@@ -8,7 +8,7 @@ fonctionne.
 Le topic ne sera pas copié puisque la plupart des personnes
 veulent qu'il soit différent entre 2 salons.
 
-Les métadonnées et les accès du salon seront également 
+Les métadonnées et les accès du salon seront également
 retirés (excepté le fondateur) du salon ciblé.
 
 Syntaxe : CLONE <#salon-source> <#salon-cible>

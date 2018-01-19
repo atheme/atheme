@@ -31,7 +31,7 @@ l'accès fondateur (+F).
 Il y a une limite de longueur de tous les templates
 sur un salon.
 
-Si vous n'est pas un fondateur, des restricitions 
+Si vous n'est pas un fondateur, des restricitions
 similaires à FLAGS s'appliquent.
 
 Syntaxe : TEMPLATE <#salon> [template vieu_template]

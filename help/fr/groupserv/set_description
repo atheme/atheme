@@ -1,7 +1,7 @@
 Aide pour SET DESCRIPTION:
 
 SET DESCRIPTION vous permet de modifier ou de définir la description
-d'un groupe. Ceci sera montré lorsqu'un utilisateur demandera des 
+d'un groupe. Ceci sera montré lorsqu'un utilisateur demandera des
 informations sur le groupe.
 
 Syntaxe : SET <!groupe> DESCRIPTION [description]

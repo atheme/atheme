@@ -6,7 +6,7 @@ oper qui définisse le vHost. La chaine de caractères $account dans le vHost
 proposé sera remplacé par le nom du compte de l'utilisateur lorsqu'ils
 utiliseront TAKE.
 
-Si le paramètre !groupe est fourni, seuls les utilisateurs avec 
+Si le paramètre !groupe est fourni, seuls les utilisateurs avec
 le flag +v dans ce groupe seront dans la possibilité de les voir
 dans OFFERLIST et de les définir avec TAKE.
 

@@ -3,7 +3,7 @@ Aide pour RWATCH:
 RWATCH maintient une liste d'expression régulières
 auxquelles le nick!user@host gecos
 de chaque client qui se connecte est comparé.
-Les clients correspondants peuvent être affichés 
+Les clients correspondants peuvent être affichés
 sur le snoop channel et/ou bannis du réseau.
 Ces bannissements du réseau ne sont pas ajoutés à
 la liste des AKILL.

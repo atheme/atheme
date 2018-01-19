@@ -3,7 +3,7 @@ Aide pour BADMAIL:
 BADMAIL vous permet de maintenir une liste d'adresses email qu'il
 n'est pas autorisé utiliser pour enregistrer des comptes.
 
-Ces adresses email sont sauvegardées dans la base de données d'Atheme et sont 
+Ces adresses email sont sauvegardées dans la base de données d'Atheme et sont
 gardées entre les redémarrages des services.
 
 Dans BADMAIL ADD, vous pouvez utiliser le 'glob matching' pour interdire

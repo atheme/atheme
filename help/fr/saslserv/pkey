@@ -1,11 +1,11 @@
 Aide pour PKEY:
 
 PKEY définit ou affiche l'empreinte de votre
-clé DSA ou RSA. Vous devriez immédiatement 
+clé DSA ou RSA. Vous devriez immédiatement
 vous connecter après avoir modifié ceci pour
 mettre à jour les autres informations de sécurité
 stockées.
-L'empreinte peut être entrée en hexadécimal, avec 
+L'empreinte peut être entrée en hexadécimal, avec
 ou sans deux-points (":").
 
 Syntaxe : PKEY <hash>

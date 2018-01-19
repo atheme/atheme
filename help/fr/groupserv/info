@@ -1,7 +1,7 @@
 Aide pour INFO:
 
 INFO affiche des informations de groupe comme
-la date d'enregistrement, l'URL du groupe, 
+la date d'enregistrement, l'URL du groupe,
 l'adresse email et le fondateur.
 
 Syntaxe : INFO <!groupe>

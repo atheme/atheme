@@ -13,7 +13,7 @@ données associées).
 
 BOT DEL supprime le bot de la liste des bots disponibles.
 
-Note: Vous ne pouvez pas créer de bot qui ait un pseudo actuellement 
+Note: Vous ne pouvez pas créer de bot qui ait un pseudo actuellement
 enregistré. Si un utilisateur non enregistré possède le nick, il sera kill.
 
 Syntaxe : BOT ADD <nick> <utilisateur> <host> <real>

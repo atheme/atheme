@@ -1,6 +1,6 @@
 Aide pour ACCESS ADD:
 
-ACCESS ADD assignera un utilisateur à un certain rôle 
+ACCESS ADD assignera un utilisateur à un certain rôle
 sur le salon.
 
 Syntaxe : ACCESS <#salon> ADD <utilisateur> <role>

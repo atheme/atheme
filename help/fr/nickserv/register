@@ -8,9 +8,9 @@ De plus, &nick& avertira les utilisateurs qui utilisent
 votre pseudo sans s'identifier et vous permettra de
 KILL les fantômes.
 
-Le mot de passe que vous choisissez est sensible à 
+Le mot de passe que vous choisissez est sensible à
 la casse (attention aux majuscules).
-Merci de noter ou de mémoriser votre mot de passe, 
+Merci de noter ou de mémoriser votre mot de passe,
 vous en aurez besoin plus tard pour modifier des
 paramètres.
 #if auth

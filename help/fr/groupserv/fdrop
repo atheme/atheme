@@ -3,7 +3,7 @@ Aide pour FDROP:
 FDROP vous permet de dés-enregistrer un groupe enregistré.
 
 Une fois que vous avez FDROP un groupe, les données associées
-(liste d'accès, métadonnées, etc) sont supprimées et ne 
+(liste d'accès, métadonnées, etc) sont supprimées et ne
 peuvent pas être restaurées.
 
 Syntaxe : FDROP <!groupe>

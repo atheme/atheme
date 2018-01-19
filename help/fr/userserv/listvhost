@@ -1,7 +1,7 @@
 Aide pour LISTVHOST:
 
 LISTVHOST affiche les comptes qui ont un vHost défini sur eux
-Si un pattern est donné, seuls les comptes qui correspondent à ce 
+Si un pattern est donné, seuls les comptes qui correspondent à ce
 pattern seront montrés.
 
 Syntaxe : LISTVHOST [pattern]

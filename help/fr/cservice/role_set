@@ -2,7 +2,7 @@ Aide pour ROLE SET:
 
 ROLE SET vous permet de modifier les flags d'un rôle
 déjà existant. Tous les utilisateurs ayant le rôle spécifié
-seront affectés par les changements. Les flags multiples 
+seront affectés par les changements. Les flags multiples
 doivent être séparés par un espace et tous être précédé
 par un "modifieur" (+ ou -).
 

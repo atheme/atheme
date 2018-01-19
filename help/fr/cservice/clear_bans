@@ -1,9 +1,9 @@
 Aide pour CLEAR BANS:
 
 Retire tous les bannissement trouvés sur le salon spécifié.
-Si votre IRCd supporte d'autres listes associées à un salon 
+Si votre IRCd supporte d'autres listes associées à un salon
 (par exemple les exceptions de ban), vous pouvez les
-retirer en spécifiant la lettre du mode. Préciser un 
+retirer en spécifiant la lettre du mode. Préciser un
 astérisque pour nettoyer toute les listes.
 
 Syntaxe : CLEAR <#salon> BANS [types]

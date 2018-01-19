@@ -3,7 +3,7 @@ Aide pour JOINMON:
 JOINMON vous permet de maintenir une liste de pattern qui correspondront à des
 pseudo qui seront loggués lorsqu'ils joingnent leur salon (avec l'information loglevel).
 
-Ces patterns sont sauvegardés dans la base de données d'Atheme et seront gardés 
+Ces patterns sont sauvegardés dans la base de données d'Atheme et seront gardés
 entre deux redémarrages des services.
 
 Syntaxe : JOINMON ADD <pattern> [raison]

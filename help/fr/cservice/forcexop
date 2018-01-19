@@ -1,6 +1,6 @@
 Aide pour FORCEXOP:
 
-FORCEXOP remet à zéro les niveaux d'accès 
+FORCEXOP remet à zéro les niveaux d'accès
 compatibles avec les valeurs xOP.
 Après cette opération, les fondateurs auront
 toutes les permissions et l'auto-op. Toutes les autres

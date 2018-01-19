@@ -4,7 +4,7 @@ BADWORDS maintient une liste d'expressions auxquelles
 chaques mots sur un salon seront comparés et interdits
 (si l'option BLOCKBADWORDS est activée).
 
-Le paramètre ACTION peut être : KICK, BAN, KICKBAN ou (si 
+Le paramètre ACTION peut être : KICK, BAN, KICKBAN ou (si
 votre IRCd le supporte) QUIET.
 
 Syntaxe : BADWORDS <#salon> LIST

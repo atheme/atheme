@@ -22,7 +22,7 @@ Permissions :
     +c - Avoir un accès au salon où le groupe un les privilèges suffisants.
     +v - Prendre les vHost offerts au groupe via HostServ.
     +s - Possibilité d'utiliser la commande &nick& SET sur le groupe.
-    +b - Bannir un utilisateur du groupe. L'utilisateur ne sera pas dans la 
+    +b - Bannir un utilisateur du groupe. L'utilisateur ne sera pas dans la
        	 possibilité de joindre le groupe avec la commande JOIN et il ne
 	 sera pas montré dans le NickServ INFO ni ailleurs.
          Notez que paramétrer ce flag ne retirera PAS automatiquement

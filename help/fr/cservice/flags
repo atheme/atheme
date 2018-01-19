@@ -52,7 +52,7 @@ $registered - N'importe quel utilisateur qui est identifié aux services.
 $channel:#channel - N'importe quel utilisateur qui est membre du salon donné.
 #endif
 
-Si vous n'avez pas +f, vous pouvez tout de même supprimer votre propre 
+Si vous n'avez pas +f, vous pouvez tout de même supprimer votre propre
 accès avec -*.
 
 Syntaxe : FLAGS <#salon> [nickname|hostmask|groupe template]

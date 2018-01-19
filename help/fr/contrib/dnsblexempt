@@ -1,7 +1,7 @@
 Aide pour DNSBLEXEMPT:
 
 DNSBLEXEMPT maintient une liste d'adresses IP pour lesquelles les
-utilisateurs qui leur correspondent ne seront pas cible de vérifications 
+utilisateurs qui leur correspondent ne seront pas cible de vérifications
 dans les blacklists.
 
 Syntaxe : DNSBLEXEMPT LIST

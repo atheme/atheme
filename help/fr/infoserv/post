@@ -1,7 +1,7 @@
 Aide pour POST:
 
 POST vous permet de poster des messages à tous les utilisateurs (ils seront
-envoyés lorsque vous effectuerez la commande) ou des messages que tous les utilisateurs 
+envoyés lorsque vous effectuerez la commande) ou des messages que tous les utilisateurs
 verront à leur connexion, ou que les opers verront lorsqu'ils s'identifieront avec
 la commande /oper
 

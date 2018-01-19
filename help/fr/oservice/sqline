@@ -3,7 +3,7 @@ Aide pour SQLINE:
 SQLINE vous permet d'empêcher l'utilisation de certains
 pseudo ou salons sur l'ensemble du réseau.
 
-Un pseudo sqline peut contenir les wildcards *, ?, # 
+Un pseudo sqline peut contenir les wildcards *, ?, #
 (n'importe quel chiffre) et @ (n'importe quelle lettre).
 Un salon sqline doit être une correspondance exacte, commençant
 par # ou &.

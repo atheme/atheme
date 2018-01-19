@@ -15,7 +15,7 @@ de vérifications de clones.
 Syntaxe : CLONES KLINE ON|OFF
 
 Active/désactive le bannissement pour une heure des
-adresses IP avec plus du nombre autorisé de clients 
+adresses IP avec plus du nombre autorisé de clients
 par adresse IP sur le réseau (ces bannissements ne
 sont pas ajoutés à la liste des AKILL). Ce paramètre
 est sauvegardé dans etc/services.db et mis sur OFF
@@ -38,7 +38,7 @@ priorité par rapport aux masques CIDR.
 <clones> est le nombre de clones autorisés ; ce doit être
 au moins 4.
 Des avertissements sont envoyés sur le nombre est rencontré
-et un bannissement du réseau peut être défini si le nombre 
+et un bannissement du réseau peut être défini si le nombre
 est dépassé.
 La raison est montrée dans LISTEXEMPT.
 Les exceptions de clone sont stockées dans etc/services.db.

@@ -11,7 +11,7 @@ selon les réseaux, utilisez /msg &nick& TEMPLATE pour vérifier.
 Indice : VOP signifie VOice, HOP signigie
 HalfOP, AOP signifie AutoOP et SOP signifie SuperOP.
 #else
-Indice : VOP signifie VOice, AOP signifie AutoOP 
+Indice : VOP signifie VOice, AOP signifie AutoOP
 et SOP signifie SuperOP.
 #endif
 

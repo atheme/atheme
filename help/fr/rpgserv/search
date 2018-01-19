@@ -5,7 +5,7 @@ critères. Pour connaitre les critères disponibles, voir le fichier d'aide
 pour la commande SET via /msg &nick& HELP SET
 
 Les options de recherche listées dans le fichier d'aide SET peuvent
-être utilisées comme mots clé avec la commande SEARCH. 
+être utilisées comme mots clé avec la commande SEARCH.
 Des exemples sont disponibles ci-dessous :
 
 Syntaxe : SEARCH <mots clé>
