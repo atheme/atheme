@@ -32,10 +32,10 @@ xmlrpc_set_options : Some options are define able for each method call these are
        XMLRPC_HTTP_HEADER : in the spec http headers are required, however many implementations
                             such as PHP do not send the http headers, use XMLRPC_ON, XMLRPC_OFF
                             to enable
-       
+
        XMLRPC_ENCODE : the spec allows you to set the text encoding, note that the default
                        is off as defined by the spec
-      
+
        XMLRPC_INTTAG : the xml tag for an integer data type is defined in two fashions <i4>
                        and <int>, this option allows you to send the one you want, by default
                        the lib sends <i4>, use XMLRPC_I4 for <i4> tags and XMLRPC_INT for <int>
