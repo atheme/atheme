@@ -100,15 +100,15 @@ sub init_dispatcher {
       fault_badparams      => "Invalid parameters.",
       fault_nosuch_source  => "No such source.",
       fault_nosuch_target  => "No such target.",
-      fault_authfail       => "Authentication failed.", 
+      fault_authfail       => "Authentication failed.",
       fault_noprivs        => "Insufficient privileges.",
       fault_nosuch_key     => "No such key.",
-      fault_alreadyexists  => "Item already exists.", 
+      fault_alreadyexists  => "Item already exists.",
       fault_toomany        => "Too many items.",
       fault_emailfail      => "Email verification failed.",
-      fault_notverified    => "Action not verified.", 
+      fault_notverified    => "Action not verified.",
       fault_nochange       => "No change.",
-      fault_already_authed => "You are already authenticated.", 
+      fault_already_authed => "You are already authenticated.",
       fault_unimplemented  => "Method not implemented."
    };
 
