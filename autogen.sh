@@ -15,7 +15,7 @@ AUTOHEADER=${AUTOHEADER:-autoheader}
 dump_help_screen ()
 {
    echo "Usage: $0 [options]"
-   echo 
+   echo
    echo "options:"
    echo "  -n           skip CVS changelog creation"
    echo "  -h,--help    show this help screen"
@@ -45,17 +45,17 @@ parse_options ()
 run_or_die ()
 {
    COMMAND=$1
-   
+  
    # check for empty commands
    if test -z "$COMMAND" ; then
       echo "*warning* no command specified"
       return 1
    fi
-   
+  
    shift;
 
    OPTIONS="$@"
-   
+  
    # print a message
    echo -n "*info* running $COMMAND"
    if test -n "$OPTIONS" ; then
@@ -70,7 +70,7 @@ run_or_die ()
       echo "*error* $COMMAND failed. (exit code = $RESULT)"
       exit 1
    fi
-   
+  
    return 0
 }
 
