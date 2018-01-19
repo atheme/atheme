@@ -31,7 +31,7 @@ additional configuration on Windows for installing pkg-config that will not
 be addressed here. As of the time of writing, documentation for doing so may
 be found at:
         http://www.gaia-gis.it/spatialite-3.0.0-BETA/mingw_how_to.html#pkg-config
-        
+
 Versions of Atheme before 7.1.0-alpha1 do not require pkg-config, so if you are
 using an older version, skip installing pkg-config.
 
@@ -101,7 +101,7 @@ An explanation of the configuration options:
 		use for our QA testing purposes.  If you want a different
 		destination, that is fine, just make sure that the first
 		directory in the prefix is a drive letter.
-		
+
 		For example, to install to D:\IRCStuff\atheme, use the
 		following prefix option:
 
