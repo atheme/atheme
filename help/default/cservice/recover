@@ -4,14 +4,14 @@ RECOVER allows you to regain control of your
 channel in the event of a takeover.
 
 Note: RECOVER may make the channel unusable by
-general public! If there is no takeover 
+general public! If there is no takeover
 emergency, instead, read
 
     /msg &nick& HELP OP
 
 More precisely, in the case of RECOVER,
 everyone will be deopped, limit and key will
-be cleared, all bans matching you are removed, 
+be cleared, all bans matching you are removed,
 a ban exception matching you is added (in case
 of bans Atheme can't see), the channel is set
 invite-only and moderated and you are invited.

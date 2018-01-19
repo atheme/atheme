@@ -1,8 +1,8 @@
 Help for FSEND:
 
 FSEND allows you to forcibly send a memo to a nickname
-that is offline at the moment.  When they come online 
-they will be told they have messages waiting for them 
+that is offline at the moment.  When they come online
+they will be told they have messages waiting for them
 and will have an opportunity to read your memo.
 
 Your memo cannot be more than 300 characters.

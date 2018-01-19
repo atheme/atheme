@@ -5,7 +5,7 @@ A memo informing the user will also be sent. If
 a reason is provided, that reason will be included
 in the rejection memo.
 If an asterisk ("*") is used in place of a nick,
-all waiting vHosts will be rejected. 
+all waiting vHosts will be rejected.
 
 Syntax: REJECT <nick> [reason]
 
