@@ -76,7 +76,7 @@ The authcookie will be valid for one hour or until Atheme shuts down.
  *
  * Side Effects:
  * command is executed
- */ 
+ */
 
 Authcookie and account name specify authentication for the command; authcookie
 can be specified as '.' to execute a command without a login.
