@@ -157,7 +157,7 @@ foreach ($nicks as $id => $data)
 foreach ($chans as $name => $data)
 {
 	if (empty($name) || empty($nicks[$data['founder']]['mainnick']) ||
-			empty($data['time_registered']) || empty($data['time_used']) || 
+			empty($data['time_registered']) || empty($data['time_used']) ||
 			empty($data['mlock_on']) || empty($data['mlock_off']) ||
 			empty($data['mlock_limit']))
 	{
