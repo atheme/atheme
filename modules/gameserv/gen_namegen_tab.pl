@@ -49,12 +49,12 @@ my $end_syms = "";
 
 for my $line (@lines) {
    chomp $line;
-   
+
    if ($line =~ /^%/) {
       $which++;
       next;
    }
-   
+
    $begin_sym{$line} = $line if $which == 0;
    $medial_sym{$line} = $line if $which == 1;
    $end_sym{$line} = $line if $which == 2;
