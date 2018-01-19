@@ -33,11 +33,11 @@ extern uint32_t arc4random_uniform(uint32_t upper_bound);
 #endif /* !HAVE_ARC4RANDOM_UNIFORM */
 #endif /* !HAVE_ARC4RANDOM */
 
-/* explicit_bzero.c */
 #ifndef HAVE_EXPLICIT_BZERO
 #  ifdef HAVE_MEMSET_S
 #    define explicit_bzero(p, n) memset_s((p), (n), 0x00, (n))
 #  else /* HAVE_MEMSET_S */
+/* explicit_bzero.c */
 extern void *(* volatile volatile_memset)(void *, int, size_t);
 extern void explicit_bzero(void *p, size_t n);
 #  endif /* !HAVE_MEMSET_S */

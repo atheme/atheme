@@ -78,6 +78,15 @@ HW_FUNC_ASPRINTF
 
 
 
+dnl If we don't have explicit_bzero(3)/memset_s(3) then we need explicit_bzero.c which provides a fallback
+EXPLICIT_BZERO_C=""
+AS_IF([test "x${ac_cv_func_explicit_bzero}x${ac_cv_func_memset_s}" = "xnoxno"], [
+	EXPLICIT_BZERO_C="explicit_bzero.c"
+	AC_SUBST([EXPLICIT_BZERO_C])
+])
+
+
+
 dnl If we're building on Windows we need socket and regex libraries from mingw
 case "${host}" in
 *-*-mingw32)

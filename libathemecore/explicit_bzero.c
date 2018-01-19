@@ -8,8 +8,6 @@
 
 #include "sysconf.h"
 
-#if !defined(HAVE_EXPLICIT_BZERO) && !defined(HAVE_MEMSET_S)
-
 /* We don't have explicit_bzero(3) [OpenBSD] or memset_s(3) [C11].
  *
  * Indirect memset(3) through a volatile function pointer should hopefully
@@ -35,5 +33,3 @@ explicit_bzero(void *const restrict p, const size_t n)
 {
 	(void) volatile_memset(p, 0x00, n);
 }
-
-#endif /* !HAVE_EXPLICIT_BZERO && !HAVE_MEMSET_S */

@@ -23,7 +23,7 @@ SRCS =				\
 	database_backend.c	\
 	datastream.c		\
 	entity.c		\
-	explicit_bzero.c	\
+	$(EXPLICIT_BZERO_C)	\
 	flags.c			\
 	function.c		\
 	help.c			\

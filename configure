@@ -660,6 +660,7 @@ LIBIDN_LIBS
 LIBCRYPTO_LIBS
 CRACKLIB_LIBS
 CRACKLIB_C
+EXPLICIT_BZERO_C
 LIBOBJS
 POSUB
 LTLIBINTL
@@ -8370,6 +8371,16 @@ fi
 
 fi
 
+
+
+
+EXPLICIT_BZERO_C=""
+if test "x${ac_cv_func_explicit_bzero}x${ac_cv_func_memset_s}" = "xnoxno"; then :
+
+	EXPLICIT_BZERO_C="explicit_bzero.c"
+
+
+fi
 
 
 
