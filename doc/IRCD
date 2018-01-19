@@ -56,13 +56,13 @@ You need <uline> tags for services on all servers on the network.
 
 Several of the modes supported by Atheme are in optional modules. It should
 usually not be a problem if those modules are not loaded. The exception to
-this is the m_services_account.so module, which must be loaded at all times 
+this is the m_services_account.so module, which must be loaded at all times
 on your inspircd servers if you wish to use this version of atheme.
 
 Using the m_invisible module on inspircd with Atheme connected is an unsupported
 condition and will result in your Atheme installation being "tainted".
 
-Jupes will use SIDs numerically following services's SID, make sure to leave 
+Jupes will use SIDs numerically following services's SID, make sure to leave
 plenty of space.
 
 ircnet
