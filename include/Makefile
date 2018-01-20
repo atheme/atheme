@@ -26,6 +26,8 @@ INCLUDES = \
 	culture.h		\
 	database_backend.h	\
 	datastream.h		\
+	digest.h		\
+	digest_fe_internal.h	\
 	entity-validation.h	\
 	entity.h		\
 	flags.h			\
@@ -37,7 +39,6 @@ INCLUDES = \
 	libathemecore.h		\
 	linker.h		\
 	match.h			\
-	md5.h			\
 	module.h		\
 	object.h		\
 	phandler.h		\

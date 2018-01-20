@@ -11,7 +11,7 @@
 
 #define MODULE_PREFIX_STR       "$rawmd5$"
 #define MODULE_PREFIX_LEN       8
-#define MODULE_DIGEST_LEN       MD5_DIGEST_LENGTH
+#define MODULE_DIGEST_LEN       DIGEST_MDLEN_MD5
 #define MODULE_PARAMS_LEN       (MODULE_PREFIX_LEN + (2 * MODULE_DIGEST_LEN))
 
 static bool
@@ -26,12 +26,10 @@ atheme_rawmd5_verify(const char *const restrict password, const char *const rest
 
 	*flags |= PWVERIFY_FLAG_MYMODULE;
 
-	md5_state_t ctx;
 	unsigned char digest[MODULE_DIGEST_LEN];
 
-	(void) md5_init(&ctx);
-	(void) md5_append(&ctx, (const unsigned char *) password, strlen(password));
-	(void) md5_finish(&ctx, digest);
+	if (! digest_oneshot(DIGALG_MD5, password, strlen(password), digest, NULL))
+		return false;
 
 	char result[(2 * MODULE_DIGEST_LEN) + 1];
 

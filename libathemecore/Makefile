@@ -22,6 +22,9 @@ SRCS =				\
 	culture.c		\
 	database_backend.c	\
 	datastream.c		\
+	digest_be_md5.c		\
+	digest_fe_internal.c	\
+	digest_fe_internal_testsuite.c	\
 	entity.c		\
 	$(EXPLICIT_BZERO_C)	\
 	flags.c			\
@@ -31,7 +34,6 @@ SRCS =				\
 	linker.c		\
 	logger.c		\
 	match.c			\
-	md5.c			\
 	memory.c		\
 	module.c		\
 	node.c			\
@@ -66,7 +68,7 @@ SRCS =				\
 include ../extra.mk
 include ../buildsys.mk
 
-CPPFLAGS	+= $(PCRE_CFLAGS) $(LIBQRENCODE_CFLAGS) -I../include
+CPPFLAGS	+= $(PCRE_CFLAGS) $(LIBQRENCODE_CFLAGS) -I../include -I.
 CFLAGS		+= $(LIB_CFLAGS)
 LIBS		+= $(LIBINTL) $(PCRE_LIBS) $(LIBQRENCODE_LIBS)
 

@@ -29,7 +29,7 @@
 #include "crypto.h"
 #include "culture.h"
 #include "base64.h"
-#include "md5.h"
+#include "digest.h"
 #include "match.h"
 #include "sysconf.h"
 #include "account.h"

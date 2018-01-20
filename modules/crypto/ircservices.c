@@ -29,11 +29,7 @@ atheme_ircservices_encrypt(const char *const restrict src, char *const restrict 
 {
 	char digest[33];
 	(void) memset(digest, 0x00, sizeof digest);
-
-	md5_state_t ctx;
-	(void) md5_init(&ctx);
-	(void) md5_append(&ctx, (const unsigned char *) src, strlen(src));
-	(void) md5_finish(&ctx, (unsigned char *) digest);
+	(void) digest_oneshot(DIGALG_MD5, src, strlen(src), digest, NULL);
 
 	char dest2[16];
 	for (size_t i = 0; i < 32; i += 2)

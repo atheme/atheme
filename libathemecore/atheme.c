@@ -348,6 +348,12 @@ int atheme_main(int argc, char *argv[])
 	}
 #endif
 
+	if (! digest_testsuite_run())
+	{
+		fprintf(stderr, "Error: digest testsuite failed\n");
+		exit(EXIT_FAILURE);
+	}
+
 	if (!(runflags & RF_LIVE))
 		daemonize(daemonize_pipe);
 
