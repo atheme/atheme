@@ -437,6 +437,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 		return NULL;
 	}
 
+	dbe.sl = (size_t) pbkdf2v2_saltsz;
 	dbe.a = pbkdf2v2_digest;
 	dbe.c = pbkdf2v2_rounds;
 
