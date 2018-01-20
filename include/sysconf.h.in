@@ -79,6 +79,9 @@
 /* Define to 1 if we have GNU libidn available. */
 #undef HAVE_LIBIDN
 
+/* Define to 1 if we have ARM mbedTLS available. */
+#undef HAVE_LIBMBEDCRYPTO
+
 /* Define to 1 if you have the `nsl' library (-lnsl). */
 #undef HAVE_LIBNSL
 

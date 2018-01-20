@@ -658,6 +658,7 @@ LDAP_AUTHC
 LDAP_LIBS
 LDAP_CFLAGS
 LIBIDN_LIBS
+LIBMBEDCRYPTO_LIBS
 LIBCRYPTO_LIBS
 CRACKLIB_LIBS
 CRACKLIB_C
@@ -787,6 +788,7 @@ with_libiconv_prefix
 with_libintl_prefix
 with_cracklib
 with_openssl
+with_mbedtls
 with_libidn
 with_ldap
 with_perl
@@ -1464,6 +1466,7 @@ Optional Packages:
   --with-cracklib         Compile NickServ cracklib module for checking
                           password strength
   --with-openssl          Compile with OpenSSL to provide more functionality.
+  --with-mbedtls          Compile with ARM mbedTLS support.
   --with-libidn           Compile with GNU libidn for SASL SCRAM-SHA support.
   --without-ldap          Disable building ldap auth module.
   --without-perl          Disable building perl scripting module
@@ -8632,6 +8635,105 @@ fi
 
 
 
+LIBMBEDCRYPTO="No"
+LIBMBEDCRYPTO_LIBS=""
+
+# Check whether --with-mbedtls was given.
+if test "${with_mbedtls+set}" = set; then :
+  withval=$with_mbedtls;
+else
+  with_mbedtls="auto"
+fi
+
+
+case "${with_mbedtls}" in
+	no | yes | auto)
+		;;
+	*)
+		as_fn_error $? "invalid option for --with-mbedtls" "$LINENO" 5
+		;;
+esac
+
+if test "x${with_mbedtls}" != "xno"; then :
+
+	LIBS_SAVED="${LIBS}"
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing mbedtls_md_setup" >&5
+$as_echo_n "checking for library containing mbedtls_md_setup... " >&6; }
+if ${ac_cv_search_mbedtls_md_setup+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS=$LIBS
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char mbedtls_md_setup ();
+int
+main ()
+{
+return mbedtls_md_setup ();
+  ;
+  return 0;
+}
+_ACEOF
+for ac_lib in '' mbedcrypto; do
+  if test -z "$ac_lib"; then
+    ac_res="none required"
+  else
+    ac_res=-l$ac_lib
+    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
+  fi
+  if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_mbedtls_md_setup=$ac_res
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext
+  if ${ac_cv_search_mbedtls_md_setup+:} false; then :
+  break
+fi
+done
+if ${ac_cv_search_mbedtls_md_setup+:} false; then :
+
+else
+  ac_cv_search_mbedtls_md_setup=no
+fi
+rm conftest.$ac_ext
+LIBS=$ac_func_search_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_mbedtls_md_setup" >&5
+$as_echo "$ac_cv_search_mbedtls_md_setup" >&6; }
+ac_res=$ac_cv_search_mbedtls_md_setup
+if test "$ac_res" != no; then :
+  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+
+		LIBMBEDCRYPTO="Yes"
+		if test "x${ac_cv_search_mbedtls_md_setup}" != "xnone required"; then :
+  LIBMBEDCRYPTO_LIBS="$ac_cv_search_mbedtls_md_setup"
+fi
+
+$as_echo "#define HAVE_LIBMBEDCRYPTO 1" >>confdefs.h
+
+
+
+else
+
+		if test "x${with_mbedtls}" != "xauto"; then :
+  as_fn_error $? "--with-mbedtls was specified but ARM mbedTLS could not be found" "$LINENO" 5
+fi
+
+fi
+
+	LIBS="${LIBS_SAVED}"
+
+fi
+
+
+
 LIBIDN="No"
 LIBIDN_LIBS=""
 
@@ -13000,6 +13102,14 @@ DIGEST_C="${DIGEST_C} digest_be_sha2_256.c"
 DIGEST_C="${DIGEST_C} digest_be_sha2_512.c"
 DIGEST_FRONTEND="Internal"
 
+if test "x${DIGEST_FRONTEND}x${LIBMBEDCRYPTO}" = "xInternalxYes"; then :
+
+	DIGEST_H="digest_fe_mbedtls.h"
+	DIGEST_C="digest_fe_mbedtls.c"
+	DIGEST_FRONTEND="ARM mbedTLS"
+
+fi
+
 if test "x${DIGEST_FRONTEND}x${LIBCRYPTO}" = "xInternalxYes"; then :
 
 	DIGEST_H="digest_fe_openssl.h"
@@ -14651,6 +14761,7 @@ Configuration:
 
     CrackLib Support ........: ${LIBCRACKLIB}
     GNU libidn Support ......: ${LIBIDN}
+    ARM mbedTLS Support .....: ${LIBMBEDCRYPTO}
     OpenSSL Support .........: ${LIBCRYPTO}
     PCRE Support ............: ${LIBPCRE}
     Perl Support ............: ${LIBPERL}

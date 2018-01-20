@@ -170,6 +170,37 @@ AS_IF([test "x${LIBCRYPTO}" = "xYes"], [
 
 
 
+LIBMBEDCRYPTO="No"
+LIBMBEDCRYPTO_LIBS=""
+AC_ARG_WITH([mbedtls],
+	[AS_HELP_STRING([--with-mbedtls], [Compile with ARM mbedTLS support.])],
+	[], [with_mbedtls="auto"])
+
+case "${with_mbedtls}" in
+	no | yes | auto)
+		;;
+	*)
+		AC_MSG_ERROR([invalid option for --with-mbedtls])
+		;;
+esac
+
+AS_IF([test "x${with_mbedtls}" != "xno"], [
+	LIBS_SAVED="${LIBS}"
+	AC_SEARCH_LIBS([mbedtls_md_setup], [mbedcrypto], [
+		LIBMBEDCRYPTO="Yes"
+		AS_IF([test "x${ac_cv_search_mbedtls_md_setup}" != "xnone required"],
+			[LIBMBEDCRYPTO_LIBS="$ac_cv_search_mbedtls_md_setup"])
+		AC_DEFINE([HAVE_LIBMBEDCRYPTO], [1], [Define to 1 if we have ARM mbedTLS available.])
+		AC_SUBST([LIBMBEDCRYPTO_LIBS])
+	], [
+		AS_IF([test "x${with_mbedtls}" != "xauto"],
+			[AC_MSG_ERROR([--with-mbedtls was specified but ARM mbedTLS could not be found])])
+	])
+	LIBS="${LIBS_SAVED}"
+])
+
+
+
 LIBIDN="No"
 LIBIDN_LIBS=""
 AC_ARG_WITH([libidn],
@@ -570,6 +601,12 @@ DIGEST_C="${DIGEST_C} digest_be_sha2_256.c"
 DIGEST_C="${DIGEST_C} digest_be_sha2_512.c"
 DIGEST_FRONTEND="Internal"
 
+AS_IF([test "x${DIGEST_FRONTEND}x${LIBMBEDCRYPTO}" = "xInternalxYes"], [
+	DIGEST_H="digest_fe_mbedtls.h"
+	DIGEST_C="digest_fe_mbedtls.c"
+	DIGEST_FRONTEND="ARM mbedTLS"
+])
+
 AS_IF([test "x${DIGEST_FRONTEND}x${LIBCRYPTO}" = "xInternalxYes"], [
 	DIGEST_H="digest_fe_openssl.h"
 	DIGEST_C="digest_fe_openssl.c"
@@ -642,6 +679,7 @@ Configuration:
 
     CrackLib Support ........: ${LIBCRACKLIB}
     GNU libidn Support ......: ${LIBIDN}
+    ARM mbedTLS Support .....: ${LIBMBEDCRYPTO}
     OpenSSL Support .........: ${LIBCRYPTO}
     PCRE Support ............: ${LIBPCRE}
     Perl Support ............: ${LIBPERL}
