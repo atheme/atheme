@@ -314,13 +314,13 @@ digest_final_sha2_512(struct digest_context_sha2_512 *const restrict ctx,
 
 	if (len)
 	{
-		if (*len < DIGEST_MDLEN_SHA2_256)
+		if (*len < DIGEST_MDLEN_SHA2_512)
 		{
 			(void) slog(LG_ERROR, "%s: output buffer length %zu is too small", __func__, *len);
 			return false;
 		}
 
-		*len = DIGEST_MDLEN_SHA2_256;
+		*len = DIGEST_MDLEN_SHA2_512;
 	}
 
 	uint64_t usedspace = ((ctx->count[0x00U] >> 0x03U) % DIGEST_BKLEN_SHA2_512);
