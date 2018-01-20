@@ -1,5 +1,5 @@
 /*
- * Atheme IRC Services digest interface.
+ * OpenSSL frontend data structures for the digest interface.
  *
  * Copyright (C) 2018 Aaron M. D. Jones <aaronmdjones@gmail.com>
  *
@@ -33,40 +33,23 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef INC_DIGEST_H
-#define INC_DIGEST_H
+#ifndef INC_DIGEST_FE_HEADER_H
+#define INC_DIGEST_FE_HEADER_H
 
-#define DIGALG_MD5              0x01U
-#define DIGALG_SHA1             0x02U
-#define DIGALG_SHA2_256         0x03U
-#define DIGALG_SHA2_512         0x04U
+#include <openssl/evp.h>
+#include <openssl/hmac.h>
 
-#define DIGEST_BKLEN_MD5        0x40U
-#define DIGEST_MDLEN_MD5        0x10U
+union digest_state
+{
+	EVP_MD_CTX      d;
+	HMAC_CTX        h;
+};
 
-#define DIGEST_BKLEN_SHA1       0x40U
-#define DIGEST_MDLEN_SHA1       0x14U
+struct digest_context
+{
+	const EVP_MD           *md;
+	union digest_state      state;
+	bool                    hmac;
+};
 
-#define DIGEST_BKLEN_SHA2_256   0x40U
-#define DIGEST_MDLEN_SHA2_256   0x20U
-
-#define DIGEST_BKLEN_SHA2_512   0x80U
-#define DIGEST_MDLEN_SHA2_512   0x40U
-
-#define DIGEST_BKLEN_MAX        DIGEST_BKLEN_SHA2_512
-#define DIGEST_MDLEN_MAX        DIGEST_MDLEN_SHA2_512
-
-#include DIGEST_FE_HEADER
-
-extern bool digest_init(struct digest_context *, unsigned int);
-extern bool digest_init_hmac(struct digest_context *, unsigned int, const void *, size_t);
-extern bool digest_update(struct digest_context *, const void *, size_t);
-extern bool digest_final(struct digest_context *, void *, size_t *);
-
-extern bool digest_oneshot(unsigned int, const void *, size_t, void *, size_t *);
-extern bool digest_oneshot_hmac(unsigned int, const void *, size_t, const void *, size_t, void *, size_t *);
-extern bool digest_pbkdf2_hmac(unsigned int, const void *, size_t, const void *, size_t, size_t, void *, size_t);
-
-extern bool digest_testsuite_run(void);
-
-#endif /* !INC_DIGEST_H */
+#endif /* !INC_DIGEST_FE_HEADER_H */

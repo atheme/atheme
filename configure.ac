@@ -559,11 +559,35 @@ if test "x${USE_NLS}" = "xyes"; then
 fi
 AC_SUBST([PODIR])
 
+
+
+dnl Digest interface to use
+DIGEST_H="digest_fe_internal.h"
+DIGEST_C="digest_fe_internal.c digest_fe_internal_testsuite.c"
+DIGEST_C="${DIGEST_C} digest_be_md5.c"
+DIGEST_C="${DIGEST_C} digest_be_sha1.c"
+DIGEST_C="${DIGEST_C} digest_be_sha2_256.c"
+DIGEST_C="${DIGEST_C} digest_be_sha2_512.c"
+DIGEST_FRONTEND="Internal"
+
+AS_IF([test "x${DIGEST_FRONTEND}x${LIBCRYPTO}" = "xInternalxYes"], [
+	DIGEST_H="digest_fe_openssl.h"
+	DIGEST_C="digest_fe_openssl.c"
+	DIGEST_FRONTEND="OpenSSL"
+])
+
+AC_DEFINE_UNQUOTED([DIGEST_FE_HEADER], ["${DIGEST_H}"], [Front-end header for digest interface])
+AC_SUBST([DIGEST_C])
+
+
+
 CPPFLAGS="${CPPFLAGS} -DPREFIX=\\\"\${prefix}\\\" -DBINDIR=\\\"\${bindir}\\\" -DLOCALEDIR=\\\"\${LOCALEDIR}\\\" -DMODDIR=\\\"\${MODDIR}\\\" -DSHAREDIR=\\\"${SHAREDIR}\\\" -DSYSCONFDIR=\\\"${sysconfdir}\\\" -DLOGDIR=\\\"${LOGDIR}\\\" -DRUNDIR=\\\"${RUNDIR}\\\" -DDATADIR=\\\"${DATADIR}\\\""
 LDFLAGS="${LDFLAGS} ${LDFLAGS_RPATH}"
 
 AC_SUBST([CPPFLAGS])
 AC_SUBST([LDFLAGS])
+
+
 
 BUILDSYS_TOUCH_DEPS
 
@@ -623,6 +647,7 @@ Configuration:
     Perl Support ............: ${LIBPERL}
     QR Code Support .........: ${LIBQRENCODE}
 
+    Digest Frontend .........: ${DIGEST_FRONTEND}
     Mowgli Installation .....: ${MOWGLI_SOURCE}
 
     CC ......................: ${CC}

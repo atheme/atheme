@@ -22,12 +22,7 @@ SRCS =				\
 	culture.c		\
 	database_backend.c	\
 	datastream.c		\
-	digest_be_md5.c		\
-	digest_be_sha1.c	\
-	digest_be_sha2_256.c	\
-	digest_be_sha2_512.c	\
-	digest_fe_internal.c	\
-	digest_fe_internal_testsuite.c	\
+	$(DIGEST_C)		\
 	entity.c		\
 	$(EXPLICIT_BZERO_C)	\
 	flags.c			\
@@ -73,6 +68,6 @@ include ../buildsys.mk
 
 CPPFLAGS	+= $(PCRE_CFLAGS) $(LIBQRENCODE_CFLAGS) -I../include -I.
 CFLAGS		+= $(LIB_CFLAGS)
-LIBS		+= $(LIBINTL) $(PCRE_LIBS) $(LIBQRENCODE_LIBS)
+LIBS		+= $(LIBCRYPTO_LIBS) $(LIBINTL) $(PCRE_LIBS) $(LIBQRENCODE_LIBS)
 
 build: depend all

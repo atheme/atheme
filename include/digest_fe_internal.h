@@ -33,8 +33,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef INC_DIGEST_FE_INTERNAL_H
-#define INC_DIGEST_FE_INTERNAL_H
+#ifndef INC_DIGEST_FE_HEADER_H
+#define INC_DIGEST_FE_HEADER_H
 
 #define DIGEST_STLEN_MD5        0x04U
 #define DIGEST_STLEN_SHA1       0x05U
@@ -96,4 +96,4 @@ struct digest_context
 	bool                    hmac;
 };
 
-#endif /* !INC_DIGEST_FE_INTERNAL_H */
+#endif /* !INC_DIGEST_FE_HEADER_H */

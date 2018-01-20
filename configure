@@ -626,6 +626,7 @@ gt_needs=
 ac_header_list=
 enable_option_checking=no
 ac_subst_vars='LTLIBOBJS
+DIGEST_C
 PODIR
 BUILDROOT
 QRCODE_C
@@ -12989,8 +12990,37 @@ if test "x${USE_NLS}" = "xyes"; then
 fi
 
 
+
+
+DIGEST_H="digest_fe_internal.h"
+DIGEST_C="digest_fe_internal.c digest_fe_internal_testsuite.c"
+DIGEST_C="${DIGEST_C} digest_be_md5.c"
+DIGEST_C="${DIGEST_C} digest_be_sha1.c"
+DIGEST_C="${DIGEST_C} digest_be_sha2_256.c"
+DIGEST_C="${DIGEST_C} digest_be_sha2_512.c"
+DIGEST_FRONTEND="Internal"
+
+if test "x${DIGEST_FRONTEND}x${LIBCRYPTO}" = "xInternalxYes"; then :
+
+	DIGEST_H="digest_fe_openssl.h"
+	DIGEST_C="digest_fe_openssl.c"
+	DIGEST_FRONTEND="OpenSSL"
+
+fi
+
+
+cat >>confdefs.h <<_ACEOF
+#define DIGEST_FE_HEADER "${DIGEST_H}"
+_ACEOF
+
+
+
+
+
 CPPFLAGS="${CPPFLAGS} -DPREFIX=\\\"\${prefix}\\\" -DBINDIR=\\\"\${bindir}\\\" -DLOCALEDIR=\\\"\${LOCALEDIR}\\\" -DMODDIR=\\\"\${MODDIR}\\\" -DSHAREDIR=\\\"${SHAREDIR}\\\" -DSYSCONFDIR=\\\"${sysconfdir}\\\" -DLOGDIR=\\\"${LOGDIR}\\\" -DRUNDIR=\\\"${RUNDIR}\\\" -DDATADIR=\\\"${DATADIR}\\\""
 LDFLAGS="${LDFLAGS} ${LDFLAGS_RPATH}"
+
+
 
 
 
@@ -14626,6 +14656,7 @@ Configuration:
     Perl Support ............: ${LIBPERL}
     QR Code Support .........: ${LIBQRENCODE}
 
+    Digest Frontend .........: ${DIGEST_FRONTEND}
     Mowgli Installation .....: ${MOWGLI_SOURCE}
 
     CC ......................: ${CC}
