@@ -38,6 +38,7 @@
 
 #define DIGEST_STLEN_MD5        0x04U
 #define DIGEST_STLEN_SHA1       0x05U
+#define DIGEST_STLEN_SHA2       0x08U
 
 struct digest_context_md5
 {
@@ -53,10 +54,18 @@ struct digest_context_sha1
 	uint8_t         buf[DIGEST_BKLEN_SHA1];
 };
 
+struct digest_context_sha2_256
+{
+	uint64_t        count;
+	uint32_t        state[DIGEST_STLEN_SHA2];
+	uint8_t         buf[DIGEST_BKLEN_SHA2_256];
+};
+
 union digest_state
 {
 	struct digest_context_md5       md5ctx;
 	struct digest_context_sha1      sha1ctx;
+	struct digest_context_sha2_256  sha256ctx;
 };
 
 typedef bool (*digest_init_fn)(union digest_state *);
