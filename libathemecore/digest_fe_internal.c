@@ -367,7 +367,7 @@ digest_pbkdf2_hmac(const unsigned int alg, const void *const restrict pass, cons
 		return false;
 	}
 
-	unsigned char dtmp[DIGEST_MDLEN_MAX];
+	uint8_t dtmp[DIGEST_MDLEN_MAX];
 	struct digest_context ctx;
 
 	if (! digest_init_hmac(&ctx, alg, pass, passLen))
