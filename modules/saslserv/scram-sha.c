@@ -10,7 +10,7 @@
  *     "SCRAM-SHA-256 and SCRAM-SHA-256-PLUS SASL Mechanisms"
  *
  * Copyright (C) 2014 Mantas Mikulėnas <grawity@gmail.com>
- * Copyright (C) 2017 Aaron M. D. Jones <aaronmdjones@gmail.com>
+ * Copyright (C) 2017-2018 Aaron M. D. Jones <aaronmdjones@gmail.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -31,10 +31,7 @@
 
 #include "atheme.h"
 
-#if defined(HAVE_OPENSSL) && defined(HAVE_LIBIDN)
-
-#include <openssl/evp.h>
-#include <openssl/hmac.h>
+#ifdef HAVE_LIBIDN
 
 #include "pbkdf2v2.h"
 
@@ -389,7 +386,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	}
 
 	// Decode ClientProof from client-final-message
-	unsigned char ClientProof[EVP_MAX_MD_SIZE];
+	unsigned char ClientProof[DIGEST_MDLEN_MAX];
 	if (base64_decode(input['p'], ClientProof, sizeof ClientProof) != s->db.dl)
 	{
 		(void) slog(LG_DEBUG, "%s: base64_decode() for ClientProof failed", __func__);
@@ -407,26 +404,24 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 		goto error;
 	}
 
-	const unsigned char *const AuthMessageR = (const unsigned char *) AuthMessage;
-
 	// Calculate ClientSignature
-	unsigned char ClientSignature[EVP_MAX_MD_SIZE];
-	if (! HMAC(s->db.md, s->db.shk, (int) s->db.dl, AuthMessageR, (size_t) alen, ClientSignature, NULL))
+	unsigned char ClientSignature[DIGEST_MDLEN_MAX];
+	if (! digest_oneshot_hmac(s->db.md, s->db.shk, s->db.dl, AuthMessage, (size_t) alen, ClientSignature, NULL))
 	{
-		(void) slog(LG_ERROR, "%s: HMAC() for ClientSignature failed", __func__);
+		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac() for ClientSignature failed", __func__);
 		goto error;
 	}
 
 	// XOR ClientProof with calculated ClientSignature to derive ClientKey
-	unsigned char ClientKey[EVP_MAX_MD_SIZE];
+	unsigned char ClientKey[DIGEST_MDLEN_MAX];
 	for (size_t x = 0; x < s->db.dl; x++)
 		ClientKey[x] = ClientProof[x] ^ ClientSignature[x];
 
 	// Compute StoredKey from derived ClientKey
-	unsigned char StoredKey[EVP_MAX_MD_SIZE];
-	if (EVP_Digest(ClientKey, s->db.dl, StoredKey, NULL, s->db.md, NULL) != 1)
+	unsigned char StoredKey[DIGEST_MDLEN_MAX];
+	if (! digest_oneshot(s->db.md, ClientKey, s->db.dl, StoredKey, NULL))
 	{
-		(void) slog(LG_ERROR, "%s: EVP_Digest() for StoredKey failed", __func__);
+		(void) slog(LG_ERROR, "%s: digest_oneshot() for StoredKey failed", __func__);
 		goto error;
 	}
 
@@ -442,15 +437,15 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	 * ******************************************************** */
 
 	// Calculate ServerSignature
-	unsigned char ServerSignature[EVP_MAX_MD_SIZE];
-	if (! HMAC(s->db.md, s->db.ssk, (int) s->db.dl, AuthMessageR, (size_t) alen, ServerSignature, NULL))
+	unsigned char ServerSignature[DIGEST_MDLEN_MAX];
+	if (! digest_oneshot_hmac(s->db.md, s->db.ssk, s->db.dl, AuthMessage, (size_t) alen, ServerSignature, NULL))
 	{
-		(void) slog(LG_ERROR, "%s: HMAC() for ServerSignature failed", __func__);
+		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac() for ServerSignature failed", __func__);
 		goto error;
 	}
 
 	// Encode ServerSignature
-	char ServerSignature64[EVP_MAX_MD_SIZE * 3];
+	char ServerSignature64[DIGEST_MDLEN_MAX * 3];
 	const size_t rs = base64_encode(ServerSignature, s->db.dl, ServerSignature64, sizeof ServerSignature64);
 
 	if (rs == (size_t) -1)
@@ -503,8 +498,8 @@ mech_step_success(const struct scramsha_session *const restrict s)
 
 	(void) slog(LG_INFO, "%s: login succeeded, attempting to convert user's hash to SCRAM format", __func__);
 
-	char csk64[EVP_MAX_MD_SIZE * 3];
-	char chk64[EVP_MAX_MD_SIZE * 3];
+	char csk64[DIGEST_MDLEN_MAX * 3];
+	char chk64[DIGEST_MDLEN_MAX * 3];
 	char res[PASSLEN];
 
 	if (base64_encode(s->db.ssk, s->db.dl, csk64, sizeof csk64) == (size_t) -1)
@@ -689,4 +684,4 @@ mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 
 SIMPLE_DECLARE_MODULE_V1("saslserv/scram-sha", MODULE_UNLOAD_CAPABILITY_OK)
 
-#endif /* HAVE_OPENSSL && HAVE_LIBIDN */
+#endif /* HAVE_LIBIDN */
