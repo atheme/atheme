@@ -79,6 +79,14 @@ digest_init(struct digest_context *const restrict ctx, const unsigned int alg)
 			ctx->digsz  = DIGEST_MDLEN_SHA2_256;
 			break;
 
+		case DIGALG_SHA2_512:
+			ctx->init   = (digest_init_fn)   &digest_init_sha2_512;
+			ctx->update = (digest_update_fn) &digest_update_sha2_512;
+			ctx->final  = (digest_final_fn)  &digest_final_sha2_512;
+			ctx->blksz  = DIGEST_BKLEN_SHA2_512;
+			ctx->digsz  = DIGEST_MDLEN_SHA2_512;
+			break;
+
 		default:
 			(void) slog(LG_ERROR, "%s: called with unknown/unimplemented alg '%u' (BUG)",
 			                      __func__, alg);

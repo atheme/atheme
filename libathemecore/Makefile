@@ -25,6 +25,7 @@ SRCS =				\
 	digest_be_md5.c		\
 	digest_be_sha1.c	\
 	digest_be_sha2_256.c	\
+	digest_be_sha2_512.c	\
 	digest_fe_internal.c	\
 	digest_fe_internal_testsuite.c	\
 	entity.c		\

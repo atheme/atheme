@@ -39,6 +39,7 @@
 #define DIGALG_MD5              0x01U
 #define DIGALG_SHA1             0x02U
 #define DIGALG_SHA2_256         0x03U
+#define DIGALG_SHA2_512         0x04U
 
 #define DIGEST_BKLEN_MD5        0x40U
 #define DIGEST_MDLEN_MD5        0x10U
@@ -49,8 +50,11 @@
 #define DIGEST_BKLEN_SHA2_256   0x40U
 #define DIGEST_MDLEN_SHA2_256   0x20U
 
-#define DIGEST_BKLEN_MAX        DIGEST_BKLEN_SHA2_256
-#define DIGEST_MDLEN_MAX        DIGEST_MDLEN_SHA2_256
+#define DIGEST_BKLEN_SHA2_512   0x80U
+#define DIGEST_MDLEN_SHA2_512   0x40U
+
+#define DIGEST_BKLEN_MAX        DIGEST_BKLEN_SHA2_512
+#define DIGEST_MDLEN_MAX        DIGEST_MDLEN_SHA2_512
 
 #include "digest_fe_internal.h"
 

@@ -61,11 +61,19 @@ struct digest_context_sha2_256
 	uint8_t         buf[DIGEST_BKLEN_SHA2_256];
 };
 
+struct digest_context_sha2_512
+{
+	uint64_t        count[0x02U];
+	uint64_t        state[DIGEST_STLEN_SHA2];
+	uint8_t         buf[DIGEST_BKLEN_SHA2_512];
+};
+
 union digest_state
 {
 	struct digest_context_md5       md5ctx;
 	struct digest_context_sha1      sha1ctx;
 	struct digest_context_sha2_256  sha256ctx;
+	struct digest_context_sha2_512  sha512ctx;
 };
 
 typedef bool (*digest_init_fn)(union digest_state *);
