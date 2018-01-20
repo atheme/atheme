@@ -28,6 +28,8 @@ INCLUDES = \
 	datastream.h		\
 	digest.h		\
 	digest_fe_internal.h	\
+	digest_fe_mbedtls.h	\
+	digest_fe_openssl.h	\
 	entity-validation.h	\
 	entity.h		\
 	flags.h			\
