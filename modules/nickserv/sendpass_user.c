@@ -125,7 +125,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 
 	key = random_string(12);
 
-	const char *const hash = crypt_string(key, NULL);
+	const char *const hash = crypt_password(key);
 
 	if (!hash)
 	{

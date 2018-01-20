@@ -172,7 +172,7 @@ static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[])
 				entity(mu)->name, mu->soper->operclass->name);
 		return;
 	}
-	else if (parv[2] && !(hash = crypt_string(parv[2], NULL)))
+	else if (parv[2] && !(hash = crypt_password(parv[2])))
 	{
 		command_fail(si, fault_internalerror, _("Hash generation for oper password failed."));
 		return;
