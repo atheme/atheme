@@ -77,6 +77,8 @@ digest_testsuite_run_md5(void)
 {
 	uint8_t result[DIGEST_MDLEN_MD5];
 
+	size_t mdlen = sizeof result;
+
 	{
 		/*****************
 		 * TEST VECTOR 1 *
@@ -89,7 +91,7 @@ digest_testsuite_run_md5(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 1", __func__);
 
-		if (! digest_oneshot(DIGALG_MD5, NULL, 0, result, NULL))
+		if (! digest_oneshot(DIGALG_MD5, NULL, 0, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -110,7 +112,7 @@ digest_testsuite_run_md5(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 2", __func__);
 
-		if (! digest_oneshot(DIGALG_MD5, data, sizeof data, result, NULL))
+		if (! digest_oneshot(DIGALG_MD5, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -131,7 +133,7 @@ digest_testsuite_run_md5(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 3", __func__);
 
-		if (! digest_oneshot(DIGALG_MD5, data, sizeof data, result, NULL))
+		if (! digest_oneshot(DIGALG_MD5, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -152,7 +154,7 @@ digest_testsuite_run_md5(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 4", __func__);
 
-		if (! digest_oneshot(DIGALG_MD5, data, sizeof data, result, NULL))
+		if (! digest_oneshot(DIGALG_MD5, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -173,7 +175,7 @@ digest_testsuite_run_md5(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 5", __func__);
 
-		if (! digest_oneshot(DIGALG_MD5, data, sizeof data, result, NULL))
+		if (! digest_oneshot(DIGALG_MD5, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -196,7 +198,7 @@ digest_testsuite_run_md5(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 6", __func__);
 
-		if (! digest_oneshot(DIGALG_MD5, data, sizeof data, result, NULL))
+		if (! digest_oneshot(DIGALG_MD5, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -219,12 +221,15 @@ digest_testsuite_run_md5(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 7", __func__);
 
-		if (! digest_oneshot(DIGALG_MD5, data, sizeof data, result, NULL))
+		if (! digest_oneshot(DIGALG_MD5, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
 			return false;
 	}
+
+	if (mdlen != sizeof result)
+		return false;
 
 	return true;
 }
@@ -233,6 +238,7 @@ static bool
 digest_testsuite_run_hmac_md5(void)
 {
 	uint8_t result[DIGEST_MDLEN_MD5];
+	size_t mdlen = sizeof result;
 
 	{
 		/*****************
@@ -253,7 +259,7 @@ digest_testsuite_run_hmac_md5(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 1", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_MD5, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_MD5, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -276,7 +282,7 @@ digest_testsuite_run_hmac_md5(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 2", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_MD5, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_MD5, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -310,7 +316,7 @@ digest_testsuite_run_hmac_md5(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 3", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_MD5, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_MD5, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -346,7 +352,7 @@ digest_testsuite_run_hmac_md5(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 4", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_MD5, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_MD5, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -372,7 +378,7 @@ digest_testsuite_run_hmac_md5(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 5", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_MD5, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_MD5, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -408,7 +414,7 @@ digest_testsuite_run_hmac_md5(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 6", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_MD5, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_MD5, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -444,12 +450,15 @@ digest_testsuite_run_hmac_md5(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 7", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_MD5, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_MD5, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
 			return false;
 	}
+
+	if (mdlen != sizeof result)
+		return false;
 
 	return true;
 }
@@ -571,6 +580,8 @@ digest_testsuite_run_sha1(void)
 	uint8_t result[DIGEST_MDLEN_SHA1];
 	struct digest_context ctx;
 
+	size_t mdlen = sizeof result;
+
 	{
 		/*****************
 		 * TEST VECTOR 1 *
@@ -583,7 +594,7 @@ digest_testsuite_run_sha1(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 1", __func__);
 
-		if (! digest_oneshot(DIGALG_SHA1, NULL, 0, result, NULL))
+		if (! digest_oneshot(DIGALG_SHA1, NULL, 0, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -604,7 +615,7 @@ digest_testsuite_run_sha1(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 2", __func__);
 
-		if (! digest_oneshot(DIGALG_SHA1, data, sizeof data, result, NULL))
+		if (! digest_oneshot(DIGALG_SHA1, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -627,7 +638,7 @@ digest_testsuite_run_sha1(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 3", __func__);
 
-		if (! digest_oneshot(DIGALG_SHA1, data, sizeof data, result, NULL))
+		if (! digest_oneshot(DIGALG_SHA1, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -660,7 +671,7 @@ digest_testsuite_run_sha1(void)
 			if (! digest_update(&ctx, data, sizeof data))
 				return false;
 
-		if (! digest_final(&ctx, result, NULL))
+		if (! digest_final(&ctx, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -690,12 +701,15 @@ digest_testsuite_run_sha1(void)
 			if (! digest_update(&ctx, data, sizeof data))
 				return false;
 
-		if (! digest_final(&ctx, result, NULL))
+		if (! digest_final(&ctx, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
 			return false;
 	}
+
+	if (mdlen != sizeof result)
+		return false;
 
 	return true;
 }
@@ -704,6 +718,8 @@ static bool
 digest_testsuite_run_hmac_sha1(void)
 {
 	uint8_t result[DIGEST_MDLEN_SHA1];
+
+	size_t mdlen = sizeof result;
 
 	{
 		/*****************
@@ -724,7 +740,7 @@ digest_testsuite_run_hmac_sha1(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 1", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_SHA1, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_SHA1, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -747,7 +763,7 @@ digest_testsuite_run_hmac_sha1(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 2", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_SHA1, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_SHA1, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -779,7 +795,7 @@ digest_testsuite_run_hmac_sha1(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 3", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_SHA1, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_SHA1, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -812,7 +828,7 @@ digest_testsuite_run_hmac_sha1(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 4", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_SHA1, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_SHA1, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -838,7 +854,7 @@ digest_testsuite_run_hmac_sha1(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 5", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_SHA1, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_SHA1, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -872,7 +888,7 @@ digest_testsuite_run_hmac_sha1(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 6", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_SHA1, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_SHA1, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -906,12 +922,15 @@ digest_testsuite_run_hmac_sha1(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 7", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_SHA1, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_SHA1, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
 			return false;
 	}
+
+	if (mdlen != sizeof result)
+		return false;
 
 	return true;
 }
@@ -1031,6 +1050,8 @@ digest_testsuite_run_sha2_256(void)
 	uint8_t result[DIGEST_MDLEN_SHA2_256];
 	struct digest_context ctx;
 
+	size_t mdlen = sizeof result;
+
 	{
 		/*****************
 		 * TEST VECTOR 1 *
@@ -1045,7 +1066,7 @@ digest_testsuite_run_sha2_256(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 1", __func__);
 
-		if (! digest_oneshot(DIGALG_SHA2_256, NULL, 0, result, NULL))
+		if (! digest_oneshot(DIGALG_SHA2_256, NULL, 0, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1068,7 +1089,7 @@ digest_testsuite_run_sha2_256(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 2", __func__);
 
-		if (! digest_oneshot(DIGALG_SHA2_256, data, sizeof data, result, NULL))
+		if (! digest_oneshot(DIGALG_SHA2_256, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1093,7 +1114,7 @@ digest_testsuite_run_sha2_256(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 3", __func__);
 
-		if (! digest_oneshot(DIGALG_SHA2_256, data, sizeof data, result, NULL))
+		if (! digest_oneshot(DIGALG_SHA2_256, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1118,7 +1139,7 @@ digest_testsuite_run_sha2_256(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 4", __func__);
 
-		if (! digest_oneshot(DIGALG_SHA2_256, data, sizeof data, result, NULL))
+		if (! digest_oneshot(DIGALG_SHA2_256, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1153,12 +1174,15 @@ digest_testsuite_run_sha2_256(void)
 			if (! digest_update(&ctx, data, sizeof data))
 				return false;
 
-		if (! digest_final(&ctx, result, NULL))
+		if (! digest_final(&ctx, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
 			return false;
 	}
+
+	if (mdlen != sizeof result)
+		return false;
 
 	return true;
 }
@@ -1167,6 +1191,8 @@ static bool
 digest_testsuite_run_hmac_sha2_256(void)
 {
 	uint8_t result[DIGEST_MDLEN_SHA2_256];
+
+	size_t mdlen = sizeof result;
 
 	{
 		/*****************
@@ -1190,7 +1216,7 @@ digest_testsuite_run_hmac_sha2_256(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 1", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_SHA2_256, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_SHA2_256, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1215,7 +1241,7 @@ digest_testsuite_run_hmac_sha2_256(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 2", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_SHA2_256, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_SHA2_256, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1252,7 +1278,7 @@ digest_testsuite_run_hmac_sha2_256(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 3", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_SHA2_256, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_SHA2_256, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1290,7 +1316,7 @@ digest_testsuite_run_hmac_sha2_256(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 4", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_SHA2_256, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_SHA2_256, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1317,7 +1343,7 @@ digest_testsuite_run_hmac_sha2_256(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 5", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_SHA2_256, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_SHA2_256, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1362,7 +1388,7 @@ digest_testsuite_run_hmac_sha2_256(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 6", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_SHA2_256, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_SHA2_256, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1409,12 +1435,15 @@ digest_testsuite_run_hmac_sha2_256(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 7", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_SHA2_256, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_SHA2_256, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
 			return false;
 	}
+
+	if (mdlen != sizeof result)
+		return false;
 
 	return true;
 }
@@ -1566,6 +1595,8 @@ digest_testsuite_run_sha2_512(void)
 	uint8_t result[DIGEST_MDLEN_SHA2_512];
 	struct digest_context ctx;
 
+	size_t mdlen = sizeof result;
+
 	{
 		/*****************
 		 * TEST VECTOR 1 *
@@ -1584,7 +1615,7 @@ digest_testsuite_run_sha2_512(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 1", __func__);
 
-		if (! digest_oneshot(DIGALG_SHA2_512, NULL, 0, result, NULL))
+		if (! digest_oneshot(DIGALG_SHA2_512, NULL, 0, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1611,7 +1642,7 @@ digest_testsuite_run_sha2_512(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 2", __func__);
 
-		if (! digest_oneshot(DIGALG_SHA2_512, data, sizeof data, result, NULL))
+		if (! digest_oneshot(DIGALG_SHA2_512, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1640,7 +1671,7 @@ digest_testsuite_run_sha2_512(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 3", __func__);
 
-		if (! digest_oneshot(DIGALG_SHA2_512, data, sizeof data, result, NULL))
+		if (! digest_oneshot(DIGALG_SHA2_512, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1669,7 +1700,7 @@ digest_testsuite_run_sha2_512(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 4", __func__);
 
-		if (! digest_oneshot(DIGALG_SHA2_512, data, sizeof data, result, NULL))
+		if (! digest_oneshot(DIGALG_SHA2_512, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1708,12 +1739,15 @@ digest_testsuite_run_sha2_512(void)
 			if (! digest_update(&ctx, data, sizeof data))
 				return false;
 
-		if (! digest_final(&ctx, result, NULL))
+		if (! digest_final(&ctx, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
 			return false;
 	}
+
+	if (mdlen != sizeof result)
+		return false;
 
 	return true;
 }
@@ -1722,6 +1756,8 @@ static bool
 digest_testsuite_run_hmac_sha2_512(void)
 {
 	uint8_t result[DIGEST_MDLEN_SHA2_512];
+
+	size_t mdlen = sizeof result;
 
 	{
 		/*****************
@@ -1749,7 +1785,7 @@ digest_testsuite_run_hmac_sha2_512(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 1", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_SHA2_512, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_SHA2_512, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1778,7 +1814,7 @@ digest_testsuite_run_hmac_sha2_512(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 2", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_SHA2_512, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_SHA2_512, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1819,7 +1855,7 @@ digest_testsuite_run_hmac_sha2_512(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 3", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_SHA2_512, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_SHA2_512, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1861,7 +1897,7 @@ digest_testsuite_run_hmac_sha2_512(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 4", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_SHA2_512, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_SHA2_512, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1888,7 +1924,7 @@ digest_testsuite_run_hmac_sha2_512(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 5", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_SHA2_512, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_SHA2_512, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1937,7 +1973,7 @@ digest_testsuite_run_hmac_sha2_512(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 6", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_SHA2_512, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_SHA2_512, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1988,12 +2024,15 @@ digest_testsuite_run_hmac_sha2_512(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 7", __func__);
 
-		if (! digest_oneshot_hmac(DIGALG_SHA2_512, key, sizeof key, data, sizeof data, result, NULL))
+		if (! digest_oneshot_hmac(DIGALG_SHA2_512, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
 			return false;
 	}
+
+	if (mdlen != sizeof result)
+		return false;
 
 	return true;
 }
