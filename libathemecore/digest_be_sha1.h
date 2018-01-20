@@ -1,5 +1,5 @@
 /*
- * Internal frontend data structures for the digest interface.
+ * SHA1 backend data structures for Atheme IRC Services.
  *
  * Copyright (C) 2018 Aaron M. D. Jones <aaronmdjones@gmail.com>
  *
@@ -33,50 +33,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef INC_DIGEST_FE_INTERNAL_H
-#define INC_DIGEST_FE_INTERNAL_H
+#ifndef INC_DIGEST_BE_SHA1_H
+#define INC_DIGEST_BE_SHA1_H
 
-#define DIGEST_STLEN_MD5        0x04U
-#define DIGEST_STLEN_SHA1       0x05U
+extern bool digest_init_sha1(struct digest_context_sha1 *);
+extern bool digest_update_sha1(struct digest_context_sha1 *, const void *, size_t);
+extern bool digest_final_sha1(struct digest_context_sha1 *, void *, size_t *);
 
-struct digest_context_md5
-{
-	uint32_t        count[0x02U];
-	uint32_t        state[DIGEST_STLEN_MD5];
-	uint8_t         buf[DIGEST_BKLEN_MD5];
-};
-
-struct digest_context_sha1
-{
-	uint32_t        count[0x02U];
-	uint32_t        state[DIGEST_STLEN_SHA1];
-	uint8_t         buf[DIGEST_BKLEN_SHA1];
-};
-
-union digest_state
-{
-	struct digest_context_md5       md5ctx;
-	struct digest_context_sha1      sha1ctx;
-};
-
-typedef bool (*digest_init_fn)(union digest_state *);
-typedef bool (*digest_update_fn)(union digest_state *, const void *, size_t);
-typedef bool (*digest_final_fn)(union digest_state *, void *, size_t *);
-
-struct digest_context
-{
-	union digest_state      state;
-
-	uint8_t                 ikey[DIGEST_BKLEN_MAX];
-	uint8_t                 okey[DIGEST_BKLEN_MAX];
-
-	digest_init_fn          init;
-	digest_update_fn        update;
-	digest_final_fn         final;
-
-	size_t                  blksz;
-	size_t                  digsz;
-	bool                    hmac;
-};
-
-#endif /* !INC_DIGEST_FE_INTERNAL_H */
+#endif /* !INC_DIGEST_BE_SHA1_H */

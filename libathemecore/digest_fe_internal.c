@@ -36,6 +36,7 @@
 #include "atheme.h"
 
 #include "digest_be_md5.h"
+#include "digest_be_sha1.h"
 
 #define DIGEST_HMAC_INNER_XORVAL        0x36U
 #define DIGEST_HMAC_OUTER_XORVAL        0x5CU
@@ -59,6 +60,14 @@ digest_init(struct digest_context *const restrict ctx, const unsigned int alg)
 			ctx->final  = (digest_final_fn)  &digest_final_md5;
 			ctx->blksz  = DIGEST_BKLEN_MD5;
 			ctx->digsz  = DIGEST_MDLEN_MD5;
+			break;
+
+		case DIGALG_SHA1:
+			ctx->init   = (digest_init_fn)   &digest_init_sha1;
+			ctx->update = (digest_update_fn) &digest_update_sha1;
+			ctx->final  = (digest_final_fn)  &digest_final_sha1;
+			ctx->blksz  = DIGEST_BKLEN_SHA1;
+			ctx->digsz  = DIGEST_MDLEN_SHA1;
 			break;
 
 		default:

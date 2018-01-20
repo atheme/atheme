@@ -23,6 +23,7 @@ SRCS =				\
 	database_backend.c	\
 	datastream.c		\
 	digest_be_md5.c		\
+	digest_be_sha1.c	\
 	digest_fe_internal.c	\
 	digest_fe_internal_testsuite.c	\
 	entity.c		\
