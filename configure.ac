@@ -248,6 +248,84 @@ AS_IF([test "x${with_mbedtls}" != "xno"], [
 
 
 
+LIBNETTLE="No"
+LIBNETTLE_LIBS=""
+AC_ARG_WITH([nettle],
+	[AS_HELP_STRING([--with-nettle], [Compile with libnettle (cryptographic library) support.])],
+	[], [with_nettle="auto"])
+
+case "${with_nettle}" in
+	no | yes | auto)
+		;;
+	*)
+		AC_MSG_ERROR([invalid option for --with-nettle])
+		;;
+esac
+
+AS_IF([test "x${with_nettle}" != "xno"], [
+	LIBS_SAVED="${LIBS}"
+
+	AC_CHECK_HEADERS([nettle/md5.h nettle/sha1.h nettle/sha2.h nettle/nettle-meta.h], [], [
+		AS_IF([test "x${with_mbedtls}" = "xyes"], [AC_MSG_ERROR([required header file missing])])
+	], [])
+
+	AC_SEARCH_LIBS([nettle_md5_init], [nettle], [
+		AC_MSG_CHECKING([if libnettle is functional])
+
+		AC_RUN_IFELSE([
+			AC_LANG_PROGRAM([[
+				#include <nettle/md5.h>
+				#include <nettle/sha1.h>
+				#include <nettle/sha2.h>
+				#include <nettle/nettle-meta.h>
+			]], [[
+				const struct nettle_hash *md_md5 = &nettle_md5;
+				const struct nettle_hash *md_sha1 = &nettle_sha1;
+				const struct nettle_hash *md_sha256 = &nettle_sha256;
+				const struct nettle_hash *md_sha512 = &nettle_sha512;
+
+				if (md_md5->digest_size != MD5_DIGEST_SIZE)
+					return 1;
+
+				if (md_sha1->digest_size != SHA1_DIGEST_SIZE)
+					return 1;
+
+				if (md_sha256->digest_size != SHA256_DIGEST_SIZE)
+					return 1;
+
+				if (md_sha512->digest_size != SHA512_DIGEST_SIZE)
+					return 1;
+			]])
+		], [
+			AC_MSG_RESULT([yes])
+			LIBNETTLE="Yes"
+		], [
+			AC_MSG_RESULT([no])
+			LIBNETTLE="No"
+			AS_IF([test "x${with_nettle}" != "xauto"],
+				[AC_MSG_ERROR([--with-nettle was specified but libnettle is unusable for this task])])
+		], [
+			AC_MSG_RESULT([maybe])
+			LIBNETTLE="Yes"
+			AC_MSG_WARN([--with-nettle was specified but we are cross-compiling])
+		])
+	], [
+		AS_IF([test "x${with_nettle}" != "xauto"],
+			[AC_MSG_ERROR([--with-nettle was specified but libnettle could not be found])])
+	])
+
+	AS_IF([test "x${LIBNETTLE}" = "xYes"], [
+		AS_IF([test "x${ac_cv_search_nettle_md5_init}" != "xnone required"],
+			[LIBNETTLE_LIBS="$ac_cv_search_nettle_md5_init"])
+		AC_DEFINE([HAVE_LIBNETTLE], [1], [Define to 1 if we have libnettle available.])
+		AC_SUBST([LIBNETTLE_LIBS])
+	])
+
+	LIBS="${LIBS_SAVED}"
+])
+
+
+
 LIBIDN="No"
 LIBIDN_LIBS=""
 AC_ARG_WITH([libidn],
@@ -654,6 +732,12 @@ AS_IF([test "x${DIGEST_FRONTEND}x${LIBMBEDCRYPTO}" = "xInternalxYes"], [
 	DIGEST_FRONTEND="ARM mbedTLS"
 ])
 
+AS_IF([test "x${DIGEST_FRONTEND}x${LIBNETTLE}" = "xInternalxYes"], [
+	DIGEST_FRONTEND_H="digest_fe_nettle.h"
+	DIGEST_FRONTEND_C="digest_fe_nettle.c"
+	DIGEST_FRONTEND="Nettle"
+])
+
 AS_IF([test "x${DIGEST_FRONTEND}x${LIBCRYPTO}" = "xInternalxYes"], [
 	DIGEST_FRONTEND_H="digest_fe_openssl.h"
 	DIGEST_FRONTEND_C="digest_fe_openssl.c"
@@ -727,6 +811,7 @@ Configuration:
     CrackLib Support ........: ${LIBCRACKLIB}
     GNU libidn Support ......: ${LIBIDN}
     ARM mbedTLS Support .....: ${LIBMBEDCRYPTO}
+    Nettle Support ..........: ${LIBNETTLE}
     OpenSSL Support .........: ${LIBCRYPTO}
     PCRE Support ............: ${LIBPCRE}
     Perl Support ............: ${LIBPERL}

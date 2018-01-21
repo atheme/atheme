@@ -25,6 +25,7 @@ The following cryptographic libraries are supported, listed in the preferred
 order, along with the configure options to control them:
 
   ARM mbedTLS           (--with-mbedtls)
+  Nettle                (--with-nettle)
   OpenSSL (& LibreSSL)  (--with-openssl)
 
 When you configure this program, it will say which libraries it detected and
@@ -33,6 +34,7 @@ which one it is going to use for cryptographic acceleration; like so:
   Configuration:
       Atheme Version ..........: 7.3.0-dev
       ARM mbedTLS Support .....: Yes
+      Nettle Support ..........: No
       OpenSSL Support .........: No
       Digest Frontend .........: ARM mbedTLS
 

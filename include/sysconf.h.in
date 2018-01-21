@@ -82,6 +82,9 @@
 /* Define to 1 if we have ARM mbedTLS available. */
 #undef HAVE_LIBMBEDCRYPTO
 
+/* Define to 1 if we have libnettle available. */
+#undef HAVE_LIBNETTLE
+
 /* Define to 1 if you have the `nsl' library (-lnsl). */
 #undef HAVE_LIBNSL
 
@@ -117,6 +120,18 @@
 
 /* Define to 1 if you have the `memset_s' function. */
 #undef HAVE_MEMSET_S
+
+/* Define to 1 if you have the <nettle/md5.h> header file. */
+#undef HAVE_NETTLE_MD5_H
+
+/* Define to 1 if you have the <nettle/nettle-meta.h> header file. */
+#undef HAVE_NETTLE_NETTLE_META_H
+
+/* Define to 1 if you have the <nettle/sha1.h> header file. */
+#undef HAVE_NETTLE_SHA1_H
+
+/* Define to 1 if you have the <nettle/sha2.h> header file. */
+#undef HAVE_NETTLE_SHA2_H
 
 /* Define to 1 if OpenSSL is available */
 #undef HAVE_OPENSSL

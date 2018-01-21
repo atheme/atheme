@@ -658,6 +658,7 @@ LDAP_AUTHC
 LDAP_LIBS
 LDAP_CFLAGS
 LIBIDN_LIBS
+LIBNETTLE_LIBS
 LIBMBEDCRYPTO_LIBS
 LIBCRYPTO_LIBS
 CRACKLIB_LIBS
@@ -789,6 +790,7 @@ with_libintl_prefix
 with_cracklib
 with_openssl
 with_mbedtls
+with_nettle
 with_libidn
 with_ldap
 with_perl
@@ -1467,6 +1469,8 @@ Optional Packages:
                           password strength
   --with-openssl          Compile with OpenSSL to provide more functionality.
   --with-mbedtls          Compile with ARM mbedTLS support.
+  --with-nettle           Compile with libnettle (cryptographic library)
+                          support.
   --with-libidn           Compile with GNU libidn for SASL SCRAM-SHA support.
   --without-ldap          Disable building ldap auth module.
   --without-perl          Disable building perl scripting module
@@ -8827,6 +8831,198 @@ fi
 
 
 
+LIBNETTLE="No"
+LIBNETTLE_LIBS=""
+
+# Check whether --with-nettle was given.
+if test "${with_nettle+set}" = set; then :
+  withval=$with_nettle;
+else
+  with_nettle="auto"
+fi
+
+
+case "${with_nettle}" in
+	no | yes | auto)
+		;;
+	*)
+		as_fn_error $? "invalid option for --with-nettle" "$LINENO" 5
+		;;
+esac
+
+if test "x${with_nettle}" != "xno"; then :
+
+	LIBS_SAVED="${LIBS}"
+
+	for ac_header in nettle/md5.h nettle/sha1.h nettle/sha2.h nettle/nettle-meta.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+else
+
+		if test "x${with_mbedtls}" = "xyes"; then :
+  as_fn_error $? "required header file missing" "$LINENO" 5
+fi
+
+fi
+
+done
+
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing nettle_md5_init" >&5
+$as_echo_n "checking for library containing nettle_md5_init... " >&6; }
+if ${ac_cv_search_nettle_md5_init+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS=$LIBS
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char nettle_md5_init ();
+int
+main ()
+{
+return nettle_md5_init ();
+  ;
+  return 0;
+}
+_ACEOF
+for ac_lib in '' nettle; do
+  if test -z "$ac_lib"; then
+    ac_res="none required"
+  else
+    ac_res=-l$ac_lib
+    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
+  fi
+  if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_nettle_md5_init=$ac_res
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext
+  if ${ac_cv_search_nettle_md5_init+:} false; then :
+  break
+fi
+done
+if ${ac_cv_search_nettle_md5_init+:} false; then :
+
+else
+  ac_cv_search_nettle_md5_init=no
+fi
+rm conftest.$ac_ext
+LIBS=$ac_func_search_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_nettle_md5_init" >&5
+$as_echo "$ac_cv_search_nettle_md5_init" >&6; }
+ac_res=$ac_cv_search_nettle_md5_init
+if test "$ac_res" != no; then :
+  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libnettle is functional" >&5
+$as_echo_n "checking if libnettle is functional... " >&6; }
+
+		if test "$cross_compiling" = yes; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: maybe" >&5
+$as_echo "maybe" >&6; }
+			LIBNETTLE="Yes"
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: --with-nettle was specified but we are cross-compiling" >&5
+$as_echo "$as_me: WARNING: --with-nettle was specified but we are cross-compiling" >&2;}
+
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#include <nettle/md5.h>
+				#include <nettle/sha1.h>
+				#include <nettle/sha2.h>
+				#include <nettle/nettle-meta.h>
+
+int
+main ()
+{
+
+				const struct nettle_hash *md_md5 = &nettle_md5;
+				const struct nettle_hash *md_sha1 = &nettle_sha1;
+				const struct nettle_hash *md_sha256 = &nettle_sha256;
+				const struct nettle_hash *md_sha512 = &nettle_sha512;
+
+				if (md_md5->digest_size != MD5_DIGEST_SIZE)
+					return 1;
+
+				if (md_sha1->digest_size != SHA1_DIGEST_SIZE)
+					return 1;
+
+				if (md_sha256->digest_size != SHA256_DIGEST_SIZE)
+					return 1;
+
+				if (md_sha512->digest_size != SHA512_DIGEST_SIZE)
+					return 1;
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_run "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+			LIBNETTLE="Yes"
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+			LIBNETTLE="No"
+			if test "x${with_nettle}" != "xauto"; then :
+  as_fn_error $? "--with-nettle was specified but libnettle is unusable for this task" "$LINENO" 5
+fi
+
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext
+fi
+
+
+else
+
+		if test "x${with_nettle}" != "xauto"; then :
+  as_fn_error $? "--with-nettle was specified but libnettle could not be found" "$LINENO" 5
+fi
+
+fi
+
+
+	if test "x${LIBNETTLE}" = "xYes"; then :
+
+		if test "x${ac_cv_search_nettle_md5_init}" != "xnone required"; then :
+  LIBNETTLE_LIBS="$ac_cv_search_nettle_md5_init"
+fi
+
+$as_echo "#define HAVE_LIBNETTLE 1" >>confdefs.h
+
+
+
+fi
+
+	LIBS="${LIBS_SAVED}"
+
+fi
+
+
+
 LIBIDN="No"
 LIBIDN_LIBS=""
 
@@ -13203,6 +13399,14 @@ if test "x${DIGEST_FRONTEND}x${LIBMBEDCRYPTO}" = "xInternalxYes"; then :
 
 fi
 
+if test "x${DIGEST_FRONTEND}x${LIBNETTLE}" = "xInternalxYes"; then :
+
+	DIGEST_FRONTEND_H="digest_fe_nettle.h"
+	DIGEST_FRONTEND_C="digest_fe_nettle.c"
+	DIGEST_FRONTEND="Nettle"
+
+fi
+
 if test "x${DIGEST_FRONTEND}x${LIBCRYPTO}" = "xInternalxYes"; then :
 
 	DIGEST_FRONTEND_H="digest_fe_openssl.h"
@@ -14855,6 +15059,7 @@ Configuration:
     CrackLib Support ........: ${LIBCRACKLIB}
     GNU libidn Support ......: ${LIBIDN}
     ARM mbedTLS Support .....: ${LIBMBEDCRYPTO}
+    Nettle Support ..........: ${LIBNETTLE}
     OpenSSL Support .........: ${LIBCRYPTO}
     PCRE Support ............: ${LIBPCRE}
     Perl Support ............: ${LIBPERL}
