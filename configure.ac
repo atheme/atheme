@@ -186,16 +186,63 @@ esac
 
 AS_IF([test "x${with_mbedtls}" != "xno"], [
 	LIBS_SAVED="${LIBS}"
+
+	AC_CHECK_HEADERS([mbedtls/md.h mbedtls/pkcs5.h], [], [
+		AS_IF([test "x${with_mbedtls}" = "xyes"], [AC_MSG_ERROR([required header file missing])])
+	], [])
+
 	AC_SEARCH_LIBS([mbedtls_md_setup], [mbedcrypto], [
-		LIBMBEDCRYPTO="Yes"
-		AS_IF([test "x${ac_cv_search_mbedtls_md_setup}" != "xnone required"],
-			[LIBMBEDCRYPTO_LIBS="$ac_cv_search_mbedtls_md_setup"])
-		AC_DEFINE([HAVE_LIBMBEDCRYPTO], [1], [Define to 1 if we have ARM mbedTLS available.])
-		AC_SUBST([LIBMBEDCRYPTO_LIBS])
+		AC_MSG_CHECKING([if ARM mbedTLS is functional])
+
+		AC_RUN_IFELSE([
+			AC_LANG_PROGRAM([[
+				#include <mbedtls/md.h>
+				#include <mbedtls/pkcs5.h>
+			]], [[
+				const mbedtls_md_info_t *const md_md5 = mbedtls_md_info_from_type(MBEDTLS_MD_MD5);
+				const mbedtls_md_info_t *const md_sha1 = mbedtls_md_info_from_type(MBEDTLS_MD_SHA1);
+				const mbedtls_md_info_t *const md_sha256 = mbedtls_md_info_from_type(MBEDTLS_MD_SHA256);
+				const mbedtls_md_info_t *const md_sha512 = mbedtls_md_info_from_type(MBEDTLS_MD_SHA512);
+
+				if (mbedtls_md_get_size(md_md5) != 0x10U)
+					return 1;
+
+				if (mbedtls_md_get_size(md_sha1) != 0x14U)
+					return 2;
+
+				if (mbedtls_md_get_size(md_sha256) != 0x20U)
+					return 3;
+
+				if (mbedtls_md_get_size(md_sha512) != 0x40U)
+					return 4;
+
+				return 0;
+			]])
+		], [
+			AC_MSG_RESULT([yes])
+			LIBMBEDCRYPTO="Yes"
+		], [
+			AC_MSG_RESULT([no])
+			LIBMBEDCRYPTO="No"
+			AS_IF([test "x${with_mbedtls}" != "xauto"],
+				[AC_MSG_ERROR([--with-mbedtls was specified but ARM mbedTLS is unusable for this task])])
+		], [
+			AC_MSG_RESULT([maybe])
+			LIBMBEDCRYPTO="Yes"
+			AC_MSG_WARN([--with-mbedtls was specified but we are cross-compiling])
+		])
 	], [
 		AS_IF([test "x${with_mbedtls}" != "xauto"],
 			[AC_MSG_ERROR([--with-mbedtls was specified but ARM mbedTLS could not be found])])
 	])
+
+	AS_IF([test "x${LIBMBEDCRYPTO}" = "xYes"], [
+		AS_IF([test "x${ac_cv_search_mbedtls_md_setup}" != "xnone required"],
+			[LIBMBEDCRYPTO_LIBS="$ac_cv_search_mbedtls_md_setup"])
+		AC_DEFINE([HAVE_LIBMBEDCRYPTO], [1], [Define to 1 if we have ARM mbedTLS available.])
+		AC_SUBST([LIBMBEDCRYPTO_LIBS])
+	])
+
 	LIBS="${LIBS_SAVED}"
 ])
 

@@ -8657,6 +8657,27 @@ esac
 if test "x${with_mbedtls}" != "xno"; then :
 
 	LIBS_SAVED="${LIBS}"
+
+	for ac_header in mbedtls/md.h mbedtls/pkcs5.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+else
+
+		if test "x${with_mbedtls}" = "xyes"; then :
+  as_fn_error $? "required header file missing" "$LINENO" 5
+fi
+
+fi
+
+done
+
+
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing mbedtls_md_setup" >&5
 $as_echo_n "checking for library containing mbedtls_md_setup... " >&6; }
 if ${ac_cv_search_mbedtls_md_setup+:} false; then :
@@ -8711,13 +8732,72 @@ ac_res=$ac_cv_search_mbedtls_md_setup
 if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
 
-		LIBMBEDCRYPTO="Yes"
-		if test "x${ac_cv_search_mbedtls_md_setup}" != "xnone required"; then :
-  LIBMBEDCRYPTO_LIBS="$ac_cv_search_mbedtls_md_setup"
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if ARM mbedTLS is functional" >&5
+$as_echo_n "checking if ARM mbedTLS is functional... " >&6; }
+
+		if test "$cross_compiling" = yes; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: maybe" >&5
+$as_echo "maybe" >&6; }
+			LIBMBEDCRYPTO="Yes"
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: --with-mbedtls was specified but we are cross-compiling" >&5
+$as_echo "$as_me: WARNING: --with-mbedtls was specified but we are cross-compiling" >&2;}
+
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#include <mbedtls/md.h>
+				#include <mbedtls/pkcs5.h>
+
+int
+main ()
+{
+
+				const mbedtls_md_info_t *const md_md5 = mbedtls_md_info_from_type(MBEDTLS_MD_MD5);
+				const mbedtls_md_info_t *const md_sha1 = mbedtls_md_info_from_type(MBEDTLS_MD_SHA1);
+				const mbedtls_md_info_t *const md_sha256 = mbedtls_md_info_from_type(MBEDTLS_MD_SHA256);
+				const mbedtls_md_info_t *const md_sha512 = mbedtls_md_info_from_type(MBEDTLS_MD_SHA512);
+
+				if (mbedtls_md_get_size(md_md5) != 0x10U)
+					return 1;
+
+				if (mbedtls_md_get_size(md_sha1) != 0x14U)
+					return 2;
+
+				if (mbedtls_md_get_size(md_sha256) != 0x20U)
+					return 3;
+
+				if (mbedtls_md_get_size(md_sha512) != 0x40U)
+					return 4;
+
+				return 0;
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_run "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+			LIBMBEDCRYPTO="Yes"
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+			LIBMBEDCRYPTO="No"
+			if test "x${with_mbedtls}" != "xauto"; then :
+  as_fn_error $? "--with-mbedtls was specified but ARM mbedTLS is unusable for this task" "$LINENO" 5
 fi
 
-$as_echo "#define HAVE_LIBMBEDCRYPTO 1" >>confdefs.h
-
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext
+fi
 
 
 else
@@ -8725,6 +8805,19 @@ else
 		if test "x${with_mbedtls}" != "xauto"; then :
   as_fn_error $? "--with-mbedtls was specified but ARM mbedTLS could not be found" "$LINENO" 5
 fi
+
+fi
+
+
+	if test "x${LIBMBEDCRYPTO}" = "xYes"; then :
+
+		if test "x${ac_cv_search_mbedtls_md_setup}" != "xnone required"; then :
+  LIBMBEDCRYPTO_LIBS="$ac_cv_search_mbedtls_md_setup"
+fi
+
+$as_echo "#define HAVE_LIBMBEDCRYPTO 1" >>confdefs.h
+
+
 
 fi
 
