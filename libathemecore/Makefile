@@ -22,8 +22,9 @@ SRCS =				\
 	culture.c		\
 	database_backend.c	\
 	datastream.c		\
-	$(DIGEST_C)		\
+	$(DIGEST_FRONTEND_C)	\
 	digest_fe_shared.c	\
+	digest_testsuite.c	\
 	entity.c		\
 	$(EXPLICIT_BZERO_C)	\
 	flags.c			\

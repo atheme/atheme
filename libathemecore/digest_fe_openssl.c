@@ -183,8 +183,8 @@ digest_final(struct digest_context *const restrict ctx, void *const restrict out
 }
 
 bool
-digest_pbkdf2_hmac(const unsigned int alg, const void *const restrict pass, const size_t passLen,
-                   const void *const restrict salt, const size_t saltLen, const size_t c,
+digest_pbkdf2_hmac(const unsigned int alg, const void *restrict pass, const size_t passLen,
+                   const void *restrict salt, const size_t saltLen, const size_t c,
                    void *const restrict dk, const size_t dkLen)
 {
 	if (! c)
@@ -218,16 +218,18 @@ digest_pbkdf2_hmac(const unsigned int alg, const void *const restrict pass, cons
 	if (! md)
 		return false;
 
+	/*
+	 * PKCS5_PBKDF2_HMAC() fails if you give it a NULL argument for pass
+	 * or salt, even if the corresponding length argument is zero! This
+	 * is extremely counter-intuitive, and requires these ugly hacks.
+	 */
+	if (! pass)
+		pass = &passLen;
+	if (! salt)
+		salt = &saltLen;
+
 	if (PKCS5_PBKDF2_HMAC(pass, (int) passLen, salt, (int) saltLen, (int) c, md, (int) dkLen, dk) != 1)
 		return false;
-
-	return true;
-}
-
-bool
-digest_testsuite_run(void)
-{
-	(void) slog(LG_DEBUG, "%s: not implemented in OpenSSL frontend", __func__);
 
 	return true;
 }

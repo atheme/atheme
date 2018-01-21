@@ -35,11 +35,6 @@
 
 #include "atheme.h"
 
-#include <mbedtls/md5.h>
-#include <mbedtls/sha1.h>
-#include <mbedtls/sha256.h>
-#include <mbedtls/sha512.h>
-
 #include <mbedtls/md.h>
 #include <mbedtls/pkcs5.h>
 
@@ -274,40 +269,4 @@ error:
 	(void) mbedtls_md_free(&ctx);
 	(void) explicit_bzero(&ctx, sizeof ctx);
 	return false;
-}
-
-bool
-digest_testsuite_run(void)
-{
-	(void) slog(LG_DEBUG, "%s: running", __func__);
-
-	if (mbedtls_md5_self_test(0) != 0)
-	{
-		(void) slog(LG_ERROR, "%s: mbedtls_md5_self_test() failed", __func__);
-		return false;
-	}
-	if (mbedtls_sha1_self_test(0) != 0)
-	{
-		(void) slog(LG_ERROR, "%s: mbedtls_sha1_self_test() failed", __func__);
-		return false;
-	}
-	if (mbedtls_sha256_self_test(0) != 0)
-	{
-		(void) slog(LG_ERROR, "%s: mbedtls_sha256_self_test() failed", __func__);
-		return false;
-	}
-	if (mbedtls_sha512_self_test(0) != 0)
-	{
-		(void) slog(LG_ERROR, "%s: mbedtls_sha512_self_test() failed", __func__);
-		return false;
-	}
-	if (mbedtls_pkcs5_self_test(0) != 0)
-	{
-		(void) slog(LG_ERROR, "%s: mbedtls_pkcs5_self_test() failed", __func__);
-		return false;
-	}
-
-	(void) slog(LG_DEBUG, "%s: passed", __func__);
-
-	return true;
 }

@@ -593,28 +593,28 @@ AC_SUBST([PODIR])
 
 
 dnl Digest interface to use
-DIGEST_H="digest_fe_internal.h"
-DIGEST_C="digest_fe_internal.c digest_fe_internal_testsuite.c"
-DIGEST_C="${DIGEST_C} digest_be_md5.c"
-DIGEST_C="${DIGEST_C} digest_be_sha1.c"
-DIGEST_C="${DIGEST_C} digest_be_sha2_256.c"
-DIGEST_C="${DIGEST_C} digest_be_sha2_512.c"
+DIGEST_FRONTEND_H="digest_fe_internal.h"
+DIGEST_FRONTEND_C="digest_fe_internal.c"
+DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_md5.c"
+DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_sha1.c"
+DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_sha2_256.c"
+DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_sha2_512.c"
 DIGEST_FRONTEND="Internal"
 
 AS_IF([test "x${DIGEST_FRONTEND}x${LIBMBEDCRYPTO}" = "xInternalxYes"], [
-	DIGEST_H="digest_fe_mbedtls.h"
-	DIGEST_C="digest_fe_mbedtls.c"
+	DIGEST_FRONTEND_H="digest_fe_mbedtls.h"
+	DIGEST_FRONTEND_C="digest_fe_mbedtls.c"
 	DIGEST_FRONTEND="ARM mbedTLS"
 ])
 
 AS_IF([test "x${DIGEST_FRONTEND}x${LIBCRYPTO}" = "xInternalxYes"], [
-	DIGEST_H="digest_fe_openssl.h"
-	DIGEST_C="digest_fe_openssl.c"
+	DIGEST_FRONTEND_H="digest_fe_openssl.h"
+	DIGEST_FRONTEND_C="digest_fe_openssl.c"
 	DIGEST_FRONTEND="OpenSSL"
 ])
 
-AC_DEFINE_UNQUOTED([DIGEST_FE_HEADER], ["${DIGEST_H}"], [Front-end header for digest interface])
-AC_SUBST([DIGEST_C])
+AC_DEFINE_UNQUOTED([DIGEST_FE_HEADER], ["${DIGEST_FRONTEND_H}"], [Front-end header for digest interface])
+AC_SUBST([DIGEST_FRONTEND_C])
 
 
 

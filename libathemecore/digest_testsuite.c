@@ -1,5 +1,5 @@
 /*
- * Internal frontend for the digest interface (test suite).
+ * Digest interface testsuite.
  *
  * Copyright (C) 2018 Aaron M. D. Jones <aaronmdjones@gmail.com>
  *
