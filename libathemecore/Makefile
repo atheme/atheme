@@ -23,6 +23,7 @@ SRCS =				\
 	database_backend.c	\
 	datastream.c		\
 	$(DIGEST_C)		\
+	digest_fe_shared.c	\
 	entity.c		\
 	$(EXPLICIT_BZERO_C)	\
 	flags.c			\
