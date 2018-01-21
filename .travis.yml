@@ -2,47 +2,34 @@ language: c
 sudo: false
 os: linux
 
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+      - llvm-toolchain-trusty-5.0
+    packages:
+      - libgettextpo-dev
+      - libcrack2-dev
+      - libidn11-dev
+      - libperl-dev
+      - libssl-dev
+      - clang-5.0
+      - gcc-5
+
+compiler:
+  - clang-5.0
+  - gcc-5
+
 env:
   - OPTIONAL_CONF_ARGS=""
   - OPTIONAL_CONF_ARGS="--with-perl"
   - OPTIONAL_CONF_ARGS="--enable-contrib"
 
+script:
+  - ./configure --enable-nls --with-openssl --with-libidn --with-cracklib ${OPTIONAL_CONF_ARGS}
+  - make -j $(nproc)
+
 matrix:
   fast_finish: true
-  include:
-    - addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - libgettextpo-dev
-            - libcrack2-dev
-            - libidn11-dev
-            - libperl-dev
-            - libssl-dev
-            - gcc-5
-
-      compiler: gcc-5
-
-    - addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-5.0
-          packages:
-            - libgettextpo-dev
-            - libcrack2-dev
-            - libidn11-dev
-            - libperl-dev
-            - libssl-dev
-            - clang-5.0
-
-      compiler: clang-5.0
-
   allow_failures:
     - env: OPTIONAL_CONF_ARGS="--enable-contrib"
-
-script:
-  - ./configure --prefix=~/atheme-master/ --enable-nls --with-openssl --with-libidn --with-cracklib ${OPTIONAL_CONF_ARGS}
-  - make -j $(nproc)
-  - make install
