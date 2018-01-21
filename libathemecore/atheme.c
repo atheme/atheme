@@ -76,6 +76,8 @@ static void print_help(void)
 	       "-n           Don't fork into the background (log screen + log file)\n"
 	       "-p <file>    Specify the pid file (will be overwritten)\n"
 	       "-D <dir>     Specify the data directory\n"
+	       "-t           Don't run the integrated digest test suite\n"
+	       "-T           Exit after running the integrated digest test suite\n"
 	       "-v           Print version information and exit\n");
 }
 /* *INDENT-ON* */
@@ -257,6 +259,8 @@ static void db_save_periodic(void *unused)
 int atheme_main(int argc, char *argv[])
 {
 	int daemonize_pipe[2];
+	bool dont_run_testsuite = false;
+	bool exit_after_testsuite = false;
 	bool have_conf = false;
 	bool have_log = false;
 	bool have_datadir = false;
@@ -272,7 +276,7 @@ int atheme_main(int argc, char *argv[])
 	atheme_bootstrap();
 
 	/* do command-line options */
-	while ((r = mowgli_getopt_long(argc, argv, "c:dhrl:np:D:v", long_opts, NULL)) != -1)
+	while ((r = mowgli_getopt_long(argc, argv, "c:dhrtTl:np:D:v", long_opts, NULL)) != -1)
 	{
 		switch (r)
 		{
@@ -296,6 +300,12 @@ int atheme_main(int argc, char *argv[])
 		  case 'n':
 			  runflags |= RF_LIVE;
 			  break;
+		  case 't':
+			  dont_run_testsuite = true;
+			  break;
+		  case 'T':
+			  exit_after_testsuite = true;
+			  break;
 		  case 'p':
 			  pidfilename = mowgli_optarg;
 			  break;
@@ -307,9 +317,15 @@ int atheme_main(int argc, char *argv[])
 			  print_version();
 			  exit(EXIT_SUCCESS);
 		  default:
-			  printf("usage: atheme [-dhnvr] [-c conf] [-l logfile] [-p pidfile]\n");
+			  fprintf(stderr, "usage: atheme [-dhnvr] [-t|-T] [-c conf] [-l logfile] [-p pidfile]\n");
 			  exit(EXIT_FAILURE);
 		}
+	}
+
+	if (dont_run_testsuite && exit_after_testsuite)
+	{
+		fprintf(stderr, "Error: specify exactly one of -t / -T\n");
+		exit(EXIT_FAILURE);
 	}
 
 	if (!have_conf)
@@ -348,11 +364,14 @@ int atheme_main(int argc, char *argv[])
 	}
 #endif
 
-	if (! digest_testsuite_run())
+	if (! dont_run_testsuite && ! digest_testsuite_run())
 	{
 		fprintf(stderr, "Error: digest testsuite failed\n");
 		exit(EXIT_FAILURE);
 	}
+
+	if (exit_after_testsuite)
+		exit(EXIT_SUCCESS);
 
 	if (!(runflags & RF_LIVE))
 		daemonize(daemonize_pipe);
