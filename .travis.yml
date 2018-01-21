@@ -2,6 +2,9 @@ language: c
 sudo: false
 os: linux
 
+notifications:
+  email: false
+
 addons:
   apt:
     sources:
@@ -30,6 +33,5 @@ script:
   - make -j $(nproc)
 
 matrix:
-  fast_finish: true
   allow_failures:
     - env: OPTIONAL_CONF_ARGS="--enable-contrib"
