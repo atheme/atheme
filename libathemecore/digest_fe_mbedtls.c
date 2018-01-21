@@ -196,6 +196,8 @@ digest_final(struct digest_context *const restrict ctx, void *const restrict out
 		(void) slog(LG_ERROR, "%s: output buffer is too small (BUG)", __func__);
 		return false;
 	}
+	else if (outLen)
+		*outLen = hLen;
 
 	if (ctx->hmac)
 	{
@@ -213,9 +215,6 @@ digest_final(struct digest_context *const restrict ctx, void *const restrict out
 			return false;
 		}
 	}
-
-	if (outLen)
-		*outLen = hLen;
 
 	(void) mbedtls_md_free(&ctx->state);
 	return true;
