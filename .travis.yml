@@ -2,6 +2,11 @@ language: c
 sudo: false
 os: linux
 
+env:
+  - OPTIONAL_CONF_ARGS=""
+  - OPTIONAL_CONF_ARGS="--with-perl"
+  - OPTIONAL_CONF_ARGS="--enable-contrib"
+
 matrix:
   fast_finish: true
   include:
@@ -19,11 +24,6 @@ matrix:
 
       compiler: gcc-5
 
-      env:
-        - OPTIONAL_CONF_ARGS=""
-        - OPTIONAL_CONF_ARGS="--with-perl"
-        - OPTIONAL_CONF_ARGS="--enable-contrib"
-
     - addons:
         apt:
           sources:
@@ -38,11 +38,6 @@ matrix:
             - clang-5.0
 
       compiler: clang-5.0
-
-      env:
-        - OPTIONAL_CONF_ARGS=""
-        - OPTIONAL_CONF_ARGS="--with-perl"
-        - OPTIONAL_CONF_ARGS="--enable-contrib"
 
   allow_failures:
     - env: OPTIONAL_CONF_ARGS="--enable-contrib"
