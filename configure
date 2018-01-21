@@ -626,6 +626,7 @@ gt_needs=
 ac_header_list=
 enable_option_checking=no
 ac_subst_vars='LTLIBOBJS
+DIGEST_API_LIBS
 DIGEST_FRONTEND_C
 PODIR
 BUILDROOT
@@ -13383,6 +13384,7 @@ fi
 
 
 
+DIGEST_API_LIBS=""
 DIGEST_FRONTEND_H="digest_fe_internal.h"
 DIGEST_FRONTEND_C="digest_fe_internal.c"
 DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_md5.c"
@@ -13393,6 +13395,7 @@ DIGEST_FRONTEND="Internal"
 
 if test "x${DIGEST_FRONTEND}x${LIBMBEDCRYPTO}" = "xInternalxYes"; then :
 
+	DIGEST_API_LIBS="${LIBMBEDCRYPTO_LIBS}"
 	DIGEST_FRONTEND_H="digest_fe_mbedtls.h"
 	DIGEST_FRONTEND_C="digest_fe_mbedtls.c"
 	DIGEST_FRONTEND="ARM mbedTLS"
@@ -13401,6 +13404,7 @@ fi
 
 if test "x${DIGEST_FRONTEND}x${LIBNETTLE}" = "xInternalxYes"; then :
 
+	DIGEST_API_LIBS="${LIBNETTLE_LIBS}"
 	DIGEST_FRONTEND_H="digest_fe_nettle.h"
 	DIGEST_FRONTEND_C="digest_fe_nettle.c"
 	DIGEST_FRONTEND="Nettle"
@@ -13409,6 +13413,7 @@ fi
 
 if test "x${DIGEST_FRONTEND}x${LIBCRYPTO}" = "xInternalxYes"; then :
 
+	DIGEST_API_LIBS="${LIBCRYPTO_LIBS}"
 	DIGEST_FRONTEND_H="digest_fe_openssl.h"
 	DIGEST_FRONTEND_C="digest_fe_openssl.c"
 	DIGEST_FRONTEND="OpenSSL"
@@ -13419,6 +13424,7 @@ fi
 cat >>confdefs.h <<_ACEOF
 #define DIGEST_FE_HEADER "${DIGEST_FRONTEND_H}"
 _ACEOF
+
 
 
 
