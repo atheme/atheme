@@ -585,6 +585,7 @@ PACKAGE_STRING='atheme 7.3.0-dev'
 PACKAGE_BUGREPORT='https://github.com/atheme/atheme/issues/'
 PACKAGE_URL=''
 
+ac_unique_file="src/services/main.c"
 ac_default_prefix=~/atheme
 # Factoring default headers for most tests.
 ac_includes_default="\
@@ -640,7 +641,6 @@ MOWGLI_CFLAGS
 CONTRIB_ENABLE
 LOCALEDIR
 BUILDDIR
-SRCDIR
 ABSPATHS
 RUNDIR
 LOGDIR
@@ -2454,6 +2454,7 @@ ac_configure="$SHELL $ac_aux_dir/configure"  # Please don't use this var.
 
 
 ac_config_headers="$ac_config_headers include/sysconf.h"
+
 
 
 
@@ -8984,7 +8985,6 @@ fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${FHSPATHS}" >&5
 $as_echo "${FHSPATHS}" >&6; }
-
 
 
 
