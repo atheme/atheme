@@ -54,10 +54,13 @@ Build System
 - m4/: don't check for warning flags that gcc -Wextra enables
 - m4/: check for more warning flags
 - m4/: support clang's -Weverything flag
+- configure: don't venture outside the build directory for headers if
+  using the in-tree libmowgli-2 submodule
 - configure: Detect PCRE support automatically instead of requiring the
   user to ask us to build against it (--with-pcre)
 - buildsys.mk.in: clearly indicate link output file for 'make V=1' text
 - Makefiles: remove PCRE CFLAGS and LIBS from programs that don't use it
+- Makefiles: separate LDFLAGS from LIBS
 - Makefiles: build source files in alphabetical order
 - configure: conditionally compile libathemecore/qrcode.c
 - configure: add --with(out)-qrencode flag to allow controlling detection
