@@ -5,7 +5,7 @@ HELP_LINGUAS	= es ru fr
 
 SRCS =				\
 	account.c		\
-	arc4random.c		\
+	$(ARC4RANDOM_C)		\
 	atheme.c		\
 	auth.c			\
 	authcookie.c		\

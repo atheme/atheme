@@ -20,18 +20,19 @@ extern int sendemail(user_t *u, myuser_t *mu, const char *type, const char *emai
 #define EMAIL_MEMO	"memo"		/* emailed memos (memo text) */
 #define EMAIL_SETPASS	"setpass"	/* send a password change key (verification code) */
 
+#if defined(HAVE_ARC4RANDOM) && defined(HAVE_ARC4RANDOM_BUF) && defined(HAVE_ARC4RANDOM_UNIFORM)
+#  define arc4random            arc4random
+#  define arc4random_buf        arc4random_buf
+#  define arc4random_uniform    arc4random_uniform
+#else
 /* arc4random.c */
-#ifndef HAVE_ARC4RANDOM
-extern void arc4random_stir(void);
-extern void arc4random_addrandom(unsigned char *dat, int datlen);
-extern unsigned int arc4random(void);
-#ifndef HAVE_ARC4RANDOM_BUF
-extern void arc4random_buf(void *buf, size_t n);
-#endif /* !HAVE_ARC4RANDOM_BUF */
-#ifndef HAVE_ARC4RANDOM_UNIFORM
-extern uint32_t arc4random_uniform(uint32_t upper_bound);
-#endif /* !HAVE_ARC4RANDOM_UNIFORM */
-#endif /* !HAVE_ARC4RANDOM */
+extern uint32_t                 atheme_arc4random(void);
+extern void                     atheme_arc4random_buf(void *buf, size_t n);
+extern uint32_t                 atheme_arc4random_uniform(uint32_t upper_bound);
+#  define arc4random            atheme_arc4random
+#  define arc4random_buf        atheme_arc4random_buf
+#  define arc4random_uniform    atheme_arc4random_uniform
+#endif /* !HAVE_ARC4RANDOM || !HAVE_ARC4RANDOM_BUF || !HAVE_ARC4RANDOM_UNIFORM */
 
 #ifndef HAVE_EXPLICIT_BZERO
 #  ifdef HAVE_MEMSET_S

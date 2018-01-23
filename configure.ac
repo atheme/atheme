@@ -67,15 +67,27 @@ dnl the following is wrong! -- jilles
 dnl AC_DEFINE_UNQUOTED([PREFIX], "${prefix}", [Installation prefix.])
 
 dnl Checks for header files.
-AC_CHECK_HEADERS([link.h],,,[-])
+AC_CHECK_HEADERS([link.h], [], [], [])
 
 dnl Checks for library functions.
-AC_CHECK_FUNCS([inet_pton inet_ntop gettimeofday umask arc4random arc4random_buf arc4random_uniform explicit_bzero memset_s getrlimit fork getpid execve strtok_r inet_ntop strcasestr flock])
+AC_CHECK_FUNCS([arc4random arc4random_buf arc4random_uniform explicit_bzero memset_s])
+AC_CHECK_FUNCS([inet_ntop inet_pton execve flock fork getpid getrlimit gettimeofday strcasestr strtok_r umask])
 AC_CHECK_FUNC([socket], [], [AC_CHECK_LIB([socket], [socket])])
 AC_CHECK_FUNC([gethostbyname], [], [AC_CHECK_LIB([nsl], [gethostbyname])])
 AC_SEARCH_LIBS([crypt], [crypt], [AC_DEFINE([HAVE_CRYPT], [1], [Define to 1 if crypt(3) is available])])
 HW_FUNC_SNPRINTF
 HW_FUNC_ASPRINTF
+
+
+
+dnl If we don't have all of arc4random*(3) then we need arc4random.c which provides implementations
+ARC4RANDOM_C=""
+AS_IF([test "x${ac_cv_func_arc4random}x${ac_cv_func_arc4random_buf}x${ac_cv_func_arc4random_uniform}" != "xyesxyesxyes"], [
+	AC_CHECK_HEADERS([sys/random.h unistd.h], [], [], [])
+	AC_CHECK_FUNCS([getentropy getrandom])
+	ARC4RANDOM_C="arc4random.c"
+	AC_SUBST([ARC4RANDOM_C])
+])
 
 
 
