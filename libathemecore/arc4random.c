@@ -34,6 +34,12 @@
 #else
 #  if defined(HAVE_GETRANDOM) && defined(HAVE_SYS_RANDOM_H)
 #    include <sys/random.h>
+#  else
+#    ifdef HAVE_MBEDTLS
+#      include <mbedtls/entropy.h>
+#      include <mbedtls/hmac_drbg.h>
+#      include <mbedtls/md.h>
+#    endif
 #  endif
 #endif
 
@@ -126,7 +132,41 @@ _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 	}
 
 #  else /* HAVE_GETRANDOM && HAVE_SYS_RANDOM_H */
-#    ifdef HAVE_OPENSSL
+#    ifdef HAVE_MBEDTLS
+
+	static mbedtls_entropy_context ent_ctx;
+	static mbedtls_hmac_drbg_context hmac_ctx;
+	static bool rng_ctx_initialised = false;
+
+	if (! rng_ctx_initialised)
+	{
+		const mbedtls_md_type_t md_type = MBEDTLS_MD_SHA256;
+		const mbedtls_md_info_t *const md_info = mbedtls_md_info_from_type(md_type);
+
+		(void) mbedtls_entropy_init(&ent_ctx);
+		(void) mbedtls_hmac_drbg_init(&hmac_ctx);
+
+		const int ret = mbedtls_hmac_drbg_seed(&hmac_ctx, md_info, mbedtls_entropy_func, &ent_ctx, NULL, 0);
+
+		if (ret != 0)
+		{
+			(void) slog(LG_ERROR, "%s: mbedtls_hmac_drbg_seed: error %d", __func__, ret);
+			exit(EXIT_FAILURE);
+		}
+
+		rng_ctx_initialised = true;
+	}
+
+	const int ret = mbedtls_hmac_drbg_random(&hmac_ctx, buf, len);
+
+	if (ret != 0)
+	{
+		(void) slog(LG_ERROR, "%s: mbedtls_hmac_drbg_random: error %d", __func__, ret);
+		exit(EXIT_FAILURE);
+	}
+
+#    else /* HAVE_MBEDTLS */
+#      ifdef HAVE_OPENSSL
 
 	for (unsigned long err = 1; err != 0; err = ERR_get_error()) { /* Flush error queue */ }
 
@@ -136,7 +176,7 @@ _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 		exit(EXIT_FAILURE);
 	}
 
-#    else /* HAVE_OPENSSL */
+#      else /* HAVE_OPENSSL */
 
 	static const char *const random_dev = "/dev/urandom";
 	static int fd = -1;
@@ -164,7 +204,8 @@ _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 		out += (size_t) ret;
 	}
 
-#    endif /* !HAVE_OPENSSL */
+#      endif /* !HAVE_OPENSSL */
+#    endif /* !HAVE_MBEDTLS */
 #  endif /* !HAVE_GETRANDOM || !HAVE_SYS_RANDOM_H */
 #endif /* !HAVE_GETENTROPY */
 }
