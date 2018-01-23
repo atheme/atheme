@@ -296,8 +296,7 @@ _rs_stir_if_needed(const size_t len)
 	{
 		uint8_t tmp[CHACHA20_KEYSZ + CHACHA20_IVSZ];
 
-		//(void) _rs_get_seed_material(tmp, sizeof tmp);
-		(void) memset(tmp, 0x5A, sizeof tmp);
+		(void) _rs_get_seed_material(tmp, sizeof tmp);
 
 		if (! rs_initialized)
 		{
