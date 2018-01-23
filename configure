@@ -585,6 +585,7 @@ PACKAGE_STRING='atheme 7.3.0-dev'
 PACKAGE_BUGREPORT='https://github.com/atheme/atheme/issues/'
 PACKAGE_URL=''
 
+ac_unique_file="src/services/main.c"
 ac_default_prefix=~/atheme
 # Factoring default headers for most tests.
 ac_includes_default="\
@@ -642,7 +643,6 @@ MOWGLI_CFLAGS
 CONTRIB_ENABLE
 LOCALEDIR
 BUILDDIR
-SRCDIR
 ABSPATHS
 RUNDIR
 LOGDIR
@@ -665,6 +665,7 @@ LIBCRYPTO_LIBS
 CRACKLIB_LIBS
 CRACKLIB_C
 EXPLICIT_BZERO_C
+ARC4RANDOM_C
 LIBOBJS
 POSUB
 LTLIBINTL
@@ -1870,35 +1871,6 @@ fi
 
 } # ac_fn_c_try_link
 
-# ac_fn_c_check_header_preproc LINENO HEADER VAR
-# ----------------------------------------------
-# Tests whether HEADER is present, setting the cache variable VAR accordingly.
-ac_fn_c_check_header_preproc ()
-{
-  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $2" >&5
-$as_echo_n "checking for $2... " >&6; }
-if eval \${$3+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <$2>
-_ACEOF
-if ac_fn_c_try_cpp "$LINENO"; then :
-  eval "$3=yes"
-else
-  eval "$3=no"
-fi
-rm -f conftest.err conftest.i conftest.$ac_ext
-fi
-eval ac_res=\$$3
-	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
-  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
-
-} # ac_fn_c_check_header_preproc
-
 # ac_fn_c_check_func LINENO FUNC VAR
 # ----------------------------------
 # Tests whether FUNC exists, setting the cache variable VAR accordingly
@@ -2463,6 +2435,7 @@ ac_configure="$SHELL $ac_aux_dir/configure"  # Please don't use this var.
 
 
 ac_config_headers="$ac_config_headers include/sysconf.h"
+
 
 
 
@@ -7169,7 +7142,7 @@ LIBS="${LIBS} ${LIBINTL}"
 
 for ac_header in link.h
 do :
-  ac_fn_c_check_header_preproc "$LINENO" "link.h" "ac_cv_header_link_h"
+  ac_fn_c_check_header_mongrel "$LINENO" "link.h" "ac_cv_header_link_h" "$ac_includes_default"
 if test "x$ac_cv_header_link_h" = xyes; then :
   cat >>confdefs.h <<_ACEOF
 #define HAVE_LINK_H 1
@@ -7180,7 +7153,19 @@ fi
 done
 
 
-for ac_func in inet_pton inet_ntop gettimeofday umask arc4random arc4random_buf arc4random_uniform explicit_bzero memset_s getrlimit fork getpid execve strtok_r inet_ntop strcasestr flock
+for ac_func in arc4random arc4random_buf arc4random_uniform explicit_bzero memset_s
+do :
+  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
+ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
+if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
+_ACEOF
+
+fi
+done
+
+for ac_func in inet_ntop inet_pton execve flock fork getpid getrlimit gettimeofday strcasestr strtok_r umask
 do :
   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
 ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
@@ -8383,6 +8368,41 @@ fi
 
 
 
+ARC4RANDOM_C=""
+if test "x${ac_cv_func_arc4random}x${ac_cv_func_arc4random_buf}x${ac_cv_func_arc4random_uniform}" != "xyesxyesxyes"; then :
+
+	for ac_header in sys/random.h unistd.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+fi
+
+done
+
+	for ac_func in getentropy getrandom
+do :
+  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
+ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
+if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
+_ACEOF
+
+fi
+done
+
+	ARC4RANDOM_C="arc4random.c"
+
+
+fi
+
+
+
 EXPLICIT_BZERO_C=""
 if test "x${ac_cv_func_explicit_bzero}x${ac_cv_func_memset_s}" = "xnoxno"; then :
 
@@ -9377,7 +9397,6 @@ fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${FHSPATHS}" >&5
 $as_echo "${FHSPATHS}" >&6; }
-
 
 
 

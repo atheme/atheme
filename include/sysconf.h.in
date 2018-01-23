@@ -49,8 +49,14 @@
 /* Define to 1 if you have the `fork' function. */
 #undef HAVE_FORK
 
+/* Define to 1 if you have the `getentropy' function. */
+#undef HAVE_GETENTROPY
+
 /* Define to 1 if you have the `getpid' function. */
 #undef HAVE_GETPID
+
+/* Define to 1 if you have the `getrandom' function. */
+#undef HAVE_GETRANDOM
 
 /* Define to 1 if you have the `getrlimit' function. */
 #undef HAVE_GETRLIMIT
@@ -186,6 +192,9 @@
 
 /* Define to 1 if `thousands_sep' is a member of `struct lconv'. */
 #undef HAVE_STRUCT_LCONV_THOUSANDS_SEP
+
+/* Define to 1 if you have the <sys/random.h> header file. */
+#undef HAVE_SYS_RANDOM_H
 
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #undef HAVE_SYS_STAT_H
