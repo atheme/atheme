@@ -5,6 +5,7 @@ include ../../extra.mk
 include ../../buildsys.mk
 
 CPPFLAGS	+= -I../../include
-LIBS		+= -L../../libathemecore -lathemecore
+LDFLAGS		+= -L../../libathemecore
+LIBS		+= -lathemecore
 
 build: all

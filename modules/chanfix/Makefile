@@ -10,7 +10,8 @@ include ../../buildsys.mk
 plugindir	= $(MODDIR)/modules/chanfix
 
 CPPFLAGS	+= -I../../include
-LIBS		+= -L../../libathemecore -lathemecore
+LDFLAGS		+= -L../../libathemecore
+LIBS		+= -lathemecore
 
 CFLAGS		+= $(PLUGIN_CFLAGS)
 LDFLAGS		+= $(PLUGIN_LDFLAGS)

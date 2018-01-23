@@ -1,7 +1,5 @@
 # Copyright (c) 2003-2004 E. Will et al.
 # Rights to this code are documented in doc/LICENSE.
-#
-# This file contains build instructions.
 
 MODULE		= scripting
 SUBDIRS		= $(PERL_ENABLE)
