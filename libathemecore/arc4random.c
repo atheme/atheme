@@ -35,7 +35,7 @@
 #  if defined(HAVE_GETRANDOM) && defined(HAVE_SYS_RANDOM_H)
 #    include <sys/random.h>
 #  else
-#    ifdef HAVE_MBEDTLS
+#    ifdef HAVE_LIBMBEDCRYPTO
 #      include <mbedtls/entropy.h>
 #      include <mbedtls/hmac_drbg.h>
 #      include <mbedtls/md.h>
@@ -132,7 +132,7 @@ _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 	}
 
 #  else /* HAVE_GETRANDOM && HAVE_SYS_RANDOM_H */
-#    ifdef HAVE_MBEDTLS
+#    ifdef HAVE_LIBMBEDCRYPTO
 
 	static mbedtls_entropy_context ent_ctx;
 	static mbedtls_hmac_drbg_context hmac_ctx;
@@ -165,7 +165,7 @@ _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 		exit(EXIT_FAILURE);
 	}
 
-#    else /* HAVE_MBEDTLS */
+#    else /* HAVE_LIBMBEDCRYPTO */
 #      ifdef HAVE_OPENSSL
 
 	for (unsigned long err = 1; err != 0; err = ERR_get_error()) { /* Flush error queue */ }
@@ -205,7 +205,7 @@ _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 	}
 
 #      endif /* !HAVE_OPENSSL */
-#    endif /* !HAVE_MBEDTLS */
+#    endif /* !HAVE_LIBMBEDCRYPTO */
 #  endif /* !HAVE_GETRANDOM || !HAVE_SYS_RANDOM_H */
 #endif /* !HAVE_GETENTROPY */
 }
