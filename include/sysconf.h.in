@@ -88,6 +88,9 @@
 /* Define to 1 if we have ARM mbedTLS available. */
 #undef HAVE_LIBMBEDCRYPTO
 
+/* Define to 1 if ARM mbedTLS has HMAC-DRBG support. */
+#undef HAVE_LIBMBEDCRYPTO_HMAC_DRBG
+
 /* Define to 1 if we have libnettle available. */
 #undef HAVE_LIBNETTLE
 
@@ -114,6 +117,12 @@
 
 /* Define to 1 if the system has the type 'long long int'. */
 #undef HAVE_LONG_LONG_INT
+
+/* Define to 1 if you have the <mbedtls/entropy.h> header file. */
+#undef HAVE_MBEDTLS_ENTROPY_H
+
+/* Define to 1 if you have the <mbedtls/hmac_drbg.h> header file. */
+#undef HAVE_MBEDTLS_HMAC_DRBG_H
 
 /* Define to 1 if you have the <mbedtls/md.h> header file. */
 #undef HAVE_MBEDTLS_MD_H

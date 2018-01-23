@@ -28,7 +28,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#ifdef HAVE_LIBMBEDCRYPTO
+#ifdef HAVE_LIBMBEDCRYPTO_HMAC_DRBG
 #  include <mbedtls/entropy.h>
 #  include <mbedtls/hmac_drbg.h>
 #  include <mbedtls/md.h>
@@ -38,7 +38,7 @@
 #  endif
 #endif
 
-#ifdef HAVE_LIBMBEDCRYPTO
+#ifdef HAVE_LIBMBEDCRYPTO_HMAC_DRBG
 
 static mbedtls_entropy_context ent_ctx;
 static mbedtls_hmac_drbg_context hmac_ctx;
@@ -88,7 +88,7 @@ atheme_arc4random_buf(void *const restrict out, const size_t len)
 	}
 }
 
-#else /* HAVE_LIBMBEDCRYPTO */
+#else /* HAVE_LIBMBEDCRYPTO_HMAC_DRBG */
 
 /*
  * We don't have a library that provides a high-quality RNG.
@@ -390,7 +390,7 @@ atheme_arc4random_buf(void *const restrict out, size_t len)
 	}
 }
 
-#endif /* !HAVE_LIBMBEDCRYPTO */
+#endif /* !HAVE_LIBMBEDCRYPTO_HMAC_DRBG */
 
 uint32_t
 atheme_arc4random(void)

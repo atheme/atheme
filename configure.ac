@@ -81,12 +81,15 @@ HW_FUNC_ASPRINTF
 
 
 dnl If we don't have all of arc4random*(3) then we need arc4random.c which provides implementations
+ARC4RANDOM_BUILDING="No"
 ARC4RANDOM_C=""
 AS_IF([test "x${ac_cv_func_arc4random}x${ac_cv_func_arc4random_buf}x${ac_cv_func_arc4random_uniform}" != "xyesxyesxyes"], [
-	AC_CHECK_HEADERS([sys/random.h unistd.h], [], [], [])
-	AC_CHECK_FUNCS([getentropy getrandom])
+	ARC4RANDOM_BUILDING="Yes"
 	ARC4RANDOM_C="arc4random.c"
 	AC_SUBST([ARC4RANDOM_C])
+
+	AC_CHECK_HEADERS([sys/random.h unistd.h], [], [], [])
+	AC_CHECK_FUNCS([getentropy getrandom])
 ])
 
 
@@ -247,6 +250,47 @@ AS_IF([test "x${with_mbedtls}" != "xno"], [
 	], [
 		AS_IF([test "x${with_mbedtls}" != "xauto"],
 			[AC_MSG_ERROR([--with-mbedtls was specified but ARM mbedTLS could not be found])])
+	])
+
+	AS_IF([test "x${ARC4RANDOM_BUILDING}x${LIBMBEDCRYPTO}" = "xYesxYes"], [
+		AC_CHECK_HEADERS([mbedtls/entropy.h mbedtls/hmac_drbg.h], [], [], [])
+
+		AC_MSG_CHECKING([if ARM mbedTLS has HMAC-DRBG support])
+
+		AC_COMPILE_IFELSE([
+			AC_LANG_PROGRAM([[
+
+				#ifdef HAVE_MBEDTLS_ENTROPY_H
+				#include <mbedtls/entropy.h>
+				#else
+				#error "HMAC-DRBG requires <mbedtls/entropy.h>"
+				#endif
+
+				#ifdef HAVE_MBEDTLS_HMAC_DRBG_H
+				#include <mbedtls/hmac_drbg.h>
+				#else
+				#error "HMAC-DRBG requires <mbedtls/hmac_drbg.h>"
+				#endif
+
+				#ifndef MBEDTLS_ENTROPY_C
+				#error "HMAC-DRBG requires MBEDTLS_ENTROPY_C"
+				#endif
+
+				#ifndef MBEDTLS_HMAC_DRBG_C
+				#error "HMAC-DRBG requires MBEDTLS_HMAC_DRBG_C"
+				#endif
+
+			]], [[
+				return 0;
+			]])
+		], [
+			AC_MSG_RESULT([yes])
+			AC_DEFINE([HAVE_LIBMBEDCRYPTO_HMAC_DRBG], [1], [Define to 1 if ARM mbedTLS has HMAC-DRBG support.])
+
+			ARC4RANDOM_BUILDING="Yes (ARM mbedTLS HMAC-DRBG)"
+		], [
+			AC_MSG_RESULT([no])
+		])
 	])
 
 	AS_IF([test "x${LIBMBEDCRYPTO}" = "xYes"], [
@@ -785,6 +829,8 @@ AC_OUTPUT
 
 
 
+AS_IF([test "x${ARC4RANDOM_BUILDING}" = "xYes"], [ARC4RANDOM_BUILDING="Yes (Internal ChaCha20)"])
+
 prefix="$(eval echo "${prefix}")"
 prefix="$(eval echo "${prefix}")"
 
@@ -836,6 +882,8 @@ Configuration:
 
     Digest Frontend .........: ${DIGEST_FRONTEND}
     Mowgli Installation .....: ${MOWGLI_SOURCE}
+
+    Fallback RNG Enabled ....: ${ARC4RANDOM_BUILDING}
 
     CC ......................: ${CC}
     CFLAGS ..................: ${CFLAGS}

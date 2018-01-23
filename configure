@@ -8368,8 +8368,13 @@ fi
 
 
 
+ARC4RANDOM_BUILDING="No"
 ARC4RANDOM_C=""
 if test "x${ac_cv_func_arc4random}x${ac_cv_func_arc4random_buf}x${ac_cv_func_arc4random_uniform}" != "xyesxyesxyes"; then :
+
+	ARC4RANDOM_BUILDING="Yes"
+	ARC4RANDOM_C="arc4random.c"
+
 
 	for ac_header in sys/random.h unistd.h
 do :
@@ -8395,8 +8400,6 @@ _ACEOF
 
 fi
 done
-
-	ARC4RANDOM_C="arc4random.c"
 
 
 fi
@@ -8833,6 +8836,82 @@ fi
 
 fi
 
+
+	if test "x${ARC4RANDOM_BUILDING}x${LIBMBEDCRYPTO}" = "xYesxYes"; then :
+
+		for ac_header in mbedtls/entropy.h mbedtls/hmac_drbg.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+fi
+
+done
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if ARM mbedTLS has HMAC-DRBG support" >&5
+$as_echo_n "checking if ARM mbedTLS has HMAC-DRBG support... " >&6; }
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+
+				#ifdef HAVE_MBEDTLS_ENTROPY_H
+				#include <mbedtls/entropy.h>
+				#else
+				#error "HMAC-DRBG requires <mbedtls/entropy.h>"
+				#endif
+
+				#ifdef HAVE_MBEDTLS_HMAC_DRBG_H
+				#include <mbedtls/hmac_drbg.h>
+				#else
+				#error "HMAC-DRBG requires <mbedtls/hmac_drbg.h>"
+				#endif
+
+				#ifndef MBEDTLS_ENTROPY_C
+				#error "HMAC-DRBG requires MBEDTLS_ENTROPY_C"
+				#endif
+
+				#ifndef MBEDTLS_HMAC_DRBG_C
+				#error "HMAC-DRBG requires MBEDTLS_HMAC_DRBG_C"
+				#endif
+
+
+int
+main ()
+{
+
+				return 0;
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBMBEDCRYPTO_HMAC_DRBG 1" >>confdefs.h
+
+
+			ARC4RANDOM_BUILDING="Yes (ARM mbedTLS HMAC-DRBG)"
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+fi
 
 	if test "x${LIBMBEDCRYPTO}" = "xYes"; then :
 
@@ -15041,6 +15120,10 @@ fi
 
 
 
+if test "x${ARC4RANDOM_BUILDING}" = "xYes"; then :
+  ARC4RANDOM_BUILDING="Yes (Internal ChaCha20)"
+fi
+
 prefix="$(eval echo "${prefix}")"
 prefix="$(eval echo "${prefix}")"
 
@@ -15092,6 +15175,8 @@ Configuration:
 
     Digest Frontend .........: ${DIGEST_FRONTEND}
     Mowgli Installation .....: ${MOWGLI_SOURCE}
+
+    Fallback RNG Enabled ....: ${ARC4RANDOM_BUILDING}
 
     CC ......................: ${CC}
     CFLAGS ..................: ${CFLAGS}
