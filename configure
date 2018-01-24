@@ -13131,11 +13131,12 @@ fi
 if test "${with_libmowgli+set}" = set; then :
   withval=$with_libmowgli;
 else
-  with_libmowgli=yes
+  with_libmowgli="yes"
 fi
 
 
-if test "x${with_libmowgli}" = "xyes"; then
+if test "x${with_libmowgli}" = "xyes"; then :
+
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for MOWGLI" >&5
@@ -13207,6 +13208,7 @@ else
 $as_echo "yes" >&6; }
 	MOWGLI_SOURCE="System"
 fi
+
 fi
 
 
@@ -13215,16 +13217,20 @@ if test "x${with_libmowgli}" = "xyes"; then :
 
 elif test "x${with_libmowgli}" = "xno"; then :
 
-    MOWGLI_CFLAGS="-I../libmowgli-2/src/libmowgli -I../../libmowgli-2/src/libmowgli -I../../../libmowgli-2/src/libmowgli"
-    MOWGLI_LIBS="-L../libmowgli-2/src/libmowgli -L../../libmowgli-2/src/libmowgli -L../../../libmowgli-2/src/libmowgli -lmowgli-2"
-    LIBMOWGLI="libmowgli-2"
-    MOWGLI_SOURCE="Internal"
-    subdirs="$subdirs libmowgli-2"
+	LIBMOWGLI="libmowgli-2"
+	MOWGLI_SOURCE="Internal"
+	subdirs="$subdirs libmowgli-2"
+
+
+	MOWGLI_CFLAGS="-I$(pwd)/libmowgli-2/src/libmowgli"
+	MOWGLI_LIBS="-L$(pwd)/libmowgli-2/src/libmowgli -lmowgli-2"
 
 else
-   MOWGLI_SOURCE="System"
-    MOWGLI_CFLAGS="-I${with_libmowgli}/include/libmowgli-2"
-    MOWGLI_LIBS="-L${with_libmowgli}/lib -lmowgli-2"
+
+	MOWGLI_SOURCE="System"
+	MOWGLI_CFLAGS="-I${with_libmowgli}/include/libmowgli-2"
+	MOWGLI_LIBS="-L${with_libmowgli}/lib -lmowgli-2"
+
 fi
 
 CPPFLAGS="${CPPFLAGS} ${MOWGLI_CFLAGS}"

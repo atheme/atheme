@@ -1,7 +1,5 @@
 # Copyright (c) 2003-2004 E. Will et al.
 # Rights to this code are documented in doc/LICENSE.
-#
-# This file contains build instructions.
 
 MODULE		= crypto
 
@@ -19,4 +17,5 @@ include ../../buildsys.mk
 include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include
-LIBS 		+= ${LIBCRYPTO_LIBS} ${LIBIDN_LIBS} -L../../libathemecore -lathemecore
+LDFLAGS		+= -L../../libathemecore
+LIBS 		+= -lathemecore ${LIBCRYPTO_LIBS} ${LIBIDN_LIBS}

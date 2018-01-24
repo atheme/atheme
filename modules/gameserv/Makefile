@@ -1,7 +1,5 @@
 # Copyright (c) 2003-2004 E. Will et al.
 # Rights to this code are documented in doc/LICENSE.
-#
-# This file contains build instructions.
 
 MODULE		= gameserv
 
@@ -21,4 +19,5 @@ include ../../buildsys.mk
 include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include
-LIBS		+= -L../../libathemecore -lathemecore -lm
+LDFLAGS		+= -L../../libathemecore
+LIBS		+= -lathemecore -lm

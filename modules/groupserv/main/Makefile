@@ -10,7 +10,8 @@ include ../../../buildsys.mk
 plugindir	= $(MODDIR)/modules/groupserv
 
 CPPFLAGS	+= -I../../../include -I..
-LIBS		+= -L../../../libathemecore -lathemecore
+LDFLAGS		+= -L../../../libathemecore
+LIBS		+= -lathemecore
 
 CFLAGS		+= $(PLUGIN_CFLAGS)
 LDFLAGS		+= $(PLUGIN_LDFLAGS)
