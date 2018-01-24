@@ -4858,7 +4858,7 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
-$as_echo "#define VENDOR_STRING \"Atheme Development Group <http://atheme.github.io>\"" >>confdefs.h
+$as_echo "#define VENDOR_STRING \"Atheme Development Group <https://atheme.github.io/>\"" >>confdefs.h
 
 
 # Find a good install program.  We prefer a C program (faster),
