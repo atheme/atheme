@@ -119,6 +119,8 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDTLS], [
 		])
 	])
 
+	AC_CHECK_HEADERS([mbedtls/error.h], [], [], [])
+
 	AS_IF([test "x${LIBMBEDCRYPTO}" = "xYes"], [
 		AS_IF([test "x${ac_cv_search_mbedtls_md_setup}" != "xnone required"], [
 			LIBMBEDCRYPTO_LIBS="${ac_cv_search_mbedtls_md_setup}"

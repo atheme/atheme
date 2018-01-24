@@ -21,30 +21,43 @@
 
 #include "atheme.h"
 
-#include <sys/types.h>
-
-#include <fcntl.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
 #ifdef HAVE_LIBMBEDCRYPTO_HMAC_DRBG
-#  include <mbedtls/entropy.h>
-#  include <mbedtls/hmac_drbg.h>
-#  include <mbedtls/md.h>
-#else
-#  if defined(HAVE_GETRANDOM) && defined(HAVE_SYS_RANDOM_H)
-#    include <sys/random.h>
-#  endif
+
+#include <mbedtls/entropy.h>
+#include <mbedtls/hmac_drbg.h>
+#include <mbedtls/md.h>
+
+#if defined(MBEDTLS_ERROR_C) && defined(HAVE_MBEDTLS_ERROR_H)
+#  include <mbedtls/error.h>
 #endif
 
-#ifdef HAVE_LIBMBEDCRYPTO_HMAC_DRBG
+static const char atheme_pers_str[] = "Atheme IRC Services v" PACKAGE_VERSION;
 
-static mbedtls_entropy_context ent_ctx;
+static mbedtls_entropy_context seed_ctx;
 static mbedtls_hmac_drbg_context hmac_ctx;
 
 static bool rng_ctx_initialised = false;
 static pid_t rs_stir_pid = -1;
+
+static const char *
+atheme_arc4random_mbedtls_strerror(int err)
+{
+	static char errbuf[384];
+
+	if (err < 0)
+		err = -err;
+
+#if defined(MBEDTLS_ERROR_C) && defined(HAVE_MBEDTLS_ERROR_H)
+	char mbed_errbuf[320];
+
+	(void) mbedtls_strerror(err, mbed_errbuf, sizeof mbed_errbuf);
+	(void) snprintf(errbuf, sizeof errbuf, "-0x%X: %s", (unsigned int) err, mbed_errbuf);
+#else
+	(void) snprintf(errbuf, sizeof errbuf, "-0x%X", (unsigned int) err);
+#endif
+
+	return errbuf;
+}
 
 void
 atheme_arc4random_buf(void *const restrict out, const size_t len)
@@ -54,14 +67,16 @@ atheme_arc4random_buf(void *const restrict out, const size_t len)
 		const mbedtls_md_type_t md_type = MBEDTLS_MD_SHA256;
 		const mbedtls_md_info_t *const md_info = mbedtls_md_info_from_type(md_type);
 
-		(void) mbedtls_entropy_init(&ent_ctx);
+		(void) mbedtls_entropy_init(&seed_ctx);
 		(void) mbedtls_hmac_drbg_init(&hmac_ctx);
 
-		const int ret = mbedtls_hmac_drbg_seed(&hmac_ctx, md_info, mbedtls_entropy_func, &ent_ctx, NULL, 0);
+		const int ret = mbedtls_hmac_drbg_seed(&hmac_ctx, md_info, &mbedtls_entropy_func, &seed_ctx,
+		                                       (const void *) atheme_pers_str, sizeof atheme_pers_str);
 
 		if (ret != 0)
 		{
-			(void) slog(LG_ERROR, "%s: mbedtls_hmac_drbg_seed: error %d", __func__, ret);
+			(void) slog(LG_ERROR, "%s: mbedtls_hmac_drbg_seed: error %s", __func__,
+			                      atheme_arc4random_mbedtls_strerror(ret));
 			exit(EXIT_FAILURE);
 		}
 
@@ -74,16 +89,20 @@ atheme_arc4random_buf(void *const restrict out, const size_t len)
 
 		if (ret != 0)
 		{
-			(void) slog(LG_ERROR, "%s: mbedtls_hmac_drbg_reseed: error %d", __func__, ret);
+			(void) slog(LG_ERROR, "%s: mbedtls_hmac_drbg_reseed: error %s", __func__,
+			                      atheme_arc4random_mbedtls_strerror(ret));
 			exit(EXIT_FAILURE);
 		}
+
+		rs_stir_pid = getpid();
 	}
 
 	const int ret = mbedtls_hmac_drbg_random(&hmac_ctx, out, len);
 
 	if (ret != 0)
 	{
-		(void) slog(LG_ERROR, "%s: mbedtls_hmac_drbg_random: error %d", __func__, ret);
+		(void) slog(LG_ERROR, "%s: mbedtls_hmac_drbg_random: error %s", __func__,
+		                      atheme_arc4random_mbedtls_strerror(ret));
 		exit(EXIT_FAILURE);
 	}
 }
@@ -94,6 +113,10 @@ atheme_arc4random_buf(void *const restrict out, const size_t len)
  * We don't have a library that provides a high-quality RNG.
  * Fall back to ChaCha20-based RNG from OpenBSD.
  */
+
+#if defined(HAVE_GETRANDOM) && defined(HAVE_SYS_RANDOM_H)
+#  include <sys/random.h>
+#endif
 
 #define CHACHA20_KEYSZ          0x20U
 #define CHACHA20_IVSZ           0x08U

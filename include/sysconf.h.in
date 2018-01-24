@@ -124,6 +124,9 @@
 /* Define to 1 if you have the <mbedtls/entropy.h> header file. */
 #undef HAVE_MBEDTLS_ENTROPY_H
 
+/* Define to 1 if you have the <mbedtls/error.h> header file. */
+#undef HAVE_MBEDTLS_ERROR_H
+
 /* Define to 1 if you have the <mbedtls/hmac_drbg.h> header file. */
 #undef HAVE_MBEDTLS_HMAC_DRBG_H
 
