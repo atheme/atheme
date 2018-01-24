@@ -128,21 +128,7 @@ case "${with_cracklib}" in
 		;;
 esac
 
-AS_IF([test "x${with_cracklib}" != "xno"], [
-	LIBS_SAVED="${LIBS}"
-	AC_SEARCH_LIBS([FascistCheck], [crack], [
-		LIBCRACKLIB="Yes"
-		CRACKLIB_C="cracklib.c"
-		AS_IF([test "x${ac_cv_search_FascistCheck}" != "xnone required"],
-			[CRACKLIB_LIBS="${ac_cv_search_FascistCheck}"])
-	], [
-		AS_IF([test "x${with_cracklib}" != "xauto"],
-			[AC_MSG_ERROR([--with-cracklib was specified but cracklib could not be found])])
-	])
-	LIBS="${LIBS_SAVED}"
-])
-AC_SUBST([CRACKLIB_C])
-AC_SUBST([CRACKLIB_LIBS])
+AS_IF([test "x${with_cracklib}" != "xno"], [ATHEME_LIBTEST_CRACKLIB])
 
 
 
@@ -160,29 +146,7 @@ case "${with_openssl}" in
 		;;
 esac
 
-AS_IF([test "x${with_openssl}" != "xno"], [
-	LIBS_SAVED="${LIBS}"
-	AC_SEARCH_LIBS([EVP_DigestUpdate], [crypto], [
-		LIBCRYPTO="Yes"
-		AS_IF([test "x${ac_cv_search_EVP_DigestUpdate}" != "xnone required"],
-			[LIBCRYPTO_LIBS="${ac_cv_search_EVP_DigestUpdate}"])
-	], [
-		AS_IF([test "x${with_openssl}" != "xauto"],
-			[AC_MSG_ERROR([--with-openssl was specified but OpenSSL could not be found])])
-	])
-	LIBS="${LIBS_SAVED}"
-])
-AS_IF([test "x${LIBCRYPTO}" = "xYes"], [
-	AC_CHECK_HEADERS([openssl/ec.h], [], [], [])
-	AC_CHECK_HEADERS([openssl/evp.h openssl/hmac.h openssl/sha.h], [], [
-		LIBCRYPTO="No"
-		AS_IF([test "x${with_openssl}" = "xyes"], [AC_MSG_ERROR([required header file missing])])
-	], [])
-])
-AS_IF([test "x${LIBCRYPTO}" = "xYes"], [
-	AC_DEFINE([HAVE_OPENSSL], [1], [Define to 1 if OpenSSL is available])
-	AC_SUBST([LIBCRYPTO_LIBS])
-])
+AS_IF([test "x${with_openssl}" != "xno"], [ATHEME_LIBTEST_OPENSSL])
 
 
 
@@ -200,108 +164,7 @@ case "${with_mbedtls}" in
 		;;
 esac
 
-AS_IF([test "x${with_mbedtls}" != "xno"], [
-	LIBS_SAVED="${LIBS}"
-
-	AC_CHECK_HEADERS([mbedtls/md.h mbedtls/pkcs5.h], [], [
-		AS_IF([test "x${with_mbedtls}" = "xyes"], [AC_MSG_ERROR([required header file missing])])
-	], [])
-
-	AC_SEARCH_LIBS([mbedtls_md_setup], [mbedcrypto], [
-		AC_MSG_CHECKING([if ARM mbedTLS is functional])
-
-		AC_RUN_IFELSE([
-			AC_LANG_PROGRAM([[
-				#include <mbedtls/md.h>
-				#include <mbedtls/pkcs5.h>
-			]], [[
-				const mbedtls_md_info_t *const md_md5 = mbedtls_md_info_from_type(MBEDTLS_MD_MD5);
-				const mbedtls_md_info_t *const md_sha1 = mbedtls_md_info_from_type(MBEDTLS_MD_SHA1);
-				const mbedtls_md_info_t *const md_sha256 = mbedtls_md_info_from_type(MBEDTLS_MD_SHA256);
-				const mbedtls_md_info_t *const md_sha512 = mbedtls_md_info_from_type(MBEDTLS_MD_SHA512);
-
-				if (mbedtls_md_get_size(md_md5) != 0x10U)
-					return 1;
-
-				if (mbedtls_md_get_size(md_sha1) != 0x14U)
-					return 2;
-
-				if (mbedtls_md_get_size(md_sha256) != 0x20U)
-					return 3;
-
-				if (mbedtls_md_get_size(md_sha512) != 0x40U)
-					return 4;
-
-				return 0;
-			]])
-		], [
-			AC_MSG_RESULT([yes])
-			LIBMBEDCRYPTO="Yes"
-		], [
-			AC_MSG_RESULT([no])
-			LIBMBEDCRYPTO="No"
-			AS_IF([test "x${with_mbedtls}" != "xauto"],
-				[AC_MSG_ERROR([--with-mbedtls was specified but ARM mbedTLS is unusable for this task])])
-		], [
-			AC_MSG_RESULT([maybe])
-			LIBMBEDCRYPTO="Yes"
-			AC_MSG_WARN([--with-mbedtls was specified but we are cross-compiling])
-		])
-	], [
-		AS_IF([test "x${with_mbedtls}" != "xauto"],
-			[AC_MSG_ERROR([--with-mbedtls was specified but ARM mbedTLS could not be found])])
-	])
-
-	AS_IF([test "x${ARC4RANDOM_BUILDING}x${LIBMBEDCRYPTO}" = "xYesxYes"], [
-		AC_CHECK_HEADERS([mbedtls/entropy.h mbedtls/hmac_drbg.h], [], [], [])
-
-		AC_MSG_CHECKING([if ARM mbedTLS has HMAC-DRBG support])
-
-		AC_COMPILE_IFELSE([
-			AC_LANG_PROGRAM([[
-
-				#ifdef HAVE_MBEDTLS_ENTROPY_H
-				#include <mbedtls/entropy.h>
-				#else
-				#error "HMAC-DRBG requires <mbedtls/entropy.h>"
-				#endif
-
-				#ifdef HAVE_MBEDTLS_HMAC_DRBG_H
-				#include <mbedtls/hmac_drbg.h>
-				#else
-				#error "HMAC-DRBG requires <mbedtls/hmac_drbg.h>"
-				#endif
-
-				#ifndef MBEDTLS_ENTROPY_C
-				#error "HMAC-DRBG requires MBEDTLS_ENTROPY_C"
-				#endif
-
-				#ifndef MBEDTLS_HMAC_DRBG_C
-				#error "HMAC-DRBG requires MBEDTLS_HMAC_DRBG_C"
-				#endif
-
-			]], [[
-				return 0;
-			]])
-		], [
-			AC_MSG_RESULT([yes])
-			AC_DEFINE([HAVE_LIBMBEDCRYPTO_HMAC_DRBG], [1], [Define to 1 if ARM mbedTLS has HMAC-DRBG support.])
-
-			ARC4RANDOM_BUILDING="Yes (ARM mbedTLS HMAC-DRBG)"
-		], [
-			AC_MSG_RESULT([no])
-		])
-	])
-
-	AS_IF([test "x${LIBMBEDCRYPTO}" = "xYes"], [
-		AS_IF([test "x${ac_cv_search_mbedtls_md_setup}" != "xnone required"],
-			[LIBMBEDCRYPTO_LIBS="$ac_cv_search_mbedtls_md_setup"])
-		AC_DEFINE([HAVE_LIBMBEDCRYPTO], [1], [Define to 1 if we have ARM mbedTLS available.])
-		AC_SUBST([LIBMBEDCRYPTO_LIBS])
-	])
-
-	LIBS="${LIBS_SAVED}"
-])
+AS_IF([test "x${with_mbedtls}" != "xno"], [ATHEME_LIBTEST_MBEDTLS])
 
 
 
@@ -319,67 +182,7 @@ case "${with_nettle}" in
 		;;
 esac
 
-AS_IF([test "x${with_nettle}" != "xno"], [
-	LIBS_SAVED="${LIBS}"
-
-	AC_CHECK_HEADERS([nettle/md5.h nettle/sha1.h nettle/sha2.h nettle/nettle-meta.h], [], [
-		AS_IF([test "x${with_mbedtls}" = "xyes"], [AC_MSG_ERROR([required header file missing])])
-	], [])
-
-	AC_SEARCH_LIBS([nettle_md5_init], [nettle], [
-		AC_MSG_CHECKING([if libnettle is functional])
-
-		AC_RUN_IFELSE([
-			AC_LANG_PROGRAM([[
-				#include <nettle/md5.h>
-				#include <nettle/sha1.h>
-				#include <nettle/sha2.h>
-				#include <nettle/nettle-meta.h>
-			]], [[
-				const struct nettle_hash *md_md5 = &nettle_md5;
-				const struct nettle_hash *md_sha1 = &nettle_sha1;
-				const struct nettle_hash *md_sha256 = &nettle_sha256;
-				const struct nettle_hash *md_sha512 = &nettle_sha512;
-
-				if (md_md5->digest_size != MD5_DIGEST_SIZE)
-					return 1;
-
-				if (md_sha1->digest_size != SHA1_DIGEST_SIZE)
-					return 1;
-
-				if (md_sha256->digest_size != SHA256_DIGEST_SIZE)
-					return 1;
-
-				if (md_sha512->digest_size != SHA512_DIGEST_SIZE)
-					return 1;
-			]])
-		], [
-			AC_MSG_RESULT([yes])
-			LIBNETTLE="Yes"
-		], [
-			AC_MSG_RESULT([no])
-			LIBNETTLE="No"
-			AS_IF([test "x${with_nettle}" != "xauto"],
-				[AC_MSG_ERROR([--with-nettle was specified but libnettle is unusable for this task])])
-		], [
-			AC_MSG_RESULT([maybe])
-			LIBNETTLE="Yes"
-			AC_MSG_WARN([--with-nettle was specified but we are cross-compiling])
-		])
-	], [
-		AS_IF([test "x${with_nettle}" != "xauto"],
-			[AC_MSG_ERROR([--with-nettle was specified but libnettle could not be found])])
-	])
-
-	AS_IF([test "x${LIBNETTLE}" = "xYes"], [
-		AS_IF([test "x${ac_cv_search_nettle_md5_init}" != "xnone required"],
-			[LIBNETTLE_LIBS="$ac_cv_search_nettle_md5_init"])
-		AC_DEFINE([HAVE_LIBNETTLE], [1], [Define to 1 if we have libnettle available.])
-		AC_SUBST([LIBNETTLE_LIBS])
-	])
-
-	LIBS="${LIBS_SAVED}"
-])
+AS_IF([test "x${with_nettle}" != "xno"], [ATHEME_LIBTEST_NETTLE])
 
 
 
@@ -397,20 +200,7 @@ case "${with_libidn}" in
 		;;
 esac
 
-AS_IF([test "x${with_libidn}" != "xno"], [
-	LIBS_SAVED="${LIBS}"
-	AC_SEARCH_LIBS([stringprep], [idn], [
-		LIBIDN="Yes"
-		AS_IF([test "x${ac_cv_search_stringprep}" != "xnone required"],
-			[LIBIDN_LIBS="${ac_cv_search_stringprep}"])
-		AC_DEFINE([HAVE_LIBIDN], [1], [Define to 1 if we have GNU libidn available.])
-		AC_SUBST([LIBIDN_LIBS])
-	], [
-		AS_IF([test "x${with_libidn}" != "xauto"],
-			[AC_MSG_ERROR([--with-libidn was specified but GNU libidn could not be found])])
-	])
-	LIBS="${LIBS_SAVED}"
-])
+AS_IF([test "x${with_libidn}" != "xno"], [ATHEME_LIBTEST_IDN])
 
 
 
@@ -714,18 +504,7 @@ case "${with_pcre}" in
 		;;
 esac
 
-AS_IF([test "x${with_pcre}" != "xno"], [
-	PKG_CHECK_MODULES([PCRE], [libpcre], [
-		LIBPCRE="Yes"
-		AC_DEFINE([HAVE_PCRE], [1], [Define to 1 if PCRE is available.])
-		AC_SUBST([PCRE_CFLAGS])
-		AC_SUBST([PCRE_LIBS])
-	], [
-		AS_IF([test "x${with_pcre}" != "xauto"], [
-		      AC_MSG_ERROR([--with-pcre was specified but the PCRE library could not be found])
-		])
-	])
-])
+AS_IF([test "x${with_pcre}" != "xno"], [ATHEME_LIBTEST_PCRE])
 
 
 
@@ -824,71 +603,7 @@ AC_CONFIG_FILES([
 	extra.mk
 	atheme-services.pc
 ])
+
 AC_OUTPUT
 
-
-
-AS_IF([test "x${ARC4RANDOM_BUILDING}" = "xYes"], [ARC4RANDOM_BUILDING="Yes (Internal ChaCha20)"])
-
-prefix="$(eval echo "${prefix}")"
-prefix="$(eval echo "${prefix}")"
-
-bindir="$(eval echo "${bindir}")"
-bindir="$(eval echo "${bindir}")"
-
-MODDIR="$(eval echo "${MODDIR}")"
-MODDIR="$(eval echo "${MODDIR}")"
-
-sysconfdir="$(eval echo "${sysconfdir}")"
-sysconfdir="$(eval echo "${sysconfdir}")"
-
-LOGDIR="$(eval echo "${LOGDIR}")"
-LOGDIR="$(eval echo "${LOGDIR}")"
-
-DATADIR="$(eval echo "${DATADIR}")"
-DATADIR="$(eval echo "${DATADIR}")"
-
-RUNDIR="$(eval echo "${RUNDIR}")"
-RUNDIR="$(eval echo "${RUNDIR}")"
-
-echo "
-Configuration:
-
-    Atheme Version ..........: ${PACKAGE_VERSION}
-
-    Installation Prefix .....: ${prefix}
-    Binary Directory ........: ${bindir}
-    Module Directory ........: ${MODDIR}/modules
-    Config Directory ........: ${sysconfdir}
-    Logfile Directory .......: ${LOGDIR}
-    Data Directory ..........: ${DATADIR}
-    PID Directory ...........: ${RUNDIR}
-
-    Contrib Modules .........: ${CONTRIB}
-    Internationalization ....: ${USE_GETTEXT}
-    Large Network Support ...: ${LARGE_NET}
-    Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}
-    Build Warnings ..........: ${BUILD_WARNINGS}
-
-    CrackLib Support ........: ${LIBCRACKLIB}
-    GNU libidn Support ......: ${LIBIDN}
-    ARM mbedTLS Support .....: ${LIBMBEDCRYPTO}
-    Nettle Support ..........: ${LIBNETTLE}
-    OpenSSL Support .........: ${LIBCRYPTO}
-    PCRE Support ............: ${LIBPCRE}
-    Perl Support ............: ${LIBPERL}
-    QR Code Support .........: ${LIBQRENCODE}
-
-    Digest Frontend .........: ${DIGEST_FRONTEND}
-    Mowgli Installation .....: ${MOWGLI_SOURCE}
-
-    Fallback RNG Enabled ....: ${ARC4RANDOM_BUILDING}
-
-    CC ......................: ${CC}
-    CFLAGS ..................: ${CFLAGS}
-    CPPFLAGS ................: ${CPPFLAGS}
-
-    LD ......................: ${LD}
-    LDFLAGS .................: ${LDFLAGS}
-
-Type make to build Atheme, and make install to install it."
+ATHEME_PRINT_CONFIGURATION

@@ -30,6 +30,9 @@
    the CoreFoundation framework. */
 #undef HAVE_CFPREFERENCESCOPYAPPVALUE
 
+/* Define to 1 if cracklib is available */
+#undef HAVE_CRACKLIB
+
 /* Define to 1 if crypt(3) is available */
 #undef HAVE_CRYPT
 
@@ -82,16 +85,16 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
-/* Define to 1 if we have GNU libidn available. */
+/* Define to 1 if we have GNU libidn available */
 #undef HAVE_LIBIDN
 
-/* Define to 1 if we have ARM mbedTLS available. */
+/* Define to 1 if we have ARM mbedTLS available */
 #undef HAVE_LIBMBEDCRYPTO
 
 /* Define to 1 if ARM mbedTLS has HMAC-DRBG support. */
 #undef HAVE_LIBMBEDCRYPTO_HMAC_DRBG
 
-/* Define to 1 if we have libnettle available. */
+/* Define to 1 if we have libnettle available */
 #undef HAVE_LIBNETTLE
 
 /* Define to 1 if you have the `nsl' library (-lnsl). */
