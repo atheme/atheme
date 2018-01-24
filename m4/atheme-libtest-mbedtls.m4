@@ -1,11 +1,9 @@
 AC_DEFUN([ATHEME_LIBTEST_MBEDTLS], [
 
 	AS_IF([test "x${with_mbedtls}" != "xno"], [
-
 		LIBS_SAVED="${LIBS}"
 
 		AC_SEARCH_LIBS([mbedtls_md_setup], [mbedcrypto], [LIBMBEDCRYPTO="Yes"], [
-
 			AS_IF([test "x${with_mbedtls}" != "xauto"], [
 				AC_MSG_ERROR([--with-mbedtls was specified but ARM mbedTLS could not be found])
 			])
@@ -15,21 +13,16 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDTLS], [
 	])
 
 	AS_IF([test "x${LIBMBEDCRYPTO}" = "xYes"], [
-
 		AC_CHECK_HEADERS([mbedtls/md.h mbedtls/pkcs5.h], [], [
-
 			LIBMBEDCRYPTO="No"
-
 			AS_IF([test "x${with_mbedtls}" = "xyes"], [AC_MSG_ERROR([required header file missing])])
 		], [])
 	])
 
 	AS_IF([test "x${LIBMBEDCRYPTO}" = "xYes"], [
-
 		AC_MSG_CHECKING([if ARM mbedTLS has MD5/SHA1/SHA2 and PBKDF2 support])
 
 		AC_COMPILE_IFELSE([
-
 			AC_LANG_PROGRAM([[
 
 				#ifdef HAVE_MBEDTLS_MD_H
@@ -74,10 +67,8 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDTLS], [
 
 			]])
 		], [
-
 			AC_MSG_RESULT([yes])
 		], [
-
 			AC_MSG_RESULT([no])
 			LIBMBEDCRYPTO="No"
 
@@ -87,13 +78,10 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDTLS], [
 	])
 
 	AS_IF([test "x${LIBMBEDCRYPTO}x${ARC4RANDOM_BUILDING}" = "xYesxYes"], [
-
 		AC_CHECK_HEADERS([mbedtls/entropy.h mbedtls/hmac_drbg.h], [], [], [])
-
 		AC_MSG_CHECKING([if ARM mbedTLS has HMAC-DRBG support])
 
 		AC_COMPILE_IFELSE([
-
 			AC_LANG_PROGRAM([[
 
 				#ifdef HAVE_MBEDTLS_ENTROPY_H
@@ -122,24 +110,20 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDTLS], [
 
 			]])
 		], [
-
 			AC_MSG_RESULT([yes])
 			AC_DEFINE([HAVE_LIBMBEDCRYPTO_HMAC_DRBG], [1], [Define to 1 if ARM mbedTLS has HMAC-DRBG support.])
 
 			ARC4RANDOM_BUILDING="Yes (ARM mbedTLS HMAC-DRBG)"
 		], [
-
 			AC_MSG_RESULT([no])
 		])
 	])
 
 	AS_IF([test "x${LIBMBEDCRYPTO}" = "xYes"], [
-
+		AS_IF([test "x${ac_cv_search_mbedtls_md_setup}" != "xnone required"], [
+			LIBMBEDCRYPTO_LIBS="${ac_cv_search_mbedtls_md_setup}"
+		])
 		AC_DEFINE([HAVE_LIBMBEDCRYPTO], [1], [Define to 1 if we have ARM mbedTLS available])
-
-		AS_IF([test "x${ac_cv_search_mbedtls_md_setup}" != "xnone required"],
-			[LIBMBEDCRYPTO_LIBS="${ac_cv_search_mbedtls_md_setup}"])
-
 		AC_SUBST([LIBMBEDCRYPTO_LIBS])
 	])
 ])

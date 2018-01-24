@@ -8450,7 +8450,6 @@ if test "x${with_cracklib}" != "xno"; then :
 
 	if test "x${with_cracklib}" != "xno"; then :
 
-
 		LIBS_SAVED="${LIBS}"
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing FascistCheck" >&5
@@ -8509,7 +8508,6 @@ if test "$ac_res" != no; then :
   LIBCRACKLIB="Yes"
 else
 
-
 			if test "x${with_cracklib}" != "xauto"; then :
 
 				as_fn_error $? "--with-cracklib was specified but cracklib could not be found" "$LINENO" 5
@@ -8525,16 +8523,14 @@ fi
 
 	if test "x${LIBCRACKLIB}" = "xYes"; then :
 
+		CRACKLIB_C="cracklib.c"
+		if test "x${ac_cv_search_FascistCheck}" != "xnone required"; then :
 
+			CRACKLIB_LIBS="${ac_cv_search_FascistCheck}"
+
+fi
 
 $as_echo "#define HAVE_CRACKLIB 1" >>confdefs.h
-
-
-		CRACKLIB_C="cracklib.c"
-
-		if test "x${ac_cv_search_FascistCheck}" != "xnone required"; then :
-  CRACKLIB_LIBS="${ac_cv_search_FascistCheck}"
-fi
 
 
 
@@ -8568,7 +8564,6 @@ if test "x${with_openssl}" != "xno"; then :
 
 
 	if test "x${with_openssl}" != "xno"; then :
-
 
 		LIBS_SAVED="${LIBS}"
 
@@ -8628,7 +8623,6 @@ if test "$ac_res" != no; then :
   LIBCRYPTO="Yes"
 else
 
-
 			if test "x${with_openssl}" != "xauto"; then :
 
 				as_fn_error $? "--with-openssl was specified but OpenSSL could not be found" "$LINENO" 5
@@ -8644,7 +8638,6 @@ fi
 
 	if test "x${LIBCRYPTO}" = "xYes"; then :
 
-
 		for ac_header in openssl/ec.h
 do :
   ac_fn_c_check_header_mongrel "$LINENO" "openssl/ec.h" "ac_cv_header_openssl_ec_h" "$ac_includes_default"
@@ -8657,7 +8650,6 @@ fi
 
 done
 
-
 		for ac_header in openssl/evp.h openssl/hmac.h openssl/sha.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
@@ -8669,9 +8661,7 @@ _ACEOF
 
 else
 
-
 			LIBCRYPTO="No"
-
 			if test "x${with_openssl}" = "xyes"; then :
   as_fn_error $? "required header file missing" "$LINENO" 5
 fi
@@ -8685,14 +8675,13 @@ fi
 
 	if test "x${LIBCRYPTO}" = "xYes"; then :
 
+		if test "x${ac_cv_search_EVP_DigestUpdate}" != "xnone required"; then :
 
+			LIBCRYPTO_LIBS="${ac_cv_search_EVP_DigestUpdate}"
+
+fi
 
 $as_echo "#define HAVE_OPENSSL 1" >>confdefs.h
-
-
-		if test "x${ac_cv_search_EVP_DigestUpdate}" != "xnone required"; then :
-  LIBCRYPTO_LIBS="${ac_cv_search_EVP_DigestUpdate}"
-fi
 
 
 
@@ -8725,7 +8714,6 @@ if test "x${with_mbedtls}" != "xno"; then :
 
 
 	if test "x${with_mbedtls}" != "xno"; then :
-
 
 		LIBS_SAVED="${LIBS}"
 
@@ -8785,7 +8773,6 @@ if test "$ac_res" != no; then :
   LIBMBEDCRYPTO="Yes"
 else
 
-
 			if test "x${with_mbedtls}" != "xauto"; then :
 
 				as_fn_error $? "--with-mbedtls was specified but ARM mbedTLS could not be found" "$LINENO" 5
@@ -8801,7 +8788,6 @@ fi
 
 	if test "x${LIBMBEDCRYPTO}" = "xYes"; then :
 
-
 		for ac_header in mbedtls/md.h mbedtls/pkcs5.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
@@ -8813,9 +8799,7 @@ _ACEOF
 
 else
 
-
 			LIBMBEDCRYPTO="No"
-
 			if test "x${with_mbedtls}" = "xyes"; then :
   as_fn_error $? "required header file missing" "$LINENO" 5
 fi
@@ -8829,13 +8813,11 @@ fi
 
 	if test "x${LIBMBEDCRYPTO}" = "xYes"; then :
 
-
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if ARM mbedTLS has MD5/SHA1/SHA2 and PBKDF2 support" >&5
 $as_echo_n "checking if ARM mbedTLS has MD5/SHA1/SHA2 and PBKDF2 support... " >&6; }
 
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-
 
 
 
@@ -8891,12 +8873,10 @@ main ()
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
 
-
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
 else
-
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -8913,7 +8893,6 @@ fi
 
 	if test "x${LIBMBEDCRYPTO}x${ARC4RANDOM_BUILDING}" = "xYesxYes"; then :
 
-
 		for ac_header in mbedtls/entropy.h mbedtls/hmac_drbg.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
@@ -8927,13 +8906,11 @@ fi
 
 done
 
-
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if ARM mbedTLS has HMAC-DRBG support" >&5
 $as_echo_n "checking if ARM mbedTLS has HMAC-DRBG support... " >&6; }
 
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-
 
 
 
@@ -8973,7 +8950,6 @@ main ()
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
 
-
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -8983,7 +8959,6 @@ $as_echo "#define HAVE_LIBMBEDCRYPTO_HMAC_DRBG 1" >>confdefs.h
 			ARC4RANDOM_BUILDING="Yes (ARM mbedTLS HMAC-DRBG)"
 
 else
-
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -8995,14 +8970,13 @@ fi
 
 	if test "x${LIBMBEDCRYPTO}" = "xYes"; then :
 
+		if test "x${ac_cv_search_mbedtls_md_setup}" != "xnone required"; then :
 
+			LIBMBEDCRYPTO_LIBS="${ac_cv_search_mbedtls_md_setup}"
+
+fi
 
 $as_echo "#define HAVE_LIBMBEDCRYPTO 1" >>confdefs.h
-
-
-		if test "x${ac_cv_search_mbedtls_md_setup}" != "xnone required"; then :
-  LIBMBEDCRYPTO_LIBS="${ac_cv_search_mbedtls_md_setup}"
-fi
 
 
 
@@ -9035,7 +9009,6 @@ if test "x${with_nettle}" != "xno"; then :
 
 
 	if test "x${with_nettle}" != "xno"; then :
-
 
 		LIBS_SAVED="${LIBS}"
 
@@ -9095,7 +9068,6 @@ if test "$ac_res" != no; then :
   LIBNETTLE="Yes"
 else
 
-
 			if test "x${with_nettle}" != "xauto"; then :
 
 				as_fn_error $? "--with-nettle was specified but libnettle could not be found" "$LINENO" 5
@@ -9111,7 +9083,6 @@ fi
 
 	if test "x${LIBNETTLE}" = "xYes"; then :
 
-
 		for ac_header in nettle/md5.h nettle/sha1.h nettle/sha2.h nettle/nettle-meta.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
@@ -9123,9 +9094,7 @@ _ACEOF
 
 else
 
-
 			LIBNETTLE="No"
-
 			if test "x${with_nettle}" = "xyes"; then :
   as_fn_error $? "required header file missing" "$LINENO" 5
 fi
@@ -9139,14 +9108,13 @@ fi
 
 	if test "x${LIBNETTLE}" = "xYes"; then :
 
+		if test "x${ac_cv_search_nettle_md5_init}" != "xnone required"; then :
 
+			LIBNETTLE_LIBS="${ac_cv_search_nettle_md5_init}"
+
+fi
 
 $as_echo "#define HAVE_LIBNETTLE 1" >>confdefs.h
-
-
-		if test "x${ac_cv_search_nettle_md5_init}" != "xnone required"; then :
-  LIBNETTLE_LIBS="${ac_cv_search_nettle_md5_init}"
-fi
 
 
 
@@ -9179,7 +9147,6 @@ if test "x${with_libidn}" != "xno"; then :
 
 
 	if test "x${with_libidn}" != "xno"; then :
-
 
 		LIBS_SAVED="${LIBS}"
 
@@ -9239,7 +9206,6 @@ if test "$ac_res" != no; then :
   LIBIDN="Yes"
 else
 
-
 			if test "x${with_libidn}" != "xauto"; then :
 
 				as_fn_error $? "--with-libidn was specified but GNU libidn could not be found" "$LINENO" 5
@@ -9255,14 +9221,13 @@ fi
 
 	if test "x${LIBIDN}" = "xYes"; then :
 
+		if test "x${ac_cv_search_stringprep}" != "xnone required"; then :
 
+			LIBIDN_LIBS="${ac_cv_search_stringprep}"
+
+fi
 
 $as_echo "#define HAVE_LIBIDN 1" >>confdefs.h
-
-
-		if test "x${ac_cv_search_stringprep}" != "xnone required"; then :
-  LIBIDN_LIBS="${ac_cv_search_stringprep}"
-fi
 
 
 
@@ -13315,6 +13280,7 @@ if test "x${with_pcre}" != "xno"; then :
 
 	if test "x${with_pcre}" != "xno"; then :
 
+		LIBS_SAVED="${LIBS}"
 
 
 pkg_failed=no
@@ -13376,7 +13342,6 @@ fi
 	echo "$PCRE_PKG_ERRORS" >&5
 
 
-
 			if test "x${with_pcre}" != "xauto"; then :
 
 				as_fn_error $? "--with-pcre was specified but the PCRE library could not be found" "$LINENO" 5
@@ -13386,7 +13351,6 @@ fi
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-
 
 			if test "x${with_pcre}" != "xauto"; then :
 
@@ -13402,14 +13366,14 @@ $as_echo "yes" >&6; }
 	LIBPCRE="Yes"
 fi
 
+		LIBS="${LIBS_SAVED}"
+
 fi
 
 	if test "x${LIBPCRE}" = "xYes"; then :
 
 
-
 $as_echo "#define HAVE_PCRE 1" >>confdefs.h
-
 
 
 
