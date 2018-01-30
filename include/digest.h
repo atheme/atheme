@@ -58,15 +58,19 @@
 
 #include DIGEST_FE_HEADER
 
-extern bool digest_init(struct digest_context *, unsigned int);
-extern bool digest_init_hmac(struct digest_context *, unsigned int, const void *, size_t);
-extern bool digest_update(struct digest_context *, const void *, size_t);
-extern bool digest_final(struct digest_context *, void *, size_t *);
+#ifndef AWUR
+#define AWUR __attribute__((warn_unused_result))
+#endif
 
-extern bool digest_oneshot(unsigned int, const void *, size_t, void *, size_t *);
-extern bool digest_oneshot_hmac(unsigned int, const void *, size_t, const void *, size_t, void *, size_t *);
-extern bool digest_pbkdf2_hmac(unsigned int, const void *, size_t, const void *, size_t, size_t, void *, size_t);
+extern bool AWUR digest_init(struct digest_context *, unsigned int);
+extern bool AWUR digest_init_hmac(struct digest_context *, unsigned int, const void *, size_t);
+extern bool AWUR digest_update(struct digest_context *, const void *, size_t);
+extern bool AWUR digest_final(struct digest_context *, void *, size_t *);
 
-extern bool digest_testsuite_run(void);
+extern bool AWUR digest_oneshot(unsigned int, const void *, size_t, void *, size_t *);
+extern bool AWUR digest_oneshot_hmac(unsigned int, const void *, size_t, const void *, size_t, void *, size_t *);
+extern bool AWUR digest_pbkdf2_hmac(unsigned int, const void *, size_t, const void *, size_t, size_t, void *, size_t);
+
+extern bool AWUR digest_testsuite_run(void);
 
 #endif /* !INC_DIGEST_H */
