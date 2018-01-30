@@ -275,34 +275,34 @@ digest_pbkdf2_hmac(const unsigned int alg, const void *const restrict pass, cons
 	 * we just call the underlying digest directly.
 	 */
 
+	uint8_t dtmp[DIGEST_MDLEN_MAX];
+	struct digest_context ctx;
+
 	if (! c)
 	{
 		(void) slog(LG_ERROR, "%s: called with zero 'c' (BUG)", __func__);
-		return false;
+		goto error;
 	}
 	if (! dk)
 	{
 		(void) slog(LG_ERROR, "%s: called with NULL 'dk' (BUG)", __func__);
-		return false;
+		goto error;
 	}
 	if (! dkLen)
 	{
 		(void) slog(LG_ERROR, "%s: called with zero 'dkLen' (BUG)", __func__);
-		return false;
+		goto error;
 	}
 	if ((! pass && passLen) || (pass && ! passLen))
 	{
 		(void) slog(LG_ERROR, "%s: called with mismatched pass parameters (BUG)", __func__);
-		return false;
+		goto error;
 	}
 	if ((! salt && saltLen) || (salt && ! saltLen))
 	{
 		(void) slog(LG_ERROR, "%s: called with mismatched salt parameters (BUG)", __func__);
-		return false;
+		goto error;
 	}
-
-	uint8_t dtmp[DIGEST_MDLEN_MAX];
-	struct digest_context ctx;
 
 	if (! digest_init_hmac(&ctx, alg, pass, passLen))
 		goto error;

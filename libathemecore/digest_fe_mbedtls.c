@@ -220,40 +220,40 @@ digest_pbkdf2_hmac(const unsigned int alg, const void *const restrict pass, cons
                    const void *const restrict salt, const size_t saltLen, const size_t c,
                    void *const restrict dk, const size_t dkLen)
 {
+	mbedtls_md_context_t ctx;
+
+	(void) mbedtls_md_init(&ctx);
+
 	if (! c)
 	{
 		(void) slog(LG_ERROR, "%s: called with zero 'c' (BUG)", __func__);
-		return false;
+		goto error;
 	}
 	if (! dk)
 	{
 		(void) slog(LG_ERROR, "%s: called with NULL 'dk' (BUG)", __func__);
-		return false;
+		goto error;
 	}
 	if (! dkLen)
 	{
 		(void) slog(LG_ERROR, "%s: called with zero 'dkLen' (BUG)", __func__);
-		return false;
+		goto error;
 	}
 	if ((! pass && passLen) || (pass && ! passLen))
 	{
 		(void) slog(LG_ERROR, "%s: called with mismatched pass parameters (BUG)", __func__);
-		return false;
+		goto error;
 	}
 	if ((! salt && saltLen) || (salt && ! saltLen))
 	{
 		(void) slog(LG_ERROR, "%s: called with mismatched salt parameters (BUG)", __func__);
-		return false;
+		goto error;
 	}
 
 	const mbedtls_md_info_t *const md = digest_decide_md(alg);
 
 	if (! md)
-		return false;
-
-	mbedtls_md_context_t ctx;
-
-	(void) mbedtls_md_init(&ctx);
+		goto error;
 
 	if (mbedtls_md_setup(&ctx, md, 1) != 0)
 		goto error;
@@ -268,5 +268,6 @@ digest_pbkdf2_hmac(const unsigned int alg, const void *const restrict pass, cons
 error:
 	(void) mbedtls_md_free(&ctx);
 	(void) explicit_bzero(&ctx, sizeof ctx);
+	(void) explicit_bzero(dk, dkLen);
 	return false;
 }

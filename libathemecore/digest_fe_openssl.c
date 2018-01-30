@@ -190,33 +190,33 @@ digest_pbkdf2_hmac(const unsigned int alg, const void *restrict pass, const size
 	if (! c)
 	{
 		(void) slog(LG_ERROR, "%s: called with zero 'c' (BUG)", __func__);
-		return false;
+		goto error;
 	}
 	if (! dk)
 	{
 		(void) slog(LG_ERROR, "%s: called with NULL 'dk' (BUG)", __func__);
-		return false;
+		goto error;
 	}
 	if (! dkLen)
 	{
 		(void) slog(LG_ERROR, "%s: called with zero 'dkLen' (BUG)", __func__);
-		return false;
+		goto error;
 	}
 	if ((! pass && passLen) || (pass && ! passLen))
 	{
 		(void) slog(LG_ERROR, "%s: called with mismatched pass parameters (BUG)", __func__);
-		return false;
+		goto error;
 	}
 	if ((! salt && saltLen) || (salt && ! saltLen))
 	{
 		(void) slog(LG_ERROR, "%s: called with mismatched salt parameters (BUG)", __func__);
-		return false;
+		goto error;
 	}
 
 	const EVP_MD *const md = digest_decide_md(alg);
 
 	if (! md)
-		return false;
+		goto error;
 
 	/*
 	 * PKCS5_PBKDF2_HMAC() fails if you give it a NULL argument for pass
@@ -229,7 +229,11 @@ digest_pbkdf2_hmac(const unsigned int alg, const void *restrict pass, const size
 		salt = &saltLen;
 
 	if (PKCS5_PBKDF2_HMAC(pass, (int) passLen, salt, (int) saltLen, (int) c, md, (int) dkLen, dk) != 1)
-		return false;
+		goto error;
 
 	return true;
+
+error:
+	(void) explicit_bzero(dk, dkLen);
+	return false;
 }
