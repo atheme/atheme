@@ -26,8 +26,6 @@ static void write_groupdb(database_handle_t *db)
 
 	MYENTITY_FOREACH_T(mt, &state, ENT_GROUP)
 	{
-		mowgli_node_t *n;
-
 		continue_if_fail(mt != NULL);
 		mygroup_t *mg = group(mt);
 		continue_if_fail(mg != NULL);
@@ -41,18 +39,6 @@ static void write_groupdb(database_handle_t *db)
 		db_write_word(db, mgflags);
 		db_commit_row(db);
 
-		MOWGLI_ITER_FOREACH(n, mg->acs.head)
-		{
-			groupacs_t *ga = n->data;
-			char *flags = gflags_tostr(ga_flags, ga->flags);
-
-			db_start_row(db, "GACL");
-			db_start_row(db, entity(mg)->name);
-			db_start_row(db, ga->mt->name);
-			db_start_row(db, flags);
-			db_commit_row(db);
-		}
-
 		if (object(mg)->metadata)
 		{
 			MOWGLI_PATRICIA_FOREACH(md, &state2, object(mg)->metadata)
@@ -63,6 +49,27 @@ static void write_groupdb(database_handle_t *db)
 				db_write_str(db, md->value);
 				db_commit_row(db);
 			}
+		}
+	}
+
+	MYENTITY_FOREACH_T(mt, &state, ENT_GROUP)
+	{
+		mowgli_node_t *n;
+
+		continue_if_fail(mt != NULL);
+		mygroup_t *mg = group(mt);
+		continue_if_fail(mg != NULL);
+
+		MOWGLI_ITER_FOREACH(n, mg->acs.head)
+		{
+			groupacs_t *ga = n->data;
+			char *flags = gflags_tostr(ga_flags, ga->flags);
+
+			db_start_row(db, "GACL");
+			db_start_row(db, entity(mg)->name);
+			db_start_row(db, ga->mt->name);
+			db_start_row(db, flags);
+			db_commit_row(db);
 		}
 	}
 }
