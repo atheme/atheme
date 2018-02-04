@@ -66,9 +66,9 @@ static void write_groupdb(database_handle_t *db)
 			char *flags = gflags_tostr(ga_flags, ga->flags);
 
 			db_start_row(db, "GACL");
-			db_start_row(db, entity(mg)->name);
-			db_start_row(db, ga->mt->name);
-			db_start_row(db, flags);
+			db_write_word(db, entity(mg)->name);
+			db_write_word(db, ga->mt->name);
+			db_write_word(db, flags);
 			db_commit_row(db);
 		}
 	}
