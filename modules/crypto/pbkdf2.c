@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2012 William Pitcock <nenolod@dereferenced.org>.
+ * Copyright (C) 2012 William Pitcock <nenolod@dereferenced.org>
+ * Copyright (C) 2017-2018 Aaron M. D. Jones <aaronmdjones@gmail.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -20,12 +21,6 @@
 
 #include "atheme.h"
 
-#ifdef HAVE_OPENSSL
-
-#include <openssl/evp.h>
-#include <openssl/hmac.h>
-#include <openssl/sha.h>
-
 #define ATHEME_PBKDF2_ROUNDS    128000
 #define ATHEME_PBKDF2_SALTLEN   16
 
@@ -33,22 +28,18 @@ static bool
 atheme_pbkdf2_verify(const char *const restrict password, const char *const restrict parameters,
                      unsigned int __attribute__((unused)) *const restrict flags)
 {
-	if (strlen(parameters) != (ATHEME_PBKDF2_SALTLEN + (2 * SHA512_DIGEST_LENGTH)))
+	if (strlen(parameters) != (ATHEME_PBKDF2_SALTLEN + (2 * DIGEST_MDLEN_SHA2_512)))
 		return false;
 
-	const EVP_MD *const md = EVP_sha512();
-	if (!md)
+	unsigned char buf[DIGEST_MDLEN_SHA2_512];
+	const bool ret = digest_pbkdf2_hmac(DIGALG_SHA2_512, password, strlen(password), parameters,
+	                                    ATHEME_PBKDF2_SALTLEN, ATHEME_PBKDF2_ROUNDS, buf, sizeof buf);
+
+	if (! ret)
 		return false;
 
-	unsigned char buf[SHA512_DIGEST_LENGTH];
-	const int ret = PKCS5_PBKDF2_HMAC(password, (int) strlen(password), (const unsigned char *) parameters,
-	                                  ATHEME_PBKDF2_SALTLEN, ATHEME_PBKDF2_ROUNDS, md,
-	                                  SHA512_DIGEST_LENGTH, buf);
-	if (!ret)
-		return false;
-
-	char result[(2 * SHA512_DIGEST_LENGTH) + 1];
-	for (size_t i = 0; i < SHA512_DIGEST_LENGTH; i++)
+	char result[(2 * DIGEST_MDLEN_SHA2_512) + 1];
+	for (size_t i = 0; i < DIGEST_MDLEN_SHA2_512; i++)
 		(void) sprintf(result + (i * 2), "%02x", 255 & buf[i]);
 
 	if (strcmp(result, parameters + ATHEME_PBKDF2_SALTLEN) != 0)
@@ -76,5 +67,3 @@ mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 }
 
 SIMPLE_DECLARE_MODULE_V1("crypto/pbkdf2", MODULE_UNLOAD_CAPABILITY_OK)
-
-#endif

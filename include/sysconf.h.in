@@ -3,6 +3,9 @@
 /* Define if building universal (internal helper macro) */
 #undef AC_APPLE_UNIVERSAL_BUILD
 
+/* Front-end header for digest interface */
+#undef DIGEST_FE_HEADER
+
 /* Define to 1 if translation of program messages to the user's native
    language is requested. */
 #undef ENABLE_NLS
@@ -26,6 +29,9 @@
 /* Define to 1 if you have the Mac OS X function CFPreferencesCopyAppValue in
    the CoreFoundation framework. */
 #undef HAVE_CFPREFERENCESCOPYAPPVALUE
+
+/* Define to 1 if cracklib is available */
+#undef HAVE_CRACKLIB
 
 /* Define to 1 if crypt(3) is available */
 #undef HAVE_CRYPT
@@ -79,8 +85,17 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
-/* Define to 1 if we have GNU libidn available. */
+/* Define to 1 if we have GNU libidn available */
 #undef HAVE_LIBIDN
+
+/* Define to 1 if we have ARM mbedTLS available */
+#undef HAVE_LIBMBEDCRYPTO
+
+/* Define to 1 if ARM mbedTLS has HMAC-DRBG support. */
+#undef HAVE_LIBMBEDCRYPTO_HMAC_DRBG
+
+/* Define to 1 if we have libnettle available */
+#undef HAVE_LIBNETTLE
 
 /* Define to 1 if you have the `nsl' library (-lnsl). */
 #undef HAVE_LIBNSL
@@ -106,11 +121,38 @@
 /* Define to 1 if the system has the type 'long long int'. */
 #undef HAVE_LONG_LONG_INT
 
+/* Define to 1 if you have the <mbedtls/entropy.h> header file. */
+#undef HAVE_MBEDTLS_ENTROPY_H
+
+/* Define to 1 if you have the <mbedtls/error.h> header file. */
+#undef HAVE_MBEDTLS_ERROR_H
+
+/* Define to 1 if you have the <mbedtls/hmac_drbg.h> header file. */
+#undef HAVE_MBEDTLS_HMAC_DRBG_H
+
+/* Define to 1 if you have the <mbedtls/md.h> header file. */
+#undef HAVE_MBEDTLS_MD_H
+
+/* Define to 1 if you have the <mbedtls/pkcs5.h> header file. */
+#undef HAVE_MBEDTLS_PKCS5_H
+
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
 /* Define to 1 if you have the `memset_s' function. */
 #undef HAVE_MEMSET_S
+
+/* Define to 1 if you have the <nettle/md5.h> header file. */
+#undef HAVE_NETTLE_MD5_H
+
+/* Define to 1 if you have the <nettle/nettle-meta.h> header file. */
+#undef HAVE_NETTLE_NETTLE_META_H
+
+/* Define to 1 if you have the <nettle/sha1.h> header file. */
+#undef HAVE_NETTLE_SHA1_H
+
+/* Define to 1 if you have the <nettle/sha2.h> header file. */
+#undef HAVE_NETTLE_SHA2_H
 
 /* Define to 1 if OpenSSL is available */
 #undef HAVE_OPENSSL
@@ -127,7 +169,7 @@
 /* Define to 1 if you have the <openssl/sha.h> header file. */
 #undef HAVE_OPENSSL_SHA_H
 
-/* Define to 1 if PCRE is available. */
+/* Define to 1 if PCRE is available */
 #undef HAVE_PCRE
 
 /* Define to 1 if the system has the type `ptrdiff_t'. */

@@ -81,12 +81,15 @@ HW_FUNC_ASPRINTF
 
 
 dnl If we don't have all of arc4random*(3) then we need arc4random.c which provides implementations
+ARC4RANDOM_BUILDING="No"
 ARC4RANDOM_C=""
 AS_IF([test "x${ac_cv_func_arc4random}x${ac_cv_func_arc4random_buf}x${ac_cv_func_arc4random_uniform}" != "xyesxyesxyes"], [
-	AC_CHECK_HEADERS([sys/random.h unistd.h], [], [], [])
-	AC_CHECK_FUNCS([getentropy getrandom])
+	ARC4RANDOM_BUILDING="Yes"
 	ARC4RANDOM_C="arc4random.c"
 	AC_SUBST([ARC4RANDOM_C])
+
+	AC_CHECK_HEADERS([sys/random.h unistd.h], [], [], [])
+	AC_CHECK_FUNCS([getentropy getrandom])
 ])
 
 
@@ -125,21 +128,7 @@ case "${with_cracklib}" in
 		;;
 esac
 
-AS_IF([test "x${with_cracklib}" != "xno"], [
-	LIBS_SAVED="${LIBS}"
-	AC_SEARCH_LIBS([FascistCheck], [crack], [
-		LIBCRACKLIB="Yes"
-		CRACKLIB_C="cracklib.c"
-		AS_IF([test "x${ac_cv_search_FascistCheck}" != "xnone required"],
-			[CRACKLIB_LIBS="${ac_cv_search_FascistCheck}"])
-	], [
-		AS_IF([test "x${with_cracklib}" != "xauto"],
-			[AC_MSG_ERROR([--with-cracklib was specified but cracklib could not be found])])
-	])
-	LIBS="${LIBS_SAVED}"
-])
-AC_SUBST([CRACKLIB_C])
-AC_SUBST([CRACKLIB_LIBS])
+AS_IF([test "x${with_cracklib}" != "xno"], [ATHEME_LIBTEST_CRACKLIB])
 
 
 
@@ -157,29 +146,43 @@ case "${with_openssl}" in
 		;;
 esac
 
-AS_IF([test "x${with_openssl}" != "xno"], [
-	LIBS_SAVED="${LIBS}"
-	AC_SEARCH_LIBS([EVP_DigestUpdate], [crypto], [
-		LIBCRYPTO="Yes"
-		AS_IF([test "x${ac_cv_search_EVP_DigestUpdate}" != "xnone required"],
-			[LIBCRYPTO_LIBS="${ac_cv_search_EVP_DigestUpdate}"])
-	], [
-		AS_IF([test "x${with_openssl}" != "xauto"],
-			[AC_MSG_ERROR([--with-openssl was specified but OpenSSL could not be found])])
-	])
-	LIBS="${LIBS_SAVED}"
-])
-AS_IF([test "x${LIBCRYPTO}" = "xYes"], [
-	AC_CHECK_HEADERS([openssl/ec.h], [], [], [])
-	AC_CHECK_HEADERS([openssl/evp.h openssl/hmac.h openssl/sha.h], [], [
-		LIBCRYPTO="No"
-		AS_IF([test "x${with_openssl}" = "xyes"], [AC_MSG_ERROR([required header file missing])])
-	], [])
-])
-AS_IF([test "x${LIBCRYPTO}" = "xYes"], [
-	AC_DEFINE([HAVE_OPENSSL], [1], [Define to 1 if OpenSSL is available])
-	AC_SUBST([LIBCRYPTO_LIBS])
-])
+AS_IF([test "x${with_openssl}" != "xno"], [ATHEME_LIBTEST_OPENSSL])
+
+
+
+LIBMBEDCRYPTO="No"
+LIBMBEDCRYPTO_LIBS=""
+AC_ARG_WITH([mbedtls],
+	[AS_HELP_STRING([--with-mbedtls], [Compile with ARM mbedTLS support.])],
+	[], [with_mbedtls="auto"])
+
+case "${with_mbedtls}" in
+	no | yes | auto)
+		;;
+	*)
+		AC_MSG_ERROR([invalid option for --with-mbedtls])
+		;;
+esac
+
+AS_IF([test "x${with_mbedtls}" != "xno"], [ATHEME_LIBTEST_MBEDTLS])
+
+
+
+LIBNETTLE="No"
+LIBNETTLE_LIBS=""
+AC_ARG_WITH([nettle],
+	[AS_HELP_STRING([--with-nettle], [Compile with libnettle (cryptographic library) support.])],
+	[], [with_nettle="auto"])
+
+case "${with_nettle}" in
+	no | yes | auto)
+		;;
+	*)
+		AC_MSG_ERROR([invalid option for --with-nettle])
+		;;
+esac
+
+AS_IF([test "x${with_nettle}" != "xno"], [ATHEME_LIBTEST_NETTLE])
 
 
 
@@ -197,20 +200,7 @@ case "${with_libidn}" in
 		;;
 esac
 
-AS_IF([test "x${with_libidn}" != "xno"], [
-	LIBS_SAVED="${LIBS}"
-	AC_SEARCH_LIBS([stringprep], [idn], [
-		LIBIDN="Yes"
-		AS_IF([test "x${ac_cv_search_stringprep}" != "xnone required"],
-			[LIBIDN_LIBS="${ac_cv_search_stringprep}"])
-		AC_DEFINE([HAVE_LIBIDN], [1], [Define to 1 if we have GNU libidn available.])
-		AC_SUBST([LIBIDN_LIBS])
-	], [
-		AS_IF([test "x${with_libidn}" != "xauto"],
-			[AC_MSG_ERROR([--with-libidn was specified but GNU libidn could not be found])])
-	])
-	LIBS="${LIBS_SAVED}"
-])
+AS_IF([test "x${with_libidn}" != "xno"], [ATHEME_LIBTEST_IDN])
 
 
 
@@ -514,18 +504,7 @@ case "${with_pcre}" in
 		;;
 esac
 
-AS_IF([test "x${with_pcre}" != "xno"], [
-	PKG_CHECK_MODULES([PCRE], [libpcre], [
-		LIBPCRE="Yes"
-		AC_DEFINE([HAVE_PCRE], [1], [Define to 1 if PCRE is available.])
-		AC_SUBST([PCRE_CFLAGS])
-		AC_SUBST([PCRE_LIBS])
-	], [
-		AS_IF([test "x${with_pcre}" != "xauto"], [
-		      AC_MSG_ERROR([--with-pcre was specified but the PCRE library could not be found])
-		])
-	])
-])
+AS_IF([test "x${with_pcre}" != "xno"], [ATHEME_LIBTEST_PCRE])
 
 
 
@@ -570,11 +549,52 @@ if test "x${USE_NLS}" = "xyes"; then
 fi
 AC_SUBST([PODIR])
 
+
+
+dnl Digest interface to use
+DIGEST_API_LIBS=""
+DIGEST_FRONTEND_H="digest_fe_internal.h"
+DIGEST_FRONTEND_C="digest_fe_internal.c"
+DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_md5.c"
+DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_sha1.c"
+DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_sha2_256.c"
+DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_sha2_512.c"
+DIGEST_FRONTEND="Internal"
+
+AS_IF([test "x${DIGEST_FRONTEND}x${LIBMBEDCRYPTO}" = "xInternalxYes"], [
+	DIGEST_API_LIBS="${LIBMBEDCRYPTO_LIBS}"
+	DIGEST_FRONTEND_H="digest_fe_mbedtls.h"
+	DIGEST_FRONTEND_C="digest_fe_mbedtls.c"
+	DIGEST_FRONTEND="ARM mbedTLS"
+])
+
+AS_IF([test "x${DIGEST_FRONTEND}x${LIBNETTLE}" = "xInternalxYes"], [
+	DIGEST_API_LIBS="${LIBNETTLE_LIBS}"
+	DIGEST_FRONTEND_H="digest_fe_nettle.h"
+	DIGEST_FRONTEND_C="digest_fe_nettle.c"
+	DIGEST_FRONTEND="Nettle"
+])
+
+AS_IF([test "x${DIGEST_FRONTEND}x${LIBCRYPTO}" = "xInternalxYes"], [
+	DIGEST_API_LIBS="${LIBCRYPTO_LIBS}"
+	DIGEST_FRONTEND_H="digest_fe_openssl.h"
+	DIGEST_FRONTEND_C="digest_fe_openssl.c"
+	DIGEST_FRONTEND="OpenSSL"
+])
+
+AC_DEFINE_UNQUOTED([DIGEST_FE_HEADER], ["${DIGEST_FRONTEND_H}"], [Front-end header for digest interface])
+AC_SUBST([DIGEST_FRONTEND_C])
+AC_SUBST([DIGEST_API_LIBS])
+
+
+
 CPPFLAGS="${CPPFLAGS} -DPREFIX=\\\"\${prefix}\\\" -DBINDIR=\\\"\${bindir}\\\" -DLOCALEDIR=\\\"\${LOCALEDIR}\\\" -DMODDIR=\\\"\${MODDIR}\\\" -DSHAREDIR=\\\"${SHAREDIR}\\\" -DSYSCONFDIR=\\\"${sysconfdir}\\\" -DLOGDIR=\\\"${LOGDIR}\\\" -DRUNDIR=\\\"${RUNDIR}\\\" -DDATADIR=\\\"${DATADIR}\\\""
 LDFLAGS="${LDFLAGS} ${LDFLAGS_RPATH}"
 
 AC_SUBST([CPPFLAGS])
 AC_SUBST([LDFLAGS])
+
+
 
 BUILDSYS_TOUCH_DEPS
 
@@ -583,64 +603,7 @@ AC_CONFIG_FILES([
 	extra.mk
 	atheme-services.pc
 ])
+
 AC_OUTPUT
 
-
-
-prefix="$(eval echo "${prefix}")"
-prefix="$(eval echo "${prefix}")"
-
-bindir="$(eval echo "${bindir}")"
-bindir="$(eval echo "${bindir}")"
-
-MODDIR="$(eval echo "${MODDIR}")"
-MODDIR="$(eval echo "${MODDIR}")"
-
-sysconfdir="$(eval echo "${sysconfdir}")"
-sysconfdir="$(eval echo "${sysconfdir}")"
-
-LOGDIR="$(eval echo "${LOGDIR}")"
-LOGDIR="$(eval echo "${LOGDIR}")"
-
-DATADIR="$(eval echo "${DATADIR}")"
-DATADIR="$(eval echo "${DATADIR}")"
-
-RUNDIR="$(eval echo "${RUNDIR}")"
-RUNDIR="$(eval echo "${RUNDIR}")"
-
-echo "
-Configuration:
-
-    Atheme Version ..........: ${PACKAGE_VERSION}
-
-    Installation Prefix .....: ${prefix}
-    Binary Directory ........: ${bindir}
-    Module Directory ........: ${MODDIR}/modules
-    Config Directory ........: ${sysconfdir}
-    Logfile Directory .......: ${LOGDIR}
-    Data Directory ..........: ${DATADIR}
-    PID Directory ...........: ${RUNDIR}
-
-    Contrib Modules .........: ${CONTRIB}
-    Internationalization ....: ${USE_GETTEXT}
-    Large Network Support ...: ${LARGE_NET}
-    Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}
-    Build Warnings ..........: ${BUILD_WARNINGS}
-
-    CrackLib Support ........: ${LIBCRACKLIB}
-    GNU libidn Support ......: ${LIBIDN}
-    OpenSSL Support .........: ${LIBCRYPTO}
-    PCRE Support ............: ${LIBPCRE}
-    Perl Support ............: ${LIBPERL}
-    QR Code Support .........: ${LIBQRENCODE}
-
-    Mowgli Installation .....: ${MOWGLI_SOURCE}
-
-    CC ......................: ${CC}
-    CFLAGS ..................: ${CFLAGS}
-    CPPFLAGS ................: ${CPPFLAGS}
-
-    LD ......................: ${LD}
-    LDFLAGS .................: ${LDFLAGS}
-
-Type make to build Atheme, and make install to install it."
+ATHEME_PRINT_CONFIGURATION

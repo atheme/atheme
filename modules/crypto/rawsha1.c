@@ -9,13 +9,9 @@
 
 #include "atheme.h"
 
-#ifdef HAVE_OPENSSL
-
-#include <openssl/sha.h>
-
 #define MODULE_PREFIX_STR       "$rawsha1$"
 #define MODULE_PREFIX_LEN       9
-#define MODULE_DIGEST_LEN       SHA_DIGEST_LENGTH
+#define MODULE_DIGEST_LEN       DIGEST_MDLEN_SHA1
 #define MODULE_PARAMS_LEN       (MODULE_PREFIX_LEN + (2 * MODULE_DIGEST_LEN))
 
 static bool
@@ -30,12 +26,10 @@ atheme_rawsha1_verify(const char *const restrict password, const char *const res
 
 	*flags |= PWVERIFY_FLAG_MYMODULE;
 
-	SHA_CTX ctx;
 	unsigned char digest[MODULE_DIGEST_LEN];
 
-	(void) SHA1_Init(&ctx);
-	(void) SHA1_Update(&ctx, (const unsigned char *) password, strlen(password));
-	(void) SHA1_Final(digest, &ctx);
+	if (! digest_oneshot(DIGALG_SHA1, password, strlen(password), digest, NULL))
+		return false;
 
 	char result[(2 * MODULE_DIGEST_LEN) + 1];
 
@@ -67,5 +61,3 @@ mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 }
 
 SIMPLE_DECLARE_MODULE_V1("crypto/rawsha1", MODULE_UNLOAD_CAPABILITY_OK)
-
-#endif /* HAVE_OPENSSL */

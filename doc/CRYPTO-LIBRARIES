@@ -1,0 +1,55 @@
+Cryptographic Implementation Documentation
+------------------------------------------
+
+The following modules are available to encrypt passwords:
+
+  Argon2d (Password Hashing Competition, v1.3)  modules/crypto/argon2d
+  PBKDF2 cryptography (better format)           modules/crypto/pbkdf2v2
+  POSIX-style crypt(3)                          modules/crypto/posix
+
+It is highly recommended that you load one or more of these modules.
+
+The following modules are available to verify old encrypted passwords:
+
+  PBKDF2 (Atheme <= 7.2 compatibility)          modules/crypto/pbkdf2
+  Raw MD5 (Anope ~1.8 compatibility)            modules/crypto/rawmd5
+  Raw SHA1 (Anope ~1.8 compatibility)           modules/crypto/rawsha1
+  IRCServices (+ Anope) compatibility           modules/crypto/ircservices
+
+All of these modules will compile stand-alone, but they can be accelerated by
+installing a cryptographic library and building Atheme against it. Such
+libraries provide more efficient digest algorithms than the ones implemented
+in Atheme.
+
+The following cryptographic libraries are supported, listed in the preferred
+order, along with the configure options to control them:
+
+  ARM mbedTLS           (--with-mbedtls)
+  Nettle                (--with-nettle)
+  OpenSSL (& LibreSSL)  (--with-openssl)
+
+When you configure this program, it will say which libraries it detected and
+which one it is going to use for cryptographic acceleration; like so:
+
+  Configuration:
+      Atheme Version ..........: 7.3.0-dev
+      ARM mbedTLS Support .....: Yes
+      Nettle Support ..........: No
+      OpenSSL Support .........: No
+      Digest Frontend .........: ARM mbedTLS
+
+All supported cryptographic libraries will be autodetected by default, and
+their absense is not an error unless the user explicitly asked to build
+against them with one of the configure options listed above.
+
+If you would like to override the order (for example, you have ARM mbedTLS
+and OpenSSL installed, and you would like to use OpenSSL), you can prevent
+Atheme from checking for the unwanted libraries by using the configure
+options listed above, but with an argument of "no". Alternatively, you can
+use e.g. '--without-mbedtls' instead of '--with-mbedtls=no'.
+
+The following modules are listed with their specific requirements. If you do
+not have the necessary library installed, the module will not load:
+
+  modules/saslserv/ecdsa-nist256p-challenge: requires OpenSSL (or LibreSSL)
+                                             + with elliptic curve support

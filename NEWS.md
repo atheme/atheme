@@ -78,6 +78,7 @@ Build System
 
 Password Cryptography
 ---------------------
+- Crypto modules no longer need OpenSSL (or any crypto library)
 - libathemecore/crypto: log current crypto provider on mod(un/re)load
 - libathemecore/crypto: rip out plaintext fallback implementation
 - Make old modules (ircservices, pbkdf2, rawmd5, rawsha1) verify-only

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2017 Aaron M. D. Jones <aaronmdjones@gmail.com>
+ * Copyright (C) 2015-2018 Aaron M. D. Jones <aaronmdjones@gmail.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -20,15 +20,9 @@
 
 #include "atheme.h"
 
-#ifdef HAVE_OPENSSL
-
 #ifdef HAVE_LIBIDN
 #include <stringprep.h>
 #endif /* HAVE_LIBIDN */
-
-#include <openssl/evp.h>
-#include <openssl/hmac.h>
-#include <openssl/sha.h>
 
 #include "pbkdf2v2.h"
 
@@ -90,8 +84,8 @@ atheme_pbkdf2v2_determine_params(struct pbkdf2v2_dbentry *const restrict dbe)
 			/* FALLTHROUGH */
 		case PBKDF2_PRF_HMAC_SHA1:
 		case PBKDF2_PRF_HMAC_SHA1_S64:
-			dbe->md = EVP_sha1();
-			dbe->dl = SHA_DIGEST_LENGTH;
+			dbe->md = DIGALG_SHA1;
+			dbe->dl = DIGEST_MDLEN_SHA1;
 			break;
 
 		case PBKDF2_PRF_SCRAM_SHA2_256:
@@ -100,8 +94,8 @@ atheme_pbkdf2v2_determine_params(struct pbkdf2v2_dbentry *const restrict dbe)
 			/* FALLTHROUGH */
 		case PBKDF2_PRF_HMAC_SHA2_256:
 		case PBKDF2_PRF_HMAC_SHA2_256_S64:
-			dbe->md = EVP_sha256();
-			dbe->dl = SHA256_DIGEST_LENGTH;
+			dbe->md = DIGALG_SHA2_256;
+			dbe->dl = DIGEST_MDLEN_SHA2_256;
 			break;
 
 		case PBKDF2_PRF_SCRAM_SHA2_512:
@@ -110,19 +104,13 @@ atheme_pbkdf2v2_determine_params(struct pbkdf2v2_dbentry *const restrict dbe)
 			/* FALLTHROUGH */
 		case PBKDF2_PRF_HMAC_SHA2_512:
 		case PBKDF2_PRF_HMAC_SHA2_512_S64:
-			dbe->md = EVP_sha512();
-			dbe->dl = SHA512_DIGEST_LENGTH;
+			dbe->md = DIGALG_SHA2_512;
+			dbe->dl = DIGEST_MDLEN_SHA2_512;
 			break;
 
 		default:
 			(void) slog(LG_DEBUG, "%s: PRF ID '%u' unknown", __func__, dbe->a);
 			return false;
-	}
-
-	if (! dbe->md)
-	{
-		(void) slog(LG_ERROR, "%s: dbe->md is NULL", __func__);
-		return false;
 	}
 
 	return true;
@@ -219,21 +207,21 @@ static bool
 atheme_pbkdf2v2_scram_derive(const struct pbkdf2v2_dbentry *const dbe, const unsigned char *const idg,
                              unsigned char *const restrict csk, unsigned char *const restrict chk)
 {
-	unsigned char cck[EVP_MAX_MD_SIZE];
+	unsigned char cck[DIGEST_MDLEN_MAX];
 
-	if (csk && ! HMAC(dbe->md, idg, (int) dbe->dl, ServerKeyStr, sizeof ServerKeyStr, csk, NULL))
+	if (csk && ! digest_oneshot_hmac(dbe->md, idg, dbe->dl, ServerKeyStr, sizeof ServerKeyStr, csk, NULL))
 	{
-		(void) slog(LG_ERROR, "%s: HMAC() failed for csk", __func__);
+		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac(idg) failed for csk", __func__);
 		return false;
 	}
-	if (chk && ! HMAC(dbe->md, idg, (int) dbe->dl, ClientKeyStr, sizeof ClientKeyStr, cck, NULL))
+	if (chk && ! digest_oneshot_hmac(dbe->md, idg, dbe->dl, ClientKeyStr, sizeof ClientKeyStr, cck, NULL))
 	{
-		(void) slog(LG_ERROR, "%s: HMAC() failed for cck", __func__);
+		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac(idg) failed for cck", __func__);
 		return false;
 	}
-	if (chk && EVP_Digest(cck, dbe->dl, chk, NULL, dbe->md, NULL) != 1)
+	if (chk && ! digest_oneshot(dbe->md, cck, dbe->dl, chk, NULL))
 	{
-		(void) slog(LG_ERROR, "%s: EVP_Digest(cck) failed for chk", __func__);
+		(void) slog(LG_ERROR, "%s: digest_oneshot(cck) failed for chk", __func__);
 		return false;
 	}
 
@@ -410,11 +398,9 @@ atheme_pbkdf2v2_compute(const char *const restrict password, struct pbkdf2v2_dbe
 		return false;
 	}
 
-	const int ret = PKCS5_PBKDF2_HMAC(key, (int) kl, dbe->salt, (int) dbe->sl, (int) dbe->c, dbe->md,
-	                                  (int) dbe->dl, dbe->cdg);
-	if (ret != 1)
+	if (! digest_pbkdf2_hmac(dbe->md, key, kl, dbe->salt, dbe->sl, dbe->c, dbe->cdg, dbe->dl))
 	{
-		(void) slog(LG_ERROR, "%s: PKCS5_PBKDF2_HMAC() failed", __func__);
+		(void) slog(LG_ERROR, "%s: digest_pbkdf2_hmac() failed", __func__);
 		(void) explicit_bzero(key, sizeof key);
 		return false;
 	}
@@ -453,10 +439,10 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 
 	if (dbe.scram)
 	{
-		unsigned char csk[EVP_MAX_MD_SIZE];
-		unsigned char chk[EVP_MAX_MD_SIZE];
-		char csk64[EVP_MAX_MD_SIZE * 3];
-		char chk64[EVP_MAX_MD_SIZE * 3];
+		unsigned char csk[DIGEST_MDLEN_MAX];
+		unsigned char chk[DIGEST_MDLEN_MAX];
+		char csk64[DIGEST_MDLEN_MAX * 3];
+		char chk64[DIGEST_MDLEN_MAX * 3];
 
 		if (! atheme_pbkdf2v2_scram_derive(&dbe, dbe.cdg, csk, chk))
 			// This function logs messages on failure
@@ -480,7 +466,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 	}
 	else
 	{
-		char cdg64[EVP_MAX_MD_SIZE * 3];
+		char cdg64[DIGEST_MDLEN_MAX * 3];
 
 		if (base64_encode(dbe.cdg, dbe.dl, cdg64, sizeof cdg64) == (size_t) -1)
 		{
@@ -540,7 +526,7 @@ atheme_pbkdf2v2_verify(const char *const restrict password, const char *const re
 
 	if (dbe.scram)
 	{
-		unsigned char csk[EVP_MAX_MD_SIZE];
+		unsigned char csk[DIGEST_MDLEN_MAX];
 
 		if (! atheme_pbkdf2v2_scram_derive(&dbe, dbe.cdg, csk, NULL))
 			// This function logs messages on failure
@@ -639,5 +625,3 @@ mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 }
 
 SIMPLE_DECLARE_MODULE_V1(PBKDF2V2_CRYPTO_MODULE_NAME, MODULE_UNLOAD_CAPABILITY_OK)
-
-#endif /* HAVE_OPENSSL */

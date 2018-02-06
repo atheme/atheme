@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Atheme Development Group
+ * Copyright (C) 2017-2018 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Data structures and macros for the PBKDF2v2 crypto module.
@@ -51,16 +51,16 @@
 
 struct pbkdf2v2_dbentry
 {
-	const EVP_MD    *md;                                // OpenSSL EVP(3) Digest Method
-	unsigned char    cdg[EVP_MAX_MD_SIZE];              // PBKDF2 Digest (Computed)
-	unsigned char    sdg[EVP_MAX_MD_SIZE];              // PBKDF2 Digest (Stored)
-	unsigned char    ssk[EVP_MAX_MD_SIZE];              // SCRAM-SHA ServerKey (Stored)
-	unsigned char    shk[EVP_MAX_MD_SIZE];              // SCRAM-SHA StoredKey (Stored)
+	unsigned char    cdg[DIGEST_MDLEN_MAX];             // PBKDF2 Digest (Computed)
+	unsigned char    sdg[DIGEST_MDLEN_MAX];             // PBKDF2 Digest (Stored)
+	unsigned char    ssk[DIGEST_MDLEN_MAX];             // SCRAM-SHA ServerKey (Stored)
+	unsigned char    shk[DIGEST_MDLEN_MAX];             // SCRAM-SHA StoredKey (Stored)
 	unsigned char    salt[PBKDF2_SALTLEN_MAX];          // PBKDF2 Salt
 	char             salt64[PBKDF2_SALTLEN_MAX * 3];    // PBKDF2 Salt (Base64-encoded)
 	size_t           dl;                                // Digest Length
 	size_t           sl;                                // Salt Length
-	unsigned int     a;                                 // PRF ID (one of the macros above)
+	unsigned int     md;                                // Atheme Digest Interface Algorithm Identifier
+	unsigned int     a;                                 // PBKDF2v2 PRF ID (one of the macros above)
 	unsigned int     c;                                 // PBKDF2 Iteration Count
 	bool             scram;                             // Whether to use HMAC-SHA or SCRAM-SHA
 };
