@@ -41,18 +41,32 @@ random_string(const size_t sz)
 	return (char *) buf;
 }
 
-void
-create_challenge(sourceinfo_t *const restrict si, const char *const restrict name, const int v,
-                 char *const restrict dest)
+const char *
+create_weak_challenge(sourceinfo_t *const restrict si, const char *const restrict name)
 {
-	char buf[256];
+	char key[BUFSIZE];
+	char val[BUFSIZE];
 
-	const int bufsz = snprintf(buf, sizeof buf, "%lu:%s:%s", (unsigned long)(CURRTIME / 300) - v,
-	                           get_source_name(si), name);
+	(void) memset(key, 0x00, sizeof key);
+	(void) memset(val, 0x00, sizeof val);
 
-	uint32_t digest[4];
-	(void) digest_oneshot(DIGALG_MD5, buf, (size_t) bufsz, digest, NULL);
-	(void) snprintf(dest, 80, "%" PRIx32 ":%" PRIx32, digest[0], digest[1]);
+	(void) mowgli_strlcpy(key, get_source_name(si), sizeof key);
+	(void) mowgli_strlcpy(val, name, sizeof val);
+
+	uint32_t out[4];
+
+	if (! digest_oneshot_hmac(DIGALG_MD5, key, sizeof key, val, sizeof val, out, NULL))
+		return NULL;
+
+	static char result[BUFSIZE];
+
+	if (snprintf(result, BUFSIZE, "%" PRIX32 ":%" PRIX32, out[0], out[1]) >= BUFSIZE)
+	{
+		(void) slog(LG_ERROR, "%s: snprintf(3) would have overflowed result buffer (BUG)", __func__);
+		return NULL;
+	}
+
+	return result;
 }
 
 #ifdef HAVE_GETTIMEOFDAY

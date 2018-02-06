@@ -136,7 +136,7 @@ typedef struct {
 
 /* misc string stuff */
 extern char *random_string(size_t sz);
-extern void create_challenge(sourceinfo_t *si, const char *name, int v, char *dest);
+extern const char *create_weak_challenge(sourceinfo_t *si, const char *name);
 extern void tb2sp(char *line);
 extern char *replace(char *s, int size, const char *old, const char *new);
 extern const char *number_to_string(int num);

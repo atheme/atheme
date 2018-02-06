@@ -48,22 +48,28 @@ static void gs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 
 	if (si->su != NULL)
 	{
-		if (!key)
+		const char *const challenge = create_weak_challenge(si, entity(mg)->name);
+
+		if (! challenge)
 		{
-			create_challenge(si, entity(mg)->name, 0, key0);
-			snprintf(fullcmd, sizeof fullcmd, "/%s%s DROP %s %s",
-					(ircd->uses_rcommand == false) ? "msg " : "",
-					si->service->disp, entity(mg)->name, key0);
-			command_success_nodata(si, _("To avoid accidental use of this command, this operation has to be confirmed. Please confirm by replying with \2%s\2"),
-					fullcmd);
+			(void) command_fail(si, fault_internalerror, _("Failed to create challenge"));
 			return;
 		}
-		/* accept current and previous key */
-		create_challenge(si, entity(mg)->name, 0, key0);
-		create_challenge(si, entity(mg)->name, 1, key1);
-		if (strcmp(key, key0) && strcmp(key, key1))
+
+		if (! key)
 		{
-			command_fail(si, fault_badparams, _("Invalid key for \2%s\2."), "DROP");
+			(void) snprintf(fullcmd, sizeof fullcmd, "/%s%s DROP %s %s", (ircd->uses_rcommand == false) ?
+			                "msg " : "", si->service->disp, entity(mg)->name, challenge);
+
+			(void) command_success_nodata(si, _("To avoid accidental use of this command, this operation "
+			                                    "has to be confirmed. Please confirm by replying with "
+			                                    "\2%s\2"), fullcmd);
+			return;
+		}
+
+		if (strcmp(challenge, key) != 0)
+		{
+			(void) command_fail(si, fault_badparams, _("Invalid key for \2%s\2."), "DROP");
 			return;
 		}
 	}

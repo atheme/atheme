@@ -93,24 +93,30 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!key)
+	const char *const challenge = create_weak_challenge(si, entity(mu)->name);
+
+	if (! challenge)
 	{
-		create_challenge(si, entity(mu)->name, 0, key0);
-		snprintf(fullcmd, sizeof fullcmd, "/%s%s DROP %s %s %s",
-				(ircd->uses_rcommand == false) ? "msg " : "",
-				nicksvs.me->disp, entity(mu)->name, pass, key0);
-		command_success_nodata(si, _("This is a friendly reminder that you are about to \2destroy\2 the account \2%s\2."),
-				entity(mu)->name);
-		command_success_nodata(si, _("To avoid accidental use of this command, this operation has to be confirmed. Please confirm by replying with \2%s\2"),
-				fullcmd);
+		(void) command_fail(si, fault_internalerror, _("Failed to create challenge"));
 		return;
 	}
 
-	create_challenge(si, entity(mu)->name, 0, key0);
-	create_challenge(si, entity(mu)->name, 1, key1);
-	if (strcmp(key, key0) && strcmp(key, key1))
+	if (! key)
 	{
-		command_fail(si, fault_badparams, _("Invalid key for %s."), "DROP");
+		(void) snprintf(fullcmd, sizeof fullcmd, "/%s%s DROP %s %s %s", (ircd->uses_rcommand == false) ?
+		                "msg " : "", nicksvs.me->disp, entity(mu)->name, pass, challenge);
+
+		(void) command_success_nodata(si, _("This is a friendly reminder that you are about to \2destroy\2 "
+		                                    "the account \2%s\2."), entity(mu)->name);
+
+		(void) command_success_nodata(si, _("To avoid accidental use of this command, this operation has to "
+		                                    "be confirmed. Please confirm by replying with \2%s\2"), fullcmd);
+		return;
+	}
+
+	if (strcmp(challenge, key) != 0)
+	{
+		(void) command_fail(si, fault_badparams, _("Invalid key for %s."), "DROP");
 		return;
 	}
 
