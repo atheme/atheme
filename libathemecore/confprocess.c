@@ -596,7 +596,7 @@ void del_top_conf(const char *name)
 
 	if (!(ct = find_top_conf(name)))
 	{
-		slog(LG_DEBUG, "del_top_conf(): cannot delete nonexistant block %s", name);
+		slog(LG_DEBUG, "del_top_conf(): cannot delete nonexistent block %s", name);
 		return;
 	}
 
@@ -616,7 +616,7 @@ void del_conf_item(const char *name, mowgli_list_t *conflist)
 
 	if (!(ct = find_conf_item(name, conflist)))
 	{
-		slog(LG_DEBUG, "del_conf_item(): cannot delete nonexistant item %s", name);
+		slog(LG_DEBUG, "del_conf_item(): cannot delete nonexistent item %s", name);
 		return;
 	}
 

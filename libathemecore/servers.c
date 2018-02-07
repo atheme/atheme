@@ -172,7 +172,7 @@ void server_delete(const char *name)
 
 	if (!s)
 	{
-		slog(LG_DEBUG, "server_delete(): called for nonexistant server: %s", name);
+		slog(LG_DEBUG, "server_delete(): called for nonexistent server: %s", name);
 
 		return;
 	}
@@ -335,7 +335,7 @@ void tld_delete(const char *name)
 
         if (!tld)
         {
-                slog(LG_DEBUG, "tld_delete(): called for nonexistant tld: %s", name);
+                slog(LG_DEBUG, "tld_delete(): called for nonexistent tld: %s", name);
 
                 return;
         }
