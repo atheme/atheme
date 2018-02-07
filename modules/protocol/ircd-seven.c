@@ -179,7 +179,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		s = server_find(parv[6]);
 		if (!s)
 		{
-			slog(LG_DEBUG, "m_nick(): new user on nonexistant server: %s", parv[6]);
+			slog(LG_DEBUG, "m_nick(): new user on nonexistent server: %s", parv[6]);
 			return;
 		}
 

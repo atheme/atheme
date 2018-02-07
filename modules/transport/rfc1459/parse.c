@@ -115,7 +115,7 @@ void irc_parse(char *line)
 		}
                 if (!si->s && !si->su && me.recvsvr)
                 {
-                        slog(LG_DEBUG, "irc_parse(): got message from nonexistant user or server: %s", origin);
+                        slog(LG_DEBUG, "irc_parse(): got message from nonexistent user or server: %s", origin);
                         goto cleanup;
                 }
 		if (si->s == me.me)

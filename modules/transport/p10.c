@@ -115,7 +115,7 @@ static void p10_parse(char *line)
 
                 if (!si->s && !si->su && me.recvsvr)
                 {
-                        slog(LG_DEBUG, "p10_parse(): got message from nonexistant user or server: %s", origin);
+                        slog(LG_DEBUG, "p10_parse(): got message from nonexistent user or server: %s", origin);
                         goto cleanup;
                 }
 		if (si->s == me.me)

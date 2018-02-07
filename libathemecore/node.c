@@ -307,7 +307,7 @@ void xline_delete(const char *realname)
 
 	if (!x)
 	{
-		slog(LG_DEBUG, "xline_delete(): called for nonexistant xline: %s", realname);
+		slog(LG_DEBUG, "xline_delete(): called for nonexistent xline: %s", realname);
 		return;
 	}
 
@@ -444,7 +444,7 @@ void qline_delete(const char *mask)
 
 	if (!q)
 	{
-		slog(LG_DEBUG, "qline_delete(): called for nonexistant qline: %s", mask);
+		slog(LG_DEBUG, "qline_delete(): called for nonexistent qline: %s", mask);
 		return;
 	}
 

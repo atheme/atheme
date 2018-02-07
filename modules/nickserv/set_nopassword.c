@@ -76,7 +76,7 @@ static void ns_cmd_set_nopassword(sourceinfo_t *si, int parc, char *parv[])
 
 		if (si->smu->cert_fingerprints.head == NULL && metadata_find(si->smu, "private:pubkey") == NULL && metadata_find(si->smu, "pubkey") == NULL && metadata_find(si->smu, "ecdsa-nist521p-pubkey") == NULL)
 		{
-			command_fail(si, fault_nochange, _("You are trying to enable NoPassword without any possibilty to identify without a password."));
+			command_fail(si, fault_nochange, _("You are trying to enable NoPassword without any possibility to identify without a password."));
 			return;
 		}
 

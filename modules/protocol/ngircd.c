@@ -421,7 +421,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		s = server_find(parv[4]);
 		if (!s)
 		{
-			slog(LG_DEBUG, "m_nick(): new user on nonexistant server (token): %s", parv[4]);
+			slog(LG_DEBUG, "m_nick(): new user on nonexistent server (token): %s", parv[4]);
 			return;
 		}
 
@@ -620,14 +620,14 @@ static void m_kick(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!u)
 	{
-		slog(LG_DEBUG, "m_kick(): got kick for nonexistant user %s", parv[1]);
+		slog(LG_DEBUG, "m_kick(): got kick for nonexistent user %s", parv[1]);
 		return;
 	}
 
 	if (!c)
 	{
 		if (*parv[0] != '!')
-			slog(LG_DEBUG, "m_kick(): got kick in nonexistant channel: %s", parv[0]);
+			slog(LG_DEBUG, "m_kick(): got kick in nonexistent channel: %s", parv[0]);
 		return;
 	}
 
