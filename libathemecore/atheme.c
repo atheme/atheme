@@ -371,7 +371,10 @@ int atheme_main(int argc, char *argv[])
 	}
 
 	if (exit_after_testsuite)
+	{
+		printf("Exiting due to -T\n");
 		exit(EXIT_SUCCESS);
+	}
 
 	if (!(runflags & RF_LIVE))
 		daemonize(daemonize_pipe);
