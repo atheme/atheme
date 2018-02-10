@@ -25,7 +25,7 @@
 
 static mowgli_list_t crypt_impl_list = { NULL, NULL, 0 };
 
-static void
+static inline void
 crypt_log_modchg(const char *const restrict caller, const char *const restrict which,
                  const crypt_impl_t *const restrict impl)
 {
@@ -37,36 +37,33 @@ crypt_log_modchg(const char *const restrict caller, const char *const restrict w
 	if (ci)
 		(void) slog(level, "%s: default crypto provider is (now) '%s'", caller, ci->id);
 	else
-		(void) slog(LG_ERROR, "%s: no crypto provider is available!", caller);
+		(void) slog(LG_ERROR, "%s: no encryption-capable crypto provider is available!", caller);
 }
 
 void
 crypt_register(crypt_impl_t *const restrict impl)
 {
-	if (! impl || ! impl->id)
-		return;
-
-	if (impl->crypt || impl->verify)
+	if (! impl || ! impl->id || ! (impl->crypt || impl->verify))
 	{
-		(void) mowgli_node_add(impl, &impl->node, &crypt_impl_list);
-		(void) crypt_log_modchg(__func__, "registered", impl);
+		(void) slog(LG_ERROR, "%s: invalid parameters (BUG)", __func__);
+		return;
 	}
-	else
-		(void) slog(LG_ERROR, "%s: crypto provider '%s' provides neither crypt nor verify methods (BUG)",
-		                      __func__, impl->id);
+
+	(void) mowgli_node_add(impl, &impl->node, &crypt_impl_list);
+	(void) crypt_log_modchg(__func__, "registered", impl);
 }
 
 void
 crypt_unregister(crypt_impl_t *const restrict impl)
 {
-	if (! impl || ! impl->id)
-		return;
-
-	if (impl->crypt || impl->verify)
+	if (! impl || ! impl->id || ! (impl->crypt || impl->verify))
 	{
-		(void) mowgli_node_delete(&impl->node, &crypt_impl_list);
-		(void) crypt_log_modchg(__func__, "unregistered", impl);
+		(void) slog(LG_ERROR, "%s: invalid parameters (BUG)", __func__);
+		return;
 	}
+
+	(void) mowgli_node_delete(&impl->node, &crypt_impl_list);
+	(void) crypt_log_modchg(__func__, "unregistered", impl);
 }
 
 const crypt_impl_t *
@@ -163,9 +160,9 @@ crypt_password(const char *const restrict password)
 	}
 
 	if (encryption_capable_module)
-		(void) slog(LG_ERROR, "%s: all encryption-capable crypto modules failed", __func__);
+		(void) slog(LG_ERROR, "%s: all encryption-capable crypto providers failed", __func__);
 	else
-		(void) slog(LG_ERROR, "%s: you have no encryption-capable crypto module", __func__);
+		(void) slog(LG_ERROR, "%s: no encryption-capable crypto provider is available!", __func__);
 
 	return NULL;
 }
