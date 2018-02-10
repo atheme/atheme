@@ -29,7 +29,7 @@ static command_t cmd_os_genhash = {
 
 	.name           = "GENHASH",
 	.desc           = N_("Generates a password hash for SOPER."),
-	.access         = AC_IRCOP,
+	.access         = PRIV_ADMIN,
 	.maxparc        = 1,
 	.cmd            = &cmd_os_genhash_func,
 
