@@ -47,7 +47,7 @@ mod_init(module_t __attribute__((unused)) *const restrict m)
 }
 
 static void
-mod_deinit(const module_unload_intent_t intent)
+mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
 	(void) service_named_unbind_command("operserv", &cmd_os_genhash);
 }
