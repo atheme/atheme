@@ -336,16 +336,16 @@ void module_unload(module_t *m, module_unload_intent_t intent)
 	n = mowgli_node_find(m, &modules);
 	if (n != NULL)
 	{
-		slog(LG_INFO, "module_unload(): unloaded \2%s\2", m->name);
-		if (me.connected)
-		{
-			wallops(_("Module %s unloaded."), m->name);
-		}
-
 		if (m->header && m->header->deinit)
 			m->header->deinit(intent);
+
 		mowgli_node_delete(n, &modules);
 		mowgli_node_free(n);
+
+		(void) slog(LG_INFO, _("%s: unloaded \2%s\2"), __func__, m->name);
+
+		if (me.connected)
+			(void) wallops(_("Module %s unloaded."), m->name);
 	}
 
 	/* else unloaded in embryonic state */
