@@ -8,6 +8,7 @@ SRCS =			\
 	clearchan.c	\
 	clones.c	\
 	compare.c	\
+	genhash.c	\
 	greplog.c	\
 	help.c		\
 	identify.c	\
