@@ -88,6 +88,9 @@ Password Cryptography
 - Indicating whether a password needs re-encrypting is now much more efficient
 - Verifying a password hash no longer wastes CPU time on modules that didn't
   produce it if the module that did produce it fails to verify it
+- A new core module operserv/genhash is available to generate password hashes
+  suitable for use as services operator passwords. This alleviates the need to
+  build contrib module support and use contrib/ns_generatehash.
 
 
 
