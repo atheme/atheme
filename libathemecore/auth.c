@@ -29,24 +29,23 @@ bool (*auth_user_custom)(myuser_t *mu, const char *password);
 void
 set_password(myuser_t *const restrict mu, const char *const restrict password)
 {
-	if (mu == NULL || password == NULL)
+	if (! mu || ! password)
 		return;
 
-	/* if we can, try to crypt it */
 	const char *const hash = crypt_password(password);
 
 	if (hash)
 	{
 		mu->flags |= MU_CRYPTPASS;
-		mowgli_strlcpy(mu->pass, hash, PASSLEN);
+
+		(void) mowgli_strlcpy(mu->pass, hash, PASSLEN);
 	}
 	else
 	{
 		mu->flags &= ~MU_CRYPTPASS;
-		mowgli_strlcpy(mu->pass, password, PASSLEN);
 
-		(void) slog(LG_ERROR, "%s: cannot encrypt password for account '%s'; is an encryption-capable "
-		                      "password crypto module loaded?", __func__, entity(mu)->name);
+		(void) mowgli_strlcpy(mu->pass, password, PASSLEN);
+		(void) slog(LG_ERROR, "%s: failed to encrypt password for account '%s'", __func__, entity(mu)->name);
 	}
 }
 
@@ -68,7 +67,7 @@ verify_password(myuser_t *const restrict mu, const char *const restrict password
 			// Verification failure
 			return false;
 
-		if (! (ci_default = crypt_get_default_provider()) || ! ci_default->crypt)
+		if (! (ci_default = crypt_get_default_provider()))
 			// Verification succeeded but we don't have a module that can create new password hashes
 			return true;
 
