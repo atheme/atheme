@@ -2193,8 +2193,6 @@ digest_testsuite_run_pbkdf2_hmac_sha2_512(void)
 bool
 digest_testsuite_run(void)
 {
-	(void) slog(LG_DEBUG, "%s: running", __func__);
-
 	if (! digest_testsuite_run_md5())
 		return false;
 
@@ -2230,8 +2228,6 @@ digest_testsuite_run(void)
 
 	if (! digest_testsuite_run_pbkdf2_hmac_sha2_512())
 		return false;
-
-	(void) slog(LG_DEBUG, "%s: passed", __func__);
 
 	return true;
 }

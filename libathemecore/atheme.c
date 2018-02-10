@@ -259,7 +259,7 @@ static void db_save_periodic(void *unused)
 int atheme_main(int argc, char *argv[])
 {
 	int daemonize_pipe[2];
-	bool dont_run_testsuite = false;
+	bool run_testsuite = true;
 	bool exit_after_testsuite = false;
 	bool have_conf = false;
 	bool have_log = false;
@@ -301,7 +301,7 @@ int atheme_main(int argc, char *argv[])
 			  runflags |= RF_LIVE;
 			  break;
 		  case 't':
-			  dont_run_testsuite = true;
+			  run_testsuite = false;
 			  break;
 		  case 'T':
 			  exit_after_testsuite = true;
@@ -322,7 +322,7 @@ int atheme_main(int argc, char *argv[])
 		}
 	}
 
-	if (dont_run_testsuite && exit_after_testsuite)
+	if (! run_testsuite && exit_after_testsuite)
 	{
 		fprintf(stderr, "Error: specify exactly one of -t / -T\n");
 		exit(EXIT_FAILURE);
@@ -364,17 +364,26 @@ int atheme_main(int argc, char *argv[])
 	}
 #endif
 
-	if (! dont_run_testsuite && ! digest_testsuite_run())
+	if (run_testsuite)
 	{
-		fprintf(stderr, "Error: digest testsuite failed\n");
-		exit(EXIT_FAILURE);
-	}
+		(void) slog(LG_INFO, "running digest testsuite...");
 
-	if (exit_after_testsuite)
-	{
-		printf("Exiting due to -T\n");
-		exit(EXIT_SUCCESS);
+		if (! digest_testsuite_run())
+		{
+			(void) slog(LG_ERROR, "digest testsuite failed");
+			exit(EXIT_FAILURE);
+		}
+
+		(void) slog(LG_INFO, "digest testsuite passed");
+
+		if (exit_after_testsuite)
+		{
+			(void) slog(LG_INFO, "exiting due to -T");
+			exit(EXIT_SUCCESS);
+		}
 	}
+	else
+		(void) slog(LG_INFO, "digest testsuite skipped due to -t");
 
 	if (!(runflags & RF_LIVE))
 		daemonize(daemonize_pipe);
