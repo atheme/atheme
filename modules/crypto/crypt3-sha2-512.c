@@ -38,7 +38,7 @@ atheme_crypt3_sha2_512_crypt(const char *const restrict password,
 
 	unsigned char rawsalt[CRYPT3_SHA2_SALTLENGTH];
 	char salt[sizeof rawsalt + 1];
-	char parv[PASSLEN];
+	char parv[PASSLEN + 1];
 
 	(void) arc4random_buf(rawsalt, sizeof rawsalt);
 	(void) memset(salt, 0x00, sizeof salt);
@@ -46,9 +46,9 @@ atheme_crypt3_sha2_512_crypt(const char *const restrict password,
 	for (size_t i = 0; i < sizeof rawsalt; i++)
 		salt[i] = saltchars[rawsalt[i] % sizeof saltchars];
 
-	if (snprintf(parv, PASSLEN, CRYPT3_SAVESALT_FORMAT_SHA2_512, salt) >= PASSLEN)
+	if (snprintf(parv, sizeof parv, CRYPT3_SAVESALT_FORMAT_SHA2_512, salt) > PASSLEN)
 	{
-		(void) slog(LG_ERROR, "%s: snprintf(3) would have overflowed parameters buffer (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: snprintf(3) output would have been too long (BUG)", __func__);
 		return NULL;
 	}
 

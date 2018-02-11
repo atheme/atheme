@@ -679,8 +679,8 @@ atheme_argon2d_crypt(const char *const restrict password,
 	if (base64_encode_raw(ctx.hash, sizeof ctx.hash, hash_b64, sizeof hash_b64) == (size_t) -1)
 		return NULL;
 
-	static char res[PASSLEN];
-	if (snprintf(res, PASSLEN, ATHEME_ARGON2D_SAVEHASH, ctx.m_cost, ctx.t_cost, salt_b64, hash_b64) >= PASSLEN)
+	static char res[PASSLEN + 1];
+	if (snprintf(res, sizeof res, ATHEME_ARGON2D_SAVEHASH, ctx.m_cost, ctx.t_cost, salt_b64, hash_b64) > PASSLEN)
 		return NULL;
 
 	return res;

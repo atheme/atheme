@@ -40,10 +40,10 @@ typedef enum {
 #define MAXMODES		4
 #define MAX_IRC_OUTPUT_LINES	2000
 
-/* lengths of buffers (string length is 1 less) */
+/* lengths of various pieces of information */
 #define HOSTLEN			64		/* seems good enough */
 #define NICKLEN			32
-#define PASSLEN			289		/* 32 bytes salt + 1024 bits digest + null */
+#define PASSLEN			288		/* 32 bytes salt + 1024 bits digest */
 #define IDLEN			10
 #define CHANNELLEN		201
 #define USERLEN			12

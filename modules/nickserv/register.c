@@ -62,10 +62,10 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (strlen(pass) >= PASSLEN)
+	if (strlen(pass) > PASSLEN)
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "REGISTER");
-		command_fail(si, fault_badparams, _("Registration passwords may not be longer than \2%d\2 characters."), PASSLEN - 1);
+		command_fail(si, fault_badparams, _("Registration passwords may not be longer than \2%u\2 characters."), PASSLEN);
 		return;
 	}
 

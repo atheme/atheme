@@ -377,7 +377,7 @@ const struct pbkdf2v2_scram_functions pbkdf2v2_scram_functions = {
 static bool
 atheme_pbkdf2v2_compute(const char *const restrict password, struct pbkdf2v2_dbentry *const restrict dbe)
 {
-	char key[PASSLEN];
+	char key[PASSLEN + 1];
 	(void) mowgli_strlcpy(key, password, sizeof key);
 
 #ifdef HAVE_LIBIDN
@@ -435,7 +435,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 		// This function logs messages on failure
 		return NULL;
 
-	static char res[PASSLEN];
+	static char res[PASSLEN + 1];
 
 	if (dbe.scram)
 	{
@@ -458,9 +458,9 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 			(void) slog(LG_ERROR, "%s: base64_encode() failed for chk", __func__);
 			return NULL;
 		}
-		if (snprintf(res, PASSLEN, PBKDF2_FS_SAVEHASH, dbe.a, dbe.c, dbe.salt64, csk64, chk64) >= PASSLEN)
+		if (snprintf(res, sizeof res, PBKDF2_FS_SAVEHASH, dbe.a, dbe.c, dbe.salt64, csk64, chk64) > PASSLEN)
 		{
-			(void) slog(LG_ERROR, "%s: snprintf(3) would have overflowed result buffer (BUG)", __func__);
+			(void) slog(LG_ERROR, "%s: snprintf(3) output would have been too long (BUG)", __func__);
 			return NULL;
 		}
 	}
@@ -473,9 +473,9 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 			(void) slog(LG_ERROR, "%s: base64_encode() failed for cdg", __func__);
 			return NULL;
 		}
-		if (snprintf(res, PASSLEN, PBKDF2_FN_SAVEHASH, dbe.a, dbe.c, dbe.salt64, cdg64) >= PASSLEN)
+		if (snprintf(res, sizeof res, PBKDF2_FN_SAVEHASH, dbe.a, dbe.c, dbe.salt64, cdg64) > PASSLEN)
 		{
-			(void) slog(LG_ERROR, "%s: snprintf(3) would have overflowed result buffer (BUG)", __func__);
+			(void) slog(LG_ERROR, "%s: snprintf(3) output would have been too long (BUG)", __func__);
 			return NULL;
 		}
 	}

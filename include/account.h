@@ -71,7 +71,7 @@ struct svsignore_ {
 struct myuser_
 {
   myentity_t ent;
-  char pass[PASSLEN];
+  char pass[PASSLEN + 1];
 
   stringref email;
   stringref email_canonical;

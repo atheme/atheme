@@ -77,11 +77,11 @@ atheme_crypt3_wrapper(const char *const restrict password, const char *const res
 		return NULL;
 	}
 
-	static char result[PASSLEN];
+	static char result[PASSLEN + 1];
 
-	if (mowgli_strlcpy(result, encrypted, sizeof result) >= sizeof result)
+	if (mowgli_strlcpy(result, encrypted, sizeof result) > PASSLEN)
 	{
-		(void) slog(LG_ERROR, "%s: mowgli_strlcpy() would have overflowed result buffer (BUG)", caller);
+		(void) slog(LG_ERROR, "%s: mowgli_strlcpy() output would have been too long (BUG)", caller);
 		return NULL;
 	}
 

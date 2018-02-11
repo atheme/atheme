@@ -500,7 +500,7 @@ mech_step_success(const struct scramsha_session *const restrict s)
 
 	char csk64[DIGEST_MDLEN_MAX * 3];
 	char chk64[DIGEST_MDLEN_MAX * 3];
-	char res[PASSLEN];
+	char res[PASSLEN + 1];
 
 	if (base64_encode(s->db.ssk, s->db.dl, csk64, sizeof csk64) == (size_t) -1)
 	{
@@ -510,7 +510,7 @@ mech_step_success(const struct scramsha_session *const restrict s)
 	{
 		(void) slog(LG_ERROR, "%s: base64_encode for shk failed", __func__);
 	}
-	else if (snprintf(res, PASSLEN, PBKDF2_FS_SAVEHASH, s->db.a, s->db.c, s->db.salt64, csk64, chk64) >= PASSLEN)
+	else if (snprintf(res, sizeof res, PBKDF2_FS_SAVEHASH, s->db.a, s->db.c, s->db.salt64, csk64, chk64) > PASSLEN)
 	{
 		(void) slog(LG_ERROR, "%s: snprintf(3) would have overflowed result buffer (BUG)", __func__);
 	}
