@@ -103,7 +103,7 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 						receipt->sent = CURRTIME;
 						receipt->status = 0;
 						mowgli_strlcpy(receipt->sender, si->service->nick, sizeof receipt->sender);
-						snprintf(receipt->text, MEMOLEN, "%s has read a memo from you sent at %s", entity(si->smu)->name, strfbuf);
+						snprintf(receipt->text, sizeof receipt->text, "%s has read a memo from you sent at %s", entity(si->smu)->name, strfbuf);
 
 						/* Attach to their linked list */
 						n = mowgli_node_create();

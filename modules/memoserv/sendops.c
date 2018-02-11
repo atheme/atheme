@@ -69,10 +69,10 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* Check for memo text length -- includes/common.h */
-	if (strlen(m) >= MEMOLEN)
+	if (strlen(m) > MEMOLEN)
 	{
 		command_fail(si, fault_badparams,
-			"Please make sure your memo is less than %d characters", MEMOLEN);
+			"Please make sure your memo is not greater than %u characters", MEMOLEN);
 
 		return;
 	}

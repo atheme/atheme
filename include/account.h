@@ -272,7 +272,7 @@ struct chanacs_
 /* struct for account memos */
 struct mymemo_ {
 	char	 sender[NICKLEN + 1];
-	char 	 text[MEMOLEN];
+	char 	 text[MEMOLEN + 1];
 	time_t	 sent;
 	unsigned int status;
 };
