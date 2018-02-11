@@ -431,7 +431,7 @@ bool validhostmask(const char *host)
 		return false;
 
 	/* XXX this NICKLEN is too long */
-	if (strlen(host) > NICKLEN + USERLEN + HOSTLEN + 2)
+	if (strlen(host) > NICKLEN + USERLEN + HOSTLEN + 3)
 		return false;
 
 	if (host[0] == ',' || host[0] == '-' || host[0] == '#' ||

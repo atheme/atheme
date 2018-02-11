@@ -305,10 +305,10 @@ mowgli_node_t *generic_next_matching_ban(channel_t *c, user_t *u, int type, mowg
 {
 	chanban_t *cb;
 	mowgli_node_t *n;
-	char hostbuf[NICKLEN + USERLEN + HOSTLEN + 1];
-	char cloakbuf[NICKLEN + USERLEN + HOSTLEN + 1];
-	char realbuf[NICKLEN + USERLEN + HOSTLEN + 1];
-	char ipbuf[NICKLEN + USERLEN + HOSTLEN + 1];
+	char hostbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN];
+	char cloakbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN];
+	char realbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN];
+	char ipbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN];
 
 	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
 	snprintf(cloakbuf, sizeof cloakbuf, "%s!%s@%s", u->nick, u->user, u->chost);
@@ -330,9 +330,9 @@ mowgli_node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, mowgl
 {
 	chanacs_t *ca;
 	mowgli_node_t *n;
-	char hostbuf[NICKLEN + USERLEN + HOSTLEN + 1];
-	char hostbuf2[NICKLEN + USERLEN + HOSTLEN + 1];
-	char ipbuf[NICKLEN + USERLEN + HOSTLEN + 1];
+	char hostbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN];
+	char hostbuf2[NICKLEN + 1 + USERLEN + 1 + HOSTLEN];
+	char ipbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN];
 
 	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
 	snprintf(hostbuf2, sizeof hostbuf2, "%s!%s@%s", u->nick, u->user, u->chost);

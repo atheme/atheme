@@ -116,9 +116,9 @@ static mowgli_node_t *inspircd_next_matching_ban(channel_t *c, user_t *u, int ty
 {
 	chanban_t *cb;
 	mowgli_node_t *n;
-	char hostbuf[NICKLEN + 1 + USERLEN + HOSTLEN];
-	char realbuf[NICKLEN + 1 + USERLEN + HOSTLEN];
-	char ipbuf[NICKLEN + 1 + USERLEN + HOSTLEN];
+	char hostbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN];
+	char realbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN];
+	char ipbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN];
 	char *p;
 
 	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);

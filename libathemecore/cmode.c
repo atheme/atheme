@@ -430,7 +430,7 @@ static void modestack_calclen(struct modestackdata *md)
 	size_t i;
 	const char *p;
 
-	md->totallen = strlen(md->source) + USERLEN + HOSTLEN + 1 + 4 + 1 +
+	md->totallen = strlen(md->source) + USERLEN + 1 + HOSTLEN + 1 + 4 + 1 +
 		10 + strlen(md->channel->name) + 1;
 	md->totallen += 2 + 32 + strlen(md->pmodes);
 	md->totalparamslen = 0;

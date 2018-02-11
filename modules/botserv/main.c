@@ -483,7 +483,7 @@ static void db_h_bot(database_handle_t *db, const char *type)
 	if (!is_valid_username(user))
 		user = "botserv";
 
-	bot->user = sstrndup(user, USERLEN - 1);
+	bot->user = sstrndup(user, USERLEN);
 	bot->host = sstrdup(host);
 	bot->real = sstrdup(real);
 	bot->private = private;
@@ -641,7 +641,7 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 			/* XXX: we really need an is_valid_user(), but this is close enough. --nenolod */
 			if (is_valid_username(parv[2])) {
 				free(bot->user);
-				bot->user = sstrndup(parv[2], USERLEN - 1);
+				bot->user = sstrndup(parv[2], USERLEN);
 			} else
 				command_fail(si, fault_badparams, _("\2%s\2 is an invalid username, not changing it."), parv[2]);
 		case 2:
@@ -733,7 +733,7 @@ static void bs_cmd_add(sourceinfo_t *si, int parc, char *parv[])
 
 	bot = scalloc(sizeof(botserv_bot_t), 1);
 	bot->nick = sstrdup(parv[0]);
-	bot->user = sstrndup(parv[1], USERLEN - 1);
+	bot->user = sstrndup(parv[1], USERLEN);
 	bot->host = sstrdup(parv[2]);
 	bot->real = sstrdup(buf);
 	bot->private = false;

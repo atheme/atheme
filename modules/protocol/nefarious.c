@@ -391,7 +391,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 				}
 				else
 				{
-					char userbuf[USERLEN];
+					char userbuf[USERLEN + 1];
 
 					strshare_unref(u->vhost);
 					u->vhost = strshare_get(p + 1);
@@ -484,7 +484,7 @@ static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 				}
 				else
 				{
-					char userbuf[USERLEN];
+					char userbuf[USERLEN + 1];
 
 					strshare_unref(u->vhost);
 					u->vhost = strshare_get(p + 1);
