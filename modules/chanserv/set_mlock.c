@@ -36,7 +36,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 	int newlock_on = 0, newlock_off = 0, newlock_limit = 0, flag = 0;
 	unsigned int mask, changed;
 	bool mask_ext;
-	char newlock_key[KEYLEN];
+	char newlock_key[KEYLEN + 1];
 	char newlock_ext[ignore_mode_list_size][512];
 	bool newlock_ext_off[ignore_mode_list_size];
 	char newext[512];
@@ -106,9 +106,9 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 					  command_fail(si, fault_badparams, _("You need to specify a value for mode +%c."), 'k');
 					  return;
 				  }
-				  else if (strlen(arg) >= KEYLEN)
+				  else if (strlen(arg) > KEYLEN)
 				  {
-					  command_fail(si, fault_badparams, _("MLOCK key is too long (%d > %d)."), (int)strlen(arg), KEYLEN - 1);
+					  command_fail(si, fault_badparams, _("MLOCK key is too long (%zu > %u)."), strlen(arg), KEYLEN);
 					  return;
 				  }
 				  else if (strchr(arg, ',') || arg[0] == ':')
