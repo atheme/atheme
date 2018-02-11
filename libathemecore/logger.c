@@ -232,7 +232,7 @@ static void logfile_write_irc(logfile_t *lf, const char *buf)
 	if (c != NULL && c->flags & CHAN_LOG)
 	{
 		size_t targetlen;
-		char targetbuf[NICKLEN];
+		char targetbuf[NICKLEN + 1];
 		service_t *svs = NULL;
 
 		memset(targetbuf, '\0', sizeof targetbuf);
@@ -638,7 +638,7 @@ void slog(unsigned int level, const char *fmt, ...)
 const char *format_user(user_t *source, bool full)
 {
 	static char buf[BUFSIZE];
-	char accountbuf[NICKLEN * 5]; /* entity name len is NICKLEN * 4, plus another for the ID */
+	char accountbuf[(NICKLEN + 1) * 5]; /* entity name len is NICKLEN * 4, plus another for the ID */
 	bool showaccount;
 
 	accountbuf[0] = '\0';

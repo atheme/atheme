@@ -231,7 +231,7 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 	unsigned int i;
 	int j;
 	char prefix[16];
-	char newnick[16+NICKLEN];
+	char newnick[sizeof prefix + NICKLEN + 1];
 	char *p;
 	time_t ts;
 	int bantype;

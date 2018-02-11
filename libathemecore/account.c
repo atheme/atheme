@@ -357,7 +357,7 @@ void myuser_rename(myuser_t *mu, const char *name)
 	user_t *u;
 	hook_user_rename_t data;
 	stringref newname;
-	char nb[NICKLEN];
+	char nb[NICKLEN + 1];
 
 	return_if_fail(mu != NULL);
 	return_if_fail(name != NULL);

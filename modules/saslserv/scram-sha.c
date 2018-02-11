@@ -182,7 +182,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 	// Does GS2 header include an authzid ?
 	if (message[0] == 'a' && message[1] == '=')
 	{
-		char authzid[NICKLEN];
+		char authzid[NICKLEN + 1];
 
 		message += 2;
 
@@ -196,7 +196,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 
 		// Check its length
 		const size_t authzid_length = (size_t) (pos - message);
-		if (authzid_length >= sizeof authzid)
+		if (authzid_length > NICKLEN)
 		{
 			(void) slog(LG_DEBUG, "%s: unacceptable authzid length '%zu'", __func__, authzid_length);
 			return ASASL_ERROR;
@@ -250,10 +250,10 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 		goto error;
 	}
 
-	char authcid[NICKLEN];
+	char authcid[NICKLEN + 1];
 	const size_t authcid_length = strlen(input['n']);
 
-	if (authcid_length >= sizeof authcid)
+	if (authcid_length > NICKLEN)
 	{
 		(void) slog(LG_DEBUG, "%s: unacceptable authcid length '%zu'", __func__, authcid_length);
 		goto error;

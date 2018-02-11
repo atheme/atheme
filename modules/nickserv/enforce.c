@@ -16,7 +16,7 @@
 #include "atheme.h"
 
 typedef struct {
-	char nick[NICKLEN];
+	char nick[NICKLEN + 1];
 	char host[HOSTLEN];
 	time_t timelimit;
 	mowgli_node_t node;
@@ -84,7 +84,7 @@ static bool log_enforce_victim_out(user_t *u, myuser_t *mu)
 /* sends an FNC for the given user */
 static void guest_nickname(user_t *u)
 {
-	char gnick[NICKLEN];
+	char gnick[NICKLEN + 1];
 	int tries;
 
 	/* Generate a new guest nickname and check if it already exists

@@ -39,7 +39,7 @@ sasl_format_sourceinfo(sourceinfo_t *const restrict si, const bool full)
 static const char *
 sasl_get_source_name(sourceinfo_t *const restrict si)
 {
-	static char result[HOSTLEN + NICKLEN + 10];
+	static char result[HOSTLEN + NICKLEN + 11];
 	char description[BUFSIZE];
 
 	const struct sasl_sourceinfo *const ssi = (const struct sasl_sourceinfo *) si;
@@ -772,7 +772,7 @@ sasl_authxid_can_login(struct sasl_session *const restrict p, const char *const 
 	if (muo)
 		*muo = mu;
 
-	(void) mowgli_strlcpy(val_name, entity(mu)->name, NICKLEN);
+	(void) mowgli_strlcpy(val_name, entity(mu)->name, NICKLEN + 1);
 	(void) mowgli_strlcpy(val_eid, entity(mu)->id, IDLEN);
 
 	if (strcmp(val_eid, other_val_eid) == 0)

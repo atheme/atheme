@@ -42,7 +42,7 @@ typedef enum {
 
 /* lengths of various pieces of information */
 #define HOSTLEN			64		/* seems good enough */
-#define NICKLEN			32
+#define NICKLEN			31
 #define PASSLEN			288		/* 32 bytes salt + 1024 bits digest */
 #define IDLEN			10
 #define CHANNELLEN		201

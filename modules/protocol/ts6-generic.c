@@ -1312,7 +1312,7 @@ static void m_encap(sourceinfo_t *si, int parc, char *parv[])
 	else if (!irccasecmp(parv[1], "RSMSG"))
 	{
 		char buf[512];
-		char dest[NICKLEN + HOSTLEN];
+		char dest[NICKLEN + 1 + HOSTLEN];
 		int i;
 
 		if (parc < 4)

@@ -127,7 +127,7 @@ struct mynick_
 {
   object_t parent;
 
-  char nick[NICKLEN];
+  char nick[NICKLEN + 1];
 
   myuser_t *owner;
 
@@ -142,7 +142,7 @@ struct myuser_name_
 {
   object_t parent;
 
-  char name[NICKLEN];
+  char name[NICKLEN + 1];
 };
 
 struct mycertfp_
@@ -271,7 +271,7 @@ struct chanacs_
 
 /* struct for account memos */
 struct mymemo_ {
-	char	 sender[NICKLEN];
+	char	 sender[NICKLEN + 1];
 	char 	 text[MEMOLEN];
 	time_t	 sent;
 	unsigned int status;

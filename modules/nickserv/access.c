@@ -191,7 +191,7 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 	char *mask;
 	char *host;
 	char *p;
-	char mangledmask[NICKLEN+HOSTLEN+10];
+	char mangledmask[NICKLEN + 1 + HOSTLEN + 10];
 
 	if (parc < 1)
 	{

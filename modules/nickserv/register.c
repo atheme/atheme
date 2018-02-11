@@ -91,7 +91,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	if (strlen(account) >= NICKLEN)
+	if (strlen(account) > NICKLEN)
 	{
 		command_fail(si, fault_badparams, _("The account name \2%s\2 is invalid."), account);
 		return;

@@ -65,20 +65,20 @@ mech_step(struct sasl_session *const restrict p, const void *const restrict in, 
 		return ASASL_DONE;
 	}
 
-	char authcid[NICKLEN];
+	char authcid[NICKLEN + 1];
 	(void) memset(authcid, 0x00, sizeof authcid);
 
 	const char *const end = memchr(in, 0x00, inlen);
 	if (! end)
 	{
-		if (! inlen || inlen >= sizeof authcid)
+		if (inlen > NICKLEN)
 			return ASASL_ERROR;
 
 		(void) memcpy(authcid, in, inlen);
 	}
 	else
 	{
-		char authzid[NICKLEN];
+		char authzid[NICKLEN + 1];
 		(void) memset(authzid, 0x00, sizeof authzid);
 
 		const char *const accnames = in;
@@ -86,10 +86,10 @@ mech_step(struct sasl_session *const restrict p, const void *const restrict in, 
 		const size_t authcid_length = (size_t) (end - accnames);
 		const size_t authzid_length = inlen - 1 - authcid_length;
 
-		if (! authcid_length || authcid_length >= sizeof authcid)
+		if (! authcid_length || authcid_length > NICKLEN)
 			return ASASL_ERROR;
 
-		if (! authzid_length || authzid_length >= sizeof authcid)
+		if (! authzid_length || authzid_length > NICKLEN)
 			return ASASL_ERROR;
 
 		(void) memcpy(authcid, accnames, authcid_length);

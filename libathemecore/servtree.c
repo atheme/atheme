@@ -277,7 +277,7 @@ service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int p
 	service_t *sptr;
 	struct ConfTable *subblock;
 	const char *nick;
-	char newnick[NICKLEN];
+	char newnick[NICKLEN + 1];
 
 	return_val_if_fail(name != NULL, NULL);
 	return_val_if_fail(service_find(name) == NULL, NULL);

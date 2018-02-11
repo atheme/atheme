@@ -30,7 +30,7 @@ typedef struct {
 	myentity_t *entity;
 	mychan_t *chan;
 
-	char host[NICKLEN + USERLEN + HOSTLEN + 4];
+	char host[NICKLEN + 1 + USERLEN + HOSTLEN + 4];
 
 	mowgli_node_t node;
 } akick_timeout_t;

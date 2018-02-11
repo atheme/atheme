@@ -23,7 +23,7 @@ mech_step(struct sasl_session *const restrict p, const void *const restrict in, 
 
 	if (in && inlen)
 	{
-		if (inlen >= NICKLEN)
+		if (inlen > NICKLEN)
 			return ASASL_ERROR;
 
 		if (! sasl_core_functions->authzid_can_login(p, in, NULL))

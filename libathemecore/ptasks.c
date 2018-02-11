@@ -529,7 +529,7 @@ void handle_message(sourceinfo_t *si, char *target, bool is_notice, char *messag
 	char *vec[3];
 	user_t *u, *target_u;
 	char *p;
-	char name2[NICKLEN];
+	char name2[NICKLEN + 1];
 	char *sentinel;
 	mowgli_node_t *n;
 

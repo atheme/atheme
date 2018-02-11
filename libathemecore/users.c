@@ -206,7 +206,7 @@ void user_delete(user_t *u, const char *comment)
 	mowgli_node_t *n, *tn;
 	chanuser_t *cu;
 	mynick_t *mn;
-	char oldnick[NICKLEN];
+	char oldnick[NICKLEN + 1];
 	bool doenforcer = false;
 
 	return_if_fail(u != NULL);
@@ -397,7 +397,7 @@ bool user_changenick(user_t *u, const char *nick, time_t ts)
 {
 	mynick_t *mn;
 	user_t *u2;
-	char oldnick[NICKLEN];
+	char oldnick[NICKLEN + 1];
 	bool doenforcer = false;
 	hook_user_nick_t hdata;
 

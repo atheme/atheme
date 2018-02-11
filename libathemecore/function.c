@@ -431,7 +431,7 @@ bool validhostmask(const char *host)
 		return false;
 
 	/* XXX this NICKLEN is too long */
-	if (strlen(host) > NICKLEN + USERLEN + HOSTLEN + 1)
+	if (strlen(host) > NICKLEN + USERLEN + HOSTLEN + 2)
 		return false;
 
 	if (host[0] == ',' || host[0] == '-' || host[0] == '#' ||
@@ -526,10 +526,10 @@ char *pretty_mask(char *mask)
         }
 
         /* truncate values to max lengths */
-        if(strlen(nick) > NICKLEN - 1)
+        if(strlen(nick) > NICKLEN)
         {
-                ne = nick[NICKLEN - 1];
-                nick[NICKLEN - 1] = '\0';
+                ne = nick[NICKLEN];
+                nick[NICKLEN] = '\0';
         }
         if(strlen(user) > USERLEN)
         {
@@ -550,7 +550,7 @@ char *pretty_mask(char *mask)
         if(ex)
                 *ex = '!';
         if(ne)
-                nick[NICKLEN - 1] = ne;
+                nick[NICKLEN] = ne;
         if(ue)
                 user[USERLEN] = ue;
         if(he)
