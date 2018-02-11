@@ -91,6 +91,8 @@ Password Cryptography
 - A new core module operserv/genhash is available to generate password hashes
   suitable for use as services operator passwords. This alleviates the need to
   build contrib module support and use contrib/ns_generatehash.
+- The crypto/posix module has been replaced with individual crypt3-* modules.
+  Please see the Password Hashing Modules section of dist/atheme.conf.example.
 
 
 

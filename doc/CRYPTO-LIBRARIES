@@ -4,19 +4,27 @@ Cryptographic Implementation Documentation
 The following modules are available to encrypt passwords:
 
   Argon2d (Password Hashing Competition, v1.3)  modules/crypto/argon2d
-  PBKDF2 cryptography (better format)           modules/crypto/pbkdf2v2
-  POSIX-style crypt(3)                          modules/crypto/posix
+  PBKDF2 (Including support for SASL SCRAM-SHA) modules/crypto/pbkdf2v2
 
 It is highly recommended that you load one or more of these modules.
 
 The following modules are available to verify old encrypted passwords:
 
   PBKDF2 (Atheme <= 7.2 compatibility)          modules/crypto/pbkdf2
-  Raw MD5 (Anope ~1.8 compatibility)            modules/crypto/rawmd5
   Raw SHA1 (Anope ~1.8 compatibility)           modules/crypto/rawsha1
+  Raw MD5 (Anope ~1.8 compatibility)            modules/crypto/rawmd5
   IRCServices (+ Anope) compatibility           modules/crypto/ircservices
+  MD5 crypt(3) (Atheme Linux compatibility)     modules/crypto/crypt3-md5
+  DES crypt(3) (Atheme OS X compatibility)      modules/crypto/crypt3-des
 
-All of these modules will compile stand-alone, but they can be accelerated by
+The crypt3-* modules depend on your platform crypt(3) supporting the
+respective algorithms. This is not guaranteed to be the case. If you used
+modules/crypto/posix on Linux, you need crypt3-md5. If you used
+modules/crypto/posix on OS X, you need crypt3-des. These modules issue
+informational messages when loaded to the effect that they might break in
+the future.
+
+All of these modules will compile stand-alone, but some can be accelerated by
 installing a cryptographic library and building Atheme against it. Such
 libraries provide more efficient digest algorithms than the ones implemented
 in Atheme.
