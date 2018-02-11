@@ -45,7 +45,7 @@ typedef enum {
 #define NICKLEN			31
 #define PASSLEN			288		/* 32 bytes salt + 1024 bits digest */
 #define IDLEN			9
-#define CHANNELLEN		201
+#define CHANNELLEN		200
 #define USERLEN			12
 #define HOSTIPLEN		54
 #define GECOSLEN		50

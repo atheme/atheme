@@ -129,7 +129,7 @@ static mowgli_node_t *chatircd_next_matching_ban(channel_t *c, user_t *u, int ty
 	char hostbuf[NICKLEN + 1 + USERLEN + HOSTLEN];
 	char realbuf[NICKLEN + 1 + USERLEN + HOSTLEN];
 	char ipbuf[NICKLEN + 1 + USERLEN + HOSTLEN];
-	char strippedmask[NICKLEN + 1 + USERLEN + HOSTLEN + CHANNELLEN + 2];
+	char strippedmask[NICKLEN + 1 + USERLEN + HOSTLEN + CHANNELLEN + 3];
 	char *p;
 	bool negate, matched;
 	int exttype;

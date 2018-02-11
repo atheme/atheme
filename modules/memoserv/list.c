@@ -33,7 +33,7 @@ static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	char strfbuf[BUFSIZE];
 	struct tm tm;
 	char line[512];
-	char chan[CHANNELLEN];
+	char chan[CHANNELLEN + 1];
 	char *p;
 
 	command_success_nodata(si, ngettext(N_("You have %zu memo (%d new)."),
