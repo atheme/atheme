@@ -6,7 +6,7 @@
 
 static mowgli_patricia_t *entities;
 static mowgli_patricia_t *entities_by_id;
-static char last_entity_uid[IDLEN];
+static char last_entity_uid[IDLEN + 1];
 
 void init_entities(void)
 {
@@ -17,8 +17,7 @@ void init_entities(void)
 
 void myentity_set_last_uid(const char *last_id)
 {
-	mowgli_strlcpy(last_entity_uid, last_id, sizeof last_entity_uid);
-	last_entity_uid[IDLEN-1] = '\0';
+	(void) mowgli_strlcpy(last_entity_uid, last_id, sizeof last_entity_uid);
 }
 
 const char *myentity_get_last_uid(void)

@@ -19,7 +19,7 @@ typedef struct {
 	myentity_type_t type;
 
 	stringref name;
-	char id[IDLEN];
+	char id[IDLEN + 1];
 
 	mowgli_list_t chanacs;
 	entity_chanacs_validation_vtable_t *chanacs_validate;

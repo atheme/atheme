@@ -47,8 +47,8 @@ struct sasl_session
 	void                    *mechdata;              // Mechanism-specific allocated memory
 	char                     authcid[NICKLEN + 1];  // Authentication identity (user having credentials verified)
 	char                     authzid[NICKLEN + 1];  // Authorization identity (user being logged in)
-	char                     authceid[IDLEN];       // Entity ID for authcid
-	char                     authzeid[IDLEN];       // Entity ID for authzid
+	char                     authceid[IDLEN + 1];   // Entity ID for authcid
+	char                     authzeid[IDLEN + 1];   // Entity ID for authzid
 	char                    *certfp;                // TLS client certificate fingerprint (if any)
 	char                    *host;                  // Hostname
 	char                    *ip;                    // IP address

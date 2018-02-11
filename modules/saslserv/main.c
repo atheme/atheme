@@ -773,7 +773,7 @@ sasl_authxid_can_login(struct sasl_session *const restrict p, const char *const 
 		*muo = mu;
 
 	(void) mowgli_strlcpy(val_name, entity(mu)->name, NICKLEN + 1);
-	(void) mowgli_strlcpy(val_eid, entity(mu)->id, IDLEN);
+	(void) mowgli_strlcpy(val_eid, entity(mu)->id, IDLEN + 1);
 
 	if (strcmp(val_eid, other_val_eid) == 0)
 		// We have already executed the user_can_login hook for this user
