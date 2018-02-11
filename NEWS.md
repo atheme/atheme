@@ -73,6 +73,7 @@ Build System
 - configure: print CC/CFLAGS/CPPFLAGS/LD/LDFLAGS
 - configure: indicate if --enable-warnings
 - configure: detect support for -Wl,-z,relro -Wl,-z,now -Wl,--as-needed
+- configure: don't link everything against -lcrypt
 - Update third-party files (ABOUT-NLS, autoconf/*, m4/*.m4)
 - Clarify that GIT-Access is a file by renaming it to GIT-Access.txt
 
