@@ -42,6 +42,7 @@ Configuration:
     Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}
     Build Warnings ..........: ${BUILD_WARNINGS}
 
+    crypt(3) Support ........: ${LIBCRYPT}
     CrackLib Support ........: ${LIBCRACKLIB}
     GNU libidn Support ......: ${LIBIDN}
     ARM mbedTLS Support .....: ${LIBMBEDCRYPTO}

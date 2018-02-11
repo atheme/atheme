@@ -74,7 +74,6 @@ AC_CHECK_FUNCS([arc4random arc4random_buf arc4random_uniform explicit_bzero mems
 AC_CHECK_FUNCS([inet_ntop inet_pton execve flock fork getpid getrlimit gettimeofday strcasestr strtok_r umask])
 AC_CHECK_FUNC([socket], [], [AC_CHECK_LIB([socket], [socket])])
 AC_CHECK_FUNC([gethostbyname], [], [AC_CHECK_LIB([nsl], [gethostbyname])])
-AC_SEARCH_LIBS([crypt], [crypt], [AC_DEFINE([HAVE_CRYPT], [1], [Define to 1 if crypt(3) is available])])
 HW_FUNC_SNPRINTF
 HW_FUNC_ASPRINTF
 
@@ -129,6 +128,24 @@ case "${with_cracklib}" in
 esac
 
 AS_IF([test "x${with_cracklib}" != "xno"], [ATHEME_LIBTEST_CRACKLIB])
+
+
+
+LIBCRYPT="No"
+LIBCRYPT_LIBS=""
+AC_ARG_WITH([crypt],
+	[AS_HELP_STRING([--with-crypt], [Compile with crypt(3) to provide modules/crypto/crypt3 modules.])],
+	[], [with_crypt="auto"])
+
+case "${with_crypt}" in
+	no | yes | auto)
+		;;
+	*)
+		AC_MSG_ERROR([invalid option for --with-crypt])
+		;;
+esac
+
+AS_IF([test "x${with_crypt}" != "xno"], [ATHEME_LIBTEST_CRYPT])
 
 
 

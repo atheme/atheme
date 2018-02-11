@@ -662,6 +662,7 @@ LIBIDN_LIBS
 LIBNETTLE_LIBS
 LIBMBEDCRYPTO_LIBS
 LIBCRYPTO_LIBS
+LIBCRYPT_LIBS
 CRACKLIB_LIBS
 CRACKLIB_C
 EXPLICIT_BZERO_C
@@ -790,6 +791,7 @@ enable_rpath
 with_libiconv_prefix
 with_libintl_prefix
 with_cracklib
+with_crypt
 with_openssl
 with_mbedtls
 with_nettle
@@ -1469,6 +1471,8 @@ Optional Packages:
   --without-libintl-prefix     don't search for libintl in includedir and libdir
   --with-cracklib         Compile NickServ cracklib module for checking
                           password strength
+  --with-crypt            Compile with crypt(3) to provide
+                          modules/crypto/crypt3 modules.
   --with-openssl          Compile with OpenSSL to provide more functionality.
   --with-mbedtls          Compile with ARM mbedTLS support.
   --with-nettle           Compile with libnettle (cryptographic library)
@@ -7279,64 +7283,6 @@ fi
 
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing crypt" >&5
-$as_echo_n "checking for library containing crypt... " >&6; }
-if ${ac_cv_search_crypt+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_func_search_save_LIBS=$LIBS
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char crypt ();
-int
-main ()
-{
-return crypt ();
-  ;
-  return 0;
-}
-_ACEOF
-for ac_lib in '' crypt; do
-  if test -z "$ac_lib"; then
-    ac_res="none required"
-  else
-    ac_res=-l$ac_lib
-    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
-  fi
-  if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_search_crypt=$ac_res
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext
-  if ${ac_cv_search_crypt+:} false; then :
-  break
-fi
-done
-if ${ac_cv_search_crypt+:} false; then :
-
-else
-  ac_cv_search_crypt=no
-fi
-rm conftest.$ac_ext
-LIBS=$ac_func_search_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_crypt" >&5
-$as_echo "$ac_cv_search_crypt" >&6; }
-ac_res=$ac_cv_search_crypt
-if test "$ac_res" != no; then :
-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-
-$as_echo "#define HAVE_CRYPT 1" >>confdefs.h
-
-fi
-
 
 
 
@@ -8532,6 +8478,119 @@ fi
 
 $as_echo "#define HAVE_CRACKLIB 1" >>confdefs.h
 
+
+
+
+fi
+
+fi
+
+
+
+LIBCRYPT="No"
+LIBCRYPT_LIBS=""
+
+# Check whether --with-crypt was given.
+if test "${with_crypt+set}" = set; then :
+  withval=$with_crypt;
+else
+  with_crypt="auto"
+fi
+
+
+case "${with_crypt}" in
+	no | yes | auto)
+		;;
+	*)
+		as_fn_error $? "invalid option for --with-crypt" "$LINENO" 5
+		;;
+esac
+
+if test "x${with_crypt}" != "xno"; then :
+
+
+	if test "x${with_crypt}" != "xno"; then :
+
+		LIBS_SAVED="${LIBS}"
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing crypt" >&5
+$as_echo_n "checking for library containing crypt... " >&6; }
+if ${ac_cv_search_crypt+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS=$LIBS
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char crypt ();
+int
+main ()
+{
+return crypt ();
+  ;
+  return 0;
+}
+_ACEOF
+for ac_lib in '' crypt; do
+  if test -z "$ac_lib"; then
+    ac_res="none required"
+  else
+    ac_res=-l$ac_lib
+    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
+  fi
+  if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_crypt=$ac_res
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext
+  if ${ac_cv_search_crypt+:} false; then :
+  break
+fi
+done
+if ${ac_cv_search_crypt+:} false; then :
+
+else
+  ac_cv_search_crypt=no
+fi
+rm conftest.$ac_ext
+LIBS=$ac_func_search_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_crypt" >&5
+$as_echo "$ac_cv_search_crypt" >&6; }
+ac_res=$ac_cv_search_crypt
+if test "$ac_res" != no; then :
+  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+  LIBCRYPT="Yes"
+else
+
+			if test "x${with_crypt}" != "xauto"; then :
+
+				as_fn_error $? "--with-crypt was specified but crypt(3) could not be found" "$LINENO" 5
+
+fi
+
+fi
+
+
+		LIBS="${LIBS_SAVED}"
+
+fi
+
+	if test "x${LIBCRYPT}" = "xYes"; then :
+
+		if test "x${ac_cv_search_crypt}" != "xnone required"; then :
+
+			LIBCRYPT_LIBS="${ac_cv_search_crypt}"
+
+fi
+
+$as_echo "#define HAVE_CRYPT 1" >>confdefs.h
 
 
 
@@ -15252,6 +15311,7 @@ Configuration:
     Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}
     Build Warnings ..........: ${BUILD_WARNINGS}
 
+    crypt(3) Support ........: ${LIBCRYPT}
     CrackLib Support ........: ${LIBCRACKLIB}
     GNU libidn Support ......: ${LIBIDN}
     ARM mbedTLS Support .....: ${LIBMBEDCRYPTO}
