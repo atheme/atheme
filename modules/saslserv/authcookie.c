@@ -18,10 +18,10 @@ mech_step(struct sasl_session *const restrict p, const void *const restrict in, 
 		return ASASL_ERROR;
 
 	/*
-	 * Data format: authzid 0x00 authcid 0x00 authcookie
+	 * Data format: authzid 0x00 authcid 0x00 authcookie [0x00]
 	 * NICKLEN includes NULL terminator
 	 */
-	if (inlen > (NICKLEN + NICKLEN + AUTHCOOKIE_LENGTH))
+	if (inlen > (NICKLEN + NICKLEN + AUTHCOOKIE_LENGTH + 1))
 		return ASASL_ERROR;
 
 	const char *ptr = in;
