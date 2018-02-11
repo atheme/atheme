@@ -627,7 +627,7 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 	switch(parc)
 	{
 		case 5:
-			if (strlen(parv[4]) < GECOSLEN)
+			if (strlen(parv[4]) <= GECOSLEN)
 			{
 				free(bot->real);
 				bot->real = sstrdup(parv[4]);
@@ -725,7 +725,7 @@ static void bs_cmd_add(sourceinfo_t *si, int parc, char *parv[])
 	if (!check_vhost_validity(si, parv[2]))
 		return;
 
-	if (strlen(parv[3]) >= GECOSLEN)
+	if (strlen(parv[3]) > GECOSLEN)
 	{
 		command_fail(si, fault_badparams, _("\2%s\2 is an invalid realname."), parv[3]);
 		return;

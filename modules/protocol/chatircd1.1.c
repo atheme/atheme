@@ -90,8 +90,8 @@ struct cmode_ chatircd_prefix_mode_list[] = {
 /* note that the host part matches differently from a regular ban */
 static bool extgecos_match(const char *mask, user_t *u)
 {
-	char hostgbuf[NICKLEN + 1 + USERLEN + HOSTLEN + GECOSLEN];
-	char realgbuf[NICKLEN + 1 + USERLEN + HOSTLEN + GECOSLEN];
+	char hostgbuf[NICKLEN + 1 + USERLEN + HOSTLEN + GECOSLEN + 1];
+	char realgbuf[NICKLEN + 1 + USERLEN + HOSTLEN + GECOSLEN + 1];
 
 	snprintf(hostgbuf, sizeof hostgbuf, "%s!%s@%s#%s", u->nick, u->user, u->vhost, u->gecos);
 	snprintf(realgbuf, sizeof realgbuf, "%s!%s@%s#%s", u->nick, u->user, u->host, u->gecos);

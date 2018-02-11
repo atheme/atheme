@@ -205,7 +205,7 @@ static void os_cmd_sgline_add(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (strlen(target) > GECOSLEN * 2)
+	if (strlen(target) > (GECOSLEN + 1) * 2)
 	{
 		command_fail(si, fault_badparams, _("The mask provided is too long."));
 		return;

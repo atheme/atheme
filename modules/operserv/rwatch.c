@@ -510,7 +510,7 @@ static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[])
 static void rwatch_newuser(hook_user_nick_t *data)
 {
 	user_t *u = data->u;
-	char usermask[NICKLEN + 1 + USERLEN + HOSTLEN + GECOSLEN];
+	char usermask[NICKLEN + 1 + USERLEN + HOSTLEN + GECOSLEN + 1];
 	mowgli_node_t *n;
 	rwatch_t *rw;
 
@@ -574,8 +574,8 @@ static void rwatch_newuser(hook_user_nick_t *data)
 static void rwatch_nickchange(hook_user_nick_t *data)
 {
 	user_t *u = data->u;
-	char usermask[NICKLEN + 1 + USERLEN + HOSTLEN + GECOSLEN];
-	char oldusermask[NICKLEN + 1 + USERLEN + HOSTLEN + GECOSLEN];
+	char usermask[NICKLEN + 1 + USERLEN + HOSTLEN + GECOSLEN + 1];
+	char oldusermask[NICKLEN + 1 + USERLEN + HOSTLEN + GECOSLEN + 1];
 	mowgli_node_t *n;
 	rwatch_t *rw;
 
