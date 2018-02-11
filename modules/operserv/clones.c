@@ -58,7 +58,7 @@ struct cexcept_
 typedef struct hostentry_ hostentry_t;
 struct hostentry_
 {
-	char ip[HOSTIPLEN];
+	char ip[HOSTIPLEN + 1];
 	mowgli_list_t clients;
 	time_t firstkill;
 	unsigned int gracekills;

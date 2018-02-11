@@ -609,7 +609,7 @@ static void m_part(sourceinfo_t *si, int parc, char *parv[])
 static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
-	char ipstring[HOSTIPLEN];
+	char ipstring[HOSTIPLEN + 1];
 	char *p;
 
 	/* got the right number of args for an introduction? */

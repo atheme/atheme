@@ -72,7 +72,7 @@ unsigned int base64touint(const char *buf)
 	return v;
 }
 
-void decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN])
+void decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN + 1])
 {
 	struct in_addr ip;
 	char buf[4];
@@ -84,7 +84,7 @@ void decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN])
 	if (len == 6)
 	{
 		ip.s_addr = ntohl(base64touint(b64));
-		if (!inet_ntop(AF_INET, &ip, ipstring, HOSTIPLEN))
+		if (!inet_ntop(AF_INET, &ip, ipstring, HOSTIPLEN + 1))
 			ipstring[0] = '\0';
 	}
 	else if (len == 24 || (len < 24 && strchr(b64, '_')))
@@ -97,7 +97,7 @@ void decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN])
 			if (b64[i] == '_')
 			{
 				i++;
-				if (j >= HOSTIPLEN - 2)
+				if (j > HOSTIPLEN - 2)
 					break;
 				if (j == 0)
 					ipstring[j++] = '0';
@@ -107,7 +107,7 @@ void decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN])
 			}
 			else
 			{
-				if (j >= HOSTIPLEN - 5)
+				if (j > HOSTIPLEN - 5)
 					break;
 				if (j != 0)
 					ipstring[j++] = ':';

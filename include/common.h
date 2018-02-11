@@ -47,7 +47,7 @@ typedef enum {
 #define IDLEN			9
 #define CHANNELLEN		200
 #define USERLEN			11
-#define HOSTIPLEN		54
+#define HOSTIPLEN		53
 #define GECOSLEN		50
 #define KEYLEN			23
 #define EMAILLEN		119

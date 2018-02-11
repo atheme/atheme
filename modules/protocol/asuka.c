@@ -132,7 +132,7 @@ static bool asuka_on_logout(user_t *u, const char *account)
 static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
-	char ipstring[HOSTIPLEN];
+	char ipstring[HOSTIPLEN + 1];
 	char *p;
 	int i;
 

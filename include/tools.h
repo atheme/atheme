@@ -184,7 +184,7 @@ extern int tokenize(char *message, char **parv);
 /* ubase64.c */
 extern const char *uinttobase64(char *buf, uint64_t v, int64_t count);
 extern unsigned int base64touint(const char *buf);
-extern void decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN]);
+extern void decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN + 1]);
 
 /* sharedheap.c */
 extern mowgli_heap_t *sharedheap_get(size_t size);
