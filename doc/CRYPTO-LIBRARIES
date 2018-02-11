@@ -5,6 +5,8 @@ The following modules are available to encrypt passwords:
 
   Argon2d (Password Hashing Competition, v1.3)  modules/crypto/argon2d
   PBKDF2 (Including support for SASL SCRAM-SHA) modules/crypto/pbkdf2v2
+  SHA2-512 crypt(3) a la '$6$...'               modules/crypto/crypt3-sha2-512
+  SHA2-256 crypt(3) a la '$5$...'               modules/crypto/crypt3-sha2-256
 
 It is highly recommended that you load one or more of these modules.
 

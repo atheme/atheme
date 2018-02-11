@@ -107,6 +107,8 @@ loadmodule "modules/backend/opensex";
  *
  *   Argon2d (Password Hashing Competition, v1.3)  modules/crypto/argon2d
  *   PBKDF2 (Including support for SASL SCRAM-SHA) modules/crypto/pbkdf2v2
+ *   SHA2-512 crypt(3) a la '$6$...'               modules/crypto/crypt3-sha2-512
+ *   SHA2-256 crypt(3) a la '$5$...'               modules/crypto/crypt3-sha2-256
  *
  * If you do not load an encryption-capable crypto module, some features will
  * not work correctly, and errors will be logged on e.g. user registration
@@ -154,6 +156,8 @@ loadmodule "modules/backend/opensex";
  */
 loadmodule "modules/crypto/argon2d";
 loadmodule "modules/crypto/pbkdf2v2";
+loadmodule "modules/crypto/crypt3-sha2-512";
+loadmodule "modules/crypto/crypt3-sha2-256";
 loadmodule "modules/crypto/pbkdf2";
 loadmodule "modules/crypto/rawsha1";
 loadmodule "modules/crypto/rawmd5";
