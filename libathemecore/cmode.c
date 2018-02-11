@@ -390,7 +390,7 @@ void channel_mode_va(user_t *source, channel_t *chan, int parc, char *parv0, ...
 }
 
 static struct modestackdata {
-	char source[HOSTLEN]; /* name */
+	char source[HOSTLEN + 1]; /* name */
 	channel_t *channel;
 	unsigned int modes_on;
 	unsigned int modes_off;
@@ -430,7 +430,7 @@ static void modestack_calclen(struct modestackdata *md)
 	size_t i;
 	const char *p;
 
-	md->totallen = strlen(md->source) + USERLEN + 1 + HOSTLEN + 1 + 4 + 1 +
+	md->totallen = strlen(md->source) + USERLEN + 1 + HOSTLEN + 1 + 1 + 4 + 1 +
 		10 + strlen(md->channel->name) + 1;
 	md->totallen += 2 + 32 + strlen(md->pmodes);
 	md->totalparamslen = 0;

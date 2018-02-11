@@ -680,7 +680,7 @@ void handle_topic_from(sourceinfo_t *si, channel_t *c, const char *setter, time_
 
 void handle_topic(channel_t *c, const char *setter, time_t ts, const char *topic)
 {
-	char newsetter[HOSTLEN], *p;
+	char newsetter[HOSTLEN + 1], *p;
 
 	/* setter can be a nick, nick!user@host or server.
 	 * strip off !user@host part if it's there

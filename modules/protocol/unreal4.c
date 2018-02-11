@@ -220,9 +220,9 @@ static mowgli_node_t *unreal_next_matching_ban(channel_t *c, user_t *u, int type
 {
 	chanban_t *cb;
 	mowgli_node_t *n;
-	char hostbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN];
-	char realbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN];
-	char ipbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN];
+	char hostbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
+	char realbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
+	char ipbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
 	char *p;
 	bool matched;
 	int exttype;

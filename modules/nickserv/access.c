@@ -56,7 +56,7 @@ static bool username_is_random(const char *name)
 
 static char *construct_mask(user_t *u)
 {
-	static char mask[USERLEN + 1 + HOSTLEN];
+	static char mask[USERLEN + 1 + HOSTLEN + 1];
 	const char *dynhosts[] = { "*dyn*.*", "*dial*.*.*", "*dhcp*.*.*",
 		"*.t-online.??", "*.t-online.???",
 		"*.t-dialin.??", "*.t-dialin.???",
@@ -191,7 +191,7 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 	char *mask;
 	char *host;
 	char *p;
-	char mangledmask[NICKLEN + 1 + HOSTLEN + 10];
+	char mangledmask[NICKLEN + 1 + HOSTLEN + 1 + 10];
 
 	if (parc < 1)
 	{
@@ -264,7 +264,7 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 		}
 		if (mask[0] == '*' && mask[1] == '!')
 			mask += 2;
-		if (strlen(mask) > USERLEN + HOSTLEN)
+		if (strlen(mask) > USERLEN + 1 + HOSTLEN)
 		{
 			command_fail(si, fault_badparams, _("Invalid mask \2%s\2."), parv[1]);
 			return;

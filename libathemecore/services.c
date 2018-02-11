@@ -1011,7 +1011,7 @@ const char *get_source_name(sourceinfo_t *si)
 
 const char *get_source_mask(sourceinfo_t *si)
 {
-	static char result[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 10];
+	static char result[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + 10];
 
 	if (si->v != NULL && si->v->get_source_mask != NULL)
 		return si->v->get_source_mask(si);
@@ -1033,7 +1033,7 @@ const char *get_source_mask(sourceinfo_t *si)
 
 const char *get_oper_name(sourceinfo_t *si)
 {
-	static char result[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + NICKLEN + 10];
+	static char result[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + NICKLEN + 10];
 
 	if (si->v != NULL && si->v->get_oper_name != NULL)
 		return si->v->get_oper_name(si);
@@ -1062,7 +1062,7 @@ const char *get_oper_name(sourceinfo_t *si)
 
 const char *get_storage_oper_name(sourceinfo_t *si)
 {
-	static char result[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + NICKLEN + 10];
+	static char result[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + NICKLEN + 10];
 
 	if (si->v != NULL && si->v->get_storage_oper_name != NULL)
 		return si->v->get_storage_oper_name(si);
@@ -1084,7 +1084,7 @@ const char *get_storage_oper_name(sourceinfo_t *si)
 
 const char *get_source_security_label(sourceinfo_t *si)
 {
-	static char result[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + NICKLEN + 1 + HOSTLEN + 10];
+	static char result[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + NICKLEN + 1 + HOSTLEN + 1 + 10];
 	const soper_t *soper;
 	const operclass_t *operclass = NULL;
 
@@ -1167,7 +1167,7 @@ bool check_vhost_validity(sourceinfo_t *si, const char *host)
 		command_fail(si, fault_badparams, _("The vhost provided contains invalid characters."));
 		return false;
 	}
-	if (strlen(host) >= HOSTLEN)
+	if (strlen(host) > HOSTLEN)
 	{
 		command_fail(si, fault_badparams, _("The vhost provided is too long."));
 		return false;

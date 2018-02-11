@@ -17,7 +17,7 @@
 
 typedef struct {
 	char nick[NICKLEN + 1];
-	char host[HOSTLEN];
+	char host[HOSTLEN + 1];
 	time_t timelimit;
 	mowgli_node_t node;
 } enforce_timeout_t;

@@ -46,7 +46,7 @@ typedef struct chanfix_oprecord {
 	myentity_t *entity;
 
 	char user[USERLEN + 1];
-	char host[HOSTLEN];
+	char host[HOSTLEN + 1];
 
 	time_t firstseen;
 	time_t lastevent;

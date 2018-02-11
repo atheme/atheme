@@ -39,7 +39,7 @@ sasl_format_sourceinfo(sourceinfo_t *const restrict si, const bool full)
 static const char *
 sasl_get_source_name(sourceinfo_t *const restrict si)
 {
-	static char result[HOSTLEN + NICKLEN + 11];
+	static char result[HOSTLEN + 1 + NICKLEN + 11];
 	char description[BUFSIZE];
 
 	const struct sasl_sourceinfo *const ssi = (const struct sasl_sourceinfo *) si;

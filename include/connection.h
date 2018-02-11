@@ -34,7 +34,7 @@ typedef struct connection_ connection_t;
 
 struct connection_
 {
-	char name[HOSTLEN];
+	char name[HOSTLEN + 1];
 	char hbuf[BUFSIZE + 1];
 
 	mowgli_list_t recvq;

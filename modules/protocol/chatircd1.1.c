@@ -90,8 +90,8 @@ struct cmode_ chatircd_prefix_mode_list[] = {
 /* note that the host part matches differently from a regular ban */
 static bool extgecos_match(const char *mask, user_t *u)
 {
-	char hostgbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + GECOSLEN + 1];
-	char realgbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + GECOSLEN + 1];
+	char hostgbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + GECOSLEN + 1];
+	char realgbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + GECOSLEN + 1];
 
 	snprintf(hostgbuf, sizeof hostgbuf, "%s!%s@%s#%s", u->nick, u->user, u->vhost, u->gecos);
 	snprintf(realgbuf, sizeof realgbuf, "%s!%s@%s#%s", u->nick, u->user, u->host, u->gecos);
@@ -105,8 +105,8 @@ static bool extgecos_match(const char *mask, user_t *u)
  */
 static bool unidentified_match(const char *mask, user_t *u)
 {
-	char hostbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN];
-	char realbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN];
+	char hostbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
+	char realbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
 
 	/* Is identified, so just bail. */
 	if (u->myuser != NULL)
@@ -126,10 +126,10 @@ static mowgli_node_t *chatircd_next_matching_ban(channel_t *c, user_t *u, int ty
 {
 	chanban_t *cb;
 	mowgli_node_t *n;
-	char hostbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN];
-	char realbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN];
-	char ipbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN];
-	char strippedmask[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + CHANNELLEN + 3];
+	char hostbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
+	char realbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
+	char ipbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
+	char strippedmask[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + CHANNELLEN + 3];
 	char *p;
 	bool negate, matched;
 	int exttype;

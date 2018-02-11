@@ -307,7 +307,7 @@ match_cidr(const char *s1, const char *s2)
 {
 	unsigned char ipaddr[IN6ADDRSZ], maskaddr[IN6ADDRSZ];
 	char mask[BUFSIZE];
-	char address[NICKLEN + USERLEN + HOSTLEN + 8];
+	char address[NICKLEN + USERLEN + HOSTLEN + 9];
 	char *ipmask;
 	char *ip;
 	char *len;
@@ -368,7 +368,7 @@ match_cidr(const char *s1, const char *s2)
 
 int valid_ip_or_mask(const char *src)
 {
-	char ipaddr[HOSTLEN + 6];
+	char ipaddr[HOSTLEN + 7];
 	unsigned char buf[IN6ADDRSZ];
 	char *mask, *end;
 	unsigned long cidrlen;

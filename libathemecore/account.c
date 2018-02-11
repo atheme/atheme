@@ -520,10 +520,10 @@ bool
 myuser_access_verify(user_t *u, myuser_t *mu)
 {
 	mowgli_node_t *n;
-	char buf[USERLEN + 1 + HOSTLEN];
-	char buf2[USERLEN + 1 + HOSTLEN];
-	char buf3[USERLEN + 1 + HOSTLEN];
-	char buf4[USERLEN + 1 + HOSTLEN];
+	char buf[USERLEN + 1 + HOSTLEN + 1];
+	char buf2[USERLEN + 1 + HOSTLEN + 1];
+	char buf3[USERLEN + 1 + HOSTLEN + 1];
+	char buf4[USERLEN + 1 + HOSTLEN + 1];
 
 	return_val_if_fail(u != NULL, false);
 	return_val_if_fail(mu != NULL, false);

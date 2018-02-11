@@ -40,8 +40,8 @@ typedef enum {
 #define MAXMODES		4
 #define MAX_IRC_OUTPUT_LINES	2000
 
-/* lengths of various pieces of information */
-#define HOSTLEN			64		/* seems good enough */
+/* lengths of various pieces of information (without NULL terminators) */
+#define HOSTLEN			63		/* seems good enough */
 #define NICKLEN			31
 #define PASSLEN			288		/* 32 bytes salt + 1024 bits digest */
 #define IDLEN			9
