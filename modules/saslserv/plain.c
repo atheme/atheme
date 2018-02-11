@@ -28,17 +28,23 @@ mech_step(struct sasl_session *const restrict p, const void *const restrict in, 
 	const char *const authzid = ptr;
 	if (! *authzid)
 		return ASASL_ERROR;
+	if (strlen(authzid) > NICKLEN)
+		return ASASL_ERROR;
 	if ((ptr += strlen(authzid) + 1) >= end)
 		return ASASL_ERROR;
 
 	const char *const authcid = ptr;
 	if (! *authcid)
 		return ASASL_ERROR;
+	if (strlen(authcid) > NICKLEN)
+		return ASASL_ERROR;
 	if ((ptr += strlen(authcid) + 1) >= end)
 		return ASASL_ERROR;
 
 	const char *const secret = ptr;
 	if (! *secret)
+		return ASASL_ERROR;
+	if (strlen(secret) > PASSLEN)
 		return ASASL_ERROR;
 
 	if (! sasl_core_functions->authzid_can_login(p, authzid, NULL))
