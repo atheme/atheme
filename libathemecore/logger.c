@@ -238,7 +238,7 @@ static void logfile_write_irc(logfile_t *lf, const char *buf)
 		memset(targetbuf, '\0', sizeof targetbuf);
 		targetlen = (strchr(buf, ' ') - buf);
 
-		if (targetlen < NICKLEN)
+		if (targetlen < sizeof targetbuf)
 		{
 			mowgli_strlcpy(targetbuf, buf, sizeof targetbuf);
 			targetbuf[targetlen] = '\0';

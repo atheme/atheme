@@ -408,9 +408,9 @@ void mygroup_rename(mygroup_t *mg, const char *name)
 
 	return_if_fail(mg != NULL);
 	return_if_fail(name != NULL);
-	return_if_fail(strlen(name) < NICKLEN);
+	return_if_fail(strlen(name) < sizeof nb);
 
-	mowgli_strlcpy(nb, entity(mg)->name, NICKLEN);
+	mowgli_strlcpy(nb, entity(mg)->name, sizeof nb);
 	newname = strshare_get(name);
 
 	myentity_del(entity(mg));

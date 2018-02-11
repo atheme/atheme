@@ -520,7 +520,7 @@ mech_step_success(const struct scramsha_session *const restrict s)
 	}
 	else
 	{
-		(void) mowgli_strlcpy(s->mu->pass, res, PASSLEN);
+		(void) mowgli_strlcpy(s->mu->pass, res, sizeof s->mu->pass);
 		(void) slog(LG_DEBUG, "%s: succeeded", __func__);
 	}
 

@@ -209,8 +209,8 @@ static void flatfile_db_load(const char *filename)
 
 			mz = smalloc(sizeof(mymemo_t));
 
-			mowgli_strlcpy(mz->sender, sender, NICKLEN);
-			mowgli_strlcpy(mz->text, text, MEMOLEN);
+			mowgli_strlcpy(mz->sender, sender, sizeof mz->sender);
+			mowgli_strlcpy(mz->text, text, sizeof mz->text);
 			mz->sent = mtime;
 			mz->status = status;
 

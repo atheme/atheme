@@ -461,8 +461,8 @@ static void corestorage_h_me(database_handle_t *db, const char *type)
 	}
 
 	mz = smalloc(sizeof *mz);
-	mowgli_strlcpy(mz->sender, src, NICKLEN);
-	mowgli_strlcpy(mz->text, text, MEMOLEN);
+	mowgli_strlcpy(mz->sender, src, sizeof mz->sender);
+	mowgli_strlcpy(mz->text, text, sizeof mz->text);
 	mz->sent = sent;
 	mz->status = status;
 

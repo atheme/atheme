@@ -61,7 +61,7 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	newpass = random_string(12);
-	mowgli_strlcpy(oldmail, mu->email, EMAILLEN);
+	mowgli_strlcpy(oldmail, mu->email, sizeof oldmail);
 	myuser_set_email(mu, newmail);
 
 	if (!sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SENDPASS, mu->email, newpass))

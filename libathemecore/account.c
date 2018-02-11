@@ -154,7 +154,7 @@ myuser_t *myuser_add_id(const char *id, const char *name, const char *pass, cons
 	 * immediately converted the first time we start up with crypto.
 	 */
 	if (flags & MU_CRYPTPASS)
-		mowgli_strlcpy(mu->pass, pass, PASSLEN);
+		mowgli_strlcpy(mu->pass, pass, sizeof mu->pass);
 	else
 		set_password(mu, pass);
 
@@ -361,9 +361,9 @@ void myuser_rename(myuser_t *mu, const char *name)
 
 	return_if_fail(mu != NULL);
 	return_if_fail(name != NULL);
-	return_if_fail(strlen(name) < NICKLEN);
+	return_if_fail(strlen(name) < sizeof nb);
 
-	mowgli_strlcpy(nb, entity(mu)->name, NICKLEN);
+	mowgli_strlcpy(nb, entity(mu)->name, sizeof nb);
 	newname = strshare_get(name);
 
 	if (authservice_loaded)
@@ -688,7 +688,7 @@ mynick_t *mynick_add(myuser_t *mu, const char *name)
 	mn = mowgli_heap_alloc(mynick_heap);
 	object_init(object(mn), name, (destructor_t) mynick_delete);
 
-	mowgli_strlcpy(mn->nick, name, NICKLEN);
+	mowgli_strlcpy(mn->nick, name, sizeof mn->nick);
 	mn->owner = mu;
 	mn->registered = CURRTIME;
 
@@ -766,7 +766,7 @@ myuser_name_t *myuser_name_add(const char *name)
 	mun = mowgli_heap_alloc(myuser_name_heap);
 	object_init(object(mun), name, (destructor_t) myuser_name_delete);
 
-	mowgli_strlcpy(mun->name, name, NICKLEN);
+	mowgli_strlcpy(mun->name, name, sizeof mun->name);
 
 	mowgli_patricia_add(oldnameslist, mun->name, mun);
 
@@ -1432,7 +1432,7 @@ chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *mt, unsigned int level, tim
 	ca->tmodified = ts;
 
 	if (setter != NULL)
-		mowgli_strlcpy(ca->setter_uid, setter->id, IDLEN);
+		mowgli_strlcpy(ca->setter_uid, setter->id, sizeof ca->setter_uid);
 	else
 		ca->setter_uid[0] = '\0';
 
@@ -1486,7 +1486,7 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int lev
 	ca->tmodified = ts;
 
 	if (setter != NULL)
-		mowgli_strlcpy(ca->setter_uid, setter->id, IDLEN);
+		mowgli_strlcpy(ca->setter_uid, setter->id, sizeof ca->setter_uid);
 	else
 		ca->setter_uid[0] = '\0';
 
@@ -1853,7 +1853,7 @@ bool chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removef
 	ca->level = (ca->level | *addflags) & ~*removeflags;
 	ca->tmodified = CURRTIME;
 	if (setter != NULL)
-		mowgli_strlcpy(ca->setter_uid, entity(setter)->id, IDLEN);
+		mowgli_strlcpy(ca->setter_uid, entity(setter)->id, sizeof ca->setter_uid);
 	else
 		ca->setter_uid[0] = '\0';
 
@@ -1920,7 +1920,7 @@ bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsi
 			ca->level = (ca->level | *addflags) & ~*removeflags;
 			ca->tmodified = CURRTIME;
 			if (setter != NULL)
-				mowgli_strlcpy(ca->setter_uid, setter->id, IDLEN);
+				mowgli_strlcpy(ca->setter_uid, setter->id, sizeof ca->setter_uid);
 			else
 				ca->setter_uid[0] = '\0';
 
@@ -1961,7 +1961,7 @@ bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsi
 			ca->level = (ca->level | *addflags) & ~*removeflags;
 			ca->tmodified = CURRTIME;
 			if (setter != NULL)
-				mowgli_strlcpy(ca->setter_uid, setter->id, IDLEN);
+				mowgli_strlcpy(ca->setter_uid, setter->id, sizeof ca->setter_uid);
 			else
 				ca->setter_uid[0] = '\0';
 

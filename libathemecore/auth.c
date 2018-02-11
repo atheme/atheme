@@ -38,13 +38,13 @@ set_password(myuser_t *const restrict mu, const char *const restrict password)
 	{
 		mu->flags |= MU_CRYPTPASS;
 
-		(void) mowgli_strlcpy(mu->pass, hash, PASSLEN);
+		(void) mowgli_strlcpy(mu->pass, hash, sizeof mu->pass);
 	}
 	else
 	{
 		mu->flags &= ~MU_CRYPTPASS;
 
-		(void) mowgli_strlcpy(mu->pass, password, PASSLEN);
+		(void) mowgli_strlcpy(mu->pass, password, sizeof mu->pass);
 		(void) slog(LG_ERROR, "%s: failed to encrypt password for account '%s'", __func__, entity(mu)->name);
 	}
 }
@@ -86,7 +86,7 @@ verify_password(myuser_t *const restrict mu, const char *const restrict password
 		if (! (new_hash = ci_default->crypt(password, NULL)))
 			(void) slog(LG_ERROR, "%s: hash generation failed", __func__);
 		else
-			(void) mowgli_strlcpy(mu->pass, new_hash, PASSLEN);
+			(void) mowgli_strlcpy(mu->pass, new_hash, sizeof mu->pass);
 
 		// Verification succeeded and user's password (possibly) re-encrypted
 		return true;

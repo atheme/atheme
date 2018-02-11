@@ -125,7 +125,7 @@ connection_t *connection_add(const char *name, int fd, unsigned int flags,
 	connection_setselect_write(cptr, write_handler);
 
 	/* set connection name */
-	mowgli_strlcpy(cptr->name, name, HOSTLEN);
+	mowgli_strlcpy(cptr->name, name, sizeof cptr->name);
 
 	if (cptr->fd > -1)
 	{

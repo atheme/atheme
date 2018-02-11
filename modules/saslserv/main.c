@@ -251,8 +251,8 @@ login_user(struct sasl_session *const restrict p)
 	{
 		target_mu = source_mu;
 
-		(void) mowgli_strlcpy(p->authzid, p->authcid, NICKLEN);
-		(void) mowgli_strlcpy(p->authzeid, p->authceid, IDLEN);
+		(void) mowgli_strlcpy(p->authzid, p->authcid, sizeof p->authzid);
+		(void) mowgli_strlcpy(p->authzeid, p->authceid, sizeof p->authzeid);
 	}
 	else if (! (target_mu = myuser_find_uid(p->authzeid)))
 		return NULL;

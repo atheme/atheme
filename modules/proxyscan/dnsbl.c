@@ -398,7 +398,7 @@ static struct Blacklist *new_blacklist(char *name)
 		mowgli_node_add(object_ref(blptr), &blptr->node, &blacklist_list);
 	}
 
-	mowgli_strlcpy(blptr->host, name, IRCD_RES_HOSTLEN + 1);
+	mowgli_strlcpy(blptr->host, name, sizeof blptr->host);
 	blptr->lastwarning = 0;
 
 	return blptr;
