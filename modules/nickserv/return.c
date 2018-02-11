@@ -29,7 +29,7 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 	char *target = parv[0];
 	char *newmail = parv[1];
 	char *newpass;
-	char oldmail[EMAILLEN];
+	char oldmail[EMAILLEN + 1];
 	myuser_t *mu;
 	user_t *u;
 	mowgli_node_t *n, *tn;

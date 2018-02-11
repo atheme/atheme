@@ -245,7 +245,7 @@ int validemail(const char *email)
 	const char *lastdot = NULL;
 
 	/* sane length */
-	if (strlen(email) >= EMAILLEN)
+	if (strlen(email) > EMAILLEN)
 		return 0;
 
 	/* RFC2822 */

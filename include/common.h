@@ -50,7 +50,7 @@ typedef enum {
 #define HOSTIPLEN		54
 #define GECOSLEN		51
 #define KEYLEN			23
-#define EMAILLEN		120
+#define EMAILLEN		119
 #define MEMOLEN			299
 
 #define MAXMSIGNORES		40
