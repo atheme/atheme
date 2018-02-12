@@ -67,6 +67,8 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 	char ss[40], newstr[400];
 	bool found, denied;
 
+	(void) memset(newstr, 0x00, sizeof newstr);
+
 	if (!channel)
 	{
 		list_generic_flags(si);
