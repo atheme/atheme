@@ -28,7 +28,7 @@ Security
 SASL
 ----
 - SASLServ and its modules have been almost entirely re-written
-- Add support for SASL SCRAM-SHA logins
+- Add support for SASL SCRAM-SHA logins (see doc/SASL-SCRAM-SHA)
 - Advertise SASL mechanism list to UnrealIRCd servers
 - Use a parameter vector to allow an arbitrary number of S2S arguments
 - Indicate whether the client is on a plaintext connection or not
