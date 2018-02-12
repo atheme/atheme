@@ -15,7 +15,7 @@ to enable this. The 5 main steps to perform are:
 
    pbkdf2v2 {
        digest = "SCRAM-SHA-256"; /* or "SCRAM-SHA-1" */
-       rounds = ...;             /* less than 65536 ** */
+       rounds = ...;             /* between 10000 and 65536 ** */
    }
 
 5) Load modules/saslserv/scram-sha
@@ -28,5 +28,6 @@ to enable this. The 5 main steps to perform are:
    if you have a large user base that wants to use SCRAM but whom cannot use
    SCRAM-SHA-256.
 
-** The popular Cyrus SASL client library will refuse to perform a PBKDF2
-   calculation with an iteration count higher than this.
+** Inclusive. The popular Cyrus SASL client library will refuse to perform a
+   PBKDF2 calculation with an iteration count greater than 65536, and the
+   pbkdf2v2 crypto module will refuse an iteration count lower than 10000.
