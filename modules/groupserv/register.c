@@ -42,7 +42,7 @@ static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (strlen(parv[0]) > NICKLEN)
+	if (strlen(parv[0]) > GROUPLEN)
 	{
 		command_fail(si, fault_badparams, _("The group name \2%s\2 is invalid."), parv[0]);
 		return;

@@ -404,7 +404,7 @@ void remove_group_chanacs(mygroup_t *mg)
 void mygroup_rename(mygroup_t *mg, const char *name)
 {
 	stringref newname;
-	char nb[NICKLEN + 1];
+	char nb[GROUPLEN + 1];
 
 	return_if_fail(mg != NULL);
 	return_if_fail(name != NULL);

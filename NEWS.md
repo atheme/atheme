@@ -4,9 +4,17 @@ Atheme Services 7.3 Development Notes
 There have been various changes since the last non-point release, most of which
 are not documented here yet.
 
-security
+POTENTIAL COMPATIBILITY BREAKAGE
+--------------------------------
+- Services now accepts nicknames up to 50 characters in length, because some
+  IRCds like Charybdis do (if so configured). However, if you actually *use*
+  nicknames on your network greater than *31* characters, your database WILL
+  NOT be compatible with earlier versions of this software (<= 7.2). PLEASE
+  consider this VERY CAREFULLY! This closes issue #601.
+
+Security
 --------
-- Services now accept email addresses that may contain shell metacharacters.
+- Services now accepts email addresses that may contain shell metacharacters.
   If your `mta` setting points at a shell script, please ensure that it
   properly handles email addresses with special characters in them.
 
@@ -43,7 +51,7 @@ IRCds
 - Add protocol module for ChatIRCd 1.1.x
 - Check for NULL send/receive password on connection to IRCd
 
-misc
+Misc
 ----
 - Replace Base-64 codec to fix erroneous failures and add a raw encoder
 - atheme.conf.example: document SET NOPASSWORD module
