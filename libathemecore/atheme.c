@@ -258,7 +258,7 @@ static void db_save_periodic(void *unused)
 
 int atheme_main(int argc, char *argv[])
 {
-	int daemonize_pipe[2];
+	int daemonize_pipe[2] = { -1, -1 };
 	bool run_testsuite = true;
 	bool exit_after_testsuite = false;
 	bool have_conf = false;
