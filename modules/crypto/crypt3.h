@@ -10,6 +10,10 @@
 
 #ifdef HAVE_CRYPT
 
+#ifdef HAVE_CRYPT_H
+#include "crypt.h"
+#endif /* HAVE_CRYPT_H */
+
 #define CRYPT3_AN_CHARS_RANGE                   "A-Za-z0-9"
 #define CRYPT3_B64_CHARS_RANGE                  "./" CRYPT3_AN_CHARS_RANGE
 
