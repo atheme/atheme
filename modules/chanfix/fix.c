@@ -353,7 +353,7 @@ static void chanfix_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	char buf[BUFSIZE];
 	mowgli_patricia_iteration_state_t state;
 	unsigned int matches = 0;
-	bool marked = false, nofix = false, markmatch, nofixmatch;
+	bool marked = false, nofix = false, markmatch = false, nofixmatch = false;
 	char *chanpattern = NULL;
 
 	if (parv[0] != NULL)
