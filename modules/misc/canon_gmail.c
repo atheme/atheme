@@ -2,25 +2,31 @@
  * Copyright (c) 2012 Marien Zwart
  * Rights to this code are as documented in doc/LICENSE.
  *
- * Canonicalize gmail addresses:
+ * Canonicalize GMail addresses:
  * - Remove dots from the address.
  * - Remove labels (+foo).
  */
 
 #include "atheme.h"
 
-static void canonicalize_gmail(char email[EMAILLEN + 1], void *user_data)
-{
-	static char buf[EMAILLEN + 1];
-	const char *p, *p_at;
-	char *p_out;
-	stringref result;
+#define GMAIL_SUFFIX "@gmail.com"
 
-	p_at = strchr(email, '@');
-	if (!p_at || strcasecmp(p_at, "@gmail.com"))
+static void
+email_canonicalize_gmail(char email[static (EMAILLEN + 1)],
+                         void __attribute__((unused)) *const restrict user_data)
+{
+	const char *const p_at = strchr(email, '@');
+
+	if (! p_at || strcasecmp(p_at, GMAIL_SUFFIX) != 0)
 		return;
 
-	for (p = email, p_out = buf; p < p_at; p++) {
+	char buf[EMAILLEN + 1];
+	char *p_out = buf;
+
+	(void) memset(buf, 0x00, sizeof buf);
+
+	for (const char *p = email; p < p_at; p++)
+	{
 		if (*p == '.')
 			continue;
 
@@ -30,28 +36,26 @@ static void canonicalize_gmail(char email[EMAILLEN + 1], void *user_data)
 		*p_out++ = *p;
 	}
 
-	/* Note the string handling here relies on the email address
-	 * passed in being at most EMAILLEN long, and the canonical
-	 * address being at most equally long. That is true for the
-	 * loop above, but if we start mapping equivalent domains here
-	 * be careful not to overflow the buffer.
-	 */
+	if (mowgli_strlcat(buf, GMAIL_SUFFIX, sizeof buf) >= sizeof buf)
+	{
+		(void) slog(LG_ERROR, "%s: buffer is too short (BUG)", __func__);
+		return;
+	}
 
-	strcpy(p_out, "@gmail.com");
-
-	strcpy(email, buf);
+	(void) slog(LG_DEBUG, "%s: '%s' -> '%s'", __func__, email, buf);
+	(void) memcpy(email, buf, sizeof buf);
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(module_t __attribute__((unused)) *const restrict m)
 {
-	register_email_canonicalizer(canonicalize_gmail, NULL);
+	(void) register_email_canonicalizer(&email_canonicalize_gmail, NULL);
 }
 
 static void
-mod_deinit(const module_unload_intent_t intent)
+mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
-	unregister_email_canonicalizer(canonicalize_gmail, NULL);
+	(void) unregister_email_canonicalizer(&email_canonicalize_gmail, NULL);
 }
 
 SIMPLE_DECLARE_MODULE_V1("misc/canon_gmail", MODULE_UNLOAD_CAPABILITY_OK)
