@@ -872,7 +872,12 @@ argon2d {
 pbkdf2v2 {
 
 	/* digest
-	 * Valid values are "SHA1", "SHA256" and "SHA512"
+	 *
+	 * Valid values are "SHA1", "SHA256", "SHA512",
+	 * "SCRAM-SHA1" and "SCRAM-SHA256".
+	 *
+	 * For the SCRAM variants, please read doc/SASL-SCRAM-SHA.
+	 *
 	 * The default is "SHA512"
 	 */
 	#digest = "SHA512";
