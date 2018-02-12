@@ -356,12 +356,12 @@ c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *const restrict ce)
 	else if (! strcasecmp(ce->vardata, "SHA512"))
 		pbkdf2v2_digest = PBKDF2_PRF_HMAC_SHA2_512_S64;
 #ifdef HAVE_LIBIDN
-	else if (! strcasecmp(ce->vardata, "SCRAM-SHA1"))
+	else if (! strcasecmp(ce->vardata, "SCRAM-SHA-1"))
 		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA1_S64;
-	else if (! strcasecmp(ce->vardata, "SCRAM-SHA256"))
+	else if (! strcasecmp(ce->vardata, "SCRAM-SHA-256"))
 		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA2_256_S64;
 /*	// No specification
-	else if (! strcasecmp(ce->vardata, "SCRAM-SHA512"))
+	else if (! strcasecmp(ce->vardata, "SCRAM-SHA-512"))
 		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA2_512_S64;
 */
 #endif /* HAVE_LIBIDN */
