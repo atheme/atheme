@@ -373,7 +373,7 @@ stringref canonicalize_email(const char *email)
 	return strshare_get(buf);
 }
 
-void canonicalize_email_case(char email[EMAILLEN + 1], void *user_data)
+void canonicalize_email_case(char email[static (EMAILLEN + 1)], void *user_data)
 {
 	strcasecanon(email);
 }
