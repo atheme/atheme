@@ -650,6 +650,8 @@ LIBQRENCODE_LIBS
 LIBQRENCODE_CFLAGS
 PCRE_LIBS
 PCRE_CFLAGS
+ECDSA_TOOLS_COND_D
+ECDSA_CHALLENGE_COND_C
 LIBCRYPTO_LIBS
 LIBNETTLE_LIBS
 LIBMBEDCRYPTO_LIBS
@@ -9473,19 +9475,7 @@ fi
 
 	if test "x${LIBCRYPTO}" = "xYes"; then :
 
-		for ac_header in openssl/ec.h
-do :
-  ac_fn_c_check_header_mongrel "$LINENO" "openssl/ec.h" "ac_cv_header_openssl_ec_h" "$ac_includes_default"
-if test "x$ac_cv_header_openssl_ec_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_OPENSSL_EC_H 1
-_ACEOF
-
-fi
-
-done
-
-		for ac_header in openssl/evp.h openssl/hmac.h openssl/sha.h
+		for ac_header in openssl/evp.h openssl/hmac.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
 ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
@@ -9519,6 +9509,28 @@ fi
 $as_echo "#define HAVE_OPENSSL 1" >>confdefs.h
 
 
+
+		for ac_header in openssl/ec.h openssl/ecdsa.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+fi
+
+done
+
+		if test "x${ac_cv_header_openssl_ec_h}x${ac_cv_header_openssl_ecdsa_h}" = "xyesxyes"; then :
+
+			ECDSA_CHALLENGE_COND_C="ecdsa-nist256p-challenge.c"
+			ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
+
+
+
+fi
 
 fi
 

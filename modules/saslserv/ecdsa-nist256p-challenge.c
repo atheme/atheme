@@ -8,14 +8,11 @@
 
 #include "atheme.h"
 
-#if defined(HAVE_OPENSSL) && defined(HAVE_OPENSSL_EC_H)
-
 #include <openssl/ec.h>
 #include <openssl/ecdsa.h>
 #include <openssl/evp.h>
-#include <openssl/sha.h>
 
-#define CHALLENGE_LENGTH	SHA256_DIGEST_LENGTH
+#define CHALLENGE_LENGTH	DIGEST_MDLEN_SHA2_256
 #define CURVE_IDENTIFIER	NID_X9_62_prime256v1
 
 enum ecdsa_step
@@ -168,5 +165,3 @@ mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 }
 
 SIMPLE_DECLARE_MODULE_V1("saslserv/ecdsa-nist256p-challenge", MODULE_UNLOAD_CAPABILITY_OK)
-
-#endif /* HAVE_OPENSSL && HAVE_OPENSSL_EC_H */
