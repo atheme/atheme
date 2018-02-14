@@ -13,15 +13,14 @@ AC_CONFIG_SRCDIR([src/services/main.c])
 AC_PREFIX_DEFAULT([~/atheme])
 
 AC_MSG_CHECKING([if you read GIT-Access.txt])
-if ! test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"; then
+AS_IF([test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"], [
+	AC_MSG_RESULT([yes])
+], [
 	AC_MSG_RESULT([no])
 	AC_MSG_ERROR([please read GIT-Access.txt before trying to build from git])
-fi
-AC_MSG_RESULT([yes])
+])
 
-if test "x${prefix}" = "xNONE"; then
-	prefix="${ac_default_prefix}"
-fi
+AS_IF([test "x${prefix}" = "xNONE"], [prefix="${ac_default_prefix}"])
 
 dnl Buildsys module stuff
 BUILDSYS_INIT
@@ -103,7 +102,7 @@ AS_IF([test "x${ac_cv_func_arc4random}x${ac_cv_func_arc4random_buf}x${ac_cv_func
 	ARC4RANDOM_COND_C="arc4random.c"
 	AC_SUBST([ARC4RANDOM_COND_C])
 
-	AC_CHECK_HEADERS([sys/random.h unistd.h], [], [], [])
+	AC_CHECK_HEADERS([sys/random.h], [], [], [])
 	AC_CHECK_FUNCS([getentropy getrandom])
 ])
 
@@ -144,8 +143,8 @@ ATHEME_FEATURETEST_REPROBUILDS
 
 
 AC_ARG_WITH([libmowgli],
-  AS_HELP_STRING([--with-libmowgli@<:@=prefix@:>@],[ Specify location of system libmowgli install, or "no" to force use of internal libmowgli]),
-  [], [with_libmowgli="yes"])
+	[AS_HELP_STRING([--with-libmowgli@<:@=prefix@:>@],[ Specify location of system libmowgli install, or "no" to force use of internal libmowgli])],
+	[], [with_libmowgli="yes"])
 
 AS_IF([test "x${with_libmowgli}" = "xyes"], [
 	PKG_CHECK_MODULES([MOWGLI], [libmowgli-2 >= 2.0.0], [MOWGLI_SOURCE="System"], [with_libmowgli="no"])
@@ -190,9 +189,9 @@ AC_SUBST([LDFLAGS])
 BUILDSYS_TOUCH_DEPS
 
 AC_CONFIG_FILES([
+	atheme-services.pc
 	buildsys.mk
 	extra.mk
-	atheme-services.pc
 ])
 
 AC_OUTPUT
