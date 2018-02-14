@@ -627,12 +627,10 @@ gt_needs=
 ac_header_list=
 enable_option_checking=no
 ac_subst_vars='LTLIBOBJS
-LIBMOWGLI
+LIBMOWGLI_COND_D
 subdirs
 MOWGLI_LIBS
 MOWGLI_CFLAGS
-BUILDDIR
-ABSPATHS
 SHAREDIR
 RUNDIR
 MODDIR
@@ -640,14 +638,14 @@ LOGDIR
 LOCALEDIR
 DOCDIR
 DATADIR
-CONTRIB_ENABLE
+CONTRIB_COND_D
 DIGEST_API_LIBS
-DIGEST_FRONTEND_C
+DIGEST_FRONTEND_COND_C
 PERL_LIBS
 PERL_CFLAGS
-PERL_ENABLE
+PERL_COND_D
 perlpath
-QRCODE_C
+QRCODE_COND_C
 LIBQRENCODE_LIBS
 LIBQRENCODE_CFLAGS
 PCRE_LIBS
@@ -657,15 +655,15 @@ LIBNETTLE_LIBS
 LIBMBEDCRYPTO_LIBS
 LDAP_LIBS
 LDAP_CFLAGS
-LDAP_AUTHC
+LDAP_AUTH_COND_C
 LIBIDN_LIBS
 LIBCRYPT_LIBS
 CRACKLIB_LIBS
-CRACKLIB_C
-EXPLICIT_BZERO_C
-ARC4RANDOM_C
+CRACKLIB_COND_C
+EXPLICIT_BZERO_COND_C
+ARC4RANDOM_COND_C
 LIBOBJS
-PODIR
+PODIR_COND_D
 POSUB
 LTLIBINTL
 LIBINTL
@@ -7159,13 +7157,13 @@ $as_echo "#define HAVE_DCGETTEXT 1" >>confdefs.h
 
 
 LIBS="${LIBS} ${LIBINTL}"
-PODIR=""
+PODIR_COND_D=""
 USE_GETTEXT="No"
 if test "x${USE_NLS}" = "xyes"; then
-	PODIR="po"
 	USE_GETTEXT="Yes"
-fi
+	PODIR_COND_D="po"
 
+fi
 
 
 
@@ -8340,11 +8338,11 @@ fi
 
 
 ARC4RANDOM_BUILDING="No"
-ARC4RANDOM_C=""
+ARC4RANDOM_COND_C=""
 if test "x${ac_cv_func_arc4random}x${ac_cv_func_arc4random_buf}x${ac_cv_func_arc4random_uniform}" != "xyesxyesxyes"; then :
 
 	ARC4RANDOM_BUILDING="Yes"
-	ARC4RANDOM_C="arc4random.c"
+	ARC4RANDOM_COND_C="arc4random.c"
 
 
 	for ac_header in sys/random.h unistd.h
@@ -8377,10 +8375,10 @@ fi
 
 
 
-EXPLICIT_BZERO_C=""
+EXPLICIT_BZERO_COND_C=""
 if test "x${ac_cv_func_explicit_bzero}x${ac_cv_func_memset_s}" = "xnoxno"; then :
 
-	EXPLICIT_BZERO_C="explicit_bzero.c"
+	EXPLICIT_BZERO_COND_C="explicit_bzero.c"
 
 
 fi
@@ -8391,7 +8389,7 @@ fi
 
 	LIBCRACKLIB="No"
 
-	CRACKLIB_C=""
+	CRACKLIB_COND_C=""
 	CRACKLIB_LIBS=""
 
 
@@ -8486,7 +8484,7 @@ fi
 
 	if test "x${LIBCRACKLIB}" = "xYes"; then :
 
-		CRACKLIB_C="cracklib.c"
+		CRACKLIB_COND_C="cracklib.c"
 		if test "x${ac_cv_search_FascistCheck}" != "xnone required"; then :
 
 			CRACKLIB_LIBS="${ac_cv_search_FascistCheck}"
@@ -8809,7 +8807,7 @@ fi
 	if test "x${with_ldap}" != "xno"; then :
 
 
-		LDAP_AUTHC=""
+		LDAP_AUTH_COND_C=""
 		LDAP_CFLAGS=""
 		LDAP_LIBS=""
 
@@ -8851,7 +8849,7 @@ fi
 $as_echo "$ac_cv_lib_ldap_ldap_initialize" >&6; }
 if test "x$ac_cv_lib_ldap_ldap_initialize" = xyes; then :
 
-			LDAP_AUTHC="ldap.c"
+			LDAP_AUTH_COND_C="ldap.c"
 			LDAP_CFLAGS=""
 			LDAP_LIBS="-lldap"
 
@@ -8903,7 +8901,7 @@ fi
 $as_echo "$ac_cv_lib_ldap_ldap_initialize" >&6; }
 if test "x$ac_cv_lib_ldap_ldap_initialize" = xyes; then :
 
-				LDAP_AUTHC="ldap.c"
+				LDAP_AUTH_COND_C="ldap.c"
 				LDAP_CFLAGS="-I/usr/local/include"
 				LDAP_LIBS="-L/usr/local/lib -lldap"
 
@@ -8922,7 +8920,7 @@ fi
 
 fi
 
-	if test "x${with_ldap}x${LDAP_AUTHC}" = "xyesx"; then :
+	if test "x${with_ldap}x${LDAP_AUTH_COND_C}" = "xyesx"; then :
 
 		as_fn_error $? "LDAP support was explicitly requested but could not be found" "$LINENO" 5
 
@@ -9642,7 +9640,7 @@ fi
 
 	LIBQRENCODE="No"
 
-	QRCODE_C=""
+	QRCODE_COND_C=""
 
 
 # Check whether --with-qrencode was given.
@@ -9748,7 +9746,7 @@ else
 $as_echo "yes" >&6; }
 
 			LIBQRENCODE="Yes"
-			QRCODE_C="qrcode.c"
+			QRCODE_COND_C="qrcode.c"
 
 
 $as_echo "#define HAVE_LIBQRENCODE 1" >>confdefs.h
@@ -9763,7 +9761,7 @@ fi
 
 	LIBPERL="No"
 
-	PERL_ENABLE=""
+	PERL_COND_D=""
 	PERL_CFLAGS=""
 	PERL_LIBS=""
 
@@ -9832,7 +9830,7 @@ fi
 		then
 			LIBPERL="Yes"
 
-			PERL_ENABLE="perl"
+			PERL_COND_D="perl"
 			PERL_CFLAGS="$(perl -MExtUtils::Embed -e ccopts)"
 			PERL_LIBS="$(perl -MExtUtils::Embed -e ldopts)"
 
@@ -9861,18 +9859,18 @@ fi
 
 	DIGEST_API_LIBS=""
 
-	DIGEST_FRONTEND_H="digest_fe_internal.h"
-	DIGEST_FRONTEND_C="digest_fe_internal.c"
-	DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_md5.c"
-	DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_sha1.c"
-	DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_sha2_256.c"
-	DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_sha2_512.c"
+	DIGEST_FRONTEND_COND_H="digest_fe_internal.h"
+	DIGEST_FRONTEND_COND_C="digest_fe_internal.c"
+	DIGEST_FRONTEND_COND_C="${DIGEST_FRONTEND_COND_C} digest_be_md5.c"
+	DIGEST_FRONTEND_COND_C="${DIGEST_FRONTEND_COND_C} digest_be_sha1.c"
+	DIGEST_FRONTEND_COND_C="${DIGEST_FRONTEND_COND_C} digest_be_sha2_256.c"
+	DIGEST_FRONTEND_COND_C="${DIGEST_FRONTEND_COND_C} digest_be_sha2_512.c"
 
 	if test "x${DIGEST_FRONTEND}x${LIBMBEDCRYPTO}" = "xInternalxYes"; then :
 
 		DIGEST_API_LIBS="${LIBMBEDCRYPTO_LIBS}"
-		DIGEST_FRONTEND_H="digest_fe_mbedtls.h"
-		DIGEST_FRONTEND_C="digest_fe_mbedtls.c"
+		DIGEST_FRONTEND_COND_H="digest_fe_mbedtls.h"
+		DIGEST_FRONTEND_COND_C="digest_fe_mbedtls.c"
 		DIGEST_FRONTEND="ARM mbedTLS"
 
 fi
@@ -9880,8 +9878,8 @@ fi
 	if test "x${DIGEST_FRONTEND}x${LIBNETTLE}" = "xInternalxYes"; then :
 
 		DIGEST_API_LIBS="${LIBNETTLE_LIBS}"
-		DIGEST_FRONTEND_H="digest_fe_nettle.h"
-		DIGEST_FRONTEND_C="digest_fe_nettle.c"
+		DIGEST_FRONTEND_COND_H="digest_fe_nettle.h"
+		DIGEST_FRONTEND_COND_C="digest_fe_nettle.c"
 		DIGEST_FRONTEND="Nettle"
 
 fi
@@ -9889,15 +9887,15 @@ fi
 	if test "x${DIGEST_FRONTEND}x${LIBCRYPTO}" = "xInternalxYes"; then :
 
 		DIGEST_API_LIBS="${LIBCRYPTO_LIBS}"
-		DIGEST_FRONTEND_H="digest_fe_openssl.h"
-		DIGEST_FRONTEND_C="digest_fe_openssl.c"
+		DIGEST_FRONTEND_COND_H="digest_fe_openssl.h"
+		DIGEST_FRONTEND_COND_C="digest_fe_openssl.c"
 		DIGEST_FRONTEND="OpenSSL"
 
 fi
 
 
 cat >>confdefs.h <<_ACEOF
-#define DIGEST_FE_HEADER "${DIGEST_FRONTEND_H}"
+#define DIGEST_FE_HEADER "${DIGEST_FRONTEND_COND_H}"
 _ACEOF
 
 
@@ -9908,7 +9906,7 @@ _ACEOF
 
 	CONTRIB_MODULES="No"
 
-	CONTRIB_ENABLE=""
+	CONTRIB_COND_D=""
 
 	# Check whether --enable-contrib was given.
 if test "${enable_contrib+set}" = set; then :
@@ -9921,7 +9919,7 @@ fi
 	case "${enable_contrib}" in
 		yes)
 			CONTRIB_MODULES="Yes"
-			CONTRIB_ENABLE="contrib"
+			CONTRIB_COND_D="contrib"
 
 			;;
 		no)
@@ -9965,9 +9963,6 @@ fi
 			as_fn_error $? "invalid option for --enable-fhs-paths" "$LINENO" 5
 			;;
 	esac
-
-
-
 
 
 
@@ -10125,9 +10120,11 @@ if test "x${with_libmowgli}" = "xyes"; then :
 
 elif test "x${with_libmowgli}" = "xno"; then :
 
-	LIBMOWGLI="libmowgli-2"
+	LIBMOWGLI_COND_D="libmowgli-2"
 	MOWGLI_SOURCE="Internal"
 	subdirs="$subdirs libmowgli-2"
+
+
 
 
 	MOWGLI_CFLAGS="-I$(pwd)/libmowgli-2/src/libmowgli"
@@ -10143,7 +10140,6 @@ fi
 
 CPPFLAGS="${CPPFLAGS} ${MOWGLI_CFLAGS}"
 LIBS="${LIBS} ${MOWGLI_LIBS}"
-
 
 
 

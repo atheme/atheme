@@ -72,13 +72,13 @@ mkdir_p="mkdir -p"
 AC_SUBST([mkdir_p])
 AM_GNU_GETTEXT([external])
 LIBS="${LIBS} ${LIBINTL}"
-PODIR=""
+PODIR_COND_D=""
 USE_GETTEXT="No"
 if test "x${USE_NLS}" = "xyes"; then
-	PODIR="po"
 	USE_GETTEXT="Yes"
+	PODIR_COND_D="po"
+	AC_SUBST([PODIR_COND_D])
 fi
-AC_SUBST([PODIR])
 
 
 
@@ -97,11 +97,11 @@ HW_FUNC_ASPRINTF
 
 dnl If we don't have all of arc4random*(3) then we need arc4random.c which provides implementations
 ARC4RANDOM_BUILDING="No"
-ARC4RANDOM_C=""
+ARC4RANDOM_COND_C=""
 AS_IF([test "x${ac_cv_func_arc4random}x${ac_cv_func_arc4random_buf}x${ac_cv_func_arc4random_uniform}" != "xyesxyesxyes"], [
 	ARC4RANDOM_BUILDING="Yes"
-	ARC4RANDOM_C="arc4random.c"
-	AC_SUBST([ARC4RANDOM_C])
+	ARC4RANDOM_COND_C="arc4random.c"
+	AC_SUBST([ARC4RANDOM_COND_C])
 
 	AC_CHECK_HEADERS([sys/random.h unistd.h], [], [], [])
 	AC_CHECK_FUNCS([getentropy getrandom])
@@ -110,10 +110,10 @@ AS_IF([test "x${ac_cv_func_arc4random}x${ac_cv_func_arc4random_buf}x${ac_cv_func
 
 
 dnl If we don't have explicit_bzero(3)/memset_s(3) then we need explicit_bzero.c which provides a fallback
-EXPLICIT_BZERO_C=""
+EXPLICIT_BZERO_COND_C=""
 AS_IF([test "x${ac_cv_func_explicit_bzero}x${ac_cv_func_memset_s}" = "xnoxno"], [
-	EXPLICIT_BZERO_C="explicit_bzero.c"
-	AC_SUBST([EXPLICIT_BZERO_C])
+	EXPLICIT_BZERO_COND_C="explicit_bzero.c"
+	AC_SUBST([EXPLICIT_BZERO_COND_C])
 ])
 
 
@@ -152,9 +152,11 @@ AS_IF([test "x${with_libmowgli}" = "xyes"], [
 ])
 
 AS_IF([test "x${with_libmowgli}" = "xyes"], [], [test "x${with_libmowgli}" = "xno"], [
-	LIBMOWGLI="libmowgli-2"
+	LIBMOWGLI_COND_D="libmowgli-2"
 	MOWGLI_SOURCE="Internal"
 	AC_CONFIG_SUBDIRS([libmowgli-2])
+
+	AC_SUBST([LIBMOWGLI_COND_D])
 
 	MOWGLI_CFLAGS="-I$(pwd)/libmowgli-2/src/libmowgli"
 	MOWGLI_LIBS="-L$(pwd)/libmowgli-2/src/libmowgli -lmowgli-2"
@@ -169,7 +171,6 @@ LIBS="${LIBS} ${MOWGLI_LIBS}"
 
 AC_SUBST([MOWGLI_CFLAGS])
 AC_SUBST([MOWGLI_LIBS])
-AC_SUBST([LIBMOWGLI])
 
 
 

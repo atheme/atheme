@@ -2,7 +2,7 @@ AC_DEFUN([ATHEME_LIBTEST_PERL], [
 
 	LIBPERL="No"
 
-	PERL_ENABLE=""
+	PERL_COND_D=""
 	PERL_CFLAGS=""
 	PERL_LIBS=""
 
@@ -26,11 +26,11 @@ AC_DEFUN([ATHEME_LIBTEST_PERL], [
 		then
 			LIBPERL="Yes"
 
-			PERL_ENABLE="perl"
+			PERL_COND_D="perl"
 			PERL_CFLAGS="$(perl -MExtUtils::Embed -e ccopts)"
 			PERL_LIBS="$(perl -MExtUtils::Embed -e ldopts)"
 
-			AC_SUBST([PERL_ENABLE])
+			AC_SUBST([PERL_COND_D])
 			AC_SUBST([PERL_CFLAGS])
 			AC_SUBST([PERL_LIBS])
 		fi

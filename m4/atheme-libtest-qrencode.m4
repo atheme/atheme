@@ -2,7 +2,7 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
 
 	LIBQRENCODE="No"
 
-	QRCODE_C=""
+	QRCODE_COND_C=""
 
 	AC_ARG_WITH([qrencode],
 		[AS_HELP_STRING([--without-qrencode], [Do not attempt to detect libqrencode for generating QR codes])],
@@ -19,8 +19,8 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
 	AS_IF([test "x${with_qrencode}" != "xno"], [
 		PKG_CHECK_MODULES([LIBQRENCODE], [libqrencode], [
 			LIBQRENCODE="Yes"
-			QRCODE_C="qrcode.c"
-			AC_SUBST([QRCODE_C])
+			QRCODE_COND_C="qrcode.c"
+			AC_SUBST([QRCODE_COND_C])
 			AC_DEFINE([HAVE_LIBQRENCODE], [1], [Define to 1 if libqrencode is available])
 		], [
 			LIBQRENCODE="No"

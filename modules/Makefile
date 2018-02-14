@@ -5,7 +5,7 @@ SUBDIRS =			\
 	botserv			\
 	chanfix			\
 	chanserv		\
-	$(CONTRIB_ENABLE)	\
+	$(CONTRIB_COND_D)	\
 	crypto			\
 	exttarget		\
 	gameserv		\

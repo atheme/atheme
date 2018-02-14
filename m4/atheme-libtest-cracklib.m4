@@ -2,7 +2,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRACKLIB], [
 
 	LIBCRACKLIB="No"
 
-	CRACKLIB_C=""
+	CRACKLIB_COND_C=""
 	CRACKLIB_LIBS=""
 
 	AC_ARG_WITH([cracklib],
@@ -30,12 +30,12 @@ AC_DEFUN([ATHEME_LIBTEST_CRACKLIB], [
 	])
 
 	AS_IF([test "x${LIBCRACKLIB}" = "xYes"], [
-		CRACKLIB_C="cracklib.c"
+		CRACKLIB_COND_C="cracklib.c"
 		AS_IF([test "x${ac_cv_search_FascistCheck}" != "xnone required"], [
 			CRACKLIB_LIBS="${ac_cv_search_FascistCheck}"
 		])
 		AC_DEFINE([HAVE_CRACKLIB], [1], [Define to 1 if cracklib is available])
-		AC_SUBST([CRACKLIB_C])
+		AC_SUBST([CRACKLIB_COND_C])
 		AC_SUBST([CRACKLIB_LIBS])
 	])
 ])

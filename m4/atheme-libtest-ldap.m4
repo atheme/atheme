@@ -14,12 +14,12 @@ AC_DEFUN([ATHEME_LIBTEST_LDAP], [
 
 	AS_IF([test "x${with_ldap}" != "xno"], [
 
-		LDAP_AUTHC=""
+		LDAP_AUTH_COND_C=""
 		LDAP_CFLAGS=""
 		LDAP_LIBS=""
 
 		AC_CHECK_LIB([ldap], [ldap_initialize], [
-			LDAP_AUTHC="ldap.c"
+			LDAP_AUTH_COND_C="ldap.c"
 			LDAP_CFLAGS=""
 			LDAP_LIBS="-lldap"
 		], [
@@ -32,7 +32,7 @@ AC_DEFUN([ATHEME_LIBTEST_LDAP], [
 			LIBS="${LIBS} -L/usr/local/lib"
 
 			AC_CHECK_LIB([ldap], [ldap_initialize], [
-				LDAP_AUTHC="ldap.c"
+				LDAP_AUTH_COND_C="ldap.c"
 				LDAP_CFLAGS="-I/usr/local/include"
 				LDAP_LIBS="-L/usr/local/lib -lldap"
 			])
@@ -41,12 +41,12 @@ AC_DEFUN([ATHEME_LIBTEST_LDAP], [
 			LIBS="${LIBS_SAVED}"
 		])
 
-		AC_SUBST([LDAP_AUTHC])
+		AC_SUBST([LDAP_AUTH_COND_C])
 		AC_SUBST([LDAP_CFLAGS])
 		AC_SUBST([LDAP_LIBS])
 	])
 
-	AS_IF([test "x${with_ldap}x${LDAP_AUTHC}" = "xyesx"], [
+	AS_IF([test "x${with_ldap}x${LDAP_AUTH_COND_C}" = "xyesx"], [
 		AC_MSG_ERROR([LDAP support was explicitly requested but could not be found])
 	])
 ])

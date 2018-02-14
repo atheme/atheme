@@ -2,7 +2,7 @@
 # Rights to this code are documented in doc/LICENSE.
 
 MODULE		= auth
-SRCS		= dummy.c $(LDAP_AUTHC)
+SRCS		= dummy.c $(LDAP_AUTH_COND_C)
 
 include ../../extra.mk
 include ../../buildsys.mk
