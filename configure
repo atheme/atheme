@@ -8787,6 +8787,8 @@ fi
 
 
 
+	LIBLDAP="No"
+
 
 # Check whether --with-ldap was given.
 if test "${with_ldap+set}" = set; then :
@@ -8849,6 +8851,7 @@ fi
 $as_echo "$ac_cv_lib_ldap_ldap_initialize" >&6; }
 if test "x$ac_cv_lib_ldap_ldap_initialize" = xyes; then :
 
+			LIBLDAP="Yes"
 			LDAP_AUTH_COND_C="ldap.c"
 			LDAP_CFLAGS=""
 			LDAP_LIBS="-lldap"
@@ -8901,6 +8904,7 @@ fi
 $as_echo "$ac_cv_lib_ldap_ldap_initialize" >&6; }
 if test "x$ac_cv_lib_ldap_ldap_initialize" = xyes; then :
 
+				LIBLDAP="Yes"
 				LDAP_AUTH_COND_C="ldap.c"
 				LDAP_CFLAGS="-I/usr/local/include"
 				LDAP_LIBS="-L/usr/local/lib -lldap"
@@ -15282,6 +15286,7 @@ Configuration:
 
     crypt(3) Support ........: ${LIBCRYPT}
     CrackLib Support ........: ${LIBCRACKLIB}
+    LDAP Support ............: ${LIBLDAP}
     GNU libidn Support ......: ${LIBIDN}
     ARM mbedTLS Support .....: ${LIBMBEDCRYPTO}
     Nettle Support ..........: ${LIBNETTLE}

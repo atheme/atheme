@@ -44,6 +44,7 @@ Configuration:
 
     crypt(3) Support ........: ${LIBCRYPT}
     CrackLib Support ........: ${LIBCRACKLIB}
+    LDAP Support ............: ${LIBLDAP}
     GNU libidn Support ......: ${LIBIDN}
     ARM mbedTLS Support .....: ${LIBMBEDCRYPTO}
     Nettle Support ..........: ${LIBNETTLE}

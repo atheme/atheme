@@ -1,5 +1,7 @@
 AC_DEFUN([ATHEME_LIBTEST_LDAP], [
 
+	LIBLDAP="No"
+
 	AC_ARG_WITH([ldap],
 		[AS_HELP_STRING([--without-ldap], [Do not attempt to detect LDAP for modules/auth/ldap])],
 		[], [with_ldap="auto"])
@@ -19,6 +21,7 @@ AC_DEFUN([ATHEME_LIBTEST_LDAP], [
 		LDAP_LIBS=""
 
 		AC_CHECK_LIB([ldap], [ldap_initialize], [
+			LIBLDAP="Yes"
 			LDAP_AUTH_COND_C="ldap.c"
 			LDAP_CFLAGS=""
 			LDAP_LIBS="-lldap"
@@ -32,6 +35,7 @@ AC_DEFUN([ATHEME_LIBTEST_LDAP], [
 			LIBS="${LIBS} -L/usr/local/lib"
 
 			AC_CHECK_LIB([ldap], [ldap_initialize], [
+				LIBLDAP="Yes"
 				LDAP_AUTH_COND_C="ldap.c"
 				LDAP_CFLAGS="-I/usr/local/include"
 				LDAP_LIBS="-L/usr/local/lib -lldap"
