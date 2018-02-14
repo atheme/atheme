@@ -7,7 +7,7 @@ AC_DEFUN([ATHEME_LIBTEST_PERL], [
 	PERL_LIBS=""
 
 	AC_ARG_WITH([perl],
-	        [AS_HELP_STRING([--without-perl], [Disable building perl scripting module])],
+	        [AS_HELP_STRING([--with-perl], [Enable Perl for modules/scripting/perl])],
 	        [], [with_perl="no"])
 
 	case "${with_perl}" in

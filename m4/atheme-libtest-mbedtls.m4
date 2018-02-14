@@ -5,7 +5,7 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDTLS], [
 	LIBMBEDCRYPTO_LIBS=""
 
 	AC_ARG_WITH([mbedtls],
-		[AS_HELP_STRING([--with-mbedtls], [Compile with ARM mbedTLS support.])],
+		[AS_HELP_STRING([--without-mbedtls], [Do not attempt to detect ARM mbedTLS])],
 		[], [with_mbedtls="auto"])
 
 	case "${with_mbedtls}" in

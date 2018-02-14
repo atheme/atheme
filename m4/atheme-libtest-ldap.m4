@@ -1,7 +1,7 @@
 AC_DEFUN([ATHEME_LIBTEST_LDAP], [
 
 	AC_ARG_WITH([ldap],
-		[AS_HELP_STRING([--without-ldap], [Disable building LDAP authentication module.])],
+		[AS_HELP_STRING([--without-ldap], [Do not attempt to detect LDAP for modules/auth/ldap])],
 		[], [with_ldap="auto"])
 
 	case "${with_ldap}" in

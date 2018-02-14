@@ -5,7 +5,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPT], [
 	LIBCRYPT_LIBS=""
 
 	AC_ARG_WITH([crypt],
-		[AS_HELP_STRING([--with-crypt], [Compile with crypt(3) to provide modules/crypto/crypt3 modules.])],
+		[AS_HELP_STRING([--without-crypt], [Do not attempt to detect crypt(3) for modules/crypto/crypt3-*])],
 		[], [with_crypt="auto"])
 
 	case "${with_crypt}" in

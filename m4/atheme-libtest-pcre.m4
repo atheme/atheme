@@ -3,7 +3,7 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 	LIBPCRE="No"
 
 	AC_ARG_WITH([pcre],
-		[AS_HELP_STRING([--with-pcre], [Enable Perl-Compatible Regular Expression support])],
+		[AS_HELP_STRING([--without-pcre], [Do not attempt to detect Perl-Compatible Regular Expression library])],
 		[], [with_pcre="auto"])
 
 	case "${with_pcre}" in

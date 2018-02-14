@@ -5,7 +5,7 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 	LIBIDN_LIBS=""
 
 	AC_ARG_WITH([libidn],
-		[AS_HELP_STRING([--with-libidn], [Compile with GNU libidn for SASL SCRAM-SHA support.])],
+		[AS_HELP_STRING([--without-libidn], [Do not attempt to detect GNU libidn for modules/saslserv/scram-sha])],
 		[], [with_libidn="auto"])
 
 	case "${with_libidn}" in

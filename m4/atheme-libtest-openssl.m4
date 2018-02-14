@@ -5,7 +5,7 @@ AC_DEFUN([ATHEME_LIBTEST_OPENSSL], [
 	LIBCRYPTO_LIBS=""
 
 	AC_ARG_WITH([openssl],
-		[AS_HELP_STRING([--with-openssl], [Compile with OpenSSL to provide more functionality.])],
+		[AS_HELP_STRING([--without-openssl], [Do not attempt to detect OpenSSL for modules/saslserv/ecdsa-nist256p-challenge])],
 		[], [with_openssl="auto"])
 
 	case "${with_openssl}" in

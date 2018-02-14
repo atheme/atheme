@@ -5,7 +5,7 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 	LIBNETTLE_LIBS=""
 
 	AC_ARG_WITH([nettle],
-		[AS_HELP_STRING([--with-nettle], [Compile with libnettle (cryptographic library) support.])],
+		[AS_HELP_STRING([--without-nettle], [Do not attempt to detect nettle (crypto library)])],
 		[], [with_nettle="auto"])
 
 	case "${with_nettle}" in

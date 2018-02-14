@@ -5,7 +5,7 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
 	QRCODE_C=""
 
 	AC_ARG_WITH([qrencode],
-		[AS_HELP_STRING([--with-qrencode], [Compile with libqrencode for generating QR codes])],
+		[AS_HELP_STRING([--without-qrencode], [Do not attempt to detect libqrencode for generating QR codes])],
 		[], [with_qrencode="auto"])
 
 	case "${with_qrencode}" in

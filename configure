@@ -646,13 +646,13 @@ SHAREDIR
 MODDIR
 DOCDIR
 mkdir_p
-QRCODE_C
-LIBQRENCODE_LIBS
-LIBQRENCODE_CFLAGS
 PERL_LIBS
 PERL_CFLAGS
 PERL_ENABLE
 perlpath
+QRCODE_C
+LIBQRENCODE_LIBS
+LIBQRENCODE_CFLAGS
 PCRE_LIBS
 PCRE_CFLAGS
 LIBCRYPTO_LIBS
@@ -798,8 +798,8 @@ with_mbedtls
 with_nettle
 with_openssl
 with_pcre
-with_perl
 with_qrencode
+with_perl
 enable_fhs_paths
 enable_reproducible_builds
 enable_large_net
@@ -1469,19 +1469,23 @@ Optional Packages:
   --without-libiconv-prefix     don't search for libiconv in includedir and libdir
   --with-libintl-prefix[=DIR]  search for libintl in DIR/include and DIR/lib
   --without-libintl-prefix     don't search for libintl in includedir and libdir
-  --with-cracklib         Compile NickServ cracklib module for checking
-                          password strength
-  --with-crypt            Compile with crypt(3) to provide
-                          modules/crypto/crypt3 modules.
-  --with-libidn           Compile with GNU libidn for SASL SCRAM-SHA support.
-  --without-ldap          Disable building LDAP authentication module.
-  --with-mbedtls          Compile with ARM mbedTLS support.
-  --with-nettle           Compile with libnettle (cryptographic library)
-                          support.
-  --with-openssl          Compile with OpenSSL to provide more functionality.
-  --with-pcre             Enable Perl-Compatible Regular Expression support
-  --without-perl          Disable building perl scripting module
-  --with-qrencode         Compile with libqrencode for generating QR codes
+  --without-cracklib      Do not attempt to detect CrackLib for
+                          modules/nickserv/cracklib (checking password
+                          strength)
+  --without-crypt         Do not attempt to detect crypt(3) for
+                          modules/crypto/crypt3-*
+  --without-libidn        Do not attempt to detect GNU libidn for
+                          modules/saslserv/scram-sha
+  --without-ldap          Do not attempt to detect LDAP for modules/auth/ldap
+  --without-mbedtls       Do not attempt to detect ARM mbedTLS
+  --without-nettle        Do not attempt to detect nettle (crypto library)
+  --without-openssl       Do not attempt to detect OpenSSL for
+                          modules/saslserv/ecdsa-nist256p-challenge
+  --without-pcre          Do not attempt to detect Perl-Compatible Regular
+                          Expression library
+  --without-qrencode      Do not attempt to detect libqrencode for generating
+                          QR codes
+  --with-perl             Enable Perl for modules/scripting/perl
   --with-libmowgli[=prefix]
                           Specify location of system libmowgli install, or
                           "no" to force use of internal libmowgli
@@ -9624,101 +9628,6 @@ fi
 
 
 
-	LIBPERL="No"
-
-	PERL_ENABLE=""
-	PERL_CFLAGS=""
-	PERL_LIBS=""
-
-
-# Check whether --with-perl was given.
-if test "${with_perl+set}" = set; then :
-  withval=$with_perl;
-else
-  with_perl="no"
-fi
-
-
-	case "${with_perl}" in
-		no | yes | auto)
-			;;
-		*)
-			as_fn_error $? "invalid option for --with-perl" "$LINENO" 5
-			;;
-	esac
-
-	if test "x${with_perl}" != "xno"; then :
-
-
-		# Extract the first word of "perl", so it can be a program name with args.
-set dummy perl; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_perlpath+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  case $perlpath in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_perlpath="$perlpath" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_perlpath="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  ;;
-esac
-fi
-perlpath=$ac_cv_path_perlpath
-if test -n "$perlpath"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $perlpath" >&5
-$as_echo "$perlpath" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-
-		if test -n "${perlpath}"
-		then
-			LIBPERL="Yes"
-
-			PERL_ENABLE="perl"
-			PERL_CFLAGS="$(perl -MExtUtils::Embed -e ccopts)"
-			PERL_LIBS="$(perl -MExtUtils::Embed -e ldopts)"
-
-
-
-
-		fi
-
-				if test -n "$(echo "${PERL_LIBS}" | grep pthread)"
-		then
-			LIBS="${LIBS} -lpthread"
-		fi
-
-fi
-
-	if test "x${with_perl}x${PERL_CFLAGS}" = "xyesx"; then :
-
-		as_fn_error $? "Perl support was requested but Perl could not be found" "$LINENO" 5
-
-fi
-
-
-
 	LIBQRENCODE="No"
 
 	QRCODE_C=""
@@ -9834,6 +9743,102 @@ $as_echo "#define HAVE_LIBQRENCODE 1" >>confdefs.h
 
 
 fi
+
+fi
+
+
+
+
+	LIBPERL="No"
+
+	PERL_ENABLE=""
+	PERL_CFLAGS=""
+	PERL_LIBS=""
+
+
+# Check whether --with-perl was given.
+if test "${with_perl+set}" = set; then :
+  withval=$with_perl;
+else
+  with_perl="no"
+fi
+
+
+	case "${with_perl}" in
+		no | yes | auto)
+			;;
+		*)
+			as_fn_error $? "invalid option for --with-perl" "$LINENO" 5
+			;;
+	esac
+
+	if test "x${with_perl}" != "xno"; then :
+
+
+		# Extract the first word of "perl", so it can be a program name with args.
+set dummy perl; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_path_perlpath+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  case $perlpath in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_perlpath="$perlpath" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_perlpath="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+perlpath=$ac_cv_path_perlpath
+if test -n "$perlpath"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $perlpath" >&5
+$as_echo "$perlpath" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+
+		if test -n "${perlpath}"
+		then
+			LIBPERL="Yes"
+
+			PERL_ENABLE="perl"
+			PERL_CFLAGS="$(perl -MExtUtils::Embed -e ccopts)"
+			PERL_LIBS="$(perl -MExtUtils::Embed -e ldopts)"
+
+
+
+
+		fi
+
+				if test -n "$(echo "${PERL_LIBS}" | grep pthread)"
+		then
+			LIBS="${LIBS} -lpthread"
+		fi
+
+fi
+
+	if test "x${with_perl}x${PERL_CFLAGS}" = "xyesx"; then :
+
+		as_fn_error $? "Perl support was requested but Perl could not be found" "$LINENO" 5
 
 fi
 

@@ -6,7 +6,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRACKLIB], [
 	CRACKLIB_LIBS=""
 
 	AC_ARG_WITH([cracklib],
-		[AS_HELP_STRING([--with-cracklib], [Compile NickServ cracklib module for checking password strength])],
+		[AS_HELP_STRING([--without-cracklib], [Do not attempt to detect CrackLib for modules/nickserv/cracklib (checking password strength)])],
 		[], [with_cracklib="auto"])
 
 	case "${with_cracklib}" in
