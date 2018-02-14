@@ -1,9 +1,5 @@
 dnl Copyright (C) 2005-2018 Atheme Development Group
-dnl Rights to this code are documented in doc/LICENSE.
-dnl
-dnl This file is the autoconf stub.
-
-dnl Process this file with autoconf to produce a configure script.
+dnl Rights to this code are as documented in doc/LICENSE.
 
 AC_PREREQ([2.69])
 
@@ -48,20 +44,43 @@ AC_C_BIGENDIAN
 AC_PROG_MAKE_SET
 
 PKG_PROG_PKG_CONFIG
-if test -z "${PKG_CONFIG}"; then
-	AC_MSG_ERROR([pkg-config not found])
-fi
+AS_IF([test -z "${PKG_CONFIG}"], [AC_MSG_ERROR([pkg-config not found])])
+
+
 
 dnl Automake compatibility. --nenolod
 AC_SUBST([PACKAGE], [AC_PACKAGE_TARNAME])
 AC_SUBST([VERSION], [AC_PACKAGE_VERSION])
 AC_DEFINE_UNQUOTED([PACKAGE], ["${PACKAGE}"], [Name of package])
 AC_DEFINE_UNQUOTED([VERSION], ["${VERSION}"], [Version number of package])
-AC_DEFINE([VENDOR_STRING], ["Atheme Development Group <https://atheme.github.io/>"], [Vendor and URL for modules's "vendor" field])
+AC_DEFINE([VENDOR_STRING], ["Atheme Development Group <https://atheme.github.io/>"], [Vendor string for module headers])
+
+
+
+dnl If we're building on Windows we need socket and regex libraries from mingw
+case "${host}" in
+	*-*-mingw32)
+		CFLAGS="-I/mingw/include ${CFLAGS}"
+		LIBS="-lwsock32 -lws2_32 -lregex ${LIBS}"
+		;;
+esac
+
+
 
 dnl GNU gettext
+mkdir_p="mkdir -p"
+AC_SUBST([mkdir_p])
 AM_GNU_GETTEXT([external])
 LIBS="${LIBS} ${LIBINTL}"
+PODIR=""
+USE_GETTEXT="No"
+if test "x${USE_NLS}" = "xyes"; then
+	PODIR="po"
+	USE_GETTEXT="Yes"
+fi
+AC_SUBST([PODIR])
+
+
 
 dnl Checks for header files.
 AC_CHECK_HEADERS([link.h], [], [], [])
@@ -99,16 +118,6 @@ AS_IF([test "x${ac_cv_func_explicit_bzero}x${ac_cv_func_memset_s}" = "xnoxno"], 
 
 
 
-dnl If we're building on Windows we need socket and regex libraries from mingw
-case "${host}" in
-*-*-mingw32)
-    CFLAGS="-I/mingw/include ${CFLAGS}"
-    LIBS="${LIBS} -lwsock32 -lws2_32 -lregex"
-        ;;
-esac
-
-
-
 dnl Libraries that are autodetected (alphabetical)
 ATHEME_LIBTEST_CRACKLIB
 ATHEME_LIBTEST_CRYPT
@@ -131,26 +140,6 @@ ATHEME_FEATURETEST_CONTRIB
 ATHEME_FEATURETEST_FHSPATHS
 ATHEME_FEATURETEST_LARGENET
 ATHEME_FEATURETEST_REPROBUILDS
-
-
-
-dnl gettextize's Makefile.in wants this
-mkdir_p="mkdir -p"
-AC_SUBST([mkdir_p])
-
-
-
-AC_ARG_ENABLE([propolice],
-	[AS_HELP_STRING([--disable-propolice],[ Disable propolice protections (for debugging.)])],
-	[], [enable_propolice=no])
-AS_IF([test "x${enable_propolice}" = "xyes"],
-	[
-	ATHEME_CC_TEST_CFLAGS([-fno-stack-protector-all])
-	ATHEME_CC_TEST_CFLAGS([-fno-pie])
-	ATHEME_CC_TEST_CFLAGS([-nonow])
-	ATHEME_CC_TEST_CFLAGS([-norelro])
-	]
-)
 
 
 
@@ -181,19 +170,6 @@ LIBS="${LIBS} ${MOWGLI_LIBS}"
 AC_SUBST([MOWGLI_CFLAGS])
 AC_SUBST([MOWGLI_LIBS])
 AC_SUBST([LIBMOWGLI])
-
-
-
-BUILDROOT=`pwd`
-AC_SUBST([BUILDROOT])
-
-PODIR=""
-USE_GETTEXT="No"
-if test "x${USE_NLS}" = "xyes"; then
-	PODIR="po"
-	USE_GETTEXT="Yes"
-fi
-AC_SUBST([PODIR])
 
 
 

@@ -627,13 +627,10 @@ gt_needs=
 ac_header_list=
 enable_option_checking=no
 ac_subst_vars='LTLIBOBJS
-PODIR
-BUILDROOT
 LIBMOWGLI
 subdirs
 MOWGLI_LIBS
 MOWGLI_CFLAGS
-mkdir_p
 BUILDDIR
 ABSPATHS
 SHAREDIR
@@ -668,6 +665,7 @@ CRACKLIB_C
 EXPLICIT_BZERO_C
 ARC4RANDOM_C
 LIBOBJS
+PODIR
 POSUB
 LTLIBINTL
 LIBINTL
@@ -690,6 +688,7 @@ MKDIR_P
 INSTALL_DATA
 INSTALL_SCRIPT
 INSTALL_PROGRAM
+mkdir_p
 VERSION
 PACKAGE
 PKG_CONFIG_LIBDIR
@@ -804,7 +803,6 @@ enable_contrib
 enable_fhs_paths
 enable_large_net
 enable_reproducible_builds
-enable_propolice
 with_libmowgli
 enable_warnings
 enable_profile
@@ -1450,7 +1448,6 @@ Optional Features:
   --enable-large-net      Enable large network support
   --enable-reproducible-builds
                           Enable reproducible builds
-  --disable-propolice     Disable propolice protections (for debugging.)
   --enable-warnings       Enable compiler warnings
   --enable-profile        Enable profiling extensions
   --disable-relro         Disable -Wl,-z,relro (marks the relocation table
@@ -4857,9 +4854,11 @@ $as_echo "no" >&6; }
 		PKG_CONFIG=""
 	fi
 fi
-if test -z "${PKG_CONFIG}"; then
-	as_fn_error $? "pkg-config not found" "$LINENO" 5
+if test -z "${PKG_CONFIG}"; then :
+  as_fn_error $? "pkg-config not found" "$LINENO" 5
 fi
+
+
 
 PACKAGE=atheme
 
@@ -4878,6 +4877,19 @@ _ACEOF
 
 $as_echo "#define VENDOR_STRING \"Atheme Development Group <https://atheme.github.io/>\"" >>confdefs.h
 
+
+
+
+case "${host}" in
+	*-*-mingw32)
+		CFLAGS="-I/mingw/include ${CFLAGS}"
+		LIBS="-lwsock32 -lws2_32 -lregex ${LIBS}"
+		;;
+esac
+
+
+
+mkdir_p="mkdir -p"
 
 # Find a good install program.  We prefer a C program (faster),
 # so one script is as good as another.  But avoid the broken or
@@ -7147,6 +7159,15 @@ $as_echo "#define HAVE_DCGETTEXT 1" >>confdefs.h
 
 
 LIBS="${LIBS} ${LIBINTL}"
+PODIR=""
+USE_GETTEXT="No"
+if test "x${USE_NLS}" = "xyes"; then
+	PODIR="po"
+	USE_GETTEXT="Yes"
+fi
+
+
+
 
 for ac_header in link.h
 do :
@@ -8363,15 +8384,6 @@ if test "x${ac_cv_func_explicit_bzero}x${ac_cv_func_memset_s}" = "xnoxno"; then 
 
 
 fi
-
-
-
-case "${host}" in
-*-*-mingw32)
-    CFLAGS="-I/mingw/include ${CFLAGS}"
-    LIBS="${LIBS} -lwsock32 -lws2_32 -lregex"
-        ;;
-esac
 
 
 
@@ -10022,190 +10034,6 @@ $as_echo "#define REPRODUCIBLE_BUILDS 1" >>confdefs.h
 
 
 
-mkdir_p="mkdir -p"
-
-
-
-
-# Check whether --enable-propolice was given.
-if test "${enable_propolice+set}" = set; then :
-  enableval=$enable_propolice;
-else
-  enable_propolice=no
-fi
-
-if test "x${enable_propolice}" = "xyes"; then :
-
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fno-stack-protector-all " >&5
-$as_echo_n "checking for C compiler flag(s) -fno-stack-protector-all ... " >&6; }
-
-		CFLAGS_SAVED="${CFLAGS}"
-		CFLAGS="${CFLAGS} -fno-stack-protector-all"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='no'
-				CFLAGS="${CFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		unset CFLAGS_SAVED
-
-
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fno-pie " >&5
-$as_echo_n "checking for C compiler flag(s) -fno-pie ... " >&6; }
-
-		CFLAGS_SAVED="${CFLAGS}"
-		CFLAGS="${CFLAGS} -fno-pie"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='no'
-				CFLAGS="${CFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		unset CFLAGS_SAVED
-
-
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -nonow " >&5
-$as_echo_n "checking for C compiler flag(s) -nonow ... " >&6; }
-
-		CFLAGS_SAVED="${CFLAGS}"
-		CFLAGS="${CFLAGS} -nonow"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='no'
-				CFLAGS="${CFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		unset CFLAGS_SAVED
-
-
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -norelro " >&5
-$as_echo_n "checking for C compiler flag(s) -norelro ... " >&6; }
-
-		CFLAGS_SAVED="${CFLAGS}"
-		CFLAGS="${CFLAGS} -norelro"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='no'
-				CFLAGS="${CFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		unset CFLAGS_SAVED
-
-
-
-
-fi
-
-
-
 
 # Check whether --with-libmowgli was given.
 if test "${with_libmowgli+set}" = set; then :
@@ -10318,19 +10146,6 @@ LIBS="${LIBS} ${MOWGLI_LIBS}"
 
 
 
-
-
-
-
-BUILDROOT=`pwd`
-
-
-PODIR=""
-USE_GETTEXT="No"
-if test "x${USE_NLS}" = "xyes"; then
-	PODIR="po"
-	USE_GETTEXT="Yes"
-fi
 
 
 

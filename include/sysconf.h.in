@@ -302,7 +302,7 @@
 #endif
 
 
-/* Vendor and URL for modules's "vendor" field */
+/* Vendor string for module headers */
 #undef VENDOR_STRING
 
 /* Version number of package */

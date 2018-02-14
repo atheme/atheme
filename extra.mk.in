@@ -16,7 +16,6 @@ htmldir ?= @htmldir@
 bindir ?= @bindir@
 MOWGLI_LIBS ?= @MOWGLI_LIBS@
 PACKAGE_URL ?= @PACKAGE_URL@
-BUILDROOT ?= @BUILDROOT@
 LDAP_AUTHC ?= @LDAP_AUTHC@
 PACKAGE_STRING ?= @PACKAGE_STRING@
 dvidir ?= @dvidir@
