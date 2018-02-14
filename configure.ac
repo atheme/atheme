@@ -140,40 +140,9 @@ ATHEME_FEATURETEST_FHSPATHS
 ATHEME_FEATURETEST_LARGENET
 ATHEME_FEATURETEST_REPROBUILDS
 
-
-
-AC_ARG_WITH([libmowgli],
-	[AS_HELP_STRING([--with-libmowgli@<:@=prefix@:>@],[ Specify location of system libmowgli install, or "no" to force use of internal libmowgli])],
-	[], [with_libmowgli="yes"])
-
-AS_IF([test "x${with_libmowgli}" = "xyes"], [
-	PKG_CHECK_MODULES([MOWGLI], [libmowgli-2 >= 2.0.0], [MOWGLI_SOURCE="System"], [with_libmowgli="no"])
-])
-
-AS_IF([test "x${with_libmowgli}" = "xyes"], [], [test "x${with_libmowgli}" = "xno"], [
-	LIBMOWGLI_COND_D="libmowgli-2"
-	MOWGLI_SOURCE="Internal"
-	AC_CONFIG_SUBDIRS([libmowgli-2])
-
-	AC_SUBST([LIBMOWGLI_COND_D])
-
-	MOWGLI_CFLAGS="-I$(pwd)/libmowgli-2/src/libmowgli"
-	MOWGLI_LIBS="-L$(pwd)/libmowgli-2/src/libmowgli -lmowgli-2"
-], [
-	MOWGLI_SOURCE="System"
-	MOWGLI_CFLAGS="-I${with_libmowgli}/include/libmowgli-2"
-	MOWGLI_LIBS="-L${with_libmowgli}/lib -lmowgli-2"
-])
-
-CPPFLAGS="${CPPFLAGS} ${MOWGLI_CFLAGS}"
-LIBS="${LIBS} ${MOWGLI_LIBS}"
-
-AC_SUBST([MOWGLI_CFLAGS])
-AC_SUBST([MOWGLI_LIBS])
-
-
-
 dnl These must be here, not above, or they might interfere with library and feature tests
+dnl Explanation is that these modify one or more of CFLAGS, CPPFLAGS, LDFLAGS, and LIBS
+ATHEME_LIBTEST_MOWGLI
 ATHEME_FEATURETEST_WARNINGS
 ATHEME_FEATURETEST_LINKERFLAGS
 

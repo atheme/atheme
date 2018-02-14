@@ -627,8 +627,8 @@ gt_needs=
 ac_header_list=
 enable_option_checking=no
 ac_subst_vars='LTLIBOBJS
-LIBMOWGLI_COND_D
 subdirs
+LIBMOWGLI_COND_D
 MOWGLI_LIBS
 MOWGLI_CFLAGS
 SHAREDIR
@@ -1483,8 +1483,9 @@ Optional Packages:
                           QR codes
   --with-perl             Enable Perl for modules/scripting/perl
   --with-libmowgli[=prefix]
-                          Specify location of system libmowgli install, or
-                          "no" to force use of internal libmowgli
+                          Specify location of system libmowgli install, "yes"
+                          to ask pkg-config (default), or "no" to force use of
+                          internal libmowgli submodule (fallback)
 
 Some influential environment variables:
   CC          C compiler command
@@ -10038,6 +10039,8 @@ $as_echo "#define REPRODUCIBLE_BUILDS 1" >>confdefs.h
 
 
 
+
+
 # Check whether --with-libmowgli was given.
 if test "${with_libmowgli+set}" = set; then :
   withval=$with_libmowgli;
@@ -10046,7 +10049,7 @@ else
 fi
 
 
-if test "x${with_libmowgli}" = "xyes"; then :
+	if test "x${with_libmowgli}" = "xyes"; then :
 
 
 pkg_failed=no
@@ -10107,52 +10110,50 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$MOWGLI_PKG_ERRORS" >&5
 
-	with_libmowgli="no"
+
+			with_libmowgli="no"
+
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	with_libmowgli="no"
+
+			with_libmowgli="no"
+
 else
 	MOWGLI_CFLAGS=$pkg_cv_MOWGLI_CFLAGS
 	MOWGLI_LIBS=$pkg_cv_MOWGLI_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	MOWGLI_SOURCE="System"
-fi
+
+			MOWGLI_SOURCE="System"
+			CPPFLAGS="${CPPFLAGS} ${MOWGLI_CFLAGS}"
+			LIBS="${LIBS} ${MOWGLI_LIBS}"
 
 fi
 
+fi
 
-
-if test "x${with_libmowgli}" = "xyes"; then :
+	if test "x${with_libmowgli}" = "xyes"; then :
 
 elif test "x${with_libmowgli}" = "xno"; then :
 
-	LIBMOWGLI_COND_D="libmowgli-2"
-	MOWGLI_SOURCE="Internal"
-	subdirs="$subdirs libmowgli-2"
+		MOWGLI_SOURCE="Internal"
+		LIBMOWGLI_COND_D="libmowgli-2"
 
+		CPPFLAGS="${CPPFLAGS} -I$(pwd)/libmowgli-2/src/libmowgli"
+		LDFLAGS="${LDFLAGS} -L$(pwd)/libmowgli-2/src/libmowgli"
+		LIBS="${LIBS} -lmowgli-2"
+		subdirs="$subdirs libmowgli-2"
 
-
-
-	MOWGLI_CFLAGS="-I$(pwd)/libmowgli-2/src/libmowgli"
-	MOWGLI_LIBS="-L$(pwd)/libmowgli-2/src/libmowgli -lmowgli-2"
 
 else
 
-	MOWGLI_SOURCE="System"
-	MOWGLI_CFLAGS="-I${with_libmowgli}/include/libmowgli-2"
-	MOWGLI_LIBS="-L${with_libmowgli}/lib -lmowgli-2"
+		MOWGLI_SOURCE="System"
+		CPPFLAGS="${CPPFLAGS} -I${with_libmowgli}/include/libmowgli-2"
+		LDFLAGS="${LDFLAGS} -L${with_libmowgli}/lib"
+		LIBS="${LIBS} -lmowgli-2"
 
 fi
-
-CPPFLAGS="${CPPFLAGS} ${MOWGLI_CFLAGS}"
-LIBS="${LIBS} ${MOWGLI_LIBS}"
-
-
-
-
-
 
 
 

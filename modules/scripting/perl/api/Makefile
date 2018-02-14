@@ -9,9 +9,9 @@ include ../../../../buildsys.mk
 
 plugindir	= $(MODDIR)/modules/scripting/lib
 
-CPPFLAGS	+= -I../../../../include -I. $(MOWGLI_CFLAGS) $(PERL_CFLAGS)
+CPPFLAGS	+= -I../../../../include -I. $(PERL_CFLAGS)
 LDFLAGS		+= -L../../../../libathemecore
-LIBS		+= -lathemecore $(MOWGLI_LIBS)
+LIBS		+= -lathemecore
 
 CFLAGS		+= $(PLUGIN_CFLAGS)
 LDFLAGS		+= $(PLUGIN_LDFLAGS)
