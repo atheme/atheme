@@ -1,5 +1,19 @@
 AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 
+	LIBPCRE="No"
+
+	AC_ARG_WITH([pcre],
+		[AS_HELP_STRING([--with-pcre], [Enable Perl-Compatible Regular Expression support])],
+		[], [with_pcre="auto"])
+
+	case "${with_pcre}" in
+		no | yes | auto)
+			;;
+		*)
+			AC_MSG_ERROR([invalid option for --with-pcre])
+			;;
+	esac
+
 	AS_IF([test "x${with_pcre}" != "xno"], [
 		LIBS_SAVED="${LIBS}"
 

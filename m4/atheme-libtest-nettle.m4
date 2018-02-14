@@ -1,5 +1,21 @@
 AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 
+	LIBNETTLE="No"
+
+	LIBNETTLE_LIBS=""
+
+	AC_ARG_WITH([nettle],
+		[AS_HELP_STRING([--with-nettle], [Compile with libnettle (cryptographic library) support.])],
+		[], [with_nettle="auto"])
+
+	case "${with_nettle}" in
+		no | yes | auto)
+			;;
+		*)
+			AC_MSG_ERROR([invalid option for --with-nettle])
+			;;
+	esac
+
 	AS_IF([test "x${with_nettle}" != "xno"], [
 		LIBS_SAVED="${LIBS}"
 

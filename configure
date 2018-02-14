@@ -631,11 +631,6 @@ DIGEST_API_LIBS
 DIGEST_FRONTEND_C
 PODIR
 BUILDROOT
-QRCODE_C
-LIBQRENCODE_LIBS
-LIBQRENCODE_CFLAGS
-PCRE_LIBS
-PCRE_CFLAGS
 LIBMOWGLI
 subdirs
 MOWGLI_LIBS
@@ -651,17 +646,22 @@ SHAREDIR
 MODDIR
 DOCDIR
 mkdir_p
-PERL_ENABLE
+QRCODE_C
+LIBQRENCODE_LIBS
+LIBQRENCODE_CFLAGS
 PERL_LIBS
 PERL_CFLAGS
+PERL_ENABLE
 perlpath
-LDAP_AUTHC
-LDAP_LIBS
-LDAP_CFLAGS
-LIBIDN_LIBS
+PCRE_LIBS
+PCRE_CFLAGS
+LIBCRYPTO_LIBS
 LIBNETTLE_LIBS
 LIBMBEDCRYPTO_LIBS
-LIBCRYPTO_LIBS
+LDAP_LIBS
+LDAP_CFLAGS
+LDAP_AUTHC
+LIBIDN_LIBS
 LIBCRYPT_LIBS
 CRACKLIB_LIBS
 CRACKLIB_C
@@ -792,12 +792,14 @@ with_libiconv_prefix
 with_libintl_prefix
 with_cracklib
 with_crypt
-with_openssl
-with_mbedtls
-with_nettle
 with_libidn
 with_ldap
+with_mbedtls
+with_nettle
+with_openssl
+with_pcre
 with_perl
+with_qrencode
 enable_fhs_paths
 enable_reproducible_builds
 enable_large_net
@@ -809,8 +811,6 @@ enable_relro
 enable_nonlazy_bind
 enable_as_needed
 with_libmowgli
-with_pcre
-with_qrencode
 '
       ac_precious_vars='build_alias
 host_alias
@@ -824,12 +824,12 @@ CPP
 PKG_CONFIG
 PKG_CONFIG_PATH
 PKG_CONFIG_LIBDIR
-MOWGLI_CFLAGS
-MOWGLI_LIBS
 PCRE_CFLAGS
 PCRE_LIBS
 LIBQRENCODE_CFLAGS
-LIBQRENCODE_LIBS'
+LIBQRENCODE_LIBS
+MOWGLI_CFLAGS
+MOWGLI_LIBS'
 ac_subdirs_all='libmowgli-2'
 
 # Initialize some variables set by options.
@@ -1473,18 +1473,18 @@ Optional Packages:
                           password strength
   --with-crypt            Compile with crypt(3) to provide
                           modules/crypto/crypt3 modules.
-  --with-openssl          Compile with OpenSSL to provide more functionality.
+  --with-libidn           Compile with GNU libidn for SASL SCRAM-SHA support.
+  --without-ldap          Disable building LDAP authentication module.
   --with-mbedtls          Compile with ARM mbedTLS support.
   --with-nettle           Compile with libnettle (cryptographic library)
                           support.
-  --with-libidn           Compile with GNU libidn for SASL SCRAM-SHA support.
-  --without-ldap          Disable building ldap auth module.
+  --with-openssl          Compile with OpenSSL to provide more functionality.
+  --with-pcre             Enable Perl-Compatible Regular Expression support
   --without-perl          Disable building perl scripting module
+  --with-qrencode         Compile with libqrencode for generating QR codes
   --with-libmowgli[=prefix]
                           Specify location of system libmowgli install, or
                           "no" to force use of internal libmowgli
-  --with-pcre             Enable Perl-Compatible Regular Expression support
-  --with-qrencode         Compile with libqrencode for generating QR codes
 
 Some influential environment variables:
   CC          C compiler command
@@ -1500,15 +1500,15 @@ Some influential environment variables:
               directories to add to pkg-config's search path
   PKG_CONFIG_LIBDIR
               path overriding pkg-config's built-in search path
-  MOWGLI_CFLAGS
-              C compiler flags for MOWGLI, overriding pkg-config
-  MOWGLI_LIBS linker flags for MOWGLI, overriding pkg-config
   PCRE_CFLAGS C compiler flags for PCRE, overriding pkg-config
   PCRE_LIBS   linker flags for PCRE, overriding pkg-config
   LIBQRENCODE_CFLAGS
               C compiler flags for LIBQRENCODE, overriding pkg-config
   LIBQRENCODE_LIBS
               linker flags for LIBQRENCODE, overriding pkg-config
+  MOWGLI_CFLAGS
+              C compiler flags for MOWGLI, overriding pkg-config
+  MOWGLI_LIBS linker flags for MOWGLI, overriding pkg-config
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -8371,9 +8371,13 @@ esac
 
 
 
-LIBCRACKLIB="No"
-CRACKLIB_C=""
-CRACKLIB_LIBS=""
+
+
+	LIBCRACKLIB="No"
+
+	CRACKLIB_C=""
+	CRACKLIB_LIBS=""
+
 
 # Check whether --with-cracklib was given.
 if test "${with_cracklib+set}" = set; then :
@@ -8383,16 +8387,13 @@ else
 fi
 
 
-case "${with_cracklib}" in
-	no | yes | auto)
-		;;
-	*)
-		as_fn_error $? "invalid option for --with-cracklib" "$LINENO" 5
-		;;
-esac
-
-if test "x${with_cracklib}" != "xno"; then :
-
+	case "${with_cracklib}" in
+		no | yes | auto)
+			;;
+		*)
+			as_fn_error $? "invalid option for --with-cracklib" "$LINENO" 5
+			;;
+	esac
 
 	if test "x${with_cracklib}" != "xno"; then :
 
@@ -8483,12 +8484,12 @@ $as_echo "#define HAVE_CRACKLIB 1" >>confdefs.h
 
 fi
 
-fi
 
 
+	LIBCRYPT="No"
 
-LIBCRYPT="No"
-LIBCRYPT_LIBS=""
+	LIBCRYPT_LIBS=""
+
 
 # Check whether --with-crypt was given.
 if test "${with_crypt+set}" = set; then :
@@ -8498,16 +8499,13 @@ else
 fi
 
 
-case "${with_crypt}" in
-	no | yes | auto)
-		;;
-	*)
-		as_fn_error $? "invalid option for --with-crypt" "$LINENO" 5
-		;;
-esac
-
-if test "x${with_crypt}" != "xno"; then :
-
+	case "${with_crypt}" in
+		no | yes | auto)
+			;;
+		*)
+			as_fn_error $? "invalid option for --with-crypt" "$LINENO" 5
+			;;
+	esac
 
 	if test "x${with_crypt}" != "xno"; then :
 
@@ -8663,39 +8661,36 @@ $as_echo "#define HAVE_CRYPT 1" >>confdefs.h
 
 fi
 
-fi
 
 
+	LIBIDN="No"
 
-LIBCRYPTO="No"
-LIBCRYPTO_LIBS=""
+	LIBIDN_LIBS=""
 
-# Check whether --with-openssl was given.
-if test "${with_openssl+set}" = set; then :
-  withval=$with_openssl;
+
+# Check whether --with-libidn was given.
+if test "${with_libidn+set}" = set; then :
+  withval=$with_libidn;
 else
-  with_openssl="auto"
+  with_libidn="auto"
 fi
 
 
-case "${with_openssl}" in
-	no | yes | auto)
-		;;
-	*)
-		as_fn_error $? "invalid option for --with-openssl" "$LINENO" 5
-		;;
-esac
+	case "${with_libidn}" in
+		no | yes | auto)
+			;;
+		*)
+			as_fn_error $? "invalid option for --with-libidn" "$LINENO" 5
+			;;
+	esac
 
-if test "x${with_openssl}" != "xno"; then :
-
-
-	if test "x${with_openssl}" != "xno"; then :
+	if test "x${with_libidn}" != "xno"; then :
 
 		LIBS_SAVED="${LIBS}"
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing EVP_DigestUpdate" >&5
-$as_echo_n "checking for library containing EVP_DigestUpdate... " >&6; }
-if ${ac_cv_search_EVP_DigestUpdate+:} false; then :
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing stringprep" >&5
+$as_echo_n "checking for library containing stringprep... " >&6; }
+if ${ac_cv_search_stringprep+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_func_search_save_LIBS=$LIBS
@@ -8708,16 +8703,16 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char EVP_DigestUpdate ();
+char stringprep ();
 int
 main ()
 {
-return EVP_DigestUpdate ();
+return stringprep ();
   ;
   return 0;
 }
 _ACEOF
-for ac_lib in '' crypto; do
+for ac_lib in '' idn; do
   if test -z "$ac_lib"; then
     ac_res="none required"
   else
@@ -8725,33 +8720,33 @@ for ac_lib in '' crypto; do
     LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
   fi
   if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_search_EVP_DigestUpdate=$ac_res
+  ac_cv_search_stringprep=$ac_res
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext
-  if ${ac_cv_search_EVP_DigestUpdate+:} false; then :
+  if ${ac_cv_search_stringprep+:} false; then :
   break
 fi
 done
-if ${ac_cv_search_EVP_DigestUpdate+:} false; then :
+if ${ac_cv_search_stringprep+:} false; then :
 
 else
-  ac_cv_search_EVP_DigestUpdate=no
+  ac_cv_search_stringprep=no
 fi
 rm conftest.$ac_ext
 LIBS=$ac_func_search_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_EVP_DigestUpdate" >&5
-$as_echo "$ac_cv_search_EVP_DigestUpdate" >&6; }
-ac_res=$ac_cv_search_EVP_DigestUpdate
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_stringprep" >&5
+$as_echo "$ac_cv_search_stringprep" >&6; }
+ac_res=$ac_cv_search_stringprep
 if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-  LIBCRYPTO="Yes"
+  LIBIDN="Yes"
 else
 
-			if test "x${with_openssl}" != "xauto"; then :
+			if test "x${with_libidn}" != "xauto"; then :
 
-				as_fn_error $? "--with-openssl was specified but OpenSSL could not be found" "$LINENO" 5
+				as_fn_error $? "--with-libidn was specified but GNU libidn could not be found" "$LINENO" 5
 
 fi
 
@@ -8762,63 +8757,167 @@ fi
 
 fi
 
-	if test "x${LIBCRYPTO}" = "xYes"; then :
+	if test "x${LIBIDN}" = "xYes"; then :
 
-		for ac_header in openssl/ec.h
-do :
-  ac_fn_c_check_header_mongrel "$LINENO" "openssl/ec.h" "ac_cv_header_openssl_ec_h" "$ac_includes_default"
-if test "x$ac_cv_header_openssl_ec_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_OPENSSL_EC_H 1
-_ACEOF
+		if test "x${ac_cv_search_stringprep}" != "xnone required"; then :
+
+			LIBIDN_LIBS="${ac_cv_search_stringprep}"
 
 fi
 
-done
+$as_echo "#define HAVE_LIBIDN 1" >>confdefs.h
 
-		for ac_header in openssl/evp.h openssl/hmac.h openssl/sha.h
-do :
-  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+
+
+fi
+
+
+
+
+# Check whether --with-ldap was given.
+if test "${with_ldap+set}" = set; then :
+  withval=$with_ldap;
+else
+  with_ldap="auto"
+fi
+
+
+	case "${with_ldap}" in
+		no | yes | auto)
+			;;
+		*)
+			as_fn_error $? "invalid option for --with-ldap" "$LINENO" 5
+			;;
+	esac
+
+	if test "x${with_ldap}" != "xno"; then :
+
+
+		LDAP_AUTHC=""
+		LDAP_CFLAGS=""
+		LDAP_LIBS=""
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ldap_initialize in -lldap" >&5
+$as_echo_n "checking for ldap_initialize in -lldap... " >&6; }
+if ${ac_cv_lib_ldap_ldap_initialize+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lldap  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char ldap_initialize ();
+int
+main ()
+{
+return ldap_initialize ();
+  ;
+  return 0;
+}
 _ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_ldap_ldap_initialize=yes
+else
+  ac_cv_lib_ldap_ldap_initialize=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_ldap_ldap_initialize" >&5
+$as_echo "$ac_cv_lib_ldap_ldap_initialize" >&6; }
+if test "x$ac_cv_lib_ldap_ldap_initialize" = xyes; then :
+
+			LDAP_AUTHC="ldap.c"
+			LDAP_CFLAGS=""
+			LDAP_LIBS="-lldap"
 
 else
 
-			LIBCRYPTO="No"
-			if test "x${with_openssl}" = "xyes"; then :
-  as_fn_error $? "required header file missing" "$LINENO" 5
+			unset ac_cv_lib_ldap_ldap_initialize
+
+			CFLAGS_SAVED="${CFLAGS}"
+			LIBS_SAVED="${LIBS}"
+
+			CFLAGS="${CFLAGS} -I/usr/local/include"
+			LIBS="${LIBS} -L/usr/local/lib"
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ldap_initialize in -lldap" >&5
+$as_echo_n "checking for ldap_initialize in -lldap... " >&6; }
+if ${ac_cv_lib_ldap_ldap_initialize+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lldap  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char ldap_initialize ();
+int
+main ()
+{
+return ldap_initialize ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_ldap_ldap_initialize=yes
+else
+  ac_cv_lib_ldap_ldap_initialize=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_ldap_ldap_initialize" >&5
+$as_echo "$ac_cv_lib_ldap_ldap_initialize" >&6; }
+if test "x$ac_cv_lib_ldap_ldap_initialize" = xyes; then :
+
+				LDAP_AUTHC="ldap.c"
+				LDAP_CFLAGS="-I/usr/local/include"
+				LDAP_LIBS="-L/usr/local/lib -lldap"
+
 fi
 
-fi
 
-done
-
-
-fi
-
-	if test "x${LIBCRYPTO}" = "xYes"; then :
-
-		if test "x${ac_cv_search_EVP_DigestUpdate}" != "xnone required"; then :
-
-			LIBCRYPTO_LIBS="${ac_cv_search_EVP_DigestUpdate}"
-
-fi
-
-$as_echo "#define HAVE_OPENSSL 1" >>confdefs.h
-
-
-
-fi
+			CFLAGS="${CFLAGS_SAVED}"
+			LIBS="${LIBS_SAVED}"
 
 fi
 
 
 
-LIBMBEDCRYPTO="No"
-LIBMBEDCRYPTO_LIBS=""
+
+
+
+fi
+
+	if test "x${with_ldap}x${LDAP_AUTHC}" = "xyesx"; then :
+
+		as_fn_error $? "LDAP support was explicitly requested but could not be found" "$LINENO" 5
+
+fi
+
+
+
+	LIBMBEDCRYPTO="No"
+
+	LIBMBEDCRYPTO_LIBS=""
+
 
 # Check whether --with-mbedtls was given.
 if test "${with_mbedtls+set}" = set; then :
@@ -8828,16 +8927,13 @@ else
 fi
 
 
-case "${with_mbedtls}" in
-	no | yes | auto)
-		;;
-	*)
-		as_fn_error $? "invalid option for --with-mbedtls" "$LINENO" 5
-		;;
-esac
-
-if test "x${with_mbedtls}" != "xno"; then :
-
+	case "${with_mbedtls}" in
+		no | yes | auto)
+			;;
+		*)
+			as_fn_error $? "invalid option for --with-mbedtls" "$LINENO" 5
+			;;
+	esac
 
 	if test "x${with_mbedtls}" != "xno"; then :
 
@@ -9121,12 +9217,12 @@ $as_echo "#define HAVE_LIBMBEDCRYPTO 1" >>confdefs.h
 
 fi
 
-fi
 
 
+	LIBNETTLE="No"
 
-LIBNETTLE="No"
-LIBNETTLE_LIBS=""
+	LIBNETTLE_LIBS=""
+
 
 # Check whether --with-nettle was given.
 if test "${with_nettle+set}" = set; then :
@@ -9136,16 +9232,13 @@ else
 fi
 
 
-case "${with_nettle}" in
-	no | yes | auto)
-		;;
-	*)
-		as_fn_error $? "invalid option for --with-nettle" "$LINENO" 5
-		;;
-esac
-
-if test "x${with_nettle}" != "xno"; then :
-
+	case "${with_nettle}" in
+		no | yes | auto)
+			;;
+		*)
+			as_fn_error $? "invalid option for --with-nettle" "$LINENO" 5
+			;;
+	esac
 
 	if test "x${with_nettle}" != "xno"; then :
 
@@ -9259,39 +9352,36 @@ $as_echo "#define HAVE_LIBNETTLE 1" >>confdefs.h
 
 fi
 
-fi
 
 
+	LIBCRYPTO="No"
 
-LIBIDN="No"
-LIBIDN_LIBS=""
+	LIBCRYPTO_LIBS=""
 
-# Check whether --with-libidn was given.
-if test "${with_libidn+set}" = set; then :
-  withval=$with_libidn;
+
+# Check whether --with-openssl was given.
+if test "${with_openssl+set}" = set; then :
+  withval=$with_openssl;
 else
-  with_libidn="auto"
+  with_openssl="auto"
 fi
 
 
-case "${with_libidn}" in
-	no | yes | auto)
-		;;
-	*)
-		as_fn_error $? "invalid option for --with-libidn" "$LINENO" 5
-		;;
-esac
+	case "${with_openssl}" in
+		no | yes | auto)
+			;;
+		*)
+			as_fn_error $? "invalid option for --with-openssl" "$LINENO" 5
+			;;
+	esac
 
-if test "x${with_libidn}" != "xno"; then :
-
-
-	if test "x${with_libidn}" != "xno"; then :
+	if test "x${with_openssl}" != "xno"; then :
 
 		LIBS_SAVED="${LIBS}"
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing stringprep" >&5
-$as_echo_n "checking for library containing stringprep... " >&6; }
-if ${ac_cv_search_stringprep+:} false; then :
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing EVP_DigestUpdate" >&5
+$as_echo_n "checking for library containing EVP_DigestUpdate... " >&6; }
+if ${ac_cv_search_EVP_DigestUpdate+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_func_search_save_LIBS=$LIBS
@@ -9304,16 +9394,16 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char stringprep ();
+char EVP_DigestUpdate ();
 int
 main ()
 {
-return stringprep ();
+return EVP_DigestUpdate ();
   ;
   return 0;
 }
 _ACEOF
-for ac_lib in '' idn; do
+for ac_lib in '' crypto; do
   if test -z "$ac_lib"; then
     ac_res="none required"
   else
@@ -9321,33 +9411,33 @@ for ac_lib in '' idn; do
     LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
   fi
   if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_search_stringprep=$ac_res
+  ac_cv_search_EVP_DigestUpdate=$ac_res
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext
-  if ${ac_cv_search_stringprep+:} false; then :
+  if ${ac_cv_search_EVP_DigestUpdate+:} false; then :
   break
 fi
 done
-if ${ac_cv_search_stringprep+:} false; then :
+if ${ac_cv_search_EVP_DigestUpdate+:} false; then :
 
 else
-  ac_cv_search_stringprep=no
+  ac_cv_search_EVP_DigestUpdate=no
 fi
 rm conftest.$ac_ext
 LIBS=$ac_func_search_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_stringprep" >&5
-$as_echo "$ac_cv_search_stringprep" >&6; }
-ac_res=$ac_cv_search_stringprep
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_EVP_DigestUpdate" >&5
+$as_echo "$ac_cv_search_EVP_DigestUpdate" >&6; }
+ac_res=$ac_cv_search_EVP_DigestUpdate
 if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-  LIBIDN="Yes"
+  LIBCRYPTO="Yes"
 else
 
-			if test "x${with_libidn}" != "xauto"; then :
+			if test "x${with_openssl}" != "xauto"; then :
 
-				as_fn_error $? "--with-libidn was specified but GNU libidn could not be found" "$LINENO" 5
+				as_fn_error $? "--with-openssl was specified but OpenSSL could not be found" "$LINENO" 5
 
 fi
 
@@ -9358,159 +9448,188 @@ fi
 
 fi
 
-	if test "x${LIBIDN}" = "xYes"; then :
+	if test "x${LIBCRYPTO}" = "xYes"; then :
 
-		if test "x${ac_cv_search_stringprep}" != "xnone required"; then :
-
-			LIBIDN_LIBS="${ac_cv_search_stringprep}"
-
-fi
-
-$as_echo "#define HAVE_LIBIDN 1" >>confdefs.h
-
-
-
-fi
-
-fi
-
-
-
-
-# Check whether --with-ldap was given.
-if test "${with_ldap+set}" = set; then :
-  withval=$with_ldap;
-else
-  with_ldap="auto"
-fi
-
-
-case "${with_ldap}" in
-	no | yes | auto)
-		;;
-	*)
-		as_fn_error $? "invalid option for --with-ldap" "$LINENO" 5
-		;;
-esac
-
-if test "x${with_ldap}" != "xno"; then :
-
-	# Thank autoconf and openldap developers for making me do all this stuff.
-	LDAP_CFLAGS=""
-	LDAP_LIBS=""
-	LDAP_AUTHC=""
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ldap_initialize in -lldap" >&5
-$as_echo_n "checking for ldap_initialize in -lldap... " >&6; }
-if ${ac_cv_lib_ldap_ldap_initialize+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lldap  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char ldap_initialize ();
-int
-main ()
-{
-return ldap_initialize ();
-  ;
-  return 0;
-}
+		for ac_header in openssl/ec.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "openssl/ec.h" "ac_cv_header_openssl_ec_h" "$ac_includes_default"
+if test "x$ac_cv_header_openssl_ec_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_OPENSSL_EC_H 1
 _ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_ldap_ldap_initialize=yes
-else
-  ac_cv_lib_ldap_ldap_initialize=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_ldap_ldap_initialize" >&5
-$as_echo "$ac_cv_lib_ldap_ldap_initialize" >&6; }
-if test "x$ac_cv_lib_ldap_ldap_initialize" = xyes; then :
 
-		LDAP_CFLAGS=""
-		LDAP_LIBS="-lldap"
-		LDAP_AUTHC="ldap.c"
+fi
+
+done
+
+		for ac_header in openssl/evp.h openssl/hmac.h openssl/sha.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
 
 else
 
-		unset ac_cv_lib_ldap_ldap_initialize
-		CFLAGS_SAVED="${CFLAGS}"
+			LIBCRYPTO="No"
+			if test "x${with_openssl}" = "xyes"; then :
+  as_fn_error $? "required header file missing" "$LINENO" 5
+fi
+
+fi
+
+done
+
+
+fi
+
+	if test "x${LIBCRYPTO}" = "xYes"; then :
+
+		if test "x${ac_cv_search_EVP_DigestUpdate}" != "xnone required"; then :
+
+			LIBCRYPTO_LIBS="${ac_cv_search_EVP_DigestUpdate}"
+
+fi
+
+$as_echo "#define HAVE_OPENSSL 1" >>confdefs.h
+
+
+
+fi
+
+
+
+	LIBPCRE="No"
+
+
+# Check whether --with-pcre was given.
+if test "${with_pcre+set}" = set; then :
+  withval=$with_pcre;
+else
+  with_pcre="auto"
+fi
+
+
+	case "${with_pcre}" in
+		no | yes | auto)
+			;;
+		*)
+			as_fn_error $? "invalid option for --with-pcre" "$LINENO" 5
+			;;
+	esac
+
+	if test "x${with_pcre}" != "xno"; then :
+
 		LIBS_SAVED="${LIBS}"
-		CFLAGS="${CFLAGS} -I/usr/local/include"
-		LIBS="${LIBS} -L/usr/local/lib"
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ldap_initialize in -lldap" >&5
-$as_echo_n "checking for ldap_initialize in -lldap... " >&6; }
-if ${ac_cv_lib_ldap_ldap_initialize+:} false; then :
-  $as_echo_n "(cached) " >&6
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for PCRE" >&5
+$as_echo_n "checking for PCRE... " >&6; }
+
+if test -n "$PCRE_CFLAGS"; then
+    pkg_cv_PCRE_CFLAGS="$PCRE_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libpcre") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_PCRE_CFLAGS=`$PKG_CONFIG --cflags "libpcre" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
 else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lldap  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char ldap_initialize ();
-int
-main ()
-{
-return ldap_initialize ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_ldap_ldap_initialize=yes
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$PCRE_LIBS"; then
+    pkg_cv_PCRE_LIBS="$PCRE_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libpcre") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_PCRE_LIBS=`$PKG_CONFIG --libs "libpcre" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
 else
-  ac_cv_lib_ldap_ldap_initialize=no
+  pkg_failed=yes
 fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_ldap_ldap_initialize" >&5
-$as_echo "$ac_cv_lib_ldap_ldap_initialize" >&6; }
-if test "x$ac_cv_lib_ldap_ldap_initialize" = xyes; then :
-
-			LDAP_CFLAGS="-I/usr/local/include"
-			LDAP_LIBS="-L/usr/local/lib -lldap"
-			LDAP_AUTHC="ldap.c"
-
+ else
+    pkg_failed=untried
 fi
 
-		CFLAGS="${CFLAGS_SAVED}"
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        PCRE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libpcre" 2>&1`
+        else
+	        PCRE_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libpcre" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$PCRE_PKG_ERRORS" >&5
+
+
+			if test "x${with_pcre}" != "xauto"; then :
+
+				as_fn_error $? "--with-pcre was specified but the PCRE library could not be found" "$LINENO" 5
+
+fi
+
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+			if test "x${with_pcre}" != "xauto"; then :
+
+				as_fn_error $? "--with-pcre was specified but the PCRE library could not be found" "$LINENO" 5
+
+fi
+
+else
+	PCRE_CFLAGS=$pkg_cv_PCRE_CFLAGS
+	PCRE_LIBS=$pkg_cv_PCRE_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	LIBPCRE="Yes"
+fi
+
 		LIBS="${LIBS_SAVED}"
 
 fi
 
+	if test "x${LIBPCRE}" = "xYes"; then :
+
+
+$as_echo "#define HAVE_PCRE 1" >>confdefs.h
+
+
+
 
 fi
 
-if test "x${with_ldap}" = "xyes" && test "x${LDAP_AUTHC}" = "x"; then :
-  as_fn_error $? "LDAP support was explicitly requested but could not be found" "$LINENO" 5
-fi
 
 
+	LIBPERL="No"
 
+	PERL_ENABLE=""
+	PERL_CFLAGS=""
+	PERL_LIBS=""
 
-
-
-
-LIBPERL="No"
 
 # Check whether --with-perl was given.
 if test "${with_perl+set}" = set; then :
@@ -9520,18 +9639,18 @@ else
 fi
 
 
+	case "${with_perl}" in
+		no | yes | auto)
+			;;
+		*)
+			as_fn_error $? "invalid option for --with-perl" "$LINENO" 5
+			;;
+	esac
 
-case "${with_perl}" in
-	no | yes | auto)
-		;;
-	*)
-		as_fn_error $? "invalid option for --with-perl" "$LINENO" 5
-		;;
-esac
+	if test "x${with_perl}" != "xno"; then :
 
-if test "x${with_perl}" != "xno"; then :
 
-  # Extract the first word of "perl", so it can be a program name with args.
+		# Extract the first word of "perl", so it can be a program name with args.
 set dummy perl; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
@@ -9572,25 +9691,151 @@ fi
 
 
 
-  if test -n "${perlpath}"; then
-      PERL_ENABLE="perl"
-      PERL_CFLAGS="$(perl -MExtUtils::Embed -e ccopts)"
-      PERL_LIBS="$(perl -MExtUtils::Embed -e ldopts)"
-      LIBPERL="Yes"
-  fi
+		if test -n "${perlpath}"
+		then
+			LIBPERL="Yes"
 
-    if test -n "$(echo "${PERL_LIBS}" | grep pthread)"; then
-     LIBS="${LIBS} -lpthread"
-  fi
+			PERL_ENABLE="perl"
+			PERL_CFLAGS="$(perl -MExtUtils::Embed -e ccopts)"
+			PERL_LIBS="$(perl -MExtUtils::Embed -e ldopts)"
+
+
+
+
+		fi
+
+				if test -n "$(echo "${PERL_LIBS}" | grep pthread)"
+		then
+			LIBS="${LIBS} -lpthread"
+		fi
 
 fi
 
-if test "x${with_perl}" = "xyes" && test "x${PERL_CFLAGS}" = "x"; then :
-  as_fn_error $? "Perl support was requested but Perl could not be found" "$LINENO" 5
+	if test "x${with_perl}x${PERL_CFLAGS}" = "xyesx"; then :
+
+		as_fn_error $? "Perl support was requested but Perl could not be found" "$LINENO" 5
+
 fi
 
 
 
+	LIBQRENCODE="No"
+
+	QRCODE_C=""
+
+
+# Check whether --with-qrencode was given.
+if test "${with_qrencode+set}" = set; then :
+  withval=$with_qrencode;
+else
+  with_qrencode="auto"
+fi
+
+
+	case "${with_qrencode}" in
+		no | yes | auto)
+			;;
+		*)
+			as_fn_error $? "invalid option for --with-qrencode" "$LINENO" 5
+			;;
+	esac
+
+	if test "x${with_qrencode}" != "xno"; then :
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBQRENCODE" >&5
+$as_echo_n "checking for LIBQRENCODE... " >&6; }
+
+if test -n "$LIBQRENCODE_CFLAGS"; then
+    pkg_cv_LIBQRENCODE_CFLAGS="$LIBQRENCODE_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libqrencode\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libqrencode") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBQRENCODE_CFLAGS=`$PKG_CONFIG --cflags "libqrencode" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$LIBQRENCODE_LIBS"; then
+    pkg_cv_LIBQRENCODE_LIBS="$LIBQRENCODE_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libqrencode\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libqrencode") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBQRENCODE_LIBS=`$PKG_CONFIG --libs "libqrencode" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        LIBQRENCODE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libqrencode" 2>&1`
+        else
+	        LIBQRENCODE_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libqrencode" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$LIBQRENCODE_PKG_ERRORS" >&5
+
+
+			LIBQRENCODE="No"
+			if test "x${with_qrencode}" = "xyes"; then :
+
+				as_fn_error $? "--with-qrencode was specified but libqrencode could not be found" "$LINENO" 5
+
+fi
+
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+			LIBQRENCODE="No"
+			if test "x${with_qrencode}" = "xyes"; then :
+
+				as_fn_error $? "--with-qrencode was specified but libqrencode could not be found" "$LINENO" 5
+
+fi
+
+else
+	LIBQRENCODE_CFLAGS=$pkg_cv_LIBQRENCODE_CFLAGS
+	LIBQRENCODE_LIBS=$pkg_cv_LIBQRENCODE_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+			LIBQRENCODE="Yes"
+			QRCODE_C="qrcode.c"
+
+
+$as_echo "#define HAVE_LIBQRENCODE 1" >>confdefs.h
+
+
+fi
+
+fi
 
 
 
@@ -13434,251 +13679,6 @@ LIBS="${LIBS} ${MOWGLI_LIBS}"
 
 
 
-
-
-
-LIBPCRE="No"
-
-# Check whether --with-pcre was given.
-if test "${with_pcre+set}" = set; then :
-  withval=$with_pcre;
-else
-  with_pcre="auto"
-fi
-
-
-case "${with_pcre}" in
-	no | yes | auto)
-		;;
-	*)
-		as_fn_error $? "invalid option for --with-pcre" "$LINENO" 5
-		;;
-esac
-
-if test "x${with_pcre}" != "xno"; then :
-
-
-	if test "x${with_pcre}" != "xno"; then :
-
-		LIBS_SAVED="${LIBS}"
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for PCRE" >&5
-$as_echo_n "checking for PCRE... " >&6; }
-
-if test -n "$PCRE_CFLAGS"; then
-    pkg_cv_PCRE_CFLAGS="$PCRE_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libpcre") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_PCRE_CFLAGS=`$PKG_CONFIG --cflags "libpcre" 2>/dev/null`
-		      test "x$?" != "x0" && pkg_failed=yes
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$PCRE_LIBS"; then
-    pkg_cv_PCRE_LIBS="$PCRE_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libpcre") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_PCRE_LIBS=`$PKG_CONFIG --libs "libpcre" 2>/dev/null`
-		      test "x$?" != "x0" && pkg_failed=yes
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        PCRE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libpcre" 2>&1`
-        else
-	        PCRE_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libpcre" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$PCRE_PKG_ERRORS" >&5
-
-
-			if test "x${with_pcre}" != "xauto"; then :
-
-				as_fn_error $? "--with-pcre was specified but the PCRE library could not be found" "$LINENO" 5
-
-fi
-
-elif test $pkg_failed = untried; then
-     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-			if test "x${with_pcre}" != "xauto"; then :
-
-				as_fn_error $? "--with-pcre was specified but the PCRE library could not be found" "$LINENO" 5
-
-fi
-
-else
-	PCRE_CFLAGS=$pkg_cv_PCRE_CFLAGS
-	PCRE_LIBS=$pkg_cv_PCRE_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	LIBPCRE="Yes"
-fi
-
-		LIBS="${LIBS_SAVED}"
-
-fi
-
-	if test "x${LIBPCRE}" = "xYes"; then :
-
-
-$as_echo "#define HAVE_PCRE 1" >>confdefs.h
-
-
-
-
-fi
-
-fi
-
-
-
-LIBQRENCODE="No"
-QRCODE_C=""
-
-# Check whether --with-qrencode was given.
-if test "${with_qrencode+set}" = set; then :
-  withval=$with_qrencode;
-else
-  with_qrencode="auto"
-fi
-
-
-case "${with_qrencode}" in
-	no | yes | auto)
-		;;
-	*)
-		as_fn_error $? "invalid option for --with-qrencode" "$LINENO" 5
-		;;
-esac
-
-if test "x${with_qrencode}" != "xno"; then :
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBQRENCODE" >&5
-$as_echo_n "checking for LIBQRENCODE... " >&6; }
-
-if test -n "$LIBQRENCODE_CFLAGS"; then
-    pkg_cv_LIBQRENCODE_CFLAGS="$LIBQRENCODE_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libqrencode\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libqrencode") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_LIBQRENCODE_CFLAGS=`$PKG_CONFIG --cflags "libqrencode" 2>/dev/null`
-		      test "x$?" != "x0" && pkg_failed=yes
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$LIBQRENCODE_LIBS"; then
-    pkg_cv_LIBQRENCODE_LIBS="$LIBQRENCODE_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libqrencode\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libqrencode") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_LIBQRENCODE_LIBS=`$PKG_CONFIG --libs "libqrencode" 2>/dev/null`
-		      test "x$?" != "x0" && pkg_failed=yes
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        LIBQRENCODE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libqrencode" 2>&1`
-        else
-	        LIBQRENCODE_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libqrencode" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$LIBQRENCODE_PKG_ERRORS" >&5
-
-
-		LIBQRENCODE="No"
-		if test "x${with_qrencode}" = "xyes"; then :
-
-			as_fn_error $? "--with-qrencode was specified but libqrencode could not be found" "$LINENO" 5
-
-fi
-
-elif test $pkg_failed = untried; then
-     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-		LIBQRENCODE="No"
-		if test "x${with_qrencode}" = "xyes"; then :
-
-			as_fn_error $? "--with-qrencode was specified but libqrencode could not be found" "$LINENO" 5
-
-fi
-
-else
-	LIBQRENCODE_CFLAGS=$pkg_cv_LIBQRENCODE_CFLAGS
-	LIBQRENCODE_LIBS=$pkg_cv_LIBQRENCODE_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-		LIBQRENCODE="Yes"
-		QRCODE_C="qrcode.c"
-
-
-$as_echo "#define HAVE_LIBQRENCODE 1" >>confdefs.h
-
-
-fi
-
-fi
 
 
 

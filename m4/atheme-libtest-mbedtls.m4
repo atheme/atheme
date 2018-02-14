@@ -1,5 +1,21 @@
 AC_DEFUN([ATHEME_LIBTEST_MBEDTLS], [
 
+	LIBMBEDCRYPTO="No"
+
+	LIBMBEDCRYPTO_LIBS=""
+
+	AC_ARG_WITH([mbedtls],
+		[AS_HELP_STRING([--with-mbedtls], [Compile with ARM mbedTLS support.])],
+		[], [with_mbedtls="auto"])
+
+	case "${with_mbedtls}" in
+		no | yes | auto)
+			;;
+		*)
+			AC_MSG_ERROR([invalid option for --with-mbedtls])
+			;;
+	esac
+
 	AS_IF([test "x${with_mbedtls}" != "xno"], [
 		LIBS_SAVED="${LIBS}"
 

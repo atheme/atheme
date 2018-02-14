@@ -1,5 +1,21 @@
 AC_DEFUN([ATHEME_LIBTEST_OPENSSL], [
 
+	LIBCRYPTO="No"
+
+	LIBCRYPTO_LIBS=""
+
+	AC_ARG_WITH([openssl],
+		[AS_HELP_STRING([--with-openssl], [Compile with OpenSSL to provide more functionality.])],
+		[], [with_openssl="auto"])
+
+	case "${with_openssl}" in
+		no | yes | auto)
+			;;
+		*)
+			AC_MSG_ERROR([invalid option for --with-openssl])
+			;;
+	esac
+
 	AS_IF([test "x${with_openssl}" != "xno"], [
 		LIBS_SAVED="${LIBS}"
 

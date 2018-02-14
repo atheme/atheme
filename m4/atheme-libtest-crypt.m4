@@ -1,5 +1,21 @@
 AC_DEFUN([ATHEME_LIBTEST_CRYPT], [
 
+	LIBCRYPT="No"
+
+	LIBCRYPT_LIBS=""
+
+	AC_ARG_WITH([crypt],
+		[AS_HELP_STRING([--with-crypt], [Compile with crypt(3) to provide modules/crypto/crypt3 modules.])],
+		[], [with_crypt="auto"])
+
+	case "${with_crypt}" in
+		no | yes | auto)
+			;;
+		*)
+			AC_MSG_ERROR([invalid option for --with-crypt])
+			;;
+	esac
+
 	AS_IF([test "x${with_crypt}" != "xno"], [
 		LIBS_SAVED="${LIBS}"
 

@@ -1,5 +1,22 @@
 AC_DEFUN([ATHEME_LIBTEST_CRACKLIB], [
 
+	LIBCRACKLIB="No"
+
+	CRACKLIB_C=""
+	CRACKLIB_LIBS=""
+
+	AC_ARG_WITH([cracklib],
+		[AS_HELP_STRING([--with-cracklib], [Compile NickServ cracklib module for checking password strength])],
+		[], [with_cracklib="auto"])
+
+	case "${with_cracklib}" in
+		no | yes | auto)
+			;;
+		*)
+			AC_MSG_ERROR([invalid option for --with-cracklib])
+			;;
+	esac
+
 	AS_IF([test "x${with_cracklib}" != "xno"], [
 		LIBS_SAVED="${LIBS}"
 

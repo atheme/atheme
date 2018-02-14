@@ -1,5 +1,21 @@
 AC_DEFUN([ATHEME_LIBTEST_IDN], [
 
+	LIBIDN="No"
+
+	LIBIDN_LIBS=""
+
+	AC_ARG_WITH([libidn],
+		[AS_HELP_STRING([--with-libidn], [Compile with GNU libidn for SASL SCRAM-SHA support.])],
+		[], [with_libidn="auto"])
+
+	case "${with_libidn}" in
+		no | yes | auto)
+			;;
+		*)
+			AC_MSG_ERROR([invalid option for --with-libidn])
+			;;
+	esac
+
 	AS_IF([test "x${with_libidn}" != "xno"], [
 		LIBS_SAVED="${LIBS}"
 
