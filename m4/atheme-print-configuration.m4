@@ -36,7 +36,7 @@ Configuration:
     Data Directory ..........: ${DATADIR}
     PID Directory ...........: ${RUNDIR}
 
-    Contrib Modules .........: ${CONTRIB}
+    Contrib Modules .........: ${CONTRIB_MODULES}
     Internationalization ....: ${USE_GETTEXT}
     Large Network Support ...: ${LARGE_NET}
     Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}

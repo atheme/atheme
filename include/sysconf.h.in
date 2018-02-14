@@ -250,7 +250,7 @@
 /* Define to 1 if you have the `__va_copy' function or macro. */
 #undef HAVE___VA_COPY
 
-/* Uncomment to enable large network support. */
+/* Enable large network support */
 #undef LARGE_NETWORK
 
 /* Name of package */
@@ -274,7 +274,7 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
-/* Uncomment to enable reproducible builds. */
+/* Enable reproducible builds */
 #undef REPRODUCIBLE_BUILDS
 
 /* Define to 1 if you have the ANSI C header files. */

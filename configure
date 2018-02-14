@@ -627,25 +627,25 @@ gt_needs=
 ac_header_list=
 enable_option_checking=no
 ac_subst_vars='LTLIBOBJS
-DIGEST_API_LIBS
-DIGEST_FRONTEND_C
 PODIR
 BUILDROOT
 LIBMOWGLI
 subdirs
 MOWGLI_LIBS
 MOWGLI_CFLAGS
-CONTRIB_ENABLE
-LOCALEDIR
+mkdir_p
 BUILDDIR
 ABSPATHS
-RUNDIR
-LOGDIR
-DATADIR
 SHAREDIR
+RUNDIR
 MODDIR
+LOGDIR
+LOCALEDIR
 DOCDIR
-mkdir_p
+DATADIR
+CONTRIB_ENABLE
+DIGEST_API_LIBS
+DIGEST_FRONTEND_C
 PERL_LIBS
 PERL_CFLAGS
 PERL_ENABLE
@@ -800,17 +800,17 @@ with_openssl
 with_pcre
 with_qrencode
 with_perl
-enable_fhs_paths
-enable_reproducible_builds
-enable_large_net
 enable_contrib
-enable_warnings
+enable_fhs_paths
+enable_large_net
+enable_reproducible_builds
 enable_propolice
+with_libmowgli
+enable_warnings
 enable_profile
 enable_relro
 enable_nonlazy_bind
 enable_as_needed
-with_libmowgli
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1445,21 +1445,22 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --disable-nls           do not use Native Language Support
   --disable-rpath         do not hardcode runtime library paths
-  --enable-fhs-paths      Use more FHS-like pathnames (for packagers)
-  --enable-reproducible-builds
-                          Enable reproducible builds.
-  --enable-large-net      Enable large network support.
   --enable-contrib        Enable contrib modules.
-  --enable-warnings       Enable compiler warnings
+  --enable-fhs-paths      Use more FHS-like pathnames (for packagers)
+  --enable-large-net      Enable large network support
+  --enable-reproducible-builds
+                          Enable reproducible builds
   --disable-propolice     Disable propolice protections (for debugging.)
+  --enable-warnings       Enable compiler warnings
   --enable-profile        Enable profiling extensions
-  --enable-relro          Enable -Wl,-z,relro to mark the relocation table
-                          read-only
-  --enable-nonlazy-bind   Enable -Wl,-z,now to resolve all symbols at startup
-                          time
-  --enable-as-needed      Enable -Wl,--as-needed to strip unnecessary
-                          libraries at link time
-  --disable-rpath         Disable use of -Wl,-rpath= during linking
+  --disable-relro         Disable -Wl,-z,relro (marks the relocation table
+                          read-only)
+  --disable-nonlazy-bind  Disable -Wl,-z,now (resolves all symbols at program
+                          startup time)
+  --disable-as-needed     Disable -Wl,--as-needed (strips unnecessary
+                          libraries at link time)
+  --disable-rpath         Disable -Wl,-rpath= (builds installation path into
+                          binaries)
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -7147,7 +7148,6 @@ $as_echo "#define HAVE_DCGETTEXT 1" >>confdefs.h
 
 LIBS="${LIBS} ${LIBINTL}"
 
-
 for ac_header in link.h
 do :
   ac_fn_c_check_header_mongrel "$LINENO" "link.h" "ac_cv_header_link_h" "$ac_includes_default"
@@ -9845,41 +9845,114 @@ fi
 
 
 
-mkdir_p="mkdir -p"
+	DIGEST_FRONTEND="Internal"
+
+	DIGEST_API_LIBS=""
+
+	DIGEST_FRONTEND_H="digest_fe_internal.h"
+	DIGEST_FRONTEND_C="digest_fe_internal.c"
+	DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_md5.c"
+	DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_sha1.c"
+	DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_sha2_256.c"
+	DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_sha2_512.c"
+
+	if test "x${DIGEST_FRONTEND}x${LIBMBEDCRYPTO}" = "xInternalxYes"; then :
+
+		DIGEST_API_LIBS="${LIBMBEDCRYPTO_LIBS}"
+		DIGEST_FRONTEND_H="digest_fe_mbedtls.h"
+		DIGEST_FRONTEND_C="digest_fe_mbedtls.c"
+		DIGEST_FRONTEND="ARM mbedTLS"
+
+fi
+
+	if test "x${DIGEST_FRONTEND}x${LIBNETTLE}" = "xInternalxYes"; then :
+
+		DIGEST_API_LIBS="${LIBNETTLE_LIBS}"
+		DIGEST_FRONTEND_H="digest_fe_nettle.h"
+		DIGEST_FRONTEND_C="digest_fe_nettle.c"
+		DIGEST_FRONTEND="Nettle"
+
+fi
+
+	if test "x${DIGEST_FRONTEND}x${LIBCRYPTO}" = "xInternalxYes"; then :
+
+		DIGEST_API_LIBS="${LIBCRYPTO_LIBS}"
+		DIGEST_FRONTEND_H="digest_fe_openssl.h"
+		DIGEST_FRONTEND_C="digest_fe_openssl.c"
+		DIGEST_FRONTEND="OpenSSL"
+
+fi
 
 
-DOCDIR='${prefix}/doc'
-MODDIR='${exec_prefix}'
-SHAREDIR='${prefix}'
-LOGDIR='${prefix}/var'
-DATADIR='${prefix}/etc'
-RUNDIR='${prefix}/var'
+cat >>confdefs.h <<_ACEOF
+#define DIGEST_FE_HEADER "${DIGEST_FRONTEND_H}"
+_ACEOF
 
-FHSPATHS="no"
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if you want FHS-like pathnames" >&5
-$as_echo_n "checking if you want FHS-like pathnames... " >&6; }
-# Check whether --enable-fhs-paths was given.
+
+
+
+
+
+
+	CONTRIB_MODULES="No"
+
+	CONTRIB_ENABLE=""
+
+	# Check whether --enable-contrib was given.
+if test "${enable_contrib+set}" = set; then :
+  enableval=$enable_contrib;
+else
+  enable_contrib="no"
+fi
+
+
+	case "${enable_contrib}" in
+		yes)
+			CONTRIB_MODULES="Yes"
+			CONTRIB_ENABLE="contrib"
+
+			;;
+		no)
+			CONTRIB_MODULES="No"
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-contrib" "$LINENO" 5
+			;;
+	esac
+
+
+
+	DATADIR='${prefix}/etc'
+	DOCDIR='${prefix}/doc'
+	LOCALEDIR='${datadir}/locale'
+	LOGDIR='${prefix}/var'
+	MODDIR='${exec_prefix}'
+	RUNDIR='${prefix}/var'
+	SHAREDIR='${prefix}'
+
+	# Check whether --enable-fhs-paths was given.
 if test "${enable_fhs_paths+set}" = set; then :
   enableval=$enable_fhs_paths;
-  case "${enableval}" in
-  yes)
-    FHSPATHS="yes"
-    DOCDIR='${datadir}/doc/atheme'
-    MODDIR='${libdir}/atheme'
-    SHAREDIR='${datadir}/atheme'
-    LOGDIR='${localstatedir}/log/atheme'
-    DATADIR='${localstatedir}/lib/atheme'
-    RUNDIR='${localstatedir}/run/atheme'
-    ;;
-  no)
-    FHSPATHS="no"
-    ;;
-  esac
-
+else
+  enable_fhs_paths="no"
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${FHSPATHS}" >&5
-$as_echo "${FHSPATHS}" >&6; }
+
+	case "${enable_fhs_paths}" in
+		yes)
+			DATADIR='${localstatedir}/lib/atheme'
+			DOCDIR='${datadir}/doc/atheme'
+			LOGDIR='${localstatedir}/log/atheme'
+			MODDIR='${libdir}/atheme'
+			RUNDIR='${localstatedir}/run/atheme'
+			SHAREDIR='${datadir}/atheme'
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-fhs-paths" "$LINENO" 5
+			;;
+	esac
 
 
 
@@ -9889,99 +9962,394 @@ $as_echo "${FHSPATHS}" >&6; }
 
 
 
-LOCALEDIR='${datadir}/locale'
 
 
 
 
-REPRODUCIBLE_BUILDS="No"
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if you want reproducible builds" >&5
-$as_echo_n "checking if you want reproducible builds... " >&6; }
-# Check whether --enable-reproducible-builds was given.
-if test "${enable_reproducible_builds+set}" = set; then :
-  enableval=$enable_reproducible_builds;
-  case "${enableval}" in
-  yes)
-    REPRODUCIBLE_BUILDS="Yes"
 
-$as_echo "#define REPRODUCIBLE_BUILDS 1" >>confdefs.h
+	LARGE_NET="No"
 
-    ;;
-  no)
-    REPRODUCIBLE_BUILDS="No"
-    ;;
-  esac
-
-fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${REPRODUCIBLE_BUILDS}" >&5
-$as_echo "${REPRODUCIBLE_BUILDS}" >&6; }
-
-
-
-LARGE_NET="No"
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if you want large network support" >&5
-$as_echo_n "checking if you want large network support... " >&6; }
-# Check whether --enable-large-net was given.
+	# Check whether --enable-large-net was given.
 if test "${enable_large_net+set}" = set; then :
   enableval=$enable_large_net;
-  case "${enableval}" in
-  yes)
-    LARGE_NET="Yes"
+else
+  enable_large_net="no"
+fi
+
+
+	case "${enable_large_net}" in
+		yes)
+			LARGE_NET="Yes"
 
 $as_echo "#define LARGE_NETWORK 1" >>confdefs.h
 
-    ;;
-  no)
-    LARGE_NET="No"
-    ;;
-  esac
-
-fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${LARGE_NET}" >&5
-$as_echo "${LARGE_NET}" >&6; }
+			;;
+		no)
+			LARGE_NET="No"
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-large-net" "$LINENO" 5
+			;;
+	esac
 
 
 
-CONTRIB="No"
-CONTRIB_ENABLE=""
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if you want contrib modules" >&5
-$as_echo_n "checking if you want contrib modules... " >&6; }
-# Check whether --enable-contrib was given.
-if test "${enable_contrib+set}" = set; then :
-  enableval=$enable_contrib;
-  case "${enableval}" in
-  yes)
-    CONTRIB="Yes"
-    ;;
-  no)
-    CONTRIB="No"
-    ;;
-  esac
+	REPRODUCIBLE_BUILDS="No"
 
-fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${CONTRIB}" >&5
-$as_echo "${CONTRIB}" >&6; }
-
-if test "x${CONTRIB}" = "xYes"; then
-	CONTRIB_ENABLE="contrib"
+	# Check whether --enable-reproducible-builds was given.
+if test "${enable_reproducible_builds+set}" = set; then :
+  enableval=$enable_reproducible_builds;
+else
+  enable_reproducible_builds="no"
 fi
 
 
+	case "${enable_reproducible_builds}" in
+		yes)
+			REPRODUCIBLE_BUILDS="Yes"
+
+$as_echo "#define REPRODUCIBLE_BUILDS 1" >>confdefs.h
+
+			;;
+		no)
+			REPRODUCIBLE_BUILDS="No"
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-reproducible-builds" "$LINENO" 5
+			;;
+	esac
 
 
 
-BUILD_WARNINGS="No"
-# Check whether --enable-warnings was given.
+
+mkdir_p="mkdir -p"
+
+
+
+
+# Check whether --enable-propolice was given.
+if test "${enable_propolice+set}" = set; then :
+  enableval=$enable_propolice;
+else
+  enable_propolice=no
+fi
+
+if test "x${enable_propolice}" = "xyes"; then :
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fno-stack-protector-all " >&5
+$as_echo_n "checking for C compiler flag(s) -fno-stack-protector-all ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -fno-stack-protector-all"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fno-pie " >&5
+$as_echo_n "checking for C compiler flag(s) -fno-pie ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -fno-pie"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -nonow " >&5
+$as_echo_n "checking for C compiler flag(s) -nonow ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -nonow"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -norelro " >&5
+$as_echo_n "checking for C compiler flag(s) -norelro ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -norelro"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+
+
+fi
+
+
+
+
+# Check whether --with-libmowgli was given.
+if test "${with_libmowgli+set}" = set; then :
+  withval=$with_libmowgli;
+else
+  with_libmowgli="yes"
+fi
+
+
+if test "x${with_libmowgli}" = "xyes"; then :
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for MOWGLI" >&5
+$as_echo_n "checking for MOWGLI... " >&6; }
+
+if test -n "$MOWGLI_CFLAGS"; then
+    pkg_cv_MOWGLI_CFLAGS="$MOWGLI_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmowgli-2 >= 2.0.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libmowgli-2 >= 2.0.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_MOWGLI_CFLAGS=`$PKG_CONFIG --cflags "libmowgli-2 >= 2.0.0" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$MOWGLI_LIBS"; then
+    pkg_cv_MOWGLI_LIBS="$MOWGLI_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmowgli-2 >= 2.0.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libmowgli-2 >= 2.0.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_MOWGLI_LIBS=`$PKG_CONFIG --libs "libmowgli-2 >= 2.0.0" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libmowgli-2 >= 2.0.0" 2>&1`
+        else
+	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libmowgli-2 >= 2.0.0" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$MOWGLI_PKG_ERRORS" >&5
+
+	with_libmowgli="no"
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+	with_libmowgli="no"
+else
+	MOWGLI_CFLAGS=$pkg_cv_MOWGLI_CFLAGS
+	MOWGLI_LIBS=$pkg_cv_MOWGLI_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	MOWGLI_SOURCE="System"
+fi
+
+fi
+
+
+
+if test "x${with_libmowgli}" = "xyes"; then :
+
+elif test "x${with_libmowgli}" = "xno"; then :
+
+	LIBMOWGLI="libmowgli-2"
+	MOWGLI_SOURCE="Internal"
+	subdirs="$subdirs libmowgli-2"
+
+
+	MOWGLI_CFLAGS="-I$(pwd)/libmowgli-2/src/libmowgli"
+	MOWGLI_LIBS="-L$(pwd)/libmowgli-2/src/libmowgli -lmowgli-2"
+
+else
+
+	MOWGLI_SOURCE="System"
+	MOWGLI_CFLAGS="-I${with_libmowgli}/include/libmowgli-2"
+	MOWGLI_LIBS="-L${with_libmowgli}/lib -lmowgli-2"
+
+fi
+
+CPPFLAGS="${CPPFLAGS} ${MOWGLI_CFLAGS}"
+LIBS="${LIBS} ${MOWGLI_LIBS}"
+
+
+
+
+
+
+
+BUILDROOT=`pwd`
+
+
+PODIR=""
+USE_GETTEXT="No"
+if test "x${USE_NLS}" = "xyes"; then
+	PODIR="po"
+	USE_GETTEXT="Yes"
+fi
+
+
+
+
+
+
+	BUILD_WARNINGS="No"
+
+	# Check whether --enable-warnings was given.
 if test "${enable_warnings+set}" = set; then :
   enableval=$enable_warnings;
 else
   enable_warnings="no"
 fi
 
-if test "x${enable_warnings}" = "xyes"; then :
+
+	if test "x${enable_warnings}" = "xyes"; then :
+
+		BUILD_WARNINGS="Yes"
 
 
 
@@ -10109,7 +10477,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 
-		if test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xyes"; then :
+	if test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xyes"; then :
 
 
 
@@ -12210,7 +12578,8 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 		unset CFLAGS_SAVED
 
 
-			if test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xno"; then :
+		if test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xno"; then :
+
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wstrict-overflow " >&5
 $as_echo_n "checking for C compiler flag(s) -Wstrict-overflow ... " >&6; }
@@ -12663,8 +13032,6 @@ fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 		unset CFLAGS_SAVED
-
-
 
 
 
@@ -13164,200 +13531,19 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 
-	BUILD_WARNINGS="Yes"
-
 fi
 
 
 
-# Check whether --enable-propolice was given.
-if test "${enable_propolice+set}" = set; then :
-  enableval=$enable_propolice;
-else
-  enable_propolice=no
-fi
-
-if test "x${enable_propolice}" = "xyes"; then :
-
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fno-stack-protector-all " >&5
-$as_echo_n "checking for C compiler flag(s) -fno-stack-protector-all ... " >&6; }
-
-		CFLAGS_SAVED="${CFLAGS}"
-		CFLAGS="${CFLAGS} -fno-stack-protector-all"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='no'
-				CFLAGS="${CFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		unset CFLAGS_SAVED
-
-
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fno-pie " >&5
-$as_echo_n "checking for C compiler flag(s) -fno-pie ... " >&6; }
-
-		CFLAGS_SAVED="${CFLAGS}"
-		CFLAGS="${CFLAGS} -fno-pie"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='no'
-				CFLAGS="${CFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		unset CFLAGS_SAVED
-
-
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -nonow " >&5
-$as_echo_n "checking for C compiler flag(s) -nonow ... " >&6; }
-
-		CFLAGS_SAVED="${CFLAGS}"
-		CFLAGS="${CFLAGS} -nonow"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='no'
-				CFLAGS="${CFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		unset CFLAGS_SAVED
-
-
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -norelro " >&5
-$as_echo_n "checking for C compiler flag(s) -norelro ... " >&6; }
-
-		CFLAGS_SAVED="${CFLAGS}"
-		CFLAGS="${CFLAGS} -norelro"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='no'
-				CFLAGS="${CFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		unset CFLAGS_SAVED
-
-
-
-
-fi
-
-
-
-# Check whether --enable-profile was given.
+	# Check whether --enable-profile was given.
 if test "${enable_profile+set}" = set; then :
   enableval=$enable_profile;
 else
-  enable_profile=no
+  enable_profile="no"
 fi
 
 
-# Check whether --enable-relro was given.
+	# Check whether --enable-relro was given.
 if test "${enable_relro+set}" = set; then :
   enableval=$enable_relro;
 else
@@ -13365,7 +13551,7 @@ else
 fi
 
 
-# Check whether --enable-nonlazy-bind was given.
+	# Check whether --enable-nonlazy-bind was given.
 if test "${enable_nonlazy_bind+set}" = set; then :
   enableval=$enable_nonlazy_bind;
 else
@@ -13373,7 +13559,7 @@ else
 fi
 
 
-# Check whether --enable-as-needed was given.
+	# Check whether --enable-as-needed was given.
 if test "${enable_as_needed+set}" = set; then :
   enableval=$enable_as_needed;
 else
@@ -13381,7 +13567,16 @@ else
 fi
 
 
-if test "x${enable_profile}" = "xyes"; then :
+	# Check whether --enable-rpath was given.
+if test "${enable_rpath+set}" = set; then :
+  enableval=$enable_rpath;
+else
+  enable_rpath="yes"
+fi
+
+
+	case "${enable_profile}" in
+		yes)
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -pg " >&5
 $as_echo_n "checking for C linker flag(s) -pg ... " >&6; }
@@ -13423,8 +13618,16 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 		unset LDFLAGS_SAVED
 
 
-fi
-if test "x${enable_relro}" = "xyes"; then :
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-profile" "$LINENO" 5
+			;;
+	esac
+
+	case "${enable_relro}" in
+		yes)
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,-z,relro " >&5
 $as_echo_n "checking for C linker flag(s) -Wl,-z,relro ... " >&6; }
@@ -13466,8 +13669,16 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 		unset LDFLAGS_SAVED
 
 
-fi
-if test "x${enable_nonlazy_bind}" = "xyes"; then :
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-relro" "$LINENO" 5
+			;;
+	esac
+
+	case "${enable_nonlazy_bind}" in
+		yes)
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,-z,now " >&5
 $as_echo_n "checking for C linker flag(s) -Wl,-z,now ... " >&6; }
@@ -13509,8 +13720,16 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 		unset LDFLAGS_SAVED
 
 
-fi
-if test "x${enable_as_needed}" = "xyes"; then :
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-nonlazy-bind" "$LINENO" 5
+			;;
+	esac
+
+	case "${enable_as_needed}" in
+		yes)
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,--as-needed " >&5
 $as_echo_n "checking for C linker flag(s) -Wl,--as-needed ... " >&6; }
@@ -13552,202 +13771,69 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 		unset LDFLAGS_SAVED
 
 
-fi
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-as-needed" "$LINENO" 5
+			;;
+	esac
+
+	case "${enable_rpath}" in
+		yes)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) ${LDFLAGS_RPATH} " >&5
+$as_echo_n "checking for C linker flag(s) ${LDFLAGS_RPATH} ... " >&6; }
+
+		LDFLAGS_SAVED="${LDFLAGS}"
+		LDFLAGS="${LDFLAGS} ${LDFLAGS_RPATH}"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
 
 
+int
+main ()
+{
 
-enablerpath="yes"
-# Check whether --enable-rpath was given.
-if test "${enable_rpath+set}" = set; then :
-  enableval=$enable_rpath; enablerpath="${enableval}"
-else
-  enablerpath="yes"
-fi
+  ;
+  return 0;
+}
 
-
-if test "x${enablerpath}" != "xyes"; then
-	LDFLAGS_RPATH=""
-fi
-
-
-
-
-# Check whether --with-libmowgli was given.
-if test "${with_libmowgli+set}" = set; then :
-  withval=$with_libmowgli;
-else
-  with_libmowgli="yes"
-fi
-
-
-if test "x${with_libmowgli}" = "xyes"; then :
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for MOWGLI" >&5
-$as_echo_n "checking for MOWGLI... " >&6; }
-
-if test -n "$MOWGLI_CFLAGS"; then
-    pkg_cv_MOWGLI_CFLAGS="$MOWGLI_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmowgli-2 >= 2.0.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libmowgli-2 >= 2.0.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_MOWGLI_CFLAGS=`$PKG_CONFIG --cflags "libmowgli-2 >= 2.0.0" 2>/dev/null`
-		      test "x$?" != "x0" && pkg_failed=yes
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$MOWGLI_LIBS"; then
-    pkg_cv_MOWGLI_LIBS="$MOWGLI_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmowgli-2 >= 2.0.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libmowgli-2 >= 2.0.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_MOWGLI_LIBS=`$PKG_CONFIG --libs "libmowgli-2 >= 2.0.0" 2>/dev/null`
-		      test "x$?" != "x0" && pkg_failed=yes
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libmowgli-2 >= 2.0.0" 2>&1`
-        else
-	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libmowgli-2 >= 2.0.0" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$MOWGLI_PKG_ERRORS" >&5
-
-	with_libmowgli="no"
-elif test $pkg_failed = untried; then
-     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-	with_libmowgli="no"
-else
-	MOWGLI_CFLAGS=$pkg_cv_MOWGLI_CFLAGS
-	MOWGLI_LIBS=$pkg_cv_MOWGLI_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	MOWGLI_SOURCE="System"
-fi
-
-fi
-
-
-
-if test "x${with_libmowgli}" = "xyes"; then :
-
-elif test "x${with_libmowgli}" = "xno"; then :
-
-	LIBMOWGLI="libmowgli-2"
-	MOWGLI_SOURCE="Internal"
-	subdirs="$subdirs libmowgli-2"
-
-
-	MOWGLI_CFLAGS="-I$(pwd)/libmowgli-2/src/libmowgli"
-	MOWGLI_LIBS="-L$(pwd)/libmowgli-2/src/libmowgli -lmowgli-2"
-
-else
-
-	MOWGLI_SOURCE="System"
-	MOWGLI_CFLAGS="-I${with_libmowgli}/include/libmowgli-2"
-	MOWGLI_LIBS="-L${with_libmowgli}/lib -lmowgli-2"
-
-fi
-
-CPPFLAGS="${CPPFLAGS} ${MOWGLI_CFLAGS}"
-LIBS="${LIBS} ${MOWGLI_LIBS}"
-
-
-
-
-
-
-
-BUILDROOT=`pwd`
-
-
-PODIR=""
-USE_GETTEXT="No"
-if test "x${USE_NLS}" = "xyes"; then
-	PODIR="po"
-	USE_GETTEXT="Yes"
-fi
-
-
-
-
-DIGEST_API_LIBS=""
-DIGEST_FRONTEND_H="digest_fe_internal.h"
-DIGEST_FRONTEND_C="digest_fe_internal.c"
-DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_md5.c"
-DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_sha1.c"
-DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_sha2_256.c"
-DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_sha2_512.c"
-DIGEST_FRONTEND="Internal"
-
-if test "x${DIGEST_FRONTEND}x${LIBMBEDCRYPTO}" = "xInternalxYes"; then :
-
-	DIGEST_API_LIBS="${LIBMBEDCRYPTO_LIBS}"
-	DIGEST_FRONTEND_H="digest_fe_mbedtls.h"
-	DIGEST_FRONTEND_C="digest_fe_mbedtls.c"
-	DIGEST_FRONTEND="ARM mbedTLS"
-
-fi
-
-if test "x${DIGEST_FRONTEND}x${LIBNETTLE}" = "xInternalxYes"; then :
-
-	DIGEST_API_LIBS="${LIBNETTLE_LIBS}"
-	DIGEST_FRONTEND_H="digest_fe_nettle.h"
-	DIGEST_FRONTEND_C="digest_fe_nettle.c"
-	DIGEST_FRONTEND="Nettle"
-
-fi
-
-if test "x${DIGEST_FRONTEND}x${LIBCRYPTO}" = "xInternalxYes"; then :
-
-	DIGEST_API_LIBS="${LIBCRYPTO_LIBS}"
-	DIGEST_FRONTEND_H="digest_fe_openssl.h"
-	DIGEST_FRONTEND_C="digest_fe_openssl.c"
-	DIGEST_FRONTEND="OpenSSL"
-
-fi
-
-
-cat >>confdefs.h <<_ACEOF
-#define DIGEST_FE_HEADER "${DIGEST_FRONTEND_H}"
 _ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
+				LDFLAGS="${LDFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset LDFLAGS_SAVED
 
 
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-rpath" "$LINENO" 5
+			;;
+	esac
 
 
 
 
 CPPFLAGS="${CPPFLAGS} -DPREFIX=\\\"\${prefix}\\\" -DBINDIR=\\\"\${bindir}\\\" -DLOCALEDIR=\\\"\${LOCALEDIR}\\\" -DMODDIR=\\\"\${MODDIR}\\\" -DSHAREDIR=\\\"${SHAREDIR}\\\" -DSYSCONFDIR=\\\"${sysconfdir}\\\" -DLOGDIR=\\\"${LOGDIR}\\\" -DRUNDIR=\\\"${RUNDIR}\\\" -DDATADIR=\\\"${DATADIR}\\\""
-LDFLAGS="${LDFLAGS} ${LDFLAGS_RPATH}"
 
 
 
@@ -15377,7 +15463,7 @@ Configuration:
     Data Directory ..........: ${DATADIR}
     PID Directory ...........: ${RUNDIR}
 
-    Contrib Modules .........: ${CONTRIB}
+    Contrib Modules .........: ${CONTRIB_MODULES}
     Internationalization ....: ${USE_GETTEXT}
     Large Network Support ...: ${LARGE_NET}
     Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}

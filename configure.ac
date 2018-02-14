@@ -63,9 +63,6 @@ dnl GNU gettext
 AM_GNU_GETTEXT([external])
 LIBS="${LIBS} ${LIBINTL}"
 
-dnl the following is wrong! -- jilles
-dnl AC_DEFINE_UNQUOTED([PREFIX], "${prefix}", [Installation prefix.])
-
 dnl Checks for header files.
 AC_CHECK_HEADERS([link.h], [], [], [])
 
@@ -126,128 +123,20 @@ ATHEME_LIBTEST_QRENCODE
 dnl Libraries that need to be explicitly enabled (alphabetical)
 ATHEME_LIBTEST_PERL
 
+dnl Digest frontend to use in libathemecore
+ATHEME_DECIDE_DIGEST_FRONTEND
+
+dnl Optional features
+ATHEME_FEATURETEST_CONTRIB
+ATHEME_FEATURETEST_FHSPATHS
+ATHEME_FEATURETEST_LARGENET
+ATHEME_FEATURETEST_REPROBUILDS
+
 
 
 dnl gettextize's Makefile.in wants this
 mkdir_p="mkdir -p"
 AC_SUBST([mkdir_p])
-
-DOCDIR='${prefix}/doc'
-MODDIR='${exec_prefix}'
-SHAREDIR='${prefix}'
-LOGDIR='${prefix}/var'
-DATADIR='${prefix}/etc'
-RUNDIR='${prefix}/var'
-
-FHSPATHS="no"
-AC_MSG_CHECKING([if you want FHS-like pathnames])
-AC_ARG_ENABLE([fhs-paths],
-AS_HELP_STRING([--enable-fhs-paths], [ Use more FHS-like pathnames (for packagers)]),
-[
-  case "${enableval}" in
-  yes)
-    FHSPATHS="yes"
-    DOCDIR='${datadir}/doc/atheme'
-    MODDIR='${libdir}/atheme'
-    SHAREDIR='${datadir}/atheme'
-    LOGDIR='${localstatedir}/log/atheme'
-    DATADIR='${localstatedir}/lib/atheme'
-    RUNDIR='${localstatedir}/run/atheme'
-    ;;
-  no)
-    FHSPATHS="no"
-    ;;
-  esac
-])
-AC_MSG_RESULT([${FHSPATHS}])
-AC_SUBST([DOCDIR])
-AC_SUBST([MODDIR])
-AC_SUBST([SHAREDIR])
-AC_SUBST([DATADIR])
-AC_SUBST([LOGDIR])
-AC_SUBST([RUNDIR])
-AC_SUBST([ABSPATHS])
-AC_SUBST([BUILDDIR])
-dnl the following is wrong! -- jilles
-dnl AC_DEFINE_UNQUOTED([MODDIR], "${MODDIR}", [Module root directory.])
-
-dnl gettext
-LOCALEDIR='${datadir}/locale'
-AC_SUBST([LOCALEDIR])
-
-
-
-REPRODUCIBLE_BUILDS="No"
-AC_MSG_CHECKING([if you want reproducible builds])
-AC_ARG_ENABLE([reproducible-builds],
-AS_HELP_STRING([--enable-reproducible-builds],[ Enable reproducible builds.]),
-[
-  case "${enableval}" in
-  yes)
-    REPRODUCIBLE_BUILDS="Yes"
-    AC_DEFINE([REPRODUCIBLE_BUILDS], [1], [Uncomment to enable reproducible builds.])
-    ;;
-  no)
-    REPRODUCIBLE_BUILDS="No"
-    ;;
-  esac
-])
-AC_MSG_RESULT([${REPRODUCIBLE_BUILDS}])
-
-
-
-LARGE_NET="No"
-AC_MSG_CHECKING([if you want large network support])
-AC_ARG_ENABLE([large-net],
-AS_HELP_STRING([--enable-large-net],[ Enable large network support.]),
-[
-  case "${enableval}" in
-  yes)
-    LARGE_NET="Yes"
-    AC_DEFINE([LARGE_NETWORK], [1], [Uncomment to enable large network support.])
-    ;;
-  no)
-    LARGE_NET="No"
-    ;;
-  esac
-])
-AC_MSG_RESULT([${LARGE_NET}])
-
-
-
-CONTRIB="No"
-CONTRIB_ENABLE=""
-AC_MSG_CHECKING([if you want contrib modules])
-AC_ARG_ENABLE([contrib],
-AS_HELP_STRING([--enable-contrib],[ Enable contrib modules.]),
-[
-  case "${enableval}" in
-  yes)
-    CONTRIB="Yes"
-    ;;
-  no)
-    CONTRIB="No"
-    ;;
-  esac
-])
-AC_MSG_RESULT([${CONTRIB}])
-
-if test "x${CONTRIB}" = "xYes"; then
-	CONTRIB_ENABLE="contrib"
-fi
-
-AC_SUBST([CONTRIB_ENABLE])
-
-
-
-BUILD_WARNINGS="No"
-AC_ARG_ENABLE([warnings],
-	[AS_HELP_STRING([--enable-warnings],[ Enable compiler warnings])],
-	[], [enable_warnings="no"])
-AS_IF([test "x${enable_warnings}" = "xyes"], [
-	ATHEME_CC_ENABLE_WARNINGS
-	BUILD_WARNINGS="Yes"
-])
 
 
 
@@ -262,40 +151,6 @@ AS_IF([test "x${enable_propolice}" = "xyes"],
 	ATHEME_CC_TEST_CFLAGS([-norelro])
 	]
 )
-
-
-
-AC_ARG_ENABLE([profile],
-	[AS_HELP_STRING([--enable-profile],[ Enable profiling extensions])],
-	[], [enable_profile=no])
-
-AC_ARG_ENABLE([relro],
-	[AS_HELP_STRING([--enable-relro], [Enable -Wl,-z,relro to mark the relocation table read-only])],
-	[], [enable_relro="yes"])
-
-AC_ARG_ENABLE([nonlazy-bind],
-	[AS_HELP_STRING([--enable-nonlazy-bind], [Enable -Wl,-z,now to resolve all symbols at startup time])],
-	[], [enable_nonlazy_bind="yes"])
-
-AC_ARG_ENABLE([as-needed],
-	[AS_HELP_STRING([--enable-as-needed], [Enable -Wl,--as-needed to strip unnecessary libraries at link time])],
-	[], [enable_as_needed="yes"])
-
-AS_IF([test "x${enable_profile}" = "xyes"], [ATHEME_LD_TEST_LDFLAGS([-pg])])
-AS_IF([test "x${enable_relro}" = "xyes"], [ATHEME_LD_TEST_LDFLAGS([-Wl,-z,relro])])
-AS_IF([test "x${enable_nonlazy_bind}" = "xyes"], [ATHEME_LD_TEST_LDFLAGS([-Wl,-z,now])])
-AS_IF([test "x${enable_as_needed}" = "xyes"], [ATHEME_LD_TEST_LDFLAGS([-Wl,--as-needed])])
-
-
-
-enablerpath="yes"
-AC_ARG_ENABLE([rpath],
-AS_HELP_STRING([--disable-rpath],[Disable use of -Wl,-rpath= during linking]),
-   [enablerpath="${enableval}"], [enablerpath="yes"])
-
-if test "x${enablerpath}" != "xyes"; then
-	LDFLAGS_RPATH=""
-fi
 
 
 
@@ -342,45 +197,13 @@ AC_SUBST([PODIR])
 
 
 
-dnl Digest interface to use
-DIGEST_API_LIBS=""
-DIGEST_FRONTEND_H="digest_fe_internal.h"
-DIGEST_FRONTEND_C="digest_fe_internal.c"
-DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_md5.c"
-DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_sha1.c"
-DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_sha2_256.c"
-DIGEST_FRONTEND_C="${DIGEST_FRONTEND_C} digest_be_sha2_512.c"
-DIGEST_FRONTEND="Internal"
-
-AS_IF([test "x${DIGEST_FRONTEND}x${LIBMBEDCRYPTO}" = "xInternalxYes"], [
-	DIGEST_API_LIBS="${LIBMBEDCRYPTO_LIBS}"
-	DIGEST_FRONTEND_H="digest_fe_mbedtls.h"
-	DIGEST_FRONTEND_C="digest_fe_mbedtls.c"
-	DIGEST_FRONTEND="ARM mbedTLS"
-])
-
-AS_IF([test "x${DIGEST_FRONTEND}x${LIBNETTLE}" = "xInternalxYes"], [
-	DIGEST_API_LIBS="${LIBNETTLE_LIBS}"
-	DIGEST_FRONTEND_H="digest_fe_nettle.h"
-	DIGEST_FRONTEND_C="digest_fe_nettle.c"
-	DIGEST_FRONTEND="Nettle"
-])
-
-AS_IF([test "x${DIGEST_FRONTEND}x${LIBCRYPTO}" = "xInternalxYes"], [
-	DIGEST_API_LIBS="${LIBCRYPTO_LIBS}"
-	DIGEST_FRONTEND_H="digest_fe_openssl.h"
-	DIGEST_FRONTEND_C="digest_fe_openssl.c"
-	DIGEST_FRONTEND="OpenSSL"
-])
-
-AC_DEFINE_UNQUOTED([DIGEST_FE_HEADER], ["${DIGEST_FRONTEND_H}"], [Front-end header for digest interface])
-AC_SUBST([DIGEST_FRONTEND_C])
-AC_SUBST([DIGEST_API_LIBS])
+dnl These must be here, not above, or they might interfere with library and feature tests
+ATHEME_FEATURETEST_WARNINGS
+ATHEME_FEATURETEST_LINKERFLAGS
 
 
 
 CPPFLAGS="${CPPFLAGS} -DPREFIX=\\\"\${prefix}\\\" -DBINDIR=\\\"\${bindir}\\\" -DLOCALEDIR=\\\"\${LOCALEDIR}\\\" -DMODDIR=\\\"\${MODDIR}\\\" -DSHAREDIR=\\\"${SHAREDIR}\\\" -DSYSCONFDIR=\\\"${sysconfdir}\\\" -DLOGDIR=\\\"${LOGDIR}\\\" -DRUNDIR=\\\"${RUNDIR}\\\" -DDATADIR=\\\"${DATADIR}\\\""
-LDFLAGS="${LDFLAGS} ${LDFLAGS_RPATH}"
 
 AC_SUBST([CPPFLAGS])
 AC_SUBST([LDFLAGS])
