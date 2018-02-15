@@ -28,7 +28,6 @@ extern void crypt_unregister(crypt_impl_t *impl);
 extern const crypt_impl_t *crypt_get_default_provider(void);
 extern const crypt_impl_t *crypt_verify_password(const char *password, const char *parameters, unsigned int *flags);
 extern const char *crypt_password(const char *password);
-extern const char *crypt_string(const char *password, const char *parameters);
 
 #endif
 

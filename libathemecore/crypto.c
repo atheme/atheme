@@ -166,11 +166,3 @@ crypt_password(const char *const restrict password)
 
 	return NULL;
 }
-
-const char *
-crypt_string(const char *const restrict password, const char __attribute__((unused)) *const restrict parameters)
-{
-	(void) slog(LG_DEBUG, "%s: this is provided for compatibility only; use crypt_password()", __func__);
-
-	return crypt_password(password);
-}
