@@ -29,7 +29,7 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 	/* Misc structs etc */
 	user_t *tu;
 	myuser_t *tmu;
-	mymemo_t *memo, *newmemo;
+	struct mymemo *memo, *newmemo;
 	mowgli_node_t *n, *temp;
 	unsigned int i = 1, memonum = 0;
 
@@ -149,8 +149,8 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 		if (i == memonum)
 		{
 			/* should have some function for send here...  ask nenolod*/
-			memo = (mymemo_t *)n->data;
-			newmemo = smalloc(sizeof(mymemo_t));
+			memo = (struct mymemo *)n->data;
+			newmemo = smalloc(sizeof(struct mymemo));
 
 			/* Create memo */
 			newmemo->sent = CURRTIME;

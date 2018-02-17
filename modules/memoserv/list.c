@@ -27,7 +27,7 @@ mod_deinit(const module_unload_intent_t intent)
 static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* Misc structs etc */
-	mymemo_t *memo;
+	struct mymemo *memo;
 	mowgli_node_t *n;
 	unsigned int i = 0;
 	char strfbuf[BUFSIZE];
@@ -50,7 +50,7 @@ static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	MOWGLI_ITER_FOREACH(n, si->smu->memos.head)
 	{
 		i++;
-		memo = (mymemo_t *)n->data;
+		memo = (struct mymemo *)n->data;
 		tm = *localtime(&memo->sent);
 
 		strftime(strfbuf, sizeof strfbuf,

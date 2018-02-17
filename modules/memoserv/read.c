@@ -30,7 +30,7 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* Misc structs etc */
 	myuser_t *tmu;
-	mymemo_t *memo, *receipt;
+	struct mymemo *memo, *receipt;
 	mowgli_node_t *n;
 	unsigned int i = 1, memonum = 0, numread = 0;
 	char strfbuf[BUFSIZE];
@@ -74,7 +74,7 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 	/* Go to reading memos */
 	MOWGLI_ITER_FOREACH(n, si->smu->memos.head)
 	{
-		memo = (mymemo_t *)n->data;
+		memo = (struct mymemo *)n->data;
 		if (i == memonum || (readnew && !(memo->status & MEMO_READ)))
 		{
 			tm = *localtime(&memo->sent);
@@ -99,7 +99,7 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 					if ( (tmu != NULL) && (tmu->memos.count < me.mdlimit) && strcasecmp(si->service->nick, memo->sender))
 					{
 						/* Malloc and populate memo struct */
-						receipt = smalloc(sizeof(mymemo_t));
+						receipt = smalloc(sizeof(struct mymemo));
 						receipt->sent = CURRTIME;
 						receipt->status = 0;
 						mowgli_strlcpy(receipt->sender, si->service->nick, sizeof receipt->sender);

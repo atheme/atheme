@@ -31,7 +31,7 @@ static void ms_cmd_sendall(sourceinfo_t *si, int parc, char *parv[])
 	/* misc structs etc */
 	myentity_t *mt;
 	mowgli_node_t *n;
-	mymemo_t *memo;
+	struct mymemo *memo;
 	int sent = 0, tried = 0;
 	bool ignored;
 	service_t *memoserv;
@@ -129,7 +129,7 @@ static void ms_cmd_sendall(sourceinfo_t *si, int parc, char *parv[])
 			continue;
 
 		/* Malloc and populate struct */
-		memo = smalloc(sizeof(mymemo_t));
+		memo = smalloc(sizeof(struct mymemo));
 		memo->sent = CURRTIME;
 		memo->status = MEMO_CHANNEL;
 		mowgli_strlcpy(memo->sender, entity(si->smu)->name, sizeof memo->sender);

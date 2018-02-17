@@ -34,7 +34,7 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 	mowgli_node_t *n, *tn;
 	unsigned int i = 0, delcount = 0, memonum = 0;
 	unsigned int deleteall = 0, deleteold = 0;
-	mymemo_t *memo;
+	struct mymemo *memo;
 	char *errptr = NULL;
 
 	/* We only take 1 arg, and we ignore all others */
@@ -91,7 +91,7 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, si->smu->memos.head)
 	{
 		i++;
-		memo = (mymemo_t*) n->data;
+		memo = (struct mymemo *) n->data;
 
 		if (i == memonum || deleteall ||
 				(deleteold && memo->status & MEMO_READ))

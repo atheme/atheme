@@ -195,7 +195,7 @@ void myuser_delete(myuser_t *mu)
 	mynick_t *mn;
 	user_t *u;
 	mowgli_node_t *n, *tn;
-	mymemo_t *memo;
+	struct mymemo *memo;
 	chanacs_t *ca;
 	char nicks[200];
 
@@ -280,7 +280,7 @@ void myuser_delete(myuser_t *mu)
 	/* delete memos */
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->memos.head)
 	{
-		memo = (mymemo_t *)n->data;
+		memo = (struct mymemo *)n->data;
 
 		mowgli_node_delete(n, &mu->memos);
 		mowgli_node_free(n);

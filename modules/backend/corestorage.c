@@ -106,7 +106,7 @@ corestorage_db_save(database_handle_t *db)
 
 		MOWGLI_ITER_FOREACH(tn, mu->memos.head)
 		{
-			mymemo_t *mz = (mymemo_t *)tn->data;
+			struct mymemo *mz = (struct mymemo *)tn->data;
 
 			db_start_row(db, "ME");
 			db_write_word(db, entity(mu)->name);
@@ -446,7 +446,7 @@ static void corestorage_h_me(database_handle_t *db, const char *type)
 	time_t sent;
 	unsigned int status;
 	myuser_t *mu;
-	mymemo_t *mz;
+	struct mymemo *mz;
 
 	dest = db_sread_word(db);
 	src = db_sread_word(db);

@@ -11,7 +11,6 @@
 #include "entity.h"
 
 typedef struct chanacs_ chanacs_t;
-typedef struct mymemo_ mymemo_t;
 typedef struct svsignore_ svsignore_t;
 
 /* kline list struct */
@@ -267,7 +266,8 @@ struct chanacs_
 #define SHRIKE_CA_SUCCESSOR     0x00000020U
 
 /* struct for account memos */
-struct mymemo_ {
+struct mymemo
+{
 	char	 sender[NICKLEN + 1];
 	char 	 text[MEMOLEN + 1];
 	time_t	 sent;

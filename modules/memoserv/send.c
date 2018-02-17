@@ -33,7 +33,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 	user_t *tu;
 	myuser_t *tmu;
 	mowgli_node_t *n;
-	mymemo_t *memo;
+	struct mymemo *memo;
 	command_t *cmd;
 	service_t *memoserv;
 
@@ -145,7 +145,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_SET, "SEND: to \2%s\2", entity(tmu)->name);
 
 		/* Malloc and populate struct */
-		memo = smalloc(sizeof(mymemo_t));
+		memo = smalloc(sizeof(struct mymemo));
 		memo->sent = CURRTIME;
 		memo->status = 0;
 		mowgli_strlcpy(memo->sender, entity(si->smu)->name, sizeof memo->sender);
