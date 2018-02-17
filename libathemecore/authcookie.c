@@ -29,7 +29,7 @@ mowgli_heap_t *authcookie_heap;
 
 void authcookie_init(void)
 {
-	authcookie_heap = sharedheap_get(sizeof(authcookie_t));
+	authcookie_heap = sharedheap_get(sizeof(struct authcookie));
 
 	if (!authcookie_heap)
 	{
@@ -50,9 +50,9 @@ void authcookie_init(void)
  * Side Effects:
  *       an authcookie ticket is created, and validated.
  */
-authcookie_t *authcookie_create(myuser_t *mu)
+struct authcookie *authcookie_create(myuser_t *mu)
 {
-	authcookie_t *au = mowgli_heap_alloc(authcookie_heap);
+	struct authcookie *au = mowgli_heap_alloc(authcookie_heap);
 
 	au->ticket = random_string(AUTHCOOKIE_LENGTH);
 	au->myuser = mu;
@@ -75,10 +75,10 @@ authcookie_t *authcookie_create(myuser_t *mu)
  * Side Effects:
  *       none
  */
-authcookie_t *authcookie_find(const char *ticket, myuser_t *myuser)
+struct authcookie *authcookie_find(const char *ticket, myuser_t *myuser)
 {
 	mowgli_node_t *n;
-	authcookie_t *ac;
+	struct authcookie *ac;
 
 	/* at least one must be specified */
 	return_val_if_fail(ticket != NULL || myuser != NULL, NULL);
@@ -130,7 +130,7 @@ authcookie_t *authcookie_find(const char *ticket, myuser_t *myuser)
  * Side Effects:
  *       an authcookie is destroyed
  */
-void authcookie_destroy(authcookie_t * ac)
+void authcookie_destroy(struct authcookie * ac)
 {
 	return_if_fail(ac != NULL);
 
@@ -154,7 +154,7 @@ void authcookie_destroy(authcookie_t * ac)
 void authcookie_destroy_all(myuser_t *mu)
 {
 	mowgli_node_t *n, *tn;
-	authcookie_t *ac;
+	struct authcookie *ac;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, authcookie_list.head)
 	{
@@ -179,7 +179,7 @@ void authcookie_destroy_all(myuser_t *mu)
  */
 void authcookie_expire(void *arg)
 {
-	authcookie_t *ac;
+	struct authcookie *ac;
 	mowgli_node_t *n, *tn;
 
 	(void)arg;
@@ -207,7 +207,7 @@ void authcookie_expire(void *arg)
  */
 bool authcookie_validate(const char *ticket, myuser_t *myuser)
 {
-	authcookie_t *ac = authcookie_find(ticket, myuser);
+	struct authcookie *ac = authcookie_find(ticket, myuser);
 
 	if (ac == NULL)
 		return false;

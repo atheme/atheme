@@ -222,7 +222,7 @@ static void xmlrpc_command_success_string(sourceinfo_t *si, const char *result, 
 static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
 {
 	myuser_t *mu;
-	authcookie_t *ac;
+	struct authcookie *ac;
 	const char *sourceip;
 
 	if (parc < 2)
@@ -295,7 +295,7 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
  */
 static int xmlrpcmethod_logout(void *conn, int parc, char *parv[])
 {
-	authcookie_t *ac;
+	struct authcookie *ac;
 	myuser_t *mu;
 
 	if (parc < 2)

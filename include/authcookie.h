@@ -10,9 +10,8 @@
 
 #define AUTHCOOKIE_LENGTH 20
 
-typedef struct authcookie_ authcookie_t;
-
-struct authcookie_ {
+struct authcookie
+{
 	char *ticket;
 	myuser_t *myuser;
 	time_t expire;
@@ -20,9 +19,9 @@ struct authcookie_ {
 };
 
 extern void authcookie_init(void);
-extern authcookie_t *authcookie_create(myuser_t *mu);
-extern authcookie_t *authcookie_find(const char *ticket, myuser_t *myuser);
-extern void authcookie_destroy(authcookie_t *ac);
+extern struct authcookie *authcookie_create(myuser_t *mu);
+extern struct authcookie *authcookie_find(const char *ticket, myuser_t *myuser);
+extern void authcookie_destroy(struct authcookie *ac);
 extern void authcookie_destroy_all(myuser_t *mu);
 extern bool authcookie_validate(const char *ticket, myuser_t *myuser);
 extern void authcookie_expire(void *arg);

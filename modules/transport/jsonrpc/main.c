@@ -119,7 +119,7 @@ jsonrpc_method_t get_json_method(const char *method_name) {
 static bool jsonrpcmethod_login(void *conn, mowgli_list_t *params, char *id)
 {
 	myuser_t *mu;
-	authcookie_t *ac;
+	struct authcookie *ac;
 	char *sourceip, *accountname, *password;
 
 	size_t len = MOWGLI_LIST_LENGTH(params);
@@ -203,7 +203,7 @@ static bool jsonrpcmethod_login(void *conn, mowgli_list_t *params, char *id)
 
 static bool jsonrpcmethod_logout(void *conn, mowgli_list_t *params, char *id)
 {
-	authcookie_t *ac;
+	struct authcookie *ac;
 	myuser_t *mu;
 	char *accountname;
 	char *cookie;
@@ -332,7 +332,7 @@ static bool jsonrpcmethod_command(void *conn, mowgli_list_t *params, char *id)
 	char *newparv[20];
 	struct httpddata *hd = ((connection_t *)conn)->userdata;
 
-	authcookie_t *ac;
+	struct authcookie *ac;
 	char *accountname, *cookie, *service, *command, *sourceip;
 
 	size_t len = MOWGLI_LIST_LENGTH(params);
