@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This code contains the channel mode definitions for ircnet ircd.
- *
  */
 
 #ifndef INC_PROTO_IRCNET_H

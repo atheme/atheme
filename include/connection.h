@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This contains the connection_t structure.
- *
  */
 
 #ifndef CONNECTION_H
@@ -111,9 +110,3 @@ extern connection_t *connection_find(int);
 extern mowgli_list_t connection_list;
 
 #endif
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

@@ -90,4 +90,5 @@ static inline void hs_sethost_all(myuser_t *mu, const char *host, const char *as
 	else
 		metadata_delete(mu, "private:usercloak-assigner");
 }
+
 #endif

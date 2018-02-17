@@ -4,7 +4,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This code contains the channel mode definitions for elemental-ircd.
- *
  */
 
 #ifndef INC_PROTO_ELEMENTAL_IRCD_H

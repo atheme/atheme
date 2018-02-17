@@ -30,9 +30,3 @@ extern const crypt_impl_t *crypt_verify_password(const char *password, const cha
 extern const char *crypt_password(const char *password);
 
 #endif
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

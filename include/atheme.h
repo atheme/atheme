@@ -3,7 +3,6 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * Includes most headers usually needed.
- *
  */
 
 #ifndef ATHEME_H
@@ -57,6 +56,3 @@
 #include "inline/connection.h"
 
 #endif /* ATHEME_H */
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs ts=8 sw=8 noexpandtab
- */

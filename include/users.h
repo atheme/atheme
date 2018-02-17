@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Data structures for connected clients.
- *
  */
 
 #ifndef USERS_H
@@ -98,9 +97,3 @@ extern void init_uid(void);
 extern const char *uid_get(void);
 
 #endif
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

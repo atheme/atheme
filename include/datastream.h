@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Datastream query stuff.
- *
  */
 
 #ifndef ATHEME_DATASTREAM_H
@@ -23,9 +22,3 @@ extern int recvq_getline(connection_t *cptr, char *buf, size_t len);
 extern void sendqrecvq_free(connection_t *cptr);
 
 #endif
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

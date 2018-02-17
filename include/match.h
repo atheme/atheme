@@ -4,7 +4,6 @@
  * Rights to this code are as defined in doc/LICENSE.
  *
  * String matching
- *
  */
 
 #ifndef ATHEME_MATCH_H
@@ -68,9 +67,3 @@ extern bool regex_match(atheme_regex_t *preg, char *string);
 extern bool regex_destroy(atheme_regex_t *preg);
 
 #endif
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

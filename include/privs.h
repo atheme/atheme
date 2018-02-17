@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Fine grained services operator privileges
- *
  */
 
 #ifndef PRIVS_H
@@ -122,9 +121,3 @@ extern const soper_t *get_sourceinfo_soper(sourceinfo_t *si);
 extern const operclass_t *get_sourceinfo_operclass(sourceinfo_t *si);
 
 #endif /* PRIVS_H */
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

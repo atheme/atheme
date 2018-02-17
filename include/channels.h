@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Data structures for channel information.
- *
  */
 
 #ifndef CHANNELS_H
@@ -182,9 +181,3 @@ extern chanban_t *chanban_find(channel_t *chan, const char *mask, int type);
 //inline void chanban_clear(channel_t *chan);
 
 #endif
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

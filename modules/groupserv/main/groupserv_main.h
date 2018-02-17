@@ -45,6 +45,4 @@ extern mowgli_list_t conf_gs_table;
 extern gflags_t ga_flags[];
 extern gflags_t mg_flags[];
 
-
-
 #endif

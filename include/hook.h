@@ -3,8 +3,8 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * A hook system.
- *
  */
+
 #ifndef HOOK_H
 #define HOOK_H
 
@@ -27,9 +27,3 @@ extern void hook_stop(void);
 extern void hook_continue(void *newptr);
 
 #endif
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

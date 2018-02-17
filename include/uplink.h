@@ -4,7 +4,6 @@
  *
  * Data structures related to our uplink.
  * Modules usually don't need this.
- *
  */
 
 #ifndef ATHEME_UPLINK_H
@@ -55,9 +54,3 @@ extern int sts(const char *fmt, ...) ATHEME_FATTR_PRINTF(1, 2);
 extern void io_loop(void);
 
 #endif
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

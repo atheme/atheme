@@ -48,9 +48,3 @@ extern size_t base64_encode_raw(const void *src, size_t srclength, char *target,
 extern size_t base64_decode(const char *src, void *target, size_t targsize) ATHEME_FATTR_WUR;
 
 #endif /* BASE64_H */
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

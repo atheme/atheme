@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Table rendering class.
- *
  */
 
 #ifndef ATHEME_TABLE_H

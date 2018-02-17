@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Message translation stuff.
- *
  */
 
 #ifndef CULTURE_H
@@ -27,9 +26,3 @@ extern bool language_is_valid(const language_t *lang);
 extern void language_set_active(language_t *lang);
 
 #endif
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

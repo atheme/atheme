@@ -30,4 +30,3 @@
 #define CMODE_NONOTICE      0x04000000      /* Cmode +T - No Notices to the Channel */
 
 #endif
-

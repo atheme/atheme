@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Defines needed by multiple header files.
- *
  */
 
 #ifndef COMMON_H
@@ -156,6 +155,3 @@ stringref strshare_ref(stringref str);
 void strshare_unref(stringref str);
 
 #endif
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs ts=8 sw=8 noexpandtab
- */

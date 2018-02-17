@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Predefined flags collections
- *
  */
 
 #ifndef TEMPLATE_H
@@ -24,9 +23,3 @@ extern void fix_global_template_flags(void);
 extern mowgli_patricia_t *global_template_dict;
 
 #endif /* TEMPLATE_H */
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

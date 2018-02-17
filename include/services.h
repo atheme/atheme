@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Data structures related to services psuedo-clients.
- *
  */
 
 #ifndef SERVICES_H
@@ -143,9 +142,3 @@ extern void command_success_qrcode(sourceinfo_t *si, const char *data);
 #endif /* HAVE_LIBQRENCODE */
 
 #endif /* !SERVICES_H */
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

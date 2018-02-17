@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Data structures for account information.
- *
  */
 
 #ifndef ACCOUNT_H
@@ -500,5 +499,3 @@ extern void svsignore_delete(svsignore_t *svsignore);
 #include "entity-validation.h"
 
 #endif
-
-// vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs ts=8 sw=8 noexpandtab

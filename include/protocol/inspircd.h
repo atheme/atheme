@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This code contains the channel mode definitions for InspIRCd.
- *
  */
 
 #ifndef INC_PROTO_INSPIRCD_H

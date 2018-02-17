@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Commandlist manipulation routines.
- *
  */
 
 #ifndef COMMANDLIST_H
@@ -41,9 +40,3 @@ extern void help_display_as_subcmd(sourceinfo_t *si, service_t *service, const c
 extern void logaudit_denycmd(sourceinfo_t *si, command_t *cmd, const char *userlevel);
 
 #endif
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

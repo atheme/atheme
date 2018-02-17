@@ -2,7 +2,6 @@
  * Copyright (c) 2014 Atheme Development Group
  *
  * JSONRPC library header
- *
  */
 
 #ifndef JSONRPC_H

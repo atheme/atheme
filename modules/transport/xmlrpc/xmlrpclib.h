@@ -3,8 +3,8 @@
  *                and Trystan Scott Lee <trystan@nomadirc.net>
  *
  * XMLRPC library header, hacked up for Atheme.
- *
  */
+
 #ifndef XMLRPC_H
 #define XMLRPC_H
 
@@ -77,9 +77,3 @@ extern char *xmlrpc_decode_string(char *buf);
 extern char *xmlrpc_normalizeBuffer(const char *buf);
 
 #endif
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

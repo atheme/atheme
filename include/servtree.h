@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Headers for service selection tree.
- *
  */
 
 #ifndef SERVTREE_H
@@ -67,9 +66,3 @@ extern void service_named_unbind_command(const char *, command_t *);
 extern void servtree_update(void *dummy);
 
 #endif
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

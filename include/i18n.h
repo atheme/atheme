@@ -3,7 +3,6 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This is the header which includes all of the internationalization stuff.
- *
  */
 
 #ifndef ATHEME_INTL_H

@@ -48,9 +48,3 @@ extern unsigned int xflag_apply(unsigned int in, const char *name);
 extern const char *xflag_tostr(unsigned int flags);
 
 #endif
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

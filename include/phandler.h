@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Protocol handlers, both generic and the actual declarations themselves.
- *
  */
 
 #ifndef PHANDLER_H
@@ -304,9 +303,3 @@ extern struct cmode_ *user_mode_list;
 extern ircd_t *ircd;
 
 #endif
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

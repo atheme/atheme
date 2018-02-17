@@ -4,7 +4,6 @@
  *
  * Protocol module stuff.
  * Modules usually do not need this.
- *
  */
 
 #ifndef PMODULE_H
@@ -67,9 +66,3 @@ extern void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp);
 extern void handle_clearlogin(sourceinfo_t *si, user_t *u);
 
 #endif
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

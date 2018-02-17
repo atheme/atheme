@@ -4,7 +4,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Global data
- *
  */
 
 #ifndef ATHEME_GLOBAL_H
@@ -200,9 +199,3 @@ extern void childproc_add(pid_t pid, const char *desc, void (*cb)(pid_t pid, int
 extern void childproc_delete_all(void (*cb)(pid_t pid, int status, void *data));
 
 #endif
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
