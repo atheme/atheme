@@ -63,7 +63,7 @@ mod_deinit(const module_unload_intent_t intent)
 static void os_akill_newuser(hook_user_nick_t *data)
 {
 	user_t *u = data->u;
-	kline_t *k;
+	struct kline *k;
 
 	/* If the user has been killed, don't do anything. */
 	if (!u)
@@ -120,7 +120,7 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 	char *treason, reason[BUFSIZE];
 	long duration;
 	char *s;
-	kline_t *k;
+	struct kline *k;
 
 	if (!target || !token)
 	{
@@ -298,7 +298,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 	char *userbuf, *hostbuf;
 	unsigned int number;
 	char *s;
-	kline_t *k;
+	struct kline *k;
 
 	if (!target)
 	{
@@ -453,7 +453,7 @@ static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[])
 	unsigned long num = 0;
 	bool full = false;
 	mowgli_node_t *n;
-	kline_t *k;
+	struct kline *k;
 
 	if (param != NULL)
 	{
@@ -492,7 +492,7 @@ static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[])
 		struct tm tm;
 		char settime[64];
 
-		k = (kline_t *)n->data;
+		k = (struct kline *)n->data;
 
 		tm = *localtime(&k->settime);
 		strftime(settime, sizeof settime, TIME_FORMAT, &tm);
@@ -529,13 +529,13 @@ static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[])
 static void os_cmd_akill_sync(sourceinfo_t *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
-	kline_t *k;
+	struct kline *k;
 
 	logcommand(si, CMDLOG_DO, "AKILL:SYNC");
 
 	MOWGLI_ITER_FOREACH(n, klnlist.head)
 	{
-		k = (kline_t *)n->data;
+		k = (struct kline *)n->data;
 
 
 		char reason[BUFSIZE];

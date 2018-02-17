@@ -62,9 +62,9 @@ int main(int argc, char *argv[])
 
 	printf("\n* * *\n\n");
 
-	printf("sizeof kline_t: %zu B --> %zu KB\n", sizeof(kline_t), (klinecount * sizeof(kline_t)) / 1024);
-	printf("sizeof xline_t: %zu B --> %zu KB\n", sizeof(xline_t), (xlinecount * sizeof(xline_t)) / 1024);
-	printf("sizeof qline_t: %zu B --> %zu KB\n", sizeof(qline_t), (qlinecount * sizeof(qline_t)) / 1024);
+	printf("sizeof kline_t: %zu B --> %zu KB\n", sizeof(struct kline), (klinecount * sizeof(struct kline)) / 1024);
+	printf("sizeof xline_t: %zu B --> %zu KB\n", sizeof(struct xline), (xlinecount * sizeof(struct xline)) / 1024);
+	printf("sizeof qline_t: %zu B --> %zu KB\n", sizeof(struct qline), (qlinecount * sizeof(struct qline)) / 1024);
 
 	printf("\n* * *\n\n");
 

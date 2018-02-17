@@ -13,14 +13,12 @@
 typedef struct mycertfp_ mycertfp_t;
 typedef struct myuser_name_ myuser_name_t;
 typedef struct chanacs_ chanacs_t;
-typedef struct kline_ kline_t;
-typedef struct xline_ xline_t;
-typedef struct qline_ qline_t;
 typedef struct mymemo_ mymemo_t;
 typedef struct svsignore_ svsignore_t;
 
 /* kline list struct */
-struct kline_ {
+struct kline
+{
   char *user;
   char *host;
   char *reason;
@@ -33,7 +31,8 @@ struct kline_ {
 };
 
 /* xline list struct */
-struct xline_ {
+struct xline
+{
   char *realname;
   char *reason;
   char *setby;
@@ -45,7 +44,8 @@ struct xline_ {
 };
 
 /* qline list struct */
-struct qline_ {
+struct qline
+{
   char *mask;
   char *reason;
   char *setby;
@@ -385,33 +385,33 @@ extern bool is_founder(mychan_t *mychan, myentity_t *myuser);
 /* node.c */
 extern mowgli_list_t klnlist;
 
-extern kline_t *kline_add_with_id(const char *user, const char *host, const char *reason, long duration, const char *setby, unsigned long id);
-extern kline_t *kline_add(const char *user, const char *host, const char *reason, long duration, const char *setby);
-extern kline_t *kline_add_user(user_t *user, const char *reason, long duration, const char *setby);
-extern void kline_delete(kline_t *k);
-extern kline_t *kline_find(const char *user, const char *host);
-extern kline_t *kline_find_num(unsigned long number);
-extern kline_t *kline_find_user(user_t *u);
+extern struct kline *kline_add_with_id(const char *user, const char *host, const char *reason, long duration, const char *setby, unsigned long id);
+extern struct kline *kline_add(const char *user, const char *host, const char *reason, long duration, const char *setby);
+extern struct kline *kline_add_user(user_t *user, const char *reason, long duration, const char *setby);
+extern void kline_delete(struct kline *k);
+extern struct kline *kline_find(const char *user, const char *host);
+extern struct kline *kline_find_num(unsigned long number);
+extern struct kline *kline_find_user(user_t *u);
 extern void kline_expire(void *arg);
 
 extern mowgli_list_t xlnlist;
 
-extern xline_t *xline_add(const char *realname, const char *reason, long duration, const char *setby);
+extern struct xline *xline_add(const char *realname, const char *reason, long duration, const char *setby);
 extern void xline_delete(const char *realname);
-extern xline_t *xline_find(const char *realname);
-extern xline_t *xline_find_num(unsigned int number);
-extern xline_t *xline_find_user(user_t *u);
+extern struct xline *xline_find(const char *realname);
+extern struct xline *xline_find_num(unsigned int number);
+extern struct xline *xline_find_user(user_t *u);
 extern void xline_expire(void *arg);
 
 extern mowgli_list_t qlnlist;
 
-extern qline_t *qline_add(const char *mask, const char *reason, long duration, const char *setby);
+extern struct qline *qline_add(const char *mask, const char *reason, long duration, const char *setby);
 extern void qline_delete(const char *mask);
-extern qline_t *qline_find(const char *mask);
-extern qline_t *qline_find_match(const char *mask);
-extern qline_t *qline_find_num(unsigned int number);
-extern qline_t *qline_find_user(user_t *u);
-extern qline_t *qline_find_channel(channel_t *c);
+extern struct qline *qline_find(const char *mask);
+extern struct qline *qline_find_match(const char *mask);
+extern struct qline *qline_find_num(unsigned int number);
+extern struct qline *qline_find_user(user_t *u);
+extern struct qline *qline_find_channel(channel_t *c);
 extern void qline_expire(void *arg);
 
 /* account.c */

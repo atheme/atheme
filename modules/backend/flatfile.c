@@ -19,9 +19,9 @@ static void flatfile_db_load(const char *filename)
 	myuser_t *mu, *founder = NULL;
 	myuser_name_t *mun;
 	mychan_t *mc;
-	kline_t *k;
-	xline_t *x;
-	qline_t *q;
+	struct kline *k;
+	struct xline *x;
+	struct qline *q;
 	svsignore_t *svsignore;
 	unsigned int versn = 0, i;
 	unsigned int linecnt = 0, muin = 0, mcin = 0, cain = 0, kin = 0, xin = 0, qin = 0;

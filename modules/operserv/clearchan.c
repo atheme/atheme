@@ -41,7 +41,7 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 	char reason[512];
 	int matches = 0;
 	int ignores = 0;
-	kline_t *k;
+	struct kline *k;
 
 	if (!actionstr || !targchan || !treason)
 	{

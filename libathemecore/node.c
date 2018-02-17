@@ -39,9 +39,9 @@ mowgli_heap_t *qline_heap;	/* 16 */
 
 void init_nodes(void)
 {
-	kline_heap = sharedheap_get(sizeof(kline_t));
-	xline_heap = sharedheap_get(sizeof(xline_t));
-	qline_heap = sharedheap_get(sizeof(qline_t));
+	kline_heap = sharedheap_get(sizeof(struct kline));
+	xline_heap = sharedheap_get(sizeof(struct xline));
+	qline_heap = sharedheap_get(sizeof(struct qline));
 
 	if (kline_heap == NULL || xline_heap == NULL || qline_heap == NULL)
 	{
@@ -119,9 +119,9 @@ void remove_illegals()
  * K L I N E *
  *************/
 
-kline_t *kline_add_with_id(const char *user, const char *host, const char *reason, long duration, const char *setby, unsigned long id)
+struct kline *kline_add_with_id(const char *user, const char *host, const char *reason, long duration, const char *setby, unsigned long id)
 {
-	kline_t *k;
+	struct kline *k;
 	mowgli_node_t *n = mowgli_node_create();
 
 	slog(LG_DEBUG, "kline_add(): %s@%s -> %s (%ld)", user, host, reason, duration);
@@ -151,19 +151,19 @@ kline_t *kline_add_with_id(const char *user, const char *host, const char *reaso
 	return k;
 }
 
-kline_t *kline_add(const char *user, const char *host, const char *reason, long duration, const char *setby)
+struct kline *kline_add(const char *user, const char *host, const char *reason, long duration, const char *setby)
 {
 	return kline_add_with_id(user, host, reason, duration, setby, ++me.kline_id);
 }
 
-kline_t *kline_add_user(user_t *u, const char *reason, long duration, const char *setby)
+struct kline *kline_add_user(user_t *u, const char *reason, long duration, const char *setby)
 {
 	bool use_ident = config_options.kline_with_ident && (!config_options.kline_verified_ident || *u->user != '~');
 
 	return kline_add (use_ident ? u->user : "*", u->ip ? u->ip : u->host, reason, duration, setby);
 }
 
-void kline_delete(kline_t *k)
+void kline_delete(struct kline *k)
 {
 	mowgli_node_t *n;
 
@@ -189,14 +189,14 @@ void kline_delete(kline_t *k)
 	cnt.kline--;
 }
 
-kline_t *kline_find(const char *user, const char *host)
+struct kline *kline_find(const char *user, const char *host)
 {
-	kline_t *k;
+	struct kline *k;
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, klnlist.head)
 	{
-		k = (kline_t *)n->data;
+		k = (struct kline *)n->data;
 
 		if ((!match(k->user, user)) && (!match(k->host, host)))
 			return k;
@@ -205,14 +205,14 @@ kline_t *kline_find(const char *user, const char *host)
 	return NULL;
 }
 
-kline_t *kline_find_num(unsigned long number)
+struct kline *kline_find_num(unsigned long number)
 {
-	kline_t *k;
+	struct kline *k;
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, klnlist.head)
 	{
-		k = (kline_t *)n->data;
+		k = (struct kline *)n->data;
 
 		if (k->number == number)
 			return k;
@@ -221,14 +221,14 @@ kline_t *kline_find_num(unsigned long number)
 	return NULL;
 }
 
-kline_t *kline_find_user(user_t *u)
+struct kline *kline_find_user(user_t *u)
 {
-	kline_t *k;
+	struct kline *k;
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, klnlist.head)
 	{
-		k = (kline_t *)n->data;
+		k = (struct kline *)n->data;
 
 		if (k->duration != 0 && k->expires <= CURRTIME)
 			continue;
@@ -241,13 +241,13 @@ kline_t *kline_find_user(user_t *u)
 
 void kline_expire(void *arg)
 {
-	kline_t *k;
+	struct kline *k;
 	char *reason;
 	mowgli_node_t *n, *tn;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, klnlist.head)
 	{
-		k = (kline_t *)n->data;
+		k = (struct kline *)n->data;
 
 		if (k->duration == 0)
 			continue;
@@ -272,9 +272,9 @@ void kline_expire(void *arg)
  * X L I N E *
  *************/
 
-xline_t *xline_add(const char *realname, const char *reason, long duration, const char *setby)
+struct xline *xline_add(const char *realname, const char *reason, long duration, const char *setby)
 {
-	xline_t *x;
+	struct xline *x;
 	mowgli_node_t *n = mowgli_node_create();
 	static unsigned int xcnt = 0;
 
@@ -302,7 +302,7 @@ xline_t *xline_add(const char *realname, const char *reason, long duration, cons
 
 void xline_delete(const char *realname)
 {
-	xline_t *x = xline_find(realname);
+	struct xline *x = xline_find(realname);
 	mowgli_node_t *n;
 
 	if (!x)
@@ -330,14 +330,14 @@ void xline_delete(const char *realname)
 	cnt.xline--;
 }
 
-xline_t *xline_find(const char *realname)
+struct xline *xline_find(const char *realname)
 {
-	xline_t *x;
+	struct xline *x;
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, xlnlist.head)
 	{
-		x = (xline_t *)n->data;
+		x = (struct xline *)n->data;
 
 		if (!match(x->realname, realname))
 			return x;
@@ -346,14 +346,14 @@ xline_t *xline_find(const char *realname)
 	return NULL;
 }
 
-xline_t *xline_find_num(unsigned int number)
+struct xline *xline_find_num(unsigned int number)
 {
-	xline_t *x;
+	struct xline *x;
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, xlnlist.head)
 	{
-		x = (xline_t *)n->data;
+		x = (struct xline *)n->data;
 
 		if (x->number == number)
 			return x;
@@ -362,14 +362,14 @@ xline_t *xline_find_num(unsigned int number)
 	return NULL;
 }
 
-xline_t *xline_find_user(user_t *u)
+struct xline *xline_find_user(user_t *u)
 {
-	xline_t *x;
+	struct xline *x;
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, xlnlist.head)
 	{
-		x = (xline_t *)n->data;
+		x = (struct xline *)n->data;
 
 		if (x->duration != 0 && x->expires <= CURRTIME)
 			continue;
@@ -383,12 +383,12 @@ xline_t *xline_find_user(user_t *u)
 
 void xline_expire(void *arg)
 {
-	xline_t *x;
+	struct xline *x;
 	mowgli_node_t *n, *tn;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, xlnlist.head)
 	{
-		x = (xline_t *)n->data;
+		x = (struct xline *)n->data;
 
 		if (x->duration == 0)
 			continue;
@@ -410,9 +410,9 @@ void xline_expire(void *arg)
  * Q L I N E *
  *************/
 
-qline_t *qline_add(const char *mask, const char *reason, long duration, const char *setby)
+struct qline *qline_add(const char *mask, const char *reason, long duration, const char *setby)
 {
-	qline_t *q;
+	struct qline *q;
 	mowgli_node_t *n = mowgli_node_create();
 	static unsigned int qcnt = 0;
 
@@ -439,7 +439,7 @@ qline_t *qline_add(const char *mask, const char *reason, long duration, const ch
 
 void qline_delete(const char *mask)
 {
-	qline_t *q = qline_find(mask);
+	struct qline *q = qline_find(mask);
 	mowgli_node_t *n;
 
 	if (!q)
@@ -467,14 +467,14 @@ void qline_delete(const char *mask)
 	cnt.qline--;
 }
 
-qline_t *qline_find(const char *mask)
+struct qline *qline_find(const char *mask)
 {
-	qline_t *q;
+	struct qline *q;
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, qlnlist.head)
 	{
-		q = (qline_t *)n->data;
+		q = (struct qline *)n->data;
 
 		if (!irccasecmp(q->mask, mask))
 			return q;
@@ -483,14 +483,14 @@ qline_t *qline_find(const char *mask)
 	return NULL;
 }
 
-qline_t *qline_find_match(const char *mask)
+struct qline *qline_find_match(const char *mask)
 {
-	qline_t *q;
+	struct qline *q;
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, qlnlist.head)
 	{
-		q = (qline_t *)n->data;
+		q = (struct qline *)n->data;
 
 		if (q->duration != 0 && q->expires <= CURRTIME)
 			continue;
@@ -501,14 +501,14 @@ qline_t *qline_find_match(const char *mask)
 	return NULL;
 }
 
-qline_t *qline_find_num(unsigned int number)
+struct qline *qline_find_num(unsigned int number)
 {
-	qline_t *q;
+	struct qline *q;
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, qlnlist.head)
 	{
-		q = (qline_t *)n->data;
+		q = (struct qline *)n->data;
 
 		if (q->number == number)
 			return q;
@@ -517,14 +517,14 @@ qline_t *qline_find_num(unsigned int number)
 	return NULL;
 }
 
-qline_t *qline_find_user(user_t *u)
+struct qline *qline_find_user(user_t *u)
 {
-	qline_t *q;
+	struct qline *q;
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, qlnlist.head)
 	{
-		q = (qline_t *)n->data;
+		q = (struct qline *)n->data;
 
 		if (q->duration != 0 && q->expires <= CURRTIME)
 			continue;
@@ -537,14 +537,14 @@ qline_t *qline_find_user(user_t *u)
 	return NULL;
 }
 
-qline_t *qline_find_channel(channel_t *c)
+struct qline *qline_find_channel(channel_t *c)
 {
-	qline_t *q;
+	struct qline *q;
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, qlnlist.head)
 	{
-		q = (qline_t *)n->data;
+		q = (struct qline *)n->data;
 
 		if (q->duration != 0 && q->expires <= CURRTIME)
 			continue;
@@ -557,12 +557,12 @@ qline_t *qline_find_channel(channel_t *c)
 
 void qline_expire(void *arg)
 {
-	qline_t *q;
+	struct qline *q;
 	mowgli_node_t *n, *tn;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, qlnlist.head)
 	{
-		q = (qline_t *)n->data;
+		q = (struct qline *)n->data;
 
 		if (q->duration == 0)
 			continue;

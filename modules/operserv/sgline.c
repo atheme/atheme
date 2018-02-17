@@ -70,7 +70,7 @@ mod_deinit(const module_unload_intent_t intent)
 static void os_sgline_newuser(hook_user_nick_t *data)
 {
 	user_t *u = data->u;
-	xline_t *x;
+	struct xline *x;
 
 	/* If the user has been killed, don't do anything. */
 	if (!u)
@@ -119,7 +119,7 @@ static void os_cmd_sgline_add(sourceinfo_t *si, int parc, char *parv[])
 	char *treason, reason[BUFSIZE];
 	long duration;
 	char *s;
-	xline_t *x;
+	struct xline *x;
 
 	if (!target || !token)
 	{
@@ -232,7 +232,7 @@ static void os_cmd_sgline_add(sourceinfo_t *si, int parc, char *parv[])
 static void os_cmd_sgline_del(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *target = parv[0];
-	xline_t *x;
+	struct xline *x;
 	unsigned int number;
 	char *s;
 
@@ -326,7 +326,7 @@ static void os_cmd_sgline_list(sourceinfo_t *si, int parc, char *parv[])
 	char *param = parv[0];
 	bool full = false;
 	mowgli_node_t *n;
-	xline_t *x;
+	struct xline *x;
 
 	if (param != NULL && !strcasecmp(param, "FULL"))
 		full = true;
@@ -338,7 +338,7 @@ static void os_cmd_sgline_list(sourceinfo_t *si, int parc, char *parv[])
 
 	MOWGLI_ITER_FOREACH(n, xlnlist.head)
 	{
-		x = (xline_t *)n->data;
+		x = (struct xline *)n->data;
 
 		if (x->duration && full)
 			command_success_nodata(si, _("%d: %s - by \2%s\2 - expires in \2%s\2 - (%s)"), x->number, x->realname, x->setby, timediff(x->expires > CURRTIME ? x->expires - CURRTIME : 0), x->reason);
@@ -357,13 +357,13 @@ static void os_cmd_sgline_list(sourceinfo_t *si, int parc, char *parv[])
 static void os_cmd_sgline_sync(sourceinfo_t *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
-	xline_t *x;
+	struct xline *x;
 
 	logcommand(si, CMDLOG_DO, "SGLINE:SYNC");
 
 	MOWGLI_ITER_FOREACH(n, xlnlist.head)
 	{
-		x = (xline_t *)n->data;
+		x = (struct xline *)n->data;
 
 		if (x->duration == 0)
 			xline_sts("*", x->realname, 0, x->reason);

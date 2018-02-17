@@ -37,9 +37,9 @@ corestorage_db_save(database_handle_t *db)
 	myuser_name_t *mun;
 	mychan_t *mc;
 	chanacs_t *ca;
-	kline_t *k;
-	xline_t *x;
-	qline_t *q;
+	struct kline *k;
+	struct xline *x;
+	struct qline *q;
 	svsignore_t *svsignore;
 	soper_t *soper;
 	mowgli_node_t *n, *tn;
@@ -304,7 +304,7 @@ corestorage_db_save(database_handle_t *db)
 
 	MOWGLI_ITER_FOREACH(n, klnlist.head)
 	{
-		k = (kline_t *)n->data;
+		k = (struct kline *)n->data;
 
 		/* KL <user> <host> <duration> <settime> <setby> <reason> */
 		db_start_row(db, "KL");
@@ -326,7 +326,7 @@ corestorage_db_save(database_handle_t *db)
 
 	MOWGLI_ITER_FOREACH(n, xlnlist.head)
 	{
-		x = (xline_t *)n->data;
+		x = (struct xline *)n->data;
 
 		/* XL <gecos> <duration> <settime> <setby> <reason> */
 		db_start_row(db, "XL");
@@ -345,7 +345,7 @@ corestorage_db_save(database_handle_t *db)
 
 	MOWGLI_ITER_FOREACH(n, qlnlist.head)
 	{
-		q = (qline_t *)n->data;
+		q = (struct qline *)n->data;
 
 		/* QL <mask> <duration> <settime> <setby> <reason> */
 		db_start_row(db, "QL");
@@ -823,7 +823,7 @@ static void corestorage_h_kl(database_handle_t *db, const char *type)
 	unsigned int id = 0;
 	time_t settime;
 	long duration;
-	kline_t *k;
+	struct kline *k;
 
 	if (dbv > 10)
 		id = db_sread_uint(db);
@@ -855,7 +855,7 @@ static void corestorage_h_xl(database_handle_t *db, const char *type)
 	unsigned int id = 0;
 	time_t settime;
 	long duration;
-	xline_t *x;
+	struct xline *x;
 
 	if (dbv > 10)
 		id = db_sread_uint(db);
@@ -889,7 +889,7 @@ static void corestorage_h_ql(database_handle_t *db, const char *type)
 	unsigned int id = 0;
 	time_t settime;
 	long duration;
-	qline_t *q;
+	struct qline *q;
 
 	if (dbv > 10)
 		id = db_sread_uint(db);

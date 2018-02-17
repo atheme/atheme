@@ -92,9 +92,9 @@ static void connection_stats_cb(const char *line, void *privdata)
 
 void handle_stats(user_t *u, char req)
 {
-	kline_t *k;
-	xline_t *x;
-	qline_t *q;
+	struct kline *k;
+	struct xline *x;
+	struct qline *q;
 	mowgli_node_t *n;
 	uplink_t *uplink;
 	soper_t *soper;
@@ -193,7 +193,7 @@ void handle_stats(user_t *u, char req)
 
 		  MOWGLI_ITER_FOREACH(n, klnlist.head)
 		  {
-			  k = (kline_t *)n->data;
+			  k = (struct kline *)n->data;
 
 			  numeric_sts(me.me, 216, u, "%c %s * %s :%s",
 					  k->duration ? 'k' : 'K',
@@ -280,7 +280,7 @@ void handle_stats(user_t *u, char req)
 
 		  MOWGLI_ITER_FOREACH(n, qlnlist.head)
 		  {
-			  q = (qline_t *)n->data;
+			  q = (struct qline *)n->data;
 
 			  numeric_sts(me.me, 217, u, "%c %d %s :%s",
 					  q->duration ? 'q' : 'Q',
@@ -297,7 +297,7 @@ void handle_stats(user_t *u, char req)
 
 		  MOWGLI_ITER_FOREACH(n, xlnlist.head)
 		  {
-			  x = (xline_t *)n->data;
+			  x = (struct xline *)n->data;
 
 			  numeric_sts(me.me, 247, u, "%c %d %s :%s",
 					  x->duration ? 'x' : 'X',
@@ -936,7 +936,7 @@ int floodcheck(user_t *u, user_t *t)
 
 			if (u->offenses == 2)
 			{
-				kline_t *k;
+				struct kline *k;
 
 				k = kline_add_user(u, "ten minute ban - flooding services", 600, chansvs.nick);
 

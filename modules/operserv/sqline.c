@@ -78,7 +78,7 @@ mod_deinit(const module_unload_intent_t intent)
 static void os_sqline_newuser(hook_user_nick_t *data)
 {
 	user_t *u = data->u;
-	qline_t *q;
+	struct qline *q;
 
 	/* If the user has been killed, don't do anything. */
 	if (!u)
@@ -99,7 +99,7 @@ static void os_sqline_newuser(hook_user_nick_t *data)
 static void os_sqline_chanjoin(hook_channel_joinpart_t *hdata)
 {
 	chanuser_t *cu = hdata->cu;
-	qline_t *q;
+	struct qline *q;
 
 	if (cu == NULL)
 		return;
@@ -147,7 +147,7 @@ static void os_cmd_sqline_add(sourceinfo_t *si, int parc, char *parv[])
 	char *treason, reason[BUFSIZE];
 	long duration;
 	char *s;
-	qline_t *q;
+	struct qline *q;
 
 	if (!target || !token)
 	{
@@ -263,7 +263,7 @@ static void os_cmd_sqline_add(sourceinfo_t *si, int parc, char *parv[])
 static void os_cmd_sqline_del(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *target = parv[0];
-	qline_t *q;
+	struct qline *q;
 	unsigned int number;
 	char *s;
 
@@ -416,7 +416,7 @@ static void os_cmd_sqline_list(sourceinfo_t *si, int parc, char *parv[])
 	char *param = parv[0];
 	bool full = false;
 	mowgli_node_t *n;
-	qline_t *q;
+	struct qline *q;
 
 	if (param != NULL && !strcasecmp(param, "FULL"))
 		full = true;
@@ -428,7 +428,7 @@ static void os_cmd_sqline_list(sourceinfo_t *si, int parc, char *parv[])
 
 	MOWGLI_ITER_FOREACH(n, qlnlist.head)
 	{
-		q = (qline_t *)n->data;
+		q = (struct qline *)n->data;
 
 		if (q->duration && full)
 			command_success_nodata(si, _("%d: %s - by \2%s\2 - expires in \2%s\2 - (%s)"), q->number, q->mask, q->setby, timediff(q->expires > CURRTIME ? q->expires - CURRTIME : 0), q->reason);
@@ -447,13 +447,13 @@ static void os_cmd_sqline_list(sourceinfo_t *si, int parc, char *parv[])
 static void os_cmd_sqline_sync(sourceinfo_t *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
-	qline_t *q;
+	struct qline *q;
 
 	logcommand(si, CMDLOG_DO, "SQLINE:SYNC");
 
 	MOWGLI_ITER_FOREACH(n, qlnlist.head)
 	{
-		q = (qline_t *)n->data;
+		q = (struct qline *)n->data;
 
 		if (q->duration == 0)
 			qline_sts("*", q->mask, 0, q->reason);

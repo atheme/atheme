@@ -501,7 +501,7 @@ static void check_dnsbls(hook_user_nick_t *data)
 static void dnsbl_hit(user_t *u, struct Blacklist *blptr)
 {
 	service_t *svs;
-	kline_t *k;
+	struct kline *k;
 
 	svs = service_find("operserv");
 
