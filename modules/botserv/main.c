@@ -1079,7 +1079,7 @@ static void on_shutdown(void *unused)
 
 static void bs_join(hook_channel_joinpart_t *hdata)
 {
-	chanuser_t *cu = hdata->cu;
+	struct chanuser *cu = hdata->cu;
 	struct channel *chan;
 	mychan_t *mc;
 	botserv_bot_t *bot;
@@ -1125,7 +1125,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 static void
 bs_part(hook_channel_joinpart_t *hdata)
 {
-	chanuser_t *cu;
+	struct chanuser *cu;
 	mychan_t *mc;
 	botserv_bot_t *bot;
 

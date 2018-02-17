@@ -98,7 +98,7 @@ static void os_sqline_newuser(hook_user_nick_t *data)
 
 static void os_sqline_chanjoin(hook_channel_joinpart_t *hdata)
 {
-	chanuser_t *cu = hdata->cu;
+	struct chanuser *cu = hdata->cu;
 	struct qline *q;
 
 	if (cu == NULL)

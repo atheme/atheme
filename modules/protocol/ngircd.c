@@ -708,7 +708,7 @@ static void m_away(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_join(sourceinfo_t *si, int parc, char *parv[])
 {
-	chanuser_t *cu;
+	struct chanuser *cu;
 	mowgli_node_t *n, *tn;
 	int chanc;
 	char *chanv[256];
@@ -719,7 +719,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 	{
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, si->su->channels.head)
 		{
-			cu = (chanuser_t *) n->data;
+			cu = (struct chanuser *) n->data;
 			chanuser_delete(cu->chan, si->su);
 		}
 	}

@@ -10,6 +10,7 @@
 
 // Types necessary for the hook system
 typedef struct channel channel_t;
+typedef struct chanuser chanuser_t;
 
 
 

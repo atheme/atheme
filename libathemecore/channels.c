@@ -46,7 +46,7 @@ mowgli_heap_t *chanban_heap;
 void init_channels(void)
 {
 	chan_heap = sharedheap_get(sizeof(struct channel));
-	chanuser_heap = sharedheap_get(sizeof(chanuser_t));
+	chanuser_heap = sharedheap_get(sizeof(struct chanuser));
 	chanban_heap = sharedheap_get(sizeof(chanban_t));
 
 	if (chan_heap == NULL || chanuser_heap == NULL || chanban_heap == NULL)
@@ -152,7 +152,7 @@ void channel_delete(struct channel *c)
 {
 	mychan_t *mc;
 	mowgli_node_t *n, *tn;
-	chanuser_t *cu;
+	struct chanuser *cu;
 
 	return_if_fail(c != NULL);
 
@@ -343,10 +343,10 @@ chanban_t *chanban_find(struct channel *chan, const char *mask, int type)
  * things. It worked fine for shrike, but the old code was restricted
  * to handling only @, @+ and + as prefixes.
  */
-chanuser_t *chanuser_add(struct channel *chan, const char *nick)
+struct chanuser *chanuser_add(struct channel *chan, const char *nick)
 {
 	user_t *u;
-	chanuser_t *cu, *tcu;
+	struct chanuser *cu, *tcu;
 	unsigned int flags = 0;
 	int i = 0;
 	hook_channel_joinpart_t hdata;
@@ -438,7 +438,7 @@ chanuser_t *chanuser_add(struct channel *chan, const char *nick)
  */
 void chanuser_delete(struct channel *chan, user_t *user)
 {
-	chanuser_t *cu;
+	struct chanuser *cu;
 	hook_channel_joinpart_t hdata;
 
 	return_if_fail(chan != NULL);
@@ -490,10 +490,10 @@ void chanuser_delete(struct channel *chan, user_t *user)
  * Side Effects:
  *     - none
  */
-chanuser_t *chanuser_find(struct channel *chan, user_t *user)
+struct chanuser *chanuser_find(struct channel *chan, user_t *user)
 {
 	mowgli_node_t *n;
-	chanuser_t *cu;
+	struct chanuser *cu;
 
 	return_val_if_fail(chan != NULL, NULL);
 	return_val_if_fail(user != NULL, NULL);
@@ -503,7 +503,7 @@ chanuser_t *chanuser_find(struct channel *chan, user_t *user)
 	{
 		MOWGLI_ITER_FOREACH(n, user->channels.head)
 		{
-			cu = (chanuser_t *)n->data;
+			cu = (struct chanuser *)n->data;
 
 			if (cu->chan == chan)
 				return cu;
@@ -513,7 +513,7 @@ chanuser_t *chanuser_find(struct channel *chan, user_t *user)
 	{
 		MOWGLI_ITER_FOREACH(n, chan->members.head)
 		{
-			cu = (chanuser_t *)n->data;
+			cu = (struct chanuser *)n->data;
 
 			if (cu->user == user)
 				return cu;

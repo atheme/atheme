@@ -45,7 +45,7 @@ static void cmd_protect(sourceinfo_t *si, bool protecting, int parc, char *parv[
 	char *nick = parv[1];
 	mychan_t *mc;
 	user_t *tu;
-	chanuser_t *cu;
+	struct chanuser *cu;
 	char *nicks;
 	bool protect;
 	mowgli_node_t *n;

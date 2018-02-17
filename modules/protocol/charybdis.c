@@ -102,7 +102,7 @@ static bool check_forward(const char *value, struct channel *c, mychan_t *mc, us
 {
 	struct channel *target_c;
 	mychan_t *target_mc;
-	chanuser_t *target_cu;
+	struct chanuser *target_cu;
 
 	if (!VALID_GLOBAL_CHANNEL_PFX(value) || strlen(value) > 50)
 		return false;

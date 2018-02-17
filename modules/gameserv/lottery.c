@@ -31,13 +31,13 @@ mod_deinit(const module_unload_intent_t intent)
 static user_t *pick_a_sucker(struct channel *c)
 {
 	int slot = arc4random_uniform(MOWGLI_LIST_LENGTH(&c->members));
-	chanuser_t *cu;
+	struct chanuser *cu;
 
-	cu = (chanuser_t *) mowgli_node_nth_data(&c->members, slot);
+	cu = (struct chanuser *) mowgli_node_nth_data(&c->members, slot);
 	while (cu != NULL && is_internal_client(cu->user))
 	{
 		slot = arc4random_uniform(MOWGLI_LIST_LENGTH(&c->members));
-		cu = (chanuser_t *) mowgli_node_nth_data(&c->members, slot);
+		cu = (struct chanuser *) mowgli_node_nth_data(&c->members, slot);
 	}
 
 	return cu != NULL ? cu->user : NULL;

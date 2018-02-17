@@ -211,7 +211,7 @@ void chanfix_gather(void *unused)
 
 		MOWGLI_ITER_FOREACH(n, ch->members.head)
 		{
-			chanuser_t *cu = n->data;
+			struct chanuser *cu = n->data;
 
 			if (cu->modes & CSTATUS_OP)
 			{

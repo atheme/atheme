@@ -110,7 +110,7 @@ enum devoice_result { DEVOICE_FAILED, DEVOICE_NO_ACTION, DEVOICE_DONE };
 static enum devoice_result
 devoice_user(sourceinfo_t *si, mychan_t *mc, struct channel *c, user_t *tu)
 {
-	chanuser_t *cu;
+	struct chanuser *cu;
 	unsigned int flag;
 	char buf[3];
 	enum devoice_result result = DEVOICE_NO_ACTION;
@@ -197,7 +197,7 @@ static void notify_one_victim(sourceinfo_t *si, struct channel *c, user_t *u, in
 static void notify_victims(sourceinfo_t *si, struct channel *c, chanban_t *cb, int dir)
 {
 	mowgli_node_t *n;
-	chanuser_t *cu;
+	struct chanuser *cu;
 	chanban_t tmpban;
 	mowgli_list_t ban_l = { NULL, NULL, 0 };
 	mowgli_node_t ban_n;

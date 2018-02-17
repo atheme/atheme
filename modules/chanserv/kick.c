@@ -36,7 +36,7 @@ static void cs_cmd_kick(sourceinfo_t *si, int parc, char *parv[])
 	char *reason = parv[2];
 	mychan_t *mc;
 	user_t *tu;
-	chanuser_t *cu;
+	struct chanuser *cu;
 	char reasonbuf[BUFSIZE];
 
 	if (!chan || !nick)
@@ -107,7 +107,7 @@ static void cs_cmd_kickban(sourceinfo_t *si, int parc, char *parv[])
 	char *reason = parv[2];
 	mychan_t *mc;
 	user_t *tu;
-	chanuser_t *cu;
+	struct chanuser *cu;
 	char reasonbuf[BUFSIZE];
 	int n;
 

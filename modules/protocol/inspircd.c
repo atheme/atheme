@@ -915,7 +915,7 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 
 	if (ts < c->ts)
 	{
-		chanuser_t *cu;
+		struct chanuser *cu;
 		mowgli_node_t *n;
 
 		/* the TS changed.  a TS change requires us to do
@@ -933,7 +933,7 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 		 */
 		MOWGLI_ITER_FOREACH(n, c->members.head)
 		{
-			cu = (chanuser_t *)n->data;
+			cu = (struct chanuser *)n->data;
 			if (cu->user->server == me.me)
 			{
 				/* it's a service, reop */

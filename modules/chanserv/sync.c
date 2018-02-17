@@ -14,7 +14,7 @@ command_t cs_sync = { "SYNC", "Forces channel statuses to flags.",
 
 static bool no_vhost_sync = false;
 
-static void do_chanuser_sync(mychan_t *mc, chanuser_t *cu, chanacs_t *ca,
+static void do_chanuser_sync(mychan_t *mc, struct chanuser *cu, chanacs_t *ca,
 		bool take)
 {
 	char akickreason[120] = "User is banned from this channel", *p;
@@ -215,7 +215,7 @@ static void do_chanuser_sync(mychan_t *mc, chanuser_t *cu, chanacs_t *ca,
 
 void do_channel_sync(mychan_t *mc, chanacs_t *ca)
 {
-	chanuser_t *cu;
+	struct chanuser *cu;
 	mowgli_node_t *n, *tn;
 
 	return_if_fail(mc != NULL);
@@ -224,7 +224,7 @@ void do_channel_sync(mychan_t *mc, chanacs_t *ca)
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chan->members.head)
 	{
-		cu = (chanuser_t *)n->data;
+		cu = (struct chanuser *)n->data;
 
 		do_chanuser_sync(mc, cu, ca, true);
 	}
@@ -242,7 +242,7 @@ static void sync_user(user_t *u)
 
 	MOWGLI_ITER_FOREACH(iter, u->channels.head)
 	{
-		chanuser_t *cu = iter->data;
+		struct chanuser *cu = iter->data;
 		mychan_t *mc;
 
 		mc = mychan_from(cu->chan);

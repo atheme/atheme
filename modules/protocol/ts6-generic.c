@@ -721,7 +721,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (ts < c->ts)
 	{
-		chanuser_t *cu;
+		struct chanuser *cu;
 		mowgli_node_t *n;
 
 		/* the TS changed.  a TS change requires the following things
@@ -739,7 +739,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 
 		MOWGLI_ITER_FOREACH(n, c->members.head)
 		{
-			cu = (chanuser_t *)n->data;
+			cu = (struct chanuser *)n->data;
 			if (cu->user->server == me.me)
 			{
 				/* it's a service, reop */
@@ -789,7 +789,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 	bool keep_new_modes = true;
 	mowgli_node_t *n, *tn;
 	struct channel *c;
-	chanuser_t *cu;
+	struct chanuser *cu;
 	time_t ts;
 
 	/* JOIN 0 is really a part from all channels */
@@ -798,7 +798,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 	{
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, si->su->channels.head)
 		{
-			cu = (chanuser_t *)n->data;
+			cu = (struct chanuser *)n->data;
 			chanuser_delete(cu->chan, si->su);
 		}
 		return;
@@ -832,7 +832,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 
 		MOWGLI_ITER_FOREACH(n, c->members.head)
 		{
-			cu = (chanuser_t *)n->data;
+			cu = (struct chanuser *)n->data;
 			if (cu->user->server == me.me)
 			{
 				/* it's a service, reop */

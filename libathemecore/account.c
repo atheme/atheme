@@ -1025,7 +1025,7 @@ bool mychan_isused(mychan_t *mc)
 {
 	mowgli_node_t *n;
 	struct channel *c;
-	chanuser_t *cu;
+	struct chanuser *cu;
 
 	return_val_if_fail(mc != NULL, false);
 

@@ -336,7 +336,7 @@ static mowgli_eventloop_timer_t *antiflood_unenforce_timer = NULL;
 static void
 on_channel_message(hook_cmessage_data_t *data)
 {
-	chanuser_t *cu;
+	struct chanuser *cu;
 	mychan_t *mc;
 	mqueue_t *mq;
 	msg_t *msg;

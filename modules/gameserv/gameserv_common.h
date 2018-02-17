@@ -36,7 +36,7 @@ gs_command_report(sourceinfo_t *si, const char *fmt, ...)
 static inline bool gs_do_parameters(sourceinfo_t *si, int *parc, char ***parv, mychan_t **pmc)
 {
 	mychan_t *mc;
-	chanuser_t *cu;
+	struct chanuser *cu;
 	metadata_t *md;
 	const char *who;
 	bool allow;

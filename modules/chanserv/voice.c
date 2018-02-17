@@ -40,7 +40,7 @@ static void cmd_voice(sourceinfo_t *si, bool voicing, int parc, char *parv[])
 	bool voice;
 	mychan_t *mc;
 	user_t *tu;
-	chanuser_t *cu;
+	struct chanuser *cu;
 	mowgli_node_t *n;
 
 	mc = mychan_find(chan);

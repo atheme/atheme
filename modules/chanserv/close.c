@@ -33,7 +33,7 @@ mod_deinit(const module_unload_intent_t intent)
 static void close_check_join(hook_channel_joinpart_t *data)
 {
 	mychan_t *mc;
-	chanuser_t *cu = data->cu;
+	struct chanuser *cu = data->cu;
 
 	if (cu == NULL || is_internal_client(cu->user))
 		return;
@@ -66,7 +66,7 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 	char *reason = parv[2];
 	mychan_t *mc;
 	struct channel *c;
-	chanuser_t *cu;
+	struct chanuser *cu;
 	mowgli_node_t *n, *tn;
 
 	if (!target || !action)
@@ -121,7 +121,7 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 			/* clear the channel */
 			MOWGLI_ITER_FOREACH_SAFE(n, tn, c->members.head)
 			{
-				cu = (chanuser_t *)n->data;
+				cu = (struct chanuser *)n->data;
 
 				if (!is_internal_client(cu->user))
 					kick(chansvs.me->me, c, cu->user, "This channel has been closed");

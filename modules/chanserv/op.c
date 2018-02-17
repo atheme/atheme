@@ -38,7 +38,7 @@ static void cmd_op(sourceinfo_t *si, bool opping, int parc, char *parv[])
 	char *nick = parv[1];
 	mychan_t *mc;
 	user_t *tu;
-	chanuser_t *cu;
+	struct chanuser *cu;
 	char *nicks;
 	bool op;
 	mowgli_node_t *n;

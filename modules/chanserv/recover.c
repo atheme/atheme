@@ -26,7 +26,7 @@ mod_deinit(const module_unload_intent_t intent)
 
 static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 {
-	chanuser_t *cu, *origin_cu = NULL;
+	struct chanuser *cu, *origin_cu = NULL;
 	mychan_t *mc;
 	mowgli_node_t *n, *tn;
 	chanban_t *cb;
@@ -84,7 +84,7 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 	/* deop everyone */
 	MOWGLI_ITER_FOREACH(n, mc->chan->members.head)
 	{
-		cu = (chanuser_t *)n->data;
+		cu = (struct chanuser *)n->data;
 
 		if (cu->user == si->su)
 			origin_cu = cu;

@@ -45,7 +45,7 @@ static void cmd_halfop(sourceinfo_t *si, bool halfopping, int parc, char *parv[]
 	char *nick = parv[1];
 	mychan_t *mc;
 	user_t *tu;
-	chanuser_t *cu;
+	struct chanuser *cu;
 	char *nicks;
 	bool halfop;
 	mowgli_node_t *n;

@@ -494,7 +494,7 @@ handle_channel_message(sourceinfo_t *si, char *target, bool is_notice, char *mes
 
 	MOWGLI_ITER_FOREACH(n, cdata.c->members.head)
 	{
-		chanuser_t *cu = (chanuser_t *) n->data;
+		struct chanuser *cu = (struct chanuser *) n->data;
 
 		if (!is_internal_client(cu->user))
 			continue;

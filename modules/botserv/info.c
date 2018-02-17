@@ -44,7 +44,7 @@ static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	time_t registered;
 	struct tm tm;
 	mowgli_node_t *n;
-	chanuser_t *cu;
+	struct chanuser *cu;
 
 	if (parc < 1 || parv[0] == NULL)
 	{
@@ -82,7 +82,7 @@ static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 			i = 0;
 			MOWGLI_ITER_FOREACH(n, bot->me->me->channels.head)
 			{
-				cu = (chanuser_t *)n->data;
+				cu = (struct chanuser *)n->data;
 				command_success_nodata(si, _("%d: %s"), ++i, cu->chan->name);
 			}
 		}

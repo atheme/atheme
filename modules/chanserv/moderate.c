@@ -205,7 +205,7 @@ static void cs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 	myuser_t *mu;
 	mychan_t *mc;
 	csreq_t *cs;
-	chanuser_t *cu;
+	struct chanuser *cu;
 	user_t *u;
 	struct channel *c;
 	char str[BUFSIZE];

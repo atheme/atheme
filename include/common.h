@@ -97,7 +97,6 @@ typedef struct user_ user_t;
 
 typedef struct server_ server_t;
 
-typedef struct chanuser_ chanuser_t;
 typedef struct chanban_ chanban_t;
 
 typedef struct operclass_ operclass_t;

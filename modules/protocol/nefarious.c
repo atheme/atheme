@@ -253,7 +253,7 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (ts < c->ts)
 	{
-		chanuser_t *cu;
+		struct chanuser *cu;
 		mowgli_node_t *n;
 
 		clear_simple_modes(c);
@@ -261,7 +261,7 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 		handle_topic_from(si, c, "", 0, "");
 		MOWGLI_ITER_FOREACH(n, c->members.head)
 		{
-			cu = (chanuser_t *)n->data;
+			cu = (struct chanuser *)n->data;
 			if (cu->user->server == me.me)
 			{
 				/* it's a service, reop */
@@ -520,7 +520,7 @@ static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 	struct channel *chan;
 	char *p, c;
 	mowgli_node_t *n, *tn;
-	chanuser_t *cu;
+	struct chanuser *cu;
 	int i;
 
 	/* -> ABAAA CM # b */
@@ -562,7 +562,7 @@ static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 		{
 			MOWGLI_ITER_FOREACH(n, chan->members.head)
 			{
-				cu = (chanuser_t *)n->data;
+				cu = (struct chanuser *)n->data;
 				if (cu->user->server == me.me)
 				{
 					/* it's a service, reop */
@@ -578,7 +578,7 @@ static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 		{
 			MOWGLI_ITER_FOREACH(n, chan->members.head)
 			{
-				cu = (chanuser_t *)n->data;
+				cu = (struct chanuser *)n->data;
 				cu->modes &= ~CSTATUS_HALFOP;
 			}
 		}
@@ -586,7 +586,7 @@ static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 		{
 			MOWGLI_ITER_FOREACH(n, chan->members.head)
 			{
-				cu = (chanuser_t *)n->data;
+				cu = (struct chanuser *)n->data;
 				cu->modes &= ~CSTATUS_VOICE;
 			}
 		}

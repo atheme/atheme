@@ -22,7 +22,7 @@ static chanacs_t *channel_ext_match_user(chanacs_t *ca, user_t *u)
 	ent = (channel_exttarget_t *) ca->entity;
 	MOWGLI_LIST_FOREACH(n, u->channels.head)
 	{
-		chanuser_t *cu = n->data;
+		struct chanuser *cu = n->data;
 
 		if (!irccasecmp(cu->chan->name, ent->channel))
 			return ca;

@@ -154,11 +154,11 @@ void generic_wallchops(user_t *sender, struct channel *channel, const char *mess
 {
 	/* ugly, but always works -- jilles */
 	mowgli_node_t *n;
-	chanuser_t *cu;
+	struct chanuser *cu;
 
 	MOWGLI_ITER_FOREACH(n, channel->members.head)
 	{
-		cu = (chanuser_t *)n->data;
+		cu = (struct chanuser *)n->data;
 		if (cu->user->server != me.me && cu->modes & CSTATUS_OP)
 			notice(sender->nick, cu->user->nick, "[@%s] %s", channel->name, message);
 	}

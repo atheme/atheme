@@ -31,7 +31,7 @@ mod_deinit(const module_unload_intent_t intent)
 
 static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 {
-	chanuser_t *cu = NULL;
+	struct chanuser *cu = NULL;
 	mowgli_node_t *n, *tn;
 	struct channel *c = NULL;
 	int action;

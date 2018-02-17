@@ -204,7 +204,7 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 void user_delete(user_t *u, const char *comment)
 {
 	mowgli_node_t *n, *tn;
-	chanuser_t *cu;
+	struct chanuser *cu;
 	mynick_t *mn;
 	char oldnick[NICKLEN + 1];
 	bool doenforcer = false;
@@ -239,7 +239,7 @@ void user_delete(user_t *u, const char *comment)
 	/* remove the user from each channel */
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, u->channels.head)
 	{
-		cu = (chanuser_t *)n->data;
+		cu = (struct chanuser *)n->data;
 
 		chanuser_delete(cu->chan, u);
 	}
@@ -647,7 +647,7 @@ bool user_is_channel_banned(user_t *u, char ban_type)
 
 	MOWGLI_ITER_FOREACH(n, u->channels.head)
 	{
-		chanuser_t *cu = n->data;
+		struct chanuser *cu = n->data;
 
 		/* Assume that any prefix modes allow changing nicks even while banned */
 		if (cu->modes != 0)

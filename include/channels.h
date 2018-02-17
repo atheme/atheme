@@ -38,7 +38,7 @@ struct channel
 };
 
 /* struct for channel memberships */
-struct chanuser_
+struct chanuser
 {
   struct channel *chan;
   user_t *user;
@@ -70,7 +70,7 @@ struct chanban_
 /* for struct channel -> flags */
 #define CHAN_LOG        0x00000001 /* logs sent to here */
 
-/* chanuser_t.modes */
+/* for struct chanuser -> modes */
 #define CSTATUS_OP      0x00000001
 #define CSTATUS_VOICE   0x00000002
 #define CSTATUS_OWNER   0x00000004      /* unreal/inspircd +q */
@@ -99,7 +99,7 @@ struct extmode
 
 /* channel related hooks */
 typedef struct {
-	chanuser_t *cu; /* Write NULL here if you kicked the user.
+	struct chanuser *cu; /* Write NULL here if you kicked the user.
 			   When kicking the last user, you must join a
 			   service first, otherwise the channel may be
 			   destroyed and crashes may occur. The service may
@@ -133,7 +133,7 @@ typedef struct {
 } hook_channel_mode_t;
 
 typedef struct {
-	chanuser_t *cu;
+	struct chanuser *cu;
 	const char mchar;
 	const unsigned int mvalue;
 } hook_channel_mode_change_t;
@@ -171,9 +171,9 @@ extern struct channel *channel_add(const char *name, time_t ts, server_t *creato
 extern void channel_delete(struct channel *c);
 //inline struct channel *channel_find(const char *name);
 
-extern chanuser_t *chanuser_add(struct channel *chan, const char *user);
+extern struct chanuser *chanuser_add(struct channel *chan, const char *user);
 extern void chanuser_delete(struct channel *chan, user_t *user);
-extern chanuser_t *chanuser_find(struct channel *chan, user_t *user);
+extern struct chanuser *chanuser_find(struct channel *chan, user_t *user);
 
 extern chanban_t *chanban_add(struct channel *chan, const char *mask, int type);
 extern void chanban_delete(chanban_t *c);

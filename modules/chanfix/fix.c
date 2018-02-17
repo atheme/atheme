@@ -16,7 +16,7 @@ static unsigned int count_ops(struct channel *c)
 
 	MOWGLI_ITER_FOREACH(n, c->members.head)
 	{
-		chanuser_t *cu = n->data;
+		struct chanuser *cu = n->data;
 
 		if (cu->modes & CSTATUS_OP)
 			i++;
@@ -73,7 +73,7 @@ static unsigned int chanfix_calculate_score(chanfix_oprecord_t *orec)
 static void chanfix_lower_ts(chanfix_channel_t *chan)
 {
 	struct channel *ch;
-	chanuser_t *cfu;
+	struct chanuser *cfu;
 	mowgli_node_t *n;
 
 	ch = chan->chan;
@@ -88,7 +88,7 @@ static void chanfix_lower_ts(chanfix_channel_t *chan)
 
 	MOWGLI_ITER_FOREACH(n, ch->members.head)
 	{
-		chanuser_t *cu = n->data;
+		struct chanuser *cu = n->data;
 		cu->modes = 0;
 	}
 
@@ -150,7 +150,7 @@ static bool chanfix_fix_channel(chanfix_channel_t *chan)
 	threshold = chanfix_get_threshold(chan);
 	MOWGLI_ITER_FOREACH(n, ch->members.head)
 	{
-		chanuser_t *cu = n->data;
+		struct chanuser *cu = n->data;
 		chanfix_oprecord_t *orec;
 		unsigned int score;
 
@@ -207,7 +207,7 @@ static bool chanfix_can_start_fix(chanfix_channel_t *chan)
 	threshold = chanfix_get_highscore(chan) * CHANFIX_FINAL_STEP;
 	MOWGLI_ITER_FOREACH(n, ch->members.head)
 	{
-		chanuser_t *cu = n->data;
+		struct chanuser *cu = n->data;
 		chanfix_oprecord_t *orec;
 		unsigned int score;
 

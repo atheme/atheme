@@ -337,7 +337,7 @@ mod_deinit(const module_unload_intent_t intent)
 
 static void cs_join(hook_channel_joinpart_t *hdata)
 {
-	chanuser_t *cu = hdata->cu;
+	struct chanuser *cu = hdata->cu;
 	user_t *u;
 	struct channel *chan;
 	mychan_t *mc;
@@ -587,7 +587,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 
 static void cs_part(hook_channel_joinpart_t *hdata)
 {
-	chanuser_t *cu;
+	struct chanuser *cu;
 	mychan_t *mc;
 
 	cu = hdata->cu;
@@ -760,7 +760,7 @@ static void cs_topiccheck(hook_channel_topic_check_t *data)
 static void cs_newchan(struct channel *c)
 {
 	mychan_t *mc;
-	chanuser_t *cu;
+	struct chanuser *cu;
 	metadata_t *md;
 	char *setter;
 	char *text;
@@ -906,7 +906,7 @@ static void cs_leave_empty(void *unused)
 static void cs_bounce_mode_change(hook_channel_mode_change_t *data)
 {
 	mychan_t *mc;
-	chanuser_t *cu;
+	struct chanuser *cu;
 	struct channel *chan;
 
 	/* if we have SECURE mode enabled, then we want to bounce any changes */

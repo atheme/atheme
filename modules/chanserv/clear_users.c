@@ -34,7 +34,7 @@ static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[])
 	struct channel *c;
 	char *channel = parv[0];
 	mychan_t *mc = mychan_find(channel);
-	chanuser_t *cu;
+	struct chanuser *cu;
 	mowgli_node_t *n, *tn;
 	int oldlimit;
 	unsigned int nmembers;

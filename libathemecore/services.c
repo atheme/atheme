@@ -94,7 +94,7 @@ int remove_ban_exceptions(user_t *source, struct channel *chan, user_t *target)
 
 void try_kick_real(user_t *source, struct channel *chan, user_t *target, const char *reason)
 {
-	chanuser_t *cu;
+	struct chanuser *cu;
 
 	return_if_fail(source != NULL);
 	return_if_fail(chan != NULL);
@@ -182,7 +182,7 @@ void join(const char *chan, const char *nick)
 {
 	struct channel *c;
 	user_t *u;
-	chanuser_t *cu;
+	struct chanuser *cu;
 	bool isnew = false;
 	mychan_t *mc;
 	metadata_t *md;
@@ -337,7 +337,7 @@ void reintroduce_user(user_t *u)
 	introduce_nick(u);
 	MOWGLI_ITER_FOREACH(n, u->channels.head)
 	{
-		c = ((chanuser_t *)n->data)->chan;
+		c = ((struct chanuser *)n->data)->chan;
 		if (MOWGLI_LIST_LENGTH(&c->members) > 1 || c->modes & ircd->perm_mode)
 			join_sts(c, u, 0, channel_modes(c, true));
 		else
