@@ -369,12 +369,14 @@ extern bool backend_loaded;
  * BG_REGULAR:   try to fork, no-op if a previous write is still in progress
  * BG_IMPORTANT: try to fork, canceling previous write first if necessary
  */
-typedef enum {
+enum db_save_strategy
+{
 	DB_SAVE_BLOCKING,
 	DB_SAVE_BG_REGULAR,
 	DB_SAVE_BG_IMPORTANT
-} db_save_strategy_t;
-extern void (*db_save)(void *arg, db_save_strategy_t strategy);
+};
+
+extern void (*db_save)(void *arg, enum db_save_strategy strategy);
 extern void (*db_load)(const char *arg);
 
 /* function.c */

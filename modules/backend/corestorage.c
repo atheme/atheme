@@ -23,7 +23,7 @@ unsigned int their_ca_all;
 
 extern mowgli_list_t modules;
 
-static void corestorage_db_write(void *filename, db_save_strategy_t strategy);
+static void corestorage_db_write(void *filename, enum db_save_strategy strategy);
 static void corestorage_db_write_blocking(void *filename);
 static void corestorage_db_saved_cb(pid_t, int, void*);
 
@@ -943,7 +943,7 @@ static void corestorage_db_saved_cb(pid_t pid, int status, void *data)
 }
 #endif
 
-static void corestorage_db_write(void *filename, db_save_strategy_t strategy)
+static void corestorage_db_write(void *filename, enum db_save_strategy strategy)
 {
 #ifndef HAVE_FORK
 	corestorage_db_write_blocking(filename);

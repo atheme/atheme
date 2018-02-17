@@ -61,7 +61,7 @@ bool strict_mode = true;
 bool offline_mode = false;
 bool permissive_mode = false;
 
-void (*db_save) (void *arg, db_save_strategy_t strategy) = NULL;
+void (*db_save) (void *arg, enum db_save_strategy strategy) = NULL;
 void (*db_load) (const char *name) = NULL;
 
 /* *INDENT-OFF* */
