@@ -1,5 +1,0 @@
-before 6.0.0 release:
-
-- audit core (src/*.c) to ensure there's no more codepaths assuming myuser_t which
-  should be using entities instead.  this includes all recasts to entities (e.g.
-  passing "entity(mu)" to a function).
