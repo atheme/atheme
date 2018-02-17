@@ -34,7 +34,7 @@ corestorage_db_save(database_handle_t *db)
 	metadata_t *md;
 	myuser_t *mu;
 	myentity_t *ment;
-	myuser_name_t *mun;
+	struct myuser_name *mun;
 	mychan_t *mc;
 	chanacs_t *ca;
 	struct kline *k;

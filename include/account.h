@@ -10,7 +10,6 @@
 
 #include "entity.h"
 
-typedef struct myuser_name_ myuser_name_t;
 typedef struct chanacs_ chanacs_t;
 typedef struct mymemo_ mymemo_t;
 typedef struct svsignore_ svsignore_t;
@@ -136,7 +135,7 @@ struct mynick_
 };
 
 /* record about a name that used to exist */
-struct myuser_name_
+struct myuser_name
 {
   object_t parent;
 
@@ -438,8 +437,7 @@ extern mynick_t *mynick_add(myuser_t *mu, const char *name);
 extern void mynick_delete(mynick_t *mn);
 //inline mynick_t *mynick_find(const char *name);
 
-extern myuser_name_t *myuser_name_add(const char *name);
-//inline myuser_name_t *myuser_name_find(const char *name);
+extern struct myuser_name *myuser_name_add(const char *name);
 extern void myuser_name_remember(const char *name, myuser_t *mu);
 extern void myuser_name_restore(const char *name, myuser_t *mu);
 

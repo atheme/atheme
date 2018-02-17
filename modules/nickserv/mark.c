@@ -78,7 +78,7 @@ static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 	char *action = parv[1];
 	char *info = parv[2];
 	myuser_t *mu;
-	myuser_name_t *mun;
+	struct myuser_name *mun;
 
 	if (!target || !action)
 	{

@@ -77,7 +77,7 @@ static inline myuser_t *myuser_find_by_nick(const char *name)
  * Side Effects:
  *      - none
  */
-static inline myuser_name_t *myuser_name_find(const char *name)
+static inline struct myuser_name *myuser_name_find(const char *name)
 {
 	return name ? mowgli_patricia_retrieve(oldnameslist, name) : NULL;
 }

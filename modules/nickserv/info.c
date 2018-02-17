@@ -27,7 +27,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	mynick_t *mn = NULL;
-	myuser_name_t *mun;
+	struct myuser_name *mun;
 	user_t *u = NULL;
 	bool recognized = false;
 	const char *name = parv[0];

@@ -17,7 +17,7 @@
 static void flatfile_db_load(const char *filename)
 {
 	myuser_t *mu, *founder = NULL;
-	myuser_name_t *mun;
+	struct myuser_name *mun;
 	mychan_t *mc;
 	struct kline *k;
 	struct xline *x;

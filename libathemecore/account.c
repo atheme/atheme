@@ -57,7 +57,7 @@ void init_accounts(void)
 {
 	myuser_heap = sharedheap_get(sizeof(myuser_t));
 	mynick_heap = sharedheap_get(sizeof(myuser_t));
-	myuser_name_heap = sharedheap_get(sizeof(myuser_name_t));
+	myuser_name_heap = sharedheap_get(sizeof(struct myuser_name));
 	mychan_heap = sharedheap_get(sizeof(mychan_t));
 	chanacs_heap = sharedheap_get(sizeof(chanacs_t));
 	mycertfp_heap = sharedheap_get(sizeof(struct mycertfp));
@@ -738,7 +738,7 @@ void mynick_delete(mynick_t *mn)
  * M Y U S E R _ N A M E *
  *************************/
 
-static void myuser_name_delete(myuser_name_t *mun);
+static void myuser_name_delete(struct myuser_name *mun);
 
 /*
  * myuser_name_add(const char *name)
@@ -749,15 +749,15 @@ static void myuser_name_delete(myuser_name_t *mun);
  *      - a nick or account name
  *
  * Outputs:
- *      - on success, a new myuser_name_t object
+ *      - on success, a new struct myuser_name object
  *      - on failure, NULL.
  *
  * Side Effects:
  *      - the created record is added to the oldnames DTree.
  */
-myuser_name_t *myuser_name_add(const char *name)
+struct myuser_name *myuser_name_add(const char *name)
 {
-	myuser_name_t *mun;
+	struct myuser_name *mun;
 
 	return_val_if_fail((mun = myuser_name_find(name)) == NULL, mun);
 
@@ -777,7 +777,7 @@ myuser_name_t *myuser_name_add(const char *name)
 }
 
 /*
- * myuser_name_delete(myuser_name_t *mun)
+ * myuser_name_delete(struct myuser_name *mun)
  *
  * Destroys and removes a name from the oldnames DTree.
  *
@@ -790,7 +790,7 @@ myuser_name_t *myuser_name_add(const char *name)
  * Side Effects:
  *      - a record is destroyed and removed from the oldnames DTree.
  */
-static void myuser_name_delete(myuser_name_t *mun)
+static void myuser_name_delete(struct myuser_name *mun)
 {
 	return_if_fail(mun != NULL);
 
@@ -824,7 +824,7 @@ static void myuser_name_delete(myuser_name_t *mun)
  */
 void myuser_name_remember(const char *name, myuser_t *mu)
 {
-	myuser_name_t *mun;
+	struct myuser_name *mun;
 	metadata_t *md;
 
 	if (myuser_name_find(name))
@@ -865,7 +865,7 @@ void myuser_name_remember(const char *name, myuser_t *mu)
  */
 void myuser_name_restore(const char *name, myuser_t *mu)
 {
-	myuser_name_t *mun;
+	struct myuser_name *mun;
 	metadata_t *md, *md2;
 	mowgli_patricia_iteration_state_t state;
 	char *copy;
