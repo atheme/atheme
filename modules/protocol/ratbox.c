@@ -9,7 +9,6 @@
 #include "atheme.h"
 #include "uplink.h"
 #include "pmodule.h"
-#include "protocol/ratbox.h"
 
 ircd_t Ratbox = {
 	.ircdname = "Ratbox (1.0 or later)",

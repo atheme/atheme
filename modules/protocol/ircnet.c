@@ -10,7 +10,6 @@
 #include "atheme.h"
 #include "uplink.h"
 #include "pmodule.h"
-#include "protocol/ircnet.h"
 
 ircd_t IRCNet = {
 	.ircdname = "ircd 2.11.1p1 or later",

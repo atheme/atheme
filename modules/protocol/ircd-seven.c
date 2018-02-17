@@ -10,7 +10,6 @@
 #include "uplink.h"
 #include "pmodule.h"
 #include "protocol/charybdis.h"
-#include "protocol/ircd-seven.h"
 
 ircd_t Seven = {
 	.ircdname = "ircd-seven",

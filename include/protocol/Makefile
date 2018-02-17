@@ -1,15 +1,12 @@
 include ../../extra.mk
 
-INCLUDES = \
-	asuka.h		\
-	bahamut.h	\
-	charybdis.h	\
-	inspircd.h	\
-	ircd-seven.h	\
-	ircnet.h	\
-	nefarious.h	\
-	ratbox.h	\
-	elemental-ircd.h \
+INCLUDES =			\
+	asuka.h			\
+	bahamut.h		\
+	charybdis.h		\
+	elemental-ircd.h	\
+	inspircd.h		\
+	nefarious.h		\
 	unreal.h
 
 includesubdir = $(PACKAGE)/protocol
