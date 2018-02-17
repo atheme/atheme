@@ -43,7 +43,7 @@ static void p10_introduce_nick(user_t *u)
 }
 
 /* invite a user to a channel */
-static void p10_invite_sts(user_t *sender, user_t *target, channel_t *channel)
+static void p10_invite_sts(user_t *sender, user_t *target, struct channel *channel)
 {
 	/* target is a nick, weird eh? -- jilles */
 	sts("%s I %s %s", sender->uid, target->nick, channel->name);
@@ -61,7 +61,7 @@ static void p10_wallops_sts(const char *text)
 }
 
 /* join a channel */
-static void p10_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
+static void p10_join_sts(struct channel *c, user_t *u, bool isnew, char *modes)
 {
 	/* If the channel doesn't exist, we need to create it. */
 	if (isnew)
@@ -77,7 +77,7 @@ static void p10_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 	}
 }
 
-static void p10_chan_lowerts(channel_t *c, user_t *u)
+static void p10_chan_lowerts(struct channel *c, user_t *u)
 {
 	slog(LG_DEBUG, "p10_chan_lowerts(): lowering TS for %s to %lu",
 			c->name, (unsigned long)c->ts);
@@ -87,7 +87,7 @@ static void p10_chan_lowerts(channel_t *c, user_t *u)
 }
 
 /* kicks a user from a channel */
-static void p10_kick(user_t *source, channel_t *c, user_t *u, const char *reason)
+static void p10_kick(user_t *source, struct channel *c, user_t *u, const char *reason)
 {
 	if (chanuser_find(c, source))
 		sts("%s K %s %s :%s", source->uid, c->name, u->uid, reason);
@@ -155,7 +155,7 @@ static void p10_notice_global_sts(user_t *from, const char *mask, const char *te
 		sts("%s O %s%s :%s", from ? from->uid : me.numeric, ircd->tldprefix, mask, text);
 }
 
-static void p10_notice_channel_sts(user_t *from, channel_t *target, const char *text)
+static void p10_notice_channel_sts(user_t *from, struct channel *target, const char *text)
 {
 	if (from == NULL || chanuser_find(target, from))
 		sts("%s O %s :%s", from ? from->uid : me.numeric, target->name, text);
@@ -163,7 +163,7 @@ static void p10_notice_channel_sts(user_t *from, channel_t *target, const char *
 		sts("%s O %s :[%s:%s] %s", me.numeric, target->name, from->nick, target->name, text);
 }
 
-static void p10_wallchops(user_t *sender, channel_t *channel, const char *message)
+static void p10_wallchops(user_t *sender, struct channel *channel, const char *message)
 {
 	sts("%s WC %s :%s", sender->uid, channel->name, message);
 }
@@ -192,7 +192,7 @@ static void p10_kill_id_sts(user_t *killer, const char *id, const char *reason)
 }
 
 /* PART wrapper */
-static void p10_part_sts(channel_t *c, user_t *u)
+static void p10_part_sts(struct channel *c, user_t *u)
 {
 	sts("%s L %s", u->uid, c->name);
 }
@@ -245,7 +245,7 @@ static void p10_unqline_sts(const char *server, const char *name)
 }
 
 /* topic wrapper */
-static void p10_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
+static void p10_topic_sts(struct channel *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	if (ts > prevts || prevts == 0)
 		sts("%s T %s %lu %lu :%s", source->uid, c->name, (unsigned long)c->ts, (unsigned long)ts, topic);
@@ -260,7 +260,7 @@ static void p10_topic_sts(channel_t *c, user_t *source, const char *setter, time
 }
 
 /* mode wrapper */
-static void p10_mode_sts(char *sender, channel_t *target, char *modes)
+static void p10_mode_sts(char *sender, struct channel *target, char *modes)
 {
 	user_t *fptr;
 
@@ -328,7 +328,7 @@ static void p10_svslogin_sts(char *target, char *nick, char *user, char *host, m
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 {
-	channel_t *c = channel_find(parv[0]);
+	struct channel *c = channel_find(parv[0]);
 	const char *source;
 	time_t ts = 0;
 
@@ -411,7 +411,7 @@ static void m_create(sourceinfo_t *si, int parc, char *parv[])
 
 	for (i = 0; i < chanc; i++)
 	{
-		channel_t *c = channel_add(chanv[i], ts = atoi(parv[1]), si->su->server);
+		struct channel *c = channel_add(chanv[i], ts = atoi(parv[1]), si->su->server);
 
 		/* Tell the core to check mode locks now,
 		 * otherwise it may only happen after the next
@@ -459,7 +459,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 
 	for (i = 0; i < chanc; i++)
 	{
-		channel_t *c = channel_find(chanv[i]);
+		struct channel *c = channel_find(chanv[i]);
 
 		if (!c)
 		{
@@ -473,7 +473,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 {
-	channel_t *c;
+	struct channel *c;
 	unsigned int modec;
 	char *modev[16];
 	unsigned int userc;
@@ -686,7 +686,7 @@ static void m_quit(sourceinfo_t *si, int parc, char *parv[])
 static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
-	channel_t *c;
+	struct channel *c;
 	int i;
 	char *p;
 	int dir = MTYPE_ADD;
@@ -742,7 +742,7 @@ static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 {
-	channel_t *chan;
+	struct channel *chan;
 	char *p, c;
 	mowgli_node_t *n;
 	chanuser_t *cu;
@@ -805,7 +805,7 @@ static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 static void m_kick(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u = user_find(parv[1]);
-	channel_t *c = channel_find(parv[0]);
+	struct channel *c = channel_find(parv[0]);
 
 	/* -> :rakaur KICK #shrike rintaun :test */
 	slog(LG_DEBUG, "m_kick(): user was kicked: %s -> %s", parv[1], parv[0]);

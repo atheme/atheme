@@ -16,13 +16,13 @@
  * Side Effects:
  *     - none
  */
-static inline channel_t *channel_find(const char *name)
+static inline struct channel *channel_find(const char *name)
 {
 	return name ? mowgli_patricia_retrieve(chanlist, name) : NULL;
 }
 
 /*
- * chanban_clear(channel_t *chan)
+ * chanban_clear(struct channel *chan)
  *
  * Destroys all channel bans attached to a channel.
  *
@@ -36,7 +36,7 @@ static inline channel_t *channel_find(const char *name)
  *     - the banlist on the channel is cleared
  *     - no protocol messages are sent
  */
-static inline void chanban_clear(channel_t *chan)
+static inline void chanban_clear(struct channel *chan)
 {
 	mowgli_node_t *n, *tn;
 

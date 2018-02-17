@@ -80,7 +80,7 @@ struct cmode_ asuka_user_mode_list[] = {
 static void check_hidehost(user_t *u);
 
 /* NOTICE wrapper */
-static void asuka_notice_channel_sts(user_t *from, channel_t *target, const char *text)
+static void asuka_notice_channel_sts(user_t *from, struct channel *target, const char *text)
 {
 	if (target->modes & CMODE_NONOTICE)
 	{
@@ -96,7 +96,7 @@ static void asuka_notice_channel_sts(user_t *from, channel_t *target, const char
 		sts("%s O %s :[%s:%s] %s", me.numeric, target->name, from->nick, target->name, text);
 }
 
-static void asuka_wallchops(user_t *sender, channel_t *channel, const char *message)
+static void asuka_wallchops(user_t *sender, struct channel *channel, const char *message)
 {
 	if (channel->modes & CMODE_NONOTICE)
 	{

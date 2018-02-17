@@ -125,7 +125,7 @@ static void chanfix_channel_delete(chanfix_channel_t *c)
 	mowgli_heap_free(chanfix_channel_heap, c);
 }
 
-chanfix_channel_t *chanfix_channel_create(const char *name, channel_t *chan)
+chanfix_channel_t *chanfix_channel_create(const char *name, struct channel *chan)
 {
 	chanfix_channel_t *c;
 
@@ -151,7 +151,7 @@ chanfix_channel_t *chanfix_channel_find(const char *name)
 	return mowgli_patricia_retrieve(chanfix_channels, name);
 }
 
-chanfix_channel_t *chanfix_channel_get(channel_t *chan)
+chanfix_channel_t *chanfix_channel_get(struct channel *chan)
 {
 	return_val_if_fail(chan != NULL, NULL);
 
@@ -160,7 +160,7 @@ chanfix_channel_t *chanfix_channel_get(channel_t *chan)
 
 /*************************************************************************************/
 
-static void chanfix_channel_add_ev(channel_t *ch)
+static void chanfix_channel_add_ev(struct channel *ch)
 {
 	chanfix_channel_t *chan;
 
@@ -175,7 +175,7 @@ static void chanfix_channel_add_ev(channel_t *ch)
 	chanfix_channel_create(ch->name, ch);
 }
 
-static void chanfix_channel_delete_ev(channel_t *ch)
+static void chanfix_channel_delete_ev(struct channel *ch)
 {
 	chanfix_channel_t *chan;
 
@@ -192,7 +192,7 @@ static void chanfix_channel_delete_ev(channel_t *ch)
 
 void chanfix_gather(void *unused)
 {
-	channel_t *ch;
+	struct channel *ch;
 	mowgli_patricia_iteration_state_t state;
 	int chans = 0, oprecords = 0;
 

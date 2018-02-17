@@ -52,7 +52,7 @@ static void logfile_delete_channel(void *vdata)
 	free(lf);
 }
 
-static void logfile_join_channels(channel_t *c)
+static void logfile_join_channels(struct channel *c)
 {
 	mowgli_node_t *n;
 
@@ -77,7 +77,7 @@ static void logfile_join_channels(channel_t *c)
 static void logfile_join_service(service_t *svs)
 {
 	mowgli_node_t *n;
-	channel_t *c;
+	struct channel *c;
 
 	return_if_fail(svs != NULL && svs->me != NULL);
 
@@ -100,7 +100,7 @@ static void logfile_join_service(service_t *svs)
 
 static void logfile_part_removed(void *unused)
 {
-	channel_t *c;
+	struct channel *c;
 	mowgli_patricia_iteration_state_t state;
 	mowgli_node_t *n;
 	bool valid;
@@ -219,7 +219,7 @@ static void logfile_write(logfile_t *lf, const char *buf)
  */
 static void logfile_write_irc(logfile_t *lf, const char *buf)
 {
-	channel_t *c;
+	struct channel *c;
 
 	return_if_fail(lf != NULL);
 	return_if_fail(lf->log_path != NULL);
@@ -282,7 +282,7 @@ static void logfile_write_irc(logfile_t *lf, const char *buf)
  */
 static void logfile_write_snotices(logfile_t *lf, const char *buf)
 {
-	channel_t *c;
+	struct channel *c;
 
 	return_if_fail(lf != NULL);
 	return_if_fail(lf->log_path != NULL);
@@ -351,7 +351,7 @@ logfile_t *logfile_new(const char *path, unsigned int log_mask)
 {
 	static bool hooked = false;
 	static time_t lastfail = 0;
-	channel_t *c;
+	struct channel *c;
 	logfile_t *lf = scalloc(sizeof(logfile_t), 1);
 
 	if (!strcasecmp(path, "!snotices") || !strcasecmp(path, "!wallops"))

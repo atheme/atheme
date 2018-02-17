@@ -106,7 +106,7 @@ static void ts6_introduce_nick(user_t *u)
 }
 
 /* invite a user to a channel */
-static void ts6_invite_sts(user_t *sender, user_t *target, channel_t *channel)
+static void ts6_invite_sts(user_t *sender, user_t *target, struct channel *channel)
 {
 	sts(":%s INVITE %s %s", CLIENT_NAME(sender), CLIENT_NAME(target), channel->name);
 }
@@ -123,7 +123,7 @@ static void ts6_wallops_sts(const char *text)
 }
 
 /* join a channel */
-static void ts6_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
+static void ts6_join_sts(struct channel *c, user_t *u, bool isnew, char *modes)
 {
 	if (isnew)
 		sts(":%s SJOIN %lu %s %s :@%s", ME, (unsigned long)c->ts,
@@ -133,7 +133,7 @@ static void ts6_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 				c->name, CLIENT_NAME(u));
 }
 
-static void ts6_chan_lowerts(channel_t *c, user_t *u)
+static void ts6_chan_lowerts(struct channel *c, user_t *u)
 {
 	slog(LG_DEBUG, "ts6_chan_lowerts(): lowering TS for %s to %lu",
 			c->name, (unsigned long)c->ts);
@@ -144,7 +144,7 @@ static void ts6_chan_lowerts(channel_t *c, user_t *u)
 }
 
 /* kicks a user from a channel */
-static void ts6_kick(user_t *source, channel_t *c, user_t *u, const char *reason)
+static void ts6_kick(user_t *source, struct channel *c, user_t *u, const char *reason)
 {
 	if (c->ts != 0 || chanuser_find(c, source))
 		sts(":%s KICK %s %s :%s", CLIENT_NAME(source), c->name, CLIENT_NAME(u), reason);
@@ -220,7 +220,7 @@ static void ts6_notice_global_sts(user_t *from, const char *mask, const char *te
 		sts(":%s NOTICE %s%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, mask, text);
 }
 
-static void ts6_notice_channel_sts(user_t *from, channel_t *target, const char *text)
+static void ts6_notice_channel_sts(user_t *from, struct channel *target, const char *text)
 {
 	if (from == NULL || chanuser_find(target, from))
 		sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, target->name, text);
@@ -228,7 +228,7 @@ static void ts6_notice_channel_sts(user_t *from, channel_t *target, const char *
 		sts(":%s NOTICE %s :[%s:%s] %s", ME, target->name, from->nick, target->name, text);
 }
 
-static void ts6_wallchops(user_t *sender, channel_t *channel, const char *message)
+static void ts6_wallchops(user_t *sender, struct channel *channel, const char *message)
 {
 	if (chanuser_find(channel, sender))
 		sts(":%s NOTICE @%s :%s", CLIENT_NAME(sender), channel->name,
@@ -261,7 +261,7 @@ static void ts6_kill_id_sts(user_t *killer, const char *id, const char *reason)
 }
 
 /* PART wrapper */
-static void ts6_part_sts(channel_t *c, user_t *u)
+static void ts6_part_sts(struct channel *c, user_t *u)
 {
 	sts(":%s PART %s", CLIENT_NAME(u), c->name);
 }
@@ -339,7 +339,7 @@ static void ts6_undline_sts(const char *server, const char *host)
 }
 
 /* topic wrapper */
-static void ts6_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
+static void ts6_topic_sts(struct channel *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	int joined = 0;
 
@@ -398,7 +398,7 @@ static void ts6_topic_sts(channel_t *c, user_t *source, const char *setter, time
 }
 
 /* mode wrapper */
-static void ts6_mode_sts(char *sender, channel_t *target, char *modes)
+static void ts6_mode_sts(char *sender, struct channel *target, char *modes)
 {
 	user_t *u;
 
@@ -536,7 +536,7 @@ static void ts6_holdnick_sts(user_t *source, int duration, const char *nick, myu
 	}
 }
 
-static void ts6_mlock_sts(channel_t *c)
+static void ts6_mlock_sts(struct channel *c)
 {
 	mychan_t *mc = mychan_from(c);
 
@@ -552,7 +552,7 @@ static void ts6_mlock_sts(channel_t *c)
 
 static void m_mlock(sourceinfo_t *si, int parc, char *parv[])
 {
-	channel_t *c;
+	struct channel *c;
 	mychan_t *mc;
 	const char *mlock;
 
@@ -586,7 +586,7 @@ static void m_mlock(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 {
-	channel_t *c = channel_find(parv[0]);
+	struct channel *c = channel_find(parv[0]);
 
 	if (c == NULL)
 		return;
@@ -596,7 +596,7 @@ static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_tb(sourceinfo_t *si, int parc, char *parv[])
 {
-	channel_t *c = channel_find(parv[0]);
+	struct channel *c = channel_find(parv[0]);
 	time_t ts = atol(parv[1]);
 
 	if (c == NULL)
@@ -613,7 +613,7 @@ static void m_tb(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_etb(sourceinfo_t *si, int parc, char *parv[])
 {
-	channel_t *c = channel_find(parv[1]);
+	struct channel *c = channel_find(parv[1]);
 	time_t channelts;
 	time_t topicts;
 
@@ -694,7 +694,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* -> :proteus.malkier.net SJOIN 1073516550 #shrike +tn :@sycobuny @+rakaur */
 
-	channel_t *c;
+	struct channel *c;
 	bool keep_new_modes = true;
 	unsigned int userc;
 	char *userv[256];
@@ -788,7 +788,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 	/* -> :1JJAAAAAB JOIN 1127474195 #test +tn */
 	bool keep_new_modes = true;
 	mowgli_node_t *n, *tn;
-	channel_t *c;
+	struct channel *c;
 	chanuser_t *cu;
 	time_t ts;
 
@@ -860,7 +860,7 @@ static void m_bmask(sourceinfo_t *si, int parc, char *parv[])
 {
 	unsigned int ac, i;
 	char *av[256];
-	channel_t *c = channel_find(parv[1]);
+	struct channel *c = channel_find(parv[1]);
 	int type;
 
 	/* :1JJ BMASK 1127474361 #services b :*!*@*evil* *!*eviluser1@* */
@@ -1064,7 +1064,7 @@ static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_tmode(sourceinfo_t *si, int parc, char *parv[])
 {
-	channel_t *c;
+	struct channel *c;
 
 	/* -> :1JJAAAAAB TMODE 1127511579 #new +o 2JJAAAAAB */
 	c = channel_find(parv[1]);
@@ -1083,7 +1083,7 @@ static void m_tmode(sourceinfo_t *si, int parc, char *parv[])
 static void m_kick(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u = user_find(parv[1]);
-	channel_t *c = channel_find(parv[0]);
+	struct channel *c = channel_find(parv[0]);
 
 	/* -> :rakaur KICK #shrike rintaun :test */
 	slog(LG_DEBUG, "m_kick(): user was kicked: %s -> %s", parv[1], parv[0]);

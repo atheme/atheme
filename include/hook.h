@@ -8,6 +8,11 @@
 #ifndef HOOK_H
 #define HOOK_H
 
+// Types necessary for the hook system
+typedef struct channel channel_t;
+
+
+
 typedef struct hook_ hook_t;
 typedef void (*hookfn_t)(void *data);
 

@@ -33,7 +33,7 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanuser_t *cu = NULL;
 	mowgli_node_t *n, *tn;
-	channel_t *c = NULL;
+	struct channel *c = NULL;
 	int action;
 	char *actionstr = parv[0];
 	char *targchan = parv[1];

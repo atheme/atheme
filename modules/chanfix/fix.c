@@ -7,7 +7,7 @@
 #include "atheme.h"
 #include "chanfix.h"
 
-static unsigned int count_ops(channel_t *c)
+static unsigned int count_ops(struct channel *c)
 {
 	unsigned int i = 0;
 	mowgli_node_t *n;
@@ -25,7 +25,7 @@ static unsigned int count_ops(channel_t *c)
 	return i;
 }
 
-static bool chanfix_should_handle(chanfix_channel_t *cfchan, channel_t *c)
+static bool chanfix_should_handle(chanfix_channel_t *cfchan, struct channel *c)
 {
 	mychan_t *mc;
 	unsigned int n;
@@ -72,7 +72,7 @@ static unsigned int chanfix_calculate_score(chanfix_oprecord_t *orec)
 
 static void chanfix_lower_ts(chanfix_channel_t *chan)
 {
-	channel_t *ch;
+	struct channel *ch;
 	chanuser_t *cfu;
 	mowgli_node_t *n;
 
@@ -138,7 +138,7 @@ static unsigned int chanfix_get_threshold(chanfix_channel_t *chan)
 
 static bool chanfix_fix_channel(chanfix_channel_t *chan)
 {
-	channel_t *ch;
+	struct channel *ch;
 	mowgli_node_t *n;
 	unsigned int threshold, opped = 0;
 
@@ -196,7 +196,7 @@ static bool chanfix_fix_channel(chanfix_channel_t *chan)
 
 static bool chanfix_can_start_fix(chanfix_channel_t *chan)
 {
-	channel_t *ch;
+	struct channel *ch;
 	mowgli_node_t *n;
 	unsigned int threshold;
 
@@ -227,7 +227,7 @@ static bool chanfix_can_start_fix(chanfix_channel_t *chan)
 	return false;
 }
 
-static void chanfix_clear_bans(channel_t *ch)
+static void chanfix_clear_bans(struct channel *ch)
 {
 	bool joined = false;
 	mowgli_node_t *n, *tn;

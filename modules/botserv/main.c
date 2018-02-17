@@ -133,10 +133,10 @@ bs_notice(const char *from, const char *target, const char *fmt, ...)
 	notice_real(real_source, target, "%s", buf);
 }
 
-static void (*topic_sts_real)(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic);
+static void (*topic_sts_real)(struct channel *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic);
 
 static void
-bs_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
+bs_topic_sts(struct channel *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	mychan_t *mc;
 	botserv_bot_t *bot = NULL;
@@ -153,7 +153,7 @@ bs_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t
 }
 
 static void
-bs_modestack_mode_simple(const char *source, channel_t *channel, int dir, int flags)
+bs_modestack_mode_simple(const char *source, struct channel *channel, int dir, int flags)
 {
 	mychan_t *mc;
 	metadata_t *bs;
@@ -172,7 +172,7 @@ bs_modestack_mode_simple(const char *source, channel_t *channel, int dir, int fl
 }
 
 static void
-bs_modestack_mode_limit(const char *source, channel_t *channel, int dir, unsigned int limit)
+bs_modestack_mode_limit(const char *source, struct channel *channel, int dir, unsigned int limit)
 {
 	mychan_t *mc;
 	metadata_t *bs;
@@ -191,7 +191,7 @@ bs_modestack_mode_limit(const char *source, channel_t *channel, int dir, unsigne
 }
 
 static void
-bs_modestack_mode_ext(const char *source, channel_t *channel, int dir, unsigned int i, const char *value)
+bs_modestack_mode_ext(const char *source, struct channel *channel, int dir, unsigned int i, const char *value)
 {
 	mychan_t *mc;
 	metadata_t *bs;
@@ -210,7 +210,7 @@ bs_modestack_mode_ext(const char *source, channel_t *channel, int dir, unsigned 
 }
 
 static void
-bs_modestack_mode_param(const char *source, channel_t *channel, int dir, char type, const char *value)
+bs_modestack_mode_param(const char *source, struct channel *channel, int dir, char type, const char *value)
 {
 	mychan_t *mc;
 	metadata_t *bs;
@@ -229,7 +229,7 @@ bs_modestack_mode_param(const char *source, channel_t *channel, int dir, char ty
 }
 
 static void
-bs_try_kick(user_t *source, channel_t *chan, user_t *target, const char *reason)
+bs_try_kick(user_t *source, struct channel *chan, user_t *target, const char *reason)
 {
 	mychan_t *mc;
 	metadata_t *bs;
@@ -840,7 +840,7 @@ static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[])
 static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
-	channel_t *c = channel_find(channel);
+	struct channel *c = channel_find(channel);
 	mychan_t *mc = mychan_from(c);
 	metadata_t *md;
 	botserv_bot_t *bot;
@@ -1080,7 +1080,7 @@ static void on_shutdown(void *unused)
 static void bs_join(hook_channel_joinpart_t *hdata)
 {
 	chanuser_t *cu = hdata->cu;
-	channel_t *chan;
+	struct channel *chan;
 	mychan_t *mc;
 	botserv_bot_t *bot;
 	metadata_t *md;

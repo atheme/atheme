@@ -291,7 +291,7 @@ static void free_alis(struct alis_query *query)
 		free(query->topic);
 }
 
-static void print_channel(sourceinfo_t *si, channel_t *chptr, struct alis_query *query)
+static void print_channel(sourceinfo_t *si, struct channel *chptr, struct alis_query *query)
 {
 	int show_topicwho = query->show_topicwho;
 	int show_topic = 1;
@@ -336,7 +336,7 @@ static void print_channel(sourceinfo_t *si, channel_t *chptr, struct alis_query 
 			chptr->name, MOWGLI_LIST_LENGTH(&chptr->members));
 }
 
-static int show_channel(channel_t *chptr, struct alis_query *query)
+static int show_channel(struct channel *chptr, struct alis_query *query)
 {
 	int i;
 
@@ -396,7 +396,7 @@ static int show_channel(channel_t *chptr, struct alis_query *query)
 
 static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
-	channel_t *chptr;
+	struct channel *chptr;
 	struct alis_query query;
 	mowgli_patricia_iteration_state_t state;
 	int maxmatch;

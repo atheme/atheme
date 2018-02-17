@@ -53,7 +53,7 @@ struct cmode_ bahamut_mode_list[] = {
   { '\0', 0 }
 };
 
-static bool check_jointhrottle(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+static bool check_jointhrottle(const char *, struct channel *, mychan_t *, user_t *, myuser_t *);
 
 struct extmode bahamut_ignore_mode_list[] = {
   { 'j', check_jointhrottle },
@@ -79,7 +79,7 @@ struct cmode_ bahamut_user_mode_list[] = {
   { '\0', 0 }
 };
 
-static bool check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+static bool check_jointhrottle(const char *value, struct channel *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
 	const char *p, *arg2;
 	int num, timeslice, v;
@@ -156,7 +156,7 @@ static void bahamut_introduce_nick(user_t *u)
 }
 
 /* invite a user to a channel */
-static void bahamut_invite_sts(user_t *sender, user_t *target, channel_t *channel)
+static void bahamut_invite_sts(user_t *sender, user_t *target, struct channel *channel)
 {
 	sts(":%s INVITE %s %s", sender->nick, target->nick, channel->name);
 }
@@ -173,7 +173,7 @@ static void bahamut_wallops_sts(const char *text)
 }
 
 /* join a channel */
-static void bahamut_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
+static void bahamut_join_sts(struct channel *c, user_t *u, bool isnew, char *modes)
 {
 	if (isnew)
 		sts(":%s SJOIN %lu %s %s :@%s", me.name, (unsigned long)c->ts,
@@ -183,7 +183,7 @@ static void bahamut_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 				c->name, u->nick);
 }
 
-static void bahamut_chan_lowerts(channel_t *c, user_t *u)
+static void bahamut_chan_lowerts(struct channel *c, user_t *u)
 {
 	slog(LG_DEBUG, "bahamut_chan_lowerts(): lowering TS for %s to %lu",
 			c->name, (unsigned long)c->ts);
@@ -201,7 +201,7 @@ static void bahamut_chan_lowerts(channel_t *c, user_t *u)
 }
 
 /* kicks a user from a channel */
-static void bahamut_kick(user_t *source, channel_t *c, user_t *u, const char *reason)
+static void bahamut_kick(user_t *source, struct channel *c, user_t *u, const char *reason)
 {
 	sts(":%s KICK %s %s :%s", source->nick, c->name, u->nick, reason);
 
@@ -261,12 +261,12 @@ static void bahamut_notice_global_sts(user_t *from, const char *mask, const char
 		sts(":%s NOTICE %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
 }
 
-static void bahamut_notice_channel_sts(user_t *from, channel_t *target, const char *text)
+static void bahamut_notice_channel_sts(user_t *from, struct channel *target, const char *text)
 {
 	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->name, text);
 }
 
-static void bahamut_wallchops(user_t *sender, channel_t *channel, const char *message)
+static void bahamut_wallchops(user_t *sender, struct channel *channel, const char *message)
 {
 	sts(":%s NOTICE @%s :%s", sender->nick, channel->name, message);
 }
@@ -294,7 +294,7 @@ static void bahamut_kill_id_sts(user_t *killer, const char *id, const char *reas
 }
 
 /* PART wrapper */
-static void bahamut_part_sts(channel_t *c, user_t *u)
+static void bahamut_part_sts(struct channel *c, user_t *u)
 {
 	sts(":%s PART %s", u->nick, c->name);
 }
@@ -315,7 +315,7 @@ static void bahamut_unkline_sts(const char *server, const char *user, const char
 }
 
 /* topic wrapper */
-static void bahamut_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
+static void bahamut_topic_sts(struct channel *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	return_if_fail(c != NULL);
 
@@ -323,7 +323,7 @@ static void bahamut_topic_sts(channel_t *c, user_t *source, const char *setter, 
 }
 
 /* mode wrapper */
-static void bahamut_mode_sts(char *sender, channel_t *target, char *modes)
+static void bahamut_mode_sts(char *sender, struct channel *target, char *modes)
 {
 	return_if_fail(sender != NULL);
 	return_if_fail(target != NULL);
@@ -390,7 +390,7 @@ static void bahamut_holdnick_sts(user_t *source, int duration, const char *nick,
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 {
-	channel_t *c = channel_find(parv[0]);
+	struct channel *c = channel_find(parv[0]);
 
 	if (!c)
 		return;
@@ -486,7 +486,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 	 *  -> :nenolod_ SJOIN 1117334567 #chat
 	 */
 
-	channel_t *c;
+	struct channel *c;
 	bool keep_new_modes = true;
 	unsigned int userc;
 	char *userv[256];
@@ -707,7 +707,7 @@ static void m_quit(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 {
-	channel_t *c;
+	struct channel *c;
 
 	if (*parv[0] == '#')
 	{
@@ -728,7 +728,7 @@ static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 static void m_kick(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u = user_find(parv[1]);
-	channel_t *c = channel_find(parv[0]);
+	struct channel *c = channel_find(parv[0]);
 
 	/* -> :rakaur KICK #shrike rintaun :test */
 	slog(LG_DEBUG, "m_kick(): user was kicked: %s -> %s", parv[1], parv[0]);

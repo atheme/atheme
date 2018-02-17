@@ -93,12 +93,12 @@ extern int use_account_private;
 extern int use_channel_private;
 extern int use_limitflags;
 
-extern int ban(user_t *source, channel_t *chan, user_t *target);
-extern int remove_banlike(user_t *source, channel_t *chan, int type, user_t *target);
-extern int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target);
+extern int ban(user_t *source, struct channel *chan, user_t *target);
+extern int remove_banlike(user_t *source, struct channel *chan, int type, user_t *target);
+extern int remove_ban_exceptions(user_t *source, struct channel *chan, user_t *target);
 
-extern void try_kick_real(user_t *source, channel_t *chan, user_t *target, const char *reason);
-extern void (*try_kick)(user_t *source, channel_t *chan, user_t *target, const char *reason);
+extern void try_kick_real(user_t *source, struct channel *chan, user_t *target, const char *reason);
+extern void (*try_kick)(user_t *source, struct channel *chan, user_t *target, const char *reason);
 
 extern void kill_user(user_t *source, user_t *victim, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
 extern void introduce_enforcer(const char *nick);
@@ -128,7 +128,7 @@ extern void verbose_wallops(const char *, ...) ATHEME_FATTR_PRINTF(1, 2);
 extern bool check_vhost_validity(sourceinfo_t *si, const char *host);
 
 /* ptasks.c */
-extern void handle_topic(channel_t *, const char *, time_t, const char *);
+extern void handle_topic(struct channel *, const char *, time_t, const char *);
 extern int floodcheck(user_t *, user_t *);
 extern void command_add_flood(sourceinfo_t *si, unsigned int amount);
 

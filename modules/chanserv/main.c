@@ -14,10 +14,10 @@ static void cs_join(hook_channel_joinpart_t *hdata);
 static void cs_part(hook_channel_joinpart_t *hdata);
 static void cs_register(hook_channel_req_t *mc);
 static void cs_succession(hook_channel_succession_req_t *data);
-static void cs_newchan(channel_t *c);
-static void cs_keeptopic_topicset(channel_t *c);
+static void cs_newchan(struct channel *c);
+static void cs_keeptopic_topicset(struct channel *c);
 static void cs_topiccheck(hook_channel_topic_check_t *data);
-static void cs_tschange(channel_t *c);
+static void cs_tschange(struct channel *c);
 static void cs_leave_empty(void *unused);
 static void cs_bounce_mode_change(hook_channel_mode_change_t *data);
 static void on_shutdown(void *unused);
@@ -339,7 +339,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 {
 	chanuser_t *cu = hdata->cu;
 	user_t *u;
-	channel_t *chan;
+	struct channel *chan;
 	mychan_t *mc;
 	unsigned int flags;
 	bool noop;
@@ -679,7 +679,7 @@ static void cs_succession(hook_channel_succession_req_t *data)
 }
 
 /* Called on every set of a topic, after updating our internal structures */
-static void cs_keeptopic_topicset(channel_t *c)
+static void cs_keeptopic_topicset(struct channel *c)
 {
 	mychan_t *mc;
 	metadata_t *md;
@@ -757,7 +757,7 @@ static void cs_topiccheck(hook_channel_topic_check_t *data)
 }
 
 /* Called on creation of a channel */
-static void cs_newchan(channel_t *c)
+static void cs_newchan(struct channel *c)
 {
 	mychan_t *mc;
 	chanuser_t *cu;
@@ -771,7 +771,7 @@ static void cs_newchan(channel_t *c)
 	if (!(mc = mychan_find(c->name)))
 		return;
 
-	/* set channel_t.mychan */
+	/* set struct channel -> mychan */
 	c->mychan = mc;
 
 	/* schedule a mode lock check when we know the current modes
@@ -849,7 +849,7 @@ static void cs_newchan(channel_t *c)
 	topic_sts(c, chansvs.me->me, setter, topicts, 0, text);
 }
 
-static void cs_tschange(channel_t *c)
+static void cs_tschange(struct channel *c)
 {
 	mychan_t *mc;
 	char str[21];
@@ -907,7 +907,7 @@ static void cs_bounce_mode_change(hook_channel_mode_change_t *data)
 {
 	mychan_t *mc;
 	chanuser_t *cu;
-	channel_t *chan;
+	struct channel *chan;
 
 	/* if we have SECURE mode enabled, then we want to bounce any changes */
 	cu = data->cu;

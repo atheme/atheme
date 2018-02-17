@@ -35,7 +35,7 @@ int use_limitflags = 0;
 #define MAX_BUF 256
 
 /* ban wrapper for cmode, returns number of bans added (0 or 1) */
-int ban(user_t *sender, channel_t *c, user_t *user)
+int ban(user_t *sender, struct channel *c, user_t *user)
 {
 	char mask[MAX_BUF];
 	chanban_t *cb;
@@ -60,7 +60,7 @@ int ban(user_t *sender, channel_t *c, user_t *user)
 }
 
 /* returns number of modes removed -- jilles */
-int remove_banlike(user_t *source, channel_t *chan, int type, user_t *target)
+int remove_banlike(user_t *source, struct channel *chan, int type, user_t *target)
 {
 	int count = 0;
 	mowgli_node_t *n, *tn;
@@ -87,12 +87,12 @@ int remove_banlike(user_t *source, channel_t *chan, int type, user_t *target)
 }
 
 /* returns number of exceptions removed -- jilles */
-int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target)
+int remove_ban_exceptions(user_t *source, struct channel *chan, user_t *target)
 {
 	return remove_banlike(source, chan, ircd->except_mchar, target);
 }
 
-void try_kick_real(user_t *source, channel_t *chan, user_t *target, const char *reason)
+void try_kick_real(user_t *source, struct channel *chan, user_t *target, const char *reason)
 {
 	chanuser_t *cu;
 
@@ -129,7 +129,7 @@ void try_kick_real(user_t *source, channel_t *chan, user_t *target, const char *
 	}
 	kick(source, chan, target, reason);
 }
-void (*try_kick)(user_t *source, channel_t *chan, user_t *target, const char *reason) = try_kick_real;
+void (*try_kick)(user_t *source, struct channel *chan, user_t *target, const char *reason) = try_kick_real;
 
 /* sends a KILL message for a user and removes the user from the userlist
  * source should be a service user or NULL for a server kill
@@ -180,7 +180,7 @@ void introduce_enforcer(const char *nick)
 /* join a channel, creating it if necessary */
 void join(const char *chan, const char *nick)
 {
-	channel_t *c;
+	struct channel *c;
 	user_t *u;
 	chanuser_t *cu;
 	bool isnew = false;
@@ -232,7 +232,7 @@ void join(const char *chan, const char *nick)
 /* part a channel */
 void part(const char *chan, const char *nick)
 {
-	channel_t *c = channel_find(chan);
+	struct channel *c = channel_find(chan);
 	user_t *u = user_find_named(nick);
 
 	if (!u || !c)
@@ -307,7 +307,7 @@ void partall(const char *name)
 void reintroduce_user(user_t *u)
 {
 	mowgli_node_t *n;
-	channel_t *c;
+	struct channel *c;
 	service_t *svs;
 
 	svs = service_find_nick(u->nick);
@@ -726,7 +726,7 @@ generic_notice(const char *from, const char *to, const char *fmt, ...)
 	va_list args;
 	char buf[BUFSIZE];
 	user_t *u;
-	channel_t *c;
+	struct channel *c;
 
 	va_start(args, fmt);
 	vsnprintf(buf, BUFSIZE, fmt, args);

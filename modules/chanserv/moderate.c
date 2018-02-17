@@ -207,7 +207,7 @@ static void cs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 	csreq_t *cs;
 	chanuser_t *cu;
 	user_t *u;
-	channel_t *c;
+	struct channel *c;
 	char str[BUFSIZE];
 	hook_channel_req_t hdata;
 	sourceinfo_t baked_si;

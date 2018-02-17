@@ -84,7 +84,7 @@ extern unsigned int (*server_login)(void);
 extern void (*introduce_nick)(user_t *u);
 /* send an invite for a given user to a channel
  * the source may not be on the channel */
-extern void (*invite_sts)(user_t *source, user_t *target, channel_t *channel);
+extern void (*invite_sts)(user_t *source, user_t *target, struct channel *channel);
 /* quit a client on the services server with the given message */
 extern void (*quit_sts)(user_t *u, const char *reason);
 /* send wallops
@@ -96,17 +96,17 @@ extern void (*wallops_sts)(const char *text);
  * note that the channelts can still be old in this case (e.g. kills)
  * modes is a convenience argument giving the simple modes with parameters
  * do not rely upon chanuser_find(c,u) */
-extern void (*join_sts)(channel_t *c, user_t *u, bool isnew, char *modes);
+extern void (*join_sts)(struct channel *c, user_t *u, bool isnew, char *modes);
 /* lower the TS of a channel, joining it with the given client on the
  * services server (opped), replacing the current simple modes with the
- * ones stored in the channel_t and clearing all other statuses
+ * ones stored in the struct channel and clearing all other statuses
  * if bans are timestamped on this ircd, call chanban_clear()
  * if the topic is timestamped on this ircd, clear it */
-extern void (*chan_lowerts)(channel_t *c, user_t *u);
+extern void (*chan_lowerts)(struct channel *c, user_t *u);
 /* kick a user from a channel
  * source is a client on the services server which may or may not be
  * on the channel */
-extern void (*kick)(user_t *source, channel_t *c, user_t *u, const char *reason);
+extern void (*kick)(user_t *source, struct channel *c, user_t *u, const char *reason);
 /* send a privmsg
  * here it's ok to assume the source is able to send */
 extern void (*msg)(const char *from, const char *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
@@ -127,11 +127,11 @@ extern void (*notice_global_sts)(user_t *from, const char *mask, const char *tex
  * itself (NULL)
  * if the source cannot send because it is not on the channel, send the
  * notice from the server or join for a moment */
-extern void (*notice_channel_sts)(user_t *from, channel_t *target, const char *text);
+extern void (*notice_channel_sts)(user_t *from, struct channel *target, const char *text);
 /* send a notice to ops in a channel
  * source may or may not be on channel
  * generic_wallchops() sends an individual notice to each channel operator */
-extern void (*wallchops)(user_t *source, channel_t *target, const char *message);
+extern void (*wallchops)(user_t *source, struct channel *target, const char *message);
 /* send a numeric from must currently be me.me */
 extern void (*numeric_sts)(server_t *from, int numeric, user_t *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(4, 5);
 /* kill a user
@@ -141,7 +141,7 @@ extern void (*numeric_sts)(server_t *from, int numeric, user_t *target, const ch
  * do not call user_find(), user_find_named() or similar on it */
 extern void (*kill_id_sts)(user_t *killer, const char *id, const char *reason);
 /* part a channel with a client on the services server */
-extern void (*part_sts)(channel_t *c, user_t *u);
+extern void (*part_sts)(struct channel *c, user_t *u);
 /* add a kline on the servers matching the given mask
  * duration is in seconds, 0 for a permanent kline
  * if the ircd requires klines to be sent from users, use opersvs */
@@ -176,10 +176,10 @@ extern void (*undline_sts)(const char *server, const char *host);
  * useful in optimizing which form of topic change to use
  * if the given topicts was not set and topicts is used on the ircd,
  * set c->topicts to the value used */
-extern void (*topic_sts)(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic);
+extern void (*topic_sts)(struct channel *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic);
 /* set modes on a channel by the given sender; sender must be a client
  * on the services server; sender may or may not be on channel */
-extern void (*mode_sts)(char *sender, channel_t *target, char *modes);
+extern void (*mode_sts)(char *sender, struct channel *target, char *modes);
 /* ping the uplink
  * first check if me.connected is true and bail if not */
 extern void (*ping_sts)(void);
@@ -223,7 +223,7 @@ extern void (*sasl_sts) (const char *target, char mode, const char *data);
 /* send sasl mech list */
 extern void (*sasl_mechlist_sts)(const char *mechlist);
 /* find next channel ban (or other ban-like mode) matching user */
-extern mowgli_node_t *(*next_matching_ban)(channel_t *c, user_t *u, int type, mowgli_node_t *first);
+extern mowgli_node_t *(*next_matching_ban)(struct channel *c, user_t *u, int type, mowgli_node_t *first);
 /* find next host channel access matching user */
 extern mowgli_node_t *(*next_matching_host_chanacs)(mychan_t *mc, user_t *u, mowgli_node_t *first);
 /* check a nickname for validity; normally you don't need to override this */
@@ -234,9 +234,9 @@ extern bool (*is_valid_username)(const char *username);
  * @!?*, space, empty, : at start, length and cidr masks */
 extern bool (*is_valid_host)(const char *host);
 /* burst a channel mlock. */
-extern void (*mlock_sts)(channel_t *c);
+extern void (*mlock_sts)(struct channel *c);
 /* burst a channel topiclock */
-extern void (*topiclock_sts)(channel_t *c);
+extern void (*topiclock_sts)(struct channel *c);
 /* attempt to quarantine a user.
  * in Unreal-esque terms, this means SHUN.
  * in Hybrid, this means CAPTURE.
@@ -248,29 +248,29 @@ extern bool (*is_extban)(const char *mask);
 
 extern unsigned int generic_server_login(void);
 extern void generic_introduce_nick(user_t *u);
-extern void generic_invite_sts(user_t *source, user_t *target, channel_t *channel);
+extern void generic_invite_sts(user_t *source, user_t *target, struct channel *channel);
 extern void generic_quit_sts(user_t *u, const char *reason);
 extern void generic_wallops_sts(const char *text);
-extern void generic_join_sts(channel_t *c, user_t *u, bool isnew, char *modes);
-extern void generic_chan_lowerts(channel_t *c, user_t *u);
-extern void generic_kick(user_t *source, channel_t *c, user_t *u, const char *reason);
+extern void generic_join_sts(struct channel *c, user_t *u, bool isnew, char *modes);
+extern void generic_chan_lowerts(struct channel *c, user_t *u);
+extern void generic_kick(user_t *source, struct channel *c, user_t *u, const char *reason);
 extern void generic_msg(const char *from, const char *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
 extern void generic_msg_global_sts(user_t *from, const char *mask, const char *text);
 extern void generic_notice_user_sts(user_t *from, user_t *target, const char *text);
 extern void generic_notice_global_sts(user_t *from, const char *mask, const char *text);
-extern void generic_notice_channel_sts(user_t *from, channel_t *target, const char *text);
-extern void generic_wallchops(user_t *source, channel_t *target, const char *message);
+extern void generic_notice_channel_sts(user_t *from, struct channel *target, const char *text);
+extern void generic_wallchops(user_t *source, struct channel *target, const char *message);
 extern void generic_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(4, 5);
 extern void generic_kill_id_sts(user_t *killer, const char *id, const char *reason);
-extern void generic_part_sts(channel_t *c, user_t *u);
+extern void generic_part_sts(struct channel *c, user_t *u);
 extern void generic_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason);
 extern void generic_unkline_sts(const char *server, const char *user, const char *host);
 extern void generic_xline_sts(const char *server, const char *realname, long duration, const char *reason);
 extern void generic_unxline_sts(const char *server, const char *realname);
 extern void generic_qline_sts(const char *server, const char *mask, long duration, const char *reason);
 extern void generic_unqline_sts(const char *server, const char *mask);
-extern void generic_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic);
-extern void generic_mode_sts(char *sender, channel_t *target, char *modes);
+extern void generic_topic_sts(struct channel *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic);
+extern void generic_mode_sts(char *sender, struct channel *target, char *modes);
 extern void generic_ping_sts(void);
 extern void generic_on_login(user_t *u, myuser_t *account, const char *wantedhost);
 extern bool generic_on_logout(user_t *u, const char *account);
@@ -281,13 +281,13 @@ extern void generic_holdnick_sts(user_t *source, int duration, const char *nick,
 extern void generic_svslogin_sts(char *target, char *nick, char *user, char *host, myuser_t *account);
 extern void generic_sasl_sts(const char *target, char mode, const char *data);
 extern void generic_sasl_mechlist_sts(const char *mechlist);
-extern mowgli_node_t *generic_next_matching_ban(channel_t *c, user_t *u, int type, mowgli_node_t *first);
+extern mowgli_node_t *generic_next_matching_ban(struct channel *c, user_t *u, int type, mowgli_node_t *first);
 extern mowgli_node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, mowgli_node_t *first);
 extern bool generic_is_valid_host(const char *host);
 extern bool generic_is_valid_nick(const char *nick);
 extern bool generic_is_valid_username(const char *username);
-extern void generic_mlock_sts(channel_t *c);
-extern void generic_topiclock_sts(channel_t *c);
+extern void generic_mlock_sts(struct channel *c);
+extern void generic_topiclock_sts(struct channel *c);
 extern void generic_quarantine_sts(user_t *source, user_t *victim, long duration, const char *reason);
 extern bool generic_is_extban(const char *mask);
 extern void generic_dline_sts(const char *server, const char *host, long duration, const char *reason);

@@ -28,7 +28,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cmd_lottery);
 }
 
-static user_t *pick_a_sucker(channel_t *c)
+static user_t *pick_a_sucker(struct channel *c)
 {
 	int slot = arc4random_uniform(MOWGLI_LIST_LENGTH(&c->members));
 	chanuser_t *cu;

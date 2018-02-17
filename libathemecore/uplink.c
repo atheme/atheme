@@ -180,7 +180,7 @@ void uplink_connect(void)
  */
 static void uplink_close(connection_t *cptr)
 {
-	channel_t *c;
+	struct channel *c;
 	mowgli_patricia_iteration_state_t state;
 
 	mowgli_timer_add_once(base_eventloop, "reconn", reconn, NULL, me.recontime);

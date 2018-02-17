@@ -49,7 +49,7 @@ int mode_to_flag(char c)
 	return mode_list[i].value;
 }
 
-static void reop_service(channel_t *chan, user_t *victim, user_t **pfirst_deopped_service)
+static void reop_service(struct channel *chan, user_t *victim, user_t **pfirst_deopped_service)
 {
 	mowgli_node_t *n;
 
@@ -86,7 +86,7 @@ static void reop_service(channel_t *chan, user_t *victim, user_t **pfirst_deoppe
 /* If source == NULL, apply a mode change from outside to our structures
  * If source != NULL, apply the mode change and send it out from that user
  */
-void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
+void channel_mode(user_t *source, struct channel *chan, int parc, char *parv[])
 {
 	bool matched = false;
 	bool simple_modes_changed = false;
@@ -366,7 +366,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 }
 
 /* like channel_mode() but parv array passed as varargs */
-void channel_mode_va(user_t *source, channel_t *chan, int parc, char *parv0, ...)
+void channel_mode_va(user_t *source, struct channel *chan, int parc, char *parv0, ...)
 {
 	char *parv[255];
 	int i;
@@ -391,7 +391,7 @@ void channel_mode_va(user_t *source, channel_t *chan, int parc, char *parv0, ...
 
 static struct modestackdata {
 	char source[HOSTLEN + 1]; /* name */
-	channel_t *channel;
+	struct channel *channel;
 	unsigned int modes_on;
 	unsigned int modes_off;
 	unsigned int limit;
@@ -586,7 +586,7 @@ static void modestack_flush(struct modestackdata *md)
 	modestack_clear(md);
 }
 
-static struct modestackdata *modestack_init(const char *source, channel_t *channel)
+static struct modestackdata *modestack_init(const char *source, struct channel *channel)
 {
 	return_val_if_fail(source != NULL, NULL);
 	return_val_if_fail(channel != NULL, NULL);
@@ -707,21 +707,21 @@ static void modestack_flush_callback(void *arg)
 }
 
 /* flush pending modes for a certain channel */
-void modestack_flush_channel(channel_t *channel)
+void modestack_flush_channel(struct channel *channel)
 {
 	if (channel == NULL || channel == modestackdata.channel)
 		modestack_flush(&modestackdata);
 }
 
 /* forget pending modes for a certain channel */
-void modestack_forget_channel(channel_t *channel)
+void modestack_forget_channel(struct channel *channel)
 {
 	if (channel == NULL || channel == modestackdata.channel)
 		modestack_clear(&modestackdata);
 }
 
 /* handle a channel that is going to be destroyed */
-void modestack_finalize_channel(channel_t *channel)
+void modestack_finalize_channel(struct channel *channel)
 {
 	user_t *u;
 
@@ -744,7 +744,7 @@ void modestack_finalize_channel(channel_t *channel)
 }
 
 /* stack simple modes without parameters */
-void modestack_mode_simple_real(const char *source, channel_t *channel, int dir, int flags)
+void modestack_mode_simple_real(const char *source, struct channel *channel, int dir, int flags)
 {
 	struct modestackdata *md;
 
@@ -755,10 +755,10 @@ void modestack_mode_simple_real(const char *source, channel_t *channel, int dir,
 	if (!md->event)
 		md->event = mowgli_timer_add_once(base_eventloop, "flush_cmode_callback", modestack_flush_callback, md, 0);
 }
-void (*modestack_mode_simple)(const char *source, channel_t *channel, int dir, int flags) = modestack_mode_simple_real;
+void (*modestack_mode_simple)(const char *source, struct channel *channel, int dir, int flags) = modestack_mode_simple_real;
 
 /* stack a limit */
-void modestack_mode_limit_real(const char *source, channel_t *channel, int dir, unsigned int limit)
+void modestack_mode_limit_real(const char *source, struct channel *channel, int dir, unsigned int limit)
 {
 	struct modestackdata *md;
 
@@ -767,10 +767,10 @@ void modestack_mode_limit_real(const char *source, channel_t *channel, int dir, 
 	if (!md->event)
 		md->event = mowgli_timer_add_once(base_eventloop, "flush_cmode_callback", modestack_flush_callback, md, 0);
 }
-void (*modestack_mode_limit)(const char *source, channel_t *channel, int dir, unsigned int limit) = modestack_mode_limit_real;
+void (*modestack_mode_limit)(const char *source, struct channel *channel, int dir, unsigned int limit) = modestack_mode_limit_real;
 
 /* stack a non-standard type C mode */
-void modestack_mode_ext_real(const char *source, channel_t *channel, int dir, unsigned int i, const char *value)
+void modestack_mode_ext_real(const char *source, struct channel *channel, int dir, unsigned int i, const char *value)
 {
 	struct modestackdata *md;
 
@@ -785,10 +785,10 @@ void modestack_mode_ext_real(const char *source, channel_t *channel, int dir, un
 	if (!md->event)
 		md->event = mowgli_timer_add_once(base_eventloop, "flush_cmode_callback", modestack_flush_callback, md, 0);
 }
-void (*modestack_mode_ext)(const char *source, channel_t *channel, int dir, unsigned int i, const char *value) = modestack_mode_ext_real;
+void (*modestack_mode_ext)(const char *source, struct channel *channel, int dir, unsigned int i, const char *value) = modestack_mode_ext_real;
 
 /* stack a type A, B or E mode */
-void modestack_mode_param_real(const char *source, channel_t *channel, int dir, char type, const char *value)
+void modestack_mode_param_real(const char *source, struct channel *channel, int dir, char type, const char *value)
 {
 	struct modestackdata *md;
 
@@ -797,7 +797,7 @@ void modestack_mode_param_real(const char *source, channel_t *channel, int dir, 
 	if (!md->event)
 		md->event = mowgli_timer_add_once(base_eventloop, "flush_cmode_callback", modestack_flush_callback, md, 0);
 }
-void (*modestack_mode_param)(const char *source, channel_t *channel, int dir, char type, const char *value) = modestack_mode_param_real;
+void (*modestack_mode_param)(const char *source, struct channel *channel, int dir, char type, const char *value) = modestack_mode_param_real;
 
 /* go ahead and flush now */
 void modestack_flush_now(void)
@@ -806,7 +806,7 @@ void modestack_flush_now(void)
 }
 
 /* Clear all simple modes (+imnpstkl etc) on a channel */
-void clear_simple_modes(channel_t *c)
+void clear_simple_modes(struct channel *c)
 {
 	size_t i;
 
@@ -825,7 +825,7 @@ void clear_simple_modes(channel_t *c)
 		}
 }
 
-char *channel_modes(channel_t *c, bool doparams)
+char *channel_modes(struct channel *c, bool doparams)
 {
 	static char fullmode[512];
 	char params[512];

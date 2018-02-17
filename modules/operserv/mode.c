@@ -27,7 +27,7 @@ static void os_cmd_mode(sourceinfo_t *si, int parc, char *parv[])
 {
         char *channel = parv[0];
 	char *mode = parv[1];
-	channel_t *c;
+	struct channel *c;
 	int modeparc;
 	char *modeparv[256];
 

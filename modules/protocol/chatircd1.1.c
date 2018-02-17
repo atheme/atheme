@@ -122,7 +122,7 @@ static bool unidentified_match(const char *mask, user_t *u)
 	return false;
 }
 
-static mowgli_node_t *chatircd_next_matching_ban(channel_t *c, user_t *u, int type, mowgli_node_t *first)
+static mowgli_node_t *chatircd_next_matching_ban(struct channel *c, user_t *u, int type, mowgli_node_t *first)
 {
 	chanban_t *cb;
 	mowgli_node_t *n;
@@ -133,7 +133,7 @@ static mowgli_node_t *chatircd_next_matching_ban(channel_t *c, user_t *u, int ty
 	char *p;
 	bool negate, matched;
 	int exttype;
-	channel_t *target_c;
+	struct channel *target_c;
 
 	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
 	snprintf(realbuf, sizeof realbuf, "%s!%s@%s", u->nick, u->user, u->host);

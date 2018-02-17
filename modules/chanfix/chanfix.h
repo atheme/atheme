@@ -32,7 +32,7 @@ typedef struct chanfix_channel {
 	time_t ts;
 	time_t lastupdate;
 
-	channel_t *chan;
+	struct channel *chan;
 
 	time_t fix_started;
 	bool fix_requested;
@@ -72,9 +72,9 @@ extern void chanfix_oprecord_update(chanfix_channel_t *chan, user_t *u);
 extern void chanfix_oprecord_delete(chanfix_oprecord_t *orec);
 extern chanfix_oprecord_t *chanfix_oprecord_create(chanfix_channel_t *chan, user_t *u);
 extern chanfix_oprecord_t *chanfix_oprecord_find(chanfix_channel_t *chan, user_t *u);
-extern chanfix_channel_t *chanfix_channel_create(const char *name, channel_t *chan);
+extern chanfix_channel_t *chanfix_channel_create(const char *name, struct channel *chan);
 extern chanfix_channel_t *chanfix_channel_find(const char *name);
-extern chanfix_channel_t *chanfix_channel_get(channel_t *chan);
+extern chanfix_channel_t *chanfix_channel_get(struct channel *chan);
 extern void chanfix_gather(void *unused);
 extern void chanfix_expire(void *unused);
 

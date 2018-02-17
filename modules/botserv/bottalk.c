@@ -44,7 +44,7 @@ static void bs_cmd_say(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	channel_t *c = channel_find(channel);
+	struct channel *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
 
 	if (!mc)
@@ -110,7 +110,7 @@ static void bs_cmd_act(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	channel_t *c = channel_find(channel);
+	struct channel *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
 
 	if (!mc)

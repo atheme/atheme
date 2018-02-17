@@ -65,7 +65,7 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 	char *action = parv[1];
 	char *reason = parv[2];
 	mychan_t *mc;
-	channel_t *c;
+	struct channel *c;
 	chanuser_t *cu;
 	mowgli_node_t *n, *tn;
 

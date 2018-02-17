@@ -156,7 +156,7 @@ struct mychan_
 
   stringref name;
 
-  channel_t *chan;
+  struct channel *chan;
   mowgli_list_t chanacs;
   time_t registered;
   time_t used;
@@ -310,7 +310,7 @@ typedef struct {
 typedef struct {
 	sourceinfo_t *si;
 	const char *name;
-	channel_t *chan;
+	struct channel *chan;
 	int approved; /* Write non-zero here to disallow the registration */
 } hook_channel_register_check_t;
 
@@ -411,7 +411,7 @@ extern struct qline *qline_find(const char *mask);
 extern struct qline *qline_find_match(const char *mask);
 extern struct qline *qline_find_num(unsigned int number);
 extern struct qline *qline_find_user(user_t *u);
-extern struct qline *qline_find_channel(channel_t *c);
+extern struct qline *qline_find_channel(struct channel *c);
 extern void qline_expire(void *arg);
 
 /* account.c */

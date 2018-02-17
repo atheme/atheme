@@ -87,7 +87,7 @@ static inline mychan_t *mychan_find(const char *name)
 	return name ? mowgli_patricia_retrieve(mclist, name) : NULL;
 }
 
-static inline mychan_t *mychan_from(channel_t *chan)
+static inline mychan_t *mychan_from(struct channel *chan)
 {
 	return chan ? (chan->mychan ? chan->mychan : mychan_find(chan->name)) : NULL;
 }

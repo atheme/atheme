@@ -537,7 +537,7 @@ struct qline *qline_find_user(user_t *u)
 	return NULL;
 }
 
-struct qline *qline_find_channel(channel_t *c)
+struct qline *qline_find_channel(struct channel *c)
 {
 	struct qline *q;
 	mowgli_node_t *n;

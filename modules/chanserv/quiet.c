@@ -66,7 +66,7 @@ static char *strip_extban(char *mask)
 	return sstrdup(mask);
 }
 
-chanban_t *place_quietmask(channel_t *c, int dir, const char *hostbuf)
+chanban_t *place_quietmask(struct channel *c, int dir, const char *hostbuf)
 {
 	char rhostbuf[BUFSIZE];
 	chanban_t *cb = NULL;
@@ -108,7 +108,7 @@ static void make_extban(char *buf, size_t size, user_t *tu)
 enum devoice_result { DEVOICE_FAILED, DEVOICE_NO_ACTION, DEVOICE_DONE };
 
 static enum devoice_result
-devoice_user(sourceinfo_t *si, mychan_t *mc, channel_t *c, user_t *tu)
+devoice_user(sourceinfo_t *si, mychan_t *mc, struct channel *c, user_t *tu)
 {
 	chanuser_t *cu;
 	unsigned int flag;
@@ -173,7 +173,7 @@ devoice_user(sourceinfo_t *si, mychan_t *mc, channel_t *c, user_t *tu)
 /* Notify at most this many users in private notices, otherwise channel */
 #define MAX_SINGLE_NOTIFY 3
 
-static void notify_one_victim(sourceinfo_t *si, channel_t *c, user_t *u, int dir)
+static void notify_one_victim(sourceinfo_t *si, struct channel *c, user_t *u, int dir)
 {
 	return_if_fail(dir == MTYPE_ADD || dir == MTYPE_DEL);
 
@@ -194,7 +194,7 @@ static void notify_one_victim(sourceinfo_t *si, channel_t *c, user_t *u, int dir
 				c->name, get_source_name(si));
 }
 
-static void notify_victims(sourceinfo_t *si, channel_t *c, chanban_t *cb, int dir)
+static void notify_victims(sourceinfo_t *si, struct channel *c, chanban_t *cb, int dir)
 {
 	mowgli_node_t *n;
 	chanuser_t *cu;
@@ -262,7 +262,7 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 	char *channel = parv[0];
 	char *target = parv[1];
 	char *newtarget;
-	channel_t *c = channel_find(channel);
+	struct channel *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
 	user_t *tu;
 	chanban_t *cb;
@@ -357,7 +357,7 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
         const char *channel = parv[0];
         const char *target = parv[1];
 	char banlike_char = get_quiet_ban_char();
-        channel_t *c = channel_find(channel);
+        struct channel *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
 	user_t *tu;
 	chanban_t *cb;

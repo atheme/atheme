@@ -47,7 +47,7 @@ struct sourceinfo_
 	 */
 	service_t *service;
 
-	channel_t *c; /* channel this command applies to (fantasy?) */
+	struct channel *c; /* channel this command applies to (fantasy?) */
 
 	struct sourceinfo_vtable *v; /* function pointers, could be NULL */
 	void *callerdata; /* opaque data pointer for caller */

@@ -31,7 +31,7 @@ mod_deinit(const module_unload_intent_t intent)
 static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[])
 {
 	char fullreason[200];
-	channel_t *c;
+	struct channel *c;
 	char *channel = parv[0];
 	mychan_t *mc = mychan_find(channel);
 	chanuser_t *cu;

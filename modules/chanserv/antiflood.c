@@ -214,11 +214,11 @@ mqueue_should_enforce(mqueue_t *mq)
 	return MQ_ENFORCE_NONE;
 }
 
-static chanban_t *(*place_quietmask)(channel_t *c, int dir, const char *hostbuf) = NULL;
+static chanban_t *(*place_quietmask)(struct channel *c, int dir, const char *hostbuf) = NULL;
 
 /* this requires `chanserv/quiet` to be loaded. */
 static void
-antiflood_enforce_quiet(user_t *u, channel_t *c)
+antiflood_enforce_quiet(user_t *u, struct channel *c)
 {
 	char hostbuf[BUFSIZE];
 
@@ -237,7 +237,7 @@ antiflood_enforce_quiet(user_t *u, channel_t *c)
 }
 
 static void
-antiflood_unenforce_banlike(channel_t *c)
+antiflood_unenforce_banlike(struct channel *c)
 {
 	mowgli_node_t *n, *tn;
 
@@ -254,7 +254,7 @@ antiflood_unenforce_banlike(channel_t *c)
 }
 
 static void
-antiflood_enforce_kickban(user_t *u, channel_t *c)
+antiflood_enforce_kickban(user_t *u, struct channel *c)
 {
 	chanban_t *cb;
 
@@ -277,15 +277,15 @@ antiflood_enforce_kickban(user_t *u, channel_t *c)
 }
 
 static void
-antiflood_enforce_kline(user_t *u, channel_t *c)
+antiflood_enforce_kline(user_t *u, struct channel *c)
 {
 	kline_add_user(u, "Flooding", 86400, chansvs.nick);
 	slog(LG_INFO, "ANTIFLOOD:ENFORCE:AKILL: \2%s!%s@%s\2 from \2%s\2", u->nick, u->user, u->vhost, c->name);
 }
 
 typedef struct {
-	void (*enforce)(user_t *u, channel_t *c);
-	void (*unenforce)(channel_t *c);
+	void (*enforce)(user_t *u, struct channel *c);
+	void (*unenforce)(struct channel *c);
 } antiflood_enforce_method_impl_t;
 
 static antiflood_enforce_method_impl_t antiflood_enforce_methods[ANTIFLOOD_ENFORCE_COUNT] = {

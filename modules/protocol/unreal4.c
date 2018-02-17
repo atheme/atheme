@@ -71,8 +71,8 @@ struct cmode_ unreal_mode_list[] = {
   { '\0', 0 }
 };
 
-static bool check_flood(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu);
-static bool check_forward(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu);
+static bool check_flood(const char *value, struct channel *c, mychan_t *mc, user_t *u, myuser_t *mu);
+static bool check_forward(const char *value, struct channel *c, mychan_t *mc, user_t *u, myuser_t *mu);
 
 struct extmode unreal_ignore_mode_list[] = {
   { 'f', check_flood },
@@ -107,7 +107,7 @@ struct cmode_ unreal_user_mode_list[] = {
 };
 
 /* +f 3:1 or +f *3:1 (which is like +f [3t]:1 or +f [3t#b]:1) */
-static inline bool check_flood_old(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+static inline bool check_flood_old(const char *value, struct channel *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
 	bool found_colon = false;
 
@@ -149,7 +149,7 @@ static inline bool check_flood_old(const char *value, channel_t *c, mychan_t *mc
  *
  * +f [<number><letter>(#<letter>)(,...)]
  */
-static bool check_flood(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+static bool check_flood(const char *value, struct channel *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
 	char evalbuf[BUFSIZE], *ep, *p;
 
@@ -200,9 +200,9 @@ static bool check_flood(const char *value, channel_t *c, mychan_t *mc, user_t *u
 	return true;
 }
 
-static bool check_forward(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+static bool check_forward(const char *value, struct channel *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
-	channel_t *target_c;
+	struct channel *target_c;
 	mychan_t *target_mc;
 
 	if (!VALID_GLOBAL_CHANNEL_PFX(value) || strlen(value) > 50)
@@ -216,7 +216,7 @@ static bool check_forward(const char *value, channel_t *c, mychan_t *mc, user_t 
 	return true;
 }
 
-static mowgli_node_t *unreal_next_matching_ban(channel_t *c, user_t *u, int type, mowgli_node_t *first)
+static mowgli_node_t *unreal_next_matching_ban(struct channel *c, user_t *u, int type, mowgli_node_t *first)
 {
 	chanban_t *cb;
 	mowgli_node_t *n;
@@ -226,7 +226,7 @@ static mowgli_node_t *unreal_next_matching_ban(channel_t *c, user_t *u, int type
 	char *p;
 	bool matched;
 	int exttype;
-	channel_t *target_c;
+	struct channel *target_c;
 
 	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
 	snprintf(realbuf, sizeof realbuf, "%s!%s@%s", u->nick, u->user, u->host);
@@ -319,7 +319,7 @@ static void unreal_introduce_nick(user_t *u)
 }
 
 /* invite a user to a channel */
-static void unreal_invite_sts(user_t *sender, user_t *target, channel_t *channel)
+static void unreal_invite_sts(user_t *sender, user_t *target, struct channel *channel)
 {
 	sts(":%s INVITE %s %s", CLIENT_NAME(sender), CLIENT_NAME(target), channel->name);
 }
@@ -336,7 +336,7 @@ static void unreal_wallops_sts(const char *text)
 }
 
 /* join a channel */
-static void unreal_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
+static void unreal_join_sts(struct channel *c, user_t *u, bool isnew, char *modes)
 {
 	if (isnew)
 		sts(":%s SJOIN %lu %s %s :@%s", ME, (unsigned long)c->ts,
@@ -347,7 +347,7 @@ static void unreal_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 }
 
 /* lower TS */
-static void unreal_chan_lowerts(channel_t *c, user_t *u)
+static void unreal_chan_lowerts(struct channel *c, user_t *u)
 {
 	slog(LG_DEBUG, "unreal_chan_lowerts(): lowering TS for %s to %lu",
 			c->name, (unsigned long)c->ts);
@@ -356,7 +356,7 @@ static void unreal_chan_lowerts(channel_t *c, user_t *u)
 }
 
 /* kicks a user from a channel */
-static void unreal_kick(user_t *source, channel_t *c, user_t *u, const char *reason)
+static void unreal_kick(user_t *source, struct channel *c, user_t *u, const char *reason)
 {
 	sts(":%s KICK %s %s :%s", source->nick, c->name, u->nick, reason);
 
@@ -417,7 +417,7 @@ static void unreal_notice_global_sts(user_t *from, const char *mask, const char 
 		sts(":%s NOTICE %s%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, mask, text);
 }
 
-static void unreal_notice_channel_sts(user_t *from, channel_t *target, const char *text)
+static void unreal_notice_channel_sts(user_t *from, struct channel *target, const char *text)
 {
 	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, target->name, text);
 }
@@ -466,7 +466,7 @@ static void unreal_kill_id_sts(user_t *killer, const char *id, const char *reaso
 }
 
 /* PART wrapper */
-static void unreal_part_sts(channel_t *c, user_t *u)
+static void unreal_part_sts(struct channel *c, user_t *u)
 {
 	sts(":%s PART %s", CLIENT_NAME(u), c->name);
 }
@@ -537,7 +537,7 @@ static void unreal_unqline_sts(const char *server, const char *name)
 }
 
 /* topic wrapper */
-static void unreal_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
+static void unreal_topic_sts(struct channel *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	return_if_fail(c != NULL);
 	return_if_fail(source != NULL);
@@ -546,7 +546,7 @@ static void unreal_topic_sts(channel_t *c, user_t *source, const char *setter, t
 }
 
 /* mode wrapper */
-static void unreal_mode_sts(char *sender, channel_t *target, char *modes)
+static void unreal_mode_sts(char *sender, struct channel *target, char *modes)
 {
 	return_if_fail(sender != NULL);
 	return_if_fail(target != NULL);
@@ -685,7 +685,7 @@ static void unreal_svslogin_sts(char *target, char *nick, char *user, char *host
 	sts(":%s SVSLOGIN %s %s %s", saslserv->me->nick, servermask, target, entity(account)->name);
 }
 
-static void unreal_mlock_sts(channel_t *c)
+static void unreal_mlock_sts(struct channel *c)
 {
 	mychan_t *mc = mychan_from(c);
 
@@ -701,7 +701,7 @@ static void unreal_mlock_sts(channel_t *c)
 
 static void m_mlock(sourceinfo_t *si, int parc, char *parv[])
 {
-	channel_t *c;
+	struct channel *c;
 	mychan_t *mc;
 	const char *mlock;
 
@@ -759,7 +759,7 @@ static void m_sasl(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 {
-	channel_t *c = channel_find(parv[0]);
+	struct channel *c = channel_find(parv[0]);
 
 	if (!c)
 		return;
@@ -831,7 +831,7 @@ static void m_notice(sourceinfo_t *si, int parc, char *parv[])
 	handle_message(si, parv[0], true, parv[1]);
 }
 
-static void remove_our_modes(channel_t *c)
+static void remove_our_modes(struct channel *c)
 {
 	/* the TS changed.  a TS change requires the following things
 	 * to be done to the channel:  reset all modes to nothing, remove
@@ -860,7 +860,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 	 *  -> SJOIN 1117334567 #chat :@nenolod
 	 */
 
-	channel_t *c;
+	struct channel *c;
 	unsigned int userc;
 	char *userv[256];
 	unsigned int i;
@@ -1264,7 +1264,7 @@ static void m_umode(sourceinfo_t *si, int parc, char *parv[])
 static void m_kick(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u = user_find(parv[1]);
-	channel_t *c = channel_find(parv[0]);
+	struct channel *c = channel_find(parv[0]);
 
 	/* -> :rakaur KICK #shrike rintaun :test */
 	slog(LG_DEBUG, "m_kick(): user was kicked: %s -> %s", parv[1], parv[0]);
@@ -1471,7 +1471,7 @@ static void m_md(sourceinfo_t *si, int parc, char *parv[])
 	char *value = (parc >= 4) ? parv[3] : NULL;
 
 	user_t *u;
-	channel_t *c;
+	struct channel *c;
 
 	if (!strcmp(type, "client"))
 	{

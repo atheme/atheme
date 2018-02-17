@@ -30,7 +30,7 @@ mod_deinit(const module_unload_intent_t intent)
 
 static void cs_cmd_clear_bans(sourceinfo_t *si, int parc, char *parv[])
 {
-	channel_t *c;
+	struct channel *c;
 	mychan_t *mc = mychan_find(parv[0]);
 	chanban_t *cb;
 	mowgli_node_t *n, *tn;

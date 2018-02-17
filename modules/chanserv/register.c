@@ -30,7 +30,7 @@ mod_deinit(const module_unload_intent_t intent)
 
 static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 {
-	channel_t *c;
+	struct channel *c;
 	chanuser_t *cu;
 	mychan_t *mc;
 	char *name = parv[0];

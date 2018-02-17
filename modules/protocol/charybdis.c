@@ -65,8 +65,8 @@ struct cmode_ charybdis_mode_list[] = {
   { '\0', 0 }
 };
 
-static bool check_forward(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
-static bool check_jointhrottle(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+static bool check_forward(const char *, struct channel *, mychan_t *, user_t *, myuser_t *);
+static bool check_jointhrottle(const char *, struct channel *, mychan_t *, user_t *, myuser_t *);
 
 struct extmode charybdis_ignore_mode_list[] = {
   { 'f', check_forward },
@@ -98,9 +98,9 @@ struct cmode_ charybdis_user_mode_list[] = {
 
 /* ircd allows forwards to existing channels; the target channel must be
  * +F or the setter must have ops in it */
-static bool check_forward(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+static bool check_forward(const char *value, struct channel *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
-	channel_t *target_c;
+	struct channel *target_c;
 	mychan_t *target_mc;
 	chanuser_t *target_cu;
 
@@ -130,7 +130,7 @@ static bool check_forward(const char *value, channel_t *c, mychan_t *mc, user_t 
 	return false;
 }
 
-static bool check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+static bool check_jointhrottle(const char *value, struct channel *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
 	const char *p, *arg2;
 
@@ -167,7 +167,7 @@ static bool extgecos_match(const char *mask, user_t *u)
 	return !match(mask, hostgbuf) || !match(mask, realgbuf);
 }
 
-static mowgli_node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int type, mowgli_node_t *first)
+static mowgli_node_t *charybdis_next_matching_ban(struct channel *c, user_t *u, int type, mowgli_node_t *first)
 {
 	chanban_t *cb;
 	mowgli_node_t *n;
@@ -178,7 +178,7 @@ static mowgli_node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int t
 	char *p;
 	bool negate, matched;
 	int exttype;
-	channel_t *target_c;
+	struct channel *target_c;
 
 	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
 	snprintf(realbuf, sizeof realbuf, "%s!%s@%s", u->nick, u->user, u->host);
@@ -271,7 +271,7 @@ static bool charybdis_is_valid_host(const char *host)
 	return true;
 }
 
-static void charybdis_notice_channel_sts(user_t *from, channel_t *target, const char *text)
+static void charybdis_notice_channel_sts(user_t *from, struct channel *target, const char *text)
 {
 	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, target->name, text);
 }

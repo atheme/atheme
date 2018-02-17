@@ -93,7 +93,7 @@ struct cmode_ nefarious_user_mode_list[] = {
 static void check_hidehost(user_t *u);
 
 /* join a channel */
-static void nefarious_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
+static void nefarious_join_sts(struct channel *c, user_t *u, bool isnew, char *modes)
 {
 	/* If the channel doesn't exist, we need to create it. */
 	if (isnew)
@@ -110,7 +110,7 @@ static void nefarious_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 }
 
 /* kicks a user from a channel */
-static void nefarious_kick(user_t *source, channel_t *c, user_t *u, const char *reason)
+static void nefarious_kick(user_t *source, struct channel *c, user_t *u, const char *reason)
 {
 	sts("%s K %s %s :%s", source->uid, c->name, u->uid, reason);
 
@@ -118,13 +118,13 @@ static void nefarious_kick(user_t *source, channel_t *c, user_t *u, const char *
 }
 
 /* NOTICE wrapper */
-static void nefarious_notice_channel_sts(user_t *from, channel_t *target, const char *text)
+static void nefarious_notice_channel_sts(user_t *from, struct channel *target, const char *text)
 {
 	sts("%s O %s :%s", from ? from->uid : me.numeric, target->name, text);
 }
 
 /* topic wrapper */
-static void nefarious_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
+static void nefarious_topic_sts(struct channel *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	return_if_fail(c != NULL);
 
@@ -200,7 +200,7 @@ static void nefarious_quarantine_sts(user_t *source, user_t *victim, long durati
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 {
-	channel_t *c = channel_find(parv[0]);
+	struct channel *c = channel_find(parv[0]);
 	const char *source;
 	time_t ts = 0;
 
@@ -223,7 +223,7 @@ static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 {
-	channel_t *c;
+	struct channel *c;
 	unsigned int modec;
 	char *modev[16];
 	unsigned int userc;
@@ -517,7 +517,7 @@ static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 {
-	channel_t *chan;
+	struct channel *chan;
 	char *p, c;
 	mowgli_node_t *n, *tn;
 	chanuser_t *cu;

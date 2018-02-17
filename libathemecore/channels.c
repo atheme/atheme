@@ -45,7 +45,7 @@ mowgli_heap_t *chanban_heap;
  */
 void init_channels(void)
 {
-	chan_heap = sharedheap_get(sizeof(channel_t));
+	chan_heap = sharedheap_get(sizeof(struct channel));
 	chanuser_heap = sharedheap_get(sizeof(chanuser_t));
 	chanban_heap = sharedheap_get(sizeof(chanban_t));
 
@@ -80,9 +80,9 @@ void init_channels(void)
  *     - if the creator is me.me these actions must be performed by the
  *       caller (i.e. join()) after joining the service
  */
-channel_t *channel_add(const char *name, time_t ts, server_t *creator)
+struct channel *channel_add(const char *name, time_t ts, server_t *creator)
 {
-	channel_t *c;
+	struct channel *c;
 	mychan_t *mc;
 
 	if (!VALID_GLOBAL_CHANNEL_PFX(name))
@@ -133,7 +133,7 @@ channel_t *channel_add(const char *name, time_t ts, server_t *creator)
 }
 
 /*
- * channel_delete(channel_t *c)
+ * channel_delete(struct channel *c)
  *
  * Destroys a channel object and its children member objects.
  *
@@ -148,7 +148,7 @@ channel_t *channel_add(const char *name, time_t ts, server_t *creator)
  *     - a channel and all attached structures are destroyed
  *     - no protocol messages are sent for any remaining members
  */
-void channel_delete(channel_t *c)
+void channel_delete(struct channel *c)
 {
 	mychan_t *mc;
 	mowgli_node_t *n, *tn;
@@ -201,7 +201,7 @@ void channel_delete(channel_t *c)
 }
 
 /*
- * chanban_add(channel_t *chan, const char *mask, int type)
+ * chanban_add(struct channel *chan, const char *mask, int type)
  *
  * Channel ban factory.
  *
@@ -217,7 +217,7 @@ void channel_delete(channel_t *c)
  * Side Effects:
  *     - the created channel ban object is added to the channel automatically.
  */
-chanban_t *chanban_add(channel_t *chan, const char *mask, int type)
+chanban_t *chanban_add(struct channel *chan, const char *mask, int type)
 {
 	chanban_t *c;
 
@@ -277,7 +277,7 @@ void chanban_delete(chanban_t * c)
 }
 
 /*
- * chanban_find(channel_t *chan, const char *mask, int type)
+ * chanban_find(struct channel *chan, const char *mask, int type)
  *
  * Looks up a channel ban.
  *
@@ -293,7 +293,7 @@ void chanban_delete(chanban_t * c)
  * Side Effects:
  *     - none
  */
-chanban_t *chanban_find(channel_t *chan, const char *mask, int type)
+chanban_t *chanban_find(struct channel *chan, const char *mask, int type)
 {
 	chanban_t *c;
 	mowgli_node_t *n;
@@ -313,7 +313,7 @@ chanban_t *chanban_find(channel_t *chan, const char *mask, int type)
 }
 
 /*
- * chanuser_add(channel_t *chan, const char *nick)
+ * chanuser_add(struct channel *chan, const char *nick)
  *
  * Channel user factory.
  *
@@ -343,7 +343,7 @@ chanban_t *chanban_find(channel_t *chan, const char *mask, int type)
  * things. It worked fine for shrike, but the old code was restricted
  * to handling only @, @+ and + as prefixes.
  */
-chanuser_t *chanuser_add(channel_t *chan, const char *nick)
+chanuser_t *chanuser_add(struct channel *chan, const char *nick)
 {
 	user_t *u;
 	chanuser_t *cu, *tcu;
@@ -417,7 +417,7 @@ chanuser_t *chanuser_add(channel_t *chan, const char *nick)
 }
 
 /*
- * chanuser_delete(channel_t *chan, user_t *user)
+ * chanuser_delete(struct channel *chan, user_t *user)
  *
  * Destroys a channel user object.
  *
@@ -436,7 +436,7 @@ chanuser_t *chanuser_add(channel_t *chan, const char *nick)
  *     - if this empties the channel and the channel is not set permanent
  *       (ircd->perm_mode), channel_delete() is called (q.v.)
  */
-void chanuser_delete(channel_t *chan, user_t *user)
+void chanuser_delete(struct channel *chan, user_t *user)
 {
 	chanuser_t *cu;
 	hook_channel_joinpart_t hdata;
@@ -475,7 +475,7 @@ void chanuser_delete(channel_t *chan, user_t *user)
 }
 
 /*
- * chanuser_find(channel_t *chan, user_t *user)
+ * chanuser_find(struct channel *chan, user_t *user)
  *
  * Looks up a channel user object.
  *
@@ -490,7 +490,7 @@ void chanuser_delete(channel_t *chan, user_t *user)
  * Side Effects:
  *     - none
  */
-chanuser_t *chanuser_find(channel_t *chan, user_t *user)
+chanuser_t *chanuser_find(struct channel *chan, user_t *user)
 {
 	mowgli_node_t *n;
 	chanuser_t *cu;

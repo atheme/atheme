@@ -50,7 +50,7 @@ extern void handle_trace(user_t *, const char *, const char *);
 extern void handle_motd(user_t *);
 extern void handle_away(user_t *, const char *);
 extern void handle_message(sourceinfo_t *, char *, bool, char *);
-extern void handle_topic_from(sourceinfo_t *, channel_t *, const char *, time_t, const char *);
+extern void handle_topic_from(sourceinfo_t *, struct channel *, const char *, time_t, const char *);
 extern void handle_kill(sourceinfo_t *, const char *, const char *);
 extern server_t *handle_server(sourceinfo_t *, const char *, const char *, int, const char *);
 extern void handle_eob(server_t *);

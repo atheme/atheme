@@ -108,7 +108,7 @@ static void ngircd_introduce_nick(user_t *u)
 }
 
 /* invite a user to a channel */
-static void ngircd_invite_sts(user_t *sender, user_t *target, channel_t *channel)
+static void ngircd_invite_sts(user_t *sender, user_t *target, struct channel *channel)
 {
 	bool joined = false;
 
@@ -130,7 +130,7 @@ static void ngircd_quit_sts(user_t *u, const char *reason)
 }
 
 /* join a channel */
-static void ngircd_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
+static void ngircd_join_sts(struct channel *c, user_t *u, bool isnew, char *modes)
 {
 	sts(":%s NJOIN %s :@%s", ME, c->name, CLIENT_NAME(u));
 	if (isnew && modes[0] && modes[1])
@@ -138,7 +138,7 @@ static void ngircd_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 }
 
 /* kicks a user from a channel */
-static void ngircd_kick(user_t *source, channel_t *c, user_t *u, const char *reason)
+static void ngircd_kick(user_t *source, struct channel *c, user_t *u, const char *reason)
 {
 	sts(":%s KICK %s %s :%s", CLIENT_NAME(source), c->name, CLIENT_NAME(u), reason);
 
@@ -199,7 +199,7 @@ static void ngircd_notice_global_sts(user_t *from, const char *mask, const char 
 		sts(":%s NOTICE %s%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, mask, text);
 }
 
-static void ngircd_notice_channel_sts(user_t *from, channel_t *target, const char *text)
+static void ngircd_notice_channel_sts(user_t *from, struct channel *target, const char *text)
 {
 	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, target->name, text);
 }
@@ -227,7 +227,7 @@ static void ngircd_kill_id_sts(user_t *killer, const char *id, const char *reaso
 }
 
 /* PART wrapper */
-static void ngircd_part_sts(channel_t *c, user_t *u)
+static void ngircd_part_sts(struct channel *c, user_t *u)
 {
 	sts(":%s PART %s", CLIENT_NAME(u), c->name);
 }
@@ -246,7 +246,7 @@ static void ngircd_unkline_sts(const char *server, const char *user, const char 
 }
 
 /* topic wrapper */
-static void ngircd_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
+static void ngircd_topic_sts(struct channel *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	bool joined = false;
 
@@ -263,7 +263,7 @@ static void ngircd_topic_sts(channel_t *c, user_t *source, const char *setter, t
 }
 
 /* mode wrapper */
-static void ngircd_mode_sts(char *sender, channel_t *target, char *modes)
+static void ngircd_mode_sts(char *sender, struct channel *target, char *modes)
 {
 	return_if_fail(sender != NULL);
 	return_if_fail(target != NULL);
@@ -337,7 +337,7 @@ static void ngircd_sethost_sts(user_t *source, user_t *target, const char *host)
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 {
-	channel_t *c = channel_find(parv[0]);
+	struct channel *c = channel_find(parv[0]);
 
 	if (!c)
 		return;
@@ -473,7 +473,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_njoin(sourceinfo_t *si, int parc, char *parv[])
 {
-	channel_t *c;
+	struct channel *c;
 	unsigned int userc;
 	char *userv[256];
 	unsigned int i;
@@ -507,7 +507,7 @@ static void m_njoin(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_chaninfo(sourceinfo_t *si, int parc, char *parv[])
 {
-	channel_t *c;
+	struct channel *c;
 	const char *kmode, *lmode;
 	bool swap;
 
@@ -609,7 +609,7 @@ static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 static void m_kick(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u = user_find(parv[1]);
-	channel_t *c = channel_find(parv[0]);
+	struct channel *c = channel_find(parv[0]);
 
 	/* -> :rakaur KICK #shrike rintaun :test */
 	slog(LG_DEBUG, "m_kick(): user was kicked: %s -> %s", parv[1], parv[0]);
@@ -732,7 +732,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 			if (st != NULL)
 				*st++ = '\0';
 
-			channel_t *c = channel_find(chanv[i]);
+			struct channel *c = channel_find(chanv[i]);
 
 			if (!c)
 			{

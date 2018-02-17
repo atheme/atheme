@@ -72,7 +72,7 @@ static void ss_cmd_channel(sourceinfo_t * si, int parc, char *parv[])
 static void ss_cmd_channel_topic(sourceinfo_t * si, int parc, char *parv[])
 {
     char *chan = parv[0];
-    channel_t *c;
+    struct channel *c;
 
     if (!chan)
     {
