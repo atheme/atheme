@@ -10,7 +10,6 @@
 
 #include "entity.h"
 
-typedef struct mycertfp_ mycertfp_t;
 typedef struct myuser_name_ myuser_name_t;
 typedef struct chanacs_ chanacs_t;
 typedef struct mymemo_ mymemo_t;
@@ -144,7 +143,7 @@ struct myuser_name_
   char name[NICKLEN + 1];
 };
 
-struct mycertfp_
+struct mycertfp
 {
   myuser_t *mu;
 
@@ -444,9 +443,9 @@ extern myuser_name_t *myuser_name_add(const char *name);
 extern void myuser_name_remember(const char *name, myuser_t *mu);
 extern void myuser_name_restore(const char *name, myuser_t *mu);
 
-extern mycertfp_t *mycertfp_add(myuser_t *mu, const char *certfp);
-extern void mycertfp_delete(mycertfp_t *mcfp);
-extern mycertfp_t *mycertfp_find(const char *certfp);
+extern struct mycertfp *mycertfp_add(myuser_t *mu, const char *certfp);
+extern void mycertfp_delete(struct mycertfp *mcfp);
+extern struct mycertfp *mycertfp_find(const char *certfp);
 
 extern mychan_t *mychan_add(char *name);
 //inline mychan_t *mychan_find(const char *name);

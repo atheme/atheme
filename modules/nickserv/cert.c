@@ -29,7 +29,7 @@ static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
 	myuser_t *mu;
 	mowgli_node_t *n, *tn;
 	char *mcfp;
-	mycertfp_t *cert;
+	struct mycertfp *cert;
 
 	if (parc < 1)
 	{
@@ -73,7 +73,7 @@ static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
 
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->cert_fingerprints.head)
 		{
-			mycertfp_delete((mycertfp_t *) n->data);
+			mycertfp_delete((struct mycertfp *) n->data);
 		}
 
 		command_success_nodata(si, _("All fingerprints for \2%s\2 have been removed."), entity(mu)->name);
@@ -115,7 +115,7 @@ static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
 
 		MOWGLI_ITER_FOREACH(n, mu->cert_fingerprints.head)
 		{
-			mcfp = ((mycertfp_t*)n->data)->certfp;
+			mcfp = ((struct mycertfp *) n->data)->certfp;
 			command_success_nodata(si, "- %s", mcfp);
 		}
 

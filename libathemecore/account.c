@@ -60,7 +60,7 @@ void init_accounts(void)
 	myuser_name_heap = sharedheap_get(sizeof(myuser_name_t));
 	mychan_heap = sharedheap_get(sizeof(mychan_t));
 	chanacs_heap = sharedheap_get(sizeof(chanacs_t));
-	mycertfp_heap = sharedheap_get(sizeof(mycertfp_t));
+	mycertfp_heap = sharedheap_get(sizeof(struct mycertfp));
 
 	if (myuser_heap == NULL || mynick_heap == NULL || mychan_heap == NULL
 			|| chanacs_heap == NULL || mycertfp_heap == NULL)
@@ -293,7 +293,7 @@ void myuser_delete(myuser_t *mu)
 
 	/* delete certfp entries */
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->cert_fingerprints.head)
-		mycertfp_delete((mycertfp_t *) n->data);
+		mycertfp_delete((struct mycertfp *) n->data);
 
 	/* delete their nicks and report them */
 	nicks[0] = '\0';
@@ -921,9 +921,9 @@ void myuser_name_restore(const char *name, myuser_t *mu)
  * M Y C E R T F P *
  *******************/
 
-mycertfp_t *mycertfp_add(myuser_t *mu, const char *certfp)
+struct mycertfp *mycertfp_add(myuser_t *mu, const char *certfp)
 {
-	mycertfp_t *mcfp;
+	struct mycertfp *mcfp;
 
 	return_val_if_fail(mu != NULL, NULL);
 	return_val_if_fail(certfp != NULL, NULL);
@@ -938,7 +938,7 @@ mycertfp_t *mycertfp_add(myuser_t *mu, const char *certfp)
 	return mcfp;
 }
 
-void mycertfp_delete(mycertfp_t *mcfp)
+void mycertfp_delete(struct mycertfp *mcfp)
 {
 	return_if_fail(mcfp != NULL);
 	return_if_fail(mcfp->mu != NULL);
@@ -951,7 +951,7 @@ void mycertfp_delete(mycertfp_t *mcfp)
 	mowgli_heap_free(mycertfp_heap, mcfp);
 }
 
-mycertfp_t *mycertfp_find(const char *certfp)
+struct mycertfp *mycertfp_find(const char *certfp)
 {
 	return_val_if_fail(certfp != NULL, NULL);
 

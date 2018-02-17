@@ -577,7 +577,7 @@ void handle_clearlogin(sourceinfo_t *si, user_t *u)
 void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp)
 {
 	myuser_t *mu;
-	mycertfp_t *mcfp;
+	struct mycertfp *mcfp;
 	service_t *svs;
 	hook_user_login_check_t req;
 

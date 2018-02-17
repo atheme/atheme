@@ -147,7 +147,7 @@ corestorage_db_save(database_handle_t *db)
 
 		MOWGLI_ITER_FOREACH(tn, mu->cert_fingerprints.head)
 		{
-			mycertfp_t *mcfp = tn->data;
+			struct mycertfp *mcfp = tn->data;
 
 			db_start_row(db, "MCFP");
 			db_write_word(db, entity(mu)->name);

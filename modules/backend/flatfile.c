@@ -289,7 +289,7 @@ static void flatfile_db_load(const char *filename)
 		{
 			/* certfp */
 			char *user, *certfp;
-			mycertfp_t *mcfp;
+			struct mycertfp *mcfp;
 
 			user = strtok(NULL, " ");
 			certfp = strtok(NULL, " ");

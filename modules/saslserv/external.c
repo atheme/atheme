@@ -17,7 +17,7 @@ mech_step(struct sasl_session *const restrict p, const void *const restrict in, 
 	if (! (p && p->certfp))
 		return ASASL_ERROR;
 
-	mycertfp_t *const mcfp = mycertfp_find(p->certfp);
+	struct mycertfp *const mcfp = mycertfp_find(p->certfp);
 	if (! mcfp)
 		return ASASL_ERROR;
 
