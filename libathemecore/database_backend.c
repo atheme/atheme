@@ -11,7 +11,7 @@ const struct database_module *db_mod = NULL;
 mowgli_patricia_t *db_types = NULL;
 
 struct database_handle *
-db_open(const char *filename, database_transaction_t txn)
+db_open(const char *filename, enum database_transaction txn)
 {
 	return_val_if_fail(db_mod != NULL, NULL);
 	return_val_if_fail(db_mod->db_open != NULL, NULL);

@@ -345,7 +345,7 @@ static struct database_handle *opensex_db_open_write(const char *filename)
 	return db;
 }
 
-static struct database_handle *opensex_db_open(const char *filename, database_transaction_t txn)
+static struct database_handle *opensex_db_open(const char *filename, enum database_transaction txn)
 {
 	if (txn == DB_WRITE)
 		return opensex_db_open_write(filename);

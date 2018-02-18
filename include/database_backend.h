@@ -12,6 +12,12 @@
 
 extern bool strict_mode;
 
+enum database_transaction
+{
+	DB_READ,
+	DB_WRITE
+};
+
 struct database_vtable
 {
 	const char *name;
@@ -35,16 +41,11 @@ struct database_vtable
 	bool (*commit_row)(struct database_handle *hdl);
 };
 
-typedef enum {
-	DB_READ,
-	DB_WRITE
-} database_transaction_t;
-
 struct database_handle
 {
 	void *priv;
 	const struct database_vtable *vt;
-	database_transaction_t txn;
+	enum database_transaction txn;
 	char *file;
 	unsigned int line;
 	unsigned int token;
@@ -52,12 +53,12 @@ struct database_handle
 
 struct database_module
 {
-	struct database_handle *(*db_open)(const char *filename, database_transaction_t txn);
+	struct database_handle *(*db_open)(const char *filename, enum database_transaction txn);
 	void (*db_close)(struct database_handle *db);
 	void (*db_parse)(struct database_handle *db);
 };
 
-extern struct database_handle *db_open(const char *filename, database_transaction_t txn);
+extern struct database_handle *db_open(const char *filename, enum database_transaction txn);
 extern void db_close(struct database_handle *db);
 extern void db_parse(struct database_handle *db);
 
