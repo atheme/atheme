@@ -579,40 +579,22 @@ const unsigned int charattrs[] = {
 	/* 0xFF */ 0,
 };
 
-enum atheme_regex_type
-{
-	at_posix = 1,
-	at_pcre = 2
-};
-
-struct atheme_regex_
-{
-	enum atheme_regex_type type;
-	union
-	{
-		regex_t posix;
-#ifdef HAVE_PCRE
-		pcre *pcre;
-#endif
-	} un;
-};
-
 /*
  * regex_compile()
  *  Compile a regex of `pattern' and return it.
  */
-atheme_regex_t *regex_create(char *pattern, int flags)
+struct atheme_regex *regex_create(char *pattern, int flags)
 {
 	static char errmsg[BUFSIZE];
 	int errnum;
-	atheme_regex_t *preg;
+	struct atheme_regex *preg;
 
 	if (pattern == NULL)
 	{
 		return NULL;
 	}
 
-	preg = smalloc(sizeof(atheme_regex_t));
+	preg = smalloc(sizeof(struct atheme_regex));
 	if (flags & AREGEX_PCRE)
 	{
 #ifdef HAVE_PCRE
@@ -696,7 +678,7 @@ char *regex_extract(char *pattern, char **pend, int *pflags)
  *  `preg' is the regex to check with, `string' needs to be checked against.
  *  Returns `true' on match, `false' else.
  */
-bool regex_match(atheme_regex_t *preg, char *string)
+bool regex_match(struct atheme_regex *preg, char *string)
 {
 	if (preg == NULL || string == NULL)
 	{
@@ -722,7 +704,7 @@ bool regex_match(atheme_regex_t *preg, char *string)
  * regex_destroy()
  *  Perform cleanup with regex `preg', free associated memory.
  */
-bool regex_destroy(atheme_regex_t *preg)
+bool regex_destroy(struct atheme_regex *preg)
 {
 	switch (preg->type)
 	{

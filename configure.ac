@@ -12,6 +12,15 @@ AC_CONFIG_HEADER([include/sysconf.h])
 AC_CONFIG_SRCDIR([src/services/main.c])
 AC_PREFIX_DEFAULT([~/atheme])
 
+AH_TOP([
+#ifndef ATHEME_INC_SYSCONF_H
+#define ATHEME_INC_SYSCONF_H 1
+])
+
+AH_BOTTOM([
+#endif
+])
+
 AC_MSG_CHECKING([if you read GIT-Access.txt])
 AS_IF([test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"], [
 	AC_MSG_RESULT([yes])

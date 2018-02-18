@@ -32,7 +32,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static void os_cmd_rmatch(struct sourceinfo *si, int parc, char *parv[])
 {
-	atheme_regex_t *regex;
+	struct atheme_regex *regex;
 	char usermask[512];
 	unsigned int matches = 0, maxmatches;
 	mowgli_patricia_iteration_state_t state;

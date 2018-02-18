@@ -30,7 +30,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static void os_cmd_rakill(struct sourceinfo *si, int parc, char *parv[])
 {
-	atheme_regex_t *regex;
+	struct atheme_regex *regex;
 	char usermask[512];
 	unsigned int matches = 0;
 	mowgli_patricia_iteration_state_t state;

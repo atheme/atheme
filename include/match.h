@@ -9,6 +9,32 @@
 #ifndef ATHEME_MATCH_H
 #define ATHEME_MATCH_H
 
+#include "sysconf.h"
+
+#include <regex.h>
+
+#ifdef HAVE_PCRE
+#include <pcre.h>
+#endif
+
+enum atheme_regex_type
+{
+	at_posix = 1,
+	at_pcre = 2
+};
+
+struct atheme_regex
+{
+	enum atheme_regex_type type;
+	union
+	{
+		regex_t posix;
+#ifdef HAVE_PCRE
+		pcre *pcre;
+#endif
+	} un;
+};
+
 /* cidr.c */
 extern int match_ips(const char *mask, const char *address);
 extern int match_cidr(const char *mask, const char *address);
@@ -59,11 +85,9 @@ extern char *collapse(char *);
 #define AREGEX_PCRE	2 /* use libpcre engine */
 #define AREGEX_KLINE	4 /* XXX for rwatch, match kline */
 
-typedef struct atheme_regex_ atheme_regex_t;
-
-extern atheme_regex_t *regex_create(char *pattern, int flags);
+extern struct atheme_regex *regex_create(char *pattern, int flags);
 extern char *regex_extract(char *pattern, char **pend, int *pflags);
-extern bool regex_match(atheme_regex_t *preg, char *string);
-extern bool regex_destroy(atheme_regex_t *preg);
+extern bool regex_match(struct atheme_regex *preg, char *string);
+extern bool regex_destroy(struct atheme_regex *preg);
 
 #endif

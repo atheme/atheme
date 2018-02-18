@@ -51,6 +51,9 @@ struct hook;
 // Defined in include/httpd.h
 struct path_handler;
 
+// Defined in include/match.h
+struct atheme_regex;
+
 // Defined in include/module.h
 struct module;
 struct module_dependency;

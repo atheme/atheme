@@ -1,5 +1,10 @@
 /* include/sysconf.h.in.  Generated from configure.ac by autoheader.  */
 
+
+#ifndef ATHEME_INC_SYSCONF_H
+#define ATHEME_INC_SYSCONF_H 1
+
+
 /* Define if building universal (internal helper macro) */
 #undef AC_APPLE_UNIVERSAL_BUILD
 
@@ -350,3 +355,7 @@
 
 /* Define to rpl_vsnprintf if the replacement function should be used. */
 #undef vsnprintf
+
+
+#endif
+
