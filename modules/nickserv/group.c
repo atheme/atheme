@@ -133,7 +133,7 @@ static void ns_cmd_ungroup(struct sourceinfo *si, int parc, char *parv[])
 	hook_call_nick_ungroup(&hdata);
 	holdnick_sts(si->service->me, 0, mn->nick, NULL);
 	command_success_nodata(si, _("Nick \2%s\2 has been removed from your account."), mn->nick);
-	object_unref(mn);
+	atheme_object_unref(mn);
 }
 
 static void ns_cmd_fungroup(struct sourceinfo *si, int parc, char *parv[])
@@ -222,7 +222,7 @@ static void ns_cmd_fungroup(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("Nick \2%s\2 has been removed from account \2%s\2, name changed to \2%s\2."), mn->nick, entity(mu)->name, mn2->nick);
 	else
 		command_success_nodata(si, _("Nick \2%s\2 has been removed from account \2%s\2."), mn->nick, entity(mu)->name);
-	object_unref(mn);
+	atheme_object_unref(mn);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/group", MODULE_UNLOAD_CAPABILITY_OK)

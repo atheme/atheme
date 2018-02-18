@@ -276,7 +276,7 @@ static void cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 			if (ca->level & CA_FOUNDER)
 				continue;
 
-			object_unref(ca);
+			atheme_object_unref(ca);
 		}
 
 		logcommand(si, CMDLOG_DO, "CLEAR:FLAGS: \2%s\2", mc->name);

@@ -9,7 +9,7 @@
 #define ATHEME_TABLE_H
 
 typedef struct {
-	object_t parent;
+	struct atheme_object parent;
 	mowgli_list_t rows;
 } table_t;
 
@@ -25,7 +25,7 @@ typedef struct {
 } table_cell_t;
 
 /*
- * Creates a new table object. Use object_unref() to destroy it.
+ * Creates a new table object. Use atheme_object_unref() to destroy it.
  */
 extern table_t *table_new(const char *fmt, ...) ATHEME_FATTR_PRINTF(1, 2);
 

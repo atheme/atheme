@@ -173,7 +173,7 @@ static void ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 		{
 			command_fail(si, fault_authfail, _("Invalid password for \2%s\2."), entity(mu)->name);
 			bad_password(si, mu);
-			object_unref(mu);
+			atheme_object_unref(mu);
 			return;
 		}
 	}
@@ -189,7 +189,7 @@ static void ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 		if (!sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_REGISTER, mu->email, key))
 		{
 			command_fail(si, fault_emailfail, _("Sending email failed, sorry! Registration aborted."));
-			object_unref(mu);
+			atheme_object_unref(mu);
 			free(key);
 			return;
 		}

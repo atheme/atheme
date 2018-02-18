@@ -169,7 +169,7 @@ static bool jsonrpcmethod_login(void *conn, mowgli_list_t *params, char *id)
 
 		bad_password(si, mu);
 
-		object_unref(si);
+		atheme_object_unref(si);
 
 		return false;
 	}
@@ -430,7 +430,7 @@ static bool jsonrpcmethod_command(void *conn, mowgli_list_t *params, char *id)
 			jsonrpc_failure_string(conn, fault_unimplemented, "Command did not return a result", id);
 	}
 
-	object_unref(si);
+	atheme_object_unref(si);
 
 	return 0;
 }

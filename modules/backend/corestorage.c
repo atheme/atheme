@@ -92,9 +92,9 @@ corestorage_db_save(struct database_handle *db)
 		db_write_word(db, language_get_name(mu->language));
 		db_commit_row(db);
 
-		if (object(mu)->metadata)
+		if (atheme_object(mu)->metadata)
 		{
-			MOWGLI_PATRICIA_FOREACH(md, &state, object(mu)->metadata)
+			MOWGLI_PATRICIA_FOREACH(md, &state, atheme_object(mu)->metadata)
 			{
 				db_start_row(db, "MDU");
 				db_write_word(db, entity(mu)->name);
@@ -207,9 +207,9 @@ corestorage_db_save(struct database_handle *db)
 
 			db_commit_row(db);
 
-			if (object(ca)->metadata)
+			if (atheme_object(ca)->metadata)
 			{
-				MOWGLI_PATRICIA_FOREACH(md, &state2, object(ca)->metadata)
+				MOWGLI_PATRICIA_FOREACH(md, &state2, atheme_object(ca)->metadata)
 				{
 					db_start_row(db, "MDA");
 					db_write_word(db, ca->mychan->name);
@@ -221,9 +221,9 @@ corestorage_db_save(struct database_handle *db)
 			}
 		}
 
-		if (object(mc)->metadata)
+		if (atheme_object(mc)->metadata)
 		{
-			MOWGLI_PATRICIA_FOREACH(md, &state2, object(mc)->metadata)
+			MOWGLI_PATRICIA_FOREACH(md, &state2, atheme_object(mc)->metadata)
 			{
 				db_start_row(db, "MDC");
 				db_write_word(db, mc->name);
@@ -243,9 +243,9 @@ corestorage_db_save(struct database_handle *db)
 		db_write_word(db, mun->name);
 		db_commit_row(db);
 
-		if (object(mun)->metadata)
+		if (atheme_object(mun)->metadata)
 		{
-			MOWGLI_PATRICIA_FOREACH(md, &state2, object(mun)->metadata)
+			MOWGLI_PATRICIA_FOREACH(md, &state2, atheme_object(mun)->metadata)
 			{
 				db_start_row(db, "MDN");
 				db_write_word(db, mun->name);

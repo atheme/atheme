@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 
 	printf("\n* * *\n\n");
 
-	printf("sizeof object_t: %zu B\n", sizeof(object_t));
+	printf("sizeof object_t: %zu B\n", sizeof(struct atheme_object));
 
 	printf("\n* * *\n\n");
 

@@ -17,7 +17,8 @@ typedef struct metadata_ metadata_t;
 
 typedef void (*destructor_t)(void *);
 
-typedef struct {
+struct atheme_object
+{
 	int refcount;
 	destructor_t destructor;
 	mowgli_patricia_t *metadata;
@@ -25,15 +26,15 @@ typedef struct {
 #ifdef OBJECT_DEBUG
 	mowgli_node_t dnode;
 #endif
-} object_t;
+};
 
 extern void init_metadata(void);
 
-extern void object_init(object_t *, const char *name, destructor_t destructor);
-extern void *object_ref(void *);
-extern void *object_sink_ref(void *);
-extern void object_unref(void *);
-extern void object_dispose(void *);
+extern void atheme_object_init(struct atheme_object *, const char *name, destructor_t destructor);
+extern void *atheme_object_ref(void *);
+extern void *atheme_object_sink_ref(void *);
+extern void atheme_object_unref(void *);
+extern void atheme_object_dispose(void *);
 
 extern metadata_t *metadata_add(void *target, const char *name, const char *value);
 extern void metadata_delete(void *target, const char *name);
@@ -47,6 +48,6 @@ extern void privatedata_set(void *target, const char *key, void *data);
 extern mowgli_list_t object_list;
 #endif
 
-#define object(x) ((object_t *) x)
+#define atheme_object(x) ((struct atheme_object *) x)
 
 #endif

@@ -102,7 +102,7 @@ static void cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[])
 		if (ca->level & CA_FOUNDER)
 			continue;
 
-		object_unref(ca);
+		atheme_object_unref(ca);
 	}
 
 	/* Copy source chanacs to target */
@@ -117,7 +117,7 @@ static void cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	/* Copy ze metadata! */
-	MOWGLI_PATRICIA_FOREACH(md, &state, object(mc)->metadata)
+	MOWGLI_PATRICIA_FOREACH(md, &state, atheme_object(mc)->metadata)
 	{
 		if(!strncmp(md->name, "private:topic:", 14))
 		{

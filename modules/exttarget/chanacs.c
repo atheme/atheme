@@ -121,13 +121,13 @@ static struct myentity *chanacs_validate_f(const char *param)
 	entity(ext)->type = ENT_EXTTARGET;
 
 	/* initialize the object. */
-	object_init(object(ext), entity(ext)->name, (destructor_t) chanacs_ext_delete);
+	atheme_object_init(atheme_object(ext), entity(ext)->name, (destructor_t) chanacs_ext_delete);
 
 	/* add the object to the exttarget tree */
 	mowgli_patricia_add(chanacs_exttarget_tree, ext->channel, ext);
 
 	/* return the object as initially unowned by sinking the reference count. */
-	return object_sink_ref(ext);
+	return atheme_object_sink_ref(ext);
 }
 
 static void

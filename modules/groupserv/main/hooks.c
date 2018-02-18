@@ -19,7 +19,7 @@ static void mygroup_expire(void *unused)
 		if (!mygroup_count_flag(mg, GA_FOUNDER))
 		{
 			remove_group_chanacs(mg);
-			object_unref(mg);
+			atheme_object_unref(mg);
 		}
 	}
 }

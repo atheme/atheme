@@ -72,11 +72,11 @@ static void
 sasl_sourceinfo_recreate(struct sasl_session *const restrict p)
 {
 	if (p->si)
-		(void) object_unref(p->si);
+		(void) atheme_object_unref(p->si);
 
 	struct sasl_sourceinfo *const ssi = smalloc(sizeof *ssi);
 
-	(void) object_init(object(ssi), "<sasl sourceinfo>", &free);
+	(void) atheme_object_init(atheme_object(ssi), "<sasl sourceinfo>", &free);
 
 	ssi->parent.s = p->server;
 	ssi->parent.connection = curr_uplink->conn;
@@ -606,7 +606,7 @@ destroy_session(struct sasl_session *const restrict p)
 		(void) p->mechptr->mech_finish(p);
 
 	if (p->si)
-		(void) object_unref(p->si);
+		(void) atheme_object_unref(p->si);
 
 	(void) free(p->certfp);
 	(void) free(p->host);

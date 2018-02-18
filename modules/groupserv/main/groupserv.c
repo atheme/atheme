@@ -54,7 +54,7 @@ static void mygroup_delete(mygroup_t *mg)
 
 		mowgli_node_delete(&ga->gnode, &mg->acs);
 		mowgli_node_delete(&ga->unode, myentity_get_membership_list(ga->mt));
-		object_unref(ga);
+		atheme_object_unref(ga);
 	}
 
 	metadata_delete_all(mg);
@@ -72,7 +72,7 @@ mygroup_t *mygroup_add_id(const char *id, const char *name)
 	mygroup_t *mg;
 
 	mg = mowgli_heap_alloc(mygroup_heap);
-	object_init(object(mg), NULL, (destructor_t) mygroup_delete);
+	atheme_object_init(atheme_object(mg), NULL, (destructor_t) mygroup_delete);
 
 	entity(mg)->type = ENT_GROUP;
 
@@ -123,7 +123,7 @@ groupacs_t *groupacs_add(mygroup_t *mg, struct myentity *mt, unsigned int flags)
 	return_val_if_fail(mt != NULL, NULL);
 
 	ga = mowgli_heap_alloc(groupacs_heap);
-	object_init(object(ga), NULL, (destructor_t) groupacs_des);
+	atheme_object_init(atheme_object(ga), NULL, (destructor_t) groupacs_des);
 
 	ga->mg = mg;
 	ga->mt = mt;
@@ -187,7 +187,7 @@ void groupacs_delete(mygroup_t *mg, struct myentity *mt)
 	{
 		mowgli_node_delete(&ga->gnode, &mg->acs);
 		mowgli_node_delete(&ga->unode, myentity_get_membership_list(mt));
-		object_unref(ga);
+		atheme_object_unref(ga);
 	}
 }
 
@@ -365,7 +365,7 @@ void remove_group_chanacs(mygroup_t *mg)
 			chanacs_change_simple(mc, entity(successor), NULL, CA_FOUNDER_0, 0, NULL);
 			if (chansvs.me != NULL)
 				myuser_notice(chansvs.nick, successor, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, entity(successor)->name);
-			object_unref(ca);
+			atheme_object_unref(ca);
 		}
 		/* no successor found */
 		else if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1)
@@ -379,10 +379,10 @@ void remove_group_chanacs(mygroup_t *mg)
 			hook_call_channel_drop(mc);
 			if (mc->chan != NULL && !(mc->chan->flags & CHAN_LOG))
 				part(mc->name, chansvs.nick);
-			object_unref(mc);
+			atheme_object_unref(mc);
 		}
 		else /* not founder */
-			object_unref(ca);
+			atheme_object_unref(ca);
 	}
 }
 

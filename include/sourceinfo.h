@@ -25,7 +25,7 @@ struct sourceinfo_vtable
 /* structure describing data about a protocol message or service command */
 struct sourceinfo
 {
-	object_t parent;
+	struct atheme_object parent;
 
 	/* fields describing the source of the message */
 	/* for protocol modules, the following applies to su and s:

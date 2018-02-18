@@ -127,7 +127,7 @@ static void cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!hide_info)
 	{
-		MOWGLI_PATRICIA_FOREACH(md, &state, object(mc)->metadata)
+		MOWGLI_PATRICIA_FOREACH(md, &state, atheme_object(mc)->metadata)
 		{
 			if (!strncmp(md->name, "private:", 8))
 				continue;

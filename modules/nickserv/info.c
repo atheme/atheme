@@ -286,7 +286,7 @@ static void ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("Email      : %s%s"), mu->email,
 					(mu->flags & MU_HIDEMAIL) ? " (hidden)": "");
 
-	MOWGLI_PATRICIA_FOREACH(md, &state, object(mu)->metadata)
+	MOWGLI_PATRICIA_FOREACH(md, &state, atheme_object(mu)->metadata)
 	{
 		if (!strncmp(md->name, "private:", 8))
 			continue;

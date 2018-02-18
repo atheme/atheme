@@ -81,7 +81,7 @@ const char *action_names[] = {
 
 /* A configured DNSBL */
 struct Blacklist {
-	object_t parent;
+	struct atheme_object parent;
 	char host[IRCD_RES_HOSTLEN + 1];
 	unsigned int hits;
 	time_t lastwarning;
@@ -345,7 +345,7 @@ static void blacklist_dns_callback(void *vptr, dns_reply_t *reply)
 	if (listed)
 		dnsbl_hit(blcptr->u, blcptr->blacklist);
 
-	object_unref(blcptr->blacklist);
+	atheme_object_unref(blcptr->blacklist);
 	free(blcptr);
 }
 
@@ -366,7 +366,7 @@ static void initiate_blacklist_dnsquery(struct Blacklist *blptr, user_t *u)
 
 	struct BlacklistClient *blcptr = smalloc(sizeof(struct BlacklistClient));
 
-	blcptr->blacklist = object_ref(blptr);
+	blcptr->blacklist = atheme_object_ref(blptr);
 	blcptr->u = u;
 
 	blcptr->dns_query.ptr = blcptr;
@@ -394,8 +394,8 @@ static struct Blacklist *new_blacklist(char *name)
 	if (blptr == NULL)
 	{
 		blptr = smalloc(sizeof(struct Blacklist));
-		object_init(object(blptr), "proxyscan dnsbl", NULL);
-		mowgli_node_add(object_ref(blptr), &blptr->node, &blacklist_list);
+		atheme_object_init(atheme_object(blptr), "proxyscan dnsbl", NULL);
+		mowgli_node_add(atheme_object_ref(blptr), &blptr->node, &blacklist_list);
 	}
 
 	mowgli_strlcpy(blptr->host, name, sizeof blptr->host);
@@ -429,7 +429,7 @@ static void destroy_blacklists(void)
 		blptr = n->data;
 
 		mowgli_node_delete(n, &blacklist_list);
-		object_unref(blptr);
+		atheme_object_unref(blptr);
 	}
 }
 

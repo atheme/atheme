@@ -179,5 +179,5 @@ void irc_parse(char *line)
 	}
 
 cleanup:
-	object_unref(si);
+	atheme_object_unref(si);
 }

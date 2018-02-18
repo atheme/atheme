@@ -54,7 +54,7 @@ static void ns_cmd_taxonomy(struct sourceinfo *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("Taxonomy for \2%s\2:"), entity(mu)->name);
 
-	MOWGLI_PATRICIA_FOREACH(md, &state, object(mu)->metadata)
+	MOWGLI_PATRICIA_FOREACH(md, &state, atheme_object(mu)->metadata)
 	{
 		if (!strncmp(md->name, "private:", 8) && !isoper)
 			continue;

@@ -369,7 +369,7 @@ static void cs_xop_do_del(struct sourceinfo *si, mychan_t *mc, struct myentity *
 		req.newlevel = ca->level;
 
 		hook_call_channel_acl_change(&req);
-		object_unref(ca);
+		atheme_object_unref(ca);
 
 		verbose(mc, _("\2%s\2 removed \2%s\2 from the %s list."), get_source_name(si), target, leveldesc);
 		logcommand(si, CMDLOG_SET, "DEL: \2%s\2 \2%s\2 from \2%s\2", mc->name, leveldesc, target);
@@ -391,7 +391,7 @@ static void cs_xop_do_del(struct sourceinfo *si, mychan_t *mc, struct myentity *
 	req.newlevel = ca->level;
 
 	hook_call_channel_acl_change(&req);
-	object_unref(ca);
+	atheme_object_unref(ca);
 
 	command_success_nodata(si, _("\2%s\2 has been removed from the %s list for \2%s\2."), mt->name, leveldesc, mc->name);
 	logcommand(si, CMDLOG_SET, "DEL: \2%s\2 \2%s\2 from \2%s\2", mc->name, leveldesc, mt->name);

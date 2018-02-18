@@ -37,7 +37,7 @@ CODE:
         part (self->name, chansvs.nick);
     }
 
-    object_unref (self);
+    atheme_object_unref (self);
 
 void
 transfer (Atheme_ChannelRegistration self, Atheme_Sourceinfo si, Atheme_Entity user)

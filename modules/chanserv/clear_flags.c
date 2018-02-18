@@ -69,7 +69,7 @@ static void cs_cmd_clear_flags(struct sourceinfo *si, int parc, char *parv[])
 			continue;
 
 		changes++;
-		object_unref(ca);
+		atheme_object_unref(ca);
 	}
 
 	logcommand(si, CMDLOG_DO, "CLEAR:FLAGS: \2%s\2", mc->name);

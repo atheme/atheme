@@ -92,7 +92,7 @@ static void ns_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 		mun = myuser_name_find(target);
 		if (mun != NULL && !strcasecmp(action, "OFF"))
 		{
-			object_unref(mun);
+			atheme_object_unref(mun);
 			wallops("%s unmarked the name \2%s\2.", get_oper_name(si), target);
 			logcommand(si, CMDLOG_ADMIN, "MARK:OFF: \2%s\2", target);
 			command_success_nodata(si, _("\2%s\2 is now unmarked."), target);

@@ -52,7 +52,7 @@ struct mygroup_ {
 typedef struct groupacs_ groupacs_t;
 
 struct groupacs_ {
-	object_t parent;
+	struct atheme_object parent;
 
 	mygroup_t *mg;
 	struct myentity *mt;

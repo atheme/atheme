@@ -181,7 +181,7 @@ static void p10_parse(char *line)
 	}
 
 cleanup:
-	object_unref(si);
+	atheme_object_unref(si);
 }
 
 void (*default_parse)(char *line) = NULL;

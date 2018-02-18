@@ -119,7 +119,7 @@ cmd_ns_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 		(void) holdnick_sts(si->service->me, 0, entity(mu)->name, NULL);
 
 	(void) command_success_nodata(si, _("The account \2%s\2 has been dropped."), entity(mu)->name);
-	(void) object_dispose(mu);
+	(void) atheme_object_dispose(mu);
 }
 
 static void
@@ -185,7 +185,7 @@ cmd_ns_fdrop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_U
 	}
 
 	(void) command_success_nodata(si, _("The account \2%s\2 has been dropped."), entity(mu)->name);
-	(void) object_dispose(mu);
+	(void) atheme_object_dispose(mu);
 }
 
 static struct command cmd_ns_drop = {

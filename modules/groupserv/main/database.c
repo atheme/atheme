@@ -39,9 +39,9 @@ static void write_groupdb(struct database_handle *db)
 		db_write_word(db, mgflags);
 		db_commit_row(db);
 
-		if (object(mg)->metadata)
+		if (atheme_object(mg)->metadata)
 		{
-			MOWGLI_PATRICIA_FOREACH(md, &state2, object(mg)->metadata)
+			MOWGLI_PATRICIA_FOREACH(md, &state2, atheme_object(mg)->metadata)
 			{
 				db_start_row(db, "MDG");
 				db_write_word(db, entity(mg)->name);

@@ -122,7 +122,7 @@ myuser_t *myuser_add_id(const char *id, const char *name, const char *pass, cons
 		slog(LG_DEBUG, "myuser_add(): %s -> %s", name, email);
 
 	mu = mowgli_heap_alloc(myuser_heap);
-	object_init(object(mu), name, (destructor_t) myuser_delete);
+	atheme_object_init(atheme_object(mu), name, (destructor_t) myuser_delete);
 
 	entity(mu)->type = ENT_USER;
 	entity(mu)->name = strshare_get(name);
@@ -248,7 +248,7 @@ void myuser_delete(myuser_t *mu)
 
 			if (chansvs.me != NULL)
 				myuser_notice(chansvs.nick, successor, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, entity(successor)->name);
-			object_unref(ca);
+			atheme_object_unref(ca);
 		}
 		/* no successor found */
 		else if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1)
@@ -262,10 +262,10 @@ void myuser_delete(myuser_t *mu)
 			hook_call_channel_drop(mc);
 			if (mc->chan != NULL && !(mc->chan->flags & CHAN_LOG))
 				part(mc->name, chansvs.nick);
-			object_unref(mc);
+			atheme_object_unref(mc);
 		}
 		else /* not founder */
-			object_unref(ca);
+			atheme_object_unref(ca);
 	}
 
 	/* remove them from the soper list */
@@ -317,7 +317,7 @@ void myuser_delete(myuser_t *mu)
 			mowgli_strlcat(nicks, mn->nick, sizeof nicks);
 			mowgli_strlcat(nicks, "\2", sizeof nicks);
 		}
-		object_unref(mn);
+		atheme_object_unref(mn);
 	}
 	if (nicks[0] != '\0')
 		slog(LG_REGISTER, _("DELETE: \2%s\2 from \2%s\2"), nicks, entity(mu)->name);
@@ -687,7 +687,7 @@ mynick_t *mynick_add(myuser_t *mu, const char *name)
 		slog(LG_DEBUG, "mynick_add(): %s -> %s", name, entity(mu)->name);
 
 	mn = mowgli_heap_alloc(mynick_heap);
-	object_init(object(mn), name, (destructor_t) mynick_delete);
+	atheme_object_init(atheme_object(mn), name, (destructor_t) mynick_delete);
 
 	mowgli_strlcpy(mn->nick, name, sizeof mn->nick);
 	mn->owner = mu;
@@ -765,7 +765,7 @@ struct myuser_name *myuser_name_add(const char *name)
 		slog(LG_DEBUG, "myuser_name_add(): %s", name);
 
 	mun = mowgli_heap_alloc(myuser_name_heap);
-	object_init(object(mun), name, (destructor_t) myuser_name_delete);
+	atheme_object_init(atheme_object(mun), name, (destructor_t) myuser_name_delete);
 
 	mowgli_strlcpy(mun->name, name, sizeof mun->name);
 
@@ -890,9 +890,9 @@ void myuser_name_restore(const char *name, myuser_t *mu)
 				md2->value, entity(mu)->name, name);
 	}
 
-	if (object(mun)->metadata)
+	if (atheme_object(mun)->metadata)
 	{
-		MOWGLI_PATRICIA_FOREACH(md, &state, object(mun)->metadata)
+		MOWGLI_PATRICIA_FOREACH(md, &state, atheme_object(mun)->metadata)
 		{
 			/* prefer current metadata to saved */
 			if (!metadata_find(mu, md->name))
@@ -912,7 +912,7 @@ void myuser_name_restore(const char *name, myuser_t *mu)
 		}
 	}
 
-	object_unref(mun);
+	atheme_object_unref(mun);
 
 	return;
 }
@@ -977,7 +977,7 @@ static void mychan_delete(mychan_t *mc)
 
 	/* remove the chanacs shiz */
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chanacs.head)
-		object_unref(n->data);
+		atheme_object_unref(n->data);
 
 	metadata_delete_all(mc);
 
@@ -1002,7 +1002,7 @@ mychan_t *mychan_add(char *name)
 
 	mc = mowgli_heap_alloc(mychan_heap);
 
-	object_init(object(mc), name, (destructor_t) mychan_delete);
+	atheme_object_init(atheme_object(mc), name, (destructor_t) mychan_delete);
 	mc->name = strshare_get(name);
 	mc->registered = CURRTIME;
 	mc->chan = channel_find(name);
@@ -1378,7 +1378,7 @@ static void chanacs_delete(struct chanacs *ca)
 		mowgli_node_delete(&ca->unode, &ca->entity->chanacs);
 
 		if (isdynamic(ca->entity))
-			object_unref(ca->entity);
+			atheme_object_unref(ca->entity);
 	}
 
 	metadata_delete_all(ca);
@@ -1425,9 +1425,9 @@ struct chanacs *chanacs_add(mychan_t *mychan, struct myentity *mt, unsigned int 
 
 	ca = mowgli_heap_alloc(chanacs_heap);
 
-	object_init(object(ca), mt->name, (destructor_t) chanacs_delete);
+	atheme_object_init(atheme_object(ca), mt->name, (destructor_t) chanacs_delete);
 	ca->mychan = mychan;
-	ca->entity = isdynamic(mt) ? object_ref(mt) : mt;
+	ca->entity = isdynamic(mt) ? atheme_object_ref(mt) : mt;
 	ca->host = NULL;
 	ca->level = level & ca_all;
 	ca->tmodified = ts;
@@ -1479,7 +1479,7 @@ struct chanacs *chanacs_add_host(mychan_t *mychan, const char *host, unsigned in
 
 	ca = mowgli_heap_alloc(chanacs_heap);
 
-	object_init(object(ca), host, (destructor_t) chanacs_delete);
+	atheme_object_init(atheme_object(ca), host, (destructor_t) chanacs_delete);
 	ca->mychan = mychan;
 	ca->entity = NULL;
 	ca->host = sstrdup(host);
@@ -1926,7 +1926,7 @@ bool chanacs_change(mychan_t *mychan, struct myentity *mt, const char *hostmask,
 				ca->setter_uid[0] = '\0';
 
 			if (ca->level == 0)
-				object_unref(ca);
+				atheme_object_unref(ca);
 		}
 	}
 	else /* hostmask != NULL */
@@ -1967,7 +1967,7 @@ bool chanacs_change(mychan_t *mychan, struct myentity *mt, const char *hostmask,
 				ca->setter_uid[0] = '\0';
 
 			if (ca->level == 0)
-				object_unref(ca);
+				atheme_object_unref(ca);
 		}
 	}
 	return true;
@@ -2025,7 +2025,7 @@ static int expire_myuser_cb(struct myentity *mt, void *unused)
 				entity(mu)->name, (int)(CURRTIME - mu->lastlogin),
 				mu->email, MOWGLI_LIST_LENGTH(&mu->nicks),
 				MOWGLI_LIST_LENGTH(&entity(mu)->chanacs));
-		object_dispose(mu);
+		atheme_object_dispose(mu);
 	}
 
 	return 0;
@@ -2079,7 +2079,7 @@ void expire_check(void *arg)
 			slog(LG_VERBOSE, "expire_check(): expiring nick %s (unused %lds, account %s)",
 					mn->nick, (long)(CURRTIME - mn->lastseen),
 					entity(mn->owner)->name);
-			object_unref(mn);
+			atheme_object_unref(mn);
 		}
 	}
 
@@ -2123,7 +2123,7 @@ void expire_check(void *arg)
 			if (mc->chan != NULL && !(mc->chan->flags & CHAN_LOG))
 				part(mc->name, chansvs.nick);
 
-			object_unref(mc);
+			atheme_object_unref(mc);
 		}
 	}
 }
@@ -2160,7 +2160,7 @@ static int check_myuser_cb(struct myentity *mt, void *unused)
 		else if (mn->owner != mu)
 		{
 			slog(LG_REGISTER, "db_check(): replacing nick %s owned by %s with %s", mn->nick, entity(mn->owner)->name, entity(mu)->name);
-			object_unref(mn);
+			atheme_object_unref(mn);
 			mn = mynick_add(mu, entity(mu)->name);
 			mn->registered = mu->registered;
 			mn->lastseen = mu->lastlogin;

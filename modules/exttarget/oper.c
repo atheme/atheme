@@ -62,7 +62,7 @@ mod_init(module_t *const restrict m)
 
 	mowgli_patricia_add(*exttarget_tree, "oper", oper_validate_f);
 
-	object_init(object(&dummy_entity), "$oper", NULL);
+	atheme_object_init(atheme_object(&dummy_entity), "$oper", NULL);
 }
 
 static void

@@ -104,7 +104,7 @@ struct sourceinfo_vtable override_vtable = {
 
 static void override_sourceinfo_dispose(cooked_sourceinfo_t *o_si)
 {
-	object_unref(o_si->parent_si);
+	atheme_object_unref(o_si->parent_si);
 	free(o_si);
 }
 
@@ -230,9 +230,9 @@ static void os_cmd_override(struct sourceinfo *si, int parc, char *parv[])
 	o_si->si.service = svs;
 	o_si->si.v = &override_vtable;
 	o_si->si.connection = NULL;
-	o_si->parent_si = object_ref(si);
+	o_si->parent_si = atheme_object_ref(si);
 
-	object_init(object(o_si), NULL, (destructor_t) override_sourceinfo_dispose);
+	atheme_object_init(atheme_object(o_si), NULL, (destructor_t) override_sourceinfo_dispose);
 
 	logcommand(si, CMDLOG_ADMIN, "OVERRIDE: (account: \2%s\2) (service: \2%s\2) (command: \2%s\2) [parameters: \2%s\2]", parv[0], parv[1], parv[2], parv[3] != NULL ? parv[3] : "");
 	wallops("\2%s\2 is using OperServ OVERRIDE: account=%s service=%s command=%s params=%s", get_source_name(si), parv[0], parv[1], parv[2], parv[3] != NULL ? parv[3] : "");
@@ -242,7 +242,7 @@ static void os_cmd_override(struct sourceinfo *si, int parc, char *parv[])
 		newparv[i] = NULL;
 	command_exec(svs, &o_si->si, cmd, newparc, newparv);
 
-	object_unref(o_si);
+	atheme_object_unref(o_si);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/override", MODULE_UNLOAD_CAPABILITY_OK)

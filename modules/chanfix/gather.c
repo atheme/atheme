@@ -132,7 +132,7 @@ chanfix_channel_t *chanfix_channel_create(const char *name, struct channel *chan
 	return_val_if_fail(name != NULL, NULL);
 
 	c = mowgli_heap_alloc(chanfix_channel_heap);
-	object_init(object(c), name, (destructor_t) chanfix_channel_delete);
+	atheme_object_init(atheme_object(c), name, (destructor_t) chanfix_channel_delete);
 
 	c->name = sstrdup(name);
 	c->chan = chan;
@@ -255,7 +255,7 @@ void chanfix_expire(void *unused)
 				CURRTIME - chan->lastupdate < CHANFIX_RETENTION_TIME)
 			continue;
 
-		object_unref(chan);
+		atheme_object_unref(chan);
 	}
 }
 
@@ -305,12 +305,12 @@ static void write_chanfixdb(struct database_handle *db)
 			db_commit_row(db);
 		}
 
-		if (object(chan)->metadata != NULL)
+		if (atheme_object(chan)->metadata != NULL)
 		{
 			mowgli_patricia_iteration_state_t state2;
 			metadata_t *md;
 
-			MOWGLI_PATRICIA_FOREACH(md, &state2, object(chan)->metadata)
+			MOWGLI_PATRICIA_FOREACH(md, &state2, atheme_object(chan)->metadata)
 			{
 				db_start_row(db, "CFMD");
 				db_write_word(db, chan->name);

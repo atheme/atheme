@@ -83,9 +83,9 @@ static void cs_cmd_set_property(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	count = 0;
-	if (object(mc)->metadata)
+	if (atheme_object(mc)->metadata)
 	{
-		MOWGLI_PATRICIA_FOREACH(md, &state, object(mc)->metadata)
+		MOWGLI_PATRICIA_FOREACH(md, &state, atheme_object(mc)->metadata)
 		{
 			if (strncmp(md->name, "private:", 8))
 				count++;

@@ -24,7 +24,7 @@
 #include "atheme.h"
 
 typedef struct {
-	object_t parent;
+	struct atheme_object parent;
 
 	size_t size;
 	mowgli_heap_t *heap;
@@ -112,14 +112,14 @@ static sharedheap_t *sharedheap_new(size_t size)
 	sharedheap_t *s;
 
 	s = smalloc(sizeof(sharedheap_t));
-	object_init(object(s), NULL, (destructor_t) sharedheap_destroy);
+	atheme_object_init(atheme_object(s), NULL, (destructor_t) sharedheap_destroy);
 
 	s->size = size;
 	s->heap = mowgli_heap_create(size, sharedheap_prealloc_size(size), BH_NOW);
 
 	mowgli_node_add(s, &s->node, &sharedheap_list);
 
-	return object_sink_ref(s);
+	return atheme_object_sink_ref(s);
 }
 
 mowgli_heap_t *sharedheap_get(size_t size)
@@ -141,7 +141,7 @@ mowgli_heap_t *sharedheap_get(size_t size)
 
 	soft_assert(s != NULL);
 
-	object_ref(s);
+	atheme_object_ref(s);
 
 	return s->heap;
 }
@@ -156,5 +156,5 @@ void sharedheap_unref(mowgli_heap_t *heap)
 
 	return_if_fail(s != NULL);
 
-	object_unref(s);
+	atheme_object_unref(s);
 }

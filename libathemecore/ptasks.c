@@ -179,7 +179,7 @@ void handle_stats(user_t *u, char req)
 	  case 'J':
 		  MOWGLI_ITER_FOREACH(n, object_list.head)
 		  {
-			  object_t *obj = n->data;
+			  struct atheme_object *obj = n->data;
 			  numeric_sts(me.me, 249, u, "J :object:%p refs:%d destructor:%p",
 				      obj, obj->refcount, obj->destructor);
 		  }

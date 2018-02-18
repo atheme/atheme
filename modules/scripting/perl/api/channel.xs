@@ -49,7 +49,7 @@ CODE:
     mc->flags |= config_options.defcflags;
 
     if ( chanacs_add(mc, entity(user), custom_founder_check(), CURRTIME, entity(si->smu)) == NULL) {
-        object_unref (mc);
+        atheme_object_unref (mc);
         mc = NULL;
         Perl_croak (aTHX_ "Failed to create channel access for %s", name);
     }

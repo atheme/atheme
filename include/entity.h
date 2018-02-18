@@ -15,7 +15,7 @@ enum myentity_type
 
 struct myentity
 {
-	object_t parent;
+	struct atheme_object parent;
 	enum myentity_type type;
 
 	stringref name;

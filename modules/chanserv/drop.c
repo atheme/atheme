@@ -101,7 +101,7 @@ cmd_cs_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 		(void) part(mc->name, chansvs.nick);
 
 	(void) command_success_nodata(si, _("The channel \2%s\2 has been dropped."), mc->name);
-	(void) object_unref(mc);
+	(void) atheme_object_unref(mc);
 }
 
 static void
@@ -154,7 +154,7 @@ cmd_cs_fdrop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_U
 		(void) part(mc->name, chansvs.nick);
 
 	(void) command_success_nodata(si, _("The channel \2%s\2 has been dropped."), mc->name);
-	(void) object_unref(mc);
+	(void) atheme_object_unref(mc);
 }
 
 static struct command cmd_cs_drop = {

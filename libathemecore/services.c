@@ -872,7 +872,7 @@ struct sourceinfo *sourceinfo_create(void)
 		sourceinfo_heap = sharedheap_get(sizeof(struct sourceinfo));
 
 	out = mowgli_heap_alloc(sourceinfo_heap);
-	object_init(object(out), "<sourceinfo>", (destructor_t) sourceinfo_delete);
+	atheme_object_init(atheme_object(out), "<sourceinfo>", (destructor_t) sourceinfo_delete);
 
 	return out;
 }

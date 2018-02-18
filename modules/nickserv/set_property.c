@@ -76,7 +76,7 @@ static void ns_cmd_set_property(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	count = 0;
-	MOWGLI_PATRICIA_FOREACH(md, &state, object(si->smu)->metadata)
+	MOWGLI_PATRICIA_FOREACH(md, &state, atheme_object(si->smu)->metadata)
 	{
 		if (strncmp(md->name, "private:", 8))
 			count++;

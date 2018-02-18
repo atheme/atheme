@@ -48,6 +48,9 @@ struct me;
 // Defined in include/hook.h
 struct hook;
 
+// Defined in include/object.h
+struct atheme_object;
+
 // Defined in include/sasl.h
 struct sasl_core_functions;
 struct sasl_mechanism;

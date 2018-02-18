@@ -10,7 +10,7 @@
 
 struct user_
 {
-	object_t parent;
+	struct atheme_object parent;
 
 	stringref nick;
 	stringref user;

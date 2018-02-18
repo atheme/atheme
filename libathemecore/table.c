@@ -94,7 +94,7 @@ table_new(const char *fmt, ...)
 	va_end(vl);
 
 	out = scalloc(sizeof(table_t), 1);
-	object_init(&out->parent, buf, table_destroy);
+	atheme_object_init(&out->parent, buf, table_destroy);
 
 	return out;
 }

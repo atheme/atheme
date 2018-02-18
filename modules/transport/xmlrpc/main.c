@@ -262,7 +262,7 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
 
 		bad_password(si, mu);
 
-		object_unref(si);
+		atheme_object_unref(si);
 
 		return 0;
 	}
@@ -422,7 +422,7 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 			xmlrpc_generic_error(fault_unimplemented, "Command did not return a result.");
 	}
 
-	object_unref(si);
+	atheme_object_unref(si);
 
 	return 0;
 }

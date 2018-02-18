@@ -107,7 +107,7 @@ static inline bool chanacs_source_has_flag(mychan_t *mychan, struct sourceinfo *
 static inline void chanacs_close(struct chanacs *ca)
 {
 	if (ca->level == 0)
-		object_unref(ca);
+		atheme_object_unref(ca);
 }
 
 /* Call this with a struct chanacs -> level == 0 */

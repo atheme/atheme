@@ -61,7 +61,7 @@ void cs_cmd_taxonomy(struct sourceinfo *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_GET, "TAXONOMY: \2%s\2", mc->name);
 	command_success_nodata(si, _("Taxonomy for \2%s\2:"), target);
 
-	MOWGLI_PATRICIA_FOREACH(md, &state, object(mc)->metadata)
+	MOWGLI_PATRICIA_FOREACH(md, &state, atheme_object(mc)->metadata)
 	{
                 if (!strncmp(md->name, "private:", 8) && !isoper)
                         continue;

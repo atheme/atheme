@@ -40,7 +40,7 @@ static void gs_cmd_fdrop(struct sourceinfo *si, int parc, char *parv[])
 	remove_group_chanacs(mg);
 	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FDROP: \2%s\2", entity(mg)->name);
         wallops("%s dropped the group \2%s\2", get_oper_name(si), name);
-	object_unref(mg);
+	atheme_object_unref(mg);
 	command_success_nodata(si, _("The group \2%s\2 has been dropped."), name);
 	return;
 }

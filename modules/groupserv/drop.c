@@ -78,7 +78,7 @@ cmd_gs_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 	(void) hook_call_group_drop(mg);
 
 	(void) command_success_nodata(si, _("The group \2%s\2 has been dropped."), entity(mg)->name);
-	(void) object_unref(mg);
+	(void) atheme_object_unref(mg);
 }
 
 static struct command cmd_gs_drop = {

@@ -24,7 +24,7 @@
 #define CHANFIX_EXPIRE_DIVISOR	672
 
 typedef struct chanfix_channel {
-	object_t parent;
+	struct atheme_object parent;
 
 	char *name;
 

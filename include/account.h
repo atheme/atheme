@@ -119,7 +119,7 @@ struct myuser_
 /* registered nick */
 struct mynick_
 {
-  object_t parent;
+  struct atheme_object parent;
 
   char nick[NICKLEN + 1];
 
@@ -134,7 +134,7 @@ struct mynick_
 /* record about a name that used to exist */
 struct myuser_name
 {
-  object_t parent;
+  struct atheme_object parent;
 
   char name[NICKLEN + 1];
 };
@@ -150,7 +150,7 @@ struct mycertfp
 
 struct mychan_
 {
-  object_t parent;
+  struct atheme_object parent;
 
   stringref name;
 
@@ -194,7 +194,7 @@ struct mychan_
 /* struct for channel access list */
 struct chanacs
 {
-	object_t parent;
+	struct atheme_object parent;
 
 	struct myentity *entity;
 	mychan_t *mychan;

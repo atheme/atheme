@@ -356,7 +356,7 @@ logfile_t *logfile_new(const char *path, unsigned int log_mask)
 
 	if (!strcasecmp(path, "!snotices") || !strcasecmp(path, "!wallops"))
 	{
-		object_init(object(lf), path, logfile_delete_channel);
+		atheme_object_init(atheme_object(lf), path, logfile_delete_channel);
 
 		lf->log_path = sstrdup(path);
 		lf->log_type = LOG_INTERACTIVE;
@@ -364,7 +364,7 @@ logfile_t *logfile_new(const char *path, unsigned int log_mask)
 	}
 	else if (!VALID_GLOBAL_CHANNEL_PFX(path))
 	{
-		object_init(object(lf), path, logfile_delete_file);
+		atheme_object_init(atheme_object(lf), path, logfile_delete_file);
 		if ((lf->log_file = fopen(path, "a")) == NULL)
 		{
 			free(lf);
@@ -386,7 +386,7 @@ logfile_t *logfile_new(const char *path, unsigned int log_mask)
 	}
 	else
 	{
-		object_init(object(lf), path, logfile_delete_channel);
+		atheme_object_init(atheme_object(lf), path, logfile_delete_channel);
 
 		lf->log_path = sstrdup(path);
 		lf->log_type = LOG_INTERACTIVE;
@@ -457,7 +457,7 @@ void log_shutdown(void)
 	mowgli_node_t *n, *tn;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, log_files.head)
-		object_unref(n->data);
+		atheme_object_unref(n->data);
 }
 
 /*
