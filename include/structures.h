@@ -32,6 +32,7 @@ struct language;
 
 // Defined in include/database_backend.h
 struct database_handle;
+struct database_module;
 
 // Defined in include/servtree.h
 struct service;

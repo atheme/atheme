@@ -49,11 +49,12 @@ struct database_handle
 	unsigned int token;
 };
 
-typedef struct {
+struct database_module
+{
 	struct database_handle *(*db_open)(const char *filename, database_transaction_t txn);
 	void (*db_close)(struct database_handle *db);
 	void (*db_parse)(struct database_handle *db);
-} database_module_t;
+};
 
 extern struct database_handle *db_open(const char *filename, database_transaction_t txn);
 extern void db_close(struct database_handle *db);
@@ -88,6 +89,6 @@ extern void db_register_type_handler(const char *type, database_handler_f fun);
 extern void db_unregister_type_handler(const char *type);
 extern void db_process(struct database_handle *db, const char *type);
 extern void db_init(void);
-extern database_module_t *db_mod;
+extern const struct database_module *db_mod;
 
 #endif

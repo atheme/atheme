@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-database_module_t *db_mod = NULL;
+const struct database_module *db_mod = NULL;
 mowgli_patricia_t *db_types = NULL;
 
 struct database_handle *
