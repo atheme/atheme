@@ -9,7 +9,7 @@
 
 static void os_cmd_mode(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_mode = { "MODE", N_("Changes modes on channels."), PRIV_OMODE, 2, os_cmd_mode, { .path = "oservice/mode" } };
+struct command os_mode = { "MODE", N_("Changes modes on channels."), PRIV_OMODE, 2, os_cmd_mode, { .path = "oservice/mode" } };
 
 static void
 mod_init(module_t *const restrict m)

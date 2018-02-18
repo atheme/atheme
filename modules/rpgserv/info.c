@@ -7,7 +7,7 @@
 
 static void rs_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t rs_info = { "INFO", N_("Displays info for a particular game."),
+struct command rs_info = { "INFO", N_("Displays info for a particular game."),
                       AC_NONE, 1, rs_cmd_info, { .path = "rpgserv/info" } };
 
 static void rs_cmd_info(sourceinfo_t *si, int parc, char *parv[])

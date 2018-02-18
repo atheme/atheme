@@ -10,7 +10,7 @@
 
 static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_return = { "RETURN", N_("Returns an account to its owner."), PRIV_USER_ADMIN, 2, ns_cmd_return, { .path = "nickserv/return" } };
+struct command ns_return = { "RETURN", N_("Returns an account to its owner."), PRIV_USER_ADMIN, 2, ns_cmd_return, { .path = "nickserv/return" } };
 
 static void
 mod_init(module_t *const restrict m)

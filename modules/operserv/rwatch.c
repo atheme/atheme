@@ -39,12 +39,12 @@ struct rwatch_
 	atheme_regex_t *re;
 };
 
-command_t os_rwatch = { "RWATCH", N_("Performs actions on connecting clients matching regexes."), PRIV_USER_AUSPEX, 2, os_cmd_rwatch, { .path = "oservice/rwatch" } };
+struct command os_rwatch = { "RWATCH", N_("Performs actions on connecting clients matching regexes."), PRIV_USER_AUSPEX, 2, os_cmd_rwatch, { .path = "oservice/rwatch" } };
 
-command_t os_rwatch_add = { "ADD", N_("Adds an entry to the regex watch list."), AC_NONE, 1, os_cmd_rwatch_add, { .path = "" } };
-command_t os_rwatch_del = { "DEL", N_("Removes an entry from the regex watch list."), AC_NONE, 1, os_cmd_rwatch_del, { .path = "" } };
-command_t os_rwatch_list = { "LIST", N_("Displays the regex watch list."), AC_NONE, 1, os_cmd_rwatch_list, { .path = "" } };
-command_t os_rwatch_set = { "SET", N_("Changes actions on an entry in the regex watch list"), AC_NONE, 1, os_cmd_rwatch_set, { .path = "" } };
+struct command os_rwatch_add = { "ADD", N_("Adds an entry to the regex watch list."), AC_NONE, 1, os_cmd_rwatch_add, { .path = "" } };
+struct command os_rwatch_del = { "DEL", N_("Removes an entry from the regex watch list."), AC_NONE, 1, os_cmd_rwatch_del, { .path = "" } };
+struct command os_rwatch_list = { "LIST", N_("Displays the regex watch list."), AC_NONE, 1, os_cmd_rwatch_list, { .path = "" } };
+struct command os_rwatch_set = { "SET", N_("Changes actions on an entry in the regex watch list"), AC_NONE, 1, os_cmd_rwatch_set, { .path = "" } };
 
 rwatch_t *rwread = NULL;
 FILE *f;
@@ -236,7 +236,7 @@ static void os_cmd_rwatch(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* Grab args */
 	char *cmd = parv[0];
-	command_t *c;
+	struct command *c;
 
 	/* Bad/missing arg */
 	if (!cmd)

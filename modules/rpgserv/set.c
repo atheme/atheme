@@ -7,7 +7,7 @@
 
 static void rs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t rs_set = { "SET", N_("Sets RPG properties of your channel."),
+struct command rs_set = { "SET", N_("Sets RPG properties of your channel."),
                      AC_NONE, 3, rs_cmd_set, { .path = "rpgserv/set" } };
 
 static void setting_clear(sourceinfo_t *si, mychan_t *mc, char *setting)

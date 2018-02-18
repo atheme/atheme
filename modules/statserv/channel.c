@@ -11,13 +11,13 @@ static void ss_cmd_channel(sourceinfo_t * si, int parc, char *parv[]);
 static void ss_cmd_channel_topic(sourceinfo_t * si, int parc, char *parv[]);
 static void ss_cmd_channel_count(sourceinfo_t * si, int parc, char *parv[]);
 
-command_t ss_channel =
+struct command ss_channel =
 { "CHANNEL", N_("Obtain various information about a channel."), AC_NONE, 2, ss_cmd_channel, {.path = "statserv/channel"} };
 
-command_t ss_channel_topic =
+struct command ss_channel_topic =
 { "TOPIC", N_("Obtain the topic for a given channel."), AC_NONE, 1, ss_cmd_channel_topic, {.path = ""} };
 
-command_t ss_channel_count =
+struct command ss_channel_count =
 { "COUNT", N_("Count the number of channels on the network."), AC_NONE, 1, ss_cmd_channel_count, {.path = ""}};
 
 mowgli_patricia_t *ss_channel_cmds;
@@ -46,7 +46,7 @@ mod_deinit(const module_unload_intent_t intent)
 
 static void ss_cmd_channel(sourceinfo_t * si, int parc, char *parv[])
 {
-    command_t *c;
+    struct command *c;
     char *cmd = parv[0];
 
     if (!cmd)

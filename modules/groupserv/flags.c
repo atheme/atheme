@@ -10,7 +10,7 @@
 
 static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_flags = { "FLAGS", N_("Sets flags on a user in a group."), AC_AUTHENTICATED, 3, gs_cmd_flags, { .path = "groupserv/flags" } };
+struct command gs_flags = { "FLAGS", N_("Sets flags on a user in a group."), AC_AUTHENTICATED, 3, gs_cmd_flags, { .path = "groupserv/flags" } };
 
 static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 {

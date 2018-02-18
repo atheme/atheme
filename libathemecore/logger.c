@@ -808,13 +808,13 @@ logcommand_external(service_t *svs, const char *type, connection_t *source, cons
 }
 
 /*
- * logaudit_denycmd(sourceinfo_t *si, command_t *cmd, const char *userlevel)
+ * logaudit_denycmd(sourceinfo_t *si, struct command *cmd, const char *userlevel)
  *
  * Logs a command access denial for auditing.
  *
  * Inputs:
  *       - sourceinfo_t object that was denied
- *       - command_t object that was denied
+ *       - struct command object that was denied
  *       - optional userlevel (if none, will be NULL)
  *
  * Outputs:
@@ -823,7 +823,7 @@ logcommand_external(service_t *svs, const char *type, connection_t *source, cons
  * Side Effects:
  *       - qualifying logfile_t objects in log_files are updated
  */
-void logaudit_denycmd(sourceinfo_t *si, command_t *cmd, const char *userlevel)
+void logaudit_denycmd(sourceinfo_t *si, struct command *cmd, const char *userlevel)
 {
 	slog_ext(LOG_NONINTERACTIVE, LG_DENYCMD, "DENYCMD: [%s] was denied execution of [%s], need privileges [%s %s]",
 		 get_source_security_label(si), cmd->name, cmd->access, userlevel != NULL ? userlevel : "");

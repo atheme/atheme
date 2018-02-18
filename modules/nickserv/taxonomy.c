@@ -9,7 +9,7 @@
 
 static void ns_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_taxonomy = { "TAXONOMY", N_("Displays a user's metadata."), AC_NONE, 1, ns_cmd_taxonomy, { .path = "nickserv/taxonomy" } };
+struct command ns_taxonomy = { "TAXONOMY", N_("Displays a user's metadata."), AC_NONE, 1, ns_cmd_taxonomy, { .path = "nickserv/taxonomy" } };
 
 static void
 mod_init(module_t *const restrict m)

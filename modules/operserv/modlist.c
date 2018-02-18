@@ -9,7 +9,7 @@
 
 static void os_cmd_modlist(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_modlist = { "MODLIST", N_("Lists loaded modules."), PRIV_SERVER_AUSPEX, 0, os_cmd_modlist, { .path = "oservice/modlist" } };
+struct command os_modlist = { "MODLIST", N_("Lists loaded modules."), PRIV_SERVER_AUSPEX, 0, os_cmd_modlist, { .path = "oservice/modlist" } };
 
 extern mowgli_list_t modules;
 

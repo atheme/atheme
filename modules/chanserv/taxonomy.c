@@ -9,7 +9,7 @@
 
 static void cs_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_taxonomy = { "TAXONOMY", N_("Displays a channel's metadata."),
+struct command cs_taxonomy = { "TAXONOMY", N_("Displays a channel's metadata."),
                         AC_NONE, 1, cs_cmd_taxonomy, { .path = "cservice/taxonomy" } };
 
 static void

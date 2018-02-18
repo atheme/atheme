@@ -26,22 +26,22 @@ static void os_cmd_set_spam(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_set_nickexpire(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_set_enforceprefix(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_set = { "SET", N_("Sets various control flags."), PRIV_ADMIN, 2, os_cmd_set, { .func = os_help_set } };
-command_t os_set_recontime = { "RECONTIME", N_("Changes IRCd reconnect delay."), AC_NONE, 1, os_cmd_set_recontime, { .path = "oservice/set_recontime" } };
-command_t os_set_maxlogins = { "MAXLOGINS", N_("Changes the maximum number of users that may be logged in to one account."), AC_NONE, 1, os_cmd_set_maxlogins, { .path = "oservice/set_maxlogins" } };
-command_t os_set_maxnicks = { "MAXNICKS", N_("Changes the maximum number of nicks that one account may own."), AC_NONE, 1, os_cmd_set_maxnicks, { .path = "oservice/set_maxnicks" } };
-command_t os_set_maxusers = { "MAXUSERS", N_("Changes the maximum number of accounts that one email address may have registered."), AC_NONE, 1, os_cmd_set_maxusers, { .path = "oservice/set_maxusers" } };
-command_t os_set_maxchans = { "MAXCHANS", N_("Changes the maximum number of channels one account may own."), AC_NONE, 1, os_cmd_set_maxchans, { .path = "oservice/set_maxchans" } };
-command_t os_set_mdlimit = { "MDLIMIT", N_("Sets the maximum amount of metadata one channel or account may have."), AC_NONE, 1, os_cmd_set_mdlimit, { .path = "oservice/set_mdlimit" } };
-command_t os_set_klinetime = { "KLINETIME", N_("Sets the default KLINE/AKILL time."), AC_NONE, 1, os_cmd_set_klinetime, { .path = "oservice/set_klinetime" } };
-command_t os_set_commitinterval = { "COMMITINTERVAL", N_("Changes how often the database is written to disk."), AC_NONE, 1, os_cmd_set_commitinterval, { .path = "oservice/set_commitinterval" } };
-command_t os_set_chanexpire = { "CHANEXPIRE", N_("Sets when unused channels expire."), AC_NONE, 1, os_cmd_set_chanexpire, { .path = "oservice/set_chanexpire" } };
-command_t os_set_maxchanacs = { "MAXCHANACS", N_("Changes the maximum number of channel access list entries per channel."), AC_NONE, 1, os_cmd_set_maxchanacs, { .path = "oservice/set_maxchanacs" } };
-command_t os_set_maxfounders = { "MAXFOUNDERS", N_("Sets the maximum number of founders per channel."), AC_NONE, 1, os_cmd_set_maxfounders, { .path = "oservice/set_maxfounders" } };
-command_t os_set_akicktime = { "AKICKTIME", N_("Sets the default AKICK time."), AC_NONE, 1, os_cmd_set_akicktime, { .path = "oservice/set_akicktime" } };
-command_t os_set_spam = { "SPAM", N_("Changes whether service spams unregistered users on connect."), AC_NONE, 1, os_cmd_set_spam, { .path = "oservice/set_spam" } };
-command_t os_set_nickexpire = { "NICKEXPIRE", N_("Sets when unused nicks and accounts expire."), AC_NONE, 1, os_cmd_set_nickexpire, { .path = "oservice/set_nickexpire" } };
-command_t os_set_enforceprefix = { "ENFORCEPREFIX", N_("Changes the prefix to use when changing the user's nick on enforcement."), AC_NONE, 1, os_cmd_set_enforceprefix, { .path = "oservice/set_enforceprefix" } };
+struct command os_set = { "SET", N_("Sets various control flags."), PRIV_ADMIN, 2, os_cmd_set, { .func = os_help_set } };
+struct command os_set_recontime = { "RECONTIME", N_("Changes IRCd reconnect delay."), AC_NONE, 1, os_cmd_set_recontime, { .path = "oservice/set_recontime" } };
+struct command os_set_maxlogins = { "MAXLOGINS", N_("Changes the maximum number of users that may be logged in to one account."), AC_NONE, 1, os_cmd_set_maxlogins, { .path = "oservice/set_maxlogins" } };
+struct command os_set_maxnicks = { "MAXNICKS", N_("Changes the maximum number of nicks that one account may own."), AC_NONE, 1, os_cmd_set_maxnicks, { .path = "oservice/set_maxnicks" } };
+struct command os_set_maxusers = { "MAXUSERS", N_("Changes the maximum number of accounts that one email address may have registered."), AC_NONE, 1, os_cmd_set_maxusers, { .path = "oservice/set_maxusers" } };
+struct command os_set_maxchans = { "MAXCHANS", N_("Changes the maximum number of channels one account may own."), AC_NONE, 1, os_cmd_set_maxchans, { .path = "oservice/set_maxchans" } };
+struct command os_set_mdlimit = { "MDLIMIT", N_("Sets the maximum amount of metadata one channel or account may have."), AC_NONE, 1, os_cmd_set_mdlimit, { .path = "oservice/set_mdlimit" } };
+struct command os_set_klinetime = { "KLINETIME", N_("Sets the default KLINE/AKILL time."), AC_NONE, 1, os_cmd_set_klinetime, { .path = "oservice/set_klinetime" } };
+struct command os_set_commitinterval = { "COMMITINTERVAL", N_("Changes how often the database is written to disk."), AC_NONE, 1, os_cmd_set_commitinterval, { .path = "oservice/set_commitinterval" } };
+struct command os_set_chanexpire = { "CHANEXPIRE", N_("Sets when unused channels expire."), AC_NONE, 1, os_cmd_set_chanexpire, { .path = "oservice/set_chanexpire" } };
+struct command os_set_maxchanacs = { "MAXCHANACS", N_("Changes the maximum number of channel access list entries per channel."), AC_NONE, 1, os_cmd_set_maxchanacs, { .path = "oservice/set_maxchanacs" } };
+struct command os_set_maxfounders = { "MAXFOUNDERS", N_("Sets the maximum number of founders per channel."), AC_NONE, 1, os_cmd_set_maxfounders, { .path = "oservice/set_maxfounders" } };
+struct command os_set_akicktime = { "AKICKTIME", N_("Sets the default AKICK time."), AC_NONE, 1, os_cmd_set_akicktime, { .path = "oservice/set_akicktime" } };
+struct command os_set_spam = { "SPAM", N_("Changes whether service spams unregistered users on connect."), AC_NONE, 1, os_cmd_set_spam, { .path = "oservice/set_spam" } };
+struct command os_set_nickexpire = { "NICKEXPIRE", N_("Sets when unused nicks and accounts expire."), AC_NONE, 1, os_cmd_set_nickexpire, { .path = "oservice/set_nickexpire" } };
+struct command os_set_enforceprefix = { "ENFORCEPREFIX", N_("Changes the prefix to use when changing the user's nick on enforcement."), AC_NONE, 1, os_cmd_set_enforceprefix, { .path = "oservice/set_enforceprefix" } };
 
 mowgli_patricia_t *os_set_cmdtree;
 
@@ -72,7 +72,7 @@ static void os_help_set(sourceinfo_t *si, const char *subcmd)
 static void os_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *setting = parv[0];
-	command_t *c;
+	struct command *c;
 
 	if (setting == NULL)
 	{

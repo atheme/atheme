@@ -13,7 +13,7 @@ mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_hidelastlogin(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_set_hidelastlogin = { "HIDELASTLOGIN", N_("Opts you out of Last Login notices upon identifying to your account."), AC_NONE, 1, ns_cmd_set_hidelastlogin, { .path = "nickserv/set_hidelastlogin" } };
+struct command ns_set_hidelastlogin = { "HIDELASTLOGIN", N_("Opts you out of Last Login notices upon identifying to your account."), AC_NONE, 1, ns_cmd_set_hidelastlogin, { .path = "nickserv/set_hidelastlogin" } };
 
 static void
 mod_init(module_t *const restrict m)

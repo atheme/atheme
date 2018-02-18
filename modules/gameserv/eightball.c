@@ -10,7 +10,7 @@
 
 static void command_eightball(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cmd_eightball = { "EIGHTBALL", N_("Ask the 8-Ball a question."), AC_NONE, 2, command_eightball, { .path = "gameserv/eightball" } };
+struct command cmd_eightball = { "EIGHTBALL", N_("Ask the 8-Ball a question."), AC_NONE, 2, command_eightball, { .path = "gameserv/eightball" } };
 
 static void
 mod_init(module_t *const restrict m)

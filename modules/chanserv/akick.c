@@ -15,13 +15,13 @@ static void cs_cmd_akick_list(sourceinfo_t *si, int parc, char *parv[]);
 static void akick_timeout_check(void *arg);
 static void akickdel_list_create(void *arg);
 
-command_t cs_akick = { "AKICK", N_("Manipulates a channel's AKICK list."),
+struct command cs_akick = { "AKICK", N_("Manipulates a channel's AKICK list."),
                         AC_NONE, 4, cs_cmd_akick, { .path = "cservice/akick" } };
-command_t cs_akick_add = { "ADD", N_("Adds a channel AKICK."),
+struct command cs_akick_add = { "ADD", N_("Adds a channel AKICK."),
                         AC_NONE, 4, cs_cmd_akick_add, { .path = "" } };
-command_t cs_akick_del = { "DEL", N_("Deletes a channel AKICK."),
+struct command cs_akick_del = { "DEL", N_("Deletes a channel AKICK."),
                         AC_NONE, 3, cs_cmd_akick_del, { .path = "" } };
-command_t cs_akick_list = { "LIST", N_("Displays a channel's AKICK list."),
+struct command cs_akick_list = { "LIST", N_("Displays a channel's AKICK list."),
                         AC_NONE, 2, cs_cmd_akick_list, { .path = "" } };
 
 typedef struct {
@@ -123,7 +123,7 @@ static void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *chan;
 	char *cmd;
-	command_t *c;
+	struct command *c;
 
 	if (parc < 2)
 	{

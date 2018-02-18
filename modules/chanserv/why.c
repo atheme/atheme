@@ -9,7 +9,7 @@
 
 static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_why = { "WHY", N_("Explains channel access logic."),
+struct command cs_why = { "WHY", N_("Explains channel access logic."),
 		     AC_NONE, 2, cs_cmd_why, { .path = "cservice/why" } };
 
 static void

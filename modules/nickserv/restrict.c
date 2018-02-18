@@ -11,7 +11,7 @@
 
 static void ns_cmd_restrict(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_restrict = { "RESTRICT", N_("Restrict a user from using certain commands."), PRIV_MARK, 3, ns_cmd_restrict, { .path = "nickserv/restrict" } };
+struct command ns_restrict = { "RESTRICT", N_("Restrict a user from using certain commands."), PRIV_MARK, 3, ns_cmd_restrict, { .path = "nickserv/restrict" } };
 
 static bool is_restricted(const mynick_t *mn, const void *arg) {
 	myuser_t *mu = mn->owner;

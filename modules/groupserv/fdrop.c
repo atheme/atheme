@@ -10,7 +10,7 @@
 
 static void gs_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_fdrop = { "FDROP", N_("Force drops a group registration."), PRIV_GROUP_ADMIN, 1, gs_cmd_fdrop, { .path = "groupserv/fdrop" } };
+struct command gs_fdrop = { "FDROP", N_("Force drops a group registration."), PRIV_GROUP_ADMIN, 1, gs_cmd_fdrop, { .path = "groupserv/fdrop" } };
 
 static void gs_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[])
 {

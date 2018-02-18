@@ -10,7 +10,7 @@
 
 static void gs_cmd_set_description(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_set_description = { "DESCRIPTION", N_("Sets the group description."), AC_AUTHENTICATED, 2, gs_cmd_set_description, { .path = "groupserv/set_description" } };
+struct command gs_set_description = { "DESCRIPTION", N_("Sets the group description."), AC_AUTHENTICATED, 2, gs_cmd_set_description, { .path = "groupserv/set_description" } };
 
 static void gs_cmd_set_description(sourceinfo_t *si, int parc, char *parv[])
 {

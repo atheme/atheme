@@ -25,7 +25,7 @@ static void check_user(user_t *u);
 static mowgli_list_t noop_kill_queue;
 static mowgli_eventloop_timer_t *noop_kill_users_timer = NULL;
 
-command_t os_noop = { "NOOP", N_("Restricts IRCop access."), PRIV_NOOP, 4, os_cmd_noop, { .path = "oservice/noop" } };
+struct command os_noop = { "NOOP", N_("Restricts IRCop access."), PRIV_NOOP, 4, os_cmd_noop, { .path = "oservice/noop" } };
 
 static void
 mod_init(module_t *const restrict m)

@@ -10,7 +10,7 @@
 
 static void gs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_fflags = { "FFLAGS", N_("Forces a flag change on a user in a group."), PRIV_GROUP_ADMIN, 3, gs_cmd_fflags, { .path = "groupserv/fflags" } };
+struct command gs_fflags = { "FFLAGS", N_("Forces a flag change on a user in a group."), PRIV_GROUP_ADMIN, 3, gs_cmd_fflags, { .path = "groupserv/fflags" } };
 
 static void gs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 {

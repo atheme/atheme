@@ -10,7 +10,7 @@
 
 static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_info = { "INFO", N_("Displays information about registered groups."), AC_NONE, 2, gs_cmd_info, { .path = "groupserv/info" } };
+struct command gs_info = { "INFO", N_("Displays information about registered groups."), AC_NONE, 2, gs_cmd_info, { .path = "groupserv/info" } };
 
 static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 {

@@ -9,7 +9,7 @@
 
 static void cs_cmd_clone(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_clone = { "CLONE", "Clones a channel.", AC_NONE, 2, cs_cmd_clone, { .path = "cservice/clone" } };
+struct command cs_clone = { "CLONE", "Clones a channel.", AC_NONE, 2, cs_cmd_clone, { .path = "cservice/clone" } };
 
 static void
 mod_init(module_t *const restrict m)

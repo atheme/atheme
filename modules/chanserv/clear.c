@@ -10,7 +10,7 @@
 static void cs_cmd_clear(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_help_clear(sourceinfo_t *si, const char *subcmd);
 
-command_t cs_clear = { "CLEAR", N_("Channel removal toolkit."),
+struct command cs_clear = { "CLEAR", N_("Channel removal toolkit."),
                         AC_NONE, 3, cs_cmd_clear, { .func = cs_help_clear } };
 
 mowgli_patricia_t *cs_clear_cmds;
@@ -53,7 +53,7 @@ static void cs_cmd_clear(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *chan;
 	char *cmd;
-	command_t *c;
+	struct command *c;
 
 	if (parc < 2)
 	{

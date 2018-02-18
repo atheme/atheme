@@ -10,7 +10,7 @@
 
 static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_register = { "REGISTER", N_("Registers a group."), AC_AUTHENTICATED, 2, gs_cmd_register, { .path = "groupserv/register" } };
+struct command gs_register = { "REGISTER", N_("Registers a group."), AC_AUTHENTICATED, 2, gs_cmd_register, { .path = "groupserv/register" } };
 
 static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 {

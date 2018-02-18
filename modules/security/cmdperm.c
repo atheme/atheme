@@ -20,9 +20,9 @@
 
 #include "atheme.h"
 
-static bool (*parent_command_authorize)(service_t *svs, sourceinfo_t *si, command_t *c, const char *userlevel) = NULL;
+static bool (*parent_command_authorize)(service_t *svs, sourceinfo_t *si, struct command *c, const char *userlevel) = NULL;
 
-static bool cmdperm_command_authorize(service_t *svs, sourceinfo_t *si, command_t *c, const char *userlevel)
+static bool cmdperm_command_authorize(service_t *svs, sourceinfo_t *si, struct command *c, const char *userlevel)
 {
 	char permbuf[BUFSIZE], *cp;
 

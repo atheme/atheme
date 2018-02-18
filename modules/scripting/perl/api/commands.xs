@@ -7,7 +7,7 @@ CODE:
 	newcmd->command.name = sstrdup(name);
 	newcmd->command.desc = sstrdup(desc);
 	newcmd->command.access = SvOK(access) ? sstrdup(SvPV_nolen(access)) : NULL;
-	*(int*)&newcmd->command.maxparc = maxparc;
+	newcmd->command.maxparc = maxparc;
 	newcmd->command.cmd = perl_command_handler;
 	newcmd->command.help.path = SvOK(help_path) ? sstrdup(SvPV_nolen(help_path)) : NULL;
 

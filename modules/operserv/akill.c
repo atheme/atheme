@@ -18,12 +18,12 @@ static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_akill_sync(sourceinfo_t *si, int parc, char *parv[]);
 
 
-command_t os_akill = { "AKILL", N_("Manages network bans."), PRIV_AKILL, 3, os_cmd_akill, { .path = "oservice/akill" } };
+struct command os_akill = { "AKILL", N_("Manages network bans."), PRIV_AKILL, 3, os_cmd_akill, { .path = "oservice/akill" } };
 
-command_t os_akill_add = { "ADD", N_("Adds a network ban"), AC_NONE, 2, os_cmd_akill_add, { .path = "" } };
-command_t os_akill_del = { "DEL", N_("Deletes a network ban"), AC_NONE, 1, os_cmd_akill_del, { .path = "" } };
-command_t os_akill_list = { "LIST", N_("Lists all network bans"), AC_NONE, 1, os_cmd_akill_list, { .path = "" } };
-command_t os_akill_sync = { "SYNC", N_("Synchronises network bans to servers"), AC_NONE, 0, os_cmd_akill_sync, { .path = "" } };
+struct command os_akill_add = { "ADD", N_("Adds a network ban"), AC_NONE, 2, os_cmd_akill_add, { .path = "" } };
+struct command os_akill_del = { "DEL", N_("Deletes a network ban"), AC_NONE, 1, os_cmd_akill_del, { .path = "" } };
+struct command os_akill_list = { "LIST", N_("Lists all network bans"), AC_NONE, 1, os_cmd_akill_list, { .path = "" } };
+struct command os_akill_sync = { "SYNC", N_("Synchronises network bans to servers"), AC_NONE, 0, os_cmd_akill_sync, { .path = "" } };
 
 mowgli_patricia_t *os_akill_cmds;
 
@@ -90,7 +90,7 @@ static void os_cmd_akill(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* Grab args */
 	char *cmd = parv[0];
-        command_t *c;
+        struct command *c;
 
 	/* Bad/missing arg */
 	if (!cmd)

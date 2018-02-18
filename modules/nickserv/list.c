@@ -13,7 +13,7 @@
 static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 static mowgli_patricia_t *list_params;
 
-command_t ns_list = { "LIST", N_("Lists nicknames registered matching a given pattern."), PRIV_USER_AUSPEX, 10, ns_cmd_list, { .path = "nickserv/list" } };
+struct command ns_list = { "LIST", N_("Lists nicknames registered matching a given pattern."), PRIV_USER_AUSPEX, 10, ns_cmd_list, { .path = "nickserv/list" } };
 
 void list_register(const char *param_name, list_param_t *param);
 void list_unregister(const char *param_name);

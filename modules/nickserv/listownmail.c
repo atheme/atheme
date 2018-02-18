@@ -9,7 +9,7 @@
 
 static void ns_cmd_listownmail(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_listownmail = { "LISTOWNMAIL", N_("Lists accounts registered to your e-mail address."), AC_AUTHENTICATED, 1, ns_cmd_listownmail, { .path = "nickserv/listownmail" } };
+struct command ns_listownmail = { "LISTOWNMAIL", N_("Lists accounts registered to your e-mail address."), AC_AUTHENTICATED, 1, ns_cmd_listownmail, { .path = "nickserv/listownmail" } };
 
 static void
 mod_init(module_t *const restrict m)

@@ -9,7 +9,7 @@
 
 static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_info = { "INFO", N_("Displays information on registrations."),
+struct command cs_info = { "INFO", N_("Displays information on registrations."),
                         AC_NONE, 2, cs_cmd_info, { .path = "cservice/info" } };
 
 static void

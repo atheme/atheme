@@ -10,7 +10,7 @@
 
 static void gs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_set_email = { "EMAIL", N_("Sets the group e-mail address."), AC_AUTHENTICATED, 2, gs_cmd_set_email, { .path = "groupserv/set_email" } };
+struct command gs_set_email = { "EMAIL", N_("Sets the group e-mail address."), AC_AUTHENTICATED, 2, gs_cmd_set_email, { .path = "groupserv/set_email" } };
 
 static void gs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
 {

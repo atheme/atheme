@@ -474,7 +474,7 @@ cs_set_cmd_antiflood(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static command_t cs_set_antiflood = {
+static struct command cs_set_antiflood = {
 	"ANTIFLOOD", N_("Set anti-flood action"), AC_NONE, 2,
 	cs_set_cmd_antiflood, { .path = "cservice/set_antiflood" }
 };

@@ -9,7 +9,7 @@
 
 static void ns_cmd_listmail(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_listmail = { "LISTMAIL", N_("Lists accounts registered to an e-mail address."), PRIV_USER_AUSPEX, 1, ns_cmd_listmail, { .path = "nickserv/listmail" } };
+struct command ns_listmail = { "LISTMAIL", N_("Lists accounts registered to an e-mail address."), PRIV_USER_AUSPEX, 1, ns_cmd_listmail, { .path = "nickserv/listmail" } };
 
 static void
 mod_init(module_t *const restrict m)

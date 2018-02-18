@@ -12,7 +12,7 @@ static void list_generic_flags(sourceinfo_t *si);
 
 static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_flags = { "TEMPLATE", N_("Manipulates predefined sets of flags."),
+struct command cs_flags = { "TEMPLATE", N_("Manipulates predefined sets of flags."),
                         AC_NONE, 3, cs_cmd_template, { .path = "cservice/template" } };
 
 static void

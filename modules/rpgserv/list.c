@@ -5,7 +5,7 @@
 
 static void rs_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t rs_list = { "LIST", N_("Lists games."),
+struct command rs_list = { "LIST", N_("Lists games."),
                       AC_NONE, 0, rs_cmd_list, { .path = "rpgserv/list" } };
 
 static void rs_cmd_list(sourceinfo_t *si, int parc, char *parv[])

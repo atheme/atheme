@@ -10,7 +10,7 @@
 
 static void command_rps(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cmd_rps = { "RPS", N_("Rock Paper Scissors."), AC_NONE, 2, command_rps, { .path = "gameserv/rps" } };
+struct command cmd_rps = { "RPS", N_("Rock Paper Scissors."), AC_NONE, 2, command_rps, { .path = "gameserv/rps" } };
 
 static void
 mod_init(module_t *const restrict m)

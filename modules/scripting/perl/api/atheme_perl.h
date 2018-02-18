@@ -10,7 +10,7 @@
 #include "atheme.h"
 
 struct perl_command_ {
-	command_t command;
+	struct command command;
 	SV * handler;
 	SV * help_func;
 };

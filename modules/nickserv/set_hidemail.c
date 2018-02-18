@@ -15,7 +15,7 @@ mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_hidemail(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_set_hidemail = { "HIDEMAIL", N_("Hides your e-mail address."), AC_NONE, 1, ns_cmd_set_hidemail, { .path = "nickserv/set_hidemail" } };
+struct command ns_set_hidemail = { "HIDEMAIL", N_("Hides your e-mail address."), AC_NONE, 1, ns_cmd_set_hidemail, { .path = "nickserv/set_hidemail" } };
 
 static bool has_hidemail(const mynick_t *mn, const void *arg) {
 	myuser_t *mu = mn->owner;

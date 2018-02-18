@@ -9,7 +9,7 @@
 
 static void os_cmd_modunload(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_modunload = { "MODUNLOAD", N_("Unloads a module."), PRIV_ADMIN, 20, os_cmd_modunload, { .path = "oservice/modunload" } };
+struct command os_modunload = { "MODUNLOAD", N_("Unloads a module."), PRIV_ADMIN, 20, os_cmd_modunload, { .path = "oservice/modunload" } };
 
 extern mowgli_list_t modules;
 

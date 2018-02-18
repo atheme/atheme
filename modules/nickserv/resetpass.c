@@ -9,7 +9,7 @@
 
 static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_resetpass = { "RESETPASS", N_("Resets an account password."), PRIV_USER_ADMIN, 1, ns_cmd_resetpass, { .path = "nickserv/resetpass" } };
+struct command ns_resetpass = { "RESETPASS", N_("Resets an account password."), PRIV_USER_ADMIN, 1, ns_cmd_resetpass, { .path = "nickserv/resetpass" } };
 
 static void
 mod_init(module_t *const restrict m)

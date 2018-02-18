@@ -11,9 +11,9 @@
 static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_devoice(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_voice = { "VOICE", N_("Gives channel voice to a user."),
+struct command cs_voice = { "VOICE", N_("Gives channel voice to a user."),
                          AC_NONE, 2, cs_cmd_voice, { .path = "cservice/op_voice" } };
-command_t cs_devoice = { "DEVOICE", N_("Removes channel voice from a user."),
+struct command cs_devoice = { "DEVOICE", N_("Removes channel voice from a user."),
                          AC_NONE, 2, cs_cmd_devoice, { .path = "cservice/op_voice" } };
 
 static void

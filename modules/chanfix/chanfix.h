@@ -82,12 +82,12 @@ extern bool chanfix_do_autofix;
 extern void chanfix_autofix_ev(void *unused);
 extern void chanfix_can_register(hook_channel_register_check_t *req);
 
-extern command_t cmd_list;
-extern command_t cmd_chanfix;
-extern command_t cmd_scores;
-extern command_t cmd_info;
-extern command_t cmd_help;
-extern command_t cmd_mark;
-extern command_t cmd_nofix;
+extern struct command cmd_list;
+extern struct command cmd_chanfix;
+extern struct command cmd_scores;
+extern struct command cmd_info;
+extern struct command cmd_help;
+extern struct command cmd_mark;
+extern struct command cmd_nofix;
 
 #endif

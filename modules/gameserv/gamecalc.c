@@ -14,9 +14,9 @@ static void command_wod(sourceinfo_t *si, int parc, char *parv[]);
 static void command_nwod(sourceinfo_t *si, int parc, char *parv[]);
 static void command_df(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cmd_wod = { "WOD", N_("WOD-style dice generation."), AC_NONE, 7, command_wod, { .path = "gameserv/roll" } };
-command_t cmd_nwod = { "NWOD", N_("New WOD-style dice generation."), AC_NONE, 7, command_nwod, { .path = "gameserv/roll" } };
-command_t cmd_df = { "DF", N_("Fudge-style dice generation."), AC_NONE, 2, command_df, { .path = "gameserv/roll" } };
+struct command cmd_wod = { "WOD", N_("WOD-style dice generation."), AC_NONE, 7, command_wod, { .path = "gameserv/roll" } };
+struct command cmd_nwod = { "NWOD", N_("New WOD-style dice generation."), AC_NONE, 7, command_nwod, { .path = "gameserv/roll" } };
+struct command cmd_df = { "DF", N_("Fudge-style dice generation."), AC_NONE, 2, command_df, { .path = "gameserv/roll" } };
 
 static void
 mod_init(module_t *const restrict m)

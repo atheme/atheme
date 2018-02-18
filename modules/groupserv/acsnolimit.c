@@ -10,7 +10,7 @@
 
 static void gs_cmd_acsnolimit(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_acsnolimit = { "ACSNOLIMIT", N_("Allow a group to bypass access list limits."), PRIV_GROUP_ADMIN, 2, gs_cmd_acsnolimit, { .path = "groupserv/acsnolimit" } };
+struct command gs_acsnolimit = { "ACSNOLIMIT", N_("Allow a group to bypass access list limits."), PRIV_GROUP_ADMIN, 2, gs_cmd_acsnolimit, { .path = "groupserv/acsnolimit" } };
 
 static void gs_cmd_acsnolimit(sourceinfo_t *si, int parc, char *parv[])
 {

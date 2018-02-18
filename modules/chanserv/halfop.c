@@ -11,9 +11,9 @@
 static void cs_cmd_halfop(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_dehalfop(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_halfop = { "HALFOP", N_("Gives channel halfops to a user."),
+struct command cs_halfop = { "HALFOP", N_("Gives channel halfops to a user."),
                         AC_NONE, 2, cs_cmd_halfop, { .path = "cservice/halfop" } };
-command_t cs_dehalfop = { "DEHALFOP", N_("Removes channel halfops from a user."),
+struct command cs_dehalfop = { "DEHALFOP", N_("Removes channel halfops from a user."),
                         AC_NONE, 2, cs_cmd_dehalfop, { .path = "cservice/halfop" } };
 
 static void

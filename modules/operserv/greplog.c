@@ -9,7 +9,7 @@
 
 static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_greplog = { "GREPLOG", N_("Searches through the logs."), PRIV_CHAN_AUSPEX, 3, os_cmd_greplog, { .path = "oservice/greplog" } };
+struct command os_greplog = { "GREPLOG", N_("Searches through the logs."), PRIV_CHAN_AUSPEX, 3, os_cmd_greplog, { .path = "oservice/greplog" } };
 
 static void
 mod_init(module_t *const restrict m)
@@ -78,7 +78,7 @@ static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[])
 	mowgli_node_t *n, *tn;
 
 	/* require user, channel and server auspex
-	 * (channel auspex checked via in command_t)
+	 * (channel auspex checked via in struct command)
 	 */
 	if (!has_priv(si, PRIV_USER_AUSPEX))
 	{

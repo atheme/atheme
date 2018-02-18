@@ -23,7 +23,7 @@
 
 #include "atheme.h"
 
-static bool command_has_help(command_t *cmd)
+static bool command_has_help(struct command *cmd)
 {
 	return_val_if_fail(cmd != NULL, false);
 
@@ -48,9 +48,9 @@ static void no_help_available(sourceinfo_t *si, const char *subcmd_of, const cha
 	command_fail(si, fault_nosuch_target, _("No help available for \2%s\2."), text);
 }
 
-static command_t *help_cmd_find(sourceinfo_t *si, const char *subcmd_of, const char *cmd, mowgli_patricia_t *list)
+static struct command *help_cmd_find(sourceinfo_t *si, const char *subcmd_of, const char *cmd, mowgli_patricia_t *list)
 {
-	command_t *c;
+	struct command *c;
 
 	if ((c = mowgli_patricia_retrieve(list, cmd)) != NULL && command_has_help(c))
 		return c;
@@ -113,7 +113,7 @@ static bool evaluate_condition(sourceinfo_t *si, const char *s)
 
 void help_display_as_subcmd(sourceinfo_t *si, service_t *service, const char *subcmd_of, const char *command, mowgli_patricia_t *list)
 {
-	command_t *c;
+	struct command *c;
 	FILE *help_file = NULL;
 	char subname[BUFSIZE], buf[BUFSIZE];
 	const char *langname = NULL;

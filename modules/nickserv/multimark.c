@@ -33,7 +33,7 @@ static inline mowgli_list_t *multimark_list(myuser_t *mu);
 
 static mowgli_patricia_t *restored_marks;
 
-command_t ns_multimark = { "MARK", N_("Adds a note to a user."), PRIV_MARK, 3, ns_cmd_multimark, { .path = "nickserv/multimark" } };
+struct command ns_multimark = { "MARK", N_("Adds a note to a user."), PRIV_MARK, 3, ns_cmd_multimark, { .path = "nickserv/multimark" } };
 
 struct multimark {
 	char *setter_uid;

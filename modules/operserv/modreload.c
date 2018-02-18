@@ -5,7 +5,7 @@
 
 static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_modreload = { "MODRELOAD", N_("Reloads a module."), PRIV_ADMIN, 20, os_cmd_modreload, { .path = "oservice/modreload" } };
+struct command os_modreload = { "MODRELOAD", N_("Reloads a module."), PRIV_ADMIN, 20, os_cmd_modreload, { .path = "oservice/modreload" } };
 
 static void
 mod_init(module_t *const restrict m)

@@ -10,7 +10,7 @@
 
 static void os_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 1, os_cmd_help, { .path = "help" } };
+struct command os_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 1, os_cmd_help, { .path = "help" } };
 
 static void
 mod_init(module_t *const restrict m)

@@ -11,7 +11,7 @@
 
 static void ns_cmd_listgroups(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_listgroups = { "LISTGROUPS", N_("Lists groups that you have access to."), AC_NONE, 1, ns_cmd_listgroups, { .path = "nickserv/listgroups" } };
+struct command ns_listgroups = { "LISTGROUPS", N_("Lists groups that you have access to."), AC_NONE, 1, ns_cmd_listgroups, { .path = "nickserv/listgroups" } };
 
 static void ns_cmd_listgroups(sourceinfo_t *si, int parc, char *parv[])
 {

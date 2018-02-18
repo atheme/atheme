@@ -9,7 +9,7 @@
 
 static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_override = { "OVERRIDE", N_("Perform a transaction on another user's account"), PRIV_OVERRIDE, 4, os_cmd_override, { .path = "oservice/override" } };
+struct command os_override = { "OVERRIDE", N_("Perform a transaction on another user's account"), PRIV_OVERRIDE, 4, os_cmd_override, { .path = "oservice/override" } };
 
 static void
 mod_init(module_t *const restrict m)
@@ -152,7 +152,7 @@ static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[])
 	myuser_t *mu = NULL;
 	service_t *svs;
 	service_t *memosvs;
-	command_t *cmd;
+	struct command *cmd;
 	int newparc;
 	size_t i;
 	char *newparv[20];

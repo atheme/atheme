@@ -57,7 +57,7 @@ struct sourceinfo_
 
 	language_t *force_language; /* locale to force replies to be in, could be NULL */
 
-	command_t *command; /* The command being executed. Needed when one function handles
+	struct command *command; /* The command being executed. Needed when one function handles
 				more than one command. */
 };
 

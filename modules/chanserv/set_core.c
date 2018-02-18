@@ -10,7 +10,7 @@
 static void cs_help_set(sourceinfo_t *si, const char *subcmd);
 static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_set = { "SET", N_("Sets various control flags."), AC_NONE, 3, cs_cmd_set, { .func = cs_help_set } };
+struct command cs_set = { "SET", N_("Sets various control flags."), AC_NONE, 3, cs_cmd_set, { .func = cs_help_set } };
 
 mowgli_patricia_t *cs_set_cmdtree;
 
@@ -55,7 +55,7 @@ static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *chan;
 	char *cmd;
-	command_t *c;
+	struct command *c;
 
 	if (parc < 2)
 	{

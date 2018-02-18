@@ -416,7 +416,7 @@ static void chanfix_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, ngettext(N_("\2%d\2 match for criteria \2%s\2"), N_("\2%d\2 matches for criteria \2%s\2"), matches), matches, chanpattern);
 }
 
-command_t cmd_list = { "LIST", N_("List all channels with CHANFIX records."), PRIV_CHAN_AUSPEX, 1, chanfix_cmd_list, { .path = "chanfix/list" } };
+struct command cmd_list = { "LIST", N_("List all channels with CHANFIX records."), PRIV_CHAN_AUSPEX, 1, chanfix_cmd_list, { .path = "chanfix/list" } };
 
 static void chanfix_cmd_fix(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -472,7 +472,7 @@ static void chanfix_cmd_fix(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Fix request has been acknowledged for \2%s\2."), parv[0]);
 }
 
-command_t cmd_chanfix = { "CHANFIX", N_("Manually chanfix a channel."), PRIV_CHAN_ADMIN, 1, chanfix_cmd_fix, { .path = "chanfix/chanfix" } };
+struct command cmd_chanfix = { "CHANFIX", N_("Manually chanfix a channel."), PRIV_CHAN_ADMIN, 1, chanfix_cmd_fix, { .path = "chanfix/chanfix" } };
 
 static int chanfix_compare_records(mowgli_node_t *a, mowgli_node_t *b, void *unused)
 {
@@ -537,7 +537,7 @@ static void chanfix_cmd_scores(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("End of \2SCORES\2 listing for \2%s\2."), chan->name);
 }
 
-command_t cmd_scores = { "SCORES", N_("List channel scores."), PRIV_CHAN_AUSPEX, 1, chanfix_cmd_scores, { .path = "chanfix/scores" } };
+struct command cmd_scores = { "SCORES", N_("List channel scores."), PRIV_CHAN_AUSPEX, 1, chanfix_cmd_scores, { .path = "chanfix/scores" } };
 
 static void chanfix_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -626,7 +626,7 @@ static void chanfix_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2*** End of Info ***\2"));
 }
 
-command_t cmd_info = { "INFO", N_("List information on channel."), PRIV_CHAN_AUSPEX, 1, chanfix_cmd_info, { .path = "chanfix/info" } };
+struct command cmd_info = { "INFO", N_("List information on channel."), PRIV_CHAN_AUSPEX, 1, chanfix_cmd_info, { .path = "chanfix/info" } };
 
 /* MARK <channel> ON|OFF [reason] */
 static void chanfix_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
@@ -700,7 +700,7 @@ static void chanfix_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-command_t cmd_mark = { "MARK", N_("Adds a note to a channel."), PRIV_MARK, 3, chanfix_cmd_mark, { .path = "chanfix/mark" } };
+struct command cmd_mark = { "MARK", N_("Adds a note to a channel."), PRIV_MARK, 3, chanfix_cmd_mark, { .path = "chanfix/mark" } };
 
 /* NOFIX <channel> ON|OFF [reason] */
 static void chanfix_cmd_nofix(sourceinfo_t *si, int parc, char *parv[])
@@ -774,7 +774,7 @@ static void chanfix_cmd_nofix(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-command_t cmd_nofix = { "NOFIX", N_("Adds NOFIX to a channel."), PRIV_CHAN_ADMIN, 3, chanfix_cmd_nofix, { .path = "chanfix/nofix" } };
+struct command cmd_nofix = { "NOFIX", N_("Adds NOFIX to a channel."), PRIV_CHAN_ADMIN, 3, chanfix_cmd_nofix, { .path = "chanfix/nofix" } };
 
 /* HELP <command> [params] */
 static void chanfix_cmd_help(sourceinfo_t *si, int parc, char *parv[])
@@ -800,7 +800,7 @@ static void chanfix_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	help_display(si, si->service, command, si->service->commands);
 }
 
-command_t cmd_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 1, chanfix_cmd_help, { .path = "help" } };
+struct command cmd_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 1, chanfix_cmd_help, { .path = "help" } };
 
 void chanfix_can_register(hook_channel_register_check_t *req)
 {

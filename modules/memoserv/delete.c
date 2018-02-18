@@ -9,9 +9,9 @@
 
 static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ms_delete = { "DELETE", N_("Deletes memos."),
+struct command ms_delete = { "DELETE", N_("Deletes memos."),
                         AC_AUTHENTICATED, 1, ms_cmd_delete, { .path = "memoserv/delete" } };
-command_t ms_del = { "DEL", N_("Alias for DELETE"),
+struct command ms_del = { "DEL", N_("Alias for DELETE"),
 			AC_AUTHENTICATED, 1, ms_cmd_delete, { .path = "memoserv/delete" } };
 
 static void

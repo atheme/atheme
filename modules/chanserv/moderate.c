@@ -27,11 +27,11 @@ static void cs_cmd_reject(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[]);
 static void can_register(hook_channel_register_check_t *req);
 
-static command_t cs_activate = { "ACTIVATE", N_("Activates a pending registration"), PRIV_CHAN_ADMIN,
+static struct command cs_activate = { "ACTIVATE", N_("Activates a pending registration"), PRIV_CHAN_ADMIN,
 				 2, cs_cmd_activate, { .path = "cservice/activate" } };
-static command_t cs_reject   = { "REJECT", N_("Rejects a pending registration"), PRIV_CHAN_ADMIN,
+static struct command cs_reject   = { "REJECT", N_("Rejects a pending registration"), PRIV_CHAN_ADMIN,
 				 2, cs_cmd_reject, { .path = "cservice/reject" } };
-static command_t cs_waiting  = { "WAITING", N_("View pending registrations"), PRIV_CHAN_ADMIN,
+static struct command cs_waiting  = { "WAITING", N_("View pending registrations"), PRIV_CHAN_ADMIN,
 				 1, cs_cmd_waiting, { .path = "cservice/waiting" } };
 
 typedef struct {

@@ -6,7 +6,7 @@
 
 static void rs_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t rs_help = { "HELP", N_("Displays contextual help information."),
+struct command rs_help = { "HELP", N_("Displays contextual help information."),
                       AC_NONE, 2, rs_cmd_help, { .path = "help" } };
 
 static void rs_cmd_help(sourceinfo_t *si, int parc, char *parv[])

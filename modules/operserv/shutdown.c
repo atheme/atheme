@@ -9,7 +9,7 @@
 
 static void os_cmd_shutdown(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_shutdown = { "SHUTDOWN", N_("Shuts down services."), PRIV_ADMIN, 0, os_cmd_shutdown, { .path = "oservice/shutdown" } };
+struct command os_shutdown = { "SHUTDOWN", N_("Shuts down services."), PRIV_ADMIN, 0, os_cmd_shutdown, { .path = "oservice/shutdown" } };
 
 static void
 mod_init(module_t *const restrict m)

@@ -9,7 +9,7 @@
 
 static void os_cmd_rnc(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_rnc = { "RNC", N_("Shows the most frequent realnames on the network"), PRIV_USER_AUSPEX, 1, os_cmd_rnc, { .path = "oservice/rnc" } };
+struct command os_rnc = { "RNC", N_("Shows the most frequent realnames on the network"), PRIV_USER_AUSPEX, 1, os_cmd_rnc, { .path = "oservice/rnc" } };
 
 typedef struct rnc_t_ rnc_t;
 struct rnc_t_

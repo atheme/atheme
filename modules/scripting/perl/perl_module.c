@@ -324,7 +324,7 @@ static bool do_script_list(sourceinfo_t *si)
  */
 static void os_cmd_perl(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_perl = { "PERL", N_("Inspect the Perl interpreter"), PRIV_ADMIN, 2, os_cmd_perl, { .path = "oservice/perl" } };
+struct command os_perl = { "PERL", N_("Inspect the Perl interpreter"), PRIV_ADMIN, 2, os_cmd_perl, { .path = "oservice/perl" } };
 
 static int conf_loadscript(mowgli_config_file_entry_t *);
 

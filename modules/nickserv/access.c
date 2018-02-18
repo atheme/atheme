@@ -9,7 +9,7 @@
 
 static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_access = { "ACCESS", N_("Changes and shows your nickname access list."), AC_NONE, 2, ns_cmd_access, { .path = "nickserv/access" } };
+struct command ns_access = { "ACCESS", N_("Changes and shows your nickname access list."), AC_NONE, 2, ns_cmd_access, { .path = "nickserv/access" } };
 
 static void
 mod_init(module_t *const restrict m)

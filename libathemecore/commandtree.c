@@ -26,7 +26,7 @@
 
 static int text_to_parv(char *text, int maxparc, char **parv);
 
-void command_add(command_t *cmd, mowgli_patricia_t *commandtree)
+void command_add(struct command *cmd, mowgli_patricia_t *commandtree)
 {
 	return_if_fail(cmd != NULL);
 	return_if_fail(commandtree != NULL);
@@ -34,7 +34,7 @@ void command_add(command_t *cmd, mowgli_patricia_t *commandtree)
 	mowgli_patricia_add(commandtree, cmd->name, cmd);
 }
 
-void command_delete(command_t *cmd, mowgli_patricia_t *commandtree)
+void command_delete(struct command *cmd, mowgli_patricia_t *commandtree)
 {
 	return_if_fail(cmd != NULL);
 	return_if_fail(commandtree != NULL);
@@ -42,7 +42,7 @@ void command_delete(command_t *cmd, mowgli_patricia_t *commandtree)
 	mowgli_patricia_delete(commandtree, cmd->name);
 }
 
-command_t *command_find(mowgli_patricia_t *commandtree, const char *command)
+struct command *command_find(mowgli_patricia_t *commandtree, const char *command)
 {
 	return_val_if_fail(commandtree != NULL, NULL);
 	return_val_if_fail(command != NULL, NULL);
@@ -51,7 +51,7 @@ command_t *command_find(mowgli_patricia_t *commandtree, const char *command)
 }
 
 static bool permissive_mode_fallback = false;
-static bool default_command_authorize(service_t *svs, sourceinfo_t *si, command_t *c, const char *userlevel)
+static bool default_command_authorize(service_t *svs, sourceinfo_t *si, struct command *c, const char *userlevel)
 {
 	if (!(has_priv(si, c->access) && has_priv(si, userlevel)))
 	{
@@ -62,9 +62,9 @@ static bool default_command_authorize(service_t *svs, sourceinfo_t *si, command_
 
 	return true;
 }
-bool (*command_authorize)(service_t *svs, sourceinfo_t *si, command_t *c, const char *userlevel) = default_command_authorize;
+bool (*command_authorize)(service_t *svs, sourceinfo_t *si, struct command *c, const char *userlevel) = default_command_authorize;
 
-static inline bool command_verify(service_t *svs, sourceinfo_t *si, command_t *c, const char *userlevel)
+static inline bool command_verify(service_t *svs, sourceinfo_t *si, struct command *c, const char *userlevel)
 {
 	if (command_authorize(svs, si, c, userlevel))
 		return true;
@@ -83,7 +83,7 @@ static inline bool command_verify(service_t *svs, sourceinfo_t *si, command_t *c
 	return false;
 }
 
-void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char *parv[])
+void command_exec(service_t *svs, sourceinfo_t *si, struct command *c, int parc, char *parv[])
 {
 	const char *cmdaccess;
 
@@ -138,7 +138,7 @@ void command_exec_split(service_t *svs, sourceinfo_t *si, const char *cmd, char 
 {
 	int parc, i;
 	char *parv[20];
-        command_t *c;
+        struct command *c;
 
 	cmd = service_resolve_alias(svs, commandtree == svs->commands ? NULL : "unknown", cmd);
 	if ((c = command_find(commandtree, cmd)))
@@ -174,7 +174,7 @@ void command_exec_split(service_t *svs, sourceinfo_t *si, const char *cmd, char 
 void command_help(sourceinfo_t *si, mowgli_patricia_t *commandtree)
 {
 	mowgli_patricia_iteration_state_t state;
-	command_t *c;
+	struct command *c;
 
 	if (si->service == NULL || si->service->commands == commandtree)
 		command_success_nodata(si, _("The following commands are available:"));
@@ -232,7 +232,7 @@ void command_help_short(sourceinfo_t *si, mowgli_patricia_t *commandtree, const 
 	mowgli_patricia_iteration_state_t state;
 	unsigned int l, lv;
 	char buf[256], *p;
-	command_t *c;
+	struct command *c;
 
 	if (si->service == NULL || si->service->commands == commandtree)
 		command_success_nodata(si, _("The following commands are available:"));

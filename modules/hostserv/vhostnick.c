@@ -10,7 +10,7 @@
 
 static void hs_cmd_vhostnick(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t hs_vhostnick = { "VHOSTNICK", N_("Manages per-nick virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhostnick, { .path = "hostserv/vhostnick" } };
+struct command hs_vhostnick = { "VHOSTNICK", N_("Manages per-nick virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhostnick, { .path = "hostserv/vhostnick" } };
 
 static void
 mod_init(module_t *const restrict m)

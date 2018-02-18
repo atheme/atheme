@@ -12,7 +12,7 @@
 static void bs_help_set(sourceinfo_t *si, const char *subcmd);
 static void bs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t bs_set = { "SET", N_("Configures bot options."), AC_NONE, 3, bs_cmd_set, { .func =  bs_help_set } };
+struct command bs_set = { "SET", N_("Configures bot options."), AC_NONE, 3, bs_cmd_set, { .func =  bs_help_set } };
 
 mowgli_patricia_t *bs_set_cmdtree;
 
@@ -56,7 +56,7 @@ static void bs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *dest;
 	char *cmd;
-	command_t *c;
+	struct command *c;
 
 	if (parc < 3)
 	{

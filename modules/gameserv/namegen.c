@@ -11,7 +11,7 @@
 
 static void command_namegen(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cmd_namegen = { "NAMEGEN", N_("Generates some names to ponder."), AC_NONE, 2, command_namegen, { .path = "gameserv/namegen" } };
+struct command cmd_namegen = { "NAMEGEN", N_("Generates some names to ponder."), AC_NONE, 2, command_namegen, { .path = "gameserv/namegen" } };
 
 static void
 mod_init(module_t *const restrict m)

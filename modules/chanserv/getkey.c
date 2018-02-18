@@ -9,7 +9,7 @@
 
 static void cs_cmd_getkey(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_getkey = { "GETKEY", N_("Returns the key (+k) of a channel."),
+struct command cs_getkey = { "GETKEY", N_("Returns the key (+k) of a channel."),
                         AC_NONE, 1, cs_cmd_getkey, { .path = "cservice/getkey" } };
 
 static void

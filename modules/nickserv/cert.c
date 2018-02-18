@@ -9,7 +9,7 @@
 
 static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_cert = { "CERT", N_("Changes and shows your nickname CertFP authentication list."), AC_NONE, 2, ns_cmd_cert, { .path = "nickserv/cert" } };
+struct command ns_cert = { "CERT", N_("Changes and shows your nickname CertFP authentication list."), AC_NONE, 2, ns_cmd_cert, { .path = "nickserv/cert" } };
 
 static void
 mod_init(module_t *const restrict m)

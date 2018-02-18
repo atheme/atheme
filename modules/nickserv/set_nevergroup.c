@@ -15,7 +15,7 @@ mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_nevergroup(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_set_nevergroup = { "NEVERGROUP", N_("Prevents you from being added to group access lists."), AC_NONE, 1, ns_cmd_set_nevergroup, { .path = "nickserv/set_nevergroup" } };
+struct command ns_set_nevergroup = { "NEVERGROUP", N_("Prevents you from being added to group access lists."), AC_NONE, 1, ns_cmd_set_nevergroup, { .path = "nickserv/set_nevergroup" } };
 
 static bool has_nevergroup(const mynick_t *mn, const void *arg)
 {

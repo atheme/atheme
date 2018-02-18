@@ -11,7 +11,7 @@
 
 static void os_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_info = { "INFO", N_("Shows some useful information about the current settings of services."), PRIV_SERVER_AUSPEX, 1, os_cmd_info, { .path = "oservice/info" } };
+struct command os_info = { "INFO", N_("Shows some useful information about the current settings of services."), PRIV_SERVER_AUSPEX, 1, os_cmd_info, { .path = "oservice/info" } };
 
 static void
 mod_init(module_t *const restrict m)

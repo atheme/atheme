@@ -10,7 +10,7 @@
 
 static void cs_cmd_invite(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_invite = { "INVITE", N_("Invites you to a channel."),
+struct command cs_invite = { "INVITE", N_("Invites you to a channel."),
                         AC_NONE, 2, cs_cmd_invite, { .path = "cservice/invite" } };
 
 static void

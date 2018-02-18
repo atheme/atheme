@@ -15,7 +15,7 @@ mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_nogreet(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_set_nogreet = { "NOGREET", N_("Allows you to opt-out of channel entry messages."), AC_NONE, 1, ns_cmd_set_nogreet, { .path = "nickserv/set_nogreet" } };
+struct command ns_set_nogreet = { "NOGREET", N_("Allows you to opt-out of channel entry messages."), AC_NONE, 1, ns_cmd_set_nogreet, { .path = "nickserv/set_nogreet" } };
 
 static bool has_nogreet(const mynick_t *mn, const void *arg)
 {

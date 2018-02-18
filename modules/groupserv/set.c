@@ -13,7 +13,7 @@
 static void gs_help_set(sourceinfo_t *si, const char *subcmd);
 static void gs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_set = { "SET", N_("Sets various control flags."), AC_AUTHENTICATED, 3, gs_cmd_set, { .func = gs_help_set } };
+struct command gs_set = { "SET", N_("Sets various control flags."), AC_AUTHENTICATED, 3, gs_cmd_set, { .func = gs_help_set } };
 
 mowgli_patricia_t *gs_set_cmdtree;
 
@@ -60,7 +60,7 @@ static void gs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *group;
 	char *cmd;
-	command_t *c;
+	struct command *c;
 
 	if (parc < 2)
 	{

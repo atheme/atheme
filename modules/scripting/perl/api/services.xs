@@ -17,12 +17,12 @@ OUTPUT:
 void
 do_bind_command(Atheme_Service self, Atheme_Command command)
 CODE:
-	service_bind_command(self, (command_t *)command);
+	service_bind_command(self, (struct command *) command);
 
 void
 unbind_command(Atheme_Service self, Atheme_Command command)
 CODE:
-	service_unbind_command(self, (command_t *)command);
+	service_unbind_command(self, (struct command *) command);
 
 const char *
 name(Atheme_Service self)

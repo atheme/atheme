@@ -545,7 +545,7 @@ const char *service_set_access(service_t *sptr, const char *cmd, const char *old
 	return newaccess != NULL ? newaccess : oldaccess;
 }
 
-void service_bind_command(service_t *sptr, command_t *cmd)
+void service_bind_command(service_t *sptr, struct command *cmd)
 {
 	return_if_fail(sptr != NULL);
 	return_if_fail(cmd != NULL);
@@ -553,7 +553,7 @@ void service_bind_command(service_t *sptr, command_t *cmd)
 	command_add(cmd, sptr->commands);
 }
 
-void service_unbind_command(service_t *sptr, command_t *cmd)
+void service_unbind_command(service_t *sptr, struct command *cmd)
 {
 	return_if_fail(sptr != NULL);
 	return_if_fail(cmd != NULL);
@@ -561,7 +561,7 @@ void service_unbind_command(service_t *sptr, command_t *cmd)
 	command_delete(cmd, sptr->commands);
 }
 
-void service_named_bind_command(const char *svs, command_t *cmd)
+void service_named_bind_command(const char *svs, struct command *cmd)
 {
 	service_t *sptr = NULL;
 
@@ -575,7 +575,7 @@ void service_named_bind_command(const char *svs, command_t *cmd)
 	service_bind_command(sptr, cmd);
 }
 
-void service_named_unbind_command(const char *svs, command_t *cmd)
+void service_named_unbind_command(const char *svs, struct command *cmd)
 {
 	service_t *sptr = NULL;
 

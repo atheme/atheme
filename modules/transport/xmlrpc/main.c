@@ -343,7 +343,7 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 {
 	myuser_t *mu;
 	service_t *svs;
-	command_t *cmd;
+	struct command *cmd;
 	sourceinfo_t *si;
 	int newparc;
 	char *newparv[20];

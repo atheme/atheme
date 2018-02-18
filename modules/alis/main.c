@@ -48,9 +48,9 @@ service_t *alis;
 static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 static void alis_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t alis_list = { "LIST", "Lists channels matching given parameters.",
+struct command alis_list = { "LIST", "Lists channels matching given parameters.",
 				AC_NONE, ALIS_MAX_PARC, alis_cmd_list, { .path = "alis/list" } };
-command_t alis_help = { "HELP", "Displays contextual help information.",
+struct command alis_help = { "HELP", "Displays contextual help information.",
 				AC_NONE, 1, alis_cmd_help, { .path = "help" } };
 
 struct alis_query

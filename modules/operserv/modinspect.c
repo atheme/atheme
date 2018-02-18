@@ -9,7 +9,7 @@
 
 static void os_cmd_modinspect(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_modinspect = { "MODINSPECT", N_("Displays information about loaded modules."), PRIV_SERVER_AUSPEX, 1, os_cmd_modinspect, { .path = "oservice/modinspect" } };
+struct command os_modinspect = { "MODINSPECT", N_("Displays information about loaded modules."), PRIV_SERVER_AUSPEX, 1, os_cmd_modinspect, { .path = "oservice/modinspect" } };
 
 static void
 mod_init(module_t *const restrict m)

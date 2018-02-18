@@ -188,7 +188,7 @@ cmd_ns_fdrop_func(sourceinfo_t *const restrict si, const int ATHEME_VATTR_UNUSED
 	(void) object_dispose(mu);
 }
 
-static command_t cmd_ns_drop = {
+static struct command cmd_ns_drop = {
 
 	.name           = "DROP",
 	.desc           = N_("Drops an account registration."),
@@ -203,7 +203,7 @@ static command_t cmd_ns_drop = {
 	},
 };
 
-static command_t cmd_ns_fdrop = {
+static struct command cmd_ns_fdrop = {
 
 	.name           = "FDROP",
 	.desc           = N_("Forces dropping an account registration."),

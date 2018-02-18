@@ -9,7 +9,7 @@
 
 static void gs_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 1, gs_cmd_help, { .path = "help" } };
+struct command gs_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 1, gs_cmd_help, { .path = "help" } };
 
 void gs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 {

@@ -11,7 +11,7 @@ service_t *statsvs;
 
 static void ss_cmd_help(sourceinfo_t * si, int parc, char *parv[]);
 
-command_t ss_help =
+struct command ss_help =
 { "HELP", N_("Displays contextual help information."), AC_NONE, 2, ss_cmd_help, {.path = "help"}
 };
 

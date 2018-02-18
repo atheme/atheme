@@ -326,7 +326,7 @@ static bool jsonrpcmethod_command(void *conn, mowgli_list_t *params, char *id)
 {
 	myuser_t *mu;
 	service_t *svs;
-	command_t *cmd;
+	struct command *cmd;
 	sourceinfo_t *si;
 	int newparc;
 	char *newparv[20];

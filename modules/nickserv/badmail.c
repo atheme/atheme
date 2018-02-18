@@ -13,7 +13,7 @@ static void ns_cmd_badmail(sourceinfo_t *si, int parc, char *parv[]);
 static void write_bedb(database_handle_t *db);
 static void db_h_be(database_handle_t *db, const char *type);
 
-command_t ns_badmail = { "BADMAIL", N_("Disallows registrations from certain email addresses."), PRIV_USER_ADMIN, 3, ns_cmd_badmail, { .path = "nickserv/badmail" } };
+struct command ns_badmail = { "BADMAIL", N_("Disallows registrations from certain email addresses."), PRIV_USER_ADMIN, 3, ns_cmd_badmail, { .path = "nickserv/badmail" } };
 
 struct badmail_ {
 	char *mail;

@@ -15,7 +15,7 @@ mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_noop(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_set_noop = { "NOOP", N_("Prevents services from setting modes upon you automatically."), AC_NONE, 1, ns_cmd_set_noop, { .path = "nickserv/set_noop" } };
+struct command ns_set_noop = { "NOOP", N_("Prevents services from setting modes upon you automatically."), AC_NONE, 1, ns_cmd_set_noop, { .path = "nickserv/set_noop" } };
 
 static bool has_noop(const mynick_t *mn, const void *arg)
 {

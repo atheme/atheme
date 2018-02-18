@@ -13,7 +13,7 @@
 
 static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_specs = { "SPECS", N_("Shows oper flags."), AC_NONE, 2, os_cmd_specs, { .path = "oservice/specs" } };
+struct command os_specs = { "SPECS", N_("Shows oper flags."), AC_NONE, 2, os_cmd_specs, { .path = "oservice/specs" } };
 
 static void
 mod_init(module_t *const restrict m)

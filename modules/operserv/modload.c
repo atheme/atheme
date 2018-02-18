@@ -10,7 +10,7 @@
 
 static void os_cmd_modload(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_modload = { "MODLOAD", N_("Loads a module."), PRIV_ADMIN, 20, os_cmd_modload, { .path = "oservice/modload" } };
+struct command os_modload = { "MODLOAD", N_("Loads a module."), PRIV_ADMIN, 20, os_cmd_modload, { .path = "oservice/modload" } };
 
 static void
 mod_init(module_t *const restrict m)

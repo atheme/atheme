@@ -9,7 +9,7 @@
 
 static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_sendpass = { "SENDPASS", N_("Email registration passwords."), AC_NONE, 2, ns_cmd_sendpass, { .path = "nickserv/sendpass_user" } };
+struct command ns_sendpass = { "SENDPASS", N_("Email registration passwords."), AC_NONE, 2, ns_cmd_sendpass, { .path = "nickserv/sendpass_user" } };
 
 static void
 mod_init(module_t *const restrict m)

@@ -10,7 +10,7 @@
 
 static void os_cmd_raw(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_raw = { "RAW", N_("Sends data to the uplink."), PRIV_ADMIN, 1, os_cmd_raw, { .path = "oservice/raw" } };
+struct command os_raw = { "RAW", N_("Sends data to the uplink."), PRIV_ADMIN, 1, os_cmd_raw, { .path = "oservice/raw" } };
 
 static void
 mod_init(module_t *const restrict m)

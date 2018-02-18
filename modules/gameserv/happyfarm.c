@@ -308,7 +308,7 @@ static void __command_join(sourceinfo_t * si, int parc, char *parv[])
 	command_success_nodata(si, _("You have started with \2%d\2 money.  For help, use \2/msg %s HELP HAPPYFARM\2."), farmer->money, si->service->nick);
 }
 
-command_t command_join = { "JOIN", N_("Join the Happy Farm game!"), AC_AUTHENTICATED, 0, __command_join, { .path = "gameserv/happyfarm_join" } };
+struct command command_join = { "JOIN", N_("Join the Happy Farm game!"), AC_AUTHENTICATED, 0, __command_join, { .path = "gameserv/happyfarm_join" } };
 
 /*
  * Syntax: BUYPLOT
@@ -344,7 +344,7 @@ static void __command_buyplot(sourceinfo_t * si, int parc, char *parv[])
 	command_success_nodata(si, _("You have \2%d\2 money available."), farmer->money);
 }
 
-command_t command_buyplot = { "BUYPLOT", N_("Buy a plot of land!"), AC_AUTHENTICATED, 0, __command_buyplot, { .path = "gameserv/happyfarm_buyplot" } };
+struct command command_buyplot = { "BUYPLOT", N_("Buy a plot of land!"), AC_AUTHENTICATED, 0, __command_buyplot, { .path = "gameserv/happyfarm_buyplot" } };
 
 /*
  * Syntax: SELLPLOT
@@ -380,7 +380,7 @@ static void __command_sellplot(sourceinfo_t * si, int parc, char *parv[])
 	command_success_nodata(si, _("You have \2%d\2 money available."), farmer->money);
 }
 
-command_t command_sellplot = { "SELLPLOT", N_("Sell a vacant plot of land."), AC_AUTHENTICATED, 0, __command_sellplot, { .path = "gameserv/happyfarm_sellplot" } };
+struct command command_sellplot = { "SELLPLOT", N_("Sell a vacant plot of land."), AC_AUTHENTICATED, 0, __command_sellplot, { .path = "gameserv/happyfarm_sellplot" } };
 
 /*******************************************************************************************/
 
@@ -389,7 +389,7 @@ mowgli_patricia_t *happyfarm_cmd_subtree = NULL;
 static void __command_trampoline(sourceinfo_t * si, int parc, char *parv[])
 {
 	char *subcmd = parv[0];
-	command_t *c;
+	struct command *c;
 
 	if (subcmd == NULL)
 	{
@@ -409,7 +409,7 @@ static void __command_trampoline(sourceinfo_t * si, int parc, char *parv[])
 	}
 }
 
-command_t command_happyfarm = { "HAPPYFARM", N_("Happy Farm!"), AC_AUTHENTICATED, 2, __command_trampoline, { .path = "gameserv/happyfarm" } };
+struct command command_happyfarm = { "HAPPYFARM", N_("Happy Farm!"), AC_AUTHENTICATED, 2, __command_trampoline, { .path = "gameserv/happyfarm" } };
 
 /*******************************************************************************************/
 

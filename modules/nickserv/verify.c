@@ -10,8 +10,8 @@
 static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_verify = { "VERIFY", N_("Verifies an account registration."), AC_NONE, 3, ns_cmd_verify, { .path = "nickserv/verify" } };
-command_t ns_fverify = { "FVERIFY", N_("Forcefully verifies an account registration."), PRIV_USER_ADMIN, 2, ns_cmd_fverify, { .path = "nickserv/fverify" } };
+struct command ns_verify = { "VERIFY", N_("Verifies an account registration."), AC_NONE, 3, ns_cmd_verify, { .path = "nickserv/verify" } };
+struct command ns_fverify = { "FVERIFY", N_("Forcefully verifies an account registration."), PRIV_USER_ADMIN, 2, ns_cmd_fverify, { .path = "nickserv/fverify" } };
 
 static void
 mod_init(module_t *const restrict m)

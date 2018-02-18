@@ -10,7 +10,7 @@
 
 static void os_cmd_rehash(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_rehash = { "REHASH", N_("Reload the configuration data."), PRIV_ADMIN, 0, os_cmd_rehash, { .path = "oservice/rehash" } };
+struct command os_rehash = { "REHASH", N_("Reload the configuration data."), PRIV_ADMIN, 0, os_cmd_rehash, { .path = "oservice/rehash" } };
 
 static void
 mod_init(module_t *const restrict m)

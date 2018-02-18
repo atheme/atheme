@@ -25,7 +25,7 @@ cmd_os_genhash_func(sourceinfo_t *const restrict si, const int parc, char **cons
 	(void) logcommand(si, CMDLOG_GET, "GENHASH");
 }
 
-static command_t cmd_os_genhash = {
+static struct command cmd_os_genhash = {
 
 	.name           = "GENHASH",
 	.desc           = N_("Generates a password hash for SOPER."),

@@ -10,7 +10,7 @@
 
 static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_fflags = { "FFLAGS", N_("Forces a flags change on a channel."),
+struct command cs_fflags = { "FFLAGS", N_("Forces a flags change on a channel."),
                         PRIV_CHAN_ADMIN, 3, cs_cmd_fflags, { .path = "cservice/fflags" } };
 
 static void

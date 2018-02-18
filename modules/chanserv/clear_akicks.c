@@ -9,7 +9,7 @@
 
 static void cs_cmd_clear_akicks(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_clear_akicks = { "AKICKS", "Clears all channel AKICK entries.", AC_NONE, 2, cs_cmd_clear_akicks, { .path = "cservice/clear_akicks" } };
+struct command cs_clear_akicks = { "AKICKS", "Clears all channel AKICK entries.", AC_NONE, 2, cs_cmd_clear_akicks, { .path = "cservice/clear_akicks" } };
 
 mowgli_patricia_t **cs_clear_cmds;
 

@@ -14,7 +14,7 @@
 
 static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_rmatch = { "RMATCH", N_("Scans the network for users based on a specific regex pattern."), PRIV_USER_AUSPEX, 1, os_cmd_rmatch, { .path = "oservice/rmatch" } };
+struct command os_rmatch = { "RMATCH", N_("Scans the network for users based on a specific regex pattern."), PRIV_USER_AUSPEX, 1, os_cmd_rmatch, { .path = "oservice/rmatch" } };
 
 static void
 mod_init(module_t *const restrict m)

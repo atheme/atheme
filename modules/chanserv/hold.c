@@ -9,7 +9,7 @@
 
 static void cs_cmd_hold(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_hold = { "HOLD", N_("Prevents a channel from expiring."),
+struct command cs_hold = { "HOLD", N_("Prevents a channel from expiring."),
 			PRIV_HOLD, 2, cs_cmd_hold, { .path = "cservice/hold" } };
 
 static void

@@ -58,11 +58,11 @@ extern void service_set_chanmsg(service_t *, bool);
 extern const char *service_resolve_alias(service_t *sptr, const char *context, const char *cmd);
 extern const char *service_set_access(service_t *sptr, const char *cmd, const char *access);
 
-extern void service_bind_command(service_t *, command_t *);
-extern void service_unbind_command(service_t *, command_t *);
+extern void service_bind_command(service_t *, struct command *);
+extern void service_unbind_command(service_t *, struct command *);
 
-extern void service_named_bind_command(const char *, command_t *);
-extern void service_named_unbind_command(const char *, command_t *);
+extern void service_named_bind_command(const char *, struct command *);
+extern void service_named_unbind_command(const char *, struct command *);
 extern void servtree_update(void *dummy);
 
 #endif

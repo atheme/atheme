@@ -157,7 +157,7 @@ cmd_cs_fdrop_func(sourceinfo_t *const restrict si, const int ATHEME_VATTR_UNUSED
 	(void) object_unref(mc);
 }
 
-static command_t cmd_cs_drop = {
+static struct command cmd_cs_drop = {
 
 	.name           = "DROP",
 	.desc           = N_("Drops a channel registration."),
@@ -172,7 +172,7 @@ static command_t cmd_cs_drop = {
 	},
 };
 
-static command_t cmd_cs_fdrop = {
+static struct command cmd_cs_fdrop = {
 
 	.name           = "FDROP",
 	.desc           = N_("Forces dropping of a channel registration."),

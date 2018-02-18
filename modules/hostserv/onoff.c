@@ -11,8 +11,8 @@
 static void hs_cmd_on(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_off(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t hs_on = { "ON", N_("Activates your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_on, { .path = "hostserv/on" } };
-command_t hs_off = { "OFF", N_("Deactivates your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_off, { .path = "hostserv/off" } };
+struct command hs_on = { "ON", N_("Activates your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_on, { .path = "hostserv/on" } };
+struct command hs_off = { "OFF", N_("Deactivates your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_off, { .path = "hostserv/off" } };
 
 static void
 mod_init(module_t *const restrict m)

@@ -11,7 +11,7 @@
 
 static void os_cmd_inject(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_inject = { "INJECT", N_("Fakes data from the uplink (debugging tool)."), PRIV_ADMIN, 1, os_cmd_inject, { .path = "oservice/inject" } };
+struct command os_inject = { "INJECT", N_("Fakes data from the uplink (debugging tool)."), PRIV_ADMIN, 1, os_cmd_inject, { .path = "oservice/inject" } };
 
 static void
 mod_init(module_t *const restrict m)

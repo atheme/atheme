@@ -7,9 +7,9 @@
 static void rs_cmd_enable(sourceinfo_t *si, int parc, char *parv[]);
 static void rs_cmd_disable(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t rs_enable = { "ENABLE", N_("Enable RPGServ for a channel."),
+struct command rs_enable = { "ENABLE", N_("Enable RPGServ for a channel."),
                         AC_NONE, 1, rs_cmd_enable, { .path = "rpgserv/enable" } };
-command_t rs_disable = { "DISABLE", N_("Disable RPGServ for a channel."),
+struct command rs_disable = { "DISABLE", N_("Disable RPGServ for a channel."),
                          AC_NONE, 1, rs_cmd_disable, { .path = "rpgserv/disable" } };
 
 static void rs_cmd_enable(sourceinfo_t *si, int parc, char *parv[])

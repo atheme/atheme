@@ -10,7 +10,7 @@
 
 static void hs_cmd_group(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t hs_group = { "GROUP", N_("Syncs the vhost for all nicks in a group."), AC_AUTHENTICATED, 1, hs_cmd_group, { .path = "hostserv/group" } };
+struct command hs_group = { "GROUP", N_("Syncs the vhost for all nicks in a group."), AC_AUTHENTICATED, 1, hs_cmd_group, { .path = "hostserv/group" } };
 
 static void
 mod_init(module_t *const restrict m)

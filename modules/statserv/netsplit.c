@@ -11,13 +11,13 @@ static void ss_cmd_netsplit(sourceinfo_t * si, int parc, char *parv[]);
 static void ss_cmd_netsplit_list(sourceinfo_t * si, int parc, char *parv[]);
 static void ss_cmd_netsplit_remove(sourceinfo_t * si, int parc, char *parv[]);
 
-command_t ss_netsplit =
+struct command ss_netsplit =
 { "NETSPLIT", N_("Monitor network splits."), PRIV_SERVER_AUSPEX, 2, ss_cmd_netsplit, {.path = "statserv/netsplit"} };
 
-command_t ss_netsplit_list =
+struct command ss_netsplit_list =
 { "LIST", N_("List currently split servers."), PRIV_SERVER_AUSPEX, 1, ss_cmd_netsplit_list, {.path = ""} };
 
-command_t ss_netsplit_remove =
+struct command ss_netsplit_remove =
 { "REMOVE", N_("Remove a server from the netsplit list."), PRIV_JUPE, 2, ss_cmd_netsplit_remove, {.path = ""} };
 
 mowgli_patricia_t *ss_netsplit_cmds;
@@ -60,7 +60,7 @@ static void netsplit_server_delete(hook_server_delete_t *serv)
 
 static void ss_cmd_netsplit(sourceinfo_t * si, int parc, char *parv[])
 {
-    command_t *c;
+    struct command *c;
     char *cmd = parv[0];
 
     if (!cmd)

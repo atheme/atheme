@@ -9,7 +9,7 @@
 
 static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_compare = { "COMPARE", N_("Compares two users or channels."), PRIV_CHAN_AUSPEX, 2, os_cmd_compare, { .path = "oservice/compare" } };
+struct command os_compare = { "COMPARE", N_("Compares two users or channels."), PRIV_CHAN_AUSPEX, 2, os_cmd_compare, { .path = "oservice/compare" } };
 
 static void
 mod_init(module_t *const restrict m)

@@ -13,7 +13,7 @@ mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_property(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_set_property = { "PROPERTY", N_("Manipulates metadata entries associated with an account."), AC_NONE, 2, ns_cmd_set_property, { .path = "nickserv/set_property" } };
+struct command ns_set_property = { "PROPERTY", N_("Manipulates metadata entries associated with an account."), AC_NONE, 2, ns_cmd_set_property, { .path = "nickserv/set_property" } };
 
 static void
 mod_init(module_t *const restrict m)
