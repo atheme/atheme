@@ -33,16 +33,15 @@ void free_object_list(void);
  * knowledge of which Perl package to bless the contents into.
  */
 
-struct perl_list_ {
+struct perl_list
+{
 	mowgli_list_t *list;
 	const char *package_name;
 };
 
-typedef struct perl_list_ perl_list_t;
-
-static inline perl_list_t * perl_list_create(mowgli_list_t *list, const char *package)
+static inline struct perl_list * perl_list_create(mowgli_list_t *list, const char *package)
 {
-	perl_list_t *ret = smalloc(sizeof(perl_list_t));
+	struct perl_list *ret = smalloc(sizeof(struct perl_list));
 	ret->list = list;
 	ret->package_name = sstrdup(package);
 	return ret;

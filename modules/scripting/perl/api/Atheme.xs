@@ -15,7 +15,7 @@ typedef chanacs_t *Atheme_ChanAcs;
 typedef mynick_t *Atheme_NickRegistration;
 typedef server_t *Atheme_Server;
 
-typedef perl_list_t *Atheme_Internal_List;
+typedef struct perl_list *Atheme_Internal_List;
 
 
 MODULE = Atheme			PACKAGE = Atheme
