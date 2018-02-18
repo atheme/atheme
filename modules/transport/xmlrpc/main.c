@@ -24,7 +24,7 @@ connection_t *current_cptr; /* XXX: Hack: src/xmlrpc.c requires us to do this */
 
 mowgli_list_t *httpd_path_handlers;
 
-static void xmlrpc_command_fail(sourceinfo_t *si, cmd_faultcode_t code, const char *message);
+static void xmlrpc_command_fail(sourceinfo_t *si, enum cmd_faultcode code, const char *message);
 static void xmlrpc_command_success_nodata(sourceinfo_t *si, const char *message);
 static void xmlrpc_command_success_string(sourceinfo_t *si, const char *result, const char *message);
 
@@ -141,7 +141,7 @@ mod_deinit(const module_unload_intent_t intent)
 	hook_del_config_ready(xmlrpc_config_ready);
 }
 
-static void xmlrpc_command_fail(sourceinfo_t *si, cmd_faultcode_t code, const char *message)
+static void xmlrpc_command_fail(sourceinfo_t *si, enum cmd_faultcode code, const char *message)
 {
 	connection_t *cptr;
 	struct httpddata *hd;

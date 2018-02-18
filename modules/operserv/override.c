@@ -28,7 +28,7 @@ typedef struct {
 	sourceinfo_t *parent_si;
 } cooked_sourceinfo_t;
 
-static void override_command_fail(sourceinfo_t *si, cmd_faultcode_t code, const char *message)
+static void override_command_fail(sourceinfo_t *si, enum cmd_faultcode code, const char *message)
 {
 	cooked_sourceinfo_t *csi = (cooked_sourceinfo_t *) si;
 

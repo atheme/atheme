@@ -878,7 +878,7 @@ sourceinfo_t *sourceinfo_create(void)
 }
 
 void ATHEME_FATTR_PRINTF(3, 4)
-command_fail(sourceinfo_t *si, cmd_faultcode_t code, const char *fmt, ...)
+command_fail(sourceinfo_t *si, enum cmd_faultcode code, const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];

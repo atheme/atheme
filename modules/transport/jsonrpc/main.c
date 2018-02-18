@@ -24,7 +24,7 @@ static bool jsonrpcmethod_ison(void *conn, mowgli_list_t *params, char *id);
 static bool jsonrpcmethod_metadata(void *conn, mowgli_list_t *params, char *id);
 
 
-static void jsonrpc_command_fail(sourceinfo_t *si, cmd_faultcode_t code, const char *message);
+static void jsonrpc_command_fail(sourceinfo_t *si, enum cmd_faultcode code, const char *message);
 static void jsonrpc_command_success_string(sourceinfo_t *si, const char *result, const char *message);
 static void jsonrpc_command_success_nodata(sourceinfo_t *si, const char *message);
 
@@ -240,7 +240,7 @@ static bool jsonrpcmethod_logout(void *conn, mowgli_list_t *params, char *id)
 	return 0;
 }
 
-static void jsonrpc_command_fail(sourceinfo_t *si, cmd_faultcode_t code, const char *message)
+static void jsonrpc_command_fail(sourceinfo_t *si, enum cmd_faultcode code, const char *message)
 {
 	connection_t *cptr;
 	struct httpddata *hd;

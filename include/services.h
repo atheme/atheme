@@ -113,7 +113,7 @@ extern void change_notify(const char *from, user_t *to, const char *message, ...
 extern bool bad_password(sourceinfo_t *si, myuser_t *mu);
 
 extern sourceinfo_t *sourceinfo_create(void);
-extern void command_fail(sourceinfo_t *si, cmd_faultcode_t code, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
+extern void command_fail(sourceinfo_t *si, enum cmd_faultcode code, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
 extern void command_success_nodata(sourceinfo_t *si, const char *fmt, ...) ATHEME_FATTR_PRINTF(2, 3);
 extern void command_success_string(sourceinfo_t *si, const char *result, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
 extern void command_success_table(sourceinfo_t *si, table_t *table);

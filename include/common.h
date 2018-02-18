@@ -107,7 +107,7 @@ typedef struct service_ service_t;
 
 typedef struct sourceinfo_ sourceinfo_t;
 
-enum faultcode_
+enum cmd_faultcode
 {
 	fault_needmoreparams	= 1,
 	fault_badparams		= 2,
@@ -126,8 +126,6 @@ enum faultcode_
 	fault_badauthcookie	= 15,
 	fault_internalerror	= 16,
 };
-
-typedef enum faultcode_ cmd_faultcode_t;
 
 /* Causes a warning if value is not of type (or compatible), returning value. */
 #define ENSURE_TYPE(value, type) (true ? (value) : (type)0)
