@@ -35,7 +35,7 @@ static void cs_cmd_set_property(struct sourceinfo *si, int parc, char *parv[])
 	char *value = strtok(NULL, "");
 	unsigned int count;
 	mowgli_patricia_iteration_state_t state;
-	metadata_t *md;
+	struct metadata *md;
 
 	if (!property)
 	{

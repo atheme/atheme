@@ -132,7 +132,7 @@ static void build_criteriastr(char *buf, int parc, char *parv[])
 static void cs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
-	metadata_t *md, *mdclosed;
+	struct metadata *md, *mdclosed;
 	char *chanpattern = NULL, *markpattern = NULL, *closedpattern = NULL;
 	char buf[BUFSIZE];
 	char criteriastr[BUFSIZE];

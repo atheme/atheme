@@ -34,7 +34,7 @@ static void cs_cmd_why(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_node_t *n;
 	struct chanacs *ca;
 	const struct entity_chanacs_validation_vtable *vt;
-	metadata_t *md;
+	struct metadata *md;
 	bool operoverride = false;
 	int fl = 0;
 

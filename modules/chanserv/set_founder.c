@@ -85,7 +85,7 @@ static void cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[])
 		/* User is not currently the founder.
 		 * Maybe they are trying to complete a transfer?
 		 */
-		metadata_t *md;
+		struct metadata *md;
 
 		/* XXX is it portable to compare times like that? */
 		if ((entity(si->smu) == mt)

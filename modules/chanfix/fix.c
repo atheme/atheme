@@ -348,7 +348,7 @@ void chanfix_autofix_ev(void *unused)
 static void chanfix_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	chanfix_channel_t *chan;
-	metadata_t *md, *mdnofix;
+	struct metadata *md, *mdnofix;
 	char *markpattern = NULL, *nofixpattern = NULL;
 	char buf[BUFSIZE];
 	mowgli_patricia_iteration_state_t state;
@@ -546,7 +546,7 @@ static void chanfix_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	struct tm tm;
 	char strfbuf[BUFSIZE];
 	unsigned int highscore = 0;
-	metadata_t *md;
+	struct metadata *md;
 
 	if (parv[0] == NULL)
 	{

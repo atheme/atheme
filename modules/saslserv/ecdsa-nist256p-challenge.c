@@ -100,7 +100,7 @@ mech_step(struct sasl_session *const restrict p, const void *const restrict in, 
 	if (! sasl_core_functions->authcid_can_login(p, authcid, &mu))
 		return ASASL_ERROR;
 
-	metadata_t *md;
+	struct metadata *md;
 	if (! (md = metadata_find(mu, "private:pubkey")) && ! (md = metadata_find(mu, "pubkey")))
 		return ASASL_ERROR;
 

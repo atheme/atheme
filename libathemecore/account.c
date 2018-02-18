@@ -825,7 +825,7 @@ static void myuser_name_delete(struct myuser_name *mun)
 void myuser_name_remember(const char *name, myuser_t *mu)
 {
 	struct myuser_name *mun;
-	metadata_t *md;
+	struct metadata *md;
 
 	if (myuser_name_find(name))
 		return;
@@ -866,7 +866,7 @@ void myuser_name_remember(const char *name, myuser_t *mu)
 void myuser_name_restore(const char *name, myuser_t *mu)
 {
 	struct myuser_name *mun;
-	metadata_t *md, *md2;
+	struct metadata *md, *md2;
 	mowgli_patricia_iteration_state_t state;
 	char *copy;
 
@@ -1196,7 +1196,7 @@ const char *mychan_get_mlock(mychan_t *mc)
 {
 	static char buf[BUFSIZE];
 	char params[BUFSIZE];
-	metadata_t *md;
+	struct metadata *md;
 	char *p, *q, *qq;
 	int dir;
 
@@ -1325,7 +1325,7 @@ const char *mychan_get_mlock(mychan_t *mc)
 const char *mychan_get_sts_mlock(mychan_t *mc)
 {
 	static char mlock[BUFSIZE];
-	metadata_t *md;
+	struct metadata *md;
 
 	return_val_if_fail(mc != NULL, NULL);
 

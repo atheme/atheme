@@ -60,7 +60,7 @@ static int global_template_search(const char *key, void *data, void *privdata)
 
 static const char *get_template_name(mychan_t *mc, unsigned int level)
 {
-	metadata_t *md;
+	struct metadata *md;
 	const char *p, *q, *r;
 	char *s;
 	char ss[40];

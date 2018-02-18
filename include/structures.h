@@ -61,6 +61,7 @@ struct v4_moduleheader;
 
 // Defined in include/object.h
 struct atheme_object;
+struct metadata;
 
 // Defined in include/sasl.h
 struct sasl_core_functions;

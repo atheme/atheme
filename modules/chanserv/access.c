@@ -295,7 +295,7 @@ static mowgli_list_t *build_template_list(mychan_t *mc)
 	char *s;
 	char ss[40];
 	static char flagname[400];
-	metadata_t *md;
+	struct metadata *md;
 	mowgli_list_t *l;
 	template_t *t;
 	template_iter_t ti;
@@ -418,7 +418,7 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
  */
 static void update_role_entry(struct sourceinfo *si, mychan_t *mc, const char *role, unsigned int flags)
 {
-	metadata_t *md;
+	struct metadata *md;
 	size_t l;
 	char *p, *q, *r;
 	char ss[40], newstr[400];
@@ -634,7 +634,7 @@ static void cs_cmd_access_info(struct sourceinfo *si, int parc, char *parv[])
 	const char *role;
 	struct tm tm;
 	char strfbuf[BUFSIZE];
-	metadata_t *md;
+	struct metadata *md;
 
 	mc = mychan_find(channel);
 	if (!mc)

@@ -308,7 +308,7 @@ static void write_chanfixdb(struct database_handle *db)
 		if (atheme_object(chan)->metadata != NULL)
 		{
 			mowgli_patricia_iteration_state_t state2;
-			metadata_t *md;
+			struct metadata *md;
 
 			MOWGLI_PATRICIA_FOREACH(md, &state2, atheme_object(chan)->metadata)
 			{

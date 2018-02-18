@@ -31,7 +31,7 @@ mowgli_heap_t *metadata_heap;	/* HEAP_CHANUSER */
 
 void init_metadata(void)
 {
-	metadata_heap = sharedheap_get(sizeof(metadata_t));
+	metadata_heap = sharedheap_get(sizeof(struct metadata));
 
 	if (metadata_heap == NULL)
 	{
@@ -216,10 +216,10 @@ void atheme_object_dispose(void *object)
 		mowgli_patricia_destroy(metadata, NULL, NULL);
 }
 
-metadata_t *metadata_add(void *target, const char *name, const char *value)
+struct metadata *metadata_add(void *target, const char *name, const char *value)
 {
 	struct atheme_object *obj;
-	metadata_t *md;
+	struct metadata *md;
 
 	return_val_if_fail(name != NULL, NULL);
 	return_val_if_fail(value != NULL, NULL);
@@ -245,7 +245,7 @@ metadata_t *metadata_add(void *target, const char *name, const char *value)
 void metadata_delete(void *target, const char *name)
 {
 	struct atheme_object *obj;
-	metadata_t *md = metadata_find(target, name);
+	struct metadata *md = metadata_find(target, name);
 
 	if (!md)
 		return;
@@ -263,7 +263,7 @@ void metadata_delete(void *target, const char *name)
 	mowgli_heap_free(metadata_heap, md);
 }
 
-metadata_t *metadata_find(void *target, const char *name)
+struct metadata *metadata_find(void *target, const char *name)
 {
 	struct atheme_object *obj;
 
@@ -281,7 +281,7 @@ metadata_t *metadata_find(void *target, const char *name)
 void metadata_delete_all(void *target)
 {
 	struct atheme_object *obj;
-	metadata_t *md;
+	struct metadata *md;
 	mowgli_patricia_iteration_state_t state;
 
 	obj = atheme_object(target);

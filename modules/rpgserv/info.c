@@ -13,7 +13,7 @@ struct command rs_info = { "INFO", N_("Displays info for a particular game."),
 static void rs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
-	metadata_t *md;
+	struct metadata *md;
 
 	if (parc < 1)
 	{

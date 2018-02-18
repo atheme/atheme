@@ -21,7 +21,7 @@ static bool is_restricted(const mynick_t *mn, const void *arg) {
 
 static bool restricted_match(const mynick_t *mn, const void *arg) {
 	const char *restrictedpattern = (const char*)arg;
-	metadata_t *mdrestricted;
+	struct metadata *mdrestricted;
 
 	myuser_t *mu = mn->owner;
 
@@ -35,7 +35,7 @@ static bool restricted_match(const mynick_t *mn, const void *arg) {
 
 static void info_hook(hook_user_req_t *hdata)
 {
-	metadata_t *md;
+	struct metadata *md;
 
 	if (has_priv(hdata->si, PRIV_USER_AUSPEX) && (md = metadata_find(hdata->mu, "private:restrict:setter")))
 	{

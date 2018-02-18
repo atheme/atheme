@@ -39,7 +39,7 @@ static bool pattern_match(const mynick_t *mn, const void *arg)
 	const char *pattern = (const char*)arg;
 
 	char pat[512], *nickpattern = NULL, *hostpattern = NULL, *p;
-	metadata_t *md;
+	struct metadata *md;
 
 	bool hostmatch;
 

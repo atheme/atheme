@@ -885,7 +885,7 @@ void check_modes(mychan_t *mychan, bool sendnow)
 {
 	int modes;
 	int i;
-	metadata_t *md;
+	struct metadata *md;
 	char *p, *q;
 	char str2[512];
 

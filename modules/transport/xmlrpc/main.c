@@ -548,7 +548,7 @@ static int xmlrpcmethod_ison(void *conn, int parc, char *parv[])
  */
 static int xmlrpcmethod_metadata(void *conn, int parc, char *parv[])
 {
-	metadata_t *md;
+	struct metadata *md;
 	int i;
 	char buf[XMLRPC_BUFSIZE];
 

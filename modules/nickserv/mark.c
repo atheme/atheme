@@ -19,7 +19,7 @@ struct command ns_mark = { "MARK", N_("Adds a note to a user."), PRIV_MARK, 3, n
 static bool mark_match(const mynick_t *mn, const void *arg)
 {
 	const char *markpattern = (const char*)arg;
-	metadata_t *mdmark;
+	struct metadata *mdmark;
 
 	myuser_t *mu = mn->owner;
 	mdmark = metadata_find(mu, "private:mark:reason");

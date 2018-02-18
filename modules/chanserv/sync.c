@@ -67,7 +67,7 @@ static void do_chanuser_sync(mychan_t *mc, struct chanuser *cu, struct chanacs *
 	if (fl & CA_AKICK && !(fl & CA_EXEMPT))
 	{
 		struct chanacs *ca2;
-		metadata_t *md;
+		struct metadata *md;
 
 		/* Stay on channel if this would empty it -- jilles */
 		if (mc->chan->nummembers - mc->chan->numsvcmembers == 1)

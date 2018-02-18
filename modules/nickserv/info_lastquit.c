@@ -17,7 +17,7 @@ static void user_delete_info_hook(hook_user_delete_t *hdata)
 
 static void info_hook(hook_user_req_t *hdata)
 {
-	metadata_t *md;
+	struct metadata *md;
 
 	if (!(hdata->mu->flags & MU_PRIVATE) || hdata->si->smu == hdata->mu ||
 			has_priv(hdata->si, PRIV_USER_AUSPEX))

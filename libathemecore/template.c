@@ -119,7 +119,7 @@ const char *getitem(const char *str, const char *name)
 
 unsigned int get_template_flags(mychan_t *mc, const char *name)
 {
-	metadata_t *md;
+	struct metadata *md;
 	const char *d;
 
 	if (mc != NULL)

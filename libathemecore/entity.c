@@ -188,7 +188,7 @@ static bool linear_allow_foundership(struct myentity *mt)
 	/* avoid workaround for restricted users where foundership is set on the user after registration. */
 	if ((mu = user(mt)) != NULL)
 	{
-		metadata_t *md;
+		struct metadata *md;
 
 		md = metadata_find(mu, "private:restrict:setter");
 		if (md != NULL)

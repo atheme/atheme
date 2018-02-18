@@ -346,7 +346,7 @@ static void db_h_rm(struct database_handle *db, const char *type)
 static void migrate_user(myuser_t *mu)
 {
 	mowgli_list_t *l;
-	metadata_t *md;
+	struct metadata *md;
 
 	char *setter, *reason;
 	myuser_t *setter_user;

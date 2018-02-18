@@ -17,7 +17,7 @@ static void gs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	mygroup_t *mg;
 	struct tm tm;
 	char buf[BUFSIZE], strfbuf[BUFSIZE];
-	metadata_t *md;
+	struct metadata *md;
 
 	if (!parv[0])
 	{

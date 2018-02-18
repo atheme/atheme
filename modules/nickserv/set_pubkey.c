@@ -34,7 +34,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 static void ns_cmd_set_pubkey(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *newkey = parv[0];
-	metadata_t *md;
+	struct metadata *md;
 
 	if (!newkey)
 	{

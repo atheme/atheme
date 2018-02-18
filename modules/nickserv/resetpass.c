@@ -26,7 +26,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 static void ns_cmd_resetpass(struct sourceinfo *si, int parc, char *parv[])
 {
 	myuser_t *mu;
-	metadata_t *md;
+	struct metadata *md;
 	char *name = parv[0];
 	char *newpass;
 

@@ -34,7 +34,7 @@ static void bs_cmd_say(struct sourceinfo *si, int parc, char *parv[])
 	char *channel = parv[0];
 	char *message = parv[1];
 	char saybuf[BUFSIZE];
-	metadata_t *bs;
+	struct metadata *bs;
 	user_t *bot;
 
 	if (!channel || !message)
@@ -100,7 +100,7 @@ static void bs_cmd_act(struct sourceinfo *si, int parc, char *parv[])
 	char *channel = parv[0];
 	char *message = parv[1];
 	char actbuf[BUFSIZE];
-	metadata_t *bs;
+	struct metadata *bs;
 	user_t *bot;
 
 	if (!channel || !message)

@@ -608,7 +608,7 @@ static bool jsonrpcmethod_ison(void *conn, mowgli_list_t *params, char *id)
 
 static bool jsonrpcmethod_metadata(void *conn, mowgli_list_t *params, char *id)
 {
-	metadata_t *md;
+	struct metadata *md;
 
 	char *param, *name, *metadata;
 

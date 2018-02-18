@@ -34,7 +34,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 static void ns_cmd_setpass(struct sourceinfo *si, int parc, char *parv[])
 {
 	myuser_t *mu;
-	metadata_t *md;
+	struct metadata *md;
 	char *nick = parv[0];
 	char *key = parv[1];
 	char *password = parv[2];
@@ -126,7 +126,7 @@ static void show_setpass(hook_user_req_t *hdata)
 		if (metadata_find(hdata->mu, "private:setpass:key"))
 			command_success_nodata(hdata->si, "%s has an active password reset key", entity(hdata->mu)->name);
 
-		metadata_t *md;
+		struct metadata *md;
 		char strfbuf[BUFSIZE];
 
 		if ((md = metadata_find(hdata->mu, "private:sendpass:sender")) != NULL)

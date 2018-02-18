@@ -58,7 +58,7 @@ static const char *system_names[] = {
 	"Character Approval", "Diced", "Character Sheets"
 };
 
-static inline const char *rs_prettyprint_keywords(metadata_t *md, const char **keys, const char **values,
+static inline const char *rs_prettyprint_keywords(struct metadata *md, const char **keys, const char **values,
 	unsigned int arraysize)
 {
 	static char ppbuf[BUFSIZE];

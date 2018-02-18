@@ -37,7 +37,7 @@ static void ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 	char *name = parv[0];
 	char *newpass = NULL;
 	char *key;
-	metadata_t *md;
+	struct metadata *md;
 	enum specialoperation op = op_none;
 	bool ismarked = false;
 	char cmdtext[NICKLEN + 20];

@@ -18,7 +18,7 @@ static void rs_cmd_search(struct sourceinfo *si, int parc, char *parv[])
 	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
 		unsigned int i, j;
-		metadata_t *md;
+		struct metadata *md;
 
 		static const char *mdkeys[] = {
 			"private:rpgserv:genre", "private:rpgserv:period", "private:rpgserv:ruleset",

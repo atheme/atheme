@@ -31,7 +31,7 @@ static void cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	char buf[BUFSIZE], strfbuf[BUFSIZE];
 	struct tm tm;
 	myuser_t *mu;
-	metadata_t *md;
+	struct metadata *md;
 	mowgli_patricia_iteration_state_t state;
 	hook_channel_req_t req;
 	bool hide_info, hide_acl;

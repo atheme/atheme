@@ -68,7 +68,7 @@ static void chanserv(struct sourceinfo *si, int parc, char *parv[])
 	/* is this a fantasy command? */
 	if (parv[parc - 2][0] == '#')
 	{
-		metadata_t *md;
+		struct metadata *md;
 
 		if (chansvs.fantasy == false)
 		{
@@ -110,7 +110,7 @@ static void chanserv(struct sourceinfo *si, int parc, char *parv[])
 		command_exec_split(si->service, si, cmd, strtok(NULL, ""), si->service->commands);
 	else
 	{
-		metadata_t *md = metadata_find(mc, "private:prefix");
+		struct metadata *md = metadata_find(mc, "private:prefix");
 		const char *prefix = (md ? md->value : chansvs.trigger);
 
 		if (strlen(cmd) >= 2 && strchr(prefix, cmd[0]) && isalpha((unsigned char)*++cmd))
@@ -344,7 +344,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	unsigned int flags;
 	bool noop;
 	bool secure;
-	metadata_t *md;
+	struct metadata *md;
 	struct chanacs *ca2;
 	char akickreason[120] = "User is banned from this channel", *p;
 
@@ -638,7 +638,7 @@ static void cs_part(hook_channel_joinpart_t *hdata)
 
 static user_t *get_changets_user(mychan_t *mc)
 {
-	metadata_t *md;
+	struct metadata *md;
 
 	return_val_if_fail(mc != NULL, chansvs.me->me);
 
@@ -682,7 +682,7 @@ static void cs_succession(hook_channel_succession_req_t *data)
 static void cs_keeptopic_topicset(struct channel *c)
 {
 	mychan_t *mc;
-	metadata_t *md;
+	struct metadata *md;
 
 	mc = mychan_find(c->name);
 
@@ -761,7 +761,7 @@ static void cs_newchan(struct channel *c)
 {
 	mychan_t *mc;
 	struct chanuser *cu;
-	metadata_t *md;
+	struct metadata *md;
 	char *setter;
 	char *text;
 	time_t channelts = 0;

@@ -60,7 +60,7 @@ static void ns_cmd_vhost(struct sourceinfo *si, int parc, char *parv[])
 	char *target = parv[0];
 	char *host;
 	myuser_t *mu;
-	metadata_t *md, *markmd;
+	struct metadata *md, *markmd;
 	bool force = false, ismarked = false;
 	char cmdtext[NICKLEN + HOSTLEN + 20];
 	char timestring[16];
@@ -255,7 +255,7 @@ static void ns_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
 	myentity_iteration_state_t state;
 	struct myentity *mt;
 	myuser_t *mu;
-	metadata_t *md;
+	struct metadata *md;
 	int matches = 0;
 
 	pattern = parc >= 1 ? parv[0] : "*";
@@ -284,7 +284,7 @@ static void ns_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
 static void vhost_on_identify(user_t *u)
 {
 	myuser_t *mu = u->myuser;
-	metadata_t *md;
+	struct metadata *md;
 
 	/* NO CLOAK?!*$*%*&&$(!& */
 	if (!(md = metadata_find(mu, "private:usercloak")))

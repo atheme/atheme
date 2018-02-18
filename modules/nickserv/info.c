@@ -35,7 +35,7 @@ static void ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	size_t buflen;
 	time_t registered;
 	struct tm tm, tm2;
-	metadata_t *md;
+	struct metadata *md;
 	mowgli_node_t *n;
 	mowgli_patricia_iteration_state_t state;
 	const char *vhost;

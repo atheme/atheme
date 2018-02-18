@@ -29,7 +29,7 @@ void cs_cmd_taxonomy(struct sourceinfo *si, int parc, char *parv[])
 	char *target = parv[0];
 	mychan_t *mc;
 	mowgli_patricia_iteration_state_t state;
-	metadata_t *md;
+	struct metadata *md;
 	bool isoper;
 
 	if (!target || *target != '#')

@@ -8,12 +8,11 @@
 #ifndef ATHEME_OBJECT_H
 #define ATHEME_OBJECT_H
 
-struct metadata_ {
+struct metadata
+{
 	stringref name;
 	char *value;
 };
-
-typedef struct metadata_ metadata_t;
 
 typedef void (*destructor_t)(void *);
 
@@ -36,9 +35,9 @@ extern void *atheme_object_sink_ref(void *);
 extern void atheme_object_unref(void *);
 extern void atheme_object_dispose(void *);
 
-extern metadata_t *metadata_add(void *target, const char *name, const char *value);
+extern struct metadata *metadata_add(void *target, const char *name, const char *value);
 extern void metadata_delete(void *target, const char *name);
-extern metadata_t *metadata_find(void *target, const char *name);
+extern struct metadata *metadata_find(void *target, const char *name);
 extern void metadata_delete_all(void *target);
 
 extern void *privatedata_get(void *target, const char *key);

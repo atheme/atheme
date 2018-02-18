@@ -303,7 +303,7 @@ static void hs_cmd_take(struct sourceinfo *si, int parc, char *parv[])
 	char *host = parv[0];
 	hsoffered_t *l;
 	mowgli_node_t *n;
-	metadata_t *md;
+	struct metadata *md;
 	time_t vhost_time;
 
 	if (!host)

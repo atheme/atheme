@@ -29,7 +29,7 @@ static void ns_cmd_taxonomy(struct sourceinfo *si, int parc, char *parv[])
 	myuser_t *mu;
 	mowgli_patricia_iteration_state_t state;
 	bool isoper;
-	metadata_t *md;
+	struct metadata *md;
 
 	if (!target && si->smu)
 		target = entity(si->smu)->name;

@@ -297,7 +297,7 @@ static antiflood_enforce_method_impl_t antiflood_enforce_methods[ANTIFLOOD_ENFOR
 static inline antiflood_enforce_method_impl_t *
 antiflood_enforce_method_impl_get(mychan_t *mc)
 {
-	metadata_t *md;
+	struct metadata *md;
 
 	md = metadata_find(mc, METADATA_KEY_ENFORCE_METHOD);
 	if (md != NULL)

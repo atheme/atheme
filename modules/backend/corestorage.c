@@ -31,7 +31,7 @@ static void corestorage_db_saved_cb(pid_t, int, void*);
 static void
 corestorage_db_save(struct database_handle *db)
 {
-	metadata_t *md;
+	struct metadata *md;
 	myuser_t *mu;
 	struct myentity *ment;
 	struct myuser_name *mun;

@@ -533,7 +533,7 @@ static void check_enforce(hook_nick_enforce_t *hdata)
 {
 	enforce_timeout_t *timeout, *timeout2;
 	mowgli_node_t *n;
-	metadata_t *md;
+	struct metadata *md;
 
 	/* nick is a service, ignore it */
 	if (is_internal_client(hdata->u))

@@ -411,7 +411,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 		if (mu)
 		{
 			char *cloak = "*";
-			metadata_t *md;
+			struct metadata *md;
 
 			if ((md = metadata_find(mu, "private:usercloak")))
 				cloak = md->value;

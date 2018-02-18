@@ -67,7 +67,7 @@ static void cs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!strcasecmp("ON", parv[1]))
 	{
-		metadata_t *md = metadata_find(mc, "disable_fantasy");
+		struct metadata *md = metadata_find(mc, "disable_fantasy");
 
 		if (!md)
 		{
@@ -84,7 +84,7 @@ static void cs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else if (!strcasecmp("OFF", parv[1]))
 	{
-		metadata_t *md = metadata_find(mc, "disable_fantasy");
+		struct metadata *md = metadata_find(mc, "disable_fantasy");
 
 		if (md)
 		{

@@ -32,7 +32,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 static void on_user_identify(user_t *u)
 {
 	myuser_t *mu = u->myuser;
-	metadata_t *md;
+	struct metadata *md;
 	char buf[NICKLEN + 20];
 
 	snprintf(buf, sizeof buf, "private:usercloak:%s", u->nick);

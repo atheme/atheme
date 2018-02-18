@@ -45,7 +45,7 @@ struct command bs_botlist = { "BOTLIST", "Lists available bots.", AC_NONE, 0, bs
 
 static botserv_bot_t *bs_mychan_find_bot(mychan_t *mc)
 {
-	metadata_t *md;
+	struct metadata *md;
 	botserv_bot_t *bot;
 
 	md = metadata_find(mc, "private:botserv:bot-assigned");
@@ -156,7 +156,7 @@ static void
 bs_modestack_mode_simple(const char *source, struct channel *channel, int dir, int flags)
 {
 	mychan_t *mc;
-	metadata_t *bs;
+	struct metadata *bs;
 	user_t *bot = NULL;
 
 	return_if_fail(source != NULL);
@@ -175,7 +175,7 @@ static void
 bs_modestack_mode_limit(const char *source, struct channel *channel, int dir, unsigned int limit)
 {
 	mychan_t *mc;
-	metadata_t *bs;
+	struct metadata *bs;
 	user_t *bot = NULL;
 
 	return_if_fail(source != NULL);
@@ -194,7 +194,7 @@ static void
 bs_modestack_mode_ext(const char *source, struct channel *channel, int dir, unsigned int i, const char *value)
 {
 	mychan_t *mc;
-	metadata_t *bs;
+	struct metadata *bs;
 	user_t *bot = NULL;
 
 	return_if_fail(source != NULL);
@@ -213,7 +213,7 @@ static void
 bs_modestack_mode_param(const char *source, struct channel *channel, int dir, char type, const char *value)
 {
 	mychan_t *mc;
-	metadata_t *bs;
+	struct metadata *bs;
 	user_t *bot = NULL;
 
 	return_if_fail(source != NULL);
@@ -232,7 +232,7 @@ static void
 bs_try_kick(user_t *source, struct channel *chan, user_t *target, const char *reason)
 {
 	mychan_t *mc;
-	metadata_t *bs;
+	struct metadata *bs;
 	user_t *bot = NULL;
 
 	return_if_fail(source != NULL);
@@ -254,7 +254,7 @@ bs_join_registered(bool all)
 {
 	mychan_t *mc;
 	mowgli_patricia_iteration_state_t state;
-	metadata_t *md;
+	struct metadata *md;
 	int cs = 0;
 
 	if ((chansvs.me != NULL) && (chansvs.me->me != NULL))
@@ -302,7 +302,7 @@ static void bs_channel_drop(mychan_t *mc)
 static void
 botserv_channel_handler(struct sourceinfo *si, int parc, char *parv[])
 {
-	metadata_t *md;
+	struct metadata *md;
 	mychan_t *mc = NULL;
 	char orig[BUFSIZE];
 	char newargs[BUFSIZE];
@@ -366,7 +366,7 @@ botserv_channel_handler(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	/* take the command through the hash table, handling both !prefix and Bot, ... styles */
-	metadata_t *mdp = metadata_find(mc, "private:prefix");
+	struct metadata *mdp = metadata_find(mc, "private:prefix");
 	const char *prefix = (mdp ? mdp->value : chansvs.trigger);
 
 	if ((sptr = service_find("chanserv")) == NULL)
@@ -581,7 +581,7 @@ static void bs_cmd_change(struct sourceinfo *si, int parc, char *parv[])
 	botserv_bot_t *bot;
 	mowgli_patricia_iteration_state_t state;
 	mychan_t *mc;
-	metadata_t *md;
+	struct metadata *md;
 
 	if (parc < 2 || parv[0] == NULL || parv[1] == NULL)
 	{
@@ -754,7 +754,7 @@ static void bs_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
 	botserv_bot_t *bot = botserv_bot_find(parv[0]);
 	mowgli_patricia_iteration_state_t state;
 	mychan_t *mc;
-	metadata_t *md;
+	struct metadata *md;
 
 	if (parc < 1)
 	{
@@ -842,7 +842,7 @@ static void bs_cmd_assign(struct sourceinfo *si, int parc, char *parv[])
 	char *channel = parv[0];
 	struct channel *c = channel_find(channel);
 	mychan_t *mc = mychan_from(c);
-	metadata_t *md;
+	struct metadata *md;
 	botserv_bot_t *bot;
 
 	if (!parv[0] || !parv[1])
@@ -920,7 +920,7 @@ static void bs_cmd_assign(struct sourceinfo *si, int parc, char *parv[])
 static void bs_cmd_unassign(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc = mychan_find(parv[0]);
-	metadata_t *md;
+	struct metadata *md;
 
 	if (!parv[0])
 	{
@@ -1083,7 +1083,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 	struct channel *chan;
 	mychan_t *mc;
 	botserv_bot_t *bot;
-	metadata_t *md;
+	struct metadata *md;
 	user_t *u;
 
 	if (cu == NULL || is_internal_client(cu->user))

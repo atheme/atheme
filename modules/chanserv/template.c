@@ -56,7 +56,7 @@ static void list_generic_flags(struct sourceinfo *si)
 /* TEMPLATE [channel] [template] [flags] */
 static void cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 {
-	metadata_t *md;
+	struct metadata *md;
 	bool operoverride = false, changechanacs = false;
 	size_t l;
 	char *channel = parv[0];

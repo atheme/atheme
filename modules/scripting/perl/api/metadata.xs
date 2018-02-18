@@ -11,7 +11,7 @@ OUTPUT:
 const char *
 FETCH(Atheme_Object_MetadataHash object, const char * key)
 CODE:
-	metadata_t *md = metadata_find(object, key);
+	struct metadata *md = metadata_find(object, key);
 	if (md == NULL)
 		XSRETURN_UNDEF;
 	RETVAL = md->value;

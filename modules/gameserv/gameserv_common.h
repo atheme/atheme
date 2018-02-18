@@ -37,7 +37,7 @@ static inline bool gs_do_parameters(struct sourceinfo *si, int *parc, char ***pa
 {
 	mychan_t *mc;
 	struct chanuser *cu;
-	metadata_t *md;
+	struct metadata *md;
 	const char *who;
 	bool allow;
 

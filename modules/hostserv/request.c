@@ -253,7 +253,7 @@ static void hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 	myuser_t *mu;
 	myentity_iteration_state_t state;
 	char buf[BUFSIZE], strfbuf[BUFSIZE];
-	metadata_t *md, *md_timestamp, *md_assigner;
+	struct metadata *md, *md_timestamp, *md_assigner;
 	mowgli_node_t *n;
 	hsreq_t *l;
 	hook_host_request_t hdata;

@@ -25,7 +25,7 @@ static bool is_frozen(const mynick_t *mn, const void *arg)
 static bool frozen_match(const mynick_t *mn, const void *arg)
 {
 	const char *frozenpattern = (const char*)arg;
-	metadata_t *mdfrozen;
+	struct metadata *mdfrozen;
 
 	myuser_t *mu = mn->owner;
 	mdfrozen = metadata_find(mu, "private:freeze:reason");

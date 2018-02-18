@@ -45,7 +45,7 @@ static void cs_cmd_set_mlock(struct sourceinfo *si, int parc, char *parv[])
 	size_t i;
 	char *letters = strtok(parv[1], " ");
 	char *arg;
-	metadata_t *md;
+	struct metadata *md;
 
 	if (!(mc = mychan_find(parv[0])))
 	{

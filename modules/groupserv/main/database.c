@@ -14,7 +14,7 @@ static void write_groupdb(struct database_handle *db)
 	struct myentity *mt;
 	myentity_iteration_state_t state;
 	mowgli_patricia_iteration_state_t state2;
-	metadata_t *md;
+	struct metadata *md;
 
 	db_start_row(db, "GDBV");
 	db_write_uint(db, GDBV_VERSION);

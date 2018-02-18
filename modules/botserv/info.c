@@ -38,7 +38,7 @@ static void bs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	char *dest = parv[0];
 	mychan_t *mc = NULL;
 	botserv_bot_t* bot = NULL;
-	metadata_t *md;
+	struct metadata *md;
 	int comma = 0, i;
 	char buf[BUFSIZE], strfbuf[BUFSIZE], *end;
 	time_t registered;

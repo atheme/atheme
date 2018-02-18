@@ -551,7 +551,7 @@ void cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	struct chanacs *ca;
-	metadata_t *md, *md2;
+	struct metadata *md, *md2;
 	mowgli_node_t *n, *tn;
 	bool operoverride = false;
 	char *chan = parv[0];
@@ -752,7 +752,7 @@ void akickdel_list_create(void *arg)
 	mychan_t *mc;
 	mowgli_node_t *n, *tn;
 	struct chanacs *ca;
-	metadata_t *md;
+	struct metadata *md;
 	time_t expireson;
 
 	mowgli_patricia_iteration_state_t state;

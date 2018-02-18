@@ -185,7 +185,7 @@ void join(const char *chan, const char *nick)
 	struct chanuser *cu;
 	bool isnew = false;
 	mychan_t *mc;
-	metadata_t *md;
+	struct metadata *md;
 	time_t ts;
 
 	u = user_find_named(nick);
@@ -627,7 +627,7 @@ void myuser_login(struct service *svs, user_t *u, myuser_t *mu, bool sendaccount
 {
 	char lau[BUFSIZE], lao[BUFSIZE];
 	char strfbuf[BUFSIZE];
-	metadata_t *md_failnum;
+	struct metadata *md_failnum;
 	struct tm tm;
 	mynick_t *mn;
 
@@ -647,7 +647,7 @@ void myuser_login(struct service *svs, user_t *u, myuser_t *mu, bool sendaccount
 
 		if (metadata_find(mu, "private:host:actual") != NULL && metadata_find(mu, "private:showlast:optout") == NULL)
 		{
-			metadata_t *md_loginaddr;
+			struct metadata *md_loginaddr;
 			time_t ts = CURRTIME;
 
 			md_loginaddr = metadata_find(mu, "private:host:actual");
@@ -673,7 +673,7 @@ void myuser_login(struct service *svs, user_t *u, myuser_t *mu, bool sendaccount
 	/* check for failed attempts and let them know */
 	if ((md_failnum = metadata_find(mu, "private:loginfail:failnum")) && (atoi(md_failnum->value) > 0))
 	{
-		metadata_t *md_failtime, *md_failaddr;
+		struct metadata *md_failtime, *md_failaddr;
 		time_t ts = CURRTIME;
 
 		notice(svs->me->nick, u->nick, "\2%d\2 failed %s since last login.",
@@ -813,7 +813,7 @@ bool bad_password(struct sourceinfo *si, myuser_t *mu)
 	struct tm tm;
 	char numeric[21], strfbuf[BUFSIZE];
 	int count;
-	metadata_t *md_failnum;
+	struct metadata *md_failnum;
 	struct service *svs;
 
 	/* If the user is already logged in, no paranoia is needed,
