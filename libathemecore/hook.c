@@ -29,7 +29,7 @@ mowgli_patricia_t *hooks;
 static mowgli_heap_t *hook_heap, *hook_privfn_heap;
 
 typedef struct {
-	hook_t *hook;
+	struct hook *hook;
 	void *dptr;
 	mowgli_node_t node;
 	unsigned int flags;
@@ -48,7 +48,7 @@ static mowgli_list_t hook_run_stack = { NULL, NULL, 0 };
 void hooks_init(void)
 {
 	hooks = mowgli_patricia_create(strcasecanon);
-	hook_heap = sharedheap_get(sizeof(hook_t));
+	hook_heap = sharedheap_get(sizeof(struct hook));
 	hook_privfn_heap = sharedheap_get(sizeof(hook_privfn_ctx_t));
 
 	if (hook_heap == NULL || hook_privfn_heap == NULL || hooks == NULL)
@@ -58,14 +58,14 @@ void hooks_init(void)
 	}
 }
 
-static inline hook_t *hook_find(const char *name)
+static inline struct hook *hook_find(const char *name)
 {
 	return mowgli_patricia_retrieve(hooks, name);
 }
 
-hook_t *hook_add_event(const char *name)
+struct hook *hook_add_event(const char *name)
 {
-	hook_t *nh;
+	struct hook *nh;
 
 	if((nh = hook_find(name)) != NULL)
 		return nh;
@@ -78,7 +78,7 @@ hook_t *hook_add_event(const char *name)
 	return nh;
 }
 
-static inline void hook_destroy(hook_t *hook, hook_privfn_ctx_t *priv)
+static inline void hook_destroy(struct hook *hook, hook_privfn_ctx_t *priv)
 {
 	mowgli_node_delete(&priv->node, &hook->hooks);
 	mowgli_heap_free(hook_privfn_heap, priv);
@@ -86,7 +86,7 @@ static inline void hook_destroy(hook_t *hook, hook_privfn_ctx_t *priv)
 
 void hook_del_event(const char *name)
 {
-	hook_t *h;
+	struct hook *h;
 	mowgli_node_t *n, *tn;
 
 	if ((h = hook_find(name)) == NULL)
@@ -104,7 +104,7 @@ void hook_del_event(const char *name)
 void hook_del_hook(const char *event, hookfn_t handler)
 {
 	mowgli_node_t *n, *n2;
-	hook_t *h;
+	struct hook *h;
 
 	return_if_fail(event != NULL);
 	return_if_fail(handler != NULL);
@@ -122,7 +122,7 @@ void hook_del_hook(const char *event, hookfn_t handler)
 	}
 }
 
-static inline hook_privfn_ctx_t *hook_create_and_add(hook_t *hook, hookfn_t handler,
+static inline hook_privfn_ctx_t *hook_create_and_add(struct hook *hook, hookfn_t handler,
 	void (*addfn)(void *data, mowgli_node_t *node, mowgli_list_t *list))
 {
 	hook_privfn_ctx_t *priv;
@@ -141,7 +141,7 @@ static inline hook_privfn_ctx_t *hook_create_and_add(hook_t *hook, hookfn_t hand
 
 void hook_add_hook(const char *event, hookfn_t handler)
 {
-	hook_t *h;
+	struct hook *h;
 	hook_privfn_ctx_t *priv;
 
 	return_if_fail(event != NULL);
@@ -156,7 +156,7 @@ void hook_add_hook(const char *event, hookfn_t handler)
 
 void hook_add_hook_first(const char *event, hookfn_t handler)
 {
-	hook_t *h;
+	struct hook *h;
 
 	return_if_fail(event != NULL);
 	return_if_fail(handler != NULL);

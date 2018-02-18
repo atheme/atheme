@@ -18,15 +18,15 @@ typedef struct sourceinfo sourceinfo_t;
 
 
 
-typedef struct hook_ hook_t;
 typedef void (*hookfn_t)(void *data);
 
-struct hook_ {
+struct hook
+{
 	stringref name;
 	mowgli_list_t hooks;
 };
 
-extern hook_t *hook_add_event(const char *);
+extern struct hook *hook_add_event(const char *);
 extern void hook_del_event(const char *);
 extern void hook_del_hook(const char *, hookfn_t);
 extern void hook_add_hook(const char *, hookfn_t);
