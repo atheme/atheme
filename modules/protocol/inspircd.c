@@ -1337,7 +1337,7 @@ static void m_encap(struct sourceinfo *si, int parc, char *parv[])
 	if (!irccasecmp(parv[1], "SASL"))
 	{
 		/* :08C ENCAP * SASL 08CAAAAAE * S d29vTklOSkFTAGRhdGEgaW4gZmlyc3QgbGluZQ== */
-		sasl_message_t smsg;
+		struct sasl_message smsg;
 
 		if (parc < 6)
 			return;

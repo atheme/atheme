@@ -751,7 +751,7 @@ static void m_mlock(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_sasl(struct sourceinfo *si, int parc, char *parv[])
 {
-	sasl_message_t smsg;
+	struct sasl_message smsg;
 
 	/* :irc.loldongs.eu SASL * irc.goatse.cx!42 S d29vTklOSkFTAGRhdGEgaW4gZmlyc3QgbGluZQ== */
 	if (parc < 4)

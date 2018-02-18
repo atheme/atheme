@@ -638,7 +638,7 @@ static void m_account(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_sasl(struct sourceinfo *si, int parc, char *parv[])
 {
-	sasl_message_t smsg;
+	struct sasl_message smsg;
 
 	if (parc < 4)
 		return;

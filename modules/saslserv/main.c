@@ -492,7 +492,7 @@ sasl_buf_process(struct sasl_session *const restrict p)
 }
 
 static void
-sasl_input_hostinfo(const sasl_message_t *const restrict smsg, struct sasl_session *const restrict p)
+sasl_input_hostinfo(const struct sasl_message *const restrict smsg, struct sasl_session *const restrict p)
 {
 	p->host = sstrdup(smsg->parv[0]);
 	p->ip   = sstrdup(smsg->parv[1]);
@@ -502,7 +502,7 @@ sasl_input_hostinfo(const sasl_message_t *const restrict smsg, struct sasl_sessi
 }
 
 static bool ATHEME_FATTR_WUR
-sasl_input_startauth(const sasl_message_t *const restrict smsg, struct sasl_session *const restrict p)
+sasl_input_startauth(const struct sasl_message *const restrict smsg, struct sasl_session *const restrict p)
 {
 	if (strcmp(smsg->parv[0], "EXTERNAL") == 0)
 	{
@@ -523,7 +523,7 @@ sasl_input_startauth(const sasl_message_t *const restrict smsg, struct sasl_sess
 }
 
 static bool ATHEME_FATTR_WUR
-sasl_input_clientdata(const sasl_message_t *const restrict smsg, struct sasl_session *const restrict p)
+sasl_input_clientdata(const struct sasl_message *const restrict smsg, struct sasl_session *const restrict p)
 {
 	/* This is complicated.
 	 *
@@ -627,7 +627,7 @@ sasl_session_abort(struct sasl_session *const restrict p)
 
 /* interpret an AUTHENTICATE message */
 static void
-sasl_input(sasl_message_t *const restrict smsg)
+sasl_input(struct sasl_message *const restrict smsg)
 {
 	struct sasl_session *const p = find_or_make_session(smsg->uid, smsg->server);
 

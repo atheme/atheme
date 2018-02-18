@@ -32,11 +32,6 @@
 #define ASASL_DONE                  2U  // client successfully authenticated
 #define ASASL_ERROR                 3U  // an error occurred in mech or it doesn't want to bad_password() the user
 
-struct sasl_session;
-struct sasl_message;
-struct sasl_mechanism;
-struct sasl_core_functions;
-
 struct sasl_session
 {
 	struct sasl_mechanism   *mechptr;               // Mechanism they're using
@@ -95,7 +90,5 @@ typedef struct {
 	bool       allowed;
 
 } hook_sasl_may_impersonate_t;
-
-typedef struct sasl_message sasl_message_t;
 
 #endif

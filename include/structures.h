@@ -45,6 +45,13 @@ struct entity_chanacs_validation_vtable;
 // Defined in include/hook.h
 struct hook;
 
+// Defined in include/sasl.h
+struct sasl_core_functions;
+struct sasl_mechanism;
+struct sasl_message;
+struct sasl_session;
+struct sasl_sourceinfo;
+
 // Defined in include/servtree.h
 struct service;
 
