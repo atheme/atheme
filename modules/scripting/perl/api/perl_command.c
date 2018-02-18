@@ -2,7 +2,7 @@
 
 void perl_command_handler(struct sourceinfo *si, const int parc, char **parv)
 {
-	perl_command_t * pc = (perl_command_t *) si->command;
+	struct perl_command * pc = (struct perl_command *) si->command;
 
 	dTHX;
 	dSP;

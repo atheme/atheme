@@ -9,13 +9,12 @@
 
 #include "atheme.h"
 
-struct perl_command_ {
+struct perl_command
+{
 	struct command command;
 	SV * handler;
 	SV * help_func;
 };
-
-typedef struct perl_command_ perl_command_t;
 
 void perl_command_handler(struct sourceinfo *si, const int parc, char **parv);
 void perl_command_help_func(struct sourceinfo *si, const char *subcmd);

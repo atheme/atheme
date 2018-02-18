@@ -3,7 +3,7 @@ MODULE = Atheme			PACKAGE = Atheme::Command
 Atheme_Command
 create(SV * package, const char * name, const char * desc, SV * access, int maxparc, SV * help_path, SV * help_func, SV * handler)
 CODE:
-	perl_command_t * newcmd = malloc(sizeof(perl_command_t));
+	struct perl_command * newcmd = malloc(sizeof(struct perl_command));
 	newcmd->command.name = sstrdup(name);
 	newcmd->command.desc = sstrdup(desc);
 	newcmd->command.access = SvOK(access) ? sstrdup(SvPV_nolen(access)) : NULL;
