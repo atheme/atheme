@@ -119,7 +119,7 @@ mowgli_list_t conf_la_table;
 
 const char *get_conf_opts(void)
 {
-	const crypt_impl_t *const ci_default = crypt_get_default_provider();
+	const struct crypt_impl *const ci_default = crypt_get_default_provider();
 
 	static char opts[53];
 

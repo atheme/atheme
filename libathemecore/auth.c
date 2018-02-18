@@ -60,7 +60,7 @@ verify_password(myuser_t *const restrict mu, const char *const restrict password
 
 	if (mu->flags & MU_CRYPTPASS)
 	{
-		const crypt_impl_t *ci, *ci_default;
+		const struct crypt_impl *ci, *ci_default;
 		unsigned int verify_flags = PWVERIFY_FLAG_NONE;
 
 		if (! (ci = crypt_verify_password(password, mu->pass, &verify_flags)))

@@ -43,7 +43,7 @@ void handle_info(user_t *u)
 
 int get_version_string(char *buf, size_t bufsize)
 {
-	const crypt_impl_t *ci = crypt_get_default_provider();
+	const struct crypt_impl *ci = crypt_get_default_provider();
 #ifdef REPRODUCIBLE_BUILDS
 	return snprintf(buf, bufsize, "%s. %s %s :%s [%s] [enc:%s]",
 		PACKAGE_STRING, me.name, revision, get_conf_opts(), ircd->ircdname, ci->id);

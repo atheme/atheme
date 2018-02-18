@@ -42,7 +42,7 @@ atheme_rawsha1_verify(const char *const restrict password, const char *const res
 	return true;
 }
 
-static crypt_impl_t crypto_rawsha1_impl = {
+static struct crypt_impl crypto_rawsha1_impl = {
 
 	.id         = "rawsha1",
 	.verify     = &atheme_rawsha1_verify,

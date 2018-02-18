@@ -795,7 +795,7 @@ atheme_argon2d_verify(const char *const restrict password, const char *const res
 	return true;
 }
 
-static crypt_impl_t crypto_argon2d_impl = {
+static struct crypt_impl crypto_argon2d_impl = {
 
 	.id         = "argon2d",
 	.crypt      = &atheme_argon2d_crypt,

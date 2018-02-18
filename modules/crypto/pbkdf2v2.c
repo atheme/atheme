@@ -586,7 +586,7 @@ c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *const restrict ce)
 	return 0;
 }
 
-static crypt_impl_t crypto_pbkdf2v2_impl = {
+static struct crypt_impl crypto_pbkdf2v2_impl = {
 
 	.id         = "pbkdf2v2",
 	.crypt      = &atheme_pbkdf2v2_crypt,

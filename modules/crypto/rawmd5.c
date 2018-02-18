@@ -42,7 +42,7 @@ atheme_rawmd5_verify(const char *const restrict password, const char *const rest
 	return true;
 }
 
-static crypt_impl_t crypto_rawmd5_impl = {
+static struct crypt_impl crypto_rawmd5_impl = {
 
 	.id         = "rawmd5",
 	.verify     = &atheme_rawmd5_verify,

@@ -613,7 +613,7 @@ sasl_scramsha_mechs_unregister(void)
 static void
 sasl_scramsha_pbkdf2v2_confhook(const unsigned int prf, const unsigned int iter, const unsigned int saltlen)
 {
-	const crypt_impl_t *const ci_default = crypt_get_default_provider();
+	const struct crypt_impl *const ci_default = crypt_get_default_provider();
 
 	if (! ci_default)
 	{

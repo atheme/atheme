@@ -66,7 +66,7 @@ atheme_crypt3_md5_verify(const char *const restrict password, const char *const 
 	return true;
 }
 
-static crypt_impl_t crypto_crypt3_impl = {
+static struct crypt_impl crypto_crypt3_impl = {
 
 	.id        = "crypt3-md5",
 	.verify    = &atheme_crypt3_md5_verify,

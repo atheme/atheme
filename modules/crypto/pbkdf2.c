@@ -48,7 +48,7 @@ atheme_pbkdf2_verify(const char *const restrict password, const char *const rest
 	return true;
 }
 
-static crypt_impl_t crypto_pbkdf2_impl = {
+static struct crypt_impl crypto_pbkdf2_impl = {
 
 	.id         = "pbkdf2",
 	.verify     = &atheme_pbkdf2_verify,

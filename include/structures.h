@@ -24,6 +24,9 @@ struct chanuser;
 // Defined in include/connection.h
 struct connection;
 
+// Defined in include/crypto.h
+struct crypt_impl;
+
 // Defined in include/servtree.h
 struct service;
 

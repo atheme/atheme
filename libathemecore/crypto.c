@@ -27,10 +27,10 @@ static mowgli_list_t crypt_impl_list = { NULL, NULL, 0 };
 
 static inline void
 crypt_log_modchg(const char *const restrict caller, const char *const restrict which,
-                 const crypt_impl_t *const restrict impl)
+                 const struct crypt_impl *const restrict impl)
 {
 	const unsigned int level = (runflags & RF_STARTING) ? LG_DEBUG : LG_INFO;
-	const crypt_impl_t *const ci = crypt_get_default_provider();
+	const struct crypt_impl *const ci = crypt_get_default_provider();
 
 	(void) slog(level, "%s: %s crypto provider '%s'", caller, which, impl->id);
 
@@ -41,7 +41,7 @@ crypt_log_modchg(const char *const restrict caller, const char *const restrict w
 }
 
 void
-crypt_register(crypt_impl_t *const restrict impl)
+crypt_register(struct crypt_impl *const restrict impl)
 {
 	if (! impl || ! impl->id || ! (impl->crypt || impl->verify))
 	{
@@ -54,7 +54,7 @@ crypt_register(crypt_impl_t *const restrict impl)
 }
 
 void
-crypt_unregister(crypt_impl_t *const restrict impl)
+crypt_unregister(struct crypt_impl *const restrict impl)
 {
 	if (! impl || ! impl->id || ! (impl->crypt || impl->verify))
 	{
@@ -66,14 +66,14 @@ crypt_unregister(crypt_impl_t *const restrict impl)
 	(void) crypt_log_modchg(__func__, "unregistered", impl);
 }
 
-const crypt_impl_t *
+const struct crypt_impl *
 crypt_get_default_provider(void)
 {
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, crypt_impl_list.head)
 	{
-		const crypt_impl_t *const ci = n->data;
+		const struct crypt_impl *const ci = n->data;
 
 		if (ci->crypt)
 			return ci;
@@ -82,7 +82,7 @@ crypt_get_default_provider(void)
 	return NULL;
 }
 
-const crypt_impl_t *
+const struct crypt_impl *
 crypt_verify_password(const char *const restrict password, const char *const restrict parameters,
                       unsigned int *const restrict flags)
 {
@@ -90,7 +90,7 @@ crypt_verify_password(const char *const restrict password, const char *const res
 
 	MOWGLI_ITER_FOREACH(n, crypt_impl_list.head)
 	{
-		const crypt_impl_t *const ci = n->data;
+		const struct crypt_impl *const ci = n->data;
 
 		if (ci->verify)
 		{
@@ -137,7 +137,7 @@ crypt_password(const char *const restrict password)
 
 	MOWGLI_ITER_FOREACH(n, crypt_impl_list.head)
 	{
-		const crypt_impl_t *const ci = n->data;
+		const struct crypt_impl *const ci = n->data;
 
 		if (! ci->crypt)
 		{
