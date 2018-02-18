@@ -155,7 +155,7 @@ ircnet_msg(const char *from, const char *target, const char *fmt, ...)
 static void ircnet_msg_global_sts(user_t *from, const char *mask, const char *text)
 {
 	mowgli_node_t *n;
-	tld_t *tld;
+	struct tld *tld;
 
 	if (!strcmp(mask, "*"))
 	{
@@ -178,7 +178,7 @@ static void ircnet_notice_user_sts(user_t *from, user_t *target, const char *tex
 static void ircnet_notice_global_sts(user_t *from, const char *mask, const char *text)
 {
 	mowgli_node_t *n;
-	tld_t *tld;
+	struct tld *tld;
 
 	if (!strcmp(mask, "*"))
 	{

@@ -8,8 +8,6 @@
 #ifndef SERVERS_H
 #define SERVERS_H
 
-typedef struct tld_ tld_t;
-
 /* servers struct */
 struct server_
 {
@@ -39,7 +37,8 @@ struct server_
 #define SF_MASKED      0x00000010 /* Is masked, has no own name (for ircnet) */
 
 /* tld list struct */
-struct tld_ {
+struct tld
+{
   char *name;
 };
 
@@ -58,9 +57,9 @@ extern mowgli_list_t tldlist;
 
 extern void init_servers(void);
 
-extern tld_t *tld_add(const char *name);
+extern struct tld *tld_add(const char *name);
 extern void tld_delete(const char *name);
-extern tld_t *tld_find(const char *name);
+extern struct tld *tld_find(const char *name);
 
 extern server_t *server_add(const char *name, unsigned int hops, server_t *uplink, const char *id, const char *desc);
 extern void server_delete(const char *name);

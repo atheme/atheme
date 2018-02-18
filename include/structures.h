@@ -76,6 +76,9 @@ struct sasl_message;
 struct sasl_session;
 struct sasl_sourceinfo;
 
+// Defined in include/servers.h
+struct tld;
+
 // Defined in include/servtree.h
 struct service;
 

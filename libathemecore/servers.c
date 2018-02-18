@@ -50,7 +50,7 @@ static void server_delete_serv(server_t *s);
 void init_servers(void)
 {
 	serv_heap = sharedheap_get(sizeof(server_t));
-	tld_heap = sharedheap_get(sizeof(tld_t));
+	tld_heap = sharedheap_get(sizeof(struct tld));
 
 	if (serv_heap == NULL || tld_heap == NULL)
 	{
@@ -296,9 +296,9 @@ server_t *server_find(const char *name)
  * Side Effects:
  *     - the TLD object is registered with the TLD list.
  */
-tld_t *tld_add(const char *name)
+struct tld *tld_add(const char *name)
 {
-        tld_t *tld;
+        struct tld *tld;
         mowgli_node_t *n = mowgli_node_create();
 
         slog(LG_DEBUG, "tld_add(): %s", name);
@@ -330,7 +330,7 @@ tld_t *tld_add(const char *name)
  */
 void tld_delete(const char *name)
 {
-        tld_t *tld = tld_find(name);
+        struct tld *tld = tld_find(name);
         mowgli_node_t *n;
 
         if (!tld)
@@ -367,9 +367,9 @@ void tld_delete(const char *name)
  * Side Effects:
  *     - none
  */
-tld_t *tld_find(const char *name)
+struct tld *tld_find(const char *name)
 {
-        tld_t *tld;
+        struct tld *tld;
         mowgli_node_t *n;
 
 	if (name == NULL)
@@ -377,7 +377,7 @@ tld_t *tld_find(const char *name)
 
         MOWGLI_ITER_FOREACH(n, tldlist.head)
         {
-                tld = (tld_t *)n->data;
+                tld = (struct tld *)n->data;
 
                 if (!strcasecmp(name, tld->name))
                         return tld;

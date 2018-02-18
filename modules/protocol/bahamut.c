@@ -225,7 +225,7 @@ bahamut_msg(const char *from, const char *target, const char *fmt, ...)
 static void bahamut_msg_global_sts(user_t *from, const char *mask, const char *text)
 {
 	mowgli_node_t *n;
-	tld_t *tld;
+	struct tld *tld;
 	if (!strcmp(mask, "*"))
 	{
 		MOWGLI_ITER_FOREACH(n, tldlist.head)
@@ -247,7 +247,7 @@ static void bahamut_notice_user_sts(user_t *from, user_t *target, const char *te
 static void bahamut_notice_global_sts(user_t *from, const char *mask, const char *text)
 {
 	mowgli_node_t *n;
-	tld_t *tld;
+	struct tld *tld;
 
 	if (!strcmp(mask, "*"))
 	{
