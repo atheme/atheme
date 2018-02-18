@@ -37,7 +37,7 @@ static bool dummy_allow_foundership(myentity_t *mt)
 	return false;
 }
 
-static entity_chanacs_validation_vtable_t dummy_validate = {
+static const struct entity_chanacs_validation_vtable dummy_validate = {
 	.match_entity = dummy_match_entity,
 	.match_user = dummy_match_user,
 	.can_register_channel = dummy_can_register_channel,

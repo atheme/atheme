@@ -1510,7 +1510,7 @@ chanacs_t *chanacs_find(mychan_t *mychan, myentity_t *mt, unsigned int level)
 
 	MOWGLI_ITER_FOREACH(n, mychan->chanacs.head)
 	{
-		entity_chanacs_validation_vtable_t *vt;
+		const struct entity_chanacs_validation_vtable *vt;
 
 		ca = (chanacs_t *)n->data;
 
@@ -1540,7 +1540,7 @@ unsigned int chanacs_entity_flags(mychan_t *mychan, myentity_t *mt)
 
 	MOWGLI_ITER_FOREACH(n, mychan->chanacs.head)
 	{
-		entity_chanacs_validation_vtable_t *vt;
+		const struct entity_chanacs_validation_vtable *vt;
 
 		ca = (chanacs_t *)n->data;
 
@@ -1736,7 +1736,7 @@ static unsigned int chanacs_entity_flags_by_user(mychan_t *mychan, user_t *u)
 	{
 		chanacs_t *ca = n->data;
 		myentity_t *mt;
-		entity_chanacs_validation_vtable_t *vt;
+		const struct entity_chanacs_validation_vtable *vt;
 
 		if (ca->entity == NULL)
 			continue;

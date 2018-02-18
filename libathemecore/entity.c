@@ -198,13 +198,13 @@ static bool linear_allow_foundership(myentity_t *mt)
 	return true;
 }
 
-entity_chanacs_validation_vtable_t linear_chanacs_validate = {
+const struct entity_chanacs_validation_vtable linear_chanacs_validate = {
 	.match_entity = linear_chanacs_match_entity,
 	.can_register_channel = linear_can_register_channel,
 	.allow_foundership = linear_allow_foundership,
 };
 
-entity_chanacs_validation_vtable_t *myentity_get_chanacs_validator(myentity_t *mt)
+const struct entity_chanacs_validation_vtable *myentity_get_chanacs_validator(myentity_t *mt)
 {
 	return mt->chanacs_validate != NULL ? mt->chanacs_validate : &linear_chanacs_validate;
 }
@@ -228,7 +228,7 @@ unsigned int myentity_count_channels_with_flagset(myentity_t *mt, unsigned int f
 
 bool myentity_can_register_channel(myentity_t *mt)
 {
-	entity_chanacs_validation_vtable_t *vt;
+	const struct entity_chanacs_validation_vtable *vt;
 
 	return_val_if_fail(mt != NULL, false);
 
@@ -241,7 +241,7 @@ bool myentity_can_register_channel(myentity_t *mt)
 
 bool myentity_allow_foundership(myentity_t *mt)
 {
-	entity_chanacs_validation_vtable_t *vt;
+	const struct entity_chanacs_validation_vtable *vt;
 
 	return_val_if_fail(mt != NULL, false);
 

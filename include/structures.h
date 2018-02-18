@@ -35,6 +35,9 @@ struct database_handle;
 struct database_module;
 struct database_vtable;
 
+// Defined in include/entity-validation.h
+struct entity_chanacs_validation_vtable;
+
 // Defined in include/servtree.h
 struct service;
 

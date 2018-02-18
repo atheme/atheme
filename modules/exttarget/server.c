@@ -44,7 +44,7 @@ static bool server_ext_allow_foundership(myentity_t *mt)
 	return false;
 }
 
-static entity_chanacs_validation_vtable_t server_ext_validate = {
+static const struct entity_chanacs_validation_vtable server_ext_validate = {
 	.match_entity = server_ext_match_entity,
 	.match_user = server_ext_match_user,
 	.can_register_channel = server_ext_can_register_channel,

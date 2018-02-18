@@ -5,7 +5,8 @@
 #ifndef ENTITY_VALIDATION_H
 #define ENTITY_VALIDATION_H
 
-struct entity_chanacs_validation_vtable {
+struct entity_chanacs_validation_vtable
+{
 	chanacs_t *(*match_entity)(chanacs_t *ca, myentity_t *mt);
 	chanacs_t *(*match_user)(chanacs_t *ca, user_t *mt);
 
@@ -13,6 +14,6 @@ struct entity_chanacs_validation_vtable {
 	bool (*allow_foundership)(myentity_t *mt);
 };
 
-extern entity_chanacs_validation_vtable_t *myentity_get_chanacs_validator(myentity_t *mt);
+extern const struct entity_chanacs_validation_vtable *myentity_get_chanacs_validator(myentity_t *mt);
 
 #endif
