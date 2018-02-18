@@ -14,7 +14,7 @@ struct command gs_set_channel = { "CHANNEL", N_("Sets the official group channel
 
 static void gs_cmd_set_channel(struct sourceinfo *si, int parc, char *parv[])
 {
-	mygroup_t *mg;
+	struct mygroup *mg;
 	char *chan = parv[1];
 
 	if (!(mg = mygroup_find(parv[0])))

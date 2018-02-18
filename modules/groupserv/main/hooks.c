@@ -11,7 +11,7 @@ static void mygroup_expire(void *unused)
 
 	MYENTITY_FOREACH_T(mt, &state, ENT_GROUP)
 	{
-		mygroup_t *mg = group(mt);
+		struct mygroup *mg = group(mt);
 
 		continue_if_fail(mt != NULL);
 		continue_if_fail(mg != NULL);

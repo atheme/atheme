@@ -11,23 +11,23 @@
 
 #include "main/groupserv_common.h"
 
-mygroup_t * (*mygroup_add)(const char *name);
-mygroup_t * (*mygroup_find)(const char *name);
-mygroup_t * (*mygroup_rename)(mygroup_t *mg, const char *name);
+struct mygroup * (*mygroup_add)(const char *name);
+struct mygroup * (*mygroup_find)(const char *name);
+struct mygroup * (*mygroup_rename)(struct mygroup *mg, const char *name);
 
-unsigned int (*mygroup_count_flag)(mygroup_t *mg, unsigned int flag);
+unsigned int (*mygroup_count_flag)(struct mygroup *mg, unsigned int flag);
 unsigned int (*myentity_count_group_flag)(struct myentity *mu, unsigned int flagset);
 
-struct groupacs * (*groupacs_add)(mygroup_t *mg, struct myentity *mt, unsigned int flags);
-struct groupacs * (*groupacs_find)(mygroup_t *mg, struct myentity *mt, unsigned int flags, bool allow_recurse);
-void (*groupacs_delete)(mygroup_t *mg, struct myentity *mt);
+struct groupacs * (*groupacs_add)(struct mygroup *mg, struct myentity *mt, unsigned int flags);
+struct groupacs * (*groupacs_find)(struct mygroup *mg, struct myentity *mt, unsigned int flags, bool allow_recurse);
+void (*groupacs_delete)(struct mygroup *mg, struct myentity *mt);
 
-bool (*groupacs_sourceinfo_has_flag)(mygroup_t *mg, struct sourceinfo *si, unsigned int flag);
-unsigned int (*groupacs_sourceinfo_flags)(mygroup_t *mg, struct sourceinfo *si);
+bool (*groupacs_sourceinfo_has_flag)(struct mygroup *mg, struct sourceinfo *si, unsigned int flag);
+unsigned int (*groupacs_sourceinfo_flags)(struct mygroup *mg, struct sourceinfo *si);
 unsigned int (*gs_flags_parser)(char *flagstring, int allow_minus, unsigned int flags);
 mowgli_list_t * (*myentity_get_membership_list)(struct myentity *mu);
-const char * (*mygroup_founder_names)(mygroup_t *mg);
-void (*remove_group_chanacs)(mygroup_t *mg);
+const char * (*mygroup_founder_names)(struct mygroup *mg);
+void (*remove_group_chanacs)(struct mygroup *mg);
 
 gflags_t *ga_flags;
 

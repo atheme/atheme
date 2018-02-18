@@ -32,7 +32,7 @@ static void gs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 
 	MYENTITY_FOREACH_T(mt, &state, ENT_GROUP)
 	{
-		mygroup_t *mg = group(mt);
+		struct mygroup *mg = group(mt);
 		continue_if_fail(mt != NULL);
 		continue_if_fail(mg != NULL);
 

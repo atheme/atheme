@@ -14,7 +14,7 @@ struct command gs_acsnolimit = { "ACSNOLIMIT", N_("Allow a group to bypass acces
 
 static void gs_cmd_acsnolimit(struct sourceinfo *si, int parc, char *parv[])
 {
-	mygroup_t *mg;
+	struct mygroup *mg;
 
 	if (!parv[0] || !parv[1])
 	{

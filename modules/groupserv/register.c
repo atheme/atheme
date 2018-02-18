@@ -14,7 +14,7 @@ struct command gs_register = { "REGISTER", N_("Registers a group."), AC_AUTHENTI
 
 static void gs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 {
-	mygroup_t *mg;
+	struct mygroup *mg;
 
 	if (!parv[0])
 	{

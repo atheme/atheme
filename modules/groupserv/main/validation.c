@@ -6,7 +6,7 @@
 
 static struct chanacs *mygroup_chanacs_match_entity(struct chanacs *ca, struct myentity *mt)
 {
-	mygroup_t *mg;
+	struct mygroup *mg;
 
 	mg = group(ca->entity);
 
@@ -20,7 +20,7 @@ static struct chanacs *mygroup_chanacs_match_entity(struct chanacs *ca, struct m
 
 static bool mygroup_can_register_channel(struct myentity *mt)
 {
-	mygroup_t *mg;
+	struct mygroup *mg;
 
 	mg = group(mt);
 

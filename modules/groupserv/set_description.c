@@ -14,7 +14,7 @@ struct command gs_set_description = { "DESCRIPTION", N_("Sets the group descript
 
 static void gs_cmd_set_description(struct sourceinfo *si, int parc, char *parv[])
 {
-	mygroup_t *mg;
+	struct mygroup *mg;
 	char *desc = parv[1];
 
 	if (!(mg = mygroup_find(parv[0])))

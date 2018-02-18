@@ -27,7 +27,7 @@ struct myentity
 
 #define entity(x)	((struct myentity *)(x))
 #define user(x)		(isuser(x) ? (myuser_t *)(x) : NULL)
-#define group(x)	(isgroup(x) ? (mygroup_t *)(x) : NULL)
+#define group(x)	(isgroup(x) ? (struct mygroup *)(x) : NULL)
 #define isuser(x)	(x != NULL && entity(x)->type == ENT_USER)
 #define isgroup(x)	(x != NULL && entity(x)->type == ENT_GROUP)
 #define isdynamic(x)	(x != NULL && (entity(x)->type == ENT_EXTTARGET))

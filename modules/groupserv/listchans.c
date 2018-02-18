@@ -27,7 +27,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static void gs_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 {
-	mygroup_t *mg;
+	struct mygroup *mg;
 	mowgli_node_t *n;
 	struct chanacs *ca;
 	bool operoverride = false;

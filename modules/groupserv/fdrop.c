@@ -14,7 +14,7 @@ struct command gs_fdrop = { "FDROP", N_("Force drops a group registration."), PR
 
 static void gs_cmd_fdrop(struct sourceinfo *si, int parc, char *parv[])
 {
-	mygroup_t *mg;
+	struct mygroup *mg;
 	char *name = parv[0];
 
 	if (!name)

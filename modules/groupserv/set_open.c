@@ -14,7 +14,7 @@ struct command gs_set_open = { "OPEN", N_("Sets the group as open for anyone to 
 
 static void gs_cmd_set_open(struct sourceinfo *si, int parc, char *parv[])
 {
-	mygroup_t *mg;
+	struct mygroup *mg;
 
 	if (!parv[0] || !parv[1])
 	{

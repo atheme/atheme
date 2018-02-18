@@ -18,7 +18,7 @@ static void hs_cmd_take(struct sourceinfo *si, int parc, char *parv[]);
 static void write_hsofferdb(struct database_handle *db);
 static void db_h_ho(struct database_handle *db, const char *type);
 
-static void remove_group_offered_hosts(mygroup_t *mg);
+static void remove_group_offered_hosts(struct mygroup *mg);
 
 struct command hs_offer = { "OFFER", N_("Sets vhosts available for users to take."), PRIV_USER_VHOST, 2, hs_cmd_offer, { .path = "hostserv/offer" } };
 struct command hs_unoffer = { "UNOFFER", N_("Removes a vhost from the list that users can take."), PRIV_USER_VHOST, 2, hs_cmd_unoffer, { .path = "hostserv/unoffer" } };
@@ -137,7 +137,7 @@ static inline hsoffered_t *hs_offer_find(const char *host, struct myentity *mt)
 	return NULL;
 }
 
-static void remove_group_offered_hosts(mygroup_t *mg)
+static void remove_group_offered_hosts(struct mygroup *mg)
 {
 	return_if_fail(mg != NULL);
 
@@ -277,7 +277,7 @@ static void hs_cmd_unoffer(struct sourceinfo *si, int parc, char *parv[])
 
 static bool myuser_is_in_group(myuser_t *mu, struct myentity *mt)
 {
-	mygroup_t *mg;
+	struct mygroup *mg;
 	mowgli_node_t *n;
 
 	return_val_if_fail(mt != NULL, false);

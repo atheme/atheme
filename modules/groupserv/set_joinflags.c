@@ -14,7 +14,7 @@ struct command gs_set_joinflags = { "JOINFLAGS", N_("Sets the flags users will b
 
 static void gs_cmd_set_joinflags(struct sourceinfo *si, int parc, char *parv[])
 {
-	mygroup_t *mg;
+	struct mygroup *mg;
 	char *joinflags = parv[1];
 	unsigned int flags = 0;
 

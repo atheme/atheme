@@ -28,7 +28,7 @@ cmd_gs_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 		return;
 	}
 
-	mygroup_t *mg;
+	struct mygroup *mg;
 
 	if (! (mg = mygroup_find(name)))
 	{

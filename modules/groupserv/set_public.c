@@ -14,7 +14,7 @@ struct command gs_set_public = { "PUBLIC", N_("Sets the group as public."), AC_A
 
 static void gs_cmd_set_public(struct sourceinfo *si, int parc, char *parv[])
 {
-	mygroup_t *mg;
+	struct mygroup *mg;
 
 	if (!parv[0] || !parv[1])
 	{

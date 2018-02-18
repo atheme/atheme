@@ -14,7 +14,7 @@ struct command gs_set_email = { "EMAIL", N_("Sets the group e-mail address."), A
 
 static void gs_cmd_set_email(struct sourceinfo *si, int parc, char *parv[])
 {
-	mygroup_t *mg;
+	struct mygroup *mg;
 	char *mail = parv[1];
 
 	if (!(mg = mygroup_find(parv[0])))

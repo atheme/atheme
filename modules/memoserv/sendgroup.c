@@ -33,7 +33,7 @@ static void ms_cmd_sendgroup(struct sourceinfo *si, int parc, char *parv[])
 	myuser_t *tmu;
 	mowgli_node_t *n, *tn;
 	struct mymemo *memo;
-	mygroup_t *mg;
+	struct mygroup *mg;
 	int sent = 0, tried = 0;
 	bool ignored, operoverride = false;
 	struct service *memoserv;

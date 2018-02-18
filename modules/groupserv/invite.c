@@ -18,7 +18,7 @@ struct command gs_invite = { "INVITE", N_("Invites a user to a group."), AC_AUTH
 
 static void gs_cmd_invite(struct sourceinfo *si, int parc, char *parv[])
 {
-	mygroup_t *mg;
+	struct mygroup *mg;
 	myuser_t *mu;
 	struct groupacs *ga;
 	char *group = parv[0];

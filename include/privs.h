@@ -25,6 +25,9 @@
 #define PRIV_MARK            "user:mark"
 #define PRIV_HOLD            "user:hold"
 #define PRIV_REG_NOLIMIT     "user:regnolimit"
+/* groupserv */
+#define PRIV_GROUP_ADMIN     "group:admin"
+#define PRIV_GROUP_AUSPEX    "group:auspex"
 /* generic */
 #define PRIV_SERVER_AUSPEX   "general:auspex"
 #define PRIV_VIEWPRIVS       "general:viewprivs"

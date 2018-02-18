@@ -14,7 +14,7 @@ struct command gs_set_url = { "URL", N_("Sets the group URL."), AC_AUTHENTICATED
 
 static void gs_cmd_set_url(struct sourceinfo *si, int parc, char *parv[])
 {
-	mygroup_t *mg;
+	struct mygroup *mg;
 	char *url = parv[1];
 
 	if (!(mg = mygroup_find(parv[0])))

@@ -27,7 +27,7 @@ static void write_groupdb(struct database_handle *db)
 	MYENTITY_FOREACH_T(mt, &state, ENT_GROUP)
 	{
 		continue_if_fail(mt != NULL);
-		mygroup_t *mg = group(mt);
+		struct mygroup *mg = group(mt);
 		continue_if_fail(mg != NULL);
 
 		char *mgflags = gflags_tostr(mg_flags, mg->flags);
@@ -57,7 +57,7 @@ static void write_groupdb(struct database_handle *db)
 		mowgli_node_t *n;
 
 		continue_if_fail(mt != NULL);
-		mygroup_t *mg = group(mt);
+		struct mygroup *mg = group(mt);
 		continue_if_fail(mg != NULL);
 
 		MOWGLI_ITER_FOREACH(n, mg->acs.head)
@@ -99,7 +99,7 @@ static void db_h_gfa(struct database_handle *db, const char *type)
 
 static void db_h_grp(struct database_handle *db, const char *type)
 {
-	mygroup_t *mg;
+	struct mygroup *mg;
 	const char *uid = NULL;
 	const char *name;
 	time_t regtime;
@@ -137,7 +137,7 @@ static void db_h_grp(struct database_handle *db, const char *type)
 
 static void db_h_gacl(struct database_handle *db, const char *type)
 {
-	mygroup_t *mg;
+	struct mygroup *mg;
 	struct myentity *mt;
 	unsigned int flags = GA_ALL;	/* GDBV 1 entires had full access */
 

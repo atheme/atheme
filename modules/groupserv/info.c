@@ -14,7 +14,7 @@ struct command gs_info = { "INFO", N_("Displays information about registered gro
 
 static void gs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
-	mygroup_t *mg;
+	struct mygroup *mg;
 	struct tm tm;
 	char buf[BUFSIZE], strfbuf[BUFSIZE];
 	struct metadata *md;

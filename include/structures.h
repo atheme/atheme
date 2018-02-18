@@ -18,6 +18,8 @@ typedef struct mychan_ mychan_t;
 
 // Defined in include/account.h
 struct chanacs;
+struct groupacs;
+struct mygroup;
 struct svsignore;
 
 // Defined in include/channels.h
