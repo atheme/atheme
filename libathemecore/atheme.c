@@ -39,7 +39,7 @@
 struct ConfOption config_options;
 
 struct chansvs chansvs;
-nicksvs_t nicksvs;
+struct nicksvs nicksvs;
 
 mowgli_list_t taint_list = { NULL, NULL, 0 };
 

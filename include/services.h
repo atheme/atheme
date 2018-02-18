@@ -8,8 +8,6 @@
 #ifndef SERVICES_H
 #define SERVICES_H
 
-typedef struct nicksvs_ nicksvs_t;
-
 /* The nick/user/host/real strings in these structs simply point
  * to their counterparts in the struct service, and will probably be removed
  * at some point.
@@ -46,7 +44,7 @@ struct chansvs
 };
 
 /* authentication services */
-struct nicksvs_
+struct nicksvs
 {
   bool  spam;
   bool  no_nick_ownership;
@@ -81,7 +79,7 @@ struct nicksvs_
 
 /* atheme.c */
 extern struct chansvs chansvs;
-extern nicksvs_t nicksvs;
+extern struct nicksvs nicksvs;
 
 /* services.c */
 extern int authservice_loaded;

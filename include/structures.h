@@ -81,6 +81,7 @@ struct tld;
 
 // Defined in include/services.h
 struct chansvs;
+struct nicksvs;
 
 // Defined in include/servtree.h
 struct service;
