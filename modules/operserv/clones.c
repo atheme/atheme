@@ -23,14 +23,14 @@ static void os_cmd_clones_setexempt(struct sourceinfo *si, int parc, char *parv[
 static void os_cmd_clones_listexempt(struct sourceinfo *si, int parc, char *parv[]);
 static void os_cmd_clones_duration(struct sourceinfo *si, int parc, char *parv[]);
 
-static void write_exemptdb(database_handle_t *db);
+static void write_exemptdb(struct database_handle *db);
 
 
-static void db_h_ck(database_handle_t *db, const char *type);
-static void db_h_cd(database_handle_t *db, const char *type);
-static void db_h_gr(database_handle_t *db, const char *type);
-static void db_h_ex(database_handle_t *db, const char *type);
-static void db_h_clonesdbv(database_handle_t *db, const char *type);
+static void db_h_ck(struct database_handle *db, const char *type);
+static void db_h_cd(struct database_handle *db, const char *type);
+static void db_h_gr(struct database_handle *db, const char *type);
+static void db_h_ex(struct database_handle *db, const char *type);
+static void db_h_clonesdbv(struct database_handle *db, const char *type);
 
 mowgli_patricia_t *os_clones_cmds;
 
@@ -201,7 +201,7 @@ mod_deinit(const module_unload_intent_t intent)
 	mowgli_patricia_destroy(os_clones_cmds, NULL, NULL);
 }
 
-static void write_exemptdb(database_handle_t *db)
+static void write_exemptdb(struct database_handle *db)
 {
 	mowgli_node_t *n, *tn;
 
@@ -243,26 +243,26 @@ static void write_exemptdb(database_handle_t *db)
 	}
 }
 
-static void db_h_clonesdbv(database_handle_t *db, const char *type)
+static void db_h_clonesdbv(struct database_handle *db, const char *type)
 {
 	clones_dbversion = db_sread_uint(db);
 }
-static void db_h_ck(database_handle_t *db, const char *type)
+static void db_h_ck(struct database_handle *db, const char *type)
 {
 	kline_enabled = db_sread_int(db) != 0;
 }
 
-static void db_h_cd(database_handle_t *db, const char *type)
+static void db_h_cd(struct database_handle *db, const char *type)
 {
 	kline_duration = db_sread_uint(db);
 }
 
-static void db_h_gr(database_handle_t *db, const char *type)
+static void db_h_gr(struct database_handle *db, const char *type)
 {
 	grace_count = db_sread_uint(db);
 }
 
-static void db_h_ex(database_handle_t *db, const char *type)
+static void db_h_ex(struct database_handle *db, const char *type)
 {
 	unsigned int allowed, warn;
 

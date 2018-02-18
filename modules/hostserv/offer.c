@@ -15,8 +15,8 @@ static void hs_cmd_unoffer(struct sourceinfo *si, int parc, char *parv[]);
 static void hs_cmd_offerlist(struct sourceinfo *si, int parc, char *parv[]);
 static void hs_cmd_take(struct sourceinfo *si, int parc, char *parv[]);
 
-static void write_hsofferdb(database_handle_t *db);
-static void db_h_ho(database_handle_t *db, const char *type);
+static void write_hsofferdb(struct database_handle *db);
+static void db_h_ho(struct database_handle *db, const char *type);
 
 static void remove_group_offered_hosts(mygroup_t *mg);
 
@@ -73,7 +73,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("hostserv", &hs_take);
 }
 
-static void write_hsofferdb(database_handle_t *db)
+static void write_hsofferdb(struct database_handle *db)
 {
 	mowgli_node_t *n;
 
@@ -94,7 +94,7 @@ static void write_hsofferdb(database_handle_t *db)
 
 }
 
-static void db_h_ho(database_handle_t *db, const char *type)
+static void db_h_ho(struct database_handle *db, const char *type)
 {
 	hsoffered_t *l;
 	const char *buf;

@@ -261,7 +261,7 @@ void chanfix_expire(void *unused)
 
 /*************************************************************************************/
 
-static void write_chanfixdb(database_handle_t *db)
+static void write_chanfixdb(struct database_handle *db)
 {
 	chanfix_channel_t *chan;
 	mowgli_patricia_iteration_state_t state;
@@ -322,13 +322,13 @@ static void write_chanfixdb(database_handle_t *db)
 	}
 }
 
-static void db_h_cfdbv(database_handle_t *db, const char *type)
+static void db_h_cfdbv(struct database_handle *db, const char *type)
 {
 	loading_cfdbv = db_sread_uint(db);
 	slog(LG_INFO, "chanfix: opensex data schema version is %d.", loading_cfdbv);
 }
 
-static void db_h_cfchan(database_handle_t *db, const char *type)
+static void db_h_cfchan(struct database_handle *db, const char *type)
 {
 	const char *name;
 	time_t ts, lastupdate;
@@ -343,7 +343,7 @@ static void db_h_cfchan(database_handle_t *db, const char *type)
 	chan->lastupdate = lastupdate;
 }
 
-static void db_h_cfop(database_handle_t *db, const char *type)
+static void db_h_cfop(struct database_handle *db, const char *type)
 {
 	const char *name, *entity, *user, *host;
 	time_t firstseen, lastevent;
@@ -374,7 +374,7 @@ static void db_h_cfop(database_handle_t *db, const char *type)
 	orec->age = age;
 }
 
-static void db_h_cfmd(database_handle_t *db, const char *type)
+static void db_h_cfmd(struct database_handle *db, const char *type)
 {
 	const char *chname, *key, *value;
 	chanfix_channel_t *chan;

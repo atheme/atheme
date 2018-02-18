@@ -17,8 +17,8 @@ static void helpserv_cmd_list(struct sourceinfo *si, int parc, char *parv[]);
 static void helpserv_cmd_close(struct sourceinfo *si, int parc, char *parv[]);
 static void helpserv_cmd_cancel(struct sourceinfo *si, int parc, char *parv[]);
 
-static void write_ticket_db(database_handle_t *db);
-static void db_h_he(database_handle_t *db, const char *type);
+static void write_ticket_db(struct database_handle *db);
+static void db_h_he(struct database_handle *db, const char *type);
 
 struct command helpserv_request = { "REQUEST", N_("Request help from network staff."), AC_AUTHENTICATED, 1, helpserv_cmd_request, { .path = "helpserv/request" } };
 struct command helpserv_list = { "LIST", N_("Lists users waiting for help."), PRIV_HELPER, 1, helpserv_cmd_list, { .path = "helpserv/list" } };
@@ -75,7 +75,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("helpserv", &helpserv_cancel);
 }
 
-static void write_ticket_db(database_handle_t *db)
+static void write_ticket_db(struct database_handle *db)
 {
 	mowgli_node_t *n;
 
@@ -92,7 +92,7 @@ static void write_ticket_db(database_handle_t *db)
 	}
 }
 
-static void db_h_he(database_handle_t *db, const char *type)
+static void db_h_he(struct database_handle *db, const char *type)
 {
 	const char *nick = db_sread_word(db);
 	time_t ticket_ts = db_sread_time(db);

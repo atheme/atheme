@@ -115,8 +115,8 @@ static void dnsbl_hit(user_t *u, struct Blacklist *blptr);
 static void abort_blacklist_queries(user_t *u);
 static void ps_cmd_dnsblexempt(struct sourceinfo *si, int parc, char *parv[]);
 static void ps_cmd_dnsblscan(struct sourceinfo *si, int parc, char *parv[]);
-static void write_dnsbl_exempt_db(database_handle_t *db);
-static void db_h_ble(database_handle_t *db, const char *type);
+static void write_dnsbl_exempt_db(struct database_handle *db);
+static void db_h_ble(struct database_handle *db, const char *type);
 static void lookup_blacklists(user_t *u);
 
 struct command os_set_dnsblaction = { "DNSBLACTION", N_("Changes what happens to a user when they hit a DNSBL."), PRIV_USER_ADMIN, 1, os_cmd_set_dnsblaction, { .path = "proxyscan/set_dnsblaction" } };
@@ -562,7 +562,7 @@ static void osinfo_hook(struct sourceinfo *si)
 	}
 }
 
-static void write_dnsbl_exempt_db(database_handle_t *db)
+static void write_dnsbl_exempt_db(struct database_handle *db)
 {
 	mowgli_node_t *n;
 
@@ -579,7 +579,7 @@ static void write_dnsbl_exempt_db(database_handle_t *db)
 	}
 }
 
-static void db_h_ble(database_handle_t *db, const char *type)
+static void db_h_ble(struct database_handle *db, const char *type)
 {
 	const char *ip = db_sread_word(db);
 	time_t exempt_ts = db_sread_time(db);

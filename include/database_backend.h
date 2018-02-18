@@ -12,29 +12,26 @@
 
 extern bool strict_mode;
 
-struct database_handle_;
-typedef struct database_handle_ database_handle_t;
-
 typedef struct {
 	const char *name;
 
 	/* Reading stuff. */
-	bool (*read_next_row)(database_handle_t *hdl);
+	bool (*read_next_row)(struct database_handle *hdl);
 
-	const char *(*read_word)(database_handle_t *hdl);
-	const char *(*read_str)(database_handle_t *hdl);
-	bool (*read_int)(database_handle_t *hdl, int *res);
-	bool (*read_uint)(database_handle_t *hdl, unsigned int *res);
-	bool (*read_time)(database_handle_t *hdl, time_t *res);
+	const char *(*read_word)(struct database_handle *hdl);
+	const char *(*read_str)(struct database_handle *hdl);
+	bool (*read_int)(struct database_handle *hdl, int *res);
+	bool (*read_uint)(struct database_handle *hdl, unsigned int *res);
+	bool (*read_time)(struct database_handle *hdl, time_t *res);
 
 	/* Writing stuff. */
-	bool (*start_row)(database_handle_t *hdl, const char *type);
-	bool (*write_word)(database_handle_t *hdl, const char *word);
-	bool (*write_str)(database_handle_t *hdl, const char *str);
-	bool (*write_int)(database_handle_t *hdl, int num);
-	bool (*write_uint)(database_handle_t *hdl, unsigned int num);
-	bool (*write_time)(database_handle_t *hdl, time_t time);
-	bool (*commit_row)(database_handle_t *hdl);
+	bool (*start_row)(struct database_handle *hdl, const char *type);
+	bool (*write_word)(struct database_handle *hdl, const char *word);
+	bool (*write_str)(struct database_handle *hdl, const char *str);
+	bool (*write_int)(struct database_handle *hdl, int num);
+	bool (*write_uint)(struct database_handle *hdl, unsigned int num);
+	bool (*write_time)(struct database_handle *hdl, time_t time);
+	bool (*commit_row)(struct database_handle *hdl);
 } database_vtable_t;
 
 typedef enum {
@@ -42,7 +39,8 @@ typedef enum {
 	DB_WRITE
 } database_transaction_t;
 
-struct database_handle_ {
+struct database_handle
+{
 	void *priv;
 	database_vtable_t *vt;
 	database_transaction_t txn;
@@ -52,43 +50,43 @@ struct database_handle_ {
 };
 
 typedef struct {
-	database_handle_t *(*db_open)(const char *filename, database_transaction_t txn);
-	void (*db_close)(database_handle_t *db);
-	void (*db_parse)(database_handle_t *db);
+	struct database_handle *(*db_open)(const char *filename, database_transaction_t txn);
+	void (*db_close)(struct database_handle *db);
+	void (*db_parse)(struct database_handle *db);
 } database_module_t;
 
-extern database_handle_t *db_open(const char *filename, database_transaction_t txn);
-extern void db_close(database_handle_t *db);
-extern void db_parse(database_handle_t *db);
+extern struct database_handle *db_open(const char *filename, database_transaction_t txn);
+extern void db_close(struct database_handle *db);
+extern void db_parse(struct database_handle *db);
 
-extern bool db_read_next_row(database_handle_t *db);
+extern bool db_read_next_row(struct database_handle *db);
 
-extern const char *db_read_word(database_handle_t *db);
-extern const char *db_read_str(database_handle_t *db);
-extern bool db_read_int(database_handle_t *db, int *r);
-extern bool db_read_uint(database_handle_t *db, unsigned int *r);
-extern bool db_read_time(database_handle_t *db, time_t *t);
+extern const char *db_read_word(struct database_handle *db);
+extern const char *db_read_str(struct database_handle *db);
+extern bool db_read_int(struct database_handle *db, int *r);
+extern bool db_read_uint(struct database_handle *db, unsigned int *r);
+extern bool db_read_time(struct database_handle *db, time_t *t);
 
-extern const char *db_sread_word(database_handle_t *db);
-extern const char *db_sread_str(database_handle_t *db);
-extern int db_sread_int(database_handle_t *db);
-extern unsigned int db_sread_uint(database_handle_t *db);
-extern time_t db_sread_time(database_handle_t *db);
+extern const char *db_sread_word(struct database_handle *db);
+extern const char *db_sread_str(struct database_handle *db);
+extern int db_sread_int(struct database_handle *db);
+extern unsigned int db_sread_uint(struct database_handle *db);
+extern time_t db_sread_time(struct database_handle *db);
 
-extern bool db_start_row(database_handle_t *db, const char *type);
-extern bool db_write_word(database_handle_t *db, const char *word);
-extern bool db_write_str(database_handle_t *db, const char *str);
-extern bool db_write_int(database_handle_t *db, int num);
-extern bool db_write_uint(database_handle_t *db, unsigned int num);
-extern bool db_write_time(database_handle_t *db, time_t time);
-extern bool db_write_format(database_handle_t *db, const char *str, ...) ATHEME_FATTR_PRINTF(2, 3);
-extern bool db_commit_row(database_handle_t *db);
+extern bool db_start_row(struct database_handle *db, const char *type);
+extern bool db_write_word(struct database_handle *db, const char *word);
+extern bool db_write_str(struct database_handle *db, const char *str);
+extern bool db_write_int(struct database_handle *db, int num);
+extern bool db_write_uint(struct database_handle *db, unsigned int num);
+extern bool db_write_time(struct database_handle *db, time_t time);
+extern bool db_write_format(struct database_handle *db, const char *str, ...) ATHEME_FATTR_PRINTF(2, 3);
+extern bool db_commit_row(struct database_handle *db);
 
-typedef void (*database_handler_f)(database_handle_t *db, const char *type);
+typedef void (*database_handler_f)(struct database_handle *db, const char *type);
 
 extern void db_register_type_handler(const char *type, database_handler_f fun);
 extern void db_unregister_type_handler(const char *type);
-extern void db_process(database_handle_t *db, const char *type);
+extern void db_process(struct database_handle *db, const char *type);
 extern void db_init(void);
 extern database_module_t *db_mod;
 

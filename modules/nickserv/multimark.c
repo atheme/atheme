@@ -12,9 +12,9 @@
 
 static void ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[]);
 
-static void write_multimark_db(database_handle_t *db);
-static void db_h_mm(database_handle_t *db, const char *type);
-static void db_h_rm(database_handle_t *db, const char *type);
+static void write_multimark_db(struct database_handle *db);
+static void db_h_mm(struct database_handle *db, const char *type);
+static void db_h_rm(struct database_handle *db, const char *type);
 
 static void show_multimark(hook_user_req_t *hdata);
 static void show_multimark_noexist(hook_info_noexist_req_t *hdata);
@@ -210,7 +210,7 @@ mowgli_list_t *restored_mark_list(const char *nick)
 	return l;
 }
 
-static void write_multimark_db(database_handle_t *db)
+static void write_multimark_db(struct database_handle *db)
 {
 	mowgli_node_t *n;
 	myuser_t *mu;
@@ -277,7 +277,7 @@ static void write_multimark_db(database_handle_t *db)
 	}
 }
 
-static void db_h_mm(database_handle_t *db, const char *type)
+static void db_h_mm(struct database_handle *db, const char *type)
 {
 	myuser_t *mu;
 	mowgli_patricia_iteration_state_t state;
@@ -314,7 +314,7 @@ static void db_h_mm(database_handle_t *db, const char *type)
 	mowgli_node_add(mm, &mm->node, l);
 }
 
-static void db_h_rm(database_handle_t *db, const char *type)
+static void db_h_rm(struct database_handle *db, const char *type)
 {
 	myuser_t *mu;
 	mowgli_patricia_iteration_state_t state;

@@ -21,9 +21,9 @@ static void bs_cmd_botlist(struct sourceinfo *si, int parc, char *parv[]);
 static void on_shutdown(void *unused);
 static void osinfo_hook(struct sourceinfo *si);
 
-static void botserv_save_database(database_handle_t *db);
-static void db_h_bot(database_handle_t *db, const char *type);
-static void db_h_bot_count(database_handle_t *db, const char *type);
+static void botserv_save_database(struct database_handle *db);
+static void db_h_bot(struct database_handle *db, const char *type);
+static void db_h_bot_count(struct database_handle *db, const char *type);
 
 /* visible for other modules; use the typedef to enforce type checking */
 fn_botserv_bot_find botserv_bot_find;
@@ -443,7 +443,7 @@ static void botserv_config_ready(void *unused)
 
 /* ******************************************************************** */
 
-void botserv_save_database(database_handle_t *db)
+void botserv_save_database(struct database_handle *db)
 {
 	mowgli_node_t *n;
 
@@ -467,7 +467,7 @@ void botserv_save_database(database_handle_t *db)
 	db_commit_row(db);
 }
 
-static void db_h_bot(database_handle_t *db, const char *type)
+static void db_h_bot(struct database_handle *db, const char *type)
 {
 	const char *nick = db_sread_word(db);
 	const char *user = db_sread_word(db);
@@ -493,7 +493,7 @@ static void db_h_bot(database_handle_t *db, const char *type)
 	mowgli_node_add(bot, &bot->bnode, &bs_bots);
 }
 
-static void db_h_bot_count(database_handle_t *db, const char *type)
+static void db_h_bot_count(struct database_handle *db, const char *type)
 {
 	unsigned int i = db_sread_uint(db);
 

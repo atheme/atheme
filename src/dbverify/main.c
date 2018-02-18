@@ -97,7 +97,7 @@ static void verify_channel_registrations(void)
 	}
 }
 
-static void handle_mdep(database_handle_t *db, const char *type)
+static void handle_mdep(struct database_handle *db, const char *type)
 {
 	const char *modname = db_sread_word(db);
 

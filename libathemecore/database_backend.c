@@ -10,7 +10,7 @@
 database_module_t *db_mod = NULL;
 mowgli_patricia_t *db_types = NULL;
 
-database_handle_t *
+struct database_handle *
 db_open(const char *filename, database_transaction_t txn)
 {
 	return_val_if_fail(db_mod != NULL, NULL);
@@ -20,7 +20,7 @@ db_open(const char *filename, database_transaction_t txn)
 }
 
 void
-db_close(database_handle_t *db)
+db_close(struct database_handle *db)
 {
 	return_if_fail(db_mod != NULL);
 	return_if_fail(db_mod->db_close != NULL);
@@ -29,7 +29,7 @@ db_close(database_handle_t *db)
 }
 
 void
-db_parse(database_handle_t *db)
+db_parse(struct database_handle *db)
 {
 	return_if_fail(db_mod != NULL);
 	return_if_fail(db_mod->db_parse != NULL);
@@ -38,7 +38,7 @@ db_parse(database_handle_t *db)
 }
 
 bool
-db_read_next_row(database_handle_t *db)
+db_read_next_row(struct database_handle *db)
 {
 	return_val_if_fail(db != NULL, NULL);
 	return_val_if_fail(db->vt != NULL, NULL);
@@ -48,7 +48,7 @@ db_read_next_row(database_handle_t *db)
 }
 
 const char *
-db_read_word(database_handle_t *db)
+db_read_word(struct database_handle *db)
 {
 	return_val_if_fail(db != NULL, NULL);
 	return_val_if_fail(db->vt != NULL, NULL);
@@ -58,7 +58,7 @@ db_read_word(database_handle_t *db)
 }
 
 const char *
-db_read_str(database_handle_t *db)
+db_read_str(struct database_handle *db)
 {
 	return_val_if_fail(db != NULL, NULL);
 	return_val_if_fail(db->vt != NULL, NULL);
@@ -68,7 +68,7 @@ db_read_str(database_handle_t *db)
 }
 
 bool
-db_read_int(database_handle_t *db, int *r)
+db_read_int(struct database_handle *db, int *r)
 {
 	return_val_if_fail(db != NULL, false);
 	return_val_if_fail(db->vt != NULL, false);
@@ -78,7 +78,7 @@ db_read_int(database_handle_t *db, int *r)
 }
 
 bool
-db_read_uint(database_handle_t *db, unsigned int *r)
+db_read_uint(struct database_handle *db, unsigned int *r)
 {
 	return_val_if_fail(db != NULL, false);
 	return_val_if_fail(db->vt != NULL, false);
@@ -88,7 +88,7 @@ db_read_uint(database_handle_t *db, unsigned int *r)
 }
 
 bool
-db_read_time(database_handle_t *db, time_t *r)
+db_read_time(struct database_handle *db, time_t *r)
 {
 	return_val_if_fail(db != NULL, false);
 	return_val_if_fail(db->vt != NULL, false);
@@ -98,7 +98,7 @@ db_read_time(database_handle_t *db, time_t *r)
 }
 
 const char *
-db_sread_word(database_handle_t *db)
+db_sread_word(struct database_handle *db)
 {
 	const char *w = db_read_word(db);
 	if (!w)
@@ -111,7 +111,7 @@ db_sread_word(database_handle_t *db)
 }
 
 const char *
-db_sread_str(database_handle_t *db)
+db_sread_str(struct database_handle *db)
 {
 	const char *w = db_read_str(db);
 	if (!w)
@@ -124,7 +124,7 @@ db_sread_str(database_handle_t *db)
 }
 
 int
-db_sread_int(database_handle_t *db)
+db_sread_int(struct database_handle *db)
 {
 	int r;
 	bool ok = db_read_int(db, &r);
@@ -139,7 +139,7 @@ db_sread_int(database_handle_t *db)
 }
 
 unsigned int
-db_sread_uint(database_handle_t *db)
+db_sread_uint(struct database_handle *db)
 {
 	unsigned int r;
 	bool ok = db_read_uint(db, &r);
@@ -154,7 +154,7 @@ db_sread_uint(database_handle_t *db)
 }
 
 time_t
-db_sread_time(database_handle_t *db)
+db_sread_time(struct database_handle *db)
 {
 	time_t r;
 	bool ok = db_read_time(db, &r);
@@ -169,7 +169,7 @@ db_sread_time(database_handle_t *db)
 }
 
 bool
-db_start_row(database_handle_t *db, const char *type)
+db_start_row(struct database_handle *db, const char *type)
 {
 	return_val_if_fail(db != NULL, false);
 	return_val_if_fail(db->vt != NULL, false);
@@ -179,7 +179,7 @@ db_start_row(database_handle_t *db, const char *type)
 }
 
 bool
-db_write_word(database_handle_t *db, const char *word)
+db_write_word(struct database_handle *db, const char *word)
 {
 	return_val_if_fail(db != NULL, false);
 	return_val_if_fail(db->vt != NULL, false);
@@ -189,7 +189,7 @@ db_write_word(database_handle_t *db, const char *word)
 }
 
 bool
-db_write_str(database_handle_t *db, const char *str)
+db_write_str(struct database_handle *db, const char *str)
 {
 	return_val_if_fail(db != NULL, false);
 	return_val_if_fail(db->vt != NULL, false);
@@ -199,7 +199,7 @@ db_write_str(database_handle_t *db, const char *str)
 }
 
 bool
-db_write_int(database_handle_t *db, int num)
+db_write_int(struct database_handle *db, int num)
 {
 	return_val_if_fail(db != NULL, false);
 	return_val_if_fail(db->vt != NULL, false);
@@ -209,7 +209,7 @@ db_write_int(database_handle_t *db, int num)
 }
 
 bool
-db_write_uint(database_handle_t *db, unsigned int num)
+db_write_uint(struct database_handle *db, unsigned int num)
 {
 	return_val_if_fail(db != NULL, false);
 	return_val_if_fail(db->vt != NULL, false);
@@ -219,7 +219,7 @@ db_write_uint(database_handle_t *db, unsigned int num)
 }
 
 bool
-db_write_time(database_handle_t *db, time_t tm)
+db_write_time(struct database_handle *db, time_t tm)
 {
 	return_val_if_fail(db != NULL, false);
 	return_val_if_fail(db->vt != NULL, false);
@@ -229,7 +229,7 @@ db_write_time(database_handle_t *db, time_t tm)
 }
 
 bool
-db_commit_row(database_handle_t *db)
+db_commit_row(struct database_handle *db)
 {
 	return_val_if_fail(db != NULL, false);
 	return_val_if_fail(db->vt != NULL, false);
@@ -258,7 +258,7 @@ db_unregister_type_handler(const char *type)
 }
 
 void
-db_process(database_handle_t *db, const char *type)
+db_process(struct database_handle *db, const char *type)
 {
 	database_handler_f fun;
 
@@ -277,7 +277,7 @@ db_process(database_handle_t *db, const char *type)
 }
 
 bool ATHEME_FATTR_PRINTF(2, 3)
-db_write_format(database_handle_t *db, const char *fmt, ...)
+db_write_format(struct database_handle *db, const char *fmt, ...)
 {
 	va_list va;
 	char buf[BUFSIZE];

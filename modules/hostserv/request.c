@@ -24,8 +24,8 @@ static void hs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[]);
 static void hs_cmd_reject(struct sourceinfo *si, int parc, char *parv[]);
 static void hs_cmd_activate(struct sourceinfo *si, int parc, char *parv[]);
 
-static void write_hsreqdb(database_handle_t *db);
-static void db_h_hr(database_handle_t *db, const char *type);
+static void write_hsreqdb(struct database_handle *db);
+static void db_h_hr(struct database_handle *db, const char *type);
 
 struct command hs_request = { "REQUEST", N_("Requests new virtual hostname for current nick."), AC_AUTHENTICATED, 2, hs_cmd_request, { .path = "hostserv/request" } };
 struct command hs_waiting = { "WAITING", N_("Lists vhosts currently waiting for activation."), PRIV_USER_VHOST, 1, hs_cmd_waiting, { .path = "hostserv/waiting" } };
@@ -99,7 +99,7 @@ mod_deinit(const module_unload_intent_t intent)
 	del_conf_item("REQUEST_PER_NICK", &hostsvs->conf_table);
 }
 
-static void write_hsreqdb(database_handle_t *db)
+static void write_hsreqdb(struct database_handle *db)
 {
 	mowgli_node_t *n;
 
@@ -116,7 +116,7 @@ static void write_hsreqdb(database_handle_t *db)
 	}
 }
 
-static void db_h_hr(database_handle_t *db, const char *type)
+static void db_h_hr(struct database_handle *db, const char *type)
 {
 	const char *nick = db_sread_word(db);
 	const char *vhost = db_sread_word(db);

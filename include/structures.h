@@ -30,6 +30,9 @@ struct crypt_impl;
 // Defined in include/culture.h
 struct language;
 
+// Defined in include/database_backend.h
+struct database_handle;
+
 // Defined in include/servtree.h
 struct service;
 

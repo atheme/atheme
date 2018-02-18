@@ -16,10 +16,10 @@ static void os_cmd_rwatch_add(struct sourceinfo *si, int parc, char *parv[]);
 static void os_cmd_rwatch_del(struct sourceinfo *si, int parc, char *parv[]);
 static void os_cmd_rwatch_set(struct sourceinfo *si, int parc, char *parv[]);
 
-static void write_rwatchdb(database_handle_t *db);
+static void write_rwatchdb(struct database_handle *db);
 static void load_rwatchdb(char *path);
-static void db_h_rw(database_handle_t *db, const char *type);
-static void db_h_rr(database_handle_t *db, const char *type);
+static void db_h_rw(struct database_handle *db, const char *type);
+static void db_h_rr(struct database_handle *db, const char *type);
 
 mowgli_patricia_t *os_rwatch_cmds;
 
@@ -119,7 +119,7 @@ mod_deinit(const module_unload_intent_t intent)
 	mowgli_patricia_destroy(os_rwatch_cmds, NULL, NULL);
 }
 
-static void write_rwatchdb(database_handle_t *db)
+static void write_rwatchdb(struct database_handle *db)
 {
 	mowgli_node_t *n;
 
@@ -210,7 +210,7 @@ static void load_rwatchdb(char *path)
 	}
 }
 
-static void db_h_rw(database_handle_t *db, const char *type)
+static void db_h_rw(struct database_handle *db, const char *type)
 {
 	int reflags = db_sread_uint(db);
 	const char *regex = db_sread_str(db);
@@ -221,7 +221,7 @@ static void db_h_rw(database_handle_t *db, const char *type)
 	rwread->re = regex_create(rwread->regex, rwread->reflags);
 }
 
-static void db_h_rr(database_handle_t *db, const char *type)
+static void db_h_rr(struct database_handle *db, const char *type)
 {
 	int actions = db_sread_uint(db);
 	const char *reason = db_sread_str(db);

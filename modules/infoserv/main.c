@@ -47,8 +47,8 @@ static void is_cmd_olist(struct sourceinfo *si, int parc, char *parv[]);
 static void display_info(hook_user_nick_t *data);
 static void display_oper_info(user_t *u);
 
-static void write_infodb(database_handle_t *db);
-static void db_h_li(database_handle_t *db, const char *type);
+static void write_infodb(struct database_handle *db);
+static void db_h_li(struct database_handle *db, const char *type);
 
 struct command is_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, is_cmd_help, { .path = "help" } };
 struct command is_post = { "POST", N_("Post news items for users to view."), PRIV_GLOBAL, 3, is_cmd_post, { .path = "infoserv/post" } };
@@ -91,7 +91,7 @@ static void underscores_to_spaces(char *y)
 	} while(*y++);
 }
 
-static void write_infodb(database_handle_t *db)
+static void write_infodb(struct database_handle *db)
 {
 	mowgli_node_t *n;
 
@@ -121,7 +121,7 @@ static void write_infodb(database_handle_t *db)
 
 }
 
-static void db_h_li(database_handle_t *db, const char *type)
+static void db_h_li(struct database_handle *db, const char *type)
 {
 	const char *nick = db_sread_word(db);
 	const char *subject = db_sread_word(db);
@@ -136,7 +136,7 @@ static void db_h_li(database_handle_t *db, const char *type)
 	mowgli_node_add(l, mowgli_node_create(), &logon_info);
 }
 
-static void db_h_lio(database_handle_t *db, const char *type)
+static void db_h_lio(struct database_handle *db, const char *type)
 {
 	const char *nick = db_sread_word(db);
 	const char *subject = db_sread_word(db);

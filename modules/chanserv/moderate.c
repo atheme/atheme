@@ -78,7 +78,7 @@ static void csreq_destroy(csreq_t *cs)
 	free(cs);
 }
 
-static void csreq_demarshal(database_handle_t *db, const char *type)
+static void csreq_demarshal(struct database_handle *db, const char *type)
 {
         const char *chan = db_sread_word(db);
         const char *nick = db_sread_word(db);
@@ -97,7 +97,7 @@ static void csreq_demarshal(database_handle_t *db, const char *type)
 	cs->ts = req_ts;
 }
 
-static void csreq_marshal_set(database_handle_t *db)
+static void csreq_marshal_set(struct database_handle *db)
 {
 	mowgli_patricia_iteration_state_t state;
 	csreq_t *cs;

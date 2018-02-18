@@ -9,7 +9,7 @@
 static unsigned int loading_gdbv = -1;
 static unsigned int their_ga_all;
 
-static void write_groupdb(database_handle_t *db)
+static void write_groupdb(struct database_handle *db)
 {
 	myentity_t *mt;
 	myentity_iteration_state_t state;
@@ -74,7 +74,7 @@ static void write_groupdb(database_handle_t *db)
 	}
 }
 
-static void db_h_gdbv(database_handle_t *db, const char *type)
+static void db_h_gdbv(struct database_handle *db, const char *type)
 {
 	loading_gdbv = db_sread_uint(db);
 	slog(LG_INFO, "groupserv: opensex data schema version is %d.", loading_gdbv);
@@ -82,7 +82,7 @@ static void db_h_gdbv(database_handle_t *db, const char *type)
 	their_ga_all = GA_ALL_OLD;
 }
 
-static void db_h_gfa(database_handle_t *db, const char *type)
+static void db_h_gfa(struct database_handle *db, const char *type)
 {
 	const char *flags = db_sread_word(db);
 
@@ -97,7 +97,7 @@ static void db_h_gfa(database_handle_t *db, const char *type)
 	}
 }
 
-static void db_h_grp(database_handle_t *db, const char *type)
+static void db_h_grp(struct database_handle *db, const char *type)
 {
 	mygroup_t *mg;
 	const char *uid = NULL;
@@ -135,7 +135,7 @@ static void db_h_grp(database_handle_t *db, const char *type)
 	}
 }
 
-static void db_h_gacl(database_handle_t *db, const char *type)
+static void db_h_gacl(struct database_handle *db, const char *type)
 {
 	mygroup_t *mg;
 	myentity_t *mt;
@@ -177,7 +177,7 @@ static void db_h_gacl(database_handle_t *db, const char *type)
 	groupacs_add(mg, mt, flags);
 }
 
-static void db_h_mdg(database_handle_t *db, const char *type)
+static void db_h_mdg(struct database_handle *db, const char *type)
 {
 	const char *name = db_sread_word(db);
 	const char *prop = db_sread_word(db);

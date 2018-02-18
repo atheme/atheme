@@ -11,6 +11,7 @@
 // Types necessary for the hook system
 typedef struct channel channel_t;
 typedef struct chanuser chanuser_t;
+typedef struct database_handle database_handle_t;
 typedef struct service service_t;
 typedef struct sourceinfo sourceinfo_t;
 
