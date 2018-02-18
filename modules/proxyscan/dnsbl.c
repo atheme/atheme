@@ -93,7 +93,7 @@ struct Blacklist {
 struct BlacklistClient {
 	struct Blacklist *blacklist;
 	user_t *u;
-	dns_query_t dns_query;
+	struct res_dns_query dns_query;
 	mowgli_node_t node;
 };
 

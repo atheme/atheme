@@ -68,7 +68,7 @@ struct reslist
 	unsigned int lastns;	/* index of last server sent to */
 	union sockaddr_any addr;
 	char *name;
-	dns_query_t *query;	/* query callback for this request */
+	struct res_dns_query *query;	/* query callback for this request */
 };
 
 static struct connection *res_fd;
@@ -76,9 +76,9 @@ static mowgli_list_t request_list = { NULL, NULL, 0 };
 static int ns_timeout_count[IRCD_MAXNS];
 
 static void rem_request(struct reslist *request);
-static struct reslist *make_request(dns_query_t *query);
-static void do_query_name(dns_query_t *query, const char *name, struct reslist *request, int);
-static void do_query_number(dns_query_t *query, const union sockaddr_any *,
+static struct reslist *make_request(struct res_dns_query *query);
+static void do_query_name(struct res_dns_query *query, const char *name, struct reslist *request, int);
+static void do_query_number(struct res_dns_query *query, const union sockaddr_any *,
 			    struct reslist *request);
 static void query_name(struct reslist *request);
 static int send_res_msg(const char *buf, int len, int count);
@@ -299,7 +299,7 @@ static void rem_request(struct reslist *request)
 /*
  * make_request - Create a DNS request record for the server.
  */
-static struct reslist *make_request(dns_query_t *query)
+static struct reslist *make_request(struct res_dns_query *query)
 {
 	struct reslist *request = smalloc(sizeof(struct reslist));
 
@@ -317,7 +317,7 @@ static struct reslist *make_request(dns_query_t *query)
  * delete_resolver_queries - cleanup outstanding queries
  * for which there no longer exist clients or conf lines.
  */
-void delete_resolver_queries(const dns_query_t *query)
+void delete_resolver_queries(const struct res_dns_query *query)
 {
 	mowgli_node_t *ptr;
 	mowgli_node_t *next_ptr;
@@ -420,7 +420,7 @@ static struct reslist *find_id(int id)
  * gethost_byname_type - get host address from name
  *
  */
-void gethost_byname_type(const char *name, dns_query_t *query, int type)
+void gethost_byname_type(const char *name, struct res_dns_query *query, int type)
 {
 	return_if_fail(name != 0);
 	do_query_name(query, name, NULL, type);
@@ -429,7 +429,7 @@ void gethost_byname_type(const char *name, dns_query_t *query, int type)
 /*
  * gethost_byaddr - get host name from address
  */
-void gethost_byaddr(const union sockaddr_any *addr, dns_query_t *query)
+void gethost_byaddr(const union sockaddr_any *addr, struct res_dns_query *query)
 {
 	do_query_number(query, addr, NULL);
 }
@@ -437,7 +437,7 @@ void gethost_byaddr(const union sockaddr_any *addr, dns_query_t *query)
 /*
  * do_query_name - nameserver lookup name
  */
-static void do_query_name(dns_query_t *query, const char *name, struct reslist *request,
+static void do_query_name(struct res_dns_query *query, const char *name, struct reslist *request,
 			  int type)
 {
 	char host_name[IRCD_RES_HOSTLEN + 1];
@@ -460,7 +460,7 @@ static void do_query_name(dns_query_t *query, const char *name, struct reslist *
 /*
  * do_query_number - Use this to do reverse IP# lookups.
  */
-static void do_query_number(dns_query_t *query, const union sockaddr_any *addr,
+static void do_query_number(struct res_dns_query *query, const union sockaddr_any *addr,
 			    struct reslist *request)
 {
 	const unsigned char *cp;

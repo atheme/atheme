@@ -28,19 +28,20 @@ struct res_dns_reply
   struct nsaddr addr;
 };
 
-typedef struct {
+struct res_dns_query
+{
   void *ptr; /* pointer used by callback to identify request */
   void (*callback)(void *vptr, struct res_dns_reply *reply); /* callback to call */
-} dns_query_t;
+};
 
 extern struct nsaddr irc_nsaddr_list[];
 extern int irc_nscount;
 
 extern void init_resolver(void);
 extern void restart_resolver(void);
-extern void delete_resolver_queries(const dns_query_t *);
-extern void gethost_byname_type(const char *, dns_query_t *, int);
-extern void gethost_byaddr(const union sockaddr_any *, dns_query_t *);
+extern void delete_resolver_queries(const struct res_dns_query *);
+extern void gethost_byname_type(const char *, struct res_dns_query *, int);
+extern void gethost_byaddr(const union sockaddr_any *, struct res_dns_query *);
 extern void add_local_domain(char *, size_t);
 extern void report_dns_servers(struct sourceinfo *);
 
