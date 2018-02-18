@@ -249,7 +249,7 @@ static void hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 	char *host = parv[0];
 	const char *target;
 	mynick_t *mn;
-	myentity_t *mt;
+	struct myentity *mt;
 	myuser_t *mu;
 	myentity_iteration_state_t state;
 	char buf[BUFSIZE], strfbuf[BUFSIZE];

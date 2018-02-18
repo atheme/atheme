@@ -307,7 +307,7 @@ static mowgli_list_t email_canonicalizers;
 static void canonicalize_emails(void)
 {
 	myentity_iteration_state_t state;
-	myentity_t *mt;
+	struct myentity *mt;
 
 	MYENTITY_FOREACH_T(mt, &state, ENT_USER)
 	{
@@ -382,7 +382,7 @@ bool email_within_limits(const char *email)
 {
 	mowgli_node_t *n;
 	myentity_iteration_state_t state;
-	myentity_t *mt;
+	struct myentity *mt;
 	unsigned int tcnt = 0;
 	stringref email_canonical;
 	bool result = true;
@@ -781,7 +781,7 @@ int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, cons
 }
 
 /* various access level checkers */
-bool is_founder(mychan_t *mychan, myentity_t *mt)
+bool is_founder(mychan_t *mychan, struct myentity *mt)
 {
 	if (mt == NULL)
 		return false;

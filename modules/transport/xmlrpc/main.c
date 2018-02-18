@@ -582,7 +582,7 @@ static int xmlrpcmethod_metadata(void *conn, int parc, char *parv[])
 	}
 	else
 	{
-		myentity_t *mt;
+		struct myentity *mt;
 
 		mt = myentity_find(parv[0]);
 		if (mt == NULL)

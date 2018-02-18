@@ -66,7 +66,7 @@ struct svsignore_ {
 /* services accounts */
 struct myuser_
 {
-  myentity_t ent;
+  struct myentity ent;
   char pass[PASSLEN + 1];
 
   stringref email;
@@ -198,7 +198,7 @@ struct chanacs_
 {
 	object_t parent;
 
-	myentity_t *entity;
+	struct myentity *entity;
 	mychan_t *mychan;
 	char     *host;
 	unsigned int  level;
@@ -287,7 +287,7 @@ typedef struct {
 typedef struct {
 	chanacs_t *ca;
 	struct sourceinfo *si;
-	myentity_t *parent;
+	struct myentity *parent;
 	unsigned int oldlevel;
 	unsigned int newlevel;
 	int approved;
@@ -380,7 +380,7 @@ extern void (*db_save)(void *arg, enum db_save_strategy strategy);
 extern void (*db_load)(const char *arg);
 
 /* function.c */
-extern bool is_founder(mychan_t *mychan, myentity_t *myuser);
+extern bool is_founder(mychan_t *mychan, struct myentity *myuser);
 
 /* node.c */
 extern mowgli_list_t klnlist;
@@ -457,13 +457,12 @@ extern myuser_t *mychan_pick_successor(mychan_t *mc);
 extern const char *mychan_get_mlock(mychan_t *mc);
 extern const char *mychan_get_sts_mlock(mychan_t *mc);
 
-extern chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *myuser, unsigned int level, time_t ts, myentity_t *setter);
-extern chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int level, time_t ts, myentity_t *setter);
+extern chanacs_t *chanacs_add(mychan_t *mychan, struct myentity *myuser, unsigned int level, time_t ts, struct myentity *setter);
+extern chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int level, time_t ts, struct myentity *setter);
 
-extern chanacs_t *chanacs_find(mychan_t *mychan, myentity_t *myuser, unsigned int level);
-extern unsigned int chanacs_entity_flags(mychan_t *mychan, myentity_t *myuser);
-//inline bool chanacs_entity_has_flag(mychan_t *mychan, myentity_t *mt, unsigned int level)
-extern chanacs_t *chanacs_find_literal(mychan_t *mychan, myentity_t *myuser, unsigned int level);
+extern chanacs_t *chanacs_find(mychan_t *mychan, struct myentity *myuser, unsigned int level);
+extern unsigned int chanacs_entity_flags(mychan_t *mychan, struct myentity *myuser);
+extern chanacs_t *chanacs_find_literal(mychan_t *mychan, struct myentity *myuser, unsigned int level);
 extern chanacs_t *chanacs_find_host(mychan_t *mychan, const char *host, unsigned int level);
 extern unsigned int chanacs_host_flags(mychan_t *mychan, const char *host);
 extern chanacs_t *chanacs_find_host_literal(mychan_t *mychan, const char *host, unsigned int level);
@@ -474,15 +473,15 @@ extern unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u);
 //inline bool chanacs_source_has_flag(mychan_t *mychan, struct sourceinfo *si, unsigned int level);
 extern unsigned int chanacs_source_flags(mychan_t *mychan, struct sourceinfo *si);
 
-extern chanacs_t *chanacs_open(mychan_t *mychan, myentity_t *mt, const char *hostmask, bool create, myentity_t *setter);
+extern chanacs_t *chanacs_open(mychan_t *mychan, struct myentity *mt, const char *hostmask, bool create, struct myentity *setter);
 //inline void chanacs_close(chanacs_t *ca);
 extern bool chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, myuser_t *setter);
 extern bool chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int removeflags, myuser_t *setter);
 
 //inline bool chanacs_is_table_full(chanacs_t *ca);
 
-extern bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, myentity_t *setter);
-extern bool chanacs_change_simple(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsigned int addflags, unsigned int removeflags, myentity_t *setter);
+extern bool chanacs_change(mychan_t *mychan, struct myentity *mt, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, struct myentity *setter);
+extern bool chanacs_change_simple(mychan_t *mychan, struct myentity *mt, const char *hostmask, unsigned int addflags, unsigned int removeflags, struct myentity *setter);
 
 extern void expire_check(void *arg);
 /* Check the database for (version) problems common to all backends */

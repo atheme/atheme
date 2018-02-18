@@ -15,7 +15,7 @@ struct command gs_list = { "LIST", N_("List registered groups."), PRIV_GROUP_AUS
 /* Perhaps add criteria to groupser/list like there is now in chanserv/list and nickserv/list in the future */
 static void gs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
-	myentity_t *mt;
+	struct myentity *mt;
 	char *pattern = parv[0];
 	unsigned int matches = 0;
 	myentity_iteration_state_t state;

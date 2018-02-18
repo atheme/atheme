@@ -604,7 +604,7 @@ static void check_enforce(hook_nick_enforce_t *hdata)
 	notice(nicksvs.nick, hdata->u->nick, "You have %d seconds to identify to your nickname before it is changed.", (int)(timeout->timelimit - CURRTIME));
 }
 
-static int idcheck_foreach_cb(myentity_t *mt, void *privdata)
+static int idcheck_foreach_cb(struct myentity *mt, void *privdata)
 {
 	myuser_t *mu = user(mt);
 

@@ -253,7 +253,7 @@ static void ns_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *pattern;
 	myentity_iteration_state_t state;
-	myentity_t *mt;
+	struct myentity *mt;
 	myuser_t *mu;
 	metadata_t *md;
 	int matches = 0;

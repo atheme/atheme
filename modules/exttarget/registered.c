@@ -9,7 +9,7 @@
 
 static mowgli_patricia_t **exttarget_tree = NULL;
 
-static myentity_t dummy_entity;
+static struct myentity dummy_entity;
 
 static chanacs_t *dummy_match_user(chanacs_t *ca, user_t *u)
 {
@@ -19,7 +19,7 @@ static chanacs_t *dummy_match_user(chanacs_t *ca, user_t *u)
 	return NULL;
 }
 
-static chanacs_t *dummy_match_entity(chanacs_t *ca, myentity_t *mt)
+static chanacs_t *dummy_match_entity(chanacs_t *ca, struct myentity *mt)
 {
 	if (ca->entity == mt)
 		return ca;
@@ -27,12 +27,12 @@ static chanacs_t *dummy_match_entity(chanacs_t *ca, myentity_t *mt)
 	return NULL;
 }
 
-static bool dummy_can_register_channel(myentity_t *mt)
+static bool dummy_can_register_channel(struct myentity *mt)
 {
 	return false;
 }
 
-static bool dummy_allow_foundership(myentity_t *mt)
+static bool dummy_allow_foundership(struct myentity *mt)
 {
 	return false;
 }
@@ -44,13 +44,13 @@ static const struct entity_chanacs_validation_vtable dummy_validate = {
 	.allow_foundership = dummy_allow_foundership,
 };
 
-static myentity_t dummy_entity = {
+static struct myentity dummy_entity = {
 	.name = "$registered",
 	.type = ENT_EXTTARGET,
 	.chanacs_validate = &dummy_validate,
 };
 
-static myentity_t *registered_validate_f(const char *param)
+static struct myentity *registered_validate_f(const char *param)
 {
 	return &dummy_entity;
 }

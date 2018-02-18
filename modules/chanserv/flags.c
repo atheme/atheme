@@ -131,7 +131,7 @@ static void do_list(struct sourceinfo *si, mychan_t *mc, unsigned int flags)
 		const char *template, *mod_ago;
 		struct tm tm;
 		char mod_date[64];
-		myentity_t *setter;
+		struct myentity *setter;
 		const char *setter_name;
 
 		ca = n->data;
@@ -302,7 +302,7 @@ static void cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	{
-		myentity_t *mt;
+		struct myentity *mt;
 
 		if (!si->smu)
 		{

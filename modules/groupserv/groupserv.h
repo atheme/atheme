@@ -16,16 +16,16 @@ mygroup_t * (*mygroup_find)(const char *name);
 mygroup_t * (*mygroup_rename)(mygroup_t *mg, const char *name);
 
 unsigned int (*mygroup_count_flag)(mygroup_t *mg, unsigned int flag);
-unsigned int (*myentity_count_group_flag)(myentity_t *mu, unsigned int flagset);
+unsigned int (*myentity_count_group_flag)(struct myentity *mu, unsigned int flagset);
 
-groupacs_t * (*groupacs_add)(mygroup_t *mg, myentity_t *mt, unsigned int flags);
-groupacs_t * (*groupacs_find)(mygroup_t *mg, myentity_t *mt, unsigned int flags, bool allow_recurse);
-void (*groupacs_delete)(mygroup_t *mg, myentity_t *mt);
+groupacs_t * (*groupacs_add)(mygroup_t *mg, struct myentity *mt, unsigned int flags);
+groupacs_t * (*groupacs_find)(mygroup_t *mg, struct myentity *mt, unsigned int flags, bool allow_recurse);
+void (*groupacs_delete)(mygroup_t *mg, struct myentity *mt);
 
 bool (*groupacs_sourceinfo_has_flag)(mygroup_t *mg, struct sourceinfo *si, unsigned int flag);
 unsigned int (*groupacs_sourceinfo_flags)(mygroup_t *mg, struct sourceinfo *si);
 unsigned int (*gs_flags_parser)(char *flagstring, int allow_minus, unsigned int flags);
-mowgli_list_t * (*myentity_get_membership_list)(myentity_t *mu);
+mowgli_list_t * (*myentity_get_membership_list)(struct myentity *mu);
 const char * (*mygroup_founder_names)(mygroup_t *mg);
 void (*remove_group_chanacs)(mygroup_t *mg);
 

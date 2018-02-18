@@ -27,7 +27,7 @@ struct command cs_akick_list = { "LIST", N_("Displays a channel's AKICK list."),
 typedef struct {
 	time_t expiration;
 
-	myentity_t *entity;
+	struct myentity *entity;
 	mychan_t *chan;
 
 	char host[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + 4];
@@ -40,7 +40,7 @@ mowgli_list_t akickdel_list;
 mowgli_patricia_t *cs_akick_cmds;
 mowgli_eventloop_timer_t *akick_timeout_check_timer = NULL;
 
-static akick_timeout_t *akick_add_timeout(mychan_t *mc, myentity_t *mt, const char *host, time_t expireson);
+static akick_timeout_t *akick_add_timeout(mychan_t *mc, struct myentity *mt, const char *host, time_t expireson);
 
 mowgli_heap_t *akick_timeout_heap;
 
@@ -81,7 +81,7 @@ mod_deinit(const module_unload_intent_t intent)
 	mowgli_patricia_destroy(cs_akick_cmds, NULL, NULL);
 }
 
-static void clear_bans_matching_entity(mychan_t *mc, myentity_t *mt)
+static void clear_bans_matching_entity(mychan_t *mc, struct myentity *mt)
 {
 	mowgli_node_t *n;
 	myuser_t *tmu;
@@ -156,7 +156,7 @@ static void cs_cmd_akick(struct sourceinfo *si, int parc, char *parv[])
 
 void cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 {
-	myentity_t *mt;
+	struct myentity *mt;
 	mychan_t *mc;
 	hook_channel_acl_req_t req;
 	chanacs_t *ca, *ca2;
@@ -427,7 +427,7 @@ void cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 
 void cs_cmd_akick_del(struct sourceinfo *si, int parc, char *parv[])
 {
-	myentity_t *mt;
+	struct myentity *mt;
 	mychan_t *mc;
 	hook_channel_acl_req_t req;
 	chanacs_t *ca;
@@ -616,7 +616,7 @@ void cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 		if (ca->level == CA_AKICK)
 		{
 			char buf[BUFSIZE], *buf_iter;
-			myentity_t *setter = NULL;
+			struct myentity *setter = NULL;
 
 			md = metadata_find(ca, "reason");
 
@@ -718,7 +718,7 @@ void akick_timeout_check(void *arg)
 	}
 }
 
-static akick_timeout_t *akick_add_timeout(mychan_t *mc, myentity_t *mt, const char *host, time_t expireson)
+static akick_timeout_t *akick_add_timeout(mychan_t *mc, struct myentity *mt, const char *host, time_t expireson)
 {
 	mowgli_node_t *n;
 	akick_timeout_t *timeout, *timeout2;

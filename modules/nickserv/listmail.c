@@ -31,7 +31,7 @@ struct listmail_state
 	int matches;
 };
 
-static int listmail_foreach_cb(myentity_t *mt, void *privdata)
+static int listmail_foreach_cb(struct myentity *mt, void *privdata)
 {
 	struct listmail_state *state = (struct listmail_state *) privdata;
 	myuser_t *mu = user(mt);

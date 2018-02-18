@@ -43,7 +43,7 @@ typedef struct chanfix_oprecord {
 
 	chanfix_channel_t *chan;
 
-	myentity_t *entity;
+	struct myentity *entity;
 
 	char user[USERLEN + 1];
 	char host[HOSTLEN + 1];

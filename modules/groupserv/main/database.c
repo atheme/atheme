@@ -11,7 +11,7 @@ static unsigned int their_ga_all;
 
 static void write_groupdb(struct database_handle *db)
 {
-	myentity_t *mt;
+	struct myentity *mt;
 	myentity_iteration_state_t state;
 	mowgli_patricia_iteration_state_t state2;
 	metadata_t *md;
@@ -138,7 +138,7 @@ static void db_h_grp(struct database_handle *db, const char *type)
 static void db_h_gacl(struct database_handle *db, const char *type)
 {
 	mygroup_t *mg;
-	myentity_t *mt;
+	struct myentity *mt;
 	unsigned int flags = GA_ALL;	/* GDBV 1 entires had full access */
 
 	const char *name = db_sread_word(db);

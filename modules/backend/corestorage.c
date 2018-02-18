@@ -33,7 +33,7 @@ corestorage_db_save(struct database_handle *db)
 {
 	metadata_t *md;
 	myuser_t *mu;
-	myentity_t *ment;
+	struct myentity *ment;
 	struct myuser_name *mun;
 	mychan_t *mc;
 	chanacs_t *ca;
@@ -191,7 +191,7 @@ corestorage_db_save(struct database_handle *db)
 
 		MOWGLI_ITER_FOREACH(tn, mc->chanacs.head)
 		{
-			myentity_t *setter = NULL;
+			struct myentity *setter = NULL;
 			ca = (chanacs_t *)tn->data;
 
 			db_start_row(db, "CA");
@@ -746,8 +746,8 @@ static void corestorage_h_ca(struct database_handle *db, const char *type)
 	time_t tmod;
 	unsigned int flags;
 	mychan_t *mc;
-	myentity_t *mt;
-	myentity_t *setter;
+	struct myentity *mt;
+	struct myentity *setter;
 
 	chan = db_sread_word(db);
 	target = db_sread_word(db);

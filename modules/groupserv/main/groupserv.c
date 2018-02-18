@@ -98,7 +98,7 @@ mygroup_t *mygroup_add_id(const char *id, const char *name)
 
 mygroup_t *mygroup_find(const char *name)
 {
-	myentity_t *mg = myentity_find(name);
+	struct myentity *mg = myentity_find(name);
 
 	if (mg == NULL)
 		return NULL;
@@ -115,7 +115,7 @@ static void groupacs_des(groupacs_t *ga)
 	mowgli_heap_free(groupacs_heap, ga);
 }
 
-groupacs_t *groupacs_add(mygroup_t *mg, myentity_t *mt, unsigned int flags)
+groupacs_t *groupacs_add(mygroup_t *mg, struct myentity *mt, unsigned int flags)
 {
 	groupacs_t *ga;
 
@@ -135,7 +135,7 @@ groupacs_t *groupacs_add(mygroup_t *mg, myentity_t *mt, unsigned int flags)
 	return ga;
 }
 
-groupacs_t *groupacs_find(mygroup_t *mg, myentity_t *mt, unsigned int flags, bool allow_recurse)
+groupacs_t *groupacs_find(mygroup_t *mg, struct myentity *mt, unsigned int flags, bool allow_recurse)
 {
 	mowgli_node_t *n;
 	groupacs_t *out = NULL;
@@ -178,7 +178,7 @@ groupacs_t *groupacs_find(mygroup_t *mg, myentity_t *mt, unsigned int flags, boo
 	return out;
 }
 
-void groupacs_delete(mygroup_t *mg, myentity_t *mt)
+void groupacs_delete(mygroup_t *mg, struct myentity *mt)
 {
 	groupacs_t *ga;
 
@@ -231,7 +231,7 @@ unsigned int mygroup_count_flag(mygroup_t *mg, unsigned int flag)
 	return count;
 }
 
-mowgli_list_t *myentity_get_membership_list(myentity_t *mt)
+mowgli_list_t *myentity_get_membership_list(struct myentity *mt)
 {
 	mowgli_list_t *l;
 
@@ -265,7 +265,7 @@ const char *mygroup_founder_names(mygroup_t *mg)
         return names;
 }
 
-unsigned int myentity_count_group_flag(myentity_t *mt, unsigned int flagset)
+unsigned int myentity_count_group_flag(struct myentity *mt, unsigned int flagset)
 {
 	mowgli_list_t *l;
 	mowgli_node_t *n;

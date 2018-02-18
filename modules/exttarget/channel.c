@@ -10,7 +10,7 @@
 static mowgli_patricia_t **exttarget_tree = NULL;
 
 typedef struct {
-	myentity_t parent;
+	struct myentity parent;
 	stringref channel;
 } channel_exttarget_t;
 
@@ -31,7 +31,7 @@ static chanacs_t *channel_ext_match_user(chanacs_t *ca, user_t *u)
 	return NULL;
 }
 
-static chanacs_t *channel_ext_match_entity(chanacs_t *ca, myentity_t *mt)
+static chanacs_t *channel_ext_match_entity(chanacs_t *ca, struct myentity *mt)
 {
 	if (ca->entity == mt)
 		return ca;
@@ -39,12 +39,12 @@ static chanacs_t *channel_ext_match_entity(chanacs_t *ca, myentity_t *mt)
 	return NULL;
 }
 
-static bool channel_ext_can_register_channel(myentity_t *mt)
+static bool channel_ext_can_register_channel(struct myentity *mt)
 {
 	return false;
 }
 
-static bool channel_ext_allow_foundership(myentity_t *mt)
+static bool channel_ext_allow_foundership(struct myentity *mt)
 {
 	return false;
 }
@@ -70,7 +70,7 @@ static void channel_ext_delete(channel_exttarget_t *e)
 	mowgli_heap_free(channel_ext_heap, e);
 }
 
-static myentity_t *channel_validate_f(const char *param)
+static struct myentity *channel_validate_f(const char *param)
 {
 	char *name;
 	channel_exttarget_t *ext;

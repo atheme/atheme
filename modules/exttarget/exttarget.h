@@ -7,6 +7,6 @@
 #ifndef __EXTTARGET_H__
 #define __EXTTARGET_H__
 
-typedef myentity_t *(*entity_validate_f)(const char *name);
+typedef struct myentity *(*entity_validate_f)(const char *name);
 
 #endif

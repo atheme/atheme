@@ -32,7 +32,7 @@ static void cs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 	const char *target = parv[1];
 	const char *flagstr = parv[2];
 	mychan_t *mc;
-	myentity_t *mt;
+	struct myentity *mt;
 	unsigned int addflags, removeflags;
 	chanacs_t *ca;
 	hook_channel_acl_req_t req;

@@ -59,7 +59,7 @@ const char *myentity_alloc_uid(void)
 	return last_entity_uid;
 }
 
-void myentity_put(myentity_t *mt)
+void myentity_put(struct myentity *mt)
 {
 	/* If the entity doesn't have an ID yet, allocate one */
 	if (mt->id[0] == '\0')
@@ -69,15 +69,15 @@ void myentity_put(myentity_t *mt)
 	mowgli_patricia_add(entities_by_id, mt->id, mt);
 }
 
-void myentity_del(myentity_t *mt)
+void myentity_del(struct myentity *mt)
 {
 	mowgli_patricia_delete(entities, mt->name);
 	mowgli_patricia_delete(entities_by_id, mt->id);
 }
 
-myentity_t *myentity_find(const char *name)
+struct myentity *myentity_find(const char *name)
 {
-	myentity_t *ent;
+	struct myentity *ent;
 	hook_myentity_req_t req;
 
 	return_val_if_fail(name != NULL, NULL);
@@ -92,16 +92,16 @@ myentity_t *myentity_find(const char *name)
 	return req.entity;
 }
 
-myentity_t *myentity_find_uid(const char *uid)
+struct myentity *myentity_find_uid(const char *uid)
 {
 	return_val_if_fail(uid != NULL, NULL);
 
 	return mowgli_patricia_retrieve(entities_by_id, uid);
 }
 
-myentity_t *myentity_find_ext(const char *name)
+struct myentity *myentity_find_ext(const char *name)
 {
-	myentity_t *mt;
+	struct myentity *mt;
 
 	return_val_if_fail(name != NULL, NULL);
 
@@ -114,7 +114,7 @@ myentity_t *myentity_find_ext(const char *name)
 
 void myentity_foreach_start(myentity_iteration_state_t *state, enum myentity_type type)
 {
-	myentity_t *e;
+	struct myentity *e;
 
 	state->type = type;
 	mowgli_patricia_foreach_start(entities, &state->st);
@@ -127,29 +127,29 @@ void myentity_foreach_start(myentity_iteration_state_t *state, enum myentity_typ
 	}
 }
 
-myentity_t *myentity_foreach_cur(myentity_iteration_state_t *state)
+struct myentity *myentity_foreach_cur(myentity_iteration_state_t *state)
 {
 	return mowgli_patricia_foreach_cur(entities, &state->st);
 }
 
 void myentity_foreach_next(myentity_iteration_state_t *state)
 {
-	myentity_t *e;
+	struct myentity *e;
 	do {
 		mowgli_patricia_foreach_next(entities, &state->st);
 		e = mowgli_patricia_foreach_cur(entities, &state->st);
 	} while (e && state->type != ENT_ANY && state->type != e->type);
 }
 
-void myentity_foreach(int (*cb)(myentity_t *mt, void *privdata), void *privdata)
+void myentity_foreach(int (*cb)(struct myentity *mt, void *privdata), void *privdata)
 {
 	myentity_foreach_t(ENT_ANY, cb, privdata);
 }
 
-void myentity_foreach_t(enum myentity_type type, int (*cb)(myentity_t *mt, void *privdata), void *privdata)
+void myentity_foreach_t(enum myentity_type type, int (*cb)(struct myentity *mt, void *privdata), void *privdata)
 {
 	myentity_iteration_state_t state;
-	myentity_t *mt;
+	struct myentity *mt;
 	MYENTITY_FOREACH_T(mt, &state, type)
 	{
 		if (cb(mt, privdata))
@@ -163,12 +163,12 @@ void myentity_stats(void (*cb)(const char *line, void *privdata), void *privdata
 }
 
 /* validation */
-static chanacs_t *linear_chanacs_match_entity(chanacs_t *ca, myentity_t *mt)
+static chanacs_t *linear_chanacs_match_entity(chanacs_t *ca, struct myentity *mt)
 {
 	return ca->entity == mt ? ca : NULL;
 }
 
-static bool linear_can_register_channel(myentity_t *mt)
+static bool linear_can_register_channel(struct myentity *mt)
 {
 	myuser_t *mu;
 
@@ -181,7 +181,7 @@ static bool linear_can_register_channel(myentity_t *mt)
 	return has_priv_myuser(mu, PRIV_REG_NOLIMIT);
 }
 
-static bool linear_allow_foundership(myentity_t *mt)
+static bool linear_allow_foundership(struct myentity *mt)
 {
 	myuser_t *mu;
 
@@ -204,13 +204,13 @@ const struct entity_chanacs_validation_vtable linear_chanacs_validate = {
 	.allow_foundership = linear_allow_foundership,
 };
 
-const struct entity_chanacs_validation_vtable *myentity_get_chanacs_validator(myentity_t *mt)
+const struct entity_chanacs_validation_vtable *myentity_get_chanacs_validator(struct myentity *mt)
 {
 	return mt->chanacs_validate != NULL ? mt->chanacs_validate : &linear_chanacs_validate;
 }
 
 /* chanacs */
-unsigned int myentity_count_channels_with_flagset(myentity_t *mt, unsigned int flagset)
+unsigned int myentity_count_channels_with_flagset(struct myentity *mt, unsigned int flagset)
 {
 	mowgli_node_t *n;
 	chanacs_t *ca;
@@ -226,7 +226,7 @@ unsigned int myentity_count_channels_with_flagset(myentity_t *mt, unsigned int f
 	return count;
 }
 
-bool myentity_can_register_channel(myentity_t *mt)
+bool myentity_can_register_channel(struct myentity *mt)
 {
 	const struct entity_chanacs_validation_vtable *vt;
 
@@ -239,7 +239,7 @@ bool myentity_can_register_channel(myentity_t *mt)
 	return (myentity_count_channels_with_flagset(mt, CA_FOUNDER) < chansvs.maxchans);
 }
 
-bool myentity_allow_foundership(myentity_t *mt)
+bool myentity_allow_foundership(struct myentity *mt)
 {
 	const struct entity_chanacs_validation_vtable *vt;
 

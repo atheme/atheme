@@ -26,7 +26,7 @@ mod_init(module_t *const restrict m)
 	else
 	{
 		myentity_iteration_state_t iter;
-		myentity_t *grp;
+		struct myentity *grp;
 
 		mygroup_heap = rec->mygroup_heap;
 		groupacs_heap = rec->groupacs_heap;

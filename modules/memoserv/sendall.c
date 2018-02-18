@@ -29,7 +29,7 @@ mod_deinit(const module_unload_intent_t intent)
 static void ms_cmd_sendall(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* misc structs etc */
-	myentity_t *mt;
+	struct myentity *mt;
 	mowgli_node_t *n;
 	struct mymemo *memo;
 	int sent = 0, tried = 0;

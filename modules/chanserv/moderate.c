@@ -36,7 +36,7 @@ static struct command cs_waiting  = { "WAITING", N_("View pending registrations"
 
 typedef struct {
 	char *name;
-	myentity_t *mt;
+	struct myentity *mt;
 	time_t ts;
 } csreq_t;
 
@@ -45,7 +45,7 @@ static char *groupmemo;
 
 /*****************************************************************************/
 
-static csreq_t *csreq_create(const char *name, myentity_t *mt)
+static csreq_t *csreq_create(const char *name, struct myentity *mt)
 {
 	csreq_t *cs;
 
@@ -83,7 +83,7 @@ static void csreq_demarshal(struct database_handle *db, const char *type)
         const char *chan = db_sread_word(db);
         const char *nick = db_sread_word(db);
         time_t req_ts = db_sread_time(db);
-	myentity_t *mt;
+	struct myentity *mt;
 	csreq_t *cs;
 
 	mt = myentity_find(nick);

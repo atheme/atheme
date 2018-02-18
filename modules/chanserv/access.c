@@ -626,7 +626,7 @@ static void cs_cmd_access_list(struct sourceinfo *si, int parc, char *parv[])
 static void cs_cmd_access_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	chanacs_t *ca;
-	myentity_t *mt;
+	struct myentity *mt;
 	mychan_t *mc;
 	const char *channel = parv[0];
 	const char *target = parv[1];
@@ -725,7 +725,7 @@ static void cs_cmd_access_info(struct sourceinfo *si, int parc, char *parv[])
 static void cs_cmd_access_del(struct sourceinfo *si, int parc, char *parv[])
 {
 	chanacs_t *ca;
-	myentity_t *mt;
+	struct myentity *mt;
 	mychan_t *mc;
 	hook_channel_acl_req_t req;
 	unsigned int restrictflags;
@@ -831,7 +831,7 @@ static void cs_cmd_access_del(struct sourceinfo *si, int parc, char *parv[])
 static void cs_cmd_access_add(struct sourceinfo *si, int parc, char *parv[])
 {
 	chanacs_t *ca;
-	myentity_t *mt = NULL;
+	struct myentity *mt = NULL;
 	mychan_t *mc;
 	hook_channel_acl_req_t req;
 	unsigned int oldflags, restrictflags;
@@ -978,7 +978,7 @@ static void cs_cmd_access_add(struct sourceinfo *si, int parc, char *parv[])
 static void cs_cmd_access_set(struct sourceinfo *si, int parc, char *parv[])
 {
 	chanacs_t *ca;
-	myentity_t *mt = NULL;
+	struct myentity *mt = NULL;
 	mychan_t *mc;
 	hook_channel_acl_req_t req;
 	unsigned int oldflags, restrictflags;

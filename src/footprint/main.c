@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 
 	printf("\n* * *\n\n");
 
-	printf("sizeof myentity_t: %zu B --> %zu KB\n", sizeof(myentity_t), (regusercount * sizeof(myentity_t)) / 1024);
+	printf("sizeof myentity_t: %zu B --> %zu KB\n", sizeof(struct myentity), (regusercount * sizeof(struct myentity)) / 1024);
 	printf("sizeof myuser_t: %zu B --> %zu KB\n", sizeof(myuser_t), (regusercount * sizeof(myuser_t)) / 1024);
 	printf("sizeof mychan_t: %zu B --> %zu KB\n", sizeof(mychan_t), (regchannelcount * sizeof(mychan_t)) / 1024);
 	printf("sizeof mynick_t: %zu B --> %zu KB\n", sizeof(mynick_t), (regusercount * sizeof(mynick_t)) / 1024);

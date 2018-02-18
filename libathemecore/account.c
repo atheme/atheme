@@ -1099,7 +1099,7 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel)
 {
 	mowgli_node_t *n;
 	chanacs_t *ca;
-	myentity_t *mt, *hi_mt;
+	struct myentity *mt, *hi_mt;
 	unsigned int level, hi_level;
 	bool recent_ok = false;
 	bool hi_recent_ok = false;
@@ -1392,7 +1392,7 @@ static void chanacs_delete(chanacs_t *ca)
 }
 
 /*
- * chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level, time_t ts, myentity_t *setter)
+ * chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level, time_t ts, struct myentity *setter)
  *
  * Creates an access entry mapping between a user and channel.
  *
@@ -1408,7 +1408,7 @@ static void chanacs_delete(chanacs_t *ca)
  * Side Effects:
  *       - the channel access list is updated for mychan.
  */
-chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *mt, unsigned int level, time_t ts, myentity_t *setter)
+chanacs_t *chanacs_add(mychan_t *mychan, struct myentity *mt, unsigned int level, time_t ts, struct myentity *setter)
 {
 	chanacs_t *ca;
 
@@ -1462,7 +1462,7 @@ chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *mt, unsigned int level, tim
  * Side Effects:
  *       - the channel access list is updated for mychan.
  */
-chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int level, time_t ts, myentity_t *setter)
+chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int level, time_t ts, struct myentity *setter)
 {
 	chanacs_t *ca;
 
@@ -1498,7 +1498,7 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int lev
 	return ca;
 }
 
-chanacs_t *chanacs_find(mychan_t *mychan, myentity_t *mt, unsigned int level)
+chanacs_t *chanacs_find(mychan_t *mychan, struct myentity *mt, unsigned int level)
 {
 	mowgli_node_t *n;
 	chanacs_t *ca;
@@ -1530,7 +1530,7 @@ chanacs_t *chanacs_find(mychan_t *mychan, myentity_t *mt, unsigned int level)
 	return NULL;
 }
 
-unsigned int chanacs_entity_flags(mychan_t *mychan, myentity_t *mt)
+unsigned int chanacs_entity_flags(mychan_t *mychan, struct myentity *mt)
 {
 	mowgli_node_t *n;
 	chanacs_t *ca;
@@ -1561,7 +1561,7 @@ unsigned int chanacs_entity_flags(mychan_t *mychan, myentity_t *mt)
 	return result;
 }
 
-chanacs_t *chanacs_find_literal(mychan_t *mychan, myentity_t *mt, unsigned int level)
+chanacs_t *chanacs_find_literal(mychan_t *mychan, struct myentity *mt, unsigned int level)
 {
 	mowgli_node_t *n;
 	chanacs_t *ca;
@@ -1688,7 +1688,7 @@ static unsigned int chanacs_host_flags_by_user(mychan_t *mychan, user_t *u)
 
 chanacs_t *chanacs_find_by_mask(mychan_t *mychan, const char *mask, unsigned int level)
 {
-	myentity_t *mt;
+	struct myentity *mt;
 	chanacs_t *ca;
 
 	return_val_if_fail(mychan != NULL && mask != NULL, NULL);
@@ -1707,7 +1707,7 @@ chanacs_t *chanacs_find_by_mask(mychan_t *mychan, const char *mask, unsigned int
 
 bool chanacs_user_has_flag(mychan_t *mychan, user_t *u, unsigned int level)
 {
-	myentity_t *mt;
+	struct myentity *mt;
 
 	return_val_if_fail(mychan != NULL && u != NULL, false);
 
@@ -1735,7 +1735,7 @@ static unsigned int chanacs_entity_flags_by_user(mychan_t *mychan, user_t *u)
 	MOWGLI_ITER_FOREACH(n, mychan->chanacs.head)
 	{
 		chanacs_t *ca = n->data;
-		myentity_t *mt;
+		struct myentity *mt;
 		const struct entity_chanacs_validation_vtable *vt;
 
 		if (ca->entity == NULL)
@@ -1755,7 +1755,7 @@ static unsigned int chanacs_entity_flags_by_user(mychan_t *mychan, user_t *u)
 
 unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u)
 {
-	myentity_t *mt;
+	struct myentity *mt;
 	unsigned int result = 0;
 
 	return_val_if_fail(mychan != NULL && u != NULL, 0);
@@ -1798,7 +1798,7 @@ unsigned int chanacs_source_flags(mychan_t *mychan, struct sourceinfo *si)
  * host must be non-NULL). If not found, and create is true, create a new
  * chanacs with no flags.
  */
-chanacs_t *chanacs_open(mychan_t *mychan, myentity_t *mt, const char *hostmask, bool create, myentity_t *setter)
+chanacs_t *chanacs_open(mychan_t *mychan, struct myentity *mt, const char *hostmask, bool create, struct myentity *setter)
 {
 	chanacs_t *ca;
 
@@ -1878,7 +1878,7 @@ bool chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int re
  * these to reflect the actual change. Only allow changes to restrictflags.
  * Returns true if successful, false if an unallowed change was attempted.
  * -- jilles */
-bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, myentity_t *setter)
+bool chanacs_change(mychan_t *mychan, struct myentity *mt, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, struct myentity *setter)
 {
 	chanacs_t *ca;
 	hook_channel_acl_req_t req;
@@ -1974,7 +1974,7 @@ bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsi
 }
 
 /* version that doesn't return the changes made */
-bool chanacs_change_simple(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsigned int addflags, unsigned int removeflags, myentity_t *setter)
+bool chanacs_change_simple(mychan_t *mychan, struct myentity *mt, const char *hostmask, unsigned int addflags, unsigned int removeflags, struct myentity *setter)
 {
 	unsigned int a, r;
 
@@ -1983,7 +1983,7 @@ bool chanacs_change_simple(mychan_t *mychan, myentity_t *mt, const char *hostmas
 	return chanacs_change(mychan, mt, hostmask, &a, &r, ca_all, setter);
 }
 
-static int expire_myuser_cb(myentity_t *mt, void *unused)
+static int expire_myuser_cb(struct myentity *mt, void *unused)
 {
 	hook_expiry_req_t req;
 	myuser_t *mu = user(mt);
@@ -2128,7 +2128,7 @@ void expire_check(void *arg)
 	}
 }
 
-static int check_myuser_cb(myentity_t *mt, void *unused)
+static int check_myuser_cb(struct myentity *mt, void *unused)
 {
 	myuser_t *mu = user(mt);
 	mowgli_node_t *n;

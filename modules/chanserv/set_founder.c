@@ -48,7 +48,7 @@ mod_deinit(const module_unload_intent_t intent)
 static void cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *newfounder = parv[1];
-	myentity_t *mt;
+	struct myentity *mt;
 	mychan_t *mc;
 
 	if (!si->smu)

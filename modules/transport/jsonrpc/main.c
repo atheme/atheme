@@ -650,7 +650,7 @@ static bool jsonrpcmethod_metadata(void *conn, mowgli_list_t *params, char *id)
 	}
 	else
 	{
-		myentity_t *mt;
+		struct myentity *mt;
 
 		mt = myentity_find(name);
 		if (mt == NULL)

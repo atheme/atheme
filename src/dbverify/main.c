@@ -26,11 +26,11 @@ static unsigned int verify_entity_uids(void)
 	unsigned int errcnt = 0;
 	mowgli_patricia_t *known = mowgli_patricia_create(strcasecanon);
 	myentity_iteration_state_t state;
-	myentity_t *mt;
+	struct myentity *mt;
 
 	MYENTITY_FOREACH_T(mt, &state, ENT_ANY)
 	{
-		myentity_t *mt2;
+		struct myentity *mt2;
 
 		if ((mt2 = mowgli_patricia_retrieve(known, mt->id)) != NULL)
 		{

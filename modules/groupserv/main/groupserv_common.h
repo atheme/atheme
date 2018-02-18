@@ -24,7 +24,7 @@ struct groupserv_config_ {
 typedef struct mygroup_ mygroup_t;
 
 struct mygroup_ {
-	myentity_t ent;
+	struct myentity ent;
 
 	mowgli_list_t acs;
 	time_t regtime;
@@ -55,7 +55,7 @@ struct groupacs_ {
 	object_t parent;
 
 	mygroup_t *mg;
-	myentity_t *mt;
+	struct myentity *mt;
 	unsigned int flags;
 
 	mowgli_node_t gnode;

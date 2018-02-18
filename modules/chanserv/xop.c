@@ -10,8 +10,8 @@
 #include "chanserv.h"
 
 /* the individual command stuff, now that we've reworked, hardcode ;) --w00t */
-static void cs_xop_do_add(struct sourceinfo *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags);
-static void cs_xop_do_del(struct sourceinfo *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc);
+static void cs_xop_do_add(struct sourceinfo *si, mychan_t *mc, struct myentity *mt, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags);
+static void cs_xop_do_del(struct sourceinfo *si, mychan_t *mc, struct myentity *mt, char *target, unsigned int level, const char *leveldesc);
 static void cs_xop_do_list(struct sourceinfo *si, mychan_t *mc, unsigned int level, const char *leveldesc, bool operoverride);
 
 static void cs_cmd_sop(struct sourceinfo *si, int parc, char *parv[]);
@@ -54,7 +54,7 @@ mod_deinit(const module_unload_intent_t intent)
 
 static void cs_xop(struct sourceinfo *si, int parc, char *parv[], const char *leveldesc)
 {
-	myentity_t *mt;
+	struct myentity *mt;
 	mychan_t *mc;
 	bool operoverride = false;
 	unsigned int restrictflags;
@@ -204,7 +204,7 @@ static void cs_cmd_hop(struct sourceinfo *si, int parc, char *parv[])
 }
 
 
-static void cs_xop_do_add(struct sourceinfo *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags)
+static void cs_xop_do_add(struct sourceinfo *si, mychan_t *mc, struct myentity *mt, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags)
 {
 	chanacs_t *ca;
 	unsigned int addflags = level, removeflags = ~level;
@@ -339,7 +339,7 @@ static void cs_xop_do_add(struct sourceinfo *si, mychan_t *mc, myentity_t *mt, c
 	}
 }
 
-static void cs_xop_do_del(struct sourceinfo *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc)
+static void cs_xop_do_del(struct sourceinfo *si, mychan_t *mc, struct myentity *mt, char *target, unsigned int level, const char *leveldesc)
 {
 	chanacs_t *ca;
 	hook_channel_acl_req_t req;

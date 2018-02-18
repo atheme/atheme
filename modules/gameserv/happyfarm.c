@@ -65,9 +65,9 @@ typedef struct {
 	 * this means it's owned by an entity instead of a user class.  In terms of
 	 * the Chairman Mao communist revolution of 1969, this means that some farms
 	 * are the People's Happy Farms of Increased Profitability.  Either way,
-	 * it means that we use a myentity_t as our derived base.
+	 * it means that we use a struct myentity as our derived base.
 	 */
-	myentity_t *owner;
+	struct myentity *owner;
 
 	/*
 	 * A farm, like any other kind of business entity has money.  Money is used
@@ -186,7 +186,7 @@ mowgli_heap_t *plot_heap = NULL;
  * When a happy farmer joins our happy little game, we have to create a happy_farmer_t
  * object for them.  Which, you know, requires a constructor...
  */
-static happy_farmer_t *happy_farmer_create(myentity_t * mt)
+static happy_farmer_t *happy_farmer_create(struct myentity * mt)
 {
 	happy_farmer_t *farmer;
 
@@ -316,7 +316,7 @@ struct command command_join = { "JOIN", N_("Join the Happy Farm game!"), AC_AUTH
  */
 static void __command_buyplot(struct sourceinfo * si, int parc, char *parv[])
 {
-	myentity_t *mt;
+	struct myentity *mt;
 	happy_farmer_t *farmer;
 
 	mt = entity(si->smu);
@@ -352,7 +352,7 @@ struct command command_buyplot = { "BUYPLOT", N_("Buy a plot of land!"), AC_AUTH
  */
 static void __command_sellplot(struct sourceinfo * si, int parc, char *parv[])
 {
-	myentity_t *mt;
+	struct myentity *mt;
 	happy_farmer_t *farmer;
 	happy_plot_t *plot;
 
