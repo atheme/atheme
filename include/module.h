@@ -23,8 +23,6 @@ typedef enum {
 	MODULE_UNLOAD_CAPABILITY_RELOAD_ONLY = 2,
 } module_unload_capability_t;
 
-typedef struct v4_moduleheader_ v4_moduleheader_t;
-
 typedef void (*module_unload_handler_t)(struct module *, module_unload_intent_t);
 
 /* Module structure. Might be a loaded .so module, or something else that
@@ -41,7 +39,7 @@ struct module
 	/* These three are real-module-specific. Either all will be set, or all
 	 * will be null.
 	 */
-	v4_moduleheader_t *header;
+	struct v4_moduleheader *header;
 	void *address;
 	mowgli_module_t *handle;
 
@@ -66,7 +64,8 @@ struct module
 
 #define MAX_CMD_PARC		20
 
-struct v4_moduleheader_ {
+struct v4_moduleheader
+{
 	unsigned int atheme_mod;
 	unsigned int abi_ver;
 	unsigned int abi_rev;
@@ -106,7 +105,7 @@ extern struct module *module_find_published(const char *name);
 extern bool module_request(const char *name);
 
 #define DECLARE_MODULE_V1(name, unloadcap, modinit, moddeinit, ver, ven)   \
-        v4_moduleheader_t _header = {                                      \
+        struct v4_moduleheader _header = {                                 \
                 MAPI_ATHEME_MAGIC, MAPI_ATHEME_V4,                         \
                 CURRENT_ABI_REVISION, SERNO,                               \
                 name, unloadcap, modinit, moddeinit, ven, ver              \

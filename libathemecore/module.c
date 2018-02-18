@@ -124,7 +124,7 @@ static struct module *module_load_internal(const char *pathname, char *errbuf, i
 {
 	mowgli_node_t *n;
 	struct module *m, *old_modtarget;
-	v4_moduleheader_t *h;
+	struct v4_moduleheader *h;
 	mowgli_module_t *handle = NULL;
 #if defined(HAVE_DLINFO) && !defined(__UCLIBC__)
 	struct link_map *map;
@@ -139,7 +139,7 @@ static struct module *module_load_internal(const char *pathname, char *errbuf, i
 		return NULL;
 	}
 
-	h = (v4_moduleheader_t *) mowgli_module_symbol(handle, "_header");
+	h = (struct v4_moduleheader *) mowgli_module_symbol(handle, "_header");
 
 	if (h == NULL || h->atheme_mod != MAPI_ATHEME_MAGIC)
 	{
