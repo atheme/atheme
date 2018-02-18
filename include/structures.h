@@ -80,6 +80,7 @@ struct ircd;
 
 // Defined in include/res.h
 struct nsaddr;
+struct res_dns_reply;
 
 // Defined in include/sasl.h
 struct sasl_core_functions;

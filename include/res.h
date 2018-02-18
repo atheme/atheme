@@ -22,14 +22,15 @@ struct nsaddr
   socklen_t saddr_len;
 };
 
-typedef struct {
+struct res_dns_reply
+{
   char *h_name;
   struct nsaddr addr;
-} dns_reply_t;
+};
 
 typedef struct {
   void *ptr; /* pointer used by callback to identify request */
-  void (*callback)(void *vptr, dns_reply_t *reply); /* callback to call */
+  void (*callback)(void *vptr, struct res_dns_reply *reply); /* callback to call */
 } dns_query_t;
 
 extern struct nsaddr irc_nsaddr_list[];

@@ -308,7 +308,7 @@ static struct Blacklist *find_blacklist(char *name)
 	return NULL;
 }
 
-static void blacklist_dns_callback(void *vptr, dns_reply_t *reply)
+static void blacklist_dns_callback(void *vptr, struct res_dns_reply *reply)
 {
 	struct BlacklistClient *blcptr = (struct BlacklistClient *) vptr;
 	int listed = 0;

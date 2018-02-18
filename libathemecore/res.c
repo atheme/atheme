@@ -86,7 +86,7 @@ static void resend_query(struct reslist *request);
 static int check_question(struct reslist *request, RESHEADER * header, char *buf, char *eob);
 static int proc_answer(struct reslist *request, RESHEADER * header, char *, char *);
 static struct reslist *find_id(int id);
-static dns_reply_t *make_dnsreply(struct reslist *request);
+static struct res_dns_reply *make_dnsreply(struct reslist *request);
 
 /*
  * int
@@ -749,7 +749,7 @@ static int res_read_single_reply(struct connection *F)
 		;
 	RESHEADER *header;
 	struct reslist *request = NULL;
-	dns_reply_t *reply = NULL;
+	struct res_dns_reply *reply = NULL;
 	int rc;
 	int answer_count;
 	socklen_t len = sizeof(union sockaddr_any);
@@ -868,12 +868,12 @@ static void res_readreply(struct connection *cptr)
 		;
 }
 
-static dns_reply_t *make_dnsreply(struct reslist *request)
+static struct res_dns_reply *make_dnsreply(struct reslist *request)
 {
-	dns_reply_t *cp;
+	struct res_dns_reply *cp;
 	return_val_if_fail(request != 0, NULL);
 
-	cp = (dns_reply_t *)smalloc(sizeof(dns_reply_t));
+	cp = (struct res_dns_reply *)smalloc(sizeof(struct res_dns_reply));
 
 	cp->h_name = request->name;
 	memcpy(&cp->addr, &request->addr, sizeof(cp->addr));
