@@ -83,7 +83,7 @@ static void os_cmd_ignore_add(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_node_t *n;
         char *target = parv[0];
 	char *reason = parv[1];
-	svsignore_t *svsignore;
+	struct svsignore *svsignore;
 
 	if (parc < 2)
 	{
@@ -101,7 +101,7 @@ static void os_cmd_ignore_add(struct sourceinfo *si, int parc, char *parv[])
 	/* Are we already ignoring this mask? */
 	MOWGLI_ITER_FOREACH(n, svs_ignore_list.head)
 	{
-		svsignore = (svsignore_t *)n->data;
+		svsignore = (struct svsignore *)n->data;
 
 		/* We're here */
 		if (!strcasecmp(svsignore->mask, target))
@@ -127,7 +127,7 @@ static void os_cmd_ignore_del(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	mowgli_node_t *n, *tn;
-	svsignore_t *svsignore;
+	struct svsignore *svsignore;
 
 	if (target == NULL)
 	{
@@ -138,7 +138,7 @@ static void os_cmd_ignore_del(struct sourceinfo *si, int parc, char *parv[])
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, svs_ignore_list.head)
 	{
-		svsignore = (svsignore_t *)n->data;
+		svsignore = (struct svsignore *)n->data;
 
 		if (!strcasecmp(svsignore->mask,target))
 		{
@@ -160,7 +160,7 @@ static void os_cmd_ignore_del(struct sourceinfo *si, int parc, char *parv[])
 static void os_cmd_ignore_clear(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n, *tn;
-	svsignore_t *svsignore;
+	struct svsignore *svsignore;
 
 	if (MOWGLI_LIST_LENGTH(&svs_ignore_list) == 0)
 	{
@@ -170,7 +170,7 @@ static void os_cmd_ignore_clear(struct sourceinfo *si, int parc, char *parv[])
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, svs_ignore_list.head)
 	{
-		svsignore = (svsignore_t *)n->data;
+		svsignore = (struct svsignore *)n->data;
 
 		command_success_nodata(si, _("\2%s\2 has been removed from the services ignore list."), svsignore->mask);
 		mowgli_node_delete(n,&svs_ignore_list);
@@ -194,7 +194,7 @@ static void os_cmd_ignore_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
 	unsigned int i = 1;
-	svsignore_t *svsignore;
+	struct svsignore *svsignore;
 	char strfbuf[BUFSIZE];
 	struct tm tm;
 
@@ -209,7 +209,7 @@ static void os_cmd_ignore_list(struct sourceinfo *si, int parc, char *parv[])
 
 	MOWGLI_ITER_FOREACH(n, svs_ignore_list.head)
 	{
-		svsignore = (svsignore_t *)n->data;
+		svsignore = (struct svsignore *)n->data;
 
 		tm = *localtime(&svsignore->settime);
 		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);

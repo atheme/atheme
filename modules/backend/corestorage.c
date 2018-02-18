@@ -40,7 +40,7 @@ corestorage_db_save(struct database_handle *db)
 	struct kline *k;
 	struct xline *x;
 	struct qline *q;
-	svsignore_t *svsignore;
+	struct svsignore *svsignore;
 	soper_t *soper;
 	mowgli_node_t *n, *tn;
 	mowgli_patricia_iteration_state_t state;
@@ -261,7 +261,7 @@ corestorage_db_save(struct database_handle *db)
 
 	MOWGLI_ITER_FOREACH(n, svs_ignore_list.head)
 	{
-		svsignore = (svsignore_t *)n->data;
+		svsignore = (struct svsignore *)n->data;
 
 		/* SI <mask> <settime> <setby> <reason> */
 		db_start_row(db, "SI");
@@ -797,7 +797,7 @@ static void corestorage_h_si(struct database_handle *db, const char *type)
 	char buf[4096];
 	const char *mask, *setby, *reason;
 	time_t settime;
-	svsignore_t *svsignore;
+	struct svsignore *svsignore;
 
 	mask = db_sread_word(db);
 	settime = db_sread_time(db);

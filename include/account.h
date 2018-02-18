@@ -10,8 +10,6 @@
 
 #include "entity.h"
 
-typedef struct svsignore_ svsignore_t;
-
 /* kline list struct */
 struct kline
 {
@@ -53,8 +51,9 @@ struct qline
 };
 
 /* services ignore struct */
-struct svsignore_ {
-  svsignore_t *svsignore;
+struct svsignore
+{
+  struct svsignore *svsignore;
 
   char *mask;
   time_t settime;
@@ -489,9 +488,9 @@ extern void db_check(void);
 /* svsignore.c */
 extern mowgli_list_t svs_ignore_list;
 
-extern svsignore_t *svsignore_find(user_t *user);
-extern svsignore_t *svsignore_add(const char *mask, const char *reason);
-extern void svsignore_delete(svsignore_t *svsignore);
+extern struct svsignore *svsignore_find(user_t *user);
+extern struct svsignore *svsignore_add(const char *mask, const char *reason);
+extern void svsignore_delete(struct svsignore *svsignore);
 
 #include "entity-validation.h"
 

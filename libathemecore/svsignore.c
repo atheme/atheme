@@ -43,12 +43,12 @@ mowgli_list_t svs_ignore_list;
  * Bugs:
  *     - this function does not check for dupes
  */
-svsignore_t *svsignore_add(const char *mask, const char *reason)
+struct svsignore *svsignore_add(const char *mask, const char *reason)
 {
-        svsignore_t *svsignore;
+        struct svsignore *svsignore;
         mowgli_node_t *n = mowgli_node_create();
 
-        svsignore = smalloc(sizeof(svsignore_t));
+        svsignore = smalloc(sizeof(struct svsignore));
 
         mowgli_node_add(svsignore, n, &svs_ignore_list);
 
@@ -75,9 +75,9 @@ svsignore_t *svsignore_add(const char *mask, const char *reason)
  * Side Effects:
  *     - none
  */
-svsignore_t *svsignore_find(user_t *source)
+struct svsignore *svsignore_find(user_t *source)
 {
-        svsignore_t *svsignore;
+        struct svsignore *svsignore;
         mowgli_node_t *n;
         char host[BUFSIZE];
 
@@ -93,7 +93,7 @@ svsignore_t *svsignore_find(user_t *source)
 
         MOWGLI_ITER_FOREACH(n, svs_ignore_list.head)
         {
-                svsignore = (svsignore_t *)n->data;
+                svsignore = (struct svsignore *)n->data;
 
                 if (!match(svsignore->mask, host))
                         return svsignore;
@@ -103,7 +103,7 @@ svsignore_t *svsignore_find(user_t *source)
 }
 
 /*
- * svsignore_delete(svsignore_t *svsignore)
+ * svsignore_delete(struct svsignore *svsignore)
  *
  * Destroys a services ignore.
  *
@@ -116,7 +116,7 @@ svsignore_t *svsignore_find(user_t *source)
  * Side Effects:
  *     - a services ignore is destroyed and removed from the list
  */
-void svsignore_delete(svsignore_t *svsignore)
+void svsignore_delete(struct svsignore *svsignore)
 {
 	mowgli_node_t *n;
 
