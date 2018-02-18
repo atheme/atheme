@@ -95,7 +95,7 @@
 /* $Id: reslib.c 1695 2006-06-27 15:11:23Z jilles $ */
 /* from Hybrid Id: reslib.c 177 2005-10-22 09:05:05Z michael $ */
 
-nsaddr_t irc_nsaddr_list[10];
+struct nsaddr irc_nsaddr_list[10];
 int irc_nscount = 0;
 char irc_domain[IRCD_RES_HOSTLEN + 1];
 

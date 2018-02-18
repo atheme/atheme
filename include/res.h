@@ -16,14 +16,15 @@
  */
 #define IRCD_MAXNS 10
 
-typedef struct {
+struct nsaddr
+{
   union sockaddr_any saddr;
   socklen_t saddr_len;
-} nsaddr_t;
+};
 
 typedef struct {
   char *h_name;
-  nsaddr_t addr;
+  struct nsaddr addr;
 } dns_reply_t;
 
 typedef struct {
@@ -31,7 +32,7 @@ typedef struct {
   void (*callback)(void *vptr, dns_reply_t *reply); /* callback to call */
 } dns_query_t;
 
-extern nsaddr_t irc_nsaddr_list[];
+extern struct nsaddr irc_nsaddr_list[];
 extern int irc_nscount;
 
 extern void init_resolver(void);

@@ -78,6 +78,9 @@ struct proto_cmd;
 // Defined in include/phandler.h
 struct ircd;
 
+// Defined in include/res.h
+struct nsaddr;
+
 // Defined in include/sasl.h
 struct sasl_core_functions;
 struct sasl_mechanism;
