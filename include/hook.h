@@ -18,7 +18,7 @@ typedef struct sourceinfo sourceinfo_t;
 
 
 
-typedef void (*hookfn_t)(void *data);
+typedef void (*hook_fn)(void *data);
 
 struct hook
 {
@@ -28,9 +28,9 @@ struct hook
 
 extern struct hook *hook_add_event(const char *);
 extern void hook_del_event(const char *);
-extern void hook_del_hook(const char *, hookfn_t);
-extern void hook_add_hook(const char *, hookfn_t);
-extern void hook_add_hook_first(const char *, hookfn_t);
+extern void hook_del_hook(const char *, hook_fn);
+extern void hook_add_hook(const char *, hook_fn);
+extern void hook_add_hook_first(const char *, hook_fn);
 extern void hook_call_event(const char *, void *);
 
 extern void hook_stop(void);
