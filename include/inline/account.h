@@ -104,14 +104,14 @@ static inline bool chanacs_source_has_flag(mychan_t *mychan, struct sourceinfo *
 }
 
 /* Destroy a chanacs if it has no flags */
-static inline void chanacs_close(chanacs_t *ca)
+static inline void chanacs_close(struct chanacs *ca)
 {
 	if (ca->level == 0)
 		object_unref(ca);
 }
 
-/* Call this with a chanacs_t with level==0 */
-static inline bool chanacs_is_table_full(chanacs_t *ca)
+/* Call this with a struct chanacs -> level == 0 */
+static inline bool chanacs_is_table_full(struct chanacs *ca)
 {
 	return chansvs.maxchanacs > 0 &&
 		MOWGLI_LIST_LENGTH(&ca->mychan->chanacs) > chansvs.maxchanacs;

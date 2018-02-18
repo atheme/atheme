@@ -339,7 +339,7 @@ unsigned int gs_flags_parser(char *flagstring, bool allow_minus, unsigned int fl
 
 void remove_group_chanacs(mygroup_t *mg)
 {
-	chanacs_t *ca;
+	struct chanacs *ca;
 	mychan_t *mc;
 	myuser_t *successor;
 	mowgli_node_t *n, *tn;

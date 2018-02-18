@@ -32,7 +32,7 @@ static void cs_cmd_why(struct sourceinfo *si, int parc, char *parv[])
 	user_t *u;
 	myuser_t *mu;
 	mowgli_node_t *n;
-	chanacs_t *ca;
+	struct chanacs *ca;
 	const struct entity_chanacs_validation_vtable *vt;
 	metadata_t *md;
 	bool operoverride = false;
@@ -91,7 +91,7 @@ static void cs_cmd_why(struct sourceinfo *si, int parc, char *parv[])
 
 	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
-		ca = (chanacs_t *)n->data;
+		ca = (struct chanacs *)n->data;
 
 		if (ca->entity == NULL)
 			continue;

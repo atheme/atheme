@@ -4,7 +4,7 @@
 
 #include "groupserv_main.h"
 
-static chanacs_t *mygroup_chanacs_match_entity(chanacs_t *ca, struct myentity *mt)
+static struct chanacs *mygroup_chanacs_match_entity(struct chanacs *ca, struct myentity *mt)
 {
 	mygroup_t *mg;
 

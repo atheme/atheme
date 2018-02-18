@@ -426,7 +426,7 @@ static void update_role_entry(struct sourceinfo *si, mychan_t *mc, const char *r
 	unsigned int oldflags;
 	char *flagstr;
 	mowgli_node_t *n, *tn;
-	chanacs_t *ca;
+	struct chanacs *ca;
 	int changes = 0;
 	hook_channel_acl_req_t req;
 
@@ -559,7 +559,7 @@ static unsigned int xflag_apply_batch(unsigned int in, int parc, char *parv[])
  */
 static void cs_cmd_access_list(struct sourceinfo *si, int parc, char *parv[])
 {
-	chanacs_t *ca;
+	struct chanacs *ca;
 	mowgli_node_t *n;
 	mychan_t *mc;
 	const char *channel = parv[0];
@@ -625,7 +625,7 @@ static void cs_cmd_access_list(struct sourceinfo *si, int parc, char *parv[])
  */
 static void cs_cmd_access_info(struct sourceinfo *si, int parc, char *parv[])
 {
-	chanacs_t *ca;
+	struct chanacs *ca;
 	struct myentity *mt;
 	mychan_t *mc;
 	const char *channel = parv[0];
@@ -724,7 +724,7 @@ static void cs_cmd_access_info(struct sourceinfo *si, int parc, char *parv[])
  */
 static void cs_cmd_access_del(struct sourceinfo *si, int parc, char *parv[])
 {
-	chanacs_t *ca;
+	struct chanacs *ca;
 	struct myentity *mt;
 	mychan_t *mc;
 	hook_channel_acl_req_t req;
@@ -830,7 +830,7 @@ static void cs_cmd_access_del(struct sourceinfo *si, int parc, char *parv[])
  */
 static void cs_cmd_access_add(struct sourceinfo *si, int parc, char *parv[])
 {
-	chanacs_t *ca;
+	struct chanacs *ca;
 	struct myentity *mt = NULL;
 	mychan_t *mc;
 	hook_channel_acl_req_t req;
@@ -977,7 +977,7 @@ static void cs_cmd_access_add(struct sourceinfo *si, int parc, char *parv[])
  */
 static void cs_cmd_access_set(struct sourceinfo *si, int parc, char *parv[])
 {
-	chanacs_t *ca;
+	struct chanacs *ca;
 	struct myentity *mt = NULL;
 	mychan_t *mc;
 	hook_channel_acl_req_t req;

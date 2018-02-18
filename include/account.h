@@ -10,7 +10,6 @@
 
 #include "entity.h"
 
-typedef struct chanacs_ chanacs_t;
 typedef struct svsignore_ svsignore_t;
 
 /* kline list struct */
@@ -194,7 +193,7 @@ struct mychan_
 #define MC_VERBOSE_MASK (MC_VERBOSE | MC_VERBOSE_OPS)
 
 /* struct for channel access list */
-struct chanacs_
+struct chanacs
 {
 	object_t parent;
 
@@ -285,7 +284,7 @@ typedef struct {
 } hook_channel_req_t;
 
 typedef struct {
-	chanacs_t *ca;
+	struct chanacs *ca;
 	struct sourceinfo *si;
 	struct myentity *parent;
 	unsigned int oldlevel;
@@ -457,28 +456,28 @@ extern myuser_t *mychan_pick_successor(mychan_t *mc);
 extern const char *mychan_get_mlock(mychan_t *mc);
 extern const char *mychan_get_sts_mlock(mychan_t *mc);
 
-extern chanacs_t *chanacs_add(mychan_t *mychan, struct myentity *myuser, unsigned int level, time_t ts, struct myentity *setter);
-extern chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int level, time_t ts, struct myentity *setter);
+extern struct chanacs *chanacs_add(mychan_t *mychan, struct myentity *myuser, unsigned int level, time_t ts, struct myentity *setter);
+extern struct chanacs *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int level, time_t ts, struct myentity *setter);
 
-extern chanacs_t *chanacs_find(mychan_t *mychan, struct myentity *myuser, unsigned int level);
+extern struct chanacs *chanacs_find(mychan_t *mychan, struct myentity *myuser, unsigned int level);
 extern unsigned int chanacs_entity_flags(mychan_t *mychan, struct myentity *myuser);
-extern chanacs_t *chanacs_find_literal(mychan_t *mychan, struct myentity *myuser, unsigned int level);
-extern chanacs_t *chanacs_find_host(mychan_t *mychan, const char *host, unsigned int level);
+extern struct chanacs *chanacs_find_literal(mychan_t *mychan, struct myentity *myuser, unsigned int level);
+extern struct chanacs *chanacs_find_host(mychan_t *mychan, const char *host, unsigned int level);
 extern unsigned int chanacs_host_flags(mychan_t *mychan, const char *host);
-extern chanacs_t *chanacs_find_host_literal(mychan_t *mychan, const char *host, unsigned int level);
-extern chanacs_t *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, unsigned int level);
-extern chanacs_t *chanacs_find_by_mask(mychan_t *mychan, const char *mask, unsigned int level);
+extern struct chanacs *chanacs_find_host_literal(mychan_t *mychan, const char *host, unsigned int level);
+extern struct chanacs *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, unsigned int level);
+extern struct chanacs *chanacs_find_by_mask(mychan_t *mychan, const char *mask, unsigned int level);
 extern bool chanacs_user_has_flag(mychan_t *mychan, user_t *u, unsigned int level);
 extern unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u);
 //inline bool chanacs_source_has_flag(mychan_t *mychan, struct sourceinfo *si, unsigned int level);
 extern unsigned int chanacs_source_flags(mychan_t *mychan, struct sourceinfo *si);
 
-extern chanacs_t *chanacs_open(mychan_t *mychan, struct myentity *mt, const char *hostmask, bool create, struct myentity *setter);
-//inline void chanacs_close(chanacs_t *ca);
-extern bool chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, myuser_t *setter);
-extern bool chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int removeflags, myuser_t *setter);
+extern struct chanacs *chanacs_open(mychan_t *mychan, struct myentity *mt, const char *hostmask, bool create, struct myentity *setter);
+//inline void chanacs_close(struct chanacs *ca);
+extern bool chanacs_modify(struct chanacs *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, myuser_t *setter);
+extern bool chanacs_modify_simple(struct chanacs *ca, unsigned int addflags, unsigned int removeflags, myuser_t *setter);
 
-//inline bool chanacs_is_table_full(chanacs_t *ca);
+//inline bool chanacs_is_table_full(struct chanacs *ca);
 
 extern bool chanacs_change(mychan_t *mychan, struct myentity *mt, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, struct myentity *setter);
 extern bool chanacs_change_simple(mychan_t *mychan, struct myentity *mt, const char *hostmask, unsigned int addflags, unsigned int removeflags, struct myentity *setter);

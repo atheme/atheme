@@ -29,7 +29,7 @@ static void gs_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 {
 	mygroup_t *mg;
 	mowgli_node_t *n;
-	chanacs_t *ca;
+	struct chanacs *ca;
 	bool operoverride = false;
 	unsigned int akicks = 0, i;
 
@@ -73,7 +73,7 @@ static void gs_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 
 	MOWGLI_ITER_FOREACH(n, entity(mg)->chanacs.head)
 	{
-		ca = (chanacs_t *)n->data;
+		ca = (struct chanacs *)n->data;
 
 		/* don't tell users they're akicked (flag +b) */
 		if (ca->level != CA_AKICK)

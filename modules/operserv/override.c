@@ -177,7 +177,7 @@ static void os_cmd_override(struct sourceinfo *si, int parc, char *parv[])
 
 		MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 		{
-			chanacs_t *ca = (chanacs_t *) n->data;
+			struct chanacs *ca = (struct chanacs *) n->data;
 
 			if (ca->entity != NULL && isuser(ca->entity) && ca->level & CA_FOUNDER)
 			{

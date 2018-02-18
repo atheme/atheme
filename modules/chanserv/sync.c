@@ -14,7 +14,7 @@ struct command cs_sync = { "SYNC", "Forces channel statuses to flags.",
 
 static bool no_vhost_sync = false;
 
-static void do_chanuser_sync(mychan_t *mc, struct chanuser *cu, chanacs_t *ca,
+static void do_chanuser_sync(mychan_t *mc, struct chanuser *cu, struct chanacs *ca,
 		bool take)
 {
 	char akickreason[120] = "User is banned from this channel", *p;
@@ -66,7 +66,7 @@ static void do_chanuser_sync(mychan_t *mc, struct chanuser *cu, chanacs_t *ca,
 	}
 	if (fl & CA_AKICK && !(fl & CA_EXEMPT))
 	{
-		chanacs_t *ca2;
+		struct chanacs *ca2;
 		metadata_t *md;
 
 		/* Stay on channel if this would empty it -- jilles */
@@ -213,7 +213,7 @@ static void do_chanuser_sync(mychan_t *mc, struct chanuser *cu, chanacs_t *ca,
 	}
 }
 
-void do_channel_sync(mychan_t *mc, chanacs_t *ca)
+void do_channel_sync(mychan_t *mc, struct chanacs *ca)
 {
 	struct chanuser *cu;
 	mowgli_node_t *n, *tn;

@@ -95,7 +95,7 @@ static void cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[])
 			&& (atol(md->value) >= si->smu->registered))
 		{
 			mowgli_node_t *n;
-			chanacs_t *ca;
+			struct chanacs *ca;
 
 			/* Duplicates the check below. We check below for user
 			 * convenience, but we need to check here as well to
@@ -183,7 +183,7 @@ static void cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[])
 	 */
 	if (!chanacs_find_literal(mc, mt, 0))
 	{
-		chanacs_t *ca;
+		struct chanacs *ca;
 
 		ca = chanacs_open(mc, mt, NULL, true, entity(si->smu));
 		if (ca->level == 0 && chanacs_is_table_full(ca))

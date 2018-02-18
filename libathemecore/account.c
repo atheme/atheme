@@ -59,7 +59,7 @@ void init_accounts(void)
 	mynick_heap = sharedheap_get(sizeof(myuser_t));
 	myuser_name_heap = sharedheap_get(sizeof(struct myuser_name));
 	mychan_heap = sharedheap_get(sizeof(mychan_t));
-	chanacs_heap = sharedheap_get(sizeof(chanacs_t));
+	chanacs_heap = sharedheap_get(sizeof(struct chanacs));
 	mycertfp_heap = sharedheap_get(sizeof(struct mycertfp));
 
 	if (myuser_heap == NULL || mynick_heap == NULL || mychan_heap == NULL
@@ -196,7 +196,7 @@ void myuser_delete(myuser_t *mu)
 	user_t *u;
 	mowgli_node_t *n, *tn;
 	struct mymemo *memo;
-	chanacs_t *ca;
+	struct chanacs *ca;
 	char nicks[200];
 
 	return_if_fail(mu != NULL);
@@ -1044,7 +1044,7 @@ bool mychan_isused(mychan_t *mc)
 unsigned int mychan_num_founders(mychan_t *mc)
 {
 	mowgli_node_t *n;
-	chanacs_t *ca;
+	struct chanacs *ca;
 	unsigned int count = 0;
 
 	return_val_if_fail(mc != NULL, 0);
@@ -1061,7 +1061,7 @@ unsigned int mychan_num_founders(mychan_t *mc)
 const char *mychan_founder_names(mychan_t *mc)
 {
 	mowgli_node_t *n;
-	chanacs_t *ca;
+	struct chanacs *ca;
 	static char names[512];
 
 	return_val_if_fail(mc != NULL, NULL);
@@ -1098,7 +1098,7 @@ static unsigned int add_auto_flags(unsigned int flags)
 myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel)
 {
 	mowgli_node_t *n;
-	chanacs_t *ca;
+	struct chanacs *ca;
 	struct myentity *mt, *hi_mt;
 	unsigned int level, hi_level;
 	bool recent_ok = false;
@@ -1361,8 +1361,8 @@ const char *mychan_get_sts_mlock(mychan_t *mc)
  * C H A N A C S *
  *****************/
 
-/* private destructor for chanacs_t */
-static void chanacs_delete(chanacs_t *ca)
+/* private destructor for struct chanacs */
+static void chanacs_delete(struct chanacs *ca)
 {
 	return_if_fail(ca != NULL);
 	return_if_fail(ca->mychan != NULL);
@@ -1403,14 +1403,14 @@ static void chanacs_delete(chanacs_t *ca)
  *       - a timestamp for this access entry
  *
  * Outputs:
- *       - a chanacs_t object which describes the mapping
+ *       - a struct chanacs object which describes the mapping
  *
  * Side Effects:
  *       - the channel access list is updated for mychan.
  */
-chanacs_t *chanacs_add(mychan_t *mychan, struct myentity *mt, unsigned int level, time_t ts, struct myentity *setter)
+struct chanacs *chanacs_add(mychan_t *mychan, struct myentity *mt, unsigned int level, time_t ts, struct myentity *setter)
 {
-	chanacs_t *ca;
+	struct chanacs *ca;
 
 	return_val_if_fail(mychan != NULL && mt != NULL, NULL);
 
@@ -1457,14 +1457,14 @@ chanacs_t *chanacs_add(mychan_t *mychan, struct myentity *mt, unsigned int level
  *       - a timestamp for this access entry
  *
  * Outputs:
- *       - a chanacs_t object which describes the mapping
+ *       - a struct chanacs object which describes the mapping
  *
  * Side Effects:
  *       - the channel access list is updated for mychan.
  */
-chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int level, time_t ts, struct myentity *setter)
+struct chanacs *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int level, time_t ts, struct myentity *setter)
 {
-	chanacs_t *ca;
+	struct chanacs *ca;
 
 	return_val_if_fail(mychan != NULL && host != NULL, NULL);
 
@@ -1498,10 +1498,10 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int lev
 	return ca;
 }
 
-chanacs_t *chanacs_find(mychan_t *mychan, struct myentity *mt, unsigned int level)
+struct chanacs *chanacs_find(mychan_t *mychan, struct myentity *mt, unsigned int level)
 {
 	mowgli_node_t *n;
-	chanacs_t *ca;
+	struct chanacs *ca;
 
 	return_val_if_fail(mychan != NULL && mt != NULL, NULL);
 
@@ -1512,7 +1512,7 @@ chanacs_t *chanacs_find(mychan_t *mychan, struct myentity *mt, unsigned int leve
 	{
 		const struct entity_chanacs_validation_vtable *vt;
 
-		ca = (chanacs_t *)n->data;
+		ca = (struct chanacs *)n->data;
 
 		if (ca->entity == NULL)
 			continue;
@@ -1533,7 +1533,7 @@ chanacs_t *chanacs_find(mychan_t *mychan, struct myentity *mt, unsigned int leve
 unsigned int chanacs_entity_flags(mychan_t *mychan, struct myentity *mt)
 {
 	mowgli_node_t *n;
-	chanacs_t *ca;
+	struct chanacs *ca;
 	unsigned int result = 0;
 
 	return_val_if_fail(mychan != NULL && mt != NULL, 0);
@@ -1542,7 +1542,7 @@ unsigned int chanacs_entity_flags(mychan_t *mychan, struct myentity *mt)
 	{
 		const struct entity_chanacs_validation_vtable *vt;
 
-		ca = (chanacs_t *)n->data;
+		ca = (struct chanacs *)n->data;
 
 		if (ca->entity == NULL)
 			continue;
@@ -1561,16 +1561,16 @@ unsigned int chanacs_entity_flags(mychan_t *mychan, struct myentity *mt)
 	return result;
 }
 
-chanacs_t *chanacs_find_literal(mychan_t *mychan, struct myentity *mt, unsigned int level)
+struct chanacs *chanacs_find_literal(mychan_t *mychan, struct myentity *mt, unsigned int level)
 {
 	mowgli_node_t *n;
-	chanacs_t *ca;
+	struct chanacs *ca;
 
 	return_val_if_fail(mychan != NULL && mt != NULL, NULL);
 
 	MOWGLI_ITER_FOREACH(n, mychan->chanacs.head)
 	{
-		ca = (chanacs_t *)n->data;
+		ca = (struct chanacs *)n->data;
 
 		if (level != 0x0)
 		{
@@ -1584,16 +1584,16 @@ chanacs_t *chanacs_find_literal(mychan_t *mychan, struct myentity *mt, unsigned 
 	return NULL;
 }
 
-chanacs_t *chanacs_find_host(mychan_t *mychan, const char *host, unsigned int level)
+struct chanacs *chanacs_find_host(mychan_t *mychan, const char *host, unsigned int level)
 {
 	mowgli_node_t *n;
-	chanacs_t *ca;
+	struct chanacs *ca;
 
 	return_val_if_fail(mychan != NULL && host != NULL, NULL);
 
 	MOWGLI_ITER_FOREACH(n, mychan->chanacs.head)
 	{
-		ca = (chanacs_t *)n->data;
+		ca = (struct chanacs *)n->data;
 
 		if (level != 0x0)
 		{
@@ -1610,14 +1610,14 @@ chanacs_t *chanacs_find_host(mychan_t *mychan, const char *host, unsigned int le
 unsigned int chanacs_host_flags(mychan_t *mychan, const char *host)
 {
 	mowgli_node_t *n;
-	chanacs_t *ca;
+	struct chanacs *ca;
 	unsigned int result = 0;
 
 	return_val_if_fail(mychan != NULL && host != NULL, 0);
 
 	MOWGLI_ITER_FOREACH(n, mychan->chanacs.head)
 	{
-		ca = (chanacs_t *)n->data;
+		ca = (struct chanacs *)n->data;
 
 		if (ca->entity == NULL && !match(ca->host, host))
 			result |= ca->level;
@@ -1626,17 +1626,17 @@ unsigned int chanacs_host_flags(mychan_t *mychan, const char *host)
 	return result;
 }
 
-chanacs_t *chanacs_find_host_literal(mychan_t *mychan, const char *host, unsigned int level)
+struct chanacs *chanacs_find_host_literal(mychan_t *mychan, const char *host, unsigned int level)
 {
 	mowgli_node_t *n;
-	chanacs_t *ca;
+	struct chanacs *ca;
 
 	if ((!mychan) || (!host))
 		return NULL;
 
 	MOWGLI_ITER_FOREACH(n, mychan->chanacs.head)
 	{
-		ca = (chanacs_t *)n->data;
+		ca = (struct chanacs *)n->data;
 
 		if (level != 0x0)
 		{
@@ -1650,10 +1650,10 @@ chanacs_t *chanacs_find_host_literal(mychan_t *mychan, const char *host, unsigne
 	return NULL;
 }
 
-chanacs_t *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, unsigned int level)
+struct chanacs *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, unsigned int level)
 {
 	mowgli_node_t *n;
-	chanacs_t *ca;
+	struct chanacs *ca;
 
 	return_val_if_fail(mychan != NULL && u != NULL, 0);
 
@@ -1671,7 +1671,7 @@ static unsigned int chanacs_host_flags_by_user(mychan_t *mychan, user_t *u)
 {
 	mowgli_node_t *n;
 	unsigned int result = 0;
-	chanacs_t *ca;
+	struct chanacs *ca;
 
 	return_val_if_fail(mychan != NULL && u != NULL, 0);
 
@@ -1686,10 +1686,10 @@ static unsigned int chanacs_host_flags_by_user(mychan_t *mychan, user_t *u)
 	return result;
 }
 
-chanacs_t *chanacs_find_by_mask(mychan_t *mychan, const char *mask, unsigned int level)
+struct chanacs *chanacs_find_by_mask(mychan_t *mychan, const char *mask, unsigned int level)
 {
 	struct myentity *mt;
-	chanacs_t *ca;
+	struct chanacs *ca;
 
 	return_val_if_fail(mychan != NULL && mask != NULL, NULL);
 
@@ -1734,7 +1734,7 @@ static unsigned int chanacs_entity_flags_by_user(mychan_t *mychan, user_t *u)
 
 	MOWGLI_ITER_FOREACH(n, mychan->chanacs.head)
 	{
-		chanacs_t *ca = n->data;
+		struct chanacs *ca = n->data;
 		struct myentity *mt;
 		const struct entity_chanacs_validation_vtable *vt;
 
@@ -1798,9 +1798,9 @@ unsigned int chanacs_source_flags(mychan_t *mychan, struct sourceinfo *si)
  * host must be non-NULL). If not found, and create is true, create a new
  * chanacs with no flags.
  */
-chanacs_t *chanacs_open(mychan_t *mychan, struct myentity *mt, const char *hostmask, bool create, struct myentity *setter)
+struct chanacs *chanacs_open(mychan_t *mychan, struct myentity *mt, const char *hostmask, bool create, struct myentity *setter)
 {
-	chanacs_t *ca;
+	struct chanacs *ca;
 
 	/* wrt the second assert: only one of mu or hostmask can be not-NULL --nenolod */
 	return_val_if_fail(mychan != NULL, false);
@@ -1832,7 +1832,7 @@ chanacs_t *chanacs_open(mychan_t *mychan, struct myentity *mt, const char *hostm
  * these to reflect the actual change. Only allow changes to restrictflags.
  * Returns true if successful, false if an unallowed change was attempted.
  * -- jilles */
-bool chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, myuser_t *setter)
+bool chanacs_modify(struct chanacs *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, myuser_t *setter)
 {
 	return_val_if_fail(ca != NULL, false);
 	return_val_if_fail(addflags != NULL && removeflags != NULL, false);
@@ -1862,7 +1862,7 @@ bool chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removef
 }
 
 /* version that doesn't return the changes made */
-bool chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int removeflags, myuser_t *setter)
+bool chanacs_modify_simple(struct chanacs *ca, unsigned int addflags, unsigned int removeflags, myuser_t *setter)
 {
 	unsigned int a, r;
 
@@ -1880,7 +1880,7 @@ bool chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int re
  * -- jilles */
 bool chanacs_change(mychan_t *mychan, struct myentity *mt, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, struct myentity *setter)
 {
-	chanacs_t *ca;
+	struct chanacs *ca;
 	hook_channel_acl_req_t req;
 
 	/* wrt the second assert: only one of mu or hostmask can be not-NULL --nenolod */

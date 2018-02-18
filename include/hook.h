@@ -9,6 +9,7 @@
 #define HOOK_H
 
 // Types necessary for the hook system
+typedef struct chanacs chanacs_t;
 typedef struct channel channel_t;
 typedef struct chanuser chanuser_t;
 typedef struct database_handle database_handle_t;

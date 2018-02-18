@@ -29,7 +29,7 @@ static void cs_cmd_ftransfer(struct sourceinfo *si, int parc, char *parv[])
 	struct myentity *mt;
 	mychan_t *mc;
 	mowgli_node_t *n;
-	chanacs_t *ca;
+	struct chanacs *ca;
 	char *name = parv[0];
 	char *newfndr = parv[1];
 	const char *oldfndr;

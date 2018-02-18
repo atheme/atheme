@@ -16,6 +16,9 @@ typedef struct myuser_ myuser_t;
 typedef struct mynick_ mynick_t;
 typedef struct mychan_ mychan_t;
 
+// Defined in include/account.h
+struct chanacs;
+
 // Defined in include/channels.h
 struct chanban;
 struct channel;

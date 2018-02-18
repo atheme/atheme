@@ -28,7 +28,7 @@ static void ns_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	mowgli_node_t *n;
-	chanacs_t *ca;
+	struct chanacs *ca;
 	unsigned int akicks = 0, i;
 
 	/* Optional target */
@@ -77,7 +77,7 @@ static void ns_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 
 	MOWGLI_ITER_FOREACH(n, entity(mu)->chanacs.head)
 	{
-		ca = (chanacs_t *)n->data;
+		ca = (struct chanacs *)n->data;
 
 		/* don't tell users they're akicked (flag +b) */
 		if (ca->level != CA_AKICK)

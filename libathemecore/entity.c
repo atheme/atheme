@@ -163,7 +163,7 @@ void myentity_stats(void (*cb)(const char *line, void *privdata), void *privdata
 }
 
 /* validation */
-static chanacs_t *linear_chanacs_match_entity(chanacs_t *ca, struct myentity *mt)
+static struct chanacs *linear_chanacs_match_entity(struct chanacs *ca, struct myentity *mt)
 {
 	return ca->entity == mt ? ca : NULL;
 }
@@ -213,7 +213,7 @@ const struct entity_chanacs_validation_vtable *myentity_get_chanacs_validator(st
 unsigned int myentity_count_channels_with_flagset(struct myentity *mt, unsigned int flagset)
 {
 	mowgli_node_t *n;
-	chanacs_t *ca;
+	struct chanacs *ca;
 	unsigned int count = 0;
 
 	MOWGLI_ITER_FOREACH(n, mt->chanacs.head)

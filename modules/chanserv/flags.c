@@ -107,7 +107,7 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 
 static void do_list(struct sourceinfo *si, mychan_t *mc, unsigned int flags)
 {
-	chanacs_t *ca;
+	struct chanacs *ca;
 	mowgli_node_t *n;
 	bool operoverride = false;
 	unsigned int i = 1;
@@ -185,7 +185,7 @@ static void check_registration_keywords(hook_user_register_check_t *hdata)
 /* FLAGS <channel> [user] [flags] */
 static void cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 {
-	chanacs_t *ca;
+	struct chanacs *ca;
 	mowgli_node_t *n;
 	char *channel = parv[0];
 	char *target = sstrdup(parv[1]);

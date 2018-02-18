@@ -31,7 +31,7 @@ static void cs_cmd_clear_flags(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	mowgli_node_t *n, *tn;
-	chanacs_t *ca;
+	struct chanacs *ca;
 	char *name = parv[0];
 	int changes = 0;
 

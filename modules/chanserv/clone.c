@@ -29,7 +29,7 @@ static void cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_node_t *n, *tn;
 	mowgli_patricia_iteration_state_t state;
 	metadata_t *md;
-	chanacs_t *ca;
+	struct chanacs *ca;
 	char *source = parv[0];
 	char *target = parv[1];
 

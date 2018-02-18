@@ -345,7 +345,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	bool noop;
 	bool secure;
 	metadata_t *md;
-	chanacs_t *ca2;
+	struct chanacs *ca2;
 	char akickreason[120] = "User is banned from this channel", *p;
 
 	if (cu == NULL || is_internal_client(cu->user))

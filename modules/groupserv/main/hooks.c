@@ -42,10 +42,10 @@ static void grant_channel_access_hook(user_t *u)
 
 		MOWGLI_ITER_FOREACH(n, entity(ga->mg)->chanacs.head)
 		{
-			chanacs_t *ca;
+			struct chanacs *ca;
 			struct chanuser *cu;
 
-			ca = (chanacs_t *)n->data;
+			ca = (struct chanacs *)n->data;
 
 			if (ca->mychan->chan == NULL)
 				continue;

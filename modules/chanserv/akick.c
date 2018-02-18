@@ -159,7 +159,7 @@ void cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 	struct myentity *mt;
 	mychan_t *mc;
 	hook_channel_acl_req_t req;
-	chanacs_t *ca, *ca2;
+	struct chanacs *ca, *ca2;
 	char *chan = parv[0];
 	long duration;
 	char expiry[512];
@@ -430,7 +430,7 @@ void cs_cmd_akick_del(struct sourceinfo *si, int parc, char *parv[])
 	struct myentity *mt;
 	mychan_t *mc;
 	hook_channel_acl_req_t req;
-	chanacs_t *ca;
+	struct chanacs *ca;
 	mowgli_node_t *n, *tn;
 	char *chan = parv[0];
 	char *uname = parv[1];
@@ -550,7 +550,7 @@ void cs_cmd_akick_del(struct sourceinfo *si, int parc, char *parv[])
 void cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
-	chanacs_t *ca;
+	struct chanacs *ca;
 	metadata_t *md, *md2;
 	mowgli_node_t *n, *tn;
 	bool operoverride = false;
@@ -611,7 +611,7 @@ void cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 		char *ago;
 		long time_left = 0;
 
-		ca = (chanacs_t *)n->data;
+		ca = (struct chanacs *)n->data;
 
 		if (ca->level == CA_AKICK)
 		{
@@ -665,7 +665,7 @@ void akick_timeout_check(void *arg)
 {
 	mowgli_node_t *n, *tn;
 	akick_timeout_t *timeout;
-	chanacs_t *ca;
+	struct chanacs *ca;
 	mychan_t *mc;
 
 	struct chanban *cb;
@@ -751,7 +751,7 @@ void akickdel_list_create(void *arg)
 {
 	mychan_t *mc;
 	mowgli_node_t *n, *tn;
-	chanacs_t *ca;
+	struct chanacs *ca;
 	metadata_t *md;
 	time_t expireson;
 
@@ -761,7 +761,7 @@ void akickdel_list_create(void *arg)
 	{
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chanacs.head)
 		{
-			ca = (chanacs_t *)n->data;
+			ca = (struct chanacs *)n->data;
 
 			if (!(ca->level & CA_AKICK))
 				continue;

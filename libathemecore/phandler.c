@@ -330,7 +330,7 @@ mowgli_node_t *generic_next_matching_ban(struct channel *c, user_t *u, int type,
 
 mowgli_node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, mowgli_node_t *first)
 {
-	chanacs_t *ca;
+	struct chanacs *ca;
 	mowgli_node_t *n;
 	char hostbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
 	char hostbuf2[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];

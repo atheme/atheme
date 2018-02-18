@@ -34,7 +34,7 @@ static void cs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 	mychan_t *mc;
 	struct myentity *mt;
 	unsigned int addflags, removeflags;
-	chanacs_t *ca;
+	struct chanacs *ca;
 	hook_channel_acl_req_t req;
 
 	if (parc < 3)

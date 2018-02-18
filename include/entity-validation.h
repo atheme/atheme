@@ -7,8 +7,8 @@
 
 struct entity_chanacs_validation_vtable
 {
-	chanacs_t *(*match_entity)(chanacs_t *ca, struct myentity *mt);
-	chanacs_t *(*match_user)(chanacs_t *ca, user_t *mt);
+	struct chanacs *(*match_entity)(struct chanacs *ca, struct myentity *mt);
+	struct chanacs *(*match_user)(struct chanacs *ca, user_t *mt);
 
 	bool (*can_register_channel)(struct myentity *mt);
 	bool (*allow_foundership)(struct myentity *mt);

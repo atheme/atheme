@@ -206,7 +206,7 @@ static void cs_cmd_hop(struct sourceinfo *si, int parc, char *parv[])
 
 static void cs_xop_do_add(struct sourceinfo *si, mychan_t *mc, struct myentity *mt, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags)
 {
-	chanacs_t *ca;
+	struct chanacs *ca;
 	unsigned int addflags = level, removeflags = ~level;
 	bool isnew;
 	hook_channel_acl_req_t req;
@@ -341,7 +341,7 @@ static void cs_xop_do_add(struct sourceinfo *si, mychan_t *mc, struct myentity *
 
 static void cs_xop_do_del(struct sourceinfo *si, mychan_t *mc, struct myentity *mt, char *target, unsigned int level, const char *leveldesc)
 {
-	chanacs_t *ca;
+	struct chanacs *ca;
 	hook_channel_acl_req_t req;
 
 	/* let's finally make this sane.. --w00t */
@@ -401,14 +401,14 @@ static void cs_xop_do_del(struct sourceinfo *si, mychan_t *mc, struct myentity *
 
 static void cs_xop_do_list(struct sourceinfo *si, mychan_t *mc, unsigned int level, const char *leveldesc, bool operoverride)
 {
-	chanacs_t *ca;
+	struct chanacs *ca;
 	int i = 0;
 	mowgli_node_t *n;
 
 	command_success_nodata(si, _("%s list for \2%s\2:"), leveldesc ,mc->name);
 	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
-		ca = (chanacs_t *)n->data;
+		ca = (struct chanacs *)n->data;
 		if (ca->level == level)
 		{
 			if (ca->entity == NULL)
@@ -431,7 +431,7 @@ static void cs_xop_do_list(struct sourceinfo *si, mychan_t *mc, unsigned int lev
 static void cs_cmd_forcexop(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
-	chanacs_t *ca;
+	struct chanacs *ca;
 	mychan_t *mc = mychan_find(chan);
 	mowgli_node_t *n;
 	int changes;
@@ -472,7 +472,7 @@ static void cs_cmd_forcexop(struct sourceinfo *si, int parc, char *parv[])
 	changes = 0;
 	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
-		ca = (chanacs_t *)n->data;
+		ca = (struct chanacs *)n->data;
 
 		if (ca->level & CA_AKICK)
 			continue;

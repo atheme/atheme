@@ -11,7 +11,7 @@ static mowgli_patricia_t **exttarget_tree = NULL;
 
 static struct myentity dummy_entity;
 
-static chanacs_t *dummy_match_user(chanacs_t *ca, user_t *u)
+static struct chanacs *dummy_match_user(struct chanacs *ca, user_t *u)
 {
 	if (is_ircop(u))
 		return ca;
@@ -19,7 +19,7 @@ static chanacs_t *dummy_match_user(chanacs_t *ca, user_t *u)
 	return NULL;
 }
 
-static chanacs_t *dummy_match_entity(chanacs_t *ca, struct myentity *mt)
+static struct chanacs *dummy_match_entity(struct chanacs *ca, struct myentity *mt)
 {
 	if (ca->entity == mt)
 		return ca;

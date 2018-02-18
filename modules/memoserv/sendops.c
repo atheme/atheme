@@ -110,7 +110,7 @@ static void ms_cmd_sendops(struct sourceinfo *si, int parc, char *parv[])
 
 	MOWGLI_ITER_FOREACH(tn, mc->chanacs.head)
 	{
-		chanacs_t *ca = (chanacs_t *) tn->data;
+		struct chanacs *ca = (struct chanacs *) tn->data;
 		tmu = isuser(ca->entity) ? user(ca->entity) : NULL;	/* XXX */
 
 		if (!(ca->level & (CA_OP | CA_AUTOOP)) || tmu == NULL || tmu == si->smu)

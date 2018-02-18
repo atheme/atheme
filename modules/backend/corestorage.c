@@ -36,7 +36,7 @@ corestorage_db_save(struct database_handle *db)
 	struct myentity *ment;
 	struct myuser_name *mun;
 	mychan_t *mc;
-	chanacs_t *ca;
+	struct chanacs *ca;
 	struct kline *k;
 	struct xline *x;
 	struct qline *q;
@@ -170,7 +170,7 @@ corestorage_db_save(struct database_handle *db)
 		mu = NULL;
 		MOWGLI_ITER_FOREACH(tn, mc->chanacs.head)
 		{
-			ca = (chanacs_t *)tn->data;
+			ca = (struct chanacs *)tn->data;
 			if (ca->entity != NULL && ca->level & CA_FOUNDER)
 			{
 				mu = user(ca->entity);
@@ -192,7 +192,7 @@ corestorage_db_save(struct database_handle *db)
 		MOWGLI_ITER_FOREACH(tn, mc->chanacs.head)
 		{
 			struct myentity *setter = NULL;
-			ca = (chanacs_t *)tn->data;
+			ca = (struct chanacs *)tn->data;
 
 			db_start_row(db, "CA");
 			db_write_word(db, ca->mychan->name);

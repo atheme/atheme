@@ -363,7 +363,7 @@ static void cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 		if (changechanacs)
 		{
 			mowgli_node_t *n, *tn;
-			chanacs_t *ca;
+			struct chanacs *ca;
 			int changes = 0, founderskipped = 0;
 			char flagstr2[128];
 

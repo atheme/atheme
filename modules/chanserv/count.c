@@ -28,7 +28,7 @@ mod_deinit(const module_unload_intent_t intent)
 static void cs_cmd_count(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
-	chanacs_t *ca;
+	struct chanacs *ca;
 	mychan_t *mc = mychan_find(chan);
 	unsigned int ca_sop, ca_aop, ca_hop, ca_vop;
 	int vopcnt = 0, aopcnt = 0, hopcnt = 0, sopcnt = 0, akickcnt = 0;
@@ -75,7 +75,7 @@ static void cs_cmd_count(struct sourceinfo *si, int parc, char *parv[])
 
 	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
-		ca = (chanacs_t *)n->data;
+		ca = (struct chanacs *)n->data;
 
 		if (ca->level == ca_vop)
 			vopcnt++;
@@ -104,7 +104,7 @@ static void cs_cmd_count(struct sourceinfo *si, int parc, char *parv[])
 		othercnt = 0;
 		MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 		{
-			ca = (chanacs_t *)n->data;
+			ca = (struct chanacs *)n->data;
 
 			if (ca->level & chanacs_flags[i].value)
 				othercnt++;

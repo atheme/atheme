@@ -386,7 +386,7 @@ static void ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 
 	if (mu == si->smu || has_user_auspex || has_priv(si, PRIV_CHAN_AUSPEX))
 	{
-		chanacs_t *ca;
+		struct chanacs *ca;
 		int founder = 0, other = 0;
 
 		MOWGLI_ITER_FOREACH(n, entity(mu)->chanacs.head)

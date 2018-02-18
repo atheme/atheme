@@ -404,7 +404,7 @@ static void flatfile_db_load(const char *filename)
 			}
 			else if (type[0] == 'A')
 			{
-				chanacs_t *ca;
+				struct chanacs *ca;
 				char *mask;
 
 				mask = strrchr(name, ':');
@@ -464,7 +464,7 @@ static void flatfile_db_load(const char *filename)
 		else if (!strcmp("CA", item))
 		{
 			/* chanacs */
-			chanacs_t *ca;
+			struct chanacs *ca;
 			char *cachan, *causer;
 
 			cachan = strtok(NULL, " ");

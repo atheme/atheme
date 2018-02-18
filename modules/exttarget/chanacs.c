@@ -18,7 +18,7 @@ typedef struct {
 	int checking;
 } chanacs_exttarget_t;
 
-static chanacs_t *chanacs_ext_match_user(chanacs_t *ca, user_t *u)
+static struct chanacs *chanacs_ext_match_user(struct chanacs *ca, user_t *u)
 {
 	chanacs_exttarget_t *ent;
 	mychan_t *mc;
@@ -45,7 +45,7 @@ static chanacs_t *chanacs_ext_match_user(chanacs_t *ca, user_t *u)
 	return NULL;
 }
 
-static chanacs_t *chanacs_ext_match_entity(chanacs_t *ca, struct myentity *mt)
+static struct chanacs *chanacs_ext_match_entity(struct chanacs *ca, struct myentity *mt)
 {
 	if (ca->entity == mt)
 		return ca;
