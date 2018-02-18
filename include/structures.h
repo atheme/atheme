@@ -42,6 +42,9 @@ struct database_vtable;
 // Defined in include/entity-validation.h
 struct entity_chanacs_validation_vtable;
 
+// Defined in include/global.h
+struct me;
+
 // Defined in include/hook.h
 struct hook;
 

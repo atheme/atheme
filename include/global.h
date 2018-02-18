@@ -11,9 +11,6 @@
 
 /* me, a struct containing basic configuration options and some dynamic
  * information about our uplink and program state */
-typedef struct me me_t;
-
-/* S T R U C T U R E S */
 struct me
 {
   char *name;                   /* server's name on IRC               */
@@ -60,7 +57,7 @@ struct me
   bool hidden;			/* whether or not we should hide ourselves in /links (if the ircd supports it) */
 };
 
-extern me_t me;
+extern struct me me;
 
 /* values for me.auth */
 #define AUTH_NONE  0

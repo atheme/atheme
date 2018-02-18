@@ -45,7 +45,7 @@ mowgli_list_t taint_list = { NULL, NULL, 0 };
 
 mowgli_eventloop_t *base_eventloop = NULL;
 
-me_t me;
+struct me me;
 struct cnt cnt;
 
 /* XXX */
