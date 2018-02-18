@@ -18,11 +18,12 @@ enum module_unload_intent
 	MODULE_UNLOAD_INTENT_RELOAD          = 1,
 };
 
-typedef enum {
+enum module_unload_capability
+{
 	MODULE_UNLOAD_CAPABILITY_OK          = 0,
 	MODULE_UNLOAD_CAPABILITY_NEVER       = 1,
 	MODULE_UNLOAD_CAPABILITY_RELOAD_ONLY = 2,
-} module_unload_capability_t;
+};
 
 typedef void (*module_unload_handler_t)(struct module *, enum module_unload_intent);
 
@@ -33,7 +34,7 @@ struct module
 {
 	char name[BUFSIZE];
 	char modpath[BUFSIZE];
-	module_unload_capability_t can_unload;
+	enum module_unload_capability can_unload;
 
 	unsigned int mflags;
 
@@ -72,7 +73,7 @@ struct v4_moduleheader
 	unsigned int abi_rev;
 	const char *serial;
 	const char *name;
-	module_unload_capability_t can_unload;
+	enum module_unload_capability can_unload;
 	void (*modinit)(struct module *m);
 	void (*deinit)(enum module_unload_intent intent);
 	const char *vendor;
@@ -92,7 +93,7 @@ typedef struct {
 
 typedef struct module_dependency_ {
 	char *name;
-	module_unload_capability_t can_unload;
+	enum module_unload_capability can_unload;
 } module_dependency_t;
 
 extern void modules_init(void);
