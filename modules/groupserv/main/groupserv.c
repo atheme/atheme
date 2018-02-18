@@ -5,27 +5,6 @@
 #include "atheme.h"
 #include "groupserv_main.h"
 
-gflags_t ga_flags[] = {
-	{ 'F', GA_FOUNDER },
-	{ 'f', GA_FLAGS },
-	{ 's', GA_SET },
-	{ 'c', GA_CHANACS },
-	{ 'm', GA_MEMOS },
-	{ 'v', GA_VHOST },
-	{ 'i', GA_INVITE },
-	{ 'b', GA_BAN },
-	{ 'A', GA_ACLVIEW },
-	{ 0, 0 }
-};
-
-gflags_t mg_flags[] = {
-	{ 'r', MG_REGNOLIMIT },
-	{ 'a', MG_ACSNOLIMIT },
-	{ 'o', MG_OPEN },
-	{ 'p', MG_PUBLIC },
-	{ 0, 0 }
-};
-
 struct groupserv_config gs_config;
 
 mowgli_heap_t *mygroup_heap, *groupacs_heap;

@@ -48,6 +48,9 @@ struct myentity_iteration_state;
 // Defined in include/entity-validation.h
 struct entity_chanacs_validation_vtable;
 
+// Defined in include/flags.h
+struct gflags;
+
 // Defined in include/global.h
 struct me;
 

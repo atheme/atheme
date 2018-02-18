@@ -29,8 +29,6 @@ mowgli_list_t * (*myentity_get_membership_list)(struct myentity *mu);
 const char * (*mygroup_founder_names)(struct mygroup *mg);
 void (*remove_group_chanacs)(struct mygroup *mg);
 
-gflags_t *ga_flags;
-
 struct groupserv_config *gs_config;
 
 static inline void use_groupserv_main_symbols(struct module *m)
@@ -52,7 +50,6 @@ static inline void use_groupserv_main_symbols(struct module *m)
     MODULE_TRY_REQUEST_SYMBOL(m, mygroup_founder_names, "groupserv/main", "mygroup_founder_names");
     MODULE_TRY_REQUEST_SYMBOL(m, remove_group_chanacs, "groupserv/main", "remove_group_chanacs");
 
-    MODULE_TRY_REQUEST_SYMBOL(m, ga_flags, "groupserv/main", "ga_flags");
     MODULE_TRY_REQUEST_SYMBOL(m, gs_config, "groupserv/main", "gs_config");
 }
 

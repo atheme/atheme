@@ -52,7 +52,7 @@ struct flags_table chanacs_flags[256] = {
 	['e'] = {CA_EXEMPT, 0, true,     "exempt"},
 };
 
-gflags_t mu_flags[] = {
+const struct gflags mu_flags[] = {
 	{ 'h', MU_HOLD },
 	{ 'n', MU_NEVEROP },
 	{ 'o', MU_NOOP },
@@ -73,7 +73,7 @@ gflags_t mu_flags[] = {
 	{ 0, 0 },
 };
 
-gflags_t mc_flags[] = {
+const struct gflags mc_flags[] = {
 	{ 'a', MC_PUBACL },
 	{ 'h', MC_HOLD },
 	{ 'o', MC_NOOP },
@@ -91,7 +91,28 @@ gflags_t mc_flags[] = {
 	{ 0, 0 },
 };
 
-gflags_t soper_flags[] = {
+const struct gflags mg_flags[] = {
+	{ 'r', MG_REGNOLIMIT },
+	{ 'a', MG_ACSNOLIMIT },
+	{ 'o', MG_OPEN },
+	{ 'p', MG_PUBLIC },
+	{ 0, 0 }
+};
+
+const struct gflags ga_flags[] = {
+	{ 'F', GA_FOUNDER },
+	{ 'f', GA_FLAGS },
+	{ 's', GA_SET },
+	{ 'c', GA_CHANACS },
+	{ 'm', GA_MEMOS },
+	{ 'v', GA_VHOST },
+	{ 'i', GA_INVITE },
+	{ 'b', GA_BAN },
+	{ 'A', GA_ACLVIEW },
+	{ 0, 0 }
+};
+
+const struct gflags soper_flags[] = {
 	{ 'c', SOPER_CONF },
 	{ 0, 0 },
 };
@@ -427,7 +448,7 @@ const char *xflag_tostr(unsigned int flags)
 	return buf;
 }
 
-char *gflags_tostr(gflags_t *gflags, unsigned int flags)
+char *gflags_tostr(const struct gflags *gflags, unsigned int flags)
 {
 	static char buf[257];
 	char *p = buf;
@@ -440,7 +461,7 @@ char *gflags_tostr(gflags_t *gflags, unsigned int flags)
 	return buf;
 }
 
-static bool gflag_fromchar(gflags_t *gflags, char f, unsigned int *res)
+static bool gflag_fromchar(const struct gflags *gflags, char f, unsigned int *res)
 {
 	int i;
 	if (f == '+') return true;
@@ -453,7 +474,7 @@ static bool gflag_fromchar(gflags_t *gflags, char f, unsigned int *res)
 	return false;
 }
 
-bool gflags_fromstr(gflags_t *gflags, const char *f, unsigned int *res)
+bool gflags_fromstr(const struct gflags *gflags, const char *f, unsigned int *res)
 {
 	*res = 0;
 	while (*f)

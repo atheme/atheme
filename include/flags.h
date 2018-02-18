@@ -17,6 +17,12 @@ struct flags_table
 	const char *name;
 };
 
+struct gflags
+{
+	char ch;
+	unsigned int value;
+};
+
 extern unsigned int ca_all;
 extern struct flags_table chanacs_flags[256];
 
@@ -31,17 +37,14 @@ extern char *bitmask_to_flags2(unsigned int, unsigned int);
 extern unsigned int allow_flags(mychan_t *mc, unsigned int flags);
 extern void update_chanacs_flags(void);
 
-typedef struct gflags {
-	char ch;
-	unsigned int value;
-} gflags_t;
+extern const struct gflags mu_flags[];
+extern const struct gflags mc_flags[];
+extern const struct gflags mg_flags[];
+extern const struct gflags ga_flags[];
+extern const struct gflags soper_flags[];
 
-extern gflags_t mu_flags[];
-extern gflags_t mc_flags[];
-extern gflags_t soper_flags[];
-
-extern char *gflags_tostr(gflags_t *gflags, unsigned int flags);
-extern bool gflags_fromstr(gflags_t *gflags, const char *f, unsigned int *res);
+extern char *gflags_tostr(const struct gflags *gflags, unsigned int flags);
+extern bool gflags_fromstr(const struct gflags *gflags, const char *f, unsigned int *res);
 
 extern unsigned int xflag_lookup(const char *name);
 extern unsigned int xflag_apply(unsigned int in, const char *name);
