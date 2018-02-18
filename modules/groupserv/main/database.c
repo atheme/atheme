@@ -12,7 +12,7 @@ static unsigned int their_ga_all;
 static void write_groupdb(struct database_handle *db)
 {
 	struct myentity *mt;
-	myentity_iteration_state_t state;
+	struct myentity_iteration_state state;
 	mowgli_patricia_iteration_state_t state2;
 	struct metadata *md;
 

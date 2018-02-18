@@ -18,7 +18,7 @@ static void gs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 	struct myentity *mt;
 	char *pattern = parv[0];
 	unsigned int matches = 0;
-	myentity_iteration_state_t state;
+	struct myentity_iteration_state state;
 
 	if (!pattern)
 	{

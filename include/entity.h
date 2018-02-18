@@ -43,16 +43,17 @@ struct myentity *myentity_find(const char *name);
 struct myentity *myentity_find_ext(const char *name);
 struct myentity *myentity_find_uid(const char *uid);
 
-typedef struct {
+struct myentity_iteration_state
+{
 	mowgli_patricia_iteration_state_t st;
 	enum myentity_type type;
-} myentity_iteration_state_t;
+};
 
 extern void myentity_foreach(int (*cb)(struct myentity *me, void *privdata), void *privdata);
 extern void myentity_foreach_t(enum myentity_type type, int (*cb)(struct myentity *me, void *privdata), void *privdata);
-extern void myentity_foreach_start(myentity_iteration_state_t *state, enum myentity_type type);
-extern void myentity_foreach_next(myentity_iteration_state_t *state);
-extern struct myentity *myentity_foreach_cur(myentity_iteration_state_t *state);
+extern void myentity_foreach_start(struct myentity_iteration_state *state, enum myentity_type type);
+extern void myentity_foreach_next(struct myentity_iteration_state *state);
+extern struct myentity *myentity_foreach_cur(struct myentity_iteration_state *state);
 
 #define MYENTITY_FOREACH_T(elem, state, type) for (myentity_foreach_start(state, type); (elem = myentity_foreach_cur(state)); myentity_foreach_next(state))
 #define MYENTITY_FOREACH(elem, state) MYENTITY_FOREACH_T(elem, state, 0)

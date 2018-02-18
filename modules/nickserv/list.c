@@ -239,7 +239,7 @@ static void ns_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 	char criteriastr[BUFSIZE];
 
 	mowgli_patricia_iteration_state_t state;
-	myentity_iteration_state_t mestate;
+	struct myentity_iteration_state mestate;
 	mynick_t *mn;
 
 	int matches = 0;

@@ -214,7 +214,7 @@ static void write_multimark_db(struct database_handle *db)
 {
 	mowgli_node_t *n;
 	myuser_t *mu;
-	myentity_iteration_state_t state;
+	struct myentity_iteration_state state;
 	mowgli_list_t *l;
 	struct myentity *mt;
 
@@ -412,7 +412,7 @@ static void migrate_user(myuser_t *mu)
 
 static void migrate_all(struct sourceinfo *si)
 {
-	myentity_iteration_state_t state;
+	struct myentity_iteration_state state;
 	struct myentity *mt;
 
 	command_success_nodata(si, _("Migrating mark data..."));

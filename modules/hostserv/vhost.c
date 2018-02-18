@@ -75,7 +75,7 @@ static void hs_cmd_vhost(struct sourceinfo *si, int parc, char *parv[])
 static void hs_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *pattern;
-	myentity_iteration_state_t state;
+	struct myentity_iteration_state state;
 	struct myentity *mt;
 	myuser_t *mu;
 	struct metadata *md, *md_timestamp, *md_assigner;

@@ -112,7 +112,7 @@ struct myentity *myentity_find_ext(const char *name)
 	return myentity_find(name);
 }
 
-void myentity_foreach_start(myentity_iteration_state_t *state, enum myentity_type type)
+void myentity_foreach_start(struct myentity_iteration_state *state, enum myentity_type type)
 {
 	struct myentity *e;
 
@@ -127,12 +127,12 @@ void myentity_foreach_start(myentity_iteration_state_t *state, enum myentity_typ
 	}
 }
 
-struct myentity *myentity_foreach_cur(myentity_iteration_state_t *state)
+struct myentity *myentity_foreach_cur(struct myentity_iteration_state *state)
 {
 	return mowgli_patricia_foreach_cur(entities, &state->st);
 }
 
-void myentity_foreach_next(myentity_iteration_state_t *state)
+void myentity_foreach_next(struct myentity_iteration_state *state)
 {
 	struct myentity *e;
 	do {
@@ -148,7 +148,7 @@ void myentity_foreach(int (*cb)(struct myentity *mt, void *privdata), void *priv
 
 void myentity_foreach_t(enum myentity_type type, int (*cb)(struct myentity *mt, void *privdata), void *privdata)
 {
-	myentity_iteration_state_t state;
+	struct myentity_iteration_state state;
 	struct myentity *mt;
 	MYENTITY_FOREACH_T(mt, &state, type)
 	{

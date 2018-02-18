@@ -25,7 +25,7 @@ static unsigned int verify_entity_uids(void)
 {
 	unsigned int errcnt = 0;
 	mowgli_patricia_t *known = mowgli_patricia_create(strcasecanon);
-	myentity_iteration_state_t state;
+	struct myentity_iteration_state state;
 	struct myentity *mt;
 
 	MYENTITY_FOREACH_T(mt, &state, ENT_ANY)

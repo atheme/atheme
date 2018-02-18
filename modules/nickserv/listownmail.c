@@ -26,7 +26,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 static void ns_cmd_listownmail(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myentity *mt;
-	myentity_iteration_state_t state;
+	struct myentity_iteration_state state;
 	unsigned int matches = 0;
 
 	if (si->smu->flags & MU_WAITAUTH)

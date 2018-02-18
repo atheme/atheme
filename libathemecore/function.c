@@ -306,7 +306,7 @@ static mowgli_list_t email_canonicalizers;
  */
 static void canonicalize_emails(void)
 {
-	myentity_iteration_state_t state;
+	struct myentity_iteration_state state;
 	struct myentity *mt;
 
 	MYENTITY_FOREACH_T(mt, &state, ENT_USER)
@@ -381,7 +381,7 @@ void canonicalize_email_case(char email[static (EMAILLEN + 1)], void *user_data)
 bool email_within_limits(const char *email)
 {
 	mowgli_node_t *n;
-	myentity_iteration_state_t state;
+	struct myentity_iteration_state state;
 	struct myentity *mt;
 	unsigned int tcnt = 0;
 	stringref email_canonical;

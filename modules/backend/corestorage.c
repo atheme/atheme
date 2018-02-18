@@ -44,7 +44,7 @@ corestorage_db_save(struct database_handle *db)
 	soper_t *soper;
 	mowgli_node_t *n, *tn;
 	mowgli_patricia_iteration_state_t state;
-	myentity_iteration_state_t mestate;
+	struct myentity_iteration_state mestate;
 
 	errno = 0;
 

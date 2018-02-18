@@ -41,6 +41,10 @@ struct database_handle;
 struct database_module;
 struct database_vtable;
 
+// Defined in include/entity.h
+struct myentity;
+struct myentity_iteration_state;
+
 // Defined in include/entity-validation.h
 struct entity_chanacs_validation_vtable;
 

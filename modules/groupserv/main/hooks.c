@@ -7,7 +7,7 @@
 static void mygroup_expire(void *unused)
 {
 	struct myentity *mt;
-	myentity_iteration_state_t state;
+	struct myentity_iteration_state state;
 
 	MYENTITY_FOREACH_T(mt, &state, ENT_GROUP)
 	{
