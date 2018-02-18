@@ -46,7 +46,7 @@ static void handle_request(struct connection *cptr, void *requestbuf)
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, httpd_path_handlers, "misc/httpd", "httpd_path_handlers");
 

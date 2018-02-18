@@ -12,7 +12,7 @@ static void on_user_identify(user_t *u);
 struct service *hostsvs;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	hook_add_event("user_identify");
 	hook_add_user_identify(on_user_identify);

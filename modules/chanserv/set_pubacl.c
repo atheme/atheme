@@ -15,7 +15,7 @@ struct command cs_set_pubacl = { "PUBACL", N_("Allows the channel ACL to be publ
 mowgli_patricia_t **cs_set_cmdtree;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 

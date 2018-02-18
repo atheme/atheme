@@ -15,7 +15,7 @@ struct command hs_vhost = { "VHOST", N_("Manages per-account virtual hosts."), P
 struct command hs_listvhost = { "LISTVHOST", N_("Lists user virtual hosts."), PRIV_USER_AUSPEX, 1, hs_cmd_listvhost, { .path = "hostserv/listvhost" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	service_named_bind_command("hostserv", &hs_vhost);
 	service_named_bind_command("hostserv", &hs_listvhost);

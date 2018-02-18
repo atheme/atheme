@@ -399,7 +399,7 @@ static void cs_cmd_set_nosync(struct sourceinfo *si, int parc, char *parv[])
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 	service_named_bind_command("chanserv", &cs_sync);

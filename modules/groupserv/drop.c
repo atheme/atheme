@@ -97,7 +97,7 @@ static struct command cmd_gs_drop = {
 };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	(void) use_groupserv_main_symbols(m);
 

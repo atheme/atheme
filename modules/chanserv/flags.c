@@ -17,7 +17,7 @@ struct command cs_flags = { "FLAGS", N_("Manipulates specific permissions on a c
 static bool anope_flags_compat = true;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	service_named_bind_command("chanserv", &cs_flags);
 

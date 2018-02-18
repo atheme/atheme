@@ -14,7 +14,7 @@ struct command ms_sendops = { "SENDOPS", N_("Sends a memo to all ops on a channe
 static unsigned int *maxmemos;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
         service_named_bind_command("memoserv", &ms_sendops);
         MODULE_TRY_REQUEST_SYMBOL(m, maxmemos, "memoserv/main", "maxmemos");

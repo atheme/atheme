@@ -116,7 +116,7 @@ static struct myentity *channel_validate_f(const char *param)
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, exttarget_tree, "exttarget/main", "exttarget_tree");
 

@@ -33,7 +33,7 @@ gflags_t *ga_flags;
 
 groupserv_config_t *gs_config;
 
-static inline void use_groupserv_main_symbols(module_t *m)
+static inline void use_groupserv_main_symbols(struct module *m)
 {
     MODULE_TRY_REQUEST_DEPENDENCY(m, "groupserv/main");
     MODULE_TRY_REQUEST_SYMBOL(m, mygroup_add, "groupserv/main", "mygroup_add");
@@ -60,7 +60,7 @@ static inline void use_groupserv_main_symbols(module_t *m)
 
 mowgli_patricia_t *gs_set_cmdtree;
 
-static inline void use_groupserv_set_symbols(module_t *m)
+static inline void use_groupserv_set_symbols(struct module *m)
 {
     MODULE_TRY_REQUEST_DEPENDENCY(m, "groupserv/set");
 

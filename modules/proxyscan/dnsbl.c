@@ -597,7 +597,7 @@ static void db_h_ble(struct database_handle *db, const char *type)
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	struct service *proxyscan;
 

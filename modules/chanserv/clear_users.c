@@ -15,7 +15,7 @@ struct command cs_clear_users = { "USERS", N_("Kicks all users from a channel.")
 mowgli_patricia_t **cs_clear_cmds;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, cs_clear_cmds, "chanserv/clear", "cs_clear_cmds");
 

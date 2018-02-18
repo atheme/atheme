@@ -71,7 +71,7 @@ __matched:
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	service_named_bind_command("rpgserv", &rs_search);
 }

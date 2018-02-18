@@ -841,7 +841,7 @@ saslserv(struct sourceinfo *const restrict si, const int parc, char **const rest
 }
 
 static void
-mod_init(module_t ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	(void) hook_add_event("sasl_input");
 	(void) hook_add_sasl_input(&sasl_input);

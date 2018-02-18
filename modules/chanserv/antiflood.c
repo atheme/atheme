@@ -501,7 +501,7 @@ c_ci_antiflood_enforce_method(mowgli_config_file_entry_t *ce)
 }
 
 static void
-mod_init(module_t *m)
+mod_init(struct module *m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 

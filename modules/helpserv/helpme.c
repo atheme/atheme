@@ -16,7 +16,7 @@ static void helpserv_cmd_helpme(struct sourceinfo *si, int parc, char *parv[]);
 struct command helpserv_helpme = { "HELPME", N_("Request help from network staff."), AC_NONE, 1, helpserv_cmd_helpme, { .path = "helpserv/helpme" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
         service_named_bind_command("helpserv", &helpserv_helpme);
 }

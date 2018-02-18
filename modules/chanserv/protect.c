@@ -17,7 +17,7 @@ struct command cs_deprotect = { "DEPROTECT", N_("Removes channel protection flag
                         AC_NONE, 2, cs_cmd_deprotect, { .path = "cservice/protect" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	if (ircd != NULL && !ircd->uses_protect)
 	{

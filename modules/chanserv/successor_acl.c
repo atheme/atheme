@@ -34,7 +34,7 @@ static void channel_succession_hook(hook_channel_succession_req_t *req)
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	m->mflags = MODTYPE_CORE;
 

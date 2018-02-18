@@ -353,7 +353,7 @@ static void cs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[])
 /*****************************************************************************/
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	csreq_list = mowgli_patricia_create(strcasecanon);
 

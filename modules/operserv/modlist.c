@@ -14,7 +14,7 @@ struct command os_modlist = { "MODLIST", N_("Lists loaded modules."), PRIV_SERVE
 extern mowgli_list_t modules;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	service_named_bind_command("operserv", &os_modlist);
 }
@@ -33,7 +33,7 @@ static void os_cmd_modlist(struct sourceinfo *si, int parc, char *parv[])
 
 	MOWGLI_ITER_FOREACH(n, modules.head)
 	{
-		module_t *m = n->data;
+		struct module *m = n->data;
 
 		command_success_nodata(si, _("%2d: %-20s [loaded at 0x%lx]"),
 			++i, m->name, (unsigned long)m->address);

@@ -91,7 +91,7 @@ uid_provider_t base36_gen = {
 };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	uid_provider_impl = &base36_gen;
 }

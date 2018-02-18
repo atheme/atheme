@@ -13,7 +13,7 @@ struct command cs_taxonomy = { "TAXONOMY", N_("Displays a channel's metadata."),
                         AC_NONE, 1, cs_cmd_taxonomy, { .path = "cservice/taxonomy" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	service_named_bind_command("chanserv", &cs_taxonomy);
 }

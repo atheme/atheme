@@ -12,7 +12,7 @@ static void ns_cmd_taxonomy(struct sourceinfo *si, int parc, char *parv[]);
 struct command ns_taxonomy = { "TAXONOMY", N_("Displays a user's metadata."), AC_NONE, 1, ns_cmd_taxonomy, { .path = "nickserv/taxonomy" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_taxonomy);
 }

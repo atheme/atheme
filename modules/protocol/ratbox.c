@@ -72,7 +72,7 @@ static const struct cmode ratbox_user_mode_list[] = {
 };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/ts6-generic");
 

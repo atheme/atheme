@@ -22,7 +22,7 @@ struct command cs_topicswap = { "TOPICSWAP", N_("Swap part of the topic on a cha
                         AC_NONE, 2, cs_cmd_topicswap, { .path = "cservice/topicswap" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_topic);
         service_named_bind_command("chanserv", &cs_topicappend);

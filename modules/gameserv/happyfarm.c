@@ -414,7 +414,7 @@ struct command command_happyfarm = { "HAPPYFARM", N_("Happy Farm!"), AC_AUTHENTI
 /*******************************************************************************************/
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	farmer_heap = mowgli_heap_create(sizeof(happy_farmer_t), 32, BH_LAZY);
 	plot_heap = mowgli_heap_create(sizeof(happy_plot_t), 32, BH_LAZY);

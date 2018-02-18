@@ -15,7 +15,7 @@ void (*list_register)(const char *param_name, list_param_t *param);
 void (*list_unregister)(const char *param_name);
 
 
-static inline void use_nslist_main_symbols(module_t *m)
+static inline void use_nslist_main_symbols(struct module *m)
 {
     MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/list");
     MODULE_TRY_REQUEST_SYMBOL(m, list_register, "nickserv/list", "list_register");

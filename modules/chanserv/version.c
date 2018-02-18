@@ -7,7 +7,7 @@ struct command cs_version = { "VERSION", N_("Displays version information of the
                         AC_NONE, 0, cs_cmd_version, { .path = "" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_version);
 }

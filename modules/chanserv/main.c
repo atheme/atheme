@@ -257,7 +257,7 @@ static int c_ci_templates(mowgli_config_file_entry_t *ce)
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	hook_add_event("config_ready");
 	hook_add_config_ready(chanserv_config_ready);

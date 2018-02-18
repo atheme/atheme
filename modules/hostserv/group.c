@@ -13,7 +13,7 @@ static void hs_cmd_group(struct sourceinfo *si, int parc, char *parv[]);
 struct command hs_group = { "GROUP", N_("Syncs the vhost for all nicks in a group."), AC_AUTHENTICATED, 1, hs_cmd_group, { .path = "hostserv/group" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	service_named_bind_command("hostserv", &hs_group);
 }

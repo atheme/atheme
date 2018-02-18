@@ -50,7 +50,7 @@ rwatch_t *rwread = NULL;
 FILE *f;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	service_named_bind_command("operserv", &os_rwatch);
 

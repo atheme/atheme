@@ -17,7 +17,7 @@ struct command bs_set = { "SET", N_("Configures bot options."), AC_NONE, 3, bs_c
 mowgli_patricia_t *bs_set_cmdtree;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	service_named_bind_command("botserv", &bs_set);
 

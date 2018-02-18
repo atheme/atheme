@@ -99,7 +99,7 @@ static bool has_waitauth(const mynick_t *mn, const void *arg) {
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	list_params = mowgli_patricia_create(strcasecanon);
 	service_named_bind_command("nickserv", &ns_list);

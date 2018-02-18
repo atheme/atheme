@@ -13,7 +13,7 @@ struct command cs_ftransfer = { "FTRANSFER", N_("Forces foundership transfer of 
                            PRIV_CHAN_ADMIN, 2, cs_cmd_ftransfer, { .path = "cservice/ftransfer" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_ftransfer);
 }

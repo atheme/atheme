@@ -13,7 +13,7 @@ struct command cs_getkey = { "GETKEY", N_("Returns the key (+k) of a channel."),
                         AC_NONE, 1, cs_cmd_getkey, { .path = "cservice/getkey" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_getkey);
 }

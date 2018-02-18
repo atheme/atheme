@@ -12,7 +12,7 @@ static void os_cmd_mode(struct sourceinfo *si, int parc, char *parv[]);
 struct command os_mode = { "MODE", N_("Changes modes on channels."), PRIV_OMODE, 2, os_cmd_mode, { .path = "oservice/mode" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
         service_named_bind_command("operserv", &os_mode);
 }

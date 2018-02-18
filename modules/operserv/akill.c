@@ -28,7 +28,7 @@ struct command os_akill_sync = { "SYNC", N_("Synchronises network bans to server
 mowgli_patricia_t *os_akill_cmds;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
         service_named_bind_command("operserv", &os_akill);
 

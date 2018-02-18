@@ -16,7 +16,7 @@ static void os_cmd_specs(struct sourceinfo *si, int parc, char *parv[]);
 struct command os_specs = { "SPECS", N_("Shows oper flags."), AC_NONE, 2, os_cmd_specs, { .path = "oservice/specs" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
         service_named_bind_command("operserv", &os_specs);
 }

@@ -17,7 +17,7 @@ struct command cs_dehalfop = { "DEHALFOP", N_("Removes channel halfops from a us
                         AC_NONE, 2, cs_cmd_dehalfop, { .path = "cservice/halfop" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	if (ircd != NULL && !ircd->uses_halfops)
 	{

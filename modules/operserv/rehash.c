@@ -13,7 +13,7 @@ static void os_cmd_rehash(struct sourceinfo *si, int parc, char *parv[]);
 struct command os_rehash = { "REHASH", N_("Reload the configuration data."), PRIV_ADMIN, 0, os_cmd_rehash, { .path = "oservice/rehash" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
         service_named_bind_command("operserv", &os_rehash);
 }

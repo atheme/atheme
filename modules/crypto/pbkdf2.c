@@ -55,7 +55,7 @@ static struct crypt_impl crypto_pbkdf2_impl = {
 };
 
 static void
-mod_init(module_t ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	(void) crypt_register(&crypto_pbkdf2_impl);
 }

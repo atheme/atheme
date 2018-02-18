@@ -15,7 +15,7 @@ struct command cs_set = { "SET", N_("Sets various control flags."), AC_NONE, 3, 
 mowgli_patricia_t *cs_set_cmdtree;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	service_named_bind_command("chanserv", &cs_set);
 

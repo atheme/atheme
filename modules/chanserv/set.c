@@ -9,7 +9,7 @@
 #include "atheme.h"
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	/* Here's all the MODULE_TRY_REQUEST_DEPENDENCY out the ass
 	 * stuff to make easy upgrades.

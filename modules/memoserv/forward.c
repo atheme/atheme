@@ -13,7 +13,7 @@ struct command ms_forward = { "FORWARD", N_(N_("Forwards a memo.")),
                         AC_AUTHENTICATED, 2, ms_cmd_forward, { .path = "memoserv/forward" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
         service_named_bind_command("memoserv", &ms_forward);
 }

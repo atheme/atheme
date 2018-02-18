@@ -391,7 +391,7 @@ static void httpd_config_ready(void *vptr)
 static mowgli_eventloop_timer_t *httpd_checkidle_timer = NULL;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	httpd_checkidle_timer = mowgli_timer_add(base_eventloop, "httpd_checkidle", httpd_checkidle, NULL, 60);
 

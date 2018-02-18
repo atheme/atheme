@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
 	atheme_bootstrap();
 	atheme_init(argv[0], LOGDIR "/dbverify.log");
 	atheme_setup();
-	module_t *m;
+	struct module *m;
 	unsigned int errcnt;
 	char *filename = argv[1] ? argv[1] : "services.db";
 

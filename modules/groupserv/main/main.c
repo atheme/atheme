@@ -17,7 +17,7 @@ typedef struct {
 extern mowgli_heap_t *mygroup_heap, *groupacs_heap;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	groupserv_persist_record_t *rec = mowgli_global_storage_get("atheme.groupserv.main.persist");
 

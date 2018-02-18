@@ -13,7 +13,7 @@ struct command cs_info = { "INFO", N_("Displays information on registrations."),
                         AC_NONE, 2, cs_cmd_info, { .path = "cservice/info" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_info);
 }

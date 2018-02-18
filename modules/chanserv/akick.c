@@ -45,7 +45,7 @@ static akick_timeout_t *akick_add_timeout(mychan_t *mc, struct myentity *mt, con
 mowgli_heap_t *akick_timeout_heap;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_akick);
 

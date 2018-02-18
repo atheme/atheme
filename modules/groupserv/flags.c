@@ -200,7 +200,7 @@ no_founder:
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	use_groupserv_main_symbols(m);
 

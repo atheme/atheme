@@ -13,7 +13,7 @@ static void gs_cmd_listchans(struct sourceinfo *si, int parc, char *parv[]);
 struct command gs_listchans = { "LISTCHANS", N_("Lists channels that a group has access to."), AC_NONE, 1, gs_cmd_listchans, { .path = "groupserv/listchans" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	use_groupserv_main_symbols(m);
 	service_named_bind_command("groupserv", &gs_listchans);

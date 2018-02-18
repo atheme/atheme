@@ -188,7 +188,7 @@ static void gs_cmd_global(struct sourceinfo *si, const int parc, char *parv[])
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	globsvs = service_add("global", NULL);
 

@@ -14,7 +14,7 @@ struct command os_modunload = { "MODUNLOAD", N_("Unloads a module."), PRIV_ADMIN
 extern mowgli_list_t modules;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	service_named_bind_command("operserv", &os_modunload);
 }
@@ -29,7 +29,7 @@ static void os_cmd_modunload(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *module;
 	int i;
-	module_t *m;
+	struct module *m;
 
 	if (parc < 1)
 	{

@@ -38,7 +38,7 @@ void helpserv_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	helpserv = service_add("helpserv", NULL);
 

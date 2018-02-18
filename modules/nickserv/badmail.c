@@ -27,7 +27,7 @@ typedef struct badmail_ badmail_t;
 mowgli_list_t ns_maillist;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	if (!module_find_published("backend/opensex"))
 	{

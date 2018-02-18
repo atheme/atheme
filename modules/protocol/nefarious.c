@@ -702,7 +702,7 @@ static void p10_kline_sts(const char *server, const char *user, const char *host
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/p10-generic");
 

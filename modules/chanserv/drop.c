@@ -188,7 +188,7 @@ static struct command cmd_cs_fdrop = {
 };
 
 static void
-mod_init(module_t ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	(void) service_named_bind_command("chanserv", &cmd_cs_drop);
 	(void) service_named_bind_command("chanserv", &cmd_cs_fdrop);

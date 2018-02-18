@@ -104,7 +104,7 @@ static struct crypt_impl crypto_crypt3_impl = {
 };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	if (! atheme_crypt3_sha2_256_selftest())
 	{
@@ -128,7 +128,7 @@ mod_deinit(const module_unload_intent_t ATHEME_VATTR_UNUSED intent)
 #else /* HAVE_CRYPT */
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	(void) slog(LG_ERROR, "%s: crypt(3) is not available on this platform", m->name);
 

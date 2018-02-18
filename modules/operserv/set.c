@@ -499,7 +499,7 @@ static void os_cmd_set_enforceprefix(struct sourceinfo *si, int parc, char *parv
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	service_named_bind_command("operserv", &os_set);
 

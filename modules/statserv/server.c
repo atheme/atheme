@@ -27,7 +27,7 @@ struct command ss_server_info =
 mowgli_patricia_t *ss_server_cmds;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
     service_named_bind_command("statserv", &ss_server);
     ss_server_cmds = mowgli_patricia_create(strcasecanon);

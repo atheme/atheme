@@ -18,7 +18,7 @@ struct command gs_set = { "SET", N_("Sets various control flags."), AC_AUTHENTIC
 mowgli_patricia_t *gs_set_cmdtree;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	use_groupserv_main_symbols(m);
 

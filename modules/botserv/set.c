@@ -11,7 +11,7 @@
 #include "botserv.h"
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	/* Some MODULE_TRY_REQUEST_DEPENDENCY gubbins */
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/set_core");

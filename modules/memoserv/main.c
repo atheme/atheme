@@ -16,7 +16,7 @@ struct service *memosvs = NULL;
 unsigned int maxmemos;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	hook_add_event("user_identify");
 	hook_add_user_identify(on_user_identify);

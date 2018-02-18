@@ -12,7 +12,7 @@ static void os_cmd_modinspect(struct sourceinfo *si, int parc, char *parv[]);
 struct command os_modinspect = { "MODINSPECT", N_("Displays information about loaded modules."), PRIV_SERVER_AUSPEX, 1, os_cmd_modinspect, { .path = "oservice/modinspect" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	service_named_bind_command("operserv", &os_modinspect);
 }
@@ -26,7 +26,7 @@ mod_deinit(const module_unload_intent_t intent)
 static void os_cmd_modinspect(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *mname = parv[0];
-	module_t *m;
+	struct module *m;
 
 	if (!mname)
 	{

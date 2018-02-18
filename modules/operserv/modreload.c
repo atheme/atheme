@@ -8,7 +8,7 @@ static void os_cmd_modreload(struct sourceinfo *si, int parc, char *parv[]);
 struct command os_modreload = { "MODRELOAD", N_("Reloads a module."), PRIV_ADMIN, 20, os_cmd_modreload, { .path = "oservice/modreload" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	service_named_bind_command("operserv", &os_modreload);
 }
@@ -19,12 +19,12 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("operserv", &os_modreload);
 }
 
-static void recurse_module_deplist(module_t *m, mowgli_list_t *deplist)
+static void recurse_module_deplist(struct module *m, mowgli_list_t *deplist)
 {
 	mowgli_node_t *n;
 	MOWGLI_LIST_FOREACH(n, m->dephost.head)
 	{
-		module_t *dm = (module_t *) n->data;
+		struct module *dm = (struct module *) n->data;
 
 		/* Skip duplicates */
 		bool found = false;
@@ -50,7 +50,7 @@ static void recurse_module_deplist(module_t *m, mowgli_list_t *deplist)
 static void os_cmd_modreload(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *module = parv[0];
-	module_t *m;
+	struct module *m;
 	mowgli_node_t *n;
 	module_dependency_t * reloading_semipermanent_module = NULL;
 
@@ -133,7 +133,7 @@ static void os_cmd_modreload(struct sourceinfo *si, int parc, char *parv[])
 
 	while (module_deplist->head != NULL)
 	{
-		module_t *t;
+		struct module *t;
 		n = module_deplist->head;
 		module_dependency_t *dep = (module_dependency_t *) n->data;
 

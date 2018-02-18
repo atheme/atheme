@@ -33,13 +33,13 @@
 mowgli_heap_t *module_heap;
 mowgli_list_t modules, modules_inprogress;
 
-module_t *modtarget = NULL;
+struct module *modtarget = NULL;
 
-static module_t *module_load_internal(const char *pathname, char *errbuf, int errlen);
+static struct module *module_load_internal(const char *pathname, char *errbuf, int errlen);
 
 void modules_init(void)
 {
-	module_heap = sharedheap_get(sizeof(module_t));
+	module_heap = sharedheap_get(sizeof(struct module));
 
 	if (!module_heap)
 	{
@@ -55,15 +55,15 @@ void modules_init(void)
  *       a literal filename for a module to load.
  *
  * outputs:
- *       the respective module_t object of the module.
+ *       the respective struct module object of the module.
  *
  * side effects:
  *       a module, or module-like object, is loaded and necessary initialization
  *       code is run.
  */
-module_t *module_load(const char *filespec)
+struct module *module_load(const char *filespec)
 {
-	module_t *m;
+	struct module *m;
 	char pathbuf[BUFSIZE], errbuf[BUFSIZE];
 	const char *pathname;
 	hook_module_load_t hdata;
@@ -120,10 +120,10 @@ module_t *module_load(const char *filespec)
  * module_load_internal: the part of module_load that deals with 'real' shared
  * object modules.
  */
-static module_t *module_load_internal(const char *pathname, char *errbuf, int errlen)
+static struct module *module_load_internal(const char *pathname, char *errbuf, int errlen)
 {
 	mowgli_node_t *n;
-	module_t *m, *old_modtarget;
+	struct module *m, *old_modtarget;
 	v4_moduleheader_t *h;
 	mowgli_module_t *handle = NULL;
 #if defined(HAVE_DLINFO) && !defined(__UCLIBC__)
@@ -310,7 +310,7 @@ void module_load_dir_match(const char *dirspec, const char *pattern)
  * side effects:
  *       a module is unloaded and neccessary deinitalization code is run.
  */
-void module_unload(module_t *m, module_unload_intent_t intent)
+void module_unload(struct module *m, module_unload_intent_t intent)
 {
 	mowgli_node_t *n, *tn;
 
@@ -319,12 +319,12 @@ void module_unload(module_t *m, module_unload_intent_t intent)
 
 	/* unload modules which depend on us */
 	while (m->dephost.head != NULL)
-		module_unload((module_t *) m->dephost.head->data, intent);
+		module_unload((struct module *) m->dephost.head->data, intent);
 
 	/* let modules that we depend on know that we no longer exist */
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, m->deplist.head)
 	{
-		module_t *hm = (module_t *) n->data;
+		struct module *hm = (struct module *) n->data;
 		mowgli_node_t *hn = mowgli_node_find(m, &hm->dephost);
 
 		mowgli_node_delete(hn, &hm->dephost);
@@ -377,7 +377,7 @@ void module_unload(module_t *m, module_unload_intent_t intent)
  */
 void *module_locate_symbol(const char *modname, const char *sym)
 {
-	module_t *m;
+	struct module *m;
 	void *symptr;
 
 	if (!(m = module_find_published(modname)))
@@ -418,13 +418,13 @@ void *module_locate_symbol(const char *modname, const char *sym)
  * side effects:
  *       none
  */
-module_t *module_find(const char *name)
+struct module *module_find(const char *name)
 {
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, modules.head)
 	{
-		module_t *m = n->data;
+		struct module *m = n->data;
 
 		if (!strcasecmp(m->modpath, name))
 			return m;
@@ -445,13 +445,13 @@ module_t *module_find(const char *name)
  * side effects:
  *       none
  */
-module_t *module_find_published(const char *name)
+struct module *module_find_published(const char *name)
 {
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, modules.head)
 	{
-		module_t *m = n->data;
+		struct module *m = n->data;
 
 		if (!strcasecmp(m->name, name))
 			return m;
@@ -474,7 +474,7 @@ module_t *module_find_published(const char *name)
  */
 bool module_request(const char *name)
 {
-	module_t *m;
+	struct module *m;
 	mowgli_node_t *n;
 
 	if (module_find_published(name))

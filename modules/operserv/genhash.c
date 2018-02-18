@@ -41,7 +41,7 @@ static struct command cmd_os_genhash = {
 };
 
 static void
-mod_init(module_t ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	(void) service_named_bind_command("operserv", &cmd_os_genhash);
 }

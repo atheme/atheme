@@ -17,7 +17,7 @@ struct command cs_deowner = { "DEOWNER", N_("Removes channel owner flag from a u
                         AC_NONE, 2, cs_cmd_deowner, { .path = "cservice/owner" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	if (ircd != NULL && !ircd->uses_owner)
 	{

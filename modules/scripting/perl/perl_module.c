@@ -36,15 +36,15 @@ static char **perl_argv = &_perl_argv[0];
 static char perl_error[512];
 
 typedef struct {
-	module_t mod;
+	struct module mod;
 	char filename[BUFSIZE];
 }perl_script_module_t;
 
 static mowgli_heap_t *perl_script_module_heap;
 
-static module_t *do_script_load(const char *filename);
+static struct module *do_script_load(const char *filename);
 static bool do_script_unload(const char *filename);
-static void perl_script_module_unload_handler(module_t *m, module_unload_intent_t intent);
+static void perl_script_module_unload_handler(struct module *m, module_unload_intent_t intent);
 
 /*
  * Startup and shutdown routines.
@@ -126,7 +126,7 @@ static void shutdown_perl(void)
 /*
  * Implementation functions: load or unload a perl script.
  */
-static module_t *do_script_load(const char *filename)
+static struct module *do_script_load(const char *filename)
 {
 	/* Remember, this must now be re-entrant. The use of the static
 	 * perl_error buffer is still OK, as it's only used immediately after
@@ -218,7 +218,7 @@ static module_t *do_script_load(const char *filename)
 						dep_name);
 				goto fail;
 			}
-			module_t *dep_mod = module_find_published(dep_name);
+			struct module *dep_mod = module_find_published(dep_name);
 			mowgli_node_add(dep_mod, mowgli_node_create(), &m->mod.deplist);
 			mowgli_node_add(m, mowgli_node_create(), &dep_mod->dephost);
 		}
@@ -230,10 +230,10 @@ static module_t *do_script_load(const char *filename)
 
 	/* Now that everything's loaded, do the module housekeeping stuff. */
 	m->mod.unload_handler = perl_script_module_unload_handler;
-	/* Can't do much better than the address of the module_t here */
+	/* Can't do much better than the address of the struct module here */
 	m->mod.address = m;
 	m->mod.can_unload = MODULE_UNLOAD_CAPABILITY_OK;
-	return (module_t*)m;
+	return (struct module *) m;
 
 fail:
 	slog(LG_ERROR, "Failed to load Perl script %s: %s", filename, perl_error);
@@ -386,7 +386,7 @@ static void hook_module_load(hook_module_load_t *data)
 	}
 }
 
-void perl_script_module_unload_handler(module_t *m, module_unload_intent_t intent)
+void perl_script_module_unload_handler(struct module *m, module_unload_intent_t intent)
 {
 	perl_script_module_t *pm = (perl_script_module_t *)m;
 	do_script_unload(pm->filename);
@@ -397,7 +397,7 @@ void perl_script_module_unload_handler(module_t *m, module_unload_intent_t inten
  * Module startup/shutdown
  */
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	perl_script_module_heap = mowgli_heap_create(sizeof(perl_script_module_t), 256, BH_NOW);
 	if (!perl_script_module_heap)

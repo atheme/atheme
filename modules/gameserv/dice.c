@@ -21,7 +21,7 @@ struct command cmd_calc = { "CALC", N_("Calculate stuff."), AC_NONE, 3, command_
 static unsigned int max_rolls = 10;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	struct service *svs;
 

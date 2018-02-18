@@ -27,7 +27,7 @@ struct command os_sgline_sync = { "SYNC", N_("Synchronises network realname bans
 mowgli_patricia_t *os_sgline_cmds;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	if (ircd != NULL && xline_sts == generic_xline_sts)
 	{

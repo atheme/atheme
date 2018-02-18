@@ -14,7 +14,7 @@ static bool dummy_auth_user(myuser_t *mu, const char *password)
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	auth_user_custom = &dummy_auth_user;
 

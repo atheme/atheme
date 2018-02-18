@@ -98,7 +98,7 @@ static bool is_user_marked(myuser_t *mu)
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	static list_param_t mark_check;
 

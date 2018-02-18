@@ -47,7 +47,7 @@ email_canonicalize_gmail(char email[static (EMAILLEN + 1)],
 }
 
 static void
-mod_init(module_t ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	(void) register_email_canonicalizer(&email_canonicalize_gmail, NULL);
 }

@@ -40,7 +40,7 @@ static bool cmdperm_command_authorize(struct service *svs, struct sourceinfo *si
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	parent_command_authorize = command_authorize;
 	command_authorize = cmdperm_command_authorize;

@@ -805,7 +805,7 @@ static struct crypt_impl crypto_argon2d_impl = {
 static mowgli_list_t atheme_argon2d_conf_table;
 
 static void
-mod_init(module_t ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	(void) crypt_register(&crypto_argon2d_impl);
 

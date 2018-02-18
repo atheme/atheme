@@ -220,7 +220,7 @@ static bool ldap_auth_user(myuser_t *mu, const char *password)
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	hook_add_event("config_ready");
 	hook_add_config_ready(ldap_config_ready);

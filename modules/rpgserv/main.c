@@ -7,7 +7,7 @@
 struct service *rpgserv;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	rpgserv = service_add("rpgserv", NULL);
 }

@@ -219,7 +219,7 @@ static struct command cmd_ns_fdrop = {
 };
 
 static void
-mod_init(module_t ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	(void) service_named_bind_command("nickserv", &cmd_ns_drop);
 	(void) service_named_bind_command("nickserv", &cmd_ns_fdrop);

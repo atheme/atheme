@@ -23,7 +23,7 @@ struct command ss_channel_count =
 mowgli_patricia_t *ss_channel_cmds;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
     service_named_bind_command("statserv", &ss_channel);
 

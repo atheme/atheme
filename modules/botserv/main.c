@@ -961,7 +961,7 @@ static void bs_cmd_unassign(struct sourceinfo *si, int parc, char *parv[])
 /* ******************************************************************** */
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	if (!module_find_published("backend/opensex"))
 	{

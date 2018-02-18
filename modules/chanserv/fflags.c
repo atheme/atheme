@@ -14,7 +14,7 @@ struct command cs_fflags = { "FFLAGS", N_("Forces a flags change on a channel.")
                         PRIV_CHAN_ADMIN, 3, cs_cmd_fflags, { .path = "cservice/fflags" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_fflags);
 }

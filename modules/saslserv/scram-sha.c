@@ -652,7 +652,7 @@ sasl_scramsha_pbkdf2v2_confhook(const unsigned int prf, const unsigned int iter,
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	// Services administrators using this module should be fully aware of the requirements for correctly doing so
 	if (! module_find_published(PBKDF2V2_CRYPTO_MODULE_NAME))

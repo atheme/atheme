@@ -48,6 +48,9 @@ struct me;
 // Defined in include/hook.h
 struct hook;
 
+// Defined in include/module.h
+struct module;
+
 // Defined in include/object.h
 struct atheme_object;
 

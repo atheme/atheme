@@ -10,7 +10,7 @@
 int oldflag;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	if (ircd == NULL)
 	{

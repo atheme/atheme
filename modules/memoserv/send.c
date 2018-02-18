@@ -15,7 +15,7 @@ struct command ms_send = { "SEND", N_("Sends a memo to a user."),
                         AC_AUTHENTICATED, 2, ms_cmd_send, { .path = "memoserv/send" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
         service_named_bind_command("memoserv", &ms_send);
         MODULE_TRY_REQUEST_SYMBOL(m, maxmemos, "memoserv/main", "maxmemos");

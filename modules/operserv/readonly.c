@@ -13,7 +13,7 @@ struct command os_readonly = { "READONLY", N_("Changes the state of read-only mo
 		      PRIV_ADMIN, 1, os_cmd_readonly, { .path = "oservice/readonly" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	service_named_bind_command("operserv", &os_readonly);
 }

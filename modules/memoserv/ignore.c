@@ -22,7 +22,7 @@ struct command ms_ignore_list = { "LIST", N_(N_("Shows all users you are ignorin
 mowgli_patricia_t *ms_ignore_cmds;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	service_named_bind_command("memoserv", &ms_ignore);
 

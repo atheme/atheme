@@ -23,15 +23,15 @@ typedef enum {
 	MODULE_UNLOAD_CAPABILITY_RELOAD_ONLY = 2,
 } module_unload_capability_t;
 
-typedef struct module_ module_t;
 typedef struct v4_moduleheader_ v4_moduleheader_t;
 
-typedef void (*module_unload_handler_t)(module_t *, module_unload_intent_t);
+typedef void (*module_unload_handler_t)(struct module *, module_unload_intent_t);
 
 /* Module structure. Might be a loaded .so module, or something else that
  * behaves as a module for dependency purposes (perl script, etc).
  */
-struct module_ {
+struct module
+{
 	char name[BUFSIZE];
 	char modpath[BUFSIZE];
 	module_unload_capability_t can_unload;
@@ -73,7 +73,7 @@ struct v4_moduleheader_ {
 	const char *serial;
 	const char *name;
 	module_unload_capability_t can_unload;
-	void (*modinit)(module_t *m);
+	void (*modinit)(struct module *m);
 	void (*deinit)(module_unload_intent_t intent);
 	const char *vendor;
 	const char *version;
@@ -81,12 +81,12 @@ struct v4_moduleheader_ {
 
 /* name is the module name we're searching for.
  * path is the likely full path name, which may be ignored.
- * If it is found, set module to the loaded module_t pointer
+ * If it is found, set module to the loaded struct module pointer
  */
 typedef struct {
 	const char *name;
 	const char *path;
-	module_t *module;
+	struct module *module;
 	int handled;
 } hook_module_load_t;
 
@@ -96,13 +96,13 @@ typedef struct module_dependency_ {
 } module_dependency_t;
 
 extern void modules_init(void);
-extern module_t *module_load(const char *filespec);
+extern struct module *module_load(const char *filespec);
 extern void module_load_dir(const char *dirspec);
 extern void module_load_dir_match(const char *dirspec, const char *pattern);
 extern void *module_locate_symbol(const char *modname, const char *sym);
-extern void module_unload(module_t *m, module_unload_intent_t intent);
-extern module_t *module_find(const char *name);
-extern module_t *module_find_published(const char *name);
+extern void module_unload(struct module *m, module_unload_intent_t intent);
+extern struct module *module_find(const char *name);
+extern struct module *module_find_published(const char *name);
 extern bool module_request(const char *name);
 
 #define DECLARE_MODULE_V1(name, unloadcap, modinit, moddeinit, ver, ven)   \

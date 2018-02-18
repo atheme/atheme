@@ -13,7 +13,7 @@ struct command cs_recover = { "RECOVER", N_("Regain control of your channel."),
                         AC_NONE, 1, cs_cmd_recover, { .path = "cservice/recover" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_recover);
 }

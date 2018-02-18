@@ -38,7 +38,7 @@ static bool is_marked(const mynick_t *mn, const void *arg)
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	if (module_find_published("nickserv/multimark"))
 	{

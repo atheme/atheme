@@ -89,7 +89,7 @@ static void clones_configready(void *unused)
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	user_t *u;
 	mowgli_patricia_iteration_state_t state;

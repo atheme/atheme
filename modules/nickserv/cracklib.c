@@ -14,7 +14,7 @@ bool cracklib_warn;
 
 static void cracklib_config_ready(void *unused)
 {
-	module_t *m;
+	struct module *m;
 	m = module_find_published("nickserv/cracklib");
 
 	if (nicksvs.cracklib_dict == NULL)
@@ -73,7 +73,7 @@ static void osinfo_hook(struct sourceinfo *si)
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 
 	hook_add_event("user_can_register");

@@ -16,7 +16,7 @@ struct command cs_flags = { "TEMPLATE", N_("Manipulates predefined sets of flags
                         AC_NONE, 3, cs_cmd_template, { .path = "cservice/template" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_flags);
 }

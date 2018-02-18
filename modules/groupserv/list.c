@@ -52,7 +52,7 @@ static void gs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	use_groupserv_main_symbols(m);
 

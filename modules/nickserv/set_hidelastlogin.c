@@ -16,7 +16,7 @@ static void ns_cmd_set_hidelastlogin(struct sourceinfo *si, int parc, char *parv
 struct command ns_set_hidelastlogin = { "HIDELASTLOGIN", N_("Opts you out of Last Login notices upon identifying to your account."), AC_NONE, 1, ns_cmd_set_hidelastlogin, { .path = "nickserv/set_hidelastlogin" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 

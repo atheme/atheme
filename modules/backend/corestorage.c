@@ -55,7 +55,7 @@ corestorage_db_save(struct database_handle *db)
 
 	MOWGLI_ITER_FOREACH(n, modules.head)
 	{
-		module_t *m = n->data;
+		struct module *m = n->data;
 
 		db_start_row(db, "MDEP");
 		db_write_word(db, m->name);
@@ -1010,7 +1010,7 @@ static void corestorage_db_write_blocking(void *filename)
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	m->mflags = MODTYPE_CORE;
 

@@ -29,7 +29,7 @@ struct command os_sqline_sync = { "SYNC", N_("Synchronises network name bans to 
 mowgli_patricia_t *os_sqline_cmds;
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	if (ircd != NULL && qline_sts == generic_qline_sts)
 	{

@@ -16,7 +16,7 @@ struct command cs_kickban = { "KICKBAN", N_("Removes and bans a user from a chan
 			AC_NONE, 3, cs_cmd_kickban, { .path = "cservice/kickban" } };
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_kick);
 	service_named_bind_command("chanserv", &cs_kickban);

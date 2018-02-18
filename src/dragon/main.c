@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
 	atheme_bootstrap();
 	atheme_init(argv[0], LOGDIR "/dbverify.log");
 	atheme_setup();
-	module_t *m;
+	struct module *m;
 	unsigned int errcnt;
 	char *config_file = argv[1] != NULL ? argv[1] : "./dragon.conf";
 

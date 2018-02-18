@@ -33,7 +33,7 @@ static void exttarget_find(hook_myentity_req_t *req)
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	exttarget_tree = mowgli_patricia_create(strcasecanon);
 
