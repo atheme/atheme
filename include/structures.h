@@ -48,6 +48,9 @@ struct me;
 // Defined in include/hook.h
 struct hook;
 
+// Defined in include/httpd.h
+struct path_handler;
+
 // Defined in include/module.h
 struct module;
 struct module_dependency;

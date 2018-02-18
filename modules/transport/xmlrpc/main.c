@@ -13,7 +13,7 @@
 
 static void handle_request(struct connection *cptr, void *requestbuf);
 
-path_handler_t handle_xmlrpc = { NULL, handle_request };
+struct path_handler handle_xmlrpc = { NULL, handle_request };
 
 struct
 {

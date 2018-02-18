@@ -8,9 +8,7 @@
 #ifndef HTTPD_H
 #define HTTPD_H
 
-typedef struct path_handler_ path_handler_t;
-
-struct path_handler_
+struct path_handler
 {
 	const char *path;
 	void (*handler)(struct connection *, void *);

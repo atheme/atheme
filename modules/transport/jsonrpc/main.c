@@ -35,7 +35,7 @@ struct sourceinfo_vtable jsonrpc_vtable = {
 	.cmd_success_nodata = jsonrpc_command_success_nodata
 };
 
-path_handler_t handle_jsonrpc = { NULL, handle_request };
+struct path_handler handle_jsonrpc = { NULL, handle_request };
 
 static void handle_request(struct connection *cptr, void *requestbuf)
 {

@@ -158,14 +158,14 @@ static void httpd_recvqhandler(struct connection *cptr)
 	struct stat sb;
 	off_t count1;
 	mowgli_node_t *n;
-	path_handler_t *ph = NULL;
+	struct path_handler *ph = NULL;
 	bool is_get, is_post, handling_done = false;
 
 	hd = cptr->userdata;
 
 	MOWGLI_ITER_FOREACH(n, httpd_path_handlers.head)
 	{
-		ph = (path_handler_t *)n->data;
+		ph = (struct path_handler *)n->data;
 		handling_done = !strcmp(hd->filename, ph->path);
 
 		if (handling_done)
