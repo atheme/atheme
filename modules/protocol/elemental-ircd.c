@@ -39,7 +39,7 @@ ircd_t elemental_ircd = {
 	.flags = IRCD_CIDR_BANS | IRCD_HOLDNICK,
 };
 
-struct cmode_ elemental_mode_list[] = {
+static const struct cmode elemental_mode_list[] = {
   { 'i', CMODE_INVITE },
   { 'm', CMODE_MOD    },
   { 'n', CMODE_NOEXT  },
@@ -69,7 +69,7 @@ struct cmode_ elemental_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ elemental_status_mode_list[] = {
+static const struct cmode elemental_status_mode_list[] = {
   { 'y', CSTATUS_OWNER },
   { 'a', CSTATUS_PROTECT },
   { 'o', CSTATUS_OP    },
@@ -78,7 +78,7 @@ struct cmode_ elemental_status_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ elemental_prefix_mode_list[] = {
+static const struct cmode elemental_prefix_mode_list[] = {
   { '~', CSTATUS_OWNER },
   { '!', CSTATUS_PROTECT },
   { '@', CSTATUS_OP    },
@@ -87,7 +87,7 @@ struct cmode_ elemental_prefix_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ elemental_user_mode_list[] = {
+static const struct cmode elemental_user_mode_list[] = {
   { 'a', UF_ADMIN    },
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },

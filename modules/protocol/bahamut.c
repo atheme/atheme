@@ -38,7 +38,7 @@ ircd_t Bahamut = {
 	.flags = IRCD_HOLDNICK,
 };
 
-struct cmode_ bahamut_mode_list[] = {
+static const struct cmode bahamut_mode_list[] = {
   { 'i', CMODE_INVITE	},
   { 'm', CMODE_MOD	},
   { 'n', CMODE_NOEXT	},
@@ -60,19 +60,19 @@ struct extmode bahamut_ignore_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ bahamut_status_mode_list[] = {
+static const struct cmode bahamut_status_mode_list[] = {
   { 'o', CSTATUS_OP    },
   { 'v', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
-struct cmode_ bahamut_prefix_mode_list[] = {
+static const struct cmode bahamut_prefix_mode_list[] = {
   { '@', CSTATUS_OP    },
   { '+', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
-struct cmode_ bahamut_user_mode_list[] = {
+static const struct cmode bahamut_user_mode_list[] = {
   { 'A', UF_ADMIN    },
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },

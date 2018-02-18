@@ -36,7 +36,7 @@ ircd_t InspIRCd = {
 	.flags = IRCD_CIDR_BANS | IRCD_HOLDNICK,
 };
 
-struct cmode_ inspircd_mode_list[] = {
+static const struct cmode inspircd_mode_list[] = {
   { 'i', CMODE_INVITE	},
   { 'm', CMODE_MOD	},
   { 'n', CMODE_NOEXT	},
@@ -84,7 +84,7 @@ struct extmode inspircd_ignore_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ inspircd_status_mode_list[] = {
+static const struct cmode inspircd_status_mode_list[] = {
   { 'Y', CSTATUS_IMMUNE	 },
   { 'q', CSTATUS_OWNER	 },
   { 'a', CSTATUS_PROTECT },
@@ -94,7 +94,7 @@ struct cmode_ inspircd_status_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ inspircd_prefix_mode_list[] = {
+static const struct cmode inspircd_prefix_mode_list[] = {
   { '!', CSTATUS_IMMUNE	 },
   { '~', CSTATUS_OWNER	 },
   { '&', CSTATUS_PROTECT },
@@ -104,7 +104,7 @@ struct cmode_ inspircd_prefix_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ inspircd_user_mode_list[] = {
+static const struct cmode inspircd_user_mode_list[] = {
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },
   { 'd', UF_DEAF     },

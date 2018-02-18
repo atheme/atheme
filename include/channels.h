@@ -85,7 +85,7 @@ struct chanban
 #define MTYPE_ADD 1
 #define MTYPE_DEL 2
 
-struct cmode_
+struct cmode
 {
         char mode;
         unsigned int value;

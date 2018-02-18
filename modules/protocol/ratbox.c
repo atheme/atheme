@@ -36,7 +36,7 @@ ircd_t Ratbox = {
 	.flags = IRCD_CIDR_BANS,
 };
 
-struct cmode_ ratbox_mode_list[] = {
+static const struct cmode ratbox_mode_list[] = {
   { 'i', CMODE_INVITE },
   { 'm', CMODE_MOD    },
   { 'n', CMODE_NOEXT  },
@@ -50,19 +50,19 @@ struct extmode ratbox_ignore_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ ratbox_status_mode_list[] = {
+static const struct cmode ratbox_status_mode_list[] = {
   { 'o', CSTATUS_OP    },
   { 'v', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
-struct cmode_ ratbox_prefix_mode_list[] = {
+static const struct cmode ratbox_prefix_mode_list[] = {
   { '@', CSTATUS_OP    },
   { '+', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
-struct cmode_ ratbox_user_mode_list[] = {
+static const struct cmode ratbox_user_mode_list[] = {
   { 'a', UF_ADMIN    },
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },

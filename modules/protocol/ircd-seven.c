@@ -37,7 +37,7 @@ ircd_t Seven = {
 	.flags = IRCD_CIDR_BANS | IRCD_HOLDNICK | IRCD_TOPIC_NOCOLOUR,
 };
 
-struct cmode_ seven_mode_list[] = {
+static const struct cmode seven_mode_list[] = {
   { 'i', CMODE_INVITE },
   { 'm', CMODE_MOD    },
   { 'n', CMODE_NOEXT  },
@@ -64,7 +64,7 @@ struct cmode_ seven_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ seven_user_mode_list[] = {
+static const struct cmode seven_user_mode_list[] = {
   { 'p', UF_IMMUNE   },
   { 'a', UF_ADMIN    },
   { 'i', UF_INVIS    },

@@ -38,7 +38,7 @@ ircd_t Nefarious = {
 	.flags = IRCD_CIDR_BANS,
 };
 
-struct cmode_ nefarious_mode_list[] = {
+static const struct cmode nefarious_mode_list[] = {
   { 'a', CMODE_ADMONLY },
   { 'i', CMODE_INVITE },
   { 'm', CMODE_MOD    },
@@ -67,21 +67,21 @@ struct extmode nefarious_ignore_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ nefarious_status_mode_list[] = {
+static const struct cmode nefarious_status_mode_list[] = {
   { 'o', CSTATUS_OP	},
   { 'h', CSTATUS_HALFOP },
   { 'v', CSTATUS_VOICE	},
   { '\0', 0 }
 };
 
-struct cmode_ nefarious_prefix_mode_list[] = {
+static const struct cmode nefarious_prefix_mode_list[] = {
   { '@', CSTATUS_OP	},
   { '%', CSTATUS_HALFOP },
   { '+', CSTATUS_VOICE	},
   { '\0', 0 }
 };
 
-struct cmode_ nefarious_user_mode_list[] = {
+static const struct cmode nefarious_user_mode_list[] = {
   { 'a', UF_ADMIN    },
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },

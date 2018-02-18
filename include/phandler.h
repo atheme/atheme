@@ -293,12 +293,12 @@ extern bool generic_is_extban(const char *mask);
 extern void generic_dline_sts(const char *server, const char *host, long duration, const char *reason);
 extern void generic_undline_sts(const char *server, const char *host);
 
-extern struct cmode_ *mode_list;
+extern const struct cmode *mode_list;
 extern struct extmode *ignore_mode_list;
 extern size_t ignore_mode_list_size;
-extern struct cmode_ *status_mode_list;
-extern struct cmode_ *prefix_mode_list;
-extern struct cmode_ *user_mode_list;
+extern const struct cmode *status_mode_list;
+extern const struct cmode *prefix_mode_list;
+extern const struct cmode *user_mode_list;
 
 extern ircd_t *ircd;
 

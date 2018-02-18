@@ -37,7 +37,7 @@ ircd_t Charybdis = {
 	.flags = IRCD_CIDR_BANS | IRCD_HOLDNICK,
 };
 
-struct cmode_ charybdis_mode_list[] = {
+static const struct cmode charybdis_mode_list[] = {
   { 'i', CMODE_INVITE },
   { 'm', CMODE_MOD    },
   { 'n', CMODE_NOEXT  },
@@ -74,19 +74,19 @@ struct extmode charybdis_ignore_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ charybdis_status_mode_list[] = {
+static const struct cmode charybdis_status_mode_list[] = {
   { 'o', CSTATUS_OP    },
   { 'v', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
-struct cmode_ charybdis_prefix_mode_list[] = {
+static const struct cmode charybdis_prefix_mode_list[] = {
   { '@', CSTATUS_OP    },
   { '+', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
-struct cmode_ charybdis_user_mode_list[] = {
+static const struct cmode charybdis_user_mode_list[] = {
   { 'p', UF_IMMUNE   },
   { 'a', UF_ADMIN    },
   { 'i', UF_INVIS    },

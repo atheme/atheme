@@ -38,7 +38,7 @@ ircd_t Asuka = {
 	.flags = IRCD_CIDR_BANS,
 };
 
-struct cmode_ asuka_mode_list[] = {
+static const struct cmode asuka_mode_list[] = {
   { 'i', CMODE_INVITE },
   { 'm', CMODE_MOD    },
   { 'n', CMODE_NOEXT  },
@@ -57,19 +57,19 @@ struct extmode asuka_ignore_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ asuka_status_mode_list[] = {
+static const struct cmode asuka_status_mode_list[] = {
   { 'o', CSTATUS_OP    },
   { 'v', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
-struct cmode_ asuka_prefix_mode_list[] = {
+static const struct cmode asuka_prefix_mode_list[] = {
   { '@', CSTATUS_OP    },
   { '+', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
-struct cmode_ asuka_user_mode_list[] = {
+static const struct cmode asuka_user_mode_list[] = {
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },
   { 'd', UF_DEAF     },

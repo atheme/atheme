@@ -29,12 +29,12 @@ mowgli_patricia_t *pcommands;
 mowgli_heap_t *pcommand_heap;
 mowgli_heap_t *messagetree_heap;
 
-struct cmode_ *mode_list;
+const struct cmode *mode_list = NULL;
 struct extmode *ignore_mode_list;
 size_t ignore_mode_list_size = 0;
-struct cmode_ *status_mode_list;
-struct cmode_ *prefix_mode_list;
-struct cmode_ *user_mode_list;
+const struct cmode *status_mode_list = NULL;
+const struct cmode *prefix_mode_list = NULL;
+const struct cmode *user_mode_list = NULL;
 ircd_t *ircd;
 bool pmodule_loaded = false;
 bool backend_loaded = false;

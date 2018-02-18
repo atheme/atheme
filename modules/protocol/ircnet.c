@@ -37,7 +37,7 @@ ircd_t IRCNet = {
 	.flags = IRCD_CIDR_BANS,
 };
 
-struct cmode_ ircnet_mode_list[] = {
+static const struct cmode ircnet_mode_list[] = {
   { 'i', CMODE_INVITE },
   { 'm', CMODE_MOD    },
   { 'n', CMODE_NOEXT  },
@@ -51,19 +51,19 @@ struct extmode ircnet_ignore_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ ircnet_status_mode_list[] = {
+static const struct cmode ircnet_status_mode_list[] = {
   { 'o', CSTATUS_OP    },
   { 'v', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
-struct cmode_ ircnet_prefix_mode_list[] = {
+static const struct cmode ircnet_prefix_mode_list[] = {
   { '@', CSTATUS_OP    },
   { '+', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
-struct cmode_ ircnet_user_mode_list[] = {
+static const struct cmode ircnet_user_mode_list[] = {
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },
   { '\0', 0 }

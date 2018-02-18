@@ -36,7 +36,7 @@ ircd_t ngIRCd = {
 	.flags = 0,
 };
 
-struct cmode_ ngircd_mode_list[] = {
+static const struct cmode ngircd_mode_list[] = {
   { 'i', CMODE_INVITE	},
   { 'm', CMODE_MOD	},
   { 'n', CMODE_NOEXT	},
@@ -55,7 +55,7 @@ struct extmode ngircd_ignore_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ ngircd_status_mode_list[] = {
+static const struct cmode ngircd_status_mode_list[] = {
   { 'q', CSTATUS_OWNER	 },
   { 'a', CSTATUS_PROTECT },
   { 'o', CSTATUS_OP	 },
@@ -64,7 +64,7 @@ struct cmode_ ngircd_status_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ ngircd_prefix_mode_list[] = {
+static const struct cmode ngircd_prefix_mode_list[] = {
   { '~', CSTATUS_OWNER	 },
   { '&', CSTATUS_PROTECT },
   { '@', CSTATUS_OP	 },
@@ -73,7 +73,7 @@ struct cmode_ ngircd_prefix_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ ngircd_user_mode_list[] = {
+static const struct cmode ngircd_user_mode_list[] = {
   { 'a', UF_AWAY     },
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },

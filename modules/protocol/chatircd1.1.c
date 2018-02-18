@@ -40,7 +40,7 @@ ircd_t ChatIRCd = {
 	.flags = IRCD_CIDR_BANS | IRCD_HOLDNICK,    /* Flags */
 };
 
-struct cmode_ chatircd_mode_list[] = {
+static const struct cmode chatircd_mode_list[] = {
   { 'i', CMODE_INVITE	},
   { 'm', CMODE_MOD	},
   { 'n', CMODE_NOEXT	},
@@ -67,7 +67,7 @@ struct cmode_ chatircd_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ chatircd_status_mode_list[] = {
+static const struct cmode chatircd_status_mode_list[] = {
   { 'y', CSTATUS_OWNER },
   { 'a', CSTATUS_PROTECT },
   { 'o', CSTATUS_OP    },
@@ -76,7 +76,7 @@ struct cmode_ chatircd_status_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ chatircd_prefix_mode_list[] = {
+static const struct cmode chatircd_prefix_mode_list[] = {
   { '~', CSTATUS_OWNER },
   { '&', CSTATUS_PROTECT },
   { '@', CSTATUS_OP    },

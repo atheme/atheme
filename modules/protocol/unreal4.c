@@ -44,7 +44,7 @@ ircd_t Unreal = {
 	.flags = IRCD_HOLDNICK | IRCD_SASL_USE_PUID,
 };
 
-struct cmode_ unreal_mode_list[] = {
+static const struct cmode unreal_mode_list[] = {
   { 'i', CMODE_INVITE	},
   { 'm', CMODE_MOD	},
   { 'n', CMODE_NOEXT	},
@@ -80,7 +80,7 @@ struct extmode unreal_ignore_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ unreal_status_mode_list[] = {
+static const struct cmode unreal_status_mode_list[] = {
   { 'q', CSTATUS_OWNER	 },
   { 'a', CSTATUS_PROTECT },
   { 'o', CSTATUS_OP	 },
@@ -89,7 +89,7 @@ struct cmode_ unreal_status_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ unreal_prefix_mode_list[] = {
+static const struct cmode unreal_prefix_mode_list[] = {
   { '*', CSTATUS_OWNER	 },
   { '~', CSTATUS_PROTECT },
   { '@', CSTATUS_OP	 },
@@ -98,7 +98,7 @@ struct cmode_ unreal_prefix_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ unreal_user_mode_list[] = {
+static const struct cmode unreal_user_mode_list[] = {
   { 'A', UF_ADMIN    },
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },
