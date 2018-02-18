@@ -89,7 +89,7 @@ struct myuser_
   mowgli_list_t access_list;
   mowgli_list_t nicks; /* registered nicks, must include mu->name if nonempty */
 
-  language_t *language;
+  struct language *language;
 
   mowgli_list_t cert_fingerprints;
 };

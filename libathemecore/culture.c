@@ -190,13 +190,6 @@ enum
 	LANG_VALID = 1		/* have catalogs for this */
 };
 
-struct language_
-{
-	char *name;
-	unsigned int flags; /* LANG_* */
-	mowgli_node_t node;
-};
-
 static mowgli_list_t language_list;
 
 void
@@ -204,7 +197,7 @@ language_init(void)
 {
 	DIR *dir;
 	struct dirent *ent;
-	language_t *lang;
+	struct language *lang;
 
 	lang = language_add("en");
 	lang->flags |= LANG_VALID;
@@ -226,10 +219,10 @@ language_init(void)
 	}
 }
 
-language_t *
+struct language *
 language_add(const char *name)
 {
-	language_t *lang;
+	struct language *lang;
 
 	if (name == NULL || !strcmp(name, "default"))
 		return NULL;
@@ -243,11 +236,11 @@ language_add(const char *name)
 	return lang;
 }
 
-language_t *
+struct language *
 language_find(const char *name)
 {
 	mowgli_node_t *n;
-	language_t *lang;
+	struct language *lang;
 
 	if (name == NULL)
 		return NULL;
@@ -266,7 +259,7 @@ language_names(void)
 {
 	static char names[512];
 	mowgli_node_t *n;
-	language_t *lang;
+	struct language *lang;
 
 	names[0] = '\0';
 	MOWGLI_ITER_FOREACH(n, language_list.head)
@@ -283,7 +276,7 @@ language_names(void)
 }
 
 const char *
-language_get_name(const language_t *lang)
+language_get_name(const struct language *lang)
 {
 	if (lang == NULL)
 		return "default";
@@ -291,7 +284,7 @@ language_get_name(const language_t *lang)
 }
 
 const char *
-language_get_real_name(const language_t *lang)
+language_get_real_name(const struct language *lang)
 {
 	if (lang == NULL)
 		return config_options.language;
@@ -299,7 +292,7 @@ language_get_real_name(const language_t *lang)
 }
 
 bool
-language_is_valid(const language_t *lang)
+language_is_valid(const struct language *lang)
 {
 	if (lang == NULL)
 		return true;
@@ -307,10 +300,10 @@ language_is_valid(const language_t *lang)
 }
 
 void
-language_set_active(language_t *lang)
+language_set_active(struct language *lang)
 {
 #ifdef ENABLE_NLS
-	static language_t *currlang;
+	static struct language *currlang;
 
 	if (lang == NULL)
 	{

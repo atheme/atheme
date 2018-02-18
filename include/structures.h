@@ -27,6 +27,9 @@ struct connection;
 // Defined in include/crypto.h
 struct crypt_impl;
 
+// Defined in include/culture.h
+struct language;
+
 // Defined in include/servtree.h
 struct service;
 

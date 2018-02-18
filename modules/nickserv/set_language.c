@@ -35,7 +35,7 @@ mod_deinit(const module_unload_intent_t intent)
 static void ns_cmd_set_language(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *language = parv[0];
-	language_t *lang;
+	struct language *lang;
 
 	if (!language)
 	{
