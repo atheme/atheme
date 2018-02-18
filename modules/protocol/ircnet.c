@@ -11,7 +11,7 @@
 #include "uplink.h"
 #include "pmodule.h"
 
-ircd_t IRCNet = {
+struct ircd IRCNet = {
 	.ircdname = "ircd 2.11.1p1 or later",
 	.tldprefix = "$$",
 	.uses_uid = true,

@@ -18,7 +18,7 @@ static bool use_esvid = false;
 static bool use_mlock = false;
 static char ts6sid[3 + 1] = "";
 
-ircd_t Unreal = {
+struct ircd Unreal = {
 	.ircdname = "UnrealIRCd 4 or later",
 	.tldprefix = "$",
 	.uses_uid = true,

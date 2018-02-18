@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/bahamut.h"
 
-ircd_t Bahamut = {
+struct ircd Bahamut = {
 	.ircdname = "Bahamut 1.8.x",
 	.tldprefix = "$",
 	.uses_uid = false,

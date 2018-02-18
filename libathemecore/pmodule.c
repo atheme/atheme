@@ -35,7 +35,7 @@ size_t ignore_mode_list_size = 0;
 const struct cmode *status_mode_list = NULL;
 const struct cmode *prefix_mode_list = NULL;
 const struct cmode *user_mode_list = NULL;
-ircd_t *ircd;
+struct ircd *ircd = NULL;
 bool pmodule_loaded = false;
 bool backend_loaded = false;
 

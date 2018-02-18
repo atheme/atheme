@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/asuka.h"
 
-ircd_t Asuka = {
+struct ircd Asuka = {
 	.ircdname = "Asuka 1.2.1 and later",
 	.tldprefix = "$",
 	.uses_uid = true,

@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/elemental-ircd.h"
 
-ircd_t elemental_ircd = {
+struct ircd elemental_ircd = {
 	.ircdname = "elemental-ircd",
 	.tldprefix = "$$",
 	.uses_uid = true,

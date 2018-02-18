@@ -10,7 +10,7 @@
 #include "pmodule.h"
 #include "protocol/ngircd.h"
 
-ircd_t ngIRCd = {
+struct ircd ngIRCd = {
 	.ircdname = "ngIRCd",
 	.tldprefix = "$",
 	.uses_uid = false,

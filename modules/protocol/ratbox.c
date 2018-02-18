@@ -10,7 +10,7 @@
 #include "uplink.h"
 #include "pmodule.h"
 
-ircd_t Ratbox = {
+struct ircd Ratbox = {
 	.ircdname = "Ratbox (1.0 or later)",
 	.tldprefix = "$$",
 	.uses_uid = true,

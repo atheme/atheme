@@ -63,6 +63,9 @@ struct v4_moduleheader;
 struct atheme_object;
 struct metadata;
 
+// Defined in include/phandler.h
+struct ircd;
+
 // Defined in include/sasl.h
 struct sasl_core_functions;
 struct sasl_mechanism;

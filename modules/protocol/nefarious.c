@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/nefarious.h"
 
-ircd_t Nefarious = {
+struct ircd Nefarious = {
 	.ircdname = "Nefarious IRCU 0.4.0 or later",
 	.tldprefix = "$",
 	.uses_uid = true,

@@ -8,7 +8,8 @@
 #ifndef PHANDLER_H
 #define PHANDLER_H
 
-struct ircd_ {
+struct ircd
+{
 	const char *ircdname;
 	const char *tldprefix;
 	bool uses_uid;
@@ -33,8 +34,6 @@ struct ircd_ {
 	char invex_mchar;
 	int flags;
 };
-
-typedef struct ircd_ ircd_t;
 
 /* values for type */
 /*  -- what the HELL are these used for? A grep reveals nothing.. --w00t
@@ -300,6 +299,6 @@ extern const struct cmode *status_mode_list;
 extern const struct cmode *prefix_mode_list;
 extern const struct cmode *user_mode_list;
 
-extern ircd_t *ircd;
+extern struct ircd *ircd;
 
 #endif

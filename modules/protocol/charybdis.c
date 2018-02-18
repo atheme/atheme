@@ -11,7 +11,7 @@
 #include "pmodule.h"
 #include "protocol/charybdis.h"
 
-ircd_t Charybdis = {
+struct ircd Charybdis = {
 	.ircdname = "Charybdis",
 	.tldprefix = "$$",
 	.uses_uid = true,

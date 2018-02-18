@@ -10,7 +10,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-ircd_t InspIRCd = {
+struct ircd InspIRCd = {
 	.ircdname = "InspIRCd",
 	.tldprefix = "$",
 	.uses_uid = true,
