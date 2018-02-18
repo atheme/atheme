@@ -63,6 +63,9 @@ struct v4_moduleheader;
 struct atheme_object;
 struct metadata;
 
+// Defined in include/pcommand.h
+struct proto_cmd;
+
 // Defined in include/phandler.h
 struct ircd;
 

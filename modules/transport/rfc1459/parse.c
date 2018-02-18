@@ -38,7 +38,7 @@ void irc_parse(char *line)
 	static char coreLine[BUFSIZE];
 	int parc = 0;
 	unsigned int i;
-	pcommand_t *pcmd;
+	struct proto_cmd *pcmd;
 
 	/* clear the parv */
 	for (i = 0; i <= MAXPARC; i++)

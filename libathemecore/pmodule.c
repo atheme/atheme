@@ -41,7 +41,7 @@ bool backend_loaded = false;
 
 void pcommand_init(void)
 {
-	pcommand_heap = sharedheap_get(sizeof(pcommand_t));
+	pcommand_heap = sharedheap_get(sizeof(struct proto_cmd));
 
 	if (!pcommand_heap)
 	{
@@ -54,7 +54,7 @@ void pcommand_init(void)
 
 void pcommand_add(const char *token, void (*handler) (struct sourceinfo *si, int parc, char *parv[]), int minparc, int sourcetype)
 {
-	pcommand_t *pcmd;
+	struct proto_cmd *pcmd;
 
 	if (pcommand_find(token))
 	{
@@ -73,7 +73,7 @@ void pcommand_add(const char *token, void (*handler) (struct sourceinfo *si, int
 
 void pcommand_delete(const char *token)
 {
-	pcommand_t *pcmd;
+	struct proto_cmd *pcmd;
 
 	if (!(pcmd = pcommand_find(token)))
 	{
@@ -88,7 +88,7 @@ void pcommand_delete(const char *token)
 	mowgli_heap_free(pcommand_heap, pcmd);
 }
 
-pcommand_t *pcommand_find(const char *token)
+struct proto_cmd *pcommand_find(const char *token)
 {
 	return mowgli_patricia_retrieve(pcommands, token);
 }

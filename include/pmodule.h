@@ -9,9 +9,8 @@
 #ifndef PMODULE_H
 #define PMODULE_H
 
-typedef struct pcommand_ pcommand_t;
-
-struct pcommand_ {
+struct proto_cmd
+{
 	char	*token;
 	void	(*handler)(struct sourceinfo *si, int parc, char *parv[]);
 	int	minparc;
@@ -37,7 +36,7 @@ extern void pcommand_add(const char *token,
 	void (*handler)(struct sourceinfo *si, int parc, char *parv[]),
 	int minparc, int sourcetype);
 extern void pcommand_delete(const char *token);
-extern pcommand_t *pcommand_find(const char *token);
+extern struct proto_cmd *pcommand_find(const char *token);
 
 /* ptasks.c */
 extern int get_version_string(char *, size_t);
