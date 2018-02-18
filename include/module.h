@@ -25,8 +25,6 @@ enum module_unload_capability
 	MODULE_UNLOAD_CAPABILITY_RELOAD_ONLY = 2,
 };
 
-typedef void (*module_unload_handler_t)(struct module *, enum module_unload_intent);
-
 /* Module structure. Might be a loaded .so module, or something else that
  * behaves as a module for dependency purposes (perl script, etc).
  */
@@ -49,7 +47,7 @@ struct module
 	 * can_unload is not never, then * this must be set to a working unload
 	 * function.
 	 */
-	module_unload_handler_t unload_handler;
+	void (*unload_handler)(struct module *, enum module_unload_intent);
 
 	mowgli_list_t dephost;
 	mowgli_list_t deplist;
