@@ -8,7 +8,6 @@
 #ifndef SERVICES_H
 #define SERVICES_H
 
-typedef struct chansvs_ chansvs_t;
 typedef struct nicksvs_ nicksvs_t;
 
 /* The nick/user/host/real strings in these structs simply point
@@ -16,7 +15,7 @@ typedef struct nicksvs_ nicksvs_t;
  * at some point.
  */
 /* core services */
-struct chansvs_
+struct chansvs
 {
   char *nick;                   /* the IRC client's nickname  */
   char *user;                   /* the IRC client's username  */
@@ -81,7 +80,7 @@ struct nicksvs_
 #define FLOOD_LIGHT 0
 
 /* atheme.c */
-extern chansvs_t chansvs;
+extern struct chansvs chansvs;
 extern nicksvs_t nicksvs;
 
 /* services.c */
