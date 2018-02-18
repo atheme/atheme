@@ -224,7 +224,7 @@ static bool opensex_commit_row(struct database_handle *db)
 	return true;
 }
 
-static database_vtable_t opensex_vt = {
+static const struct database_vtable opensex_vt = {
 	.name = "opensex",
 
 	.read_next_row = opensex_read_next_row,

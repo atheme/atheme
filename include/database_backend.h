@@ -12,7 +12,8 @@
 
 extern bool strict_mode;
 
-typedef struct {
+struct database_vtable
+{
 	const char *name;
 
 	/* Reading stuff. */
@@ -32,7 +33,7 @@ typedef struct {
 	bool (*write_uint)(struct database_handle *hdl, unsigned int num);
 	bool (*write_time)(struct database_handle *hdl, time_t time);
 	bool (*commit_row)(struct database_handle *hdl);
-} database_vtable_t;
+};
 
 typedef enum {
 	DB_READ,
@@ -42,7 +43,7 @@ typedef enum {
 struct database_handle
 {
 	void *priv;
-	database_vtable_t *vt;
+	const struct database_vtable *vt;
 	database_transaction_t txn;
 	char *file;
 	unsigned int line;
