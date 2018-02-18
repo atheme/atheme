@@ -30,13 +30,13 @@ mowgli_list_t soperlist;
 mowgli_heap_t *operclass_heap;
 mowgli_heap_t *soper_heap;
 
-static operclass_t *user_r = NULL;
-static operclass_t *authenticated_r = NULL;
-static operclass_t *ircop_r = NULL;
+static struct operclass *user_r = NULL;
+static struct operclass *authenticated_r = NULL;
+static struct operclass *ircop_r = NULL;
 
 void init_privs(void)
 {
-	operclass_heap = sharedheap_get(sizeof(operclass_t));
+	operclass_heap = sharedheap_get(sizeof(struct operclass));
 	soper_heap = sharedheap_get(sizeof(soper_t));
 
 	if (!operclass_heap || !soper_heap)
@@ -59,9 +59,9 @@ void init_privs(void)
  *
  * Add or override an operclass.
  */
-operclass_t *operclass_add(const char *name, const char *privs, int flags)
+struct operclass *operclass_add(const char *name, const char *privs, int flags)
 {
-	operclass_t *operclass;
+	struct operclass *operclass;
 	mowgli_node_t *n;
 
 	operclass = operclass_find(name);
@@ -101,7 +101,7 @@ operclass_t *operclass_add(const char *name, const char *privs, int flags)
 	return operclass;
 }
 
-void operclass_delete(operclass_t *operclass)
+void operclass_delete(struct operclass *operclass)
 {
 	mowgli_node_t *n;
 
@@ -128,14 +128,14 @@ void operclass_delete(operclass_t *operclass)
 	cnt.operclass--;
 }
 
-operclass_t *operclass_find(const char *name)
+struct operclass *operclass_find(const char *name)
 {
-	operclass_t *operclass;
+	struct operclass *operclass;
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, operclasslist.head)
 	{
-		operclass = (operclass_t *)n->data;
+		operclass = (struct operclass *)n->data;
 
 		if (!strcasecmp(operclass->name, name))
 			return operclass;
@@ -153,7 +153,7 @@ soper_t *soper_add(const char *name, const char *classname, int flags, const cha
 	soper_t *soper;
 	myuser_t *mu = myuser_find(name);
 	mowgli_node_t *n;
-	operclass_t *operclass = operclass_find(classname);
+	struct operclass *operclass = operclass_find(classname);
 
 	soper = mu ? soper_find(mu) : soper_find_named(name);
 
@@ -313,7 +313,7 @@ static bool string_in_list(const char *str, const char *name)
 	return false;
 }
 
-bool has_priv_operclass(operclass_t *operclass, const char *priv)
+bool has_priv_operclass(struct operclass *operclass, const char *priv)
 {
 	if (operclass == NULL)
 		return false;
@@ -350,7 +350,7 @@ bool has_priv(sourceinfo_t *si, const char *priv)
 
 bool has_priv_user(user_t *u, const char *priv)
 {
-	operclass_t *operclass;
+	struct operclass *operclass;
 
 	if (priv == NULL)
 		return true;
@@ -385,7 +385,7 @@ bool has_priv_user(user_t *u, const char *priv)
 
 bool has_priv_myuser(myuser_t *mu, const char *priv)
 {
-	operclass_t *operclass;
+	struct operclass *operclass;
 
 	if (priv == NULL)
 		return true;
@@ -406,7 +406,7 @@ bool has_priv_myuser(myuser_t *mu, const char *priv)
 	return false;
 }
 
-bool has_all_operclass(sourceinfo_t *si, operclass_t *operclass)
+bool has_all_operclass(sourceinfo_t *si, struct operclass *operclass)
 {
 	char *privs2;
 	char *priv;
@@ -436,9 +436,9 @@ const soper_t *get_sourceinfo_soper(sourceinfo_t *si)
 	return NULL;
 }
 
-const operclass_t *get_sourceinfo_operclass(sourceinfo_t *si)
+const struct operclass *get_sourceinfo_operclass(sourceinfo_t *si)
 {
-	operclass_t *out = NULL;
+	struct operclass *out = NULL;
 	const soper_t *soper;
 
 	if ((soper = get_sourceinfo_soper(si)) != NULL)

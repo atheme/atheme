@@ -107,7 +107,7 @@ static void os_cmd_soper_list(sourceinfo_t *si, int parc, char *parv[])
 static void os_cmd_soper_listclass(sourceinfo_t *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
-	operclass_t *operclass;
+	struct operclass *operclass;
 
 	logcommand(si, CMDLOG_GET, "SOPER:LISTCLASS");
 	command_success_nodata(si, _("Oper class list:"));
@@ -125,7 +125,7 @@ static void os_cmd_soper_listclass(sourceinfo_t *si, int parc, char *parv[])
 static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
-	operclass_t *operclass;
+	struct operclass *operclass;
 
 	if (parc < 2)
 	{

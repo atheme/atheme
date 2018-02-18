@@ -466,7 +466,7 @@ static int c_operclass(mowgli_config_file_entry_t *ce)
 				conf_report_warning(ce, "no parameter for configuration option");
 				continue;
 			}
-			operclass_t *parent = operclass_find(ce->vardata);
+			struct operclass *parent = operclass_find(ce->vardata);
 			if (parent == NULL)
 			{
 				conf_report_warning(ce, "nonexistent extends operclass %s for operclass %s", ce->vardata, name);
@@ -503,7 +503,7 @@ static int c_operator(mowgli_config_file_entry_t *ce)
 {
 	char *name;
 	char *password = NULL;
-	operclass_t *operclass = NULL;
+	struct operclass *operclass = NULL;
 	mowgli_config_file_entry_t *topce;
 
 	if (ce->vardata == NULL)

@@ -55,7 +55,8 @@
 #define AC_IRCOP "special:ircop"
 #define AC_SRA "general:admin"
 
-struct operclass_ {
+struct operclass
+{
   char *name;
   char *privs; /* priv1 priv2 priv3... */
   int flags;
@@ -69,7 +70,7 @@ struct operclass_ {
 struct soper_ {
   myuser_t *myuser;
   char *name;
-  operclass_t *operclass;
+  struct operclass *operclass;
   char *classname;
   int flags;
   char *password;
@@ -83,9 +84,9 @@ extern mowgli_list_t soperlist;
 
 extern void init_privs(void);
 
-extern operclass_t *operclass_add(const char *name, const char *privs, int flags);
-extern void operclass_delete(operclass_t *operclass);
-extern operclass_t *operclass_find(const char *name);
+extern struct operclass *operclass_add(const char *name, const char *privs, int flags);
+extern void operclass_delete(struct operclass *operclass);
+extern struct operclass *operclass_find(const char *name);
 
 extern soper_t *soper_add(const char *name, const char *classname, int flags, const char *password);
 extern void soper_delete(soper_t *soper);
@@ -107,9 +108,9 @@ extern bool has_priv_user(user_t *, const char *);
 /* has_priv_myuser(): channel succession etc */
 extern bool has_priv_myuser(myuser_t *, const char *);
 /* has_priv_operclass(): /os specs etc */
-extern bool has_priv_operclass(operclass_t *, const char *);
+extern bool has_priv_operclass(struct operclass *, const char *);
 /* has_all_operclass(): checks if source has all privs in operclass */
-extern bool has_all_operclass(sourceinfo_t *, operclass_t *);
+extern bool has_all_operclass(sourceinfo_t *, struct operclass *);
 
 /* get_sourceinfo_soper(): get the specific operclass role which is granting
  * privilege authority
@@ -118,6 +119,6 @@ extern const soper_t *get_sourceinfo_soper(sourceinfo_t *si);
 /* get_sourceinfo_operclass(): get the specific operclass role which is granting
  * privilege authority
  */
-extern const operclass_t *get_sourceinfo_operclass(sourceinfo_t *si);
+extern const struct operclass *get_sourceinfo_operclass(sourceinfo_t *si);
 
 #endif /* PRIVS_H */
