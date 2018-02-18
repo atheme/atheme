@@ -66,7 +66,7 @@ struct reslist
 	time_t sentat;
 	time_t timeout;
 	unsigned int lastns;	/* index of last server sent to */
-	sockaddr_any_t addr;
+	union sockaddr_any addr;
 	char *name;
 	dns_query_t *query;	/* query callback for this request */
 };
@@ -78,7 +78,7 @@ static int ns_timeout_count[IRCD_MAXNS];
 static void rem_request(struct reslist *request);
 static struct reslist *make_request(dns_query_t *query);
 static void do_query_name(dns_query_t *query, const char *name, struct reslist *request, int);
-static void do_query_number(dns_query_t *query, const sockaddr_any_t *,
+static void do_query_number(dns_query_t *query, const union sockaddr_any *,
 			    struct reslist *request);
 static void query_name(struct reslist *request);
 static int send_res_msg(const char *buf, int len, int count);
@@ -99,7 +99,7 @@ static dns_reply_t *make_dnsreply(struct reslist *request);
  *      paul vixie, 29may94
  *      revised for ircd, cryogen(stu) may03
  */
-static int res_ourserver(const sockaddr_any_t *inp)
+static int res_ourserver(const union sockaddr_any *inp)
 {
 #ifdef RB_IPV6
 	const struct sockaddr_in6 *v6;
@@ -111,7 +111,7 @@ static int res_ourserver(const sockaddr_any_t *inp)
 
 	for (ns = 0; ns < irc_nscount; ns++)
 	{
-		const sockaddr_any_t *srv = &irc_nsaddr_list[ns].saddr;
+		const union sockaddr_any *srv = &irc_nsaddr_list[ns].saddr;
 #ifdef RB_IPV6
 		v6 = (const struct sockaddr_in6 *)srv;
 #endif
@@ -429,7 +429,7 @@ void gethost_byname_type(const char *name, dns_query_t *query, int type)
 /*
  * gethost_byaddr - get host name from address
  */
-void gethost_byaddr(const sockaddr_any_t *addr, dns_query_t *query)
+void gethost_byaddr(const union sockaddr_any *addr, dns_query_t *query)
 {
 	do_query_number(query, addr, NULL);
 }
@@ -460,7 +460,7 @@ static void do_query_name(dns_query_t *query, const char *name, struct reslist *
 /*
  * do_query_number - Use this to do reverse IP# lookups.
  */
-static void do_query_number(dns_query_t *query, const sockaddr_any_t *addr,
+static void do_query_number(dns_query_t *query, const union sockaddr_any *addr,
 			    struct reslist *request)
 {
 	const unsigned char *cp;
@@ -468,7 +468,7 @@ static void do_query_number(dns_query_t *query, const sockaddr_any_t *addr,
 	if (request == NULL)
 	{
 		request = make_request(query);
-		memcpy(&request->addr, addr, sizeof(sockaddr_any_t));
+		memcpy(&request->addr, addr, sizeof(union sockaddr_any));
 		request->name = (char *)smalloc(IRCD_RES_HOSTLEN + 1);
 	}
 
@@ -752,8 +752,8 @@ static int res_read_single_reply(connection_t *F)
 	dns_reply_t *reply = NULL;
 	int rc;
 	int answer_count;
-	socklen_t len = sizeof(sockaddr_any_t);
-	sockaddr_any_t lsin;
+	socklen_t len = sizeof(union sockaddr_any);
+	union sockaddr_any lsin;
 
 	rc = recvfrom(F->fd, buf, sizeof(buf), 0, (struct sockaddr *)&lsin, &len);
 

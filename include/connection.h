@@ -14,9 +14,7 @@
 # define ioerrno()	WSAGetLastError()
 #endif
 
-typedef union sockaddr_any_ sockaddr_any_t;
-
-union sockaddr_any_
+union sockaddr_any
 {
 	struct sockaddr sa;
 	struct sockaddr_in sin;
@@ -47,7 +45,7 @@ struct connection_
 
 	size_t sendq_limit;
 
-	sockaddr_any_t saddr;
+	union sockaddr_any saddr;
 	socklen_t saddr_size;
 
 	void (*read_handler)(connection_t *);
