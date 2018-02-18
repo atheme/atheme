@@ -310,7 +310,7 @@ void module_load_dir_match(const char *dirspec, const char *pattern)
  * side effects:
  *       a module is unloaded and neccessary deinitalization code is run.
  */
-void module_unload(struct module *m, module_unload_intent_t intent)
+void module_unload(struct module *m, const enum module_unload_intent intent)
 {
 	mowgli_node_t *n, *tn;
 

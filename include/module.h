@@ -12,10 +12,11 @@
 #include "abirev.h"
 #include "serno.h"
 
-typedef enum {
+enum module_unload_intent
+{
 	MODULE_UNLOAD_INTENT_PERM            = 0,
 	MODULE_UNLOAD_INTENT_RELOAD          = 1,
-} module_unload_intent_t;
+};
 
 typedef enum {
 	MODULE_UNLOAD_CAPABILITY_OK          = 0,
@@ -23,7 +24,7 @@ typedef enum {
 	MODULE_UNLOAD_CAPABILITY_RELOAD_ONLY = 2,
 } module_unload_capability_t;
 
-typedef void (*module_unload_handler_t)(struct module *, module_unload_intent_t);
+typedef void (*module_unload_handler_t)(struct module *, enum module_unload_intent);
 
 /* Module structure. Might be a loaded .so module, or something else that
  * behaves as a module for dependency purposes (perl script, etc).
@@ -73,7 +74,7 @@ struct v4_moduleheader
 	const char *name;
 	module_unload_capability_t can_unload;
 	void (*modinit)(struct module *m);
-	void (*deinit)(module_unload_intent_t intent);
+	void (*deinit)(enum module_unload_intent intent);
 	const char *vendor;
 	const char *version;
 };
@@ -99,7 +100,7 @@ extern struct module *module_load(const char *filespec);
 extern void module_load_dir(const char *dirspec);
 extern void module_load_dir_match(const char *dirspec, const char *pattern);
 extern void *module_locate_symbol(const char *modname, const char *sym);
-extern void module_unload(struct module *m, module_unload_intent_t intent);
+extern void module_unload(struct module *m, enum module_unload_intent intent);
 extern struct module *module_find(const char *name);
 extern struct module *module_find_published(const char *name);
 extern bool module_request(const char *name);

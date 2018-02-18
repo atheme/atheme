@@ -44,7 +44,7 @@ static mowgli_heap_t *perl_script_module_heap;
 
 static struct module *do_script_load(const char *filename);
 static bool do_script_unload(const char *filename);
-static void perl_script_module_unload_handler(struct module *m, module_unload_intent_t intent);
+static void perl_script_module_unload_handler(struct module *m, const enum module_unload_intent ATHEME_VATTR_UNUSED intent);
 
 /*
  * Startup and shutdown routines.
@@ -386,7 +386,7 @@ static void hook_module_load(hook_module_load_t *data)
 	}
 }
 
-void perl_script_module_unload_handler(struct module *m, module_unload_intent_t intent)
+void perl_script_module_unload_handler(struct module *m, const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	perl_script_module_t *pm = (perl_script_module_t *)m;
 	do_script_unload(pm->filename);
@@ -421,7 +421,7 @@ mod_init(struct module *const restrict m)
 }
 
 static void
-mod_deinit(const module_unload_intent_t intent)
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	service_named_unbind_command("operserv", &os_perl);
 

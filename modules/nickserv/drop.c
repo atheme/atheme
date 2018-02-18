@@ -226,7 +226,7 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 }
 
 static void
-mod_deinit(const module_unload_intent_t ATHEME_VATTR_UNUSED intent)
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	(void) service_named_unbind_command("nickserv", &cmd_ns_drop);
 	(void) service_named_unbind_command("nickserv", &cmd_ns_fdrop);

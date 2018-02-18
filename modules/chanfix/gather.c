@@ -418,7 +418,7 @@ void chanfix_gather_init(chanfix_persist_record_t *rec)
 	chanfix_gather_timer = mowgli_timer_add(base_eventloop, "chanfix_gather", chanfix_gather, NULL, CHANFIX_GATHER_INTERVAL);
 }
 
-void chanfix_gather_deinit(module_unload_intent_t intent, chanfix_persist_record_t *rec)
+void chanfix_gather_deinit(const enum module_unload_intent intent, chanfix_persist_record_t *rec)
 {
 	hook_del_db_write(write_chanfixdb);
 	hook_del_channel_add(chanfix_channel_add_ev);

@@ -63,7 +63,7 @@ mod_init(struct module *const restrict m)
 }
 
 static void
-mod_deinit(const module_unload_intent_t intent)
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	command_delete(&gs_set_description, gs_set_cmdtree);
 }

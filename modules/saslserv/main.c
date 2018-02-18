@@ -860,7 +860,7 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 }
 
 static void
-mod_deinit(const module_unload_intent_t ATHEME_VATTR_UNUSED intent)
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	(void) hook_del_sasl_input(&sasl_input);
 	(void) hook_del_user_add(&sasl_newuser);

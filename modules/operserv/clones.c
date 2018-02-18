@@ -158,7 +158,7 @@ static void free_hostentry(const char *key, void *data, void *privdata)
 }
 
 static void
-mod_deinit(const module_unload_intent_t intent)
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	mowgli_node_t *n, *tn;
 

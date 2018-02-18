@@ -534,7 +534,7 @@ mod_init(struct module *m)
 }
 
 static void
-mod_deinit(module_unload_intent_t intent)
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	command_delete(&cs_set_antiflood, *cs_set_cmdtree);
 
