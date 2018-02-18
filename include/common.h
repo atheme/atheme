@@ -8,33 +8,6 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-/* D E F I N E S */
-typedef enum {
-	PATH_LOCALE,
-	PATH_MODULE,
-	PATH_SHARE,
-	PATH_CONFIG,
-	PATH_LOG,
-	PATH_RUN,
-	PATH_DATA,
-	PATH_VEC_SIZE,
-} path_vec_t;
-
-/*
- * XXX: this is very nieve.
- * We assume that %zu works if we're not on Windows; we know this is a lie.
- * Oh well...
- */
-#ifndef _WIN32
-# define SIZE_T_FORMAT	"%zu"
-#else
-# ifndef _WIN64
-#  define SIZE_T_FORMAT "%lu"
-# else
-#  define SIZE_T_FORMAT "%llu"
-# endif
-#endif
-
 #define BUFSIZE			1024		/* maximum size of a buffer */
 #define MAXMODES		4
 #define MAX_IRC_OUTPUT_LINES	2000
