@@ -38,7 +38,7 @@ int use_limitflags = 0;
 int ban(user_t *sender, struct channel *c, user_t *user)
 {
 	char mask[MAX_BUF];
-	chanban_t *cb;
+	struct chanban *cb;
 
 	if (!c)
 		return 0;
@@ -64,7 +64,7 @@ int remove_banlike(user_t *source, struct channel *chan, int type, user_t *targe
 {
 	int count = 0;
 	mowgli_node_t *n, *tn;
-	chanban_t *cb;
+	struct chanban *cb;
 
 	if (type == 0)
 		return 0;

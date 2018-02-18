@@ -538,7 +538,7 @@ static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 		{
 			MOWGLI_ITER_FOREACH_SAFE(n, tn, chan->bans.head)
 			{
-				if (((chanban_t *)n->data)->type == 'b')
+				if (((struct chanban *)n->data)->type == 'b')
 					chanban_delete(n->data);
 			}
 		}
@@ -546,7 +546,7 @@ static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 		{
 			MOWGLI_ITER_FOREACH_SAFE(n, tn, chan->bans.head)
 			{
-				if (((chanban_t *)n->data)->type == 'e')
+				if (((struct chanban *)n->data)->type == 'e')
 					chanban_delete(n->data);
 			}
 		}

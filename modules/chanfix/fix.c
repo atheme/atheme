@@ -263,7 +263,7 @@ static void chanfix_clear_bans(struct channel *ch)
 	}
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, ch->bans.head)
 	{
-		chanban_t *cb = n->data;
+		struct chanban *cb = n->data;
 
 		if (cb->type != 'b')
 			continue;

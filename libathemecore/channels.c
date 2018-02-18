@@ -47,7 +47,7 @@ void init_channels(void)
 {
 	chan_heap = sharedheap_get(sizeof(struct channel));
 	chanuser_heap = sharedheap_get(sizeof(struct chanuser));
-	chanban_heap = sharedheap_get(sizeof(chanban_t));
+	chanban_heap = sharedheap_get(sizeof(struct chanban));
 
 	if (chan_heap == NULL || chanuser_heap == NULL || chanban_heap == NULL)
 	{
@@ -217,9 +217,9 @@ void channel_delete(struct channel *c)
  * Side Effects:
  *     - the created channel ban object is added to the channel automatically.
  */
-chanban_t *chanban_add(struct channel *chan, const char *mask, int type)
+struct chanban *chanban_add(struct channel *chan, const char *mask, int type)
 {
-	chanban_t *c;
+	struct chanban *c;
 
 	return_val_if_fail(chan != NULL, NULL);
 	return_val_if_fail(mask != NULL, NULL);
@@ -253,7 +253,7 @@ chanban_t *chanban_add(struct channel *chan, const char *mask, int type)
 }
 
 /*
- * chanban_delete(chanban_t *c)
+ * chanban_delete(struct chanban *c)
  *
  * Destroys a channel ban.
  *
@@ -266,7 +266,7 @@ chanban_t *chanban_add(struct channel *chan, const char *mask, int type)
  * Side Effects:
  *     - the channel ban is automatically removed from the channel that owned it
  */
-void chanban_delete(chanban_t * c)
+void chanban_delete(struct chanban * c)
 {
 	return_if_fail(c != NULL);
 
@@ -293,9 +293,9 @@ void chanban_delete(chanban_t * c)
  * Side Effects:
  *     - none
  */
-chanban_t *chanban_find(struct channel *chan, const char *mask, int type)
+struct chanban *chanban_find(struct channel *chan, const char *mask, int type)
 {
-	chanban_t *c;
+	struct chanban *c;
 	mowgli_node_t *n;
 
 	return_val_if_fail(chan != NULL, NULL);

@@ -47,7 +47,7 @@ struct chanuser
   mowgli_node_t cnode;
 };
 
-struct chanban_
+struct chanban
 {
   struct channel *chan;
   char *mask;
@@ -78,7 +78,7 @@ struct chanban_
 #define CSTATUS_HALFOP  0x00000010      /* unreal/inspircd +h */
 #define CSTATUS_IMMUNE	0x00000020	/* inspircd-style per-user immune */
 
-/* chanban_t.flags */
+/* for struct chanban -> flags */
 #define CBAN_ANTIFLOOD  0x00000001	/* chanserv/antiflood set this */
 
 #define MTYPE_NUL 0
@@ -175,9 +175,9 @@ extern struct chanuser *chanuser_add(struct channel *chan, const char *user);
 extern void chanuser_delete(struct channel *chan, user_t *user);
 extern struct chanuser *chanuser_find(struct channel *chan, user_t *user);
 
-extern chanban_t *chanban_add(struct channel *chan, const char *mask, int type);
-extern void chanban_delete(chanban_t *c);
-extern chanban_t *chanban_find(struct channel *chan, const char *mask, int type);
+extern struct chanban *chanban_add(struct channel *chan, const char *mask, int type);
+extern void chanban_delete(struct chanban *c);
+extern struct chanban *chanban_find(struct channel *chan, const char *mask, int type);
 //inline void chanban_clear(struct channel *chan);
 
 #endif

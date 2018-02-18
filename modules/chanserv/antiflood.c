@@ -214,7 +214,7 @@ mqueue_should_enforce(mqueue_t *mq)
 	return MQ_ENFORCE_NONE;
 }
 
-static chanban_t *(*place_quietmask)(struct channel *c, int dir, const char *hostbuf) = NULL;
+static struct chanban *(*place_quietmask)(struct channel *c, int dir, const char *hostbuf) = NULL;
 
 /* this requires `chanserv/quiet` to be loaded. */
 static void
@@ -227,7 +227,7 @@ antiflood_enforce_quiet(user_t *u, struct channel *c)
 
 	if (place_quietmask != NULL)
 	{
-		chanban_t *cb;
+		struct chanban *cb;
 
 		cb = place_quietmask(c, MTYPE_ADD, hostbuf);
 		if (cb != NULL)
@@ -243,7 +243,7 @@ antiflood_unenforce_banlike(struct channel *c)
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, c->bans.head)
 	{
-		chanban_t *cb = n->data;
+		struct chanban *cb = n->data;
 
 		if (!(cb->flags & CBAN_ANTIFLOOD))
 			continue;
@@ -256,7 +256,7 @@ antiflood_unenforce_banlike(struct channel *c)
 static void
 antiflood_enforce_kickban(user_t *u, struct channel *c)
 {
-	chanban_t *cb;
+	struct chanban *cb;
 
 	ban(chansvs.me->me, c, u);
 	remove_ban_exceptions(chansvs.me->me, c, u);

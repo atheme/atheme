@@ -275,7 +275,7 @@ void channel_mode(user_t *source, struct channel *chan, int parc, char *parv[])
 			}
 			else
 			{
-				chanban_t *c;
+				struct chanban *c;
 
 				c = chanban_find(chan, parv[parpos], *pos);
 				if (c != NULL)

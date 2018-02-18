@@ -305,7 +305,7 @@ void generic_sasl_mechlist_sts(const char *mechlist)
 
 mowgli_node_t *generic_next_matching_ban(struct channel *c, user_t *u, int type, mowgli_node_t *first)
 {
-	chanban_t *cb;
+	struct chanban *cb;
 	mowgli_node_t *n;
 	char hostbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
 	char cloakbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];

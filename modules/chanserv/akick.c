@@ -106,7 +106,7 @@ static void clear_bans_matching_entity(mychan_t *mc, myentity_t *mt)
 		snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->vhost);
 		for (it = next_matching_ban(mc->chan, tu, 'b', mc->chan->bans.head); it != NULL; it = next_matching_ban(mc->chan, tu, 'b', itn))
 		{
-			chanban_t *cb;
+			struct chanban *cb;
 
 			itn = it->next;
 			cb = it->data;
@@ -456,7 +456,7 @@ void cs_cmd_akick_del(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	akick_timeout_t *timeout;
-	chanban_t *cb;
+	struct chanban *cb;
 
 	if ((chanacs_source_flags(mc, si) & (CA_FLAGS | CA_REMOVE)) != (CA_FLAGS | CA_REMOVE))
 	{
@@ -668,7 +668,7 @@ void akick_timeout_check(void *arg)
 	chanacs_t *ca;
 	mychan_t *mc;
 
-	chanban_t *cb;
+	struct chanban *cb;
 	akickdel_next = 0;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, akickdel_list.head)

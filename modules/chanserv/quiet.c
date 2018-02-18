@@ -66,10 +66,10 @@ static char *strip_extban(char *mask)
 	return sstrdup(mask);
 }
 
-chanban_t *place_quietmask(struct channel *c, int dir, const char *hostbuf)
+struct chanban *place_quietmask(struct channel *c, int dir, const char *hostbuf)
 {
 	char rhostbuf[BUFSIZE];
-	chanban_t *cb = NULL;
+	struct chanban *cb = NULL;
 	char banlike_char = get_quiet_ban_char();
 
 	make_extbanmask(rhostbuf, sizeof rhostbuf, hostbuf);
@@ -194,11 +194,11 @@ static void notify_one_victim(sourceinfo_t *si, struct channel *c, user_t *u, in
 				c->name, get_source_name(si));
 }
 
-static void notify_victims(sourceinfo_t *si, struct channel *c, chanban_t *cb, int dir)
+static void notify_victims(sourceinfo_t *si, struct channel *c, struct chanban *cb, int dir)
 {
 	mowgli_node_t *n;
 	struct chanuser *cu;
-	chanban_t tmpban;
+	struct chanban tmpban;
 	mowgli_list_t ban_l = { NULL, NULL, 0 };
 	mowgli_node_t ban_n;
 	user_t *to_notify[MAX_SINGLE_NOTIFY];
@@ -216,7 +216,7 @@ static void notify_victims(sourceinfo_t *si, struct channel *c, chanban_t *cb, i
 
 	/* some ircds use an action extban for mute
 	 * strip it from those who do so we can reliably match users */
-	memcpy(&tmpban, cb, sizeof(chanban_t));
+	memcpy(&tmpban, cb, sizeof(struct chanban));
 	tmpban.mask = strip_extban(cb->mask);
 
 	/* only check the newly added/removed quiet */
@@ -265,7 +265,7 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 	struct channel *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
 	user_t *tu;
-	chanban_t *cb;
+	struct chanban *cb;
 	int n;
 	char *targetlist;
 	char *strtokctx = NULL;
@@ -360,7 +360,7 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
         struct channel *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
 	user_t *tu;
-	chanban_t *cb;
+	struct chanban *cb;
 	char *targetlist;
 	char *strtokctx;
 	char target_extban[BUFSIZE];

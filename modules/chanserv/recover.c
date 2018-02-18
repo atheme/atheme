@@ -29,7 +29,7 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 	struct chanuser *cu, *origin_cu = NULL;
 	mychan_t *mc;
 	mowgli_node_t *n, *tn;
-	chanban_t *cb;
+	struct chanban *cb;
 	char *name = parv[0];
 	char hostbuf2[BUFSIZE];
 	char e;

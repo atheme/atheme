@@ -33,7 +33,7 @@ static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
         struct channel *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
 	user_t *tu;
-	chanban_t *cb;
+	struct chanban *cb;
 
 	if (si->su == NULL)
 	{
