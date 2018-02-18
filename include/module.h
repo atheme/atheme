@@ -89,10 +89,11 @@ typedef struct {
 	int handled;
 } hook_module_load_t;
 
-typedef struct module_dependency_ {
+struct module_dependency
+{
 	char *name;
 	enum module_unload_capability can_unload;
-} module_dependency_t;
+};
 
 extern void modules_init(void);
 extern struct module *module_load(const char *filespec);

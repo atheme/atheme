@@ -31,14 +31,14 @@ static void recurse_module_deplist(struct module *m, mowgli_list_t *deplist)
 		mowgli_node_t *n2;
 		MOWGLI_LIST_FOREACH(n2, deplist->head)
 		{
-			module_dependency_t *existing_dep = (module_dependency_t *) n2->data;
+			struct module_dependency *existing_dep = n2->data;
 			if (0 == strcasecmp(dm->name, existing_dep->name))
 				found = true;
 		}
 		if (found)
 			continue;
 
-		module_dependency_t *dep = smalloc(sizeof(module_dependency_t));
+		struct module_dependency *dep = smalloc(sizeof(struct module_dependency));
 		dep->name = sstrdup(dm->name);
 		dep->can_unload = dm->can_unload;
 		mowgli_node_add(dep, mowgli_node_create(), deplist);
@@ -52,7 +52,7 @@ static void os_cmd_modreload(struct sourceinfo *si, int parc, char *parv[])
 	char *module = parv[0];
 	struct module *m;
 	mowgli_node_t *n;
-	module_dependency_t * reloading_semipermanent_module = NULL;
+	struct module_dependency * reloading_semipermanent_module = NULL;
 
 	if (parc < 1)
         {
@@ -85,7 +85,7 @@ static void os_cmd_modreload(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	mowgli_list_t *module_deplist = mowgli_list_create();
-	module_dependency_t *self_dep = smalloc(sizeof(module_dependency_t));
+	struct module_dependency *self_dep = smalloc(sizeof(struct module_dependency));
 	self_dep->name = sstrdup(module);
 	self_dep->can_unload = m->can_unload;
 	mowgli_node_add(self_dep, mowgli_node_create(), module_deplist);
@@ -93,7 +93,7 @@ static void os_cmd_modreload(struct sourceinfo *si, int parc, char *parv[])
 
 	MOWGLI_LIST_FOREACH(n, module_deplist->head)
 	{
-		module_dependency_t *dep = (module_dependency_t *) n->data;
+		struct module_dependency *dep = n->data;
 		if (dep->can_unload == MODULE_UNLOAD_CAPABILITY_NEVER)
 		{
 			command_fail(si, fault_noprivs, _("\2%s\2 is depended upon by \2%s\2, which is a permanent module and cannot be reloaded."), module, dep->name);
@@ -135,7 +135,7 @@ static void os_cmd_modreload(struct sourceinfo *si, int parc, char *parv[])
 	{
 		struct module *t;
 		n = module_deplist->head;
-		module_dependency_t *dep = (module_dependency_t *) n->data;
+		struct module_dependency *dep = n->data;
 
 		t = module_load(dep->name);
 

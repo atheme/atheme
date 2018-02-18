@@ -50,6 +50,7 @@ struct hook;
 
 // Defined in include/module.h
 struct module;
+struct module_dependency;
 struct v4_moduleheader;
 
 // Defined in include/object.h
