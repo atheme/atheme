@@ -68,7 +68,7 @@ static void ns_cmd_listgroups(struct sourceinfo *si, int parc, char *parv[])
 
 	MOWGLI_ITER_FOREACH(n, l->head)
 	{
-		groupacs_t *ga = n->data;
+		struct groupacs *ga = n->data;
 
 		if (ga->mt != entity(mu))
 			continue;

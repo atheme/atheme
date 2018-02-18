@@ -99,7 +99,7 @@ static void ms_cmd_sendgroup(struct sourceinfo *si, int parc, char *parv[])
 
 	MOWGLI_ITER_FOREACH(tn, mg->acs.head)
 	{
-		groupacs_t *ga = (groupacs_t *) tn->data;
+		struct groupacs *ga = (struct groupacs *) tn->data;
 		tmu = user(ga->mt);
 
 		if (!(ga->flags & GA_MEMOS) || tmu == NULL || tmu == si->smu)

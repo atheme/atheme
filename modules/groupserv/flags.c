@@ -17,7 +17,7 @@ static void gs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_node_t *n;
 	mygroup_t *mg;
 	struct myentity *mt;
-	groupacs_t *ga;
+	struct groupacs *ga;
 	unsigned int flags = 0, oldflags = 0;
 	unsigned int dir = 0;
 	char *c;

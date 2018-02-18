@@ -288,7 +288,7 @@ static bool myuser_is_in_group(myuser_t *mu, struct myentity *mt)
 
 	MOWGLI_ITER_FOREACH(n, mg->acs.head)
 	{
-		groupacs_t *ga = n->data;
+		struct groupacs *ga = n->data;
 
 		if (ga->mt == entity(mu) && ga->flags & GA_VHOST)
 			return true;

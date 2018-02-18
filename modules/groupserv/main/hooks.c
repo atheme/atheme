@@ -35,7 +35,7 @@ static void grant_channel_access_hook(user_t *u)
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, l->head)
 	{
-		groupacs_t *ga = n->data;
+		struct groupacs *ga = n->data;
 
 		if (!(ga->flags & GA_CHANACS))
 			continue;
@@ -120,7 +120,7 @@ static void user_info_hook(hook_user_req_t *req)
 
 	MOWGLI_ITER_FOREACH(n, l->head)
 	{
-		groupacs_t *ga = n->data;
+		struct groupacs *ga = n->data;
 
 		if (ga->flags & GA_BAN)
 			continue;
@@ -152,7 +152,7 @@ static void sasl_may_impersonate_hook(hook_sasl_may_impersonate_t *req)
 
 	MOWGLI_ITER_FOREACH(n, l->head)
 	{
-		groupacs_t *ga = n->data;
+		struct groupacs *ga = n->data;
 
 		snprintf(priv, sizeof(priv), PRIV_IMPERSONATE_ENTITY_FMT, entity(ga->mg)->name);
 
@@ -173,7 +173,7 @@ static void myuser_delete_hook(myuser_t *mu)
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, l->head)
 	{
-		groupacs_t *ga = n->data;
+		struct groupacs *ga = n->data;
 
 		groupacs_delete(ga->mg, ga->mt);
 	}

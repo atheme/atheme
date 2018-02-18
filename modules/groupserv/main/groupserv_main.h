@@ -16,8 +16,8 @@ extern mygroup_t *mygroup_add(const char *name);
 extern mygroup_t *mygroup_add_id(const char *id, const char *name);
 extern mygroup_t *mygroup_find(const char *name);
 
-extern groupacs_t *groupacs_add(mygroup_t *mg, struct myentity *mt, unsigned int flags);
-extern groupacs_t *groupacs_find(mygroup_t *mg, struct myentity *mt, unsigned int flags, bool allow_recurse);
+extern struct groupacs *groupacs_add(mygroup_t *mg, struct myentity *mt, unsigned int flags);
+extern struct groupacs *groupacs_find(mygroup_t *mg, struct myentity *mt, unsigned int flags, bool allow_recurse);
 extern void groupacs_delete(mygroup_t *mg, struct myentity *mt);
 
 extern bool groupacs_sourceinfo_has_flag(mygroup_t *mg, struct sourceinfo *si, unsigned int flag);

@@ -18,8 +18,8 @@ mygroup_t * (*mygroup_rename)(mygroup_t *mg, const char *name);
 unsigned int (*mygroup_count_flag)(mygroup_t *mg, unsigned int flag);
 unsigned int (*myentity_count_group_flag)(struct myentity *mu, unsigned int flagset);
 
-groupacs_t * (*groupacs_add)(mygroup_t *mg, struct myentity *mt, unsigned int flags);
-groupacs_t * (*groupacs_find)(mygroup_t *mg, struct myentity *mt, unsigned int flags, bool allow_recurse);
+struct groupacs * (*groupacs_add)(mygroup_t *mg, struct myentity *mt, unsigned int flags);
+struct groupacs * (*groupacs_find)(mygroup_t *mg, struct myentity *mt, unsigned int flags, bool allow_recurse);
 void (*groupacs_delete)(mygroup_t *mg, struct myentity *mt);
 
 bool (*groupacs_sourceinfo_has_flag)(mygroup_t *mg, struct sourceinfo *si, unsigned int flag);

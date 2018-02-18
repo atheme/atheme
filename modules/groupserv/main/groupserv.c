@@ -33,7 +33,7 @@ mowgli_heap_t *mygroup_heap, *groupacs_heap;
 void mygroups_init(void)
 {
 	mygroup_heap = mowgli_heap_create(sizeof(mygroup_t), HEAP_USER, BH_NOW);
-	groupacs_heap = mowgli_heap_create(sizeof(groupacs_t), HEAP_CHANACS, BH_NOW);
+	groupacs_heap = mowgli_heap_create(sizeof(struct groupacs), HEAP_CHANACS, BH_NOW);
 }
 
 void mygroups_deinit(void)
@@ -50,7 +50,7 @@ static void mygroup_delete(mygroup_t *mg)
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, mg->acs.head)
 	{
-		groupacs_t *ga = n->data;
+		struct groupacs *ga = n->data;
 
 		mowgli_node_delete(&ga->gnode, &mg->acs);
 		mowgli_node_delete(&ga->unode, myentity_get_membership_list(ga->mt));
@@ -109,15 +109,15 @@ mygroup_t *mygroup_find(const char *name)
 	return group(mg);
 }
 
-static void groupacs_des(groupacs_t *ga)
+static void groupacs_des(struct groupacs *ga)
 {
 	metadata_delete_all(ga);
 	mowgli_heap_free(groupacs_heap, ga);
 }
 
-groupacs_t *groupacs_add(mygroup_t *mg, struct myentity *mt, unsigned int flags)
+struct groupacs *groupacs_add(mygroup_t *mg, struct myentity *mt, unsigned int flags)
 {
-	groupacs_t *ga;
+	struct groupacs *ga;
 
 	return_val_if_fail(mg != NULL, NULL);
 	return_val_if_fail(mt != NULL, NULL);
@@ -135,10 +135,10 @@ groupacs_t *groupacs_add(mygroup_t *mg, struct myentity *mt, unsigned int flags)
 	return ga;
 }
 
-groupacs_t *groupacs_find(mygroup_t *mg, struct myentity *mt, unsigned int flags, bool allow_recurse)
+struct groupacs *groupacs_find(mygroup_t *mg, struct myentity *mt, unsigned int flags, bool allow_recurse)
 {
 	mowgli_node_t *n;
-	groupacs_t *out = NULL;
+	struct groupacs *out = NULL;
 
 	return_val_if_fail(mg != NULL, NULL);
 	return_val_if_fail(mt != NULL, NULL);
@@ -147,14 +147,14 @@ groupacs_t *groupacs_find(mygroup_t *mg, struct myentity *mt, unsigned int flags
 
 	MOWGLI_ITER_FOREACH(n, mg->acs.head)
 	{
-		groupacs_t *ga = n->data;
+		struct groupacs *ga = n->data;
 
 		if (out != NULL)
 			break;
 
 		if (isgroup(ga->mt) && allow_recurse && !(group(ga->mt)->visited))
 		{
-			groupacs_t *ga2;
+			struct groupacs *ga2;
 
 			ga2 = groupacs_find(group(ga->mt), mt, flags, allow_recurse);
 
@@ -180,7 +180,7 @@ groupacs_t *groupacs_find(mygroup_t *mg, struct myentity *mt, unsigned int flags
 
 void groupacs_delete(mygroup_t *mg, struct myentity *mt)
 {
-	groupacs_t *ga;
+	struct groupacs *ga;
 
 	ga = groupacs_find(mg, mt, 0, false);
 	if (ga != NULL)
@@ -198,7 +198,7 @@ bool groupacs_sourceinfo_has_flag(mygroup_t *mg, struct sourceinfo *si, unsigned
 
 unsigned int groupacs_sourceinfo_flags(mygroup_t *mg, struct sourceinfo *si)
 {
-	groupacs_t *ga;
+	struct groupacs *ga;
 
 	ga = groupacs_find(mg, entity(si->smu), 0, true);
 	if (ga == NULL)
@@ -222,7 +222,7 @@ unsigned int mygroup_count_flag(mygroup_t *mg, unsigned int flag)
 
 	MOWGLI_ITER_FOREACH(n, mg->acs.head)
 	{
-		groupacs_t *ga = n->data;
+		struct groupacs *ga = n->data;
 
 		if (ga->flags & flag)
 			count++;
@@ -248,7 +248,7 @@ mowgli_list_t *myentity_get_membership_list(struct myentity *mt)
 const char *mygroup_founder_names(mygroup_t *mg)
 {
         mowgli_node_t *n;
-        groupacs_t *ga;
+        struct groupacs *ga;
         static char names[512];
 
         names[0] = '\0';
@@ -274,7 +274,7 @@ unsigned int myentity_count_group_flag(struct myentity *mt, unsigned int flagset
 	l = myentity_get_membership_list(mt);
 	MOWGLI_ITER_FOREACH(n, l->head)
 	{
-		groupacs_t *ga = n->data;
+		struct groupacs *ga = n->data;
 
 		if (ga->mt == mt && ga->flags & flagset)
 			count++;

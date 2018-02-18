@@ -15,7 +15,7 @@ struct command gs_join = { "JOIN", N_("Join a open group."), AC_AUTHENTICATED, 2
 static void gs_cmd_join(struct sourceinfo *si, int parc, char *parv[])
 {
 	mygroup_t *mg;
-	groupacs_t *ga;
+	struct groupacs *ga;
 	struct metadata *md, *md2;
 	unsigned int flags = 0;
 	bool invited = false;

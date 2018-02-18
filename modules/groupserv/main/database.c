@@ -62,7 +62,7 @@ static void write_groupdb(struct database_handle *db)
 
 		MOWGLI_ITER_FOREACH(n, mg->acs.head)
 		{
-			groupacs_t *ga = n->data;
+			struct groupacs *ga = n->data;
 			char *flags = gflags_tostr(ga_flags, ga->flags);
 
 			db_start_row(db, "GACL");

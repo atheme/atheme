@@ -49,9 +49,8 @@ struct mygroup_ {
 #define PRIV_GROUP_ADMIN "group:admin"
 #define PRIV_GROUP_AUSPEX "group:auspex"
 
-typedef struct groupacs_ groupacs_t;
-
-struct groupacs_ {
+struct groupacs
+{
 	struct atheme_object parent;
 
 	mygroup_t *mg;

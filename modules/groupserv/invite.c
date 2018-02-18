@@ -20,7 +20,7 @@ static void gs_cmd_invite(struct sourceinfo *si, int parc, char *parv[])
 {
 	mygroup_t *mg;
 	myuser_t *mu;
-	groupacs_t *ga;
+	struct groupacs *ga;
 	char *group = parv[0];
 	char *user = parv[1];
 	char buf[BUFSIZE];
