@@ -9,9 +9,7 @@
 #ifndef ATHEME_UPLINK_H
 #define ATHEME_UPLINK_H
 
-typedef struct uplink_ uplink_t;
-
-struct uplink_
+struct uplink
 {
 	mowgli_node_t	node;
 
@@ -32,12 +30,12 @@ struct uplink_
 
 /* uplink.c */
 extern mowgli_list_t uplinks;
-extern uplink_t *curr_uplink;
+extern struct uplink *curr_uplink;
 
 extern void init_uplinks(void);
-extern uplink_t *uplink_add(const char *name, const char *host, const char *send_password, const char *receive_password, const char *vhost, int port);
-extern void uplink_delete(uplink_t *u);
-extern uplink_t *uplink_find(const char *name);
+extern struct uplink *uplink_add(const char *name, const char *host, const char *send_password, const char *receive_password, const char *vhost, int port);
+extern void uplink_delete(struct uplink *u);
+extern struct uplink *uplink_find(const char *name);
 extern void uplink_connect(void);
 
 /* packet.c */

@@ -96,7 +96,7 @@ void handle_stats(user_t *u, char req)
 	struct xline *x;
 	struct qline *q;
 	mowgli_node_t *n;
-	uplink_t *uplink;
+	struct uplink *uplink;
 	soper_t *soper;
 	int j;
 	char fl[10];
@@ -126,7 +126,7 @@ void handle_stats(user_t *u, char req)
 
 		  MOWGLI_ITER_FOREACH(n, uplinks.head)
 		  {
-			  uplink = (uplink_t *)n->data;
+			  uplink = (struct uplink *)n->data;
 			  numeric_sts(me.me, 213, u, "C *@127.0.0.1 A %s %d uplink", uplink->name, uplink->port);
 		  }
 		  break;
@@ -164,7 +164,7 @@ void handle_stats(user_t *u, char req)
 
 		  MOWGLI_ITER_FOREACH(n, uplinks.head)
 		  {
-			  uplink = (uplink_t *)n->data;
+			  uplink = (struct uplink *)n->data;
 			  numeric_sts(me.me, 244, u, "H * * %s", uplink->name);
 		  }
 		  break;

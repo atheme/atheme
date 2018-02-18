@@ -595,7 +595,7 @@ static void inspircd_mode_sts(char *sender, struct channel *target, char *modes)
 /* ping wrapper */
 static void inspircd_ping_sts(void)
 {
-	// XXX this is annoying, uplink_t contains no sid or link to server_t
+	// XXX this is annoying, struct uplink contains no sid or link to server_t
 	server_t *u = server_find(curr_uplink->name);
 
 	if (!u)

@@ -63,13 +63,13 @@ void init_nodes(void)
 void mark_all_illegal()
 {
 	mowgli_node_t *n, *tn;
-	uplink_t *u;
+	struct uplink *u;
 	soper_t *soper;
 	struct operclass *operclass;
 
 	MOWGLI_ITER_FOREACH(n, uplinks.head)
 	{
-		u = (uplink_t *)n->data;
+		u = (struct uplink *)n->data;
 		u->flags |= UPF_ILLEGAL;
 	}
 
@@ -92,11 +92,11 @@ void mark_all_illegal()
 void unmark_all_illegal()
 {
 	mowgli_node_t *n;
-	uplink_t *u;
+	struct uplink *u;
 
 	MOWGLI_ITER_FOREACH(n, uplinks.head)
 	{
-		u = (uplink_t *)n->data;
+		u = (struct uplink *)n->data;
 		u->flags &= ~UPF_ILLEGAL;
 	}
 }
@@ -105,11 +105,11 @@ void unmark_all_illegal()
 void remove_illegals()
 {
 	mowgli_node_t *n, *tn;
-	uplink_t *u;
+	struct uplink *u;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, uplinks.head)
 	{
-		u = (uplink_t *)n->data;
+		u = (struct uplink *)n->data;
 		if (u->flags & UPF_ILLEGAL && u != curr_uplink)
 			uplink_delete(u);
 	}

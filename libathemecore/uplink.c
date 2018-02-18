@@ -28,7 +28,7 @@
 void (*parse) (char *line) = NULL;
 
 mowgli_list_t uplinks;
-uplink_t *curr_uplink;
+struct uplink *curr_uplink;
 
 mowgli_heap_t *uplink_heap;
 
@@ -36,7 +36,7 @@ static void uplink_close(struct connection *cptr);
 
 void init_uplinks(void)
 {
-	uplink_heap = sharedheap_get(sizeof(uplink_t));
+	uplink_heap = sharedheap_get(sizeof(struct uplink));
 	if (!uplink_heap)
 	{
 		slog(LG_INFO, "init_uplinks(): block allocator failed.");
@@ -44,9 +44,9 @@ void init_uplinks(void)
 	}
 }
 
-uplink_t *uplink_add(const char *name, const char *host, const char *send_password, const char *receive_password, const char *vhost, int port)
+struct uplink *uplink_add(const char *name, const char *host, const char *send_password, const char *receive_password, const char *vhost, int port)
 {
-	uplink_t *u;
+	struct uplink *u;
 
 	slog(LG_DEBUG, "uplink_add(): %s -> %s:%d", me.name, name, port);
 
@@ -86,7 +86,7 @@ uplink_t *uplink_add(const char *name, const char *host, const char *send_passwo
 	return u;
 }
 
-void uplink_delete(uplink_t * u)
+void uplink_delete(struct uplink * u)
 {
 	free(u->name);
 	free(u->host);
@@ -101,13 +101,13 @@ void uplink_delete(uplink_t * u)
 	cnt.uplink--;
 }
 
-uplink_t *uplink_find(const char *name)
+struct uplink *uplink_find(const char *name)
 {
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, uplinks.head)
 	{
-		uplink_t *u = n->data;
+		struct uplink *u = n->data;
 
 		if (!strcasecmp(u->name, name))
 			return u;
@@ -126,7 +126,7 @@ static void reconn(void *arg)
 
 void uplink_connect(void)
 {
-	uplink_t *u;
+	struct uplink *u;
 
 	if (curr_uplink == NULL)
 	{
