@@ -5,16 +5,17 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-typedef enum {
+enum myentity_type
+{
 	ENT_ANY = 0,
 	ENT_USER,
 	ENT_GROUP,
 	ENT_EXTTARGET,
-} myentity_type_t;
+};
 
 typedef struct {
 	object_t parent;
-	myentity_type_t type;
+	enum myentity_type type;
 
 	stringref name;
 	char id[IDLEN + 1];
@@ -43,12 +44,12 @@ myentity_t *myentity_find_uid(const char *uid);
 
 typedef struct {
 	mowgli_patricia_iteration_state_t st;
-	myentity_type_t type;
+	enum myentity_type type;
 } myentity_iteration_state_t;
 
 extern void myentity_foreach(int (*cb)(myentity_t *me, void *privdata), void *privdata);
-extern void myentity_foreach_t(myentity_type_t type, int (*cb)(myentity_t *me, void *privdata), void *privdata);
-extern void myentity_foreach_start(myentity_iteration_state_t *state, myentity_type_t type);
+extern void myentity_foreach_t(enum myentity_type type, int (*cb)(myentity_t *me, void *privdata), void *privdata);
+extern void myentity_foreach_start(myentity_iteration_state_t *state, enum myentity_type type);
 extern void myentity_foreach_next(myentity_iteration_state_t *state);
 extern myentity_t *myentity_foreach_cur(myentity_iteration_state_t *state);
 

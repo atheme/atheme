@@ -112,7 +112,7 @@ myentity_t *myentity_find_ext(const char *name)
 	return myentity_find(name);
 }
 
-void myentity_foreach_start(myentity_iteration_state_t *state, myentity_type_t type)
+void myentity_foreach_start(myentity_iteration_state_t *state, enum myentity_type type)
 {
 	myentity_t *e;
 
@@ -146,7 +146,7 @@ void myentity_foreach(int (*cb)(myentity_t *mt, void *privdata), void *privdata)
 	myentity_foreach_t(ENT_ANY, cb, privdata);
 }
 
-void myentity_foreach_t(myentity_type_t type, int (*cb)(myentity_t *mt, void *privdata), void *privdata)
+void myentity_foreach_t(enum myentity_type type, int (*cb)(myentity_t *mt, void *privdata), void *privdata)
 {
 	myentity_iteration_state_t state;
 	myentity_t *mt;
