@@ -8,7 +8,7 @@
 #include "atheme.h"
 #include "groupserv_common.h"
 
-extern groupserv_config_t gs_config;
+extern struct groupserv_config gs_config;
 
 extern void mygroups_init(void);
 extern void mygroups_deinit(void);

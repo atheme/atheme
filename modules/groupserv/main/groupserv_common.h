@@ -7,9 +7,8 @@
 
 #include "atheme.h"
 
-typedef struct groupserv_config_ groupserv_config_t;
-
-struct groupserv_config_ {
+struct groupserv_config
+{
     unsigned int maxgroups;
     unsigned int maxgroupacs;
     bool enable_open_groups;

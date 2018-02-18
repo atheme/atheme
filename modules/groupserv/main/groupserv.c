@@ -26,7 +26,7 @@ gflags_t mg_flags[] = {
 	{ 0, 0 }
 };
 
-groupserv_config_t gs_config;
+struct groupserv_config gs_config;
 
 mowgli_heap_t *mygroup_heap, *groupacs_heap;
 

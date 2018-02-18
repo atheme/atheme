@@ -31,7 +31,7 @@ void (*remove_group_chanacs)(struct mygroup *mg);
 
 gflags_t *ga_flags;
 
-groupserv_config_t *gs_config;
+struct groupserv_config *gs_config;
 
 static inline void use_groupserv_main_symbols(struct module *m)
 {
