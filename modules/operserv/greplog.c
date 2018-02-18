@@ -27,7 +27,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static const char *get_logfile(const unsigned int *masks)
 {
-	logfile_t *lf;
+	struct logfile *lf;
 	int i;
 
 	for (i = 0; masks[i] != 0; i++)

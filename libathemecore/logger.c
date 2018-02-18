@@ -23,15 +23,15 @@
 
 #include "atheme.h"
 
-static logfile_t *log_file;
+static struct logfile *log_file;
 int log_force;
 
 static mowgli_list_t log_files = { NULL, NULL, 0 };
 
-/* private destructor function for logfile_t. */
+/* private destructor function for struct logfile. */
 static void logfile_delete_file(void *vdata)
 {
-	logfile_t *lf = (logfile_t *) vdata;
+	struct logfile *lf = (struct logfile *) vdata;
 
 	logfile_unregister(lf);
 
@@ -43,7 +43,7 @@ static void logfile_delete_file(void *vdata)
 
 static void logfile_delete_channel(void *vdata)
 {
-	logfile_t *lf = (logfile_t *) vdata;
+	struct logfile *lf = (struct logfile *) vdata;
 
 	logfile_unregister(lf);
 
@@ -60,7 +60,7 @@ static void logfile_join_channels(struct channel *c)
 
 	MOWGLI_ITER_FOREACH(n, log_files.head)
 	{
-		logfile_t *lf = n->data;
+		struct logfile *lf = n->data;
 
 		if (!irccasecmp(c->name, lf->log_path))
 		{
@@ -87,7 +87,7 @@ static void logfile_join_service(struct service *svs)
 
 	MOWGLI_ITER_FOREACH(n, log_files.head)
 	{
-		logfile_t *lf = n->data;
+		struct logfile *lf = n->data;
 
 		if (!VALID_GLOBAL_CHANNEL_PFX(lf->log_path))
 			continue;
@@ -112,7 +112,7 @@ static void logfile_part_removed(void *unused)
 		valid = false;
 		MOWGLI_ITER_FOREACH(n, log_files.head)
 		{
-			logfile_t *lf = n->data;
+			struct logfile *lf = n->data;
 
 			if (!irccasecmp(c->name, lf->log_path))
 			{
@@ -170,12 +170,12 @@ logfile_strip_control_codes(const char *buf)
 }
 
 /*
- * logfile_write(logfile_t *lf, const char *buf)
+ * logfile_write(struct logfile *lf, const char *buf)
  *
  * Writes an I/O stream to a static file.
  *
  * Inputs:
- *       - logfile_t representing the I/O stream.
+ *       - struct logfile representing the I/O stream.
  *       - data to write to the file
  *
  * Outputs:
@@ -184,7 +184,7 @@ logfile_strip_control_codes(const char *buf)
  * Side Effects:
  *       - none
  */
-static void logfile_write(logfile_t *lf, const char *buf)
+static void logfile_write(struct logfile *lf, const char *buf)
 {
 	char datetime[BUFSIZE];
 	time_t t;
@@ -203,12 +203,12 @@ static void logfile_write(logfile_t *lf, const char *buf)
 }
 
 /*
- * logfile_write_irc(logfile_t *lf, const char *buf)
+ * logfile_write_irc(struct logfile *lf, const char *buf)
  *
  * Writes an I/O stream to an IRC target.
  *
  * Inputs:
- *       - logfile_t representing the I/O stream.
+ *       - struct logfile representing the I/O stream.
  *       - data to write to the IRC target
  *
  * Outputs:
@@ -217,7 +217,7 @@ static void logfile_write(logfile_t *lf, const char *buf)
  * Side Effects:
  *       - none
  */
-static void logfile_write_irc(logfile_t *lf, const char *buf)
+static void logfile_write_irc(struct logfile *lf, const char *buf)
 {
 	struct channel *c;
 
@@ -266,12 +266,12 @@ static void logfile_write_irc(logfile_t *lf, const char *buf)
 }
 
 /*
- * logfile_write_snotices(logfile_t *lf, const char *buf)
+ * logfile_write_snotices(struct logfile *lf, const char *buf)
  *
  * Writes an I/O stream to IRC snotes.
  *
  * Inputs:
- *       - logfile_t representing the I/O stream.
+ *       - struct logfile representing the I/O stream.
  *       - data to write to the IRC target
  *
  * Outputs:
@@ -280,7 +280,7 @@ static void logfile_write_irc(logfile_t *lf, const char *buf)
  * Side Effects:
  *       - none
  */
-static void logfile_write_snotices(logfile_t *lf, const char *buf)
+static void logfile_write_snotices(struct logfile *lf, const char *buf)
 {
 	struct channel *c;
 
@@ -295,12 +295,12 @@ static void logfile_write_snotices(logfile_t *lf, const char *buf)
 }
 
 /*
- * logfile_register(logfile_t *lf)
+ * logfile_register(struct logfile *lf)
  *
  * Registers a log I/O stream.
  *
  * Inputs:
- *       - logfile_t representing the I/O stream.
+ *       - struct logfile representing the I/O stream.
  *
  * Outputs:
  *       - none
@@ -308,18 +308,18 @@ static void logfile_write_snotices(logfile_t *lf, const char *buf)
  * Side Effects:
  *       - log_files is populated with the given object.
  */
-void logfile_register(logfile_t *lf)
+void logfile_register(struct logfile *lf)
 {
 	mowgli_node_add(lf, &lf->node, &log_files);
 }
 
 /*
- * logfile_unregister(logfile_t *lf)
+ * logfile_unregister(struct logfile *lf)
  *
  * Unregisters a log I/O stream.
  *
  * Inputs:
- *       - logfile_t representing the I/O stream.
+ *       - struct logfile representing the I/O stream.
  *
  * Outputs:
  *       - none
@@ -327,7 +327,7 @@ void logfile_register(logfile_t *lf)
  * Side Effects:
  *       - the given object is removed from log_files, but remains valid.
  */
-void logfile_unregister(logfile_t *lf)
+void logfile_unregister(struct logfile *lf)
 {
 	mowgli_node_delete(&lf->node, &log_files);
 }
@@ -342,17 +342,17 @@ void logfile_unregister(logfile_t *lf)
  *       - bitmask of events to log
  *
  * Outputs:
- *       - a logfile_t object describing how this logfile should be used
+ *       - a struct logfile object describing how this logfile should be used
  *
  * Side Effects:
- *       - log_files is populated with the newly created logfile_t.
+ *       - log_files is populated with the newly created struct logfile.
  */
-logfile_t *logfile_new(const char *path, unsigned int log_mask)
+struct logfile *logfile_new(const char *path, unsigned int log_mask)
 {
 	static bool hooked = false;
 	static time_t lastfail = 0;
 	struct channel *c;
-	logfile_t *lf = scalloc(sizeof(logfile_t), 1);
+	struct logfile *lf = scalloc(sizeof(struct logfile), 1);
 
 	if (!strcasecmp(path, "!snotices") || !strcasecmp(path, "!wallops"))
 	{
@@ -450,7 +450,7 @@ void log_open(void)
  *       - none
  *
  * Side Effects:
- *       - logfile_t objects in the log_files list are destroyed.
+ *       - struct logfile objects in the log_files list are destroyed.
  */
 void log_shutdown(void)
 {
@@ -477,7 +477,7 @@ void log_shutdown(void)
 bool log_debug_enabled(void)
 {
 	mowgli_node_t *n;
-	logfile_t *lf;
+	struct logfile *lf;
 
 	if (log_force)
 		return true;
@@ -522,16 +522,16 @@ void log_master_set_mask(unsigned int mask)
  *       - log mask
  *
  * Outputs:
- *       - logfile_t object pointer, guaranteed to be a file, not some
+ *       - struct logfile object pointer, guaranteed to be a file, not some
  *         other kind of log stream
  *
  * Side Effects:
  *       - none
  */
-logfile_t *logfile_find_mask(unsigned int log_mask)
+struct logfile *logfile_find_mask(unsigned int log_mask)
 {
 	mowgli_node_t *n;
-	logfile_t *lf;
+	struct logfile *lf;
 
 	MOWGLI_ITER_FOREACH(n, log_files.head)
 	{
@@ -574,7 +574,7 @@ static void vslog_ext(log_type_t type, unsigned int level, const char *fmt,
 
 	MOWGLI_ITER_FOREACH(n, log_files.head)
 	{
-		logfile_t *lf = (logfile_t *) n->data;
+		struct logfile *lf = (struct logfile *) n->data;
 
 		if (type != LOG_ANY && type != lf->log_type)
 			continue;
@@ -706,7 +706,7 @@ const char *format_sourceinfo(struct sourceinfo *si, bool full)
  *       - none
  *
  * Side Effects:
- *       - qualifying logfile_t objects in log_files are updated.
+ *       - qualifying struct logfile objects in log_files are updated.
  */
 void ATHEME_FATTR_PRINTF(3, 4)
 logcommand(struct sourceinfo *si, int level, const char *fmt, ...)
@@ -743,7 +743,7 @@ logcommand(struct sourceinfo *si, int level, const char *fmt, ...)
  *       - none
  *
  * Side Effects:
- *       - qualifying logfile_t objects in log_files are updated.
+ *       - qualifying struct logfile objects in log_files are updated.
  */
 void ATHEME_FATTR_PRINTF(4, 5)
 logcommand_user(struct service *svs, user_t *source, int level, const char *fmt, ...)
@@ -785,7 +785,7 @@ logcommand_user(struct service *svs, user_t *source, int level, const char *fmt,
  *       - none
  *
  * Side Effects:
- *       - qualifying logfile_t objects in log_files are updated.
+ *       - qualifying struct logfile objects in log_files are updated.
  */
 void ATHEME_FATTR_PRINTF(7, 8)
 logcommand_external(struct service *svs, const char *type, struct connection *source, const char *sourcedesc, myuser_t *mu, int level, const char *fmt, ...)
@@ -821,7 +821,7 @@ logcommand_external(struct service *svs, const char *type, struct connection *so
  *       - nothing
  *
  * Side Effects:
- *       - qualifying logfile_t objects in log_files are updated
+ *       - qualifying struct logfile objects in log_files are updated
  */
 void logaudit_denycmd(struct sourceinfo *si, struct command *cmd, const char *userlevel)
 {

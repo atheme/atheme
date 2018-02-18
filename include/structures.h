@@ -90,4 +90,7 @@ struct service;
 struct sourceinfo;
 struct sourceinfo_vtable;
 
+// Defined in include/tools.h
+struct logfile;
+
 #endif

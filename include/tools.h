@@ -52,13 +52,12 @@ typedef enum {
 	LOG_NONINTERACTIVE = 2 /* files */
 } log_type_t;
 
-typedef struct logfile_ logfile_t;
-
 /* logstreams API --nenolod */
-typedef void (*log_write_func_t)(logfile_t *lf, const char *buf);
+typedef void (*log_write_func_t)(struct logfile *lf, const char *buf);
 
 /* logger.c */
-struct logfile_ {
+struct logfile
+{
 	struct atheme_object parent;
 	mowgli_node_t node;
 
@@ -73,9 +72,9 @@ struct logfile_ {
 extern char *log_path; /* contains path to default log. */
 extern int log_force;
 
-extern logfile_t *logfile_new(const char *log_path_, unsigned int log_mask);
-extern void logfile_register(logfile_t *lf);
-extern void logfile_unregister(logfile_t *lf);
+extern struct logfile *logfile_new(const char *log_path_, unsigned int log_mask);
+extern void logfile_register(struct logfile *lf);
+extern void logfile_unregister(struct logfile *lf);
 
 /* general */
 #define LG_NONE         0x00000001      /* don't log                */
@@ -117,7 +116,7 @@ extern void log_open(void);
 extern void log_shutdown(void);
 extern bool log_debug_enabled(void);
 extern void log_master_set_mask(unsigned int mask);
-extern logfile_t *logfile_find_mask(unsigned int log_mask);
+extern struct logfile *logfile_find_mask(unsigned int log_mask);
 extern void slog(unsigned int level, const char *fmt, ...) ATHEME_FATTR_PRINTF(2, 3);
 extern void logcommand(struct sourceinfo *si, int level, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
 extern void logcommand_user(struct service *svs, user_t *source, int level, const char *fmt, ...) ATHEME_FATTR_PRINTF(4, 5);
