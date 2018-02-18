@@ -32,7 +32,7 @@ struct timeval burstime;
 
 mowgli_eventloop_timer_t *ping_uplink_timer = NULL;
 
-static void irc_recvq_handler(connection_t *cptr)
+static void irc_recvq_handler(struct connection *cptr)
 {
 	bool wasnonl;
 	char parsebuf[BUFSIZE + 1];
@@ -82,7 +82,7 @@ static void ping_uplink(void *arg)
 		ping_uplink_timer = NULL;
 }
 
-void irc_handle_connect(connection_t *cptr)
+void irc_handle_connect(struct connection *cptr)
 {
 	/* add our server */
 	{

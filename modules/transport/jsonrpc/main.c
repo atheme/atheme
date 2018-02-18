@@ -11,7 +11,7 @@
 #include "datastream.h"
 #include "authcookie.h"
 
-static void handle_request(connection_t *cptr, void *requestbuf);
+static void handle_request(struct connection *cptr, void *requestbuf);
 
 mowgli_list_t *httpd_path_handlers;
 static mowgli_patricia_t *json_methods;
@@ -37,7 +37,7 @@ struct sourceinfo_vtable jsonrpc_vtable = {
 
 path_handler_t handle_jsonrpc = { NULL, handle_request };
 
-static void handle_request(connection_t *cptr, void *requestbuf)
+static void handle_request(struct connection *cptr, void *requestbuf)
 {
 
 	jsonrpc_process(requestbuf, cptr);
@@ -242,7 +242,7 @@ static bool jsonrpcmethod_logout(void *conn, mowgli_list_t *params, char *id)
 
 static void jsonrpc_command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *message)
 {
-	connection_t *cptr;
+	struct connection *cptr;
 	struct httpddata *hd;
 	char *newmessage;
 
@@ -263,7 +263,7 @@ static void jsonrpc_command_fail(struct sourceinfo *si, enum cmd_faultcode code,
 
 static void jsonrpc_command_success_string(struct sourceinfo *si, const char *result, const char *message)
 {
-	connection_t *cptr;
+	struct connection *cptr;
 	struct httpddata *hd;
 
 	cptr = si->connection;
@@ -279,7 +279,7 @@ static void jsonrpc_command_success_string(struct sourceinfo *si, const char *re
 
 static void jsonrpc_command_success_nodata(struct sourceinfo *si, const char *message)
 {
-	connection_t *cptr;
+	struct connection *cptr;
 	struct httpddata *hd;
 	char *p;
 
@@ -330,7 +330,7 @@ static bool jsonrpcmethod_command(void *conn, mowgli_list_t *params, char *id)
 	struct sourceinfo *si;
 	int newparc;
 	char *newparv[20];
-	struct httpddata *hd = ((connection_t *)conn)->userdata;
+	struct httpddata *hd = ((struct connection *)conn)->userdata;
 
 	struct authcookie *ac;
 	char *accountname, *cookie, *service, *command, *sourceip;
@@ -677,7 +677,7 @@ static bool jsonrpcmethod_metadata(void *conn, mowgli_list_t *params, char *id)
 }
 
 void jsonrpc_send_data(void *conn, char *str) {
-	struct httpddata *hd = ((connection_t *) conn)->userdata;
+	struct httpddata *hd = ((struct connection *) conn)->userdata;
 
 	char buf[300];
 
@@ -691,11 +691,11 @@ void jsonrpc_send_data(void *conn, char *str) {
 			hd->connection_close ? "Connection: close\r\n" : "",
 			PACKAGE_VERSION, (unsigned long)len);
 
-	sendq_add((connection_t *)conn, buf, strlen(buf));
-	sendq_add((connection_t *)conn, str, len);
+	sendq_add((struct connection *)conn, buf, strlen(buf));
+	sendq_add((struct connection *)conn, str, len);
 
 	if (hd->connection_close) {
-		sendq_add_eof((connection_t *) conn);
+		sendq_add_eof((struct connection *) conn);
 	}
 }
 

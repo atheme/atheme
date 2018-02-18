@@ -67,12 +67,12 @@ static int socket_setnonblocking(mowgli_descriptor_t sck)
  *       none
  *
  * side effects:
- *       whatever happens from the connection_t i/o handlers
+ *       whatever happens from the struct connection i/o handlers
  */
 static void connection_trampoline(mowgli_eventloop_t *eventloop, mowgli_eventloop_io_t *io,
 	mowgli_eventloop_io_dir_t dir, void *userdata)
 {
-	connection_t *cptr = userdata;
+	struct connection *cptr = userdata;
 
 	switch (dir) {
 	case MOWGLI_EVENTLOOP_IO_READ:
@@ -96,11 +96,11 @@ static void connection_trampoline(mowgli_eventloop_t *eventloop, mowgli_eventloo
  * side effects:
  *       a connection is added to the socket queue.
  */
-connection_t *connection_add(const char *name, int fd, unsigned int flags,
-	void (*read_handler)(connection_t *),
-	void (*write_handler)(connection_t *))
+struct connection *connection_add(const char *name, int fd, unsigned int flags,
+	void (*read_handler)(struct connection *),
+	void (*write_handler)(struct connection *))
 {
-	connection_t *cptr;
+	struct connection *cptr;
 
 	if ((cptr = connection_find(fd)))
 	{
@@ -111,7 +111,7 @@ connection_t *connection_add(const char *name, int fd, unsigned int flags,
 
 	slog(LG_DEBUG, "connection_add(): adding connection '%s', fd=%d", name, fd);
 
-	cptr = smalloc(sizeof(connection_t));
+	cptr = smalloc(sizeof(struct connection));
 
 	cptr->fd = fd;
 	cptr->pollslot = -1;
@@ -153,14 +153,14 @@ connection_t *connection_add(const char *name, int fd, unsigned int flags,
  *       the file descriptor to search by
  *
  * outputs:
- *       the connection_t object associated with that fd
+ *       the struct connection object associated with that fd
  *
  * side effects:
  *       none
  */
-connection_t *connection_find(int fd)
+struct connection *connection_find(int fd)
 {
-	connection_t *cptr;
+	struct connection *cptr;
 	mowgli_node_t *nptr;
 
 	MOWGLI_ITER_FOREACH(nptr, connection_list.head)
@@ -186,7 +186,7 @@ connection_t *connection_find(int fd)
  * side effects:
  *       the connection is closed.
  */
-void connection_close(connection_t *cptr)
+void connection_close(struct connection *cptr)
 {
 	mowgli_node_t *nptr;
 	int errno1, errno2;
@@ -242,7 +242,7 @@ void connection_close(connection_t *cptr)
 /* This one is only safe for use by connection_close_soon(),
  * it will cause infinite loops otherwise
  */
-static void empty_handler(connection_t *cptr)
+static void empty_handler(struct connection *cptr)
 {
 }
 
@@ -260,7 +260,7 @@ static void empty_handler(connection_t *cptr)
  *       handlers reset
  *       close_handler called
  */
-void connection_close_soon(connection_t *cptr)
+void connection_close_soon(struct connection *cptr)
 {
 	if (cptr == NULL)
 		return;
@@ -288,10 +288,10 @@ void connection_close_soon(connection_t *cptr)
  *       connection_close_soon() called on the connection itself and
  *       for all connections accepted on this listener
  */
-void connection_close_soon_children(connection_t *cptr)
+void connection_close_soon_children(struct connection *cptr)
 {
 	mowgli_node_t *n;
-	connection_t *cptr2;
+	struct connection *cptr2;
 
 	if (cptr == NULL)
 		return;
@@ -323,7 +323,7 @@ void connection_close_soon_children(connection_t *cptr)
 void connection_close_all(void)
 {
 	mowgli_node_t *n, *tn;
-	connection_t *cptr;
+	struct connection *cptr;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, connection_list.head)
 	{
@@ -350,7 +350,7 @@ void connection_close_all(void)
 void connection_close_all_fds(void)
 {
 	mowgli_node_t *n, *tn;
-	connection_t *cptr;
+	struct connection *cptr;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, connection_list.head)
 	{
@@ -367,17 +367,17 @@ void connection_close_all_fds(void)
  *       read handler, write handler
  *
  * outputs:
- *       the connection_t on success, NULL on failure.
+ *       the struct connection on success, NULL on failure.
  *
  * side effects:
  *       a TCP/IP connection is opened to the host,
  *       and interest is registered in read/write events.
  */
-connection_t *connection_open_tcp(char *host, char *vhost, unsigned int port,
-	void (*read_handler)(connection_t *),
-	void (*write_handler)(connection_t *))
+struct connection *connection_open_tcp(char *host, char *vhost, unsigned int port,
+	void (*read_handler)(struct connection *),
+	void (*write_handler)(struct connection *))
 {
-	connection_t *cptr;
+	struct connection *cptr;
 	char buf[BUFSIZE];
 	struct addrinfo *addr = NULL;
 	int s, error;
@@ -490,16 +490,16 @@ connection_t *connection_open_tcp(char *host, char *vhost, unsigned int port,
  *       accept handler
  *
  * outputs:
- *       the connection_t on success, NULL on failure.
+ *       the struct connection on success, NULL on failure.
  *
  * side effects:
  *       a TCP/IP connection is opened to the host,
  *       and interest is registered in read/write events.
  */
-connection_t *connection_open_listener_tcp(char *host, unsigned int port,
-	void (*read_handler)(connection_t *))
+struct connection *connection_open_listener_tcp(char *host, unsigned int port,
+	void (*read_handler)(struct connection *))
 {
-	connection_t *cptr;
+	struct connection *cptr;
 	char buf[BUFSIZE];
 	struct addrinfo *addr;
 	int s, error;
@@ -579,18 +579,18 @@ connection_t *connection_open_listener_tcp(char *host, unsigned int port,
  *       listener to accept from, read handler, write handler
  *
  * outputs:
- *       the connection_t on success, NULL on failure.
+ *       the struct connection on success, NULL on failure.
  *
  * side effects:
  *       a TCP/IP connection is accepted from the host,
  *       and interest is registered in read/write events.
  */
-connection_t *connection_accept_tcp(connection_t *cptr,
-	void (*read_handler)(connection_t *),
-	void (*write_handler)(connection_t *))
+struct connection *connection_accept_tcp(struct connection *cptr,
+	void (*read_handler)(struct connection *),
+	void (*write_handler)(struct connection *))
 {
 	char buf[BUFSIZE];
-	connection_t *newptr;
+	struct connection *newptr;
 	int s;
 
 	if (!(s = accept(cptr->fd, NULL, NULL)))
@@ -615,17 +615,17 @@ connection_t *connection_accept_tcp(connection_t *cptr,
  * connection_setselect_read()
  *
  * inputs:
- *       connection_t to register/deregister interest on,
+ *       struct connection to register/deregister interest on,
  *       replacement handler (NULL = no interest)
  *
  * outputs:
  *       none
  *
  * side effects:
- *       the read handler is changed for the connection_t.
+ *       the read handler is changed for the struct connection.
  */
-void connection_setselect_read(connection_t *cptr,
-	void (*read_handler)(connection_t *))
+void connection_setselect_read(struct connection *cptr,
+	void (*read_handler)(struct connection *))
 {
 	cptr->read_handler = read_handler;
 	mowgli_pollable_setselect(base_eventloop, cptr->pollable, MOWGLI_EVENTLOOP_IO_READ, cptr->read_handler != NULL ? connection_trampoline : NULL);
@@ -635,17 +635,17 @@ void connection_setselect_read(connection_t *cptr,
  * connection_setselect_write()
  *
  * inputs:
- *       connection_t to register/deregister interest on,
+ *       struct connection to register/deregister interest on,
  *       replacement handler (NULL = no interest)
  *
  * outputs:
  *       none
  *
  * side effects:
- *       the write handler is changed for the connection_t.
+ *       the write handler is changed for the struct connection.
  */
-void connection_setselect_write(connection_t *cptr,
-	void (*write_handler)(connection_t *))
+void connection_setselect_write(struct connection *cptr,
+	void (*write_handler)(struct connection *))
 {
 	cptr->write_handler = write_handler;
 	mowgli_pollable_setselect(base_eventloop, cptr->pollable, MOWGLI_EVENTLOOP_IO_WRITE, cptr->write_handler != NULL ? connection_trampoline : NULL);
@@ -671,7 +671,7 @@ void connection_stats(void (*stats_cb)(const char *, void *), void *privdata)
 
 	MOWGLI_ITER_FOREACH(n, connection_list.head)
 	{
-		connection_t *c = (connection_t *) n->data;
+		struct connection *c = (struct connection *) n->data;
 
 		snprintf(buf, sizeof buf, "fd %-3d desc '%s'", c->fd, c->name);
 		if (c->listener != NULL)

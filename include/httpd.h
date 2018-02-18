@@ -13,7 +13,7 @@ typedef struct path_handler_ path_handler_t;
 struct path_handler_
 {
 	const char *path;
-	void (*handler)(connection_t *, void *);
+	void (*handler)(struct connection *, void *);
 };
 
 struct httpddata

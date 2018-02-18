@@ -121,7 +121,7 @@ extern logfile_t *logfile_find_mask(unsigned int log_mask);
 extern void slog(unsigned int level, const char *fmt, ...) ATHEME_FATTR_PRINTF(2, 3);
 extern void logcommand(struct sourceinfo *si, int level, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
 extern void logcommand_user(struct service *svs, user_t *source, int level, const char *fmt, ...) ATHEME_FATTR_PRINTF(4, 5);
-extern void logcommand_external(struct service *svs, const char *type, connection_t *source, const char *sourcedesc, myuser_t *login, int level, const char *fmt, ...) ATHEME_FATTR_PRINTF(7, 8);
+extern void logcommand_external(struct service *svs, const char *type, struct connection *source, const char *sourcedesc, myuser_t *login, int level, const char *fmt, ...) ATHEME_FATTR_PRINTF(7, 8);
 
 /* function.c */
 

@@ -662,7 +662,7 @@ const char *format_user(user_t *source, bool full)
 	return buf;
 }
 
-const char *format_external(const char *type, connection_t *source, const char *sourcedesc, myuser_t *mu, bool full)
+const char *format_external(const char *type, struct connection *source, const char *sourcedesc, myuser_t *mu, bool full)
 {
 	static char buf[BUFSIZE];
 
@@ -766,7 +766,7 @@ logcommand_user(struct service *svs, user_t *source, int level, const char *fmt,
 }
 
 /*
- * logcommand_external(struct service *svs, const char *type, connection_t *source,
+ * logcommand_external(struct service *svs, const char *type, struct connection *source,
  *       const char *sourcedesc, myuser_t *login, int level, const char *fmt, ...)
  *
  * Logs usage of a command from an RPC call as described by struct sourceinfo.
@@ -774,7 +774,7 @@ logcommand_user(struct service *svs, user_t *source, int level, const char *fmt,
  * Inputs:
  *       - struct service object which describes the service the command is attached to
  *       - string which describes the type of RPC call
- *       - connection_t which describes the socket source of the RPC call
+ *       - struct connection which describes the socket source of the RPC call
  *       - string which describes the socket source of the RPC call
  *       - myuser_t which describes the services account used for the RPC call
  *       - bitmask of log categories to log the command use to.
@@ -788,7 +788,7 @@ logcommand_user(struct service *svs, user_t *source, int level, const char *fmt,
  *       - qualifying logfile_t objects in log_files are updated.
  */
 void ATHEME_FATTR_PRINTF(7, 8)
-logcommand_external(struct service *svs, const char *type, connection_t *source, const char *sourcedesc, myuser_t *mu, int level, const char *fmt, ...)
+logcommand_external(struct service *svs, const char *type, struct connection *source, const char *sourcedesc, myuser_t *mu, int level, const char *fmt, ...)
 {
 	va_list args;
 	char lbuf[BUFSIZE];

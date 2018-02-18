@@ -2,7 +2,7 @@
  * Copyright (c) 2005 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
- * This contains the connection_t structure.
+ * This contains the connection structure.
  */
 
 #ifndef CONNECTION_H
@@ -27,9 +27,7 @@ union sockaddr_any
 
 #include "res.h"
 
-typedef struct connection_ connection_t;
-
-struct connection_
+struct connection
 {
 	char name[HOSTLEN + 1];
 	char hbuf[BUFSIZE + 1];
@@ -48,15 +46,15 @@ struct connection_
 	union sockaddr_any saddr;
 	socklen_t saddr_size;
 
-	void (*read_handler)(connection_t *);
-	void (*write_handler)(connection_t *);
+	void (*read_handler)(struct connection *);
+	void (*write_handler)(struct connection *);
 
 	unsigned int flags;
 
-	void (*recvq_handler)(connection_t *);
-	void (*close_handler)(connection_t *);
+	void (*recvq_handler)(struct connection *);
+	void (*close_handler)(struct connection *);
 
-	connection_t *listener;
+	struct connection *listener;
 	void *userdata;
 
 	mowgli_eventloop_pollable_t *pollable;
@@ -83,26 +81,26 @@ struct connection_
 #define CF_IS_CONNECTING(x) ((x)->flags & CF_CONNECTING)
 #define CF_IS_LISTENING(x) ((x)->flags & CF_LISTENING)
 
-extern connection_t *connection_add(const char *, int, unsigned int,
-	void(*)(connection_t *),
-	void(*)(connection_t *));
-extern connection_t *connection_open_tcp(char *, char *, unsigned int,
-	void(*)(connection_t *),
-	void(*)(connection_t *));
-extern connection_t *connection_open_listener_tcp(char *, unsigned int,
-	void(*)(connection_t *));
-extern connection_t *connection_accept_tcp(connection_t *,
-	void(*)(connection_t *),
-	void(*)(connection_t *));
-extern void connection_setselect_read(connection_t *, void(*)(connection_t *));
-extern void connection_setselect_write(connection_t *, void(*)(connection_t *));
-extern void connection_close(connection_t *);
-extern void connection_close_soon(connection_t *);
-extern void connection_close_soon_children(connection_t *);
+extern struct connection *connection_add(const char *, int, unsigned int,
+	void(*)(struct connection *),
+	void(*)(struct connection *));
+extern struct connection *connection_open_tcp(char *, char *, unsigned int,
+	void(*)(struct connection *),
+	void(*)(struct connection *));
+extern struct connection *connection_open_listener_tcp(char *, unsigned int,
+	void(*)(struct connection *));
+extern struct connection *connection_accept_tcp(struct connection *,
+	void(*)(struct connection *),
+	void(*)(struct connection *));
+extern void connection_setselect_read(struct connection *, void(*)(struct connection *));
+extern void connection_setselect_write(struct connection *, void(*)(struct connection *));
+extern void connection_close(struct connection *);
+extern void connection_close_soon(struct connection *);
+extern void connection_close_soon_children(struct connection *);
 extern void connection_close_all(void);
 extern void connection_close_all_fds(void);
 extern void connection_stats(void (*)(const char *, void *), void *);
-extern connection_t *connection_find(int);
+extern struct connection *connection_find(int);
 //inline int connection_count(void);
 
 extern mowgli_list_t connection_list;

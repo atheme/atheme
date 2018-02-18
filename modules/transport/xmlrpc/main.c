@@ -11,7 +11,7 @@
 #include "datastream.h"
 #include "authcookie.h"
 
-static void handle_request(connection_t *cptr, void *requestbuf);
+static void handle_request(struct connection *cptr, void *requestbuf);
 
 path_handler_t handle_xmlrpc = { NULL, handle_request };
 
@@ -20,7 +20,7 @@ struct
 	char *path;
 } xmlrpc_config;
 
-connection_t *current_cptr; /* XXX: Hack: src/xmlrpc.c requires us to do this */
+struct connection *current_cptr; /* XXX: Hack: src/xmlrpc.c requires us to do this */
 
 mowgli_list_t *httpd_path_handlers;
 
@@ -65,7 +65,7 @@ static char *dump_buffer(char *buf, int length)
 	return buf;
 }
 
-static void handle_request(connection_t *cptr, void *requestbuf)
+static void handle_request(struct connection *cptr, void *requestbuf)
 {
 	current_cptr = cptr;
 	xmlrpc_process(requestbuf, cptr);
@@ -143,7 +143,7 @@ mod_deinit(const module_unload_intent_t intent)
 
 static void xmlrpc_command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *message)
 {
-	connection_t *cptr;
+	struct connection *cptr;
 	struct httpddata *hd;
 	char *newmessage;
 
@@ -159,7 +159,7 @@ static void xmlrpc_command_fail(struct sourceinfo *si, enum cmd_faultcode code, 
 
 static void xmlrpc_command_success_nodata(struct sourceinfo *si, const char *message)
 {
-	connection_t *cptr;
+	struct connection *cptr;
 	struct httpddata *hd;
 	char *newmessage;
 	char *p;
@@ -190,7 +190,7 @@ static void xmlrpc_command_success_nodata(struct sourceinfo *si, const char *mes
 
 static void xmlrpc_command_success_string(struct sourceinfo *si, const char *result, const char *message)
 {
-	connection_t *cptr;
+	struct connection *cptr;
 	struct httpddata *hd;
 
 	cptr = si->connection;
@@ -347,7 +347,7 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 	struct sourceinfo *si;
 	int newparc;
 	char *newparv[20];
-	struct httpddata *hd = ((connection_t *)conn)->userdata;
+	struct httpddata *hd = ((struct connection *)conn)->userdata;
 	int i;
 
 	for (i = 0; i < parc; i++)

@@ -37,7 +37,7 @@
 #error this code needs to be able to address individual octets
 #endif
 
-static void res_readreply(connection_t *cptr);
+static void res_readreply(struct connection *cptr);
 
 #define MAXPACKET      1024	/* rfc sez 512 but we expand names so ... */
 #define RES_MAXALIASES 35	/* maximum aliases allowed */
@@ -71,7 +71,7 @@ struct reslist
 	dns_query_t *query;	/* query callback for this request */
 };
 
-static connection_t *res_fd;
+static struct connection *res_fd;
 static mowgli_list_t request_list = { NULL, NULL, 0 };
 static int ns_timeout_count[IRCD_MAXNS];
 
@@ -736,7 +736,7 @@ static int proc_answer(struct reslist *request, RESHEADER * header, char *buf, c
  * res_read_single_reply - read a dns reply from the nameserver and process it.
  * Return value: 1 if a packet was read, 0 otherwise
  */
-static int res_read_single_reply(connection_t *F)
+static int res_read_single_reply(struct connection *F)
 {
 	char buf[sizeof(RESHEADER) + MAXPACKET]
 		/* Sparc and alpha need 16bit-alignment for accessing header->id
@@ -862,7 +862,7 @@ static int res_read_single_reply(connection_t *F)
 	return 1;
 }
 
-static void res_readreply(connection_t *cptr)
+static void res_readreply(struct connection *cptr)
 {
 	while (res_read_single_reply(cptr))
 		;

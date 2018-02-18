@@ -11,7 +11,7 @@
 
 #define REQUEST_MAX 65536 /* maximum size of one call */
 
-connection_t *listener;
+struct connection *listener;
 mowgli_list_t httpd_path_handlers;
 
 /* conf stuff */
@@ -56,7 +56,7 @@ static int open_file(const char *filename)
 	return open(fname, O_RDONLY);
 }
 
-static void process_header(connection_t *cptr, char *line)
+static void process_header(struct connection *cptr, char *line)
 {
 	struct httpddata *hd;
 	char *p;
@@ -97,7 +97,7 @@ static void process_header(connection_t *cptr, char *line)
 	}
 }
 
-static void check_close(connection_t *cptr)
+static void check_close(struct connection *cptr)
 {
 	struct httpddata *hd;
 
@@ -106,7 +106,7 @@ static void check_close(connection_t *cptr)
 		sendq_add_eof(cptr);
 }
 
-static void send_error(connection_t *cptr, int errorcode, const char *text, bool sendentity)
+static void send_error(struct connection *cptr, int errorcode, const char *text, bool sendentity)
 {
 	char buf1[300];
 	char buf2[700];
@@ -147,7 +147,7 @@ static const char *content_type(const char *filename)
 	return "application/octet-stream";
 }
 
-static void httpd_recvqhandler(connection_t *cptr)
+static void httpd_recvqhandler(struct connection *cptr)
 {
 	char buf[BUFSIZE * 2];
 	char outbuf[BUFSIZE * 2];
@@ -316,7 +316,7 @@ static void httpd_recvqhandler(connection_t *cptr)
 		process_header(cptr, buf);
 }
 
-static void httpd_closehandler(connection_t *cptr)
+static void httpd_closehandler(struct connection *cptr)
 {
 	struct httpddata *hd;
 
@@ -330,9 +330,9 @@ static void httpd_closehandler(connection_t *cptr)
 	cptr->userdata = NULL;
 }
 
-static void do_listen(connection_t *cptr)
+static void do_listen(struct connection *cptr)
 {
-	connection_t *newptr;
+	struct connection *newptr;
 	struct httpddata *hd;
 
 	newptr = connection_accept_tcp(cptr, recvq_put, NULL);
@@ -350,7 +350,7 @@ static void do_listen(connection_t *cptr)
 static void httpd_checkidle(void *arg)
 {
 	mowgli_node_t *n, *tn;
-	connection_t *cptr;
+	struct connection *cptr;
 
 	(void)arg;
 	if (listener == NULL)
@@ -376,7 +376,7 @@ static void httpd_config_ready(void *vptr)
 {
 	if (httpd_config.host != NULL && httpd_config.port != 0)
 	{
-		/* Some code depends on connection_t.listener == listener. */
+		/* Some code depends on struct connection -> listener == listener. */
 		if (listener != NULL)
 			return;
 		listener = connection_open_listener_tcp(httpd_config.host,

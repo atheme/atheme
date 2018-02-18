@@ -23,7 +23,7 @@ struct uplink_
 
 	unsigned int port;
 
-	connection_t *conn;
+	struct connection *conn;
 
 	unsigned int flags;
 };
@@ -47,7 +47,7 @@ extern struct timeval burstime;
 #endif
 
 extern void (*parse)(char *line);
-extern void irc_handle_connect(connection_t *cptr);
+extern void irc_handle_connect(struct connection *cptr);
 
 /* send.c */
 extern int sts(const char *fmt, ...) ATHEME_FATTR_PRINTF(1, 2);

@@ -32,7 +32,7 @@ uplink_t *curr_uplink;
 
 mowgli_heap_t *uplink_heap;
 
-static void uplink_close(connection_t *cptr);
+static void uplink_close(struct connection *cptr);
 
 void init_uplinks(void)
 {
@@ -178,7 +178,7 @@ void uplink_connect(void)
  *       uplink marked dead
  *       uplink deleted if it had been removed from configuration
  */
-static void uplink_close(connection_t *cptr)
+static void uplink_close(struct connection *cptr)
 {
 	struct channel *c;
 	mowgli_patricia_iteration_state_t state;

@@ -38,7 +38,7 @@ struct sourceinfo
 	user_t *su; /* source, if it's a user */
 	server_t *s; /* source, if it's a server */
 
-	connection_t *connection; /* physical connection cmd received from */
+	struct connection *connection; /* physical connection cmd received from */
 	const char *sourcedesc; /* additional information (e.g. IP address) */
 	myuser_t *smu; /* login associated with source */
 

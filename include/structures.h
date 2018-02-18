@@ -21,6 +21,9 @@ struct chanban;
 struct channel;
 struct chanuser;
 
+// Defined in include/connection.h
+struct connection;
+
 // Defined in include/servtree.h
 struct service;
 
