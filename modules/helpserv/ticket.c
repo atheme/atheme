@@ -259,7 +259,7 @@ static void helpserv_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 			}
 			else
 			{
-				service_t *svs;
+				struct service *svs;
 				char buf[BUFSIZE];
 
 				if ((svs = service_find("memoserv")) != NULL && myuser_find(parv[0]) != NULL)

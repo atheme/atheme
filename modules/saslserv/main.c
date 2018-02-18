@@ -13,7 +13,7 @@ static mowgli_list_t mechanisms;
 static char mechlist_string[SASL_S2S_MAXLEN];
 static bool hide_server_names;
 
-static service_t *saslsvs = NULL;
+static struct service *saslsvs = NULL;
 static mowgli_eventloop_timer_t *delete_stale_timer = NULL;
 
 static const char *

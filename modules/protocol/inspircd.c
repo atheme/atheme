@@ -474,7 +474,7 @@ static void inspircd_part_sts(struct channel *c, user_t *u)
 /* server-to-server KLINE wrapper */
 static void inspircd_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
-	service_t *svs;
+	struct service *svs;
 
 	/* :services-dev.chatspike.net ADDLINE G test@test.com Brain 1133994664 0 :You are banned from this network */
 	svs = service_find("operserv");
@@ -484,7 +484,7 @@ static void inspircd_kline_sts(const char *server, const char *user, const char 
 /* server-to-server UNKLINE wrapper */
 static void inspircd_unkline_sts(const char *server, const char *user, const char *host)
 {
-	service_t *svs;
+	struct service *svs;
 
 	svs = service_find("operserv");
 	sts(":%s DELLINE G %s@%s", svs != NULL ? svs->me->uid : ME, user, host);
@@ -493,7 +493,7 @@ static void inspircd_unkline_sts(const char *server, const char *user, const cha
 /* server-to-server QLINE wrapper */
 static void inspircd_qline_sts(const char *server, const char *name, long duration, const char *reason)
 {
-	service_t *svs;
+	struct service *svs;
 
 	svs = service_find("operserv");
 
@@ -527,7 +527,7 @@ static void inspircd_unqline_sts(const char *server, const char *name)
 /* server-to-server ZLINE/DLINE wrapper */
 static void inspircd_dline_sts(const char *server, const char *host, long duration, const char *reason)
 {
-	service_t *svs;
+	struct service *svs;
 
 	svs = service_find("operserv");
 	sts(":%s ADDLINE Z %s %s %lu %ld :%s", me.numeric, host, svs != NULL ? svs->nick : me.name, (unsigned long)CURRTIME, duration, reason);
@@ -536,7 +536,7 @@ static void inspircd_dline_sts(const char *server, const char *host, long durati
 /* server-to-server UNZLINE/UNDLINE wrapper */
 static void inspircd_undline_sts(const char *server, const char *host)
 {
-	service_t *svs;
+	struct service *svs;
 
 	svs = service_find("operserv");
 	sts(":%s DELLINE Z %s", svs != NULL ? svs->me->uid : ME, host);
@@ -619,7 +619,7 @@ static bool inspircd_on_logout(user_t *u, const char *account)
 
 static void inspircd_jupe(const char *server, const char *reason)
 {
-	service_t *svs;
+	struct service *svs;
 	static char sid[3+1];
 	int i;
 	server_t *s;
@@ -693,7 +693,7 @@ static void inspircd_invite_sts(user_t *sender, user_t *target, struct channel *
 
 static void inspircd_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account)
 {
-	service_t *svs;
+	struct service *svs;
 
 	svs = service_find("operserv");
 	if (duration == 0)
@@ -724,7 +724,7 @@ static void inspircd_svslogin_sts(char *target, char *nick, char *user, char *ho
 
 static void inspircd_sasl_sts(const char *target, char mode, const char *data)
 {
-	service_t *svs;
+	struct service *svs;
 	server_t *s = sid_find(target);
 
 	return_if_fail(s != NULL);

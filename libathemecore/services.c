@@ -246,7 +246,7 @@ void part(const char *chan, const char *nick)
 
 void services_init(void)
 {
-	service_t *svs;
+	struct service *svs;
 	mowgli_patricia_iteration_state_t state;
 
 	MOWGLI_PATRICIA_FOREACH(svs, &state, services_name)
@@ -265,7 +265,7 @@ void services_init(void)
 
 void joinall(const char *name)
 {
-	service_t *svs;
+	struct service *svs;
 	mowgli_patricia_iteration_state_t state;
 
 	if (name == NULL)
@@ -283,7 +283,7 @@ void joinall(const char *name)
 void partall(const char *name)
 {
 	mowgli_patricia_iteration_state_t state;
-	service_t *svs;
+	struct service *svs;
 	mychan_t *mc;
 
 	if (name == NULL)
@@ -308,7 +308,7 @@ void reintroduce_user(user_t *u)
 {
 	mowgli_node_t *n;
 	struct channel *c;
-	service_t *svs;
+	struct service *svs;
 
 	svs = service_find_nick(u->nick);
 	if (svs == NULL)
@@ -374,7 +374,7 @@ verbose(mychan_t *mychan, const char *fmt, ...)
 /* protocol wrapper for nickchange/nick burst */
 void handle_nickchange(user_t *u)
 {
-	service_t *svs;
+	struct service *svs;
 
 	return_if_fail(u != NULL);
 	return_if_fail(!is_internal_client(u));
@@ -578,7 +578,7 @@ void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp)
 {
 	myuser_t *mu;
 	struct mycertfp *mcfp;
-	service_t *svs;
+	struct service *svs;
 	hook_user_login_check_t req;
 
 	free(u->certfp);
@@ -623,7 +623,7 @@ void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp)
 	logcommand_user(svs, u, CMDLOG_LOGIN, "LOGIN via CERTFP (%s)", certfp);
 }
 
-void myuser_login(service_t *svs, user_t *u, myuser_t *mu, bool sendaccount)
+void myuser_login(struct service *svs, user_t *u, myuser_t *mu, bool sendaccount)
 {
 	char lau[BUFSIZE], lao[BUFSIZE];
 	char strfbuf[BUFSIZE];
@@ -814,7 +814,7 @@ bool bad_password(sourceinfo_t *si, myuser_t *mu)
 	char numeric[21], strfbuf[BUFSIZE];
 	int count;
 	metadata_t *md_failnum;
-	service_t *svs;
+	struct service *svs;
 
 	/* If the user is already logged in, no paranoia is needed,
 	 * as they could /ns set password anyway.

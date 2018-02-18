@@ -6,7 +6,7 @@
  */
 
 typedef struct {
-	service_t *me;
+	struct service *me;
 	char *nick;
 	char *user;
 	char *host;

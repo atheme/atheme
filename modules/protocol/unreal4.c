@@ -474,7 +474,7 @@ static void unreal_part_sts(struct channel *c, user_t *u)
 /* server-to-server KLINE wrapper */
 static void unreal_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
-	service_t *svs;
+	struct service *svs;
 
 	svs = service_find("operserv");
 	sts(":%s TKL + G %s %s %s %lu %lu :%s", ME, user, host, svs != NULL ? svs->nick : me.name, (unsigned long)(duration > 0 ? CURRTIME + duration : 0), (unsigned long)CURRTIME, reason);
@@ -483,7 +483,7 @@ static void unreal_kline_sts(const char *server, const char *user, const char *h
 /* server-to-server UNKLINE wrapper */
 static void unreal_unkline_sts(const char *server, const char *user, const char *host)
 {
-	service_t *svs;
+	struct service *svs;
 
 	svs = service_find("operserv");
 	sts(":%s TKL - G %s %s %s", ME, user, host, svs != NULL ? svs->nick : me.name);
@@ -516,7 +516,7 @@ static void unreal_unxline_sts(const char *server, const char *realname)
 
 static void unreal_qline_sts(const char *server, const char *name, long duration, const char *reason)
 {
-	service_t *svs;
+	struct service *svs;
 
 	if (*name == '#' || *name == '&')
 	{
@@ -530,7 +530,7 @@ static void unreal_qline_sts(const char *server, const char *name, long duration
 
 static void unreal_unqline_sts(const char *server, const char *name)
 {
-	service_t *svs;
+	struct service *svs;
 
 	svs = service_find("operserv");
 	sts(":%s TKL - Q * %s %s", ME, name, svs != NULL ? svs->nick : me.name);
@@ -598,7 +598,7 @@ static bool unreal_on_logout(user_t *u, const char *account)
 
 static void unreal_jupe(const char *server, const char *reason)
 {
-	service_t *svs;
+	struct service *svs;
 
 	server_delete(server);
 
@@ -647,7 +647,7 @@ static void unreal_quarantine_sts(user_t *source, user_t *victim, long duration,
 static void unreal_sasl_sts(const char *target, char mode, const char *data)
 {
 	char servermask[BUFSIZE], *p;
-	service_t *saslserv;
+	struct service *saslserv;
 
 	saslserv = service_find("saslserv");
 	if (saslserv == NULL)
@@ -670,7 +670,7 @@ static void unreal_sasl_mechlist_sts(const char *mechlist)
 static void unreal_svslogin_sts(char *target, char *nick, char *user, char *host, myuser_t *account)
 {
 	char servermask[BUFSIZE], *p;
-	service_t *saslserv;
+	struct service *saslserv;
 
 	saslserv = service_find("saslserv");
 	if (saslserv == NULL)

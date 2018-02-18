@@ -34,7 +34,7 @@ static void db_h_clonesdbv(database_handle_t *db, const char *type);
 
 mowgli_patricia_t *os_clones_cmds;
 
-service_t *serviceinfo;
+struct service *serviceinfo;
 
 static mowgli_list_t clone_exempts;
 bool kline_enabled;

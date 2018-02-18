@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-service_t *statsvs;
+struct service *statsvs;
 
 static void ss_cmd_help(sourceinfo_t * si, int parc, char *parv[]);
 

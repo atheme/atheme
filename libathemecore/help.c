@@ -111,7 +111,7 @@ static bool evaluate_condition(sourceinfo_t *si, const char *s)
 		return false;
 }
 
-void help_display_as_subcmd(sourceinfo_t *si, service_t *service, const char *subcmd_of, const char *command, mowgli_patricia_t *list)
+void help_display_as_subcmd(sourceinfo_t *si, struct service *service, const char *subcmd_of, const char *command, mowgli_patricia_t *list)
 {
 	struct command *c;
 	FILE *help_file = NULL;
@@ -217,7 +217,7 @@ void help_display_as_subcmd(sourceinfo_t *si, service_t *service, const char *su
 	free(ccommand);
 }
 
-void help_display(sourceinfo_t *si, service_t *service, const char *command, mowgli_patricia_t *list)
+void help_display(sourceinfo_t *si, struct service *service, const char *command, mowgli_patricia_t *list)
 {
 	help_display_as_subcmd(si, service, NULL, command, list);
 }

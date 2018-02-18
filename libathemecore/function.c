@@ -644,7 +644,7 @@ int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, cons
 	int rc;
 	static time_t period_start = 0, lastwallops = 0;
 	static unsigned int emailcount = 0;
-	service_t *svs;
+	struct service *svs;
 
 	if (u == NULL || mu == NULL)
 		return 0;

@@ -36,7 +36,7 @@ static void ms_cmd_sendgroup(sourceinfo_t *si, int parc, char *parv[])
 	mygroup_t *mg;
 	int sent = 0, tried = 0;
 	bool ignored, operoverride = false;
-	service_t *memoserv;
+	struct service *memoserv;
 
 	/* Grab args */
 	char *target = parv[0];

@@ -9,7 +9,7 @@
 #include "hostserv.h"
 
 static void on_user_identify(user_t *u);
-service_t *hostsvs;
+struct service *hostsvs;
 
 static void
 mod_init(module_t *const restrict m)

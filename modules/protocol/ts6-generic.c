@@ -269,7 +269,7 @@ static void ts6_part_sts(struct channel *c, user_t *u)
 /* server-to-server KLINE wrapper */
 static void ts6_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
-	service_t *svs;
+	struct service *svs;
 
 	svs = service_find("operserv");
 	sts(":%s ENCAP %s KLINE %ld %s %s :%s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, duration, user, host, reason);
@@ -278,7 +278,7 @@ static void ts6_kline_sts(const char *server, const char *user, const char *host
 /* server-to-server UNKLINE wrapper */
 static void ts6_unkline_sts(const char *server, const char *user, const char *host)
 {
-	service_t *svs;
+	struct service *svs;
 
 	svs = service_find("operserv");
 	sts(":%s ENCAP %s UNKLINE %s %s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, user, host);
@@ -287,7 +287,7 @@ static void ts6_unkline_sts(const char *server, const char *user, const char *ho
 /* server-to-server XLINE wrapper */
 static void ts6_xline_sts(const char *server, const char *realname, long duration, const char *reason)
 {
-	service_t *svs;
+	struct service *svs;
 
 	svs = service_find("operserv");
 	sts(":%s ENCAP %s XLINE %ld %s 2 :%s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, duration, realname, reason);
@@ -296,7 +296,7 @@ static void ts6_xline_sts(const char *server, const char *realname, long duratio
 /* server-to-server UNXLINE wrapper */
 static void ts6_unxline_sts(const char *server, const char *realname)
 {
-	service_t *svs;
+	struct service *svs;
 
 	svs = service_find("operserv");
 	sts(":%s ENCAP %s UNXLINE %s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, realname);
@@ -305,7 +305,7 @@ static void ts6_unxline_sts(const char *server, const char *realname)
 /* server-to-server QLINE wrapper */
 static void ts6_qline_sts(const char *server, const char *name, long duration, const char *reason)
 {
-	service_t *svs;
+	struct service *svs;
 
 	svs = service_find("operserv");
 	sts(":%s ENCAP %s RESV %ld %s 0 :%s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, duration, name, reason);
@@ -314,7 +314,7 @@ static void ts6_qline_sts(const char *server, const char *name, long duration, c
 /* server-to-server UNQLINE wrapper */
 static void ts6_unqline_sts(const char *server, const char *name)
 {
-	service_t *svs;
+	struct service *svs;
 
 	svs = service_find("operserv");
 	sts(":%s ENCAP %s UNRESV %s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, name);
@@ -323,7 +323,7 @@ static void ts6_unqline_sts(const char *server, const char *name)
 /* server-to-server DLINE wrapper */
 static void ts6_dline_sts(const char *server, const char *host, long duration, const char *reason)
 {
-	service_t *svs;
+	struct service *svs;
 
 	svs = service_find("operserv");
 	sts(":%s ENCAP %s DLINE %ld %s :%s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, duration, host, reason);
@@ -332,7 +332,7 @@ static void ts6_dline_sts(const char *server, const char *host, long duration, c
 /* server-to-server UNDLINE wrapper */
 static void ts6_undline_sts(const char *server, const char *host)
 {
-	service_t *svs;
+	struct service *svs;
 
 	svs = service_find("operserv");
 	sts(":%s ENCAP %s UNDLINE %s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, host);
@@ -451,7 +451,7 @@ static bool ts6_on_logout(user_t *u, const char *account)
  */
 static void ts6_jupe(const char *server, const char *reason)
 {
-	service_t *svs;
+	struct service *svs;
 
 	server_delete(server);
 
@@ -496,7 +496,7 @@ static void ts6_svslogin_sts(char *target, char *nick, char *user, char *host, m
 
 static void ts6_sasl_sts(const char *target, char mode, const char *data)
 {
-	service_t *svs;
+	struct service *svs;
 	server_t *s = sid_find(target);
 
 	if(s == NULL)

@@ -34,7 +34,7 @@ static void ms_cmd_sendall(sourceinfo_t *si, int parc, char *parv[])
 	struct mymemo *memo;
 	int sent = 0, tried = 0;
 	bool ignored;
-	service_t *memoserv;
+	struct service *memoserv;
 	myentity_iteration_state_t state;
 
 	/* Grab args */

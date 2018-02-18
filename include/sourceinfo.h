@@ -45,7 +45,7 @@ struct sourceinfo_
 	/* the service the original command was sent to, which may differ
 	 * from the service the current command is in
 	 */
-	service_t *service;
+	struct service *service;
 
 	struct channel *c; /* channel this command applies to (fantasy?) */
 

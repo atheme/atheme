@@ -62,7 +62,7 @@ typedef struct chanfix_persist {
 	mowgli_patricia_t *chanfix_channels;
 } chanfix_persist_record_t;
 
-extern service_t *chanfix;
+extern struct service *chanfix;
 extern mowgli_patricia_t *chanfix_channels;
 
 extern void chanfix_gather_init(chanfix_persist_record_t *);

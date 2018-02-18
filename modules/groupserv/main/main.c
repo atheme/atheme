@@ -5,7 +5,7 @@
 #include "atheme.h"
 #include "groupserv_main.h"
 
-service_t *groupsvs;
+struct service *groupsvs;
 
 typedef struct {
 	int version;

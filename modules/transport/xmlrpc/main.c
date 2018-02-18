@@ -342,7 +342,7 @@ static int xmlrpcmethod_logout(void *conn, int parc, char *parv[])
 static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 {
 	myuser_t *mu;
-	service_t *svs;
+	struct service *svs;
 	struct command *cmd;
 	sourceinfo_t *si;
 	int newparc;

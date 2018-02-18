@@ -25,15 +25,15 @@ struct command
 extern void command_add(struct command *cmd, mowgli_patricia_t *commandtree);
 extern void command_delete(struct command *cmd, mowgli_patricia_t *commandtree);
 extern struct command *command_find(mowgli_patricia_t *commandtree, const char *command);
-extern void command_exec(service_t *svs, sourceinfo_t *si, struct command *c, int parc, char *parv[]);
-extern void command_exec_split(service_t *svs, sourceinfo_t *si, const char *cmd, char *text, mowgli_patricia_t *commandtree);
+extern void command_exec(struct service *svs, sourceinfo_t *si, struct command *c, int parc, char *parv[]);
+extern void command_exec_split(struct service *svs, sourceinfo_t *si, const char *cmd, char *text, mowgli_patricia_t *commandtree);
 extern void command_help(sourceinfo_t *si, mowgli_patricia_t *commandtree);
 extern void command_help_short(sourceinfo_t *si, mowgli_patricia_t *commandtree, const char *maincmds);
-extern bool (*command_authorize)(service_t *svs, sourceinfo_t *si, struct command *c, const char *userlevel);
+extern bool (*command_authorize)(struct service *svs, sourceinfo_t *si, struct command *c, const char *userlevel);
 
 /* help.c */
-extern void help_display(sourceinfo_t *si, service_t *service, const char *command, mowgli_patricia_t *list);
-extern void help_display_as_subcmd(sourceinfo_t *si, service_t *service, const char *subcmd_of, const char *command, mowgli_patricia_t *list);
+extern void help_display(sourceinfo_t *si, struct service *service, const char *command, mowgli_patricia_t *list);
+extern void help_display_as_subcmd(sourceinfo_t *si, struct service *service, const char *subcmd_of, const char *command, mowgli_patricia_t *list);
 
 /* logger.c */
 extern void logaudit_denycmd(sourceinfo_t *si, struct command *cmd, const char *userlevel);

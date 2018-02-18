@@ -28,7 +28,7 @@ static void db_h_bot_count(database_handle_t *db, const char *type);
 /* visible for other modules; use the typedef to enforce type checking */
 fn_botserv_bot_find botserv_bot_find;
 
-service_t *botsvs;
+struct service *botsvs;
 
 unsigned int min_users = 0;
 
@@ -308,7 +308,7 @@ botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
 	char newargs[BUFSIZE];
 	char *cmd;
 	char *args;
-	service_t *sptr = NULL;
+	struct service *sptr = NULL;
 
 	/* this should never happen */
 	if (parv[parc - 2][0] == '&')

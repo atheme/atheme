@@ -36,7 +36,7 @@ typedef struct operlogoninfo_ operlogoninfo_t;
 mowgli_list_t operlogon_info;
 unsigned int logoninfo_count = 0;
 
-service_t *infoserv;
+struct service *infoserv;
 
 static void is_cmd_help(sourceinfo_t *si, const int parc, char *parv[]);
 static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[]);

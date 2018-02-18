@@ -6,7 +6,7 @@
 #include "atheme.h"
 #include "chanfix.h"
 
-service_t *chanfix;
+struct service *chanfix;
 mowgli_eventloop_timer_t *chanfix_autofix_timer = NULL;
 
 static void

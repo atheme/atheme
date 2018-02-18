@@ -500,7 +500,7 @@ static void check_dnsbls(hook_user_nick_t *data)
 
 static void dnsbl_hit(user_t *u, struct Blacklist *blptr)
 {
-	service_t *svs;
+	struct service *svs;
 	struct kline *k;
 
 	svs = service_find("operserv");
@@ -599,7 +599,7 @@ static void db_h_ble(database_handle_t *db, const char *type)
 static void
 mod_init(module_t *const restrict m)
 {
-	service_t *proxyscan;
+	struct service *proxyscan;
 
 	MODULE_TRY_REQUEST_SYMBOL(m, os_set_cmdtree, "operserv/set", "os_set_cmdtree");
 
@@ -640,7 +640,7 @@ mod_init(module_t *const restrict m)
 static void
 mod_deinit(const module_unload_intent_t intent)
 {
-	service_t *proxyscan;
+	struct service *proxyscan;
 
 	hook_del_db_write(write_dnsbl_exempt_db);
 	hook_del_user_add(check_dnsbls);

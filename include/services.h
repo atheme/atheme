@@ -12,7 +12,7 @@ typedef struct chansvs_ chansvs_t;
 typedef struct nicksvs_ nicksvs_t;
 
 /* The nick/user/host/real strings in these structs simply point
- * to their counterparts in the service_t, and will probably be removed
+ * to their counterparts in the struct service, and will probably be removed
  * at some point.
  */
 /* core services */
@@ -29,7 +29,7 @@ struct chansvs_
 
   bool changets;		/* use TS to better deop people */
 
-  service_t *me;                /* our user_t struct          */
+  struct service *me;                /* our user_t struct          */
 
   unsigned int expiry;		/* expiry time                */
 
@@ -57,7 +57,7 @@ struct nicksvs_
   char   *host;
   char   *real;
 
-  service_t *me;
+  struct service *me;
 
   unsigned int maxnicks;        /* max nicknames one can group */
   unsigned int expiry;          /* expiry time                */
@@ -106,7 +106,7 @@ extern void join(const char *chan, const char *nick);
 extern void joinall(const char *name);
 extern void part(const char *chan, const char *nick);
 extern void partall(const char *name);
-extern void myuser_login(service_t *svs, user_t *u, myuser_t *mu, bool sendaccount);
+extern void myuser_login(struct service *svs, user_t *u, myuser_t *mu, bool sendaccount);
 extern void verbose(mychan_t *mychan, const char *fmt, ...) ATHEME_FATTR_PRINTF(2, 3);
 extern void (*notice)(const char *from, const char *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
 extern void change_notify(const char *from, user_t *to, const char *message, ...) ATHEME_FATTR_PRINTF(3, 4);

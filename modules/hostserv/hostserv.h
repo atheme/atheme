@@ -25,7 +25,7 @@ typedef struct {
  */
 static inline void do_sethost(user_t *u, const char *host)
 {
-	service_t *svs;
+	struct service *svs;
 
         if (!strcmp(u->vhost, host ? host : u->host))
                 return;

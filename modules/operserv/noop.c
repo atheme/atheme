@@ -60,7 +60,7 @@ mod_deinit(const module_unload_intent_t intent)
 
 static void noop_kill_users(void *dummy)
 {
-	service_t *service;
+	struct service *service;
 	mowgli_node_t *n, *tn;
 	user_t *u;
 

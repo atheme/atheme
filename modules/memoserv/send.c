@@ -35,7 +35,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 	mowgli_node_t *n;
 	struct mymemo *memo;
 	struct command *cmd;
-	service_t *memoserv;
+	struct service *memoserv;
 
 	/* Grab args */
 	char *target = parv[0];

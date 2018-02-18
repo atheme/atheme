@@ -26,7 +26,7 @@ mod_deinit(const module_unload_intent_t intent)
 
 static void helpserv_cmd_services(sourceinfo_t *si, int parc, char *parv[])
 {
-	service_t *sptr;
+	struct service *sptr;
 	mowgli_patricia_iteration_state_t state;
 
 	command_success_nodata(si, _("Services running on %s:"), me.netname);

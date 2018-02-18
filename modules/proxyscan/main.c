@@ -20,7 +20,7 @@
 
 #include "atheme.h"
 
-static service_t *proxyscan = NULL;
+static struct service *proxyscan = NULL;
 
 static void
 mod_init(module_t *const restrict m)

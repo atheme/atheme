@@ -103,8 +103,6 @@ typedef struct myuser_ myuser_t;
 typedef struct mynick_ mynick_t;
 typedef struct mychan_ mychan_t;
 
-typedef struct service_ service_t;
-
 typedef struct sourceinfo_ sourceinfo_t;
 
 enum cmd_faultcode

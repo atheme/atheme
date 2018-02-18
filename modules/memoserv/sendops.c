@@ -35,7 +35,7 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc;
 	int sent = 0, tried = 0;
 	bool ignored, operoverride = false;
-	service_t *memoserv;
+	struct service *memoserv;
 
 	/* Grab args */
 	char *target = parv[0];

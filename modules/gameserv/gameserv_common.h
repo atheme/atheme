@@ -25,7 +25,7 @@ gs_command_report(sourceinfo_t *si, const char *fmt, ...)
 
 	if (si->c != NULL)
 	{
-		service_t *svs = service_find("gameserv");
+		struct service *svs = service_find("gameserv");
 
 		msg(svs->me->nick, si->c->name, "%s", buf);
 	}
@@ -105,7 +105,7 @@ static inline bool gs_do_parameters(sourceinfo_t *si, int *parc, char ***parv, m
 static inline void ATHEME_FATTR_PRINTF(2, 3)
 gs_interactive_notification(myuser_t *mu, const char *notification, ...)
 {
-	service_t *gameserv;
+	struct service *gameserv;
 	char buf[BUFSIZE];
 	va_list va;
 
@@ -120,7 +120,7 @@ gs_interactive_notification(myuser_t *mu, const char *notification, ...)
 		myuser_notice(gameserv->nick, mu, "%s", buf);
 	else
 	{
-		service_t *svs;
+		struct service *svs;
 
 		if ((svs = service_find("memoserv")) != NULL)
 		{

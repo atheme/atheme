@@ -23,7 +23,7 @@ static unsigned int max_rolls = 10;
 static void
 mod_init(module_t *const restrict m)
 {
-	service_t *svs;
+	struct service *svs;
 
 	service_named_bind_command("chanserv", &cmd_dice);
 	service_named_bind_command("chanserv", &cmd_calc);
@@ -41,7 +41,7 @@ mod_init(module_t *const restrict m)
 static void
 mod_deinit(const module_unload_intent_t intent)
 {
-	service_t *svs;
+	struct service *svs;
 
 	service_named_unbind_command("chanserv", &cmd_dice);
 	service_named_unbind_command("chanserv", &cmd_calc);

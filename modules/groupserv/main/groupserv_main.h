@@ -39,7 +39,7 @@ extern unsigned int myentity_count_group_flag(myentity_t *mt, unsigned int flags
 extern const char *mygroup_founder_names(mygroup_t *mg);
 
 /* services plumbing */
-extern service_t *groupsvs;
+extern struct service *groupsvs;
 extern mowgli_list_t gs_cmdtree;
 extern mowgli_list_t conf_gs_table;
 extern gflags_t ga_flags[];

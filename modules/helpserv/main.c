@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-service_t *helpserv;
+struct service *helpserv;
 
 static void helpserv_cmd_help(sourceinfo_t *si, const int parc, char *parv[]);
 

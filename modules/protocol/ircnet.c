@@ -233,7 +233,7 @@ static void ircnet_part_sts(struct channel *c, user_t *u)
 /* server-to-server KLINE wrapper */
 static void ircnet_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
-	service_t *svs;
+	struct service *svs;
 
 	/* this won't propagate!
 	 * you'll need some bot/service on each server to do that */
@@ -247,7 +247,7 @@ static void ircnet_kline_sts(const char *server, const char *user, const char *h
 /* server-to-server UNKLINE wrapper */
 static void ircnet_unkline_sts(const char *server, const char *user, const char *host)
 {
-	service_t *svs;
+	struct service *svs;
 
 	if (irccasecmp(server, me.actual) && cnt.server > 2)
 		wallops("Missed an untkline");
@@ -313,7 +313,7 @@ static bool ircnet_on_logout(user_t *u, const char *account)
 
 static void ircnet_jupe(const char *server, const char *reason)
 {
-	service_t *svs;
+	struct service *svs;
 	static char sid[4+1];
 	int i;
 	server_t *s;

@@ -475,7 +475,7 @@ handle_channel_message(sourceinfo_t *si, char *target, bool is_notice, char *mes
 	hook_cmessage_data_t cdata;
 	mowgli_node_t *n, *tn;
 	mowgli_list_t l = { NULL, NULL, 0 };
-	service_t *svs;
+	struct service *svs;
 
 	/* Call hook here */
 	cdata.u = si->su;

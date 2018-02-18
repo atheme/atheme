@@ -11,7 +11,7 @@
 static void on_user_identify(user_t *u);
 static void on_user_away(user_t *u);
 
-service_t *memosvs = NULL;
+struct service *memosvs = NULL;
 /*struct memoserv_conf *memosvs_conf;*/
 unsigned int maxmemos;
 

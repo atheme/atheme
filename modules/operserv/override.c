@@ -150,8 +150,8 @@ static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[])
 {
 	cooked_sourceinfo_t *o_si;
 	myuser_t *mu = NULL;
-	service_t *svs;
-	service_t *memosvs;
+	struct service *svs;
+	struct service *memosvs;
 	struct command *cmd;
 	int newparc;
 	size_t i;

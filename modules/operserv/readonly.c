@@ -26,7 +26,7 @@ mod_deinit(const module_unload_intent_t intent)
 
 static void os_cmd_readonly(sourceinfo_t *si, int parc, char *parv[])
 {
-	service_t *svs;
+	struct service *svs;
 	char *action = parv[0];
 
 	if (!action)

@@ -302,7 +302,7 @@ static void bahamut_part_sts(struct channel *c, user_t *u)
 /* server-to-server KLINE wrapper */
 static void bahamut_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
-	service_t *svs;
+	struct service *svs;
 
 	svs = service_find("operserv");
 	sts(":%s AKILL %s %s %ld %s %lu :%s", me.name, host, user, duration, svs != NULL ? svs->nick : me.name, (unsigned long)CURRTIME, reason);

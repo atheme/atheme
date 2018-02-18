@@ -74,7 +74,7 @@ static void logfile_join_channels(struct channel *c)
 	}
 }
 
-static void logfile_join_service(service_t *svs)
+static void logfile_join_service(struct service *svs)
 {
 	mowgli_node_t *n;
 	struct channel *c;
@@ -233,7 +233,7 @@ static void logfile_write_irc(logfile_t *lf, const char *buf)
 	{
 		size_t targetlen;
 		char targetbuf[NICKLEN + 1];
-		service_t *svs = NULL;
+		struct service *svs = NULL;
 
 		memset(targetbuf, '\0', sizeof targetbuf);
 		targetlen = (strchr(buf, ' ') - buf);
@@ -728,12 +728,12 @@ logcommand(sourceinfo_t *si, int level, const char *fmt, ...)
 }
 
 /*
- * logcommand_user(service_t *svs, user_t *source, int level, const char *fmt, ...)
+ * logcommand_user(struct service *svs, user_t *source, int level, const char *fmt, ...)
  *
  * Logs usage of a command from a user as described by sourceinfo_t.
  *
  * Inputs:
- *       - service_t object which describes the service the command is attached to
+ *       - struct service object which describes the service the command is attached to
  *       - user_t object which describes the source of the command call
  *       - bitmask of log categories to log the command use to.
  *       - printf-style format string
@@ -746,7 +746,7 @@ logcommand(sourceinfo_t *si, int level, const char *fmt, ...)
  *       - qualifying logfile_t objects in log_files are updated.
  */
 void ATHEME_FATTR_PRINTF(4, 5)
-logcommand_user(service_t *svs, user_t *source, int level, const char *fmt, ...)
+logcommand_user(struct service *svs, user_t *source, int level, const char *fmt, ...)
 {
 	va_list args;
 	char lbuf[BUFSIZE];
@@ -766,13 +766,13 @@ logcommand_user(service_t *svs, user_t *source, int level, const char *fmt, ...)
 }
 
 /*
- * logcommand_external(service_t *svs, const char *type, connection_t *source,
+ * logcommand_external(struct service *svs, const char *type, connection_t *source,
  *       const char *sourcedesc, myuser_t *login, int level, const char *fmt, ...)
  *
  * Logs usage of a command from an RPC call as described by sourceinfo_t.
  *
  * Inputs:
- *       - service_t object which describes the service the command is attached to
+ *       - struct service object which describes the service the command is attached to
  *       - string which describes the type of RPC call
  *       - connection_t which describes the socket source of the RPC call
  *       - string which describes the socket source of the RPC call
@@ -788,7 +788,7 @@ logcommand_user(service_t *svs, user_t *source, int level, const char *fmt, ...)
  *       - qualifying logfile_t objects in log_files are updated.
  */
 void ATHEME_FATTR_PRINTF(7, 8)
-logcommand_external(service_t *svs, const char *type, connection_t *source, const char *sourcedesc, myuser_t *mu, int level, const char *fmt, ...)
+logcommand_external(struct service *svs, const char *type, connection_t *source, const char *sourcedesc, myuser_t *mu, int level, const char *fmt, ...)
 {
 	va_list args;
 	char lbuf[BUFSIZE];

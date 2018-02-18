@@ -67,7 +67,7 @@ static void service_default_handler(sourceinfo_t *si, int parc, char *parv[])
 
 void servtree_init(void)
 {
-	service_heap = sharedheap_get(sizeof(service_t));
+	service_heap = sharedheap_get(sizeof(struct service));
 	services_name = mowgli_patricia_create(strcasecanon);
 	services_nick = mowgli_patricia_create(strcasecanon);
 
@@ -110,7 +110,7 @@ static void create_unique_service_nick(char *dest, size_t len)
 
 static int conf_service_nick(mowgli_config_file_entry_t *ce)
 {
-	service_t *sptr;
+	struct service *sptr;
 	char newnick[NICKLEN + 1];
 
 	if (!ce->vardata)
@@ -139,7 +139,7 @@ static int conf_service_nick(mowgli_config_file_entry_t *ce)
 
 static int conf_service_user(mowgli_config_file_entry_t *ce)
 {
-	service_t *sptr;
+	struct service *sptr;
 
 	if (!ce->vardata)
 		return -1;
@@ -156,7 +156,7 @@ static int conf_service_user(mowgli_config_file_entry_t *ce)
 
 static int conf_service_host(mowgli_config_file_entry_t *ce)
 {
-	service_t *sptr;
+	struct service *sptr;
 
 	if (!ce->vardata)
 		return -1;
@@ -179,7 +179,7 @@ static int conf_service_host(mowgli_config_file_entry_t *ce)
 
 static int conf_service_real(mowgli_config_file_entry_t *ce)
 {
-	service_t *sptr;
+	struct service *sptr;
 
 	if (!ce->vardata)
 		return -1;
@@ -196,7 +196,7 @@ static int conf_service_real(mowgli_config_file_entry_t *ce)
 
 static int conf_service_aliases(mowgli_config_file_entry_t *ce)
 {
-	service_t *sptr;
+	struct service *sptr;
 	mowgli_config_file_entry_t *subce;
 
 	sptr = service_find(ce->prevlevel->varname);
@@ -229,7 +229,7 @@ static int conf_service_aliases(mowgli_config_file_entry_t *ce)
 
 static int conf_service_access(mowgli_config_file_entry_t *ce)
 {
-	service_t *sptr;
+	struct service *sptr;
 	mowgli_config_file_entry_t *subce;
 
 	sptr = service_find(ce->prevlevel->varname);
@@ -262,7 +262,7 @@ static int conf_service_access(mowgli_config_file_entry_t *ce)
 
 static int conf_service(mowgli_config_file_entry_t *ce)
 {
-	service_t *sptr;
+	struct service *sptr;
 
 	sptr = service_find(ce->varname);
 	if (!sptr)
@@ -272,9 +272,9 @@ static int conf_service(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int parc, char *parv[]))
+struct service *service_add(const char *name, void (*handler)(sourceinfo_t *si, int parc, char *parv[]))
 {
-	service_t *sptr;
+	struct service *sptr;
 	struct ConfTable *subblock;
 	const char *nick;
 	char newnick[NICKLEN + 1];
@@ -334,7 +334,7 @@ service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int p
 	return sptr;
 }
 
-void service_delete(service_t *sptr)
+void service_delete(struct service *sptr)
 {
 	struct ConfTable *subblock;
 
@@ -374,9 +374,9 @@ void service_delete(service_t *sptr)
 	mowgli_heap_free(service_heap, sptr);
 }
 
-service_t *service_add_static(const char *name, const char *user, const char *host, const char *real, void (*handler)(sourceinfo_t *si, int parc, char *parv[]), service_t *logtarget)
+struct service *service_add_static(const char *name, const char *user, const char *host, const char *real, void (*handler)(sourceinfo_t *si, int parc, char *parv[]), struct service *logtarget)
 {
-	service_t *sptr;
+	struct service *sptr;
 	char internal_name[NICKLEN + 10];
 
 	snprintf(internal_name, sizeof internal_name, "static:%s", name);
@@ -396,9 +396,9 @@ service_t *service_add_static(const char *name, const char *user, const char *ho
 	return sptr;
 }
 
-service_t *service_find_any(void)
+struct service *service_find_any(void)
 {
-	service_t *sptr;
+	struct service *sptr;
 	mowgli_patricia_iteration_state_t state;
 
 	MOWGLI_PATRICIA_FOREACH(sptr, &state, services_name)
@@ -406,19 +406,19 @@ service_t *service_find_any(void)
 	return NULL;
 }
 
-service_t *service_find(const char *name)
+struct service *service_find(const char *name)
 {
 	return mowgli_patricia_retrieve(services_name, name);
 }
 
-service_t *service_find_nick(const char *nick)
+struct service *service_find_nick(const char *nick)
 {
 	return mowgli_patricia_retrieve(services_nick, nick);
 }
 
 void servtree_update(void *dummy)
 {
-	service_t *sptr;
+	struct service *sptr;
 	mowgli_patricia_iteration_state_t state;
 	user_t *u;
 
@@ -509,14 +509,14 @@ char *service_name(char *name)
 	return str;
 }
 
-void service_set_chanmsg(service_t *service, bool chanmsg)
+void service_set_chanmsg(struct service *service, bool chanmsg)
 {
 	return_if_fail(service != NULL);
 
 	service->chanmsg = chanmsg;
 }
 
-const char *service_resolve_alias(service_t *sptr, const char *context, const char *cmd)
+const char *service_resolve_alias(struct service *sptr, const char *context, const char *cmd)
 {
 	char fullname[256];
 	char *alias;
@@ -534,7 +534,7 @@ const char *service_resolve_alias(service_t *sptr, const char *context, const ch
 	return alias != NULL ? alias : cmd;
 }
 
-const char *service_set_access(service_t *sptr, const char *cmd, const char *oldaccess)
+const char *service_set_access(struct service *sptr, const char *cmd, const char *oldaccess)
 {
 	char *newaccess;
 
@@ -545,7 +545,7 @@ const char *service_set_access(service_t *sptr, const char *cmd, const char *old
 	return newaccess != NULL ? newaccess : oldaccess;
 }
 
-void service_bind_command(service_t *sptr, struct command *cmd)
+void service_bind_command(struct service *sptr, struct command *cmd)
 {
 	return_if_fail(sptr != NULL);
 	return_if_fail(cmd != NULL);
@@ -553,7 +553,7 @@ void service_bind_command(service_t *sptr, struct command *cmd)
 	command_add(cmd, sptr->commands);
 }
 
-void service_unbind_command(service_t *sptr, struct command *cmd)
+void service_unbind_command(struct service *sptr, struct command *cmd)
 {
 	return_if_fail(sptr != NULL);
 	return_if_fail(cmd != NULL);
@@ -563,7 +563,7 @@ void service_unbind_command(service_t *sptr, struct command *cmd)
 
 void service_named_bind_command(const char *svs, struct command *cmd)
 {
-	service_t *sptr = NULL;
+	struct service *sptr = NULL;
 
 	return_if_fail(svs != NULL);
 	return_if_fail(cmd != NULL);
@@ -577,7 +577,7 @@ void service_named_bind_command(const char *svs, struct command *cmd)
 
 void service_named_unbind_command(const char *svs, struct command *cmd)
 {
-	service_t *sptr = NULL;
+	struct service *sptr = NULL;
 
 	return_if_fail(svs != NULL);
 	return_if_fail(cmd != NULL);

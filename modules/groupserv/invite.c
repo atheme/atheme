@@ -24,7 +24,7 @@ static void gs_cmd_invite(sourceinfo_t *si, int parc, char *parv[])
 	char *group = parv[0];
 	char *user = parv[1];
 	char buf[BUFSIZE];
-	service_t *svs;
+	struct service *svs;
 
 	if (!group || !user)
 	{

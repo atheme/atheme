@@ -325,7 +325,7 @@ static void jsonrpc_command_success_nodata(sourceinfo_t *si, const char *message
 static bool jsonrpcmethod_command(void *conn, mowgli_list_t *params, char *id)
 {
 	myuser_t *mu;
-	service_t *svs;
+	struct service *svs;
 	struct command *cmd;
 	sourceinfo_t *si;
 	int newparc;

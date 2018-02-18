@@ -12,7 +12,7 @@ struct global_ {
 	char *text;
 };
 
-service_t *globsvs = NULL;
+struct service *globsvs = NULL;
 
 static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[]);
 static void gs_cmd_help(sourceinfo_t *si, const int parc, char *parv[]);
