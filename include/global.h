@@ -143,14 +143,15 @@ struct cnt
 
 extern struct cnt cnt;
 
-typedef struct claro_state_ {
+struct claro_state
+{
 	unsigned int node;
 	unsigned int event;
 	time_t currtime;
 	int maxfd;
-} claro_state_t;
+};
 
-extern claro_state_t claro_state;
+extern struct claro_state claro_state;
 
 #define CURRTIME claro_state.currtime
 

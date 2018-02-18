@@ -49,7 +49,7 @@ struct me me;
 struct cnt cnt;
 
 /* XXX */
-claro_state_t claro_state;
+struct claro_state claro_state;
 int runflags;
 
 char *config_file;
