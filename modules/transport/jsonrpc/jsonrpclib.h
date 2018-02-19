@@ -11,10 +11,11 @@
 
 typedef bool (*jsonrpc_method_t)(void *conn, mowgli_list_t *params, char *id);
 
-typedef struct {
+struct jsonrpc_sourceinfo
+{
     struct sourceinfo *base;
     char *id;
-} jsonrpc_sourceinfo_t;
+};
 
 extern char *jsonrpc_normalizeBuffer(const char *buf);
 

@@ -156,7 +156,7 @@ static bool jsonrpcmethod_login(void *conn, mowgli_list_t *params, char *id)
 
 		si = sourceinfo_create();
 
-		jsonrpc_sourceinfo_t *jsi = (jsonrpc_sourceinfo_t *)si;
+		struct jsonrpc_sourceinfo *jsi = (struct jsonrpc_sourceinfo *)si;
 
 		si->service = NULL;
 		si->sourcedesc = sourceip;
@@ -252,7 +252,7 @@ static void jsonrpc_command_fail(struct sourceinfo *si, enum cmd_faultcode code,
 		return;
 	newmessage = jsonrpc_normalizeBuffer(message);
 
-	jsonrpc_sourceinfo_t *jsi = (jsonrpc_sourceinfo_t *)si;
+	struct jsonrpc_sourceinfo *jsi = (struct jsonrpc_sourceinfo *)si;
 
 	jsonrpc_failure_string(cptr, code, newmessage, jsi->id);
 
@@ -271,7 +271,7 @@ static void jsonrpc_command_success_string(struct sourceinfo *si, const char *re
 	if (hd->sent_reply)
 		return;
 
-	jsonrpc_sourceinfo_t *jsi = (jsonrpc_sourceinfo_t *)si;
+	struct jsonrpc_sourceinfo *jsi = (struct jsonrpc_sourceinfo *)si;
 
 	jsonrpc_success_string(cptr, result, jsi->id);
 	hd->sent_reply = true;
@@ -407,7 +407,7 @@ static bool jsonrpcmethod_command(void *conn, mowgli_list_t *params, char *id)
 
 	si = sourceinfo_create();
 
-	jsonrpc_sourceinfo_t *jsi = (jsonrpc_sourceinfo_t *)si;
+	struct jsonrpc_sourceinfo *jsi = (struct jsonrpc_sourceinfo *)si;
 
 	si->smu = mu;
 	si->service = svs;
