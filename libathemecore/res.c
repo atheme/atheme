@@ -40,8 +40,6 @@
 static void res_readreply(struct connection *cptr);
 
 #define MAXPACKET      1024	/* rfc sez 512 but we expand names so ... */
-#define RES_MAXALIASES 35	/* maximum aliases allowed */
-#define RES_MAXADDRS   35	/* maximum addresses allowed */
 #define AR_TTL         600	/* TTL in seconds for dns cache entries */
 
 /* RFC 1104/1105 wasn't very helpful about what these fields
