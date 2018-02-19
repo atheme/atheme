@@ -389,7 +389,7 @@ static void db_h_cfmd(struct database_handle *db, const char *type)
 
 /*************************************************************************************/
 
-void chanfix_gather_init(chanfix_persist_record_t *rec)
+void chanfix_gather_init(struct chanfix_persist_record *rec)
 {
 	hook_add_db_write(write_chanfixdb);
 	hook_add_channel_add(chanfix_channel_add_ev);
@@ -418,7 +418,7 @@ void chanfix_gather_init(chanfix_persist_record_t *rec)
 	chanfix_gather_timer = mowgli_timer_add(base_eventloop, "chanfix_gather", chanfix_gather, NULL, CHANFIX_GATHER_INTERVAL);
 }
 
-void chanfix_gather_deinit(const enum module_unload_intent intent, chanfix_persist_record_t *rec)
+void chanfix_gather_deinit(const enum module_unload_intent intent, struct chanfix_persist_record *rec)
 {
 	hook_del_db_write(write_chanfixdb);
 	hook_del_channel_add(chanfix_channel_add_ev);

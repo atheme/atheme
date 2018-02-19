@@ -55,20 +55,21 @@ struct chanfix_oprecord
 	unsigned int age;
 };
 
-typedef struct chanfix_persist {
+struct chanfix_persist_record
+{
 	int version;
 
 	mowgli_heap_t *chanfix_channel_heap;
 	mowgli_heap_t *chanfix_oprecord_heap;
 
 	mowgli_patricia_t *chanfix_channels;
-} chanfix_persist_record_t;
+};
 
 extern struct service *chanfix;
 extern mowgli_patricia_t *chanfix_channels;
 
-extern void chanfix_gather_init(chanfix_persist_record_t *);
-extern void chanfix_gather_deinit(enum module_unload_intent, chanfix_persist_record_t *);
+extern void chanfix_gather_init(struct chanfix_persist_record *);
+extern void chanfix_gather_deinit(enum module_unload_intent, struct chanfix_persist_record *);
 
 extern void chanfix_oprecord_update(struct chanfix_channel *chan, user_t *u);
 extern void chanfix_oprecord_delete(struct chanfix_oprecord *orec);

@@ -12,7 +12,7 @@ mowgli_eventloop_timer_t *chanfix_autofix_timer = NULL;
 static void
 mod_init(struct module *const restrict m)
 {
-	chanfix_persist_record_t *rec = mowgli_global_storage_get("atheme.chanfix.main.persist");
+	struct chanfix_persist_record *rec = mowgli_global_storage_get("atheme.chanfix.main.persist");
 
 	chanfix_gather_init(rec);
 
@@ -42,7 +42,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent intent)
 {
-	chanfix_persist_record_t *rec = NULL;
+	struct chanfix_persist_record *rec = NULL;
 
 	hook_del_channel_can_register(chanfix_can_register);
 
@@ -55,7 +55,7 @@ mod_deinit(const enum module_unload_intent intent)
 	{
 		case MODULE_UNLOAD_INTENT_RELOAD:
 		{
-			rec = smalloc(sizeof(chanfix_persist_record_t));
+			rec = smalloc(sizeof(struct chanfix_persist_record));
 			rec->version = 1;
 
 			mowgli_global_storage_put("atheme.chanfix.main.persist", rec);
