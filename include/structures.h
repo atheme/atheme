@@ -105,6 +105,7 @@ struct sourceinfo;
 struct sourceinfo_vtable;
 
 // Defined in include/tools.h
+struct email_canonicalizer_item;
 struct logfile;
 
 // Defined in include/uid.h

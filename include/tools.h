@@ -127,11 +127,12 @@ extern void logcommand_external(struct service *svs, const char *type, struct co
 
 typedef void (*email_canonicalizer_t)(char email[static (EMAILLEN + 1)], void *user_data);
 
-typedef struct {
+struct email_canonicalizer_item
+{
 	email_canonicalizer_t func;
 	void *user_data;
 	mowgli_node_t node;
-} email_canonicalizer_item_t;
+};
 
 /* misc string stuff */
 extern char *random_string(size_t sz);

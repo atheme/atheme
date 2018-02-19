@@ -321,9 +321,9 @@ static void canonicalize_emails(void)
 void
 register_email_canonicalizer(email_canonicalizer_t func, void *user_data)
 {
-	email_canonicalizer_item_t *item;
+	struct email_canonicalizer_item *item;
 
-	item = smalloc(sizeof(email_canonicalizer_item_t));
+	item = smalloc(sizeof(struct email_canonicalizer_item));
 	item->func = func;
 	item->user_data = user_data;
 
@@ -339,7 +339,7 @@ unregister_email_canonicalizer(email_canonicalizer_t func, void *user_data)
 
 	MOWGLI_LIST_FOREACH_SAFE(n, tn, email_canonicalizers.head)
 	{
-		email_canonicalizer_item_t *item = n->data;
+		struct email_canonicalizer_item *item = n->data;
 
 		if (item->func == func && item->user_data == user_data)
 		{
@@ -365,7 +365,7 @@ stringref canonicalize_email(const char *email)
 
 	MOWGLI_LIST_FOREACH_SAFE(n, tn, email_canonicalizers.head)
 	{
-		email_canonicalizer_item_t *item = n->data;
+		struct email_canonicalizer_item *item = n->data;
 
 		item->func(buf, item->user_data);
 	}
