@@ -55,7 +55,7 @@ mod_deinit(const enum module_unload_intent intent)
 	{
 		case MODULE_UNLOAD_INTENT_RELOAD:
 		{
-			rec = smalloc(sizeof(struct chanfix_persist_record));
+			rec = smalloc(sizeof *rec);
 			rec->version = 1;
 
 			mowgli_global_storage_put("atheme.chanfix.main.persist", rec);

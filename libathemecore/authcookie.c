@@ -52,8 +52,7 @@ void authcookie_init(void)
  */
 struct authcookie *authcookie_create(struct myuser *mu)
 {
-	struct authcookie *au = mowgli_heap_alloc(authcookie_heap);
-
+	struct authcookie *const au = mowgli_heap_alloc(authcookie_heap);
 	au->ticket = random_string(AUTHCOOKIE_LENGTH);
 	au->myuser = mu;
 	au->expire = CURRTIME + 3600;

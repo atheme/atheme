@@ -45,18 +45,16 @@ mowgli_list_t svs_ignore_list;
  */
 struct svsignore *svsignore_add(const char *mask, const char *reason)
 {
-        struct svsignore *svsignore;
-        mowgli_node_t *n = mowgli_node_create();
-
-        svsignore = smalloc(sizeof(struct svsignore));
-
-        mowgli_node_add(svsignore, n, &svs_ignore_list);
+        struct svsignore *const svsignore = smalloc(sizeof *svsignore);
 
         svsignore->mask = sstrdup(mask);
         svsignore->settime = CURRTIME;
         svsignore->reason = sstrdup(reason);
-        cnt.svsignore++;
 
+        mowgli_node_t *n = mowgli_node_create();
+        mowgli_node_add(svsignore, n, &svs_ignore_list);
+
+        cnt.svsignore++;
         return svsignore;
 }
 

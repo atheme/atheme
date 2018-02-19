@@ -109,9 +109,7 @@ static inline size_t sharedheap_normalize_size(size_t size)
 
 static sharedheap_t *sharedheap_new(size_t size)
 {
-	sharedheap_t *s;
-
-	s = smalloc(sizeof(sharedheap_t));
+	sharedheap_t *const s = smalloc(sizeof *s);
 	atheme_object_init(atheme_object(s), NULL, (atheme_object_destructor_fn) sharedheap_destroy);
 
 	s->size = size;

@@ -80,7 +80,7 @@ static void db_h_be(struct database_handle *db, const char *type)
 	const char *creator = db_sread_word(db);
 	const char *reason = db_sread_str(db);
 
-	badmail_t *l = smalloc(sizeof(badmail_t));
+	badmail_t *const l = smalloc(sizeof *l);
 	l->mail = sstrdup(mail);
 	l->mail_ts = mail_ts;
 	l->creator = sstrdup(creator);
@@ -153,7 +153,7 @@ static void ns_cmd_badmail(struct sourceinfo *si, int parc, char *parv[])
 			}
 		}
 
-		l = smalloc(sizeof(badmail_t));
+		l = smalloc(sizeof *l);
 		l->mail = sstrdup(email);
 		l->mail_ts = CURRTIME;;
 		l->creator = sstrdup(get_source_name(si));

@@ -286,7 +286,7 @@ static void db_h_ex(struct database_handle *db, const char *type)
 	time_t expires = db_sread_time(db);
 	const char *reason = db_sread_str(db);
 
-	cexcept_t *c = (cexcept_t *)smalloc(sizeof(cexcept_t));
+	cexcept_t *const c = smalloc(sizeof *c);
 	c->ip = sstrdup(ip);
 	c->allowed = allowed;
 	c->warn = warn;
@@ -544,7 +544,7 @@ static void os_cmd_clones_addexempt(struct sourceinfo *si, int parc, char *parv[
 			return;
 		}
 
-		c = smalloc(sizeof(cexcept_t));
+		c = smalloc(sizeof *c);
 		c->ip = sstrdup(ip);
 		c->reason = sstrdup(rreason);
 		mowgli_node_add(c, mowgli_node_create(), &clone_exempts);

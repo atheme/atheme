@@ -352,7 +352,7 @@ struct logfile *logfile_new(const char *path, unsigned int log_mask)
 	static bool hooked = false;
 	static time_t lastfail = 0;
 	struct channel *c;
-	struct logfile *lf = scalloc(sizeof(struct logfile), 1);
+	struct logfile *const lf = smalloc(sizeof *lf);
 
 	if (!strcasecmp(path, "!snotices") || !strcasecmp(path, "!wallops"))
 	{

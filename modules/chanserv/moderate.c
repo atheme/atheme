@@ -47,12 +47,10 @@ static char *groupmemo;
 
 static csreq_t *csreq_create(const char *name, struct myentity *mt)
 {
-	csreq_t *cs;
-
 	return_val_if_fail(name != NULL, NULL);
 	return_val_if_fail(mt != NULL, NULL);
 
-	cs = smalloc(sizeof(csreq_t));
+	csreq_t *const cs = smalloc(sizeof *cs);
 	cs->name = sstrdup(name);
 	cs->mt = mt;
 	cs->ts = CURRTIME;

@@ -296,7 +296,7 @@ static void db_h_mm(struct database_handle *db, const char *type)
 
 	l = multimark_list(mu);
 
-	multimark_t *mm = smalloc(sizeof(multimark_t));
+	multimark_t *const mm = smalloc(sizeof *mm);
 
 	mm->setter_uid = sstrdup(setter_uid);
 	mm->setter_name = sstrdup(setter_name);
@@ -329,7 +329,7 @@ static void db_h_rm(struct database_handle *db, const char *type)
 
 	mowgli_list_t *l = restored_mark_list(nick);
 
-	restored_mark_t *rm = smalloc(sizeof(restored_mark_t));
+	restored_mark_t *rm = smalloc(sizeof *rm);
 
 	rm->account_uid = sstrdup(account_uid);
 	rm->account_name = sstrdup(account_name);
@@ -352,7 +352,6 @@ static void migrate_user(struct myuser *mu)
 	struct myuser *setter_user;
 
 	time_t time;
-	multimark_t *mm;
 
 	l = multimark_list(mu);
 	md = metadata_find(mu, "private:mark:setter");
@@ -369,7 +368,7 @@ static void migrate_user(struct myuser *mu)
 	md = metadata_find(mu, "private:mark:timestamp");
 	time = md != NULL ? atoi(md->value) : 0;
 
-	mm = smalloc(sizeof(multimark_t));
+	multimark_t *const mm = smalloc(sizeof *mm);
 
 	/*
 	 * "Was MARKED by nick (actual_account)"
@@ -465,7 +464,7 @@ static void nick_ungroup_hook(hook_user_req_t *hdata)
 	{
 		mm = n->data;
 
-		restored_mark_t *rm = smalloc(sizeof(restored_mark_t));
+		restored_mark_t *const rm = smalloc(sizeof *rm);
 		rm->account_uid = sstrdup(uid);
 		rm->nick = sstrdup(nick);
 		rm->account_name = sstrdup(account);
@@ -498,7 +497,7 @@ static void account_drop_hook(struct myuser *mu)
 	{
 		mm = n->data;
 
-		restored_mark_t *rm = smalloc(sizeof(restored_mark_t));
+		restored_mark_t *const rm = smalloc(sizeof *rm);
 		rm->account_uid = sstrdup(uid);
 		rm->nick = sstrdup(name);
 		rm->account_name = sstrdup(name);
@@ -536,8 +535,7 @@ static void account_register_hook(struct myuser *mu)
 	{
 		rm = n->data;
 
-		multimark_t *mm = smalloc(sizeof(multimark_t));
-
+		multimark_t *const mm = smalloc(sizeof *mm);
 		mm->setter_uid = sstrdup(rm->setter_uid);
 		mm->setter_name = sstrdup(rm->setter_name);
 		mm->restored_from_uid = rm->account_uid;
@@ -594,8 +592,7 @@ static void nick_group_hook(hook_user_req_t *hdata)
 			continue;
 		}
 
-		multimark_t *mm = smalloc(sizeof(multimark_t));
-
+		multimark_t *const mm = smalloc(sizeof *mm);
 		mm->setter_uid = sstrdup(rm->setter_uid);
 		mm->setter_name = sstrdup(rm->setter_name);
 		mm->restored_from_uid = rm->account_uid;
@@ -875,11 +872,9 @@ static void ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 
 		l = multimark_list(mu);
 
-		mm = smalloc(sizeof(multimark_t));
+		mm = smalloc(sizeof *mm);
 		mm->setter_uid = sstrdup(entity(si->smu)->id);
 		mm->setter_name = sstrdup(entity(si->smu)->name);
-		mm->restored_from_uid = NULL;
-		mm->restored_from_account = NULL;
 		mm->time = CURRTIME;
 		mm->number = get_multimark_max(mu);
 		mm->mark = sstrdup(info);

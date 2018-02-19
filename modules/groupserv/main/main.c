@@ -69,7 +69,7 @@ mod_deinit(const enum module_unload_intent intent)
 	{
 		case MODULE_UNLOAD_INTENT_RELOAD:
 		{
-			groupserv_persist_record_t *rec = smalloc(sizeof(groupserv_persist_record_t));
+			groupserv_persist_record_t *const rec = smalloc(sizeof *rec);
 
 			rec->version = 1;
 			rec->mygroup_heap = mygroup_heap;

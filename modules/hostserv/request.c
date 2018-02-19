@@ -123,7 +123,7 @@ static void db_h_hr(struct database_handle *db, const char *type)
 	time_t vhost_ts = db_sread_time(db);
 	const char *creator = db_sread_word(db);
 
-	hsreq_t *l = smalloc(sizeof(hsreq_t));
+	hsreq_t *const l = smalloc(sizeof *l);
 	l->nick = sstrdup(nick);
 	l->vhost = sstrdup(vhost);
 	l->vhost_ts = vhost_ts;
@@ -399,7 +399,8 @@ static void hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 		slog(LG_INFO, "VHOSTREQUEST:THROTTLED: %s", si->su->nick);
 		return;
 	}
-	l = smalloc(sizeof(hsreq_t));
+
+	l = smalloc(sizeof *l);
 	l->nick = sstrdup(target);
 	l->vhost = sstrdup(host);
 	l->vhost_ts = CURRTIME;;

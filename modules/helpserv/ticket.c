@@ -99,7 +99,7 @@ static void db_h_he(struct database_handle *db, const char *type)
 	const char *creator = db_sread_word(db);
 	const char *topic = db_sread_str(db);
 
-	ticket_t *l = smalloc(sizeof(ticket_t));
+	ticket_t *const l = smalloc(sizeof *l);
 	l->nick = strshare_get(nick);
 	l->ticket_ts = ticket_ts;
 	l->creator = sstrdup(creator);
@@ -214,7 +214,7 @@ static void helpserv_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 		slog(LG_INFO, "HELP:REQUEST:THROTTLED: %s", si->su->nick);
 		return;
 	}
-	l = smalloc(sizeof(ticket_t));
+	l = smalloc(sizeof *l);
 	l->nick = strshare_ref(entity(si->smu)->name);
 	l->ticket_ts = CURRTIME;;
 	l->creator = sstrdup(get_source_name(si));

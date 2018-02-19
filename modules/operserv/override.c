@@ -148,7 +148,6 @@ static int text_to_parv(char *text, int maxparc, char **parv)
 
 static void os_cmd_override(struct sourceinfo *si, int parc, char *parv[])
 {
-	cooked_sourceinfo_t *o_si;
 	struct myuser *mu = NULL;
 	struct service *svs;
 	struct service *memosvs;
@@ -224,12 +223,10 @@ static void os_cmd_override(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	o_si = smalloc(sizeof(cooked_sourceinfo_t));
-	o_si->si.su = NULL;
+	cooked_sourceinfo_t *const o_si = smalloc(sizeof *o_si);
 	o_si->si.smu = mu;
 	o_si->si.service = svs;
 	o_si->si.v = &override_vtable;
-	o_si->si.connection = NULL;
 	o_si->parent_si = atheme_object_ref(si);
 
 	atheme_object_init(atheme_object(o_si), NULL, (atheme_object_destructor_fn) override_sourceinfo_dispose);

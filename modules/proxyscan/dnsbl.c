@@ -200,7 +200,7 @@ static void ps_cmd_dnsblexempt(struct sourceinfo *si, int parc, char *parv[])
 			}
 		}
 
-		de = smalloc(sizeof(dnsbl_exempt_t));
+		de = smalloc(sizeof *de);
 		de->exempt_ts = CURRTIME;;
 		de->creator = sstrdup(get_source_name(si));
 		de->reason = sstrdup(reason);
@@ -364,7 +364,7 @@ static void initiate_blacklist_dnsquery(struct Blacklist *blptr, struct user *u)
 	if (sscanf(u->ip, "%d.%d.%d.%d", &ip[3], &ip[2], &ip[1], &ip[0]) != 4)
 		return;
 
-	struct BlacklistClient *blcptr = smalloc(sizeof(struct BlacklistClient));
+	struct BlacklistClient *blcptr = smalloc(sizeof *blcptr);
 
 	blcptr->blacklist = atheme_object_ref(blptr);
 	blcptr->u = u;
@@ -393,7 +393,7 @@ static struct Blacklist *new_blacklist(char *name)
 
 	if (blptr == NULL)
 	{
-		blptr = smalloc(sizeof(struct Blacklist));
+		blptr = smalloc(sizeof *blptr);
 		atheme_object_init(atheme_object(blptr), "proxyscan dnsbl", NULL);
 		mowgli_node_add(atheme_object_ref(blptr), &blptr->node, &blacklist_list);
 	}
@@ -586,8 +586,7 @@ static void db_h_ble(struct database_handle *db, const char *type)
 	const char *creator = db_sread_word(db);
 	const char *reason = db_sread_word(db);
 
-	dnsbl_exempt_t *de = smalloc(sizeof(dnsbl_exempt_t));
-
+	dnsbl_exempt_t *const de = smalloc(sizeof *de);
 	de->ip = sstrdup(ip);
 	de->exempt_ts = exempt_ts;
 	de->creator = sstrdup(creator);

@@ -321,9 +321,7 @@ static void canonicalize_emails(void)
 void
 register_email_canonicalizer(email_canonicalizer_fn func, void *user_data)
 {
-	struct email_canonicalizer_item *item;
-
-	item = smalloc(sizeof(struct email_canonicalizer_item));
+	struct email_canonicalizer_item *const item = smalloc(sizeof *item);
 	item->func = func;
 	item->user_data = user_data;
 

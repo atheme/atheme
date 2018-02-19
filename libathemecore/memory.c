@@ -24,75 +24,73 @@
 #include "atheme.h"
 
 #ifndef SIGUSR1
-# define RAISE_EXCEPTION abort()
+#  define RAISE_EXCEPTION       abort()
 #else
-# define RAISE_EXCEPTION raise(SIGUSR1)
+#  define RAISE_EXCEPTION       raise(SIGUSR1)
 #endif
 
-/* does malloc()'s job and dies if malloc() fails
+/* does malloc()'s job and dies if it fails
  *
- * Note that this function MUST RETURN ZERO-INITIALIZED MEMORY
+ * Note that this function *MUST* RETURN ZERO-INITIALIZED MEMORY
  * Parts of the codebase assume this is so and will malfunction otherwise
  */
-void *smalloc(size_t size)
+void *
+smalloc(const size_t len)
 {
-        void *buf = calloc(1, size);
-
-        if (!buf)
-                RAISE_EXCEPTION;
-        return buf;
+	return scalloc(1, len);
 }
 
-/* does calloc()'s job and dies if calloc() fails */
-void *scalloc(size_t elsize, size_t els)
+/* does calloc()'s job and dies if it fails
+ *
+ * Note that this function *MUST* RETURN ZERO-INITIALIZED MEMORY
+ * Parts of the codebase assume this is so and will malfunction otherwise
+ */
+void *
+scalloc(const size_t num, const size_t len)
 {
-        void *buf = calloc(elsize, els);
+	void *const buf = calloc(num, len);
 
-        if (!buf)
-                RAISE_EXCEPTION;
-        return buf;
+	if (! buf)
+		RAISE_EXCEPTION;
+
+	return buf;
 }
 
-/* does realloc()'s job and dies if realloc() fails */
-void *srealloc(void *oldptr, size_t newsize)
+/* does realloc()'s job and dies if it fails */
+void *
+srealloc(void *const restrict ptr, const size_t len)
 {
-        void *buf = realloc(oldptr, newsize);
+	void *const buf = realloc(ptr, len);
 
-        if (!buf)
-                RAISE_EXCEPTION;
-        return buf;
+	if (len && ! buf)
+		RAISE_EXCEPTION;
+
+	return buf;
 }
 
 /* does strdup()'s job, only with the above memory functions */
-char *sstrdup(const char *s)
+char *
+sstrdup(const char *const restrict ptr)
 {
-	char *t;
-
-	if (s == NULL)
+	if (! ptr)
 		return NULL;
 
-	t = smalloc(strlen(s) + 1);
+	const size_t len = strlen(ptr);
+	char *const buf = smalloc(len + 1);
 
-	strcpy(t, s);
-	return t;
+	(void) memcpy(buf, ptr, len);
+	return buf;
 }
 
 /* does strndup()'s job, only with the above memory functions */
-char *sstrndup(const char *s, size_t len)
+char *
+sstrndup(const char *const restrict ptr, const size_t len)
 {
-	char *t;
-
-	if (s == NULL)
+	if (! ptr)
 		return NULL;
 
-	t = smalloc(len + 1);
+	char *const buf = smalloc(len + 1);
 
-	mowgli_strlcpy(t, s, len + 1);
-	return t;
+	(void) mowgli_strlcpy(buf, ptr, len + 1);
+	return buf;
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

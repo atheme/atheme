@@ -99,7 +99,7 @@ const char *translation_get(const char *str)
  */
 void itranslation_create(const char *str, const char *trans)
 {
-	translation_t *t = smalloc(sizeof(translation_t));
+	translation_t *const t = smalloc(sizeof *t);
 
 	t->name = sstrdup(str);
 	t->replacement = sstrdup(trans);
@@ -146,7 +146,7 @@ void itranslation_destroy(const char *str)
 void translation_create(const char *str, const char *trans)
 {
 	char buf[BUFSIZE];
-	translation_t *t = smalloc(sizeof(translation_t));
+	translation_t *const t = smalloc(sizeof *t);
 
 	mowgli_strlcpy(buf, str, BUFSIZE);
 	replace(buf, BUFSIZE, "\\2", "\2");
@@ -226,11 +226,13 @@ language_add(const char *name)
 
 	if (name == NULL || !strcmp(name, "default"))
 		return NULL;
+
 	lang = language_find(name);
 	if (lang != NULL)
 		return lang;
+
 	slog(LG_DEBUG, "language_add(): %s", name);
-	lang = smalloc(sizeof(*lang));
+	lang = smalloc(sizeof *lang);
 	lang->name = sstrdup(name);
 	mowgli_node_add(lang, &lang->node, &language_list);
 	return lang;

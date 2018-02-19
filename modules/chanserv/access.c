@@ -281,7 +281,7 @@ static int append_global_template(const char *key, void *data, void *privdata)
 	if ((t = find_template(ti->l, key)) != NULL)
 		return 0;
 
-	t = smalloc(sizeof(template_t));
+	t = smalloc(sizeof *t);
 	mowgli_strlcpy(t->name, key, sizeof(t->name));
 	t->level = get_template_flags(ti->mc, key);
 	mowgli_node_add(t, &t->node, ti->l);
@@ -329,7 +329,7 @@ static mowgli_list_t *build_template_list(struct mychan *mc)
 			if (s != NULL)
 				*s = '\0';
 
-			t = smalloc(sizeof(template_t));
+			t = smalloc(sizeof *t);
 			mowgli_strlcpy(t->name, flagname, sizeof(t->name));
 			t->level = flags_to_bitmask(ss, 0);
 			mowgli_node_add(t, &t->node, l);

@@ -224,9 +224,7 @@ struct childproc
  */
 void childproc_add(pid_t pid, const char *desc, void (*cb)(pid_t pid, int status, void *data), void *data)
 {
-	struct childproc *p;
-
-	p = smalloc(sizeof(*p));
+	struct childproc *const p = smalloc(sizeof *p);
 	p->pid = pid;
 	p->desc = sstrdup(desc);
 	p->cb = cb;

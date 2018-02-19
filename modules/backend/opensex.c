@@ -270,20 +270,17 @@ static struct database_handle *opensex_db_open_read(const char *filename)
 		return NULL;
 	}
 
-	rs = scalloc(sizeof(opensex_t), 1);
+	rs = smalloc(sizeof *rs);
 	rs->grver = 1;
-	rs->buf = scalloc(512, 1);
 	rs->bufsize = 512;
-	rs->token = NULL;
+	rs->buf = smalloc(rs->bufsize);
 	rs->f = f;
 
-	db = scalloc(sizeof(struct database_handle), 1);
+	db = smalloc(sizeof *db);
 	db->priv = rs;
 	db->vt = &opensex_vt;
 	db->txn = DB_READ;
 	db->file = sstrdup(path);
-	db->line = 0;
-	db->token = 0;
 
 	return db;
 }
@@ -326,17 +323,15 @@ static struct database_handle *opensex_db_open_write(const char *filename)
 		return NULL;
 	}
 
-	rs = scalloc(sizeof(opensex_t), 1);
+	rs = smalloc(sizeof *rs);
 	rs->f = f;
 	rs->grver = 1;
 
-	db = scalloc(sizeof(struct database_handle), 1);
+	db = smalloc(sizeof *db);
 	db->priv = rs;
 	db->vt = &opensex_vt;
 	db->txn = DB_WRITE;
 	db->file = sstrdup(bpath);
-	db->line = 0;
-	db->token = 0;
 
 	db_start_row(db, "GRVER");
 	db_write_int(db, rs->grver);

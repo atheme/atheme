@@ -145,7 +145,7 @@ char *jsonrpc_normalizeBuffer(const char *buf)
 	int i, len, j = 0;
 
 	len = strlen(buf);
-	newbuf = (char *)smalloc(sizeof(char) * len + 1);
+	newbuf = smalloc(sizeof(char) * len + 1);
 
 	for (i = 0; i < len; i++)
 	{

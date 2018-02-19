@@ -145,9 +145,8 @@ static void ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_SET, "SEND: to \2%s\2", entity(tmu)->name);
 
 		/* Malloc and populate struct */
-		memo = smalloc(sizeof(struct mymemo));
+		memo = smalloc(sizeof *memo);
 		memo->sent = CURRTIME;
-		memo->status = 0;
 		mowgli_strlcpy(memo->sender, entity(si->smu)->name, sizeof memo->sender);
 		mowgli_strlcpy(memo->text, m, sizeof memo->text);
 

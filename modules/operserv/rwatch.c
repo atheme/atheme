@@ -164,8 +164,7 @@ static void load_rwatchdb(char *path)
 				; /* erroneous, don't add */
 			else
 			{
-				rw = (rwatch_t *)smalloc(sizeof(rwatch_t));
-
+				rw = smalloc(sizeof *rw);
 				rw->regex = sstrdup(regex);
 				rw->reflags = atoi(reflagsstr);
 				rw->re = regex_create(rw->regex, rw->reflags);
@@ -215,7 +214,7 @@ static void db_h_rw(struct database_handle *db, const char *type)
 	int reflags = db_sread_uint(db);
 	const char *regex = db_sread_str(db);
 
-	rwread = (rwatch_t *)smalloc(sizeof(rwatch_t));
+	rwread = smalloc(sizeof *rwread);
 	rwread->regex = sstrdup(regex);
 	rwread->reflags = reflags;
 	rwread->re = regex_create(rwread->regex, rwread->reflags);
@@ -262,7 +261,6 @@ static void os_cmd_rwatch_add(struct sourceinfo *si, int parc, char *parv[])
 	char *pattern;
 	char *reason;
 	struct atheme_regex *regex;
-	rwatch_t *rw;
 	int flags;
 	char *args = parv[0];
 
@@ -309,7 +307,7 @@ static void os_cmd_rwatch_add(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	rw = smalloc(sizeof(rwatch_t));
+	rwatch_t *const rw = smalloc(sizeof *rw);
 	rw->regex = sstrdup(pattern);
 	rw->reflags = flags;
 	rw->reason = sstrdup(reason);

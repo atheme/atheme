@@ -81,7 +81,6 @@ table_new(const char *fmt, ...)
 {
 	va_list vl;
 	char buf[BUFSIZE];
-	struct atheme_table *out;
 
 	return_val_if_fail(fmt != NULL, NULL);
 
@@ -93,7 +92,7 @@ table_new(const char *fmt, ...)
 	}
 	va_end(vl);
 
-	out = scalloc(sizeof(struct atheme_table), 1);
+	struct atheme_table *const out = smalloc(sizeof *out);
 	atheme_object_init(&out->parent, buf, table_destroy);
 
 	return out;
@@ -115,12 +114,9 @@ table_new(const char *fmt, ...)
  */
 struct atheme_table_row *table_row_new(struct atheme_table *t)
 {
-	struct atheme_table_row *out;
-
 	return_val_if_fail(t != NULL, NULL);
 
-	out = scalloc(sizeof(struct atheme_table_row), 1);
-
+	struct atheme_table_row *const out = smalloc(sizeof *out);
 	mowgli_node_add(out, mowgli_node_create(), &t->rows);
 
 	return out;
@@ -142,13 +138,11 @@ struct atheme_table_row *table_row_new(struct atheme_table *t)
  */
 void table_cell_associate(struct atheme_table_row *r, const char *name, const char *value)
 {
-	struct atheme_table_cell *c;
-
 	return_if_fail(r != NULL);
 	return_if_fail(name != NULL);
 	return_if_fail(value != NULL);
 
-	c = scalloc(sizeof(struct atheme_table_cell), 1);
+	struct atheme_table_cell *const c = smalloc(sizeof *c);
 
 	c->name = sstrdup(name);
 	c->value = sstrdup(value);
@@ -218,7 +212,6 @@ void table_render(struct atheme_table *t, void (*callback)(const char *line, voi
 	}
 
 	buf = smalloc(bufsz);
-	*buf = '\0';
 
 	/* start outputting the header. */
 	callback("", data);

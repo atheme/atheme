@@ -39,19 +39,18 @@ void fix_global_template_flags(void)
 
 void set_global_template_flags(const char *name, unsigned int flags)
 {
-	struct default_template *def_t;
-
 	if (global_template_dict == NULL)
 		global_template_dict = mowgli_patricia_create(strcasecanon);
 
-	def_t = mowgli_patricia_retrieve(global_template_dict, name);
+	struct default_template *def_t = mowgli_patricia_retrieve(global_template_dict, name);
+
 	if (def_t != NULL)
 	{
 		def_t->flags = flags;
 		return;
 	}
 
-	def_t = smalloc(sizeof(struct default_template));
+	def_t = smalloc(sizeof *def_t);
 	def_t->flags = flags;
 	mowgli_patricia_add(global_template_dict, name, def_t);
 

@@ -299,7 +299,7 @@ static void rem_request(struct reslist *request)
  */
 static struct reslist *make_request(struct res_dns_query *query)
 {
-	struct reslist *request = smalloc(sizeof(struct reslist));
+	struct reslist *const request = smalloc(sizeof *request);
 
 	request->sentat = CURRTIME;
 	request->retries = 3;
@@ -446,7 +446,7 @@ static void do_query_name(struct res_dns_query *query, const char *name, struct 
 	if (request == NULL)
 	{
 		request = make_request(query);
-		request->name = (char *)smalloc(strlen(host_name) + 1);
+		request->name = smalloc(strlen(host_name) + 1);
 		strcpy(request->name, host_name);
 	}
 
@@ -467,7 +467,7 @@ static void do_query_number(struct res_dns_query *query, const union sockaddr_an
 	{
 		request = make_request(query);
 		memcpy(&request->addr, addr, sizeof(union sockaddr_any));
-		request->name = (char *)smalloc(IRCD_RES_HOSTLEN + 1);
+		request->name = smalloc(IRCD_RES_HOSTLEN + 1);
 	}
 
 	if (addr->sa.sa_family == AF_INET)
@@ -868,10 +868,9 @@ static void res_readreply(struct connection *cptr)
 
 static struct res_dns_reply *make_dnsreply(struct reslist *request)
 {
-	struct res_dns_reply *cp;
 	return_val_if_fail(request != 0, NULL);
 
-	cp = (struct res_dns_reply *)smalloc(sizeof(struct res_dns_reply));
+	struct res_dns_reply *const cp = smalloc(sizeof *cp);
 
 	cp->h_name = request->name;
 	memcpy(&cp->addr, &request->addr, sizeof(cp->addr));

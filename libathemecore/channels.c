@@ -110,7 +110,7 @@ struct channel *channel_add(const char *name, time_t ts, struct server *creator)
 	c->topic_setter = NULL;
 
 	if (ignore_mode_list_size != 0)
-		c->extmodes = scalloc(sizeof(char *), ignore_mode_list_size);
+		c->extmodes = scalloc(ignore_mode_list_size, sizeof(char *));
 
 	c->bans.head = NULL;
 	c->bans.tail = NULL;

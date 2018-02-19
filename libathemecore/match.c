@@ -587,14 +587,14 @@ struct atheme_regex *regex_create(char *pattern, int flags)
 {
 	static char errmsg[BUFSIZE];
 	int errnum;
-	struct atheme_regex *preg;
 
 	if (pattern == NULL)
 	{
 		return NULL;
 	}
 
-	preg = smalloc(sizeof(struct atheme_regex));
+	struct atheme_regex *const preg = smalloc(sizeof *preg);
+
 	if (flags & AREGEX_PCRE)
 	{
 #ifdef HAVE_PCRE

@@ -150,11 +150,10 @@ static void ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])
 		{
 			/* should have some function for send here...  ask nenolod*/
 			memo = (struct mymemo *)n->data;
-			newmemo = smalloc(sizeof(struct mymemo));
+			newmemo = smalloc(sizeof *newmemo);
 
 			/* Create memo */
 			newmemo->sent = CURRTIME;
-			newmemo->status = 0;
 			mowgli_strlcpy(newmemo->sender, entity(si->smu)->name, sizeof newmemo->sender);
 			mowgli_strlcpy(newmemo->text, memo->text, sizeof newmemo->text);
 

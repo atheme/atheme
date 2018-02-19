@@ -475,9 +475,8 @@ static void db_h_bot(struct database_handle *db, const char *type)
 	int private = db_sread_int(db);
 	time_t registered = db_sread_time(db);
 	const char *real = db_sread_str(db);
-	struct botserv_bot *bot;
 
-	bot = scalloc(sizeof(struct botserv_bot), 1);
+	struct botserv_bot *const bot = smalloc(sizeof *bot);
 	bot->nick = sstrdup(nick);
 
 	if (!is_valid_username(user))
@@ -681,7 +680,6 @@ static void bs_cmd_change(struct sourceinfo *si, int parc, char *parv[])
 /* ADD nick user host real */
 static void bs_cmd_add(struct sourceinfo *si, int parc, char *parv[])
 {
-	struct botserv_bot *bot;
 	char buf[BUFSIZE];
 
 	if (parc < 4)
@@ -731,12 +729,11 @@ static void bs_cmd_add(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	bot = scalloc(sizeof(struct botserv_bot), 1);
+	struct botserv_bot *const bot = smalloc(sizeof *bot);
 	bot->nick = sstrdup(parv[0]);
 	bot->user = sstrndup(parv[1], USERLEN);
 	bot->host = sstrdup(parv[2]);
 	bot->real = sstrdup(buf);
-	bot->private = false;
 	bot->registered = CURRTIME;
 	bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler, chansvs.me);
 	service_set_chanmsg(bot->me, true);

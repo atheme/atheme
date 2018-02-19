@@ -85,10 +85,9 @@ void sendq_add(struct connection * cptr, char *buf, size_t len)
 
 	while (len > 0)
 	{
-		sq = smalloc(sizeof(struct sendq));
-		sq->firstused = sq->firstfree = 0;
+		sq = smalloc(sizeof *sq);
 		mowgli_node_add(sq, &sq->node, &cptr->sendq);
-		l = SENDQSIZE - sq->firstfree;
+		l = SENDQSIZE;
 		if (l > len)
 			l = len;
 		memcpy(sq->buf + sq->firstfree, buf + pos, l);
@@ -238,8 +237,7 @@ void recvq_put(struct connection *cptr)
 	}
 	if (sq == NULL)
 	{
-		sq = smalloc(sizeof(struct sendq));
-		sq->firstused = sq->firstfree = 0;
+		sq = smalloc(sizeof *sq);
 		mowgli_node_add(sq, &sq->node, &cptr->recvq);
 		l = SENDQSIZE;
 	}

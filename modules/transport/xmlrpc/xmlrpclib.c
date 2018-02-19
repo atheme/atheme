@@ -151,13 +151,9 @@ int xmlrpc_register_method(const char *name, XMLRPCMethodFunc func)
 
 static XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func)
 {
-	XMLRPCCmd *xml = NULL;
-	xml = smalloc(sizeof(XMLRPCCmd));
+	XMLRPCCmd *const xml = smalloc(sizeof *xml);
 	xml->name = sstrdup(name);
 	xml->func = func;
-	xml->mod_name = NULL;
-	xml->core = 0;
-	xml->next = NULL;
 	return xml;
 }
 
@@ -301,7 +297,6 @@ static char *xmlrpc_method(char *buffer)
 		namelen = p - data;
 		name = smalloc(namelen + 1);
 		memcpy(name, data, namelen);
-		name[namelen] = '\0';
 		return name;
 	}
 	return NULL;
@@ -609,7 +604,7 @@ char *xmlrpc_normalizeBuffer(const char *buf)
 	int i, len, j = 0;
 
 	len = strlen(buf);
-	newbuf = (char *)smalloc(sizeof(char) * len + 1);
+	newbuf = smalloc(sizeof(char) * len + 1);
 
 	for (i = 0; i < len; i++)
 	{

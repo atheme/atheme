@@ -49,7 +49,7 @@ static void os_cmd_rnc(struct sourceinfo *si, int parc, char *parv[])
 			rnc->count++;
 		else
 		{
-			rnc = smalloc(sizeof(rnc_t));
+			rnc = smalloc(sizeof *rnc);
 			rnc->gecos = u->gecos;
 			rnc->count = 1;
 			mowgli_patricia_add(realnames, rnc->gecos, rnc);

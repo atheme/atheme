@@ -128,7 +128,7 @@ static void db_h_li(struct database_handle *db, const char *type)
 	time_t info_ts = db_sread_time(db);
 	const char *story = db_sread_str(db);
 
-	logoninfo_t *l = smalloc(sizeof(logoninfo_t));
+	logoninfo_t *const l = smalloc(sizeof *l);
 	l->nick = strshare_get(nick);
 	l->subject = sstrdup(subject);
 	l->info_ts = info_ts;
@@ -143,7 +143,7 @@ static void db_h_lio(struct database_handle *db, const char *type)
 	time_t info_ts = db_sread_time(db);
 	const char *story = db_sread_str(db);
 
-	operlogoninfo_t *o = smalloc(sizeof(operlogoninfo_t));
+	operlogoninfo_t *const o = smalloc(sizeof *o);
 	o->nick = strshare_get(nick);
 	o->subject = sstrdup(subject);
 	o->info_ts = info_ts;
@@ -310,7 +310,7 @@ static void is_cmd_post(struct sourceinfo *si, int parc, char *parv[])
 
 	if (imp == 0)
 	{
-		o = smalloc(sizeof(operlogoninfo_t));
+		o = smalloc(sizeof *o);
 		o->nick = strshare_ref(entity(si->smu)->name);
 		o->info_ts = CURRTIME;
 		o->story = sstrdup(story);
@@ -322,7 +322,7 @@ static void is_cmd_post(struct sourceinfo *si, int parc, char *parv[])
 
 	if (imp > 0)
 	{
-		l = smalloc(sizeof(logoninfo_t));
+		l = smalloc(sizeof *l);
 		l->nick = strshare_ref(entity(si->smu)->name);
 		l->info_ts = CURRTIME;
 		l->story = sstrdup(story);

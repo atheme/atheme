@@ -207,7 +207,7 @@ static void flatfile_db_load(const char *filename)
 			if (!sender || !mtime || !text)
 				continue;
 
-			mz = smalloc(sizeof(struct mymemo));
+			mz = smalloc(sizeof *mz);
 
 			mowgli_strlcpy(mz->sender, sender, sizeof mz->sender);
 			mowgli_strlcpy(mz->text, text, sizeof mz->text);

@@ -131,23 +131,13 @@ sasl_scramsha_attrlist_free(scram_attr_list *const restrict attrs)
 }
 
 static unsigned int
-mech_start(struct sasl_session *const restrict p, void ATHEME_VATTR_UNUSED **const restrict out,
-           size_t ATHEME_VATTR_UNUSED *const restrict out_len)
-{
-	p->mechdata = smalloc(sizeof(struct scramsha_session));
-
-	return ASASL_MORE;
-}
-
-static unsigned int
 mech_step_clientfirst(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
                       void **const restrict out, size_t *const restrict outlen, const unsigned int prf)
 {
 	if (! (in && inlen))
 		return ASASL_ERROR;
 
-	struct scramsha_session *const s = p->mechdata;
-
+	struct scramsha_session *s = NULL;
 	const char *const header = in;
 	const char *message = in;
 
@@ -269,41 +259,54 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 
 	(void) slog(LG_DEBUG, "%s: parsed authcid '%s'", __func__, authcid);
 
-	if (! sasl_core_functions->authcid_can_login(p, authcid, &s->mu))
+	struct myuser *mu = NULL;
+
+	if (! sasl_core_functions->authcid_can_login(p, authcid, &mu))
 	{
 		(void) slog(LG_DEBUG, "%s: authcid_can_login failed", __func__);
 		goto error;
 	}
+	if (! mu)
+	{
+		(void) slog(LG_ERROR, "%s: authcid_can_login did not set 'mu' (BUG)", __func__);
+		goto error;
+	}
 
-	if (! (s->mu->flags & MU_CRYPTPASS))
+	if (! (mu->flags & MU_CRYPTPASS))
 	{
 		(void) slog(LG_DEBUG, "%s: user's password is not encrypted", __func__);
 		goto error;
 	}
 
-	if (s->mu->flags & MU_NOPASSWORD)
+	if (mu->flags & MU_NOPASSWORD)
 	{
 		(void) slog(LG_DEBUG, "%s: user has NOPASSWORD flag set", __func__);
 		goto error;
 	}
 
-	if (! pbkdf2v2_scram_functions->dbextract(s->mu->pass, &s->db))
+	struct pbkdf2v2_dbentry db;
+
+	if (! pbkdf2v2_scram_functions->dbextract(mu->pass, &db))
 		// User's password hash is not in a compatible (PBKDF2 v2) format
 		goto error;
 
-	if (s->db.a != prf)
+	if (db.a != prf)
 	{
-		(void) slog(LG_DEBUG, "%s: PRF ID mismatch: server(%u) != client(%u)", __func__, s->db.a, prf);
+		(void) slog(LG_DEBUG, "%s: PRF ID mismatch: server(%u) != client(%u)", __func__, db.a, prf);
 		goto error;
 	}
 
 	// These cannot fail
+	s = smalloc(sizeof *s);
 	s->c_gs2_len = (size_t) (message - header);
 	s->c_gs2_buf = sstrndup(header, s->c_gs2_len);
 	s->c_msg_len = inlen - s->c_gs2_len;
 	s->c_msg_buf = sstrndup(message, s->c_msg_len);
 	s->cn = sstrdup(input['r']);
 	s->sn = random_string(NONCE_LENGTH);
+	s->mu = mu;
+	(void) memcpy(&s->db, &db, sizeof db);
+	p->mechdata = s;
 
 	// Construct server-first-message
 	char response[SASL_C2S_MAXLEN];
@@ -329,7 +332,10 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 
 error:
 	(void) sasl_scramsha_attrlist_free(&input);
-	s->step = SCRAMSHA_STEP_ERRORED;
+
+	if (s)
+		s->step = SCRAMSHA_STEP_ERRORED;
+
 	return ASASL_ERROR;
 }
 
@@ -590,7 +596,7 @@ mech_finish(struct sasl_session *const restrict p)
 static struct sasl_mechanism sasl_scramsha_mech_sha1 = {
 
 	.name           = "SCRAM-SHA-1",
-	.mech_start     = &mech_start,
+	.mech_start     = NULL,
 	.mech_step      = &mech_step_sha1,
 	.mech_finish    = &mech_finish,
 };
@@ -598,7 +604,7 @@ static struct sasl_mechanism sasl_scramsha_mech_sha1 = {
 static struct sasl_mechanism sasl_scramsha_mech_sha2_256 = {
 
 	.name           = "SCRAM-SHA-256",
-	.mech_start     = &mech_start,
+	.mech_start     = NULL,
 	.mech_step      = &mech_step_sha2_256,
 	.mech_finish    = &mech_finish,
 };

@@ -10,32 +10,32 @@
 
 struct taint_reason
 {
+	mowgli_node_t node;
+	char buf[BUFSIZE];
 	char condition[BUFSIZE];
 	char file[BUFSIZE];
 	int line;
-	char buf[BUFSIZE];
-	mowgli_node_t node;
 };
 
 extern mowgli_list_t taint_list;
 
-#define IS_TAINTED	MOWGLI_LIST_LENGTH(&taint_list)
-#define TAINT_ON(cond, reason) \
-	if ((cond))						\
-	{							\
-		struct taint_reason *tr;			\
-		tr = scalloc(sizeof(struct taint_reason), 1);	\
-		mowgli_strlcpy(tr->condition, #cond, BUFSIZE);	\
-		mowgli_strlcpy(tr->file, __FILE__, BUFSIZE);	\
-		tr->line = __LINE__;				\
-		mowgli_strlcpy(tr->buf, (reason), BUFSIZE);	\
-		mowgli_node_add(tr, &tr->node, &taint_list);	\
-		slog(LG_ERROR, "TAINTED: %s", (reason));	\
-		if (!config_options.allow_taint)		\
-		{						\
-			slog(LG_ERROR, "exiting due to taint");	\
-			exit(EXIT_FAILURE);			\
-		}						\
-	}
+#define IS_TAINTED      MOWGLI_LIST_LENGTH(&taint_list)
+
+#define TAINT_ON(cond, reason)                                                          \
+        if ((cond))                                                                     \
+        {                                                                               \
+                struct taint_reason *const tr = smalloc(sizeof *tr);                    \
+                (void) mowgli_strlcpy(tr->buf, (reason), sizeof tr->buf);               \
+                (void) mowgli_strlcpy(tr->condition, #cond, sizeof tr->condition);      \
+                (void) mowgli_strlcpy(tr->file, __FILE__, sizeof tr->file);             \
+                tr->line = __LINE__;                                                    \
+                (void) mowgli_node_add(tr, &tr->node, &taint_list);                     \
+                (void) slog(LG_ERROR, "TAINTED: %s", (reason));                         \
+                if (! config_options.allow_taint)                                       \
+                {                                                                       \
+                        slog(LG_ERROR, "exiting due to taint");                         \
+                        exit(EXIT_FAILURE);                                             \
+                }                                                                       \
+        }
 
 #endif

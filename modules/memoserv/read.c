@@ -99,9 +99,8 @@ static void ms_cmd_read(struct sourceinfo *si, int parc, char *parv[])
 					if ( (tmu != NULL) && (tmu->memos.count < me.mdlimit) && strcasecmp(si->service->nick, memo->sender))
 					{
 						/* Malloc and populate memo struct */
-						receipt = smalloc(sizeof(struct mymemo));
+						receipt = smalloc(sizeof *receipt);
 						receipt->sent = CURRTIME;
-						receipt->status = 0;
 						mowgli_strlcpy(receipt->sender, si->service->nick, sizeof receipt->sender);
 						snprintf(receipt->text, sizeof receipt->text, "%s has read a memo from you sent at %s", entity(si->smu)->name, strfbuf);
 

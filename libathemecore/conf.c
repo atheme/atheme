@@ -832,7 +832,6 @@ static void free_cstructs(struct me *mesrc)
 
 bool conf_rehash(void)
 {
-	struct me *hold_me;	/* and keep_me_warm; */
 	mowgli_config_file_t *cfp;
 
 	/* we're rehashing */
@@ -847,7 +846,7 @@ bool conf_rehash(void)
 		return false;
 	}
 
-	hold_me = scalloc(sizeof(struct me), 1);
+	struct me *const hold_me = smalloc(sizeof *hold_me);
 	copy_me(&me, hold_me);
 
 	/* reset everything */

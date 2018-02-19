@@ -333,13 +333,11 @@ static void httpd_closehandler(struct connection *cptr)
 static void do_listen(struct connection *cptr)
 {
 	struct connection *newptr;
-	struct httpddata *hd;
 
 	newptr = connection_accept_tcp(cptr, recvq_put, NULL);
 	slog(LG_DEBUG, "do_listen(): accepted httpd from %s fd %d", newptr->hbuf, newptr->fd);
-	hd = smalloc(sizeof(*hd));
-	hd->requestbuf = NULL;
-	hd->replybuf = NULL;
+
+	struct httpddata *const hd = smalloc(sizeof *hd);
 	hd->connection_close = false;
 	clear_httpddata(hd);
 	newptr->userdata = hd;

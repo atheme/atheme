@@ -111,15 +111,13 @@ struct connection *connection_add(const char *name, int fd, unsigned int flags,
 
 	slog(LG_DEBUG, "connection_add(): adding connection '%s', fd=%d", name, fd);
 
-	cptr = smalloc(sizeof(struct connection));
-
+	cptr = smalloc(sizeof *cptr);
 	cptr->fd = fd;
 	cptr->pollslot = -1;
 	cptr->flags = flags;
 	cptr->first_recv = CURRTIME;
 	cptr->last_recv = CURRTIME;
-
-	cptr->pollable = mowgli_pollable_create(base_eventloop, cptr->fd, cptr);
+	cptr->pollable = mowgli_pollable_create(base_eventloop, fd, cptr);
 
 	connection_setselect_read(cptr, read_handler);
 	connection_setselect_write(cptr, write_handler);

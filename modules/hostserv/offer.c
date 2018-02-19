@@ -96,7 +96,6 @@ static void write_hsofferdb(struct database_handle *db)
 
 static void db_h_ho(struct database_handle *db, const char *type)
 {
-	hsoffered_t *l;
 	const char *buf;
 	time_t vhost_ts;
 	const char *creator;
@@ -112,7 +111,7 @@ static void db_h_ho(struct database_handle *db, const char *type)
 	vhost_ts = db_sread_time(db);
 	creator = db_sread_word(db);
 
-	l = smalloc(sizeof(hsoffered_t));
+	hsoffered_t *const l = smalloc(sizeof *l);
 	l->group = mt;
 	l->vhost = sstrdup(buf);
 	l->vhost_ts = vhost_ts;
@@ -215,8 +214,7 @@ static void hs_cmd_offer(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	l = smalloc(sizeof(hsoffered_t));
-
+	l = smalloc(sizeof *l);
 	l->group = mt;
 	l->vhost = sstrdup(host);
 	l->vhost_ts = CURRTIME;;

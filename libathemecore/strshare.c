@@ -47,11 +47,12 @@ stringref strshare_get(const char *str)
 		ss->refcount++;
 	else
 	{
-		ss = smalloc(sizeof(strshare_t) + strlen(str) + 1);
+		ss = smalloc((sizeof *ss) + strlen(str) + 1);
 		ss->refcount = 1;
 		strcpy((char *)(ss + 1), str);
 		mowgli_patricia_add(strshare_dict, (char *)(ss + 1), ss);
 	}
+
 	return (char *)(ss + 1);
 }
 

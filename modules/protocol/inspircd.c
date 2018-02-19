@@ -1453,7 +1453,6 @@ static void m_metadata(struct sourceinfo *si, int parc, char *parv[])
 
 		certfp = smalloc(len + 1);
 		memcpy(certfp, fpstr, len);
-		certfp[len] = '\0';
 
 		handle_certfp(si, u, certfp);
 		free(certfp);
