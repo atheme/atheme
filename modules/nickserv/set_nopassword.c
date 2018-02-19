@@ -34,7 +34,7 @@ mod_init(struct module *const restrict m)
 
 	use_nslist_main_symbols(m);
 
-	static list_param_t nopassword;
+	static struct list_param nopassword;
 	nopassword.opttype = OPT_BOOL;
 	nopassword.is_match = has_nopassword;
 

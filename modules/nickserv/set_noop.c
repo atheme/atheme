@@ -33,7 +33,7 @@ mod_init(struct module *const restrict m)
 
 	use_nslist_main_symbols(m);
 
-	static list_param_t noop;
+	static struct list_param noop;
 	noop.opttype = OPT_BOOL;
 	noop.is_match = has_noop;
 

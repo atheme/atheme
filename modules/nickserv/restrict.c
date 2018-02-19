@@ -68,11 +68,11 @@ mod_init(struct module *const restrict m)
 
 	use_nslist_main_symbols(m);
 
-	static list_param_t restricted;
+	static struct list_param restricted;
 	restricted.opttype = OPT_BOOL;
 	restricted.is_match = is_restricted;
 
-	static list_param_t restrict_match;
+	static struct list_param restrict_match;
 	restrict_match.opttype = OPT_STRING;
 	restrict_match.is_match = restricted_match;
 

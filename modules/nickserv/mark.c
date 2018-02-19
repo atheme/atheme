@@ -51,11 +51,11 @@ mod_init(struct module *const restrict m)
 
 	use_nslist_main_symbols(m);
 
-	static list_param_t mark;
+	static struct list_param mark;
 	mark.opttype = OPT_STRING;
 	mark.is_match = mark_match;
 
-	static list_param_t marked;
+	static struct list_param marked;
 	marked.opttype = OPT_BOOL;
 	marked.is_match = is_marked;
 

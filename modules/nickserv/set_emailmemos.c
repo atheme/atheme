@@ -33,7 +33,7 @@ mod_init(struct module *const restrict m)
 
 	use_nslist_main_symbols(m);
 
-	static list_param_t emailmemos;
+	static struct list_param emailmemos;
 	emailmemos.opttype = OPT_BOOL;
 	emailmemos.is_match = has_emailmemos;
 

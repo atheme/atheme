@@ -80,7 +80,7 @@ mod_init(struct module *const restrict m)
 
 	use_nslist_main_symbols(m);
 
-	static list_param_t use_privmsg;
+	static struct list_param use_privmsg;
 	use_privmsg.opttype = OPT_BOOL;
 	use_privmsg.is_match = uses_privmsg;
 

@@ -15,7 +15,7 @@ static mowgli_patricia_t *list_params;
 
 struct command ns_list = { "LIST", N_("Lists nicknames registered matching a given pattern."), PRIV_USER_AUSPEX, 10, ns_cmd_list, { .path = "nickserv/list" } };
 
-void list_register(const char *param_name, list_param_t *param);
+void list_register(const char *param_name, struct list_param *param);
 void list_unregister(const char *param_name);
 
 static bool email_match(const mynick_t *mn, const void *arg)
@@ -105,19 +105,19 @@ mod_init(struct module *const restrict m)
 	service_named_bind_command("nickserv", &ns_list);
 
 	/* list email */
-	static list_param_t email;
+	static struct list_param email;
 	email.opttype = OPT_STRING;
 	email.is_match = email_match;
 
-	static list_param_t lastlogin;
+	static struct list_param lastlogin;
 	lastlogin.opttype = OPT_AGE;
 	lastlogin.is_match = lastlogin_match;
 
-	static list_param_t pattern;
+	static struct list_param pattern;
 	pattern.opttype = OPT_STRING;
 	pattern.is_match = pattern_match;
 
-	static list_param_t registered;
+	static struct list_param registered;
 	registered.opttype = OPT_AGE;
 	registered.is_match = registered_match;
 
@@ -128,7 +128,7 @@ mod_init(struct module *const restrict m)
 	list_register("pattern", &pattern);
 	list_register("registered", &registered);
 
-	static list_param_t waitauth;
+	static struct list_param waitauth;
 	waitauth.opttype = OPT_BOOL;
 	waitauth.is_match = has_waitauth;
 
@@ -150,7 +150,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	list_unregister("waitauth");
 }
 
-void list_register(const char *param_name, list_param_t *param) {
+void list_register(const char *param_name, struct list_param *param) {
 	mowgli_patricia_add(list_params, param_name, param);
 }
 
@@ -254,7 +254,7 @@ static void ns_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 
 		for (i = 0; i < parc; i++)
 		{
-			list_param_t *param = mowgli_patricia_retrieve(list_params, parv[i]);
+			struct list_param *param = mowgli_patricia_retrieve(list_params, parv[i]);
 
 			if (param == NULL) {
 				command_fail(si, fault_badparams, _("\2%s\2 is not a recognized LIST criterion"), parv[i]);

@@ -33,7 +33,7 @@ mod_init(struct module *const restrict m)
 
 	use_nslist_main_symbols(m);
 
-	static list_param_t neverop;
+	static struct list_param neverop;
 	neverop.opttype = OPT_BOOL;
 	neverop.is_match = has_neverop;
 

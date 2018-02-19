@@ -32,7 +32,7 @@ mod_init(struct module *const restrict m)
 
 	use_nslist_main_symbols(m);
 
-	static list_param_t hidemail;
+	static struct list_param hidemail;
 	hidemail.opttype = OPT_BOOL;
 	hidemail.is_match = has_hidemail;
 

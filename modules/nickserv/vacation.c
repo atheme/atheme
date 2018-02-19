@@ -99,7 +99,7 @@ mod_init(struct module *const restrict m)
 
 	use_nslist_main_symbols(m);
 
-	static list_param_t vacation;
+	static struct list_param vacation;
 	vacation.opttype = OPT_BOOL;
 	vacation.is_match = is_vacation;
 

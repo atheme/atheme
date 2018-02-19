@@ -16,9 +16,10 @@ enum list_opttype
 	OPT_AGE,
 };
 
-typedef struct {
+struct list_param
+{
 	enum list_opttype opttype;
 	bool (*is_match)(const mynick_t *mn, const void *arg);
-} list_param_t;
+};
 
 #endif /* !NSLIST_COMMON_H */

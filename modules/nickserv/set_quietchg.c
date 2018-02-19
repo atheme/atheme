@@ -33,7 +33,7 @@ mod_init(struct module *const restrict m)
 
 	use_nslist_main_symbols(m);
 
-	static list_param_t quietchg;
+	static struct list_param quietchg;
 	quietchg.opttype = OPT_BOOL;
 	quietchg.is_match = has_quietchg;
 

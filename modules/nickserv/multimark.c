@@ -100,7 +100,7 @@ static bool is_user_marked(myuser_t *mu)
 static void
 mod_init(struct module *const restrict m)
 {
-	static list_param_t mark_check;
+	static struct list_param mark_check;
 
 	if (!module_find_published("backend/opensex"))
 	{
@@ -147,7 +147,7 @@ mod_init(struct module *const restrict m)
 
 	use_nslist_main_symbols(m);
 
-	static list_param_t mark;
+	static struct list_param mark;
 	mark.opttype = OPT_STRING;
 	mark.is_match = multimark_match;
 

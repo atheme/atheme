@@ -33,7 +33,7 @@ mod_init(struct module *const restrict m)
 
 	use_nslist_main_symbols(m);
 
-	static list_param_t nogreet;
+	static struct list_param nogreet;
 	nogreet.opttype = OPT_BOOL;
 	nogreet.is_match = has_nogreet;
 

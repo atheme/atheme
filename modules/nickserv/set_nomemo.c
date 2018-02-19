@@ -32,7 +32,7 @@ mod_init(struct module *const restrict m)
 
 	use_nslist_main_symbols(m);
 
-	static list_param_t nomemo;
+	static struct list_param nomemo;
 	nomemo.opttype = OPT_BOOL;
 	nomemo.is_match = has_nomemo;
 

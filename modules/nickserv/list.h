@@ -11,7 +11,7 @@
 
 #include "list_common.h"
 
-void (*list_register)(const char *param_name, list_param_t *param);
+void (*list_register)(const char *param_name, struct list_param *param);
 void (*list_unregister)(const char *param_name);
 
 

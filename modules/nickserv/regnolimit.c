@@ -28,7 +28,7 @@ mod_init(struct module *const restrict m)
 
 	use_nslist_main_symbols(m);
 
-	static list_param_t regnolimit;
+	static struct list_param regnolimit;
 	regnolimit.opttype = OPT_BOOL;
 	regnolimit.is_match = has_regnolimit;
 

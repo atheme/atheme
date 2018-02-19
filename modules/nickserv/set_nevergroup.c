@@ -33,7 +33,7 @@ mod_init(struct module *const restrict m)
 
 	use_nslist_main_symbols(m);
 
-	static list_param_t nevergroup;
+	static struct list_param nevergroup;
 	nevergroup.opttype = OPT_BOOL;
 	nevergroup.is_match = has_nevergroup;
 

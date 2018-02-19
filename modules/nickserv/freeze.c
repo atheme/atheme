@@ -43,11 +43,11 @@ mod_init(struct module *const restrict m)
 
 	use_nslist_main_symbols(m);
 
-	static list_param_t frozen;
+	static struct list_param frozen;
 	frozen.opttype = OPT_BOOL;
 	frozen.is_match = is_frozen;
 
-	static list_param_t frozen_reason;
+	static struct list_param frozen_reason;
 	frozen_reason.opttype = OPT_STRING;
 	frozen_reason.is_match = frozen_match;
 
