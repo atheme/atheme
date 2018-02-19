@@ -79,7 +79,7 @@ signal_usr2_handler(int signum)
 }
 
 /* XXX */
-static void
+static void ATHEME_FATTR_NORETURN
 signal_usr1_handler(int signum)
 {
 	int n;
