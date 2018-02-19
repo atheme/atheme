@@ -25,7 +25,7 @@ static unsigned int count_ops(struct channel *c)
 	return i;
 }
 
-static bool chanfix_should_handle(chanfix_channel_t *cfchan, struct channel *c)
+static bool chanfix_should_handle(struct chanfix_channel *cfchan, struct channel *c)
 {
 	mychan_t *mc;
 	unsigned int n;
@@ -70,7 +70,7 @@ static unsigned int chanfix_calculate_score(chanfix_oprecord_t *orec)
 	return base;
 }
 
-static void chanfix_lower_ts(chanfix_channel_t *chan)
+static void chanfix_lower_ts(struct chanfix_channel *chan)
 {
 	struct channel *ch;
 	struct chanuser *cfu;
@@ -101,7 +101,7 @@ static void chanfix_lower_ts(chanfix_channel_t *chan)
 	part(chan->name, chanfix->me->nick);
 }
 
-static unsigned int chanfix_get_highscore(chanfix_channel_t *chan)
+static unsigned int chanfix_get_highscore(struct chanfix_channel *chan)
 {
 	unsigned int highscore = 0;
 	mowgli_node_t *n;
@@ -119,7 +119,7 @@ static unsigned int chanfix_get_highscore(chanfix_channel_t *chan)
 	return highscore;
 }
 
-static unsigned int chanfix_get_threshold(chanfix_channel_t *chan)
+static unsigned int chanfix_get_threshold(struct chanfix_channel *chan)
 {
 	unsigned int highscore, t, threshold;
 
@@ -136,7 +136,7 @@ static unsigned int chanfix_get_threshold(chanfix_channel_t *chan)
 	return threshold;
 }
 
-static bool chanfix_fix_channel(chanfix_channel_t *chan)
+static bool chanfix_fix_channel(struct chanfix_channel *chan)
 {
 	struct channel *ch;
 	mowgli_node_t *n;
@@ -194,7 +194,7 @@ static bool chanfix_fix_channel(chanfix_channel_t *chan)
 	return true;
 }
 
-static bool chanfix_can_start_fix(chanfix_channel_t *chan)
+static bool chanfix_can_start_fix(struct chanfix_channel *chan)
 {
 	struct channel *ch;
 	mowgli_node_t *n;
@@ -291,7 +291,7 @@ bool chanfix_do_autofix;
 
 void chanfix_autofix_ev(void *unused)
 {
-	chanfix_channel_t *chan;
+	struct chanfix_channel *chan;
 	mowgli_patricia_iteration_state_t state;
 
 	MOWGLI_PATRICIA_FOREACH(chan, &state, chanfix_channels)
@@ -347,7 +347,7 @@ void chanfix_autofix_ev(void *unused)
 
 static void chanfix_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
-	chanfix_channel_t *chan;
+	struct chanfix_channel *chan;
 	struct metadata *md, *mdnofix;
 	char *markpattern = NULL, *nofixpattern = NULL;
 	char buf[BUFSIZE];
@@ -420,7 +420,7 @@ struct command cmd_list = { "LIST", N_("List all channels with CHANFIX records."
 
 static void chanfix_cmd_fix(struct sourceinfo *si, int parc, char *parv[])
 {
-	chanfix_channel_t *chan;
+	struct chanfix_channel *chan;
 	unsigned int highscore;
 
 	if (parv[0] == NULL)
@@ -485,7 +485,7 @@ static int chanfix_compare_records(mowgli_node_t *a, mowgli_node_t *b, void *unu
 static void chanfix_cmd_scores(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
-	chanfix_channel_t *chan;
+	struct chanfix_channel *chan;
 	int i = 0;
 	unsigned int count = 20;
 
@@ -542,7 +542,7 @@ struct command cmd_scores = { "SCORES", N_("List channel scores."), PRIV_CHAN_AU
 static void chanfix_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	chanfix_oprecord_t *orec;
-	chanfix_channel_t *chan;
+	struct chanfix_channel *chan;
 	struct tm tm;
 	char strfbuf[BUFSIZE];
 	unsigned int highscore = 0;
@@ -634,7 +634,7 @@ static void chanfix_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 	char *target = parv[0];
 	char *action = parv[1];
 	char *info = parv[2];
-	chanfix_channel_t *chan;
+	struct chanfix_channel *chan;
 
 	if (!target || !action)
 	{
@@ -708,7 +708,7 @@ static void chanfix_cmd_nofix(struct sourceinfo *si, int parc, char *parv[])
 	char *target = parv[0];
 	char *action = parv[1];
 	char *info = parv[2];
-	chanfix_channel_t *chan;
+	struct chanfix_channel *chan;
 
 	if (!target || !action)
 	{
@@ -804,7 +804,7 @@ struct command cmd_help = { "HELP", N_(N_("Displays contextual help information.
 
 void chanfix_can_register(hook_channel_register_check_t *req)
 {
-	chanfix_channel_t *chan;
+	struct chanfix_channel *chan;
 	chanfix_oprecord_t *orec;
 	unsigned int highscore, score;
 

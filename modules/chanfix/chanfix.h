@@ -23,7 +23,8 @@
  */
 #define CHANFIX_EXPIRE_DIVISOR	672
 
-typedef struct chanfix_channel {
+struct chanfix_channel
+{
 	struct atheme_object parent;
 
 	char *name;
@@ -36,12 +37,12 @@ typedef struct chanfix_channel {
 
 	time_t fix_started;
 	bool fix_requested;
-} chanfix_channel_t;
+};
 
 typedef struct chanfix_oprecord {
 	mowgli_node_t node;
 
-	chanfix_channel_t *chan;
+	struct chanfix_channel *chan;
 
 	struct myentity *entity;
 
@@ -68,13 +69,13 @@ extern mowgli_patricia_t *chanfix_channels;
 extern void chanfix_gather_init(chanfix_persist_record_t *);
 extern void chanfix_gather_deinit(enum module_unload_intent, chanfix_persist_record_t *);
 
-extern void chanfix_oprecord_update(chanfix_channel_t *chan, user_t *u);
+extern void chanfix_oprecord_update(struct chanfix_channel *chan, user_t *u);
 extern void chanfix_oprecord_delete(chanfix_oprecord_t *orec);
-extern chanfix_oprecord_t *chanfix_oprecord_create(chanfix_channel_t *chan, user_t *u);
-extern chanfix_oprecord_t *chanfix_oprecord_find(chanfix_channel_t *chan, user_t *u);
-extern chanfix_channel_t *chanfix_channel_create(const char *name, struct channel *chan);
-extern chanfix_channel_t *chanfix_channel_find(const char *name);
-extern chanfix_channel_t *chanfix_channel_get(struct channel *chan);
+extern chanfix_oprecord_t *chanfix_oprecord_create(struct chanfix_channel *chan, user_t *u);
+extern chanfix_oprecord_t *chanfix_oprecord_find(struct chanfix_channel *chan, user_t *u);
+extern struct chanfix_channel *chanfix_channel_create(const char *name, struct channel *chan);
+extern struct chanfix_channel *chanfix_channel_find(const char *name);
+extern struct chanfix_channel *chanfix_channel_get(struct channel *chan);
 extern void chanfix_gather(void *unused);
 extern void chanfix_expire(void *unused);
 
