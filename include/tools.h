@@ -54,7 +54,7 @@ enum log_type
 };
 
 /* logstreams API --nenolod */
-typedef void (*log_write_func_t)(struct logfile *lf, const char *buf);
+typedef void (*log_write_func_fn)(struct logfile *lf, const char *buf);
 
 /* logger.c */
 struct logfile
@@ -66,7 +66,7 @@ struct logfile
 	char *log_path;
 	unsigned int log_mask;
 
-	log_write_func_t write_func;
+	log_write_func_fn write_func;
 	enum log_type log_type;
 };
 
