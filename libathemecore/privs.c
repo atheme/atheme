@@ -37,7 +37,7 @@ static struct operclass *ircop_r = NULL;
 void init_privs(void)
 {
 	operclass_heap = sharedheap_get(sizeof(struct operclass));
-	soper_heap = sharedheap_get(sizeof(soper_t));
+	soper_heap = sharedheap_get(sizeof(struct soper));
 
 	if (!operclass_heap || !soper_heap)
 	{
@@ -92,7 +92,7 @@ struct operclass *operclass_add(const char *name, const char *privs, int flags)
 
 	MOWGLI_ITER_FOREACH(n, soperlist.head)
 	{
-		soper_t *soper = n->data;
+		struct soper *soper = n->data;
 		if (soper->operclass == NULL &&
 				!strcasecmp(name, soper->classname))
 			soper->operclass = operclass;
@@ -116,7 +116,7 @@ void operclass_delete(struct operclass *operclass)
 
 	MOWGLI_ITER_FOREACH(n, soperlist.head)
 	{
-		soper_t *soper = n->data;
+		struct soper *soper = n->data;
 		if (soper->operclass == operclass)
 			soper->operclass = NULL;
 	}
@@ -148,9 +148,9 @@ struct operclass *operclass_find(const char *name)
  * S O P E R S *
  ***************/
 
-soper_t *soper_add(const char *name, const char *classname, int flags, const char *password)
+struct soper *soper_add(const char *name, const char *classname, int flags, const char *password)
 {
-	soper_t *soper;
+	struct soper *soper;
 	myuser_t *mu = myuser_find(name);
 	mowgli_node_t *n;
 	struct operclass *operclass = operclass_find(classname);
@@ -205,7 +205,7 @@ soper_t *soper_add(const char *name, const char *classname, int flags, const cha
 	return soper;
 }
 
-void soper_delete(soper_t *soper)
+void soper_delete(struct soper *soper)
 {
 	mowgli_node_t *n;
 
@@ -236,14 +236,14 @@ void soper_delete(soper_t *soper)
 	cnt.soper--;
 }
 
-soper_t *soper_find(myuser_t *myuser)
+struct soper *soper_find(myuser_t *myuser)
 {
-	soper_t *soper;
+	struct soper *soper;
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, soperlist.head)
 	{
-		soper = (soper_t *)n->data;
+		soper = (struct soper *)n->data;
 
 		if (soper->myuser && soper->myuser == myuser)
 			return soper;
@@ -252,14 +252,14 @@ soper_t *soper_find(myuser_t *myuser)
 	return NULL;
 }
 
-soper_t *soper_find_named(const char *name)
+struct soper *soper_find_named(const char *name)
 {
-	soper_t *soper;
+	struct soper *soper;
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, soperlist.head)
 	{
-		soper = (soper_t *)n->data;
+		soper = (struct soper *)n->data;
 
 		if (soper->name && !irccasecmp(soper->name, name))
 			return soper;
@@ -428,7 +428,7 @@ bool has_all_operclass(struct sourceinfo *si, struct operclass *operclass)
 
 /**********************************************************************************/
 
-const soper_t *get_sourceinfo_soper(struct sourceinfo *si)
+const struct soper *get_sourceinfo_soper(struct sourceinfo *si)
 {
 	if (si->smu != NULL && is_soper(si->smu))
 		return si->smu->soper;
@@ -439,7 +439,7 @@ const soper_t *get_sourceinfo_soper(struct sourceinfo *si)
 const struct operclass *get_sourceinfo_operclass(struct sourceinfo *si)
 {
 	struct operclass *out = NULL;
-	const soper_t *soper;
+	const struct soper *soper;
 
 	if ((soper = get_sourceinfo_soper(si)) != NULL)
 		return soper->operclass;

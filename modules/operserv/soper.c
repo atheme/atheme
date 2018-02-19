@@ -80,7 +80,7 @@ static void os_cmd_soper(struct sourceinfo *si, int parc, char *parv[])
 static void os_cmd_soper_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
-	soper_t *soper;
+	struct soper *soper;
 	const char *typestr;
 
 	logcommand(si, CMDLOG_GET, "SOPER:LIST");

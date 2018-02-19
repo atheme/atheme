@@ -74,7 +74,7 @@ struct myuser_
   time_t registered;
   time_t lastlogin;
 
-  soper_t *soper;
+  struct soper *soper;
 
   unsigned int flags;
 

@@ -27,7 +27,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("operserv", &os_id);
 }
 
-static bool verify_operserv_password(soper_t *so, char *password)
+static bool verify_operserv_password(struct soper *so, char *password)
 {
 	if (so == NULL || password == NULL)
 		return false;

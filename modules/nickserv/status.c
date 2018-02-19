@@ -96,7 +96,7 @@ static void ns_cmd_status(struct sourceinfo *si, int parc, char *parv[])
 
 		if (is_soper(si->smu))
 		{
-			soper_t *soper = si->smu->soper;
+			struct soper *soper = si->smu->soper;
 
 			command_success_nodata(si, _("You are a services operator of class %s."), soper->operclass ? soper->operclass->name : soper->classname);
 		}

@@ -1092,7 +1092,7 @@ const char *get_storage_oper_name(struct sourceinfo *si)
 const char *get_source_security_label(struct sourceinfo *si)
 {
 	static char result[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + NICKLEN + 1 + HOSTLEN + 1 + 10];
-	const soper_t *soper;
+	const struct soper *soper;
 	const struct operclass *operclass = NULL;
 
 	mowgli_strlcpy(result, get_storage_oper_name(si), sizeof result);

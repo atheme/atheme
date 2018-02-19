@@ -97,7 +97,7 @@ void handle_stats(user_t *u, char req)
 	struct qline *q;
 	mowgli_node_t *n;
 	struct uplink *uplink;
-	soper_t *soper;
+	struct soper *soper;
 	int j;
 	char fl[10];
 

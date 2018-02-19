@@ -41,7 +41,7 @@ corestorage_db_save(struct database_handle *db)
 	struct xline *x;
 	struct qline *q;
 	struct svsignore *svsignore;
-	soper_t *soper;
+	struct soper *soper;
 	mowgli_node_t *n, *tn;
 	mowgli_patricia_iteration_state_t state;
 	struct myentity_iteration_state mestate;

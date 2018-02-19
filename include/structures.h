@@ -11,7 +11,6 @@
 // XXX remove me, or move me to include/hook.h
 typedef struct user_ user_t;
 typedef struct server_ server_t;
-typedef struct soper_ soper_t;
 typedef struct myuser_ myuser_t;
 typedef struct mynick_ mynick_t;
 typedef struct mychan_ mychan_t;
@@ -77,6 +76,10 @@ struct proto_cmd;
 
 // Defined in include/phandler.h
 struct ircd;
+
+// Defined in include/privs.h
+struct operclass;
+struct soper;
 
 // Defined in include/res.h
 struct nsaddr;

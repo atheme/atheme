@@ -70,7 +70,8 @@ struct operclass
 #define OPERCLASS_BUILTIN	0x2 /* builtin */
 
 /* soper list struct */
-struct soper_ {
+struct soper
+{
   myuser_t *myuser;
   char *name;
   struct operclass *operclass;
@@ -91,10 +92,10 @@ extern struct operclass *operclass_add(const char *name, const char *privs, int 
 extern void operclass_delete(struct operclass *operclass);
 extern struct operclass *operclass_find(const char *name);
 
-extern soper_t *soper_add(const char *name, const char *classname, int flags, const char *password);
-extern void soper_delete(soper_t *soper);
-extern soper_t *soper_find(myuser_t *myuser);
-extern soper_t *soper_find_named(const char *name);
+extern struct soper *soper_add(const char *name, const char *classname, int flags, const char *password);
+extern void soper_delete(struct soper *soper);
+extern struct soper *soper_find(myuser_t *myuser);
+extern struct soper *soper_find_named(const char *name);
 
 extern bool is_soper(myuser_t *myuser);
 extern bool is_conf_soper(myuser_t *myuser);
@@ -118,7 +119,7 @@ extern bool has_all_operclass(struct sourceinfo *, struct operclass *);
 /* get_sourceinfo_soper(): get the specific operclass role which is granting
  * privilege authority
  */
-extern const soper_t *get_sourceinfo_soper(struct sourceinfo *si);
+extern const struct soper *get_sourceinfo_soper(struct sourceinfo *si);
 /* get_sourceinfo_operclass(): get the specific operclass role which is granting
  * privilege authority
  */

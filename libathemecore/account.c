@@ -114,7 +114,7 @@ myuser_t *myuser_add(const char *name, const char *pass, const char *email, unsi
 myuser_t *myuser_add_id(const char *id, const char *name, const char *pass, const char *email, unsigned int flags)
 {
 	myuser_t *mu;
-	soper_t *soper;
+	struct soper *soper;
 
 	return_val_if_fail((mu = myuser_find(name)) == NULL, mu);
 

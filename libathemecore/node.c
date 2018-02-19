@@ -64,7 +64,7 @@ void mark_all_illegal()
 {
 	mowgli_node_t *n, *tn;
 	struct uplink *u;
-	soper_t *soper;
+	struct soper *soper;
 	struct operclass *operclass;
 
 	MOWGLI_ITER_FOREACH(n, uplinks.head)
@@ -76,7 +76,7 @@ void mark_all_illegal()
 	/* just delete these, we can survive without for a while */
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, soperlist.head)
 	{
-		soper = (soper_t *)n->data;
+		soper = (struct soper *)n->data;
 		if (soper->flags & SOPER_CONF)
 			soper_delete(soper);
 	}
