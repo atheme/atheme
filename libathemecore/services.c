@@ -980,7 +980,7 @@ static void command_table_cb(const char *line, void *data)
 	command_success_nodata(data, "%s", line);
 }
 
-void command_success_table(struct sourceinfo *si, table_t *table)
+void command_success_table(struct sourceinfo *si, struct atheme_table *table)
 {
 	if (si->v != NULL && si->v->cmd_success_table)
 	{

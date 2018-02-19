@@ -113,7 +113,7 @@ extern struct sourceinfo *sourceinfo_create(void);
 extern void command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
 extern void command_success_nodata(struct sourceinfo *si, const char *fmt, ...) ATHEME_FATTR_PRINTF(2, 3);
 extern void command_success_string(struct sourceinfo *si, const char *result, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
-extern void command_success_table(struct sourceinfo *si, table_t *table);
+extern void command_success_table(struct sourceinfo *si, struct atheme_table *table);
 extern const char *get_source_name(struct sourceinfo *si);
 extern const char *get_source_mask(struct sourceinfo *si);
 extern const char *get_oper_name(struct sourceinfo *si);

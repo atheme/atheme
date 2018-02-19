@@ -15,7 +15,7 @@ struct sourceinfo_vtable
 	void (*cmd_fail)(struct sourceinfo *si, enum cmd_faultcode code, const char *message);
 	void (*cmd_success_nodata)(struct sourceinfo *si, const char *message);
 	void (*cmd_success_string)(struct sourceinfo *si, const char *result, const char *message);
-	void (*cmd_success_table)(struct sourceinfo *si, table_t *table);
+	void (*cmd_success_table)(struct sourceinfo *si, struct atheme_table *table);
 	const char *(*get_source_name)(struct sourceinfo *si);
 	const char *(*get_source_mask)(struct sourceinfo *si);
 	const char *(*get_oper_name)(struct sourceinfo *si);

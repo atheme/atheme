@@ -104,6 +104,9 @@ struct service;
 struct sourceinfo;
 struct sourceinfo_vtable;
 
+// Defined in include/table.h
+struct atheme_table;
+
 // Defined in include/tools.h
 struct email_canonicalizer_item;
 struct logfile;

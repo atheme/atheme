@@ -28,7 +28,7 @@
 
 static void table_destroy(void *obj)
 {
-	table_t *table = (table_t *) obj;
+	struct atheme_table *table = (struct atheme_table *) obj;
 	mowgli_node_t *n, *tn;
 
 	return_if_fail(table != NULL);
@@ -76,12 +76,12 @@ static void table_destroy(void *obj)
  * Side Effects:
  *     - none
  */
-table_t * ATHEME_FATTR_PRINTF(1, 2)
+struct atheme_table * ATHEME_FATTR_PRINTF(1, 2)
 table_new(const char *fmt, ...)
 {
 	va_list vl;
 	char buf[BUFSIZE];
-	table_t *out;
+	struct atheme_table *out;
 
 	return_val_if_fail(fmt != NULL, NULL);
 
@@ -93,7 +93,7 @@ table_new(const char *fmt, ...)
 	}
 	va_end(vl);
 
-	out = scalloc(sizeof(table_t), 1);
+	out = scalloc(sizeof(struct atheme_table), 1);
 	atheme_object_init(&out->parent, buf, table_destroy);
 
 	return out;
@@ -113,7 +113,7 @@ table_new(const char *fmt, ...)
  * Side Effects:
  *     - none
  */
-table_row_t *table_row_new(table_t *t)
+table_row_t *table_row_new(struct atheme_table *t)
 {
 	table_row_t *out;
 
@@ -173,7 +173,7 @@ void table_cell_associate(table_row_t *r, const char *name, const char *value)
  * Side Effects:
  *     - a callback function is called for each row of the table.
  */
-void table_render(table_t *t, void (*callback)(const char *line, void *data), void *data)
+void table_render(struct atheme_table *t, void (*callback)(const char *line, void *data), void *data)
 {
 	mowgli_node_t *n;
 	table_row_t *f;

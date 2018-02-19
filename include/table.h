@@ -8,10 +8,11 @@
 #ifndef ATHEME_TABLE_H
 #define ATHEME_TABLE_H
 
-typedef struct {
+struct atheme_table
+{
 	struct atheme_object parent;
 	mowgli_list_t rows;
-} table_t;
+};
 
 typedef struct {
 	int id;
@@ -27,12 +28,12 @@ typedef struct {
 /*
  * Creates a new table object. Use atheme_object_unref() to destroy it.
  */
-extern table_t *table_new(const char *fmt, ...) ATHEME_FATTR_PRINTF(1, 2);
+extern struct atheme_table *table_new(const char *fmt, ...) ATHEME_FATTR_PRINTF(1, 2);
 
 /*
  * Renders a table, each line going to callback().
  */
-extern void table_render(table_t *t, void (*callback)(const char *line, void *data), void *data);
+extern void table_render(struct atheme_table *t, void (*callback)(const char *line, void *data), void *data);
 
 /*
  * Associates a value with a row.
@@ -42,6 +43,6 @@ extern void table_cell_associate(table_row_t *r, const char *name, const char *v
 /*
  * Associates a row with a table.
  */
-extern table_row_t *table_row_new(table_t *t);
+extern table_row_t *table_row_new(struct atheme_table *t);
 
 #endif
