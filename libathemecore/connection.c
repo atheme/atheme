@@ -78,7 +78,7 @@ static void connection_trampoline(mowgli_eventloop_t *eventloop, mowgli_eventloo
 	case MOWGLI_EVENTLOOP_IO_READ:
 		return cptr->read_handler(cptr);
 	case MOWGLI_EVENTLOOP_IO_WRITE:
-	default:
+	case MOWGLI_EVENTLOOP_IO_ERROR:
 		return cptr->write_handler(cptr);
 	}
 }
