@@ -7,16 +7,17 @@
 
 #include "atheme.h"
 
-typedef enum {
+enum list_opttype
+{
 	OPT_BOOL,
 	OPT_INT,
 	OPT_STRING,
 	OPT_FLAG,
 	OPT_AGE,
-} list_opttype_t;
+};
 
 typedef struct {
-	list_opttype_t opttype;
+	enum list_opttype opttype;
 	bool (*is_match)(const mynick_t *mn, const void *arg);
 } list_param_t;
 
