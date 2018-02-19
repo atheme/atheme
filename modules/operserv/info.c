@@ -66,7 +66,7 @@ static void os_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 
 		MOWGLI_ITER_FOREACH(n, taint_list.head)
 		{
-			taint_reason_t *tr = n->data;
+			struct taint_reason *tr = n->data;
 
 			command_success_nodata(si, _("Taint Condition: %s"), tr->condition);
 			command_success_nodata(si, _("Taint Location: %s:%d"), tr->file, tr->line);

@@ -109,6 +109,9 @@ struct atheme_table;
 struct atheme_table_cell;
 struct atheme_table_row;
 
+// Defined in include/taint.h
+struct taint_reason;
+
 // Defined in include/tools.h
 struct email_canonicalizer_item;
 struct logfile;

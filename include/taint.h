@@ -8,13 +8,14 @@
 #ifndef ATHEME_TAINT_H
 #define ATHEME_TAINT_H
 
-typedef struct {
+struct taint_reason
+{
 	char condition[BUFSIZE];
 	char file[BUFSIZE];
 	int line;
 	char buf[BUFSIZE];
 	mowgli_node_t node;
-} taint_reason_t;
+};
 
 extern mowgli_list_t taint_list;
 
@@ -22,8 +23,8 @@ extern mowgli_list_t taint_list;
 #define TAINT_ON(cond, reason) \
 	if ((cond))						\
 	{							\
-		taint_reason_t *tr;				\
-		tr = scalloc(sizeof(taint_reason_t), 1);	\
+		struct taint_reason *tr;			\
+		tr = scalloc(sizeof(struct taint_reason), 1);	\
 		mowgli_strlcpy(tr->condition, #cond, BUFSIZE);	\
 		mowgli_strlcpy(tr->file, __FILE__, BUFSIZE);	\
 		tr->line = __LINE__;				\
