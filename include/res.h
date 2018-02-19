@@ -14,7 +14,7 @@
  * In hybrid, this was 2 -- but in Charybdis, we want to track
  * a few more than that ;) --nenolod
  */
-#define IRCD_MAXNS 10
+#define ATHEME_MAX_NAMESERVERS 10
 
 struct nsaddr
 {
@@ -34,7 +34,7 @@ struct res_dns_query
   void (*callback)(void *vptr, struct res_dns_reply *reply); /* callback to call */
 };
 
-extern struct nsaddr irc_nsaddr_list[];
+extern struct nsaddr irc_nsaddr_list[ATHEME_MAX_NAMESERVERS];
 extern int irc_nscount;
 
 extern void init_resolver(void);

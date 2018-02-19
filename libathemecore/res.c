@@ -71,7 +71,7 @@ struct reslist
 
 static struct connection *res_fd;
 static mowgli_list_t request_list = { NULL, NULL, 0 };
-static int ns_timeout_count[IRCD_MAXNS];
+static int ns_timeout_count[ATHEME_MAX_NAMESERVERS];
 
 static void rem_request(struct reslist *request);
 static struct reslist *make_request(struct res_dns_query *query);
