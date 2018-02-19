@@ -43,10 +43,10 @@ struct command bs_botlist = { "BOTLIST", "Lists available bots.", AC_NONE, 0, bs
 
 /* ******************************************************************** */
 
-static botserv_bot_t *bs_mychan_find_bot(struct mychan *mc)
+static struct botserv_bot *bs_mychan_find_bot(struct mychan *mc)
 {
 	struct metadata *md;
-	botserv_bot_t *bot;
+	struct botserv_bot *bot;
 
 	md = metadata_find(mc, "private:botserv:bot-assigned");
 	bot = md != NULL ? botserv_bot_find(md->value) : NULL;
@@ -85,7 +85,7 @@ bs_msg(const char *from, const char *target, const char *fmt, ...)
 	if (*target == '#' && !strcmp(from, chansvs.nick))
 	{
 		struct mychan *mc;
-		botserv_bot_t *bot = NULL;
+		struct botserv_bot *bot = NULL;
 
 		mc = mychan_find(target);
 		if (mc != NULL)
@@ -119,7 +119,7 @@ bs_notice(const char *from, const char *target, const char *fmt, ...)
 	if (*target == '#' && !strcmp(from, chansvs.nick))
 	{
 		struct mychan *mc;
-		botserv_bot_t *bot = NULL;
+		struct botserv_bot *bot = NULL;
 
 		mc = mychan_find(target);
 		if (mc != NULL)
@@ -139,7 +139,7 @@ static void
 bs_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	struct mychan *mc;
-	botserv_bot_t *bot = NULL;
+	struct botserv_bot *bot = NULL;
 
 	return_if_fail(source != NULL);
 	return_if_fail(c != NULL);
@@ -286,7 +286,7 @@ bs_join_registered(bool all)
 
 static void bs_channel_drop(struct mychan *mc)
 {
-	botserv_bot_t *bot;
+	struct botserv_bot *bot;
 
 	if ((bot = bs_mychan_find_bot(mc)) == NULL)
 		return;
@@ -450,7 +450,7 @@ void botserv_save_database(struct database_handle *db)
 	/* iterate through and write all the metadata */
 	MOWGLI_ITER_FOREACH(n, bs_bots.head)
 	{
-		botserv_bot_t *bot = (botserv_bot_t *) n->data;
+		struct botserv_bot *bot = (struct botserv_bot *) n->data;
 
 		db_start_row(db, "BOT");
 		db_write_word(db, bot->nick);
@@ -475,9 +475,9 @@ static void db_h_bot(struct database_handle *db, const char *type)
 	int private = db_sread_int(db);
 	time_t registered = db_sread_time(db);
 	const char *real = db_sread_str(db);
-	botserv_bot_t *bot;
+	struct botserv_bot *bot;
 
-	bot = scalloc(sizeof(botserv_bot_t), 1);
+	bot = scalloc(sizeof(struct botserv_bot), 1);
 	bot->nick = sstrdup(nick);
 
 	if (!is_valid_username(user))
@@ -503,7 +503,7 @@ static void db_h_bot_count(struct database_handle *db, const char *type)
 
 /* ******************************************************************** */
 
-botserv_bot_t* botserv_bot_find(char *name)
+struct botserv_bot* botserv_bot_find(char *name)
 {
 	mowgli_node_t *n;
 
@@ -512,7 +512,7 @@ botserv_bot_t* botserv_bot_find(char *name)
 
 	MOWGLI_ITER_FOREACH(n, bs_bots.head)
 	{
-		botserv_bot_t *bot = (botserv_bot_t *) n->data;
+		struct botserv_bot *bot = (struct botserv_bot *) n->data;
 
 		if (!irccasecmp(name, bot->nick))
 			return bot;
@@ -578,7 +578,7 @@ static bool valid_misc_field(const char *field, size_t maxlen)
 /* CHANGE oldnick nick [user [host [real]]] */
 static void bs_cmd_change(struct sourceinfo *si, int parc, char *parv[])
 {
-	botserv_bot_t *bot;
+	struct botserv_bot *bot;
 	mowgli_patricia_iteration_state_t state;
 	struct mychan *mc;
 	struct metadata *md;
@@ -681,7 +681,7 @@ static void bs_cmd_change(struct sourceinfo *si, int parc, char *parv[])
 /* ADD nick user host real */
 static void bs_cmd_add(struct sourceinfo *si, int parc, char *parv[])
 {
-	botserv_bot_t *bot;
+	struct botserv_bot *bot;
 	char buf[BUFSIZE];
 
 	if (parc < 4)
@@ -731,7 +731,7 @@ static void bs_cmd_add(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	bot = scalloc(sizeof(botserv_bot_t), 1);
+	bot = scalloc(sizeof(struct botserv_bot), 1);
 	bot->nick = sstrdup(parv[0]);
 	bot->user = sstrndup(parv[1], USERLEN);
 	bot->host = sstrdup(parv[2]);
@@ -751,7 +751,7 @@ static void bs_cmd_add(struct sourceinfo *si, int parc, char *parv[])
 /* DELETE nick */
 static void bs_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
 {
-	botserv_bot_t *bot = botserv_bot_find(parv[0]);
+	struct botserv_bot *bot = botserv_bot_find(parv[0]);
 	mowgli_patricia_iteration_state_t state;
 	struct mychan *mc;
 	struct metadata *md;
@@ -811,7 +811,7 @@ static void bs_cmd_botlist(struct sourceinfo *si, int parc, char *parv[])
 
 	MOWGLI_ITER_FOREACH(n, bs_bots.head)
 	{
-		botserv_bot_t *bot = (botserv_bot_t *) n->data;
+		struct botserv_bot *bot = (struct botserv_bot *) n->data;
 
 		if (!bot->private)
 			command_success_nodata(si, "\2%d:\2 %s (%s@%s) [%s]", ++i, bot->nick, bot->user, bot->host, bot->real);
@@ -824,7 +824,7 @@ static void bs_cmd_botlist(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("Listing of private bots available on \2%s\2:"), me.netname);
 		MOWGLI_ITER_FOREACH(n, bs_bots.head)
 		{
-			botserv_bot_t *bot = (botserv_bot_t *) n->data;
+			struct botserv_bot *bot = (struct botserv_bot *) n->data;
 
 			if (bot->private)
 				command_success_nodata(si, "\2%d:\2 %s (%s@%s) [%s]", ++i, bot->nick, bot->user, bot->host, bot->real);
@@ -843,7 +843,7 @@ static void bs_cmd_assign(struct sourceinfo *si, int parc, char *parv[])
 	struct channel *c = channel_find(channel);
 	struct mychan *mc = mychan_from(c);
 	struct metadata *md;
-	botserv_bot_t *bot;
+	struct botserv_bot *bot;
 
 	if (!parv[0] || !parv[1])
 	{
@@ -1020,7 +1020,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, bs_bots.head)
 	{
-		botserv_bot_t *bot = (botserv_bot_t *) n->data;
+		struct botserv_bot *bot = (struct botserv_bot *) n->data;
 
 		mowgli_node_delete(&bot->bnode, &bs_bots);
 		service_delete(bot->me);
@@ -1072,7 +1072,7 @@ static void on_shutdown(void *unused)
 
 	MOWGLI_ITER_FOREACH(n, bs_bots.head)
 	{
-		botserv_bot_t *bot = (botserv_bot_t *) n->data;
+		struct botserv_bot *bot = (struct botserv_bot *) n->data;
 		quit_sts(bot->me->me, "shutting down");
 	}
 }
@@ -1082,7 +1082,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 	struct chanuser *cu = hdata->cu;
 	struct channel *chan;
 	struct mychan *mc;
-	botserv_bot_t *bot;
+	struct botserv_bot *bot;
 	struct metadata *md;
 	struct user *u;
 
@@ -1127,7 +1127,7 @@ bs_part(hook_channel_joinpart_t *hdata)
 {
 	struct chanuser *cu;
 	struct mychan *mc;
-	botserv_bot_t *bot;
+	struct botserv_bot *bot;
 
 	cu = hdata->cu;
 	if (cu == NULL)

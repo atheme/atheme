@@ -5,7 +5,8 @@
  * BotServ common definitions.
  */
 
-typedef struct {
+struct botserv_bot
+{
 	struct service *me;
 	char *nick;
 	char *user;
@@ -14,6 +15,6 @@ typedef struct {
 	mowgli_node_t bnode;
 	bool private;
 	time_t registered;
-} botserv_bot_t;
+};
 
-typedef botserv_bot_t *fn_botserv_bot_find(char *name);
+typedef struct botserv_bot *(fn_botserv_bot_find)(char *name);

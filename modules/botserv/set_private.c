@@ -39,7 +39,7 @@ static void bs_cmd_set_private(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *botserv = parv[0];
 	char *option = parv[1];
-	botserv_bot_t *bot;
+	struct botserv_bot *bot;
 
 	if (parc < 2 || !botserv || !option)
 	{
