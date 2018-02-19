@@ -40,28 +40,28 @@ extern struct proto_cmd *pcommand_find(const char *token);
 
 /* ptasks.c */
 extern int get_version_string(char *, size_t);
-extern void handle_version(user_t *);
-extern void handle_admin(user_t *);
-extern void handle_info(user_t *);
-extern void handle_stats(user_t *, char);
-extern void handle_whois(user_t *, const char *);
-extern void handle_trace(user_t *, const char *, const char *);
-extern void handle_motd(user_t *);
-extern void handle_away(user_t *, const char *);
+extern void handle_version(struct user *);
+extern void handle_admin(struct user *);
+extern void handle_info(struct user *);
+extern void handle_stats(struct user *, char);
+extern void handle_whois(struct user *, const char *);
+extern void handle_trace(struct user *, const char *, const char *);
+extern void handle_motd(struct user *);
+extern void handle_away(struct user *, const char *);
 extern void handle_message(struct sourceinfo *, char *, bool, char *);
 extern void handle_topic_from(struct sourceinfo *, struct channel *, const char *, time_t, const char *);
 extern void handle_kill(struct sourceinfo *, const char *, const char *);
 extern server_t *handle_server(struct sourceinfo *, const char *, const char *, int, const char *);
 extern void handle_eob(server_t *);
-extern bool should_reg_umode(user_t *);
+extern bool should_reg_umode(struct user *);
 
 /* services.c */
 extern void services_init(void);
-extern void reintroduce_user(user_t *u);
-extern void handle_nickchange(user_t *u);
-extern void handle_burstlogin(user_t *u, const char *login, time_t ts);
-extern void handle_setlogin(struct sourceinfo *si, user_t *u, const char *login, time_t ts);
-extern void handle_certfp(struct sourceinfo *si, user_t *u, const char *certfp);
-extern void handle_clearlogin(struct sourceinfo *si, user_t *u);
+extern void reintroduce_user(struct user *u);
+extern void handle_nickchange(struct user *u);
+extern void handle_burstlogin(struct user *u, const char *login, time_t ts);
+extern void handle_setlogin(struct sourceinfo *si, struct user *u, const char *login, time_t ts);
+extern void handle_certfp(struct sourceinfo *si, struct user *u, const char *certfp);
+extern void handle_clearlogin(struct sourceinfo *si, struct user *u);
 
 #endif

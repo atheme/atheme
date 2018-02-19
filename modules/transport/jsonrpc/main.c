@@ -517,7 +517,7 @@ static bool jsonrpcmethod_privset(void *conn, mowgli_list_t *params, char *id)
 
 static bool jsonrpcmethod_ison(void *conn, mowgli_list_t *params, char *id)
 {
-	user_t *u;
+	struct user *u;
 
 	char *param, *user;
 	user = mowgli_node_nth_data(params, 0);

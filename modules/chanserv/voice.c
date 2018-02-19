@@ -39,7 +39,7 @@ static void cmd_voice(struct sourceinfo *si, bool voicing, int parc, char *parv[
 	char *nicks;
 	bool voice;
 	mychan_t *mc;
-	user_t *tu;
+	struct user *tu;
 	struct chanuser *cu;
 	mowgli_node_t *n;
 

@@ -423,7 +423,7 @@ static void hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 static void hs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *nick = parv[0];
-	user_t *u;
+	struct user *u;
 	char buf[BUFSIZE];
 	hsreq_t *l;
 	mowgli_node_t *n, *tn;
@@ -489,7 +489,7 @@ static void hs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *nick = parv[0];
 	char *reason = parv[1];
-	user_t *u;
+	struct user *u;
 	char buf[BUFSIZE];
 	hsreq_t *l;
 	mowgli_node_t *n, *tn;

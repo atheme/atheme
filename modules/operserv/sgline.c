@@ -69,7 +69,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static void os_sgline_newuser(hook_user_nick_t *data)
 {
-	user_t *u = data->u;
+	struct user *u = data->u;
 	struct xline *x;
 
 	/* If the user has been killed, don't do anything. */

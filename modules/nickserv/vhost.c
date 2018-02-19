@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void vhost_on_identify(user_t *u);
+static void vhost_on_identify(struct user *u);
 static void ns_cmd_vhost(struct sourceinfo *si, int parc, char *parv[]);
 static void ns_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[]);
 
@@ -32,7 +32,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 }
 
 
-static void do_sethost(user_t *u, stringref host)
+static void do_sethost(struct user *u, stringref host)
 {
 	if (!strcmp(u->vhost, host))
 		return;
@@ -43,7 +43,7 @@ static void do_sethost(user_t *u, stringref host)
 static void do_sethost_all(myuser_t *mu, stringref host)
 {
 	mowgli_node_t *n;
-	user_t *u;
+	struct user *u;
 
 	MOWGLI_ITER_FOREACH(n, mu->logins.head)
 	{
@@ -281,7 +281,7 @@ static void ns_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
 						    N_("\2%d\2 matches for pattern \2%s\2"), matches), matches, pattern);
 }
 
-static void vhost_on_identify(user_t *u)
+static void vhost_on_identify(struct user *u)
 {
 	myuser_t *mu = u->myuser;
 	struct metadata *md;

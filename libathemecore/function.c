@@ -233,7 +233,7 @@ unsigned long makekey(void)
 	return k;
 }
 
-bool is_internal_client(user_t *u)
+bool is_internal_client(struct user *u)
 {
 	return (u && (!u->server || u->server == me.me));
 }
@@ -631,7 +631,7 @@ static void sendemail_waited(pid_t pid, int status, void *data)
  * mu is the recipient user
  * param depends on type, also see include/tools.h
  */
-int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, const char *param)
+int sendemail(struct user *u, myuser_t *mu, const char *type, const char *email, const char *param)
 {
 #ifndef MOWGLI_OS_WIN
 	char *date = NULL;
@@ -792,7 +792,7 @@ bool is_founder(mychan_t *mychan, struct myentity *mt)
 	return false;
 }
 
-bool is_ircop(user_t *user)
+bool is_ircop(struct user *user)
 {
 	if (UF_IRCOP & user->flags)
 		return true;
@@ -800,7 +800,7 @@ bool is_ircop(user_t *user)
 	return false;
 }
 
-bool is_admin(user_t *user)
+bool is_admin(struct user *user)
 {
 	if (UF_ADMIN & user->flags)
 		return true;
@@ -808,7 +808,7 @@ bool is_admin(user_t *user)
 	return false;
 }
 
-bool is_autokline_exempt(user_t *user)
+bool is_autokline_exempt(struct user *user)
 {
 	mowgli_node_t *n;
 	char buf[BUFSIZE];
@@ -822,7 +822,7 @@ bool is_autokline_exempt(user_t *user)
 	return false;
 }
 
-bool is_service(user_t *user)
+bool is_service(struct user *user)
 {
 	if (UF_SERVICE & user->flags)
 		return true;

@@ -34,11 +34,11 @@ static void os_cmd_rakill(struct sourceinfo *si, int parc, char *parv[])
 	char usermask[512];
 	unsigned int matches = 0;
 	mowgli_patricia_iteration_state_t state;
-	user_t *u;
+	struct user *u;
 	char *args = parv[0];
 	char *pattern;
 	char *reason;
-	user_t *source;
+	struct user *source;
 	int flags = 0;
 
 	/* make sure they could have done RMATCH */

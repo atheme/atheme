@@ -26,7 +26,7 @@ struct chansvs
 
   bool changets;		/* use TS to better deop people */
 
-  struct service *me;                /* our user_t struct          */
+  struct service *me;                /* our struct user       */
 
   unsigned int expiry;		/* expiry time                */
 
@@ -90,23 +90,23 @@ extern int use_account_private;
 extern int use_channel_private;
 extern int use_limitflags;
 
-extern int ban(user_t *source, struct channel *chan, user_t *target);
-extern int remove_banlike(user_t *source, struct channel *chan, int type, user_t *target);
-extern int remove_ban_exceptions(user_t *source, struct channel *chan, user_t *target);
+extern int ban(struct user *source, struct channel *chan, struct user *target);
+extern int remove_banlike(struct user *source, struct channel *chan, int type, struct user *target);
+extern int remove_ban_exceptions(struct user *source, struct channel *chan, struct user *target);
 
-extern void try_kick_real(user_t *source, struct channel *chan, user_t *target, const char *reason);
-extern void (*try_kick)(user_t *source, struct channel *chan, user_t *target, const char *reason);
+extern void try_kick_real(struct user *source, struct channel *chan, struct user *target, const char *reason);
+extern void (*try_kick)(struct user *source, struct channel *chan, struct user *target, const char *reason);
 
-extern void kill_user(user_t *source, user_t *victim, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
+extern void kill_user(struct user *source, struct user *victim, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
 extern void introduce_enforcer(const char *nick);
 extern void join(const char *chan, const char *nick);
 extern void joinall(const char *name);
 extern void part(const char *chan, const char *nick);
 extern void partall(const char *name);
-extern void myuser_login(struct service *svs, user_t *u, myuser_t *mu, bool sendaccount);
+extern void myuser_login(struct service *svs, struct user *u, myuser_t *mu, bool sendaccount);
 extern void verbose(mychan_t *mychan, const char *fmt, ...) ATHEME_FATTR_PRINTF(2, 3);
 extern void (*notice)(const char *from, const char *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
-extern void change_notify(const char *from, user_t *to, const char *message, ...) ATHEME_FATTR_PRINTF(3, 4);
+extern void change_notify(const char *from, struct user *to, const char *message, ...) ATHEME_FATTR_PRINTF(3, 4);
 extern bool bad_password(struct sourceinfo *si, myuser_t *mu);
 
 extern struct sourceinfo *sourceinfo_create(void);
@@ -126,7 +126,7 @@ extern bool check_vhost_validity(struct sourceinfo *si, const char *host);
 
 /* ptasks.c */
 extern void handle_topic(struct channel *, const char *, time_t, const char *);
-extern int floodcheck(user_t *, user_t *);
+extern int floodcheck(struct user *, struct user *);
 extern void command_add_flood(struct sourceinfo *si, unsigned int amount);
 
 /* ctcp-common.c */

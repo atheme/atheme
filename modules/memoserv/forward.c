@@ -27,7 +27,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 static void ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* Misc structs etc */
-	user_t *tu;
+	struct user *tu;
 	myuser_t *tmu;
 	struct mymemo *memo, *newmemo;
 	mowgli_node_t *n, *temp;

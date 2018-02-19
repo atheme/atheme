@@ -77,10 +77,10 @@ static const struct cmode asuka_user_mode_list[] = {
   { '\0', 0 }
 };
 
-static void check_hidehost(user_t *u);
+static void check_hidehost(struct user *u);
 
 /* NOTICE wrapper */
-static void asuka_notice_channel_sts(user_t *from, struct channel *target, const char *text)
+static void asuka_notice_channel_sts(struct user *from, struct channel *target, const char *text)
 {
 	if (target->modes & CMODE_NONOTICE)
 	{
@@ -96,7 +96,7 @@ static void asuka_notice_channel_sts(user_t *from, struct channel *target, const
 		sts("%s O %s :[%s:%s] %s", me.numeric, target->name, from->nick, target->name, text);
 }
 
-static void asuka_wallchops(user_t *sender, struct channel *channel, const char *message)
+static void asuka_wallchops(struct user *sender, struct channel *channel, const char *message)
 {
 	if (channel->modes & CMODE_NONOTICE)
 	{
@@ -110,7 +110,7 @@ static void asuka_wallchops(user_t *sender, struct channel *channel, const char 
 }
 
 /* protocol-specific stuff to do on login */
-static void asuka_on_login(user_t *u, myuser_t *account, const char *wantedhost)
+static void asuka_on_login(struct user *u, myuser_t *account, const char *wantedhost)
 {
 	return_if_fail(u != NULL);
 
@@ -121,7 +121,7 @@ static void asuka_on_login(user_t *u, myuser_t *account, const char *wantedhost)
 
 /* P10 does not support logout, so kill the user
  * we can't keep track of which logins are stale and which aren't -- jilles */
-static bool asuka_on_logout(user_t *u, const char *account)
+static bool asuka_on_logout(struct user *u, const char *account)
 {
 	return_val_if_fail(u != NULL, false);
 
@@ -131,7 +131,7 @@ static bool asuka_on_logout(user_t *u, const char *account)
 
 static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
-	user_t *u;
+	struct user *u;
 	char ipstring[HOSTIPLEN + 1];
 	char *p;
 	int i;
@@ -225,7 +225,7 @@ static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_mode(struct sourceinfo *si, int parc, char *parv[])
 {
-	user_t *u;
+	struct user *u;
 	char *p;
 
 	if (*parv[0] == '#')
@@ -290,7 +290,7 @@ static void m_mode(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void check_hidehost(user_t *u)
+static void check_hidehost(struct user *u)
 {
 	static bool warned = false;
 	char buf[HOSTLEN + 1];

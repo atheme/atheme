@@ -20,8 +20,8 @@ mowgli_list_t noop_server_list;
 
 static void os_cmd_noop(struct sourceinfo *si, int parc, char *parv[]);
 static void noop_kill_users(void *dummy);
-static void check_quit(user_t *u);
-static void check_user(user_t *u);
+static void check_quit(struct user *u);
+static void check_user(struct user *u);
 static mowgli_list_t noop_kill_queue;
 static mowgli_eventloop_timer_t *noop_kill_users_timer = NULL;
 
@@ -62,7 +62,7 @@ static void noop_kill_users(void *dummy)
 {
 	struct service *service;
 	mowgli_node_t *n, *tn;
-	user_t *u;
+	struct user *u;
 
 	hook_del_user_delete(check_quit);
 
@@ -76,7 +76,7 @@ static void noop_kill_users(void *dummy)
 	}
 }
 
-static void check_quit(user_t *u)
+static void check_quit(struct user *u)
 {
 	mowgli_node_t *n;
 
@@ -93,7 +93,7 @@ static void check_quit(user_t *u)
 	}
 }
 
-static void check_user(user_t *u)
+static void check_user(struct user *u)
 {
 	mowgli_node_t *n;
 	char hostbuf[BUFSIZE];

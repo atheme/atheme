@@ -34,7 +34,7 @@ static void os_cmd_rnc(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *param = parv[0];
 	int count = param ? atoi(param) : 20;
-	user_t *u;
+	struct user *u;
 	rnc_t *rnc, *biggest;
 	mowgli_patricia_t *realnames;
 	int i, found = 0;

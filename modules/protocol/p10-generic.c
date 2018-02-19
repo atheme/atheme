@@ -11,7 +11,7 @@
 #include "uplink.h"
 #include "pmodule.h"
 
-static void check_hidehost(user_t *u);
+static void check_hidehost(struct user *u);
 
 /* login to our uplink */
 static unsigned int p10_server_login(void)
@@ -35,7 +35,7 @@ static unsigned int p10_server_login(void)
 }
 
 /* introduce a client */
-static void p10_introduce_nick(user_t *u)
+static void p10_introduce_nick(struct user *u)
 {
 	const char *umode = user_get_umodestr(u);
 
@@ -43,13 +43,13 @@ static void p10_introduce_nick(user_t *u)
 }
 
 /* invite a user to a channel */
-static void p10_invite_sts(user_t *sender, user_t *target, struct channel *channel)
+static void p10_invite_sts(struct user *sender, struct user *target, struct channel *channel)
 {
 	/* target is a nick, weird eh? -- jilles */
 	sts("%s I %s %s", sender->uid, target->nick, channel->name);
 }
 
-static void p10_quit_sts(user_t *u, const char *reason)
+static void p10_quit_sts(struct user *u, const char *reason)
 {
 	sts("%s Q :%s", u->uid, reason);
 }
@@ -61,7 +61,7 @@ static void p10_wallops_sts(const char *text)
 }
 
 /* join a channel */
-static void p10_join_sts(struct channel *c, user_t *u, bool isnew, char *modes)
+static void p10_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
 {
 	/* If the channel doesn't exist, we need to create it. */
 	if (isnew)
@@ -77,7 +77,7 @@ static void p10_join_sts(struct channel *c, user_t *u, bool isnew, char *modes)
 	}
 }
 
-static void p10_chan_lowerts(struct channel *c, user_t *u)
+static void p10_chan_lowerts(struct channel *c, struct user *u)
 {
 	slog(LG_DEBUG, "p10_chan_lowerts(): lowering TS for %s to %lu",
 			c->name, (unsigned long)c->ts);
@@ -87,7 +87,7 @@ static void p10_chan_lowerts(struct channel *c, user_t *u)
 }
 
 /* kicks a user from a channel */
-static void p10_kick(user_t *source, struct channel *c, user_t *u, const char *reason)
+static void p10_kick(struct user *source, struct channel *c, struct user *u, const char *reason)
 {
 	if (chanuser_find(c, source))
 		sts("%s K %s %s :%s", source->uid, c->name, u->uid, reason);
@@ -102,7 +102,7 @@ static void ATHEME_FATTR_PRINTF(3, 4)
 p10_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
-	user_t *u = user_find_named(from);
+	struct user *u = user_find_named(from);
 	char buf[BUFSIZE];
 
 	if (!u)
@@ -115,7 +115,7 @@ p10_msg(const char *from, const char *target, const char *fmt, ...)
 	sts("%s P %s :%s", u->uid, target, buf);
 }
 
-static void p10_msg_global_sts(user_t *from, const char *mask, const char *text)
+static void p10_msg_global_sts(struct user *from, const char *mask, const char *text)
 {
 	mowgli_node_t *n;
 	struct tld *tld;
@@ -133,12 +133,12 @@ static void p10_msg_global_sts(user_t *from, const char *mask, const char *text)
 }
 
 /* NOTICE wrapper */
-static void p10_notice_user_sts(user_t *from, user_t *target, const char *text)
+static void p10_notice_user_sts(struct user *from, struct user *target, const char *text)
 {
 	sts("%s O %s :%s", from ? from->uid : me.numeric, target->uid, text);
 }
 
-static void p10_notice_global_sts(user_t *from, const char *mask, const char *text)
+static void p10_notice_global_sts(struct user *from, const char *mask, const char *text)
 {
 	mowgli_node_t *n;
 	struct tld *tld;
@@ -155,7 +155,7 @@ static void p10_notice_global_sts(user_t *from, const char *mask, const char *te
 		sts("%s O %s%s :%s", from ? from->uid : me.numeric, ircd->tldprefix, mask, text);
 }
 
-static void p10_notice_channel_sts(user_t *from, struct channel *target, const char *text)
+static void p10_notice_channel_sts(struct user *from, struct channel *target, const char *text)
 {
 	if (from == NULL || chanuser_find(target, from))
 		sts("%s O %s :%s", from ? from->uid : me.numeric, target->name, text);
@@ -163,14 +163,14 @@ static void p10_notice_channel_sts(user_t *from, struct channel *target, const c
 		sts("%s O %s :[%s:%s] %s", me.numeric, target->name, from->nick, target->name, text);
 }
 
-static void p10_wallchops(user_t *sender, struct channel *channel, const char *message)
+static void p10_wallchops(struct user *sender, struct channel *channel, const char *message)
 {
 	sts("%s WC %s :%s", sender->uid, channel->name, message);
 }
 
 /* numeric wrapper */
 static void ATHEME_FATTR_PRINTF(4, 5)
-p10_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
+p10_numeric_sts(server_t *from, int numeric, struct user *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -183,7 +183,7 @@ p10_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ..
 }
 
 /* KILL wrapper */
-static void p10_kill_id_sts(user_t *killer, const char *id, const char *reason)
+static void p10_kill_id_sts(struct user *killer, const char *id, const char *reason)
 {
 	if (killer != NULL)
 		sts("%s D %s :%s!%s (%s)", killer->uid, id, killer->host, killer->nick, reason);
@@ -192,7 +192,7 @@ static void p10_kill_id_sts(user_t *killer, const char *id, const char *reason)
 }
 
 /* PART wrapper */
-static void p10_part_sts(struct channel *c, user_t *u)
+static void p10_part_sts(struct channel *c, struct user *u)
 {
 	sts("%s L %s", u->uid, c->name);
 }
@@ -245,7 +245,7 @@ static void p10_unqline_sts(const char *server, const char *name)
 }
 
 /* topic wrapper */
-static void p10_topic_sts(struct channel *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
+static void p10_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	if (ts > prevts || prevts == 0)
 		sts("%s T %s %lu %lu :%s", source->uid, c->name, (unsigned long)c->ts, (unsigned long)ts, topic);
@@ -262,7 +262,7 @@ static void p10_topic_sts(struct channel *c, user_t *source, const char *setter,
 /* mode wrapper */
 static void p10_mode_sts(char *sender, struct channel *target, char *modes)
 {
-	user_t *fptr;
+	struct user *fptr;
 
 	return_if_fail(sender != NULL);
 	return_if_fail(target != NULL);
@@ -285,7 +285,7 @@ static void p10_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void p10_on_login(user_t *u, myuser_t *mu, const char *wantedhost)
+static void p10_on_login(struct user *u, myuser_t *mu, const char *wantedhost)
 {
 	return_if_fail(u != NULL);
 
@@ -296,7 +296,7 @@ static void p10_on_login(user_t *u, myuser_t *mu, const char *wantedhost)
 
 /* P10 does not support logout, so kill the user
  * we can't keep track of which logins are stale and which aren't -- jilles */
-static bool p10_on_logout(user_t *u, const char *account)
+static bool p10_on_logout(struct user *u, const char *account)
 {
 	return_val_if_fail(u != NULL, false);
 
@@ -610,7 +610,7 @@ static void m_part(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
-	user_t *u;
+	struct user *u;
 	char ipstring[HOSTIPLEN + 1];
 	char *p;
 
@@ -685,7 +685,7 @@ static void m_quit(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_mode(struct sourceinfo *si, int parc, char *parv[])
 {
-	user_t *u;
+	struct user *u;
 	struct channel *c;
 	int i;
 	char *p;
@@ -804,7 +804,7 @@ static void m_clearmode(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_kick(struct sourceinfo *si, int parc, char *parv[])
 {
-	user_t *u = user_find(parv[1]);
+	struct user *u = user_find(parv[1]);
 	struct channel *c = channel_find(parv[0]);
 
 	/* -> :rakaur KICK #shrike rintaun :test */
@@ -936,7 +936,7 @@ static void m_eos(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_account(struct sourceinfo *si, int parc, char *parv[])
 {
-	user_t *u;
+	struct user *u;
 
 	u = user_find(parv[0]);
 	if (u == NULL)
@@ -944,7 +944,7 @@ static void m_account(struct sourceinfo *si, int parc, char *parv[])
 	handle_setlogin(si, u, parv[1], parc > 2 ? atol(parv[2]) : 0);
 }
 
-static void check_hidehost(user_t *u)
+static void check_hidehost(struct user *u)
 {
 	static bool warned = false;
 	char buf[HOSTLEN + 1];

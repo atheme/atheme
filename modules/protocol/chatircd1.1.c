@@ -88,7 +88,7 @@ static const struct cmode chatircd_prefix_mode_list[] = {
 /* this may be slow, but it is not used much */
 /* returns true if it matches, false if not */
 /* note that the host part matches differently from a regular ban */
-static bool extgecos_match(const char *mask, user_t *u)
+static bool extgecos_match(const char *mask, struct user *u)
 {
 	char hostgbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + GECOSLEN + 1];
 	char realgbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + GECOSLEN + 1];
@@ -103,7 +103,7 @@ static bool extgecos_match(const char *mask, user_t *u)
  * e.g. +b $u:*!webchat@* would ban all webchat users who are not
  * identified to services.
  */
-static bool unidentified_match(const char *mask, user_t *u)
+static bool unidentified_match(const char *mask, struct user *u)
 {
 	char hostbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
 	char realbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
@@ -122,7 +122,7 @@ static bool unidentified_match(const char *mask, user_t *u)
 	return false;
 }
 
-static mowgli_node_t *chatircd_next_matching_ban(struct channel *c, user_t *u, int type, mowgli_node_t *first)
+static mowgli_node_t *chatircd_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_node_t *first)
 {
 	struct chanban *cb;
 	mowgli_node_t *n;

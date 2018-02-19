@@ -500,7 +500,7 @@ static int xmlrpcmethod_privset(void *conn, int parc, char *parv[])
  */
 static int xmlrpcmethod_ison(void *conn, int parc, char *parv[])
 {
-	user_t *u;
+	struct user *u;
 	int i;
 	char buf[XMLRPC_BUFSIZE], buf2[XMLRPC_BUFSIZE];
 

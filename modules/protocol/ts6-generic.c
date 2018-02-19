@@ -93,7 +93,7 @@ static unsigned int ts6_server_login(void)
 }
 
 /* introduce a client */
-static void ts6_introduce_nick(user_t *u)
+static void ts6_introduce_nick(struct user *u)
 {
 	const char *umode = user_get_umodestr(u);
 
@@ -106,12 +106,12 @@ static void ts6_introduce_nick(user_t *u)
 }
 
 /* invite a user to a channel */
-static void ts6_invite_sts(user_t *sender, user_t *target, struct channel *channel)
+static void ts6_invite_sts(struct user *sender, struct user *target, struct channel *channel)
 {
 	sts(":%s INVITE %s %s", CLIENT_NAME(sender), CLIENT_NAME(target), channel->name);
 }
 
-static void ts6_quit_sts(user_t *u, const char *reason)
+static void ts6_quit_sts(struct user *u, const char *reason)
 {
 	sts(":%s QUIT :%s", CLIENT_NAME(u), reason);
 }
@@ -123,7 +123,7 @@ static void ts6_wallops_sts(const char *text)
 }
 
 /* join a channel */
-static void ts6_join_sts(struct channel *c, user_t *u, bool isnew, char *modes)
+static void ts6_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
 {
 	if (isnew)
 		sts(":%s SJOIN %lu %s %s :@%s", ME, (unsigned long)c->ts,
@@ -133,7 +133,7 @@ static void ts6_join_sts(struct channel *c, user_t *u, bool isnew, char *modes)
 				c->name, CLIENT_NAME(u));
 }
 
-static void ts6_chan_lowerts(struct channel *c, user_t *u)
+static void ts6_chan_lowerts(struct channel *c, struct user *u)
 {
 	slog(LG_DEBUG, "ts6_chan_lowerts(): lowering TS for %s to %lu",
 			c->name, (unsigned long)c->ts);
@@ -144,7 +144,7 @@ static void ts6_chan_lowerts(struct channel *c, user_t *u)
 }
 
 /* kicks a user from a channel */
-static void ts6_kick(user_t *source, struct channel *c, user_t *u, const char *reason)
+static void ts6_kick(struct user *source, struct channel *c, struct user *u, const char *reason)
 {
 	if (c->ts != 0 || chanuser_find(c, source))
 		sts(":%s KICK %s %s :%s", CLIENT_NAME(source), c->name, CLIENT_NAME(u), reason);
@@ -160,8 +160,8 @@ ts6_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
-	user_t *u = user_find(from);
-	user_t *t = user_find(target);
+	struct user *u = user_find(from);
+	struct user *t = user_find(target);
 
 	if (!u)
 		return;
@@ -180,7 +180,7 @@ ts6_msg(const char *from, const char *target, const char *fmt, ...)
 	sts(":%s PRIVMSG %s :%s", CLIENT_NAME(u), t ? CLIENT_NAME(t) : target, buf);
 }
 
-static void ts6_msg_global_sts(user_t *from, const char *mask, const char *text)
+static void ts6_msg_global_sts(struct user *from, const char *mask, const char *text)
 {
 	mowgli_node_t *n;
 	struct tld *tld;
@@ -198,12 +198,12 @@ static void ts6_msg_global_sts(user_t *from, const char *mask, const char *text)
 }
 
 /* NOTICE wrapper */
-static void ts6_notice_user_sts(user_t *from, user_t *target, const char *text)
+static void ts6_notice_user_sts(struct user *from, struct user *target, const char *text)
 {
 	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, CLIENT_NAME(target), text);
 }
 
-static void ts6_notice_global_sts(user_t *from, const char *mask, const char *text)
+static void ts6_notice_global_sts(struct user *from, const char *mask, const char *text)
 {
 	mowgli_node_t *n;
 	struct tld *tld;
@@ -220,7 +220,7 @@ static void ts6_notice_global_sts(user_t *from, const char *mask, const char *te
 		sts(":%s NOTICE %s%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, mask, text);
 }
 
-static void ts6_notice_channel_sts(user_t *from, struct channel *target, const char *text)
+static void ts6_notice_channel_sts(struct user *from, struct channel *target, const char *text)
 {
 	if (from == NULL || chanuser_find(target, from))
 		sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, target->name, text);
@@ -228,7 +228,7 @@ static void ts6_notice_channel_sts(user_t *from, struct channel *target, const c
 		sts(":%s NOTICE %s :[%s:%s] %s", ME, target->name, from->nick, target->name, text);
 }
 
-static void ts6_wallchops(user_t *sender, struct channel *channel, const char *message)
+static void ts6_wallchops(struct user *sender, struct channel *channel, const char *message)
 {
 	if (chanuser_find(channel, sender))
 		sts(":%s NOTICE @%s :%s", CLIENT_NAME(sender), channel->name,
@@ -239,7 +239,7 @@ static void ts6_wallchops(user_t *sender, struct channel *channel, const char *m
 
 /* numeric wrapper */
 static void ATHEME_FATTR_PRINTF(4, 5)
-ts6_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
+ts6_numeric_sts(server_t *from, int numeric, struct user *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -252,7 +252,7 @@ ts6_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ..
 }
 
 /* KILL wrapper */
-static void ts6_kill_id_sts(user_t *killer, const char *id, const char *reason)
+static void ts6_kill_id_sts(struct user *killer, const char *id, const char *reason)
 {
 	if (killer != NULL)
 		sts(":%s KILL %s :%s!%s (%s)", CLIENT_NAME(killer), id, killer->host, killer->nick, reason);
@@ -261,7 +261,7 @@ static void ts6_kill_id_sts(user_t *killer, const char *id, const char *reason)
 }
 
 /* PART wrapper */
-static void ts6_part_sts(struct channel *c, user_t *u)
+static void ts6_part_sts(struct channel *c, struct user *u)
 {
 	sts(":%s PART %s", CLIENT_NAME(u), c->name);
 }
@@ -339,7 +339,7 @@ static void ts6_undline_sts(const char *server, const char *host)
 }
 
 /* topic wrapper */
-static void ts6_topic_sts(struct channel *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
+static void ts6_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	int joined = 0;
 
@@ -400,7 +400,7 @@ static void ts6_topic_sts(struct channel *c, user_t *source, const char *setter,
 /* mode wrapper */
 static void ts6_mode_sts(char *sender, struct channel *target, char *modes)
 {
-	user_t *u;
+	struct user *u;
 
 	return_if_fail(sender != NULL);
 	return_if_fail(target != NULL);
@@ -423,7 +423,7 @@ static void ts6_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void ts6_on_login(user_t *u, myuser_t *mu, const char *wantedhost)
+static void ts6_on_login(struct user *u, myuser_t *mu, const char *wantedhost)
 {
 	if (!use_rserv_support)
 		return;
@@ -434,7 +434,7 @@ static void ts6_on_login(user_t *u, myuser_t *mu, const char *wantedhost)
 }
 
 /* protocol-specific stuff to do on login */
-static bool ts6_on_logout(user_t *u, const char *account)
+static bool ts6_on_logout(struct user *u, const char *account)
 {
 	if (!use_rserv_support)
 		return false;
@@ -460,7 +460,7 @@ static void ts6_jupe(const char *server, const char *reason)
 	sts(":%s SERVER %s 2 :(H) %s", me.name, server, reason);
 }
 
-static void ts6_sethost_sts(user_t *source, user_t *target, const char *host)
+static void ts6_sethost_sts(struct user *source, struct user *target, const char *host)
 {
 	if (use_euid)
 		sts(":%s CHGHOST %s :%s", ME, CLIENT_NAME(target), host);
@@ -468,7 +468,7 @@ static void ts6_sethost_sts(user_t *source, user_t *target, const char *host)
 		sts(":%s ENCAP * CHGHOST %s :%s", ME, target->nick, host);
 }
 
-static void ts6_fnc_sts(user_t *source, user_t *u, const char *newnick, int type)
+static void ts6_fnc_sts(struct user *source, struct user *u, const char *newnick, int type)
 {
 	/* XXX assumes the server will accept this -- jilles */
 	sts(":%s ENCAP %s RSFNC %s %s %lu %lu", ME,
@@ -480,7 +480,7 @@ static void ts6_fnc_sts(user_t *source, user_t *u, const char *newnick, int type
 
 static void ts6_svslogin_sts(char *target, char *nick, char *user, char *host, myuser_t *account)
 {
-	user_t *tu = user_find(target);
+	struct user *tu = user_find(target);
 	server_t *s;
 
 	if(tu)
@@ -521,7 +521,7 @@ static void ts6_sasl_mechlist_sts(const char *mechlist)
 	sts(":%s ENCAP * MECHLIST :%s", ME, mechlist);
 }
 
-static void ts6_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *mu)
+static void ts6_holdnick_sts(struct user *source, int duration, const char *nick, myuser_t *mu)
 {
 	if (use_euid)
 		sts(":%s ENCAP * NICKDELAY %d %s", ME, duration, nick);
@@ -904,7 +904,7 @@ static void m_part(struct sourceinfo *si, int parc, char *parv[])
 static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
 	server_t *s;
-	user_t *u;
+	struct user *u;
 
 	/* got the right number of args for an introduction? */
 	if (parc == 8)
@@ -965,7 +965,7 @@ static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 static void m_uid(struct sourceinfo *si, int parc, char *parv[])
 {
 	server_t *s;
-	user_t *u;
+	struct user *u;
 
 	/* got the right number of args for an introduction? */
 	if (parc == 9)
@@ -1000,7 +1000,7 @@ static void m_uid(struct sourceinfo *si, int parc, char *parv[])
 static void m_euid(struct sourceinfo *si, int parc, char *parv[])
 {
 	server_t *s;
-	user_t *u;
+	struct user *u;
 
 	/* got the right number of args for an introduction? */
 	if (parc >= 11)
@@ -1082,7 +1082,7 @@ static void m_tmode(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_kick(struct sourceinfo *si, int parc, char *parv[])
 {
-	user_t *u = user_find(parv[1]);
+	struct user *u = user_find(parv[1]);
 	struct channel *c = channel_find(parv[0]);
 
 	/* -> :rakaur KICK #shrike rintaun :test */
@@ -1226,7 +1226,7 @@ static void m_error(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_encap(struct sourceinfo *si, int parc, char *parv[])
 {
-	user_t *u;
+	struct user *u;
 
 	if (match(parv[0], me.name))
 		return;
@@ -1347,7 +1347,7 @@ static void m_encap(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_signon(struct sourceinfo *si, int parc, char *parv[])
 {
-	user_t *u;
+	struct user *u;
 
 	if((u = user_find(parv[0])) == NULL)
 		return;
@@ -1422,7 +1422,7 @@ static void m_capab(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_chghost(struct sourceinfo *si, int parc, char *parv[])
 {
-	user_t *u = user_find(parv[0]);
+	struct user *u = user_find(parv[0]);
 
 	if (!u)
 		return;
@@ -1443,7 +1443,7 @@ static void server_eob(server_t *s)
 
 	MOWGLI_ITER_FOREACH(n, s->userlist.head)
 	{
-		handle_nickchange((user_t *)n->data);
+		handle_nickchange((struct user *)n->data);
 	}
 }
 

@@ -24,7 +24,7 @@ static void mygroup_expire(void *unused)
 	}
 }
 
-static void grant_channel_access_hook(user_t *u)
+static void grant_channel_access_hook(struct user *u)
 {
 	mowgli_node_t *n, *tn;
 	mowgli_list_t *l;

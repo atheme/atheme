@@ -19,7 +19,7 @@ static int loading_cfdbv = 0;
 
 /*************************************************************************************/
 
-struct chanfix_oprecord *chanfix_oprecord_create(struct chanfix_channel *chan, user_t *u)
+struct chanfix_oprecord *chanfix_oprecord_create(struct chanfix_channel *chan, struct user *u)
 {
 	struct chanfix_oprecord *orec;
 
@@ -52,7 +52,7 @@ struct chanfix_oprecord *chanfix_oprecord_create(struct chanfix_channel *chan, u
 	return orec;
 }
 
-struct chanfix_oprecord *chanfix_oprecord_find(struct chanfix_channel *chan, user_t *u)
+struct chanfix_oprecord *chanfix_oprecord_find(struct chanfix_channel *chan, struct user *u)
 {
 	mowgli_node_t *n;
 
@@ -73,7 +73,7 @@ struct chanfix_oprecord *chanfix_oprecord_find(struct chanfix_channel *chan, use
 	return NULL;
 }
 
-void chanfix_oprecord_update(struct chanfix_channel *chan, user_t *u)
+void chanfix_oprecord_update(struct chanfix_channel *chan, struct user *u)
 {
 	struct chanfix_oprecord *orec;
 

@@ -28,7 +28,7 @@ static void ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	myuser_t *mu;
 	mynick_t *mn = NULL;
 	struct myuser_name *mun;
-	user_t *u = NULL;
+	struct user *u = NULL;
 	bool recognized = false;
 	const char *name = parv[0];
 	char buf[BUFSIZE], strfbuf[BUFSIZE], lastlogin[BUFSIZE], *p;
@@ -243,7 +243,7 @@ static void ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 			}
 			if (buf[0])
 				mowgli_strlcat(buf, " ", sizeof buf);
-			mowgli_strlcat(buf, ((user_t *)(n->data))->nick, sizeof buf);
+			mowgli_strlcat(buf, ((struct user *)(n->data))->nick, sizeof buf);
 		}
 		if (buf[0])
 			command_success_nodata(si, _("Logins from: %s"), buf);

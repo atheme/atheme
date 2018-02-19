@@ -25,7 +25,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static void ns_cmd_logout(struct sourceinfo *si, int parc, char *parv[])
 {
-	user_t *u = si->su;
+	struct user *u = si->su;
 	mowgli_node_t *n, *tn;
 	mynick_t *mn;
 	char *user = parv[0];

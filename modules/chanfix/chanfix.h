@@ -71,10 +71,10 @@ extern mowgli_patricia_t *chanfix_channels;
 extern void chanfix_gather_init(struct chanfix_persist_record *);
 extern void chanfix_gather_deinit(enum module_unload_intent, struct chanfix_persist_record *);
 
-extern void chanfix_oprecord_update(struct chanfix_channel *chan, user_t *u);
+extern void chanfix_oprecord_update(struct chanfix_channel *chan, struct user *u);
 extern void chanfix_oprecord_delete(struct chanfix_oprecord *orec);
-extern struct chanfix_oprecord *chanfix_oprecord_create(struct chanfix_channel *chan, user_t *u);
-extern struct chanfix_oprecord *chanfix_oprecord_find(struct chanfix_channel *chan, user_t *u);
+extern struct chanfix_oprecord *chanfix_oprecord_create(struct chanfix_channel *chan, struct user *u);
+extern struct chanfix_oprecord *chanfix_oprecord_find(struct chanfix_channel *chan, struct user *u);
 extern struct chanfix_channel *chanfix_channel_create(const char *name, struct channel *chan);
 extern struct chanfix_channel *chanfix_channel_find(const char *name);
 extern struct chanfix_channel *chanfix_channel_get(struct channel *chan);

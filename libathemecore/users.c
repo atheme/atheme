@@ -44,7 +44,7 @@ mowgli_patricia_t *uidlist;
  */
 void init_users(void)
 {
-	user_heap = sharedheap_get(sizeof(user_t));
+	user_heap = sharedheap_get(sizeof(struct user));
 
 	if (user_heap == NULL)
 	{
@@ -81,11 +81,11 @@ void init_users(void)
  *     - if successful, a user is created and added to the users DTree.
  *     - if unsuccessful, a kill has been sent if necessary
  */
-user_t *user_add(const char *nick, const char *user, const char *host,
+struct user *user_add(const char *nick, const char *user, const char *host,
 	const char *vhost, const char *ip, const char *uid, const char *gecos,
 	server_t *server, time_t ts)
 {
-	user_t *u, *u2;
+	struct user *u, *u2;
 	hook_user_nick_t hdata;
 
 	slog(LG_DEBUG, "user_add(): %s (%s@%s) -> %s", nick, user, host, server->name);
@@ -187,7 +187,7 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 }
 
 /*
- * user_delete(user_t *u, const char *comment)
+ * user_delete(struct user *u, const char *comment)
  *
  * Destroys a user object and deletes the object from the users DTree.
  *
@@ -201,7 +201,7 @@ user_t *user_add(const char *nick, const char *user, const char *host,
  * Side Effects:
  *     - on success, a user is deleted from the users DTree.
  */
-void user_delete(user_t *u, const char *comment)
+void user_delete(struct user *u, const char *comment)
 {
 	mowgli_node_t *n, *tn;
 	struct chanuser *cu;
@@ -301,9 +301,9 @@ void user_delete(user_t *u, const char *comment)
  * Side Effects:
  *     - none
  */
-user_t *user_find(const char *nick)
+struct user *user_find(const char *nick)
 {
-	user_t *u;
+	struct user *u;
 
 	return_val_if_fail(nick != NULL, NULL);
 
@@ -342,13 +342,13 @@ user_t *user_find(const char *nick)
  * Side Effects:
  *     - none
  */
-user_t *user_find_named(const char *nick)
+struct user *user_find_named(const char *nick)
 {
 	return mowgli_patricia_retrieve(userlist, nick);
 }
 
 /*
- * user_changeuid(user_t *u, const char *uid)
+ * user_changeuid(struct user *u, const char *uid)
  *
  * Changes a user object's UID.
  *
@@ -362,7 +362,7 @@ user_t *user_find_named(const char *nick)
  * Side Effects:
  *     - a user object's UID is changed.
  */
-void user_changeuid(user_t *u, const char *uid)
+void user_changeuid(struct user *u, const char *uid)
 {
 	return_if_fail(u != NULL);
 
@@ -377,7 +377,7 @@ void user_changeuid(user_t *u, const char *uid)
 }
 
 /*
- * user_changenick(user_t *u, const char *uid)
+ * user_changenick(struct user *u, const char *uid)
  *
  * Changes a user object's nick and TS.
  *
@@ -393,10 +393,10 @@ void user_changeuid(user_t *u, const char *uid)
  *     - a user object's nick and TS is changed.
  *     - in event of a collision or a decision by a hook, the user may be killed
  */
-bool user_changenick(user_t *u, const char *nick, time_t ts)
+bool user_changenick(struct user *u, const char *nick, time_t ts)
 {
 	mynick_t *mn;
-	user_t *u2;
+	struct user *u2;
 	char oldnick[NICKLEN + 1];
 	bool doenforcer = false;
 	hook_user_nick_t hdata;
@@ -509,7 +509,7 @@ bool user_changenick(user_t *u, const char *nick, time_t ts)
 }
 
 /*
- * user_mode(user_t *user, const char *modes)
+ * user_mode(struct user *user, const char *modes)
  *
  * Changes a user object's modes.
  *
@@ -526,7 +526,7 @@ bool user_changenick(user_t *u, const char *nick, time_t ts)
  * Bugs:
  *     - this routine only tracks +i and +o usermode changes.
  */
-void user_mode(user_t *user, const char *modes)
+void user_mode(struct user *user, const char *modes)
 {
 	int dir = MTYPE_ADD;
 	bool was_ircop, was_invis;
@@ -587,7 +587,7 @@ void user_mode(user_t *user, const char *modes)
 }
 
 /*
- * user_sethost(user_t *source, user_t *target, const char *host)
+ * user_sethost(struct user *source, struct user *target, const char *host)
  *
  * Sets a new virtual host on a user.
  *
@@ -602,7 +602,7 @@ void user_mode(user_t *user, const char *modes)
  * Side Effects:
  *     - virtual host is set
  */
-void user_sethost(user_t *source, user_t *target, stringref host)
+void user_sethost(struct user *source, struct user *target, stringref host)
 {
 	return_if_fail(source != NULL);
 	return_if_fail(target != NULL);
@@ -621,7 +621,7 @@ void user_sethost(user_t *source, user_t *target, stringref host)
 	hook_call_user_sethost(target);
 }
 
-const char *user_get_umodestr(user_t *u)
+const char *user_get_umodestr(struct user *u)
 {
 	static char result[34];
 	int iter;
@@ -638,7 +638,7 @@ const char *user_get_umodestr(user_t *u)
 	return result;
 }
 
-bool user_is_channel_banned(user_t *u, char ban_type)
+bool user_is_channel_banned(struct user *u, char ban_type)
 {
 	mowgli_node_t *n;
 

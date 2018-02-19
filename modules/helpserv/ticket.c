@@ -234,7 +234,7 @@ static void helpserv_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 static void helpserv_cmd_close(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *nick = parv[0];
-	user_t *u;
+	struct user *u;
 	ticket_t *l;
 	mowgli_node_t *n;
 

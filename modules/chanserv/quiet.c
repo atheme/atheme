@@ -80,7 +80,7 @@ struct chanban *place_quietmask(struct channel *c, int dir, const char *hostbuf)
 	return cb;
 }
 
-static void make_extban(char *buf, size_t size, user_t *tu)
+static void make_extban(char *buf, size_t size, struct user *tu)
 {
 	return_if_fail(buf != NULL);
 	return_if_fail(tu != NULL);
@@ -108,7 +108,7 @@ static void make_extban(char *buf, size_t size, user_t *tu)
 enum devoice_result { DEVOICE_FAILED, DEVOICE_NO_ACTION, DEVOICE_DONE };
 
 static enum devoice_result
-devoice_user(struct sourceinfo *si, mychan_t *mc, struct channel *c, user_t *tu)
+devoice_user(struct sourceinfo *si, mychan_t *mc, struct channel *c, struct user *tu)
 {
 	struct chanuser *cu;
 	unsigned int flag;
@@ -173,7 +173,7 @@ devoice_user(struct sourceinfo *si, mychan_t *mc, struct channel *c, user_t *tu)
 /* Notify at most this many users in private notices, otherwise channel */
 #define MAX_SINGLE_NOTIFY 3
 
-static void notify_one_victim(struct sourceinfo *si, struct channel *c, user_t *u, int dir)
+static void notify_one_victim(struct sourceinfo *si, struct channel *c, struct user *u, int dir)
 {
 	return_if_fail(dir == MTYPE_ADD || dir == MTYPE_DEL);
 
@@ -201,7 +201,7 @@ static void notify_victims(struct sourceinfo *si, struct channel *c, struct chan
 	struct chanban tmpban;
 	mowgli_list_t ban_l = { NULL, NULL, 0 };
 	mowgli_node_t ban_n;
-	user_t *to_notify[MAX_SINGLE_NOTIFY];
+	struct user *to_notify[MAX_SINGLE_NOTIFY];
 	unsigned int to_notify_count = 0, i;
 	char banlike_char = get_quiet_ban_char();
 
@@ -264,7 +264,7 @@ static void cs_cmd_quiet(struct sourceinfo *si, int parc, char *parv[])
 	char *newtarget;
 	struct channel *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
-	user_t *tu;
+	struct user *tu;
 	struct chanban *cb;
 	int n;
 	char *targetlist;
@@ -359,7 +359,7 @@ static void cs_cmd_unquiet(struct sourceinfo *si, int parc, char *parv[])
 	char banlike_char = get_quiet_ban_char();
         struct channel *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
-	user_t *tu;
+	struct user *tu;
 	struct chanban *cb;
 	char *targetlist;
 	char *strtokctx;

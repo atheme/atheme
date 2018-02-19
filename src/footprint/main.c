@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 
 	printf("\n* * *\n\n");
 
-	printf("sizeof user_t: %zu B --> %zu KB\n", sizeof(user_t), (usercount * sizeof(user_t)) / 1024);
+	printf("sizeof user_t: %zu B --> %zu KB\n", sizeof(struct user), (usercount * sizeof(struct user)) / 1024);
 	printf("sizeof channel_t: %zu B --> %zu KB\n", sizeof(struct channel), (channelcount * sizeof(struct channel)) / 1024);
 	printf("sizeof chanuser_t: %zu B --> %zu KB\n", sizeof(struct chanuser), (membercount * sizeof(struct chanuser)) / 1024);
 

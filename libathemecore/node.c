@@ -156,7 +156,7 @@ struct kline *kline_add(const char *user, const char *host, const char *reason, 
 	return kline_add_with_id(user, host, reason, duration, setby, ++me.kline_id);
 }
 
-struct kline *kline_add_user(user_t *u, const char *reason, long duration, const char *setby)
+struct kline *kline_add_user(struct user *u, const char *reason, long duration, const char *setby)
 {
 	bool use_ident = config_options.kline_with_ident && (!config_options.kline_verified_ident || *u->user != '~');
 
@@ -221,7 +221,7 @@ struct kline *kline_find_num(unsigned long number)
 	return NULL;
 }
 
-struct kline *kline_find_user(user_t *u)
+struct kline *kline_find_user(struct user *u)
 {
 	struct kline *k;
 	mowgli_node_t *n;
@@ -362,7 +362,7 @@ struct xline *xline_find_num(unsigned int number)
 	return NULL;
 }
 
-struct xline *xline_find_user(user_t *u)
+struct xline *xline_find_user(struct user *u)
 {
 	struct xline *x;
 	mowgli_node_t *n;
@@ -517,7 +517,7 @@ struct qline *qline_find_num(unsigned int number)
 	return NULL;
 }
 
-struct qline *qline_find_user(user_t *u)
+struct qline *qline_find_user(struct user *u)
 {
 	struct qline *q;
 	mowgli_node_t *n;

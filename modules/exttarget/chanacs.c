@@ -18,7 +18,7 @@ typedef struct {
 	int checking;
 } chanacs_exttarget_t;
 
-static struct chanacs *chanacs_ext_match_user(struct chanacs *ca, user_t *u)
+static struct chanacs *chanacs_ext_match_user(struct chanacs *ca, struct user *u)
 {
 	chanacs_exttarget_t *ent;
 	mychan_t *mc;

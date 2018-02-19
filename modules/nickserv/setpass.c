@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void clear_setpass_key(user_t *u);
+static void clear_setpass_key(struct user *u);
 static void ns_cmd_setpass(struct sourceinfo *si, int parc, char *parv[]);
 static void show_setpass(hook_user_req_t *hdata);
 
@@ -104,7 +104,7 @@ static void ns_cmd_setpass(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void clear_setpass_key(user_t *u)
+static void clear_setpass_key(struct user *u)
 {
 	myuser_t *mu = u->myuser;
 

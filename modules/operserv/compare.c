@@ -28,7 +28,7 @@ static void os_cmd_compare(struct sourceinfo *si, int parc, char *parv[])
 	char *object1 = parv[0];
 	char *object2 = parv[1];
 	struct channel *c1, *c2;
-	user_t *u1, *u2;
+	struct user *u1, *u2;
 	mowgli_node_t *n1, *n2;
 	struct chanuser *cu1, *cu2;
 	int matches = 0;

@@ -238,7 +238,7 @@ static void os_cmd_soper_setpass(struct sourceinfo *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	mowgli_node_t *n;
-	user_t *u;
+	struct user *u;
 
 	if (parc < 1)
 	{

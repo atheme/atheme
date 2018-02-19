@@ -70,7 +70,7 @@ static void ns_cmd_freeze(struct sourceinfo *si, int parc, char *parv[])
 	char *target = parv[0];
 	char *action = parv[1];
 	char *reason = parv[2];
-	user_t *u;
+	struct user *u;
 	mowgli_node_t *n, *tn;
 
 	if (!target || !action)
@@ -115,7 +115,7 @@ static void ns_cmd_freeze(struct sourceinfo *si, int parc, char *parv[])
 		/* log them out */
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->logins.head)
 		{
-			u = (user_t *)n->data;
+			u = (struct user *)n->data;
 			if (!ircd_on_logout(u, entity(mu)->name))
 			{
 				u->myuser = NULL;

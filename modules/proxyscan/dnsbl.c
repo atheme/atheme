@@ -92,7 +92,7 @@ struct Blacklist {
 /* A lookup in progress for a particular DNSBL for a particular client */
 struct BlacklistClient {
 	struct Blacklist *blacklist;
-	user_t *u;
+	struct user *u;
 	struct res_dns_query dns_query;
 	mowgli_node_t node;
 };
@@ -111,19 +111,19 @@ typedef struct dnsbl_exempt_ dnsbl_exempt_t;
 mowgli_list_t dnsbl_elist;
 
 static void os_cmd_set_dnsblaction(struct sourceinfo *si, int parc, char *parv[]);
-static void dnsbl_hit(user_t *u, struct Blacklist *blptr);
-static void abort_blacklist_queries(user_t *u);
+static void dnsbl_hit(struct user *u, struct Blacklist *blptr);
+static void abort_blacklist_queries(struct user *u);
 static void ps_cmd_dnsblexempt(struct sourceinfo *si, int parc, char *parv[]);
 static void ps_cmd_dnsblscan(struct sourceinfo *si, int parc, char *parv[]);
 static void write_dnsbl_exempt_db(struct database_handle *db);
 static void db_h_ble(struct database_handle *db, const char *type);
-static void lookup_blacklists(user_t *u);
+static void lookup_blacklists(struct user *u);
 
 struct command os_set_dnsblaction = { "DNSBLACTION", N_("Changes what happens to a user when they hit a DNSBL."), PRIV_USER_ADMIN, 1, os_cmd_set_dnsblaction, { .path = "proxyscan/set_dnsblaction" } };
 struct command ps_dnsblexempt = { "DNSBLEXEMPT", N_("Manage the list of IP's exempt from DNSBL checking."), PRIV_USER_ADMIN, 3, ps_cmd_dnsblexempt, { .path = "proxyscan/dnsblexempt" } };
 struct command ps_dnsblscan = { "DNSBLSCAN", N_("Manually scan if a user is in a DNSBL."), PRIV_USER_ADMIN, 1, ps_cmd_dnsblscan, { .path = "proxyscan/dnsblscan" } };
 
-static inline mowgli_list_t *dnsbl_queries(user_t *u)
+static inline mowgli_list_t *dnsbl_queries(struct user *u)
 {
 	mowgli_list_t *l;
 
@@ -269,7 +269,7 @@ static void ps_cmd_dnsblexempt(struct sourceinfo *si, int parc, char *parv[])
 static void ps_cmd_dnsblscan(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *user = parv[0];
-	user_t *u;
+	struct user *u;
 
 	if (!user)
 	{
@@ -351,7 +351,7 @@ static void blacklist_dns_callback(void *vptr, struct res_dns_reply *reply)
 
 /* XXX: no IPv6 implementation, not to concerned right now though. */
 /* 2015-12-06: at least we shouldn't crash on bad inputs anymore... -bcode */
-static void initiate_blacklist_dnsquery(struct Blacklist *blptr, user_t *u)
+static void initiate_blacklist_dnsquery(struct Blacklist *blptr, struct user *u)
 {
 	char buf[IRCD_RES_HOSTLEN + 1];
 	int ip[4];
@@ -404,7 +404,7 @@ static struct Blacklist *new_blacklist(char *name)
 	return blptr;
 }
 
-static void lookup_blacklists(user_t *u)
+static void lookup_blacklists(struct user *u)
 {
 	mowgli_node_t *n;
 
@@ -475,7 +475,7 @@ static int dnsbl_action_config_handler(mowgli_config_file_entry_t *ce)
 
 static void check_dnsbls(hook_user_nick_t *data)
 {
-	user_t *u = data->u;
+	struct user *u = data->u;
 	mowgli_node_t *n;
 
 	if (!u)
@@ -498,7 +498,7 @@ static void check_dnsbls(hook_user_nick_t *data)
 	lookup_blacklists(u);
 }
 
-static void dnsbl_hit(user_t *u, struct Blacklist *blptr)
+static void dnsbl_hit(struct user *u, struct Blacklist *blptr)
 {
 	struct service *svs;
 	struct kline *k;
@@ -530,7 +530,7 @@ static void dnsbl_hit(user_t *u, struct Blacklist *blptr)
 	}
 }
 
-static void abort_blacklist_queries(user_t *u)
+static void abort_blacklist_queries(struct user *u)
 {
 	mowgli_node_t *n, *tn;
 	mowgli_list_t *l = dnsbl_queries(u);

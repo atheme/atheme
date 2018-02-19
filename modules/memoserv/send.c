@@ -30,7 +30,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 static void ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* misc structs etc */
-	user_t *tu;
+	struct user *tu;
 	myuser_t *tmu;
 	mowgli_node_t *n;
 	struct mymemo *memo;

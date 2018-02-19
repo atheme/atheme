@@ -35,7 +35,7 @@ int use_limitflags = 0;
 #define MAX_BUF 256
 
 /* ban wrapper for cmode, returns number of bans added (0 or 1) */
-int ban(user_t *sender, struct channel *c, user_t *user)
+int ban(struct user *sender, struct channel *c, struct user *user)
 {
 	char mask[MAX_BUF];
 	struct chanban *cb;
@@ -60,7 +60,7 @@ int ban(user_t *sender, struct channel *c, user_t *user)
 }
 
 /* returns number of modes removed -- jilles */
-int remove_banlike(user_t *source, struct channel *chan, int type, user_t *target)
+int remove_banlike(struct user *source, struct channel *chan, int type, struct user *target)
 {
 	int count = 0;
 	mowgli_node_t *n, *tn;
@@ -87,12 +87,12 @@ int remove_banlike(user_t *source, struct channel *chan, int type, user_t *targe
 }
 
 /* returns number of exceptions removed -- jilles */
-int remove_ban_exceptions(user_t *source, struct channel *chan, user_t *target)
+int remove_ban_exceptions(struct user *source, struct channel *chan, struct user *target)
 {
 	return remove_banlike(source, chan, ircd->except_mchar, target);
 }
 
-void try_kick_real(user_t *source, struct channel *chan, user_t *target, const char *reason)
+void try_kick_real(struct user *source, struct channel *chan, struct user *target, const char *reason)
 {
 	struct chanuser *cu;
 
@@ -129,13 +129,13 @@ void try_kick_real(user_t *source, struct channel *chan, user_t *target, const c
 	}
 	kick(source, chan, target, reason);
 }
-void (*try_kick)(user_t *source, struct channel *chan, user_t *target, const char *reason) = try_kick_real;
+void (*try_kick)(struct user *source, struct channel *chan, struct user *target, const char *reason) = try_kick_real;
 
 /* sends a KILL message for a user and removes the user from the userlist
  * source should be a service user or NULL for a server kill
  */
 void ATHEME_FATTR_PRINTF(3, 4)
-kill_user(user_t *source, user_t *victim, const char *fmt, ...)
+kill_user(struct user *source, struct user *victim, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -166,7 +166,7 @@ kill_user(user_t *source, user_t *victim, const char *fmt, ...)
 
 void introduce_enforcer(const char *nick)
 {
-	user_t *u;
+	struct user *u;
 
 	/* TS 1 to win nick collisions */
 	u = user_add(nick, "enforcer", me.name, NULL, NULL,
@@ -181,7 +181,7 @@ void introduce_enforcer(const char *nick)
 void join(const char *chan, const char *nick)
 {
 	struct channel *c;
-	user_t *u;
+	struct user *u;
 	struct chanuser *cu;
 	bool isnew = false;
 	mychan_t *mc;
@@ -233,7 +233,7 @@ void join(const char *chan, const char *nick)
 void part(const char *chan, const char *nick)
 {
 	struct channel *c = channel_find(chan);
-	user_t *u = user_find_named(nick);
+	struct user *u = user_find_named(nick);
 
 	if (!u || !c)
 		return;
@@ -304,7 +304,7 @@ void partall(const char *name)
 }
 
 /* reintroduce a service e.g. after it's been killed -- jilles */
-void reintroduce_user(user_t *u)
+void reintroduce_user(struct user *u)
 {
 	mowgli_node_t *n;
 	struct channel *c;
@@ -372,7 +372,7 @@ verbose(mychan_t *mychan, const char *fmt, ...)
 }
 
 /* protocol wrapper for nickchange/nick burst */
-void handle_nickchange(user_t *u)
+void handle_nickchange(struct user *u)
 {
 	struct service *svs;
 
@@ -404,7 +404,7 @@ void handle_nickchange(user_t *u)
  *    server confirms EOB
  * -- jilles
  */
-void handle_burstlogin(user_t *u, const char *login, time_t ts)
+void handle_burstlogin(struct user *u, const char *login, time_t ts)
 {
 	mynick_t *mn;
 	myuser_t *mu;
@@ -478,7 +478,7 @@ void handle_burstlogin(user_t *u, const char *login, time_t ts)
 	}
 }
 
-void handle_setlogin(struct sourceinfo *si, user_t *u, const char *login, time_t ts)
+void handle_setlogin(struct sourceinfo *si, struct user *u, const char *login, time_t ts)
 {
 	mynick_t *mn;
 	myuser_t *mu;
@@ -549,7 +549,7 @@ void handle_setlogin(struct sourceinfo *si, user_t *u, const char *login, time_t
 			get_oper_name(si), u->nick, login);
 }
 
-void handle_clearlogin(struct sourceinfo *si, user_t *u)
+void handle_clearlogin(struct sourceinfo *si, struct user *u)
 {
 	mowgli_node_t *n;
 
@@ -574,7 +574,7 @@ void handle_clearlogin(struct sourceinfo *si, user_t *u)
 	u->myuser = NULL;
 }
 
-void handle_certfp(struct sourceinfo *si, user_t *u, const char *certfp)
+void handle_certfp(struct sourceinfo *si, struct user *u, const char *certfp)
 {
 	myuser_t *mu;
 	struct mycertfp *mcfp;
@@ -623,7 +623,7 @@ void handle_certfp(struct sourceinfo *si, user_t *u, const char *certfp)
 	logcommand_user(svs, u, CMDLOG_LOGIN, "LOGIN via CERTFP (%s)", certfp);
 }
 
-void myuser_login(struct service *svs, user_t *u, myuser_t *mu, bool sendaccount)
+void myuser_login(struct service *svs, struct user *u, myuser_t *mu, bool sendaccount)
 {
 	char lau[BUFSIZE], lao[BUFSIZE];
 	char strfbuf[BUFSIZE];
@@ -725,7 +725,7 @@ generic_notice(const char *from, const char *to, const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
-	user_t *u;
+	struct user *u;
 	struct channel *c;
 
 	va_start(args, fmt);
@@ -760,7 +760,7 @@ void (*notice) (const char *from, const char *target, const char *fmt, ...) = ge
  *
  * Inputs:
  *       - string representing source (for compatibility with notice())
- *       - user_t object to send the notice to
+ *       - struct user object to send the notice to
  *       - printf-style string containing the data to send and any args
  *
  * Outputs:
@@ -770,7 +770,7 @@ void (*notice) (const char *from, const char *target, const char *fmt, ...) = ge
  *       - a notice is sent to a user if MU_QUIETCHG is not set.
  */
 void ATHEME_FATTR_PRINTF(3, 4)
-change_notify(const char *from, user_t *to, const char *fmt, ...)
+change_notify(const char *from, struct user *to, const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];

@@ -61,7 +61,7 @@ struct svsignore *svsignore_add(const char *mask, const char *reason)
 }
 
 /*
- * svsignore_find(user_t *source)
+ * svsignore_find(struct user *source)
  *
  * Finds any services ignores that affect a user.
  *
@@ -75,7 +75,7 @@ struct svsignore *svsignore_add(const char *mask, const char *reason)
  * Side Effects:
  *     - none
  */
-struct svsignore *svsignore_find(user_t *source)
+struct svsignore *svsignore_find(struct user *source)
 {
         struct svsignore *svsignore;
         mowgli_node_t *n;

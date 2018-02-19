@@ -231,7 +231,7 @@ void do_channel_sync(mychan_t *mc, struct chanacs *ca)
 }
 
 /* this could be a little slow, should probably have an option to disable it */
-static void sync_user(user_t *u)
+static void sync_user(struct user *u)
 {
 	mowgli_node_t *iter;
 

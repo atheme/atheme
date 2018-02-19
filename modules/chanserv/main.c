@@ -338,7 +338,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 static void cs_join(hook_channel_joinpart_t *hdata)
 {
 	struct chanuser *cu = hdata->cu;
-	user_t *u;
+	struct user *u;
 	struct channel *chan;
 	mychan_t *mc;
 	unsigned int flags;
@@ -636,7 +636,7 @@ static void cs_part(hook_channel_joinpart_t *hdata)
 	part(cu->chan->name, chansvs.nick);
 }
 
-static user_t *get_changets_user(mychan_t *mc)
+static struct user *get_changets_user(mychan_t *mc)
 {
 	struct metadata *md;
 
@@ -645,7 +645,7 @@ static user_t *get_changets_user(mychan_t *mc)
 	md = metadata_find(mc, "private:botserv:bot-assigned");
 	if (md != NULL)
 	{
-		user_t *u = user_find(md->value);
+		struct user *u = user_find(md->value);
 
 		return_val_if_fail(is_internal_client(u), chansvs.me->me);
 
@@ -791,7 +791,7 @@ static void cs_newchan(struct channel *c)
 
 	if (chansvs.changets && c->ts > channelts && channelts > 0)
 	{
-		user_t *u;
+		struct user *u;
 
 		u = get_changets_user(mc);
 

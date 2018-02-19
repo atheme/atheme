@@ -108,7 +108,7 @@ static void seven_wallops_sts(const char *reason)
 static void m_euid(struct sourceinfo *si, int parc, char *parv[])
 {
 	server_t *s;
-	user_t *u;
+	struct user *u;
 
 	/* got the right number of args for an introduction? */
 	if (parc >= 11)
@@ -163,7 +163,7 @@ static void m_euid(struct sourceinfo *si, int parc, char *parv[])
 static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
 	server_t *s;
-	user_t *u;
+	struct user *u;
 
 	/* got the right number of args for an introduction? */
 	if (parc == 8)
@@ -229,7 +229,7 @@ static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 }
 
 /* protocol-specific stuff to do on login */
-static void seven_on_login(user_t *u, myuser_t *mu, const char *wantedhost)
+static void seven_on_login(struct user *u, myuser_t *mu, const char *wantedhost)
 {
 	return_if_fail(u != NULL);
 
@@ -239,7 +239,7 @@ static void seven_on_login(user_t *u, myuser_t *mu, const char *wantedhost)
 		sts(":%s ENCAP * IDENTIFIED %s %s", ME, CLIENT_NAME(u), u->nick);
 }
 
-static bool seven_on_logout(user_t *u, const char *account)
+static bool seven_on_logout(struct user *u, const char *account)
 {
 	return_val_if_fail(u != NULL, false);
 
@@ -250,7 +250,7 @@ static bool seven_on_logout(user_t *u, const char *account)
 
 static void nick_group(hook_user_req_t *hdata)
 {
-	user_t *u;
+	struct user *u;
 
 	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
 	if (u != NULL && should_reg_umode(u))
@@ -259,7 +259,7 @@ static void nick_group(hook_user_req_t *hdata)
 
 static void nick_ungroup(hook_user_req_t *hdata)
 {
-	user_t *u;
+	struct user *u;
 
 	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
 	if (u != NULL && !nicksvs.no_nick_ownership)

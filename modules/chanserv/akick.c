@@ -96,7 +96,7 @@ static void clear_bans_matching_entity(mychan_t *mc, struct myentity *mt)
 
 	MOWGLI_ITER_FOREACH(n, tmu->logins.head)
 	{
-		user_t *tu;
+		struct user *tu;
 		mowgli_node_t *it, *itn;
 
 		char hostbuf2[BUFSIZE];

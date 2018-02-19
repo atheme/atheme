@@ -18,7 +18,7 @@ struct service
 	char *real;
 	char *disp;
 
-	user_t *me;
+	struct user *me;
 
 	void (*handler)(struct sourceinfo *, int, char **);
 	void (*notice_handler)(struct sourceinfo *, int, char **);

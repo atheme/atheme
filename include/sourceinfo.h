@@ -35,7 +35,7 @@ struct sourceinfo
 	 * for services commands, s is always NULL and su is non-NULL if
 	 * and only if the command was received via IRC.
 	 */
-	user_t *su; /* source, if it's a user */
+	struct user *su; /* source, if it's a user */
 	server_t *s; /* source, if it's a server */
 
 	struct connection *connection; /* physical connection cmd received from */

@@ -420,7 +420,7 @@ void servtree_update(void *dummy)
 {
 	struct service *sptr;
 	mowgli_patricia_iteration_state_t state;
-	user_t *u;
+	struct user *u;
 
 	if (offline_mode)
 		return;

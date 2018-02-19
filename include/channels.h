@@ -41,7 +41,7 @@ struct channel
 struct chanuser
 {
   struct channel *chan;
-  user_t *user;
+  struct user *user;
   unsigned int modes;
   mowgli_node_t unode;
   mowgli_node_t cnode;
@@ -94,7 +94,7 @@ struct cmode
 struct extmode
 {
 	char mode;
-	bool (*check)(const char *, struct channel *, mychan_t *, user_t *, myuser_t *);
+	bool (*check)(const char *, struct channel *, mychan_t *, struct user *, myuser_t *);
 };
 
 /* channel related hooks */
@@ -111,13 +111,13 @@ typedef struct {
 } hook_channel_joinpart_t;
 
 typedef struct {
-	user_t *u;
+	struct user *u;
         struct channel *c;
         char *msg;
 } hook_cmessage_data_t;
 
 typedef struct {
-	user_t *u; /* Online user that changed the topic */
+	struct user *u; /* Online user that changed the topic */
 	server_t *s; /* Server that restored a topic */
         struct channel *c; /* Channel still has old topic */
         const char *setter; /* Stored setter string, can be nick, nick!user@host
@@ -128,7 +128,7 @@ typedef struct {
 } hook_channel_topic_check_t;
 
 typedef struct {
-	user_t *u;
+	struct user *u;
 	struct channel *c;
 } hook_channel_mode_t;
 
@@ -141,8 +141,8 @@ typedef struct {
 /* cmode.c */
 extern char *flags_to_string(unsigned int flags);
 extern int mode_to_flag(char c);
-extern void channel_mode(user_t *source, struct channel *chan, int parc, char *parv[]);
-extern void channel_mode_va(user_t *source, struct channel *chan, int parc, char *parv0, ...);
+extern void channel_mode(struct user *source, struct channel *chan, int parc, char *parv[]);
+extern void channel_mode_va(struct user *source, struct channel *chan, int parc, char *parv0, ...);
 extern void clear_simple_modes(struct channel *c);
 extern char *channel_modes(struct channel *c, bool doparams);
 extern void modestack_flush_channel(struct channel *channel);
@@ -172,8 +172,8 @@ extern void channel_delete(struct channel *c);
 //inline struct channel *channel_find(const char *name);
 
 extern struct chanuser *chanuser_add(struct channel *chan, const char *user);
-extern void chanuser_delete(struct channel *chan, user_t *user);
-extern struct chanuser *chanuser_find(struct channel *chan, user_t *user);
+extern void chanuser_delete(struct channel *chan, struct user *user);
+extern struct chanuser *chanuser_find(struct channel *chan, struct user *user);
 
 extern struct chanban *chanban_add(struct channel *chan, const char *mask, int type);
 extern void chanban_delete(struct chanban *c);

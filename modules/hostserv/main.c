@@ -8,7 +8,7 @@
 #include "atheme.h"
 #include "hostserv.h"
 
-static void on_user_identify(user_t *u);
+static void on_user_identify(struct user *u);
 struct service *hostsvs;
 
 static void
@@ -29,7 +29,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	hook_del_user_identify(on_user_identify);
 }
 
-static void on_user_identify(user_t *u)
+static void on_user_identify(struct user *u)
 {
 	myuser_t *mu = u->myuser;
 	struct metadata *md;

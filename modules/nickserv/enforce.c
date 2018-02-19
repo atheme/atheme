@@ -26,7 +26,7 @@ mowgli_list_t enforce_list;
 mowgli_heap_t *enforce_timeout_heap;
 time_t enforce_next;
 
-static void guest_nickname(user_t *u);
+static void guest_nickname(struct user *u);
 
 static void ns_cmd_set_enforce(struct sourceinfo *si, int parc, char *parv[]);
 static void ns_cmd_release(struct sourceinfo *si, int parc, char *parv[]);
@@ -47,7 +47,7 @@ static mowgli_eventloop_timer_t *enforce_timeout_check_timer = NULL;
 static mowgli_eventloop_timer_t *enforce_remove_enforcers_timer = NULL;
 
 /* logs a released nickname out */
-static bool log_enforce_victim_out(user_t *u, myuser_t *mu)
+static bool log_enforce_victim_out(struct user *u, myuser_t *mu)
 {
 	mynick_t *mn;
 	mowgli_node_t *n, *tn;
@@ -82,7 +82,7 @@ static bool log_enforce_victim_out(user_t *u, myuser_t *mu)
 }
 
 /* sends an FNC for the given user */
-static void guest_nickname(user_t *u)
+static void guest_nickname(struct user *u)
 {
 	char gnick[NICKLEN + 1];
 	int tries;
@@ -105,7 +105,7 @@ static void check_enforce_all(myuser_t *mu)
 {
 	mowgli_node_t *n;
 	mynick_t *mn;
-	user_t *u;
+	struct user *u;
 
 	MOWGLI_ITER_FOREACH(n, mu->nicks.head)
 	{
@@ -166,7 +166,7 @@ static void ns_cmd_release(struct sourceinfo *si, int parc, char *parv[])
 	mynick_t *mn;
 	const char *target = parv[0];
 	const char *password = parv[1];
-	user_t *u;
+	struct user *u;
 	mowgli_node_t *n, *tn;
 	enforce_timeout_t *timeout;
 
@@ -276,7 +276,7 @@ static void ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 	mynick_t *mn;
 	const char *target = parv[0];
 	const char *password = parv[1];
-	user_t *u;
+	struct user *u;
 	mowgli_node_t *n, *tn;
 	enforce_timeout_t *timeout;
 	char lau[BUFSIZE];
@@ -395,7 +395,7 @@ static void ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 			{
 				if (lau[0] != '\0')
 					mowgli_strlcat(lau, ", ", sizeof lau);
-				mowgli_strlcat(lau, ((user_t *)n->data)->nick, sizeof lau);
+				mowgli_strlcat(lau, ((struct user *)n->data)->nick, sizeof lau);
 			}
 			command_fail(si, fault_toomany, _("Logged in nicks are: %s"), lau);
 
@@ -448,7 +448,7 @@ static void ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 static void enforce_remove_enforcers(void *arg)
 {
 	mowgli_node_t *n, *tn;
-	user_t *u;
+	struct user *u;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, me.me->userlist.head)
 	{
@@ -465,7 +465,7 @@ void enforce_timeout_check(void *arg)
 {
 	mowgli_node_t *n, *tn;
 	enforce_timeout_t *timeout;
-	user_t *u;
+	struct user *u;
 	mynick_t *mn;
 	bool valid;
 

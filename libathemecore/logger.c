@@ -636,7 +636,7 @@ slog(unsigned int level, const char *fmt, ...)
 	va_end(args);
 }
 
-const char *format_user(user_t *source, bool full)
+const char *format_user(struct user *source, bool full)
 {
 	static char buf[BUFSIZE];
 	char accountbuf[(NICKLEN + 1) * 5]; /* entity name len is NICKLEN * 4, plus another for the ID */
@@ -728,13 +728,13 @@ logcommand(struct sourceinfo *si, int level, const char *fmt, ...)
 }
 
 /*
- * logcommand_user(struct service *svs, user_t *source, int level, const char *fmt, ...)
+ * logcommand_user(struct service *svs, struct user *source, int level, const char *fmt, ...)
  *
  * Logs usage of a command from a user as described by struct sourceinfo.
  *
  * Inputs:
  *       - struct service object which describes the service the command is attached to
- *       - user_t object which describes the source of the command call
+ *       - struct user object which describes the source of the command call
  *       - bitmask of log categories to log the command use to.
  *       - printf-style format string
  *       - (optional) additional parameters
@@ -746,7 +746,7 @@ logcommand(struct sourceinfo *si, int level, const char *fmt, ...)
  *       - qualifying struct logfile objects in log_files are updated.
  */
 void ATHEME_FATTR_PRINTF(4, 5)
-logcommand_user(struct service *svs, user_t *source, int level, const char *fmt, ...)
+logcommand_user(struct service *svs, struct user *source, int level, const char *fmt, ...)
 {
 	va_list args;
 	char lbuf[BUFSIZE];

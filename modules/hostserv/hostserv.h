@@ -9,7 +9,7 @@ typedef struct {
 } hook_host_request_t;
 
 /*
- * do_sethost(user_t *u, char *host)
+ * do_sethost(struct user *u, char *host)
  *
  * Sets a virtual host on a single nickname/user.
  *
@@ -23,7 +23,7 @@ typedef struct {
  * Side Effects:
  *      - The vHost is set on the user.
  */
-static inline void do_sethost(user_t *u, const char *host)
+static inline void do_sethost(struct user *u, const char *host)
 {
 	struct service *svs;
 
@@ -54,7 +54,7 @@ static inline void do_sethost(user_t *u, const char *host)
 static inline void do_sethost_all(myuser_t *mu, const char *host)
 {
 	mowgli_node_t *n;
-        user_t *u;
+        struct user *u;
 
         MOWGLI_ITER_FOREACH(n, mu->logins.head)
         {

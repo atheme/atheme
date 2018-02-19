@@ -65,7 +65,7 @@ void
 vhost(Atheme_Account self, const char *host)
 CODE:
 	mowgli_node_t *n;
-	user_t *u;
+	struct user *u;
 	char timestring[16];
 
 	snprintf(timestring, 16, "%lu", (unsigned long)time(NULL));

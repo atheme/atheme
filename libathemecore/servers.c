@@ -182,7 +182,7 @@ void server_delete(const char *name)
 static void server_delete_serv(server_t *s)
 {
 	server_t *child;
-	user_t *u;
+	struct user *u;
 	mowgli_node_t *n, *tn;
 
 	if (s == me.me)
@@ -210,7 +210,7 @@ static void server_delete_serv(server_t *s)
 	/* first go through it's users and kill all of them */
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, s->userlist.head)
 	{
-		u = (user_t *)n->data;
+		u = (struct user *)n->data;
 		/* This user split, allow bursted logins for the account.
 		 * XXX should we do this here?
 		 * -- jilles */

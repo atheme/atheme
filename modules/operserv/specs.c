@@ -110,7 +110,7 @@ static struct priv_category *priv_categories[] = {
 
 static void os_cmd_specs(struct sourceinfo *si, int parc, char *parv[])
 {
-	user_t *tu = NULL;
+	struct user *tu = NULL;
 	struct operclass *cl = NULL;
 	const char *targettype = parv[0];
 	const char *target = parv[1];

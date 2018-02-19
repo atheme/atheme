@@ -664,7 +664,7 @@ static void
 sasl_newuser(hook_user_nick_t *const restrict data)
 {
 	/* If the user has been killed, don't do anything. */
-	user_t *const u = data->u;
+	struct user *const u = data->u;
 	if (! u)
 		return;
 

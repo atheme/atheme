@@ -14,7 +14,7 @@ typedef struct {
 	stringref channel;
 } channel_exttarget_t;
 
-static struct chanacs *channel_ext_match_user(struct chanacs *ca, user_t *u)
+static struct chanacs *channel_ext_match_user(struct chanacs *ca, struct user *u)
 {
 	channel_exttarget_t *ent;
 	mowgli_node_t *n;

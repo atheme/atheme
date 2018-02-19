@@ -37,7 +37,7 @@ static void cmd_op(struct sourceinfo *si, bool opping, int parc, char *parv[])
 	char *chan = parv[0];
 	char *nick = parv[1];
 	mychan_t *mc;
-	user_t *tu;
+	struct user *tu;
 	struct chanuser *cu;
 	char *nicks;
 	bool op;

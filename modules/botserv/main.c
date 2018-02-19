@@ -133,10 +133,10 @@ bs_notice(const char *from, const char *target, const char *fmt, ...)
 	notice_real(real_source, target, "%s", buf);
 }
 
-static void (*topic_sts_real)(struct channel *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic);
+static void (*topic_sts_real)(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic);
 
 static void
-bs_topic_sts(struct channel *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
+bs_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	mychan_t *mc;
 	botserv_bot_t *bot = NULL;
@@ -157,7 +157,7 @@ bs_modestack_mode_simple(const char *source, struct channel *channel, int dir, i
 {
 	mychan_t *mc;
 	struct metadata *bs;
-	user_t *bot = NULL;
+	struct user *bot = NULL;
 
 	return_if_fail(source != NULL);
 	return_if_fail(channel != NULL);
@@ -176,7 +176,7 @@ bs_modestack_mode_limit(const char *source, struct channel *channel, int dir, un
 {
 	mychan_t *mc;
 	struct metadata *bs;
-	user_t *bot = NULL;
+	struct user *bot = NULL;
 
 	return_if_fail(source != NULL);
 	return_if_fail(channel != NULL);
@@ -195,7 +195,7 @@ bs_modestack_mode_ext(const char *source, struct channel *channel, int dir, unsi
 {
 	mychan_t *mc;
 	struct metadata *bs;
-	user_t *bot = NULL;
+	struct user *bot = NULL;
 
 	return_if_fail(source != NULL);
 	return_if_fail(channel != NULL);
@@ -214,7 +214,7 @@ bs_modestack_mode_param(const char *source, struct channel *channel, int dir, ch
 {
 	mychan_t *mc;
 	struct metadata *bs;
-	user_t *bot = NULL;
+	struct user *bot = NULL;
 
 	return_if_fail(source != NULL);
 	return_if_fail(channel != NULL);
@@ -229,11 +229,11 @@ bs_modestack_mode_param(const char *source, struct channel *channel, int dir, ch
 }
 
 static void
-bs_try_kick(user_t *source, struct channel *chan, user_t *target, const char *reason)
+bs_try_kick(struct user *source, struct channel *chan, struct user *target, const char *reason)
 {
 	mychan_t *mc;
 	struct metadata *bs;
-	user_t *bot = NULL;
+	struct user *bot = NULL;
 
 	return_if_fail(source != NULL);
 	return_if_fail(chan != NULL);
@@ -1084,7 +1084,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 	mychan_t *mc;
 	botserv_bot_t *bot;
 	struct metadata *md;
-	user_t *u;
+	struct user *u;
 
 	if (cu == NULL || is_internal_client(cu->user))
 		return;

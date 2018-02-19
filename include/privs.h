@@ -104,11 +104,11 @@ extern bool is_conf_soper(myuser_t *myuser);
  * messages about disallowed things
  * warning: do not use this for any kind of real privilege! */
 extern bool has_any_privs(struct sourceinfo *);
-extern bool has_any_privs_user(user_t *);
+extern bool has_any_privs_user(struct user *);
 /* has_priv(): for sources of commands */
 extern bool has_priv(struct sourceinfo *, const char *);
 /* has_priv_user(): for online users */
-extern bool has_priv_user(user_t *, const char *);
+extern bool has_priv_user(struct user *, const char *);
 /* has_priv_myuser(): channel succession etc */
 extern bool has_priv_myuser(myuser_t *, const char *);
 /* has_priv_operclass(): /os specs etc */

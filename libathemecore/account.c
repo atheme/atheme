@@ -193,7 +193,7 @@ void myuser_delete(myuser_t *mu)
 	myuser_t *successor;
 	mychan_t *mc;
 	mynick_t *mn;
-	user_t *u;
+	struct user *u;
 	mowgli_node_t *n, *tn;
 	struct mymemo *memo;
 	struct chanacs *ca;
@@ -211,7 +211,7 @@ void myuser_delete(myuser_t *mu)
 	/* log them out */
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->logins.head)
 	{
-		u = (user_t *)n->data;
+		u = (struct user *)n->data;
 		if (!authservice_loaded || !ircd_on_logout(u, entity(mu)->name))
 		{
 			u->myuser = NULL;
@@ -354,7 +354,7 @@ void myuser_delete(myuser_t *mu)
 void myuser_rename(myuser_t *mu, const char *name)
 {
 	mowgli_node_t *n, *tn;
-	user_t *u;
+	struct user *u;
 	hook_user_rename_t data;
 	stringref newname;
 	char nb[NICKLEN + 1];
@@ -438,7 +438,7 @@ void myuser_set_email(myuser_t *mu, const char *newemail)
  */
 myuser_t *myuser_find_ext(const char *name)
 {
-	user_t *u;
+	struct user *u;
 	mynick_t *mn;
 
 	return_val_if_fail(name != NULL, NULL);
@@ -484,7 +484,7 @@ myuser_notice(const char *from, myuser_t *target, const char *fmt, ...)
 	va_list ap;
 	char buf[BUFSIZE];
 	mowgli_node_t *n;
-	user_t *u;
+	struct user *u;
 
 	return_if_fail(from != NULL);
 	return_if_fail(target != NULL);
@@ -499,7 +499,7 @@ myuser_notice(const char *from, myuser_t *target, const char *fmt, ...)
 
 	MOWGLI_ITER_FOREACH(n, target->logins.head)
 	{
-		u = (user_t *)n->data;
+		u = (struct user *)n->data;
 		notice(from, u->nick, "%s", buf);
 	}
 }
@@ -518,7 +518,7 @@ myuser_notice(const char *from, myuser_t *target, const char *fmt, ...)
  *     - none
  */
 bool
-myuser_access_verify(user_t *u, myuser_t *mu)
+myuser_access_verify(struct user *u, myuser_t *mu)
 {
 	mowgli_node_t *n;
 	char buf[USERLEN + 1 + HOSTLEN + 1];
@@ -1650,7 +1650,7 @@ struct chanacs *chanacs_find_host_literal(mychan_t *mychan, const char *host, un
 	return NULL;
 }
 
-struct chanacs *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, unsigned int level)
+struct chanacs *chanacs_find_host_by_user(mychan_t *mychan, struct user *u, unsigned int level)
 {
 	mowgli_node_t *n;
 	struct chanacs *ca;
@@ -1667,7 +1667,7 @@ struct chanacs *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, unsigned 
 	return NULL;
 }
 
-static unsigned int chanacs_host_flags_by_user(mychan_t *mychan, user_t *u)
+static unsigned int chanacs_host_flags_by_user(mychan_t *mychan, struct user *u)
 {
 	mowgli_node_t *n;
 	unsigned int result = 0;
@@ -1705,7 +1705,7 @@ struct chanacs *chanacs_find_by_mask(mychan_t *mychan, const char *mask, unsigne
 	return chanacs_find_host_literal(mychan, mask, level);
 }
 
-bool chanacs_user_has_flag(mychan_t *mychan, user_t *u, unsigned int level)
+bool chanacs_user_has_flag(mychan_t *mychan, struct user *u, unsigned int level)
 {
 	struct myentity *mt;
 
@@ -1724,7 +1724,7 @@ bool chanacs_user_has_flag(mychan_t *mychan, user_t *u, unsigned int level)
 	return false;
 }
 
-static unsigned int chanacs_entity_flags_by_user(mychan_t *mychan, user_t *u)
+static unsigned int chanacs_entity_flags_by_user(mychan_t *mychan, struct user *u)
 {
 	mowgli_node_t *n;
 	unsigned int result = 0;
@@ -1753,7 +1753,7 @@ static unsigned int chanacs_entity_flags_by_user(mychan_t *mychan, user_t *u)
 	return result;
 }
 
-unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u)
+unsigned int chanacs_user_flags(mychan_t *mychan, struct user *u)
 {
 	struct myentity *mt;
 	unsigned int result = 0;
@@ -2035,7 +2035,7 @@ void expire_check(void *arg)
 {
 	mynick_t *mn;
 	mychan_t *mc;
-	user_t *u;
+	struct user *u;
 	mowgli_patricia_iteration_state_t state;
 	hook_expiry_req_t req;
 

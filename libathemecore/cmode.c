@@ -49,7 +49,7 @@ int mode_to_flag(char c)
 	return mode_list[i].value;
 }
 
-static void reop_service(struct channel *chan, user_t *victim, user_t **pfirst_deopped_service)
+static void reop_service(struct channel *chan, struct user *victim, struct user **pfirst_deopped_service)
 {
 	mowgli_node_t *n;
 
@@ -68,7 +68,7 @@ static void reop_service(struct channel *chan, user_t *victim, user_t **pfirst_d
 			{
 				if (n->data != victim)
 				{
-					modestack_mode_param(((user_t *)n->data)->nick, chan, MTYPE_ADD, 'o', CLIENT_NAME(victim));
+					modestack_mode_param(((struct user *)n->data)->nick, chan, MTYPE_ADD, 'o', CLIENT_NAME(victim));
 					break;
 				}
 			}
@@ -86,7 +86,7 @@ static void reop_service(struct channel *chan, user_t *victim, user_t **pfirst_d
 /* If source == NULL, apply a mode change from outside to our structures
  * If source != NULL, apply the mode change and send it out from that user
  */
-void channel_mode(user_t *source, struct channel *chan, int parc, char *parv[])
+void channel_mode(struct user *source, struct channel *chan, int parc, char *parv[])
 {
 	bool matched = false;
 	bool simple_modes_changed = false;
@@ -94,9 +94,9 @@ void channel_mode(user_t *source, struct channel *chan, int parc, char *parv[])
 	unsigned int newlimit;
 	const char *pos = parv[0];
 	mychan_t *mc;
-	user_t *target;
+	struct user *target;
 	struct chanuser *cu = NULL;
-	user_t *first_deopped_service = NULL;
+	struct user *first_deopped_service = NULL;
 	hook_channel_mode_t hookmsg;
 
 	if ((!pos) || (*pos == '\0'))
@@ -366,7 +366,7 @@ void channel_mode(user_t *source, struct channel *chan, int parc, char *parv[])
 }
 
 /* like channel_mode() but parv array passed as varargs */
-void channel_mode_va(user_t *source, struct channel *chan, int parc, char *parv0, ...)
+void channel_mode_va(struct user *source, struct channel *chan, int parc, char *parv0, ...)
 {
 	char *parv[255];
 	int i;
@@ -723,7 +723,7 @@ void modestack_forget_channel(struct channel *channel)
 /* handle a channel that is going to be destroyed */
 void modestack_finalize_channel(struct channel *channel)
 {
-	user_t *u;
+	struct user *u;
 
 	if (channel == modestackdata.channel)
 	{

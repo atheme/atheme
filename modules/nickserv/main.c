@@ -30,7 +30,7 @@ struct
 	{ NULL, NULL }
 };
 
-static void nickserv_handle_nickchange(user_t *u)
+static void nickserv_handle_nickchange(struct user *u)
 {
 	mynick_t *mn;
 	hook_nick_enforce_t hdata;

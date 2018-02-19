@@ -9,7 +9,6 @@
 #define STRUCTURES_H
 
 // XXX remove me, or move me to include/hook.h
-typedef struct user_ user_t;
 typedef struct server_ server_t;
 typedef struct myuser_ myuser_t;
 typedef struct mynick_ mynick_t;
@@ -127,5 +126,8 @@ struct uid_provider;
 
 // Defined in include/uplink.h
 struct uplink;
+
+// Defined in include/users.h
+struct user;
 
 #endif

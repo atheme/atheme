@@ -80,7 +80,7 @@ static void ns_cmd_verify(struct sourceinfo *si, int parc, char *parv[])
 			command_success_nodata(si, _("Thank you for verifying your e-mail address! You have taken steps in ensuring that your registrations are not exploited."));
 			MOWGLI_ITER_FOREACH(n, mu->logins.head)
 			{
-				user_t *u = n->data;
+				struct user *u = n->data;
 				ircd_on_login(u, mu, NULL);
 			}
 
@@ -187,7 +187,7 @@ static void ns_cmd_fverify(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("\2%s\2 has now been verified."), entity(mu)->name);
 		MOWGLI_ITER_FOREACH(n, mu->logins.head)
 		{
-			user_t *u = n->data;
+			struct user *u = n->data;
 			ircd_on_login(u, mu, NULL);
 		}
 

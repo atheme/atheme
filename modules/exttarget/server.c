@@ -14,7 +14,7 @@ typedef struct {
 	stringref server;
 } server_exttarget_t;
 
-static struct chanacs *server_ext_match_user(struct chanacs *ca, user_t *u)
+static struct chanacs *server_ext_match_user(struct chanacs *ca, struct user *u)
 {
 	server_exttarget_t *ent;
 	mowgli_node_t *n;

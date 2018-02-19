@@ -36,7 +36,7 @@ static void os_cmd_rmatch(struct sourceinfo *si, int parc, char *parv[])
 	char usermask[512];
 	unsigned int matches = 0, maxmatches;
 	mowgli_patricia_iteration_state_t state;
-	user_t *u;
+	struct user *u;
 	char *args = parv[0];
 	char *pattern;
 	int flags = 0;

@@ -26,7 +26,7 @@
 #include "pmodule.h"
 #include "privs.h"
 
-void handle_info(user_t *u)
+void handle_info(struct user *u)
 {
 	unsigned int i;
 
@@ -53,7 +53,7 @@ int get_version_string(char *buf, size_t bufsize)
 #endif
 }
 
-void handle_version(user_t *u)
+void handle_version(struct user *u)
 {
 	if (u == NULL)
 		return;
@@ -65,7 +65,7 @@ void handle_version(user_t *u)
 	numeric_sts(me.me, 351, u, "%s", ver);
 }
 
-void handle_admin(user_t *u)
+void handle_admin(struct user *u)
 {
 
 	if (u == NULL)
@@ -82,15 +82,15 @@ void handle_admin(user_t *u)
 
 static void dictionary_stats_cb(const char *line, void *privdata)
 {
-	numeric_sts(me.me, 249, ((user_t *)privdata), "B :%s", line);
+	numeric_sts(me.me, 249, ((struct user *)privdata), "B :%s", line);
 }
 
 static void connection_stats_cb(const char *line, void *privdata)
 {
-	numeric_sts(me.me, 249, ((user_t *)privdata), "F :%s", line);
+	numeric_sts(me.me, 249, ((struct user *)privdata), "F :%s", line);
 }
 
-void handle_stats(user_t *u, char req)
+void handle_stats(struct user *u, char req)
 {
 	struct kline *k;
 	struct xline *x;
@@ -323,9 +323,9 @@ void handle_stats(user_t *u, char req)
 	numeric_sts(me.me, 219, u, "%c :End of /STATS report", req);
 }
 
-void handle_whois(user_t *u, const char *target)
+void handle_whois(struct user *u, const char *target)
 {
-	user_t *t = user_find_named(target);
+	struct user *t = user_find_named(target);
 
 	if (u == NULL)
 		return;
@@ -349,7 +349,7 @@ void handle_whois(user_t *u, const char *target)
 	numeric_sts(me.me, 318, u, "%s :End of WHOIS", target);
 }
 
-static void single_trace(user_t *u, user_t *t)
+static void single_trace(struct user *u, struct user *t)
 {
 	const char *classname;
 
@@ -363,9 +363,9 @@ static void single_trace(user_t *u, user_t *t)
 /* target -> object to trace
  * dest -> server to execute command on
  */
-void handle_trace(user_t *u, const char *target, const char *dest)
+void handle_trace(struct user *u, const char *target, const char *dest)
 {
-	user_t *t;
+	struct user *t;
 	mowgli_node_t *n;
 	int nusers;
 
@@ -399,7 +399,7 @@ void handle_trace(user_t *u, const char *target, const char *dest)
 	numeric_sts(me.me, 262, u, "%s :End of TRACE", target);
 }
 
-void handle_motd(user_t *u)
+void handle_motd(struct user *u)
 {
 	FILE *f;
 	char lbuf[BUFSIZE];
@@ -448,7 +448,7 @@ void handle_motd(user_t *u)
 	fclose(f);
 }
 
-void handle_away(user_t *u, const char *message)
+void handle_away(struct user *u, const char *message)
 {
 	if (message == NULL || *message == '\0')
 	{
@@ -527,7 +527,7 @@ handle_channel_message(struct sourceinfo *si, char *target, bool is_notice, char
 void handle_message(struct sourceinfo *si, char *target, bool is_notice, char *message)
 {
 	char *vec[3];
-	user_t *u, *target_u;
+	struct user *u, *target_u;
 	char *p;
 	char name2[NICKLEN + 1];
 	char *sentinel;
@@ -733,7 +733,7 @@ void handle_kill(struct sourceinfo *si, const char *victim, const char *reason)
 {
 	const char *source, *source1, *origreason;
 	char qreason[512];
-	user_t *u;
+	struct user *u;
 	static time_t lastkill = 0;
 	static unsigned int killcount = 0;
 
@@ -840,7 +840,7 @@ void handle_eob(server_t *s)
  * t - target of the message (to be used in warning the user, may be NULL
  *     to use the server name)
  */
-int floodcheck(user_t *u, user_t *t)
+int floodcheck(struct user *u, struct user *t)
 {
 	const char *from;
 	static time_t last_ignore_notice = 0;
@@ -956,7 +956,7 @@ void command_add_flood(struct sourceinfo *si, unsigned int amount)
 		si->su->msgs += amount;
 }
 
-bool should_reg_umode(user_t *u)
+bool should_reg_umode(struct user *u)
 {
 	mynick_t *mn;
 

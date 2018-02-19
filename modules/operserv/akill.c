@@ -62,7 +62,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static void os_akill_newuser(hook_user_nick_t *data)
 {
-	user_t *u = data->u;
+	struct user *u = data->u;
 	struct kline *k;
 
 	/* If the user has been killed, don't do anything. */
@@ -112,7 +112,7 @@ static void os_cmd_akill(struct sourceinfo *si, int parc, char *parv[])
 
 static void os_cmd_akill_add(struct sourceinfo *si, int parc, char *parv[])
 {
-	user_t *u;
+	struct user *u;
 	char *target = parv[0];
 	char *token = strtok(parv[1], " ");
 	char star[] = "*";

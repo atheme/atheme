@@ -345,7 +345,7 @@ struct chanban *chanban_find(struct channel *chan, const char *mask, int type)
  */
 struct chanuser *chanuser_add(struct channel *chan, const char *nick)
 {
-	user_t *u;
+	struct user *u;
 	struct chanuser *cu, *tcu;
 	unsigned int flags = 0;
 	int i = 0;
@@ -417,7 +417,7 @@ struct chanuser *chanuser_add(struct channel *chan, const char *nick)
 }
 
 /*
- * chanuser_delete(struct channel *chan, user_t *user)
+ * chanuser_delete(struct channel *chan, struct user *user)
  *
  * Destroys a channel user object.
  *
@@ -436,7 +436,7 @@ struct chanuser *chanuser_add(struct channel *chan, const char *nick)
  *     - if this empties the channel and the channel is not set permanent
  *       (ircd->perm_mode), channel_delete() is called (q.v.)
  */
-void chanuser_delete(struct channel *chan, user_t *user)
+void chanuser_delete(struct channel *chan, struct user *user)
 {
 	struct chanuser *cu;
 	hook_channel_joinpart_t hdata;
@@ -475,7 +475,7 @@ void chanuser_delete(struct channel *chan, user_t *user)
 }
 
 /*
- * chanuser_find(struct channel *chan, user_t *user)
+ * chanuser_find(struct channel *chan, struct user *user)
  *
  * Looks up a channel user object.
  *
@@ -490,7 +490,7 @@ void chanuser_delete(struct channel *chan, user_t *user)
  * Side Effects:
  *     - none
  */
-struct chanuser *chanuser_find(struct channel *chan, user_t *user)
+struct chanuser *chanuser_find(struct channel *chan, struct user *user)
 {
 	mowgli_node_t *n;
 	struct chanuser *cu;

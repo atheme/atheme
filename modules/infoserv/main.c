@@ -45,7 +45,7 @@ static void is_cmd_odel(struct sourceinfo *si, int parc, char *parv[]);
 static void is_cmd_list(struct sourceinfo *si, int parc, char *parv[]);
 static void is_cmd_olist(struct sourceinfo *si, int parc, char *parv[]);
 static void display_info(hook_user_nick_t *data);
-static void display_oper_info(user_t *u);
+static void display_oper_info(struct user *u);
 
 static void write_infodb(struct database_handle *db);
 static void db_h_li(struct database_handle *db, const char *type);
@@ -153,7 +153,7 @@ static void db_h_lio(struct database_handle *db, const char *type)
 
 static void display_info(hook_user_nick_t *data)
 {
-	user_t *u;
+	struct user *u;
 	mowgli_node_t *n;
 	logoninfo_t *l;
 	char dBuf[BUFSIZE];
@@ -199,7 +199,7 @@ static void display_info(hook_user_nick_t *data)
 	}
 }
 
-static void display_oper_info(user_t *u)
+static void display_oper_info(struct user *u)
 {
 	mowgli_node_t *n;
 	operlogoninfo_t *o;

@@ -8,8 +8,8 @@
 #include "atheme.h"
 #include <limits.h>
 
-static void on_user_identify(user_t *u);
-static void on_user_away(user_t *u);
+static void on_user_identify(struct user *u);
+static void on_user_away(struct user *u);
 
 struct service *memosvs = NULL;
 /*struct memoserv_conf *memosvs_conf;*/
@@ -39,7 +39,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
                 service_delete(memosvs);
 }
 
-static void on_user_identify(user_t *u)
+static void on_user_identify(struct user *u)
 {
 	myuser_t *mu = u->myuser;
 
@@ -58,7 +58,7 @@ static void on_user_identify(user_t *u)
 	}
 }
 
-static void on_user_away(user_t *u)
+static void on_user_away(struct user *u)
 {
 	myuser_t *mu;
 	mynick_t *mn;

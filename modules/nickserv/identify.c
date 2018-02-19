@@ -48,7 +48,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static void ns_cmd_login(struct sourceinfo *si, int parc, char *parv[])
 {
-	user_t *u = si->su;
+	struct user *u = si->su;
 	myuser_t *mu;
 	mowgli_node_t *n, *tn;
 	const char *target = parv[0];
@@ -134,7 +134,7 @@ static void ns_cmd_login(struct sourceinfo *si, int parc, char *parv[])
 			{
 				if (lau[0] != '\0')
 					mowgli_strlcat(lau, ", ", sizeof lau);
-				mowgli_strlcat(lau, ((user_t *)n->data)->nick, sizeof lau);
+				mowgli_strlcat(lau, ((struct user *)n->data)->nick, sizeof lau);
 			}
 			command_fail(si, fault_toomany, _("Logged in nicks are: %s"), lau);
 			logcommand(si, CMDLOG_LOGIN, "failed " COMMAND_UC " to \2%s\2 (too many logins)", entity(mu)->name);

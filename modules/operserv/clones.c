@@ -11,7 +11,7 @@
 #define CLONES_GRACE_TIMEPERIOD	180
 
 static void clones_newuser(hook_user_nick_t *data);
-static void clones_userquit(user_t *u);
+static void clones_userquit(struct user *u);
 static void clones_configready(void *unused);
 
 static void os_cmd_clones(struct sourceinfo *si, int parc, char *parv[]);
@@ -91,7 +91,7 @@ static void clones_configready(void *unused)
 static void
 mod_init(struct module *const restrict m)
 {
-	user_t *u;
+	struct user *u;
 	mowgli_patricia_iteration_state_t state;
 
 	if (!module_find_published("backend/opensex"))
@@ -833,7 +833,7 @@ static void os_cmd_clones_listexempt(struct sourceinfo *si, int parc, char *parv
 
 static void clones_newuser(hook_user_nick_t *data)
 {
-	user_t *u = data->u;
+	struct user *u = data->u;
 	unsigned int i;
 	hostentry_t *he;
 	unsigned int allowed, warn;
@@ -876,7 +876,7 @@ static void clones_newuser(hook_user_nick_t *data)
 
 		MOWGLI_ITER_FOREACH(n, he->clients.head)
 		{
-			user_t *tu = n->data;
+			struct user *tu = n->data;
 
 			if (tu->myuser == NULL)
 				continue;
@@ -936,7 +936,7 @@ static void clones_newuser(hook_user_nick_t *data)
 	}
 }
 
-static void clones_userquit(user_t *u)
+static void clones_userquit(struct user *u)
 {
 	mowgli_node_t *n;
 	hostentry_t *he;

@@ -53,7 +53,7 @@ static const struct cmode bahamut_mode_list[] = {
   { '\0', 0 }
 };
 
-static bool check_jointhrottle(const char *, struct channel *, mychan_t *, user_t *, myuser_t *);
+static bool check_jointhrottle(const char *, struct channel *, mychan_t *, struct user *, myuser_t *);
 
 struct extmode bahamut_ignore_mode_list[] = {
   { 'j', check_jointhrottle },
@@ -79,7 +79,7 @@ static const struct cmode bahamut_user_mode_list[] = {
   { '\0', 0 }
 };
 
-static bool check_jointhrottle(const char *value, struct channel *c, mychan_t *mc, user_t *u, myuser_t *mu)
+static bool check_jointhrottle(const char *value, struct channel *c, mychan_t *mc, struct user *u, myuser_t *mu)
 {
 	const char *p, *arg2;
 	int num, timeslice, v;
@@ -145,7 +145,7 @@ static unsigned int bahamut_server_login(void)
 }
 
 /* introduce a client */
-static void bahamut_introduce_nick(user_t *u)
+static void bahamut_introduce_nick(struct user *u)
 {
 	const char *umode = user_get_umodestr(u);
 
@@ -156,12 +156,12 @@ static void bahamut_introduce_nick(user_t *u)
 }
 
 /* invite a user to a channel */
-static void bahamut_invite_sts(user_t *sender, user_t *target, struct channel *channel)
+static void bahamut_invite_sts(struct user *sender, struct user *target, struct channel *channel)
 {
 	sts(":%s INVITE %s %s", sender->nick, target->nick, channel->name);
 }
 
-static void bahamut_quit_sts(user_t *u, const char *reason)
+static void bahamut_quit_sts(struct user *u, const char *reason)
 {
 	sts(":%s QUIT :%s", u->nick, reason);
 }
@@ -173,7 +173,7 @@ static void bahamut_wallops_sts(const char *text)
 }
 
 /* join a channel */
-static void bahamut_join_sts(struct channel *c, user_t *u, bool isnew, char *modes)
+static void bahamut_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
 {
 	if (isnew)
 		sts(":%s SJOIN %lu %s %s :@%s", me.name, (unsigned long)c->ts,
@@ -183,7 +183,7 @@ static void bahamut_join_sts(struct channel *c, user_t *u, bool isnew, char *mod
 				c->name, u->nick);
 }
 
-static void bahamut_chan_lowerts(struct channel *c, user_t *u)
+static void bahamut_chan_lowerts(struct channel *c, struct user *u)
 {
 	slog(LG_DEBUG, "bahamut_chan_lowerts(): lowering TS for %s to %lu",
 			c->name, (unsigned long)c->ts);
@@ -201,7 +201,7 @@ static void bahamut_chan_lowerts(struct channel *c, user_t *u)
 }
 
 /* kicks a user from a channel */
-static void bahamut_kick(user_t *source, struct channel *c, user_t *u, const char *reason)
+static void bahamut_kick(struct user *source, struct channel *c, struct user *u, const char *reason)
 {
 	sts(":%s KICK %s %s :%s", source->nick, c->name, u->nick, reason);
 
@@ -222,7 +222,7 @@ bahamut_msg(const char *from, const char *target, const char *fmt, ...)
 	sts(":%s PRIVMSG %s :%s", from, target, buf);
 }
 
-static void bahamut_msg_global_sts(user_t *from, const char *mask, const char *text)
+static void bahamut_msg_global_sts(struct user *from, const char *mask, const char *text)
 {
 	mowgli_node_t *n;
 	struct tld *tld;
@@ -239,12 +239,12 @@ static void bahamut_msg_global_sts(user_t *from, const char *mask, const char *t
 }
 
 /* NOTICE wrapper */
-static void bahamut_notice_user_sts(user_t *from, user_t *target, const char *text)
+static void bahamut_notice_user_sts(struct user *from, struct user *target, const char *text)
 {
 	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->nick, text);
 }
 
-static void bahamut_notice_global_sts(user_t *from, const char *mask, const char *text)
+static void bahamut_notice_global_sts(struct user *from, const char *mask, const char *text)
 {
 	mowgli_node_t *n;
 	struct tld *tld;
@@ -261,18 +261,18 @@ static void bahamut_notice_global_sts(user_t *from, const char *mask, const char
 		sts(":%s NOTICE %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
 }
 
-static void bahamut_notice_channel_sts(user_t *from, struct channel *target, const char *text)
+static void bahamut_notice_channel_sts(struct user *from, struct channel *target, const char *text)
 {
 	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->name, text);
 }
 
-static void bahamut_wallchops(user_t *sender, struct channel *channel, const char *message)
+static void bahamut_wallchops(struct user *sender, struct channel *channel, const char *message)
 {
 	sts(":%s NOTICE @%s :%s", sender->nick, channel->name, message);
 }
 
 static void ATHEME_FATTR_PRINTF(4, 5)
-bahamut_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
+bahamut_numeric_sts(server_t *from, int numeric, struct user *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -285,7 +285,7 @@ bahamut_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt
 }
 
 /* KILL wrapper */
-static void bahamut_kill_id_sts(user_t *killer, const char *id, const char *reason)
+static void bahamut_kill_id_sts(struct user *killer, const char *id, const char *reason)
 {
 	if (killer != NULL)
 		sts(":%s KILL %s :%s!%s (%s)", killer->nick, id, killer->host, killer->nick, reason);
@@ -294,7 +294,7 @@ static void bahamut_kill_id_sts(user_t *killer, const char *id, const char *reas
 }
 
 /* PART wrapper */
-static void bahamut_part_sts(struct channel *c, user_t *u)
+static void bahamut_part_sts(struct channel *c, struct user *u)
 {
 	sts(":%s PART %s", u->nick, c->name);
 }
@@ -315,7 +315,7 @@ static void bahamut_unkline_sts(const char *server, const char *user, const char
 }
 
 /* topic wrapper */
-static void bahamut_topic_sts(struct channel *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
+static void bahamut_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	return_if_fail(c != NULL);
 
@@ -339,7 +339,7 @@ static void bahamut_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void bahamut_on_login(user_t *u, myuser_t *account, const char *wantedhost)
+static void bahamut_on_login(struct user *u, myuser_t *account, const char *wantedhost)
 {
 	return_if_fail(u != NULL);
 
@@ -351,7 +351,7 @@ static void bahamut_on_login(user_t *u, myuser_t *account, const char *wantedhos
 }
 
 /* protocol-specific stuff to do on login */
-static bool bahamut_on_logout(user_t *u, const char *account)
+static bool bahamut_on_logout(struct user *u, const char *account)
 {
 	return_val_if_fail(u != NULL, false);
 
@@ -375,13 +375,13 @@ static void bahamut_jupe(const char *server, const char *reason)
 		sts(":%s SERVER %s 2 :%s", me.name, server, reason);
 }
 
-static void bahamut_fnc_sts(user_t *source, user_t *u, const char *newnick, int type)
+static void bahamut_fnc_sts(struct user *source, struct user *u, const char *newnick, int type)
 {
 	sts(":%s SVSNICK %s %s %lu", source->nick, u->nick, newnick,
 			(unsigned long)(CURRTIME - 60));
 }
 
-static void bahamut_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *mu)
+static void bahamut_holdnick_sts(struct user *source, int duration, const char *nick, myuser_t *mu)
 {
 	sts(":%s SVSHOLD %s %d :Reserved by %s for nickname owner (%s)",
 			source->nick, nick, duration, source->nick,
@@ -613,7 +613,7 @@ static void m_part(struct sourceinfo *si, int parc, char *parv[])
 static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
 	server_t *s;
-	user_t *u;
+	struct user *u;
 	char ipstring[64];
 	bool realchange;
 
@@ -727,7 +727,7 @@ static void m_mode(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_kick(struct sourceinfo *si, int parc, char *parv[])
 {
-	user_t *u = user_find(parv[1]);
+	struct user *u = user_find(parv[1]);
 	struct channel *c = channel_find(parv[0]);
 
 	/* -> :rakaur KICK #shrike rintaun :test */
@@ -880,7 +880,7 @@ static void m_capab(struct sourceinfo *si, int parc, char *parv[])
 
 static void nick_group(hook_user_req_t *hdata)
 {
-	user_t *u;
+	struct user *u;
 
 	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
 	if (u != NULL && should_reg_umode(u))
@@ -889,7 +889,7 @@ static void nick_group(hook_user_req_t *hdata)
 
 static void nick_ungroup(hook_user_req_t *hdata)
 {
-	user_t *u;
+	struct user *u;
 
 	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
 	if (u != NULL && !nicksvs.no_nick_ownership)

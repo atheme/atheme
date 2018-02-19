@@ -331,7 +331,7 @@ bool has_any_privs(struct sourceinfo *si)
 	return false;
 }
 
-bool has_any_privs_user(user_t *u)
+bool has_any_privs_user(struct user *u)
 {
 	if (u == NULL)
 		return false;
@@ -348,7 +348,7 @@ bool has_priv(struct sourceinfo *si, const char *priv)
 		has_priv_myuser(si->smu, priv);
 }
 
-bool has_priv_user(user_t *u, const char *priv)
+bool has_priv_user(struct user *u, const char *priv)
 {
 	struct operclass *operclass;
 

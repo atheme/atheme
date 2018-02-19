@@ -54,7 +54,7 @@ static bool username_is_random(const char *name)
 	return true;
 }
 
-static char *construct_mask(user_t *u)
+static char *construct_mask(struct user *u)
 {
 	static char mask[USERLEN + 1 + HOSTLEN + 1];
 	const char *dynhosts[] = { "*dyn*.*", "*dial*.*.*", "*dhcp*.*.*",
@@ -152,7 +152,7 @@ static void myuser_access_delete_enforce(myuser_t *mu, char *mask)
 	mowgli_list_t l = {NULL, NULL, 0};
 	mowgli_node_t *n, *tn;
 	mynick_t *mn;
-	user_t *u;
+	struct user *u;
 	hook_nick_enforce_t hdata;
 
 	/* find users who get access via the access list */

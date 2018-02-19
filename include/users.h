@@ -8,7 +8,7 @@
 #ifndef USERS_H
 #define USERS_H
 
-struct user_
+struct user
 {
 	struct atheme_object parent;
 
@@ -59,21 +59,21 @@ struct user_
 #define CLIENT_NAME(user)	((user)->uid != NULL ? (user)->uid : (user)->nick)
 
 typedef struct {
-	user_t *u;		/* User in question. Write NULL here if you delete the user. */
+	struct user *u;		/* User in question. Write NULL here if you delete the user. */
 	const char *oldnick;	/* Previous nick for nick changes. u->nick is the new nick. */
 } hook_user_nick_t;
 
 typedef struct {
-	user_t *const u;
+	struct user *const u;
 	const char *comment;
 } hook_user_delete_t;
 
 /* function.c */
-extern bool is_ircop(user_t *user);
-extern bool is_admin(user_t *user);
-extern bool is_internal_client(user_t *user);
-extern bool is_autokline_exempt(user_t *user);
-extern bool is_service(user_t *user);
+extern bool is_ircop(struct user *user);
+extern bool is_admin(struct user *user);
+extern bool is_internal_client(struct user *user);
+extern bool is_autokline_exempt(struct user *user);
+extern bool is_service(struct user *user);
 
 /* users.c */
 extern mowgli_patricia_t *userlist;
@@ -81,16 +81,16 @@ extern mowgli_patricia_t *uidlist;
 
 extern void init_users(void);
 
-extern user_t *user_add(const char *nick, const char *user, const char *host, const char *vhost, const char *ip, const char *uid, const char *gecos, server_t *server, time_t ts);
-extern void user_delete(user_t *u, const char *comment);
-extern user_t *user_find(const char *nick);
-extern user_t *user_find_named(const char *nick);
-extern void user_changeuid(user_t *u, const char *uid);
-extern bool user_changenick(user_t *u, const char *nick, time_t ts);
-extern void user_mode(user_t *user, const char *modes);
-extern void user_sethost(user_t *source, user_t *target, const char *host);
-extern const char *user_get_umodestr(user_t *u);
-extern bool user_is_channel_banned(user_t *u, char ban_type);
+extern struct user *user_add(const char *nick, const char *user, const char *host, const char *vhost, const char *ip, const char *uid, const char *gecos, server_t *server, time_t ts);
+extern void user_delete(struct user *u, const char *comment);
+extern struct user *user_find(const char *nick);
+extern struct user *user_find_named(const char *nick);
+extern void user_changeuid(struct user *u, const char *uid);
+extern bool user_changenick(struct user *u, const char *nick, time_t ts);
+extern void user_mode(struct user *user, const char *modes);
+extern void user_sethost(struct user *source, struct user *target, const char *host);
+extern const char *user_get_umodestr(struct user *u);
+extern bool user_is_channel_banned(struct user *u, char ban_type);
 
 /* uid.c */
 extern void init_uid(void);

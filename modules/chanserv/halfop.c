@@ -44,7 +44,7 @@ static void cmd_halfop(struct sourceinfo *si, bool halfopping, int parc, char *p
 	char *chan = parv[0];
 	char *nick = parv[1];
 	mychan_t *mc;
-	user_t *tu;
+	struct user *tu;
 	struct chanuser *cu;
 	char *nicks;
 	bool halfop;
