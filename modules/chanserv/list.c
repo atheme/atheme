@@ -24,17 +24,18 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("chanserv", &cs_list);
 }
 
-typedef enum {
+enum list_opttype
+{
 	OPT_BOOL,
 	OPT_INT,
 	OPT_STRING,
 	OPT_FLAG,
 	OPT_AGE,
-} list_opttype_t;
+};
 
 typedef struct {
 	char *option;
-	list_opttype_t opttype;
+	enum list_opttype opttype;
 	union {
 		bool *boolval;
 		int *intval;
