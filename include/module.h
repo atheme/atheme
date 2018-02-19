@@ -106,6 +106,7 @@ extern struct module *module_find_published(const char *name);
 extern bool module_request(const char *name);
 
 #define DECLARE_MODULE_V1(name, unloadcap, modinit, moddeinit, ver, ven)   \
+        extern struct v4_moduleheader _header;                             \
         struct v4_moduleheader _header = {                                 \
                 MAPI_ATHEME_MAGIC, MAPI_ATHEME_V4,                         \
                 CURRENT_ABI_REVISION, SERNO,                               \
