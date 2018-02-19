@@ -19,7 +19,7 @@ struct command ns_set_emailmemos = { "EMAILMEMOS", N_("Forwards incoming memos t
 
 static bool has_emailmemos(const mynick_t *mn, const void *arg)
 {
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 
 	return ( mu->flags & MU_EMAILMEMOS ) == MU_EMAILMEMOS;
 }

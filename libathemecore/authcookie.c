@@ -50,7 +50,7 @@ void authcookie_init(void)
  * Side Effects:
  *       an authcookie ticket is created, and validated.
  */
-struct authcookie *authcookie_create(myuser_t *mu)
+struct authcookie *authcookie_create(struct myuser *mu)
 {
 	struct authcookie *au = mowgli_heap_alloc(authcookie_heap);
 
@@ -67,7 +67,7 @@ struct authcookie *authcookie_create(myuser_t *mu)
  * authcookie_find()
  *
  * Inputs:
- *       either the ticket string, the myuser_t it is associated with, or both
+ *       either the ticket string, the struct myuser it is associated with, or both
  *
  * Outputs:
  *       the authcookie ticket for this object, if any
@@ -75,7 +75,7 @@ struct authcookie *authcookie_create(myuser_t *mu)
  * Side Effects:
  *       none
  */
-struct authcookie *authcookie_find(const char *ticket, myuser_t *myuser)
+struct authcookie *authcookie_find(const char *ticket, struct myuser *myuser)
 {
 	mowgli_node_t *n;
 	struct authcookie *ac;
@@ -143,7 +143,7 @@ void authcookie_destroy(struct authcookie * ac)
  * authcookie_destroy_all()
  *
  * Inputs:
- *       a myuser_t pointer
+ *       a struct myuser pointer
  *
  * Outputs:
  *       none
@@ -151,7 +151,7 @@ void authcookie_destroy(struct authcookie * ac)
  * Side Effects:
  *       all authcookies for the user are destroyed
  */
-void authcookie_destroy_all(myuser_t *mu)
+void authcookie_destroy_all(struct myuser *mu)
 {
 	mowgli_node_t *n, *tn;
 	struct authcookie *ac;
@@ -205,7 +205,7 @@ void authcookie_expire(void *arg)
  * Side Effects:
  *       expired authcookies are destroyed here
  */
-bool authcookie_validate(const char *ticket, myuser_t *myuser)
+bool authcookie_validate(const char *ticket, struct myuser *myuser)
 {
 	struct authcookie *ac = authcookie_find(ticket, myuser);
 

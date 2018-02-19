@@ -32,7 +32,7 @@ static void ns_cmd_acc(struct sourceinfo *si, int parc, char *parv[])
 	const char *targuser = parv[0];
 	const char *targaccount = parv[1];
 	struct user *u;
-	myuser_t *mu;
+	struct myuser *mu;
 	mynick_t *mn;
 	bool show_id = config_options.show_entity_id || has_priv(si, PRIV_USER_AUSPEX);
 

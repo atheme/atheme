@@ -21,7 +21,7 @@ cmd_ns_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 		return;
 	}
 
-	myuser_t *mu;
+	struct myuser *mu;
 
 	if (! (mu = myuser_find(acc)))
 	{
@@ -134,7 +134,7 @@ cmd_ns_fdrop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_U
 		return;
 	}
 
-	myuser_t *mu;
+	struct myuser *mu;
 
 	if (! (mu = myuser_find(acc)))
 	{

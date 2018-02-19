@@ -25,7 +25,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static void ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	mynick_t *mn = NULL;
 	struct myuser_name *mun;
 	struct user *u = NULL;

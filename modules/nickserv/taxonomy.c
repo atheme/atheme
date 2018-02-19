@@ -26,7 +26,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 static void ns_cmd_taxonomy(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *target = parv[0];
-	myuser_t *mu;
+	struct myuser *mu;
 	mowgli_patricia_iteration_state_t state;
 	bool isoper;
 	struct metadata *md;

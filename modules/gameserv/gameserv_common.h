@@ -103,7 +103,7 @@ static inline bool gs_do_parameters(struct sourceinfo *si, int *parc, char ***pa
 }
 
 static inline void ATHEME_FATTR_PRINTF(2, 3)
-gs_interactive_notification(myuser_t *mu, const char *notification, ...)
+gs_interactive_notification(struct myuser *mu, const char *notification, ...)
 {
 	struct service *gameserv;
 	char buf[BUFSIZE];

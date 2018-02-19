@@ -142,7 +142,7 @@ static void nefarious_topic_sts(struct channel *c, struct user *source, const ch
 }
 
 /* protocol-specific stuff to do on login */
-static void nefarious_on_login(struct user *u, myuser_t *mu, const char *wantedhost)
+static void nefarious_on_login(struct user *u, struct myuser *mu, const char *wantedhost)
 {
 	return_if_fail(u != NULL);
 	return_if_fail(mu != NULL);
@@ -179,7 +179,7 @@ static void nefarious_sasl_sts(const char *target, char mode, const char *data)
 	sts("%s SASL %c%c %s %c %s", me.numeric, target[0], target[1], target, mode, data);
 }
 
-static void nefarious_svslogin_sts(char *target, char *nick, char *user, char *host, myuser_t *account)
+static void nefarious_svslogin_sts(char *target, char *nick, char *user, char *host, struct myuser *account)
 {
 	sts("%s SASL %c%c %s L %s %lu", me.numeric, target[0], target[1], target,
 			entity(account)->name, (unsigned long)account->registered);

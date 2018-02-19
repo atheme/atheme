@@ -112,13 +112,13 @@ jsonrpc_method_fn get_json_method(const char *method_name) {
  *       default - success (authcookie)
  *
  * Side Effects:
- *       an authcookie ticket is created for the myuser_t.
+ *       an authcookie ticket is created for the struct myuser.
  *       the user's lastlogin is updated
  */
 
 static bool jsonrpcmethod_login(void *conn, mowgli_list_t *params, char *id)
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	struct authcookie *ac;
 	char *sourceip, *accountname, *password;
 
@@ -204,7 +204,7 @@ static bool jsonrpcmethod_login(void *conn, mowgli_list_t *params, char *id)
 static bool jsonrpcmethod_logout(void *conn, mowgli_list_t *params, char *id)
 {
 	struct authcookie *ac;
-	myuser_t *mu;
+	struct myuser *mu;
 	char *accountname;
 	char *cookie;
 
@@ -324,7 +324,7 @@ static void jsonrpc_command_success_nodata(struct sourceinfo *si, const char *me
 
 static bool jsonrpcmethod_command(void *conn, mowgli_list_t *params, char *id)
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	struct service *svs;
 	struct command *cmd;
 	struct sourceinfo *si;
@@ -448,7 +448,7 @@ static bool jsonrpcmethod_command(void *conn, mowgli_list_t *params, char *id)
 
 static bool jsonrpcmethod_privset(void *conn, mowgli_list_t *params, char *id)
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	mowgli_node_t *n;
 
 	char *param, *accountname, *cookie;

@@ -72,7 +72,7 @@ struct operclass
 /* soper list struct */
 struct soper
 {
-  myuser_t *myuser;
+  struct myuser *myuser;
   char *name;
   struct operclass *operclass;
   char *classname;
@@ -94,11 +94,11 @@ extern struct operclass *operclass_find(const char *name);
 
 extern struct soper *soper_add(const char *name, const char *classname, int flags, const char *password);
 extern void soper_delete(struct soper *soper);
-extern struct soper *soper_find(myuser_t *myuser);
+extern struct soper *soper_find(struct myuser *myuser);
 extern struct soper *soper_find_named(const char *name);
 
-extern bool is_soper(myuser_t *myuser);
-extern bool is_conf_soper(myuser_t *myuser);
+extern bool is_soper(struct myuser *myuser);
+extern bool is_conf_soper(struct myuser *myuser);
 
 /* has_any_privs(): used to determine whether we should give detailed
  * messages about disallowed things
@@ -110,7 +110,7 @@ extern bool has_priv(struct sourceinfo *, const char *);
 /* has_priv_user(): for online users */
 extern bool has_priv_user(struct user *, const char *);
 /* has_priv_myuser(): channel succession etc */
-extern bool has_priv_myuser(myuser_t *, const char *);
+extern bool has_priv_myuser(struct myuser *, const char *);
 /* has_priv_operclass(): /os specs etc */
 extern bool has_priv_operclass(struct operclass *, const char *);
 /* has_all_operclass(): checks if source has all privs in operclass */

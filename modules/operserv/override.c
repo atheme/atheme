@@ -149,7 +149,7 @@ static int text_to_parv(char *text, int maxparc, char **parv)
 static void os_cmd_override(struct sourceinfo *si, int parc, char *parv[])
 {
 	cooked_sourceinfo_t *o_si;
-	myuser_t *mu = NULL;
+	struct myuser *mu = NULL;
 	struct service *svs;
 	struct service *memosvs;
 	struct command *cmd;

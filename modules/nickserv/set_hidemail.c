@@ -18,7 +18,7 @@ static void ns_cmd_set_hidemail(struct sourceinfo *si, int parc, char *parv[]);
 struct command ns_set_hidemail = { "HIDEMAIL", N_("Hides your e-mail address."), AC_NONE, 1, ns_cmd_set_hidemail, { .path = "nickserv/set_hidemail" } };
 
 static bool has_hidemail(const mynick_t *mn, const void *arg) {
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 
 	return ( mu->flags & MU_HIDEMAIL ) == MU_HIDEMAIL;
 }

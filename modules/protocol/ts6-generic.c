@@ -423,7 +423,7 @@ static void ts6_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void ts6_on_login(struct user *u, myuser_t *mu, const char *wantedhost)
+static void ts6_on_login(struct user *u, struct myuser *mu, const char *wantedhost)
 {
 	if (!use_rserv_support)
 		return;
@@ -478,7 +478,7 @@ static void ts6_fnc_sts(struct user *source, struct user *u, const char *newnick
 			(unsigned long)u->ts);
 }
 
-static void ts6_svslogin_sts(char *target, char *nick, char *user, char *host, myuser_t *account)
+static void ts6_svslogin_sts(char *target, char *nick, char *user, char *host, struct myuser *account)
 {
 	struct user *tu = user_find(target);
 	struct server *s;
@@ -521,7 +521,7 @@ static void ts6_sasl_mechlist_sts(const char *mechlist)
 	sts(":%s ENCAP * MECHLIST :%s", ME, mechlist);
 }
 
-static void ts6_holdnick_sts(struct user *source, int duration, const char *nick, myuser_t *mu)
+static void ts6_holdnick_sts(struct user *source, int duration, const char *nick, struct myuser *mu)
 {
 	if (use_euid)
 		sts(":%s ENCAP * NICKDELAY %d %s", ME, duration, nick);

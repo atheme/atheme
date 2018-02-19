@@ -30,7 +30,7 @@ static void ns_cmd_return(struct sourceinfo *si, int parc, char *parv[])
 	char *newmail = parv[1];
 	char *newpass;
 	char oldmail[EMAILLEN + 1];
-	myuser_t *mu;
+	struct myuser *mu;
 	struct user *u;
 	mowgli_node_t *n, *tn;
 

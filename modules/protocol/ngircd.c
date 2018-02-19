@@ -279,7 +279,7 @@ static void ngircd_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void ngircd_on_login(struct user *u, myuser_t *account, const char *wantedhost)
+static void ngircd_on_login(struct user *u, struct myuser *account, const char *wantedhost)
 {
 	return_if_fail(u != NULL);
 

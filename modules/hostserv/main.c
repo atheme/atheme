@@ -31,7 +31,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static void on_user_identify(struct user *u)
 {
-	myuser_t *mu = u->myuser;
+	struct myuser *mu = u->myuser;
 	struct metadata *md;
 	char buf[NICKLEN + 20];
 

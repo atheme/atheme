@@ -94,7 +94,7 @@ struct cmode
 struct extmode
 {
 	char mode;
-	bool (*check)(const char *, struct channel *, mychan_t *, struct user *, myuser_t *);
+	bool (*check)(const char *, struct channel *, mychan_t *, struct user *, struct myuser *);
 };
 
 /* channel related hooks */

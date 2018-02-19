@@ -50,7 +50,7 @@ static void ns_cmd_listownmail(struct sourceinfo *si, int parc, char *parv[])
 
 	MYENTITY_FOREACH_T(mt, &state, ENT_USER)
 	{
-		myuser_t *mu = user(mt);
+		struct myuser *mu = user(mt);
 
 		continue_if_fail(mu != NULL);
 

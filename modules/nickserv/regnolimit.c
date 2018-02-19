@@ -16,7 +16,7 @@ struct command ns_regnolimit = { "REGNOLIMIT", N_("Allow a user to bypass regist
 
 static bool has_regnolimit(const mynick_t *mn, const void *arg)
 {
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 
 	return ( mu->flags & MU_REGNOLIMIT ) == MU_REGNOLIMIT;
 }
@@ -47,7 +47,7 @@ static void ns_cmd_regnolimit(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *action = parv[1];
-	myuser_t *mu;
+	struct myuser *mu;
 
 	if (!target || !action)
 	{

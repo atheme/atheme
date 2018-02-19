@@ -29,7 +29,7 @@ static void hs_cmd_vhostnick(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *host = parv[1];
-	myuser_t *mu;
+	struct myuser *mu;
 	struct user *u;
 	struct metadata *md;
 	char buf[BUFSIZE];

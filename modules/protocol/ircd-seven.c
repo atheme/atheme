@@ -229,7 +229,7 @@ static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 }
 
 /* protocol-specific stuff to do on login */
-static void seven_on_login(struct user *u, myuser_t *mu, const char *wantedhost)
+static void seven_on_login(struct user *u, struct myuser *mu, const char *wantedhost)
 {
 	return_if_fail(u != NULL);
 

@@ -320,7 +320,7 @@ void remove_group_chanacs(struct mygroup *mg)
 {
 	struct chanacs *ca;
 	mychan_t *mc;
-	myuser_t *successor;
+	struct myuser *successor;
 	mowgli_node_t *n, *tn;
 
 	/* kill all their channels and chanacs */

@@ -47,7 +47,7 @@ static mowgli_eventloop_timer_t *enforce_timeout_check_timer = NULL;
 static mowgli_eventloop_timer_t *enforce_remove_enforcers_timer = NULL;
 
 /* logs a released nickname out */
-static bool log_enforce_victim_out(struct user *u, myuser_t *mu)
+static bool log_enforce_victim_out(struct user *u, struct myuser *mu)
 {
 	mynick_t *mn;
 	mowgli_node_t *n, *tn;
@@ -101,7 +101,7 @@ static void guest_nickname(struct user *u)
 	fnc_sts(nicksvs.me->me, u, gnick, FNC_FORCE);
 }
 
-static void check_enforce_all(myuser_t *mu)
+static void check_enforce_all(struct myuser *mu)
 {
 	mowgli_node_t *n;
 	mynick_t *mn;
@@ -606,7 +606,7 @@ static void check_enforce(hook_nick_enforce_t *hdata)
 
 static int idcheck_foreach_cb(struct myentity *mt, void *privdata)
 {
-	myuser_t *mu = user(mt);
+	struct myuser *mu = user(mt);
 
 	if (metadata_find(mu, "private:idcheck"))
 		metadata_delete(mu, "private:idcheck");

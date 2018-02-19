@@ -49,7 +49,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 static void ns_cmd_login(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u = si->su;
-	myuser_t *mu;
+	struct myuser *mu;
 	mowgli_node_t *n, *tn;
 	const char *target = parv[0];
 	const char *password = parv[1];

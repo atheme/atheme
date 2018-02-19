@@ -29,7 +29,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 static void ms_cmd_read(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* Misc structs etc */
-	myuser_t *tmu;
+	struct myuser *tmu;
 	struct mymemo *memo, *receipt;
 	mowgli_node_t *n;
 	unsigned int i = 1, memonum = 0, numread = 0;

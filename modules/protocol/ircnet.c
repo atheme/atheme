@@ -298,7 +298,7 @@ static void ircnet_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void ircnet_on_login(struct user *u, myuser_t *account, const char *wantedhost)
+static void ircnet_on_login(struct user *u, struct myuser *account, const char *wantedhost)
 {
 	/* nothing to do on ratbox */
 	return;

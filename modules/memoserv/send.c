@@ -31,7 +31,7 @@ static void ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* misc structs etc */
 	struct user *tu;
-	myuser_t *tmu;
+	struct myuser *tmu;
 	mowgli_node_t *n;
 	struct mymemo *memo;
 	struct command *cmd;
@@ -126,7 +126,7 @@ static void ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 		MOWGLI_ITER_FOREACH(n, tmu->memo_ignores.head)
 		{
 			mynick_t *mn;
-			myuser_t *mu;
+			struct myuser *mu;
 
 			if (nicksvs.no_nick_ownership)
 				mu = myuser_find((const char *)n->data);

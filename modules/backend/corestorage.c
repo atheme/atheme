@@ -10,7 +10,7 @@
  * a set of non-finite table cells).
  *
  * The stuff here should be moved to the individual components which depend
- * on them.  e.g. myuser_t should register their own writer, mychan_t same
+ * on them.  e.g. struct myuser should register their own writer, mychan_t same
  * story etc.
  *
  *    --nenolod
@@ -32,7 +32,7 @@ static void
 corestorage_db_save(struct database_handle *db)
 {
 	struct metadata *md;
-	myuser_t *mu;
+	struct myuser *mu;
 	struct myentity *ment;
 	struct myuser_name *mun;
 	mychan_t *mc;
@@ -400,7 +400,7 @@ static void corestorage_h_mu(struct database_handle *db, const char *type)
 	time_t reg, login;
 	const char *sflags;
 	unsigned int flags = 0;
-	myuser_t *mu;
+	struct myuser *mu;
 
 	if (dbv >= 10)
 		uid = db_sread_word(db);
@@ -445,7 +445,7 @@ static void corestorage_h_me(struct database_handle *db, const char *type)
 	const char *dest, *src, *text;
 	time_t sent;
 	unsigned int status;
-	myuser_t *mu;
+	struct myuser *mu;
 	struct mymemo *mz;
 
 	dest = db_sread_word(db);
@@ -474,7 +474,7 @@ static void corestorage_h_me(struct database_handle *db, const char *type)
 
 static void corestorage_h_mi(struct database_handle *db, const char *type)
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	const char *user, *target;
 
 	user = db_sread_word(db);
@@ -492,7 +492,7 @@ static void corestorage_h_mi(struct database_handle *db, const char *type)
 
 static void corestorage_h_ac(struct database_handle *db, const char *type)
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	const char *user, *mask;
 
 	user = db_sread_word(db);
@@ -510,7 +510,7 @@ static void corestorage_h_ac(struct database_handle *db, const char *type)
 
 static void corestorage_h_mn(struct database_handle *db, const char *type)
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	mynick_t *mn;
 	const char *user, *nick;
 	time_t reg, seen;
@@ -541,7 +541,7 @@ static void corestorage_h_mn(struct database_handle *db, const char *type)
 static void corestorage_h_mcfp(struct database_handle *db, const char *type)
 {
 	const char *user, *certfp;
-	myuser_t *mu;
+	struct myuser *mu;
 
 	user = db_sread_word(db);
 	certfp = db_sread_word(db);
@@ -571,7 +571,7 @@ static void corestorage_h_so(struct database_handle *db, const char *type)
 {
 	const char *user, *class, *pass;
 	unsigned int flags = 0;
-	myuser_t *mu;
+	struct myuser *mu;
 	const char *sflags;
 
 	user = db_sread_word(db);

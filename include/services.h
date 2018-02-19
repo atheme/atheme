@@ -103,11 +103,11 @@ extern void join(const char *chan, const char *nick);
 extern void joinall(const char *name);
 extern void part(const char *chan, const char *nick);
 extern void partall(const char *name);
-extern void myuser_login(struct service *svs, struct user *u, myuser_t *mu, bool sendaccount);
+extern void myuser_login(struct service *svs, struct user *u, struct myuser *mu, bool sendaccount);
 extern void verbose(mychan_t *mychan, const char *fmt, ...) ATHEME_FATTR_PRINTF(2, 3);
 extern void (*notice)(const char *from, const char *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
 extern void change_notify(const char *from, struct user *to, const char *message, ...) ATHEME_FATTR_PRINTF(3, 4);
-extern bool bad_password(struct sourceinfo *si, myuser_t *mu);
+extern bool bad_password(struct sourceinfo *si, struct myuser *mu);
 
 extern struct sourceinfo *sourceinfo_create(void);
 extern void command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);

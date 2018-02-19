@@ -24,10 +24,10 @@
 #include "atheme.h"
 
 bool auth_module_loaded = false;
-bool (*auth_user_custom)(myuser_t *mu, const char *password);
+bool (*auth_user_custom)(struct myuser *mu, const char *password);
 
 void
-set_password(myuser_t *const restrict mu, const char *const restrict password)
+set_password(struct myuser *const restrict mu, const char *const restrict password)
 {
 	if (! mu || ! password)
 		return;
@@ -50,7 +50,7 @@ set_password(myuser_t *const restrict mu, const char *const restrict password)
 }
 
 bool
-verify_password(myuser_t *const restrict mu, const char *const restrict password)
+verify_password(struct myuser *const restrict mu, const char *const restrict password)
 {
 	if (! mu || ! password)
 		return false;

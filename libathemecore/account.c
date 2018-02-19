@@ -55,8 +55,8 @@ mowgli_heap_t *chanacs_heap;	/* HEAP_CHANACS */
  */
 void init_accounts(void)
 {
-	myuser_heap = sharedheap_get(sizeof(myuser_t));
-	mynick_heap = sharedheap_get(sizeof(myuser_t));
+	myuser_heap = sharedheap_get(sizeof(struct myuser));
+	mynick_heap = sharedheap_get(sizeof(struct myuser));
 	myuser_name_heap = sharedheap_get(sizeof(struct myuser_name));
 	mychan_heap = sharedheap_get(sizeof(mychan_t));
 	chanacs_heap = sharedheap_get(sizeof(struct chanacs));
@@ -88,7 +88,7 @@ void init_accounts(void)
  *      - flags for the account
  *
  * Outputs:
- *      - on success, a new myuser_t object (account)
+ *      - on success, a new struct myuser object (account)
  *      - on failure, NULL.
  *
  * Side Effects:
@@ -100,7 +100,7 @@ void init_accounts(void)
  *        responsible for adding a nick with the same name
  */
 
-myuser_t *myuser_add(const char *name, const char *pass, const char *email, unsigned int flags)
+struct myuser *myuser_add(const char *name, const char *pass, const char *email, unsigned int flags)
 {
 	return myuser_add_id(NULL, name, pass, email, flags);
 }
@@ -111,9 +111,9 @@ myuser_t *myuser_add(const char *name, const char *pass, const char *email, unsi
  *
  * Like myuser_add, but lets you specify the new entity's UID.
  */
-myuser_t *myuser_add_id(const char *id, const char *name, const char *pass, const char *email, unsigned int flags)
+struct myuser *myuser_add_id(const char *id, const char *name, const char *pass, const char *email, unsigned int flags)
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	struct soper *soper;
 
 	return_val_if_fail((mu = myuser_find(name)) == NULL, mu);
@@ -175,7 +175,7 @@ myuser_t *myuser_add_id(const char *id, const char *name, const char *pass, cons
 }
 
 /*
- * myuser_delete(myuser_t *mu)
+ * myuser_delete(struct myuser *mu)
  *
  * Destroys and removes an account from the accounts DTree.
  *
@@ -188,9 +188,9 @@ myuser_t *myuser_add_id(const char *id, const char *name, const char *pass, cons
  * Side Effects:
  *      - an account is destroyed and removed from the accounts DTree.
  */
-void myuser_delete(myuser_t *mu)
+void myuser_delete(struct myuser *mu)
 {
-	myuser_t *successor;
+	struct myuser *successor;
 	mychan_t *mc;
 	mynick_t *mn;
 	struct user *u;
@@ -335,7 +335,7 @@ void myuser_delete(myuser_t *mu)
 }
 
 /*
- * myuser_rename(myuser_t *mu, const char *name)
+ * myuser_rename(struct myuser *mu, const char *name)
  *
  * Renames an account in the accounts DTree.
  *
@@ -351,7 +351,7 @@ void myuser_delete(myuser_t *mu)
  *      - an account is renamed.
  *      - online users are logged out and in again
  */
-void myuser_rename(myuser_t *mu, const char *name)
+void myuser_rename(struct myuser *mu, const char *name)
 {
 	mowgli_node_t *n, *tn;
 	struct user *u;
@@ -395,7 +395,7 @@ void myuser_rename(myuser_t *mu, const char *name)
 }
 
 /*
- * myuser_set_email(myuser_t *mu, const char *name)
+ * myuser_set_email(struct myuser *mu, const char *name)
  *
  * Changes the email address of an account.
  *
@@ -409,7 +409,7 @@ void myuser_rename(myuser_t *mu, const char *name)
  * Side Effects:
  *      - email address is changed
  */
-void myuser_set_email(myuser_t *mu, const char *newemail)
+void myuser_set_email(struct myuser *mu, const char *newemail)
 {
 	return_if_fail(mu != NULL);
 	return_if_fail(newemail != NULL);
@@ -436,7 +436,7 @@ void myuser_set_email(myuser_t *mu, const char *newemail)
  * Side Effects:
  *      - none
  */
-myuser_t *myuser_find_ext(const char *name)
+struct myuser *myuser_find_ext(const char *name)
 {
 	struct user *u;
 	mynick_t *mn;
@@ -462,7 +462,7 @@ myuser_t *myuser_find_ext(const char *name)
 }
 
 /*
- * myuser_notice(const char *from, myuser_t *target, const char *fmt, ...)
+ * myuser_notice(const char *from, struct myuser *target, const char *fmt, ...)
  *
  * Sends a notice to all users logged into an account.
  *
@@ -479,7 +479,7 @@ myuser_t *myuser_find_ext(const char *name)
  *      - a notice is sent to all users logged into the account.
  */
 void ATHEME_FATTR_PRINTF(3, 4)
-myuser_notice(const char *from, myuser_t *target, const char *fmt, ...)
+myuser_notice(const char *from, struct myuser *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -518,7 +518,7 @@ myuser_notice(const char *from, myuser_t *target, const char *fmt, ...)
  *     - none
  */
 bool
-myuser_access_verify(struct user *u, myuser_t *mu)
+myuser_access_verify(struct user *u, struct myuser *mu)
 {
 	mowgli_node_t *n;
 	char buf[USERLEN + 1 + HOSTLEN + 1];
@@ -565,7 +565,7 @@ myuser_access_verify(struct user *u, myuser_t *mu)
  *     - an access mask is added to an account.
  */
 bool
-myuser_access_add(myuser_t *mu, const char *mask)
+myuser_access_add(struct myuser *mu, const char *mask)
 {
 	mowgli_node_t *n;
 	char *msk;
@@ -601,7 +601,7 @@ myuser_access_add(myuser_t *mu, const char *mask)
  *     - none
  */
 char *
-myuser_access_find(myuser_t *mu, const char *mask)
+myuser_access_find(struct myuser *mu, const char *mask)
 {
 	mowgli_node_t *n;
 
@@ -631,7 +631,7 @@ myuser_access_find(myuser_t *mu, const char *mask)
  *     - an access mask is added to an account.
  */
 void
-myuser_access_delete(myuser_t *mu, const char *mask)
+myuser_access_delete(struct myuser *mu, const char *mask)
 {
 	mowgli_node_t *n, *tn;
 
@@ -660,7 +660,7 @@ myuser_access_delete(myuser_t *mu, const char *mask)
  ***************/
 
 /*
- * mynick_add(myuser_t *mu, const char *name)
+ * mynick_add(struct myuser *mu, const char *name)
  *
  * Creates a nick registration for the given account and adds it to the
  * nicks DTree.
@@ -677,7 +677,7 @@ myuser_access_delete(myuser_t *mu, const char *mask)
  *      - the created nick is added to the nick DTree and to the
  *        account's list.
  */
-mynick_t *mynick_add(myuser_t *mu, const char *name)
+mynick_t *mynick_add(struct myuser *mu, const char *name)
 {
 	mynick_t *mn;
 
@@ -807,7 +807,7 @@ static void myuser_name_delete(struct myuser_name *mun)
 }
 
 /*
- * myuser_name_remember(const char *name, myuser_t *mu)
+ * myuser_name_remember(const char *name, struct myuser *mu)
  *
  * If the given account has any information worth saving, creates a record
  * for the given name and adds it to the oldnames DTree.
@@ -822,7 +822,7 @@ static void myuser_name_delete(struct myuser_name *mun)
  * Side Effects:
  *      - a record may be added to the oldnames DTree.
  */
-void myuser_name_remember(const char *name, myuser_t *mu)
+void myuser_name_remember(const char *name, struct myuser *mu)
 {
 	struct myuser_name *mun;
 	struct metadata *md;
@@ -848,7 +848,7 @@ void myuser_name_remember(const char *name, myuser_t *mu)
 }
 
 /*
- * myuser_name_restore(const char *name, myuser_t *mu)
+ * myuser_name_restore(const char *name, struct myuser *mu)
  *
  * If the given name is in the oldnames DTree, restores information from it
  * into the given account.
@@ -863,7 +863,7 @@ void myuser_name_remember(const char *name, myuser_t *mu)
  * Side Effects:
  *      - if present, the record will be removed from the oldnames DTree.
  */
-void myuser_name_restore(const char *name, myuser_t *mu)
+void myuser_name_restore(const char *name, struct myuser *mu)
 {
 	struct myuser_name *mun;
 	struct metadata *md, *md2;
@@ -921,7 +921,7 @@ void myuser_name_restore(const char *name, myuser_t *mu)
  * M Y C E R T F P *
  *******************/
 
-struct mycertfp *mycertfp_add(myuser_t *mu, const char *certfp)
+struct mycertfp *mycertfp_add(struct myuser *mu, const char *certfp)
 {
 	struct mycertfp *mcfp;
 
@@ -1095,7 +1095,7 @@ static unsigned int add_auto_flags(unsigned int flags)
 #define RECENTLY_SEEN (7 * 86400)
 
 /* Find a user fulfilling the conditions who can take another channel */
-myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel)
+struct myuser *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel)
 {
 	mowgli_node_t *n;
 	struct chanacs *ca;
@@ -1153,9 +1153,9 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel)
  * the channel or on IRC; this would give an unfair advantage to
  * 24*7 clients and bots.
  * -- jilles */
-myuser_t *mychan_pick_successor(mychan_t *mc)
+struct myuser *mychan_pick_successor(mychan_t *mc)
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	hook_channel_succession_req_t req;
 
 	return_val_if_fail(mc != NULL, NULL);
@@ -1392,7 +1392,7 @@ static void chanacs_delete(struct chanacs *ca)
 }
 
 /*
- * chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level, time_t ts, struct myentity *setter)
+ * chanacs_add(mychan_t *mychan, struct myuser *myuser, unsigned int level, time_t ts, struct myentity *setter)
  *
  * Creates an access entry mapping between a user and channel.
  *
@@ -1832,7 +1832,7 @@ struct chanacs *chanacs_open(mychan_t *mychan, struct myentity *mt, const char *
  * these to reflect the actual change. Only allow changes to restrictflags.
  * Returns true if successful, false if an unallowed change was attempted.
  * -- jilles */
-bool chanacs_modify(struct chanacs *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, myuser_t *setter)
+bool chanacs_modify(struct chanacs *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, struct myuser *setter)
 {
 	return_val_if_fail(ca != NULL, false);
 	return_val_if_fail(addflags != NULL && removeflags != NULL, false);
@@ -1862,7 +1862,7 @@ bool chanacs_modify(struct chanacs *ca, unsigned int *addflags, unsigned int *re
 }
 
 /* version that doesn't return the changes made */
-bool chanacs_modify_simple(struct chanacs *ca, unsigned int addflags, unsigned int removeflags, myuser_t *setter)
+bool chanacs_modify_simple(struct chanacs *ca, unsigned int addflags, unsigned int removeflags, struct myuser *setter)
 {
 	unsigned int a, r;
 
@@ -1986,7 +1986,7 @@ bool chanacs_change_simple(mychan_t *mychan, struct myentity *mt, const char *ho
 static int expire_myuser_cb(struct myentity *mt, void *unused)
 {
 	hook_expiry_req_t req;
-	myuser_t *mu = user(mt);
+	struct myuser *mu = user(mt);
 
 	return_val_if_fail(isuser(mt), 0);
 
@@ -2130,7 +2130,7 @@ void expire_check(void *arg)
 
 static int check_myuser_cb(struct myentity *mt, void *unused)
 {
-	myuser_t *mu = user(mt);
+	struct myuser *mu = user(mt);
 	mowgli_node_t *n;
 	mynick_t *mn, *mn1;
 

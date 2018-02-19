@@ -63,13 +63,13 @@ static const struct cmode inspircd_mode_list[] = {
   { '\0', 0 }
 };
 
-static bool check_flood(const char *, struct channel *, mychan_t *, struct user *, myuser_t *);
-static bool check_nickflood(const char *, struct channel *, mychan_t *, struct user *, myuser_t *);
-static bool check_jointhrottle(const char *, struct channel *, mychan_t *, struct user *, myuser_t *);
-static bool check_forward(const char *, struct channel *, mychan_t *, struct user *, myuser_t *);
-static bool check_rejoindelay(const char *, struct channel *, mychan_t *, struct user *, myuser_t *);
-static bool check_delaymsg(const char *, struct channel *, mychan_t *, struct user *, myuser_t *);
-static bool check_history(const char *, struct channel *, mychan_t *, struct user *, myuser_t *);
+static bool check_flood(const char *, struct channel *, mychan_t *, struct user *, struct myuser *);
+static bool check_nickflood(const char *, struct channel *, mychan_t *, struct user *, struct myuser *);
+static bool check_jointhrottle(const char *, struct channel *, mychan_t *, struct user *, struct myuser *);
+static bool check_forward(const char *, struct channel *, mychan_t *, struct user *, struct myuser *);
+static bool check_rejoindelay(const char *, struct channel *, mychan_t *, struct user *, struct myuser *);
+static bool check_delaymsg(const char *, struct channel *, mychan_t *, struct user *, struct myuser *);
+static bool check_history(const char *, struct channel *, mychan_t *, struct user *, struct myuser *);
 
 static unsigned int max_rejoindelay = 5;
 
@@ -223,17 +223,17 @@ static inline void channel_metadata_sts(struct channel *c, const char *key, cons
 	sts(":%s METADATA %s %s :%s", ME, c->name, key, value);
 }
 
-static bool check_flood(const char *value, struct channel *c, mychan_t *mc, struct user *u, myuser_t *mu)
+static bool check_flood(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
 {
 	return check_jointhrottle((*value == '*' ? value + 1 : value), c, mc, u, mu);
 }
 
-static bool check_nickflood(const char *value, struct channel *c, mychan_t *mc, struct user *u, myuser_t *mu)
+static bool check_nickflood(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
 {
 	return check_jointhrottle(value, c, mc, u, mu);
 }
 
-static bool check_jointhrottle(const char *value, struct channel *c, mychan_t *mc, struct user *u, myuser_t *mu)
+static bool check_jointhrottle(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
 {
 	const char *p, *arg2;
 
@@ -257,12 +257,12 @@ static bool check_jointhrottle(const char *value, struct channel *c, mychan_t *m
 	return true;
 }
 
-static bool check_history(const char *value, struct channel *c, mychan_t *mc, struct user *u, myuser_t *mu)
+static bool check_history(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
 {
 	return check_jointhrottle(value, c, mc, u, mu);
 }
 
-static bool check_forward(const char *value, struct channel *c, mychan_t *mc, struct user *u, myuser_t *mu)
+static bool check_forward(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
 {
 	struct channel *target_c;
 	mychan_t *target_mc;
@@ -278,7 +278,7 @@ static bool check_forward(const char *value, struct channel *c, mychan_t *mc, st
 	return true;
 }
 
-static bool check_rejoindelay(const char *value, struct channel *c, mychan_t *mc, struct user *u, myuser_t *mu)
+static bool check_rejoindelay(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
 {
 	const char *ch = value;
 
@@ -299,7 +299,7 @@ static bool check_rejoindelay(const char *value, struct channel *c, mychan_t *mc
 	}
 }
 
-static bool check_delaymsg(const char *value, struct channel *c, mychan_t *mc, struct user *u, myuser_t *mu)
+static bool check_delaymsg(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
 {
 	const char *ch = value;
 
@@ -605,7 +605,7 @@ static void inspircd_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void inspircd_on_login(struct user *u, myuser_t *mu, const char *wantedhost)
+static void inspircd_on_login(struct user *u, struct myuser *mu, const char *wantedhost)
 {
 	sts(":%s METADATA %s accountname :%s", me.numeric, u->uid, entity(mu)->name);
 }
@@ -691,7 +691,7 @@ static void inspircd_invite_sts(struct user *sender, struct user *target, struct
 	sts(":%s INVITE %s %s", sender->uid, target->uid, channel->name);
 }
 
-static void inspircd_holdnick_sts(struct user *source, int duration, const char *nick, myuser_t *account)
+static void inspircd_holdnick_sts(struct user *source, int duration, const char *nick, struct myuser *account)
 {
 	struct service *svs;
 
@@ -713,7 +713,7 @@ static void inspircd_holdnick_sts(struct user *source, int duration, const char 
 	}
 }
 
-static void inspircd_svslogin_sts(char *target, char *nick, char *user, char *host, myuser_t *account)
+static void inspircd_svslogin_sts(char *target, char *nick, char *user, char *host, struct myuser *account)
 {
 	sts(":%s METADATA %s accountname :%s", me.numeric, target, entity(account)->name);
 

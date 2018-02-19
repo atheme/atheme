@@ -13,17 +13,17 @@
 struct authcookie
 {
 	char *ticket;
-	myuser_t *myuser;
+	struct myuser *myuser;
 	time_t expire;
 	mowgli_node_t node;
 };
 
 extern void authcookie_init(void);
-extern struct authcookie *authcookie_create(myuser_t *mu);
-extern struct authcookie *authcookie_find(const char *ticket, myuser_t *myuser);
+extern struct authcookie *authcookie_create(struct myuser *mu);
+extern struct authcookie *authcookie_find(const char *ticket, struct myuser *myuser);
 extern void authcookie_destroy(struct authcookie *ac);
-extern void authcookie_destroy_all(myuser_t *mu);
-extern bool authcookie_validate(const char *ticket, myuser_t *myuser);
+extern void authcookie_destroy_all(struct myuser *mu);
+extern bool authcookie_validate(const char *ticket, struct myuser *myuser);
 extern void authcookie_expire(void *arg);
 
 #endif

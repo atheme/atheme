@@ -90,7 +90,7 @@ static void ms_cmd_sendall(struct sourceinfo *si, int parc, char *parv[])
 
 	MYENTITY_FOREACH_T(mt, &state, ENT_USER)
 	{
-		myuser_t *tmu = user(mt);
+		struct myuser *tmu = user(mt);
 
 		if (tmu == si->smu)
 			continue;
@@ -113,7 +113,7 @@ static void ms_cmd_sendall(struct sourceinfo *si, int parc, char *parv[])
 		MOWGLI_ITER_FOREACH(n, tmu->memo_ignores.head)
 		{
 			mynick_t *mn;
-			myuser_t *mu;
+			struct myuser *mu;
 
 			if (nicksvs.no_nick_ownership)
 				mu = myuser_find((const char *)n->data);

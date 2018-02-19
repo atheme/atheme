@@ -21,7 +21,7 @@ static bool mark_match(const mynick_t *mn, const void *arg)
 	const char *markpattern = (const char*)arg;
 	struct metadata *mdmark;
 
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 	mdmark = metadata_find(mu, "private:mark:reason");
 
 	if (mdmark != NULL && !match(markpattern, mdmark->value))
@@ -32,7 +32,7 @@ static bool mark_match(const mynick_t *mn, const void *arg)
 
 static bool is_marked(const mynick_t *mn, const void *arg)
 {
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 
 	return !!metadata_find(mu, "private:mark:setter");
 }
@@ -77,7 +77,7 @@ static void ns_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 	char *target = parv[0];
 	char *action = parv[1];
 	char *info = parv[2];
-	myuser_t *mu;
+	struct myuser *mu;
 	struct myuser_name *mun;
 
 	if (!target || !action)

@@ -15,12 +15,12 @@
  * Side Effects:
  *      - none
  */
-static inline myuser_t *myuser_find(const char *name)
+static inline struct myuser *myuser_find(const char *name)
 {
 	return name ? user(myentity_find(name)) : NULL;
 }
 
-static inline myuser_t *myuser_find_uid(const char *uid)
+static inline struct myuser *myuser_find_uid(const char *uid)
 {
 	return uid ? user(myentity_find_uid(uid)) : NULL;
 }
@@ -44,9 +44,9 @@ static inline mynick_t *mynick_find(const char *name)
 	return name ? mowgli_patricia_retrieve(nicklist, name) : NULL;
 }
 
-static inline myuser_t *myuser_find_by_nick(const char *name)
+static inline struct myuser *myuser_find_by_nick(const char *name)
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	mynick_t *mn;
 
 	mu = myuser_find(name);

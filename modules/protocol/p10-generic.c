@@ -285,7 +285,7 @@ static void p10_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void p10_on_login(struct user *u, myuser_t *mu, const char *wantedhost)
+static void p10_on_login(struct user *u, struct myuser *mu, const char *wantedhost)
 {
 	return_if_fail(u != NULL);
 
@@ -321,7 +321,7 @@ static void p10_sasl_sts(const char *target, char mode, const char *data)
 	sts("%s XR %c%c %s :SASL:%c:%s", me.numeric, target[0], target[1], target, mode, data);
 }
 
-static void p10_svslogin_sts(char *target, char *nick, char *user, char *host, myuser_t *account)
+static void p10_svslogin_sts(char *target, char *nick, char *user, char *host, struct myuser *account)
 {
 	sts("%s XR %c%c %s :SASL:L:%s", me.numeric, target[0], target[1], target, entity(account)->name);
 }

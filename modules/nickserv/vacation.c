@@ -47,7 +47,7 @@ static void user_identify_hook(struct user *u)
 
 static void user_expiry_hook(hook_expiry_req_t *req)
 {
-	myuser_t *mu = req->data.mu;
+	struct myuser *mu = req->data.mu;
 
 	if (!metadata_find(mu, "private:vacation"))
 		return;
@@ -59,7 +59,7 @@ static void user_expiry_hook(hook_expiry_req_t *req)
 static void nick_expiry_hook(hook_expiry_req_t *req)
 {
 	mynick_t *mn = req->data.mn;
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 
 	if (!metadata_find(mu, "private:vacation"))
 		return;
@@ -75,7 +75,7 @@ static void info_hook(hook_user_req_t *hdata)
 }
 
 static bool is_vacation(const mynick_t *mn, const void *arg) {
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 
 	return ( metadata_find(mu, "private:vacation") != NULL );
 }

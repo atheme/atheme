@@ -19,7 +19,7 @@ struct command ns_set_quietchg = { "QUIETCHG", N_("Allows you to opt-out of chan
 
 static bool has_quietchg(const mynick_t *mn, const void *arg)
 {
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 
 	return ( mu->flags & MU_QUIETCHG ) == MU_QUIETCHG;
 }

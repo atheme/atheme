@@ -19,7 +19,7 @@ struct command ns_set_noop = { "NOOP", N_("Prevents services from setting modes 
 
 static bool has_noop(const mynick_t *mn, const void *arg)
 {
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 
 	return ( mu->flags & MU_NOOP ) == MU_NOOP;
 }

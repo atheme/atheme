@@ -19,7 +19,7 @@ struct command ns_set_neverop = { "NEVEROP", N_("Prevents you from being added t
 
 static bool has_neverop(const mynick_t *mn, const void *arg)
 {
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 
 	return ( mu->flags & MU_NEVEROP ) == MU_NEVEROP;
 }

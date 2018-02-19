@@ -34,7 +34,7 @@ struct listmail_state
 static int listmail_foreach_cb(struct myentity *mt, void *privdata)
 {
 	struct listmail_state *state = (struct listmail_state *) privdata;
-	myuser_t *mu = user(mt);
+	struct myuser *mu = user(mt);
 
 	if (state->email_canonical == mu->email_canonical || !match(state->pattern, mu->email))
 	{

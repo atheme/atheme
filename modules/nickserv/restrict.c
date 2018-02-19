@@ -14,7 +14,7 @@ static void ns_cmd_restrict(struct sourceinfo *si, int parc, char *parv[]);
 struct command ns_restrict = { "RESTRICT", N_("Restrict a user from using certain commands."), PRIV_MARK, 3, ns_cmd_restrict, { .path = "nickserv/restrict" } };
 
 static bool is_restricted(const mynick_t *mn, const void *arg) {
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 
 	return !!metadata_find(mu, "private:restrict:setter");
 }
@@ -23,7 +23,7 @@ static bool restricted_match(const mynick_t *mn, const void *arg) {
 	const char *restrictedpattern = (const char*)arg;
 	struct metadata *mdrestricted;
 
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 
 	mdrestricted = metadata_find(mu, "private:restrict:reason");
 
@@ -96,7 +96,7 @@ static void ns_cmd_restrict(struct sourceinfo *si, int parc, char *parv[])
 	char *target = parv[0];
 	char *action = parv[1];
 	char *info = parv[2];
-	myuser_t *mu;
+	struct myuser *mu;
 
 	if (!target || !action)
 	{

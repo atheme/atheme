@@ -18,7 +18,7 @@ struct command ns_set_nomemo = { "NOMEMO", N_("Disables the ability to receive m
 
 static bool has_nomemo(const mynick_t *mn, const void *arg)
 {
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 
 	return ( mu->flags & MU_NOMEMO ) == MU_NOMEMO;
 }

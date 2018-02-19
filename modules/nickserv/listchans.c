@@ -26,7 +26,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static void ns_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	mowgli_node_t *n;
 	struct chanacs *ca;
 	unsigned int akicks = 0, i;

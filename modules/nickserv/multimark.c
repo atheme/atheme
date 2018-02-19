@@ -19,17 +19,17 @@ static void db_h_rm(struct database_handle *db, const char *type);
 static void show_multimark(hook_user_req_t *hdata);
 static void show_multimark_noexist(hook_info_noexist_req_t *hdata);
 
-static void account_drop_hook(myuser_t *mu);
+static void account_drop_hook(struct myuser *mu);
 
 static void nick_group_hook(hook_user_req_t *hdata);
 static void nick_ungroup_hook(hook_user_req_t *hdata);
-static void account_register_hook(myuser_t *mu);
+static void account_register_hook(struct myuser *mu);
 static void multimark_needforce(hook_user_needforce_t *hdata);
 
-static bool is_user_marked(myuser_t *mu);
+static bool is_user_marked(struct myuser *mu);
 
-int get_multimark_max(myuser_t *mu);
-static inline mowgli_list_t *multimark_list(myuser_t *mu);
+int get_multimark_max(struct myuser *mu);
+static inline mowgli_list_t *multimark_list(struct myuser *mu);
 
 static mowgli_patricia_t *restored_marks;
 
@@ -63,7 +63,7 @@ typedef struct restored_mark restored_mark_t;
 static bool multimark_match(const mynick_t *mn, const void *arg)
 {
 	const char *markpattern = (const char*)arg;
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 
 	mowgli_list_t *l = multimark_list(mu);
 
@@ -85,12 +85,12 @@ static bool multimark_match(const mynick_t *mn, const void *arg)
 
 static bool is_marked(const mynick_t *mn, const void *arg)
 {
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 
 	return is_user_marked(mu);
 }
 
-static bool is_user_marked(myuser_t *mu)
+static bool is_user_marked(struct myuser *mu)
 {
 	mowgli_list_t *l = multimark_list(mu);
 
@@ -180,7 +180,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	list_unregister("marked");
 }
 
-static inline mowgli_list_t *multimark_list(myuser_t *mu)
+static inline mowgli_list_t *multimark_list(struct myuser *mu)
 {
 	mowgli_list_t *l;
 
@@ -213,7 +213,7 @@ mowgli_list_t *restored_mark_list(const char *nick)
 static void write_multimark_db(struct database_handle *db)
 {
 	mowgli_node_t *n;
-	myuser_t *mu;
+	struct myuser *mu;
 	struct myentity_iteration_state state;
 	mowgli_list_t *l;
 	struct myentity *mt;
@@ -279,7 +279,7 @@ static void write_multimark_db(struct database_handle *db)
 
 static void db_h_mm(struct database_handle *db, const char *type)
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	mowgli_patricia_iteration_state_t state;
 	mowgli_list_t *l;
 
@@ -316,7 +316,7 @@ static void db_h_mm(struct database_handle *db, const char *type)
 
 static void db_h_rm(struct database_handle *db, const char *type)
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	mowgli_patricia_iteration_state_t state;
 
 	const char *account_uid = db_sread_word(db);
@@ -343,13 +343,13 @@ static void db_h_rm(struct database_handle *db, const char *type)
 }
 
 /* Copy old style marks */
-static void migrate_user(myuser_t *mu)
+static void migrate_user(struct myuser *mu)
 {
 	mowgli_list_t *l;
 	struct metadata *md;
 
 	char *setter, *reason;
-	myuser_t *setter_user;
+	struct myuser *setter_user;
 
 	time_t time;
 	multimark_t *mm;
@@ -419,14 +419,14 @@ static void migrate_all(struct sourceinfo *si)
 
 	MYENTITY_FOREACH_T(mt, &state, ENT_USER)
 	{
-		myuser_t *mu = user(mt);
+		struct myuser *mu = user(mt);
 		migrate_user(mu);
 	}
 
 	command_success_nodata(si, _("Mark data migrated successfully."));
 }
 
-int get_multimark_max(myuser_t *mu)
+int get_multimark_max(struct myuser *mu)
 {
 	int max = 0;
 
@@ -449,7 +449,7 @@ int get_multimark_max(myuser_t *mu)
 
 static void nick_ungroup_hook(hook_user_req_t *hdata)
 {
-	myuser_t *mu = hdata->mu;
+	struct myuser *mu = hdata->mu;
 	mowgli_list_t *l = multimark_list(mu);
 
 	mowgli_node_t *n;
@@ -478,7 +478,7 @@ static void nick_ungroup_hook(hook_user_req_t *hdata)
 	}
 }
 
-static void account_drop_hook(myuser_t *mu)
+static void account_drop_hook(struct myuser *mu)
 {
 	// Let's turn old marks to new marks at this point,
 	// so that they are preserved.
@@ -511,7 +511,7 @@ static void account_drop_hook(myuser_t *mu)
 	}
 }
 
-static void account_register_hook(myuser_t *mu)
+static void account_register_hook(struct myuser *mu)
 {
 	mowgli_list_t *l;
 	mowgli_node_t *n, *tn;
@@ -522,7 +522,7 @@ static void account_register_hook(myuser_t *mu)
 	const char *name = entity(mu)->name;
 
 	char *setter_name;
-	myuser_t *setter;
+	struct myuser *setter;
 
 	//Migrate any old-style marks that have already been restored at user
 	//creation.
@@ -554,7 +554,7 @@ static void account_register_hook(myuser_t *mu)
 
 static void nick_group_hook(hook_user_req_t *hdata)
 {
-	myuser_t *smu = hdata->si->smu;
+	struct myuser *smu = hdata->si->smu;
 	mowgli_list_t *l;
 
 	mowgli_node_t *n, *tn, *n2;
@@ -617,7 +617,7 @@ static void show_multimark(hook_user_req_t *hdata)
 	struct tm tm;
 	char time[BUFSIZE];
 
-	myuser_t *setter;
+	struct myuser *setter;
 	const char *setter_name;
 
 	bool has_user_auspex;
@@ -677,7 +677,7 @@ static void show_multimark(hook_user_req_t *hdata)
 		{
 			if (strcasecmp(setter_name, mm->setter_name))
 			{
-				myuser_t *user;
+				struct myuser *user;
 				if ((user = myuser_find_uid(mm->restored_from_uid)) != NULL)
 				{
 					command_success_nodata(
@@ -708,7 +708,7 @@ static void show_multimark(hook_user_req_t *hdata)
 			}
 			else
 			{
-				myuser_t *user;
+				struct myuser *user;
 				if ((user = myuser_find_uid(mm->restored_from_uid)) != NULL)
 				{
 					command_success_nodata(
@@ -748,7 +748,7 @@ static void show_multimark_noexist(hook_info_noexist_req_t *hdata)
 	struct tm tm;
 	char time[BUFSIZE];
 
-	myuser_t *setter;
+	struct myuser *setter;
 	const char *setter_name;
 
 	bool has_user_auspex;
@@ -805,7 +805,7 @@ static void show_multimark_noexist(hook_info_noexist_req_t *hdata)
 
 static void multimark_needforce(hook_user_needforce_t *hdata)
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	bool marked;
 
 	mu = hdata->mu;
@@ -819,7 +819,7 @@ static void ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 	char *target = parv[0];
 	char *action = parv[1];
 	char *info = parv[2];
-	myuser_t *mu;
+	struct myuser *mu;
 	struct myuser_name *mun;
 	mowgli_list_t *l;
 
@@ -828,7 +828,7 @@ static void ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 	struct tm tm;
 	char time[BUFSIZE];
 
-	myuser_t *setter;
+	struct myuser *setter;
 	const char *setter_name;
 
 	mowgli_list_t *rl;
@@ -995,7 +995,7 @@ static void ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 			{
 				if (strcasecmp(setter_name, mm->setter_name))
 				{
-					myuser_t *user;
+					struct myuser *user;
 					if ((user = myuser_find_uid(mm->restored_from_uid)) != NULL)
 					{
 						command_success_nodata(
@@ -1026,7 +1026,7 @@ static void ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 				}
 				else
 				{
-					myuser_t *user;
+					struct myuser *user;
 					if ((user = myuser_find_uid(mm->restored_from_uid)) != NULL)
 					{
 						command_success_nodata(

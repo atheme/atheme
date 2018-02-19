@@ -30,7 +30,7 @@ static void cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	char *name = parv[0];
 	char buf[BUFSIZE], strfbuf[BUFSIZE];
 	struct tm tm;
-	myuser_t *mu;
+	struct myuser *mu;
 	struct metadata *md;
 	mowgli_patricia_iteration_state_t state;
 	hook_channel_req_t req;

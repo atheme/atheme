@@ -275,7 +275,7 @@ static void hs_cmd_unoffer(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("You have unoffered vhost \2%s\2."), host);
 }
 
-static bool myuser_is_in_group(myuser_t *mu, struct myentity *mt)
+static bool myuser_is_in_group(struct myuser *mu, struct myentity *mt)
 {
 	struct mygroup *mg;
 	mowgli_node_t *n;

@@ -33,7 +33,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static void ns_cmd_setpass(struct sourceinfo *si, int parc, char *parv[])
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	struct metadata *md;
 	char *nick = parv[0];
 	char *key = parv[1];
@@ -106,7 +106,7 @@ static void ns_cmd_setpass(struct sourceinfo *si, int parc, char *parv[])
 
 static void clear_setpass_key(struct user *u)
 {
-	myuser_t *mu = u->myuser;
+	struct myuser *mu = u->myuser;
 
 	if (!metadata_find(mu, "private:setpass:key"))
 		return;

@@ -151,7 +151,7 @@ struct operclass *operclass_find(const char *name)
 struct soper *soper_add(const char *name, const char *classname, int flags, const char *password)
 {
 	struct soper *soper;
-	myuser_t *mu = myuser_find(name);
+	struct myuser *mu = myuser_find(name);
 	mowgli_node_t *n;
 	struct operclass *operclass = operclass_find(classname);
 
@@ -236,7 +236,7 @@ void soper_delete(struct soper *soper)
 	cnt.soper--;
 }
 
-struct soper *soper_find(myuser_t *myuser)
+struct soper *soper_find(struct myuser *myuser)
 {
 	struct soper *soper;
 	mowgli_node_t *n;
@@ -268,7 +268,7 @@ struct soper *soper_find_named(const char *name)
 	return NULL;
 }
 
-bool is_soper(myuser_t *myuser)
+bool is_soper(struct myuser *myuser)
 {
 	if (!myuser)
 		return false;
@@ -279,7 +279,7 @@ bool is_soper(myuser_t *myuser)
 	return false;
 }
 
-bool is_conf_soper(myuser_t *myuser)
+bool is_conf_soper(struct myuser *myuser)
 {
 	if (!myuser)
 		return false;
@@ -383,7 +383,7 @@ bool has_priv_user(struct user *u, const char *priv)
 	return false;
 }
 
-bool has_priv_myuser(myuser_t *mu, const char *priv)
+bool has_priv_myuser(struct myuser *mu, const char *priv)
 {
 	struct operclass *operclass;
 

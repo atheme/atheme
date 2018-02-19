@@ -66,7 +66,7 @@ struct command ns_set_private = { "PRIVATE", N_("Hides information about you fro
 
 static bool has_private(const mynick_t *mn, const void *arg)
 {
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 
 	return ( mu->flags & MU_PRIVATE ) == MU_PRIVATE;
 }

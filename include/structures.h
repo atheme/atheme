@@ -9,7 +9,6 @@
 #define STRUCTURES_H
 
 // XXX remove me, or move me to include/hook.h
-typedef struct myuser_ myuser_t;
 typedef struct mynick_ mynick_t;
 typedef struct mychan_ mychan_t;
 
@@ -17,6 +16,7 @@ typedef struct mychan_ mychan_t;
 struct chanacs;
 struct groupacs;
 struct mygroup;
+struct myuser;
 struct svsignore;
 
 // Defined in include/channels.h

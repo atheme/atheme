@@ -62,7 +62,7 @@ struct svsignore
 };
 
 /* services accounts */
-struct myuser_
+struct myuser
 {
   struct myentity ent;
   char pass[PASSLEN + 1];
@@ -123,12 +123,12 @@ struct mynick_
 
   char nick[NICKLEN + 1];
 
-  myuser_t *owner;
+  struct myuser *owner;
 
   time_t registered;
   time_t lastseen;
 
-  mowgli_node_t node; /* for myuser_t.nicks */
+  mowgli_node_t node; /* for struct myuser -> nicks */
 };
 
 /* record about a name that used to exist */
@@ -141,7 +141,7 @@ struct myuser_name
 
 struct mycertfp
 {
-  myuser_t *mu;
+  struct myuser *mu;
 
   char *certfp;
 
@@ -334,13 +334,13 @@ typedef struct {
 
 typedef struct {
 	mychan_t *mc;
-	myuser_t *mu;
+	struct myuser *mu;
 } hook_channel_succession_req_t;
 
 typedef struct {
 	union {
 		mychan_t *mc;
-		myuser_t *mu;
+		struct myuser *mu;
 		mynick_t *mn;
 	} data;
 	int do_expire;	/* Write zero here to disallow expiry */
@@ -355,7 +355,7 @@ typedef struct {
 
 typedef struct {
 	struct sourceinfo *si;
-	myuser_t *mu;
+	struct myuser *mu;
 	mynick_t *mn;
 } hook_user_req_t;
 
@@ -369,7 +369,7 @@ typedef struct {
 
 typedef struct {
 	struct sourceinfo *si;
-	myuser_t *mu;
+	struct myuser *mu;
 	bool allowed;
 } hook_user_login_check_t;
 
@@ -379,13 +379,13 @@ typedef struct {
 } hook_nick_enforce_t;
 
 typedef struct {
-	myuser_t *target;
+	struct myuser *target;
 	const char *name;
 	char *value;
 } hook_metadata_change_t;
 
 typedef struct {
-	myuser_t *mu;
+	struct myuser *mu;
 	const char *oldname;
 } hook_user_rename_t;
 
@@ -396,7 +396,7 @@ typedef struct {
 
 typedef struct {
 	struct sourceinfo *si;
-	myuser_t *mu;
+	struct myuser *mu;
 	int allowed;
 } hook_user_needforce_t;
 
@@ -460,29 +460,29 @@ extern mowgli_patricia_t *mclist;
 
 extern void init_accounts(void);
 
-extern myuser_t *myuser_add(const char *name, const char *pass, const char *email, unsigned int flags);
-extern myuser_t *myuser_add_id(const char *id, const char *name, const char *pass, const char *email, unsigned int flags);
-extern void myuser_delete(myuser_t *mu);
-//inline myuser_t *myuser_find(const char *name);
-extern void myuser_rename(myuser_t *mu, const char *name);
-extern void myuser_set_email(myuser_t *mu, const char *newemail);
-extern myuser_t *myuser_find_ext(const char *name);
-extern void myuser_notice(const char *from, myuser_t *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
+extern struct myuser *myuser_add(const char *name, const char *pass, const char *email, unsigned int flags);
+extern struct myuser *myuser_add_id(const char *id, const char *name, const char *pass, const char *email, unsigned int flags);
+extern void myuser_delete(struct myuser *mu);
+//inline struct myuser *myuser_find(const char *name);
+extern void myuser_rename(struct myuser *mu, const char *name);
+extern void myuser_set_email(struct myuser *mu, const char *newemail);
+extern struct myuser *myuser_find_ext(const char *name);
+extern void myuser_notice(const char *from, struct myuser *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
 
-extern bool myuser_access_verify(struct user *u, myuser_t *mu);
-extern bool myuser_access_add(myuser_t *mu, const char *mask);
-extern char *myuser_access_find(myuser_t *mu, const char *mask);
-extern void myuser_access_delete(myuser_t *mu, const char *mask);
+extern bool myuser_access_verify(struct user *u, struct myuser *mu);
+extern bool myuser_access_add(struct myuser *mu, const char *mask);
+extern char *myuser_access_find(struct myuser *mu, const char *mask);
+extern void myuser_access_delete(struct myuser *mu, const char *mask);
 
-extern mynick_t *mynick_add(myuser_t *mu, const char *name);
+extern mynick_t *mynick_add(struct myuser *mu, const char *name);
 extern void mynick_delete(mynick_t *mn);
 //inline mynick_t *mynick_find(const char *name);
 
 extern struct myuser_name *myuser_name_add(const char *name);
-extern void myuser_name_remember(const char *name, myuser_t *mu);
-extern void myuser_name_restore(const char *name, myuser_t *mu);
+extern void myuser_name_remember(const char *name, struct myuser *mu);
+extern void myuser_name_restore(const char *name, struct myuser *mu);
 
-extern struct mycertfp *mycertfp_add(myuser_t *mu, const char *certfp);
+extern struct mycertfp *mycertfp_add(struct myuser *mu, const char *certfp);
 extern void mycertfp_delete(struct mycertfp *mcfp);
 extern struct mycertfp *mycertfp_find(const char *certfp);
 
@@ -491,8 +491,8 @@ extern mychan_t *mychan_add(char *name);
 extern bool mychan_isused(mychan_t *mc);
 extern unsigned int mychan_num_founders(mychan_t *mc);
 extern const char *mychan_founder_names(mychan_t *mc);
-extern myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel);
-extern myuser_t *mychan_pick_successor(mychan_t *mc);
+extern struct myuser *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel);
+extern struct myuser *mychan_pick_successor(mychan_t *mc);
 extern const char *mychan_get_mlock(mychan_t *mc);
 extern const char *mychan_get_sts_mlock(mychan_t *mc);
 
@@ -514,8 +514,8 @@ extern unsigned int chanacs_source_flags(mychan_t *mychan, struct sourceinfo *si
 
 extern struct chanacs *chanacs_open(mychan_t *mychan, struct myentity *mt, const char *hostmask, bool create, struct myentity *setter);
 //inline void chanacs_close(struct chanacs *ca);
-extern bool chanacs_modify(struct chanacs *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, myuser_t *setter);
-extern bool chanacs_modify_simple(struct chanacs *ca, unsigned int addflags, unsigned int removeflags, myuser_t *setter);
+extern bool chanacs_modify(struct chanacs *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, struct myuser *setter);
+extern bool chanacs_modify_simple(struct chanacs *ca, unsigned int addflags, unsigned int removeflags, struct myuser *setter);
 
 //inline bool chanacs_is_table_full(struct chanacs *ca);
 

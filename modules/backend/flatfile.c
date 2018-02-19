@@ -16,7 +16,7 @@
 /* loads atheme.db */
 static void flatfile_db_load(const char *filename)
 {
-	myuser_t *mu, *founder = NULL;
+	struct myuser *mu, *founder = NULL;
 	struct myuser_name *mun;
 	mychan_t *mc;
 	struct kline *k;

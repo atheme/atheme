@@ -30,7 +30,7 @@ static void cs_cmd_why(struct sourceinfo *si, int parc, char *parv[])
 	const char *targ = parv[1];
 	mychan_t *mc;
 	struct user *u;
-	myuser_t *mu;
+	struct myuser *mu;
 	mowgli_node_t *n;
 	struct chanacs *ca;
 	const struct entity_chanacs_validation_vtable *vt;

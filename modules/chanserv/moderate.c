@@ -115,7 +115,7 @@ static void csreq_marshal_set(struct database_handle *db)
 /*****************************************************************************/
 
 static void ATHEME_FATTR_PRINTF(3, 4)
-send_memo(struct sourceinfo *si, myuser_t *mu, const char *memo, ...)
+send_memo(struct sourceinfo *si, struct myuser *mu, const char *memo, ...)
 {
 	struct service *msvs;
 	va_list va;
@@ -202,7 +202,7 @@ static void can_register(hook_channel_register_check_t *req)
 
 static void cs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	mychan_t *mc;
 	csreq_t *cs;
 	struct chanuser *cu;
@@ -304,7 +304,7 @@ static void cs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 static void cs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
 {
 	csreq_t *cs;
-	myuser_t *mu;
+	struct myuser *mu;
 
 	if (!parv[0])
 	{

@@ -19,7 +19,7 @@ struct command ns_set_nevergroup = { "NEVERGROUP", N_("Prevents you from being a
 
 static bool has_nevergroup(const mynick_t *mn, const void *arg)
 {
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 
 	return ( mu->flags & MU_NEVERGROUP ) == MU_NEVERGROUP;
 }

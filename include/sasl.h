@@ -79,15 +79,15 @@ struct sasl_core_functions
 {
 	void     (*mech_register)(struct sasl_mechanism *);
 	void     (*mech_unregister)(struct sasl_mechanism *);
-	bool     (*authcid_can_login)(struct sasl_session *, const char *, myuser_t **);
-	bool     (*authzid_can_login)(struct sasl_session *, const char *, myuser_t **);
+	bool     (*authcid_can_login)(struct sasl_session *, const char *, struct myuser **);
+	bool     (*authzid_can_login)(struct sasl_session *, const char *, struct myuser **);
 };
 
 typedef struct {
 
-	myuser_t  *source_mu;
-	myuser_t  *target_mu;
-	bool       allowed;
+	struct myuser  *source_mu;
+	struct myuser  *target_mu;
+	bool            allowed;
 
 } hook_sasl_may_impersonate_t;
 

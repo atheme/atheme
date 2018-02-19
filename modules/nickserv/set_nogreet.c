@@ -19,7 +19,7 @@ struct command ns_set_nogreet = { "NOGREET", N_("Allows you to opt-out of channe
 
 static bool has_nogreet(const mynick_t *mn, const void *arg)
 {
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 
 	return ( mu->flags & MU_NOGREET ) == MU_NOGREET;
 }

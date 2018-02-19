@@ -124,7 +124,7 @@ static void os_cmd_soper_listclass(struct sourceinfo *si, int parc, char *parv[]
 
 static void os_cmd_soper_add(struct sourceinfo *si, int parc, char *parv[])
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	struct operclass *operclass;
 
 	if (parc < 2)
@@ -193,7 +193,7 @@ static void os_cmd_soper_add(struct sourceinfo *si, int parc, char *parv[])
 
 static void os_cmd_soper_del(struct sourceinfo *si, int parc, char *parv[])
 {
-	myuser_t *mu;
+	struct myuser *mu;
 
 	if (parc < 1)
 	{
@@ -236,7 +236,7 @@ static void os_cmd_soper_del(struct sourceinfo *si, int parc, char *parv[])
 
 static void os_cmd_soper_setpass(struct sourceinfo *si, int parc, char *parv[])
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	mowgli_node_t *n;
 	struct user *u;
 

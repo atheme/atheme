@@ -35,7 +35,7 @@ enum specialoperation
 
 static void ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	char *name = parv[0];
 	char *key;
 	enum specialoperation op = op_none;

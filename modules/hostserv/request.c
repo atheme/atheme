@@ -15,9 +15,9 @@ struct service *hostsvs;
 unsigned int ratelimit_count = 0;
 time_t ratelimit_firsttime = 0;
 
-static void account_drop_request(myuser_t *mu);
+static void account_drop_request(struct myuser *mu);
 static void nick_drop_request(hook_user_req_t *hdata);
-static void account_delete_request(myuser_t *mu);
+static void account_delete_request(struct myuser *mu);
 static void osinfo_hook(struct sourceinfo *si);
 static void hs_cmd_request(struct sourceinfo *si, int parc, char *parv[]);
 static void hs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[]);
@@ -155,7 +155,7 @@ static void nick_drop_request(hook_user_req_t *hdata)
 	}
 }
 
-static void account_drop_request(myuser_t *mu)
+static void account_drop_request(struct myuser *mu)
 {
 	mowgli_node_t *n;
 	hsreq_t *l;
@@ -179,7 +179,7 @@ static void account_drop_request(myuser_t *mu)
 	}
 }
 
-static void account_delete_request(myuser_t *mu)
+static void account_delete_request(struct myuser *mu)
 {
 	mowgli_node_t *n;
 	hsreq_t *l;
@@ -250,7 +250,7 @@ static void hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 	const char *target;
 	mynick_t *mn;
 	struct myentity *mt;
-	myuser_t *mu;
+	struct myuser *mu;
 	struct myentity_iteration_state state;
 	char buf[BUFSIZE], strfbuf[BUFSIZE];
 	struct metadata *md, *md_timestamp, *md_assigner;

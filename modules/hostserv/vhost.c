@@ -33,7 +33,7 @@ static void hs_cmd_vhost(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *host = parv[1];
-	myuser_t *mu;
+	struct myuser *mu;
 
 	if (!target)
 	{
@@ -77,7 +77,7 @@ static void hs_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
 	const char *pattern;
 	struct myentity_iteration_state state;
 	struct myentity *mt;
-	myuser_t *mu;
+	struct myuser *mu;
 	struct metadata *md, *md_timestamp, *md_assigner;
 	mowgli_node_t *n;
 	char buf[BUFSIZE], strfbuf[BUFSIZE];

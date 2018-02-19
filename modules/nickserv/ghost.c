@@ -25,7 +25,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 void ns_cmd_ghost(struct sourceinfo *si, int parc, char *parv[])
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	char *target = parv[0];
 	char *password = parv[1];
 	struct user *target_u;

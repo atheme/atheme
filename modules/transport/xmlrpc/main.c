@@ -216,12 +216,12 @@ static void xmlrpc_command_success_string(struct sourceinfo *si, const char *res
  *       default - success (authcookie)
  *
  * Side Effects:
- *       an authcookie ticket is created for the myuser_t.
+ *       an authcookie ticket is created for the struct myuser.
  *       the user's lastlogin is updated
  */
 static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	struct authcookie *ac;
 	const char *sourceip;
 
@@ -296,7 +296,7 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
 static int xmlrpcmethod_logout(void *conn, int parc, char *parv[])
 {
 	struct authcookie *ac;
-	myuser_t *mu;
+	struct myuser *mu;
 
 	if (parc < 2)
 	{
@@ -341,7 +341,7 @@ static int xmlrpcmethod_logout(void *conn, int parc, char *parv[])
  */
 static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	struct service *svs;
 	struct command *cmd;
 	struct sourceinfo *si;
@@ -441,7 +441,7 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
  */
 static int xmlrpcmethod_privset(void *conn, int parc, char *parv[])
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	int i;
 
 	for (i = 0; i < parc; i++)

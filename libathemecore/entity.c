@@ -170,7 +170,7 @@ static struct chanacs *linear_chanacs_match_entity(struct chanacs *ca, struct my
 
 static bool linear_can_register_channel(struct myentity *mt)
 {
-	myuser_t *mu;
+	struct myuser *mu;
 
 	if ((mu = user(mt)) == NULL)
 		return false;
@@ -183,7 +183,7 @@ static bool linear_can_register_channel(struct myentity *mt)
 
 static bool linear_allow_foundership(struct myentity *mt)
 {
-	myuser_t *mu;
+	struct myuser *mu;
 
 	/* avoid workaround for restricted users where foundership is set on the user after registration. */
 	if ((mu = user(mt)) != NULL)

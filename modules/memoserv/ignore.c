@@ -77,7 +77,7 @@ static void ms_cmd_ignore(struct sourceinfo *si, int parc, char *parv[])
 
 static void ms_cmd_ignore_add(struct sourceinfo *si, int parc, char *parv[])
 {
-	myuser_t *tmu;
+	struct myuser *tmu;
 	mowgli_node_t *n;
 	const char *newnick;
 	char *temp;

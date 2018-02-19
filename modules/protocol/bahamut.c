@@ -53,7 +53,7 @@ static const struct cmode bahamut_mode_list[] = {
   { '\0', 0 }
 };
 
-static bool check_jointhrottle(const char *, struct channel *, mychan_t *, struct user *, myuser_t *);
+static bool check_jointhrottle(const char *, struct channel *, mychan_t *, struct user *, struct myuser *);
 
 struct extmode bahamut_ignore_mode_list[] = {
   { 'j', check_jointhrottle },
@@ -79,7 +79,7 @@ static const struct cmode bahamut_user_mode_list[] = {
   { '\0', 0 }
 };
 
-static bool check_jointhrottle(const char *value, struct channel *c, mychan_t *mc, struct user *u, myuser_t *mu)
+static bool check_jointhrottle(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
 {
 	const char *p, *arg2;
 	int num, timeslice, v;
@@ -339,7 +339,7 @@ static void bahamut_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void bahamut_on_login(struct user *u, myuser_t *account, const char *wantedhost)
+static void bahamut_on_login(struct user *u, struct myuser *account, const char *wantedhost)
 {
 	return_if_fail(u != NULL);
 
@@ -381,7 +381,7 @@ static void bahamut_fnc_sts(struct user *source, struct user *u, const char *new
 			(unsigned long)(CURRTIME - 60));
 }
 
-static void bahamut_holdnick_sts(struct user *source, int duration, const char *nick, myuser_t *mu)
+static void bahamut_holdnick_sts(struct user *source, int duration, const char *nick, struct myuser *mu)
 {
 	sts(":%s SVSHOLD %s %d :Reserved by %s for nickname owner (%s)",
 			source->nick, nick, duration, source->nick,

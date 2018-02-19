@@ -36,7 +36,7 @@ static inline void do_sethost(struct user *u, const char *host)
 }
 
 /*
- * do_sethost_all(myuser_t *mu, char *host)
+ * do_sethost_all(struct myuser *mu, char *host)
  *
  * Sets a virtual host on all nicknames in an account.
  *
@@ -51,7 +51,7 @@ static inline void do_sethost(struct user *u, const char *host)
  *      - The vHost is set on all users logged into
  *        the account.
  */
-static inline void do_sethost_all(myuser_t *mu, const char *host)
+static inline void do_sethost_all(struct myuser *mu, const char *host)
 {
 	mowgli_node_t *n;
         struct user *u;
@@ -64,7 +64,7 @@ static inline void do_sethost_all(myuser_t *mu, const char *host)
         }
 }
 
-static inline void hs_sethost_all(myuser_t *mu, const char *host, const char *assigner)
+static inline void hs_sethost_all(struct myuser *mu, const char *host, const char *assigner)
 {
 	mowgli_node_t *n;
 	mynick_t *mn;

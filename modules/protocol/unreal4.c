@@ -71,8 +71,8 @@ static const struct cmode unreal_mode_list[] = {
   { '\0', 0 }
 };
 
-static bool check_flood(const char *value, struct channel *c, mychan_t *mc, struct user *u, myuser_t *mu);
-static bool check_forward(const char *value, struct channel *c, mychan_t *mc, struct user *u, myuser_t *mu);
+static bool check_flood(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu);
+static bool check_forward(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu);
 
 struct extmode unreal_ignore_mode_list[] = {
   { 'f', check_flood },
@@ -107,7 +107,7 @@ static const struct cmode unreal_user_mode_list[] = {
 };
 
 /* +f 3:1 or +f *3:1 (which is like +f [3t]:1 or +f [3t#b]:1) */
-static inline bool check_flood_old(const char *value, struct channel *c, mychan_t *mc, struct user *u, myuser_t *mu)
+static inline bool check_flood_old(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
 {
 	bool found_colon = false;
 
@@ -149,7 +149,7 @@ static inline bool check_flood_old(const char *value, struct channel *c, mychan_
  *
  * +f [<number><letter>(#<letter>)(,...)]
  */
-static bool check_flood(const char *value, struct channel *c, mychan_t *mc, struct user *u, myuser_t *mu)
+static bool check_flood(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
 {
 	char evalbuf[BUFSIZE], *ep, *p;
 
@@ -200,7 +200,7 @@ static bool check_flood(const char *value, struct channel *c, mychan_t *mc, stru
 	return true;
 }
 
-static bool check_forward(const char *value, struct channel *c, mychan_t *mc, struct user *u, myuser_t *mu)
+static bool check_forward(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
 {
 	struct channel *target_c;
 	mychan_t *target_mc;
@@ -562,7 +562,7 @@ static void unreal_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void unreal_on_login(struct user *u, myuser_t *account, const char *wantedhost)
+static void unreal_on_login(struct user *u, struct myuser *account, const char *wantedhost)
 {
 	return_if_fail(u != NULL);
 	return_if_fail(account != NULL);
@@ -626,7 +626,7 @@ static void unreal_fnc_sts(struct user *source, struct user *u, const char *newn
 			(unsigned long)(CURRTIME - 60));
 }
 
-static void unreal_holdnick_sts(struct user *source, int duration, const char *nick, myuser_t *mu)
+static void unreal_holdnick_sts(struct user *source, int duration, const char *nick, struct myuser *mu)
 {
 	if (duration > 0)
 		sts(":%s TKL + Q H %s %s %lu %lu :Reserved by %s for nickname owner (%s)",
@@ -667,7 +667,7 @@ static void unreal_sasl_mechlist_sts(const char *mechlist)
 	sts("MD client %s saslmechlist :%s", ME, mechlist);
 }
 
-static void unreal_svslogin_sts(char *target, char *nick, char *user, char *host, myuser_t *account)
+static void unreal_svslogin_sts(char *target, char *nick, char *user, char *host, struct myuser *account)
 {
 	char servermask[BUFSIZE], *p;
 	struct service *saslserv;

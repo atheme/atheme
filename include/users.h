@@ -24,7 +24,7 @@ struct user
 	mowgli_list_t channels;
 
 	struct server *server;
-	myuser_t *myuser;
+	struct myuser *myuser;
 
 	unsigned int offenses;
 	unsigned int msgs; /* times FLOOD_MSGS_FACTOR */

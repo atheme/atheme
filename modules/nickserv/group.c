@@ -139,7 +139,7 @@ static void ns_cmd_ungroup(struct sourceinfo *si, int parc, char *parv[])
 static void ns_cmd_fungroup(struct sourceinfo *si, int parc, char *parv[])
 {
 	mynick_t *mn, *mn2 = NULL;
-	myuser_t *mu;
+	struct myuser *mu;
 	hook_user_req_t hdata;
 
 	if (parc < 1)

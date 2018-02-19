@@ -185,7 +185,7 @@ extern void (*ping_sts)(void);
 /* mark user 'u' as logged in as 'account'
  * wantedhost is currently not used
  * first check if me.connected is true and bail if not */
-extern void (*ircd_on_login)(struct user *u, myuser_t *account, const char *wantedhost);
+extern void (*ircd_on_login)(struct user *u, struct myuser *account, const char *wantedhost);
 /* mark user 'u' as logged out
  * first check if me.connected is true and bail if not
  * return false if successful or logins are not supported
@@ -213,10 +213,10 @@ extern void (*fnc_sts)(struct user *source, struct user *u, const char *newnick,
  * source is the responsible service
  * duration is in seconds, 0 to remove the effect of a previous call
  * account is an account that may still use the nick, or NULL */
-extern void (*holdnick_sts)(struct user *source, int duration, const char *nick, myuser_t *account);
+extern void (*holdnick_sts)(struct user *source, int duration, const char *nick, struct myuser *account);
 /* change nick, user, host and/or services login name for a user
  * target may also be a not yet fully introduced UID (for SASL) */
-extern void (*svslogin_sts)(char *target, char *nick, char *user, char *host, myuser_t *account);
+extern void (*svslogin_sts)(char *target, char *nick, char *user, char *host, struct myuser *account);
 /* send sasl message */
 extern void (*sasl_sts) (const char *target, char mode, const char *data);
 /* send sasl mech list */
@@ -271,13 +271,13 @@ extern void generic_unqline_sts(const char *server, const char *mask);
 extern void generic_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic);
 extern void generic_mode_sts(char *sender, struct channel *target, char *modes);
 extern void generic_ping_sts(void);
-extern void generic_on_login(struct user *u, myuser_t *account, const char *wantedhost);
+extern void generic_on_login(struct user *u, struct myuser *account, const char *wantedhost);
 extern bool generic_on_logout(struct user *u, const char *account);
 extern void generic_jupe(const char *server, const char *reason);
 extern void generic_sethost_sts(struct user *source, struct user *target, const char *host);
 extern void generic_fnc_sts(struct user *source, struct user *u, const char *newnick, int type);
-extern void generic_holdnick_sts(struct user *source, int duration, const char *nick, myuser_t *account);
-extern void generic_svslogin_sts(char *target, char *nick, char *user, char *host, myuser_t *account);
+extern void generic_holdnick_sts(struct user *source, int duration, const char *nick, struct myuser *account);
+extern void generic_svslogin_sts(char *target, char *nick, char *user, char *host, struct myuser *account);
 extern void generic_sasl_sts(const char *target, char mode, const char *data);
 extern void generic_sasl_mechlist_sts(const char *mechlist);
 extern mowgli_node_t *generic_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_node_t *first);

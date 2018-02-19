@@ -311,7 +311,7 @@ static void canonicalize_emails(void)
 
 	MYENTITY_FOREACH_T(mt, &state, ENT_USER)
 	{
-		myuser_t *mu = user(mt);
+		struct myuser *mu = user(mt);
 
 		strshare_unref(mu->email_canonical);
 		mu->email_canonical = canonicalize_email(mu->email);
@@ -400,7 +400,7 @@ bool email_within_limits(const char *email)
 
 	MYENTITY_FOREACH_T(mt, &state, ENT_USER)
 	{
-		myuser_t *mu = user(mt);
+		struct myuser *mu = user(mt);
 
 		if (mu->email_canonical == email_canonical)
 			tcnt++;
@@ -631,7 +631,7 @@ static void sendemail_waited(pid_t pid, int status, void *data)
  * mu is the recipient user
  * param depends on type, also see include/tools.h
  */
-int sendemail(struct user *u, myuser_t *mu, const char *type, const char *email, const char *param)
+int sendemail(struct user *u, struct myuser *mu, const char *type, const char *email, const char *param)
 {
 #ifndef MOWGLI_OS_WIN
 	char *date = NULL;

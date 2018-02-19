@@ -84,7 +84,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 static void clear_bans_matching_entity(mychan_t *mc, struct myentity *mt)
 {
 	mowgli_node_t *n;
-	myuser_t *tmu;
+	struct myuser *tmu;
 
 	if (mc->chan == NULL)
 		return;

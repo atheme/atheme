@@ -10,8 +10,8 @@
 unsigned int ratelimit_count = 0;
 time_t ratelimit_firsttime = 0;
 
-static void account_drop_request(myuser_t *mu);
-static void account_delete_request(myuser_t *mu);
+static void account_drop_request(struct myuser *mu);
+static void account_delete_request(struct myuser *mu);
 static void helpserv_cmd_request(struct sourceinfo *si, int parc, char *parv[]);
 static void helpserv_cmd_list(struct sourceinfo *si, int parc, char *parv[]);
 static void helpserv_cmd_close(struct sourceinfo *si, int parc, char *parv[]);
@@ -107,7 +107,7 @@ static void db_h_he(struct database_handle *db, const char *type)
 	mowgli_node_add(l, mowgli_node_create(), &helpserv_reqlist);
 }
 
-static void account_drop_request(myuser_t *mu)
+static void account_drop_request(struct myuser *mu)
 {
         mowgli_node_t *n;
         ticket_t *l;
@@ -131,7 +131,7 @@ static void account_drop_request(myuser_t *mu)
         }
 }
 
-static void account_delete_request(myuser_t *mu)
+static void account_delete_request(struct myuser *mu)
 {
         mowgli_node_t *n;
         ticket_t *l;

@@ -10,7 +10,7 @@
 #define ATHEME_TOOLS_H
 
 /* email stuff */
-extern int sendemail(struct user *u, myuser_t *mu, const char *type, const char *email, const char *param);
+extern int sendemail(struct user *u, struct myuser *mu, const char *type, const char *email, const char *param);
 
 /* email types (meaning of param argument) */
 #define EMAIL_REGISTER	"register"	/* register an account/nick (verification code) */
@@ -121,7 +121,7 @@ extern struct logfile *logfile_find_mask(unsigned int log_mask);
 extern void slog(unsigned int level, const char *fmt, ...) ATHEME_FATTR_PRINTF(2, 3);
 extern void logcommand(struct sourceinfo *si, int level, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
 extern void logcommand_user(struct service *svs, struct user *source, int level, const char *fmt, ...) ATHEME_FATTR_PRINTF(4, 5);
-extern void logcommand_external(struct service *svs, const char *type, struct connection *source, const char *sourcedesc, myuser_t *login, int level, const char *fmt, ...) ATHEME_FATTR_PRINTF(7, 8);
+extern void logcommand_external(struct service *svs, const char *type, struct connection *source, const char *sourcedesc, struct myuser *login, int level, const char *fmt, ...) ATHEME_FATTR_PRINTF(7, 8);
 
 /* function.c */
 

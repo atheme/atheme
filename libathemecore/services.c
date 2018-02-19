@@ -407,7 +407,7 @@ void handle_nickchange(struct user *u)
 void handle_burstlogin(struct user *u, const char *login, time_t ts)
 {
 	mynick_t *mn;
-	myuser_t *mu;
+	struct myuser *mu;
 	mowgli_node_t *n;
 
 	if (login != NULL)
@@ -481,7 +481,7 @@ void handle_burstlogin(struct user *u, const char *login, time_t ts)
 void handle_setlogin(struct sourceinfo *si, struct user *u, const char *login, time_t ts)
 {
 	mynick_t *mn;
-	myuser_t *mu;
+	struct myuser *mu;
 	mowgli_node_t *n;
 
 	if (login != NULL)
@@ -576,7 +576,7 @@ void handle_clearlogin(struct sourceinfo *si, struct user *u)
 
 void handle_certfp(struct sourceinfo *si, struct user *u, const char *certfp)
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	struct mycertfp *mcfp;
 	struct service *svs;
 	hook_user_login_check_t req;
@@ -623,7 +623,7 @@ void handle_certfp(struct sourceinfo *si, struct user *u, const char *certfp)
 	logcommand_user(svs, u, CMDLOG_LOGIN, "LOGIN via CERTFP (%s)", certfp);
 }
 
-void myuser_login(struct service *svs, struct user *u, myuser_t *mu, bool sendaccount)
+void myuser_login(struct service *svs, struct user *u, struct myuser *mu, bool sendaccount)
 {
 	char lau[BUFSIZE], lao[BUFSIZE];
 	char strfbuf[BUFSIZE];
@@ -794,7 +794,7 @@ change_notify(const char *from, struct user *to, const char *fmt, ...)
  *
  * Inputs:
  *       - struct sourceinfo representing what sent the bad password
- *       - myuser_t object attempt was against
+ *       - struct myuser object attempt was against
  *
  * Outputs:
  *       - whether the user was killed off the network
@@ -807,7 +807,7 @@ change_notify(const char *from, struct user *to, const char *fmt, ...)
  * Note:
  *       - kills are currently not done
  */
-bool bad_password(struct sourceinfo *si, myuser_t *mu)
+bool bad_password(struct sourceinfo *si, struct myuser *mu)
 {
 	const char *mask;
 	struct tm tm;

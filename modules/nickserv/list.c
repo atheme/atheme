@@ -20,7 +20,7 @@ void list_unregister(const char *param_name);
 
 static bool email_match(const mynick_t *mn, const void *arg)
 {
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 	const char *cmpr = (const char*)arg;
 
 	return !match(cmpr, mu->email);
@@ -28,7 +28,7 @@ static bool email_match(const mynick_t *mn, const void *arg)
 
 static bool lastlogin_match(const mynick_t *mn, const void *arg)
 {
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 	const time_t lastlogin = *(time_t *)arg;
 
 	return (CURRTIME - mu->lastlogin) > lastlogin;
@@ -43,7 +43,7 @@ static bool pattern_match(const mynick_t *mn, const void *arg)
 
 	bool hostmatch;
 
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 
 	if (pattern != NULL)
 	{
@@ -86,14 +86,14 @@ static bool pattern_match(const mynick_t *mn, const void *arg)
 
 static bool registered_match(const mynick_t *mn, const void *arg)
 {
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 	const time_t age = *(time_t *)arg;
 
 	return (CURRTIME - mu->registered) > age;
 }
 
 static bool has_waitauth(const mynick_t *mn, const void *arg) {
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 
 	return ( mu->flags & MU_WAITAUTH ) == MU_WAITAUTH;
 }
@@ -195,7 +195,7 @@ static void build_criteriastr(char *buf, int parc, char *parv[])
 	}
 }
 
-static void list_one(struct sourceinfo *si, myuser_t *mu, mynick_t *mn)
+static void list_one(struct sourceinfo *si, struct myuser *mu, mynick_t *mn)
 {
 	char buf[BUFSIZE];
 

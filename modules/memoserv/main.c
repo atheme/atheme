@@ -41,7 +41,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static void on_user_identify(struct user *u)
 {
-	myuser_t *mu = u->myuser;
+	struct myuser *mu = u->myuser;
 
 	if (mu->memoct_new > 0)
 	{
@@ -60,7 +60,7 @@ static void on_user_identify(struct user *u)
 
 static void on_user_away(struct user *u)
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	mynick_t *mn;
 
 	if (u->flags & UF_AWAY)

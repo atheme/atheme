@@ -104,7 +104,7 @@ static void ldap_config_ready(void *unused)
 	ldap_set_option(ldap_conn, LDAP_OPT_REFERRALS, &(const int){false});
 }
 
-static bool ldap_auth_user(myuser_t *mu, const char *password)
+static bool ldap_auth_user(struct myuser *mu, const char *password)
 {
 	int res;
 	struct berval cred;

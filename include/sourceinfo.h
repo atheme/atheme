@@ -40,7 +40,7 @@ struct sourceinfo
 
 	struct connection *connection; /* physical connection cmd received from */
 	const char *sourcedesc; /* additional information (e.g. IP address) */
-	myuser_t *smu; /* login associated with source */
+	struct myuser *smu; /* login associated with source */
 
 	/* the service the original command was sent to, which may differ
 	 * from the service the current command is in

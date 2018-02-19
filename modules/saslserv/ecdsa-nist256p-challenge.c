@@ -96,7 +96,7 @@ mech_step(struct sasl_session *const restrict p, const void *const restrict in, 
 			return ASASL_ERROR;
 	}
 
-	myuser_t *mu = NULL;
+	struct myuser *mu = NULL;
 	if (! sasl_core_functions->authcid_can_login(p, authcid, &mu))
 		return ASASL_ERROR;
 

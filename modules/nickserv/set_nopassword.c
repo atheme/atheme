@@ -20,7 +20,7 @@ struct command ns_set_nopassword = { "NOPASSWORD", N_("Allows you to disable any
 
 static bool has_nopassword(const mynick_t *mn, const void *arg)
 {
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 
 	return ( mu->flags & MU_NOPASSWORD ) == MU_NOPASSWORD;
 }

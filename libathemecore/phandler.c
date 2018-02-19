@@ -49,14 +49,14 @@ void (*topic_sts) (struct channel *c, struct user *source, const char *setter, t
 void (*mode_sts) (char *sender, struct channel *target, char *modes) = generic_mode_sts;
 void (*ping_sts) (void) = generic_ping_sts;
 void (*quit_sts) (struct user *u, const char *reason) = generic_quit_sts;
-void (*ircd_on_login) (struct user *u, myuser_t *account, const char *wantedhost) = generic_on_login;
+void (*ircd_on_login) (struct user *u, struct myuser *account, const char *wantedhost) = generic_on_login;
 bool (*ircd_on_logout) (struct user *u, const char *account) = generic_on_logout;
 void (*jupe) (const char *server, const char *reason) = generic_jupe;
 void (*sethost_sts) (struct user *source, struct user *target, const char *host) = generic_sethost_sts;
 void (*fnc_sts) (struct user *source, struct user *u, const char *newnick, int type) = generic_fnc_sts;
-void (*holdnick_sts)(struct user *source, int duration, const char *nick, myuser_t *account) = generic_holdnick_sts;
+void (*holdnick_sts)(struct user *source, int duration, const char *nick, struct myuser *account) = generic_holdnick_sts;
 void (*invite_sts) (struct user *source, struct user *target, struct channel *channel) = generic_invite_sts;
-void (*svslogin_sts) (char *target, char *nick, char *user, char *host, myuser_t *account) = generic_svslogin_sts;
+void (*svslogin_sts) (char *target, char *nick, char *user, char *host, struct myuser *account) = generic_svslogin_sts;
 void (*sasl_sts) (const char *target, char mode, const char *data) = generic_sasl_sts;
 void (*sasl_mechlist_sts) (const char *mechlist) = generic_sasl_mechlist_sts;
 mowgli_node_t *(*next_matching_ban)(struct channel *c, struct user *u, int type, mowgli_node_t *first) = generic_next_matching_ban;
@@ -251,7 +251,7 @@ void generic_quit_sts(struct user *u, const char *reason)
 	/* cant do anything here. bail. */
 }
 
-void generic_on_login(struct user *u, myuser_t *account, const char *wantedhost)
+void generic_on_login(struct user *u, struct myuser *account, const char *wantedhost)
 {
 	/* nothing to do here. */
 }
@@ -278,7 +278,7 @@ void generic_fnc_sts(struct user *source, struct user *u, const char *newnick, i
 		kill_id_sts(source, CLIENT_NAME(u), "Nickname enforcement");
 }
 
-void generic_holdnick_sts(struct user *source, int duration, const char *nick, myuser_t *account)
+void generic_holdnick_sts(struct user *source, int duration, const char *nick, struct myuser *account)
 {
 	/* nothing to do here. */
 }
@@ -288,7 +288,7 @@ void generic_invite_sts(struct user *source, struct user *target, struct channel
 	/* nothing to do here. */
 }
 
-void generic_svslogin_sts(char *target, char *nick, char *user, char *host, myuser_t *account)
+void generic_svslogin_sts(char *target, char *nick, char *user, char *host, struct myuser *account)
 {
 	/* nothing to do here. */
 }

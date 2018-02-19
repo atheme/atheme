@@ -40,7 +40,7 @@ static void do_sethost(struct user *u, stringref host)
 	user_sethost(nicksvs.me->me, u, host);
 }
 
-static void do_sethost_all(myuser_t *mu, stringref host)
+static void do_sethost_all(struct myuser *mu, stringref host)
 {
 	mowgli_node_t *n;
 	struct user *u;
@@ -59,7 +59,7 @@ static void ns_cmd_vhost(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *host;
-	myuser_t *mu;
+	struct myuser *mu;
 	struct metadata *md, *markmd;
 	bool force = false, ismarked = false;
 	char cmdtext[NICKLEN + HOSTLEN + 20];
@@ -254,7 +254,7 @@ static void ns_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
 	const char *pattern;
 	struct myentity_iteration_state state;
 	struct myentity *mt;
-	myuser_t *mu;
+	struct myuser *mu;
 	struct metadata *md;
 	int matches = 0;
 
@@ -283,7 +283,7 @@ static void ns_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
 
 static void vhost_on_identify(struct user *u)
 {
-	myuser_t *mu = u->myuser;
+	struct myuser *mu = u->myuser;
 	struct metadata *md;
 
 	/* NO CLOAK?!*$*%*&&$(!& */

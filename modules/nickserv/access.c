@@ -147,7 +147,7 @@ static bool mangle_wildcard_to_cidr(const char *host, char *dest, size_t destlen
 	return false;
 }
 
-static void myuser_access_delete_enforce(myuser_t *mu, char *mask)
+static void myuser_access_delete_enforce(struct myuser *mu, char *mask)
 {
 	mowgli_list_t l = {NULL, NULL, 0};
 	mowgli_node_t *n, *tn;
@@ -186,7 +186,7 @@ static void myuser_access_delete_enforce(myuser_t *mu, char *mask)
 
 static void ns_cmd_access(struct sourceinfo *si, int parc, char *parv[])
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	mowgli_node_t *n;
 	char *mask;
 	char *host;

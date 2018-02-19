@@ -198,7 +198,7 @@ mechlist_do_rebuild(void)
 }
 
 static bool
-may_impersonate(myuser_t *const source_mu, myuser_t *const target_mu)
+may_impersonate(struct myuser *const source_mu, struct myuser *const target_mu)
 {
 	/* Allow same (although this function won't get called in that case anyway) */
 	if (source_mu == target_mu)
@@ -236,13 +236,13 @@ may_impersonate(myuser_t *const source_mu, myuser_t *const target_mu)
 }
 
 /* authenticated, now double check that their account is ok for login */
-static myuser_t *
+static struct myuser *
 login_user(struct sasl_session *const restrict p)
 {
 	/* source_mu is the user whose credentials we verified ("authentication id") */
 	/* target_mu is the user who will be ultimately logged in ("authorization id") */
-	myuser_t *source_mu;
-	myuser_t *target_mu;
+	struct myuser *source_mu;
+	struct myuser *target_mu;
 
 	if (! *p->authceid || ! (source_mu = myuser_find_uid(p->authceid)))
 		return NULL;
@@ -406,7 +406,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 
 	if (rc == ASASL_DONE)
 	{
-		myuser_t *const mu = login_user(p);
+		struct myuser *const mu = login_user(p);
 
 		if (mu)
 		{
@@ -456,7 +456,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 		/* If we reach this, they failed SASL auth, so if they were trying
 		 * to identify as a specific user, bad_password them.
 		 */
-		myuser_t *const mu = myuser_find_uid(p->authceid);
+		struct myuser *const mu = myuser_find_uid(p->authceid);
 
 		if (mu)
 		{
@@ -585,7 +585,7 @@ destroy_session(struct sasl_session *const restrict p)
 {
 	if (p->flags & ASASL_NEED_LOG && *p->authceid)
 	{
-		myuser_t *const mu = myuser_find_uid(p->authceid);
+		struct myuser *const mu = myuser_find_uid(p->authceid);
 
 		if (mu && ! (ircd->flags & IRCD_SASL_USE_PUID))
 			(void) logcommand(p->si, CMDLOG_LOGIN, "LOGIN (session timed out)");
@@ -677,7 +677,7 @@ sasl_newuser(hook_user_nick_t *const restrict data)
 	p->flags &= ~ASASL_NEED_LOG;
 
 	/* Find the account */
-	myuser_t *const mu = *p->authzeid ? myuser_find_uid(p->authzeid) : NULL;
+	struct myuser *const mu = *p->authzeid ? myuser_find_uid(p->authzeid) : NULL;
 	if (! mu)
 	{
 		(void) notice(saslsvs->nick, u->nick, "Account %s dropped, login cancelled",
@@ -761,10 +761,10 @@ sasl_mech_unregister(struct sasl_mechanism *const restrict mech)
 
 static inline bool
 sasl_authxid_can_login(struct sasl_session *const restrict p, const char *const restrict authxid,
-                       myuser_t **const restrict muo, char *const restrict val_name,
+                       struct myuser **const restrict muo, char *const restrict val_name,
                        char *const restrict val_eid, const char *const restrict other_val_eid)
 {
-	myuser_t *const mu = myuser_find_by_nick(authxid);
+	struct myuser *const mu = myuser_find_by_nick(authxid);
 
 	if (! mu)
 		return false;
@@ -796,14 +796,14 @@ sasl_authxid_can_login(struct sasl_session *const restrict p, const char *const 
 
 static bool
 sasl_authcid_can_login(struct sasl_session *const restrict p, const char *const restrict authcid,
-                       myuser_t **const restrict muo)
+                       struct myuser **const restrict muo)
 {
 	return sasl_authxid_can_login(p, authcid, muo, p->authcid, p->authceid, p->authzeid);
 }
 
 static bool
 sasl_authzid_can_login(struct sasl_session *const restrict p, const char *const restrict authzid,
-                       myuser_t **const restrict muo)
+                       struct myuser **const restrict muo)
 {
 	return sasl_authxid_can_login(p, authzid, muo, p->authzid, p->authzeid, p->authceid);
 }

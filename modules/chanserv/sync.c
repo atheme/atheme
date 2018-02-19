@@ -256,7 +256,7 @@ static void sync_user(struct user *u)
 		hook_call_grant_channel_access(u);
 }
 
-static void sync_myuser(myuser_t *mu)
+static void sync_myuser(struct myuser *mu)
 {
 	mowgli_node_t *iter;
 

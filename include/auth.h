@@ -8,10 +8,10 @@
 #ifndef AUTH_H
 #define AUTH_H
 
-extern void set_password(myuser_t *mu, const char *newpassword);
-extern bool verify_password(myuser_t *mu, const char *password);
+extern void set_password(struct myuser *mu, const char *newpassword);
+extern bool verify_password(struct myuser *mu, const char *password);
 
 extern bool auth_module_loaded;
-extern bool (*auth_user_custom)(myuser_t *mu, const char *password);
+extern bool (*auth_user_custom)(struct myuser *mu, const char *password);
 
 #endif

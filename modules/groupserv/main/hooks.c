@@ -164,7 +164,7 @@ static void sasl_may_impersonate_hook(hook_sasl_may_impersonate_t *req)
 	}
 }
 
-static void myuser_delete_hook(myuser_t *mu)
+static void myuser_delete_hook(struct myuser *mu)
 {
 	mowgli_node_t *n, *tn;
 	mowgli_list_t *l;

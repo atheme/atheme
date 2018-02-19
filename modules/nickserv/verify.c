@@ -29,7 +29,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static void ns_cmd_verify(struct sourceinfo *si, int parc, char *parv[])
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	struct metadata *md;
 	mowgli_node_t *n;
 	char *op = parv[0];
@@ -149,7 +149,7 @@ static void ns_cmd_verify(struct sourceinfo *si, int parc, char *parv[])
 
 static void ns_cmd_fverify(struct sourceinfo *si, int parc, char *parv[])
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	struct metadata *md;
 	mowgli_node_t *n;
 	char *op = parv[0];

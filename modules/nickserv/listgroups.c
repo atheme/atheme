@@ -15,7 +15,7 @@ struct command ns_listgroups = { "LISTGROUPS", N_("Lists groups that you have ac
 
 static void ns_cmd_listgroups(struct sourceinfo *si, int parc, char *parv[])
 {
-	myuser_t *mu;
+	struct myuser *mu;
 	mowgli_node_t *n;
 	mowgli_list_t *l;
 	unsigned int bans = 0, i;

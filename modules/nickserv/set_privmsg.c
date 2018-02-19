@@ -65,7 +65,7 @@ struct command ns_set_privmsg = { "PRIVMSG", N_("Uses private messages instead o
 
 static bool uses_privmsg(const mynick_t *mn, const void *arg)
 {
-	myuser_t *mu = mn->owner;
+	struct myuser *mu = mn->owner;
 
 	return ( mu->flags & MU_USE_PRIVMSG ) == MU_USE_PRIVMSG;
 }
