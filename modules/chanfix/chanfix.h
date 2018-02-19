@@ -39,7 +39,8 @@ struct chanfix_channel
 	bool fix_requested;
 };
 
-typedef struct chanfix_oprecord {
+struct chanfix_oprecord
+{
 	mowgli_node_t node;
 
 	struct chanfix_channel *chan;
@@ -52,7 +53,7 @@ typedef struct chanfix_oprecord {
 	time_t firstseen;
 	time_t lastevent;
 	unsigned int age;
-} chanfix_oprecord_t;
+};
 
 typedef struct chanfix_persist {
 	int version;
@@ -70,9 +71,9 @@ extern void chanfix_gather_init(chanfix_persist_record_t *);
 extern void chanfix_gather_deinit(enum module_unload_intent, chanfix_persist_record_t *);
 
 extern void chanfix_oprecord_update(struct chanfix_channel *chan, user_t *u);
-extern void chanfix_oprecord_delete(chanfix_oprecord_t *orec);
-extern chanfix_oprecord_t *chanfix_oprecord_create(struct chanfix_channel *chan, user_t *u);
-extern chanfix_oprecord_t *chanfix_oprecord_find(struct chanfix_channel *chan, user_t *u);
+extern void chanfix_oprecord_delete(struct chanfix_oprecord *orec);
+extern struct chanfix_oprecord *chanfix_oprecord_create(struct chanfix_channel *chan, user_t *u);
+extern struct chanfix_oprecord *chanfix_oprecord_find(struct chanfix_channel *chan, user_t *u);
 extern struct chanfix_channel *chanfix_channel_create(const char *name, struct channel *chan);
 extern struct chanfix_channel *chanfix_channel_find(const char *name);
 extern struct chanfix_channel *chanfix_channel_get(struct channel *chan);

@@ -19,9 +19,9 @@ static int loading_cfdbv = 0;
 
 /*************************************************************************************/
 
-chanfix_oprecord_t *chanfix_oprecord_create(struct chanfix_channel *chan, user_t *u)
+struct chanfix_oprecord *chanfix_oprecord_create(struct chanfix_channel *chan, user_t *u)
 {
-	chanfix_oprecord_t *orec;
+	struct chanfix_oprecord *orec;
 
 	return_val_if_fail(chan != NULL, NULL);
 
@@ -52,7 +52,7 @@ chanfix_oprecord_t *chanfix_oprecord_create(struct chanfix_channel *chan, user_t
 	return orec;
 }
 
-chanfix_oprecord_t *chanfix_oprecord_find(struct chanfix_channel *chan, user_t *u)
+struct chanfix_oprecord *chanfix_oprecord_find(struct chanfix_channel *chan, user_t *u)
 {
 	mowgli_node_t *n;
 
@@ -61,7 +61,7 @@ chanfix_oprecord_t *chanfix_oprecord_find(struct chanfix_channel *chan, user_t *
 
 	MOWGLI_ITER_FOREACH(n, chan->oprecords.head)
 	{
-		chanfix_oprecord_t *orec = n->data;
+		struct chanfix_oprecord *orec = n->data;
 
 		if (orec->entity != NULL && orec->entity == entity(u->myuser))
 			return orec;
@@ -75,7 +75,7 @@ chanfix_oprecord_t *chanfix_oprecord_find(struct chanfix_channel *chan, user_t *
 
 void chanfix_oprecord_update(struct chanfix_channel *chan, user_t *u)
 {
-	chanfix_oprecord_t *orec;
+	struct chanfix_oprecord *orec;
 
 	return_if_fail(chan != NULL);
 	return_if_fail(u != NULL);
@@ -96,7 +96,7 @@ void chanfix_oprecord_update(struct chanfix_channel *chan, user_t *u)
 	chan->lastupdate = CURRTIME;
 }
 
-void chanfix_oprecord_delete(chanfix_oprecord_t *orec)
+void chanfix_oprecord_delete(struct chanfix_oprecord *orec)
 {
 	return_if_fail(orec != NULL);
 
@@ -116,7 +116,7 @@ static void chanfix_channel_delete(struct chanfix_channel *c)
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, c->oprecords.head)
 	{
-		chanfix_oprecord_t *orec = n->data;
+		struct chanfix_oprecord *orec = n->data;
 
 		chanfix_oprecord_delete(orec);
 	}
@@ -237,7 +237,7 @@ void chanfix_expire(void *unused)
 
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, chan->oprecords.head)
 		{
-			chanfix_oprecord_t *orec = n->data;
+			struct chanfix_oprecord *orec = n->data;
 
 			/* Simple exponential decay, rounding the decay up
 			 * so that low scores expire sooner.
@@ -284,7 +284,7 @@ static void write_chanfixdb(struct database_handle *db)
 
 		MOWGLI_ITER_FOREACH(n, chan->oprecords.head)
 		{
-			chanfix_oprecord_t *orec = n->data;
+			struct chanfix_oprecord *orec = n->data;
 
 			db_start_row(db, "CFOP");
 			db_write_word(db, chan->name);
@@ -349,7 +349,7 @@ static void db_h_cfop(struct database_handle *db, const char *type)
 	time_t firstseen, lastevent;
 	unsigned int age;
 	struct chanfix_channel *chan;
-	chanfix_oprecord_t *orec;
+	struct chanfix_oprecord *orec;
 
 	name = db_sread_word(db);
 	entity = db_sread_word(db);
@@ -410,7 +410,7 @@ void chanfix_gather_init(chanfix_persist_record_t *rec)
 	}
 
 	chanfix_channel_heap = mowgli_heap_create(sizeof(struct chanfix_channel), 32, BH_LAZY);
-	chanfix_oprecord_heap = mowgli_heap_create(sizeof(chanfix_oprecord_t), 32, BH_LAZY);
+	chanfix_oprecord_heap = mowgli_heap_create(sizeof(struct chanfix_oprecord), 32, BH_LAZY);
 
 	chanfix_channels = mowgli_patricia_create(strcasecanon);
 

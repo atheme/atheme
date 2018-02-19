@@ -57,7 +57,7 @@ static bool chanfix_should_handle(struct chanfix_channel *cfchan, struct channel
 	return true;
 }
 
-static unsigned int chanfix_calculate_score(chanfix_oprecord_t *orec)
+static unsigned int chanfix_calculate_score(struct chanfix_oprecord *orec)
 {
 	unsigned int base;
 
@@ -109,7 +109,7 @@ static unsigned int chanfix_get_highscore(struct chanfix_channel *chan)
 	MOWGLI_ITER_FOREACH(n, chan->oprecords.head)
 	{
 		unsigned int score;
-		chanfix_oprecord_t *orec = n->data;
+		struct chanfix_oprecord *orec = n->data;
 
 		score = chanfix_calculate_score(orec);
 		if (score > highscore)
@@ -151,7 +151,7 @@ static bool chanfix_fix_channel(struct chanfix_channel *chan)
 	MOWGLI_ITER_FOREACH(n, ch->members.head)
 	{
 		struct chanuser *cu = n->data;
-		chanfix_oprecord_t *orec;
+		struct chanfix_oprecord *orec;
 		unsigned int score;
 
 		if (cu->user == chanfix->me)
@@ -208,7 +208,7 @@ static bool chanfix_can_start_fix(struct chanfix_channel *chan)
 	MOWGLI_ITER_FOREACH(n, ch->members.head)
 	{
 		struct chanuser *cu = n->data;
-		chanfix_oprecord_t *orec;
+		struct chanfix_oprecord *orec;
 		unsigned int score;
 
 		if (cu->user == chanfix->me)
@@ -476,8 +476,8 @@ struct command cmd_chanfix = { "CHANFIX", N_("Manually chanfix a channel."), PRI
 
 static int chanfix_compare_records(mowgli_node_t *a, mowgli_node_t *b, void *unused)
 {
-	chanfix_oprecord_t *ta = a->data;
-	chanfix_oprecord_t *tb = b->data;
+	struct chanfix_oprecord *ta = a->data;
+	struct chanfix_oprecord *tb = b->data;
 
 	return tb->age - ta->age;
 }
@@ -524,7 +524,7 @@ static void chanfix_cmd_scores(struct sourceinfo *si, int parc, char *parv[])
 	{
 		char buf[BUFSIZE];
 		unsigned int score;
-		chanfix_oprecord_t *orec = n->data;
+		struct chanfix_oprecord *orec = n->data;
 
 		score = chanfix_calculate_score(orec);
 
@@ -541,7 +541,7 @@ struct command cmd_scores = { "SCORES", N_("List channel scores."), PRIV_CHAN_AU
 
 static void chanfix_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
-	chanfix_oprecord_t *orec;
+	struct chanfix_oprecord *orec;
 	struct chanfix_channel *chan;
 	struct tm tm;
 	char strfbuf[BUFSIZE];
@@ -805,7 +805,7 @@ struct command cmd_help = { "HELP", N_(N_("Displays contextual help information.
 void chanfix_can_register(hook_channel_register_check_t *req)
 {
 	struct chanfix_channel *chan;
-	chanfix_oprecord_t *orec;
+	struct chanfix_oprecord *orec;
 	unsigned int highscore, score;
 
 	return_if_fail(req != NULL);
