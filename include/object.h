@@ -14,12 +14,12 @@ struct metadata
 	char *value;
 };
 
-typedef void (*destructor_t)(void *);
+typedef void (*atheme_object_destructor_fn)(void *);
 
 struct atheme_object
 {
 	int refcount;
-	destructor_t destructor;
+	atheme_object_destructor_fn destructor;
 	mowgli_patricia_t *metadata;
 	mowgli_patricia_t *privatedata;
 #ifdef OBJECT_DEBUG
@@ -29,7 +29,7 @@ struct atheme_object
 
 extern void init_metadata(void);
 
-extern void atheme_object_init(struct atheme_object *, const char *name, destructor_t destructor);
+extern void atheme_object_init(struct atheme_object *, const char *name, atheme_object_destructor_fn destructor);
 extern void *atheme_object_ref(void *);
 extern void *atheme_object_sink_ref(void *);
 extern void atheme_object_unref(void *);

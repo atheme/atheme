@@ -51,7 +51,7 @@ struct mygroup *mygroup_add_id(const char *id, const char *name)
 	struct mygroup *mg;
 
 	mg = mowgli_heap_alloc(mygroup_heap);
-	atheme_object_init(atheme_object(mg), NULL, (destructor_t) mygroup_delete);
+	atheme_object_init(atheme_object(mg), NULL, (atheme_object_destructor_fn) mygroup_delete);
 
 	entity(mg)->type = ENT_GROUP;
 
@@ -102,7 +102,7 @@ struct groupacs *groupacs_add(struct mygroup *mg, struct myentity *mt, unsigned 
 	return_val_if_fail(mt != NULL, NULL);
 
 	ga = mowgli_heap_alloc(groupacs_heap);
-	atheme_object_init(atheme_object(ga), NULL, (destructor_t) groupacs_des);
+	atheme_object_init(atheme_object(ga), NULL, (atheme_object_destructor_fn) groupacs_des);
 
 	ga->mg = mg;
 	ga->mt = mt;

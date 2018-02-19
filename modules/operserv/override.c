@@ -232,7 +232,7 @@ static void os_cmd_override(struct sourceinfo *si, int parc, char *parv[])
 	o_si->si.connection = NULL;
 	o_si->parent_si = atheme_object_ref(si);
 
-	atheme_object_init(atheme_object(o_si), NULL, (destructor_t) override_sourceinfo_dispose);
+	atheme_object_init(atheme_object(o_si), NULL, (atheme_object_destructor_fn) override_sourceinfo_dispose);
 
 	logcommand(si, CMDLOG_ADMIN, "OVERRIDE: (account: \2%s\2) (service: \2%s\2) (command: \2%s\2) [parameters: \2%s\2]", parv[0], parv[1], parv[2], parv[3] != NULL ? parv[3] : "");
 	wallops("\2%s\2 is using OperServ OVERRIDE: account=%s service=%s command=%s params=%s", get_source_name(si), parv[0], parv[1], parv[2], parv[3] != NULL ? parv[3] : "");

@@ -132,7 +132,7 @@ struct chanfix_channel *chanfix_channel_create(const char *name, struct channel 
 	return_val_if_fail(name != NULL, NULL);
 
 	c = mowgli_heap_alloc(chanfix_channel_heap);
-	atheme_object_init(atheme_object(c), name, (destructor_t) chanfix_channel_delete);
+	atheme_object_init(atheme_object(c), name, (atheme_object_destructor_fn) chanfix_channel_delete);
 
 	c->name = sstrdup(name);
 	c->chan = chan;

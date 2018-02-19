@@ -57,7 +57,7 @@ void init_metadata(void)
  * Side Effects:
  *      - none
  */
-void atheme_object_init(struct atheme_object *obj, const char *name, destructor_t des)
+void atheme_object_init(struct atheme_object *obj, const char *name, atheme_object_destructor_fn des)
 {
 	return_if_fail(obj != NULL);
 

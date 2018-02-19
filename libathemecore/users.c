@@ -151,7 +151,7 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 	}
 
 	u = mowgli_heap_alloc(user_heap);
-	atheme_object_init(atheme_object(u), nick, (destructor_t) user_delete);
+	atheme_object_init(atheme_object(u), nick, (atheme_object_destructor_fn) user_delete);
 
 	if (uid != NULL)
 	{

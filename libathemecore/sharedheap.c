@@ -112,7 +112,7 @@ static sharedheap_t *sharedheap_new(size_t size)
 	sharedheap_t *s;
 
 	s = smalloc(sizeof(sharedheap_t));
-	atheme_object_init(atheme_object(s), NULL, (destructor_t) sharedheap_destroy);
+	atheme_object_init(atheme_object(s), NULL, (atheme_object_destructor_fn) sharedheap_destroy);
 
 	s->size = size;
 	s->heap = mowgli_heap_create(size, sharedheap_prealloc_size(size), BH_NOW);

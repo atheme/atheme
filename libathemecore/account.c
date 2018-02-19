@@ -122,7 +122,7 @@ myuser_t *myuser_add_id(const char *id, const char *name, const char *pass, cons
 		slog(LG_DEBUG, "myuser_add(): %s -> %s", name, email);
 
 	mu = mowgli_heap_alloc(myuser_heap);
-	atheme_object_init(atheme_object(mu), name, (destructor_t) myuser_delete);
+	atheme_object_init(atheme_object(mu), name, (atheme_object_destructor_fn) myuser_delete);
 
 	entity(mu)->type = ENT_USER;
 	entity(mu)->name = strshare_get(name);
@@ -687,7 +687,7 @@ mynick_t *mynick_add(myuser_t *mu, const char *name)
 		slog(LG_DEBUG, "mynick_add(): %s -> %s", name, entity(mu)->name);
 
 	mn = mowgli_heap_alloc(mynick_heap);
-	atheme_object_init(atheme_object(mn), name, (destructor_t) mynick_delete);
+	atheme_object_init(atheme_object(mn), name, (atheme_object_destructor_fn) mynick_delete);
 
 	mowgli_strlcpy(mn->nick, name, sizeof mn->nick);
 	mn->owner = mu;
@@ -765,7 +765,7 @@ struct myuser_name *myuser_name_add(const char *name)
 		slog(LG_DEBUG, "myuser_name_add(): %s", name);
 
 	mun = mowgli_heap_alloc(myuser_name_heap);
-	atheme_object_init(atheme_object(mun), name, (destructor_t) myuser_name_delete);
+	atheme_object_init(atheme_object(mun), name, (atheme_object_destructor_fn) myuser_name_delete);
 
 	mowgli_strlcpy(mun->name, name, sizeof mun->name);
 
@@ -1002,7 +1002,7 @@ mychan_t *mychan_add(char *name)
 
 	mc = mowgli_heap_alloc(mychan_heap);
 
-	atheme_object_init(atheme_object(mc), name, (destructor_t) mychan_delete);
+	atheme_object_init(atheme_object(mc), name, (atheme_object_destructor_fn) mychan_delete);
 	mc->name = strshare_get(name);
 	mc->registered = CURRTIME;
 	mc->chan = channel_find(name);
@@ -1425,7 +1425,7 @@ struct chanacs *chanacs_add(mychan_t *mychan, struct myentity *mt, unsigned int 
 
 	ca = mowgli_heap_alloc(chanacs_heap);
 
-	atheme_object_init(atheme_object(ca), mt->name, (destructor_t) chanacs_delete);
+	atheme_object_init(atheme_object(ca), mt->name, (atheme_object_destructor_fn) chanacs_delete);
 	ca->mychan = mychan;
 	ca->entity = isdynamic(mt) ? atheme_object_ref(mt) : mt;
 	ca->host = NULL;
@@ -1479,7 +1479,7 @@ struct chanacs *chanacs_add_host(mychan_t *mychan, const char *host, unsigned in
 
 	ca = mowgli_heap_alloc(chanacs_heap);
 
-	atheme_object_init(atheme_object(ca), host, (destructor_t) chanacs_delete);
+	atheme_object_init(atheme_object(ca), host, (atheme_object_destructor_fn) chanacs_delete);
 	ca->mychan = mychan;
 	ca->entity = NULL;
 	ca->host = sstrdup(host);

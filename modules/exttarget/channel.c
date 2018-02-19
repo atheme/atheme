@@ -106,7 +106,7 @@ static struct myentity *channel_validate_f(const char *param)
 	entity(ext)->type = ENT_EXTTARGET;
 
 	/* initialize the object. */
-	atheme_object_init(atheme_object(ext), entity(ext)->name, (destructor_t) channel_ext_delete);
+	atheme_object_init(atheme_object(ext), entity(ext)->name, (atheme_object_destructor_fn) channel_ext_delete);
 
 	/* add the object to the exttarget tree. */
 	mowgli_patricia_add(channel_exttarget_tree, ext->channel, ext);
