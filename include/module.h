@@ -105,12 +105,19 @@ extern struct module *module_find(const char *name);
 extern struct module *module_find_published(const char *name);
 extern bool module_request(const char *name);
 
-#define DECLARE_MODULE_V1(name, unloadcap, modinit, moddeinit, ver, ven)   \
-        extern struct v4_moduleheader _header;                             \
-        struct v4_moduleheader _header = {                                 \
-                MAPI_ATHEME_MAGIC, MAPI_ATHEME_V4,                         \
-                CURRENT_ABI_REVISION, SERNO,                               \
-                name, unloadcap, modinit, moddeinit, ven, ver              \
+#define DECLARE_MODULE_V1(_name, _unloadcap, _modinit, _moddeinit, _ver, _ven)  \
+        extern struct v4_moduleheader _header;                                  \
+        struct v4_moduleheader _header = {                                      \
+                .atheme_mod = MAPI_ATHEME_MAGIC,                                \
+                .abi_ver    = MAPI_ATHEME_V4,                                   \
+                .abi_rev    = CURRENT_ABI_REVISION,                             \
+                .serial     = SERNO,                                            \
+                .name       = _name,                                            \
+                .can_unload = _unloadcap,                                       \
+                .modinit    = _modinit,                                         \
+                .deinit     = _moddeinit,                                       \
+                .vendor     = _ven,                                             \
+                .version    = _ver,                                             \
         }
 
 #define VENDOR_DECLARE_MODULE_V1(name, unloadcap, ven)                     \
