@@ -85,7 +85,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	}
 }
 
-void jsonrpc_register_method(const char *method_name, jsonrpc_method_t method) {
+void jsonrpc_register_method(const char *method_name, jsonrpc_method_fn method) {
 	mowgli_patricia_add(json_methods, method_name, method);
 }
 
@@ -93,7 +93,7 @@ void jsonrpc_unregister_method(const char *method_name) {
 	mowgli_patricia_delete(json_methods, method_name);
 }
 
-jsonrpc_method_t get_json_method(const char *method_name) {
+jsonrpc_method_fn get_json_method(const char *method_name) {
 	return mowgli_patricia_retrieve(json_methods, method_name);
 }
 

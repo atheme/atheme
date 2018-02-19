@@ -63,7 +63,7 @@ void jsonrpc_process(char *buffer, void *userdata)
 	mowgli_json_t *param;
 	mowgli_node_t *n;
 
-	jsonrpc_method_t call_method = get_json_method(method_str);
+	jsonrpc_method_fn call_method = get_json_method(method_str);
 
 	MOWGLI_LIST_FOREACH(n, params_list->head)
 	{

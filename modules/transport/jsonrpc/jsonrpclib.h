@@ -9,7 +9,7 @@
 
 #include "atheme.h"
 
-typedef bool (*jsonrpc_method_t)(void *conn, mowgli_list_t *params, char *id);
+typedef bool (*jsonrpc_method_fn)(void *conn, mowgli_list_t *params, char *id);
 
 struct jsonrpc_sourceinfo
 {
@@ -19,7 +19,7 @@ struct jsonrpc_sourceinfo
 
 extern char *jsonrpc_normalizeBuffer(const char *buf);
 
-extern jsonrpc_method_t get_json_method(const char *method_name);
+extern jsonrpc_method_fn get_json_method(const char *method_name);
 
 extern void jsonrpc_process(char *buffer, void *userdata);
 extern void jsonrpc_register_method(const char *method_name, bool (*method)(void *conn, mowgli_list_t *params, char *id));
