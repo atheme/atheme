@@ -781,7 +781,7 @@ int sendemail(struct user *u, struct myuser *mu, const char *type, const char *e
 }
 
 /* various access level checkers */
-bool is_founder(mychan_t *mychan, struct myentity *mt)
+bool is_founder(struct mychan *mychan, struct myentity *mt)
 {
 	if (mt == NULL)
 		return false;

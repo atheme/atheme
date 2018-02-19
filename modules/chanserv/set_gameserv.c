@@ -30,7 +30,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static void cs_cmd_set_gameserv(struct sourceinfo *si, int parc, char *parv[])
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	const char *val;
 	struct metadata *md;
 

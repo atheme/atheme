@@ -148,7 +148,7 @@ struct mycertfp
   mowgli_node_t node;
 };
 
-struct mychan_
+struct mychan
 {
   struct atheme_object parent;
 
@@ -197,7 +197,7 @@ struct chanacs
 	struct atheme_object parent;
 
 	struct myentity *entity;
-	mychan_t *mychan;
+	struct mychan *mychan;
 	char     *host;
 	unsigned int  level;
 	time_t    tmodified;
@@ -319,7 +319,7 @@ struct mymemo
 
 /* account related hooks */
 typedef struct {
-	mychan_t *mc;
+	struct mychan *mc;
 	struct sourceinfo *si;
 } hook_channel_req_t;
 
@@ -333,13 +333,13 @@ typedef struct {
 } hook_channel_acl_req_t;
 
 typedef struct {
-	mychan_t *mc;
+	struct mychan *mc;
 	struct myuser *mu;
 } hook_channel_succession_req_t;
 
 typedef struct {
 	union {
-		mychan_t *mc;
+		struct mychan *mc;
 		struct myuser *mu;
 		mynick_t *mn;
 	} data;
@@ -419,7 +419,7 @@ extern void (*db_save)(void *arg, enum db_save_strategy strategy);
 extern void (*db_load)(const char *arg);
 
 /* function.c */
-extern bool is_founder(mychan_t *mychan, struct myentity *myuser);
+extern bool is_founder(struct mychan *mychan, struct myentity *myuser);
 
 /* node.c */
 extern mowgli_list_t klnlist;
@@ -486,41 +486,41 @@ extern struct mycertfp *mycertfp_add(struct myuser *mu, const char *certfp);
 extern void mycertfp_delete(struct mycertfp *mcfp);
 extern struct mycertfp *mycertfp_find(const char *certfp);
 
-extern mychan_t *mychan_add(char *name);
-//inline mychan_t *mychan_find(const char *name);
-extern bool mychan_isused(mychan_t *mc);
-extern unsigned int mychan_num_founders(mychan_t *mc);
-extern const char *mychan_founder_names(mychan_t *mc);
-extern struct myuser *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel);
-extern struct myuser *mychan_pick_successor(mychan_t *mc);
-extern const char *mychan_get_mlock(mychan_t *mc);
-extern const char *mychan_get_sts_mlock(mychan_t *mc);
+extern struct mychan *mychan_add(char *name);
+//inline struct mychan *mychan_find(const char *name);
+extern bool mychan_isused(struct mychan *mc);
+extern unsigned int mychan_num_founders(struct mychan *mc);
+extern const char *mychan_founder_names(struct mychan *mc);
+extern struct myuser *mychan_pick_candidate(struct mychan *mc, unsigned int minlevel);
+extern struct myuser *mychan_pick_successor(struct mychan *mc);
+extern const char *mychan_get_mlock(struct mychan *mc);
+extern const char *mychan_get_sts_mlock(struct mychan *mc);
 
-extern struct chanacs *chanacs_add(mychan_t *mychan, struct myentity *myuser, unsigned int level, time_t ts, struct myentity *setter);
-extern struct chanacs *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int level, time_t ts, struct myentity *setter);
+extern struct chanacs *chanacs_add(struct mychan *mychan, struct myentity *myuser, unsigned int level, time_t ts, struct myentity *setter);
+extern struct chanacs *chanacs_add_host(struct mychan *mychan, const char *host, unsigned int level, time_t ts, struct myentity *setter);
 
-extern struct chanacs *chanacs_find(mychan_t *mychan, struct myentity *myuser, unsigned int level);
-extern unsigned int chanacs_entity_flags(mychan_t *mychan, struct myentity *myuser);
-extern struct chanacs *chanacs_find_literal(mychan_t *mychan, struct myentity *myuser, unsigned int level);
-extern struct chanacs *chanacs_find_host(mychan_t *mychan, const char *host, unsigned int level);
-extern unsigned int chanacs_host_flags(mychan_t *mychan, const char *host);
-extern struct chanacs *chanacs_find_host_literal(mychan_t *mychan, const char *host, unsigned int level);
-extern struct chanacs *chanacs_find_host_by_user(mychan_t *mychan, struct user *u, unsigned int level);
-extern struct chanacs *chanacs_find_by_mask(mychan_t *mychan, const char *mask, unsigned int level);
-extern bool chanacs_user_has_flag(mychan_t *mychan, struct user *u, unsigned int level);
-extern unsigned int chanacs_user_flags(mychan_t *mychan, struct user *u);
-//inline bool chanacs_source_has_flag(mychan_t *mychan, struct sourceinfo *si, unsigned int level);
-extern unsigned int chanacs_source_flags(mychan_t *mychan, struct sourceinfo *si);
+extern struct chanacs *chanacs_find(struct mychan *mychan, struct myentity *myuser, unsigned int level);
+extern unsigned int chanacs_entity_flags(struct mychan *mychan, struct myentity *myuser);
+extern struct chanacs *chanacs_find_literal(struct mychan *mychan, struct myentity *myuser, unsigned int level);
+extern struct chanacs *chanacs_find_host(struct mychan *mychan, const char *host, unsigned int level);
+extern unsigned int chanacs_host_flags(struct mychan *mychan, const char *host);
+extern struct chanacs *chanacs_find_host_literal(struct mychan *mychan, const char *host, unsigned int level);
+extern struct chanacs *chanacs_find_host_by_user(struct mychan *mychan, struct user *u, unsigned int level);
+extern struct chanacs *chanacs_find_by_mask(struct mychan *mychan, const char *mask, unsigned int level);
+extern bool chanacs_user_has_flag(struct mychan *mychan, struct user *u, unsigned int level);
+extern unsigned int chanacs_user_flags(struct mychan *mychan, struct user *u);
+//inline bool chanacs_source_has_flag(struct mychan *mychan, struct sourceinfo *si, unsigned int level);
+extern unsigned int chanacs_source_flags(struct mychan *mychan, struct sourceinfo *si);
 
-extern struct chanacs *chanacs_open(mychan_t *mychan, struct myentity *mt, const char *hostmask, bool create, struct myentity *setter);
+extern struct chanacs *chanacs_open(struct mychan *mychan, struct myentity *mt, const char *hostmask, bool create, struct myentity *setter);
 //inline void chanacs_close(struct chanacs *ca);
 extern bool chanacs_modify(struct chanacs *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, struct myuser *setter);
 extern bool chanacs_modify_simple(struct chanacs *ca, unsigned int addflags, unsigned int removeflags, struct myuser *setter);
 
 //inline bool chanacs_is_table_full(struct chanacs *ca);
 
-extern bool chanacs_change(mychan_t *mychan, struct myentity *mt, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, struct myentity *setter);
-extern bool chanacs_change_simple(mychan_t *mychan, struct myentity *mt, const char *hostmask, unsigned int addflags, unsigned int removeflags, struct myentity *setter);
+extern bool chanacs_change(struct mychan *mychan, struct myentity *mt, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, struct myentity *setter);
+extern bool chanacs_change_simple(struct mychan *mychan, struct myentity *mt, const char *hostmask, unsigned int addflags, unsigned int removeflags, struct myentity *setter);
 
 extern void expire_check(void *arg);
 /* Check the database for (version) problems common to all backends */

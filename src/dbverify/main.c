@@ -53,7 +53,7 @@ static unsigned int verify_entity_uids(void)
 static void verify_channel_registrations(void)
 {
 	mowgli_patricia_iteration_state_t state;
-	mychan_t *mc;
+	struct mychan *mc;
 
 	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{

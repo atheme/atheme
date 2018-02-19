@@ -58,7 +58,7 @@ static int global_template_search(const char *key, void *data, void *privdata)
 	return 0;
 }
 
-static const char *get_template_name(mychan_t *mc, unsigned int level)
+static const char *get_template_name(struct mychan *mc, unsigned int level)
 {
 	struct metadata *md;
 	const char *p, *q, *r;
@@ -105,7 +105,7 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 	return iter.res;
 }
 
-static void do_list(struct sourceinfo *si, mychan_t *mc, unsigned int flags)
+static void do_list(struct sourceinfo *si, struct mychan *mc, unsigned int flags)
 {
 	struct chanacs *ca;
 	mowgli_node_t *n;
@@ -193,7 +193,7 @@ static void cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 	const char *str1;
 	unsigned int addflags, removeflags, restrictflags;
 	hook_channel_acl_req_t req;
-	mychan_t *mc;
+	struct mychan *mc;
 
 	if (parc < 1)
 	{

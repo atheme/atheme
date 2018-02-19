@@ -60,7 +60,7 @@ void (*svslogin_sts) (char *target, char *nick, char *user, char *host, struct m
 void (*sasl_sts) (const char *target, char mode, const char *data) = generic_sasl_sts;
 void (*sasl_mechlist_sts) (const char *mechlist) = generic_sasl_mechlist_sts;
 mowgli_node_t *(*next_matching_ban)(struct channel *c, struct user *u, int type, mowgli_node_t *first) = generic_next_matching_ban;
-mowgli_node_t *(*next_matching_host_chanacs)(mychan_t *mc, struct user *u, mowgli_node_t *first) = generic_next_matching_host_chanacs;
+mowgli_node_t *(*next_matching_host_chanacs)(struct mychan *mc, struct user *u, mowgli_node_t *first) = generic_next_matching_host_chanacs;
 bool (*is_valid_nick)(const char *nick) = generic_is_valid_nick;
 bool (*is_valid_host)(const char *host) = generic_is_valid_host;
 bool (*is_valid_username)(const char *username) = generic_is_valid_username;
@@ -328,7 +328,7 @@ mowgli_node_t *generic_next_matching_ban(struct channel *c, struct user *u, int 
 	return NULL;
 }
 
-mowgli_node_t *generic_next_matching_host_chanacs(mychan_t *mc, struct user *u, mowgli_node_t *first)
+mowgli_node_t *generic_next_matching_host_chanacs(struct mychan *mc, struct user *u, mowgli_node_t *first)
 {
 	struct chanacs *ca;
 	mowgli_node_t *n;

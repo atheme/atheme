@@ -11,7 +11,7 @@ struct command rs_list = { "LIST", N_("Lists games."),
 static void rs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_patricia_iteration_state_t state;
-	mychan_t *mc;
+	struct mychan *mc;
 	unsigned int listed = 0;
 	char *desc;
 

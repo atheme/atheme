@@ -538,7 +538,7 @@ static void ts6_holdnick_sts(struct user *source, int duration, const char *nick
 
 static void ts6_mlock_sts(struct channel *c)
 {
-	mychan_t *mc = mychan_from(c);
+	struct mychan *mc = mychan_from(c);
 
 	if (use_mlock == false)
 		return;
@@ -553,7 +553,7 @@ static void ts6_mlock_sts(struct channel *c)
 static void m_mlock(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c;
-	mychan_t *mc;
+	struct mychan *mc;
 	const char *mlock;
 
 	/* Ignore MLOCK if the server isn't bursting, to avoid 'war' conditions */
@@ -1448,7 +1448,7 @@ static void server_eob(struct server *s)
 }
 
 /* Channel drop hook: clear MLOCK when a channel becomes unregistered. */
-static void channel_drop(mychan_t *mc)
+static void channel_drop(struct mychan *mc)
 {
 	if (use_mlock == false)
 		return;

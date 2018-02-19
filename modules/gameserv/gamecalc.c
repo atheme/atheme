@@ -44,7 +44,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static void command_wod(struct sourceinfo *si, int parc, char *parv[])
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	char *arg_dice, *arg_difficulty;
 	int ii = 0;
 	int dice, difficulty;
@@ -127,7 +127,7 @@ static void command_wod(struct sourceinfo *si, int parc, char *parv[])
 
 static void command_nwod(struct sourceinfo *si, int parc, char *parv[])
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	char *arg_dice, *arg_rerollflag;
 	int ii = 0;
 	int dice, reroll;
@@ -226,7 +226,7 @@ static const char *df_dice_table[3] = { "[-]", "[ ]", "[+]" };
 
 static void command_df(struct sourceinfo *si, int parc, char *parv[])
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	char *arg_dice;
 	char buf[BUFSIZE];
 	int i, dice;

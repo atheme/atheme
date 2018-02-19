@@ -569,7 +569,7 @@ static int xmlrpcmethod_metadata(void *conn, int parc, char *parv[])
 
 	if (*parv[0] == '#')
 	{
-		mychan_t *mc;
+		struct mychan *mc;
 
 		mc = mychan_find(parv[0]);
 		if (mc == NULL)

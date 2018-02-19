@@ -203,7 +203,7 @@ static void can_register(hook_channel_register_check_t *req)
 static void cs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
-	mychan_t *mc;
+	struct mychan *mc;
 	csreq_t *cs;
 	struct chanuser *cu;
 	struct user *u;

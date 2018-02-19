@@ -14,7 +14,7 @@ struct default_template
 };
 
 extern const char *getitem(const char *str, const char *name);
-extern unsigned int get_template_flags(mychan_t *mc, const char *name);
+extern unsigned int get_template_flags(struct mychan *mc, const char *name);
 
 extern void set_global_template_flags(const char *name, unsigned int flags);
 extern unsigned int get_global_template_flags(const char *name);

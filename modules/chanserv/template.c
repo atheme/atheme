@@ -61,7 +61,7 @@ static void cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 	size_t l;
 	char *channel = parv[0];
 	char *target = parv[1];
-	mychan_t *mc;
+	struct mychan *mc;
 	unsigned int oldflags, newflags = 0, addflags, removeflags, restrictflags;
 	char *p, *q, *r;
 	char ss[40], newstr[400];

@@ -63,13 +63,13 @@ static const struct cmode inspircd_mode_list[] = {
   { '\0', 0 }
 };
 
-static bool check_flood(const char *, struct channel *, mychan_t *, struct user *, struct myuser *);
-static bool check_nickflood(const char *, struct channel *, mychan_t *, struct user *, struct myuser *);
-static bool check_jointhrottle(const char *, struct channel *, mychan_t *, struct user *, struct myuser *);
-static bool check_forward(const char *, struct channel *, mychan_t *, struct user *, struct myuser *);
-static bool check_rejoindelay(const char *, struct channel *, mychan_t *, struct user *, struct myuser *);
-static bool check_delaymsg(const char *, struct channel *, mychan_t *, struct user *, struct myuser *);
-static bool check_history(const char *, struct channel *, mychan_t *, struct user *, struct myuser *);
+static bool check_flood(const char *, struct channel *, struct mychan *, struct user *, struct myuser *);
+static bool check_nickflood(const char *, struct channel *, struct mychan *, struct user *, struct myuser *);
+static bool check_jointhrottle(const char *, struct channel *, struct mychan *, struct user *, struct myuser *);
+static bool check_forward(const char *, struct channel *, struct mychan *, struct user *, struct myuser *);
+static bool check_rejoindelay(const char *, struct channel *, struct mychan *, struct user *, struct myuser *);
+static bool check_delaymsg(const char *, struct channel *, struct mychan *, struct user *, struct myuser *);
+static bool check_history(const char *, struct channel *, struct mychan *, struct user *, struct myuser *);
 
 static unsigned int max_rejoindelay = 5;
 
@@ -223,17 +223,17 @@ static inline void channel_metadata_sts(struct channel *c, const char *key, cons
 	sts(":%s METADATA %s %s :%s", ME, c->name, key, value);
 }
 
-static bool check_flood(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
+static bool check_flood(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	return check_jointhrottle((*value == '*' ? value + 1 : value), c, mc, u, mu);
 }
 
-static bool check_nickflood(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
+static bool check_nickflood(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	return check_jointhrottle(value, c, mc, u, mu);
 }
 
-static bool check_jointhrottle(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
+static bool check_jointhrottle(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	const char *p, *arg2;
 
@@ -257,15 +257,15 @@ static bool check_jointhrottle(const char *value, struct channel *c, mychan_t *m
 	return true;
 }
 
-static bool check_history(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
+static bool check_history(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	return check_jointhrottle(value, c, mc, u, mu);
 }
 
-static bool check_forward(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
+static bool check_forward(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	struct channel *target_c;
-	mychan_t *target_mc;
+	struct mychan *target_mc;
 
 	if (!VALID_GLOBAL_CHANNEL_PFX(value) || strlen(value) > 50)
 		return false;
@@ -278,7 +278,7 @@ static bool check_forward(const char *value, struct channel *c, mychan_t *mc, st
 	return true;
 }
 
-static bool check_rejoindelay(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
+static bool check_rejoindelay(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	const char *ch = value;
 
@@ -299,7 +299,7 @@ static bool check_rejoindelay(const char *value, struct channel *c, mychan_t *mc
 	}
 }
 
-static bool check_delaymsg(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
+static bool check_delaymsg(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	const char *ch = value;
 
@@ -749,7 +749,7 @@ static void inspircd_quarantine_sts(struct user *source, struct user *victim, lo
 
 static void inspircd_mlock_sts(struct channel *c)
 {
-	mychan_t *mc = mychan_from(c);
+	struct mychan *mc = mychan_from(c);
 
 	if (mc == NULL)
 		return;
@@ -759,7 +759,7 @@ static void inspircd_mlock_sts(struct channel *c)
 
 static void  inspircd_topiclock_sts(struct channel *c)
 {
-	mychan_t *mc = mychan_from(c);
+	struct mychan *mc = mychan_from(c);
 	if (mc == NULL || !has_svstopic_topiclock)
 		return;
 
@@ -1364,7 +1364,7 @@ static void m_encap(struct sourceinfo *si, int parc, char *parv[])
 static inline void verify_mlock(struct channel *c, time_t ts, const char *their_mlock)
 {
 	const char *mlock_str;
-	mychan_t *mc;
+	struct mychan *mc;
 
 	mc = mychan_from(c);
 	if (mc == NULL)
@@ -1382,7 +1382,7 @@ static inline void verify_mlock(struct channel *c, time_t ts, const char *their_
 static void verify_topiclock(struct channel *c, bool state)
 {
 	bool mystate;
-	mychan_t *mc = mychan_from(c);
+	struct mychan *mc = mychan_from(c);
 	if (!mc)
 		return;
 
@@ -1484,7 +1484,7 @@ static void m_rsquit(struct sourceinfo *si, int parc, char *parv[])
 	sts(":%s SQUIT %s :Jupe removed by %s", me.numeric, parv[0], si->su->nick);
 }
 
-static void channel_drop(mychan_t *mc)
+static void channel_drop(struct mychan *mc)
 {
 	if (mc->chan == NULL)
 		return;

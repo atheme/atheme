@@ -30,7 +30,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static void cs_cmd_set_mlock(struct sourceinfo *si, int parc, char *parv[])
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	char modebuf[32], *end, c;
 	int dir = MTYPE_NUL;
 	int newlock_on = 0, newlock_off = 0, newlock_limit = 0, flag = 0;

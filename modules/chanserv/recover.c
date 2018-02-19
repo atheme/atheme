@@ -27,7 +27,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 static void cs_cmd_recover(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct chanuser *cu, *origin_cu = NULL;
-	mychan_t *mc;
+	struct mychan *mc;
 	mowgli_node_t *n, *tn;
 	struct chanban *cb;
 	char *name = parv[0];

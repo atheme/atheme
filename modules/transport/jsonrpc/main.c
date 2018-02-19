@@ -637,7 +637,7 @@ static bool jsonrpcmethod_metadata(void *conn, mowgli_list_t *params, char *id)
 
 	if (*name == '#')
 	{
-		mychan_t *mc;
+		struct mychan *mc;
 
 		mc = mychan_find(name);
 		if (mc == NULL)

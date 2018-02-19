@@ -26,7 +26,7 @@ static mowgli_eventloop_timer_t *cs_leave_empty_timer = NULL;
 
 static void join_registered(bool all)
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	mowgli_patricia_iteration_state_t state;
 
 	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
@@ -52,7 +52,7 @@ static void join_registered(bool all)
 /* main services client routine */
 static void chanserv(struct sourceinfo *si, int parc, char *parv[])
 {
-	mychan_t *mc = NULL;
+	struct mychan *mc = NULL;
 	char orig[BUFSIZE];
 	char newargs[BUFSIZE];
 	char *cmd;
@@ -340,7 +340,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	struct chanuser *cu = hdata->cu;
 	struct user *u;
 	struct channel *chan;
-	mychan_t *mc;
+	struct mychan *mc;
 	unsigned int flags;
 	bool noop;
 	bool secure;
@@ -588,7 +588,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 static void cs_part(hook_channel_joinpart_t *hdata)
 {
 	struct chanuser *cu;
-	mychan_t *mc;
+	struct mychan *mc;
 
 	cu = hdata->cu;
 	if (cu == NULL)
@@ -636,7 +636,7 @@ static void cs_part(hook_channel_joinpart_t *hdata)
 	part(cu->chan->name, chansvs.nick);
 }
 
-static struct user *get_changets_user(mychan_t *mc)
+static struct user *get_changets_user(struct mychan *mc)
 {
 	struct metadata *md;
 
@@ -657,7 +657,7 @@ static struct user *get_changets_user(mychan_t *mc)
 
 static void cs_register(hook_channel_req_t *hdata)
 {
-	mychan_t *mc;
+	struct mychan *mc;
 
 	mc = hdata->mc;
 	if (mc->chan)
@@ -681,7 +681,7 @@ static void cs_succession(hook_channel_succession_req_t *data)
 /* Called on every set of a topic, after updating our internal structures */
 static void cs_keeptopic_topicset(struct channel *c)
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	struct metadata *md;
 
 	mc = mychan_find(c->name);
@@ -722,7 +722,7 @@ static void cs_keeptopic_topicset(struct channel *c)
  * our internal structures */
 static void cs_topiccheck(hook_channel_topic_check_t *data)
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	unsigned int accessfl = 0;
 
 	mc = mychan_find(data->c->name);
@@ -759,7 +759,7 @@ static void cs_topiccheck(hook_channel_topic_check_t *data)
 /* Called on creation of a channel */
 static void cs_newchan(struct channel *c)
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	struct chanuser *cu;
 	struct metadata *md;
 	char *setter;
@@ -851,7 +851,7 @@ static void cs_newchan(struct channel *c)
 
 static void cs_tschange(struct channel *c)
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	char str[21];
 
 	if (!(mc = mychan_find(c->name)))
@@ -878,7 +878,7 @@ static void on_shutdown(void *unused)
 
 static void cs_leave_empty(void *unused)
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	mowgli_patricia_iteration_state_t state;
 
 	(void)unused;
@@ -905,7 +905,7 @@ static void cs_leave_empty(void *unused)
 
 static void cs_bounce_mode_change(hook_channel_mode_change_t *data)
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	struct chanuser *cu;
 	struct channel *chan;
 

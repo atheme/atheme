@@ -33,9 +33,9 @@ gs_command_report(struct sourceinfo *si, const char *fmt, ...)
 		command_success_nodata(si, "%s", buf);
 }
 
-static inline bool gs_do_parameters(struct sourceinfo *si, int *parc, char ***parv, mychan_t **pmc)
+static inline bool gs_do_parameters(struct sourceinfo *si, int *parc, char ***parv, struct mychan **pmc)
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	struct chanuser *cu;
 	struct metadata *md;
 	const char *who;

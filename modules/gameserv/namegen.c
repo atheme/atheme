@@ -34,7 +34,7 @@ static void command_namegen(struct sourceinfo *si, int parc, char *parv[])
 	unsigned int iter;
 	unsigned int amt = 20;
 	char buf[BUFSIZE];
-	mychan_t *mc;
+	struct mychan *mc;
 
 	if (!gs_do_parameters(si, &parc, &parv, &mc))
 		return;

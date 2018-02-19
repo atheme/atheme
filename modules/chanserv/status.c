@@ -30,7 +30,7 @@ static void cs_cmd_status(struct sourceinfo *si, int parc, char *parv[])
 
 	if (chan)
 	{
-		mychan_t *mc = mychan_find(chan);
+		struct mychan *mc = mychan_find(chan);
 		unsigned int flags;
 
 		if (*chan != '#')

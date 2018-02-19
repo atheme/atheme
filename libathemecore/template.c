@@ -117,7 +117,7 @@ const char *getitem(const char *str, const char *name)
 	}
 }
 
-unsigned int get_template_flags(mychan_t *mc, const char *name)
+unsigned int get_template_flags(struct mychan *mc, const char *name)
 {
 	struct metadata *md;
 	const char *d;

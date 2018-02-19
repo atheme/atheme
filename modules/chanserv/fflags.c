@@ -31,7 +31,7 @@ static void cs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 	const char *channel = parv[0];
 	const char *target = parv[1];
 	const char *flagstr = parv[2];
-	mychan_t *mc;
+	struct mychan *mc;
 	struct myentity *mt;
 	unsigned int addflags, removeflags;
 	struct chanacs *ca;

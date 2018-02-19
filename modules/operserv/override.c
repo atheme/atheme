@@ -166,7 +166,7 @@ static void os_cmd_override(struct sourceinfo *si, int parc, char *parv[])
 
 	if (*parv[0] == '#')
 	{
-		mychan_t *mc;
+		struct mychan *mc;
 		mowgli_node_t *n;
 
 		if (!(mc = mychan_find(parv[0])))

@@ -28,7 +28,7 @@ static void cs_cmd_why(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *chan = parv[0];
 	const char *targ = parv[1];
-	mychan_t *mc;
+	struct mychan *mc;
 	struct user *u;
 	struct myuser *mu;
 	mowgli_node_t *n;

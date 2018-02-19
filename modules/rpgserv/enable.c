@@ -15,7 +15,7 @@ struct command rs_disable = { "DISABLE", N_("Disable RPGServ for a channel."),
 static void rs_cmd_enable(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
-	mychan_t *mc;
+	struct mychan *mc;
 
 	if (!chan)
 	{
@@ -45,7 +45,7 @@ static void rs_cmd_enable(struct sourceinfo *si, int parc, char *parv[])
 static void rs_cmd_disable(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
-	mychan_t *mc;
+	struct mychan *mc;
 
 	if (!chan)
 	{

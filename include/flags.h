@@ -34,7 +34,7 @@ extern void flags_make_bitmasks(const char *string, unsigned int *addflags, unsi
 extern unsigned int flags_to_bitmask(const char *, unsigned int flags);
 extern char *bitmask_to_flags(unsigned int);
 extern char *bitmask_to_flags2(unsigned int, unsigned int);
-extern unsigned int allow_flags(mychan_t *mc, unsigned int flags);
+extern unsigned int allow_flags(struct mychan *mc, unsigned int flags);
 extern void update_chanacs_flags(void);
 
 extern const struct gflags mu_flags[];

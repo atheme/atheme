@@ -49,7 +49,7 @@ static void cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *newfounder = parv[1];
 	struct myentity *mt;
-	mychan_t *mc;
+	struct mychan *mc;
 
 	if (!si->smu)
 	{

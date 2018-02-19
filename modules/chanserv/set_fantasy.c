@@ -45,7 +45,7 @@ static void cs_set_fantasy_config_ready(void *unused)
 
 static void cs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[])
 {
-	mychan_t *mc;
+	struct mychan *mc;
 
 	if (!(mc = mychan_find(parv[0])))
 	{

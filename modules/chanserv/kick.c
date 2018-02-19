@@ -34,7 +34,7 @@ static void cs_cmd_kick(struct sourceinfo *si, int parc, char *parv[])
 	char *chan = parv[0];
 	char *nick = parv[1];
 	char *reason = parv[2];
-	mychan_t *mc;
+	struct mychan *mc;
 	struct user *tu;
 	struct chanuser *cu;
 	char reasonbuf[BUFSIZE];
@@ -105,7 +105,7 @@ static void cs_cmd_kickban(struct sourceinfo *si, int parc, char *parv[])
 	char *chan = parv[0];
 	char *nick = parv[1];
 	char *reason = parv[2];
-	mychan_t *mc;
+	struct mychan *mc;
 	struct user *tu;
 	struct chanuser *cu;
 	char reasonbuf[BUFSIZE];

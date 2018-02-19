@@ -27,7 +27,7 @@ cmd_cs_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 		return;
 	}
 
-	mychan_t *mc;
+	struct mychan *mc;
 
 	if (! (mc = mychan_find(name)))
 	{
@@ -123,7 +123,7 @@ cmd_cs_fdrop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_U
 		return;
 	}
 
-	mychan_t *mc;
+	struct mychan *mc;
 
 	if (! (mc = mychan_find(name)))
 	{

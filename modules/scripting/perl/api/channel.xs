@@ -32,7 +32,7 @@ Atheme_ChannelRegistration
 register (Atheme_Channel self, Atheme_Sourceinfo si, Atheme_Account user)
 CODE:
     char *name = self->name;
-    mychan_t *mc = mychan_add(name);
+    struct mychan *mc = mychan_add(name);
     hook_channel_req_t hdata;
 
     if (mc == NULL) {

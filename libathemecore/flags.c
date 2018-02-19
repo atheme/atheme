@@ -332,7 +332,7 @@ char *bitmask_to_flags2(unsigned int addflags, unsigned int removeflags)
 }
 
 /* flags a non-founder with +f and these flags is allowed to set -- jilles */
-unsigned int allow_flags(mychan_t *mc, unsigned int theirflags)
+unsigned int allow_flags(struct mychan *mc, unsigned int theirflags)
 {
 	unsigned int flags;
 

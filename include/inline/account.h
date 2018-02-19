@@ -82,22 +82,22 @@ static inline struct myuser_name *myuser_name_find(const char *name)
 	return name ? mowgli_patricia_retrieve(oldnameslist, name) : NULL;
 }
 
-static inline mychan_t *mychan_find(const char *name)
+static inline struct mychan *mychan_find(const char *name)
 {
 	return name ? mowgli_patricia_retrieve(mclist, name) : NULL;
 }
 
-static inline mychan_t *mychan_from(struct channel *chan)
+static inline struct mychan *mychan_from(struct channel *chan)
 {
 	return chan ? (chan->mychan ? chan->mychan : mychan_find(chan->name)) : NULL;
 }
 
-static inline bool chanacs_entity_has_flag(mychan_t *mychan, struct myentity *mt, unsigned int level)
+static inline bool chanacs_entity_has_flag(struct mychan *mychan, struct myentity *mt, unsigned int level)
 {
 	return mychan && mt ? (chanacs_entity_flags(mychan, mt) & level) != 0 : false;
 }
 
-static inline bool chanacs_source_has_flag(mychan_t *mychan, struct sourceinfo *si, unsigned int level)
+static inline bool chanacs_source_has_flag(struct mychan *mychan, struct sourceinfo *si, unsigned int level)
 {
 	return si->su != NULL ? chanacs_user_has_flag(mychan, si->su, level) :
 		chanacs_entity_has_flag(mychan, entity(si->smu), level);

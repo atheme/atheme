@@ -29,7 +29,7 @@ static void cs_cmd_count(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	struct chanacs *ca;
-	mychan_t *mc = mychan_find(chan);
+	struct mychan *mc = mychan_find(chan);
 	unsigned int ca_sop, ca_aop, ca_hop, ca_vop;
 	int vopcnt = 0, aopcnt = 0, hopcnt = 0, sopcnt = 0, akickcnt = 0;
 	int othercnt = 0;

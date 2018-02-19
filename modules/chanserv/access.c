@@ -233,7 +233,7 @@ typedef struct {
 } template_t;
 
 typedef struct {
-	mychan_t *mc;
+	struct mychan *mc;
 	mowgli_list_t *l;
 } template_iter_t;
 
@@ -289,7 +289,7 @@ static int append_global_template(const char *key, void *data, void *privdata)
         return 0;
 }
 
-static mowgli_list_t *build_template_list(mychan_t *mc)
+static mowgli_list_t *build_template_list(struct mychan *mc)
 {
 	const char *p, *q, *r;
 	char *s;
@@ -385,7 +385,7 @@ static void free_template_list(mowgli_list_t *l)
  *
  * but now we just return an exact template name or <Custom>.
  */
-static const char *get_template_name(mychan_t *mc, unsigned int level)
+static const char *get_template_name(struct mychan *mc, unsigned int level)
 {
 	mowgli_list_t *l;
 	mowgli_node_t *n;
@@ -416,7 +416,7 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 /*
  * Update a role entry and synchronize the changes with the access list.
  */
-static void update_role_entry(struct sourceinfo *si, mychan_t *mc, const char *role, unsigned int flags)
+static void update_role_entry(struct sourceinfo *si, struct mychan *mc, const char *role, unsigned int flags)
 {
 	struct metadata *md;
 	size_t l;
@@ -561,7 +561,7 @@ static void cs_cmd_access_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct chanacs *ca;
 	mowgli_node_t *n;
-	mychan_t *mc;
+	struct mychan *mc;
 	const char *channel = parv[0];
 	bool operoverride = false;
 	unsigned int i = 1;
@@ -627,7 +627,7 @@ static void cs_cmd_access_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct chanacs *ca;
 	struct myentity *mt;
-	mychan_t *mc;
+	struct mychan *mc;
 	const char *channel = parv[0];
 	const char *target = parv[1];
 	bool operoverride = false;
@@ -726,7 +726,7 @@ static void cs_cmd_access_del(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct chanacs *ca;
 	struct myentity *mt;
-	mychan_t *mc;
+	struct mychan *mc;
 	hook_channel_acl_req_t req;
 	unsigned int restrictflags;
 	const char *channel = parv[0];
@@ -832,7 +832,7 @@ static void cs_cmd_access_add(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct chanacs *ca;
 	struct myentity *mt = NULL;
-	mychan_t *mc;
+	struct mychan *mc;
 	hook_channel_acl_req_t req;
 	unsigned int oldflags, restrictflags;
 	unsigned int newflags, addflags, removeflags;
@@ -979,7 +979,7 @@ static void cs_cmd_access_set(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct chanacs *ca;
 	struct myentity *mt = NULL;
-	mychan_t *mc;
+	struct mychan *mc;
 	hook_channel_acl_req_t req;
 	unsigned int oldflags, restrictflags;
 	unsigned int newflags, addflags, removeflags;
@@ -1125,7 +1125,7 @@ static void cs_cmd_access_set(struct sourceinfo *si, int parc, char *parv[])
  */
 static void cs_cmd_role_list(struct sourceinfo *si, int parc, char *parv[])
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	const char *channel = parv[0];
 	mowgli_list_t *l;
 
@@ -1163,7 +1163,7 @@ static void cs_cmd_role_list(struct sourceinfo *si, int parc, char *parv[])
  */
 static void cs_cmd_role_add(struct sourceinfo *si, int parc, char *parv[])
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	mowgli_list_t *l;
 	const char *channel = parv[0];
 	const char *role = parv[1];
@@ -1254,7 +1254,7 @@ static void cs_cmd_role_add(struct sourceinfo *si, int parc, char *parv[])
  */
 static void cs_cmd_role_set(struct sourceinfo *si, int parc, char *parv[])
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	mowgli_list_t *l;
 	const char *channel = parv[0];
 	const char *role = parv[1];
@@ -1351,7 +1351,7 @@ static void cs_cmd_role_set(struct sourceinfo *si, int parc, char *parv[])
  */
 static void cs_cmd_role_del(struct sourceinfo *si, int parc, char *parv[])
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	const char *channel = parv[0];
 	const char *role = parv[1];
 	unsigned int oldflags, restrictflags;

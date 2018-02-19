@@ -83,7 +83,7 @@ void init_channels(void)
 struct channel *channel_add(const char *name, time_t ts, struct server *creator)
 {
 	struct channel *c;
-	mychan_t *mc;
+	struct mychan *mc;
 
 	if (!VALID_GLOBAL_CHANNEL_PFX(name))
 	{
@@ -150,7 +150,7 @@ struct channel *channel_add(const char *name, time_t ts, struct server *creator)
  */
 void channel_delete(struct channel *c)
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	mowgli_node_t *n, *tn;
 	struct chanuser *cu;
 

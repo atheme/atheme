@@ -575,7 +575,7 @@ static bool eval_dice(struct sourceinfo *si, char *s_input)
 static void command_dice(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *arg;
-	mychan_t *mc;
+	struct mychan *mc;
 	int i, times = 1;
 
 	if (!gs_do_parameters(si, &parc, &parv, &mc))
@@ -613,7 +613,7 @@ static void command_dice(struct sourceinfo *si, int parc, char *parv[])
 static void command_calc(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *arg;
-	mychan_t *mc;
+	struct mychan *mc;
 	int i, times = 1;
 
 	if (!gs_do_parameters(si, &parc, &parv, &mc))

@@ -224,7 +224,7 @@ extern void (*sasl_mechlist_sts)(const char *mechlist);
 /* find next channel ban (or other ban-like mode) matching user */
 extern mowgli_node_t *(*next_matching_ban)(struct channel *c, struct user *u, int type, mowgli_node_t *first);
 /* find next host channel access matching user */
-extern mowgli_node_t *(*next_matching_host_chanacs)(mychan_t *mc, struct user *u, mowgli_node_t *first);
+extern mowgli_node_t *(*next_matching_host_chanacs)(struct mychan *mc, struct user *u, mowgli_node_t *first);
 /* check a nickname for validity; normally you don't need to override this */
 extern bool (*is_valid_nick)(const char *nick);
 /* check a username for validity; normally you don't need to override this */
@@ -281,7 +281,7 @@ extern void generic_svslogin_sts(char *target, char *nick, char *user, char *hos
 extern void generic_sasl_sts(const char *target, char mode, const char *data);
 extern void generic_sasl_mechlist_sts(const char *mechlist);
 extern mowgli_node_t *generic_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_node_t *first);
-extern mowgli_node_t *generic_next_matching_host_chanacs(mychan_t *mc, struct user *u, mowgli_node_t *first);
+extern mowgli_node_t *generic_next_matching_host_chanacs(struct mychan *mc, struct user *u, mowgli_node_t *first);
 extern bool generic_is_valid_host(const char *host);
 extern bool generic_is_valid_nick(const char *nick);
 extern bool generic_is_valid_username(const char *username);

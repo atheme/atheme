@@ -27,7 +27,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 static void cs_cmd_ftransfer(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myentity *mt;
-	mychan_t *mc;
+	struct mychan *mc;
 	mowgli_node_t *n;
 	struct chanacs *ca;
 	char *name = parv[0];

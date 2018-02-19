@@ -31,7 +31,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 static void cs_cmd_clear_bans(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c;
-	mychan_t *mc = mychan_find(parv[0]);
+	struct mychan *mc = mychan_find(parv[0]);
 	struct chanban *cb;
 	mowgli_node_t *n, *tn;
 	const char *item = parv[1], *p;

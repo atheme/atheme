@@ -27,7 +27,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 static void cs_cmd_getkey(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
-	mychan_t *mc;
+	struct mychan *mc;
 
 	if (!chan)
 	{

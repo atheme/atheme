@@ -69,9 +69,9 @@ static const struct cmode unreal_mode_list[] = {
   { '\0', 0 }
 };
 
-static bool check_jointhrottle(const char *, struct channel *, mychan_t *, struct user *, struct myuser *);
-static bool check_flood(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu);
-static bool check_forward(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu);
+static bool check_jointhrottle(const char *, struct channel *, struct mychan *, struct user *, struct myuser *);
+static bool check_flood(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu);
+static bool check_forward(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu);
 
 struct extmode unreal_ignore_mode_list[] = {
   { 'j', check_jointhrottle },
@@ -106,7 +106,7 @@ static const struct cmode unreal_user_mode_list[] = {
   { '\0', 0 }
 };
 
-static bool check_jointhrottle(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
+static bool check_jointhrottle(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	const char *p, *arg2;
 
@@ -131,7 +131,7 @@ static bool check_jointhrottle(const char *value, struct channel *c, mychan_t *m
 }
 
 /* +f 3:1 or +f *3:1 (which is like +f [3t]:1 or +f [3t#b]:1) */
-static inline bool check_flood_old(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
+static inline bool check_flood_old(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	bool found_colon = false;
 
@@ -173,7 +173,7 @@ static inline bool check_flood_old(const char *value, struct channel *c, mychan_
  *
  * +f [<number><letter>(#<letter>)(,...)]
  */
-static bool check_flood(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
+static bool check_flood(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	char evalbuf[BUFSIZE], *ep, *p;
 
@@ -224,10 +224,10 @@ static bool check_flood(const char *value, struct channel *c, mychan_t *mc, stru
 	return true;
 }
 
-static bool check_forward(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
+static bool check_forward(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	struct channel *target_c;
-	mychan_t *target_mc;
+	struct mychan *target_mc;
 
 	if (!VALID_GLOBAL_CHANNEL_PFX(value) || strlen(value) > 50)
 		return false;
@@ -705,7 +705,7 @@ static void unreal_svslogin_sts(char *target, char *nick, char *user, char *host
 
 static void unreal_mlock_sts(struct channel *c)
 {
-	mychan_t *mc = mychan_from(c);
+	struct mychan *mc = mychan_from(c);
 
 	if (use_mlock == false)
 		return;
@@ -720,7 +720,7 @@ static void unreal_mlock_sts(struct channel *c)
 static void m_mlock(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c;
-	mychan_t *mc;
+	struct mychan *mc;
 	const char *mlock;
 
 	/* Ignore MLOCK if the server isn't bursting, to avoid 'war' conditions */

@@ -32,7 +32,7 @@ static void ms_cmd_sendops(struct sourceinfo *si, int parc, char *parv[])
 	struct myuser *tmu;
 	mowgli_node_t *n, *tn;
 	struct mymemo *memo;
-	mychan_t *mc;
+	struct mychan *mc;
 	int sent = 0, tried = 0;
 	bool ignored, operoverride = false;
 	struct service *memoserv;

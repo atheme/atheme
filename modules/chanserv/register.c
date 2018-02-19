@@ -32,7 +32,7 @@ static void cs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c;
 	struct chanuser *cu;
-	mychan_t *mc;
+	struct mychan *mc;
 	char *name = parv[0];
 	char str[21];
 	hook_channel_register_check_t hdatac;

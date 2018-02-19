@@ -27,7 +27,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 void cs_cmd_taxonomy(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
-	mychan_t *mc;
+	struct mychan *mc;
 	mowgli_patricia_iteration_state_t state;
 	struct metadata *md;
 	bool isoper;

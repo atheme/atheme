@@ -32,7 +32,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static void close_check_join(hook_channel_joinpart_t *data)
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	struct chanuser *cu = data->cu;
 
 	if (cu == NULL || is_internal_client(cu->user))
@@ -64,7 +64,7 @@ static void cs_cmd_close(struct sourceinfo *si, int parc, char *parv[])
 	char *target = parv[0];
 	char *action = parv[1];
 	char *reason = parv[2];
-	mychan_t *mc;
+	struct mychan *mc;
 	struct channel *c;
 	struct chanuser *cu;
 	mowgli_node_t *n, *tn;

@@ -45,7 +45,7 @@ static struct user *pick_a_sucker(struct channel *c)
 
 static void command_lottery(struct sourceinfo *si, int parc, char *parv[])
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	struct user *u;
 
 	if (!gs_do_parameters(si, &parc, &parv, &mc))

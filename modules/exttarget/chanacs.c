@@ -21,7 +21,7 @@ typedef struct {
 static struct chanacs *chanacs_ext_match_user(struct chanacs *ca, struct user *u)
 {
 	chanacs_exttarget_t *ent;
-	mychan_t *mc;
+	struct mychan *mc;
 	unsigned int flags;
 
 	ent = (chanacs_exttarget_t *) ca->entity;

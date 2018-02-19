@@ -10,9 +10,9 @@
 #include "chanserv.h"
 
 /* the individual command stuff, now that we've reworked, hardcode ;) --w00t */
-static void cs_xop_do_add(struct sourceinfo *si, mychan_t *mc, struct myentity *mt, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags);
-static void cs_xop_do_del(struct sourceinfo *si, mychan_t *mc, struct myentity *mt, char *target, unsigned int level, const char *leveldesc);
-static void cs_xop_do_list(struct sourceinfo *si, mychan_t *mc, unsigned int level, const char *leveldesc, bool operoverride);
+static void cs_xop_do_add(struct sourceinfo *si, struct mychan *mc, struct myentity *mt, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags);
+static void cs_xop_do_del(struct sourceinfo *si, struct mychan *mc, struct myentity *mt, char *target, unsigned int level, const char *leveldesc);
+static void cs_xop_do_list(struct sourceinfo *si, struct mychan *mc, unsigned int level, const char *leveldesc, bool operoverride);
 
 static void cs_cmd_sop(struct sourceinfo *si, int parc, char *parv[]);
 static void cs_cmd_aop(struct sourceinfo *si, int parc, char *parv[]);
@@ -55,7 +55,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 static void cs_xop(struct sourceinfo *si, int parc, char *parv[], const char *leveldesc)
 {
 	struct myentity *mt;
-	mychan_t *mc;
+	struct mychan *mc;
 	bool operoverride = false;
 	unsigned int restrictflags;
 	const char *chan = parv[0];
@@ -204,7 +204,7 @@ static void cs_cmd_hop(struct sourceinfo *si, int parc, char *parv[])
 }
 
 
-static void cs_xop_do_add(struct sourceinfo *si, mychan_t *mc, struct myentity *mt, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags)
+static void cs_xop_do_add(struct sourceinfo *si, struct mychan *mc, struct myentity *mt, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags)
 {
 	struct chanacs *ca;
 	unsigned int addflags = level, removeflags = ~level;
@@ -339,7 +339,7 @@ static void cs_xop_do_add(struct sourceinfo *si, mychan_t *mc, struct myentity *
 	}
 }
 
-static void cs_xop_do_del(struct sourceinfo *si, mychan_t *mc, struct myentity *mt, char *target, unsigned int level, const char *leveldesc)
+static void cs_xop_do_del(struct sourceinfo *si, struct mychan *mc, struct myentity *mt, char *target, unsigned int level, const char *leveldesc)
 {
 	struct chanacs *ca;
 	hook_channel_acl_req_t req;
@@ -399,7 +399,7 @@ static void cs_xop_do_del(struct sourceinfo *si, mychan_t *mc, struct myentity *
 }
 
 
-static void cs_xop_do_list(struct sourceinfo *si, mychan_t *mc, unsigned int level, const char *leveldesc, bool operoverride)
+static void cs_xop_do_list(struct sourceinfo *si, struct mychan *mc, unsigned int level, const char *leveldesc, bool operoverride)
 {
 	struct chanacs *ca;
 	int i = 0;
@@ -432,7 +432,7 @@ static void cs_cmd_forcexop(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	struct chanacs *ca;
-	mychan_t *mc = mychan_find(chan);
+	struct mychan *mc = mychan_find(chan);
 	mowgli_node_t *n;
 	int changes;
 	unsigned int newlevel;

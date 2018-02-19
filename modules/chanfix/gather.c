@@ -198,7 +198,7 @@ void chanfix_gather(void *unused)
 
 	MOWGLI_PATRICIA_FOREACH(ch, &state, chanlist)
 	{
-		mychan_t *mc;
+		struct mychan *mc;
 		mowgli_node_t *n;
 		struct chanfix_channel *chan;
 

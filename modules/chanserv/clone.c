@@ -25,7 +25,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static void cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[])
 {
-	mychan_t *mc, *mc2;
+	struct mychan *mc, *mc2;
 	mowgli_node_t *n, *tn;
 	mowgli_patricia_iteration_state_t state;
 	struct metadata *md;

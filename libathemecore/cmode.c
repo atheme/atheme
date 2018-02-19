@@ -93,7 +93,7 @@ void channel_mode(struct user *source, struct channel *chan, int parc, char *par
 	int i, parpos = 0, whatt = MTYPE_NUL;
 	unsigned int newlimit;
 	const char *pos = parv[0];
-	mychan_t *mc;
+	struct mychan *mc;
 	struct user *target;
 	struct chanuser *cu = NULL;
 	struct user *first_deopped_service = NULL;
@@ -881,7 +881,7 @@ char *channel_modes(struct channel *c, bool doparams)
 	return fullmode;
 }
 
-void check_modes(mychan_t *mychan, bool sendnow)
+void check_modes(struct mychan *mychan, bool sendnow)
 {
 	int modes;
 	int i;

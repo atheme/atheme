@@ -43,7 +43,7 @@ static void cmd_protect(struct sourceinfo *si, bool protecting, int parc, char *
 {
 	char *chan = parv[0];
 	char *nick = parv[1];
-	mychan_t *mc;
+	struct mychan *mc;
 	struct user *tu;
 	struct chanuser *cu;
 	char *nicks;

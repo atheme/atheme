@@ -124,7 +124,7 @@ mqueue_free(mqueue_t *mq)
 }
 
 static mqueue_t *
-mqueue_get(mychan_t *mc)
+mqueue_get(struct mychan *mc)
 {
 	mqueue_t *mq;
 
@@ -295,7 +295,7 @@ static antiflood_enforce_method_impl_t antiflood_enforce_methods[ANTIFLOOD_ENFOR
 };
 
 static inline antiflood_enforce_method_impl_t *
-antiflood_enforce_method_impl_get(mychan_t *mc)
+antiflood_enforce_method_impl_get(struct mychan *mc)
 {
 	struct metadata *md;
 
@@ -317,7 +317,7 @@ static void
 antiflood_unenforce_timer_cb(void *unused)
 {
 	mowgli_patricia_iteration_state_t state;
-	mychan_t *mc;
+	struct mychan *mc;
 
 	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
@@ -337,7 +337,7 @@ static void
 on_channel_message(hook_cmessage_data_t *data)
 {
 	struct chanuser *cu;
-	mychan_t *mc;
+	struct mychan *mc;
 	mqueue_t *mq;
 	msg_t *msg;
 
@@ -379,7 +379,7 @@ on_channel_message(hook_cmessage_data_t *data)
 }
 
 static void
-on_channel_drop(mychan_t *mc)
+on_channel_drop(struct mychan *mc)
 {
 	mqueue_t *mq;
 
@@ -392,7 +392,7 @@ on_channel_drop(mychan_t *mc)
 static void
 cs_set_cmd_antiflood(struct sourceinfo *si, int parc, char *parv[])
 {
-	mychan_t *mc;
+	struct mychan *mc;
 
 	if (!(mc = mychan_find(parv[0])))
 	{

@@ -43,7 +43,7 @@ static void cs_cmd_topic(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	char *topic = parv[1];
-	mychan_t *mc;
+	struct mychan *mc;
 	struct channel *c;
 	const char *topicsetter;
 	time_t prevtopicts;
@@ -106,7 +106,7 @@ static void cs_cmd_topicappend(struct sourceinfo *si, int parc, char *parv[])
 {
         char *chan = parv[0];
         char *topic = parv[1];
-        mychan_t *mc;
+        struct mychan *mc;
 	char topicbuf[BUFSIZE];
 	struct channel *c;
 	const char *topicsetter;
@@ -181,7 +181,7 @@ static void cs_cmd_topicprepend(struct sourceinfo *si, int parc, char *parv[])
 {
         char *chan = parv[0];
         char *topic = parv[1];
-        mychan_t *mc;
+        struct mychan *mc;
 	char topicbuf[BUFSIZE];
 	struct channel *c;
 	const char *topicsetter;
@@ -256,7 +256,7 @@ static void cs_cmd_topicswap(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	char *topic = parv[1];
-	mychan_t *mc;
+	struct mychan *mc;
 	struct channel *c;
 	const char *topicsetter;
 	time_t prevtopicts;

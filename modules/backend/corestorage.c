@@ -10,8 +10,8 @@
  * a set of non-finite table cells).
  *
  * The stuff here should be moved to the individual components which depend
- * on them.  e.g. struct myuser should register their own writer, mychan_t same
- * story etc.
+ * on them.  e.g. struct myuser should register their own writer, struct mychan
+ * same story etc.
  *
  *    --nenolod
  */
@@ -35,7 +35,7 @@ corestorage_db_save(struct database_handle *db)
 	struct myuser *mu;
 	struct myentity *ment;
 	struct myuser_name *mun;
-	mychan_t *mc;
+	struct mychan *mc;
 	struct chanacs *ca;
 	struct kline *k;
 	struct xline *x;
@@ -607,7 +607,7 @@ static void corestorage_h_mc(struct database_handle *db, const char *type)
 	unsigned int flags = 0;
 
 	mowgli_strlcpy(buf, name, sizeof buf);
-	mychan_t *mc = mychan_add(buf);
+	struct mychan *mc = mychan_add(buf);
 
 	mc->registered = db_sread_time(db);
 	mc->used = db_sread_time(db);
@@ -745,7 +745,7 @@ static void corestorage_h_ca(struct database_handle *db, const char *type)
 	const char *chan, *target;
 	time_t tmod;
 	unsigned int flags;
-	mychan_t *mc;
+	struct mychan *mc;
 	struct myentity *mt;
 	struct myentity *setter;
 

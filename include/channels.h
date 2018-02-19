@@ -34,7 +34,7 @@ struct channel
 
   unsigned int flags;
 
-  mychan_t *mychan;
+  struct mychan *mychan;
 };
 
 /* struct for channel memberships */
@@ -94,7 +94,7 @@ struct cmode
 struct extmode
 {
 	char mode;
-	bool (*check)(const char *, struct channel *, mychan_t *, struct user *, struct myuser *);
+	bool (*check)(const char *, struct channel *, struct mychan *, struct user *, struct myuser *);
 };
 
 /* channel related hooks */
@@ -148,7 +148,7 @@ extern char *channel_modes(struct channel *c, bool doparams);
 extern void modestack_flush_channel(struct channel *channel);
 extern void modestack_forget_channel(struct channel *channel);
 extern void modestack_finalize_channel(struct channel *channel);
-extern void check_modes(mychan_t *mychan, bool sendnow);
+extern void check_modes(struct mychan *mychan, bool sendnow);
 
 extern void modestack_mode_simple_real(const char *source, struct channel *channel, int dir, int flags);
 extern void modestack_mode_limit_real(const char *source, struct channel *channel, int dir, unsigned int limit);

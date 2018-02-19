@@ -12,7 +12,7 @@ struct command rs_search = { "SEARCH", N_("Search for games based on specific cr
 static void rs_cmd_search(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_patricia_iteration_state_t state;
-	mychan_t *mc;
+	struct mychan *mc;
 	unsigned int listed = 0;
 
 	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)

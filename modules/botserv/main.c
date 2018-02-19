@@ -43,7 +43,7 @@ struct command bs_botlist = { "BOTLIST", "Lists available bots.", AC_NONE, 0, bs
 
 /* ******************************************************************** */
 
-static botserv_bot_t *bs_mychan_find_bot(mychan_t *mc)
+static botserv_bot_t *bs_mychan_find_bot(struct mychan *mc)
 {
 	struct metadata *md;
 	botserv_bot_t *bot;
@@ -84,7 +84,7 @@ bs_msg(const char *from, const char *target, const char *fmt, ...)
 
 	if (*target == '#' && !strcmp(from, chansvs.nick))
 	{
-		mychan_t *mc;
+		struct mychan *mc;
 		botserv_bot_t *bot = NULL;
 
 		mc = mychan_find(target);
@@ -118,7 +118,7 @@ bs_notice(const char *from, const char *target, const char *fmt, ...)
 
 	if (*target == '#' && !strcmp(from, chansvs.nick))
 	{
-		mychan_t *mc;
+		struct mychan *mc;
 		botserv_bot_t *bot = NULL;
 
 		mc = mychan_find(target);
@@ -138,7 +138,7 @@ static void (*topic_sts_real)(struct channel *c, struct user *source, const char
 static void
 bs_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	botserv_bot_t *bot = NULL;
 
 	return_if_fail(source != NULL);
@@ -155,7 +155,7 @@ bs_topic_sts(struct channel *c, struct user *source, const char *setter, time_t 
 static void
 bs_modestack_mode_simple(const char *source, struct channel *channel, int dir, int flags)
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	struct metadata *bs;
 	struct user *bot = NULL;
 
@@ -174,7 +174,7 @@ bs_modestack_mode_simple(const char *source, struct channel *channel, int dir, i
 static void
 bs_modestack_mode_limit(const char *source, struct channel *channel, int dir, unsigned int limit)
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	struct metadata *bs;
 	struct user *bot = NULL;
 
@@ -193,7 +193,7 @@ bs_modestack_mode_limit(const char *source, struct channel *channel, int dir, un
 static void
 bs_modestack_mode_ext(const char *source, struct channel *channel, int dir, unsigned int i, const char *value)
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	struct metadata *bs;
 	struct user *bot = NULL;
 
@@ -212,7 +212,7 @@ bs_modestack_mode_ext(const char *source, struct channel *channel, int dir, unsi
 static void
 bs_modestack_mode_param(const char *source, struct channel *channel, int dir, char type, const char *value)
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	struct metadata *bs;
 	struct user *bot = NULL;
 
@@ -231,7 +231,7 @@ bs_modestack_mode_param(const char *source, struct channel *channel, int dir, ch
 static void
 bs_try_kick(struct user *source, struct channel *chan, struct user *target, const char *reason)
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	struct metadata *bs;
 	struct user *bot = NULL;
 
@@ -252,7 +252,7 @@ bs_try_kick(struct user *source, struct channel *chan, struct user *target, cons
 static void
 bs_join_registered(bool all)
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	mowgli_patricia_iteration_state_t state;
 	struct metadata *md;
 	int cs = 0;
@@ -284,7 +284,7 @@ bs_join_registered(bool all)
 
 /* ******************************************************************** */
 
-static void bs_channel_drop(mychan_t *mc)
+static void bs_channel_drop(struct mychan *mc)
 {
 	botserv_bot_t *bot;
 
@@ -303,7 +303,7 @@ static void
 botserv_channel_handler(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct metadata *md;
-	mychan_t *mc = NULL;
+	struct mychan *mc = NULL;
 	char orig[BUFSIZE];
 	char newargs[BUFSIZE];
 	char *cmd;
@@ -580,7 +580,7 @@ static void bs_cmd_change(struct sourceinfo *si, int parc, char *parv[])
 {
 	botserv_bot_t *bot;
 	mowgli_patricia_iteration_state_t state;
-	mychan_t *mc;
+	struct mychan *mc;
 	struct metadata *md;
 
 	if (parc < 2 || parv[0] == NULL || parv[1] == NULL)
@@ -753,7 +753,7 @@ static void bs_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
 {
 	botserv_bot_t *bot = botserv_bot_find(parv[0]);
 	mowgli_patricia_iteration_state_t state;
-	mychan_t *mc;
+	struct mychan *mc;
 	struct metadata *md;
 
 	if (parc < 1)
@@ -841,7 +841,7 @@ static void bs_cmd_assign(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
 	struct channel *c = channel_find(channel);
-	mychan_t *mc = mychan_from(c);
+	struct mychan *mc = mychan_from(c);
 	struct metadata *md;
 	botserv_bot_t *bot;
 
@@ -919,7 +919,7 @@ static void bs_cmd_assign(struct sourceinfo *si, int parc, char *parv[])
 /* UNASSIGN #channel */
 static void bs_cmd_unassign(struct sourceinfo *si, int parc, char *parv[])
 {
-	mychan_t *mc = mychan_find(parv[0]);
+	struct mychan *mc = mychan_find(parv[0]);
 	struct metadata *md;
 
 	if (!parv[0])
@@ -1081,7 +1081,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 {
 	struct chanuser *cu = hdata->cu;
 	struct channel *chan;
-	mychan_t *mc;
+	struct mychan *mc;
 	botserv_bot_t *bot;
 	struct metadata *md;
 	struct user *u;
@@ -1126,7 +1126,7 @@ static void
 bs_part(hook_channel_joinpart_t *hdata)
 {
 	struct chanuser *cu;
-	mychan_t *mc;
+	struct mychan *mc;
 	botserv_bot_t *bot;
 
 	cu = hdata->cu;

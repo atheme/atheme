@@ -33,7 +33,7 @@ static void bs_cmd_set_nobot(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
 	char *option = parv[1];
-	mychan_t *mc;
+	struct mychan *mc;
 	struct metadata *md;
 
 	if (parc < 2 || !channel || !option)

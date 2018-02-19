@@ -62,7 +62,7 @@ struct logfile
 	struct atheme_object parent;
 	mowgli_node_t node;
 
-	void *log_file;		/* opaque: can either be mychan_t or FILE --nenolod */
+	void *log_file;		/* opaque: can either be struct mychan or FILE --nenolod */
 	char *log_path;
 	unsigned int log_mask;
 

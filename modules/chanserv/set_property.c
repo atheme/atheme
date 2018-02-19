@@ -30,7 +30,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static void cs_cmd_set_property(struct sourceinfo *si, int parc, char *parv[])
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	char *property = strtok(parv[1], " ");
 	char *value = strtok(NULL, "");
 	unsigned int count;

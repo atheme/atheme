@@ -65,8 +65,8 @@ static const struct cmode charybdis_mode_list[] = {
   { '\0', 0 }
 };
 
-static bool check_forward(const char *, struct channel *, mychan_t *, struct user *, struct myuser *);
-static bool check_jointhrottle(const char *, struct channel *, mychan_t *, struct user *, struct myuser *);
+static bool check_forward(const char *, struct channel *, struct mychan *, struct user *, struct myuser *);
+static bool check_jointhrottle(const char *, struct channel *, struct mychan *, struct user *, struct myuser *);
 
 struct extmode charybdis_ignore_mode_list[] = {
   { 'f', check_forward },
@@ -98,10 +98,10 @@ static const struct cmode charybdis_user_mode_list[] = {
 
 /* ircd allows forwards to existing channels; the target channel must be
  * +F or the setter must have ops in it */
-static bool check_forward(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
+static bool check_forward(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	struct channel *target_c;
-	mychan_t *target_mc;
+	struct mychan *target_mc;
 	struct chanuser *target_cu;
 
 	if (!VALID_GLOBAL_CHANNEL_PFX(value) || strlen(value) > 50)
@@ -130,7 +130,7 @@ static bool check_forward(const char *value, struct channel *c, mychan_t *mc, st
 	return false;
 }
 
-static bool check_jointhrottle(const char *value, struct channel *c, mychan_t *mc, struct user *u, struct myuser *mu)
+static bool check_jointhrottle(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	const char *p, *arg2;
 

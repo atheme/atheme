@@ -10,11 +10,11 @@
 
 // XXX remove me, or move me to include/hook.h
 typedef struct mynick_ mynick_t;
-typedef struct mychan_ mychan_t;
 
 // Defined in include/account.h
 struct chanacs;
 struct groupacs;
+struct mychan;
 struct mygroup;
 struct myuser;
 struct svsignore;

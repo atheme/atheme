@@ -27,7 +27,7 @@ static unsigned int count_ops(struct channel *c)
 
 static bool chanfix_should_handle(struct chanfix_channel *cfchan, struct channel *c)
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	unsigned int n;
 
 	return_val_if_fail(cfchan != NULL, false);

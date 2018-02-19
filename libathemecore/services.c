@@ -184,7 +184,7 @@ void join(const char *chan, const char *nick)
 	struct user *u;
 	struct chanuser *cu;
 	bool isnew = false;
-	mychan_t *mc;
+	struct mychan *mc;
 	struct metadata *md;
 	time_t ts;
 
@@ -284,7 +284,7 @@ void partall(const char *name)
 {
 	mowgli_patricia_iteration_state_t state;
 	struct service *svs;
-	mychan_t *mc;
+	struct mychan *mc;
 
 	if (name == NULL)
 		return;
@@ -353,7 +353,7 @@ void reintroduce_user(struct user *u)
 }
 
 void ATHEME_FATTR_PRINTF(2, 3)
-verbose(mychan_t *mychan, const char *fmt, ...)
+verbose(struct mychan *mychan, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];

@@ -31,7 +31,7 @@ static void cs_cmd_unban(struct sourceinfo *si, int parc, char *parv[])
         const char *channel = parv[0];
         const char *target = parv[1];
         struct channel *c = channel_find(channel);
-	mychan_t *mc = mychan_find(channel);
+	struct mychan *mc = mychan_find(channel);
 	struct user *tu;
 	struct chanban *cb;
 

@@ -58,7 +58,7 @@ static int goodprefix(const char *p)
 
 static void cs_cmd_set_prefix(struct sourceinfo *si, int parc, char *parv[])
 {
-	mychan_t *mc;
+	struct mychan *mc;
 	char *prefix = parv[1];
 
 	if (!(mc = mychan_find(parv[0])))

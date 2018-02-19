@@ -28,7 +28,7 @@ static void cs_cmd_hold(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *action = parv[1];
-	mychan_t *mc;
+	struct mychan *mc;
 
 	if (!target || !action)
 	{

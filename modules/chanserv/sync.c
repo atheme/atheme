@@ -14,7 +14,7 @@ struct command cs_sync = { "SYNC", "Forces channel statuses to flags.",
 
 static bool no_vhost_sync = false;
 
-static void do_chanuser_sync(mychan_t *mc, struct chanuser *cu, struct chanacs *ca,
+static void do_chanuser_sync(struct mychan *mc, struct chanuser *cu, struct chanacs *ca,
 		bool take)
 {
 	char akickreason[120] = "User is banned from this channel", *p;
@@ -213,7 +213,7 @@ static void do_chanuser_sync(mychan_t *mc, struct chanuser *cu, struct chanacs *
 	}
 }
 
-void do_channel_sync(mychan_t *mc, struct chanacs *ca)
+void do_channel_sync(struct mychan *mc, struct chanacs *ca)
 {
 	struct chanuser *cu;
 	mowgli_node_t *n, *tn;
@@ -243,7 +243,7 @@ static void sync_user(struct user *u)
 	MOWGLI_ITER_FOREACH(iter, u->channels.head)
 	{
 		struct chanuser *cu = iter->data;
-		mychan_t *mc;
+		struct mychan *mc;
 
 		mc = mychan_from(cu->chan);
 		if (mc == NULL)
@@ -270,7 +270,7 @@ static void sync_myuser(struct myuser *mu)
 
 static void sync_channel_acl_change(hook_channel_acl_req_t *hookdata)
 {
-	mychan_t *mc;
+	struct mychan *mc;
 
 	return_if_fail(hookdata != NULL);
 	return_if_fail(hookdata->ca != NULL);
@@ -292,7 +292,7 @@ static void sync_channel_acl_change(hook_channel_acl_req_t *hookdata)
 static void cs_cmd_sync(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *name = parv[0];
-	mychan_t *mc;
+	struct mychan *mc;
 
 	if (!name)
 	{
@@ -341,7 +341,7 @@ mowgli_patricia_t **cs_set_cmdtree;
 
 static void cs_cmd_set_nosync(struct sourceinfo *si, int parc, char *parv[])
 {
-	mychan_t *mc;
+	struct mychan *mc;
 
 	if (!(mc = mychan_find(parv[0])))
 	{

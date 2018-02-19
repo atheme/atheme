@@ -108,7 +108,7 @@ static void make_extban(char *buf, size_t size, struct user *tu)
 enum devoice_result { DEVOICE_FAILED, DEVOICE_NO_ACTION, DEVOICE_DONE };
 
 static enum devoice_result
-devoice_user(struct sourceinfo *si, mychan_t *mc, struct channel *c, struct user *tu)
+devoice_user(struct sourceinfo *si, struct mychan *mc, struct channel *c, struct user *tu)
 {
 	struct chanuser *cu;
 	unsigned int flag;
@@ -263,7 +263,7 @@ static void cs_cmd_quiet(struct sourceinfo *si, int parc, char *parv[])
 	char *target = parv[1];
 	char *newtarget;
 	struct channel *c = channel_find(channel);
-	mychan_t *mc = mychan_find(channel);
+	struct mychan *mc = mychan_find(channel);
 	struct user *tu;
 	struct chanban *cb;
 	int n;
@@ -358,7 +358,7 @@ static void cs_cmd_unquiet(struct sourceinfo *si, int parc, char *parv[])
         const char *target = parv[1];
 	char banlike_char = get_quiet_ban_char();
         struct channel *c = channel_find(channel);
-	mychan_t *mc = mychan_find(channel);
+	struct mychan *mc = mychan_find(channel);
 	struct user *tu;
 	struct chanban *cb;
 	char *targetlist;
