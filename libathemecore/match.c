@@ -690,13 +690,13 @@ bool regex_match(struct atheme_regex *preg, char *string)
 	{
 		case at_posix:
 			return regexec(&preg->un.posix, string, 0, NULL, 0) == 0;
-#ifdef HAVE_PCRE
 		case at_pcre:
+#ifdef HAVE_PCRE
 			return pcre_exec(preg->un.pcre, NULL, string, strlen(string), 0, 0, NULL, 0) >= 0;
-#endif
-		default:
-			slog(LG_ERROR, "regex_match(): we were given a pattern of unknown type %d, bad!", preg->type);
+#else
+			slog(LG_ERROR, "regex_match(): we were given a PCRE pattern without PCRE support!");
 			return false;
+#endif
 	}
 }
 
@@ -711,14 +711,14 @@ bool regex_destroy(struct atheme_regex *preg)
 		case at_posix:
 			regfree(&preg->un.posix);
 			break;
-#ifdef HAVE_PCRE
 		case at_pcre:
+#ifdef HAVE_PCRE
 			pcre_free(preg->un.pcre);
 			break;
+#else
+			slog(LG_ERROR, "regex_destroy(): we were given a PCRE pattern without PCRE support!");
+			return false;
 #endif
-		default:
-			slog(LG_ERROR, "regex_destroy(): we were given a pattern of unknown type %d, bad!", preg->type);
-			break;
 	}
 	free(preg);
 	return true;
