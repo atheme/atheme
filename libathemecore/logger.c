@@ -552,7 +552,7 @@ struct logfile *logfile_find_mask(unsigned int log_mask)
 	return NULL;
 }
 
-static void vslog_ext(log_type_t type, unsigned int level, const char *fmt,
+static void vslog_ext(enum log_type type, unsigned int level, const char *fmt,
 		va_list args)
 {
 	static bool in_slog = false;
@@ -599,7 +599,7 @@ static void vslog_ext(log_type_t type, unsigned int level, const char *fmt,
 }
 
 static void ATHEME_FATTR_PRINTF(3, 4)
-slog_ext(log_type_t type, unsigned int level, const char *fmt, ...)
+slog_ext(enum log_type type, unsigned int level, const char *fmt, ...)
 {
 	va_list args;
 

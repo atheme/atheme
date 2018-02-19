@@ -46,11 +46,12 @@ extern void explicit_bzero(void *p, size_t n);
 /* cidr.c */
 extern int valid_ip_or_mask(const char *src);
 
-typedef enum {
+enum log_type
+{
 	LOG_ANY = 0,
 	LOG_INTERACTIVE = 1, /* IRC channels */
 	LOG_NONINTERACTIVE = 2 /* files */
-} log_type_t;
+};
 
 /* logstreams API --nenolod */
 typedef void (*log_write_func_t)(struct logfile *lf, const char *buf);
@@ -66,7 +67,7 @@ struct logfile
 	unsigned int log_mask;
 
 	log_write_func_t write_func;
-	log_type_t log_type;
+	enum log_type log_type;
 };
 
 extern char *log_path; /* contains path to default log. */
