@@ -38,7 +38,7 @@ static void netsplit_delete_serv(split_t *s)
     mowgli_heap_free(split_heap, s);
 }
 
-static void netsplit_server_add(server_t *s)
+static void netsplit_server_add(struct server *s)
 {
     split_t *serv = mowgli_patricia_retrieve(splitlist, s->name);
     if (serv != NULL)

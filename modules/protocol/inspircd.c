@@ -211,7 +211,7 @@ static int has_protocol = 0;
 #define PROTOCOL_PREFERRED_STR "1202"
 
 /* find a user's server by extracting the SID and looking that up. --nenolod */
-static server_t *sid_find(const char *name)
+static struct server *sid_find(const char *name)
 {
 	char sid[4];
 	mowgli_strlcpy(sid, name, 4);
@@ -444,7 +444,7 @@ static void inspircd_notice_channel_sts(struct user *from, struct channel *targe
 }
 
 static void ATHEME_FATTR_PRINTF(4, 5)
-inspircd_numeric_sts(server_t *from, int numeric, struct user *target, const char *fmt, ...)
+inspircd_numeric_sts(struct server *from, int numeric, struct user *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -595,8 +595,8 @@ static void inspircd_mode_sts(char *sender, struct channel *target, char *modes)
 /* ping wrapper */
 static void inspircd_ping_sts(void)
 {
-	// XXX this is annoying, struct uplink contains no sid or link to server_t
-	server_t *u = server_find(curr_uplink->name);
+	// XXX this is annoying, struct uplink contains no sid or link to struct server
+	struct server *u = server_find(curr_uplink->name);
 
 	if (!u)
 		return;
@@ -622,7 +622,7 @@ static void inspircd_jupe(const char *server, const char *reason)
 	struct service *svs;
 	static char sid[3+1];
 	int i;
-	server_t *s;
+	struct server *s;
 
 	svs = service_find("operserv");
 
@@ -725,7 +725,7 @@ static void inspircd_svslogin_sts(char *target, char *nick, char *user, char *ho
 static void inspircd_sasl_sts(const char *target, char mode, const char *data)
 {
 	struct service *svs;
-	server_t *s = sid_find(target);
+	struct server *s = sid_find(target);
 
 	return_if_fail(s != NULL);
 
@@ -804,7 +804,7 @@ static void m_ping(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_pong(struct sourceinfo *si, int parc, char *parv[])
 {
-	server_t *s;
+	struct server *s;
 
 	if (!parv[1])
 		return;
@@ -1036,7 +1036,7 @@ static void m_uid(struct sourceinfo *si, int parc, char *parv[])
 	 */
 	slog(LG_DEBUG, "m_uid(): new user on `%s': %s", si->s->name, parv[2]);
 
-	/* char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, unsigned int ts */
+	/* char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, struct server *server, unsigned int ts */
 	u = user_add(parv[2], parv[5], parv[3], parv[4], parv[6], parv[0], parv[parc - 1], si->s, atol(parv[1]));
 	if (u == NULL)
 		return;
@@ -1193,7 +1193,7 @@ static void m_squit(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_server(struct sourceinfo *si, int parc, char *parv[])
 {
-	server_t *s;
+	struct server *s;
 	char ver[BUFSIZE];
 
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
@@ -1208,7 +1208,7 @@ static void m_server(struct sourceinfo *si, int parc, char *parv[])
 	s = handle_server(si, parv[0], parv[3], atoi(parv[2]), parv[4]);
 }
 
-static inline void solicit_pongs(server_t *s)
+static inline void solicit_pongs(struct server *s)
 {
 	mowgli_node_t *n;
 
@@ -1639,7 +1639,7 @@ static void m_capab(struct sourceinfo *si, int parc, char *parv[])
 }
 
 /* Server ended their burst: warn all their users if necessary -- jilles */
-static void server_eob(server_t *s)
+static void server_eob(struct server *s)
 {
 	mowgli_node_t *n;
 

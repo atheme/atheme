@@ -118,7 +118,7 @@ typedef struct {
 
 typedef struct {
 	struct user *u; /* Online user that changed the topic */
-	server_t *s; /* Server that restored a topic */
+	struct server *s; /* Server that restored a topic */
         struct channel *c; /* Channel still has old topic */
         const char *setter; /* Stored setter string, can be nick, nick!user@host
 			       or server */
@@ -167,7 +167,7 @@ extern mowgli_patricia_t *chanlist;
 
 extern void init_channels(void);
 
-extern struct channel *channel_add(const char *name, time_t ts, server_t *creator);
+extern struct channel *channel_add(const char *name, time_t ts, struct server *creator);
 extern void channel_delete(struct channel *c);
 //inline struct channel *channel_find(const char *name);
 

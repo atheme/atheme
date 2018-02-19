@@ -272,7 +272,7 @@ static void bahamut_wallchops(struct user *sender, struct channel *channel, cons
 }
 
 static void ATHEME_FATTR_PRINTF(4, 5)
-bahamut_numeric_sts(server_t *from, int numeric, struct user *target, const char *fmt, ...)
+bahamut_numeric_sts(struct server *from, int numeric, struct user *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -362,7 +362,7 @@ static bool bahamut_on_logout(struct user *u, const char *account)
 
 static void bahamut_jupe(const char *server, const char *reason)
 {
-	server_t *s;
+	struct server *s;
 
 	sts(":%s SQUIT %s :%s", me.name, server, reason);
 	s = server_find(server);
@@ -413,7 +413,7 @@ static void m_ping(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_pong(struct sourceinfo *si, int parc, char *parv[])
 {
-	server_t *s;
+	struct server *s;
 
 	/* someone replied to our PING */
 	if (!parv[0])
@@ -435,7 +435,7 @@ static void m_pong(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_burst(struct sourceinfo *si, int parc, char *parv[])
 {
-	server_t *s;
+	struct server *s;
 
 	/* Ignore "BURST" at start of burst */
 	if (parc != 1)
@@ -612,7 +612,7 @@ static void m_part(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
-	server_t *s;
+	struct server *s;
 	struct user *u;
 	char ipstring[64];
 	bool realchange;
@@ -774,7 +774,7 @@ static void m_squit(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_server(struct sourceinfo *si, int parc, char *parv[])
 {
-	server_t *s;
+	struct server *s;
 
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
 	s = handle_server(si, parv[0], NULL, atoi(parv[1]), parv[2]);

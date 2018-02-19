@@ -115,7 +115,7 @@ find_session(const char *const restrict uid)
 
 /* create a new session if it does not already exist */
 static struct sasl_session *
-find_or_make_session(const char *const restrict uid, server_t *const restrict server)
+find_or_make_session(const char *const restrict uid, struct server *const restrict server)
 {
 	struct sasl_session *p;
 
@@ -153,7 +153,7 @@ find_mechanism(const char *const restrict name)
 }
 
 static void
-sasl_server_eob(server_t ATHEME_VATTR_UNUSED *const restrict s)
+sasl_server_eob(struct server ATHEME_VATTR_UNUSED *const restrict s)
 {
 	/* new server online, push mechlist to make sure it's using the current one */
 	(void) sasl_mechlist_sts(mechlist_string);

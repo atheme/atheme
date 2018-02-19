@@ -13,7 +13,7 @@ typedef chanuser_t *Atheme_ChanUser;
 typedef mychan_t *Atheme_ChannelRegistration;
 typedef chanacs_t *Atheme_ChanAcs;
 typedef mynick_t *Atheme_NickRegistration;
-typedef server_t *Atheme_Server;
+typedef struct server *Atheme_Server;
 
 typedef struct perl_list *Atheme_Internal_List;
 

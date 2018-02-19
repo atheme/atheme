@@ -170,7 +170,7 @@ static void p10_wallchops(struct user *sender, struct channel *channel, const ch
 
 /* numeric wrapper */
 static void ATHEME_FATTR_PRINTF(4, 5)
-p10_numeric_sts(server_t *from, int numeric, struct user *target, const char *fmt, ...)
+p10_numeric_sts(struct server *from, int numeric, struct user *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -306,7 +306,7 @@ static bool p10_on_logout(struct user *u, const char *account)
 
 static void p10_jupe(const char *server, const char *reason)
 {
-	server_t *s;
+	struct server *s;
 
 	/* hold it for a day (arbitrary) -- jilles */
 	/* get rid of local deactivation too */
@@ -852,7 +852,7 @@ static void m_squit(struct sourceinfo *si, int parc, char *parv[])
 /* SERVER ircu.devel.atheme.org 1 1119902586 1119908830 J10 ABAP] + :lets lol */
 static void m_server(struct sourceinfo *si, int parc, char *parv[])
 {
-	server_t *s;
+	struct server *s;
 
 	/* We dont care about the max connections. */
 	parv[5][2] = '\0';

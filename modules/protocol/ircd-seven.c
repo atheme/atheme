@@ -107,7 +107,7 @@ static void seven_wallops_sts(const char *reason)
 
 static void m_euid(struct sourceinfo *si, int parc, char *parv[])
 {
-	server_t *s;
+	struct server *s;
 	struct user *u;
 
 	/* got the right number of args for an introduction? */
@@ -162,7 +162,7 @@ static void m_euid(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
-	server_t *s;
+	struct server *s;
 	struct user *u;
 
 	/* got the right number of args for an introduction? */

@@ -36,7 +36,7 @@ struct sourceinfo
 	 * and only if the command was received via IRC.
 	 */
 	struct user *su; /* source, if it's a user */
-	server_t *s; /* source, if it's a server */
+	struct server *s; /* source, if it's a server */
 
 	struct connection *connection; /* physical connection cmd received from */
 	const char *sourcedesc; /* additional information (e.g. IP address) */

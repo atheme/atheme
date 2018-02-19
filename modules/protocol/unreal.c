@@ -446,7 +446,7 @@ static void unreal_notice_channel_sts(struct user *from, struct channel *target,
 }
 
 static void ATHEME_FATTR_PRINTF(4, 5)
-unreal_numeric_sts(server_t *from, int numeric, struct user *target, const char *fmt, ...)
+unreal_numeric_sts(struct server *from, int numeric, struct user *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -800,7 +800,7 @@ static void m_ping(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_pong(struct sourceinfo *si, int parc, char *parv[])
 {
-	server_t *s;
+	struct server *s;
 
 	/* someone replied to our PING */
 	if (!parv[0])
@@ -998,7 +998,7 @@ static void m_part(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_uid(struct sourceinfo *si, int parc, char *parv[])
 {
-	server_t *s;
+	struct server *s;
 	struct user *u;
 	bool realchange;
 	const char *vhost;
@@ -1085,7 +1085,7 @@ static void m_uid(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
-	server_t *s;
+	struct server *s;
 	struct user *u;
 	bool realchange;
 	const char *vhost;
@@ -1328,7 +1328,7 @@ static void m_squit(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_server(struct sourceinfo *si, int parc, char *parv[])
 {
-	server_t *s;
+	struct server *s;
 	const char *inf;
 
 	/* because multiple PROTOCTL messages are allowed without a PROTOCTL END,
@@ -1375,7 +1375,7 @@ static void m_server(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_sid(struct sourceinfo *si, int parc, char *parv[])
 {
-	server_t *s;
+	struct server *s;
 	const char *inf;
 
 	s = handle_server(si, parv[0], parv[2], atoi(parv[1]), parv[3]);

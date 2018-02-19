@@ -30,7 +30,7 @@ mowgli_list_t tldlist;
 mowgli_heap_t *serv_heap;
 mowgli_heap_t *tld_heap;
 
-static void server_delete_serv(server_t *s);
+static void server_delete_serv(struct server *s);
 
 /*
  * init_servers()
@@ -49,7 +49,7 @@ static void server_delete_serv(server_t *s);
  */
 void init_servers(void)
 {
-	serv_heap = sharedheap_get(sizeof(server_t));
+	serv_heap = sharedheap_get(sizeof(struct server));
 	tld_heap = sharedheap_get(sizeof(struct tld));
 
 	if (serv_heap == NULL || tld_heap == NULL)
@@ -81,9 +81,9 @@ void init_servers(void)
  * Side Effects:
  *     - the new server object is added to the server and sid DTree.
  */
-server_t *server_add(const char *name, unsigned int hops, server_t *uplink, const char *id, const char *desc)
+struct server *server_add(const char *name, unsigned int hops, struct server *uplink, const char *id, const char *desc)
 {
-	server_t *s;
+	struct server *s;
 	const char *tld;
 
 	/* Masked servers must have a SID */
@@ -168,7 +168,7 @@ server_t *server_add(const char *name, unsigned int hops, server_t *uplink, cons
  */
 void server_delete(const char *name)
 {
-	server_t *s = server_find(name);
+	struct server *s = server_find(name);
 
 	if (!s)
 	{
@@ -179,9 +179,9 @@ void server_delete(const char *name)
 	server_delete_serv(s);
 }
 
-static void server_delete_serv(server_t *s)
+static void server_delete_serv(struct server *s)
 {
-	server_t *child;
+	struct server *child;
 	struct user *u;
 	mowgli_node_t *n, *tn;
 
@@ -270,9 +270,9 @@ static void server_delete_serv(server_t *s)
  * Side Effects:
  *     - none
  */
-server_t *server_find(const char *name)
+struct server *server_find(const char *name)
 {
-	server_t *s;
+	struct server *s;
 
 	s = mowgli_patricia_retrieve(sidlist, name);
 	if (s != NULL)

@@ -202,7 +202,7 @@ static void ircnet_notice_channel_sts(struct user *from, struct channel *target,
 
 /* numeric wrapper */
 static void ATHEME_FATTR_PRINTF(4, 5)
-ircnet_numeric_sts(server_t *from, int numeric, struct user *target, const char *fmt, ...)
+ircnet_numeric_sts(struct server *from, int numeric, struct user *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -316,7 +316,7 @@ static void ircnet_jupe(const char *server, const char *reason)
 	struct service *svs;
 	static char sid[4+1];
 	int i;
-	server_t *s;
+	struct server *s;
 
 	svs = service_find("operserv");
 	sts(":%s SQUIT %s :%s", svs != NULL ? CLIENT_NAME(svs->me) : me.actual, server, reason);
@@ -385,7 +385,7 @@ static void m_pong(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_eob(struct sourceinfo *si, int parc, char *parv[])
 {
-	server_t *serv;
+	struct server *serv;
 	char sidbuf[4+1], *p;
 
 	handle_eob(si->s);

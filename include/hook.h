@@ -16,6 +16,7 @@ typedef struct database_handle database_handle_t;
 typedef struct myentity myentity_t;
 typedef struct mygroup mygroup_t;
 typedef struct sasl_message sasl_message_t;
+typedef struct server server_t;
 typedef struct service service_t;
 typedef struct sourceinfo sourceinfo_t;
 typedef struct user user_t;

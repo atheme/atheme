@@ -35,7 +35,7 @@
 struct sasl_session
 {
 	struct sasl_mechanism   *mechptr;               // Mechanism they're using
-	server_t                *server;                // Server they're on
+	struct server           *server;                // Server they're on
 	struct sourceinfo       *si;                    // The source info for logcommand(), bad_password(), and login hooks
 	char                    *uid;                   // Network UID
 	char                    *buf;                   // Buffered Base-64 data from them (so far)
@@ -60,11 +60,11 @@ struct sasl_sourceinfo
 
 struct sasl_message
 {
-	server_t  *server;
-	char      *uid;
-	char      *parv[SASL_MESSAGE_MAXPARA];
-	int        parc;
-	char       mode;
+	struct server  *server;
+	char           *uid;
+	char           *parv[SASL_MESSAGE_MAXPARA];
+	int             parc;
+	char            mode;
 };
 
 struct sasl_mechanism

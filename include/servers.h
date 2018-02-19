@@ -9,7 +9,7 @@
 #define SERVERS_H
 
 /* servers struct */
-struct server_
+struct server
 {
 	char *name;
 	char *desc;
@@ -25,7 +25,7 @@ struct server_
 
 	unsigned int flags;
 
-	server_t *uplink; /* uplink server */
+	struct server *uplink; /* uplink server */
 	mowgli_list_t children;  /* children linked to me */
 	mowgli_list_t userlist;  /* users attached to me */
 };
@@ -44,7 +44,7 @@ struct tld
 
 /* server related hooks */
 typedef struct {
-	server_t *s;
+	struct server *s;
 	/* space for reason etc here */
 } hook_server_delete_t;
 
@@ -61,8 +61,8 @@ extern struct tld *tld_add(const char *name);
 extern void tld_delete(const char *name);
 extern struct tld *tld_find(const char *name);
 
-extern server_t *server_add(const char *name, unsigned int hops, server_t *uplink, const char *id, const char *desc);
+extern struct server *server_add(const char *name, unsigned int hops, struct server *uplink, const char *id, const char *desc);
 extern void server_delete(const char *name);
-extern server_t *server_find(const char *name);
+extern struct server *server_find(const char *name);
 
 #endif

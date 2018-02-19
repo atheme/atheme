@@ -9,7 +9,6 @@
 #define STRUCTURES_H
 
 // XXX remove me, or move me to include/hook.h
-typedef struct server_ server_t;
 typedef struct myuser_ myuser_t;
 typedef struct mynick_ mynick_t;
 typedef struct mychan_ mychan_t;
@@ -93,6 +92,7 @@ struct sasl_session;
 struct sasl_sourceinfo;
 
 // Defined in include/servers.h
+struct server;
 struct tld;
 
 // Defined in include/services.h

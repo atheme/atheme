@@ -43,8 +43,8 @@ static bool use_euid = false;
 static bool use_eopmod = false;
 static bool use_mlock = false;
 
-static void server_eob(server_t *s);
-static server_t *sid_find(const char *name);
+static void server_eob(struct server *s);
+static struct server *sid_find(const char *name);
 
 static char ts6sid[3 + 1] = "";
 
@@ -239,7 +239,7 @@ static void ts6_wallchops(struct user *sender, struct channel *channel, const ch
 
 /* numeric wrapper */
 static void ATHEME_FATTR_PRINTF(4, 5)
-ts6_numeric_sts(server_t *from, int numeric, struct user *target, const char *fmt, ...)
+ts6_numeric_sts(struct server *from, int numeric, struct user *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -481,7 +481,7 @@ static void ts6_fnc_sts(struct user *source, struct user *u, const char *newnick
 static void ts6_svslogin_sts(char *target, char *nick, char *user, char *host, myuser_t *account)
 {
 	struct user *tu = user_find(target);
-	server_t *s;
+	struct server *s;
 
 	if(tu)
 		s = tu->server;
@@ -497,7 +497,7 @@ static void ts6_svslogin_sts(char *target, char *nick, char *user, char *host, m
 static void ts6_sasl_sts(const char *target, char mode, const char *data)
 {
 	struct service *svs;
-	server_t *s = sid_find(target);
+	struct server *s = sid_find(target);
 
 	if(s == NULL)
 		return;
@@ -641,7 +641,7 @@ static void m_ping(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_pong(struct sourceinfo *si, int parc, char *parv[])
 {
-	server_t *s;
+	struct server *s;
 
 	/* someone replied to our PING */
 	if (!parv[0])
@@ -903,7 +903,7 @@ static void m_part(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
-	server_t *s;
+	struct server *s;
 	struct user *u;
 
 	/* got the right number of args for an introduction? */
@@ -964,7 +964,7 @@ static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_uid(struct sourceinfo *si, int parc, char *parv[])
 {
-	server_t *s;
+	struct server *s;
 	struct user *u;
 
 	/* got the right number of args for an introduction? */
@@ -999,7 +999,7 @@ static void m_uid(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_euid(struct sourceinfo *si, int parc, char *parv[])
 {
-	server_t *s;
+	struct server *s;
 	struct user *u;
 
 	/* got the right number of args for an introduction? */
@@ -1129,7 +1129,7 @@ static void m_squit(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_server(struct sourceinfo *si, int parc, char *parv[])
 {
-	server_t *s;
+	struct server *s;
 
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
 	s = handle_server(si, parv[0], si->s || !ircd->uses_uid ? NULL : ts6sid, atoi(parv[1]), parv[2]);
@@ -1146,7 +1146,7 @@ static void m_server(struct sourceinfo *si, int parc, char *parv[])
 static void m_sid(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* -> :1JJ SID file. 2 00F :telnet server */
-	server_t *s;
+	struct server *s;
 
 	slog(LG_DEBUG, "m_sid(): new server: %s", parv[0]);
 	s = handle_server(si, parv[0], parv[2], atoi(parv[1]), parv[3]);
@@ -1437,7 +1437,7 @@ static void m_motd(struct sourceinfo *si, int parc, char *parv[])
 }
 
 /* Server ended their burst: warn all their users if necessary -- jilles */
-static void server_eob(server_t *s)
+static void server_eob(struct server *s)
 {
 	mowgli_node_t *n;
 
@@ -1460,7 +1460,7 @@ static void channel_drop(mychan_t *mc)
 			mc->chan->name);
 }
 
-static server_t *sid_find(const char *name)
+static struct server *sid_find(const char *name)
 {
 	char sid[4];
 	mowgli_strlcpy(sid, name, 4);

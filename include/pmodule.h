@@ -51,8 +51,8 @@ extern void handle_away(struct user *, const char *);
 extern void handle_message(struct sourceinfo *, char *, bool, char *);
 extern void handle_topic_from(struct sourceinfo *, struct channel *, const char *, time_t, const char *);
 extern void handle_kill(struct sourceinfo *, const char *, const char *);
-extern server_t *handle_server(struct sourceinfo *, const char *, const char *, int, const char *);
-extern void handle_eob(server_t *);
+extern struct server *handle_server(struct sourceinfo *, const char *, const char *, int, const char *);
+extern void handle_eob(struct server *);
 extern bool should_reg_umode(struct user *);
 
 /* services.c */

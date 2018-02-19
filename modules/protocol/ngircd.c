@@ -205,7 +205,7 @@ static void ngircd_notice_channel_sts(struct user *from, struct channel *target,
 }
 
 static void ATHEME_FATTR_PRINTF(4, 5)
-ngircd_numeric_sts(server_t *from, int numeric, struct user *target, const char *fmt, ...)
+ngircd_numeric_sts(struct server *from, int numeric, struct user *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -408,7 +408,7 @@ static void m_part(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
-	server_t *s;
+	struct server *s;
 	struct user *u;
 	bool realchange;
 
@@ -656,7 +656,7 @@ static void m_squit(struct sourceinfo *si, int parc, char *parv[])
 
 static void m_server(struct sourceinfo *si, int parc, char *parv[])
 {
-	server_t *s;
+	struct server *s;
 
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
 	s = handle_server(si, parv[0], parc >= 4 ? parv[2] : "1",

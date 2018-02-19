@@ -29,7 +29,7 @@ struct me
   int maxfd;                    /* how many fds do we have?           */
   unsigned int mdlimit;		/* metadata entry limit		      */
   time_t start;                 /* starting time                      */
-  server_t *me;                 /* pointer to our server struct       */
+  struct server *me;                 /* pointer to our server struct       */
   bool connected;          /* are we connected?                  */
   bool bursting;           /* are we bursting?                   */
   bool recvsvr;		/* received server peer               */

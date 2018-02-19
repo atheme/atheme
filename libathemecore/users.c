@@ -58,7 +58,7 @@ void init_users(void)
 
 /*
  * user_add(const char *nick, const char *user, const char *host, const char *vhost, const char *ip,
- *          const char *uid, const char *gecos, server_t *server, time_t ts);
+ *          const char *uid, const char *gecos, struct server *server, time_t ts);
  *
  * User object factory.
  *
@@ -83,7 +83,7 @@ void init_users(void)
  */
 struct user *user_add(const char *nick, const char *user, const char *host,
 	const char *vhost, const char *ip, const char *uid, const char *gecos,
-	server_t *server, time_t ts)
+	struct server *server, time_t ts)
 {
 	struct user *u, *u2;
 	hook_user_nick_t hdata;

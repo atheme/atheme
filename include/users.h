@@ -23,7 +23,7 @@ struct user
 
 	mowgli_list_t channels;
 
-	server_t *server;
+	struct server *server;
 	myuser_t *myuser;
 
 	unsigned int offenses;
@@ -34,7 +34,7 @@ struct user
 
 	time_t ts;
 
-	mowgli_node_t snode; /* for server_t.userlist */
+	mowgli_node_t snode; /* for struct server -> userlist */
 
 	char *certfp; /* client certificate fingerprint */
 };
@@ -81,7 +81,7 @@ extern mowgli_patricia_t *uidlist;
 
 extern void init_users(void);
 
-extern struct user *user_add(const char *nick, const char *user, const char *host, const char *vhost, const char *ip, const char *uid, const char *gecos, server_t *server, time_t ts);
+extern struct user *user_add(const char *nick, const char *user, const char *host, const char *vhost, const char *ip, const char *uid, const char *gecos, struct server *server, time_t ts);
 extern void user_delete(struct user *u, const char *comment);
 extern struct user *user_find(const char *nick);
 extern struct user *user_find_named(const char *nick);

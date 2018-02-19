@@ -788,10 +788,10 @@ void handle_kill(struct sourceinfo *si, const char *victim, const char *reason)
 	}
 }
 
-server_t *handle_server(struct sourceinfo *si, const char *name, const char *sid,
+struct server *handle_server(struct sourceinfo *si, const char *name, const char *sid,
 		int hops, const char *desc)
 {
-	server_t *s = NULL;
+	struct server *s = NULL;
 
 	if (si->s != NULL)
 	{
@@ -812,10 +812,10 @@ server_t *handle_server(struct sourceinfo *si, const char *name, const char *sid
 	return s;
 }
 
-void handle_eob(server_t *s)
+void handle_eob(struct server *s)
 {
 	mowgli_node_t *n;
-	server_t *s2;
+	struct server *s2;
 
 	if (s == NULL)
 		return;

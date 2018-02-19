@@ -36,7 +36,7 @@ void (*notice_user_sts) (struct user *from, struct user *target, const char *tex
 void (*notice_global_sts) (struct user *from, const char *mask, const char *text) = generic_notice_global_sts;
 void (*notice_channel_sts) (struct user *from, struct channel *target, const char *text) = generic_notice_channel_sts;
 void (*wallchops) (struct user *source, struct channel *target, const char *message) = generic_wallchops;
-void (*numeric_sts) (server_t *from, int numeric, struct user *target, const char *fmt, ...) = generic_numeric_sts;
+void (*numeric_sts) (struct server *from, int numeric, struct user *target, const char *fmt, ...) = generic_numeric_sts;
 void (*kill_id_sts) (struct user *killer, const char *id, const char *reason) = generic_kill_id_sts;
 void (*part_sts) (struct channel *c, struct user *u) = generic_part_sts;
 void (*kline_sts) (const char *server, const char *user, const char *host, long duration, const char *reason) = generic_kline_sts;
@@ -165,7 +165,7 @@ void generic_wallchops(struct user *sender, struct channel *channel, const char 
 }
 
 void ATHEME_FATTR_PRINTF(4, 5)
-generic_numeric_sts(server_t *from, int numeric, struct user *target, const char *fmt, ...)
+generic_numeric_sts(struct server *from, int numeric, struct user *target, const char *fmt, ...)
 {
 	va_list va;
 	char buf[BUFSIZE];

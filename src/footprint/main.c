@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 
 	printf("\n* * *\n\n");
 
-	printf("sizeof server_t: %zu B --> %zu KB\n", sizeof(server_t), (servercount * sizeof(server_t)) / 1024);
+	printf("sizeof server_t: %zu B --> %zu KB\n", sizeof(struct server), (servercount * sizeof(struct server)) / 1024);
 
 	return EXIT_SUCCESS;
 }

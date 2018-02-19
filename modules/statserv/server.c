@@ -73,7 +73,7 @@ static void ss_cmd_server(struct sourceinfo * si, int parc, char *parv[])
 
 static void ss_cmd_server_list(struct sourceinfo * si, int parc, char *parv[])
 {
-    server_t *s;
+    struct server *s;
     int i = 0;
     mowgli_patricia_iteration_state_t state;
     MOWGLI_PATRICIA_FOREACH(s, &state, servlist)
@@ -89,7 +89,7 @@ static void ss_cmd_server_list(struct sourceinfo * si, int parc, char *parv[])
 
 static void ss_cmd_server_info(struct sourceinfo * si, int parc, char *parv[])
 {
-    server_t *s;
+    struct server *s;
     char *name = parv[0];
 
     if (!name)

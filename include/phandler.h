@@ -132,7 +132,7 @@ extern void (*notice_channel_sts)(struct user *from, struct channel *target, con
  * generic_wallchops() sends an individual notice to each channel operator */
 extern void (*wallchops)(struct user *source, struct channel *target, const char *message);
 /* send a numeric from must currently be me.me */
-extern void (*numeric_sts)(server_t *from, int numeric, struct user *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(4, 5);
+extern void (*numeric_sts)(struct server *from, int numeric, struct user *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(4, 5);
 /* kill a user
  * killer can be a client on the services server or NULL for the
  * services server itself
@@ -259,7 +259,7 @@ extern void generic_notice_user_sts(struct user *from, struct user *target, cons
 extern void generic_notice_global_sts(struct user *from, const char *mask, const char *text);
 extern void generic_notice_channel_sts(struct user *from, struct channel *target, const char *text);
 extern void generic_wallchops(struct user *source, struct channel *target, const char *message);
-extern void generic_numeric_sts(server_t *from, int numeric, struct user *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(4, 5);
+extern void generic_numeric_sts(struct server *from, int numeric, struct user *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(4, 5);
 extern void generic_kill_id_sts(struct user *killer, const char *id, const char *reason);
 extern void generic_part_sts(struct channel *c, struct user *u);
 extern void generic_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason);
