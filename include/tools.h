@@ -125,11 +125,11 @@ extern void logcommand_external(struct service *svs, const char *type, struct co
 
 /* function.c */
 
-typedef void (*email_canonicalizer_t)(char email[static (EMAILLEN + 1)], void *user_data);
+typedef void (*email_canonicalizer_fn)(char email[static (EMAILLEN + 1)], void *user_data);
 
 struct email_canonicalizer_item
 {
-	email_canonicalizer_t func;
+	email_canonicalizer_fn func;
 	void *user_data;
 	mowgli_node_t node;
 };
@@ -143,8 +143,8 @@ extern const char *number_to_string(int num);
 extern int validemail(const char *email);
 extern stringref canonicalize_email(const char *email);
 extern void canonicalize_email_case(char email[static (EMAILLEN + 1)], void *user_data);
-extern void register_email_canonicalizer(email_canonicalizer_t func, void *user_data);
-extern void unregister_email_canonicalizer(email_canonicalizer_t func, void *user_data);
+extern void register_email_canonicalizer(email_canonicalizer_fn func, void *user_data);
+extern void unregister_email_canonicalizer(email_canonicalizer_fn func, void *user_data);
 extern bool email_within_limits(const char *email);
 extern bool validhostmask(const char *host);
 extern char *pretty_mask(char *mask);

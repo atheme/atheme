@@ -319,7 +319,7 @@ static void canonicalize_emails(void)
 }
 
 void
-register_email_canonicalizer(email_canonicalizer_t func, void *user_data)
+register_email_canonicalizer(email_canonicalizer_fn func, void *user_data)
 {
 	struct email_canonicalizer_item *item;
 
@@ -333,7 +333,7 @@ register_email_canonicalizer(email_canonicalizer_t func, void *user_data)
 }
 
 void
-unregister_email_canonicalizer(email_canonicalizer_t func, void *user_data)
+unregister_email_canonicalizer(email_canonicalizer_fn func, void *user_data)
 {
 	mowgli_node_t *n, *tn;
 
