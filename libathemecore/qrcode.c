@@ -90,33 +90,32 @@ command_success_qrcode(struct sourceinfo *si, const char *data)
 	char *buf;
 	QRcode *code;
 	size_t bufsize, realwidth;
-	size_t y;
 
 	return_if_fail(si != NULL);
 	return_if_fail(data != NULL);
 
-	code = QRcode_encodeData(strlen(data), data, 4, QR_ECLEVEL_L);
+	code = QRcode_encodeData(strlen(data), (const void *) data, 4, QR_ECLEVEL_L);
 
 	realwidth = (code->width + 3 * 2) * 2;
 	bufsize = strlen(prologue) + (realwidth * 3) + strlen(prologue);
 	buf = smalloc(bufsize);
 
 	/* header */
-	for (y = 0; y < 3; y++)
+	for (int y = 0; y < 3; y++)
 	{
 		qrcode_margin(buf, bufsize, realwidth);
 		command_success_nodata(si, "%s", buf);
 	}
 
 	/* qrcode contents + side margins */
-	for (y = 0; y < code->width; y++)
+	for (int y = 0; y < code->width; y++)
 	{
-		qrcode_scanline(buf, bufsize, code->data + (y * code->width), code->width);
+		qrcode_scanline(buf, bufsize, code->data + (y * code->width), (size_t) code->width);
 		command_success_nodata(si, "%s", buf);
 	}
 
 	/* footer */
-	for (y = 0; y < 3; y++)
+	for (int y = 0; y < 3; y++)
 	{
 		qrcode_margin(buf, bufsize, realwidth);
 		command_success_nodata(si, "%s", buf);
