@@ -18,7 +18,7 @@ struct command ns_list = { "LIST", N_("Lists nicknames registered matching a giv
 void list_register(const char *param_name, struct list_param *param);
 void list_unregister(const char *param_name);
 
-static bool email_match(const mynick_t *mn, const void *arg)
+static bool email_match(const struct mynick *mn, const void *arg)
 {
 	struct myuser *mu = mn->owner;
 	const char *cmpr = (const char*)arg;
@@ -26,7 +26,7 @@ static bool email_match(const mynick_t *mn, const void *arg)
 	return !match(cmpr, mu->email);
 }
 
-static bool lastlogin_match(const mynick_t *mn, const void *arg)
+static bool lastlogin_match(const struct mynick *mn, const void *arg)
 {
 	struct myuser *mu = mn->owner;
 	const time_t lastlogin = *(time_t *)arg;
@@ -34,7 +34,7 @@ static bool lastlogin_match(const mynick_t *mn, const void *arg)
 	return (CURRTIME - mu->lastlogin) > lastlogin;
 }
 
-static bool pattern_match(const mynick_t *mn, const void *arg)
+static bool pattern_match(const struct mynick *mn, const void *arg)
 {
 	const char *pattern = (const char*)arg;
 
@@ -84,7 +84,7 @@ static bool pattern_match(const mynick_t *mn, const void *arg)
 	return true;
 }
 
-static bool registered_match(const mynick_t *mn, const void *arg)
+static bool registered_match(const struct mynick *mn, const void *arg)
 {
 	struct myuser *mu = mn->owner;
 	const time_t age = *(time_t *)arg;
@@ -92,7 +92,7 @@ static bool registered_match(const mynick_t *mn, const void *arg)
 	return (CURRTIME - mu->registered) > age;
 }
 
-static bool has_waitauth(const mynick_t *mn, const void *arg) {
+static bool has_waitauth(const struct mynick *mn, const void *arg) {
 	struct myuser *mu = mn->owner;
 
 	return ( mu->flags & MU_WAITAUTH ) == MU_WAITAUTH;
@@ -195,7 +195,7 @@ static void build_criteriastr(char *buf, int parc, char *parv[])
 	}
 }
 
-static void list_one(struct sourceinfo *si, struct myuser *mu, mynick_t *mn)
+static void list_one(struct sourceinfo *si, struct myuser *mu, struct mynick *mn)
 {
 	char buf[BUFSIZE];
 
@@ -240,7 +240,7 @@ static void ns_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 
 	mowgli_patricia_iteration_state_t state;
 	struct myentity_iteration_state mestate;
-	mynick_t *mn;
+	struct mynick *mn;
 
 	int matches = 0;
 

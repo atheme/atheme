@@ -27,7 +27,7 @@ static void ns_cmd_logout(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u = si->su;
 	mowgli_node_t *n, *tn;
-	mynick_t *mn;
+	struct mynick *mn;
 	char *user = parv[0];
 	char *pass = parv[1];
 

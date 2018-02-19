@@ -17,7 +17,7 @@ static void ns_cmd_set_nogreet(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_set_nogreet = { "NOGREET", N_("Allows you to opt-out of channel entry messages."), AC_NONE, 1, ns_cmd_set_nogreet, { .path = "nickserv/set_nogreet" } };
 
-static bool has_nogreet(const mynick_t *mn, const void *arg)
+static bool has_nogreet(const struct mynick *mn, const void *arg)
 {
 	struct myuser *mu = mn->owner;
 

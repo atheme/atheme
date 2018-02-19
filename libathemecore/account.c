@@ -192,7 +192,7 @@ void myuser_delete(struct myuser *mu)
 {
 	struct myuser *successor;
 	struct mychan *mc;
-	mynick_t *mn;
+	struct mynick *mn;
 	struct user *u;
 	mowgli_node_t *n, *tn;
 	struct mymemo *memo;
@@ -439,7 +439,7 @@ void myuser_set_email(struct myuser *mu, const char *newemail)
 struct myuser *myuser_find_ext(const char *name)
 {
 	struct user *u;
-	mynick_t *mn;
+	struct mynick *mn;
 
 	return_val_if_fail(name != NULL, NULL);
 
@@ -670,16 +670,16 @@ myuser_access_delete(struct myuser *mu, const char *mask)
  *      - a nickname
  *
  * Outputs:
- *      - on success, a new mynick_t object
+ *      - on success, a new struct mynick object
  *      - on failure, NULL.
  *
  * Side Effects:
  *      - the created nick is added to the nick DTree and to the
  *        account's list.
  */
-mynick_t *mynick_add(struct myuser *mu, const char *name)
+struct mynick *mynick_add(struct myuser *mu, const char *name)
 {
-	mynick_t *mn;
+	struct mynick *mn;
 
 	return_val_if_fail((mn = mynick_find(name)) == NULL, mn);
 
@@ -704,7 +704,7 @@ mynick_t *mynick_add(struct myuser *mu, const char *name)
 }
 
 /*
- * mynick_delete(mynick_t *mn)
+ * mynick_delete(struct mynick *mn)
  *
  * Destroys and removes a nick from the nicks DTree and the account.
  *
@@ -717,7 +717,7 @@ mynick_t *mynick_add(struct myuser *mu, const char *name)
  * Side Effects:
  *      - a nick is destroyed and removed from the nicks DTree and the account.
  */
-void mynick_delete(mynick_t *mn)
+void mynick_delete(struct mynick *mn)
 {
 	return_if_fail(mn != NULL);
 
@@ -2033,7 +2033,7 @@ static int expire_myuser_cb(struct myentity *mt, void *unused)
 
 void expire_check(void *arg)
 {
-	mynick_t *mn;
+	struct mynick *mn;
 	struct mychan *mc;
 	struct user *u;
 	mowgli_patricia_iteration_state_t state;
@@ -2132,7 +2132,7 @@ static int check_myuser_cb(struct myentity *mt, void *unused)
 {
 	struct myuser *mu = user(mt);
 	mowgli_node_t *n;
-	mynick_t *mn, *mn1;
+	struct mynick *mn, *mn1;
 
 	return_val_if_fail(isuser(mt), 0);
 

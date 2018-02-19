@@ -49,7 +49,7 @@ static mowgli_eventloop_timer_t *enforce_remove_enforcers_timer = NULL;
 /* logs a released nickname out */
 static bool log_enforce_victim_out(struct user *u, struct myuser *mu)
 {
-	mynick_t *mn;
+	struct mynick *mn;
 	mowgli_node_t *n, *tn;
 
 	return_val_if_fail(u != NULL, false);
@@ -104,7 +104,7 @@ static void guest_nickname(struct user *u)
 static void check_enforce_all(struct myuser *mu)
 {
 	mowgli_node_t *n;
-	mynick_t *mn;
+	struct mynick *mn;
 	struct user *u;
 
 	MOWGLI_ITER_FOREACH(n, mu->nicks.head)
@@ -163,7 +163,7 @@ static void ns_cmd_set_enforce(struct sourceinfo *si, int parc, char *parv[])
 
 static void ns_cmd_release(struct sourceinfo *si, int parc, char *parv[])
 {
-	mynick_t *mn;
+	struct mynick *mn;
 	const char *target = parv[0];
 	const char *password = parv[1];
 	struct user *u;
@@ -273,7 +273,7 @@ static void ns_cmd_release(struct sourceinfo *si, int parc, char *parv[])
 
 static void ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 {
-	mynick_t *mn;
+	struct mynick *mn;
 	const char *target = parv[0];
 	const char *password = parv[1];
 	struct user *u;
@@ -466,7 +466,7 @@ void enforce_timeout_check(void *arg)
 	mowgli_node_t *n, *tn;
 	enforce_timeout_t *timeout;
 	struct user *u;
-	mynick_t *mn;
+	struct mynick *mn;
 	bool valid;
 
 	enforce_next = 0;

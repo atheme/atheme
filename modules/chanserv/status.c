@@ -83,7 +83,7 @@ static void cs_cmd_status(struct sourceinfo *si, int parc, char *parv[])
 
 	if (si->su != NULL)
 	{
-		mynick_t *mn;
+		struct mynick *mn;
 
 		mn = mynick_find(si->su->nick);
 		if (mn != NULL && mn->owner != si->smu &&

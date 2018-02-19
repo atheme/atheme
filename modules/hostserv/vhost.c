@@ -119,13 +119,13 @@ static void hs_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
 		}
 		MOWGLI_ITER_FOREACH(n, mu->nicks.head)
 		{
-			snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
+			snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((struct mynick *)(n->data))->nick);
 			md = metadata_find(mu, buf);
 			if (md == NULL)
 				continue;
 			if (!match(pattern, md->value))
 			{
-				command_success_nodata(si, "- %-30s %s", ((mynick_t *)(n->data))->nick, md->value);
+				command_success_nodata(si, "- %-30s %s", ((struct mynick *)(n->data))->nick, md->value);
 				matches++;
 			}
 		}

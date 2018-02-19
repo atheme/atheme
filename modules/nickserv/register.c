@@ -29,7 +29,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 static void ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
-	mynick_t *mn = NULL;
+	struct mynick *mn = NULL;
 	mowgli_node_t *n;
 	const char *account;
 	const char *pass;

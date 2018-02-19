@@ -248,7 +248,7 @@ static void hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *host = parv[0];
 	const char *target;
-	mynick_t *mn;
+	struct mynick *mn;
 	struct myentity *mt;
 	struct myuser *mu;
 	struct myentity_iteration_state state;
@@ -334,7 +334,7 @@ static void hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 		}
 		MOWGLI_ITER_FOREACH(n, mu->nicks.head)
 		{
-			snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
+			snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((struct mynick *)(n->data))->nick);
 			md = metadata_find(mu, buf);
 			if (md == NULL)
 				continue;

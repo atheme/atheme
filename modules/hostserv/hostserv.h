@@ -67,7 +67,7 @@ static inline void do_sethost_all(struct myuser *mu, const char *host)
 static inline void hs_sethost_all(struct myuser *mu, const char *host, const char *assigner)
 {
 	mowgli_node_t *n;
-	mynick_t *mn;
+	struct mynick *mn;
 	char buf[BUFSIZE];
 	char timestring[16];
 

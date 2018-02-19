@@ -27,7 +27,7 @@ cmd_ns_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 	{
 		if (! nicksvs.no_nick_ownership)
 		{
-			mynick_t *const mn = mynick_find(acc);
+			struct mynick *const mn = mynick_find(acc);
 
 			if (mn && command_find(si->service->commands, "UNGROUP"))
 			{
@@ -140,7 +140,7 @@ cmd_ns_fdrop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_U
 	{
 		if (!nicksvs.no_nick_ownership)
 		{
-			mynick_t *const mn = mynick_find(acc);
+			struct mynick *const mn = mynick_find(acc);
 
 			if (mn != NULL && command_find(si->service->commands, "FUNGROUP"))
 			{
@@ -178,7 +178,7 @@ cmd_ns_fdrop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_U
 
 		MOWGLI_ITER_FOREACH(n, mu->nicks.head)
 		{
-			mynick_t *const mn = n->data;
+			struct mynick *const mn = n->data;
 
 			(void) holdnick_sts(si->service->me, 0, mn->nick, NULL);
 		}

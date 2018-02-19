@@ -16,7 +16,7 @@ static void ns_cmd_set_nomemo(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_set_nomemo = { "NOMEMO", N_("Disables the ability to receive memos."), AC_NONE, 1, ns_cmd_set_nomemo, { .path = "nickserv/set_nomemo" } };
 
-static bool has_nomemo(const mynick_t *mn, const void *arg)
+static bool has_nomemo(const struct mynick *mn, const void *arg)
 {
 	struct myuser *mu = mn->owner;
 

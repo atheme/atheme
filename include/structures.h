@@ -8,14 +8,12 @@
 #ifndef STRUCTURES_H
 #define STRUCTURES_H
 
-// XXX remove me, or move me to include/hook.h
-typedef struct mynick_ mynick_t;
-
 // Defined in include/account.h
 struct chanacs;
 struct groupacs;
 struct mychan;
 struct mygroup;
+struct mynick;
 struct myuser;
 struct svsignore;
 

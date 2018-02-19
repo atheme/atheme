@@ -958,7 +958,7 @@ void command_add_flood(struct sourceinfo *si, unsigned int amount)
 
 bool should_reg_umode(struct user *u)
 {
-	mynick_t *mn;
+	struct mynick *mn;
 
 	if (nicksvs.me == NULL || nicksvs.no_nick_ownership ||
 			u->myuser == NULL || u->myuser->flags & MU_WAITAUTH)

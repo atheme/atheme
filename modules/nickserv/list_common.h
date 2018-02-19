@@ -19,7 +19,7 @@ enum list_opttype
 struct list_param
 {
 	enum list_opttype opttype;
-	bool (*is_match)(const mynick_t *mn, const void *arg);
+	bool (*is_match)(const struct mynick *mn, const void *arg);
 };
 
 #endif /* !NSLIST_COMMON_H */

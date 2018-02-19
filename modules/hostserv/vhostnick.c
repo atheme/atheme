@@ -52,9 +52,9 @@ static void hs_cmd_vhostnick(struct sourceinfo *si, int parc, char *parv[])
 
 	MOWGLI_ITER_FOREACH(n, mu->nicks.head)
 	{
-		if (!irccasecmp(((mynick_t *)(n->data))->nick, target))
+		if (!irccasecmp(((struct mynick *)(n->data))->nick, target))
 		{
-			snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
+			snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((struct mynick *)(n->data))->nick);
 			found++;
 		}
 	}

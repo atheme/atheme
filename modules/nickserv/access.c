@@ -151,7 +151,7 @@ static void myuser_access_delete_enforce(struct myuser *mu, char *mask)
 {
 	mowgli_list_t l = {NULL, NULL, 0};
 	mowgli_node_t *n, *tn;
-	mynick_t *mn;
+	struct mynick *mn;
 	struct user *u;
 	hook_nick_enforce_t hdata;
 

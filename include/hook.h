@@ -8,7 +8,7 @@
 #ifndef HOOK_H
 #define HOOK_H
 
-// Types necessary for the hook system
+// Types necessary for the hook system (and/or for Perl scripts)
 typedef struct chanacs chanacs_t;
 typedef struct channel channel_t;
 typedef struct chanuser chanuser_t;
@@ -16,6 +16,7 @@ typedef struct database_handle database_handle_t;
 typedef struct mychan mychan_t;
 typedef struct myentity myentity_t;
 typedef struct mygroup mygroup_t;
+typedef struct mynick mynick_t;
 typedef struct myuser myuser_t;
 typedef struct sasl_message sasl_message_t;
 typedef struct server server_t;

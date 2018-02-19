@@ -31,7 +31,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static void hs_cmd_on(struct sourceinfo *si, int parc, char *parv[])
 {
-	mynick_t *mn = NULL;
+	struct mynick *mn = NULL;
 	struct metadata *md;
 	char buf[BUFSIZE];
 
@@ -67,7 +67,7 @@ static void hs_cmd_on(struct sourceinfo *si, int parc, char *parv[])
 
 static void hs_cmd_off(struct sourceinfo *si, int parc, char *parv[])
 {
-	mynick_t *mn = NULL;
+	struct mynick *mn = NULL;
 	struct metadata *md;
 	char buf[BUFSIZE];
 

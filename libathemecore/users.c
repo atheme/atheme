@@ -205,7 +205,7 @@ void user_delete(struct user *u, const char *comment)
 {
 	mowgli_node_t *n, *tn;
 	struct chanuser *cu;
-	mynick_t *mn;
+	struct mynick *mn;
 	char oldnick[NICKLEN + 1];
 	bool doenforcer = false;
 
@@ -395,7 +395,7 @@ void user_changeuid(struct user *u, const char *uid)
  */
 bool user_changenick(struct user *u, const char *nick, time_t ts)
 {
-	mynick_t *mn;
+	struct mynick *mn;
 	struct user *u2;
 	char oldnick[NICKLEN + 1];
 	bool doenforcer = false;

@@ -133,7 +133,7 @@ static void ms_cmd_sendops(struct sourceinfo *si, int parc, char *parv[])
 		ignored = false;
 		MOWGLI_ITER_FOREACH(n, tmu->memo_ignores.head)
 		{
-			mynick_t *mn;
+			struct mynick *mn;
 			struct myuser *mu;
 
 			if (nicksvs.no_nick_ownership)

@@ -33,7 +33,7 @@ static void ns_cmd_acc(struct sourceinfo *si, int parc, char *parv[])
 	const char *targaccount = parv[1];
 	struct user *u;
 	struct myuser *mu;
-	mynick_t *mn;
+	struct mynick *mn;
 	bool show_id = config_options.show_entity_id || has_priv(si, PRIV_USER_AUSPEX);
 
 	if (!targuser)
@@ -104,7 +104,7 @@ static void ns_cmd_status(struct sourceinfo *si, int parc, char *parv[])
 
 	if (si->su != NULL)
 	{
-		mynick_t *mn;
+		struct mynick *mn;
 
 		mn = mynick_find(si->su->nick);
 		if (mn != NULL && mn->owner != si->smu &&

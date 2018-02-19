@@ -135,7 +135,7 @@ corestorage_db_save(struct database_handle *db)
 
 		MOWGLI_ITER_FOREACH(tn, mu->nicks.head)
 		{
-			mynick_t *mn = tn->data;
+			struct mynick *mn = tn->data;
 
 			db_start_row(db, "MN");
 			db_write_word(db, entity(mu)->name);
@@ -511,7 +511,7 @@ static void corestorage_h_ac(struct database_handle *db, const char *type)
 static void corestorage_h_mn(struct database_handle *db, const char *type)
 {
 	struct myuser *mu;
-	mynick_t *mn;
+	struct mynick *mn;
 	const char *user, *nick;
 	time_t reg, seen;
 

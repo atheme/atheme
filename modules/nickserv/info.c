@@ -26,7 +26,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 static void ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
-	mynick_t *mn = NULL;
+	struct mynick *mn = NULL;
 	struct myuser_name *mun;
 	struct user *u = NULL;
 	bool recognized = false;
@@ -274,7 +274,7 @@ static void ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 				}
 				if (buf[0])
 					mowgli_strlcat(buf, " ", sizeof buf);
-				mowgli_strlcat(buf, ((mynick_t *)(n->data))->nick, sizeof buf);
+				mowgli_strlcat(buf, ((struct mynick *)(n->data))->nick, sizeof buf);
 			}
 			if (buf[0])
 				command_success_nodata(si, _("Nicks      : %s"), buf);

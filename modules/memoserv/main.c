@@ -61,7 +61,7 @@ static void on_user_identify(struct user *u)
 static void on_user_away(struct user *u)
 {
 	struct myuser *mu;
-	mynick_t *mn;
+	struct mynick *mn;
 
 	if (u->flags & UF_AWAY)
 		return;

@@ -13,13 +13,13 @@ static void ns_cmd_restrict(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_restrict = { "RESTRICT", N_("Restrict a user from using certain commands."), PRIV_MARK, 3, ns_cmd_restrict, { .path = "nickserv/restrict" } };
 
-static bool is_restricted(const mynick_t *mn, const void *arg) {
+static bool is_restricted(const struct mynick *mn, const void *arg) {
 	struct myuser *mu = mn->owner;
 
 	return !!metadata_find(mu, "private:restrict:setter");
 }
 
-static bool restricted_match(const mynick_t *mn, const void *arg) {
+static bool restricted_match(const struct mynick *mn, const void *arg) {
 	const char *restrictedpattern = (const char*)arg;
 	struct metadata *mdrestricted;
 

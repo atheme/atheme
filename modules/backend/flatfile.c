@@ -261,7 +261,7 @@ static void flatfile_db_load(const char *filename)
 		{
 			/* registered nick */
 			char *user, *nick, *treg, *tseen;
-			mynick_t *mn;
+			struct mynick *mn;
 
 			user = strtok(NULL, " ");
 			nick = strtok(NULL, " ");

@@ -125,7 +125,7 @@ static void ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 		/* Make sure we're not on ignore */
 		MOWGLI_ITER_FOREACH(n, tmu->memo_ignores.head)
 		{
-			mynick_t *mn;
+			struct mynick *mn;
 			struct myuser *mu;
 
 			if (nicksvs.no_nick_ownership)

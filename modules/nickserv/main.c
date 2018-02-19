@@ -32,7 +32,7 @@ struct
 
 static void nickserv_handle_nickchange(struct user *u)
 {
-	mynick_t *mn;
+	struct mynick *mn;
 	hook_nick_enforce_t hdata;
 
 	if (nicksvs.me == NULL || nicksvs.no_nick_ownership)

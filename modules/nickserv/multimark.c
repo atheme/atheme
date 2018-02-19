@@ -60,7 +60,7 @@ struct restored_mark {
 typedef struct multimark multimark_t;
 typedef struct restored_mark restored_mark_t;
 
-static bool multimark_match(const mynick_t *mn, const void *arg)
+static bool multimark_match(const struct mynick *mn, const void *arg)
 {
 	const char *markpattern = (const char*)arg;
 	struct myuser *mu = mn->owner;
@@ -83,7 +83,7 @@ static bool multimark_match(const mynick_t *mn, const void *arg)
 	return false;
 }
 
-static bool is_marked(const mynick_t *mn, const void *arg)
+static bool is_marked(const struct mynick *mn, const void *arg)
 {
 	struct myuser *mu = mn->owner;
 

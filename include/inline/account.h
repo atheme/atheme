@@ -39,7 +39,7 @@ static inline struct myuser *myuser_find_uid(const char *uid)
  * Side Effects:
  *      - none
  */
-static inline mynick_t *mynick_find(const char *name)
+static inline struct mynick *mynick_find(const char *name)
 {
 	return name ? mowgli_patricia_retrieve(nicklist, name) : NULL;
 }
@@ -47,7 +47,7 @@ static inline mynick_t *mynick_find(const char *name)
 static inline struct myuser *myuser_find_by_nick(const char *name)
 {
 	struct myuser *mu;
-	mynick_t *mn;
+	struct mynick *mn;
 
 	mu = myuser_find(name);
 	if (mu != NULL)

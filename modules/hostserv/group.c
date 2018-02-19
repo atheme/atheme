@@ -26,7 +26,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static void hs_cmd_group(struct sourceinfo *si, int parc, char *parv[])
 {
-	mynick_t *mn;
+	struct mynick *mn;
 	struct metadata *md;
 	char buf[BUFSIZE];
 

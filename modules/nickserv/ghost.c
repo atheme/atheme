@@ -29,7 +29,7 @@ void ns_cmd_ghost(struct sourceinfo *si, int parc, char *parv[])
 	char *target = parv[0];
 	char *password = parv[1];
 	struct user *target_u;
-	mynick_t *mn;
+	struct mynick *mn;
 
 	if (!target)
 	{

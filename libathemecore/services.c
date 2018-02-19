@@ -406,7 +406,7 @@ void handle_nickchange(struct user *u)
  */
 void handle_burstlogin(struct user *u, const char *login, time_t ts)
 {
-	mynick_t *mn;
+	struct mynick *mn;
 	struct myuser *mu;
 	mowgli_node_t *n;
 
@@ -480,7 +480,7 @@ void handle_burstlogin(struct user *u, const char *login, time_t ts)
 
 void handle_setlogin(struct sourceinfo *si, struct user *u, const char *login, time_t ts)
 {
-	mynick_t *mn;
+	struct mynick *mn;
 	struct myuser *mu;
 	mowgli_node_t *n;
 
@@ -629,7 +629,7 @@ void myuser_login(struct service *svs, struct user *u, struct myuser *mu, bool s
 	char strfbuf[BUFSIZE];
 	struct metadata *md_failnum;
 	struct tm tm;
-	mynick_t *mn;
+	struct mynick *mn;
 
 	return_if_fail(svs != NULL && svs->me != NULL);
 	return_if_fail(u->myuser == NULL);

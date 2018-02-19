@@ -33,7 +33,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static void ns_cmd_group(struct sourceinfo *si, int parc, char *parv[])
 {
-	mynick_t *mn;
+	struct mynick *mn;
 	hook_user_req_t hdata;
 	hook_user_register_check_t hdata_reg;
 
@@ -98,7 +98,7 @@ static void ns_cmd_group(struct sourceinfo *si, int parc, char *parv[])
 
 static void ns_cmd_ungroup(struct sourceinfo *si, int parc, char *parv[])
 {
-	mynick_t *mn;
+	struct mynick *mn;
 	const char *target;
 	hook_user_req_t hdata;
 
@@ -138,7 +138,7 @@ static void ns_cmd_ungroup(struct sourceinfo *si, int parc, char *parv[])
 
 static void ns_cmd_fungroup(struct sourceinfo *si, int parc, char *parv[])
 {
-	mynick_t *mn, *mn2 = NULL;
+	struct mynick *mn, *mn2 = NULL;
 	struct myuser *mu;
 	hook_user_req_t hdata;
 

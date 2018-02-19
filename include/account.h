@@ -117,7 +117,7 @@ struct myuser
 #define MEMO_MAX_TIME  180
 
 /* registered nick */
-struct mynick_
+struct mynick
 {
   struct atheme_object parent;
 
@@ -341,7 +341,7 @@ typedef struct {
 	union {
 		struct mychan *mc;
 		struct myuser *mu;
-		mynick_t *mn;
+		struct mynick *mn;
 	} data;
 	int do_expire;	/* Write zero here to disallow expiry */
 } hook_expiry_req_t;
@@ -356,7 +356,7 @@ typedef struct {
 typedef struct {
 	struct sourceinfo *si;
 	struct myuser *mu;
-	mynick_t *mn;
+	struct mynick *mn;
 } hook_user_req_t;
 
 typedef struct {
@@ -375,7 +375,7 @@ typedef struct {
 
 typedef struct {
 	struct user *u;
-	mynick_t *mn;
+	struct mynick *mn;
 } hook_nick_enforce_t;
 
 typedef struct {
@@ -474,9 +474,8 @@ extern bool myuser_access_add(struct myuser *mu, const char *mask);
 extern char *myuser_access_find(struct myuser *mu, const char *mask);
 extern void myuser_access_delete(struct myuser *mu, const char *mask);
 
-extern mynick_t *mynick_add(struct myuser *mu, const char *name);
-extern void mynick_delete(mynick_t *mn);
-//inline mynick_t *mynick_find(const char *name);
+extern struct mynick *mynick_add(struct myuser *mu, const char *name);
+extern void mynick_delete(struct mynick *mn);
 
 extern struct myuser_name *myuser_name_add(const char *name);
 extern void myuser_name_remember(const char *name, struct myuser *mu);
