@@ -39,7 +39,7 @@ struct module
 	/* These three are real-module-specific. Either all will be set, or all
 	 * will be null.
 	 */
-	struct v4_moduleheader *header;
+	const struct v4_moduleheader *header;
 	void *address;
 	mowgli_module_t *handle;
 
@@ -106,8 +106,8 @@ extern struct module *module_find_published(const char *name);
 extern bool module_request(const char *name);
 
 #define DECLARE_MODULE_V1(_name, _unloadcap, _modinit, _moddeinit, _ver, _ven)  \
-        extern struct v4_moduleheader _header;                                  \
-        struct v4_moduleheader _header = {                                      \
+        extern const struct v4_moduleheader _header;                            \
+        const struct v4_moduleheader _header = {                                \
                 .atheme_mod = MAPI_ATHEME_MAGIC,                                \
                 .abi_ver    = MAPI_ATHEME_V4,                                   \
                 .abi_rev    = CURRENT_ABI_REVISION,                             \
