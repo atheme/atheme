@@ -210,7 +210,7 @@ void recvq_put(struct connection *cptr)
 {
 	mowgli_node_t *n;
 	struct sendq *sq = NULL;
-	int l, ll;
+	int l = 0, ll = 0;
 
 	return_if_fail(cptr != NULL);
 
