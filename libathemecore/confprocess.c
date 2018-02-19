@@ -633,7 +633,7 @@ void del_conf_item(const char *name, mowgli_list_t *conflist)
 	mowgli_heap_free(conftable_heap, ct);
 }
 
-conf_handler_t conftable_get_conf_handler(struct ConfTable *ct)
+conf_handler_fn conftable_get_conf_handler(struct ConfTable *ct)
 {
 	return_val_if_fail(ct != NULL, NULL);
 
