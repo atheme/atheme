@@ -106,6 +106,7 @@ struct sourceinfo_vtable;
 
 // Defined in include/table.h
 struct atheme_table;
+struct atheme_table_row;
 
 // Defined in include/tools.h
 struct email_canonicalizer_item;

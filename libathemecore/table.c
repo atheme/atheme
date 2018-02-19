@@ -35,7 +35,7 @@ static void table_destroy(void *obj)
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, table->rows.head)
 	{
-		table_row_t *r = (table_row_t *) n->data;
+		struct atheme_table_row *r = (struct atheme_table_row *) n->data;
 		mowgli_node_t *n2, *tn2;
 
 		return_if_fail(r != NULL);
@@ -113,13 +113,13 @@ table_new(const char *fmt, ...)
  * Side Effects:
  *     - none
  */
-table_row_t *table_row_new(struct atheme_table *t)
+struct atheme_table_row *table_row_new(struct atheme_table *t)
 {
-	table_row_t *out;
+	struct atheme_table_row *out;
 
 	return_val_if_fail(t != NULL, NULL);
 
-	out = scalloc(sizeof(table_row_t), 1);
+	out = scalloc(sizeof(struct atheme_table_row), 1);
 
 	mowgli_node_add(out, mowgli_node_create(), &t->rows);
 
@@ -140,7 +140,7 @@ table_row_t *table_row_new(struct atheme_table *t)
  * Side Effects:
  *     - none
  */
-void table_cell_associate(table_row_t *r, const char *name, const char *value)
+void table_cell_associate(struct atheme_table_row *r, const char *name, const char *value)
 {
 	table_cell_t *c;
 
@@ -176,7 +176,7 @@ void table_cell_associate(table_row_t *r, const char *name, const char *value)
 void table_render(struct atheme_table *t, void (*callback)(const char *line, void *data), void *data)
 {
 	mowgli_node_t *n;
-	table_row_t *f;
+	struct atheme_table_row *f;
 	size_t bufsz = 0;
 	char *buf = NULL;
 	char *p;
@@ -185,11 +185,11 @@ void table_render(struct atheme_table *t, void (*callback)(const char *line, voi
 	return_if_fail(t != NULL);
 	return_if_fail(callback != NULL);
 
-	f = (table_row_t *) t->rows.head->data;
+	f = (struct atheme_table_row *) t->rows.head->data;
 
 	MOWGLI_ITER_FOREACH(n, t->rows.head)
 	{
-		table_row_t *r = (table_row_t *) n->data;
+		struct atheme_table_row *r = (struct atheme_table_row *) n->data;
 		mowgli_node_t *n2, *rn;
 
 		/* we, uhh... we don't provide a macro for dealing with two lists at once ;) */
@@ -255,7 +255,7 @@ void table_render(struct atheme_table *t, void (*callback)(const char *line, voi
 
 	MOWGLI_ITER_FOREACH(n, t->rows.head)
 	{
-		table_row_t *r = (table_row_t *) n->data;
+		struct atheme_table_row *r = (struct atheme_table_row *) n->data;
 		mowgli_node_t *n2, *rn;
 
 		for (n2 = r->cells.head, rn = f->cells.head;
