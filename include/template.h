@@ -8,9 +8,10 @@
 #ifndef TEMPLATE_H
 #define TEMPLATE_H
 
-typedef struct {
+struct default_template
+{
 	unsigned int flags;
-} default_template_t;
+};
 
 extern const char *getitem(const char *str, const char *name);
 extern unsigned int get_template_flags(mychan_t *mc, const char *name);

@@ -28,7 +28,7 @@ mowgli_patricia_t *global_template_dict = NULL;
 
 void fix_global_template_flags(void)
 {
-	default_template_t *def_t;
+	struct default_template *def_t;
 	mowgli_patricia_iteration_state_t state;
 
 	MOWGLI_PATRICIA_FOREACH(def_t, &state, global_template_dict)
@@ -39,7 +39,7 @@ void fix_global_template_flags(void)
 
 void set_global_template_flags(const char *name, unsigned int flags)
 {
-	default_template_t *def_t;
+	struct default_template *def_t;
 
 	if (global_template_dict == NULL)
 		global_template_dict = mowgli_patricia_create(strcasecanon);
@@ -51,7 +51,7 @@ void set_global_template_flags(const char *name, unsigned int flags)
 		return;
 	}
 
-	def_t = smalloc(sizeof(default_template_t));
+	def_t = smalloc(sizeof(struct default_template));
 	def_t->flags = flags;
 	mowgli_patricia_add(global_template_dict, name, def_t);
 
@@ -60,7 +60,7 @@ void set_global_template_flags(const char *name, unsigned int flags)
 
 unsigned int get_global_template_flags(const char *name)
 {
-	default_template_t *def_t;
+	struct default_template *def_t;
 
 	if (global_template_dict == NULL)
 		global_template_dict = mowgli_patricia_create(strcasecanon);

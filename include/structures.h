@@ -112,6 +112,9 @@ struct atheme_table_row;
 // Defined in include/taint.h
 struct taint_reason;
 
+// Defined in include/template.h
+struct default_template;
+
 // Defined in include/tools.h
 struct email_canonicalizer_item;
 struct logfile;

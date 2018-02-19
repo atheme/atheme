@@ -267,7 +267,7 @@ static int append_global_template(const char *key, void *data, void *privdata)
 {
 	template_t *t;
 	template_iter_t *ti = privdata;
-	default_template_t *def_t = data;
+	struct default_template *def_t = data;
 	unsigned int vopflags;
 
 	if (!chansvs.hide_xop)

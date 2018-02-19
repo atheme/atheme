@@ -30,7 +30,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 static int display_template(const char *key, void *data, void *privdata)
 {
 	struct sourceinfo *si = privdata;
-	default_template_t *def_t = data;
+	struct default_template *def_t = data;
 	unsigned int vopflags;
 
 	vopflags = get_global_template_flags("VOP");
