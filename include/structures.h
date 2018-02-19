@@ -107,6 +107,9 @@ struct sourceinfo_vtable;
 // Defined in include/tools.h
 struct logfile;
 
+// Defined in include/uid.h
+struct uid_provider;
+
 // Defined in include/uplink.h
 struct uplink;
 

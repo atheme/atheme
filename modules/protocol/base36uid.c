@@ -85,9 +85,9 @@ static const char *base36_uid_get(void)
 	return (new_uid);
 }
 
-uid_provider_t base36_gen = {
-	.uid_init = base36_uid_init,
-	.uid_get = base36_uid_get,
+static const struct uid_provider base36_gen = {
+	.uid_init       = &base36_uid_init,
+	.uid_get        = &base36_uid_get,
 };
 
 static void

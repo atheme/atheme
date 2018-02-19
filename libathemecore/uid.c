@@ -23,7 +23,7 @@
 
 #include "atheme.h"
 
-uid_provider_t *uid_provider_impl = NULL;
+const struct uid_provider *uid_provider_impl = NULL;
 
 void init_uid(void)
 {

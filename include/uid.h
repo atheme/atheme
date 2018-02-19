@@ -8,11 +8,12 @@
 #ifndef ATHEME_UID_H
 #define ATHEME_UID_H
 
-typedef struct {
+struct uid_provider
+{
 	void (*uid_init)(const char *sid);
 	const char *(*uid_get)(void);
-} uid_provider_t;
+};
 
-extern uid_provider_t *uid_provider_impl;
+extern const struct uid_provider *uid_provider_impl;
 
 #endif
