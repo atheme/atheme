@@ -20,11 +20,12 @@ struct atheme_table_row
 	mowgli_list_t cells;
 };
 
-typedef struct {
+struct atheme_table_cell
+{
 	int width;	/* only if first row. */
 	char *name;
 	char *value;
-} table_cell_t;
+};
 
 /*
  * Creates a new table object. Use atheme_object_unref() to destroy it.

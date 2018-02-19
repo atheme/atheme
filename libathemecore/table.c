@@ -42,7 +42,7 @@ static void table_destroy(void *obj)
 
 		MOWGLI_ITER_FOREACH_SAFE(n2, tn2, r->cells.head)
 		{
-			table_cell_t *c = (table_cell_t *) n2->data;
+			struct atheme_table_cell *c = (struct atheme_table_cell *) n2->data;
 
 			free(c->name);
 			free(c->value);
@@ -142,13 +142,13 @@ struct atheme_table_row *table_row_new(struct atheme_table *t)
  */
 void table_cell_associate(struct atheme_table_row *r, const char *name, const char *value)
 {
-	table_cell_t *c;
+	struct atheme_table_cell *c;
 
 	return_if_fail(r != NULL);
 	return_if_fail(name != NULL);
 	return_if_fail(value != NULL);
 
-	c = scalloc(sizeof(table_cell_t), 1);
+	c = scalloc(sizeof(struct atheme_table_cell), 1);
 
 	c->name = sstrdup(name);
 	c->value = sstrdup(value);
@@ -196,11 +196,11 @@ void table_render(struct atheme_table *t, void (*callback)(const char *line, voi
 		for (n2 = r->cells.head, rn = f->cells.head;
 		     n2 != NULL && rn != NULL; n2 = n2->next, rn = rn->next)
 		{
-			table_cell_t *c, *rc;
+			struct atheme_table_cell *c, *rc;
 			size_t sz;
 
-			c  = (table_cell_t *) n2->data;
-			rc = (table_cell_t *) rn->data;
+			c  = (struct atheme_table_cell *) n2->data;
+			rc = (struct atheme_table_cell *) rn->data;
 
 			if ((sz = strlen(c->name)) > (size_t)rc->width)
 				rc->width = sz;
@@ -213,7 +213,7 @@ void table_render(struct atheme_table *t, void (*callback)(const char *line, voi
 	/* now total up the result. */
 	MOWGLI_ITER_FOREACH(n, f->cells.head)
 	{
-		table_cell_t *c = (table_cell_t *) n->data;
+		struct atheme_table_cell *c = (struct atheme_table_cell *) n->data;
 		bufsz += c->width + 1;
 	}
 
@@ -224,7 +224,7 @@ void table_render(struct atheme_table *t, void (*callback)(const char *line, voi
 	callback("", data);
 	MOWGLI_ITER_FOREACH(n, f->cells.head)
 	{
-		table_cell_t *c = (table_cell_t *) n->data;
+		struct atheme_table_cell *c = (struct atheme_table_cell *) n->data;
 		char buf2[1024];
 
 		snprintf(buf2, 1024, "%-*s", n->next != NULL ? c->width + 1 : 0, c->name);
@@ -237,7 +237,7 @@ void table_render(struct atheme_table *t, void (*callback)(const char *line, voi
 	p = buf;
 	MOWGLI_ITER_FOREACH(n, f->cells.head)
 	{
-		table_cell_t *c = (table_cell_t *) n->data;
+		struct atheme_table_cell *c = (struct atheme_table_cell *) n->data;
 
 		if (n->next != NULL)
 		{
@@ -261,11 +261,11 @@ void table_render(struct atheme_table *t, void (*callback)(const char *line, voi
 		for (n2 = r->cells.head, rn = f->cells.head;
 		     n2 != NULL && rn != NULL; n2 = n2->next, rn = rn->next)
 		{
-			table_cell_t *c, *rc;
+			struct atheme_table_cell *c, *rc;
 			char buf2[1024];
 
-			c  = (table_cell_t *) n2->data;
-			rc = (table_cell_t *) rn->data;
+			c  = (struct atheme_table_cell *) n2->data;
+			rc = (struct atheme_table_cell *) rn->data;
 
 			snprintf(buf2, 1024, "%-*s", n2->next != NULL ? rc->width + 1 : 0, c->value);
 			mowgli_strlcat(buf, buf2, bufsz);
@@ -278,7 +278,7 @@ void table_render(struct atheme_table *t, void (*callback)(const char *line, voi
 	p = buf;
 	MOWGLI_ITER_FOREACH(n, f->cells.head)
 	{
-		table_cell_t *c = (table_cell_t *) n->data;
+		struct atheme_table_cell *c = (struct atheme_table_cell *) n->data;
 
 		if (n->next != NULL)
 		{
