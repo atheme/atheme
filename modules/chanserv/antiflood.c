@@ -25,14 +25,15 @@ static size_t antiflood_msg_count = 10;
 
 #define METADATA_KEY_ENFORCE_METHOD	"private:antiflood:enforce-method"
 
-typedef enum {
+enum antiflood_enforce_method
+{
 	ANTIFLOOD_ENFORCE_QUIET = 0,
 	ANTIFLOOD_ENFORCE_KICKBAN,
 	ANTIFLOOD_ENFORCE_KLINE,
 	ANTIFLOOD_ENFORCE_COUNT
-} antiflood_enforce_method_t;
+};
 
-static antiflood_enforce_method_t antiflood_enforce_method = ANTIFLOOD_ENFORCE_QUIET;
+static enum antiflood_enforce_method antiflood_enforce_method = ANTIFLOOD_ENFORCE_QUIET;
 
 typedef enum {
 	MQ_ENFORCE_NONE = 0,
