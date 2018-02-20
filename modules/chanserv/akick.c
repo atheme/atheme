@@ -24,7 +24,8 @@ struct command cs_akick_del = { "DEL", N_("Deletes a channel AKICK."),
 struct command cs_akick_list = { "LIST", N_("Displays a channel's AKICK list."),
                         AC_NONE, 2, cs_cmd_akick_list, { .path = "" } };
 
-typedef struct {
+struct akick_timeout
+{
 	time_t expiration;
 
 	struct myentity *entity;
@@ -33,14 +34,14 @@ typedef struct {
 	char host[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + 4];
 
 	mowgli_node_t node;
-} akick_timeout_t;
+};
 
 time_t akickdel_next;
 mowgli_list_t akickdel_list;
 mowgli_patricia_t *cs_akick_cmds;
 mowgli_eventloop_timer_t *akick_timeout_check_timer = NULL;
 
-static akick_timeout_t *akick_add_timeout(struct mychan *mc, struct myentity *mt, const char *host, time_t expireson);
+static struct akick_timeout *akick_add_timeout(struct mychan *mc, struct myentity *mt, const char *host, time_t expireson);
 
 mowgli_heap_t *akick_timeout_heap;
 
@@ -56,7 +57,7 @@ mod_init(struct module *const restrict m)
 	command_add(&cs_akick_del, cs_akick_cmds);
 	command_add(&cs_akick_list, cs_akick_cmds);
 
-        akick_timeout_heap = mowgli_heap_create(sizeof(akick_timeout_t), 512, BH_NOW);
+        akick_timeout_heap = mowgli_heap_create(sizeof(struct akick_timeout), 512, BH_NOW);
 
     	if (akick_timeout_heap == NULL)
     	{
@@ -324,7 +325,7 @@ void cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 
 		if (duration > 0)
 		{
-			akick_timeout_t *timeout;
+			struct akick_timeout *timeout;
 			time_t expireson = ca2->tmodified+duration;
 
 			snprintf(expiry, sizeof expiry, "%ld", expireson);
@@ -390,7 +391,7 @@ void cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 
 		if (duration > 0)
 		{
-			akick_timeout_t *timeout;
+			struct akick_timeout *timeout;
 			time_t expireson = ca2->tmodified+duration;
 
 			snprintf(expiry, sizeof expiry, "%ld", expireson);
@@ -455,7 +456,7 @@ void cs_cmd_akick_del(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	akick_timeout_t *timeout;
+	struct akick_timeout *timeout;
 	struct chanban *cb;
 
 	if ((chanacs_source_flags(mc, si) & (CA_FLAGS | CA_REMOVE)) != (CA_FLAGS | CA_REMOVE))
@@ -664,7 +665,7 @@ void cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 void akick_timeout_check(void *arg)
 {
 	mowgli_node_t *n, *tn;
-	akick_timeout_t *timeout;
+	struct akick_timeout *timeout;
 	struct chanacs *ca;
 	struct mychan *mc;
 
@@ -718,10 +719,10 @@ void akick_timeout_check(void *arg)
 	}
 }
 
-static akick_timeout_t *akick_add_timeout(struct mychan *mc, struct myentity *mt, const char *host, time_t expireson)
+static struct akick_timeout *akick_add_timeout(struct mychan *mc, struct myentity *mt, const char *host, time_t expireson)
 {
 	mowgli_node_t *n;
-	akick_timeout_t *timeout, *timeout2;
+	struct akick_timeout *timeout, *timeout2;
 
 	timeout = mowgli_heap_alloc(akick_timeout_heap);
 
