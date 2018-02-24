@@ -42,12 +42,13 @@ enum mqueue_enforce_strategy
 	MQ_ENFORCE_LINE,
 };
 
-typedef struct {
+struct flood_message_queue
+{
 	char *name;
 	size_t max;
 	time_t last_used;
 	mowgli_list_t entries;
-} mqueue_t;
+};
 
 typedef struct {
 	stringref source;
@@ -59,7 +60,7 @@ typedef struct {
 static mowgli_heap_t *msg_heap = NULL;
 
 static void
-msg_destroy(msg_t *msg, mqueue_t *mq)
+msg_destroy(msg_t *msg, struct flood_message_queue *mq)
 {
 	free(msg->message);
 	strshare_unref(msg->source);
@@ -69,7 +70,7 @@ msg_destroy(msg_t *msg, mqueue_t *mq)
 }
 
 static msg_t *
-msg_create(mqueue_t *mq, struct user *u, const char *message)
+msg_create(struct flood_message_queue *mq, struct user *u, const char *message)
 {
 	msg_t *msg;
 
@@ -94,10 +95,10 @@ static mowgli_patricia_t *mqueue_trie = NULL;
 static mowgli_heap_t *mqueue_heap = NULL;
 static mowgli_eventloop_timer_t *mqueue_gc_timer = NULL;
 
-static mqueue_t *
+static struct flood_message_queue *
 mqueue_create(const char *name)
 {
-	mqueue_t *mq;
+	struct flood_message_queue *mq;
 
 	mq = mowgli_heap_alloc(mqueue_heap);
 	mq->name = sstrdup(name);
@@ -110,7 +111,7 @@ mqueue_create(const char *name)
 }
 
 static void
-mqueue_free(mqueue_t *mq)
+mqueue_free(struct flood_message_queue *mq)
 {
 	mowgli_node_t *n, *tn;
 
@@ -125,10 +126,10 @@ mqueue_free(mqueue_t *mq)
 	mowgli_heap_free(mqueue_heap, mq);
 }
 
-static mqueue_t *
+static struct flood_message_queue *
 mqueue_get(struct mychan *mc)
 {
-	mqueue_t *mq;
+	struct flood_message_queue *mq;
 
 	mq = mowgli_patricia_retrieve(mqueue_trie, mc->name);
 	if (mq == NULL)
@@ -138,7 +139,7 @@ mqueue_get(struct mychan *mc)
 }
 
 static void
-mqueue_destroy(mqueue_t *mq)
+mqueue_destroy(struct flood_message_queue *mq)
 {
 	mowgli_patricia_delete(mqueue_trie, mq->name);
 
@@ -148,7 +149,7 @@ mqueue_destroy(mqueue_t *mq)
 static void
 mqueue_trie_destroy_cb(const char *key, void *data, void *privdata)
 {
-	mqueue_t *mq = data;
+	struct flood_message_queue *mq = data;
 
 	mqueue_free(mq);
 }
@@ -157,7 +158,7 @@ static void
 mqueue_gc(void *unused)
 {
 	mowgli_patricia_iteration_state_t iter;
-	mqueue_t *mq;
+	struct flood_message_queue *mq;
 
 	MOWGLI_PATRICIA_FOREACH(mq, &iter, mqueue_trie)
 	{
@@ -167,7 +168,7 @@ mqueue_gc(void *unused)
 }
 
 static enum mqueue_enforce_strategy
-mqueue_should_enforce(mqueue_t *mq)
+mqueue_should_enforce(struct flood_message_queue *mq)
 {
 	msg_t *oldest, *newest;
 	time_t age_delta;
@@ -340,7 +341,7 @@ on_channel_message(hook_cmessage_data_t *data)
 {
 	struct chanuser *cu;
 	struct mychan *mc;
-	mqueue_t *mq;
+	struct flood_message_queue *mq;
 	msg_t *msg;
 
 	return_if_fail(data != NULL);
@@ -383,7 +384,7 @@ on_channel_message(hook_cmessage_data_t *data)
 static void
 on_channel_drop(struct mychan *mc)
 {
-	mqueue_t *mq;
+	struct flood_message_queue *mq;
 
 	mq = mqueue_get(mc);
 	return_if_fail(mq != NULL);
@@ -524,7 +525,7 @@ mod_init(struct module *m)
 
 	msg_heap = sharedheap_get(sizeof(msg_t));
 
-	mqueue_heap = sharedheap_get(sizeof(mqueue_t));
+	mqueue_heap = sharedheap_get(sizeof(struct flood_message_queue));
 	mqueue_trie = mowgli_patricia_create(irccasecanon);
 	mqueue_gc_timer = mowgli_timer_add(base_eventloop, "mqueue_gc", mqueue_gc, NULL, 300);
 
