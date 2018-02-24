@@ -54,8 +54,7 @@ struct clones_exemption
 	long expires;
 };
 
-typedef struct hostentry_ hostentry_t;
-struct hostentry_
+struct clones_hostentry
 {
 	char ip[HOSTIPLEN + 1];
 	mowgli_list_t clients;
@@ -128,7 +127,7 @@ mod_init(struct module *const restrict m)
 	db_register_type_handler("CLONES-EX", db_h_ex);
 
 	hostlist = mowgli_patricia_create(noopcanon);
-	hostentry_heap = mowgli_heap_create(sizeof(hostentry_t), HEAP_USER, BH_NOW);
+	hostentry_heap = mowgli_heap_create(sizeof(struct clones_hostentry), HEAP_USER, BH_NOW);
 
 	kline_duration = 3600; /* set a default */
 
@@ -145,7 +144,7 @@ mod_init(struct module *const restrict m)
 static void free_hostentry(const char *key, void *data, void *privdata)
 {
 	mowgli_node_t *n, *tn;
-	hostentry_t *he = data;
+	struct clones_hostentry *he = data;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, he->clients.head)
 	{
@@ -403,7 +402,7 @@ static void os_cmd_clones_kline(struct sourceinfo *si, int parc, char *parv[])
 
 static void os_cmd_clones_list(struct sourceinfo *si, int parc, char *parv[])
 {
-	hostentry_t *he;
+	struct clones_hostentry *he;
 	int k = 0;
 	mowgli_patricia_iteration_state_t state;
 
@@ -834,7 +833,7 @@ static void clones_newuser(hook_user_nick_t *data)
 {
 	struct user *u = data->u;
 	unsigned int i;
-	hostentry_t *he;
+	struct clones_hostentry *he;
 	unsigned int allowed, warn;
 	mowgli_node_t *n;
 
@@ -938,7 +937,7 @@ static void clones_newuser(hook_user_nick_t *data)
 static void clones_userquit(struct user *u)
 {
 	mowgli_node_t *n;
-	hostentry_t *he;
+	struct clones_hostentry *he;
 
 	/* User has no IP, ignore them */
 	if (is_internal_client(u) || u->ip == NULL)
