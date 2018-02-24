@@ -36,8 +36,8 @@
 #ifndef INC_DIGEST_BE_MD5_H
 #define INC_DIGEST_BE_MD5_H
 
-extern bool digest_init_md5(struct digest_context_md5 *);
-extern bool digest_update_md5(struct digest_context_md5 *, const void *, size_t);
-extern bool digest_final_md5(struct digest_context_md5 *, void *, size_t *);
+bool digest_init_md5(struct digest_context_md5 *);
+bool digest_update_md5(struct digest_context_md5 *, const void *, size_t);
+bool digest_final_md5(struct digest_context_md5 *, void *, size_t *);
 
 #endif /* !INC_DIGEST_BE_MD5_H */

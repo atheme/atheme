@@ -36,8 +36,8 @@
 #ifndef INC_DIGEST_BE_SHA1_H
 #define INC_DIGEST_BE_SHA1_H
 
-extern bool digest_init_sha1(struct digest_context_sha1 *);
-extern bool digest_update_sha1(struct digest_context_sha1 *, const void *, size_t);
-extern bool digest_final_sha1(struct digest_context_sha1 *, void *, size_t *);
+bool digest_init_sha1(struct digest_context_sha1 *);
+bool digest_update_sha1(struct digest_context_sha1 *, const void *, size_t);
+bool digest_final_sha1(struct digest_context_sha1 *, void *, size_t *);
 
 #endif /* !INC_DIGEST_BE_SHA1_H */
