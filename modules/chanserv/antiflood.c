@@ -287,18 +287,19 @@ antiflood_enforce_kline(struct user *u, struct channel *c)
 	slog(LG_INFO, "ANTIFLOOD:ENFORCE:AKILL: \2%s!%s@%s\2 from \2%s\2", u->nick, u->user, u->vhost, c->name);
 }
 
-typedef struct {
+struct antiflood_enforce_method_impl
+{
 	void (*enforce)(struct user *u, struct channel *c);
 	void (*unenforce)(struct channel *c);
-} antiflood_enforce_method_impl_t;
+};
 
-static antiflood_enforce_method_impl_t antiflood_enforce_methods[ANTIFLOOD_ENFORCE_COUNT] = {
+static struct antiflood_enforce_method_impl antiflood_enforce_methods[ANTIFLOOD_ENFORCE_COUNT] = {
 	[ANTIFLOOD_ENFORCE_QUIET]   = { &antiflood_enforce_quiet, &antiflood_unenforce_banlike },
 	[ANTIFLOOD_ENFORCE_KICKBAN] = { &antiflood_enforce_kickban, &antiflood_unenforce_banlike },
 	[ANTIFLOOD_ENFORCE_KLINE]   = { &antiflood_enforce_kline, NULL },
 };
 
-static inline antiflood_enforce_method_impl_t *
+static inline struct antiflood_enforce_method_impl *
 antiflood_enforce_method_impl_get(struct mychan *mc)
 {
 	struct metadata *md;
@@ -325,7 +326,7 @@ antiflood_unenforce_timer_cb(void *unused)
 
 	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
-		antiflood_enforce_method_impl_t *enf = antiflood_enforce_method_impl_get(mc);
+		struct antiflood_enforce_method_impl *enf = antiflood_enforce_method_impl_get(mc);
 
 		if (mc->chan == NULL)
 			continue;
@@ -373,7 +374,7 @@ on_channel_message(hook_cmessage_data_t *data)
 
 	if (mqueue_should_enforce(mq) != MQ_ENFORCE_NONE)
 	{
-		antiflood_enforce_method_impl_t *enf = antiflood_enforce_method_impl_get(mc);
+		struct antiflood_enforce_method_impl *enf = antiflood_enforce_method_impl_get(mc);
 
 		if (enf == NULL || enf->enforce == NULL)
 			return;
