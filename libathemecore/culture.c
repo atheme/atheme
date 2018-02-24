@@ -26,14 +26,6 @@
 
 #include <dirent.h>
 
-struct translation_
-{
-	char *name;
-	char *replacement;
-};
-
-typedef struct translation_ translation_t;
-
 static mowgli_patricia_t *itranslation_tree; /* internal translations, userserv/nickserv etc */
 static mowgli_patricia_t *translation_tree; /* language translations */
 
@@ -73,7 +65,7 @@ void translation_init(void)
  */
 const char *translation_get(const char *str)
 {
-	translation_t *t;
+	struct translation *t;
 
 	/* See if an internal substitution is present. */
 	if ((t = mowgli_patricia_retrieve(itranslation_tree, str)) != NULL)
@@ -99,7 +91,7 @@ const char *translation_get(const char *str)
  */
 void itranslation_create(const char *str, const char *trans)
 {
-	translation_t *const t = smalloc(sizeof *t);
+	struct translation *const t = smalloc(sizeof *t);
 
 	t->name = sstrdup(str);
 	t->replacement = sstrdup(trans);
@@ -121,7 +113,7 @@ void itranslation_create(const char *str, const char *trans)
  */
 void itranslation_destroy(const char *str)
 {
-	translation_t *t = mowgli_patricia_delete(itranslation_tree, str);
+	struct translation *t = mowgli_patricia_delete(itranslation_tree, str);
 
 	if (t == NULL)
 		return;
@@ -146,7 +138,7 @@ void itranslation_destroy(const char *str)
 void translation_create(const char *str, const char *trans)
 {
 	char buf[BUFSIZE];
-	translation_t *const t = smalloc(sizeof *t);
+	struct translation *const t = smalloc(sizeof *t);
 
 	mowgli_strlcpy(buf, str, BUFSIZE);
 	replace(buf, BUFSIZE, "\\2", "\2");
@@ -175,7 +167,7 @@ void translation_create(const char *str, const char *trans)
  */
 void translation_destroy(const char *str)
 {
-	translation_t *t = mowgli_patricia_delete(translation_tree, str);
+	struct translation *t = mowgli_patricia_delete(translation_tree, str);
 
 	if (t == NULL)
 		return;

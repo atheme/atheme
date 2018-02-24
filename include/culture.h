@@ -15,6 +15,12 @@ struct language
 	mowgli_node_t node;
 };
 
+struct translation
+{
+	char *name;
+	char *replacement;
+};
+
 extern const char *translation_get(const char *name);
 extern void itranslation_create(const char *str, const char *trans);
 extern void itranslation_destroy(const char *str);
