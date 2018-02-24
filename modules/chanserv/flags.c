@@ -42,14 +42,15 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	del_conf_item("ANOPE_FLAGS_COMPAT", &chansvs.me->conf_table);
 }
 
-typedef struct {
+struct template_iter
+{
 	const char *res;
 	unsigned int level;
-} template_iter_t;
+};
 
 static int global_template_search(const char *key, void *data, void *privdata)
 {
-	template_iter_t *iter = privdata;
+	struct template_iter *iter = privdata;
 	struct default_template *def_t = data;
 
 	if (def_t->flags == iter->level)
@@ -65,7 +66,7 @@ static const char *get_template_name(struct mychan *mc, unsigned int level)
 	char *s;
 	char ss[40];
 	static char flagname[400];
-	template_iter_t iter;
+	struct template_iter iter;
 
 	md = metadata_find(mc, "private:templates");
 	if (md != NULL)
