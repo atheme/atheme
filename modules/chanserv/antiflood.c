@@ -35,11 +35,12 @@ enum antiflood_enforce_method
 
 static enum antiflood_enforce_method antiflood_enforce_method = ANTIFLOOD_ENFORCE_QUIET;
 
-typedef enum {
+enum mqueue_enforce_strategy
+{
 	MQ_ENFORCE_NONE = 0,
 	MQ_ENFORCE_MSG,
 	MQ_ENFORCE_LINE,
-} mqueue_enforce_strategy_t;
+};
 
 typedef struct {
 	char *name;
@@ -165,7 +166,7 @@ mqueue_gc(void *unused)
 	}
 }
 
-static mqueue_enforce_strategy_t
+static enum mqueue_enforce_strategy
 mqueue_should_enforce(mqueue_t *mq)
 {
 	msg_t *oldest, *newest;
