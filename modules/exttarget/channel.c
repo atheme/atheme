@@ -9,17 +9,18 @@
 
 static mowgli_patricia_t **exttarget_tree = NULL;
 
-typedef struct {
+struct this_exttarget
+{
 	struct myentity parent;
 	stringref channel;
-} channel_exttarget_t;
+};
 
 static struct chanacs *channel_ext_match_user(struct chanacs *ca, struct user *u)
 {
-	channel_exttarget_t *ent;
+	struct this_exttarget *ent;
 	mowgli_node_t *n;
 
-	ent = (channel_exttarget_t *) ca->entity;
+	ent = (struct this_exttarget *) ca->entity;
 	MOWGLI_LIST_FOREACH(n, u->channels.head)
 	{
 		struct chanuser *cu = n->data;
@@ -59,7 +60,7 @@ static const struct entity_chanacs_validation_vtable channel_ext_validate = {
 static mowgli_heap_t *channel_ext_heap = NULL;
 static mowgli_patricia_t *channel_exttarget_tree = NULL;
 
-static void channel_ext_delete(channel_exttarget_t *e)
+static void channel_ext_delete(struct this_exttarget *e)
 {
 	return_if_fail(e != NULL);
 
@@ -73,7 +74,7 @@ static void channel_ext_delete(channel_exttarget_t *e)
 static struct myentity *channel_validate_f(const char *param)
 {
 	char *name;
-	channel_exttarget_t *ext;
+	struct this_exttarget *ext;
 	size_t namelen;
 
 	if (param == NULL)
@@ -124,7 +125,7 @@ mod_init(struct module *const restrict m)
 
 	/* since we are dealing with channel names, we use irccasecanon. */
 	channel_exttarget_tree = mowgli_patricia_create(irccasecanon);
-	channel_ext_heap = mowgli_heap_create(sizeof(channel_exttarget_t), 32, BH_LAZY);
+	channel_ext_heap = mowgli_heap_create(sizeof(struct this_exttarget), 32, BH_LAZY);
 }
 
 static void
