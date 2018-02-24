@@ -30,21 +30,21 @@ struct atheme_table_cell
 /*
  * Creates a new table object. Use atheme_object_unref() to destroy it.
  */
-extern struct atheme_table *table_new(const char *fmt, ...) ATHEME_FATTR_PRINTF(1, 2);
+struct atheme_table *table_new(const char *fmt, ...) ATHEME_FATTR_PRINTF(1, 2);
 
 /*
  * Renders a table, each line going to callback().
  */
-extern void table_render(struct atheme_table *t, void (*callback)(const char *line, void *data), void *data);
+void table_render(struct atheme_table *t, void (*callback)(const char *line, void *data), void *data);
 
 /*
  * Associates a value with a row.
  */
-extern void table_cell_associate(struct atheme_table_row *r, const char *name, const char *value);
+void table_cell_associate(struct atheme_table_row *r, const char *name, const char *value);
 
 /*
  * Associates a row with a table.
  */
-extern struct atheme_table_row *table_row_new(struct atheme_table *t);
+struct atheme_table_row *table_row_new(struct atheme_table *t);
 
 #endif

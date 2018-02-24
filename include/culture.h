@@ -21,19 +21,19 @@ struct translation
 	char *replacement;
 };
 
-extern const char *translation_get(const char *name);
-extern void itranslation_create(const char *str, const char *trans);
-extern void itranslation_destroy(const char *str);
-extern void translation_create(const char *str, const char *trans);
-extern void translation_destroy(const char *str);
-extern void translation_init(void);
+const char *translation_get(const char *name);
+void itranslation_create(const char *str, const char *trans);
+void itranslation_destroy(const char *str);
+void translation_create(const char *str, const char *trans);
+void translation_destroy(const char *str);
+void translation_init(void);
 
-extern struct language *language_add(const char *name);
-extern struct language *language_find(const char *name);
-extern const char *language_names(void);
-extern const char *language_get_name(const struct language *lang);
-extern const char *language_get_real_name(const struct language *lang);
-extern bool language_is_valid(const struct language *lang);
-extern void language_set_active(struct language *lang);
+struct language *language_add(const char *name);
+struct language *language_find(const char *name);
+const char *language_names(void);
+const char *language_get_name(const struct language *lang);
+const char *language_get_real_name(const struct language *lang);
+bool language_is_valid(const struct language *lang);
+void language_set_active(struct language *lang);
 
 #endif

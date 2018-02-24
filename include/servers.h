@@ -55,14 +55,14 @@ typedef struct {
 extern mowgli_patricia_t *servlist;
 extern mowgli_list_t tldlist;
 
-extern void init_servers(void);
+void init_servers(void);
 
-extern struct tld *tld_add(const char *name);
-extern void tld_delete(const char *name);
-extern struct tld *tld_find(const char *name);
+struct tld *tld_add(const char *name);
+void tld_delete(const char *name);
+struct tld *tld_find(const char *name);
 
-extern struct server *server_add(const char *name, unsigned int hops, struct server *uplink, const char *id, const char *desc);
-extern void server_delete(const char *name);
-extern struct server *server_find(const char *name);
+struct server *server_add(const char *name, unsigned int hops, struct server *uplink, const char *id, const char *desc);
+void server_delete(const char *name);
+struct server *server_find(const char *name);
 
 #endif

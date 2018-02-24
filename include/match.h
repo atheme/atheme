@@ -36,8 +36,8 @@ struct atheme_regex
 };
 
 /* cidr.c */
-extern int match_ips(const char *mask, const char *address);
-extern int match_cidr(const char *mask, const char *address);
+int match_ips(const char *mask, const char *address);
+int match_cidr(const char *mask, const char *address);
 
 /* match.c */
 #define MATCH_RFC1459   0
@@ -67,27 +67,27 @@ extern const unsigned char ToUpperTab[];
 
 void set_match_mapping(int);
 
-extern int ToLower(int);
-extern int ToUpper(int);
+int ToLower(int);
+int ToUpper(int);
 
-extern int irccasecmp(const char *, const char *);
-extern int ircncasecmp(const char *, const char *, size_t);
+int irccasecmp(const char *, const char *);
+int ircncasecmp(const char *, const char *, size_t);
 
-extern void irccasecanon(char *);
-extern void strcasecanon(char *);
-extern void noopcanon(char *);
+void irccasecanon(char *);
+void strcasecanon(char *);
+void noopcanon(char *);
 
-extern int match(const char *, const char *);
-extern char *collapse(char *);
+int match(const char *, const char *);
+char *collapse(char *);
 
 /* regex_create() flags */
 #define AREGEX_ICASE	1 /* case insensitive */
 #define AREGEX_PCRE	2 /* use libpcre engine */
 #define AREGEX_KLINE	4 /* XXX for rwatch, match kline */
 
-extern struct atheme_regex *regex_create(char *pattern, int flags);
-extern char *regex_extract(char *pattern, char **pend, int *pflags);
-extern bool regex_match(struct atheme_regex *preg, char *string);
-extern bool regex_destroy(struct atheme_regex *preg);
+struct atheme_regex *regex_create(char *pattern, int flags);
+char *regex_extract(char *pattern, char **pend, int *pflags);
+bool regex_match(struct atheme_regex *preg, char *string);
+bool regex_destroy(struct atheme_regex *preg);
 
 #endif

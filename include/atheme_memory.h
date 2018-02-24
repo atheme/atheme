@@ -8,10 +8,10 @@
 #ifndef ATHEME_MEMORY_H
 #define ATHEME_MEMORY_H
 
-extern void *smalloc(size_t len);
-extern void *scalloc(size_t num, size_t len);
-extern void *srealloc(void *ptr, size_t len);
-extern char *sstrdup(const char *ptr);
-extern char *sstrndup(const char *ptr, size_t len);
+void *smalloc(size_t len);
+void *scalloc(size_t num, size_t len);
+void *srealloc(void *ptr, size_t len);
+char *sstrdup(const char *ptr);
+char *sstrndup(const char *ptr, size_t len);
 
 #endif

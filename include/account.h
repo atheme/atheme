@@ -419,118 +419,118 @@ extern void (*db_save)(void *arg, enum db_save_strategy strategy);
 extern void (*db_load)(const char *arg);
 
 /* function.c */
-extern bool is_founder(struct mychan *mychan, struct myentity *myuser);
+bool is_founder(struct mychan *mychan, struct myentity *myuser);
 
 /* node.c */
 extern mowgli_list_t klnlist;
 
-extern struct kline *kline_add_with_id(const char *user, const char *host, const char *reason, long duration, const char *setby, unsigned long id);
-extern struct kline *kline_add(const char *user, const char *host, const char *reason, long duration, const char *setby);
-extern struct kline *kline_add_user(struct user *user, const char *reason, long duration, const char *setby);
-extern void kline_delete(struct kline *k);
-extern struct kline *kline_find(const char *user, const char *host);
-extern struct kline *kline_find_num(unsigned long number);
-extern struct kline *kline_find_user(struct user *u);
-extern void kline_expire(void *arg);
+struct kline *kline_add_with_id(const char *user, const char *host, const char *reason, long duration, const char *setby, unsigned long id);
+struct kline *kline_add(const char *user, const char *host, const char *reason, long duration, const char *setby);
+struct kline *kline_add_user(struct user *user, const char *reason, long duration, const char *setby);
+void kline_delete(struct kline *k);
+struct kline *kline_find(const char *user, const char *host);
+struct kline *kline_find_num(unsigned long number);
+struct kline *kline_find_user(struct user *u);
+void kline_expire(void *arg);
 
 extern mowgli_list_t xlnlist;
 
-extern struct xline *xline_add(const char *realname, const char *reason, long duration, const char *setby);
-extern void xline_delete(const char *realname);
-extern struct xline *xline_find(const char *realname);
-extern struct xline *xline_find_num(unsigned int number);
-extern struct xline *xline_find_user(struct user *u);
-extern void xline_expire(void *arg);
+struct xline *xline_add(const char *realname, const char *reason, long duration, const char *setby);
+void xline_delete(const char *realname);
+struct xline *xline_find(const char *realname);
+struct xline *xline_find_num(unsigned int number);
+struct xline *xline_find_user(struct user *u);
+void xline_expire(void *arg);
 
 extern mowgli_list_t qlnlist;
 
-extern struct qline *qline_add(const char *mask, const char *reason, long duration, const char *setby);
-extern void qline_delete(const char *mask);
-extern struct qline *qline_find(const char *mask);
-extern struct qline *qline_find_match(const char *mask);
-extern struct qline *qline_find_num(unsigned int number);
-extern struct qline *qline_find_user(struct user *u);
-extern struct qline *qline_find_channel(struct channel *c);
-extern void qline_expire(void *arg);
+struct qline *qline_add(const char *mask, const char *reason, long duration, const char *setby);
+void qline_delete(const char *mask);
+struct qline *qline_find(const char *mask);
+struct qline *qline_find_match(const char *mask);
+struct qline *qline_find_num(unsigned int number);
+struct qline *qline_find_user(struct user *u);
+struct qline *qline_find_channel(struct channel *c);
+void qline_expire(void *arg);
 
 /* account.c */
 extern mowgli_patricia_t *nicklist;
 extern mowgli_patricia_t *oldnameslist;
 extern mowgli_patricia_t *mclist;
 
-extern void init_accounts(void);
+void init_accounts(void);
 
-extern struct myuser *myuser_add(const char *name, const char *pass, const char *email, unsigned int flags);
-extern struct myuser *myuser_add_id(const char *id, const char *name, const char *pass, const char *email, unsigned int flags);
-extern void myuser_delete(struct myuser *mu);
+struct myuser *myuser_add(const char *name, const char *pass, const char *email, unsigned int flags);
+struct myuser *myuser_add_id(const char *id, const char *name, const char *pass, const char *email, unsigned int flags);
+void myuser_delete(struct myuser *mu);
 //inline struct myuser *myuser_find(const char *name);
-extern void myuser_rename(struct myuser *mu, const char *name);
-extern void myuser_set_email(struct myuser *mu, const char *newemail);
-extern struct myuser *myuser_find_ext(const char *name);
-extern void myuser_notice(const char *from, struct myuser *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
+void myuser_rename(struct myuser *mu, const char *name);
+void myuser_set_email(struct myuser *mu, const char *newemail);
+struct myuser *myuser_find_ext(const char *name);
+void myuser_notice(const char *from, struct myuser *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
 
-extern bool myuser_access_verify(struct user *u, struct myuser *mu);
-extern bool myuser_access_add(struct myuser *mu, const char *mask);
-extern char *myuser_access_find(struct myuser *mu, const char *mask);
-extern void myuser_access_delete(struct myuser *mu, const char *mask);
+bool myuser_access_verify(struct user *u, struct myuser *mu);
+bool myuser_access_add(struct myuser *mu, const char *mask);
+char *myuser_access_find(struct myuser *mu, const char *mask);
+void myuser_access_delete(struct myuser *mu, const char *mask);
 
-extern struct mynick *mynick_add(struct myuser *mu, const char *name);
-extern void mynick_delete(struct mynick *mn);
+struct mynick *mynick_add(struct myuser *mu, const char *name);
+void mynick_delete(struct mynick *mn);
 
-extern struct myuser_name *myuser_name_add(const char *name);
-extern void myuser_name_remember(const char *name, struct myuser *mu);
-extern void myuser_name_restore(const char *name, struct myuser *mu);
+struct myuser_name *myuser_name_add(const char *name);
+void myuser_name_remember(const char *name, struct myuser *mu);
+void myuser_name_restore(const char *name, struct myuser *mu);
 
-extern struct mycertfp *mycertfp_add(struct myuser *mu, const char *certfp);
-extern void mycertfp_delete(struct mycertfp *mcfp);
-extern struct mycertfp *mycertfp_find(const char *certfp);
+struct mycertfp *mycertfp_add(struct myuser *mu, const char *certfp);
+void mycertfp_delete(struct mycertfp *mcfp);
+struct mycertfp *mycertfp_find(const char *certfp);
 
-extern struct mychan *mychan_add(char *name);
+struct mychan *mychan_add(char *name);
 //inline struct mychan *mychan_find(const char *name);
-extern bool mychan_isused(struct mychan *mc);
-extern unsigned int mychan_num_founders(struct mychan *mc);
-extern const char *mychan_founder_names(struct mychan *mc);
-extern struct myuser *mychan_pick_candidate(struct mychan *mc, unsigned int minlevel);
-extern struct myuser *mychan_pick_successor(struct mychan *mc);
-extern const char *mychan_get_mlock(struct mychan *mc);
-extern const char *mychan_get_sts_mlock(struct mychan *mc);
+bool mychan_isused(struct mychan *mc);
+unsigned int mychan_num_founders(struct mychan *mc);
+const char *mychan_founder_names(struct mychan *mc);
+struct myuser *mychan_pick_candidate(struct mychan *mc, unsigned int minlevel);
+struct myuser *mychan_pick_successor(struct mychan *mc);
+const char *mychan_get_mlock(struct mychan *mc);
+const char *mychan_get_sts_mlock(struct mychan *mc);
 
-extern struct chanacs *chanacs_add(struct mychan *mychan, struct myentity *myuser, unsigned int level, time_t ts, struct myentity *setter);
-extern struct chanacs *chanacs_add_host(struct mychan *mychan, const char *host, unsigned int level, time_t ts, struct myentity *setter);
+struct chanacs *chanacs_add(struct mychan *mychan, struct myentity *myuser, unsigned int level, time_t ts, struct myentity *setter);
+struct chanacs *chanacs_add_host(struct mychan *mychan, const char *host, unsigned int level, time_t ts, struct myentity *setter);
 
-extern struct chanacs *chanacs_find(struct mychan *mychan, struct myentity *myuser, unsigned int level);
-extern unsigned int chanacs_entity_flags(struct mychan *mychan, struct myentity *myuser);
-extern struct chanacs *chanacs_find_literal(struct mychan *mychan, struct myentity *myuser, unsigned int level);
-extern struct chanacs *chanacs_find_host(struct mychan *mychan, const char *host, unsigned int level);
-extern unsigned int chanacs_host_flags(struct mychan *mychan, const char *host);
-extern struct chanacs *chanacs_find_host_literal(struct mychan *mychan, const char *host, unsigned int level);
-extern struct chanacs *chanacs_find_host_by_user(struct mychan *mychan, struct user *u, unsigned int level);
-extern struct chanacs *chanacs_find_by_mask(struct mychan *mychan, const char *mask, unsigned int level);
-extern bool chanacs_user_has_flag(struct mychan *mychan, struct user *u, unsigned int level);
-extern unsigned int chanacs_user_flags(struct mychan *mychan, struct user *u);
+struct chanacs *chanacs_find(struct mychan *mychan, struct myentity *myuser, unsigned int level);
+unsigned int chanacs_entity_flags(struct mychan *mychan, struct myentity *myuser);
+struct chanacs *chanacs_find_literal(struct mychan *mychan, struct myentity *myuser, unsigned int level);
+struct chanacs *chanacs_find_host(struct mychan *mychan, const char *host, unsigned int level);
+unsigned int chanacs_host_flags(struct mychan *mychan, const char *host);
+struct chanacs *chanacs_find_host_literal(struct mychan *mychan, const char *host, unsigned int level);
+struct chanacs *chanacs_find_host_by_user(struct mychan *mychan, struct user *u, unsigned int level);
+struct chanacs *chanacs_find_by_mask(struct mychan *mychan, const char *mask, unsigned int level);
+bool chanacs_user_has_flag(struct mychan *mychan, struct user *u, unsigned int level);
+unsigned int chanacs_user_flags(struct mychan *mychan, struct user *u);
 //inline bool chanacs_source_has_flag(struct mychan *mychan, struct sourceinfo *si, unsigned int level);
-extern unsigned int chanacs_source_flags(struct mychan *mychan, struct sourceinfo *si);
+unsigned int chanacs_source_flags(struct mychan *mychan, struct sourceinfo *si);
 
-extern struct chanacs *chanacs_open(struct mychan *mychan, struct myentity *mt, const char *hostmask, bool create, struct myentity *setter);
+struct chanacs *chanacs_open(struct mychan *mychan, struct myentity *mt, const char *hostmask, bool create, struct myentity *setter);
 //inline void chanacs_close(struct chanacs *ca);
-extern bool chanacs_modify(struct chanacs *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, struct myuser *setter);
-extern bool chanacs_modify_simple(struct chanacs *ca, unsigned int addflags, unsigned int removeflags, struct myuser *setter);
+bool chanacs_modify(struct chanacs *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, struct myuser *setter);
+bool chanacs_modify_simple(struct chanacs *ca, unsigned int addflags, unsigned int removeflags, struct myuser *setter);
 
 //inline bool chanacs_is_table_full(struct chanacs *ca);
 
-extern bool chanacs_change(struct mychan *mychan, struct myentity *mt, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, struct myentity *setter);
-extern bool chanacs_change_simple(struct mychan *mychan, struct myentity *mt, const char *hostmask, unsigned int addflags, unsigned int removeflags, struct myentity *setter);
+bool chanacs_change(struct mychan *mychan, struct myentity *mt, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, struct myentity *setter);
+bool chanacs_change_simple(struct mychan *mychan, struct myentity *mt, const char *hostmask, unsigned int addflags, unsigned int removeflags, struct myentity *setter);
 
-extern void expire_check(void *arg);
+void expire_check(void *arg);
 /* Check the database for (version) problems common to all backends */
-extern void db_check(void);
+void db_check(void);
 
 /* svsignore.c */
 extern mowgli_list_t svs_ignore_list;
 
-extern struct svsignore *svsignore_find(struct user *user);
-extern struct svsignore *svsignore_add(const char *mask, const char *reason);
-extern void svsignore_delete(struct svsignore *svsignore);
+struct svsignore *svsignore_find(struct user *user);
+struct svsignore *svsignore_add(const char *mask, const char *reason);
+void svsignore_delete(struct svsignore *svsignore);
 
 #include "entity-validation.h"
 

@@ -14,6 +14,6 @@ struct entity_chanacs_validation_vtable
 	bool (*allow_foundership)(struct myentity *mt);
 };
 
-extern const struct entity_chanacs_validation_vtable *myentity_get_chanacs_validator(struct myentity *mt);
+const struct entity_chanacs_validation_vtable *myentity_get_chanacs_validator(struct myentity *mt);
 
 #endif

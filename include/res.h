@@ -37,12 +37,12 @@ struct res_dns_query
 extern struct nsaddr irc_nsaddr_list[ATHEME_MAX_NAMESERVERS];
 extern int irc_nscount;
 
-extern void init_resolver(void);
-extern void restart_resolver(void);
-extern void delete_resolver_queries(const struct res_dns_query *);
-extern void gethost_byname_type(const char *, struct res_dns_query *, int);
-extern void gethost_byaddr(const union sockaddr_any *, struct res_dns_query *);
-extern void add_local_domain(char *, size_t);
-extern void report_dns_servers(struct sourceinfo *);
+void init_resolver(void);
+void restart_resolver(void);
+void delete_resolver_queries(const struct res_dns_query *);
+void gethost_byname_type(const char *, struct res_dns_query *, int);
+void gethost_byaddr(const union sockaddr_any *, struct res_dns_query *);
+void add_local_domain(char *, size_t);
+void report_dns_servers(struct sourceinfo *);
 
 #endif

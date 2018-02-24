@@ -22,20 +22,20 @@ struct command
 };
 
 /* commandtree.c */
-extern void command_add(struct command *cmd, mowgli_patricia_t *commandtree);
-extern void command_delete(struct command *cmd, mowgli_patricia_t *commandtree);
-extern struct command *command_find(mowgli_patricia_t *commandtree, const char *command);
-extern void command_exec(struct service *svs, struct sourceinfo *si, struct command *c, int parc, char *parv[]);
-extern void command_exec_split(struct service *svs, struct sourceinfo *si, const char *cmd, char *text, mowgli_patricia_t *commandtree);
-extern void command_help(struct sourceinfo *si, mowgli_patricia_t *commandtree);
-extern void command_help_short(struct sourceinfo *si, mowgli_patricia_t *commandtree, const char *maincmds);
+void command_add(struct command *cmd, mowgli_patricia_t *commandtree);
+void command_delete(struct command *cmd, mowgli_patricia_t *commandtree);
+struct command *command_find(mowgli_patricia_t *commandtree, const char *command);
+void command_exec(struct service *svs, struct sourceinfo *si, struct command *c, int parc, char *parv[]);
+void command_exec_split(struct service *svs, struct sourceinfo *si, const char *cmd, char *text, mowgli_patricia_t *commandtree);
+void command_help(struct sourceinfo *si, mowgli_patricia_t *commandtree);
+void command_help_short(struct sourceinfo *si, mowgli_patricia_t *commandtree, const char *maincmds);
 extern bool (*command_authorize)(struct service *svs, struct sourceinfo *si, struct command *c, const char *userlevel);
 
 /* help.c */
-extern void help_display(struct sourceinfo *si, struct service *service, const char *command, mowgli_patricia_t *list);
-extern void help_display_as_subcmd(struct sourceinfo *si, struct service *service, const char *subcmd_of, const char *command, mowgli_patricia_t *list);
+void help_display(struct sourceinfo *si, struct service *service, const char *command, mowgli_patricia_t *list);
+void help_display_as_subcmd(struct sourceinfo *si, struct service *service, const char *subcmd_of, const char *command, mowgli_patricia_t *list);
 
 /* logger.c */
-extern void logaudit_denycmd(struct sourceinfo *si, struct command *cmd, const char *userlevel);
+void logaudit_denycmd(struct sourceinfo *si, struct command *cmd, const char *userlevel);
 
 #endif

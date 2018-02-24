@@ -19,11 +19,11 @@ struct crypt_impl
 	bool (*verify)(const char *password, const char *parameters, unsigned int *flags);
 };
 
-extern void crypt_register(const struct crypt_impl *impl);
-extern void crypt_unregister(const struct crypt_impl *impl);
+void crypt_register(const struct crypt_impl *impl);
+void crypt_unregister(const struct crypt_impl *impl);
 
-extern const struct crypt_impl *crypt_get_default_provider(void);
-extern const struct crypt_impl *crypt_verify_password(const char *password, const char *parameters, unsigned int *flags);
-extern const char *crypt_password(const char *password);
+const struct crypt_impl *crypt_get_default_provider(void);
+const struct crypt_impl *crypt_verify_password(const char *password, const char *parameters, unsigned int *flags);
+const char *crypt_password(const char *password);
 
 #endif

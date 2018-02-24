@@ -34,14 +34,14 @@ struct hook
 	mowgli_list_t hooks;
 };
 
-extern struct hook *hook_add_event(const char *);
-extern void hook_del_event(const char *);
-extern void hook_del_hook(const char *, hook_fn);
-extern void hook_add_hook(const char *, hook_fn);
-extern void hook_add_hook_first(const char *, hook_fn);
-extern void hook_call_event(const char *, void *);
+struct hook *hook_add_event(const char *);
+void hook_del_event(const char *);
+void hook_del_hook(const char *, hook_fn);
+void hook_add_hook(const char *, hook_fn);
+void hook_add_hook_first(const char *, hook_fn);
+void hook_call_event(const char *, void *);
 
-extern void hook_stop(void);
-extern void hook_continue(void *newptr);
+void hook_stop(void);
+void hook_continue(void *newptr);
 
 #endif

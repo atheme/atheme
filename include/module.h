@@ -95,15 +95,15 @@ struct module_dependency
 	enum module_unload_capability can_unload;
 };
 
-extern void modules_init(void);
-extern struct module *module_load(const char *filespec);
-extern void module_load_dir(const char *dirspec);
-extern void module_load_dir_match(const char *dirspec, const char *pattern);
-extern void *module_locate_symbol(const char *modname, const char *sym);
-extern void module_unload(struct module *m, enum module_unload_intent intent);
-extern struct module *module_find(const char *name);
-extern struct module *module_find_published(const char *name);
-extern bool module_request(const char *name);
+void modules_init(void);
+struct module *module_load(const char *filespec);
+void module_load_dir(const char *dirspec);
+void module_load_dir_match(const char *dirspec, const char *pattern);
+void *module_locate_symbol(const char *modname, const char *sym);
+void module_unload(struct module *m, enum module_unload_intent intent);
+struct module *module_find(const char *name);
+struct module *module_find_published(const char *name);
+bool module_request(const char *name);
 
 #define DECLARE_MODULE_V1(_name, _unloadcap, _modinit, _moddeinit, _ver, _ven)  \
         extern const struct v4_moduleheader _header;                            \

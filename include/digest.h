@@ -58,18 +58,18 @@
 
 #include DIGEST_FE_HEADER
 
-extern bool digest_init(struct digest_context *, unsigned int) ATHEME_FATTR_WUR;
-extern bool digest_init_hmac(struct digest_context *, unsigned int, const void *, size_t) ATHEME_FATTR_WUR;
-extern bool digest_update(struct digest_context *, const void *, size_t) ATHEME_FATTR_WUR;
-extern bool digest_final(struct digest_context *, void *, size_t *) ATHEME_FATTR_WUR;
+bool digest_init(struct digest_context *, unsigned int) ATHEME_FATTR_WUR;
+bool digest_init_hmac(struct digest_context *, unsigned int, const void *, size_t) ATHEME_FATTR_WUR;
+bool digest_update(struct digest_context *, const void *, size_t) ATHEME_FATTR_WUR;
+bool digest_final(struct digest_context *, void *, size_t *) ATHEME_FATTR_WUR;
 
-extern bool digest_oneshot(unsigned int, const void *, size_t, void *, size_t *) ATHEME_FATTR_WUR;
-extern bool digest_oneshot_hmac(unsigned int, const void *, size_t, const void *, size_t,
+bool digest_oneshot(unsigned int, const void *, size_t, void *, size_t *) ATHEME_FATTR_WUR;
+bool digest_oneshot_hmac(unsigned int, const void *, size_t, const void *, size_t,
                                 void *, size_t *) ATHEME_FATTR_WUR;
 
-extern bool digest_pbkdf2_hmac(unsigned int, const void *, size_t, const void *, size_t, size_t,
+bool digest_pbkdf2_hmac(unsigned int, const void *, size_t, const void *, size_t, size_t,
                                void *, size_t) ATHEME_FATTR_WUR;
 
-extern bool digest_testsuite_run(void) ATHEME_FATTR_WUR;
+bool digest_testsuite_run(void) ATHEME_FATTR_WUR;
 
 #endif /* !INC_DIGEST_H */

@@ -69,31 +69,31 @@ typedef struct {
 } hook_user_delete_t;
 
 /* function.c */
-extern bool is_ircop(struct user *user);
-extern bool is_admin(struct user *user);
-extern bool is_internal_client(struct user *user);
-extern bool is_autokline_exempt(struct user *user);
-extern bool is_service(struct user *user);
+bool is_ircop(struct user *user);
+bool is_admin(struct user *user);
+bool is_internal_client(struct user *user);
+bool is_autokline_exempt(struct user *user);
+bool is_service(struct user *user);
 
 /* users.c */
 extern mowgli_patricia_t *userlist;
 extern mowgli_patricia_t *uidlist;
 
-extern void init_users(void);
+void init_users(void);
 
-extern struct user *user_add(const char *nick, const char *user, const char *host, const char *vhost, const char *ip, const char *uid, const char *gecos, struct server *server, time_t ts);
-extern void user_delete(struct user *u, const char *comment);
-extern struct user *user_find(const char *nick);
-extern struct user *user_find_named(const char *nick);
-extern void user_changeuid(struct user *u, const char *uid);
-extern bool user_changenick(struct user *u, const char *nick, time_t ts);
-extern void user_mode(struct user *user, const char *modes);
-extern void user_sethost(struct user *source, struct user *target, const char *host);
-extern const char *user_get_umodestr(struct user *u);
-extern bool user_is_channel_banned(struct user *u, char ban_type);
+struct user *user_add(const char *nick, const char *user, const char *host, const char *vhost, const char *ip, const char *uid, const char *gecos, struct server *server, time_t ts);
+void user_delete(struct user *u, const char *comment);
+struct user *user_find(const char *nick);
+struct user *user_find_named(const char *nick);
+void user_changeuid(struct user *u, const char *uid);
+bool user_changenick(struct user *u, const char *nick, time_t ts);
+void user_mode(struct user *user, const char *modes);
+void user_sethost(struct user *source, struct user *target, const char *host);
+const char *user_get_umodestr(struct user *u);
+bool user_is_channel_banned(struct user *u, char ban_type);
 
 /* uid.c */
-extern void init_uid(void);
-extern const char *uid_get(void);
+void init_uid(void);
+const char *uid_get(void);
 
 #endif

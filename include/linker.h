@@ -8,6 +8,6 @@
 #ifndef LINKER_H
 #define LINKER_H
 
-extern mowgli_module_t *linker_open_ext(const char *path, char *errbuf, int errlen);
+mowgli_module_t *linker_open_ext(const char *path, char *errbuf, int errlen);
 
 #endif

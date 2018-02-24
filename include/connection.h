@@ -81,26 +81,26 @@ struct connection
 #define CF_IS_CONNECTING(x) ((x)->flags & CF_CONNECTING)
 #define CF_IS_LISTENING(x) ((x)->flags & CF_LISTENING)
 
-extern struct connection *connection_add(const char *, int, unsigned int,
+struct connection *connection_add(const char *, int, unsigned int,
 	void(*)(struct connection *),
 	void(*)(struct connection *));
-extern struct connection *connection_open_tcp(char *, char *, unsigned int,
+struct connection *connection_open_tcp(char *, char *, unsigned int,
 	void(*)(struct connection *),
 	void(*)(struct connection *));
-extern struct connection *connection_open_listener_tcp(char *, unsigned int,
+struct connection *connection_open_listener_tcp(char *, unsigned int,
 	void(*)(struct connection *));
-extern struct connection *connection_accept_tcp(struct connection *,
+struct connection *connection_accept_tcp(struct connection *,
 	void(*)(struct connection *),
 	void(*)(struct connection *));
-extern void connection_setselect_read(struct connection *, void(*)(struct connection *));
-extern void connection_setselect_write(struct connection *, void(*)(struct connection *));
-extern void connection_close(struct connection *);
-extern void connection_close_soon(struct connection *);
-extern void connection_close_soon_children(struct connection *);
-extern void connection_close_all(void);
-extern void connection_close_all_fds(void);
-extern void connection_stats(void (*)(const char *, void *), void *);
-extern struct connection *connection_find(int);
+void connection_setselect_read(struct connection *, void(*)(struct connection *));
+void connection_setselect_write(struct connection *, void(*)(struct connection *));
+void connection_close(struct connection *);
+void connection_close_soon(struct connection *);
+void connection_close_soon_children(struct connection *);
+void connection_close_all(void);
+void connection_close_all_fds(void);
+void connection_stats(void (*)(const char *, void *), void *);
+struct connection *connection_find(int);
 //inline int connection_count(void);
 
 extern mowgli_list_t connection_list;

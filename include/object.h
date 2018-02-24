@@ -27,21 +27,21 @@ struct atheme_object
 #endif
 };
 
-extern void init_metadata(void);
+void init_metadata(void);
 
-extern void atheme_object_init(struct atheme_object *, const char *name, atheme_object_destructor_fn destructor);
-extern void *atheme_object_ref(void *);
-extern void *atheme_object_sink_ref(void *);
-extern void atheme_object_unref(void *);
-extern void atheme_object_dispose(void *);
+void atheme_object_init(struct atheme_object *, const char *name, atheme_object_destructor_fn destructor);
+void *atheme_object_ref(void *);
+void *atheme_object_sink_ref(void *);
+void atheme_object_unref(void *);
+void atheme_object_dispose(void *);
 
-extern struct metadata *metadata_add(void *target, const char *name, const char *value);
-extern void metadata_delete(void *target, const char *name);
-extern struct metadata *metadata_find(void *target, const char *name);
-extern void metadata_delete_all(void *target);
+struct metadata *metadata_add(void *target, const char *name, const char *value);
+void metadata_delete(void *target, const char *name);
+struct metadata *metadata_find(void *target, const char *name);
+void metadata_delete_all(void *target);
 
-extern void *privatedata_get(void *target, const char *key);
-extern void privatedata_set(void *target, const char *key, void *data);
+void *privatedata_get(void *target, const char *key);
+void privatedata_set(void *target, const char *key, void *data);
 
 #ifdef OBJECT_DEBUG
 extern mowgli_list_t object_list;

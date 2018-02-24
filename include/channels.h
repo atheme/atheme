@@ -139,45 +139,45 @@ typedef struct {
 } hook_channel_mode_change_t;
 
 /* cmode.c */
-extern char *flags_to_string(unsigned int flags);
-extern int mode_to_flag(char c);
-extern void channel_mode(struct user *source, struct channel *chan, int parc, char *parv[]);
-extern void channel_mode_va(struct user *source, struct channel *chan, int parc, char *parv0, ...);
-extern void clear_simple_modes(struct channel *c);
-extern char *channel_modes(struct channel *c, bool doparams);
-extern void modestack_flush_channel(struct channel *channel);
-extern void modestack_forget_channel(struct channel *channel);
-extern void modestack_finalize_channel(struct channel *channel);
-extern void check_modes(struct mychan *mychan, bool sendnow);
+char *flags_to_string(unsigned int flags);
+int mode_to_flag(char c);
+void channel_mode(struct user *source, struct channel *chan, int parc, char *parv[]);
+void channel_mode_va(struct user *source, struct channel *chan, int parc, char *parv0, ...);
+void clear_simple_modes(struct channel *c);
+char *channel_modes(struct channel *c, bool doparams);
+void modestack_flush_channel(struct channel *channel);
+void modestack_forget_channel(struct channel *channel);
+void modestack_finalize_channel(struct channel *channel);
+void check_modes(struct mychan *mychan, bool sendnow);
 
-extern void modestack_mode_simple_real(const char *source, struct channel *channel, int dir, int flags);
-extern void modestack_mode_limit_real(const char *source, struct channel *channel, int dir, unsigned int limit);
-extern void modestack_mode_ext_real(const char *source, struct channel *channel, int dir, unsigned int i, const char *value);
-extern void modestack_mode_param_real(const char *source, struct channel *channel, int dir, char type, const char *value);
+void modestack_mode_simple_real(const char *source, struct channel *channel, int dir, int flags);
+void modestack_mode_limit_real(const char *source, struct channel *channel, int dir, unsigned int limit);
+void modestack_mode_ext_real(const char *source, struct channel *channel, int dir, unsigned int i, const char *value);
+void modestack_mode_param_real(const char *source, struct channel *channel, int dir, char type, const char *value);
 
 extern void (*modestack_mode_simple)(const char *source, struct channel *channel, int dir, int flags);
 extern void (*modestack_mode_limit)(const char *source, struct channel *channel, int dir, unsigned int limit);
 extern void (*modestack_mode_ext)(const char *source, struct channel *channel, int dir, unsigned int i, const char *value);
 extern void (*modestack_mode_param)(const char *source, struct channel *channel, int dir, char type, const char *value);
 
-extern void modestack_flush_now(void);
+void modestack_flush_now(void);
 
 /* channels.c */
 extern mowgli_patricia_t *chanlist;
 
-extern void init_channels(void);
+void init_channels(void);
 
-extern struct channel *channel_add(const char *name, time_t ts, struct server *creator);
-extern void channel_delete(struct channel *c);
+struct channel *channel_add(const char *name, time_t ts, struct server *creator);
+void channel_delete(struct channel *c);
 //inline struct channel *channel_find(const char *name);
 
-extern struct chanuser *chanuser_add(struct channel *chan, const char *user);
-extern void chanuser_delete(struct channel *chan, struct user *user);
-extern struct chanuser *chanuser_find(struct channel *chan, struct user *user);
+struct chanuser *chanuser_add(struct channel *chan, const char *user);
+void chanuser_delete(struct channel *chan, struct user *user);
+struct chanuser *chanuser_find(struct channel *chan, struct user *user);
 
-extern struct chanban *chanban_add(struct channel *chan, const char *mask, int type);
-extern void chanban_delete(struct chanban *c);
-extern struct chanban *chanban_find(struct channel *chan, const char *mask, int type);
+struct chanban *chanban_add(struct channel *chan, const char *mask, int type);
+void chanban_delete(struct chanban *c);
+struct chanban *chanban_find(struct channel *chan, const char *mask, int type);
 //inline void chanban_clear(struct channel *chan);
 
 #endif

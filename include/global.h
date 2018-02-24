@@ -165,11 +165,11 @@ extern int runflags;
 #define RF_REHASHING    0x00000010      /* rehashing   */
 
 /* node.c */
-extern void init_nodes(void);
+void init_nodes(void);
 /* The following currently only do uplinks -- jilles */
-extern void mark_all_illegal(void);
-extern void unmark_all_illegal(void);
-extern void remove_illegals(void);
+void mark_all_illegal(void);
+void unmark_all_illegal(void);
+void remove_illegals(void);
 
 /* atheme.c */
 extern mowgli_eventloop_t *base_eventloop;
@@ -181,7 +181,7 @@ extern char *config_file;
 extern char *datadir;
 
 /* conf.c */
-extern const char *get_conf_opts(void);
+const char *get_conf_opts(void);
 
 /* version.c */
 extern const char *creation;
@@ -192,8 +192,8 @@ extern const char *osinfo;
 extern const char *infotext[];
 
 /* signal.c */
-extern void check_signals(void);
-extern void childproc_add(pid_t pid, const char *desc, void (*cb)(pid_t pid, int status, void *data), void *data);
-extern void childproc_delete_all(void (*cb)(pid_t pid, int status, void *data));
+void check_signals(void);
+void childproc_add(pid_t pid, const char *desc, void (*cb)(pid_t pid, int status, void *data), void *data);
+void childproc_delete_all(void (*cb)(pid_t pid, int status, void *data));
 
 #endif

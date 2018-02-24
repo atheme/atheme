@@ -111,14 +111,14 @@ typedef struct
 	(cp) += NS_INT32SZ; \
 }
 
-extern int irc_res_init(void);
-extern int irc_dn_expand(const unsigned char *msg, const unsigned char *eom, const unsigned char *src, char *dst, int dstsiz);
-extern int irc_dn_skipname(const unsigned char *ptr, const unsigned char *eom);
-extern unsigned int irc_ns_get16(const unsigned char *src);
-extern unsigned long irc_ns_get32(const unsigned char *src);
-extern void irc_ns_put16(unsigned int src, unsigned char *dst);
-extern void irc_ns_put32(unsigned long src, unsigned char *dst);
-extern int irc_res_mkquery(const char *dname, int class, int type, unsigned char *buf, int buflen);
+int irc_res_init(void);
+int irc_dn_expand(const unsigned char *msg, const unsigned char *eom, const unsigned char *src, char *dst, int dstsiz);
+int irc_dn_skipname(const unsigned char *ptr, const unsigned char *eom);
+unsigned int irc_ns_get16(const unsigned char *src);
+unsigned long irc_ns_get32(const unsigned char *src);
+void irc_ns_put16(unsigned int src, unsigned char *dst);
+void irc_ns_put32(unsigned long src, unsigned char *dst);
+int irc_res_mkquery(const char *dname, int class, int type, unsigned char *buf, int buflen);
 
 extern char irc_domain[IRCD_RES_HOSTLEN + 1];
 

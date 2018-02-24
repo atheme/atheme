@@ -32,11 +32,11 @@ struct uplink
 extern mowgli_list_t uplinks;
 extern struct uplink *curr_uplink;
 
-extern void init_uplinks(void);
-extern struct uplink *uplink_add(const char *name, const char *host, const char *send_password, const char *receive_password, const char *vhost, int port);
-extern void uplink_delete(struct uplink *u);
-extern struct uplink *uplink_find(const char *name);
-extern void uplink_connect(void);
+void init_uplinks(void);
+struct uplink *uplink_add(const char *name, const char *host, const char *send_password, const char *receive_password, const char *vhost, int port);
+void uplink_delete(struct uplink *u);
+struct uplink *uplink_find(const char *name);
+void uplink_connect(void);
 
 /* packet.c */
 /* bursting timer */
@@ -45,10 +45,10 @@ extern struct timeval burstime;
 #endif
 
 extern void (*parse)(char *line);
-extern void irc_handle_connect(struct connection *cptr);
+void irc_handle_connect(struct connection *cptr);
 
 /* send.c */
-extern int sts(const char *fmt, ...) ATHEME_FATTR_PRINTF(1, 2);
-extern void io_loop(void);
+int sts(const char *fmt, ...) ATHEME_FATTR_PRINTF(1, 2);
+void io_loop(void);
 
 #endif
