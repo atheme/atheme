@@ -61,7 +61,8 @@ struct {
  * convey emotion, it is safe to assume that the farmer is always
  * happy.
  */
-typedef struct {
+struct happy_farmer
+{
 	/*
 	 * A farm may be either personal, or collectively owned.  In Atheme terms,
 	 * this means it's owned by an entity instead of a user class.  In terms of
@@ -99,7 +100,7 @@ typedef struct {
 	 * means no Inventory, which means no Profit, which means Sad Starving Farmers.
 	 */
 	struct happy_inventory seed_inventory[PLANT_COUNT];
-} happy_farmer_t;
+};
 
 /*
  * The game progresses at a rate of time that we will describe as The People's
@@ -185,12 +186,12 @@ mowgli_heap_t *farmer_heap = NULL;
 mowgli_heap_t *plot_heap = NULL;
 
 /*
- * When a happy farmer joins our happy little game, we have to create a happy_farmer_t
+ * When a happy farmer joins our happy little game, we have to create a struct happy_farmer
  * object for them.  Which, you know, requires a constructor...
  */
-static happy_farmer_t *happy_farmer_create(struct myentity * mt)
+static struct happy_farmer *happy_farmer_create(struct myentity * mt)
 {
-	happy_farmer_t *farmer;
+	struct happy_farmer *farmer;
 
 	return_val_if_fail(mt != NULL, NULL);
 
@@ -207,7 +208,7 @@ static happy_farmer_t *happy_farmer_create(struct myentity * mt)
  * When a happy farmer decides to commit suicide, Government must intervene and start the
  * probate procedures (which in our case means we take all resources back).
  */
-static void happy_farmer_destroy(happy_farmer_t * farmer)
+static void happy_farmer_destroy(struct happy_farmer * farmer)
 {
 	mowgli_node_t *n, *tn;
 
@@ -231,7 +232,7 @@ static void happy_farmer_destroy(happy_farmer_t * farmer)
 /*
  * A farmer just bought a plot of land.
  */
-static happy_plot_t *happy_plot_create(happy_farmer_t * farmer)
+static happy_plot_t *happy_plot_create(struct happy_farmer * farmer)
 {
 	happy_plot_t *plot;
 
@@ -247,7 +248,7 @@ static happy_plot_t *happy_plot_create(happy_farmer_t * farmer)
 /*
  * The farmer has sold his plot of land back.
  */
-static void happy_plot_destroy(happy_farmer_t * farmer, happy_plot_t * plot)
+static void happy_plot_destroy(struct happy_farmer * farmer, happy_plot_t * plot)
 {
 	return_if_fail(farmer != NULL);
 	return_if_fail(plot != NULL);
@@ -261,7 +262,7 @@ static void happy_plot_destroy(happy_farmer_t * farmer, happy_plot_t * plot)
 /*
  * Find the first plot that can actually be sold back.
  */
-static happy_plot_t *happy_farmer_find_vacant_plot(happy_farmer_t * farmer)
+static happy_plot_t *happy_farmer_find_vacant_plot(struct happy_farmer * farmer)
 {
 	mowgli_node_t *n;
 
@@ -302,7 +303,7 @@ static enum happy_plant_type happy_plant_by_name(const char *name)
  */
 static void __command_join(struct sourceinfo * si, int parc, char *parv[])
 {
-	happy_farmer_t *farmer;
+	struct happy_farmer *farmer;
 
 	farmer = happy_farmer_create(entity(si->smu));
 
@@ -319,7 +320,7 @@ struct command command_join = { "JOIN", N_("Join the Happy Farm game!"), AC_AUTH
 static void __command_buyplot(struct sourceinfo * si, int parc, char *parv[])
 {
 	struct myentity *mt;
-	happy_farmer_t *farmer;
+	struct happy_farmer *farmer;
 
 	mt = entity(si->smu);
 
@@ -355,7 +356,7 @@ struct command command_buyplot = { "BUYPLOT", N_("Buy a plot of land!"), AC_AUTH
 static void __command_sellplot(struct sourceinfo * si, int parc, char *parv[])
 {
 	struct myentity *mt;
-	happy_farmer_t *farmer;
+	struct happy_farmer *farmer;
 	happy_plot_t *plot;
 
 	mt = entity(si->smu);
@@ -418,7 +419,7 @@ struct command command_happyfarm = { "HAPPYFARM", N_("Happy Farm!"), AC_AUTHENTI
 static void
 mod_init(struct module *const restrict m)
 {
-	farmer_heap = mowgli_heap_create(sizeof(happy_farmer_t), 32, BH_LAZY);
+	farmer_heap = mowgli_heap_create(sizeof(struct happy_farmer), 32, BH_LAZY);
 	plot_heap = mowgli_heap_create(sizeof(happy_plot_t), 32, BH_LAZY);
 
 	service_named_bind_command("gameserv", &command_happyfarm);
