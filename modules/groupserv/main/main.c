@@ -7,19 +7,20 @@
 
 struct service *groupsvs;
 
-typedef struct {
+struct groupserv_persist_record
+{
 	int version;
 
 	mowgli_heap_t *mygroup_heap;
 	mowgli_heap_t *groupacs_heap;
-} groupserv_persist_record_t;
+};
 
 extern mowgli_heap_t *mygroup_heap, *groupacs_heap;
 
 static void
 mod_init(struct module *const restrict m)
 {
-	groupserv_persist_record_t *rec = mowgli_global_storage_get("atheme.groupserv.main.persist");
+	struct groupserv_persist_record *rec = mowgli_global_storage_get("atheme.groupserv.main.persist");
 
 	if (rec == NULL)
 		mygroups_init();
@@ -69,7 +70,7 @@ mod_deinit(const enum module_unload_intent intent)
 	{
 		case MODULE_UNLOAD_INTENT_RELOAD:
 		{
-			groupserv_persist_record_t *const rec = smalloc(sizeof *rec);
+			struct groupserv_persist_record *const rec = smalloc(sizeof *rec);
 
 			rec->version = 1;
 			rec->mygroup_heap = mygroup_heap;
