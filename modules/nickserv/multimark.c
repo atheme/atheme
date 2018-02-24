@@ -47,7 +47,8 @@ struct multimark
 	mowgli_node_t node;
 };
 
-struct restored_mark {
+struct restored_mark
+{
 	char *account_uid;
 	char *account_name;
 	char *nick;
@@ -57,8 +58,6 @@ struct restored_mark {
 	char *mark;
 	mowgli_node_t node;
 };
-
-typedef struct restored_mark restored_mark_t;
 
 static bool multimark_match(const struct mynick *mn, const void *arg)
 {
@@ -220,7 +219,7 @@ static void write_multimark_db(struct database_handle *db)
 
 	mowgli_patricia_iteration_state_t state2;
 	mowgli_list_t *rml;
-	restored_mark_t *rm;
+	struct restored_mark *rm;
 	struct multimark *mm;
 
 	MYENTITY_FOREACH_T(mt, &state, ENT_USER)
@@ -329,7 +328,7 @@ static void db_h_rm(struct database_handle *db, const char *type)
 
 	mowgli_list_t *l = restored_mark_list(nick);
 
-	restored_mark_t *rm = smalloc(sizeof *rm);
+	struct restored_mark *rm = smalloc(sizeof *rm);
 
 	rm->account_uid = sstrdup(account_uid);
 	rm->account_name = sstrdup(account_name);
@@ -464,7 +463,7 @@ static void nick_ungroup_hook(hook_user_req_t *hdata)
 	{
 		mm = n->data;
 
-		restored_mark_t *const rm = smalloc(sizeof *rm);
+		struct restored_mark *const rm = smalloc(sizeof *rm);
 		rm->account_uid = sstrdup(uid);
 		rm->nick = sstrdup(nick);
 		rm->account_name = sstrdup(account);
@@ -497,7 +496,7 @@ static void account_drop_hook(struct myuser *mu)
 	{
 		mm = n->data;
 
-		restored_mark_t *const rm = smalloc(sizeof *rm);
+		struct restored_mark *const rm = smalloc(sizeof *rm);
 		rm->account_uid = sstrdup(uid);
 		rm->nick = sstrdup(name);
 		rm->account_name = sstrdup(name);
@@ -515,7 +514,7 @@ static void account_register_hook(struct myuser *mu)
 	mowgli_list_t *l;
 	mowgli_node_t *n, *tn;
 
-	restored_mark_t *rm;
+	struct restored_mark *rm;
 	mowgli_list_t *rml;
 
 	const char *name = entity(mu)->name;
@@ -559,7 +558,7 @@ static void nick_group_hook(hook_user_req_t *hdata)
 	struct multimark *mm2;
 
 	mowgli_list_t *rml;
-	restored_mark_t *rm;
+	struct restored_mark *rm;
 
 	char *uid = entity(smu)->id;
 	const char *name = hdata->mn->nick;
@@ -741,7 +740,7 @@ static void show_multimark_noexist(hook_info_noexist_req_t *hdata)
 	const char *nick = hdata->nick;
 
 	mowgli_node_t *n;
-	restored_mark_t *rm;
+	struct restored_mark *rm;
 	struct tm tm;
 	char time[BUFSIZE];
 
@@ -888,7 +887,7 @@ static void ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 		if (!mu)
 		{
 			rl = restored_mark_list(target);
-			restored_mark_t *rm;
+			struct restored_mark *rm;
 
 			if (rl->count == 0)
 			{
