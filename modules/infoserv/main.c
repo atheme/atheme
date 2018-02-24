@@ -13,14 +13,13 @@
 #include "atheme.h"
 #include <limits.h>
 
-struct logoninfo_ {
+struct logoninfo
+{
         stringref nick;
         char *subject;
         time_t info_ts;
         char *story;
 };
-
-typedef struct logoninfo_ logoninfo_t;
 
 mowgli_list_t logon_info;
 
@@ -97,7 +96,7 @@ static void write_infodb(struct database_handle *db)
 
 	MOWGLI_ITER_FOREACH(n, logon_info.head)
 	{
-		logoninfo_t *l = n->data;
+		struct logoninfo *l = n->data;
 
 		db_start_row(db, "LI");
 		db_write_word(db, l->nick);
@@ -128,7 +127,7 @@ static void db_h_li(struct database_handle *db, const char *type)
 	time_t info_ts = db_sread_time(db);
 	const char *story = db_sread_str(db);
 
-	logoninfo_t *const l = smalloc(sizeof *l);
+	struct logoninfo *const l = smalloc(sizeof *l);
 	l->nick = strshare_get(nick);
 	l->subject = sstrdup(subject);
 	l->info_ts = info_ts;
@@ -155,7 +154,7 @@ static void display_info(hook_user_nick_t *data)
 {
 	struct user *u;
 	mowgli_node_t *n;
-	logoninfo_t *l;
+	struct logoninfo *l;
 	char dBuf[BUFSIZE];
 	struct tm tm;
 	unsigned int count = 0;
@@ -258,7 +257,7 @@ static void is_cmd_post(struct sourceinfo *si, int parc, char *parv[])
 	char *subject = parv[1];
 	char *story = parv[2];
 	int imp;
-	logoninfo_t *l;
+	struct logoninfo *l;
 	operlogoninfo_t *o;
 	mowgli_node_t *n;
 	char buf[BUFSIZE];
@@ -351,7 +350,7 @@ static void is_cmd_del(struct sourceinfo *si, int parc, char *parv[])
 	char *target = parv[0];
 	int x = 0;
 	int id;
-	logoninfo_t *l;
+	struct logoninfo *l;
 	mowgli_node_t *n;
 
 	if (!target)
@@ -448,7 +447,7 @@ static void is_cmd_odel(struct sourceinfo *si, int parc, char *parv[])
 
 static void is_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
-	logoninfo_t *l;
+	struct logoninfo *l;
 	mowgli_node_t *n;
 	struct tm tm;
 	char dBuf[BUFSIZE];
