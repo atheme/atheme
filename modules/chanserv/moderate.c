@@ -34,23 +34,24 @@ static struct command cs_reject   = { "REJECT", N_("Rejects a pending registrati
 static struct command cs_waiting  = { "WAITING", N_("View pending registrations"), PRIV_CHAN_ADMIN,
 				 1, cs_cmd_waiting, { .path = "cservice/waiting" } };
 
-typedef struct {
+struct reg_request
+{
 	char *name;
 	struct myentity *mt;
 	time_t ts;
-} csreq_t;
+};
 
 static mowgli_patricia_t *csreq_list = NULL;
 static char *groupmemo;
 
 /*****************************************************************************/
 
-static csreq_t *csreq_create(const char *name, struct myentity *mt)
+static struct reg_request *csreq_create(const char *name, struct myentity *mt)
 {
 	return_val_if_fail(name != NULL, NULL);
 	return_val_if_fail(mt != NULL, NULL);
 
-	csreq_t *const cs = smalloc(sizeof *cs);
+	struct reg_request *const cs = smalloc(sizeof *cs);
 	cs->name = sstrdup(name);
 	cs->mt = mt;
 	cs->ts = CURRTIME;
@@ -60,14 +61,14 @@ static csreq_t *csreq_create(const char *name, struct myentity *mt)
 	return cs;
 }
 
-static csreq_t *csreq_find(const char *name)
+static struct reg_request *csreq_find(const char *name)
 {
 	return_val_if_fail(name != NULL, NULL);
 
 	return mowgli_patricia_retrieve(csreq_list, name);
 }
 
-static void csreq_destroy(csreq_t *cs)
+static void csreq_destroy(struct reg_request *cs)
 {
 	return_if_fail(cs != NULL);
 
@@ -82,7 +83,7 @@ static void csreq_demarshal(struct database_handle *db, const char *type)
         const char *nick = db_sread_word(db);
         time_t req_ts = db_sread_time(db);
 	struct myentity *mt;
-	csreq_t *cs;
+	struct reg_request *cs;
 
 	mt = myentity_find(nick);
 	if (mt == NULL)
@@ -98,7 +99,7 @@ static void csreq_demarshal(struct database_handle *db, const char *type)
 static void csreq_marshal_set(struct database_handle *db)
 {
 	mowgli_patricia_iteration_state_t state;
-	csreq_t *cs;
+	struct reg_request *cs;
 
 	MOWGLI_PATRICIA_FOREACH(cs, &state, csreq_list)
 	{
@@ -174,7 +175,7 @@ send_group_memo(struct sourceinfo *si, const char *memo, ...)
 /* deny chanserv registrations but turn them into a request */
 static void can_register(hook_channel_register_check_t *req)
 {
-	csreq_t *cs;
+	struct reg_request *cs;
 
 	return_if_fail(req != NULL);
 
@@ -202,7 +203,7 @@ static void cs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
 	struct mychan *mc;
-	csreq_t *cs;
+	struct reg_request *cs;
 	struct chanuser *cu;
 	struct user *u;
 	struct channel *c;
@@ -301,7 +302,7 @@ static void cs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 
 static void cs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
 {
-	csreq_t *cs;
+	struct reg_request *cs;
 	struct myuser *mu;
 
 	if (!parv[0])
@@ -331,7 +332,7 @@ static void cs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
 static void cs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_patricia_iteration_state_t state;
-	csreq_t *cs;
+	struct reg_request *cs;
 	struct tm tm;
 	char strfbuf[BUFSIZE];
 
