@@ -35,10 +35,11 @@ static char **perl_argv = &_perl_argv[0];
 
 static char perl_error[512];
 
-typedef struct {
+struct perl_script_module
+{
 	struct module mod;
 	char filename[BUFSIZE];
-}perl_script_module_t;
+};
 
 static mowgli_heap_t *perl_script_module_heap;
 
@@ -132,7 +133,7 @@ static struct module *do_script_load(const char *filename)
 	 * perl_error buffer is still OK, as it's only used immediately after
 	 * setting, without control passing from this function.
 	 */
-	perl_script_module_t *m = mowgli_heap_alloc(perl_script_module_heap);
+	struct perl_script_module *m = mowgli_heap_alloc(perl_script_module_heap);
 	mowgli_strlcpy(m->filename, filename, sizeof(m->filename));
 
 	snprintf(perl_error, sizeof(perl_error),  "Unknown error attempting to load perl script %s",
@@ -388,7 +389,7 @@ static void hook_module_load(hook_module_load_t *data)
 
 void perl_script_module_unload_handler(struct module *m, const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	perl_script_module_t *pm = (perl_script_module_t *)m;
+	struct perl_script_module *pm = (struct perl_script_module *)m;
 	do_script_unload(pm->filename);
 	mowgli_heap_free(perl_script_module_heap, pm);
 }
@@ -399,7 +400,7 @@ void perl_script_module_unload_handler(struct module *m, const enum module_unloa
 static void
 mod_init(struct module *const restrict m)
 {
-	perl_script_module_heap = mowgli_heap_create(sizeof(perl_script_module_t), 256, BH_NOW);
+	perl_script_module_heap = mowgli_heap_create(sizeof(struct perl_script_module), 256, BH_NOW);
 	if (!perl_script_module_heap)
 	{
 		m->mflags |= MODTYPE_FAIL;
