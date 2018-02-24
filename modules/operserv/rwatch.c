@@ -29,8 +29,7 @@ mowgli_list_t rwatch_list;
 #define RWACT_KLINE 		2
 #define RWACT_QUARANTINE	4
 
-typedef struct rwatch_ rwatch_t;
-struct rwatch_
+struct rwatch
 {
 	char *regex;
 	int reflags; /* AREGEX_* */
@@ -46,7 +45,7 @@ struct command os_rwatch_del = { "DEL", N_("Removes an entry from the regex watc
 struct command os_rwatch_list = { "LIST", N_("Displays the regex watch list."), AC_NONE, 1, os_cmd_rwatch_list, { .path = "" } };
 struct command os_rwatch_set = { "SET", N_("Changes actions on an entry in the regex watch list"), AC_NONE, 1, os_cmd_rwatch_set, { .path = "" } };
 
-rwatch_t *rwread = NULL;
+struct rwatch *rwread = NULL;
 FILE *f;
 
 static void
@@ -90,7 +89,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, rwatch_list.head)
 	{
-		rwatch_t *rw = n->data;
+		struct rwatch *rw = n->data;
 
 		free(rw->regex);
 		free(rw->reason);
@@ -125,7 +124,7 @@ static void write_rwatchdb(struct database_handle *db)
 
 	MOWGLI_ITER_FOREACH(n, rwatch_list.head)
 	{
-		rwatch_t *rw = n->data;
+		struct rwatch *rw = n->data;
 
 		db_start_row(db, "RW");
 		db_write_uint(db, rw->reflags);
@@ -142,7 +141,7 @@ static void write_rwatchdb(struct database_handle *db)
 static void load_rwatchdb(char *path)
 {
 	char *item, rBuf[BUFSIZE * 2];
-	rwatch_t *rw = NULL;
+	struct rwatch *rw = NULL;
 	char newpath[BUFSIZE];
 
 	snprintf(newpath, BUFSIZE, "%s/%s", datadir, "rwatch.db.old");
@@ -291,7 +290,7 @@ static void os_cmd_rwatch_add(struct sourceinfo *si, int parc, char *parv[])
 
 	MOWGLI_ITER_FOREACH(n, rwatch_list.head)
 	{
-		rwatch_t *t = n->data;
+		struct rwatch *t = n->data;
 
 		if (!strcmp(pattern, t->regex))
 		{
@@ -307,7 +306,7 @@ static void os_cmd_rwatch_add(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	rwatch_t *const rw = smalloc(sizeof *rw);
+	struct rwatch *const rw = smalloc(sizeof *rw);
 	rw->regex = sstrdup(pattern);
 	rw->reflags = flags;
 	rw->reason = sstrdup(reason);
@@ -343,7 +342,7 @@ static void os_cmd_rwatch_del(struct sourceinfo *si, int parc, char *parv[])
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, rwatch_list.head)
 	{
-		rwatch_t *rw = n->data;
+		struct rwatch *rw = n->data;
 
 		if (!strcmp(rw->regex, pattern))
 		{
@@ -387,7 +386,7 @@ static void os_cmd_rwatch_list(struct sourceinfo *si, int parc, char *parv[])
 
 	MOWGLI_ITER_FOREACH(n, rwatch_list.head)
 	{
-		rwatch_t *rw = n->data;
+		struct rwatch *rw = n->data;
 
 		command_success_nodata(si, "%s (%s%s%s%s) - %s",
 				rw->regex,
@@ -474,7 +473,7 @@ static void os_cmd_rwatch_set(struct sourceinfo *si, int parc, char *parv[])
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, rwatch_list.head)
 	{
-		rwatch_t *rw = n->data;
+		struct rwatch *rw = n->data;
 
 		if (!strcmp(rw->regex, pattern))
 		{
@@ -510,7 +509,7 @@ static void rwatch_newuser(hook_user_nick_t *data)
 	struct user *u = data->u;
 	char usermask[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + GECOSLEN + 1];
 	mowgli_node_t *n;
-	rwatch_t *rw;
+	struct rwatch *rw;
 
 	/* If the user has been killed, don't do anything. */
 	if (!u)
@@ -575,7 +574,7 @@ static void rwatch_nickchange(hook_user_nick_t *data)
 	char usermask[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + GECOSLEN + 1];
 	char oldusermask[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + GECOSLEN + 1];
 	mowgli_node_t *n;
-	rwatch_t *rw;
+	struct rwatch *rw;
 
 	/* If the user has been killed, don't do anything. */
 	if (!u)
