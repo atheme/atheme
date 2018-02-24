@@ -16,7 +16,8 @@
 /*
  * Types of plants you may grow.
  */
-typedef enum {
+enum happy_plant_type
+{
 	PLANT_NOTHING = 0,
 	PLANT_TURNIP,
 	PLANT_TOMATO,
@@ -29,7 +30,7 @@ typedef enum {
 	PLANT_PEARS,
 	PLANT_APPLES,
 	PLANT_COUNT,
-} happy_planttype_t;
+};
 
 typedef struct {
 	unsigned int count;
@@ -37,7 +38,7 @@ typedef struct {
 
 struct {
 	const char *name;
-	happy_planttype_t plant;
+	enum happy_plant_type plant;
 } happy_planttype_mapping[] = {
 	{N_("nothing"), PLANT_NOTHING},
 	{N_("turnip"), PLANT_TURNIP},
@@ -151,7 +152,7 @@ typedef struct {
 	 * plot of land are the same type.  So, plot::plant == PLANT_CORN means
 	 * you're growing corn.
 	 */
-	happy_planttype_t plant;
+	enum happy_plant_type plant;
 
 	/*
 	 * Since plots of land contain seeds, we need to know how many seeds we have.
@@ -279,7 +280,7 @@ static happy_plot_t *happy_farmer_find_vacant_plot(happy_farmer_t * farmer)
 /*
  * Determine a plant type, given user input.
  */
-static happy_planttype_t happy_plant_by_name(const char *name)
+static enum happy_plant_type happy_plant_by_name(const char *name)
 {
 	unsigned int i;
 
