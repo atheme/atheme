@@ -25,15 +25,14 @@ struct command hs_unoffer = { "UNOFFER", N_("Removes a vhost from the list that 
 struct command hs_offerlist = { "OFFERLIST", N_("Lists all available vhosts."), AC_NONE, 1, hs_cmd_offerlist, { .path = "hostserv/offerlist" } };
 struct command hs_take = { "TAKE", N_("Take an offered vhost for use."), AC_AUTHENTICATED, 2, hs_cmd_take, { .path = "hostserv/take" } };
 
-struct hsoffered_ {
+struct hsoffered
+{
 	char *vhost;
 	time_t vhost_ts;
 	stringref creator;
 	struct myentity *group;
 	mowgli_node_t node;
 };
-
-typedef struct hsoffered_ hsoffered_t;
 
 mowgli_list_t hs_offeredlist;
 
@@ -79,7 +78,7 @@ static void write_hsofferdb(struct database_handle *db)
 
 	MOWGLI_ITER_FOREACH(n, hs_offeredlist.head)
 	{
-		hsoffered_t *l = n->data;
+		struct hsoffered *l = n->data;
 
 		db_start_row(db, "HO");
 
@@ -111,7 +110,7 @@ static void db_h_ho(struct database_handle *db, const char *type)
 	vhost_ts = db_sread_time(db);
 	creator = db_sread_word(db);
 
-	hsoffered_t *const l = smalloc(sizeof *l);
+	struct hsoffered *const l = smalloc(sizeof *l);
 	l->group = mt;
 	l->vhost = sstrdup(buf);
 	l->vhost_ts = vhost_ts;
@@ -120,10 +119,10 @@ static void db_h_ho(struct database_handle *db, const char *type)
 	mowgli_node_add(l, &l->node, &hs_offeredlist);
 }
 
-static inline hsoffered_t *hs_offer_find(const char *host, struct myentity *mt)
+static inline struct hsoffered *hs_offer_find(const char *host, struct myentity *mt)
 {
 	mowgli_node_t *n;
-	hsoffered_t *l;
+	struct hsoffered *l;
 
 	MOWGLI_ITER_FOREACH(n, hs_offeredlist.head)
 	{
@@ -142,7 +141,7 @@ static void remove_group_offered_hosts(struct mygroup *mg)
 
 	struct myentity *mt = entity(mg);
 	mowgli_node_t *n, *tn;
-	hsoffered_t *l;
+	struct hsoffered *l;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, hs_offeredlist.head)
 	{
@@ -166,7 +165,7 @@ static void hs_cmd_offer(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *group = parv[0];
 	char *host;
-	hsoffered_t *l;
+	struct hsoffered *l;
 	struct myentity *mt = NULL;
 
 	if (!group)
@@ -240,7 +239,7 @@ static void hs_cmd_offer(struct sourceinfo *si, int parc, char *parv[])
 static void hs_cmd_unoffer(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *host = parv[0];
-	hsoffered_t *l;
+	struct hsoffered *l;
 	mowgli_node_t *n;
 
 	if (!host)
@@ -299,7 +298,7 @@ static bool myuser_is_in_group(struct myuser *mu, struct myentity *mt)
 static void hs_cmd_take(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *host = parv[0];
-	hsoffered_t *l;
+	struct hsoffered *l;
 	mowgli_node_t *n;
 	struct metadata *md;
 	time_t vhost_time;
@@ -363,7 +362,7 @@ static void hs_cmd_take(struct sourceinfo *si, int parc, char *parv[])
 /* OFFERLIST */
 static void hs_cmd_offerlist(struct sourceinfo *si, int parc, char *parv[])
 {
-	hsoffered_t *l;
+	struct hsoffered *l;
 	mowgli_node_t *n;
 	char buf[BUFSIZE];
 	struct tm tm;
