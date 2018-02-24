@@ -148,7 +148,8 @@ mowgli_list_t happy_plot_list = { NULL, NULL, 0 };
  * grow into plants.  Once GROWTH_RATE is reached, the plot may be harvested
  * and replotted.
  */
-typedef struct {
+struct happy_plot
+{
 	/*
 	 * As previously mentioned, a plot of land contains seeds.  All seeds on a
 	 * plot of land are the same type.  So, plot::plant == PLANT_CORN means
@@ -170,7 +171,7 @@ typedef struct {
 	 * A nore for storage in the global plot list.
 	 */
 	mowgli_node_t global_node;
-} happy_plot_t;
+};
 
 /*******************************************************************************************/
 
@@ -216,7 +217,7 @@ static void happy_farmer_destroy(struct happy_farmer * farmer)
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, farmer->plots.head)
 	{
-		happy_plot_t *plot = n->data;
+		struct happy_plot *plot = n->data;
 
 		mowgli_node_delete(&plot->farmer_node, &farmer->plots);
 		mowgli_node_delete(&plot->global_node, &happy_plot_list);
@@ -232,9 +233,9 @@ static void happy_farmer_destroy(struct happy_farmer * farmer)
 /*
  * A farmer just bought a plot of land.
  */
-static happy_plot_t *happy_plot_create(struct happy_farmer * farmer)
+static struct happy_plot *happy_plot_create(struct happy_farmer * farmer)
 {
-	happy_plot_t *plot;
+	struct happy_plot *plot;
 
 	return_val_if_fail(farmer != NULL, NULL);
 
@@ -248,7 +249,7 @@ static happy_plot_t *happy_plot_create(struct happy_farmer * farmer)
 /*
  * The farmer has sold his plot of land back.
  */
-static void happy_plot_destroy(struct happy_farmer * farmer, happy_plot_t * plot)
+static void happy_plot_destroy(struct happy_farmer * farmer, struct happy_plot * plot)
 {
 	return_if_fail(farmer != NULL);
 	return_if_fail(plot != NULL);
@@ -262,7 +263,7 @@ static void happy_plot_destroy(struct happy_farmer * farmer, happy_plot_t * plot
 /*
  * Find the first plot that can actually be sold back.
  */
-static happy_plot_t *happy_farmer_find_vacant_plot(struct happy_farmer * farmer)
+static struct happy_plot *happy_farmer_find_vacant_plot(struct happy_farmer * farmer)
 {
 	mowgli_node_t *n;
 
@@ -270,7 +271,7 @@ static happy_plot_t *happy_farmer_find_vacant_plot(struct happy_farmer * farmer)
 
 	MOWGLI_ITER_FOREACH(n, farmer->plots.head)
 	{
-		happy_plot_t *plot = n->data;
+		struct happy_plot *plot = n->data;
 
 		if (plot->plant == PLANT_NOTHING)
 			return plot;
@@ -357,7 +358,7 @@ static void __command_sellplot(struct sourceinfo * si, int parc, char *parv[])
 {
 	struct myentity *mt;
 	struct happy_farmer *farmer;
-	happy_plot_t *plot;
+	struct happy_plot *plot;
 
 	mt = entity(si->smu);
 
@@ -420,7 +421,7 @@ static void
 mod_init(struct module *const restrict m)
 {
 	farmer_heap = mowgli_heap_create(sizeof(struct happy_farmer), 32, BH_LAZY);
-	plot_heap = mowgli_heap_create(sizeof(happy_plot_t), 32, BH_LAZY);
+	plot_heap = mowgli_heap_create(sizeof(struct happy_plot), 32, BH_LAZY);
 
 	service_named_bind_command("gameserv", &command_happyfarm);
 
