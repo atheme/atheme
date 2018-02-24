@@ -14,7 +14,8 @@
 # include <sys/file.h>
 #endif
 
-typedef struct opensex_ {
+struct opensex
+{
 	/* Lexing state */
 	char *buf;
 	unsigned int bufsize;
@@ -23,7 +24,7 @@ typedef struct opensex_ {
 
 	/* Interpreting state */
 	unsigned int grver;
-} opensex_t;
+};
 
 #ifdef HAVE_FLOCK
 static int lockfd;
@@ -42,7 +43,7 @@ static void opensex_db_parse(struct database_handle *db)
 
 static void opensex_h_grver(struct database_handle *db, const char *type)
 {
-	opensex_t *rs = (opensex_t *)db->priv;
+	struct opensex *rs = (struct opensex *)db->priv;
 	rs->grver = db_sread_int(db);
 	slog(LG_INFO, "opensex: grammar version is %d.", rs->grver);
 
@@ -56,7 +57,7 @@ static bool opensex_read_next_row(struct database_handle *hdl)
 {
 	int c = 0;
 	unsigned int n = 0;
-	opensex_t *rs = (opensex_t *)hdl->priv;
+	struct opensex *rs = (struct opensex *)hdl->priv;
 
 	while ((c = getc(rs->f)) != EOF && c != '\n')
 	{
@@ -87,7 +88,7 @@ static bool opensex_read_next_row(struct database_handle *hdl)
 
 static const char *opensex_read_word(struct database_handle *db)
 {
-	opensex_t *rs = (opensex_t *)db->priv;
+	struct opensex *rs = (struct opensex *)db->priv;
 	char *ptr = rs->token;
 	char *res;
 	static char buf[BUFSIZE];
@@ -112,7 +113,7 @@ static const char *opensex_read_word(struct database_handle *db)
 
 static const char *opensex_read_str(struct database_handle *db)
 {
-	opensex_t *rs = (opensex_t *)db->priv;
+	struct opensex *rs = (struct opensex *)db->priv;
 	char *res;
 
 	res = rs->token;
@@ -156,11 +157,11 @@ static bool opensex_read_time(struct database_handle *db, time_t *res)
 
 static bool opensex_start_row(struct database_handle *db, const char *type)
 {
-	opensex_t *rs;
+	struct opensex *rs;
 
 	return_val_if_fail(db != NULL, false);
 	return_val_if_fail(type != NULL, false);
-	rs = (opensex_t *)db->priv;
+	rs = (struct opensex *)db->priv;
 
 	fprintf(rs->f, "%s ", type);
 
@@ -169,12 +170,12 @@ static bool opensex_start_row(struct database_handle *db, const char *type)
 
 static bool opensex_write_cell(struct database_handle *db, const char *data, bool multiword)
 {
-	opensex_t *rs;
+	struct opensex *rs;
 	char buf[BUFSIZE], *bi;
 	const char *i;
 
 	return_val_if_fail(db != NULL, false);
-	rs = (opensex_t *)db->priv;
+	rs = (struct opensex *)db->priv;
 
 	fprintf(rs->f, "%s%s", data != NULL ? data : "*", !multiword ? " " : "");
 
@@ -214,10 +215,10 @@ static bool opensex_write_time(struct database_handle *db, time_t tm)
 
 static bool opensex_commit_row(struct database_handle *db)
 {
-	opensex_t *rs;
+	struct opensex *rs;
 
 	return_val_if_fail(db != NULL, false);
-	rs = (opensex_t *)db->priv;
+	rs = (struct opensex *)db->priv;
 
 	fprintf(rs->f, "\n");
 
@@ -247,7 +248,7 @@ static const struct database_vtable opensex_vt = {
 static struct database_handle *opensex_db_open_read(const char *filename)
 {
 	struct database_handle *db;
-	opensex_t *rs;
+	struct opensex *rs;
 	FILE *f;
 	int errno1;
 	char path[BUFSIZE];
@@ -288,7 +289,7 @@ static struct database_handle *opensex_db_open_read(const char *filename)
 static struct database_handle *opensex_db_open_write(const char *filename)
 {
 	struct database_handle *db;
-	opensex_t *rs;
+	struct opensex *rs;
 	int fd;
 	FILE *f;
 	int errno1;
@@ -349,7 +350,7 @@ static struct database_handle *opensex_db_open(const char *filename, enum databa
 
 static void opensex_db_close(struct database_handle *db)
 {
-	opensex_t *rs;
+	struct opensex *rs;
 	int errno1;
 	char oldpath[BUFSIZE], newpath[BUFSIZE];
 
