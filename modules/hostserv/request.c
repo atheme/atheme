@@ -32,14 +32,13 @@ struct command hs_waiting = { "WAITING", N_("Lists vhosts currently waiting for 
 struct command hs_reject = { "REJECT", N_("Reject the requested vhost for the given nick."), PRIV_USER_VHOST, 2, hs_cmd_reject, { .path = "hostserv/reject" } };
 struct command hs_activate = { "ACTIVATE", N_("Activate the requested vhost for a given nick."), PRIV_USER_VHOST, 2, hs_cmd_activate, { .path = "hostserv/activate" } };
 
-struct hsreq_ {
+struct hsrequest
+{
 	char *nick;
 	char *vhost;
 	time_t vhost_ts;
 	char *creator;
 };
-
-typedef struct hsreq_ hsreq_t;
 
 mowgli_list_t hs_reqlist;
 static char *groupmemo;
@@ -105,7 +104,7 @@ static void write_hsreqdb(struct database_handle *db)
 
 	MOWGLI_ITER_FOREACH(n, hs_reqlist.head)
 	{
-		hsreq_t *l = n->data;
+		struct hsrequest *l = n->data;
 
 		db_start_row(db, "HR");
 		db_write_word(db, l->nick);
@@ -123,7 +122,7 @@ static void db_h_hr(struct database_handle *db, const char *type)
 	time_t vhost_ts = db_sread_time(db);
 	const char *creator = db_sread_word(db);
 
-	hsreq_t *const l = smalloc(sizeof *l);
+	struct hsrequest *const l = smalloc(sizeof *l);
 	l->nick = sstrdup(nick);
 	l->vhost = sstrdup(vhost);
 	l->vhost_ts = vhost_ts;
@@ -134,7 +133,7 @@ static void db_h_hr(struct database_handle *db, const char *type)
 static void nick_drop_request(hook_user_req_t *hdata)
 {
 	mowgli_node_t *m;
-	hsreq_t *l;
+	struct hsrequest *l;
 
 	MOWGLI_ITER_FOREACH(m, hs_reqlist.head)
 	{
@@ -158,7 +157,7 @@ static void nick_drop_request(hook_user_req_t *hdata)
 static void account_drop_request(struct myuser *mu)
 {
 	mowgli_node_t *n;
-	hsreq_t *l;
+	struct hsrequest *l;
 
 	MOWGLI_ITER_FOREACH(n, hs_reqlist.head)
 	{
@@ -182,7 +181,7 @@ static void account_drop_request(struct myuser *mu)
 static void account_delete_request(struct myuser *mu)
 {
 	mowgli_node_t *n;
-	hsreq_t *l;
+	struct hsrequest *l;
 
 	MOWGLI_ITER_FOREACH(n, hs_reqlist.head)
 	{
@@ -255,7 +254,7 @@ static void hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 	char buf[BUFSIZE], strfbuf[BUFSIZE];
 	struct metadata *md, *md_timestamp, *md_assigner;
 	mowgli_node_t *n;
-	hsreq_t *l;
+	struct hsrequest *l;
 	hook_host_request_t hdata;
 	int matches = 0;
 
@@ -426,7 +425,7 @@ static void hs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 	char *nick = parv[0];
 	struct user *u;
 	char buf[BUFSIZE];
-	hsreq_t *l;
+	struct hsrequest *l;
 	mowgli_node_t *n, *tn;
 
 	if (!nick)
@@ -492,7 +491,7 @@ static void hs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
 	char *reason = parv[1];
 	struct user *u;
 	char buf[BUFSIZE];
-	hsreq_t *l;
+	struct hsrequest *l;
 	mowgli_node_t *n, *tn;
 
 	if (!nick)
@@ -586,7 +585,7 @@ static void hs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
 /* WAITING */
 static void hs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[])
 {
-	hsreq_t *l;
+	struct hsrequest *l;
 	mowgli_node_t *n;
 	char buf[BUFSIZE];
 	struct tm tm;
