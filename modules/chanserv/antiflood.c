@@ -50,17 +50,18 @@ struct flood_message_queue
 	mowgli_list_t entries;
 };
 
-typedef struct {
+struct flood_message
+{
 	stringref source;
 	char *message;
 	time_t time;
 	mowgli_node_t node;
-} msg_t;
+};
 
 static mowgli_heap_t *msg_heap = NULL;
 
 static void
-msg_destroy(msg_t *msg, struct flood_message_queue *mq)
+msg_destroy(struct flood_message *msg, struct flood_message_queue *mq)
 {
 	free(msg->message);
 	strshare_unref(msg->source);
@@ -69,10 +70,10 @@ msg_destroy(msg_t *msg, struct flood_message_queue *mq)
 	mowgli_heap_free(msg_heap, msg);
 }
 
-static msg_t *
+static struct flood_message *
 msg_create(struct flood_message_queue *mq, struct user *u, const char *message)
 {
-	msg_t *msg;
+	struct flood_message *msg;
 
 	msg = mowgli_heap_alloc(msg_heap);
 	msg->message = sstrdup(message);
@@ -81,7 +82,7 @@ msg_create(struct flood_message_queue *mq, struct user *u, const char *message)
 
 	if (MOWGLI_LIST_LENGTH(&mq->entries) > mq->max)
 	{
-		msg_t *head_msg = mq->entries.head->data;
+		struct flood_message *head_msg = mq->entries.head->data;
 		msg_destroy(head_msg, mq);
 	}
 
@@ -117,7 +118,7 @@ mqueue_free(struct flood_message_queue *mq)
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, mq->entries.head)
 	{
-		msg_t *msg = n->data;
+		struct flood_message *msg = n->data;
 
 		msg_destroy(msg, mq);
 	}
@@ -170,7 +171,7 @@ mqueue_gc(void *unused)
 static enum mqueue_enforce_strategy
 mqueue_should_enforce(struct flood_message_queue *mq)
 {
-	msg_t *oldest, *newest;
+	struct flood_message *oldest, *newest;
 	time_t age_delta;
 
 	if (MOWGLI_LIST_LENGTH(&mq->entries) < mq->max)
@@ -192,7 +193,7 @@ mqueue_should_enforce(struct flood_message_queue *mq)
 
 		MOWGLI_ITER_FOREACH(n, mq->entries.head)
 		{
-			msg_t *msg = n->data;
+			struct flood_message *msg = n->data;
 
 			if (!strcasecmp(msg->message, newest->message))
 				msg_matches++;
@@ -342,7 +343,7 @@ on_channel_message(hook_cmessage_data_t *data)
 	struct chanuser *cu;
 	struct mychan *mc;
 	struct flood_message_queue *mq;
-	msg_t *msg;
+	struct flood_message *msg;
 
 	return_if_fail(data != NULL);
 	return_if_fail(data->msg != NULL);
@@ -523,7 +524,7 @@ mod_init(struct module *m)
 	hook_add_event("channel_drop");
 	hook_add_channel_drop(on_channel_drop);
 
-	msg_heap = sharedheap_get(sizeof(msg_t));
+	msg_heap = sharedheap_get(sizeof(struct flood_message));
 
 	mqueue_heap = sharedheap_get(sizeof(struct flood_message_queue));
 	mqueue_trie = mowgli_patricia_create(irccasecanon);
