@@ -7,9 +7,8 @@
 
 #include "atheme.h"
 
-typedef struct noop_ noop_t;
-
-struct noop_ {
+struct noop
+{
 	char *target;
 	char *added_by;
 	char *reason;
@@ -105,7 +104,7 @@ static void check_user(struct user *u)
 
 	MOWGLI_ITER_FOREACH(n, noop_hostmask_list.head)
 	{
-		noop_t *np = n->data;
+		struct noop *np = n->data;
 
 		if (!match(np->target, hostbuf))
 		{
@@ -124,7 +123,7 @@ static void check_user(struct user *u)
 
 	MOWGLI_ITER_FOREACH(n, noop_server_list.head)
 	{
-		noop_t *np = n->data;
+		struct noop *np = n->data;
 
 		if (!match(np->target, u->server->name))
 		{
@@ -142,13 +141,13 @@ static void check_user(struct user *u)
 	}
 }
 
-static noop_t *noop_find(char *target, mowgli_list_t *list)
+static struct noop *noop_find(char *target, mowgli_list_t *list)
 {
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, list->head)
 	{
-		noop_t *np = n->data;
+		struct noop *np = n->data;
 
 		if (!match(np->target, target))
 			return np;
@@ -161,7 +160,7 @@ static noop_t *noop_find(char *target, mowgli_list_t *list)
 static void os_cmd_noop(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
-	noop_t *np;
+	struct noop *np;
 	char *action = parv[0];
 	enum { type_all, type_hostmask, type_server } type;
 	char *mask = parv[2];
