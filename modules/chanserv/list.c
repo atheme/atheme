@@ -33,7 +33,8 @@ enum list_opttype
 	OPT_AGE,
 };
 
-typedef struct {
+struct list_option
+{
 	char *option;
 	enum list_opttype opttype;
 	union {
@@ -44,7 +45,7 @@ typedef struct {
 		time_t *ageval;
 	} optval;
 	unsigned int flag;
-} list_option_t;
+};
 
 static time_t parse_age(char *s)
 {
@@ -68,7 +69,7 @@ static time_t parse_age(char *s)
 	return duration;
 }
 
-static void process_parvarray(list_option_t *opts, size_t optsize, int parc, char *parv[])
+static void process_parvarray(struct list_option *opts, size_t optsize, int parc, char *parv[])
 {
 	int i;
 	size_t j;
@@ -143,7 +144,7 @@ static void cs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 	time_t age = 0, lastused = 0;
 	bool closed = false, marked = false, markmatch, closedmatch;
 	mowgli_patricia_iteration_state_t state;
-	list_option_t optstable[] = {
+	struct list_option optstable[] = {
 		{"pattern",	OPT_STRING,	{.strval = &chanpattern}, 0},
 		{"mark-reason", OPT_STRING,	{.strval = &markpattern}, 0},
 		{"close-reason", OPT_STRING,    {.strval = &closedpattern}, 0},
