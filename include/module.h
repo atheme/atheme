@@ -105,6 +105,9 @@ struct module *module_find(const char *name);
 struct module *module_find_published(const char *name);
 bool module_request(const char *name);
 
+// Located in libathemecore/module.c
+extern mowgli_list_t modules;
+
 #define DECLARE_MODULE_V1(_name, _unloadcap, _modinit, _moddeinit, _ver, _ven)  \
         extern const struct v4_moduleheader _header;                            \
         const struct v4_moduleheader _header = {                                \
