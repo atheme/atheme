@@ -24,13 +24,14 @@ mowgli_patricia_t *ss_netsplit_cmds;
 mowgli_patricia_t *splitlist;
 mowgli_heap_t *split_heap;
 
-typedef struct {
+struct netsplit
+{
     char *name;
     time_t disconnected_since;
     unsigned int flags;
-} split_t;
+};
 
-static void netsplit_delete_serv(split_t *s)
+static void netsplit_delete_serv(struct netsplit *s)
 {
     mowgli_patricia_delete(splitlist, s->name);
     free(s->name);
@@ -40,7 +41,7 @@ static void netsplit_delete_serv(split_t *s)
 
 static void netsplit_server_add(struct server *s)
 {
-    split_t *serv = mowgli_patricia_retrieve(splitlist, s->name);
+    struct netsplit *serv = mowgli_patricia_retrieve(splitlist, s->name);
     if (serv != NULL)
     {
         netsplit_delete_serv(serv);
@@ -49,7 +50,7 @@ static void netsplit_server_add(struct server *s)
 
 static void netsplit_server_delete(hook_server_delete_t *serv)
 {
-    split_t *s;
+    struct netsplit *s;
 
     s = mowgli_heap_alloc(split_heap);
     s->name = sstrdup(serv->s->name);
@@ -85,7 +86,7 @@ static void ss_cmd_netsplit(struct sourceinfo * si, int parc, char *parv[])
 
 static void ss_cmd_netsplit_list(struct sourceinfo * si, int parc, char *parv[])
 {
-    split_t *s;
+    struct netsplit *s;
     mowgli_patricia_iteration_state_t state;
     int i = 0;
 
@@ -100,7 +101,7 @@ static void ss_cmd_netsplit_list(struct sourceinfo * si, int parc, char *parv[])
 static void ss_cmd_netsplit_remove(struct sourceinfo * si, int parc, char *parv[])
 {
     char *name = parv[0];
-    split_t *s;
+    struct netsplit *s;
 
     if (!name)
     {
@@ -136,7 +137,7 @@ mod_init(struct module *const restrict m)
     hook_add_server_add(netsplit_server_add);
     hook_add_server_delete(netsplit_server_delete);
 
-    split_heap = mowgli_heap_create(sizeof(split_t), 30, BH_NOW);
+    split_heap = mowgli_heap_create(sizeof(struct netsplit), 30, BH_NOW);
 
     if (split_heap == NULL)
     {
@@ -151,7 +152,7 @@ static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
     mowgli_patricia_iteration_state_t state;
-    split_t *s;
+    struct netsplit *s;
 
     MOWGLI_PATRICIA_FOREACH(s, &state, splitlist)
         netsplit_delete_serv(s);
