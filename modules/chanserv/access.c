@@ -233,10 +233,11 @@ struct channel_template
 	mowgli_node_t node;
 };
 
-typedef struct {
+struct channel_template_iter
+{
 	struct mychan *mc;
 	mowgli_list_t *l;
-} template_iter_t;
+};
 
 static int compare_template_nodes(mowgli_node_t *a, mowgli_node_t *b, void *opaque)
 {
@@ -267,7 +268,7 @@ static struct channel_template *find_template(mowgli_list_t *l, const char *key)
 static int append_global_template(const char *key, void *data, void *privdata)
 {
 	struct channel_template *t;
-	template_iter_t *ti = privdata;
+	struct channel_template_iter *ti = privdata;
 	struct default_template *def_t = data;
 	unsigned int vopflags;
 
@@ -299,7 +300,7 @@ static mowgli_list_t *build_template_list(struct mychan *mc)
 	struct metadata *md;
 	mowgli_list_t *l;
 	struct channel_template *t;
-	template_iter_t ti;
+	struct channel_template_iter ti;
 
 	l = mowgli_list_create();
 
