@@ -23,14 +23,15 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("operserv", &os_override);
 }
 
-typedef struct {
+struct override_sourceinfo
+{
 	struct sourceinfo si;
 	struct sourceinfo *parent_si;
-} cooked_sourceinfo_t;
+};
 
 static void override_command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *message)
 {
-	cooked_sourceinfo_t *csi = (cooked_sourceinfo_t *) si;
+	struct override_sourceinfo *csi = (struct override_sourceinfo *) si;
 
 	return_if_fail(csi != NULL);
 
@@ -39,7 +40,7 @@ static void override_command_fail(struct sourceinfo *si, enum cmd_faultcode code
 
 static void override_command_success_nodata(struct sourceinfo *si, const char *message)
 {
-	cooked_sourceinfo_t *csi = (cooked_sourceinfo_t *) si;
+	struct override_sourceinfo *csi = (struct override_sourceinfo *) si;
 
 	return_if_fail(csi != NULL);
 
@@ -48,7 +49,7 @@ static void override_command_success_nodata(struct sourceinfo *si, const char *m
 
 static void override_command_success_string(struct sourceinfo *si, const char *result, const char *message)
 {
-	cooked_sourceinfo_t *csi = (cooked_sourceinfo_t *) si;
+	struct override_sourceinfo *csi = (struct override_sourceinfo *) si;
 
 	return_if_fail(csi != NULL);
 
@@ -57,7 +58,7 @@ static void override_command_success_string(struct sourceinfo *si, const char *r
 
 static const char *override_get_source_name(struct sourceinfo *si)
 {
-	cooked_sourceinfo_t *csi = (cooked_sourceinfo_t *) si;
+	struct override_sourceinfo *csi = (struct override_sourceinfo *) si;
 
 	return_val_if_fail(csi != NULL, NULL);
 
@@ -66,7 +67,7 @@ static const char *override_get_source_name(struct sourceinfo *si)
 
 static const char *override_get_source_mask(struct sourceinfo *si)
 {
-	cooked_sourceinfo_t *csi = (cooked_sourceinfo_t *) si;
+	struct override_sourceinfo *csi = (struct override_sourceinfo *) si;
 
 	return_val_if_fail(csi != NULL, NULL);
 
@@ -75,7 +76,7 @@ static const char *override_get_source_mask(struct sourceinfo *si)
 
 static const char *override_get_oper_name(struct sourceinfo *si)
 {
-	cooked_sourceinfo_t *csi = (cooked_sourceinfo_t *) si;
+	struct override_sourceinfo *csi = (struct override_sourceinfo *) si;
 
 	return_val_if_fail(csi != NULL, NULL);
 
@@ -84,7 +85,7 @@ static const char *override_get_oper_name(struct sourceinfo *si)
 
 static const char *override_get_storage_oper_name(struct sourceinfo *si)
 {
-	cooked_sourceinfo_t *csi = (cooked_sourceinfo_t *) si;
+	struct override_sourceinfo *csi = (struct override_sourceinfo *) si;
 
 	return_val_if_fail(csi != NULL, NULL);
 
@@ -102,7 +103,7 @@ struct sourceinfo_vtable override_vtable = {
 	.get_storage_oper_name = override_get_storage_oper_name,
 };
 
-static void override_sourceinfo_dispose(cooked_sourceinfo_t *o_si)
+static void override_sourceinfo_dispose(struct override_sourceinfo *o_si)
 {
 	atheme_object_unref(o_si->parent_si);
 	free(o_si);
@@ -223,7 +224,7 @@ static void os_cmd_override(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	cooked_sourceinfo_t *const o_si = smalloc(sizeof *o_si);
+	struct override_sourceinfo *const o_si = smalloc(sizeof *o_si);
 	o_si->si.smu = mu;
 	o_si->si.service = svs;
 	o_si->si.v = &override_vtable;
