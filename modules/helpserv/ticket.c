@@ -25,14 +25,13 @@ struct command helpserv_list = { "LIST", N_("Lists users waiting for help."), PR
 struct command helpserv_close = { "CLOSE", N_("Close a users' help request."), PRIV_HELPER, 2, helpserv_cmd_close, { .path = "helpserv/close" } };
 struct command helpserv_cancel = { "CANCEL", N_("Cancel your own pending help request."), AC_AUTHENTICATED, 1, helpserv_cmd_cancel, { .path = "helpserv/cancel" } };
 
-struct ticket_ {
+struct help_ticket
+{
 	stringref nick;
 	time_t ticket_ts;
 	char *creator;
 	char *topic;
 };
-
-typedef struct ticket_ ticket_t;
 
 mowgli_list_t helpserv_reqlist;
 
@@ -81,7 +80,7 @@ static void write_ticket_db(struct database_handle *db)
 
 	MOWGLI_ITER_FOREACH(n, helpserv_reqlist.head)
 	{
-		ticket_t *l = n->data;
+		struct help_ticket *l = n->data;
 
 		db_start_row(db, "HE");
 		db_write_word(db, l->nick);
@@ -99,7 +98,7 @@ static void db_h_he(struct database_handle *db, const char *type)
 	const char *creator = db_sread_word(db);
 	const char *topic = db_sread_str(db);
 
-	ticket_t *const l = smalloc(sizeof *l);
+	struct help_ticket *const l = smalloc(sizeof *l);
 	l->nick = strshare_get(nick);
 	l->ticket_ts = ticket_ts;
 	l->creator = sstrdup(creator);
@@ -110,7 +109,7 @@ static void db_h_he(struct database_handle *db, const char *type)
 static void account_drop_request(struct myuser *mu)
 {
         mowgli_node_t *n;
-        ticket_t *l;
+        struct help_ticket *l;
 
         MOWGLI_ITER_FOREACH(n, helpserv_reqlist.head)
         {
@@ -134,7 +133,7 @@ static void account_drop_request(struct myuser *mu)
 static void account_delete_request(struct myuser *mu)
 {
         mowgli_node_t *n;
-        ticket_t *l;
+        struct help_ticket *l;
 
         MOWGLI_ITER_FOREACH(n, helpserv_reqlist.head)
         {
@@ -160,7 +159,7 @@ static void helpserv_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *topic = parv[0];
 	mowgli_node_t *n;
-	ticket_t *l;
+	struct help_ticket *l;
 
 	if (!topic)
 	{
@@ -235,7 +234,7 @@ static void helpserv_cmd_close(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *nick = parv[0];
 	struct user *u;
-	ticket_t *l;
+	struct help_ticket *l;
 	mowgli_node_t *n;
 
 	if (!nick)
@@ -295,7 +294,7 @@ static void helpserv_cmd_close(struct sourceinfo *si, int parc, char *parv[])
 /* LIST */
 static void helpserv_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
-	ticket_t *l;
+	struct help_ticket *l;
 	mowgli_node_t *n;
 	int x = 0;
 	char buf[BUFSIZE];
@@ -318,7 +317,7 @@ static void helpserv_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 /* CANCEL */
 static void helpserv_cmd_cancel(struct sourceinfo *si, int parc, char *parv[])
 {
-        ticket_t *l;
+        struct help_ticket *l;
         mowgli_node_t *n;
 
         MOWGLI_ITER_FOREACH(n, helpserv_reqlist.head)
