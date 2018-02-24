@@ -15,12 +15,13 @@
 
 #include "atheme.h"
 
-typedef struct {
+struct enforce_timeout
+{
 	char nick[NICKLEN + 1];
 	char host[HOSTLEN + 1];
 	time_t timelimit;
 	mowgli_node_t node;
-} enforce_timeout_t;
+};
 
 mowgli_list_t enforce_list;
 mowgli_heap_t *enforce_timeout_heap;
@@ -168,7 +169,7 @@ static void ns_cmd_release(struct sourceinfo *si, int parc, char *parv[])
 	const char *password = parv[1];
 	struct user *u;
 	mowgli_node_t *n, *tn;
-	enforce_timeout_t *timeout;
+	struct enforce_timeout *timeout;
 
 	/* Absolutely do not do anything like this if nicks
 	 * are not considered owned */
@@ -278,7 +279,7 @@ static void ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 	const char *password = parv[1];
 	struct user *u;
 	mowgli_node_t *n, *tn;
-	enforce_timeout_t *timeout;
+	struct enforce_timeout *timeout;
 	char lau[BUFSIZE];
 
 	/* Absolutely do not do anything like this if nicks
@@ -464,7 +465,7 @@ static void enforce_remove_enforcers(void *arg)
 void enforce_timeout_check(void *arg)
 {
 	mowgli_node_t *n, *tn;
-	enforce_timeout_t *timeout;
+	struct enforce_timeout *timeout;
 	struct user *u;
 	struct mynick *mn;
 	bool valid;
@@ -531,7 +532,7 @@ static void check_registration(hook_user_register_check_t *hdata)
 
 static void check_enforce(hook_nick_enforce_t *hdata)
 {
-	enforce_timeout_t *timeout, *timeout2;
+	struct enforce_timeout *timeout, *timeout2;
 	mowgli_node_t *n;
 	struct metadata *md;
 
@@ -635,7 +636,7 @@ mod_init(struct module *const restrict m)
 		return;
 	}
 
-	enforce_timeout_heap = mowgli_heap_create(sizeof(enforce_timeout_t), 128, BH_NOW);
+	enforce_timeout_heap = mowgli_heap_create(sizeof(struct enforce_timeout), 128, BH_NOW);
 	if (enforce_timeout_heap == NULL)
 	{
 		m->mflags = MODTYPE_FAIL;
