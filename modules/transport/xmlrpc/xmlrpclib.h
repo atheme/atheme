@@ -54,26 +54,26 @@
 
 typedef int (*XMLRPCMethodFunc)(void *userdata, int ac, char **av);
 
-extern int xmlrpc_getlast_error(void);
-extern void xmlrpc_process(char *buffer, void *userdata);
-extern int xmlrpc_register_method(const char *name, XMLRPCMethodFunc func);
-extern int xmlrpc_unregister_method(const char *method);
+int xmlrpc_getlast_error(void);
+void xmlrpc_process(char *buffer, void *userdata);
+int xmlrpc_register_method(const char *name, XMLRPCMethodFunc func);
+int xmlrpc_unregister_method(const char *method);
 
-extern char *xmlrpc_array(int argc, ...);
-extern char *xmlrpc_double(char *buf, double value);
-extern char *xmlrpc_boolean(char *buf, int value);
-extern char *xmlrpc_string(char *buf, const char *value);
-extern char *xmlrpc_integer(char *buf, int value);
-extern char *xmlrpc_time2date(char *buf, time_t t);
+char *xmlrpc_array(int argc, ...);
+char *xmlrpc_double(char *buf, double value);
+char *xmlrpc_boolean(char *buf, int value);
+char *xmlrpc_string(char *buf, const char *value);
+char *xmlrpc_integer(char *buf, int value);
+char *xmlrpc_time2date(char *buf, time_t t);
 
-extern int xmlrpc_set_options(int type, const char *value);
-extern void xmlrpc_set_buffer(char *(*func)(char *buffer, int len));
-extern void xmlrpc_generic_error(int code, const char *string);
-extern void xmlrpc_send(int argc, ...);
-extern void xmlrpc_send_string(const char *value);
-extern int xmlrpc_about(void *userdata, int ac, char **av);
-extern void xmlrpc_char_encode(char *outbuffer, const char *s1);
-extern char *xmlrpc_decode_string(char *buf);
-extern char *xmlrpc_normalizeBuffer(const char *buf);
+int xmlrpc_set_options(int type, const char *value);
+void xmlrpc_set_buffer(char *(*func)(char *buffer, int len));
+void xmlrpc_generic_error(int code, const char *string);
+void xmlrpc_send(int argc, ...);
+void xmlrpc_send_string(const char *value);
+int xmlrpc_about(void *userdata, int ac, char **av);
+void xmlrpc_char_encode(char *outbuffer, const char *s1);
+char *xmlrpc_decode_string(char *buf);
+char *xmlrpc_normalizeBuffer(const char *buf);
 
 #endif
