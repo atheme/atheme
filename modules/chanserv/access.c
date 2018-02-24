@@ -226,11 +226,12 @@ static inline unsigned int count_bits(unsigned int bits)
 	return count;
 }
 
-typedef struct {
+struct channel_template
+{
 	char name[400];
 	unsigned int level;
 	mowgli_node_t node;
-} template_t;
+};
 
 typedef struct {
 	struct mychan *mc;
@@ -239,13 +240,13 @@ typedef struct {
 
 static int compare_template_nodes(mowgli_node_t *a, mowgli_node_t *b, void *opaque)
 {
-	template_t *ta = a->data;
-	template_t *tb = b->data;
+	struct channel_template *ta = a->data;
+	struct channel_template *tb = b->data;
 
 	return count_bits(ta->level) - count_bits(tb->level);
 }
 
-static template_t *find_template(mowgli_list_t *l, const char *key)
+static struct channel_template *find_template(mowgli_list_t *l, const char *key)
 {
 	mowgli_node_t *iter;
 
@@ -254,7 +255,7 @@ static template_t *find_template(mowgli_list_t *l, const char *key)
 
 	MOWGLI_ITER_FOREACH(iter, l->head)
 	{
-		template_t *t = iter->data;
+		struct channel_template *t = iter->data;
 
 		if (!strcasecmp(t->name, key))
 			return t;
@@ -265,7 +266,7 @@ static template_t *find_template(mowgli_list_t *l, const char *key)
 
 static int append_global_template(const char *key, void *data, void *privdata)
 {
-	template_t *t;
+	struct channel_template *t;
 	template_iter_t *ti = privdata;
 	struct default_template *def_t = data;
 	unsigned int vopflags;
@@ -297,7 +298,7 @@ static mowgli_list_t *build_template_list(struct mychan *mc)
 	static char flagname[400];
 	struct metadata *md;
 	mowgli_list_t *l;
-	template_t *t;
+	struct channel_template *t;
 	template_iter_t ti;
 
 	l = mowgli_list_create();
@@ -358,7 +359,7 @@ static void free_template_list(mowgli_list_t *l)
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, l->head)
 	{
-		template_t *t = n->data;
+		struct channel_template *t = n->data;
 
 		mowgli_node_delete(&t->node, l);
 		free(t);
@@ -390,14 +391,14 @@ static const char *get_template_name(struct mychan *mc, unsigned int level)
 	mowgli_list_t *l;
 	mowgli_node_t *n;
 	static char flagname[400];
-	template_t *exact_t = NULL;
+	struct channel_template *exact_t = NULL;
 
 	l = build_template_list(mc);
 
 	/* find exact_t, lesser_t and greater_t */
 	MOWGLI_ITER_FOREACH(n, l->head)
 	{
-		template_t *t = n->data;
+		struct channel_template *t = n->data;
 
 		if (t->level == level)
 			exact_t = t;
@@ -1145,7 +1146,7 @@ static void cs_cmd_role_list(struct sourceinfo *si, int parc, char *parv[])
 
 		MOWGLI_ITER_FOREACH(n, l->head)
 		{
-			template_t *t = n->data;
+			struct channel_template *t = n->data;
 
 			command_success_nodata(si, "%-20s: %s (%s)", t->name, xflag_tostr(t->level), bitmask_to_flags(t->level));
 		}
@@ -1229,7 +1230,7 @@ static void cs_cmd_role_add(struct sourceinfo *si, int parc, char *parv[])
 
 		MOWGLI_ITER_FOREACH(n, l->head)
 		{
-			template_t *t = n->data;
+			struct channel_template *t = n->data;
 
 			if (t->level == newflags)
 			{
@@ -1326,7 +1327,7 @@ static void cs_cmd_role_set(struct sourceinfo *si, int parc, char *parv[])
 
 		MOWGLI_ITER_FOREACH(n, l->head)
 		{
-			template_t *t = n->data;
+			struct channel_template *t = n->data;
 
 			if (t->level == newflags)
 			{
