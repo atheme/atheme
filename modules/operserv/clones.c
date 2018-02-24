@@ -45,8 +45,7 @@ static long kline_duration;
 static int clones_allowed, clones_warn;
 static unsigned int clones_dbversion = 1;
 
-typedef struct cexcept_ cexcept_t;
-struct cexcept_
+struct clones_exemption
 {
 	char *ip;
 	int allowed;
@@ -64,7 +63,7 @@ struct hostentry_
 	unsigned int gracekills;
 };
 
-static inline bool cexempt_expired(cexcept_t *c)
+static inline bool cexempt_expired(struct clones_exemption *c)
 {
 	if (c && c->expires && CURRTIME > c->expires)
 		return true;
@@ -167,7 +166,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, clone_exempts.head)
 	{
-		cexcept_t *c = n->data;
+		struct clones_exemption *c = n->data;
 
 		free(c->ip);
 		free(c->reason);
@@ -221,7 +220,7 @@ static void write_exemptdb(struct database_handle *db)
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, clone_exempts.head)
 	{
-		cexcept_t *c = n->data;
+		struct clones_exemption *c = n->data;
 		if (cexempt_expired(c))
 		{
 			free(c->ip);
@@ -286,7 +285,7 @@ static void db_h_ex(struct database_handle *db, const char *type)
 	time_t expires = db_sread_time(db);
 	const char *reason = db_sread_str(db);
 
-	cexcept_t *const c = smalloc(sizeof *c);
+	struct clones_exemption *const c = smalloc(sizeof *c);
 	c->ip = sstrdup(ip);
 	c->allowed = allowed;
 	c->warn = warn;
@@ -295,14 +294,14 @@ static void db_h_ex(struct database_handle *db, const char *type)
 	mowgli_node_add(c, mowgli_node_create(), &clone_exempts);
 }
 
-static cexcept_t * find_exempt(const char *ip)
+static struct clones_exemption * find_exempt(const char *ip)
 {
 	mowgli_node_t *n;
 
 	/* first check for an exact match */
 	MOWGLI_ITER_FOREACH(n, clone_exempts.head)
 	{
-		cexcept_t *c = n->data;
+		struct clones_exemption *c = n->data;
 
 		if (!strcmp(ip, c->ip))
 			return c;
@@ -311,7 +310,7 @@ static cexcept_t * find_exempt(const char *ip)
 	/* then look for cidr */
 	MOWGLI_ITER_FOREACH(n, clone_exempts.head)
 	{
-		cexcept_t *c = n->data;
+		struct clones_exemption *c = n->data;
 
 		if (!match_ips(c->ip, ip))
 			return c;
@@ -414,7 +413,7 @@ static void os_cmd_clones_list(struct sourceinfo *si, int parc, char *parv[])
 
 		if (k > 3)
 		{
-			cexcept_t *c = find_exempt(he->ip);
+			struct clones_exemption *c = find_exempt(he->ip);
 			if (c)
 				command_success_nodata(si, _("%d from %s (\2EXEMPT\2; allowed %d)"), k, he->ip, c->allowed);
 			else
@@ -434,7 +433,7 @@ static void os_cmd_clones_addexempt(struct sourceinfo *si, int parc, char *parv[
 	char *expiry = parv[2];
 	char *reason = parv[3];
 	char rreason[BUFSIZE];
-	cexcept_t *c = NULL;
+	struct clones_exemption *c = NULL;
 	long duration;
 
 	if (!ip || !clonesstr || !expiry)
@@ -529,7 +528,7 @@ static void os_cmd_clones_addexempt(struct sourceinfo *si, int parc, char *parv[
 
 	MOWGLI_ITER_FOREACH(n, clone_exempts.head)
 	{
-		cexcept_t *t = n->data;
+		struct clones_exemption *t = n->data;
 
 		if (!strcmp(ip, t->ip))
 			c = t;
@@ -582,7 +581,7 @@ static void os_cmd_clones_delexempt(struct sourceinfo *si, int parc, char *parv[
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, clone_exempts.head)
 	{
-		cexcept_t *c = n->data;
+		struct clones_exemption *c = n->data;
 
 		if (cexempt_expired(c))
 		{
@@ -663,7 +662,7 @@ static void os_cmd_clones_setexempt(struct sourceinfo *si, int parc, char *parv[
 	else if (ip) {
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, clone_exempts.head)
 		{
-			cexcept_t *c = n->data;
+			struct clones_exemption *c = n->data;
 
 			if (cexempt_expired(c))
 			{
@@ -812,7 +811,7 @@ static void os_cmd_clones_listexempt(struct sourceinfo *si, int parc, char *parv
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, clone_exempts.head)
 	{
-		cexcept_t *c = n->data;
+		struct clones_exemption *c = n->data;
 
 		if (cexempt_expired(c))
 		{
@@ -857,7 +856,7 @@ static void clones_newuser(hook_user_nick_t *data)
 	mowgli_node_add(u, mowgli_node_create(), &he->clients);
 	i = MOWGLI_LIST_LENGTH(&he->clients);
 
-	cexcept_t *c = find_exempt(u->ip);
+	struct clones_exemption *c = find_exempt(u->ip);
 	if (c == 0)
 	{
 		allowed = clones_allowed;
