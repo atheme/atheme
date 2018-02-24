@@ -23,14 +23,13 @@ struct logoninfo
 
 mowgli_list_t logon_info;
 
-struct operlogoninfo_ {
+struct operlogoninfo
+{
         stringref nick;
         char *subject;
         time_t info_ts;
         char *story;
 };
-
-typedef struct operlogoninfo_ operlogoninfo_t;
 
 mowgli_list_t operlogon_info;
 unsigned int logoninfo_count = 0;
@@ -108,7 +107,7 @@ static void write_infodb(struct database_handle *db)
 
 	MOWGLI_ITER_FOREACH(n, operlogon_info.head)
 	{
-		operlogoninfo_t *o = n->data;
+		struct operlogoninfo *o = n->data;
 
 		db_start_row(db, "LIO");
 		db_write_word(db, o->nick);
@@ -142,7 +141,7 @@ static void db_h_lio(struct database_handle *db, const char *type)
 	time_t info_ts = db_sread_time(db);
 	const char *story = db_sread_str(db);
 
-	operlogoninfo_t *const o = smalloc(sizeof *o);
+	struct operlogoninfo *const o = smalloc(sizeof *o);
 	o->nick = strshare_get(nick);
 	o->subject = sstrdup(subject);
 	o->info_ts = info_ts;
@@ -201,7 +200,7 @@ static void display_info(hook_user_nick_t *data)
 static void display_oper_info(struct user *u)
 {
 	mowgli_node_t *n;
-	operlogoninfo_t *o;
+	struct operlogoninfo *o;
 	char dBuf[BUFSIZE];
 	struct tm tm;
 	unsigned int count = 0;
@@ -258,7 +257,7 @@ static void is_cmd_post(struct sourceinfo *si, int parc, char *parv[])
 	char *story = parv[2];
 	int imp;
 	struct logoninfo *l;
-	operlogoninfo_t *o;
+	struct operlogoninfo *o;
 	mowgli_node_t *n;
 	char buf[BUFSIZE];
 
@@ -400,7 +399,7 @@ static void is_cmd_odel(struct sourceinfo *si, int parc, char *parv[])
 	char *target = parv[0];
 	int x = 0;
 	int id;
-	operlogoninfo_t *o;
+	struct operlogoninfo *o;
 	mowgli_node_t *n;
 
 	if (!target)
@@ -475,7 +474,7 @@ static void is_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 
 static void is_cmd_olist(struct sourceinfo *si, int parc, char *parv[])
 {
-	operlogoninfo_t *o;
+	struct operlogoninfo *o;
 	mowgli_node_t *n;
 	struct tm tm;
 	char dBuf[BUFSIZE];
