@@ -32,9 +32,10 @@ enum happy_plant_type
 	PLANT_COUNT,
 };
 
-typedef struct {
+struct happy_inventory
+{
 	unsigned int count;
-} happy_inventory_t;
+};
 
 struct {
 	const char *name;
@@ -91,13 +92,13 @@ typedef struct {
 	 * rules of acquisition, Profit is Life.  Without an Inventory, there is
 	 * no Profit.
 	 */
-	happy_inventory_t inventory[PLANT_COUNT];
+	struct happy_inventory inventory[PLANT_COUNT];
 
 	/*
 	 * The second most important thing for a farm is it's seedbank.  No seedbank,
 	 * means no Inventory, which means no Profit, which means Sad Starving Farmers.
 	 */
-	happy_inventory_t seed_inventory[PLANT_COUNT];
+	struct happy_inventory seed_inventory[PLANT_COUNT];
 } happy_farmer_t;
 
 /*
