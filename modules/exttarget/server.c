@@ -9,17 +9,18 @@
 
 static mowgli_patricia_t **exttarget_tree = NULL;
 
-typedef struct {
+struct this_exttarget
+{
 	struct myentity parent;
 	stringref server;
-} server_exttarget_t;
+};
 
 static struct chanacs *server_ext_match_user(struct chanacs *ca, struct user *u)
 {
-	server_exttarget_t *ent;
+	struct this_exttarget *ent;
 	mowgli_node_t *n;
 
-	ent = (server_exttarget_t *) ca->entity;
+	ent = (struct this_exttarget *) ca->entity;
 	if (match(ent->server, u->server->name) == 0)
 		return ca;
 
@@ -54,7 +55,7 @@ static const struct entity_chanacs_validation_vtable server_ext_validate = {
 static mowgli_heap_t *server_ext_heap = NULL;
 static mowgli_patricia_t *server_exttarget_tree = NULL;
 
-static void server_ext_delete(server_exttarget_t *e)
+static void server_ext_delete(struct this_exttarget *e)
 {
 	return_if_fail(e != NULL);
 
@@ -68,7 +69,7 @@ static void server_ext_delete(server_exttarget_t *e)
 static struct myentity *server_validate_f(const char *param)
 {
 	char *name;
-	server_exttarget_t *ext;
+	struct this_exttarget *ext;
 	size_t namelen;
 
 	if (param == NULL)
@@ -118,7 +119,7 @@ mod_init(struct module *const restrict m)
 	mowgli_patricia_add(*exttarget_tree, "server", server_validate_f);
 
 	server_exttarget_tree = mowgli_patricia_create(irccasecanon);
-	server_ext_heap = mowgli_heap_create(sizeof(server_exttarget_t), 32, BH_LAZY);
+	server_ext_heap = mowgli_heap_create(sizeof(struct this_exttarget), 32, BH_LAZY);
 }
 
 static void
