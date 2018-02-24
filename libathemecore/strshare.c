@@ -25,10 +25,10 @@
 
 mowgli_patricia_t *strshare_dict;
 
-typedef struct
+struct strshare
 {
 	int refcount;
-} strshare_t;
+};
 
 void strshare_init(void)
 {
@@ -37,7 +37,7 @@ void strshare_init(void)
 
 stringref strshare_get(const char *str)
 {
-	strshare_t *ss;
+	struct strshare *ss;
 
 	if (str == NULL)
 		return NULL;
@@ -58,13 +58,13 @@ stringref strshare_get(const char *str)
 
 stringref strshare_ref(stringref str)
 {
-	strshare_t *ss;
+	struct strshare *ss;
 
 	if (str == NULL)
 		return NULL;
 
 	/* intermediate cast to suppress gcc -Wcast-qual */
-	ss = (strshare_t *)(uintptr_t)str - 1;
+	ss = (struct strshare *)(uintptr_t)str - 1;
 	ss->refcount++;
 
 	return str;
@@ -72,13 +72,13 @@ stringref strshare_ref(stringref str)
 
 void strshare_unref(stringref str)
 {
-	strshare_t *ss;
+	struct strshare *ss;
 
 	if (str == NULL)
 		return;
 
 	/* intermediate cast to suppress gcc -Wcast-qual */
-	ss = (strshare_t *)(uintptr_t)str - 1;
+	ss = (struct strshare *)(uintptr_t)str - 1;
 	ss->refcount--;
 	if (ss->refcount == 0)
 	{
