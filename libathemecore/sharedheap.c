@@ -23,24 +23,15 @@
 
 #include "atheme.h"
 
-typedef struct {
-	struct atheme_object parent;
-
-	size_t size;
-	mowgli_heap_t *heap;
-
-	mowgli_node_t node;
-} sharedheap_t;
-
 mowgli_list_t sharedheap_list;
 
-static sharedheap_t *sharedheap_find_by_size(size_t size)
+static struct sharedheap *sharedheap_find_by_size(size_t size)
 {
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, sharedheap_list.head)
 	{
-		sharedheap_t *s = n->data;
+		struct sharedheap *s = n->data;
 
 		if (s->size == size)
 			return s;
@@ -49,13 +40,13 @@ static sharedheap_t *sharedheap_find_by_size(size_t size)
 	return NULL;
 }
 
-static sharedheap_t *sharedheap_find_by_heap(mowgli_heap_t *heap)
+static struct sharedheap *sharedheap_find_by_heap(mowgli_heap_t *heap)
 {
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, sharedheap_list.head)
 	{
-		sharedheap_t *s = n->data;
+		struct sharedheap *s = n->data;
 
 		if (s->heap == heap)
 			return s;
@@ -64,7 +55,7 @@ static sharedheap_t *sharedheap_find_by_heap(mowgli_heap_t *heap)
 	return NULL;
 }
 
-static void sharedheap_destroy(sharedheap_t *s)
+static void sharedheap_destroy(struct sharedheap *s)
 {
 	return_if_fail(s != NULL);
 
@@ -107,9 +98,9 @@ static inline size_t sharedheap_normalize_size(size_t size)
 	return normalized;
 }
 
-static sharedheap_t *sharedheap_new(size_t size)
+static struct sharedheap *sharedheap_new(size_t size)
 {
-	sharedheap_t *const s = smalloc(sizeof *s);
+	struct sharedheap *const s = smalloc(sizeof *s);
 	atheme_object_init(atheme_object(s), NULL, (atheme_object_destructor_fn) sharedheap_destroy);
 
 	s->size = size;
@@ -122,7 +113,7 @@ static sharedheap_t *sharedheap_new(size_t size)
 
 mowgli_heap_t *sharedheap_get(size_t size)
 {
-	sharedheap_t *s;
+	struct sharedheap *s;
 
 	size = sharedheap_normalize_size(size);
 
@@ -146,7 +137,7 @@ mowgli_heap_t *sharedheap_get(size_t size)
 
 void sharedheap_unref(mowgli_heap_t *heap)
 {
-	sharedheap_t *s;
+	struct sharedheap *s;
 
 	return_if_fail(heap != NULL);
 

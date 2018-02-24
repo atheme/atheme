@@ -187,6 +187,16 @@ extern unsigned int base64touint(const char *buf);
 extern void decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN + 1]);
 
 /* sharedheap.c */
+struct sharedheap
+{
+	struct atheme_object parent;
+
+	size_t size;
+	mowgli_heap_t *heap;
+
+	mowgli_node_t node;
+};
+
 extern mowgli_heap_t *sharedheap_get(size_t size);
 extern void sharedheap_unref(mowgli_heap_t *heap);
 extern char *combine_path(const char *parent, const char *child);

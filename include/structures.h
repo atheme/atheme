@@ -119,6 +119,7 @@ struct default_template;
 // Defined in include/tools.h
 struct email_canonicalizer_item;
 struct logfile;
+struct sharedheap;
 
 // Defined in include/uid.h
 struct uid_provider;
