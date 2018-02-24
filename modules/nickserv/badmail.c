@@ -15,14 +15,13 @@ static void db_h_be(struct database_handle *db, const char *type);
 
 struct command ns_badmail = { "BADMAIL", N_("Disallows registrations from certain email addresses."), PRIV_USER_ADMIN, 3, ns_cmd_badmail, { .path = "nickserv/badmail" } };
 
-struct badmail_ {
+struct badmail
+{
 	char *mail;
 	time_t mail_ts;
 	char *creator;
 	char *reason;
 };
-
-typedef struct badmail_ badmail_t;
 
 mowgli_list_t ns_maillist;
 
@@ -62,7 +61,7 @@ static void write_bedb(struct database_handle *db)
 
 	MOWGLI_ITER_FOREACH(n, ns_maillist.head)
 	{
-		badmail_t *l = n->data;
+		struct badmail *l = n->data;
 
 		db_start_row(db, "BE");
 		db_write_word(db, l->mail);
@@ -80,7 +79,7 @@ static void db_h_be(struct database_handle *db, const char *type)
 	const char *creator = db_sread_word(db);
 	const char *reason = db_sread_str(db);
 
-	badmail_t *const l = smalloc(sizeof *l);
+	struct badmail *const l = smalloc(sizeof *l);
 	l->mail = sstrdup(mail);
 	l->mail_ts = mail_ts;
 	l->creator = sstrdup(creator);
@@ -90,7 +89,7 @@ static void db_h_be(struct database_handle *db, const char *type)
 static void check_registration(hook_user_register_check_t *hdata)
 {
 	mowgli_node_t *n;
-	badmail_t *l;
+	struct badmail *l;
 
 	if (hdata->approved)
 		return;
@@ -117,7 +116,7 @@ static void ns_cmd_badmail(struct sourceinfo *si, int parc, char *parv[])
 	char *email = parv[1];
 	char *reason = parv[2];
 	mowgli_node_t *n, *tn;
-	badmail_t *l;
+	struct badmail *l;
 
 	if (!action)
 	{
