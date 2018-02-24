@@ -97,7 +97,8 @@ struct BlacklistClient {
 	mowgli_node_t node;
 };
 
-struct dnsbl_exempt_ {
+struct dnsbl_exemption
+{
 	char *ip;
 	time_t exempt_ts;
 	char *creator;
@@ -105,8 +106,6 @@ struct dnsbl_exempt_ {
 
 	mowgli_node_t node;
 };
-
-typedef struct dnsbl_exempt_ dnsbl_exempt_t;
 
 mowgli_list_t dnsbl_elist;
 
@@ -170,7 +169,7 @@ static void ps_cmd_dnsblexempt(struct sourceinfo *si, int parc, char *parv[])
 	char *ip = parv[1];
 	char *reason = parv[2];
 	mowgli_node_t *n, *tn;
-	dnsbl_exempt_t *de;
+	struct dnsbl_exemption *de;
 
 	if (!command)
 	{
@@ -489,7 +488,7 @@ static void check_dnsbls(hook_user_nick_t *data)
 
 	MOWGLI_ITER_FOREACH(n, dnsbl_elist.head)
 	{
-		dnsbl_exempt_t *de = n->data;
+		struct dnsbl_exemption *de = n->data;
 
 		if (!irccasecmp(de->ip, u->ip))
 			return;
@@ -568,7 +567,7 @@ static void write_dnsbl_exempt_db(struct database_handle *db)
 
 	MOWGLI_ITER_FOREACH(n, dnsbl_elist.head)
 	{
-		dnsbl_exempt_t *de = n->data;
+		struct dnsbl_exemption *de = n->data;
 
 		db_start_row(db, "BLE");
 		db_write_word(db, de->ip);
@@ -586,7 +585,7 @@ static void db_h_ble(struct database_handle *db, const char *type)
 	const char *creator = db_sread_word(db);
 	const char *reason = db_sread_word(db);
 
-	dnsbl_exempt_t *const de = smalloc(sizeof *de);
+	struct dnsbl_exemption *const de = smalloc(sizeof *de);
 	de->ip = sstrdup(ip);
 	de->exempt_ts = exempt_ts;
 	de->creator = sstrdup(creator);
