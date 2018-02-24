@@ -32,8 +32,6 @@ struct service *botsvs;
 
 unsigned int min_users = 0;
 
-extern mowgli_list_t mychan;
-
 mowgli_list_t bs_bots;
 
 struct command bs_bot = { "BOT", "Maintains network bot list.", PRIV_USER_ADMIN, 6, bs_cmd_bot, { .path = "botserv/bot" } };
