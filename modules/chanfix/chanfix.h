@@ -68,22 +68,22 @@ struct chanfix_persist_record
 extern struct service *chanfix;
 extern mowgli_patricia_t *chanfix_channels;
 
-extern void chanfix_gather_init(struct chanfix_persist_record *);
-extern void chanfix_gather_deinit(enum module_unload_intent, struct chanfix_persist_record *);
+void chanfix_gather_init(struct chanfix_persist_record *);
+void chanfix_gather_deinit(enum module_unload_intent, struct chanfix_persist_record *);
 
-extern void chanfix_oprecord_update(struct chanfix_channel *chan, struct user *u);
-extern void chanfix_oprecord_delete(struct chanfix_oprecord *orec);
-extern struct chanfix_oprecord *chanfix_oprecord_create(struct chanfix_channel *chan, struct user *u);
-extern struct chanfix_oprecord *chanfix_oprecord_find(struct chanfix_channel *chan, struct user *u);
-extern struct chanfix_channel *chanfix_channel_create(const char *name, struct channel *chan);
-extern struct chanfix_channel *chanfix_channel_find(const char *name);
-extern struct chanfix_channel *chanfix_channel_get(struct channel *chan);
-extern void chanfix_gather(void *unused);
-extern void chanfix_expire(void *unused);
+void chanfix_oprecord_update(struct chanfix_channel *chan, struct user *u);
+void chanfix_oprecord_delete(struct chanfix_oprecord *orec);
+struct chanfix_oprecord *chanfix_oprecord_create(struct chanfix_channel *chan, struct user *u);
+struct chanfix_oprecord *chanfix_oprecord_find(struct chanfix_channel *chan, struct user *u);
+struct chanfix_channel *chanfix_channel_create(const char *name, struct channel *chan);
+struct chanfix_channel *chanfix_channel_find(const char *name);
+struct chanfix_channel *chanfix_channel_get(struct channel *chan);
+void chanfix_gather(void *unused);
+void chanfix_expire(void *unused);
 
 extern bool chanfix_do_autofix;
-extern void chanfix_autofix_ev(void *unused);
-extern void chanfix_can_register(hook_channel_register_check_t *req);
+void chanfix_autofix_ev(void *unused);
+void chanfix_can_register(hook_channel_register_check_t *req);
 
 extern struct command cmd_list;
 extern struct command cmd_chanfix;
