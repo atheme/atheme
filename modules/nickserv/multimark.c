@@ -35,7 +35,8 @@ static mowgli_patricia_t *restored_marks;
 
 struct command ns_multimark = { "MARK", N_("Adds a note to a user."), PRIV_MARK, 3, ns_cmd_multimark, { .path = "nickserv/multimark" } };
 
-struct multimark {
+struct multimark
+{
 	char *setter_uid;
 	char *setter_name;
 	char *restored_from_uid;
@@ -57,7 +58,6 @@ struct restored_mark {
 	mowgli_node_t node;
 };
 
-typedef struct multimark multimark_t;
 typedef struct restored_mark restored_mark_t;
 
 static bool multimark_match(const struct mynick *mn, const void *arg)
@@ -68,7 +68,7 @@ static bool multimark_match(const struct mynick *mn, const void *arg)
 	mowgli_list_t *l = multimark_list(mu);
 
 	mowgli_node_t *n;
-	multimark_t *mm;
+	struct multimark *mm;
 
 	MOWGLI_ITER_FOREACH(n, l->head)
 	{
@@ -221,7 +221,7 @@ static void write_multimark_db(struct database_handle *db)
 	mowgli_patricia_iteration_state_t state2;
 	mowgli_list_t *rml;
 	restored_mark_t *rm;
-	multimark_t *mm;
+	struct multimark *mm;
 
 	MYENTITY_FOREACH_T(mt, &state, ENT_USER)
 	{
@@ -296,7 +296,7 @@ static void db_h_mm(struct database_handle *db, const char *type)
 
 	l = multimark_list(mu);
 
-	multimark_t *const mm = smalloc(sizeof *mm);
+	struct multimark *const mm = smalloc(sizeof *mm);
 
 	mm->setter_uid = sstrdup(setter_uid);
 	mm->setter_name = sstrdup(setter_name);
@@ -368,7 +368,7 @@ static void migrate_user(struct myuser *mu)
 	md = metadata_find(mu, "private:mark:timestamp");
 	time = md != NULL ? atoi(md->value) : 0;
 
-	multimark_t *const mm = smalloc(sizeof *mm);
+	struct multimark *const mm = smalloc(sizeof *mm);
 
 	/*
 	 * "Was MARKED by nick (actual_account)"
@@ -432,7 +432,7 @@ int get_multimark_max(struct myuser *mu)
 	mowgli_list_t *l = multimark_list(mu);
 
 	mowgli_node_t *n;
-	multimark_t *mm;
+	struct multimark *mm;
 
 	MOWGLI_ITER_FOREACH(n, l->head)
 	{
@@ -452,7 +452,7 @@ static void nick_ungroup_hook(hook_user_req_t *hdata)
 	mowgli_list_t *l = multimark_list(mu);
 
 	mowgli_node_t *n;
-	multimark_t *mm;
+	struct multimark *mm;
 
 	char *uid = entity(mu)->id;
 	const char *nick = hdata->mn->nick;
@@ -487,7 +487,7 @@ static void account_drop_hook(struct myuser *mu)
 	mowgli_list_t *l = multimark_list(mu);
 
 	mowgli_node_t *n;
-	multimark_t *mm;
+	struct multimark *mm;
 
 	char *uid = entity(mu)->id;
 	const char *name = entity(mu)->name;
@@ -535,7 +535,7 @@ static void account_register_hook(struct myuser *mu)
 	{
 		rm = n->data;
 
-		multimark_t *const mm = smalloc(sizeof *mm);
+		struct multimark *const mm = smalloc(sizeof *mm);
 		mm->setter_uid = sstrdup(rm->setter_uid);
 		mm->setter_name = sstrdup(rm->setter_name);
 		mm->restored_from_uid = rm->account_uid;
@@ -556,7 +556,7 @@ static void nick_group_hook(hook_user_req_t *hdata)
 	mowgli_list_t *l;
 
 	mowgli_node_t *n, *tn, *n2;
-	multimark_t *mm2;
+	struct multimark *mm2;
 
 	mowgli_list_t *rml;
 	restored_mark_t *rm;
@@ -592,7 +592,7 @@ static void nick_group_hook(hook_user_req_t *hdata)
 			continue;
 		}
 
-		multimark_t *const mm = smalloc(sizeof *mm);
+		struct multimark *const mm = smalloc(sizeof *mm);
 		mm->setter_uid = sstrdup(rm->setter_uid);
 		mm->setter_name = sstrdup(rm->setter_name);
 		mm->restored_from_uid = rm->account_uid;
@@ -610,7 +610,7 @@ static void show_multimark(hook_user_req_t *hdata)
 	mowgli_list_t *l;
 
 	mowgli_node_t *n;
-	multimark_t *mm;
+	struct multimark *mm;
 	struct tm tm;
 	char time[BUFSIZE];
 
@@ -821,7 +821,7 @@ static void ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_list_t *l;
 
 	mowgli_node_t *n;
-	multimark_t *mm;
+	struct multimark *mm;
 	struct tm tm;
 	char time[BUFSIZE];
 
