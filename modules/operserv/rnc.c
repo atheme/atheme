@@ -11,8 +11,7 @@ static void os_cmd_rnc(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_rnc = { "RNC", N_("Shows the most frequent realnames on the network"), PRIV_USER_AUSPEX, 1, os_cmd_rnc, { .path = "oservice/rnc" } };
 
-typedef struct rnc_t_ rnc_t;
-struct rnc_t_
+struct rnc
 {
 	const char *gecos;
 	int count;
@@ -35,7 +34,7 @@ static void os_cmd_rnc(struct sourceinfo *si, int parc, char *parv[])
 	char *param = parv[0];
 	int count = param ? atoi(param) : 20;
 	struct user *u;
-	rnc_t *rnc, *biggest;
+	struct rnc *rnc, *biggest;
 	mowgli_patricia_t *realnames;
 	int i, found = 0;
 	mowgli_patricia_iteration_state_t state;
