@@ -12,7 +12,8 @@ static void gs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command gs_fflags = { "FFLAGS", N_("Forces a flag change on a user in a group."), PRIV_GROUP_ADMIN, 3, gs_cmd_fflags, { .path = "groupserv/fflags" } };
 
-static void gs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
+static void
+gs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
 	struct mygroup *mg;
