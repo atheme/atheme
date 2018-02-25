@@ -18,7 +18,8 @@ struct command ns_list = { "LIST", N_("Lists nicknames registered matching a giv
 void list_register(const char *param_name, struct list_param *param);
 void list_unregister(const char *param_name);
 
-static bool email_match(const struct mynick *mn, const void *arg)
+static bool
+email_match(const struct mynick *mn, const void *arg)
 {
 	struct myuser *mu = mn->owner;
 	const char *cmpr = (const char*)arg;
@@ -26,7 +27,8 @@ static bool email_match(const struct mynick *mn, const void *arg)
 	return !match(cmpr, mu->email);
 }
 
-static bool lastlogin_match(const struct mynick *mn, const void *arg)
+static bool
+lastlogin_match(const struct mynick *mn, const void *arg)
 {
 	struct myuser *mu = mn->owner;
 	const time_t lastlogin = *(time_t *)arg;
@@ -34,7 +36,8 @@ static bool lastlogin_match(const struct mynick *mn, const void *arg)
 	return (CURRTIME - mu->lastlogin) > lastlogin;
 }
 
-static bool pattern_match(const struct mynick *mn, const void *arg)
+static bool
+pattern_match(const struct mynick *mn, const void *arg)
 {
 	const char *pattern = (const char*)arg;
 
@@ -84,7 +87,8 @@ static bool pattern_match(const struct mynick *mn, const void *arg)
 	return true;
 }
 
-static bool registered_match(const struct mynick *mn, const void *arg)
+static bool
+registered_match(const struct mynick *mn, const void *arg)
 {
 	struct myuser *mu = mn->owner;
 	const time_t age = *(time_t *)arg;
@@ -92,7 +96,9 @@ static bool registered_match(const struct mynick *mn, const void *arg)
 	return (CURRTIME - mu->registered) > age;
 }
 
-static bool has_waitauth(const struct mynick *mn, const void *arg) {
+static bool
+has_waitauth(const struct mynick *mn, const void *arg)
+{
 	struct myuser *mu = mn->owner;
 
 	return ( mu->flags & MU_WAITAUTH ) == MU_WAITAUTH;
@@ -150,16 +156,20 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	list_unregister("waitauth");
 }
 
-void list_register(const char *param_name, struct list_param *param) {
+void
+list_register(const char *param_name, struct list_param *param)
+{
 	mowgli_patricia_add(list_params, param_name, param);
 }
 
-void list_unregister(const char *param_name) {
+void
+list_unregister(const char *param_name)
+{
 	mowgli_patricia_delete(list_params, param_name);
 }
 
-
-static time_t parse_age(char *s)
+static time_t
+parse_age(char *s)
 {
 	time_t duration;
 
@@ -181,7 +191,8 @@ static time_t parse_age(char *s)
 	return duration;
 }
 
-static void build_criteriastr(char *buf, int parc, char *parv[])
+static void
+build_criteriastr(char *buf, int parc, char *parv[])
 {
 	int i;
 
@@ -195,7 +206,8 @@ static void build_criteriastr(char *buf, int parc, char *parv[])
 	}
 }
 
-static void list_one(struct sourceinfo *si, struct myuser *mu, struct mynick *mn)
+static void
+list_one(struct sourceinfo *si, struct myuser *mu, struct mynick *mn)
 {
 	char buf[BUFSIZE];
 
@@ -234,7 +246,8 @@ static void list_one(struct sourceinfo *si, struct myuser *mu, struct mynick *mn
 		command_success_nodata(si, "- %s (%s) (%s) %s", mn->nick, mu->email, entity(mu)->name, buf);
 }
 
-static void ns_cmd_list(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	char criteriastr[BUFSIZE];
 
