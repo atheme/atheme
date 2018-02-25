@@ -109,7 +109,8 @@ conf_report_warning(mowgli_config_file_entry_t *ce, const char *fmt, ...)
 	slog(LG_ERROR, "%s:%d: [%s] warning: %s", ce->fileptr->filename, ce->varlinenum, name, buf);
 }
 
-bool process_uint_configentry(mowgli_config_file_entry_t *ce, unsigned int *var,
+bool
+process_uint_configentry(mowgli_config_file_entry_t *ce, unsigned int *var,
 		unsigned int min, unsigned int max)
 {
 	unsigned long v;
@@ -154,7 +155,8 @@ static struct
 	{ NULL, 0 }
 };
 
-bool process_duration_configentry(mowgli_config_file_entry_t *ce, unsigned int *var,
+bool
+process_duration_configentry(mowgli_config_file_entry_t *ce, unsigned int *var,
 		const char *defunit)
 {
 	unsigned long v;
@@ -212,7 +214,8 @@ bool process_duration_configentry(mowgli_config_file_entry_t *ce, unsigned int *
 	return true;
 }
 
-static void set_default(struct ConfTable *ct)
+static void
+set_default(struct ConfTable *ct)
 {
 	return_if_fail(ct != NULL);
 
@@ -241,7 +244,8 @@ static void set_default(struct ConfTable *ct)
 	}
 }
 
-static void process_configentry(struct ConfTable *ct, mowgli_config_file_entry_t *ce)
+static void
+process_configentry(struct ConfTable *ct, mowgli_config_file_entry_t *ce)
 {
 	return_if_fail(ct != NULL);
 	return_if_fail(ce != NULL);
@@ -297,7 +301,8 @@ static void process_configentry(struct ConfTable *ct, mowgli_config_file_entry_t
 	}
 }
 
-void conf_process(mowgli_config_file_t *cfp)
+void
+conf_process(mowgli_config_file_t *cfp)
 {
 	mowgli_config_file_t *cfptr;
 	mowgli_config_file_entry_t *ce;
@@ -354,7 +359,8 @@ void conf_process(mowgli_config_file_t *cfp)
 	conf_need_rehash = false;
 }
 
-int subblock_handler(mowgli_config_file_entry_t *ce, mowgli_list_t *entries)
+int
+subblock_handler(mowgli_config_file_entry_t *ce, mowgli_list_t *entries)
 {
 	mowgli_node_t *tn;
 	struct ConfTable *ct = NULL;
@@ -388,7 +394,8 @@ int subblock_handler(mowgli_config_file_entry_t *ce, mowgli_list_t *entries)
 	return 0;
 }
 
-struct ConfTable *find_top_conf(const char *name)
+struct ConfTable *
+find_top_conf(const char *name)
 {
 	mowgli_node_t *n;
 	struct ConfTable *ct;
@@ -406,7 +413,8 @@ struct ConfTable *find_top_conf(const char *name)
 	return NULL;
 }
 
-struct ConfTable *find_conf_item(const char *name, mowgli_list_t *conflist)
+struct ConfTable *
+find_conf_item(const char *name, mowgli_list_t *conflist)
 {
 	mowgli_node_t *n;
 	struct ConfTable *ct;
@@ -425,7 +433,8 @@ struct ConfTable *find_conf_item(const char *name, mowgli_list_t *conflist)
 	return NULL;
 }
 
-void add_top_conf(const char *name, int (*handler) (mowgli_config_file_entry_t *ce))
+void
+add_top_conf(const char *name, int (*handler) (mowgli_config_file_entry_t *ce))
 {
 	return_if_fail(name != NULL);
 	return_if_fail(handler != NULL);
@@ -446,7 +455,8 @@ void add_top_conf(const char *name, int (*handler) (mowgli_config_file_entry_t *
 	conf_need_rehash = true;
 }
 
-void add_subblock_top_conf(const char *name, mowgli_list_t *list)
+void
+add_subblock_top_conf(const char *name, mowgli_list_t *list)
 {
 	return_if_fail(name != NULL);
 	return_if_fail(list != NULL);
@@ -467,7 +477,8 @@ void add_subblock_top_conf(const char *name, mowgli_list_t *list)
 	conf_need_rehash = true;
 }
 
-void add_conf_item(const char *name, mowgli_list_t *conflist, int (*handler) (mowgli_config_file_entry_t *ce))
+void
+add_conf_item(const char *name, mowgli_list_t *conflist, int (*handler) (mowgli_config_file_entry_t *ce))
 {
 	return_if_fail(name != NULL);
 	return_if_fail(conflist != NULL);
@@ -489,7 +500,8 @@ void add_conf_item(const char *name, mowgli_list_t *conflist, int (*handler) (mo
 	conf_need_rehash = true;
 }
 
-void add_uint_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, unsigned int *var, unsigned int min, unsigned int max, unsigned int def)
+void
+add_uint_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, unsigned int *var, unsigned int min, unsigned int max, unsigned int def)
 {
 	if (find_conf_item(name, conflist))
 	{
@@ -510,7 +522,8 @@ void add_uint_conf_item(const char *name, mowgli_list_t *conflist, unsigned int 
 	conf_need_rehash = true;
 }
 
-void add_duration_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, unsigned int *var, const char *defunit, unsigned int def)
+void
+add_duration_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, unsigned int *var, const char *defunit, unsigned int def)
 {
 	if (find_conf_item(name, conflist))
 	{
@@ -530,7 +543,8 @@ void add_duration_conf_item(const char *name, mowgli_list_t *conflist, unsigned 
 	conf_need_rehash = true;
 }
 
-void add_dupstr_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, char **var, const char *def)
+void
+add_dupstr_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, char **var, const char *def)
 {
 	if (find_conf_item(name, conflist))
 	{
@@ -549,7 +563,8 @@ void add_dupstr_conf_item(const char *name, mowgli_list_t *conflist, unsigned in
 	conf_need_rehash = true;
 }
 
-void add_bool_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, bool *var, bool def)
+void
+add_bool_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, bool *var, bool def)
 {
 	if (find_conf_item(name, conflist))
 	{
@@ -568,7 +583,8 @@ void add_bool_conf_item(const char *name, mowgli_list_t *conflist, unsigned int 
 	conf_need_rehash = true;
 }
 
-void del_top_conf(const char *name)
+void
+del_top_conf(const char *name)
 {
 	struct ConfTable *ct;
 
@@ -587,7 +603,8 @@ void del_top_conf(const char *name)
 	mowgli_heap_free(conftable_heap, ct);
 }
 
-void del_conf_item(const char *name, mowgli_list_t *conflist)
+void
+del_conf_item(const char *name, mowgli_list_t *conflist)
 {
 	struct ConfTable *ct;
 
@@ -612,7 +629,8 @@ void del_conf_item(const char *name, mowgli_list_t *conflist)
 	mowgli_heap_free(conftable_heap, ct);
 }
 
-conf_handler_fn conftable_get_conf_handler(struct ConfTable *ct)
+conf_handler_fn
+conftable_get_conf_handler(struct ConfTable *ct)
 {
 	return_val_if_fail(ct != NULL, NULL);
 
@@ -620,7 +638,8 @@ conf_handler_fn conftable_get_conf_handler(struct ConfTable *ct)
 }
 
 /* stolen from Sentinel */
-int token_to_value(struct Token token_table[], const char *token)
+int
+token_to_value(struct Token token_table[], const char *token)
 {
 	int i;
 
@@ -639,7 +658,8 @@ int token_to_value(struct Token token_table[], const char *token)
 	return TOKEN_UNMATCHED;
 }
 
-void init_confprocess(void)
+void
+init_confprocess(void)
 {
 	conftable_heap = sharedheap_get(sizeof(struct ConfTable));
 
