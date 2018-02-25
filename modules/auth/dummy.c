@@ -8,7 +8,8 @@
 
 #include "atheme.h"
 
-static bool dummy_auth_user(struct myuser *mu, const char *password)
+static bool
+dummy_auth_user(struct myuser *mu, const char *password)
 {
 	return false;
 }
