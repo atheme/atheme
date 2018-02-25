@@ -14,7 +14,8 @@ struct command cs_sync = { "SYNC", "Forces channel statuses to flags.",
 
 static bool no_vhost_sync = false;
 
-static void do_chanuser_sync(struct mychan *mc, struct chanuser *cu, struct chanacs *ca,
+static void
+do_chanuser_sync(struct mychan *mc, struct chanuser *cu, struct chanacs *ca,
 		bool take)
 {
 	char akickreason[120] = "User is banned from this channel", *p;
@@ -213,7 +214,8 @@ static void do_chanuser_sync(struct mychan *mc, struct chanuser *cu, struct chan
 	}
 }
 
-void do_channel_sync(struct mychan *mc, struct chanacs *ca)
+void
+do_channel_sync(struct mychan *mc, struct chanacs *ca)
 {
 	struct chanuser *cu;
 	mowgli_node_t *n, *tn;
@@ -231,7 +233,8 @@ void do_channel_sync(struct mychan *mc, struct chanacs *ca)
 }
 
 /* this could be a little slow, should probably have an option to disable it */
-static void sync_user(struct user *u)
+static void
+sync_user(struct user *u)
 {
 	mowgli_node_t *iter;
 
@@ -256,7 +259,8 @@ static void sync_user(struct user *u)
 		hook_call_grant_channel_access(u);
 }
 
-static void sync_myuser(struct myuser *mu)
+static void
+sync_myuser(struct myuser *mu)
 {
 	mowgli_node_t *iter;
 
@@ -268,7 +272,8 @@ static void sync_myuser(struct myuser *mu)
 	}
 }
 
-static void sync_channel_acl_change(hook_channel_acl_req_t *hookdata)
+static void
+sync_channel_acl_change(hook_channel_acl_req_t *hookdata)
 {
 	struct mychan *mc;
 
@@ -289,7 +294,8 @@ static void sync_channel_acl_change(hook_channel_acl_req_t *hookdata)
 	do_channel_sync(mc, hookdata->ca);
 }
 
-static void cs_cmd_sync(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_sync(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *name = parv[0];
 	struct mychan *mc;
@@ -339,7 +345,8 @@ struct command cs_set_nosync = { "NOSYNC", N_("Disables automatic channel ACL sy
 
 mowgli_patricia_t **cs_set_cmdtree;
 
-static void cs_cmd_set_nosync(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_set_nosync(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
 
