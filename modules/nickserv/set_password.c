@@ -30,7 +30,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 }
 
 /* SET PASSWORD <password> */
-static void ns_cmd_set_password(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_set_password(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *password = parv[0];
 
