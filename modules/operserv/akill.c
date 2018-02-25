@@ -60,7 +60,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	mowgli_patricia_destroy(os_akill_cmds, NULL, NULL);
 }
 
-static void os_akill_newuser(hook_user_nick_t *data)
+static void
+os_akill_newuser(hook_user_nick_t *data)
 {
 	struct user *u = data->u;
 	struct kline *k;
@@ -86,7 +87,8 @@ static void os_akill_newuser(hook_user_nick_t *data)
 	}
 }
 
-static void os_cmd_akill(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_akill(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* Grab args */
 	char *cmd = parv[0];
@@ -110,7 +112,8 @@ static void os_cmd_akill(struct sourceinfo *si, int parc, char *parv[])
 	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
 
-static void os_cmd_akill_add(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_akill_add(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u;
 	char *target = parv[0];
@@ -292,7 +295,8 @@ static void os_cmd_akill_add(struct sourceinfo *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_ADMIN, "AKILL:ADD: \2%s@%s\2 (reason: \2%s\2) (duration: \2Permanent\2)", k->user, k->host, k->reason);
 }
 
-static void os_cmd_akill_del(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_akill_del(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *userbuf, *hostbuf;
@@ -446,7 +450,8 @@ static void os_cmd_akill_del(struct sourceinfo *si, int parc, char *parv[])
 	kline_delete(k);
 }
 
-static void os_cmd_akill_list(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_akill_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *param = parv[0];
 	char *user = NULL, *host = NULL;
@@ -526,7 +531,8 @@ static void os_cmd_akill_list(struct sourceinfo *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_GET, "AKILL:LIST: \2%s\2", full ? " FULL" : "");
 }
 
-static void os_cmd_akill_sync(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_akill_sync(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
 	struct kline *k;
