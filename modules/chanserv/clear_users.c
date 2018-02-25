@@ -28,7 +28,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	command_delete(&cs_clear_users, *cs_clear_cmds);
 }
 
-static void cs_cmd_clear_users(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_clear_users(struct sourceinfo *si, int parc, char *parv[])
 {
 	char fullreason[200];
 	struct channel *c;
