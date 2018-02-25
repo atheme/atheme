@@ -41,7 +41,7 @@ mod_init(struct module *const restrict m)
 	if (!module_find_published("backend/opensex"))
 	{
 		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
-		m->mflags = MODTYPE_FAIL;
+		m->mflags |= MODTYPE_FAIL;
 		return;
 	}
 

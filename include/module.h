@@ -134,7 +134,7 @@ extern mowgli_list_t modules;
 #define MODULE_TRY_REQUEST_DEPENDENCY(self, modname)                       \
         if (module_request(modname) == false)                              \
         {                                                                  \
-                (self)->mflags = MODTYPE_FAIL;                             \
+                (self)->mflags |= MODTYPE_FAIL;                            \
                 return;                                                    \
         }
 
@@ -144,7 +144,7 @@ extern mowgli_list_t modules;
                 MODULE_TRY_REQUEST_DEPENDENCY(self, modname);              \
                 if ((dest = module_locate_symbol(modname, sym)) == NULL)   \
                 {                                                          \
-                        (self)->mflags = MODTYPE_FAIL;                     \
+                        (self)->mflags |= MODTYPE_FAIL;                    \
                         return;                                            \
                 }                                                          \
         }
@@ -154,7 +154,7 @@ extern mowgli_list_t modules;
         {                                                                  \
                 slog(LG_ERROR, "module %s conflicts with %s, unloading",   \
                      self->name, modname);                                 \
-                (self)->mflags = MODTYPE_FAIL;                             \
+                (self)->mflags |= MODTYPE_FAIL;                            \
                 return;                                                    \
         }
 

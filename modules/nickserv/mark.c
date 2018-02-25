@@ -45,7 +45,7 @@ mod_init(struct module *const restrict m)
 	if (module_find_published("nickserv/multimark"))
 	{
 		slog(LG_INFO, "Loading both multimark and mark has severe consequences for the space-time continuum. Refusing to load.");
-		m->mflags = MODTYPE_FAIL;
+		m->mflags |= MODTYPE_FAIL;
 		return;
 	}
 

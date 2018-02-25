@@ -61,7 +61,7 @@ mod_init(struct module *const restrict m)
 
     	if (akick_timeout_heap == NULL)
     	{
-    		m->mflags = MODTYPE_FAIL;
+		m->mflags |= MODTYPE_FAIL;
     		return;
     	}
 

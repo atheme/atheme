@@ -35,7 +35,7 @@ mod_init(struct module *const restrict m)
 	{
 		slog(LG_INFO, "Module %s requires qline support, refusing to load.",
 				m->name);
-		m->mflags = MODTYPE_FAIL;
+		m->mflags |= MODTYPE_FAIL;
 		return;
 	}
 

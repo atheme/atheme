@@ -15,13 +15,13 @@ mod_init(struct module *const restrict m)
 	if (ircd == NULL)
 	{
 		slog(LG_ERROR, "Module %s must be loaded after a protocol module.", m->name);
-		m->mflags = MODTYPE_FAIL;
+		m->mflags |= MODTYPE_FAIL;
 		return;
 	}
 	if (cnt.mychan > 0)
 	{
 		slog(LG_ERROR, "Module %s must be loaded from the configuration file, not via MODLOAD.", m->name);
-		m->mflags = MODTYPE_FAIL;
+		m->mflags |= MODTYPE_FAIL;
 		return;
 	}
 
