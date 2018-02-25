@@ -37,7 +37,8 @@ mowgli_heap_t *qline_heap;	/* 16 */
  * L I S T S *
  *************/
 
-void init_nodes(void)
+void
+init_nodes(void)
 {
 	kline_heap = sharedheap_get(sizeof(struct kline));
 	xline_heap = sharedheap_get(sizeof(struct xline));
@@ -60,7 +61,8 @@ void init_nodes(void)
 }
 
 /* Mark everything illegal, to be called before a rehash -- jilles */
-void mark_all_illegal()
+void
+mark_all_illegal()
 {
 	mowgli_node_t *n, *tn;
 	struct uplink *u;
@@ -89,7 +91,8 @@ void mark_all_illegal()
 }
 
 /* Unmark everything illegal, to be called after a failed rehash -- jilles */
-void unmark_all_illegal()
+void
+unmark_all_illegal()
 {
 	mowgli_node_t *n;
 	struct uplink *u;
@@ -102,7 +105,8 @@ void unmark_all_illegal()
 }
 
 /* Remove illegal stuff, to be called after a successful rehash -- jilles */
-void remove_illegals()
+void
+remove_illegals()
 {
 	mowgli_node_t *n, *tn;
 	struct uplink *u;
@@ -119,7 +123,8 @@ void remove_illegals()
  * K L I N E *
  *************/
 
-struct kline *kline_add_with_id(const char *user, const char *host, const char *reason, long duration, const char *setby, unsigned long id)
+struct kline *
+kline_add_with_id(const char *user, const char *host, const char *reason, long duration, const char *setby, unsigned long id)
 {
 	struct kline *k;
 	mowgli_node_t *n = mowgli_node_create();
@@ -151,19 +156,22 @@ struct kline *kline_add_with_id(const char *user, const char *host, const char *
 	return k;
 }
 
-struct kline *kline_add(const char *user, const char *host, const char *reason, long duration, const char *setby)
+struct kline *
+kline_add(const char *user, const char *host, const char *reason, long duration, const char *setby)
 {
 	return kline_add_with_id(user, host, reason, duration, setby, ++me.kline_id);
 }
 
-struct kline *kline_add_user(struct user *u, const char *reason, long duration, const char *setby)
+struct kline *
+kline_add_user(struct user *u, const char *reason, long duration, const char *setby)
 {
 	bool use_ident = config_options.kline_with_ident && (!config_options.kline_verified_ident || *u->user != '~');
 
 	return kline_add (use_ident ? u->user : "*", u->ip ? u->ip : u->host, reason, duration, setby);
 }
 
-void kline_delete(struct kline *k)
+void
+kline_delete(struct kline *k)
 {
 	mowgli_node_t *n;
 
@@ -189,7 +197,8 @@ void kline_delete(struct kline *k)
 	cnt.kline--;
 }
 
-struct kline *kline_find(const char *user, const char *host)
+struct kline *
+kline_find(const char *user, const char *host)
 {
 	struct kline *k;
 	mowgli_node_t *n;
@@ -205,7 +214,8 @@ struct kline *kline_find(const char *user, const char *host)
 	return NULL;
 }
 
-struct kline *kline_find_num(unsigned long number)
+struct kline *
+kline_find_num(unsigned long number)
 {
 	struct kline *k;
 	mowgli_node_t *n;
@@ -221,7 +231,8 @@ struct kline *kline_find_num(unsigned long number)
 	return NULL;
 }
 
-struct kline *kline_find_user(struct user *u)
+struct kline *
+kline_find_user(struct user *u)
 {
 	struct kline *k;
 	mowgli_node_t *n;
@@ -239,7 +250,8 @@ struct kline *kline_find_user(struct user *u)
 	return NULL;
 }
 
-void kline_expire(void *arg)
+void
+kline_expire(void *arg)
 {
 	struct kline *k;
 	char *reason;
@@ -272,7 +284,8 @@ void kline_expire(void *arg)
  * X L I N E *
  *************/
 
-struct xline *xline_add(const char *realname, const char *reason, long duration, const char *setby)
+struct xline *
+xline_add(const char *realname, const char *reason, long duration, const char *setby)
 {
 	struct xline *x;
 	mowgli_node_t *n = mowgli_node_create();
@@ -300,7 +313,8 @@ struct xline *xline_add(const char *realname, const char *reason, long duration,
 	return x;
 }
 
-void xline_delete(const char *realname)
+void
+xline_delete(const char *realname)
 {
 	struct xline *x = xline_find(realname);
 	mowgli_node_t *n;
@@ -330,7 +344,8 @@ void xline_delete(const char *realname)
 	cnt.xline--;
 }
 
-struct xline *xline_find(const char *realname)
+struct xline *
+xline_find(const char *realname)
 {
 	struct xline *x;
 	mowgli_node_t *n;
@@ -346,7 +361,8 @@ struct xline *xline_find(const char *realname)
 	return NULL;
 }
 
-struct xline *xline_find_num(unsigned int number)
+struct xline *
+xline_find_num(unsigned int number)
 {
 	struct xline *x;
 	mowgli_node_t *n;
@@ -362,7 +378,8 @@ struct xline *xline_find_num(unsigned int number)
 	return NULL;
 }
 
-struct xline *xline_find_user(struct user *u)
+struct xline *
+xline_find_user(struct user *u)
 {
 	struct xline *x;
 	mowgli_node_t *n;
@@ -381,7 +398,8 @@ struct xline *xline_find_user(struct user *u)
 	return NULL;
 }
 
-void xline_expire(void *arg)
+void
+xline_expire(void *arg)
 {
 	struct xline *x;
 	mowgli_node_t *n, *tn;
@@ -410,7 +428,8 @@ void xline_expire(void *arg)
  * Q L I N E *
  *************/
 
-struct qline *qline_add(const char *mask, const char *reason, long duration, const char *setby)
+struct qline *
+qline_add(const char *mask, const char *reason, long duration, const char *setby)
 {
 	struct qline *q;
 	mowgli_node_t *n = mowgli_node_create();
@@ -437,7 +456,8 @@ struct qline *qline_add(const char *mask, const char *reason, long duration, con
 	return q;
 }
 
-void qline_delete(const char *mask)
+void
+qline_delete(const char *mask)
 {
 	struct qline *q = qline_find(mask);
 	mowgli_node_t *n;
@@ -467,7 +487,8 @@ void qline_delete(const char *mask)
 	cnt.qline--;
 }
 
-struct qline *qline_find(const char *mask)
+struct qline *
+qline_find(const char *mask)
 {
 	struct qline *q;
 	mowgli_node_t *n;
@@ -483,7 +504,8 @@ struct qline *qline_find(const char *mask)
 	return NULL;
 }
 
-struct qline *qline_find_match(const char *mask)
+struct qline *
+qline_find_match(const char *mask)
 {
 	struct qline *q;
 	mowgli_node_t *n;
@@ -501,7 +523,8 @@ struct qline *qline_find_match(const char *mask)
 	return NULL;
 }
 
-struct qline *qline_find_num(unsigned int number)
+struct qline *
+qline_find_num(unsigned int number)
 {
 	struct qline *q;
 	mowgli_node_t *n;
@@ -517,7 +540,8 @@ struct qline *qline_find_num(unsigned int number)
 	return NULL;
 }
 
-struct qline *qline_find_user(struct user *u)
+struct qline *
+qline_find_user(struct user *u)
 {
 	struct qline *q;
 	mowgli_node_t *n;
@@ -537,7 +561,8 @@ struct qline *qline_find_user(struct user *u)
 	return NULL;
 }
 
-struct qline *qline_find_channel(struct channel *c)
+struct qline *
+qline_find_channel(struct channel *c)
 {
 	struct qline *q;
 	mowgli_node_t *n;
@@ -555,7 +580,8 @@ struct qline *qline_find_channel(struct channel *c)
 	return NULL;
 }
 
-void qline_expire(void *arg)
+void
+qline_expire(void *arg)
 {
 	struct qline *q;
 	mowgli_node_t *n, *tn;
