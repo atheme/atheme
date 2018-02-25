@@ -107,7 +107,8 @@ static const struct cmode unreal_user_mode_list[] = {
 };
 
 /* +f 3:1 or +f *3:1 (which is like +f [3t]:1 or +f [3t#b]:1) */
-static inline bool check_flood_old(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
+static inline bool
+check_flood_old(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	bool found_colon = false;
 
@@ -149,7 +150,8 @@ static inline bool check_flood_old(const char *value, struct channel *c, struct 
  *
  * +f [<number><letter>(#<letter>)(,...)]
  */
-static bool check_flood(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
+static bool
+check_flood(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	char evalbuf[BUFSIZE], *ep, *p;
 
@@ -200,7 +202,8 @@ static bool check_flood(const char *value, struct channel *c, struct mychan *mc,
 	return true;
 }
 
-static bool check_forward(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
+static bool
+check_forward(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	struct channel *target_c;
 	struct mychan *target_mc;
@@ -216,7 +219,8 @@ static bool check_forward(const char *value, struct channel *c, struct mychan *m
 	return true;
 }
 
-static mowgli_node_t *unreal_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_node_t *first)
+static mowgli_node_t *
+unreal_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_node_t *first)
 {
 	struct chanban *cb;
 	mowgli_node_t *n;
@@ -286,7 +290,8 @@ static mowgli_node_t *unreal_next_matching_ban(struct channel *c, struct user *u
 }
 
 /* login to our uplink */
-static unsigned int unreal_server_login(void)
+static unsigned int
+unreal_server_login(void)
 {
 	int ret;
 
@@ -308,7 +313,8 @@ static unsigned int unreal_server_login(void)
 }
 
 /* introduce a client */
-static void unreal_introduce_nick(struct user *u)
+static void
+unreal_introduce_nick(struct user *u)
 {
 	const char *umode = user_get_umodestr(u);
 
@@ -319,24 +325,28 @@ static void unreal_introduce_nick(struct user *u)
 }
 
 /* invite a user to a channel */
-static void unreal_invite_sts(struct user *sender, struct user *target, struct channel *channel)
+static void
+unreal_invite_sts(struct user *sender, struct user *target, struct channel *channel)
 {
 	sts(":%s INVITE %s %s", CLIENT_NAME(sender), CLIENT_NAME(target), channel->name);
 }
 
-static void unreal_quit_sts(struct user *u, const char *reason)
+static void
+unreal_quit_sts(struct user *u, const char *reason)
 {
 	sts(":%s QUIT :%s", CLIENT_NAME(u), reason);
 }
 
 /* WALLOPS wrapper */
-static void unreal_wallops_sts(const char *text)
+static void
+unreal_wallops_sts(const char *text)
 {
 	sts(":%s GLOBOPS :%s", ME, text);
 }
 
 /* join a channel */
-static void unreal_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
+static void
+unreal_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
 {
 	if (isnew)
 		sts(":%s SJOIN %lu %s %s :@%s", ME, (unsigned long)c->ts,
@@ -347,7 +357,8 @@ static void unreal_join_sts(struct channel *c, struct user *u, bool isnew, char 
 }
 
 /* lower TS */
-static void unreal_chan_lowerts(struct channel *c, struct user *u)
+static void
+unreal_chan_lowerts(struct channel *c, struct user *u)
 {
 	slog(LG_DEBUG, "unreal_chan_lowerts(): lowering TS for %s to %lu",
 			c->name, (unsigned long)c->ts);
@@ -356,7 +367,8 @@ static void unreal_chan_lowerts(struct channel *c, struct user *u)
 }
 
 /* kicks a user from a channel */
-static void unreal_kick(struct user *source, struct channel *c, struct user *u, const char *reason)
+static void
+unreal_kick(struct user *source, struct channel *c, struct user *u, const char *reason)
 {
 	sts(":%s KICK %s %s :%s", source->nick, c->name, u->nick, reason);
 
@@ -377,7 +389,8 @@ unreal_msg(const char *from, const char *target, const char *fmt, ...)
 	sts(":%s PRIVMSG %s :%s", from, target, buf);
 }
 
-static void unreal_msg_global_sts(struct user *from, const char *mask, const char *text)
+static void
+unreal_msg_global_sts(struct user *from, const char *mask, const char *text)
 {
 	mowgli_node_t *n;
 	struct tld *tld;
@@ -395,12 +408,14 @@ static void unreal_msg_global_sts(struct user *from, const char *mask, const cha
 }
 
 /* NOTICE wrapper */
-static void unreal_notice_user_sts(struct user *from, struct user *target, const char *text)
+static void
+unreal_notice_user_sts(struct user *from, struct user *target, const char *text)
 {
 	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, CLIENT_NAME(target), text);
 }
 
-static void unreal_notice_global_sts(struct user *from, const char *mask, const char *text)
+static void
+unreal_notice_global_sts(struct user *from, const char *mask, const char *text)
 {
 	mowgli_node_t *n;
 	struct tld *tld;
@@ -417,7 +432,8 @@ static void unreal_notice_global_sts(struct user *from, const char *mask, const 
 		sts(":%s NOTICE %s%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, mask, text);
 }
 
-static void unreal_notice_channel_sts(struct user *from, struct channel *target, const char *text)
+static void
+unreal_notice_channel_sts(struct user *from, struct channel *target, const char *text)
 {
 	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, target->name, text);
 }
@@ -436,7 +452,8 @@ unreal_numeric_sts(struct server *from, int numeric, struct user *target, const 
 }
 
 /* KILL wrapper */
-static void unreal_kill_id_sts(struct user *killer, const char *id, const char *reason)
+static void
+unreal_kill_id_sts(struct user *killer, const char *id, const char *reason)
 {
 	if (killer != NULL)
 	{
@@ -466,13 +483,15 @@ static void unreal_kill_id_sts(struct user *killer, const char *id, const char *
 }
 
 /* PART wrapper */
-static void unreal_part_sts(struct channel *c, struct user *u)
+static void
+unreal_part_sts(struct channel *c, struct user *u)
 {
 	sts(":%s PART %s", CLIENT_NAME(u), c->name);
 }
 
 /* server-to-server KLINE wrapper */
-static void unreal_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
+static void
+unreal_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
 	struct service *svs;
 
@@ -481,7 +500,8 @@ static void unreal_kline_sts(const char *server, const char *user, const char *h
 }
 
 /* server-to-server UNKLINE wrapper */
-static void unreal_unkline_sts(const char *server, const char *user, const char *host)
+static void
+unreal_unkline_sts(const char *server, const char *user, const char *host)
 {
 	struct service *svs;
 
@@ -489,7 +509,8 @@ static void unreal_unkline_sts(const char *server, const char *user, const char 
 	sts(":%s TKL - G %s %s %s", ME, user, host, svs != NULL ? svs->nick : me.name);
 }
 
-static void unreal_xline_sts(const char *server, const char *realname, long duration, const char *reason)
+static void
+unreal_xline_sts(const char *server, const char *realname, long duration, const char *reason)
 {
 	char escapedreason[512], *p;
 
@@ -509,12 +530,14 @@ static void unreal_xline_sts(const char *server, const char *realname, long dura
 	sts(":%s SVSNLINE + %s :%s", ME, escapedreason, realname);
 }
 
-static void unreal_unxline_sts(const char *server, const char *realname)
+static void
+unreal_unxline_sts(const char *server, const char *realname)
 {
 	sts(":%s SVSNLINE - :%s", ME, realname);
 }
 
-static void unreal_qline_sts(const char *server, const char *name, long duration, const char *reason)
+static void
+unreal_qline_sts(const char *server, const char *name, long duration, const char *reason)
 {
 	struct service *svs;
 
@@ -528,7 +551,8 @@ static void unreal_qline_sts(const char *server, const char *name, long duration
 	sts(":%s TKL + Q * %s %s %lu %lu :%s", ME, name, svs != NULL ? svs->nick : me.name, (unsigned long)(duration > 0 ? CURRTIME + duration : 0), (unsigned long)CURRTIME, reason);
 }
 
-static void unreal_unqline_sts(const char *server, const char *name)
+static void
+unreal_unqline_sts(const char *server, const char *name)
 {
 	struct service *svs;
 
@@ -537,7 +561,8 @@ static void unreal_unqline_sts(const char *server, const char *name)
 }
 
 /* topic wrapper */
-static void unreal_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
+static void
+unreal_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	return_if_fail(c != NULL);
 	return_if_fail(source != NULL);
@@ -546,7 +571,8 @@ static void unreal_topic_sts(struct channel *c, struct user *source, const char 
 }
 
 /* mode wrapper */
-static void unreal_mode_sts(char *sender, struct channel *target, char *modes)
+static void
+unreal_mode_sts(char *sender, struct channel *target, char *modes)
 {
 	return_if_fail(sender != NULL);
 	return_if_fail(target != NULL);
@@ -556,13 +582,15 @@ static void unreal_mode_sts(char *sender, struct channel *target, char *modes)
 }
 
 /* ping wrapper */
-static void unreal_ping_sts(void)
+static void
+unreal_ping_sts(void)
 {
 	sts("PING :%s", ME);
 }
 
 /* protocol-specific stuff to do on login */
-static void unreal_on_login(struct user *u, struct myuser *account, const char *wantedhost)
+static void
+unreal_on_login(struct user *u, struct myuser *account, const char *wantedhost)
 {
 	return_if_fail(u != NULL);
 	return_if_fail(account != NULL);
@@ -586,7 +614,8 @@ static void unreal_on_login(struct user *u, struct myuser *account, const char *
 }
 
 /* protocol-specific stuff to do on logout */
-static bool unreal_on_logout(struct user *u, const char *account)
+static bool
+unreal_on_logout(struct user *u, const char *account)
 {
 	return_val_if_fail(u != NULL, false);
 
@@ -596,7 +625,8 @@ static bool unreal_on_logout(struct user *u, const char *account)
 	return false;
 }
 
-static void unreal_jupe(const char *server, const char *reason)
+static void
+unreal_jupe(const char *server, const char *reason)
 {
 	struct service *svs;
 
@@ -607,7 +637,8 @@ static void unreal_jupe(const char *server, const char *reason)
 	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
 }
 
-static void unreal_sethost_sts(struct user *source, struct user *target, const char *host)
+static void
+unreal_sethost_sts(struct user *source, struct user *target, const char *host)
 {
 	sts(":%s CHGHOST %s :%s", source->nick, target->nick, host);
 
@@ -620,13 +651,15 @@ static void unreal_sethost_sts(struct user *source, struct user *target, const c
 	}
 }
 
-static void unreal_fnc_sts(struct user *source, struct user *u, const char *newnick, int type)
+static void
+unreal_fnc_sts(struct user *source, struct user *u, const char *newnick, int type)
 {
 	sts(":%s SVSNICK %s %s %lu", ME, CLIENT_NAME(u), newnick,
 			(unsigned long)(CURRTIME - 60));
 }
 
-static void unreal_holdnick_sts(struct user *source, int duration, const char *nick, struct myuser *mu)
+static void
+unreal_holdnick_sts(struct user *source, int duration, const char *nick, struct myuser *mu)
 {
 	if (duration > 0)
 		sts(":%s TKL + Q H %s %s %lu %lu :Reserved by %s for nickname owner (%s)",
@@ -639,12 +672,14 @@ static void unreal_holdnick_sts(struct user *source, int duration, const char *n
 		sts(":%s TKL - Q H %s %s", ME, nick, source->nick);
 }
 
-static void unreal_quarantine_sts(struct user *source, struct user *victim, long duration, const char *reason)
+static void
+unreal_quarantine_sts(struct user *source, struct user *victim, long duration, const char *reason)
 {
 	sts(":%s SHUN +*@%s %ld :%s", source->nick, victim->host, duration, reason);
 }
 
-static void unreal_sasl_sts(const char *target, char mode, const char *data)
+static void
+unreal_sasl_sts(const char *target, char mode, const char *data)
 {
 	char servermask[BUFSIZE], *p;
 	struct service *saslserv;
@@ -662,12 +697,14 @@ static void unreal_sasl_sts(const char *target, char mode, const char *data)
 	sts(":%s SASL %s %s %c %s", saslserv->me->nick, servermask, target, mode, data);
 }
 
-static void unreal_sasl_mechlist_sts(const char *mechlist)
+static void
+unreal_sasl_mechlist_sts(const char *mechlist)
 {
 	sts("MD client %s saslmechlist :%s", ME, mechlist);
 }
 
-static void unreal_svslogin_sts(char *target, char *nick, char *user, char *host, struct myuser *account)
+static void
+unreal_svslogin_sts(char *target, char *nick, char *user, char *host, struct myuser *account)
 {
 	char servermask[BUFSIZE], *p;
 	struct service *saslserv;
@@ -685,7 +722,8 @@ static void unreal_svslogin_sts(char *target, char *nick, char *user, char *host
 	sts(":%s SVSLOGIN %s %s %s", saslserv->me->nick, servermask, target, entity(account)->name);
 }
 
-static void unreal_mlock_sts(struct channel *c)
+static void
+unreal_mlock_sts(struct channel *c)
 {
 	struct mychan *mc = mychan_from(c);
 
@@ -699,7 +737,8 @@ static void unreal_mlock_sts(struct channel *c)
 				    mychan_get_sts_mlock(mc));
 }
 
-static void m_mlock(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_mlock(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c;
 	struct mychan *mc;
@@ -731,7 +770,8 @@ static void m_mlock(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_sasl(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_sasl(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct sasl_message smsg;
 
@@ -757,7 +797,8 @@ static void m_sasl(struct sourceinfo *si, int parc, char *parv[])
 	hook_call_sasl_input(&smsg);
 }
 
-static void m_topic(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_topic(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c = channel_find(parv[0]);
 
@@ -774,13 +815,15 @@ static void m_topic(struct sourceinfo *si, int parc, char *parv[])
 	handle_topic_from(si, c, parv[1], atol(parv[2]), parv[3]);
 }
 
-static void m_ping(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_ping(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* reply to PING's */
 	sts(":%s PONG %s %s", ME, me.name, parv[0]);
 }
 
-static void m_pong(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_pong(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct server *s;
 
@@ -815,7 +858,8 @@ static void m_pong(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_privmsg(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_privmsg(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (parc != 2)
 		return;
@@ -823,7 +867,8 @@ static void m_privmsg(struct sourceinfo *si, int parc, char *parv[])
 	handle_message(si, parv[0], false, parv[1]);
 }
 
-static void m_notice(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_notice(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (parc != 2)
 		return;
@@ -831,7 +876,8 @@ static void m_notice(struct sourceinfo *si, int parc, char *parv[])
 	handle_message(si, parv[0], true, parv[1]);
 }
 
-static void remove_our_modes(struct channel *c)
+static void
+remove_our_modes(struct channel *c)
 {
 	/* the TS changed.  a TS change requires the following things
 	 * to be done to the channel:  reset all modes to nothing, remove
@@ -850,7 +896,8 @@ static void remove_our_modes(struct channel *c)
 	}
 }
 
-static void m_sjoin(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_sjoin(struct sourceinfo *si, int parc, char *parv[])
 {
 	/*
 	 *  -> :proteus.malkier.net SJOIN 1073516550 #shrike +tn :@sycobuny @+rakaur
@@ -963,7 +1010,8 @@ static void m_sjoin(struct sourceinfo *si, int parc, char *parv[])
 		channel_delete(c);
 }
 
-static void m_part(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_part(struct sourceinfo *si, int parc, char *parv[])
 {
 	int chanc;
 	char *chanv[256];
@@ -978,7 +1026,8 @@ static void m_part(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_uid(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_uid(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct server *s;
 	struct user *u;
@@ -1065,7 +1114,8 @@ static void m_uid(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_nick(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct server *s;
 	struct user *u;
@@ -1189,7 +1239,8 @@ static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_quit(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_quit(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
 
@@ -1197,7 +1248,8 @@ static void m_quit(struct sourceinfo *si, int parc, char *parv[])
 	user_delete(si->su, parv[0]);
 }
 
-static void unreal_user_mode(struct user *u, const char *changes)
+static void
+unreal_user_mode(struct user *u, const char *changes)
 {
 	const char *p;
 	int dir;
@@ -1234,7 +1286,8 @@ static void unreal_user_mode(struct user *u, const char *changes)
 		}
 }
 
-static bool unreal_is_extban(const char *mask)
+static bool
+unreal_is_extban(const char *mask)
 {
 	const char mask_len = strlen(mask);
 	unsigned char offset = 0;
@@ -1248,7 +1301,8 @@ static bool unreal_is_extban(const char *mask)
 	return true;
 }
 
-static void m_mode(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_mode(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (*parv[0] == '#')
 		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
@@ -1256,12 +1310,14 @@ static void m_mode(struct sourceinfo *si, int parc, char *parv[])
 		unreal_user_mode(user_find(parv[0]), parv[1]);
 }
 
-static void m_umode(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_umode(struct sourceinfo *si, int parc, char *parv[])
 {
 	unreal_user_mode(si->su, parv[0]);
 }
 
-static void m_kick(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_kick(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u = user_find(parv[1]);
 	struct channel *c = channel_find(parv[0]);
@@ -1297,18 +1353,21 @@ static void m_kick(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_kill(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_kill(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_kill(si, parv[0], parc > 1 ? parv[1] : "<No reason given>");
 }
 
-static void m_squit(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_squit(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_squit(): server leaving: %s from %s", parv[0], parv[1]);
 	server_delete(parv[0]);
 }
 
-static void m_server(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_server(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct server *s;
 	const char *inf;
@@ -1355,7 +1414,8 @@ static void m_server(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_sid(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_sid(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct server *s;
 	const char *inf;
@@ -1371,42 +1431,50 @@ static void m_sid(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_stats(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_stats(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_stats(si->su, parv[0][0]);
 }
 
-static void m_admin(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_admin(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_admin(si->su);
 }
 
-static void m_version(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_version(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_version(si->su);
 }
 
-static void m_info(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_info(si->su);
 }
 
-static void m_whois(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_whois(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_whois(si->su, parv[1]);
 }
 
-static void m_trace(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_trace(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_trace(si->su, parv[0], parc >= 2 ? parv[1] : NULL);
 }
 
-static void m_away(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_away(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_away(si->su, parc >= 1 ? parv[0] : NULL);
 }
 
-static void m_join(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_join(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct chanuser *cu;
 	mowgli_node_t *n, *tn;
@@ -1422,7 +1490,8 @@ static void m_join(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_pass(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_pass(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (curr_uplink->receive_pass != NULL &&
 	    strcmp(curr_uplink->receive_pass, parv[0]))
@@ -1432,18 +1501,21 @@ static void m_pass(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_error(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_error(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_INFO, "m_error(): error from server: %s", parv[0]);
 }
 
-static void m_sethost(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_sethost(struct sourceinfo *si, int parc, char *parv[])
 {
 	strshare_unref(si->su->vhost);
 	si->su->vhost = strshare_get(parv[0]);
 }
 
-static void m_chghost(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_chghost(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u = user_find(parv[0]);
 
@@ -1454,7 +1526,8 @@ static void m_chghost(struct sourceinfo *si, int parc, char *parv[])
 	u->vhost = strshare_get(parv[1]);
 }
 
-static void m_motd(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_motd(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_motd(si->su);
 }
@@ -1463,7 +1536,8 @@ static void m_motd(struct sourceinfo *si, int parc, char *parv[])
  * :src MD <type> <object name> <variable name> <value>
  * :virgule.cluenet.org MD client 1RGGFJS0G certfp :8ef42b0e3f6f7b9ca9ab841be34c4797e91be67a1bd8721217ef1f319debfe0e
  */
-static void m_md(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_md(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *type = parv[0];
 	char *obj = parv[1];
@@ -1489,7 +1563,8 @@ static void m_md(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void nick_group(hook_user_req_t *hdata)
+static void
+nick_group(hook_user_req_t *hdata)
 {
 	struct user *u;
 
@@ -1499,7 +1574,8 @@ static void nick_group(hook_user_req_t *hdata)
 				(unsigned long)u->ts);
 }
 
-static void nick_ungroup(hook_user_req_t *hdata)
+static void
+nick_ungroup(hook_user_req_t *hdata)
 {
 	struct user *u;
 
@@ -1508,7 +1584,8 @@ static void nick_ungroup(hook_user_req_t *hdata)
 		sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, u->nick);
 }
 
-static void m_protoctl(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_protoctl(struct sourceinfo *si, int parc, char *parv[])
 {
 	int i;
 
@@ -1631,6 +1708,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("protocol/unreal", MODULE_UNLOAD_CAPABILITY_NEVER)
