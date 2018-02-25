@@ -26,7 +26,8 @@
 #include "pmodule.h"
 
 /* parses a P10 IRC stream */
-static void p10_parse(char *line)
+static void
+p10_parse(char *line)
 {
 	struct sourceinfo *si;
 	char *pos;
