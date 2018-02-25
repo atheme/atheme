@@ -28,7 +28,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	command_delete(&cs_set_topiclock, *cs_set_cmdtree);
 }
 
-static void cs_cmd_set_topiclock(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_set_topiclock(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
 
