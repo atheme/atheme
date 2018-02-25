@@ -26,7 +26,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 }
 
 /* FFLAGS <channel> <user> <flags> */
-static void cs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *channel = parv[0];
 	const char *target = parv[1];
