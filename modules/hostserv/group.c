@@ -24,7 +24,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("hostserv", &hs_group);
 }
 
-static void hs_cmd_group(struct sourceinfo *si, int parc, char *parv[])
+static void
+hs_cmd_group(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mynick *mn;
 	struct metadata *md;
