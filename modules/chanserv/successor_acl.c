@@ -9,7 +9,8 @@
 
 static unsigned int successor_flag = 0;
 
-static void channel_pick_successor_hook(hook_channel_succession_req_t *req)
+static void
+channel_pick_successor_hook(hook_channel_succession_req_t *req)
 {
 	return_if_fail(req != NULL);
 	return_if_fail(req->mc != NULL);
@@ -23,7 +24,8 @@ static void channel_pick_successor_hook(hook_channel_succession_req_t *req)
 		return;
 }
 
-static void channel_succession_hook(hook_channel_succession_req_t *req)
+static void
+channel_succession_hook(hook_channel_succession_req_t *req)
 {
 	return_if_fail(req != NULL);
 	return_if_fail(req->mc != NULL);
@@ -52,6 +54,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/successor_acl", MODULE_UNLOAD_CAPABILITY_NEVER)
