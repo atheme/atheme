@@ -39,7 +39,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static mowgli_list_t halfop_actions;
 
-static void cmd_halfop(struct sourceinfo *si, bool halfopping, int parc, char *parv[])
+static void
+cmd_halfop(struct sourceinfo *si, bool halfopping, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	char *nick = parv[1];
@@ -127,7 +128,8 @@ static void cmd_halfop(struct sourceinfo *si, bool halfopping, int parc, char *p
 	prefix_action_clear(&halfop_actions);
 }
 
-static void cs_cmd_halfop(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_halfop(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (!parv[0])
 	{
@@ -139,7 +141,8 @@ static void cs_cmd_halfop(struct sourceinfo *si, int parc, char *parv[])
 	cmd_halfop(si, true, parc, parv);
 }
 
-static void cs_cmd_dehalfop(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_dehalfop(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (!parv[0])
 	{
