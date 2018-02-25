@@ -93,7 +93,8 @@ static const struct cmode nefarious_user_mode_list[] = {
 static void check_hidehost(struct user *u);
 
 /* join a channel */
-static void nefarious_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
+static void
+nefarious_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
 {
 	/* If the channel doesn't exist, we need to create it. */
 	if (isnew)
@@ -110,7 +111,8 @@ static void nefarious_join_sts(struct channel *c, struct user *u, bool isnew, ch
 }
 
 /* kicks a user from a channel */
-static void nefarious_kick(struct user *source, struct channel *c, struct user *u, const char *reason)
+static void
+nefarious_kick(struct user *source, struct channel *c, struct user *u, const char *reason)
 {
 	sts("%s K %s %s :%s", source->uid, c->name, u->uid, reason);
 
@@ -118,13 +120,15 @@ static void nefarious_kick(struct user *source, struct channel *c, struct user *
 }
 
 /* NOTICE wrapper */
-static void nefarious_notice_channel_sts(struct user *from, struct channel *target, const char *text)
+static void
+nefarious_notice_channel_sts(struct user *from, struct channel *target, const char *text)
 {
 	sts("%s O %s :%s", from ? from->uid : me.numeric, target->name, text);
 }
 
 /* topic wrapper */
-static void nefarious_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
+static void
+nefarious_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	return_if_fail(c != NULL);
 
@@ -142,7 +146,8 @@ static void nefarious_topic_sts(struct channel *c, struct user *source, const ch
 }
 
 /* protocol-specific stuff to do on login */
-static void nefarious_on_login(struct user *u, struct myuser *mu, const char *wantedhost)
+static void
+nefarious_on_login(struct user *u, struct myuser *mu, const char *wantedhost)
 {
 	return_if_fail(u != NULL);
 	return_if_fail(mu != NULL);
@@ -156,7 +161,8 @@ static void nefarious_on_login(struct user *u, struct myuser *mu, const char *wa
  * we can't keep track of which logins are stale and which aren't -- jilles
  * Except we can in Nefarious --nenolod
  */
-static bool nefarious_on_logout(struct user *u, const char *account)
+static bool
+nefarious_on_logout(struct user *u, const char *account)
 {
 	return_val_if_fail(u != NULL, false);
 
@@ -174,18 +180,21 @@ static bool nefarious_on_logout(struct user *u, const char *account)
 	return false;
 }
 
-static void nefarious_sasl_sts(const char *target, char mode, const char *data)
+static void
+nefarious_sasl_sts(const char *target, char mode, const char *data)
 {
 	sts("%s SASL %c%c %s %c %s", me.numeric, target[0], target[1], target, mode, data);
 }
 
-static void nefarious_svslogin_sts(char *target, char *nick, char *user, char *host, struct myuser *account)
+static void
+nefarious_svslogin_sts(char *target, char *nick, char *user, char *host, struct myuser *account)
 {
 	sts("%s SASL %c%c %s L %s %lu", me.numeric, target[0], target[1], target,
 			entity(account)->name, (unsigned long)account->registered);
 }
 
-static void nefarious_sethost_sts(struct user *source, struct user *target, const char *host)
+static void
+nefarious_sethost_sts(struct user *source, struct user *target, const char *host)
 {
 	sts("%s FA %s %s", me.numeric, target->uid, host);
 	/* need to set +x; this will be echoed */
@@ -193,12 +202,14 @@ static void nefarious_sethost_sts(struct user *source, struct user *target, cons
 		sts("%s M %s +x", me.numeric, target->uid);
 }
 
-static void nefarious_quarantine_sts(struct user *source, struct user *victim, long duration, const char *reason)
+static void
+nefarious_quarantine_sts(struct user *source, struct user *victim, long duration, const char *reason)
 {
 	sts("%s SU * +*@%s %lu :%s", me.numeric, victim->host, CURRTIME + duration, reason);
 }
 
-static void m_topic(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_topic(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c = channel_find(parv[0]);
 	const char *source;
@@ -221,7 +232,8 @@ static void m_topic(struct sourceinfo *si, int parc, char *parv[])
 	handle_topic_from(si, c, parc > 4 ? parv[parc - 4] : source, ts, parv[parc - 1]);
 }
 
-static void m_burst(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_burst(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c;
 	unsigned int modec;
@@ -346,7 +358,8 @@ static void m_burst(struct sourceinfo *si, int parc, char *parv[])
 		channel_delete(c);
 }
 
-static void m_nick(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u;
 	char ipstring[HOSTIPLEN + 1];
@@ -449,7 +462,8 @@ static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_mode(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_mode(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u;
 	char *p;
@@ -515,7 +529,8 @@ static void m_mode(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_clearmode(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_clearmode(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *chan;
 	char *p, c;
@@ -599,7 +614,8 @@ static void m_clearmode(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_account(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_account(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u;
 	static bool warned = false;
@@ -636,7 +652,8 @@ static void m_account(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_sasl(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_sasl(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct sasl_message smsg;
 
@@ -661,7 +678,8 @@ static void m_sasl(struct sourceinfo *si, int parc, char *parv[])
 	hook_call_sasl_input(&smsg);
 }
 
-static void check_hidehost(struct user *u)
+static void
+check_hidehost(struct user *u)
 {
 	static bool warned = false;
 	char buf[HOSTLEN + 1];
@@ -693,7 +711,8 @@ static void check_hidehost(struct user *u)
 	slog(LG_DEBUG, "check_hidehost(): %s -> %s", u->nick, u->vhost);
 }
 
-static void p10_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
+static void
+p10_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
 	/* hold permanent akills for four weeks -- jilles
 	 *  This was changed in Nefarious 2.
@@ -753,6 +772,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("protocol/nefarious", MODULE_UNLOAD_CAPABILITY_NEVER)
