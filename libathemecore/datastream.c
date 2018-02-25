@@ -40,7 +40,8 @@ struct sendq {
 	char buf[SENDQSIZE];
 };
 
-void sendq_add(struct connection * cptr, char *buf, size_t len)
+void
+sendq_add(struct connection * cptr, char *buf, size_t len)
 {
 	mowgli_node_t *n;
 	struct sendq *sq;
@@ -97,7 +98,8 @@ void sendq_add(struct connection * cptr, char *buf, size_t len)
 	}
 }
 
-void sendq_add_eof(struct connection * cptr)
+void
+sendq_add_eof(struct connection * cptr)
 {
 	return_if_fail(cptr != NULL);
 
@@ -111,7 +113,8 @@ void sendq_add_eof(struct connection * cptr)
 	cptr->flags |= CF_SEND_EOF;
 }
 
-void sendq_flush(struct connection * cptr)
+void
+sendq_flush(struct connection * cptr)
 {
         mowgli_node_t *n, *tn;
         struct sendq *sq;
@@ -170,7 +173,8 @@ void sendq_flush(struct connection * cptr)
 	connection_setselect_write(cptr, NULL);
 }
 
-bool sendq_nonempty(struct connection *cptr)
+bool
+sendq_nonempty(struct connection *cptr)
 {
 	mowgli_node_t *n;
 	struct sendq *sq;
@@ -186,12 +190,14 @@ bool sendq_nonempty(struct connection *cptr)
 	return sq->firstfree > sq->firstused;
 }
 
-void sendq_set_limit(struct connection *cptr, size_t len)
+void
+sendq_set_limit(struct connection *cptr, size_t len)
 {
 	cptr->sendq_limit = len;
 }
 
-int recvq_length(struct connection *cptr)
+int
+recvq_length(struct connection *cptr)
 {
 	int l = 0;
 	mowgli_node_t *n;
@@ -205,7 +211,8 @@ int recvq_length(struct connection *cptr)
 	return l;
 }
 
-void recvq_put(struct connection *cptr)
+void
+recvq_put(struct connection *cptr)
 {
 	mowgli_node_t *n;
 	struct sendq *sq = NULL;
@@ -269,7 +276,8 @@ void recvq_put(struct connection *cptr)
 	return;
 }
 
-int recvq_get(struct connection *cptr, char *buf, size_t len)
+int
+recvq_get(struct connection *cptr, char *buf, size_t len)
 {
 	mowgli_node_t *n, *tn;
 	struct sendq *sq;
@@ -310,7 +318,8 @@ int recvq_get(struct connection *cptr, char *buf, size_t len)
 	return p - buf;
 }
 
-int recvq_getline(struct connection *cptr, char *buf, size_t len)
+int
+recvq_getline(struct connection *cptr, char *buf, size_t len)
 {
 	mowgli_node_t *n, *tn;
 	struct sendq *sq, *sq2 = NULL;
@@ -369,7 +378,8 @@ int recvq_getline(struct connection *cptr, char *buf, size_t len)
 	return p - buf;
 }
 
-void sendqrecvq_free(struct connection *cptr)
+void
+sendqrecvq_free(struct connection *cptr)
 {
 	mowgli_node_t *nptr, *nptr2;
 	struct sendq *sq;
