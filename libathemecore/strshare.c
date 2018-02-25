@@ -30,12 +30,14 @@ struct strshare
 	int refcount;
 };
 
-void strshare_init(void)
+void
+strshare_init(void)
 {
 	strshare_dict = mowgli_patricia_create(noopcanon);
 }
 
-stringref strshare_get(const char *str)
+stringref
+strshare_get(const char *str)
 {
 	struct strshare *ss;
 
@@ -56,7 +58,8 @@ stringref strshare_get(const char *str)
 	return (char *)(ss + 1);
 }
 
-stringref strshare_ref(stringref str)
+stringref
+strshare_ref(stringref str)
 {
 	struct strshare *ss;
 
@@ -70,7 +73,8 @@ stringref strshare_ref(stringref str)
 	return str;
 }
 
-void strshare_unref(stringref str)
+void
+strshare_unref(stringref str)
 {
 	struct strshare *ss;
 
