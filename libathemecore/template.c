@@ -26,7 +26,8 @@
 
 mowgli_patricia_t *global_template_dict = NULL;
 
-void fix_global_template_flags(void)
+void
+fix_global_template_flags(void)
 {
 	struct default_template *def_t;
 	mowgli_patricia_iteration_state_t state;
@@ -37,7 +38,8 @@ void fix_global_template_flags(void)
 	}
 }
 
-void set_global_template_flags(const char *name, unsigned int flags)
+void
+set_global_template_flags(const char *name, unsigned int flags)
 {
 	if (global_template_dict == NULL)
 		global_template_dict = mowgli_patricia_create(strcasecanon);
@@ -57,7 +59,8 @@ void set_global_template_flags(const char *name, unsigned int flags)
 	slog(LG_DEBUG, "set_global_template_flags(): add %s", name);
 }
 
-unsigned int get_global_template_flags(const char *name)
+unsigned int
+get_global_template_flags(const char *name)
 {
 	struct default_template *def_t;
 
@@ -71,14 +74,16 @@ unsigned int get_global_template_flags(const char *name)
 	return def_t->flags;
 }
 
-static void release_global_template_data(const char *key, void *data, void *privdata)
+static void
+release_global_template_data(const char *key, void *data, void *privdata)
 {
 	slog(LG_DEBUG, "release_global_template_data(): delete %s", key);
 
 	free(data);
 }
 
-void clear_global_template_flags(void)
+void
+clear_global_template_flags(void)
 {
 	if (global_template_dict == NULL)
 		return;
@@ -88,7 +93,8 @@ void clear_global_template_flags(void)
 }
 
 /* name1=value1 name2=value2 name3=value3... */
-const char *getitem(const char *str, const char *name)
+const char *
+getitem(const char *str, const char *name)
 {
 	char *p;
 	static char result[300];
@@ -116,7 +122,8 @@ const char *getitem(const char *str, const char *name)
 	}
 }
 
-unsigned int get_template_flags(struct mychan *mc, const char *name)
+unsigned int
+get_template_flags(struct mychan *mc, const char *name)
 {
 	struct metadata *md;
 	const char *d;
