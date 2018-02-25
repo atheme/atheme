@@ -24,7 +24,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("operserv", &os_readonly);
 }
 
-static void os_cmd_readonly(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_readonly(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct service *svs;
 	char *action = parv[0];
