@@ -50,7 +50,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	mowgli_patricia_destroy(os_soper_cmds, NULL, NULL);
 }
 
-static void os_cmd_soper(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_soper(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct command *c;
 
@@ -77,7 +78,8 @@ static void os_cmd_soper(struct sourceinfo *si, int parc, char *parv[])
 	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
 
-static void os_cmd_soper_list(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_soper_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
 	struct soper *soper;
@@ -104,7 +106,8 @@ static void os_cmd_soper_list(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("End of services operator list"));
 }
 
-static void os_cmd_soper_listclass(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_soper_listclass(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
 	struct operclass *operclass;
@@ -122,7 +125,8 @@ static void os_cmd_soper_listclass(struct sourceinfo *si, int parc, char *parv[]
 	command_success_nodata(si, _("End of oper class list"));
 }
 
-static void os_cmd_soper_add(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_soper_add(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
 	struct operclass *operclass;
@@ -191,7 +195,8 @@ static void os_cmd_soper_add(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("Set class for \2%s\2 to \2%s\2."), entity(mu)->name, operclass->name);
 }
 
-static void os_cmd_soper_del(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_soper_del(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
 
@@ -234,7 +239,8 @@ static void os_cmd_soper_del(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("Removed class for \2%s\2."), entity(mu)->name);
 }
 
-static void os_cmd_soper_setpass(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_soper_setpass(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
 	mowgli_node_t *n;
