@@ -48,7 +48,8 @@ __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __,
 __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __ };
 #undef __
 
-const char *uinttobase64(char *buf, uint64_t v, int64_t count)
+const char *
+uinttobase64(char *buf, uint64_t v, int64_t count)
 {
 	buf[count] = '\0';
 
@@ -61,7 +62,8 @@ const char *uinttobase64(char *buf, uint64_t v, int64_t count)
 	return buf;
 }
 
-unsigned int base64touint(const char *buf)
+unsigned int
+base64touint(const char *buf)
 {
 	int bits;
 	unsigned int v = 0;
@@ -72,7 +74,8 @@ unsigned int base64touint(const char *buf)
 	return v;
 }
 
-void decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN + 1])
+void
+decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN + 1])
 {
 	struct in_addr ip;
 	char buf[4];
