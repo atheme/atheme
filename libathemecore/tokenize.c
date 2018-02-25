@@ -24,7 +24,8 @@
 #include "atheme.h"
 #include "pmodule.h"
 
-int sjtoken(char *message, char delimiter, char **parv)
+int
+sjtoken(char *message, char delimiter, char **parv)
 {
 	char *next;
 	unsigned int count;
@@ -85,7 +86,8 @@ int sjtoken(char *message, char delimiter, char **parv)
 }
 
 /* this splits apart a message with origin and command picked off already */
-int tokenize(char *message, char **parv)
+int
+tokenize(char *message, char **parv)
 {
 	char *pos = NULL;
 	char *next;
