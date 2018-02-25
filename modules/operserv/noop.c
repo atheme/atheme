@@ -27,7 +27,7 @@ static mowgli_eventloop_timer_t *noop_kill_users_timer = NULL;
 static struct command os_noop = { "NOOP", N_("Restricts IRCop access."), PRIV_NOOP, 4, os_cmd_noop, { .path = "oservice/noop" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("operserv", &os_noop);
 	hook_add_event("user_oper");

@@ -11,7 +11,7 @@ struct service *chanfix;
 static mowgli_eventloop_timer_t *chanfix_autofix_timer = NULL;
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	struct chanfix_persist_record *rec = mowgli_global_storage_get("atheme.chanfix.main.persist");
 

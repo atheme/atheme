@@ -26,7 +26,7 @@
 #include "rfc1459.h"
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	parse = &irc_parse;
 }

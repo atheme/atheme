@@ -16,7 +16,7 @@ static struct command bs_say = { "SAY", N_("Makes the bot say the given text on 
 static struct command bs_act = { "ACT", N_("Makes the bot do the equivalent of a \"/me\" command."), AC_AUTHENTICATED, 2, bs_cmd_act, { .path = "botserv/act" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("botserv", &bs_say);
 	service_named_bind_command("botserv", &bs_act);

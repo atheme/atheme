@@ -32,7 +32,7 @@ info_hook(hook_user_req_t *hdata)
 }
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	hook_add_event("user_delete_info");
 	hook_add_user_delete_info(user_delete_info_hook);

@@ -135,7 +135,7 @@ c_ni_emailexempts(mowgli_config_file_entry_t *ce)
 }
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
         hook_add_event("config_ready");
         hook_add_config_ready(nickserv_config_ready);

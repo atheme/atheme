@@ -12,7 +12,7 @@ static void cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[]);
 static struct command cs_clone = { "CLONE", "Clones a channel.", AC_NONE, 2, cs_cmd_clone, { .path = "cservice/clone" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("chanserv", &cs_clone);
 }

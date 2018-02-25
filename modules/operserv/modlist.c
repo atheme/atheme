@@ -12,7 +12,7 @@ static void os_cmd_modlist(struct sourceinfo *si, int parc, char *parv[]);
 static struct command os_modlist = { "MODLIST", N_("Lists loaded modules."), PRIV_SERVER_AUSPEX, 0, os_cmd_modlist, { .path = "oservice/modlist" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("operserv", &os_modlist);
 }

@@ -15,7 +15,7 @@ dummy_auth_user(struct myuser *mu, const char *password)
 }
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	auth_user_custom = &dummy_auth_user;
 

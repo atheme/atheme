@@ -13,7 +13,7 @@ static struct command cs_help = { "HELP", N_("Displays contextual help informati
                         AC_NONE, 1, cs_cmd_help, { .path = "help" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("chanserv", &cs_help);
 }

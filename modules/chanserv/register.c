@@ -17,7 +17,7 @@ static struct command cs_register = { "REGISTER", N_("Registers a channel."),
                            AC_AUTHENTICATED, 3, cs_cmd_register, { .path = "cservice/register" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_register);
 }

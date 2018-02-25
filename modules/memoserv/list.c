@@ -13,7 +13,7 @@ static struct command ms_list = { "LIST", N_(N_("Lists all of your memos.")),
                         AC_AUTHENTICATED, 0, ms_cmd_list, { .path = "memoserv/list" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
         service_named_bind_command("memoserv", &ms_list);
 }

@@ -12,7 +12,7 @@ static void os_cmd_uptime(struct sourceinfo *si, int parc, char *parv[]);
 static struct command os_uptime = { "UPTIME", N_("Shows services uptime and the number of registered nicks and channels."), PRIV_SERVER_AUSPEX, 1, os_cmd_uptime, { .path = "oservice/uptime" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
         service_named_bind_command("operserv", &os_uptime);
 }

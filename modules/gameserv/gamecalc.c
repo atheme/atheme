@@ -19,7 +19,7 @@ static struct command cmd_nwod = { "NWOD", N_("New WOD-style dice generation."),
 static struct command cmd_df = { "DF", N_("Fudge-style dice generation."), AC_NONE, 2, command_df, { .path = "gameserv/roll" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("gameserv", &cmd_wod);
 	service_named_bind_command("gameserv", &cmd_nwod);

@@ -14,7 +14,7 @@ static struct command ns_status = { "STATUS", N_("Displays session information."
 static struct command ns_acc = { "ACC", N_("Displays parsable session information."), AC_NONE, 2, ns_cmd_acc, { .path = "nickserv/acc" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_acc);
 	service_named_bind_command("nickserv", &ns_status);

@@ -12,7 +12,7 @@ static void os_cmd_jupe(struct sourceinfo *si, int parc, char *parv[]);
 static struct command os_jupe = { "JUPE", N_("Jupiters a server."), PRIV_JUPE, 2, os_cmd_jupe, { .path = "oservice/jupe" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("operserv", &os_jupe);
 }

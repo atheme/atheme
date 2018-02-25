@@ -16,7 +16,7 @@ static struct command ss_help =
 };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
     statsvs = service_add("statserv", NULL);
     service_named_bind_command("statserv", &ss_help);

@@ -15,7 +15,7 @@ static struct command hs_on = { "ON", N_("Activates your assigned vhost."), AC_A
 static struct command hs_off = { "OFF", N_("Deactivates your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_off, { .path = "hostserv/off" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("hostserv", &hs_on);
 	service_named_bind_command("hostserv", &hs_off);

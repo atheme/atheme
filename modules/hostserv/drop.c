@@ -14,7 +14,7 @@ static void hs_cmd_drop(struct sourceinfo *si, int parc, char *parv[]);
 static struct command hs_drop = { "DROP", N_("Drops your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_drop, { .path = "hostserv/drop" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("hostserv", &hs_drop);
 }

@@ -17,7 +17,7 @@ static struct command cs_unquiet = { "UNQUIET", N_("Removes a quiet on a channel
 			AC_AUTHENTICATED, 2, cs_cmd_unquiet, { .path = "cservice/unquiet" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_quiet);
 	service_named_bind_command("chanserv", &cs_unquiet);

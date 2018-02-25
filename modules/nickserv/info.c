@@ -12,7 +12,7 @@ static void ns_cmd_info(struct sourceinfo *si, int parc, char *parv[]);
 static struct command ns_info = { "INFO", N_("Displays information on registrations."), AC_NONE, 2, ns_cmd_info, { .path = "nickserv/info" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_info);
 }

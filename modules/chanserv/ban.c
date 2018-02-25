@@ -16,7 +16,7 @@ static struct command cs_unban = { "UNBAN", N_("Removes a ban on a channel."),
 			AC_AUTHENTICATED, 2, cs_cmd_unban, { .path = "cservice/unban" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_ban);
 	service_named_bind_command("chanserv", &cs_unban);

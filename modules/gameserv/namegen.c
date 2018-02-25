@@ -14,7 +14,7 @@ static void command_namegen(struct sourceinfo *si, int parc, char *parv[]);
 static struct command cmd_namegen = { "NAMEGEN", N_("Generates some names to ponder."), AC_NONE, 2, command_namegen, { .path = "gameserv/namegen" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("gameserv", &cmd_namegen);
 

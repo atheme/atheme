@@ -13,7 +13,7 @@ static void command_rps(struct sourceinfo *si, int parc, char *parv[]);
 static struct command cmd_rps = { "RPS", N_("Rock Paper Scissors."), AC_NONE, 2, command_rps, { .path = "gameserv/rps" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("gameserv", &cmd_rps);
 

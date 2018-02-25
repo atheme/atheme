@@ -69,7 +69,7 @@ static mowgli_patricia_t *cs_access_cmds = NULL;
 static mowgli_patricia_t *cs_role_cmds = NULL;
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("chanserv", &cs_access);
 	service_named_bind_command("chanserv", &cs_role);

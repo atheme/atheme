@@ -222,7 +222,7 @@ ldap_auth_user(struct myuser *mu, const char *password)
 }
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	hook_add_event("config_ready");
 	hook_add_config_ready(ldap_config_ready);

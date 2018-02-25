@@ -18,7 +18,7 @@ static void bs_cmd_set(struct sourceinfo *si, int parc, char *parv[]);
 static struct command bs_set = { "SET", N_("Configures bot options."), AC_NONE, 3, bs_cmd_set, { .func =  bs_help_set } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("botserv", &bs_set);
 

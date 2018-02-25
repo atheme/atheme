@@ -12,7 +12,7 @@ static void ns_cmd_listmail(struct sourceinfo *si, int parc, char *parv[]);
 static struct command ns_listmail = { "LISTMAIL", N_("Lists accounts registered to an e-mail address."), PRIV_USER_AUSPEX, 1, ns_cmd_listmail, { .path = "nickserv/listmail" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_listmail);
 }

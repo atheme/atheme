@@ -25,7 +25,7 @@ static struct command ns_identify = { "IDENTIFY", N_("Identifies to services for
 #endif
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 #ifdef NICKSERV_LOGIN
 	service_named_bind_command("nickserv", &ns_login);

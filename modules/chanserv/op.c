@@ -17,7 +17,7 @@ static struct command cs_deop = { "DEOP", N_("Removes channel ops from a user.")
                         AC_NONE, 2, cs_cmd_deop, { .path = "cservice/op_voice" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_op);
         service_named_bind_command("chanserv", &cs_deop);

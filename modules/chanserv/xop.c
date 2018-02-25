@@ -32,7 +32,7 @@ static struct command cs_forcexop = { "FORCEXOP", N_("Forces access levels to xO
                          AC_NONE, 1, cs_cmd_forcexop, { .path = "cservice/forcexop" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("chanserv", &cs_aop);
 	service_named_bind_command("chanserv", &cs_sop);

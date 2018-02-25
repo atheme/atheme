@@ -24,7 +24,7 @@ static mowgli_patricia_t *os_ignore_cmds = NULL;
 mowgli_list_t svs_ignore_list;
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
         service_named_bind_command("operserv", &os_ignore);
 

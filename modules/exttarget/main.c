@@ -35,7 +35,7 @@ exttarget_find(hook_myentity_req_t *req)
 }
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	exttarget_tree = mowgli_patricia_create(strcasecanon);
 

@@ -41,7 +41,7 @@ cmdperm_command_authorize(struct service *svs, struct sourceinfo *si, struct com
 }
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	parent_command_authorize = command_authorize;
 	command_authorize = cmdperm_command_authorize;

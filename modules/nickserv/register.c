@@ -15,7 +15,7 @@ static void ns_cmd_register(struct sourceinfo *si, int parc, char *parv[]);
 static struct command ns_register = { "REGISTER", N_("Registers a nickname."), AC_NONE, 3, ns_cmd_register, { .path = "nickserv/register" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_register);
 }

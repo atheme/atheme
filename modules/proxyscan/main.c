@@ -23,7 +23,7 @@
 static struct service *proxyscan = NULL;
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	proxyscan = service_add("proxyscan", NULL);
 }

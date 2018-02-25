@@ -14,7 +14,7 @@ static struct command cs_count = { "COUNT", N_("Shows number of entries in acces
                          AC_NONE, 1, cs_cmd_count, { .path = "cservice/count" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_count);
 }

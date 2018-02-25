@@ -10,7 +10,7 @@
 static struct service *gs;
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	gs = service_add("gameserv", NULL);
 }

@@ -15,7 +15,7 @@ static struct command ms_del = { "DEL", N_("Alias for DELETE"),
 			AC_AUTHENTICATED, 1, ms_cmd_delete, { .path = "memoserv/delete" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
         service_named_bind_command("memoserv", &ms_delete);
 	service_named_bind_command("memoserv", &ms_del);

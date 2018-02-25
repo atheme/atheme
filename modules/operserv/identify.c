@@ -14,7 +14,7 @@ static struct command os_identify = { "IDENTIFY", N_("Authenticate for services 
 static struct command os_id = { "ID", N_("Alias for IDENTIFY"), AC_AUTHENTICATED, 1, os_cmd_identify, { .path = "oservice/identify" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
         service_named_bind_command("operserv", &os_identify);
         service_named_bind_command("operserv", &os_id);

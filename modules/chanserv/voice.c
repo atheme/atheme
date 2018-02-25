@@ -17,7 +17,7 @@ static struct command cs_devoice = { "DEVOICE", N_("Removes channel voice from a
                          AC_NONE, 2, cs_cmd_devoice, { .path = "cservice/op_voice" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_voice);
         service_named_bind_command("chanserv", &cs_devoice);

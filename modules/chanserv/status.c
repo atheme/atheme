@@ -13,7 +13,7 @@ static struct command cs_status = { "STATUS", N_("Displays your status in servic
                          AC_NONE, 1, cs_cmd_status, { .path = "cservice/status" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_status);
 }

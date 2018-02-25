@@ -13,7 +13,7 @@ static void ns_cmd_listchans(struct sourceinfo *si, int parc, char *parv[]);
 static struct command ns_listchans = { "LISTCHANS", N_("Lists channels that you have access to."), AC_NONE, 1, ns_cmd_listchans, { .path = "nickserv/listchans" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_listchans);
 }

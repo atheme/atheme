@@ -15,7 +15,7 @@ static struct command cs_set_founder = { "FOUNDER", N_("Transfers foundership of
 static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 

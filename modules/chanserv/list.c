@@ -13,7 +13,7 @@ static void cs_cmd_list(struct sourceinfo *si, int parc, char *parv[]);
 static struct command cs_list = { "LIST", N_("Lists channels registered matching a given pattern."), PRIV_CHAN_AUSPEX, 10, cs_cmd_list, { .path = "cservice/list" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("chanserv", &cs_list);
 }

@@ -15,7 +15,7 @@ static struct command ns_vhost = { "VHOST", N_("Manages user virtualhosts."), PR
 static struct command ns_listvhost = { "LISTVHOST", N_("Lists user virtualhosts."), PRIV_USER_AUSPEX, 1, ns_cmd_listvhost, { .path = "nickserv/listvhost" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	hook_add_event("user_identify");
 	hook_add_user_identify(vhost_on_identify);

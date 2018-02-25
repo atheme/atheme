@@ -14,7 +14,7 @@ static struct command ns_verify = { "VERIFY", N_("Verifies an account registrati
 static struct command ns_fverify = { "FVERIFY", N_("Forcefully verifies an account registration."), PRIV_USER_ADMIN, 2, ns_cmd_fverify, { .path = "nickserv/fverify" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_verify);
 	service_named_bind_command("nickserv", &ns_fverify);

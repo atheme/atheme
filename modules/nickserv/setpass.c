@@ -14,7 +14,7 @@ static void show_setpass(hook_user_req_t *hdata);
 static struct command ns_setpass = { "SETPASS", N_("Changes a password using an authcode."), AC_NONE, 3, ns_cmd_setpass, { .path = "nickserv/setpass" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	hook_add_event("user_identify");
 	hook_add_user_identify(clear_setpass_key);

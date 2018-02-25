@@ -14,7 +14,7 @@ static struct command cs_invite = { "INVITE", N_("Invites you to a channel."),
                         AC_NONE, 2, cs_cmd_invite, { .path = "cservice/invite" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_invite);
 }

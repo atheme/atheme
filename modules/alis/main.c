@@ -72,7 +72,7 @@ struct alis_query
 };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	alis = service_add("alis", NULL);
 	service_bind_command(alis, &alis_list);

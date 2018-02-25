@@ -16,7 +16,7 @@ static struct command cs_close = { "CLOSE", N_("Closes a channel."),
 static void close_check_join(hook_channel_joinpart_t *data);
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("chanserv", &cs_close);
 	hook_add_event("channel_join");

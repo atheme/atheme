@@ -16,7 +16,7 @@ static struct command ns_ungroup = { "UNGROUP", N_("Removes a nickname from your
 static struct command ns_fungroup = { "FUNGROUP", N_("Forces removal of a nickname from an account."), PRIV_USER_ADMIN, 2, ns_cmd_fungroup, { .path = "nickserv/fungroup" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_group);
 	service_named_bind_command("nickserv", &ns_ungroup);

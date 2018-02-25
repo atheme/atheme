@@ -38,7 +38,7 @@ rs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 }
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("rpgserv", &rs_list);
 }

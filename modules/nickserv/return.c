@@ -13,7 +13,7 @@ static void ns_cmd_return(struct sourceinfo *si, int parc, char *parv[]);
 static struct command ns_return = { "RETURN", N_("Returns an account to its owner."), PRIV_USER_ADMIN, 2, ns_cmd_return, { .path = "nickserv/return" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_return);
 }

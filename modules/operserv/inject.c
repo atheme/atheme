@@ -14,7 +14,7 @@ static void os_cmd_inject(struct sourceinfo *si, int parc, char *parv[]);
 static struct command os_inject = { "INJECT", N_("Fakes data from the uplink (debugging tool)."), PRIV_ADMIN, 1, os_cmd_inject, { .path = "oservice/inject" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
         service_named_bind_command("operserv", &os_inject);
 }

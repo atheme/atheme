@@ -12,7 +12,7 @@ static void os_cmd_compare(struct sourceinfo *si, int parc, char *parv[]);
 static struct command os_compare = { "COMPARE", N_("Compares two users or channels."), PRIV_CHAN_AUSPEX, 2, os_cmd_compare, { .path = "oservice/compare" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("operserv", &os_compare);
 }

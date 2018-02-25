@@ -17,7 +17,7 @@ static struct command cs_clear = { "CLEAR", N_("Channel removal toolkit."),
 mowgli_patricia_t *cs_clear_cmds;
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_clear);
 

@@ -13,7 +13,7 @@ static struct command cs_why = { "WHY", N_("Explains channel access logic."),
 		     AC_NONE, 2, cs_cmd_why, { .path = "cservice/why" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("chanserv", &cs_why);
 }

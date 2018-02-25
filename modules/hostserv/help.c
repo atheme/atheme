@@ -12,7 +12,7 @@ static void hs_cmd_help(struct sourceinfo *si, int parc, char *parv[]);
 static struct command hs_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, hs_cmd_help, { .path = "help" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("hostserv", &hs_help);
 }

@@ -12,7 +12,7 @@ static void os_cmd_modunload(struct sourceinfo *si, int parc, char *parv[]);
 static struct command os_modunload = { "MODUNLOAD", N_("Unloads a module."), PRIV_ADMIN, 20, os_cmd_modunload, { .path = "oservice/modunload" } };
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("operserv", &os_modunload);
 }
