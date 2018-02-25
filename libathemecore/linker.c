@@ -45,7 +45,8 @@
  *       the extension is appended if it's not already there.
  *       a shared module is loaded into the application's memory space
  */
-mowgli_module_t *linker_open_ext(const char *path, char *errbuf, int errlen)
+mowgli_module_t *
+linker_open_ext(const char *path, char *errbuf, int errlen)
 {
 	size_t len = strlen(path) + 20;
 	char *buf = smalloc(len);
