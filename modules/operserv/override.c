@@ -29,7 +29,8 @@ struct override_sourceinfo
 	struct sourceinfo *parent_si;
 };
 
-static void override_command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *message)
+static void
+override_command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *message)
 {
 	struct override_sourceinfo *csi = (struct override_sourceinfo *) si;
 
@@ -38,7 +39,8 @@ static void override_command_fail(struct sourceinfo *si, enum cmd_faultcode code
 	command_fail(csi->parent_si, code, "%s", message);
 }
 
-static void override_command_success_nodata(struct sourceinfo *si, const char *message)
+static void
+override_command_success_nodata(struct sourceinfo *si, const char *message)
 {
 	struct override_sourceinfo *csi = (struct override_sourceinfo *) si;
 
@@ -47,7 +49,8 @@ static void override_command_success_nodata(struct sourceinfo *si, const char *m
 	command_success_nodata(csi->parent_si, "%s", message);
 }
 
-static void override_command_success_string(struct sourceinfo *si, const char *result, const char *message)
+static void
+override_command_success_string(struct sourceinfo *si, const char *result, const char *message)
 {
 	struct override_sourceinfo *csi = (struct override_sourceinfo *) si;
 
@@ -56,7 +59,8 @@ static void override_command_success_string(struct sourceinfo *si, const char *r
 	command_success_string(csi->parent_si, result, "%s", message);
 }
 
-static const char *override_get_source_name(struct sourceinfo *si)
+static const char *
+override_get_source_name(struct sourceinfo *si)
 {
 	struct override_sourceinfo *csi = (struct override_sourceinfo *) si;
 
@@ -65,7 +69,8 @@ static const char *override_get_source_name(struct sourceinfo *si)
 	return get_source_name(csi->parent_si);
 }
 
-static const char *override_get_source_mask(struct sourceinfo *si)
+static const char *
+override_get_source_mask(struct sourceinfo *si)
 {
 	struct override_sourceinfo *csi = (struct override_sourceinfo *) si;
 
@@ -74,7 +79,8 @@ static const char *override_get_source_mask(struct sourceinfo *si)
 	return get_source_mask(csi->parent_si);
 }
 
-static const char *override_get_oper_name(struct sourceinfo *si)
+static const char *
+override_get_oper_name(struct sourceinfo *si)
 {
 	struct override_sourceinfo *csi = (struct override_sourceinfo *) si;
 
@@ -83,7 +89,8 @@ static const char *override_get_oper_name(struct sourceinfo *si)
 	return get_oper_name(csi->parent_si);
 }
 
-static const char *override_get_storage_oper_name(struct sourceinfo *si)
+static const char *
+override_get_storage_oper_name(struct sourceinfo *si)
 {
 	struct override_sourceinfo *csi = (struct override_sourceinfo *) si;
 
@@ -103,13 +110,15 @@ struct sourceinfo_vtable override_vtable = {
 	.get_storage_oper_name = override_get_storage_oper_name,
 };
 
-static void override_sourceinfo_dispose(struct override_sourceinfo *o_si)
+static void
+override_sourceinfo_dispose(struct override_sourceinfo *o_si)
 {
 	atheme_object_unref(o_si->parent_si);
 	free(o_si);
 }
 
-static int text_to_parv(char *text, int maxparc, char **parv)
+static int
+text_to_parv(char *text, int maxparc, char **parv)
 {
 	int count = 0;
 	char *p;
@@ -147,7 +156,8 @@ static int text_to_parv(char *text, int maxparc, char **parv)
 	return count;
 }
 
-static void os_cmd_override(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_override(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu = NULL;
 	struct service *svs;
