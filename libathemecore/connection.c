@@ -33,7 +33,8 @@ mowgli_list_t connection_list;
 # define SHUT_RDWR   SD_BOTH
 #endif
 
-static int socket_setnonblocking(mowgli_descriptor_t sck)
+static int
+socket_setnonblocking(mowgli_descriptor_t sck)
 {
 #ifndef MOWGLI_OS_WIN
 	int flags;
@@ -69,7 +70,8 @@ static int socket_setnonblocking(mowgli_descriptor_t sck)
  * side effects:
  *       whatever happens from the struct connection i/o handlers
  */
-static void connection_trampoline(mowgli_eventloop_t *eventloop, mowgli_eventloop_io_t *io,
+static void
+connection_trampoline(mowgli_eventloop_t *eventloop, mowgli_eventloop_io_t *io,
 	mowgli_eventloop_io_dir_t dir, void *userdata)
 {
 	struct connection *cptr = userdata;
@@ -96,7 +98,8 @@ static void connection_trampoline(mowgli_eventloop_t *eventloop, mowgli_eventloo
  * side effects:
  *       a connection is added to the socket queue.
  */
-struct connection *connection_add(const char *name, int fd, unsigned int flags,
+struct connection *
+connection_add(const char *name, int fd, unsigned int flags,
 	void (*read_handler)(struct connection *),
 	void (*write_handler)(struct connection *))
 {
@@ -156,7 +159,8 @@ struct connection *connection_add(const char *name, int fd, unsigned int flags,
  * side effects:
  *       none
  */
-struct connection *connection_find(int fd)
+struct connection *
+connection_find(int fd)
 {
 	struct connection *cptr;
 	mowgli_node_t *nptr;
@@ -184,7 +188,8 @@ struct connection *connection_find(int fd)
  * side effects:
  *       the connection is closed.
  */
-void connection_close(struct connection *cptr)
+void
+connection_close(struct connection *cptr)
 {
 	mowgli_node_t *nptr;
 	int errno1, errno2;
@@ -240,8 +245,10 @@ void connection_close(struct connection *cptr)
 /* This one is only safe for use by connection_close_soon(),
  * it will cause infinite loops otherwise
  */
-static void empty_handler(struct connection *cptr)
+static void
+empty_handler(struct connection *cptr)
 {
+
 }
 
 /*
@@ -258,7 +265,8 @@ static void empty_handler(struct connection *cptr)
  *       handlers reset
  *       close_handler called
  */
-void connection_close_soon(struct connection *cptr)
+void
+connection_close_soon(struct connection *cptr)
 {
 	if (cptr == NULL)
 		return;
@@ -286,7 +294,8 @@ void connection_close_soon(struct connection *cptr)
  *       connection_close_soon() called on the connection itself and
  *       for all connections accepted on this listener
  */
-void connection_close_soon_children(struct connection *cptr)
+void
+connection_close_soon_children(struct connection *cptr)
 {
 	mowgli_node_t *n;
 	struct connection *cptr2;
@@ -318,7 +327,8 @@ void connection_close_soon_children(struct connection *cptr)
  * side effects:
  *       connection_close() called on all registered connections
  */
-void connection_close_all(void)
+void
+connection_close_all(void)
 {
 	mowgli_node_t *n, *tn;
 	struct connection *cptr;
@@ -345,7 +355,8 @@ void connection_close_all(void)
  *       file descriptors belonging to all connections are closed
  *       no handlers called
  */
-void connection_close_all_fds(void)
+void
+connection_close_all_fds(void)
 {
 	mowgli_node_t *n, *tn;
 	struct connection *cptr;
@@ -371,7 +382,8 @@ void connection_close_all_fds(void)
  *       a TCP/IP connection is opened to the host,
  *       and interest is registered in read/write events.
  */
-struct connection *connection_open_tcp(char *host, char *vhost, unsigned int port,
+struct connection *
+connection_open_tcp(char *host, char *vhost, unsigned int port,
 	void (*read_handler)(struct connection *),
 	void (*write_handler)(struct connection *))
 {
@@ -494,7 +506,8 @@ struct connection *connection_open_tcp(char *host, char *vhost, unsigned int por
  *       a TCP/IP connection is opened to the host,
  *       and interest is registered in read/write events.
  */
-struct connection *connection_open_listener_tcp(char *host, unsigned int port,
+struct connection *
+connection_open_listener_tcp(char *host, unsigned int port,
 	void (*read_handler)(struct connection *))
 {
 	struct connection *cptr;
@@ -583,7 +596,8 @@ struct connection *connection_open_listener_tcp(char *host, unsigned int port,
  *       a TCP/IP connection is accepted from the host,
  *       and interest is registered in read/write events.
  */
-struct connection *connection_accept_tcp(struct connection *cptr,
+struct connection *
+connection_accept_tcp(struct connection *cptr,
 	void (*read_handler)(struct connection *),
 	void (*write_handler)(struct connection *))
 {
@@ -622,7 +636,8 @@ struct connection *connection_accept_tcp(struct connection *cptr,
  * side effects:
  *       the read handler is changed for the struct connection.
  */
-void connection_setselect_read(struct connection *cptr,
+void
+connection_setselect_read(struct connection *cptr,
 	void (*read_handler)(struct connection *))
 {
 	cptr->read_handler = read_handler;
@@ -642,7 +657,8 @@ void connection_setselect_read(struct connection *cptr,
  * side effects:
  *       the write handler is changed for the struct connection.
  */
-void connection_setselect_write(struct connection *cptr,
+void
+connection_setselect_write(struct connection *cptr,
 	void (*write_handler)(struct connection *))
 {
 	cptr->write_handler = write_handler;
@@ -661,7 +677,8 @@ void connection_setselect_write(struct connection *cptr,
  * side effects:
  *       callback function is called with a series of lines
  */
-void connection_stats(void (*stats_cb)(const char *, void *), void *privdata)
+void
+connection_stats(void (*stats_cb)(const char *, void *), void *privdata)
 {
 	mowgli_node_t *n;
 	char buf[160];
