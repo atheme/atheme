@@ -14,7 +14,9 @@ static void ns_cmd_hold(struct sourceinfo *si, int parc, char *parv[]);
 struct command ns_hold = { "HOLD", N_("Prevents an account from expiring."),
 		      PRIV_HOLD, 2, ns_cmd_hold, { .path = "nickserv/hold" } };
 
-static bool is_held(const struct mynick *mn, const void *arg) {
+static bool
+is_held(const struct mynick *mn, const void *arg)
+{
 	struct myuser *mu = mn->owner;
 
 	return ( mu->flags & MU_HOLD ) == MU_HOLD;
@@ -46,7 +48,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	list_unregister("noexpire");
 }
 
-static void ns_cmd_hold(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_hold(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *action = parv[1];
