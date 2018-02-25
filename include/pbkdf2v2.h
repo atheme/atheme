@@ -8,8 +8,6 @@
 #ifndef PBKDF2V2_H
 #define PBKDF2V2_H
 
-#include <openssl/evp.h>
-
 #define PBKDF2V2_CRYPTO_MODULE_NAME     "crypto/pbkdf2v2"
 
 #define PBKDF2_FN_PREFIX                "$z$%u$%u$"
