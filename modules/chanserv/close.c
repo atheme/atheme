@@ -30,7 +30,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	hook_del_channel_join(close_check_join);
 }
 
-static void close_check_join(hook_channel_joinpart_t *data)
+static void
+close_check_join(hook_channel_joinpart_t *data)
 {
 	struct mychan *mc;
 	struct chanuser *cu = data->cu;
@@ -59,7 +60,8 @@ static void close_check_join(hook_channel_joinpart_t *data)
 	}
 }
 
-static void cs_cmd_close(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_close(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *action = parv[1];
