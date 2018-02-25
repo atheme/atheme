@@ -46,7 +46,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
     mowgli_patricia_destroy(ss_server_cmds, NULL, NULL);
 }
 
-static void ss_cmd_server(struct sourceinfo * si, int parc, char *parv[])
+static void
+ss_cmd_server(struct sourceinfo * si, int parc, char *parv[])
 {
     struct command *c;
     char *cmd = parv[0];
@@ -71,7 +72,8 @@ static void ss_cmd_server(struct sourceinfo * si, int parc, char *parv[])
     command_exec(si->service, si, c, parc - 1, parv + 1);
 }
 
-static void ss_cmd_server_list(struct sourceinfo * si, int parc, char *parv[])
+static void
+ss_cmd_server_list(struct sourceinfo * si, int parc, char *parv[])
 {
     struct server *s;
     int i = 0;
@@ -87,7 +89,8 @@ static void ss_cmd_server_list(struct sourceinfo * si, int parc, char *parv[])
     command_success_nodata(si, _("End of server list."));
 }
 
-static void ss_cmd_server_info(struct sourceinfo * si, int parc, char *parv[])
+static void
+ss_cmd_server_info(struct sourceinfo * si, int parc, char *parv[])
 {
     struct server *s;
     char *name = parv[0];
@@ -124,8 +127,8 @@ static void ss_cmd_server_info(struct sourceinfo * si, int parc, char *parv[])
     command_success_nodata(si, _("End of server info."));
 }
 
-
-static void ss_cmd_server_count(struct sourceinfo * si, int parc, char *parv[])
+static void
+ss_cmd_server_count(struct sourceinfo * si, int parc, char *parv[])
 {
     command_success_nodata(si, _("Network size: %u servers"), mowgli_patricia_size(servlist));
 }
