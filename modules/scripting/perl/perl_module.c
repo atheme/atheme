@@ -52,7 +52,8 @@ static void perl_script_module_unload_handler(struct module *m, const enum modul
  *
  * These deal with starting and stopping the perl interpreter.
  */
-static bool startup_perl(void)
+static bool
+startup_perl(void)
 {
 	/*
 	 * Hack: atheme modules (hence our dependent libperl.so) are loaded with
@@ -107,7 +108,8 @@ static bool startup_perl(void)
 	return true;
 }
 
-static void shutdown_perl(void)
+static void
+shutdown_perl(void)
 {
 	PL_perl_destruct_level = 1;
 	perl_destruct(my_perl);
@@ -127,7 +129,8 @@ static void shutdown_perl(void)
 /*
  * Implementation functions: load or unload a perl script.
  */
-static struct module *do_script_load(const char *filename)
+static struct module *
+do_script_load(const char *filename)
 {
 	/* Remember, this must now be re-entrant. The use of the static
 	 * perl_error buffer is still OK, as it's only used immediately after
@@ -255,7 +258,8 @@ fail:
 	return NULL;
 }
 
-static bool do_script_unload(const char *filename)
+static bool
+do_script_unload(const char *filename)
 {
 	bool retval = true;
 
@@ -286,7 +290,8 @@ static bool do_script_unload(const char *filename)
 	return retval;
 }
 
-static bool do_script_list(struct sourceinfo *si)
+static bool
+do_script_list(struct sourceinfo *si)
 {
 	bool retval = true;
 
@@ -329,7 +334,8 @@ struct command os_perl = { "PERL", N_("Inspect the Perl interpreter"), PRIV_ADMI
 
 static int conf_loadscript(mowgli_config_file_entry_t *);
 
-static void hook_module_load(hook_module_load_t *data)
+static void
+hook_module_load(hook_module_load_t *data)
 {
 	struct stat s;
 	char buf[BUFSIZE];
@@ -387,7 +393,8 @@ static void hook_module_load(hook_module_load_t *data)
 	}
 }
 
-void perl_script_module_unload_handler(struct module *m, const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+void
+perl_script_module_unload_handler(struct module *m, const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	struct perl_script_module *pm = (struct perl_script_module *)m;
 	do_script_unload(pm->filename);
@@ -437,13 +444,15 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 /*
  * Actual command handlers.
  */
-static void os_cmd_perl(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_perl(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (!do_script_list(si))
 		command_fail(si, fault_badparams, _("Failed to retrieve script list: %s"), perl_error);
 }
 
-static int conf_loadscript(mowgli_config_file_entry_t *ce)
+static int
+conf_loadscript(mowgli_config_file_entry_t *ce)
 {
 	char pathbuf[4096];
 	char *name;
