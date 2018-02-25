@@ -14,7 +14,8 @@ static void helpserv_cmd_help(struct sourceinfo *si, const int parc, char *parv[
 struct command helpserv_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, helpserv_cmd_help, { .path = "help" } };
 
 /* HELP <command> [params] */
-void helpserv_cmd_help(struct sourceinfo *si, int parc, char *parv[])
+void
+helpserv_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *command = parv[0];
 
