@@ -74,7 +74,8 @@ static const struct cmode seven_user_mode_list[] = {
   { '\0', 0 }
 };
 
-static bool seven_is_valid_hostslash(const char *host)
+static bool
+seven_is_valid_hostslash(const char *host)
 {
 	const char *p;
 	bool dot = false;
@@ -96,7 +97,8 @@ static bool seven_is_valid_hostslash(const char *host)
 	return dot;
 }
 
-static void seven_wallops_sts(const char *reason)
+static void
+seven_wallops_sts(const char *reason)
 {
 	sts(":%s ENCAP * SNOTE s :%s", ME, reason);
 }
@@ -105,7 +107,8 @@ static void seven_wallops_sts(const char *reason)
  * "identified" / "owns this nick" flag.
  */
 
-static void m_euid(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_euid(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct server *s;
 	struct user *u;
@@ -160,7 +163,8 @@ static void m_euid(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_nick(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct server *s;
 	struct user *u;
@@ -229,7 +233,8 @@ static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 }
 
 /* protocol-specific stuff to do on login */
-static void seven_on_login(struct user *u, struct myuser *mu, const char *wantedhost)
+static void
+seven_on_login(struct user *u, struct myuser *mu, const char *wantedhost)
 {
 	return_if_fail(u != NULL);
 
@@ -239,7 +244,8 @@ static void seven_on_login(struct user *u, struct myuser *mu, const char *wanted
 		sts(":%s ENCAP * IDENTIFIED %s %s", ME, CLIENT_NAME(u), u->nick);
 }
 
-static bool seven_on_logout(struct user *u, const char *account)
+static bool
+seven_on_logout(struct user *u, const char *account)
 {
 	return_val_if_fail(u != NULL, false);
 
@@ -248,7 +254,8 @@ static bool seven_on_logout(struct user *u, const char *account)
 	return false;
 }
 
-static void nick_group(hook_user_req_t *hdata)
+static void
+nick_group(hook_user_req_t *hdata)
 {
 	struct user *u;
 
@@ -257,7 +264,8 @@ static void nick_group(hook_user_req_t *hdata)
 		sts(":%s ENCAP * IDENTIFIED %s %s", ME, CLIENT_NAME(u), u->nick);
 }
 
-static void nick_ungroup(hook_user_req_t *hdata)
+static void
+nick_ungroup(hook_user_req_t *hdata)
 {
 	struct user *u;
 
@@ -299,6 +307,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("protocol/ircd-seven", MODULE_UNLOAD_CAPABILITY_NEVER)
