@@ -35,7 +35,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	hook_del_config_ready(cs_set_guard_config_ready);
 }
 
-static void cs_set_guard_config_ready(void *unused)
+static void
+cs_set_guard_config_ready(void *unused)
 {
 	if (config_options.join_chans)
 		cs_set_guard.access = NULL;
@@ -43,7 +44,8 @@ static void cs_set_guard_config_ready(void *unused)
 		cs_set_guard.access = PRIV_ADMIN;
 }
 
-static void cs_cmd_set_guard(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_set_guard(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
 
