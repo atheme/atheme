@@ -98,7 +98,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	del_conf_item("REQUEST_PER_NICK", &hostsvs->conf_table);
 }
 
-static void write_hsreqdb(struct database_handle *db)
+static void
+write_hsreqdb(struct database_handle *db)
 {
 	mowgli_node_t *n;
 
@@ -115,7 +116,8 @@ static void write_hsreqdb(struct database_handle *db)
 	}
 }
 
-static void db_h_hr(struct database_handle *db, const char *type)
+static void
+db_h_hr(struct database_handle *db, const char *type)
 {
 	const char *nick = db_sread_word(db);
 	const char *vhost = db_sread_word(db);
@@ -130,7 +132,8 @@ static void db_h_hr(struct database_handle *db, const char *type)
 	mowgli_node_add(l, mowgli_node_create(), &hs_reqlist);
 }
 
-static void nick_drop_request(hook_user_req_t *hdata)
+static void
+nick_drop_request(hook_user_req_t *hdata)
 {
 	mowgli_node_t *m;
 	struct hsrequest *l;
@@ -154,7 +157,8 @@ static void nick_drop_request(hook_user_req_t *hdata)
 	}
 }
 
-static void account_drop_request(struct myuser *mu)
+static void
+account_drop_request(struct myuser *mu)
 {
 	mowgli_node_t *n;
 	struct hsrequest *l;
@@ -178,7 +182,8 @@ static void account_drop_request(struct myuser *mu)
 	}
 }
 
-static void account_delete_request(struct myuser *mu)
+static void
+account_delete_request(struct myuser *mu)
 {
 	mowgli_node_t *n;
 	struct hsrequest *l;
@@ -202,7 +207,8 @@ static void account_delete_request(struct myuser *mu)
 	}
 }
 
-static void osinfo_hook(struct sourceinfo *si)
+static void
+osinfo_hook(struct sourceinfo *si)
 {
 	return_if_fail(si != NULL);
 
@@ -243,7 +249,8 @@ send_group_memo(struct sourceinfo *si, const char *memo, ...)
 /*****************************************************************************/
 
 /* REQUEST <host> */
-static void hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
+static void
+hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *host = parv[0];
 	const char *target;
@@ -420,7 +427,8 @@ static void hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 }
 
 /* ACTIVATE <nick> */
-static void hs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
+static void
+hs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *nick = parv[0];
 	struct user *u;
@@ -485,7 +493,8 @@ static void hs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 }
 
 /* REJECT <nick> */
-static void hs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
+static void
+hs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *nick = parv[0];
 	char *reason = parv[1];
@@ -583,7 +592,8 @@ static void hs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
 }
 
 /* WAITING */
-static void hs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[])
+static void
+hs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct hsrequest *l;
 	mowgli_node_t *n;
