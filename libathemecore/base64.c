@@ -53,7 +53,7 @@ static const unsigned char base64_dtable[] = {
 	0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F, 0x30, 0x31, 0x32, 0x33, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 };
 
-static size_t
+static size_t ATHEME_FATTR_WUR
 base64_encode_x(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len,
                 const bool terminate)
 {
@@ -149,19 +149,19 @@ base64_encode_x(const void *const restrict in, const size_t in_len, char *const 
 	return written;
 }
 
-size_t
+size_t ATHEME_FATTR_WUR
 base64_encode(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len)
 {
 	return base64_encode_x(in, in_len, dst, dst_len, true);
 }
 
-size_t
+size_t ATHEME_FATTR_WUR
 base64_encode_raw(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len)
 {
 	return base64_encode_x(in, in_len, dst, dst_len, false);
 }
 
-size_t
+size_t ATHEME_FATTR_WUR
 base64_decode(const char *restrict src, void *const restrict out, const size_t out_len)
 {
 	static const size_t failure = (size_t) -1;
