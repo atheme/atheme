@@ -23,7 +23,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("nickserv", &ns_listownmail);
 }
 
-static void ns_cmd_listownmail(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_listownmail(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myentity *mt;
 	struct myentity_iteration_state state;
