@@ -71,7 +71,8 @@ create_weak_challenge(struct sourceinfo *const restrict si, const char *const re
 
 #ifdef HAVE_GETTIMEOFDAY
 /* starts a timer */
-void s_time(struct timeval *sttime)
+void
+s_time(struct timeval *sttime)
 {
 	gettimeofday(sttime, NULL);
 }
@@ -79,7 +80,8 @@ void s_time(struct timeval *sttime)
 
 #ifdef HAVE_GETTIMEOFDAY
 /* ends a timer */
-void e_time(struct timeval sttime, struct timeval *ttime)
+void
+e_time(struct timeval sttime, struct timeval *ttime)
 {
 	struct timeval now;
 
@@ -90,14 +92,16 @@ void e_time(struct timeval sttime, struct timeval *ttime)
 
 #ifdef HAVE_GETTIMEOFDAY
 /* translates microseconds into miliseconds */
-int tv2ms(struct timeval *tv)
+int
+tv2ms(struct timeval *tv)
 {
 	return (tv->tv_sec * 1000) + (int) (tv->tv_usec / 1000);
 }
 #endif
 
 /* replaces tabs with a single ASCII 32 */
-void tb2sp(char *line)
+void
+tb2sp(char *line)
 {
 	char *c;
 
@@ -106,7 +110,8 @@ void tb2sp(char *line)
 }
 
 /* replace all occurances of 'old' with 'new' */
-char *replace(char *s, int size, const char *old, const char *new)
+char *
+replace(char *s, int size, const char *old, const char *new)
 {
 	char *ptr = s;
 	int left = strlen(s);
@@ -139,7 +144,8 @@ char *replace(char *s, int size, const char *old, const char *new)
 }
 
 /* reverse of atoi() */
-const char *number_to_string(int num)
+const char *
+number_to_string(int num)
 {
 	static char ret[32];
 	snprintf(ret, 32, "%d", num);
@@ -147,7 +153,8 @@ const char *number_to_string(int num)
 }
 
 /* return the time elapsed since an event */
-char *time_ago(time_t event)
+char *
+time_ago(time_t event)
 {
 	static char ret[128];
 	int years, weeks, days, hours, minutes, seconds;
@@ -199,7 +206,8 @@ char *time_ago(time_t event)
 	return ret;
 }
 
-char *timediff(time_t seconds)
+char *
+timediff(time_t seconds)
 {
 	static char buf[BUFSIZE];
 	long unsigned days, hours, minutes;
@@ -218,7 +226,8 @@ char *timediff(time_t seconds)
 }
 
 /* generate a random number, for use as a key */
-unsigned long makekey(void)
+unsigned long
+makekey(void)
 {
 	unsigned long k;
 
@@ -233,12 +242,14 @@ unsigned long makekey(void)
 	return k;
 }
 
-bool is_internal_client(struct user *u)
+bool
+is_internal_client(struct user *u)
 {
 	return (u && (!u->server || u->server == me.me));
 }
 
-int validemail(const char *email)
+int
+validemail(const char *email)
 {
 	int i, valid = 1, chars = 0, atcnt = 0, dotcnt1 = 0;
 	char c;
@@ -304,7 +315,8 @@ static mowgli_list_t email_canonicalizers;
 /* Re-canonicalize email addresses.
  * Call this after adding or removing an email_canonicalize hook.
  */
-static void canonicalize_emails(void)
+static void
+canonicalize_emails(void)
 {
 	struct myentity_iteration_state state;
 	struct myentity *mt;
@@ -351,7 +363,8 @@ unregister_email_canonicalizer(email_canonicalizer_fn func, void *user_data)
 	}
 }
 
-stringref canonicalize_email(const char *email)
+stringref
+canonicalize_email(const char *email)
 {
 	mowgli_node_t *n, *tn;
 	char buf[EMAILLEN + 1];
@@ -371,12 +384,14 @@ stringref canonicalize_email(const char *email)
 	return strshare_get(buf);
 }
 
-void canonicalize_email_case(char email[static (EMAILLEN + 1)], void *user_data)
+void
+canonicalize_email_case(char email[static (EMAILLEN + 1)], void *user_data)
 {
 	strcasecanon(email);
 }
 
-bool email_within_limits(const char *email)
+bool
+email_within_limits(const char *email)
 {
 	mowgli_node_t *n;
 	struct myentity_iteration_state state;
@@ -414,7 +429,8 @@ bool email_within_limits(const char *email)
 	return result;
 }
 
-bool validhostmask(const char *host)
+bool
+validhostmask(const char *host)
 {
 	char *p, *q;
 
@@ -455,7 +471,8 @@ bool validhostmask(const char *host)
  * If either nick/user/host are > than their respective limits, they are
  * chopped
  */
-char *pretty_mask(char *mask)
+char *
+pretty_mask(char *mask)
 {
 	static char mask_buf[BUFSIZE];
         int old_mask_pos;
@@ -557,7 +574,8 @@ char *pretty_mask(char *mask)
 	return mask_buf;
 }
 
-bool validtopic(const char *topic)
+bool
+validtopic(const char *topic)
 {
 	int i;
 
@@ -597,7 +615,8 @@ bool validtopic(const char *topic)
 	return true;
 }
 
-bool has_ctrl_chars(const char *text)
+bool
+has_ctrl_chars(const char *text)
 {
 	int i;
 
@@ -610,7 +629,8 @@ bool has_ctrl_chars(const char *text)
 }
 
 #ifndef MOWGLI_OS_WIN
-static void sendemail_waited(pid_t pid, int status, void *data)
+static void
+sendemail_waited(pid_t pid, int status, void *data)
 {
 	char *email;
 
@@ -629,7 +649,8 @@ static void sendemail_waited(pid_t pid, int status, void *data)
  * mu is the recipient user
  * param depends on type, also see include/tools.h
  */
-int sendemail(struct user *u, struct myuser *mu, const char *type, const char *email, const char *param)
+int
+sendemail(struct user *u, struct myuser *mu, const char *type, const char *email, const char *param)
 {
 #ifndef MOWGLI_OS_WIN
 	char *date = NULL;
@@ -779,7 +800,8 @@ int sendemail(struct user *u, struct myuser *mu, const char *type, const char *e
 }
 
 /* various access level checkers */
-bool is_founder(struct mychan *mychan, struct myentity *mt)
+bool
+is_founder(struct mychan *mychan, struct myentity *mt)
 {
 	if (mt == NULL)
 		return false;
@@ -790,7 +812,8 @@ bool is_founder(struct mychan *mychan, struct myentity *mt)
 	return false;
 }
 
-bool is_ircop(struct user *user)
+bool
+is_ircop(struct user *user)
 {
 	if (UF_IRCOP & user->flags)
 		return true;
@@ -798,7 +821,8 @@ bool is_ircop(struct user *user)
 	return false;
 }
 
-bool is_admin(struct user *user)
+bool
+is_admin(struct user *user)
 {
 	if (UF_ADMIN & user->flags)
 		return true;
@@ -806,7 +830,8 @@ bool is_admin(struct user *user)
 	return false;
 }
 
-bool is_autokline_exempt(struct user *user)
+bool
+is_autokline_exempt(struct user *user)
 {
 	mowgli_node_t *n;
 	char buf[BUFSIZE];
@@ -820,7 +845,8 @@ bool is_autokline_exempt(struct user *user)
 	return false;
 }
 
-bool is_service(struct user *user)
+bool
+is_service(struct user *user)
 {
 	if (UF_SERVICE & user->flags)
 		return true;
@@ -828,7 +854,8 @@ bool is_service(struct user *user)
 	return false;
 }
 
-char *sbytes(float x)
+char *
+sbytes(float x)
 {
 	if (x > 1073741824.0f)
 		return "GB";
@@ -842,7 +869,8 @@ char *sbytes(float x)
 	return "B";
 }
 
-float bytes(float x)
+float
+bytes(float x)
 {
 	if (x > 1073741824.0f)
 		return (x / 1073741824.0f);
@@ -856,7 +884,8 @@ float bytes(float x)
 	return x;
 }
 
-int srename(const char *old_fn, const char *new_fn)
+int
+srename(const char *old_fn, const char *new_fn)
 {
 #ifdef MOWGLI_OS_WIN
 	unlink(new_fn);
@@ -865,7 +894,8 @@ int srename(const char *old_fn, const char *new_fn)
 	return rename(old_fn, new_fn);
 }
 
-char *combine_path(const char *parent, const char *child)
+char *
+combine_path(const char *parent, const char *child)
 {
 	char buf[BUFSIZE];
 
