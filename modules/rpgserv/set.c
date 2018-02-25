@@ -10,7 +10,8 @@ static void rs_cmd_set(struct sourceinfo *si, int parc, char *parv[]);
 struct command rs_set = { "SET", N_("Sets RPG properties of your channel."),
                      AC_NONE, 3, rs_cmd_set, { .path = "rpgserv/set" } };
 
-static void setting_clear(struct sourceinfo *si, struct mychan *mc, char *setting)
+static void
+setting_clear(struct sourceinfo *si, struct mychan *mc, char *setting)
 {
 	char nbuf[64];
 	snprintf(nbuf, sizeof(nbuf), "private:rpgserv:%s", setting);
@@ -22,7 +23,8 @@ static void setting_clear(struct sourceinfo *si, struct mychan *mc, char *settin
 	command_success_nodata(si, _("Setting \2%s\2 cleared for \2%s\2."), setting, mc->name);
 }
 
-static int inlist(const char *needle, const char **haystack)
+static int
+inlist(const char *needle, const char **haystack)
 {
 	int i;
 	for (i = 0; haystack[i]; i++)
@@ -31,7 +33,8 @@ static int inlist(const char *needle, const char **haystack)
 	return -1;
 }
 
-static void set_genre(struct sourceinfo *si, struct mychan *mc, char *value)
+static void
+set_genre(struct sourceinfo *si, struct mychan *mc, char *value)
 {
 	char copy[512];
 	char *sp = NULL, *t = NULL;
@@ -51,7 +54,8 @@ static void set_genre(struct sourceinfo *si, struct mychan *mc, char *value)
 	command_success_nodata(si, _("Genre for \2%s\2 set to \2%s\2."), mc->name, value);
 }
 
-static void set_period(struct sourceinfo *si, struct mychan *mc, char *value)
+static void
+set_period(struct sourceinfo *si, struct mychan *mc, char *value)
 {
 	char copy[512];
 	char *sp = NULL, *t = NULL;
@@ -71,7 +75,8 @@ static void set_period(struct sourceinfo *si, struct mychan *mc, char *value)
 	command_success_nodata(si, _("Period for \2%s\2 set to \2%s\2."), mc->name, value);
 }
 
-static void set_ruleset(struct sourceinfo *si, struct mychan *mc, char *value)
+static void
+set_ruleset(struct sourceinfo *si, struct mychan *mc, char *value)
 {
 	if (inlist(value, ruleset_keys) < 0) {
 		command_fail(si, fault_badparams, _("\2%s\2 is not a valid ruleset."), value);
@@ -82,7 +87,8 @@ static void set_ruleset(struct sourceinfo *si, struct mychan *mc, char *value)
 	command_success_nodata(si, _("Ruleset for \2%s\2 set to \2%s\2."), mc->name, value);
 }
 
-static void set_rating(struct sourceinfo *si, struct mychan *mc, char *value)
+static void
+set_rating(struct sourceinfo *si, struct mychan *mc, char *value)
 {
 	if (inlist(value, rating_keys) < 0) {
 		command_fail(si, fault_badparams, _("\2%s\2 is not a valid rating."), value);
@@ -93,7 +99,8 @@ static void set_rating(struct sourceinfo *si, struct mychan *mc, char *value)
 	command_success_nodata(si, _("Rating for \2%s\2 set to \2%s\2."), mc->name, value);
 }
 
-static void set_system(struct sourceinfo *si, struct mychan *mc, char *value)
+static void
+set_system(struct sourceinfo *si, struct mychan *mc, char *value)
 {
 	char copy[512];
 	char *sp = NULL, *t = NULL;
@@ -112,19 +119,22 @@ static void set_system(struct sourceinfo *si, struct mychan *mc, char *value)
 	command_success_nodata(si, _("System for \2%s\2 set to \2%s\2."), mc->name, value);
 }
 
-static void set_setting(struct sourceinfo *si, struct mychan *mc, char *value)
+static void
+set_setting(struct sourceinfo *si, struct mychan *mc, char *value)
 {
 	metadata_add(mc, "private:rpgserv:setting", value);
 	command_success_nodata(si, _("Setting for \2%s\2 set."), mc->name);
 }
 
-static void set_storyline(struct sourceinfo *si, struct mychan *mc, char *value)
+static void
+set_storyline(struct sourceinfo *si, struct mychan *mc, char *value)
 {
 	metadata_add(mc, "private:rpgserv:storyline", value);
 	command_success_nodata(si, _("Storyline for \2%s\2 set."), mc->name);
 }
 
-static void set_summary(struct sourceinfo *si, struct mychan *mc, char *value)
+static void
+set_summary(struct sourceinfo *si, struct mychan *mc, char *value)
 {
 	metadata_add(mc, "private:rpgserv:summary", value);
 	command_success_nodata(si, _("Summary for \2%s\2 set."), mc->name);
@@ -145,7 +155,8 @@ static struct {
 	{ NULL, NULL },
 };
 
-static void rs_cmd_set(struct sourceinfo *si, int parc, char *parv[])
+static void
+rs_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan;
 	char *setting;
