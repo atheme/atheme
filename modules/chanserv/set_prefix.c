@@ -33,7 +33,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	hook_del_config_ready(cs_set_prefix_config_ready);
 }
 
-static void cs_set_prefix_config_ready(void *unused)
+static void
+cs_set_prefix_config_ready(void *unused)
 {
 	if (chansvs.fantasy)
 		cs_set_prefix.access = NULL;
@@ -41,7 +42,8 @@ static void cs_set_prefix_config_ready(void *unused)
 		cs_set_prefix.access = AC_DISABLED;
 }
 
-static int goodprefix(const char *p)
+static int
+goodprefix(const char *p)
 {
 	int i;
 	int haschar = 0;
@@ -55,8 +57,8 @@ static int goodprefix(const char *p)
 	return haschar && !hasnonprint;
 }
 
-
-static void cs_cmd_set_prefix(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_set_prefix(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
 	char *prefix = parv[1];
