@@ -53,7 +53,8 @@ mowgli_heap_t *chanacs_heap;	/* HEAP_CHANACS */
  * Side Effects:
  *      - if the DTree initialization fails, services will abort.
  */
-void init_accounts(void)
+void
+init_accounts(void)
 {
 	myuser_heap = sharedheap_get(sizeof(struct myuser));
 	mynick_heap = sharedheap_get(sizeof(struct myuser));
@@ -100,7 +101,8 @@ void init_accounts(void)
  *        responsible for adding a nick with the same name
  */
 
-struct myuser *myuser_add(const char *name, const char *pass, const char *email, unsigned int flags)
+struct myuser *
+myuser_add(const char *name, const char *pass, const char *email, unsigned int flags)
 {
 	return myuser_add_id(NULL, name, pass, email, flags);
 }
@@ -111,7 +113,8 @@ struct myuser *myuser_add(const char *name, const char *pass, const char *email,
  *
  * Like myuser_add, but lets you specify the new entity's UID.
  */
-struct myuser *myuser_add_id(const char *id, const char *name, const char *pass, const char *email, unsigned int flags)
+struct myuser *
+myuser_add_id(const char *id, const char *name, const char *pass, const char *email, unsigned int flags)
 {
 	struct myuser *mu;
 	struct soper *soper;
@@ -188,7 +191,8 @@ struct myuser *myuser_add_id(const char *id, const char *name, const char *pass,
  * Side Effects:
  *      - an account is destroyed and removed from the accounts DTree.
  */
-void myuser_delete(struct myuser *mu)
+void
+myuser_delete(struct myuser *mu)
 {
 	struct myuser *successor;
 	struct mychan *mc;
@@ -351,7 +355,8 @@ void myuser_delete(struct myuser *mu)
  *      - an account is renamed.
  *      - online users are logged out and in again
  */
-void myuser_rename(struct myuser *mu, const char *name)
+void
+myuser_rename(struct myuser *mu, const char *name)
 {
 	mowgli_node_t *n, *tn;
 	struct user *u;
@@ -409,7 +414,8 @@ void myuser_rename(struct myuser *mu, const char *name)
  * Side Effects:
  *      - email address is changed
  */
-void myuser_set_email(struct myuser *mu, const char *newemail)
+void
+myuser_set_email(struct myuser *mu, const char *newemail)
 {
 	return_if_fail(mu != NULL);
 	return_if_fail(newemail != NULL);
@@ -436,7 +442,8 @@ void myuser_set_email(struct myuser *mu, const char *newemail)
  * Side Effects:
  *      - none
  */
-struct myuser *myuser_find_ext(const char *name)
+struct myuser *
+myuser_find_ext(const char *name)
 {
 	struct user *u;
 	struct mynick *mn;
@@ -677,7 +684,8 @@ myuser_access_delete(struct myuser *mu, const char *mask)
  *      - the created nick is added to the nick DTree and to the
  *        account's list.
  */
-struct mynick *mynick_add(struct myuser *mu, const char *name)
+struct mynick *
+mynick_add(struct myuser *mu, const char *name)
 {
 	struct mynick *mn;
 
@@ -717,7 +725,8 @@ struct mynick *mynick_add(struct myuser *mu, const char *name)
  * Side Effects:
  *      - a nick is destroyed and removed from the nicks DTree and the account.
  */
-void mynick_delete(struct mynick *mn)
+void
+mynick_delete(struct mynick *mn)
 {
 	return_if_fail(mn != NULL);
 
@@ -755,7 +764,8 @@ static void myuser_name_delete(struct myuser_name *mun);
  * Side Effects:
  *      - the created record is added to the oldnames DTree.
  */
-struct myuser_name *myuser_name_add(const char *name)
+struct myuser_name *
+myuser_name_add(const char *name)
 {
 	struct myuser_name *mun;
 
@@ -790,7 +800,8 @@ struct myuser_name *myuser_name_add(const char *name)
  * Side Effects:
  *      - a record is destroyed and removed from the oldnames DTree.
  */
-static void myuser_name_delete(struct myuser_name *mun)
+static void
+myuser_name_delete(struct myuser_name *mun)
 {
 	return_if_fail(mun != NULL);
 
@@ -822,7 +833,8 @@ static void myuser_name_delete(struct myuser_name *mun)
  * Side Effects:
  *      - a record may be added to the oldnames DTree.
  */
-void myuser_name_remember(const char *name, struct myuser *mu)
+void
+myuser_name_remember(const char *name, struct myuser *mu)
 {
 	struct myuser_name *mun;
 	struct metadata *md;
@@ -863,7 +875,8 @@ void myuser_name_remember(const char *name, struct myuser *mu)
  * Side Effects:
  *      - if present, the record will be removed from the oldnames DTree.
  */
-void myuser_name_restore(const char *name, struct myuser *mu)
+void
+myuser_name_restore(const char *name, struct myuser *mu)
 {
 	struct myuser_name *mun;
 	struct metadata *md, *md2;
@@ -921,7 +934,8 @@ void myuser_name_restore(const char *name, struct myuser *mu)
  * M Y C E R T F P *
  *******************/
 
-struct mycertfp *mycertfp_add(struct myuser *mu, const char *certfp)
+struct mycertfp *
+mycertfp_add(struct myuser *mu, const char *certfp)
 {
 	struct mycertfp *mcfp;
 
@@ -938,7 +952,8 @@ struct mycertfp *mycertfp_add(struct myuser *mu, const char *certfp)
 	return mcfp;
 }
 
-void mycertfp_delete(struct mycertfp *mcfp)
+void
+mycertfp_delete(struct mycertfp *mcfp)
 {
 	return_if_fail(mcfp != NULL);
 	return_if_fail(mcfp->mu != NULL);
@@ -951,7 +966,8 @@ void mycertfp_delete(struct mycertfp *mcfp)
 	mowgli_heap_free(mycertfp_heap, mcfp);
 }
 
-struct mycertfp *mycertfp_find(const char *certfp)
+struct mycertfp *
+mycertfp_find(const char *certfp)
 {
 	return_val_if_fail(certfp != NULL, NULL);
 
@@ -963,7 +979,8 @@ struct mycertfp *mycertfp_find(const char *certfp)
  ***************/
 
 /* private destructor for struct mychan. */
-static void mychan_delete(struct mychan *mc)
+static void
+mychan_delete(struct mychan *mc)
 {
 	mowgli_node_t *n, *tn;
 
@@ -990,7 +1007,8 @@ static void mychan_delete(struct mychan *mc)
 	cnt.mychan--;
 }
 
-struct mychan *mychan_add(char *name)
+struct mychan *
+mychan_add(char *name)
 {
 	struct mychan *mc;
 
@@ -1021,7 +1039,8 @@ struct mychan *mychan_add(char *name)
 /* Check if there is anyone on the channel fulfilling the conditions.
  * Fairly expensive, but this is sometimes necessary to avoid
  * inappropriate drops. -- jilles */
-bool mychan_isused(struct mychan *mc)
+bool
+mychan_isused(struct mychan *mc)
 {
 	mowgli_node_t *n;
 	struct channel *c;
@@ -1041,7 +1060,8 @@ bool mychan_isused(struct mychan *mc)
 	return false;
 }
 
-unsigned int mychan_num_founders(struct mychan *mc)
+unsigned int
+mychan_num_founders(struct mychan *mc)
 {
 	mowgli_node_t *n;
 	struct chanacs *ca;
@@ -1058,7 +1078,8 @@ unsigned int mychan_num_founders(struct mychan *mc)
 	return count;
 }
 
-const char *mychan_founder_names(struct mychan *mc)
+const char *
+mychan_founder_names(struct mychan *mc)
 {
 	mowgli_node_t *n;
 	struct chanacs *ca;
@@ -1080,7 +1101,8 @@ const char *mychan_founder_names(struct mychan *mc)
 	return names;
 }
 
-static unsigned int add_auto_flags(unsigned int flags)
+static unsigned int
+add_auto_flags(unsigned int flags)
 {
 	if (flags & CA_OP)
 		flags |= CA_AUTOOP;
@@ -1095,7 +1117,8 @@ static unsigned int add_auto_flags(unsigned int flags)
 #define RECENTLY_SEEN (7 * 86400)
 
 /* Find a user fulfilling the conditions who can take another channel */
-struct myuser *mychan_pick_candidate(struct mychan *mc, unsigned int minlevel)
+struct myuser *
+mychan_pick_candidate(struct mychan *mc, unsigned int minlevel)
 {
 	mowgli_node_t *n;
 	struct chanacs *ca;
@@ -1153,7 +1176,8 @@ struct myuser *mychan_pick_candidate(struct mychan *mc, unsigned int minlevel)
  * the channel or on IRC; this would give an unfair advantage to
  * 24*7 clients and bots.
  * -- jilles */
-struct myuser *mychan_pick_successor(struct mychan *mc)
+struct myuser *
+mychan_pick_successor(struct mychan *mc)
 {
 	struct myuser *mu;
 	hook_channel_succession_req_t req;
@@ -1192,7 +1216,8 @@ struct myuser *mychan_pick_successor(struct mychan *mc)
 	return mychan_pick_candidate(mc, 0);
 }
 
-const char *mychan_get_mlock(struct mychan *mc)
+const char *
+mychan_get_mlock(struct mychan *mc)
 {
 	static char buf[BUFSIZE];
 	char params[BUFSIZE];
@@ -1322,7 +1347,8 @@ const char *mychan_get_mlock(struct mychan *mc)
 	return buf;
 }
 
-const char *mychan_get_sts_mlock(struct mychan *mc)
+const char *
+mychan_get_sts_mlock(struct mychan *mc)
 {
 	static char mlock[BUFSIZE];
 	struct metadata *md;
@@ -1362,7 +1388,8 @@ const char *mychan_get_sts_mlock(struct mychan *mc)
  *****************/
 
 /* private destructor for struct chanacs */
-static void chanacs_delete(struct chanacs *ca)
+static void
+chanacs_delete(struct chanacs *ca)
 {
 	return_if_fail(ca != NULL);
 	return_if_fail(ca->mychan != NULL);
@@ -1408,7 +1435,8 @@ static void chanacs_delete(struct chanacs *ca)
  * Side Effects:
  *       - the channel access list is updated for mychan.
  */
-struct chanacs *chanacs_add(struct mychan *mychan, struct myentity *mt, unsigned int level, time_t ts, struct myentity *setter)
+struct chanacs *
+chanacs_add(struct mychan *mychan, struct myentity *mt, unsigned int level, time_t ts, struct myentity *setter)
 {
 	struct chanacs *ca;
 
@@ -1462,7 +1490,8 @@ struct chanacs *chanacs_add(struct mychan *mychan, struct myentity *mt, unsigned
  * Side Effects:
  *       - the channel access list is updated for mychan.
  */
-struct chanacs *chanacs_add_host(struct mychan *mychan, const char *host, unsigned int level, time_t ts, struct myentity *setter)
+struct chanacs *
+chanacs_add_host(struct mychan *mychan, const char *host, unsigned int level, time_t ts, struct myentity *setter)
 {
 	struct chanacs *ca;
 
@@ -1498,7 +1527,8 @@ struct chanacs *chanacs_add_host(struct mychan *mychan, const char *host, unsign
 	return ca;
 }
 
-struct chanacs *chanacs_find(struct mychan *mychan, struct myentity *mt, unsigned int level)
+struct chanacs *
+chanacs_find(struct mychan *mychan, struct myentity *mt, unsigned int level)
 {
 	mowgli_node_t *n;
 	struct chanacs *ca;
@@ -1530,7 +1560,8 @@ struct chanacs *chanacs_find(struct mychan *mychan, struct myentity *mt, unsigne
 	return NULL;
 }
 
-unsigned int chanacs_entity_flags(struct mychan *mychan, struct myentity *mt)
+unsigned int
+chanacs_entity_flags(struct mychan *mychan, struct myentity *mt)
 {
 	mowgli_node_t *n;
 	struct chanacs *ca;
@@ -1561,7 +1592,8 @@ unsigned int chanacs_entity_flags(struct mychan *mychan, struct myentity *mt)
 	return result;
 }
 
-struct chanacs *chanacs_find_literal(struct mychan *mychan, struct myentity *mt, unsigned int level)
+struct chanacs *
+chanacs_find_literal(struct mychan *mychan, struct myentity *mt, unsigned int level)
 {
 	mowgli_node_t *n;
 	struct chanacs *ca;
@@ -1584,7 +1616,8 @@ struct chanacs *chanacs_find_literal(struct mychan *mychan, struct myentity *mt,
 	return NULL;
 }
 
-struct chanacs *chanacs_find_host(struct mychan *mychan, const char *host, unsigned int level)
+struct chanacs *
+chanacs_find_host(struct mychan *mychan, const char *host, unsigned int level)
 {
 	mowgli_node_t *n;
 	struct chanacs *ca;
@@ -1607,7 +1640,8 @@ struct chanacs *chanacs_find_host(struct mychan *mychan, const char *host, unsig
 	return NULL;
 }
 
-unsigned int chanacs_host_flags(struct mychan *mychan, const char *host)
+unsigned int
+chanacs_host_flags(struct mychan *mychan, const char *host)
 {
 	mowgli_node_t *n;
 	struct chanacs *ca;
@@ -1626,7 +1660,8 @@ unsigned int chanacs_host_flags(struct mychan *mychan, const char *host)
 	return result;
 }
 
-struct chanacs *chanacs_find_host_literal(struct mychan *mychan, const char *host, unsigned int level)
+struct chanacs *
+chanacs_find_host_literal(struct mychan *mychan, const char *host, unsigned int level)
 {
 	mowgli_node_t *n;
 	struct chanacs *ca;
@@ -1650,7 +1685,8 @@ struct chanacs *chanacs_find_host_literal(struct mychan *mychan, const char *hos
 	return NULL;
 }
 
-struct chanacs *chanacs_find_host_by_user(struct mychan *mychan, struct user *u, unsigned int level)
+struct chanacs *
+chanacs_find_host_by_user(struct mychan *mychan, struct user *u, unsigned int level)
 {
 	mowgli_node_t *n;
 	struct chanacs *ca;
@@ -1667,7 +1703,8 @@ struct chanacs *chanacs_find_host_by_user(struct mychan *mychan, struct user *u,
 	return NULL;
 }
 
-static unsigned int chanacs_host_flags_by_user(struct mychan *mychan, struct user *u)
+static unsigned int
+chanacs_host_flags_by_user(struct mychan *mychan, struct user *u)
 {
 	mowgli_node_t *n;
 	unsigned int result = 0;
@@ -1686,7 +1723,8 @@ static unsigned int chanacs_host_flags_by_user(struct mychan *mychan, struct use
 	return result;
 }
 
-struct chanacs *chanacs_find_by_mask(struct mychan *mychan, const char *mask, unsigned int level)
+struct chanacs *
+chanacs_find_by_mask(struct mychan *mychan, const char *mask, unsigned int level)
 {
 	struct myentity *mt;
 	struct chanacs *ca;
@@ -1705,7 +1743,8 @@ struct chanacs *chanacs_find_by_mask(struct mychan *mychan, const char *mask, un
 	return chanacs_find_host_literal(mychan, mask, level);
 }
 
-bool chanacs_user_has_flag(struct mychan *mychan, struct user *u, unsigned int level)
+bool
+chanacs_user_has_flag(struct mychan *mychan, struct user *u, unsigned int level)
 {
 	struct myentity *mt;
 
@@ -1724,7 +1763,8 @@ bool chanacs_user_has_flag(struct mychan *mychan, struct user *u, unsigned int l
 	return false;
 }
 
-static unsigned int chanacs_entity_flags_by_user(struct mychan *mychan, struct user *u)
+static unsigned int
+chanacs_entity_flags_by_user(struct mychan *mychan, struct user *u)
 {
 	mowgli_node_t *n;
 	unsigned int result = 0;
@@ -1753,7 +1793,8 @@ static unsigned int chanacs_entity_flags_by_user(struct mychan *mychan, struct u
 	return result;
 }
 
-unsigned int chanacs_user_flags(struct mychan *mychan, struct user *u)
+unsigned int
+chanacs_user_flags(struct mychan *mychan, struct user *u)
 {
 	struct myentity *mt;
 	unsigned int result = 0;
@@ -1779,7 +1820,8 @@ unsigned int chanacs_user_flags(struct mychan *mychan, struct user *u)
 	return result;
 }
 
-unsigned int chanacs_source_flags(struct mychan *mychan, struct sourceinfo *si)
+unsigned int
+chanacs_source_flags(struct mychan *mychan, struct sourceinfo *si)
 {
 	if (si->su != NULL)
 	{
@@ -1798,7 +1840,8 @@ unsigned int chanacs_source_flags(struct mychan *mychan, struct sourceinfo *si)
  * host must be non-NULL). If not found, and create is true, create a new
  * chanacs with no flags.
  */
-struct chanacs *chanacs_open(struct mychan *mychan, struct myentity *mt, const char *hostmask, bool create, struct myentity *setter)
+struct chanacs *
+chanacs_open(struct mychan *mychan, struct myentity *mt, const char *hostmask, bool create, struct myentity *setter)
 {
 	struct chanacs *ca;
 
@@ -1832,7 +1875,8 @@ struct chanacs *chanacs_open(struct mychan *mychan, struct myentity *mt, const c
  * these to reflect the actual change. Only allow changes to restrictflags.
  * Returns true if successful, false if an unallowed change was attempted.
  * -- jilles */
-bool chanacs_modify(struct chanacs *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, struct myuser *setter)
+bool
+chanacs_modify(struct chanacs *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, struct myuser *setter)
 {
 	return_val_if_fail(ca != NULL, false);
 	return_val_if_fail(addflags != NULL && removeflags != NULL, false);
@@ -1862,7 +1906,8 @@ bool chanacs_modify(struct chanacs *ca, unsigned int *addflags, unsigned int *re
 }
 
 /* version that doesn't return the changes made */
-bool chanacs_modify_simple(struct chanacs *ca, unsigned int addflags, unsigned int removeflags, struct myuser *setter)
+bool
+chanacs_modify_simple(struct chanacs *ca, unsigned int addflags, unsigned int removeflags, struct myuser *setter)
 {
 	unsigned int a, r;
 
@@ -1878,7 +1923,8 @@ bool chanacs_modify_simple(struct chanacs *ca, unsigned int addflags, unsigned i
  * these to reflect the actual change. Only allow changes to restrictflags.
  * Returns true if successful, false if an unallowed change was attempted.
  * -- jilles */
-bool chanacs_change(struct mychan *mychan, struct myentity *mt, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, struct myentity *setter)
+bool
+chanacs_change(struct mychan *mychan, struct myentity *mt, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, struct myentity *setter)
 {
 	struct chanacs *ca;
 	hook_channel_acl_req_t req;
@@ -1974,7 +2020,8 @@ bool chanacs_change(struct mychan *mychan, struct myentity *mt, const char *host
 }
 
 /* version that doesn't return the changes made */
-bool chanacs_change_simple(struct mychan *mychan, struct myentity *mt, const char *hostmask, unsigned int addflags, unsigned int removeflags, struct myentity *setter)
+bool
+chanacs_change_simple(struct mychan *mychan, struct myentity *mt, const char *hostmask, unsigned int addflags, unsigned int removeflags, struct myentity *setter)
 {
 	unsigned int a, r;
 
@@ -1983,7 +2030,8 @@ bool chanacs_change_simple(struct mychan *mychan, struct myentity *mt, const cha
 	return chanacs_change(mychan, mt, hostmask, &a, &r, ca_all, setter);
 }
 
-static int expire_myuser_cb(struct myentity *mt, void *unused)
+static int
+expire_myuser_cb(struct myentity *mt, void *unused)
 {
 	hook_expiry_req_t req;
 	struct myuser *mu = user(mt);
@@ -2031,7 +2079,8 @@ static int expire_myuser_cb(struct myentity *mt, void *unused)
 	return 0;
 }
 
-void expire_check(void *arg)
+void
+expire_check(void *arg)
 {
 	struct mynick *mn;
 	struct mychan *mc;
@@ -2128,7 +2177,8 @@ void expire_check(void *arg)
 	}
 }
 
-static int check_myuser_cb(struct myentity *mt, void *unused)
+static int
+check_myuser_cb(struct myentity *mt, void *unused)
 {
 	struct myuser *mu = user(mt);
 	mowgli_node_t *n;
@@ -2170,7 +2220,8 @@ static int check_myuser_cb(struct myentity *mt, void *unused)
 	return 0;
 }
 
-void db_check(void)
+void
+db_check(void)
 {
 	myentity_foreach_t(ENT_USER, check_myuser_cb, NULL);
 }
