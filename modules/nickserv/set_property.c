@@ -30,7 +30,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 }
 
 /* SET PROPERTY <property> [value] */
-static void ns_cmd_set_property(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_set_property(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *property = strtok(parv[0], " ");
 	char *value = strtok(NULL, "");
