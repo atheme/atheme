@@ -32,7 +32,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 }
 
 /* SET LANGUAGE <language> */
-static void ns_cmd_set_language(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_set_language(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *language = parv[0];
 	struct language *lang;
@@ -64,6 +65,5 @@ static void ns_cmd_set_language(struct sourceinfo *si, int parc, char *parv[])
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/set_language", MODULE_UNLOAD_CAPABILITY_OK)
-
 
 #endif /* ENABLE_NLS */
