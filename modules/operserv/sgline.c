@@ -67,7 +67,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	mowgli_patricia_destroy(os_sgline_cmds, NULL, NULL);
 }
 
-static void os_sgline_newuser(hook_user_nick_t *data)
+static void
+os_sgline_newuser(hook_user_nick_t *data)
 {
 	struct user *u = data->u;
 	struct xline *x;
@@ -88,7 +89,8 @@ static void os_sgline_newuser(hook_user_nick_t *data)
 	}
 }
 
-static void os_cmd_sgline(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_sgline(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* Grab args */
 	char *cmd = parv[0];
@@ -112,7 +114,8 @@ static void os_cmd_sgline(struct sourceinfo *si, int parc, char *parv[])
 	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
 
-static void os_cmd_sgline_add(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_sgline_add(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *token = strtok(parv[1], " ");
@@ -229,7 +232,8 @@ static void os_cmd_sgline_add(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "SGLINE:ADD: \2%s\2 (reason: \2%s\2)", x->realname, x->reason);
 }
 
-static void os_cmd_sgline_del(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_sgline_del(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	struct xline *x;
@@ -321,7 +325,8 @@ static void os_cmd_sgline_del(struct sourceinfo *si, int parc, char *parv[])
 	xline_delete(target);
 }
 
-static void os_cmd_sgline_list(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_sgline_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *param = parv[0];
 	bool full = false;
@@ -354,7 +359,8 @@ static void os_cmd_sgline_list(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_GET, "SGLINE:LIST: \2%s\2", full ? " FULL" : "");
 }
 
-static void os_cmd_sgline_sync(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_sgline_sync(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
 	struct xline *x;
