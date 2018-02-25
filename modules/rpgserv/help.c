@@ -9,7 +9,8 @@ static void rs_cmd_help(struct sourceinfo *si, int parc, char *parv[]);
 struct command rs_help = { "HELP", N_("Displays contextual help information."),
                       AC_NONE, 2, rs_cmd_help, { .path = "help" } };
 
-static void rs_cmd_help(struct sourceinfo *si, int parc, char *parv[])
+static void
+rs_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *command = parv[0];
 	if (!command)
