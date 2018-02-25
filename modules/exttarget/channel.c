@@ -15,7 +15,8 @@ struct this_exttarget
 	stringref channel;
 };
 
-static struct chanacs *channel_ext_match_user(struct chanacs *ca, struct user *u)
+static struct chanacs *
+channel_ext_match_user(struct chanacs *ca, struct user *u)
 {
 	struct this_exttarget *ent;
 	mowgli_node_t *n;
@@ -32,7 +33,8 @@ static struct chanacs *channel_ext_match_user(struct chanacs *ca, struct user *u
 	return NULL;
 }
 
-static struct chanacs *channel_ext_match_entity(struct chanacs *ca, struct myentity *mt)
+static struct chanacs *
+channel_ext_match_entity(struct chanacs *ca, struct myentity *mt)
 {
 	if (ca->entity == mt)
 		return ca;
@@ -40,12 +42,14 @@ static struct chanacs *channel_ext_match_entity(struct chanacs *ca, struct myent
 	return NULL;
 }
 
-static bool channel_ext_can_register_channel(struct myentity *mt)
+static bool
+channel_ext_can_register_channel(struct myentity *mt)
 {
 	return false;
 }
 
-static bool channel_ext_allow_foundership(struct myentity *mt)
+static bool
+channel_ext_allow_foundership(struct myentity *mt)
 {
 	return false;
 }
@@ -60,7 +64,8 @@ static const struct entity_chanacs_validation_vtable channel_ext_validate = {
 static mowgli_heap_t *channel_ext_heap = NULL;
 static mowgli_patricia_t *channel_exttarget_tree = NULL;
 
-static void channel_ext_delete(struct this_exttarget *e)
+static void
+channel_ext_delete(struct this_exttarget *e)
 {
 	return_if_fail(e != NULL);
 
@@ -71,7 +76,8 @@ static void channel_ext_delete(struct this_exttarget *e)
 	mowgli_heap_free(channel_ext_heap, e);
 }
 
-static struct myentity *channel_validate_f(const char *param)
+static struct myentity *
+channel_validate_f(const char *param)
 {
 	char *name;
 	struct this_exttarget *ext;
