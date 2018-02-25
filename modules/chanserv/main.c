@@ -24,7 +24,8 @@ static void on_shutdown(void *unused);
 
 static mowgli_eventloop_timer_t *cs_leave_empty_timer = NULL;
 
-static void join_registered(bool all)
+static void
+join_registered(bool all)
 {
 	struct mychan *mc;
 	mowgli_patricia_iteration_state_t state;
@@ -50,7 +51,8 @@ static void join_registered(bool all)
 }
 
 /* main services client routine */
-static void chanserv(struct sourceinfo *si, int parc, char *parv[])
+static void
+chanserv(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc = NULL;
 	char orig[BUFSIZE];
@@ -173,7 +175,8 @@ static void chanserv(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void chanserv_config_ready(void *unused)
+static void
+chanserv_config_ready(void *unused)
 {
 	chansvs.nick = chansvs.me->nick;
 	chansvs.user = chansvs.me->user;
@@ -186,7 +189,8 @@ static void chanserv_config_ready(void *unused)
 		join_registered(false); /* !config_options.leave_chans */
 }
 
-static int c_ci_vop(mowgli_config_file_entry_t *ce)
+static int
+c_ci_vop(mowgli_config_file_entry_t *ce)
 {
 	if (ce->vardata == NULL)
 	{
@@ -199,7 +203,8 @@ static int c_ci_vop(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-static int c_ci_hop(mowgli_config_file_entry_t *ce)
+static int
+c_ci_hop(mowgli_config_file_entry_t *ce)
 {
 	if (ce->vardata == NULL)
 	{
@@ -212,7 +217,8 @@ static int c_ci_hop(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-static int c_ci_aop(mowgli_config_file_entry_t *ce)
+static int
+c_ci_aop(mowgli_config_file_entry_t *ce)
 {
 	if (ce->vardata == NULL)
 	{
@@ -225,7 +231,8 @@ static int c_ci_aop(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-static int c_ci_sop(mowgli_config_file_entry_t *ce)
+static int
+c_ci_sop(mowgli_config_file_entry_t *ce)
 {
 	if (ce->vardata == NULL)
 	{
@@ -238,7 +245,8 @@ static int c_ci_sop(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-static int c_ci_templates(mowgli_config_file_entry_t *ce)
+static int
+c_ci_templates(mowgli_config_file_entry_t *ce)
 {
 	mowgli_config_file_entry_t *flce;
 
@@ -335,7 +343,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	mowgli_timer_destroy(base_eventloop, cs_leave_empty_timer);
 }
 
-static void cs_join(hook_channel_joinpart_t *hdata)
+static void
+cs_join(hook_channel_joinpart_t *hdata)
 {
 	struct chanuser *cu = hdata->cu;
 	struct user *u;
@@ -585,7 +594,8 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 		mc->used = CURRTIME;
 }
 
-static void cs_part(hook_channel_joinpart_t *hdata)
+static void
+cs_part(hook_channel_joinpart_t *hdata)
 {
 	struct chanuser *cu;
 	struct mychan *mc;
@@ -636,7 +646,8 @@ static void cs_part(hook_channel_joinpart_t *hdata)
 	part(cu->chan->name, chansvs.nick);
 }
 
-static struct user *get_changets_user(struct mychan *mc)
+static struct user *
+get_changets_user(struct mychan *mc)
 {
 	struct metadata *md;
 
@@ -655,7 +666,8 @@ static struct user *get_changets_user(struct mychan *mc)
 	return chansvs.me->me;
 }
 
-static void cs_register(hook_channel_req_t *hdata)
+static void
+cs_register(hook_channel_req_t *hdata)
 {
 	struct mychan *mc;
 
@@ -673,13 +685,15 @@ static void cs_register(hook_channel_req_t *hdata)
 	}
 }
 
-static void cs_succession(hook_channel_succession_req_t *data)
+static void
+cs_succession(hook_channel_succession_req_t *data)
 {
 	chanacs_change_simple(data->mc, entity(data->mu), NULL, custom_founder_check(), 0, NULL);
 }
 
 /* Called on every set of a topic, after updating our internal structures */
-static void cs_keeptopic_topicset(struct channel *c)
+static void
+cs_keeptopic_topicset(struct channel *c)
 {
 	struct mychan *mc;
 	struct metadata *md;
@@ -720,7 +734,8 @@ static void cs_keeptopic_topicset(struct channel *c)
 
 /* Called when a topic change is received from the network, before altering
  * our internal structures */
-static void cs_topiccheck(hook_channel_topic_check_t *data)
+static void
+cs_topiccheck(hook_channel_topic_check_t *data)
 {
 	struct mychan *mc;
 	unsigned int accessfl = 0;
@@ -757,7 +772,8 @@ static void cs_topiccheck(hook_channel_topic_check_t *data)
 }
 
 /* Called on creation of a channel */
-static void cs_newchan(struct channel *c)
+static void
+cs_newchan(struct channel *c)
 {
 	struct mychan *mc;
 	struct chanuser *cu;
@@ -849,7 +865,8 @@ static void cs_newchan(struct channel *c)
 	topic_sts(c, chansvs.me->me, setter, topicts, 0, text);
 }
 
-static void cs_tschange(struct channel *c)
+static void
+cs_tschange(struct channel *c)
 {
 	struct mychan *mc;
 	char str[21];
@@ -870,13 +887,15 @@ static void cs_tschange(struct channel *c)
 	topiclock_sts(c);
 }
 
-static void on_shutdown(void *unused)
+static void
+on_shutdown(void *unused)
 {
 	if (chansvs.me != NULL && chansvs.me->me != NULL)
 		quit_sts(chansvs.me->me, "shutting down");
 }
 
-static void cs_leave_empty(void *unused)
+static void
+cs_leave_empty(void *unused)
 {
 	struct mychan *mc;
 	mowgli_patricia_iteration_state_t state;
@@ -903,7 +922,8 @@ static void cs_leave_empty(void *unused)
 	}
 }
 
-static void cs_bounce_mode_change(hook_channel_mode_change_t *data)
+static void
+cs_bounce_mode_change(hook_channel_mode_change_t *data)
 {
 	struct mychan *mc;
 	struct chanuser *cu;
