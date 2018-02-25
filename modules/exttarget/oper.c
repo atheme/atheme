@@ -11,7 +11,8 @@ static mowgli_patricia_t **exttarget_tree = NULL;
 
 static struct myentity dummy_entity;
 
-static struct chanacs *dummy_match_user(struct chanacs *ca, struct user *u)
+static struct chanacs *
+dummy_match_user(struct chanacs *ca, struct user *u)
 {
 	if (is_ircop(u))
 		return ca;
@@ -19,7 +20,8 @@ static struct chanacs *dummy_match_user(struct chanacs *ca, struct user *u)
 	return NULL;
 }
 
-static struct chanacs *dummy_match_entity(struct chanacs *ca, struct myentity *mt)
+static struct chanacs *
+dummy_match_entity(struct chanacs *ca, struct myentity *mt)
 {
 	if (ca->entity == mt)
 		return ca;
@@ -27,12 +29,14 @@ static struct chanacs *dummy_match_entity(struct chanacs *ca, struct myentity *m
 	return NULL;
 }
 
-static bool dummy_can_register_channel(struct myentity *mt)
+static bool
+dummy_can_register_channel(struct myentity *mt)
 {
 	return false;
 }
 
-static bool dummy_allow_foundership(struct myentity *mt)
+static bool
+dummy_allow_foundership(struct myentity *mt)
 {
 	return false;
 }
@@ -50,7 +54,8 @@ static struct myentity dummy_entity = {
 	.chanacs_validate = &dummy_validate,
 };
 
-static struct myentity *oper_validate_f(const char *param)
+static struct myentity *
+oper_validate_f(const char *param)
 {
 	return &dummy_entity;
 }
