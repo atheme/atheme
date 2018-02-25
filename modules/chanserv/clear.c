@@ -31,7 +31,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	mowgli_patricia_destroy(cs_clear_cmds, NULL, NULL);
 }
 
-static void cs_help_clear(struct sourceinfo *si, const char *subcmd)
+static void
+cs_help_clear(struct sourceinfo *si, const char *subcmd)
 {
 	if (!subcmd)
 	{
@@ -49,7 +50,8 @@ static void cs_help_clear(struct sourceinfo *si, const char *subcmd)
 		help_display(si, si->service, subcmd, cs_clear_cmds);
 }
 
-static void cs_cmd_clear(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_clear(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan;
 	char *cmd;
