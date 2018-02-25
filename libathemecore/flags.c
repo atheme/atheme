@@ -117,7 +117,8 @@ const struct gflags soper_flags[] = {
 	{ 0, 0 },
 };
 
-unsigned int flags_associate(unsigned char flag, unsigned int restrictflags, bool def, const char *name)
+unsigned int
+flags_associate(unsigned char flag, unsigned int restrictflags, bool def, const char *name)
 {
 	if (chanacs_flags[flag].value && chanacs_flags[flag].value != 0xFFFFFFFF)
 		return 0;
@@ -132,7 +133,8 @@ unsigned int flags_associate(unsigned char flag, unsigned int restrictflags, boo
 	return chanacs_flags[flag].value;
 }
 
-void flags_clear(unsigned char flag)
+void
+flags_clear(unsigned char flag)
 {
 	/* 0xFFFFFFFF = orphaned flag */
 	chanacs_flags[flag].value = 0xFFFFFFFF;
@@ -141,7 +143,8 @@ void flags_clear(unsigned char flag)
 	chanacs_flags[flag].name = NULL;
 }
 
-unsigned int flags_find_slot(void)
+unsigned int
+flags_find_slot(void)
 {
 	unsigned int flag, i;
 	unsigned int all_flags = 0;
@@ -157,7 +160,8 @@ unsigned int flags_find_slot(void)
 /* Construct bitmasks to be added and removed
  * Postcondition *addflags & *removeflags == 0
  * -- jilles */
-void flags_make_bitmasks(const char *string, unsigned int *addflags, unsigned int *removeflags)
+void
+flags_make_bitmasks(const char *string, unsigned int *addflags, unsigned int *removeflags)
 {
 	unsigned int flag;
 	bool shortflag = false;
@@ -240,7 +244,8 @@ void flags_make_bitmasks(const char *string, unsigned int *addflags, unsigned in
 	return;
 }
 
-unsigned int flags_to_bitmask(const char *string, unsigned int flags)
+unsigned int
+flags_to_bitmask(const char *string, unsigned int flags)
 {
 	unsigned int bitmask = (flags ? flags : 0x0);
 	int status = FLAGS_ADD;
@@ -286,7 +291,8 @@ unsigned int flags_to_bitmask(const char *string, unsigned int flags)
 	return bitmask & ca_all;
 }
 
-char *bitmask_to_flags(unsigned int flags)
+char *
+bitmask_to_flags(unsigned int flags)
 {
 	char *bptr;
 	unsigned int i = 0;
@@ -304,7 +310,8 @@ char *bitmask_to_flags(unsigned int flags)
 	return flags_buf;
 }
 
-char *bitmask_to_flags2(unsigned int addflags, unsigned int removeflags)
+char *
+bitmask_to_flags2(unsigned int addflags, unsigned int removeflags)
 {
 	char *bptr;
 	unsigned int i = 0;
@@ -332,7 +339,8 @@ char *bitmask_to_flags2(unsigned int addflags, unsigned int removeflags)
 }
 
 /* flags a non-founder with +f and these flags is allowed to set -- jilles */
-unsigned int allow_flags(struct mychan *mc, unsigned int theirflags)
+unsigned int
+allow_flags(struct mychan *mc, unsigned int theirflags)
 {
 	unsigned int flags;
 
@@ -356,7 +364,8 @@ unsigned int allow_flags(struct mychan *mc, unsigned int theirflags)
 	return flags;
 }
 
-void update_chanacs_flags(void)
+void
+update_chanacs_flags(void)
 {
 	unsigned int i;
 
@@ -379,7 +388,8 @@ void update_chanacs_flags(void)
 	}
 }
 
-unsigned int xflag_lookup(const char *name)
+unsigned int
+xflag_lookup(const char *name)
 {
 	unsigned int i;
 
@@ -395,7 +405,8 @@ unsigned int xflag_lookup(const char *name)
 	return 0;
 }
 
-unsigned int xflag_apply(unsigned int in, const char *name)
+unsigned int
+xflag_apply(unsigned int in, const char *name)
 {
 	unsigned int out, flag;
 	int status = FLAGS_ADD;
@@ -424,7 +435,8 @@ unsigned int xflag_apply(unsigned int in, const char *name)
 	return out;
 }
 
-const char *xflag_tostr(unsigned int flags)
+const char *
+xflag_tostr(unsigned int flags)
 {
 	unsigned int i;
 	static char buf[BUFSIZE];
@@ -448,7 +460,8 @@ const char *xflag_tostr(unsigned int flags)
 	return buf;
 }
 
-char *gflags_tostr(const struct gflags *gflags, unsigned int flags)
+char *
+gflags_tostr(const struct gflags *gflags, unsigned int flags)
 {
 	static char buf[257];
 	char *p = buf;
@@ -461,7 +474,8 @@ char *gflags_tostr(const struct gflags *gflags, unsigned int flags)
 	return buf;
 }
 
-static bool gflag_fromchar(const struct gflags *gflags, char f, unsigned int *res)
+static bool
+gflag_fromchar(const struct gflags *gflags, char f, unsigned int *res)
 {
 	int i;
 	if (f == '+') return true;
@@ -474,7 +488,8 @@ static bool gflag_fromchar(const struct gflags *gflags, char f, unsigned int *re
 	return false;
 }
 
-bool gflags_fromstr(const struct gflags *gflags, const char *f, unsigned int *res)
+bool
+gflags_fromstr(const struct gflags *gflags, const char *f, unsigned int *res)
 {
 	*res = 0;
 	while (*f)
