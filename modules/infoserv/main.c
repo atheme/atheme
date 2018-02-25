@@ -57,7 +57,8 @@ struct command is_list = { "LIST", N_("List previously posted news items."), AC_
 struct command is_olist = { "OLIST", N_("List previously posted oper news items."), PRIV_GLOBAL, 1, is_cmd_olist, { .path = "infoserv/olist" } };
 
 /* HELP <command> [params] */
-void is_cmd_help(struct sourceinfo *si, int parc, char *parv[])
+void
+is_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *command = parv[0];
 
@@ -80,7 +81,8 @@ void is_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 	help_display(si, si->service, command, si->service->commands);
 }
 
-static void underscores_to_spaces(char *y)
+static void
+underscores_to_spaces(char *y)
 {
 	do
 	{
@@ -89,7 +91,8 @@ static void underscores_to_spaces(char *y)
 	} while(*y++);
 }
 
-static void write_infodb(struct database_handle *db)
+static void
+write_infodb(struct database_handle *db)
 {
 	mowgli_node_t *n;
 
@@ -119,7 +122,8 @@ static void write_infodb(struct database_handle *db)
 
 }
 
-static void db_h_li(struct database_handle *db, const char *type)
+static void
+db_h_li(struct database_handle *db, const char *type)
 {
 	const char *nick = db_sread_word(db);
 	const char *subject = db_sread_word(db);
@@ -134,7 +138,8 @@ static void db_h_li(struct database_handle *db, const char *type)
 	mowgli_node_add(l, mowgli_node_create(), &logon_info);
 }
 
-static void db_h_lio(struct database_handle *db, const char *type)
+static void
+db_h_lio(struct database_handle *db, const char *type)
 {
 	const char *nick = db_sread_word(db);
 	const char *subject = db_sread_word(db);
@@ -149,7 +154,8 @@ static void db_h_lio(struct database_handle *db, const char *type)
 	mowgli_node_add(o, mowgli_node_create(), &operlogon_info);
 }
 
-static void display_info(hook_user_nick_t *data)
+static void
+display_info(hook_user_nick_t *data)
 {
 	struct user *u;
 	mowgli_node_t *n;
@@ -197,7 +203,8 @@ static void display_info(hook_user_nick_t *data)
 	}
 }
 
-static void display_oper_info(struct user *u)
+static void
+display_oper_info(struct user *u)
 {
 	mowgli_node_t *n;
 	struct operlogoninfo *o;
@@ -243,14 +250,16 @@ static void display_oper_info(struct user *u)
 	}
 }
 
-static void osinfo_hook(struct sourceinfo *si)
+static void
+osinfo_hook(struct sourceinfo *si)
 {
 	return_if_fail(si != NULL);
 
 	command_success_nodata(si, "How many messages will be sent to users on connect: %u", logoninfo_count);
 }
 
-static void is_cmd_post(struct sourceinfo *si, int parc, char *parv[])
+static void
+is_cmd_post(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *importance = parv[0];
 	char *subject = parv[1];
@@ -344,7 +353,8 @@ static void is_cmd_post(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-static void is_cmd_del(struct sourceinfo *si, int parc, char *parv[])
+static void
+is_cmd_del(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	int x = 0;
@@ -394,7 +404,8 @@ static void is_cmd_del(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-static void is_cmd_odel(struct sourceinfo *si, int parc, char *parv[])
+static void
+is_cmd_odel(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	int x = 0;
@@ -444,7 +455,8 @@ static void is_cmd_odel(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-static void is_cmd_list(struct sourceinfo *si, int parc, char *parv[])
+static void
+is_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct logoninfo *l;
 	mowgli_node_t *n;
@@ -472,7 +484,8 @@ static void is_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-static void is_cmd_olist(struct sourceinfo *si, int parc, char *parv[])
+static void
+is_cmd_olist(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct operlogoninfo *o;
 	mowgli_node_t *n;
