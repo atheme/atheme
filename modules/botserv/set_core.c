@@ -34,7 +34,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 /* ******************************************************************** */
 
-static void bs_help_set(struct sourceinfo *si, const char *subcmd)
+static void
+bs_help_set(struct sourceinfo *si, const char *subcmd)
 {
 	if (!subcmd)
 	{
@@ -52,7 +53,8 @@ static void bs_help_set(struct sourceinfo *si, const char *subcmd)
 		help_display_as_subcmd(si, si->service, "SET", subcmd, bs_set_cmdtree);
 }
 
-static void bs_cmd_set(struct sourceinfo *si, int parc, char *parv[])
+static void
+bs_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *dest;
 	char *cmd;
