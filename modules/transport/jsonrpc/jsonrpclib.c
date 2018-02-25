@@ -8,7 +8,8 @@
 #include "atheme.h"
 #include "jsonrpclib.h"
 
-void jsonrpc_process(char *buffer, void *userdata)
+void
+jsonrpc_process(char *buffer, void *userdata)
 {
 	if (!buffer)
 	{
@@ -94,7 +95,8 @@ void jsonrpc_process(char *buffer, void *userdata)
 
 }
 
-void jsonrpc_success_string(void *conn, const char *result, const char *id)
+void
+jsonrpc_success_string(void *conn, const char *result, const char *id)
 {
 	mowgli_json_t *obj = mowgli_json_create_object();
 
@@ -114,7 +116,8 @@ void jsonrpc_success_string(void *conn, const char *result, const char *id)
 	jsonrpc_send_data(conn, str->str);
 }
 
-void jsonrpc_failure_string(void *conn, int code, const char *error, const char *id)
+void
+jsonrpc_failure_string(void *conn, int code, const char *error, const char *id)
 {
 	mowgli_json_t *obj = mowgli_json_create_object();
 	mowgli_json_t *errorobj = mowgli_json_create_object();
@@ -139,7 +142,8 @@ void jsonrpc_failure_string(void *conn, int code, const char *error, const char 
 	jsonrpc_send_data(conn, str->str);
 }
 
-char *jsonrpc_normalizeBuffer(const char *buf)
+char *
+jsonrpc_normalizeBuffer(const char *buf)
 {
 	char *newbuf;
 	int i, len, j = 0;
