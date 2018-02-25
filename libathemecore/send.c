@@ -70,7 +70,8 @@ sts(const char *fmt, ...)
  * side effects:
  *       everything happens inside this loop.
  */
-void io_loop(void)
+void
+io_loop(void)
 {
 	while (!(runflags & (RF_SHUTDOWN | RF_RESTART)))
 	{
