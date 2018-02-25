@@ -43,7 +43,8 @@ mowgli_heap_t *chanban_heap;
  * Side Effects:
  *     - if the heaps or DTrees fail to initialize, the program will abort.
  */
-void init_channels(void)
+void
+init_channels(void)
 {
 	chan_heap = sharedheap_get(sizeof(struct channel));
 	chanuser_heap = sharedheap_get(sizeof(struct chanuser));
@@ -80,7 +81,8 @@ void init_channels(void)
  *     - if the creator is me.me these actions must be performed by the
  *       caller (i.e. join()) after joining the service
  */
-struct channel *channel_add(const char *name, time_t ts, struct server *creator)
+struct channel *
+channel_add(const char *name, time_t ts, struct server *creator)
 {
 	struct channel *c;
 	struct mychan *mc;
@@ -148,7 +150,8 @@ struct channel *channel_add(const char *name, time_t ts, struct server *creator)
  *     - a channel and all attached structures are destroyed
  *     - no protocol messages are sent for any remaining members
  */
-void channel_delete(struct channel *c)
+void
+channel_delete(struct channel *c)
 {
 	struct mychan *mc;
 	mowgli_node_t *n, *tn;
@@ -217,7 +220,8 @@ void channel_delete(struct channel *c)
  * Side Effects:
  *     - the created channel ban object is added to the channel automatically.
  */
-struct chanban *chanban_add(struct channel *chan, const char *mask, int type)
+struct chanban *
+chanban_add(struct channel *chan, const char *mask, int type)
 {
 	struct chanban *c;
 
@@ -266,7 +270,8 @@ struct chanban *chanban_add(struct channel *chan, const char *mask, int type)
  * Side Effects:
  *     - the channel ban is automatically removed from the channel that owned it
  */
-void chanban_delete(struct chanban * c)
+void
+chanban_delete(struct chanban * c)
 {
 	return_if_fail(c != NULL);
 
@@ -293,7 +298,8 @@ void chanban_delete(struct chanban * c)
  * Side Effects:
  *     - none
  */
-struct chanban *chanban_find(struct channel *chan, const char *mask, int type)
+struct chanban *
+chanban_find(struct channel *chan, const char *mask, int type)
 {
 	struct chanban *c;
 	mowgli_node_t *n;
@@ -343,7 +349,8 @@ struct chanban *chanban_find(struct channel *chan, const char *mask, int type)
  * things. It worked fine for shrike, but the old code was restricted
  * to handling only @, @+ and + as prefixes.
  */
-struct chanuser *chanuser_add(struct channel *chan, const char *nick)
+struct chanuser *
+chanuser_add(struct channel *chan, const char *nick)
 {
 	struct user *u;
 	struct chanuser *cu, *tcu;
@@ -436,7 +443,8 @@ struct chanuser *chanuser_add(struct channel *chan, const char *nick)
  *     - if this empties the channel and the channel is not set permanent
  *       (ircd->perm_mode), channel_delete() is called (q.v.)
  */
-void chanuser_delete(struct channel *chan, struct user *user)
+void
+chanuser_delete(struct channel *chan, struct user *user)
 {
 	struct chanuser *cu;
 	hook_channel_joinpart_t hdata;
@@ -490,7 +498,8 @@ void chanuser_delete(struct channel *chan, struct user *user)
  * Side Effects:
  *     - none
  */
-struct chanuser *chanuser_find(struct channel *chan, struct user *user)
+struct chanuser *
+chanuser_find(struct channel *chan, struct user *user)
 {
 	mowgli_node_t *n;
 	struct chanuser *cu;
