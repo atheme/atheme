@@ -25,7 +25,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 #define MAXMATCHES 100
 
-static const char *get_logfile(const unsigned int *masks)
+static const char *
+get_logfile(const unsigned int *masks)
 {
 	struct logfile *lf;
 	int i;
@@ -39,7 +40,8 @@ static const char *get_logfile(const unsigned int *masks)
 	return NULL;
 }
 
-static const char *get_commands_log(void)
+static const char *
+get_commands_log(void)
 {
 	const unsigned int masks[] = {
 		LG_CMD_ALL,
@@ -53,7 +55,8 @@ static const char *get_commands_log(void)
 	return get_logfile(masks);
 }
 
-static const char *get_account_log(void)
+static const char *
+get_account_log(void)
 {
 	const unsigned int masks[] = {
 		LG_CMD_REGISTER | LG_CMD_SET | LG_REGISTER,
@@ -64,7 +67,8 @@ static const char *get_account_log(void)
 }
 
 /* GREPLOG <service> <mask> */
-static void os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *service, *pattern, *baselog;
 	int maxdays, matches = -1, matches1, day, days, lines, linesv;
