@@ -82,7 +82,8 @@ static const struct cmode ngircd_user_mode_list[] = {
 };
 
 /* login to our uplink */
-static unsigned int ngircd_server_login(void)
+static unsigned int
+ngircd_server_login(void)
 {
 	int ret;
 
@@ -100,7 +101,8 @@ static unsigned int ngircd_server_login(void)
 }
 
 /* introduce a client */
-static void ngircd_introduce_nick(struct user *u)
+static void
+ngircd_introduce_nick(struct user *u)
 {
 	const char *umode = user_get_umodestr(u);
 
@@ -108,7 +110,8 @@ static void ngircd_introduce_nick(struct user *u)
 }
 
 /* invite a user to a channel */
-static void ngircd_invite_sts(struct user *sender, struct user *target, struct channel *channel)
+static void
+ngircd_invite_sts(struct user *sender, struct user *target, struct channel *channel)
 {
 	bool joined = false;
 
@@ -124,13 +127,15 @@ static void ngircd_invite_sts(struct user *sender, struct user *target, struct c
 		sts(":%s PART %s :Invited %s", CLIENT_NAME(sender), channel->name, target->nick);
 }
 
-static void ngircd_quit_sts(struct user *u, const char *reason)
+static void
+ngircd_quit_sts(struct user *u, const char *reason)
 {
 	sts(":%s QUIT :%s", CLIENT_NAME(u), reason);
 }
 
 /* join a channel */
-static void ngircd_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
+static void
+ngircd_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
 {
 	sts(":%s NJOIN %s :@%s", ME, c->name, CLIENT_NAME(u));
 	if (isnew && modes[0] && modes[1])
@@ -138,7 +143,8 @@ static void ngircd_join_sts(struct channel *c, struct user *u, bool isnew, char 
 }
 
 /* kicks a user from a channel */
-static void ngircd_kick(struct user *source, struct channel *c, struct user *u, const char *reason)
+static void
+ngircd_kick(struct user *source, struct channel *c, struct user *u, const char *reason)
 {
 	sts(":%s KICK %s %s :%s", CLIENT_NAME(source), c->name, CLIENT_NAME(u), reason);
 
@@ -159,7 +165,8 @@ ngircd_msg(const char *from, const char *target, const char *fmt, ...)
 	sts(":%s PRIVMSG %s :%s", from, target, buf);
 }
 
-static void ngircd_msg_global_sts(struct user *from, const char *mask, const char *text)
+static void
+ngircd_msg_global_sts(struct user *from, const char *mask, const char *text)
 {
 	mowgli_node_t *n;
 	struct tld *tld;
@@ -177,12 +184,14 @@ static void ngircd_msg_global_sts(struct user *from, const char *mask, const cha
 }
 
 /* NOTICE wrapper */
-static void ngircd_notice_user_sts(struct user *from, struct user *target, const char *text)
+static void
+ngircd_notice_user_sts(struct user *from, struct user *target, const char *text)
 {
 	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, CLIENT_NAME(target), text);
 }
 
-static void ngircd_notice_global_sts(struct user *from, const char *mask, const char *text)
+static void
+ngircd_notice_global_sts(struct user *from, const char *mask, const char *text)
 {
 	mowgli_node_t *n;
 	struct tld *tld;
@@ -199,7 +208,8 @@ static void ngircd_notice_global_sts(struct user *from, const char *mask, const 
 		sts(":%s NOTICE %s%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, mask, text);
 }
 
-static void ngircd_notice_channel_sts(struct user *from, struct channel *target, const char *text)
+static void
+ngircd_notice_channel_sts(struct user *from, struct channel *target, const char *text)
 {
 	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, target->name, text);
 }
@@ -218,7 +228,8 @@ ngircd_numeric_sts(struct server *from, int numeric, struct user *target, const 
 }
 
 /* KILL wrapper */
-static void ngircd_kill_id_sts(struct user *killer, const char *id, const char *reason)
+static void
+ngircd_kill_id_sts(struct user *killer, const char *id, const char *reason)
 {
 	if (killer != NULL)
 		sts(":%s KILL %s :%s!%s (%s)", CLIENT_NAME(killer), id, killer->host, killer->nick, reason);
@@ -227,26 +238,30 @@ static void ngircd_kill_id_sts(struct user *killer, const char *id, const char *
 }
 
 /* PART wrapper */
-static void ngircd_part_sts(struct channel *c, struct user *u)
+static void
+ngircd_part_sts(struct channel *c, struct user *u)
 {
 	sts(":%s PART %s", CLIENT_NAME(u), c->name);
 }
 
 /* server-to-server KLINE wrapper */
-static void ngircd_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
+static void
+ngircd_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
 	sts(":%s GLINE %s@%s %ld :%s", ME, user, host, duration, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
-static void ngircd_unkline_sts(const char *server, const char *user, const char *host)
+static void
+ngircd_unkline_sts(const char *server, const char *user, const char *host)
 {
 	/* when sent with no extra parameters, it indicates the GLINE should be removed. */
 	sts(":%s GLINE %s@%s", ME, user, host);
 }
 
 /* topic wrapper */
-static void ngircd_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
+static void
+ngircd_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	bool joined = false;
 
@@ -263,7 +278,8 @@ static void ngircd_topic_sts(struct channel *c, struct user *source, const char 
 }
 
 /* mode wrapper */
-static void ngircd_mode_sts(char *sender, struct channel *target, char *modes)
+static void
+ngircd_mode_sts(char *sender, struct channel *target, char *modes)
 {
 	return_if_fail(sender != NULL);
 	return_if_fail(target != NULL);
@@ -273,13 +289,15 @@ static void ngircd_mode_sts(char *sender, struct channel *target, char *modes)
 }
 
 /* ping wrapper */
-static void ngircd_ping_sts(void)
+static void
+ngircd_ping_sts(void)
 {
 	sts(":%s PING :%s", me.name, me.name);
 }
 
 /* protocol-specific stuff to do on login */
-static void ngircd_on_login(struct user *u, struct myuser *account, const char *wantedhost)
+static void
+ngircd_on_login(struct user *u, struct myuser *account, const char *wantedhost)
 {
 	return_if_fail(u != NULL);
 
@@ -290,7 +308,8 @@ static void ngircd_on_login(struct user *u, struct myuser *account, const char *
 }
 
 /* protocol-specific stuff to do on login */
-static bool ngircd_on_logout(struct user *u, const char *account)
+static bool
+ngircd_on_logout(struct user *u, const char *account)
 {
 	return_val_if_fail(u != NULL, false);
 
@@ -302,7 +321,8 @@ static bool ngircd_on_logout(struct user *u, const char *account)
 	return false;
 }
 
-static void ngircd_jupe(const char *server, const char *reason)
+static void
+ngircd_jupe(const char *server, const char *reason)
 {
 	static int jupe_ctr = 1;
 
@@ -311,7 +331,8 @@ static void ngircd_jupe(const char *server, const char *reason)
 	sts(":%s SERVER %s 2 %d :%s", ME, server, ++jupe_ctr, reason);
 }
 
-static void ngircd_sethost_sts(struct user *source, struct user *target, const char *host)
+static void
+ngircd_sethost_sts(struct user *source, struct user *target, const char *host)
 {
 	if (strcmp(target->host, host))
 	{
@@ -335,7 +356,8 @@ static void ngircd_sethost_sts(struct user *source, struct user *target, const c
 	}
 }
 
-static void m_topic(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_topic(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c = channel_find(parv[0]);
 
@@ -345,13 +367,15 @@ static void m_topic(struct sourceinfo *si, int parc, char *parv[])
 	handle_topic_from(si, c, si->su != NULL ? si->su->nick : si->s->name, CURRTIME, parv[1]);
 }
 
-static void m_ping(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_ping(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* reply to PING's */
 	sts(":%s PONG %s", ME, parv[0]);
 }
 
-static void m_pong(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_pong(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_eob(si->s);
 
@@ -375,7 +399,8 @@ static void m_pong(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_privmsg(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_privmsg(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (parc != 2)
 		return;
@@ -383,7 +408,8 @@ static void m_privmsg(struct sourceinfo *si, int parc, char *parv[])
 	handle_message(si, parv[0], false, parv[1]);
 }
 
-static void m_notice(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_notice(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (parc != 2)
 		return;
@@ -391,7 +417,8 @@ static void m_notice(struct sourceinfo *si, int parc, char *parv[])
 	handle_message(si, parv[0], true, parv[1]);
 }
 
-static void m_part(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_part(struct sourceinfo *si, int parc, char *parv[])
 {
 	int chanc;
 	char *chanv[256];
@@ -406,7 +433,8 @@ static void m_part(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_nick(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct server *s;
 	struct user *u;
@@ -471,7 +499,8 @@ static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_njoin(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_njoin(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c;
 	unsigned int userc;
@@ -505,7 +534,8 @@ static void m_njoin(struct sourceinfo *si, int parc, char *parv[])
 		channel_delete(c);
 }
 
-static void m_chaninfo(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_chaninfo(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c;
 	const char *kmode, *lmode;
@@ -554,7 +584,8 @@ static void m_chaninfo(struct sourceinfo *si, int parc, char *parv[])
 		handle_topic(c, si->s->name, CURRTIME, parv[parc - 1]);
 }
 
-static void m_quit(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_quit(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
 
@@ -562,7 +593,8 @@ static void m_quit(struct sourceinfo *si, int parc, char *parv[])
 	user_delete(si->su, parv[0]);
 }
 
-static void ngircd_user_mode(struct user *u, const char *modes)
+static void
+ngircd_user_mode(struct user *u, const char *modes)
 {
 	int dir;
 	const char *p;
@@ -596,7 +628,8 @@ static void ngircd_user_mode(struct user *u, const char *modes)
 		}
 }
 
-static void m_mode(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_mode(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (*parv[0] == '#')
 		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
@@ -606,7 +639,8 @@ static void m_mode(struct sourceinfo *si, int parc, char *parv[])
 		ngircd_user_mode(user_find(parv[0]), parv[1]);
 }
 
-static void m_kick(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_kick(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u = user_find(parv[1]);
 	struct channel *c = channel_find(parv[0]);
@@ -643,18 +677,21 @@ static void m_kick(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_kill(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_kill(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_kill(si, parv[0], parc > 1 ? parv[1] : "<No reason given>");
 }
 
-static void m_squit(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_squit(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_squit(): server leaving: %s from %s", parv[0], parv[1]);
 	server_delete(parv[0]);
 }
 
-static void m_server(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_server(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct server *s;
 
@@ -671,42 +708,50 @@ static void m_server(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_stats(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_stats(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_stats(si->su, parv[0][0]);
 }
 
-static void m_admin(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_admin(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_admin(si->su);
 }
 
-static void m_version(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_version(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_version(si->su);
 }
 
-static void m_info(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_info(si->su);
 }
 
-static void m_whois(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_whois(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_whois(si->su, parv[1]);
 }
 
-static void m_trace(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_trace(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_trace(si->su, parv[0], parc >= 2 ? parv[1] : NULL);
 }
 
-static void m_away(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_away(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_away(si->su, parc >= 1 ? parv[0] : NULL);
 }
 
-static void m_join(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_join(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct chanuser *cu;
 	mowgli_node_t *n, *tn;
@@ -775,7 +820,8 @@ static void m_join(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_pass(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_pass(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (curr_uplink->receive_pass != NULL &&
 	    strcmp(curr_uplink->receive_pass, parv[0]))
@@ -785,17 +831,20 @@ static void m_pass(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_error(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_error(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_INFO, "m_error(): error from server: %s", parv[0]);
 }
 
-static void m_motd(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_motd(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_motd(si->su);
 }
 
-static void m_metadata(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_metadata(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u = user_find(parv[0]);
 
@@ -823,7 +872,8 @@ static void m_metadata(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void nick_group(hook_user_req_t *hdata)
+static void
+nick_group(hook_user_req_t *hdata)
 {
 	struct user *u;
 
@@ -832,7 +882,8 @@ static void nick_group(hook_user_req_t *hdata)
 		sts(":%s MODE %s +R", nicksvs.nick, u->nick);
 }
 
-static void nick_ungroup(hook_user_req_t *hdata)
+static void
+nick_ungroup(hook_user_req_t *hdata)
 {
 	struct user *u;
 
@@ -924,6 +975,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("protocol/ngircd", MODULE_UNLOAD_CAPABILITY_NEVER)
