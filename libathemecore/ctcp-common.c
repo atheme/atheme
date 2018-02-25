@@ -28,7 +28,8 @@
 
 mowgli_patricia_t *ctcptree;
 
-static void ctcp_ping_handler(struct sourceinfo *si, char *cmd, char *args)
+static void
+ctcp_ping_handler(struct sourceinfo *si, char *cmd, char *args)
 {
 	char *s;
 
@@ -39,7 +40,8 @@ static void ctcp_ping_handler(struct sourceinfo *si, char *cmd, char *args)
 	notice(si->service->nick, si->su->nick, "\001PING %.100s\001", s != NULL ? s : "pong!");
 }
 
-static void ctcp_version_handler(struct sourceinfo *si, char *cmd, char *args)
+static void
+ctcp_version_handler(struct sourceinfo *si, char *cmd, char *args)
 {
 	char ver[BUFSIZE];
 
@@ -47,19 +49,22 @@ static void ctcp_version_handler(struct sourceinfo *si, char *cmd, char *args)
 	notice(si->service->nick, si->su->nick, "\001VERSION %s\001", ver);
 }
 
-static void ctcp_clientinfo_handler(struct sourceinfo *si, char *cmd, char *args)
+static void
+ctcp_clientinfo_handler(struct sourceinfo *si, char *cmd, char *args)
 {
 	notice(si->service->nick, si->su->nick, "\001CLIENTINFO PING VERSION CLIENTINFO\001");
 }
 
 /* easter egg (so is the next one, who cares) */
-static void ctcp_machinegod_handler(struct sourceinfo *si, char *cmd, char *args)
+static void
+ctcp_machinegod_handler(struct sourceinfo *si, char *cmd, char *args)
 {
 	notice(si->service->nick, si->su->nick, "\001MACHINEGOD http://www.findagrave.com/cgi-bin/fg.cgi?page=gr&GRid=10369601\001");
 }
 
 /* update this as necessary to track notable events */
-static void ctcp_about_handler(struct sourceinfo *si, char *cmd, char *args)
+static void
+ctcp_about_handler(struct sourceinfo *si, char *cmd, char *args)
 {
 	/*
 	 * October 31, 2014: Atheme 7.2 final was released, the final release series from atheme.org, which has dissolved
@@ -69,7 +74,8 @@ static void ctcp_about_handler(struct sourceinfo *si, char *cmd, char *args)
 	notice(si->service->nick, si->su->nick, "\001ABOUT The machine god has \002fallen\002, and the unbelievers \037rejoiced\037. But from the debris rose new machines which will have their vengeance. ~The Book of Atheme, 10:31\001");
 }
 
-void common_ctcp_init(void)
+void
+common_ctcp_init(void)
 {
 	ctcptree = mowgli_patricia_create(noopcanon);
 
@@ -80,7 +86,8 @@ void common_ctcp_init(void)
 	mowgli_patricia_add(ctcptree, "\001ABOUT\001", ctcp_about_handler);
 }
 
-unsigned int handle_ctcp_common(struct sourceinfo *si, char *cmd, char *args)
+unsigned int
+handle_ctcp_common(struct sourceinfo *si, char *cmd, char *args)
 {
 	void (*handler)(struct sourceinfo *si, char *, char *);
 
