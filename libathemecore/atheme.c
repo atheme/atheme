@@ -65,7 +65,8 @@ void (*db_save) (void *arg, enum db_save_strategy strategy) = NULL;
 void (*db_load) (const char *name) = NULL;
 
 /* *INDENT-OFF* */
-static void print_help(void)
+static void
+print_help(void)
 {
 	printf("usage: atheme [-dhnvr] [-c conf] [-l logfile] [-p pidfile]\n\n"
 	       "-c <file>    Specify the config file\n"
@@ -82,7 +83,8 @@ static void print_help(void)
 }
 /* *INDENT-ON* */
 
-static void print_version(void)
+static void
+print_version(void)
 {
 	int i;
 
@@ -92,12 +94,14 @@ static void print_version(void)
 		printf("%s\n", infotext[i]);
 }
 
-static void process_mowgli_log(const char *line)
+static void
+process_mowgli_log(const char *line)
 {
 	slog(LG_ERROR, "%s", line);
 }
 
-static void daemonize(int *daemonize_pipe)
+static void
+daemonize(int *daemonize_pipe)
 {
 #ifdef HAVE_FORK
 	int i;
@@ -136,7 +140,8 @@ static void daemonize(int *daemonize_pipe)
 #endif
 }
 
-static bool detach_console(int *daemonize_pipe)
+static bool
+detach_console(int *daemonize_pipe)
 {
 #ifdef HAVE_FORK
 	close(0);
@@ -166,7 +171,8 @@ static bool detach_console(int *daemonize_pipe)
 #endif
 }
 
-void atheme_bootstrap(void)
+void
+atheme_bootstrap(void)
 {
 #ifdef HAVE_GETRLIMIT
 	struct rlimit rlim;
@@ -203,7 +209,8 @@ void atheme_bootstrap(void)
 	curr_uplink = NULL;
 }
 
-void atheme_init(char *execname, char *log_p)
+void
+atheme_init(char *execname, char *log_p)
 {
 	me.execname = execname;
 	me.kline_id = 0;
@@ -224,7 +231,8 @@ void atheme_init(char *execname, char *log_p)
 	mowgli_log_set_cb(process_mowgli_log);
 }
 
-void atheme_setup(void)
+void
+atheme_setup(void)
 {
 	base_eventloop = mowgli_eventloop_create();
         hooks_init();
@@ -250,13 +258,15 @@ void atheme_setup(void)
 	common_ctcp_init();
 }
 
-static void db_save_periodic(void *unused)
+static void
+db_save_periodic(void *unused)
 {
 	slog(LG_DEBUG, "db_save_periodic(): initiating periodic database write");
 	db_save(unused, DB_SAVE_BG_REGULAR);
 }
 
-int atheme_main(int argc, char *argv[])
+int
+atheme_main(int argc, char *argv[])
 {
 	int daemonize_pipe[2] = { -1, -1 };
 	bool run_testsuite = true;
