@@ -24,7 +24,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("chanserv", &cs_info);
 }
 
-static void cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
 	char *name = parv[0];
