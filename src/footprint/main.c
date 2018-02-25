@@ -8,7 +8,8 @@
 #include "atheme.h"
 #include "serno.h"
 
-int main(int argc, char *argv[])
+int
+main(int argc, char *argv[])
 {
 	unsigned int usercount = 0, channelcount = 0, membercount = 0,
 		klinecount = 0, qlinecount = 0, xlinecount = 0, regchannelcount = 0,
