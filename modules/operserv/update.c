@@ -23,7 +23,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("operserv", &os_update);
 }
 
-void os_cmd_update(struct sourceinfo *si, int parc, char *parv[])
+void
+os_cmd_update(struct sourceinfo *si, int parc, char *parv[])
 {
 	logcommand(si, CMDLOG_ADMIN, "UPDATE");
 	wallops("Updating database by request of \2%s\2.", get_oper_name(si));
