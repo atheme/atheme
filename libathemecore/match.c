@@ -102,7 +102,8 @@ const unsigned char ToUpperTab[] = {
 	0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff
 };
 
-int ToLower(int c)
+int
+ToLower(int c)
 {
 	if (match_mapping == MATCH_ASCII)
 		return tolower((unsigned char)c);
@@ -110,7 +111,8 @@ int ToLower(int c)
 	return (ToLowerTab[(unsigned char)(c)]);
 }
 
-int ToUpper(int c)
+int
+ToUpper(int c)
 {
 	if (match_mapping == MATCH_ASCII)
 		return toupper((unsigned char)c);
@@ -118,7 +120,8 @@ int ToUpper(int c)
 	return (ToUpperTab[(unsigned char)(c)]);
 }
 
-void set_match_mapping(int type)
+void
+set_match_mapping(int type)
 {
 	match_mapping = type;
 }
@@ -139,7 +142,8 @@ void set_match_mapping(int type)
 ** Written by Douglas A Lewis (dalewis@acsu.buffalo.edu)
 */
 
-int match(const char *mask, const char *name)
+int
+match(const char *mask, const char *name)
 {
 	const unsigned char *m = (const unsigned char *)mask, *n = (const unsigned char *)name;
 	const char *ma = mask, *na = name;
@@ -216,7 +220,8 @@ int match(const char *mask, const char *name)
 ** This particular version is "in place", so that it changes the pattern
 ** which is to be reduced to a "minimal" size.
 */
-char *collapse(char *pattern)
+char *
+collapse(char *pattern)
 {
 	char *s = pattern, *s1, *t;
 
@@ -253,7 +258,8 @@ char *collapse(char *pattern)
 **              <0, if s1 lexicographically less than s2
 **              >0, if s1 lexicographically greater than s2
 */
-int irccasecmp(const char *s1, const char *s2)
+int
+irccasecmp(const char *s1, const char *s2)
 {
 	const unsigned char *str1 = (const unsigned char *)s1;
 	const unsigned char *str2 = (const unsigned char *)s2;
@@ -275,7 +281,8 @@ int irccasecmp(const char *s1, const char *s2)
 	return (res);
 }
 
-int ircncasecmp(const char *str1, const char *str2, size_t n)
+int
+ircncasecmp(const char *str1, const char *str2, size_t n)
 {
 	const unsigned char *s1 = (const unsigned char *)str1;
 	const unsigned char *s2 = (const unsigned char *)str2;
@@ -295,7 +302,8 @@ int ircncasecmp(const char *str1, const char *str2, size_t n)
 	return (res);
 }
 
-void irccasecanon(char *str)
+void
+irccasecanon(char *str)
 {
 	while (*str)
 	{
@@ -305,7 +313,8 @@ void irccasecanon(char *str)
 	return;
 }
 
-void strcasecanon(char *str)
+void
+strcasecanon(char *str)
 {
 	while (*str)
 	{
@@ -315,7 +324,8 @@ void strcasecanon(char *str)
 	return;
 }
 
-void noopcanon(char *str)
+void
+noopcanon(char *str)
 {
 	return;
 }
@@ -583,7 +593,8 @@ const unsigned int charattrs[] = {
  * regex_compile()
  *  Compile a regex of `pattern' and return it.
  */
-struct atheme_regex *regex_create(char *pattern, int flags)
+struct atheme_regex *
+regex_create(char *pattern, int flags)
 {
 	static char errmsg[BUFSIZE];
 	int errnum;
@@ -635,7 +646,8 @@ struct atheme_regex *regex_create(char *pattern, int flags)
 	return preg;
 }
 
-char *regex_extract(char *pattern, char **pend, int *pflags)
+char *
+regex_extract(char *pattern, char **pend, int *pflags)
 {
 	char c, *p, *p2;
 	bool backslash = false;
@@ -678,7 +690,8 @@ char *regex_extract(char *pattern, char **pend, int *pflags)
  *  `preg' is the regex to check with, `string' needs to be checked against.
  *  Returns `true' on match, `false' else.
  */
-bool regex_match(struct atheme_regex *preg, char *string)
+bool
+regex_match(struct atheme_regex *preg, char *string)
 {
 	if (preg == NULL || string == NULL)
 	{
@@ -704,7 +717,8 @@ bool regex_match(struct atheme_regex *preg, char *string)
  * regex_destroy()
  *  Perform cleanup with regex `preg', free associated memory.
  */
-bool regex_destroy(struct atheme_regex *preg)
+bool
+regex_destroy(struct atheme_regex *preg)
 {
 	switch (preg->type)
 	{
