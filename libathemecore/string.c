@@ -24,7 +24,8 @@
 #include "atheme.h"
 
 /* removes unwanted chars from a line */
-void strip(char *line)
+void
+strip(char *line)
 {
         char *c;
 
@@ -40,7 +41,8 @@ void strip(char *line)
 }
 
 /* remove mirc colors and controls */
-void strip_ctrl(char *line)
+void
+strip_ctrl(char *line)
 {
 	char *p, *q;
 
