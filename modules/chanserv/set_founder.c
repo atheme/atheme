@@ -45,7 +45,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
  * undesirable channels (e.g. registering #kidsex and transferring to an
  * innocent user.) Originally, we used channel passwords for this purpose.
  */
-static void cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *newfounder = parv[1];
 	struct myentity *mt;
