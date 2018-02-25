@@ -30,7 +30,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 }
 
 /* SET EMAIL <new address> */
-static void ns_cmd_set_email(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_set_email(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *email = parv[0];
 	struct metadata *md;
