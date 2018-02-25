@@ -29,7 +29,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	hook_del_user_identify(on_user_identify);
 }
 
-static void on_user_identify(struct user *u)
+static void
+on_user_identify(struct user *u)
 {
 	struct myuser *mu = u->myuser;
 	struct metadata *md;
