@@ -25,7 +25,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 }
 
 /* VHOSTNICK <nick> [host] */
-static void hs_cmd_vhostnick(struct sourceinfo *si, int parc, char *parv[])
+static void
+hs_cmd_vhostnick(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *host = parv[1];
