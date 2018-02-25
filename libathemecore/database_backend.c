@@ -239,7 +239,7 @@ db_commit_row(struct database_handle *db)
 }
 
 void
-db_register_type_handler(const char *type, database_handler_f fun)
+db_register_type_handler(const char *type, database_handler_fn fun)
 {
 	return_if_fail(db_types != NULL);
 	return_if_fail(type != NULL);
@@ -260,7 +260,7 @@ db_unregister_type_handler(const char *type)
 void
 db_process(struct database_handle *db, const char *type)
 {
-	database_handler_f fun;
+	database_handler_fn fun;
 
 	return_if_fail(db_types != NULL);
 	return_if_fail(db != NULL);

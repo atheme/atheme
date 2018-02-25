@@ -85,9 +85,9 @@ bool db_write_time(struct database_handle *db, time_t time);
 bool db_write_format(struct database_handle *db, const char *str, ...) ATHEME_FATTR_PRINTF(2, 3);
 bool db_commit_row(struct database_handle *db);
 
-typedef void (*database_handler_f)(struct database_handle *db, const char *type);
+typedef void (*database_handler_fn)(struct database_handle *db, const char *type);
 
-void db_register_type_handler(const char *type, database_handler_f fun);
+void db_register_type_handler(const char *type, database_handler_fn fun);
 void db_unregister_type_handler(const char *type);
 void db_process(struct database_handle *db, const char *type);
 void db_init(void);
