@@ -23,7 +23,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("nickserv", &ns_logout);
 }
 
-static void ns_cmd_logout(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_logout(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u = si->su;
 	mowgli_node_t *n, *tn;
