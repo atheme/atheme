@@ -112,7 +112,8 @@ static const struct cmode inspircd_user_mode_list[] = {
   { '\0', 0 }
 };
 
-static mowgli_node_t *inspircd_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_node_t *first)
+static mowgli_node_t *
+inspircd_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_node_t *first)
 {
 	struct chanban *cb;
 	mowgli_node_t *n;
@@ -183,7 +184,8 @@ static mowgli_node_t *inspircd_next_matching_ban(struct channel *c, struct user 
 	return NULL;
 }
 
-static bool inspircd_is_extban(const char *mask)
+static bool
+inspircd_is_extban(const char *mask)
 {
 	const size_t mask_len = strlen(mask);
 	/* e.g R:Test */
@@ -211,29 +213,34 @@ static int has_protocol = 0;
 #define PROTOCOL_PREFERRED_STR "1202"
 
 /* find a user's server by extracting the SID and looking that up. --nenolod */
-static struct server *sid_find(const char *name)
+static struct server *
+sid_find(const char *name)
 {
 	char sid[4];
 	mowgli_strlcpy(sid, name, 4);
 	return server_find(sid);
 }
 
-static inline void channel_metadata_sts(struct channel *c, const char *key, const char *value)
+static inline void
+channel_metadata_sts(struct channel *c, const char *key, const char *value)
 {
 	sts(":%s METADATA %s %s :%s", ME, c->name, key, value);
 }
 
-static bool check_flood(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
+static bool
+check_flood(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	return check_jointhrottle((*value == '*' ? value + 1 : value), c, mc, u, mu);
 }
 
-static bool check_nickflood(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
+static bool
+check_nickflood(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	return check_jointhrottle(value, c, mc, u, mu);
 }
 
-static bool check_jointhrottle(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
+static bool
+check_jointhrottle(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	const char *p, *arg2;
 
@@ -257,12 +264,14 @@ static bool check_jointhrottle(const char *value, struct channel *c, struct mych
 	return true;
 }
 
-static bool check_history(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
+static bool
+check_history(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	return check_jointhrottle(value, c, mc, u, mu);
 }
 
-static bool check_forward(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
+static bool
+check_forward(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	struct channel *target_c;
 	struct mychan *target_mc;
@@ -278,7 +287,8 @@ static bool check_forward(const char *value, struct channel *c, struct mychan *m
 	return true;
 }
 
-static bool check_rejoindelay(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
+static bool
+check_rejoindelay(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	const char *ch = value;
 
@@ -299,7 +309,8 @@ static bool check_rejoindelay(const char *value, struct channel *c, struct mycha
 	}
 }
 
-static bool check_delaymsg(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
+static bool
+check_delaymsg(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	const char *ch = value;
 
@@ -320,13 +331,15 @@ static bool check_delaymsg(const char *value, struct channel *c, struct mychan *
 	}
 }
 
-static void inspircd_send_fjoin(struct channel *c, struct user *u, char *modes)
+static void
+inspircd_send_fjoin(struct channel *c, struct user *u, char *modes)
 {
 	sts(":%s FJOIN %s %lu %s :o,%s", me.numeric, c->name, (unsigned long)c->ts, modes, u->uid);
 }
 
 /* login to our uplink */
-static unsigned int inspircd_server_login(void)
+static unsigned int
+inspircd_server_login(void)
 {
 	int ret;
 
@@ -356,7 +369,8 @@ static unsigned int inspircd_server_login(void)
 }
 
 /* introduce a client */
-static void inspircd_introduce_nick(struct user *u)
+static void
+inspircd_introduce_nick(struct user *u)
 {
 	/* :penguin.omega.org.za UID 497AAAAAB 1188302517 OperServ 127.0.0.1 127.0.0.1 OperServ +s 127.0.0.1 :Operator Server */
 	const char *umode = user_get_umodestr(u);
@@ -367,13 +381,15 @@ static void inspircd_introduce_nick(struct user *u)
 		sts(":%s OPERTYPE Service", u->uid);
 }
 
-static void inspircd_quit_sts(struct user *u, const char *reason)
+static void
+inspircd_quit_sts(struct user *u, const char *reason)
 {
 	sts(":%s QUIT :%s", u->uid, reason);
 }
 
 /* WALLOPS wrapper */
-static void inspircd_wallops_sts(const char *text)
+static void
+inspircd_wallops_sts(const char *text)
 {
 	if (has_globopsmod)
 		sts(":%s SNONOTICE g :%s", me.numeric, text);
@@ -382,7 +398,8 @@ static void inspircd_wallops_sts(const char *text)
 }
 
 /* join a channel */
-static void inspircd_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
+static void
+inspircd_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
 {
 	if (!isnew || !modes[0])
 		modes = "+";
@@ -390,7 +407,8 @@ static void inspircd_join_sts(struct channel *c, struct user *u, bool isnew, cha
 	inspircd_send_fjoin(c, u, modes);
 }
 
-static void inspircd_chan_lowerts(struct channel *c, struct user *u)
+static void
+inspircd_chan_lowerts(struct channel *c, struct user *u)
 {
 	slog(LG_DEBUG, "inspircd_chan_lowerts(): lowering TS for %s to %lu",
 		c->name, (unsigned long)c->ts);
@@ -399,7 +417,8 @@ static void inspircd_chan_lowerts(struct channel *c, struct user *u)
 }
 
 /* kicks a user from a channel */
-static void inspircd_kick(struct user *source, struct channel *c, struct user *u, const char *reason)
+static void
+inspircd_kick(struct user *source, struct channel *c, struct user *u, const char *reason)
 {
 	sts(":%s KICK %s %s :%s", source->uid, c->name, u->uid, reason);
 
@@ -422,23 +441,27 @@ inspircd_msg(const char *from, const char *target, const char *fmt, ...)
 	sts(":%s PRIVMSG %s :%s", from_p->uid, !VALID_GLOBAL_CHANNEL_PFX(target) ? user->uid : target, buf);
 }
 
-static void inspircd_msg_global_sts(struct user *from, const char *mask, const char *text)
+static void
+inspircd_msg_global_sts(struct user *from, const char *mask, const char *text)
 {
 	sts(":%s PRIVMSG %s%s :%s", from ? from->uid : me.numeric, ircd->tldprefix, mask, text);
 }
 
 /* NOTICE wrapper */
-static void inspircd_notice_user_sts(struct user *from, struct user *target, const char *text)
+static void
+inspircd_notice_user_sts(struct user *from, struct user *target, const char *text)
 {
 	sts(":%s NOTICE %s :%s", from ? from->uid : me.numeric, target->uid, text);
 }
 
-static void inspircd_notice_global_sts(struct user *from, const char *mask, const char *text)
+static void
+inspircd_notice_global_sts(struct user *from, const char *mask, const char *text)
 {
 	sts(":%s NOTICE %s%s :%s", from ? from->uid : me.numeric, ircd->tldprefix, mask, text);
 }
 
-static void inspircd_notice_channel_sts(struct user *from, struct channel *target, const char *text)
+static void
+inspircd_notice_channel_sts(struct user *from, struct channel *target, const char *text)
 {
 	sts(":%s NOTICE %s :%s", from ? from->uid : me.numeric, target->name, text);
 }
@@ -457,7 +480,8 @@ inspircd_numeric_sts(struct server *from, int numeric, struct user *target, cons
 }
 
 /* KILL wrapper */
-static void inspircd_kill_id_sts(struct user *killer, const char *id, const char *reason)
+static void
+inspircd_kill_id_sts(struct user *killer, const char *id, const char *reason)
 {
 	if (killer != NULL)
 		sts(":%s KILL %s :Killed (%s (%s))", CLIENT_NAME(killer), id, killer->nick, reason);
@@ -466,13 +490,15 @@ static void inspircd_kill_id_sts(struct user *killer, const char *id, const char
 }
 
 /* PART wrapper */
-static void inspircd_part_sts(struct channel *c, struct user *u)
+static void
+inspircd_part_sts(struct channel *c, struct user *u)
 {
 	sts(":%s PART %s :Leaving", u->uid, c->name);
 }
 
 /* server-to-server KLINE wrapper */
-static void inspircd_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
+static void
+inspircd_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
 	struct service *svs;
 
@@ -482,7 +508,8 @@ static void inspircd_kline_sts(const char *server, const char *user, const char 
 }
 
 /* server-to-server UNKLINE wrapper */
-static void inspircd_unkline_sts(const char *server, const char *user, const char *host)
+static void
+inspircd_unkline_sts(const char *server, const char *user, const char *host)
 {
 	struct service *svs;
 
@@ -491,7 +518,8 @@ static void inspircd_unkline_sts(const char *server, const char *user, const cha
 }
 
 /* server-to-server QLINE wrapper */
-static void inspircd_qline_sts(const char *server, const char *name, long duration, const char *reason)
+static void
+inspircd_qline_sts(const char *server, const char *name, long duration, const char *reason)
 {
 	struct service *svs;
 
@@ -510,7 +538,8 @@ static void inspircd_qline_sts(const char *server, const char *name, long durati
 }
 
 /* server-to-server UNQLINE wrapper */
-static void inspircd_unqline_sts(const char *server, const char *name)
+static void
+inspircd_unqline_sts(const char *server, const char *name)
 {
 	if (!VALID_GLOBAL_CHANNEL_PFX(name))
 	{
@@ -525,7 +554,8 @@ static void inspircd_unqline_sts(const char *server, const char *name)
 }
 
 /* server-to-server ZLINE/DLINE wrapper */
-static void inspircd_dline_sts(const char *server, const char *host, long duration, const char *reason)
+static void
+inspircd_dline_sts(const char *server, const char *host, long duration, const char *reason)
 {
 	struct service *svs;
 
@@ -534,7 +564,8 @@ static void inspircd_dline_sts(const char *server, const char *host, long durati
 }
 
 /* server-to-server UNZLINE/UNDLINE wrapper */
-static void inspircd_undline_sts(const char *server, const char *host)
+static void
+inspircd_undline_sts(const char *server, const char *host)
 {
 	struct service *svs;
 
@@ -543,7 +574,8 @@ static void inspircd_undline_sts(const char *server, const char *host)
 }
 
 /* topic wrapper */
-static void inspircd_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
+static void
+inspircd_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	return_if_fail(c != NULL);
 
@@ -577,7 +609,8 @@ static void inspircd_topic_sts(struct channel *c, struct user *source, const cha
 }
 
 /* mode wrapper */
-static void inspircd_mode_sts(char *sender, struct channel *target, char *modes)
+static void
+inspircd_mode_sts(char *sender, struct channel *target, char *modes)
 {
 	struct user *sender_p;
 
@@ -593,7 +626,8 @@ static void inspircd_mode_sts(char *sender, struct channel *target, char *modes)
 }
 
 /* ping wrapper */
-static void inspircd_ping_sts(void)
+static void
+inspircd_ping_sts(void)
 {
 	// XXX this is annoying, struct uplink contains no sid or link to struct server
 	struct server *u = server_find(curr_uplink->name);
@@ -605,19 +639,22 @@ static void inspircd_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void inspircd_on_login(struct user *u, struct myuser *mu, const char *wantedhost)
+static void
+inspircd_on_login(struct user *u, struct myuser *mu, const char *wantedhost)
 {
 	sts(":%s METADATA %s accountname :%s", me.numeric, u->uid, entity(mu)->name);
 }
 
 /* protocol-specific stuff to do on logout */
-static bool inspircd_on_logout(struct user *u, const char *account)
+static bool
+inspircd_on_logout(struct user *u, const char *account)
 {
 	sts(":%s METADATA %s accountname :", me.numeric, u->uid);
 	return false;
 }
 
-static void inspircd_jupe(const char *server, const char *reason)
+static void
+inspircd_jupe(const char *server, const char *reason)
 {
 	struct service *svs;
 	static char sid[3+1];
@@ -664,7 +701,8 @@ static void inspircd_jupe(const char *server, const char *reason)
 	sts(":%s SERVER %s * 1 %s :%s", me.numeric, server, sid, reason);
 }
 
-static void inspircd_sethost_sts(struct user *source, struct user *target, const char *host)
+static void
+inspircd_sethost_sts(struct user *source, struct user *target, const char *host)
 {
 	if (has_chghostmod)
 	{
@@ -677,21 +715,23 @@ static void inspircd_sethost_sts(struct user *source, struct user *target, const
 		slog(LG_INFO, "VHOST: Could not set \2%s\2 due to m_chghost not being loaded in inspircd.", host);
 }
 
-static void inspircd_fnc_sts(struct user *source, struct user *u, const char *newnick, int type)
+static void
+inspircd_fnc_sts(struct user *source, struct user *u, const char *newnick, int type)
 {
 	/* svsnick can only be sent by a server */
 	sts(":%s SVSNICK %s %s %lu", me.numeric, u->uid, newnick,
 		(unsigned long)(CURRTIME - 60));
 }
 
-
 /* invite a user to a channel */
-static void inspircd_invite_sts(struct user *sender, struct user *target, struct channel *channel)
+static void
+inspircd_invite_sts(struct user *sender, struct user *target, struct channel *channel)
 {
 	sts(":%s INVITE %s %s", sender->uid, target->uid, channel->name);
 }
 
-static void inspircd_holdnick_sts(struct user *source, int duration, const char *nick, struct myuser *account)
+static void
+inspircd_holdnick_sts(struct user *source, int duration, const char *nick, struct myuser *account)
 {
 	struct service *svs;
 
@@ -713,7 +753,8 @@ static void inspircd_holdnick_sts(struct user *source, int duration, const char 
 	}
 }
 
-static void inspircd_svslogin_sts(char *target, char *nick, char *user, char *host, struct myuser *account)
+static void
+inspircd_svslogin_sts(char *target, char *nick, char *user, char *host, struct myuser *account)
 {
 	sts(":%s METADATA %s accountname :%s", me.numeric, target, entity(account)->name);
 
@@ -722,7 +763,8 @@ static void inspircd_svslogin_sts(char *target, char *nick, char *user, char *ho
 		sts(":%s ENCAP %c%c%c CHGHOST %s %s", me.numeric, target[0], target[1], target[2], target, host);
 }
 
-static void inspircd_sasl_sts(const char *target, char mode, const char *data)
+static void
+inspircd_sasl_sts(const char *target, char mode, const char *data)
 {
 	struct service *svs;
 	struct server *s = sid_find(target);
@@ -736,18 +778,21 @@ static void inspircd_sasl_sts(const char *target, char mode, const char *data)
 	sts(":%s ENCAP %s SASL %s %s %c %s", ME, s->sid, svs->me->uid, target, mode, data);
 }
 
-static void inspircd_sasl_mechlist_sts(const char *mechlist)
+static void
+inspircd_sasl_mechlist_sts(const char *mechlist)
 {
 	sts(":%s METADATA * saslmechlist :%s", ME, mechlist);
 }
 
-static void inspircd_quarantine_sts(struct user *source, struct user *victim, long duration, const char *reason)
+static void
+inspircd_quarantine_sts(struct user *source, struct user *victim, long duration, const char *reason)
 {
 	if (has_shun)
 		sts(":%s ADDLINE SHUN *@%s %s %lu %ld :%s", me.numeric, victim->host, source->nick, (unsigned long) CURRTIME, duration, reason);
 }
 
-static void inspircd_mlock_sts(struct channel *c)
+static void
+inspircd_mlock_sts(struct channel *c)
 {
 	struct mychan *mc = mychan_from(c);
 
@@ -757,7 +802,8 @@ static void inspircd_mlock_sts(struct channel *c)
 	channel_metadata_sts(c, "mlock", mychan_get_sts_mlock(mc));
 }
 
-static void  inspircd_topiclock_sts(struct channel *c)
+static void
+inspircd_topiclock_sts(struct channel *c)
 {
 	struct mychan *mc = mychan_from(c);
 	if (mc == NULL || !has_svstopic_topiclock)
@@ -766,7 +812,8 @@ static void  inspircd_topiclock_sts(struct channel *c)
 	channel_metadata_sts(c, "topiclock", (mc->flags & MC_TOPICLOCK ? "1" : ""));
 }
 
-static void m_topic(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_topic(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c = channel_find(parv[0]);
 
@@ -776,7 +823,8 @@ static void m_topic(struct sourceinfo *si, int parc, char *parv[])
 	handle_topic_from(si, c, si->su->nick, time(NULL), parv[1]);
 }
 
-static void m_ftopic(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_ftopic(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c = channel_find(parv[0]);
 	time_t ts = atol(parv[1]);
@@ -793,7 +841,8 @@ static void m_ftopic(struct sourceinfo *si, int parc, char *parv[])
 	handle_topic_from(si, c, parv[2], ts, parv[3]);
 }
 
-static void m_ping(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_ping(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* reply to PING's */
 	if (parc == 1)
@@ -802,7 +851,8 @@ static void m_ping(struct sourceinfo *si, int parc, char *parv[])
 		sts(":%s PONG %s :%s", me.numeric, parv[1], parv[0]);
 }
 
-static void m_pong(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_pong(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct server *s;
 
@@ -842,7 +892,8 @@ static void m_pong(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_privmsg(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_privmsg(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (parc != 2)
 		return;
@@ -850,7 +901,8 @@ static void m_privmsg(struct sourceinfo *si, int parc, char *parv[])
 	handle_message(si, parv[0], false, parv[1]);
 }
 
-static void m_notice(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_notice(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (!me.recvsvr)
 	{
@@ -867,7 +919,8 @@ static void m_notice(struct sourceinfo *si, int parc, char *parv[])
 	handle_message(si, parv[0], true, parv[1]);
 }
 
-static void map_a_prefix(char prefix, char* prefixandnick, unsigned int *nlen)
+static void
+map_a_prefix(char prefix, char* prefixandnick, unsigned int *nlen)
 {
 	size_t j, k;
 
@@ -890,7 +943,8 @@ static void map_a_prefix(char prefix, char* prefixandnick, unsigned int *nlen)
 	}
 }
 
-static void m_fjoin(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_fjoin(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* :08X FJOIN #flaps 1234 +nt vh,0F8XXXXN ,08XGH75C ,001CCCC3 aq,00ABBBB1 */
 	struct channel *c;
@@ -1017,13 +1071,15 @@ static void m_fjoin(struct sourceinfo *si, int parc, char *parv[])
 		channel_delete(c);
 }
 
-static void m_part(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_part(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_part(): user left channel: %s -> %s", si->su->nick, parv[0]);
 	chanuser_delete(channel_find(parv[0]), si->su);
 }
 
-static void m_uid(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_uid(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u;
 
@@ -1048,7 +1104,8 @@ static void m_uid(struct sourceinfo *si, int parc, char *parv[])
 		handle_nickchange(u);
 }
 
-static void m_nick(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
@@ -1062,7 +1119,8 @@ static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 		handle_nickchange(si->su);
 }
 
-static void m_quit(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_quit(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
 
@@ -1070,7 +1128,8 @@ static void m_quit(struct sourceinfo *si, int parc, char *parv[])
 	user_delete(si->su, parv[0]);
 }
 
-static void inspircd_user_mode(struct user *u, const char *modes)
+static void
+inspircd_user_mode(struct user *u, const char *modes)
 {
 	int dir;
 	const char *p;
@@ -1109,7 +1168,8 @@ static void inspircd_user_mode(struct user *u, const char *modes)
 		}
 }
 
-static void m_mode(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_mode(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (*parv[0] == '#')
 		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
@@ -1117,7 +1177,8 @@ static void m_mode(struct sourceinfo *si, int parc, char *parv[])
 		inspircd_user_mode(user_find(parv[0]), parv[1]);
 }
 
-static void m_fmode(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_fmode(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c;
 	time_t ts;
@@ -1144,7 +1205,8 @@ static void m_fmode(struct sourceinfo *si, int parc, char *parv[])
 		inspircd_user_mode(user_find(parv[0]), parv[2]);
 }
 
-static void m_kick(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_kick(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u = user_find(parv[1]);
 	struct channel *c = channel_find(parv[0]);
@@ -1180,18 +1242,21 @@ static void m_kick(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_kill(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_kill(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_kill(si, parv[0], parc > 1 ? parv[1] : "<No reason given>");
 }
 
-static void m_squit(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_squit(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_squit(): server leaving: %s", parv[0]);
 	server_delete(parv[0]);
 }
 
-static void m_server(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_server(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct server *s;
 	char ver[BUFSIZE];
@@ -1208,7 +1273,8 @@ static void m_server(struct sourceinfo *si, int parc, char *parv[])
 	s = handle_server(si, parv[0], parv[3], atoi(parv[2]), parv[4]);
 }
 
-static inline void solicit_pongs(struct server *s)
+static inline void
+solicit_pongs(struct server *s)
 {
 	mowgli_node_t *n;
 
@@ -1218,32 +1284,38 @@ static inline void solicit_pongs(struct server *s)
 		solicit_pongs(n->data);
 }
 
-static void m_endburst(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_endburst(struct sourceinfo *si, int parc, char *parv[])
 {
 	solicit_pongs(si->s);
 }
 
-static void m_stats(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_stats(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_stats(si->su, parv[0][0]);
 }
 
-static void m_motd(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_motd(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_motd(si->su);
 }
 
-static void m_admin(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_admin(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_admin(si->su);
 }
 
-static void m_away(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_away(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_away(si->su, parc >= 1 ? parv[parc-1] : NULL);
 }
 
-static void m_join(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_join(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c;
 
@@ -1258,7 +1330,8 @@ static void m_join(struct sourceinfo *si, int parc, char *parv[])
 	chanuser_add(c, si->su->nick);
 }
 
-static void m_save(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_save(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u = user_find(parv[0]);
 	if (!u)
@@ -1293,12 +1366,14 @@ static void m_save(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_error(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_error(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_INFO, "m_error(): error from server: %s", parv[0]);
 }
 
-static void m_idle(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_idle(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (parc == 1 && si->su != NULL)
 	{
@@ -1310,7 +1385,8 @@ static void m_idle(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_opertype(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_opertype(struct sourceinfo *si, int parc, char *parv[])
 {
 	/*
 	 * Hope this works.. InspIRCd OPERTYPE means user is an oper, mark them so
@@ -1320,19 +1396,22 @@ static void m_opertype(struct sourceinfo *si, int parc, char *parv[])
 	user_mode(si->su, "+o");
 }
 
-static void m_fident(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_fident(struct sourceinfo *si, int parc, char *parv[])
 {
 	strshare_unref(si->su->user);
 	si->su->user = strshare_get(parv[0]);
 }
 
-static void m_fhost(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_fhost(struct sourceinfo *si, int parc, char *parv[])
 {
 	strshare_unref(si->su->vhost);
 	si->su->vhost = strshare_get(parv[0]);
 }
 
-static void m_encap(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_encap(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (!irccasecmp(parv[1], "SASL"))
 	{
@@ -1361,7 +1440,8 @@ static void m_encap(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static inline void verify_mlock(struct channel *c, time_t ts, const char *their_mlock)
+static inline void
+verify_mlock(struct channel *c, time_t ts, const char *their_mlock)
 {
 	const char *mlock_str;
 	struct mychan *mc;
@@ -1379,7 +1459,8 @@ static inline void verify_mlock(struct channel *c, time_t ts, const char *their_
 		return mlock_sts(c);
 }
 
-static void verify_topiclock(struct channel *c, bool state)
+static void
+verify_topiclock(struct channel *c, bool state)
 {
 	bool mystate;
 	struct mychan *mc = mychan_from(c);
@@ -1399,7 +1480,8 @@ static void verify_topiclock(struct channel *c, bool state)
  * :services.barafranca METADATA w00t accountname :w00t
  * :services.barafranca METADATA #moo 1274712456 mlock :nt
  */
-static void m_metadata(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_metadata(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u;
 	struct channel *c;
@@ -1478,12 +1560,14 @@ static void m_metadata(struct sourceinfo *si, int parc, char *parv[])
  *  the server to be squit as a local connection, which should then close it's connection and send SQUIT back
  *  to the rest of the network.
  */
-static void m_rsquit(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_rsquit(struct sourceinfo *si, int parc, char *parv[])
 {
 	sts(":%s SQUIT %s :Jupe removed by %s", me.numeric, parv[0], si->su->nick);
 }
 
-static void channel_drop(struct mychan *mc)
+static void
+channel_drop(struct mychan *mc)
 {
 	if (mc->chan == NULL)
 		return;
@@ -1492,7 +1576,8 @@ static void channel_drop(struct mychan *mc)
 	channel_metadata_sts(mc->chan, "topiclock", "");
 }
 
-static void m_capab(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_capab(struct sourceinfo *si, int parc, char *parv[])
 {
 	int i, varc;
 	char *varv[256];
@@ -1638,7 +1723,8 @@ static void m_capab(struct sourceinfo *si, int parc, char *parv[])
 }
 
 /* Server ended their burst: warn all their users if necessary -- jilles */
-static void server_eob(struct server *s)
+static void
+server_eob(struct server *s)
 {
 	mowgli_node_t *n;
 
@@ -1751,6 +1837,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("protocol/inspircd", MODULE_UNLOAD_CAPABILITY_NEVER)
