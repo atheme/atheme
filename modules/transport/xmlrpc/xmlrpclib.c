@@ -45,14 +45,16 @@ static char *xmlrpc_write_header(int length);
 
 /*************************************************************************/
 
-int xmlrpc_getlast_error(void)
+int
+xmlrpc_getlast_error(void)
 {
 	return xmlrpc_error_code;
 }
 
 /*************************************************************************/
 
-void xmlrpc_process(char *buffer, void *userdata)
+void
+xmlrpc_process(char *buffer, void *userdata)
 {
 	int retVal = 0;
 	XMLRPCCmd *current = NULL;
@@ -128,7 +130,8 @@ void xmlrpc_process(char *buffer, void *userdata)
 
 /*************************************************************************/
 
-void xmlrpc_set_buffer(char *(*func) (char *buffer, int len))
+void
+xmlrpc_set_buffer(char *(*func) (char *buffer, int len))
 {
 	return_if_fail(func != NULL);
 	xmlrpc.setbuffer = func;
@@ -136,7 +139,8 @@ void xmlrpc_set_buffer(char *(*func) (char *buffer, int len))
 
 /*************************************************************************/
 
-int xmlrpc_register_method(const char *name, XMLRPCMethodFunc func)
+int
+xmlrpc_register_method(const char *name, XMLRPCMethodFunc func)
 {
 	XMLRPCCmd *xml;
 
@@ -149,7 +153,8 @@ int xmlrpc_register_method(const char *name, XMLRPCMethodFunc func)
 
 /*************************************************************************/
 
-static XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func)
+static XMLRPCCmd *
+createXMLCommand(const char *name, XMLRPCMethodFunc func)
 {
 	XMLRPCCmd *const xml = smalloc(sizeof *xml);
 	xml->name = sstrdup(name);
@@ -159,7 +164,8 @@ static XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func)
 
 /*************************************************************************/
 
-static int addXMLCommand(XMLRPCCmd * xml)
+static int
+addXMLCommand(XMLRPCCmd * xml)
 {
 	if (XMLRPCCMD == NULL)
 		XMLRPCCMD = mowgli_patricia_create(strcasecanon);
@@ -171,7 +177,8 @@ static int addXMLCommand(XMLRPCCmd * xml)
 
 /*************************************************************************/
 
-int xmlrpc_unregister_method(const char *method)
+int
+xmlrpc_unregister_method(const char *method)
 {
 	return_val_if_fail(method != NULL, XMLRPC_ERR_PARAMS);
 
@@ -182,7 +189,8 @@ int xmlrpc_unregister_method(const char *method)
 
 /*************************************************************************/
 
-static char *xmlrpc_write_header(int length)
+static char *
+xmlrpc_write_header(int length)
 {
 	char buf[512];
 	time_t ts;
@@ -206,7 +214,8 @@ static char *xmlrpc_write_header(int length)
  * @param buffer Incoming data buffer
  * @return cleaned up buffer
  */
-static char *xmlrpc_parse(char *buffer)
+static char *
+xmlrpc_parse(char *buffer)
 {
 	char *tmp = NULL;
 
@@ -234,7 +243,8 @@ static char *xmlrpc_parse(char *buffer)
  * Returns the number of values placed in the array.
  * Largely rewritten by jilles 20080803
  */
-static int xmlrpc_split_buf(char *buffer, char ***argv)
+static int
+xmlrpc_split_buf(char *buffer, char ***argv)
 {
 	int ac = 0;
 	int argvsize = 8;
@@ -282,7 +292,8 @@ static int xmlrpc_split_buf(char *buffer, char ***argv)
 
 /*************************************************************************/
 
-static char *xmlrpc_method(char *buffer)
+static char *
+xmlrpc_method(char *buffer)
 {
 	char *data, *p, *name;
 	int namelen;
@@ -304,7 +315,8 @@ static char *xmlrpc_method(char *buffer)
 
 /*************************************************************************/
 
-void xmlrpc_generic_error(int code, const char *string)
+void
+xmlrpc_generic_error(int code, const char *string)
 {
 	char buf[1024];
 	const char *ss;
@@ -352,7 +364,8 @@ void xmlrpc_generic_error(int code, const char *string)
 
 /*************************************************************************/
 
-int xmlrpc_about(void *userdata, int ac, char **av)
+int
+xmlrpc_about(void *userdata, int ac, char **av)
 {
 	char buf[XMLRPC_BUFSIZE];
 	char buf2[XMLRPC_BUFSIZE];
@@ -374,7 +387,8 @@ int xmlrpc_about(void *userdata, int ac, char **av)
 
 /*************************************************************************/
 
-void xmlrpc_send(int argc, ...)
+void
+xmlrpc_send(int argc, ...)
 {
 	va_list va;
 	int idx = 0;
@@ -438,7 +452,8 @@ void xmlrpc_send(int argc, ...)
 
 /*************************************************************************/
 
-void xmlrpc_send_string(const char *value)
+void
+xmlrpc_send_string(const char *value)
 {
 	int len;
 	char buf[1024];
@@ -494,7 +509,8 @@ void xmlrpc_send_string(const char *value)
 
 /*************************************************************************/
 
-char *xmlrpc_time2date(char *buf, time_t t)
+char *
+xmlrpc_time2date(char *buf, time_t t)
 {
 	char timebuf[XMLRPC_BUFSIZE];
 	struct tm *tm;
@@ -509,7 +525,8 @@ char *xmlrpc_time2date(char *buf, time_t t)
 
 /*************************************************************************/
 
-char *xmlrpc_integer(char *buf, int value)
+char *
+xmlrpc_integer(char *buf, int value)
 {
 	*buf = '\0';
 
@@ -533,7 +550,8 @@ char *xmlrpc_integer(char *buf, int value)
 
 /*************************************************************************/
 
-char *xmlrpc_string(char *buf, const char *value)
+char *
+xmlrpc_string(char *buf, const char *value)
 {
 	char encoded[XMLRPC_BUFSIZE];
 	*buf = '\0';
@@ -545,7 +563,8 @@ char *xmlrpc_string(char *buf, const char *value)
 
 /*************************************************************************/
 
-char *xmlrpc_boolean(char *buf, int value)
+char *
+xmlrpc_boolean(char *buf, int value)
 {
 	*buf = '\0';
 	snprintf(buf, XMLRPC_BUFSIZE, "<boolean>%d</boolean>", (value ? 1 : 0));
@@ -554,7 +573,8 @@ char *xmlrpc_boolean(char *buf, int value)
 
 /*************************************************************************/
 
-char *xmlrpc_double(char *buf, double value)
+char *
+xmlrpc_double(char *buf, double value)
 {
 	*buf = '\0';
 	snprintf(buf, XMLRPC_BUFSIZE, "<double>%g</double>", value);
@@ -563,7 +583,8 @@ char *xmlrpc_double(char *buf, double value)
 
 /*************************************************************************/
 
-char *xmlrpc_array(int argc, ...)
+char *
+xmlrpc_array(int argc, ...)
 {
 	va_list va;
 	char *a;
@@ -598,7 +619,8 @@ char *xmlrpc_array(int argc, ...)
 
 /*************************************************************************/
 
-char *xmlrpc_normalizeBuffer(const char *buf)
+char *
+xmlrpc_normalizeBuffer(const char *buf)
 {
 	char *newbuf;
 	int i, len, j = 0;
@@ -689,7 +711,8 @@ char *xmlrpc_normalizeBuffer(const char *buf)
 
 /*************************************************************************/
 
-int xmlrpc_set_options(int type, const char *value)
+int
+xmlrpc_set_options(int type, const char *value)
 {
 	if (type == XMLRPC_HTTP_HEADER)
 	{
@@ -727,7 +750,8 @@ int xmlrpc_set_options(int type, const char *value)
 
 /*************************************************************************/
 
-void xmlrpc_char_encode(char *outbuffer, const char *s1)
+void
+xmlrpc_char_encode(char *outbuffer, const char *s1)
 {
 	long unsigned int i;
 	unsigned char c;
@@ -775,7 +799,8 @@ void xmlrpc_char_encode(char *outbuffer, const char *s1)
 	strncpy(outbuffer, s->str, XMLRPC_BUFSIZE);
 }
 
-static void xmlrpc_append_char_encode(mowgli_string_t *s, const char *s1)
+static void
+xmlrpc_append_char_encode(mowgli_string_t *s, const char *s1)
 {
 	long unsigned int i;
 	unsigned char c;
@@ -820,7 +845,8 @@ static void xmlrpc_append_char_encode(mowgli_string_t *s, const char *s1)
 /* In-place decode of some entities
  * rewritten by jilles 20080802
  */
-char *xmlrpc_decode_string(char *buf)
+char *
+xmlrpc_decode_string(char *buf)
 {
 	const char *p;
 	char *q;
