@@ -48,7 +48,8 @@ struct template_iter
 	unsigned int level;
 };
 
-static int global_template_search(const char *key, void *data, void *privdata)
+static int
+global_template_search(const char *key, void *data, void *privdata)
 {
 	struct template_iter *iter = privdata;
 	struct default_template *def_t = data;
@@ -59,7 +60,8 @@ static int global_template_search(const char *key, void *data, void *privdata)
 	return 0;
 }
 
-static const char *get_template_name(struct mychan *mc, unsigned int level)
+static const char *
+get_template_name(struct mychan *mc, unsigned int level)
 {
 	struct metadata *md;
 	const char *p, *q, *r;
@@ -106,7 +108,8 @@ static const char *get_template_name(struct mychan *mc, unsigned int level)
 	return iter.res;
 }
 
-static void do_list(struct sourceinfo *si, struct mychan *mc, unsigned int flags)
+static void
+do_list(struct sourceinfo *si, struct mychan *mc, unsigned int flags)
 {
 	struct chanacs *ca;
 	mowgli_node_t *n;
@@ -169,7 +172,8 @@ static void do_list(struct sourceinfo *si, struct mychan *mc, unsigned int flags
 		logcommand(si, CMDLOG_GET, "FLAGS: \2%s\2", mc->name);
 }
 
-static void check_registration_keywords(hook_user_register_check_t *hdata)
+static void
+check_registration_keywords(hook_user_register_check_t *hdata)
 {
 	if (hdata->approved || !anope_flags_compat)
 	{
@@ -184,7 +188,8 @@ static void check_registration_keywords(hook_user_register_check_t *hdata)
 }
 
 /* FLAGS <channel> [user] [flags] */
-static void cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct chanacs *ca;
 	mowgli_node_t *n;
