@@ -35,7 +35,8 @@ int use_limitflags = 0;
 #define MAX_BUF 256
 
 /* ban wrapper for cmode, returns number of bans added (0 or 1) */
-int ban(struct user *sender, struct channel *c, struct user *user)
+int
+ban(struct user *sender, struct channel *c, struct user *user)
 {
 	char mask[MAX_BUF];
 	struct chanban *cb;
@@ -60,7 +61,8 @@ int ban(struct user *sender, struct channel *c, struct user *user)
 }
 
 /* returns number of modes removed -- jilles */
-int remove_banlike(struct user *source, struct channel *chan, int type, struct user *target)
+int
+remove_banlike(struct user *source, struct channel *chan, int type, struct user *target)
 {
 	int count = 0;
 	mowgli_node_t *n, *tn;
@@ -87,12 +89,14 @@ int remove_banlike(struct user *source, struct channel *chan, int type, struct u
 }
 
 /* returns number of exceptions removed -- jilles */
-int remove_ban_exceptions(struct user *source, struct channel *chan, struct user *target)
+int
+remove_ban_exceptions(struct user *source, struct channel *chan, struct user *target)
 {
 	return remove_banlike(source, chan, ircd->except_mchar, target);
 }
 
-void try_kick_real(struct user *source, struct channel *chan, struct user *target, const char *reason)
+void
+try_kick_real(struct user *source, struct channel *chan, struct user *target, const char *reason)
 {
 	struct chanuser *cu;
 
@@ -129,6 +133,7 @@ void try_kick_real(struct user *source, struct channel *chan, struct user *targe
 	}
 	kick(source, chan, target, reason);
 }
+
 void (*try_kick)(struct user *source, struct channel *chan, struct user *target, const char *reason) = try_kick_real;
 
 /* sends a KILL message for a user and removes the user from the userlist
@@ -164,7 +169,8 @@ kill_user(struct user *source, struct user *victim, const char *fmt, ...)
 	user_delete(victim, qreason);
 }
 
-void introduce_enforcer(const char *nick)
+void
+introduce_enforcer(const char *nick)
 {
 	struct user *u;
 
@@ -178,7 +184,8 @@ void introduce_enforcer(const char *nick)
 }
 
 /* join a channel, creating it if necessary */
-void join(const char *chan, const char *nick)
+void
+join(const char *chan, const char *nick)
 {
 	struct channel *c;
 	struct user *u;
@@ -230,7 +237,8 @@ void join(const char *chan, const char *nick)
 }
 
 /* part a channel */
-void part(const char *chan, const char *nick)
+void
+part(const char *chan, const char *nick)
 {
 	struct channel *c = channel_find(chan);
 	struct user *u = user_find_named(nick);
@@ -244,7 +252,8 @@ void part(const char *chan, const char *nick)
 	chanuser_delete(c, u);
 }
 
-void services_init(void)
+void
+services_init(void)
 {
 	struct service *svs;
 	mowgli_patricia_iteration_state_t state;
@@ -263,7 +272,8 @@ void services_init(void)
 	hook_add_event("user_can_login");
 }
 
-void joinall(const char *name)
+void
+joinall(const char *name)
 {
 	struct service *svs;
 	mowgli_patricia_iteration_state_t state;
@@ -280,7 +290,8 @@ void joinall(const char *name)
 	}
 }
 
-void partall(const char *name)
+void
+partall(const char *name)
 {
 	mowgli_patricia_iteration_state_t state;
 	struct service *svs;
@@ -304,7 +315,8 @@ void partall(const char *name)
 }
 
 /* reintroduce a service e.g. after it's been killed -- jilles */
-void reintroduce_user(struct user *u)
+void
+reintroduce_user(struct user *u)
 {
 	mowgli_node_t *n;
 	struct channel *c;
@@ -372,7 +384,8 @@ verbose(struct mychan *mychan, const char *fmt, ...)
 }
 
 /* protocol wrapper for nickchange/nick burst */
-void handle_nickchange(struct user *u)
+void
+handle_nickchange(struct user *u)
 {
 	struct service *svs;
 
@@ -404,7 +417,8 @@ void handle_nickchange(struct user *u)
  *    server confirms EOB
  * -- jilles
  */
-void handle_burstlogin(struct user *u, const char *login, time_t ts)
+void
+handle_burstlogin(struct user *u, const char *login, time_t ts)
 {
 	struct mynick *mn;
 	struct myuser *mu;
@@ -478,7 +492,8 @@ void handle_burstlogin(struct user *u, const char *login, time_t ts)
 	}
 }
 
-void handle_setlogin(struct sourceinfo *si, struct user *u, const char *login, time_t ts)
+void
+handle_setlogin(struct sourceinfo *si, struct user *u, const char *login, time_t ts)
 {
 	struct mynick *mn;
 	struct myuser *mu;
@@ -549,7 +564,8 @@ void handle_setlogin(struct sourceinfo *si, struct user *u, const char *login, t
 			get_oper_name(si), u->nick, login);
 }
 
-void handle_clearlogin(struct sourceinfo *si, struct user *u)
+void
+handle_clearlogin(struct sourceinfo *si, struct user *u)
 {
 	mowgli_node_t *n;
 
@@ -574,7 +590,8 @@ void handle_clearlogin(struct sourceinfo *si, struct user *u)
 	u->myuser = NULL;
 }
 
-void handle_certfp(struct sourceinfo *si, struct user *u, const char *certfp)
+void
+handle_certfp(struct sourceinfo *si, struct user *u, const char *certfp)
 {
 	struct myuser *mu;
 	struct mycertfp *mcfp;
@@ -623,7 +640,8 @@ void handle_certfp(struct sourceinfo *si, struct user *u, const char *certfp)
 	logcommand_user(svs, u, CMDLOG_LOGIN, "LOGIN via CERTFP (%s)", certfp);
 }
 
-void myuser_login(struct service *svs, struct user *u, struct myuser *mu, bool sendaccount)
+void
+myuser_login(struct service *svs, struct user *u, struct myuser *mu, bool sendaccount)
 {
 	char lau[BUFSIZE], lao[BUFSIZE];
 	char strfbuf[BUFSIZE];
@@ -750,6 +768,7 @@ generic_notice(const char *from, const char *to, const char *fmt, ...)
 		}
 	}
 }
+
 void (*notice) (const char *from, const char *target, const char *fmt, ...) = generic_notice;
 
 /*
@@ -807,7 +826,8 @@ change_notify(const char *from, struct user *to, const char *fmt, ...)
  * Note:
  *       - kills are currently not done
  */
-bool bad_password(struct sourceinfo *si, struct myuser *mu)
+bool
+bad_password(struct sourceinfo *si, struct myuser *mu)
 {
 	const char *mask;
 	struct tm tm;
@@ -859,12 +879,14 @@ bool bad_password(struct sourceinfo *si, struct myuser *mu)
 
 mowgli_heap_t *sourceinfo_heap = NULL;
 
-static void sourceinfo_delete(struct sourceinfo *si)
+static void
+sourceinfo_delete(struct sourceinfo *si)
 {
 	mowgli_heap_free(sourceinfo_heap, si);
 }
 
-struct sourceinfo *sourceinfo_create(void)
+struct sourceinfo *
+sourceinfo_create(void)
 {
 	struct sourceinfo *out;
 
@@ -975,12 +997,14 @@ command_success_string(struct sourceinfo *si, const char *result, const char *fm
 		notice_user_sts(si->service->me, si->su, buf);
 }
 
-static void command_table_cb(const char *line, void *data)
+static void
+command_table_cb(const char *line, void *data)
 {
 	command_success_nodata(data, "%s", line);
 }
 
-void command_success_table(struct sourceinfo *si, struct atheme_table *table)
+void
+command_success_table(struct sourceinfo *si, struct atheme_table *table)
 {
 	if (si->v != NULL && si->v->cmd_success_table)
 	{
@@ -991,7 +1015,8 @@ void command_success_table(struct sourceinfo *si, struct atheme_table *table)
 	table_render(table, command_table_cb, si);
 }
 
-const char *get_source_name(struct sourceinfo *si)
+const char *
+get_source_name(struct sourceinfo *si)
 {
 	static char result[NICKLEN + 1 + NICKLEN + 1 + 10];
 
@@ -1016,7 +1041,8 @@ const char *get_source_name(struct sourceinfo *si)
 	return result;
 }
 
-const char *get_source_mask(struct sourceinfo *si)
+const char *
+get_source_mask(struct sourceinfo *si)
 {
 	static char result[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + 10];
 
@@ -1038,7 +1064,8 @@ const char *get_source_mask(struct sourceinfo *si)
 	return result;
 }
 
-const char *get_oper_name(struct sourceinfo *si)
+const char *
+get_oper_name(struct sourceinfo *si)
 {
 	static char result[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + NICKLEN + 10];
 
@@ -1067,7 +1094,8 @@ const char *get_oper_name(struct sourceinfo *si)
 	return result;
 }
 
-const char *get_storage_oper_name(struct sourceinfo *si)
+const char *
+get_storage_oper_name(struct sourceinfo *si)
 {
 	static char result[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + NICKLEN + 10];
 
@@ -1089,7 +1117,8 @@ const char *get_storage_oper_name(struct sourceinfo *si)
 	return result;
 }
 
-const char *get_source_security_label(struct sourceinfo *si)
+const char *
+get_source_security_label(struct sourceinfo *si)
 {
 	static char result[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + NICKLEN + 1 + HOSTLEN + 1 + 10];
 	const struct soper *soper;
@@ -1161,7 +1190,8 @@ verbose_wallops(const char *fmt, ...)
  * Returns true if it is ok, false if not; command_fail() will have been called
  * as well.
  */
-bool check_vhost_validity(struct sourceinfo *si, const char *host)
+bool
+check_vhost_validity(struct sourceinfo *si, const char *host)
 {
 	const char *p;
 
