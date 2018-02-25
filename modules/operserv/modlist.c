@@ -9,7 +9,7 @@
 
 static void os_cmd_modlist(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command os_modlist = { "MODLIST", N_("Lists loaded modules."), PRIV_SERVER_AUSPEX, 0, os_cmd_modlist, { .path = "oservice/modlist" } };
+static struct command os_modlist = { "MODLIST", N_("Lists loaded modules."), PRIV_SERVER_AUSPEX, 0, os_cmd_modlist, { .path = "oservice/modlist" } };
 
 static void
 mod_init(struct module *const restrict m)

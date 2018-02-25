@@ -11,7 +11,7 @@
 
 static void cs_cmd_unban(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_unban = { "UNBAN", N_("Unbans you on a channel."),
+static struct command cs_unban = { "UNBAN", N_("Unbans you on a channel."),
 			AC_AUTHENTICATED, 2, cs_cmd_unban, { .path = "cservice/unban_self" } };
 
 static void

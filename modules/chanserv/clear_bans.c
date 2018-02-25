@@ -9,7 +9,7 @@
 
 static void cs_cmd_clear_bans(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_clear_bans = { "BANS", N_("Clears bans or other lists of a channel."),
+static struct command cs_clear_bans = { "BANS", N_("Clears bans or other lists of a channel."),
 	AC_NONE, 2, cs_cmd_clear_bans, { .path = "cservice/clear_bans" } };
 
 mowgli_patricia_t **cs_clear_cmds;

@@ -10,9 +10,9 @@
 static void cs_cmd_ban(struct sourceinfo *si, int parc, char *parv[]);
 static void cs_cmd_unban(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_ban = { "BAN", N_("Sets a ban on a channel."),
+static struct command cs_ban = { "BAN", N_("Sets a ban on a channel."),
                         AC_AUTHENTICATED, 2, cs_cmd_ban, { .path = "cservice/ban" } };
-struct command cs_unban = { "UNBAN", N_("Removes a ban on a channel."),
+static struct command cs_unban = { "UNBAN", N_("Removes a ban on a channel."),
 			AC_AUTHENTICATED, 2, cs_cmd_unban, { .path = "cservice/unban" } };
 
 static void

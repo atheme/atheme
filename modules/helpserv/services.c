@@ -10,7 +10,7 @@
 
 static void helpserv_cmd_services(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command helpserv_services = { "SERVICES", N_("List all services currently running on the network."), AC_NONE, 1, helpserv_cmd_services, { .path = "helpserv/services" } };
+static struct command helpserv_services = { "SERVICES", N_("List all services currently running on the network."), AC_NONE, 1, helpserv_cmd_services, { .path = "helpserv/services" } };
 
 static void
 mod_init(struct module *const restrict m)

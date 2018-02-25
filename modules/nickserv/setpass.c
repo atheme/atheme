@@ -11,7 +11,7 @@ static void clear_setpass_key(struct user *u);
 static void ns_cmd_setpass(struct sourceinfo *si, int parc, char *parv[]);
 static void show_setpass(hook_user_req_t *hdata);
 
-struct command ns_setpass = { "SETPASS", N_("Changes a password using an authcode."), AC_NONE, 3, ns_cmd_setpass, { .path = "nickserv/setpass" } };
+static struct command ns_setpass = { "SETPASS", N_("Changes a password using an authcode."), AC_NONE, 3, ns_cmd_setpass, { .path = "nickserv/setpass" } };
 
 static void
 mod_init(struct module *const restrict m)

@@ -10,7 +10,7 @@
 
 static void command_lottery(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cmd_lottery = { "LOTTERY", N_("Choose a random user on a channel."), AC_NONE, 2, command_lottery, { .path = "gameserv/lottery" } };
+static struct command cmd_lottery = { "LOTTERY", N_("Choose a random user on a channel."), AC_NONE, 2, command_lottery, { .path = "gameserv/lottery" } };
 
 static void
 mod_init(struct module *const restrict m)

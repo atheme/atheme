@@ -11,7 +11,7 @@
 static void cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[]);
 static void check_registration_keywords(hook_user_register_check_t *hdata);
 
-struct command cs_flags = { "FLAGS", N_("Manipulates specific permissions on a channel."),
+static struct command cs_flags = { "FLAGS", N_("Manipulates specific permissions on a channel."),
                         AC_NONE, 3, cs_cmd_flags, { .path = "cservice/flags" } };
 
 static bool anope_flags_compat = true;

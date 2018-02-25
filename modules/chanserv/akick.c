@@ -15,13 +15,13 @@ static void cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[]);
 static void akick_timeout_check(void *arg);
 static void akickdel_list_create(void *arg);
 
-struct command cs_akick = { "AKICK", N_("Manipulates a channel's AKICK list."),
+static struct command cs_akick = { "AKICK", N_("Manipulates a channel's AKICK list."),
                         AC_NONE, 4, cs_cmd_akick, { .path = "cservice/akick" } };
-struct command cs_akick_add = { "ADD", N_("Adds a channel AKICK."),
+static struct command cs_akick_add = { "ADD", N_("Adds a channel AKICK."),
                         AC_NONE, 4, cs_cmd_akick_add, { .path = "" } };
-struct command cs_akick_del = { "DEL", N_("Deletes a channel AKICK."),
+static struct command cs_akick_del = { "DEL", N_("Deletes a channel AKICK."),
                         AC_NONE, 3, cs_cmd_akick_del, { .path = "" } };
-struct command cs_akick_list = { "LIST", N_("Displays a channel's AKICK list."),
+static struct command cs_akick_list = { "LIST", N_("Displays a channel's AKICK list."),
                         AC_NONE, 2, cs_cmd_akick_list, { .path = "" } };
 
 struct akick_timeout

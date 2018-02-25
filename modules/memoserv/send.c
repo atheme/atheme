@@ -11,7 +11,7 @@ static void ms_cmd_send(struct sourceinfo *si, int parc, char *parv[]);
 static unsigned int *maxmemos;
 
 
-struct command ms_send = { "SEND", N_("Sends a memo to a user."),
+static struct command ms_send = { "SEND", N_("Sends a memo to a user."),
                         AC_AUTHENTICATED, 2, ms_cmd_send, { .path = "memoserv/send" } };
 
 static void

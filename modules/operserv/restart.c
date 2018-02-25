@@ -9,7 +9,7 @@
 
 static void os_cmd_restart(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command os_restart = { "RESTART", N_("Restart services."), PRIV_ADMIN, 0, os_cmd_restart, { .path = "oservice/restart" } };
+static struct command os_restart = { "RESTART", N_("Restart services."), PRIV_ADMIN, 0, os_cmd_restart, { .path = "oservice/restart" } };
 
 static void
 mod_init(struct module *const restrict m)

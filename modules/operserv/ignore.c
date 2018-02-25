@@ -13,11 +13,11 @@ static void os_cmd_ignore_del(struct sourceinfo *si, int parc, char *parv[]);
 static void os_cmd_ignore_list(struct sourceinfo *si, int parc, char *parv[]);
 static void os_cmd_ignore_clear(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command os_ignore = { "IGNORE", N_("Ignore a mask from services."), PRIV_ADMIN, 3, os_cmd_ignore, { .path = "oservice/ignore" } };
-struct command os_ignore_add = { "ADD", N_("Add services ignore"), PRIV_ADMIN, 2, os_cmd_ignore_add, { .path = "" } };
-struct command os_ignore_del = { "DEL", N_("Delete services ignore"), PRIV_ADMIN, 1, os_cmd_ignore_del, { .path = "" } };
-struct command os_ignore_list = { "LIST", N_("List services ignores"), PRIV_ADMIN, 0, os_cmd_ignore_list, { .path = "" } };
-struct command os_ignore_clear = { "CLEAR", N_("Clear all services ignores"), PRIV_ADMIN, 0, os_cmd_ignore_clear, { .path = "" } };
+static struct command os_ignore = { "IGNORE", N_("Ignore a mask from services."), PRIV_ADMIN, 3, os_cmd_ignore, { .path = "oservice/ignore" } };
+static struct command os_ignore_add = { "ADD", N_("Add services ignore"), PRIV_ADMIN, 2, os_cmd_ignore_add, { .path = "" } };
+static struct command os_ignore_del = { "DEL", N_("Delete services ignore"), PRIV_ADMIN, 1, os_cmd_ignore_del, { .path = "" } };
+static struct command os_ignore_list = { "LIST", N_("List services ignores"), PRIV_ADMIN, 0, os_cmd_ignore_list, { .path = "" } };
+static struct command os_ignore_clear = { "CLEAR", N_("Clear all services ignores"), PRIV_ADMIN, 0, os_cmd_ignore_clear, { .path = "" } };
 
 mowgli_patricia_t *os_ignore_cmds;
 mowgli_list_t svs_ignore_list;

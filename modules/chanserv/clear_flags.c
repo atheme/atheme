@@ -9,7 +9,7 @@
 
 static void cs_cmd_clear_flags(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_clear_flags = { "FLAGS", "Clears all channel flags.", AC_NONE, 2, cs_cmd_clear_flags, { .path = "cservice/clear_flags" } };
+static struct command cs_clear_flags = { "FLAGS", "Clears all channel flags.", AC_NONE, 2, cs_cmd_clear_flags, { .path = "cservice/clear_flags" } };
 
 mowgli_patricia_t **cs_clear_cmds;
 

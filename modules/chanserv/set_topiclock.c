@@ -10,7 +10,7 @@
 
 static void cs_cmd_set_topiclock(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_set_topiclock = { "TOPICLOCK", N_("Restricts who can change the topic."), AC_NONE, 2, cs_cmd_set_topiclock, { .path = "cservice/set_topiclock" } };
+static struct command cs_set_topiclock = { "TOPICLOCK", N_("Restricts who can change the topic."), AC_NONE, 2, cs_cmd_set_topiclock, { .path = "cservice/set_topiclock" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
 

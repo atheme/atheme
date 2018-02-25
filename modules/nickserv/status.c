@@ -10,8 +10,8 @@
 static void ns_cmd_acc(struct sourceinfo *si, int parc, char *parv[]);
 static void ns_cmd_status(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command ns_status = { "STATUS", N_("Displays session information."), AC_NONE, 0, ns_cmd_status, { .path = "nickserv/status" } };
-struct command ns_acc = { "ACC", N_("Displays parsable session information."), AC_NONE, 2, ns_cmd_acc, { .path = "nickserv/acc" } };
+static struct command ns_status = { "STATUS", N_("Displays session information."), AC_NONE, 0, ns_cmd_status, { .path = "nickserv/status" } };
+static struct command ns_acc = { "ACC", N_("Displays parsable session information."), AC_NONE, 2, ns_cmd_acc, { .path = "nickserv/acc" } };
 
 static void
 mod_init(struct module *const restrict m)

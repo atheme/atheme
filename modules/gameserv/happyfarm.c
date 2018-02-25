@@ -319,7 +319,7 @@ __command_join(struct sourceinfo * si, int parc, char *parv[])
 	command_success_nodata(si, _("You have started with \2%d\2 money.  For help, use \2/msg %s HELP HAPPYFARM\2."), farmer->money, si->service->nick);
 }
 
-struct command command_join = { "JOIN", N_("Join the Happy Farm game!"), AC_AUTHENTICATED, 0, __command_join, { .path = "gameserv/happyfarm_join" } };
+static struct command command_join = { "JOIN", N_("Join the Happy Farm game!"), AC_AUTHENTICATED, 0, __command_join, { .path = "gameserv/happyfarm_join" } };
 
 /*
  * Syntax: BUYPLOT
@@ -356,7 +356,7 @@ __command_buyplot(struct sourceinfo * si, int parc, char *parv[])
 	command_success_nodata(si, _("You have \2%d\2 money available."), farmer->money);
 }
 
-struct command command_buyplot = { "BUYPLOT", N_("Buy a plot of land!"), AC_AUTHENTICATED, 0, __command_buyplot, { .path = "gameserv/happyfarm_buyplot" } };
+static struct command command_buyplot = { "BUYPLOT", N_("Buy a plot of land!"), AC_AUTHENTICATED, 0, __command_buyplot, { .path = "gameserv/happyfarm_buyplot" } };
 
 /*
  * Syntax: SELLPLOT
@@ -393,7 +393,7 @@ __command_sellplot(struct sourceinfo * si, int parc, char *parv[])
 	command_success_nodata(si, _("You have \2%d\2 money available."), farmer->money);
 }
 
-struct command command_sellplot = { "SELLPLOT", N_("Sell a vacant plot of land."), AC_AUTHENTICATED, 0, __command_sellplot, { .path = "gameserv/happyfarm_sellplot" } };
+static struct command command_sellplot = { "SELLPLOT", N_("Sell a vacant plot of land."), AC_AUTHENTICATED, 0, __command_sellplot, { .path = "gameserv/happyfarm_sellplot" } };
 
 /*******************************************************************************************/
 
@@ -423,7 +423,7 @@ __command_trampoline(struct sourceinfo * si, int parc, char *parv[])
 	}
 }
 
-struct command command_happyfarm = { "HAPPYFARM", N_("Happy Farm!"), AC_AUTHENTICATED, 2, __command_trampoline, { .path = "gameserv/happyfarm" } };
+static struct command command_happyfarm = { "HAPPYFARM", N_("Happy Farm!"), AC_AUTHENTICATED, 2, __command_trampoline, { .path = "gameserv/happyfarm" } };
 
 /*******************************************************************************************/
 

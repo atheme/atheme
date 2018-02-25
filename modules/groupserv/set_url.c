@@ -10,7 +10,7 @@
 
 static void gs_cmd_set_url(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command gs_set_url = { "URL", N_("Sets the group URL."), AC_AUTHENTICATED, 2, gs_cmd_set_url, { .path = "groupserv/set_url" } };
+static struct command gs_set_url = { "URL", N_("Sets the group URL."), AC_AUTHENTICATED, 2, gs_cmd_set_url, { .path = "groupserv/set_url" } };
 
 static void
 gs_cmd_set_url(struct sourceinfo *si, int parc, char *parv[])

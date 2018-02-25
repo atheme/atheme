@@ -10,8 +10,8 @@
 
 static void os_cmd_identify(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command os_identify = { "IDENTIFY", N_("Authenticate for services operator privileges."), AC_AUTHENTICATED, 1, os_cmd_identify, { .path = "oservice/identify" } };
-struct command os_id = { "ID", N_("Alias for IDENTIFY"), AC_AUTHENTICATED, 1, os_cmd_identify, { .path = "oservice/identify" } };
+static struct command os_identify = { "IDENTIFY", N_("Authenticate for services operator privileges."), AC_AUTHENTICATED, 1, os_cmd_identify, { .path = "oservice/identify" } };
+static struct command os_id = { "ID", N_("Alias for IDENTIFY"), AC_AUTHENTICATED, 1, os_cmd_identify, { .path = "oservice/identify" } };
 
 static void
 mod_init(struct module *const restrict m)

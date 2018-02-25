@@ -10,7 +10,7 @@
 
 static void ns_cmd_listchans(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command ns_listchans = { "LISTCHANS", N_("Lists channels that you have access to."), AC_NONE, 1, ns_cmd_listchans, { .path = "nickserv/listchans" } };
+static struct command ns_listchans = { "LISTCHANS", N_("Lists channels that you have access to."), AC_NONE, 1, ns_cmd_listchans, { .path = "nickserv/listchans" } };
 
 static void
 mod_init(struct module *const restrict m)

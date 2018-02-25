@@ -9,7 +9,7 @@
 
 static void ms_cmd_sendall(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command ms_sendall = { "SENDALL", N_("Sends a memo to all accounts."),
+static struct command ms_sendall = { "SENDALL", N_("Sends a memo to all accounts."),
                          PRIV_ADMIN, 1, ms_cmd_sendall, { .path = "memoserv/sendall" } };
 static unsigned int *maxmemos;
 

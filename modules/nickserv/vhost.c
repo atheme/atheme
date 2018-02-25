@@ -11,8 +11,8 @@ static void vhost_on_identify(struct user *u);
 static void ns_cmd_vhost(struct sourceinfo *si, int parc, char *parv[]);
 static void ns_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command ns_vhost = { "VHOST", N_("Manages user virtualhosts."), PRIV_USER_VHOST, 4, ns_cmd_vhost, { .path = "nickserv/vhost" } };
-struct command ns_listvhost = { "LISTVHOST", N_("Lists user virtualhosts."), PRIV_USER_AUSPEX, 1, ns_cmd_listvhost, { .path = "nickserv/listvhost" } };
+static struct command ns_vhost = { "VHOST", N_("Manages user virtualhosts."), PRIV_USER_VHOST, 4, ns_cmd_vhost, { .path = "nickserv/vhost" } };
+static struct command ns_listvhost = { "LISTVHOST", N_("Lists user virtualhosts."), PRIV_USER_AUSPEX, 1, ns_cmd_listvhost, { .path = "nickserv/listvhost" } };
 
 static void
 mod_init(struct module *const restrict m)

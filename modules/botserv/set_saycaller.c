@@ -12,7 +12,7 @@ mowgli_patricia_t **bs_set_cmdtree;
 
 static void bs_cmd_set_saycaller(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command bs_set_saycaller = { "SAYCALLER", N_("Enable Caller-ID on BotServ actions or messages."), AC_AUTHENTICATED, 2, bs_cmd_set_saycaller, { .path = "botserv/set_saycaller" } };
+static struct command bs_set_saycaller = { "SAYCALLER", N_("Enable Caller-ID on BotServ actions or messages."), AC_AUTHENTICATED, 2, bs_cmd_set_saycaller, { .path = "botserv/set_saycaller" } };
 
 static void
 mod_init(struct module *const restrict m)

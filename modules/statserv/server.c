@@ -12,16 +12,16 @@ static void ss_cmd_server_info(struct sourceinfo * si, int parc, char *parv[]);
 static void ss_cmd_server_list(struct sourceinfo * si, int parc, char *parv[]);
 static void ss_cmd_server_count(struct sourceinfo * si, int parc, char *parv[]);
 
-struct command ss_server =
+static struct command ss_server =
 { "SERVER", N_("Obtain information about servers on the network."), AC_NONE, 3, ss_cmd_server, {.path = "statserv/server"} };
 
-struct command ss_server_list =
+static struct command ss_server_list =
 { "LIST", N_("Obtain a list of servers."), AC_NONE, 1, ss_cmd_server_list, {.path = ""} };
 
-struct command ss_server_count =
+static struct command ss_server_count =
 { "COUNT", N_("Count the amount of servers connected to the network."), AC_NONE, 1, ss_cmd_server_count, {.path = ""} };
 
-struct command ss_server_info =
+static struct command ss_server_info =
 { "INFO", N_("Obtain information about a specified server."), AC_NONE, 2, ss_cmd_server_info, {.path = ""} };
 
 mowgli_patricia_t *ss_server_cmds;

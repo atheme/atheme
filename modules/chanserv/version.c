@@ -3,7 +3,7 @@
 
 static void cs_cmd_version(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_version = { "VERSION", N_("Displays version information of the services."),
+static struct command cs_version = { "VERSION", N_("Displays version information of the services."),
                         AC_NONE, 0, cs_cmd_version, { .path = "" } };
 
 static void

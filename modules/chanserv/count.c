@@ -10,7 +10,7 @@
 
 static void cs_cmd_count(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_count = { "COUNT", N_("Shows number of entries in access lists."),
+static struct command cs_count = { "COUNT", N_("Shows number of entries in access lists."),
                          AC_NONE, 1, cs_cmd_count, { .path = "cservice/count" } };
 
 static void

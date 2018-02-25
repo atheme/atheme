@@ -15,8 +15,8 @@
 static void command_dice(struct sourceinfo *si, int parc, char *parv[]);
 static void command_calc(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cmd_dice = { "ROLL", N_("Rolls one or more dice."), AC_NONE, 3, command_dice, {.path = "gameserv/roll"} };
-struct command cmd_calc = { "CALC", N_("Calculate stuff."), AC_NONE, 3, command_calc, {.path = "gameserv/calc"} };
+static struct command cmd_dice = { "ROLL", N_("Rolls one or more dice."), AC_NONE, 3, command_dice, {.path = "gameserv/roll"} };
+static struct command cmd_calc = { "CALC", N_("Calculate stuff."), AC_NONE, 3, command_calc, {.path = "gameserv/calc"} };
 
 static unsigned int max_rolls = 10;
 

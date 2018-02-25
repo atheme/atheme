@@ -10,7 +10,7 @@
 static void cs_cmd_close(struct sourceinfo *si, int parc, char *parv[]);
 
 /* CLOSE ON|OFF -- don't pollute the root with REOPEN */
-struct command cs_close = { "CLOSE", N_("Closes a channel."),
+static struct command cs_close = { "CLOSE", N_("Closes a channel."),
 			PRIV_CHAN_ADMIN, 3, cs_cmd_close , { .path = "cservice/close" }};
 
 static void close_check_join(hook_channel_joinpart_t *data);

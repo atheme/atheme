@@ -10,7 +10,7 @@
 
 static void gs_cmd_join(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command gs_join = { "JOIN", N_("Join a open group."), AC_AUTHENTICATED, 2, gs_cmd_join, { .path = "groupserv/join" } };
+static struct command gs_join = { "JOIN", N_("Join a open group."), AC_AUTHENTICATED, 2, gs_cmd_join, { .path = "groupserv/join" } };
 
 static void
 gs_cmd_join(struct sourceinfo *si, int parc, char *parv[])

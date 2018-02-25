@@ -63,7 +63,7 @@ ns_cmd_set_private(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-struct command ns_set_private = { "PRIVATE", N_("Hides information about you from other users."), AC_NONE, 1, ns_cmd_set_private, { .path = "nickserv/set_private" } };
+static struct command ns_set_private = { "PRIVATE", N_("Hides information about you from other users."), AC_NONE, 1, ns_cmd_set_private, { .path = "nickserv/set_private" } };
 
 static bool
 has_private(const struct mynick *mn, const void *arg)

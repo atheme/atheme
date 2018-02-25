@@ -9,7 +9,7 @@
 
 static void cs_cmd_sync(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_sync = { "SYNC", "Forces channel statuses to flags.",
+static struct command cs_sync = { "SYNC", "Forces channel statuses to flags.",
                         AC_NONE, 1, cs_cmd_sync, { .path = "cservice/sync" } };
 
 static bool no_vhost_sync = false;
@@ -341,7 +341,7 @@ cs_cmd_sync(struct sourceinfo *si, int parc, char *parv[])
 
 static void cs_cmd_set_nosync(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_set_nosync = { "NOSYNC", N_("Disables automatic channel ACL syncing."), AC_NONE, 2, cs_cmd_set_nosync, { .path = "cservice/set_nosync" } };
+static struct command cs_set_nosync = { "NOSYNC", N_("Disables automatic channel ACL syncing."), AC_NONE, 2, cs_cmd_set_nosync, { .path = "cservice/set_nosync" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
 

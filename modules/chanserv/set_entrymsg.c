@@ -10,7 +10,7 @@
 
 static void cs_cmd_set_entrymsg(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_set_entrymsg = { "ENTRYMSG", N_("Sets the channel's entry message."), AC_NONE, 2, cs_cmd_set_entrymsg, { .path = "cservice/set_entrymsg" } };
+static struct command cs_set_entrymsg = { "ENTRYMSG", N_("Sets the channel's entry message."), AC_NONE, 2, cs_cmd_set_entrymsg, { .path = "cservice/set_entrymsg" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
 

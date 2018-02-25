@@ -9,7 +9,7 @@
 
 static void os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command os_greplog = { "GREPLOG", N_("Searches through the logs."), PRIV_CHAN_AUSPEX, 3, os_cmd_greplog, { .path = "oservice/greplog" } };
+static struct command os_greplog = { "GREPLOG", N_("Searches through the logs."), PRIV_CHAN_AUSPEX, 3, os_cmd_greplog, { .path = "oservice/greplog" } };
 
 static void
 mod_init(struct module *const restrict m)

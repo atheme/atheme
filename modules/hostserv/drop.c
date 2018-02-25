@@ -11,7 +11,7 @@
 
 static void hs_cmd_drop(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command hs_drop = { "DROP", N_("Drops your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_drop, { .path = "hostserv/drop" } };
+static struct command hs_drop = { "DROP", N_("Drops your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_drop, { .path = "hostserv/drop" } };
 
 static void
 mod_init(struct module *const restrict m)

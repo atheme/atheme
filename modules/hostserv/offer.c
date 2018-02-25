@@ -20,10 +20,10 @@ static void db_h_ho(struct database_handle *db, const char *type);
 
 static void remove_group_offered_hosts(struct mygroup *mg);
 
-struct command hs_offer = { "OFFER", N_("Sets vhosts available for users to take."), PRIV_USER_VHOST, 2, hs_cmd_offer, { .path = "hostserv/offer" } };
-struct command hs_unoffer = { "UNOFFER", N_("Removes a vhost from the list that users can take."), PRIV_USER_VHOST, 2, hs_cmd_unoffer, { .path = "hostserv/unoffer" } };
-struct command hs_offerlist = { "OFFERLIST", N_("Lists all available vhosts."), AC_NONE, 1, hs_cmd_offerlist, { .path = "hostserv/offerlist" } };
-struct command hs_take = { "TAKE", N_("Take an offered vhost for use."), AC_AUTHENTICATED, 2, hs_cmd_take, { .path = "hostserv/take" } };
+static struct command hs_offer = { "OFFER", N_("Sets vhosts available for users to take."), PRIV_USER_VHOST, 2, hs_cmd_offer, { .path = "hostserv/offer" } };
+static struct command hs_unoffer = { "UNOFFER", N_("Removes a vhost from the list that users can take."), PRIV_USER_VHOST, 2, hs_cmd_unoffer, { .path = "hostserv/unoffer" } };
+static struct command hs_offerlist = { "OFFERLIST", N_("Lists all available vhosts."), AC_NONE, 1, hs_cmd_offerlist, { .path = "hostserv/offerlist" } };
+static struct command hs_take = { "TAKE", N_("Take an offered vhost for use."), AC_AUTHENTICATED, 2, hs_cmd_take, { .path = "hostserv/take" } };
 
 struct hsoffered
 {

@@ -10,9 +10,9 @@
 static void cs_cmd_kick(struct sourceinfo *si, int parc, char *parv[]);
 static void cs_cmd_kickban(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_kick = { "KICK", N_("Removes a user from a channel."),
+static struct command cs_kick = { "KICK", N_("Removes a user from a channel."),
                         AC_NONE, 3, cs_cmd_kick, { .path = "cservice/kick" } };
-struct command cs_kickban = { "KICKBAN", N_("Removes and bans a user from a channel."),
+static struct command cs_kickban = { "KICKBAN", N_("Removes and bans a user from a channel."),
 			AC_NONE, 3, cs_cmd_kickban, { .path = "cservice/kickban" } };
 
 static void

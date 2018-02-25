@@ -11,58 +11,58 @@
 static void cs_cmd_access(struct sourceinfo *si, int parc, char *parv[]);
 static void cs_help_access(struct sourceinfo *si, const char *subcmd);
 
-struct command cs_access = { "ACCESS", N_("Manage channel access."),
+static struct command cs_access = { "ACCESS", N_("Manage channel access."),
                         AC_NONE, 3, cs_cmd_access, { .func = cs_help_access } };
 
 static void cs_cmd_role(struct sourceinfo *si, int parc, char *parv[]);
 static void cs_help_role(struct sourceinfo *si, const char *subcmd);
 
-struct command cs_role =  { "ROLE", N_("Manage channel roles."),
+static struct command cs_role =  { "ROLE", N_("Manage channel roles."),
                         AC_NONE, 3, cs_cmd_role, { .func = cs_help_role } };
 
 static void cs_cmd_access_list(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_access_list = { "LIST", N_("List channel access entries."),
+static struct command cs_access_list = { "LIST", N_("List channel access entries."),
                              AC_NONE, 1, cs_cmd_access_list, { .path = "cservice/access_list" } };
 
 static void cs_cmd_access_info(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_access_info = { "INFO", N_("Display information on an access list entry."),
+static struct command cs_access_info = { "INFO", N_("Display information on an access list entry."),
                              AC_NONE, 2, cs_cmd_access_info, { .path = "cservice/access_info" } };
 
 static void cs_cmd_access_del(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_access_del =  { "DEL", N_("Delete an access list entry."),
+static struct command cs_access_del =  { "DEL", N_("Delete an access list entry."),
                              AC_NONE, 2, cs_cmd_access_del, { .path = "cservice/access_del" } };
 
 static void cs_cmd_access_add(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_access_add =  { "ADD", N_("Add an access list entry."),
+static struct command cs_access_add =  { "ADD", N_("Add an access list entry."),
                              AC_NONE, 3, cs_cmd_access_add, { .path = "cservice/access_add" } };
 
 static void cs_cmd_access_set(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_access_set =  { "SET", N_("Update an access list entry."),
+static struct command cs_access_set =  { "SET", N_("Update an access list entry."),
                              AC_NONE, 3, cs_cmd_access_set, { .path = "cservice/access_set" } };
 
 static void cs_cmd_role_list(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_role_list = { "LIST", N_("List available roles."),
+static struct command cs_role_list = { "LIST", N_("List available roles."),
                             AC_NONE, 1, cs_cmd_role_list, { .path = "cservice/role_list" } };
 
 static void cs_cmd_role_add(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_role_add =  { "ADD", N_("Add a role."),
+static struct command cs_role_add =  { "ADD", N_("Add a role."),
                             AC_NONE, 20, cs_cmd_role_add, { .path = "cservice/role_add" } };
 
 static void cs_cmd_role_set(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_role_set =  { "SET", N_("Change flags on a role."),
+static struct command cs_role_set =  { "SET", N_("Change flags on a role."),
                             AC_NONE, 20, cs_cmd_role_set, { .path = "cservice/role_set" } };
 
 static void cs_cmd_role_del(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_role_del =  { "DEL", N_("Delete a role."),
+static struct command cs_role_del =  { "DEL", N_("Delete a role."),
                             AC_NONE, 2, cs_cmd_role_del, { .path = "cservice/role_del" } };
 
 mowgli_patricia_t *cs_access_cmds;

@@ -19,9 +19,9 @@
 static void ns_cmd_login(struct sourceinfo *si, int parc, char *parv[]);
 
 #ifdef NICKSERV_LOGIN
-struct command ns_login = { "LOGIN", N_("Authenticates to a services account."), AC_NONE, 2, ns_cmd_login, { .path = "nickserv/login" } };
+static struct command ns_login = { "LOGIN", N_("Authenticates to a services account."), AC_NONE, 2, ns_cmd_login, { .path = "nickserv/login" } };
 #else
-struct command ns_identify = { "IDENTIFY", N_("Identifies to services for a nickname."), AC_NONE, 2, ns_cmd_login, { .path = "nickserv/identify" } };
+static struct command ns_identify = { "IDENTIFY", N_("Identifies to services for a nickname."), AC_NONE, 2, ns_cmd_login, { .path = "nickserv/identify" } };
 #endif
 
 static void

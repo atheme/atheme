@@ -12,7 +12,7 @@
 static void bs_help_set(struct sourceinfo *si, const char *subcmd);
 static void bs_cmd_set(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command bs_set = { "SET", N_("Configures bot options."), AC_NONE, 3, bs_cmd_set, { .func =  bs_help_set } };
+static struct command bs_set = { "SET", N_("Configures bot options."), AC_NONE, 3, bs_cmd_set, { .func =  bs_help_set } };
 
 mowgli_patricia_t *bs_set_cmdtree;
 

@@ -9,7 +9,7 @@
 
 static void ns_cmd_ghost(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command ns_ghost = { "GHOST", N_("Reclaims use of a nickname."), AC_NONE, 2, ns_cmd_ghost, { .path = "nickserv/ghost" } };
+static struct command ns_ghost = { "GHOST", N_("Reclaims use of a nickname."), AC_NONE, 2, ns_cmd_ghost, { .path = "nickserv/ghost" } };
 
 static void
 mod_init(struct module *const restrict m)

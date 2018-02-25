@@ -9,7 +9,7 @@
 
 static void cs_cmd_mark(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_mark = { "MARK", N_("Adds a note to a channel."),
+static struct command cs_mark = { "MARK", N_("Adds a note to a channel."),
 			PRIV_MARK, 3, cs_cmd_mark, { .path = "cservice/mark" } };
 
 static void

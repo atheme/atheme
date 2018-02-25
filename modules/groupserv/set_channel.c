@@ -10,7 +10,7 @@
 
 static void gs_cmd_set_channel(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command gs_set_channel = { "CHANNEL", N_("Sets the official group channel."), AC_AUTHENTICATED, 2, gs_cmd_set_channel, { .path = "groupserv/set_channel" } };
+static struct command gs_set_channel = { "CHANNEL", N_("Sets the official group channel."), AC_AUTHENTICATED, 2, gs_cmd_set_channel, { .path = "groupserv/set_channel" } };
 
 static void
 gs_cmd_set_channel(struct sourceinfo *si, int parc, char *parv[])

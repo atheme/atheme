@@ -13,11 +13,11 @@ static void ms_cmd_ignore_del(struct sourceinfo *si, int parc, char *parv[]);
 static void ms_cmd_ignore_clear(struct sourceinfo *si, int parc, char *parv[]);
 static void ms_cmd_ignore_list(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command ms_ignore = { "IGNORE", N_(N_("Ignores memos.")), AC_AUTHENTICATED, 2, ms_cmd_ignore, { .path = "memoserv/ignore" } };
-struct command ms_ignore_add = { "ADD", N_(N_("Ignores memos from a user.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_add, { .path = "" } };
-struct command ms_ignore_del = { "DEL", N_(N_("Stops ignoring memos from a user.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_del, { .path = "" } };
-struct command ms_ignore_clear = { "CLEAR", N_(N_("Clears your memo ignore list.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_clear, { .path = "" } };
-struct command ms_ignore_list = { "LIST", N_(N_("Shows all users you are ignoring memos from.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_list, { .path = "" } };
+static struct command ms_ignore = { "IGNORE", N_(N_("Ignores memos.")), AC_AUTHENTICATED, 2, ms_cmd_ignore, { .path = "memoserv/ignore" } };
+static struct command ms_ignore_add = { "ADD", N_(N_("Ignores memos from a user.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_add, { .path = "" } };
+static struct command ms_ignore_del = { "DEL", N_(N_("Stops ignoring memos from a user.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_del, { .path = "" } };
+static struct command ms_ignore_clear = { "CLEAR", N_(N_("Clears your memo ignore list.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_clear, { .path = "" } };
+static struct command ms_ignore_list = { "LIST", N_(N_("Shows all users you are ignoring memos from.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_list, { .path = "" } };
 
 mowgli_patricia_t *ms_ignore_cmds;
 

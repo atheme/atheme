@@ -10,7 +10,7 @@
 static void cs_help_set(struct sourceinfo *si, const char *subcmd);
 static void cs_cmd_set(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_set = { "SET", N_("Sets various control flags."), AC_NONE, 3, cs_cmd_set, { .func = cs_help_set } };
+static struct command cs_set = { "SET", N_("Sets various control flags."), AC_NONE, 3, cs_cmd_set, { .func = cs_help_set } };
 
 mowgli_patricia_t *cs_set_cmdtree;
 

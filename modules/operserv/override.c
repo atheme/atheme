@@ -9,7 +9,7 @@
 
 static void os_cmd_override(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command os_override = { "OVERRIDE", N_("Perform a transaction on another user's account"), PRIV_OVERRIDE, 4, os_cmd_override, { .path = "oservice/override" } };
+static struct command os_override = { "OVERRIDE", N_("Perform a transaction on another user's account"), PRIV_OVERRIDE, 4, os_cmd_override, { .path = "oservice/override" } };
 
 static void
 mod_init(struct module *const restrict m)

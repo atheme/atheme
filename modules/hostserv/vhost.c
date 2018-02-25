@@ -11,8 +11,8 @@
 static void hs_cmd_vhost(struct sourceinfo *si, int parc, char *parv[]);
 static void hs_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command hs_vhost = { "VHOST", N_("Manages per-account virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhost, { .path = "hostserv/vhost" } };
-struct command hs_listvhost = { "LISTVHOST", N_("Lists user virtual hosts."), PRIV_USER_AUSPEX, 1, hs_cmd_listvhost, { .path = "hostserv/listvhost" } };
+static struct command hs_vhost = { "VHOST", N_("Manages per-account virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhost, { .path = "hostserv/vhost" } };
+static struct command hs_listvhost = { "LISTVHOST", N_("Lists user virtual hosts."), PRIV_USER_AUSPEX, 1, hs_cmd_listvhost, { .path = "hostserv/listvhost" } };
 
 static void
 mod_init(struct module *const restrict m)

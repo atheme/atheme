@@ -12,7 +12,7 @@ time_t ratelimit_firsttime = 0;
 
 static void ns_cmd_register(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command ns_register = { "REGISTER", N_("Registers a nickname."), AC_NONE, 3, ns_cmd_register, { .path = "nickserv/register" } };
+static struct command ns_register = { "REGISTER", N_("Registers a nickname."), AC_NONE, 3, ns_cmd_register, { .path = "nickserv/register" } };
 
 static void
 mod_init(struct module *const restrict m)

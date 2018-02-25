@@ -10,7 +10,7 @@
 
 static void cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_set_founder = { "FOUNDER", N_("Transfers foundership of a channel."), AC_NONE, 2, cs_cmd_set_founder, { .path = "cservice/set_founder" } };
+static struct command cs_set_founder = { "FOUNDER", N_("Transfers foundership of a channel."), AC_NONE, 2, cs_cmd_set_founder, { .path = "cservice/set_founder" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
 

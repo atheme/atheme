@@ -19,12 +19,12 @@ static void os_cmd_sqline_list(struct sourceinfo *si, int parc, char *parv[]);
 static void os_cmd_sqline_sync(struct sourceinfo *si, int parc, char *parv[]);
 
 
-struct command os_sqline = { "SQLINE", N_("Manages network name bans."), PRIV_MASS_AKILL, 3, os_cmd_sqline, { .path = "oservice/sqline" } };
+static struct command os_sqline = { "SQLINE", N_("Manages network name bans."), PRIV_MASS_AKILL, 3, os_cmd_sqline, { .path = "oservice/sqline" } };
 
-struct command os_sqline_add = { "ADD", N_("Adds a network name ban"), AC_NONE, 2, os_cmd_sqline_add, { .path = "" } };
-struct command os_sqline_del = { "DEL", N_("Deletes a network name ban"), AC_NONE, 1, os_cmd_sqline_del, { .path = "" } };
-struct command os_sqline_list = { "LIST", N_("Lists all network name bans"), AC_NONE, 1, os_cmd_sqline_list, { .path = "" } };
-struct command os_sqline_sync = { "SYNC", N_("Synchronises network name bans to servers"), AC_NONE, 0, os_cmd_sqline_sync, { .path = "" } };
+static struct command os_sqline_add = { "ADD", N_("Adds a network name ban"), AC_NONE, 2, os_cmd_sqline_add, { .path = "" } };
+static struct command os_sqline_del = { "DEL", N_("Deletes a network name ban"), AC_NONE, 1, os_cmd_sqline_del, { .path = "" } };
+static struct command os_sqline_list = { "LIST", N_("Lists all network name bans"), AC_NONE, 1, os_cmd_sqline_list, { .path = "" } };
+static struct command os_sqline_sync = { "SYNC", N_("Synchronises network name bans to servers"), AC_NONE, 0, os_cmd_sqline_sync, { .path = "" } };
 
 mowgli_patricia_t *os_sqline_cmds;
 

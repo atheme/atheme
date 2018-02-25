@@ -9,7 +9,7 @@
 
 static void ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command ms_forward = { "FORWARD", N_(N_("Forwards a memo.")),
+static struct command ms_forward = { "FORWARD", N_(N_("Forwards a memo.")),
                         AC_AUTHENTICATED, 2, ms_cmd_forward, { .path = "memoserv/forward" } };
 
 static void

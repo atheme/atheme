@@ -11,9 +11,9 @@
 static void cs_cmd_quiet(struct sourceinfo *si, int parc, char *parv[]);
 static void cs_cmd_unquiet(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_quiet = { "QUIET", N_("Sets a quiet on a channel."),
+static struct command cs_quiet = { "QUIET", N_("Sets a quiet on a channel."),
                         AC_AUTHENTICATED, 2, cs_cmd_quiet, { .path = "cservice/quiet" } };
-struct command cs_unquiet = { "UNQUIET", N_("Removes a quiet on a channel."),
+static struct command cs_unquiet = { "UNQUIET", N_("Removes a quiet on a channel."),
 			AC_AUTHENTICATED, 2, cs_cmd_unquiet, { .path = "cservice/unquiet" } };
 
 static void

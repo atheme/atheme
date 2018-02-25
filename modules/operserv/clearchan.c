@@ -15,7 +15,7 @@
 
 static void os_cmd_clearchan(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command os_clearchan = { "CLEARCHAN", N_("Clears a channel via KICK, KILL or AKILL"), PRIV_CHAN_ADMIN, 3, os_cmd_clearchan, { .path = "oservice/clearchan" } };
+static struct command os_clearchan = { "CLEARCHAN", N_("Clears a channel via KICK, KILL or AKILL"), PRIV_CHAN_ADMIN, 3, os_cmd_clearchan, { .path = "oservice/clearchan" } };
 
 static void
 mod_init(struct module *const restrict m)

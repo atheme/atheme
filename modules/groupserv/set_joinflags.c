@@ -10,7 +10,7 @@
 
 static void gs_cmd_set_joinflags(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command gs_set_joinflags = { "JOINFLAGS", N_("Sets the flags users will be given when they JOIN the group."), AC_AUTHENTICATED, 2, gs_cmd_set_joinflags, { .path = "groupserv/set_joinflags" } };
+static struct command gs_set_joinflags = { "JOINFLAGS", N_("Sets the flags users will be given when they JOIN the group."), AC_AUTHENTICATED, 2, gs_cmd_set_joinflags, { .path = "groupserv/set_joinflags" } };
 
 static void
 gs_cmd_set_joinflags(struct sourceinfo *si, int parc, char *parv[])

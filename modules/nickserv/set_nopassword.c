@@ -16,7 +16,7 @@ mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_nopassword(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command ns_set_nopassword = { "NOPASSWORD", N_("Allows you to disable any password-based authentication methods except for XMLRPC/JSONRPC."), AC_NONE, 1, ns_cmd_set_nopassword, { .path = "nickserv/set_nopassword" } };
+static struct command ns_set_nopassword = { "NOPASSWORD", N_("Allows you to disable any password-based authentication methods except for XMLRPC/JSONRPC."), AC_NONE, 1, ns_cmd_set_nopassword, { .path = "nickserv/set_nopassword" } };
 
 static bool
 has_nopassword(const struct mynick *mn, const void *arg)

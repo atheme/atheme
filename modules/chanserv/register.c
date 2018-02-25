@@ -13,7 +13,7 @@ time_t ratelimit_firsttime = 0;
 
 static void cs_cmd_register(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_register = { "REGISTER", N_("Registers a channel."),
+static struct command cs_register = { "REGISTER", N_("Registers a channel."),
                            AC_AUTHENTICATED, 3, cs_cmd_register, { .path = "cservice/register" } };
 
 static void

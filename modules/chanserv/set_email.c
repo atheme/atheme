@@ -10,7 +10,7 @@
 
 static void cs_cmd_set_email(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_set_email = { "EMAIL", N_("Sets the channel e-mail address."), AC_NONE, 2, cs_cmd_set_email, { .path = "cservice/set_email" } };
+static struct command cs_set_email = { "EMAIL", N_("Sets the channel e-mail address."), AC_NONE, 2, cs_cmd_set_email, { .path = "cservice/set_email" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
 

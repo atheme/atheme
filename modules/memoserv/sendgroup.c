@@ -10,7 +10,7 @@
 
 static void ms_cmd_sendgroup(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command ms_sendgroup = { "SENDGROUP", N_("Sends a memo to all members on a group."),
+static struct command ms_sendgroup = { "SENDGROUP", N_("Sends a memo to all members on a group."),
                            AC_AUTHENTICATED, 2, ms_cmd_sendgroup, { .path = "memoserv/sendgroup" } };
 static unsigned int *maxmemos;
 

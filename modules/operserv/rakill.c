@@ -14,7 +14,7 @@
 
 static void os_cmd_rakill(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command os_rakill = { "RAKILL", N_("Sets a group of AKILLs against users matching a specific regex pattern."), PRIV_MASS_AKILL, 1, os_cmd_rakill, { .path = "oservice/rakill" } };
+static struct command os_rakill = { "RAKILL", N_("Sets a group of AKILLs against users matching a specific regex pattern."), PRIV_MASS_AKILL, 1, os_cmd_rakill, { .path = "oservice/rakill" } };
 
 static void
 mod_init(struct module *const restrict m)

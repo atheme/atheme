@@ -11,7 +11,7 @@
 
 static void ms_cmd_read(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command ms_read = { "READ", N_("Reads a memo."),
+static struct command ms_read = { "READ", N_("Reads a memo."),
                         AC_AUTHENTICATED, 2, ms_cmd_read, { .path = "memoserv/read" } };
 
 static void

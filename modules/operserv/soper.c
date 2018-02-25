@@ -14,13 +14,13 @@ static void os_cmd_soper_add(struct sourceinfo *si, int parc, char *parv[]);
 static void os_cmd_soper_del(struct sourceinfo *si, int parc, char *parv[]);
 static void os_cmd_soper_setpass(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command os_soper = { "SOPER", N_("Shows and changes services operator privileges."), AC_NONE, 4, os_cmd_soper, { .path = "oservice/soper" } };
+static struct command os_soper = { "SOPER", N_("Shows and changes services operator privileges."), AC_NONE, 4, os_cmd_soper, { .path = "oservice/soper" } };
 
-struct command os_soper_list = { "LIST", N_("Lists services operators."), PRIV_VIEWPRIVS, 0, os_cmd_soper_list, { .path = "" } };
-struct command os_soper_listclass = { "LISTCLASS", N_("Lists operclasses."), PRIV_VIEWPRIVS, 0, os_cmd_soper_listclass, { .path = "" } };
-struct command os_soper_add = { "ADD", N_("Grants services operator privileges to an account."), PRIV_GRANT, 3, os_cmd_soper_add, { .path = "" } };
-struct command os_soper_del = { "DEL", N_("Removes services operator privileges from an account."), PRIV_GRANT, 1, os_cmd_soper_del, { .path = "" } };
-struct command os_soper_setpass = { "SETPASS", N_("Changes a password for services operator privileges."), PRIV_GRANT, 2, os_cmd_soper_setpass, { .path = "" } };
+static struct command os_soper_list = { "LIST", N_("Lists services operators."), PRIV_VIEWPRIVS, 0, os_cmd_soper_list, { .path = "" } };
+static struct command os_soper_listclass = { "LISTCLASS", N_("Lists operclasses."), PRIV_VIEWPRIVS, 0, os_cmd_soper_listclass, { .path = "" } };
+static struct command os_soper_add = { "ADD", N_("Grants services operator privileges to an account."), PRIV_GRANT, 3, os_cmd_soper_add, { .path = "" } };
+static struct command os_soper_del = { "DEL", N_("Removes services operator privileges from an account."), PRIV_GRANT, 1, os_cmd_soper_del, { .path = "" } };
+static struct command os_soper_setpass = { "SETPASS", N_("Changes a password for services operator privileges."), PRIV_GRANT, 2, os_cmd_soper_setpass, { .path = "" } };
 
 mowgli_patricia_t *os_soper_cmds;
 

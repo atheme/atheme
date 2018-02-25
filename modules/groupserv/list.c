@@ -10,7 +10,7 @@
 
 static void gs_cmd_list(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command gs_list = { "LIST", N_("List registered groups."), PRIV_GROUP_AUSPEX, 1, gs_cmd_list, { .path = "groupserv/list" } };
+static struct command gs_list = { "LIST", N_("List registered groups."), PRIV_GROUP_AUSPEX, 1, gs_cmd_list, { .path = "groupserv/list" } };
 
 /* Perhaps add criteria to groupser/list like there is now in chanserv/list and nickserv/list in the future */
 static void

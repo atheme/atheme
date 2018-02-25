@@ -9,7 +9,7 @@
 
 static void ms_cmd_sendops(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command ms_sendops = { "SENDOPS", N_("Sends a memo to all ops on a channel."),
+static struct command ms_sendops = { "SENDOPS", N_("Sends a memo to all ops on a channel."),
                           AC_AUTHENTICATED, 2, ms_cmd_sendops, { .path = "memoserv/sendops" } };
 static unsigned int *maxmemos;
 

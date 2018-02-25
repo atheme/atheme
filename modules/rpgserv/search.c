@@ -6,7 +6,7 @@
 
 static void rs_cmd_search(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command rs_search = { "SEARCH", N_("Search for games based on specific criteria."),
+static struct command rs_search = { "SEARCH", N_("Search for games based on specific criteria."),
                       AC_NONE, 20, rs_cmd_search, { .path = "rpgserv/search" } };
 
 static void

@@ -10,7 +10,7 @@
 
 static void cs_cmd_list(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_list = { "LIST", N_("Lists channels registered matching a given pattern."), PRIV_CHAN_AUSPEX, 10, cs_cmd_list, { .path = "cservice/list" } };
+static struct command cs_list = { "LIST", N_("Lists channels registered matching a given pattern."), PRIV_CHAN_AUSPEX, 10, cs_cmd_list, { .path = "cservice/list" } };
 
 static void
 mod_init(struct module *const restrict m)

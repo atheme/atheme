@@ -9,7 +9,7 @@
 
 static void cs_cmd_ftransfer(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_ftransfer = { "FTRANSFER", N_("Forces foundership transfer of a channel."),
+static struct command cs_ftransfer = { "FTRANSFER", N_("Forces foundership transfer of a channel."),
                            PRIV_CHAN_ADMIN, 2, cs_cmd_ftransfer, { .path = "cservice/ftransfer" } };
 
 static void

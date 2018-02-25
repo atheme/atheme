@@ -14,7 +14,7 @@
 
 static void gs_cmd_invite(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command gs_invite = { "INVITE", N_("Invites a user to a group."), AC_AUTHENTICATED, 2, gs_cmd_invite, { .path = "groupserv/invite" } };
+static struct command gs_invite = { "INVITE", N_("Invites a user to a group."), AC_AUTHENTICATED, 2, gs_cmd_invite, { .path = "groupserv/invite" } };
 
 static void
 gs_cmd_invite(struct sourceinfo *si, int parc, char *parv[])

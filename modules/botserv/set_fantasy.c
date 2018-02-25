@@ -15,7 +15,7 @@ static void bs_set_fantasy_config_ready(void *unused);
 
 static void bs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command bs_set_fantasy = { "FANTASY", N_("Enable fantasy commands."), AC_AUTHENTICATED, 2, bs_cmd_set_fantasy, { .path = "botserv/set_fantasy" } };
+static struct command bs_set_fantasy = { "FANTASY", N_("Enable fantasy commands."), AC_AUTHENTICATED, 2, bs_cmd_set_fantasy, { .path = "botserv/set_fantasy" } };
 
 static void
 mod_init(struct module *const restrict m)

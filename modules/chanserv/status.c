@@ -9,7 +9,7 @@
 
 static void cs_cmd_status(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_status = { "STATUS", N_("Displays your status in services."),
+static struct command cs_status = { "STATUS", N_("Displays your status in services."),
                          AC_NONE, 1, cs_cmd_status, { .path = "cservice/status" } };
 
 static void

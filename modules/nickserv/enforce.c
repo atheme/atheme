@@ -38,9 +38,9 @@ static void show_enforce(hook_user_req_t *hdata);
 static void check_registration(hook_user_register_check_t *hdata);
 static void check_enforce(hook_nick_enforce_t *hdata);
 
-struct command ns_set_enforce = { "ENFORCE", N_("Enables or disables automatic protection of a nickname."), AC_NONE, 1, ns_cmd_set_enforce, { .path = "nickserv/set_enforce" } };
-struct command ns_release = { "RELEASE", N_("Releases a services enforcer."), AC_NONE, 2, ns_cmd_release, { .path = "nickserv/release" } };
-struct command ns_regain = { "REGAIN", N_("Regain usage of a nickname."), AC_NONE, 2, ns_cmd_regain, { .path = "nickserv/regain" } };
+static struct command ns_set_enforce = { "ENFORCE", N_("Enables or disables automatic protection of a nickname."), AC_NONE, 1, ns_cmd_set_enforce, { .path = "nickserv/set_enforce" } };
+static struct command ns_release = { "RELEASE", N_("Releases a services enforcer."), AC_NONE, 2, ns_cmd_release, { .path = "nickserv/release" } };
+static struct command ns_regain = { "REGAIN", N_("Regain usage of a nickname."), AC_NONE, 2, ns_cmd_regain, { .path = "nickserv/regain" } };
 
 mowgli_patricia_t **ns_set_cmdtree;
 

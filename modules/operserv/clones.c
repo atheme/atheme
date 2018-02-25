@@ -71,15 +71,15 @@ cexempt_expired(struct clones_exemption *c)
 	return false;
 }
 
-struct command os_clones = { "CLONES", N_("Manages network wide clones."), PRIV_AKILL, 5, os_cmd_clones, { .path = "oservice/clones" } };
+static struct command os_clones = { "CLONES", N_("Manages network wide clones."), PRIV_AKILL, 5, os_cmd_clones, { .path = "oservice/clones" } };
 
-struct command os_clones_kline = { "KLINE", N_("Enables/disables klines for excessive clones."), AC_NONE, 1, os_cmd_clones_kline, { .path = "" } };
-struct command os_clones_list = { "LIST", N_("Lists clones on the network."), AC_NONE, 0, os_cmd_clones_list, { .path = "" } };
-struct command os_clones_addexempt = { "ADDEXEMPT", N_("Adds a clones exemption."), AC_NONE, 3, os_cmd_clones_addexempt, { .path = "" } };
-struct command os_clones_delexempt = { "DELEXEMPT", N_("Deletes a clones exemption."), AC_NONE, 1, os_cmd_clones_delexempt, { .path = "" } };
-struct command os_clones_setexempt = { "SETEXEMPT", N_("Sets a clone exemption details."), AC_NONE, 1, os_cmd_clones_setexempt, { .path = "" } };
-struct command os_clones_listexempt = { "LISTEXEMPT", N_("Lists clones exemptions."), AC_NONE, 0, os_cmd_clones_listexempt, { .path = "" } };
-struct command os_clones_duration = { "DURATION", N_("Sets a custom duration to ban clones for."), AC_NONE, 1, os_cmd_clones_duration, { .path = "" } };
+static struct command os_clones_kline = { "KLINE", N_("Enables/disables klines for excessive clones."), AC_NONE, 1, os_cmd_clones_kline, { .path = "" } };
+static struct command os_clones_list = { "LIST", N_("Lists clones on the network."), AC_NONE, 0, os_cmd_clones_list, { .path = "" } };
+static struct command os_clones_addexempt = { "ADDEXEMPT", N_("Adds a clones exemption."), AC_NONE, 3, os_cmd_clones_addexempt, { .path = "" } };
+static struct command os_clones_delexempt = { "DELEXEMPT", N_("Deletes a clones exemption."), AC_NONE, 1, os_cmd_clones_delexempt, { .path = "" } };
+static struct command os_clones_setexempt = { "SETEXEMPT", N_("Sets a clone exemption details."), AC_NONE, 1, os_cmd_clones_setexempt, { .path = "" } };
+static struct command os_clones_listexempt = { "LISTEXEMPT", N_("Lists clones exemptions."), AC_NONE, 0, os_cmd_clones_listexempt, { .path = "" } };
+static struct command os_clones_duration = { "DURATION", N_("Sets a custom duration to ban clones for."), AC_NONE, 1, os_cmd_clones_duration, { .path = "" } };
 
 static void
 clones_configready(void *unused)

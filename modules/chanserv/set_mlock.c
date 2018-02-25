@@ -10,7 +10,7 @@
 
 static void cs_cmd_set_mlock(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_set_mlock = { "MLOCK", N_("Sets channel mode lock."), AC_NONE, 2, cs_cmd_set_mlock, { .path = "cservice/set_mlock" } };
+static struct command cs_set_mlock = { "MLOCK", N_("Sets channel mode lock."), AC_NONE, 2, cs_cmd_set_mlock, { .path = "cservice/set_mlock" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
 

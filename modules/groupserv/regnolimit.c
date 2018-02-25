@@ -11,7 +11,7 @@
 
 static void gs_cmd_regnolimit(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command gs_regnolimit = { "REGNOLIMIT", N_("Allow a group to bypass registration limits."), PRIV_GROUP_ADMIN, 2, gs_cmd_regnolimit, { .path = "groupserv/regnolimit" } };
+static struct command gs_regnolimit = { "REGNOLIMIT", N_("Allow a group to bypass registration limits."), PRIV_GROUP_ADMIN, 2, gs_cmd_regnolimit, { .path = "groupserv/regnolimit" } };
 
 static void
 gs_cmd_regnolimit(struct sourceinfo *si, int parc, char *parv[])

@@ -9,7 +9,7 @@
 
 static void ns_cmd_info(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command ns_info = { "INFO", N_("Displays information on registrations."), AC_NONE, 2, ns_cmd_info, { .path = "nickserv/info" } };
+static struct command ns_info = { "INFO", N_("Displays information on registrations."), AC_NONE, 2, ns_cmd_info, { .path = "nickserv/info" } };
 
 static void
 mod_init(struct module *const restrict m)

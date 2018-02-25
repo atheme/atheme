@@ -14,7 +14,7 @@
 
 static void ns_cmd_mark(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command ns_mark = { "MARK", N_("Adds a note to a user."), PRIV_MARK, 3, ns_cmd_mark, { .path = "nickserv/mark" } };
+static struct command ns_mark = { "MARK", N_("Adds a note to a user."), PRIV_MARK, 3, ns_cmd_mark, { .path = "nickserv/mark" } };
 
 static bool
 mark_match(const struct mynick *mn, const void *arg)

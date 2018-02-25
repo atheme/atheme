@@ -11,7 +11,7 @@ struct service *statsvs;
 
 static void ss_cmd_help(struct sourceinfo * si, int parc, char *parv[]);
 
-struct command ss_help =
+static struct command ss_help =
 { "HELP", N_("Displays contextual help information."), AC_NONE, 2, ss_cmd_help, {.path = "help"}
 };
 

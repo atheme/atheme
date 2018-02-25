@@ -12,7 +12,7 @@ static void cs_set_guard_config_ready(void *unused);
 
 static void cs_cmd_set_guard(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_set_guard = { "GUARD", N_("Sets whether or not services will inhabit the channel."), AC_NONE, 2, cs_cmd_set_guard, { .path = "cservice/set_guard" } };
+static struct command cs_set_guard = { "GUARD", N_("Sets whether or not services will inhabit the channel."), AC_NONE, 2, cs_cmd_set_guard, { .path = "cservice/set_guard" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
 

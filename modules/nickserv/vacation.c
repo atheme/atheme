@@ -35,7 +35,7 @@ ns_cmd_vacation(struct sourceinfo *si, int parc, char *parv[])
 				(nicksvs.expiry / 3600 / 24) * 3);
 }
 
-struct command ns_vacation = { "VACATION", N_("Sets an account as being on vacation."), AC_AUTHENTICATED, 1, ns_cmd_vacation, { .path = "nickserv/vacation" } };
+static struct command ns_vacation = { "VACATION", N_("Sets an account as being on vacation."), AC_AUTHENTICATED, 1, ns_cmd_vacation, { .path = "nickserv/vacation" } };
 
 static void
 user_identify_hook(struct user *u)

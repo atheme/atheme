@@ -9,7 +9,7 @@
 
 static void os_cmd_modunload(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command os_modunload = { "MODUNLOAD", N_("Unloads a module."), PRIV_ADMIN, 20, os_cmd_modunload, { .path = "oservice/modunload" } };
+static struct command os_modunload = { "MODUNLOAD", N_("Unloads a module."), PRIV_ADMIN, 20, os_cmd_modunload, { .path = "oservice/modunload" } };
 
 static void
 mod_init(struct module *const restrict m)

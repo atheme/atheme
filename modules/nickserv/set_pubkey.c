@@ -14,7 +14,7 @@ mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_pubkey(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command ns_set_pubkey = { "PUBKEY", N_("Changes your ECDSA-NIST256p-CHALLENGE public key."), AC_NONE, 1, ns_cmd_set_pubkey, { .path = "nickserv/set_pubkey" } };
+static struct command ns_set_pubkey = { "PUBKEY", N_("Changes your ECDSA-NIST256p-CHALLENGE public key."), AC_NONE, 1, ns_cmd_set_pubkey, { .path = "nickserv/set_pubkey" } };
 
 static void
 mod_init(struct module *const restrict m)

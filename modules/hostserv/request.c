@@ -27,10 +27,10 @@ static void hs_cmd_activate(struct sourceinfo *si, int parc, char *parv[]);
 static void write_hsreqdb(struct database_handle *db);
 static void db_h_hr(struct database_handle *db, const char *type);
 
-struct command hs_request = { "REQUEST", N_("Requests new virtual hostname for current nick."), AC_AUTHENTICATED, 2, hs_cmd_request, { .path = "hostserv/request" } };
-struct command hs_waiting = { "WAITING", N_("Lists vhosts currently waiting for activation."), PRIV_USER_VHOST, 1, hs_cmd_waiting, { .path = "hostserv/waiting" } };
-struct command hs_reject = { "REJECT", N_("Reject the requested vhost for the given nick."), PRIV_USER_VHOST, 2, hs_cmd_reject, { .path = "hostserv/reject" } };
-struct command hs_activate = { "ACTIVATE", N_("Activate the requested vhost for a given nick."), PRIV_USER_VHOST, 2, hs_cmd_activate, { .path = "hostserv/activate" } };
+static struct command hs_request = { "REQUEST", N_("Requests new virtual hostname for current nick."), AC_AUTHENTICATED, 2, hs_cmd_request, { .path = "hostserv/request" } };
+static struct command hs_waiting = { "WAITING", N_("Lists vhosts currently waiting for activation."), PRIV_USER_VHOST, 1, hs_cmd_waiting, { .path = "hostserv/waiting" } };
+static struct command hs_reject = { "REJECT", N_("Reject the requested vhost for the given nick."), PRIV_USER_VHOST, 2, hs_cmd_reject, { .path = "hostserv/reject" } };
+static struct command hs_activate = { "ACTIVATE", N_("Activate the requested vhost for a given nick."), PRIV_USER_VHOST, 2, hs_cmd_activate, { .path = "hostserv/activate" } };
 
 struct hsrequest
 {

@@ -48,13 +48,13 @@ static void display_oper_info(struct user *u);
 static void write_infodb(struct database_handle *db);
 static void db_h_li(struct database_handle *db, const char *type);
 
-struct command is_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, is_cmd_help, { .path = "help" } };
-struct command is_post = { "POST", N_("Post news items for users to view."), PRIV_GLOBAL, 3, is_cmd_post, { .path = "infoserv/post" } };
-struct command is_del = { "DEL", N_("Delete news items."), PRIV_GLOBAL, 1, is_cmd_del, { .path = "infoserv/del" } };
-struct command is_odel = { "ODEL", N_("Delete oper news items."), PRIV_GLOBAL, 1, is_cmd_odel, { .path = "infoserv/odel" } };
-struct command is_list = { "LIST", N_("List previously posted news items."), AC_NONE, 1, is_cmd_list, { .path = "infoserv/list" } };
+static struct command is_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, is_cmd_help, { .path = "help" } };
+static struct command is_post = { "POST", N_("Post news items for users to view."), PRIV_GLOBAL, 3, is_cmd_post, { .path = "infoserv/post" } };
+static struct command is_del = { "DEL", N_("Delete news items."), PRIV_GLOBAL, 1, is_cmd_del, { .path = "infoserv/del" } };
+static struct command is_odel = { "ODEL", N_("Delete oper news items."), PRIV_GLOBAL, 1, is_cmd_odel, { .path = "infoserv/odel" } };
+static struct command is_list = { "LIST", N_("List previously posted news items."), AC_NONE, 1, is_cmd_list, { .path = "infoserv/list" } };
 /* Should prolly change the priv for this. What would be a better priv for it though? */
-struct command is_olist = { "OLIST", N_("List previously posted oper news items."), PRIV_GLOBAL, 1, is_cmd_olist, { .path = "infoserv/olist" } };
+static struct command is_olist = { "OLIST", N_("List previously posted oper news items."), PRIV_GLOBAL, 1, is_cmd_olist, { .path = "infoserv/olist" } };
 
 /* HELP <command> [params] */
 void

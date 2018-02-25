@@ -17,9 +17,9 @@ struct service *globsvs = NULL;
 static void gs_cmd_global(struct sourceinfo *si, const int parc, char *parv[]);
 static void gs_cmd_help(struct sourceinfo *si, const int parc, char *parv[]);
 
-struct command gs_help = { "HELP", N_("Displays contextual help information."),
+static struct command gs_help = { "HELP", N_("Displays contextual help information."),
 		      PRIV_GLOBAL, 1, gs_cmd_help, { .path = "help" } };
-struct command gs_global = { "GLOBAL", N_("Sends a global notice."),
+static struct command gs_global = { "GLOBAL", N_("Sends a global notice."),
 			PRIV_GLOBAL, 1, gs_cmd_global, { .path = "gservice/global" } };
 
 /* HELP <command> [params] */

@@ -9,7 +9,7 @@
 
 static void cs_cmd_recover(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_recover = { "RECOVER", N_("Regain control of your channel."),
+static struct command cs_recover = { "RECOVER", N_("Regain control of your channel."),
                         AC_NONE, 1, cs_cmd_recover, { .path = "cservice/recover" } };
 
 static void

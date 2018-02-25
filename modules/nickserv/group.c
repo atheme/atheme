@@ -11,9 +11,9 @@ static void ns_cmd_group(struct sourceinfo *si, int parc, char *parv[]);
 static void ns_cmd_ungroup(struct sourceinfo *si, int parc, char *parv[]);
 static void ns_cmd_fungroup(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command ns_group = { "GROUP", N_("Adds a nickname to your account."), AC_AUTHENTICATED, 0, ns_cmd_group, { .path = "nickserv/group" } };
-struct command ns_ungroup = { "UNGROUP", N_("Removes a nickname from your account."), AC_AUTHENTICATED, 1, ns_cmd_ungroup, { .path = "nickserv/ungroup" } };
-struct command ns_fungroup = { "FUNGROUP", N_("Forces removal of a nickname from an account."), PRIV_USER_ADMIN, 2, ns_cmd_fungroup, { .path = "nickserv/fungroup" } };
+static struct command ns_group = { "GROUP", N_("Adds a nickname to your account."), AC_AUTHENTICATED, 0, ns_cmd_group, { .path = "nickserv/group" } };
+static struct command ns_ungroup = { "UNGROUP", N_("Removes a nickname from your account."), AC_AUTHENTICATED, 1, ns_cmd_ungroup, { .path = "nickserv/ungroup" } };
+static struct command ns_fungroup = { "FUNGROUP", N_("Forces removal of a nickname from an account."), PRIV_USER_ADMIN, 2, ns_cmd_fungroup, { .path = "nickserv/fungroup" } };
 
 static void
 mod_init(struct module *const restrict m)

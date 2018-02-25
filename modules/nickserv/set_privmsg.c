@@ -62,7 +62,7 @@ ns_cmd_set_privmsg(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-struct command ns_set_privmsg = { "PRIVMSG", N_("Uses private messages instead of notices if enabled."), AC_NONE, 1, ns_cmd_set_privmsg, { .path = "nickserv/set_privmsg" } };
+static struct command ns_set_privmsg = { "PRIVMSG", N_("Uses private messages instead of notices if enabled."), AC_NONE, 1, ns_cmd_set_privmsg, { .path = "nickserv/set_privmsg" } };
 
 static bool
 uses_privmsg(const struct mynick *mn, const void *arg)

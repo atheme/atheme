@@ -17,12 +17,12 @@ static void os_cmd_sgline_del(struct sourceinfo *si, int parc, char *parv[]);
 static void os_cmd_sgline_list(struct sourceinfo *si, int parc, char *parv[]);
 static void os_cmd_sgline_sync(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command os_sgline = { "SGLINE", N_("Manages network realname bans."), PRIV_MASS_AKILL, 3, os_cmd_sgline, { .path = "oservice/sgline" } };
+static struct command os_sgline = { "SGLINE", N_("Manages network realname bans."), PRIV_MASS_AKILL, 3, os_cmd_sgline, { .path = "oservice/sgline" } };
 
-struct command os_sgline_add = { "ADD", N_("Adds a network realname ban"), AC_NONE, 2, os_cmd_sgline_add, { .path = "" } };
-struct command os_sgline_del = { "DEL", N_("Deletes a network realname ban"), AC_NONE, 1, os_cmd_sgline_del, { .path = "" } };
-struct command os_sgline_list = { "LIST", N_("Lists all network realname bans"), AC_NONE, 1, os_cmd_sgline_list, { .path = "" } };
-struct command os_sgline_sync = { "SYNC", N_("Synchronises network realname bans to servers"), AC_NONE, 0, os_cmd_sgline_sync, { .path = "" } };
+static struct command os_sgline_add = { "ADD", N_("Adds a network realname ban"), AC_NONE, 2, os_cmd_sgline_add, { .path = "" } };
+static struct command os_sgline_del = { "DEL", N_("Deletes a network realname ban"), AC_NONE, 1, os_cmd_sgline_del, { .path = "" } };
+static struct command os_sgline_list = { "LIST", N_("Lists all network realname bans"), AC_NONE, 1, os_cmd_sgline_list, { .path = "" } };
+static struct command os_sgline_sync = { "SYNC", N_("Synchronises network realname bans to servers"), AC_NONE, 0, os_cmd_sgline_sync, { .path = "" } };
 
 mowgli_patricia_t *os_sgline_cmds;
 

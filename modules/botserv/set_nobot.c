@@ -13,7 +13,7 @@ mowgli_patricia_t **bs_set_cmdtree;
 
 static void bs_cmd_set_nobot(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command bs_set_nobot = { "NOBOT", N_("Prevent a bot from being assigned to a channel."), PRIV_CHAN_ADMIN, 2, bs_cmd_set_nobot, { .path = "botserv/set_nobot" } };
+static struct command bs_set_nobot = { "NOBOT", N_("Prevent a bot from being assigned to a channel."), PRIV_CHAN_ADMIN, 2, bs_cmd_set_nobot, { .path = "botserv/set_nobot" } };
 
 static void
 mod_init(struct module *const restrict m)

@@ -20,15 +20,15 @@ static void cs_cmd_hop(struct sourceinfo *si, int parc, char *parv[]);
 static void cs_cmd_vop(struct sourceinfo *si, int parc, char *parv[]);
 static void cs_cmd_forcexop(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_sop = { "SOP", N_("Manipulates a channel SOP list."),
+static struct command cs_sop = { "SOP", N_("Manipulates a channel SOP list."),
                         AC_NONE, 3, cs_cmd_sop, { .path = "cservice/xop" } };
-struct command cs_aop = { "AOP", N_("Manipulates a channel AOP list."),
+static struct command cs_aop = { "AOP", N_("Manipulates a channel AOP list."),
                         AC_NONE, 3, cs_cmd_aop, { .path = "cservice/xop" } };
-struct command cs_hop = { "HOP", N_("Manipulates a channel HOP list."),
+static struct command cs_hop = { "HOP", N_("Manipulates a channel HOP list."),
 			AC_NONE, 3, cs_cmd_hop, { .path = "cservice/xop" } };
-struct command cs_vop = { "VOP", N_("Manipulates a channel VOP list."),
+static struct command cs_vop = { "VOP", N_("Manipulates a channel VOP list."),
                         AC_NONE, 3, cs_cmd_vop, { .path = "cservice/xop" } };
-struct command cs_forcexop = { "FORCEXOP", N_("Forces access levels to xOP levels."),
+static struct command cs_forcexop = { "FORCEXOP", N_("Forces access levels to xOP levels."),
                          AC_NONE, 1, cs_cmd_forcexop, { .path = "cservice/forcexop" } };
 
 static void

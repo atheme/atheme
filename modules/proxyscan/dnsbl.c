@@ -118,9 +118,9 @@ static void write_dnsbl_exempt_db(struct database_handle *db);
 static void db_h_ble(struct database_handle *db, const char *type);
 static void lookup_blacklists(struct user *u);
 
-struct command os_set_dnsblaction = { "DNSBLACTION", N_("Changes what happens to a user when they hit a DNSBL."), PRIV_USER_ADMIN, 1, os_cmd_set_dnsblaction, { .path = "proxyscan/set_dnsblaction" } };
-struct command ps_dnsblexempt = { "DNSBLEXEMPT", N_("Manage the list of IP's exempt from DNSBL checking."), PRIV_USER_ADMIN, 3, ps_cmd_dnsblexempt, { .path = "proxyscan/dnsblexempt" } };
-struct command ps_dnsblscan = { "DNSBLSCAN", N_("Manually scan if a user is in a DNSBL."), PRIV_USER_ADMIN, 1, ps_cmd_dnsblscan, { .path = "proxyscan/dnsblscan" } };
+static struct command os_set_dnsblaction = { "DNSBLACTION", N_("Changes what happens to a user when they hit a DNSBL."), PRIV_USER_ADMIN, 1, os_cmd_set_dnsblaction, { .path = "proxyscan/set_dnsblaction" } };
+static struct command ps_dnsblexempt = { "DNSBLEXEMPT", N_("Manage the list of IP's exempt from DNSBL checking."), PRIV_USER_ADMIN, 3, ps_cmd_dnsblexempt, { .path = "proxyscan/dnsblexempt" } };
+static struct command ps_dnsblscan = { "DNSBLSCAN", N_("Manually scan if a user is in a DNSBL."), PRIV_USER_ADMIN, 1, ps_cmd_dnsblscan, { .path = "proxyscan/dnsblscan" } };
 
 static inline mowgli_list_t *
 dnsbl_queries(struct user *u)

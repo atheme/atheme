@@ -10,7 +10,7 @@
 
 static void cs_cmd_set_pubacl(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command cs_set_pubacl = { "PUBACL", N_("Allows the channel ACL to be public."), AC_NONE, 2, cs_cmd_set_pubacl, { .path = "cservice/set_pubacl" } };
+static struct command cs_set_pubacl = { "PUBACL", N_("Allows the channel ACL to be public."), AC_NONE, 2, cs_cmd_set_pubacl, { .path = "cservice/set_pubacl" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
 

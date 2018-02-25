@@ -15,7 +15,7 @@ mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_neverop(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command ns_set_neverop = { "NEVEROP", N_("Prevents you from being added to access lists."), AC_NONE, 1, ns_cmd_set_neverop, { .path = "nickserv/set_neverop" } };
+static struct command ns_set_neverop = { "NEVEROP", N_("Prevents you from being added to access lists."), AC_NONE, 1, ns_cmd_set_neverop, { .path = "nickserv/set_neverop" } };
 
 static bool
 has_neverop(const struct mynick *mn, const void *arg)

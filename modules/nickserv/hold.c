@@ -11,7 +11,7 @@
 
 static void ns_cmd_hold(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command ns_hold = { "HOLD", N_("Prevents an account from expiring."),
+static struct command ns_hold = { "HOLD", N_("Prevents an account from expiring."),
 		      PRIV_HOLD, 2, ns_cmd_hold, { .path = "nickserv/hold" } };
 
 static bool

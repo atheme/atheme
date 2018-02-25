@@ -9,7 +9,7 @@
 
 static void os_cmd_uptime(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command os_uptime = { "UPTIME", N_("Shows services uptime and the number of registered nicks and channels."), PRIV_SERVER_AUSPEX, 1, os_cmd_uptime, { .path = "oservice/uptime" } };
+static struct command os_uptime = { "UPTIME", N_("Shows services uptime and the number of registered nicks and channels."), PRIV_SERVER_AUSPEX, 1, os_cmd_uptime, { .path = "oservice/uptime" } };
 
 static void
 mod_init(struct module *const restrict m)

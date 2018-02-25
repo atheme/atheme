@@ -9,7 +9,7 @@
 
 static void os_cmd_jupe(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command os_jupe = { "JUPE", N_("Jupiters a server."), PRIV_JUPE, 2, os_cmd_jupe, { .path = "oservice/jupe" } };
+static struct command os_jupe = { "JUPE", N_("Jupiters a server."), PRIV_JUPE, 2, os_cmd_jupe, { .path = "oservice/jupe" } };
 
 static void
 mod_init(struct module *const restrict m)

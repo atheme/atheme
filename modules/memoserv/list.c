@@ -9,7 +9,7 @@
 
 static void ms_cmd_list(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command ms_list = { "LIST", N_(N_("Lists all of your memos.")),
+static struct command ms_list = { "LIST", N_(N_("Lists all of your memos.")),
                         AC_AUTHENTICATED, 0, ms_cmd_list, { .path = "memoserv/list" } };
 
 static void

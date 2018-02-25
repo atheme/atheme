@@ -12,7 +12,7 @@
 
 static void gs_cmd_set_groupname(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command gs_set_groupname = { "GROUPNAME", N_("Changes the group's name."), AC_NONE, 1, gs_cmd_set_groupname, { .path = "groupserv/set_groupname" } };
+static struct command gs_set_groupname = { "GROUPNAME", N_("Changes the group's name."), AC_NONE, 1, gs_cmd_set_groupname, { .path = "groupserv/set_groupname" } };
 
 static void
 mod_init(struct module *const restrict m)

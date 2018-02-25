@@ -13,7 +13,7 @@
 static void ns_cmd_freeze(struct sourceinfo *si, int parc, char *parv[]);
 
 /* FREEZE ON|OFF -- don't pollute the root with THAW */
-struct command ns_freeze = { "FREEZE", N_("Freezes an account."), PRIV_USER_ADMIN, 3, ns_cmd_freeze, { .path = "nickserv/freeze" } };
+static struct command ns_freeze = { "FREEZE", N_("Freezes an account."), PRIV_USER_ADMIN, 3, ns_cmd_freeze, { .path = "nickserv/freeze" } };
 
 static bool
 is_frozen(const struct mynick *mn, const void *arg)

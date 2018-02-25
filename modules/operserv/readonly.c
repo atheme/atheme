@@ -9,7 +9,7 @@
 
 static void os_cmd_readonly(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command os_readonly = { "READONLY", N_("Changes the state of read-only mode for services."),
+static struct command os_readonly = { "READONLY", N_("Changes the state of read-only mode for services."),
 		      PRIV_ADMIN, 1, os_cmd_readonly, { .path = "oservice/readonly" } };
 
 static void

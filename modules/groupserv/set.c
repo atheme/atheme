@@ -13,7 +13,7 @@
 static void gs_help_set(struct sourceinfo *si, const char *subcmd);
 static void gs_cmd_set(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command gs_set = { "SET", N_("Sets various control flags."), AC_AUTHENTICATED, 3, gs_cmd_set, { .func = gs_help_set } };
+static struct command gs_set = { "SET", N_("Sets various control flags."), AC_AUTHENTICATED, 3, gs_cmd_set, { .func = gs_help_set } };
 
 mowgli_patricia_t *gs_set_cmdtree;
 

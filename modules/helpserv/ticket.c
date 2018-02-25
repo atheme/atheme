@@ -20,10 +20,10 @@ static void helpserv_cmd_cancel(struct sourceinfo *si, int parc, char *parv[]);
 static void write_ticket_db(struct database_handle *db);
 static void db_h_he(struct database_handle *db, const char *type);
 
-struct command helpserv_request = { "REQUEST", N_("Request help from network staff."), AC_AUTHENTICATED, 1, helpserv_cmd_request, { .path = "helpserv/request" } };
-struct command helpserv_list = { "LIST", N_("Lists users waiting for help."), PRIV_HELPER, 1, helpserv_cmd_list, { .path = "helpserv/list" } };
-struct command helpserv_close = { "CLOSE", N_("Close a users' help request."), PRIV_HELPER, 2, helpserv_cmd_close, { .path = "helpserv/close" } };
-struct command helpserv_cancel = { "CANCEL", N_("Cancel your own pending help request."), AC_AUTHENTICATED, 1, helpserv_cmd_cancel, { .path = "helpserv/cancel" } };
+static struct command helpserv_request = { "REQUEST", N_("Request help from network staff."), AC_AUTHENTICATED, 1, helpserv_cmd_request, { .path = "helpserv/request" } };
+static struct command helpserv_list = { "LIST", N_("Lists users waiting for help."), PRIV_HELPER, 1, helpserv_cmd_list, { .path = "helpserv/list" } };
+static struct command helpserv_close = { "CLOSE", N_("Close a users' help request."), PRIV_HELPER, 2, helpserv_cmd_close, { .path = "helpserv/close" } };
+static struct command helpserv_cancel = { "CANCEL", N_("Cancel your own pending help request."), AC_AUTHENTICATED, 1, helpserv_cmd_cancel, { .path = "helpserv/cancel" } };
 
 struct help_ticket
 {

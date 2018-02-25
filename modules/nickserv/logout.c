@@ -9,7 +9,7 @@
 
 static void ns_cmd_logout(struct sourceinfo *si, int parc, char *parv[]);
 
-struct command ns_logout = { "LOGOUT", N_("Logs your services session out."), AC_NONE, 2, ns_cmd_logout, { .path = "nickserv/logout" } };
+static struct command ns_logout = { "LOGOUT", N_("Logs your services session out."), AC_NONE, 2, ns_cmd_logout, { .path = "nickserv/logout" } };
 
 static void
 mod_init(struct module *const restrict m)
