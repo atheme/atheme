@@ -248,7 +248,8 @@ inet_pton6(const char *src, unsigned char *dst)
  * Output - 0 = Matched 1 = Did not match
  * switched 0 and 1 to be consistent with atheme's match() -- jilles
  */
-int match_ips(const char *s1, const char *s2)
+int
+match_ips(const char *s1, const char *s2)
 {
 	unsigned char ipaddr[IN6ADDRSZ], maskaddr[IN6ADDRSZ];
 	char ipmask[BUFSIZE];
@@ -366,7 +367,8 @@ match_cidr(const char *s1, const char *s2)
 		return 1;
 }
 
-int valid_ip_or_mask(const char *src)
+int
+valid_ip_or_mask(const char *src)
 {
 	char ipaddr[HOSTLEN + 7];
 	unsigned char buf[IN6ADDRSZ];
