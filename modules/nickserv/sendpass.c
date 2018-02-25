@@ -31,7 +31,8 @@ enum specialoperation
 	op_clear
 };
 
-static void ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
 	char *name = parv[0];
