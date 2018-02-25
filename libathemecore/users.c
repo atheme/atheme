@@ -42,7 +42,8 @@ mowgli_patricia_t *uidlist;
  * Side Effects:
  *     - the users heap and DTree are initialized.
  */
-void init_users(void)
+void
+init_users(void)
 {
 	user_heap = sharedheap_get(sizeof(struct user));
 
@@ -81,7 +82,8 @@ void init_users(void)
  *     - if successful, a user is created and added to the users DTree.
  *     - if unsuccessful, a kill has been sent if necessary
  */
-struct user *user_add(const char *nick, const char *user, const char *host,
+struct user *
+user_add(const char *nick, const char *user, const char *host,
 	const char *vhost, const char *ip, const char *uid, const char *gecos,
 	struct server *server, time_t ts)
 {
@@ -201,7 +203,8 @@ struct user *user_add(const char *nick, const char *user, const char *host,
  * Side Effects:
  *     - on success, a user is deleted from the users DTree.
  */
-void user_delete(struct user *u, const char *comment)
+void
+user_delete(struct user *u, const char *comment)
 {
 	mowgli_node_t *n, *tn;
 	struct chanuser *cu;
@@ -301,7 +304,8 @@ void user_delete(struct user *u, const char *comment)
  * Side Effects:
  *     - none
  */
-struct user *user_find(const char *nick)
+struct user *
+user_find(const char *nick)
 {
 	struct user *u;
 
@@ -342,7 +346,8 @@ struct user *user_find(const char *nick)
  * Side Effects:
  *     - none
  */
-struct user *user_find_named(const char *nick)
+struct user *
+user_find_named(const char *nick)
 {
 	return mowgli_patricia_retrieve(userlist, nick);
 }
@@ -362,7 +367,8 @@ struct user *user_find_named(const char *nick)
  * Side Effects:
  *     - a user object's UID is changed.
  */
-void user_changeuid(struct user *u, const char *uid)
+void
+user_changeuid(struct user *u, const char *uid)
 {
 	return_if_fail(u != NULL);
 
@@ -393,7 +399,8 @@ void user_changeuid(struct user *u, const char *uid)
  *     - a user object's nick and TS is changed.
  *     - in event of a collision or a decision by a hook, the user may be killed
  */
-bool user_changenick(struct user *u, const char *nick, time_t ts)
+bool
+user_changenick(struct user *u, const char *nick, time_t ts)
 {
 	struct mynick *mn;
 	struct user *u2;
@@ -526,7 +533,8 @@ bool user_changenick(struct user *u, const char *nick, time_t ts)
  * Bugs:
  *     - this routine only tracks +i and +o usermode changes.
  */
-void user_mode(struct user *user, const char *modes)
+void
+user_mode(struct user *user, const char *modes)
 {
 	int dir = MTYPE_ADD;
 	bool was_ircop, was_invis;
@@ -602,7 +610,8 @@ void user_mode(struct user *user, const char *modes)
  * Side Effects:
  *     - virtual host is set
  */
-void user_sethost(struct user *source, struct user *target, stringref host)
+void
+user_sethost(struct user *source, struct user *target, stringref host)
 {
 	return_if_fail(source != NULL);
 	return_if_fail(target != NULL);
@@ -621,7 +630,8 @@ void user_sethost(struct user *source, struct user *target, stringref host)
 	hook_call_user_sethost(target);
 }
 
-const char *user_get_umodestr(struct user *u)
+const char *
+user_get_umodestr(struct user *u)
 {
 	static char result[34];
 	int iter;
@@ -638,7 +648,8 @@ const char *user_get_umodestr(struct user *u)
 	return result;
 }
 
-bool user_is_channel_banned(struct user *u, char ban_type)
+bool
+user_is_channel_banned(struct user *u, char ban_type)
 {
 	mowgli_node_t *n;
 
