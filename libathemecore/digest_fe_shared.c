@@ -35,7 +35,7 @@
 
 #include "atheme.h"
 
-bool
+bool ATHEME_FATTR_WUR
 digest_oneshot(const unsigned int alg, const void *const restrict data, const size_t dataLen,
                void *const restrict out, size_t *const restrict outLen)
 {
@@ -65,7 +65,7 @@ digest_oneshot(const unsigned int alg, const void *const restrict data, const si
 	return true;
 }
 
-bool
+bool ATHEME_FATTR_WUR
 digest_oneshot_hmac(const unsigned int alg, const void *const restrict key, const size_t keyLen,
                     const void *const restrict data, const size_t dataLen, void *const restrict out,
                     size_t *const restrict outLen)
