@@ -21,7 +21,8 @@
 #include "atheme.h"
 #include "libathemecore.h"
 
-static unsigned int verify_entity_uids(void)
+static unsigned int
+verify_entity_uids(void)
 {
 	unsigned int errcnt = 0;
 	mowgli_patricia_t *known = mowgli_patricia_create(strcasecanon);
@@ -50,7 +51,8 @@ static unsigned int verify_entity_uids(void)
 	return errcnt;
 }
 
-static void verify_channel_registrations(void)
+static void
+verify_channel_registrations(void)
 {
 	mowgli_patricia_iteration_state_t state;
 	struct mychan *mc;
@@ -97,14 +99,16 @@ static void verify_channel_registrations(void)
 	}
 }
 
-static void handle_mdep(struct database_handle *db, const char *type)
+static void
+handle_mdep(struct database_handle *db, const char *type)
 {
 	const char *modname = db_sread_word(db);
 
 	module_load(modname);
 }
 
-int main(int argc, char *argv[])
+int
+main(int argc, char *argv[])
 {
 	atheme_bootstrap();
 	atheme_init(argv[0], LOGDIR "/dbverify.log");
