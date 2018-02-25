@@ -62,7 +62,8 @@ struct clones_hostentry
 	unsigned int gracekills;
 };
 
-static inline bool cexempt_expired(struct clones_exemption *c)
+static inline bool
+cexempt_expired(struct clones_exemption *c)
 {
 	if (c && c->expires && CURRTIME > c->expires)
 		return true;
@@ -80,7 +81,8 @@ struct command os_clones_setexempt = { "SETEXEMPT", N_("Sets a clone exemption d
 struct command os_clones_listexempt = { "LISTEXEMPT", N_("Lists clones exemptions."), AC_NONE, 0, os_cmd_clones_listexempt, { .path = "" } };
 struct command os_clones_duration = { "DURATION", N_("Sets a custom duration to ban clones for."), AC_NONE, 1, os_cmd_clones_duration, { .path = "" } };
 
-static void clones_configready(void *unused)
+static void
+clones_configready(void *unused)
 {
 	clones_allowed = config_options.default_clone_allowed;
 	clones_warn = config_options.default_clone_warn;
@@ -141,7 +143,8 @@ mod_init(struct module *const restrict m)
 	}
 }
 
-static void free_hostentry(const char *key, void *data, void *privdata)
+static void
+free_hostentry(const char *key, void *data, void *privdata)
 {
 	mowgli_node_t *n, *tn;
 	struct clones_hostentry *he = data;
@@ -199,7 +202,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	mowgli_patricia_destroy(os_clones_cmds, NULL, NULL);
 }
 
-static void write_exemptdb(struct database_handle *db)
+static void
+write_exemptdb(struct database_handle *db)
 {
 	mowgli_node_t *n, *tn;
 
@@ -241,26 +245,32 @@ static void write_exemptdb(struct database_handle *db)
 	}
 }
 
-static void db_h_clonesdbv(struct database_handle *db, const char *type)
+static void
+db_h_clonesdbv(struct database_handle *db, const char *type)
 {
 	clones_dbversion = db_sread_uint(db);
 }
-static void db_h_ck(struct database_handle *db, const char *type)
+
+static void
+db_h_ck(struct database_handle *db, const char *type)
 {
 	kline_enabled = db_sread_int(db) != 0;
 }
 
-static void db_h_cd(struct database_handle *db, const char *type)
+static void
+db_h_cd(struct database_handle *db, const char *type)
 {
 	kline_duration = db_sread_uint(db);
 }
 
-static void db_h_gr(struct database_handle *db, const char *type)
+static void
+db_h_gr(struct database_handle *db, const char *type)
 {
 	grace_count = db_sread_uint(db);
 }
 
-static void db_h_ex(struct database_handle *db, const char *type)
+static void
+db_h_ex(struct database_handle *db, const char *type)
 {
 	unsigned int allowed, warn;
 
@@ -293,7 +303,8 @@ static void db_h_ex(struct database_handle *db, const char *type)
 	mowgli_node_add(c, mowgli_node_create(), &clone_exempts);
 }
 
-static struct clones_exemption * find_exempt(const char *ip)
+static struct clones_exemption *
+find_exempt(const char *ip)
 {
 	mowgli_node_t *n;
 
@@ -318,7 +329,8 @@ static struct clones_exemption * find_exempt(const char *ip)
 	return 0;
 }
 
-static void os_cmd_clones(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_clones(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct command *c;
 	char *cmd = parv[0];
@@ -341,7 +353,8 @@ static void os_cmd_clones(struct sourceinfo *si, int parc, char *parv[])
 	command_exec(si->service, si, c, parc + 1, parv + 1);
 }
 
-static void os_cmd_clones_kline(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_clones_kline(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *arg = parv[0];
 
@@ -400,7 +413,8 @@ static void os_cmd_clones_kline(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void os_cmd_clones_list(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_clones_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct clones_hostentry *he;
 	int k = 0;
@@ -423,7 +437,8 @@ static void os_cmd_clones_list(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "CLONES:LIST");
 }
 
-static void os_cmd_clones_addexempt(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_clones_addexempt(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
 	char *ip = parv[0];
@@ -566,7 +581,8 @@ static void os_cmd_clones_addexempt(struct sourceinfo *si, int parc, char *parv[
 	logcommand(si, CMDLOG_ADMIN, "CLONES:ADDEXEMPT: \2%s\2 \2%d\2 (reason: \2%s\2) (duration: \2%s\2)", ip, clones, c->reason, timediff(duration));
 }
 
-static void os_cmd_clones_delexempt(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_clones_delexempt(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n, *tn;
 	char *arg = parv[0];
@@ -606,8 +622,8 @@ static void os_cmd_clones_delexempt(struct sourceinfo *si, int parc, char *parv[
 	command_fail(si, fault_nosuch_target, _("\2%s\2 not found in clone exempt list."), arg);
 }
 
-
-static void os_cmd_clones_setexempt(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_clones_setexempt(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n, *tn;
 	char *ip = parv[0];
@@ -767,7 +783,8 @@ static void os_cmd_clones_setexempt(struct sourceinfo *si, int parc, char *parv[
 	}
 }
 
-static void os_cmd_clones_duration(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_clones_duration(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *s = parv[0];
 	long duration;
@@ -802,7 +819,8 @@ static void os_cmd_clones_duration(struct sourceinfo *si, int parc, char *parv[]
 	command_success_nodata(si, _("Clone ban duration set to \2%s\2 (%ld seconds)"), parv[0], kline_duration);
 }
 
-static void os_cmd_clones_listexempt(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_clones_listexempt(struct sourceinfo *si, int parc, char *parv[])
 {
 
 	command_success_nodata(si, _("DEFAULT - allowed limit %d, warn on %d"), clones_allowed, clones_warn);
@@ -829,7 +847,8 @@ static void os_cmd_clones_listexempt(struct sourceinfo *si, int parc, char *parv
 	logcommand(si, CMDLOG_ADMIN, "CLONES:LISTEXEMPT");
 }
 
-static void clones_newuser(hook_user_nick_t *data)
+static void
+clones_newuser(hook_user_nick_t *data)
 {
 	struct user *u = data->u;
 	unsigned int i;
@@ -934,7 +953,8 @@ static void clones_newuser(hook_user_nick_t *data)
 	}
 }
 
-static void clones_userquit(struct user *u)
+static void
+clones_userquit(struct user *u)
 {
 	mowgli_node_t *n;
 	struct clones_hostentry *he;
