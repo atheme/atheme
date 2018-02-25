@@ -108,7 +108,8 @@ static struct priv_category *priv_categories[] = {
 	&nickserv_privs, &chanserv_privs, &general_privs, &operserv_privs, &groupserv_privs,
 };
 
-static void os_cmd_specs(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_specs(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *tu = NULL;
 	struct operclass *cl = NULL;
