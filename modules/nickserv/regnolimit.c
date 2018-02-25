@@ -14,7 +14,8 @@ static void ns_cmd_regnolimit(struct sourceinfo *si, int parc, char *parv[]);
 struct command ns_regnolimit = { "REGNOLIMIT", N_("Allow a user to bypass registration limits."),
 		      PRIV_ADMIN, 2, ns_cmd_regnolimit, { .path = "nickserv/regnolimit" } };
 
-static bool has_regnolimit(const struct mynick *mn, const void *arg)
+static bool
+has_regnolimit(const struct mynick *mn, const void *arg)
 {
 	struct myuser *mu = mn->owner;
 
@@ -43,7 +44,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	list_unregister("regnolimit");
 }
 
-static void ns_cmd_regnolimit(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_regnolimit(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *action = parv[1];
