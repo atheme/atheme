@@ -70,7 +70,8 @@ static const struct cmode ircnet_user_mode_list[] = {
 };
 
 /* login to our uplink */
-static unsigned int ircnet_server_login(void)
+static unsigned int
+ircnet_server_login(void)
 {
 	int ret;
 
@@ -90,7 +91,8 @@ static unsigned int ircnet_server_login(void)
 }
 
 /* introduce a client */
-static void ircnet_introduce_nick(struct user *u)
+static
+void ircnet_introduce_nick(struct user *u)
 {
 	const char *umode = user_get_umodestr(u);
 
@@ -98,7 +100,8 @@ static void ircnet_introduce_nick(struct user *u)
 }
 
 /* invite a user to a channel */
-static void ircnet_invite_sts(struct user *sender, struct user *target, struct channel *channel)
+static void
+ircnet_invite_sts(struct user *sender, struct user *target, struct channel *channel)
 {
 	int joined = 0;
 
@@ -115,13 +118,15 @@ static void ircnet_invite_sts(struct user *sender, struct user *target, struct c
 		sts(":%s PART %s :Invited %s", CLIENT_NAME(sender), channel->name, target->nick);
 }
 
-static void ircnet_quit_sts(struct user *u, const char *reason)
+static void
+ircnet_quit_sts(struct user *u, const char *reason)
 {
 	sts(":%s QUIT :%s", u->nick, reason);
 }
 
 /* join a channel */
-static void ircnet_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
+static void
+ircnet_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
 {
 	sts(":%s NJOIN %s :@%s", me.numeric, c->name, u->uid);
 	if (isnew && modes[0] && modes[1])
@@ -129,7 +134,8 @@ static void ircnet_join_sts(struct channel *c, struct user *u, bool isnew, char 
 }
 
 /* kicks a user from a channel */
-static void ircnet_kick(struct user *source, struct channel *c, struct user *u, const char *reason)
+static void
+ircnet_kick(struct user *source, struct channel *c, struct user *u, const char *reason)
 {
 	/* sigh server kicks will generate snotes
 	 * but let's avoid joining N times for N kicks */
@@ -152,7 +158,8 @@ ircnet_msg(const char *from, const char *target, const char *fmt, ...)
 	sts(":%s PRIVMSG %s :%s", from, target, buf);
 }
 
-static void ircnet_msg_global_sts(struct user *from, const char *mask, const char *text)
+static void
+ircnet_msg_global_sts(struct user *from, const char *mask, const char *text)
 {
 	mowgli_node_t *n;
 	struct tld *tld;
@@ -170,12 +177,14 @@ static void ircnet_msg_global_sts(struct user *from, const char *mask, const cha
 }
 
 /* NOTICE wrapper */
-static void ircnet_notice_user_sts(struct user *from, struct user *target, const char *text)
+static void
+ircnet_notice_user_sts(struct user *from, struct user *target, const char *text)
 {
 	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, CLIENT_NAME(target), text);
 }
 
-static void ircnet_notice_global_sts(struct user *from, const char *mask, const char *text)
+static void
+ircnet_notice_global_sts(struct user *from, const char *mask, const char *text)
 {
 	mowgli_node_t *n;
 	struct tld *tld;
@@ -192,7 +201,8 @@ static void ircnet_notice_global_sts(struct user *from, const char *mask, const 
 		sts(":%s NOTICE %s%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, mask, text);
 }
 
-static void ircnet_notice_channel_sts(struct user *from, struct channel *target, const char *text)
+static void
+ircnet_notice_channel_sts(struct user *from, struct channel *target, const char *text)
 {
 	if (from == NULL || chanuser_find(target, from))
 		sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, target->name, text);
@@ -216,7 +226,8 @@ ircnet_numeric_sts(struct server *from, int numeric, struct user *target, const 
 }
 
 /* KILL wrapper */
-static void ircnet_kill_id_sts(struct user *killer, const char *id, const char *reason)
+static void
+ircnet_kill_id_sts(struct user *killer, const char *id, const char *reason)
 {
 	if (killer != NULL)
 		sts(":%s KILL %s :%s!%s (%s)", CLIENT_NAME(killer), id, killer->host, killer->nick, reason);
@@ -225,13 +236,15 @@ static void ircnet_kill_id_sts(struct user *killer, const char *id, const char *
 }
 
 /* PART wrapper */
-static void ircnet_part_sts(struct channel *c, struct user *u)
+static void
+ircnet_part_sts(struct channel *c, struct user *u)
 {
 	sts(":%s PART %s", u->nick, c->name);
 }
 
 /* server-to-server KLINE wrapper */
-static void ircnet_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
+static void
+ircnet_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
 	struct service *svs;
 
@@ -245,7 +258,8 @@ static void ircnet_kline_sts(const char *server, const char *user, const char *h
 }
 
 /* server-to-server UNKLINE wrapper */
-static void ircnet_unkline_sts(const char *server, const char *user, const char *host)
+static void
+ircnet_unkline_sts(const char *server, const char *user, const char *host)
 {
 	struct service *svs;
 
@@ -257,7 +271,8 @@ static void ircnet_unkline_sts(const char *server, const char *user, const char 
 }
 
 /* topic wrapper */
-static void ircnet_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
+static void
+ircnet_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	int joined = 0;
 
@@ -276,7 +291,8 @@ static void ircnet_topic_sts(struct channel *c, struct user *source, const char 
 }
 
 /* mode wrapper */
-static void ircnet_mode_sts(char *sender, struct channel *target, char *modes)
+static void
+ircnet_mode_sts(char *sender, struct channel *target, char *modes)
 {
 	struct user *u;
 
@@ -292,26 +308,30 @@ static void ircnet_mode_sts(char *sender, struct channel *target, char *modes)
 }
 
 /* ping wrapper */
-static void ircnet_ping_sts(void)
+static void
+ircnet_ping_sts(void)
 {
 	sts("PING :%s", me.name);
 }
 
 /* protocol-specific stuff to do on login */
-static void ircnet_on_login(struct user *u, struct myuser *account, const char *wantedhost)
+static void
+ircnet_on_login(struct user *u, struct myuser *account, const char *wantedhost)
 {
 	/* nothing to do on ratbox */
 	return;
 }
 
 /* protocol-specific stuff to do on login */
-static bool ircnet_on_logout(struct user *u, const char *account)
+static bool
+ircnet_on_logout(struct user *u, const char *account)
 {
 	/* nothing to do on ratbox */
 	return false;
 }
 
-static void ircnet_jupe(const char *server, const char *reason)
+static void
+ircnet_jupe(const char *server, const char *reason)
 {
 	struct service *svs;
 	static char sid[4+1];
@@ -356,7 +376,8 @@ static void ircnet_jupe(const char *server, const char *reason)
 	sts(":%s SERVER %s 2 %s 0211010000 :%s", me.name, server, sid, reason);
 }
 
-static void m_topic(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_topic(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c = channel_find(parv[0]);
 
@@ -366,13 +387,15 @@ static void m_topic(struct sourceinfo *si, int parc, char *parv[])
 	handle_topic_from(si, c, si->su->nick, CURRTIME, parv[1]);
 }
 
-static void m_ping(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_ping(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* reply to PING's */
 	sts(":%s PONG %s %s", me.name, me.name, parv[0]);
 }
 
-static void m_pong(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_pong(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* someone replied to our PING */
 	if ((!parv[0]) || (strcasecmp(me.actual, parv[0])))
@@ -383,7 +406,8 @@ static void m_pong(struct sourceinfo *si, int parc, char *parv[])
 	/* -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net */
 }
 
-static void m_eob(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_eob(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct server *serv;
 	char sidbuf[4+1], *p;
@@ -422,7 +446,8 @@ static void m_eob(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_privmsg(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_privmsg(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (parc != 2)
 		return;
@@ -430,7 +455,8 @@ static void m_privmsg(struct sourceinfo *si, int parc, char *parv[])
 	handle_message(si, parv[0], false, parv[1]);
 }
 
-static void m_notice(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_notice(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (parc != 2)
 		return;
@@ -438,7 +464,8 @@ static void m_notice(struct sourceinfo *si, int parc, char *parv[])
 	handle_message(si, parv[0], true, parv[1]);
 }
 
-static void m_njoin(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_njoin(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c;
 	unsigned int userc;
@@ -469,7 +496,8 @@ static void m_njoin(struct sourceinfo *si, int parc, char *parv[])
 		channel_delete(c);
 }
 
-static void m_part(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_part(struct sourceinfo *si, int parc, char *parv[])
 {
 	int chanc;
 	char *chanv[256];
@@ -484,7 +512,8 @@ static void m_part(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_nick(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u;
 
@@ -530,7 +559,8 @@ static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_save(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_save(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u;
 
@@ -559,7 +589,8 @@ static void m_save(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_quit(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_quit(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
 
@@ -567,7 +598,8 @@ static void m_quit(struct sourceinfo *si, int parc, char *parv[])
 	user_delete(si->su, parv[0]);
 }
 
-static void m_mode(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_mode(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* The following is hackish, but it works, because user MODE
 	 * is not used in bursts and users are not allowed to change away
@@ -583,7 +615,8 @@ static void m_mode(struct sourceinfo *si, int parc, char *parv[])
 		user_mode(user_find(parv[0]), parv[1]);
 }
 
-static void m_kick(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_kick(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u = user_find(parv[1]);
 	struct channel *c = channel_find(parv[0]);
@@ -619,12 +652,14 @@ static void m_kick(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_kill(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_kill(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_kill(si, parv[0], parc > 1 ? parv[1] : "<No reason given>");
 }
 
-static void m_squit(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_squit(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_squit(): server leaving: %s from %s", parv[0], parv[1]);
 	if (server_find(parv[0]))
@@ -639,50 +674,59 @@ static void m_squit(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_server(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_server(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
 	handle_server(si, parv[0], parv[2], atoi(parv[1]), parv[parc - 1]);
 }
 
-static void m_smask(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_smask(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_smask(): new masked server: %s (%s)",
 			si->s->name, parv[0]);
 	handle_server(si, NULL, parv[0], si->s->hops + 1, si->s->desc);
 }
 
-static void m_stats(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_stats(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_stats(si->su, parv[0][0]);
 }
 
-static void m_admin(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_admin(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_admin(si->su);
 }
 
-static void m_version(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_version(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_version(si->su);
 }
 
-static void m_info(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_info(si->su);
 }
 
-static void m_whois(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_whois(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_whois(si->su, parv[1]);
 }
 
-static void m_trace(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_trace(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_trace(si->su, parv[0], parc >= 2 ? parv[1] : NULL);
 }
 
-static void m_join(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_join(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct chanuser *cu;
 	mowgli_node_t *n, *tn;
@@ -698,7 +742,8 @@ static void m_join(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_pass(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_pass(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (curr_uplink->receive_pass != NULL &&
 	    strcmp(curr_uplink->receive_pass, parv[0]))
@@ -708,12 +753,14 @@ static void m_pass(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_error(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_error(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_INFO, "m_error(): error from server: %s", parv[0]);
 }
 
-static void m_motd(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_motd(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_motd(si->su);
 }
@@ -795,6 +842,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("protocol/ircnet", MODULE_UNLOAD_CAPABILITY_NEVER)
