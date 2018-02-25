@@ -28,8 +28,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("hostserv", &hs_off);
 }
 
-
-static void hs_cmd_on(struct sourceinfo *si, int parc, char *parv[])
+static void
+hs_cmd_on(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mynick *mn = NULL;
 	struct metadata *md;
@@ -65,7 +65,8 @@ static void hs_cmd_on(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("Your vhost of \2%s\2 is now activated."), md->value);
 }
 
-static void hs_cmd_off(struct sourceinfo *si, int parc, char *parv[])
+static void
+hs_cmd_off(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mynick *mn = NULL;
 	struct metadata *md;
