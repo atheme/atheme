@@ -30,7 +30,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 }
 
 /* SET GROUPNAME <name> */
-static void gs_cmd_set_groupname(struct sourceinfo *si, int parc, char *parv[])
+static void
+gs_cmd_set_groupname(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *oldname, *newname;
 	struct mygroup *mg;
