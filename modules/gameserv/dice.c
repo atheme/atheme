@@ -82,7 +82,8 @@ int is_calcoper(char oper);
 // * / = Multiply / Divide         |  [Rank 7]
 // % \ = Modulus / Integer-divide  |  |   = Bitwise inclusive OR
 //
-static bool eval_calc(struct sourceinfo *si, char *s_input)
+static bool
+eval_calc(struct sourceinfo *si, char *s_input)
 {
 	static char buffer[1024];
 
@@ -172,7 +173,8 @@ typedef struct _tagCalcStack
 	int _brace;
 } CalcStack;
 
-int do_calc_expr(struct sourceinfo *si, char *expr, char *errmsg, double *presult)
+int
+do_calc_expr(struct sourceinfo *si, char *expr, char *errmsg, double *presult)
 {
 	int expect = CALCEXPR_VALUE, lastrank, currank;
 	char *cur = expr, *endptr, lastop, curop = ' ';
@@ -345,8 +347,8 @@ int do_calc_expr(struct sourceinfo *si, char *expr, char *errmsg, double *presul
 	return 0;		// no error
 }
 
-
-static double calc_dice_simple(double lhs, double rhs)
+static double
+calc_dice_simple(double lhs, double rhs)
 {
 	double out = 0.0;
 	int i, sides, dice;
@@ -370,7 +372,8 @@ static double calc_dice_simple(double lhs, double rhs)
 
 //////////////////////////////////////////////////////////////////////////
 
-int do_calc_eval(struct sourceinfo *si, double lhs, char oper, double rhs, double *out, char *errmsg)
+int
+do_calc_eval(struct sourceinfo *si, double lhs, char oper, double rhs, double *out, char *errmsg)
 {
 	switch (oper)
 	{
@@ -439,7 +442,8 @@ int do_calc_eval(struct sourceinfo *si, double lhs, char oper, double rhs, doubl
 
 // Is 'oper' an operator? If so, return its 'rank', else '0'.
 //
-int is_calcoper(char oper)
+int
+is_calcoper(char oper)
 {
 	static char *opers = "~!d ^ */%\\ +- & $ |";
 	char *c = opers;
@@ -457,7 +461,8 @@ int is_calcoper(char oper)
 
 /*************************************************************************************/
 
-static bool eval_dice(struct sourceinfo *si, char *s_input)
+static bool
+eval_dice(struct sourceinfo *si, char *s_input)
 {
 	static char buffer[1024], result[32];
 
@@ -572,7 +577,8 @@ static bool eval_dice(struct sourceinfo *si, char *s_input)
 	return true;
 }
 
-static void command_dice(struct sourceinfo *si, int parc, char *parv[])
+static void
+command_dice(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *arg;
 	struct mychan *mc;
@@ -610,7 +616,8 @@ static void command_dice(struct sourceinfo *si, int parc, char *parv[])
 			break;
 }
 
-static void command_calc(struct sourceinfo *si, int parc, char *parv[])
+static void
+command_calc(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *arg;
 	struct mychan *mc;
