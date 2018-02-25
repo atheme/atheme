@@ -26,7 +26,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("memoserv", &ms_read);
 }
 
-static void ms_cmd_read(struct sourceinfo *si, int parc, char *parv[])
+static void
+ms_cmd_read(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* Misc structs etc */
 	struct myuser *tmu;
