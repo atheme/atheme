@@ -27,7 +27,8 @@
 #include "rfc1459.h"
 
 /* parses a standard 2.8.21 style IRC stream */
-void irc_parse(char *line)
+void
+irc_parse(char *line)
 {
 	struct sourceinfo *si;
 	char *pos;
