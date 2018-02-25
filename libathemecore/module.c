@@ -37,7 +37,8 @@ struct module *modtarget = NULL;
 
 static struct module *module_load_internal(const char *pathname, char *errbuf, int errlen);
 
-void modules_init(void)
+void
+modules_init(void)
 {
 	module_heap = sharedheap_get(sizeof(struct module));
 
@@ -61,7 +62,8 @@ void modules_init(void)
  *       a module, or module-like object, is loaded and necessary initialization
  *       code is run.
  */
-struct module *module_load(const char *filespec)
+struct module *
+module_load(const char *filespec)
 {
 	struct module *m;
 	char pathbuf[BUFSIZE], errbuf[BUFSIZE];
@@ -120,7 +122,8 @@ struct module *module_load(const char *filespec)
  * module_load_internal: the part of module_load that deals with 'real' shared
  * object modules.
  */
-static struct module *module_load_internal(const char *pathname, char *errbuf, int errlen)
+static struct module *
+module_load_internal(const char *pathname, char *errbuf, int errlen)
 {
 	mowgli_node_t *n;
 	struct module *m, *old_modtarget;
@@ -233,7 +236,8 @@ static struct module *module_load_internal(const char *pathname, char *errbuf, i
  * side effects:
  *       qualifying modules are passed to module_load().
  */
-void module_load_dir(const char *dirspec)
+void
+module_load_dir(const char *dirspec)
 {
 	DIR *module_dir = NULL;
 	struct dirent *ldirent = NULL;
@@ -272,7 +276,8 @@ void module_load_dir(const char *dirspec)
  * side effects:
  *       qualifying modules are passed to module_load().
  */
-void module_load_dir_match(const char *dirspec, const char *pattern)
+void
+module_load_dir_match(const char *dirspec, const char *pattern)
 {
 	DIR *module_dir = NULL;
 	struct dirent *ldirent = NULL;
@@ -310,7 +315,8 @@ void module_load_dir_match(const char *dirspec, const char *pattern)
  * side effects:
  *       a module is unloaded and neccessary deinitalization code is run.
  */
-void module_unload(struct module *m, const enum module_unload_intent intent)
+void
+module_unload(struct module *m, const enum module_unload_intent intent)
 {
 	mowgli_node_t *n, *tn;
 
@@ -375,7 +381,8 @@ void module_unload(struct module *m, const enum module_unload_intent intent)
  * side effects:
  *       none
  */
-void *module_locate_symbol(const char *modname, const char *sym)
+void *
+module_locate_symbol(const char *modname, const char *sym)
 {
 	struct module *m;
 	void *symptr;
@@ -418,7 +425,8 @@ void *module_locate_symbol(const char *modname, const char *sym)
  * side effects:
  *       none
  */
-struct module *module_find(const char *name)
+struct module *
+module_find(const char *name)
 {
 	mowgli_node_t *n;
 
@@ -445,7 +453,8 @@ struct module *module_find(const char *name)
  * side effects:
  *       none
  */
-struct module *module_find_published(const char *name)
+struct module *
+module_find_published(const char *name)
 {
 	mowgli_node_t *n;
 
@@ -472,7 +481,8 @@ struct module *module_find_published(const char *name)
  * side effects:
  *       a module might be loaded.
  */
-bool module_request(const char *name)
+bool
+module_request(const char *name)
 {
 	struct module *m;
 	mowgli_node_t *n;
