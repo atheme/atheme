@@ -23,7 +23,8 @@ struct httpd_configuration
 	unsigned int port;
 } httpd_config;
 
-static void clear_httpddata(struct httpddata *hd)
+static void
+clear_httpddata(struct httpddata *hd)
 {
 	hd->method[0] = '\0';
 	hd->filename[0] = '\0';
@@ -44,7 +45,8 @@ static void clear_httpddata(struct httpddata *hd)
 	hd->sent_reply = false;
 }
 
-static int open_file(const char *filename)
+static int
+open_file(const char *filename)
 {
 	char fname[256];
 
@@ -56,7 +58,8 @@ static int open_file(const char *filename)
 	return open(fname, O_RDONLY);
 }
 
-static void process_header(struct connection *cptr, char *line)
+static void
+process_header(struct connection *cptr, char *line)
 {
 	struct httpddata *hd;
 	char *p;
@@ -97,7 +100,8 @@ static void process_header(struct connection *cptr, char *line)
 	}
 }
 
-static void check_close(struct connection *cptr)
+static void
+check_close(struct connection *cptr)
 {
 	struct httpddata *hd;
 
@@ -106,7 +110,8 @@ static void check_close(struct connection *cptr)
 		sendq_add_eof(cptr);
 }
 
-static void send_error(struct connection *cptr, int errorcode, const char *text, bool sendentity)
+static void
+send_error(struct connection *cptr, int errorcode, const char *text, bool sendentity)
 {
 	char buf1[300];
 	char buf2[700];
@@ -123,7 +128,8 @@ static void send_error(struct connection *cptr, int errorcode, const char *text,
 	sendq_add(cptr, buf1, strlen(buf1));
 }
 
-static const char *content_type(const char *filename)
+static const char *
+content_type(const char *filename)
 {
 	const char *p;
 
@@ -147,7 +153,8 @@ static const char *content_type(const char *filename)
 	return "application/octet-stream";
 }
 
-static void httpd_recvqhandler(struct connection *cptr)
+static void
+httpd_recvqhandler(struct connection *cptr)
 {
 	char buf[BUFSIZE * 2];
 	char outbuf[BUFSIZE * 2];
@@ -316,7 +323,8 @@ static void httpd_recvqhandler(struct connection *cptr)
 		process_header(cptr, buf);
 }
 
-static void httpd_closehandler(struct connection *cptr)
+static void
+httpd_closehandler(struct connection *cptr)
 {
 	struct httpddata *hd;
 
@@ -330,7 +338,8 @@ static void httpd_closehandler(struct connection *cptr)
 	cptr->userdata = NULL;
 }
 
-static void do_listen(struct connection *cptr)
+static void
+do_listen(struct connection *cptr)
 {
 	struct connection *newptr;
 
@@ -345,7 +354,8 @@ static void do_listen(struct connection *cptr)
 	newptr->close_handler = httpd_closehandler;
 }
 
-static void httpd_checkidle(void *arg)
+static void
+httpd_checkidle(void *arg)
 {
 	mowgli_node_t *n, *tn;
 	struct connection *cptr;
@@ -370,7 +380,8 @@ static void httpd_checkidle(void *arg)
 	}
 }
 
-static void httpd_config_ready(void *vptr)
+static void
+httpd_config_ready(void *vptr)
 {
 	if (httpd_config.host != NULL && httpd_config.port != 0)
 	{
