@@ -30,7 +30,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
         service_delete(statsvs);
 }
 
-void ss_cmd_help(struct sourceinfo * si, int parc, char *parv[])
+void
+ss_cmd_help(struct sourceinfo * si, int parc, char *parv[])
 {
     char *command = parv[0];
 
