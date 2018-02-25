@@ -22,7 +22,8 @@
 
 static bool (*parent_command_authorize)(struct service *svs, struct sourceinfo *si, struct command *c, const char *userlevel) = NULL;
 
-static bool cmdperm_command_authorize(struct service *svs, struct sourceinfo *si, struct command *c, const char *userlevel)
+static bool
+cmdperm_command_authorize(struct service *svs, struct sourceinfo *si, struct command *c, const char *userlevel)
 {
 	char permbuf[BUFSIZE], *cp;
 
