@@ -25,7 +25,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 }
 
 /* HELP <command> [params] */
-static void cs_cmd_help(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *command = parv[0];
 
