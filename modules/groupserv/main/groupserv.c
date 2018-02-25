@@ -9,19 +9,22 @@ struct groupserv_config gs_config;
 
 mowgli_heap_t *mygroup_heap, *groupacs_heap;
 
-void mygroups_init(void)
+void
+mygroups_init(void)
 {
 	mygroup_heap = mowgli_heap_create(sizeof(struct mygroup), HEAP_USER, BH_NOW);
 	groupacs_heap = mowgli_heap_create(sizeof(struct groupacs), HEAP_CHANACS, BH_NOW);
 }
 
-void mygroups_deinit(void)
+void
+mygroups_deinit(void)
 {
 	mowgli_heap_destroy(mygroup_heap);
 	mowgli_heap_destroy(groupacs_heap);
 }
 
-static void mygroup_delete(struct mygroup *mg)
+static void
+mygroup_delete(struct mygroup *mg)
 {
 	mowgli_node_t *n, *tn;
 
@@ -41,12 +44,14 @@ static void mygroup_delete(struct mygroup *mg)
 	mowgli_heap_free(mygroup_heap, mg);
 }
 
-struct mygroup *mygroup_add(const char *name)
+struct mygroup *
+mygroup_add(const char *name)
 {
 	return mygroup_add_id(NULL, name);
 }
 
-struct mygroup *mygroup_add_id(const char *id, const char *name)
+struct mygroup *
+mygroup_add_id(const char *id, const char *name)
 {
 	struct mygroup *mg;
 
@@ -75,7 +80,8 @@ struct mygroup *mygroup_add_id(const char *id, const char *name)
 	return mg;
 }
 
-struct mygroup *mygroup_find(const char *name)
+struct mygroup *
+mygroup_find(const char *name)
 {
 	struct myentity *mg = myentity_find(name);
 
@@ -88,13 +94,15 @@ struct mygroup *mygroup_find(const char *name)
 	return group(mg);
 }
 
-static void groupacs_des(struct groupacs *ga)
+static void
+groupacs_des(struct groupacs *ga)
 {
 	metadata_delete_all(ga);
 	mowgli_heap_free(groupacs_heap, ga);
 }
 
-struct groupacs *groupacs_add(struct mygroup *mg, struct myentity *mt, unsigned int flags)
+struct groupacs *
+groupacs_add(struct mygroup *mg, struct myentity *mt, unsigned int flags)
 {
 	struct groupacs *ga;
 
@@ -114,7 +122,8 @@ struct groupacs *groupacs_add(struct mygroup *mg, struct myentity *mt, unsigned 
 	return ga;
 }
 
-struct groupacs *groupacs_find(struct mygroup *mg, struct myentity *mt, unsigned int flags, bool allow_recurse)
+struct groupacs *
+groupacs_find(struct mygroup *mg, struct myentity *mt, unsigned int flags, bool allow_recurse)
 {
 	mowgli_node_t *n;
 	struct groupacs *out = NULL;
@@ -157,7 +166,8 @@ struct groupacs *groupacs_find(struct mygroup *mg, struct myentity *mt, unsigned
 	return out;
 }
 
-void groupacs_delete(struct mygroup *mg, struct myentity *mt)
+void
+groupacs_delete(struct mygroup *mg, struct myentity *mt)
 {
 	struct groupacs *ga;
 
@@ -170,12 +180,14 @@ void groupacs_delete(struct mygroup *mg, struct myentity *mt)
 	}
 }
 
-bool groupacs_sourceinfo_has_flag(struct mygroup *mg, struct sourceinfo *si, unsigned int flag)
+bool
+groupacs_sourceinfo_has_flag(struct mygroup *mg, struct sourceinfo *si, unsigned int flag)
 {
 	return groupacs_find(mg, entity(si->smu), flag, true) != NULL;
 }
 
-unsigned int groupacs_sourceinfo_flags(struct mygroup *mg, struct sourceinfo *si)
+unsigned int
+groupacs_sourceinfo_flags(struct mygroup *mg, struct sourceinfo *si)
 {
 	struct groupacs *ga;
 
@@ -186,7 +198,8 @@ unsigned int groupacs_sourceinfo_flags(struct mygroup *mg, struct sourceinfo *si
 	return ga->flags;
 }
 
-unsigned int mygroup_count_flag(struct mygroup *mg, unsigned int flag)
+unsigned int
+mygroup_count_flag(struct mygroup *mg, unsigned int flag)
 {
 	mowgli_node_t *n;
 	unsigned int count = 0;
@@ -210,7 +223,8 @@ unsigned int mygroup_count_flag(struct mygroup *mg, unsigned int flag)
 	return count;
 }
 
-mowgli_list_t *myentity_get_membership_list(struct myentity *mt)
+mowgli_list_t *
+myentity_get_membership_list(struct myentity *mt)
 {
 	mowgli_list_t *l;
 
@@ -224,7 +238,8 @@ mowgli_list_t *myentity_get_membership_list(struct myentity *mt)
 	return l;
 }
 
-const char *mygroup_founder_names(struct mygroup *mg)
+const char *
+mygroup_founder_names(struct mygroup *mg)
 {
         mowgli_node_t *n;
         struct groupacs *ga;
@@ -244,7 +259,8 @@ const char *mygroup_founder_names(struct mygroup *mg)
         return names;
 }
 
-unsigned int myentity_count_group_flag(struct myentity *mt, unsigned int flagset)
+unsigned int
+myentity_count_group_flag(struct myentity *mt, unsigned int flagset)
 {
 	mowgli_list_t *l;
 	mowgli_node_t *n;
@@ -262,7 +278,8 @@ unsigned int myentity_count_group_flag(struct myentity *mt, unsigned int flagset
 	return count;
 }
 
-unsigned int gs_flags_parser(char *flagstring, bool allow_minus, unsigned int flags)
+unsigned int
+gs_flags_parser(char *flagstring, bool allow_minus, unsigned int flags)
 {
 	char *c;
 	unsigned int dir = 0;
@@ -316,7 +333,8 @@ unsigned int gs_flags_parser(char *flagstring, bool allow_minus, unsigned int fl
 	return flags;
 }
 
-void remove_group_chanacs(struct mygroup *mg)
+void
+remove_group_chanacs(struct mygroup *mg)
 {
 	struct chanacs *ca;
 	struct mychan *mc;
@@ -380,7 +398,8 @@ void remove_group_chanacs(struct mygroup *mg)
  * Side Effects:
  *      - a group is renamed.
  */
-void mygroup_rename(struct mygroup *mg, const char *name)
+void
+mygroup_rename(struct mygroup *mg, const char *name)
 {
 	stringref newname;
 	char nb[GROUPLEN + 1];
