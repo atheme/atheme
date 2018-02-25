@@ -26,7 +26,8 @@
 #include "pmodule.h"
 #include "privs.h"
 
-void handle_info(struct user *u)
+void
+handle_info(struct user *u)
 {
 	unsigned int i;
 
@@ -41,7 +42,8 @@ void handle_info(struct user *u)
 	numeric_sts(me.me, 374, u, ":End of /INFO list");
 }
 
-int get_version_string(char *buf, size_t bufsize)
+int
+get_version_string(char *buf, size_t bufsize)
 {
 	const struct crypt_impl *ci = crypt_get_default_provider();
 #ifdef REPRODUCIBLE_BUILDS
@@ -53,7 +55,8 @@ int get_version_string(char *buf, size_t bufsize)
 #endif
 }
 
-void handle_version(struct user *u)
+void
+handle_version(struct user *u)
 {
 	if (u == NULL)
 		return;
@@ -65,7 +68,8 @@ void handle_version(struct user *u)
 	numeric_sts(me.me, 351, u, "%s", ver);
 }
 
-void handle_admin(struct user *u)
+void
+handle_admin(struct user *u)
 {
 
 	if (u == NULL)
@@ -80,17 +84,20 @@ void handle_admin(struct user *u)
 	numeric_sts(me.me, 259, u, ":<%s>", me.adminemail);
 }
 
-static void dictionary_stats_cb(const char *line, void *privdata)
+static void
+dictionary_stats_cb(const char *line, void *privdata)
 {
 	numeric_sts(me.me, 249, ((struct user *)privdata), "B :%s", line);
 }
 
-static void connection_stats_cb(const char *line, void *privdata)
+static void
+connection_stats_cb(const char *line, void *privdata)
 {
 	numeric_sts(me.me, 249, ((struct user *)privdata), "F :%s", line);
 }
 
-void handle_stats(struct user *u, char req)
+void
+handle_stats(struct user *u, char req)
 {
 	struct kline *k;
 	struct xline *x;
@@ -323,7 +330,8 @@ void handle_stats(struct user *u, char req)
 	numeric_sts(me.me, 219, u, "%c :End of /STATS report", req);
 }
 
-void handle_whois(struct user *u, const char *target)
+void
+handle_whois(struct user *u, const char *target)
 {
 	struct user *t = user_find_named(target);
 
@@ -349,7 +357,8 @@ void handle_whois(struct user *u, const char *target)
 	numeric_sts(me.me, 318, u, "%s :End of WHOIS", target);
 }
 
-static void single_trace(struct user *u, struct user *t)
+static void
+single_trace(struct user *u, struct user *t)
 {
 	const char *classname;
 
@@ -363,7 +372,8 @@ static void single_trace(struct user *u, struct user *t)
 /* target -> object to trace
  * dest -> server to execute command on
  */
-void handle_trace(struct user *u, const char *target, const char *dest)
+void
+handle_trace(struct user *u, const char *target, const char *dest)
 {
 	struct user *t;
 	mowgli_node_t *n;
@@ -399,7 +409,8 @@ void handle_trace(struct user *u, const char *target, const char *dest)
 	numeric_sts(me.me, 262, u, "%s :End of TRACE", target);
 }
 
-void handle_motd(struct user *u)
+void
+handle_motd(struct user *u)
 {
 	FILE *f;
 	char lbuf[BUFSIZE];
@@ -448,7 +459,8 @@ void handle_motd(struct user *u)
 	fclose(f);
 }
 
-void handle_away(struct user *u, const char *message)
+void
+handle_away(struct user *u, const char *message)
 {
 	if (message == NULL || *message == '\0')
 	{
@@ -524,7 +536,8 @@ handle_channel_message(struct sourceinfo *si, char *target, bool is_notice, char
 	}
 }
 
-void handle_message(struct sourceinfo *si, char *target, bool is_notice, char *message)
+void
+handle_message(struct sourceinfo *si, char *target, bool is_notice, char *message)
 {
 	char *vec[3];
 	struct user *u, *target_u;
@@ -635,7 +648,8 @@ void handle_message(struct sourceinfo *si, char *target, bool is_notice, char *m
 		si->service->handler(si, 2, vec);
 }
 
-void handle_topic_from(struct sourceinfo *si, struct channel *c, const char *setter, time_t ts, const char *topic)
+void
+handle_topic_from(struct sourceinfo *si, struct channel *c, const char *setter, time_t ts, const char *topic)
 {
 	hook_channel_topic_check_t hdata;
 
@@ -678,7 +692,8 @@ void handle_topic_from(struct sourceinfo *si, struct channel *c, const char *set
 	}
 }
 
-void handle_topic(struct channel *c, const char *setter, time_t ts, const char *topic)
+void
+handle_topic(struct channel *c, const char *setter, time_t ts, const char *topic)
 {
 	char newsetter[HOSTLEN + 1], *p;
 
@@ -712,7 +727,8 @@ void handle_topic(struct channel *c, const char *setter, time_t ts, const char *
 	hook_call_channel_topic(c);
 }
 
-static const char *skip_kill_path(const char *reason)
+static const char *
+skip_kill_path(const char *reason)
 {
 	const char *p;
 	bool have_dot = false;
@@ -729,7 +745,8 @@ static const char *skip_kill_path(const char *reason)
 	return have_dot ? p + 1 : reason;
 }
 
-void handle_kill(struct sourceinfo *si, const char *victim, const char *reason)
+void
+handle_kill(struct sourceinfo *si, const char *victim, const char *reason)
 {
 	const char *source, *source1, *origreason;
 	char qreason[512];
@@ -788,7 +805,8 @@ void handle_kill(struct sourceinfo *si, const char *victim, const char *reason)
 	}
 }
 
-struct server *handle_server(struct sourceinfo *si, const char *name, const char *sid,
+struct server *
+handle_server(struct sourceinfo *si, const char *name, const char *sid,
 		int hops, const char *desc)
 {
 	struct server *s = NULL;
@@ -812,7 +830,8 @@ struct server *handle_server(struct sourceinfo *si, const char *name, const char
 	return s;
 }
 
-void handle_eob(struct server *s)
+void
+handle_eob(struct server *s)
 {
 	mowgli_node_t *n;
 	struct server *s2;
@@ -840,7 +859,8 @@ void handle_eob(struct server *s)
  * t - target of the message (to be used in warning the user, may be NULL
  *     to use the server name)
  */
-int floodcheck(struct user *u, struct user *t)
+int
+floodcheck(struct user *u, struct user *t)
 {
 	const char *from;
 	static time_t last_ignore_notice = 0;
@@ -950,13 +970,15 @@ int floodcheck(struct user *u, struct user *t)
 	return 0;
 }
 
-void command_add_flood(struct sourceinfo *si, unsigned int amount)
+void
+command_add_flood(struct sourceinfo *si, unsigned int amount)
 {
 	if (si->su != NULL)
 		si->su->msgs += amount;
 }
 
-bool should_reg_umode(struct user *u)
+bool
+should_reg_umode(struct user *u)
 {
 	struct mynick *mn;
 
