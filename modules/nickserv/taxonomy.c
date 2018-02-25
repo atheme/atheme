@@ -23,7 +23,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("nickserv", &ns_taxonomy);
 }
 
-static void ns_cmd_taxonomy(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_taxonomy(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *target = parv[0];
 	struct myuser *mu;
