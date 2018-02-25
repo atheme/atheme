@@ -1,6 +1,7 @@
 #include "atheme.h"
 
-int main(int argc, const char *argv)
+int
+main(int argc, const char *argv)
 {
 	char b64[] = "Q2hyaXNUZXN0AENocmlzVGVzdABwbXpqZ3VseGF5ZWJjcGJ3cXFkaA==";
 	char b64out[BUFSIZE];
