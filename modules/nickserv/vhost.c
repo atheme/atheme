@@ -31,8 +31,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("nickserv", &ns_listvhost);
 }
 
-
-static void do_sethost(struct user *u, stringref host)
+static void
+do_sethost(struct user *u, stringref host)
 {
 	if (!strcmp(u->vhost, host))
 		return;
@@ -40,7 +40,8 @@ static void do_sethost(struct user *u, stringref host)
 	user_sethost(nicksvs.me->me, u, host);
 }
 
-static void do_sethost_all(struct myuser *mu, stringref host)
+static void
+do_sethost_all(struct myuser *mu, stringref host)
 {
 	mowgli_node_t *n;
 	struct user *u;
@@ -55,7 +56,8 @@ static void do_sethost_all(struct myuser *mu, stringref host)
 
 /* VHOST <account> [host]  (legacy) */
 /* VHOST <account> ON|OFF [host] */
-static void ns_cmd_vhost(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_vhost(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *host;
@@ -249,7 +251,8 @@ static void ns_cmd_vhost(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-static void ns_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *pattern;
 	struct myentity_iteration_state state;
@@ -281,7 +284,8 @@ static void ns_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
 						    N_("\2%d\2 matches for pattern \2%s\2"), matches), matches, pattern);
 }
 
-static void vhost_on_identify(struct user *u)
+static void
+vhost_on_identify(struct user *u)
 {
 	struct myuser *mu = u->myuser;
 	struct metadata *md;
