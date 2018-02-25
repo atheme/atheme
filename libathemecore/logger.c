@@ -29,7 +29,8 @@ int log_force;
 static mowgli_list_t log_files = { NULL, NULL, 0 };
 
 /* private destructor function for struct logfile. */
-static void logfile_delete_file(void *vdata)
+static void
+logfile_delete_file(void *vdata)
 {
 	struct logfile *lf = (struct logfile *) vdata;
 
@@ -41,7 +42,8 @@ static void logfile_delete_file(void *vdata)
 	free(lf);
 }
 
-static void logfile_delete_channel(void *vdata)
+static void
+logfile_delete_channel(void *vdata)
 {
 	struct logfile *lf = (struct logfile *) vdata;
 
@@ -52,7 +54,8 @@ static void logfile_delete_channel(void *vdata)
 	free(lf);
 }
 
-static void logfile_join_channels(struct channel *c)
+static void
+logfile_join_channels(struct channel *c)
 {
 	mowgli_node_t *n;
 
@@ -74,7 +77,8 @@ static void logfile_join_channels(struct channel *c)
 	}
 }
 
-static void logfile_join_service(struct service *svs)
+static void
+logfile_join_service(struct service *svs)
 {
 	mowgli_node_t *n;
 	struct channel *c;
@@ -98,7 +102,8 @@ static void logfile_join_service(struct service *svs)
 	}
 }
 
-static void logfile_part_removed(void *unused)
+static void
+logfile_part_removed(void *unused)
 {
 	struct channel *c;
 	mowgli_patricia_iteration_state_t state;
@@ -184,7 +189,8 @@ logfile_strip_control_codes(const char *buf)
  * Side Effects:
  *       - none
  */
-static void logfile_write(struct logfile *lf, const char *buf)
+static void
+logfile_write(struct logfile *lf, const char *buf)
 {
 	char datetime[BUFSIZE];
 	time_t t;
@@ -217,7 +223,8 @@ static void logfile_write(struct logfile *lf, const char *buf)
  * Side Effects:
  *       - none
  */
-static void logfile_write_irc(struct logfile *lf, const char *buf)
+static void
+logfile_write_irc(struct logfile *lf, const char *buf)
 {
 	struct channel *c;
 
@@ -280,7 +287,8 @@ static void logfile_write_irc(struct logfile *lf, const char *buf)
  * Side Effects:
  *       - none
  */
-static void logfile_write_snotices(struct logfile *lf, const char *buf)
+static void
+logfile_write_snotices(struct logfile *lf, const char *buf)
 {
 	struct channel *c;
 
@@ -308,7 +316,8 @@ static void logfile_write_snotices(struct logfile *lf, const char *buf)
  * Side Effects:
  *       - log_files is populated with the given object.
  */
-void logfile_register(struct logfile *lf)
+void
+logfile_register(struct logfile *lf)
 {
 	mowgli_node_add(lf, &lf->node, &log_files);
 }
@@ -327,7 +336,8 @@ void logfile_register(struct logfile *lf)
  * Side Effects:
  *       - the given object is removed from log_files, but remains valid.
  */
-void logfile_unregister(struct logfile *lf)
+void
+logfile_unregister(struct logfile *lf)
 {
 	mowgli_node_delete(&lf->node, &log_files);
 }
@@ -347,7 +357,8 @@ void logfile_unregister(struct logfile *lf)
  * Side Effects:
  *       - log_files is populated with the newly created struct logfile.
  */
-struct logfile *logfile_new(const char *path, unsigned int log_mask)
+struct logfile *
+logfile_new(const char *path, unsigned int log_mask)
 {
 	static bool hooked = false;
 	static time_t lastfail = 0;
@@ -433,7 +444,8 @@ struct logfile *logfile_new(const char *path, unsigned int log_mask)
  *       - the log_files list is populated with the master
  *         atheme.log reference.
  */
-void log_open(void)
+void
+log_open(void)
 {
 	log_file = logfile_new(log_path, LG_ERROR | LG_INFO | LG_CMD_ADMIN);
 }
@@ -452,7 +464,8 @@ void log_open(void)
  * Side Effects:
  *       - struct logfile objects in the log_files list are destroyed.
  */
-void log_shutdown(void)
+void
+log_shutdown(void)
 {
 	mowgli_node_t *n, *tn;
 
@@ -474,7 +487,8 @@ void log_shutdown(void)
  * Side Effects:
  *       - none
  */
-bool log_debug_enabled(void)
+bool
+log_debug_enabled(void)
 {
 	mowgli_node_t *n;
 	struct logfile *lf;
@@ -504,7 +518,8 @@ bool log_debug_enabled(void)
  * Side Effects:
  *       - logging mask updated
  */
-void log_master_set_mask(unsigned int mask)
+void
+log_master_set_mask(unsigned int mask)
 {
 	/* couldn't be opened etc */
 	if (log_file == NULL)
@@ -528,7 +543,8 @@ void log_master_set_mask(unsigned int mask)
  * Side Effects:
  *       - none
  */
-struct logfile *logfile_find_mask(unsigned int log_mask)
+struct logfile *
+logfile_find_mask(unsigned int log_mask)
 {
 	mowgli_node_t *n;
 	struct logfile *lf;
@@ -636,7 +652,8 @@ slog(unsigned int level, const char *fmt, ...)
 	va_end(args);
 }
 
-const char *format_user(struct user *source, bool full)
+const char *
+format_user(struct user *source, bool full)
 {
 	static char buf[BUFSIZE];
 	char accountbuf[(NICKLEN + 1) * 5]; /* entity name len is NICKLEN * 4, plus another for the ID */
@@ -662,7 +679,8 @@ const char *format_user(struct user *source, bool full)
 	return buf;
 }
 
-const char *format_external(const char *type, struct connection *source, const char *sourcedesc, struct myuser *mu, bool full)
+const char *
+format_external(const char *type, struct connection *source, const char *sourcedesc, struct myuser *mu, bool full)
 {
 	static char buf[BUFSIZE];
 
@@ -679,7 +697,8 @@ const char *format_external(const char *type, struct connection *source, const c
 	return buf;
 }
 
-const char *format_sourceinfo(struct sourceinfo *si, bool full)
+const char *
+format_sourceinfo(struct sourceinfo *si, bool full)
 {
 	if(si->v != NULL && si->v->format != NULL)
 		return si->v->format(si, full);
@@ -823,7 +842,8 @@ logcommand_external(struct service *svs, const char *type, struct connection *so
  * Side Effects:
  *       - qualifying struct logfile objects in log_files are updated
  */
-void logaudit_denycmd(struct sourceinfo *si, struct command *cmd, const char *userlevel)
+void
+logaudit_denycmd(struct sourceinfo *si, struct command *cmd, const char *userlevel)
 {
 	slog_ext(LOG_NONINTERACTIVE, LG_DENYCMD, "DENYCMD: [%s] was denied execution of [%s], need privileges [%s %s]",
 		 get_source_security_label(si), cmd->name, cmd->access, userlevel != NULL ? userlevel : "");
