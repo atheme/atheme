@@ -57,7 +57,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	hook_del_user_oper(check_user);
 }
 
-static void noop_kill_users(void *dummy)
+static void
+noop_kill_users(void *dummy)
 {
 	struct service *service;
 	mowgli_node_t *n, *tn;
@@ -75,7 +76,8 @@ static void noop_kill_users(void *dummy)
 	}
 }
 
-static void check_quit(struct user *u)
+static void
+check_quit(struct user *u)
 {
 	mowgli_node_t *n;
 
@@ -92,7 +94,8 @@ static void check_quit(struct user *u)
 	}
 }
 
-static void check_user(struct user *u)
+static void
+check_user(struct user *u)
 {
 	mowgli_node_t *n;
 	char hostbuf[BUFSIZE];
@@ -141,7 +144,8 @@ static void check_user(struct user *u)
 	}
 }
 
-static struct noop *noop_find(char *target, mowgli_list_t *list)
+static struct noop *
+noop_find(char *target, mowgli_list_t *list)
 {
 	mowgli_node_t *n;
 
@@ -157,7 +161,8 @@ static struct noop *noop_find(char *target, mowgli_list_t *list)
 }
 
 /* NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> [reason] */
-static void os_cmd_noop(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_noop(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
 	struct noop *np;
