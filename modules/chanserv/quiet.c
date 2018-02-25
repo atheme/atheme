@@ -30,7 +30,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("chanserv", &cs_unquiet);
 }
 
-static void make_extbanmask(char *buf, size_t buflen, const char *mask)
+static void
+make_extbanmask(char *buf, size_t buflen, const char *mask)
 {
 	return_if_fail(buf != NULL);
 	return_if_fail(mask != NULL);
@@ -51,13 +52,15 @@ static void make_extbanmask(char *buf, size_t buflen, const char *mask)
 	mowgli_strlcat(buf, mask, buflen);
 }
 
-static char get_quiet_ban_char(void)
+static char
+get_quiet_ban_char(void)
 {
 	return (ircd->type == PROTOCOL_UNREAL ||
 			ircd->type == PROTOCOL_INSPIRCD) ? 'b' : 'q';
 }
 
-static char *strip_extban(char *mask)
+static char *
+strip_extban(char *mask)
 {
 	if (ircd->type == PROTOCOL_INSPIRCD)
 		return sstrdup(&mask[2]);
@@ -66,7 +69,8 @@ static char *strip_extban(char *mask)
 	return sstrdup(mask);
 }
 
-struct chanban *place_quietmask(struct channel *c, int dir, const char *hostbuf)
+struct chanban *
+place_quietmask(struct channel *c, int dir, const char *hostbuf)
 {
 	char rhostbuf[BUFSIZE];
 	struct chanban *cb = NULL;
@@ -80,7 +84,8 @@ struct chanban *place_quietmask(struct channel *c, int dir, const char *hostbuf)
 	return cb;
 }
 
-static void make_extban(char *buf, size_t size, struct user *tu)
+static void
+make_extban(char *buf, size_t size, struct user *tu)
 {
 	return_if_fail(buf != NULL);
 	return_if_fail(tu != NULL);
@@ -173,7 +178,8 @@ devoice_user(struct sourceinfo *si, struct mychan *mc, struct channel *c, struct
 /* Notify at most this many users in private notices, otherwise channel */
 #define MAX_SINGLE_NOTIFY 3
 
-static void notify_one_victim(struct sourceinfo *si, struct channel *c, struct user *u, int dir)
+static void
+notify_one_victim(struct sourceinfo *si, struct channel *c, struct user *u, int dir)
 {
 	return_if_fail(dir == MTYPE_ADD || dir == MTYPE_DEL);
 
@@ -194,7 +200,8 @@ static void notify_one_victim(struct sourceinfo *si, struct channel *c, struct u
 				c->name, get_source_name(si));
 }
 
-static void notify_victims(struct sourceinfo *si, struct channel *c, struct chanban *cb, int dir)
+static void
+notify_victims(struct sourceinfo *si, struct channel *c, struct chanban *cb, int dir)
 {
 	mowgli_node_t *n;
 	struct chanuser *cu;
@@ -257,7 +264,8 @@ static void notify_victims(struct sourceinfo *si, struct channel *c, struct chan
 	free(tmpban.mask);
 }
 
-static void cs_cmd_quiet(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_quiet(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
 	char *target = parv[1];
@@ -352,7 +360,8 @@ static void cs_cmd_quiet(struct sourceinfo *si, int parc, char *parv[])
 	free(targetlist);
 }
 
-static void cs_cmd_unquiet(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_unquiet(struct sourceinfo *si, int parc, char *parv[])
 {
         const char *channel = parv[0];
         const char *target = parv[1];
