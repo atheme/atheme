@@ -44,7 +44,8 @@ static mowgli_patricia_t *translation_tree; /* language translations */
  *     - on success, nothing
  *     - on failure, the program will abort
  */
-void translation_init(void)
+void
+translation_init(void)
 {
 	itranslation_tree = mowgli_patricia_create(noopcanon);
 	translation_tree = mowgli_patricia_create(noopcanon);
@@ -63,7 +64,8 @@ void translation_init(void)
  * Side Effects:
  *     - none
  */
-const char *translation_get(const char *str)
+const char *
+translation_get(const char *str)
 {
 	struct translation *t;
 
@@ -89,7 +91,8 @@ const char *translation_get(const char *str)
  * Side Effects:
  *     - a new translation is added to the cache
  */
-void itranslation_create(const char *str, const char *trans)
+void
+itranslation_create(const char *str, const char *trans)
 {
 	struct translation *const t = smalloc(sizeof *t);
 
@@ -111,7 +114,8 @@ void itranslation_create(const char *str, const char *trans)
  * Side Effects:
  *     - a string is removed from the translation cache
  */
-void itranslation_destroy(const char *str)
+void
+itranslation_destroy(const char *str)
 {
 	struct translation *t = mowgli_patricia_delete(itranslation_tree, str);
 
@@ -135,7 +139,8 @@ void itranslation_destroy(const char *str)
  * Side Effects:
  *     - a new translation is added to the cache
  */
-void translation_create(const char *str, const char *trans)
+void
+translation_create(const char *str, const char *trans)
 {
 	char buf[BUFSIZE];
 	struct translation *const t = smalloc(sizeof *t);
@@ -165,7 +170,8 @@ void translation_create(const char *str, const char *trans)
  * Side Effects:
  *     - a string is removed from the translation cache
  */
-void translation_destroy(const char *str)
+void
+translation_destroy(const char *str)
 {
 	struct translation *t = mowgli_patricia_delete(translation_tree, str);
 
