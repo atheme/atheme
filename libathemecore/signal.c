@@ -99,7 +99,8 @@ signal_usr1_handler(int signum)
 	abort();
 }
 
-void init_signal_handlers(void)
+void
+init_signal_handlers(void)
 {
 #ifndef MOWGLI_OS_WIN
 #ifdef SIGHUP
@@ -132,7 +133,8 @@ void init_signal_handlers(void)
 #endif
 }
 
-void check_signals(void)
+void
+check_signals(void)
 {
 	/* rehash */
 	if (got_sighup)
@@ -222,7 +224,8 @@ struct childproc
  * Will call cb(pid, status, data) after the process terminates
  * where status is the status from waitpid(2).
  */
-void childproc_add(pid_t pid, const char *desc, void (*cb)(pid_t pid, int status, void *data), void *data)
+void
+childproc_add(pid_t pid, const char *desc, void (*cb)(pid_t pid, int status, void *data), void *data)
 {
 	struct childproc *const p = smalloc(sizeof *p);
 	p->pid = pid;
@@ -232,7 +235,8 @@ void childproc_add(pid_t pid, const char *desc, void (*cb)(pid_t pid, int status
 	mowgli_node_add(p, &p->node, &childproc_list);
 }
 
-static void childproc_free(struct childproc *p)
+static void
+childproc_free(struct childproc *p)
 {
 	free(p->desc);
 	free(p);
@@ -241,7 +245,8 @@ static void childproc_free(struct childproc *p)
 /* Forgets about all child processes with the given callback.
  * Useful if the callback is in a module which is being unloaded.
  */
-void childproc_delete_all(void (*cb)(pid_t pid, int status, void *data))
+void
+childproc_delete_all(void (*cb)(pid_t pid, int status, void *data))
 {
 	mowgli_node_t *n, *tn;
 	struct childproc *p;
@@ -257,7 +262,8 @@ void childproc_delete_all(void (*cb)(pid_t pid, int status, void *data))
 	}
 }
 
-static void childproc_check(void)
+static void
+childproc_check(void)
 {
 #ifndef MOWGLI_OS_WIN
 	pid_t pid;
