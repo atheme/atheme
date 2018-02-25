@@ -30,7 +30,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 #define MAXMATCHES_DEF 1000
 
-static void os_cmd_rmatch(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_rmatch(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct atheme_regex *regex;
 	char usermask[512];
