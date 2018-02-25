@@ -32,7 +32,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static mowgli_list_t op_actions;
 
-static void cmd_op(struct sourceinfo *si, bool opping, int parc, char *parv[])
+static void
+cmd_op(struct sourceinfo *si, bool opping, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	char *nick = parv[1];
@@ -117,7 +118,8 @@ static void cmd_op(struct sourceinfo *si, bool opping, int parc, char *parv[])
 	prefix_action_clear(&op_actions);
 }
 
-static void cs_cmd_op(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_op(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (!parv[0])
 	{
@@ -129,7 +131,8 @@ static void cs_cmd_op(struct sourceinfo *si, int parc, char *parv[])
 	cmd_op(si, true, parc, parv);
 }
 
-static void cs_cmd_deop(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_deop(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (!parv[0])
 	{
