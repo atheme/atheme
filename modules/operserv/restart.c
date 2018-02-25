@@ -23,7 +23,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("operserv", &os_restart);
 }
 
-static void os_cmd_restart(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_restart(struct sourceinfo *si, int parc, char *parv[])
 {
 	logcommand(si, CMDLOG_ADMIN, "RESTART");
 	wallops("Restarting by request of \2%s\2.", get_oper_name(si));
