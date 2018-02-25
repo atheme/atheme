@@ -38,23 +38,7 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	mowgli_node_t *n, *tn;
 
-	if (MOWGLI_LIST_LENGTH(&noop_kill_queue) > 0)
-	{
-		/* Cannot safely delete users from here, so just forget
-		 * about them.
-		 */
-		mowgli_timer_destroy(base_eventloop, noop_kill_users_timer);
-		MOWGLI_ITER_FOREACH_SAFE(n, tn, noop_kill_queue.head)
-		{
-			mowgli_node_delete(n, &noop_kill_queue);
-			mowgli_node_free(n);
-		}
-		hook_del_user_delete(check_quit);
-	}
-	service_named_unbind_command("operserv", &os_noop);
-	hook_del_user_oper(check_user);
 }
 
 static void

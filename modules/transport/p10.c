@@ -25,8 +25,6 @@
 #include "uplink.h"
 #include "pmodule.h"
 
-static void (*default_parse)(char *line) = NULL;
-
 /* parses a P10 IRC stream */
 static void
 p10_parse(char *line)
@@ -192,14 +190,13 @@ mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
 
-	default_parse = parse;
 	parse = &p10_parse;
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	parse = default_parse;
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("transport/p10", MODULE_UNLOAD_CAPABILITY_NEVER)

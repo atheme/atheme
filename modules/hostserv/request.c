@@ -81,21 +81,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	hook_del_user_drop(account_drop_request);
-	hook_del_nick_ungroup(nick_drop_request);
-	hook_del_myuser_delete(account_delete_request);
-	hook_del_operserv_info(osinfo_hook);
-	hook_del_db_write(write_hsreqdb);
 
-	del_conf_item("REGGROUP", &hostsvs->conf_table);
-
-	db_unregister_type_handler("HR");
-
- 	service_named_unbind_command("hostserv", &hs_request);
-	service_named_unbind_command("hostserv", &hs_waiting);
-	service_named_unbind_command("hostserv", &hs_reject);
-	service_named_unbind_command("hostserv", &hs_activate);
-	del_conf_item("REQUEST_PER_NICK", &hostsvs->conf_table);
 }
 
 static void

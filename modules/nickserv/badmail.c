@@ -47,12 +47,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	hook_del_user_can_register(check_registration);
-	hook_del_db_write(write_bedb);
 
-	db_unregister_type_handler("BE");
-
-	service_named_unbind_command("nickserv", &ns_badmail);
 }
 
 static void

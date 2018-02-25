@@ -12,8 +12,6 @@
 
 #include "atheme.h"
 
-static bool oldflag;
-
 static void
 mod_init(struct module *const restrict m)
 {
@@ -29,7 +27,7 @@ mod_init(struct module *const restrict m)
 		m->mflags = MODTYPE_FAIL;
 		return;
 	}
-	oldflag = ircd->uses_halfops;
+
 	ircd->uses_halfops = false;
 	update_chanacs_flags();
 }
@@ -37,8 +35,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	ircd->uses_halfops = oldflag;
-	update_chanacs_flags();
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("protocol/mixin_nohalfops", MODULE_UNLOAD_CAPABILITY_NEVER)

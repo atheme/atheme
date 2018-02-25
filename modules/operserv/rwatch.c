@@ -85,37 +85,7 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	mowgli_node_t *n, *tn;
 
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, rwatch_list.head)
-	{
-		struct rwatch *rw = n->data;
-
-		free(rw->regex);
-		free(rw->reason);
-		if (rw->re != NULL)
-			regex_destroy(rw->re);
-		free(rw);
-
-		mowgli_node_delete(n, &rwatch_list);
-		mowgli_node_free(n);
-	}
-
-	service_named_unbind_command("operserv", &os_rwatch);
-
-	command_delete(&os_rwatch_add, os_rwatch_cmds);
-	command_delete(&os_rwatch_del, os_rwatch_cmds);
-	command_delete(&os_rwatch_list, os_rwatch_cmds);
-	command_delete(&os_rwatch_set, os_rwatch_cmds);
-
-	hook_del_user_add(rwatch_newuser);
-	hook_del_user_nickchange(rwatch_nickchange);
-	hook_del_db_write(write_rwatchdb);
-
-        db_unregister_type_handler("RW");
-        db_unregister_type_handler("RR");
-
-	mowgli_patricia_destroy(os_rwatch_cmds, NULL, NULL);
 }
 
 static void

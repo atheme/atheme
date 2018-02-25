@@ -318,29 +318,7 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	if (chansvs.me)
-	{
-		chansvs.nick = NULL;
-		chansvs.user = NULL;
-		chansvs.host = NULL;
-		chansvs.real = NULL;
-		service_delete(chansvs.me);
-		chansvs.me = NULL;
-	}
 
-	hook_del_config_ready(chanserv_config_ready);
-	hook_del_channel_join(cs_join);
-	hook_del_channel_part(cs_part);
-	hook_del_channel_register(cs_register);
-	hook_del_channel_succession(cs_succession);
-	hook_del_channel_add(cs_newchan);
-	hook_del_channel_topic(cs_keeptopic_topicset);
-	hook_del_channel_can_change_topic(cs_topiccheck);
-	hook_del_channel_tschange(cs_tschange);
-	hook_del_channel_mode_change(cs_bounce_mode_change);
-	hook_del_shutdown(on_shutdown);
-
-	mowgli_timer_destroy(base_eventloop, cs_leave_empty_timer);
 }
 
 static void

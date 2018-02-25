@@ -62,16 +62,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	hook_del_user_drop(account_drop_request);
-	hook_del_myuser_delete(account_delete_request);
-	hook_del_db_write(write_ticket_db);
 
-	db_unregister_type_handler("HE");
-
-	service_named_unbind_command("helpserv", &helpserv_request);
-	service_named_unbind_command("helpserv", &helpserv_list);
-	service_named_unbind_command("helpserv", &helpserv_close);
-	service_named_unbind_command("helpserv", &helpserv_cancel);
 }
 
 static void

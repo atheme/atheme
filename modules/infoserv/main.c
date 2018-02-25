@@ -548,28 +548,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	del_conf_item("LOGONINFO_COUNT", &infoserv->conf_table);
 
-	if (infoserv)
-	{
-		service_delete(infoserv);
-		infoserv = NULL;
-	}
-
-	hook_del_user_add(display_info);
-	hook_del_user_oper(display_oper_info);
-	hook_del_operserv_info(osinfo_hook);
-	hook_del_db_write(write_infodb);
-
-	db_unregister_type_handler("LI");
-	db_unregister_type_handler("LIO");
-
-	service_unbind_command(infoserv, &is_help);
-	service_unbind_command(infoserv, &is_post);
-	service_unbind_command(infoserv, &is_del);
-	service_unbind_command(infoserv, &is_odel);
-	service_unbind_command(infoserv, &is_list);
-	service_unbind_command(infoserv, &is_olist);
 }
 
 SIMPLE_DECLARE_MODULE_V1("infoserv/main", MODULE_UNLOAD_CAPABILITY_NEVER)

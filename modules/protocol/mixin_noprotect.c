@@ -9,8 +9,6 @@
 
 #include "atheme.h"
 
-static bool oldflag;
-
 static void
 mod_init(struct module *const restrict m)
 {
@@ -26,7 +24,7 @@ mod_init(struct module *const restrict m)
 		m->mflags = MODTYPE_FAIL;
 		return;
 	}
-	oldflag = ircd->uses_protect;
+
 	ircd->uses_protect = false;
 	update_chanacs_flags();
 }
@@ -34,8 +32,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	ircd->uses_protect = oldflag;
-	update_chanacs_flags();
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("protocol/mixin_noprotect", MODULE_UNLOAD_CAPABILITY_NEVER)

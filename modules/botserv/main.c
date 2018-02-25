@@ -1024,45 +1024,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	mowgli_node_t *n, *tn;
 
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, bs_bots.head)
-	{
-		struct botserv_bot *bot = (struct botserv_bot *) n->data;
-
-		mowgli_node_delete(&bot->bnode, &bs_bots);
-		service_delete(bot->me);
-		free(bot->nick);
-		free(bot->user);
-		free(bot->real);
-		free(bot->host);
-		free(bot);
-	}
-	service_unbind_command(botsvs, &bs_bot);
-	service_unbind_command(botsvs, &bs_assign);
-	service_unbind_command(botsvs, &bs_unassign);
-	service_unbind_command(botsvs, &bs_botlist);
-	del_conf_item("MIN_USERS", &botsvs->conf_table);
-	hook_del_channel_join(bs_join);
-	hook_del_channel_part(bs_part);
-	hook_del_channel_drop(bs_channel_drop);
-	hook_del_shutdown(on_shutdown);
-	hook_del_config_ready(botserv_config_ready);
-	hook_del_operserv_info(osinfo_hook);
-	hook_del_db_write(botserv_save_database);
-	db_unregister_type_handler("BOT");
-	db_unregister_type_handler("BOT-COUNT");
-
-	service_delete(botsvs);
-
-	modestack_mode_simple = modestack_mode_simple_real;
-	modestack_mode_limit  = modestack_mode_limit_real;
-	modestack_mode_ext    = modestack_mode_ext_real;
-	modestack_mode_param  = modestack_mode_param_real;
-	try_kick              = try_kick_real;
-	topic_sts             = topic_sts_real;
-	msg                   = msg_real;
-	notice                = notice_real;
 }
 
 /* ******************************************************************** */

@@ -61,15 +61,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	hook_del_db_write(write_hsofferdb);
-	db_unregister_type_handler("HO");
 
-	hook_del_group_drop(remove_group_offered_hosts);
-
- 	service_named_unbind_command("hostserv", &hs_offer);
-	service_named_unbind_command("hostserv", &hs_unoffer);
-	service_named_unbind_command("hostserv", &hs_offerlist);
-	service_named_unbind_command("hostserv", &hs_take);
 }
 
 static void

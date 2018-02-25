@@ -102,7 +102,7 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	uid_provider_impl = NULL;
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("protocol/base36uid", MODULE_UNLOAD_CAPABILITY_NEVER)

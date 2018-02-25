@@ -160,45 +160,7 @@ free_hostentry(const char *key, void *data, void *privdata)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	mowgli_node_t *n, *tn;
 
-	mowgli_patricia_destroy(hostlist, free_hostentry, NULL);
-	mowgli_heap_destroy(hostentry_heap);
-
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, clone_exempts.head)
-	{
-		struct clones_exemption *c = n->data;
-
-		free(c->ip);
-		free(c->reason);
-		free(c);
-
-		mowgli_node_delete(n, &clone_exempts);
-		mowgli_node_free(n);
-	}
-
-	service_named_unbind_command("operserv", &os_clones);
-
-	command_delete(&os_clones_kline, os_clones_cmds);
-	command_delete(&os_clones_list, os_clones_cmds);
-	command_delete(&os_clones_addexempt, os_clones_cmds);
-	command_delete(&os_clones_delexempt, os_clones_cmds);
-	command_delete(&os_clones_setexempt, os_clones_cmds);
-	command_delete(&os_clones_listexempt, os_clones_cmds);
-
-	command_delete(&os_clones_duration, os_clones_cmds);
-
-	hook_del_user_add(clones_newuser);
-	hook_del_user_delete(clones_userquit);
-	hook_del_db_write(write_exemptdb);
-	hook_del_config_ready(clones_configready);
-
-	db_unregister_type_handler("CLONES-DBV");
-	db_unregister_type_handler("CLONES-CK");
-	db_unregister_type_handler("CLONES-CD");
-	db_unregister_type_handler("CLONES-EX");
-
-	mowgli_patricia_destroy(os_clones_cmds, NULL, NULL);
 }
 
 static void
