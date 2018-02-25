@@ -34,7 +34,8 @@ mowgli_heap_t *uplink_heap;
 
 static void uplink_close(struct connection *cptr);
 
-void init_uplinks(void)
+void
+init_uplinks(void)
 {
 	uplink_heap = sharedheap_get(sizeof(struct uplink));
 	if (!uplink_heap)
@@ -44,7 +45,8 @@ void init_uplinks(void)
 	}
 }
 
-struct uplink *uplink_add(const char *name, const char *host, const char *send_password, const char *receive_password, const char *vhost, int port)
+struct uplink *
+uplink_add(const char *name, const char *host, const char *send_password, const char *receive_password, const char *vhost, int port)
 {
 	struct uplink *u;
 
@@ -86,7 +88,8 @@ struct uplink *uplink_add(const char *name, const char *host, const char *send_p
 	return u;
 }
 
-void uplink_delete(struct uplink * u)
+void
+uplink_delete(struct uplink * u)
 {
 	free(u->name);
 	free(u->host);
@@ -101,7 +104,8 @@ void uplink_delete(struct uplink * u)
 	cnt.uplink--;
 }
 
-struct uplink *uplink_find(const char *name)
+struct uplink *
+uplink_find(const char *name)
 {
 	mowgli_node_t *n;
 
@@ -116,7 +120,8 @@ struct uplink *uplink_find(const char *name)
 	return NULL;
 }
 
-static void reconn(void *arg)
+static void
+reconn(void *arg)
 {
 	if (me.connected)
 		return;
@@ -124,7 +129,8 @@ static void reconn(void *arg)
 	uplink_connect();
 }
 
-void uplink_connect(void)
+void
+uplink_connect(void)
 {
 	struct uplink *u;
 
@@ -178,7 +184,8 @@ void uplink_connect(void)
  *       uplink marked dead
  *       uplink deleted if it had been removed from configuration
  */
-static void uplink_close(struct connection *cptr)
+static void
+uplink_close(struct connection *cptr)
 {
 	struct channel *c;
 	mowgli_patricia_iteration_state_t state;
