@@ -25,7 +25,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("operserv", &os_info);
 }
 
-static void os_cmd_info(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *tn, *n2;
 
