@@ -41,7 +41,8 @@ struct command bs_botlist = { "BOTLIST", "Lists available bots.", AC_NONE, 0, bs
 
 /* ******************************************************************** */
 
-static struct botserv_bot *bs_mychan_find_bot(struct mychan *mc)
+static struct botserv_bot *
+bs_mychan_find_bot(struct mychan *mc)
 {
 	struct metadata *md;
 	struct botserv_bot *bot;
@@ -282,7 +283,8 @@ bs_join_registered(bool all)
 
 /* ******************************************************************** */
 
-static void bs_channel_drop(struct mychan *mc)
+static void
+bs_channel_drop(struct mychan *mc)
 {
 	struct botserv_bot *bot;
 
@@ -431,7 +433,8 @@ botserv_channel_handler(struct sourceinfo *si, int parc, char *parv[])
 
 /* ******************************************************************** */
 
-static void botserv_config_ready(void *unused)
+static void
+botserv_config_ready(void *unused)
 {
 	if (me.connected)
 		bs_join_registered(!config_options.leave_chans);
@@ -441,7 +444,8 @@ static void botserv_config_ready(void *unused)
 
 /* ******************************************************************** */
 
-void botserv_save_database(struct database_handle *db)
+void
+botserv_save_database(struct database_handle *db)
 {
 	mowgli_node_t *n;
 
@@ -465,7 +469,8 @@ void botserv_save_database(struct database_handle *db)
 	db_commit_row(db);
 }
 
-static void db_h_bot(struct database_handle *db, const char *type)
+static void
+db_h_bot(struct database_handle *db, const char *type)
 {
 	const char *nick = db_sread_word(db);
 	const char *user = db_sread_word(db);
@@ -490,7 +495,8 @@ static void db_h_bot(struct database_handle *db, const char *type)
 	mowgli_node_add(bot, &bot->bnode, &bs_bots);
 }
 
-static void db_h_bot_count(struct database_handle *db, const char *type)
+static void
+db_h_bot_count(struct database_handle *db, const char *type)
 {
 	unsigned int i = db_sread_uint(db);
 
@@ -500,7 +506,8 @@ static void db_h_bot_count(struct database_handle *db, const char *type)
 
 /* ******************************************************************** */
 
-struct botserv_bot* botserv_bot_find(char *name)
+struct botserv_bot *
+botserv_bot_find(char *name)
 {
 	mowgli_node_t *n;
 
@@ -521,7 +528,8 @@ struct botserv_bot* botserv_bot_find(char *name)
 /* ******************************************************************** */
 
 /* BOT CMD nick user host real */
-static void bs_cmd_bot(struct sourceinfo *si, int parc, char *parv[])
+static void
+bs_cmd_bot(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (parc < 1 || parv[0] == NULL)
 	{
@@ -555,7 +563,8 @@ static void bs_cmd_bot(struct sourceinfo *si, int parc, char *parv[])
 
 /* ******************************************************************** */
 
-static bool valid_misc_field(const char *field, size_t maxlen)
+static bool
+valid_misc_field(const char *field, size_t maxlen)
 {
 	if (strlen(field) > maxlen)
 		return false;
@@ -573,7 +582,8 @@ static bool valid_misc_field(const char *field, size_t maxlen)
 }
 
 /* CHANGE oldnick nick [user [host [real]]] */
-static void bs_cmd_change(struct sourceinfo *si, int parc, char *parv[])
+static void
+bs_cmd_change(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct botserv_bot *bot;
 	mowgli_patricia_iteration_state_t state;
@@ -676,7 +686,8 @@ static void bs_cmd_change(struct sourceinfo *si, int parc, char *parv[])
 /* ******************************************************************** */
 
 /* ADD nick user host real */
-static void bs_cmd_add(struct sourceinfo *si, int parc, char *parv[])
+static void
+bs_cmd_add(struct sourceinfo *si, int parc, char *parv[])
 {
 	char buf[BUFSIZE];
 
@@ -744,7 +755,8 @@ static void bs_cmd_add(struct sourceinfo *si, int parc, char *parv[])
 /* ******************************************************************** */
 
 /* DELETE nick */
-static void bs_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
+static void
+bs_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct botserv_bot *bot = botserv_bot_find(parv[0]);
 	mowgli_patricia_iteration_state_t state;
@@ -797,7 +809,8 @@ static void bs_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
 /* ******************************************************************** */
 
 /* LIST */
-static void bs_cmd_botlist(struct sourceinfo *si, int parc, char *parv[])
+static void
+bs_cmd_botlist(struct sourceinfo *si, int parc, char *parv[])
 {
 	int i = 0;
 	mowgli_node_t *n;
@@ -832,7 +845,8 @@ static void bs_cmd_botlist(struct sourceinfo *si, int parc, char *parv[])
 /* ******************************************************************** */
 
 /* ASSIGN #channel nick */
-static void bs_cmd_assign(struct sourceinfo *si, int parc, char *parv[])
+static void
+bs_cmd_assign(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
 	struct channel *c = channel_find(channel);
@@ -912,7 +926,8 @@ static void bs_cmd_assign(struct sourceinfo *si, int parc, char *parv[])
 /* ******************************************************************** */
 
 /* UNASSIGN #channel */
-static void bs_cmd_unassign(struct sourceinfo *si, int parc, char *parv[])
+static void
+bs_cmd_unassign(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc = mychan_find(parv[0]);
 	struct metadata *md;
@@ -1054,14 +1069,16 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 /* ******************************************************************** */
 
-static void osinfo_hook(struct sourceinfo *si)
+static void
+osinfo_hook(struct sourceinfo *si)
 {
 	return_if_fail(si != NULL);
 
 	command_success_nodata(si, "Minimum number of users that must be in a channel for a bot to be assigned: %u", min_users);
 }
 
-static void on_shutdown(void *unused)
+static void
+on_shutdown(void *unused)
 {
 	mowgli_node_t *n;
 
@@ -1072,7 +1089,8 @@ static void on_shutdown(void *unused)
 	}
 }
 
-static void bs_join(hook_channel_joinpart_t *hdata)
+static void
+bs_join(hook_channel_joinpart_t *hdata)
 {
 	struct chanuser *cu = hdata->cu;
 	struct channel *chan;
