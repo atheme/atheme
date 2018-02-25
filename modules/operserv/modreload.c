@@ -19,7 +19,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("operserv", &os_modreload);
 }
 
-static void recurse_module_deplist(struct module *m, mowgli_list_t *deplist)
+static void
+recurse_module_deplist(struct module *m, mowgli_list_t *deplist)
 {
 	mowgli_node_t *n;
 	MOWGLI_LIST_FOREACH(n, m->dephost.head)
@@ -47,7 +48,8 @@ static void recurse_module_deplist(struct module *m, mowgli_list_t *deplist)
 	}
 }
 
-static void os_cmd_modreload(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_modreload(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *module = parv[0];
 	struct module *m;
