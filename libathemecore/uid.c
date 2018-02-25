@@ -25,13 +25,15 @@
 
 const struct uid_provider *uid_provider_impl = NULL;
 
-void init_uid(void)
+void
+init_uid(void)
 {
 	if (uid_provider_impl != NULL)
 		return uid_provider_impl->uid_init(me.numeric);
 }
 
-const char *uid_get(void)
+const char *
+uid_get(void)
 {
 	if (uid_provider_impl != NULL)
 		return uid_provider_impl->uid_get();
