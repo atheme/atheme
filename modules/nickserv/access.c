@@ -27,7 +27,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	use_myuser_access--;
 }
 
-static bool username_is_random(const char *name)
+static bool
+username_is_random(const char *name)
 {
 	const char *p;
 	int lower = 0, upper = 0, digit = 0;
@@ -54,7 +55,8 @@ static bool username_is_random(const char *name)
 	return true;
 }
 
-static char *construct_mask(struct user *u)
+static char *
+construct_mask(struct user *u)
 {
 	static char mask[USERLEN + 1 + HOSTLEN + 1];
 	const char *dynhosts[] = { "*dyn*.*", "*dial*.*.*", "*dhcp*.*.*",
@@ -101,7 +103,8 @@ static char *construct_mask(struct user *u)
 	return mask;
 }
 
-static bool mangle_wildcard_to_cidr(const char *host, char *dest, size_t destlen)
+static bool
+mangle_wildcard_to_cidr(const char *host, char *dest, size_t destlen)
 {
 	int i;
 	const char *p;
@@ -147,7 +150,8 @@ static bool mangle_wildcard_to_cidr(const char *host, char *dest, size_t destlen
 	return false;
 }
 
-static void myuser_access_delete_enforce(struct myuser *mu, char *mask)
+static void
+myuser_access_delete_enforce(struct myuser *mu, char *mask)
 {
 	mowgli_list_t l = {NULL, NULL, 0};
 	mowgli_node_t *n, *tn;
@@ -184,7 +188,8 @@ static void myuser_access_delete_enforce(struct myuser *mu, char *mask)
 	}
 }
 
-static void ns_cmd_access(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_access(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
 	mowgli_node_t *n;
