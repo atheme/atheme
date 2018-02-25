@@ -39,7 +39,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static mowgli_list_t protect_actions;
 
-static void cmd_protect(struct sourceinfo *si, bool protecting, int parc, char *parv[])
+static void
+cmd_protect(struct sourceinfo *si, bool protecting, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	char *nick = parv[1];
@@ -127,7 +128,8 @@ static void cmd_protect(struct sourceinfo *si, bool protecting, int parc, char *
 	prefix_action_clear(&protect_actions);
 }
 
-static void cs_cmd_protect(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_protect(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (!parv[0])
 	{
@@ -139,7 +141,8 @@ static void cs_cmd_protect(struct sourceinfo *si, int parc, char *parv[])
 	cmd_protect(si, true, parc, parv);
 }
 
-static void cs_cmd_deprotect(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_deprotect(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (!parv[0])
 	{
