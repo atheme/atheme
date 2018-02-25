@@ -34,7 +34,8 @@ static struct operclass *user_r = NULL;
 static struct operclass *authenticated_r = NULL;
 static struct operclass *ircop_r = NULL;
 
-void init_privs(void)
+void
+init_privs(void)
 {
 	operclass_heap = sharedheap_get(sizeof(struct operclass));
 	soper_heap = sharedheap_get(sizeof(struct soper));
@@ -59,7 +60,8 @@ void init_privs(void)
  *
  * Add or override an operclass.
  */
-struct operclass *operclass_add(const char *name, const char *privs, int flags)
+struct operclass *
+operclass_add(const char *name, const char *privs, int flags)
 {
 	struct operclass *operclass;
 	mowgli_node_t *n;
@@ -101,7 +103,8 @@ struct operclass *operclass_add(const char *name, const char *privs, int flags)
 	return operclass;
 }
 
-void operclass_delete(struct operclass *operclass)
+void
+operclass_delete(struct operclass *operclass)
 {
 	mowgli_node_t *n;
 
@@ -128,7 +131,8 @@ void operclass_delete(struct operclass *operclass)
 	cnt.operclass--;
 }
 
-struct operclass *operclass_find(const char *name)
+struct operclass *
+operclass_find(const char *name)
 {
 	struct operclass *operclass;
 	mowgli_node_t *n;
@@ -148,7 +152,8 @@ struct operclass *operclass_find(const char *name)
  * S O P E R S *
  ***************/
 
-struct soper *soper_add(const char *name, const char *classname, int flags, const char *password)
+struct soper *
+soper_add(const char *name, const char *classname, int flags, const char *password)
 {
 	struct soper *soper;
 	struct myuser *mu = myuser_find(name);
@@ -205,7 +210,8 @@ struct soper *soper_add(const char *name, const char *classname, int flags, cons
 	return soper;
 }
 
-void soper_delete(struct soper *soper)
+void
+soper_delete(struct soper *soper)
 {
 	mowgli_node_t *n;
 
@@ -236,7 +242,8 @@ void soper_delete(struct soper *soper)
 	cnt.soper--;
 }
 
-struct soper *soper_find(struct myuser *myuser)
+struct soper *
+soper_find(struct myuser *myuser)
 {
 	struct soper *soper;
 	mowgli_node_t *n;
@@ -252,7 +259,8 @@ struct soper *soper_find(struct myuser *myuser)
 	return NULL;
 }
 
-struct soper *soper_find_named(const char *name)
+struct soper *
+soper_find_named(const char *name)
 {
 	struct soper *soper;
 	mowgli_node_t *n;
@@ -268,7 +276,8 @@ struct soper *soper_find_named(const char *name)
 	return NULL;
 }
 
-bool is_soper(struct myuser *myuser)
+bool
+is_soper(struct myuser *myuser)
 {
 	if (!myuser)
 		return false;
@@ -279,7 +288,8 @@ bool is_soper(struct myuser *myuser)
 	return false;
 }
 
-bool is_conf_soper(struct myuser *myuser)
+bool
+is_conf_soper(struct myuser *myuser)
 {
 	if (!myuser)
 		return false;
@@ -291,7 +301,8 @@ bool is_conf_soper(struct myuser *myuser)
 }
 
 /* name1 name2 name3... */
-static bool string_in_list(const char *str, const char *name)
+static bool
+string_in_list(const char *str, const char *name)
 {
 	char *p;
 	int l;
@@ -313,7 +324,8 @@ static bool string_in_list(const char *str, const char *name)
 	return false;
 }
 
-bool has_priv_operclass(struct operclass *operclass, const char *priv)
+bool
+has_priv_operclass(struct operclass *operclass, const char *priv)
 {
 	if (operclass == NULL)
 		return false;
@@ -322,7 +334,8 @@ bool has_priv_operclass(struct operclass *operclass, const char *priv)
 	return false;
 }
 
-bool has_any_privs(struct sourceinfo *si)
+bool
+has_any_privs(struct sourceinfo *si)
 {
 	if (si->su != NULL && is_ircop(si->su))
 		return true;
@@ -331,7 +344,8 @@ bool has_any_privs(struct sourceinfo *si)
 	return false;
 }
 
-bool has_any_privs_user(struct user *u)
+bool
+has_any_privs_user(struct user *u)
 {
 	if (u == NULL)
 		return false;
@@ -342,13 +356,15 @@ bool has_any_privs_user(struct user *u)
 	return false;
 }
 
-bool has_priv(struct sourceinfo *si, const char *priv)
+bool
+has_priv(struct sourceinfo *si, const char *priv)
 {
 	return si->su != NULL ? has_priv_user(si->su, priv) :
 		has_priv_myuser(si->smu, priv);
 }
 
-bool has_priv_user(struct user *u, const char *priv)
+bool
+has_priv_user(struct user *u, const char *priv)
 {
 	struct operclass *operclass;
 
@@ -383,7 +399,8 @@ bool has_priv_user(struct user *u, const char *priv)
 	return false;
 }
 
-bool has_priv_myuser(struct myuser *mu, const char *priv)
+bool
+has_priv_myuser(struct myuser *mu, const char *priv)
 {
 	struct operclass *operclass;
 
@@ -406,7 +423,8 @@ bool has_priv_myuser(struct myuser *mu, const char *priv)
 	return false;
 }
 
-bool has_all_operclass(struct sourceinfo *si, struct operclass *operclass)
+bool
+has_all_operclass(struct sourceinfo *si, struct operclass *operclass)
 {
 	char *privs2;
 	char *priv;
@@ -428,7 +446,8 @@ bool has_all_operclass(struct sourceinfo *si, struct operclass *operclass)
 
 /**********************************************************************************/
 
-const struct soper *get_sourceinfo_soper(struct sourceinfo *si)
+const struct soper *
+get_sourceinfo_soper(struct sourceinfo *si)
 {
 	if (si->smu != NULL && is_soper(si->smu))
 		return si->smu->soper;
@@ -436,7 +455,8 @@ const struct soper *get_sourceinfo_soper(struct sourceinfo *si)
 	return NULL;
 }
 
-const struct operclass *get_sourceinfo_operclass(struct sourceinfo *si)
+const struct operclass *
+get_sourceinfo_operclass(struct sourceinfo *si)
 {
 	struct operclass *out = NULL;
 	const struct soper *soper;
