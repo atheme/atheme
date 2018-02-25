@@ -12,7 +12,8 @@ static void gs_cmd_set_public(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command gs_set_public = { "PUBLIC", N_("Sets the group as public."), AC_AUTHENTICATED, 2, gs_cmd_set_public, { .path = "groupserv/set_public" } };
 
-static void gs_cmd_set_public(struct sourceinfo *si, int parc, char *parv[])
+static void
+gs_cmd_set_public(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mygroup *mg;
 
