@@ -80,7 +80,8 @@ static const struct cmode asuka_user_mode_list[] = {
 static void check_hidehost(struct user *u);
 
 /* NOTICE wrapper */
-static void asuka_notice_channel_sts(struct user *from, struct channel *target, const char *text)
+static void
+asuka_notice_channel_sts(struct user *from, struct channel *target, const char *text)
 {
 	if (target->modes & CMODE_NONOTICE)
 	{
@@ -96,7 +97,8 @@ static void asuka_notice_channel_sts(struct user *from, struct channel *target, 
 		sts("%s O %s :[%s:%s] %s", me.numeric, target->name, from->nick, target->name, text);
 }
 
-static void asuka_wallchops(struct user *sender, struct channel *channel, const char *message)
+static void
+asuka_wallchops(struct user *sender, struct channel *channel, const char *message)
 {
 	if (channel->modes & CMODE_NONOTICE)
 	{
@@ -110,7 +112,8 @@ static void asuka_wallchops(struct user *sender, struct channel *channel, const 
 }
 
 /* protocol-specific stuff to do on login */
-static void asuka_on_login(struct user *u, struct myuser *account, const char *wantedhost)
+static void
+asuka_on_login(struct user *u, struct myuser *account, const char *wantedhost)
 {
 	return_if_fail(u != NULL);
 
@@ -121,7 +124,8 @@ static void asuka_on_login(struct user *u, struct myuser *account, const char *w
 
 /* P10 does not support logout, so kill the user
  * we can't keep track of which logins are stale and which aren't -- jilles */
-static bool asuka_on_logout(struct user *u, const char *account)
+static bool
+asuka_on_logout(struct user *u, const char *account)
 {
 	return_val_if_fail(u != NULL, false);
 
@@ -129,7 +133,8 @@ static bool asuka_on_logout(struct user *u, const char *account)
 	return true;
 }
 
-static void m_nick(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u;
 	char ipstring[HOSTIPLEN + 1];
@@ -223,7 +228,8 @@ static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_mode(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_mode(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u;
 	char *p;
@@ -290,7 +296,8 @@ static void m_mode(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void check_hidehost(struct user *u)
+static void
+check_hidehost(struct user *u)
 {
 	static bool warned = false;
 	char buf[HOSTLEN + 1];
@@ -358,6 +365,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("protocol/asuka", MODULE_UNLOAD_CAPABILITY_NEVER)
