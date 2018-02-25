@@ -29,7 +29,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 }
 
 /* VHOST <nick> [host] */
-static void hs_cmd_vhost(struct sourceinfo *si, int parc, char *parv[])
+static void
+hs_cmd_vhost(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *host = parv[1];
@@ -72,7 +73,8 @@ static void hs_cmd_vhost(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-static void hs_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
+static void
+hs_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *pattern;
 	struct myentity_iteration_state state;
