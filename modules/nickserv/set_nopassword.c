@@ -18,7 +18,8 @@ static void ns_cmd_set_nopassword(struct sourceinfo *si, int parc, char *parv[])
 
 struct command ns_set_nopassword = { "NOPASSWORD", N_("Allows you to disable any password-based authentication methods except for XMLRPC/JSONRPC."), AC_NONE, 1, ns_cmd_set_nopassword, { .path = "nickserv/set_nopassword" } };
 
-static bool has_nopassword(const struct mynick *mn, const void *arg)
+static bool
+has_nopassword(const struct mynick *mn, const void *arg)
 {
 	struct myuser *mu = mn->owner;
 
@@ -50,7 +51,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 }
 
 /* SET NOPASSWORD [ON|OFF] */
-static void ns_cmd_set_nopassword(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_set_nopassword(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *setting = parv[0];
 
