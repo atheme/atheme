@@ -31,7 +31,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("nickserv", &ns_fungroup);
 }
 
-static void ns_cmd_group(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_group(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mynick *mn;
 	hook_user_req_t hdata;
@@ -96,7 +97,8 @@ static void ns_cmd_group(struct sourceinfo *si, int parc, char *parv[])
 	hook_call_nick_group(&hdata);
 }
 
-static void ns_cmd_ungroup(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_ungroup(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mynick *mn;
 	const char *target;
@@ -136,7 +138,8 @@ static void ns_cmd_ungroup(struct sourceinfo *si, int parc, char *parv[])
 	atheme_object_unref(mn);
 }
 
-static void ns_cmd_fungroup(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_fungroup(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mynick *mn, *mn2 = NULL;
 	struct myuser *mu;
