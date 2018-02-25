@@ -39,7 +39,8 @@ struct ircd *ircd = NULL;
 bool pmodule_loaded = false;
 bool backend_loaded = false;
 
-void pcommand_init(void)
+void
+pcommand_init(void)
 {
 	pcommand_heap = sharedheap_get(sizeof(struct proto_cmd));
 
@@ -52,7 +53,8 @@ void pcommand_init(void)
 	pcommands = mowgli_patricia_create(noopcanon);
 }
 
-void pcommand_add(const char *token, void (*handler) (struct sourceinfo *si, int parc, char *parv[]), int minparc, int sourcetype)
+void
+pcommand_add(const char *token, void (*handler) (struct sourceinfo *si, int parc, char *parv[]), int minparc, int sourcetype)
 {
 	struct proto_cmd *pcmd;
 
@@ -71,7 +73,8 @@ void pcommand_add(const char *token, void (*handler) (struct sourceinfo *si, int
 	mowgli_patricia_add(pcommands, pcmd->token, pcmd);
 }
 
-void pcommand_delete(const char *token)
+void
+pcommand_delete(const char *token)
 {
 	struct proto_cmd *pcmd;
 
@@ -88,7 +91,8 @@ void pcommand_delete(const char *token)
 	mowgli_heap_free(pcommand_heap, pcmd);
 }
 
-struct proto_cmd *pcommand_find(const char *token)
+struct proto_cmd *
+pcommand_find(const char *token)
 {
 	return mowgli_patricia_retrieve(pcommands, token);
 }
