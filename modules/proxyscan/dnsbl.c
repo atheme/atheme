@@ -122,7 +122,8 @@ struct command os_set_dnsblaction = { "DNSBLACTION", N_("Changes what happens to
 struct command ps_dnsblexempt = { "DNSBLEXEMPT", N_("Manage the list of IP's exempt from DNSBL checking."), PRIV_USER_ADMIN, 3, ps_cmd_dnsblexempt, { .path = "proxyscan/dnsblexempt" } };
 struct command ps_dnsblscan = { "DNSBLSCAN", N_("Manually scan if a user is in a DNSBL."), PRIV_USER_ADMIN, 1, ps_cmd_dnsblscan, { .path = "proxyscan/dnsblscan" } };
 
-static inline mowgli_list_t *dnsbl_queries(struct user *u)
+static inline mowgli_list_t *
+dnsbl_queries(struct user *u)
 {
 	mowgli_list_t *l;
 
@@ -138,7 +139,8 @@ static inline mowgli_list_t *dnsbl_queries(struct user *u)
 	return l;
 }
 
-static void os_cmd_set_dnsblaction(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_set_dnsblaction(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *act = parv[0];
 
@@ -163,7 +165,8 @@ static void os_cmd_set_dnsblaction(struct sourceinfo *si, int parc, char *parv[]
 	command_fail(si, fault_badparams, _("Invalid action given."));
 }
 
-static void ps_cmd_dnsblexempt(struct sourceinfo *si, int parc, char *parv[])
+static void
+ps_cmd_dnsblexempt(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *command = parv[0];
 	char *ip = parv[1];
@@ -265,7 +268,8 @@ static void ps_cmd_dnsblexempt(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void ps_cmd_dnsblscan(struct sourceinfo *si, int parc, char *parv[])
+static void
+ps_cmd_dnsblscan(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *user = parv[0];
 	struct user *u;
@@ -292,7 +296,8 @@ static void ps_cmd_dnsblscan(struct sourceinfo *si, int parc, char *parv[])
 }
 
 /* private interfaces */
-static struct Blacklist *find_blacklist(char *name)
+static struct Blacklist *
+find_blacklist(char *name)
 {
 	mowgli_node_t *n;
 
@@ -307,7 +312,8 @@ static struct Blacklist *find_blacklist(char *name)
 	return NULL;
 }
 
-static void blacklist_dns_callback(void *vptr, struct res_dns_reply *reply)
+static void
+blacklist_dns_callback(void *vptr, struct res_dns_reply *reply)
 {
 	struct BlacklistClient *blcptr = (struct BlacklistClient *) vptr;
 	int listed = 0;
@@ -350,7 +356,8 @@ static void blacklist_dns_callback(void *vptr, struct res_dns_reply *reply)
 
 /* XXX: no IPv6 implementation, not to concerned right now though. */
 /* 2015-12-06: at least we shouldn't crash on bad inputs anymore... -bcode */
-static void initiate_blacklist_dnsquery(struct Blacklist *blptr, struct user *u)
+static void
+initiate_blacklist_dnsquery(struct Blacklist *blptr, struct user *u)
 {
 	char buf[IRCD_RES_HOSTLEN + 1];
 	int ip[4];
@@ -381,7 +388,8 @@ static void initiate_blacklist_dnsquery(struct Blacklist *blptr, struct user *u)
 }
 
 /* public interfaces */
-static struct Blacklist *new_blacklist(char *name)
+static struct Blacklist *
+new_blacklist(char *name)
 {
 	struct Blacklist *blptr;
 
@@ -403,7 +411,8 @@ static struct Blacklist *new_blacklist(char *name)
 	return blptr;
 }
 
-static void lookup_blacklists(struct user *u)
+static void
+lookup_blacklists(struct user *u)
 {
 	mowgli_node_t *n;
 
@@ -418,7 +427,8 @@ static void lookup_blacklists(struct user *u)
 	}
 }
 
-static void destroy_blacklists(void)
+static void
+destroy_blacklists(void)
 {
 	mowgli_node_t *n, *tn;
 	struct Blacklist *blptr;
@@ -432,7 +442,8 @@ static void destroy_blacklists(void)
 	}
 }
 
-static int dnsbl_config_handler(mowgli_config_file_entry_t *ce)
+static int
+dnsbl_config_handler(mowgli_config_file_entry_t *ce)
 {
 	mowgli_config_file_entry_t *cce;
 
@@ -446,12 +457,14 @@ static int dnsbl_config_handler(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-static void dnsbl_config_purge(void *unused)
+static void
+dnsbl_config_purge(void *unused)
 {
 	destroy_blacklists();
 }
 
-static int dnsbl_action_config_handler(mowgli_config_file_entry_t *ce)
+static int
+dnsbl_action_config_handler(mowgli_config_file_entry_t *ce)
 {
 	if (ce->vardata == NULL)
 	{
@@ -472,7 +485,8 @@ static int dnsbl_action_config_handler(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-static void check_dnsbls(hook_user_nick_t *data)
+static void
+check_dnsbls(hook_user_nick_t *data)
 {
 	struct user *u = data->u;
 	mowgli_node_t *n;
@@ -497,7 +511,8 @@ static void check_dnsbls(hook_user_nick_t *data)
 	lookup_blacklists(u);
 }
 
-static void dnsbl_hit(struct user *u, struct Blacklist *blptr)
+static void
+dnsbl_hit(struct user *u, struct Blacklist *blptr)
 {
 	struct service *svs;
 	struct kline *k;
@@ -529,7 +544,8 @@ static void dnsbl_hit(struct user *u, struct Blacklist *blptr)
 	}
 }
 
-static void abort_blacklist_queries(struct user *u)
+static void
+abort_blacklist_queries(struct user *u)
 {
 	mowgli_node_t *n, *tn;
 	mowgli_list_t *l = dnsbl_queries(u);
@@ -544,7 +560,8 @@ static void abort_blacklist_queries(struct user *u)
 	}
 }
 
-static void osinfo_hook(struct sourceinfo *si)
+static void
+osinfo_hook(struct sourceinfo *si)
 {
 	mowgli_node_t *n;
 	const char *name = action_names[action];
@@ -561,7 +578,8 @@ static void osinfo_hook(struct sourceinfo *si)
 	}
 }
 
-static void write_dnsbl_exempt_db(struct database_handle *db)
+static void
+write_dnsbl_exempt_db(struct database_handle *db)
 {
 	mowgli_node_t *n;
 
@@ -578,7 +596,8 @@ static void write_dnsbl_exempt_db(struct database_handle *db)
 	}
 }
 
-static void db_h_ble(struct database_handle *db, const char *type)
+static void
+db_h_ble(struct database_handle *db, const char *type)
 {
 	const char *ip = db_sread_word(db);
 	time_t exempt_ts = db_sread_time(db);
