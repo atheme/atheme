@@ -97,7 +97,8 @@ static struct res_dns_reply *make_dnsreply(struct reslist *request);
  *      paul vixie, 29may94
  *      revised for ircd, cryogen(stu) may03
  */
-static int res_ourserver(const union sockaddr_any *inp)
+static int
+res_ourserver(const union sockaddr_any *inp)
 {
 #ifdef RB_IPV6
 	const struct sockaddr_in6 *v6;
@@ -156,7 +157,8 @@ static int res_ourserver(const union sockaddr_any *inp)
  * timeout_query_list - Remove queries from the list which have been
  * there too long without being resolved.
  */
-static time_t timeout_query_list(time_t now)
+static time_t
+timeout_query_list(time_t now)
 {
 	mowgli_node_t *ptr;
 	mowgli_node_t *next_ptr;
@@ -198,7 +200,8 @@ static time_t timeout_query_list(time_t now)
 /*
  * timeout_resolver - check request list
  */
-static void timeout_resolver(void *notused)
+static void
+timeout_resolver(void *notused)
 {
 	timeout_query_list(CURRTIME);
 }
@@ -209,7 +212,8 @@ static void timeout_resolver(void *notused)
  */
 static mowgli_eventloop_timer_t *timeout_resolver_timer = NULL;
 
-static void start_resolver(void)
+static void
+start_resolver(void)
 {
 	int i;
 
@@ -236,7 +240,8 @@ static void start_resolver(void)
 /*
  * init_resolver - initialize resolver and resolver library
  */
-void init_resolver(void)
+void
+init_resolver(void)
 {
 #ifdef HAVE_SRAND48
 	srand48(CURRTIME);
@@ -247,7 +252,8 @@ void init_resolver(void)
 /*
  * restart_resolver - reread resolv.conf, reopen socket
  */
-void restart_resolver(void)
+void
+restart_resolver(void)
 {
 	connection_close(res_fd);
 	res_fd = NULL;
@@ -262,7 +268,8 @@ void restart_resolver(void)
  * add_local_domain - Add the domain to hostname, if it is missing
  * (as suggested by eps@TOASTER.SFSU.EDU)
  */
-void add_local_domain(char *hname, size_t size)
+void
+add_local_domain(char *hname, size_t size)
 {
 	/* try to fix up unqualified names */
 	if (strchr(hname, '.') == NULL)
@@ -285,7 +292,8 @@ void add_local_domain(char *hname, size_t size)
  * This must also free any memory that has been allocated for
  * temporary storage of DNS results.
  */
-static void rem_request(struct reslist *request)
+static void
+rem_request(struct reslist *request)
 {
 	return_if_fail(request != NULL);
 
@@ -297,7 +305,8 @@ static void rem_request(struct reslist *request)
 /*
  * make_request - Create a DNS request record for the server.
  */
-static struct reslist *make_request(struct res_dns_query *query)
+static struct reslist *
+make_request(struct res_dns_query *query)
 {
 	struct reslist *const request = smalloc(sizeof *request);
 
@@ -315,7 +324,8 @@ static struct reslist *make_request(struct res_dns_query *query)
  * delete_resolver_queries - cleanup outstanding queries
  * for which there no longer exist clients or conf lines.
  */
-void delete_resolver_queries(const struct res_dns_query *query)
+void
+delete_resolver_queries(const struct res_dns_query *query)
 {
 	mowgli_node_t *ptr;
 	mowgli_node_t *next_ptr;
@@ -335,7 +345,8 @@ void delete_resolver_queries(const struct res_dns_query *query)
  * retryfreq - determine how many queries to wait before resending
  * if there have been that many consecutive timeouts
  */
-static int retryfreq(int timeouts)
+static int
+retryfreq(int timeouts)
 {
 	switch (timeouts)
 	{
@@ -358,7 +369,8 @@ static int retryfreq(int timeouts)
  * Returns number of nameserver successfully sent to
  * or -1 if no successful sends.
  */
-static int send_res_msg(const char *rmsg, int len, int rcount)
+static int
+send_res_msg(const char *rmsg, int len, int rcount)
 {
 	int i;
 	int ns;
@@ -398,7 +410,8 @@ static int send_res_msg(const char *rmsg, int len, int rcount)
 /*
  * find_id - find a dns request id (id is determined by dn_mkquery)
  */
-static struct reslist *find_id(int id)
+static struct reslist *
+find_id(int id)
 {
 	mowgli_node_t *ptr;
 	struct reslist *request;
@@ -418,7 +431,8 @@ static struct reslist *find_id(int id)
  * gethost_byname_type - get host address from name
  *
  */
-void gethost_byname_type(const char *name, struct res_dns_query *query, int type)
+void
+gethost_byname_type(const char *name, struct res_dns_query *query, int type)
 {
 	return_if_fail(name != 0);
 	do_query_name(query, name, NULL, type);
@@ -427,7 +441,8 @@ void gethost_byname_type(const char *name, struct res_dns_query *query, int type
 /*
  * gethost_byaddr - get host name from address
  */
-void gethost_byaddr(const union sockaddr_any *addr, struct res_dns_query *query)
+void
+gethost_byaddr(const union sockaddr_any *addr, struct res_dns_query *query)
 {
 	do_query_number(query, addr, NULL);
 }
@@ -435,7 +450,8 @@ void gethost_byaddr(const union sockaddr_any *addr, struct res_dns_query *query)
 /*
  * do_query_name - nameserver lookup name
  */
-static void do_query_name(struct res_dns_query *query, const char *name, struct reslist *request,
+static void
+do_query_name(struct res_dns_query *query, const char *name, struct reslist *request,
 			  int type)
 {
 	char host_name[IRCD_RES_HOSTLEN + 1];
@@ -458,7 +474,8 @@ static void do_query_name(struct res_dns_query *query, const char *name, struct 
 /*
  * do_query_number - Use this to do reverse IP# lookups.
  */
-static void do_query_number(struct res_dns_query *query, const union sockaddr_any *addr,
+static void
+do_query_number(struct res_dns_query *query, const union sockaddr_any *addr,
 			    struct reslist *request)
 {
 	const unsigned char *cp;
@@ -512,7 +529,8 @@ static void do_query_number(struct res_dns_query *query, const union sockaddr_an
 /*
  * query_name - generate a query based on class, type and name.
  */
-static void query_name(struct reslist *request)
+static void
+query_name(struct reslist *request)
 {
 	char buf[MAXPACKET];
 	int request_len = 0;
@@ -556,7 +574,8 @@ static void query_name(struct reslist *request)
 	}
 }
 
-static void resend_query(struct reslist *request)
+static void
+resend_query(struct reslist *request)
 {
 	switch (request->type)
 	{
@@ -579,7 +598,8 @@ static void resend_query(struct reslist *request)
  * name we queried (to guard against late replies from previous
  * queries with the same id).
  */
-static int check_question(struct reslist *request, RESHEADER * header, char *buf, char *eob)
+static int
+check_question(struct reslist *request, RESHEADER * header, char *buf, char *eob)
 {
 	char hostbuf[IRCD_RES_HOSTLEN + 1];	/* working buffer */
 	unsigned char *current;	/* current position in buf */
@@ -600,7 +620,8 @@ static int check_question(struct reslist *request, RESHEADER * header, char *buf
 /*
  * proc_answer - process name server reply
  */
-static int proc_answer(struct reslist *request, RESHEADER * header, char *buf, char *eob)
+static int
+proc_answer(struct reslist *request, RESHEADER * header, char *buf, char *eob)
 {
 	char hostbuf[IRCD_RES_HOSTLEN + 100];	/* working buffer */
 	unsigned char *current;	/* current position in buf */
@@ -734,7 +755,8 @@ static int proc_answer(struct reslist *request, RESHEADER * header, char *buf, c
  * res_read_single_reply - read a dns reply from the nameserver and process it.
  * Return value: 1 if a packet was read, 0 otherwise
  */
-static int res_read_single_reply(struct connection *F)
+static int
+res_read_single_reply(struct connection *F)
 {
 	char buf[sizeof(RESHEADER) + MAXPACKET]
 		/* Sparc and alpha need 16bit-alignment for accessing header->id
@@ -860,13 +882,15 @@ static int res_read_single_reply(struct connection *F)
 	return 1;
 }
 
-static void res_readreply(struct connection *cptr)
+static void
+res_readreply(struct connection *cptr)
 {
 	while (res_read_single_reply(cptr))
 		;
 }
 
-static struct res_dns_reply *make_dnsreply(struct reslist *request)
+static struct res_dns_reply *
+make_dnsreply(struct reslist *request)
 {
 	return_val_if_fail(request != 0, NULL);
 
@@ -877,7 +901,8 @@ static struct res_dns_reply *make_dnsreply(struct reslist *request)
 	return (cp);
 }
 
-void report_dns_servers(struct sourceinfo *si)
+void
+report_dns_servers(struct sourceinfo *si)
 {
 	int i;
 
