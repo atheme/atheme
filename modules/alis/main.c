@@ -88,7 +88,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_delete(alis);
 }
 
-static int alis_parse_mode(const char *text, int *key, int *limit, int *ext)
+static int
+alis_parse_mode(const char *text, int *key, int *limit, int *ext)
 {
 	int mode = 0, i;
 
@@ -119,7 +120,8 @@ static int alis_parse_mode(const char *text, int *key, int *limit, int *ext)
 	return mode;
 }
 
-static int parse_alis(struct sourceinfo *si, int parc, char *parv[], struct alis_query *query)
+static int
+parse_alis(struct sourceinfo *si, int parc, char *parv[], struct alis_query *query)
 {
 	int i = 1;
 	char *opt = NULL, *arg = NULL;
@@ -280,7 +282,8 @@ static int parse_alis(struct sourceinfo *si, int parc, char *parv[], struct alis
 	return 1;
 }
 
-static void free_alis(struct alis_query *query)
+static void
+free_alis(struct alis_query *query)
 {
 	return_if_fail(query != NULL);
 
@@ -291,7 +294,8 @@ static void free_alis(struct alis_query *query)
 		free(query->topic);
 }
 
-static void print_channel(struct sourceinfo *si, struct channel *chptr, struct alis_query *query)
+static void
+print_channel(struct sourceinfo *si, struct channel *chptr, struct alis_query *query)
 {
 	int show_topicwho = query->show_topicwho;
 	int show_topic = 1;
@@ -336,7 +340,8 @@ static void print_channel(struct sourceinfo *si, struct channel *chptr, struct a
 			chptr->name, MOWGLI_LIST_LENGTH(&chptr->members));
 }
 
-static int show_channel(struct channel *chptr, struct alis_query *query)
+static int
+show_channel(struct channel *chptr, struct alis_query *query)
 {
 	int i;
 
@@ -394,7 +399,8 @@ static int show_channel(struct channel *chptr, struct alis_query *query)
 	return 1;
 }
 
-static void alis_cmd_list(struct sourceinfo *si, int parc, char *parv[])
+static void
+alis_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *chptr;
 	struct alis_query query;
@@ -453,7 +459,8 @@ static void alis_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-static void alis_cmd_help(struct sourceinfo *si, int parc, char *parv[])
+static void
+alis_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *command = parv[0];
 
