@@ -27,7 +27,8 @@
 mowgli_list_t authcookie_list;
 mowgli_heap_t *authcookie_heap;
 
-void authcookie_init(void)
+void
+authcookie_init(void)
 {
 	authcookie_heap = sharedheap_get(sizeof(struct authcookie));
 
@@ -50,7 +51,8 @@ void authcookie_init(void)
  * Side Effects:
  *       an authcookie ticket is created, and validated.
  */
-struct authcookie *authcookie_create(struct myuser *mu)
+struct authcookie *
+authcookie_create(struct myuser *mu)
 {
 	struct authcookie *const au = mowgli_heap_alloc(authcookie_heap);
 	au->ticket = random_string(AUTHCOOKIE_LENGTH);
@@ -74,7 +76,8 @@ struct authcookie *authcookie_create(struct myuser *mu)
  * Side Effects:
  *       none
  */
-struct authcookie *authcookie_find(const char *ticket, struct myuser *myuser)
+struct authcookie *
+authcookie_find(const char *ticket, struct myuser *myuser)
 {
 	mowgli_node_t *n;
 	struct authcookie *ac;
@@ -129,7 +132,8 @@ struct authcookie *authcookie_find(const char *ticket, struct myuser *myuser)
  * Side Effects:
  *       an authcookie is destroyed
  */
-void authcookie_destroy(struct authcookie * ac)
+void
+authcookie_destroy(struct authcookie * ac)
 {
 	return_if_fail(ac != NULL);
 
@@ -150,7 +154,8 @@ void authcookie_destroy(struct authcookie * ac)
  * Side Effects:
  *       all authcookies for the user are destroyed
  */
-void authcookie_destroy_all(struct myuser *mu)
+void
+authcookie_destroy_all(struct myuser *mu)
 {
 	mowgli_node_t *n, *tn;
 	struct authcookie *ac;
@@ -176,7 +181,8 @@ void authcookie_destroy_all(struct myuser *mu)
  * Side Effects:
  *       expired authcookies are destroyed
  */
-void authcookie_expire(void *arg)
+void
+authcookie_expire(void *arg)
 {
 	struct authcookie *ac;
 	mowgli_node_t *n, *tn;
@@ -204,7 +210,8 @@ void authcookie_expire(void *arg)
  * Side Effects:
  *       expired authcookies are destroyed here
  */
-bool authcookie_validate(const char *ticket, struct myuser *myuser)
+bool
+authcookie_validate(const char *ticket, struct myuser *myuser)
 {
 	struct authcookie *ac = authcookie_find(ticket, myuser);
 
