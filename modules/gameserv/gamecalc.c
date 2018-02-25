@@ -42,7 +42,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("chanserv", &cmd_df);
 }
 
-static void command_wod(struct sourceinfo *si, int parc, char *parv[])
+static void
+command_wod(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
 	char *arg_dice, *arg_difficulty;
@@ -125,7 +126,8 @@ static void command_wod(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void command_nwod(struct sourceinfo *si, int parc, char *parv[])
+static void
+command_nwod(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
 	char *arg_dice, *arg_rerollflag;
@@ -224,7 +226,8 @@ static void command_nwod(struct sourceinfo *si, int parc, char *parv[])
 
 static const char *df_dice_table[3] = { "[-]", "[ ]", "[+]" };
 
-static void command_df(struct sourceinfo *si, int parc, char *parv[])
+static void
+command_df(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
 	char *arg_dice;
