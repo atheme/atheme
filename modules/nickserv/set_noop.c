@@ -17,7 +17,8 @@ static void ns_cmd_set_noop(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_set_noop = { "NOOP", N_("Prevents services from setting modes upon you automatically."), AC_NONE, 1, ns_cmd_set_noop, { .path = "nickserv/set_noop" } };
 
-static bool has_noop(const struct mynick *mn, const void *arg)
+static bool
+has_noop(const struct mynick *mn, const void *arg)
 {
 	struct myuser *mu = mn->owner;
 
@@ -40,8 +41,6 @@ mod_init(struct module *const restrict m)
 	list_register("noop", &noop);
 }
 
-
-
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
@@ -51,7 +50,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 }
 
 /* SET NOOP [ON|OFF] */
-static void ns_cmd_set_noop(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_set_noop(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *params = parv[0];
 
