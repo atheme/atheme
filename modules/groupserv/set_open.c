@@ -12,7 +12,8 @@ static void gs_cmd_set_open(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command gs_set_open = { "OPEN", N_("Sets the group as open for anyone to join."), AC_AUTHENTICATED, 2, gs_cmd_set_open, { .path = "groupserv/set_open" } };
 
-static void gs_cmd_set_open(struct sourceinfo *si, int parc, char *parv[])
+static void
+gs_cmd_set_open(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mygroup *mg;
 
