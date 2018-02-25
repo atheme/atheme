@@ -47,7 +47,8 @@ static void server_delete_serv(struct server *s);
  *     - if the heap or dtrees fail to initialize, the program
  *       will abort.
  */
-void init_servers(void)
+void
+init_servers(void)
 {
 	serv_heap = sharedheap_get(sizeof(struct server));
 	tld_heap = sharedheap_get(sizeof(struct tld));
@@ -81,7 +82,8 @@ void init_servers(void)
  * Side Effects:
  *     - the new server object is added to the server and sid DTree.
  */
-struct server *server_add(const char *name, unsigned int hops, struct server *uplink, const char *id, const char *desc)
+struct server *
+server_add(const char *name, unsigned int hops, struct server *uplink, const char *id, const char *desc)
 {
 	struct server *s;
 	const char *tld;
@@ -166,7 +168,8 @@ struct server *server_add(const char *name, unsigned int hops, struct server *up
  * Side Effects:
  *     - all users and servers attached to the target are recursively deleted
  */
-void server_delete(const char *name)
+void
+server_delete(const char *name)
 {
 	struct server *s = server_find(name);
 
@@ -179,7 +182,8 @@ void server_delete(const char *name)
 	server_delete_serv(s);
 }
 
-static void server_delete_serv(struct server *s)
+static void
+server_delete_serv(struct server *s)
 {
 	struct server *child;
 	struct user *u;
@@ -270,7 +274,8 @@ static void server_delete_serv(struct server *s)
  * Side Effects:
  *     - none
  */
-struct server *server_find(const char *name)
+struct server *
+server_find(const char *name)
 {
 	struct server *s;
 
@@ -296,7 +301,8 @@ struct server *server_find(const char *name)
  * Side Effects:
  *     - the TLD object is registered with the TLD list.
  */
-struct tld *tld_add(const char *name)
+struct tld *
+tld_add(const char *name)
 {
         struct tld *tld;
         mowgli_node_t *n = mowgli_node_create();
@@ -328,7 +334,8 @@ struct tld *tld_add(const char *name)
  * Side Effects:
  *     - the TLD object is removed and deregistered from the TLD list.
  */
-void tld_delete(const char *name)
+void
+tld_delete(const char *name)
 {
         struct tld *tld = tld_find(name);
         mowgli_node_t *n;
@@ -367,7 +374,8 @@ void tld_delete(const char *name)
  * Side Effects:
  *     - none
  */
-struct tld *tld_find(const char *name)
+struct tld *
+tld_find(const char *name)
 {
         struct tld *tld;
         mowgli_node_t *n;
