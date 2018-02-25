@@ -29,7 +29,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("botserv", &bs_act);
 }
 
-static void bs_cmd_say(struct sourceinfo *si, int parc, char *parv[])
+static void
+bs_cmd_say(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
 	char *message = parv[1];
@@ -95,7 +96,8 @@ static void bs_cmd_say(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void bs_cmd_act(struct sourceinfo *si, int parc, char *parv[])
+static void
+bs_cmd_act(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
 	char *message = parv[1];
