@@ -29,7 +29,8 @@ mowgli_list_t object_list = { NULL, NULL, 0 };
 
 mowgli_heap_t *metadata_heap;	/* HEAP_CHANUSER */
 
-void init_metadata(void)
+void
+init_metadata(void)
 {
 	metadata_heap = sharedheap_get(sizeof(struct metadata));
 
@@ -57,7 +58,8 @@ void init_metadata(void)
  * Side Effects:
  *      - none
  */
-void atheme_object_init(struct atheme_object *obj, const char *name, atheme_object_destructor_fn des)
+void
+atheme_object_init(struct atheme_object *obj, const char *name, atheme_object_destructor_fn des)
 {
 	return_if_fail(obj != NULL);
 
@@ -83,7 +85,8 @@ void atheme_object_init(struct atheme_object *obj, const char *name, atheme_obje
  * Side Effects:
  *      - none
  */
-void * atheme_object_ref(void *object)
+void *
+atheme_object_ref(void *object)
 {
 	return_val_if_fail(object != NULL, NULL);
 
@@ -121,7 +124,8 @@ void * atheme_object_ref(void *object)
  * Side Effects:
  *      - none
  */
-void *atheme_object_sink_ref(void *obj)
+void *
+atheme_object_sink_ref(void *obj)
 {
 	return_val_if_fail(obj != NULL, NULL);
 	return_val_if_fail(atheme_object(obj)->refcount > 0, obj);
@@ -148,7 +152,8 @@ void *atheme_object_sink_ref(void *obj)
  * Side Effects:
  *      - if the refcount is 0, the object is destroyed.
  */
-void atheme_object_unref(void *obj)
+void
+atheme_object_unref(void *obj)
 {
 	return_if_fail(obj != NULL);
 	return_if_fail(atheme_object(obj)->refcount >= -1);
@@ -177,7 +182,8 @@ void atheme_object_unref(void *obj)
  * Side Effects:
  *      - the object is destroyed
  */
-void atheme_object_dispose(void *object)
+void
+atheme_object_dispose(void *object)
 {
 	struct atheme_object *obj;
 	mowgli_patricia_t *privatedata, *metadata;
@@ -216,7 +222,8 @@ void atheme_object_dispose(void *object)
 		mowgli_patricia_destroy(metadata, NULL, NULL);
 }
 
-struct metadata *metadata_add(void *target, const char *name, const char *value)
+struct metadata *
+metadata_add(void *target, const char *name, const char *value)
 {
 	struct atheme_object *obj;
 	struct metadata *md;
@@ -242,7 +249,8 @@ struct metadata *metadata_add(void *target, const char *name, const char *value)
 	return md;
 }
 
-void metadata_delete(void *target, const char *name)
+void
+metadata_delete(void *target, const char *name)
 {
 	struct atheme_object *obj;
 	struct metadata *md = metadata_find(target, name);
@@ -263,7 +271,8 @@ void metadata_delete(void *target, const char *name)
 	mowgli_heap_free(metadata_heap, md);
 }
 
-struct metadata *metadata_find(void *target, const char *name)
+struct metadata *
+metadata_find(void *target, const char *name)
 {
 	struct atheme_object *obj;
 
@@ -278,7 +287,8 @@ struct metadata *metadata_find(void *target, const char *name)
 	return mowgli_patricia_retrieve(obj->metadata, name);
 }
 
-void metadata_delete_all(void *target)
+void
+metadata_delete_all(void *target)
 {
 	struct atheme_object *obj;
 	struct metadata *md;
@@ -295,7 +305,8 @@ void metadata_delete_all(void *target)
 	}
 }
 
-void *privatedata_get(void *target, const char *key)
+void *
+privatedata_get(void *target, const char *key)
 {
 	struct atheme_object *obj;
 
@@ -306,7 +317,8 @@ void *privatedata_get(void *target, const char *key)
 	return mowgli_patricia_retrieve(obj->privatedata, key);
 }
 
-void privatedata_set(void *target, const char *key, void *data)
+void
+privatedata_set(void *target, const char *key, void *data)
 {
 	struct atheme_object *obj;
 
