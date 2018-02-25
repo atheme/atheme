@@ -48,7 +48,8 @@ static mowgli_eventloop_timer_t *enforce_timeout_check_timer = NULL;
 static mowgli_eventloop_timer_t *enforce_remove_enforcers_timer = NULL;
 
 /* logs a released nickname out */
-static bool log_enforce_victim_out(struct user *u, struct myuser *mu)
+static bool
+log_enforce_victim_out(struct user *u, struct myuser *mu)
 {
 	struct mynick *mn;
 	mowgli_node_t *n, *tn;
@@ -83,7 +84,8 @@ static bool log_enforce_victim_out(struct user *u, struct myuser *mu)
 }
 
 /* sends an FNC for the given user */
-static void guest_nickname(struct user *u)
+static void
+guest_nickname(struct user *u)
 {
 	char gnick[NICKLEN + 1];
 	int tries;
@@ -102,7 +104,8 @@ static void guest_nickname(struct user *u)
 	fnc_sts(nicksvs.me->me, u, gnick, FNC_FORCE);
 }
 
-static void check_enforce_all(struct myuser *mu)
+static void
+check_enforce_all(struct myuser *mu)
 {
 	mowgli_node_t *n;
 	struct mynick *mn;
@@ -118,7 +121,8 @@ static void check_enforce_all(struct myuser *mu)
 	}
 }
 
-static void ns_cmd_set_enforce(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_set_enforce(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *setting = parv[0];
 
@@ -162,7 +166,8 @@ static void ns_cmd_set_enforce(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void ns_cmd_release(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_release(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mynick *mn;
 	const char *target = parv[0];
@@ -272,7 +277,8 @@ static void ns_cmd_release(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mynick *mn;
 	const char *target = parv[0];
@@ -446,7 +452,8 @@ static void ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void enforce_remove_enforcers(void *arg)
+static void
+enforce_remove_enforcers(void *arg)
 {
 	mowgli_node_t *n, *tn;
 	struct user *u;
@@ -462,7 +469,8 @@ static void enforce_remove_enforcers(void *arg)
 	}
 }
 
-void enforce_timeout_check(void *arg)
+void
+enforce_timeout_check(void *arg)
 {
 	mowgli_node_t *n, *tn;
 	struct enforce_timeout *timeout;
@@ -506,13 +514,15 @@ void enforce_timeout_check(void *arg)
 	}
 }
 
-static void show_enforce(hook_user_req_t *hdata)
+static void
+show_enforce(hook_user_req_t *hdata)
 {
 	if (metadata_find(hdata->mu, "private:doenforce"))
 		command_success_nodata(hdata->si, "%s has enabled nick protection", entity(hdata->mu)->name);
 }
 
-static void check_registration(hook_user_register_check_t *hdata)
+static void
+check_registration(hook_user_register_check_t *hdata)
 {
 	int prefixlen;
 
@@ -530,7 +540,8 @@ static void check_registration(hook_user_register_check_t *hdata)
 	}
 }
 
-static void check_enforce(hook_nick_enforce_t *hdata)
+static void
+check_enforce(hook_nick_enforce_t *hdata)
 {
 	struct enforce_timeout *timeout, *timeout2;
 	mowgli_node_t *n;
@@ -605,7 +616,8 @@ static void check_enforce(hook_nick_enforce_t *hdata)
 	notice(nicksvs.nick, hdata->u->nick, "You have %d seconds to identify to your nickname before it is changed.", (int)(timeout->timelimit - CURRTIME));
 }
 
-static int idcheck_foreach_cb(struct myentity *mt, void *privdata)
+static int
+idcheck_foreach_cb(struct myentity *mt, void *privdata)
 {
 	struct myuser *mu = user(mt);
 
