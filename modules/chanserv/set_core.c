@@ -30,7 +30,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	mowgli_patricia_destroy(cs_set_cmdtree, NULL, NULL);
 }
 
-static void cs_help_set(struct sourceinfo *si, const char *subcmd)
+static void
+cs_help_set(struct sourceinfo *si, const char *subcmd)
 {
 	if (!subcmd)
 	{
@@ -51,7 +52,8 @@ static void cs_help_set(struct sourceinfo *si, const char *subcmd)
 }
 
 /* SET <#channel> <setting> <parameters> */
-static void cs_cmd_set(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan;
 	char *cmd;
