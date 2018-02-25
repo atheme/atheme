@@ -82,7 +82,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	mowgli_patricia_destroy(cs_akick_cmds, NULL, NULL);
 }
 
-static void clear_bans_matching_entity(struct mychan *mc, struct myentity *mt)
+static void
+clear_bans_matching_entity(struct mychan *mc, struct myentity *mt)
 {
 	mowgli_node_t *n;
 	struct myuser *tmu;
@@ -120,7 +121,8 @@ static void clear_bans_matching_entity(struct mychan *mc, struct myentity *mt)
 	modestack_flush_channel(mc->chan);
 }
 
-static void cs_cmd_akick(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_akick(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan;
 	char *cmd;
@@ -155,7 +157,8 @@ static void cs_cmd_akick(struct sourceinfo *si, int parc, char *parv[])
 	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
 
-void cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
+void
+cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myentity *mt;
 	struct mychan *mc;
@@ -426,7 +429,8 @@ void cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-void cs_cmd_akick_del(struct sourceinfo *si, int parc, char *parv[])
+void
+cs_cmd_akick_del(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myentity *mt;
 	struct mychan *mc;
@@ -548,7 +552,8 @@ void cs_cmd_akick_del(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-void cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
+void
+cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
 	struct chanacs *ca;
@@ -662,7 +667,8 @@ void cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_GET, "AKICK:LIST: \2%s\2", mc->name);
 }
 
-void akick_timeout_check(void *arg)
+void
+akick_timeout_check(void *arg)
 {
 	mowgli_node_t *n, *tn;
 	struct akick_timeout *timeout;
@@ -719,7 +725,8 @@ void akick_timeout_check(void *arg)
 	}
 }
 
-static struct akick_timeout *akick_add_timeout(struct mychan *mc, struct myentity *mt, const char *host, time_t expireson)
+static struct akick_timeout *
+akick_add_timeout(struct mychan *mc, struct myentity *mt, const char *host, time_t expireson)
 {
 	mowgli_node_t *n;
 	struct akick_timeout *timeout, *timeout2;
@@ -748,7 +755,8 @@ static struct akick_timeout *akick_add_timeout(struct mychan *mc, struct myentit
 	return timeout;
 }
 
-void akickdel_list_create(void *arg)
+void
+akickdel_list_create(void *arg)
 {
 	struct mychan *mc;
 	mowgli_node_t *n, *tn;
