@@ -36,7 +36,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	hook_del_config_ready(bs_set_fantasy_config_ready);
 }
 
-static void bs_set_fantasy_config_ready(void *unused)
+static void
+bs_set_fantasy_config_ready(void *unused)
 {
 	if (chansvs.fantasy)
 		bs_set_fantasy.access = NULL;
@@ -44,7 +45,8 @@ static void bs_set_fantasy_config_ready(void *unused)
 		bs_set_fantasy.access = AC_DISABLED;
 }
 
-static void bs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[])
+static void
+bs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
 	char *option = parv[1];
