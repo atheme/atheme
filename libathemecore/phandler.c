@@ -71,18 +71,21 @@ bool (*is_extban)(const char *mask) = generic_is_extban;
 void (*dline_sts)(const char *server, const char *host, long duration, const char *reason) = generic_dline_sts;
 void (*undline_sts)(const char *server, const char *host) = generic_undline_sts;
 
-unsigned int generic_server_login(void)
+unsigned int
+generic_server_login(void)
 {
 	/* Nothing to do here. */
 	return 0;
 }
 
-void generic_introduce_nick(struct user *u)
+void
+generic_introduce_nick(struct user *u)
 {
 	/* Nothing to do here. */
 }
 
-void generic_wallops_sts(const char *text)
+void
+generic_wallops_sts(const char *text)
 {
 	/* ugly, but some ircds offer no alternative -- jilles */
 	struct user *u;
@@ -97,18 +100,21 @@ void generic_wallops_sts(const char *text)
 	}
 }
 
-void generic_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
+void
+generic_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
 {
 	/* We can't do anything here. Bail. */
 }
 
-void generic_chan_lowerts(struct channel *c, struct user *u)
+void
+generic_chan_lowerts(struct channel *c, struct user *u)
 {
 	slog(LG_ERROR, "chan_lowerts() called but not supported!");
 	join_sts(c, u, true, channel_modes(c, true));
 }
 
-void generic_kick(struct user *source, struct channel *c, struct user *u, const char *reason)
+void
+generic_kick(struct user *source, struct channel *c, struct user *u, const char *reason)
 {
 	/* We can't do anything here. Bail. */
 }
@@ -130,27 +136,32 @@ generic_msg(const char *from, const char *target, const char *fmt, ...)
 	slog(LG_INFO, "Cannot send message to %s (%s): don't know how. Load a protocol module perhaps?", target, buf);
 }
 
-void generic_msg_global_sts(struct user *from, const char *mask, const char *text)
+void
+generic_msg_global_sts(struct user *from, const char *mask, const char *text)
 {
 	slog(LG_INFO, "Cannot send global message to %s (%s): don't know how. Load a protocol module perhaps?", mask, text);
 }
 
-void generic_notice_user_sts(struct user *from, struct user *target, const char *text)
+void
+generic_notice_user_sts(struct user *from, struct user *target, const char *text)
 {
 	slog(LG_INFO, "Cannot send notice to %s (%s): don't know how. Load a protocol module perhaps?", target->nick, text);
 }
 
-void generic_notice_global_sts(struct user *from, const char *mask, const char *text)
+void
+generic_notice_global_sts(struct user *from, const char *mask, const char *text)
 {
 	slog(LG_INFO, "Cannot send global notice to %s (%s): don't know how. Load a protocol module perhaps?", mask, text);
 }
 
-void generic_notice_channel_sts(struct user *from, struct channel *target, const char *text)
+void
+generic_notice_channel_sts(struct user *from, struct channel *target, const char *text)
 {
 	slog(LG_INFO, "Cannot send notice to %s (%s): don't know how. Load a protocol module perhaps?", target->name, text);
 }
 
-void generic_wallchops(struct user *sender, struct channel *channel, const char *message)
+void
+generic_wallchops(struct user *sender, struct channel *channel, const char *message)
 {
 	/* ugly, but always works -- jilles */
 	mowgli_node_t *n;
@@ -181,129 +192,154 @@ generic_numeric_sts(struct server *from, int numeric, struct user *target, const
 	sts(":%s %d %s %s", SERVER_NAME(from), numeric, CLIENT_NAME(target), buf);
 }
 
-void generic_kill_id_sts(struct user *killer, const char *id, const char *reason)
+void
+generic_kill_id_sts(struct user *killer, const char *id, const char *reason)
 {
 	/* cant do anything here. bail. */
 }
 
-void generic_part_sts(struct channel *c, struct user *u)
+void
+generic_part_sts(struct channel *c, struct user *u)
 {
 	/* cant do anything here. bail. */
 }
 
-void generic_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
+void
+generic_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
 	/* cant do anything here. bail. */
 }
 
-void generic_unkline_sts(const char *server, const char *user, const char *host)
+void
+generic_unkline_sts(const char *server, const char *user, const char *host)
 {
 	/* cant do anything here. bail. */
 }
 
-void generic_xline_sts(const char *server, const char *realname, long duration, const char *reason)
+void
+generic_xline_sts(const char *server, const char *realname, long duration, const char *reason)
 {
 	/* cant do anything here. bail. */
 }
 
-void generic_unxline_sts(const char *server, const char *realname)
+void
+generic_unxline_sts(const char *server, const char *realname)
 {
 	/* cant do anything here. bail. */
 }
 
-void generic_qline_sts(const char *server, const char *mask, long duration, const char *reason)
+void
+generic_qline_sts(const char *server, const char *mask, long duration, const char *reason)
 {
 	/* cant do anything here. bail. */
 }
 
-void generic_unqline_sts(const char *server, const char *mask)
+void
+generic_unqline_sts(const char *server, const char *mask)
 {
 	/* cant do anything here. bail. */
 }
 
-void generic_dline_sts(const char *server, const char *host, long duration, const char *reason)
+void
+generic_dline_sts(const char *server, const char *host, long duration, const char *reason)
 {
 	/* can't do anything here. bail. */
 }
 
-void generic_undline_sts(const char *server, const char *host)
+void
+generic_undline_sts(const char *server, const char *host)
 {
 	/* can't do anything here. bail. */
 }
 
-void generic_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
+void
+generic_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	/* cant do anything here. bail. */
 }
 
-void generic_mode_sts(char *sender, struct channel *target, char *modes)
+void
+generic_mode_sts(char *sender, struct channel *target, char *modes)
 {
 	/* cant do anything here. bail. */
 }
 
-void generic_ping_sts(void)
+void
+generic_ping_sts(void)
 {
 	/* cant do anything here. bail. */
 }
 
-void generic_quit_sts(struct user *u, const char *reason)
+void
+generic_quit_sts(struct user *u, const char *reason)
 {
 	/* cant do anything here. bail. */
 }
 
-void generic_on_login(struct user *u, struct myuser *account, const char *wantedhost)
+void
+generic_on_login(struct user *u, struct myuser *account, const char *wantedhost)
 {
 	/* nothing to do here. */
 }
 
-bool generic_on_logout(struct user *u, const char *account)
+bool
+generic_on_logout(struct user *u, const char *account)
 {
 	/* nothing to do here. */
 	return false;
 }
 
-void generic_jupe(const char *server, const char *reason)
+void
+generic_jupe(const char *server, const char *reason)
 {
 	/* nothing to do here. */
 }
 
-void generic_sethost_sts(struct user *source, struct user *target, const char *host)
+void
+generic_sethost_sts(struct user *source, struct user *target, const char *host)
 {
 	/* nothing to do here. */
 }
 
-void generic_fnc_sts(struct user *source, struct user *u, const char *newnick, int type)
+void
+generic_fnc_sts(struct user *source, struct user *u, const char *newnick, int type)
 {
 	if (type == FNC_FORCE) /* XXX this does not work properly */
 		kill_id_sts(source, CLIENT_NAME(u), "Nickname enforcement");
 }
 
-void generic_holdnick_sts(struct user *source, int duration, const char *nick, struct myuser *account)
+void
+generic_holdnick_sts(struct user *source, int duration, const char *nick, struct myuser *account)
 {
 	/* nothing to do here. */
 }
 
-void generic_invite_sts(struct user *source, struct user *target, struct channel *channel)
+void
+generic_invite_sts(struct user *source, struct user *target, struct channel *channel)
 {
 	/* nothing to do here. */
 }
 
-void generic_svslogin_sts(char *target, char *nick, char *user, char *host, struct myuser *account)
+void
+generic_svslogin_sts(char *target, char *nick, char *user, char *host, struct myuser *account)
 {
 	/* nothing to do here. */
 }
 
-void generic_sasl_sts(const char *target, char mode, const char *data)
+void
+generic_sasl_sts(const char *target, char mode, const char *data)
 {
 	/* nothing to do here. */
 }
 
-void generic_sasl_mechlist_sts(const char *mechlist)
+void
+generic_sasl_mechlist_sts(const char *mechlist)
 {
 	/* nothing to do here. */
 }
 
-mowgli_node_t *generic_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_node_t *first)
+mowgli_node_t *
+generic_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_node_t *first)
 {
 	struct chanban *cb;
 	mowgli_node_t *n;
@@ -328,7 +364,8 @@ mowgli_node_t *generic_next_matching_ban(struct channel *c, struct user *u, int 
 	return NULL;
 }
 
-mowgli_node_t *generic_next_matching_host_chanacs(struct mychan *mc, struct user *u, mowgli_node_t *first)
+mowgli_node_t *
+generic_next_matching_host_chanacs(struct mychan *mc, struct user *u, mowgli_node_t *first)
 {
 	struct chanacs *ca;
 	mowgli_node_t *n;
@@ -353,7 +390,8 @@ mowgli_node_t *generic_next_matching_host_chanacs(struct mychan *mc, struct user
 	return NULL;
 }
 
-bool generic_is_valid_nick(const char *nick)
+bool
+generic_is_valid_nick(const char *nick)
 {
 	const char *iter = nick;
 
@@ -372,7 +410,8 @@ bool generic_is_valid_nick(const char *nick)
 	return true;
 }
 
-bool generic_is_valid_username(const char *username)
+bool
+generic_is_valid_username(const char *username)
 {
 	const char *iter = username;
 
@@ -385,28 +424,33 @@ bool generic_is_valid_username(const char *username)
 	return true;
 }
 
-bool generic_is_valid_host(const char *host)
+bool
+generic_is_valid_host(const char *host)
 {
 	/* don't know what to do here */
 	return true;
 }
 
-void generic_mlock_sts(struct channel *c)
+void
+generic_mlock_sts(struct channel *c)
 {
 	/* nothing to do here. */
 }
 
-void generic_topiclock_sts(struct channel *c)
+void
+generic_topiclock_sts(struct channel *c)
 {
 	/* nothing to do here. */
 }
 
-void generic_quarantine_sts(struct user *source, struct user *victim, long duration, const char *reason)
+void
+generic_quarantine_sts(struct user *source, struct user *victim, long duration, const char *reason)
 {
 	/* nothing to do here */
 }
 
-bool generic_is_extban(const char *mask)
+bool
+generic_is_extban(const char *mask)
 {
 	return false;
 }
