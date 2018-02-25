@@ -24,7 +24,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("chanserv", &cs_ftransfer);
 }
 
-static void cs_cmd_ftransfer(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_ftransfer(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myentity *mt;
 	struct mychan *mc;
