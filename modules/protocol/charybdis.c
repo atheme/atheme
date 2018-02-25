@@ -98,7 +98,8 @@ static const struct cmode charybdis_user_mode_list[] = {
 
 /* ircd allows forwards to existing channels; the target channel must be
  * +F or the setter must have ops in it */
-static bool check_forward(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
+static bool
+check_forward(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	struct channel *target_c;
 	struct mychan *target_mc;
@@ -130,7 +131,8 @@ static bool check_forward(const char *value, struct channel *c, struct mychan *m
 	return false;
 }
 
-static bool check_jointhrottle(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
+static bool
+check_jointhrottle(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	const char *p, *arg2;
 
@@ -157,7 +159,8 @@ static bool check_jointhrottle(const char *value, struct channel *c, struct mych
 /* this may be slow, but it is not used much */
 /* returns true if it matches, false if not */
 /* note that the host part matches differently from a regular ban */
-static bool extgecos_match(const char *mask, struct user *u)
+static bool
+extgecos_match(const char *mask, struct user *u)
 {
 	char hostgbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + GECOSLEN + 1];
 	char realgbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + GECOSLEN + 1];
@@ -167,7 +170,8 @@ static bool extgecos_match(const char *mask, struct user *u)
 	return !match(mask, hostgbuf) || !match(mask, realgbuf);
 }
 
-static mowgli_node_t *charybdis_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_node_t *first)
+static mowgli_node_t *
+charybdis_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_node_t *first)
 {
 	struct chanban *cb;
 	mowgli_node_t *n;
@@ -259,7 +263,8 @@ static mowgli_node_t *charybdis_next_matching_ban(struct channel *c, struct user
 	return NULL;
 }
 
-static bool charybdis_is_valid_host(const char *host)
+static bool
+charybdis_is_valid_host(const char *host)
 {
 	const char *p;
 
@@ -271,12 +276,14 @@ static bool charybdis_is_valid_host(const char *host)
 	return true;
 }
 
-static void charybdis_notice_channel_sts(struct user *from, struct channel *target, const char *text)
+static void
+charybdis_notice_channel_sts(struct user *from, struct channel *target, const char *text)
 {
 	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, target->name, text);
 }
 
-static bool charybdis_is_extban(const char *mask)
+static bool
+charybdis_is_extban(const char *mask)
 {
 	const char without_param[] = "oza";
 	const char with_param[] = "ajcxr";
@@ -329,6 +336,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("protocol/charybdis", MODULE_UNLOAD_CAPABILITY_NEVER)
