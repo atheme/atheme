@@ -46,7 +46,8 @@ static char *groupmemo;
 
 /*****************************************************************************/
 
-static struct reg_request *csreq_create(const char *name, struct myentity *mt)
+static struct reg_request *
+csreq_create(const char *name, struct myentity *mt)
 {
 	return_val_if_fail(name != NULL, NULL);
 	return_val_if_fail(mt != NULL, NULL);
@@ -61,14 +62,16 @@ static struct reg_request *csreq_create(const char *name, struct myentity *mt)
 	return cs;
 }
 
-static struct reg_request *csreq_find(const char *name)
+static struct reg_request *
+csreq_find(const char *name)
 {
 	return_val_if_fail(name != NULL, NULL);
 
 	return mowgli_patricia_retrieve(csreq_list, name);
 }
 
-static void csreq_destroy(struct reg_request *cs)
+static void
+csreq_destroy(struct reg_request *cs)
 {
 	return_if_fail(cs != NULL);
 
@@ -77,7 +80,8 @@ static void csreq_destroy(struct reg_request *cs)
 	free(cs);
 }
 
-static void csreq_demarshal(struct database_handle *db, const char *type)
+static void
+csreq_demarshal(struct database_handle *db, const char *type)
 {
         const char *chan = db_sread_word(db);
         const char *nick = db_sread_word(db);
@@ -96,7 +100,8 @@ static void csreq_demarshal(struct database_handle *db, const char *type)
 	cs->ts = req_ts;
 }
 
-static void csreq_marshal_set(struct database_handle *db)
+static void
+csreq_marshal_set(struct database_handle *db)
 {
 	mowgli_patricia_iteration_state_t state;
 	struct reg_request *cs;
@@ -173,7 +178,8 @@ send_group_memo(struct sourceinfo *si, const char *memo, ...)
 /*****************************************************************************/
 
 /* deny chanserv registrations but turn them into a request */
-static void can_register(hook_channel_register_check_t *req)
+static void
+can_register(hook_channel_register_check_t *req)
 {
 	struct reg_request *cs;
 
@@ -199,7 +205,8 @@ static void can_register(hook_channel_register_check_t *req)
 
 /*****************************************************************************/
 
-static void cs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
 	struct mychan *mc;
@@ -300,7 +307,8 @@ static void cs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "ACTIVATE: \2%s\2", parv[0]);
 }
 
-static void cs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct reg_request *cs;
 	struct myuser *mu;
@@ -329,7 +337,8 @@ static void cs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "REJECT: \2%s\2", parv[0]);
 }
 
-static void cs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_patricia_iteration_state_t state;
 	struct reg_request *cs;
