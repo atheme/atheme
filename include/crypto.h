@@ -5,8 +5,8 @@
  * Cryptographic module support.
  */
 
-#ifndef CRYPTO_H
-#define CRYPTO_H
+#ifndef ATHEME_INC_CRYPTO_H
+#define ATHEME_INC_CRYPTO_H 1
 
 #define PWVERIFY_FLAG_NONE      0x0000U // Initial state
 #define PWVERIFY_FLAG_MYMODULE  0x0001U // This password hash was from 'this' crypto module
@@ -26,4 +26,4 @@ const struct crypt_impl *crypt_get_default_provider(void);
 const struct crypt_impl *crypt_verify_password(const char *password, const char *parameters, unsigned int *flags);
 const char *crypt_password(const char *password);
 
-#endif
+#endif /* !ATHEME_INC_CRYPTO_H */

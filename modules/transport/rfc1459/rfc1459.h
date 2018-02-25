@@ -5,9 +5,9 @@
  * Header for IRC code.
  */
 
-#ifndef RFC1459_H
-#define RFC1459_H
+#ifndef ATHEME_MOD_TRANSPORT_RFC1459_RFC1459_H
+#define ATHEME_MOD_TRANSPORT_RFC1459_RFC1459_H 1
 
 void irc_parse(char *line);
 
-#endif
+#endif /* !ATHEME_MOD_TRANSPORT_RFC1459_RFC1459_H */

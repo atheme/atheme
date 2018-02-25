@@ -1,5 +1,5 @@
-#ifndef INLINE_ACCOUNT_H
-#define INLINE_ACCOUNT_H
+#ifndef ATHEME_INC_INLINE_ACCOUNT_H
+#define ATHEME_INC_INLINE_ACCOUNT_H 1
 
 /*
  * myuser_find(const char *name)
@@ -117,4 +117,4 @@ static inline bool chanacs_is_table_full(struct chanacs *ca)
 		MOWGLI_LIST_LENGTH(&ca->mychan->chanacs) > chansvs.maxchanacs;
 }
 
-#endif
+#endif /* !ATHEME_INC_INLINE_ACCOUNT_H */

@@ -5,8 +5,8 @@
  * Message translation stuff.
  */
 
-#ifndef CULTURE_H
-#define CULTURE_H
+#ifndef ATHEME_INC_CULTURE_H
+#define ATHEME_INC_CULTURE_H 1
 
 struct language
 {
@@ -36,4 +36,4 @@ const char *language_get_real_name(const struct language *lang);
 bool language_is_valid(const struct language *lang);
 void language_set_active(struct language *lang);
 
-#endif
+#endif /* !ATHEME_INC_CULTURE_H */

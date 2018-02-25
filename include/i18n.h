@@ -5,8 +5,8 @@
  * This is the header which includes all of the internationalization stuff.
  */
 
-#ifndef ATHEME_INTL_H
-#define ATHEME_INTL_H
+#ifndef ATHEME_INC_INTL_H
+#define ATHEME_INC_INTL_H 1
 
 #ifdef ENABLE_NLS
 # include <locale.h>
@@ -23,4 +23,4 @@
 # define ngettext(s1, sn, n) ((n) == 1 ? (s1) : (sn))
 #endif
 
-#endif
+#endif /* !ATHEME_INC_INTL_H */

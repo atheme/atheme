@@ -6,8 +6,8 @@
  * Misc tools
  */
 
-#ifndef ATHEME_TOOLS_H
-#define ATHEME_TOOLS_H
+#ifndef ATHEME_INC_TOOLS_H
+#define ATHEME_INC_TOOLS_H 1
 
 /* email stuff */
 int sendemail(struct user *u, struct myuser *mu, const char *type, const char *email, const char *param);
@@ -214,4 +214,4 @@ int rpl_vasprintf(char **, const char *, va_list) ATHEME_FATTR_PRINTF(2, 0);
 int rpl_asprintf(char **, const char *, ...) ATHEME_FATTR_PRINTF(2, 3);
 #endif
 
-#endif
+#endif /* !ATHEME_INC_TOOLS_H */

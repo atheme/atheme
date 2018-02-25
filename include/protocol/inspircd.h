@@ -3,8 +3,8 @@
  * Rights to this code are as documented in doc/LICENSE.
  */
 
-#ifndef INC_PROTO_INSPIRCD_H
-#define INC_PROTO_INSPIRCD_H
+#ifndef ATHEME_INC_PROTOCOL_INSPIRCD_H
+#define ATHEME_INC_PROTOCOL_INSPIRCD_H 1
 
 #define CMODE_NOCOLOR           0x00001000
 #define CMODE_MODREG            0x00002000
@@ -24,4 +24,4 @@
 #define CMODE_PERM              0x08000000
 #define CMODE_DELAYJOIN         0x20000000
 
-#endif /* !INC_PROTO_INSPIRCD_H */
+#endif /* !ATHEME_INC_PROTOCOL_INSPIRCD_H */

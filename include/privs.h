@@ -5,8 +5,8 @@
  * Fine grained services operator privileges
  */
 
-#ifndef PRIVS_H
-#define PRIVS_H
+#ifndef ATHEME_INC_PRIVS_H
+#define ATHEME_INC_PRIVS_H 1
 
 #define PRIV_NONE            NULL
 
@@ -125,4 +125,4 @@ const struct soper *get_sourceinfo_soper(struct sourceinfo *si);
  */
 const struct operclass *get_sourceinfo_operclass(struct sourceinfo *si);
 
-#endif /* PRIVS_H */
+#endif /* !ATHEME_INC_PRIVS_H */

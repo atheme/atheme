@@ -5,8 +5,8 @@
  * This contains the connection structure.
  */
 
-#ifndef CONNECTION_H
-#define CONNECTION_H
+#ifndef ATHEME_INC_CONNECTION_H
+#define ATHEME_INC_CONNECTION_H 1
 
 #ifndef _WIN32
 # define ioerrno()	errno
@@ -105,4 +105,4 @@ struct connection *connection_find(int);
 
 extern mowgli_list_t connection_list;
 
-#endif
+#endif /* !ATHEME_INC_CONNECTION_H */

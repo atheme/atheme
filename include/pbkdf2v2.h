@@ -5,8 +5,8 @@
  * Data structures and macros for the PBKDF2v2 crypto module.
  */
 
-#ifndef PBKDF2V2_H
-#define PBKDF2V2_H
+#ifndef ATHEME_INC_PBKDF2V2_H
+#define ATHEME_INC_PBKDF2V2_H 1
 
 #define PBKDF2V2_CRYPTO_MODULE_NAME     "crypto/pbkdf2v2"
 
@@ -84,4 +84,4 @@ struct pbkdf2v2_scram_functions
 	void             (*confhook)(pbkdf2v2_confhook_fn);
 };
 
-#endif /* !PBKDF2V2_H */
+#endif /* !ATHEME_INC_PBKDF2V2_H */

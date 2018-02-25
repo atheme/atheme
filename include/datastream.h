@@ -5,8 +5,8 @@
  * Datastream query stuff.
  */
 
-#ifndef ATHEME_DATASTREAM_H
-#define ATHEME_DATASTREAM_H
+#ifndef ATHEME_INC_DATASTREAM_H
+#define ATHEME_INC_DATASTREAM_H 1
 
 void sendq_add(struct connection *cptr, char *buf, size_t len);
 void sendq_add_eof(struct connection *cptr);
@@ -21,4 +21,4 @@ int recvq_getline(struct connection *cptr, char *buf, size_t len);
 
 void sendqrecvq_free(struct connection *cptr);
 
-#endif
+#endif /* !ATHEME_INC_DATASTREAM_H */

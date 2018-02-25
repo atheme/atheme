@@ -5,8 +5,8 @@
  * Generic stuff from libathemecore.
  */
 
-#ifndef LIBATHEMECORE_H
-#define LIBATHEMECORE_H
+#ifndef ATHEME_INC_LIBATHEMECORE_H
+#define ATHEME_INC_LIBATHEMECORE_H 1
 
 void atheme_bootstrap(void);
 void atheme_init(char *execname, char *log_p);
@@ -14,4 +14,4 @@ void atheme_setup(void);
 
 int atheme_main(int argc, char *argv[]);
 
-#endif
+#endif /* !ATHEME_INC_LIBATHEMECORE_H */

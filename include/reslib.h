@@ -4,8 +4,8 @@
  * $Id: reslib.h 446 2006-02-12 02:46:54Z db $
  */
 
-#ifndef CHARYBDIS_RESLIB_H
-#define CHARYBDIS_RESLIB_H
+#ifndef ATHEME_INC_RESLIB_H
+#define ATHEME_INC_RESLIB_H 1
 
 /* Longest hostname we're willing to work with.
  * Due to DNSBLs this is more than HOSTLEN.
@@ -122,4 +122,4 @@ int irc_res_mkquery(const char *dname, int class, int type, unsigned char *buf, 
 
 extern char irc_domain[IRCD_RES_HOSTLEN + 1];
 
-#endif
+#endif /* !ATHEME_INC_RESLIB_H */

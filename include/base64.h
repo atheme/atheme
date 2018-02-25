@@ -40,11 +40,11 @@
  * IF IBM IS APPRISED OF THE POSSIBILITY OF SUCH DAMAGES.
  */
 
-#ifndef BASE64_H
-#define BASE64_H
+#ifndef ATHEME_INC_BASE64_H
+#define ATHEME_INC_BASE64_H 1
 
 size_t base64_encode(const void *src, size_t srclength, char *target, size_t targsize) ATHEME_FATTR_WUR;
 size_t base64_encode_raw(const void *src, size_t srclength, char *target, size_t targsize) ATHEME_FATTR_WUR;
 size_t base64_decode(const char *src, void *target, size_t targsize) ATHEME_FATTR_WUR;
 
-#endif /* BASE64_H */
+#endif /* !ATHEME_INC_BASE64_H */

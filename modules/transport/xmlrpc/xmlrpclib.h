@@ -5,8 +5,8 @@
  * XMLRPC library header, hacked up for Atheme.
  */
 
-#ifndef XMLRPC_H
-#define XMLRPC_H
+#ifndef ATHEME_MOD_TRANSPORT_XMLRPC_XMLRPCLIB_H
+#define ATHEME_MOD_TRANSPORT_XMLRPC_XMLRPCLIB_H 1
 
 #include "atheme.h"
 
@@ -76,4 +76,4 @@ void xmlrpc_char_encode(char *outbuffer, const char *s1);
 char *xmlrpc_decode_string(char *buf);
 char *xmlrpc_normalizeBuffer(const char *buf);
 
-#endif
+#endif /* !ATHEME_MOD_TRANSPORT_XMLRPC_XMLRPCLIB_H */

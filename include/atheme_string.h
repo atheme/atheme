@@ -5,8 +5,8 @@
  * String stuff.
  */
 
-#ifndef ATHEME_STRING_H
-#define ATHEME_STRING_H
+#ifndef ATHEME_INC_ATHEME_STRING_H
+#define ATHEME_INC_ATHEME_STRING_H 1
 
 void strip(char *line);
 void strip_ctrl(char *line);
@@ -19,4 +19,4 @@ char *strtok_r(char *s, const char *delim, char **lasts);
 char *strcasestr(char *s, const char *find);
 #endif
 
-#endif
+#endif /* !ATHEME_INC_ATHEME_STRING_H */

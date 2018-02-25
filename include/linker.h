@@ -5,9 +5,9 @@
  * Dynamic linker.
  */
 
-#ifndef LINKER_H
-#define LINKER_H
+#ifndef ATHEME_INC_LINKER_H
+#define ATHEME_INC_LINKER_H 1
 
 mowgli_module_t *linker_open_ext(const char *path, char *errbuf, int errlen);
 
-#endif
+#endif /* !ATHEME_INC_LINKER_H */

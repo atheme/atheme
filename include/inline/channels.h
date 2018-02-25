@@ -1,5 +1,5 @@
-#ifndef INLINE_CHANNELS_H
-#define INLINE_CHANNELS_H
+#ifndef ATHEME_INC_INLINE_CHANNELS_H
+#define ATHEME_INC_INLINE_CHANNELS_H 1
 
 /*
  * channel_find(const char *name)
@@ -47,4 +47,4 @@ static inline void chanban_clear(struct channel *chan)
 	}
 }
 
-#endif
+#endif /* !ATHEME_INC_INLINE_CHANNELS_H */

@@ -5,8 +5,8 @@
  * Structures used throughout the project (forward declarations).
  */
 
-#ifndef STRUCTURES_H
-#define STRUCTURES_H
+#ifndef ATHEME_INC_STRUCTURES_H
+#define ATHEME_INC_STRUCTURES_H 1
 
 // Defined in include/account.h
 struct chanacs;
@@ -130,4 +130,4 @@ struct uplink;
 // Defined in include/users.h
 struct user;
 
-#endif
+#endif /* !ATHEME_INC_STRUCTURES_H */

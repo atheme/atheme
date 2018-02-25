@@ -5,8 +5,8 @@
  * Module ABI revision.
  */
 
-#ifndef ABIREV_H
-#define ABIREV_H
+#ifndef ATHEME_INC_ABIREV_H
+#define ATHEME_INC_ABIREV_H 1
 
 /*
  * Increment this in case of changes to the module ABI (i.e. changes
@@ -18,4 +18,4 @@
  */
 #define CURRENT_ABI_REVISION 730000
 
-#endif
+#endif /* !ATHEME_INC_ABIREV_H */

@@ -4,8 +4,8 @@
  * Rights to this code are as documented in doc/LICENSE.
  */
 
-#ifndef RATBOX_H
-#define RATBOX_H
+#ifndef ATHEME_INC_PROTOCOL_CHATIRCD_H
+#define ATHEME_INC_PROTOCOL_CHATIRCD_H 1
 
 #define CMODE_NOCOLOR           0x00001000
 #define CMODE_REGONLY           0x00002000
@@ -22,4 +22,4 @@
 #define CMODE_ADMINONLY         0x01000000
 #define CMODE_NONOTICE          0x04000000
 
-#endif
+#endif /* !ATHEME_INC_PROTOCOL_CHATIRCD_H */

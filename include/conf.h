@@ -5,8 +5,8 @@
  * Config reader.
  */
 
-#ifndef CONF_H
-#define CONF_H
+#ifndef ATHEME_INC_CONF_H
+#define ATHEME_INC_CONF_H 1
 
 bool conf_parse(const char *);
 void conf_init(void);
@@ -20,4 +20,4 @@ extern mowgli_list_t conf_si_table; /* serverinfo{} */
 extern mowgli_list_t conf_gi_table; /* general{} */
 extern mowgli_list_t conf_la_table; /* language{} */
 
-#endif
+#endif /* !ATHEME_INC_CONF_H */

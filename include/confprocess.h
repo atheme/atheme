@@ -5,8 +5,8 @@
  * Config reader.
  */
 
-#ifndef CONFPROCESS_H
-#define CONFPROCESS_H
+#ifndef ATHEME_INC_CONFPROCESS_H
+#define ATHEME_INC_CONFPROCESS_H 1
 
 #define CONF_NO_REHASH 0x1
 
@@ -49,4 +49,4 @@ int token_to_value(struct Token token_table[], const char *token);
 
 extern bool conf_need_rehash;
 
-#endif
+#endif /* !ATHEME_INC_CONFPROCESS_H */

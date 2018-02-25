@@ -2,8 +2,8 @@
  * Copyright (C) 2010 Atheme Development Group
  */
 
-#ifndef NSLIST_COMMON_H
-#define NSLIST_COMMON_H
+#ifndef ATHEME_MOD_NICKSERV_LIST_COMMON_H
+#define ATHEME_MOD_NICKSERV_LIST_COMMON_H 1
 
 #include "atheme.h"
 
@@ -22,4 +22,4 @@ struct list_param
 	bool (*is_match)(const struct mynick *mn, const void *arg);
 };
 
-#endif /* !NSLIST_COMMON_H */
+#endif /* !ATHEME_MOD_NICKSERV_LIST_COMMON_H */

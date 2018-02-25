@@ -6,8 +6,8 @@
  * String matching
  */
 
-#ifndef ATHEME_MATCH_H
-#define ATHEME_MATCH_H
+#ifndef ATHEME_INC_MATCH_H
+#define ATHEME_INC_MATCH_H 1
 
 #include "sysconf.h"
 
@@ -90,4 +90,4 @@ char *regex_extract(char *pattern, char **pend, int *pflags);
 bool regex_match(struct atheme_regex *preg, char *string);
 bool regex_destroy(struct atheme_regex *preg);
 
-#endif
+#endif /* !ATHEME_INC_MATCH_H */

@@ -5,8 +5,8 @@
  * Headers for service selection tree.
  */
 
-#ifndef SERVTREE_H
-#define SERVTREE_H
+#ifndef ATHEME_INC_SERVTREE_H
+#define ATHEME_INC_SERVTREE_H 1
 
 struct service
 {
@@ -66,4 +66,4 @@ void service_named_bind_command(const char *, struct command *);
 void service_named_unbind_command(const char *, struct command *);
 void servtree_update(void *dummy);
 
-#endif
+#endif /* !ATHEME_INC_SERVTREE_H */

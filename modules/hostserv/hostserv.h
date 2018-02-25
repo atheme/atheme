@@ -1,5 +1,5 @@
-#ifndef INLINE_HOSTSERV_H
-#define INLINE_HOSTSERV_H
+#ifndef ATHEME_MOD_HOSTSERV_HOSTSERV_H
+#define ATHEME_MOD_HOSTSERV_HOSTSERV_H 1
 
 typedef struct {
         const char *host;
@@ -91,4 +91,4 @@ static inline void hs_sethost_all(struct myuser *mu, const char *host, const cha
 		metadata_delete(mu, "private:usercloak-assigner");
 }
 
-#endif
+#endif /* !ATHEME_MOD_HOSTSERV_HOSTSERV_H */

@@ -3,8 +3,8 @@
  * Rights to this code are as documented in doc/LICENSE.
  */
 
-#ifndef INC_PROTO_UNREAL_H
-#define INC_PROTO_UNREAL_H
+#ifndef ATHEME_INC_PROTOCOL_UNREAL_H
+#define ATHEME_INC_PROTOCOL_UNREAL_H 1
 
 #define CMODE_NOCOLOR           0x00001000
 #define CMODE_MODREG            0x00002000
@@ -25,4 +25,4 @@
 #define CMODE_NONOTICE          0x10000000
 #define CMODE_DELAYJOIN         0x20000000
 
-#endif /* !INC_PROTO_UNREAL_H */
+#endif /* !ATHEME_INC_PROTOCOL_UNREAL_H */

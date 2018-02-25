@@ -6,8 +6,8 @@
  * Copyright (C) 2010 Atheme Development Group
  */
 
-#ifndef NSLIST_H
-#define NSLIST_H
+#ifndef ATHEME_MOD_NICKSERV_LIST_H
+#define ATHEME_MOD_NICKSERV_LIST_H 1
 
 #include "list_common.h"
 
@@ -22,4 +22,4 @@ static inline void use_nslist_main_symbols(struct module *m)
     MODULE_TRY_REQUEST_SYMBOL(m, list_unregister, "nickserv/list", "list_unregister");
 }
 
-#endif /* !NSLIST_H */
+#endif /* !ATHEME_MOD_NICKSERV_LIST_H */

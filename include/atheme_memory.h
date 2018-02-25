@@ -5,8 +5,8 @@
  * Memory stuff.
  */
 
-#ifndef ATHEME_MEMORY_H
-#define ATHEME_MEMORY_H
+#ifndef ATHEME_INC_ATHEME_MEMORY_H
+#define ATHEME_INC_ATHEME_MEMORY_H 1
 
 void *smalloc(size_t len);
 void *scalloc(size_t num, size_t len);
@@ -14,4 +14,4 @@ void *srealloc(void *ptr, size_t len);
 char *sstrdup(const char *ptr);
 char *sstrndup(const char *ptr, size_t len);
 
-#endif
+#endif /* !ATHEME_INC_ATHEME_MEMORY_H */

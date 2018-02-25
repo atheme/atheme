@@ -5,8 +5,8 @@
  * Authentication.
  */
 
-#ifndef AUTH_H
-#define AUTH_H
+#ifndef ATHEME_INC_AUTH_H
+#define ATHEME_INC_AUTH_H 1
 
 void set_password(struct myuser *mu, const char *newpassword);
 bool verify_password(struct myuser *mu, const char *password);
@@ -14,4 +14,4 @@ bool verify_password(struct myuser *mu, const char *password);
 extern bool auth_module_loaded;
 extern bool (*auth_user_custom)(struct myuser *mu, const char *password);
 
-#endif
+#endif /* !ATHEME_INC_AUTH_H */

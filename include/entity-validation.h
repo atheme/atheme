@@ -2,8 +2,8 @@
  * Copyright (C) 2010 Atheme Development Group
  */
 
-#ifndef ENTITY_VALIDATION_H
-#define ENTITY_VALIDATION_H
+#ifndef ATHEME_INC_ENTITY_VALIDATION_H
+#define ATHEME_INC_ENTITY_VALIDATION_H 1
 
 struct entity_chanacs_validation_vtable
 {
@@ -16,4 +16,4 @@ struct entity_chanacs_validation_vtable
 
 const struct entity_chanacs_validation_vtable *myentity_get_chanacs_validator(struct myentity *mt);
 
-#endif
+#endif /* !ATHEME_INC_ENTITY_VALIDATION_H */

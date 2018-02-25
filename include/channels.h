@@ -5,8 +5,8 @@
  * Data structures for channel information.
  */
 
-#ifndef CHANNELS_H
-#define CHANNELS_H
+#ifndef ATHEME_INC_CHANNELS_H
+#define ATHEME_INC_CHANNELS_H 1
 
 #define VALID_GLOBAL_CHANNEL_PFX(name)	(*(name) == '#' || *(name) == '+' || *(name) == '!')
 #define VALID_CHANNEL_PFX(name)		(VALID_GLOBAL_CHANNEL_PFX(name) || *(name) == '&')
@@ -180,4 +180,4 @@ void chanban_delete(struct chanban *c);
 struct chanban *chanban_find(struct channel *chan, const char *mask, int type);
 //inline void chanban_clear(struct channel *chan);
 
-#endif
+#endif /* !ATHEME_INC_CHANNELS_H */

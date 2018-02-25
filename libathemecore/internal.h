@@ -5,8 +5,8 @@
  * Stuff for internal use in Atheme.
  */
 
-#ifndef INTERNAL_H
-#define INTERNAL_H
+#ifndef ATHEME_LAC_INTERNAL_H
+#define ATHEME_LAC_INTERNAL_H 1
 
 /* internal functions */
 void event_init(void);
@@ -18,4 +18,4 @@ void init_signal_handlers(void);
 
 void language_init(void);
 
-#endif
+#endif /* !ATHEME_LAC_INTERNAL_H */

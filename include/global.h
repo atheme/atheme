@@ -6,8 +6,8 @@
  * Global data
  */
 
-#ifndef ATHEME_GLOBAL_H
-#define ATHEME_GLOBAL_H
+#ifndef ATHEME_INC_GLOBAL_H
+#define ATHEME_INC_GLOBAL_H 1
 
 /* me, a struct containing basic configuration options and some dynamic
  * information about our uplink and program state */
@@ -196,4 +196,4 @@ void check_signals(void);
 void childproc_add(pid_t pid, const char *desc, void (*cb)(pid_t pid, int status, void *data), void *data);
 void childproc_delete_all(void (*cb)(pid_t pid, int status, void *data));
 
-#endif
+#endif /* !ATHEME_INC_GLOBAL_H */

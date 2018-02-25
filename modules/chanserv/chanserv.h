@@ -1,5 +1,5 @@
-#ifndef INLINE_CHANSERV_H
-#define INLINE_CHANSERV_H
+#ifndef ATHEME_MOD_CHANSERV_CHANSERV_H
+#define ATHEME_MOD_CHANSERV_CHANSERV_H 1
 
 typedef void (*cs_cmd_proto)(struct sourceinfo *, int, char**);
 
@@ -81,4 +81,4 @@ static inline void prefix_action_clear(mowgli_list_t *actions)
 	}
 }
 
-#endif
+#endif /* !ATHEME_MOD_CHANSERV_CHANSERV_H */

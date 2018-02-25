@@ -3,8 +3,8 @@
  * Rights to this code are as documented in doc/LICENSE.
  */
 
-#ifndef INC_PROTO_NEFARIOUS_H
-#define INC_PROTO_NEFARIOUS_H
+#ifndef ATHEME_INC_PROTOCOL_NEFARIOUS_H
+#define ATHEME_INC_PROTOCOL_NEFARIOUS_H 1
 
 #define CMODE_NOCOLOR           0x00001000
 #define CMODE_NOCTCP            0x00002000
@@ -22,4 +22,4 @@
 #define CMODE_SOFTPRIV          0x02000000
 #define CMODE_SSLONLY           0x04000000
 
-#endif /* !INC_PROTO_NEFARIOUS_H */
+#endif /* !ATHEME_INC_PROTOCOL_NEFARIOUS_H */

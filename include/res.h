@@ -4,8 +4,8 @@
  * $Id: res.h 2023 2006-09-02 23:47:27Z jilles $
  */
 
-#ifndef CHARYBDIS_RES_H
-#define CHARYBDIS_RES_H
+#ifndef ATHEME_INC_RES_H
+#define ATHEME_INC_RES_H 1
 
 #include "atheme.h"
 #include "reslib.h"
@@ -45,4 +45,4 @@ void gethost_byaddr(const union sockaddr_any *, struct res_dns_query *);
 void add_local_domain(char *, size_t);
 void report_dns_servers(struct sourceinfo *);
 
-#endif
+#endif /* !ATHEME_INC_RES_H */

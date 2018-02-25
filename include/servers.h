@@ -5,8 +5,8 @@
  * Data structures related to network servers.
  */
 
-#ifndef SERVERS_H
-#define SERVERS_H
+#ifndef ATHEME_INC_SERVERS_H
+#define ATHEME_INC_SERVERS_H 1
 
 /* servers struct */
 struct server
@@ -65,4 +65,4 @@ struct server *server_add(const char *name, unsigned int hops, struct server *up
 void server_delete(const char *name);
 struct server *server_find(const char *name);
 
-#endif
+#endif /* !ATHEME_INC_SERVERS_H */

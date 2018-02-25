@@ -33,8 +33,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef INC_DIGEST_FE_HEADER_H
-#define INC_DIGEST_FE_HEADER_H
+#ifndef ATHEME_INC_DIGEST_FE_HEADER_H
+#define ATHEME_INC_DIGEST_FE_HEADER_H 1
 
 #include <mbedtls/md.h>
 
@@ -45,4 +45,4 @@ struct digest_context
 	bool                            hmac;
 };
 
-#endif /* !INC_DIGEST_FE_HEADER_H */
+#endif /* !ATHEME_INC_DIGEST_FE_HEADER_H */

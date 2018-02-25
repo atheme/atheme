@@ -33,11 +33,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef INC_DIGEST_BE_SHA1_H
-#define INC_DIGEST_BE_SHA1_H
+#ifndef ATHEME_LAC_DIGEST_BE_SHA1_H
+#define ATHEME_LAC_DIGEST_BE_SHA1_H 1
 
 bool digest_init_sha1(struct digest_context_sha1 *);
 bool digest_update_sha1(struct digest_context_sha1 *, const void *, size_t);
 bool digest_final_sha1(struct digest_context_sha1 *, void *, size_t *);
 
-#endif /* !INC_DIGEST_BE_SHA1_H */
+#endif /* !ATHEME_LAC_DIGEST_BE_SHA1_H */

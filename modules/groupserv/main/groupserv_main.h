@@ -2,8 +2,8 @@
  * Copyright (C) 2010 Atheme Development Group
  */
 
-#ifndef GROUPSERV_MAIN_H
-#define GROUPSERV_MAIN_H
+#ifndef ATHEME_MOD_GROUPSERV_MAIN_GROUPSERV_MAIN_H
+#define ATHEME_MOD_GROUPSERV_MAIN_GROUPSERV_MAIN_H 1
 
 #include "atheme.h"
 #include "groupserv_common.h"
@@ -43,4 +43,4 @@ extern struct service *groupsvs;
 extern mowgli_list_t gs_cmdtree;
 extern mowgli_list_t conf_gs_table;
 
-#endif
+#endif /* !ATHEME_MOD_GROUPSERV_MAIN_GROUPSERV_MAIN_H */

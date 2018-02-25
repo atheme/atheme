@@ -5,8 +5,8 @@
  * Management of tainted running configuration reasons and status.
  */
 
-#ifndef ATHEME_TAINT_H
-#define ATHEME_TAINT_H
+#ifndef ATHEME_INC_TAINT_H
+#define ATHEME_INC_TAINT_H 1
 
 struct taint_reason
 {
@@ -38,4 +38,4 @@ extern mowgli_list_t taint_list;
                 }                                                                       \
         }
 
-#endif
+#endif /* !ATHEME_INC_TAINT_H */

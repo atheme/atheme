@@ -5,8 +5,8 @@
  * Data structures related to services psuedo-clients.
  */
 
-#ifndef SERVICES_H
-#define SERVICES_H
+#ifndef ATHEME_INC_SERVICES_H
+#define ATHEME_INC_SERVICES_H 1
 
 /* The nick/user/host/real strings in these structs simply point
  * to their counterparts in the struct service, and will probably be removed
@@ -138,4 +138,4 @@ unsigned int handle_ctcp_common(struct sourceinfo *si, char *, char *);
 void command_success_qrcode(struct sourceinfo *si, const char *data);
 #endif /* HAVE_LIBQRENCODE */
 
-#endif /* !SERVICES_H */
+#endif /* !ATHEME_INC_SERVICES_H */

@@ -1,7 +1,7 @@
 /* prettyprint helpers for rpgserv */
 
-#ifndef __RPGSERV__PRETTYPRINT_H__GUARD
-#define __RPGSERV__PRETTYPRINT_H__GUARD
+#ifndef ATHEME_MOD_RPGSERV_PRETTYPRINT_H
+#define ATHEME_MOD_RPGSERV_PRETTYPRINT_H 1
 
 /*
  * Important: keys and names must line up index-wise or everything
@@ -96,4 +96,4 @@ static inline const char *rs_prettyprint_keywords(struct metadata *md, const cha
 	return ppbuf;
 }
 
-#endif
+#endif /* !ATHEME_MOD_RPGSERV_PRETTYPRINT_H */

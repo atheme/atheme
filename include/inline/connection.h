@@ -1,5 +1,5 @@
-#ifndef INLINE_CONNECTION_H
-#define INLINE_CONNECTION_H
+#ifndef ATHEME_INC_INLINE_CONNECTION_H
+#define ATHEME_INC_INLINE_CONNECTION_H 1
 
 /*
  * connection_count()
@@ -18,4 +18,4 @@ static inline int connection_count(void)
 	return MOWGLI_LIST_LENGTH(&connection_list);
 }
 
-#endif
+#endif /* !ATHEME_INC_INLINE_CONNECTION_H */

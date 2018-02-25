@@ -5,8 +5,8 @@
  * Defines needed by multiple header files.
  */
 
-#ifndef COMMON_H
-#define COMMON_H
+#ifndef ATHEME_INC_COMMON_H
+#define ATHEME_INC_COMMON_H 1
 
 #define BUFSIZE			1024		/* maximum size of a buffer */
 #define MAXMODES		4
@@ -105,4 +105,4 @@ stringref strshare_get(const char *str);
 stringref strshare_ref(stringref str);
 void strshare_unref(stringref str);
 
-#endif
+#endif /* !ATHEME_INC_COMMON_H */

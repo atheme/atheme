@@ -5,8 +5,8 @@
  * Predefined flags collections
  */
 
-#ifndef TEMPLATE_H
-#define TEMPLATE_H
+#ifndef ATHEME_INC_TEMPLATE_H
+#define ATHEME_INC_TEMPLATE_H 1
 
 struct default_template
 {
@@ -23,4 +23,4 @@ void fix_global_template_flags(void);
 
 extern mowgli_patricia_t *global_template_dict;
 
-#endif /* TEMPLATE_H */
+#endif /* !ATHEME_INC_TEMPLATE_H */

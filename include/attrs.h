@@ -6,7 +6,7 @@
  */
 
 #ifndef ATHEME_INC_ATTRS_H
-#define ATHEME_INC_ATTRS_H
+#define ATHEME_INC_ATTRS_H 1
 
 #if defined(__GNUC__) || defined(__INTEL_COMPILER)
 
@@ -36,4 +36,4 @@
 
 #endif /* (__GNUC__ || __INTEL_COMPILER) */
 
-#endif /* ATHEME_INC_ATTRS_H */
+#endif /* !ATHEME_INC_ATTRS_H */

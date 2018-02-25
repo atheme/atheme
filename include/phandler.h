@@ -5,8 +5,8 @@
  * Protocol handlers, both generic and the actual declarations themselves.
  */
 
-#ifndef PHANDLER_H
-#define PHANDLER_H
+#ifndef ATHEME_INC_PHANDLER_H
+#define ATHEME_INC_PHANDLER_H 1
 
 struct ircd
 {
@@ -301,4 +301,4 @@ extern const struct cmode *user_mode_list;
 
 extern struct ircd *ircd;
 
-#endif
+#endif /* !ATHEME_INC_PHANDLER_H */

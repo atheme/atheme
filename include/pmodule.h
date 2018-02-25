@@ -6,8 +6,8 @@
  * Modules usually do not need this.
  */
 
-#ifndef PMODULE_H
-#define PMODULE_H
+#ifndef ATHEME_INC_PMODULE_H
+#define ATHEME_INC_PMODULE_H 1
 
 struct proto_cmd
 {
@@ -64,4 +64,4 @@ void handle_setlogin(struct sourceinfo *si, struct user *u, const char *login, t
 void handle_certfp(struct sourceinfo *si, struct user *u, const char *certfp);
 void handle_clearlogin(struct sourceinfo *si, struct user *u);
 
-#endif
+#endif /* !ATHEME_INC_PMODULE_H */

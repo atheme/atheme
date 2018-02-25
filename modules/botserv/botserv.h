@@ -5,6 +5,9 @@
  * BotServ common definitions.
  */
 
+#ifndef ATHEME_MOD_BOTSERV_BOTSERV_H
+#define ATHEME_MOD_BOTSERV_BOTSERV_H 1
+
 struct botserv_bot
 {
 	struct service *me;
@@ -18,3 +21,5 @@ struct botserv_bot
 };
 
 typedef struct botserv_bot *(fn_botserv_bot_find)(char *name);
+
+#endif /* !ATHEME_MOD_BOTSERV_BOTSERV_H */

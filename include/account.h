@@ -5,8 +5,8 @@
  * Data structures for account information.
  */
 
-#ifndef ACCOUNT_H
-#define ACCOUNT_H
+#ifndef ATHEME_INC_ACCOUNT_H
+#define ATHEME_INC_ACCOUNT_H 1
 
 #include "entity.h"
 
@@ -534,4 +534,4 @@ void svsignore_delete(struct svsignore *svsignore);
 
 #include "entity-validation.h"
 
-#endif
+#endif /* !ATHEME_INC_ACCOUNT_H */

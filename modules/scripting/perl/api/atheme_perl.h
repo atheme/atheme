@@ -1,5 +1,5 @@
-#ifndef ATHEME_PERL_H
-#define ATHEME_PERL_H
+#ifndef ATHEME_MOD_SCRIPTING_PERL_API_ATHEME_PERL_H
+#define ATHEME_MOD_SCRIPTING_PERL_API_ATHEME_PERL_H 1
 
 #include <EXTERN.h>
 #include <perl.h>
@@ -53,4 +53,4 @@ static inline struct perl_list * perl_list_create(mowgli_list_t *list, const cha
 
 SV * bless_pointer_to_package(void *data, const char *package);
 
-#endif
+#endif /* !ATHEME_MOD_SCRIPTING_PERL_API_ATHEME_PERL_H */

@@ -5,8 +5,8 @@
  * Object management.
  */
 
-#ifndef ATHEME_OBJECT_H
-#define ATHEME_OBJECT_H
+#ifndef ATHEME_INC_OBJECT_H
+#define ATHEME_INC_OBJECT_H 1
 
 struct metadata
 {
@@ -49,4 +49,4 @@ extern mowgli_list_t object_list;
 
 #define atheme_object(x) ((struct atheme_object *) x)
 
-#endif
+#endif /* !ATHEME_INC_OBJECT_H */

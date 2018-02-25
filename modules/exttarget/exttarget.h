@@ -4,9 +4,9 @@
  * Rights to this code are as documented in doc/LICENSE.
  */
 
-#ifndef __EXTTARGET_H__
-#define __EXTTARGET_H__
+#ifndef ATHEME_MOD_EXTTARGET_EXTTARGET_H
+#define ATHEME_MOD_EXTTARGET_EXTTARGET_H 1
 
 typedef struct myentity *(*entity_validate_f)(const char *name);
 
-#endif
+#endif /* !ATHEME_MOD_EXTTARGET_EXTTARGET_H */

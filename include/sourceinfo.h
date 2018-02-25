@@ -5,8 +5,8 @@
  * Data structures for sourceinfo
  */
 
-#ifndef SOURCEINFO_H
-#define SOURCEINFO_H
+#ifndef ATHEME_INC_SOURCEINFO_H
+#define ATHEME_INC_SOURCEINFO_H 1
 
 struct sourceinfo_vtable
 {
@@ -61,4 +61,4 @@ struct sourceinfo
 				more than one command. */
 };
 
-#endif
+#endif /* !ATHEME_INC_SOURCEINFO_H */

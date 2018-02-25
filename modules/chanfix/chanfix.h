@@ -2,8 +2,8 @@
  * Copyright (c) 2010 Atheme Development Group
  */
 
-#ifndef __CHANFIX_H__
-#define __CHANFIX_H__
+#ifndef ATHEME_MOD_CHANFIX_CHANFIX_H
+#define ATHEME_MOD_CHANFIX_CHANFIX_H 1
 
 #define CHANFIX_OP_THRESHHOLD   3
 #define CHANFIX_ACCOUNT_WEIGHT  1.5
@@ -93,4 +93,4 @@ extern struct command cmd_help;
 extern struct command cmd_mark;
 extern struct command cmd_nofix;
 
-#endif
+#endif /* !ATHEME_MOD_CHANFIX_CHANFIX_H */

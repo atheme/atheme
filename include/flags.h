@@ -5,8 +5,8 @@
  * Data structures for flags to bitmask processing routines.
  */
 
-#ifndef FLAGS_H
-#define FLAGS_H
+#ifndef ATHEME_INC_FLAGS_H
+#define ATHEME_INC_FLAGS_H 1
 
 /* flags stuff */
 struct flags_table
@@ -50,4 +50,4 @@ unsigned int xflag_lookup(const char *name);
 unsigned int xflag_apply(unsigned int in, const char *name);
 const char *xflag_tostr(unsigned int flags);
 
-#endif
+#endif /* !ATHEME_INC_FLAGS_H */

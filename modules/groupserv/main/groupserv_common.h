@@ -2,8 +2,8 @@
  * Copyright (C) 2010 Atheme Development Group
  */
 
-#ifndef GROUPSERV_COMMON_H
-#define GROUPSERV_COMMON_H
+#ifndef ATHEME_MOD_GROUPSERV_MAIN_GROUPSERV_COMMON_H
+#define ATHEME_MOD_GROUPSERV_MAIN_GROUPSERV_COMMON_H 1
 
 #include "atheme.h"
 
@@ -15,4 +15,4 @@ struct groupserv_config
     char *join_flags;
 };
 
-#endif /* !GROUPSERV_H */
+#endif /* !ATHEME_MOD_GROUPSERV_MAIN_GROUPSERV_COMMON_H */

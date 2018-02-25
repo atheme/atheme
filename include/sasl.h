@@ -5,8 +5,8 @@
  * Data structures and macros for SASL mechanisms.
  */
 
-#ifndef SASL_H
-#define SASL_H
+#ifndef ATHEME_INC_SASL_H
+#define ATHEME_INC_SASL_H 1
 
 // Maximum number of parameters for an SASL S2S command (arbitrary, increment in future if necessary)
 #define SASL_MESSAGE_MAXPARA        8
@@ -91,4 +91,4 @@ typedef struct {
 
 } hook_sasl_may_impersonate_t;
 
-#endif
+#endif /* !ATHEME_INC_SASL_H */

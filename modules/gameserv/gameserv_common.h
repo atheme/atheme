@@ -5,8 +5,8 @@
  * Rights to this code are documented in doc/LICENSE.
  */
 
-#ifndef __GAMESERV_COMMON_H__
-#define __GAMESERV_COMMON_H__
+#ifndef ATHEME_MOD_GAMESERV_GAMESERV_COMMON_H
+#define ATHEME_MOD_GAMESERV_GAMESERV_COMMON_H 1
 
 /*
  * Handle reporting for both fantasy commands and normal commands in GameServ
@@ -131,4 +131,4 @@ gs_interactive_notification(struct myuser *mu, const char *notification, ...)
 	}
 }
 
-#endif
+#endif /* !ATHEME_MOD_GAMESERV_GAMESERV_H */

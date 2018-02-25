@@ -5,8 +5,8 @@
  * This file contains data structures concerning modules.
  */
 
-#ifndef MODULE_H
-#define MODULE_H
+#ifndef ATHEME_INC_MODULE_H
+#define ATHEME_INC_MODULE_H 1
 
 #include "privs.h"
 #include "abirev.h"
@@ -158,4 +158,4 @@ extern mowgli_list_t modules;
                 return;                                                    \
         }
 
-#endif
+#endif /* !ATHEME_INC_MODULE_H */

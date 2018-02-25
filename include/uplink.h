@@ -6,8 +6,8 @@
  * Modules usually don't need this.
  */
 
-#ifndef ATHEME_UPLINK_H
-#define ATHEME_UPLINK_H
+#ifndef ATHEME_INC_UPLINK_H
+#define ATHEME_INC_UPLINK_H 1
 
 struct uplink
 {
@@ -51,4 +51,4 @@ void irc_handle_connect(struct connection *cptr);
 int sts(const char *fmt, ...) ATHEME_FATTR_PRINTF(1, 2);
 void io_loop(void);
 
-#endif
+#endif /* !ATHEME_INC_UPLINK_H */

@@ -5,8 +5,8 @@
  * Platform-agnostic database backend layer.
  */
 
-#ifndef DATABASE_BACKEND_H
-#define DATABASE_BACKEND_H
+#ifndef ATHEME_INC_DATABASE_BACKEND_H
+#define ATHEME_INC_DATABASE_BACKEND_H 1
 
 #include "common.h"
 
@@ -93,4 +93,4 @@ void db_process(struct database_handle *db, const char *type);
 void db_init(void);
 extern const struct database_module *db_mod;
 
-#endif
+#endif /* !ATHEME_INC_DATABASE_BACKEND_H */

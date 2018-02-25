@@ -3,8 +3,8 @@
  * Rights to this code are as documented in doc/LICENSE.
  */
 
-#ifndef INC_CRYPT3_H
-#define INC_CRYPT3_H
+#ifndef ATHEME_MOD_CRYPTO_CRYPT3_H
+#define ATHEME_MOD_CRYPTO_CRYPT3_H 1
 
 #include "atheme.h"
 
@@ -93,4 +93,5 @@ atheme_crypt3_wrapper(const char *const restrict password, const char *const res
 }
 
 #endif /* HAVE_CRYPT */
-#endif /* !INC_CRYPT3_H */
+
+#endif /* !ATHEME_MOD_CRYPTO_CRYPT3_H */

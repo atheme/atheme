@@ -1,5 +1,5 @@
-#ifndef PERL_HOOKS_EXTRA_H
-#define PERL_HOOKS_EXTRA_H
+#ifndef ATHEME_MOD_SCRIPTING_PERL_API_PERL_HOOKS_EXTRA_H
+#define ATHEME_MOD_SCRIPTING_PERL_API_PERL_HOOKS_EXTRA_H 1
 
 /*
  * Special-case. Pass undef to the handler routine where it takes no argument.
@@ -86,4 +86,4 @@ static void perl_hook_channel_check_expire(hook_expiry_req_t * data)
 	perl_hook_expiry_check(data, "channel_check_expire", "Atheme::ChannelRegistration", "channel");
 }
 
-#endif
+#endif /* !ATHEME_MOD_SCRIPTING_PERL_API_PERL_HOOKS_EXTRA_H */

@@ -5,8 +5,8 @@
  * Remote authentication ticket management.
  */
 
-#ifndef AUTHCOOKIE_H
-#define AUTHCOOKIE_H
+#ifndef ATHEME_INC_AUTHCOOKIE_H
+#define ATHEME_INC_AUTHCOOKIE_H 1
 
 #define AUTHCOOKIE_LENGTH 20
 
@@ -26,4 +26,4 @@ void authcookie_destroy_all(struct myuser *mu);
 bool authcookie_validate(const char *ticket, struct myuser *myuser);
 void authcookie_expire(void *arg);
 
-#endif
+#endif /* !ATHEME_INC_AUTHCOOKIE_H */

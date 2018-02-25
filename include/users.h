@@ -5,8 +5,8 @@
  * Data structures for connected clients.
  */
 
-#ifndef USERS_H
-#define USERS_H
+#ifndef ATHEME_INC_USERS_H
+#define ATHEME_INC_USERS_H 1
 
 struct user
 {
@@ -96,4 +96,4 @@ bool user_is_channel_banned(struct user *u, char ban_type);
 void init_uid(void);
 const char *uid_get(void);
 
-#endif
+#endif /* !ATHEME_INC_USERS_H */

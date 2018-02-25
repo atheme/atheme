@@ -6,8 +6,8 @@
  * Copyright (C) 2010 Atheme Development Group
  */
 
-#ifndef GROUPSERV_H
-#define GROUPSERV_H
+#ifndef ATHEME_MOD_GROUPSERV_GROUPSERV_H
+#define ATHEME_MOD_GROUPSERV_GROUPSERV_H 1
 
 #include "main/groupserv_common.h"
 
@@ -68,4 +68,4 @@ static inline void use_groupserv_set_symbols(struct module *m)
 
 #endif
 
-#endif
+#endif /* !ATHEME_MOD_GROUPSERV_GROUPSERV_H */

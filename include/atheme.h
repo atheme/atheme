@@ -5,8 +5,8 @@
  * Includes most headers usually needed.
  */
 
-#ifndef ATHEME_H
-#define ATHEME_H
+#ifndef ATHEME_INC_ATHEME_H
+#define ATHEME_INC_ATHEME_H 1
 
 /* *INDENT-OFF* */
 
@@ -56,4 +56,4 @@
 #include "inline/channels.h"
 #include "inline/connection.h"
 
-#endif /* ATHEME_H */
+#endif /* !ATHEME_INC_ATHEME_H */

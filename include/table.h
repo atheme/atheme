@@ -5,8 +5,8 @@
  * Table rendering class.
  */
 
-#ifndef ATHEME_TABLE_H
-#define ATHEME_TABLE_H
+#ifndef ATHEME_INC_TABLE_H
+#define ATHEME_INC_TABLE_H 1
 
 struct atheme_table
 {
@@ -47,4 +47,4 @@ void table_cell_associate(struct atheme_table_row *r, const char *name, const ch
  */
 struct atheme_table_row *table_row_new(struct atheme_table *t);
 
-#endif
+#endif /* !ATHEME_INC_TABLE_H */

@@ -5,8 +5,8 @@
  * A hook system.
  */
 
-#ifndef HOOK_H
-#define HOOK_H
+#ifndef ATHEME_INC_HOOK_H
+#define ATHEME_INC_HOOK_H 1
 
 // Types necessary for the hook system (and/or for Perl scripts)
 typedef struct chanacs chanacs_t;
@@ -44,4 +44,4 @@ void hook_call_event(const char *, void *);
 void hook_stop(void);
 void hook_continue(void *newptr);
 
-#endif
+#endif /* !ATHEME_INC_HOOK_H */

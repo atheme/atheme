@@ -5,8 +5,8 @@
  * Generic HTTP server
  */
 
-#ifndef HTTPD_H
-#define HTTPD_H
+#ifndef ATHEME_INC_HTTPD_H
+#define ATHEME_INC_HTTPD_H 1
 
 struct path_handler
 {
@@ -28,4 +28,4 @@ struct httpddata
 	bool sent_reply;
 };
 
-#endif
+#endif /* !ATHEME_INC_HTTPD_H */

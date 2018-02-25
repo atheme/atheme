@@ -2,8 +2,8 @@
  * Copyright (C) 2010 Atheme Development Group
  */
 
-#ifndef ENTITY_H
-#define ENTITY_H
+#ifndef ATHEME_INC_ENTITY_H
+#define ATHEME_INC_ENTITY_H 1
 
 enum myentity_type
 {
@@ -72,4 +72,4 @@ typedef struct {
 	bool approval;
 } hook_myentity_req_t;
 
-#endif /* !ENTITY_H */
+#endif /* !ATHEME_INC_ENTITY_H */

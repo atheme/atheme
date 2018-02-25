@@ -4,8 +4,8 @@
  * Rights to this code are as documented in doc/LICENSE.
  */
 
-#ifndef INC_PROTO_ELEMENTAL_IRCD_H
-#define INC_PROTO_ELEMENTAL_IRCD_H
+#ifndef ATHEME_INC_PROTOCOL_ELEMENTAL_IRCD_H
+#define ATHEME_INC_PROTOCOL_ELEMENTAL_IRCD_H 1
 
 #define CMODE_NOCOLOR           0x00001000
 #define CMODE_REGONLY           0x00002000
@@ -28,4 +28,4 @@
 #define CMODE_NOREPEAT          0x40000000
 #define CMODE_KICKNOREJOIN      0x80000000
 
-#endif /* !INC_PROTO_ELEMENTAL_IRCD_H */
+#endif /* !ATHEME_INC_PROTOCOL_ELEMENTAL_IRCD_H */

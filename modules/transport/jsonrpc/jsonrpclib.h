@@ -4,8 +4,8 @@
  * JSONRPC library header
  */
 
-#ifndef JSONRPC_H
-#define JSONRPC_H
+#ifndef ATHEME_MOD_TRANSPORT_JSONRPC_JSONRPCLIB_H
+#define ATHEME_MOD_TRANSPORT_JSONRPC_JSONRPCLIB_H 1
 
 #include "atheme.h"
 
@@ -28,4 +28,4 @@ void jsonrpc_send_data(void *conn, char *str);
 void jsonrpc_success_string(void *conn, const char *str, const char *id);
 void jsonrpc_failure_string(void *conn, int code, const char *str, const char *id);
 
-#endif
+#endif /* !ATHEME_MOD_TRANSPORT_JSONRPC_JSONRPCLIB_H */

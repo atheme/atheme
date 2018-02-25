@@ -5,8 +5,8 @@
  * UID provider stuff.
  */
 
-#ifndef ATHEME_UID_H
-#define ATHEME_UID_H
+#ifndef ATHEME_INC_UID_H
+#define ATHEME_INC_UID_H 1
 
 struct uid_provider
 {
@@ -16,4 +16,4 @@ struct uid_provider
 
 extern const struct uid_provider *uid_provider_impl;
 
-#endif
+#endif /* !ATHEME_INC_UID_H */

@@ -5,8 +5,8 @@
  * Commandlist manipulation routines.
  */
 
-#ifndef COMMANDLIST_H
-#define COMMANDLIST_H
+#ifndef ATHEME_INC_COMMANDTREE_H
+#define ATHEME_INC_COMMANDTREE_H 1
 
 struct command
 {
@@ -38,4 +38,4 @@ void help_display_as_subcmd(struct sourceinfo *si, struct service *service, cons
 /* logger.c */
 void logaudit_denycmd(struct sourceinfo *si, struct command *cmd, const char *userlevel);
 
-#endif
+#endif /* !ATHEME_INC_COMMANDTREE_H */

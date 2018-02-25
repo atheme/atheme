@@ -33,8 +33,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef INC_DIGEST_H
-#define INC_DIGEST_H
+#ifndef ATHEME_INC_DIGEST_H
+#define ATHEME_INC_DIGEST_H 1
 
 #define DIGALG_MD5              0x01U
 #define DIGALG_SHA1             0x02U
@@ -72,4 +72,4 @@ bool digest_pbkdf2_hmac(unsigned int, const void *, size_t, const void *, size_t
 
 bool digest_testsuite_run(void) ATHEME_FATTR_WUR;
 
-#endif /* !INC_DIGEST_H */
+#endif /* !ATHEME_INC_DIGEST_H */
