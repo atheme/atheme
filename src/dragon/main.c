@@ -27,7 +27,8 @@
 static struct timeval burstbegin;
 static bool bursting = false;
 
-void bootstrap(void)
+void
+bootstrap(void)
 {
 	if (me.name == NULL)
 		me.name = sstrdup("services.dereferenced.org");
@@ -43,12 +44,14 @@ void bootstrap(void)
 	slog(LG_INFO, "bootstrap: done, servtree root @%p", me.me);
 }
 
-bool conf_check(void)
+bool
+conf_check(void)
 {
 	return true;
 }
 
-void build_world(void)
+void
+build_world(void)
 {
 	int i;
 	char userbuf[BUFSIZE];
@@ -60,7 +63,8 @@ void build_world(void)
 	}
 }
 
-void burst_world(void)
+void
+burst_world(void)
 {
 	mowgli_node_t *n;
 
@@ -75,7 +79,8 @@ void burst_world(void)
 	bursting = true;
 }
 
-void phase_buildworld(void)
+void
+phase_buildworld(void)
 {
 	struct timeval ts, te;
 
@@ -88,7 +93,8 @@ void phase_buildworld(void)
 	slog(LG_INFO, "world created in %d msec", tv2ms(&te));
 }
 
-static void m_pong(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_pong(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct timeval te;
 
@@ -105,13 +111,15 @@ static void m_pong(struct sourceinfo *si, int parc, char *parv[])
 	runflags |= RF_SHUTDOWN;
 }
 
-void hijack_pong_handler(void)
+void
+hijack_pong_handler(void)
 {
 	pcommand_delete("PONG");
 	pcommand_add("PONG", m_pong, 1, MSRC_SERVER);
 }
 
-int main(int argc, char *argv[])
+int
+main(int argc, char *argv[])
 {
 	atheme_bootstrap();
 	atheme_init(argv[0], LOGDIR "/dbverify.log");
