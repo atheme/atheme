@@ -31,7 +31,8 @@ struct listmail_state
 	int matches;
 };
 
-static int listmail_foreach_cb(struct myentity *mt, void *privdata)
+static int
+listmail_foreach_cb(struct myentity *mt, void *privdata)
 {
 	struct listmail_state *state = (struct listmail_state *) privdata;
 	struct myuser *mu = user(mt);
@@ -49,7 +50,8 @@ static int listmail_foreach_cb(struct myentity *mt, void *privdata)
 	return 0;
 }
 
-static void ns_cmd_listmail(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_listmail(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *email = parv[0];
 	struct listmail_state state;
