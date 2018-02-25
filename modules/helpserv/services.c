@@ -24,7 +24,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("helpserv", &helpserv_services);
 }
 
-static void helpserv_cmd_services(struct sourceinfo *si, int parc, char *parv[])
+static void
+helpserv_cmd_services(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct service *sptr;
 	mowgli_patricia_iteration_state_t state;
