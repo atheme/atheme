@@ -24,7 +24,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("nickserv", &ns_cert);
 }
 
-static void ns_cmd_cert(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_cert(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
 	mowgli_node_t *n, *tn;
