@@ -118,7 +118,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	mowgli_patricia_destroy(os_rwatch_cmds, NULL, NULL);
 }
 
-static void write_rwatchdb(struct database_handle *db)
+static void
+write_rwatchdb(struct database_handle *db)
 {
 	mowgli_node_t *n;
 
@@ -138,7 +139,8 @@ static void write_rwatchdb(struct database_handle *db)
 	}
 }
 
-static void load_rwatchdb(char *path)
+static void
+load_rwatchdb(char *path)
 {
 	char *item, rBuf[BUFSIZE * 2];
 	struct rwatch *rw = NULL;
@@ -208,7 +210,8 @@ static void load_rwatchdb(char *path)
 	}
 }
 
-static void db_h_rw(struct database_handle *db, const char *type)
+static void
+db_h_rw(struct database_handle *db, const char *type)
 {
 	int reflags = db_sread_uint(db);
 	const char *regex = db_sread_str(db);
@@ -219,7 +222,8 @@ static void db_h_rw(struct database_handle *db, const char *type)
 	rwread->re = regex_create(rwread->regex, rwread->reflags);
 }
 
-static void db_h_rr(struct database_handle *db, const char *type)
+static void
+db_h_rr(struct database_handle *db, const char *type)
 {
 	int actions = db_sread_uint(db);
 	const char *reason = db_sread_str(db);
@@ -230,7 +234,8 @@ static void db_h_rr(struct database_handle *db, const char *type)
 	rwread = NULL;
 }
 
-static void os_cmd_rwatch(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_rwatch(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* Grab args */
 	char *cmd = parv[0];
@@ -254,7 +259,8 @@ static void os_cmd_rwatch(struct sourceinfo *si, int parc, char *parv[])
 	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
 
-static void os_cmd_rwatch_add(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_rwatch_add(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
 	char *pattern;
@@ -318,7 +324,8 @@ static void os_cmd_rwatch_add(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "RWATCH:ADD: \2%s\2 (reason: \2%s\2)", pattern, reason);
 }
 
-static void os_cmd_rwatch_del(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_rwatch_del(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n, *tn;
 	char *pattern;
@@ -380,7 +387,8 @@ static void os_cmd_rwatch_del(struct sourceinfo *si, int parc, char *parv[])
 	command_fail(si, fault_nochange, _("\2%s\2 not found in regex watch list."), pattern);
 }
 
-static void os_cmd_rwatch_list(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_rwatch_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
 
@@ -400,7 +408,8 @@ static void os_cmd_rwatch_list(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_GET, "RWATCH:LIST");
 }
 
-static void os_cmd_rwatch_set(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_rwatch_set(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n, *tn;
 	char *pattern;
@@ -504,7 +513,8 @@ static void os_cmd_rwatch_set(struct sourceinfo *si, int parc, char *parv[])
 	command_fail(si, fault_nosuch_target, _("\2%s\2 not found in regex watch list."), pattern);
 }
 
-static void rwatch_newuser(hook_user_nick_t *data)
+static void
+rwatch_newuser(hook_user_nick_t *data)
 {
 	struct user *u = data->u;
 	char usermask[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + GECOSLEN + 1];
@@ -568,7 +578,8 @@ static void rwatch_newuser(hook_user_nick_t *data)
 	}
 }
 
-static void rwatch_nickchange(hook_user_nick_t *data)
+static void
+rwatch_nickchange(hook_user_nick_t *data)
 {
 	struct user *u = data->u;
 	char usermask[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + GECOSLEN + 1];
