@@ -10,7 +10,8 @@ static void rs_cmd_info(struct sourceinfo *si, int parc, char *parv[]);
 struct command rs_info = { "INFO", N_("Displays info for a particular game."),
                       AC_NONE, 1, rs_cmd_info, { .path = "rpgserv/info" } };
 
-static void rs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
+static void
+rs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
 	struct metadata *md;
