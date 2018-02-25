@@ -35,7 +35,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	command_delete(&bs_set_private, *bs_set_cmdtree);
 }
 
-static void bs_cmd_set_private(struct sourceinfo *si, int parc, char *parv[])
+static void
+bs_cmd_set_private(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *botserv = parv[0];
 	char *option = parv[1];
