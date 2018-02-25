@@ -3,7 +3,8 @@
 static void (*real_register_object_reference)(SV *) = NULL;
 static void (*real_invalidate_object_references)(void) = NULL;
 
-SV * bless_pointer_to_package(void *data, const char *package)
+SV *
+bless_pointer_to_package(void *data, const char *package)
 {
 	SV *ret = newSV(0);
 	sv_setref_pv(ret, package, data);
@@ -16,7 +17,8 @@ SV * bless_pointer_to_package(void *data, const char *package)
 	return ret;
 }
 
-void register_object_reference(SV *sv)
+void
+register_object_reference(SV *sv)
 {
 	if (real_register_object_reference == NULL)
 	{
@@ -30,7 +32,8 @@ void register_object_reference(SV *sv)
 	real_register_object_reference(sv);
 }
 
-void invalidate_object_references(void)
+void
+invalidate_object_references(void)
 {
 	if (real_invalidate_object_references == NULL)
 	{
