@@ -13,13 +13,17 @@ static void ns_cmd_restrict(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_restrict = { "RESTRICT", N_("Restrict a user from using certain commands."), PRIV_MARK, 3, ns_cmd_restrict, { .path = "nickserv/restrict" } };
 
-static bool is_restricted(const struct mynick *mn, const void *arg) {
+static bool
+is_restricted(const struct mynick *mn, const void *arg)
+{
 	struct myuser *mu = mn->owner;
 
 	return !!metadata_find(mu, "private:restrict:setter");
 }
 
-static bool restricted_match(const struct mynick *mn, const void *arg) {
+static bool
+restricted_match(const struct mynick *mn, const void *arg)
+{
 	const char *restrictedpattern = (const char*)arg;
 	struct metadata *mdrestricted;
 
@@ -33,7 +37,8 @@ static bool restricted_match(const struct mynick *mn, const void *arg) {
 	return false;
 }
 
-static void info_hook(hook_user_req_t *hdata)
+static void
+info_hook(hook_user_req_t *hdata)
 {
 	struct metadata *md;
 
@@ -91,7 +96,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	list_unregister("restricted-reason");
 }
 
-static void ns_cmd_restrict(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_restrict(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *action = parv[1];
