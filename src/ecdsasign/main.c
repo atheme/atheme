@@ -25,7 +25,8 @@
 #include <openssl/ecdsa.h>
 #include <openssl/evp.h>
 
-int main(int argc, const char **argv)
+int
+main(int argc, const char **argv)
 {
 	BIO *in;
 	EC_KEY *eckey;
