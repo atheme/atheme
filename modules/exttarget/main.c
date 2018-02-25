@@ -9,7 +9,8 @@
 
 mowgli_patricia_t *exttarget_tree = NULL;
 
-static void exttarget_find(hook_myentity_req_t *req)
+static void
+exttarget_find(hook_myentity_req_t *req)
 {
 	char buf[BUFSIZE];
 	char *i, *j;
