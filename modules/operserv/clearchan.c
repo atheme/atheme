@@ -29,7 +29,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("operserv", &os_clearchan);
 }
 
-static void os_cmd_clearchan(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_clearchan(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct chanuser *cu = NULL;
 	mowgli_node_t *n, *tn;
