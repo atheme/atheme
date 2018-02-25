@@ -27,7 +27,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("chanserv", &cs_flags);
 }
 
-static int display_template(const char *key, void *data, void *privdata)
+static int
+display_template(const char *key, void *data, void *privdata)
 {
 	struct sourceinfo *si = privdata;
 	struct default_template *def_t = data;
@@ -42,7 +43,8 @@ static int display_template(const char *key, void *data, void *privdata)
 	return 0;
 }
 
-static void list_generic_flags(struct sourceinfo *si)
+static void
+list_generic_flags(struct sourceinfo *si)
 {
 	command_success_nodata(si, "%-20s %s", _("Name"), _("Flags"));
 	command_success_nodata(si, "%-20s %s", "--------------------", "-----");
@@ -54,7 +56,8 @@ static void list_generic_flags(struct sourceinfo *si)
 }
 
 /* TEMPLATE [channel] [template] [flags] */
-static void cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct metadata *md;
 	bool operoverride = false, changechanacs = false;
