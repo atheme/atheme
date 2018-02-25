@@ -29,7 +29,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("operserv", &os_rnc);
 }
 
-static void os_cmd_rnc(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_rnc(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *param = parv[0];
 	int count = param ? atoi(param) : 20;
