@@ -10,7 +10,8 @@
 #include "list_common.h"
 #include "list.h"
 
-static void ns_cmd_vacation(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_vacation(struct sourceinfo *si, int parc, char *parv[])
 {
 	char tsbuf[BUFSIZE];
 
@@ -36,7 +37,8 @@ static void ns_cmd_vacation(struct sourceinfo *si, int parc, char *parv[])
 
 struct command ns_vacation = { "VACATION", N_("Sets an account as being on vacation."), AC_AUTHENTICATED, 1, ns_cmd_vacation, { .path = "nickserv/vacation" } };
 
-static void user_identify_hook(struct user *u)
+static void
+user_identify_hook(struct user *u)
 {
 	if (!metadata_find(u->myuser, "private:vacation"))
 		return;
@@ -45,7 +47,8 @@ static void user_identify_hook(struct user *u)
 	metadata_delete(u->myuser, "private:vacation");
 }
 
-static void user_expiry_hook(hook_expiry_req_t *req)
+static void
+user_expiry_hook(hook_expiry_req_t *req)
 {
 	struct myuser *mu = req->data.mu;
 
@@ -56,7 +59,8 @@ static void user_expiry_hook(hook_expiry_req_t *req)
 		req->do_expire = 0;
 }
 
-static void nick_expiry_hook(hook_expiry_req_t *req)
+static void
+nick_expiry_hook(hook_expiry_req_t *req)
 {
 	struct mynick *mn = req->data.mn;
 	struct myuser *mu = mn->owner;
@@ -68,13 +72,16 @@ static void nick_expiry_hook(hook_expiry_req_t *req)
 		req->do_expire = 0;
 }
 
-static void info_hook(hook_user_req_t *hdata)
+static void
+info_hook(hook_user_req_t *hdata)
 {
 	if (metadata_find(hdata->mu, "private:vacation"))
 		command_success_nodata(hdata->si, "%s is on vacation and has an extended expiry time", entity(hdata->mu)->name);
 }
 
-static bool is_vacation(const struct mynick *mn, const void *arg) {
+static bool
+is_vacation(const struct mynick *mn, const void *arg)
+{
 	struct myuser *mu = mn->owner;
 
 	return ( metadata_find(mu, "private:vacation") != NULL );
