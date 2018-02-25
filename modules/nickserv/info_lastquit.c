@@ -7,7 +7,8 @@
 
 #include "atheme.h"
 
-static void user_delete_info_hook(hook_user_delete_t *hdata)
+static void
+user_delete_info_hook(hook_user_delete_t *hdata)
 {
 	if (hdata->u->myuser == NULL)
 		return;
@@ -15,7 +16,8 @@ static void user_delete_info_hook(hook_user_delete_t *hdata)
 			"private:lastquit:message", hdata->comment);
 }
 
-static void info_hook(hook_user_req_t *hdata)
+static void
+info_hook(hook_user_req_t *hdata)
 {
 	struct metadata *md;
 
