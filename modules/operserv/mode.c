@@ -23,7 +23,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("operserv", &os_mode);
 }
 
-static void os_cmd_mode(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_mode(struct sourceinfo *si, int parc, char *parv[])
 {
         char *channel = parv[0];
 	char *mode = parv[1];
