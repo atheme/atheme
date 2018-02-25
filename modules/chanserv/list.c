@@ -47,7 +47,8 @@ struct list_option
 	unsigned int flag;
 };
 
-static time_t parse_age(char *s)
+static time_t
+parse_age(char *s)
 {
 	time_t duration;
 
@@ -69,7 +70,8 @@ static time_t parse_age(char *s)
 	return duration;
 }
 
-static void process_parvarray(struct list_option *opts, size_t optsize, int parc, char *parv[])
+static void
+process_parvarray(struct list_option *opts, size_t optsize, int parc, char *parv[])
 {
 	int i;
 	size_t j;
@@ -117,7 +119,8 @@ static void process_parvarray(struct list_option *opts, size_t optsize, int parc
 	}
 }
 
-static void build_criteriastr(char *buf, int parc, char *parv[])
+static void
+build_criteriastr(char *buf, int parc, char *parv[])
 {
 	int i;
 
@@ -131,7 +134,8 @@ static void build_criteriastr(char *buf, int parc, char *parv[])
 	}
 }
 
-static void cs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
 	struct metadata *md, *mdclosed;
