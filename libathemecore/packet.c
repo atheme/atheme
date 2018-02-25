@@ -30,7 +30,7 @@
 struct timeval burstime;
 #endif
 
-mowgli_eventloop_timer_t *ping_uplink_timer = NULL;
+static mowgli_eventloop_timer_t *ping_uplink_timer = NULL;
 
 static void
 irc_recvq_handler(struct connection *cptr)

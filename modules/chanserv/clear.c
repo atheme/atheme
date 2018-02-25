@@ -13,6 +13,7 @@ static void cs_help_clear(struct sourceinfo *si, const char *subcmd);
 static struct command cs_clear = { "CLEAR", N_("Channel removal toolkit."),
                         AC_NONE, 3, cs_cmd_clear, { .func = cs_help_clear } };
 
+// This is imported by modules/chanserv/clear_*.so
 mowgli_patricia_t *cs_clear_cmds;
 
 static void

@@ -12,7 +12,7 @@ static void cs_cmd_set_url(struct sourceinfo *si, int parc, char *parv[]);
 
 static struct command cs_set_url = { "URL", N_("Sets the channel URL."), AC_NONE, 2, cs_cmd_set_url, { .path = "cservice/set_url" } };
 
-mowgli_patricia_t **cs_set_cmdtree;
+static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static void
 mod_init(struct module *const restrict m)

@@ -9,7 +9,7 @@
 #include "list_common.h"
 #include "list.h"
 
-mowgli_patricia_t **ns_set_cmdtree;
+static mowgli_patricia_t **ns_set_cmdtree = NULL;
 
 /* SET PRIVMSG ON|OFF */
 static void

@@ -7,6 +7,7 @@
 #include "atheme.h"
 #include "exttarget.h"
 
+/* Imported by other modules/exttarget/*.so */
 mowgli_patricia_t *exttarget_tree = NULL;
 
 static void

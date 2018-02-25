@@ -23,7 +23,7 @@
 
 #include "atheme.h"
 
-mowgli_heap_t *user_heap;
+static mowgli_heap_t *user_heap = NULL;
 
 mowgli_patricia_t *userlist;
 mowgli_patricia_t *uidlist;

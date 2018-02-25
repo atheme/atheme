@@ -9,10 +9,9 @@
 #include "atheme.h"
 #include "botserv.h"
 
-mowgli_patricia_t **bs_set_cmdtree;
-
-fn_botserv_bot_find *botserv_bot_find;
-mowgli_list_t *bs_bots;
+static fn_botserv_bot_find *botserv_bot_find = NULL;
+static mowgli_patricia_t **bs_set_cmdtree = NULL;
+static mowgli_list_t *bs_bots = NULL;
 
 static void bs_cmd_set_private(struct sourceinfo *si, int parc, char *parv[]);
 
@@ -21,10 +20,9 @@ static struct command bs_set_private = { "PRIVATE", N_("Prevent a bot from being
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_SYMBOL(m, bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree");
-
-	MODULE_TRY_REQUEST_SYMBOL(m, bs_bots, "botserv/main", "bs_bots");
 	MODULE_TRY_REQUEST_SYMBOL(m, botserv_bot_find, "botserv/main", "botserv_bot_find");
+	MODULE_TRY_REQUEST_SYMBOL(m, bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree");
+	MODULE_TRY_REQUEST_SYMBOL(m, bs_bots, "botserv/main", "bs_bots");
 
 	command_add(&bs_set_private, *bs_set_cmdtree);
 }

@@ -23,9 +23,10 @@ struct enforce_timeout
 	mowgli_node_t node;
 };
 
-mowgli_list_t enforce_list;
-mowgli_heap_t *enforce_timeout_heap;
-time_t enforce_next;
+static mowgli_heap_t *enforce_timeout_heap = NULL;
+
+static mowgli_list_t enforce_list;
+static time_t enforce_next;
 
 static void guest_nickname(struct user *u);
 

@@ -14,8 +14,8 @@ struct noop
 	char *reason;
 };
 
-mowgli_list_t noop_hostmask_list;
-mowgli_list_t noop_server_list;
+static mowgli_list_t noop_hostmask_list;
+static mowgli_list_t noop_server_list;
 
 static void os_cmd_noop(struct sourceinfo *si, int parc, char *parv[]);
 static void noop_kill_users(void *dummy);

@@ -7,7 +7,8 @@
 #include "chanfix.h"
 
 struct service *chanfix;
-mowgli_eventloop_timer_t *chanfix_autofix_timer = NULL;
+
+static mowgli_eventloop_timer_t *chanfix_autofix_timer = NULL;
 
 static void
 mod_init(struct module *const restrict m)

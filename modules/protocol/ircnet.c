@@ -11,7 +11,7 @@
 #include "uplink.h"
 #include "pmodule.h"
 
-struct ircd IRCNet = {
+static struct ircd IRCNet = {
 	.ircdname = "ircd 2.11.1p1 or later",
 	.tldprefix = "$$",
 	.uses_uid = true,
@@ -47,7 +47,7 @@ static const struct cmode ircnet_mode_list[] = {
   { '\0', 0 }
 };
 
-struct extmode ircnet_ignore_mode_list[] = {
+static struct extmode ircnet_ignore_mode_list[] = {
   { '\0', 0 }
 };
 

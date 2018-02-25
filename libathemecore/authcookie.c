@@ -24,8 +24,8 @@
 #include "atheme.h"
 #include "authcookie.h"
 
-mowgli_list_t authcookie_list;
-mowgli_heap_t *authcookie_heap;
+static mowgli_list_t authcookie_list;
+static mowgli_heap_t *authcookie_heap = NULL;
 
 void
 authcookie_init(void)

@@ -26,7 +26,7 @@
 #include "privs.h"
 #include "pmodule.h"
 
-mowgli_patricia_t *ctcptree;
+static mowgli_patricia_t *ctcptree = NULL;
 
 static void
 ctcp_ping_handler(struct sourceinfo *si, char *cmd, char *args)

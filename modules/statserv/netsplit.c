@@ -20,9 +20,9 @@ static struct command ss_netsplit_list =
 static struct command ss_netsplit_remove =
 { "REMOVE", N_("Remove a server from the netsplit list."), PRIV_JUPE, 2, ss_cmd_netsplit_remove, {.path = ""} };
 
-mowgli_patricia_t *ss_netsplit_cmds;
-mowgli_patricia_t *splitlist;
-mowgli_heap_t *split_heap;
+static mowgli_patricia_t *ss_netsplit_cmds = NULL;
+static mowgli_patricia_t *splitlist = NULL;
+static mowgli_heap_t *split_heap = NULL;
 
 struct netsplit
 {

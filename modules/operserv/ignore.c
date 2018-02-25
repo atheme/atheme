@@ -19,9 +19,9 @@ static struct command os_ignore_del = { "DEL", N_("Delete services ignore"), PRI
 static struct command os_ignore_list = { "LIST", N_("List services ignores"), PRIV_ADMIN, 0, os_cmd_ignore_list, { .path = "" } };
 static struct command os_ignore_clear = { "CLEAR", N_("Clear all services ignores"), PRIV_ADMIN, 0, os_cmd_ignore_clear, { .path = "" } };
 
-mowgli_patricia_t *os_ignore_cmds;
-mowgli_list_t svs_ignore_list;
+static mowgli_patricia_t *os_ignore_cmds = NULL;
 
+mowgli_list_t svs_ignore_list;
 
 static void
 mod_init(struct module *const restrict m)

@@ -9,7 +9,7 @@
 #include "atheme.h"
 #include "uplink.h"
 
-mowgli_patricia_t **bs_set_cmdtree;
+static mowgli_patricia_t **bs_set_cmdtree = NULL;
 
 static void bs_cmd_set_nobot(struct sourceinfo *si, int parc, char *parv[]);
 

@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-struct service *opersvs = NULL;
+static struct service *opersvs = NULL;
 
 static void
 mod_init(struct module *const restrict m)

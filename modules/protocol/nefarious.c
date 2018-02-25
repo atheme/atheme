@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/nefarious.h"
 
-struct ircd Nefarious = {
+static struct ircd Nefarious = {
 	.ircdname = "Nefarious IRCU 0.4.0 or later",
 	.tldprefix = "$",
 	.uses_uid = true,
@@ -63,7 +63,7 @@ static const struct cmode nefarious_mode_list[] = {
   { '\0', 0 }
 };
 
-struct extmode nefarious_ignore_mode_list[] = {
+static struct extmode nefarious_ignore_mode_list[] = {
   { '\0', 0 }
 };
 

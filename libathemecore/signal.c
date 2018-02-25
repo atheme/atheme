@@ -35,6 +35,8 @@ static void childproc_check(void);
 
 static volatile sig_atomic_t got_sighup, got_sigint, got_sigterm, got_sigchld, got_sigusr2;
 
+static mowgli_list_t childproc_list;
+
 /*
  * A version of signal(2) that works more reliably across different
  * platforms.
@@ -208,8 +210,6 @@ check_signals(void)
 		childproc_check();
 	}
 }
-
-mowgli_list_t childproc_list;
 
 struct childproc
 {

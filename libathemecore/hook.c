@@ -25,8 +25,9 @@
 #include "atheme.h"
 #include "internal.h"
 
-mowgli_patricia_t *hooks;
-static mowgli_heap_t *hook_heap, *hook_privfn_heap;
+static mowgli_patricia_t *hooks = NULL;
+static mowgli_heap_t *hook_heap = NULL;
+static mowgli_heap_t *hook_privfn_heap = NULL;
 
 typedef struct {
 	struct hook *hook;

@@ -99,7 +99,7 @@ override_get_storage_oper_name(struct sourceinfo *si)
 	return get_storage_oper_name(csi->parent_si);
 }
 
-struct sourceinfo_vtable override_vtable = {
+static struct sourceinfo_vtable override_vtable = {
 	.description = "override",
 	.cmd_fail = override_command_fail,
 	.cmd_success_nodata = override_command_success_nodata,

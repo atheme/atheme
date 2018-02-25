@@ -10,7 +10,7 @@
 #include <sys/stat.h>
 #include <crack.h>
 
-bool cracklib_warn;
+static bool cracklib_warn = false;
 
 static void
 cracklib_config_ready(void *unused)

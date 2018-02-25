@@ -19,7 +19,7 @@ static struct command ms_ignore_del = { "DEL", N_(N_("Stops ignoring memos from 
 static struct command ms_ignore_clear = { "CLEAR", N_(N_("Clears your memo ignore list.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_clear, { .path = "" } };
 static struct command ms_ignore_list = { "LIST", N_(N_("Shows all users you are ignoring memos from.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_list, { .path = "" } };
 
-mowgli_patricia_t *ms_ignore_cmds;
+static mowgli_patricia_t *ms_ignore_cmds = NULL;
 
 static void
 mod_init(struct module *const restrict m)

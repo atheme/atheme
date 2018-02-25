@@ -13,16 +13,16 @@
 
 static void handle_request(struct connection *cptr, void *requestbuf);
 
-struct path_handler handle_xmlrpc = { NULL, handle_request };
+static struct path_handler handle_xmlrpc = { NULL, handle_request };
 
-struct
+static struct
 {
 	char *path;
 } xmlrpc_config;
 
-struct connection *current_cptr; /* XXX: Hack: src/xmlrpc.c requires us to do this */
+static struct connection *current_cptr = NULL; /* XXX: Hack: src/xmlrpc.c requires us to do this */
 
-mowgli_list_t *httpd_path_handlers;
+static mowgli_list_t *httpd_path_handlers = NULL;
 
 static void xmlrpc_command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *message);
 static void xmlrpc_command_success_nodata(struct sourceinfo *si, const char *message);
@@ -36,9 +36,9 @@ static int xmlrpcmethod_ison(void *conn, int parc, char *parv[]);
 static int xmlrpcmethod_metadata(void *conn, int parc, char *parv[]);
 
 /* Configuration */
-mowgli_list_t conf_xmlrpc_table;
+static mowgli_list_t conf_xmlrpc_table;
 
-struct sourceinfo_vtable xmlrpc_vtable = {
+static struct sourceinfo_vtable xmlrpc_vtable = {
 	.description = "xmlrpc",
 	.cmd_fail = xmlrpc_command_fail,
 	.cmd_success_nodata = xmlrpc_command_success_nodata,

@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/chatircd.h"
 
-struct ircd ChatIRCd = {
+static struct ircd ChatIRCd = {
 	.ircdname = "ChatIRCd",                     /* IRCd name */
 	.tldprefix = "$$",                          /* TLD Prefix, used by Global. */
 	.uses_uid = true,                           /* Whether or not we use IRCNet/TS6 UID */

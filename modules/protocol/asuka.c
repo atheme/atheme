@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/asuka.h"
 
-struct ircd Asuka = {
+static struct ircd Asuka = {
 	.ircdname = "Asuka 1.2.1 and later",
 	.tldprefix = "$",
 	.uses_uid = true,
@@ -53,7 +53,7 @@ static const struct cmode asuka_mode_list[] = {
   { '\0', 0 }
 };
 
-struct extmode asuka_ignore_mode_list[] = {
+static struct extmode asuka_ignore_mode_list[] = {
   { '\0', 0 }
 };
 

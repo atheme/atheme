@@ -12,8 +12,8 @@
 bool request_per_nick;
 struct service *hostsvs;
 
-unsigned int ratelimit_count = 0;
-time_t ratelimit_firsttime = 0;
+static unsigned int ratelimit_count = 0;
+static time_t ratelimit_firsttime = 0;
 
 static void account_drop_request(struct myuser *mu);
 static void nick_drop_request(hook_user_req_t *hdata);

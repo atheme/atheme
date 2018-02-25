@@ -12,6 +12,7 @@ static void ns_cmd_set(struct sourceinfo *si, int parc, char *parv[]);
 
 static struct command ns_set = { "SET", N_("Sets various control flags."), AC_AUTHENTICATED, 2, ns_cmd_set, { .func = ns_help_set } };
 
+// Imported by other modules/nickserv/set_*.so
 mowgli_patricia_t *ns_set_cmdtree;
 
 /* HELP SET */

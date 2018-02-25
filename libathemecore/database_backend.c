@@ -7,8 +7,9 @@
 
 #include "atheme.h"
 
+static mowgli_patricia_t *db_types = NULL;
+
 const struct database_module *db_mod = NULL;
-mowgli_patricia_t *db_types = NULL;
 
 struct database_handle *
 db_open(const char *filename, enum database_transaction txn)

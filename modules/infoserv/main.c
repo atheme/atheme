@@ -21,8 +21,6 @@ struct logoninfo
         char *story;
 };
 
-mowgli_list_t logon_info;
-
 struct operlogoninfo
 {
         stringref nick;
@@ -31,10 +29,12 @@ struct operlogoninfo
         char *story;
 };
 
-mowgli_list_t operlogon_info;
-unsigned int logoninfo_count = 0;
+static mowgli_list_t logon_info;
+static mowgli_list_t operlogon_info;
 
-struct service *infoserv;
+static unsigned int logoninfo_count = 0;
+
+static struct service *infoserv = NULL;
 
 static void is_cmd_help(struct sourceinfo *si, const int parc, char *parv[]);
 static void is_cmd_post(struct sourceinfo *si, int parc, char *parv[]);

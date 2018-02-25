@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-struct service *gs;
+static struct service *gs;
 
 static void
 mod_init(struct module *const restrict m)

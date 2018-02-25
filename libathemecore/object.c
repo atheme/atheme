@@ -27,7 +27,7 @@
 mowgli_list_t object_list = { NULL, NULL, 0 };
 #endif
 
-mowgli_heap_t *metadata_heap;	/* HEAP_CHANUSER */
+static mowgli_heap_t *metadata_heap = NULL;	/* HEAP_CHANUSER */
 
 void
 init_metadata(void)

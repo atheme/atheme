@@ -20,7 +20,7 @@ static struct command ss_channel_topic =
 static struct command ss_channel_count =
 { "COUNT", N_("Count the number of channels on the network."), AC_NONE, 1, ss_cmd_channel_count, {.path = ""}};
 
-mowgli_patricia_t *ss_channel_cmds;
+static mowgli_patricia_t *ss_channel_cmds = NULL;
 
 static void
 mod_init(struct module *const restrict m)

@@ -9,7 +9,7 @@
 
 #include "atheme.h"
 
-bool oldflag;
+static bool oldflag;
 
 static void
 mod_init(struct module *const restrict m)

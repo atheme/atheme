@@ -25,9 +25,9 @@
 
 mowgli_patricia_t *chanlist;
 
-mowgli_heap_t *chan_heap;
-mowgli_heap_t *chanuser_heap;
-mowgli_heap_t *chanban_heap;
+static mowgli_heap_t *chan_heap = NULL;
+static mowgli_heap_t *chanuser_heap = NULL;
+static mowgli_heap_t *chanban_heap = NULL;
 
 /*
  * init_channels()

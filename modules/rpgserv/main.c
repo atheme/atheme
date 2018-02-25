@@ -4,7 +4,7 @@
 
 #include "atheme.h"
 
-struct service *rpgserv;
+static struct service *rpgserv = NULL;
 
 static void
 mod_init(struct module *const restrict m)

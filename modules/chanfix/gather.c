@@ -9,11 +9,11 @@
 
 mowgli_patricia_t *chanfix_channels = NULL;
 
-mowgli_heap_t *chanfix_channel_heap = NULL;
-mowgli_heap_t *chanfix_oprecord_heap = NULL;
+static mowgli_heap_t *chanfix_channel_heap = NULL;
+static mowgli_heap_t *chanfix_oprecord_heap = NULL;
 
-mowgli_eventloop_timer_t *chanfix_gather_timer = NULL;
-mowgli_eventloop_timer_t *chanfix_expire_timer = NULL;
+static mowgli_eventloop_timer_t *chanfix_gather_timer = NULL;
+static mowgli_eventloop_timer_t *chanfix_expire_timer = NULL;
 
 static int loading_cfdbv = 0;
 

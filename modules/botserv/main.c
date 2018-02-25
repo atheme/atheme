@@ -8,6 +8,9 @@
 #include "atheme.h"
 #include "botserv.h"
 
+static struct service *botsvs = NULL;
+static unsigned int min_users = 0;
+
 static void bs_join(hook_channel_joinpart_t *hdata);
 static void bs_part(hook_channel_joinpart_t *hdata);
 
@@ -25,19 +28,14 @@ static void botserv_save_database(struct database_handle *db);
 static void db_h_bot(struct database_handle *db, const char *type);
 static void db_h_bot_count(struct database_handle *db, const char *type);
 
-/* visible for other modules; use the typedef to enforce type checking */
-fn_botserv_bot_find botserv_bot_find;
-
-struct service *botsvs;
-
-unsigned int min_users = 0;
-
-mowgli_list_t bs_bots;
-
 static struct command bs_bot = { "BOT", "Maintains network bot list.", PRIV_USER_ADMIN, 6, bs_cmd_bot, { .path = "botserv/bot" } };
 static struct command bs_assign = { "ASSIGN", "Assigns a bot to a channel.", AC_NONE, 2, bs_cmd_assign, { .path = "botserv/assign" } };
 static struct command bs_unassign = { "UNASSIGN", "Unassigns a bot from a channel.", AC_NONE, 1, bs_cmd_unassign, { .path = "botserv/unassign" } };
 static struct command bs_botlist = { "BOTLIST", "Lists available bots.", AC_NONE, 0, bs_cmd_botlist, { .path = "botserv/botlist" } };
+
+/* visible for other modules */
+fn_botserv_bot_find botserv_bot_find;
+mowgli_list_t bs_bots;
 
 /* ******************************************************************** */
 

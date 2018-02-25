@@ -14,7 +14,7 @@ static void cs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[]);
 
 static struct command cs_set_fantasy = { "FANTASY", N_("Allows or disallows in-channel commands."), AC_NONE, 2, cs_cmd_set_fantasy, { .path = "cservice/set_fantasy" } };
 
-mowgli_patricia_t **cs_set_cmdtree;
+static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static void
 mod_init(struct module *const restrict m)

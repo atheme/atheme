@@ -12,7 +12,7 @@ static void cs_cmd_set_secure(struct sourceinfo *si, int parc, char *parv[]);
 
 static struct command cs_set_secure = { "SECURE", N_("Prevents unauthorized users from gaining operator status."), AC_NONE, 2, cs_cmd_set_secure, { .path = "cservice/set_secure" } };
 
-mowgli_patricia_t **cs_set_cmdtree;
+static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static void
 mod_init(struct module *const restrict m)

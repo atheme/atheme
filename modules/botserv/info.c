@@ -9,12 +9,12 @@
 #include "atheme.h"
 #include "botserv.h"
 
+static mowgli_list_t *bs_bots = NULL;
+static fn_botserv_bot_find *botserv_bot_find = NULL;
+
 static void bs_cmd_info(struct sourceinfo *si, int parc, char *parv[]);
 
 static struct command bs_info = { "INFO", N_("Allows you to see BotServ information about a channel or a bot."), AC_NONE, 1, bs_cmd_info, { .path = "botserv/info" } };
-
-fn_botserv_bot_find *botserv_bot_find;
-mowgli_list_t *bs_bots;
 
 static void
 mod_init(struct module *const restrict m)

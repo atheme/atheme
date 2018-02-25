@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-mowgli_patricia_t **ns_set_cmdtree;
+static mowgli_patricia_t **ns_set_cmdtree = NULL;
 
 static void ns_cmd_set_enforcetime(struct sourceinfo *si, int parc, char *parv[]);
 

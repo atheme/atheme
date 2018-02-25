@@ -9,7 +9,7 @@
 #include "conf.h" /* XXX conf_ni_table */
 #include <limits.h>
 
-struct
+static struct
 {
 	const char *nickstring, *accountstring;
 } nick_account_trans[] =

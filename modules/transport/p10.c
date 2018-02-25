@@ -25,6 +25,8 @@
 #include "uplink.h"
 #include "pmodule.h"
 
+static void (*default_parse)(char *line) = NULL;
+
 /* parses a P10 IRC stream */
 static void
 p10_parse(char *line)
@@ -184,8 +186,6 @@ p10_parse(char *line)
 cleanup:
 	atheme_object_unref(si);
 }
-
-void (*default_parse)(char *line) = NULL;
 
 static void
 mod_init(struct module *const restrict m)

@@ -34,7 +34,7 @@ struct hsoffered
 	mowgli_node_t node;
 };
 
-mowgli_list_t hs_offeredlist;
+static mowgli_list_t hs_offeredlist;
 
 static void
 mod_init(struct module *const restrict m)

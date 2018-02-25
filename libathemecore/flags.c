@@ -27,7 +27,7 @@
 #define FLAGS_DEL       0x2
 
 unsigned int ca_all = CA_ALL_ALL;
-unsigned int ca_all_enable = CA_ALL_ALL;
+static unsigned int ca_all_enable = CA_ALL_ALL;
 
 static char flags_buf[128];
 

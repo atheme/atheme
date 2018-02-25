@@ -10,7 +10,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-struct ircd InspIRCd = {
+static struct ircd InspIRCd = {
 	.ircdname = "InspIRCd",
 	.tldprefix = "$",
 	.uses_uid = true,
@@ -73,7 +73,7 @@ static bool check_history(const char *, struct channel *, struct mychan *, struc
 
 static unsigned int max_rejoindelay = 5;
 
-struct extmode inspircd_ignore_mode_list[] = {
+static struct extmode inspircd_ignore_mode_list[] = {
   { 'f', check_flood },
   { 'F', check_nickflood },
   { 'j', check_jointhrottle },

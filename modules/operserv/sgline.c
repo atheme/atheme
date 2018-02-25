@@ -24,7 +24,7 @@ static struct command os_sgline_del = { "DEL", N_("Deletes a network realname ba
 static struct command os_sgline_list = { "LIST", N_("Lists all network realname bans"), AC_NONE, 1, os_cmd_sgline_list, { .path = "" } };
 static struct command os_sgline_sync = { "SYNC", N_("Synchronises network realname bans to servers"), AC_NONE, 0, os_cmd_sgline_sync, { .path = "" } };
 
-mowgli_patricia_t *os_sgline_cmds;
+static mowgli_patricia_t *os_sgline_cmds = NULL;
 
 static void
 mod_init(struct module *const restrict m)

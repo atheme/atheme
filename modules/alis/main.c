@@ -43,7 +43,7 @@
 #define DIR_SET		1
 #define DIR_EQUAL	2
 
-struct service *alis;
+static struct service *alis = NULL;
 
 static void alis_cmd_list(struct sourceinfo *si, int parc, char *parv[]);
 static void alis_cmd_help(struct sourceinfo *si, int parc, char *parv[]);

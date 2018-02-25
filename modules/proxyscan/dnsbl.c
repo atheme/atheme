@@ -57,10 +57,10 @@
 #include "atheme.h"
 #include "conf.h"
 
-mowgli_list_t blacklist_list = { NULL, NULL, 0 };
-mowgli_patricia_t **os_set_cmdtree;
+static mowgli_list_t blacklist_list = { NULL, NULL, 0 };
+static mowgli_patricia_t **os_set_cmdtree = NULL;
 
-enum dnsbl_action {
+static enum dnsbl_action {
 	DNSBL_ACT_NONE,
 	DNSBL_ACT_NOTIFY,
 	DNSBL_ACT_SNOOP,
@@ -69,7 +69,7 @@ enum dnsbl_action {
 
 #define ITEM_DESC(x) [DNSBL_ACT_ ## x] = #x
 
-const char *action_names[] = {
+static const char *action_names[] = {
 	ITEM_DESC(NONE),
 	ITEM_DESC(NOTIFY),
 	ITEM_DESC(SNOOP),
@@ -107,7 +107,7 @@ struct dnsbl_exemption
 	mowgli_node_t node;
 };
 
-mowgli_list_t dnsbl_elist;
+static mowgli_list_t dnsbl_elist;
 
 static void os_cmd_set_dnsblaction(struct sourceinfo *si, int parc, char *parv[]);
 static void dnsbl_hit(struct user *u, struct Blacklist *blptr);

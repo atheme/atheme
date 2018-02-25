@@ -23,7 +23,7 @@
 
 #include "atheme.h"
 
-mowgli_list_t sharedheap_list;
+static mowgli_list_t sharedheap_list;
 
 static struct sharedheap *
 sharedheap_find_by_size(size_t size)

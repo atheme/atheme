@@ -343,7 +343,7 @@ static void cs_cmd_set_nosync(struct sourceinfo *si, int parc, char *parv[]);
 
 static struct command cs_set_nosync = { "NOSYNC", N_("Disables automatic channel ACL syncing."), AC_NONE, 2, cs_cmd_set_nosync, { .path = "cservice/set_nosync" } };
 
-mowgli_patricia_t **cs_set_cmdtree;
+static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static void
 cs_cmd_set_nosync(struct sourceinfo *si, int parc, char *parv[])

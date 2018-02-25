@@ -12,7 +12,7 @@ static void cs_cmd_set_gameserv(struct sourceinfo *si, int parc, char *parv[]);
 
 static struct command cs_set_gameserv = { "GAMESERV", N_("Allows or disallows gaming services."), AC_NONE, 2, cs_cmd_set_gameserv, { .path = "cservice/set_gameserv" } };
 
-mowgli_patricia_t **cs_set_cmdtree;
+static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static void
 mod_init(struct module *const restrict m)

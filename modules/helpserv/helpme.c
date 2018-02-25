@@ -8,8 +8,8 @@
 #include "atheme.h"
 #include "uplink.h"
 
-unsigned int ratelimit_count = 0;
-time_t ratelimit_firsttime = 0;
+static unsigned int ratelimit_count = 0;
+static time_t ratelimit_firsttime = 0;
 
 static void helpserv_cmd_helpme(struct sourceinfo *si, int parc, char *parv[]);
 

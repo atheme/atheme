@@ -43,7 +43,7 @@ static struct command os_set_spam = { "SPAM", N_("Changes whether service spams 
 static struct command os_set_nickexpire = { "NICKEXPIRE", N_("Sets when unused nicks and accounts expire."), AC_NONE, 1, os_cmd_set_nickexpire, { .path = "oservice/set_nickexpire" } };
 static struct command os_set_enforceprefix = { "ENFORCEPREFIX", N_("Changes the prefix to use when changing the user's nick on enforcement."), AC_NONE, 1, os_cmd_set_enforceprefix, { .path = "oservice/set_enforceprefix" } };
 
-mowgli_patricia_t *os_set_cmdtree;
+static mowgli_patricia_t *os_set_cmdtree = NULL;
 
 /* HELP SET */
 static void

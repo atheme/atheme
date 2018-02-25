@@ -25,14 +25,14 @@
 #include "datastream.h"
 #include "uplink.h"
 
-void (*parse) (char *line) = NULL;
+static void uplink_close(struct connection *cptr);
+
+static mowgli_heap_t *uplink_heap = NULL;
 
 mowgli_list_t uplinks;
 struct uplink *curr_uplink;
 
-mowgli_heap_t *uplink_heap;
-
-static void uplink_close(struct connection *cptr);
+void (*parse)(char *line) = NULL;
 
 void
 init_uplinks(void)

@@ -23,7 +23,7 @@
 
 #include "atheme.h"
 
-mowgli_patricia_t *strshare_dict;
+static mowgli_patricia_t *strshare_dict = NULL;
 
 struct strshare
 {

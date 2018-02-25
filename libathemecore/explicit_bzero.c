@@ -6,7 +6,7 @@
 
 #include <string.h>
 
-#include "sysconf.h"
+#include "explicit_bzero.h"
 
 /* We don't have explicit_bzero(3) [OpenBSD] or memset_s(3) [C11].
  *
@@ -26,7 +26,7 @@
  * Clang 6.0 with Thin LTO does not remove the call.
  * Other compilers are untested.
  */
-void *(* volatile volatile_memset)(void *, int, size_t) = memset;
+void *(* volatile volatile_memset)(void *, int, size_t) = &memset;
 
 void
 explicit_bzero(void *const restrict p, const size_t n)

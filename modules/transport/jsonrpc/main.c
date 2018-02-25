@@ -13,8 +13,8 @@
 
 static void handle_request(struct connection *cptr, void *requestbuf);
 
-mowgli_list_t *httpd_path_handlers;
-static mowgli_patricia_t *json_methods;
+static mowgli_list_t *httpd_path_handlers = NULL;
+static mowgli_patricia_t *json_methods = NULL;
 
 static bool jsonrpcmethod_login(void *conn, mowgli_list_t *params, char *id);
 static bool jsonrpcmethod_logout(void *conn, mowgli_list_t *params, char *id);
@@ -23,19 +23,18 @@ static bool jsonrpcmethod_privset(void *conn, mowgli_list_t *params, char *id);
 static bool jsonrpcmethod_ison(void *conn, mowgli_list_t *params, char *id);
 static bool jsonrpcmethod_metadata(void *conn, mowgli_list_t *params, char *id);
 
-
 static void jsonrpc_command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *message);
 static void jsonrpc_command_success_string(struct sourceinfo *si, const char *result, const char *message);
 static void jsonrpc_command_success_nodata(struct sourceinfo *si, const char *message);
 
-struct sourceinfo_vtable jsonrpc_vtable = {
+static struct sourceinfo_vtable jsonrpc_vtable = {
 	.description        = "jsonrpc",
 	.cmd_fail           = jsonrpc_command_fail,
 	.cmd_success_string = jsonrpc_command_success_string,
 	.cmd_success_nodata = jsonrpc_command_success_nodata
 };
 
-struct path_handler handle_jsonrpc = { NULL, handle_request };
+static struct path_handler handle_jsonrpc = { NULL, handle_request };
 
 static void
 handle_request(struct connection *cptr, void *requestbuf)

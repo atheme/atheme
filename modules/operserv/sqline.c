@@ -26,7 +26,7 @@ static struct command os_sqline_del = { "DEL", N_("Deletes a network name ban"),
 static struct command os_sqline_list = { "LIST", N_("Lists all network name bans"), AC_NONE, 1, os_cmd_sqline_list, { .path = "" } };
 static struct command os_sqline_sync = { "SYNC", N_("Synchronises network name bans to servers"), AC_NONE, 0, os_cmd_sqline_sync, { .path = "" } };
 
-mowgli_patricia_t *os_sqline_cmds;
+static mowgli_patricia_t *os_sqline_cmds = NULL;
 
 static void
 mod_init(struct module *const restrict m)

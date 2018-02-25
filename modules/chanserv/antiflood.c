@@ -484,7 +484,7 @@ static struct command cs_set_antiflood = {
 	cs_set_cmd_antiflood, { .path = "cservice/set_antiflood" }
 };
 
-mowgli_patricia_t **cs_set_cmdtree;
+static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static int
 c_ci_antiflood_enforce_method(mowgli_config_file_entry_t *ce)

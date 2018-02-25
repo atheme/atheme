@@ -36,14 +36,14 @@ struct akick_timeout
 	mowgli_node_t node;
 };
 
-time_t akickdel_next;
-mowgli_list_t akickdel_list;
-mowgli_patricia_t *cs_akick_cmds;
-mowgli_eventloop_timer_t *akick_timeout_check_timer = NULL;
+static time_t akickdel_next;
+static mowgli_list_t akickdel_list;
+
+static mowgli_heap_t *akick_timeout_heap = NULL;
+static mowgli_patricia_t *cs_akick_cmds = NULL;
+static mowgli_eventloop_timer_t *akick_timeout_check_timer = NULL;
 
 static struct akick_timeout *akick_add_timeout(struct mychan *mc, struct myentity *mt, const char *host, time_t expireson);
-
-mowgli_heap_t *akick_timeout_heap;
 
 static void
 mod_init(struct module *const restrict m)

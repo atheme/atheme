@@ -29,9 +29,9 @@ mowgli_list_t klnlist;
 mowgli_list_t xlnlist;
 mowgli_list_t qlnlist;
 
-mowgli_heap_t *kline_heap;	/* 16 */
-mowgli_heap_t *xline_heap;	/* 16 */
-mowgli_heap_t *qline_heap;	/* 16 */
+static mowgli_heap_t *kline_heap = NULL;	/* 16 */
+static mowgli_heap_t *xline_heap = NULL;	/* 16 */
+static mowgli_heap_t *qline_heap = NULL;	/* 16 */
 
 /*************
  * L I S T S *

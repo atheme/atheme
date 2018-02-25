@@ -18,8 +18,8 @@
 
 #include "atheme.h"
 
-unsigned int dbv;
-unsigned int their_ca_all;
+static unsigned int dbv;
+static unsigned int their_ca_all;
 
 static void corestorage_db_write(void *filename, enum db_save_strategy strategy);
 static void corestorage_db_write_blocking(void *filename);

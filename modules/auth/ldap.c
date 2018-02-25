@@ -28,9 +28,9 @@
 
 #include <ldap.h>
 
-mowgli_list_t conf_ldap_table;
+static mowgli_list_t conf_ldap_table;
 
-struct
+static struct
 {
 	char *url;
 	char *dnformat;
@@ -41,7 +41,7 @@ struct
 	bool useDN;
 } ldap_config;
 
-LDAP *ldap_conn;
+static LDAP *ldap_conn;
 
 static void
 ldap_config_ready(void *unused)

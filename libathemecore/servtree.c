@@ -23,9 +23,10 @@
 #include "atheme.h"
 #include "pmodule.h"
 
+static mowgli_heap_t *service_heap = NULL;
+
 mowgli_patricia_t *services_name;
 mowgli_patricia_t *services_nick;
-mowgli_heap_t *service_heap;
 
 void servtree_update(void *dummy);
 

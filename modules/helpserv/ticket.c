@@ -7,8 +7,8 @@
 
 #include "atheme.h"
 
-unsigned int ratelimit_count = 0;
-time_t ratelimit_firsttime = 0;
+static unsigned int ratelimit_count = 0;
+static time_t ratelimit_firsttime = 0;
 
 static void account_drop_request(struct myuser *mu);
 static void account_delete_request(struct myuser *mu);
@@ -33,7 +33,7 @@ struct help_ticket
 	char *topic;
 };
 
-mowgli_list_t helpserv_reqlist;
+static mowgli_list_t helpserv_reqlist;
 
 static void
 mod_init(struct module *const restrict m)

@@ -24,9 +24,9 @@ struct XMLRPCCmd_ {
 	XMLRPCCmd *next;
 };
 
-mowgli_patricia_t *XMLRPCCMD = NULL;
+static mowgli_patricia_t *XMLRPCCMD = NULL;
 
-struct xmlrpc_settings {
+static struct xmlrpc_settings {
 	char *(*setbuffer)(char *buffer, int len);
 	char *encode;
 	int httpheader;

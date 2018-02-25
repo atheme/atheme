@@ -23,14 +23,14 @@
 
 #include "atheme.h"
 
-mowgli_patricia_t *sidlist;
+static void server_delete_serv(struct server *s);
+
+static mowgli_patricia_t *sidlist = NULL;
+static mowgli_heap_t *serv_heap = NULL;
+static mowgli_heap_t *tld_heap = NULL;
+
 mowgli_patricia_t *servlist;
 mowgli_list_t tldlist;
-
-mowgli_heap_t *serv_heap;
-mowgli_heap_t *tld_heap;
-
-static void server_delete_serv(struct server *s);
 
 /*
  * init_servers()

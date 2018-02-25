@@ -9,7 +9,7 @@
 #include "atheme.h"
 #include "uplink.h"
 
-mowgli_patricia_t **bs_set_cmdtree;
+static mowgli_patricia_t **bs_set_cmdtree = NULL;
 
 static void bs_set_fantasy_config_ready(void *unused);
 

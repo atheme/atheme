@@ -11,12 +11,15 @@
 
 #define REQUEST_MAX 65536 /* maximum size of one call */
 
-struct connection *listener;
+static struct connection *listener = NULL;
+
+/* Imported by modules/transport/*rpc/*rpc.so */
 mowgli_list_t httpd_path_handlers;
 
 /* conf stuff */
-mowgli_list_t conf_httpd_table;
-struct httpd_configuration
+static mowgli_list_t conf_httpd_table;
+
+static struct httpd_configuration
 {
 	char *host;
 	char *www_root;

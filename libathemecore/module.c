@@ -30,12 +30,13 @@
 # include <dlfcn.h>
 #endif
 
-mowgli_heap_t *module_heap;
-mowgli_list_t modules, modules_inprogress;
-
-struct module *modtarget = NULL;
-
 static struct module *module_load_internal(const char *pathname, char *errbuf, int errlen);
+
+static mowgli_list_t modules_inprogress;
+static mowgli_heap_t *module_heap = NULL;
+static struct module *modtarget = NULL;
+
+mowgli_list_t modules;
 
 void
 modules_init(void)

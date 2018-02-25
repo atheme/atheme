@@ -10,7 +10,7 @@
 #include "uplink.h"
 #include "pmodule.h"
 
-struct ircd Ratbox = {
+static struct ircd Ratbox = {
 	.ircdname = "Ratbox (1.0 or later)",
 	.tldprefix = "$$",
 	.uses_uid = true,
@@ -46,7 +46,7 @@ static const struct cmode ratbox_mode_list[] = {
   { '\0', 0 }
 };
 
-struct extmode ratbox_ignore_mode_list[] = {
+static struct extmode ratbox_ignore_mode_list[] = {
   { '\0', 0 }
 };
 

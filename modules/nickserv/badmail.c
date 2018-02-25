@@ -23,7 +23,7 @@ struct badmail
 	char *reason;
 };
 
-mowgli_list_t ns_maillist;
+static mowgli_list_t ns_maillist;
 
 static void
 mod_init(struct module *const restrict m)

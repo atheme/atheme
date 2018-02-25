@@ -65,8 +65,8 @@ static void cs_cmd_role_del(struct sourceinfo *si, int parc, char *parv[]);
 static struct command cs_role_del =  { "DEL", N_("Delete a role."),
                             AC_NONE, 2, cs_cmd_role_del, { .path = "cservice/role_del" } };
 
-mowgli_patricia_t *cs_access_cmds;
-mowgli_patricia_t *cs_role_cmds;
+static mowgli_patricia_t *cs_access_cmds = NULL;
+static mowgli_patricia_t *cs_role_cmds = NULL;
 
 static void
 mod_init(struct module *const restrict m)

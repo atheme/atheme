@@ -11,7 +11,7 @@
 #include "pmodule.h"
 #include "protocol/charybdis.h"
 
-struct ircd Charybdis = {
+static struct ircd Charybdis = {
 	.ircdname = "Charybdis",
 	.tldprefix = "$$",
 	.uses_uid = true,
@@ -68,7 +68,7 @@ static const struct cmode charybdis_mode_list[] = {
 static bool check_forward(const char *, struct channel *, struct mychan *, struct user *, struct myuser *);
 static bool check_jointhrottle(const char *, struct channel *, struct mychan *, struct user *, struct myuser *);
 
-struct extmode charybdis_ignore_mode_list[] = {
+static struct extmode charybdis_ignore_mode_list[] = {
   { 'f', check_forward },
   { 'j', check_jointhrottle },
   { '\0', 0 }

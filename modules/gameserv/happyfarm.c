@@ -37,7 +37,7 @@ struct happy_inventory
 	unsigned int count;
 };
 
-struct {
+static struct {
 	const char *name;
 	enum happy_plant_type plant;
 } happy_planttype_mapping[] = {
@@ -135,7 +135,7 @@ struct happy_farmer
  * The People's Glorious Land Office of Arbitration Management needs to keep a record
  * of all Happy Plots in the world.  We do so here.
  */
-mowgli_list_t happy_plot_list = { NULL, NULL, 0 };
+static mowgli_list_t happy_plot_list = { NULL, NULL, 0 };
 
 /*
  * A plot of land consists of seeds that grow into plants.  A plot is planted with X
@@ -179,12 +179,12 @@ struct happy_plot
  * Our happy farmers are happily stored in a magazine allocator to be quickly allocated to
  * happy users.  This allows for maximum efficiency in gameplay success.
  */
-mowgli_heap_t *farmer_heap = NULL;
+static mowgli_heap_t *farmer_heap = NULL;
 
 /*
  * We need to have a magazine allocator for plots too.
  */
-mowgli_heap_t *plot_heap = NULL;
+static mowgli_heap_t *plot_heap = NULL;
 
 /*
  * When a happy farmer joins our happy little game, we have to create a struct happy_farmer
@@ -397,7 +397,7 @@ static struct command command_sellplot = { "SELLPLOT", N_("Sell a vacant plot of
 
 /*******************************************************************************************/
 
-mowgli_patricia_t *happyfarm_cmd_subtree = NULL;
+static mowgli_patricia_t *happyfarm_cmd_subtree = NULL;
 
 static void
 __command_trampoline(struct sourceinfo * si, int parc, char *parv[])

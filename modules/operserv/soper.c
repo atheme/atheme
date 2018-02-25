@@ -22,7 +22,7 @@ static struct command os_soper_add = { "ADD", N_("Grants services operator privi
 static struct command os_soper_del = { "DEL", N_("Removes services operator privileges from an account."), PRIV_GRANT, 1, os_cmd_soper_del, { .path = "" } };
 static struct command os_soper_setpass = { "SETPASS", N_("Changes a password for services operator privileges."), PRIV_GRANT, 2, os_cmd_soper_setpass, { .path = "" } };
 
-mowgli_patricia_t *os_soper_cmds;
+static mowgli_patricia_t *os_soper_cmds = NULL;
 
 static void
 mod_init(struct module *const restrict m)

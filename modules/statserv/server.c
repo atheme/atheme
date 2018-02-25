@@ -24,7 +24,7 @@ static struct command ss_server_count =
 static struct command ss_server_info =
 { "INFO", N_("Obtain information about a specified server."), AC_NONE, 2, ss_cmd_server_info, {.path = ""} };
 
-mowgli_patricia_t *ss_server_cmds;
+static mowgli_patricia_t *ss_server_cmds = NULL;
 
 static void
 mod_init(struct module *const restrict m)

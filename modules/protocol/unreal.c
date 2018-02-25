@@ -16,7 +16,7 @@ static bool use_esvid = false;
 static bool use_mlock = false;
 static char ts6sid[3 + 1] = "";
 
-struct ircd Unreal = {
+static struct ircd Unreal = {
 	.ircdname = "UnrealIRCd 3.1 or later",
 	.tldprefix = "$",
 	.uses_uid = true,
@@ -73,7 +73,7 @@ static bool check_jointhrottle(const char *, struct channel *, struct mychan *, 
 static bool check_flood(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu);
 static bool check_forward(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu);
 
-struct extmode unreal_ignore_mode_list[] = {
+static struct extmode unreal_ignore_mode_list[] = {
   { 'j', check_jointhrottle },
   { 'f', check_flood },
   { 'L', check_forward },

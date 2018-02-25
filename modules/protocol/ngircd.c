@@ -10,7 +10,7 @@
 #include "pmodule.h"
 #include "protocol/ngircd.h"
 
-struct ircd ngIRCd = {
+static struct ircd ngIRCd = {
 	.ircdname = "ngIRCd",
 	.tldprefix = "$",
 	.uses_uid = false,
@@ -51,7 +51,7 @@ static const struct cmode ngircd_mode_list[] = {
   { '\0', 0 }
 };
 
-struct extmode ngircd_ignore_mode_list[] = {
+static struct extmode ngircd_ignore_mode_list[] = {
   { '\0', 0 }
 };
 

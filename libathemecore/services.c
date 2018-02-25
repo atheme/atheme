@@ -24,6 +24,8 @@
 #include "atheme.h"
 #include "pmodule.h"
 
+static mowgli_heap_t *sourceinfo_heap = NULL;
+
 int authservice_loaded = 0;
 int use_myuser_access = 0;
 int use_svsignore = 0;
@@ -876,8 +878,6 @@ bad_password(struct sourceinfo *si, struct myuser *mu)
 
 	return false;
 }
-
-mowgli_heap_t *sourceinfo_heap = NULL;
 
 static void
 sourceinfo_delete(struct sourceinfo *si)

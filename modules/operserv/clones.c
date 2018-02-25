@@ -32,15 +32,14 @@ static void db_h_gr(struct database_handle *db, const char *type);
 static void db_h_ex(struct database_handle *db, const char *type);
 static void db_h_clonesdbv(struct database_handle *db, const char *type);
 
-mowgli_patricia_t *os_clones_cmds;
-
-struct service *serviceinfo;
+static mowgli_patricia_t *os_clones_cmds = NULL;
+static mowgli_patricia_t *hostlist = NULL;
+static mowgli_heap_t *hostentry_heap = NULL;
+static struct service *serviceinfo = NULL;
 
 static mowgli_list_t clone_exempts;
-bool kline_enabled;
-unsigned int grace_count;
-mowgli_patricia_t *hostlist;
-mowgli_heap_t *hostentry_heap;
+static bool kline_enabled;
+static unsigned int grace_count;
 static long kline_duration;
 static int clones_allowed, clones_warn;
 static unsigned int clones_dbversion = 1;

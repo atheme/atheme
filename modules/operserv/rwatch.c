@@ -45,8 +45,8 @@ static struct command os_rwatch_del = { "DEL", N_("Removes an entry from the reg
 static struct command os_rwatch_list = { "LIST", N_("Displays the regex watch list."), AC_NONE, 1, os_cmd_rwatch_list, { .path = "" } };
 static struct command os_rwatch_set = { "SET", N_("Changes actions on an entry in the regex watch list"), AC_NONE, 1, os_cmd_rwatch_set, { .path = "" } };
 
-struct rwatch *rwread = NULL;
-FILE *f;
+static struct rwatch *rwread = NULL;
+static FILE *f;
 
 static void
 mod_init(struct module *const restrict m)

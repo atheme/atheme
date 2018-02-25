@@ -72,9 +72,9 @@ struct ConfTable
 	mowgli_node_t node;
 };
 
-mowgli_heap_t *conftable_heap;
+static mowgli_list_t confblocks;
+static mowgli_heap_t *conftable_heap = NULL;
 
-mowgli_list_t confblocks;
 bool conf_need_rehash;
 
 /* *INDENT-ON* */

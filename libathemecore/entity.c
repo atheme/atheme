@@ -4,8 +4,9 @@
 
 #include "atheme.h"
 
-static mowgli_patricia_t *entities;
-static mowgli_patricia_t *entities_by_id;
+static mowgli_patricia_t *entities = NULL;
+static mowgli_patricia_t *entities_by_id = NULL;
+
 static char last_entity_uid[IDLEN + 1];
 
 void
@@ -216,7 +217,7 @@ linear_allow_foundership(struct myentity *mt)
 	return true;
 }
 
-const struct entity_chanacs_validation_vtable linear_chanacs_validate = {
+static const struct entity_chanacs_validation_vtable linear_chanacs_validate = {
 	.match_entity = linear_chanacs_match_entity,
 	.can_register_channel = linear_can_register_channel,
 	.allow_foundership = linear_allow_foundership,

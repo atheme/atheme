@@ -27,8 +27,8 @@
 mowgli_list_t operclasslist;
 mowgli_list_t soperlist;
 
-mowgli_heap_t *operclass_heap;
-mowgli_heap_t *soper_heap;
+static mowgli_heap_t *operclass_heap = NULL;
+static mowgli_heap_t *soper_heap = NULL;
 
 static struct operclass *user_r = NULL;
 static struct operclass *authenticated_r = NULL;

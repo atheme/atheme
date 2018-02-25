@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/bahamut.h"
 
-struct ircd Bahamut = {
+static struct ircd Bahamut = {
 	.ircdname = "Bahamut 1.8.x",
 	.tldprefix = "$",
 	.uses_uid = false,
@@ -55,7 +55,7 @@ static const struct cmode bahamut_mode_list[] = {
 
 static bool check_jointhrottle(const char *, struct channel *, struct mychan *, struct user *, struct myuser *);
 
-struct extmode bahamut_ignore_mode_list[] = {
+static struct extmode bahamut_ignore_mode_list[] = {
   { 'j', check_jointhrottle },
   { '\0', 0 }
 };
