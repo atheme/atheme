@@ -25,7 +25,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("groupserv", &gs_listchans);
 }
 
-static void gs_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
+static void
+gs_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mygroup *mg;
 	mowgli_node_t *n;
