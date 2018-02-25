@@ -190,7 +190,8 @@ mowgli_heap_t *plot_heap = NULL;
  * When a happy farmer joins our happy little game, we have to create a struct happy_farmer
  * object for them.  Which, you know, requires a constructor...
  */
-static struct happy_farmer *happy_farmer_create(struct myentity * mt)
+static struct happy_farmer *
+happy_farmer_create(struct myentity * mt)
 {
 	struct happy_farmer *farmer;
 
@@ -209,7 +210,8 @@ static struct happy_farmer *happy_farmer_create(struct myentity * mt)
  * When a happy farmer decides to commit suicide, Government must intervene and start the
  * probate procedures (which in our case means we take all resources back).
  */
-static void happy_farmer_destroy(struct happy_farmer * farmer)
+static void
+happy_farmer_destroy(struct happy_farmer * farmer)
 {
 	mowgli_node_t *n, *tn;
 
@@ -233,7 +235,8 @@ static void happy_farmer_destroy(struct happy_farmer * farmer)
 /*
  * A farmer just bought a plot of land.
  */
-static struct happy_plot *happy_plot_create(struct happy_farmer * farmer)
+static struct happy_plot *
+happy_plot_create(struct happy_farmer * farmer)
 {
 	struct happy_plot *plot;
 
@@ -249,7 +252,8 @@ static struct happy_plot *happy_plot_create(struct happy_farmer * farmer)
 /*
  * The farmer has sold his plot of land back.
  */
-static void happy_plot_destroy(struct happy_farmer * farmer, struct happy_plot * plot)
+static void
+happy_plot_destroy(struct happy_farmer * farmer, struct happy_plot * plot)
 {
 	return_if_fail(farmer != NULL);
 	return_if_fail(plot != NULL);
@@ -263,7 +267,8 @@ static void happy_plot_destroy(struct happy_farmer * farmer, struct happy_plot *
 /*
  * Find the first plot that can actually be sold back.
  */
-static struct happy_plot *happy_farmer_find_vacant_plot(struct happy_farmer * farmer)
+static struct happy_plot *
+happy_farmer_find_vacant_plot(struct happy_farmer * farmer)
 {
 	mowgli_node_t *n;
 
@@ -283,7 +288,8 @@ static struct happy_plot *happy_farmer_find_vacant_plot(struct happy_farmer * fa
 /*
  * Determine a plant type, given user input.
  */
-static enum happy_plant_type happy_plant_by_name(const char *name)
+static enum happy_plant_type
+happy_plant_by_name(const char *name)
 {
 	unsigned int i;
 
@@ -302,7 +308,8 @@ static enum happy_plant_type happy_plant_by_name(const char *name)
  * Syntax: JOIN
  * Result: Player joins the game.
  */
-static void __command_join(struct sourceinfo * si, int parc, char *parv[])
+static void
+__command_join(struct sourceinfo * si, int parc, char *parv[])
 {
 	struct happy_farmer *farmer;
 
@@ -318,7 +325,8 @@ struct command command_join = { "JOIN", N_("Join the Happy Farm game!"), AC_AUTH
  * Syntax: BUYPLOT
  * Result: Player buys a plot if they have enough money.
  */
-static void __command_buyplot(struct sourceinfo * si, int parc, char *parv[])
+static void
+__command_buyplot(struct sourceinfo * si, int parc, char *parv[])
 {
 	struct myentity *mt;
 	struct happy_farmer *farmer;
@@ -354,7 +362,8 @@ struct command command_buyplot = { "BUYPLOT", N_("Buy a plot of land!"), AC_AUTH
  * Syntax: SELLPLOT
  * Result: Player sells a plot back to the motherland
  */
-static void __command_sellplot(struct sourceinfo * si, int parc, char *parv[])
+static void
+__command_sellplot(struct sourceinfo * si, int parc, char *parv[])
 {
 	struct myentity *mt;
 	struct happy_farmer *farmer;
@@ -390,7 +399,8 @@ struct command command_sellplot = { "SELLPLOT", N_("Sell a vacant plot of land."
 
 mowgli_patricia_t *happyfarm_cmd_subtree = NULL;
 
-static void __command_trampoline(struct sourceinfo * si, int parc, char *parv[])
+static void
+__command_trampoline(struct sourceinfo * si, int parc, char *parv[])
 {
 	char *subcmd = parv[0];
 	struct command *c;
