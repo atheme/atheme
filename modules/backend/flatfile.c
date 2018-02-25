@@ -14,7 +14,8 @@
 #define DB_ATHEME	2
 
 /* loads atheme.db */
-static void flatfile_db_load(const char *filename)
+static void
+flatfile_db_load(const char *filename)
 {
 	struct myuser *mu, *founder = NULL;
 	struct myuser_name *mun;
@@ -740,6 +741,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("backend/flatfile", MODULE_UNLOAD_CAPABILITY_NEVER)
