@@ -16,7 +16,8 @@ static void ns_cmd_mark(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_mark = { "MARK", N_("Adds a note to a user."), PRIV_MARK, 3, ns_cmd_mark, { .path = "nickserv/mark" } };
 
-static bool mark_match(const struct mynick *mn, const void *arg)
+static bool
+mark_match(const struct mynick *mn, const void *arg)
 {
 	const char *markpattern = (const char*)arg;
 	struct metadata *mdmark;
@@ -30,7 +31,8 @@ static bool mark_match(const struct mynick *mn, const void *arg)
 	return false;
 }
 
-static bool is_marked(const struct mynick *mn, const void *arg)
+static bool
+is_marked(const struct mynick *mn, const void *arg)
 {
 	struct myuser *mu = mn->owner;
 
@@ -72,7 +74,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	list_unregister("marked");
 }
 
-static void ns_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *action = parv[1];
