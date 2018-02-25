@@ -45,7 +45,8 @@ struct sourceinfo_vtable xmlrpc_vtable = {
 	.cmd_success_string = xmlrpc_command_success_string
 };
 
-static char *dump_buffer(char *buf, int length)
+static char *
+dump_buffer(char *buf, int length)
 {
 	struct httpddata *hd;
 	char buf1[300];
@@ -65,7 +66,8 @@ static char *dump_buffer(char *buf, int length)
 	return buf;
 }
 
-static void handle_request(struct connection *cptr, void *requestbuf)
+static void
+handle_request(struct connection *cptr, void *requestbuf)
 {
 	current_cptr = cptr;
 	xmlrpc_process(requestbuf, cptr);
@@ -74,7 +76,8 @@ static void handle_request(struct connection *cptr, void *requestbuf)
 	return;
 }
 
-static void xmlrpc_config_ready(void *vptr)
+static void
+xmlrpc_config_ready(void *vptr)
 {
 	/* Note: handle_xmlrpc.path may point to freed memory between
 	 * reading the config and here.
@@ -141,7 +144,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	hook_del_config_ready(xmlrpc_config_ready);
 }
 
-static void xmlrpc_command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *message)
+static void
+xmlrpc_command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *message)
 {
 	struct connection *cptr;
 	struct httpddata *hd;
@@ -157,7 +161,8 @@ static void xmlrpc_command_fail(struct sourceinfo *si, enum cmd_faultcode code, 
 	hd->sent_reply = true;
 }
 
-static void xmlrpc_command_success_nodata(struct sourceinfo *si, const char *message)
+static void
+xmlrpc_command_success_nodata(struct sourceinfo *si, const char *message)
 {
 	struct connection *cptr;
 	struct httpddata *hd;
@@ -188,7 +193,8 @@ static void xmlrpc_command_success_nodata(struct sourceinfo *si, const char *mes
 	free(newmessage);
 }
 
-static void xmlrpc_command_success_string(struct sourceinfo *si, const char *result, const char *message)
+static void
+xmlrpc_command_success_string(struct sourceinfo *si, const char *result, const char *message)
 {
 	struct connection *cptr;
 	struct httpddata *hd;
@@ -219,7 +225,8 @@ static void xmlrpc_command_success_string(struct sourceinfo *si, const char *res
  *       an authcookie ticket is created for the struct myuser.
  *       the user's lastlogin is updated
  */
-static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
+static int
+xmlrpcmethod_login(void *conn, int parc, char *parv[])
 {
 	struct myuser *mu;
 	struct authcookie *ac;
@@ -293,7 +300,8 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
  * Side Effects:
  *       an authcookie ticket is destroyed.
  */
-static int xmlrpcmethod_logout(void *conn, int parc, char *parv[])
+static int
+xmlrpcmethod_logout(void *conn, int parc, char *parv[])
 {
 	struct authcookie *ac;
 	struct myuser *mu;
@@ -339,7 +347,8 @@ static int xmlrpcmethod_logout(void *conn, int parc, char *parv[])
  * Side Effects:
  *       command is executed
  */
-static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
+static int
+xmlrpcmethod_command(void *conn, int parc, char *parv[])
 {
 	struct myuser *mu;
 	struct service *svs;
@@ -439,7 +448,8 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
  * Side Effects:
  *       command is executed
  */
-static int xmlrpcmethod_privset(void *conn, int parc, char *parv[])
+static int
+xmlrpcmethod_privset(void *conn, int parc, char *parv[])
 {
 	struct myuser *mu;
 	int i;
@@ -498,7 +508,8 @@ static int xmlrpcmethod_privset(void *conn, int parc, char *parv[])
  *       string: if nickname is authenticated, what entity they are authed to,
  *       else '*'
  */
-static int xmlrpcmethod_ison(void *conn, int parc, char *parv[])
+static int
+xmlrpcmethod_ison(void *conn, int parc, char *parv[])
 {
 	struct user *u;
 	int i;
@@ -546,7 +557,8 @@ static int xmlrpcmethod_ison(void *conn, int parc, char *parv[])
  * XML outputs:
  *       string: metadata value
  */
-static int xmlrpcmethod_metadata(void *conn, int parc, char *parv[])
+static int
+xmlrpcmethod_metadata(void *conn, int parc, char *parv[])
 {
 	struct metadata *md;
 	int i;
