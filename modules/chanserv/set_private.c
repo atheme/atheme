@@ -32,7 +32,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	use_channel_private--;
 }
 
-static void cs_cmd_set_private(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_set_private(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
 
