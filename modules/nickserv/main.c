@@ -30,7 +30,8 @@ struct
 	{ NULL, NULL }
 };
 
-static void nickserv_handle_nickchange(struct user *u)
+static void
+nickserv_handle_nickchange(struct user *u)
 {
 	struct mynick *mn;
 	hook_nick_enforce_t hdata;
@@ -84,7 +85,8 @@ static void nickserv_handle_nickchange(struct user *u)
 	hook_call_nick_enforce(&hdata);
 }
 
-static void nickserv_config_ready(void *unused)
+static void
+nickserv_config_ready(void *unused)
 {
 	int i;
 
@@ -102,7 +104,8 @@ static void nickserv_config_ready(void *unused)
 			itranslation_destroy(_(nick_account_trans[i].nickstring));
 }
 
-static int c_ni_emailexempts(mowgli_config_file_entry_t *ce)
+static int
+c_ni_emailexempts(mowgli_config_file_entry_t *ce)
 {
 	mowgli_config_file_entry_t *subce;
 	mowgli_node_t *n, *tn;
