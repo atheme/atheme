@@ -24,7 +24,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("operserv", &os_raw);
 }
 
-static void os_cmd_raw(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_raw(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *s = parv[0];
 
