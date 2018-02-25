@@ -39,7 +39,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("chanserv", &cs_topicswap);
 }
 
-static void cs_cmd_topic(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_topic(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	char *topic = parv[1];
@@ -102,7 +103,8 @@ static void cs_cmd_topic(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("Topic set to \2%s\2 on \2%s\2."), topic, chan);
 }
 
-static void cs_cmd_topicappend(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_topicappend(struct sourceinfo *si, int parc, char *parv[])
 {
         char *chan = parv[0];
         char *topic = parv[1];
@@ -177,7 +179,8 @@ static void cs_cmd_topicappend(struct sourceinfo *si, int parc, char *parv[])
         	command_success_nodata(si, _("Topic set to \2%s\2 on \2%s\2."), c->topic, chan);
 }
 
-static void cs_cmd_topicprepend(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_topicprepend(struct sourceinfo *si, int parc, char *parv[])
 {
         char *chan = parv[0];
         char *topic = parv[1];
@@ -252,7 +255,8 @@ static void cs_cmd_topicprepend(struct sourceinfo *si, int parc, char *parv[])
         	command_success_nodata(si, _("Topic set to \2%s\2 on \2%s\2."), c->topic, chan);
 }
 
-static void cs_cmd_topicswap(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_topicswap(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	char *topic = parv[1];
