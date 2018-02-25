@@ -32,7 +32,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 static mowgli_list_t voice_actions;
 
-static void cmd_voice(struct sourceinfo *si, bool voicing, int parc, char *parv[])
+static void
+cmd_voice(struct sourceinfo *si, bool voicing, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	char *nick = parv[1];
@@ -106,7 +107,8 @@ static void cmd_voice(struct sourceinfo *si, bool voicing, int parc, char *parv[
 	prefix_action_clear(&voice_actions);
 }
 
-static void cs_cmd_voice(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_voice(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (!parv[0])
 	{
@@ -118,7 +120,8 @@ static void cs_cmd_voice(struct sourceinfo *si, int parc, char *parv[])
 	cmd_voice(si, true, parc, parv);
 }
 
-static void cs_cmd_devoice(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_devoice(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (!parv[0])
 	{
