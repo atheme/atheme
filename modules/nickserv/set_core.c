@@ -15,7 +15,8 @@ struct command ns_set = { "SET", N_("Sets various control flags."), AC_AUTHENTIC
 mowgli_patricia_t *ns_set_cmdtree;
 
 /* HELP SET */
-static void ns_help_set(struct sourceinfo *si, const char *subcmd)
+static void
+ns_help_set(struct sourceinfo *si, const char *subcmd)
 {
 	if (!subcmd)
 	{
@@ -41,7 +42,8 @@ static void ns_help_set(struct sourceinfo *si, const char *subcmd)
 }
 
 /* SET <setting> <parameters> */
-static void ns_cmd_set(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *setting = parv[0];
 	struct command *c;
