@@ -79,7 +79,8 @@ static const struct cmode bahamut_user_mode_list[] = {
   { '\0', 0 }
 };
 
-static bool check_jointhrottle(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
+static bool
+check_jointhrottle(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
 	const char *p, *arg2;
 	int num, timeslice, v;
@@ -127,7 +128,8 @@ static bool check_jointhrottle(const char *value, struct channel *c, struct mych
 static bool use_nickipstr = false;
 
 /* login to our uplink */
-static unsigned int bahamut_server_login(void)
+static unsigned int
+bahamut_server_login(void)
 {
 	int ret;
 
@@ -145,7 +147,8 @@ static unsigned int bahamut_server_login(void)
 }
 
 /* introduce a client */
-static void bahamut_introduce_nick(struct user *u)
+static void
+bahamut_introduce_nick(struct user *u)
 {
 	const char *umode = user_get_umodestr(u);
 
@@ -156,24 +159,28 @@ static void bahamut_introduce_nick(struct user *u)
 }
 
 /* invite a user to a channel */
-static void bahamut_invite_sts(struct user *sender, struct user *target, struct channel *channel)
+static void
+bahamut_invite_sts(struct user *sender, struct user *target, struct channel *channel)
 {
 	sts(":%s INVITE %s %s", sender->nick, target->nick, channel->name);
 }
 
-static void bahamut_quit_sts(struct user *u, const char *reason)
+static void
+bahamut_quit_sts(struct user *u, const char *reason)
 {
 	sts(":%s QUIT :%s", u->nick, reason);
 }
 
 /* WALLOPS wrapper */
-static void bahamut_wallops_sts(const char *text)
+static void
+bahamut_wallops_sts(const char *text)
 {
 	sts(":%s GLOBOPS :%s", me.name, text);
 }
 
 /* join a channel */
-static void bahamut_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
+static void
+bahamut_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
 {
 	if (isnew)
 		sts(":%s SJOIN %lu %s %s :@%s", me.name, (unsigned long)c->ts,
@@ -183,7 +190,8 @@ static void bahamut_join_sts(struct channel *c, struct user *u, bool isnew, char
 				c->name, u->nick);
 }
 
-static void bahamut_chan_lowerts(struct channel *c, struct user *u)
+static void
+bahamut_chan_lowerts(struct channel *c, struct user *u)
 {
 	slog(LG_DEBUG, "bahamut_chan_lowerts(): lowering TS for %s to %lu",
 			c->name, (unsigned long)c->ts);
@@ -201,7 +209,8 @@ static void bahamut_chan_lowerts(struct channel *c, struct user *u)
 }
 
 /* kicks a user from a channel */
-static void bahamut_kick(struct user *source, struct channel *c, struct user *u, const char *reason)
+static void
+bahamut_kick(struct user *source, struct channel *c, struct user *u, const char *reason)
 {
 	sts(":%s KICK %s %s :%s", source->nick, c->name, u->nick, reason);
 
@@ -222,7 +231,8 @@ bahamut_msg(const char *from, const char *target, const char *fmt, ...)
 	sts(":%s PRIVMSG %s :%s", from, target, buf);
 }
 
-static void bahamut_msg_global_sts(struct user *from, const char *mask, const char *text)
+static void
+bahamut_msg_global_sts(struct user *from, const char *mask, const char *text)
 {
 	mowgli_node_t *n;
 	struct tld *tld;
@@ -239,12 +249,14 @@ static void bahamut_msg_global_sts(struct user *from, const char *mask, const ch
 }
 
 /* NOTICE wrapper */
-static void bahamut_notice_user_sts(struct user *from, struct user *target, const char *text)
+static void
+bahamut_notice_user_sts(struct user *from, struct user *target, const char *text)
 {
 	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->nick, text);
 }
 
-static void bahamut_notice_global_sts(struct user *from, const char *mask, const char *text)
+static void
+bahamut_notice_global_sts(struct user *from, const char *mask, const char *text)
 {
 	mowgli_node_t *n;
 	struct tld *tld;
@@ -261,12 +273,14 @@ static void bahamut_notice_global_sts(struct user *from, const char *mask, const
 		sts(":%s NOTICE %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
 }
 
-static void bahamut_notice_channel_sts(struct user *from, struct channel *target, const char *text)
+static void
+bahamut_notice_channel_sts(struct user *from, struct channel *target, const char *text)
 {
 	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->name, text);
 }
 
-static void bahamut_wallchops(struct user *sender, struct channel *channel, const char *message)
+static void
+bahamut_wallchops(struct user *sender, struct channel *channel, const char *message)
 {
 	sts(":%s NOTICE @%s :%s", sender->nick, channel->name, message);
 }
@@ -285,7 +299,8 @@ bahamut_numeric_sts(struct server *from, int numeric, struct user *target, const
 }
 
 /* KILL wrapper */
-static void bahamut_kill_id_sts(struct user *killer, const char *id, const char *reason)
+static void
+bahamut_kill_id_sts(struct user *killer, const char *id, const char *reason)
 {
 	if (killer != NULL)
 		sts(":%s KILL %s :%s!%s (%s)", killer->nick, id, killer->host, killer->nick, reason);
@@ -294,13 +309,15 @@ static void bahamut_kill_id_sts(struct user *killer, const char *id, const char 
 }
 
 /* PART wrapper */
-static void bahamut_part_sts(struct channel *c, struct user *u)
+static void
+bahamut_part_sts(struct channel *c, struct user *u)
 {
 	sts(":%s PART %s", u->nick, c->name);
 }
 
 /* server-to-server KLINE wrapper */
-static void bahamut_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
+static void
+bahamut_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
 	struct service *svs;
 
@@ -309,13 +326,15 @@ static void bahamut_kline_sts(const char *server, const char *user, const char *
 }
 
 /* server-to-server UNKLINE wrapper */
-static void bahamut_unkline_sts(const char *server, const char *user, const char *host)
+static void
+bahamut_unkline_sts(const char *server, const char *user, const char *host)
 {
 	sts(":%s RAKILL %s %s", me.name, host, user);
 }
 
 /* topic wrapper */
-static void bahamut_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
+static void
+bahamut_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	return_if_fail(c != NULL);
 
@@ -323,7 +342,8 @@ static void bahamut_topic_sts(struct channel *c, struct user *source, const char
 }
 
 /* mode wrapper */
-static void bahamut_mode_sts(char *sender, struct channel *target, char *modes)
+static void
+bahamut_mode_sts(char *sender, struct channel *target, char *modes)
 {
 	return_if_fail(sender != NULL);
 	return_if_fail(target != NULL);
@@ -333,13 +353,15 @@ static void bahamut_mode_sts(char *sender, struct channel *target, char *modes)
 }
 
 /* ping wrapper */
-static void bahamut_ping_sts(void)
+static void
+bahamut_ping_sts(void)
 {
 	sts("PING :%s", me.name);
 }
 
 /* protocol-specific stuff to do on login */
-static void bahamut_on_login(struct user *u, struct myuser *account, const char *wantedhost)
+static void
+bahamut_on_login(struct user *u, struct myuser *account, const char *wantedhost)
 {
 	return_if_fail(u != NULL);
 
@@ -351,7 +373,8 @@ static void bahamut_on_login(struct user *u, struct myuser *account, const char 
 }
 
 /* protocol-specific stuff to do on login */
-static bool bahamut_on_logout(struct user *u, const char *account)
+static bool
+bahamut_on_logout(struct user *u, const char *account)
 {
 	return_val_if_fail(u != NULL, false);
 
@@ -360,7 +383,8 @@ static bool bahamut_on_logout(struct user *u, const char *account)
 	return false;
 }
 
-static void bahamut_jupe(const char *server, const char *reason)
+static void
+bahamut_jupe(const char *server, const char *reason)
 {
 	struct server *s;
 
@@ -375,20 +399,23 @@ static void bahamut_jupe(const char *server, const char *reason)
 		sts(":%s SERVER %s 2 :%s", me.name, server, reason);
 }
 
-static void bahamut_fnc_sts(struct user *source, struct user *u, const char *newnick, int type)
+static void
+bahamut_fnc_sts(struct user *source, struct user *u, const char *newnick, int type)
 {
 	sts(":%s SVSNICK %s %s %lu", source->nick, u->nick, newnick,
 			(unsigned long)(CURRTIME - 60));
 }
 
-static void bahamut_holdnick_sts(struct user *source, int duration, const char *nick, struct myuser *mu)
+static void
+bahamut_holdnick_sts(struct user *source, int duration, const char *nick, struct myuser *mu)
 {
 	sts(":%s SVSHOLD %s %d :Reserved by %s for nickname owner (%s)",
 			source->nick, nick, duration, source->nick,
 			mu ? entity(mu)->name : nick);
 }
 
-static void m_topic(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_topic(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c = channel_find(parv[0]);
 
@@ -405,13 +432,15 @@ static void m_topic(struct sourceinfo *si, int parc, char *parv[])
 	handle_topic_from(si, c, parv[1], atol(parv[2]), parv[3]);
 }
 
-static void m_ping(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_ping(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* reply to PING's */
 	sts(":%s PONG %s %s", me.name, me.name, parv[0]);
 }
 
-static void m_pong(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_pong(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct server *s;
 
@@ -433,7 +462,8 @@ static void m_pong(struct sourceinfo *si, int parc, char *parv[])
 	/* -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net */
 }
 
-static void m_burst(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_burst(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct server *s;
 
@@ -462,7 +492,8 @@ static void m_burst(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_privmsg(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_privmsg(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (parc != 2)
 		return;
@@ -470,7 +501,8 @@ static void m_privmsg(struct sourceinfo *si, int parc, char *parv[])
 	handle_message(si, parv[0], false, parv[1]);
 }
 
-static void m_notice(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_notice(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (parc != 2)
 		return;
@@ -478,7 +510,8 @@ static void m_notice(struct sourceinfo *si, int parc, char *parv[])
 	handle_message(si, parv[0], true, parv[1]);
 }
 
-static void m_sjoin(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_sjoin(struct sourceinfo *si, int parc, char *parv[])
 {
 	/*
 	 *  -> :proteus.malkier.net SJOIN 1073516550 #shrike +tn :@sycobuny @+rakaur
@@ -595,7 +628,8 @@ static void m_sjoin(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_part(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_part(struct sourceinfo *si, int parc, char *parv[])
 {
 	int chanc;
 	char *chanv[256];
@@ -610,7 +644,8 @@ static void m_part(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_nick(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct server *s;
 	struct user *u;
@@ -697,7 +732,8 @@ static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_quit(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_quit(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
 
@@ -705,7 +741,8 @@ static void m_quit(struct sourceinfo *si, int parc, char *parv[])
 	user_delete(si->su, parv[0]);
 }
 
-static void m_mode(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_mode(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c;
 
@@ -725,7 +762,8 @@ static void m_mode(struct sourceinfo *si, int parc, char *parv[])
 		user_mode(user_find(parv[0]), parv[1]);
 }
 
-static void m_kick(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_kick(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u = user_find(parv[1]);
 	struct channel *c = channel_find(parv[0]);
@@ -761,18 +799,21 @@ static void m_kick(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_kill(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_kill(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_kill(si, parv[0], parc > 1 ? parv[1] : "<No reason given>");
 }
 
-static void m_squit(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_squit(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_squit(): server leaving: %s from %s", parv[0], parv[1]);
 	server_delete(parv[0]);
 }
 
-static void m_server(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_server(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct server *s;
 
@@ -788,42 +829,50 @@ static void m_server(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_stats(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_stats(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_stats(si->su, parv[0][0]);
 }
 
-static void m_admin(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_admin(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_admin(si->su);
 }
 
-static void m_version(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_version(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_version(si->su);
 }
 
-static void m_info(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_info(si->su);
 }
 
-static void m_whois(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_whois(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_whois(si->su, parv[1]);
 }
 
-static void m_trace(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_trace(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_trace(si->su, parv[0], parc >= 2 ? parv[1] : NULL);
 }
 
-static void m_away(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_away(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_away(si->su, parc >= 1 ? parv[0] : NULL);
 }
 
-static void m_join(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_join(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct chanuser *cu;
 	mowgli_node_t *n, *tn;
@@ -839,7 +888,8 @@ static void m_join(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_pass(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_pass(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (curr_uplink->receive_pass != NULL &&
 	    strcmp(curr_uplink->receive_pass, parv[0]))
@@ -849,17 +899,20 @@ static void m_pass(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void m_error(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_error(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_INFO, "m_error(): error from server: %s", parv[0]);
 }
 
-static void m_motd(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_motd(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_motd(si->su);
 }
 
-static void m_capab(struct sourceinfo *si, int parc, char *parv[])
+static void
+m_capab(struct sourceinfo *si, int parc, char *parv[])
 {
 	int i;
 
@@ -878,7 +931,8 @@ static void m_capab(struct sourceinfo *si, int parc, char *parv[])
 	services_init();
 }
 
-static void nick_group(hook_user_req_t *hdata)
+static void
+nick_group(hook_user_req_t *hdata)
 {
 	struct user *u;
 
@@ -887,7 +941,8 @@ static void nick_group(hook_user_req_t *hdata)
 		sts(":%s SVSMODE %s +rd %lu", nicksvs.nick, u->nick, (unsigned long)CURRTIME);
 }
 
-static void nick_ungroup(hook_user_req_t *hdata)
+static void
+nick_ungroup(hook_user_req_t *hdata)
 {
 	struct user *u;
 
@@ -980,6 +1035,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("protocol/bahamut", MODULE_UNLOAD_CAPABILITY_NEVER)
