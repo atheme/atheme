@@ -33,7 +33,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 /* ******************************************************************** */
 
-static void bs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
+static void
+bs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *dest = parv[0];
 	struct mychan *mc = NULL;
