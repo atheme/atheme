@@ -28,7 +28,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("chanserv", &cmd_lottery);
 }
 
-static struct user *pick_a_sucker(struct channel *c)
+static struct user *
+pick_a_sucker(struct channel *c)
 {
 	int slot = arc4random_uniform(MOWGLI_LIST_LENGTH(&c->members));
 	struct chanuser *cu;
@@ -43,7 +44,8 @@ static struct user *pick_a_sucker(struct channel *c)
 	return cu != NULL ? cu->user : NULL;
 }
 
-static void command_lottery(struct sourceinfo *si, int parc, char *parv[])
+static void
+command_lottery(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
 	struct user *u;
