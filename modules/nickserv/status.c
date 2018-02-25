@@ -27,7 +27,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("nickserv", &ns_status);
 }
 
-static void ns_cmd_acc(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_acc(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *targuser = parv[0];
 	const char *targaccount = parv[1];
@@ -84,7 +85,8 @@ static void ns_cmd_acc(struct sourceinfo *si, int parc, char *parv[])
 			show_id ? entity(mu)->id : "");
 }
 
-static void ns_cmd_status(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_status(struct sourceinfo *si, int parc, char *parv[])
 {
 	logcommand(si, CMDLOG_GET, "STATUS");
 
