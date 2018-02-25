@@ -4,7 +4,8 @@
 
 #include "groupserv_main.h"
 
-static struct chanacs *mygroup_chanacs_match_entity(struct chanacs *ca, struct myentity *mt)
+static struct chanacs *
+mygroup_chanacs_match_entity(struct chanacs *ca, struct myentity *mt)
 {
 	struct mygroup *mg;
 
@@ -18,7 +19,8 @@ static struct chanacs *mygroup_chanacs_match_entity(struct chanacs *ca, struct m
 	return groupacs_find(mg, mt, GA_CHANACS, true) != NULL ? ca : NULL;
 }
 
-static bool mygroup_can_register_channel(struct myentity *mt)
+static bool
+mygroup_can_register_channel(struct myentity *mt)
 {
 	struct mygroup *mg;
 
@@ -32,7 +34,8 @@ static bool mygroup_can_register_channel(struct myentity *mt)
 	return false;
 }
 
-static bool mygroup_allow_foundership(struct myentity *mt)
+static bool
+mygroup_allow_foundership(struct myentity *mt)
 {
 	return true;
 }
@@ -43,6 +46,8 @@ static const struct entity_chanacs_validation_vtable mygroup_chanacs_validate = 
 	.allow_foundership = mygroup_allow_foundership,
 };
 
-void mygroup_set_chanacs_validator(struct myentity *mt) {
+void
+mygroup_set_chanacs_validator(struct myentity *mt)
+{
 	mt->chanacs_validate = &mygroup_chanacs_validate;
 }
