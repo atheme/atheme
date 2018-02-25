@@ -44,7 +44,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
     mowgli_patricia_destroy(ss_channel_cmds, NULL, NULL);
 }
 
-static void ss_cmd_channel(struct sourceinfo * si, int parc, char *parv[])
+static void
+ss_cmd_channel(struct sourceinfo * si, int parc, char *parv[])
 {
     struct command *c;
     char *cmd = parv[0];
@@ -69,7 +70,8 @@ static void ss_cmd_channel(struct sourceinfo * si, int parc, char *parv[])
     command_exec(si->service, si, c, parc - 1, parv + 1);
 }
 
-static void ss_cmd_channel_topic(struct sourceinfo * si, int parc, char *parv[])
+static void
+ss_cmd_channel_topic(struct sourceinfo * si, int parc, char *parv[])
 {
     char *chan = parv[0];
     struct channel *c;
@@ -102,7 +104,8 @@ static void ss_cmd_channel_topic(struct sourceinfo * si, int parc, char *parv[])
         command_success_nodata(si, _("No topic set for %s"), c->name);
 }
 
-static void ss_cmd_channel_count(struct sourceinfo * si, int parc, char *parv[])
+static void
+ss_cmd_channel_count(struct sourceinfo * si, int parc, char *parv[])
 {
     command_success_nodata(si, "There are %u channels on the network.", mowgli_patricia_size(chanlist));
 }
