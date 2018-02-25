@@ -99,7 +99,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	mowgli_patricia_destroy(cs_role_cmds, NULL, NULL);
 }
 
-static void cs_help_access(struct sourceinfo *si, const char *subcmd)
+static void
+cs_help_access(struct sourceinfo *si, const char *subcmd)
 {
 	if (!subcmd)
 	{
@@ -115,7 +116,8 @@ static void cs_help_access(struct sourceinfo *si, const char *subcmd)
 		help_display(si, si->service, subcmd, cs_access_cmds);
 }
 
-static void cs_help_role(struct sourceinfo *si, const char *subcmd)
+static void
+cs_help_role(struct sourceinfo *si, const char *subcmd)
 {
 	if (!subcmd)
 	{
@@ -131,7 +133,8 @@ static void cs_help_role(struct sourceinfo *si, const char *subcmd)
 		help_display(si, si->service, subcmd, cs_role_cmds);
 }
 
-static void cs_cmd_access(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_access(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan;
 	char *cmd;
@@ -171,7 +174,8 @@ static void cs_cmd_access(struct sourceinfo *si, int parc, char *parv[])
 	command_exec_split(si->service, si, c->name, buf, cs_access_cmds);
 }
 
-static void cs_cmd_role(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_role(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan;
 	char *cmd;
@@ -213,7 +217,8 @@ static void cs_cmd_role(struct sourceinfo *si, int parc, char *parv[])
 
 /***********************************************************************************************/
 
-static inline unsigned int count_bits(unsigned int bits)
+static inline unsigned int
+count_bits(unsigned int bits)
 {
 	unsigned int i = 1, count = 0;
 
@@ -239,7 +244,8 @@ struct channel_template_iter
 	mowgli_list_t *l;
 };
 
-static int compare_template_nodes(mowgli_node_t *a, mowgli_node_t *b, void *opaque)
+static int
+compare_template_nodes(mowgli_node_t *a, mowgli_node_t *b, void *opaque)
 {
 	struct channel_template *ta = a->data;
 	struct channel_template *tb = b->data;
@@ -247,7 +253,8 @@ static int compare_template_nodes(mowgli_node_t *a, mowgli_node_t *b, void *opaq
 	return count_bits(ta->level) - count_bits(tb->level);
 }
 
-static struct channel_template *find_template(mowgli_list_t *l, const char *key)
+static struct channel_template *
+find_template(mowgli_list_t *l, const char *key)
 {
 	mowgli_node_t *iter;
 
@@ -265,7 +272,8 @@ static struct channel_template *find_template(mowgli_list_t *l, const char *key)
 	return NULL;
 }
 
-static int append_global_template(const char *key, void *data, void *privdata)
+static int
+append_global_template(const char *key, void *data, void *privdata)
 {
 	struct channel_template *t;
 	struct channel_template_iter *ti = privdata;
@@ -291,7 +299,8 @@ static int append_global_template(const char *key, void *data, void *privdata)
         return 0;
 }
 
-static mowgli_list_t *build_template_list(struct mychan *mc)
+static mowgli_list_t *
+build_template_list(struct mychan *mc)
 {
 	const char *p, *q, *r;
 	char *s;
@@ -352,7 +361,8 @@ static mowgli_list_t *build_template_list(struct mychan *mc)
 	return l;
 }
 
-static void free_template_list(mowgli_list_t *l)
+static void
+free_template_list(mowgli_list_t *l)
 {
 	mowgli_node_t *n, *tn;
 
@@ -387,7 +397,8 @@ static void free_template_list(mowgli_list_t *l)
  *
  * but now we just return an exact template name or <Custom>.
  */
-static const char *get_template_name(struct mychan *mc, unsigned int level)
+static const char *
+get_template_name(struct mychan *mc, unsigned int level)
 {
 	mowgli_list_t *l;
 	mowgli_node_t *n;
@@ -418,7 +429,8 @@ static const char *get_template_name(struct mychan *mc, unsigned int level)
 /*
  * Update a role entry and synchronize the changes with the access list.
  */
-static void update_role_entry(struct sourceinfo *si, struct mychan *mc, const char *role, unsigned int flags)
+static void
+update_role_entry(struct sourceinfo *si, struct mychan *mc, const char *role, unsigned int flags)
 {
 	struct metadata *md;
 	size_t l;
@@ -535,7 +547,8 @@ static void update_role_entry(struct sourceinfo *si, struct mychan *mc, const ch
 		command_success_nodata(si, _("%d access entries updated accordingly."), changes);
 }
 
-static unsigned int xflag_apply_batch(unsigned int in, int parc, char *parv[])
+static unsigned int
+xflag_apply_batch(unsigned int in, int parc, char *parv[])
 {
 	unsigned int out;
 	int i;
@@ -559,7 +572,8 @@ static unsigned int xflag_apply_batch(unsigned int in, int parc, char *parv[])
  * 1     nenolod                founder
  * 2     jdhore                 channel-staffer
  */
-static void cs_cmd_access_list(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_access_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct chanacs *ca;
 	mowgli_node_t *n;
@@ -625,7 +639,8 @@ static void cs_cmd_access_list(struct sourceinfo *si, int parc, char *parv[])
  * Modified   : Aug 18 21:41:31 2005 (5 years, 6 weeks, 0 days, 05:57:21 ago)
  * *** End of Info ***
  */
-static void cs_cmd_access_info(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_access_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct chanacs *ca;
 	struct myentity *mt;
@@ -724,7 +739,8 @@ static void cs_cmd_access_info(struct sourceinfo *si, int parc, char *parv[])
  *
  * nenolod was removed from the Founder role in #atheme.
  */
-static void cs_cmd_access_del(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_access_del(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct chanacs *ca;
 	struct myentity *mt;
@@ -830,7 +846,8 @@ static void cs_cmd_access_del(struct sourceinfo *si, int parc, char *parv[])
  *
  * nenolod was added with the Founder role in #atheme.
  */
-static void cs_cmd_access_add(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_access_add(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct chanacs *ca;
 	struct myentity *mt = NULL;
@@ -977,7 +994,8 @@ static void cs_cmd_access_add(struct sourceinfo *si, int parc, char *parv[])
  *
  * nenolod now has the Founder role in #atheme.
  */
-static void cs_cmd_access_set(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_access_set(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct chanacs *ca;
 	struct myentity *mt = NULL;
@@ -1125,7 +1143,8 @@ static void cs_cmd_access_set(struct sourceinfo *si, int parc, char *parv[])
  * List of channel-defined roles:
  * Founder      : ...
  */
-static void cs_cmd_role_list(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_role_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
 	const char *channel = parv[0];
@@ -1163,7 +1182,8 @@ static void cs_cmd_role_list(struct sourceinfo *si, int parc, char *parv[])
  *
  * Creates a new role with the given flags.
  */
-static void cs_cmd_role_add(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_role_add(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
 	mowgli_list_t *l;
@@ -1254,7 +1274,8 @@ static void cs_cmd_role_add(struct sourceinfo *si, int parc, char *parv[])
  *
  * Creates a new role with the given flags.
  */
-static void cs_cmd_role_set(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_role_set(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
 	mowgli_list_t *l;
@@ -1351,7 +1372,8 @@ static void cs_cmd_role_set(struct sourceinfo *si, int parc, char *parv[])
  *
  * Deletes a role.
  */
-static void cs_cmd_role_del(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_role_del(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
 	const char *channel = parv[0];
