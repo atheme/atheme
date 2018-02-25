@@ -55,7 +55,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	mowgli_patricia_destroy(os_ignore_cmds, NULL, NULL);
 }
 
-static void os_cmd_ignore(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_ignore(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *cmd = parv[0];
         struct command *c;
@@ -78,7 +79,8 @@ static void os_cmd_ignore(struct sourceinfo *si, int parc, char *parv[])
 
 }
 
-static void os_cmd_ignore_add(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_ignore_add(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
         char *target = parv[0];
@@ -123,7 +125,8 @@ static void os_cmd_ignore_add(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-static void os_cmd_ignore_del(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_ignore_del(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	mowgli_node_t *n, *tn;
@@ -157,7 +160,8 @@ static void os_cmd_ignore_del(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-static void os_cmd_ignore_clear(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_ignore_clear(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n, *tn;
 	struct svsignore *svsignore;
@@ -189,8 +193,8 @@ static void os_cmd_ignore_clear(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-
-static void os_cmd_ignore_list(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_ignore_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
 	unsigned int i = 1;
