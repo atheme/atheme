@@ -74,7 +74,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("helpserv", &helpserv_cancel);
 }
 
-static void write_ticket_db(struct database_handle *db)
+static void
+write_ticket_db(struct database_handle *db)
 {
 	mowgli_node_t *n;
 
@@ -91,7 +92,8 @@ static void write_ticket_db(struct database_handle *db)
 	}
 }
 
-static void db_h_he(struct database_handle *db, const char *type)
+static void
+db_h_he(struct database_handle *db, const char *type)
 {
 	const char *nick = db_sread_word(db);
 	time_t ticket_ts = db_sread_time(db);
@@ -106,7 +108,8 @@ static void db_h_he(struct database_handle *db, const char *type)
 	mowgli_node_add(l, mowgli_node_create(), &helpserv_reqlist);
 }
 
-static void account_drop_request(struct myuser *mu)
+static void
+account_drop_request(struct myuser *mu)
 {
         mowgli_node_t *n;
         struct help_ticket *l;
@@ -130,7 +133,8 @@ static void account_drop_request(struct myuser *mu)
         }
 }
 
-static void account_delete_request(struct myuser *mu)
+static void
+account_delete_request(struct myuser *mu)
 {
         mowgli_node_t *n;
         struct help_ticket *l;
@@ -155,7 +159,8 @@ static void account_delete_request(struct myuser *mu)
 }
 
 /* REQUEST <topic> */
-static void helpserv_cmd_request(struct sourceinfo *si, int parc, char *parv[])
+static void
+helpserv_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *topic = parv[0];
 	mowgli_node_t *n;
@@ -230,7 +235,8 @@ static void helpserv_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 }
 
 /* CLOSE <nick> [reason] */
-static void helpserv_cmd_close(struct sourceinfo *si, int parc, char *parv[])
+static void
+helpserv_cmd_close(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *nick = parv[0];
 	struct user *u;
@@ -292,7 +298,8 @@ static void helpserv_cmd_close(struct sourceinfo *si, int parc, char *parv[])
 }
 
 /* LIST */
-static void helpserv_cmd_list(struct sourceinfo *si, int parc, char *parv[])
+static void
+helpserv_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct help_ticket *l;
 	mowgli_node_t *n;
@@ -315,7 +322,8 @@ static void helpserv_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 }
 
 /* CANCEL */
-static void helpserv_cmd_cancel(struct sourceinfo *si, int parc, char *parv[])
+static void
+helpserv_cmd_cancel(struct sourceinfo *si, int parc, char *parv[])
 {
         struct help_ticket *l;
         mowgli_node_t *n;
