@@ -17,7 +17,8 @@ static void ns_cmd_set_nevergroup(struct sourceinfo *si, int parc, char *parv[])
 
 struct command ns_set_nevergroup = { "NEVERGROUP", N_("Prevents you from being added to group access lists."), AC_NONE, 1, ns_cmd_set_nevergroup, { .path = "nickserv/set_nevergroup" } };
 
-static bool has_nevergroup(const struct mynick *mn, const void *arg)
+static bool
+has_nevergroup(const struct mynick *mn, const void *arg)
 {
 	struct myuser *mu = mn->owner;
 
@@ -49,7 +50,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 }
 
 /* SET NEVERGROUP <ON|OFF> */
-static void ns_cmd_set_nevergroup(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_set_nevergroup(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *params = parv[0];
 
