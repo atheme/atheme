@@ -30,7 +30,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 }
 
 /* SET ACCOUNTNAME <nick> */
-static void ns_cmd_set_accountname(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_set_accountname(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *newname = parv[0];
 	struct mynick *mn;
