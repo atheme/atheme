@@ -4,7 +4,8 @@
 
 #include "groupserv_main.h"
 
-static void mygroup_expire(void *unused)
+static void
+mygroup_expire(void *unused)
 {
 	struct myentity *mt;
 	struct myentity_iteration_state state;
@@ -24,7 +25,8 @@ static void mygroup_expire(void *unused)
 	}
 }
 
-static void grant_channel_access_hook(struct user *u)
+static void
+grant_channel_access_hook(struct user *u)
 {
 	mowgli_node_t *n, *tn;
 	mowgli_list_t *l;
@@ -108,7 +110,8 @@ static void grant_channel_access_hook(struct user *u)
 	}
 }
 
-static void user_info_hook(hook_user_req_t *req)
+static void
+user_info_hook(hook_user_req_t *req)
 {
 	static char buf[BUFSIZE];
 	mowgli_node_t *n;
@@ -138,7 +141,8 @@ static void user_info_hook(hook_user_req_t *req)
 		command_success_nodata(req->si, _("Groups     : %s"), buf);
 }
 
-static void sasl_may_impersonate_hook(hook_sasl_may_impersonate_t *req)
+static void
+sasl_may_impersonate_hook(hook_sasl_may_impersonate_t *req)
 {
 	char priv[BUFSIZE];
 	mowgli_list_t *l;
@@ -164,7 +168,8 @@ static void sasl_may_impersonate_hook(hook_sasl_may_impersonate_t *req)
 	}
 }
 
-static void myuser_delete_hook(struct myuser *mu)
+static void
+myuser_delete_hook(struct myuser *mu)
 {
 	mowgli_node_t *n, *tn;
 	mowgli_list_t *l;
@@ -181,7 +186,8 @@ static void myuser_delete_hook(struct myuser *mu)
 	mowgli_list_free(l);
 }
 
-static void osinfo_hook(struct sourceinfo *si)
+static void
+osinfo_hook(struct sourceinfo *si)
 {
 	return_if_fail(si != NULL);
 
@@ -193,7 +199,8 @@ static void osinfo_hook(struct sourceinfo *si)
 
 static mowgli_eventloop_timer_t *mygroup_expire_timer = NULL;
 
-void gs_hooks_init(void)
+void
+gs_hooks_init(void)
 {
 	mygroup_expire_timer = mowgli_timer_add(base_eventloop, "mygroup_expire", mygroup_expire, NULL, 3600);
 
@@ -210,7 +217,8 @@ void gs_hooks_init(void)
 	hook_add_sasl_may_impersonate(sasl_may_impersonate_hook);
 }
 
-void gs_hooks_deinit(void)
+void
+gs_hooks_deinit(void)
 {
 	mowgli_timer_destroy(base_eventloop, mygroup_expire_timer);
 
