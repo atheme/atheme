@@ -9,7 +9,8 @@
 static unsigned int loading_gdbv = -1;
 static unsigned int their_ga_all;
 
-static void write_groupdb(struct database_handle *db)
+static void
+write_groupdb(struct database_handle *db)
 {
 	struct myentity *mt;
 	struct myentity_iteration_state state;
@@ -74,7 +75,8 @@ static void write_groupdb(struct database_handle *db)
 	}
 }
 
-static void db_h_gdbv(struct database_handle *db, const char *type)
+static void
+db_h_gdbv(struct database_handle *db, const char *type)
 {
 	loading_gdbv = db_sread_uint(db);
 	slog(LG_INFO, "groupserv: opensex data schema version is %d.", loading_gdbv);
@@ -82,7 +84,8 @@ static void db_h_gdbv(struct database_handle *db, const char *type)
 	their_ga_all = GA_ALL_OLD;
 }
 
-static void db_h_gfa(struct database_handle *db, const char *type)
+static void
+db_h_gfa(struct database_handle *db, const char *type)
 {
 	const char *flags = db_sread_word(db);
 
@@ -97,7 +100,8 @@ static void db_h_gfa(struct database_handle *db, const char *type)
 	}
 }
 
-static void db_h_grp(struct database_handle *db, const char *type)
+static void
+db_h_grp(struct database_handle *db, const char *type)
 {
 	struct mygroup *mg;
 	const char *uid = NULL;
@@ -135,7 +139,8 @@ static void db_h_grp(struct database_handle *db, const char *type)
 	}
 }
 
-static void db_h_gacl(struct database_handle *db, const char *type)
+static void
+db_h_gacl(struct database_handle *db, const char *type)
 {
 	struct mygroup *mg;
 	struct myentity *mt;
@@ -177,7 +182,8 @@ static void db_h_gacl(struct database_handle *db, const char *type)
 	groupacs_add(mg, mt, flags);
 }
 
-static void db_h_mdg(struct database_handle *db, const char *type)
+static void
+db_h_mdg(struct database_handle *db, const char *type)
 {
 	const char *name = db_sread_word(db);
 	const char *prop = db_sread_word(db);
@@ -196,7 +202,8 @@ static void db_h_mdg(struct database_handle *db, const char *type)
 	metadata_add(obj, prop, value);
 }
 
-void gs_db_init(void)
+void
+gs_db_init(void)
 {
 	hook_add_db_write_pre_ca(write_groupdb);
 
@@ -207,7 +214,8 @@ void gs_db_init(void)
 	db_register_type_handler("GFA", db_h_gfa);
 }
 
-void gs_db_deinit(void)
+void
+gs_db_deinit(void)
 {
 	hook_del_db_write_pre_ca(write_groupdb);
 
