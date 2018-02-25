@@ -23,7 +23,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("nickserv", &ns_ghost);
 }
 
-void ns_cmd_ghost(struct sourceinfo *si, int parc, char *parv[])
+void
+ns_cmd_ghost(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
 	char *target = parv[0];
