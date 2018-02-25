@@ -1,6 +1,7 @@
 #include "atheme_perl.h"
 
-void perl_command_handler(struct sourceinfo *si, const int parc, char **parv)
+void
+perl_command_handler(struct sourceinfo *si, const int parc, char **parv)
 {
 	struct perl_command * pc = (struct perl_command *) si->command;
 
@@ -39,7 +40,8 @@ void perl_command_handler(struct sourceinfo *si, const int parc, char **parv)
 	invalidate_object_references();
 }
 
-void perl_command_help_func(struct sourceinfo *si, const char *subcmd)
+void
+perl_command_help_func(struct sourceinfo *si, const char *subcmd)
 {
 	command_fail(si, fault_unimplemented, _("Perl help commands not yet implemented"));
 }
