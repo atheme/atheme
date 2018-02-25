@@ -37,7 +37,8 @@ struct sourceinfo_vtable jsonrpc_vtable = {
 
 struct path_handler handle_jsonrpc = { NULL, handle_request };
 
-static void handle_request(struct connection *cptr, void *requestbuf)
+static void
+handle_request(struct connection *cptr, void *requestbuf)
 {
 
 	jsonrpc_process(requestbuf, cptr);
@@ -85,15 +86,21 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	}
 }
 
-void jsonrpc_register_method(const char *method_name, jsonrpc_method_fn method) {
+void
+jsonrpc_register_method(const char *method_name, jsonrpc_method_fn method)
+{
 	mowgli_patricia_add(json_methods, method_name, method);
 }
 
-void jsonrpc_unregister_method(const char *method_name) {
+void
+jsonrpc_unregister_method(const char *method_name)
+{
 	mowgli_patricia_delete(json_methods, method_name);
 }
 
-jsonrpc_method_fn get_json_method(const char *method_name) {
+jsonrpc_method_fn
+get_json_method(const char *method_name)
+{
 	return mowgli_patricia_retrieve(json_methods, method_name);
 }
 
@@ -115,8 +122,8 @@ jsonrpc_method_fn get_json_method(const char *method_name) {
  *       an authcookie ticket is created for the struct myuser.
  *       the user's lastlogin is updated
  */
-
-static bool jsonrpcmethod_login(void *conn, mowgli_list_t *params, char *id)
+static bool
+jsonrpcmethod_login(void *conn, mowgli_list_t *params, char *id)
 {
 	struct myuser *mu;
 	struct authcookie *ac;
@@ -200,8 +207,8 @@ static bool jsonrpcmethod_login(void *conn, mowgli_list_t *params, char *id)
  * JSON Effects:
  *       an authcookie ticket is destroyed.
  */
-
-static bool jsonrpcmethod_logout(void *conn, mowgli_list_t *params, char *id)
+static bool
+jsonrpcmethod_logout(void *conn, mowgli_list_t *params, char *id)
 {
 	struct authcookie *ac;
 	struct myuser *mu;
@@ -240,7 +247,8 @@ static bool jsonrpcmethod_logout(void *conn, mowgli_list_t *params, char *id)
 	return 0;
 }
 
-static void jsonrpc_command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *message)
+static void
+jsonrpc_command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *message)
 {
 	struct connection *cptr;
 	struct httpddata *hd;
@@ -260,8 +268,8 @@ static void jsonrpc_command_fail(struct sourceinfo *si, enum cmd_faultcode code,
 	hd->sent_reply = true;
 }
 
-
-static void jsonrpc_command_success_string(struct sourceinfo *si, const char *result, const char *message)
+static void
+jsonrpc_command_success_string(struct sourceinfo *si, const char *result, const char *message)
 {
 	struct connection *cptr;
 	struct httpddata *hd;
@@ -277,7 +285,8 @@ static void jsonrpc_command_success_string(struct sourceinfo *si, const char *re
 	hd->sent_reply = true;
 }
 
-static void jsonrpc_command_success_nodata(struct sourceinfo *si, const char *message)
+static void
+jsonrpc_command_success_nodata(struct sourceinfo *si, const char *message)
 {
 	struct connection *cptr;
 	struct httpddata *hd;
@@ -321,8 +330,8 @@ static void jsonrpc_command_success_nodata(struct sourceinfo *si, const char *me
  * JSON Effects:
  *       command is executed
  */
-
-static bool jsonrpcmethod_command(void *conn, mowgli_list_t *params, char *id)
+static bool
+jsonrpcmethod_command(void *conn, mowgli_list_t *params, char *id)
 {
 	struct myuser *mu;
 	struct service *svs;
@@ -445,8 +454,8 @@ static bool jsonrpcmethod_command(void *conn, mowgli_list_t *params, char *id)
  *       Privset for user, or error message
  *
 */
-
-static bool jsonrpcmethod_privset(void *conn, mowgli_list_t *params, char *id)
+static bool
+jsonrpcmethod_privset(void *conn, mowgli_list_t *params, char *id)
 {
 	struct myuser *mu;
 	mowgli_node_t *n;
@@ -514,8 +523,8 @@ static bool jsonrpcmethod_privset(void *conn, mowgli_list_t *params, char *id)
  *       accountname: string: if nickname is authenticated, what entity they
  *       are authed to, else '*'
  */
-
-static bool jsonrpcmethod_ison(void *conn, mowgli_list_t *params, char *id)
+static bool
+jsonrpcmethod_ison(void *conn, mowgli_list_t *params, char *id)
 {
 	struct user *u;
 
@@ -604,9 +613,8 @@ static bool jsonrpcmethod_ison(void *conn, mowgli_list_t *params, char *id)
  * JSON outputs:
  *       metadata value
  */
-
-
-static bool jsonrpcmethod_metadata(void *conn, mowgli_list_t *params, char *id)
+static bool
+jsonrpcmethod_metadata(void *conn, mowgli_list_t *params, char *id)
 {
 	struct metadata *md;
 
@@ -676,7 +684,9 @@ static bool jsonrpcmethod_metadata(void *conn, mowgli_list_t *params, char *id)
 	return 0;
 }
 
-void jsonrpc_send_data(void *conn, char *str) {
+void
+jsonrpc_send_data(void *conn, char *str)
+{
 	struct httpddata *hd = ((struct connection *) conn)->userdata;
 
 	char buf[300];
