@@ -42,7 +42,7 @@
 #define DIGEST_HMAC_INNER_XORVAL        0x36U
 #define DIGEST_HMAC_OUTER_XORVAL        0x5CU
 
-bool
+bool ATHEME_FATTR_WUR
 digest_init(struct digest_context *const restrict ctx, const unsigned int alg)
 {
 	if (! ctx)
@@ -96,7 +96,7 @@ digest_init(struct digest_context *const restrict ctx, const unsigned int alg)
 	return ctx->init(&ctx->state);
 }
 
-bool
+bool ATHEME_FATTR_WUR
 digest_init_hmac(struct digest_context *const restrict ctx, const unsigned int alg,
                  const void *const restrict key, const size_t keyLen)
 {
@@ -136,7 +136,7 @@ digest_init_hmac(struct digest_context *const restrict ctx, const unsigned int a
 	return ctx->update(&ctx->state, ctx->ikey, ctx->blksz);
 }
 
-bool
+bool ATHEME_FATTR_WUR
 digest_update(struct digest_context *const restrict ctx, const void *const restrict data, const size_t dataLen)
 {
 	if (! ctx)
@@ -161,7 +161,7 @@ digest_update(struct digest_context *const restrict ctx, const void *const restr
 	return ctx->update(&ctx->state, data, dataLen);
 }
 
-bool
+bool ATHEME_FATTR_WUR
 digest_final(struct digest_context *const restrict ctx, void *const restrict out, size_t *const restrict outLen)
 {
 	if (! ctx)
@@ -207,7 +207,7 @@ digest_final(struct digest_context *const restrict ctx, void *const restrict out
 	return ctx->final(&ctx->state, out, outLen);
 }
 
-bool
+bool ATHEME_FATTR_WUR
 digest_pbkdf2_hmac(const unsigned int alg, const void *const restrict pass, const size_t passLen,
                    const void *const restrict salt, const size_t saltLen, const size_t c,
                    void *const restrict dk, const size_t dkLen)
