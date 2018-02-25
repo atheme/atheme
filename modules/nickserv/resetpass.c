@@ -23,7 +23,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("nickserv", &ns_resetpass);
 }
 
-static void ns_cmd_resetpass(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_resetpass(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
 	struct metadata *md;
