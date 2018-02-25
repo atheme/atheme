@@ -357,25 +357,29 @@ corestorage_db_save(struct database_handle *db)
 	}
 }
 
-static void corestorage_h_unknown(struct database_handle *db, const char *type)
+static void
+corestorage_h_unknown(struct database_handle *db, const char *type)
 {
 	slog(LG_ERROR, "db %s:%d: unknown directive '%s'", db->file, db->line, type);
 	slog(LG_ERROR, "corestorage: exiting to avoid data loss");
 	exit(EXIT_FAILURE);
 }
 
-static void corestorage_h_dbv(struct database_handle *db, const char *type)
+static void
+corestorage_h_dbv(struct database_handle *db, const char *type)
 {
 	dbv = db_sread_int(db);
 	slog(LG_INFO, "corestorage: data schema version is %d.", dbv);
 }
 
-static void corestorage_h_luid(struct database_handle *db, const char *type)
+static void
+corestorage_h_luid(struct database_handle *db, const char *type)
 {
 	myentity_set_last_uid(db_sread_word(db));
 }
 
-static void corestorage_h_cf(struct database_handle *db, const char *type)
+static void
+corestorage_h_cf(struct database_handle *db, const char *type)
 {
 	const char *flags = db_sread_word(db);
 
@@ -390,7 +394,8 @@ static void corestorage_h_cf(struct database_handle *db, const char *type)
 	}
 }
 
-static void corestorage_h_mu(struct database_handle *db, const char *type)
+static void
+corestorage_h_mu(struct database_handle *db, const char *type)
 {
 	const char *uid = NULL;
 	const char *name;
@@ -438,7 +443,8 @@ static void corestorage_h_mu(struct database_handle *db, const char *type)
 		mu->language = language_add(language);
 }
 
-static void corestorage_h_me(struct database_handle *db, const char *type)
+static void
+corestorage_h_me(struct database_handle *db, const char *type)
 {
 	const char *dest, *src, *text;
 	time_t sent;
@@ -470,7 +476,8 @@ static void corestorage_h_me(struct database_handle *db, const char *type)
 	mowgli_node_add(mz, mowgli_node_create(), &mu->memos);
 }
 
-static void corestorage_h_mi(struct database_handle *db, const char *type)
+static void
+corestorage_h_mi(struct database_handle *db, const char *type)
 {
 	struct myuser *mu;
 	const char *user, *target;
@@ -488,7 +495,8 @@ static void corestorage_h_mi(struct database_handle *db, const char *type)
 	mowgli_node_add(sstrdup(target), mowgli_node_create(), &mu->memo_ignores);
 }
 
-static void corestorage_h_ac(struct database_handle *db, const char *type)
+static void
+corestorage_h_ac(struct database_handle *db, const char *type)
 {
 	struct myuser *mu;
 	const char *user, *mask;
@@ -506,7 +514,8 @@ static void corestorage_h_ac(struct database_handle *db, const char *type)
 	myuser_access_add(mu, mask);
 }
 
-static void corestorage_h_mn(struct database_handle *db, const char *type)
+static void
+corestorage_h_mn(struct database_handle *db, const char *type)
 {
 	struct myuser *mu;
 	struct mynick *mn;
@@ -536,7 +545,8 @@ static void corestorage_h_mn(struct database_handle *db, const char *type)
 	mn->lastseen = seen;
 }
 
-static void corestorage_h_mcfp(struct database_handle *db, const char *type)
+static void
+corestorage_h_mcfp(struct database_handle *db, const char *type)
 {
 	const char *user, *certfp;
 	struct myuser *mu;
@@ -554,18 +564,21 @@ static void corestorage_h_mcfp(struct database_handle *db, const char *type)
 	mycertfp_add(mu, certfp);
 }
 
-static void corestorage_h_su(struct database_handle *db, const char *type)
+static void
+corestorage_h_su(struct database_handle *db, const char *type)
 {
 	slog(LG_INFO, "db-h-su: line %d: metadata change subscriptions have been dropped, ignoring", db->line);
 }
 
-static void corestorage_h_nam(struct database_handle *db, const char *type)
+static void
+corestorage_h_nam(struct database_handle *db, const char *type)
 {
 	const char *user = db_sread_word(db);
 	myuser_name_add(user);
 }
 
-static void corestorage_h_so(struct database_handle *db, const char *type)
+static void
+corestorage_h_so(struct database_handle *db, const char *type)
 {
 	const char *user, *class, *pass;
 	unsigned int flags = 0;
@@ -596,7 +609,8 @@ static void corestorage_h_so(struct database_handle *db, const char *type)
 	soper_add(entity(mu)->name, class, flags & ~SOPER_CONF, pass);
 }
 
-static void corestorage_h_mc(struct database_handle *db, const char *type)
+static void
+corestorage_h_mc(struct database_handle *db, const char *type)
 {
 	char buf[4096];
 	const char *name = db_sread_word(db);
@@ -660,7 +674,8 @@ convert_templates(const char *value)
 	return newvalue;
 }
 
-static void corestorage_h_md(struct database_handle *db, const char *type)
+static void
+corestorage_h_md(struct database_handle *db, const char *type)
 {
 	const char *name = db_sread_word(db);
 	const char *prop = db_sread_word(db);
@@ -713,7 +728,8 @@ static void corestorage_h_md(struct database_handle *db, const char *type)
 	free(newvalue);
 }
 
-static void corestorage_h_mda(struct database_handle *db, const char *type)
+static void
+corestorage_h_mda(struct database_handle *db, const char *type)
 {
 	const char *name, *prop, *value, *mask;
 	void *obj = NULL;
@@ -738,7 +754,8 @@ static void corestorage_h_mda(struct database_handle *db, const char *type)
 	metadata_add(obj, prop, value);
 }
 
-static void corestorage_h_ca(struct database_handle *db, const char *type)
+static void
+corestorage_h_ca(struct database_handle *db, const char *type)
 {
 	const char *chan, *target;
 	time_t tmod;
@@ -790,7 +807,8 @@ static void corestorage_h_ca(struct database_handle *db, const char *type)
 	}
 }
 
-static void corestorage_h_si(struct database_handle *db, const char *type)
+static void
+corestorage_h_si(struct database_handle *db, const char *type)
 {
 	char buf[4096];
 	const char *mask, *setby, *reason;
@@ -809,12 +827,14 @@ static void corestorage_h_si(struct database_handle *db, const char *type)
 	svsignore->setby = sstrdup(setby);
 }
 
-static void corestorage_h_kid(struct database_handle *db, const char *type)
+static void
+corestorage_h_kid(struct database_handle *db, const char *type)
 {
 	me.kline_id = db_sread_int(db);
 }
 
-static void corestorage_h_kl(struct database_handle *db, const char *type)
+static void
+corestorage_h_kl(struct database_handle *db, const char *type)
 {
 	char buf[4096];
 	const char *user, *host, *reason, *setby;
@@ -841,12 +861,14 @@ static void corestorage_h_kl(struct database_handle *db, const char *type)
 	k->expires = k->settime + k->duration;
 }
 
-static void corestorage_h_xid(struct database_handle *db, const char *type)
+static void
+corestorage_h_xid(struct database_handle *db, const char *type)
 {
 	me.xline_id = db_sread_int(db);
 }
 
-static void corestorage_h_xl(struct database_handle *db, const char *type)
+static void
+corestorage_h_xl(struct database_handle *db, const char *type)
 {
 	char buf[4096];
 	const char *realname, *reason, *setby;
@@ -875,12 +897,14 @@ static void corestorage_h_xl(struct database_handle *db, const char *type)
 		x->number = id;
 }
 
-static void corestorage_h_qid(struct database_handle *db, const char *type)
+static void
+corestorage_h_qid(struct database_handle *db, const char *type)
 {
 	me.qline_id = db_sread_int(db);
 }
 
-static void corestorage_h_ql(struct database_handle *db, const char *type)
+static void
+corestorage_h_ql(struct database_handle *db, const char *type)
 {
 	char buf[4096];
 	const char *mask, *reason, *setby;
@@ -909,12 +933,14 @@ static void corestorage_h_ql(struct database_handle *db, const char *type)
 		q->number = id;
 }
 
-static void corestorage_ignore_row(struct database_handle *db, const char *type)
+static void
+corestorage_ignore_row(struct database_handle *db, const char *type)
 {
 	return;
 }
 
-static void corestorage_db_load(const char *filename)
+static void
+corestorage_db_load(const char *filename)
 {
 	struct database_handle *db;
 
@@ -929,7 +955,8 @@ static void corestorage_db_load(const char *filename)
 #ifdef HAVE_FORK
 static pid_t child_pid;
 
-static void corestorage_db_saved_cb(pid_t pid, int status, void *data)
+static void
+corestorage_db_saved_cb(pid_t pid, int status, void *data)
 {
 	if (child_pid != pid)
 		return; /* probably killed our child for a forced write */
@@ -941,7 +968,8 @@ static void corestorage_db_saved_cb(pid_t pid, int status, void *data)
 }
 #endif
 
-static void corestorage_db_write(void *filename, enum db_save_strategy strategy)
+static void
+corestorage_db_write(void *filename, enum db_save_strategy strategy)
 {
 #ifndef HAVE_FORK
 	corestorage_db_write_blocking(filename);
@@ -989,7 +1017,8 @@ static void corestorage_db_write(void *filename, enum db_save_strategy strategy)
 #endif
 }
 
-static void corestorage_db_write_blocking(void *filename)
+static void
+corestorage_db_write_blocking(void *filename)
 {
 	struct database_handle *db;
 
@@ -1053,6 +1082,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("backend/corestorage", MODULE_UNLOAD_CAPABILITY_NEVER)
