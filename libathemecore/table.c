@@ -26,7 +26,8 @@
 
 #include "atheme.h"
 
-static void table_destroy(void *obj)
+static void
+table_destroy(void *obj)
 {
 	struct atheme_table *table = (struct atheme_table *) obj;
 	mowgli_node_t *n, *tn;
@@ -112,7 +113,8 @@ table_new(const char *fmt, ...)
  * Side Effects:
  *     - none
  */
-struct atheme_table_row *table_row_new(struct atheme_table *t)
+struct atheme_table_row *
+table_row_new(struct atheme_table *t)
 {
 	return_val_if_fail(t != NULL, NULL);
 
@@ -136,7 +138,8 @@ struct atheme_table_row *table_row_new(struct atheme_table *t)
  * Side Effects:
  *     - none
  */
-void table_cell_associate(struct atheme_table_row *r, const char *name, const char *value)
+void
+table_cell_associate(struct atheme_table_row *r, const char *name, const char *value)
 {
 	return_if_fail(r != NULL);
 	return_if_fail(name != NULL);
@@ -167,7 +170,8 @@ void table_cell_associate(struct atheme_table_row *r, const char *name, const ch
  * Side Effects:
  *     - a callback function is called for each row of the table.
  */
-void table_render(struct atheme_table *t, void (*callback)(const char *line, void *data), void *data)
+void
+table_render(struct atheme_table *t, void (*callback)(const char *line, void *data), void *data)
 {
 	mowgli_node_t *n;
 	struct atheme_table_row *f;
