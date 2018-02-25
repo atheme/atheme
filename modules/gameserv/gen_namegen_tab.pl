@@ -60,17 +60,17 @@ for my $line (@lines) {
    $end_sym{$line} = $line if $which == 2;
 };
 
-for my $sym (keys %begin_sym) {
+for my $sym (sort keys %begin_sym) {
    $begin_syms .= "\t\"$sym\",\n";
    $begin_sym_cnt++;
 };
 
-for my $sym (keys %medial_sym) {
+for my $sym (sort keys %medial_sym) {
    $medial_syms .= "\t\"$sym\",\n";
    $medial_sym_cnt++;
 };
 
-for my $sym (keys %end_sym) {
+for my $sym (sort keys %end_sym) {
    $end_syms .= "\t\"$sym\",\n";
    $end_sym_cnt++;
 };
@@ -80,17 +80,17 @@ print <<EOF;
 #ifndef ATHEME_MOD_GAMESERV_NAMEGEN_TAB_H
 #define ATHEME_MOD_GAMESERV_NAMEGEN_TAB_H
 
-const char *begin_sym[] = {
+static const char *begin_sym[] = {
 $begin_syms};
 
 #define BEGIN_SYM_SZ $begin_sym_cnt
 
-const char *medial_sym[] = {
+static const char *medial_sym[] = {
 $medial_syms};
 
 #define MEDIAL_SYM_SZ $medial_sym_cnt
 
-const char *end_sym[] = {
+static const char *end_sym[] = {
 $end_syms};
 
 #define END_SYM_SZ $end_sym_cnt
