@@ -28,7 +28,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	command_delete(&ns_set_enforcetime, *ns_set_cmdtree);
 }
 
-static void ns_cmd_set_enforcetime(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_set_enforcetime(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *setting = parv[0];
 
