@@ -12,7 +12,8 @@
 
 bool cracklib_warn;
 
-static void cracklib_config_ready(void *unused)
+static void
+cracklib_config_ready(void *unused)
 {
 	struct module *m;
 	m = module_find_published("nickserv/cracklib");
@@ -27,7 +28,8 @@ static void cracklib_config_ready(void *unused)
 	hook_del_config_ready(cracklib_config_ready);
 }
 
-static int check_dict (char *filename)
+static int
+check_dict(char *filename)
 {
 	struct stat sb;
 
@@ -65,7 +67,8 @@ cracklib_hook(hook_user_register_check_t *hdata)
 	}
 }
 
-static void osinfo_hook(struct sourceinfo *si)
+static void
+osinfo_hook(struct sourceinfo *si)
 {
 	return_if_fail(si != NULL);
 
