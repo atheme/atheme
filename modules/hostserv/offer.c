@@ -72,7 +72,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("hostserv", &hs_take);
 }
 
-static void write_hsofferdb(struct database_handle *db)
+static void
+write_hsofferdb(struct database_handle *db)
 {
 	mowgli_node_t *n;
 
@@ -93,7 +94,8 @@ static void write_hsofferdb(struct database_handle *db)
 
 }
 
-static void db_h_ho(struct database_handle *db, const char *type)
+static void
+db_h_ho(struct database_handle *db, const char *type)
 {
 	const char *buf;
 	time_t vhost_ts;
@@ -119,7 +121,8 @@ static void db_h_ho(struct database_handle *db, const char *type)
 	mowgli_node_add(l, &l->node, &hs_offeredlist);
 }
 
-static inline struct hsoffered *hs_offer_find(const char *host, struct myentity *mt)
+static inline struct hsoffered *
+hs_offer_find(const char *host, struct myentity *mt)
 {
 	mowgli_node_t *n;
 	struct hsoffered *l;
@@ -135,7 +138,8 @@ static inline struct hsoffered *hs_offer_find(const char *host, struct myentity 
 	return NULL;
 }
 
-static void remove_group_offered_hosts(struct mygroup *mg)
+static void
+remove_group_offered_hosts(struct mygroup *mg)
 {
 	return_if_fail(mg != NULL);
 
@@ -161,7 +165,8 @@ static void remove_group_offered_hosts(struct mygroup *mg)
 }
 
 /* OFFER <host> */
-static void hs_cmd_offer(struct sourceinfo *si, int parc, char *parv[])
+static void
+hs_cmd_offer(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *group = parv[0];
 	char *host;
@@ -236,7 +241,8 @@ static void hs_cmd_offer(struct sourceinfo *si, int parc, char *parv[])
 }
 
 /* UNOFFER <vhost> */
-static void hs_cmd_unoffer(struct sourceinfo *si, int parc, char *parv[])
+static void
+hs_cmd_unoffer(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *host = parv[0];
 	struct hsoffered *l;
@@ -272,7 +278,8 @@ static void hs_cmd_unoffer(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("You have unoffered vhost \2%s\2."), host);
 }
 
-static bool myuser_is_in_group(struct myuser *mu, struct myentity *mt)
+static bool
+myuser_is_in_group(struct myuser *mu, struct myentity *mt)
 {
 	struct mygroup *mg;
 	mowgli_node_t *n;
@@ -295,7 +302,8 @@ static bool myuser_is_in_group(struct myuser *mu, struct myentity *mt)
 }
 
 /* TAKE <vhost> */
-static void hs_cmd_take(struct sourceinfo *si, int parc, char *parv[])
+static void
+hs_cmd_take(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *host = parv[0];
 	struct hsoffered *l;
@@ -360,7 +368,8 @@ static void hs_cmd_take(struct sourceinfo *si, int parc, char *parv[])
 }
 
 /* OFFERLIST */
-static void hs_cmd_offerlist(struct sourceinfo *si, int parc, char *parv[])
+static void
+hs_cmd_offerlist(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct hsoffered *l;
 	mowgli_node_t *n;
