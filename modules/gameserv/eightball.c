@@ -28,7 +28,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("chanserv", &cmd_eightball);
 }
 
-static void command_eightball(struct sourceinfo *si, int parc, char *parv[])
+static void
+command_eightball(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
 
