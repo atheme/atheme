@@ -27,7 +27,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	command_delete(&cs_clear_akicks, *cs_clear_cmds);
 }
 
-static void cs_cmd_clear_akicks(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_clear_akicks(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
 	mowgli_node_t *n, *tn;
