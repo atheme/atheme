@@ -31,7 +31,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("nickserv", &ns_setpass);
 }
 
-static void ns_cmd_setpass(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_setpass(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
 	struct metadata *md;
@@ -104,7 +105,8 @@ static void ns_cmd_setpass(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void clear_setpass_key(struct user *u)
+static void
+clear_setpass_key(struct user *u)
 {
 	struct myuser *mu = u->myuser;
 
@@ -119,7 +121,8 @@ static void clear_setpass_key(struct user *u)
 		"key. Since you have identified, that key is no longer valid.");
 }
 
-static void show_setpass(hook_user_req_t *hdata)
+static void
+show_setpass(hook_user_req_t *hdata)
 {
 	if (has_priv(hdata->si, PRIV_USER_AUSPEX))
 	{
