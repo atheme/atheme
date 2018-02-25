@@ -12,7 +12,8 @@ static void gs_cmd_register(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command gs_register = { "REGISTER", N_("Registers a group."), AC_AUTHENTICATED, 2, gs_cmd_register, { .path = "groupserv/register" } };
 
-static void gs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
+static void
+gs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mygroup *mg;
 
@@ -68,7 +69,6 @@ static void gs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_REGISTER, "REGISTER: \2%s\2", entity(mg)->name);
 	command_success_nodata(si, _("The group \2%s\2 has been registered to \2%s\2."), entity(mg)->name, entity(si->smu)->name);
 }
-
 
 static void
 mod_init(struct module *const restrict m)
