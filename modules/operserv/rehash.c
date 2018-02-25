@@ -25,7 +25,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 }
 
 /* REHASH */
-void os_cmd_rehash(struct sourceinfo *si, int parc, char *parv[])
+void
+os_cmd_rehash(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_INFO, "UPDATE (due to REHASH): \2%s\2", get_oper_name(si));
 	wallops("Updating database by request of \2%s\2.", get_oper_name(si));
