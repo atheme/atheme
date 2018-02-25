@@ -18,7 +18,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("chanserv", &cs_version);
 }
 
-static void cs_cmd_version(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_version(struct sourceinfo *si, int parc, char *parv[])
 {
         char buf[BUFSIZE];
         snprintf(buf, BUFSIZE, "%s [%s]", PACKAGE_STRING, SERNO);
