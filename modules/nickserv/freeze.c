@@ -15,14 +15,16 @@ static void ns_cmd_freeze(struct sourceinfo *si, int parc, char *parv[]);
 /* FREEZE ON|OFF -- don't pollute the root with THAW */
 struct command ns_freeze = { "FREEZE", N_("Freezes an account."), PRIV_USER_ADMIN, 3, ns_cmd_freeze, { .path = "nickserv/freeze" } };
 
-static bool is_frozen(const struct mynick *mn, const void *arg)
+static bool
+is_frozen(const struct mynick *mn, const void *arg)
 {
 	struct myuser *mu = mn->owner;
 
 	return !!metadata_find(mu, "private:freeze:freezer");
 }
 
-static bool frozen_match(const struct mynick *mn, const void *arg)
+static bool
+frozen_match(const struct mynick *mn, const void *arg)
 {
 	const char *frozenpattern = (const char*)arg;
 	struct metadata *mdfrozen;
@@ -64,7 +66,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	list_unregister("frozen-reason");
 }
 
-static void ns_cmd_freeze(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_freeze(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
 	char *target = parv[0];
