@@ -52,7 +52,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("chanserv", &cs_forcexop);
 }
 
-static void cs_xop(struct sourceinfo *si, int parc, char *parv[], const char *leveldesc)
+static void
+cs_xop(struct sourceinfo *si, int parc, char *parv[], const char *leveldesc)
 {
 	struct myentity *mt;
 	struct mychan *mc;
@@ -176,22 +177,26 @@ static void cs_xop(struct sourceinfo *si, int parc, char *parv[], const char *le
 	}
 }
 
-static void cs_cmd_sop(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_sop(struct sourceinfo *si, int parc, char *parv[])
 {
 	cs_xop(si, parc, parv, "SOP");
 }
 
-static void cs_cmd_aop(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_aop(struct sourceinfo *si, int parc, char *parv[])
 {
 	cs_xop(si, parc, parv, "AOP");
 }
 
-static void cs_cmd_vop(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_vop(struct sourceinfo *si, int parc, char *parv[])
 {
 	cs_xop(si, parc, parv, "VOP");
 }
 
-static void cs_cmd_hop(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_hop(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* Don't reject the command. This helps the rare case where
 	 * a network switches to a non-halfop ircd: users can still
@@ -204,7 +209,8 @@ static void cs_cmd_hop(struct sourceinfo *si, int parc, char *parv[])
 }
 
 
-static void cs_xop_do_add(struct sourceinfo *si, struct mychan *mc, struct myentity *mt, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags)
+static void
+cs_xop_do_add(struct sourceinfo *si, struct mychan *mc, struct myentity *mt, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags)
 {
 	struct chanacs *ca;
 	unsigned int addflags = level, removeflags = ~level;
@@ -339,7 +345,8 @@ static void cs_xop_do_add(struct sourceinfo *si, struct mychan *mc, struct myent
 	}
 }
 
-static void cs_xop_do_del(struct sourceinfo *si, struct mychan *mc, struct myentity *mt, char *target, unsigned int level, const char *leveldesc)
+static void
+cs_xop_do_del(struct sourceinfo *si, struct mychan *mc, struct myentity *mt, char *target, unsigned int level, const char *leveldesc)
 {
 	struct chanacs *ca;
 	hook_channel_acl_req_t req;
@@ -398,8 +405,8 @@ static void cs_xop_do_del(struct sourceinfo *si, struct mychan *mc, struct myent
 	verbose(mc, _("\2%s\2 removed \2%s\2 from the %s list."), get_source_name(si), mt->name, leveldesc);
 }
 
-
-static void cs_xop_do_list(struct sourceinfo *si, struct mychan *mc, unsigned int level, const char *leveldesc, bool operoverride)
+static void
+cs_xop_do_list(struct sourceinfo *si, struct mychan *mc, unsigned int level, const char *leveldesc, bool operoverride)
 {
 	struct chanacs *ca;
 	int i = 0;
@@ -428,7 +435,8 @@ static void cs_xop_do_list(struct sourceinfo *si, struct mychan *mc, unsigned in
 		logcommand(si, CMDLOG_GET, "LIST: \2%s\2 \2%s\2", mc->name, leveldesc);
 }
 
-static void cs_cmd_forcexop(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_forcexop(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	struct chanacs *ca;
