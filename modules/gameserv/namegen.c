@@ -29,7 +29,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("chanserv", &cmd_namegen);
 }
 
-static void command_namegen(struct sourceinfo *si, int parc, char *parv[])
+static void
+command_namegen(struct sourceinfo *si, int parc, char *parv[])
 {
 	unsigned int iter;
 	unsigned int amt = 20;
