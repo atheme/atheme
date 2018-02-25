@@ -23,7 +23,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("operserv", &os_compare);
 }
 
-static void os_cmd_compare(struct sourceinfo *si, int parc, char *parv[])
+static void
+os_cmd_compare(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *object1 = parv[0];
 	char *object2 = parv[1];
