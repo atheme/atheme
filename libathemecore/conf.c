@@ -117,7 +117,8 @@ mowgli_list_t conf_la_table;
 
 /* *INDENT-ON* */
 
-const char *get_conf_opts(void)
+const char *
+get_conf_opts(void)
 {
 	const struct crypt_impl *const ci_default = crypt_get_default_provider();
 
@@ -140,7 +141,8 @@ const char *get_conf_opts(void)
 	return opts;
 }
 
-bool conf_parse(const char *file)
+bool
+conf_parse(const char *file)
 {
 	mowgli_config_file_t *cfp;
 
@@ -166,7 +168,8 @@ bool conf_parse(const char *file)
 	return true;
 }
 
-void conf_init(void)
+void
+conf_init(void)
 {
 	hook_call_config_purge();
 
@@ -187,7 +190,8 @@ void conf_init(void)
 	}
 }
 
-void init_newconf(void)
+void
+init_newconf(void)
 {
 	/* First we set up the blocks. */
 	add_subblock_top_conf("SERVERINFO", &conf_si_table);
@@ -262,7 +266,8 @@ void init_newconf(void)
 	add_dupstr_conf_item("TRANSLATOR", &conf_la_table, 0, &me.language_translator, NULL);
 }
 
-static int c_loadmodule(mowgli_config_file_entry_t *ce)
+static int
+c_loadmodule(mowgli_config_file_entry_t *ce)
 {
 	char pathbuf[4096];
 	char *name;
@@ -291,7 +296,8 @@ static int c_loadmodule(mowgli_config_file_entry_t *ce)
 	}
 }
 
-static int c_uplink(mowgli_config_file_entry_t *ce)
+static int
+c_uplink(mowgli_config_file_entry_t *ce)
 {
 	char *name;
 	char *host = NULL, *vhost = NULL, *send_password = NULL, *receive_password = NULL;
@@ -394,7 +400,8 @@ static int c_uplink(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-static int c_operclass(mowgli_config_file_entry_t *ce)
+static int
+c_operclass(mowgli_config_file_entry_t *ce)
 {
 	char *name;
 	char *privs = NULL, *newprivs;
@@ -499,7 +506,8 @@ static int c_operclass(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-static int c_operator(mowgli_config_file_entry_t *ce)
+static int
+c_operator(mowgli_config_file_entry_t *ce)
 {
 	char *name;
 	char *password = NULL;
@@ -569,7 +577,8 @@ static int c_operator(mowgli_config_file_entry_t *ce)
  * to set the languagefile setting. So it's rather weird.
  *    --nenolod
  */
-static int c_language(mowgli_config_file_entry_t *ce)
+static int
+c_language(mowgli_config_file_entry_t *ce)
 {
 	if (ce->entries)
 	{
@@ -582,7 +591,8 @@ static int c_language(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-static int c_string(mowgli_config_file_entry_t *ce)
+static int
+c_string(mowgli_config_file_entry_t *ce)
 {
 	char *name, *trans = NULL;
 	mowgli_config_file_entry_t *topce;
@@ -622,7 +632,8 @@ static int c_string(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-static int c_si_loglevel(mowgli_config_file_entry_t *ce)
+static int
+c_si_loglevel(mowgli_config_file_entry_t *ce)
 {
 	mowgli_config_file_entry_t *flce;
 	int val;
@@ -653,7 +664,8 @@ static int c_si_loglevel(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-static int c_si_auth(mowgli_config_file_entry_t *ce)
+static int
+c_si_auth(mowgli_config_file_entry_t *ce)
 {
 	if (ce->vardata == NULL)
 	{
@@ -670,7 +682,8 @@ static int c_si_auth(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-static int c_si_casemapping(mowgli_config_file_entry_t *ce)
+static int
+c_si_casemapping(mowgli_config_file_entry_t *ce)
 {
 	if (ce->vardata == NULL)
 	{
@@ -687,7 +700,8 @@ static int c_si_casemapping(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-static int c_gi_immune_level(mowgli_config_file_entry_t *ce)
+static int
+c_gi_immune_level(mowgli_config_file_entry_t *ce)
 {
 	int val;
 
@@ -701,7 +715,8 @@ static int c_gi_immune_level(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-static int c_gi_uflags(mowgli_config_file_entry_t *ce)
+static int
+c_gi_uflags(mowgli_config_file_entry_t *ce)
 {
 	mowgli_config_file_entry_t *flce;
 
@@ -721,7 +736,8 @@ static int c_gi_uflags(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-static int c_gi_cflags(mowgli_config_file_entry_t *ce)
+static int
+c_gi_cflags(mowgli_config_file_entry_t *ce)
 {
 	mowgli_config_file_entry_t *flce;
 
@@ -744,7 +760,8 @@ static int c_gi_cflags(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-static int c_gi_exempts(mowgli_config_file_entry_t *ce)
+static int
+c_gi_exempts(mowgli_config_file_entry_t *ce)
 {
 	mowgli_config_file_entry_t *subce;
 	mowgli_node_t *n, *tn;
@@ -772,8 +789,8 @@ static int c_gi_exempts(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-
-static int c_logfile(mowgli_config_file_entry_t *ce)
+static int
+c_logfile(mowgli_config_file_entry_t *ce)
 {
 	mowgli_config_file_entry_t *flce;
 	unsigned int logval = 0;
@@ -803,7 +820,8 @@ static int c_logfile(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-static void copy_me(struct me *src, struct me *dst)
+static void
+copy_me(struct me *src, struct me *dst)
 {
 	dst->recontime = src->recontime;
 	dst->restarttime = src->restarttime;
@@ -820,7 +838,8 @@ static void copy_me(struct me *src, struct me *dst)
 	dst->auth = src->auth;
 }
 
-static void free_cstructs(struct me *mesrc)
+static void
+free_cstructs(struct me *mesrc)
 {
 	free(mesrc->netname);
 	free(mesrc->hidehostsuffix);
@@ -830,7 +849,8 @@ static void free_cstructs(struct me *mesrc)
 	free(mesrc->mta);
 }
 
-bool conf_rehash(void)
+bool
+conf_rehash(void)
 {
 	mowgli_config_file_t *cfp;
 
@@ -894,7 +914,8 @@ bool conf_rehash(void)
 	return true;
 }
 
-bool conf_check(void)
+bool
+conf_check(void)
 {
 	if (!me.name)
 	{
