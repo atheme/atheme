@@ -59,7 +59,8 @@ struct restored_mark
 	mowgli_node_t node;
 };
 
-static bool multimark_match(const struct mynick *mn, const void *arg)
+static bool
+multimark_match(const struct mynick *mn, const void *arg)
 {
 	const char *markpattern = (const char*)arg;
 	struct myuser *mu = mn->owner;
@@ -82,14 +83,16 @@ static bool multimark_match(const struct mynick *mn, const void *arg)
 	return false;
 }
 
-static bool is_marked(const struct mynick *mn, const void *arg)
+static bool
+is_marked(const struct mynick *mn, const void *arg)
 {
 	struct myuser *mu = mn->owner;
 
 	return is_user_marked(mu);
 }
 
-static bool is_user_marked(struct myuser *mu)
+static bool
+is_user_marked(struct myuser *mu)
 {
 	mowgli_list_t *l = multimark_list(mu);
 
@@ -179,7 +182,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	list_unregister("marked");
 }
 
-static inline mowgli_list_t *multimark_list(struct myuser *mu)
+static inline mowgli_list_t *
+multimark_list(struct myuser *mu)
 {
 	mowgli_list_t *l;
 
@@ -196,7 +200,8 @@ static inline mowgli_list_t *multimark_list(struct myuser *mu)
 	return l;
 }
 
-mowgli_list_t *restored_mark_list(const char *nick)
+mowgli_list_t *
+restored_mark_list(const char *nick)
 {
 	mowgli_list_t *l = mowgli_patricia_retrieve(restored_marks, nick);
 
@@ -209,7 +214,8 @@ mowgli_list_t *restored_mark_list(const char *nick)
 	return l;
 }
 
-static void write_multimark_db(struct database_handle *db)
+static void
+write_multimark_db(struct database_handle *db)
 {
 	mowgli_node_t *n;
 	struct myuser *mu;
@@ -276,7 +282,8 @@ static void write_multimark_db(struct database_handle *db)
 	}
 }
 
-static void db_h_mm(struct database_handle *db, const char *type)
+static void
+db_h_mm(struct database_handle *db, const char *type)
 {
 	struct myuser *mu;
 	mowgli_patricia_iteration_state_t state;
@@ -313,7 +320,8 @@ static void db_h_mm(struct database_handle *db, const char *type)
 	mowgli_node_add(mm, &mm->node, l);
 }
 
-static void db_h_rm(struct database_handle *db, const char *type)
+static void
+db_h_rm(struct database_handle *db, const char *type)
 {
 	struct myuser *mu;
 	mowgli_patricia_iteration_state_t state;
@@ -342,7 +350,8 @@ static void db_h_rm(struct database_handle *db, const char *type)
 }
 
 /* Copy old style marks */
-static void migrate_user(struct myuser *mu)
+static void
+migrate_user(struct myuser *mu)
 {
 	mowgli_list_t *l;
 	struct metadata *md;
@@ -408,7 +417,8 @@ static void migrate_user(struct myuser *mu)
 	metadata_delete(mu, "private:mark:timestamp");
 }
 
-static void migrate_all(struct sourceinfo *si)
+static void
+migrate_all(struct sourceinfo *si)
 {
 	struct myentity_iteration_state state;
 	struct myentity *mt;
@@ -424,7 +434,8 @@ static void migrate_all(struct sourceinfo *si)
 	command_success_nodata(si, _("Mark data migrated successfully."));
 }
 
-int get_multimark_max(struct myuser *mu)
+int
+get_multimark_max(struct myuser *mu)
 {
 	int max = 0;
 
@@ -445,7 +456,8 @@ int get_multimark_max(struct myuser *mu)
 	return max+1;
 }
 
-static void nick_ungroup_hook(hook_user_req_t *hdata)
+static void
+nick_ungroup_hook(hook_user_req_t *hdata)
 {
 	struct myuser *mu = hdata->mu;
 	mowgli_list_t *l = multimark_list(mu);
@@ -476,7 +488,8 @@ static void nick_ungroup_hook(hook_user_req_t *hdata)
 	}
 }
 
-static void account_drop_hook(struct myuser *mu)
+static void
+account_drop_hook(struct myuser *mu)
 {
 	// Let's turn old marks to new marks at this point,
 	// so that they are preserved.
@@ -509,7 +522,8 @@ static void account_drop_hook(struct myuser *mu)
 	}
 }
 
-static void account_register_hook(struct myuser *mu)
+static void
+account_register_hook(struct myuser *mu)
 {
 	mowgli_list_t *l;
 	mowgli_node_t *n, *tn;
@@ -549,7 +563,8 @@ static void account_register_hook(struct myuser *mu)
 	}
 }
 
-static void nick_group_hook(hook_user_req_t *hdata)
+static void
+nick_group_hook(hook_user_req_t *hdata)
 {
 	struct myuser *smu = hdata->si->smu;
 	mowgli_list_t *l;
@@ -604,7 +619,8 @@ static void nick_group_hook(hook_user_req_t *hdata)
 	}
 }
 
-static void show_multimark(hook_user_req_t *hdata)
+static void
+show_multimark(hook_user_req_t *hdata)
 {
 	mowgli_list_t *l;
 
@@ -735,7 +751,8 @@ static void show_multimark(hook_user_req_t *hdata)
 	}
 }
 
-static void show_multimark_noexist(hook_info_noexist_req_t *hdata)
+static void
+show_multimark_noexist(hook_info_noexist_req_t *hdata)
 {
 	const char *nick = hdata->nick;
 
@@ -799,7 +816,8 @@ static void show_multimark_noexist(hook_info_noexist_req_t *hdata)
 	}
 }
 
-static void multimark_needforce(hook_user_needforce_t *hdata)
+static void
+multimark_needforce(hook_user_needforce_t *hdata)
 {
 	struct myuser *mu;
 	bool marked;
@@ -810,7 +828,8 @@ static void multimark_needforce(hook_user_needforce_t *hdata)
 	hdata->allowed = !marked;
 }
 
-static void ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *action = parv[1];
