@@ -29,7 +29,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("chanserv", &cs_unban);
 }
 
-static void cs_cmd_ban(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_ban(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
 	char *target = parv[1];
@@ -102,7 +103,8 @@ static void cs_cmd_ban(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static void cs_cmd_unban(struct sourceinfo *si, int parc, char *parv[])
+static void
+cs_cmd_unban(struct sourceinfo *si, int parc, char *parv[])
 {
         const char *channel = parv[0];
         const char *target = parv[1];
