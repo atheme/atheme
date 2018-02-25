@@ -24,7 +24,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	service_named_unbind_command("nickserv", &ns_return);
 }
 
-static void ns_cmd_return(struct sourceinfo *si, int parc, char *parv[])
+static void
+ns_cmd_return(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *newmail = parv[1];
