@@ -7200,7 +7200,7 @@ _ACEOF
 fi
 done
 
-for ac_func in inet_ntop inet_pton execve flock fork getpid getrlimit gettimeofday strcasestr strtok_r umask
+for ac_func in execve flock fork getpid getrlimit gettimeofday strcasestr strtok_r
 do :
   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
 ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"

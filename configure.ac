@@ -86,7 +86,7 @@ AC_CHECK_HEADERS([link.h], [], [], [])
 
 dnl Checks for library functions.
 AC_CHECK_FUNCS([arc4random arc4random_buf arc4random_uniform explicit_bzero memset_s])
-AC_CHECK_FUNCS([inet_ntop inet_pton execve flock fork getpid getrlimit gettimeofday strcasestr strtok_r umask])
+AC_CHECK_FUNCS([execve flock fork getpid getrlimit gettimeofday strcasestr strtok_r])
 AC_CHECK_FUNC([socket], [], [AC_CHECK_LIB([socket], [socket])])
 AC_CHECK_FUNC([gethostbyname], [], [AC_CHECK_LIB([nsl], [gethostbyname])])
 HW_FUNC_SNPRINTF
