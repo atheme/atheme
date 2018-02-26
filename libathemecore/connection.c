@@ -98,7 +98,7 @@ connection_trampoline(mowgli_eventloop_t *eventloop, mowgli_eventloop_io_t *io,
  * side effects:
  *       a connection is added to the socket queue.
  */
-struct connection *
+struct connection * ATHEME_FATTR_MALLOC
 connection_add(const char *name, int fd, unsigned int flags,
 	void (*read_handler)(struct connection *),
 	void (*write_handler)(struct connection *))

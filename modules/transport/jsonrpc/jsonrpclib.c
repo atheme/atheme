@@ -142,7 +142,7 @@ jsonrpc_failure_string(void *conn, int code, const char *error, const char *id)
 	jsonrpc_send_data(conn, str->str);
 }
 
-char *
+char * ATHEME_FATTR_MALLOC
 jsonrpc_normalizeBuffer(const char *buf)
 {
 	char *newbuf;

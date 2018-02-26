@@ -14,7 +14,7 @@
 #define DB_ATHEME	2
 
 /* loads atheme.db */
-static void
+static void ATHEME_FATTR_NORETURN
 flatfile_db_load(const char *filename)
 {
 	struct myuser *mu, *founder = NULL;

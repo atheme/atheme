@@ -593,7 +593,7 @@ const unsigned int charattrs[] = {
  * regex_compile()
  *  Compile a regex of `pattern' and return it.
  */
-struct atheme_regex *
+struct atheme_regex * ATHEME_FATTR_MALLOC
 regex_create(char *pattern, int flags)
 {
 	static char errmsg[BUFSIZE];

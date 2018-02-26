@@ -517,7 +517,7 @@ servtree_update(void *dummy)
 	}
 }
 
-char *
+char * ATHEME_FATTR_MALLOC
 service_name(char *name)
 {
 	char *str;

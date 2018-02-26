@@ -30,7 +30,7 @@ struct atheme_table_cell
 /*
  * Creates a new table object. Use atheme_object_unref() to destroy it.
  */
-struct atheme_table *table_new(const char *fmt, ...) ATHEME_FATTR_PRINTF(1, 2);
+struct atheme_table *table_new(const char *fmt, ...) ATHEME_FATTR_MALLOC ATHEME_FATTR_PRINTF(1, 2);
 
 /*
  * Renders a table, each line going to callback().
@@ -45,6 +45,6 @@ void table_cell_associate(struct atheme_table_row *r, const char *name, const ch
 /*
  * Associates a row with a table.
  */
-struct atheme_table_row *table_row_new(struct atheme_table *t);
+struct atheme_table_row *table_row_new(struct atheme_table *t) ATHEME_FATTR_MALLOC;
 
 #endif /* !ATHEME_INC_TABLE_H */

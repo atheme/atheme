@@ -34,7 +34,7 @@
  * Note that this function *MUST* RETURN ZERO-INITIALIZED MEMORY
  * Parts of the codebase assume this is so and will malfunction otherwise
  */
-void *
+void * ATHEME_FATTR_MALLOC
 smalloc(const size_t len)
 {
 	return scalloc(1, len);
@@ -45,7 +45,7 @@ smalloc(const size_t len)
  * Note that this function *MUST* RETURN ZERO-INITIALIZED MEMORY
  * Parts of the codebase assume this is so and will malfunction otherwise
  */
-void *
+void * ATHEME_FATTR_MALLOC
 scalloc(const size_t num, const size_t len)
 {
 	void *const buf = calloc(num, len);
@@ -57,7 +57,7 @@ scalloc(const size_t num, const size_t len)
 }
 
 /* does realloc()'s job and dies if it fails */
-void *
+void * /* ATHEME_FATTR_MALLOC is not applicable -- may return same ptr */
 srealloc(void *const restrict ptr, const size_t len)
 {
 	void *const buf = realloc(ptr, len);
@@ -69,7 +69,7 @@ srealloc(void *const restrict ptr, const size_t len)
 }
 
 /* does strdup()'s job, only with the above memory functions */
-char *
+char * ATHEME_FATTR_MALLOC
 sstrdup(const char *const restrict ptr)
 {
 	if (! ptr)
@@ -83,7 +83,7 @@ sstrdup(const char *const restrict ptr)
 }
 
 /* does strndup()'s job, only with the above memory functions */
-char *
+char * ATHEME_FATTR_MALLOC
 sstrndup(const char *const restrict ptr, const size_t len)
 {
 	if (! ptr)

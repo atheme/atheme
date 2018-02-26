@@ -77,7 +77,7 @@ table_destroy(void *obj)
  * Side Effects:
  *     - none
  */
-struct atheme_table * ATHEME_FATTR_PRINTF(1, 2)
+struct atheme_table * ATHEME_FATTR_MALLOC ATHEME_FATTR_PRINTF(1, 2)
 table_new(const char *fmt, ...)
 {
 	va_list vl;
@@ -113,7 +113,7 @@ table_new(const char *fmt, ...)
  * Side Effects:
  *     - none
  */
-struct atheme_table_row *
+struct atheme_table_row * ATHEME_FATTR_MALLOC
 table_row_new(struct atheme_table *t)
 {
 	return_val_if_fail(t != NULL, NULL);

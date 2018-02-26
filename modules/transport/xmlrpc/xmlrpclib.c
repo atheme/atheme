@@ -153,7 +153,7 @@ xmlrpc_register_method(const char *name, XMLRPCMethodFunc func)
 
 /*************************************************************************/
 
-static XMLRPCCmd *
+static XMLRPCCmd * ATHEME_FATTR_MALLOC
 createXMLCommand(const char *name, XMLRPCMethodFunc func)
 {
 	XMLRPCCmd *const xml = smalloc(sizeof *xml);

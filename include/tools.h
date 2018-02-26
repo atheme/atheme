@@ -73,7 +73,7 @@ struct logfile
 extern char *log_path; /* contains path to default log. */
 extern int log_force;
 
-struct logfile *logfile_new(const char *log_path_, unsigned int log_mask);
+struct logfile *logfile_new(const char *log_path_, unsigned int log_mask) ATHEME_FATTR_MALLOC;
 void logfile_register(struct logfile *lf);
 void logfile_unregister(struct logfile *lf);
 
@@ -135,7 +135,7 @@ struct email_canonicalizer_item
 };
 
 /* misc string stuff */
-char *random_string(size_t sz);
+char *random_string(size_t sz) ATHEME_FATTR_MALLOC;
 const char *create_weak_challenge(struct sourceinfo *si, const char *name);
 void tb2sp(char *line);
 char *replace(char *s, int size, const char *old, const char *new);

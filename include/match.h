@@ -85,7 +85,7 @@ char *collapse(char *);
 #define AREGEX_PCRE	2 /* use libpcre engine */
 #define AREGEX_KLINE	4 /* XXX for rwatch, match kline */
 
-struct atheme_regex *regex_create(char *pattern, int flags);
+struct atheme_regex *regex_create(char *pattern, int flags) ATHEME_FATTR_MALLOC;
 char *regex_extract(char *pattern, char **pend, int *pflags);
 bool regex_match(struct atheme_regex *preg, char *string);
 bool regex_destroy(struct atheme_regex *preg);

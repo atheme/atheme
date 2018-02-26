@@ -83,7 +83,7 @@ struct connection
 
 struct connection *connection_add(const char *, int, unsigned int,
 	void(*)(struct connection *),
-	void(*)(struct connection *));
+	void(*)(struct connection *)) ATHEME_FATTR_MALLOC;
 struct connection *connection_open_tcp(char *, char *, unsigned int,
 	void(*)(struct connection *),
 	void(*)(struct connection *));

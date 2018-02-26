@@ -261,7 +261,7 @@ static const struct database_vtable opensex_vt = {
 	.commit_row = opensex_commit_row
 };
 
-static struct database_handle *
+static struct database_handle * ATHEME_FATTR_MALLOC
 opensex_db_open_read(const char *filename)
 {
 	struct database_handle *db;
@@ -303,7 +303,7 @@ opensex_db_open_read(const char *filename)
 	return db;
 }
 
-static struct database_handle *
+static struct database_handle * ATHEME_FATTR_MALLOC
 opensex_db_open_write(const char *filename)
 {
 	struct database_handle *db;

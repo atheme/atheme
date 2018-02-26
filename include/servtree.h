@@ -54,7 +54,7 @@ void service_delete(struct service *sptr);
 struct service *service_find_any(void);
 struct service *service_find(const char *name);
 struct service *service_find_nick(const char *nick);
-char *service_name(char *name);
+char *service_name(char *name) ATHEME_FATTR_MALLOC;
 void service_set_chanmsg(struct service *, bool);
 const char *service_resolve_alias(struct service *sptr, const char *context, const char *cmd);
 const char *service_set_access(struct service *sptr, const char *cmd, const char *access);

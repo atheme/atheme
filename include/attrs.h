@@ -11,6 +11,7 @@
 #if defined(__GNUC__) || defined(__INTEL_COMPILER)
 
 #define ATHEME_FATTR_DEPRECATED         __attribute__((deprecated))
+#define ATHEME_FATTR_MALLOC             __attribute__((malloc))
 #define ATHEME_FATTR_NORETURN           __attribute__((noreturn))
 #define ATHEME_FATTR_PRINTF(fmt, start) __attribute__((format(__printf__, fmt, start)))
 #define ATHEME_FATTR_SCANF(fmt, start)  __attribute__((format(__scanf__, fmt, start)))
@@ -24,6 +25,7 @@
 #else
 
 #define ATHEME_FATTR_DEPRECATED         /* No function attribute support */
+#define ATHEME_FATTR_MALLOC             /* No function attribute support */
 #define ATHEME_FATTR_NORETURN           /* No function attribute support */
 #define ATHEME_FATTR_PRINTF(fmt, start) /* No function attribute support */
 #define ATHEME_FATTR_SCANF(fmt, start)  /* No function attribute support */

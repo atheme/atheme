@@ -46,7 +46,7 @@ static char *groupmemo;
 
 /*****************************************************************************/
 
-static struct reg_request *
+static struct reg_request * ATHEME_FATTR_MALLOC
 csreq_create(const char *name, struct myentity *mt)
 {
 	return_val_if_fail(name != NULL, NULL);

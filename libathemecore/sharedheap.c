@@ -103,7 +103,7 @@ sharedheap_normalize_size(size_t size)
 	return normalized;
 }
 
-static struct sharedheap *
+static struct sharedheap * ATHEME_FATTR_MALLOC
 sharedheap_new(size_t size)
 {
 	struct sharedheap *const s = smalloc(sizeof *s);

@@ -39,7 +39,8 @@ struct perl_list
 	const char *package_name;
 };
 
-static inline struct perl_list * perl_list_create(mowgli_list_t *list, const char *package)
+static inline struct perl_list * ATHEME_FATTR_MALLOC
+perl_list_create(mowgli_list_t *list, const char *package)
 {
 	struct perl_list *ret = smalloc(sizeof(struct perl_list));
 	ret->list = list;

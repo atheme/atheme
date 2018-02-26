@@ -305,7 +305,7 @@ rem_request(struct reslist *request)
 /*
  * make_request - Create a DNS request record for the server.
  */
-static struct reslist *
+static struct reslist * ATHEME_FATTR_MALLOC
 make_request(struct res_dns_query *query)
 {
 	struct reslist *const request = smalloc(sizeof *request);
@@ -889,7 +889,7 @@ res_readreply(struct connection *cptr)
 		;
 }
 
-static struct res_dns_reply *
+static struct res_dns_reply * ATHEME_FATTR_MALLOC
 make_dnsreply(struct reslist *request)
 {
 	return_val_if_fail(request != 0, NULL);

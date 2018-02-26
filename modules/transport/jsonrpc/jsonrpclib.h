@@ -17,7 +17,7 @@ struct jsonrpc_sourceinfo
     char *id;
 };
 
-char *jsonrpc_normalizeBuffer(const char *buf);
+char *jsonrpc_normalizeBuffer(const char *buf) ATHEME_FATTR_MALLOC;
 
 jsonrpc_method_fn get_json_method(const char *method_name);
 

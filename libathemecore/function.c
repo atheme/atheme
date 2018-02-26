@@ -26,7 +26,7 @@
 /* This function uses smalloc() to allocate memory.
  * You MUST free() the result when you are done with it!
  */
-char *
+char * ATHEME_FATTR_MALLOC
 random_string(const size_t sz)
 {
 	static const char ch[62] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

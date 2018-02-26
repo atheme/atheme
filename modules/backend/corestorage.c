@@ -357,7 +357,7 @@ corestorage_db_save(struct database_handle *db)
 	}
 }
 
-static void
+static void ATHEME_FATTR_NORETURN
 corestorage_h_unknown(struct database_handle *db, const char *type)
 {
 	slog(LG_ERROR, "db %s:%d: unknown directive '%s'", db->file, db->line, type);
@@ -646,7 +646,7 @@ corestorage_h_mc(struct database_handle *db, const char *type)
 	}
 }
 
-static char *
+static char * ATHEME_FATTR_MALLOC
 convert_templates(const char *value)
 {
 	char *newvalue, *p;

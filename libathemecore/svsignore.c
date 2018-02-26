@@ -43,7 +43,7 @@ mowgli_list_t svs_ignore_list;
  * Bugs:
  *     - this function does not check for dupes
  */
-struct svsignore *
+struct svsignore * ATHEME_FATTR_MALLOC
 svsignore_add(const char *mask, const char *reason)
 {
         struct svsignore *const svsignore = smalloc(sizeof *svsignore);
