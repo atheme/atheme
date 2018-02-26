@@ -19,7 +19,6 @@
 #include "common.h"
 #include "object.h"
 #include "connection.h"
-#include "res.h"
 #include "hook.h"
 #include "hooktypes.h"
 #include "atheme_string.h"

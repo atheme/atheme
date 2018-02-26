@@ -25,8 +25,6 @@ union sockaddr_any
 #define SOCKADDR_IN(foo) 	(struct sockaddr_in	*) &(foo)
 #define SOCKADDR_IN6(foo) 	(struct sockaddr_in6	*) &(foo)
 
-#include "res.h"
-
 struct connection
 {
 	char name[HOSTLEN + 1];

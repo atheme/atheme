@@ -238,8 +238,6 @@ atheme_setup(void)
         hooks_init();
 	db_init();
 
-	init_resolver();
-
 	translation_init();
 #ifdef ENABLE_NLS
 	language_init();

@@ -47,8 +47,6 @@ INCLUDES = \
 	phandler.h		\
 	pmodule.h		\
 	privs.h			\
-	res.h			\
-	reslib.h		\
 	sasl.h			\
 	serno.h			\
 	servers.h		\

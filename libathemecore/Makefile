@@ -44,8 +44,6 @@ SRCS =					\
 	privs.c				\
 	ptasks.c			\
 	$(QRCODE_COND_C)		\
-	res.c				\
-	reslib.c			\
 	send.c				\
 	servers.c			\
 	services.c			\

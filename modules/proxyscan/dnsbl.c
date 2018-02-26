@@ -57,6 +57,8 @@
 #include "atheme.h"
 #include "conf.h"
 
+#define IRCD_RES_HOSTLEN 255
+
 static mowgli_list_t blacklist_list = { NULL, NULL, 0 };
 static mowgli_patricia_t **os_set_cmdtree = NULL;
 
@@ -93,7 +95,7 @@ struct Blacklist {
 struct BlacklistClient {
 	struct Blacklist *blacklist;
 	struct user *u;
-	struct res_dns_query dns_query;
+	mowgli_dns_query_t dns_query;
 	mowgli_node_t node;
 };
 
@@ -121,6 +123,8 @@ static void lookup_blacklists(struct user *u);
 static struct command os_set_dnsblaction = { "DNSBLACTION", N_("Changes what happens to a user when they hit a DNSBL."), PRIV_USER_ADMIN, 1, os_cmd_set_dnsblaction, { .path = "proxyscan/set_dnsblaction" } };
 static struct command ps_dnsblexempt = { "DNSBLEXEMPT", N_("Manage the list of IP's exempt from DNSBL checking."), PRIV_USER_ADMIN, 3, ps_cmd_dnsblexempt, { .path = "proxyscan/dnsblexempt" } };
 static struct command ps_dnsblscan = { "DNSBLSCAN", N_("Manually scan if a user is in a DNSBL."), PRIV_USER_ADMIN, 1, ps_cmd_dnsblscan, { .path = "proxyscan/dnsblscan" } };
+
+static mowgli_dns_t *dns_base = NULL;
 
 static inline mowgli_list_t *
 dnsbl_queries(struct user *u)
@@ -313,7 +317,7 @@ find_blacklist(char *name)
 }
 
 static void
-blacklist_dns_callback(void *vptr, struct res_dns_reply *reply)
+blacklist_dns_callback(mowgli_dns_reply_t *reply, int result, void *vptr)
 {
 	struct BlacklistClient *blcptr = (struct BlacklistClient *) vptr;
 	int listed = 0;
@@ -334,8 +338,8 @@ blacklist_dns_callback(void *vptr, struct res_dns_reply *reply)
 	if (reply != NULL)
 	{
 		/* only accept 127.x.y.z as a listing */
-		if (reply->addr.saddr.sa.sa_family == AF_INET &&
-				!memcmp(&((struct sockaddr_in *)&reply->addr)->sin_addr, "\177", 1))
+		if (reply->addr.addr.ss_family == AF_INET &&
+				!memcmp(&((struct sockaddr_in *)&reply->addr.addr)->sin_addr, "\177", 1))
 			listed++;
 		else if (blcptr->blacklist->lastwarning + 3600 < CURRTIME)
 		{
@@ -381,7 +385,7 @@ initiate_blacklist_dnsquery(struct Blacklist *blptr, struct user *u)
 	/* becomes 2.0.0.127.torbl.ahbl.org or whatever */
 	snprintf(buf, sizeof buf, "%d.%d.%d.%d.%s", ip[0], ip[1], ip[2], ip[3], blptr->host);
 
-	gethost_byname_type(buf, &blcptr->dns_query, T_A);
+	mowgli_dns_gethost_byname(dns_base, buf, &blcptr->dns_query, MOWGLI_DNS_T_A);
 
 	l = dnsbl_queries(u);
 	mowgli_node_add(blcptr, &blcptr->node, l);
@@ -554,7 +558,7 @@ abort_blacklist_queries(struct user *u)
 	{
 		struct BlacklistClient *blcptr = n->data;
 
-		delete_resolver_queries(&blcptr->dns_query);
+		mowgli_dns_delete_query(dns_base, &blcptr->dns_query);
 		mowgli_node_delete(n, l);
 		free(blcptr);
 	}
@@ -622,7 +626,14 @@ mod_init(struct module *const restrict m)
 
 	if (!module_find_published("backend/opensex"))
 	{
-		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
+		(void) slog(LG_ERROR, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	if (! (dns_base = mowgli_dns_create(base_eventloop, MOWGLI_DNS_TYPE_ASYNC)))
+	{
+		(void) slog(LG_ERROR, "%s: failed to create Mowgli DNS resolver object", m->name);
 		m->mflags |= MODTYPE_FAIL;
 		return;
 	}
@@ -657,6 +668,8 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
+	mowgli_dns_destroy(dns_base);
+
 	struct service *proxyscan;
 
 	hook_del_db_write(write_dnsbl_exempt_db);
