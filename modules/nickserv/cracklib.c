@@ -65,7 +65,7 @@ cracklib_hook(hook_user_register_check_t *hdata)
 	}
 }
 
-static void osinfo_hook(sourceinfo_t *si)
+static void osinfo_hook(struct sourceinfo *si)
 {
 	return_if_fail(si != NULL);
 

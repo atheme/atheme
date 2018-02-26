@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_status(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_status = { "STATUS", N_("Displays your status in services."),
                          AC_NONE, 1, cs_cmd_status, { .path = "cservice/status" } };
@@ -24,7 +24,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cs_status);
 }
 
-static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_status(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
 

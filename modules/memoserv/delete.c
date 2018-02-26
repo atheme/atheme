@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[]);
+static void ms_cmd_delete(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ms_delete = { "DELETE", N_("Deletes memos."),
                         AC_AUTHENTICATED, 1, ms_cmd_delete, { .path = "memoserv/delete" } };
@@ -28,7 +28,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("memoserv", &ms_del);
 }
 
-static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
+static void ms_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* Misc structs etc */
 	mowgli_node_t *n, *tn;

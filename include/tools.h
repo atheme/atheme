@@ -119,7 +119,7 @@ extern bool log_debug_enabled(void);
 extern void log_master_set_mask(unsigned int mask);
 extern logfile_t *logfile_find_mask(unsigned int log_mask);
 extern void slog(unsigned int level, const char *fmt, ...) ATHEME_FATTR_PRINTF(2, 3);
-extern void logcommand(sourceinfo_t *si, int level, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
+extern void logcommand(struct sourceinfo *si, int level, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
 extern void logcommand_user(struct service *svs, user_t *source, int level, const char *fmt, ...) ATHEME_FATTR_PRINTF(4, 5);
 extern void logcommand_external(struct service *svs, const char *type, connection_t *source, const char *sourcedesc, myuser_t *login, int level, const char *fmt, ...) ATHEME_FATTR_PRINTF(7, 8);
 
@@ -135,7 +135,7 @@ typedef struct {
 
 /* misc string stuff */
 extern char *random_string(size_t sz);
-extern const char *create_weak_challenge(sourceinfo_t *si, const char *name);
+extern const char *create_weak_challenge(struct sourceinfo *si, const char *name);
 extern void tb2sp(char *line);
 extern char *replace(char *s, int size, const char *old, const char *new);
 extern const char *number_to_string(int num);

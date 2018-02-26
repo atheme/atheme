@@ -766,7 +766,7 @@ static void  inspircd_topiclock_sts(struct channel *c)
 	channel_metadata_sts(c, "topiclock", (mc->flags & MC_TOPICLOCK ? "1" : ""));
 }
 
-static void m_topic(sourceinfo_t *si, int parc, char *parv[])
+static void m_topic(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c = channel_find(parv[0]);
 
@@ -776,7 +776,7 @@ static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 	handle_topic_from(si, c, si->su->nick, time(NULL), parv[1]);
 }
 
-static void m_ftopic(sourceinfo_t *si, int parc, char *parv[])
+static void m_ftopic(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c = channel_find(parv[0]);
 	time_t ts = atol(parv[1]);
@@ -793,7 +793,7 @@ static void m_ftopic(sourceinfo_t *si, int parc, char *parv[])
 	handle_topic_from(si, c, parv[2], ts, parv[3]);
 }
 
-static void m_ping(sourceinfo_t *si, int parc, char *parv[])
+static void m_ping(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* reply to PING's */
 	if (parc == 1)
@@ -802,7 +802,7 @@ static void m_ping(sourceinfo_t *si, int parc, char *parv[])
 		sts(":%s PONG %s :%s", me.numeric, parv[1], parv[0]);
 }
 
-static void m_pong(sourceinfo_t *si, int parc, char *parv[])
+static void m_pong(struct sourceinfo *si, int parc, char *parv[])
 {
 	server_t *s;
 
@@ -842,7 +842,7 @@ static void m_pong(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void m_privmsg(sourceinfo_t *si, int parc, char *parv[])
+static void m_privmsg(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (parc != 2)
 		return;
@@ -850,7 +850,7 @@ static void m_privmsg(sourceinfo_t *si, int parc, char *parv[])
 	handle_message(si, parv[0], false, parv[1]);
 }
 
-static void m_notice(sourceinfo_t *si, int parc, char *parv[])
+static void m_notice(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (!me.recvsvr)
 	{
@@ -890,7 +890,7 @@ static void map_a_prefix(char prefix, char* prefixandnick, unsigned int *nlen)
 	}
 }
 
-static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
+static void m_fjoin(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* :08X FJOIN #flaps 1234 +nt vh,0F8XXXXN ,08XGH75C ,001CCCC3 aq,00ABBBB1 */
 	struct channel *c;
@@ -1017,13 +1017,13 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 		channel_delete(c);
 }
 
-static void m_part(sourceinfo_t *si, int parc, char *parv[])
+static void m_part(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_part(): user left channel: %s -> %s", si->su->nick, parv[0]);
 	chanuser_delete(channel_find(parv[0]), si->su);
 }
 
-static void m_uid(sourceinfo_t *si, int parc, char *parv[])
+static void m_uid(struct sourceinfo *si, int parc, char *parv[])
 {
 	user_t *u;
 
@@ -1048,7 +1048,7 @@ static void m_uid(sourceinfo_t *si, int parc, char *parv[])
 		handle_nickchange(u);
 }
 
-static void m_nick(sourceinfo_t *si, int parc, char *parv[])
+static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
@@ -1062,7 +1062,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		handle_nickchange(si->su);
 }
 
-static void m_quit(sourceinfo_t *si, int parc, char *parv[])
+static void m_quit(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
 
@@ -1109,7 +1109,7 @@ static void inspircd_user_mode(user_t *u, const char *modes)
 		}
 }
 
-static void m_mode(sourceinfo_t *si, int parc, char *parv[])
+static void m_mode(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (*parv[0] == '#')
 		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
@@ -1117,7 +1117,7 @@ static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 		inspircd_user_mode(user_find(parv[0]), parv[1]);
 }
 
-static void m_fmode(sourceinfo_t *si, int parc, char *parv[])
+static void m_fmode(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c;
 	time_t ts;
@@ -1144,7 +1144,7 @@ static void m_fmode(sourceinfo_t *si, int parc, char *parv[])
 		inspircd_user_mode(user_find(parv[0]), parv[2]);
 }
 
-static void m_kick(sourceinfo_t *si, int parc, char *parv[])
+static void m_kick(struct sourceinfo *si, int parc, char *parv[])
 {
 	user_t *u = user_find(parv[1]);
 	struct channel *c = channel_find(parv[0]);
@@ -1180,18 +1180,18 @@ static void m_kick(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void m_kill(sourceinfo_t *si, int parc, char *parv[])
+static void m_kill(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_kill(si, parv[0], parc > 1 ? parv[1] : "<No reason given>");
 }
 
-static void m_squit(sourceinfo_t *si, int parc, char *parv[])
+static void m_squit(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_squit(): server leaving: %s", parv[0]);
 	server_delete(parv[0]);
 }
 
-static void m_server(sourceinfo_t *si, int parc, char *parv[])
+static void m_server(struct sourceinfo *si, int parc, char *parv[])
 {
 	server_t *s;
 	char ver[BUFSIZE];
@@ -1218,32 +1218,32 @@ static inline void solicit_pongs(server_t *s)
 		solicit_pongs(n->data);
 }
 
-static void m_endburst(sourceinfo_t *si, int parc, char *parv[])
+static void m_endburst(struct sourceinfo *si, int parc, char *parv[])
 {
 	solicit_pongs(si->s);
 }
 
-static void m_stats(sourceinfo_t *si, int parc, char *parv[])
+static void m_stats(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_stats(si->su, parv[0][0]);
 }
 
-static void m_motd(sourceinfo_t *si, int parc, char *parv[])
+static void m_motd(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_motd(si->su);
 }
 
-static void m_admin(sourceinfo_t *si, int parc, char *parv[])
+static void m_admin(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_admin(si->su);
 }
 
-static void m_away(sourceinfo_t *si, int parc, char *parv[])
+static void m_away(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_away(si->su, parc >= 1 ? parv[parc-1] : NULL);
 }
 
-static void m_join(sourceinfo_t *si, int parc, char *parv[])
+static void m_join(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c;
 
@@ -1258,7 +1258,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 	chanuser_add(c, si->su->nick);
 }
 
-static void m_save(sourceinfo_t *si, int parc, char *parv[])
+static void m_save(struct sourceinfo *si, int parc, char *parv[])
 {
 	user_t *u = user_find(parv[0]);
 	if (!u)
@@ -1293,12 +1293,12 @@ static void m_save(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void m_error(sourceinfo_t *si, int parc, char *parv[])
+static void m_error(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_INFO, "m_error(): error from server: %s", parv[0]);
 }
 
-static void m_idle(sourceinfo_t *si, int parc, char *parv[])
+static void m_idle(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (parc == 1 && si->su != NULL)
 	{
@@ -1310,7 +1310,7 @@ static void m_idle(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void m_opertype(sourceinfo_t *si, int parc, char *parv[])
+static void m_opertype(struct sourceinfo *si, int parc, char *parv[])
 {
 	/*
 	 * Hope this works.. InspIRCd OPERTYPE means user is an oper, mark them so
@@ -1320,19 +1320,19 @@ static void m_opertype(sourceinfo_t *si, int parc, char *parv[])
 	user_mode(si->su, "+o");
 }
 
-static void m_fident(sourceinfo_t *si, int parc, char *parv[])
+static void m_fident(struct sourceinfo *si, int parc, char *parv[])
 {
 	strshare_unref(si->su->user);
 	si->su->user = strshare_get(parv[0]);
 }
 
-static void m_fhost(sourceinfo_t *si, int parc, char *parv[])
+static void m_fhost(struct sourceinfo *si, int parc, char *parv[])
 {
 	strshare_unref(si->su->vhost);
 	si->su->vhost = strshare_get(parv[0]);
 }
 
-static void m_encap(sourceinfo_t *si, int parc, char *parv[])
+static void m_encap(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (!irccasecmp(parv[1], "SASL"))
 	{
@@ -1399,7 +1399,7 @@ static void verify_topiclock(struct channel *c, bool state)
  * :services.barafranca METADATA w00t accountname :w00t
  * :services.barafranca METADATA #moo 1274712456 mlock :nt
  */
-static void m_metadata(sourceinfo_t *si, int parc, char *parv[])
+static void m_metadata(struct sourceinfo *si, int parc, char *parv[])
 {
 	user_t *u;
 	struct channel *c;
@@ -1479,7 +1479,7 @@ static void m_metadata(sourceinfo_t *si, int parc, char *parv[])
  *  the server to be squit as a local connection, which should then close it's connection and send SQUIT back
  *  to the rest of the network.
  */
-static void m_rsquit(sourceinfo_t *si, int parc, char *parv[])
+static void m_rsquit(struct sourceinfo *si, int parc, char *parv[])
 {
 	sts(":%s SQUIT %s :Jupe removed by %s", me.numeric, parv[0], si->su->nick);
 }
@@ -1493,7 +1493,7 @@ static void channel_drop(mychan_t *mc)
 	channel_metadata_sts(mc->chan, "topiclock", "");
 }
 
-static void m_capab(sourceinfo_t *si, int parc, char *parv[])
+static void m_capab(struct sourceinfo *si, int parc, char *parv[])
 {
 	int i, varc;
 	char *varv[256];

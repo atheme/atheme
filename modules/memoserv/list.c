@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
+static void ms_cmd_list(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ms_list = { "LIST", N_(N_("Lists all of your memos.")),
                         AC_AUTHENTICATED, 0, ms_cmd_list, { .path = "memoserv/list" } };
@@ -24,7 +24,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("memoserv", &ms_list);
 }
 
-static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])
+static void ms_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* Misc structs etc */
 	struct mymemo *memo;

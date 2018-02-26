@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void os_cmd_modunload(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_modunload(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_modunload = { "MODUNLOAD", N_("Unloads a module."), PRIV_ADMIN, 20, os_cmd_modunload, { .path = "oservice/modunload" } };
 
@@ -25,7 +25,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("operserv", &os_modunload);
 }
 
-static void os_cmd_modunload(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_modunload(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *module;
 	int i;

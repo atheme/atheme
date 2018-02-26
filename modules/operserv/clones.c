@@ -14,14 +14,14 @@ static void clones_newuser(hook_user_nick_t *data);
 static void clones_userquit(user_t *u);
 static void clones_configready(void *unused);
 
-static void os_cmd_clones(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_clones_kline(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_clones_list(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_clones_delexempt(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_clones_setexempt(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_clones_listexempt(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_clones_duration(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_clones(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_clones_kline(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_clones_list(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_clones_addexempt(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_clones_delexempt(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_clones_setexempt(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_clones_listexempt(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_clones_duration(struct sourceinfo *si, int parc, char *parv[]);
 
 static void write_exemptdb(database_handle_t *db);
 
@@ -320,7 +320,7 @@ static cexcept_t * find_exempt(const char *ip)
 	return 0;
 }
 
-static void os_cmd_clones(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_clones(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct command *c;
 	char *cmd = parv[0];
@@ -343,7 +343,7 @@ static void os_cmd_clones(sourceinfo_t *si, int parc, char *parv[])
 	command_exec(si->service, si, c, parc + 1, parv + 1);
 }
 
-static void os_cmd_clones_kline(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_clones_kline(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *arg = parv[0];
 
@@ -402,7 +402,7 @@ static void os_cmd_clones_kline(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void os_cmd_clones_list(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_clones_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	hostentry_t *he;
 	int k = 0;
@@ -425,7 +425,7 @@ static void os_cmd_clones_list(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "CLONES:LIST");
 }
 
-static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_clones_addexempt(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
 	char *ip = parv[0];
@@ -568,7 +568,7 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "CLONES:ADDEXEMPT: \2%s\2 \2%d\2 (reason: \2%s\2) (duration: \2%s\2)", ip, clones, c->reason, timediff(duration));
 }
 
-static void os_cmd_clones_delexempt(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_clones_delexempt(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n, *tn;
 	char *arg = parv[0];
@@ -609,7 +609,7 @@ static void os_cmd_clones_delexempt(sourceinfo_t *si, int parc, char *parv[])
 }
 
 
-static void os_cmd_clones_setexempt(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_clones_setexempt(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n, *tn;
 	char *ip = parv[0];
@@ -769,7 +769,7 @@ static void os_cmd_clones_setexempt(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void os_cmd_clones_duration(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_clones_duration(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *s = parv[0];
 	long duration;
@@ -804,7 +804,7 @@ static void os_cmd_clones_duration(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Clone ban duration set to \2%s\2 (%ld seconds)"), parv[0], kline_duration);
 }
 
-static void os_cmd_clones_listexempt(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_clones_listexempt(struct sourceinfo *si, int parc, char *parv[])
 {
 
 	command_success_nodata(si, _("DEFAULT - allowed limit %d, warn on %d"), clones_allowed, clones_warn);

@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_why(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_why = { "WHY", N_("Explains channel access logic."),
 		     AC_NONE, 2, cs_cmd_why, { .path = "cservice/why" } };
@@ -24,7 +24,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cs_why);
 }
 
-static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_why(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *chan = parv[0];
 	const char *targ = parv[1];

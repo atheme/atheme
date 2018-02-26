@@ -8,8 +8,8 @@
 #include "atheme.h"
 #include "chanserv.h"
 
-static void cs_cmd_protect(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_cmd_deprotect(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_protect(struct sourceinfo *si, int parc, char *parv[]);
+static void cs_cmd_deprotect(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_protect = { "PROTECT", N_("Gives the channel protection flag to a user."),
                         AC_NONE, 2, cs_cmd_protect, { .path = "cservice/protect" } };
@@ -39,7 +39,7 @@ mod_deinit(const module_unload_intent_t intent)
 
 static mowgli_list_t protect_actions;
 
-static void cmd_protect(sourceinfo_t *si, bool protecting, int parc, char *parv[])
+static void cmd_protect(struct sourceinfo *si, bool protecting, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	char *nick = parv[1];
@@ -127,7 +127,7 @@ static void cmd_protect(sourceinfo_t *si, bool protecting, int parc, char *parv[
 	prefix_action_clear(&protect_actions);
 }
 
-static void cs_cmd_protect(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_protect(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (!parv[0])
 	{
@@ -139,7 +139,7 @@ static void cs_cmd_protect(sourceinfo_t *si, int parc, char *parv[])
 	cmd_protect(si, true, parc, parv);
 }
 
-static void cs_cmd_deprotect(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_deprotect(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (!parv[0])
 	{

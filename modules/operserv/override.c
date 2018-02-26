@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_override(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_override = { "OVERRIDE", N_("Perform a transaction on another user's account"), PRIV_OVERRIDE, 4, os_cmd_override, { .path = "oservice/override" } };
 
@@ -24,11 +24,11 @@ mod_deinit(const module_unload_intent_t intent)
 }
 
 typedef struct {
-	sourceinfo_t si;
-	sourceinfo_t *parent_si;
+	struct sourceinfo si;
+	struct sourceinfo *parent_si;
 } cooked_sourceinfo_t;
 
-static void override_command_fail(sourceinfo_t *si, enum cmd_faultcode code, const char *message)
+static void override_command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *message)
 {
 	cooked_sourceinfo_t *csi = (cooked_sourceinfo_t *) si;
 
@@ -37,7 +37,7 @@ static void override_command_fail(sourceinfo_t *si, enum cmd_faultcode code, con
 	command_fail(csi->parent_si, code, "%s", message);
 }
 
-static void override_command_success_nodata(sourceinfo_t *si, const char *message)
+static void override_command_success_nodata(struct sourceinfo *si, const char *message)
 {
 	cooked_sourceinfo_t *csi = (cooked_sourceinfo_t *) si;
 
@@ -46,7 +46,7 @@ static void override_command_success_nodata(sourceinfo_t *si, const char *messag
 	command_success_nodata(csi->parent_si, "%s", message);
 }
 
-static void override_command_success_string(sourceinfo_t *si, const char *result, const char *message)
+static void override_command_success_string(struct sourceinfo *si, const char *result, const char *message)
 {
 	cooked_sourceinfo_t *csi = (cooked_sourceinfo_t *) si;
 
@@ -55,7 +55,7 @@ static void override_command_success_string(sourceinfo_t *si, const char *result
 	command_success_string(csi->parent_si, result, "%s", message);
 }
 
-static const char *override_get_source_name(sourceinfo_t *si)
+static const char *override_get_source_name(struct sourceinfo *si)
 {
 	cooked_sourceinfo_t *csi = (cooked_sourceinfo_t *) si;
 
@@ -64,7 +64,7 @@ static const char *override_get_source_name(sourceinfo_t *si)
 	return get_source_name(csi->parent_si);
 }
 
-static const char *override_get_source_mask(sourceinfo_t *si)
+static const char *override_get_source_mask(struct sourceinfo *si)
 {
 	cooked_sourceinfo_t *csi = (cooked_sourceinfo_t *) si;
 
@@ -73,7 +73,7 @@ static const char *override_get_source_mask(sourceinfo_t *si)
 	return get_source_mask(csi->parent_si);
 }
 
-static const char *override_get_oper_name(sourceinfo_t *si)
+static const char *override_get_oper_name(struct sourceinfo *si)
 {
 	cooked_sourceinfo_t *csi = (cooked_sourceinfo_t *) si;
 
@@ -82,7 +82,7 @@ static const char *override_get_oper_name(sourceinfo_t *si)
 	return get_oper_name(csi->parent_si);
 }
 
-static const char *override_get_storage_oper_name(sourceinfo_t *si)
+static const char *override_get_storage_oper_name(struct sourceinfo *si)
 {
 	cooked_sourceinfo_t *csi = (cooked_sourceinfo_t *) si;
 
@@ -146,7 +146,7 @@ static int text_to_parv(char *text, int maxparc, char **parv)
 	return count;
 }
 
-static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_override(struct sourceinfo *si, int parc, char *parv[])
 {
 	cooked_sourceinfo_t *o_si;
 	myuser_t *mu = NULL;

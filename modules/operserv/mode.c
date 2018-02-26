@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void os_cmd_mode(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_mode(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_mode = { "MODE", N_("Changes modes on channels."), PRIV_OMODE, 2, os_cmd_mode, { .path = "oservice/mode" } };
 
@@ -23,7 +23,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("operserv", &os_mode);
 }
 
-static void os_cmd_mode(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_mode(struct sourceinfo *si, int parc, char *parv[])
 {
         char *channel = parv[0];
 	char *mode = parv[1];

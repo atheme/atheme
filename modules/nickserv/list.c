@@ -10,7 +10,7 @@
 #include "atheme.h"
 #include "list_common.h"
 
-static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_list(struct sourceinfo *si, int parc, char *parv[]);
 static mowgli_patricia_t *list_params;
 
 struct command ns_list = { "LIST", N_("Lists nicknames registered matching a given pattern."), PRIV_USER_AUSPEX, 10, ns_cmd_list, { .path = "nickserv/list" } };
@@ -195,7 +195,7 @@ static void build_criteriastr(char *buf, int parc, char *parv[])
 	}
 }
 
-static void list_one(sourceinfo_t *si, myuser_t *mu, mynick_t *mn)
+static void list_one(struct sourceinfo *si, myuser_t *mu, mynick_t *mn)
 {
 	char buf[BUFSIZE];
 
@@ -234,7 +234,7 @@ static void list_one(sourceinfo_t *si, myuser_t *mu, mynick_t *mn)
 		command_success_nodata(si, "- %s (%s) (%s) %s", mn->nick, mu->email, entity(mu)->name, buf);
 }
 
-static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	char criteriastr[BUFSIZE];
 

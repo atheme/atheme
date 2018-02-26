@@ -88,7 +88,7 @@ void phase_buildworld(void)
 	slog(LG_INFO, "world created in %d msec", tv2ms(&te));
 }
 
-static void m_pong(sourceinfo_t *si, int parc, char *parv[])
+static void m_pong(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct timeval te;
 

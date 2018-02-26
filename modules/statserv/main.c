@@ -9,7 +9,7 @@
 
 struct service *statsvs;
 
-static void ss_cmd_help(sourceinfo_t * si, int parc, char *parv[]);
+static void ss_cmd_help(struct sourceinfo * si, int parc, char *parv[]);
 
 struct command ss_help =
 { "HELP", N_("Displays contextual help information."), AC_NONE, 2, ss_cmd_help, {.path = "help"}
@@ -30,7 +30,7 @@ mod_deinit(const module_unload_intent_t intent)
         service_delete(statsvs);
 }
 
-void ss_cmd_help(sourceinfo_t * si, int parc, char *parv[])
+void ss_cmd_help(struct sourceinfo * si, int parc, char *parv[])
 {
     char *command = parv[0];
 

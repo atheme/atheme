@@ -85,7 +85,7 @@ qrcode_scanline(char *buffer, size_t bufsize, unsigned char *row, size_t width)
 }
 
 void
-command_success_qrcode(sourceinfo_t *si, const char *data)
+command_success_qrcode(struct sourceinfo *si, const char *data)
 {
 	char *buf;
 	QRcode *code;

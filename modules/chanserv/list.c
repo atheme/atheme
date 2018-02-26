@@ -8,7 +8,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_list(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_list = { "LIST", N_("Lists channels registered matching a given pattern."), PRIV_CHAN_AUSPEX, 10, cs_cmd_list, { .path = "cservice/list" } };
 
@@ -129,7 +129,7 @@ static void build_criteriastr(char *buf, int parc, char *parv[])
 	}
 }
 
-static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	metadata_t *md, *mdclosed;

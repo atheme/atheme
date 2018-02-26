@@ -29,11 +29,11 @@ mowgli_heap_t *service_heap;
 
 void servtree_update(void *dummy);
 
-static void dummy_handler(sourceinfo_t *si, int parc, char **parv)
+static void dummy_handler(struct sourceinfo *si, int parc, char **parv)
 {
 }
 
-static void service_default_handler(sourceinfo_t *si, int parc, char *parv[])
+static void service_default_handler(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *cmd;
         char *text;
@@ -272,7 +272,7 @@ static int conf_service(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-struct service *service_add(const char *name, void (*handler)(sourceinfo_t *si, int parc, char *parv[]))
+struct service *service_add(const char *name, void (*handler)(struct sourceinfo *si, int parc, char *parv[]))
 {
 	struct service *sptr;
 	struct ConfTable *subblock;
@@ -374,7 +374,7 @@ void service_delete(struct service *sptr)
 	mowgli_heap_free(service_heap, sptr);
 }
 
-struct service *service_add_static(const char *name, const char *user, const char *host, const char *real, void (*handler)(sourceinfo_t *si, int parc, char *parv[]), struct service *logtarget)
+struct service *service_add_static(const char *name, const char *user, const char *host, const char *real, void (*handler)(struct sourceinfo *si, int parc, char *parv[]), struct service *logtarget)
 {
 	struct service *sptr;
 	char internal_name[NICKLEN + 10];

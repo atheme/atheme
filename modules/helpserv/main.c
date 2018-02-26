@@ -9,12 +9,12 @@
 
 struct service *helpserv;
 
-static void helpserv_cmd_help(sourceinfo_t *si, const int parc, char *parv[]);
+static void helpserv_cmd_help(struct sourceinfo *si, const int parc, char *parv[]);
 
 struct command helpserv_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, helpserv_cmd_help, { .path = "help" } };
 
 /* HELP <command> [params] */
-void helpserv_cmd_help(sourceinfo_t *si, int parc, char *parv[])
+void helpserv_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *command = parv[0];
 

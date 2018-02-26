@@ -11,7 +11,7 @@
 unsigned int ratelimit_count = 0;
 time_t ratelimit_firsttime = 0;
 
-static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_register(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_register = { "REGISTER", N_("Registers a channel."),
                            AC_AUTHENTICATED, 3, cs_cmd_register, { .path = "cservice/register" } };
@@ -28,7 +28,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cs_register);
 }
 
-static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c;
 	struct chanuser *cu;

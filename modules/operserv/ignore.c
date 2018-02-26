@@ -7,11 +7,11 @@
 
 #include "atheme.h"
 
-static void os_cmd_ignore(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_ignore(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_ignore_add(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_ignore_del(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_ignore_list(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_ignore_clear(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_ignore = { "IGNORE", N_("Ignore a mask from services."), PRIV_ADMIN, 3, os_cmd_ignore, { .path = "oservice/ignore" } };
 struct command os_ignore_add = { "ADD", N_("Add services ignore"), PRIV_ADMIN, 2, os_cmd_ignore_add, { .path = "" } };
@@ -55,7 +55,7 @@ mod_deinit(const module_unload_intent_t intent)
 	mowgli_patricia_destroy(os_ignore_cmds, NULL, NULL);
 }
 
-static void os_cmd_ignore(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_ignore(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *cmd = parv[0];
         struct command *c;
@@ -78,7 +78,7 @@ static void os_cmd_ignore(sourceinfo_t *si, int parc, char *parv[])
 
 }
 
-static void os_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_ignore_add(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
         char *target = parv[0];
@@ -123,7 +123,7 @@ static void os_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-static void os_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_ignore_del(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	mowgli_node_t *n, *tn;
@@ -157,7 +157,7 @@ static void os_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-static void os_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_ignore_clear(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n, *tn;
 	svsignore_t *svsignore;
@@ -190,7 +190,7 @@ static void os_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[])
 }
 
 
-static void os_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_ignore_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
 	unsigned int i = 1;

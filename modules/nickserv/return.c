@@ -8,7 +8,7 @@
 #include "atheme.h"
 #include "authcookie.h"
 
-static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_return(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_return = { "RETURN", N_("Returns an account to its owner."), PRIV_USER_ADMIN, 2, ns_cmd_return, { .path = "nickserv/return" } };
 
@@ -24,7 +24,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("nickserv", &ns_return);
 }
 
-static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_return(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *newmail = parv[1];

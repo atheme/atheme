@@ -6,7 +6,7 @@
 #include "atheme.h"
 
 static void
-cmd_os_genhash_func(sourceinfo_t *const restrict si, const int parc, char **const restrict parv)
+cmd_os_genhash_func(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
 	if (parc < 1)
 	{

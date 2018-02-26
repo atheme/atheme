@@ -110,35 +110,35 @@ extern void myuser_login(struct service *svs, user_t *u, myuser_t *mu, bool send
 extern void verbose(mychan_t *mychan, const char *fmt, ...) ATHEME_FATTR_PRINTF(2, 3);
 extern void (*notice)(const char *from, const char *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
 extern void change_notify(const char *from, user_t *to, const char *message, ...) ATHEME_FATTR_PRINTF(3, 4);
-extern bool bad_password(sourceinfo_t *si, myuser_t *mu);
+extern bool bad_password(struct sourceinfo *si, myuser_t *mu);
 
-extern sourceinfo_t *sourceinfo_create(void);
-extern void command_fail(sourceinfo_t *si, enum cmd_faultcode code, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
-extern void command_success_nodata(sourceinfo_t *si, const char *fmt, ...) ATHEME_FATTR_PRINTF(2, 3);
-extern void command_success_string(sourceinfo_t *si, const char *result, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
-extern void command_success_table(sourceinfo_t *si, table_t *table);
-extern const char *get_source_name(sourceinfo_t *si);
-extern const char *get_source_mask(sourceinfo_t *si);
-extern const char *get_oper_name(sourceinfo_t *si);
-extern const char *get_storage_oper_name(sourceinfo_t *si);
-extern const char *get_source_security_label(sourceinfo_t *si);
+extern struct sourceinfo *sourceinfo_create(void);
+extern void command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
+extern void command_success_nodata(struct sourceinfo *si, const char *fmt, ...) ATHEME_FATTR_PRINTF(2, 3);
+extern void command_success_string(struct sourceinfo *si, const char *result, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
+extern void command_success_table(struct sourceinfo *si, table_t *table);
+extern const char *get_source_name(struct sourceinfo *si);
+extern const char *get_source_mask(struct sourceinfo *si);
+extern const char *get_oper_name(struct sourceinfo *si);
+extern const char *get_storage_oper_name(struct sourceinfo *si);
+extern const char *get_source_security_label(struct sourceinfo *si);
 
 extern void wallops(const char *, ...) ATHEME_FATTR_PRINTF(1, 2);
 extern void verbose_wallops(const char *, ...) ATHEME_FATTR_PRINTF(1, 2);
-extern bool check_vhost_validity(sourceinfo_t *si, const char *host);
+extern bool check_vhost_validity(struct sourceinfo *si, const char *host);
 
 /* ptasks.c */
 extern void handle_topic(struct channel *, const char *, time_t, const char *);
 extern int floodcheck(user_t *, user_t *);
-extern void command_add_flood(sourceinfo_t *si, unsigned int amount);
+extern void command_add_flood(struct sourceinfo *si, unsigned int amount);
 
 /* ctcp-common.c */
 extern void common_ctcp_init(void);
-extern unsigned int handle_ctcp_common(sourceinfo_t *si, char *, char *);
+extern unsigned int handle_ctcp_common(struct sourceinfo *si, char *, char *);
 
 #ifdef HAVE_LIBQRENCODE
 /* qrcode.c */
-extern void command_success_qrcode(sourceinfo_t *si, const char *data);
+extern void command_success_qrcode(struct sourceinfo *si, const char *data);
 #endif /* HAVE_LIBQRENCODE */
 
 #endif /* !SERVICES_H */

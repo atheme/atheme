@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[]);
+static void ms_cmd_send(struct sourceinfo *si, int parc, char *parv[]);
 static unsigned int *maxmemos;
 
 
@@ -27,7 +27,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("memoserv", &ms_send);
 }
 
-static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
+static void ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* misc structs etc */
 	user_t *tu;

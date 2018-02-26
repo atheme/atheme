@@ -7,12 +7,12 @@
 
 #include "atheme.h"
 
-static void os_cmd_soper(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_soper_list(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_soper_listclass(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_soper_del(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_soper_setpass(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_soper(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_soper_list(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_soper_listclass(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_soper_add(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_soper_del(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_soper_setpass(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_soper = { "SOPER", N_("Shows and changes services operator privileges."), AC_NONE, 4, os_cmd_soper, { .path = "oservice/soper" } };
 
@@ -50,7 +50,7 @@ mod_deinit(const module_unload_intent_t intent)
 	mowgli_patricia_destroy(os_soper_cmds, NULL, NULL);
 }
 
-static void os_cmd_soper(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_soper(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct command *c;
 
@@ -77,7 +77,7 @@ static void os_cmd_soper(sourceinfo_t *si, int parc, char *parv[])
 	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
 
-static void os_cmd_soper_list(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_soper_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
 	soper_t *soper;
@@ -104,7 +104,7 @@ static void os_cmd_soper_list(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("End of services operator list"));
 }
 
-static void os_cmd_soper_listclass(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_soper_listclass(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
 	struct operclass *operclass;
@@ -122,7 +122,7 @@ static void os_cmd_soper_listclass(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("End of oper class list"));
 }
 
-static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_soper_add(struct sourceinfo *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	struct operclass *operclass;
@@ -191,7 +191,7 @@ static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Set class for \2%s\2 to \2%s\2."), entity(mu)->name, operclass->name);
 }
 
-static void os_cmd_soper_del(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_soper_del(struct sourceinfo *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 
@@ -234,7 +234,7 @@ static void os_cmd_soper_del(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Removed class for \2%s\2."), entity(mu)->name);
 }
 
-static void os_cmd_soper_setpass(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_soper_setpass(struct sourceinfo *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	mowgli_node_t *n;

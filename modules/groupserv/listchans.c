@@ -8,7 +8,7 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-static void gs_cmd_listchans(sourceinfo_t *si, int parc, char *parv[]);
+static void gs_cmd_listchans(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command gs_listchans = { "LISTCHANS", N_("Lists channels that a group has access to."), AC_NONE, 1, gs_cmd_listchans, { .path = "groupserv/listchans" } };
 
@@ -25,7 +25,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("groupserv", &gs_listchans);
 }
 
-static void gs_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
+static void gs_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 {
 	mygroup_t *mg;
 	mowgli_node_t *n;

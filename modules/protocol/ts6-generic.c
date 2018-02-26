@@ -550,7 +550,7 @@ static void ts6_mlock_sts(struct channel *c)
 			mychan_get_sts_mlock(mc));
 }
 
-static void m_mlock(sourceinfo_t *si, int parc, char *parv[])
+static void m_mlock(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c;
 	mychan_t *mc;
@@ -584,7 +584,7 @@ static void m_mlock(sourceinfo_t *si, int parc, char *parv[])
 }
 
 
-static void m_topic(sourceinfo_t *si, int parc, char *parv[])
+static void m_topic(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c = channel_find(parv[0]);
 
@@ -594,7 +594,7 @@ static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 	handle_topic_from(si, c, si->su->nick, CURRTIME, parv[1]);
 }
 
-static void m_tb(sourceinfo_t *si, int parc, char *parv[])
+static void m_tb(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c = channel_find(parv[0]);
 	time_t ts = atol(parv[1]);
@@ -611,7 +611,7 @@ static void m_tb(sourceinfo_t *si, int parc, char *parv[])
 	handle_topic_from(si, c, parc > 3 ? parv[2] : si->s->name, ts, parv[parc - 1]);
 }
 
-static void m_etb(sourceinfo_t *si, int parc, char *parv[])
+static void m_etb(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c = channel_find(parv[1]);
 	time_t channelts;
@@ -633,13 +633,13 @@ static void m_etb(sourceinfo_t *si, int parc, char *parv[])
 		handle_topic_from(si, c, parv[3], topicts, parv[parc - 1]);
 }
 
-static void m_ping(sourceinfo_t *si, int parc, char *parv[])
+static void m_ping(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* reply to PING's */
 	sts(":%s PONG %s %s", ME, me.name, parv[0]);
 }
 
-static void m_pong(sourceinfo_t *si, int parc, char *parv[])
+static void m_pong(struct sourceinfo *si, int parc, char *parv[])
 {
 	server_t *s;
 
@@ -674,7 +674,7 @@ static void m_pong(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void m_privmsg(sourceinfo_t *si, int parc, char *parv[])
+static void m_privmsg(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (parc != 2)
 		return;
@@ -682,7 +682,7 @@ static void m_privmsg(sourceinfo_t *si, int parc, char *parv[])
 	handle_message(si, parv[0], false, parv[1]);
 }
 
-static void m_notice(sourceinfo_t *si, int parc, char *parv[])
+static void m_notice(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (parc != 2)
 		return;
@@ -690,7 +690,7 @@ static void m_notice(sourceinfo_t *si, int parc, char *parv[])
 	handle_message(si, parv[0], true, parv[1]);
 }
 
-static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
+static void m_sjoin(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* -> :proteus.malkier.net SJOIN 1073516550 #shrike +tn :@sycobuny @+rakaur */
 
@@ -783,7 +783,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 		channel_delete(c);
 }
 
-static void m_join(sourceinfo_t *si, int parc, char *parv[])
+static void m_join(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* -> :1JJAAAAAB JOIN 1127474195 #test +tn */
 	bool keep_new_modes = true;
@@ -856,7 +856,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 	chanuser_add(c, CLIENT_NAME(si->su));
 }
 
-static void m_bmask(sourceinfo_t *si, int parc, char *parv[])
+static void m_bmask(struct sourceinfo *si, int parc, char *parv[])
 {
 	unsigned int ac, i;
 	char *av[256];
@@ -886,7 +886,7 @@ static void m_bmask(sourceinfo_t *si, int parc, char *parv[])
 		chanban_add(c, av[i], type);
 }
 
-static void m_part(sourceinfo_t *si, int parc, char *parv[])
+static void m_part(struct sourceinfo *si, int parc, char *parv[])
 {
 	int chanc;
 	char *chanv[256];
@@ -901,7 +901,7 @@ static void m_part(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void m_nick(sourceinfo_t *si, int parc, char *parv[])
+static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
 	server_t *s;
 	user_t *u;
@@ -962,7 +962,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void m_uid(sourceinfo_t *si, int parc, char *parv[])
+static void m_uid(struct sourceinfo *si, int parc, char *parv[])
 {
 	server_t *s;
 	user_t *u;
@@ -997,7 +997,7 @@ static void m_uid(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void m_euid(sourceinfo_t *si, int parc, char *parv[])
+static void m_euid(struct sourceinfo *si, int parc, char *parv[])
 {
 	server_t *s;
 	user_t *u;
@@ -1046,7 +1046,7 @@ static void m_euid(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void m_quit(sourceinfo_t *si, int parc, char *parv[])
+static void m_quit(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
 
@@ -1054,7 +1054,7 @@ static void m_quit(sourceinfo_t *si, int parc, char *parv[])
 	user_delete(si->su, parv[0]);
 }
 
-static void m_mode(sourceinfo_t *si, int parc, char *parv[])
+static void m_mode(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (*parv[0] == '#')
 		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
@@ -1062,7 +1062,7 @@ static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 		user_mode(user_find(parv[0]), parv[1]);
 }
 
-static void m_tmode(sourceinfo_t *si, int parc, char *parv[])
+static void m_tmode(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c;
 
@@ -1080,7 +1080,7 @@ static void m_tmode(sourceinfo_t *si, int parc, char *parv[])
 	channel_mode(NULL, c, parc - 2, &parv[2]);
 }
 
-static void m_kick(sourceinfo_t *si, int parc, char *parv[])
+static void m_kick(struct sourceinfo *si, int parc, char *parv[])
 {
 	user_t *u = user_find(parv[1]);
 	struct channel *c = channel_find(parv[0]);
@@ -1116,18 +1116,18 @@ static void m_kick(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void m_kill(sourceinfo_t *si, int parc, char *parv[])
+static void m_kill(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_kill(si, parv[0], parc > 1 ? parv[1] : "<No reason given>");
 }
 
-static void m_squit(sourceinfo_t *si, int parc, char *parv[])
+static void m_squit(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_squit(): server leaving: %s from %s", parv[0], parv[1]);
 	server_delete(parv[0]);
 }
 
-static void m_server(sourceinfo_t *si, int parc, char *parv[])
+static void m_server(struct sourceinfo *si, int parc, char *parv[])
 {
 	server_t *s;
 
@@ -1143,7 +1143,7 @@ static void m_server(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void m_sid(sourceinfo_t *si, int parc, char *parv[])
+static void m_sid(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* -> :1JJ SID file. 2 00F :telnet server */
 	server_t *s;
@@ -1160,42 +1160,42 @@ static void m_sid(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void m_stats(sourceinfo_t *si, int parc, char *parv[])
+static void m_stats(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_stats(si->su, parv[0][0]);
 }
 
-static void m_admin(sourceinfo_t *si, int parc, char *parv[])
+static void m_admin(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_admin(si->su);
 }
 
-static void m_version(sourceinfo_t *si, int parc, char *parv[])
+static void m_version(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_version(si->su);
 }
 
-static void m_info(sourceinfo_t *si, int parc, char *parv[])
+static void m_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_info(si->su);
 }
 
-static void m_whois(sourceinfo_t *si, int parc, char *parv[])
+static void m_whois(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_whois(si->su, parv[1]);
 }
 
-static void m_trace(sourceinfo_t *si, int parc, char *parv[])
+static void m_trace(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_trace(si->su, parv[0], parc >= 2 ? parv[1] : NULL);
 }
 
-static void m_away(sourceinfo_t *si, int parc, char *parv[])
+static void m_away(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_away(si->su, parc >= 1 ? parv[0] : NULL);
 }
 
-static void m_pass(sourceinfo_t *si, int parc, char *parv[])
+static void m_pass(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* TS5: PASS mypassword :TS
 	 * TS6: PASS mypassword TS 6 :sid */
@@ -1219,12 +1219,12 @@ static void m_pass(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void m_error(sourceinfo_t *si, int parc, char *parv[])
+static void m_error(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_INFO, "m_error(): error from server: %s", parv[0]);
 }
 
-static void m_encap(sourceinfo_t *si, int parc, char *parv[])
+static void m_encap(struct sourceinfo *si, int parc, char *parv[])
 {
 	user_t *u;
 
@@ -1345,7 +1345,7 @@ static void m_encap(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void m_signon(sourceinfo_t *si, int parc, char *parv[])
+static void m_signon(struct sourceinfo *si, int parc, char *parv[])
 {
 	user_t *u;
 
@@ -1375,7 +1375,7 @@ static void m_signon(sourceinfo_t *si, int parc, char *parv[])
 		handle_setlogin(si, u, parv[4], 0);
 }
 
-static void m_capab(sourceinfo_t *si, int parc, char *parv[])
+static void m_capab(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *p;
 
@@ -1420,7 +1420,7 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 	services_init();
 }
 
-static void m_chghost(sourceinfo_t *si, int parc, char *parv[])
+static void m_chghost(struct sourceinfo *si, int parc, char *parv[])
 {
 	user_t *u = user_find(parv[0]);
 
@@ -1431,7 +1431,7 @@ static void m_chghost(sourceinfo_t *si, int parc, char *parv[])
 	u->vhost = strshare_get(parv[1]);
 }
 
-static void m_motd(sourceinfo_t *si, int parc, char *parv[])
+static void m_motd(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_motd(si->su);
 }

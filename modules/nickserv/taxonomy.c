@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void ns_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_taxonomy(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_taxonomy = { "TAXONOMY", N_("Displays a user's metadata."), AC_NONE, 1, ns_cmd_taxonomy, { .path = "nickserv/taxonomy" } };
 
@@ -23,7 +23,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("nickserv", &ns_taxonomy);
 }
 
-static void ns_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_taxonomy(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *target = parv[0];
 	myuser_t *mu;

@@ -8,59 +8,59 @@
 #include "atheme.h"
 #include "template.h"
 
-static void cs_cmd_access(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_help_access(sourceinfo_t *si, const char *subcmd);
+static void cs_cmd_access(struct sourceinfo *si, int parc, char *parv[]);
+static void cs_help_access(struct sourceinfo *si, const char *subcmd);
 
 struct command cs_access = { "ACCESS", N_("Manage channel access."),
                         AC_NONE, 3, cs_cmd_access, { .func = cs_help_access } };
 
-static void cs_cmd_role(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_help_role(sourceinfo_t *si, const char *subcmd);
+static void cs_cmd_role(struct sourceinfo *si, int parc, char *parv[]);
+static void cs_help_role(struct sourceinfo *si, const char *subcmd);
 
 struct command cs_role =  { "ROLE", N_("Manage channel roles."),
                         AC_NONE, 3, cs_cmd_role, { .func = cs_help_role } };
 
-static void cs_cmd_access_list(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_access_list(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_access_list = { "LIST", N_("List channel access entries."),
                              AC_NONE, 1, cs_cmd_access_list, { .path = "cservice/access_list" } };
 
-static void cs_cmd_access_info(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_access_info(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_access_info = { "INFO", N_("Display information on an access list entry."),
                              AC_NONE, 2, cs_cmd_access_info, { .path = "cservice/access_info" } };
 
-static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_access_del(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_access_del =  { "DEL", N_("Delete an access list entry."),
                              AC_NONE, 2, cs_cmd_access_del, { .path = "cservice/access_del" } };
 
-static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_access_add(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_access_add =  { "ADD", N_("Add an access list entry."),
                              AC_NONE, 3, cs_cmd_access_add, { .path = "cservice/access_add" } };
 
-static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_access_set(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_access_set =  { "SET", N_("Update an access list entry."),
                              AC_NONE, 3, cs_cmd_access_set, { .path = "cservice/access_set" } };
 
-static void cs_cmd_role_list(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_role_list(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_role_list = { "LIST", N_("List available roles."),
                             AC_NONE, 1, cs_cmd_role_list, { .path = "cservice/role_list" } };
 
-static void cs_cmd_role_add(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_role_add(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_role_add =  { "ADD", N_("Add a role."),
                             AC_NONE, 20, cs_cmd_role_add, { .path = "cservice/role_add" } };
 
-static void cs_cmd_role_set(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_role_set(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_role_set =  { "SET", N_("Change flags on a role."),
                             AC_NONE, 20, cs_cmd_role_set, { .path = "cservice/role_set" } };
 
-static void cs_cmd_role_del(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_role_del(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_role_del =  { "DEL", N_("Delete a role."),
                             AC_NONE, 2, cs_cmd_role_del, { .path = "cservice/role_del" } };
@@ -99,7 +99,7 @@ mod_deinit(const module_unload_intent_t intent)
 	mowgli_patricia_destroy(cs_role_cmds, NULL, NULL);
 }
 
-static void cs_help_access(sourceinfo_t *si, const char *subcmd)
+static void cs_help_access(struct sourceinfo *si, const char *subcmd)
 {
 	if (!subcmd)
 	{
@@ -115,7 +115,7 @@ static void cs_help_access(sourceinfo_t *si, const char *subcmd)
 		help_display(si, si->service, subcmd, cs_access_cmds);
 }
 
-static void cs_help_role(sourceinfo_t *si, const char *subcmd)
+static void cs_help_role(struct sourceinfo *si, const char *subcmd)
 {
 	if (!subcmd)
 	{
@@ -131,7 +131,7 @@ static void cs_help_role(sourceinfo_t *si, const char *subcmd)
 		help_display(si, si->service, subcmd, cs_role_cmds);
 }
 
-static void cs_cmd_access(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_access(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan;
 	char *cmd;
@@ -171,7 +171,7 @@ static void cs_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 	command_exec_split(si->service, si, c->name, buf, cs_access_cmds);
 }
 
-static void cs_cmd_role(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_role(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan;
 	char *cmd;
@@ -416,7 +416,7 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 /*
  * Update a role entry and synchronize the changes with the access list.
  */
-static void update_role_entry(sourceinfo_t *si, mychan_t *mc, const char *role, unsigned int flags)
+static void update_role_entry(struct sourceinfo *si, mychan_t *mc, const char *role, unsigned int flags)
 {
 	metadata_t *md;
 	size_t l;
@@ -557,7 +557,7 @@ static unsigned int xflag_apply_batch(unsigned int in, int parc, char *parv[])
  * 1     nenolod                founder
  * 2     jdhore                 channel-staffer
  */
-static void cs_cmd_access_list(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_access_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	chanacs_t *ca;
 	mowgli_node_t *n;
@@ -623,7 +623,7 @@ static void cs_cmd_access_list(sourceinfo_t *si, int parc, char *parv[])
  * Modified   : Aug 18 21:41:31 2005 (5 years, 6 weeks, 0 days, 05:57:21 ago)
  * *** End of Info ***
  */
-static void cs_cmd_access_info(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_access_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	chanacs_t *ca;
 	myentity_t *mt;
@@ -722,7 +722,7 @@ static void cs_cmd_access_info(sourceinfo_t *si, int parc, char *parv[])
  *
  * nenolod was removed from the Founder role in #atheme.
  */
-static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_access_del(struct sourceinfo *si, int parc, char *parv[])
 {
 	chanacs_t *ca;
 	myentity_t *mt;
@@ -828,7 +828,7 @@ static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[])
  *
  * nenolod was added with the Founder role in #atheme.
  */
-static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_access_add(struct sourceinfo *si, int parc, char *parv[])
 {
 	chanacs_t *ca;
 	myentity_t *mt = NULL;
@@ -975,7 +975,7 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
  *
  * nenolod now has the Founder role in #atheme.
  */
-static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_access_set(struct sourceinfo *si, int parc, char *parv[])
 {
 	chanacs_t *ca;
 	myentity_t *mt = NULL;
@@ -1123,7 +1123,7 @@ static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
  * List of channel-defined roles:
  * Founder      : ...
  */
-static void cs_cmd_role_list(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_role_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	const char *channel = parv[0];
@@ -1161,7 +1161,7 @@ static void cs_cmd_role_list(sourceinfo_t *si, int parc, char *parv[])
  *
  * Creates a new role with the given flags.
  */
-static void cs_cmd_role_add(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_role_add(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	mowgli_list_t *l;
@@ -1252,7 +1252,7 @@ static void cs_cmd_role_add(sourceinfo_t *si, int parc, char *parv[])
  *
  * Creates a new role with the given flags.
  */
-static void cs_cmd_role_set(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_role_set(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	mowgli_list_t *l;
@@ -1349,7 +1349,7 @@ static void cs_cmd_role_set(sourceinfo_t *si, int parc, char *parv[])
  *
  * Deletes a role.
  */
-static void cs_cmd_role_del(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_role_del(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	const char *channel = parv[0];

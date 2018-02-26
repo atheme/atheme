@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_clear_akicks(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_clear_akicks(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_clear_akicks = { "AKICKS", "Clears all channel AKICK entries.", AC_NONE, 2, cs_cmd_clear_akicks, { .path = "cservice/clear_akicks" } };
 
@@ -27,7 +27,7 @@ mod_deinit(const module_unload_intent_t intent)
 	command_delete(&cs_clear_akicks, *cs_clear_cmds);
 }
 
-static void cs_cmd_clear_akicks(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_clear_akicks(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	mowgli_node_t *n, *tn;

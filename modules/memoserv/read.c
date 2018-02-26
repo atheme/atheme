@@ -9,7 +9,7 @@
 
 #define MAX_READ_AT_ONCE 5
 
-static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[]);
+static void ms_cmd_read(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ms_read = { "READ", N_("Reads a memo."),
                         AC_AUTHENTICATED, 2, ms_cmd_read, { .path = "memoserv/read" } };
@@ -26,7 +26,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("memoserv", &ms_read);
 }
 
-static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
+static void ms_cmd_read(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* Misc structs etc */
 	myuser_t *tmu;

@@ -613,7 +613,7 @@ slog_ext(log_type_t type, unsigned int level, const char *fmt, ...)
  *
  * Handles the basic logging of log messages to the log files defined
  * in the configuration file. All I/O is handled here, and no longer
- * in the various sourceinfo_t log transforms.
+ * in the various struct sourceinfo log transforms.
  *
  * Inputs:
  *       - a bitmask of the various log categories this event qualifies to
@@ -679,7 +679,7 @@ const char *format_external(const char *type, connection_t *source, const char *
 	return buf;
 }
 
-const char *format_sourceinfo(sourceinfo_t *si, bool full)
+const char *format_sourceinfo(struct sourceinfo *si, bool full)
 {
 	if(si->v != NULL && si->v->format != NULL)
 		return si->v->format(si, full);
@@ -691,13 +691,13 @@ const char *format_sourceinfo(sourceinfo_t *si, bool full)
 }
 
 /*
- * logcommand(sourceinfo_t *si, int level, const char *fmt, ...)
+ * logcommand(struct sourceinfo *si, int level, const char *fmt, ...)
  *
  * Logs usage of a command from a user or other source (RPC call) as
- * described by sourceinfo_t.
+ * described by struct sourceinfo.
  *
  * Inputs:
- *       - sourceinfo_t object which describes the source of the command call
+ *       - struct sourceinfo object which describes the source of the command call
  *       - bitmask of log categories to log the command use to.
  *       - printf-style format string
  *       - (optional) additional parameters
@@ -709,7 +709,7 @@ const char *format_sourceinfo(sourceinfo_t *si, bool full)
  *       - qualifying logfile_t objects in log_files are updated.
  */
 void ATHEME_FATTR_PRINTF(3, 4)
-logcommand(sourceinfo_t *si, int level, const char *fmt, ...)
+logcommand(struct sourceinfo *si, int level, const char *fmt, ...)
 {
 	va_list args;
 	char lbuf[BUFSIZE];
@@ -730,7 +730,7 @@ logcommand(sourceinfo_t *si, int level, const char *fmt, ...)
 /*
  * logcommand_user(struct service *svs, user_t *source, int level, const char *fmt, ...)
  *
- * Logs usage of a command from a user as described by sourceinfo_t.
+ * Logs usage of a command from a user as described by struct sourceinfo.
  *
  * Inputs:
  *       - struct service object which describes the service the command is attached to
@@ -769,7 +769,7 @@ logcommand_user(struct service *svs, user_t *source, int level, const char *fmt,
  * logcommand_external(struct service *svs, const char *type, connection_t *source,
  *       const char *sourcedesc, myuser_t *login, int level, const char *fmt, ...)
  *
- * Logs usage of a command from an RPC call as described by sourceinfo_t.
+ * Logs usage of a command from an RPC call as described by struct sourceinfo.
  *
  * Inputs:
  *       - struct service object which describes the service the command is attached to
@@ -808,12 +808,12 @@ logcommand_external(struct service *svs, const char *type, connection_t *source,
 }
 
 /*
- * logaudit_denycmd(sourceinfo_t *si, struct command *cmd, const char *userlevel)
+ * logaudit_denycmd(struct sourceinfo *si, struct command *cmd, const char *userlevel)
  *
  * Logs a command access denial for auditing.
  *
  * Inputs:
- *       - sourceinfo_t object that was denied
+ *       - struct sourceinfo object that was denied
  *       - struct command object that was denied
  *       - optional userlevel (if none, will be NULL)
  *
@@ -823,7 +823,7 @@ logcommand_external(struct service *svs, const char *type, connection_t *source,
  * Side Effects:
  *       - qualifying logfile_t objects in log_files are updated
  */
-void logaudit_denycmd(sourceinfo_t *si, struct command *cmd, const char *userlevel)
+void logaudit_denycmd(struct sourceinfo *si, struct command *cmd, const char *userlevel)
 {
 	slog_ext(LOG_NONINTERACTIVE, LG_DENYCMD, "DENYCMD: [%s] was denied execution of [%s], need privileges [%s %s]",
 		 get_source_security_label(si), cmd->name, cmd->access, userlevel != NULL ? userlevel : "");

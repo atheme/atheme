@@ -10,7 +10,7 @@
 
 static void cs_set_guard_config_ready(void *unused);
 
-static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_guard(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_set_guard = { "GUARD", N_("Sets whether or not services will inhabit the channel."), AC_NONE, 2, cs_cmd_set_guard, { .path = "cservice/set_guard" } };
 
@@ -43,7 +43,7 @@ static void cs_set_guard_config_ready(void *unused)
 		cs_set_guard.access = PRIV_ADMIN;
 }
 
-static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_set_guard(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 

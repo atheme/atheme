@@ -8,7 +8,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_mlock(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_set_mlock = { "MLOCK", N_("Sets channel mode lock."), AC_NONE, 2, cs_cmd_set_mlock, { .path = "cservice/set_mlock" } };
 
@@ -28,7 +28,7 @@ mod_deinit(const module_unload_intent_t intent)
 	command_delete(&cs_set_mlock, *cs_set_cmdtree);
 }
 
-static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_set_mlock(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	char modebuf[32], *end, c;

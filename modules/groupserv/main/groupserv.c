@@ -191,12 +191,12 @@ void groupacs_delete(mygroup_t *mg, myentity_t *mt)
 	}
 }
 
-bool groupacs_sourceinfo_has_flag(mygroup_t *mg, sourceinfo_t *si, unsigned int flag)
+bool groupacs_sourceinfo_has_flag(mygroup_t *mg, struct sourceinfo *si, unsigned int flag)
 {
 	return groupacs_find(mg, entity(si->smu), flag, true) != NULL;
 }
 
-unsigned int groupacs_sourceinfo_flags(mygroup_t *mg, sourceinfo_t *si)
+unsigned int groupacs_sourceinfo_flags(mygroup_t *mg, struct sourceinfo *si)
 {
 	groupacs_t *ga;
 

@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_logout(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_logout = { "LOGOUT", N_("Logs your services session out."), AC_NONE, 2, ns_cmd_logout, { .path = "nickserv/logout" } };
 
@@ -23,7 +23,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("nickserv", &ns_logout);
 }
 
-static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_logout(struct sourceinfo *si, int parc, char *parv[])
 {
 	user_t *u = si->su;
 	mowgli_node_t *n, *tn;

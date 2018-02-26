@@ -1779,7 +1779,7 @@ unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u)
 	return result;
 }
 
-unsigned int chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si)
+unsigned int chanacs_source_flags(mychan_t *mychan, struct sourceinfo *si)
 {
 	if (si->su != NULL)
 	{

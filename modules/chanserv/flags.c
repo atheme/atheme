@@ -8,7 +8,7 @@
 #include "atheme.h"
 #include "template.h"
 
-static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[]);
 static void check_registration_keywords(hook_user_register_check_t *hdata);
 
 struct command cs_flags = { "FLAGS", N_("Manipulates specific permissions on a channel."),
@@ -105,7 +105,7 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 	return iter.res;
 }
 
-static void do_list(sourceinfo_t *si, mychan_t *mc, unsigned int flags)
+static void do_list(struct sourceinfo *si, mychan_t *mc, unsigned int flags)
 {
 	chanacs_t *ca;
 	mowgli_node_t *n;
@@ -183,7 +183,7 @@ static void check_registration_keywords(hook_user_register_check_t *hdata)
 }
 
 /* FLAGS <channel> [user] [flags] */
-static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 {
 	chanacs_t *ca;
 	mowgli_node_t *n;

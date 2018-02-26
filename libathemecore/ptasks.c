@@ -469,7 +469,7 @@ void handle_away(user_t *u, const char *message)
 }
 
 static void
-handle_channel_message(sourceinfo_t *si, char *target, bool is_notice, char *message)
+handle_channel_message(struct sourceinfo *si, char *target, bool is_notice, char *message)
 {
 	char *vec[3];
 	hook_cmessage_data_t cdata;
@@ -524,7 +524,7 @@ handle_channel_message(sourceinfo_t *si, char *target, bool is_notice, char *mes
 	}
 }
 
-void handle_message(sourceinfo_t *si, char *target, bool is_notice, char *message)
+void handle_message(struct sourceinfo *si, char *target, bool is_notice, char *message)
 {
 	char *vec[3];
 	user_t *u, *target_u;
@@ -635,7 +635,7 @@ void handle_message(sourceinfo_t *si, char *target, bool is_notice, char *messag
 		si->service->handler(si, 2, vec);
 }
 
-void handle_topic_from(sourceinfo_t *si, struct channel *c, const char *setter, time_t ts, const char *topic)
+void handle_topic_from(struct sourceinfo *si, struct channel *c, const char *setter, time_t ts, const char *topic)
 {
 	hook_channel_topic_check_t hdata;
 
@@ -729,7 +729,7 @@ static const char *skip_kill_path(const char *reason)
 	return have_dot ? p + 1 : reason;
 }
 
-void handle_kill(sourceinfo_t *si, const char *victim, const char *reason)
+void handle_kill(struct sourceinfo *si, const char *victim, const char *reason)
 {
 	const char *source, *source1, *origreason;
 	char qreason[512];
@@ -788,7 +788,7 @@ void handle_kill(sourceinfo_t *si, const char *victim, const char *reason)
 	}
 }
 
-server_t *handle_server(sourceinfo_t *si, const char *name, const char *sid,
+server_t *handle_server(struct sourceinfo *si, const char *name, const char *sid,
 		int hops, const char *desc)
 {
 	server_t *s = NULL;
@@ -950,7 +950,7 @@ int floodcheck(user_t *u, user_t *t)
 	return 0;
 }
 
-void command_add_flood(sourceinfo_t *si, unsigned int amount)
+void command_add_flood(struct sourceinfo *si, unsigned int amount)
 {
 	if (si->su != NULL)
 		si->su->msgs += amount;

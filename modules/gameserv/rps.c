@@ -8,7 +8,7 @@
 #include "atheme.h"
 #include "gameserv_common.h"
 
-static void command_rps(sourceinfo_t *si, int parc, char *parv[]);
+static void command_rps(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cmd_rps = { "RPS", N_("Rock Paper Scissors."), AC_NONE, 2, command_rps, { .path = "gameserv/rps" } };
 
@@ -28,7 +28,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cmd_rps);
 }
 
-static void command_rps(sourceinfo_t *si, int parc, char *parv[])
+static void command_rps(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	static const char *rps_responses[3] = {

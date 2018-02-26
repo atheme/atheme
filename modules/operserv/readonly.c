@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void os_cmd_readonly(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_readonly(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_readonly = { "READONLY", N_("Changes the state of read-only mode for services."),
 		      PRIV_ADMIN, 1, os_cmd_readonly, { .path = "oservice/readonly" } };
@@ -24,7 +24,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("operserv", &os_readonly);
 }
 
-static void os_cmd_readonly(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_readonly(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct service *svs;
 	char *action = parv[0];

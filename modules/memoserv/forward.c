@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[]);
+static void ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ms_forward = { "FORWARD", N_(N_("Forwards a memo.")),
                         AC_AUTHENTICATED, 2, ms_cmd_forward, { .path = "memoserv/forward" } };
@@ -24,7 +24,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("memoserv", &ms_forward);
 }
 
-static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
+static void ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* Misc structs etc */
 	user_t *tu;

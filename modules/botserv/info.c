@@ -9,7 +9,7 @@
 #include "atheme.h"
 #include "botserv.h"
 
-static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
+static void bs_cmd_info(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command bs_info = { "INFO", N_("Allows you to see BotServ information about a channel or a bot."), AC_NONE, 1, bs_cmd_info, { .path = "botserv/info" } };
 
@@ -33,7 +33,7 @@ mod_deinit(const module_unload_intent_t intent)
 
 /* ******************************************************************** */
 
-static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
+static void bs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *dest = parv[0];
 	mychan_t *mc = NULL;

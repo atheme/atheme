@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void os_cmd_shutdown(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_shutdown(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_shutdown = { "SHUTDOWN", N_("Shuts down services."), PRIV_ADMIN, 0, os_cmd_shutdown, { .path = "oservice/shutdown" } };
 
@@ -23,7 +23,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("operserv", &os_shutdown);
 }
 
-static void os_cmd_shutdown(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_shutdown(struct sourceinfo *si, int parc, char *parv[])
 {
 	logcommand(si, CMDLOG_ADMIN, "SHUTDOWN");
 	wallops("Shutting down by request of \2%s\2.", get_oper_name(si));

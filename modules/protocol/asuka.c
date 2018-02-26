@@ -129,7 +129,7 @@ static bool asuka_on_logout(user_t *u, const char *account)
 	return true;
 }
 
-static void m_nick(sourceinfo_t *si, int parc, char *parv[])
+static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
 	user_t *u;
 	char ipstring[HOSTIPLEN + 1];
@@ -223,7 +223,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void m_mode(sourceinfo_t *si, int parc, char *parv[])
+static void m_mode(struct sourceinfo *si, int parc, char *parv[])
 {
 	user_t *u;
 	char *p;

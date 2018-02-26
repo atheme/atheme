@@ -11,7 +11,7 @@
 
 mowgli_patricia_t **ns_set_cmdtree;
 
-static void ns_cmd_set_email(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_set_email(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_set_email = { "EMAIL", N_("Changes your e-mail address."), AC_NONE, 1, ns_cmd_set_email, { .path = "nickserv/set_email" } };
 
@@ -30,7 +30,7 @@ mod_deinit(const module_unload_intent_t intent)
 }
 
 /* SET EMAIL <new address> */
-static void ns_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_set_email(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *email = parv[0];
 	metadata_t *md;

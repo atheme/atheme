@@ -298,7 +298,7 @@ static happy_planttype_t happy_plant_by_name(const char *name)
  * Syntax: JOIN
  * Result: Player joins the game.
  */
-static void __command_join(sourceinfo_t * si, int parc, char *parv[])
+static void __command_join(struct sourceinfo * si, int parc, char *parv[])
 {
 	happy_farmer_t *farmer;
 
@@ -314,7 +314,7 @@ struct command command_join = { "JOIN", N_("Join the Happy Farm game!"), AC_AUTH
  * Syntax: BUYPLOT
  * Result: Player buys a plot if they have enough money.
  */
-static void __command_buyplot(sourceinfo_t * si, int parc, char *parv[])
+static void __command_buyplot(struct sourceinfo * si, int parc, char *parv[])
 {
 	myentity_t *mt;
 	happy_farmer_t *farmer;
@@ -350,7 +350,7 @@ struct command command_buyplot = { "BUYPLOT", N_("Buy a plot of land!"), AC_AUTH
  * Syntax: SELLPLOT
  * Result: Player sells a plot back to the motherland
  */
-static void __command_sellplot(sourceinfo_t * si, int parc, char *parv[])
+static void __command_sellplot(struct sourceinfo * si, int parc, char *parv[])
 {
 	myentity_t *mt;
 	happy_farmer_t *farmer;
@@ -386,7 +386,7 @@ struct command command_sellplot = { "SELLPLOT", N_("Sell a vacant plot of land."
 
 mowgli_patricia_t *happyfarm_cmd_subtree = NULL;
 
-static void __command_trampoline(sourceinfo_t * si, int parc, char *parv[])
+static void __command_trampoline(struct sourceinfo * si, int parc, char *parv[])
 {
 	char *subcmd = parv[0];
 	struct command *c;

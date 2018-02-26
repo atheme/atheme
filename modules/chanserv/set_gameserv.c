@@ -8,7 +8,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_set_gameserv(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_gameserv(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_set_gameserv = { "GAMESERV", N_("Allows or disallows gaming services."), AC_NONE, 2, cs_cmd_set_gameserv, { .path = "cservice/set_gameserv" } };
 
@@ -28,7 +28,7 @@ mod_deinit(const module_unload_intent_t intent)
 	command_delete(&cs_set_gameserv, *cs_set_cmdtree);
 }
 
-static void cs_cmd_set_gameserv(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_set_gameserv(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	const char *val;

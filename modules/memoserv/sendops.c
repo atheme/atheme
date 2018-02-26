@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[]);
+static void ms_cmd_sendops(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ms_sendops = { "SENDOPS", N_("Sends a memo to all ops on a channel."),
                           AC_AUTHENTICATED, 2, ms_cmd_sendops, { .path = "memoserv/sendops" } };
@@ -26,7 +26,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("memoserv", &ms_sendops);
 }
 
-static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
+static void ms_cmd_sendops(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* misc structs etc */
 	myuser_t *tmu;

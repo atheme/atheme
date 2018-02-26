@@ -91,19 +91,6 @@ typedef enum {
 #define CACHEFILE_HEAP_SIZE	32
 #define CACHELINE_HEAP_SIZE	64
 
-/* Make it possible to use pointers to these types everywhere
- * (for structures used in multiple header files) */
-typedef struct user_ user_t;
-
-typedef struct server_ server_t;
-
-typedef struct soper_ soper_t;
-typedef struct myuser_ myuser_t;
-typedef struct mynick_ mynick_t;
-typedef struct mychan_ mychan_t;
-
-typedef struct sourceinfo_ sourceinfo_t;
-
 enum cmd_faultcode
 {
 	fault_needmoreparams	= 1,

@@ -8,7 +8,7 @@
 #include "atheme.h"
 
 static void
-cmd_ns_drop_func(sourceinfo_t *const restrict si, const int ATHEME_VATTR_UNUSED parc, char *parv[])
+cmd_ns_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc, char *parv[])
 {
 	const char *const acc = parv[0];
 	const char *const pass = parv[1];
@@ -123,7 +123,7 @@ cmd_ns_drop_func(sourceinfo_t *const restrict si, const int ATHEME_VATTR_UNUSED 
 }
 
 static void
-cmd_ns_fdrop_func(sourceinfo_t *const restrict si, const int ATHEME_VATTR_UNUSED parc, char *parv[])
+cmd_ns_fdrop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc, char *parv[])
 {
 	const char *const acc = parv[0];
 

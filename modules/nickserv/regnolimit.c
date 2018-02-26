@@ -9,7 +9,7 @@
 #include "list_common.h"
 #include "list.h"
 
-static void ns_cmd_regnolimit(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_regnolimit(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_regnolimit = { "REGNOLIMIT", N_("Allow a user to bypass registration limits."),
 		      PRIV_ADMIN, 2, ns_cmd_regnolimit, { .path = "nickserv/regnolimit" } };
@@ -43,7 +43,7 @@ mod_deinit(const module_unload_intent_t intent)
 	list_unregister("regnolimit");
 }
 
-static void ns_cmd_regnolimit(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_regnolimit(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *action = parv[1];

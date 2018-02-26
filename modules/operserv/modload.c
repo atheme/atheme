@@ -8,7 +8,7 @@
 #include "atheme.h"
 #include "conf.h"
 
-static void os_cmd_modload(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_modload(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_modload = { "MODLOAD", N_("Loads a module."), PRIV_ADMIN, 20, os_cmd_modload, { .path = "oservice/modload" } };
 
@@ -24,7 +24,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("operserv", &os_modload);
 }
 
-static void os_cmd_modload(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_modload(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *module;
 	module_t *m;

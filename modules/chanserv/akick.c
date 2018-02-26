@@ -7,10 +7,10 @@
 
 #include "atheme.h"
 
-static void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_cmd_akick_del(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_cmd_akick_list(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_akick(struct sourceinfo *si, int parc, char *parv[]);
+static void cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[]);
+static void cs_cmd_akick_del(struct sourceinfo *si, int parc, char *parv[]);
+static void cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[]);
 
 static void akick_timeout_check(void *arg);
 static void akickdel_list_create(void *arg);
@@ -119,7 +119,7 @@ static void clear_bans_matching_entity(mychan_t *mc, myentity_t *mt)
 	modestack_flush_channel(mc->chan);
 }
 
-static void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_akick(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan;
 	char *cmd;
@@ -154,7 +154,7 @@ static void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
 
-void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
+void cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 {
 	myentity_t *mt;
 	mychan_t *mc;
@@ -425,7 +425,7 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-void cs_cmd_akick_del(sourceinfo_t *si, int parc, char *parv[])
+void cs_cmd_akick_del(struct sourceinfo *si, int parc, char *parv[])
 {
 	myentity_t *mt;
 	mychan_t *mc;
@@ -547,7 +547,7 @@ void cs_cmd_akick_del(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-void cs_cmd_akick_list(sourceinfo_t *si, int parc, char *parv[])
+void cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	chanacs_t *ca;

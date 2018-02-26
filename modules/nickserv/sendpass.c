@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_sendpass = { "SENDPASS", N_("Email registration passwords."), PRIV_USER_SENDPASS, 2, ns_cmd_sendpass, { .path = "nickserv/sendpass" } };
 
@@ -31,7 +31,7 @@ enum specialoperation
 	op_clear
 };
 
-static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	char *name = parv[0];

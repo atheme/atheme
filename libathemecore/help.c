@@ -30,7 +30,7 @@ static bool command_has_help(struct command *cmd)
 	return (cmd->help.func != NULL || cmd->help.path != NULL);
 }
 
-static void no_help_available(sourceinfo_t *si, const char *subcmd_of, const char *cmd)
+static void no_help_available(struct sourceinfo *si, const char *subcmd_of, const char *cmd)
 {
 	const char *text;
 	char buf[512];
@@ -48,7 +48,7 @@ static void no_help_available(sourceinfo_t *si, const char *subcmd_of, const cha
 	command_fail(si, fault_nosuch_target, _("No help available for \2%s\2."), text);
 }
 
-static struct command *help_cmd_find(sourceinfo_t *si, const char *subcmd_of, const char *cmd, mowgli_patricia_t *list)
+static struct command *help_cmd_find(struct sourceinfo *si, const char *subcmd_of, const char *cmd, mowgli_patricia_t *list)
 {
 	struct command *c;
 
@@ -68,7 +68,7 @@ static struct command *help_cmd_find(sourceinfo_t *si, const char *subcmd_of, co
 	return NULL;
 }
 
-static bool evaluate_condition(sourceinfo_t *si, const char *s)
+static bool evaluate_condition(struct sourceinfo *si, const char *s)
 {
 	char word[80];
 	char *p, *q;
@@ -111,7 +111,7 @@ static bool evaluate_condition(sourceinfo_t *si, const char *s)
 		return false;
 }
 
-void help_display_as_subcmd(sourceinfo_t *si, struct service *service, const char *subcmd_of, const char *command, mowgli_patricia_t *list)
+void help_display_as_subcmd(struct sourceinfo *si, struct service *service, const char *subcmd_of, const char *command, mowgli_patricia_t *list)
 {
 	struct command *c;
 	FILE *help_file = NULL;
@@ -217,7 +217,7 @@ void help_display_as_subcmd(sourceinfo_t *si, struct service *service, const cha
 	free(ccommand);
 }
 
-void help_display(sourceinfo_t *si, struct service *service, const char *command, mowgli_patricia_t *list)
+void help_display(struct sourceinfo *si, struct service *service, const char *command, mowgli_patricia_t *list)
 {
 	help_display_as_subcmd(si, service, NULL, command, list);
 }

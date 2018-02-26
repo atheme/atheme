@@ -22,9 +22,9 @@
 #include "atheme.h"
 #include "chanserv.h"
 
-static void cs_cmd_activate(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_cmd_reject(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_activate(struct sourceinfo *si, int parc, char *parv[]);
+static void cs_cmd_reject(struct sourceinfo *si, int parc, char *parv[]);
+static void cs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[]);
 static void can_register(hook_channel_register_check_t *req);
 
 static struct command cs_activate = { "ACTIVATE", N_("Activates a pending registration"), PRIV_CHAN_ADMIN,
@@ -115,7 +115,7 @@ static void csreq_marshal_set(database_handle_t *db)
 /*****************************************************************************/
 
 static void ATHEME_FATTR_PRINTF(3, 4)
-send_memo(sourceinfo_t *si, myuser_t *mu, const char *memo, ...)
+send_memo(struct sourceinfo *si, myuser_t *mu, const char *memo, ...)
 {
 	struct service *msvs;
 	va_list va;
@@ -144,7 +144,7 @@ send_memo(sourceinfo_t *si, myuser_t *mu, const char *memo, ...)
 }
 
 static void ATHEME_FATTR_PRINTF(2, 3)
-send_group_memo(sourceinfo_t *si, const char *memo, ...)
+send_group_memo(struct sourceinfo *si, const char *memo, ...)
 {
 	struct service *msvs;
 	va_list va;
@@ -200,7 +200,7 @@ static void can_register(hook_channel_register_check_t *req)
 
 /*****************************************************************************/
 
-static void cs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	mychan_t *mc;
@@ -210,7 +210,7 @@ static void cs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 	struct channel *c;
 	char str[BUFSIZE];
 	hook_channel_req_t hdata;
-	sourceinfo_t baked_si;
+	struct sourceinfo baked_si;
 	unsigned int fl;
 
 	if (!parv[0])
@@ -301,7 +301,7 @@ static void cs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "ACTIVATE: \2%s\2", parv[0]);
 }
 
-static void cs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
 {
 	csreq_t *cs;
 	myuser_t *mu;
@@ -330,7 +330,7 @@ static void cs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "REJECT: \2%s\2", parv[0]);
 }
 
-static void cs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_patricia_iteration_state_t state;
 	csreq_t *cs;

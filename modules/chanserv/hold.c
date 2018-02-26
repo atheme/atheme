@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_hold(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_hold(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_hold = { "HOLD", N_("Prevents a channel from expiring."),
 			PRIV_HOLD, 2, cs_cmd_hold, { .path = "cservice/hold" } };
@@ -24,7 +24,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cs_hold);
 }
 
-static void cs_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_hold(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *action = parv[1];

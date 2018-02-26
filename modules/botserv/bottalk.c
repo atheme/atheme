@@ -9,8 +9,8 @@
 
 #include "atheme.h"
 
-static void bs_cmd_say(sourceinfo_t *si, int parc, char *parv[]);
-static void bs_cmd_act(sourceinfo_t *si, int parc, char *parv[]);
+static void bs_cmd_say(struct sourceinfo *si, int parc, char *parv[]);
+static void bs_cmd_act(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command bs_say = { "SAY", N_("Makes the bot say the given text on the given channel."), AC_AUTHENTICATED, 2, bs_cmd_say, { .path = "botserv/say" } };
 struct command bs_act = { "ACT", N_("Makes the bot do the equivalent of a \"/me\" command."), AC_AUTHENTICATED, 2, bs_cmd_act, { .path = "botserv/act" } };
@@ -29,7 +29,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("botserv", &bs_act);
 }
 
-static void bs_cmd_say(sourceinfo_t *si, int parc, char *parv[])
+static void bs_cmd_say(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
 	char *message = parv[1];
@@ -95,7 +95,7 @@ static void bs_cmd_say(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void bs_cmd_act(sourceinfo_t *si, int parc, char *parv[])
+static void bs_cmd_act(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
 	char *message = parv[1];

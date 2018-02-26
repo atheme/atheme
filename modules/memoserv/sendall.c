@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void ms_cmd_sendall(sourceinfo_t *si, int parc, char *parv[]);
+static void ms_cmd_sendall(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ms_sendall = { "SENDALL", N_("Sends a memo to all accounts."),
                          PRIV_ADMIN, 1, ms_cmd_sendall, { .path = "memoserv/sendall" } };
@@ -26,7 +26,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("memoserv", &ms_sendall);
 }
 
-static void ms_cmd_sendall(sourceinfo_t *si, int parc, char *parv[])
+static void ms_cmd_sendall(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* misc structs etc */
 	myentity_t *mt;

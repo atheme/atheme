@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void os_cmd_modinspect(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_modinspect(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_modinspect = { "MODINSPECT", N_("Displays information about loaded modules."), PRIV_SERVER_AUSPEX, 1, os_cmd_modinspect, { .path = "oservice/modinspect" } };
 
@@ -23,7 +23,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("operserv", &os_modinspect);
 }
 
-static void os_cmd_modinspect(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_modinspect(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *mname = parv[0];
 	module_t *m;

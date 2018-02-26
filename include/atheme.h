@@ -12,6 +12,7 @@
 
 #include "sysconf.h"
 #include "attrs.h"
+#include "structures.h"
 
 #include "stdinc.h"
 #include "i18n.h"

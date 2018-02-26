@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_taxonomy(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_taxonomy = { "TAXONOMY", N_("Displays a channel's metadata."),
                         AC_NONE, 1, cs_cmd_taxonomy, { .path = "cservice/taxonomy" } };
@@ -24,7 +24,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cs_taxonomy);
 }
 
-void cs_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
+void cs_cmd_taxonomy(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	mychan_t *mc;

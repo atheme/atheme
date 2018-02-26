@@ -8,7 +8,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_invite(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_invite(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_invite = { "INVITE", N_("Invites you to a channel."),
                         AC_NONE, 2, cs_cmd_invite, { .path = "cservice/invite" } };
@@ -25,7 +25,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cs_invite);
 }
 
-static void cs_cmd_invite(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_invite(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	mychan_t *mc;

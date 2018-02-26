@@ -18,7 +18,7 @@ struct noop_ {
 mowgli_list_t noop_hostmask_list;
 mowgli_list_t noop_server_list;
 
-static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_noop(struct sourceinfo *si, int parc, char *parv[]);
 static void noop_kill_users(void *dummy);
 static void check_quit(user_t *u);
 static void check_user(user_t *u);
@@ -158,7 +158,7 @@ static noop_t *noop_find(char *target, mowgli_list_t *list)
 }
 
 /* NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> [reason] */
-static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_noop(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
 	noop_t *np;

@@ -12,11 +12,11 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-static void gs_cmd_invite(sourceinfo_t *si, int parc, char *parv[]);
+static void gs_cmd_invite(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command gs_invite = { "INVITE", N_("Invites a user to a group."), AC_AUTHENTICATED, 2, gs_cmd_invite, { .path = "groupserv/invite" } };
 
-static void gs_cmd_invite(sourceinfo_t *si, int parc, char *parv[])
+static void gs_cmd_invite(struct sourceinfo *si, int parc, char *parv[])
 {
 	mygroup_t *mg;
 	myuser_t *mu;

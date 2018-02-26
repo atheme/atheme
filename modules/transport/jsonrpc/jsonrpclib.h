@@ -12,7 +12,7 @@
 typedef bool (*jsonrpc_method_t)(void *conn, mowgli_list_t *params, char *id);
 
 typedef struct {
-    sourceinfo_t *base;
+    struct sourceinfo *base;
     char *id;
 } jsonrpc_sourceinfo_t;
 

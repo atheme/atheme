@@ -478,7 +478,7 @@ void handle_burstlogin(user_t *u, const char *login, time_t ts)
 	}
 }
 
-void handle_setlogin(sourceinfo_t *si, user_t *u, const char *login, time_t ts)
+void handle_setlogin(struct sourceinfo *si, user_t *u, const char *login, time_t ts)
 {
 	mynick_t *mn;
 	myuser_t *mu;
@@ -549,7 +549,7 @@ void handle_setlogin(sourceinfo_t *si, user_t *u, const char *login, time_t ts)
 			get_oper_name(si), u->nick, login);
 }
 
-void handle_clearlogin(sourceinfo_t *si, user_t *u)
+void handle_clearlogin(struct sourceinfo *si, user_t *u)
 {
 	mowgli_node_t *n;
 
@@ -574,7 +574,7 @@ void handle_clearlogin(sourceinfo_t *si, user_t *u)
 	u->myuser = NULL;
 }
 
-void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp)
+void handle_certfp(struct sourceinfo *si, user_t *u, const char *certfp)
 {
 	myuser_t *mu;
 	struct mycertfp *mcfp;
@@ -793,7 +793,7 @@ change_notify(const char *from, user_t *to, const char *fmt, ...)
  * Registers an attempt to authenticate with an incorrect password.
  *
  * Inputs:
- *       - sourceinfo_t representing what sent the bad password
+ *       - struct sourceinfo representing what sent the bad password
  *       - myuser_t object attempt was against
  *
  * Outputs:
@@ -807,7 +807,7 @@ change_notify(const char *from, user_t *to, const char *fmt, ...)
  * Note:
  *       - kills are currently not done
  */
-bool bad_password(sourceinfo_t *si, myuser_t *mu)
+bool bad_password(struct sourceinfo *si, myuser_t *mu)
 {
 	const char *mask;
 	struct tm tm;
@@ -859,17 +859,17 @@ bool bad_password(sourceinfo_t *si, myuser_t *mu)
 
 mowgli_heap_t *sourceinfo_heap = NULL;
 
-static void sourceinfo_delete(sourceinfo_t *si)
+static void sourceinfo_delete(struct sourceinfo *si)
 {
 	mowgli_heap_free(sourceinfo_heap, si);
 }
 
-sourceinfo_t *sourceinfo_create(void)
+struct sourceinfo *sourceinfo_create(void)
 {
-	sourceinfo_t *out;
+	struct sourceinfo *out;
 
 	if (sourceinfo_heap == NULL)
-		sourceinfo_heap = sharedheap_get(sizeof(sourceinfo_t));
+		sourceinfo_heap = sharedheap_get(sizeof(struct sourceinfo));
 
 	out = mowgli_heap_alloc(sourceinfo_heap);
 	object_init(object(out), "<sourceinfo>", (destructor_t) sourceinfo_delete);
@@ -878,7 +878,7 @@ sourceinfo_t *sourceinfo_create(void)
 }
 
 void ATHEME_FATTR_PRINTF(3, 4)
-command_fail(sourceinfo_t *si, enum cmd_faultcode code, const char *fmt, ...)
+command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
@@ -902,7 +902,7 @@ command_fail(sourceinfo_t *si, enum cmd_faultcode code, const char *fmt, ...)
 }
 
 void ATHEME_FATTR_PRINTF(2, 3)
-command_success_nodata(sourceinfo_t *si, const char *fmt, ...)
+command_success_nodata(struct sourceinfo *si, const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
@@ -952,7 +952,7 @@ command_success_nodata(sourceinfo_t *si, const char *fmt, ...)
 }
 
 void ATHEME_FATTR_PRINTF(3, 4)
-command_success_string(sourceinfo_t *si, const char *result, const char *fmt, ...)
+command_success_string(struct sourceinfo *si, const char *result, const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
@@ -980,7 +980,7 @@ static void command_table_cb(const char *line, void *data)
 	command_success_nodata(data, "%s", line);
 }
 
-void command_success_table(sourceinfo_t *si, table_t *table)
+void command_success_table(struct sourceinfo *si, table_t *table)
 {
 	if (si->v != NULL && si->v->cmd_success_table)
 	{
@@ -991,7 +991,7 @@ void command_success_table(sourceinfo_t *si, table_t *table)
 	table_render(table, command_table_cb, si);
 }
 
-const char *get_source_name(sourceinfo_t *si)
+const char *get_source_name(struct sourceinfo *si)
 {
 	static char result[NICKLEN + 1 + NICKLEN + 1 + 10];
 
@@ -1016,7 +1016,7 @@ const char *get_source_name(sourceinfo_t *si)
 	return result;
 }
 
-const char *get_source_mask(sourceinfo_t *si)
+const char *get_source_mask(struct sourceinfo *si)
 {
 	static char result[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + 10];
 
@@ -1038,7 +1038,7 @@ const char *get_source_mask(sourceinfo_t *si)
 	return result;
 }
 
-const char *get_oper_name(sourceinfo_t *si)
+const char *get_oper_name(struct sourceinfo *si)
 {
 	static char result[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + NICKLEN + 10];
 
@@ -1067,7 +1067,7 @@ const char *get_oper_name(sourceinfo_t *si)
 	return result;
 }
 
-const char *get_storage_oper_name(sourceinfo_t *si)
+const char *get_storage_oper_name(struct sourceinfo *si)
 {
 	static char result[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + NICKLEN + 10];
 
@@ -1089,7 +1089,7 @@ const char *get_storage_oper_name(sourceinfo_t *si)
 	return result;
 }
 
-const char *get_source_security_label(sourceinfo_t *si)
+const char *get_source_security_label(struct sourceinfo *si)
 {
 	static char result[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + NICKLEN + 1 + HOSTLEN + 1 + 10];
 	const soper_t *soper;
@@ -1161,7 +1161,7 @@ verbose_wallops(const char *fmt, ...)
  * Returns true if it is ok, false if not; command_fail() will have been called
  * as well.
  */
-bool check_vhost_validity(sourceinfo_t *si, const char *host)
+bool check_vhost_validity(struct sourceinfo *si, const char *host)
 {
 	const char *p;
 

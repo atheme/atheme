@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_compare(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_compare = { "COMPARE", N_("Compares two users or channels."), PRIV_CHAN_AUSPEX, 2, os_cmd_compare, { .path = "oservice/compare" } };
 
@@ -23,7 +23,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("operserv", &os_compare);
 }
 
-static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_compare(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *object1 = parv[0];
 	char *object2 = parv[1];

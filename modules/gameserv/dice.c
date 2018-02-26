@@ -12,8 +12,8 @@
 
 #include <math.h>
 
-static void command_dice(sourceinfo_t *si, int parc, char *parv[]);
-static void command_calc(sourceinfo_t *si, int parc, char *parv[]);
+static void command_dice(struct sourceinfo *si, int parc, char *parv[]);
+static void command_calc(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cmd_dice = { "ROLL", N_("Rolls one or more dice."), AC_NONE, 3, command_dice, {.path = "gameserv/roll"} };
 struct command cmd_calc = { "CALC", N_("Calculate stuff."), AC_NONE, 3, command_calc, {.path = "gameserv/calc"} };
@@ -61,8 +61,8 @@ mod_deinit(const module_unload_intent_t intent)
 #define DICE_MAX_DICE		(100)
 #define DICE_MAX_SIDES		(100)
 
-int do_calc_expr(sourceinfo_t *si, char *expr, char *errmsg, double *presult);
-int do_calc_eval(sourceinfo_t *si, double lhs, char oper, double rhs, double *out, char *errmsg);
+int do_calc_expr(struct sourceinfo *si, char *expr, char *errmsg, double *presult);
+int do_calc_eval(struct sourceinfo *si, double lhs, char oper, double rhs, double *out, char *errmsg);
 int is_calcoper(char oper);
 
 //
@@ -82,7 +82,7 @@ int is_calcoper(char oper);
 // * / = Multiply / Divide         |  [Rank 7]
 // % \ = Modulus / Integer-divide  |  |   = Bitwise inclusive OR
 //
-static bool eval_calc(sourceinfo_t *si, char *s_input)
+static bool eval_calc(struct sourceinfo *si, char *s_input)
 {
 	static char buffer[1024];
 
@@ -172,7 +172,7 @@ typedef struct _tagCalcStack
 	int _brace;
 } CalcStack;
 
-int do_calc_expr(sourceinfo_t *si, char *expr, char *errmsg, double *presult)
+int do_calc_expr(struct sourceinfo *si, char *expr, char *errmsg, double *presult)
 {
 	int expect = CALCEXPR_VALUE, lastrank, currank;
 	char *cur = expr, *endptr, lastop, curop = ' ';
@@ -370,7 +370,7 @@ static double calc_dice_simple(double lhs, double rhs)
 
 //////////////////////////////////////////////////////////////////////////
 
-int do_calc_eval(sourceinfo_t *si, double lhs, char oper, double rhs, double *out, char *errmsg)
+int do_calc_eval(struct sourceinfo *si, double lhs, char oper, double rhs, double *out, char *errmsg)
 {
 	switch (oper)
 	{
@@ -457,7 +457,7 @@ int is_calcoper(char oper)
 
 /*************************************************************************************/
 
-static bool eval_dice(sourceinfo_t *si, char *s_input)
+static bool eval_dice(struct sourceinfo *si, char *s_input)
 {
 	static char buffer[1024], result[32];
 
@@ -572,7 +572,7 @@ static bool eval_dice(sourceinfo_t *si, char *s_input)
 	return true;
 }
 
-static void command_dice(sourceinfo_t *si, int parc, char *parv[])
+static void command_dice(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *arg;
 	mychan_t *mc;
@@ -610,7 +610,7 @@ static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 			break;
 }
 
-static void command_calc(sourceinfo_t *si, int parc, char *parv[])
+static void command_calc(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *arg;
 	mychan_t *mc;

@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void os_cmd_uptime(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_uptime(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_uptime = { "UPTIME", N_("Shows services uptime and the number of registered nicks and channels."), PRIV_SERVER_AUSPEX, 1, os_cmd_uptime, { .path = "oservice/uptime" } };
 
@@ -23,7 +23,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("operserv", &os_uptime);
 }
 
-static void os_cmd_uptime(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_uptime(struct sourceinfo *si, int parc, char *parv[])
 {
 	logcommand(si, CMDLOG_GET, "UPTIME");
 

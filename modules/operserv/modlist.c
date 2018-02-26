@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void os_cmd_modlist(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_modlist(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_modlist = { "MODLIST", N_("Lists loaded modules."), PRIV_SERVER_AUSPEX, 0, os_cmd_modlist, { .path = "oservice/modlist" } };
 
@@ -25,7 +25,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("operserv", &os_modlist);
 }
 
-static void os_cmd_modlist(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_modlist(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
 	unsigned int i = 0;

@@ -10,10 +10,10 @@
 #include "hostserv.h"
 #include "../groupserv/groupserv.h"
 
-static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[]);
-static void hs_cmd_unoffer(sourceinfo_t *si, int parc, char *parv[]);
-static void hs_cmd_offerlist(sourceinfo_t *si, int parc, char *parv[]);
-static void hs_cmd_take(sourceinfo_t *si, int parc, char *parv[]);
+static void hs_cmd_offer(struct sourceinfo *si, int parc, char *parv[]);
+static void hs_cmd_unoffer(struct sourceinfo *si, int parc, char *parv[]);
+static void hs_cmd_offerlist(struct sourceinfo *si, int parc, char *parv[]);
+static void hs_cmd_take(struct sourceinfo *si, int parc, char *parv[]);
 
 static void write_hsofferdb(database_handle_t *db);
 static void db_h_ho(database_handle_t *db, const char *type);
@@ -163,7 +163,7 @@ static void remove_group_offered_hosts(mygroup_t *mg)
 }
 
 /* OFFER <host> */
-static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[])
+static void hs_cmd_offer(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *group = parv[0];
 	char *host;
@@ -239,7 +239,7 @@ static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[])
 }
 
 /* UNOFFER <vhost> */
-static void hs_cmd_unoffer(sourceinfo_t *si, int parc, char *parv[])
+static void hs_cmd_unoffer(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *host = parv[0];
 	hsoffered_t *l;
@@ -298,7 +298,7 @@ static bool myuser_is_in_group(myuser_t *mu, myentity_t *mt)
 }
 
 /* TAKE <vhost> */
-static void hs_cmd_take(sourceinfo_t *si, int parc, char *parv[])
+static void hs_cmd_take(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *host = parv[0];
 	hsoffered_t *l;
@@ -363,7 +363,7 @@ static void hs_cmd_take(sourceinfo_t *si, int parc, char *parv[])
 }
 
 /* OFFERLIST */
-static void hs_cmd_offerlist(sourceinfo_t *si, int parc, char *parv[])
+static void hs_cmd_offerlist(struct sourceinfo *si, int parc, char *parv[])
 {
 	hsoffered_t *l;
 	mowgli_node_t *n;

@@ -8,7 +8,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_set_restricted(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_restricted(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_set_restricted = { "RESTRICTED", N_("Restricts access to the channel to users on the access list. (Other users are kickbanned.)"), AC_NONE, 2, cs_cmd_set_restricted, { .path = "cservice/set_restricted" } };
 
@@ -28,7 +28,7 @@ mod_deinit(const module_unload_intent_t intent)
 	command_delete(&cs_set_restricted, *cs_set_cmdtree);
 }
 
-static void cs_cmd_set_restricted(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_set_restricted(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 

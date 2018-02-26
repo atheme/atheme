@@ -8,23 +8,23 @@
 #include "atheme.h"
 #include <limits.h>
 
-static void os_help_set(sourceinfo_t *si, const char *subcmd);
-static void os_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_set_recontime(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_set_maxlogins(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_set_maxnicks(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_set_maxusers(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_set_maxchans(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_set_mdlimit(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_set_klinetime(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_set_commitinterval(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_set_chanexpire(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_set_maxchanacs(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_set_maxfounders(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_set_akicktime(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_set_spam(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_set_nickexpire(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_set_enforceprefix(sourceinfo_t *si, int parc, char *parv[]);
+static void os_help_set(struct sourceinfo *si, const char *subcmd);
+static void os_cmd_set(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_set_recontime(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_set_maxlogins(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_set_maxnicks(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_set_maxusers(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_set_maxchans(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_set_mdlimit(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_set_klinetime(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_set_commitinterval(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_set_chanexpire(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_set_maxchanacs(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_set_maxfounders(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_set_akicktime(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_set_spam(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_set_nickexpire(struct sourceinfo *si, int parc, char *parv[]);
+static void os_cmd_set_enforceprefix(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_set = { "SET", N_("Sets various control flags."), PRIV_ADMIN, 2, os_cmd_set, { .func = os_help_set } };
 struct command os_set_recontime = { "RECONTIME", N_("Changes IRCd reconnect delay."), AC_NONE, 1, os_cmd_set_recontime, { .path = "oservice/set_recontime" } };
@@ -46,7 +46,7 @@ struct command os_set_enforceprefix = { "ENFORCEPREFIX", N_("Changes the prefix 
 mowgli_patricia_t *os_set_cmdtree;
 
 /* HELP SET */
-static void os_help_set(sourceinfo_t *si, const char *subcmd)
+static void os_help_set(struct sourceinfo *si, const char *subcmd)
 {
 	if (!subcmd)
 	{
@@ -69,7 +69,7 @@ static void os_help_set(sourceinfo_t *si, const char *subcmd)
 }
 
 /* SET <setting> <parameters> */
-static void os_cmd_set(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *setting = parv[0];
 	struct command *c;
@@ -92,7 +92,7 @@ static void os_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void os_cmd_set_recontime(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_set_recontime(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *recontime = parv[0];
 
@@ -118,7 +118,7 @@ static void os_cmd_set_recontime(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void os_cmd_set_maxlogins(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_set_maxlogins(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *logins = parv[0];
 
@@ -144,7 +144,7 @@ static void os_cmd_set_maxlogins(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void os_cmd_set_maxusers(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_set_maxusers(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *users = parv[0];
 
@@ -170,7 +170,7 @@ static void os_cmd_set_maxusers(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void os_cmd_set_maxnicks(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_set_maxnicks(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *nicks = parv[0];
 
@@ -196,7 +196,7 @@ static void os_cmd_set_maxnicks(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void os_cmd_set_maxchans(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_set_maxchans(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chans = parv[0];
 
@@ -222,7 +222,7 @@ static void os_cmd_set_maxchans(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void os_cmd_set_mdlimit(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_set_mdlimit(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *limit = parv[0];
 
@@ -248,7 +248,7 @@ static void os_cmd_set_mdlimit(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void os_cmd_set_klinetime(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_set_klinetime(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *days = parv[0];
 
@@ -275,7 +275,7 @@ static void os_cmd_set_klinetime(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void os_cmd_set_commitinterval(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_set_commitinterval(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *minutes = parv[0];
 
@@ -302,7 +302,7 @@ static void os_cmd_set_commitinterval(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void os_cmd_set_chanexpire(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_set_chanexpire(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *days = parv[0];
 
@@ -329,7 +329,7 @@ static void os_cmd_set_chanexpire(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void os_cmd_set_maxchanacs(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_set_maxchanacs(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chanacs = parv[0];
 
@@ -355,7 +355,7 @@ static void os_cmd_set_maxchanacs(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void os_cmd_set_maxfounders(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_set_maxfounders(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *founders = parv[0];
 
@@ -384,7 +384,7 @@ static void os_cmd_set_maxfounders(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void os_cmd_set_akicktime(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_set_akicktime(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *minutes = parv[0];
 
@@ -411,7 +411,7 @@ static void os_cmd_set_akicktime(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void os_cmd_set_spam(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_set_spam(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *spam = parv[0];
 
@@ -455,7 +455,7 @@ static void os_cmd_set_spam(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void os_cmd_set_nickexpire(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_set_nickexpire(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *days = parv[0];
 
@@ -482,7 +482,7 @@ static void os_cmd_set_nickexpire(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void os_cmd_set_enforceprefix(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_set_enforceprefix(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *prefix = parv[0];
 

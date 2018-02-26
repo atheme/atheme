@@ -8,11 +8,11 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[]);
+static void gs_cmd_flags(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command gs_flags = { "FLAGS", N_("Sets flags on a user in a group."), AC_AUTHENTICATED, 3, gs_cmd_flags, { .path = "groupserv/flags" } };
 
-static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
+static void gs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
 	mygroup_t *mg;

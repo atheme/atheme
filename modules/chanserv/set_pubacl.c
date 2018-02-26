@@ -8,7 +8,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_set_pubacl(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_pubacl(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_set_pubacl = { "PUBACL", N_("Allows the channel ACL to be public."), AC_NONE, 2, cs_cmd_set_pubacl, { .path = "cservice/set_pubacl" } };
 
@@ -28,7 +28,7 @@ mod_deinit(const module_unload_intent_t intent)
 	command_delete(&cs_set_pubacl, *cs_set_cmdtree);
 }
 
-static void cs_cmd_set_pubacl(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_set_pubacl(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 

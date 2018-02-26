@@ -9,11 +9,11 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-static void gs_cmd_regnolimit(sourceinfo_t *si, int parc, char *parv[]);
+static void gs_cmd_regnolimit(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command gs_regnolimit = { "REGNOLIMIT", N_("Allow a group to bypass registration limits."), PRIV_GROUP_ADMIN, 2, gs_cmd_regnolimit, { .path = "groupserv/regnolimit" } };
 
-static void gs_cmd_regnolimit(sourceinfo_t *si, int parc, char *parv[])
+static void gs_cmd_regnolimit(struct sourceinfo *si, int parc, char *parv[])
 {
 	mygroup_t *mg;
 

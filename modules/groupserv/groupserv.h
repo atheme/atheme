@@ -22,8 +22,8 @@ groupacs_t * (*groupacs_add)(mygroup_t *mg, myentity_t *mt, unsigned int flags);
 groupacs_t * (*groupacs_find)(mygroup_t *mg, myentity_t *mt, unsigned int flags, bool allow_recurse);
 void (*groupacs_delete)(mygroup_t *mg, myentity_t *mt);
 
-bool (*groupacs_sourceinfo_has_flag)(mygroup_t *mg, sourceinfo_t *si, unsigned int flag);
-unsigned int (*groupacs_sourceinfo_flags)(mygroup_t *mg, sourceinfo_t *si);
+bool (*groupacs_sourceinfo_has_flag)(mygroup_t *mg, struct sourceinfo *si, unsigned int flag);
+unsigned int (*groupacs_sourceinfo_flags)(mygroup_t *mg, struct sourceinfo *si);
 unsigned int (*gs_flags_parser)(char *flagstring, int allow_minus, unsigned int flags);
 mowgli_list_t * (*myentity_get_membership_list)(myentity_t *mu);
 const char * (*mygroup_founder_names)(mygroup_t *mg);

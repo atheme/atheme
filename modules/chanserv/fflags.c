@@ -8,7 +8,7 @@
 #include "atheme.h"
 #include "template.h"
 
-static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_fflags = { "FFLAGS", N_("Forces a flags change on a channel."),
                         PRIV_CHAN_ADMIN, 3, cs_cmd_fflags, { .path = "cservice/fflags" } };
@@ -26,7 +26,7 @@ mod_deinit(const module_unload_intent_t intent)
 }
 
 /* FFLAGS <channel> <user> <flags> */
-static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *channel = parv[0];
 	const char *target = parv[1];

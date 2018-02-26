@@ -7,9 +7,9 @@
 
 #include "atheme.h"
 
-static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[]);
-static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[]);
-static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_group(struct sourceinfo *si, int parc, char *parv[]);
+static void ns_cmd_ungroup(struct sourceinfo *si, int parc, char *parv[]);
+static void ns_cmd_fungroup(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_group = { "GROUP", N_("Adds a nickname to your account."), AC_AUTHENTICATED, 0, ns_cmd_group, { .path = "nickserv/group" } };
 struct command ns_ungroup = { "UNGROUP", N_("Removes a nickname from your account."), AC_AUTHENTICATED, 1, ns_cmd_ungroup, { .path = "nickserv/ungroup" } };
@@ -31,7 +31,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("nickserv", &ns_fungroup);
 }
 
-static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_group(struct sourceinfo *si, int parc, char *parv[])
 {
 	mynick_t *mn;
 	hook_user_req_t hdata;
@@ -96,7 +96,7 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 	hook_call_nick_group(&hdata);
 }
 
-static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_ungroup(struct sourceinfo *si, int parc, char *parv[])
 {
 	mynick_t *mn;
 	const char *target;
@@ -136,7 +136,7 @@ static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[])
 	object_unref(mn);
 }
 
-static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_fungroup(struct sourceinfo *si, int parc, char *parv[])
 {
 	mynick_t *mn, *mn2 = NULL;
 	myuser_t *mu;

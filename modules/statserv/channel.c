@@ -7,9 +7,9 @@
 
 #include "atheme.h"
 
-static void ss_cmd_channel(sourceinfo_t * si, int parc, char *parv[]);
-static void ss_cmd_channel_topic(sourceinfo_t * si, int parc, char *parv[]);
-static void ss_cmd_channel_count(sourceinfo_t * si, int parc, char *parv[]);
+static void ss_cmd_channel(struct sourceinfo * si, int parc, char *parv[]);
+static void ss_cmd_channel_topic(struct sourceinfo * si, int parc, char *parv[]);
+static void ss_cmd_channel_count(struct sourceinfo * si, int parc, char *parv[]);
 
 struct command ss_channel =
 { "CHANNEL", N_("Obtain various information about a channel."), AC_NONE, 2, ss_cmd_channel, {.path = "statserv/channel"} };
@@ -44,7 +44,7 @@ mod_deinit(const module_unload_intent_t intent)
     mowgli_patricia_destroy(ss_channel_cmds, NULL, NULL);
 }
 
-static void ss_cmd_channel(sourceinfo_t * si, int parc, char *parv[])
+static void ss_cmd_channel(struct sourceinfo * si, int parc, char *parv[])
 {
     struct command *c;
     char *cmd = parv[0];
@@ -69,7 +69,7 @@ static void ss_cmd_channel(sourceinfo_t * si, int parc, char *parv[])
     command_exec(si->service, si, c, parc - 1, parv + 1);
 }
 
-static void ss_cmd_channel_topic(sourceinfo_t * si, int parc, char *parv[])
+static void ss_cmd_channel_topic(struct sourceinfo * si, int parc, char *parv[])
 {
     char *chan = parv[0];
     struct channel *c;
@@ -102,7 +102,7 @@ static void ss_cmd_channel_topic(sourceinfo_t * si, int parc, char *parv[])
         command_success_nodata(si, _("No topic set for %s"), c->name);
 }
 
-static void ss_cmd_channel_count(sourceinfo_t * si, int parc, char *parv[])
+static void ss_cmd_channel_count(struct sourceinfo * si, int parc, char *parv[])
 {
     command_success_nodata(si, "There are %u channels on the network.", mowgli_patricia_size(chanlist));
 }

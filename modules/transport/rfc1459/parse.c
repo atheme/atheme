@@ -29,7 +29,7 @@
 /* parses a standard 2.8.21 style IRC stream */
 void irc_parse(char *line)
 {
-	sourceinfo_t *si;
+	struct sourceinfo *si;
 	char *pos;
 	char *origin = NULL;
 	char *command = NULL;

@@ -10,9 +10,9 @@
 #include "atheme.h"
 #include "gameserv_common.h"
 
-static void command_wod(sourceinfo_t *si, int parc, char *parv[]);
-static void command_nwod(sourceinfo_t *si, int parc, char *parv[]);
-static void command_df(sourceinfo_t *si, int parc, char *parv[]);
+static void command_wod(struct sourceinfo *si, int parc, char *parv[]);
+static void command_nwod(struct sourceinfo *si, int parc, char *parv[]);
+static void command_df(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cmd_wod = { "WOD", N_("WOD-style dice generation."), AC_NONE, 7, command_wod, { .path = "gameserv/roll" } };
 struct command cmd_nwod = { "NWOD", N_("New WOD-style dice generation."), AC_NONE, 7, command_nwod, { .path = "gameserv/roll" } };
@@ -42,7 +42,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cmd_df);
 }
 
-static void command_wod(sourceinfo_t *si, int parc, char *parv[])
+static void command_wod(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	char *arg_dice, *arg_difficulty;
@@ -125,7 +125,7 @@ static void command_wod(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void command_nwod(sourceinfo_t *si, int parc, char *parv[])
+static void command_nwod(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	char *arg_dice, *arg_rerollflag;
@@ -224,7 +224,7 @@ static void command_nwod(sourceinfo_t *si, int parc, char *parv[])
 
 static const char *df_dice_table[3] = { "[-]", "[ ]", "[+]" };
 
-static void command_df(sourceinfo_t *si, int parc, char *parv[])
+static void command_df(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	char *arg_dice;

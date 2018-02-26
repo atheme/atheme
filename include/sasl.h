@@ -41,7 +41,7 @@ struct sasl_session
 {
 	struct sasl_mechanism   *mechptr;               // Mechanism they're using
 	server_t                *server;                // Server they're on
-	sourceinfo_t            *si;                    // The source info for logcommand(), bad_password(), and login hooks
+	struct sourceinfo       *si;                    // The source info for logcommand(), bad_password(), and login hooks
 	char                    *uid;                   // Network UID
 	char                    *buf;                   // Buffered Base-64 data from them (so far)
 	void                    *mechdata;              // Mechanism-specific allocated memory
@@ -59,7 +59,7 @@ struct sasl_session
 
 struct sasl_sourceinfo
 {
-	sourceinfo_t             parent;
+	struct sourceinfo        parent;
 	struct sasl_session     *sess;
 };
 

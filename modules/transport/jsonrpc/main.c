@@ -24,9 +24,9 @@ static bool jsonrpcmethod_ison(void *conn, mowgli_list_t *params, char *id);
 static bool jsonrpcmethod_metadata(void *conn, mowgli_list_t *params, char *id);
 
 
-static void jsonrpc_command_fail(sourceinfo_t *si, enum cmd_faultcode code, const char *message);
-static void jsonrpc_command_success_string(sourceinfo_t *si, const char *result, const char *message);
-static void jsonrpc_command_success_nodata(sourceinfo_t *si, const char *message);
+static void jsonrpc_command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *message);
+static void jsonrpc_command_success_string(struct sourceinfo *si, const char *result, const char *message);
+static void jsonrpc_command_success_nodata(struct sourceinfo *si, const char *message);
 
 struct sourceinfo_vtable jsonrpc_vtable = {
 	.description        = "jsonrpc",
@@ -149,7 +149,7 @@ static bool jsonrpcmethod_login(void *conn, mowgli_list_t *params, char *id)
 
 	if (!verify_password(mu, password))
 	{
-		sourceinfo_t *si;
+		struct sourceinfo *si;
 
 		logcommand_external(nicksvs.me, "jsonrpc", conn, sourceip, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (bad password)", entity(mu)->name);
 		jsonrpc_failure_string(conn, fault_authfail, "The password is incorrect.", id);
@@ -240,7 +240,7 @@ static bool jsonrpcmethod_logout(void *conn, mowgli_list_t *params, char *id)
 	return 0;
 }
 
-static void jsonrpc_command_fail(sourceinfo_t *si, enum cmd_faultcode code, const char *message)
+static void jsonrpc_command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *message)
 {
 	connection_t *cptr;
 	struct httpddata *hd;
@@ -261,7 +261,7 @@ static void jsonrpc_command_fail(sourceinfo_t *si, enum cmd_faultcode code, cons
 }
 
 
-static void jsonrpc_command_success_string(sourceinfo_t *si, const char *result, const char *message)
+static void jsonrpc_command_success_string(struct sourceinfo *si, const char *result, const char *message)
 {
 	connection_t *cptr;
 	struct httpddata *hd;
@@ -277,7 +277,7 @@ static void jsonrpc_command_success_string(sourceinfo_t *si, const char *result,
 	hd->sent_reply = true;
 }
 
-static void jsonrpc_command_success_nodata(sourceinfo_t *si, const char *message)
+static void jsonrpc_command_success_nodata(struct sourceinfo *si, const char *message)
 {
 	connection_t *cptr;
 	struct httpddata *hd;
@@ -327,7 +327,7 @@ static bool jsonrpcmethod_command(void *conn, mowgli_list_t *params, char *id)
 	myuser_t *mu;
 	struct service *svs;
 	struct command *cmd;
-	sourceinfo_t *si;
+	struct sourceinfo *si;
 	int newparc;
 	char *newparv[20];
 	struct httpddata *hd = ((connection_t *)conn)->userdata;

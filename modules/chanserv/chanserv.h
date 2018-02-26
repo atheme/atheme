@@ -1,7 +1,7 @@
 #ifndef INLINE_CHANSERV_H
 #define INLINE_CHANSERV_H
 
-typedef void (*cs_cmd_proto)(sourceinfo_t*, int, char**);
+typedef void (*cs_cmd_proto)(struct sourceinfo *, int, char**);
 
 static inline unsigned int custom_founder_check(void)
 {

@@ -9,7 +9,7 @@
 #include "atheme.h"
 #include "uplink.h"
 
-static void os_cmd_inject(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_inject(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_inject = { "INJECT", N_("Fakes data from the uplink (debugging tool)."), PRIV_ADMIN, 1, os_cmd_inject, { .path = "oservice/inject" } };
 
@@ -25,7 +25,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("operserv", &os_inject);
 }
 
-static void os_cmd_inject(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_inject(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *inject;
 	static bool injecting = false;

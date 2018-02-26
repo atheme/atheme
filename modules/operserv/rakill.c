@@ -12,7 +12,7 @@
  */
 #include "atheme.h"
 
-static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_rakill(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_rakill = { "RAKILL", N_("Sets a group of AKILLs against users matching a specific regex pattern."), PRIV_MASS_AKILL, 1, os_cmd_rakill, { .path = "oservice/rakill" } };
 
@@ -28,7 +28,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("operserv", &os_rakill);
 }
 
-static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_rakill(struct sourceinfo *si, int parc, char *parv[])
 {
 	atheme_regex_t *regex;
 	char usermask[512];

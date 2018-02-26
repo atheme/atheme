@@ -8,7 +8,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_email(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_set_email = { "EMAIL", N_("Sets the channel e-mail address."), AC_NONE, 2, cs_cmd_set_email, { .path = "cservice/set_email" } };
 
@@ -28,7 +28,7 @@ mod_deinit(const module_unload_intent_t intent)
 	command_delete(&cs_set_email, *cs_set_cmdtree);
 }
 
-static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_set_email(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	char *mail = parv[1];

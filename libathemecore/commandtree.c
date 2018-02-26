@@ -51,7 +51,7 @@ struct command *command_find(mowgli_patricia_t *commandtree, const char *command
 }
 
 static bool permissive_mode_fallback = false;
-static bool default_command_authorize(struct service *svs, sourceinfo_t *si, struct command *c, const char *userlevel)
+static bool default_command_authorize(struct service *svs, struct sourceinfo *si, struct command *c, const char *userlevel)
 {
 	if (!(has_priv(si, c->access) && has_priv(si, userlevel)))
 	{
@@ -62,9 +62,9 @@ static bool default_command_authorize(struct service *svs, sourceinfo_t *si, str
 
 	return true;
 }
-bool (*command_authorize)(struct service *svs, sourceinfo_t *si, struct command *c, const char *userlevel) = default_command_authorize;
+bool (*command_authorize)(struct service *svs, struct sourceinfo *si, struct command *c, const char *userlevel) = default_command_authorize;
 
-static inline bool command_verify(struct service *svs, sourceinfo_t *si, struct command *c, const char *userlevel)
+static inline bool command_verify(struct service *svs, struct sourceinfo *si, struct command *c, const char *userlevel)
 {
 	if (command_authorize(svs, si, c, userlevel))
 		return true;
@@ -83,7 +83,7 @@ static inline bool command_verify(struct service *svs, sourceinfo_t *si, struct 
 	return false;
 }
 
-void command_exec(struct service *svs, sourceinfo_t *si, struct command *c, int parc, char *parv[])
+void command_exec(struct service *svs, struct sourceinfo *si, struct command *c, int parc, char *parv[])
 {
 	const char *cmdaccess;
 
@@ -134,7 +134,7 @@ void command_exec(struct service *svs, sourceinfo_t *si, struct command *c, int 
 		language_set_active(NULL);
 }
 
-void command_exec_split(struct service *svs, sourceinfo_t *si, const char *cmd, char *text, mowgli_patricia_t *commandtree)
+void command_exec_split(struct service *svs, struct sourceinfo *si, const char *cmd, char *text, mowgli_patricia_t *commandtree)
 {
 	int parc, i;
 	char *parv[20];
@@ -171,7 +171,7 @@ void command_exec_split(struct service *svs, sourceinfo_t *si, const char *cmd, 
  * outputs -
  *     A list of available commands.
  */
-void command_help(sourceinfo_t *si, mowgli_patricia_t *commandtree)
+void command_help(struct sourceinfo *si, mowgli_patricia_t *commandtree)
 {
 	mowgli_patricia_iteration_state_t state;
 	struct command *c;
@@ -227,7 +227,7 @@ static bool string_in_list(const char *str, const char *name)
  * outputs -
  *     A list of available commands.
  */
-void command_help_short(sourceinfo_t *si, mowgli_patricia_t *commandtree, const char *maincmds)
+void command_help_short(struct sourceinfo *si, mowgli_patricia_t *commandtree, const char *maincmds)
 {
 	mowgli_patricia_iteration_state_t state;
 	unsigned int l, lv;

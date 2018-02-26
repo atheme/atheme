@@ -13,7 +13,7 @@
 
 mowgli_patricia_t **ns_set_cmdtree;
 
-static void ns_cmd_set_nevergroup(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_set_nevergroup(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_set_nevergroup = { "NEVERGROUP", N_("Prevents you from being added to group access lists."), AC_NONE, 1, ns_cmd_set_nevergroup, { .path = "nickserv/set_nevergroup" } };
 
@@ -49,7 +49,7 @@ mod_deinit(const module_unload_intent_t intent)
 }
 
 /* SET NEVERGROUP <ON|OFF> */
-static void ns_cmd_set_nevergroup(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_set_nevergroup(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *params = parv[0];
 

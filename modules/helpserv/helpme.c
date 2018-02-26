@@ -11,7 +11,7 @@
 unsigned int ratelimit_count = 0;
 time_t ratelimit_firsttime = 0;
 
-static void helpserv_cmd_helpme(sourceinfo_t *si, int parc, char *parv[]);
+static void helpserv_cmd_helpme(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command helpserv_helpme = { "HELPME", N_("Request help from network staff."), AC_NONE, 1, helpserv_cmd_helpme, { .path = "helpserv/helpme" } };
 
@@ -27,7 +27,7 @@ mod_deinit(const module_unload_intent_t intent)
         service_named_unbind_command("helpserv", &helpserv_helpme);
 }
 
-static void helpserv_cmd_helpme(sourceinfo_t *si, int parc, char *parv[])
+static void helpserv_cmd_helpme(struct sourceinfo *si, int parc, char *parv[])
 {
         char *topic = parv[0];
 

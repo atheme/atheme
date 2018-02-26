@@ -281,12 +281,12 @@ struct mymemo
 /* account related hooks */
 typedef struct {
 	mychan_t *mc;
-	sourceinfo_t *si;
+	struct sourceinfo *si;
 } hook_channel_req_t;
 
 typedef struct {
 	chanacs_t *ca;
-	sourceinfo_t *si;
+	struct sourceinfo *si;
 	myentity_t *parent;
 	unsigned int oldlevel;
 	unsigned int newlevel;
@@ -308,20 +308,20 @@ typedef struct {
 } hook_expiry_req_t;
 
 typedef struct {
-	sourceinfo_t *si;
+	struct sourceinfo *si;
 	const char *name;
 	struct channel *chan;
 	int approved; /* Write non-zero here to disallow the registration */
 } hook_channel_register_check_t;
 
 typedef struct {
-	sourceinfo_t *si;
+	struct sourceinfo *si;
 	myuser_t *mu;
 	mynick_t *mn;
 } hook_user_req_t;
 
 typedef struct {
-	sourceinfo_t *si;
+	struct sourceinfo *si;
 	const char *account; /* or nick */
 	const char *email;
 	const char *password;
@@ -329,7 +329,7 @@ typedef struct {
 } hook_user_register_check_t;
 
 typedef struct {
-	sourceinfo_t *si;
+	struct sourceinfo *si;
 	myuser_t *mu;
 	bool allowed;
 } hook_user_login_check_t;
@@ -351,12 +351,12 @@ typedef struct {
 } hook_user_rename_t;
 
 typedef struct {
-	sourceinfo_t *si;
+	struct sourceinfo *si;
 	const char *nick;
 } hook_info_noexist_req_t;
 
 typedef struct {
-	sourceinfo_t *si;
+	struct sourceinfo *si;
 	myuser_t *mu;
 	int allowed;
 } hook_user_needforce_t;
@@ -471,8 +471,8 @@ extern chanacs_t *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, unsigne
 extern chanacs_t *chanacs_find_by_mask(mychan_t *mychan, const char *mask, unsigned int level);
 extern bool chanacs_user_has_flag(mychan_t *mychan, user_t *u, unsigned int level);
 extern unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u);
-//inline bool chanacs_source_has_flag(mychan_t *mychan, sourceinfo_t *si, unsigned int level);
-extern unsigned int chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si);
+//inline bool chanacs_source_has_flag(mychan_t *mychan, struct sourceinfo *si, unsigned int level);
+extern unsigned int chanacs_source_flags(mychan_t *mychan, struct sourceinfo *si);
 
 extern chanacs_t *chanacs_open(mychan_t *mychan, myentity_t *mt, const char *hostmask, bool create, myentity_t *setter);
 //inline void chanacs_close(chanacs_t *ca);

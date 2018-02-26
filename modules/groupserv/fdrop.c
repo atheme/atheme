@@ -8,11 +8,11 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-static void gs_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[]);
+static void gs_cmd_fdrop(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command gs_fdrop = { "FDROP", N_("Force drops a group registration."), PRIV_GROUP_ADMIN, 1, gs_cmd_fdrop, { .path = "groupserv/fdrop" } };
 
-static void gs_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[])
+static void gs_cmd_fdrop(struct sourceinfo *si, int parc, char *parv[])
 {
 	mygroup_t *mg;
 	char *name = parv[0];

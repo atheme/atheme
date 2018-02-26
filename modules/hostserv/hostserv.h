@@ -3,7 +3,7 @@
 
 typedef struct {
         const char *host;
-	sourceinfo_t *si;
+	struct sourceinfo *si;
 	int approved;
 	const char *target;
 } hook_host_request_t;

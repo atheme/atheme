@@ -9,7 +9,7 @@
 #include "atheme.h"
 #include "hostserv.h"
 
-static void hs_cmd_drop(sourceinfo_t *si, int parc, char *parv[]);
+static void hs_cmd_drop(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command hs_drop = { "DROP", N_("Drops your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_drop, { .path = "hostserv/drop" } };
 
@@ -26,7 +26,7 @@ mod_deinit(const module_unload_intent_t intent)
 }
 
 
-static void hs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
+static void hs_cmd_drop(struct sourceinfo *si, int parc, char *parv[])
 {
 	mynick_t *mn;
 	metadata_t *md;

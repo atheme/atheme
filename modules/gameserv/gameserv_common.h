@@ -14,7 +14,7 @@
  * but this is quicker and easier...                                  -- nenolod
  */
 static inline void ATHEME_FATTR_PRINTF(2, 3)
-gs_command_report(sourceinfo_t *si, const char *fmt, ...)
+gs_command_report(struct sourceinfo *si, const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
@@ -33,7 +33,7 @@ gs_command_report(sourceinfo_t *si, const char *fmt, ...)
 		command_success_nodata(si, "%s", buf);
 }
 
-static inline bool gs_do_parameters(sourceinfo_t *si, int *parc, char ***parv, mychan_t **pmc)
+static inline bool gs_do_parameters(struct sourceinfo *si, int *parc, char ***parv, mychan_t **pmc)
 {
 	mychan_t *mc;
 	struct chanuser *cu;
@@ -124,7 +124,7 @@ gs_interactive_notification(myuser_t *mu, const char *notification, ...)
 
 		if ((svs = service_find("memoserv")) != NULL)
 		{
-			sourceinfo_t nullinfo = { .su = gameserv->me };
+			struct sourceinfo nullinfo = { .su = gameserv->me };
 
 			command_exec_split(svs, &nullinfo, "SEND", buf, svs->commands);
 		}

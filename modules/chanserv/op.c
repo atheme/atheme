@@ -8,8 +8,8 @@
 #include "atheme.h"
 #include "chanserv.h"
 
-static void cs_cmd_op(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_cmd_deop(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_op(struct sourceinfo *si, int parc, char *parv[]);
+static void cs_cmd_deop(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_op = { "OP", N_("Gives channel ops to a user."),
                         AC_NONE, 2, cs_cmd_op, { .path = "cservice/op_voice" } };
@@ -32,7 +32,7 @@ mod_deinit(const module_unload_intent_t intent)
 
 static mowgli_list_t op_actions;
 
-static void cmd_op(sourceinfo_t *si, bool opping, int parc, char *parv[])
+static void cmd_op(struct sourceinfo *si, bool opping, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	char *nick = parv[1];
@@ -117,7 +117,7 @@ static void cmd_op(sourceinfo_t *si, bool opping, int parc, char *parv[])
 	prefix_action_clear(&op_actions);
 }
 
-static void cs_cmd_op(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_op(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (!parv[0])
 	{
@@ -129,7 +129,7 @@ static void cs_cmd_op(sourceinfo_t *si, int parc, char *parv[])
 	cmd_op(si, true, parc, parv);
 }
 
-static void cs_cmd_deop(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_deop(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (!parv[0])
 	{

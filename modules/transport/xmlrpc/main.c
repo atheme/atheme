@@ -24,9 +24,9 @@ connection_t *current_cptr; /* XXX: Hack: src/xmlrpc.c requires us to do this */
 
 mowgli_list_t *httpd_path_handlers;
 
-static void xmlrpc_command_fail(sourceinfo_t *si, enum cmd_faultcode code, const char *message);
-static void xmlrpc_command_success_nodata(sourceinfo_t *si, const char *message);
-static void xmlrpc_command_success_string(sourceinfo_t *si, const char *result, const char *message);
+static void xmlrpc_command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *message);
+static void xmlrpc_command_success_nodata(struct sourceinfo *si, const char *message);
+static void xmlrpc_command_success_string(struct sourceinfo *si, const char *result, const char *message);
 
 static int xmlrpcmethod_login(void *conn, int parc, char *parv[]);
 static int xmlrpcmethod_logout(void *conn, int parc, char *parv[]);
@@ -141,7 +141,7 @@ mod_deinit(const module_unload_intent_t intent)
 	hook_del_config_ready(xmlrpc_config_ready);
 }
 
-static void xmlrpc_command_fail(sourceinfo_t *si, enum cmd_faultcode code, const char *message)
+static void xmlrpc_command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *message)
 {
 	connection_t *cptr;
 	struct httpddata *hd;
@@ -157,7 +157,7 @@ static void xmlrpc_command_fail(sourceinfo_t *si, enum cmd_faultcode code, const
 	hd->sent_reply = true;
 }
 
-static void xmlrpc_command_success_nodata(sourceinfo_t *si, const char *message)
+static void xmlrpc_command_success_nodata(struct sourceinfo *si, const char *message)
 {
 	connection_t *cptr;
 	struct httpddata *hd;
@@ -188,7 +188,7 @@ static void xmlrpc_command_success_nodata(sourceinfo_t *si, const char *message)
 	free(newmessage);
 }
 
-static void xmlrpc_command_success_string(sourceinfo_t *si, const char *result, const char *message)
+static void xmlrpc_command_success_string(struct sourceinfo *si, const char *result, const char *message)
 {
 	connection_t *cptr;
 	struct httpddata *hd;
@@ -248,7 +248,7 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
 
 	if (!verify_password(mu, parv[1]))
 	{
-		sourceinfo_t *si;
+		struct sourceinfo *si;
 
 		logcommand_external(nicksvs.me, "xmlrpc", conn, sourceip, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (bad password)", entity(mu)->name);
 		xmlrpc_generic_error(fault_authfail, "The password is not valid for this account.");
@@ -344,7 +344,7 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 	myuser_t *mu;
 	struct service *svs;
 	struct command *cmd;
-	sourceinfo_t *si;
+	struct sourceinfo *si;
 	int newparc;
 	char *newparv[20];
 	struct httpddata *hd = ((connection_t *)conn)->userdata;

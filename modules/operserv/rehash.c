@@ -8,7 +8,7 @@
 #include "atheme.h"
 #include "conf.h"
 
-static void os_cmd_rehash(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_rehash(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_rehash = { "REHASH", N_("Reload the configuration data."), PRIV_ADMIN, 0, os_cmd_rehash, { .path = "oservice/rehash" } };
 
@@ -25,7 +25,7 @@ mod_deinit(const module_unload_intent_t intent)
 }
 
 /* REHASH */
-void os_cmd_rehash(sourceinfo_t *si, int parc, char *parv[])
+void os_cmd_rehash(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_INFO, "UPDATE (due to REHASH): \2%s\2", get_oper_name(si));
 	wallops("Updating database by request of \2%s\2.", get_oper_name(si));

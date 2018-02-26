@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void os_cmd_jupe(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_jupe(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_jupe = { "JUPE", N_("Jupiters a server."), PRIV_JUPE, 2, os_cmd_jupe, { .path = "oservice/jupe" } };
 
@@ -23,7 +23,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("operserv", &os_jupe);
 }
 
-static void os_cmd_jupe(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_jupe(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *server = parv[0];
 	char *reason = parv[1];

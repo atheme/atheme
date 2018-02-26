@@ -11,7 +11,7 @@
 
 mowgli_patricia_t **ns_set_cmdtree;
 
-static void ns_cmd_set_accountname(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_set_accountname(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_set_accountname = { "ACCOUNTNAME", N_("Changes your account name."), AC_NONE, 1, ns_cmd_set_accountname, { .path = "nickserv/set_accountname" } };
 
@@ -30,7 +30,7 @@ mod_deinit(const module_unload_intent_t intent)
 }
 
 /* SET ACCOUNTNAME <nick> */
-static void ns_cmd_set_accountname(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_set_accountname(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *newname = parv[0];
 	mynick_t *mn;

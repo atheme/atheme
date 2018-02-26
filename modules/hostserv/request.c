@@ -18,11 +18,11 @@ time_t ratelimit_firsttime = 0;
 static void account_drop_request(myuser_t *mu);
 static void nick_drop_request(hook_user_req_t *hdata);
 static void account_delete_request(myuser_t *mu);
-static void osinfo_hook(sourceinfo_t *si);
-static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[]);
-static void hs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[]);
-static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[]);
-static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[]);
+static void osinfo_hook(struct sourceinfo *si);
+static void hs_cmd_request(struct sourceinfo *si, int parc, char *parv[]);
+static void hs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[]);
+static void hs_cmd_reject(struct sourceinfo *si, int parc, char *parv[]);
+static void hs_cmd_activate(struct sourceinfo *si, int parc, char *parv[]);
 
 static void write_hsreqdb(database_handle_t *db);
 static void db_h_hr(database_handle_t *db, const char *type);
@@ -203,7 +203,7 @@ static void account_delete_request(myuser_t *mu)
 	}
 }
 
-static void osinfo_hook(sourceinfo_t *si)
+static void osinfo_hook(struct sourceinfo *si)
 {
 	return_if_fail(si != NULL);
 
@@ -214,7 +214,7 @@ static void osinfo_hook(sourceinfo_t *si)
 /*****************************************************************************/
 
 static void ATHEME_FATTR_PRINTF(2, 3)
-send_group_memo(sourceinfo_t *si, const char *memo, ...)
+send_group_memo(struct sourceinfo *si, const char *memo, ...)
 {
 	struct service *msvs;
 	va_list va;
@@ -244,7 +244,7 @@ send_group_memo(sourceinfo_t *si, const char *memo, ...)
 /*****************************************************************************/
 
 /* REQUEST <host> */
-static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
+static void hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *host = parv[0];
 	const char *target;
@@ -420,7 +420,7 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 }
 
 /* ACTIVATE <nick> */
-static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
+static void hs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *nick = parv[0];
 	user_t *u;
@@ -485,7 +485,7 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 }
 
 /* REJECT <nick> */
-static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
+static void hs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *nick = parv[0];
 	char *reason = parv[1];
@@ -583,7 +583,7 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 }
 
 /* WAITING */
-static void hs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[])
+static void hs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[])
 {
 	hsreq_t *l;
 	mowgli_node_t *n;

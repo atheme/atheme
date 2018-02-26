@@ -10,7 +10,7 @@
 
 static void cs_set_fantasy_config_ready(void *unused);
 
-static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_set_fantasy = { "FANTASY", N_("Allows or disallows in-channel commands."), AC_NONE, 2, cs_cmd_set_fantasy, { .path = "cservice/set_fantasy" } };
 
@@ -43,7 +43,7 @@ static void cs_set_fantasy_config_ready(void *unused)
 		cs_set_fantasy.access = AC_DISABLED;
 }
 
-static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 

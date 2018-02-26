@@ -3,7 +3,7 @@
 #include "uplink.h" /* XXX: For sendq_flush and curr_uplink */
 #include "datastream.h"
 
-static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_modreload(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_modreload = { "MODRELOAD", N_("Reloads a module."), PRIV_ADMIN, 20, os_cmd_modreload, { .path = "oservice/modreload" } };
 
@@ -47,7 +47,7 @@ static void recurse_module_deplist(module_t *m, mowgli_list_t *deplist)
 	}
 }
 
-static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_modreload(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *module = parv[0];
 	module_t *m;

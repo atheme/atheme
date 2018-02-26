@@ -11,7 +11,7 @@
 
 mowgli_patricia_t **bs_set_cmdtree;
 
-static void bs_cmd_set_nobot(sourceinfo_t *si, int parc, char *parv[]);
+static void bs_cmd_set_nobot(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command bs_set_nobot = { "NOBOT", N_("Prevent a bot from being assigned to a channel."), PRIV_CHAN_ADMIN, 2, bs_cmd_set_nobot, { .path = "botserv/set_nobot" } };
 
@@ -29,7 +29,7 @@ mod_deinit(const module_unload_intent_t intent)
 	command_delete(&bs_set_nobot, *bs_set_cmdtree);
 }
 
-static void bs_cmd_set_nobot(sourceinfo_t *si, int parc, char *parv[])
+static void bs_cmd_set_nobot(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
 	char *option = parv[1];

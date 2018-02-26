@@ -13,7 +13,7 @@ mowgli_patricia_t **bs_set_cmdtree;
 
 static void bs_set_fantasy_config_ready(void *unused);
 
-static void bs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[]);
+static void bs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command bs_set_fantasy = { "FANTASY", N_("Enable fantasy commands."), AC_AUTHENTICATED, 2, bs_cmd_set_fantasy, { .path = "botserv/set_fantasy" } };
 
@@ -44,7 +44,7 @@ static void bs_set_fantasy_config_ready(void *unused)
 		bs_set_fantasy.access = AC_DISABLED;
 }
 
-static void bs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
+static void bs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
 	char *option = parv[1];

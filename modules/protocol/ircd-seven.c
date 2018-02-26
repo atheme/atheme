@@ -105,7 +105,7 @@ static void seven_wallops_sts(const char *reason)
  * "identified" / "owns this nick" flag.
  */
 
-static void m_euid(sourceinfo_t *si, int parc, char *parv[])
+static void m_euid(struct sourceinfo *si, int parc, char *parv[])
 {
 	server_t *s;
 	user_t *u;
@@ -160,7 +160,7 @@ static void m_euid(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void m_nick(sourceinfo_t *si, int parc, char *parv[])
+static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
 	server_t *s;
 	user_t *u;

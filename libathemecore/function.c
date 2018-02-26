@@ -42,7 +42,7 @@ random_string(const size_t sz)
 }
 
 const char *
-create_weak_challenge(sourceinfo_t *const restrict si, const char *const restrict name)
+create_weak_challenge(struct sourceinfo *const restrict si, const char *const restrict name)
 {
 	char key[BUFSIZE];
 	char val[BUFSIZE];

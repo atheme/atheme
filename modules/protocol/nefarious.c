@@ -198,7 +198,7 @@ static void nefarious_quarantine_sts(user_t *source, user_t *victim, long durati
 	sts("%s SU * +*@%s %lu :%s", me.numeric, victim->host, CURRTIME + duration, reason);
 }
 
-static void m_topic(sourceinfo_t *si, int parc, char *parv[])
+static void m_topic(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c = channel_find(parv[0]);
 	const char *source;
@@ -221,7 +221,7 @@ static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 	handle_topic_from(si, c, parc > 4 ? parv[parc - 4] : source, ts, parv[parc - 1]);
 }
 
-static void m_burst(sourceinfo_t *si, int parc, char *parv[])
+static void m_burst(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c;
 	unsigned int modec;
@@ -346,7 +346,7 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 		channel_delete(c);
 }
 
-static void m_nick(sourceinfo_t *si, int parc, char *parv[])
+static void m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
 	user_t *u;
 	char ipstring[HOSTIPLEN + 1];
@@ -449,7 +449,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void m_mode(sourceinfo_t *si, int parc, char *parv[])
+static void m_mode(struct sourceinfo *si, int parc, char *parv[])
 {
 	user_t *u;
 	char *p;
@@ -515,7 +515,7 @@ static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
+static void m_clearmode(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *chan;
 	char *p, c;
@@ -599,7 +599,7 @@ static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void m_account(sourceinfo_t *si, int parc, char *parv[])
+static void m_account(struct sourceinfo *si, int parc, char *parv[])
 {
 	user_t *u;
 	static bool warned = false;
@@ -636,7 +636,7 @@ static void m_account(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void m_sasl(sourceinfo_t *si, int parc, char *parv[])
+static void m_sasl(struct sourceinfo *si, int parc, char *parv[])
 {
 	sasl_message_t smsg;
 

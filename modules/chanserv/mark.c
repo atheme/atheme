@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_mark(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_mark(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_mark = { "MARK", N_("Adds a note to a channel."),
 			PRIV_MARK, 3, cs_cmd_mark, { .path = "cservice/mark" } };
@@ -24,7 +24,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cs_mark);
 }
 
-static void cs_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *action = parv[1];

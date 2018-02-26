@@ -11,7 +11,7 @@
 #include "atheme.h"
 #include "../groupserv/main/groupserv_common.h"
 
-static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_specs(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_specs = { "SPECS", N_("Shows oper flags."), AC_NONE, 2, os_cmd_specs, { .path = "oservice/specs" } };
 
@@ -108,7 +108,7 @@ static struct priv_category *priv_categories[] = {
 	&nickserv_privs, &chanserv_privs, &general_privs, &operserv_privs, &groupserv_privs,
 };
 
-static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_specs(struct sourceinfo *si, int parc, char *parv[])
 {
 	user_t *tu = NULL;
 	struct operclass *cl = NULL;

@@ -8,7 +8,7 @@
 #include "atheme.h"
 #include "hostserv.h"
 
-static void hs_cmd_group(sourceinfo_t *si, int parc, char *parv[]);
+static void hs_cmd_group(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command hs_group = { "GROUP", N_("Syncs the vhost for all nicks in a group."), AC_AUTHENTICATED, 1, hs_cmd_group, { .path = "hostserv/group" } };
 
@@ -24,7 +24,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("hostserv", &hs_group);
 }
 
-static void hs_cmd_group(sourceinfo_t *si, int parc, char *parv[])
+static void hs_cmd_group(struct sourceinfo *si, int parc, char *parv[])
 {
 	mynick_t *mn;
 	metadata_t *md;

@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_recover(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_recover = { "RECOVER", N_("Regain control of your channel."),
                         AC_NONE, 1, cs_cmd_recover, { .path = "cservice/recover" } };
@@ -24,7 +24,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cs_recover);
 }
 
-static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_recover(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct chanuser *cu, *origin_cu = NULL;
 	mychan_t *mc;

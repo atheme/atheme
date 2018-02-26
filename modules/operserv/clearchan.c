@@ -13,7 +13,7 @@
 #define CLEAR_KILL 2
 #define CLEAR_AKILL 3
 
-static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_clearchan(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_clearchan = { "CLEARCHAN", N_("Clears a channel via KICK, KILL or AKILL"), PRIV_CHAN_ADMIN, 3, os_cmd_clearchan, { .path = "oservice/clearchan" } };
 
@@ -29,7 +29,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("operserv", &os_clearchan);
 }
 
-static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_clearchan(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct chanuser *cu = NULL;
 	mowgli_node_t *n, *tn;

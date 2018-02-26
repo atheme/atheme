@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void os_cmd_restart(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_restart(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_restart = { "RESTART", N_("Restart services."), PRIV_ADMIN, 0, os_cmd_restart, { .path = "oservice/restart" } };
 
@@ -23,7 +23,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("operserv", &os_restart);
 }
 
-static void os_cmd_restart(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_restart(struct sourceinfo *si, int parc, char *parv[])
 {
 	logcommand(si, CMDLOG_ADMIN, "RESTART");
 	wallops("Restarting by request of \2%s\2.", get_oper_name(si));

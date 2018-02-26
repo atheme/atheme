@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_close(struct sourceinfo *si, int parc, char *parv[]);
 
 /* CLOSE ON|OFF -- don't pollute the root with REOPEN */
 struct command cs_close = { "CLOSE", N_("Closes a channel."),
@@ -59,7 +59,7 @@ static void close_check_join(hook_channel_joinpart_t *data)
 	}
 }
 
-static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_close(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *action = parv[1];

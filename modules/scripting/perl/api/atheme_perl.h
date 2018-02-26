@@ -17,8 +17,8 @@ struct perl_command_ {
 
 typedef struct perl_command_ perl_command_t;
 
-void perl_command_handler(sourceinfo_t *si, const int parc, char **parv);
-void perl_command_help_func(sourceinfo_t *si, const char *subcmd);
+void perl_command_handler(struct sourceinfo *si, const int parc, char **parv);
+void perl_command_help_func(struct sourceinfo *si, const char *subcmd);
 
 #define PERL_MODULE_NAME "scripting/perl"
 static const IV invalid_object_pointer = -1;

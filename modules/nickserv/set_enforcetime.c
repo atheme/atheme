@@ -9,7 +9,7 @@
 
 mowgli_patricia_t **ns_set_cmdtree;
 
-static void ns_cmd_set_enforcetime(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_set_enforcetime(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_set_enforcetime = { "ENFORCETIME", N_("Amount of time it takes before nickname protection occurs."), AC_NONE, 1, ns_cmd_set_enforcetime, { .path = "nickserv/set_enforcetime" } };
 
@@ -28,7 +28,7 @@ mod_deinit(const module_unload_intent_t intent)
 	command_delete(&ns_set_enforcetime, *ns_set_cmdtree);
 }
 
-static void ns_cmd_set_enforcetime(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_set_enforcetime(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *setting = parv[0];
 

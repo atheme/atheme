@@ -4,15 +4,15 @@
 
 #include "atheme.h"
 
-static void rs_cmd_enable(sourceinfo_t *si, int parc, char *parv[]);
-static void rs_cmd_disable(sourceinfo_t *si, int parc, char *parv[]);
+static void rs_cmd_enable(struct sourceinfo *si, int parc, char *parv[]);
+static void rs_cmd_disable(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command rs_enable = { "ENABLE", N_("Enable RPGServ for a channel."),
                         AC_NONE, 1, rs_cmd_enable, { .path = "rpgserv/enable" } };
 struct command rs_disable = { "DISABLE", N_("Disable RPGServ for a channel."),
                          AC_NONE, 1, rs_cmd_disable, { .path = "rpgserv/disable" } };
 
-static void rs_cmd_enable(sourceinfo_t *si, int parc, char *parv[])
+static void rs_cmd_enable(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	mychan_t *mc;
@@ -42,7 +42,7 @@ static void rs_cmd_enable(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("RPGServ enabled for \2%s\2."), chan);
 }
 
-static void rs_cmd_disable(sourceinfo_t *si, int parc, char *parv[])
+static void rs_cmd_disable(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	mychan_t *mc;

@@ -28,9 +28,9 @@ time_t enforce_next;
 
 static void guest_nickname(user_t *u);
 
-static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[]);
-static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[]);
-static void ns_cmd_regain(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_set_enforce(struct sourceinfo *si, int parc, char *parv[]);
+static void ns_cmd_release(struct sourceinfo *si, int parc, char *parv[]);
+static void ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[]);
 
 static void enforce_timeout_check(void *arg);
 static void show_enforce(hook_user_req_t *hdata);
@@ -117,7 +117,7 @@ static void check_enforce_all(myuser_t *mu)
 	}
 }
 
-static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_set_enforce(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *setting = parv[0];
 
@@ -161,7 +161,7 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_release(struct sourceinfo *si, int parc, char *parv[])
 {
 	mynick_t *mn;
 	const char *target = parv[0];
@@ -271,7 +271,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void ns_cmd_regain(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 {
 	mynick_t *mn;
 	const char *target = parv[0];

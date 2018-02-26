@@ -45,8 +45,8 @@
 
 struct service *alis;
 
-static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
-static void alis_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
+static void alis_cmd_list(struct sourceinfo *si, int parc, char *parv[]);
+static void alis_cmd_help(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command alis_list = { "LIST", "Lists channels matching given parameters.",
 				AC_NONE, ALIS_MAX_PARC, alis_cmd_list, { .path = "alis/list" } };
@@ -119,7 +119,7 @@ static int alis_parse_mode(const char *text, int *key, int *limit, int *ext)
 	return mode;
 }
 
-static int parse_alis(sourceinfo_t *si, int parc, char *parv[], struct alis_query *query)
+static int parse_alis(struct sourceinfo *si, int parc, char *parv[], struct alis_query *query)
 {
 	int i = 1;
 	char *opt = NULL, *arg = NULL;
@@ -291,7 +291,7 @@ static void free_alis(struct alis_query *query)
 		free(query->topic);
 }
 
-static void print_channel(sourceinfo_t *si, struct channel *chptr, struct alis_query *query)
+static void print_channel(struct sourceinfo *si, struct channel *chptr, struct alis_query *query)
 {
 	int show_topicwho = query->show_topicwho;
 	int show_topic = 1;
@@ -394,7 +394,7 @@ static int show_channel(struct channel *chptr, struct alis_query *query)
 	return 1;
 }
 
-static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[])
+static void alis_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *chptr;
 	struct alis_query query;
@@ -453,7 +453,7 @@ static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-static void alis_cmd_help(sourceinfo_t *si, int parc, char *parv[])
+static void alis_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *command = parv[0];
 

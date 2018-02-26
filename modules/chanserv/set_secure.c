@@ -8,7 +8,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_set_secure(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_secure(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_set_secure = { "SECURE", N_("Prevents unauthorized users from gaining operator status."), AC_NONE, 2, cs_cmd_set_secure, { .path = "cservice/set_secure" } };
 
@@ -28,7 +28,7 @@ mod_deinit(const module_unload_intent_t intent)
 	command_delete(&cs_set_secure, *cs_set_cmdtree);
 }
 
-static void cs_cmd_set_secure(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_set_secure(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 

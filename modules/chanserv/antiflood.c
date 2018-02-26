@@ -390,7 +390,7 @@ on_channel_drop(mychan_t *mc)
 }
 
 static void
-cs_set_cmd_antiflood(sourceinfo_t *si, int parc, char *parv[])
+cs_set_cmd_antiflood(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 

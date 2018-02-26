@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_access(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_access = { "ACCESS", N_("Changes and shows your nickname access list."), AC_NONE, 2, ns_cmd_access, { .path = "nickserv/access" } };
 
@@ -184,7 +184,7 @@ static void myuser_access_delete_enforce(myuser_t *mu, char *mask)
 	}
 }
 
-static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_access(struct sourceinfo *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	mowgli_node_t *n;

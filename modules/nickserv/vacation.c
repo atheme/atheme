@@ -10,7 +10,7 @@
 #include "list_common.h"
 #include "list.h"
 
-static void ns_cmd_vacation(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_vacation(struct sourceinfo *si, int parc, char *parv[])
 {
 	char tsbuf[BUFSIZE];
 

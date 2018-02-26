@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_clone(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_clone = { "CLONE", "Clones a channel.", AC_NONE, 2, cs_cmd_clone, { .path = "cservice/clone" } };
 
@@ -23,7 +23,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cs_clone);
 }
 
-static void cs_cmd_clone(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc, *mc2;
 	mowgli_node_t *n, *tn;

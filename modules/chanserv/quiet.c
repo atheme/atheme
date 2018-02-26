@@ -8,8 +8,8 @@
 #include "atheme.h"
 #include "chanserv.h"
 
-static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_quiet(struct sourceinfo *si, int parc, char *parv[]);
+static void cs_cmd_unquiet(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_quiet = { "QUIET", N_("Sets a quiet on a channel."),
                         AC_AUTHENTICATED, 2, cs_cmd_quiet, { .path = "cservice/quiet" } };
@@ -108,7 +108,7 @@ static void make_extban(char *buf, size_t size, user_t *tu)
 enum devoice_result { DEVOICE_FAILED, DEVOICE_NO_ACTION, DEVOICE_DONE };
 
 static enum devoice_result
-devoice_user(sourceinfo_t *si, mychan_t *mc, struct channel *c, user_t *tu)
+devoice_user(struct sourceinfo *si, mychan_t *mc, struct channel *c, user_t *tu)
 {
 	struct chanuser *cu;
 	unsigned int flag;
@@ -173,7 +173,7 @@ devoice_user(sourceinfo_t *si, mychan_t *mc, struct channel *c, user_t *tu)
 /* Notify at most this many users in private notices, otherwise channel */
 #define MAX_SINGLE_NOTIFY 3
 
-static void notify_one_victim(sourceinfo_t *si, struct channel *c, user_t *u, int dir)
+static void notify_one_victim(struct sourceinfo *si, struct channel *c, user_t *u, int dir)
 {
 	return_if_fail(dir == MTYPE_ADD || dir == MTYPE_DEL);
 
@@ -194,7 +194,7 @@ static void notify_one_victim(sourceinfo_t *si, struct channel *c, user_t *u, in
 				c->name, get_source_name(si));
 }
 
-static void notify_victims(sourceinfo_t *si, struct channel *c, struct chanban *cb, int dir)
+static void notify_victims(struct sourceinfo *si, struct channel *c, struct chanban *cb, int dir)
 {
 	mowgli_node_t *n;
 	struct chanuser *cu;
@@ -257,7 +257,7 @@ static void notify_victims(sourceinfo_t *si, struct channel *c, struct chanban *
 	free(tmpban.mask);
 }
 
-static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_quiet(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
 	char *target = parv[1];
@@ -352,7 +352,7 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 	free(targetlist);
 }
 
-static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_unquiet(struct sourceinfo *si, int parc, char *parv[])
 {
         const char *channel = parv[0];
         const char *target = parv[1];

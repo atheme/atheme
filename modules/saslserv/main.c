@@ -17,7 +17,7 @@ static struct service *saslsvs = NULL;
 static mowgli_eventloop_timer_t *delete_stale_timer = NULL;
 
 static const char *
-sasl_format_sourceinfo(sourceinfo_t *const restrict si, const bool full)
+sasl_format_sourceinfo(struct sourceinfo *const restrict si, const bool full)
 {
 	static char result[BUFSIZE];
 
@@ -37,7 +37,7 @@ sasl_format_sourceinfo(sourceinfo_t *const restrict si, const bool full)
 }
 
 static const char *
-sasl_get_source_name(sourceinfo_t *const restrict si)
+sasl_get_source_name(struct sourceinfo *const restrict si)
 {
 	static char result[HOSTLEN + 1 + NICKLEN + 11];
 	char description[BUFSIZE];
@@ -810,7 +810,7 @@ sasl_authzid_can_login(struct sasl_session *const restrict p, const char *const 
 
 /* main services client routine */
 static void
-saslserv(sourceinfo_t *const restrict si, const int parc, char **const restrict parv)
+saslserv(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
 	/* this should never happen */
 	if (parv[0][0] == '&')

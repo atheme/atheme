@@ -8,7 +8,7 @@
 #include "atheme.h"
 #include "../groupserv/groupserv.h"
 
-static void ms_cmd_sendgroup(sourceinfo_t *si, int parc, char *parv[]);
+static void ms_cmd_sendgroup(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ms_sendgroup = { "SENDGROUP", N_("Sends a memo to all members on a group."),
                            AC_AUTHENTICATED, 2, ms_cmd_sendgroup, { .path = "memoserv/sendgroup" } };
@@ -27,7 +27,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("memoserv", &ms_sendgroup);
 }
 
-static void ms_cmd_sendgroup(sourceinfo_t *si, int parc, char *parv[])
+static void ms_cmd_sendgroup(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* misc structs etc */
 	myuser_t *tmu;

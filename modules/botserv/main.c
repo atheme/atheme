@@ -11,15 +11,15 @@
 static void bs_join(hook_channel_joinpart_t *hdata);
 static void bs_part(hook_channel_joinpart_t *hdata);
 
-static void bs_cmd_bot(sourceinfo_t *si, int parc, char *parv[]);
-static void bs_cmd_add(sourceinfo_t *si, int parc, char *parv[]);
-static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[]);
-static void bs_cmd_delete(sourceinfo_t *si, int parc, char *parv[]);
-static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[]);
-static void bs_cmd_unassign(sourceinfo_t *si, int parc, char *parv[]);
-static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[]);
+static void bs_cmd_bot(struct sourceinfo *si, int parc, char *parv[]);
+static void bs_cmd_add(struct sourceinfo *si, int parc, char *parv[]);
+static void bs_cmd_change(struct sourceinfo *si, int parc, char *parv[]);
+static void bs_cmd_delete(struct sourceinfo *si, int parc, char *parv[]);
+static void bs_cmd_assign(struct sourceinfo *si, int parc, char *parv[]);
+static void bs_cmd_unassign(struct sourceinfo *si, int parc, char *parv[]);
+static void bs_cmd_botlist(struct sourceinfo *si, int parc, char *parv[]);
 static void on_shutdown(void *unused);
-static void osinfo_hook(sourceinfo_t *si);
+static void osinfo_hook(struct sourceinfo *si);
 
 static void botserv_save_database(database_handle_t *db);
 static void db_h_bot(database_handle_t *db, const char *type);
@@ -300,7 +300,7 @@ static void bs_channel_drop(mychan_t *mc)
 
 /* botserv: bot handler: channel commands only. */
 static void
-botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
+botserv_channel_handler(struct sourceinfo *si, int parc, char *parv[])
 {
 	metadata_t *md;
 	mychan_t *mc = NULL;
@@ -524,7 +524,7 @@ botserv_bot_t* botserv_bot_find(char *name)
 /* ******************************************************************** */
 
 /* BOT CMD nick user host real */
-static void bs_cmd_bot(sourceinfo_t *si, int parc, char *parv[])
+static void bs_cmd_bot(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (parc < 1 || parv[0] == NULL)
 	{
@@ -576,7 +576,7 @@ static bool valid_misc_field(const char *field, size_t maxlen)
 }
 
 /* CHANGE oldnick nick [user [host [real]]] */
-static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
+static void bs_cmd_change(struct sourceinfo *si, int parc, char *parv[])
 {
 	botserv_bot_t *bot;
 	mowgli_patricia_iteration_state_t state;
@@ -679,7 +679,7 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 /* ******************************************************************** */
 
 /* ADD nick user host real */
-static void bs_cmd_add(sourceinfo_t *si, int parc, char *parv[])
+static void bs_cmd_add(struct sourceinfo *si, int parc, char *parv[])
 {
 	botserv_bot_t *bot;
 	char buf[BUFSIZE];
@@ -749,7 +749,7 @@ static void bs_cmd_add(sourceinfo_t *si, int parc, char *parv[])
 /* ******************************************************************** */
 
 /* DELETE nick */
-static void bs_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
+static void bs_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
 {
 	botserv_bot_t *bot = botserv_bot_find(parv[0]);
 	mowgli_patricia_iteration_state_t state;
@@ -802,7 +802,7 @@ static void bs_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 /* ******************************************************************** */
 
 /* LIST */
-static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[])
+static void bs_cmd_botlist(struct sourceinfo *si, int parc, char *parv[])
 {
 	int i = 0;
 	mowgli_node_t *n;
@@ -837,7 +837,7 @@ static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[])
 /* ******************************************************************** */
 
 /* ASSIGN #channel nick */
-static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
+static void bs_cmd_assign(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
 	struct channel *c = channel_find(channel);
@@ -917,7 +917,7 @@ static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 /* ******************************************************************** */
 
 /* UNASSIGN #channel */
-static void bs_cmd_unassign(sourceinfo_t *si, int parc, char *parv[])
+static void bs_cmd_unassign(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc = mychan_find(parv[0]);
 	metadata_t *md;
@@ -1059,7 +1059,7 @@ mod_deinit(const module_unload_intent_t intent)
 
 /* ******************************************************************** */
 
-static void osinfo_hook(sourceinfo_t *si)
+static void osinfo_hook(struct sourceinfo *si)
 {
 	return_if_fail(si != NULL);
 

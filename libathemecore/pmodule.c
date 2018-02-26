@@ -52,7 +52,7 @@ void pcommand_init(void)
 	pcommands = mowgli_patricia_create(noopcanon);
 }
 
-void pcommand_add(const char *token, void (*handler) (sourceinfo_t *si, int parc, char *parv[]), int minparc, int sourcetype)
+void pcommand_add(const char *token, void (*handler) (struct sourceinfo *si, int parc, char *parv[]), int minparc, int sourcetype)
 {
 	pcommand_t *pcmd;
 

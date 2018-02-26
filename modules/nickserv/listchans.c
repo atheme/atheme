@@ -8,7 +8,7 @@
 
 #include "atheme.h"
 
-static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_listchans(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_listchans = { "LISTCHANS", N_("Lists channels that you have access to."), AC_NONE, 1, ns_cmd_listchans, { .path = "nickserv/listchans" } };
 
@@ -24,7 +24,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("nickserv", &ns_listchans);
 }
 
-static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	mowgli_node_t *n;

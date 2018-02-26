@@ -10,7 +10,7 @@
 #include "list.h"
 #include "account.h"
 
-static void ns_cmd_multimark(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[]);
 
 static void write_multimark_db(database_handle_t *db);
 static void db_h_mm(database_handle_t *db, const char *type);
@@ -410,7 +410,7 @@ static void migrate_user(myuser_t *mu)
 	metadata_delete(mu, "private:mark:timestamp");
 }
 
-static void migrate_all(sourceinfo_t *si)
+static void migrate_all(struct sourceinfo *si)
 {
 	myentity_iteration_state_t state;
 	myentity_t *mt;
@@ -814,7 +814,7 @@ static void multimark_needforce(hook_user_needforce_t *hdata)
 	hdata->allowed = !marked;
 }
 
-static void ns_cmd_multimark(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *action = parv[1];

@@ -38,12 +38,12 @@ unsigned int logoninfo_count = 0;
 
 struct service *infoserv;
 
-static void is_cmd_help(sourceinfo_t *si, const int parc, char *parv[]);
-static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[]);
-static void is_cmd_del(sourceinfo_t *si, int parc, char *parv[]);
-static void is_cmd_odel(sourceinfo_t *si, int parc, char *parv[]);
-static void is_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
-static void is_cmd_olist(sourceinfo_t *si, int parc, char *parv[]);
+static void is_cmd_help(struct sourceinfo *si, const int parc, char *parv[]);
+static void is_cmd_post(struct sourceinfo *si, int parc, char *parv[]);
+static void is_cmd_del(struct sourceinfo *si, int parc, char *parv[]);
+static void is_cmd_odel(struct sourceinfo *si, int parc, char *parv[]);
+static void is_cmd_list(struct sourceinfo *si, int parc, char *parv[]);
+static void is_cmd_olist(struct sourceinfo *si, int parc, char *parv[]);
 static void display_info(hook_user_nick_t *data);
 static void display_oper_info(user_t *u);
 
@@ -59,7 +59,7 @@ struct command is_list = { "LIST", N_("List previously posted news items."), AC_
 struct command is_olist = { "OLIST", N_("List previously posted oper news items."), PRIV_GLOBAL, 1, is_cmd_olist, { .path = "infoserv/olist" } };
 
 /* HELP <command> [params] */
-void is_cmd_help(sourceinfo_t *si, int parc, char *parv[])
+void is_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *command = parv[0];
 
@@ -245,14 +245,14 @@ static void display_oper_info(user_t *u)
 	}
 }
 
-static void osinfo_hook(sourceinfo_t *si)
+static void osinfo_hook(struct sourceinfo *si)
 {
 	return_if_fail(si != NULL);
 
 	command_success_nodata(si, "How many messages will be sent to users on connect: %u", logoninfo_count);
 }
 
-static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
+static void is_cmd_post(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *importance = parv[0];
 	char *subject = parv[1];
@@ -346,7 +346,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-static void is_cmd_del(sourceinfo_t *si, int parc, char *parv[])
+static void is_cmd_del(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	int x = 0;
@@ -396,7 +396,7 @@ static void is_cmd_del(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-static void is_cmd_odel(sourceinfo_t *si, int parc, char *parv[])
+static void is_cmd_odel(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	int x = 0;
@@ -446,7 +446,7 @@ static void is_cmd_odel(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-static void is_cmd_list(sourceinfo_t *si, int parc, char *parv[])
+static void is_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	logoninfo_t *l;
 	mowgli_node_t *n;
@@ -474,7 +474,7 @@ static void is_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-static void is_cmd_olist(sourceinfo_t *si, int parc, char *parv[])
+static void is_cmd_olist(struct sourceinfo *si, int parc, char *parv[])
 {
 	operlogoninfo_t *o;
 	mowgli_node_t *n;

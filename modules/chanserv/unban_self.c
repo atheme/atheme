@@ -9,7 +9,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_unban(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_unban = { "UNBAN", N_("Unbans you on a channel."),
 			AC_AUTHENTICATED, 2, cs_cmd_unban, { .path = "cservice/unban_self" } };
@@ -26,7 +26,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cs_unban);
 }
 
-static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_unban(struct sourceinfo *si, int parc, char *parv[])
 {
         const char *channel = parv[0];
         const char *target = parv[1];

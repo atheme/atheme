@@ -8,11 +8,11 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-static void gs_cmd_acsnolimit(sourceinfo_t *si, int parc, char *parv[]);
+static void gs_cmd_acsnolimit(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command gs_acsnolimit = { "ACSNOLIMIT", N_("Allow a group to bypass access list limits."), PRIV_GROUP_ADMIN, 2, gs_cmd_acsnolimit, { .path = "groupserv/acsnolimit" } };
 
-static void gs_cmd_acsnolimit(sourceinfo_t *si, int parc, char *parv[])
+static void gs_cmd_acsnolimit(struct sourceinfo *si, int parc, char *parv[])
 {
 	mygroup_t *mg;
 

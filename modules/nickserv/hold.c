@@ -9,7 +9,7 @@
 #include "list_common.h"
 #include "list.h"
 
-static void ns_cmd_hold(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_hold(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_hold = { "HOLD", N_("Prevents an account from expiring."),
 		      PRIV_HOLD, 2, ns_cmd_hold, { .path = "nickserv/hold" } };
@@ -46,7 +46,7 @@ mod_deinit(const module_unload_intent_t intent)
 	list_unregister("noexpire");
 }
 
-static void ns_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_hold(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *action = parv[1];

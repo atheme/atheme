@@ -9,7 +9,7 @@
 #include "groupserv.h"
 
 static void
-cmd_gs_drop_func(sourceinfo_t *const restrict si, const int ATHEME_VATTR_UNUSED parc, char *parv[])
+cmd_gs_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc, char *parv[])
 {
 	const char *const name = parv[0];
 	const char *const key = parv[1];

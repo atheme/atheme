@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void ns_cmd_listownmail(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_listownmail(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_listownmail = { "LISTOWNMAIL", N_("Lists accounts registered to your e-mail address."), AC_AUTHENTICATED, 1, ns_cmd_listownmail, { .path = "nickserv/listownmail" } };
 
@@ -23,7 +23,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("nickserv", &ns_listownmail);
 }
 
-static void ns_cmd_listownmail(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_listownmail(struct sourceinfo *si, int parc, char *parv[])
 {
 	myentity_t *mt;
 	myentity_iteration_state_t state;

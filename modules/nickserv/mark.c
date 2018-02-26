@@ -12,7 +12,7 @@
 //NickServ mark module
 //Do NOT use this in combination with contrib/multimark!
 
-static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_mark(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_mark = { "MARK", N_("Adds a note to a user."), PRIV_MARK, 3, ns_cmd_mark, { .path = "nickserv/mark" } };
 
@@ -72,7 +72,7 @@ mod_deinit(const module_unload_intent_t intent)
 	list_unregister("marked");
 }
 
-static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *action = parv[1];

@@ -10,15 +10,15 @@
 #include "chanserv.h"
 
 /* the individual command stuff, now that we've reworked, hardcode ;) --w00t */
-static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags);
-static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc);
-static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, unsigned int level, const char *leveldesc, bool operoverride);
+static void cs_xop_do_add(struct sourceinfo *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags);
+static void cs_xop_do_del(struct sourceinfo *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc);
+static void cs_xop_do_list(struct sourceinfo *si, mychan_t *mc, unsigned int level, const char *leveldesc, bool operoverride);
 
-static void cs_cmd_sop(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_cmd_aop(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_cmd_hop(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_cmd_vop(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_sop(struct sourceinfo *si, int parc, char *parv[]);
+static void cs_cmd_aop(struct sourceinfo *si, int parc, char *parv[]);
+static void cs_cmd_hop(struct sourceinfo *si, int parc, char *parv[]);
+static void cs_cmd_vop(struct sourceinfo *si, int parc, char *parv[]);
+static void cs_cmd_forcexop(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_sop = { "SOP", N_("Manipulates a channel SOP list."),
                         AC_NONE, 3, cs_cmd_sop, { .path = "cservice/xop" } };
@@ -52,7 +52,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cs_forcexop);
 }
 
-static void cs_xop(sourceinfo_t *si, int parc, char *parv[], const char *leveldesc)
+static void cs_xop(struct sourceinfo *si, int parc, char *parv[], const char *leveldesc)
 {
 	myentity_t *mt;
 	mychan_t *mc;
@@ -176,22 +176,22 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], const char *levelde
 	}
 }
 
-static void cs_cmd_sop(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_sop(struct sourceinfo *si, int parc, char *parv[])
 {
 	cs_xop(si, parc, parv, "SOP");
 }
 
-static void cs_cmd_aop(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_aop(struct sourceinfo *si, int parc, char *parv[])
 {
 	cs_xop(si, parc, parv, "AOP");
 }
 
-static void cs_cmd_vop(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_vop(struct sourceinfo *si, int parc, char *parv[])
 {
 	cs_xop(si, parc, parv, "VOP");
 }
 
-static void cs_cmd_hop(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_hop(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* Don't reject the command. This helps the rare case where
 	 * a network switches to a non-halfop ircd: users can still
@@ -204,7 +204,7 @@ static void cs_cmd_hop(sourceinfo_t *si, int parc, char *parv[])
 }
 
 
-static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags)
+static void cs_xop_do_add(struct sourceinfo *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags)
 {
 	chanacs_t *ca;
 	unsigned int addflags = level, removeflags = ~level;
@@ -339,7 +339,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 	}
 }
 
-static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc)
+static void cs_xop_do_del(struct sourceinfo *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc)
 {
 	chanacs_t *ca;
 	hook_channel_acl_req_t req;
@@ -399,7 +399,7 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 }
 
 
-static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, unsigned int level, const char *leveldesc, bool operoverride)
+static void cs_xop_do_list(struct sourceinfo *si, mychan_t *mc, unsigned int level, const char *leveldesc, bool operoverride)
 {
 	chanacs_t *ca;
 	int i = 0;
@@ -428,7 +428,7 @@ static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, unsigned int level, c
 		logcommand(si, CMDLOG_GET, "LIST: \2%s\2 \2%s\2", mc->name, leveldesc);
 }
 
-static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_forcexop(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	chanacs_t *ca;

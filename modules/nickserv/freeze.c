@@ -10,7 +10,7 @@
 #include "list_common.h"
 #include "list.h"
 
-static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_freeze(struct sourceinfo *si, int parc, char *parv[]);
 
 /* FREEZE ON|OFF -- don't pollute the root with THAW */
 struct command ns_freeze = { "FREEZE", N_("Freezes an account."), PRIV_USER_ADMIN, 3, ns_cmd_freeze, { .path = "nickserv/freeze" } };
@@ -64,7 +64,7 @@ mod_deinit(const module_unload_intent_t intent)
 	list_unregister("frozen-reason");
 }
 
-static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_freeze(struct sourceinfo *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	char *target = parv[0];

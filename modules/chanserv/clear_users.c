@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_clear_users(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_clear_users = { "USERS", N_("Kicks all users from a channel."),
 	AC_NONE, 2, cs_cmd_clear_users, { .path = "cservice/clear_users" } };
@@ -28,7 +28,7 @@ mod_deinit(const module_unload_intent_t intent)
 	command_delete(&cs_clear_users, *cs_clear_cmds);
 }
 
-static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_clear_users(struct sourceinfo *si, int parc, char *parv[])
 {
 	char fullreason[200];
 	struct channel *c;

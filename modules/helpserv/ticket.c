@@ -12,10 +12,10 @@ time_t ratelimit_firsttime = 0;
 
 static void account_drop_request(myuser_t *mu);
 static void account_delete_request(myuser_t *mu);
-static void helpserv_cmd_request(sourceinfo_t *si, int parc, char *parv[]);
-static void helpserv_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
-static void helpserv_cmd_close(sourceinfo_t *si, int parc, char *parv[]);
-static void helpserv_cmd_cancel(sourceinfo_t *si, int parc, char *parv[]);
+static void helpserv_cmd_request(struct sourceinfo *si, int parc, char *parv[]);
+static void helpserv_cmd_list(struct sourceinfo *si, int parc, char *parv[]);
+static void helpserv_cmd_close(struct sourceinfo *si, int parc, char *parv[]);
+static void helpserv_cmd_cancel(struct sourceinfo *si, int parc, char *parv[]);
 
 static void write_ticket_db(database_handle_t *db);
 static void db_h_he(database_handle_t *db, const char *type);
@@ -156,7 +156,7 @@ static void account_delete_request(myuser_t *mu)
 }
 
 /* REQUEST <topic> */
-static void helpserv_cmd_request(sourceinfo_t *si, int parc, char *parv[])
+static void helpserv_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *topic = parv[0];
 	mowgli_node_t *n;
@@ -231,7 +231,7 @@ static void helpserv_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 }
 
 /* CLOSE <nick> [reason] */
-static void helpserv_cmd_close(sourceinfo_t *si, int parc, char *parv[])
+static void helpserv_cmd_close(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *nick = parv[0];
 	user_t *u;
@@ -293,7 +293,7 @@ static void helpserv_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 }
 
 /* LIST */
-static void helpserv_cmd_list(sourceinfo_t *si, int parc, char *parv[])
+static void helpserv_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	ticket_t *l;
 	mowgli_node_t *n;
@@ -316,7 +316,7 @@ static void helpserv_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 }
 
 /* CANCEL */
-static void helpserv_cmd_cancel(sourceinfo_t *si, int parc, char *parv[])
+static void helpserv_cmd_cancel(struct sourceinfo *si, int parc, char *parv[])
 {
         ticket_t *l;
         mowgli_node_t *n;

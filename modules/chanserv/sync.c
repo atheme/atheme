@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_sync(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_sync = { "SYNC", "Forces channel statuses to flags.",
                         AC_NONE, 1, cs_cmd_sync, { .path = "cservice/sync" } };
@@ -289,7 +289,7 @@ static void sync_channel_acl_change(hook_channel_acl_req_t *hookdata)
 	do_channel_sync(mc, hookdata->ca);
 }
 
-static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_sync(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *name = parv[0];
 	mychan_t *mc;
@@ -333,13 +333,13 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, "Sync complete for \2%s\2.", mc->name);
 }
 
-static void cs_cmd_set_nosync(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_nosync(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_set_nosync = { "NOSYNC", N_("Disables automatic channel ACL syncing."), AC_NONE, 2, cs_cmd_set_nosync, { .path = "cservice/set_nosync" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
 
-static void cs_cmd_set_nosync(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_set_nosync(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 

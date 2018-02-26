@@ -7,8 +7,8 @@
 
 #include "atheme.h"
 
-static void ns_cmd_acc(sourceinfo_t *si, int parc, char *parv[]);
-static void ns_cmd_status(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_acc(struct sourceinfo *si, int parc, char *parv[]);
+static void ns_cmd_status(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_status = { "STATUS", N_("Displays session information."), AC_NONE, 0, ns_cmd_status, { .path = "nickserv/status" } };
 struct command ns_acc = { "ACC", N_("Displays parsable session information."), AC_NONE, 2, ns_cmd_acc, { .path = "nickserv/acc" } };
@@ -27,7 +27,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("nickserv", &ns_status);
 }
 
-static void ns_cmd_acc(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_acc(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *targuser = parv[0];
 	const char *targaccount = parv[1];
@@ -84,7 +84,7 @@ static void ns_cmd_acc(sourceinfo_t *si, int parc, char *parv[])
 			show_id ? entity(mu)->id : "");
 }
 
-static void ns_cmd_status(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_status(struct sourceinfo *si, int parc, char *parv[])
 {
 	logcommand(si, CMDLOG_GET, "STATUS");
 

@@ -8,7 +8,7 @@
 #include "atheme.h"
 #include "uplink.h"
 
-static void os_cmd_raw(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_raw(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_raw = { "RAW", N_("Sends data to the uplink."), PRIV_ADMIN, 1, os_cmd_raw, { .path = "oservice/raw" } };
 
@@ -24,7 +24,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("operserv", &os_raw);
 }
 
-static void os_cmd_raw(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_raw(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *s = parv[0];
 

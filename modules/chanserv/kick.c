@@ -7,8 +7,8 @@
 
 #include "atheme.h"
 
-static void cs_cmd_kick(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_cmd_kickban(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_kick(struct sourceinfo *si, int parc, char *parv[]);
+static void cs_cmd_kickban(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_kick = { "KICK", N_("Removes a user from a channel."),
                         AC_NONE, 3, cs_cmd_kick, { .path = "cservice/kick" } };
@@ -29,7 +29,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cs_kickban);
 }
 
-static void cs_cmd_kick(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_kick(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	char *nick = parv[1];
@@ -100,7 +100,7 @@ static void cs_cmd_kick(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("\2%s\2 has been kicked from \2%s\2."), tu->nick, mc->name);
 }
 
-static void cs_cmd_kickban(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_kickban(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	char *nick = parv[1];

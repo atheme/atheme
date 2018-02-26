@@ -99,10 +99,10 @@ extern bool is_conf_soper(myuser_t *myuser);
 /* has_any_privs(): used to determine whether we should give detailed
  * messages about disallowed things
  * warning: do not use this for any kind of real privilege! */
-extern bool has_any_privs(sourceinfo_t *);
+extern bool has_any_privs(struct sourceinfo *);
 extern bool has_any_privs_user(user_t *);
 /* has_priv(): for sources of commands */
-extern bool has_priv(sourceinfo_t *, const char *);
+extern bool has_priv(struct sourceinfo *, const char *);
 /* has_priv_user(): for online users */
 extern bool has_priv_user(user_t *, const char *);
 /* has_priv_myuser(): channel succession etc */
@@ -110,15 +110,15 @@ extern bool has_priv_myuser(myuser_t *, const char *);
 /* has_priv_operclass(): /os specs etc */
 extern bool has_priv_operclass(struct operclass *, const char *);
 /* has_all_operclass(): checks if source has all privs in operclass */
-extern bool has_all_operclass(sourceinfo_t *, struct operclass *);
+extern bool has_all_operclass(struct sourceinfo *, struct operclass *);
 
 /* get_sourceinfo_soper(): get the specific operclass role which is granting
  * privilege authority
  */
-extern const soper_t *get_sourceinfo_soper(sourceinfo_t *si);
+extern const soper_t *get_sourceinfo_soper(struct sourceinfo *si);
 /* get_sourceinfo_operclass(): get the specific operclass role which is granting
  * privilege authority
  */
-extern const struct operclass *get_sourceinfo_operclass(sourceinfo_t *si);
+extern const struct operclass *get_sourceinfo_operclass(struct sourceinfo *si);
 
 #endif /* PRIVS_H */

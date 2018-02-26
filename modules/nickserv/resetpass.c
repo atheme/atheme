@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_resetpass(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_resetpass = { "RESETPASS", N_("Resets an account password."), PRIV_USER_ADMIN, 1, ns_cmd_resetpass, { .path = "nickserv/resetpass" } };
 
@@ -23,7 +23,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("nickserv", &ns_resetpass);
 }
 
-static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_resetpass(struct sourceinfo *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	metadata_t *md;

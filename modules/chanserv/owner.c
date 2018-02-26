@@ -8,8 +8,8 @@
 #include "atheme.h"
 #include "chanserv.h"
 
-static void cs_cmd_owner(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_cmd_deowner(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_owner(struct sourceinfo *si, int parc, char *parv[]);
+static void cs_cmd_deowner(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_owner = { "OWNER", N_("Gives the channel owner flag to a user."),
                         AC_NONE, 2, cs_cmd_owner, { .path = "cservice/owner" } };
@@ -39,7 +39,7 @@ mod_deinit(const module_unload_intent_t intent)
 
 static mowgli_list_t owner_actions;
 
-static void cmd_owner(sourceinfo_t *si, bool ownering, int parc, char *parv[])
+static void cmd_owner(struct sourceinfo *si, bool ownering, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	char *nick = parv[1];
@@ -127,7 +127,7 @@ static void cmd_owner(sourceinfo_t *si, bool ownering, int parc, char *parv[])
 	prefix_action_clear(&owner_actions);
 }
 
-static void cs_cmd_owner(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_owner(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (!parv[0])
 	{
@@ -139,7 +139,7 @@ static void cs_cmd_owner(sourceinfo_t *si, int parc, char *parv[])
 	cmd_owner(si, true, parc, parv);
 }
 
-static void cs_cmd_deowner(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_deowner(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (!parv[0])
 	{

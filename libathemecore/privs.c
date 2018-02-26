@@ -322,7 +322,7 @@ bool has_priv_operclass(struct operclass *operclass, const char *priv)
 	return false;
 }
 
-bool has_any_privs(sourceinfo_t *si)
+bool has_any_privs(struct sourceinfo *si)
 {
 	if (si->su != NULL && is_ircop(si->su))
 		return true;
@@ -342,7 +342,7 @@ bool has_any_privs_user(user_t *u)
 	return false;
 }
 
-bool has_priv(sourceinfo_t *si, const char *priv)
+bool has_priv(struct sourceinfo *si, const char *priv)
 {
 	return si->su != NULL ? has_priv_user(si->su, priv) :
 		has_priv_myuser(si->smu, priv);
@@ -406,7 +406,7 @@ bool has_priv_myuser(myuser_t *mu, const char *priv)
 	return false;
 }
 
-bool has_all_operclass(sourceinfo_t *si, struct operclass *operclass)
+bool has_all_operclass(struct sourceinfo *si, struct operclass *operclass)
 {
 	char *privs2;
 	char *priv;
@@ -428,7 +428,7 @@ bool has_all_operclass(sourceinfo_t *si, struct operclass *operclass)
 
 /**********************************************************************************/
 
-const soper_t *get_sourceinfo_soper(sourceinfo_t *si)
+const soper_t *get_sourceinfo_soper(struct sourceinfo *si)
 {
 	if (si->smu != NULL && is_soper(si->smu))
 		return si->smu->soper;
@@ -436,7 +436,7 @@ const soper_t *get_sourceinfo_soper(sourceinfo_t *si)
 	return NULL;
 }
 
-const struct operclass *get_sourceinfo_operclass(sourceinfo_t *si)
+const struct operclass *get_sourceinfo_operclass(struct sourceinfo *si)
 {
 	struct operclass *out = NULL;
 	const soper_t *soper;

@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_ghost(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_ghost = { "GHOST", N_("Reclaims use of a nickname."), AC_NONE, 2, ns_cmd_ghost, { .path = "nickserv/ghost" } };
 
@@ -23,7 +23,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("nickserv", &ns_ghost);
 }
 
-void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[])
+void ns_cmd_ghost(struct sourceinfo *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	char *target = parv[0];

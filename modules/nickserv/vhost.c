@@ -8,8 +8,8 @@
 #include "atheme.h"
 
 static void vhost_on_identify(user_t *u);
-static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[]);
-static void ns_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_vhost(struct sourceinfo *si, int parc, char *parv[]);
+static void ns_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_vhost = { "VHOST", N_("Manages user virtualhosts."), PRIV_USER_VHOST, 4, ns_cmd_vhost, { .path = "nickserv/vhost" } };
 struct command ns_listvhost = { "LISTVHOST", N_("Lists user virtualhosts."), PRIV_USER_AUSPEX, 1, ns_cmd_listvhost, { .path = "nickserv/listvhost" } };
@@ -55,7 +55,7 @@ static void do_sethost_all(myuser_t *mu, stringref host)
 
 /* VHOST <account> [host]  (legacy) */
 /* VHOST <account> ON|OFF [host] */
-static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_vhost(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *host;
@@ -249,7 +249,7 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-static void ns_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *pattern;
 	myentity_iteration_state_t state;

@@ -285,7 +285,7 @@ static bool do_script_unload(const char *filename)
 	return retval;
 }
 
-static bool do_script_list(sourceinfo_t *si)
+static bool do_script_list(struct sourceinfo *si)
 {
 	bool retval = true;
 
@@ -322,7 +322,7 @@ static bool do_script_list(sourceinfo_t *si)
 /*
  * Connect all of the above to OperServ.
  */
-static void os_cmd_perl(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_perl(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_perl = { "PERL", N_("Inspect the Perl interpreter"), PRIV_ADMIN, 2, os_cmd_perl, { .path = "oservice/perl" } };
 
@@ -436,7 +436,7 @@ mod_deinit(const module_unload_intent_t intent)
 /*
  * Actual command handlers.
  */
-static void os_cmd_perl(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_perl(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (!do_script_list(si))
 		command_fail(si, fault_badparams, _("Failed to retrieve script list: %s"), perl_error);

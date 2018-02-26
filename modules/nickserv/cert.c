@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_cert(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_cert = { "CERT", N_("Changes and shows your nickname CertFP authentication list."), AC_NONE, 2, ns_cmd_cert, { .path = "nickserv/cert" } };
 
@@ -24,7 +24,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("nickserv", &ns_cert);
 }
 
-static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_cert(struct sourceinfo *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	mowgli_node_t *n, *tn;

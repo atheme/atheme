@@ -7,8 +7,8 @@
 
 #include "atheme.h"
 
-static void cs_help_set(sourceinfo_t *si, const char *subcmd);
-static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_help_set(struct sourceinfo *si, const char *subcmd);
+static void cs_cmd_set(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_set = { "SET", N_("Sets various control flags."), AC_NONE, 3, cs_cmd_set, { .func = cs_help_set } };
 
@@ -30,7 +30,7 @@ mod_deinit(const module_unload_intent_t intent)
 	mowgli_patricia_destroy(cs_set_cmdtree, NULL, NULL);
 }
 
-static void cs_help_set(sourceinfo_t *si, const char *subcmd)
+static void cs_help_set(struct sourceinfo *si, const char *subcmd)
 {
 	if (!subcmd)
 	{
@@ -51,7 +51,7 @@ static void cs_help_set(sourceinfo_t *si, const char *subcmd)
 }
 
 /* SET <#channel> <setting> <parameters> */
-static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan;
 	char *cmd;

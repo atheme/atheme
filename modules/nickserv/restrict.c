@@ -9,7 +9,7 @@
 #include "list_common.h"
 #include "list.h"
 
-static void ns_cmd_restrict(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_restrict(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_restrict = { "RESTRICT", N_("Restrict a user from using certain commands."), PRIV_MARK, 3, ns_cmd_restrict, { .path = "nickserv/restrict" } };
 
@@ -91,7 +91,7 @@ mod_deinit(const module_unload_intent_t intent)
 	list_unregister("restricted-reason");
 }
 
-static void ns_cmd_restrict(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_restrict(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *action = parv[1];

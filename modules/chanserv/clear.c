@@ -7,8 +7,8 @@
 
 #include "atheme.h"
 
-static void cs_cmd_clear(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_help_clear(sourceinfo_t *si, const char *subcmd);
+static void cs_cmd_clear(struct sourceinfo *si, int parc, char *parv[]);
+static void cs_help_clear(struct sourceinfo *si, const char *subcmd);
 
 struct command cs_clear = { "CLEAR", N_("Channel removal toolkit."),
                         AC_NONE, 3, cs_cmd_clear, { .func = cs_help_clear } };
@@ -31,7 +31,7 @@ mod_deinit(const module_unload_intent_t intent)
 	mowgli_patricia_destroy(cs_clear_cmds, NULL, NULL);
 }
 
-static void cs_help_clear(sourceinfo_t *si, const char *subcmd)
+static void cs_help_clear(struct sourceinfo *si, const char *subcmd)
 {
 	if (!subcmd)
 	{
@@ -49,7 +49,7 @@ static void cs_help_clear(sourceinfo_t *si, const char *subcmd)
 		help_display(si, si->service, subcmd, cs_clear_cmds);
 }
 
-static void cs_cmd_clear(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_clear(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan;
 	char *cmd;

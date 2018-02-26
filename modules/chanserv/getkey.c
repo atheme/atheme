@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_getkey(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_getkey(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_getkey = { "GETKEY", N_("Returns the key (+k) of a channel."),
                         AC_NONE, 1, cs_cmd_getkey, { .path = "cservice/getkey" } };
@@ -24,7 +24,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cs_getkey);
 }
 
-static void cs_cmd_getkey(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_getkey(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	mychan_t *mc;

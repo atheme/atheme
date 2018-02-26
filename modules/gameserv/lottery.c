@@ -8,7 +8,7 @@
 #include "atheme.h"
 #include "gameserv_common.h"
 
-static void command_lottery(sourceinfo_t *si, int parc, char *parv[]);
+static void command_lottery(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cmd_lottery = { "LOTTERY", N_("Choose a random user on a channel."), AC_NONE, 2, command_lottery, { .path = "gameserv/lottery" } };
 
@@ -43,7 +43,7 @@ static user_t *pick_a_sucker(struct channel *c)
 	return cu != NULL ? cu->user : NULL;
 }
 
-static void command_lottery(sourceinfo_t *si, int parc, char *parv[])
+static void command_lottery(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	user_t *u;

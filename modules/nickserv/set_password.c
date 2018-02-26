@@ -11,7 +11,7 @@
 
 mowgli_patricia_t **ns_set_cmdtree;
 
-static void ns_cmd_set_password(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_set_password(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_set_password = { "PASSWORD", N_("Changes the password associated with your account."), AC_NONE, 1, ns_cmd_set_password, { .path = "nickserv/set_password" } };
 
@@ -30,7 +30,7 @@ mod_deinit(const module_unload_intent_t intent)
 }
 
 /* SET PASSWORD <password> */
-static void ns_cmd_set_password(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_set_password(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *password = parv[0];
 

@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void os_cmd_rnc(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_rnc(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_rnc = { "RNC", N_("Shows the most frequent realnames on the network"), PRIV_USER_AUSPEX, 1, os_cmd_rnc, { .path = "oservice/rnc" } };
 
@@ -30,7 +30,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("operserv", &os_rnc);
 }
 
-static void os_cmd_rnc(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_rnc(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *param = parv[0];
 	int count = param ? atoi(param) : 20;

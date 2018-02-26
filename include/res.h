@@ -40,6 +40,6 @@ extern void delete_resolver_queries(const dns_query_t *);
 extern void gethost_byname_type(const char *, dns_query_t *, int);
 extern void gethost_byaddr(const sockaddr_any_t *, dns_query_t *);
 extern void add_local_domain(char *, size_t);
-extern void report_dns_servers(sourceinfo_t *);
+extern void report_dns_servers(struct sourceinfo *);
 
 #endif

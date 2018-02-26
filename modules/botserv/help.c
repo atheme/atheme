@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void bs_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
+static void bs_cmd_help(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command bs_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 1, bs_cmd_help, { .path = "help" } };
 
@@ -24,7 +24,7 @@ mod_deinit(const module_unload_intent_t intent)
 }
 
 /* HELP <command> [params] */
-void bs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
+void bs_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *command = parv[0];
 

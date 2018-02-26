@@ -7,9 +7,9 @@
 
 #include "atheme.h"
 
-static void ss_cmd_netsplit(sourceinfo_t * si, int parc, char *parv[]);
-static void ss_cmd_netsplit_list(sourceinfo_t * si, int parc, char *parv[]);
-static void ss_cmd_netsplit_remove(sourceinfo_t * si, int parc, char *parv[]);
+static void ss_cmd_netsplit(struct sourceinfo * si, int parc, char *parv[]);
+static void ss_cmd_netsplit_list(struct sourceinfo * si, int parc, char *parv[]);
+static void ss_cmd_netsplit_remove(struct sourceinfo * si, int parc, char *parv[]);
 
 struct command ss_netsplit =
 { "NETSPLIT", N_("Monitor network splits."), PRIV_SERVER_AUSPEX, 2, ss_cmd_netsplit, {.path = "statserv/netsplit"} };
@@ -58,7 +58,7 @@ static void netsplit_server_delete(hook_server_delete_t *serv)
     mowgli_patricia_add(splitlist, s->name, s);
 }
 
-static void ss_cmd_netsplit(sourceinfo_t * si, int parc, char *parv[])
+static void ss_cmd_netsplit(struct sourceinfo * si, int parc, char *parv[])
 {
     struct command *c;
     char *cmd = parv[0];
@@ -83,7 +83,7 @@ static void ss_cmd_netsplit(sourceinfo_t * si, int parc, char *parv[])
     command_exec(si->service, si, c, parc - 1, parv + 1);
 }
 
-static void ss_cmd_netsplit_list(sourceinfo_t * si, int parc, char *parv[])
+static void ss_cmd_netsplit_list(struct sourceinfo * si, int parc, char *parv[])
 {
     split_t *s;
     mowgli_patricia_iteration_state_t state;
@@ -97,7 +97,7 @@ static void ss_cmd_netsplit_list(sourceinfo_t * si, int parc, char *parv[])
     command_success_nodata(si, _("End of netsplit list."));
 }
 
-static void ss_cmd_netsplit_remove(sourceinfo_t * si, int parc, char *parv[])
+static void ss_cmd_netsplit_remove(struct sourceinfo * si, int parc, char *parv[])
 {
     char *name = parv[0];
     split_t *s;

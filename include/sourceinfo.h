@@ -11,19 +11,19 @@
 struct sourceinfo_vtable
 {
 	const char *description;
-	const char *(*format)(sourceinfo_t *si, bool full);
-	void (*cmd_fail)(sourceinfo_t *si, enum cmd_faultcode code, const char *message);
-	void (*cmd_success_nodata)(sourceinfo_t *si, const char *message);
-	void (*cmd_success_string)(sourceinfo_t *si, const char *result, const char *message);
-	void (*cmd_success_table)(sourceinfo_t *si, table_t *table);
-	const char *(*get_source_name)(sourceinfo_t *si);
-	const char *(*get_source_mask)(sourceinfo_t *si);
-	const char *(*get_oper_name)(sourceinfo_t *si);
-	const char *(*get_storage_oper_name)(sourceinfo_t *si);
+	const char *(*format)(struct sourceinfo *si, bool full);
+	void (*cmd_fail)(struct sourceinfo *si, enum cmd_faultcode code, const char *message);
+	void (*cmd_success_nodata)(struct sourceinfo *si, const char *message);
+	void (*cmd_success_string)(struct sourceinfo *si, const char *result, const char *message);
+	void (*cmd_success_table)(struct sourceinfo *si, table_t *table);
+	const char *(*get_source_name)(struct sourceinfo *si);
+	const char *(*get_source_mask)(struct sourceinfo *si);
+	const char *(*get_oper_name)(struct sourceinfo *si);
+	const char *(*get_storage_oper_name)(struct sourceinfo *si);
 };
 
 /* structure describing data about a protocol message or service command */
-struct sourceinfo_
+struct sourceinfo
 {
 	object_t parent;
 

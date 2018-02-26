@@ -20,7 +20,7 @@ extern groupacs_t *groupacs_add(mygroup_t *mg, myentity_t *mt, unsigned int flag
 extern groupacs_t *groupacs_find(mygroup_t *mg, myentity_t *mt, unsigned int flags, bool allow_recurse);
 extern void groupacs_delete(mygroup_t *mg, myentity_t *mt);
 
-extern bool groupacs_sourceinfo_has_flag(mygroup_t *mg, sourceinfo_t *si, unsigned int flag);
+extern bool groupacs_sourceinfo_has_flag(mygroup_t *mg, struct sourceinfo *si, unsigned int flag);
 
 extern void gs_db_init(void);
 extern void gs_db_deinit(void);

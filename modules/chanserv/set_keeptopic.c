@@ -8,7 +8,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_set_keeptopic(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_keeptopic(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_set_keeptopic = { "KEEPTOPIC", N_("Enables topic retention."), AC_NONE, 2, cs_cmd_set_keeptopic, { .path = "cservice/set_keeptopic" } };
 
@@ -28,7 +28,7 @@ mod_deinit(const module_unload_intent_t intent)
 	command_delete(&cs_set_keeptopic, *cs_set_cmdtree);
 }
 
-static void cs_cmd_set_keeptopic(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_set_keeptopic(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 

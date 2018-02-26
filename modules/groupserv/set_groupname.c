@@ -10,7 +10,7 @@
 #include "uplink.h"
 #include "groupserv.h"
 
-static void gs_cmd_set_groupname(sourceinfo_t *si, int parc, char *parv[]);
+static void gs_cmd_set_groupname(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command gs_set_groupname = { "GROUPNAME", N_("Changes the group's name."), AC_NONE, 1, gs_cmd_set_groupname, { .path = "groupserv/set_groupname" } };
 
@@ -30,7 +30,7 @@ mod_deinit(const module_unload_intent_t intent)
 }
 
 /* SET GROUPNAME <name> */
-static void gs_cmd_set_groupname(sourceinfo_t *si, int parc, char *parv[])
+static void gs_cmd_set_groupname(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *oldname, *newname;
 	mygroup_t *mg;

@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_clear_bans(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_clear_bans(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_clear_bans = { "BANS", N_("Clears bans or other lists of a channel."),
 	AC_NONE, 2, cs_cmd_clear_bans, { .path = "cservice/clear_bans" } };
@@ -28,7 +28,7 @@ mod_deinit(const module_unload_intent_t intent)
 	command_delete(&cs_clear_bans, *cs_clear_cmds);
 }
 
-static void cs_cmd_clear_bans(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_clear_bans(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c;
 	mychan_t *mc = mychan_find(parv[0]);

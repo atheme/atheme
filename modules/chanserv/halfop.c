@@ -8,8 +8,8 @@
 #include "atheme.h"
 #include "chanserv.h"
 
-static void cs_cmd_halfop(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_cmd_dehalfop(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_halfop(struct sourceinfo *si, int parc, char *parv[]);
+static void cs_cmd_dehalfop(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_halfop = { "HALFOP", N_("Gives channel halfops to a user."),
                         AC_NONE, 2, cs_cmd_halfop, { .path = "cservice/halfop" } };
@@ -39,7 +39,7 @@ mod_deinit(const module_unload_intent_t intent)
 
 static mowgli_list_t halfop_actions;
 
-static void cmd_halfop(sourceinfo_t *si, bool halfopping, int parc, char *parv[])
+static void cmd_halfop(struct sourceinfo *si, bool halfopping, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	char *nick = parv[1];
@@ -127,7 +127,7 @@ static void cmd_halfop(sourceinfo_t *si, bool halfopping, int parc, char *parv[]
 	prefix_action_clear(&halfop_actions);
 }
 
-static void cs_cmd_halfop(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_halfop(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (!parv[0])
 	{
@@ -139,7 +139,7 @@ static void cs_cmd_halfop(sourceinfo_t *si, int parc, char *parv[])
 	cmd_halfop(si, true, parc, parv);
 }
 
-static void cs_cmd_dehalfop(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_dehalfop(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (!parv[0])
 	{

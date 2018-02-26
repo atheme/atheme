@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void ns_cmd_listmail(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_listmail(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_listmail = { "LISTMAIL", N_("Lists accounts registered to an e-mail address."), PRIV_USER_AUSPEX, 1, ns_cmd_listmail, { .path = "nickserv/listmail" } };
 
@@ -25,7 +25,7 @@ mod_deinit(const module_unload_intent_t intent)
 
 struct listmail_state
 {
-	sourceinfo_t *origin;
+	struct sourceinfo *origin;
 	char *pattern;
 	stringref email_canonical;
 	int matches;
@@ -49,7 +49,7 @@ static int listmail_foreach_cb(myentity_t *mt, void *privdata)
 	return 0;
 }
 
-static void ns_cmd_listmail(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_listmail(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *email = parv[0];
 	struct listmail_state state;

@@ -181,7 +181,7 @@ static void myuser_delete_hook(myuser_t *mu)
 	mowgli_list_free(l);
 }
 
-static void osinfo_hook(sourceinfo_t *si)
+static void osinfo_hook(struct sourceinfo *si)
 {
 	return_if_fail(si != NULL);
 

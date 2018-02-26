@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_info(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_info = { "INFO", N_("Displays information on registrations."),
                         AC_NONE, 2, cs_cmd_info, { .path = "cservice/info" } };
@@ -24,7 +24,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cs_info);
 }
 
-static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	char *name = parv[0];

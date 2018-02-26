@@ -10,7 +10,7 @@
 
 mowgli_patricia_t **bs_set_cmdtree;
 
-static void bs_cmd_set_saycaller(sourceinfo_t *si, int parc, char *parv[]);
+static void bs_cmd_set_saycaller(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command bs_set_saycaller = { "SAYCALLER", N_("Enable Caller-ID on BotServ actions or messages."), AC_AUTHENTICATED, 2, bs_cmd_set_saycaller, { .path = "botserv/set_saycaller" } };
 
@@ -30,7 +30,7 @@ mod_deinit(const module_unload_intent_t intent)
 
 }
 
-static void bs_cmd_set_saycaller(sourceinfo_t *si, int parc, char *parv[])
+static void bs_cmd_set_saycaller(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
 	char *option = parv[1];

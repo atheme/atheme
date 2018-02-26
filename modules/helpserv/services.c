@@ -8,7 +8,7 @@
 #include "atheme.h"
 #include "uplink.h"
 
-static void helpserv_cmd_services(sourceinfo_t *si, int parc, char *parv[]);
+static void helpserv_cmd_services(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command helpserv_services = { "SERVICES", N_("List all services currently running on the network."), AC_NONE, 1, helpserv_cmd_services, { .path = "helpserv/services" } };
 
@@ -24,7 +24,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("helpserv", &helpserv_services);
 }
 
-static void helpserv_cmd_services(sourceinfo_t *si, int parc, char *parv[])
+static void helpserv_cmd_services(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct service *sptr;
 	mowgli_patricia_iteration_state_t state;

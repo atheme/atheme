@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_ftransfer(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_ftransfer = { "FTRANSFER", N_("Forces foundership transfer of a channel."),
                            PRIV_CHAN_ADMIN, 2, cs_cmd_ftransfer, { .path = "cservice/ftransfer" } };
@@ -24,7 +24,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cs_ftransfer);
 }
 
-static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_ftransfer(struct sourceinfo *si, int parc, char *parv[])
 {
 	myentity_t *mt;
 	mychan_t *mc;

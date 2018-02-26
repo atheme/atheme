@@ -8,7 +8,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_set_limitflags(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_limitflags(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_set_limitflags = { "LIMITFLAGS", N_("Limits the power of the +f flag."), AC_NONE, 2, cs_cmd_set_limitflags, { .path = "cservice/set_limitflags" } };
 
@@ -32,7 +32,7 @@ mod_deinit(const module_unload_intent_t intent)
 	use_limitflags--;
 }
 
-static void cs_cmd_set_limitflags(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_set_limitflags(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 

@@ -8,9 +8,9 @@
 #include "atheme.h"
 #include "template.h"
 
-static void list_generic_flags(sourceinfo_t *si);
+static void list_generic_flags(struct sourceinfo *si);
 
-static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_template(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_flags = { "TEMPLATE", N_("Manipulates predefined sets of flags."),
                         AC_NONE, 3, cs_cmd_template, { .path = "cservice/template" } };
@@ -29,7 +29,7 @@ mod_deinit(const module_unload_intent_t intent)
 
 static int display_template(const char *key, void *data, void *privdata)
 {
-	sourceinfo_t *si = privdata;
+	struct sourceinfo *si = privdata;
 	default_template_t *def_t = data;
 	unsigned int vopflags;
 
@@ -42,7 +42,7 @@ static int display_template(const char *key, void *data, void *privdata)
 	return 0;
 }
 
-static void list_generic_flags(sourceinfo_t *si)
+static void list_generic_flags(struct sourceinfo *si)
 {
 	command_success_nodata(si, "%-20s %s", _("Name"), _("Flags"));
 	command_success_nodata(si, "%-20s %s", "--------------------", "-----");
@@ -54,7 +54,7 @@ static void list_generic_flags(sourceinfo_t *si)
 }
 
 /* TEMPLATE [channel] [template] [flags] */
-static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 {
 	metadata_t *md;
 	bool operoverride = false, changechanacs = false;

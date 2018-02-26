@@ -8,11 +8,11 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-static void gs_cmd_set_channel(sourceinfo_t *si, int parc, char *parv[]);
+static void gs_cmd_set_channel(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command gs_set_channel = { "CHANNEL", N_("Sets the official group channel."), AC_AUTHENTICATED, 2, gs_cmd_set_channel, { .path = "groupserv/set_channel" } };
 
-static void gs_cmd_set_channel(sourceinfo_t *si, int parc, char *parv[])
+static void gs_cmd_set_channel(struct sourceinfo *si, int parc, char *parv[])
 {
 	mygroup_t *mg;
 	char *chan = parv[1];

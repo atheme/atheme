@@ -8,7 +8,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_set_private(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_private(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_set_private = { "PRIVATE", N_("Hides information about a channel."), AC_NONE, 2, cs_cmd_set_private, { .path = "cservice/set_private" } };
 
@@ -32,7 +32,7 @@ mod_deinit(const module_unload_intent_t intent)
 	use_channel_private--;
 }
 
-static void cs_cmd_set_private(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_set_private(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 

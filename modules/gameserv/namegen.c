@@ -9,7 +9,7 @@
 #include "gameserv_common.h"
 #include "namegen_tab.h"
 
-static void command_namegen(sourceinfo_t *si, int parc, char *parv[]);
+static void command_namegen(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cmd_namegen = { "NAMEGEN", N_("Generates some names to ponder."), AC_NONE, 2, command_namegen, { .path = "gameserv/namegen" } };
 
@@ -29,7 +29,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cmd_namegen);
 }
 
-static void command_namegen(sourceinfo_t *si, int parc, char *parv[])
+static void command_namegen(struct sourceinfo *si, int parc, char *parv[])
 {
 	unsigned int iter;
 	unsigned int amt = 20;

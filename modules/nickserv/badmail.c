@@ -8,7 +8,7 @@
 #include "atheme.h"
 
 static void check_registration(hook_user_register_check_t *hdata);
-static void ns_cmd_badmail(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_badmail(struct sourceinfo *si, int parc, char *parv[]);
 
 static void write_bedb(database_handle_t *db);
 static void db_h_be(database_handle_t *db, const char *type);
@@ -111,7 +111,7 @@ static void check_registration(hook_user_register_check_t *hdata)
 	}
 }
 
-static void ns_cmd_badmail(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_badmail(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *action = parv[0];
 	char *email = parv[1];

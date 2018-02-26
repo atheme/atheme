@@ -20,8 +20,8 @@ struct service
 
 	user_t *me;
 
-	void (*handler)(sourceinfo_t *, int, char **);
-	void (*notice_handler)(sourceinfo_t *, int, char **);
+	void (*handler)(struct sourceinfo *, int, char **);
+	void (*notice_handler)(struct sourceinfo *, int, char **);
 
 	mowgli_patricia_t *commands;
 	mowgli_patricia_t *aliases;
@@ -48,8 +48,8 @@ extern mowgli_patricia_t *services_name;
 extern mowgli_patricia_t *services_nick;
 
 extern void servtree_init(void);
-extern struct service *service_add(const char *name, void (*handler)(sourceinfo_t *si, int parc, char *parv[]));
-extern struct service *service_add_static(const char *name, const char *user, const char *host, const char *real, void (*handler)(sourceinfo_t *si, int parc, char *parv[]), struct service *logtarget);
+extern struct service *service_add(const char *name, void (*handler)(struct sourceinfo *si, int parc, char *parv[]));
+extern struct service *service_add_static(const char *name, const char *user, const char *host, const char *real, void (*handler)(struct sourceinfo *si, int parc, char *parv[]), struct service *logtarget);
 extern void service_delete(struct service *sptr);
 extern struct service *service_find_any(void);
 extern struct service *service_find(const char *name);

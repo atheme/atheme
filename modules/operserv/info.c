@@ -9,7 +9,7 @@
 
 #include "atheme.h"
 
-static void os_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_info(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_info = { "INFO", N_("Shows some useful information about the current settings of services."), PRIV_SERVER_AUSPEX, 1, os_cmd_info, { .path = "oservice/info" } };
 
@@ -25,7 +25,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("operserv", &os_info);
 }
 
-static void os_cmd_info(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *tn, *n2;
 

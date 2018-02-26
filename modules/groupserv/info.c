@@ -8,11 +8,11 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
+static void gs_cmd_info(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command gs_info = { "INFO", N_("Displays information about registered groups."), AC_NONE, 2, gs_cmd_info, { .path = "groupserv/info" } };
 
-static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
+static void gs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	mygroup_t *mg;
 	struct tm tm;

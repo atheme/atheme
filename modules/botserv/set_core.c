@@ -9,8 +9,8 @@
 #include "atheme.h"
 #include "botserv.h"
 
-static void bs_help_set(sourceinfo_t *si, const char *subcmd);
-static void bs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
+static void bs_help_set(struct sourceinfo *si, const char *subcmd);
+static void bs_cmd_set(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command bs_set = { "SET", N_("Configures bot options."), AC_NONE, 3, bs_cmd_set, { .func =  bs_help_set } };
 
@@ -34,7 +34,7 @@ mod_deinit(const module_unload_intent_t intent)
 
 /* ******************************************************************** */
 
-static void bs_help_set(sourceinfo_t *si, const char *subcmd)
+static void bs_help_set(struct sourceinfo *si, const char *subcmd)
 {
 	if (!subcmd)
 	{
@@ -52,7 +52,7 @@ static void bs_help_set(sourceinfo_t *si, const char *subcmd)
 		help_display_as_subcmd(si, si->service, "SET", subcmd, bs_set_cmdtree);
 }
 
-static void bs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
+static void bs_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *dest;
 	char *cmd;

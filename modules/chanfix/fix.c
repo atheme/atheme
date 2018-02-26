@@ -345,7 +345,7 @@ void chanfix_autofix_ev(void *unused)
 
 /*************************************************************************************/
 
-static void chanfix_cmd_list(sourceinfo_t *si, int parc, char *parv[])
+static void chanfix_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	chanfix_channel_t *chan;
 	metadata_t *md, *mdnofix;
@@ -418,7 +418,7 @@ static void chanfix_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 
 struct command cmd_list = { "LIST", N_("List all channels with CHANFIX records."), PRIV_CHAN_AUSPEX, 1, chanfix_cmd_list, { .path = "chanfix/list" } };
 
-static void chanfix_cmd_fix(sourceinfo_t *si, int parc, char *parv[])
+static void chanfix_cmd_fix(struct sourceinfo *si, int parc, char *parv[])
 {
 	chanfix_channel_t *chan;
 	unsigned int highscore;
@@ -482,7 +482,7 @@ static int chanfix_compare_records(mowgli_node_t *a, mowgli_node_t *b, void *unu
 	return tb->age - ta->age;
 }
 
-static void chanfix_cmd_scores(sourceinfo_t *si, int parc, char *parv[])
+static void chanfix_cmd_scores(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
 	chanfix_channel_t *chan;
@@ -539,7 +539,7 @@ static void chanfix_cmd_scores(sourceinfo_t *si, int parc, char *parv[])
 
 struct command cmd_scores = { "SCORES", N_("List channel scores."), PRIV_CHAN_AUSPEX, 1, chanfix_cmd_scores, { .path = "chanfix/scores" } };
 
-static void chanfix_cmd_info(sourceinfo_t *si, int parc, char *parv[])
+static void chanfix_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	chanfix_oprecord_t *orec;
 	chanfix_channel_t *chan;
@@ -629,7 +629,7 @@ static void chanfix_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 struct command cmd_info = { "INFO", N_("List information on channel."), PRIV_CHAN_AUSPEX, 1, chanfix_cmd_info, { .path = "chanfix/info" } };
 
 /* MARK <channel> ON|OFF [reason] */
-static void chanfix_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
+static void chanfix_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *action = parv[1];
@@ -703,7 +703,7 @@ static void chanfix_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 struct command cmd_mark = { "MARK", N_("Adds a note to a channel."), PRIV_MARK, 3, chanfix_cmd_mark, { .path = "chanfix/mark" } };
 
 /* NOFIX <channel> ON|OFF [reason] */
-static void chanfix_cmd_nofix(sourceinfo_t *si, int parc, char *parv[])
+static void chanfix_cmd_nofix(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *action = parv[1];
@@ -777,7 +777,7 @@ static void chanfix_cmd_nofix(sourceinfo_t *si, int parc, char *parv[])
 struct command cmd_nofix = { "NOFIX", N_("Adds NOFIX to a channel."), PRIV_CHAN_ADMIN, 3, chanfix_cmd_nofix, { .path = "chanfix/nofix" } };
 
 /* HELP <command> [params] */
-static void chanfix_cmd_help(sourceinfo_t *si, int parc, char *parv[])
+static void chanfix_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *command = parv[0];
 

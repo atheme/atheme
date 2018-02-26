@@ -50,7 +50,7 @@ static void join_registered(bool all)
 }
 
 /* main services client routine */
-static void chanserv(sourceinfo_t *si, int parc, char *parv[])
+static void chanserv(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc = NULL;
 	char orig[BUFSIZE];

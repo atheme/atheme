@@ -110,11 +110,11 @@ typedef struct dnsbl_exempt_ dnsbl_exempt_t;
 
 mowgli_list_t dnsbl_elist;
 
-static void os_cmd_set_dnsblaction(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_set_dnsblaction(struct sourceinfo *si, int parc, char *parv[]);
 static void dnsbl_hit(user_t *u, struct Blacklist *blptr);
 static void abort_blacklist_queries(user_t *u);
-static void ps_cmd_dnsblexempt(sourceinfo_t *si, int parc, char *parv[]);
-static void ps_cmd_dnsblscan(sourceinfo_t *si, int parc, char *parv[]);
+static void ps_cmd_dnsblexempt(struct sourceinfo *si, int parc, char *parv[]);
+static void ps_cmd_dnsblscan(struct sourceinfo *si, int parc, char *parv[]);
 static void write_dnsbl_exempt_db(database_handle_t *db);
 static void db_h_ble(database_handle_t *db, const char *type);
 static void lookup_blacklists(user_t *u);
@@ -139,7 +139,7 @@ static inline mowgli_list_t *dnsbl_queries(user_t *u)
 	return l;
 }
 
-static void os_cmd_set_dnsblaction(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_set_dnsblaction(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *act = parv[0];
 
@@ -164,7 +164,7 @@ static void os_cmd_set_dnsblaction(sourceinfo_t *si, int parc, char *parv[])
 	command_fail(si, fault_badparams, _("Invalid action given."));
 }
 
-static void ps_cmd_dnsblexempt(sourceinfo_t *si, int parc, char *parv[])
+static void ps_cmd_dnsblexempt(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *command = parv[0];
 	char *ip = parv[1];
@@ -266,7 +266,7 @@ static void ps_cmd_dnsblexempt(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void ps_cmd_dnsblscan(sourceinfo_t *si, int parc, char *parv[])
+static void ps_cmd_dnsblscan(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *user = parv[0];
 	user_t *u;
@@ -545,7 +545,7 @@ static void abort_blacklist_queries(user_t *u)
 	}
 }
 
-static void osinfo_hook(sourceinfo_t *si)
+static void osinfo_hook(struct sourceinfo *si)
 {
 	mowgli_node_t *n;
 	const char *name = action_names[action];

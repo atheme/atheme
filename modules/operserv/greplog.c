@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command os_greplog = { "GREPLOG", N_("Searches through the logs."), PRIV_CHAN_AUSPEX, 3, os_cmd_greplog, { .path = "oservice/greplog" } };
 
@@ -64,7 +64,7 @@ static const char *get_account_log(void)
 }
 
 /* GREPLOG <service> <mask> */
-static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *service, *pattern, *baselog;
 	int maxdays, matches = -1, matches1, day, days, lines, linesv;

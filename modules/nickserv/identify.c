@@ -16,7 +16,7 @@
 #define COMMAND_LC "identify"
 #endif
 
-static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_login(struct sourceinfo *si, int parc, char *parv[]);
 
 #ifdef NICKSERV_LOGIN
 struct command ns_login = { "LOGIN", N_("Authenticates to a services account."), AC_NONE, 2, ns_cmd_login, { .path = "nickserv/login" } };
@@ -46,7 +46,7 @@ mod_deinit(const module_unload_intent_t intent)
 #endif
 }
 
-static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_login(struct sourceinfo *si, int parc, char *parv[])
 {
 	user_t *u = si->su;
 	myuser_t *mu;

@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_info(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command ns_info = { "INFO", N_("Displays information on registrations."), AC_NONE, 2, ns_cmd_info, { .path = "nickserv/info" } };
 
@@ -23,7 +23,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("nickserv", &ns_info);
 }
 
-static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	mynick_t *mn = NULL;

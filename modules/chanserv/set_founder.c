@@ -8,7 +8,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_set_founder = { "FOUNDER", N_("Transfers foundership of a channel."), AC_NONE, 2, cs_cmd_set_founder, { .path = "cservice/set_founder" } };
 
@@ -45,7 +45,7 @@ mod_deinit(const module_unload_intent_t intent)
  * undesirable channels (e.g. registering #kidsex and transferring to an
  * innocent user.) Originally, we used channel passwords for this purpose.
  */
-static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *newfounder = parv[1];
 	myentity_t *mt;

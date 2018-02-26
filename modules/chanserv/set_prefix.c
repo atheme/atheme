@@ -8,7 +8,7 @@
 #include "atheme.h"
 
 static void cs_set_prefix_config_ready(void *unused);
-static void cs_cmd_set_prefix(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_prefix(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_set_prefix = { "PREFIX", N_("Sets the channel PREFIX."), AC_NONE, 2, cs_cmd_set_prefix, { .path = "cservice/set_prefix" } };
 
@@ -56,7 +56,7 @@ static int goodprefix(const char *p)
 }
 
 
-static void cs_cmd_set_prefix(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_set_prefix(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	char *prefix = parv[1];

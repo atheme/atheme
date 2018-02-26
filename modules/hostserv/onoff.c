@@ -8,8 +8,8 @@
 #include "atheme.h"
 #include "hostserv.h"
 
-static void hs_cmd_on(sourceinfo_t *si, int parc, char *parv[]);
-static void hs_cmd_off(sourceinfo_t *si, int parc, char *parv[]);
+static void hs_cmd_on(struct sourceinfo *si, int parc, char *parv[]);
+static void hs_cmd_off(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command hs_on = { "ON", N_("Activates your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_on, { .path = "hostserv/on" } };
 struct command hs_off = { "OFF", N_("Deactivates your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_off, { .path = "hostserv/off" } };
@@ -29,7 +29,7 @@ mod_deinit(const module_unload_intent_t intent)
 }
 
 
-static void hs_cmd_on(sourceinfo_t *si, int parc, char *parv[])
+static void hs_cmd_on(struct sourceinfo *si, int parc, char *parv[])
 {
 	mynick_t *mn = NULL;
 	metadata_t *md;
@@ -65,7 +65,7 @@ static void hs_cmd_on(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Your vhost of \2%s\2 is now activated."), md->value);
 }
 
-static void hs_cmd_off(sourceinfo_t *si, int parc, char *parv[])
+static void hs_cmd_off(struct sourceinfo *si, int parc, char *parv[])
 {
 	mynick_t *mn = NULL;
 	metadata_t *md;

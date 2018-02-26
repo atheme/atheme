@@ -8,7 +8,7 @@
 #include "atheme.h"
 #include "gameserv_common.h"
 
-static void command_eightball(sourceinfo_t *si, int parc, char *parv[]);
+static void command_eightball(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cmd_eightball = { "EIGHTBALL", N_("Ask the 8-Ball a question."), AC_NONE, 2, command_eightball, { .path = "gameserv/eightball" } };
 
@@ -28,7 +28,7 @@ mod_deinit(const module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cmd_eightball);
 }
 
-static void command_eightball(sourceinfo_t *si, int parc, char *parv[])
+static void command_eightball(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 

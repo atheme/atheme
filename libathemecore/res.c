@@ -880,7 +880,7 @@ static dns_reply_t *make_dnsreply(struct reslist *request)
 	return (cp);
 }
 
-void report_dns_servers(sourceinfo_t *si)
+void report_dns_servers(struct sourceinfo *si)
 {
 	int i;
 

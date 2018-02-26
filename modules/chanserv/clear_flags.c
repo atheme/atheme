@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_clear_flags(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_clear_flags(struct sourceinfo *si, int parc, char *parv[]);
 
 struct command cs_clear_flags = { "FLAGS", "Clears all channel flags.", AC_NONE, 2, cs_cmd_clear_flags, { .path = "cservice/clear_flags" } };
 
@@ -27,7 +27,7 @@ mod_deinit(const module_unload_intent_t intent)
 	command_delete(&cs_clear_flags, *cs_clear_cmds);
 }
 
-static void cs_cmd_clear_flags(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_clear_flags(struct sourceinfo *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	mowgli_node_t *n, *tn;
