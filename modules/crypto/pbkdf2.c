@@ -26,7 +26,7 @@
 
 static bool
 atheme_pbkdf2_verify(const char *const restrict password, const char *const restrict parameters,
-                     unsigned int __attribute__((unused)) *const restrict flags)
+                     unsigned int ATHEME_VATTR_UNUSED *const restrict flags)
 {
 	if (strlen(parameters) != (ATHEME_PBKDF2_SALTLEN + (2 * DIGEST_MDLEN_SHA2_512)))
 		return false;
@@ -55,13 +55,13 @@ static crypt_impl_t crypto_pbkdf2_impl = {
 };
 
 static void
-mod_init(module_t __attribute__((unused)) *const restrict m)
+mod_init(module_t ATHEME_VATTR_UNUSED *const restrict m)
 {
 	(void) crypt_register(&crypto_pbkdf2_impl);
 }
 
 static void
-mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
+mod_deinit(const module_unload_intent_t ATHEME_VATTR_UNUSED intent)
 {
 	(void) crypt_unregister(&crypto_pbkdf2_impl);
 }

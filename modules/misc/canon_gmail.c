@@ -13,7 +13,7 @@
 
 static void
 email_canonicalize_gmail(char email[static (EMAILLEN + 1)],
-                         void __attribute__((unused)) *const restrict user_data)
+                         void ATHEME_VATTR_UNUSED *const restrict user_data)
 {
 	const char *const p_at = strchr(email, '@');
 
@@ -47,13 +47,13 @@ email_canonicalize_gmail(char email[static (EMAILLEN + 1)],
 }
 
 static void
-mod_init(module_t __attribute__((unused)) *const restrict m)
+mod_init(module_t ATHEME_VATTR_UNUSED *const restrict m)
 {
 	(void) register_email_canonicalizer(&email_canonicalize_gmail, NULL);
 }
 
 static void
-mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
+mod_deinit(const module_unload_intent_t ATHEME_VATTR_UNUSED intent)
 {
 	(void) unregister_email_canonicalizer(&email_canonicalize_gmail, NULL);
 }

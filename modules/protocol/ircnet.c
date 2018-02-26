@@ -140,7 +140,8 @@ static void ircnet_kick(user_t *source, channel_t *c, user_t *u, const char *rea
 }
 
 /* PRIVMSG wrapper */
-static void ircnet_msg(const char *from, const char *target, const char *fmt, ...)
+static void ATHEME_FATTR_PRINTF(3, 4)
+ircnet_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -201,7 +202,8 @@ static void ircnet_notice_channel_sts(user_t *from, channel_t *target, const cha
 }
 
 /* numeric wrapper */
-static void ircnet_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
+static void ATHEME_FATTR_PRINTF(4, 5)
+ircnet_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];

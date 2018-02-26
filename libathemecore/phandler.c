@@ -113,7 +113,8 @@ void generic_kick(user_t *source, channel_t *c, user_t *u, const char *reason)
 	/* We can't do anything here. Bail. */
 }
 
-void generic_msg(const char *from, const char *target, const char *fmt, ...)
+void ATHEME_FATTR_PRINTF(3, 4)
+generic_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -163,7 +164,8 @@ void generic_wallchops(user_t *sender, channel_t *channel, const char *message)
 	}
 }
 
-void generic_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
+void ATHEME_FATTR_PRINTF(4, 5)
+generic_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
 {
 	va_list va;
 	char buf[BUFSIZE];

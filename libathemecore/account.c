@@ -478,7 +478,8 @@ myuser_t *myuser_find_ext(const char *name)
  * Side Effects:
  *      - a notice is sent to all users logged into the account.
  */
-void myuser_notice(const char *from, myuser_t *target, const char *fmt, ...)
+void ATHEME_FATTR_PRINTF(3, 4)
+myuser_notice(const char *from, myuser_t *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];

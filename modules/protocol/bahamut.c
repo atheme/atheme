@@ -209,7 +209,8 @@ static void bahamut_kick(user_t *source, channel_t *c, user_t *u, const char *re
 }
 
 /* PRIVMSG wrapper */
-static void bahamut_msg(const char *from, const char *target, const char *fmt, ...)
+static void ATHEME_FATTR_PRINTF(3, 4)
+bahamut_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -270,7 +271,8 @@ static void bahamut_wallchops(user_t *sender, channel_t *channel, const char *me
 	sts(":%s NOTICE @%s :%s", sender->nick, channel->name, message);
 }
 
-static void bahamut_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
+static void ATHEME_FATTR_PRINTF(4, 5)
+bahamut_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];

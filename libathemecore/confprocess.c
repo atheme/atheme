@@ -79,7 +79,8 @@ bool conf_need_rehash;
 
 /* *INDENT-ON* */
 
-void conf_report_warning(mowgli_config_file_entry_t *ce, const char *fmt, ...)
+void ATHEME_FATTR_PRINTF(2, 3)
+conf_report_warning(mowgli_config_file_entry_t *ce, const char *fmt, ...)
 {
 	va_list va;
 	char buf[BUFSIZE];

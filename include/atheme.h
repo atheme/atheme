@@ -12,6 +12,8 @@
 /* *INDENT-OFF* */
 
 #include "sysconf.h"
+#include "attrs.h"
+
 #include "stdinc.h"
 #include "i18n.h"
 #include "common.h"

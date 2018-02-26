@@ -98,7 +98,8 @@ static void p10_kick(user_t *source, channel_t *c, user_t *u, const char *reason
 }
 
 /* PRIVMSG wrapper */
-static void p10_msg(const char *from, const char *target, const char *fmt, ...)
+static void ATHEME_FATTR_PRINTF(3, 4)
+p10_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
 	user_t *u = user_find_named(from);
@@ -168,7 +169,8 @@ static void p10_wallchops(user_t *sender, channel_t *channel, const char *messag
 }
 
 /* numeric wrapper */
-static void p10_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
+static void ATHEME_FATTR_PRINTF(4, 5)
+p10_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];

@@ -598,8 +598,8 @@ static void vslog_ext(log_type_t type, unsigned int level, const char *fmt,
 	in_slog = false;
 }
 
-static PRINTFLIKE(3, 4) void slog_ext(log_type_t type, unsigned int level,
-		const char *fmt, ...)
+static void ATHEME_FATTR_PRINTF(3, 4)
+slog_ext(log_type_t type, unsigned int level, const char *fmt, ...)
 {
 	va_list args;
 
@@ -626,7 +626,8 @@ static PRINTFLIKE(3, 4) void slog_ext(log_type_t type, unsigned int level,
  * Side Effects:
  *       - logfiles are updated depending on how they are configured.
  */
-void slog(unsigned int level, const char *fmt, ...)
+void ATHEME_FATTR_PRINTF(2, 3)
+slog(unsigned int level, const char *fmt, ...)
 {
 	va_list args;
 
@@ -707,7 +708,8 @@ const char *format_sourceinfo(sourceinfo_t *si, bool full)
  * Side Effects:
  *       - qualifying logfile_t objects in log_files are updated.
  */
-void logcommand(sourceinfo_t *si, int level, const char *fmt, ...)
+void ATHEME_FATTR_PRINTF(3, 4)
+logcommand(sourceinfo_t *si, int level, const char *fmt, ...)
 {
 	va_list args;
 	char lbuf[BUFSIZE];
@@ -743,7 +745,8 @@ void logcommand(sourceinfo_t *si, int level, const char *fmt, ...)
  * Side Effects:
  *       - qualifying logfile_t objects in log_files are updated.
  */
-void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt, ...)
+void ATHEME_FATTR_PRINTF(4, 5)
+logcommand_user(service_t *svs, user_t *source, int level, const char *fmt, ...)
 {
 	va_list args;
 	char lbuf[BUFSIZE];
@@ -784,7 +787,8 @@ void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt,
  * Side Effects:
  *       - qualifying logfile_t objects in log_files are updated.
  */
-void logcommand_external(service_t *svs, const char *type, connection_t *source, const char *sourcedesc, myuser_t *mu, int level, const char *fmt, ...)
+void ATHEME_FATTR_PRINTF(7, 8)
+logcommand_external(service_t *svs, const char *type, connection_t *source, const char *sourcedesc, myuser_t *mu, int level, const char *fmt, ...)
 {
 	va_list args;
 	char lbuf[BUFSIZE];

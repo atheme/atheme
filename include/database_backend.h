@@ -81,7 +81,7 @@ extern bool db_write_str(database_handle_t *db, const char *str);
 extern bool db_write_int(database_handle_t *db, int num);
 extern bool db_write_uint(database_handle_t *db, unsigned int num);
 extern bool db_write_time(database_handle_t *db, time_t time);
-extern bool db_write_format(database_handle_t *db, const char *str, ...);
+extern bool db_write_format(database_handle_t *db, const char *str, ...) ATHEME_FATTR_PRINTF(2, 3);
 extern bool db_commit_row(database_handle_t *db);
 
 typedef void (*database_handler_f)(database_handle_t *db, const char *type);

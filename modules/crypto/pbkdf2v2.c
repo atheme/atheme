@@ -42,7 +42,7 @@ atheme_pbkdf2v2_confhook_dispatch(void)
 }
 
 static void
-atheme_pbkdf2v2_config_ready(void __attribute__((unused)) *const restrict unused)
+atheme_pbkdf2v2_config_ready(void ATHEME_VATTR_UNUSED *const restrict unused)
 {
 	if (! pbkdf2v2_digest)
 		pbkdf2v2_digest = PBKDF2_PRF_DEFAULT;
@@ -411,7 +411,7 @@ atheme_pbkdf2v2_compute(const char *const restrict password, struct pbkdf2v2_dbe
 
 static const char *
 atheme_pbkdf2v2_crypt(const char *const restrict password,
-                      const char __attribute__((unused)) *const restrict parameters)
+                      const char ATHEME_VATTR_UNUSED *const restrict parameters)
 {
 	struct pbkdf2v2_dbentry dbe;
 	(void) memset(&dbe, 0x00, sizeof dbe);
@@ -596,7 +596,7 @@ static crypt_impl_t crypto_pbkdf2v2_impl = {
 static mowgli_list_t pbkdf2v2_conf_table;
 
 static void
-mod_init(module_t __attribute__((unused)) *const restrict m)
+mod_init(module_t ATHEME_VATTR_UNUSED *const restrict m)
 {
 	(void) crypt_register(&crypto_pbkdf2v2_impl);
 
@@ -612,7 +612,7 @@ mod_init(module_t __attribute__((unused)) *const restrict m)
 }
 
 static void
-mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
+mod_deinit(const module_unload_intent_t ATHEME_VATTR_UNUSED intent)
 {
 	(void) hook_del_config_ready(&atheme_pbkdf2v2_config_ready);
 

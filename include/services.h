@@ -101,22 +101,22 @@ extern int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target
 extern void try_kick_real(user_t *source, channel_t *chan, user_t *target, const char *reason);
 extern void (*try_kick)(user_t *source, channel_t *chan, user_t *target, const char *reason);
 
-extern void kill_user(user_t *source, user_t *victim, const char *fmt, ...) PRINTFLIKE(3, 4);
+extern void kill_user(user_t *source, user_t *victim, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
 extern void introduce_enforcer(const char *nick);
 extern void join(const char *chan, const char *nick);
 extern void joinall(const char *name);
 extern void part(const char *chan, const char *nick);
 extern void partall(const char *name);
 extern void myuser_login(service_t *svs, user_t *u, myuser_t *mu, bool sendaccount);
-extern void verbose(mychan_t *mychan, const char *fmt, ...) PRINTFLIKE(2, 3);
-extern void (*notice)(const char *from, const char *target, const char *fmt, ...) PRINTFLIKE(3, 4);
-extern void change_notify(const char *from, user_t *to, const char *message, ...) PRINTFLIKE(3, 4);
+extern void verbose(mychan_t *mychan, const char *fmt, ...) ATHEME_FATTR_PRINTF(2, 3);
+extern void (*notice)(const char *from, const char *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
+extern void change_notify(const char *from, user_t *to, const char *message, ...) ATHEME_FATTR_PRINTF(3, 4);
 extern bool bad_password(sourceinfo_t *si, myuser_t *mu);
 
 extern sourceinfo_t *sourceinfo_create(void);
-extern void command_fail(sourceinfo_t *si, cmd_faultcode_t code, const char *fmt, ...) PRINTFLIKE(3, 4);
-extern void command_success_nodata(sourceinfo_t *si, const char *fmt, ...) PRINTFLIKE(2, 3);
-extern void command_success_string(sourceinfo_t *si, const char *result, const char *fmt, ...) PRINTFLIKE(3, 4);
+extern void command_fail(sourceinfo_t *si, cmd_faultcode_t code, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
+extern void command_success_nodata(sourceinfo_t *si, const char *fmt, ...) ATHEME_FATTR_PRINTF(2, 3);
+extern void command_success_string(sourceinfo_t *si, const char *result, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
 extern void command_success_table(sourceinfo_t *si, table_t *table);
 extern const char *get_source_name(sourceinfo_t *si);
 extern const char *get_source_mask(sourceinfo_t *si);
@@ -124,8 +124,8 @@ extern const char *get_oper_name(sourceinfo_t *si);
 extern const char *get_storage_oper_name(sourceinfo_t *si);
 extern const char *get_source_security_label(sourceinfo_t *si);
 
-extern void wallops(const char *, ...) PRINTFLIKE(1, 2);
-extern void verbose_wallops(const char *, ...) PRINTFLIKE(1, 2);
+extern void wallops(const char *, ...) ATHEME_FATTR_PRINTF(1, 2);
+extern void verbose_wallops(const char *, ...) ATHEME_FATTR_PRINTF(1, 2);
 extern bool check_vhost_validity(sourceinfo_t *si, const char *host);
 
 /* ptasks.c */

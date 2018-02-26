@@ -407,7 +407,8 @@ static void inspircd_kick(user_t *source, channel_t *c, user_t *u, const char *r
 }
 
 /* PRIVMSG wrapper */
-static void inspircd_msg(const char *from, const char *target, const char *fmt, ...)
+static void ATHEME_FATTR_PRINTF(3, 4)
+inspircd_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -442,7 +443,8 @@ static void inspircd_notice_channel_sts(user_t *from, channel_t *target, const c
 	sts(":%s NOTICE %s :%s", from ? from->uid : me.numeric, target->name, text);
 }
 
-static void inspircd_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
+static void ATHEME_FATTR_PRINTF(4, 5)
+inspircd_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];

@@ -9,7 +9,7 @@
 
 #ifdef HAVE_CRYPT
 
-static bool __attribute__((warn_unused_result))
+static bool ATHEME_FATTR_WUR
 atheme_crypt3_sha2_512_selftest(void)
 {
 	static const char password[] = CRYPT3_MODULE_TEST_PASSWORD;
@@ -32,7 +32,7 @@ atheme_crypt3_sha2_512_selftest(void)
 
 static const char *
 atheme_crypt3_sha2_512_crypt(const char *const restrict password,
-                             const char __attribute__((unused)) *const restrict parameters)
+                             const char ATHEME_VATTR_UNUSED *const restrict parameters)
 {
 	static const char saltchars[CRYPT3_SHA2_SALTCHARS_LENGTH] = CRYPT3_SHA2_SALTCHARS;
 
@@ -120,7 +120,7 @@ mod_init(module_t *const restrict m)
 }
 
 static void
-mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
+mod_deinit(const module_unload_intent_t ATHEME_VATTR_UNUSED intent)
 {
 	(void) crypt_unregister(&crypto_crypt3_impl);
 }
@@ -136,7 +136,7 @@ mod_init(module_t *const restrict m)
 }
 
 static void
-mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
+mod_deinit(const module_unload_intent_t ATHEME_VATTR_UNUSED intent)
 {
 	/* Nothing To Do */
 }

@@ -153,7 +153,7 @@ find_mechanism(const char *const restrict name)
 }
 
 static void
-sasl_server_eob(server_t __attribute__((unused)) *const restrict s)
+sasl_server_eob(server_t ATHEME_VATTR_UNUSED *const restrict s)
 {
 	/* new server online, push mechlist to make sure it's using the current one */
 	(void) sasl_mechlist_sts(mechlist_string);
@@ -350,7 +350,7 @@ sasl_write(const char *const restrict target, const char *restrict data, const s
 /* given an entire sasl message, advance session by passing data to mechanism
  * and feeding returned data back to client.
  */
-static bool __attribute__((warn_unused_result))
+static bool ATHEME_FATTR_WUR
 sasl_packet(struct sasl_session *const restrict p, const char *const restrict buf, const size_t len)
 {
 	unsigned int rc;
@@ -475,7 +475,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 	return false;
 }
 
-static bool __attribute__((warn_unused_result))
+static bool ATHEME_FATTR_WUR
 sasl_buf_process(struct sasl_session *const restrict p)
 {
 	p->buf[p->len] = 0x00;
@@ -501,7 +501,7 @@ sasl_input_hostinfo(const sasl_message_t *const restrict smsg, struct sasl_sessi
 		p->tls = true;
 }
 
-static bool __attribute__((warn_unused_result))
+static bool ATHEME_FATTR_WUR
 sasl_input_startauth(const sasl_message_t *const restrict smsg, struct sasl_session *const restrict p)
 {
 	if (strcmp(smsg->parv[0], "EXTERNAL") == 0)
@@ -522,7 +522,7 @@ sasl_input_startauth(const sasl_message_t *const restrict smsg, struct sasl_sess
 	return sasl_packet(p, smsg->parv[0], 0);
 }
 
-static bool __attribute__((warn_unused_result))
+static bool ATHEME_FATTR_WUR
 sasl_input_clientdata(const sasl_message_t *const restrict smsg, struct sasl_session *const restrict p)
 {
 	/* This is complicated.
@@ -701,7 +701,7 @@ sasl_newuser(hook_user_nick_t *const restrict data)
  * after no more than 60 seconds.
  */
 static void
-delete_stale(void __attribute__((unused)) *const restrict vptr)
+delete_stale(void ATHEME_VATTR_UNUSED *const restrict vptr)
 {
 	mowgli_node_t *n, *tn;
 
@@ -841,7 +841,7 @@ saslserv(sourceinfo_t *const restrict si, const int parc, char **const restrict 
 }
 
 static void
-mod_init(module_t __attribute__((unused)) *const restrict m)
+mod_init(module_t ATHEME_VATTR_UNUSED *const restrict m)
 {
 	(void) hook_add_event("sasl_input");
 	(void) hook_add_sasl_input(&sasl_input);
@@ -860,7 +860,7 @@ mod_init(module_t __attribute__((unused)) *const restrict m)
 }
 
 static void
-mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
+mod_deinit(const module_unload_intent_t ATHEME_VATTR_UNUSED intent)
 {
 	(void) hook_del_sasl_input(&sasl_input);
 	(void) hook_del_user_add(&sasl_newuser);

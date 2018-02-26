@@ -63,7 +63,7 @@
  * does length checking on the result to avoid silent truncation
  * errors.
  */
-static inline const char * __attribute__((warn_unused_result))
+static inline const char * ATHEME_FATTR_WUR
 atheme_crypt3_wrapper(const char *const restrict password, const char *const restrict parameters,
                       const char *const restrict caller)
 {

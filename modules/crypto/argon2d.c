@@ -75,7 +75,7 @@ struct blake2b_param
 	uint8_t                 reserved[0x0E];
 	uint8_t                 salt[BLAKE2B_SALTLEN];
 	uint8_t                 personal[BLAKE2B_PERSLEN];
-} __attribute__((packed));
+} ATHEME_SATTR_PACKED;
 
 #pragma pack(pop)
 
@@ -700,7 +700,7 @@ static unsigned int atheme_argon2d_tcost = ARGON2D_TIMECOST_DEF;
 
 static const char *
 atheme_argon2d_crypt(const char *const restrict password,
-                     const char __attribute__((unused)) *const restrict parameters)
+                     const char ATHEME_VATTR_UNUSED *const restrict parameters)
 {
 	struct argon2d_context ctx;
 	(void) memset(&ctx, 0x00, sizeof ctx);
@@ -805,7 +805,7 @@ static crypt_impl_t crypto_argon2d_impl = {
 static mowgli_list_t atheme_argon2d_conf_table;
 
 static void
-mod_init(module_t __attribute__((unused)) *const restrict m)
+mod_init(module_t ATHEME_VATTR_UNUSED *const restrict m)
 {
 	(void) crypt_register(&crypto_argon2d_impl);
 
@@ -819,7 +819,7 @@ mod_init(module_t __attribute__((unused)) *const restrict m)
 }
 
 static void
-mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
+mod_deinit(const module_unload_intent_t ATHEME_VATTR_UNUSED intent)
 {
 	(void) del_conf_item("TIME", &atheme_argon2d_conf_table);
 	(void) del_conf_item("MEMORY", &atheme_argon2d_conf_table);

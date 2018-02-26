@@ -8,7 +8,7 @@
 #include "atheme.h"
 
 static void
-cmd_cs_drop_func(sourceinfo_t *const restrict si, const int __attribute__((unused)) parc, char *parv[])
+cmd_cs_drop_func(sourceinfo_t *const restrict si, const int ATHEME_VATTR_UNUSED parc, char *parv[])
 {
 	const char *const name = parv[0];
 	const char *const key = parv[1];
@@ -105,7 +105,7 @@ cmd_cs_drop_func(sourceinfo_t *const restrict si, const int __attribute__((unuse
 }
 
 static void
-cmd_cs_fdrop_func(sourceinfo_t *const restrict si, const int __attribute__((unused)) parc, char *parv[])
+cmd_cs_fdrop_func(sourceinfo_t *const restrict si, const int ATHEME_VATTR_UNUSED parc, char *parv[])
 {
 	const char *const name = parv[0];
 
@@ -188,14 +188,14 @@ static command_t cmd_cs_fdrop = {
 };
 
 static void
-mod_init(module_t __attribute__((unused)) *const restrict m)
+mod_init(module_t ATHEME_VATTR_UNUSED *const restrict m)
 {
 	(void) service_named_bind_command("chanserv", &cmd_cs_drop);
 	(void) service_named_bind_command("chanserv", &cmd_cs_fdrop);
 }
 
 static void
-mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
+mod_deinit(const module_unload_intent_t ATHEME_VATTR_UNUSED intent)
 {
 	(void) service_named_unbind_command("chanserv", &cmd_cs_drop);
 	(void) service_named_unbind_command("chanserv", &cmd_cs_fdrop);

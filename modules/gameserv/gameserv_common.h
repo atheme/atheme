@@ -13,7 +13,8 @@
  * quickly and easily. Of course, sourceinfo has a vtable that can be manipulated,
  * but this is quicker and easier...                                  -- nenolod
  */
-static inline void gs_command_report(sourceinfo_t *si, const char *fmt, ...)
+static inline void ATHEME_FATTR_PRINTF(2, 3)
+gs_command_report(sourceinfo_t *si, const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
@@ -101,7 +102,8 @@ static inline bool gs_do_parameters(sourceinfo_t *si, int *parc, char ***parv, m
 	return true;
 }
 
-static inline void gs_interactive_notification(myuser_t *mu, const char *notification, ...)
+static inline void ATHEME_FATTR_PRINTF(2, 3)
+gs_interactive_notification(myuser_t *mu, const char *notification, ...)
 {
 	service_t *gameserv;
 	char buf[BUFSIZE];

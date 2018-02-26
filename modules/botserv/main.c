@@ -67,7 +67,7 @@ static botserv_bot_t *bs_mychan_find_bot(mychan_t *mc)
 
 static void (*msg_real)(const char *from, const char *target, const char *fmt, ...);
 
-static void
+static void ATHEME_FATTR_PRINTF(3, 4)
 bs_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
@@ -101,7 +101,7 @@ bs_msg(const char *from, const char *target, const char *fmt, ...)
 
 static void (*notice_real)(const char *from, const char *target, const char *fmt, ...);
 
-static void
+static void ATHEME_FATTR_PRINTF(3, 4)
 bs_notice(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;

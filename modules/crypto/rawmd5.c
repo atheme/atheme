@@ -49,13 +49,13 @@ static crypt_impl_t crypto_rawmd5_impl = {
 };
 
 static void
-mod_init(module_t __attribute__((unused)) *const restrict m)
+mod_init(module_t ATHEME_VATTR_UNUSED *const restrict m)
 {
 	(void) crypt_register(&crypto_rawmd5_impl);
 }
 
 static void
-mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
+mod_deinit(const module_unload_intent_t ATHEME_VATTR_UNUSED intent)
 {
 	(void) crypt_unregister(&crypto_rawmd5_impl);
 }

@@ -76,7 +76,8 @@ static void table_destroy(void *obj)
  * Side Effects:
  *     - none
  */
-table_t *table_new(const char *fmt, ...)
+table_t * ATHEME_FATTR_PRINTF(1, 2)
+table_new(const char *fmt, ...)
 {
 	va_list vl;
 	char buf[BUFSIZE];

@@ -110,7 +110,7 @@ extern void (*chan_lowerts)(channel_t *c, user_t *u);
 extern void (*kick)(user_t *source, channel_t *c, user_t *u, const char *reason);
 /* send a privmsg
  * here it's ok to assume the source is able to send */
-extern void (*msg)(const char *from, const char *target, const char *fmt, ...) PRINTFLIKE(3, 4);
+extern void (*msg)(const char *from, const char *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
 /* send a global privmsg to all users on servers matching the mask
  * from is a client on the services server
  * mask is either "*" or it has a non-wildcard TLD */
@@ -134,7 +134,7 @@ extern void (*notice_channel_sts)(user_t *from, channel_t *target, const char *t
  * generic_wallchops() sends an individual notice to each channel operator */
 extern void (*wallchops)(user_t *source, channel_t *target, const char *message);
 /* send a numeric from must currently be me.me */
-extern void (*numeric_sts)(server_t *from, int numeric, user_t *target, const char *fmt, ...) PRINTFLIKE(4, 5);
+extern void (*numeric_sts)(server_t *from, int numeric, user_t *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(4, 5);
 /* kill a user
  * killer can be a client on the services server or NULL for the
  * services server itself
@@ -255,13 +255,13 @@ extern void generic_wallops_sts(const char *text);
 extern void generic_join_sts(channel_t *c, user_t *u, bool isnew, char *modes);
 extern void generic_chan_lowerts(channel_t *c, user_t *u);
 extern void generic_kick(user_t *source, channel_t *c, user_t *u, const char *reason);
-extern void generic_msg(const char *from, const char *target, const char *fmt, ...);
+extern void generic_msg(const char *from, const char *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
 extern void generic_msg_global_sts(user_t *from, const char *mask, const char *text);
 extern void generic_notice_user_sts(user_t *from, user_t *target, const char *text);
 extern void generic_notice_global_sts(user_t *from, const char *mask, const char *text);
 extern void generic_notice_channel_sts(user_t *from, channel_t *target, const char *text);
 extern void generic_wallchops(user_t *source, channel_t *target, const char *message);
-extern void generic_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...);
+extern void generic_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(4, 5);
 extern void generic_kill_id_sts(user_t *killer, const char *id, const char *reason);
 extern void generic_part_sts(channel_t *c, user_t *u);
 extern void generic_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason);

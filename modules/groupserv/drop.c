@@ -9,7 +9,7 @@
 #include "groupserv.h"
 
 static void
-cmd_gs_drop_func(sourceinfo_t *const restrict si, const int __attribute__((unused)) parc, char *parv[])
+cmd_gs_drop_func(sourceinfo_t *const restrict si, const int ATHEME_VATTR_UNUSED parc, char *parv[])
 {
 	const char *const name = parv[0];
 	const char *const key = parv[1];
@@ -105,7 +105,7 @@ mod_init(module_t *const restrict m)
 }
 
 static void
-mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
+mod_deinit(const module_unload_intent_t ATHEME_VATTR_UNUSED intent)
 {
 	(void) service_named_unbind_command("groupserv", &cmd_gs_drop);
 }

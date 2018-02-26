@@ -744,7 +744,7 @@ static int res_read_single_reply(connection_t *F)
 		 * lateron, this is neeeded. --FaUl
 		 */
 #if defined(__sparc__) || defined(__alpha__)
-		__attribute__ ((aligned(16)))
+		ATHEME_VATTR_ALIGNED(16)
 #endif
 		;
 	RESHEADER *header;

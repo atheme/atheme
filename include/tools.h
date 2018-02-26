@@ -119,10 +119,10 @@ extern void log_shutdown(void);
 extern bool log_debug_enabled(void);
 extern void log_master_set_mask(unsigned int mask);
 extern logfile_t *logfile_find_mask(unsigned int log_mask);
-extern void slog(unsigned int level, const char *fmt, ...) PRINTFLIKE(2, 3);
-extern void logcommand(sourceinfo_t *si, int level, const char *fmt, ...) PRINTFLIKE(3, 4);
-extern void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt, ...) PRINTFLIKE(4, 5);
-extern void logcommand_external(service_t *svs, const char *type, connection_t *source, const char *sourcedesc, myuser_t *login, int level, const char *fmt, ...) PRINTFLIKE(7, 8);
+extern void slog(unsigned int level, const char *fmt, ...) ATHEME_FATTR_PRINTF(2, 3);
+extern void logcommand(sourceinfo_t *si, int level, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
+extern void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt, ...) ATHEME_FATTR_PRINTF(4, 5);
+extern void logcommand_external(service_t *svs, const char *type, connection_t *source, const char *sourcedesc, myuser_t *login, int level, const char *fmt, ...) ATHEME_FATTR_PRINTF(7, 8);
 
 /* function.c */
 
@@ -192,16 +192,16 @@ extern void sharedheap_unref(mowgli_heap_t *heap);
 extern char *combine_path(const char *parent, const char *child);
 
 #if !HAVE_VSNPRINTF
-int rpl_vsnprintf(char *, size_t, const char *, va_list);
+int rpl_vsnprintf(char *, size_t, const char *, va_list) ATHEME_FATTR_PRINTF(3, 0);
 #endif
 #if !HAVE_SNPRINTF
-int rpl_snprintf(char *, size_t, const char *, ...);
+int rpl_snprintf(char *, size_t, const char *, ...) ATHEME_FATTR_PRINTF(3, 4);
 #endif
 #if !HAVE_VASPRINTF
-int rpl_vasprintf(char **, const char *, va_list);
+int rpl_vasprintf(char **, const char *, va_list) ATHEME_FATTR_PRINTF(2, 0);
 #endif
 #if !HAVE_ASPRINTF
-int rpl_asprintf(char **, const char *, ...);
+int rpl_asprintf(char **, const char *, ...) ATHEME_FATTR_PRINTF(2, 3);
 #endif
 
 #endif

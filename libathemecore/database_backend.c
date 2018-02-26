@@ -276,7 +276,7 @@ db_process(database_handle_t *db, const char *type)
 	fun(db, type);
 }
 
-bool
+bool ATHEME_FATTR_PRINTF(2, 3)
 db_write_format(database_handle_t *db, const char *fmt, ...)
 {
 	va_list va;

@@ -31,8 +31,8 @@ struct ecdsa_session
 static const struct sasl_core_functions *sasl_core_functions = NULL;
 
 static unsigned int
-mech_start(struct sasl_session *const restrict p, void __attribute__((unused)) **const restrict out,
-           size_t __attribute__((unused)) *const restrict outlen)
+mech_start(struct sasl_session *const restrict p, void ATHEME_VATTR_UNUSED **const restrict out,
+           size_t ATHEME_VATTR_UNUSED *const restrict outlen)
 {
 	struct ecdsa_session *const s = smalloc(sizeof *s);
 
@@ -159,7 +159,7 @@ mod_init(module_t *const restrict m)
 }
 
 static void
-mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
+mod_deinit(const module_unload_intent_t ATHEME_VATTR_UNUSED intent)
 {
 	(void) sasl_core_functions->mech_unregister(&mech);
 }

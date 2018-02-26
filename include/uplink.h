@@ -51,7 +51,7 @@ extern void (*parse)(char *line);
 extern void irc_handle_connect(connection_t *cptr);
 
 /* send.c */
-extern int sts(const char *fmt, ...) PRINTFLIKE(1, 2);
+extern int sts(const char *fmt, ...) ATHEME_FATTR_PRINTF(1, 2);
 extern void io_loop(void);
 
 #endif

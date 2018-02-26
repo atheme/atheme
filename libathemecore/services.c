@@ -134,7 +134,8 @@ void (*try_kick)(user_t *source, channel_t *chan, user_t *target, const char *re
 /* sends a KILL message for a user and removes the user from the userlist
  * source should be a service user or NULL for a server kill
  */
-void kill_user(user_t *source, user_t *victim, const char *fmt, ...)
+void ATHEME_FATTR_PRINTF(3, 4)
+kill_user(user_t *source, user_t *victim, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -351,7 +352,8 @@ void reintroduce_user(user_t *u)
 	}
 }
 
-void verbose(mychan_t *mychan, const char *fmt, ...)
+void ATHEME_FATTR_PRINTF(2, 3)
+verbose(mychan_t *mychan, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -718,7 +720,8 @@ void myuser_login(service_t *svs, user_t *u, myuser_t *mu, bool sendaccount)
 }
 
 /* this could be done with more finesse, but hey! */
-static void generic_notice(const char *from, const char *to, const char *fmt, ...)
+static void ATHEME_FATTR_PRINTF(3, 4)
+generic_notice(const char *from, const char *to, const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
@@ -766,7 +769,8 @@ void (*notice) (const char *from, const char *target, const char *fmt, ...) = ge
  * Side Effects:
  *       - a notice is sent to a user if MU_QUIETCHG is not set.
  */
-void change_notify(const char *from, user_t *to, const char *fmt, ...)
+void ATHEME_FATTR_PRINTF(3, 4)
+change_notify(const char *from, user_t *to, const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
@@ -873,7 +877,8 @@ sourceinfo_t *sourceinfo_create(void)
 	return out;
 }
 
-void command_fail(sourceinfo_t *si, cmd_faultcode_t code, const char *fmt, ...)
+void ATHEME_FATTR_PRINTF(3, 4)
+command_fail(sourceinfo_t *si, cmd_faultcode_t code, const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
@@ -896,7 +901,8 @@ void command_fail(sourceinfo_t *si, cmd_faultcode_t code, const char *fmt, ...)
 		notice_user_sts(si->service->me, si->su, buf);
 }
 
-void command_success_nodata(sourceinfo_t *si, const char *fmt, ...)
+void ATHEME_FATTR_PRINTF(2, 3)
+command_success_nodata(sourceinfo_t *si, const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
@@ -945,7 +951,8 @@ void command_success_nodata(sourceinfo_t *si, const char *fmt, ...)
 	} while (p != NULL);
 }
 
-void command_success_string(sourceinfo_t *si, const char *result, const char *fmt, ...)
+void ATHEME_FATTR_PRINTF(3, 4)
+command_success_string(sourceinfo_t *si, const char *result, const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
@@ -1112,7 +1119,8 @@ const char *get_source_security_label(sourceinfo_t *si)
 	return result;
 }
 
-void wallops(const char *fmt, ...)
+void ATHEME_FATTR_PRINTF(1, 2)
+wallops(const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
@@ -1130,7 +1138,8 @@ void wallops(const char *fmt, ...)
 		slog(LG_ERROR, "wallops(): unable to send: %s", buf);
 }
 
-void verbose_wallops(const char *fmt, ...)
+void ATHEME_FATTR_PRINTF(1, 2)
+verbose_wallops(const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];

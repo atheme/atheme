@@ -155,7 +155,8 @@ static void ts6_kick(user_t *source, channel_t *c, user_t *u, const char *reason
 }
 
 /* PRIVMSG wrapper */
-static void ts6_msg(const char *from, const char *target, const char *fmt, ...)
+static void ATHEME_FATTR_PRINTF(3, 4)
+ts6_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -237,7 +238,8 @@ static void ts6_wallchops(user_t *sender, channel_t *channel, const char *messag
 }
 
 /* numeric wrapper */
-static void ts6_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
+static void ATHEME_FATTR_PRINTF(4, 5)
+ts6_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];

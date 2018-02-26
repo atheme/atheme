@@ -41,13 +41,13 @@ static command_t cmd_os_genhash = {
 };
 
 static void
-mod_init(module_t __attribute__((unused)) *const restrict m)
+mod_init(module_t ATHEME_VATTR_UNUSED *const restrict m)
 {
 	(void) service_named_bind_command("operserv", &cmd_os_genhash);
 }
 
 static void
-mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
+mod_deinit(const module_unload_intent_t ATHEME_VATTR_UNUSED intent)
 {
 	(void) service_named_unbind_command("operserv", &cmd_os_genhash);
 }

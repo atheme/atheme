@@ -364,7 +364,8 @@ static void unreal_kick(user_t *source, channel_t *c, user_t *u, const char *rea
 }
 
 /* PRIVMSG wrapper */
-static void unreal_msg(const char *from, const char *target, const char *fmt, ...)
+static void ATHEME_FATTR_PRINTF(3, 4)
+unreal_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -421,7 +422,8 @@ static void unreal_notice_channel_sts(user_t *from, channel_t *target, const cha
 	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, target->name, text);
 }
 
-static void unreal_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
+static void ATHEME_FATTR_PRINTF(4, 5)
+unreal_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];

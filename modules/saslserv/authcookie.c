@@ -12,7 +12,7 @@ static const struct sasl_core_functions *sasl_core_functions = NULL;
 
 static unsigned int
 mech_step(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
-          void __attribute__((unused)) **const restrict out, size_t __attribute__((unused)) *const restrict outlen)
+          void ATHEME_VATTR_UNUSED **const restrict out, size_t ATHEME_VATTR_UNUSED *const restrict outlen)
 {
 	if (! (p && in && inlen))
 		return ASASL_ERROR;
@@ -78,7 +78,7 @@ mod_init(module_t *const restrict m)
 }
 
 static void
-mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
+mod_deinit(const module_unload_intent_t ATHEME_VATTR_UNUSED intent)
 {
 	(void) sasl_core_functions->mech_unregister(&mech);
 }

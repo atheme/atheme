@@ -28,7 +28,7 @@ typedef struct {
 /*
  * Creates a new table object. Use object_unref() to destroy it.
  */
-extern table_t *table_new(const char *fmt, ...) PRINTFLIKE(1, 2);
+extern table_t *table_new(const char *fmt, ...) ATHEME_FATTR_PRINTF(1, 2);
 
 /*
  * Renders a table, each line going to callback().

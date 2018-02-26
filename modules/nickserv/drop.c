@@ -8,7 +8,7 @@
 #include "atheme.h"
 
 static void
-cmd_ns_drop_func(sourceinfo_t *const restrict si, const int __attribute__((unused)) parc, char *parv[])
+cmd_ns_drop_func(sourceinfo_t *const restrict si, const int ATHEME_VATTR_UNUSED parc, char *parv[])
 {
 	const char *const acc = parv[0];
 	const char *const pass = parv[1];
@@ -123,7 +123,7 @@ cmd_ns_drop_func(sourceinfo_t *const restrict si, const int __attribute__((unuse
 }
 
 static void
-cmd_ns_fdrop_func(sourceinfo_t *const restrict si, const int __attribute__((unused)) parc, char *parv[])
+cmd_ns_fdrop_func(sourceinfo_t *const restrict si, const int ATHEME_VATTR_UNUSED parc, char *parv[])
 {
 	const char *const acc = parv[0];
 
@@ -219,14 +219,14 @@ static command_t cmd_ns_fdrop = {
 };
 
 static void
-mod_init(module_t __attribute__((unused)) *const restrict m)
+mod_init(module_t ATHEME_VATTR_UNUSED *const restrict m)
 {
 	(void) service_named_bind_command("nickserv", &cmd_ns_drop);
 	(void) service_named_bind_command("nickserv", &cmd_ns_fdrop);
 }
 
 static void
-mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
+mod_deinit(const module_unload_intent_t ATHEME_VATTR_UNUSED intent)
 {
 	(void) service_named_unbind_command("nickserv", &cmd_ns_drop);
 	(void) service_named_unbind_command("nickserv", &cmd_ns_fdrop);

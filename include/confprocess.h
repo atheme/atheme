@@ -35,7 +35,7 @@ extern bool process_uint_configentry(mowgli_config_file_entry_t *ce, unsigned in
 		unsigned int min, unsigned int max);
 extern bool process_duration_configentry(mowgli_config_file_entry_t *ce, unsigned int *var,
 		const char *defunit);
-extern void conf_report_warning(mowgli_config_file_entry_t *ce, const char *fmt, ...) PRINTFLIKE (2, 3);
+extern void conf_report_warning(mowgli_config_file_entry_t *ce, const char *fmt, ...) ATHEME_FATTR_PRINTF (2, 3);
 /* sort of a hack for servtree.c */
 typedef int (*conf_handler_t)(mowgli_config_file_entry_t *);
 extern conf_handler_t conftable_get_conf_handler(struct ConfTable *ct);

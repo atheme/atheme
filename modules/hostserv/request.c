@@ -213,7 +213,8 @@ static void osinfo_hook(sourceinfo_t *si)
 
 /*****************************************************************************/
 
-static void send_group_memo(sourceinfo_t *si, const char *memo, ...)
+static void ATHEME_FATTR_PRINTF(2, 3)
+send_group_memo(sourceinfo_t *si, const char *memo, ...)
 {
 	service_t *msvs;
 	va_list va;

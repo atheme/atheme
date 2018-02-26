@@ -429,7 +429,7 @@ extern void myuser_delete(myuser_t *mu);
 extern void myuser_rename(myuser_t *mu, const char *name);
 extern void myuser_set_email(myuser_t *mu, const char *newemail);
 extern myuser_t *myuser_find_ext(const char *name);
-extern void myuser_notice(const char *from, myuser_t *target, const char *fmt, ...) PRINTFLIKE(3, 4);
+extern void myuser_notice(const char *from, myuser_t *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
 
 extern bool myuser_access_verify(user_t *u, myuser_t *mu);
 extern bool myuser_access_add(myuser_t *mu, const char *mask);

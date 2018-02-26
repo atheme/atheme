@@ -114,7 +114,8 @@ static void csreq_marshal_set(database_handle_t *db)
 
 /*****************************************************************************/
 
-static void send_memo(sourceinfo_t *si, myuser_t *mu, const char *memo, ...)
+static void ATHEME_FATTR_PRINTF(3, 4)
+send_memo(sourceinfo_t *si, myuser_t *mu, const char *memo, ...)
 {
 	service_t *msvs;
 	va_list va;
@@ -142,7 +143,8 @@ static void send_memo(sourceinfo_t *si, myuser_t *mu, const char *memo, ...)
 	}
 }
 
-static void send_group_memo(sourceinfo_t *si, const char *memo, ...)
+static void ATHEME_FATTR_PRINTF(2, 3)
+send_group_memo(sourceinfo_t *si, const char *memo, ...)
 {
 	service_t *msvs;
 	va_list va;

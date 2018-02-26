@@ -131,8 +131,8 @@ sasl_scramsha_attrlist_free(scram_attr_list *const restrict attrs)
 }
 
 static unsigned int
-mech_start(struct sasl_session *const restrict p, void __attribute__((unused)) **const restrict out,
-           size_t __attribute__((unused)) *const restrict out_len)
+mech_start(struct sasl_session *const restrict p, void ATHEME_VATTR_UNUSED **const restrict out,
+           size_t ATHEME_VATTR_UNUSED *const restrict out_len)
 {
 	p->mechdata = smalloc(sizeof(struct scramsha_session));
 
@@ -673,7 +673,7 @@ mod_init(module_t *const restrict m)
 }
 
 static void
-mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
+mod_deinit(const module_unload_intent_t ATHEME_VATTR_UNUSED intent)
 {
 	// Unregister configuration interest in the pbkdf2v2 module
 	(void) pbkdf2v2_scram_functions->confhook(NULL);

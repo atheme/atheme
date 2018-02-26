@@ -146,7 +146,8 @@ static void ngircd_kick(user_t *source, channel_t *c, user_t *u, const char *rea
 }
 
 /* PRIVMSG wrapper */
-static void ngircd_msg(const char *from, const char *target, const char *fmt, ...)
+static void ATHEME_FATTR_PRINTF(3, 4)
+ngircd_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -203,7 +204,8 @@ static void ngircd_notice_channel_sts(user_t *from, channel_t *target, const cha
 	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, target->name, text);
 }
 
-static void ngircd_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
+static void ATHEME_FATTR_PRINTF(4, 5)
+ngircd_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
