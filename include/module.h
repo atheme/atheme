@@ -11,6 +11,7 @@
 
 #include "privs.h"
 #include "abirev.h"
+#include "serno.h"
 
 typedef enum {
 	MODULE_UNLOAD_INTENT_PERM            = 0,
@@ -108,7 +109,7 @@ extern bool module_request(const char *name);
 #define DECLARE_MODULE_V1(name, unloadcap, modinit, moddeinit, ver, ven)   \
         v4_moduleheader_t _header = {                                      \
                 MAPI_ATHEME_MAGIC, MAPI_ATHEME_V4,                         \
-                CURRENT_ABI_REVISION, "unknown",                           \
+                CURRENT_ABI_REVISION, SERNO,                               \
                 name, unloadcap, modinit, moddeinit, ven, ver              \
         }
 
