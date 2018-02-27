@@ -152,6 +152,9 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (si->su && !auth_module_loaded && !crypt_get_default_provider())
+		(void) command_success_nodata(si, "%s", _("Warning: Your password will not be encrypted."));
+
 	mu = myuser_add(account, auth_module_loaded ? "*" : pass, email, config_options.defuflags | MU_NOBURSTLOGIN | (auth_module_loaded ? MU_CRYPTPASS : 0));
 	mu->registered = CURRTIME;
 	mu->lastlogin = CURRTIME;
