@@ -149,7 +149,7 @@ static const uint64_t blake2b_sigma[0x0C][0x10] = {
 static struct argon2d_block *argon2d_mempool = NULL;
 static uint32_t argon2d_mempoolsz = 0;
 
-static inline bool
+static inline bool ATHEME_FATTR_WUR
 atheme_argon2d_mempool_realloc(const uint32_t mem_blocks)
 {
 	if (argon2d_mempool != NULL && argon2d_mempoolsz >= mem_blocks)
@@ -307,7 +307,7 @@ blake2b_compress(struct blake2b_state *const restrict state, const uint8_t *cons
 		state->h[x] ^= (v[x] ^ v[x + 0x08]);
 }
 
-static bool
+static bool ATHEME_FATTR_WUR
 blake2b_update(struct blake2b_state *const restrict state, const uint8_t *restrict in, size_t inlen)
 {
 	if (!inlen)
@@ -344,7 +344,7 @@ blake2b_update(struct blake2b_state *const restrict state, const uint8_t *restri
 	return true;
 }
 
-static inline bool
+static inline bool ATHEME_FATTR_WUR
 blake2b_final(struct blake2b_state *const restrict state, uint8_t *const restrict out)
 {
 	if (state->f[0x00] != 0x00)
@@ -365,7 +365,7 @@ blake2b_final(struct blake2b_state *const restrict state, uint8_t *const restric
 	return true;
 }
 
-static inline bool
+static inline bool ATHEME_FATTR_WUR
 blake2b_full(const uint8_t *const restrict in, const size_t inlen, uint8_t *const restrict out, const size_t outlen)
 {
 	struct blake2b_state state;
@@ -377,7 +377,7 @@ blake2b_full(const uint8_t *const restrict in, const size_t inlen, uint8_t *cons
 	return blake2b_final(&state, out);
 }
 
-static bool
+static bool ATHEME_FATTR_WUR
 blake2b_long(const uint8_t *const restrict in, const size_t inlen, uint8_t *restrict out, const size_t outlen)
 {
 	uint8_t outlen_buf[4] = { 0x00, 0x00, 0x00, 0x00 };
@@ -468,7 +468,7 @@ argon2d_store_block(uint8_t *const restrict output, const struct argon2d_block *
 		(void) blake2b_store64(&output[(x * sizeof src->v[x])], src->v[x]);
 }
 
-static inline void
+static inline bool ATHEME_FATTR_WUR
 argon2d_hash_init(struct argon2d_context *const restrict ctx, uint8_t *const restrict bhash)
 {
 	struct blake2b_state state;
@@ -476,28 +476,62 @@ argon2d_hash_init(struct argon2d_context *const restrict ctx, uint8_t *const res
 
 	(void) blake2b_init(&state, ARGON2_PREHASH_LEN);
 	(void) blake2b_store32(value, ATHEME_ARGON2D_LANECNT);
-	(void) blake2b_update(&state, value, sizeof value);
+
+	if (!blake2b_update(&state, value, sizeof value))
+		return false;
+
 	(void) blake2b_store32(value, ATHEME_ARGON2D_HASHLEN);
-	(void) blake2b_update(&state, value, sizeof value);
+
+	if (!blake2b_update(&state, value, sizeof value))
+		return false;
+
 	(void) blake2b_store32(value, ctx->m_cost);
-	(void) blake2b_update(&state, value, sizeof value);
+
+	if (!blake2b_update(&state, value, sizeof value))
+		return false;
+
 	(void) blake2b_store32(value, ctx->t_cost);
-	(void) blake2b_update(&state, value, sizeof value);
+
+	if (!blake2b_update(&state, value, sizeof value))
+		return false;
+
 	(void) blake2b_store32(value, ATHEME_ARGON2D_VERSION);
-	(void) blake2b_update(&state, value, sizeof value);
+
+	if (!blake2b_update(&state, value, sizeof value))
+		return false;
+
 	(void) blake2b_store32(value, ATHEME_ARGON2D_TYPEVAL);
-	(void) blake2b_update(&state, value, sizeof value);
+
+	if (!blake2b_update(&state, value, sizeof value))
+		return false;
+
 	(void) blake2b_store32(value, ctx->passlen);
-	(void) blake2b_update(&state, value, sizeof value);
-	(void) blake2b_update(&state, ctx->pass, ctx->passlen);
+
+	if (!blake2b_update(&state, value, sizeof value))
+		return false;
+
+	if (!blake2b_update(&state, ctx->pass, ctx->passlen))
+		return false;
+
 	(void) blake2b_store32(value, ATHEME_ARGON2D_SALTLEN);
-	(void) blake2b_update(&state, value, sizeof value);
-	(void) blake2b_update(&state, ctx->salt, ATHEME_ARGON2D_SALTLEN);
+
+	if (!blake2b_update(&state, value, sizeof value))
+		return false;
+
+	if (!blake2b_update(&state, ctx->salt, ATHEME_ARGON2D_SALTLEN))
+		return false;
+
 	(void) blake2b_store32(value, ATHEME_ARGON2D_PRIVLEN);
-	(void) blake2b_update(&state, value, sizeof value);
+
+	if (!blake2b_update(&state, value, sizeof value))
+		return false;
+
 	(void) blake2b_store32(value, ATHEME_ARGON2D_AUTHLEN);
-	(void) blake2b_update(&state, value, sizeof value);
-	(void) blake2b_final(&state, bhash);
+
+	if (!blake2b_update(&state, value, sizeof value))
+		return false;
+
+	return blake2b_final(&state, bhash);
 }
 
 static uint32_t
@@ -606,7 +640,7 @@ argon2d_segment_fill(struct argon2d_context *const restrict ctx, const uint32_t 
 	}
 }
 
-static bool
+static bool ATHEME_FATTR_WUR
 argon2d_hash_raw(struct argon2d_context *const restrict ctx)
 {
 	ctx->seg_len = (ctx->m_cost / ARGON2_SYNC_POINTS);
@@ -619,15 +653,24 @@ argon2d_hash_raw(struct argon2d_context *const restrict ctx)
 		return false;
 
 	uint8_t bhash_init[ARGON2_PRESEED_LEN];
-	(void) argon2d_hash_init(ctx, bhash_init);
+
+	if (!argon2d_hash_init(ctx, bhash_init))
+		return false;
+
 	(void) blake2b_store32(bhash_init + ARGON2_PREHASH_LEN, 0x00);
 	(void) blake2b_store32(bhash_init + ARGON2_PREHASH_LEN + 0x04, 0x00);
 
 	uint8_t bhash_bytes[ARGON2_BLKSZ];
-	(void) blake2b_long(bhash_init, ARGON2_PRESEED_LEN, bhash_bytes, ARGON2_BLKSZ);
+
+	if (!blake2b_long(bhash_init, ARGON2_PRESEED_LEN, bhash_bytes, ARGON2_BLKSZ))
+		return false;
+
 	(void) argon2d_load_block(&argon2d_mempool[0x00], bhash_bytes);
 	(void) blake2b_store32(bhash_init + ARGON2_PREHASH_LEN, 0x01);
-	(void) blake2b_long(bhash_init, ARGON2_PRESEED_LEN, bhash_bytes, ARGON2_BLKSZ);
+
+	if (!blake2b_long(bhash_init, ARGON2_PRESEED_LEN, bhash_bytes, ARGON2_BLKSZ))
+		return false;
+
 	(void) argon2d_load_block(&argon2d_mempool[0x01], bhash_bytes);
 
 	for (uint32_t pass = 0x00; pass < ctx->t_cost; pass++)
@@ -642,8 +685,8 @@ argon2d_hash_raw(struct argon2d_context *const restrict ctx)
 	struct argon2d_block bhash_final;
 	(void) argon2d_copy_block(&bhash_final, &argon2d_mempool[ctx->lane_len - 0x01]);
 	(void) argon2d_store_block(bhash_bytes, &bhash_final);
-	(void) blake2b_long(bhash_bytes, ARGON2_BLKSZ, ctx->hash, ATHEME_ARGON2D_HASHLEN);
-	return true;
+
+	return blake2b_long(bhash_bytes, ARGON2_BLKSZ, ctx->hash, ATHEME_ARGON2D_HASHLEN);
 }
 
 
