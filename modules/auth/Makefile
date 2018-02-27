@@ -8,6 +8,6 @@ include ../../extra.mk
 include ../../buildsys.mk
 include ../../buildsys.module.mk
 
-CPPFLAGS	+= -I../../include $(LDAP_CFLAGS)
-LDFLAGS		+= -L../../libathemecore
+CPPFLAGS	+= -I../../include $(LDAP_CPPFLAGS)
+LDFLAGS		+= -L../../libathemecore $(LDAP_LDFLAGS)
 LIBS 		+= -lathemecore $(LDAP_LIBS)

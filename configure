@@ -656,7 +656,8 @@ LIBCRYPTO_LIBS
 LIBNETTLE_LIBS
 LIBMBEDCRYPTO_LIBS
 LDAP_LIBS
-LDAP_CFLAGS
+LDAP_LDFLAGS
+LDAP_CPPFLAGS
 LDAP_AUTH_COND_C
 LIBIDN_LIBS
 LIBCRYPT_LIBS
@@ -8817,8 +8818,13 @@ fi
 
 
 		LDAP_AUTH_COND_C=""
-		LDAP_CFLAGS=""
+		LDAP_CPPFLAGS=""
+		LDAP_LDFLAGS=""
 		LDAP_LIBS=""
+
+		CPPFLAGS_SAVED="${CPPFLAGS}"
+		LDFLAGS_SAVED="${LDFLAGS}"
+		LIBS_SAVED="${LIBS}"
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ldap_initialize in -lldap" >&5
 $as_echo_n "checking for ldap_initialize in -lldap... " >&6; }
@@ -8860,18 +8866,14 @@ if test "x$ac_cv_lib_ldap_ldap_initialize" = xyes; then :
 
 			LIBLDAP="Yes"
 			LDAP_AUTH_COND_C="ldap.c"
-			LDAP_CFLAGS=""
 			LDAP_LIBS="-lldap"
 
 else
 
 			unset ac_cv_lib_ldap_ldap_initialize
 
-			CFLAGS_SAVED="${CFLAGS}"
-			LIBS_SAVED="${LIBS}"
-
-			CFLAGS="${CFLAGS} -I/usr/local/include"
-			LIBS="${LIBS} -L/usr/local/lib"
+			CPPFLAGS="${CPPFLAGS} -I/usr/local/include"
+			LDFLAGS="${LDFLAGS} -L/usr/local/lib"
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ldap_initialize in -lldap" >&5
 $as_echo_n "checking for ldap_initialize in -lldap... " >&6; }
@@ -8913,27 +8915,30 @@ if test "x$ac_cv_lib_ldap_ldap_initialize" = xyes; then :
 
 				LIBLDAP="Yes"
 				LDAP_AUTH_COND_C="ldap.c"
-				LDAP_CFLAGS="-I/usr/local/include"
-				LDAP_LIBS="-L/usr/local/lib -lldap"
+				LDAP_CPPFLAGS="-I/usr/local/include"
+				LDAP_LDFLAGS="-L/usr/local/lib"
+				LDAP_LIBS="-lldap"
 
 fi
 
 
-			CFLAGS="${CFLAGS_SAVED}"
-			LIBS="${LIBS_SAVED}"
-
 fi
 
 
 
 
 
+
+
+		CPPFLAGS="${CPPFLAGS_SAVED}"
+		LDFLAGS="${LDFLAGS_SAVED}"
+		LIBS="${LIBS_SAVED}"
 
 fi
 
 	if test "x${with_ldap}x${LDAP_AUTH_COND_C}" = "xyesx"; then :
 
-		as_fn_error $? "LDAP support was explicitly requested but could not be found" "$LINENO" 5
+		as_fn_error $? "LDAP support was explicitly requested but LDAP library could not be found" "$LINENO" 5
 
 fi
 
