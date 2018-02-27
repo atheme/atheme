@@ -10,33 +10,25 @@
 
 struct user
 {
-	struct atheme_object parent;
-
-	stringref nick;
-	stringref user;
-	stringref host; /* Real host */
-	stringref gecos;
-	stringref chost; /* Cloaked host */
-	stringref vhost; /* Visible host */
-	stringref uid; /* Used for TS6, P10, IRCNet ircd. */
-	stringref ip;
-
-	mowgli_list_t channels;
-
-	struct server *server;
-	struct myuser *myuser;
-
-	unsigned int offenses;
-	unsigned int msgs; /* times FLOOD_MSGS_FACTOR */
-	time_t lastmsg;
-
-	unsigned int flags;
-
-	time_t ts;
-
-	mowgli_node_t snode; /* for struct server -> userlist */
-
-	char *certfp; /* client certificate fingerprint */
+	struct atheme_object    parent;
+	stringref               nick;
+	stringref               user;
+	stringref               host;           // Real host
+	stringref               gecos;
+	stringref               chost;          // Cloaked host
+	stringref               vhost;          // Visible host
+	stringref               uid;            // Used for TS6, P10, IRCNet ircd
+	stringref               ip;
+	mowgli_list_t           channels;
+	struct server *         server;
+	struct myuser *         myuser;
+	unsigned int            offenses;
+	unsigned int            msgs;           // times FLOOD_MSGS_FACTOR
+	time_t                  lastmsg;
+	unsigned int            flags;
+	time_t                  ts;
+	mowgli_node_t           snode;          // for struct server -> userlist
+	char *                  certfp;         // client certificate fingerprint
 };
 
 #define FLOOD_MSGS_FACTOR 256
@@ -59,13 +51,13 @@ struct user
 #define CLIENT_NAME(user)	((user)->uid != NULL ? (user)->uid : (user)->nick)
 
 typedef struct {
-	struct user *u;		/* User in question. Write NULL here if you delete the user. */
-	const char *oldnick;	/* Previous nick for nick changes. u->nick is the new nick. */
+	struct user *    u;             // User in question. Write NULL here if you delete the user
+	const char *     oldnick;       // Previous nick for nick changes. u->nick is the new nick
 } hook_user_nick_t;
 
 typedef struct {
-	struct user *const u;
-	const char *comment;
+	struct user * const     u;
+	const char *            comment;
 } hook_user_delete_t;
 
 /* function.c */

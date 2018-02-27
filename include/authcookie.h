@@ -12,10 +12,10 @@
 
 struct authcookie
 {
-	char *ticket;
-	struct myuser *myuser;
-	time_t expire;
-	mowgli_node_t node;
+	char *          ticket;
+	struct myuser * myuser;
+	time_t          expire;
+	mowgli_node_t   node;
 };
 
 void authcookie_init(void);

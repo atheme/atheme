@@ -10,7 +10,7 @@
 
 struct default_template
 {
-	unsigned int flags;
+	unsigned int    flags;
 };
 
 const char *getitem(const char *str, const char *name);

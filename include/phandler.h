@@ -10,29 +10,29 @@
 
 struct ircd
 {
-	const char *ircdname;
-	const char *tldprefix;
-	bool uses_uid;
-	bool uses_rcommand;
-	bool uses_owner;
-	bool uses_protect;
-	bool uses_halfops;
-	bool uses_p10;		/* Parser hackhack. */
-	bool uses_vhost;		/* Do we use vHosts? */
-	unsigned int oper_only_modes;
-	unsigned int owner_mode;
-	unsigned int protect_mode;
-	unsigned int halfops_mode;
-	const char *owner_mchar;
-	const char *protect_mchar;
-	const char *halfops_mchar;
-	unsigned int type;
-	unsigned int perm_mode;		/* Modes to not disappear when empty */
-	unsigned int oimmune_mode;	/* Mode to disallow kicking ircops */
-	const char *ban_like_modes;		/* e.g. "beI" */
-	char except_mchar;
-	char invex_mchar;
-	int flags;
+	const char *    ircdname;
+	const char *    tldprefix;
+	bool            uses_uid;
+	bool            uses_rcommand;
+	bool            uses_owner;
+	bool            uses_protect;
+	bool            uses_halfops;
+	bool            uses_p10;       // Parser hackhack
+	bool            uses_vhost;     // Do we use vHosts?
+	unsigned int    oper_only_modes;
+	unsigned int    owner_mode;
+	unsigned int    protect_mode;
+	unsigned int    halfops_mode;
+	const char *    owner_mchar;
+	const char *    protect_mchar;
+	const char *    halfops_mchar;
+	unsigned int    type;
+	unsigned int    perm_mode;      // Modes to not disappear when empty
+	unsigned int    oimmune_mode;   // Mode to disallow kicking ircops
+	const char *    ban_like_modes; // e.g. "beI"
+	char            except_mchar;
+	char            invex_mchar;
+	int             flags;
 };
 
 /* values for type */

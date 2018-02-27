@@ -10,30 +10,22 @@
 
 struct service
 {
-	char *internal_name;
-
-	char *nick;
-	char *user;
-	char *host;
-	char *real;
-	char *disp;
-
-	struct user *me;
-
-	void (*handler)(struct sourceinfo *, int, char **);
-	void (*notice_handler)(struct sourceinfo *, int, char **);
-
-	mowgli_patricia_t *commands;
-	mowgli_patricia_t *aliases;
-	mowgli_patricia_t *access;
-
-	bool chanmsg;
-
-	mowgli_list_t conf_table;
-
-	bool botonly;
-
-	struct service *logtarget;
+	char *                  internal_name;
+	char *                  nick;
+	char *                  user;
+	char *                  host;
+	char *                  real;
+	char *                  disp;
+	struct user *           me;
+	void                  (*handler)(struct sourceinfo *, int, char **);
+	void                  (*notice_handler)(struct sourceinfo *, int, char **);
+	mowgli_patricia_t *     commands;
+	mowgli_patricia_t *     aliases;
+	mowgli_patricia_t *     access;
+	bool                    chanmsg;
+	mowgli_list_t           conf_table;
+	bool                    botonly;
+	struct service *        logtarget;
 };
 
 static inline const char *service_get_log_target(const struct service *svs)

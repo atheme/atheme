@@ -10,20 +10,20 @@
 
 struct metadata
 {
-	stringref name;
-	char *value;
+	stringref       name;
+	char *          value;
 };
 
 typedef void (*atheme_object_destructor_fn)(void *);
 
 struct atheme_object
 {
-	int refcount;
-	atheme_object_destructor_fn destructor;
-	mowgli_patricia_t *metadata;
-	mowgli_patricia_t *privatedata;
+	int                             refcount;
+	atheme_object_destructor_fn     destructor;
+	mowgli_patricia_t *             metadata;
+	mowgli_patricia_t *             privatedata;
 #ifdef OBJECT_DEBUG
-	mowgli_node_t dnode;
+	mowgli_node_t                   dnode;
 #endif
 };
 

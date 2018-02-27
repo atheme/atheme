@@ -30,8 +30,8 @@ typedef void (*hook_fn)(void *data);
 
 struct hook
 {
-	stringref name;
-	mowgli_list_t hooks;
+	stringref       name;
+	mowgli_list_t   hooks;
 };
 
 struct hook *hook_add_event(const char *);

@@ -60,10 +60,10 @@
 
 struct operclass
 {
-  char *name;
-  char *privs; /* priv1 priv2 priv3... */
-  int flags;
-  mowgli_node_t node;
+	char *          name;
+	char *          privs;  // priv1 priv2 priv3...
+	int             flags;
+	mowgli_node_t   node;
 };
 
 #define OPERCLASS_NEEDOPER	0x1 /* only give privs to IRCops */
@@ -72,12 +72,12 @@ struct operclass
 /* soper list struct */
 struct soper
 {
-  struct myuser *myuser;
-  char *name;
-  struct operclass *operclass;
-  char *classname;
-  int flags;
-  char *password;
+	struct myuser *         myuser;
+	char *                  name;
+	struct operclass *      operclass;
+	char *                  classname;
+	int                     flags;
+	char *                  password;
 };
 
 #define SOPER_CONF	0x1 /* oper is listed in atheme.conf */

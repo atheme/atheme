@@ -10,21 +10,21 @@
 
 struct atheme_table
 {
-	struct atheme_object parent;
-	mowgli_list_t rows;
+	struct atheme_object    parent;
+	mowgli_list_t           rows;
 };
 
 struct atheme_table_row
 {
-	int id;
-	mowgli_list_t cells;
+	int             id;
+	mowgli_list_t   cells;
 };
 
 struct atheme_table_cell
 {
-	int width;	/* only if first row. */
-	char *name;
-	char *value;
+	int     width;  // only if first row
+	char *  name;
+	char *  value;
 };
 
 /*

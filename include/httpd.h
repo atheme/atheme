@@ -10,22 +10,22 @@
 
 struct path_handler
 {
-	const char *path;
-	void (*handler)(struct connection *, void *);
+	const char *    path;
+	void          (*handler)(struct connection *, void *);
 };
 
 struct httpddata
 {
-	char method[64];
-	char filename[256];
-	char *requestbuf;
-	char *replybuf;
-	int length;
-	int lengthdone;
-	bool connection_close;
-	bool correct_content_type;
-	bool expect_100_continue;
-	bool sent_reply;
+	char            method[64];
+	char            filename[256];
+	char *          requestbuf;
+	char *          replybuf;
+	int             length;
+	int             lengthdone;
+	bool            connection_close;
+	bool            correct_content_type;
+	bool            expect_100_continue;
+	bool            sent_reply;
 };
 
 #endif /* !ATHEME_INC_HTTPD_H */

@@ -59,15 +59,13 @@ typedef void (*log_write_func_fn)(struct logfile *lf, const char *buf);
 /* logger.c */
 struct logfile
 {
-	struct atheme_object parent;
-	mowgli_node_t node;
-
-	void *log_file;		/* opaque: can either be struct mychan or FILE --nenolod */
-	char *log_path;
-	unsigned int log_mask;
-
-	log_write_func_fn write_func;
-	enum log_type log_type;
+	struct atheme_object    parent;
+	mowgli_node_t           node;
+	void *                  log_file;       // opaque: can either be struct mychan or FILE --nenolod
+	char *                  log_path;
+	unsigned int            log_mask;
+	log_write_func_fn       write_func;
+	enum log_type           log_type;
 };
 
 extern char *log_path; /* contains path to default log. */
@@ -129,9 +127,9 @@ typedef void (*email_canonicalizer_fn)(char email[static (EMAILLEN + 1)], void *
 
 struct email_canonicalizer_item
 {
-	email_canonicalizer_fn func;
-	void *user_data;
-	mowgli_node_t node;
+	email_canonicalizer_fn  func;
+	void *                  user_data;
+	mowgli_node_t           node;
 };
 
 /* misc string stuff */
@@ -189,12 +187,10 @@ void decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN + 1]);
 /* sharedheap.c */
 struct sharedheap
 {
-	struct atheme_object parent;
-
-	size_t size;
-	mowgli_heap_t *heap;
-
-	mowgli_node_t node;
+	struct atheme_object    parent;
+	size_t                  size;
+	mowgli_heap_t *         heap;
+	mowgli_node_t           node;
 };
 
 mowgli_heap_t *sharedheap_get(size_t size);

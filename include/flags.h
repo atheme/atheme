@@ -11,16 +11,16 @@
 /* flags stuff */
 struct flags_table
 {
-	unsigned int value;
-	unsigned int restrictflags;
-	bool def;
-	const char *name;
+	unsigned int    value;
+	unsigned int    restrictflags;
+	bool            def;
+	const char *    name;
 };
 
 struct gflags
 {
-	char ch;
-	unsigned int value;
+	char            ch;
+	unsigned int    value;
 };
 
 extern unsigned int ca_all;

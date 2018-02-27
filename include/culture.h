@@ -10,15 +10,15 @@
 
 struct language
 {
-	char *name;
-	unsigned int flags; /* LANG_* */
-	mowgli_node_t node;
+	char *          name;
+	unsigned int    flags;  // LANG_*
+	mowgli_node_t   node;
 };
 
 struct translation
 {
-	char *name;
-	char *replacement;
+	char *          name;
+	char *          replacement;
 };
 
 const char *translation_get(const char *name);

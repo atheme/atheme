@@ -10,15 +10,15 @@
 
 struct command
 {
-	const char *name;
-	const char *desc;
-	const char *access;
-        int maxparc;
-	void (*cmd)(struct sourceinfo *, const int parc, char *parv[]);
+	const char *            name;
+	const char *            desc;
+	const char *            access;
+	int                     maxparc;
+	void                  (*cmd)(struct sourceinfo *, const int parc, char *parv[]);
 	struct {
-		const char *path;
-		void (*func)(struct sourceinfo *, const char *subcmd);
-	} help;
+		const char *    path;
+		void          (*func)(struct sourceinfo *, const char *subcmd);
+	}                       help;
 };
 
 /* commandtree.c */

@@ -25,12 +25,11 @@ enum atheme_regex_type
 
 struct atheme_regex
 {
-	enum atheme_regex_type type;
-	union
-	{
-		regex_t posix;
+	enum atheme_regex_type  type;
+	union {
+		regex_t         posix;
 #ifdef HAVE_PCRE
-		pcre *pcre;
+		pcre *          pcre;
 #endif
 	} un;
 };

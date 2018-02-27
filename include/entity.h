@@ -15,14 +15,12 @@ enum myentity_type
 
 struct myentity
 {
-	struct atheme_object parent;
-	enum myentity_type type;
-
-	stringref name;
-	char id[IDLEN + 1];
-
-	mowgli_list_t chanacs;
-	const struct entity_chanacs_validation_vtable *chanacs_validate;
+	struct atheme_object                            parent;
+	enum myentity_type                              type;
+	stringref                                       name;
+	char                                            id[IDLEN + 1];
+	mowgli_list_t                                   chanacs;
+	const struct entity_chanacs_validation_vtable * chanacs_validate;
 };
 
 #define entity(x)	((struct myentity *)(x))
@@ -45,8 +43,8 @@ struct myentity *myentity_find_uid(const char *uid);
 
 struct myentity_iteration_state
 {
-	mowgli_patricia_iteration_state_t st;
-	enum myentity_type type;
+	mowgli_patricia_iteration_state_t       st;
+	enum myentity_type                      type;
 };
 
 void myentity_foreach(int (*cb)(struct myentity *me, void *privdata), void *privdata);
@@ -66,10 +64,9 @@ bool myentity_can_register_channel(struct myentity *mt);
 bool myentity_allow_foundership(struct myentity *mt);
 
 typedef struct {
-	struct myentity *entity;
-	const char *name;
-
-	bool approval;
+	struct myentity *       entity;
+	const char *            name;
+	bool                    approval;
 } hook_myentity_req_t;
 
 #endif /* !ATHEME_INC_ENTITY_H */

@@ -48,7 +48,7 @@ union digest_state
 struct digest_context
 {
 	union digest_state      state;
-	const EVP_MD           *md;
+	const EVP_MD *          md;
 	bool                    hmac;
 };
 

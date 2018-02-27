@@ -16,9 +16,9 @@
 
 union sockaddr_any
 {
-	struct sockaddr sa;
-	struct sockaddr_in sin;
-	struct sockaddr_in6 sin6;
+	struct sockaddr         sa;
+	struct sockaddr_in      sin;
+	struct sockaddr_in6     sin6;
 };
 
 #define SOCKADDR(foo) 		(struct sockaddr 	*) &(foo)
@@ -27,35 +27,25 @@ union sockaddr_any
 
 struct connection
 {
-	char name[HOSTLEN + 1];
-	char hbuf[BUFSIZE + 1];
-
-	mowgli_list_t recvq;
-	mowgli_list_t sendq;
-
-	int fd;
-	int pollslot;
-
-	time_t first_recv;
-	time_t last_recv;
-
-	size_t sendq_limit;
-
-	union sockaddr_any saddr;
-	socklen_t saddr_size;
-
-	void (*read_handler)(struct connection *);
-	void (*write_handler)(struct connection *);
-
-	unsigned int flags;
-
-	void (*recvq_handler)(struct connection *);
-	void (*close_handler)(struct connection *);
-
-	struct connection *listener;
-	void *userdata;
-
-	mowgli_eventloop_pollable_t *pollable;
+	char                            name[HOSTLEN + 1];
+	char                            hbuf[BUFSIZE + 1];
+	mowgli_list_t                   recvq;
+	mowgli_list_t                   sendq;
+	int                             fd;
+	int                             pollslot;
+	time_t                          first_recv;
+	time_t                          last_recv;
+	size_t                          sendq_limit;
+	union sockaddr_any              saddr;
+	socklen_t                       saddr_size;
+	void                          (*read_handler)(struct connection *);
+	void                          (*write_handler)(struct connection *);
+	unsigned int                    flags;
+	void                          (*recvq_handler)(struct connection *);
+	void                          (*close_handler)(struct connection *);
+	struct connection *             listener;
+	void *                          userdata;
+	mowgli_eventloop_pollable_t *   pollable;
 };
 
 #define CF_UPLINK     0x00000001

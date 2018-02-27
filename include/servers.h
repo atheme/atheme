@@ -11,23 +11,19 @@
 /* servers struct */
 struct server
 {
-	char *name;
-	char *desc;
-	char *sid;
-
-	unsigned int hops;
-	unsigned int users;
-	unsigned int invis;
-	unsigned int opers;
-	unsigned int away;
-
-	time_t connected_since;
-
-	unsigned int flags;
-
-	struct server *uplink; /* uplink server */
-	mowgli_list_t children;  /* children linked to me */
-	mowgli_list_t userlist;  /* users attached to me */
+	char *          name;
+	char *          desc;
+	char *          sid;
+	unsigned int    hops;
+	unsigned int    users;
+	unsigned int    invis;
+	unsigned int    opers;
+	unsigned int    away;
+	time_t          connected_since;
+	unsigned int    flags;
+	struct server * uplink;         // uplink server
+	mowgli_list_t   children;       // children linked to me
+	mowgli_list_t   userlist;       // users attached to me
 };
 
 #define SF_HIDE        0x00000001
@@ -39,12 +35,12 @@ struct server
 /* tld list struct */
 struct tld
 {
-  char *name;
+	char *  name;
 };
 
 /* server related hooks */
 typedef struct {
-	struct server *s;
+	struct server * s;
 	/* space for reason etc here */
 } hook_server_delete_t;
 

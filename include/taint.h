@@ -10,11 +10,11 @@
 
 struct taint_reason
 {
-	mowgli_node_t node;
-	char buf[BUFSIZE];
-	char condition[BUFSIZE];
-	char file[BUFSIZE];
-	int line;
+	mowgli_node_t   node;
+	char            buf[BUFSIZE];
+	char            condition[BUFSIZE];
+	char            file[BUFSIZE];
+	int             line;
 };
 
 extern mowgli_list_t taint_list;

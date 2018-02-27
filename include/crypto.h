@@ -14,9 +14,9 @@
 
 struct crypt_impl
 {
-	const char *id;
-	const char *(*crypt)(const char *password, const char *parameters);
-	bool (*verify)(const char *password, const char *parameters, unsigned int *flags);
+	const char *    id;
+	const char *  (*crypt)(const char *password, const char *parameters);
+	bool          (*verify)(const char *password, const char *parameters, unsigned int *flags);
 };
 
 void crypt_register(const struct crypt_impl *impl);

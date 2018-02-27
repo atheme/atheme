@@ -11,19 +11,15 @@
 
 struct uplink
 {
-	mowgli_node_t	node;
-
-	char *name;
-	char *host;
-	char *send_pass;
-	char *receive_pass;
-	char *vhost;
-
-	unsigned int port;
-
-	struct connection *conn;
-
-	unsigned int flags;
+	mowgli_node_t           node;
+	char *                  name;
+	char *                  host;
+	char *                  send_pass;
+	char *                  receive_pass;
+	char *                  vhost;
+	unsigned int            port;
+	struct connection *     conn;
+	unsigned int            flags;
 };
 
 #define UPF_ILLEGAL 0x80000000 /* not in conf anymore, delete when disconnected */

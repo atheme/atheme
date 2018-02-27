@@ -30,29 +30,17 @@ enum module_unload_capability
  */
 struct module
 {
-	char name[BUFSIZE];
-	char modpath[BUFSIZE];
-	enum module_unload_capability can_unload;
-
-	unsigned int mflags;
-
-	/* These three are real-module-specific. Either all will be set, or all
-	 * will be null.
-	 */
-	const struct v4_moduleheader *header;
-	void *address;
-	mowgli_module_t *handle;
-
-	/* If this module is not a loaded .so (the above three are null), and
-	 * can_unload is not never, then * this must be set to a working unload
-	 * function.
-	 */
-	void (*unload_handler)(struct module *, enum module_unload_intent);
-
-	mowgli_list_t dephost;
-	mowgli_list_t deplist;
-
-	mowgli_list_t symlist;		/* MAPIv2 symbol dependencies. */
+	char                            name[BUFSIZE];
+	char                            modpath[BUFSIZE];
+	enum module_unload_capability   can_unload;
+	unsigned int                    mflags;
+	const struct v4_moduleheader *  header;
+	void *                          address;
+	mowgli_module_t *               handle;
+	void                          (*unload_handler)(struct module *, enum module_unload_intent);
+	mowgli_list_t                   dephost;
+	mowgli_list_t                   deplist;
+	mowgli_list_t                   symlist;
 };
 
 #define MODTYPE_STANDARD	0
@@ -66,16 +54,16 @@ struct module
 
 struct v4_moduleheader
 {
-	unsigned int atheme_mod;
-	unsigned int abi_ver;
-	unsigned int abi_rev;
-	const char *serial;
-	const char *name;
-	enum module_unload_capability can_unload;
-	void (*modinit)(struct module *m);
-	void (*deinit)(enum module_unload_intent intent);
-	const char *vendor;
-	const char *version;
+	unsigned int                    atheme_mod;
+	unsigned int                    abi_ver;
+	unsigned int                    abi_rev;
+	const char *                    serial;
+	const char *                    name;
+	enum module_unload_capability   can_unload;
+	void                          (*modinit)(struct module *m);
+	void                          (*deinit)(enum module_unload_intent intent);
+	const char *                    vendor;
+	const char *                    version;
 };
 
 /* name is the module name we're searching for.
@@ -83,16 +71,16 @@ struct v4_moduleheader
  * If it is found, set module to the loaded struct module pointer
  */
 typedef struct {
-	const char *name;
-	const char *path;
-	struct module *module;
-	int handled;
+	const char *    name;
+	const char *    path;
+	struct module * module;
+	int             handled;
 } hook_module_load_t;
 
 struct module_dependency
 {
-	char *name;
-	enum module_unload_capability can_unload;
+	char *                          name;
+	enum module_unload_capability   can_unload;
 };
 
 void modules_init(void);

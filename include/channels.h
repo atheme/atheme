@@ -13,47 +13,40 @@
 
 struct channel
 {
-  char *name;
-
-  unsigned int modes;
-  char *key;
-  unsigned int limit;
-  char **extmodes; /* non-standard simple modes with param eg +j */
-
-  unsigned int nummembers;
-  unsigned int numsvcmembers;
-
-  time_t ts;
-
-  char *topic;
-  char *topic_setter;
-  time_t topicts;
-
-  mowgli_list_t members;
-  mowgli_list_t bans;
-
-  unsigned int flags;
-
-  struct mychan *mychan;
+	char *          name;
+	unsigned int    modes;
+	char *          key;
+	unsigned int    limit;
+	char **         extmodes;       // non-standard simple modes with param eg +j
+	unsigned int    nummembers;
+	unsigned int    numsvcmembers;
+	time_t          ts;
+	char *          topic;
+	char *          topic_setter;
+	time_t          topicts;
+	mowgli_list_t   members;
+	mowgli_list_t   bans;
+	unsigned int    flags;
+	struct mychan * mychan;
 };
 
 /* struct for channel memberships */
 struct chanuser
 {
-  struct channel *chan;
-  struct user *user;
-  unsigned int modes;
-  mowgli_node_t unode;
-  mowgli_node_t cnode;
+	struct channel *chan;
+	struct user *   user;
+	unsigned int    modes;
+	mowgli_node_t   unode;
+	mowgli_node_t   cnode;
 };
 
 struct chanban
 {
-  struct channel *chan;
-  char *mask;
-  int type; /* 'b', 'e', 'I', etc -- jilles */
-  mowgli_node_t node; /* for struct channel -> bans */
-  unsigned int flags;
+	struct channel *chan;
+	char *          mask;
+	int             type;   // 'b', 'e', 'I', etc -- jilles
+	mowgli_node_t   node;   // for struct channel -> bans
+	unsigned int    flags;
 };
 
 /* for struct channel -> modes */
@@ -87,55 +80,53 @@ struct chanban
 
 struct cmode
 {
-        char mode;
-        unsigned int value;
+	char            mode;
+	unsigned int    value;
 };
 
 struct extmode
 {
-	char mode;
-	bool (*check)(const char *, struct channel *, struct mychan *, struct user *, struct myuser *);
+	char    mode;
+	bool  (*check)(const char *, struct channel *, struct mychan *, struct user *, struct myuser *);
 };
 
 /* channel related hooks */
 typedef struct {
-	struct chanuser *cu; /* Write NULL here if you kicked the user.
-			   When kicking the last user, you must join a
-			   service first, otherwise the channel may be
-			   destroyed and crashes may occur. The service may
-			   not part until you return; chanserv provides
-			   MC_INHABIT to help with this.
-			   This also prevents kick/rejoin floods.
-			   If this is NULL, a previous function kicked
-			   the user */
+
+	/* Write NULL here if you kicked the user. When kicking the last user, you must join a service first,
+	 * otherwise the channel may be destroyed and crashes may occur. The service may not part until you
+	 * return; chanserv provides MC_INHABIT to help with this. This also prevents kick/rejoin floods. If
+	 * this is NULL, a previous function kicked the user
+	 */
+	struct chanuser *       cu;
+
 } hook_channel_joinpart_t;
 
 typedef struct {
-	struct user *u;
-        struct channel *c;
-        char *msg;
+	struct user *   u;
+	struct channel *c;
+	char *          msg;
 } hook_cmessage_data_t;
 
 typedef struct {
-	struct user *u; /* Online user that changed the topic */
-	struct server *s; /* Server that restored a topic */
-        struct channel *c; /* Channel still has old topic */
-        const char *setter; /* Stored setter string, can be nick, nick!user@host
-			       or server */
-	time_t ts; /* Time the topic was changed */
-	const char *topic; /* New topic */
-	int approved; /* Write non-zero here to cancel the change */
+	struct user *   u;              // Online user that changed the topic
+	struct server * s;              // Server that restored a topic
+	struct channel *c;              // Channel still has old topic
+	const char *    setter;         // Stored setter string, can be nick, nick!user@host or server
+	time_t          ts;             // Time the topic was changed
+	const char *    topic;          // New topic
+	int             approved;       // Write non-zero here to cancel the change
 } hook_channel_topic_check_t;
 
 typedef struct {
-	struct user *u;
+	struct user *   u;
 	struct channel *c;
 } hook_channel_mode_t;
 
 typedef struct {
-	struct chanuser *cu;
-	const char mchar;
-	const unsigned int mvalue;
+	struct chanuser *       cu;
+	const char              mchar;
+	const unsigned int      mvalue;
 } hook_channel_mode_change_t;
 
 /* cmode.c */

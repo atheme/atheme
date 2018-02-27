@@ -13,83 +13,71 @@
 /* kline list struct */
 struct kline
 {
-  char *user;
-  char *host;
-  char *reason;
-  char *setby;
-
-  unsigned long number;
-  long duration;
-  time_t settime;
-  time_t expires;
+	char *          user;
+	char *          host;
+	char *          reason;
+	char *          setby;
+	unsigned long   number;
+	long            duration;
+	time_t          settime;
+	time_t          expires;
 };
 
 /* xline list struct */
 struct xline
 {
-  char *realname;
-  char *reason;
-  char *setby;
-
-  unsigned int number;
-  long duration;
-  time_t settime;
-  time_t expires;
+	char *          realname;
+	char *          reason;
+	char *          setby;
+	unsigned int    number;
+	long            duration;
+	time_t          settime;
+	time_t          expires;
 };
 
 /* qline list struct */
 struct qline
 {
-  char *mask;
-  char *reason;
-  char *setby;
-
-  unsigned int number;
-  long duration;
-  time_t settime;
-  time_t expires;
+	char *          mask;
+	char *          reason;
+	char *          setby;
+	unsigned int    number;
+	long            duration;
+	time_t          settime;
+	time_t          expires;
 };
 
 /* services ignore struct */
 struct svsignore
 {
-  struct svsignore *svsignore;
-
-  char *mask;
-  time_t settime;
-  char *setby;
-  char *reason;
+	struct svsignore *      svsignore;
+	char *                  mask;
+	time_t                  settime;
+	char *                  setby;
+	char *                  reason;
 };
 
 /* services accounts */
 struct myuser
 {
-  struct myentity ent;
-  char pass[PASSLEN + 1];
-
-  stringref email;
-  stringref email_canonical;
-
-  mowgli_list_t logins; /* 'struct user's currently logged in to this */
-  time_t registered;
-  time_t lastlogin;
-
-  struct soper *soper;
-
-  unsigned int flags;
-
-  mowgli_list_t memos; /* store memos */
-  unsigned short memoct_new;
-  unsigned short memo_ratelimit_num; /* memos sent recently */
-  time_t memo_ratelimit_time; /* last time a memo was sent */
-  mowgli_list_t memo_ignores;
-
-  mowgli_list_t access_list;
-  mowgli_list_t nicks; /* registered nicks, must include mu->name if nonempty */
-
-  struct language *language;
-
-  mowgli_list_t cert_fingerprints;
+	struct myentity         ent;
+	char                    pass[PASSLEN + 1];
+	stringref               email;
+	stringref               email_canonical;
+	mowgli_list_t           logins;                 // 'struct user's currently logged in to this
+	time_t                  registered;
+	time_t                  lastlogin;
+	struct soper *          soper;
+	unsigned int            flags;
+	mowgli_list_t           memos;                  // store memos
+	unsigned short          memoct_new;
+	unsigned short          memo_ratelimit_num;     // memos sent recently
+	time_t                  memo_ratelimit_time;    // last time a memo was sent
+	mowgli_list_t           memo_ignores;
+	mowgli_list_t           access_list;
+	mowgli_list_t           nicks;                  // registered nicks, must include mu->name if nonempty
+	struct language *       language;
+	mowgli_list_t           cert_fingerprints;
 };
 
 /* Keep this synchronized with mu_flags in libathemecore/flags.c */
@@ -119,52 +107,41 @@ struct myuser
 /* registered nick */
 struct mynick
 {
-  struct atheme_object parent;
-
-  char nick[NICKLEN + 1];
-
-  struct myuser *owner;
-
-  time_t registered;
-  time_t lastseen;
-
-  mowgli_node_t node; /* for struct myuser -> nicks */
+	struct atheme_object    parent;
+	char                    nick[NICKLEN + 1];
+	struct myuser *         owner;
+	time_t                  registered;
+	time_t                  lastseen;
+	mowgli_node_t           node;   // for struct myuser -> nicks
 };
 
 /* record about a name that used to exist */
 struct myuser_name
 {
-  struct atheme_object parent;
-
-  char name[NICKLEN + 1];
+	struct atheme_object    parent;
+	char                    name[NICKLEN + 1];
 };
 
 struct mycertfp
 {
-  struct myuser *mu;
-
-  char *certfp;
-
-  mowgli_node_t node;
+	struct myuser * mu;
+	char *          certfp;
+	mowgli_node_t   node;
 };
 
 struct mychan
 {
-  struct atheme_object parent;
-
-  stringref name;
-
-  struct channel *chan;
-  mowgli_list_t chanacs;
-  time_t registered;
-  time_t used;
-
-  unsigned int mlock_on;
-  unsigned int mlock_off;
-  unsigned int mlock_limit;
-  char *mlock_key;
-
-  unsigned int flags;
+	struct atheme_object    parent;
+	stringref               name;
+	struct channel *        chan;
+	mowgli_list_t           chanacs;
+	time_t                  registered;
+	time_t                  used;
+	unsigned int            mlock_on;
+	unsigned int            mlock_off;
+	unsigned int            mlock_limit;
+	char *                  mlock_key;
+	unsigned int            flags;
 };
 
 /* Keep this synchronized with mc_flags in libathemecore/flags.c */
@@ -194,18 +171,15 @@ struct mychan
 /* struct for channel access list */
 struct chanacs
 {
-	struct atheme_object parent;
-
-	struct myentity *entity;
-	struct mychan *mychan;
-	char     *host;
-	unsigned int  level;
-	time_t    tmodified;
-
-	mowgli_node_t    cnode;
-	mowgli_node_t    unode;
-
-	char setter_uid[IDLEN + 1];
+	struct atheme_object    parent;
+	struct myentity *       entity;
+	struct mychan *         mychan;
+	char *                  host;
+	unsigned int            level;
+	time_t                  tmodified;
+	mowgli_node_t           cnode;
+	mowgli_node_t           unode;
+	char                    setter_uid[IDLEN + 1];
 };
 
 /* the new atheme-style channel flags */
@@ -266,13 +240,10 @@ struct chanacs
 struct mygroup
 {
 	struct myentity ent;
-
-	mowgli_list_t acs;
-	time_t regtime;
-
-	unsigned int flags;
-
-	bool visited;
+	mowgli_list_t   acs;
+	time_t          regtime;
+	unsigned int    flags;
+	bool            visited;
 };
 
 #define MG_REGNOLIMIT		0x00000001
@@ -282,14 +253,12 @@ struct mygroup
 
 struct groupacs
 {
-	struct atheme_object parent;
-
-	struct mygroup *mg;
-	struct myentity *mt;
-	unsigned int flags;
-
-	mowgli_node_t gnode;
-	mowgli_node_t unode;
+	struct atheme_object    parent;
+	struct mygroup *        mg;
+	struct myentity *       mt;
+	unsigned int            flags;
+	mowgli_node_t           gnode;
+	mowgli_node_t           unode;
 };
 
 #define GA_FOUNDER		0x00000001
@@ -307,10 +276,10 @@ struct groupacs
 /* struct for account memos */
 struct mymemo
 {
-	char	 sender[NICKLEN + 1];
-	char 	 text[MEMOLEN + 1];
-	time_t	 sent;
-	unsigned int status;
+	char            sender[NICKLEN + 1];
+	char            text[MEMOLEN + 1];
+	time_t          sent;
+	unsigned int    status;
 };
 
 /* memo status flags */
@@ -319,85 +288,85 @@ struct mymemo
 
 /* account related hooks */
 typedef struct {
-	struct mychan *mc;
-	struct sourceinfo *si;
+	struct mychan *         mc;
+	struct sourceinfo *     si;
 } hook_channel_req_t;
 
 typedef struct {
-	struct chanacs *ca;
-	struct sourceinfo *si;
-	struct myentity *parent;
-	unsigned int oldlevel;
-	unsigned int newlevel;
-	int approved;
+	struct chanacs *        ca;
+	struct sourceinfo *     si;
+	struct myentity *       parent;
+	unsigned int            oldlevel;
+	unsigned int            newlevel;
+	int                     approved;
 } hook_channel_acl_req_t;
 
 typedef struct {
-	struct mychan *mc;
-	struct myuser *mu;
+	struct mychan * mc;
+	struct myuser * mu;
 } hook_channel_succession_req_t;
 
 typedef struct {
 	union {
-		struct mychan *mc;
-		struct myuser *mu;
-		struct mynick *mn;
-	} data;
-	int do_expire;	/* Write zero here to disallow expiry */
+		struct mychan * mc;
+		struct myuser * mu;
+		struct mynick * mn;
+	}                       data;
+	int                     do_expire;      // Write zero here to disallow expiry
 } hook_expiry_req_t;
 
 typedef struct {
-	struct sourceinfo *si;
-	const char *name;
-	struct channel *chan;
-	int approved; /* Write non-zero here to disallow the registration */
+	struct sourceinfo *     si;
+	const char *            name;
+	struct channel *        chan;
+	int                     approved;       // Write non-zero here to disallow the registration
 } hook_channel_register_check_t;
 
 typedef struct {
-	struct sourceinfo *si;
-	struct myuser *mu;
-	struct mynick *mn;
+	struct sourceinfo *     si;
+	struct myuser *         mu;
+	struct mynick *         mn;
 } hook_user_req_t;
 
 typedef struct {
-	struct sourceinfo *si;
-	const char *account; /* or nick */
-	const char *email;
-	const char *password;
-	int approved; /* Write non-zero here to disallow the registration */
+	struct sourceinfo *     si;
+	const char *            account;        // or nick
+	const char *            email;
+	const char *            password;
+	int                     approved;       // Write non-zero here to disallow the registration
 } hook_user_register_check_t;
 
 typedef struct {
-	struct sourceinfo *si;
-	struct myuser *mu;
-	bool allowed;
+	struct sourceinfo *     si;
+	struct myuser *         mu;
+	bool                    allowed;
 } hook_user_login_check_t;
 
 typedef struct {
-	struct user *u;
-	struct mynick *mn;
+	struct user *   u;
+	struct mynick * mn;
 } hook_nick_enforce_t;
 
 typedef struct {
-	struct myuser *target;
-	const char *name;
-	char *value;
+	struct myuser * target;
+	const char *    name;
+	char *          value;
 } hook_metadata_change_t;
 
 typedef struct {
-	struct myuser *mu;
-	const char *oldname;
+	struct myuser * mu;
+	const char *    oldname;
 } hook_user_rename_t;
 
 typedef struct {
-	struct sourceinfo *si;
-	const char *nick;
+	struct sourceinfo *     si;
+	const char *            nick;
 } hook_info_noexist_req_t;
 
 typedef struct {
-	struct sourceinfo *si;
-	struct myuser *mu;
-	int allowed;
+	struct sourceinfo *     si;
+	struct myuser *         mu;
+	int                     allowed;
 } hook_user_needforce_t;
 
 /* pmodule.c XXX */

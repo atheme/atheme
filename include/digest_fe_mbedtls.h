@@ -41,7 +41,7 @@
 struct digest_context
 {
 	mbedtls_md_context_t            state;
-	const mbedtls_md_info_t        *md;
+	const mbedtls_md_info_t *       md;
 	bool                            hmac;
 };
 

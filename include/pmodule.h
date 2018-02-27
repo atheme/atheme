@@ -11,10 +11,10 @@
 
 struct proto_cmd
 {
-	char	*token;
-	void	(*handler)(struct sourceinfo *si, int parc, char *parv[]);
-	int	minparc;
-	int	sourcetype;
+	char *  token;
+	void  (*handler)(struct sourceinfo *si, int parc, char *parv[]);
+	int     minparc;
+	int     sourcetype;
 };
 
 /* values for sourcetype */

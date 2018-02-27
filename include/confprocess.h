@@ -12,8 +12,8 @@
 
 struct Token
 {
-	const char *text;
-	int value;
+	const char *    text;
+	int             value;
 };
 
 struct ConfTable;

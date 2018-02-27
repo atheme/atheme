@@ -15,54 +15,41 @@
 /* core services */
 struct chansvs
 {
-  char *nick;                   /* the IRC client's nickname  */
-  char *user;                   /* the IRC client's username  */
-  char *host;                   /* the IRC client's hostname  */
-  char *real;                   /* the IRC client's realname  */
-
-  bool fantasy;		/* enable fantasy commands    */
-
-  char *trigger;		/* trigger, e.g. !, ` or .    */
-
-  bool changets;		/* use TS to better deop people */
-
-  struct service *me;                /* our struct user       */
-
-  unsigned int expiry;		/* expiry time                */
-
-  unsigned int akick_time; /* default akick duration */
-
-  unsigned int maxchans;    /* max channels one can register */
-  unsigned int maxchanacs;	/* max entries in chanacs list */
-  unsigned int maxfounders;	/* max founders per channel    */
-
-  char *founder_flags;		/* default founder flags for new channels */
-
-  char *deftemplates;		/* default templates          */
-
-  bool hide_xop;		/* hide XOP templates	      */
+	char *          nick;           // the IRC client's nickname
+	char *          user;           // the IRC client's username
+	char *          host;           // the IRC client's hostname
+	char *          real;           // the IRC client's realname
+	bool            fantasy;        // enable fantasy commands
+	char *          trigger;        // trigger, e.g. !, ` or .
+	bool            changets;       // use TS to better deop people
+	struct service *me;             // our struct user
+	unsigned int    expiry;         // expiry time
+	unsigned int    akick_time;     // default akick duration
+	unsigned int    maxchans;       // max channels one can register
+	unsigned int    maxchanacs;     // max entries in chanacs list
+	unsigned int    maxfounders;    // max founders per channel
+	char *          founder_flags;  // default founder flags for new channels
+	char *          deftemplates;   // default templates
+	bool            hide_xop;       // hide XOP templates
 };
 
 /* authentication services */
 struct nicksvs
 {
-  bool  spam;
-  bool  no_nick_ownership;
-
-  char   *nick;
-  char   *user;
-  char   *host;
-  char   *real;
-
-  struct service *me;
-
-  unsigned int maxnicks;        /* max nicknames one can group */
-  unsigned int expiry;          /* expiry time                */
-  unsigned int enforce_expiry;  /* expiry time                */
-  unsigned int enforce_delay;   /* delay for nickname enforce */
-  char         *enforce_prefix; /* prefix for enforcement */
-  char	       *cracklib_dict; /* cracklib dictionary path */
-  mowgli_list_t emailexempts; /* emails exempt from maxusers checks */
+	bool            spam;
+	bool            no_nick_ownership;
+	char *          nick;
+	char *          user;
+	char *          host;
+	char *          real;
+	struct service *me;
+	unsigned int    maxnicks;       // max nicknames one can group
+	unsigned int    expiry;         // expiry time
+	unsigned int    enforce_expiry; // expiry time
+	unsigned int    enforce_delay;  // delay for nickname enforce
+	char *          enforce_prefix; // prefix for enforcement
+	char *          cracklib_dict;  // cracklib dictionary path
+	mowgli_list_t   emailexempts;   // emails exempt from maxusers checks
 };
 
 /* help us keep consistent messages */

@@ -20,42 +20,41 @@ enum database_transaction
 
 struct database_vtable
 {
-	const char *name;
+	const char *    name;
 
 	/* Reading stuff. */
-	bool (*read_next_row)(struct database_handle *hdl);
-
-	const char *(*read_word)(struct database_handle *hdl);
-	const char *(*read_str)(struct database_handle *hdl);
-	bool (*read_int)(struct database_handle *hdl, int *res);
-	bool (*read_uint)(struct database_handle *hdl, unsigned int *res);
-	bool (*read_time)(struct database_handle *hdl, time_t *res);
+	bool          (*read_next_row)(struct database_handle *hdl);
+	const char *  (*read_word)(struct database_handle *hdl);
+	const char *  (*read_str)(struct database_handle *hdl);
+	bool          (*read_int)(struct database_handle *hdl, int *res);
+	bool          (*read_uint)(struct database_handle *hdl, unsigned int *res);
+	bool          (*read_time)(struct database_handle *hdl, time_t *res);
 
 	/* Writing stuff. */
-	bool (*start_row)(struct database_handle *hdl, const char *type);
-	bool (*write_word)(struct database_handle *hdl, const char *word);
-	bool (*write_str)(struct database_handle *hdl, const char *str);
-	bool (*write_int)(struct database_handle *hdl, int num);
-	bool (*write_uint)(struct database_handle *hdl, unsigned int num);
-	bool (*write_time)(struct database_handle *hdl, time_t time);
-	bool (*commit_row)(struct database_handle *hdl);
+	bool          (*start_row)(struct database_handle *hdl, const char *type);
+	bool          (*write_word)(struct database_handle *hdl, const char *word);
+	bool          (*write_str)(struct database_handle *hdl, const char *str);
+	bool          (*write_int)(struct database_handle *hdl, int num);
+	bool          (*write_uint)(struct database_handle *hdl, unsigned int num);
+	bool          (*write_time)(struct database_handle *hdl, time_t time);
+	bool          (*commit_row)(struct database_handle *hdl);
 };
 
 struct database_handle
 {
-	void *priv;
-	const struct database_vtable *vt;
-	enum database_transaction txn;
-	char *file;
-	unsigned int line;
-	unsigned int token;
+	void *                          priv;
+	const struct database_vtable *  vt;
+	enum database_transaction       txn;
+	char *                          file;
+	unsigned int                    line;
+	unsigned int                    token;
 };
 
 struct database_module
 {
-	struct database_handle *(*db_open)(const char *filename, enum database_transaction txn);
-	void (*db_close)(struct database_handle *db);
-	void (*db_parse)(struct database_handle *db);
+	struct database_handle *      (*db_open)(const char *filename, enum database_transaction txn);
+	void                          (*db_close)(struct database_handle *db);
+	void                          (*db_parse)(struct database_handle *db);
 };
 
 struct database_handle *db_open(const char *filename, enum database_transaction txn);

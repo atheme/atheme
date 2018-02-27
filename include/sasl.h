@@ -34,59 +34,59 @@
 
 struct sasl_session
 {
-	struct sasl_mechanism   *mechptr;               // Mechanism they're using
-	struct server           *server;                // Server they're on
-	struct sourceinfo       *si;                    // The source info for logcommand(), bad_password(), and login hooks
-	char                    *uid;                   // Network UID
-	char                    *buf;                   // Buffered Base-64 data from them (so far)
-	void                    *mechdata;              // Mechanism-specific allocated memory
-	char                     authcid[NICKLEN + 1];  // Authentication identity (user having credentials verified)
-	char                     authzid[NICKLEN + 1];  // Authorization identity (user being logged in)
-	char                     authceid[IDLEN + 1];   // Entity ID for authcid
-	char                     authzeid[IDLEN + 1];   // Entity ID for authzid
-	char                    *certfp;                // TLS client certificate fingerprint (if any)
-	char                    *host;                  // Hostname
-	char                    *ip;                    // IP address
-	size_t                   len;                   // Length of buffered Base-64 data
-	unsigned int             flags;                 // Flags (described above)
-	bool                     tls;                   // Whether their connection to the network is using TLS
+	struct sasl_mechanism * mechptr;                // Mechanism they're using
+	struct server *         server;                 // Server they're on
+	struct sourceinfo *     si;                     // The source info for logcommand(), bad_password(), and login hooks
+	char *                  uid;                    // Network UID
+	char *                  buf;                    // Buffered Base-64 data from them (so far)
+	void *                  mechdata;               // Mechanism-specific allocated memory
+	char                    authcid[NICKLEN + 1];   // Authentication identity (user having credentials verified)
+	char                    authzid[NICKLEN + 1];   // Authorization identity (user being logged in)
+	char                    authceid[IDLEN + 1];    // Entity ID for authcid
+	char                    authzeid[IDLEN + 1];    // Entity ID for authzid
+	char *                  certfp;                 // TLS client certificate fingerprint (if any)
+	char *                  host;                   // Hostname
+	char *                  ip;                     // IP address
+	size_t                  len;                    // Length of buffered Base-64 data
+	unsigned int            flags;                  // Flags (described above)
+	bool                    tls;                    // Whether their connection to the network is using TLS
 };
 
 struct sasl_sourceinfo
 {
-	struct sourceinfo        parent;
-	struct sasl_session     *sess;
+	struct sourceinfo       parent;
+	struct sasl_session *   sess;
 };
 
 struct sasl_message
 {
-	struct server  *server;
-	char           *uid;
-	char           *parv[SASL_MESSAGE_MAXPARA];
+	struct server * server;
+	char *          uid;
+	char *          parv[SASL_MESSAGE_MAXPARA];
 	int             parc;
 	char            mode;
 };
 
 struct sasl_mechanism
 {
-	char           name[SASL_MECHANISM_MAXLEN];
-	unsigned int (*mech_start)(struct sasl_session *, void **, size_t *);
-	unsigned int (*mech_step)(struct sasl_session *, const void *, size_t, void **, size_t *);
-	void         (*mech_finish)(struct sasl_session *);
+	char            name[SASL_MECHANISM_MAXLEN];
+	unsigned int  (*mech_start)(struct sasl_session *, void **, size_t *);
+	unsigned int  (*mech_step)(struct sasl_session *, const void *, size_t, void **, size_t *);
+	void          (*mech_finish)(struct sasl_session *);
 };
 
 struct sasl_core_functions
 {
-	void     (*mech_register)(struct sasl_mechanism *);
-	void     (*mech_unregister)(struct sasl_mechanism *);
-	bool     (*authcid_can_login)(struct sasl_session *, const char *, struct myuser **);
-	bool     (*authzid_can_login)(struct sasl_session *, const char *, struct myuser **);
+	void          (*mech_register)(struct sasl_mechanism *);
+	void          (*mech_unregister)(struct sasl_mechanism *);
+	bool          (*authcid_can_login)(struct sasl_session *, const char *, struct myuser **);
+	bool          (*authzid_can_login)(struct sasl_session *, const char *, struct myuser **);
 };
 
 typedef struct {
 
-	struct myuser  *source_mu;
-	struct myuser  *target_mu;
+	struct myuser * source_mu;
+	struct myuser * target_mu;
 	bool            allowed;
 
 } hook_sasl_may_impersonate_t;

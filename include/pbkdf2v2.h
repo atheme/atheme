@@ -49,18 +49,18 @@
 
 struct pbkdf2v2_dbentry
 {
-	unsigned char    cdg[DIGEST_MDLEN_MAX];             // PBKDF2 Digest (Computed)
-	unsigned char    sdg[DIGEST_MDLEN_MAX];             // PBKDF2 Digest (Stored)
-	unsigned char    ssk[DIGEST_MDLEN_MAX];             // SCRAM-SHA ServerKey (Stored)
-	unsigned char    shk[DIGEST_MDLEN_MAX];             // SCRAM-SHA StoredKey (Stored)
-	unsigned char    salt[PBKDF2_SALTLEN_MAX];          // PBKDF2 Salt
-	char             salt64[PBKDF2_SALTLEN_MAX * 3];    // PBKDF2 Salt (Base64-encoded)
-	size_t           dl;                                // Digest Length
-	size_t           sl;                                // Salt Length
-	unsigned int     md;                                // Atheme Digest Interface Algorithm Identifier
-	unsigned int     a;                                 // PBKDF2v2 PRF ID (one of the macros above)
-	unsigned int     c;                                 // PBKDF2 Iteration Count
-	bool             scram;                             // Whether to use HMAC-SHA or SCRAM-SHA
+	unsigned char   cdg[DIGEST_MDLEN_MAX];          // PBKDF2 Digest (Computed)
+	unsigned char   sdg[DIGEST_MDLEN_MAX];          // PBKDF2 Digest (Stored)
+	unsigned char   ssk[DIGEST_MDLEN_MAX];          // SCRAM-SHA ServerKey (Stored)
+	unsigned char   shk[DIGEST_MDLEN_MAX];          // SCRAM-SHA StoredKey (Stored)
+	unsigned char   salt[PBKDF2_SALTLEN_MAX];       // PBKDF2 Salt
+	char            salt64[PBKDF2_SALTLEN_MAX * 3]; // PBKDF2 Salt (Base64-encoded)
+	size_t          dl;                             // Digest Length
+	size_t          sl;                             // Salt Length
+	unsigned int    md;                             // Atheme Digest Interface Algorithm Identifier
+	unsigned int    a;                              // PBKDF2v2 PRF ID (one of the macros above)
+	unsigned int    c;                              // PBKDF2 Iteration Count
+	bool            scram;                          // Whether to use HMAC-SHA or SCRAM-SHA
 };
 
 static const unsigned char ServerKeyStr[] = {
@@ -79,9 +79,9 @@ typedef void (*pbkdf2v2_confhook_fn)(unsigned int, unsigned int, unsigned int);
 
 struct pbkdf2v2_scram_functions
 {
-	bool             (*dbextract)(const char *restrict, struct pbkdf2v2_dbentry *restrict);
-	bool             (*normalize)(char *restrict, size_t);
-	void             (*confhook)(pbkdf2v2_confhook_fn);
+	bool  (*dbextract)(const char *restrict, struct pbkdf2v2_dbentry *restrict);
+	bool  (*normalize)(char *restrict, size_t);
+	void  (*confhook)(pbkdf2v2_confhook_fn);
 };
 
 #endif /* !ATHEME_INC_PBKDF2V2_H */
