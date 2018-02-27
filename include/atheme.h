@@ -11,10 +11,11 @@
 /* *INDENT-OFF* */
 
 #include "sysconf.h"
+#include "stdinc.h"
+
 #include "attrs.h"
 #include "structures.h"
 
-#include "stdinc.h"
 #include "i18n.h"
 #include "common.h"
 #include "object.h"
