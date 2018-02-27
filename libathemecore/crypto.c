@@ -41,7 +41,7 @@ crypt_log_modchg(const char *const restrict caller, const char *const restrict w
 }
 
 void
-crypt_register(struct crypt_impl *const restrict impl)
+crypt_register(const struct crypt_impl *const restrict impl)
 {
 	if (! impl || ! impl->id || ! (impl->crypt || impl->verify))
 	{
@@ -49,12 +49,27 @@ crypt_register(struct crypt_impl *const restrict impl)
 		return;
 	}
 
-	(void) mowgli_node_add(impl, &impl->node, &crypt_impl_list);
+	mowgli_node_t *const n = mowgli_node_create();
+
+	if (! n)
+	{
+		(void) slog(LG_ERROR, "%s: mowgli_node_create: memory allocation failure", __func__);
+		return;
+	}
+
+	/* Here we cast it to (void *) because mowgli_node_add() expects that; it cannot be made const because then
+	 * it would have to return a (const void *) too which would cause multiple warnings any time it is actually
+	 * storing, and thus gets assigned to, a pointer to a mutable object.
+	 *
+	 * To avoid the cast generating a diagnostic due to dropping a const qualifier, we first cast to uintptr_t.
+	 * This is not unprecedented in this codebase; libathemecore/strshare.c does the same thing.
+	 */
+	(void) mowgli_node_add((void *) ((uintptr_t) impl), n, &crypt_impl_list);
 	(void) crypt_log_modchg(__func__, "registered", impl);
 }
 
 void
-crypt_unregister(struct crypt_impl *const restrict impl)
+crypt_unregister(const struct crypt_impl *const restrict impl)
 {
 	if (! impl || ! impl->id || ! (impl->crypt || impl->verify))
 	{
@@ -62,8 +77,21 @@ crypt_unregister(struct crypt_impl *const restrict impl)
 		return;
 	}
 
-	(void) mowgli_node_delete(&impl->node, &crypt_impl_list);
-	(void) crypt_log_modchg(__func__, "unregistered", impl);
+	mowgli_node_t *n, *tn;
+
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, crypt_impl_list.head)
+	{
+		if (n->data == impl)
+		{
+			(void) mowgli_node_delete(n, &crypt_impl_list);
+			(void) mowgli_node_free(n);
+
+			(void) crypt_log_modchg(__func__, "unregistered", impl);
+			return;
+		}
+	}
+
+	(void) slog(LG_ERROR, "%s: could not find provider '%s' to unregister", __func__, impl->id);
 }
 
 const struct crypt_impl *

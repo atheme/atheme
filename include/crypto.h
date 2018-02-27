@@ -17,12 +17,10 @@ struct crypt_impl
 	const char *id;
 	const char *(*crypt)(const char *password, const char *parameters);
 	bool (*verify)(const char *password, const char *parameters, unsigned int *flags);
-
-	mowgli_node_t node;
 };
 
-extern void crypt_register(struct crypt_impl *impl);
-extern void crypt_unregister(struct crypt_impl *impl);
+extern void crypt_register(const struct crypt_impl *impl);
+extern void crypt_unregister(const struct crypt_impl *impl);
 
 extern const struct crypt_impl *crypt_get_default_provider(void);
 extern const struct crypt_impl *crypt_verify_password(const char *password, const char *parameters, unsigned int *flags);

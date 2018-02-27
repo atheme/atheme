@@ -96,7 +96,7 @@ atheme_crypt3_sha2_512_verify(const char *const restrict password, const char *c
 	return true;
 }
 
-static struct crypt_impl crypto_crypt3_impl = {
+static const struct crypt_impl crypto_crypt3_impl = {
 
 	.id        = "crypt3-sha2-512",
 	.crypt     = &atheme_crypt3_sha2_512_crypt,

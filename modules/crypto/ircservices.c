@@ -62,7 +62,7 @@ atheme_ircservices_verify(const char *const restrict password, const char *const
 	return true;
 }
 
-static struct crypt_impl crypto_ircservices_impl = {
+static const struct crypt_impl crypto_ircservices_impl = {
 
 	.id         = "ircservices",
 	.verify     = &atheme_ircservices_verify,
