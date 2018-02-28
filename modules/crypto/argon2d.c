@@ -149,7 +149,7 @@ static const uint64_t blake2b_sigma[0x0C][0x10] = {
 static struct argon2d_block *argon2d_mempool = NULL;
 static uint32_t argon2d_mempoolsz = 0;
 
-static inline bool ATHEME_FATTR_WUR
+static inline bool __attribute__((warn_unused_result))
 atheme_argon2d_mempool_realloc(const uint32_t mem_blocks)
 {
 	if (argon2d_mempool != NULL && argon2d_mempoolsz >= mem_blocks)
@@ -307,7 +307,7 @@ blake2b_compress(struct blake2b_state *const restrict state, const uint8_t *cons
 		state->h[x] ^= (v[x] ^ v[x + 0x08]);
 }
 
-static bool ATHEME_FATTR_WUR
+static bool __attribute__((warn_unused_result))
 blake2b_update(struct blake2b_state *const restrict state, const uint8_t *restrict in, size_t inlen)
 {
 	if (!inlen)
@@ -344,7 +344,7 @@ blake2b_update(struct blake2b_state *const restrict state, const uint8_t *restri
 	return true;
 }
 
-static inline bool ATHEME_FATTR_WUR
+static inline bool __attribute__((warn_unused_result))
 blake2b_final(struct blake2b_state *const restrict state, uint8_t *const restrict out)
 {
 	if (state->f[0x00] != 0x00)
@@ -365,7 +365,7 @@ blake2b_final(struct blake2b_state *const restrict state, uint8_t *const restric
 	return true;
 }
 
-static inline bool ATHEME_FATTR_WUR
+static inline bool __attribute__((warn_unused_result))
 blake2b_full(const uint8_t *const restrict in, const size_t inlen, uint8_t *const restrict out, const size_t outlen)
 {
 	struct blake2b_state state;
@@ -377,7 +377,7 @@ blake2b_full(const uint8_t *const restrict in, const size_t inlen, uint8_t *cons
 	return blake2b_final(&state, out);
 }
 
-static bool ATHEME_FATTR_WUR
+static bool __attribute__((warn_unused_result))
 blake2b_long(const uint8_t *const restrict in, const size_t inlen, uint8_t *restrict out, const size_t outlen)
 {
 	uint8_t outlen_buf[4] = { 0x00, 0x00, 0x00, 0x00 };
@@ -468,7 +468,7 @@ argon2d_store_block(uint8_t *const restrict output, const struct argon2d_block *
 		(void) blake2b_store64(&output[(x * sizeof src->v[x])], src->v[x]);
 }
 
-static inline bool ATHEME_FATTR_WUR
+static inline bool __attribute__((warn_unused_result))
 argon2d_hash_init(struct argon2d_context *const restrict ctx, uint8_t *const restrict bhash)
 {
 	struct blake2b_state state;
@@ -640,7 +640,7 @@ argon2d_segment_fill(struct argon2d_context *const restrict ctx, const uint32_t 
 	}
 }
 
-static bool ATHEME_FATTR_WUR
+static bool __attribute__((warn_unused_result))
 argon2d_hash_raw(struct argon2d_context *const restrict ctx)
 {
 	ctx->seg_len = (ctx->m_cost / ARGON2_SYNC_POINTS);
