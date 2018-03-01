@@ -622,6 +622,8 @@ mod_init(struct module *const restrict m)
 {
 	struct service *proxyscan;
 
+	MODULE_CONFLICT(m, "contrib/dnsbl");
+
 	MODULE_TRY_REQUEST_SYMBOL(m, os_set_cmdtree, "operserv/set", "os_set_cmdtree");
 
 	if (!module_find_published("backend/opensex"))
