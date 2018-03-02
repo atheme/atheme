@@ -6,9 +6,9 @@
 #include "atheme.h"
 #include "chanfix.h"
 
-struct service *chanfix;
-
 static mowgli_eventloop_timer_t *chanfix_autofix_timer = NULL;
+
+struct service *chanfix;
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

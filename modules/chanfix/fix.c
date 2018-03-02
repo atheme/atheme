@@ -7,6 +7,8 @@
 #include "atheme.h"
 #include "chanfix.h"
 
+bool chanfix_do_autofix;
+
 static unsigned int
 count_ops(struct channel *c)
 {
@@ -41,11 +43,11 @@ chanfix_should_handle(struct chanfix_channel *cfchan, struct channel *c)
 		return false;
 
 	n = count_ops(c);
-	/* enough ops, don't touch it */
+	// enough ops, don't touch it
 	if (n >= CHANFIX_OP_THRESHHOLD)
 		return false;
 
-	/* Do not fix NOFIX'd channels */
+	// Do not fix NOFIX'd channels
 	if ((metadata_find(cfchan, "private:nofix:setter")) != NULL)
 		return false;
 
@@ -84,7 +86,7 @@ chanfix_lower_ts(struct chanfix_channel *chan)
 	if (ch == NULL)
 		return;
 
-	/* Apply mode change locally only, chan_lowerts() will propagate. */
+	// Apply mode change locally only, chan_lowerts() will propagate.
 	channel_mode_va(NULL, ch, 2, "-ilk", "*");
 
 	chan->ts--;
@@ -153,7 +155,7 @@ chanfix_fix_channel(struct chanfix_channel *chan)
 	if (ch == NULL)
 		return false;
 
-	/* op users who have X% of the highest score. */
+	// op users who have X% of the highest score.
 	threshold = chanfix_get_threshold(chan);
 	MOWGLI_ITER_FOREACH(n, ch->members.head)
 	{
@@ -185,17 +187,17 @@ chanfix_fix_channel(struct chanfix_channel *chan)
 	if (opped == 0)
 		return false;
 
-	/* flush the modestacker. */
+	// flush the modestacker.
 	modestack_flush_channel(ch);
 
-	/* now report the damage */
+	// now report the damage
 	msg(chanfix->me->nick, chan->name, "\2%d\2 client%s should have been opped.", opped, opped != 1 ? "s" : "");
 
-	/* if this is the services log channel, continue to occupy it after the fix */
+	// if this is the services log channel, continue to occupy it after the fix
 	if (ch->flags & CHAN_LOG)
 	return true;
 
-	/* fix done, leave. */
+	// fix done, leave.
 	part(chan->name, chanfix->me->nick);
 
 	return true;
@@ -294,10 +296,6 @@ chanfix_clear_bans(struct channel *ch)
 	part(ch->name, chanfix->me->nick);
 }
 
-/*************************************************************************************/
-
-bool chanfix_do_autofix;
-
 void
 chanfix_autofix_ev(void *unused)
 {
@@ -353,8 +351,6 @@ chanfix_autofix_ev(void *unused)
 	}
 }
 
-/*************************************************************************************/
-
 static void
 chanfix_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -403,7 +399,7 @@ chanfix_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 		if (nofixmatch && !metadata_find(chan, "private:nofix:setter"))
 			continue;
 
-		/* in the future we could add a LIMIT parameter */
+		// in the future we could add a LIMIT parameter
 		*buf = '\0';
 
 		if (metadata_find(chan, "private:mark:setter")) {
@@ -426,8 +422,6 @@ chanfix_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 	else
 		command_success_nodata(si, ngettext(N_("\2%d\2 match for criteria \2%s\2"), N_("\2%d\2 matches for criteria \2%s\2"), matches), matches, chanpattern);
 }
-
-struct command cmd_list = { "LIST", N_("List all channels with CHANFIX records."), PRIV_CHAN_AUSPEX, 1, chanfix_cmd_list, { .path = "chanfix/list" } };
 
 static void
 chanfix_cmd_fix(struct sourceinfo *si, int parc, char *parv[])
@@ -461,7 +455,7 @@ chanfix_cmd_fix(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-        /* Do not fix NOFIX'd channels */
+        // Do not fix NOFIX'd channels
         if ((metadata_find(chan, "private:nofix:setter")) != NULL)
 	{
 		command_fail(si, fault_nochange, _("\2%s\2 has NOFIX enabled."), parv[0]);
@@ -483,8 +477,6 @@ chanfix_cmd_fix(struct sourceinfo *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("Fix request has been acknowledged for \2%s\2."), parv[0]);
 }
-
-struct command cmd_chanfix = { "CHANFIX", N_("Manually chanfix a channel."), PRIV_CHAN_ADMIN, 1, chanfix_cmd_fix, { .path = "chanfix/chanfix" } };
 
 static int
 chanfix_compare_records(mowgli_node_t *a, mowgli_node_t *b, void *unused)
@@ -517,7 +509,7 @@ chanfix_cmd_scores(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* sort records by score. */
+	// sort records by score.
 	mowgli_list_sort(&chan->oprecords, chanfix_compare_records, NULL);
 
 	if (count > MOWGLI_LIST_LENGTH(&chan->oprecords))
@@ -551,8 +543,6 @@ chanfix_cmd_scores(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("End of \2SCORES\2 listing for \2%s\2."), chan->name);
 }
 
-struct command cmd_scores = { "SCORES", N_("List channel scores."), PRIV_CHAN_AUSPEX, 1, chanfix_cmd_scores, { .path = "chanfix/scores" } };
-
 static void
 chanfix_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -577,7 +567,7 @@ chanfix_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* sort records by score. */
+	// sort records by score.
 	mowgli_list_sort(&chan->oprecords, chanfix_compare_records, NULL);
 
 	command_success_nodata(si, _("Information on \2%s\2:"), chan->name);
@@ -641,9 +631,7 @@ chanfix_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2*** End of Info ***\2"));
 }
 
-struct command cmd_info = { "INFO", N_("List information on channel."), PRIV_CHAN_AUSPEX, 1, chanfix_cmd_info, { .path = "chanfix/info" } };
-
-/* MARK <channel> ON|OFF [reason] */
+// MARK <channel> ON|OFF [reason]
 static void
 chanfix_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -716,9 +704,7 @@ chanfix_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-struct command cmd_mark = { "MARK", N_("Adds a note to a channel."), PRIV_MARK, 3, chanfix_cmd_mark, { .path = "chanfix/mark" } };
-
-/* NOFIX <channel> ON|OFF [reason] */
+// NOFIX <channel> ON|OFF [reason]
 static void
 chanfix_cmd_nofix(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -791,9 +777,7 @@ chanfix_cmd_nofix(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-struct command cmd_nofix = { "NOFIX", N_("Adds NOFIX to a channel."), PRIV_CHAN_ADMIN, 3, chanfix_cmd_nofix, { .path = "chanfix/nofix" } };
-
-/* HELP <command> [params] */
+// HELP <command> [params]
 static void
 chanfix_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -814,11 +798,9 @@ chanfix_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* take the command through the hash table */
+	// take the command through the hash table
 	help_display(si, si->service, command, si->service->commands);
 }
-
-struct command cmd_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 1, chanfix_cmd_help, { .path = "help" } };
 
 void
 chanfix_can_register(hook_channel_register_check_t *req)
@@ -862,3 +844,11 @@ chanfix_can_register(hook_channel_register_check_t *req)
 		command_fail(req->si, fault_noprivs, _("Your chanfix score is too low to register \2%s\2."), req->name);
 	}
 }
+
+struct command cmd_list = { "LIST", N_("List all channels with CHANFIX records."), PRIV_CHAN_AUSPEX, 1, chanfix_cmd_list, { .path = "chanfix/list" } };
+struct command cmd_chanfix = { "CHANFIX", N_("Manually chanfix a channel."), PRIV_CHAN_ADMIN, 1, chanfix_cmd_fix, { .path = "chanfix/chanfix" } };
+struct command cmd_scores = { "SCORES", N_("List channel scores."), PRIV_CHAN_AUSPEX, 1, chanfix_cmd_scores, { .path = "chanfix/scores" } };
+struct command cmd_info = { "INFO", N_("List information on channel."), PRIV_CHAN_AUSPEX, 1, chanfix_cmd_info, { .path = "chanfix/info" } };
+struct command cmd_mark = { "MARK", N_("Adds a note to a channel."), PRIV_MARK, 3, chanfix_cmd_mark, { .path = "chanfix/mark" } };
+struct command cmd_nofix = { "NOFIX", N_("Adds NOFIX to a channel."), PRIV_CHAN_ADMIN, 3, chanfix_cmd_nofix, { .path = "chanfix/nofix" } };
+struct command cmd_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 1, chanfix_cmd_help, { .path = "help" } };

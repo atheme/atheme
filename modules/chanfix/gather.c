@@ -7,17 +7,14 @@
 
 #define CFDB_VERSION	1
 
-mowgli_patricia_t *chanfix_channels = NULL;
+static int loading_cfdbv = 0;
 
 static mowgli_heap_t *chanfix_channel_heap = NULL;
 static mowgli_heap_t *chanfix_oprecord_heap = NULL;
-
 static mowgli_eventloop_timer_t *chanfix_gather_timer = NULL;
 static mowgli_eventloop_timer_t *chanfix_expire_timer = NULL;
 
-static int loading_cfdbv = 0;
-
-/*************************************************************************************/
+mowgli_patricia_t *chanfix_channels = NULL;
 
 struct chanfix_oprecord *
 chanfix_oprecord_create(struct chanfix_channel *chan, struct user *u)
@@ -108,8 +105,6 @@ chanfix_oprecord_delete(struct chanfix_oprecord *orec)
 	mowgli_heap_free(chanfix_oprecord_heap, orec);
 }
 
-/*************************************************************************************/
-
 static void
 chanfix_channel_delete(struct chanfix_channel *c)
 {
@@ -165,8 +160,6 @@ chanfix_channel_get(struct channel *chan)
 
 	return mowgli_patricia_retrieve(chanfix_channels, chan->name);
 }
-
-/*************************************************************************************/
 
 static void
 chanfix_channel_add_ev(struct channel *ch)
@@ -270,8 +263,6 @@ chanfix_expire(void *unused)
 		atheme_object_unref(chan);
 	}
 }
-
-/*************************************************************************************/
 
 static void
 write_chanfixdb(struct database_handle *db)
@@ -403,8 +394,6 @@ db_h_cfmd(struct database_handle *db, const char *type)
 	chan = chanfix_channel_find(chname);
 	metadata_add(chan, key, value);
 }
-
-/*************************************************************************************/
 
 void
 chanfix_gather_init(struct chanfix_persist_record *rec)
