@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-static void os_cmd_restart(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command os_restart = { "RESTART", N_("Restart services."), PRIV_ADMIN, 0, os_cmd_restart, { .path = "oservice/restart" } };
-
 static void
 os_cmd_restart(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -19,6 +15,8 @@ os_cmd_restart(struct sourceinfo *si, int parc, char *parv[])
 
 	runflags |= RF_RESTART;
 }
+
+static struct command os_restart = { "RESTART", N_("Restart services."), PRIV_ADMIN, 0, os_cmd_restart, { .path = "oservice/restart" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

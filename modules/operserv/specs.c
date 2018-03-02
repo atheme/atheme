@@ -11,10 +11,6 @@
 #include "atheme.h"
 #include "../groupserv/main/groupserv_common.h"
 
-static void os_cmd_specs(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command os_specs = { "SPECS", N_("Shows oper flags."), AC_NONE, 2, os_cmd_specs, { .path = "oservice/specs" } };
-
 struct privilege
 {
 	const char *priv;
@@ -27,78 +23,78 @@ struct priv_category
 	struct privilege privs[];
 };
 
-static struct priv_category nickserv_privs = {
-	N_("Nicknames/Accounts"),
-	{
-		{ PRIV_USER_AUSPEX, N_("view concealed information about accounts") },
-		{ PRIV_USER_ADMIN, N_("drop accounts, freeze accounts, reset passwords") },
-		{ PRIV_USER_SENDPASS, N_("send passwords") },
-		{ PRIV_USER_VHOST, N_("set vhosts") },
-		{ PRIV_USER_FREGISTER, N_("register accounts on behalf of another user") },
-		{ PRIV_MARK, N_("mark accounts") },
-		{ PRIV_HOLD, N_("hold accounts") },
-		{ NULL, NULL },
-	}
-};
-
-static struct priv_category chanserv_privs = {
-	N_("Channels"),
-	{
-		{ PRIV_CHAN_AUSPEX, N_("view concealed information about channels") },
-		{ PRIV_CHAN_ADMIN, N_("drop channels, close channels, transfer ownership") },
-		{ PRIV_CHAN_CMODES, N_("mlock operator modes") },
-		{ PRIV_JOIN_STAFFONLY, N_("join staff channels") },
-		{ PRIV_MARK, N_("mark channels") },
-		{ PRIV_HOLD, N_("hold channels") },
-		{ PRIV_REG_NOLIMIT, N_("bypass channel registration limits") },
-		{ NULL, NULL },
-	}
-};
-
-static struct priv_category general_privs = {
-	N_("General"),
-	{
-		{ PRIV_SERVER_AUSPEX, N_("view concealed information about servers") },
-		{ PRIV_VIEWPRIVS, N_("view privileges of other users") },
-		{ PRIV_FLOOD, N_("exempt from flood control") },
-		{ PRIV_ADMIN, N_("administer services") },
-		{ PRIV_METADATA, N_("edit private and internal metadata") },
-		{ NULL, NULL },
-	}
-};
-
-static struct priv_category operserv_privs = {
-	N_("OperServ"),
-	{
-		{ PRIV_OMODE, N_("set channel modes") },
-		{ PRIV_AKILL, N_("add and remove autokills") },
-		{ PRIV_MASS_AKILL, N_("masskill channels or regexes") },
-		{ PRIV_JUPE, N_("jupe servers") },
-		{ PRIV_NOOP, N_("NOOP access") },
-		{ PRIV_GLOBAL, N_("send global notices") },
-		{ PRIV_GRANT, N_("edit oper privileges") },
-		{ PRIV_OVERRIDE, N_("perform actions as any other user") },
-		{ NULL, NULL },
-	}
-};
-
-static struct priv_category groupserv_privs = {
-	N_("GroupServ"),
-	{
-		{ PRIV_GROUP_AUSPEX, N_("view concealed information about groups") },
-		{ PRIV_GROUP_ADMIN, N_("administer groups") },
-		{ PRIV_REG_NOLIMIT, N_("bypass group registration limits") },
-		{ NULL, NULL },
-	}
-};
-
-static struct priv_category *priv_categories[] = {
-	&nickserv_privs, &chanserv_privs, &general_privs, &operserv_privs, &groupserv_privs,
-};
-
 static void
 os_cmd_specs(struct sourceinfo *si, int parc, char *parv[])
 {
+	static const struct priv_category nickserv_privs = {
+		N_("Nicknames/Accounts"),
+		{
+			{ PRIV_USER_AUSPEX, N_("view concealed information about accounts") },
+			{ PRIV_USER_ADMIN, N_("drop accounts, freeze accounts, reset passwords") },
+			{ PRIV_USER_SENDPASS, N_("send passwords") },
+			{ PRIV_USER_VHOST, N_("set vhosts") },
+			{ PRIV_USER_FREGISTER, N_("register accounts on behalf of another user") },
+			{ PRIV_MARK, N_("mark accounts") },
+			{ PRIV_HOLD, N_("hold accounts") },
+			{ NULL, NULL },
+		}
+	};
+
+	static const struct priv_category chanserv_privs = {
+		N_("Channels"),
+		{
+			{ PRIV_CHAN_AUSPEX, N_("view concealed information about channels") },
+			{ PRIV_CHAN_ADMIN, N_("drop channels, close channels, transfer ownership") },
+			{ PRIV_CHAN_CMODES, N_("mlock operator modes") },
+			{ PRIV_JOIN_STAFFONLY, N_("join staff channels") },
+			{ PRIV_MARK, N_("mark channels") },
+			{ PRIV_HOLD, N_("hold channels") },
+			{ PRIV_REG_NOLIMIT, N_("bypass channel registration limits") },
+			{ NULL, NULL },
+		}
+	};
+
+	static const struct priv_category general_privs = {
+		N_("General"),
+		{
+			{ PRIV_SERVER_AUSPEX, N_("view concealed information about servers") },
+			{ PRIV_VIEWPRIVS, N_("view privileges of other users") },
+			{ PRIV_FLOOD, N_("exempt from flood control") },
+			{ PRIV_ADMIN, N_("administer services") },
+			{ PRIV_METADATA, N_("edit private and internal metadata") },
+			{ NULL, NULL },
+		}
+	};
+
+	static const struct priv_category operserv_privs = {
+		N_("OperServ"),
+		{
+			{ PRIV_OMODE, N_("set channel modes") },
+			{ PRIV_AKILL, N_("add and remove autokills") },
+			{ PRIV_MASS_AKILL, N_("masskill channels or regexes") },
+			{ PRIV_JUPE, N_("jupe servers") },
+			{ PRIV_NOOP, N_("NOOP access") },
+			{ PRIV_GLOBAL, N_("send global notices") },
+			{ PRIV_GRANT, N_("edit oper privileges") },
+			{ PRIV_OVERRIDE, N_("perform actions as any other user") },
+			{ NULL, NULL },
+		}
+	};
+
+	static const struct priv_category groupserv_privs = {
+		N_("GroupServ"),
+		{
+			{ PRIV_GROUP_AUSPEX, N_("view concealed information about groups") },
+			{ PRIV_GROUP_ADMIN, N_("administer groups") },
+			{ PRIV_REG_NOLIMIT, N_("bypass group registration limits") },
+			{ NULL, NULL },
+		}
+	};
+
+	static const struct priv_category *priv_categories[] = {
+		&nickserv_privs, &chanserv_privs, &general_privs, &operserv_privs, &groupserv_privs,
+	};
+
 	struct user *tu = NULL;
 	struct operclass *cl = NULL;
 	const char *targettype = parv[0];
@@ -167,7 +163,7 @@ os_cmd_specs(struct sourceinfo *si, int parc, char *parv[])
 
 	for (i = 0; i < ARRAY_SIZE(priv_categories); i++)
 	{
-		struct priv_category *cat = priv_categories[i];
+		const struct priv_category *cat = priv_categories[i];
 
 		command_success_nodata(si, "\2%s\2:", _(cat->name));
 
@@ -193,6 +189,8 @@ os_cmd_specs(struct sourceinfo *si, int parc, char *parv[])
 	else
 		logcommand(si, CMDLOG_ADMIN, "SPECS:OPERCLASS: \2%s\2", cl->name);
 }
+
+static struct command os_specs = { "SPECS", N_("Shows oper flags."), AC_NONE, 2, os_cmd_specs, { .path = "oservice/specs" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -7,11 +7,6 @@
 
 #include "atheme.h"
 
-static void os_cmd_readonly(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command os_readonly = { "READONLY", N_("Changes the state of read-only mode for services."),
-		      PRIV_ADMIN, 1, os_cmd_readonly, { .path = "oservice/readonly" } };
-
 static void
 os_cmd_readonly(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -65,6 +60,8 @@ os_cmd_readonly(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Usage: READONLY <ON|OFF>"));
 	}
 }
+
+static struct command os_readonly = { "READONLY", N_("Changes the state of read-only mode for services."), PRIV_ADMIN, 1, os_cmd_readonly, { .path = "oservice/readonly" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

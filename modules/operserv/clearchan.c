@@ -13,10 +13,6 @@
 #define CLEAR_KILL 2
 #define CLEAR_AKILL 3
 
-static void os_cmd_clearchan(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command os_clearchan = { "CLEARCHAN", N_("Clears a channel via KICK, KILL or AKILL"), PRIV_CHAN_ADMIN, 3, os_cmd_clearchan, { .path = "oservice/clearchan" } };
-
 static void
 os_cmd_clearchan(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -47,7 +43,7 @@ os_cmd_clearchan(struct sourceinfo *si, int parc, char *parv[])
  		return;
 	}
 
-	/* check what they are doing is valid */
+	// check what they are doing is valid
 	if (!strcasecmp(actionstr, "KICK"))
 		action = CLEAR_KICK;
 	else if (!strcasecmp(actionstr, "KILL"))
@@ -56,7 +52,7 @@ os_cmd_clearchan(struct sourceinfo *si, int parc, char *parv[])
 		action = CLEAR_AKILL;
 	else
 	{
-		/* not valid! */
+		// not valid!
 		command_fail(si, fault_badparams, _("\2%s\2 is not a valid action"), actionstr);
  		return;
 	}
@@ -76,7 +72,7 @@ os_cmd_clearchan(struct sourceinfo *si, int parc, char *parv[])
 			get_oper_name(si), targchan, actionstr);
 	command_success_nodata(si, _("Clearing \2%s\2 with \2%s\2"), targchan, actionstr);
 
-	/* iterate over the users in channel */
+	// iterate over the users in channel
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, c->members.head)
 	{
 		cu = n->data;
@@ -118,6 +114,8 @@ os_cmd_clearchan(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%d\2 matches, \2%d\2 ignores for \2%s\2 on \2%s\2"), matches, ignores, actionstr, targchan);
 	logcommand(si, CMDLOG_ADMIN, "CLEARCHAN: \2%s\2 \2%s\2 (reason: \2%s\2) (\2%d\2 matches, \2%d\2 ignores)", actionstr, targchan, treason, matches, ignores);
 }
+
+static struct command os_clearchan = { "CLEARCHAN", N_("Clears a channel via KICK, KILL or AKILL"), PRIV_CHAN_ADMIN, 3, os_cmd_clearchan, { .path = "oservice/clearchan" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

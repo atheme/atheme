@@ -8,11 +8,6 @@
 
 #include "atheme.h"
 
-static void os_cmd_identify(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command os_identify = { "IDENTIFY", N_("Authenticate for services operator privileges."), AC_AUTHENTICATED, 1, os_cmd_identify, { .path = "oservice/identify" } };
-static struct command os_id = { "ID", N_("Alias for IDENTIFY"), AC_AUTHENTICATED, 1, os_cmd_identify, { .path = "oservice/identify" } };
-
 static bool
 verify_operserv_password(struct soper *so, char *password)
 {
@@ -25,7 +20,7 @@ verify_operserv_password(struct soper *so, char *password)
 static void
 os_cmd_identify(struct sourceinfo *si, int parc, char *parv[])
 {
-	/* XXX use this with authcookie also */
+	// XXX use this with authcookie also
 	if (si->su == NULL)
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 can only be executed via IRC."), "IDENTIFY");
@@ -69,6 +64,9 @@ os_cmd_identify(struct sourceinfo *si, int parc, char *parv[])
 			si->service->nick);
 	logcommand(si, CMDLOG_ADMIN, "IDENTIFY");
 }
+
+static struct command os_identify = { "IDENTIFY", N_("Authenticate for services operator privileges."), AC_AUTHENTICATED, 1, os_cmd_identify, { .path = "oservice/identify" } };
+static struct command os_id = { "ID", N_("Alias for IDENTIFY"), AC_AUTHENTICATED, 1, os_cmd_identify, { .path = "oservice/identify" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

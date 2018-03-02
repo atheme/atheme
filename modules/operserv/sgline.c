@@ -9,21 +9,6 @@
 
 #include "atheme.h"
 
-static void os_sgline_newuser(hook_user_nick_t *data);
-
-static void os_cmd_sgline(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_sgline_add(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_sgline_del(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_sgline_list(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_sgline_sync(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command os_sgline = { "SGLINE", N_("Manages network realname bans."), PRIV_MASS_AKILL, 3, os_cmd_sgline, { .path = "oservice/sgline" } };
-
-static struct command os_sgline_add = { "ADD", N_("Adds a network realname ban"), AC_NONE, 2, os_cmd_sgline_add, { .path = "" } };
-static struct command os_sgline_del = { "DEL", N_("Deletes a network realname ban"), AC_NONE, 1, os_cmd_sgline_del, { .path = "" } };
-static struct command os_sgline_list = { "LIST", N_("Lists all network realname bans"), AC_NONE, 1, os_cmd_sgline_list, { .path = "" } };
-static struct command os_sgline_sync = { "SYNC", N_("Synchronises network realname bans to servers"), AC_NONE, 0, os_cmd_sgline_sync, { .path = "" } };
-
 static mowgli_patricia_t *os_sgline_cmds = NULL;
 
 static void
@@ -32,7 +17,7 @@ os_sgline_newuser(hook_user_nick_t *data)
 	struct user *u = data->u;
 	struct xline *x;
 
-	/* If the user has been killed, don't do anything. */
+	// If the user has been killed, don't do anything.
 	if (!u)
 		return;
 
@@ -51,11 +36,11 @@ os_sgline_newuser(hook_user_nick_t *data)
 static void
 os_cmd_sgline(struct sourceinfo *si, int parc, char *parv[])
 {
-	/* Grab args */
+	// Grab args
 	char *cmd = parv[0];
 	struct command *c;
 
-	/* Bad/missing arg */
+	// Bad/missing arg
 	if (!cmd)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SGLINE");
@@ -223,7 +208,7 @@ os_cmd_sgline_del(struct sourceinfo *si, int parc, char *parv[])
 				t[++i] = '\0';
 				start = atoi(t);
 
-				s++;	/* skip past the : */
+				s++;	// skip past the :
 
 				for (i = 0; *s != '\0'; s++, i++)
 					t[i] = *s;
@@ -339,6 +324,12 @@ os_cmd_sgline_sync(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("SGLINE list synchronized to servers."));
 }
 
+static struct command os_sgline = { "SGLINE", N_("Manages network realname bans."), PRIV_MASS_AKILL, 3, os_cmd_sgline, { .path = "oservice/sgline" } };
+static struct command os_sgline_add = { "ADD", N_("Adds a network realname ban"), AC_NONE, 2, os_cmd_sgline_add, { .path = "" } };
+static struct command os_sgline_del = { "DEL", N_("Deletes a network realname ban"), AC_NONE, 1, os_cmd_sgline_del, { .path = "" } };
+static struct command os_sgline_list = { "LIST", N_("Lists all network realname bans"), AC_NONE, 1, os_cmd_sgline_list, { .path = "" } };
+static struct command os_sgline_sync = { "SYNC", N_("Synchronises network realname bans to servers"), AC_NONE, 0, os_cmd_sgline_sync, { .path = "" } };
+
 static void
 mod_init(struct module *const restrict m)
 {
@@ -354,7 +345,6 @@ mod_init(struct module *const restrict m)
 
 	os_sgline_cmds = mowgli_patricia_create(strcasecanon);
 
-	/* Add sub-commands */
 	command_add(&os_sgline_add, os_sgline_cmds);
 	command_add(&os_sgline_del, os_sgline_cmds);
 	command_add(&os_sgline_list, os_sgline_cmds);
@@ -369,7 +359,6 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	service_named_unbind_command("operserv", &os_sgline);
 
-	/* Delete sub-commands */
 	command_delete(&os_sgline_add, os_sgline_cmds);
 	command_delete(&os_sgline_del, os_sgline_cmds);
 	command_delete(&os_sgline_list, os_sgline_cmds);

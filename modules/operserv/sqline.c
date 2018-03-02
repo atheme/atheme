@@ -9,23 +9,6 @@
 
 #include "atheme.h"
 
-static void os_sqline_newuser(hook_user_nick_t *data);
-static void os_sqline_chanjoin(hook_channel_joinpart_t *hdata);
-
-static void os_cmd_sqline(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_sqline_add(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_sqline_del(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_sqline_list(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_sqline_sync(struct sourceinfo *si, int parc, char *parv[]);
-
-
-static struct command os_sqline = { "SQLINE", N_("Manages network name bans."), PRIV_MASS_AKILL, 3, os_cmd_sqline, { .path = "oservice/sqline" } };
-
-static struct command os_sqline_add = { "ADD", N_("Adds a network name ban"), AC_NONE, 2, os_cmd_sqline_add, { .path = "" } };
-static struct command os_sqline_del = { "DEL", N_("Deletes a network name ban"), AC_NONE, 1, os_cmd_sqline_del, { .path = "" } };
-static struct command os_sqline_list = { "LIST", N_("Lists all network name bans"), AC_NONE, 1, os_cmd_sqline_list, { .path = "" } };
-static struct command os_sqline_sync = { "SYNC", N_("Synchronises network name bans to servers"), AC_NONE, 0, os_cmd_sqline_sync, { .path = "" } };
-
 static mowgli_patricia_t *os_sqline_cmds = NULL;
 
 static void
@@ -34,7 +17,7 @@ os_sqline_newuser(hook_user_nick_t *data)
 	struct user *u = data->u;
 	struct qline *q;
 
-	/* If the user has been killed, don't do anything. */
+	// If the user has been killed, don't do anything.
 	if (!u)
 		return;
 
@@ -74,11 +57,11 @@ os_sqline_chanjoin(hook_channel_joinpart_t *hdata)
 static void
 os_cmd_sqline(struct sourceinfo *si, int parc, char *parv[])
 {
-	/* Grab args */
+	// Grab args
 	char *cmd = parv[0];
 	struct command *c;
 
-	/* Bad/missing arg */
+	// Bad/missing arg
 	if (!cmd)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SQLINE");
@@ -249,7 +232,7 @@ os_cmd_sqline_del(struct sourceinfo *si, int parc, char *parv[])
 				t[++i] = '\0';
 				start = atoi(t);
 
-				s++;	/* skip past the : */
+				s++;	// skip past the :
 
 				for (i = 0; *s != '\0'; s++, i++)
 					t[i] = *s;
@@ -308,7 +291,7 @@ os_cmd_sqline_del(struct sourceinfo *si, int parc, char *parv[])
 			t[++i] = '\0';
 			start = atoi(t);
 
-			target++;	/* skip past the : */
+			target++;	// skip past the :
 
 			for (i = 0; *target != '\0'; target++, i++)
 				t[i] = *target;
@@ -424,6 +407,12 @@ os_cmd_sqline_sync(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("SQLINE list synchronized to servers."));
 }
 
+static struct command os_sqline = { "SQLINE", N_("Manages network name bans."), PRIV_MASS_AKILL, 3, os_cmd_sqline, { .path = "oservice/sqline" } };
+static struct command os_sqline_add = { "ADD", N_("Adds a network name ban"), AC_NONE, 2, os_cmd_sqline_add, { .path = "" } };
+static struct command os_sqline_del = { "DEL", N_("Deletes a network name ban"), AC_NONE, 1, os_cmd_sqline_del, { .path = "" } };
+static struct command os_sqline_list = { "LIST", N_("Lists all network name bans"), AC_NONE, 1, os_cmd_sqline_list, { .path = "" } };
+static struct command os_sqline_sync = { "SYNC", N_("Synchronises network name bans to servers"), AC_NONE, 0, os_cmd_sqline_sync, { .path = "" } };
+
 static void
 mod_init(struct module *const restrict m)
 {
@@ -439,7 +428,6 @@ mod_init(struct module *const restrict m)
 
 	os_sqline_cmds = mowgli_patricia_create(strcasecanon);
 
-	/* Add sub-commands */
 	command_add(&os_sqline_add, os_sqline_cmds);
 	command_add(&os_sqline_del, os_sqline_cmds);
 	command_add(&os_sqline_list, os_sqline_cmds);
@@ -458,7 +446,6 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	service_named_unbind_command("operserv", &os_sqline);
 
-	/* Delete sub-commands */
 	command_delete(&os_sqline_add, os_sqline_cmds);
 	command_delete(&os_sqline_del, os_sqline_cmds);
 	command_delete(&os_sqline_list, os_sqline_cmds);

@@ -8,11 +8,6 @@
 #include "atheme.h"
 #include "conf.h"
 
-static void os_cmd_rehash(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command os_rehash = { "REHASH", N_("Reload the configuration data."), PRIV_ADMIN, 0, os_cmd_rehash, { .path = "oservice/rehash" } };
-
-/* REHASH */
 void
 os_cmd_rehash(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -30,6 +25,8 @@ os_cmd_rehash(struct sourceinfo *si, int parc, char *parv[])
 	else
 		command_fail(si, fault_nosuch_target, _("REHASH of \2%s\2 failed. Please correct any errors in the file and try again."), config_file);
 }
+
+static struct command os_rehash = { "REHASH", N_("Reload the configuration data."), PRIV_ADMIN, 0, os_cmd_rehash, { .path = "oservice/rehash" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

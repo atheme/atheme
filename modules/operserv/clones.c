@@ -10,40 +10,6 @@
 #define CLONESDB_VERSION	3
 #define CLONES_GRACE_TIMEPERIOD	180
 
-static void clones_newuser(hook_user_nick_t *data);
-static void clones_userquit(struct user *u);
-static void clones_configready(void *unused);
-
-static void os_cmd_clones(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_clones_kline(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_clones_list(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_clones_addexempt(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_clones_delexempt(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_clones_setexempt(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_clones_listexempt(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_clones_duration(struct sourceinfo *si, int parc, char *parv[]);
-
-static void write_exemptdb(struct database_handle *db);
-
-
-static void db_h_ck(struct database_handle *db, const char *type);
-static void db_h_cd(struct database_handle *db, const char *type);
-static void db_h_gr(struct database_handle *db, const char *type);
-static void db_h_ex(struct database_handle *db, const char *type);
-static void db_h_clonesdbv(struct database_handle *db, const char *type);
-
-static mowgli_patricia_t *os_clones_cmds = NULL;
-static mowgli_patricia_t *hostlist = NULL;
-static mowgli_heap_t *hostentry_heap = NULL;
-static struct service *serviceinfo = NULL;
-
-static mowgli_list_t clone_exempts;
-static bool kline_enabled;
-static unsigned int grace_count;
-static long kline_duration;
-static int clones_allowed, clones_warn;
-static unsigned int clones_dbversion = 1;
-
 struct clones_exemption
 {
 	char *ip;
@@ -61,6 +27,18 @@ struct clones_hostentry
 	unsigned int gracekills;
 };
 
+static mowgli_patricia_t *os_clones_cmds = NULL;
+static mowgli_patricia_t *hostlist = NULL;
+static mowgli_heap_t *hostentry_heap = NULL;
+static struct service *serviceinfo = NULL;
+
+static mowgli_list_t clone_exempts;
+static bool kline_enabled;
+static unsigned int grace_count;
+static long kline_duration;
+static int clones_allowed, clones_warn;
+static unsigned int clones_dbversion = 1;
+
 static inline bool
 cexempt_expired(struct clones_exemption *c)
 {
@@ -69,16 +47,6 @@ cexempt_expired(struct clones_exemption *c)
 
 	return false;
 }
-
-static struct command os_clones = { "CLONES", N_("Manages network wide clones."), PRIV_AKILL, 5, os_cmd_clones, { .path = "oservice/clones" } };
-
-static struct command os_clones_kline = { "KLINE", N_("Enables/disables klines for excessive clones."), AC_NONE, 1, os_cmd_clones_kline, { .path = "" } };
-static struct command os_clones_list = { "LIST", N_("Lists clones on the network."), AC_NONE, 0, os_cmd_clones_list, { .path = "" } };
-static struct command os_clones_addexempt = { "ADDEXEMPT", N_("Adds a clones exemption."), AC_NONE, 3, os_cmd_clones_addexempt, { .path = "" } };
-static struct command os_clones_delexempt = { "DELEXEMPT", N_("Deletes a clones exemption."), AC_NONE, 1, os_cmd_clones_delexempt, { .path = "" } };
-static struct command os_clones_setexempt = { "SETEXEMPT", N_("Sets a clone exemption details."), AC_NONE, 1, os_cmd_clones_setexempt, { .path = "" } };
-static struct command os_clones_listexempt = { "LISTEXEMPT", N_("Lists clones exemptions."), AC_NONE, 0, os_cmd_clones_listexempt, { .path = "" } };
-static struct command os_clones_duration = { "DURATION", N_("Sets a custom duration to ban clones for."), AC_NONE, 1, os_cmd_clones_duration, { .path = "" } };
 
 static void
 clones_configready(void *unused)
@@ -184,7 +152,7 @@ db_h_ex(struct database_handle *db, const char *type)
 	else if (clones_dbversion == 2)
 	{
 		warn = db_sread_uint(db);
-		db_sread_uint(db); /* trash the old KILL value */
+		db_sread_uint(db); // trash the old KILL value
 	}
 	else
 	{
@@ -208,7 +176,7 @@ find_exempt(const char *ip)
 {
 	mowgli_node_t *n;
 
-	/* first check for an exact match */
+	// first check for an exact match
 	MOWGLI_ITER_FOREACH(n, clone_exempts.head)
 	{
 		struct clones_exemption *c = n->data;
@@ -217,7 +185,7 @@ find_exempt(const char *ip)
 			return c;
 	}
 
-	/* then look for cidr */
+	// then look for cidr
 	MOWGLI_ITER_FOREACH(n, clone_exempts.head)
 	{
 		struct clones_exemption *c = n->data;
@@ -235,7 +203,7 @@ os_cmd_clones(struct sourceinfo *si, int parc, char *parv[])
 	struct command *c;
 	char *cmd = parv[0];
 
-	/* Bad/missing arg */
+	// Bad/missing arg
 	if (!cmd)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLONES");
@@ -566,7 +534,7 @@ os_cmd_clones_setexempt(struct sourceinfo *si, int parc, char *parv[])
 		}
 		else
 		{
-			/* Invalid parameters */
+			// Invalid parameters
 			command_fail(si, fault_badparams, _("Invalid syntax given."));
 			command_fail(si, fault_badparams, _("Syntax: CLONES SETEXEMPT DEFAULT <ALLOWED | WARN> <limit>"));
 			return;
@@ -660,14 +628,14 @@ os_cmd_clones_setexempt(struct sourceinfo *si, int parc, char *parv[])
 						mowgli_strlcat(rreason, " ", BUFSIZE);
 						mowgli_strlcat(rreason, reason, BUFSIZE);
 					}
-					/* mowgli_strlcat(rreason,clonesstr,BUFSIZE); */
+
 					free(c->reason);
 					c->reason = sstrdup(rreason);
 					command_success_nodata(si, _("Clone exemption reason for host \2%s\2 changed to \2%s\2"), ip, c->reason);
 				}
 				else
 				{
-					/* Invalid parameters */
+					// Invalid parameters
 					command_fail(si, fault_badparams, _("Invalid syntax given."));
 					command_fail(si, fault_badparams, _("Syntax: CLONES SETEXEMPT <IP> <ALLOWED | WARN | DURATION | REASON> <value>"));
 					return;
@@ -756,11 +724,11 @@ clones_newuser(hook_user_nick_t *data)
 	unsigned int allowed, warn;
 	mowgli_node_t *n;
 
-	/* If the user has been killed, don't do anything. */
+	// If the user has been killed, don't do anything.
 	if (!u)
 		return;
 
-	/* User has no IP, ignore them */
+	// User has no IP, ignore them
 	if (is_internal_client(u) || u->ip == NULL)
 		return;
 
@@ -803,7 +771,7 @@ clones_newuser(hook_user_nick_t *data)
 				warn++;
 		}
 
-		/* A hard limit of 2x the "real" limit sounds good IMO --jdhore */
+		// A hard limit of 2x the "real" limit sounds good IMO --jdhore
 		if (allowed > (real_allowed * 2))
 			allowed = real_allowed * 2;
 		if (warn > (real_warn * 2))
@@ -812,7 +780,7 @@ clones_newuser(hook_user_nick_t *data)
 
 	if (i > allowed && allowed != 0)
 	{
-		/* User has exceeded the maximum number of allowed clones. */
+		// User has exceeded the maximum number of allowed clones.
 		if (is_autokline_exempt(u))
 			slog(LG_INFO, "CLONES: \2%d\2 clones on \2%s\2 (%s!%s@%s) (user is autokline exempt)", i, u->ip, u->nick, u->user, u->host);
 		else if (!kline_enabled || he->gracekills < grace_count || (grace_count > 0 && he->firstkill < time(NULL) - CLONES_GRACE_TIMEPERIOD))
@@ -834,7 +802,7 @@ clones_newuser(hook_user_nick_t *data)
 					u->user, u->host, grace_count - he->gracekills);
 
 			kill_user(serviceinfo->me, u, "Too many connections from this host.");
-			data->u = NULL; /* Required due to kill_user being called during user_add hook. --mr_flea */
+			data->u = NULL; // Required due to kill_user being called during user_add hook. --mr_flea
 		}
 		else
 		{
@@ -859,7 +827,7 @@ clones_userquit(struct user *u)
 	mowgli_node_t *n;
 	struct clones_hostentry *he;
 
-	/* User has no IP, ignore them */
+	// User has no IP, ignore them
 	if (is_internal_client(u) || u->ip == NULL)
 		return;
 
@@ -876,12 +844,21 @@ clones_userquit(struct user *u)
 		mowgli_node_free(n);
 		if (MOWGLI_LIST_LENGTH(&he->clients) == 0)
 		{
-			/* TODO: free later if he->firstkill > time(NULL) - CLONES_GRACE_TIMEPERIOD. */
+			// TODO: free later if he->firstkill > time(NULL) - CLONES_GRACE_TIMEPERIOD.
 			mowgli_patricia_delete(hostlist, he->ip);
 			mowgli_heap_free(hostentry_heap, he);
 		}
 	}
 }
+
+static struct command os_clones = { "CLONES", N_("Manages network wide clones."), PRIV_AKILL, 5, os_cmd_clones, { .path = "oservice/clones" } };
+static struct command os_clones_kline = { "KLINE", N_("Enables/disables klines for excessive clones."), AC_NONE, 1, os_cmd_clones_kline, { .path = "" } };
+static struct command os_clones_list = { "LIST", N_("Lists clones on the network."), AC_NONE, 0, os_cmd_clones_list, { .path = "" } };
+static struct command os_clones_addexempt = { "ADDEXEMPT", N_("Adds a clones exemption."), AC_NONE, 3, os_cmd_clones_addexempt, { .path = "" } };
+static struct command os_clones_delexempt = { "DELEXEMPT", N_("Deletes a clones exemption."), AC_NONE, 1, os_cmd_clones_delexempt, { .path = "" } };
+static struct command os_clones_setexempt = { "SETEXEMPT", N_("Sets a clone exemption details."), AC_NONE, 1, os_cmd_clones_setexempt, { .path = "" } };
+static struct command os_clones_listexempt = { "LISTEXEMPT", N_("Lists clones exemptions."), AC_NONE, 0, os_cmd_clones_listexempt, { .path = "" } };
+static struct command os_clones_duration = { "DURATION", N_("Sets a custom duration to ban clones for."), AC_NONE, 1, os_cmd_clones_duration, { .path = "" } };
 
 static void
 mod_init(struct module *const restrict m)
@@ -926,12 +903,11 @@ mod_init(struct module *const restrict m)
 	hostlist = mowgli_patricia_create(noopcanon);
 	hostentry_heap = mowgli_heap_create(sizeof(struct clones_hostentry), HEAP_USER, BH_NOW);
 
-	kline_duration = 3600; /* set a default */
+	kline_duration = 3600; // set a default
 
 	serviceinfo = service_find("operserv");
 
-
-	/* add everyone to host hash */
+	// add everyone to host hash
 	MOWGLI_PATRICIA_FOREACH(u, &state, userlist)
 	{
 		clones_newuser(&(hook_user_nick_t){ .u = u });

@@ -12,10 +12,6 @@
  */
 #include "atheme.h"
 
-static void os_cmd_rakill(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command os_rakill = { "RAKILL", N_("Sets a group of AKILLs against users matching a specific regex pattern."), PRIV_MASS_AKILL, 1, os_cmd_rakill, { .path = "oservice/rakill" } };
-
 static void
 os_cmd_rakill(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -30,7 +26,7 @@ os_cmd_rakill(struct sourceinfo *si, int parc, char *parv[])
 	struct user *source;
 	int flags = 0;
 
-	/* make sure they could have done RMATCH */
+	// make sure they could have done RMATCH
 	if (!has_priv(si, PRIV_USER_AUSPEX))
 	{
 		command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, PRIV_USER_AUSPEX);
@@ -70,7 +66,7 @@ os_cmd_rakill(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	source = si->su;
-	/* try to find them on IRC, otherwise use operserv */
+	// try to find them on IRC, otherwise use operserv
 	if (source == NULL)
 		source = si->smu != NULL && MOWGLI_LIST_LENGTH(&si->smu->logins) > 0 ?
 			si->smu->logins.head->data : si->service->me;
@@ -91,7 +87,7 @@ os_cmd_rakill(struct sourceinfo *si, int parc, char *parv[])
 
 		if (regex_match(regex, usermask))
 		{
-			/* match */
+			// match
 			command_success_nodata(si, _("\2Match:\2  %s!%s@%s %s - akilling"), u->nick, u->user, u->host, u->gecos);
 			if (! (u->flags & UF_KLINESENT)) {
 				kline_sts("*", "*", u->host, 604800, reason);
@@ -105,6 +101,8 @@ os_cmd_rakill(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%d\2 matches for %s akilled."), matches, pattern);
 	logcommand(si, CMDLOG_ADMIN, "RAKILL: \2%s\2 (reason: \2%s\2) (\2%d\2 matches)", pattern, reason, matches);
 }
+
+static struct command os_rakill = { "RAKILL", N_("Sets a group of AKILLs against users matching a specific regex pattern."), PRIV_MASS_AKILL, 1, os_cmd_rakill, { .path = "oservice/rakill" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

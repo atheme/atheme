@@ -16,15 +16,26 @@ struct noop
 
 static mowgli_list_t noop_hostmask_list;
 static mowgli_list_t noop_server_list;
-
-static void os_cmd_noop(struct sourceinfo *si, int parc, char *parv[]);
-static void noop_kill_users(void *dummy);
-static void check_quit(struct user *u);
-static void check_user(struct user *u);
 static mowgli_list_t noop_kill_queue;
 static mowgli_eventloop_timer_t *noop_kill_users_timer = NULL;
 
-static struct command os_noop = { "NOOP", N_("Restricts IRCop access."), PRIV_NOOP, 4, os_cmd_noop, { .path = "oservice/noop" } };
+static void
+check_quit(struct user *u)
+{
+	mowgli_node_t *n;
+
+	n = mowgli_node_find(u, &noop_kill_queue);
+	if (n != NULL)
+	{
+		mowgli_node_delete(n, &noop_kill_queue);
+		mowgli_node_free(n);
+		if (MOWGLI_LIST_LENGTH(&noop_kill_queue) == 0)
+		{
+			mowgli_timer_destroy(base_eventloop, noop_kill_users_timer);
+			hook_del_user_delete(check_quit);
+		}
+	}
+}
 
 static void
 noop_kill_users(void *dummy)
@@ -42,24 +53,6 @@ noop_kill_users(void *dummy)
 		kill_user(service->me, u, "Operator access denied");
 		mowgli_node_delete(n, &noop_kill_queue);
 		mowgli_node_free(n);
-	}
-}
-
-static void
-check_quit(struct user *u)
-{
-	mowgli_node_t *n;
-
-	n = mowgli_node_find(u, &noop_kill_queue);
-	if (n != NULL)
-	{
-		mowgli_node_delete(n, &noop_kill_queue);
-		mowgli_node_free(n);
-		if (MOWGLI_LIST_LENGTH(&noop_kill_queue) == 0)
-		{
-			mowgli_timer_destroy(base_eventloop, noop_kill_users_timer);
-			hook_del_user_delete(check_quit);
-		}
 	}
 }
 
@@ -87,7 +80,8 @@ check_user(struct user *u)
 			}
 			if (!mowgli_node_find(u, &noop_kill_queue))
 				mowgli_node_add(u, mowgli_node_create(), &noop_kill_queue);
-			/* Prevent them using the privs in Atheme. */
+
+			// Prevent them using the privs in Atheme.
 			u->flags &= ~UF_IRCOP;
 			return;
 		}
@@ -106,7 +100,8 @@ check_user(struct user *u)
 			}
 			if (!mowgli_node_find(u, &noop_kill_queue))
 				mowgli_node_add(u, mowgli_node_create(), &noop_kill_queue);
-			/* Prevent them using the privs in Atheme. */
+
+			// Prevent them using the privs in Atheme.
 			u->flags &= ~UF_IRCOP;
 			return;
 		}
@@ -129,7 +124,7 @@ noop_find(char *target, mowgli_list_t *list)
 	return NULL;
 }
 
-/* NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> [reason] */
+// NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> [reason]
 static void
 os_cmd_noop(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -322,6 +317,8 @@ os_cmd_noop(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]"));
 	}
 }
+
+static struct command os_noop = { "NOOP", N_("Restricts IRCop access."), PRIV_NOOP, 4, os_cmd_noop, { .path = "oservice/noop" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

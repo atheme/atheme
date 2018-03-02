@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-static void os_cmd_compare(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command os_compare = { "COMPARE", N_("Compares two users or channels."), PRIV_CHAN_AUSPEX, 2, os_cmd_compare, { .path = "oservice/compare" } };
-
 static void
 os_cmd_compare(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -40,7 +36,7 @@ os_cmd_compare(struct sourceinfo *si, int parc, char *parv[])
 	{
 		if (*object2 == '#')
 		{
-			/* compare on two channels */
+			// compare on two channels
 			c1 = channel_find(object1);
 			c2 = channel_find(object2);
 
@@ -52,25 +48,25 @@ os_cmd_compare(struct sourceinfo *si, int parc, char *parv[])
 
 			command_success_nodata(si, _("Common users in \2%s\2 and \2%s\2"), object1, object2);
 
-			/* iterate over the users in channel 1 */
+			// iterate over the users in channel 1
 			MOWGLI_ITER_FOREACH(n1, c1->members.head)
 			{
 				cu1 = n1->data;
 
-				/* now iterate over each of channel 2's members, and compare them to the current user from ch1 */
+				// now iterate over each of channel 2's members, and compare them to the current user from ch1
 				MOWGLI_ITER_FOREACH(n2, c2->members.head)
 				{
 					cu2 = n2->data;
 
-					/* match! */
+					// match!
 					if (cu1->user == cu2->user)
 					{
-						/* common user! */
+						// common user!
 						snprintf(tmpbuf, 99, "%s, ", cu1->user->nick);
 						strcat((char *)buf, tmpbuf);
 						memset(tmpbuf, '\0', 100);
 
-						/* if too many, output to user */
+						// if too many, output to user
 						if (temp >= 5 || strlen(buf) > 300)
 						{
 							command_success_nodata(si, "%s", buf);
@@ -86,7 +82,7 @@ os_cmd_compare(struct sourceinfo *si, int parc, char *parv[])
 		}
 		else
 		{
-			/* bad syntax */
+			// bad syntax
 			command_fail(si, fault_badparams, _("Bad syntax for @compare. Use @compare on two channels, or two users."));
 			return;
 		}
@@ -95,13 +91,13 @@ os_cmd_compare(struct sourceinfo *si, int parc, char *parv[])
 	{
 		if (*object2 == '#')
 		{
-			/* bad syntax */
+			// bad syntax
 			command_fail(si, fault_badparams, _("Bad syntax for @compare. Use @compare on two channels, or two users."));
 			return;
 		}
 		else
 		{
-			/* compare on two users */
+			// compare on two users
 			u1 = user_find_named(object1);
 			u2 = user_find_named(object2);
 
@@ -113,25 +109,25 @@ os_cmd_compare(struct sourceinfo *si, int parc, char *parv[])
 
 			command_success_nodata(si, _("Common channels for \2%s\2 and \2%s\2"), object1, object2);
 
-			/* iterate over the channels of user 1 */
+			// iterate over the channels of user 1
 			MOWGLI_ITER_FOREACH(n1, u1->channels.head)
 			{
 				cu1 = n1->data;
 
-				/* now iterate over each of user 2's channels to the current channel from user 1 */
+				// now iterate over each of user 2's channels to the current channel from user 1
 				MOWGLI_ITER_FOREACH(n2, u2->channels.head)
 				{
 					cu2 = n2->data;
 
-					/* match! */
+					// match!
 					if (cu1->chan == cu2->chan)
 					{
-						/* common channel! */
+						// common channel!
 						snprintf(tmpbuf, 99, "%s, ", cu1->chan->name);
 						strcat((char *)buf, tmpbuf);
 						memset(tmpbuf, '\0', 100);
 
-						/* if too many, output to user */
+						// if too many, output to user
 						if (temp >= 5 || strlen(buf) > 300)
 						{
 							command_success_nodata(si, "%s", buf);
@@ -153,6 +149,8 @@ os_cmd_compare(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%d\2 matches comparing %s and %s"), matches, object1, object2);
 	logcommand(si, CMDLOG_ADMIN, "COMPARE: \2%s\2 to \2%s\2 (\2%d\2 matches)", object1, object2, matches);
 }
+
+static struct command os_compare = { "COMPARE", N_("Compares two users or channels."), PRIV_CHAN_AUSPEX, 2, os_cmd_compare, { .path = "oservice/compare" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

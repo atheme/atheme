@@ -8,10 +8,6 @@
 #include "atheme.h"
 #include "conf.h"
 
-static void os_cmd_modload(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command os_modload = { "MODLOAD", N_("Loads a module."), PRIV_ADMIN, 20, os_cmd_modload, { .path = "oservice/modload" } };
-
 static void
 os_cmd_modload(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -52,6 +48,8 @@ os_cmd_modload(struct sourceinfo *si, int parc, char *parv[])
 			command_fail(si, fault_nosuch_target, _("REHASH of \2%s\2 failed. Please correct any errors in the file and try again."), config_file);
 	}
 }
+
+static struct command os_modload = { "MODLOAD", N_("Loads a module."), PRIV_ADMIN, 20, os_cmd_modload, { .path = "oservice/modload" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

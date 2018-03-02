@@ -9,22 +9,6 @@
 
 #include "atheme.h"
 
-static void os_akill_newuser(hook_user_nick_t *data);
-
-static void os_cmd_akill(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_akill_add(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_akill_del(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_akill_list(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_akill_sync(struct sourceinfo *si, int parc, char *parv[]);
-
-
-static struct command os_akill = { "AKILL", N_("Manages network bans."), PRIV_AKILL, 3, os_cmd_akill, { .path = "oservice/akill" } };
-
-static struct command os_akill_add = { "ADD", N_("Adds a network ban"), AC_NONE, 2, os_cmd_akill_add, { .path = "" } };
-static struct command os_akill_del = { "DEL", N_("Deletes a network ban"), AC_NONE, 1, os_cmd_akill_del, { .path = "" } };
-static struct command os_akill_list = { "LIST", N_("Lists all network bans"), AC_NONE, 1, os_cmd_akill_list, { .path = "" } };
-static struct command os_akill_sync = { "SYNC", N_("Synchronises network bans to servers"), AC_NONE, 0, os_cmd_akill_sync, { .path = "" } };
-
 static mowgli_patricia_t *os_akill_cmds = NULL;
 
 static void
@@ -33,7 +17,7 @@ os_akill_newuser(hook_user_nick_t *data)
 	struct user *u = data->u;
 	struct kline *k;
 
-	/* If the user has been killed, don't do anything. */
+	// If the user has been killed, don't do anything.
 	if (!u)
 		return;
 
@@ -57,11 +41,11 @@ os_akill_newuser(hook_user_nick_t *data)
 static void
 os_cmd_akill(struct sourceinfo *si, int parc, char *parv[])
 {
-	/* Grab args */
+	// Grab args
 	char *cmd = parv[0];
         struct command *c;
 
-	/* Bad/missing arg */
+	// Bad/missing arg
 	if (!cmd)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKILL");
@@ -295,7 +279,7 @@ os_cmd_akill_del(struct sourceinfo *si, int parc, char *parv[])
 				t[++i] = '\0';
 				start = atoi(t);
 
-				s++;	/* skip past the : */
+				s++;	// skip past the :
 
 				for (i = 0; *s != '\0'; s++, i++)
 					t[i] = *s;
@@ -354,7 +338,7 @@ os_cmd_akill_del(struct sourceinfo *si, int parc, char *parv[])
 			t[++i] = '\0';
 			start = atoi(t);
 
-			target++;	/* skip past the : */
+			target++;	// skip past the :
 
 			for (i = 0; *target != '\0'; target++, i++)
 				t[i] = *target;
@@ -523,6 +507,12 @@ os_cmd_akill_sync(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("AKILL list synchronized to servers."));
 }
 
+static struct command os_akill = { "AKILL", N_("Manages network bans."), PRIV_AKILL, 3, os_cmd_akill, { .path = "oservice/akill" } };
+static struct command os_akill_add = { "ADD", N_("Adds a network ban"), AC_NONE, 2, os_cmd_akill_add, { .path = "" } };
+static struct command os_akill_del = { "DEL", N_("Deletes a network ban"), AC_NONE, 1, os_cmd_akill_del, { .path = "" } };
+static struct command os_akill_list = { "LIST", N_("Lists all network bans"), AC_NONE, 1, os_cmd_akill_list, { .path = "" } };
+static struct command os_akill_sync = { "SYNC", N_("Synchronises network bans to servers"), AC_NONE, 0, os_cmd_akill_sync, { .path = "" } };
+
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
@@ -530,7 +520,6 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 
 	os_akill_cmds = mowgli_patricia_create(strcasecanon);
 
-	/* Add sub-commands */
 	command_add(&os_akill_add, os_akill_cmds);
 	command_add(&os_akill_del, os_akill_cmds);
 	command_add(&os_akill_list, os_akill_cmds);
@@ -545,15 +534,14 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	service_named_unbind_command("operserv", &os_akill);
 
-	/* Delete sub-commands */
 	command_delete(&os_akill_add, os_akill_cmds);
 	command_delete(&os_akill_del, os_akill_cmds);
 	command_delete(&os_akill_list, os_akill_cmds);
 	command_delete(&os_akill_sync, os_akill_cmds);
 
-	hook_del_user_add(os_akill_newuser);
-
 	mowgli_patricia_destroy(os_akill_cmds, NULL, NULL);
+
+	hook_del_user_add(os_akill_newuser);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/akill", MODULE_UNLOAD_CAPABILITY_OK)

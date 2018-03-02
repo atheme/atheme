@@ -9,10 +9,6 @@
 #include "atheme.h"
 #include "uplink.h"
 
-static void os_cmd_inject(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command os_inject = { "INJECT", N_("Fakes data from the uplink (debugging tool)."), PRIV_ADMIN, 1, os_cmd_inject, { .path = "oservice/inject" } };
-
 static void
 os_cmd_inject(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -32,9 +28,7 @@ os_cmd_inject(struct sourceinfo *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_ADMIN, "INJECT: \2%s\2", inject);
 
-	/* looks like someone INJECT'd an INJECT command.
-	 * this is probably a bad thing.
-	 */
+	// looks like someone INJECT'd an INJECT command. this is probably a bad thing.
 	if (injecting)
 	{
 		command_fail(si, fault_noprivs, _("You cannot inject an INJECT command."));
@@ -45,6 +39,8 @@ os_cmd_inject(struct sourceinfo *si, int parc, char *parv[])
 	parse(inject);
 	injecting = false;
 }
+
+static struct command os_inject = { "INJECT", N_("Fakes data from the uplink (debugging tool)."), PRIV_ADMIN, 1, os_cmd_inject, { .path = "oservice/inject" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-static void os_cmd_update(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command os_update = { "UPDATE", N_("Flushes services database to disk."), PRIV_ADMIN, 0, os_cmd_update, { .path = "oservice/update" } };
-
 void
 os_cmd_update(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -18,10 +14,14 @@ os_cmd_update(struct sourceinfo *si, int parc, char *parv[])
 	wallops("Updating database by request of \2%s\2.", get_oper_name(si));
 	expire_check(NULL);
 	command_success_nodata(si, _("Updating database."));
+
 	if (db_save)
 		db_save(NULL, DB_SAVE_BG_IMPORTANT);
-	/* db_save() will wallops/snoop/log the error */
+
+	// db_save() will wallops/snoop/log the error
 }
+
+static struct command os_update = { "UPDATE", N_("Flushes services database to disk."), PRIV_ADMIN, 0, os_cmd_update, { .path = "oservice/update" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

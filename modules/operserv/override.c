@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-static void os_cmd_override(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command os_override = { "OVERRIDE", N_("Perform a transaction on another user's account"), PRIV_OVERRIDE, 4, os_cmd_override, { .path = "oservice/override" } };
-
 struct override_sourceinfo
 {
 	struct sourceinfo si;
@@ -87,17 +83,6 @@ override_get_storage_oper_name(struct sourceinfo *si)
 	return get_storage_oper_name(csi->parent_si);
 }
 
-static struct sourceinfo_vtable override_vtable = {
-	.description = "override",
-	.cmd_fail = override_command_fail,
-	.cmd_success_nodata = override_command_success_nodata,
-	.cmd_success_string = override_command_success_string,
-	.get_source_name = override_get_source_name,
-	.get_source_mask = override_get_source_mask,
-	.get_oper_name = override_get_oper_name,
-	.get_storage_oper_name = override_get_storage_oper_name,
-};
-
 static void
 override_sourceinfo_dispose(struct override_sourceinfo *o_si)
 {
@@ -147,6 +132,17 @@ text_to_parv(char *text, int maxparc, char **parv)
 static void
 os_cmd_override(struct sourceinfo *si, int parc, char *parv[])
 {
+	static struct sourceinfo_vtable override_vtable = {
+		.description = "override",
+		.cmd_fail = override_command_fail,
+		.cmd_success_nodata = override_command_success_nodata,
+		.cmd_success_string = override_command_success_string,
+		.get_source_name = override_get_source_name,
+		.get_source_mask = override_get_source_mask,
+		.get_oper_name = override_get_oper_name,
+		.get_storage_oper_name = override_get_storage_oper_name,
+	};
+
 	struct myuser *mu = NULL;
 	struct service *svs;
 	struct service *memosvs;
@@ -184,7 +180,7 @@ os_cmd_override(struct sourceinfo *si, int parc, char *parv[])
 			}
 		}
 
-		/* this should never happen, but we'll check anyway. */
+		// this should never happen, but we'll check anyway.
 		if (mu == NULL)
 		{
 			slog(LG_DEBUG, "override: couldn't find a founder for %s!", parv[0]);
@@ -240,6 +236,8 @@ os_cmd_override(struct sourceinfo *si, int parc, char *parv[])
 
 	atheme_object_unref(o_si);
 }
+
+static struct command os_override = { "OVERRIDE", N_("Perform a transaction on another user's account"), PRIV_OVERRIDE, 4, os_cmd_override, { .path = "oservice/override" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

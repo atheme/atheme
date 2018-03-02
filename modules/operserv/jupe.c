@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-static void os_cmd_jupe(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command os_jupe = { "JUPE", N_("Jupiters a server."), PRIV_JUPE, 2, os_cmd_jupe, { .path = "oservice/jupe" } };
-
 static void
 os_cmd_jupe(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -25,8 +21,7 @@ os_cmd_jupe(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* Disallow * in a jupe as a minimal sanity check; it makes it hard to
-	 * squit safely. */
+	// Disallow * in a jupe as a minimal sanity check; it makes it hard to squit safely.
 	if (!strchr(server, '.') || strchr(server, '*') || strchr(server, '?'))
 	{
 		command_fail(si, fault_badparams, _("\2%s\2 is not a valid server name."), server);
@@ -54,6 +49,8 @@ os_cmd_jupe(struct sourceinfo *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("\2%s\2 has been jupitered."), server);
 }
+
+static struct command os_jupe = { "JUPE", N_("Jupiters a server."), PRIV_JUPE, 2, os_cmd_jupe, { .path = "oservice/jupe" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

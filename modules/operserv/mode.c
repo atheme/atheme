@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-static void os_cmd_mode(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command os_mode = { "MODE", N_("Changes modes on channels."), PRIV_OMODE, 2, os_cmd_mode, { .path = "oservice/mode" } };
-
 static void
 os_cmd_mode(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -43,6 +39,8 @@ os_cmd_mode(struct sourceinfo *si, int parc, char *parv[])
 
 	channel_mode(si->service->me, c, modeparc, modeparv);
 }
+
+static struct command os_mode = { "MODE", N_("Changes modes on channels."), PRIV_OMODE, 2, os_cmd_mode, { .path = "oservice/mode" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

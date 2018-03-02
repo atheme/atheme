@@ -1,11 +1,7 @@
 #include "atheme.h"
 #include "conf.h"
-#include "uplink.h" /* XXX: For sendq_flush and curr_uplink */
+#include "uplink.h" // XXX: For sendq_flush and curr_uplink
 #include "datastream.h"
-
-static void os_cmd_modreload(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command os_modreload = { "MODRELOAD", N_("Reloads a module."), PRIV_ADMIN, 20, os_cmd_modreload, { .path = "oservice/modreload" } };
 
 static void
 recurse_module_deplist(struct module *m, mowgli_list_t *deplist)
@@ -15,7 +11,7 @@ recurse_module_deplist(struct module *m, mowgli_list_t *deplist)
 	{
 		struct module *dm = (struct module *) n->data;
 
-		/* Skip duplicates */
+		// Skip duplicates
 		bool found = false;
 		mowgli_node_t *n2;
 		MOWGLI_LIST_FOREACH(n2, deplist->head)
@@ -89,7 +85,7 @@ os_cmd_modreload(struct sourceinfo *si, int parc, char *parv[])
 			command_fail(si, fault_noprivs, _("\2%s\2 is depended upon by \2%s\2, which is a permanent module and cannot be reloaded."), module, dep->name);
 			slog(LG_ERROR, "MODRELOAD:ERROR: \2%s\2 tried to reload \2%s\2, which is depended upon by permanent module \2%s\2", get_oper_name(si), module, dep->name);
 
-			/* We've constructed the dep list now, so don't return without cleaning up */
+			// We've constructed the dep list now, so don't return without cleaning up
 			while (module_deplist->head != NULL)
 			{
 				dep = module_deplist->head->data;
@@ -138,7 +134,7 @@ os_cmd_modreload(struct sourceinfo *si, int parc, char *parv[])
 		{
 			if (dep->can_unload != MODULE_UNLOAD_CAPABILITY_OK)
 			{
-				/* Failed to reload a module that can't be unloaded. Abort. */
+				// Failed to reload a module that can't be unloaded. Abort.
 				command_fail(si, fault_nosuch_target, _(
 						"Module \2%s\2 failed to reload, and does not allow unloading. "
 						"Shutting down to avoid data loss."), dep->name);
@@ -167,6 +163,8 @@ os_cmd_modreload(struct sourceinfo *si, int parc, char *parv[])
 			command_fail(si, fault_nosuch_target, _("REHASH of \2%s\2 failed. Please correct any errors in the file and try again."), config_file);
 	}
 }
+
+static struct command os_modreload = { "MODRELOAD", N_("Reloads a module."), PRIV_ADMIN, 20, os_cmd_modreload, { .path = "oservice/modreload" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -7,24 +7,6 @@
 
 #include "atheme.h"
 
-static void rwatch_newuser(hook_user_nick_t *data);
-static void rwatch_nickchange(hook_user_nick_t *data);
-
-static void os_cmd_rwatch(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_rwatch_list(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_rwatch_add(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_rwatch_del(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_rwatch_set(struct sourceinfo *si, int parc, char *parv[]);
-
-static void write_rwatchdb(struct database_handle *db);
-static void load_rwatchdb(char *path);
-static void db_h_rw(struct database_handle *db, const char *type);
-static void db_h_rr(struct database_handle *db, const char *type);
-
-mowgli_patricia_t *os_rwatch_cmds;
-
-mowgli_list_t rwatch_list;
-
 #define RWACT_SNOOP 		1
 #define RWACT_KLINE 		2
 #define RWACT_QUARANTINE	4
@@ -32,21 +14,18 @@ mowgli_list_t rwatch_list;
 struct rwatch
 {
 	char *regex;
-	int reflags; /* AREGEX_* */
+	int reflags; // AREGEX_*
 	char *reason;
-	int actions; /* RWACT_* */
+	int actions; // RWACT_*
 	struct atheme_regex *re;
 };
 
-static struct command os_rwatch = { "RWATCH", N_("Performs actions on connecting clients matching regexes."), PRIV_USER_AUSPEX, 2, os_cmd_rwatch, { .path = "oservice/rwatch" } };
-
-static struct command os_rwatch_add = { "ADD", N_("Adds an entry to the regex watch list."), AC_NONE, 1, os_cmd_rwatch_add, { .path = "" } };
-static struct command os_rwatch_del = { "DEL", N_("Removes an entry from the regex watch list."), AC_NONE, 1, os_cmd_rwatch_del, { .path = "" } };
-static struct command os_rwatch_list = { "LIST", N_("Displays the regex watch list."), AC_NONE, 1, os_cmd_rwatch_list, { .path = "" } };
-static struct command os_rwatch_set = { "SET", N_("Changes actions on an entry in the regex watch list"), AC_NONE, 1, os_cmd_rwatch_set, { .path = "" } };
-
 static struct rwatch *rwread = NULL;
 static FILE *f;
+
+mowgli_patricia_t *os_rwatch_cmds;
+
+mowgli_list_t rwatch_list;
 
 static void
 write_rwatchdb(struct database_handle *db)
@@ -92,7 +71,7 @@ load_rwatchdb(char *path)
 			char *regex = strtok(NULL, "\n");
 
 			if (!reflagsstr || !regex || rw)
-				; /* erroneous, don't add */
+				; // erroneous, don't add
 			else
 			{
 				rw = smalloc(sizeof *rw);
@@ -107,7 +86,7 @@ load_rwatchdb(char *path)
 			char *reason = strtok(NULL, "\n");
 
 			if (!actionstr || !reason || !rw)
-				; /* erroneous, don't add */
+				; // erroneous, don't add
 			else
 			{
 				rw->actions = atoi(actionstr);
@@ -167,11 +146,11 @@ db_h_rr(struct database_handle *db, const char *type)
 static void
 os_cmd_rwatch(struct sourceinfo *si, int parc, char *parv[])
 {
-	/* Grab args */
+	// Grab args
 	char *cmd = parv[0];
 	struct command *c;
 
-	/* Bad/missing arg */
+	// Bad/missing arg
 	if (!cmd)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RWATCH");
@@ -451,7 +430,7 @@ rwatch_newuser(hook_user_nick_t *data)
 	mowgli_node_t *n;
 	struct rwatch *rw;
 
-	/* If the user has been killed, don't do anything. */
+	// If the user has been killed, don't do anything.
 	if (!u)
 		return;
 
@@ -517,7 +496,7 @@ rwatch_nickchange(hook_user_nick_t *data)
 	mowgli_node_t *n;
 	struct rwatch *rw;
 
-	/* If the user has been killed, don't do anything. */
+	// If the user has been killed, don't do anything.
 	if (!u)
 		return;
 
@@ -534,7 +513,7 @@ rwatch_nickchange(hook_user_nick_t *data)
 			continue;
 		if (regex_match(rw->re, usermask))
 		{
-			/* Only process if they did not match before. */
+			// Only process if they did not match before.
 			if (regex_match(rw->re, oldusermask))
 				continue;
 			if (rw->actions & RWACT_SNOOP)
@@ -578,6 +557,12 @@ rwatch_nickchange(hook_user_nick_t *data)
 	}
 }
 
+static struct command os_rwatch = { "RWATCH", N_("Performs actions on connecting clients matching regexes."), PRIV_USER_AUSPEX, 2, os_cmd_rwatch, { .path = "oservice/rwatch" } };
+static struct command os_rwatch_add = { "ADD", N_("Adds an entry to the regex watch list."), AC_NONE, 1, os_cmd_rwatch_add, { .path = "" } };
+static struct command os_rwatch_del = { "DEL", N_("Removes an entry from the regex watch list."), AC_NONE, 1, os_cmd_rwatch_del, { .path = "" } };
+static struct command os_rwatch_list = { "LIST", N_("Displays the regex watch list."), AC_NONE, 1, os_cmd_rwatch_list, { .path = "" } };
+static struct command os_rwatch_set = { "SET", N_("Changes actions on an entry in the regex watch list"), AC_NONE, 1, os_cmd_rwatch_set, { .path = "" } };
+
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
@@ -602,7 +587,7 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 
 	if (f)
 	{
-		load_rwatchdb(path); /* because i'm lazy, let's pass path to the function */
+		load_rwatchdb(path); // because i'm lazy, let's pass path to the function
 		fclose(f);
 	}
 	else

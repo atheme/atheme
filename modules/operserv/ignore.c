@@ -7,18 +7,6 @@
 
 #include "atheme.h"
 
-static void os_cmd_ignore(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_ignore_add(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_ignore_del(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_ignore_list(struct sourceinfo *si, int parc, char *parv[]);
-static void os_cmd_ignore_clear(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command os_ignore = { "IGNORE", N_("Ignore a mask from services."), PRIV_ADMIN, 3, os_cmd_ignore, { .path = "oservice/ignore" } };
-static struct command os_ignore_add = { "ADD", N_("Add services ignore"), PRIV_ADMIN, 2, os_cmd_ignore_add, { .path = "" } };
-static struct command os_ignore_del = { "DEL", N_("Delete services ignore"), PRIV_ADMIN, 1, os_cmd_ignore_del, { .path = "" } };
-static struct command os_ignore_list = { "LIST", N_("List services ignores"), PRIV_ADMIN, 0, os_cmd_ignore_list, { .path = "" } };
-static struct command os_ignore_clear = { "CLEAR", N_("Clear all services ignores"), PRIV_ADMIN, 0, os_cmd_ignore_clear, { .path = "" } };
-
 static mowgli_patricia_t *os_ignore_cmds = NULL;
 
 mowgli_list_t svs_ignore_list;
@@ -68,12 +56,12 @@ os_cmd_ignore_add(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* Are we already ignoring this mask? */
+	// Are we already ignoring this mask?
 	MOWGLI_ITER_FOREACH(n, svs_ignore_list.head)
 	{
 		svsignore = (struct svsignore *)n->data;
 
-		/* We're here */
+		// We're here
 		if (!strcasecmp(svsignore->mask, target))
 		{
 			command_fail(si, fault_nochange, _("The mask \2%s\2 already exists on the services ignore list."), svsignore->mask);
@@ -197,6 +185,12 @@ os_cmd_ignore_list(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
+static struct command os_ignore = { "IGNORE", N_("Ignore a mask from services."), PRIV_ADMIN, 3, os_cmd_ignore, { .path = "oservice/ignore" } };
+static struct command os_ignore_add = { "ADD", N_("Add services ignore"), PRIV_ADMIN, 2, os_cmd_ignore_add, { .path = "" } };
+static struct command os_ignore_del = { "DEL", N_("Delete services ignore"), PRIV_ADMIN, 1, os_cmd_ignore_del, { .path = "" } };
+static struct command os_ignore_list = { "LIST", N_("List services ignores"), PRIV_ADMIN, 0, os_cmd_ignore_list, { .path = "" } };
+static struct command os_ignore_clear = { "CLEAR", N_("Clear all services ignores"), PRIV_ADMIN, 0, os_cmd_ignore_clear, { .path = "" } };
+
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
@@ -204,7 +198,7 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 
 	os_ignore_cmds = mowgli_patricia_create(strcasecanon);
 
-	/* Sub-commands */
+	// Sub-commands
 	command_add(&os_ignore_add, os_ignore_cmds);
 	command_add(&os_ignore_del, os_ignore_cmds);
 	command_add(&os_ignore_clear, os_ignore_cmds);
@@ -218,7 +212,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	service_named_unbind_command("operserv", &os_ignore);
 
-	/* Sub-commands */
+	// Sub-commands
 	command_delete(&os_ignore_add, os_ignore_cmds);
 	command_delete(&os_ignore_del, os_ignore_cmds);
 	command_delete(&os_ignore_list, os_ignore_cmds);

@@ -8,10 +8,6 @@
 #include "atheme.h"
 #include "uplink.h"
 
-static void os_cmd_raw(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command os_raw = { "RAW", N_("Sends data to the uplink."), PRIV_ADMIN, 1, os_cmd_raw, { .path = "oservice/raw" } };
-
 static void
 os_cmd_raw(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -30,6 +26,8 @@ os_cmd_raw(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "RAW: \2%s\2", s);
 	sts("%s", s);
 }
+
+static struct command os_raw = { "RAW", N_("Sends data to the uplink."), PRIV_ADMIN, 1, os_cmd_raw, { .path = "oservice/raw" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

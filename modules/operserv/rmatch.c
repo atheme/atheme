@@ -12,10 +12,6 @@
 #include "atheme.h"
 #include <limits.h>
 
-static void os_cmd_rmatch(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command os_rmatch = { "RMATCH", N_("Scans the network for users based on a specific regex pattern."), PRIV_USER_AUSPEX, 1, os_cmd_rmatch, { .path = "oservice/rmatch" } };
-
 #define MAXMATCHES_DEF 1000
 
 static void
@@ -88,6 +84,8 @@ os_cmd_rmatch(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%d\2 matches for %s"), matches, pattern);
 	logcommand(si, CMDLOG_ADMIN, "RMATCH: \2%s\2 (\2%d\2 matches)", pattern, matches);
 }
+
+static struct command os_rmatch = { "RMATCH", N_("Scans the network for users based on a specific regex pattern."), PRIV_USER_AUSPEX, 1, os_cmd_rmatch, { .path = "oservice/rmatch" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

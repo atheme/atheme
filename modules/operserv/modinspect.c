@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-static void os_cmd_modinspect(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command os_modinspect = { "MODINSPECT", N_("Displays information about loaded modules."), PRIV_SERVER_AUSPEX, 1, os_cmd_modinspect, { .path = "oservice/modinspect" } };
-
 static void
 os_cmd_modinspect(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -34,7 +30,7 @@ os_cmd_modinspect(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* Is there a header? */
+	// Is there a header?
 	if (!m->header)
 	{
 		command_fail(si, fault_unimplemented, _("\2%s\2 cannot be inspected."), mname);
@@ -53,6 +49,8 @@ os_cmd_modinspect(struct sourceinfo *si, int parc, char *parv[])
 					( m->can_unload == MODULE_UNLOAD_CAPABILITY_NEVER ? "No" : "Reload only"));
 	command_success_nodata(si, _("*** \2End of Info\2 ***"));
 }
+
+static struct command os_modinspect = { "MODINSPECT", N_("Displays information about loaded modules."), PRIV_SERVER_AUSPEX, 1, os_cmd_modinspect, { .path = "oservice/modinspect" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

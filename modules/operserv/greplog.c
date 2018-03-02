@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-static void os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command os_greplog = { "GREPLOG", N_("Searches through the logs."), PRIV_CHAN_AUSPEX, 3, os_cmd_greplog, { .path = "oservice/greplog" } };
-
 #define MAXMATCHES 100
 
 static const char *
@@ -54,7 +50,7 @@ get_account_log(void)
 	return get_logfile(masks);
 }
 
-/* GREPLOG <service> <mask> */
+// GREPLOG <service> <mask>
 static void
 os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -69,9 +65,7 @@ os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_list_t loglines = { NULL, NULL, 0 };
 	mowgli_node_t *n, *tn;
 
-	/* require user, channel and server auspex
-	 * (channel auspex checked via in struct command)
-	 */
+	// require user, channel and server auspex (channel auspex checked via in struct command)
 	if (!has_priv(si, PRIV_USER_AUSPEX))
 	{
 		command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, PRIV_USER_AUSPEX);
@@ -194,6 +188,8 @@ os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, ngettext(N_("\2%d\2 match for pattern \2%s\2"),
 						    N_("\2%d\2 matches for pattern \2%s\2"), matches), matches, pattern);
 }
+
+static struct command os_greplog = { "GREPLOG", N_("Searches through the logs."), PRIV_CHAN_AUSPEX, 3, os_cmd_greplog, { .path = "oservice/greplog" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
