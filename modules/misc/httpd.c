@@ -9,22 +9,22 @@
 #include "httpd.h"
 #include "datastream.h"
 
-#define REQUEST_MAX 65536 /* maximum size of one call */
+#define REQUEST_MAX 65536 // maximum size of one call
 
 static struct connection *listener = NULL;
+static mowgli_eventloop_timer_t *httpd_checkidle_timer = NULL;
 
-/* Imported by modules/transport/*rpc/*rpc.so */
-mowgli_list_t httpd_path_handlers;
-
-/* conf stuff */
+// conf stuff
 static mowgli_list_t conf_httpd_table;
 
-static struct httpd_configuration
-{
+static struct {
 	char *host;
 	char *www_root;
 	unsigned int port;
 } httpd_config;
+
+// Imported by modules/transport/*rpc/*rpc.so */
+mowgli_list_t httpd_path_handlers;
 
 static void
 clear_httpddata(struct httpddata *hd)
@@ -388,7 +388,7 @@ httpd_config_ready(void *vptr)
 {
 	if (httpd_config.host != NULL && httpd_config.port != 0)
 	{
-		/* Some code depends on struct connection -> listener == listener. */
+		// Some code depends on struct connection -> listener == listener.
 		if (listener != NULL)
 			return;
 		listener = connection_open_listener_tcp(httpd_config.host,
@@ -400,15 +400,12 @@ httpd_config_ready(void *vptr)
 		slog(LG_ERROR, "httpd_config_ready(): httpd {} block missing or invalid");
 }
 
-static mowgli_eventloop_timer_t *httpd_checkidle_timer = NULL;
-
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	httpd_checkidle_timer = mowgli_timer_add(base_eventloop, "httpd_checkidle", httpd_checkidle, NULL, 60);
 
-	/* This module needs a rehash to initialize fully if loaded
-	 * at run time */
+	// This module needs a rehash to initialize fully if loaded at run time
 	hook_add_event("config_ready");
 	hook_add_config_ready(httpd_config_ready);
 
