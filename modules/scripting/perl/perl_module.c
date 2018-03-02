@@ -13,27 +13,10 @@
 
 #include <dlfcn.h>
 
-/*
- * Definitions:
+/* Definitions:
  *  PERL_INIT_FILE is the perl script that is used to boot the Atheme interface.
  */
 #define PERL_INIT_FILE PERL_MODDIR "/lib/init.pl"
-
-/*
- * External functions:
- *  xs_init is defined in the auto-generated perlxsi.c
- */
-extern void xs_init(pTHX);
-
-/*
- * Required static variables:
- */
-static PerlInterpreter *my_perl = NULL;
-static void *libperl_handle = NULL;
-static char *_perl_argv[3] = { "", PERL_INIT_FILE, NULL };
-static char **perl_argv = &_perl_argv[0];
-
-static char perl_error[512];
 
 struct perl_script_module
 {
@@ -41,22 +24,26 @@ struct perl_script_module
 	char filename[BUFSIZE];
 };
 
+// Required static variables:
+static PerlInterpreter *my_perl = NULL;
+static void *libperl_handle = NULL;
+static char *_perl_argv[3] = { "", PERL_INIT_FILE, NULL };
+static char **perl_argv = &_perl_argv[0];
+static char perl_error[512];
 static mowgli_heap_t *perl_script_module_heap;
 
-static struct module *do_script_load(const char *filename);
-static bool do_script_unload(const char *filename);
-static void perl_script_module_unload_handler(struct module *m, const enum module_unload_intent ATHEME_VATTR_UNUSED intent);
+/* External functions:
+ *  xs_init is defined in the auto-generated perlxsi.c
+ */
+extern void xs_init(pTHX);
 
-/*
- * Startup and shutdown routines.
- *
+/* Startup and shutdown routines.
  * These deal with starting and stopping the perl interpreter.
  */
 static bool
 startup_perl(void)
 {
-	/*
-	 * Hack: atheme modules (hence our dependent libperl.so) are loaded with
+	/* Hack: atheme modules (hence our dependent libperl.so) are loaded with
 	 * RTLD_LOCAL, meaning that they're not available for later resolution. Perl
 	 * extension modules assume that libperl.so is already loaded and available.
 	 * Make it so.
@@ -126,9 +113,7 @@ shutdown_perl(void)
 	free_object_list();
 }
 
-/*
- * Implementation functions: load or unload a perl script.
- */
+// Implementation functions: load or unload a perl script.
 static struct module *
 do_script_load(const char *filename)
 {
@@ -167,15 +152,12 @@ do_script_load(const char *filename)
 		goto fail;
 	}
 
-	/* load_script should have returned the package name that was just
-	 * loaded...
-	 */
+	// load_script should have returned the package name that was just loaded...
 	const char *packagename = POPp;
 	char info_varname[BUFSIZE];
 	snprintf(info_varname, BUFSIZE, "%s::Info", packagename);
 
-	/* ... so use that name to grab the script information hash...
-	 */
+	// ... so use that name to grab the script information hash...
 	HV *info_hash = get_hv(info_varname, 0);
 	if (!info_hash)
 	{
@@ -183,8 +165,7 @@ do_script_load(const char *filename)
 		goto fail;
 	}
 
-	/* ..., extract the canonical name...
-	 */
+	// ..., extract the canonical name...
 	SV **name_var = hv_fetch(info_hash, "name", 4, 0);
 	if (!name_var)
 	{
@@ -194,13 +175,13 @@ do_script_load(const char *filename)
 
 	mowgli_strlcpy(m->mod.name, SvPV_nolen(*name_var), sizeof(m->mod.name));
 
-	/* ... and dependency list.
-	 */
+	// ... and dependency list.
 	SV **deplist_var = hv_fetch(info_hash, "depends", 7, 0);
-	/* Not declaring this is legal... */
+
+	// Not declaring this is legal...
 	if (deplist_var)
 	{
-		/* ... but having it as anything but an arrayref isn't. */
+		// ... but having it as anything but an arrayref isn't.
 		if (!SvROK(*deplist_var) || SvTYPE(SvRV(*deplist_var)) != SVt_PVAV)
 		{
 			snprintf(perl_error, sizeof(perl_error), "$Info::depends must be an array reference");
@@ -209,7 +190,8 @@ do_script_load(const char *filename)
 
 		AV *deplist = (AV*)SvRV(*deplist_var);
 		I32 len = av_len(deplist);
-		/* av_len returns max index, not number of items */
+
+		// av_len returns max index, not number of items
 		for (I32 i = 0; i <= len; ++i)
 		{
 			SV **item = av_fetch(deplist, i, 0);
@@ -232,9 +214,10 @@ do_script_load(const char *filename)
 	LEAVE;
 	invalidate_object_references();
 
-	/* Now that everything's loaded, do the module housekeeping stuff. */
+	// Now that everything's loaded, do the module housekeeping stuff.
 	m->mod.unload_handler = perl_script_module_unload_handler;
-	/* Can't do much better than the address of the struct module here */
+
+	// Can't do much better than the address of the struct module here
 	m->mod.address = m;
 	m->mod.can_unload = MODULE_UNLOAD_CAPABILITY_OK;
 	return (struct module *) m;
@@ -325,15 +308,7 @@ do_script_list(struct sourceinfo *si)
 	return retval;
 }
 
-/*
- * Connect all of the above to OperServ.
- */
-static void os_cmd_perl(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command os_perl = { "PERL", N_("Inspect the Perl interpreter"), PRIV_ADMIN, 2, os_cmd_perl, { .path = "oservice/perl" } };
-
-static int conf_loadscript(mowgli_config_file_entry_t *);
-
+// Connect all of the above to OperServ.
 static void
 hook_module_load(hook_module_load_t *data)
 {
@@ -401,9 +376,7 @@ perl_script_module_unload_handler(struct module *m, const enum module_unload_int
 	mowgli_heap_free(perl_script_module_heap, pm);
 }
 
-/*
- * Actual command handlers.
- */
+// Actual command handlers.
 static void
 os_cmd_perl(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -441,9 +414,8 @@ conf_loadscript(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-/*
- * Module startup/shutdown
- */
+static struct command os_perl = { "PERL", N_("Inspect the Perl interpreter"), PRIV_ADMIN, 2, os_cmd_perl, { .path = "oservice/perl" } };
+
 static void
 mod_init(struct module *const restrict m)
 {
