@@ -7,17 +7,12 @@
 
 #include "atheme.h"
 
-static void ms_cmd_send(struct sourceinfo *si, int parc, char *parv[]);
 static unsigned int *maxmemos;
-
-
-static struct command ms_send = { "SEND", N_("Sends a memo to a user."),
-                        AC_AUTHENTICATED, 2, ms_cmd_send, { .path = "memoserv/send" } };
 
 static void
 ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 {
-	/* misc structs etc */
+	// misc structs etc
 	struct user *tu;
 	struct myuser *tmu;
 	mowgli_node_t *n;
@@ -25,11 +20,11 @@ ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 	struct command *cmd;
 	struct service *memoserv;
 
-	/* Grab args */
+	// Grab args
 	char *target = parv[0];
 	char *m = parv[1];
 
-	/* Arg validation */
+	// Arg validation
 	if (!target || !m)
 	{
 		command_fail(si, fault_needmoreparams,
@@ -47,7 +42,7 @@ ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* rate limit it -- jilles */
+	// rate limit it -- jilles
 	if (CURRTIME - si->smu->memo_ratelimit_time > MEMO_MAX_TIME)
 		si->smu->memo_ratelimit_num = 0;
 	if (si->smu->memo_ratelimit_num > MEMO_MAX_NUM && !has_priv(si, PRIV_FLOOD))
@@ -56,7 +51,7 @@ ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* Check for memo text length -- includes/common.h */
+	// Check for memo text length -- includes/common.h
 	if (strlen(m) > MEMOLEN)
 	{
 		command_fail(si, fault_badparams,
@@ -80,7 +75,7 @@ ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 
 	if (*target != '#' && *target != '!')
 	{
-		/* See if target is valid */
+		// See if target is valid
 		if (!(tmu = myuser_find_ext(target)))
 		{
 			command_fail(si, fault_nosuch_target,
@@ -92,7 +87,7 @@ ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 		si->smu->memo_ratelimit_num++;
 		si->smu->memo_ratelimit_time = CURRTIME;
 
-		/* Does the user allow memos? --pfish */
+		// Does the user allow memos? --pfish
 		if (tmu->flags & MU_NOMEMO)
 		{
 			command_fail(si, fault_noprivs,
@@ -101,7 +96,7 @@ ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 			return;
 		}
 
-		/* Check to make sure target inbox not full */
+		// Check to make sure target inbox not full
 		if (tmu->memos.count >= *maxmemos)
 		{
 			command_fail(si, fault_toomany, _("%s's inbox is full"), target);
@@ -109,8 +104,7 @@ ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 			return;
 		}
 
-
-		/* Make sure we're not on ignore */
+		// Make sure we're not on ignore
 		MOWGLI_ITER_FOREACH(n, tmu->memo_ignores.head)
 		{
 			struct mynick *mn;
@@ -132,18 +126,18 @@ ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 		}
 		logcommand(si, CMDLOG_SET, "SEND: to \2%s\2", entity(tmu)->name);
 
-		/* Malloc and populate struct */
+		// Malloc and populate struct
 		memo = smalloc(sizeof *memo);
 		memo->sent = CURRTIME;
 		mowgli_strlcpy(memo->sender, entity(si->smu)->name, sizeof memo->sender);
 		mowgli_strlcpy(memo->text, m, sizeof memo->text);
 
-		/* Create a linked list node and add to memos */
+		// Create a linked list node and add to memos
 		n = mowgli_node_create();
 		mowgli_node_add(memo, n, &tmu->memos);
 		tmu->memoct_new++;
 
-		/* Should we email this? */
+		// Should we email this?
 	        if (tmu->flags & MU_EMAILMEMOS)
 		{
 			sendemail(si->su, tmu, EMAIL_MEMO, tmu->email, memo->text);
@@ -159,7 +153,7 @@ ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 		if (tu != NULL && tu->myuser == tmu)
 			command_success_nodata(si, _("%s is currently online, and you may talk directly, by sending a private message."), target);
 
-		/* Is the user online? If so, tell them about the new memo. */
+		// Is the user online? If so, tell them about the new memo.
 		if (si->su == NULL || !irccasecmp(si->su->nick, entity(si->smu)->name))
 			myuser_notice(memoserv->nick, tmu, "You have a new memo from %s (%zu).", entity(si->smu)->name, MOWGLI_LIST_LENGTH(&tmu->memos));
 		else
@@ -167,7 +161,7 @@ ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 		myuser_notice(memoserv->nick, tmu, _("To read it, type /%s%s READ %zu"),
 					ircd->uses_rcommand ? "" : "msg ", memoserv->disp, MOWGLI_LIST_LENGTH(&tmu->memos));
 
-		/* Tell user memo sent */
+		// Tell user memo sent
 		command_success_nodata(si, _("The memo has been successfully sent to \2%s\2."), target);
 	}
 	else if (*target == '#')
@@ -189,6 +183,8 @@ ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 
 	return;
 }
+
+static struct command ms_send = { "SEND", N_("Sends a memo to a user."), AC_AUTHENTICATED, 2, ms_cmd_send, { .path = "memoserv/send" } };
 
 static void
 mod_init(struct module *const restrict m)

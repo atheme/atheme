@@ -7,26 +7,21 @@
 
 #include "atheme.h"
 
-static void ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ms_forward = { "FORWARD", N_(N_("Forwards a memo.")),
-                        AC_AUTHENTICATED, 2, ms_cmd_forward, { .path = "memoserv/forward" } };
-
 static void
 ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])
 {
-	/* Misc structs etc */
+	// Misc structs etc
 	struct user *tu;
 	struct myuser *tmu;
 	struct mymemo *memo, *newmemo;
 	mowgli_node_t *n, *temp;
 	unsigned int i = 1, memonum = 0;
 
-	/* Grab args */
+	// Grab args
 	char *target = parv[0];
 	char *arg = parv[1];
 
-	/* Arg validator */
+	// Arg validator
 	if (!target || !arg)
 	{
 		command_fail(si, fault_needmoreparams,
@@ -46,35 +41,35 @@ ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* Check to see if any memos */
+	// Check to see if any memos
 	if (!si->smu->memos.count)
 	{
 		command_fail(si, fault_nosuch_key, _("You have no memos to forward."));
 		return;
 	}
 
-	/* Check to see if target user exists */
+	// Check to see if target user exists
 	if (!(tmu = myuser_find_ext(target)))
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 		return;
 	}
 
-	/* Make sure target isn't sender */
+	// Make sure target isn't sender
 	if (si->smu == tmu)
 	{
 		command_fail(si, fault_noprivs, _("You cannot send yourself a memo."));
 		return;
 	}
 
-	/* Make sure arg is an int */
+	// Make sure arg is an int
 	if (!memonum)
 	{
 		command_fail(si, fault_badparams, _("Invalid message index."));
 		return;
 	}
 
-	/* check if targetuser has nomemo set */
+	// check if targetuser has nomemo set
 	if (tmu->flags & MU_NOMEMO)
 	{
 		command_fail(si, fault_noprivs,
@@ -83,14 +78,14 @@ ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* Check to see if memo n exists */
+	// Check to see if memo n exists
 	if (memonum > si->smu->memos.count)
 	{
 		command_fail(si, fault_nosuch_key, _("Invalid memo number."));
 		return;
 	}
 
-	/* Check to make sure target inbox not full */
+	// Check to make sure target inbox not full
 	if (tmu->memos.count >= me.mdlimit)
 	{
 		command_fail(si, fault_toomany, _("Target inbox is full."));
@@ -98,7 +93,7 @@ ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* rate limit it -- jilles */
+	// rate limit it -- jilles
 	if (CURRTIME - si->smu->memo_ratelimit_time > MEMO_MAX_TIME)
 		si->smu->memo_ratelimit_num = 0;
 	if (si->smu->memo_ratelimit_num > MEMO_MAX_NUM && !has_priv(si, PRIV_FLOOD))
@@ -109,7 +104,7 @@ ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])
 	si->smu->memo_ratelimit_num++;
 	si->smu->memo_ratelimit_time = CURRTIME;
 
-	/* Make sure we're not on ignore */
+	// Make sure we're not on ignore
 	MOWGLI_ITER_FOREACH(n, tmu->memo_ignores.head)
 	{
 		struct mynick *mn;
@@ -124,7 +119,7 @@ ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])
 		}
 		if (mu == si->smu)
 		{
-			/* Lie... change this if you want it to fail silent */
+			// Lie... change this if you want it to fail silent
 			logcommand(si, CMDLOG_SET, "failed FORWARD to \2%s\2 (on ignore list)", entity(tmu)->name);
 			command_success_nodata(si, _("The memo has been successfully forwarded to \2%s\2."), target);
 			return;
@@ -132,26 +127,26 @@ ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])
 	}
 	logcommand(si, CMDLOG_SET, "FORWARD: to \2%s\2", entity(tmu)->name);
 
-	/* Go to forwarding memos */
+	// Go to forwarding memos
 	MOWGLI_ITER_FOREACH(n, si->smu->memos.head)
 	{
 		if (i == memonum)
 		{
-			/* should have some function for send here...  ask nenolod*/
+			// should have some function for send here...  ask nenolod
 			memo = (struct mymemo *)n->data;
 			newmemo = smalloc(sizeof *newmemo);
 
-			/* Create memo */
+			// Create memo
 			newmemo->sent = CURRTIME;
 			mowgli_strlcpy(newmemo->sender, entity(si->smu)->name, sizeof newmemo->sender);
 			mowgli_strlcpy(newmemo->text, memo->text, sizeof newmemo->text);
 
-			/* Create node, add to their linked list of memos */
+			// Create node, add to their linked list of memos
 			temp = mowgli_node_create();
 			mowgli_node_add(newmemo, temp, &tmu->memos);
 			tmu->memoct_new++;
 
-			/* Should we email this? */
+			// Should we email this?
 			if (tmu->flags & MU_EMAILMEMOS)
 			{
 				sendemail(si->su, tmu, EMAIL_MEMO, tmu->email, memo->text);
@@ -160,8 +155,7 @@ ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])
 		i++;
 	}
 
-	/* Note: do not disclose other nicks they're logged in with
-	 * -- jilles */
+	// Note: do not disclose other nicks they're logged in with  -- jilles
 	tu = user_find_named(target);
 	if (tu != NULL && tu->myuser == tmu)
 	{
@@ -177,6 +171,8 @@ ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("The memo has been successfully forwarded to \2%s\2."), target);
 	return;
 }
+
+static struct command ms_forward = { "FORWARD", N_(N_("Forwards a memo.")), AC_AUTHENTICATED, 2, ms_cmd_forward, { .path = "memoserv/forward" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

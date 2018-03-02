@@ -9,15 +9,10 @@
 
 #define MAX_READ_AT_ONCE 5
 
-static void ms_cmd_read(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ms_read = { "READ", N_("Reads a memo."),
-                        AC_AUTHENTICATED, 2, ms_cmd_read, { .path = "memoserv/read" } };
-
 static void
 ms_cmd_read(struct sourceinfo *si, int parc, char *parv[])
 {
-	/* Misc structs etc */
+	// Misc structs etc
 	struct myuser *tmu;
 	struct mymemo *memo, *receipt;
 	mowgli_node_t *n;
@@ -26,7 +21,7 @@ ms_cmd_read(struct sourceinfo *si, int parc, char *parv[])
 	struct tm tm;
 	bool readnew;
 
-	/* Grab arg */
+	// Grab arg
 	char *arg1 = parv[0];
 
 	if (!arg1)
@@ -38,7 +33,7 @@ ms_cmd_read(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* Check to see if any memos */
+	// Check to see if any memos
 	if (!si->smu->memos.count)
 	{
 		command_fail(si, fault_nosuch_key, _("You have no memos."));
@@ -53,14 +48,14 @@ ms_cmd_read(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* Check to see if memonum is greater than memocount */
+	// Check to see if memonum is greater than memocount
 	if (memonum > si->smu->memos.count)
 	{
 		command_fail(si, fault_nosuch_key, _("Invalid message index."));
 		return;
 	}
 
-	/* Go to reading memos */
+	// Go to reading memos
 	MOWGLI_ITER_FOREACH(n, si->smu->memos.head)
 	{
 		memo = (struct mymemo *)n->data;
@@ -84,16 +79,16 @@ ms_cmd_read(struct sourceinfo *si, int parc, char *parv[])
 					myuser_notice(si->service->me->nick, tmu, "%s has read your memo, which was sent at %s", entity(si->smu)->name, strfbuf);
 				else
 				{
-					/* If they have an account, their inbox is not full and they aren't memoserv */
+					// If they have an account, their inbox is not full and they aren't memoserv
 					if ( (tmu != NULL) && (tmu->memos.count < me.mdlimit) && strcasecmp(si->service->nick, memo->sender))
 					{
-						/* Malloc and populate memo struct */
+						// Malloc and populate memo struct
 						receipt = smalloc(sizeof *receipt);
 						receipt->sent = CURRTIME;
 						mowgli_strlcpy(receipt->sender, si->service->nick, sizeof receipt->sender);
 						snprintf(receipt->text, sizeof receipt->text, "%s has read a memo from you sent at %s", entity(si->smu)->name, strfbuf);
 
-						/* Attach to their linked list */
+						// Attach to their linked list
 						n = mowgli_node_create();
 						mowgli_node_add(receipt, n, &tmu->memos);
 						tmu->memoct_new++;
@@ -125,6 +120,8 @@ ms_cmd_read(struct sourceinfo *si, int parc, char *parv[])
 	else if (readnew)
 		command_success_nodata(si, _("Read %d memos."), numread);
 }
+
+static struct command ms_read = { "READ", N_("Reads a memo."), AC_AUTHENTICATED, 2, ms_cmd_read, { .path = "memoserv/read" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

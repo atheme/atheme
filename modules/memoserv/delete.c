@@ -7,27 +7,20 @@
 
 #include "atheme.h"
 
-static void ms_cmd_delete(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ms_delete = { "DELETE", N_("Deletes memos."),
-                        AC_AUTHENTICATED, 1, ms_cmd_delete, { .path = "memoserv/delete" } };
-static struct command ms_del = { "DEL", N_("Alias for DELETE"),
-			AC_AUTHENTICATED, 1, ms_cmd_delete, { .path = "memoserv/delete" } };
-
 static void
 ms_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
 {
-	/* Misc structs etc */
+	// Misc structs etc
 	mowgli_node_t *n, *tn;
 	unsigned int i = 0, delcount = 0, memonum = 0;
 	unsigned int deleteall = 0, deleteold = 0;
 	struct mymemo *memo;
 	char *errptr = NULL;
 
-	/* We only take 1 arg, and we ignore all others */
+	// We only take 1 arg, and we ignore all others
 	char *arg1 = parv[0];
 
-	/* Does the arg exist? */
+	// Does the arg exist?
 	if (!arg1)
 	{
 		command_fail(si, fault_needmoreparams,
@@ -37,14 +30,14 @@ ms_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* Do we have any memos? */
+	// Do we have any memos?
 	if (!si->smu->memos.count)
 	{
 		command_fail(si, fault_nochange, _("You have no memos to delete."));
 		return;
 	}
 
-	/* Do we want to delete all memos? */
+	// Do we want to delete all memos?
 	if (!strcasecmp("all",arg1))
 	{
 		deleteall = 1;
@@ -57,14 +50,14 @@ ms_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
 	{
 		memonum = strtoul(arg1, &errptr, 10);
 
-		/* Make sure they didn't slip us an alphabetic index */
+		// Make sure they didn't slip us an alphabetic index
 		if (!memonum || (errptr && *errptr))
 		{
 			command_fail(si, fault_badparams, _("Invalid message index."));
 			return;
 		}
 
-		/* If int, does that index exist? And do we have something to delete? */
+		// If int, does that index exist? And do we have something to delete?
 		if (memonum > si->smu->memos.count)
 		{
 			command_fail(si, fault_nosuch_key, _("The specified memo doesn't exist."));
@@ -74,7 +67,7 @@ ms_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
 
 	delcount = 0;
 
-	/* Iterate through memos, doing deletion */
+	// Iterate through memos, doing deletion
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, si->smu->memos.head)
 	{
 		i++;
@@ -88,7 +81,7 @@ ms_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
 			if (!(memo->status & MEMO_READ))
 				si->smu->memoct_new--;
 
-			/* Free to node pool, remove from chain */
+			// Free to node pool, remove from chain
 			mowgli_node_delete(n, &si->smu->memos);
 			mowgli_node_free(n);
 
@@ -101,6 +94,9 @@ ms_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
 
 	return;
 }
+
+static struct command ms_delete = { "DELETE", N_("Deletes memos."), AC_AUTHENTICATED, 1, ms_cmd_delete, { .path = "memoserv/delete" } };
+static struct command ms_del = { "DEL", N_("Alias for DELETE"), AC_AUTHENTICATED, 1, ms_cmd_delete, { .path = "memoserv/delete" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

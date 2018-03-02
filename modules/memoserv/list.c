@@ -7,15 +7,10 @@
 
 #include "atheme.h"
 
-static void ms_cmd_list(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ms_list = { "LIST", N_(N_("Lists all of your memos.")),
-                        AC_AUTHENTICATED, 0, ms_cmd_list, { .path = "memoserv/list" } };
-
 static void
 ms_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
-	/* Misc structs etc */
+	// Misc structs etc
 	struct mymemo *memo;
 	mowgli_node_t *n;
 	unsigned int i = 0;
@@ -29,11 +24,11 @@ ms_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 					    N_("You have %zu memos (%d new)."),
 					    si->smu->memos.count), si->smu->memos.count, si->smu->memoct_new);
 
-	/* Check to see if any memos */
+	// Check to see if any memos
 	if (!si->smu->memos.count)
 		return;
 
-	/* Go to listing memos */
+	// Go to listing memos
 	command_success_nodata(si, " ");
 
 	MOWGLI_ITER_FOREACH(n, si->smu->memos.head)
@@ -68,6 +63,8 @@ ms_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 
 	return;
 }
+
+static struct command ms_list = { "LIST", N_(N_("Lists all of your memos.")), AC_AUTHENTICATED, 0, ms_cmd_list, { .path = "memoserv/list" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

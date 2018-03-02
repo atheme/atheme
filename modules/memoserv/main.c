@@ -8,11 +8,7 @@
 #include "atheme.h"
 #include <limits.h>
 
-static void on_user_identify(struct user *u);
-static void on_user_away(struct user *u);
-
 static struct service *memosvs = NULL;
-/*struct memoserv_conf *memosvs_conf;*/
 
 // Imported by modules/memoserv/send*.so
 unsigned int maxmemos;

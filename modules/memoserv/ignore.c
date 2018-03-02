@@ -7,28 +7,16 @@
 
 #include "atheme.h"
 
-static void ms_cmd_ignore(struct sourceinfo *si, int parc, char *parv[]);
-static void ms_cmd_ignore_add(struct sourceinfo *si, int parc, char *parv[]);
-static void ms_cmd_ignore_del(struct sourceinfo *si, int parc, char *parv[]);
-static void ms_cmd_ignore_clear(struct sourceinfo *si, int parc, char *parv[]);
-static void ms_cmd_ignore_list(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ms_ignore = { "IGNORE", N_(N_("Ignores memos.")), AC_AUTHENTICATED, 2, ms_cmd_ignore, { .path = "memoserv/ignore" } };
-static struct command ms_ignore_add = { "ADD", N_(N_("Ignores memos from a user.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_add, { .path = "" } };
-static struct command ms_ignore_del = { "DEL", N_(N_("Stops ignoring memos from a user.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_del, { .path = "" } };
-static struct command ms_ignore_clear = { "CLEAR", N_(N_("Clears your memo ignore list.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_clear, { .path = "" } };
-static struct command ms_ignore_list = { "LIST", N_(N_("Shows all users you are ignoring memos from.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_list, { .path = "" } };
-
 static mowgli_patricia_t *ms_ignore_cmds = NULL;
 
 static void
 ms_cmd_ignore(struct sourceinfo *si, int parc, char *parv[])
 {
-	/* Grab args */
+	// Grab args
 	char *cmd = parv[0];
 	struct command *c;
 
-	/* Bad/missing arg */
+	// Bad/missing arg
 	if (!cmd)
 	{
 		command_fail(si, fault_needmoreparams,
@@ -56,7 +44,7 @@ ms_cmd_ignore_add(struct sourceinfo *si, int parc, char *parv[])
 	const char *newnick;
 	char *temp;
 
-	/* Arg check */
+	// Arg check
 	if (parc < 1)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "IGNORE");
@@ -65,14 +53,14 @@ ms_cmd_ignore_add(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* User attempting to ignore themself? */
+	// User attempting to ignore themself?
 	if (!irccasecmp(parv[0], entity(si->smu)->name))
 	{
 		command_fail(si, fault_badparams, _("Silly wabbit, you can't ignore yourself."));
 		return;
 	}
 
-	/* Does the target account exist? */
+	// Does the target account exist?
 	if (!(tmu = myuser_find_ext(parv[0])))
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
@@ -80,19 +68,19 @@ ms_cmd_ignore_add(struct sourceinfo *si, int parc, char *parv[])
 	}
 	newnick = entity(tmu)->name;
 
-	/* Ignore list is full */
+	// Ignore list is full
 	if (si->smu->memo_ignores.count >= MAXMSIGNORES)
 	{
 		command_fail(si, fault_toomany, _("Your ignore list is full, please DEL an account."));
 		return;
 	}
 
-	/* Iterate through list, make sure target not in it, if last node append */
+	// Iterate through list, make sure target not in it, if last node append
 	MOWGLI_ITER_FOREACH(n, si->smu->memo_ignores.head)
 	{
 		temp = (char *)n->data;
 
-		/* Already in the list */
+		// Already in the list
 		if (!irccasecmp(temp, newnick))
 		{
 			command_fail(si, fault_nochange, _("Account \2%s\2 is already in your ignore list."), temp);
@@ -100,7 +88,7 @@ ms_cmd_ignore_add(struct sourceinfo *si, int parc, char *parv[])
 		}
 	}
 
-	/* Add to ignore list */
+	// Add to ignore list
 	temp = sstrdup(newnick);
 	mowgli_node_add(temp, mowgli_node_create(), &si->smu->memo_ignores);
 	logcommand(si, CMDLOG_SET, "IGNORE:ADD: \2%s\2", newnick);
@@ -114,7 +102,7 @@ ms_cmd_ignore_del(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_node_t *n, *tn;
 	char *temp;
 
-	/* Arg check */
+	// Arg check
 	if (parc < 1)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "IGNORE");
@@ -122,12 +110,12 @@ ms_cmd_ignore_del(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* Iterate through list, make sure they're not in it, if last node append */
+	// Iterate through list, make sure they're not in it, if last node append
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, si->smu->memo_ignores.head)
 	{
 		temp = (char *)n->data;
 
-		/* Not using list or clear, but we've found our target in the ignore list */
+		// Not using list or clear, but we've found our target in the ignore list
 		if (!irccasecmp(temp, parv[0]))
 		{
 			logcommand(si, CMDLOG_SET, "IGNORE:DEL: \2%s\2", temp);
@@ -162,7 +150,7 @@ ms_cmd_ignore_clear(struct sourceinfo *si, int parc, char *parv[])
 		mowgli_node_free(n);
 	}
 
-	/* Let them know list is clear */
+	// Let them know list is clear
 	command_success_nodata(si, _("Ignore list cleared."));
 	logcommand(si, CMDLOG_SET, "IGNORE:CLEAR");
 	return;
@@ -174,24 +162,30 @@ ms_cmd_ignore_list(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_node_t *n;
 	unsigned int i = 1;
 
-	/* Throw in list header */
+	// Throw in list header
 	command_success_nodata(si, _("Ignore list:"));
 	command_success_nodata(si, "-------------------------");
 
-	/* Iterate through list, make sure they're not in it, if last node append */
+	// Iterate through list, make sure they're not in it, if last node append
 	MOWGLI_ITER_FOREACH(n, si->smu->memo_ignores.head)
 	{
 		command_success_nodata(si, "%d - %s", i, (char *)n->data);
 		i++;
 	}
 
-	/* Ignore list footer */
+	// Ignore list footer
 	if (i == 1)
 		command_success_nodata(si, _("list empty"));
 
 	command_success_nodata(si, "-------------------------");
 	return;
 }
+
+static struct command ms_ignore = { "IGNORE", N_(N_("Ignores memos.")), AC_AUTHENTICATED, 2, ms_cmd_ignore, { .path = "memoserv/ignore" } };
+static struct command ms_ignore_add = { "ADD", N_(N_("Ignores memos from a user.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_add, { .path = "" } };
+static struct command ms_ignore_del = { "DEL", N_(N_("Stops ignoring memos from a user.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_del, { .path = "" } };
+static struct command ms_ignore_clear = { "CLEAR", N_(N_("Clears your memo ignore list.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_clear, { .path = "" } };
+static struct command ms_ignore_list = { "LIST", N_(N_("Shows all users you are ignoring memos from.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_list, { .path = "" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
@@ -200,7 +194,7 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 
 	ms_ignore_cmds = mowgli_patricia_create(strcasecanon);
 
-	/* Add sub-commands */
+	// Add sub-commands
 	command_add(&ms_ignore_add, ms_ignore_cmds);
 	command_add(&ms_ignore_del, ms_ignore_cmds);
 	command_add(&ms_ignore_clear, ms_ignore_cmds);
@@ -212,7 +206,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	service_named_unbind_command("memoserv", &ms_ignore);
 
-	/* Delete sub-commands */
+	// Delete sub-commands
 	command_delete(&ms_ignore_add, ms_ignore_cmds);
 	command_delete(&ms_ignore_del, ms_ignore_cmds);
 	command_delete(&ms_ignore_clear, ms_ignore_cmds);
