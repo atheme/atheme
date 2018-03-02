@@ -50,7 +50,7 @@ sasl_get_source_name(struct sourceinfo *const restrict si)
 	else
 		(void) mowgli_strlcpy(description, "Unknown user (via SASL)", sizeof description);
 
-	/* we can reasonably assume that si->v is non-null as this is part of the SASL vtable */
+	// we can reasonably assume that si->v is non-null as this is part of the SASL vtable
 	if (si->sourcedesc)
 		(void) snprintf(result, sizeof result, "<%s:%s>%s", description, si->sourcedesc,
 		                si->smu ? entity(si->smu)->name : "");
@@ -60,17 +60,17 @@ sasl_get_source_name(struct sourceinfo *const restrict si)
 	return result;
 }
 
-static struct sourceinfo_vtable sasl_vtable = {
-
-	.description        = "SASL",
-	.format             = sasl_format_sourceinfo,
-	.get_source_name    = sasl_get_source_name,
-	.get_source_mask    = sasl_get_source_name,
-};
-
 static void
 sasl_sourceinfo_recreate(struct sasl_session *const restrict p)
 {
+	static struct sourceinfo_vtable sasl_vtable = {
+
+		.description        = "SASL",
+		.format             = sasl_format_sourceinfo,
+		.get_source_name    = sasl_get_source_name,
+		.get_source_mask    = sasl_get_source_name,
+	};
+
 	if (p->si)
 		(void) atheme_object_unref(p->si);
 
@@ -93,7 +93,6 @@ sasl_sourceinfo_recreate(struct sasl_session *const restrict p)
 	p->si = &ssi->parent;
 }
 
-/* find an existing session by uid */
 static struct sasl_session *
 find_session(const char *const restrict uid)
 {
@@ -113,7 +112,6 @@ find_session(const char *const restrict uid)
 	return NULL;
 }
 
-/* create a new session if it does not already exist */
 static struct sasl_session *
 find_or_make_session(const char *const restrict uid, struct server *const restrict server)
 {
@@ -133,7 +131,6 @@ find_or_make_session(const char *const restrict uid, struct server *const restri
 	return p;
 }
 
-/* find a mechanism by name */
 static struct sasl_mechanism *
 find_mechanism(const char *const restrict name)
 {
@@ -155,7 +152,6 @@ find_mechanism(const char *const restrict name)
 static void
 sasl_server_eob(struct server ATHEME_VATTR_UNUSED *const restrict s)
 {
-	/* new server online, push mechlist to make sure it's using the current one */
 	(void) sasl_mechlist_sts(mechlist_string);
 }
 
@@ -192,7 +188,6 @@ mechlist_do_rebuild(void)
 {
 	(void) mechlist_build_string();
 
-	/* push mechanism list to the network */
 	if (me.connected)
 		(void) sasl_mechlist_sts(mechlist_string);
 }
@@ -200,29 +195,29 @@ mechlist_do_rebuild(void)
 static bool
 may_impersonate(struct myuser *const source_mu, struct myuser *const target_mu)
 {
-	/* Allow same (although this function won't get called in that case anyway) */
+	// Allow same (although this function won't get called in that case anyway)
 	if (source_mu == target_mu)
 		return true;
 
 	char priv[BUFSIZE] = PRIV_IMPERSONATE_ANY;
 
-	/* Check for wildcard priv */
+	// Check for wildcard priv
 	if (has_priv_myuser(source_mu, priv))
 		return true;
 
-	/* Check for target-operclass specific priv */
+	// Check for target-operclass specific priv
 	const char *const classname = (target_mu->soper && target_mu->soper->classname) ?
 	                                  target_mu->soper->classname : "user";
 	(void) snprintf(priv, sizeof priv, PRIV_IMPERSONATE_CLASS_FMT, classname);
 	if (has_priv_myuser(source_mu, priv))
 		return true;
 
-	/* Check for target-entity specific priv */
+	// Check for target-entity specific priv
 	(void) snprintf(priv, sizeof priv, PRIV_IMPERSONATE_ENTITY_FMT, entity(target_mu)->name);
 	if (has_priv_myuser(source_mu, priv))
 		return true;
 
-	/* Allow modules to check too */
+	// Allow modules to check too
 	hook_sasl_may_impersonate_t req = {
 
 		.source_mu = source_mu,
@@ -235,12 +230,11 @@ may_impersonate(struct myuser *const source_mu, struct myuser *const target_mu)
 	return req.allowed;
 }
 
-/* authenticated, now double check that their account is ok for login */
 static struct myuser *
 login_user(struct sasl_session *const restrict p)
 {
-	/* source_mu is the user whose credentials we verified ("authentication id") */
-	/* target_mu is the user who will be ultimately logged in ("authorization id") */
+	// source_mu is the user whose credentials we verified ("authentication id")
+	// target_mu is the user who will be ultimately logged in ("authorization id")
 	struct myuser *source_mu;
 	struct myuser *target_mu;
 
@@ -287,7 +281,7 @@ login_user(struct sasl_session *const restrict p)
 		return NULL;
 	}
 
-	/* Log it with the full n!u@h later */
+	// Log it with the full n!u@h later
 	p->flags |= ASASL_NEED_LOG;
 
 	/* We just did SASL authentication for a user.  With IRCds which do not
@@ -309,7 +303,6 @@ login_user(struct sasl_session *const restrict p)
 	return target_mu;
 }
 
-/* output an arbitrary amount of data to the SASL client */
 static void
 sasl_write(const char *const restrict target, const char *restrict data, const size_t length)
 {
@@ -401,7 +394,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 			(void) slog(LG_DEBUG, "%s: base64_decode() failed", __func__);
 	}
 
-	/* Some progress has been made, reset timeout. */
+	// Some progress has been made, reset timeout.
 	p->flags &= ~ASASL_MARKED_FOR_DELETION;
 
 	if (rc == ASASL_DONE)
@@ -421,7 +414,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 
 			(void) sasl_sts(p->uid, 'D', "S");
 
-			/* Will destroy session on introduction of user to net. */
+			// Will destroy session on introduction of user to net.
 			return true;
 		}
 
@@ -542,13 +535,13 @@ sasl_input_clientdata(const struct sasl_message *const restrict smsg, struct sas
 
 	const size_t len = strlen(smsg->parv[0]);
 
-	/* End of data? */
+	// End of data?
 	if (len == 1 && smsg->parv[0][0] == '+')
 	{
 		if (p->buf)
 			return sasl_buf_process(p);
 
-		/* This function already deals with the special case of 1 '+' character */
+		// This function already deals with the special case of 1 '+' character
 		return sasl_packet(p, smsg->parv[0], len);
 	}
 
@@ -567,19 +560,18 @@ sasl_input_clientdata(const struct sasl_message *const restrict smsg, struct sas
 		return false;
 	}
 
-	/* (Re)allocate a buffer, append the received data to it, and update its recorded length. */
+	// (Re)allocate a buffer, append the received data to it, and update its recorded length.
 	p->buf = srealloc(p->buf, p->len + len + 1);
 	(void) memcpy(p->buf + p->len, smsg->parv[0], len);
 	p->len += len;
 
-	/* Messages not exactly 400 characters are the end of data. */
+	// Messages not exactly 400 characters are the end of data.
 	if (len < SASL_S2S_MAXLEN)
 		return sasl_buf_process(p);
 
 	return true;
 }
 
-/* free a session and all its contents */
 static void
 destroy_session(struct sasl_session *const restrict p)
 {
@@ -616,8 +608,6 @@ destroy_session(struct sasl_session *const restrict p)
 	(void) free(p);
 }
 
-/* abort an SASL session
- */
 static inline void
 sasl_session_abort(struct sasl_session *const restrict p)
 {
@@ -625,7 +615,6 @@ sasl_session_abort(struct sasl_session *const restrict p)
 	(void) destroy_session(p);
 }
 
-/* interpret an AUTHENTICATE message */
 static void
 sasl_input(struct sasl_message *const restrict smsg)
 {
@@ -634,49 +623,48 @@ sasl_input(struct sasl_message *const restrict smsg)
 	switch(smsg->mode)
 	{
 	case 'H':
-		/* (H)ost information */
+		// (H)ost information
 		(void) sasl_input_hostinfo(smsg, p);
 		return;
 
 	case 'S':
-		/* (S)tart authentication */
+		// (S)tart authentication
 		if (! sasl_input_startauth(smsg, p))
 			(void) sasl_session_abort(p);
 
 		return;
 
 	case 'C':
-		/* (C)lient data */
+		// (C)lient data
 		if (! sasl_input_clientdata(smsg, p))
 			(void) sasl_session_abort(p);
 
 		return;
 
 	case 'D':
-		/* (D)one -- when we receive it, means client abort */
+		// (D)one -- when we receive it, means client abort
 		(void) destroy_session(p);
 		return;
 	}
 }
 
-/* clean up after a user who is finally on the net */
 static void
 sasl_newuser(hook_user_nick_t *const restrict data)
 {
-	/* If the user has been killed, don't do anything. */
+	// If the user has been killed, don't do anything.
 	struct user *const u = data->u;
 	if (! u)
 		return;
 
-	/* Not concerned unless it's a SASL login. */
+	// Not concerned unless it's a SASL login.
 	struct sasl_session *const p = find_session(u->uid);
 	if (! p)
 		return;
 
-	/* We will log it ourselves, if needed */
+	// We will log it ourselves, if needed
 	p->flags &= ~ASASL_NEED_LOG;
 
-	/* Find the account */
+	// Find the account
 	struct myuser *const mu = *p->authzeid ? myuser_find_uid(p->authzeid) : NULL;
 	if (! mu)
 	{
@@ -684,7 +672,7 @@ sasl_newuser(hook_user_nick_t *const restrict data)
 		                                      *p->authzid ? p->authzid : "???");
 		(void) destroy_session(p);
 
-		/* We'll remove their ircd login in handle_burstlogin() */
+		// We'll remove their ircd login in handle_burstlogin()
 		return;
 	}
 
@@ -695,11 +683,6 @@ sasl_newuser(hook_user_nick_t *const restrict data)
 	(void) logcommand_user(saslsvs, u, CMDLOG_LOGIN, "LOGIN (%s)", mptr->name);
 }
 
-/* This function is run approximately once every 30 seconds.
- * It looks for flagged sessions, and deletes them, while
- * flagging all the others. This way stale sessions are deleted
- * after no more than 60 seconds.
- */
 static void
 delete_stale(void ATHEME_VATTR_UNUSED *const restrict vptr)
 {
@@ -808,22 +791,29 @@ sasl_authzid_can_login(struct sasl_session *const restrict p, const char *const 
 	return sasl_authxid_can_login(p, authzid, muo, p->authzid, p->authzeid, p->authceid);
 }
 
-/* main services client routine */
+const struct sasl_core_functions sasl_core_functions = {
+
+	.mech_register      = &sasl_mech_register,
+	.mech_unregister    = &sasl_mech_unregister,
+	.authcid_can_login  = &sasl_authcid_can_login,
+	.authzid_can_login  = &sasl_authzid_can_login,
+};
+
 static void
 saslserv(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	/* this should never happen */
+	// this should never happen
 	if (parv[0][0] == '&')
 	{
 		(void) slog(LG_ERROR, "%s: got parv with local channel: %s", __func__, parv[0]);
 		return;
 	}
 
-	/* make a copy of the original for debugging */
+	// make a copy of the original for debugging
 	char orig[BUFSIZE];
 	(void) mowgli_strlcpy(orig, parv[parc - 1], sizeof orig);
 
-	/* lets go through this to get the command */
+	// lets go through this to get the command
 	char *const cmd = strtok(parv[parc - 1], " ");
 	char *const text = strtok(NULL, "");
 
@@ -879,14 +869,5 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 		(void) slog(LG_ERROR, "saslserv/main: shutting down with a non-empty session list; "
 		                      "a mechanism did not unregister itself! (BUG)");
 }
-
-/* This structure is imported by SASL mechanism modules */
-const struct sasl_core_functions sasl_core_functions = {
-
-	.mech_register      = &sasl_mech_register,
-	.mech_unregister    = &sasl_mech_unregister,
-	.authcid_can_login  = &sasl_authcid_can_login,
-	.authzid_can_login  = &sasl_authzid_can_login,
-};
 
 SIMPLE_DECLARE_MODULE_V1("saslserv/main", MODULE_UNLOAD_CAPABILITY_OK)

@@ -16,9 +16,7 @@ mech_step(struct sasl_session *const restrict p, const void *const restrict in, 
 	if (! (p && in && inlen))
 		return ASASL_ERROR;
 
-	/*
-	 * Data format: authzid 0x00 authcid 0x00 password [0x00]
-	 */
+	// Data format: authzid 0x00 authcid 0x00 password [0x00]
 	if (inlen > (NICKLEN + 1 + NICKLEN + 1 + PASSLEN + 1))
 		return ASASL_ERROR;
 
@@ -55,7 +53,7 @@ mech_step(struct sasl_session *const restrict p, const void *const restrict in, 
 		return ASASL_ERROR;
 
 	if (mu->flags & MU_NOPASSWORD)
-		/* Don't bad_password() the user */
+		// Don't bad_password() the user
 		return ASASL_ERROR;
 
 	if (! verify_password(mu, secret))

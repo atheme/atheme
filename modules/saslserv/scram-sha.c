@@ -490,8 +490,7 @@ mech_step_success(const struct scramsha_session *const restrict s)
 		// User's password hash was already in SCRAM format, nothing to do
 		return ASASL_DONE;
 
-	/*
-	 * An SASL SCRAM-SHA login has succeeded, but the user's database hash was not in SCRAM format.
+	/* An SASL SCRAM-SHA login has succeeded, but the user's database hash was not in SCRAM format.
 	 *
 	 * If the database is breached in the future, the raw PBKDF2 digest ("SaltedPassword" in RFC 5802)
 	 * can be used to compute the ClientKey and impersonate the client to this service.
