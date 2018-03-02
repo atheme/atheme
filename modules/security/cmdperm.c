@@ -20,7 +20,7 @@
 
 #include "atheme.h"
 
-static bool (*parent_command_authorize)(struct service *svs, struct sourceinfo *si, struct command *c, const char *userlevel) = NULL;
+static bool (*parent_command_authorize)(struct service *, struct sourceinfo *, struct command *, const char *) = NULL;
 
 static bool
 cmdperm_command_authorize(struct service *svs, struct sourceinfo *si, struct command *c, const char *userlevel)
