@@ -43,16 +43,6 @@
 #define DIR_SET		1
 #define DIR_EQUAL	2
 
-static struct service *alis = NULL;
-
-static void alis_cmd_list(struct sourceinfo *si, int parc, char *parv[]);
-static void alis_cmd_help(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command alis_list = { "LIST", "Lists channels matching given parameters.",
-				AC_NONE, ALIS_MAX_PARC, alis_cmd_list, { .path = "alis/list" } };
-static struct command alis_help = { "HELP", "Displays contextual help information.",
-				AC_NONE, 1, alis_cmd_help, { .path = "help" } };
-
 struct alis_query
 {
 	char *mask;
@@ -70,6 +60,8 @@ struct alis_query
 	int maxmatches;
 	int showsecret;
 };
+
+static struct service *alis = NULL;
 
 static int
 alis_parse_mode(const char *text, int *key, int *limit, int *ext)
@@ -284,7 +276,7 @@ print_channel(struct sourceinfo *si, struct channel *chptr, struct alis_query *q
 	int show_topic = 1;
 	char topic[BUFSIZE];
 
-	/* cant show a topicwho, when a channel has no topic. */
+	// cant show a topicwho, when a channel has no topic
 	if(!chptr->topic)
 	{
 		show_topicwho = 0;
@@ -328,7 +320,7 @@ show_channel(struct channel *chptr, struct alis_query *query)
 {
 	int i;
 
-	/* skip +s channels unless -showsecret is used */
+	// skip +s channels unless -showsecret is used
 	if(chptr->modes & CMODE_SEC && !query->showsecret)
 		return 0;
 
@@ -406,7 +398,7 @@ alis_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 		"Returning maximum of %d channel names matching '\2%s\2'",
 		query.maxmatches, query.mask);
 
-	/* hunting for one channel.. */
+	// hunting for one channel...
 	if(strchr(query.mask, '*') == NULL && strchr(query.mask, '?') == NULL)
 	{
 		if((chptr = channel_find(query.mask)) != NULL)
@@ -424,7 +416,7 @@ alis_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 
 	MOWGLI_PATRICIA_FOREACH(chptr, &state, chanlist)
 	{
-		/* matches, so show it */
+		// matches, so show it
 		if(show_channel(chptr, &query))
 		{
 			print_channel(si, chptr, &query);
@@ -464,6 +456,9 @@ alis_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 
 	help_display(si, si->service, command, alis->commands);
 }
+
+static struct command alis_list = { "LIST", "Lists channels matching given parameters.", AC_NONE, ALIS_MAX_PARC, alis_cmd_list, { .path = "alis/list" } };
+static struct command alis_help = { "HELP", "Displays contextual help information.", AC_NONE, 1, alis_cmd_help, { .path = "help" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
