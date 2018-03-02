@@ -4,11 +4,6 @@
 #include "atheme.h"
 #include "prettyprint.h"
 
-static void rs_cmd_search(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command rs_search = { "SEARCH", N_("Search for games based on specific criteria."),
-                      AC_NONE, 20, rs_cmd_search, { .path = "rpgserv/search" } };
-
 static void
 rs_cmd_search(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -70,6 +65,8 @@ __matched:
 
 	logcommand(si, CMDLOG_GET, "RPGSERV:SEARCH");
 }
+
+static struct command rs_search = { "SEARCH", N_("Search for games based on specific criteria."), AC_NONE, 20, rs_cmd_search, { .path = "rpgserv/search" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -4,11 +4,6 @@
 
 #include "atheme.h"
 
-static void rs_cmd_help(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command rs_help = { "HELP", N_("Displays contextual help information."),
-                      AC_NONE, 2, rs_cmd_help, { .path = "help" } };
-
 static void
 rs_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -28,6 +23,8 @@ rs_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 
 	help_display(si, si->service, command, si->service->commands);
 }
+
+static struct command rs_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 2, rs_cmd_help, { .path = "help" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

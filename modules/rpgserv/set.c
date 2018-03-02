@@ -5,11 +5,6 @@
 #include "atheme.h"
 #include "prettyprint.h"
 
-static void rs_cmd_set(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command rs_set = { "SET", N_("Sets RPG properties of your channel."),
-                     AC_NONE, 3, rs_cmd_set, { .path = "rpgserv/set" } };
-
 static void
 setting_clear(struct sourceinfo *si, struct mychan *mc, char *setting)
 {
@@ -140,24 +135,24 @@ set_summary(struct sourceinfo *si, struct mychan *mc, char *value)
 	command_success_nodata(si, _("Summary for \2%s\2 set."), mc->name);
 }
 
-static struct {
-	char *name;
-	void (*func)(struct sourceinfo *si, struct mychan *mc, char *value);
-} settings[] = {
-	{ "genre", set_genre },
-	{ "period", set_period },
-	{ "ruleset", set_ruleset },
-	{ "rating", set_rating },
-	{ "system", set_system },
-	{ "setting", set_setting },
-	{ "storyline", set_storyline },
-	{ "summary", set_summary },
-	{ NULL, NULL },
-};
-
 static void
 rs_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 {
+	static const struct {
+		const char *name;
+		void (*func)(struct sourceinfo *, struct mychan *, char *);
+	} settings[] = {
+		{ "genre", set_genre },
+		{ "period", set_period },
+		{ "ruleset", set_ruleset },
+		{ "rating", set_rating },
+		{ "system", set_system },
+		{ "setting", set_setting },
+		{ "storyline", set_storyline },
+		{ "summary", set_summary },
+		{ NULL, NULL },
+	};
+
 	char *chan;
 	char *setting;
 	char *value = NULL;
@@ -213,6 +208,8 @@ rs_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("No such setting \2%s\2."), setting);
 	}
 }
+
+static struct command rs_set = { "SET", N_("Sets RPG properties of your channel."), AC_NONE, 3, rs_cmd_set, { .path = "rpgserv/set" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
