@@ -10,11 +10,6 @@
 #define IN_GROUPSERV_SET
 #include "groupserv.h"
 
-static void gs_help_set(struct sourceinfo *si, const char *subcmd);
-static void gs_cmd_set(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command gs_set = { "SET", N_("Sets various control flags."), AC_AUTHENTICATED, 3, gs_cmd_set, { .func = gs_help_set } };
-
 mowgli_patricia_t *gs_set_cmdtree;
 
 static void
@@ -38,7 +33,7 @@ gs_help_set(struct sourceinfo *si, const char *subcmd)
 		help_display_as_subcmd(si, si->service, "SET", subcmd, gs_set_cmdtree);
 }
 
-/* SET <!group> <setting> <parameters> */
+// SET <!group> <setting> <parameters>
 static void
 gs_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -74,6 +69,8 @@ gs_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 	parv[1] = group;
 	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
+
+static struct command gs_set = { "SET", N_("Sets various control flags."), AC_AUTHENTICATED, 3, gs_cmd_set, { .func = gs_help_set } };
 
 static void
 mod_init(struct module *const restrict m)

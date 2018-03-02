@@ -8,10 +8,6 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-static void gs_cmd_info(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command gs_info = { "INFO", N_("Displays information about registered groups."), AC_NONE, 2, gs_cmd_info, { .path = "groupserv/info" } };
-
 static void
 gs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -95,6 +91,8 @@ gs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_GET, "INFO: \2%s\2", parv[0]);
 }
+
+static struct command gs_info = { "INFO", N_("Displays information about registered groups."), AC_NONE, 2, gs_cmd_info, { .path = "groupserv/info" } };
 
 static void
 mod_init(struct module *const restrict m)

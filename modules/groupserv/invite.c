@@ -5,16 +5,10 @@
  * This file contains routines to handle the GroupServ INVITE command.
  */
 
-/* TODO:
- * We should probably add a way for the target user to remove pending invites
- */
+// TODO: We should probably add a way for the target user to remove pending invites
 
 #include "atheme.h"
 #include "groupserv.h"
-
-static void gs_cmd_invite(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command gs_invite = { "INVITE", N_("Invites a user to a group."), AC_AUTHENTICATED, 2, gs_cmd_invite, { .path = "groupserv/invite" } };
 
 static void
 gs_cmd_invite(struct sourceinfo *si, int parc, char *parv[])
@@ -87,6 +81,8 @@ gs_cmd_invite(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_SET, "INVITE: \2%s\2 \2%s\2", group, user);
 	command_success_nodata(si, _("\2%s\2 has been invited to \2%s\2"), user, group);
 }
+
+static struct command gs_invite = { "INVITE", N_("Invites a user to a group."), AC_AUTHENTICATED, 2, gs_cmd_invite, { .path = "groupserv/invite" } };
 
 static void
 mod_init(struct module *const restrict m)

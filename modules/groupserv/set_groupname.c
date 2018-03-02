@@ -10,11 +10,7 @@
 #include "uplink.h"
 #include "groupserv.h"
 
-static void gs_cmd_set_groupname(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command gs_set_groupname = { "GROUPNAME", N_("Changes the group's name."), AC_NONE, 1, gs_cmd_set_groupname, { .path = "groupserv/set_groupname" } };
-
-/* SET GROUPNAME <name> */
+// SET GROUPNAME <name>
 static void
 gs_cmd_set_groupname(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -68,6 +64,8 @@ gs_cmd_set_groupname(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_REGISTER, "SET:GROUPNAME: \2%s\2 to \2%s\2", oldname, newname);
 	command_success_nodata(si, _("The group \2%s\2 has been renamed to \2%s\2."), oldname, newname);
 }
+
+static struct command gs_set_groupname = { "GROUPNAME", N_("Changes the group's name."), AC_NONE, 1, gs_cmd_set_groupname, { .path = "groupserv/set_groupname" } };
 
 static void
 mod_init(struct module *const restrict m)

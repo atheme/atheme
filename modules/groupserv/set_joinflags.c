@@ -8,10 +8,6 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-static void gs_cmd_set_joinflags(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command gs_set_joinflags = { "JOINFLAGS", N_("Sets the flags users will be given when they JOIN the group."), AC_AUTHENTICATED, 2, gs_cmd_set_joinflags, { .path = "groupserv/set_joinflags" } };
-
 static void
 gs_cmd_set_joinflags(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -56,12 +52,14 @@ gs_cmd_set_joinflags(struct sourceinfo *si, int parc, char *parv[])
 
 	flags = gs_flags_parser(joinflags, 0, flags);
 
-	/* we'll overwrite any existing metadata */
+	// we'll overwrite any existing metadata
 	metadata_add(mg, "joinflags", number_to_string(flags));
 
 	logcommand(si, CMDLOG_SET, "SET:JOINFLAGS: \2%s\2 \2%s\2", entity(mg)->name, joinflags);
 	command_success_nodata(si, _("The join flags of \2%s\2 have been set to \2%s\2."), parv[0], joinflags);
 }
+
+static struct command gs_set_joinflags = { "JOINFLAGS", N_("Sets the flags users will be given when they JOIN the group."), AC_AUTHENTICATED, 2, gs_cmd_set_joinflags, { .path = "groupserv/set_joinflags" } };
 
 static void
 mod_init(struct module *const restrict m)

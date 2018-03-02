@@ -8,10 +8,6 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-static void gs_cmd_set_email(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command gs_set_email = { "EMAIL", N_("Sets the group e-mail address."), AC_AUTHENTICATED, 2, gs_cmd_set_email, { .path = "groupserv/set_email" } };
-
 static void
 gs_cmd_set_email(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -50,12 +46,14 @@ gs_cmd_set_email(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* we'll overwrite any existing metadata */
+	// we'll overwrite any existing metadata
 	metadata_add(mg, "email", mail);
 
 	logcommand(si, CMDLOG_SET, "SET:EMAIL: \2%s\2 \2%s\2", entity(mg)->name, mail);
 	command_success_nodata(si, _("The e-mail address for group \2%s\2 has been set to \2%s\2."), parv[0], mail);
 }
+
+static struct command gs_set_email = { "EMAIL", N_("Sets the group e-mail address."), AC_AUTHENTICATED, 2, gs_cmd_set_email, { .path = "groupserv/set_email" } };
 
 static void
 mod_init(struct module *const restrict m)

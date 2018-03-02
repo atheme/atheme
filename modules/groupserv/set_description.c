@@ -8,10 +8,6 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-static void gs_cmd_set_description(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command gs_set_description = { "DESCRIPTION", N_("Sets the group description."), AC_AUTHENTICATED, 2, gs_cmd_set_description, { .path = "groupserv/set_description" } };
-
 static void
 gs_cmd_set_description(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -47,12 +43,14 @@ gs_cmd_set_description(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* we'll overwrite any existing metadata */
+	// we'll overwrite any existing metadata
 	metadata_add(mg, "description", desc);
 
 	logcommand(si, CMDLOG_SET, "SET:DESCRIPTION: \2%s\2 \2%s\2", entity(mg)->name, desc);
 	command_success_nodata(si, _("The description of \2%s\2 has been set to \2%s\2."), parv[0], desc);
 }
+
+static struct command gs_set_description = { "DESCRIPTION", N_("Sets the group description."), AC_AUTHENTICATED, 2, gs_cmd_set_description, { .path = "groupserv/set_description" } };
 
 static void
 mod_init(struct module *const restrict m)

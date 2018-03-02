@@ -8,10 +8,6 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-static void gs_cmd_flags(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command gs_flags = { "FLAGS", N_("Sets flags on a user in a group."), AC_AUTHENTICATED, 3, gs_cmd_flags, { .path = "groupserv/flags" } };
-
 static void
 gs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -76,7 +72,7 @@ gs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* simple check since it's already checked above */
+	// simple check since it's already checked above
 	if (operoverride)
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
@@ -109,7 +105,7 @@ gs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 	oldflags = flags;
 	flags = gs_flags_parser(parv[2], 1, flags);
 
-	/* check for MU_NEVEROP and forbid committing the change if it's enabled */
+	// check for MU_NEVEROP and forbid committing the change if it's enabled
 	if (!(oldflags & GA_CHANACS) && (flags & GA_CHANACS))
 	{
 		if (isuser(mt) && user(mt)->flags & MU_NEVEROP)
@@ -196,9 +192,11 @@ no_founder:
 
 	command_success_nodata(si, _("\2%s\2 now has flags \2%s\2 on \2%s\2."), mt->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name);
 
-	/* XXX */
+	// XXX
 	logcommand(si, CMDLOG_SET, "FLAGS: \2%s\2 now has flags \2%s\2 on \2%s\2", mt->name, gflags_tostr(ga_flags,  ga->flags), entity(mg)->name);
 }
+
+static struct command gs_flags = { "FLAGS", N_("Sets flags on a user in a group."), AC_AUTHENTICATED, 3, gs_cmd_flags, { .path = "groupserv/flags" } };
 
 static void
 mod_init(struct module *const restrict m)

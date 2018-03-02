@@ -8,10 +8,6 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-static void gs_cmd_set_channel(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command gs_set_channel = { "CHANNEL", N_("Sets the official group channel."), AC_AUTHENTICATED, 2, gs_cmd_set_channel, { .path = "groupserv/set_channel" } };
-
 static void
 gs_cmd_set_channel(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -47,12 +43,14 @@ gs_cmd_set_channel(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* we'll overwrite any existing metadata */
+	// we'll overwrite any existing metadata
 	metadata_add(mg, "channel", chan);
 
 	logcommand(si, CMDLOG_SET, "SET:CHANNEL: \2%s\2 \2%s\2", entity(mg)->name, chan);
 	command_success_nodata(si, _("The official channel of \2%s\2 has been set to \2%s\2."), parv[0], chan);
 }
+
+static struct command gs_set_channel = { "CHANNEL", N_("Sets the official group channel."), AC_AUTHENTICATED, 2, gs_cmd_set_channel, { .path = "groupserv/set_channel" } };
 
 static void
 mod_init(struct module *const restrict m)

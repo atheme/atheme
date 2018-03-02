@@ -5,8 +5,6 @@
 #include "atheme.h"
 #include "groupserv_main.h"
 
-struct service *groupsvs;
-
 struct groupserv_persist_record
 {
 	int version;
@@ -16,6 +14,8 @@ struct groupserv_persist_record
 };
 
 extern mowgli_heap_t *mygroup_heap, *groupacs_heap;
+
+struct service *groupsvs;
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

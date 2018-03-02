@@ -40,14 +40,14 @@ mygroup_allow_foundership(struct myentity *mt)
 	return true;
 }
 
-static const struct entity_chanacs_validation_vtable mygroup_chanacs_validate = {
-	.match_entity = mygroup_chanacs_match_entity,
-	.can_register_channel = mygroup_can_register_channel,
-	.allow_foundership = mygroup_allow_foundership,
-};
-
 void
 mygroup_set_chanacs_validator(struct myentity *mt)
 {
+	static const struct entity_chanacs_validation_vtable mygroup_chanacs_validate = {
+		.match_entity = mygroup_chanacs_match_entity,
+		.can_register_channel = mygroup_can_register_channel,
+		.allow_foundership = mygroup_allow_foundership,
+	};
+
 	mt->chanacs_validate = &mygroup_chanacs_validate;
 }

@@ -144,7 +144,7 @@ db_h_gacl(struct database_handle *db, const char *type)
 {
 	struct mygroup *mg;
 	struct myentity *mt;
-	unsigned int flags = GA_ALL;	/* GDBV 1 entires had full access */
+	unsigned int flags = GA_ALL;	// GDBV 1 entires had full access
 
 	const char *name = db_sread_word(db);
 	const char *entity = db_sread_word(db);

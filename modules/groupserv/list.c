@@ -8,11 +8,7 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-static void gs_cmd_list(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command gs_list = { "LIST", N_("List registered groups."), PRIV_GROUP_AUSPEX, 1, gs_cmd_list, { .path = "groupserv/list" } };
-
-/* Perhaps add criteria to groupser/list like there is now in chanserv/list and nickserv/list in the future */
+// Perhaps add criteria to groupser/list like there is now in chanserv/list and nickserv/list in the future
 static void
 gs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -28,7 +24,7 @@ gs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* No need to say "Groups currently registered". You can't have a unregistered group. */
+	// No need to say "Groups currently registered". You can't have a unregistered group.
 	command_success_nodata(si, _("Groups matching pattern \2%s\2:"), pattern);
 
 	MYENTITY_FOREACH_T(mt, &state, ENT_GROUP)
@@ -51,6 +47,8 @@ gs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 (\2%d\2 matches)", pattern, matches);
 }
+
+static struct command gs_list = { "LIST", N_("List registered groups."), PRIV_GROUP_AUSPEX, 1, gs_cmd_list, { .path = "groupserv/list" } };
 
 static void
 mod_init(struct module *const restrict m)

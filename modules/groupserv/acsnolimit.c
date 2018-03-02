@@ -8,10 +8,6 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-static void gs_cmd_acsnolimit(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command gs_acsnolimit = { "ACSNOLIMIT", N_("Allow a group to bypass access list limits."), PRIV_GROUP_ADMIN, 2, gs_cmd_acsnolimit, { .path = "groupserv/acsnolimit" } };
-
 static void
 gs_cmd_acsnolimit(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -64,6 +60,8 @@ gs_cmd_acsnolimit(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Syntax: ACSNOLIMIT <!group> <ON|OFF>"));
 	}
 }
+
+static struct command gs_acsnolimit = { "ACSNOLIMIT", N_("Allow a group to bypass access list limits."), PRIV_GROUP_ADMIN, 2, gs_cmd_acsnolimit, { .path = "groupserv/acsnolimit" } };
 
 static void
 mod_init(struct module *const restrict m)

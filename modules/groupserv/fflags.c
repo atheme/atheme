@@ -8,10 +8,6 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-static void gs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command gs_fflags = { "FFLAGS", N_("Forces a flag change on a user in a group."), PRIV_GROUP_ADMIN, 3, gs_cmd_fflags, { .path = "groupserv/fflags" } };
-
 static void
 gs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -100,10 +96,12 @@ gs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("\2%s\2 now has flags \2%s\2 on \2%s\2."), mt->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name);
 
-	/* XXX */
+	// XXX
 	wallops("\2%s\2 is modifying flags(\2%s\2) for \2%s\2 on \2%s\2", get_oper_name(si), gflags_tostr(ga_flags, ga->flags), mt->name, entity(mg)->name);
 	logcommand(si, CMDLOG_ADMIN, "FFLAGS: \2%s\2 now has flags \2%s\2 on \2%s\2", mt->name, gflags_tostr(ga_flags,  ga->flags), entity(mg)->name);
 }
+
+static struct command gs_fflags = { "FFLAGS", N_("Forces a flag change on a user in a group."), PRIV_GROUP_ADMIN, 3, gs_cmd_fflags, { .path = "groupserv/fflags" } };
 
 static void
 mod_init(struct module *const restrict m)

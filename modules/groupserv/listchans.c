@@ -8,10 +8,6 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-static void gs_cmd_listchans(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command gs_listchans = { "LISTCHANS", N_("Lists channels that a group has access to."), AC_NONE, 1, gs_cmd_listchans, { .path = "groupserv/listchans" } };
-
 static void
 gs_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -21,7 +17,7 @@ gs_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 	bool operoverride = false;
 	unsigned int akicks = 0, i;
 
-	/* target */
+	// target
 	char *target = parv[0];
 
 	if (!target)
@@ -63,7 +59,7 @@ gs_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 	{
 		ca = (struct chanacs *)n->data;
 
-		/* don't tell users they're akicked (flag +b) */
+		// don't tell users they're akicked (flag +b)
 		if (ca->level != CA_AKICK)
 			command_success_nodata(si, _("Access flag(s) %s in %s"), bitmask_to_flags(ca->level), ca->mychan->name);
 		else
@@ -79,6 +75,8 @@ gs_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 						    N_("\2%d\2 channel access matches for the group \2%s\2"), i),
 						    i, entity(mg)->name);
 }
+
+static struct command gs_listchans = { "LISTCHANS", N_("Lists channels that a group has access to."), AC_NONE, 1, gs_cmd_listchans, { .path = "groupserv/listchans" } };
 
 static void
 mod_init(struct module *const restrict m)

@@ -305,7 +305,7 @@ gs_flags_parser(char *flagstring, bool allow_minus, unsigned int flags)
 				flags = 0;
 			else
 			{
-				/* preserve existing flags except GA_BAN */
+				// preserve existing flags except GA_BAN
 				flags |= GA_ALL;
 				flags &= ~GA_BAN;
 			}
@@ -341,13 +341,13 @@ remove_group_chanacs(struct mygroup *mg)
 	struct myuser *successor;
 	mowgli_node_t *n, *tn;
 
-	/* kill all their channels and chanacs */
+	// kill all their channels and chanacs
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, entity(mg)->chanacs.head)
 	{
 		ca = n->data;
 		mc = ca->mychan;
 
-		/* attempt succession */
+		// attempt succession
 		if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1 && (successor = mychan_pick_successor(mc)) != NULL)
 		{
 			slog(LG_INFO, _("SUCCESSION: \2%s\2 to \2%s\2 from \2%s\2"), mc->name, entity(successor)->name, entity(mg)->name);
@@ -364,7 +364,7 @@ remove_group_chanacs(struct mygroup *mg)
 				myuser_notice(chansvs.nick, successor, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, entity(successor)->name);
 			atheme_object_unref(ca);
 		}
-		/* no successor found */
+		// no successor found
 		else if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1)
 		{
 			slog(LG_REGISTER, _("DELETE: \2%s\2 from \2%s\2"), mc->name, entity(mg)->name);
@@ -378,7 +378,7 @@ remove_group_chanacs(struct mygroup *mg)
 				part(mc->name, chansvs.nick);
 			atheme_object_unref(mc);
 		}
-		else /* not founder */
+		else // not founder
 			atheme_object_unref(ca);
 	}
 }

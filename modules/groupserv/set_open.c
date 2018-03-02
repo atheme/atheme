@@ -8,10 +8,6 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-static void gs_cmd_set_open(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command gs_set_open = { "OPEN", N_("Sets the group as open for anyone to join."), AC_AUTHENTICATED, 2, gs_cmd_set_open, { .path = "groupserv/set_open" } };
-
 static void
 gs_cmd_set_open(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -74,6 +70,8 @@ gs_cmd_set_open(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Syntax: OPEN <!group> <ON|OFF>"));
 	}
 }
+
+static struct command gs_set_open = { "OPEN", N_("Sets the group as open for anyone to join."), AC_AUTHENTICATED, 2, gs_cmd_set_open, { .path = "groupserv/set_open" } };
 
 static void
 mod_init(struct module *const restrict m)

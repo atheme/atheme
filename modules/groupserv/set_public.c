@@ -8,10 +8,6 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-static void gs_cmd_set_public(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command gs_set_public = { "PUBLIC", N_("Sets the group as public."), AC_AUTHENTICATED, 2, gs_cmd_set_public, { .path = "groupserv/set_public" } };
-
 static void
 gs_cmd_set_public(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -68,6 +64,8 @@ gs_cmd_set_public(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Syntax: PUBLIC <!group> <ON|OFF>"));
 	}
 }
+
+static struct command gs_set_public = { "PUBLIC", N_("Sets the group as public."), AC_AUTHENTICATED, 2, gs_cmd_set_public, { .path = "groupserv/set_public" } };
 
 static void
 mod_init(struct module *const restrict m)

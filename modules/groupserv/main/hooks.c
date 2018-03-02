@@ -4,6 +4,8 @@
 
 #include "groupserv_main.h"
 
+static mowgli_eventloop_timer_t *mygroup_expire_timer = NULL;
+
 static void
 mygroup_expire(void *unused)
 {
@@ -57,7 +59,7 @@ grant_channel_access_hook(struct user *u)
 			{
 				if (ca->level & CA_AKICK && !(ca->level & CA_EXEMPT))
 				{
-					/* Stay on channel if this would empty it -- jilles */
+					// Stay on channel if this would empty it -- jilles
 					if (ca->mychan->chan->nummembers - ca->mychan->chan->numsvcmembers == 1)
 					{
 						ca->mychan->flags |= MC_INHABIT;
@@ -148,7 +150,7 @@ sasl_may_impersonate_hook(hook_sasl_may_impersonate_t *req)
 	mowgli_list_t *l;
 	mowgli_node_t *n;
 
-	/* if the request is already granted, don't bother doing any of this. */
+	// if the request is already granted, don't bother doing any of this.
 	if (req->allowed)
 		return;
 
@@ -196,8 +198,6 @@ osinfo_hook(struct sourceinfo *si)
 	command_success_nodata(si, "Are open groups allowed: %s", gs_config.enable_open_groups ? "Yes" : "No");
 	command_success_nodata(si, "Default joinflags for open groups: %s", gs_config.join_flags);
 }
-
-static mowgli_eventloop_timer_t *mygroup_expire_timer = NULL;
 
 void
 gs_hooks_init(void)

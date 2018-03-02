@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2005 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
@@ -8,10 +7,6 @@
 
 #include "atheme.h"
 #include "groupserv.h"
-
-static void gs_cmd_regnolimit(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command gs_regnolimit = { "REGNOLIMIT", N_("Allow a group to bypass registration limits."), PRIV_GROUP_ADMIN, 2, gs_cmd_regnolimit, { .path = "groupserv/regnolimit" } };
 
 static void
 gs_cmd_regnolimit(struct sourceinfo *si, int parc, char *parv[])
@@ -65,6 +60,8 @@ gs_cmd_regnolimit(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Syntax: REGNOLIMIT <!group> <ON|OFF>"));
 	}
 }
+
+static struct command gs_regnolimit = { "REGNOLIMIT", N_("Allow a group to bypass registration limits."), PRIV_GROUP_ADMIN, 2, gs_cmd_regnolimit, { .path = "groupserv/regnolimit" } };
 
 static void
 mod_init(struct module *const restrict m)
