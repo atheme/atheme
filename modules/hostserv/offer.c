@@ -10,21 +10,6 @@
 #include "hostserv.h"
 #include "../groupserv/groupserv.h"
 
-static void hs_cmd_offer(struct sourceinfo *si, int parc, char *parv[]);
-static void hs_cmd_unoffer(struct sourceinfo *si, int parc, char *parv[]);
-static void hs_cmd_offerlist(struct sourceinfo *si, int parc, char *parv[]);
-static void hs_cmd_take(struct sourceinfo *si, int parc, char *parv[]);
-
-static void write_hsofferdb(struct database_handle *db);
-static void db_h_ho(struct database_handle *db, const char *type);
-
-static void remove_group_offered_hosts(struct mygroup *mg);
-
-static struct command hs_offer = { "OFFER", N_("Sets vhosts available for users to take."), PRIV_USER_VHOST, 2, hs_cmd_offer, { .path = "hostserv/offer" } };
-static struct command hs_unoffer = { "UNOFFER", N_("Removes a vhost from the list that users can take."), PRIV_USER_VHOST, 2, hs_cmd_unoffer, { .path = "hostserv/unoffer" } };
-static struct command hs_offerlist = { "OFFERLIST", N_("Lists all available vhosts."), AC_NONE, 1, hs_cmd_offerlist, { .path = "hostserv/offerlist" } };
-static struct command hs_take = { "TAKE", N_("Take an offered vhost for use."), AC_AUTHENTICATED, 2, hs_cmd_take, { .path = "hostserv/take" } };
-
 struct hsoffered
 {
 	char *vhost;
@@ -128,7 +113,7 @@ remove_group_offered_hosts(struct mygroup *mg)
 	}
 }
 
-/* OFFER <host> */
+// OFFER <host>
 static void
 hs_cmd_offer(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -204,7 +189,7 @@ hs_cmd_offer(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-/* UNOFFER <vhost> */
+// UNOFFER <vhost>
 static void
 hs_cmd_unoffer(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -251,7 +236,7 @@ myuser_is_in_group(struct myuser *mu, struct myentity *mt)
 	return_val_if_fail(mt != NULL, false);
 	return_val_if_fail((mg = group(mt)) != NULL, false);
 
-	if (!mu) /* NULL users can't be in groups! :o */
+	if (!mu) // NULL users can't be in groups! :o
 		return false;
 
 	MOWGLI_ITER_FOREACH(n, mg->acs.head)
@@ -265,7 +250,7 @@ myuser_is_in_group(struct myuser *mu, struct myentity *mt)
 	return false;
 }
 
-/* TAKE <vhost> */
+// TAKE <vhost>
 static void
 hs_cmd_take(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -331,7 +316,7 @@ hs_cmd_take(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("vhost \2%s\2 not found in vhost offer database."), host);
 }
 
-/* OFFERLIST */
+// OFFERLIST
 static void
 hs_cmd_offerlist(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -361,6 +346,11 @@ hs_cmd_offerlist(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, "End of list.");
 	logcommand(si, CMDLOG_GET, "OFFERLIST");
 }
+
+static struct command hs_offer = { "OFFER", N_("Sets vhosts available for users to take."), PRIV_USER_VHOST, 2, hs_cmd_offer, { .path = "hostserv/offer" } };
+static struct command hs_unoffer = { "UNOFFER", N_("Removes a vhost from the list that users can take."), PRIV_USER_VHOST, 2, hs_cmd_unoffer, { .path = "hostserv/unoffer" } };
+static struct command hs_offerlist = { "OFFERLIST", N_("Lists all available vhosts."), AC_NONE, 1, hs_cmd_offerlist, { .path = "hostserv/offerlist" } };
+static struct command hs_take = { "TAKE", N_("Take an offered vhost for use."), AC_AUTHENTICATED, 2, hs_cmd_take, { .path = "hostserv/take" } };
 
 static void
 mod_init(struct module *const restrict m)

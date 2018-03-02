@@ -8,8 +8,6 @@
 #include "atheme.h"
 #include "hostserv.h"
 
-static void on_user_identify(struct user *u);
-
 static struct service *hostsvs = NULL;
 
 static void

@@ -8,11 +8,7 @@
 #include "atheme.h"
 #include "hostserv.h"
 
-static void hs_cmd_vhostnick(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command hs_vhostnick = { "VHOSTNICK", N_("Manages per-nick virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhostnick, { .path = "hostserv/vhostnick" } };
-
-/* VHOSTNICK <nick> [host] */
+// VHOSTNICK <nick> [host]
 static void
 hs_cmd_vhostnick(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -32,7 +28,7 @@ hs_cmd_vhostnick(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* find the user... */
+	// find the user...
 	if (!(mu = myuser_find_ext(target)))
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
@@ -54,7 +50,7 @@ hs_cmd_vhostnick(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* deletion action */
+	// deletion action
 	if (!host)
 	{
 		metadata_delete(mu, buf);
@@ -63,7 +59,7 @@ hs_cmd_vhostnick(struct sourceinfo *si, int parc, char *parv[])
 		u = user_find_named(target);
 		if (u != NULL)
 		{
-			/* Revert to account's vhost */
+			// Revert to account's vhost
 			md = metadata_find(mu, "private:usercloak");
 			do_sethost(u, md ? md->value : NULL);
 		}
@@ -83,6 +79,8 @@ hs_cmd_vhostnick(struct sourceinfo *si, int parc, char *parv[])
 		do_sethost(u, host);
 	return;
 }
+
+static struct command hs_vhostnick = { "VHOSTNICK", N_("Manages per-nick virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhostnick, { .path = "hostserv/vhostnick" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

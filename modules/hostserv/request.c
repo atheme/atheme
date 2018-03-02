@@ -9,29 +9,6 @@
 #include "atheme.h"
 #include "hostserv.h"
 
-bool request_per_nick;
-struct service *hostsvs;
-
-static unsigned int ratelimit_count = 0;
-static time_t ratelimit_firsttime = 0;
-
-static void account_drop_request(struct myuser *mu);
-static void nick_drop_request(hook_user_req_t *hdata);
-static void account_delete_request(struct myuser *mu);
-static void osinfo_hook(struct sourceinfo *si);
-static void hs_cmd_request(struct sourceinfo *si, int parc, char *parv[]);
-static void hs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[]);
-static void hs_cmd_reject(struct sourceinfo *si, int parc, char *parv[]);
-static void hs_cmd_activate(struct sourceinfo *si, int parc, char *parv[]);
-
-static void write_hsreqdb(struct database_handle *db);
-static void db_h_hr(struct database_handle *db, const char *type);
-
-static struct command hs_request = { "REQUEST", N_("Requests new virtual hostname for current nick."), AC_AUTHENTICATED, 2, hs_cmd_request, { .path = "hostserv/request" } };
-static struct command hs_waiting = { "WAITING", N_("Lists vhosts currently waiting for activation."), PRIV_USER_VHOST, 1, hs_cmd_waiting, { .path = "hostserv/waiting" } };
-static struct command hs_reject = { "REJECT", N_("Reject the requested vhost for the given nick."), PRIV_USER_VHOST, 2, hs_cmd_reject, { .path = "hostserv/reject" } };
-static struct command hs_activate = { "ACTIVATE", N_("Activate the requested vhost for a given nick."), PRIV_USER_VHOST, 2, hs_cmd_activate, { .path = "hostserv/activate" } };
-
 struct hsrequest
 {
 	char *nick;
@@ -39,6 +16,12 @@ struct hsrequest
 	time_t vhost_ts;
 	char *creator;
 };
+
+bool request_per_nick;
+struct service *hostsvs;
+
+static unsigned int ratelimit_count = 0;
+static time_t ratelimit_firsttime = 0;
 
 mowgli_list_t hs_reqlist;
 static char *groupmemo;
@@ -157,11 +140,9 @@ osinfo_hook(struct sourceinfo *si)
 {
 	return_if_fail(si != NULL);
 
-	/* Can't think of a better way to phrase this, feel free to fix if you can. */
+	// Can't think of a better way to phrase this, feel free to fix if you can.
 	command_success_nodata(si, "Requested vHosts will be per-nick: %s", request_per_nick ? "Yes" : "No");
 }
-
-/*****************************************************************************/
 
 static void ATHEME_FATTR_PRINTF(2, 3)
 send_group_memo(struct sourceinfo *si, const char *memo, ...)
@@ -191,9 +172,7 @@ send_group_memo(struct sourceinfo *si, const char *memo, ...)
 	}
 }
 
-/*****************************************************************************/
-
-/* REQUEST <host> */
+// REQUEST <host>
 static void
 hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -301,6 +280,7 @@ hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 	hdata.host = host;
 	hdata.si = si;
 	hdata.approved = 0;
+
 	/* keep target and si seperate so modules that use the hook
 	 * can see if it's an account or nick requesting the host
 	 */
@@ -310,7 +290,7 @@ hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 	if (hdata.approved != 0)
 		return;
 
-	/* search for it */
+	// search for it
 	MOWGLI_ITER_FOREACH(n, hs_reqlist.head)
 	{
 		l = n->data;
@@ -371,7 +351,7 @@ hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-/* ACTIVATE <nick> */
+// ACTIVATE <nick>
 static void
 hs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -397,7 +377,8 @@ hs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 		{
 			if ((u = user_find_named(nick)) != NULL)
 				notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been approved.", l->vhost, nick);
-			/* VHOSTNICK command below will generate snoop */
+
+			// VHOSTNICK command below will generate snoop
 			logcommand(si, CMDLOG_REQUEST, "ACTIVATE: \2%s\2 for \2%s\2", l->vhost, nick);
 			snprintf(buf, BUFSIZE, "%s %s", l->nick, l->vhost);
 
@@ -416,7 +397,8 @@ hs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 		{
 			if ((u = user_find_named(l->nick)) != NULL)
 				notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been approved.", l->vhost, l->nick);
-			/* VHOSTNICK command below will generate snoop */
+
+			// VHOSTNICK command below will generate snoop
 			logcommand(si, CMDLOG_REQUEST, "ACTIVATE: \2%s\2 for \2%s\2", l->vhost, l->nick);
 			snprintf(buf, BUFSIZE, "%s %s", l->nick, l->vhost);
 
@@ -437,7 +419,7 @@ hs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("Nick \2%s\2 not found in vhost request database."), nick);
 }
 
-/* REJECT <nick> */
+// REJECT <nick>
 static void
 hs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -536,7 +518,7 @@ hs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("Nick \2%s\2 not found in vhost request database."), nick);
 }
 
-/* WAITING */
+// WAITING
 static void
 hs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -557,6 +539,11 @@ hs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, "End of list.");
 	logcommand(si, CMDLOG_GET, "WAITING");
 }
+
+static struct command hs_request = { "REQUEST", N_("Requests new virtual hostname for current nick."), AC_AUTHENTICATED, 2, hs_cmd_request, { .path = "hostserv/request" } };
+static struct command hs_waiting = { "WAITING", N_("Lists vhosts currently waiting for activation."), PRIV_USER_VHOST, 1, hs_cmd_waiting, { .path = "hostserv/waiting" } };
+static struct command hs_reject = { "REJECT", N_("Reject the requested vhost for the given nick."), PRIV_USER_VHOST, 2, hs_cmd_reject, { .path = "hostserv/reject" } };
+static struct command hs_activate = { "ACTIVATE", N_("Activate the requested vhost for a given nick."), PRIV_USER_VHOST, 2, hs_cmd_activate, { .path = "hostserv/activate" } };
 
 static void
 mod_init(struct module *const restrict m)

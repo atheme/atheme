@@ -9,10 +9,6 @@
 #include "atheme.h"
 #include "hostserv.h"
 
-static void hs_cmd_drop(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command hs_drop = { "DROP", N_("Drops your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_drop, { .path = "hostserv/drop" } };
-
 static void
 hs_cmd_drop(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -20,7 +16,7 @@ hs_cmd_drop(struct sourceinfo *si, int parc, char *parv[])
 	struct metadata *md;
 	char buf[BUFSIZE];
 
-	/* This is only because we need a nick to copy from. */
+	// This is only because we need a nick to copy from.
 	if (si->su == NULL)
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 can only be executed via IRC."), "DROP");
@@ -53,6 +49,8 @@ hs_cmd_drop(struct sourceinfo *si, int parc, char *parv[])
 	do_sethost_all(si->smu, NULL); // restore user vhost from user host
 
 }
+
+static struct command hs_drop = { "DROP", N_("Drops your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_drop, { .path = "hostserv/drop" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

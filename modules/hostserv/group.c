@@ -8,10 +8,6 @@
 #include "atheme.h"
 #include "hostserv.h"
 
-static void hs_cmd_group(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command hs_group = { "GROUP", N_("Syncs the vhost for all nicks in a group."), AC_AUTHENTICATED, 1, hs_cmd_group, { .path = "hostserv/group" } };
-
 static void
 hs_cmd_group(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -19,7 +15,7 @@ hs_cmd_group(struct sourceinfo *si, int parc, char *parv[])
 	struct metadata *md;
 	char buf[BUFSIZE];
 
-	/* This is only because we need a nick to copy from. */
+	// This is only because we need a nick to copy from.
 	if (si->su == NULL)
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 can only be executed via IRC."), "GROUP");
@@ -51,6 +47,8 @@ hs_cmd_group(struct sourceinfo *si, int parc, char *parv[])
 	do_sethost_all(si->smu, buf);
 	command_success_nodata(si, _("All vhosts in the group \2%s\2 have been set to \2%s\2."), entity(si->smu)->name, buf);
 }
+
+static struct command hs_group = { "GROUP", N_("Syncs the vhost for all nicks in a group."), AC_AUTHENTICATED, 1, hs_cmd_group, { .path = "hostserv/group" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

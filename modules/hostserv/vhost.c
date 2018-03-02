@@ -8,13 +8,7 @@
 #include "atheme.h"
 #include "hostserv.h"
 
-static void hs_cmd_vhost(struct sourceinfo *si, int parc, char *parv[]);
-static void hs_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command hs_vhost = { "VHOST", N_("Manages per-account virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhost, { .path = "hostserv/vhost" } };
-static struct command hs_listvhost = { "LISTVHOST", N_("Lists user virtual hosts."), PRIV_USER_AUSPEX, 1, hs_cmd_listvhost, { .path = "hostserv/listvhost" } };
-
-/* VHOST <nick> [host] */
+// VHOST <nick> [host]
 static void
 hs_cmd_vhost(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -29,14 +23,14 @@ hs_cmd_vhost(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* find the user... */
+	// find the user...
 	if (!(mu = myuser_find_ext(target)))
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 		return;
 	}
 
-	/* deletion action */
+	// deletion action
 	if (!host)
 	{
 		hs_sethost_all(mu, NULL, get_source_name(si));
@@ -126,6 +120,9 @@ hs_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, ngettext(N_("\2%d\2 match for pattern \2%s\2"),
 						    N_("\2%d\2 matches for pattern \2%s\2"), matches), matches, pattern);
 }
+
+static struct command hs_vhost = { "VHOST", N_("Manages per-account virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhost, { .path = "hostserv/vhost" } };
+static struct command hs_listvhost = { "LISTVHOST", N_("Lists user virtual hosts."), PRIV_USER_AUSPEX, 1, hs_cmd_listvhost, { .path = "hostserv/listvhost" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
