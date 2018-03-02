@@ -16,20 +16,6 @@ static struct command cs_voice = { "VOICE", N_("Gives channel voice to a user.")
 static struct command cs_devoice = { "DEVOICE", N_("Removes channel voice from a user."),
                          AC_NONE, 2, cs_cmd_devoice, { .path = "cservice/op_voice" } };
 
-static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("chanserv", &cs_voice);
-        service_named_bind_command("chanserv", &cs_devoice);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_voice);
-	service_named_unbind_command("chanserv", &cs_devoice);
-}
-
 static mowgli_list_t voice_actions;
 
 static void
@@ -131,6 +117,20 @@ cs_cmd_devoice(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	cmd_voice(si, false, parc, parv);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("chanserv", &cs_voice);
+        service_named_bind_command("chanserv", &cs_devoice);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_voice);
+	service_named_unbind_command("chanserv", &cs_devoice);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/voice", MODULE_UNLOAD_CAPABILITY_OK)

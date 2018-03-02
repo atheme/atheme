@@ -11,18 +11,6 @@ static void os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[]);
 
 static struct command os_greplog = { "GREPLOG", N_("Searches through the logs."), PRIV_CHAN_AUSPEX, 3, os_cmd_greplog, { .path = "oservice/greplog" } };
 
-static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("operserv", &os_greplog);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("operserv", &os_greplog);
-}
-
 #define MAXMATCHES 100
 
 static const char *
@@ -205,6 +193,18 @@ os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[])
 	else if (matches > 0)
 		command_success_nodata(si, ngettext(N_("\2%d\2 match for pattern \2%s\2"),
 						    N_("\2%d\2 matches for pattern \2%s\2"), matches), matches, pattern);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("operserv", &os_greplog);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("operserv", &os_greplog);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/greplog", MODULE_UNLOAD_CAPABILITY_OK)

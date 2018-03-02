@@ -64,39 +64,6 @@ info_hook(hook_user_req_t *hdata)
 }
 
 static void
-mod_init(struct module *const restrict m)
-{
-	service_named_bind_command("nickserv", &ns_restrict);
-
-	hook_add_event("user_info");
-	hook_add_user_info(info_hook);
-
-	use_nslist_main_symbols(m);
-
-	static struct list_param restricted;
-	restricted.opttype = OPT_BOOL;
-	restricted.is_match = is_restricted;
-
-	static struct list_param restrict_match;
-	restrict_match.opttype = OPT_STRING;
-	restrict_match.is_match = restricted_match;
-
-	list_register("restricted", &restricted);
-	list_register("restricted-reason", &restrict_match);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("nickserv", &ns_restrict);
-
-	hook_del_user_info(info_hook);
-
-	list_unregister("restricted");
-	list_unregister("restricted-reason");
-}
-
-static void
 ns_cmd_restrict(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
@@ -161,6 +128,39 @@ ns_cmd_restrict(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "RESTRICT");
 		command_fail(si, fault_needmoreparams, _("Usage: RESTRICT <target> <ON|OFF> [note]"));
 	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	service_named_bind_command("nickserv", &ns_restrict);
+
+	hook_add_event("user_info");
+	hook_add_user_info(info_hook);
+
+	use_nslist_main_symbols(m);
+
+	static struct list_param restricted;
+	restricted.opttype = OPT_BOOL;
+	restricted.is_match = is_restricted;
+
+	static struct list_param restrict_match;
+	restrict_match.opttype = OPT_STRING;
+	restrict_match.is_match = restricted_match;
+
+	list_register("restricted", &restricted);
+	list_register("restricted-reason", &restrict_match);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("nickserv", &ns_restrict);
+
+	hook_del_user_info(info_hook);
+
+	list_unregister("restricted");
+	list_unregister("restricted-reason");
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/restrict", MODULE_UNLOAD_CAPABILITY_OK)

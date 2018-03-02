@@ -12,18 +12,6 @@ static void cs_cmd_taxonomy(struct sourceinfo *si, int parc, char *parv[]);
 static struct command cs_taxonomy = { "TAXONOMY", N_("Displays a channel's metadata."),
                         AC_NONE, 1, cs_cmd_taxonomy, { .path = "cservice/taxonomy" } };
 
-static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("chanserv", &cs_taxonomy);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_taxonomy);
-}
-
 void
 cs_cmd_taxonomy(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -71,6 +59,18 @@ cs_cmd_taxonomy(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	command_success_nodata(si, _("End of \2%s\2 taxonomy."), target);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("chanserv", &cs_taxonomy);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_taxonomy);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/taxonomy", MODULE_UNLOAD_CAPABILITY_OK)

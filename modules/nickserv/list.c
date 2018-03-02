@@ -104,58 +104,6 @@ has_waitauth(const struct mynick *mn, const void *arg)
 	return ( mu->flags & MU_WAITAUTH ) == MU_WAITAUTH;
 }
 
-static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	list_params = mowgli_patricia_create(strcasecanon);
-	service_named_bind_command("nickserv", &ns_list);
-
-	/* list email */
-	static struct list_param email;
-	email.opttype = OPT_STRING;
-	email.is_match = email_match;
-
-	static struct list_param lastlogin;
-	lastlogin.opttype = OPT_AGE;
-	lastlogin.is_match = lastlogin_match;
-
-	static struct list_param pattern;
-	pattern.opttype = OPT_STRING;
-	pattern.is_match = pattern_match;
-
-	static struct list_param registered;
-	registered.opttype = OPT_AGE;
-	registered.is_match = registered_match;
-
-	list_register("email", &email);
-	list_register("lastlogin", &lastlogin);
-	list_register("mail", &email);
-
-	list_register("pattern", &pattern);
-	list_register("registered", &registered);
-
-	static struct list_param waitauth;
-	waitauth.opttype = OPT_BOOL;
-	waitauth.is_match = has_waitauth;
-
-	list_register("waitauth", &waitauth);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("nickserv", &ns_list);
-
-	list_unregister("email");
-	list_unregister("lastlogin");
-	list_unregister("mail");
-
-	list_unregister("pattern");
-	list_unregister("registered");
-
-	list_unregister("waitauth");
-}
-
 void
 list_register(const char *param_name, struct list_param *param)
 {
@@ -341,6 +289,58 @@ ns_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("No nicknames matched criteria \2%s\2"), criteriastr);
 	else
 		command_success_nodata(si, ngettext(N_("\2%d\2 match for criteria \2%s\2"), N_("\2%d\2 matches for criteria \2%s\2"), matches), matches, criteriastr);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	list_params = mowgli_patricia_create(strcasecanon);
+	service_named_bind_command("nickserv", &ns_list);
+
+	/* list email */
+	static struct list_param email;
+	email.opttype = OPT_STRING;
+	email.is_match = email_match;
+
+	static struct list_param lastlogin;
+	lastlogin.opttype = OPT_AGE;
+	lastlogin.is_match = lastlogin_match;
+
+	static struct list_param pattern;
+	pattern.opttype = OPT_STRING;
+	pattern.is_match = pattern_match;
+
+	static struct list_param registered;
+	registered.opttype = OPT_AGE;
+	registered.is_match = registered_match;
+
+	list_register("email", &email);
+	list_register("lastlogin", &lastlogin);
+	list_register("mail", &email);
+
+	list_register("pattern", &pattern);
+	list_register("registered", &registered);
+
+	static struct list_param waitauth;
+	waitauth.opttype = OPT_BOOL;
+	waitauth.is_match = has_waitauth;
+
+	list_register("waitauth", &waitauth);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("nickserv", &ns_list);
+
+	list_unregister("email");
+	list_unregister("lastlogin");
+	list_unregister("mail");
+
+	list_unregister("pattern");
+	list_unregister("registered");
+
+	list_unregister("waitauth");
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/list", MODULE_UNLOAD_CAPABILITY_OK)

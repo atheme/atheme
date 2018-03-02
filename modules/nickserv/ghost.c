@@ -11,18 +11,6 @@ static void ns_cmd_ghost(struct sourceinfo *si, int parc, char *parv[]);
 
 static struct command ns_ghost = { "GHOST", N_("Reclaims use of a nickname."), AC_NONE, 2, ns_cmd_ghost, { .path = "nickserv/ghost" } };
 
-static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("nickserv", &ns_ghost);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("nickserv", &ns_ghost);
-}
-
 void
 ns_cmd_ghost(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -116,6 +104,18 @@ ns_cmd_ghost(struct sourceinfo *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_DO, "failed GHOST \2%s\2 (invalid login)", target);
 		command_fail(si, fault_noprivs, _("You may not ghost \2%s\2."), target);
 	}
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("nickserv", &ns_ghost);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("nickserv", &ns_ghost);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/ghost", MODULE_UNLOAD_CAPABILITY_OK)

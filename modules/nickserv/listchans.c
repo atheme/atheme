@@ -13,18 +13,6 @@ static void ns_cmd_listchans(struct sourceinfo *si, int parc, char *parv[]);
 static struct command ns_listchans = { "LISTCHANS", N_("Lists channels that you have access to."), AC_NONE, 1, ns_cmd_listchans, { .path = "nickserv/listchans" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("nickserv", &ns_listchans);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("nickserv", &ns_listchans);
-}
-
-static void
 ns_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
@@ -95,6 +83,18 @@ ns_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, ngettext(N_("\2%d\2 channel access match for the nickname \2%s\2"),
 						    N_("\2%d\2 channel access matches for the nickname \2%s\2"), i),
 						    i, entity(mu)->name);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("nickserv", &ns_listchans);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("nickserv", &ns_listchans);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/listchans", MODULE_UNLOAD_CAPABILITY_OK)

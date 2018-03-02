@@ -15,18 +15,6 @@ static void ns_cmd_register(struct sourceinfo *si, int parc, char *parv[]);
 static struct command ns_register = { "REGISTER", N_("Registers a nickname."), AC_NONE, 3, ns_cmd_register, { .path = "nickserv/register" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("nickserv", &ns_register);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("nickserv", &ns_register);
-}
-
-static void
 ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
@@ -244,6 +232,18 @@ ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 		req.mn = mn;
 		hook_call_user_verify_register(&req);
 	}
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("nickserv", &ns_register);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("nickserv", &ns_register);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/register", MODULE_UNLOAD_CAPABILITY_OK)

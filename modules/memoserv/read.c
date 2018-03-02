@@ -15,18 +15,6 @@ static struct command ms_read = { "READ", N_("Reads a memo."),
                         AC_AUTHENTICATED, 2, ms_cmd_read, { .path = "memoserv/read" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("memoserv", &ms_read);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("memoserv", &ms_read);
-}
-
-static void
 ms_cmd_read(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* Misc structs etc */
@@ -136,6 +124,18 @@ ms_cmd_read(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_key, _("You have no new memos."));
 	else if (readnew)
 		command_success_nodata(si, _("Read %d memos."), numread);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("memoserv", &ms_read);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("memoserv", &ms_read);
 }
 
 SIMPLE_DECLARE_MODULE_V1("memoserv/read", MODULE_UNLOAD_CAPABILITY_OK)

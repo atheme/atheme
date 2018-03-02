@@ -25,30 +25,6 @@ has_hidemail(const struct mynick *mn, const void *arg)
 	return ( mu->flags & MU_HIDEMAIL ) == MU_HIDEMAIL;
 }
 
-static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
-
-	command_add(&ns_set_hidemail, *ns_set_cmdtree);
-
-	use_nslist_main_symbols(m);
-
-	static struct list_param hidemail;
-	hidemail.opttype = OPT_BOOL;
-	hidemail.is_match = has_hidemail;
-
-	list_register("hidemail", &hidemail);
-
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	command_delete(&ns_set_hidemail, *ns_set_cmdtree);
-	list_unregister("hidemail");
-}
-
 /* SET HIDEMAIL [ON|OFF] */
 static void
 ns_cmd_set_hidemail(struct sourceinfo *si, int parc, char *parv[])
@@ -98,6 +74,30 @@ ns_cmd_set_hidemail(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "HIDEMAIL");
 		return;
 	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
+
+	command_add(&ns_set_hidemail, *ns_set_cmdtree);
+
+	use_nslist_main_symbols(m);
+
+	static struct list_param hidemail;
+	hidemail.opttype = OPT_BOOL;
+	hidemail.is_match = has_hidemail;
+
+	list_register("hidemail", &hidemail);
+
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	command_delete(&ns_set_hidemail, *ns_set_cmdtree);
+	list_unregister("hidemail");
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/set_hidemail", MODULE_UNLOAD_CAPABILITY_OK)

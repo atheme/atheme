@@ -18,24 +18,6 @@ static struct command gs_set = { "SET", N_("Sets various control flags."), AC_AU
 mowgli_patricia_t *gs_set_cmdtree;
 
 static void
-mod_init(struct module *const restrict m)
-{
-	use_groupserv_main_symbols(m);
-
-	service_named_bind_command("groupserv", &gs_set);
-
-	gs_set_cmdtree = mowgli_patricia_create(strcasecanon);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("groupserv", &gs_set);
-
-	mowgli_patricia_destroy(gs_set_cmdtree, NULL, NULL);
-}
-
-static void
 gs_help_set(struct sourceinfo *si, const char *subcmd)
 {
 	if (!subcmd)
@@ -91,6 +73,24 @@ gs_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 
 	parv[1] = group;
 	command_exec(si->service, si, c, parc - 1, parv + 1);
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	use_groupserv_main_symbols(m);
+
+	service_named_bind_command("groupserv", &gs_set);
+
+	gs_set_cmdtree = mowgli_patricia_create(strcasecanon);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("groupserv", &gs_set);
+
+	mowgli_patricia_destroy(gs_set_cmdtree, NULL, NULL);
 }
 
 SIMPLE_DECLARE_MODULE_V1("groupserv/set", MODULE_UNLOAD_CAPABILITY_OK)

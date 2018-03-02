@@ -12,19 +12,6 @@ static void ns_cmd_cert(struct sourceinfo *si, int parc, char *parv[]);
 static struct command ns_cert = { "CERT", N_("Changes and shows your nickname CertFP authentication list."), AC_NONE, 2, ns_cmd_cert, { .path = "nickserv/cert" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("nickserv", &ns_cert);
-
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("nickserv", &ns_cert);
-}
-
-static void
 ns_cmd_cert(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
@@ -198,6 +185,19 @@ ns_cmd_cert(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Syntax: CERT ADD|DEL|LIST|CLEAR [fingerprint]"));
 		return;
 	}
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("nickserv", &ns_cert);
+
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("nickserv", &ns_cert);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/cert", MODULE_UNLOAD_CAPABILITY_OK)

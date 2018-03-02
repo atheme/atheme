@@ -11,18 +11,6 @@ static void os_cmd_override(struct sourceinfo *si, int parc, char *parv[]);
 
 static struct command os_override = { "OVERRIDE", N_("Perform a transaction on another user's account"), PRIV_OVERRIDE, 4, os_cmd_override, { .path = "oservice/override" } };
 
-static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("operserv", &os_override);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("operserv", &os_override);
-}
-
 struct override_sourceinfo
 {
 	struct sourceinfo si;
@@ -251,6 +239,18 @@ os_cmd_override(struct sourceinfo *si, int parc, char *parv[])
 	command_exec(svs, &o_si->si, cmd, newparc, newparv);
 
 	atheme_object_unref(o_si);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("operserv", &os_override);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("operserv", &os_override);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/override", MODULE_UNLOAD_CAPABILITY_OK)

@@ -15,19 +15,6 @@ static struct command ms_send = { "SEND", N_("Sends a memo to a user."),
                         AC_AUTHENTICATED, 2, ms_cmd_send, { .path = "memoserv/send" } };
 
 static void
-mod_init(struct module *const restrict m)
-{
-        service_named_bind_command("memoserv", &ms_send);
-        MODULE_TRY_REQUEST_SYMBOL(m, maxmemos, "memoserv/main", "maxmemos");
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("memoserv", &ms_send);
-}
-
-static void
 ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* misc structs etc */
@@ -201,6 +188,19 @@ ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	return;
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+        service_named_bind_command("memoserv", &ms_send);
+        MODULE_TRY_REQUEST_SYMBOL(m, maxmemos, "memoserv/main", "maxmemos");
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("memoserv", &ms_send);
 }
 
 SIMPLE_DECLARE_MODULE_V1("memoserv/send", MODULE_UNLOAD_CAPABILITY_OK)

@@ -25,32 +25,6 @@ static struct command os_soper_setpass = { "SETPASS", N_("Changes a password for
 static mowgli_patricia_t *os_soper_cmds = NULL;
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("operserv", &os_soper);
-
-	os_soper_cmds = mowgli_patricia_create(strcasecanon);
-
-	command_add(&os_soper_list, os_soper_cmds);
-	command_add(&os_soper_listclass, os_soper_cmds);
-	command_add(&os_soper_add, os_soper_cmds);
-	command_add(&os_soper_del, os_soper_cmds);
-	command_add(&os_soper_setpass, os_soper_cmds);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("operserv", &os_soper);
-	command_delete(&os_soper_list, os_soper_cmds);
-	command_delete(&os_soper_listclass, os_soper_cmds);
-	command_delete(&os_soper_add, os_soper_cmds);
-	command_delete(&os_soper_del, os_soper_cmds);
-
-	mowgli_patricia_destroy(os_soper_cmds, NULL, NULL);
-}
-
-static void
 os_cmd_soper(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct command *c;
@@ -314,6 +288,32 @@ os_cmd_soper_setpass(struct sourceinfo *si, int parc, char *parv[])
 		mu->soper->password = NULL;
 		command_success_nodata(si, _("Cleared password for \2%s\2."), entity(mu)->name);
 	}
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("operserv", &os_soper);
+
+	os_soper_cmds = mowgli_patricia_create(strcasecanon);
+
+	command_add(&os_soper_list, os_soper_cmds);
+	command_add(&os_soper_listclass, os_soper_cmds);
+	command_add(&os_soper_add, os_soper_cmds);
+	command_add(&os_soper_del, os_soper_cmds);
+	command_add(&os_soper_setpass, os_soper_cmds);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("operserv", &os_soper);
+	command_delete(&os_soper_list, os_soper_cmds);
+	command_delete(&os_soper_listclass, os_soper_cmds);
+	command_delete(&os_soper_add, os_soper_cmds);
+	command_delete(&os_soper_del, os_soper_cmds);
+
+	mowgli_patricia_destroy(os_soper_cmds, NULL, NULL);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/soper", MODULE_UNLOAD_CAPABILITY_OK)

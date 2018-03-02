@@ -15,20 +15,6 @@ static struct command ms_del = { "DEL", N_("Alias for DELETE"),
 			AC_AUTHENTICATED, 1, ms_cmd_delete, { .path = "memoserv/delete" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("memoserv", &ms_delete);
-	service_named_bind_command("memoserv", &ms_del);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("memoserv", &ms_delete);
-	service_named_unbind_command("memoserv", &ms_del);
-}
-
-static void
 ms_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* Misc structs etc */
@@ -114,6 +100,20 @@ ms_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, ngettext(N_("%d memo deleted."), N_("%d memos deleted."), delcount), delcount);
 
 	return;
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("memoserv", &ms_delete);
+	service_named_bind_command("memoserv", &ms_del);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("memoserv", &ms_delete);
+	service_named_unbind_command("memoserv", &ms_del);
 }
 
 SIMPLE_DECLARE_MODULE_V1("memoserv/delete", MODULE_UNLOAD_CAPABILITY_OK)

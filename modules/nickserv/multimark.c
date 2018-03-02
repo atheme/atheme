@@ -99,89 +99,6 @@ is_user_marked(struct myuser *mu)
 	return MOWGLI_LIST_LENGTH(l) != 0;
 }
 
-static void
-mod_init(struct module *const restrict m)
-{
-	static struct list_param mark_check;
-
-	if (!module_find_published("backend/opensex"))
-	{
-		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
-		m->mflags |= MODTYPE_FAIL;
-		return;
-	}
-
-	if (module_find_published("nickserv/mark"))
-	{
-		slog(LG_INFO, "Loading both multimark and mark has severe consequences for the space-time continuum. Refusing to load.");
-		m->mflags |= MODTYPE_FAIL;
-		return;
-	}
-
-	restored_marks = mowgli_patricia_create(strcasecanon);
-
-	hook_add_db_write(write_multimark_db);
-	db_register_type_handler("MM", db_h_mm);
-	db_register_type_handler("RM", db_h_rm);
-
-	hook_add_event("user_info");
-	hook_add_user_info(show_multimark);
-
-	hook_add_event("user_info_noexist");
-	hook_add_user_info_noexist(show_multimark_noexist);
-
-	hook_add_event("user_needforce");
-	hook_add_user_needforce(multimark_needforce);
-
-	hook_add_event("user_drop");
-	hook_add_user_drop(account_drop_hook);
-
-	hook_add_event("nick_ungroup");
-	hook_add_nick_ungroup(nick_ungroup_hook);
-
-	hook_add_event("nick_group");
-	hook_add_nick_group(nick_group_hook);
-
-	hook_add_event("user_register");
-	hook_add_user_register(account_register_hook);
-
-	service_named_bind_command("nickserv", &ns_multimark);
-
-	use_nslist_main_symbols(m);
-
-	static struct list_param mark;
-	mark.opttype = OPT_STRING;
-	mark.is_match = multimark_match;
-
-	list_register("mark-reason", &mark);
-
-	mark_check.opttype = OPT_BOOL;
-	mark_check.is_match = is_marked;
-
-	list_register("marked", &mark_check);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	hook_del_db_write(write_multimark_db);
-	db_unregister_type_handler("MM");
-	db_unregister_type_handler("RM");
-	db_unregister_type_handler("MDU");
-
-	hook_del_user_info(show_multimark);
-	hook_del_user_info_noexist(show_multimark_noexist);
-	hook_del_user_drop(account_drop_hook);
-	hook_del_nick_ungroup(nick_ungroup_hook);
-	hook_del_nick_group(nick_group_hook);
-	hook_del_user_register(account_register_hook);
-
-	service_named_unbind_command("nickserv", &ns_multimark);
-
-	list_unregister("mark-reason");
-	list_unregister("marked");
-}
-
 static inline mowgli_list_t *
 multimark_list(struct myuser *mu)
 {
@@ -1120,6 +1037,89 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "MARK");
 		command_fail(si, fault_badparams, _("Usage: MARK <target> <ADD|DEL|LIST|MIGRATE> [note]"));
 	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	static struct list_param mark_check;
+
+	if (!module_find_published("backend/opensex"))
+	{
+		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	if (module_find_published("nickserv/mark"))
+	{
+		slog(LG_INFO, "Loading both multimark and mark has severe consequences for the space-time continuum. Refusing to load.");
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	restored_marks = mowgli_patricia_create(strcasecanon);
+
+	hook_add_db_write(write_multimark_db);
+	db_register_type_handler("MM", db_h_mm);
+	db_register_type_handler("RM", db_h_rm);
+
+	hook_add_event("user_info");
+	hook_add_user_info(show_multimark);
+
+	hook_add_event("user_info_noexist");
+	hook_add_user_info_noexist(show_multimark_noexist);
+
+	hook_add_event("user_needforce");
+	hook_add_user_needforce(multimark_needforce);
+
+	hook_add_event("user_drop");
+	hook_add_user_drop(account_drop_hook);
+
+	hook_add_event("nick_ungroup");
+	hook_add_nick_ungroup(nick_ungroup_hook);
+
+	hook_add_event("nick_group");
+	hook_add_nick_group(nick_group_hook);
+
+	hook_add_event("user_register");
+	hook_add_user_register(account_register_hook);
+
+	service_named_bind_command("nickserv", &ns_multimark);
+
+	use_nslist_main_symbols(m);
+
+	static struct list_param mark;
+	mark.opttype = OPT_STRING;
+	mark.is_match = multimark_match;
+
+	list_register("mark-reason", &mark);
+
+	mark_check.opttype = OPT_BOOL;
+	mark_check.is_match = is_marked;
+
+	list_register("marked", &mark_check);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	hook_del_db_write(write_multimark_db);
+	db_unregister_type_handler("MM");
+	db_unregister_type_handler("RM");
+	db_unregister_type_handler("MDU");
+
+	hook_del_user_info(show_multimark);
+	hook_del_user_info_noexist(show_multimark_noexist);
+	hook_del_user_drop(account_drop_hook);
+	hook_del_nick_ungroup(nick_ungroup_hook);
+	hook_del_nick_group(nick_group_hook);
+	hook_del_user_register(account_register_hook);
+
+	service_named_unbind_command("nickserv", &ns_multimark);
+
+	list_unregister("mark-reason");
+	list_unregister("marked");
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/multimark", MODULE_UNLOAD_CAPABILITY_OK)

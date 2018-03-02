@@ -17,20 +17,6 @@ static struct command cs_unquiet = { "UNQUIET", N_("Removes a quiet on a channel
 			AC_AUTHENTICATED, 2, cs_cmd_unquiet, { .path = "cservice/unquiet" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("chanserv", &cs_quiet);
-	service_named_bind_command("chanserv", &cs_unquiet);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_quiet);
-	service_named_unbind_command("chanserv", &cs_unquiet);
-}
-
-static void
 make_extbanmask(char *buf, size_t buflen, const char *mask)
 {
 	return_if_fail(buf != NULL);
@@ -472,6 +458,20 @@ cs_cmd_unquiet(struct sourceinfo *si, int parc, char *parv[])
 		}
 	} while ((target = strtok_r(NULL, " ", &strtokctx)) != NULL);
 	free(targetlist);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("chanserv", &cs_quiet);
+	service_named_bind_command("chanserv", &cs_unquiet);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_quiet);
+	service_named_unbind_command("chanserv", &cs_unquiet);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/quiet", MODULE_UNLOAD_CAPABILITY_OK)

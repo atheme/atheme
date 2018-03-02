@@ -17,25 +17,6 @@ static struct command cs_set_fantasy = { "FANTASY", N_("Allows or disallows in-c
 static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
-
-	command_add(&cs_set_fantasy, *cs_set_cmdtree);
-
-	hook_add_event("config_ready");
-	hook_add_config_ready(cs_set_fantasy_config_ready);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	command_delete(&cs_set_fantasy, *cs_set_cmdtree);
-
-	hook_del_config_ready(cs_set_fantasy_config_ready);
-}
-
-static void
 cs_set_fantasy_config_ready(void *unused)
 {
 	if (chansvs.fantasy)
@@ -106,6 +87,25 @@ cs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "FANTASY");
 		return;
 	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
+
+	command_add(&cs_set_fantasy, *cs_set_cmdtree);
+
+	hook_add_event("config_ready");
+	hook_add_config_ready(cs_set_fantasy_config_ready);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	command_delete(&cs_set_fantasy, *cs_set_cmdtree);
+
+	hook_del_config_ready(cs_set_fantasy_config_ready);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/set_fantasy", MODULE_UNLOAD_CAPABILITY_OK)

@@ -26,30 +26,6 @@ has_nopassword(const struct mynick *mn, const void *arg)
 	return ( mu->flags & MU_NOPASSWORD ) == MU_NOPASSWORD;
 }
 
-static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
-
-	command_add(&ns_set_nopassword, *ns_set_cmdtree);
-
-	use_nslist_main_symbols(m);
-
-	static struct list_param nopassword;
-	nopassword.opttype = OPT_BOOL;
-	nopassword.is_match = has_nopassword;
-
-	list_register("nopassword", &nopassword);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	command_delete(&ns_set_nopassword, *ns_set_cmdtree);
-
-	list_unregister("nopassword");
-}
-
 /* SET NOPASSWORD [ON|OFF] */
 static void
 ns_cmd_set_nopassword(struct sourceinfo *si, int parc, char *parv[])
@@ -105,6 +81,30 @@ ns_cmd_set_nopassword(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "NOPASSWORD");
 		return;
 	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
+
+	command_add(&ns_set_nopassword, *ns_set_cmdtree);
+
+	use_nslist_main_symbols(m);
+
+	static struct list_param nopassword;
+	nopassword.opttype = OPT_BOOL;
+	nopassword.is_match = has_nopassword;
+
+	list_register("nopassword", &nopassword);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	command_delete(&ns_set_nopassword, *ns_set_cmdtree);
+
+	list_unregister("nopassword");
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/set_nopassword", MODULE_UNLOAD_CAPABILITY_OK)

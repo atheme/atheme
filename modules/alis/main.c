@@ -71,23 +71,6 @@ struct alis_query
 	int showsecret;
 };
 
-static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	alis = service_add("alis", NULL);
-	service_bind_command(alis, &alis_list);
-	service_bind_command(alis, &alis_help);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_unbind_command(alis, &alis_list);
-	service_unbind_command(alis, &alis_help);
-
-	service_delete(alis);
-}
-
 static int
 alis_parse_mode(const char *text, int *key, int *limit, int *ext)
 {
@@ -480,6 +463,23 @@ alis_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	help_display(si, si->service, command, alis->commands);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	alis = service_add("alis", NULL);
+	service_bind_command(alis, &alis_list);
+	service_bind_command(alis, &alis_help);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_unbind_command(alis, &alis_list);
+	service_unbind_command(alis, &alis_help);
+
+	service_delete(alis);
 }
 
 SIMPLE_DECLARE_MODULE_V1("alis/main", MODULE_UNLOAD_CAPABILITY_OK)

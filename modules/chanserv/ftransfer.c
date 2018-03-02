@@ -13,18 +13,6 @@ static struct command cs_ftransfer = { "FTRANSFER", N_("Forces foundership trans
                            PRIV_CHAN_ADMIN, 2, cs_cmd_ftransfer, { .path = "cservice/ftransfer" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("chanserv", &cs_ftransfer);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_ftransfer);
-}
-
-static void
 cs_cmd_ftransfer(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myentity *mt;
@@ -89,6 +77,18 @@ cs_cmd_ftransfer(struct sourceinfo *si, int parc, char *parv[])
 	/* delete transfer metadata -- prevents a user from stealing it back */
 	metadata_delete(mc, "private:verify:founderchg:newfounder");
 	metadata_delete(mc, "private:verify:founderchg:timestamp");
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("chanserv", &cs_ftransfer);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_ftransfer);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/ftransfer", MODULE_UNLOAD_CAPABILITY_OK)

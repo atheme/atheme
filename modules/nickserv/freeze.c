@@ -39,34 +39,6 @@ frozen_match(const struct mynick *mn, const void *arg)
 }
 
 static void
-mod_init(struct module *const restrict m)
-{
-	service_named_bind_command("nickserv", &ns_freeze);
-
-	use_nslist_main_symbols(m);
-
-	static struct list_param frozen;
-	frozen.opttype = OPT_BOOL;
-	frozen.is_match = is_frozen;
-
-	static struct list_param frozen_reason;
-	frozen_reason.opttype = OPT_STRING;
-	frozen_reason.is_match = frozen_match;
-
-	list_register("frozen", &frozen);
-	list_register("frozen-reason", &frozen_reason);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("nickserv", &ns_freeze);
-
-	list_unregister("frozen");
-	list_unregister("frozen-reason");
-}
-
-static void
 ns_cmd_freeze(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
@@ -154,6 +126,34 @@ ns_cmd_freeze(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FREEZE");
 		command_fail(si, fault_needmoreparams, _("Usage: FREEZE <account> <ON|OFF> [reason]"));
 	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	service_named_bind_command("nickserv", &ns_freeze);
+
+	use_nslist_main_symbols(m);
+
+	static struct list_param frozen;
+	frozen.opttype = OPT_BOOL;
+	frozen.is_match = is_frozen;
+
+	static struct list_param frozen_reason;
+	frozen_reason.opttype = OPT_STRING;
+	frozen_reason.is_match = frozen_match;
+
+	list_register("frozen", &frozen);
+	list_register("frozen-reason", &frozen_reason);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("nickserv", &ns_freeze);
+
+	list_unregister("frozen");
+	list_unregister("frozen-reason");
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/freeze", MODULE_UNLOAD_CAPABILITY_OK)

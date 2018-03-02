@@ -17,22 +17,6 @@ static struct command cs_clear = { "CLEAR", N_("Channel removal toolkit."),
 mowgli_patricia_t *cs_clear_cmds;
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("chanserv", &cs_clear);
-
-	cs_clear_cmds = mowgli_patricia_create(strcasecanon);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_clear);
-
-	mowgli_patricia_destroy(cs_clear_cmds, NULL, NULL);
-}
-
-static void
 cs_help_clear(struct sourceinfo *si, const char *subcmd)
 {
 	if (!subcmd)
@@ -85,6 +69,22 @@ cs_cmd_clear(struct sourceinfo *si, int parc, char *parv[])
 
 	parv[1] = chan;
 	command_exec(si->service, si, c, parc - 1, parv + 1);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("chanserv", &cs_clear);
+
+	cs_clear_cmds = mowgli_patricia_create(strcasecanon);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_clear);
+
+	mowgli_patricia_destroy(cs_clear_cmds, NULL, NULL);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/clear", MODULE_UNLOAD_CAPABILITY_OK)

@@ -16,20 +16,6 @@ static struct command bs_say = { "SAY", N_("Makes the bot say the given text on 
 static struct command bs_act = { "ACT", N_("Makes the bot do the equivalent of a \"/me\" command."), AC_AUTHENTICATED, 2, bs_cmd_act, { .path = "botserv/act" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("botserv", &bs_say);
-	service_named_bind_command("botserv", &bs_act);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("botserv", &bs_say);
-	service_named_unbind_command("botserv", &bs_act);
-}
-
-static void
 bs_cmd_say(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
@@ -160,6 +146,20 @@ bs_cmd_act(struct sourceinfo *si, int parc, char *parv[])
 	msg(bot->nick, channel, "\001ACTION %s\001", message);
 	logcommand(si, CMDLOG_DO, "ACT:\2%s\2: \2%s\2", channel, message);
 	}
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("botserv", &bs_say);
+	service_named_bind_command("botserv", &bs_act);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("botserv", &bs_say);
+	service_named_unbind_command("botserv", &bs_act);
 }
 
 SIMPLE_DECLARE_MODULE_V1("botserv/bottalk", MODULE_UNLOAD_CAPABILITY_OK)

@@ -46,43 +46,6 @@ static mowgli_eventloop_timer_t *akick_timeout_check_timer = NULL;
 static struct akick_timeout *akick_add_timeout(struct mychan *mc, struct myentity *mt, const char *host, time_t expireson);
 
 static void
-mod_init(struct module *const restrict m)
-{
-        service_named_bind_command("chanserv", &cs_akick);
-
-	cs_akick_cmds = mowgli_patricia_create(strcasecanon);
-
-	/* Add sub-commands */
-	command_add(&cs_akick_add, cs_akick_cmds);
-	command_add(&cs_akick_del, cs_akick_cmds);
-	command_add(&cs_akick_list, cs_akick_cmds);
-
-        akick_timeout_heap = mowgli_heap_create(sizeof(struct akick_timeout), 512, BH_NOW);
-
-    	if (akick_timeout_heap == NULL)
-    	{
-		m->mflags |= MODTYPE_FAIL;
-    		return;
-    	}
-
-	mowgli_timer_add_once(base_eventloop, "akickdel_list_create", akickdel_list_create, NULL, 0);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_akick);
-
-	/* Delete sub-commands */
-	command_delete(&cs_akick_add, cs_akick_cmds);
-	command_delete(&cs_akick_del, cs_akick_cmds);
-	command_delete(&cs_akick_list, cs_akick_cmds);
-
-	mowgli_heap_destroy(akick_timeout_heap);
-	mowgli_patricia_destroy(cs_akick_cmds, NULL, NULL);
-}
-
-static void
 clear_bans_matching_entity(struct mychan *mc, struct myentity *mt)
 {
 	mowgli_node_t *n;
@@ -797,6 +760,43 @@ akickdel_list_create(void *arg)
 			}
 		}
 	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+        service_named_bind_command("chanserv", &cs_akick);
+
+	cs_akick_cmds = mowgli_patricia_create(strcasecanon);
+
+	/* Add sub-commands */
+	command_add(&cs_akick_add, cs_akick_cmds);
+	command_add(&cs_akick_del, cs_akick_cmds);
+	command_add(&cs_akick_list, cs_akick_cmds);
+
+        akick_timeout_heap = mowgli_heap_create(sizeof(struct akick_timeout), 512, BH_NOW);
+
+    	if (akick_timeout_heap == NULL)
+    	{
+		m->mflags |= MODTYPE_FAIL;
+    		return;
+    	}
+
+	mowgli_timer_add_once(base_eventloop, "akickdel_list_create", akickdel_list_create, NULL, 0);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_akick);
+
+	/* Delete sub-commands */
+	command_delete(&cs_akick_add, cs_akick_cmds);
+	command_delete(&cs_akick_del, cs_akick_cmds);
+	command_delete(&cs_akick_list, cs_akick_cmds);
+
+	mowgli_heap_destroy(akick_timeout_heap);
+	mowgli_patricia_destroy(cs_akick_cmds, NULL, NULL);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/akick", MODULE_UNLOAD_CAPABILITY_OK)

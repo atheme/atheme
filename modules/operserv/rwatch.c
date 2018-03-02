@@ -49,46 +49,6 @@ static struct rwatch *rwread = NULL;
 static FILE *f;
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("operserv", &os_rwatch);
-
-	os_rwatch_cmds = mowgli_patricia_create(strcasecanon);
-
-	command_add(&os_rwatch_add, os_rwatch_cmds);
-	command_add(&os_rwatch_del, os_rwatch_cmds);
-	command_add(&os_rwatch_list, os_rwatch_cmds);
-	command_add(&os_rwatch_set, os_rwatch_cmds);
-
-	hook_add_event("user_add");
-	hook_add_user_add(rwatch_newuser);
-	hook_add_event("user_nickchange");
-	hook_add_user_nickchange(rwatch_nickchange);
-	hook_add_db_write(write_rwatchdb);
-
-	char path[BUFSIZE];
-	snprintf(path, BUFSIZE, "%s/%s", datadir, "rwatch.db");
-	f = fopen(path, "r");
-
-	if (f)
-	{
-		load_rwatchdb(path); /* because i'm lazy, let's pass path to the function */
-		fclose(f);
-	}
-	else
-	{
-		db_register_type_handler("RW", db_h_rw);
-		db_register_type_handler("RR", db_h_rr);
-	}
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-
-}
-
-static void
 write_rwatchdb(struct database_handle *db)
 {
 	mowgli_node_t *n;
@@ -616,6 +576,46 @@ rwatch_nickchange(hook_user_nick_t *data)
 			}
 		}
 	}
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("operserv", &os_rwatch);
+
+	os_rwatch_cmds = mowgli_patricia_create(strcasecanon);
+
+	command_add(&os_rwatch_add, os_rwatch_cmds);
+	command_add(&os_rwatch_del, os_rwatch_cmds);
+	command_add(&os_rwatch_list, os_rwatch_cmds);
+	command_add(&os_rwatch_set, os_rwatch_cmds);
+
+	hook_add_event("user_add");
+	hook_add_user_add(rwatch_newuser);
+	hook_add_event("user_nickchange");
+	hook_add_user_nickchange(rwatch_nickchange);
+	hook_add_db_write(write_rwatchdb);
+
+	char path[BUFSIZE];
+	snprintf(path, BUFSIZE, "%s/%s", datadir, "rwatch.db");
+	f = fopen(path, "r");
+
+	if (f)
+	{
+		load_rwatchdb(path); /* because i'm lazy, let's pass path to the function */
+		fclose(f);
+	}
+	else
+	{
+		db_register_type_handler("RW", db_h_rw);
+		db_register_type_handler("RR", db_h_rr);
+	}
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/rwatch", MODULE_UNLOAD_CAPABILITY_NEVER)

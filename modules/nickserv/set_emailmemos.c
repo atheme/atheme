@@ -25,29 +25,6 @@ has_emailmemos(const struct mynick *mn, const void *arg)
 	return ( mu->flags & MU_EMAILMEMOS ) == MU_EMAILMEMOS;
 }
 
-static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
-
-	command_add(&ns_set_emailmemos, *ns_set_cmdtree);
-
-	use_nslist_main_symbols(m);
-
-	static struct list_param emailmemos;
-	emailmemos.opttype = OPT_BOOL;
-	emailmemos.is_match = has_emailmemos;
-
-	list_register("emailmemos", &emailmemos);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	command_delete(&ns_set_emailmemos, *ns_set_cmdtree);
-	list_unregister("emailmemos");
-}
-
 /* SET EMAILMEMOS [ON|OFF] */
 static void
 ns_cmd_set_emailmemos(struct sourceinfo *si, int parc, char *parv[])
@@ -103,6 +80,29 @@ ns_cmd_set_emailmemos(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "EMAILMEMOS");
 		return;
 	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
+
+	command_add(&ns_set_emailmemos, *ns_set_cmdtree);
+
+	use_nslist_main_symbols(m);
+
+	static struct list_param emailmemos;
+	emailmemos.opttype = OPT_BOOL;
+	emailmemos.is_match = has_emailmemos;
+
+	list_register("emailmemos", &emailmemos);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	command_delete(&ns_set_emailmemos, *ns_set_cmdtree);
+	list_unregister("emailmemos");
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/set_emailmemos", MODULE_UNLOAD_CAPABILITY_OK)

@@ -16,21 +16,6 @@ static struct command cs_close = { "CLOSE", N_("Closes a channel."),
 static void close_check_join(hook_channel_joinpart_t *data);
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("chanserv", &cs_close);
-	hook_add_event("channel_join");
-	hook_add_first_channel_join(close_check_join);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_close);
-	hook_del_channel_join(close_check_join);
-}
-
-static void
 close_check_join(hook_channel_joinpart_t *data)
 {
 	struct mychan *mc;
@@ -167,6 +152,21 @@ cs_cmd_close(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "CLOSE");
 		command_fail(si, fault_badparams, _("Usage: CLOSE <#channel> <ON|OFF> [reason]"));
 	}
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("chanserv", &cs_close);
+	hook_add_event("channel_join");
+	hook_add_first_channel_join(close_check_join);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_close);
+	hook_del_channel_join(close_check_join);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/close", MODULE_UNLOAD_CAPABILITY_OK)

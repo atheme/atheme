@@ -11,21 +11,6 @@ static void ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[]);
 
 static struct command ns_sendpass = { "SENDPASS", N_("Email registration passwords."), AC_NONE, 2, ns_cmd_sendpass, { .path = "nickserv/sendpass_user" } };
 
-static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_CONFLICT(m, "nickserv/sendpass")
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/setpass");
-
-	service_named_bind_command("nickserv", &ns_sendpass);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("nickserv", &ns_sendpass);
-}
-
 enum specialoperation
 {
 	op_none,
@@ -147,6 +132,21 @@ ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 	else
 		command_fail(si, fault_emailfail, _("Email send failed."));
 	free(key);
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_CONFLICT(m, "nickserv/sendpass")
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/setpass");
+
+	service_named_bind_command("nickserv", &ns_sendpass);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("nickserv", &ns_sendpass);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/sendpass_user", MODULE_UNLOAD_CAPABILITY_OK)

@@ -15,24 +15,6 @@ static struct command cs_set_limitflags = { "LIMITFLAGS", N_("Limits the power o
 static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
-
-	command_add(&cs_set_limitflags, *cs_set_cmdtree);
-
-	use_limitflags++;
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	command_delete(&cs_set_limitflags, *cs_set_cmdtree);
-
-	use_limitflags--;
-}
-
-static void
 cs_cmd_set_limitflags(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
@@ -96,6 +78,24 @@ cs_cmd_set_limitflags(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "LIMITFLAGS");
 		return;
 	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
+
+	command_add(&cs_set_limitflags, *cs_set_cmdtree);
+
+	use_limitflags++;
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	command_delete(&cs_set_limitflags, *cs_set_cmdtree);
+
+	use_limitflags--;
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/set_limitflags", MODULE_UNLOAD_CAPABILITY_OK)

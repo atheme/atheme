@@ -13,22 +13,6 @@ static void command_rps(struct sourceinfo *si, int parc, char *parv[]);
 static struct command cmd_rps = { "RPS", N_("Rock Paper Scissors."), AC_NONE, 2, command_rps, { .path = "gameserv/rps" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("gameserv", &cmd_rps);
-
-	service_named_bind_command("chanserv", &cmd_rps);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("gameserv", &cmd_rps);
-
-	service_named_unbind_command("chanserv", &cmd_rps);
-}
-
-static void
 command_rps(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
@@ -42,6 +26,22 @@ command_rps(struct sourceinfo *si, int parc, char *parv[])
 		return;
 
 	gs_command_report(si, "%s", _(rps_responses[rand() % 3]));
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("gameserv", &cmd_rps);
+
+	service_named_bind_command("chanserv", &cmd_rps);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("gameserv", &cmd_rps);
+
+	service_named_unbind_command("chanserv", &cmd_rps);
 }
 
 SIMPLE_DECLARE_MODULE_V1("gameserv/rps", MODULE_UNLOAD_CAPABILITY_OK)

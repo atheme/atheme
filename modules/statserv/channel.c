@@ -23,28 +23,6 @@ static struct command ss_channel_count =
 static mowgli_patricia_t *ss_channel_cmds = NULL;
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-    service_named_bind_command("statserv", &ss_channel);
-
-    ss_channel_cmds = mowgli_patricia_create(strcasecanon);
-
-    command_add(&ss_channel_topic, ss_channel_cmds);
-    command_add(&ss_channel_count, ss_channel_cmds);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-    service_named_unbind_command("statserv", &ss_channel);
-
-    command_delete(&ss_channel_topic, ss_channel_cmds);
-    command_delete(&ss_channel_count, ss_channel_cmds);
-
-    mowgli_patricia_destroy(ss_channel_cmds, NULL, NULL);
-}
-
-static void
 ss_cmd_channel(struct sourceinfo * si, int parc, char *parv[])
 {
     struct command *c;
@@ -108,6 +86,28 @@ static void
 ss_cmd_channel_count(struct sourceinfo * si, int parc, char *parv[])
 {
     command_success_nodata(si, "There are %u channels on the network.", mowgli_patricia_size(chanlist));
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+    service_named_bind_command("statserv", &ss_channel);
+
+    ss_channel_cmds = mowgli_patricia_create(strcasecanon);
+
+    command_add(&ss_channel_topic, ss_channel_cmds);
+    command_add(&ss_channel_count, ss_channel_cmds);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+    service_named_unbind_command("statserv", &ss_channel);
+
+    command_delete(&ss_channel_topic, ss_channel_cmds);
+    command_delete(&ss_channel_count, ss_channel_cmds);
+
+    mowgli_patricia_destroy(ss_channel_cmds, NULL, NULL);
 }
 
 SIMPLE_DECLARE_MODULE_V1("statserv/channel", MODULE_UNLOAD_CAPABILITY_OK)

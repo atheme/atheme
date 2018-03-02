@@ -12,18 +12,6 @@ static void os_cmd_help(struct sourceinfo *si, int parc, char *parv[]);
 
 static struct command os_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 1, os_cmd_help, { .path = "help" } };
 
-static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("operserv", &os_help);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("operserv", &os_help);
-}
-
 /* HELP <command> [params] */
 static void
 os_cmd_help(struct sourceinfo *si, int parc, char *parv[])
@@ -56,6 +44,18 @@ os_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 
 	/* take the command through the hash table */
 	help_display(si, si->service, command, si->service->commands);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("operserv", &os_help);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("operserv", &os_help);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/help", MODULE_UNLOAD_CAPABILITY_OK)

@@ -25,30 +25,6 @@ has_neverop(const struct mynick *mn, const void *arg)
 	return ( mu->flags & MU_NEVEROP ) == MU_NEVEROP;
 }
 
-static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
-
-	command_add(&ns_set_neverop, *ns_set_cmdtree);
-
-	use_nslist_main_symbols(m);
-
-	static struct list_param neverop;
-	neverop.opttype = OPT_BOOL;
-	neverop.is_match = has_neverop;
-
-	list_register("neverop", &neverop);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	command_delete(&ns_set_neverop, *ns_set_cmdtree);
-
-	list_unregister("neverop");
-}
-
 /* SET NEVEROP [ON|OFF] */
 static void
 ns_cmd_set_neverop(struct sourceinfo *si, int parc, char *parv[])
@@ -100,6 +76,30 @@ ns_cmd_set_neverop(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "NEVEROP");
 		return;
 	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
+
+	command_add(&ns_set_neverop, *ns_set_cmdtree);
+
+	use_nslist_main_symbols(m);
+
+	static struct list_param neverop;
+	neverop.opttype = OPT_BOOL;
+	neverop.is_match = has_neverop;
+
+	list_register("neverop", &neverop);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	command_delete(&ns_set_neverop, *ns_set_cmdtree);
+
+	list_unregister("neverop");
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/set_neverop", MODULE_UNLOAD_CAPABILITY_OK)

@@ -15,20 +15,6 @@ static struct command cs_set_property = { "PROPERTY", N_("Manipulates channel me
 static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
-
-	command_add(&cs_set_property, *cs_set_cmdtree);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	command_delete(&cs_set_property, *cs_set_cmdtree);
-}
-
-static void
 cs_cmd_set_property(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
@@ -109,6 +95,20 @@ cs_cmd_set_property(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_SET, "SET:PROPERTY: \2%s\2 on \2%s\2 to \2%s\2", property, mc->name, value);
 	verbose(mc, _("\2%s\2 added the metadata entry \2%s\2 with value \2%s\2"), get_source_name(si), property, value);
 	command_success_nodata(si, _("Metadata entry \2%s\2 added."), property);
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
+
+	command_add(&cs_set_property, *cs_set_cmdtree);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	command_delete(&cs_set_property, *cs_set_cmdtree);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/set_property", MODULE_UNLOAD_CAPABILITY_OK)

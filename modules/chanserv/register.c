@@ -17,18 +17,6 @@ static struct command cs_register = { "REGISTER", N_("Registers a channel."),
                            AC_AUTHENTICATED, 3, cs_cmd_register, { .path = "cservice/register" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("chanserv", &cs_register);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_register);
-}
-
-static void
 cs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c;
@@ -179,6 +167,18 @@ cs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 				ircd->protect_mchar[1], CLIENT_NAME(si->su));
 		cu->modes |= CSTATUS_PROTECT;
 	}
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("chanserv", &cs_register);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_register);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/register", MODULE_UNLOAD_CAPABILITY_OK)

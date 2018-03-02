@@ -25,28 +25,6 @@ static struct command ns_identify = { "IDENTIFY", N_("Identifies to services for
 #endif
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-#ifdef NICKSERV_LOGIN
-	service_named_bind_command("nickserv", &ns_login);
-#else
-	service_named_bind_command("nickserv", &ns_identify);
-#endif
-
-	hook_add_event("user_can_login");
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-#ifdef NICKSERV_LOGIN
-	service_named_unbind_command("nickserv", &ns_login);
-#else
-	service_named_unbind_command("nickserv", &ns_identify);
-#endif
-}
-
-static void
 ns_cmd_login(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u = si->su;
@@ -178,6 +156,28 @@ ns_cmd_login(struct sourceinfo *si, int parc, char *parv[])
 
 	command_fail(si, fault_authfail, _("Invalid password for \2%s\2."), entity(mu)->name);
 	bad_password(si, mu);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+#ifdef NICKSERV_LOGIN
+	service_named_bind_command("nickserv", &ns_login);
+#else
+	service_named_bind_command("nickserv", &ns_identify);
+#endif
+
+	hook_add_event("user_can_login");
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+#ifdef NICKSERV_LOGIN
+	service_named_unbind_command("nickserv", &ns_login);
+#else
+	service_named_unbind_command("nickserv", &ns_identify);
+#endif
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/" COMMAND_LC, MODULE_UNLOAD_CAPABILITY_OK)

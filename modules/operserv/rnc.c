@@ -18,18 +18,6 @@ struct rnc
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("operserv", &os_rnc);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("operserv", &os_rnc);
-}
-
-static void
 os_cmd_rnc(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *param = parv[0];
@@ -87,6 +75,18 @@ os_cmd_rnc(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_patricia_destroy(realnames, NULL, NULL);
 
 	logcommand(si, CMDLOG_ADMIN, "RNC: \2%d\2", count);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("operserv", &os_rnc);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("operserv", &os_rnc);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/rnc", MODULE_UNLOAD_CAPABILITY_OK)

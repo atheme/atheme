@@ -16,32 +16,6 @@ static struct command cs_flags = { "FLAGS", N_("Manipulates specific permissions
 
 static bool anope_flags_compat = true;
 
-static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("chanserv", &cs_flags);
-
-	add_bool_conf_item("ANOPE_FLAGS_COMPAT", &chansvs.me->conf_table, 0, &anope_flags_compat, true);
-
-	hook_add_event("nick_can_register");
-	hook_add_nick_can_register(check_registration_keywords);
-
-	hook_add_event("user_can_register");
-	hook_add_user_can_register(check_registration_keywords);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_flags);
-
-	hook_del_nick_can_register(check_registration_keywords);
-
-	hook_del_user_can_register(check_registration_keywords);
-
-	del_conf_item("ANOPE_FLAGS_COMPAT", &chansvs.me->conf_table);
-}
-
 struct template_iter
 {
 	const char *res;
@@ -523,6 +497,32 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	free(target);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("chanserv", &cs_flags);
+
+	add_bool_conf_item("ANOPE_FLAGS_COMPAT", &chansvs.me->conf_table, 0, &anope_flags_compat, true);
+
+	hook_add_event("nick_can_register");
+	hook_add_nick_can_register(check_registration_keywords);
+
+	hook_add_event("user_can_register");
+	hook_add_user_can_register(check_registration_keywords);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_flags);
+
+	hook_del_nick_can_register(check_registration_keywords);
+
+	hook_del_user_can_register(check_registration_keywords);
+
+	del_conf_item("ANOPE_FLAGS_COMPAT", &chansvs.me->conf_table);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/flags", MODULE_UNLOAD_CAPABILITY_OK)

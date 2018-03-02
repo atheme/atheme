@@ -15,22 +15,6 @@ static void bs_cmd_set_saycaller(struct sourceinfo *si, int parc, char *parv[]);
 static struct command bs_set_saycaller = { "SAYCALLER", N_("Enable Caller-ID on BotServ actions or messages."), AC_AUTHENTICATED, 2, bs_cmd_set_saycaller, { .path = "botserv/set_saycaller" } };
 
 static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree");
-
-	command_add(&bs_set_saycaller, *bs_set_cmdtree);
-
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	command_delete(&bs_set_saycaller, *bs_set_cmdtree);
-
-}
-
-static void
 bs_cmd_set_saycaller(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
@@ -84,6 +68,20 @@ bs_cmd_set_saycaller(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET SAYCALLER");
 		command_fail(si, fault_badparams, _("Syntax: SET <#channel> SAYCALLER {ON|OFF}"));
 	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree");
+
+	command_add(&bs_set_saycaller, *bs_set_cmdtree);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	command_delete(&bs_set_saycaller, *bs_set_cmdtree);
 }
 
 SIMPLE_DECLARE_MODULE_V1("botserv/set_saycaller", MODULE_UNLOAD_CAPABILITY_OK)

@@ -12,18 +12,6 @@ static void ns_cmd_resetpass(struct sourceinfo *si, int parc, char *parv[]);
 static struct command ns_resetpass = { "RESETPASS", N_("Resets an account password."), PRIV_USER_ADMIN, 1, ns_cmd_resetpass, { .path = "nickserv/resetpass" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("nickserv", &ns_resetpass);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("nickserv", &ns_resetpass);
-}
-
-static void
 ns_cmd_resetpass(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
@@ -86,6 +74,18 @@ ns_cmd_resetpass(struct sourceinfo *si, int parc, char *parv[])
 		mu->flags &= ~MU_NOPASSWORD;
 		command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "NOPASSWORD", entity(mu)->name);
 	}
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("nickserv", &ns_resetpass);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("nickserv", &ns_resetpass);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/resetpass", MODULE_UNLOAD_CAPABILITY_OK)

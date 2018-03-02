@@ -12,18 +12,6 @@ static void os_cmd_jupe(struct sourceinfo *si, int parc, char *parv[]);
 static struct command os_jupe = { "JUPE", N_("Jupiters a server."), PRIV_JUPE, 2, os_cmd_jupe, { .path = "oservice/jupe" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("operserv", &os_jupe);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("operserv", &os_jupe);
-}
-
-static void
 os_cmd_jupe(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *server = parv[0];
@@ -65,6 +53,18 @@ os_cmd_jupe(struct sourceinfo *si, int parc, char *parv[])
 	jupe(server, reasonbuf);
 
 	command_success_nodata(si, _("\2%s\2 has been jupitered."), server);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("operserv", &os_jupe);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("operserv", &os_jupe);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/jupe", MODULE_UNLOAD_CAPABILITY_OK)

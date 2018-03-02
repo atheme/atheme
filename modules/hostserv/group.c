@@ -13,18 +13,6 @@ static void hs_cmd_group(struct sourceinfo *si, int parc, char *parv[]);
 static struct command hs_group = { "GROUP", N_("Syncs the vhost for all nicks in a group."), AC_AUTHENTICATED, 1, hs_cmd_group, { .path = "hostserv/group" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("hostserv", &hs_group);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("hostserv", &hs_group);
-}
-
-static void
 hs_cmd_group(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mynick *mn;
@@ -62,6 +50,18 @@ hs_cmd_group(struct sourceinfo *si, int parc, char *parv[])
 	hs_sethost_all(si->smu, buf, get_source_name(si));
 	do_sethost_all(si->smu, buf);
 	command_success_nodata(si, _("All vhosts in the group \2%s\2 have been set to \2%s\2."), entity(si->smu)->name, buf);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("hostserv", &hs_group);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("hostserv", &hs_group);
 }
 
 SIMPLE_DECLARE_MODULE_V1("hostserv/group", MODULE_UNLOAD_CAPABILITY_OK)

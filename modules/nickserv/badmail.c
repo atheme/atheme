@@ -26,31 +26,6 @@ struct badmail
 static mowgli_list_t ns_maillist;
 
 static void
-mod_init(struct module *const restrict m)
-{
-	if (!module_find_published("backend/opensex"))
-	{
-		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
-		m->mflags |= MODTYPE_FAIL;
-		return;
-	}
-
-	hook_add_event("user_can_register");
-	hook_add_user_can_register(check_registration);
-	hook_add_db_write(write_bedb);
-
-	db_register_type_handler("BE", db_h_be);
-
-	service_named_bind_command("nickserv", &ns_badmail);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-
-}
-
-static void
 write_bedb(struct database_handle *db)
 {
 	mowgli_node_t *n;
@@ -266,6 +241,31 @@ ns_cmd_badmail(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "BADMAIL");
 		return;
 	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	if (!module_find_published("backend/opensex"))
+	{
+		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	hook_add_event("user_can_register");
+	hook_add_user_can_register(check_registration);
+	hook_add_db_write(write_bedb);
+
+	db_register_type_handler("BE", db_h_be);
+
+	service_named_bind_command("nickserv", &ns_badmail);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/badmail", MODULE_UNLOAD_CAPABILITY_NEVER)

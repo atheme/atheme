@@ -14,18 +14,6 @@ static struct command cs_invite = { "INVITE", N_("Invites you to a channel."),
                         AC_NONE, 2, cs_cmd_invite, { .path = "cservice/invite" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("chanserv", &cs_invite);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_invite);
-}
-
-static void
 cs_cmd_invite(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
@@ -84,6 +72,18 @@ cs_cmd_invite(struct sourceinfo *si, int parc, char *parv[])
 	invite_sts(si->service->me, si->su, mc->chan);
 	logcommand(si, CMDLOG_DO, "INVITE: \2%s\2", mc->name);
 	command_success_nodata(si, _("You have been invited to \2%s\2."), mc->name);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("chanserv", &cs_invite);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_invite);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/invite", MODULE_UNLOAD_CAPABILITY_OK)

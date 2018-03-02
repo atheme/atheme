@@ -16,20 +16,6 @@ static void bs_cmd_set_nobot(struct sourceinfo *si, int parc, char *parv[]);
 static struct command bs_set_nobot = { "NOBOT", N_("Prevent a bot from being assigned to a channel."), PRIV_CHAN_ADMIN, 2, bs_cmd_set_nobot, { .path = "botserv/set_nobot" } };
 
 static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree");
-
-	command_add(&bs_set_nobot, *bs_set_cmdtree);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	command_delete(&bs_set_nobot, *bs_set_cmdtree);
-}
-
-static void
 bs_cmd_set_nobot(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
@@ -91,6 +77,20 @@ bs_cmd_set_nobot(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET NOBOT");
 		command_fail(si, fault_badparams, _("Syntax: SET <#channel> NOBOT {ON|OFF}"));
 	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree");
+
+	command_add(&bs_set_nobot, *bs_set_cmdtree);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	command_delete(&bs_set_nobot, *bs_set_cmdtree);
 }
 
 SIMPLE_DECLARE_MODULE_V1("botserv/set_nobot", MODULE_UNLOAD_CAPABILITY_OK)

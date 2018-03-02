@@ -16,21 +16,6 @@ static void bs_cmd_info(struct sourceinfo *si, int parc, char *parv[]);
 
 static struct command bs_info = { "INFO", N_("Allows you to see BotServ information about a channel or a bot."), AC_NONE, 1, bs_cmd_info, { .path = "botserv/info" } };
 
-static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, bs_bots, "botserv/main", "bs_bots");
-	MODULE_TRY_REQUEST_SYMBOL(m, botserv_bot_find, "botserv/main", "botserv_bot_find");
-
-	service_named_bind_command("botserv", &bs_info);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("botserv", &bs_info);
-}
-
 /* ******************************************************************** */
 
 static void
@@ -126,6 +111,21 @@ bs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("Syntax: INFO <#channel>"));
 		command_fail(si, fault_nosuch_target, _("Syntax: INFO <botnick>"));
 	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, bs_bots, "botserv/main", "bs_bots");
+	MODULE_TRY_REQUEST_SYMBOL(m, botserv_bot_find, "botserv/main", "botserv_bot_find");
+
+	service_named_bind_command("botserv", &bs_info);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("botserv", &bs_info);
 }
 
 SIMPLE_DECLARE_MODULE_V1("botserv/info", MODULE_UNLOAD_CAPABILITY_OK)

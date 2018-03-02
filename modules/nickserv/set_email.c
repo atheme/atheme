@@ -15,20 +15,6 @@ static void ns_cmd_set_email(struct sourceinfo *si, int parc, char *parv[]);
 
 static struct command ns_set_email = { "EMAIL", N_("Changes your e-mail address."), AC_NONE, 1, ns_cmd_set_email, { .path = "nickserv/set_email" } };
 
-static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
-
-	command_add(&ns_set_email, *ns_set_cmdtree);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	command_delete(&ns_set_email, *ns_set_cmdtree);
-}
-
 /* SET EMAIL <new address> */
 static void
 ns_cmd_set_email(struct sourceinfo *si, int parc, char *parv[])
@@ -97,6 +83,20 @@ ns_cmd_set_email(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_SET, "SET:EMAIL: \2%s\2 (\2%s\2 -> \2%s\2)", entity(si->smu)->name, si->smu->email, email);
 	myuser_set_email(si->smu, email);
 	command_success_nodata(si, _("The email address for account \2%s\2 has been changed to \2%s\2."), entity(si->smu)->name, si->smu->email);
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
+
+	command_add(&ns_set_email, *ns_set_cmdtree);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	command_delete(&ns_set_email, *ns_set_cmdtree);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/set_email", MODULE_UNLOAD_CAPABILITY_OK)

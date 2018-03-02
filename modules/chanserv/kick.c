@@ -16,20 +16,6 @@ static struct command cs_kickban = { "KICKBAN", N_("Removes and bans a user from
 			AC_NONE, 3, cs_cmd_kickban, { .path = "cservice/kickban" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("chanserv", &cs_kick);
-	service_named_bind_command("chanserv", &cs_kickban);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_kick);
-	service_named_unbind_command("chanserv", &cs_kickban);
-}
-
-static void
 cs_cmd_kick(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
@@ -170,6 +156,20 @@ cs_cmd_kickban(struct sourceinfo *si, int parc, char *parv[])
 	if (si->su == NULL ||
 			(si->su != tu && !chanuser_find(mc->chan, si->su)))
 		command_success_nodata(si, _("\2%s\2 has been kickbanned from \2%s\2."), tu->nick, mc->name);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("chanserv", &cs_kick);
+	service_named_bind_command("chanserv", &cs_kickban);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_kick);
+	service_named_unbind_command("chanserv", &cs_kickban);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/kick", MODULE_UNLOAD_CAPABILITY_OK)

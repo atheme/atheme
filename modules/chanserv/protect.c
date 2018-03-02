@@ -16,27 +16,6 @@ static struct command cs_protect = { "PROTECT", N_("Gives the channel protection
 static struct command cs_deprotect = { "DEPROTECT", N_("Removes channel protection flag from a user."),
                         AC_NONE, 2, cs_cmd_deprotect, { .path = "cservice/protect" } };
 
-static void
-mod_init(struct module *const restrict m)
-{
-	if (ircd != NULL && !ircd->uses_protect)
-	{
-		slog(LG_INFO, "Module %s requires protect support, refusing to load.", m->name);
-		m->mflags |= MODTYPE_FAIL;
-		return;
-	}
-
-        service_named_bind_command("chanserv", &cs_protect);
-        service_named_bind_command("chanserv", &cs_deprotect);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_protect);
-	service_named_unbind_command("chanserv", &cs_deprotect);
-}
-
 static mowgli_list_t protect_actions;
 
 static void
@@ -152,6 +131,27 @@ cs_cmd_deprotect(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	cmd_protect(si, false, parc, parv);
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	if (ircd != NULL && !ircd->uses_protect)
+	{
+		slog(LG_INFO, "Module %s requires protect support, refusing to load.", m->name);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+        service_named_bind_command("chanserv", &cs_protect);
+        service_named_bind_command("chanserv", &cs_deprotect);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_protect);
+	service_named_unbind_command("chanserv", &cs_deprotect);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/protect", MODULE_UNLOAD_CAPABILITY_OK)

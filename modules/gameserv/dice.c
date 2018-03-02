@@ -20,42 +20,6 @@ static struct command cmd_calc = { "CALC", N_("Calculate stuff."), AC_NONE, 3, c
 
 static unsigned int max_rolls = 10;
 
-static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	struct service *svs;
-
-	service_named_bind_command("chanserv", &cmd_dice);
-	service_named_bind_command("chanserv", &cmd_calc);
-
-	svs = service_find("gameserv");
-	if (!svs)
-		return;
-
-	service_bind_command(svs, &cmd_dice);
-	service_bind_command(svs, &cmd_calc);
-
-	add_uint_conf_item("MAX_ROLLS", &svs->conf_table, 0, &max_rolls, 1, INT_MAX, 10);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	struct service *svs;
-
-	service_named_unbind_command("chanserv", &cmd_dice);
-	service_named_unbind_command("chanserv", &cmd_calc);
-
-	svs = service_find("gameserv");
-	if (!svs)
-		return;
-
-	service_unbind_command(svs, &cmd_dice);
-	service_unbind_command(svs, &cmd_calc);
-
-	del_conf_item("MAX_ROLLS", &svs->conf_table);
-}
-
 #define CALC_MAX_STACK		(128)
 
 #define DICE_MAX_DICE		(100)
@@ -645,6 +609,42 @@ command_calc(struct sourceinfo *si, int parc, char *parv[])
 	for (i = 0; i < times; i++)
 		if (!eval_calc(si, arg))
 			break;
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	struct service *svs;
+
+	service_named_bind_command("chanserv", &cmd_dice);
+	service_named_bind_command("chanserv", &cmd_calc);
+
+	svs = service_find("gameserv");
+	if (!svs)
+		return;
+
+	service_bind_command(svs, &cmd_dice);
+	service_bind_command(svs, &cmd_calc);
+
+	add_uint_conf_item("MAX_ROLLS", &svs->conf_table, 0, &max_rolls, 1, INT_MAX, 10);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	struct service *svs;
+
+	service_named_unbind_command("chanserv", &cmd_dice);
+	service_named_unbind_command("chanserv", &cmd_calc);
+
+	svs = service_find("gameserv");
+	if (!svs)
+		return;
+
+	service_unbind_command(svs, &cmd_dice);
+	service_unbind_command(svs, &cmd_calc);
+
+	del_conf_item("MAX_ROLLS", &svs->conf_table);
 }
 
 SIMPLE_DECLARE_MODULE_V1("gameserv/dice", MODULE_UNLOAD_CAPABILITY_OK)

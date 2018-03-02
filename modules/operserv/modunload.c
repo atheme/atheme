@@ -12,18 +12,6 @@ static void os_cmd_modunload(struct sourceinfo *si, int parc, char *parv[]);
 static struct command os_modunload = { "MODUNLOAD", N_("Unloads a module."), PRIV_ADMIN, 20, os_cmd_modunload, { .path = "oservice/modunload" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("operserv", &os_modunload);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("operserv", &os_modunload);
-}
-
-static void
 os_cmd_modunload(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *module;
@@ -69,6 +57,18 @@ os_cmd_modunload(struct sourceinfo *si, int parc, char *parv[])
 
 		command_success_nodata(si, _("Module \2%s\2 unloaded."), module);
 	}
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("operserv", &os_modunload);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("operserv", &os_modunload);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/modunload", MODULE_UNLOAD_CAPABILITY_OK)

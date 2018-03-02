@@ -27,21 +27,6 @@ static mowgli_eventloop_timer_t *noop_kill_users_timer = NULL;
 static struct command os_noop = { "NOOP", N_("Restricts IRCop access."), PRIV_NOOP, 4, os_cmd_noop, { .path = "oservice/noop" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("operserv", &os_noop);
-	hook_add_event("user_oper");
-	hook_add_user_oper(check_user);
-	hook_add_event("user_delete");
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-
-}
-
-static void
 noop_kill_users(void *dummy)
 {
 	struct service *service;
@@ -336,6 +321,21 @@ os_cmd_noop(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "NOOP");
 		command_fail(si, fault_badparams, _("Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]"));
 	}
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("operserv", &os_noop);
+	hook_add_event("user_oper");
+	hook_add_user_oper(check_user);
+	hook_add_event("user_delete");
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/noop", MODULE_UNLOAD_CAPABILITY_NEVER)

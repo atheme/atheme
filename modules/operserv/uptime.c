@@ -12,18 +12,6 @@ static void os_cmd_uptime(struct sourceinfo *si, int parc, char *parv[]);
 static struct command os_uptime = { "UPTIME", N_("Shows services uptime and the number of registered nicks and channels."), PRIV_SERVER_AUSPEX, 1, os_cmd_uptime, { .path = "oservice/uptime" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("operserv", &os_uptime);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("operserv", &os_uptime);
-}
-
-static void
 os_cmd_uptime(struct sourceinfo *si, int parc, char *parv[])
 {
 	logcommand(si, CMDLOG_GET, "UPTIME");
@@ -40,6 +28,18 @@ os_cmd_uptime(struct sourceinfo *si, int parc, char *parv[])
         	command_success_nodata(si, _("Registered nicknames: %d"), cnt.mynick);
         command_success_nodata(si, _("Registered channels: %d"), cnt.mychan);
         command_success_nodata(si, _("Users currently online: %d"), cnt.user - me.me->users);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("operserv", &os_uptime);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("operserv", &os_uptime);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/uptime", MODULE_UNLOAD_CAPABILITY_OK)

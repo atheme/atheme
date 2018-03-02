@@ -13,18 +13,6 @@ static void cs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[]);
 static struct command cs_fflags = { "FFLAGS", N_("Forces a flags change on a channel."),
                         PRIV_CHAN_ADMIN, 3, cs_cmd_fflags, { .path = "cservice/fflags" } };
 
-static void
-mod_init(struct module *const restrict m)
-{
-        service_named_bind_command("chanserv", &cs_fflags);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_fflags);
-}
-
 /* FFLAGS <channel> <user> <flags> */
 static void
 cs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
@@ -161,6 +149,18 @@ cs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("Flags \2%s\2 were set on \2%s\2 in \2%s\2."), flagstr, target, channel);
 	logcommand(si, CMDLOG_ADMIN, "FFLAGS: \2%s\2 \2%s\2 \2%s\2", mc->name, target, flagstr);
 	verbose(mc, _("\2%s\2 forced flags change \2%s\2 on \2%s\2."), get_source_name(si), flagstr, target);
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+        service_named_bind_command("chanserv", &cs_fflags);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_fflags);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/fflags", MODULE_UNLOAD_CAPABILITY_OK)

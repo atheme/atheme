@@ -16,20 +16,6 @@ static struct command cs_unban = { "UNBAN", N_("Removes a ban on a channel."),
 			AC_AUTHENTICATED, 2, cs_cmd_unban, { .path = "cservice/unban" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("chanserv", &cs_ban);
-	service_named_bind_command("chanserv", &cs_unban);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_ban);
-	service_named_unbind_command("chanserv", &cs_unban);
-}
-
-static void
 cs_cmd_ban(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
@@ -197,6 +183,20 @@ cs_cmd_unban(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Syntax: UNBAN <#channel> [nickname|hostmask]"));
 		return;
         }
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("chanserv", &cs_ban);
+	service_named_bind_command("chanserv", &cs_unban);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_ban);
+	service_named_unbind_command("chanserv", &cs_unban);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/ban", MODULE_UNLOAD_CAPABILITY_OK)

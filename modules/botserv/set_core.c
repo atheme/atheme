@@ -17,22 +17,6 @@ static void bs_cmd_set(struct sourceinfo *si, int parc, char *parv[]);
 
 static struct command bs_set = { "SET", N_("Configures bot options."), AC_NONE, 3, bs_cmd_set, { .func =  bs_help_set } };
 
-static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("botserv", &bs_set);
-
-	bs_set_cmdtree = mowgli_patricia_create(strcasecanon);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("botserv", &bs_set);
-
-	mowgli_patricia_destroy(bs_set_cmdtree, NULL, NULL);
-}
-
 /* ******************************************************************** */
 
 static void
@@ -79,6 +63,22 @@ bs_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 
 	parv[1] = dest;
 	command_exec(si->service, si, c, parc - 1, parv + 1);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("botserv", &bs_set);
+
+	bs_set_cmdtree = mowgli_patricia_create(strcasecanon);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("botserv", &bs_set);
+
+	mowgli_patricia_destroy(bs_set_cmdtree, NULL, NULL);
 }
 
 SIMPLE_DECLARE_MODULE_V1("botserv/set_core", MODULE_UNLOAD_CAPABILITY_OK)

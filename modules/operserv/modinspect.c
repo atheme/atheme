@@ -12,18 +12,6 @@ static void os_cmd_modinspect(struct sourceinfo *si, int parc, char *parv[]);
 static struct command os_modinspect = { "MODINSPECT", N_("Displays information about loaded modules."), PRIV_SERVER_AUSPEX, 1, os_cmd_modinspect, { .path = "oservice/modinspect" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("operserv", &os_modinspect);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("operserv", &os_modinspect);
-}
-
-static void
 os_cmd_modinspect(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *mname = parv[0];
@@ -64,6 +52,18 @@ os_cmd_modinspect(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("Can unload : %s"), m->can_unload == MODULE_UNLOAD_CAPABILITY_OK ? "Yes" :
 					( m->can_unload == MODULE_UNLOAD_CAPABILITY_NEVER ? "No" : "Reload only"));
 	command_success_nodata(si, _("*** \2End of Info\2 ***"));
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("operserv", &os_modinspect);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("operserv", &os_modinspect);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/modinspect", MODULE_UNLOAD_CAPABILITY_OK)

@@ -265,63 +265,6 @@ c_ci_templates(mowgli_config_file_entry_t *ce)
 }
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	hook_add_event("config_ready");
-	hook_add_config_ready(chanserv_config_ready);
-
-	chansvs.me = service_add("chanserv", chanserv);
-
-	hook_add_event("channel_join");
-	hook_add_event("channel_part");
-	hook_add_event("channel_register");
-	hook_add_event("channel_succession");
-	hook_add_event("channel_add");
-	hook_add_event("channel_topic");
-	hook_add_event("channel_can_change_topic");
-	hook_add_event("channel_tschange");
-	hook_add_event("channel_mode_change");
-	hook_add_event("user_identify");
-	hook_add_event("shutdown");
-	hook_add_channel_join(cs_join);
-	hook_add_channel_part(cs_part);
-	hook_add_channel_register(cs_register);
-	hook_add_channel_succession(cs_succession);
-	hook_add_channel_add(cs_newchan);
-	hook_add_channel_topic(cs_keeptopic_topicset);
-	hook_add_channel_can_change_topic(cs_topiccheck);
-	hook_add_channel_tschange(cs_tschange);
-	hook_add_channel_mode_change(cs_bounce_mode_change);
-	hook_add_shutdown(on_shutdown);
-
-	cs_leave_empty_timer = mowgli_timer_add(base_eventloop, "cs_leave_empty", cs_leave_empty, NULL, 300);
-
-	/* chanserv{} block */
-	add_bool_conf_item("FANTASY", &chansvs.me->conf_table, 0, &chansvs.fantasy, false);
-	add_conf_item("VOP", &chansvs.me->conf_table, c_ci_vop);
-	add_conf_item("HOP", &chansvs.me->conf_table, c_ci_hop);
-	add_conf_item("AOP", &chansvs.me->conf_table, c_ci_aop);
-	add_conf_item("SOP", &chansvs.me->conf_table, c_ci_sop);
-	add_conf_item("TEMPLATES", &chansvs.me->conf_table, c_ci_templates);
-	add_bool_conf_item("CHANGETS", &chansvs.me->conf_table, 0, &chansvs.changets, false);
-	add_bool_conf_item("HIDE_XOP", &chansvs.me->conf_table, 0, &chansvs.hide_xop, false);
-	add_dupstr_conf_item("TRIGGER", &chansvs.me->conf_table, 0, &chansvs.trigger, "!");
-	add_duration_conf_item("EXPIRE", &chansvs.me->conf_table, 0, &chansvs.expiry, "d", 0);
-	add_uint_conf_item("MAXCHANS", &chansvs.me->conf_table, 0, &chansvs.maxchans, 1, INT_MAX, 5);
-	add_uint_conf_item("MAXCHANACS", &chansvs.me->conf_table, 0, &chansvs.maxchanacs, 0, INT_MAX, 0);
-	add_uint_conf_item("MAXFOUNDERS", &chansvs.me->conf_table, 0, &chansvs.maxfounders, 1, (512 - 60) / (9 + 2), 4); /* fit on a line */
-	add_dupstr_conf_item("FOUNDER_FLAGS", &chansvs.me->conf_table, 0, &chansvs.founder_flags, NULL);
-	add_dupstr_conf_item("DEFTEMPLATES", &chansvs.me->conf_table, 0, &chansvs.deftemplates, NULL);
-	add_duration_conf_item("AKICK_TIME", &chansvs.me->conf_table, 0, &chansvs.akick_time, "m", 0);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-
-}
-
-static void
 cs_join(hook_channel_joinpart_t *hdata)
 {
 	struct chanuser *cu = hdata->cu;
@@ -935,6 +878,63 @@ cs_bounce_mode_change(hook_channel_mode_change_t *data)
 		modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, ircd->halfops_mchar[1], CLIENT_NAME(cu->user));
 		cu->modes &= ~data->mvalue;
 	}
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	hook_add_event("config_ready");
+	hook_add_config_ready(chanserv_config_ready);
+
+	chansvs.me = service_add("chanserv", chanserv);
+
+	hook_add_event("channel_join");
+	hook_add_event("channel_part");
+	hook_add_event("channel_register");
+	hook_add_event("channel_succession");
+	hook_add_event("channel_add");
+	hook_add_event("channel_topic");
+	hook_add_event("channel_can_change_topic");
+	hook_add_event("channel_tschange");
+	hook_add_event("channel_mode_change");
+	hook_add_event("user_identify");
+	hook_add_event("shutdown");
+	hook_add_channel_join(cs_join);
+	hook_add_channel_part(cs_part);
+	hook_add_channel_register(cs_register);
+	hook_add_channel_succession(cs_succession);
+	hook_add_channel_add(cs_newchan);
+	hook_add_channel_topic(cs_keeptopic_topicset);
+	hook_add_channel_can_change_topic(cs_topiccheck);
+	hook_add_channel_tschange(cs_tschange);
+	hook_add_channel_mode_change(cs_bounce_mode_change);
+	hook_add_shutdown(on_shutdown);
+
+	cs_leave_empty_timer = mowgli_timer_add(base_eventloop, "cs_leave_empty", cs_leave_empty, NULL, 300);
+
+	/* chanserv{} block */
+	add_bool_conf_item("FANTASY", &chansvs.me->conf_table, 0, &chansvs.fantasy, false);
+	add_conf_item("VOP", &chansvs.me->conf_table, c_ci_vop);
+	add_conf_item("HOP", &chansvs.me->conf_table, c_ci_hop);
+	add_conf_item("AOP", &chansvs.me->conf_table, c_ci_aop);
+	add_conf_item("SOP", &chansvs.me->conf_table, c_ci_sop);
+	add_conf_item("TEMPLATES", &chansvs.me->conf_table, c_ci_templates);
+	add_bool_conf_item("CHANGETS", &chansvs.me->conf_table, 0, &chansvs.changets, false);
+	add_bool_conf_item("HIDE_XOP", &chansvs.me->conf_table, 0, &chansvs.hide_xop, false);
+	add_dupstr_conf_item("TRIGGER", &chansvs.me->conf_table, 0, &chansvs.trigger, "!");
+	add_duration_conf_item("EXPIRE", &chansvs.me->conf_table, 0, &chansvs.expiry, "d", 0);
+	add_uint_conf_item("MAXCHANS", &chansvs.me->conf_table, 0, &chansvs.maxchans, 1, INT_MAX, 5);
+	add_uint_conf_item("MAXCHANACS", &chansvs.me->conf_table, 0, &chansvs.maxchanacs, 0, INT_MAX, 0);
+	add_uint_conf_item("MAXFOUNDERS", &chansvs.me->conf_table, 0, &chansvs.maxfounders, 1, (512 - 60) / (9 + 2), 4); /* fit on a line */
+	add_dupstr_conf_item("FOUNDER_FLAGS", &chansvs.me->conf_table, 0, &chansvs.founder_flags, NULL);
+	add_dupstr_conf_item("DEFTEMPLATES", &chansvs.me->conf_table, 0, &chansvs.deftemplates, NULL);
+	add_duration_conf_item("AKICK_TIME", &chansvs.me->conf_table, 0, &chansvs.akick_time, "m", 0);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/main", MODULE_UNLOAD_CAPABILITY_NEVER)

@@ -40,41 +40,6 @@ is_marked(const struct mynick *mn, const void *arg)
 }
 
 static void
-mod_init(struct module *const restrict m)
-{
-	if (module_find_published("nickserv/multimark"))
-	{
-		slog(LG_INFO, "Loading both multimark and mark has severe consequences for the space-time continuum. Refusing to load.");
-		m->mflags |= MODTYPE_FAIL;
-		return;
-	}
-
-	service_named_bind_command("nickserv", &ns_mark);
-
-	use_nslist_main_symbols(m);
-
-	static struct list_param mark;
-	mark.opttype = OPT_STRING;
-	mark.is_match = mark_match;
-
-	static struct list_param marked;
-	marked.opttype = OPT_BOOL;
-	marked.is_match = is_marked;
-
-	list_register("mark-reason", &mark);
-	list_register("marked", &marked);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("nickserv", &ns_mark);
-
-	list_unregister("mark-reason");
-	list_unregister("marked");
-}
-
-static void
 ns_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
@@ -149,6 +114,41 @@ ns_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "MARK");
 		command_fail(si, fault_needmoreparams, _("Usage: MARK <target> <ON|OFF> [note]"));
 	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	if (module_find_published("nickserv/multimark"))
+	{
+		slog(LG_INFO, "Loading both multimark and mark has severe consequences for the space-time continuum. Refusing to load.");
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	service_named_bind_command("nickserv", &ns_mark);
+
+	use_nslist_main_symbols(m);
+
+	static struct list_param mark;
+	mark.opttype = OPT_STRING;
+	mark.is_match = mark_match;
+
+	static struct list_param marked;
+	marked.opttype = OPT_BOOL;
+	marked.is_match = is_marked;
+
+	list_register("mark-reason", &mark);
+	list_register("marked", &marked);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("nickserv", &ns_mark);
+
+	list_unregister("mark-reason");
+	list_unregister("marked");
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/mark", MODULE_UNLOAD_CAPABILITY_OK)

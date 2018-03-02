@@ -13,18 +13,6 @@ static struct command cs_recover = { "RECOVER", N_("Regain control of your chann
                         AC_NONE, 1, cs_cmd_recover, { .path = "cservice/recover" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("chanserv", &cs_recover);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_recover);
-}
-
-static void
 cs_cmd_recover(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct chanuser *cu, *origin_cu = NULL;
@@ -194,6 +182,18 @@ cs_cmd_recover(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("Recover complete for \2%s\2, ban exception \2%s\2 added."), mc->chan->name, hostbuf2);
 	else
 		command_success_nodata(si, _("Recover complete for \2%s\2."), mc->chan->name);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("chanserv", &cs_recover);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_recover);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/recover", MODULE_UNLOAD_CAPABILITY_OK)

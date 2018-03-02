@@ -23,28 +23,6 @@ has_regnolimit(const struct mynick *mn, const void *arg)
 }
 
 static void
-mod_init(struct module *const restrict m)
-{
-	service_named_bind_command("nickserv", &ns_regnolimit);
-
-	use_nslist_main_symbols(m);
-
-	static struct list_param regnolimit;
-	regnolimit.opttype = OPT_BOOL;
-	regnolimit.is_match = has_regnolimit;
-
-	list_register("regnolimit", &regnolimit);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("nickserv", &ns_regnolimit);
-
-	list_unregister("regnolimit");
-}
-
-static void
 ns_cmd_regnolimit(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
@@ -97,6 +75,28 @@ ns_cmd_regnolimit(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "REGNOLIMIT");
 		command_fail(si, fault_needmoreparams, _("Usage: REGNOLIMIT <account> <ON|OFF>"));
 	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	service_named_bind_command("nickserv", &ns_regnolimit);
+
+	use_nslist_main_symbols(m);
+
+	static struct list_param regnolimit;
+	regnolimit.opttype = OPT_BOOL;
+	regnolimit.is_match = has_regnolimit;
+
+	list_register("regnolimit", &regnolimit);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("nickserv", &ns_regnolimit);
+
+	list_unregister("regnolimit");
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/regnolimit", MODULE_UNLOAD_CAPABILITY_OK)

@@ -14,18 +14,6 @@ static void os_cmd_info(struct sourceinfo *si, int parc, char *parv[]);
 static struct command os_info = { "INFO", N_("Shows some useful information about the current settings of services."), PRIV_SERVER_AUSPEX, 1, os_cmd_info, { .path = "oservice/info" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("operserv", &os_info);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("operserv", &os_info);
-}
-
-static void
 os_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *tn, *n2;
@@ -86,6 +74,18 @@ os_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	hook_call_operserv_info(si);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("operserv", &os_info);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("operserv", &os_info);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/info", MODULE_UNLOAD_CAPABILITY_OK)

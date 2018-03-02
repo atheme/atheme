@@ -24,38 +24,6 @@ static mowgli_patricia_t *os_ignore_cmds = NULL;
 mowgli_list_t svs_ignore_list;
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("operserv", &os_ignore);
-
-	os_ignore_cmds = mowgli_patricia_create(strcasecanon);
-
-	/* Sub-commands */
-	command_add(&os_ignore_add, os_ignore_cmds);
-	command_add(&os_ignore_del, os_ignore_cmds);
-	command_add(&os_ignore_clear, os_ignore_cmds);
-	command_add(&os_ignore_list, os_ignore_cmds);
-
-	use_svsignore++;
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("operserv", &os_ignore);
-
-	/* Sub-commands */
-	command_delete(&os_ignore_add, os_ignore_cmds);
-	command_delete(&os_ignore_del, os_ignore_cmds);
-	command_delete(&os_ignore_list, os_ignore_cmds);
-	command_delete(&os_ignore_clear, os_ignore_cmds);
-
-	use_svsignore--;
-
-	mowgli_patricia_destroy(os_ignore_cmds, NULL, NULL);
-}
-
-static void
 os_cmd_ignore(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *cmd = parv[0];
@@ -227,6 +195,38 @@ os_cmd_ignore_list(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "IGNORE:LIST");
 
 	return;
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("operserv", &os_ignore);
+
+	os_ignore_cmds = mowgli_patricia_create(strcasecanon);
+
+	/* Sub-commands */
+	command_add(&os_ignore_add, os_ignore_cmds);
+	command_add(&os_ignore_del, os_ignore_cmds);
+	command_add(&os_ignore_clear, os_ignore_cmds);
+	command_add(&os_ignore_list, os_ignore_cmds);
+
+	use_svsignore++;
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("operserv", &os_ignore);
+
+	/* Sub-commands */
+	command_delete(&os_ignore_add, os_ignore_cmds);
+	command_delete(&os_ignore_del, os_ignore_cmds);
+	command_delete(&os_ignore_list, os_ignore_cmds);
+	command_delete(&os_ignore_clear, os_ignore_cmds);
+
+	use_svsignore--;
+
+	mowgli_patricia_destroy(os_ignore_cmds, NULL, NULL);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/ignore", MODULE_UNLOAD_CAPABILITY_OK)

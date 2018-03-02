@@ -23,32 +23,6 @@ is_held(const struct mynick *mn, const void *arg)
 }
 
 static void
-mod_init(struct module *const restrict m)
-{
-	service_named_bind_command("nickserv", &ns_hold);
-
-	use_nslist_main_symbols(m);
-
-	static struct list_param hold;
-	hold.opttype = OPT_BOOL;
-	hold.is_match = is_held;
-
-	list_register("hold", &hold);
-	list_register("held", &hold);
-	list_register("noexpire", &hold);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("nickserv", &ns_hold);
-
-	list_unregister("hold");
-	list_unregister("held");
-	list_unregister("noexpire");
-}
-
-static void
 ns_cmd_hold(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
@@ -101,6 +75,32 @@ ns_cmd_hold(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "HOLD");
 		command_fail(si, fault_needmoreparams, _("Usage: HOLD <account> <ON|OFF>"));
 	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	service_named_bind_command("nickserv", &ns_hold);
+
+	use_nslist_main_symbols(m);
+
+	static struct list_param hold;
+	hold.opttype = OPT_BOOL;
+	hold.is_match = is_held;
+
+	list_register("hold", &hold);
+	list_register("held", &hold);
+	list_register("noexpire", &hold);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("nickserv", &ns_hold);
+
+	list_unregister("hold");
+	list_unregister("held");
+	list_unregister("noexpire");
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/hold", MODULE_UNLOAD_CAPABILITY_OK)

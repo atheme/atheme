@@ -22,34 +22,6 @@ static struct command ms_ignore_list = { "LIST", N_(N_("Shows all users you are 
 static mowgli_patricia_t *ms_ignore_cmds = NULL;
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("memoserv", &ms_ignore);
-
-	ms_ignore_cmds = mowgli_patricia_create(strcasecanon);
-
-	/* Add sub-commands */
-	command_add(&ms_ignore_add, ms_ignore_cmds);
-	command_add(&ms_ignore_del, ms_ignore_cmds);
-	command_add(&ms_ignore_clear, ms_ignore_cmds);
-	command_add(&ms_ignore_list, ms_ignore_cmds);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("memoserv", &ms_ignore);
-
-	/* Delete sub-commands */
-	command_delete(&ms_ignore_add, ms_ignore_cmds);
-	command_delete(&ms_ignore_del, ms_ignore_cmds);
-	command_delete(&ms_ignore_clear, ms_ignore_cmds);
-	command_delete(&ms_ignore_list, ms_ignore_cmds);
-
-	mowgli_patricia_destroy(ms_ignore_cmds, NULL, NULL);
-}
-
-static void
 ms_cmd_ignore(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* Grab args */
@@ -219,6 +191,34 @@ ms_cmd_ignore_list(struct sourceinfo *si, int parc, char *parv[])
 
 	command_success_nodata(si, "-------------------------");
 	return;
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("memoserv", &ms_ignore);
+
+	ms_ignore_cmds = mowgli_patricia_create(strcasecanon);
+
+	/* Add sub-commands */
+	command_add(&ms_ignore_add, ms_ignore_cmds);
+	command_add(&ms_ignore_del, ms_ignore_cmds);
+	command_add(&ms_ignore_clear, ms_ignore_cmds);
+	command_add(&ms_ignore_list, ms_ignore_cmds);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("memoserv", &ms_ignore);
+
+	/* Delete sub-commands */
+	command_delete(&ms_ignore_add, ms_ignore_cmds);
+	command_delete(&ms_ignore_del, ms_ignore_cmds);
+	command_delete(&ms_ignore_clear, ms_ignore_cmds);
+	command_delete(&ms_ignore_list, ms_ignore_cmds);
+
+	mowgli_patricia_destroy(ms_ignore_cmds, NULL, NULL);
 }
 
 SIMPLE_DECLARE_MODULE_V1("memoserv/ignore", MODULE_UNLOAD_CAPABILITY_OK)

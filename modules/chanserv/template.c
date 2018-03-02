@@ -15,18 +15,6 @@ static void cs_cmd_template(struct sourceinfo *si, int parc, char *parv[]);
 static struct command cs_flags = { "TEMPLATE", N_("Manipulates predefined sets of flags."),
                         AC_NONE, 3, cs_cmd_template, { .path = "cservice/template" } };
 
-static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("chanserv", &cs_flags);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_flags);
-}
-
 static int
 display_template(const char *key, void *data, void *privdata)
 {
@@ -396,6 +384,18 @@ cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 			logcommand(si, CMDLOG_SET, "TEMPLATE: \2%s\2 \2%s\2 \2%s\2", mc->name, target, flagstr);
 		/*verbose(mc, "Flags \2%s\2 were set on template \2%s\2 in \2%s\2.", flagstr, target, channel);*/
 	}
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("chanserv", &cs_flags);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_flags);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/template", MODULE_UNLOAD_CAPABILITY_OK)

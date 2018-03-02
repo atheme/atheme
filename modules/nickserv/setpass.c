@@ -14,24 +14,6 @@ static void show_setpass(hook_user_req_t *hdata);
 static struct command ns_setpass = { "SETPASS", N_("Changes a password using an authcode."), AC_NONE, 3, ns_cmd_setpass, { .path = "nickserv/setpass" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	hook_add_event("user_identify");
-	hook_add_user_identify(clear_setpass_key);
-	hook_add_event("user_info");
-	hook_add_user_info(show_setpass);
-	service_named_bind_command("nickserv", &ns_setpass);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	hook_del_user_identify(clear_setpass_key);
-	hook_del_user_info(show_setpass);
-	service_named_unbind_command("nickserv", &ns_setpass);
-}
-
-static void
 ns_cmd_setpass(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
@@ -147,6 +129,24 @@ show_setpass(hook_user_req_t *hdata)
 			command_success_nodata(hdata->si, _("%s was \2SENDPASSED\2 by %s on %s"), entity(hdata->mu)->name, sender, strfbuf);
 		}
 	}
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	hook_add_event("user_identify");
+	hook_add_user_identify(clear_setpass_key);
+	hook_add_event("user_info");
+	hook_add_user_info(show_setpass);
+	service_named_bind_command("nickserv", &ns_setpass);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	hook_del_user_identify(clear_setpass_key);
+	hook_del_user_info(show_setpass);
+	service_named_unbind_command("nickserv", &ns_setpass);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/setpass", MODULE_UNLOAD_CAPABILITY_OK)

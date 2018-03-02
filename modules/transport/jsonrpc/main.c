@@ -45,46 +45,6 @@ handle_request(struct connection *cptr, void *requestbuf)
 	return;
 }
 
-static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, httpd_path_handlers, "misc/httpd", "httpd_path_handlers");
-
-	handle_jsonrpc.path = "/jsonrpc";
-	mowgli_node_add(&handle_jsonrpc, mowgli_node_create(), httpd_path_handlers);
-
-	json_methods = mowgli_patricia_create(strcasecanon);
-
-	jsonrpc_register_method("atheme.login", jsonrpcmethod_login);
-	jsonrpc_register_method("atheme.logout", jsonrpcmethod_logout);
-	jsonrpc_register_method("atheme.command", jsonrpcmethod_command);
-
-	jsonrpc_register_method("atheme.privset", jsonrpcmethod_privset);
-	jsonrpc_register_method("atheme.ison", jsonrpcmethod_ison);
-	jsonrpc_register_method("atheme.metadata", jsonrpcmethod_metadata);
-
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	mowgli_node_t *n;
-
-	jsonrpc_unregister_method("atheme.login");
-	jsonrpc_unregister_method("atheme.logout");
-	jsonrpc_unregister_method("atheme.command");
-
-	jsonrpc_unregister_method("atheme.privset");
-	jsonrpc_unregister_method("atheme.ison");
-	jsonrpc_unregister_method("atheme.metadata");
-
-	if ((n = mowgli_node_find(&handle_jsonrpc, httpd_path_handlers)) != NULL)
-	{
-		mowgli_node_delete(n, httpd_path_handlers);
-		mowgli_node_free(n);
-	}
-}
-
 void
 jsonrpc_register_method(const char *method_name, jsonrpc_method_fn method)
 {
@@ -705,6 +665,46 @@ jsonrpc_send_data(void *conn, char *str)
 
 	if (hd->connection_close) {
 		sendq_add_eof((struct connection *) conn);
+	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, httpd_path_handlers, "misc/httpd", "httpd_path_handlers");
+
+	handle_jsonrpc.path = "/jsonrpc";
+	mowgli_node_add(&handle_jsonrpc, mowgli_node_create(), httpd_path_handlers);
+
+	json_methods = mowgli_patricia_create(strcasecanon);
+
+	jsonrpc_register_method("atheme.login", jsonrpcmethod_login);
+	jsonrpc_register_method("atheme.logout", jsonrpcmethod_logout);
+	jsonrpc_register_method("atheme.command", jsonrpcmethod_command);
+
+	jsonrpc_register_method("atheme.privset", jsonrpcmethod_privset);
+	jsonrpc_register_method("atheme.ison", jsonrpcmethod_ison);
+	jsonrpc_register_method("atheme.metadata", jsonrpcmethod_metadata);
+
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	mowgli_node_t *n;
+
+	jsonrpc_unregister_method("atheme.login");
+	jsonrpc_unregister_method("atheme.logout");
+	jsonrpc_unregister_method("atheme.command");
+
+	jsonrpc_unregister_method("atheme.privset");
+	jsonrpc_unregister_method("atheme.ison");
+	jsonrpc_unregister_method("atheme.metadata");
+
+	if ((n = mowgli_node_find(&handle_jsonrpc, httpd_path_handlers)) != NULL)
+	{
+		mowgli_node_delete(n, httpd_path_handlers);
+		mowgli_node_free(n);
 	}
 }
 

@@ -16,22 +16,6 @@ static struct command cs_set = { "SET", N_("Sets various control flags."), AC_NO
 mowgli_patricia_t *cs_set_cmdtree;
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("chanserv", &cs_set);
-
-	cs_set_cmdtree = mowgli_patricia_create(strcasecanon);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_set);
-
-	mowgli_patricia_destroy(cs_set_cmdtree, NULL, NULL);
-}
-
-static void
 cs_help_set(struct sourceinfo *si, const char *subcmd)
 {
 	if (!subcmd)
@@ -87,6 +71,22 @@ cs_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 
 	parv[1] = chan;
 	command_exec(si->service, si, c, parc - 1, parv + 1);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("chanserv", &cs_set);
+
+	cs_set_cmdtree = mowgli_patricia_create(strcasecanon);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_set);
+
+	mowgli_patricia_destroy(cs_set_cmdtree, NULL, NULL);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/set_core", MODULE_UNLOAD_CAPABILITY_OK)

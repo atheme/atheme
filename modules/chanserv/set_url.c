@@ -15,20 +15,6 @@ static struct command cs_set_url = { "URL", N_("Sets the channel URL."), AC_NONE
 static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
-
-	command_add(&cs_set_url, *cs_set_cmdtree);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	command_delete(&cs_set_url, *cs_set_cmdtree);
-}
-
-static void
 cs_cmd_set_url(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
@@ -70,6 +56,20 @@ cs_cmd_set_url(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_SET, "SET:URL: \2%s\2 \2%s\2", mc->name, url);
 	verbose(mc, _("\2%s\2 set the channel URL to \2%s\2"), get_source_name(si), url);
 	command_success_nodata(si, _("The URL of \2%s\2 has been set to \2%s\2."), parv[0], url);
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
+
+	command_add(&cs_set_url, *cs_set_cmdtree);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	command_delete(&cs_set_url, *cs_set_cmdtree);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/set_url", MODULE_UNLOAD_CAPABILITY_OK)

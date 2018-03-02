@@ -69,37 +69,6 @@ static mowgli_patricia_t *cs_access_cmds = NULL;
 static mowgli_patricia_t *cs_role_cmds = NULL;
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("chanserv", &cs_access);
-	service_named_bind_command("chanserv", &cs_role);
-
-	cs_access_cmds = mowgli_patricia_create(strcasecanon);
-	cs_role_cmds  = mowgli_patricia_create(strcasecanon);
-
-	command_add(&cs_access_list, cs_access_cmds);
-	command_add(&cs_access_info, cs_access_cmds);
-	command_add(&cs_access_del, cs_access_cmds);
-	command_add(&cs_access_add, cs_access_cmds);
-	command_add(&cs_access_set, cs_access_cmds);
-
-	command_add(&cs_role_list, cs_role_cmds);
-	command_add(&cs_role_add, cs_role_cmds);
-	command_add(&cs_role_set, cs_role_cmds);
-	command_add(&cs_role_del, cs_role_cmds);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_access);
-	service_named_unbind_command("chanserv", &cs_role);
-
-	mowgli_patricia_destroy(cs_access_cmds, NULL, NULL);
-	mowgli_patricia_destroy(cs_role_cmds, NULL, NULL);
-}
-
-static void
 cs_help_access(struct sourceinfo *si, const char *subcmd)
 {
 	if (!subcmd)
@@ -1422,6 +1391,37 @@ cs_cmd_role_del(struct sourceinfo *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("Role \2%s\2 has been deleted."), role);
 	update_role_entry(si, mc, role, 0);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("chanserv", &cs_access);
+	service_named_bind_command("chanserv", &cs_role);
+
+	cs_access_cmds = mowgli_patricia_create(strcasecanon);
+	cs_role_cmds  = mowgli_patricia_create(strcasecanon);
+
+	command_add(&cs_access_list, cs_access_cmds);
+	command_add(&cs_access_info, cs_access_cmds);
+	command_add(&cs_access_del, cs_access_cmds);
+	command_add(&cs_access_add, cs_access_cmds);
+	command_add(&cs_access_set, cs_access_cmds);
+
+	command_add(&cs_role_list, cs_role_cmds);
+	command_add(&cs_role_add, cs_role_cmds);
+	command_add(&cs_role_set, cs_role_cmds);
+	command_add(&cs_role_del, cs_role_cmds);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_access);
+	service_named_unbind_command("chanserv", &cs_role);
+
+	mowgli_patricia_destroy(cs_access_cmds, NULL, NULL);
+	mowgli_patricia_destroy(cs_role_cmds, NULL, NULL);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/access", MODULE_UNLOAD_CAPABILITY_OK)

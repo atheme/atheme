@@ -25,29 +25,6 @@ has_nogreet(const struct mynick *mn, const void *arg)
 	return ( mu->flags & MU_NOGREET ) == MU_NOGREET;
 }
 
-static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
-
-	command_add(&ns_set_nogreet, *ns_set_cmdtree);
-
-	use_nslist_main_symbols(m);
-
-	static struct list_param nogreet;
-	nogreet.opttype = OPT_BOOL;
-	nogreet.is_match = has_nogreet;
-
-	list_register("nogreet", &nogreet);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	list_unregister("nogreet");
-	command_delete(&ns_set_nogreet, *ns_set_cmdtree);
-}
-
 /* SET NOGREET [ON|OFF] */
 static void
 ns_cmd_set_nogreet(struct sourceinfo *si, int parc, char *parv[])
@@ -97,6 +74,29 @@ ns_cmd_set_nogreet(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "NOGREET");
 		return;
 	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
+
+	command_add(&ns_set_nogreet, *ns_set_cmdtree);
+
+	use_nslist_main_symbols(m);
+
+	static struct list_param nogreet;
+	nogreet.opttype = OPT_BOOL;
+	nogreet.is_match = has_nogreet;
+
+	list_register("nogreet", &nogreet);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	list_unregister("nogreet");
+	command_delete(&ns_set_nogreet, *ns_set_cmdtree);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/set_nogreet", MODULE_UNLOAD_CAPABILITY_OK)

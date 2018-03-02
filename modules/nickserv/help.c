@@ -11,18 +11,6 @@ static void ns_cmd_help(struct sourceinfo *si, int parc, char *parv[]);
 
 static struct command ns_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 1, ns_cmd_help, { .path = "help" } };
 
-static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("nickserv", &ns_help);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("nickserv", &ns_help);
-}
-
 /* HELP <command> [params] */
 void
 ns_cmd_help(struct sourceinfo *si, int parc, char *parv[])
@@ -88,6 +76,18 @@ ns_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 
 	/* take the command through the hash table */
 	help_display(si, si->service, command, si->service->commands);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("nickserv", &ns_help);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("nickserv", &ns_help);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/help", MODULE_UNLOAD_CAPABILITY_OK)

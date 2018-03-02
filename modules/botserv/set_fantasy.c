@@ -18,25 +18,6 @@ static void bs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[]);
 static struct command bs_set_fantasy = { "FANTASY", N_("Enable fantasy commands."), AC_AUTHENTICATED, 2, bs_cmd_set_fantasy, { .path = "botserv/set_fantasy" } };
 
 static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree");
-
-	command_add(&bs_set_fantasy, *bs_set_cmdtree);
-
-	hook_add_event("config_ready");
-	hook_add_config_ready(bs_set_fantasy_config_ready);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	command_delete(&bs_set_fantasy, *bs_set_cmdtree);
-
-	hook_del_config_ready(bs_set_fantasy_config_ready);
-}
-
-static void
 bs_set_fantasy_config_ready(void *unused)
 {
 	if (chansvs.fantasy)
@@ -93,6 +74,25 @@ bs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET FANTASY");
 		command_fail(si, fault_badparams, _("Syntax: SET <#channel> FANTASY {ON|OFF}"));
 	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree");
+
+	command_add(&bs_set_fantasy, *bs_set_cmdtree);
+
+	hook_add_event("config_ready");
+	hook_add_config_ready(bs_set_fantasy_config_ready);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	command_delete(&bs_set_fantasy, *bs_set_cmdtree);
+
+	hook_del_config_ready(bs_set_fantasy_config_ready);
 }
 
 SIMPLE_DECLARE_MODULE_V1("botserv/set_fantasy", MODULE_UNLOAD_CAPABILITY_OK)

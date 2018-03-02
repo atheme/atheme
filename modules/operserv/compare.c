@@ -12,18 +12,6 @@ static void os_cmd_compare(struct sourceinfo *si, int parc, char *parv[]);
 static struct command os_compare = { "COMPARE", N_("Compares two users or channels."), PRIV_CHAN_AUSPEX, 2, os_cmd_compare, { .path = "oservice/compare" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("operserv", &os_compare);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("operserv", &os_compare);
-}
-
-static void
 os_cmd_compare(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *object1 = parv[0];
@@ -164,6 +152,18 @@ os_cmd_compare(struct sourceinfo *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("\2%d\2 matches comparing %s and %s"), matches, object1, object2);
 	logcommand(si, CMDLOG_ADMIN, "COMPARE: \2%s\2 to \2%s\2 (\2%d\2 matches)", object1, object2, matches);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("operserv", &os_compare);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("operserv", &os_compare);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/compare", MODULE_UNLOAD_CAPABILITY_OK)

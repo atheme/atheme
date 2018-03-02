@@ -88,61 +88,6 @@ clones_configready(void *unused)
 }
 
 static void
-mod_init(struct module *const restrict m)
-{
-	struct user *u;
-	mowgli_patricia_iteration_state_t state;
-
-	if (!module_find_published("backend/opensex"))
-	{
-		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
-		m->mflags |= MODTYPE_FAIL;
-		return;
-	}
-
-	service_named_bind_command("operserv", &os_clones);
-
-	os_clones_cmds = mowgli_patricia_create(strcasecanon);
-
-	command_add(&os_clones_kline, os_clones_cmds);
-	command_add(&os_clones_list, os_clones_cmds);
-	command_add(&os_clones_addexempt, os_clones_cmds);
-	command_add(&os_clones_delexempt, os_clones_cmds);
-	command_add(&os_clones_setexempt, os_clones_cmds);
-	command_add(&os_clones_listexempt, os_clones_cmds);
-	command_add(&os_clones_duration, os_clones_cmds);
-
-	hook_add_event("config_ready");
-	hook_add_config_ready(clones_configready);
-
-	hook_add_event("user_add");
-	hook_add_user_add(clones_newuser);
-	hook_add_event("user_delete");
-	hook_add_user_delete(clones_userquit);
-	hook_add_db_write(write_exemptdb);
-
-	db_register_type_handler("CLONES-DBV", db_h_clonesdbv);
-	db_register_type_handler("CLONES-CK", db_h_ck);
-	db_register_type_handler("CLONES-CD", db_h_cd);
-	db_register_type_handler("CLONES-GR", db_h_gr);
-	db_register_type_handler("CLONES-EX", db_h_ex);
-
-	hostlist = mowgli_patricia_create(noopcanon);
-	hostentry_heap = mowgli_heap_create(sizeof(struct clones_hostentry), HEAP_USER, BH_NOW);
-
-	kline_duration = 3600; /* set a default */
-
-	serviceinfo = service_find("operserv");
-
-
-	/* add everyone to host hash */
-	MOWGLI_PATRICIA_FOREACH(u, &state, userlist)
-	{
-		clones_newuser(&(hook_user_nick_t){ .u = u });
-	}
-}
-
-static void
 free_hostentry(const char *key, void *data, void *privdata)
 {
 	mowgli_node_t *n, *tn;
@@ -155,12 +100,6 @@ free_hostentry(const char *key, void *data, void *privdata)
 	}
 
 	mowgli_heap_free(hostentry_heap, he);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-
 }
 
 static void
@@ -942,6 +881,67 @@ clones_userquit(struct user *u)
 			mowgli_heap_free(hostentry_heap, he);
 		}
 	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	struct user *u;
+	mowgli_patricia_iteration_state_t state;
+
+	if (!module_find_published("backend/opensex"))
+	{
+		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	service_named_bind_command("operserv", &os_clones);
+
+	os_clones_cmds = mowgli_patricia_create(strcasecanon);
+
+	command_add(&os_clones_kline, os_clones_cmds);
+	command_add(&os_clones_list, os_clones_cmds);
+	command_add(&os_clones_addexempt, os_clones_cmds);
+	command_add(&os_clones_delexempt, os_clones_cmds);
+	command_add(&os_clones_setexempt, os_clones_cmds);
+	command_add(&os_clones_listexempt, os_clones_cmds);
+	command_add(&os_clones_duration, os_clones_cmds);
+
+	hook_add_event("config_ready");
+	hook_add_config_ready(clones_configready);
+
+	hook_add_event("user_add");
+	hook_add_user_add(clones_newuser);
+	hook_add_event("user_delete");
+	hook_add_user_delete(clones_userquit);
+	hook_add_db_write(write_exemptdb);
+
+	db_register_type_handler("CLONES-DBV", db_h_clonesdbv);
+	db_register_type_handler("CLONES-CK", db_h_ck);
+	db_register_type_handler("CLONES-CD", db_h_cd);
+	db_register_type_handler("CLONES-GR", db_h_gr);
+	db_register_type_handler("CLONES-EX", db_h_ex);
+
+	hostlist = mowgli_patricia_create(noopcanon);
+	hostentry_heap = mowgli_heap_create(sizeof(struct clones_hostentry), HEAP_USER, BH_NOW);
+
+	kline_duration = 3600; /* set a default */
+
+	serviceinfo = service_find("operserv");
+
+
+	/* add everyone to host hash */
+	MOWGLI_PATRICIA_FOREACH(u, &state, userlist)
+	{
+		clones_newuser(&(hook_user_nick_t){ .u = u });
+	}
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/clones", MODULE_UNLOAD_CAPABILITY_NEVER)

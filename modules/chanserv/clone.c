@@ -12,18 +12,6 @@ static void cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[]);
 static struct command cs_clone = { "CLONE", "Clones a channel.", AC_NONE, 2, cs_cmd_clone, { .path = "cservice/clone" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("chanserv", &cs_clone);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_clone);
-}
-
-static void
 cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc, *mc2;
@@ -147,6 +135,18 @@ cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[])
 	/* I feel like this should log at a higher level... */
 	logcommand(si, CMDLOG_DO, "CLONE: \2%s\2 to \2%s\2", mc->name, mc2->name);
 	command_success_nodata(si, _("Cloned \2%s\2 to \2%s\2."), source, target);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("chanserv", &cs_clone);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_clone);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/clone", MODULE_UNLOAD_CAPABILITY_OK)

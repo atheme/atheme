@@ -16,22 +16,6 @@ static struct command ns_ungroup = { "UNGROUP", N_("Removes a nickname from your
 static struct command ns_fungroup = { "FUNGROUP", N_("Forces removal of a nickname from an account."), PRIV_USER_ADMIN, 2, ns_cmd_fungroup, { .path = "nickserv/fungroup" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("nickserv", &ns_group);
-	service_named_bind_command("nickserv", &ns_ungroup);
-	service_named_bind_command("nickserv", &ns_fungroup);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("nickserv", &ns_group);
-	service_named_unbind_command("nickserv", &ns_ungroup);
-	service_named_unbind_command("nickserv", &ns_fungroup);
-}
-
-static void
 ns_cmd_group(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mynick *mn;
@@ -226,6 +210,22 @@ ns_cmd_fungroup(struct sourceinfo *si, int parc, char *parv[])
 	else
 		command_success_nodata(si, _("Nick \2%s\2 has been removed from account \2%s\2."), mn->nick, entity(mu)->name);
 	atheme_object_unref(mn);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("nickserv", &ns_group);
+	service_named_bind_command("nickserv", &ns_ungroup);
+	service_named_bind_command("nickserv", &ns_fungroup);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("nickserv", &ns_group);
+	service_named_unbind_command("nickserv", &ns_ungroup);
+	service_named_unbind_command("nickserv", &ns_fungroup);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/group", MODULE_UNLOAD_CAPABILITY_OK)

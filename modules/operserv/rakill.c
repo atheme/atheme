@@ -17,18 +17,6 @@ static void os_cmd_rakill(struct sourceinfo *si, int parc, char *parv[]);
 static struct command os_rakill = { "RAKILL", N_("Sets a group of AKILLs against users matching a specific regex pattern."), PRIV_MASS_AKILL, 1, os_cmd_rakill, { .path = "oservice/rakill" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("operserv", &os_rakill);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("operserv", &os_rakill);
-}
-
-static void
 os_cmd_rakill(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct atheme_regex *regex;
@@ -116,6 +104,18 @@ os_cmd_rakill(struct sourceinfo *si, int parc, char *parv[])
 	regex_destroy(regex);
 	command_success_nodata(si, _("\2%d\2 matches for %s akilled."), matches, pattern);
 	logcommand(si, CMDLOG_ADMIN, "RAKILL: \2%s\2 (reason: \2%s\2) (\2%d\2 matches)", pattern, reason, matches);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("operserv", &os_rakill);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("operserv", &os_rakill);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/rakill", MODULE_UNLOAD_CAPABILITY_OK)

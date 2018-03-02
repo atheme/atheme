@@ -27,26 +27,6 @@ static struct command ss_server_info =
 static mowgli_patricia_t *ss_server_cmds = NULL;
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-    service_named_bind_command("statserv", &ss_server);
-    ss_server_cmds = mowgli_patricia_create(strcasecanon);
-    command_add(&ss_server_list, ss_server_cmds);
-    command_add(&ss_server_count, ss_server_cmds);
-    command_add(&ss_server_info, ss_server_cmds);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-    service_named_unbind_command("statserv", &ss_server);
-    command_delete(&ss_server_list, ss_server_cmds);
-    command_delete(&ss_server_count, ss_server_cmds);
-    command_delete(&ss_server_info, ss_server_cmds);
-    mowgli_patricia_destroy(ss_server_cmds, NULL, NULL);
-}
-
-static void
 ss_cmd_server(struct sourceinfo * si, int parc, char *parv[])
 {
     struct command *c;
@@ -131,6 +111,26 @@ static void
 ss_cmd_server_count(struct sourceinfo * si, int parc, char *parv[])
 {
     command_success_nodata(si, _("Network size: %u servers"), mowgli_patricia_size(servlist));
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+    service_named_bind_command("statserv", &ss_server);
+    ss_server_cmds = mowgli_patricia_create(strcasecanon);
+    command_add(&ss_server_list, ss_server_cmds);
+    command_add(&ss_server_count, ss_server_cmds);
+    command_add(&ss_server_info, ss_server_cmds);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+    service_named_unbind_command("statserv", &ss_server);
+    command_delete(&ss_server_list, ss_server_cmds);
+    command_delete(&ss_server_count, ss_server_cmds);
+    command_delete(&ss_server_info, ss_server_cmds);
+    mowgli_patricia_destroy(ss_server_cmds, NULL, NULL);
 }
 
 SIMPLE_DECLARE_MODULE_V1("statserv/server", MODULE_UNLOAD_CAPABILITY_OK)

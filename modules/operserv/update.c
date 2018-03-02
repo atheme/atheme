@@ -11,18 +11,6 @@ static void os_cmd_update(struct sourceinfo *si, int parc, char *parv[]);
 
 static struct command os_update = { "UPDATE", N_("Flushes services database to disk."), PRIV_ADMIN, 0, os_cmd_update, { .path = "oservice/update" } };
 
-static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("operserv", &os_update);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("operserv", &os_update);
-}
-
 void
 os_cmd_update(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -33,6 +21,18 @@ os_cmd_update(struct sourceinfo *si, int parc, char *parv[])
 	if (db_save)
 		db_save(NULL, DB_SAVE_BG_IMPORTANT);
 	/* db_save() will wallops/snoop/log the error */
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("operserv", &os_update);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("operserv", &os_update);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/update", MODULE_UNLOAD_CAPABILITY_OK)

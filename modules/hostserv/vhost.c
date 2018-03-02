@@ -14,20 +14,6 @@ static void hs_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[]);
 static struct command hs_vhost = { "VHOST", N_("Manages per-account virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhost, { .path = "hostserv/vhost" } };
 static struct command hs_listvhost = { "LISTVHOST", N_("Lists user virtual hosts."), PRIV_USER_AUSPEX, 1, hs_cmd_listvhost, { .path = "hostserv/listvhost" } };
 
-static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("hostserv", &hs_vhost);
-	service_named_bind_command("hostserv", &hs_listvhost);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("hostserv", &hs_vhost);
-	service_named_unbind_command("hostserv", &hs_listvhost);
-}
-
 /* VHOST <nick> [host] */
 static void
 hs_cmd_vhost(struct sourceinfo *si, int parc, char *parv[])
@@ -139,6 +125,20 @@ hs_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
 	else
 		command_success_nodata(si, ngettext(N_("\2%d\2 match for pattern \2%s\2"),
 						    N_("\2%d\2 matches for pattern \2%s\2"), matches), matches, pattern);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("hostserv", &hs_vhost);
+	service_named_bind_command("hostserv", &hs_listvhost);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("hostserv", &hs_vhost);
+	service_named_unbind_command("hostserv", &hs_listvhost);
 }
 
 SIMPLE_DECLARE_MODULE_V1("hostserv/vhost", MODULE_UNLOAD_CAPABILITY_OK)

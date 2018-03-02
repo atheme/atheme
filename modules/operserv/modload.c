@@ -13,18 +13,6 @@ static void os_cmd_modload(struct sourceinfo *si, int parc, char *parv[]);
 static struct command os_modload = { "MODLOAD", N_("Loads a module."), PRIV_ADMIN, 20, os_cmd_modload, { .path = "oservice/modload" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("operserv", &os_modload);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("operserv", &os_modload);
-}
-
-static void
 os_cmd_modload(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *module;
@@ -63,6 +51,18 @@ os_cmd_modload(struct sourceinfo *si, int parc, char *parv[])
 		if (!conf_rehash())
 			command_fail(si, fault_nosuch_target, _("REHASH of \2%s\2 failed. Please correct any errors in the file and try again."), config_file);
 	}
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("operserv", &os_modload);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("operserv", &os_modload);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/modload", MODULE_UNLOAD_CAPABILITY_OK)

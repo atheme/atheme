@@ -14,19 +14,6 @@ static struct command ms_sendops = { "SENDOPS", N_("Sends a memo to all ops on a
 static unsigned int *maxmemos;
 
 static void
-mod_init(struct module *const restrict m)
-{
-        service_named_bind_command("memoserv", &ms_sendops);
-        MODULE_TRY_REQUEST_SYMBOL(m, maxmemos, "memoserv/main", "maxmemos");
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("memoserv", &ms_sendops);
-}
-
-static void
 ms_cmd_sendops(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* misc structs etc */
@@ -192,6 +179,19 @@ ms_cmd_sendops(struct sourceinfo *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_SET, "SENDOPS: to \2%s\2 (%d/%d sent)", mc->name, sent, tried);
 	command_success_nodata(si, _("The memo has been successfully sent to %d ops on \2%s\2."), sent, mc->name);
 	return;
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+        service_named_bind_command("memoserv", &ms_sendops);
+        MODULE_TRY_REQUEST_SYMBOL(m, maxmemos, "memoserv/main", "maxmemos");
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("memoserv", &ms_sendops);
 }
 
 SIMPLE_DECLARE_MODULE_V1("memoserv/sendops", MODULE_UNLOAD_CAPABILITY_OK)

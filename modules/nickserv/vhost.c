@@ -15,23 +15,6 @@ static struct command ns_vhost = { "VHOST", N_("Manages user virtualhosts."), PR
 static struct command ns_listvhost = { "LISTVHOST", N_("Lists user virtualhosts."), PRIV_USER_AUSPEX, 1, ns_cmd_listvhost, { .path = "nickserv/listvhost" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	hook_add_event("user_identify");
-	hook_add_user_identify(vhost_on_identify);
-	service_named_bind_command("nickserv", &ns_vhost);
-	service_named_bind_command("nickserv", &ns_listvhost);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	hook_del_user_identify(vhost_on_identify);
-	service_named_unbind_command("nickserv", &ns_vhost);
-	service_named_unbind_command("nickserv", &ns_listvhost);
-}
-
-static void
 do_sethost(struct user *u, stringref host)
 {
 	if (!strcmp(u->vhost, host))
@@ -295,6 +278,23 @@ vhost_on_identify(struct user *u)
 		return;
 
 	do_sethost(u, md->value);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	hook_add_event("user_identify");
+	hook_add_user_identify(vhost_on_identify);
+	service_named_bind_command("nickserv", &ns_vhost);
+	service_named_bind_command("nickserv", &ns_listvhost);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	hook_del_user_identify(vhost_on_identify);
+	service_named_unbind_command("nickserv", &ns_vhost);
+	service_named_unbind_command("nickserv", &ns_listvhost);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/vhost", MODULE_UNLOAD_CAPABILITY_OK)

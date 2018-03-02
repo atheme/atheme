@@ -96,55 +96,6 @@ xmlrpc_config_ready(void *vptr)
 }
 
 static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, httpd_path_handlers, "misc/httpd", "httpd_path_handlers");
-
-	hook_add_event("config_ready");
-	hook_add_config_ready(xmlrpc_config_ready);
-
-	xmlrpc_config.path = sstrdup("/xmlrpc");
-
-	add_subblock_top_conf("XMLRPC", &conf_xmlrpc_table);
-	add_dupstr_conf_item("PATH", &conf_xmlrpc_table, 0, &xmlrpc_config.path, NULL);
-
-	xmlrpc_set_buffer(dump_buffer);
-	xmlrpc_set_options(XMLRPC_HTTP_HEADER, XMLRPC_OFF);
-	xmlrpc_register_method("atheme.login", xmlrpcmethod_login);
-	xmlrpc_register_method("atheme.logout", xmlrpcmethod_logout);
-	xmlrpc_register_method("atheme.command", xmlrpcmethod_command);
-	xmlrpc_register_method("atheme.privset", xmlrpcmethod_privset);
-	xmlrpc_register_method("atheme.ison", xmlrpcmethod_ison);
-	xmlrpc_register_method("atheme.metadata", xmlrpcmethod_metadata);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	mowgli_node_t *n;
-
-	xmlrpc_unregister_method("atheme.login");
-	xmlrpc_unregister_method("atheme.logout");
-	xmlrpc_unregister_method("atheme.command");
-	xmlrpc_unregister_method("atheme.privset");
-	xmlrpc_unregister_method("atheme.ison");
-	xmlrpc_unregister_method("atheme.metadata");
-
-	if ((n = mowgli_node_find(&handle_xmlrpc, httpd_path_handlers)) != NULL)
-	{
-		mowgli_node_delete(n, httpd_path_handlers);
-		mowgli_node_free(n);
-	}
-
-	del_conf_item("PATH", &conf_xmlrpc_table);
-	del_top_conf("XMLRPC");
-
-	free(xmlrpc_config.path);
-
-	hook_del_config_ready(xmlrpc_config_ready);
-}
-
-static void
 xmlrpc_command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *message)
 {
 	struct connection *cptr;
@@ -619,6 +570,55 @@ xmlrpcmethod_metadata(void *conn, int parc, char *parv[])
 	xmlrpc_send(1, buf);
 
 	return 0;
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, httpd_path_handlers, "misc/httpd", "httpd_path_handlers");
+
+	hook_add_event("config_ready");
+	hook_add_config_ready(xmlrpc_config_ready);
+
+	xmlrpc_config.path = sstrdup("/xmlrpc");
+
+	add_subblock_top_conf("XMLRPC", &conf_xmlrpc_table);
+	add_dupstr_conf_item("PATH", &conf_xmlrpc_table, 0, &xmlrpc_config.path, NULL);
+
+	xmlrpc_set_buffer(dump_buffer);
+	xmlrpc_set_options(XMLRPC_HTTP_HEADER, XMLRPC_OFF);
+	xmlrpc_register_method("atheme.login", xmlrpcmethod_login);
+	xmlrpc_register_method("atheme.logout", xmlrpcmethod_logout);
+	xmlrpc_register_method("atheme.command", xmlrpcmethod_command);
+	xmlrpc_register_method("atheme.privset", xmlrpcmethod_privset);
+	xmlrpc_register_method("atheme.ison", xmlrpcmethod_ison);
+	xmlrpc_register_method("atheme.metadata", xmlrpcmethod_metadata);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	mowgli_node_t *n;
+
+	xmlrpc_unregister_method("atheme.login");
+	xmlrpc_unregister_method("atheme.logout");
+	xmlrpc_unregister_method("atheme.command");
+	xmlrpc_unregister_method("atheme.privset");
+	xmlrpc_unregister_method("atheme.ison");
+	xmlrpc_unregister_method("atheme.metadata");
+
+	if ((n = mowgli_node_find(&handle_xmlrpc, httpd_path_handlers)) != NULL)
+	{
+		mowgli_node_delete(n, httpd_path_handlers);
+		mowgli_node_free(n);
+	}
+
+	del_conf_item("PATH", &conf_xmlrpc_table);
+	del_top_conf("XMLRPC");
+
+	free(xmlrpc_config.path);
+
+	hook_del_config_ready(xmlrpc_config_ready);
 }
 
 SIMPLE_DECLARE_MODULE_V1("transport/xmlrpc", MODULE_UNLOAD_CAPABILITY_OK)

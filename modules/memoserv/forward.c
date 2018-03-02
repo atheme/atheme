@@ -13,18 +13,6 @@ static struct command ms_forward = { "FORWARD", N_(N_("Forwards a memo.")),
                         AC_AUTHENTICATED, 2, ms_cmd_forward, { .path = "memoserv/forward" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("memoserv", &ms_forward);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("memoserv", &ms_forward);
-}
-
-static void
 ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])
 {
 	/* Misc structs etc */
@@ -188,6 +176,18 @@ ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("The memo has been successfully forwarded to \2%s\2."), target);
 	return;
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("memoserv", &ms_forward);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("memoserv", &ms_forward);
 }
 
 SIMPLE_DECLARE_MODULE_V1("memoserv/forward", MODULE_UNLOAD_CAPABILITY_OK)

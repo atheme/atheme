@@ -14,18 +14,6 @@ static struct command cs_count = { "COUNT", N_("Shows number of entries in acces
                          AC_NONE, 1, cs_cmd_count, { .path = "cservice/count" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("chanserv", &cs_count);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_count);
-}
-
-static void
 cs_cmd_count(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
@@ -119,6 +107,18 @@ cs_cmd_count(struct sourceinfo *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_ADMIN, "COUNT: \2%s\2 (oper override)", mc->name);
 	else
 		logcommand(si, CMDLOG_GET, "COUNT: \2%s\2", mc->name);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("chanserv", &cs_count);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_count);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/count", MODULE_UNLOAD_CAPABILITY_OK)

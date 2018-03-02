@@ -13,18 +13,6 @@ static struct command cs_status = { "STATUS", N_("Displays your status in servic
                          AC_NONE, 1, cs_cmd_status, { .path = "cservice/status" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("chanserv", &cs_status);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_status);
-}
-
-static void
 cs_cmd_status(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
@@ -97,6 +85,18 @@ cs_cmd_status(struct sourceinfo *si, int parc, char *parv[])
 
 	if (si->su != NULL && is_ircop(si->su))
 		command_success_nodata(si, _("You are an IRC operator."));
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("chanserv", &cs_status);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_status);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/status", MODULE_UNLOAD_CAPABILITY_OK)

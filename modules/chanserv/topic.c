@@ -22,24 +22,6 @@ static struct command cs_topicswap = { "TOPICSWAP", N_("Swap part of the topic o
                         AC_NONE, 2, cs_cmd_topicswap, { .path = "cservice/topicswap" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("chanserv", &cs_topic);
-        service_named_bind_command("chanserv", &cs_topicappend);
-        service_named_bind_command("chanserv", &cs_topicprepend);
-        service_named_bind_command("chanserv", &cs_topicswap);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_topic);
-	service_named_unbind_command("chanserv", &cs_topicappend);
-	service_named_unbind_command("chanserv", &cs_topicprepend);
-	service_named_unbind_command("chanserv", &cs_topicswap);
-}
-
-static void
 cs_cmd_topic(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
@@ -362,6 +344,24 @@ invalid_error:
 	logcommand(si, CMDLOG_DO, "TOPICSWAP: \2%s\2", mc->name);
 	if (si->su == NULL || !chanuser_find(c, si->su))
 		command_success_nodata(si, _("Topic set to \2%s\2 on \2%s\2."), c->topic, chan);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("chanserv", &cs_topic);
+        service_named_bind_command("chanserv", &cs_topicappend);
+        service_named_bind_command("chanserv", &cs_topicprepend);
+        service_named_bind_command("chanserv", &cs_topicswap);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_topic);
+	service_named_unbind_command("chanserv", &cs_topicappend);
+	service_named_unbind_command("chanserv", &cs_topicprepend);
+	service_named_unbind_command("chanserv", &cs_topicswap);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/topic", MODULE_UNLOAD_CAPABILITY_OK)

@@ -15,20 +15,6 @@ static void ns_cmd_set_password(struct sourceinfo *si, int parc, char *parv[]);
 
 static struct command ns_set_password = { "PASSWORD", N_("Changes the password associated with your account."), AC_NONE, 1, ns_cmd_set_password, { .path = "nickserv/set_password" } };
 
-static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
-
-	command_add(&ns_set_password, *ns_set_cmdtree);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	command_delete(&ns_set_password, *ns_set_cmdtree);
-}
-
 /* SET PASSWORD <password> */
 static void
 ns_cmd_set_password(struct sourceinfo *si, int parc, char *parv[])
@@ -68,6 +54,20 @@ ns_cmd_set_password(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("The password for \2%s\2 has been changed to \2%s\2."), entity(si->smu)->name, password);
 
 	return;
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
+
+	command_add(&ns_set_password, *ns_set_cmdtree);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	command_delete(&ns_set_password, *ns_set_cmdtree);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/set_password", MODULE_UNLOAD_CAPABILITY_OK)

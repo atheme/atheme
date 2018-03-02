@@ -14,20 +14,6 @@ static struct command cs_set_founder = { "FOUNDER", N_("Transfers foundership of
 
 static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
-static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
-
-	command_add(&cs_set_founder, *cs_set_cmdtree);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	command_delete(&cs_set_founder, *cs_set_cmdtree);
-}
-
 /*
  * This is how CS SET FOUNDER behaves in the absence of channel passwords:
  *
@@ -213,6 +199,20 @@ cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, "   \2/msg %s SET %s FOUNDER %s\2", chansvs.nick, mc->name, mt->name);
 	command_success_nodata(si, _("After that command is issued, the channel will be transferred."));
 	command_success_nodata(si, _("To cancel the transfer, use \2/msg %s SET %s FOUNDER %s\2"), chansvs.nick, mc->name, entity(si->smu)->name);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
+
+	command_add(&cs_set_founder, *cs_set_cmdtree);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	command_delete(&cs_set_founder, *cs_set_cmdtree);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/set_founder", MODULE_UNLOAD_CAPABILITY_OK)

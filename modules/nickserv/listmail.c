@@ -11,18 +11,6 @@ static void ns_cmd_listmail(struct sourceinfo *si, int parc, char *parv[]);
 
 static struct command ns_listmail = { "LISTMAIL", N_("Lists accounts registered to an e-mail address."), PRIV_USER_AUSPEX, 1, ns_cmd_listmail, { .path = "nickserv/listmail" } };
 
-static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("nickserv", &ns_listmail);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("nickserv", &ns_listmail);
-}
-
 struct listmail_state
 {
 	struct sourceinfo *origin;
@@ -76,6 +64,18 @@ ns_cmd_listmail(struct sourceinfo *si, int parc, char *parv[])
 	else
 		command_success_nodata(si, ngettext(N_("\2%d\2 match for e-mail address \2%s\2"),
 						    N_("\2%d\2 matches for e-mail address \2%s\2"), state.matches), state.matches, email);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("nickserv", &ns_listmail);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("nickserv", &ns_listmail);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/listmail", MODULE_UNLOAD_CAPABILITY_OK)

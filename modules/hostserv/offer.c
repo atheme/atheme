@@ -37,34 +37,6 @@ struct hsoffered
 static mowgli_list_t hs_offeredlist;
 
 static void
-mod_init(struct module *const restrict m)
-{
-	if (!module_find_published("backend/opensex"))
-	{
-		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
-		m->mflags |= MODTYPE_FAIL;
-		return;
-	}
-
-	hook_add_db_write(write_hsofferdb);
-	db_register_type_handler("HO", db_h_ho);
-
-	hook_add_event("group_drop");
-	hook_add_group_drop(remove_group_offered_hosts);
-
- 	service_named_bind_command("hostserv", &hs_offer);
-	service_named_bind_command("hostserv", &hs_unoffer);
-	service_named_bind_command("hostserv", &hs_offerlist);
-	service_named_bind_command("hostserv", &hs_take);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-
-}
-
-static void
 write_hsofferdb(struct database_handle *db)
 {
 	mowgli_node_t *n;
@@ -388,6 +360,34 @@ hs_cmd_offerlist(struct sourceinfo *si, int parc, char *parv[])
 	}
 	command_success_nodata(si, "End of list.");
 	logcommand(si, CMDLOG_GET, "OFFERLIST");
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	if (!module_find_published("backend/opensex"))
+	{
+		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	hook_add_db_write(write_hsofferdb);
+	db_register_type_handler("HO", db_h_ho);
+
+	hook_add_event("group_drop");
+	hook_add_group_drop(remove_group_offered_hosts);
+
+ 	service_named_bind_command("hostserv", &hs_offer);
+	service_named_bind_command("hostserv", &hs_unoffer);
+	service_named_bind_command("hostserv", &hs_offerlist);
+	service_named_bind_command("hostserv", &hs_take);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("hostserv/offer", MODULE_UNLOAD_CAPABILITY_NEVER)

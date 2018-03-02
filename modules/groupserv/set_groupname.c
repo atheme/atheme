@@ -14,21 +14,6 @@ static void gs_cmd_set_groupname(struct sourceinfo *si, int parc, char *parv[]);
 
 static struct command gs_set_groupname = { "GROUPNAME", N_("Changes the group's name."), AC_NONE, 1, gs_cmd_set_groupname, { .path = "groupserv/set_groupname" } };
 
-static void
-mod_init(struct module *const restrict m)
-{
-        use_groupserv_main_symbols(m);
-        use_groupserv_set_symbols(m);
-
-	command_add(&gs_set_groupname, gs_set_cmdtree);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	command_delete(&gs_set_groupname, gs_set_cmdtree);
-}
-
 /* SET GROUPNAME <name> */
 static void
 gs_cmd_set_groupname(struct sourceinfo *si, int parc, char *parv[])
@@ -82,6 +67,21 @@ gs_cmd_set_groupname(struct sourceinfo *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_REGISTER, "SET:GROUPNAME: \2%s\2 to \2%s\2", oldname, newname);
 	command_success_nodata(si, _("The group \2%s\2 has been renamed to \2%s\2."), oldname, newname);
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+        use_groupserv_main_symbols(m);
+        use_groupserv_set_symbols(m);
+
+	command_add(&gs_set_groupname, gs_set_cmdtree);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	command_delete(&gs_set_groupname, gs_set_cmdtree);
 }
 
 SIMPLE_DECLARE_MODULE_V1("groupserv/set_groupname", MODULE_UNLOAD_CAPABILITY_OK)

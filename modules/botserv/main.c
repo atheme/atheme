@@ -968,65 +968,6 @@ bs_cmd_unassign(struct sourceinfo *si, int parc, char *parv[])
 
 /* ******************************************************************** */
 
-static void
-mod_init(struct module *const restrict m)
-{
-	if (!module_find_published("backend/opensex"))
-	{
-		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
-		m->mflags |= MODTYPE_FAIL;
-		return;
-	}
-
-	hook_add_event("config_ready");
-	hook_add_config_ready(botserv_config_ready);
-
-	hook_add_db_write(botserv_save_database);
-	db_register_type_handler("BOT", db_h_bot);
-	db_register_type_handler("BOT-COUNT", db_h_bot_count);
-
-	hook_add_event("channel_drop");
-	hook_add_channel_drop(bs_channel_drop);
-
-	hook_add_event("shutdown");
-	hook_add_shutdown(on_shutdown);
-
-	botsvs = service_add("botserv", NULL);
-
-	add_uint_conf_item("MIN_USERS", &botsvs->conf_table, 0, &min_users, 0, 65535, 0);
-	service_bind_command(botsvs, &bs_bot);
-	service_bind_command(botsvs, &bs_assign);
-	service_bind_command(botsvs, &bs_unassign);
-	service_bind_command(botsvs, &bs_botlist);
-	hook_add_event("channel_join");
-	hook_add_event("channel_part");
-	hook_add_event("channel_register");
-	hook_add_event("channel_add");
-	hook_add_event("channel_can_change_topic");
-	hook_add_event("operserv_info");
-	hook_add_operserv_info(osinfo_hook);
-	hook_add_first_channel_join(bs_join);
-	hook_add_channel_part(bs_part);
-
-	modestack_mode_simple = bs_modestack_mode_simple;
-	modestack_mode_limit  = bs_modestack_mode_limit;
-	modestack_mode_ext    = bs_modestack_mode_ext;
-	modestack_mode_param  = bs_modestack_mode_param;
-	try_kick              = bs_try_kick;
-	topic_sts_real        = topic_sts;
-	topic_sts             = bs_topic_sts;
-	msg_real              = msg;
-	msg                   = bs_msg;
-	notice_real           = notice;
-	notice                = bs_notice;
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-
-}
-
 /* ******************************************************************** */
 
 static void
@@ -1137,6 +1078,65 @@ bs_part(hook_channel_joinpart_t *hdata)
 		else
 			part(cu->chan->name, chansvs.nick);
 	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	if (!module_find_published("backend/opensex"))
+	{
+		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	hook_add_event("config_ready");
+	hook_add_config_ready(botserv_config_ready);
+
+	hook_add_db_write(botserv_save_database);
+	db_register_type_handler("BOT", db_h_bot);
+	db_register_type_handler("BOT-COUNT", db_h_bot_count);
+
+	hook_add_event("channel_drop");
+	hook_add_channel_drop(bs_channel_drop);
+
+	hook_add_event("shutdown");
+	hook_add_shutdown(on_shutdown);
+
+	botsvs = service_add("botserv", NULL);
+
+	add_uint_conf_item("MIN_USERS", &botsvs->conf_table, 0, &min_users, 0, 65535, 0);
+	service_bind_command(botsvs, &bs_bot);
+	service_bind_command(botsvs, &bs_assign);
+	service_bind_command(botsvs, &bs_unassign);
+	service_bind_command(botsvs, &bs_botlist);
+	hook_add_event("channel_join");
+	hook_add_event("channel_part");
+	hook_add_event("channel_register");
+	hook_add_event("channel_add");
+	hook_add_event("channel_can_change_topic");
+	hook_add_event("operserv_info");
+	hook_add_operserv_info(osinfo_hook);
+	hook_add_first_channel_join(bs_join);
+	hook_add_channel_part(bs_part);
+
+	modestack_mode_simple = bs_modestack_mode_simple;
+	modestack_mode_limit  = bs_modestack_mode_limit;
+	modestack_mode_ext    = bs_modestack_mode_ext;
+	modestack_mode_param  = bs_modestack_mode_param;
+	try_kick              = bs_try_kick;
+	topic_sts_real        = topic_sts;
+	topic_sts             = bs_topic_sts;
+	msg_real              = msg;
+	msg                   = bs_msg;
+	notice_real           = notice;
+	notice                = bs_notice;
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("botserv/main", MODULE_UNLOAD_CAPABILITY_NEVER)

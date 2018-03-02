@@ -13,20 +13,6 @@ static void os_cmd_identify(struct sourceinfo *si, int parc, char *parv[]);
 static struct command os_identify = { "IDENTIFY", N_("Authenticate for services operator privileges."), AC_AUTHENTICATED, 1, os_cmd_identify, { .path = "oservice/identify" } };
 static struct command os_id = { "ID", N_("Alias for IDENTIFY"), AC_AUTHENTICATED, 1, os_cmd_identify, { .path = "oservice/identify" } };
 
-static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("operserv", &os_identify);
-        service_named_bind_command("operserv", &os_id);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("operserv", &os_identify);
-	service_named_unbind_command("operserv", &os_id);
-}
-
 static bool
 verify_operserv_password(struct soper *so, char *password)
 {
@@ -82,6 +68,20 @@ os_cmd_identify(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("You are now identified to %s."),
 			si->service->nick);
 	logcommand(si, CMDLOG_ADMIN, "IDENTIFY");
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("operserv", &os_identify);
+        service_named_bind_command("operserv", &os_id);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("operserv", &os_identify);
+	service_named_unbind_command("operserv", &os_id);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/identify", MODULE_UNLOAD_CAPABILITY_OK)

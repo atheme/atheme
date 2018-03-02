@@ -15,20 +15,6 @@ static struct command cs_set_mlock = { "MLOCK", N_("Sets channel mode lock."), A
 static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
-
-	command_add(&cs_set_mlock, *cs_set_cmdtree);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	command_delete(&cs_set_mlock, *cs_set_cmdtree);
-}
-
-static void
 cs_cmd_set_mlock(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
@@ -303,6 +289,20 @@ cs_cmd_set_mlock(struct sourceinfo *si, int parc, char *parv[])
 		mlock_sts(mc->chan);
 
 	return;
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
+
+	command_add(&cs_set_mlock, *cs_set_cmdtree);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	command_delete(&cs_set_mlock, *cs_set_cmdtree);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/set_mlock", MODULE_UNLOAD_CAPABILITY_OK)

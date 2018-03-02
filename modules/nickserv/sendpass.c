@@ -11,19 +11,6 @@ static void ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[]);
 
 static struct command ns_sendpass = { "SENDPASS", N_("Email registration passwords."), PRIV_USER_SENDPASS, 2, ns_cmd_sendpass, { .path = "nickserv/sendpass" } };
 
-static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_CONFLICT(m, "nickserv/sendpass_user")
-	service_named_bind_command("nickserv", &ns_sendpass);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("nickserv", &ns_sendpass);
-}
-
 enum specialoperation
 {
 	op_none,
@@ -237,6 +224,19 @@ ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 			command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "NOPASSWORD", entity(mu)->name);
 		}
 	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_CONFLICT(m, "nickserv/sendpass_user")
+	service_named_bind_command("nickserv", &ns_sendpass);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("nickserv", &ns_sendpass);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/sendpass", MODULE_UNLOAD_CAPABILITY_OK)

@@ -19,30 +19,6 @@ static struct command cmd_nwod = { "NWOD", N_("New WOD-style dice generation."),
 static struct command cmd_df = { "DF", N_("Fudge-style dice generation."), AC_NONE, 2, command_df, { .path = "gameserv/roll" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("gameserv", &cmd_wod);
-	service_named_bind_command("gameserv", &cmd_nwod);
-	service_named_bind_command("gameserv", &cmd_df);
-
-	service_named_bind_command("chanserv", &cmd_wod);
-	service_named_bind_command("chanserv", &cmd_nwod);
-	service_named_bind_command("chanserv", &cmd_df);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("gameserv", &cmd_wod);
-	service_named_unbind_command("gameserv", &cmd_nwod);
-	service_named_unbind_command("gameserv", &cmd_df);
-
-	service_named_unbind_command("chanserv", &cmd_wod);
-	service_named_unbind_command("chanserv", &cmd_nwod);
-	service_named_unbind_command("chanserv", &cmd_df);
-}
-
-static void
 command_wod(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
@@ -264,6 +240,30 @@ command_df(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	gs_command_report(si, _("Result: %s"), buf);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("gameserv", &cmd_wod);
+	service_named_bind_command("gameserv", &cmd_nwod);
+	service_named_bind_command("gameserv", &cmd_df);
+
+	service_named_bind_command("chanserv", &cmd_wod);
+	service_named_bind_command("chanserv", &cmd_nwod);
+	service_named_bind_command("chanserv", &cmd_df);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("gameserv", &cmd_wod);
+	service_named_unbind_command("gameserv", &cmd_nwod);
+	service_named_unbind_command("gameserv", &cmd_df);
+
+	service_named_unbind_command("chanserv", &cmd_wod);
+	service_named_unbind_command("chanserv", &cmd_nwod);
+	service_named_unbind_command("chanserv", &cmd_df);
 }
 
 SIMPLE_DECLARE_MODULE_V1("gameserv/gamecalc", MODULE_UNLOAD_CAPABILITY_OK)

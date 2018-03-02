@@ -15,20 +15,6 @@ static void ns_cmd_set_accountname(struct sourceinfo *si, int parc, char *parv[]
 
 static struct command ns_set_accountname = { "ACCOUNTNAME", N_("Changes your account name."), AC_NONE, 1, ns_cmd_set_accountname, { .path = "nickserv/set_accountname" } };
 
-static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
-
-	command_add(&ns_set_accountname, *ns_set_cmdtree);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	command_delete(&ns_set_accountname, *ns_set_cmdtree);
-}
-
 /* SET ACCOUNTNAME <nick> */
 static void
 ns_cmd_set_accountname(struct sourceinfo *si, int parc, char *parv[])
@@ -77,6 +63,20 @@ ns_cmd_set_accountname(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("Your account name is now set to \2%s\2."), newname);
 	myuser_rename(si->smu, newname);
 	return;
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
+
+	command_add(&ns_set_accountname, *ns_set_cmdtree);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	command_delete(&ns_set_accountname, *ns_set_cmdtree);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/set_accountname", MODULE_UNLOAD_CAPABILITY_OK)

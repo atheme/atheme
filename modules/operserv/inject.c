@@ -14,18 +14,6 @@ static void os_cmd_inject(struct sourceinfo *si, int parc, char *parv[]);
 static struct command os_inject = { "INJECT", N_("Fakes data from the uplink (debugging tool)."), PRIV_ADMIN, 1, os_cmd_inject, { .path = "oservice/inject" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("operserv", &os_inject);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("operserv", &os_inject);
-}
-
-static void
 os_cmd_inject(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *inject;
@@ -56,6 +44,18 @@ os_cmd_inject(struct sourceinfo *si, int parc, char *parv[])
 	injecting = true;
 	parse(inject);
 	injecting = false;
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("operserv", &os_inject);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("operserv", &os_inject);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/inject", MODULE_UNLOAD_CAPABILITY_OK)

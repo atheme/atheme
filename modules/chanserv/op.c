@@ -16,20 +16,6 @@ static struct command cs_op = { "OP", N_("Gives channel ops to a user."),
 static struct command cs_deop = { "DEOP", N_("Removes channel ops from a user."),
                         AC_NONE, 2, cs_cmd_deop, { .path = "cservice/op_voice" } };
 
-static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("chanserv", &cs_op);
-        service_named_bind_command("chanserv", &cs_deop);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_op);
-	service_named_unbind_command("chanserv", &cs_deop);
-}
-
 static mowgli_list_t op_actions;
 
 static void
@@ -142,6 +128,20 @@ cs_cmd_deop(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	cmd_op(si, false, parc, parv);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("chanserv", &cs_op);
+        service_named_bind_command("chanserv", &cs_deop);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_op);
+	service_named_unbind_command("chanserv", &cs_deop);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/op", MODULE_UNLOAD_CAPABILITY_OK)

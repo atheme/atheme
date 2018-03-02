@@ -12,18 +12,6 @@ static void ns_cmd_logout(struct sourceinfo *si, int parc, char *parv[]);
 static struct command ns_logout = { "LOGOUT", N_("Logs your services session out."), AC_NONE, 2, ns_cmd_logout, { .path = "nickserv/logout" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("nickserv", &ns_logout);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("nickserv", &ns_logout);
-}
-
-static void
 ns_cmd_logout(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u = si->su;
@@ -109,6 +97,18 @@ ns_cmd_logout(struct sourceinfo *si, int parc, char *parv[])
 		}
 		u->myuser = NULL;
 	}
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("nickserv", &ns_logout);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("nickserv", &ns_logout);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/logout", MODULE_UNLOAD_CAPABILITY_OK)

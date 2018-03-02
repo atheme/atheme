@@ -16,27 +16,6 @@ static struct command cs_owner = { "OWNER", N_("Gives the channel owner flag to 
 static struct command cs_deowner = { "DEOWNER", N_("Removes channel owner flag from a user."),
                         AC_NONE, 2, cs_cmd_deowner, { .path = "cservice/owner" } };
 
-static void
-mod_init(struct module *const restrict m)
-{
-	if (ircd != NULL && !ircd->uses_owner)
-	{
-		slog(LG_INFO, "Module %s requires owner support, refusing to load.", m->name);
-		m->mflags |= MODTYPE_FAIL;
-		return;
-	}
-
-        service_named_bind_command("chanserv", &cs_owner);
-        service_named_bind_command("chanserv", &cs_deowner);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_owner);
-	service_named_unbind_command("chanserv", &cs_deowner);
-}
-
 static mowgli_list_t owner_actions;
 
 static void
@@ -152,6 +131,27 @@ cs_cmd_deowner(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	cmd_owner(si, false, parc, parv);
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	if (ircd != NULL && !ircd->uses_owner)
+	{
+		slog(LG_INFO, "Module %s requires owner support, refusing to load.", m->name);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+        service_named_bind_command("chanserv", &cs_owner);
+        service_named_bind_command("chanserv", &cs_deowner);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_owner);
+	service_named_unbind_command("chanserv", &cs_deowner);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/owner", MODULE_UNLOAD_CAPABILITY_OK)

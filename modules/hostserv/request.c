@@ -44,47 +44,6 @@ mowgli_list_t hs_reqlist;
 static char *groupmemo;
 
 static void
-mod_init(struct module *const restrict m)
-{
-	if (!module_find_published("backend/opensex"))
-	{
-		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
-		m->mflags |= MODTYPE_FAIL;
-		return;
-	}
-
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "hostserv/main");
-
-	hostsvs = service_find("hostserv");
-
-	hook_add_event("user_drop");
-	hook_add_user_drop(account_drop_request);
-	hook_add_event("nick_ungroup");
-	hook_add_nick_ungroup(nick_drop_request);
-	hook_add_event("myuser_delete");
-	hook_add_myuser_delete(account_delete_request);
-	hook_add_event("operserv_info");
-	hook_add_operserv_info(osinfo_hook);
-	hook_add_db_write(write_hsreqdb);
-
-	add_dupstr_conf_item("REGGROUP", &hostsvs->conf_table, 0, &groupmemo, NULL);
-
-	db_register_type_handler("HR", db_h_hr);
-
- 	service_named_bind_command("hostserv", &hs_request);
-	service_named_bind_command("hostserv", &hs_waiting);
-	service_named_bind_command("hostserv", &hs_reject);
-	service_named_bind_command("hostserv", &hs_activate);
-	add_bool_conf_item("REQUEST_PER_NICK", &hostsvs->conf_table, 0, &request_per_nick, false);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-
-}
-
-static void
 write_hsreqdb(struct database_handle *db)
 {
 	mowgli_node_t *n;
@@ -597,6 +556,47 @@ hs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[])
 	}
 	command_success_nodata(si, "End of list.");
 	logcommand(si, CMDLOG_GET, "WAITING");
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	if (!module_find_published("backend/opensex"))
+	{
+		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "hostserv/main");
+
+	hostsvs = service_find("hostserv");
+
+	hook_add_event("user_drop");
+	hook_add_user_drop(account_drop_request);
+	hook_add_event("nick_ungroup");
+	hook_add_nick_ungroup(nick_drop_request);
+	hook_add_event("myuser_delete");
+	hook_add_myuser_delete(account_delete_request);
+	hook_add_event("operserv_info");
+	hook_add_operserv_info(osinfo_hook);
+	hook_add_db_write(write_hsreqdb);
+
+	add_dupstr_conf_item("REGGROUP", &hostsvs->conf_table, 0, &groupmemo, NULL);
+
+	db_register_type_handler("HR", db_h_hr);
+
+ 	service_named_bind_command("hostserv", &hs_request);
+	service_named_bind_command("hostserv", &hs_waiting);
+	service_named_bind_command("hostserv", &hs_reject);
+	service_named_bind_command("hostserv", &hs_activate);
+	add_bool_conf_item("REQUEST_PER_NICK", &hostsvs->conf_table, 0, &request_per_nick, false);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("hostserv/request", MODULE_UNLOAD_CAPABILITY_NEVER)

@@ -12,18 +12,6 @@ static void hs_cmd_vhostnick(struct sourceinfo *si, int parc, char *parv[]);
 
 static struct command hs_vhostnick = { "VHOSTNICK", N_("Manages per-nick virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhostnick, { .path = "hostserv/vhostnick" } };
 
-static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("hostserv", &hs_vhostnick);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("hostserv", &hs_vhostnick);
-}
-
 /* VHOSTNICK <nick> [host] */
 static void
 hs_cmd_vhostnick(struct sourceinfo *si, int parc, char *parv[])
@@ -94,6 +82,18 @@ hs_cmd_vhostnick(struct sourceinfo *si, int parc, char *parv[])
 	if (u != NULL)
 		do_sethost(u, host);
 	return;
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("hostserv", &hs_vhostnick);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("hostserv", &hs_vhostnick);
 }
 
 SIMPLE_DECLARE_MODULE_V1("hostserv/vhostnick", MODULE_UNLOAD_CAPABILITY_OK)

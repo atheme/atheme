@@ -12,22 +12,6 @@ static void command_lottery(struct sourceinfo *si, int parc, char *parv[]);
 
 static struct command cmd_lottery = { "LOTTERY", N_("Choose a random user on a channel."), AC_NONE, 2, command_lottery, { .path = "gameserv/lottery" } };
 
-static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("gameserv", &cmd_lottery);
-
-	service_named_bind_command("chanserv", &cmd_lottery);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("gameserv", &cmd_lottery);
-
-	service_named_unbind_command("chanserv", &cmd_lottery);
-}
-
 static struct user *
 pick_a_sucker(struct channel *c)
 {
@@ -63,6 +47,22 @@ command_lottery(struct sourceinfo *si, int parc, char *parv[])
 	return_if_fail(u != NULL);
 
 	gs_command_report(si, "%s", u->nick);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("gameserv", &cmd_lottery);
+
+	service_named_bind_command("chanserv", &cmd_lottery);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("gameserv", &cmd_lottery);
+
+	service_named_unbind_command("chanserv", &cmd_lottery);
 }
 
 SIMPLE_DECLARE_MODULE_V1("gameserv/lottery", MODULE_UNLOAD_CAPABILITY_OK)

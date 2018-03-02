@@ -16,18 +16,6 @@ static void helpserv_cmd_helpme(struct sourceinfo *si, int parc, char *parv[]);
 static struct command helpserv_helpme = { "HELPME", N_("Request help from network staff."), AC_NONE, 1, helpserv_cmd_helpme, { .path = "helpserv/helpme" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("helpserv", &helpserv_helpme);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-        service_named_unbind_command("helpserv", &helpserv_helpme);
-}
-
-static void
 helpserv_cmd_helpme(struct sourceinfo *si, int parc, char *parv[])
 {
         char *topic = parv[0];
@@ -67,6 +55,18 @@ helpserv_cmd_helpme(struct sourceinfo *si, int parc, char *parv[])
 		ratelimit_count++;
 
         return;
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("helpserv", &helpserv_helpme);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+        service_named_unbind_command("helpserv", &helpserv_helpme);
 }
 
 SIMPLE_DECLARE_MODULE_V1("helpserv/helpme", MODULE_UNLOAD_CAPABILITY_OK)

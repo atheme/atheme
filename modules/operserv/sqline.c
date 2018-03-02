@@ -29,53 +29,6 @@ static struct command os_sqline_sync = { "SYNC", N_("Synchronises network name b
 static mowgli_patricia_t *os_sqline_cmds = NULL;
 
 static void
-mod_init(struct module *const restrict m)
-{
-	if (ircd != NULL && qline_sts == generic_qline_sts)
-	{
-		slog(LG_INFO, "Module %s requires qline support, refusing to load.",
-				m->name);
-		m->mflags |= MODTYPE_FAIL;
-		return;
-	}
-
-	service_named_bind_command("operserv", &os_sqline);
-
-	os_sqline_cmds = mowgli_patricia_create(strcasecanon);
-
-	/* Add sub-commands */
-	command_add(&os_sqline_add, os_sqline_cmds);
-	command_add(&os_sqline_del, os_sqline_cmds);
-	command_add(&os_sqline_list, os_sqline_cmds);
-	command_add(&os_sqline_sync, os_sqline_cmds);
-
-	hook_add_event("user_add");
-	hook_add_user_add(os_sqline_newuser);
-	hook_add_event("user_nickchange");
-	hook_add_user_nickchange(os_sqline_newuser);
-	hook_add_event("channel_join");
-	hook_add_channel_join(os_sqline_chanjoin);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("operserv", &os_sqline);
-
-	/* Delete sub-commands */
-	command_delete(&os_sqline_add, os_sqline_cmds);
-	command_delete(&os_sqline_del, os_sqline_cmds);
-	command_delete(&os_sqline_list, os_sqline_cmds);
-	command_delete(&os_sqline_sync, os_sqline_cmds);
-
-	hook_del_user_add(os_sqline_newuser);
-	hook_del_user_nickchange(os_sqline_newuser);
-	hook_del_channel_join(os_sqline_chanjoin);
-
-	mowgli_patricia_destroy(os_sqline_cmds, NULL, NULL);
-}
-
-static void
 os_sqline_newuser(hook_user_nick_t *data)
 {
 	struct user *u = data->u;
@@ -469,6 +422,53 @@ os_cmd_sqline_sync(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	command_success_nodata(si, _("SQLINE list synchronized to servers."));
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	if (ircd != NULL && qline_sts == generic_qline_sts)
+	{
+		slog(LG_INFO, "Module %s requires qline support, refusing to load.",
+				m->name);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	service_named_bind_command("operserv", &os_sqline);
+
+	os_sqline_cmds = mowgli_patricia_create(strcasecanon);
+
+	/* Add sub-commands */
+	command_add(&os_sqline_add, os_sqline_cmds);
+	command_add(&os_sqline_del, os_sqline_cmds);
+	command_add(&os_sqline_list, os_sqline_cmds);
+	command_add(&os_sqline_sync, os_sqline_cmds);
+
+	hook_add_event("user_add");
+	hook_add_user_add(os_sqline_newuser);
+	hook_add_event("user_nickchange");
+	hook_add_user_nickchange(os_sqline_newuser);
+	hook_add_event("channel_join");
+	hook_add_channel_join(os_sqline_chanjoin);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("operserv", &os_sqline);
+
+	/* Delete sub-commands */
+	command_delete(&os_sqline_add, os_sqline_cmds);
+	command_delete(&os_sqline_del, os_sqline_cmds);
+	command_delete(&os_sqline_list, os_sqline_cmds);
+	command_delete(&os_sqline_sync, os_sqline_cmds);
+
+	hook_del_user_add(os_sqline_newuser);
+	hook_del_user_nickchange(os_sqline_newuser);
+	hook_del_channel_join(os_sqline_chanjoin);
+
+	mowgli_patricia_destroy(os_sqline_cmds, NULL, NULL);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/sqline", MODULE_UNLOAD_CAPABILITY_OK)

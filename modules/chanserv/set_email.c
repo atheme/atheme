@@ -15,20 +15,6 @@ static struct command cs_set_email = { "EMAIL", N_("Sets the channel e-mail addr
 static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
-
-	command_add(&cs_set_email, *cs_set_cmdtree);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	command_delete(&cs_set_email, *cs_set_cmdtree);
-}
-
-static void
 cs_cmd_set_email(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
@@ -72,6 +58,20 @@ cs_cmd_set_email(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_SET, "SET:EMAIL: \2%s\2 \2%s\2", mc->name, mail);
 	verbose(mc, _("\2%s\2 set the e-mail address for the channel to \2%s\2"), get_source_name(si), mail);
 	command_success_nodata(si, _("The e-mail address for channel \2%s\2 has been set to \2%s\2."), parv[0], mail);
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
+
+	command_add(&cs_set_email, *cs_set_cmdtree);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	command_delete(&cs_set_email, *cs_set_cmdtree);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/set_email", MODULE_UNLOAD_CAPABILITY_OK)

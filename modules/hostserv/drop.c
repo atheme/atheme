@@ -14,18 +14,6 @@ static void hs_cmd_drop(struct sourceinfo *si, int parc, char *parv[]);
 static struct command hs_drop = { "DROP", N_("Drops your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_drop, { .path = "hostserv/drop" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("hostserv", &hs_drop);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("hostserv", &hs_drop);
-}
-
-static void
 hs_cmd_drop(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mynick *mn;
@@ -64,6 +52,18 @@ hs_cmd_drop(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "VHOST:DROP: \2%s\2", get_source_name(si));
 	do_sethost_all(si->smu, NULL); // restore user vhost from user host
 
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("hostserv", &hs_drop);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("hostserv", &hs_drop);
 }
 
 SIMPLE_DECLARE_MODULE_V1("hostserv/drop", MODULE_UNLOAD_CAPABILITY_OK)

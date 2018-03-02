@@ -15,20 +15,6 @@ static struct command cs_set_gameserv = { "GAMESERV", N_("Allows or disallows ga
 static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
-
-	command_add(&cs_set_gameserv, *cs_set_cmdtree);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	command_delete(&cs_set_gameserv, *cs_set_cmdtree);
-}
-
-static void
 cs_cmd_set_gameserv(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
@@ -100,6 +86,20 @@ cs_cmd_set_gameserv(struct sourceinfo *si, int parc, char *parv[])
 
 		command_success_nodata(si, _("\2%s\2 has been disabled for \2%s\2."), "GAMESERV", mc->name);
 	}
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
+
+	command_add(&cs_set_gameserv, *cs_set_cmdtree);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	command_delete(&cs_set_gameserv, *cs_set_cmdtree);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/set_gameserv", MODULE_UNLOAD_CAPABILITY_OK)

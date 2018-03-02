@@ -36,36 +36,6 @@ struct help_ticket
 static mowgli_list_t helpserv_reqlist;
 
 static void
-mod_init(struct module *const restrict m)
-{
-	if (!module_find_published("backend/opensex"))
-	{
-		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
-		m->mflags |= MODTYPE_FAIL;
-		return;
-	}
-
-	hook_add_event("user_drop");
-	hook_add_user_drop(account_drop_request);
-	hook_add_event("myuser_delete");
-	hook_add_myuser_delete(account_delete_request);
-	hook_add_db_write(write_ticket_db);
-
-	db_register_type_handler("HE", db_h_he);
-
- 	service_named_bind_command("helpserv", &helpserv_request);
-	service_named_bind_command("helpserv", &helpserv_list);
-	service_named_bind_command("helpserv", &helpserv_close);
-	service_named_bind_command("helpserv", &helpserv_cancel);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-
-}
-
-static void
 write_ticket_db(struct database_handle *db)
 {
 	mowgli_node_t *n;
@@ -339,6 +309,36 @@ helpserv_cmd_cancel(struct sourceinfo *si, int parc, char *parv[])
                 }
         }
         command_fail(si, fault_badparams, _("You do not have a help request to cancel."));
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	if (!module_find_published("backend/opensex"))
+	{
+		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	hook_add_event("user_drop");
+	hook_add_user_drop(account_drop_request);
+	hook_add_event("myuser_delete");
+	hook_add_myuser_delete(account_delete_request);
+	hook_add_db_write(write_ticket_db);
+
+	db_register_type_handler("HE", db_h_he);
+
+ 	service_named_bind_command("helpserv", &helpserv_request);
+	service_named_bind_command("helpserv", &helpserv_list);
+	service_named_bind_command("helpserv", &helpserv_close);
+	service_named_bind_command("helpserv", &helpserv_cancel);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+
 }
 
 SIMPLE_DECLARE_MODULE_V1("helpserv/ticket", MODULE_UNLOAD_CAPABILITY_NEVER)

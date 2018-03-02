@@ -14,22 +14,6 @@ static void command_namegen(struct sourceinfo *si, int parc, char *parv[]);
 static struct command cmd_namegen = { "NAMEGEN", N_("Generates some names to ponder."), AC_NONE, 2, command_namegen, { .path = "gameserv/namegen" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("gameserv", &cmd_namegen);
-
-	service_named_bind_command("chanserv", &cmd_namegen);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("gameserv", &cmd_namegen);
-
-	service_named_unbind_command("chanserv", &cmd_namegen);
-}
-
-static void
 command_namegen(struct sourceinfo *si, int parc, char *parv[])
 {
 	unsigned int iter;
@@ -72,6 +56,22 @@ command_namegen(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	gs_command_report(si, _("Some names to ponder: %s"), buf);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("gameserv", &cmd_namegen);
+
+	service_named_bind_command("chanserv", &cmd_namegen);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("gameserv", &cmd_namegen);
+
+	service_named_unbind_command("chanserv", &cmd_namegen);
 }
 
 SIMPLE_DECLARE_MODULE_V1("gameserv/namegen", MODULE_UNLOAD_CAPABILITY_OK)

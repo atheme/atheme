@@ -15,18 +15,6 @@ static struct command cs_unban = { "UNBAN", N_("Unbans you on a channel."),
 			AC_AUTHENTICATED, 2, cs_cmd_unban, { .path = "cservice/unban_self" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("chanserv", &cs_unban);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_unban);
-}
-
-static void
 cs_cmd_unban(struct sourceinfo *si, int parc, char *parv[])
 {
         const char *channel = parv[0];
@@ -107,6 +95,18 @@ cs_cmd_unban(struct sourceinfo *si, int parc, char *parv[])
 			command_success_nodata(si, _("No bans found matching \2%s\2 on \2%s\2."), target, channel);
 		return;
 	}
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("chanserv", &cs_unban);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_unban);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/unban_self", MODULE_UNLOAD_CAPABILITY_OK)

@@ -12,18 +12,6 @@ static void cs_cmd_help(struct sourceinfo *si, int parc, char *parv[]);
 static struct command cs_help = { "HELP", N_("Displays contextual help information."),
                         AC_NONE, 1, cs_cmd_help, { .path = "help" } };
 
-static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("chanserv", &cs_help);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_help);
-}
-
 /* HELP <command> [params] */
 static void
 cs_cmd_help(struct sourceinfo *si, int parc, char *parv[])
@@ -99,6 +87,18 @@ cs_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	help_display(si, chansvs.me, command, chansvs.me->commands);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("chanserv", &cs_help);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_help);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/help", MODULE_UNLOAD_CAPABILITY_OK)

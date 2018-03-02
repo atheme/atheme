@@ -13,18 +13,6 @@ static struct command cs_why = { "WHY", N_("Explains channel access logic."),
 		     AC_NONE, 2, cs_cmd_why, { .path = "cservice/why" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("chanserv", &cs_why);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_why);
-}
-
-static void
 cs_cmd_why(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *chan = parv[0];
@@ -155,6 +143,18 @@ cs_cmd_why(struct sourceinfo *si, int parc, char *parv[])
 	else if (fl == 0)
 		command_success_nodata(si, _("\2%s\2 has no special access to \2%s\2."),
 				u->nick, mc->name);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("chanserv", &cs_why);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_why);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/why", MODULE_UNLOAD_CAPABILITY_OK)

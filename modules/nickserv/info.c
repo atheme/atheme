@@ -12,18 +12,6 @@ static void ns_cmd_info(struct sourceinfo *si, int parc, char *parv[]);
 static struct command ns_info = { "INFO", N_("Displays information on registrations."), AC_NONE, 2, ns_cmd_info, { .path = "nickserv/info" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("nickserv", &ns_info);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("nickserv", &ns_info);
-}
-
-static void
 ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
@@ -464,6 +452,18 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("*** \2End of Info\2 ***"));
 
 	logcommand(si, CMDLOG_GET, "INFO: \2%s\2", mn != NULL ? mn->nick : entity(mu)->name);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("nickserv", &ns_info);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("nickserv", &ns_info);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/info", MODULE_UNLOAD_CAPABILITY_OK)

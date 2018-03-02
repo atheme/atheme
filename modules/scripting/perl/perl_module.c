@@ -402,46 +402,6 @@ perl_script_module_unload_handler(struct module *m, const enum module_unload_int
 }
 
 /*
- * Module startup/shutdown
- */
-static void
-mod_init(struct module *const restrict m)
-{
-	perl_script_module_heap = mowgli_heap_create(sizeof(struct perl_script_module), 256, BH_NOW);
-	if (!perl_script_module_heap)
-	{
-		m->mflags |= MODTYPE_FAIL;
-		return;
-	}
-
-	if (! startup_perl())
-	{
-		m->mflags |= MODTYPE_FAIL;
-		return;
-	}
-
-	service_named_bind_command("operserv", &os_perl);
-
-        hook_add_event("module_load");
-        hook_add_module_load(hook_module_load);
-
-	add_top_conf("LOADSCRIPT", conf_loadscript);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("operserv", &os_perl);
-
-	shutdown_perl();
-
-	/* Since all our perl pseudo-modules depend on us, we know they'll
-	 * all be deallocated before this. No need to clean them up.
-	 */
-	mowgli_heap_destroy(perl_script_module_heap);
-}
-
-/*
  * Actual command handlers.
  */
 static void
@@ -479,6 +439,46 @@ conf_loadscript(mowgli_config_file_entry_t *ce)
 	}
 
 	return 0;
+}
+
+/*
+ * Module startup/shutdown
+ */
+static void
+mod_init(struct module *const restrict m)
+{
+	perl_script_module_heap = mowgli_heap_create(sizeof(struct perl_script_module), 256, BH_NOW);
+	if (!perl_script_module_heap)
+	{
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	if (! startup_perl())
+	{
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	service_named_bind_command("operserv", &os_perl);
+
+        hook_add_event("module_load");
+        hook_add_module_load(hook_module_load);
+
+	add_top_conf("LOADSCRIPT", conf_loadscript);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("operserv", &os_perl);
+
+	shutdown_perl();
+
+	/* Since all our perl pseudo-modules depend on us, we know they'll
+	 * all be deallocated before this. No need to clean them up.
+	 */
+	mowgli_heap_destroy(perl_script_module_heap);
 }
 
 SIMPLE_DECLARE_MODULE_V1("scripting/perl", MODULE_UNLOAD_CAPABILITY_OK)

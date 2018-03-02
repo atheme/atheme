@@ -14,20 +14,6 @@ static struct command cs_clear_flags = { "FLAGS", "Clears all channel flags.", A
 static mowgli_patricia_t **cs_clear_cmds = NULL;
 
 static void
-mod_init(struct module *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, cs_clear_cmds, "chanserv/clear", "cs_clear_cmds");
-
-        command_add(&cs_clear_flags, *cs_clear_cmds);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	command_delete(&cs_clear_flags, *cs_clear_cmds);
-}
-
-static void
 cs_cmd_clear_flags(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
@@ -78,6 +64,20 @@ cs_cmd_clear_flags(struct sourceinfo *si, int parc, char *parv[])
 	if (changes > 0)
 		verbose(mc, _("\2%s\2 removed all %d non-founder access entries."),
 				get_source_name(si), changes);
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, cs_clear_cmds, "chanserv/clear", "cs_clear_cmds");
+
+        command_add(&cs_clear_flags, *cs_clear_cmds);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	command_delete(&cs_clear_flags, *cs_clear_cmds);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/clear_flags", MODULE_UNLOAD_CAPABILITY_OK)

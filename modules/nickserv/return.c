@@ -13,18 +13,6 @@ static void ns_cmd_return(struct sourceinfo *si, int parc, char *parv[]);
 static struct command ns_return = { "RETURN", N_("Returns an account to its owner."), PRIV_USER_ADMIN, 2, ns_cmd_return, { .path = "nickserv/return" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("nickserv", &ns_return);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("nickserv", &ns_return);
-}
-
-static void
 ns_cmd_return(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
@@ -105,6 +93,18 @@ ns_cmd_return(struct sourceinfo *si, int parc, char *parv[])
 						target, newmail);
 	command_success_nodata(si, _("A random password has been set; it has been sent to \2%s\2."),
 						newmail);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("nickserv", &ns_return);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("nickserv", &ns_return);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/return", MODULE_UNLOAD_CAPABILITY_OK)

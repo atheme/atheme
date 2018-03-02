@@ -15,20 +15,6 @@ static struct command hs_on = { "ON", N_("Activates your assigned vhost."), AC_A
 static struct command hs_off = { "OFF", N_("Deactivates your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_off, { .path = "hostserv/off" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("hostserv", &hs_on);
-	service_named_bind_command("hostserv", &hs_off);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("hostserv", &hs_on);
-	service_named_unbind_command("hostserv", &hs_off);
-}
-
-static void
 hs_cmd_on(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mynick *mn = NULL;
@@ -100,6 +86,20 @@ hs_cmd_off(struct sourceinfo *si, int parc, char *parv[])
 	}
 	do_sethost(si->su, NULL);
 	command_success_nodata(si, _("Your vhost of \2%s\2 is now deactivated."), md->value);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("hostserv", &hs_on);
+	service_named_bind_command("hostserv", &hs_off);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("hostserv", &hs_on);
+	service_named_unbind_command("hostserv", &hs_off);
 }
 
 SIMPLE_DECLARE_MODULE_V1("hostserv/onoff", MODULE_UNLOAD_CAPABILITY_OK)

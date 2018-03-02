@@ -15,21 +15,6 @@ static struct command ss_help =
 { "HELP", N_("Displays contextual help information."), AC_NONE, 2, ss_cmd_help, {.path = "help"}
 };
 
-static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-    statsvs = service_add("statserv", NULL);
-    service_named_bind_command("statserv", &ss_help);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-    service_named_unbind_command("statserv", &ss_help);
-    if (statsvs != NULL)
-        service_delete(statsvs);
-}
-
 void
 ss_cmd_help(struct sourceinfo * si, int parc, char *parv[])
 {
@@ -54,6 +39,21 @@ ss_cmd_help(struct sourceinfo * si, int parc, char *parv[])
     }
 
     help_display(si, si->service, command, si->service->commands);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+    statsvs = service_add("statserv", NULL);
+    service_named_bind_command("statserv", &ss_help);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+    service_named_unbind_command("statserv", &ss_help);
+    if (statsvs != NULL)
+        service_delete(statsvs);
 }
 
 SIMPLE_DECLARE_MODULE_V1("statserv/main", MODULE_UNLOAD_CAPABILITY_OK)

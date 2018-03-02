@@ -27,47 +27,6 @@ static struct command os_sgline_sync = { "SYNC", N_("Synchronises network realna
 static mowgli_patricia_t *os_sgline_cmds = NULL;
 
 static void
-mod_init(struct module *const restrict m)
-{
-	if (ircd != NULL && xline_sts == generic_xline_sts)
-	{
-		slog(LG_INFO, "Module %s requires xline support, refusing to load.",
-				m->name);
-		m->mflags |= MODTYPE_FAIL;
-		return;
-	}
-
-	service_named_bind_command("operserv", &os_sgline);
-
-	os_sgline_cmds = mowgli_patricia_create(strcasecanon);
-
-	/* Add sub-commands */
-	command_add(&os_sgline_add, os_sgline_cmds);
-	command_add(&os_sgline_del, os_sgline_cmds);
-	command_add(&os_sgline_list, os_sgline_cmds);
-	command_add(&os_sgline_sync, os_sgline_cmds);
-
-	hook_add_event("user_add");
-	hook_add_user_add(os_sgline_newuser);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("operserv", &os_sgline);
-
-	/* Delete sub-commands */
-	command_delete(&os_sgline_add, os_sgline_cmds);
-	command_delete(&os_sgline_del, os_sgline_cmds);
-	command_delete(&os_sgline_list, os_sgline_cmds);
-	command_delete(&os_sgline_sync, os_sgline_cmds);
-
-	hook_del_user_add(os_sgline_newuser);
-
-	mowgli_patricia_destroy(os_sgline_cmds, NULL, NULL);
-}
-
-static void
 os_sgline_newuser(hook_user_nick_t *data)
 {
 	struct user *u = data->u;
@@ -378,6 +337,47 @@ os_cmd_sgline_sync(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	command_success_nodata(si, _("SGLINE list synchronized to servers."));
+}
+
+static void
+mod_init(struct module *const restrict m)
+{
+	if (ircd != NULL && xline_sts == generic_xline_sts)
+	{
+		slog(LG_INFO, "Module %s requires xline support, refusing to load.",
+				m->name);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	service_named_bind_command("operserv", &os_sgline);
+
+	os_sgline_cmds = mowgli_patricia_create(strcasecanon);
+
+	/* Add sub-commands */
+	command_add(&os_sgline_add, os_sgline_cmds);
+	command_add(&os_sgline_del, os_sgline_cmds);
+	command_add(&os_sgline_list, os_sgline_cmds);
+	command_add(&os_sgline_sync, os_sgline_cmds);
+
+	hook_add_event("user_add");
+	hook_add_user_add(os_sgline_newuser);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("operserv", &os_sgline);
+
+	/* Delete sub-commands */
+	command_delete(&os_sgline_add, os_sgline_cmds);
+	command_delete(&os_sgline_del, os_sgline_cmds);
+	command_delete(&os_sgline_list, os_sgline_cmds);
+	command_delete(&os_sgline_sync, os_sgline_cmds);
+
+	hook_del_user_add(os_sgline_newuser);
+
+	mowgli_patricia_destroy(os_sgline_cmds, NULL, NULL);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/sgline", MODULE_UNLOAD_CAPABILITY_OK)

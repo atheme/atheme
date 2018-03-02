@@ -8,18 +8,6 @@ static void os_cmd_modreload(struct sourceinfo *si, int parc, char *parv[]);
 static struct command os_modreload = { "MODRELOAD", N_("Reloads a module."), PRIV_ADMIN, 20, os_cmd_modreload, { .path = "oservice/modreload" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("operserv", &os_modreload);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("operserv", &os_modreload);
-}
-
-static void
 recurse_module_deplist(struct module *m, mowgli_list_t *deplist)
 {
 	mowgli_node_t *n;
@@ -178,6 +166,18 @@ os_cmd_modreload(struct sourceinfo *si, int parc, char *parv[])
 		if (!conf_rehash())
 			command_fail(si, fault_nosuch_target, _("REHASH of \2%s\2 failed. Please correct any errors in the file and try again."), config_file);
 	}
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("operserv", &os_modreload);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("operserv", &os_modreload);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/modreload", MODULE_UNLOAD_CAPABILITY_OK)

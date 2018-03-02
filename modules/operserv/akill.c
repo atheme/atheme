@@ -28,39 +28,6 @@ static struct command os_akill_sync = { "SYNC", N_("Synchronises network bans to
 static mowgli_patricia_t *os_akill_cmds = NULL;
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-        service_named_bind_command("operserv", &os_akill);
-
-	os_akill_cmds = mowgli_patricia_create(strcasecanon);
-
-	/* Add sub-commands */
-	command_add(&os_akill_add, os_akill_cmds);
-	command_add(&os_akill_del, os_akill_cmds);
-	command_add(&os_akill_list, os_akill_cmds);
-	command_add(&os_akill_sync, os_akill_cmds);
-
-	hook_add_event("user_add");
-	hook_add_user_add(os_akill_newuser);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("operserv", &os_akill);
-
-	/* Delete sub-commands */
-	command_delete(&os_akill_add, os_akill_cmds);
-	command_delete(&os_akill_del, os_akill_cmds);
-	command_delete(&os_akill_list, os_akill_cmds);
-	command_delete(&os_akill_sync, os_akill_cmds);
-
-	hook_del_user_add(os_akill_newuser);
-
-	mowgli_patricia_destroy(os_akill_cmds, NULL, NULL);
-}
-
-static void
 os_akill_newuser(hook_user_nick_t *data)
 {
 	struct user *u = data->u;
@@ -554,6 +521,39 @@ os_cmd_akill_sync(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	command_success_nodata(si, _("AKILL list synchronized to servers."));
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+        service_named_bind_command("operserv", &os_akill);
+
+	os_akill_cmds = mowgli_patricia_create(strcasecanon);
+
+	/* Add sub-commands */
+	command_add(&os_akill_add, os_akill_cmds);
+	command_add(&os_akill_del, os_akill_cmds);
+	command_add(&os_akill_list, os_akill_cmds);
+	command_add(&os_akill_sync, os_akill_cmds);
+
+	hook_add_event("user_add");
+	hook_add_user_add(os_akill_newuser);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("operserv", &os_akill);
+
+	/* Delete sub-commands */
+	command_delete(&os_akill_add, os_akill_cmds);
+	command_delete(&os_akill_del, os_akill_cmds);
+	command_delete(&os_akill_list, os_akill_cmds);
+	command_delete(&os_akill_sync, os_akill_cmds);
+
+	hook_del_user_add(os_akill_newuser);
+
+	mowgli_patricia_destroy(os_akill_cmds, NULL, NULL);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/akill", MODULE_UNLOAD_CAPABILITY_OK)

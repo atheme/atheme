@@ -32,27 +32,6 @@ static struct command cs_forcexop = { "FORCEXOP", N_("Forces access levels to xO
                          AC_NONE, 1, cs_cmd_forcexop, { .path = "cservice/forcexop" } };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
-{
-	service_named_bind_command("chanserv", &cs_aop);
-	service_named_bind_command("chanserv", &cs_sop);
-	if (ircd != NULL && ircd->uses_halfops)
-		service_named_bind_command("chanserv", &cs_hop);
-	service_named_bind_command("chanserv", &cs_vop);
-	service_named_bind_command("chanserv", &cs_forcexop);
-}
-
-static void
-mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
-{
-	service_named_unbind_command("chanserv", &cs_aop);
-	service_named_unbind_command("chanserv", &cs_sop);
-	service_named_unbind_command("chanserv", &cs_hop);
-	service_named_unbind_command("chanserv", &cs_vop);
-	service_named_unbind_command("chanserv", &cs_forcexop);
-}
-
-static void
 cs_xop(struct sourceinfo *si, int parc, char *parv[], const char *leveldesc)
 {
 	struct myentity *mt;
@@ -521,6 +500,27 @@ cs_cmd_forcexop(struct sourceinfo *si, int parc, char *parv[])
 	if (changes > 0)
 		verbose(mc, _("\2%s\2 reset access levels to xOP (\2%d\2 changes)"), get_source_name(si), changes);
 	logcommand(si, CMDLOG_SET, "FORCEXOP: \2%s\2 (\2%d\2 changes)", mc->name, changes);
+}
+
+static void
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+{
+	service_named_bind_command("chanserv", &cs_aop);
+	service_named_bind_command("chanserv", &cs_sop);
+	if (ircd != NULL && ircd->uses_halfops)
+		service_named_bind_command("chanserv", &cs_hop);
+	service_named_bind_command("chanserv", &cs_vop);
+	service_named_bind_command("chanserv", &cs_forcexop);
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	service_named_unbind_command("chanserv", &cs_aop);
+	service_named_unbind_command("chanserv", &cs_sop);
+	service_named_unbind_command("chanserv", &cs_hop);
+	service_named_unbind_command("chanserv", &cs_vop);
+	service_named_unbind_command("chanserv", &cs_forcexop);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/xop", MODULE_UNLOAD_CAPABILITY_OK)
