@@ -8,10 +8,6 @@
 #include "atheme.h"
 #include "uplink.h"
 
-static void helpserv_cmd_services(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command helpserv_services = { "SERVICES", N_("List all services currently running on the network."), AC_NONE, 1, helpserv_cmd_services, { .path = "helpserv/services" } };
-
 static void
 helpserv_cmd_services(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -30,6 +26,8 @@ helpserv_cmd_services(struct sourceinfo *si, int parc, char *parv[])
 
 	return;
 }
+
+static struct command helpserv_services = { "SERVICES", N_("List all services currently running on the network."), AC_NONE, 1, helpserv_cmd_services, { .path = "helpserv/services" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
