@@ -7,29 +7,16 @@
 
 #include "atheme.h"
 
-static void ss_cmd_netsplit(struct sourceinfo * si, int parc, char *parv[]);
-static void ss_cmd_netsplit_list(struct sourceinfo * si, int parc, char *parv[]);
-static void ss_cmd_netsplit_remove(struct sourceinfo * si, int parc, char *parv[]);
-
-static struct command ss_netsplit =
-{ "NETSPLIT", N_("Monitor network splits."), PRIV_SERVER_AUSPEX, 2, ss_cmd_netsplit, {.path = "statserv/netsplit"} };
-
-static struct command ss_netsplit_list =
-{ "LIST", N_("List currently split servers."), PRIV_SERVER_AUSPEX, 1, ss_cmd_netsplit_list, {.path = ""} };
-
-static struct command ss_netsplit_remove =
-{ "REMOVE", N_("Remove a server from the netsplit list."), PRIV_JUPE, 2, ss_cmd_netsplit_remove, {.path = ""} };
-
-static mowgli_patricia_t *ss_netsplit_cmds = NULL;
-static mowgli_patricia_t *splitlist = NULL;
-static mowgli_heap_t *split_heap = NULL;
-
 struct netsplit
 {
     char *name;
     time_t disconnected_since;
     unsigned int flags;
 };
+
+static mowgli_patricia_t *ss_netsplit_cmds = NULL;
+static mowgli_patricia_t *splitlist = NULL;
+static mowgli_heap_t *split_heap = NULL;
 
 static void
 netsplit_delete_serv(struct netsplit *s)
@@ -127,6 +114,10 @@ ss_cmd_netsplit_remove(struct sourceinfo * si, int parc, char *parv[])
     else
         command_fail(si, fault_nosuch_target, _("The server \2%s\2 does is not a split server."), name);
 }
+
+static struct command ss_netsplit = { "NETSPLIT", N_("Monitor network splits."), PRIV_SERVER_AUSPEX, 2, ss_cmd_netsplit, {.path = "statserv/netsplit"} };
+static struct command ss_netsplit_list = { "LIST", N_("List currently split servers."), PRIV_SERVER_AUSPEX, 1, ss_cmd_netsplit_list, {.path = ""} };
+static struct command ss_netsplit_remove = { "REMOVE", N_("Remove a server from the netsplit list."), PRIV_JUPE, 2, ss_cmd_netsplit_remove, {.path = ""} };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

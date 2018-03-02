@@ -7,23 +7,6 @@
 
 #include "atheme.h"
 
-static void ss_cmd_server(struct sourceinfo * si, int parc, char *parv[]);
-static void ss_cmd_server_info(struct sourceinfo * si, int parc, char *parv[]);
-static void ss_cmd_server_list(struct sourceinfo * si, int parc, char *parv[]);
-static void ss_cmd_server_count(struct sourceinfo * si, int parc, char *parv[]);
-
-static struct command ss_server =
-{ "SERVER", N_("Obtain information about servers on the network."), AC_NONE, 3, ss_cmd_server, {.path = "statserv/server"} };
-
-static struct command ss_server_list =
-{ "LIST", N_("Obtain a list of servers."), AC_NONE, 1, ss_cmd_server_list, {.path = ""} };
-
-static struct command ss_server_count =
-{ "COUNT", N_("Count the amount of servers connected to the network."), AC_NONE, 1, ss_cmd_server_count, {.path = ""} };
-
-static struct command ss_server_info =
-{ "INFO", N_("Obtain information about a specified server."), AC_NONE, 2, ss_cmd_server_info, {.path = ""} };
-
 static mowgli_patricia_t *ss_server_cmds = NULL;
 
 static void
@@ -112,6 +95,11 @@ ss_cmd_server_count(struct sourceinfo * si, int parc, char *parv[])
 {
     command_success_nodata(si, _("Network size: %u servers"), mowgli_patricia_size(servlist));
 }
+
+static struct command ss_server = { "SERVER", N_("Obtain information about servers on the network."), AC_NONE, 3, ss_cmd_server, {.path = "statserv/server"} };
+static struct command ss_server_list = { "LIST", N_("Obtain a list of servers."), AC_NONE, 1, ss_cmd_server_list, {.path = ""} };
+static struct command ss_server_count = { "COUNT", N_("Count the amount of servers connected to the network."), AC_NONE, 1, ss_cmd_server_count, {.path = ""} };
+static struct command ss_server_info = { "INFO", N_("Obtain information about a specified server."), AC_NONE, 2, ss_cmd_server_info, {.path = ""} };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

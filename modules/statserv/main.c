@@ -9,12 +9,6 @@
 
 static struct service *statsvs = NULL;
 
-static void ss_cmd_help(struct sourceinfo * si, int parc, char *parv[]);
-
-static struct command ss_help =
-{ "HELP", N_("Displays contextual help information."), AC_NONE, 2, ss_cmd_help, {.path = "help"}
-};
-
 void
 ss_cmd_help(struct sourceinfo * si, int parc, char *parv[])
 {
@@ -40,6 +34,8 @@ ss_cmd_help(struct sourceinfo * si, int parc, char *parv[])
 
     help_display(si, si->service, command, si->service->commands);
 }
+
+static struct command ss_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 2, ss_cmd_help, {.path = "help"} };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
