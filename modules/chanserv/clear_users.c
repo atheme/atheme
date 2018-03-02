@@ -7,11 +7,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_clear_users(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_clear_users = { "USERS", N_("Kicks all users from a channel."),
-	AC_NONE, 2, cs_cmd_clear_users, { .path = "cservice/clear_users" } };
-
 static mowgli_patricia_t **cs_clear_cmds = NULL;
 
 static void
@@ -57,7 +52,7 @@ cs_cmd_clear_users(struct sourceinfo *si, int parc, char *parv[])
 
 	command_add_flood(si, MOWGLI_LIST_LENGTH(&c->members) > 3 ? FLOOD_HEAVY : FLOOD_MODERATE);
 
-	/* stop a race condition where users can rejoin */
+	// stop a race condition where users can rejoin
 	oldlimit = c->limit;
 	if (oldlimit != 1)
 		modestack_mode_limit(chansvs.nick, c, MTYPE_ADD, 1);
@@ -67,12 +62,13 @@ cs_cmd_clear_users(struct sourceinfo *si, int parc, char *parv[])
 	{
 		cu = n->data;
 
-		/* don't kick the user who requested the masskick */
+		// don't kick the user who requested the masskick
 		if (cu->user == si->su || is_internal_client(cu->user))
 			continue;
 
 		nmembers = MOWGLI_LIST_LENGTH(&c->members);
 		try_kick(chansvs.me->me, c, cu->user, fullreason);
+
 		/* If there are only two users remaining before the kick,
 		 * it is possible that the last user is chanserv which will
 		 * part if leave_chans is enabled. If it is a permanent
@@ -89,7 +85,7 @@ cs_cmd_clear_users(struct sourceinfo *si, int parc, char *parv[])
 			break;
 	}
 
-	/* the channel may be empty now, so our pointer may be bogus! */
+	// the channel may be empty now, so our pointer may be bogus!
 	c = channel_find(channel);
 	if (c != NULL)
 	{
@@ -101,7 +97,8 @@ cs_cmd_clear_users(struct sourceinfo *si, int parc, char *parv[])
 			 * -- jilles */
 			part(channel, chansvs.nick);
 		}
-		/* could be permanent channel, blah */
+
+		// could be permanent channel, blah
 		c = channel_find(channel);
 		if (c != NULL)
 		{
@@ -116,6 +113,8 @@ cs_cmd_clear_users(struct sourceinfo *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("Cleared users from \2%s\2."), channel);
 }
+
+static struct command cs_clear_users = { "USERS", N_("Kicks all users from a channel."), AC_NONE, 2, cs_cmd_clear_users, { .path = "cservice/clear_users" } };
 
 static void
 mod_init(struct module *const restrict m)

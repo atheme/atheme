@@ -7,18 +7,13 @@
 
 #include "atheme.h"
 
-static void cs_cmd_help(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_help = { "HELP", N_("Displays contextual help information."),
-                        AC_NONE, 1, cs_cmd_help, { .path = "help" } };
-
-/* HELP <command> [params] */
+// HELP <command> [params]
 static void
 cs_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *command = parv[0];
 
-	/* strip off channel name for fantasy commands */
+	// strip off channel name for fantasy commands
 	if (si->c)
 	{
 		command = strchr(command, ' ');
@@ -66,7 +61,7 @@ cs_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 
 		command_success_nodata(si, _("***** \2End of Help\2 *****"));
 
-		/* Fun for helpchan/helpurl. */
+		// Fun for helpchan/helpurl.
 		if (config_options.helpchan && config_options.helpurl)
 			command_success_nodata(si, _("If you're having trouble or you need some additional help, you may want to join the help channel %s or visit the help webpage %s"),
 					config_options.helpchan, config_options.helpurl);
@@ -88,6 +83,8 @@ cs_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 
 	help_display(si, chansvs.me, command, chansvs.me->commands);
 }
+
+static struct command cs_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 1, cs_cmd_help, { .path = "help" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

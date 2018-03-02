@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_clear_flags(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_clear_flags = { "FLAGS", "Clears all channel flags.", AC_NONE, 2, cs_cmd_clear_flags, { .path = "cservice/clear_flags" } };
-
 static mowgli_patricia_t **cs_clear_cmds = NULL;
 
 static void
@@ -65,6 +61,8 @@ cs_cmd_clear_flags(struct sourceinfo *si, int parc, char *parv[])
 		verbose(mc, _("\2%s\2 removed all %d non-founder access entries."),
 				get_source_name(si), changes);
 }
+
+static struct command cs_clear_flags = { "FLAGS", "Clears all channel flags.", AC_NONE, 2, cs_cmd_clear_flags, { .path = "cservice/clear_flags" } };
 
 static void
 mod_init(struct module *const restrict m)

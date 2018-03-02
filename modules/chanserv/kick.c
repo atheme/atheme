@@ -7,14 +7,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_kick(struct sourceinfo *si, int parc, char *parv[]);
-static void cs_cmd_kickban(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_kick = { "KICK", N_("Removes a user from a channel."),
-                        AC_NONE, 3, cs_cmd_kick, { .path = "cservice/kick" } };
-static struct command cs_kickban = { "KICKBAN", N_("Removes and bans a user from a channel."),
-			AC_NONE, 3, cs_cmd_kickban, { .path = "cservice/kickban" } };
-
 static void
 cs_cmd_kick(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -52,14 +44,14 @@ cs_cmd_kick(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* figure out who we're going to kick */
+	// figure out who we're going to kick
 	if ((tu = user_find_named(nick)) == NULL)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), nick);
 		return;
 	}
 
-	/* if target is a service, bail. --nenolod */
+	// if target is a service, bail. --nenolod
 	if (is_service(tu))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is a network service; you cannot kick or deop them."), tu->nick);
@@ -119,14 +111,14 @@ cs_cmd_kickban(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* figure out who we're going to kick */
+	// figure out who we're going to kick
 	if ((tu = user_find_named(nick)) == NULL)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), nick);
 		return;
 	}
 
-        /* if target is a service, bail. --nenolod */
+        // if target is a service, bail. --nenolod
 	if (is_service(tu))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is a network service; you cannot kick or deop them."), tu->nick);
@@ -157,6 +149,9 @@ cs_cmd_kickban(struct sourceinfo *si, int parc, char *parv[])
 			(si->su != tu && !chanuser_find(mc->chan, si->su)))
 		command_success_nodata(si, _("\2%s\2 has been kickbanned from \2%s\2."), tu->nick, mc->name);
 }
+
+static struct command cs_kick = { "KICK", N_("Removes a user from a channel."), AC_NONE, 3, cs_cmd_kick, { .path = "cservice/kick" } };
+static struct command cs_kickban = { "KICKBAN", N_("Removes and bans a user from a channel."), AC_NONE, 3, cs_cmd_kickban, { .path = "cservice/kickban" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_clear_akicks(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_clear_akicks = { "AKICKS", "Clears all channel AKICK entries.", AC_NONE, 2, cs_cmd_clear_akicks, { .path = "cservice/clear_akicks" } };
-
 static mowgli_patricia_t **cs_clear_cmds = NULL;
 
 static void
@@ -71,6 +67,8 @@ cs_cmd_clear_akicks(struct sourceinfo *si, int parc, char *parv[])
 		verbose(mc, _("\2%s\2 removed all %d AKICK entries."),
 				get_source_name(si), changes);
 }
+
+static struct command cs_clear_akicks = { "AKICKS", "Clears all channel AKICK entries.", AC_NONE, 2, cs_cmd_clear_akicks, { .path = "cservice/clear_akicks" } };
 
 static void
 mod_init(struct module *const restrict m)

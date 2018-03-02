@@ -8,10 +8,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_set_limitflags(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_set_limitflags = { "LIMITFLAGS", N_("Limits the power of the +f flag."), AC_NONE, 2, cs_cmd_set_limitflags, { .path = "cservice/set_limitflags" } };
-
 static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static void
@@ -79,6 +75,8 @@ cs_cmd_set_limitflags(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 }
+
+static struct command cs_set_limitflags = { "LIMITFLAGS", N_("Limits the power of the +f flag."), AC_NONE, 2, cs_cmd_set_limitflags, { .path = "cservice/set_limitflags" } };
 
 static void
 mod_init(struct module *const restrict m)

@@ -8,10 +8,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_list(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_list = { "LIST", N_("Lists channels registered matching a given pattern."), PRIV_CHAN_AUSPEX, 10, cs_cmd_list, { .path = "cservice/list" } };
-
 enum list_opttype
 {
 	OPT_BOOL,
@@ -212,7 +208,7 @@ cs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 		if (lastused && (CURRTIME - mc->used) < lastused)
 			continue;
 
-		/* in the future we could add a LIMIT parameter */
+		// in the future we could add a LIMIT parameter
 		*buf = '\0';
 
 		if (metadata_find(mc, "private:mark:setter")) {
@@ -241,6 +237,8 @@ cs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 	else
 		command_success_nodata(si, ngettext(N_("\2%d\2 match for criteria \2%s\2"), N_("\2%d\2 matches for criteria \2%s\2"), matches), matches, criteriastr);
 }
+
+static struct command cs_list = { "LIST", N_("Lists channels registered matching a given pattern."), PRIV_CHAN_AUSPEX, 10, cs_cmd_list, { .path = "cservice/list" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

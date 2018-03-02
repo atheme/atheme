@@ -11,9 +11,6 @@
 static void
 mod_init(struct module *const restrict m)
 {
-	/* Here's all the MODULE_TRY_REQUEST_DEPENDENCY out the ass
-	 * stuff to make easy upgrades.
-	 */
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_core");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_email");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_entrymsg");

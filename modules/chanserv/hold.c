@@ -7,11 +7,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_hold(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_hold = { "HOLD", N_("Prevents a channel from expiring."),
-			PRIV_HOLD, 2, cs_cmd_hold, { .path = "cservice/hold" } };
-
 static void
 cs_cmd_hold(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -72,6 +67,8 @@ cs_cmd_hold(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Usage: HOLD <#channel> <ON|OFF>"));
 	}
 }
+
+static struct command cs_hold = { "HOLD", N_("Prevents a channel from expiring."), PRIV_HOLD, 2, cs_cmd_hold, { .path = "cservice/hold" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -8,13 +8,15 @@
 #include "atheme.h"
 #include "chanserv.h"
 
-static void cs_cmd_quiet(struct sourceinfo *si, int parc, char *parv[]);
-static void cs_cmd_unquiet(struct sourceinfo *si, int parc, char *parv[]);
+// Notify at most this many users in private notices, otherwise channel
+#define MAX_SINGLE_NOTIFY 3
 
-static struct command cs_quiet = { "QUIET", N_("Sets a quiet on a channel."),
-                        AC_AUTHENTICATED, 2, cs_cmd_quiet, { .path = "cservice/quiet" } };
-static struct command cs_unquiet = { "UNQUIET", N_("Removes a quiet on a channel."),
-			AC_AUTHENTICATED, 2, cs_cmd_unquiet, { .path = "cservice/unquiet" } };
+enum devoice_result
+{
+	DEVOICE_FAILED,
+	DEVOICE_NO_ACTION,
+	DEVOICE_DONE
+};
 
 static void
 make_extbanmask(char *buf, size_t buflen, const char *mask)
@@ -96,8 +98,6 @@ make_extban(char *buf, size_t size, struct user *tu)
 	mowgli_strlcat(buf, tu->vhost, size);
 }
 
-enum devoice_result { DEVOICE_FAILED, DEVOICE_NO_ACTION, DEVOICE_DONE };
-
 static enum devoice_result
 devoice_user(struct sourceinfo *si, struct mychan *mc, struct channel *c, struct user *tu)
 {
@@ -161,18 +161,16 @@ devoice_user(struct sourceinfo *si, struct mychan *mc, struct channel *c, struct
 	return result;
 }
 
-/* Notify at most this many users in private notices, otherwise channel */
-#define MAX_SINGLE_NOTIFY 3
-
 static void
 notify_one_victim(struct sourceinfo *si, struct channel *c, struct user *u, int dir)
 {
 	return_if_fail(dir == MTYPE_ADD || dir == MTYPE_DEL);
 
-	/* fantasy command, they can see it */
+	// fantasy command, they can see it
 	if (si->c != NULL)
 		return;
-	/* self */
+
+	// self
 	if (si->su == u)
 		return;
 
@@ -203,7 +201,7 @@ notify_victims(struct sourceinfo *si, struct channel *c, struct chanban *cb, int
 	if (cb == NULL)
 		return;
 
-	/* fantasy command, they can see it */
+	// fantasy command, they can see it
 	if (si->c != NULL)
 		return;
 
@@ -212,7 +210,7 @@ notify_victims(struct sourceinfo *si, struct channel *c, struct chanban *cb, int
 	memcpy(&tmpban, cb, sizeof(struct chanban));
 	tmpban.mask = strip_extban(cb->mask);
 
-	/* only check the newly added/removed quiet */
+	// only check the newly added/removed quiet
 	mowgli_node_add(&tmpban, &ban_n, &ban_l);
 
 	MOWGLI_ITER_FOREACH(n, c->members.head)
@@ -317,7 +315,8 @@ cs_cmd_quiet(struct sourceinfo *si, int parc, char *parv[])
 			n = remove_ban_exceptions(si->service->me, c, tu);
 			if (n > 0)
 				command_success_nodata(si, _("To ensure the quiet takes effect, %d ban exception(s) matching \2%s\2 have been removed from \2%s\2."), n, tu->nick, c->name);
-			/* Notify if we did anything. */
+
+			// Notify if we did anything.
 			if (cb != NULL)
 				notify_victims(si, c, cb, MTYPE_ADD);
 			else if (devoice_result == DEVOICE_DONE || n > 0)
@@ -422,7 +421,7 @@ cs_cmd_unquiet(struct sourceinfo *si, int parc, char *parv[])
 			}
 			if (count > 0)
 			{
-				/* one notification only */
+				// one notification only
 				if (chanuser_find(c, tu))
 					notify_one_victim(si, c, tu, MTYPE_DEL);
 				command_success_nodata(si, _("Unquieted \2%s\2 on \2%s\2 (%d quiet%s removed)."),
@@ -459,6 +458,9 @@ cs_cmd_unquiet(struct sourceinfo *si, int parc, char *parv[])
 	} while ((target = strtok_r(NULL, " ", &strtokctx)) != NULL);
 	free(targetlist);
 }
+
+static struct command cs_quiet = { "QUIET", N_("Sets a quiet on a channel."), AC_AUTHENTICATED, 2, cs_cmd_quiet, { .path = "cservice/quiet" } };
+static struct command cs_unquiet = { "UNQUIET", N_("Removes a quiet on a channel."), AC_AUTHENTICATED, 2, cs_cmd_unquiet, { .path = "cservice/unquiet" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

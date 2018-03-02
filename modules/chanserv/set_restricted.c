@@ -8,10 +8,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_set_restricted(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_set_restricted = { "RESTRICTED", N_("Restricts access to the channel to users on the access list. (Other users are kickbanned.)"), AC_NONE, 2, cs_cmd_set_restricted, { .path = "cservice/set_restricted" } };
-
 static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static void
@@ -75,6 +71,8 @@ cs_cmd_set_restricted(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 }
+
+static struct command cs_set_restricted = { "RESTRICTED", N_("Restricts access to the channel to users on the access list. (Other users are kickbanned.)"), AC_NONE, 2, cs_cmd_set_restricted, { .path = "cservice/set_restricted" } };
 
 static void
 mod_init(struct module *const restrict m)

@@ -7,12 +7,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_clear(struct sourceinfo *si, int parc, char *parv[]);
-static void cs_help_clear(struct sourceinfo *si, const char *subcmd);
-
-static struct command cs_clear = { "CLEAR", N_("Channel removal toolkit."),
-                        AC_NONE, 3, cs_cmd_clear, { .func = cs_help_clear } };
-
 // This is imported by modules/chanserv/clear_*.so
 mowgli_patricia_t *cs_clear_cmds;
 
@@ -70,6 +64,8 @@ cs_cmd_clear(struct sourceinfo *si, int parc, char *parv[])
 	parv[1] = chan;
 	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
+
+static struct command cs_clear = { "CLEAR", N_("Channel removal toolkit."), AC_NONE, 3, cs_cmd_clear, { .func = cs_help_clear } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

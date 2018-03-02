@@ -8,14 +8,6 @@
 #include "atheme.h"
 #include "chanserv.h"
 
-static void cs_cmd_protect(struct sourceinfo *si, int parc, char *parv[]);
-static void cs_cmd_deprotect(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_protect = { "PROTECT", N_("Gives the channel protection flag to a user."),
-                        AC_NONE, 2, cs_cmd_protect, { .path = "cservice/protect" } };
-static struct command cs_deprotect = { "DEPROTECT", N_("Removes channel protection flag from a user."),
-                        AC_NONE, 2, cs_cmd_deprotect, { .path = "cservice/protect" } };
-
 static mowgli_list_t protect_actions;
 
 static void
@@ -65,7 +57,7 @@ cmd_protect(struct sourceinfo *si, bool protecting, int parc, char *parv[])
 		nick = act->nick;
 		protect = act->en;
 
-		/* figure out who we're going to protect */
+		// figure out who we're going to protect
 		if (!(tu = user_find_named(nick)))
 		{
 			command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), nick);
@@ -75,7 +67,7 @@ cmd_protect(struct sourceinfo *si, bool protecting, int parc, char *parv[])
 		if (is_internal_client(tu))
 			continue;
 
-		/* SECURE check; we can skip this if deprotecting or sender == target, because we already verified */
+		// SECURE check; we can skip this if deprotecting or sender == target, because we already verified
 		if (protect && (si->su != tu) && (mc->flags & MC_SECURE) && !chanacs_user_has_flag(mc, tu, CA_OP) && !chanacs_user_has_flag(mc, tu, CA_AUTOOP))
 		{
 			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
@@ -132,6 +124,9 @@ cs_cmd_deprotect(struct sourceinfo *si, int parc, char *parv[])
 
 	cmd_protect(si, false, parc, parv);
 }
+
+static struct command cs_protect = { "PROTECT", N_("Gives the channel protection flag to a user."), AC_NONE, 2, cs_cmd_protect, { .path = "cservice/protect" } };
+static struct command cs_deprotect = { "DEPROTECT", N_("Removes channel protection flag from a user."), AC_NONE, 2, cs_cmd_deprotect, { .path = "cservice/protect" } };
 
 static void
 mod_init(struct module *const restrict m)

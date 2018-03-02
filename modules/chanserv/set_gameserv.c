@@ -8,10 +8,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_set_gameserv(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_set_gameserv = { "GAMESERV", N_("Allows or disallows gaming services."), AC_NONE, 2, cs_cmd_set_gameserv, { .path = "cservice/set_gameserv" } };
-
 static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static void
@@ -87,6 +83,8 @@ cs_cmd_set_gameserv(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("\2%s\2 has been disabled for \2%s\2."), "GAMESERV", mc->name);
 	}
 }
+
+static struct command cs_set_gameserv = { "GAMESERV", N_("Allows or disallows gaming services."), AC_NONE, 2, cs_cmd_set_gameserv, { .path = "cservice/set_gameserv" } };
 
 static void
 mod_init(struct module *const restrict m)

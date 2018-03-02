@@ -8,11 +8,6 @@
 #include "atheme.h"
 #include "template.h"
 
-static void cs_cmd_count(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_count = { "COUNT", N_("Shows number of entries in access lists."),
-                         AC_NONE, 1, cs_cmd_count, { .path = "cservice/count" } };
-
 static void
 cs_cmd_count(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -108,6 +103,8 @@ cs_cmd_count(struct sourceinfo *si, int parc, char *parv[])
 	else
 		logcommand(si, CMDLOG_GET, "COUNT: \2%s\2", mc->name);
 }
+
+static struct command cs_count = { "COUNT", N_("Shows number of entries in access lists."), AC_NONE, 1, cs_cmd_count, { .path = "cservice/count" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

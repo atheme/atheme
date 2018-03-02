@@ -7,11 +7,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_mark(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_mark = { "MARK", N_("Adds a note to a channel."),
-			PRIV_MARK, 3, cs_cmd_mark, { .path = "cservice/mark" } };
-
 static void
 cs_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -84,6 +79,8 @@ cs_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Usage: MARK <#channel> <ON|OFF> [note]"));
 	}
 }
+
+static struct command cs_mark = { "MARK", N_("Adds a note to a channel."), PRIV_MARK, 3, cs_cmd_mark, { .path = "cservice/mark" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

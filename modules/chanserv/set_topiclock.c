@@ -8,10 +8,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_set_topiclock(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_set_topiclock = { "TOPICLOCK", N_("Restricts who can change the topic."), AC_NONE, 2, cs_cmd_set_topiclock, { .path = "cservice/set_topiclock" } };
-
 static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static void
@@ -78,6 +74,8 @@ cs_cmd_set_topiclock(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 }
+
+static struct command cs_set_topiclock = { "TOPICLOCK", N_("Restricts who can change the topic."), AC_NONE, 2, cs_cmd_set_topiclock, { .path = "cservice/set_topiclock" } };
 
 static void
 mod_init(struct module *const restrict m)

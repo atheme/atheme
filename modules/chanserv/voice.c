@@ -8,14 +8,6 @@
 #include "atheme.h"
 #include "chanserv.h"
 
-static void cs_cmd_voice(struct sourceinfo *si, int parc, char *parv[]);
-static void cs_cmd_devoice(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_voice = { "VOICE", N_("Gives channel voice to a user."),
-                         AC_NONE, 2, cs_cmd_voice, { .path = "cservice/op_voice" } };
-static struct command cs_devoice = { "DEVOICE", N_("Removes channel voice from a user."),
-                         AC_NONE, 2, cs_cmd_devoice, { .path = "cservice/op_voice" } };
-
 static mowgli_list_t voice_actions;
 
 static void
@@ -53,7 +45,7 @@ cmd_voice(struct sourceinfo *si, bool voicing, int parc, char *parv[])
 		nick = act->nick;
 		voice = act->en;
 
-		/* figure out who we're going to voice */
+		// figure out who we're going to voice
 		if (!(tu = user_find_named(nick)))
 		{
 			command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), nick);
@@ -118,6 +110,9 @@ cs_cmd_devoice(struct sourceinfo *si, int parc, char *parv[])
 
 	cmd_voice(si, false, parc, parv);
 }
+
+static struct command cs_voice = { "VOICE", N_("Gives channel voice to a user."), AC_NONE, 2, cs_cmd_voice, { .path = "cservice/op_voice" } };
+static struct command cs_devoice = { "DEVOICE", N_("Removes channel voice from a user."), AC_NONE, 2, cs_cmd_devoice, { .path = "cservice/op_voice" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

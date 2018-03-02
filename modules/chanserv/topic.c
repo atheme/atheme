@@ -7,20 +7,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_topic(struct sourceinfo *si, int parc, char *parv[]);
-static void cs_cmd_topicappend(struct sourceinfo *si, int parc, char *parv[]);
-static void cs_cmd_topicprepend(struct sourceinfo *si, int parc, char *parv[]);
-static void cs_cmd_topicswap(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_topic = { "TOPIC", N_("Sets a topic on a channel."),
-                        AC_NONE, 2, cs_cmd_topic, { .path = "cservice/topic" } };
-static struct command cs_topicappend = { "TOPICAPPEND", N_("Appends a topic on a channel."),
-                        AC_NONE, 2, cs_cmd_topicappend, { .path = "cservice/topicappend" } };
-static struct command cs_topicprepend = { "TOPICPREPEND", N_("Prepends a topic on a channel."),
-                        AC_NONE, 2, cs_cmd_topicprepend, { .path = "cservice/topicprepend" } };
-static struct command cs_topicswap = { "TOPICSWAP", N_("Swap part of the topic on a channel."),
-                        AC_NONE, 2, cs_cmd_topicswap, { .path = "cservice/topicswap" } };
-
 static void
 cs_cmd_topic(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -345,6 +331,11 @@ invalid_error:
 	if (si->su == NULL || !chanuser_find(c, si->su))
 		command_success_nodata(si, _("Topic set to \2%s\2 on \2%s\2."), c->topic, chan);
 }
+
+static struct command cs_topic = { "TOPIC", N_("Sets a topic on a channel."), AC_NONE, 2, cs_cmd_topic, { .path = "cservice/topic" } };
+static struct command cs_topicappend = { "TOPICAPPEND", N_("Appends a topic on a channel."), AC_NONE, 2, cs_cmd_topicappend, { .path = "cservice/topicappend" } };
+static struct command cs_topicprepend = { "TOPICPREPEND", N_("Prepends a topic on a channel."), AC_NONE, 2, cs_cmd_topicprepend, { .path = "cservice/topicprepend" } };
+static struct command cs_topicswap = { "TOPICSWAP", N_("Swap part of the topic on a channel."), AC_NONE, 2, cs_cmd_topicswap, { .path = "cservice/topicswap" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

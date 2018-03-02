@@ -10,18 +10,6 @@
 #include "template.h"
 #include <limits.h>
 
-static void cs_join(hook_channel_joinpart_t *hdata);
-static void cs_part(hook_channel_joinpart_t *hdata);
-static void cs_register(hook_channel_req_t *mc);
-static void cs_succession(hook_channel_succession_req_t *data);
-static void cs_newchan(struct channel *c);
-static void cs_keeptopic_topicset(struct channel *c);
-static void cs_topiccheck(hook_channel_topic_check_t *data);
-static void cs_tschange(struct channel *c);
-static void cs_leave_empty(void *unused);
-static void cs_bounce_mode_change(hook_channel_mode_change_t *data);
-static void on_shutdown(void *unused);
-
 static mowgli_eventloop_timer_t *cs_leave_empty_timer = NULL;
 
 static void
@@ -50,7 +38,7 @@ join_registered(bool all)
 	}
 }
 
-/* main services client routine */
+// main services client routine
 static void
 chanserv(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -60,43 +48,43 @@ chanserv(struct sourceinfo *si, int parc, char *parv[])
 	char *cmd;
 	char *args;
 
-	/* this should never happen */
+	// this should never happen
 	if (parv[parc - 2][0] == '&')
 	{
 		slog(LG_ERROR, "services(): got parv with local channel: %s", parv[0]);
 		return;
 	}
 
-	/* is this a fantasy command? */
+	// is this a fantasy command?
 	if (parv[parc - 2][0] == '#')
 	{
 		struct metadata *md;
 
 		if (chansvs.fantasy == false)
 		{
-			/* *all* fantasy disabled */
+			// *all* fantasy disabled
 			return;
 		}
 
 		mc = mychan_find(parv[parc - 2]);
 		if (!mc)
 		{
-			/* unregistered, NFI how we got this message, but let's leave it alone! */
+			// unregistered, NFI how we got this message, but let's leave it alone!
 			return;
 		}
 
 		md = metadata_find(mc, "disable_fantasy");
 		if (md)
 		{
-			/* fantasy disabled on this channel. don't message them, just bail. */
+			// fantasy disabled on this channel. don't message them, just bail.
 			return;
 		}
 	}
 
-	/* make a copy of the original for debugging */
+	// make a copy of the original for debugging
 	mowgli_strlcpy(orig, parv[parc - 1], BUFSIZE);
 
-	/* lets go through this to get the command */
+	// lets go through this to get the command
 	cmd = strtok(parv[parc - 1], " ");
 
 	if (!cmd)
@@ -107,7 +95,7 @@ chanserv(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* take the command through the hash table */
+	// take the command through the hash table
 	if (mc == NULL)
 		command_exec_split(si->service, si, cmd, strtok(NULL, ""), si->service->commands);
 	else
@@ -125,7 +113,7 @@ chanserv(struct sourceinfo *si, int parc, char *parv[])
 				return;
 			if (floodcheck(si->su, si->service->me))
 				return;
-			/* construct <channel> <args> */
+			// construct <channel> <args>
 			mowgli_strlcpy(newargs, parv[parc - 2], sizeof newargs);
 			args = strtok(NULL, "");
 			if (args != NULL)
@@ -133,8 +121,10 @@ chanserv(struct sourceinfo *si, int parc, char *parv[])
 				mowgli_strlcat(newargs, " ", sizeof newargs);
 				mowgli_strlcat(newargs, args, sizeof newargs);
 			}
-			/* let the command know it's called as fantasy cmd */
+
+			// let the command know it's called as fantasy cmd
 			si->c = mc->chan;
+
 			/* fantasy commands are always verbose
 			 * (a little ugly but this way we can !set verbose)
 			 */
@@ -186,7 +176,7 @@ chanserv_config_ready(void *unused)
 	service_set_chanmsg(chansvs.me, true);
 
 	if (me.connected)
-		join_registered(false); /* !config_options.leave_chans */
+		join_registered(false); // !config_options.leave_chans
 }
 
 static int
@@ -283,7 +273,7 @@ cs_join(hook_channel_joinpart_t *hdata)
 	u = cu->user;
 	chan = cu->chan;
 
-	/* first check if this is a registered channel at all */
+	// first check if this is a registered channel at all
 	mc = mychan_find(chan->name);
 	if (mc == NULL)
 		return;
@@ -300,13 +290,12 @@ cs_join(hook_channel_joinpart_t *hdata)
 		metadata_find(mc, "private:botserv:bot-assigned") == NULL)
 		join(chan->name, chansvs.nick);
 
-	/*
-	 * CS SET RESTRICTED: if they don't have any access (excluding AKICK)
+	/* CS SET RESTRICTED: if they don't have any access (excluding AKICK)
 	 * or special privs to join restricted chans, boot them. -- w00t
 	 */
 	if ((mc->flags & MC_RESTRICTED) && !(flags & CA_ALLPRIVS) && !has_priv_user(u, PRIV_JOIN_STAFFONLY))
 	{
-		/* Stay on channel if this would empty it -- jilles */
+		// Stay on channel if this would empty it -- jilles
 		if (chan->nummembers - chan->numsvcmembers == 1)
 		{
 			mc->flags |= MC_INHABIT;
@@ -332,14 +321,15 @@ cs_join(hook_channel_joinpart_t *hdata)
 
 	if (flags & CA_AKICK && !(flags & CA_EXEMPT))
 	{
-		/* Stay on channel if this would empty it -- jilles */
+		// Stay on channel if this would empty it -- jilles
 		if (chan->nummembers - chan->numsvcmembers == 1)
 		{
 			mc->flags |= MC_INHABIT;
 			if (chan->numsvcmembers == 0)
 				join(chan->name, chansvs.nick);
 		}
-		/* use a user-given ban mask if possible -- jilles */
+
+		// use a user-given ban mask if possible -- jilles
 		ca2 = chanacs_find_host_by_user(mc, u, CA_AKICK);
 		if (ca2 != NULL)
 		{
@@ -352,7 +342,7 @@ cs_join(hook_channel_joinpart_t *hdata)
 		}
 		else
 		{
-			/* XXX this could be done more efficiently */
+			// XXX this could be done more efficiently
 			ca2 = chanacs_find(mc, entity(u->myuser), CA_AKICK);
 			ban(chansvs.me->me, chan, u);
 		}
@@ -544,26 +534,26 @@ cs_part(hook_channel_joinpart_t *hdata)
 	 * branches for better clarity and debugging ability. --nenolod
 	 */
 
-	/* we're not parting if we've been told to never part. */
+	// we're not parting if we've been told to never part.
 	if (!config_options.leave_chans)
 		return;
 
-	/* we're not parting if the channel has more than one person on it */
+	// we're not parting if the channel has more than one person on it
 	if (cu->chan->nummembers - cu->chan->numsvcmembers > 1)
 		return;
 
-	/* internal clients parting a channel shouldn't cause chanserv to leave. */
+	// internal clients parting a channel shouldn't cause chanserv to leave.
 	if (is_internal_client(cu->user))
 		return;
 
-	/* if we're enforcing an akick, we're MC_INHABIT.  do not part. */
+	// if we're enforcing an akick, we're MC_INHABIT.  do not part.
 	if (mc->flags & MC_INHABIT)
 	{
 		slog(LG_DEBUG, "cs_part(): not leaving channel %s due to MC_INHABIT flag", mc->name);
 		return;
 	}
 
-	/* seems we've met all conditions to be parted from a channel. */
+	// seems we've met all conditions to be parted from a channel.
 	part(cu->chan->name, chansvs.nick);
 }
 
@@ -612,7 +602,7 @@ cs_succession(hook_channel_succession_req_t *data)
 	chanacs_change_simple(data->mc, entity(data->mu), NULL, custom_founder_check(), 0, NULL);
 }
 
-/* Called on every set of a topic, after updating our internal structures */
+// Called on every set of a topic, after updating our internal structures
 static void
 cs_keeptopic_topicset(struct channel *c)
 {
@@ -669,7 +659,7 @@ cs_topiccheck(hook_channel_topic_check_t *data)
 	{
 		if (data->u == NULL || !((accessfl = chanacs_user_flags(mc, data->u)) & CA_TOPIC))
 		{
-			/* topic burst or unauthorized user, revert it */
+			// topic burst or unauthorized user, revert it
 			data->approved = 1;
 			slog(LG_DEBUG, "cs_topiccheck(): reverting topic change on channel %s by %s",
 					data->c->name,
@@ -692,7 +682,7 @@ cs_topiccheck(hook_channel_topic_check_t *data)
 	}
 }
 
-/* Called on creation of a channel */
+// Called on creation of a channel
 static void
 cs_newchan(struct channel *c)
 {
@@ -708,7 +698,7 @@ cs_newchan(struct channel *c)
 	if (!(mc = mychan_find(c->name)))
 		return;
 
-	/* set struct channel -> mychan */
+	// set struct channel -> mychan
 	c->mychan = mc;
 
 	/* schedule a mode lock check when we know the current modes
@@ -732,16 +722,18 @@ cs_newchan(struct channel *c)
 
 		u = get_changets_user(mc);
 
-		/* Stop the splitrider -- jilles */
+		// Stop the splitrider -- jilles
 		c->ts = channelts;
 		clear_simple_modes(c);
 		c->modes |= CMODE_NOEXT | CMODE_TOPIC;
 		check_modes(mc, false);
-		/* No ops to clear */
+
+		// No ops to clear
 		chan_lowerts(c, u);
 		cu = chanuser_add(c, CLIENT_NAME(u));
 		cu->modes |= CSTATUS_OP;
-		/* make sure it parts again sometime (empty SJOIN etc) */
+
+		// make sure it parts again sometime (empty SJOIN etc)
 		mc->flags |= MC_INHABIT;
 	}
 	else if (c->ts != channelts)
@@ -752,6 +744,7 @@ cs_newchan(struct channel *c)
 	else if (!(MC_TOPICLOCK & mc->flags) && MOWGLI_LIST_LENGTH(&c->members) == 0)
 	{
 		mlock_sts(c);
+
 		/* Same channel, let's assume ircd has kept topic.
 		 * However, if topiclock is enabled, we must change it back
 		 * regardless.
@@ -795,7 +788,7 @@ cs_tschange(struct channel *c)
 	if (!(mc = mychan_find(c->name)))
 		return;
 
-	/* store new TS */
+	// store new TS
 	snprintf(str, sizeof str, "%lu", (unsigned long)c->ts);
 	metadata_add(mc, "private:channelts", str);
 
@@ -803,7 +796,7 @@ cs_tschange(struct channel *c)
 	 * -- jilles */
 	mc->flags |= MC_MLOCK_CHECK;
 
-	/* reset the mlock if needed */
+	// reset the mlock if needed
 	mlock_sts(c);
 	topiclock_sts(c);
 }
@@ -826,9 +819,11 @@ cs_leave_empty(void *unused)
 	{
 		if (!(mc->flags & MC_INHABIT))
 			continue;
-		/* If there is only one user, stay indefinitely. */
+
+		// If there is only one user, stay indefinitely.
 		if (mc->chan != NULL && mc->chan->nummembers - mc->chan->numsvcmembers == 1)
 			continue;
+
 		mc->flags &= ~MC_INHABIT;
 		if (mc->chan != NULL &&
 				!(mc->chan->flags & CHAN_LOG) &&
@@ -850,7 +845,7 @@ cs_bounce_mode_change(hook_channel_mode_change_t *data)
 	struct chanuser *cu;
 	struct channel *chan;
 
-	/* if we have SECURE mode enabled, then we want to bounce any changes */
+	// if we have SECURE mode enabled, then we want to bounce any changes
 	cu = data->cu;
 	chan = cu->chan;
 	mc = chan->mychan;
@@ -912,7 +907,7 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 
 	cs_leave_empty_timer = mowgli_timer_add(base_eventloop, "cs_leave_empty", cs_leave_empty, NULL, 300);
 
-	/* chanserv{} block */
+	// chanserv{} block
 	add_bool_conf_item("FANTASY", &chansvs.me->conf_table, 0, &chansvs.fantasy, false);
 	add_conf_item("VOP", &chansvs.me->conf_table, c_ci_vop);
 	add_conf_item("HOP", &chansvs.me->conf_table, c_ci_hop);
@@ -925,7 +920,7 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 	add_duration_conf_item("EXPIRE", &chansvs.me->conf_table, 0, &chansvs.expiry, "d", 0);
 	add_uint_conf_item("MAXCHANS", &chansvs.me->conf_table, 0, &chansvs.maxchans, 1, INT_MAX, 5);
 	add_uint_conf_item("MAXCHANACS", &chansvs.me->conf_table, 0, &chansvs.maxchanacs, 0, INT_MAX, 0);
-	add_uint_conf_item("MAXFOUNDERS", &chansvs.me->conf_table, 0, &chansvs.maxfounders, 1, (512 - 60) / (9 + 2), 4); /* fit on a line */
+	add_uint_conf_item("MAXFOUNDERS", &chansvs.me->conf_table, 0, &chansvs.maxfounders, 1, (512 - 60) / (9 + 2), 4); // fit on a line
 	add_dupstr_conf_item("FOUNDER_FLAGS", &chansvs.me->conf_table, 0, &chansvs.founder_flags, NULL);
 	add_dupstr_conf_item("DEFTEMPLATES", &chansvs.me->conf_table, 0, &chansvs.deftemplates, NULL);
 	add_duration_conf_item("AKICK_TIME", &chansvs.me->conf_table, 0, &chansvs.akick_time, "m", 0);

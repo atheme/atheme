@@ -8,13 +8,6 @@
 #include "atheme.h"
 #include "template.h"
 
-static void list_generic_flags(struct sourceinfo *si);
-
-static void cs_cmd_template(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_flags = { "TEMPLATE", N_("Manipulates predefined sets of flags."),
-                        AC_NONE, 3, cs_cmd_template, { .path = "cservice/template" } };
-
 static int
 display_template(const char *key, void *data, void *privdata)
 {
@@ -43,7 +36,7 @@ list_generic_flags(struct sourceinfo *si)
 	command_success_nodata(si, _("End of network wide template list."));
 }
 
-/* TEMPLATE [channel] [template] [flags] */
+// TEMPLATE [channel] [template] [flags]
 static void
 cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -134,7 +127,7 @@ cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 			return;
 		}
 
-		/* founder may always set flags -- jilles */
+		// founder may always set flags -- jilles
 		restrictflags = chanacs_source_flags(mc, si);
 		if (restrictflags & CA_FOUNDER)
 			restrictflags = ca_all;
@@ -184,7 +177,7 @@ cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 		}
 		else
 		{
-			/* allow copying templates as well */
+			// allow copying templates as well
 			addflags = get_template_flags(mc, flagstr);
 			if (addflags == 0)
 			{
@@ -194,10 +187,10 @@ cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 			removeflags = ca_all & ~addflags;
 		}
 
-		/* if adding +F, also add +f */
+		// if adding +F, also add +f
 		if (addflags & CA_FOUNDER)
 			addflags |= CA_FLAGS, removeflags &= ~CA_FLAGS;
-		/* if removing +f, also remove +F */
+		// if removing +f, also remove +F
 		else if (removeflags & CA_FLAGS)
 			removeflags |= CA_FOUNDER, addflags &= ~CA_FOUNDER;
 
@@ -231,9 +224,11 @@ cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 					oldflags &= ca_all;
 					addflags &= ~oldflags;
 					removeflags &= oldflags & ~addflags;
-					/* no change? */
+
+					// no change?
 					if ((addflags | removeflags) == 0)
 						break;
+
 					/* attempting to add bad flag? */
 					/* attempting to remove bad flag? */
 					/* attempting to manipulate something with more privs? */
@@ -253,7 +248,7 @@ cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 							mowgli_strlcpy(newstr, r != NULL ? r + 1 : "", sizeof newstr);
 						else
 						{
-							/* otherwise, zap the space before it */
+							// otherwise, zap the space before it
 							p--;
 							mowgli_strlcpy(newstr + (p - md->value), r != NULL ? r : "", sizeof newstr - (p - md->value));
 						}
@@ -382,9 +377,10 @@ cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 		}
 		else
 			logcommand(si, CMDLOG_SET, "TEMPLATE: \2%s\2 \2%s\2 \2%s\2", mc->name, target, flagstr);
-		/*verbose(mc, "Flags \2%s\2 were set on template \2%s\2 in \2%s\2.", flagstr, target, channel);*/
 	}
 }
+
+static struct command cs_flags = { "TEMPLATE", N_("Manipulates predefined sets of flags."), AC_NONE, 3, cs_cmd_template, { .path = "cservice/template" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

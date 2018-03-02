@@ -8,12 +8,7 @@
 #include "atheme.h"
 #include "template.h"
 
-static void cs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_fflags = { "FFLAGS", N_("Forces a flags change on a channel."),
-                        PRIV_CHAN_ADMIN, 3, cs_cmd_fflags, { .path = "cservice/fflags" } };
-
-/* FFLAGS <channel> <user> <flags> */
+// FFLAGS <channel> <user> <flags>
 static void
 cs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -54,7 +49,7 @@ cs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 		addflags = get_template_flags(mc, flagstr);
 		if (addflags == 0)
 		{
-			/* Hack -- jilles */
+			// Hack -- jilles
 			if (*target == '+' || *target == '-' || *target == '=')
 				command_fail(si, fault_badparams, _("Usage: FFLAGS %s <target> <flags>"), mc->name);
 			else
@@ -75,7 +70,7 @@ cs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 
 		ca = chanacs_open(mc, mt, NULL, true, entity(si->smu));
 
-		/* XXX this should be more like flags.c */
+		// XXX this should be more like flags.c
 		if (removeflags & CA_FLAGS)
 			removeflags |= CA_FOUNDER, addflags &= ~CA_FOUNDER;
 		else if (addflags & CA_FOUNDER)
@@ -101,7 +96,7 @@ cs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 
 		if (!chanacs_modify(ca, &addflags, &removeflags, ca_all, si->smu))
 		{
-			/* this shouldn't happen */
+			// this shouldn't happen
 			command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags), mt->name, mc->name);
 			chanacs_close(ca);
 			return;
@@ -127,7 +122,7 @@ cs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 
 		if (!chanacs_modify(ca, &addflags, &removeflags, ca_all, si->smu))
 		{
-			/* this shouldn't happen */
+			// this shouldn't happen
 			command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags), target, mc->name);
 			chanacs_close(ca);
 			return;
@@ -150,6 +145,8 @@ cs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "FFLAGS: \2%s\2 \2%s\2 \2%s\2", mc->name, target, flagstr);
 	verbose(mc, _("\2%s\2 forced flags change \2%s\2 on \2%s\2."), get_source_name(si), flagstr, target);
 }
+
+static struct command cs_fflags = { "FFLAGS", N_("Forces a flags change on a channel."), PRIV_CHAN_ADMIN, 3, cs_cmd_fflags, { .path = "cservice/fflags" } };
 
 static void
 mod_init(struct module *const restrict m)

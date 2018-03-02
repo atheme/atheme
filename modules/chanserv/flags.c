@@ -8,19 +8,13 @@
 #include "atheme.h"
 #include "template.h"
 
-static void cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[]);
-static void check_registration_keywords(hook_user_register_check_t *hdata);
-
-static struct command cs_flags = { "FLAGS", N_("Manipulates specific permissions on a channel."),
-                        AC_NONE, 3, cs_cmd_flags, { .path = "cservice/flags" } };
-
-static bool anope_flags_compat = true;
-
 struct template_iter
 {
 	const char *res;
 	unsigned int level;
 };
+
+static bool anope_flags_compat = true;
 
 static int
 global_template_search(const char *key, void *data, void *privdata)
@@ -161,7 +155,7 @@ check_registration_keywords(hook_user_register_check_t *hdata)
 	}
 }
 
-/* FLAGS <channel> [user] [flags] */
+// FLAGS <channel> [user] [flags]
 static void
 cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -324,7 +318,7 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 			return;
 		}
 
-		/* founder may always set flags -- jilles */
+		// founder may always set flags -- jilles
 		restrictflags = chanacs_source_flags(mc, si);
 		if (restrictflags & CA_FOUNDER)
 			restrictflags = ca_all;
@@ -363,7 +357,7 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 			addflags = get_template_flags(mc, flagstr);
 			if (addflags == 0)
 			{
-				/* Hack -- jilles */
+				// Hack -- jilles
 				if (*target == '+' || *target == '-' || *target == '=')
 					command_fail(si, fault_badparams, _("Usage: FLAGS %s [target] [flags]"), mc->name);
 				else
@@ -498,6 +492,8 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 
 	free(target);
 }
+
+static struct command cs_flags = { "FLAGS", N_("Manipulates specific permissions on a channel."), AC_NONE, 3, cs_cmd_flags, { .path = "cservice/flags" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

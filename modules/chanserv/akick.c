@@ -7,23 +7,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_akick(struct sourceinfo *si, int parc, char *parv[]);
-static void cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[]);
-static void cs_cmd_akick_del(struct sourceinfo *si, int parc, char *parv[]);
-static void cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[]);
-
-static void akick_timeout_check(void *arg);
-static void akickdel_list_create(void *arg);
-
-static struct command cs_akick = { "AKICK", N_("Manipulates a channel's AKICK list."),
-                        AC_NONE, 4, cs_cmd_akick, { .path = "cservice/akick" } };
-static struct command cs_akick_add = { "ADD", N_("Adds a channel AKICK."),
-                        AC_NONE, 4, cs_cmd_akick_add, { .path = "" } };
-static struct command cs_akick_del = { "DEL", N_("Deletes a channel AKICK."),
-                        AC_NONE, 3, cs_cmd_akick_del, { .path = "" } };
-static struct command cs_akick_list = { "LIST", N_("Displays a channel's AKICK list."),
-                        AC_NONE, 2, cs_cmd_akick_list, { .path = "" } };
-
 struct akick_timeout
 {
 	time_t expiration;
@@ -42,8 +25,6 @@ static mowgli_list_t akickdel_list;
 static mowgli_heap_t *akick_timeout_heap = NULL;
 static mowgli_patricia_t *cs_akick_cmds = NULL;
 static mowgli_eventloop_timer_t *akick_timeout_check_timer = NULL;
-
-static struct akick_timeout *akick_add_timeout(struct mychan *mc, struct myentity *mt, const char *host, time_t expireson);
 
 static void
 clear_bans_matching_entity(struct mychan *mc, struct myentity *mt)
@@ -120,6 +101,94 @@ cs_cmd_akick(struct sourceinfo *si, int parc, char *parv[])
 	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
 
+static struct akick_timeout *
+akick_add_timeout(struct mychan *mc, struct myentity *mt, const char *host, time_t expireson)
+{
+	mowgli_node_t *n;
+	struct akick_timeout *timeout, *timeout2;
+
+	timeout = mowgli_heap_alloc(akick_timeout_heap);
+
+	timeout->entity = mt;
+	timeout->chan = mc;
+	timeout->expiration = expireson;
+
+	mowgli_strlcpy(timeout->host, host, sizeof timeout->host);
+
+	MOWGLI_ITER_FOREACH_PREV(n, akickdel_list.tail)
+	{
+		timeout2 = n->data;
+		if (timeout2->expiration <= timeout->expiration)
+			break;
+	}
+	if (n == NULL)
+		mowgli_node_add_head(timeout, &timeout->node, &akickdel_list);
+	else if (n->next == NULL)
+		mowgli_node_add(timeout, &timeout->node, &akickdel_list);
+	else
+		mowgli_node_add_before(timeout, &timeout->node, &akickdel_list, n->next);
+
+	return timeout;
+}
+
+void
+akick_timeout_check(void *arg)
+{
+	mowgli_node_t *n, *tn;
+	struct akick_timeout *timeout;
+	struct chanacs *ca;
+	struct mychan *mc;
+
+	struct chanban *cb;
+	akickdel_next = 0;
+
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, akickdel_list.head)
+	{
+		timeout = n->data;
+		mc = timeout->chan;
+
+		if (timeout->expiration > CURRTIME)
+		{
+			akickdel_next = timeout->expiration;
+			akick_timeout_check_timer = mowgli_timer_add_once(base_eventloop, "akick_timeout_check", akick_timeout_check, NULL, akickdel_next - CURRTIME);
+			break;
+		}
+
+		ca = NULL;
+
+		if (timeout->entity == NULL)
+		{
+			if ((ca = chanacs_find_host_literal(mc, timeout->host, CA_AKICK)) && mc->chan != NULL && (cb = chanban_find(mc->chan, ca->host, 'b')))
+			{
+				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, cb->type, cb->mask);
+				chanban_delete(cb);
+			}
+		}
+		else
+		{
+			ca = chanacs_find_literal(mc, timeout->entity, CA_AKICK);
+			if (ca == NULL)
+			{
+				mowgli_node_delete(&timeout->node, &akickdel_list);
+				mowgli_heap_free(akick_timeout_heap, timeout);
+
+				continue;
+			}
+
+			clear_bans_matching_entity(mc, timeout->entity);
+		}
+
+		if (ca)
+		{
+			chanacs_modify_simple(ca, 0, CA_AKICK, NULL);
+			chanacs_close(ca);
+		}
+
+		mowgli_node_delete(&timeout->node, &akickdel_list);
+		mowgli_heap_free(akick_timeout_heap, timeout);
+	}
+}
+
 void
 cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -159,10 +228,10 @@ cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* A duration, reason or duration and reason. */
+	// A duration, reason or duration and reason.
 	if (token)
 	{
-		if (!strcasecmp(token, "!P")) /* A duration [permanent] */
+		if (!strcasecmp(token, "!P")) // A duration [permanent]
 		{
 			duration = 0;
 			treason = strtok(NULL, "");
@@ -172,7 +241,7 @@ cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 			else
 				reason[0] = 0;
 		}
-		else if (!strcasecmp(token, "!T")) /* A duration [temporary] */
+		else if (!strcasecmp(token, "!T")) // A duration [temporary]
 		{
 			s = strtok(NULL, " ");
 			treason = strtok(NULL, "");
@@ -226,7 +295,8 @@ cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 		}
 	}
 	else
-	{ /* No reason and no duration */
+	{
+		// No reason and no duration
 		duration = chansvs.akick_time;
 		reason[0] = 0;
 	}
@@ -244,7 +314,7 @@ cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 		if (uname == NULL)
 			uname = target;
 
-		/* we might be adding a hostmask */
+		// we might be adding a hostmask
 		if (!validhostmask(uname))
 		{
 			command_fail(si, fault_badparams, _("\2%s\2 is neither a nickname nor a hostmask."), uname);
@@ -270,7 +340,7 @@ cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 			return;
 		}
 
-		/* new entry */
+		// new entry
 		ca2 = chanacs_open(mc, NULL, uname, true, entity(si->smu));
 		if (chanacs_is_table_full(ca2))
 		{
@@ -336,7 +406,7 @@ cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 			return;
 		}
 
-		/* new entry */
+		// new entry
 		ca2 = chanacs_open(mc, mt, NULL, true, entity(si->smu));
 		if (chanacs_is_table_full(ca2))
 		{
@@ -435,7 +505,7 @@ cs_cmd_akick_del(struct sourceinfo *si, int parc, char *parv[])
 	mt = myentity_find_ext(uname);
 	if (!mt)
 	{
-		/* we might be deleting a hostmask */
+		// we might be deleting a hostmask
 		ca = chanacs_find_host_literal(mc, uname, CA_AKICK);
 		if (ca == NULL)
 		{
@@ -539,7 +609,7 @@ cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 	 */
 	if (!si->smu)
 	{
-		/* if they're opers and just want to LIST, they don't have to log in */
+		// if they're opers and just want to LIST, they don't have to log in
 		if (!(has_priv(si, PRIV_CHAN_AUSPEX)))
 		{
 			command_fail(si, fault_noprivs, _("You are not logged in."));
@@ -589,7 +659,7 @@ cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 
 			md = metadata_find(ca, "reason");
 
-			/* check if it's a temporary akick */
+			// check if it's a temporary akick
 			if ((md2 = metadata_find(ca, "expires")))
 			{
 				snprintf(expiry, sizeof expiry, "%s", md2->value);
@@ -631,94 +701,6 @@ cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 }
 
 void
-akick_timeout_check(void *arg)
-{
-	mowgli_node_t *n, *tn;
-	struct akick_timeout *timeout;
-	struct chanacs *ca;
-	struct mychan *mc;
-
-	struct chanban *cb;
-	akickdel_next = 0;
-
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, akickdel_list.head)
-	{
-		timeout = n->data;
-		mc = timeout->chan;
-
-		if (timeout->expiration > CURRTIME)
-		{
-			akickdel_next = timeout->expiration;
-			akick_timeout_check_timer = mowgli_timer_add_once(base_eventloop, "akick_timeout_check", akick_timeout_check, NULL, akickdel_next - CURRTIME);
-			break;
-		}
-
-		ca = NULL;
-
-		if (timeout->entity == NULL)
-		{
-			if ((ca = chanacs_find_host_literal(mc, timeout->host, CA_AKICK)) && mc->chan != NULL && (cb = chanban_find(mc->chan, ca->host, 'b')))
-			{
-				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, cb->type, cb->mask);
-				chanban_delete(cb);
-			}
-		}
-		else
-		{
-			ca = chanacs_find_literal(mc, timeout->entity, CA_AKICK);
-			if (ca == NULL)
-			{
-				mowgli_node_delete(&timeout->node, &akickdel_list);
-				mowgli_heap_free(akick_timeout_heap, timeout);
-
-				continue;
-			}
-
-			clear_bans_matching_entity(mc, timeout->entity);
-		}
-
-		if (ca)
-		{
-			chanacs_modify_simple(ca, 0, CA_AKICK, NULL);
-			chanacs_close(ca);
-		}
-
-		mowgli_node_delete(&timeout->node, &akickdel_list);
-		mowgli_heap_free(akick_timeout_heap, timeout);
-	}
-}
-
-static struct akick_timeout *
-akick_add_timeout(struct mychan *mc, struct myentity *mt, const char *host, time_t expireson)
-{
-	mowgli_node_t *n;
-	struct akick_timeout *timeout, *timeout2;
-
-	timeout = mowgli_heap_alloc(akick_timeout_heap);
-
-	timeout->entity = mt;
-	timeout->chan = mc;
-	timeout->expiration = expireson;
-
-	mowgli_strlcpy(timeout->host, host, sizeof timeout->host);
-
-	MOWGLI_ITER_FOREACH_PREV(n, akickdel_list.tail)
-	{
-		timeout2 = n->data;
-		if (timeout2->expiration <= timeout->expiration)
-			break;
-	}
-	if (n == NULL)
-		mowgli_node_add_head(timeout, &timeout->node, &akickdel_list);
-	else if (n->next == NULL)
-		mowgli_node_add(timeout, &timeout->node, &akickdel_list);
-	else
-		mowgli_node_add_before(timeout, &timeout->node, &akickdel_list, n->next);
-
-	return timeout;
-}
-
-void
 akickdel_list_create(void *arg)
 {
 	struct mychan *mc;
@@ -752,7 +734,7 @@ akickdel_list_create(void *arg)
 			}
 			else
 			{
-				/* overcomplicate the logic here a tiny bit */
+				// overcomplicate the logic here a tiny bit
 				if (ca->host == NULL && ca->entity != NULL)
 					akick_add_timeout(mc, ca->entity, entity(ca->entity)->name, expireson);
 				else if (ca->host != NULL && ca->entity == NULL)
@@ -762,6 +744,11 @@ akickdel_list_create(void *arg)
 	}
 }
 
+static struct command cs_akick = { "AKICK", N_("Manipulates a channel's AKICK list."), AC_NONE, 4, cs_cmd_akick, { .path = "cservice/akick" } };
+static struct command cs_akick_add = { "ADD", N_("Adds a channel AKICK."), AC_NONE, 4, cs_cmd_akick_add, { .path = "" } };
+static struct command cs_akick_del = { "DEL", N_("Deletes a channel AKICK."), AC_NONE, 3, cs_cmd_akick_del, { .path = "" } };
+static struct command cs_akick_list = { "LIST", N_("Displays a channel's AKICK list."), AC_NONE, 2, cs_cmd_akick_list, { .path = "" } };
+
 static void
 mod_init(struct module *const restrict m)
 {
@@ -769,7 +756,7 @@ mod_init(struct module *const restrict m)
 
 	cs_akick_cmds = mowgli_patricia_create(strcasecanon);
 
-	/* Add sub-commands */
+	// Add sub-commands
 	command_add(&cs_akick_add, cs_akick_cmds);
 	command_add(&cs_akick_del, cs_akick_cmds);
 	command_add(&cs_akick_list, cs_akick_cmds);
@@ -790,7 +777,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	service_named_unbind_command("chanserv", &cs_akick);
 
-	/* Delete sub-commands */
+	// Delete sub-commands
 	command_delete(&cs_akick_add, cs_akick_cmds);
 	command_delete(&cs_akick_del, cs_akick_cmds);
 	command_delete(&cs_akick_list, cs_akick_cmds);

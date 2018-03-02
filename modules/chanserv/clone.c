@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_clone = { "CLONE", "Clones a channel.", AC_NONE, 2, cs_cmd_clone, { .path = "cservice/clone" } };
-
 static void
 cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -83,7 +79,7 @@ cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* Delete almost all chanacs of the target first */
+	// Delete almost all chanacs of the target first
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, mc2->chanacs.head)
 	{
 		ca = n->data;
@@ -94,7 +90,7 @@ cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[])
 		atheme_object_unref(ca);
 	}
 
-	/* Copy source chanacs to target */
+	// Copy source chanacs to target
 	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
 		ca = n->data;
@@ -105,7 +101,7 @@ cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[])
 			chanacs_change_simple(mc2, NULL, ca->host, ca->level, 0, *ca->setter_uid != '\0' ? myentity_find_uid(ca->setter_uid) : NULL);
 	}
 
-	/* Copy ze metadata! */
+	// Copy ze metadata!
 	MOWGLI_PATRICIA_FOREACH(md, &state, atheme_object(mc)->metadata)
 	{
 		if(!strncmp(md->name, "private:topic:", 14))
@@ -113,7 +109,7 @@ cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[])
 			continue;
 		}
 
-		/* Replace ANTIFLOOD AKILL with QUIET if it exists --shaynejellesma */
+		// Replace ANTIFLOOD AKILL with QUIET if it exists --shaynejellesma
 		if((strcasecmp(md->name, "private:antiflood:enforce-method") == 0) && (strcasecmp(md->value, "AKILL") == 0))
 		{
 			metadata_add(mc2, md->name, "QUIET");
@@ -123,19 +119,21 @@ cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[])
 		metadata_add(mc2, md->name, md->value);
 	}
 
-	/* Copy channel flags */
+	// Copy channel flags
 	mc2->flags = mc->flags;
 
-	/* Remove HOLD flag if it exists --shaynejellesma */
+	// Remove HOLD flag if it exists --shaynejellesma
 	if (mc2->flags & MC_HOLD)
 		mc2->flags &= ~MC_HOLD;
 
 	command_add_flood(si, FLOOD_MODERATE);
 
-	/* I feel like this should log at a higher level... */
+	// I feel like this should log at a higher level...
 	logcommand(si, CMDLOG_DO, "CLONE: \2%s\2 to \2%s\2", mc->name, mc2->name);
 	command_success_nodata(si, _("Cloned \2%s\2 to \2%s\2."), source, target);
 }
+
+static struct command cs_clone = { "CLONE", "Clones a channel.", AC_NONE, 2, cs_cmd_clone, { .path = "cservice/clone" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

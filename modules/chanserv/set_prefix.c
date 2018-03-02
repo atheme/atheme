@@ -7,21 +7,7 @@
 
 #include "atheme.h"
 
-static void cs_set_prefix_config_ready(void *unused);
-static void cs_cmd_set_prefix(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_set_prefix = { "PREFIX", N_("Sets the channel PREFIX."), AC_NONE, 2, cs_cmd_set_prefix, { .path = "cservice/set_prefix" } };
-
 static mowgli_patricia_t **cs_set_cmdtree = NULL;
-
-static void
-cs_set_prefix_config_ready(void *unused)
-{
-	if (chansvs.fantasy)
-		cs_set_prefix.access = NULL;
-	else
-		cs_set_prefix.access = AC_DISABLED;
-}
 
 static int
 goodprefix(const char *p)
@@ -79,6 +65,17 @@ cs_cmd_set_prefix(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("The fantasy prefix for channel \2%s\2 has been set to \2%s\2."),
                                parv[0], prefix);
 
+}
+
+static struct command cs_set_prefix = { "PREFIX", N_("Sets the channel PREFIX."), AC_NONE, 2, cs_cmd_set_prefix, { .path = "cservice/set_prefix" } };
+
+static void
+cs_set_prefix_config_ready(void *unused)
+{
+	if (chansvs.fantasy)
+		cs_set_prefix.access = AC_NONE;
+	else
+		cs_set_prefix.access = AC_DISABLED;
 }
 
 static void

@@ -8,22 +8,7 @@
 
 #include "atheme.h"
 
-static void cs_set_fantasy_config_ready(void *unused);
-
-static void cs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_set_fantasy = { "FANTASY", N_("Allows or disallows in-channel commands."), AC_NONE, 2, cs_cmd_set_fantasy, { .path = "cservice/set_fantasy" } };
-
 static mowgli_patricia_t **cs_set_cmdtree = NULL;
-
-static void
-cs_set_fantasy_config_ready(void *unused)
-{
-	if (chansvs.fantasy)
-		cs_set_fantasy.access = NULL;
-	else
-		cs_set_fantasy.access = AC_DISABLED;
-}
 
 static void
 cs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[])
@@ -87,6 +72,17 @@ cs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "FANTASY");
 		return;
 	}
+}
+
+static struct command cs_set_fantasy = { "FANTASY", N_("Allows or disallows in-channel commands."), AC_NONE, 2, cs_cmd_set_fantasy, { .path = "cservice/set_fantasy" } };
+
+static void
+cs_set_fantasy_config_ready(void *unused)
+{
+	if (chansvs.fantasy)
+		cs_set_fantasy.access = AC_NONE;
+	else
+		cs_set_fantasy.access = AC_DISABLED;
 }
 
 static void

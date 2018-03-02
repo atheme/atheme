@@ -8,10 +8,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_set_property(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_set_property = { "PROPERTY", N_("Manipulates channel metadata."), AC_NONE, 2, cs_cmd_set_property, { .path = "cservice/set_property" } };
-
 static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static void
@@ -30,7 +26,7 @@ cs_cmd_set_property(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* do we really need to allow this? -- jilles */
+	// do we really need to allow this? -- jilles
 	if (strchr(property, ':') && !has_priv(si, PRIV_METADATA))
 	{
 		command_fail(si, fault_badparams, _("Invalid property name."));
@@ -96,6 +92,8 @@ cs_cmd_set_property(struct sourceinfo *si, int parc, char *parv[])
 	verbose(mc, _("\2%s\2 added the metadata entry \2%s\2 with value \2%s\2"), get_source_name(si), property, value);
 	command_success_nodata(si, _("Metadata entry \2%s\2 added."), property);
 }
+
+static struct command cs_set_property = { "PROPERTY", N_("Manipulates channel metadata."), AC_NONE, 2, cs_cmd_set_property, { .path = "cservice/set_property" } };
 
 static void
 mod_init(struct module *const restrict m)

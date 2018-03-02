@@ -8,14 +8,6 @@
 #include "atheme.h"
 #include "chanserv.h"
 
-static void cs_cmd_owner(struct sourceinfo *si, int parc, char *parv[]);
-static void cs_cmd_deowner(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_owner = { "OWNER", N_("Gives the channel owner flag to a user."),
-                        AC_NONE, 2, cs_cmd_owner, { .path = "cservice/owner" } };
-static struct command cs_deowner = { "DEOWNER", N_("Removes channel owner flag from a user."),
-                        AC_NONE, 2, cs_cmd_deowner, { .path = "cservice/owner" } };
-
 static mowgli_list_t owner_actions;
 
 static void
@@ -65,7 +57,7 @@ cmd_owner(struct sourceinfo *si, bool ownering, int parc, char *parv[])
 		nick = act->nick;
 		owner = act->en;
 
-		/* figure out who we're going to op */
+		// figure out who we're going to op
 		if (!(tu = user_find_named(nick)))
 		{
 			command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), nick);
@@ -75,7 +67,7 @@ cmd_owner(struct sourceinfo *si, bool ownering, int parc, char *parv[])
 		if (is_internal_client(tu))
 			continue;
 
-		/* SECURE check; we can skip this if deownering or sender == target, because we already verified */
+		// SECURE check; we can skip this if deownering or sender == target, because we already verified
 		if (owner && (si->su != tu) && (mc->flags & MC_SECURE) && !chanacs_user_has_flag(mc, tu, CA_OP) && !chanacs_user_has_flag(mc, tu, CA_AUTOOP))
 		{
 			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
@@ -132,6 +124,9 @@ cs_cmd_deowner(struct sourceinfo *si, int parc, char *parv[])
 
 	cmd_owner(si, false, parc, parv);
 }
+
+static struct command cs_owner = { "OWNER", N_("Gives the channel owner flag to a user."), AC_NONE, 2, cs_cmd_owner, { .path = "cservice/owner" } };
+static struct command cs_deowner = { "DEOWNER", N_("Removes channel owner flag from a user."), AC_NONE, 2, cs_cmd_deowner, { .path = "cservice/owner" } };
 
 static void
 mod_init(struct module *const restrict m)

@@ -7,11 +7,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_status(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_status = { "STATUS", N_("Displays your status in services."),
-                         AC_NONE, 1, cs_cmd_status, { .path = "cservice/status" } };
-
 static void
 cs_cmd_status(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -86,6 +81,8 @@ cs_cmd_status(struct sourceinfo *si, int parc, char *parv[])
 	if (si->su != NULL && is_ircop(si->su))
 		command_success_nodata(si, _("You are an IRC operator."));
 }
+
+static struct command cs_status = { "STATUS", N_("Displays your status in services."), AC_NONE, 1, cs_cmd_status, { .path = "cservice/status" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

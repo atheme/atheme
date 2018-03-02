@@ -7,11 +7,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_info(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_info = { "INFO", N_("Displays information on registrations."),
-                        AC_NONE, 2, cs_cmd_info, { .path = "cservice/info" } };
-
 static void
 cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -94,7 +89,7 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	{
 		if (md != NULL && strlen(md->value) > 450)
 		{
-			/* Be safe */
+			// Be safe
 			command_success_nodata(si, _("Mode lock is too long, not entirely shown"));
 			md = NULL;
 		}
@@ -120,7 +115,7 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		{
 			if (!strncmp(md->name, "private:", 8))
 				continue;
-			/* these are shown separately */
+			// these are shown separately
 			if (!strcasecmp(md->name, "email") ||
 					!strcasecmp(md->name, "url") ||
 					!strcasecmp(md->name, "disable_fantasy"))
@@ -304,6 +299,8 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2*** End of Info ***\2"));
 	logcommand(si, CMDLOG_GET, "INFO: \2%s\2", mc->name);
 }
+
+static struct command cs_info = { "INFO", N_("Displays information on registrations."), AC_NONE, 2, cs_cmd_info, { .path = "cservice/info" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

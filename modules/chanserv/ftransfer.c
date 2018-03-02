@@ -7,11 +7,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_ftransfer(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_ftransfer = { "FTRANSFER", N_("Forces foundership transfer of a channel."),
-                           PRIV_CHAN_ADMIN, 2, cs_cmd_ftransfer, { .path = "cservice/ftransfer" } };
-
 static void
 cs_cmd_ftransfer(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -55,7 +50,7 @@ cs_cmd_ftransfer(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* no maxchans check (intentional -- this is an oper command) */
+	// no maxchans check (intentional -- this is an oper command)
 	wallops("%s transferred foundership of %s from %s to %s", get_oper_name(si), name, oldfndr, mt->name);
 	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FTRANSFER: \2%s\2 transferred from \2%s\2 to \2%s\2", mc->name, oldfndr, mt->name);
 	verbose(mc, _("Foundership transfer from \2%s\2 to \2%s\2 forced by %s administration."), oldfndr, mt->name, me.netname);
@@ -74,10 +69,12 @@ cs_cmd_ftransfer(struct sourceinfo *si, int parc, char *parv[])
 	mc->used = CURRTIME;
 	chanacs_change_simple(mc, mt, NULL, CA_FOUNDER_0, 0, entity(si->smu));
 
-	/* delete transfer metadata -- prevents a user from stealing it back */
+	// delete transfer metadata -- prevents a user from stealing it back
 	metadata_delete(mc, "private:verify:founderchg:newfounder");
 	metadata_delete(mc, "private:verify:founderchg:timestamp");
 }
+
+static struct command cs_ftransfer = { "FTRANSFER", N_("Forces foundership transfer of a channel."), PRIV_CHAN_ADMIN, 2, cs_cmd_ftransfer, { .path = "cservice/ftransfer" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

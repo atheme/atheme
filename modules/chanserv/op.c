@@ -8,14 +8,6 @@
 #include "atheme.h"
 #include "chanserv.h"
 
-static void cs_cmd_op(struct sourceinfo *si, int parc, char *parv[]);
-static void cs_cmd_deop(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_op = { "OP", N_("Gives channel ops to a user."),
-                        AC_NONE, 2, cs_cmd_op, { .path = "cservice/op_voice" } };
-static struct command cs_deop = { "DEOP", N_("Removes channel ops from a user."),
-                        AC_NONE, 2, cs_cmd_deop, { .path = "cservice/op_voice" } };
-
 static mowgli_list_t op_actions;
 
 static void
@@ -53,7 +45,7 @@ cmd_op(struct sourceinfo *si, bool opping, int parc, char *parv[])
 		nick = act->nick;
 		op = act->en;
 
-		/* figure out who we're going to op */
+		// figure out who we're going to op
 		if (!(tu = user_find_named(nick)))
 		{
 			command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), nick);
@@ -72,7 +64,7 @@ cmd_op(struct sourceinfo *si, bool opping, int parc, char *parv[])
 			continue;
 		}
 
-		/* SECURE check; we can skip this if deopping or sender == target, because we already verified */
+		// SECURE check; we can skip this if deopping or sender == target, because we already verified
 		if (op && (si->su != tu) && (mc->flags & MC_SECURE) && !chanacs_user_has_flag(mc, tu, CA_OP) && !chanacs_user_has_flag(mc, tu, CA_AUTOOP))
 		{
 			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
@@ -129,6 +121,9 @@ cs_cmd_deop(struct sourceinfo *si, int parc, char *parv[])
 
 	cmd_op(si, false, parc, parv);
 }
+
+static struct command cs_op = { "OP", N_("Gives channel ops to a user."), AC_NONE, 2, cs_cmd_op, { .path = "cservice/op_voice" } };
+static struct command cs_deop = { "DEOP", N_("Removes channel ops from a user."), AC_NONE, 2, cs_cmd_deop, { .path = "cservice/op_voice" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

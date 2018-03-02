@@ -8,10 +8,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_set_url(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_set_url = { "URL", N_("Sets the channel URL."), AC_NONE, 2, cs_cmd_set_url, { .path = "cservice/set_url" } };
-
 static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static void
@@ -50,13 +46,15 @@ cs_cmd_set_url(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* we'll overwrite any existing metadata */
+	// we'll overwrite any existing metadata
 	metadata_add(mc, "url", url);
 
 	logcommand(si, CMDLOG_SET, "SET:URL: \2%s\2 \2%s\2", mc->name, url);
 	verbose(mc, _("\2%s\2 set the channel URL to \2%s\2"), get_source_name(si), url);
 	command_success_nodata(si, _("The URL of \2%s\2 has been set to \2%s\2."), parv[0], url);
 }
+
+static struct command cs_set_url = { "URL", N_("Sets the channel URL."), AC_NONE, 2, cs_cmd_set_url, { .path = "cservice/set_url" } };
 
 static void
 mod_init(struct module *const restrict m)

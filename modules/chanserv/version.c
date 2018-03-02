@@ -1,11 +1,6 @@
 #include "atheme.h"
 #include "serno.h"
 
-static void cs_cmd_version(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_version = { "VERSION", N_("Displays version information of the services."),
-                        AC_NONE, 0, cs_cmd_version, { .path = "" } };
-
 static void
 cs_cmd_version(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -14,6 +9,8 @@ cs_cmd_version(struct sourceinfo *si, int parc, char *parv[])
         command_success_string(si, buf, "%s", buf);
         return;
 }
+
+static struct command cs_version = { "VERSION", N_("Displays version information of the services."), AC_NONE, 0, cs_cmd_version, { .path = "" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

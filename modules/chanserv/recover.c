@@ -7,11 +7,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_recover(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_recover = { "RECOVER", N_("Regain control of your channel."),
-                        AC_NONE, 1, cs_cmd_recover, { .path = "cservice/recover" } };
-
 static void
 cs_cmd_recover(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -55,7 +50,7 @@ cs_cmd_recover(struct sourceinfo *si, int parc, char *parv[])
 	{
 		if (chansvs.changets)
 		{
-			/* Otherwise, our modes are likely ignored. */
+			// Otherwise, our modes are likely ignored.
 			join(mc->name, chansvs.nick);
 			mc->flags |= MC_INHABIT;
 		}
@@ -70,7 +65,7 @@ cs_cmd_recover(struct sourceinfo *si, int parc, char *parv[])
 	verbose(mc, _("\2%s\2 used RECOVER."), get_source_name(si));
 	logcommand(si, CMDLOG_DO, "RECOVER: \2%s\2", mc->name);
 
-	/* deop everyone */
+	// deop everyone
 	MOWGLI_ITER_FOREACH(n, mc->chan->members.head)
 	{
 		cu = (struct chanuser *)n->data;
@@ -144,7 +139,7 @@ cs_cmd_recover(struct sourceinfo *si, int parc, char *parv[])
 
 	if (si->su != NULL)
 	{
-		/* unban the user */
+		// unban the user
 		snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", si->su->nick, si->su->user, si->su->vhost);
 
 		for (n = next_matching_ban(mc->chan, si->su, 'b', mc->chan->bans.head); n != NULL; n = next_matching_ban(mc->chan, si->su, 'b', tn))
@@ -158,7 +153,7 @@ cs_cmd_recover(struct sourceinfo *si, int parc, char *parv[])
 
 		if (origin_cu == NULL)
 		{
-			/* set an exempt on the user calling this */
+			// set an exempt on the user calling this
 			e = ircd->except_mchar;
 			if (e != '\0')
 			{
@@ -174,7 +169,7 @@ cs_cmd_recover(struct sourceinfo *si, int parc, char *parv[])
 
 	modestack_flush_channel(mc->chan);
 
-	/* invite them back. must have sent +i before this */
+	// invite them back. must have sent +i before this
 	if (origin_cu == NULL && si->su != NULL)
 		invite_sts(si->service->me, si->su, mc->chan);
 
@@ -183,6 +178,8 @@ cs_cmd_recover(struct sourceinfo *si, int parc, char *parv[])
 	else
 		command_success_nodata(si, _("Recover complete for \2%s\2."), mc->chan->name);
 }
+
+static struct command cs_recover = { "RECOVER", N_("Regain control of your channel."), AC_NONE, 1, cs_cmd_recover, { .path = "cservice/recover" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -22,18 +22,6 @@
 #include "atheme.h"
 #include "chanserv.h"
 
-static void cs_cmd_activate(struct sourceinfo *si, int parc, char *parv[]);
-static void cs_cmd_reject(struct sourceinfo *si, int parc, char *parv[]);
-static void cs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[]);
-static void can_register(hook_channel_register_check_t *req);
-
-static struct command cs_activate = { "ACTIVATE", N_("Activates a pending registration"), PRIV_CHAN_ADMIN,
-				 2, cs_cmd_activate, { .path = "cservice/activate" } };
-static struct command cs_reject   = { "REJECT", N_("Rejects a pending registration"), PRIV_CHAN_ADMIN,
-				 2, cs_cmd_reject, { .path = "cservice/reject" } };
-static struct command cs_waiting  = { "WAITING", N_("View pending registrations"), PRIV_CHAN_ADMIN,
-				 1, cs_cmd_waiting, { .path = "cservice/waiting" } };
-
 struct reg_request
 {
 	char *name;
@@ -43,8 +31,6 @@ struct reg_request
 
 static mowgli_patricia_t *csreq_list = NULL;
 static char *groupmemo;
-
-/*****************************************************************************/
 
 static struct reg_request * ATHEME_FATTR_MALLOC
 csreq_create(const char *name, struct myentity *mt)
@@ -116,8 +102,6 @@ csreq_marshal_set(struct database_handle *db)
 	}
 }
 
-/*****************************************************************************/
-
 static void ATHEME_FATTR_PRINTF(3, 4)
 send_memo(struct sourceinfo *si, struct myuser *mu, const char *memo, ...)
 {
@@ -175,9 +159,7 @@ send_group_memo(struct sourceinfo *si, const char *memo, ...)
 	}
 }
 
-/*****************************************************************************/
-
-/* deny chanserv registrations but turn them into a request */
+// deny chanserv registrations but turn them into a request
 static void
 can_register(hook_channel_register_check_t *req)
 {
@@ -202,8 +184,6 @@ can_register(hook_channel_register_check_t *req)
 
 	logcommand(req->si, CMDLOG_REGISTER, "REGISTER: \2%s\2 (pending)", req->name);
 }
-
-/*****************************************************************************/
 
 static void
 cs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
@@ -276,7 +256,7 @@ cs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 
 		if (mc->chan != NULL)
 		{
-		        /* Allow the hook to override this. */
+		        // Allow the hook to override this.
 		        fl = chanacs_source_flags(mc, &baked_si);
 		        cu = chanuser_find(mc->chan, u);
 		        if (cu == NULL)
@@ -358,7 +338,9 @@ cs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_GET, "WAITING");
 }
 
-/*****************************************************************************/
+static struct command cs_activate = { "ACTIVATE", N_("Activates a pending registration"), PRIV_CHAN_ADMIN, 2, cs_cmd_activate, { .path = "cservice/activate" } };
+static struct command cs_reject   = { "REJECT", N_("Rejects a pending registration"), PRIV_CHAN_ADMIN, 2, cs_cmd_reject, { .path = "cservice/reject" } };
+static struct command cs_waiting  = { "WAITING", N_("View pending registrations"), PRIV_CHAN_ADMIN, 1, cs_cmd_waiting, { .path = "cservice/waiting" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

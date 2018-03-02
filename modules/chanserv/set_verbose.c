@@ -8,10 +8,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_set_verbose(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_set_verbose = { "VERBOSE", N_("Notifies channel about access list modifications."), AC_NONE, 2, cs_cmd_set_verbose, { .path = "cservice/set_verbose" } };
-
 static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static void
@@ -105,6 +101,8 @@ cs_cmd_set_verbose(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 }
+
+static struct command cs_set_verbose = { "VERBOSE", N_("Notifies channel about access list modifications."), AC_NONE, 2, cs_cmd_set_verbose, { .path = "cservice/set_verbose" } };
 
 static void
 mod_init(struct module *const restrict m)

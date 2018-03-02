@@ -7,11 +7,6 @@
 
 #include "atheme.h"
 
-static void cs_help_set(struct sourceinfo *si, const char *subcmd);
-static void cs_cmd_set(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_set = { "SET", N_("Sets various control flags."), AC_NONE, 3, cs_cmd_set, { .func = cs_help_set } };
-
 // This is imported by other modules/chanserv/set_*.so
 mowgli_patricia_t *cs_set_cmdtree;
 
@@ -36,7 +31,7 @@ cs_help_set(struct sourceinfo *si, const char *subcmd)
 		help_display_as_subcmd(si, si->service, "SET", subcmd, cs_set_cmdtree);
 }
 
-/* SET <#channel> <setting> <parameters> */
+// SET <#channel> <setting> <parameters>
 static void
 cs_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -72,6 +67,8 @@ cs_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 	parv[1] = chan;
 	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
+
+static struct command cs_set = { "SET", N_("Sets various control flags."), AC_NONE, 3, cs_cmd_set, { .func = cs_help_set } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

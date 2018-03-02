@@ -7,10 +7,7 @@
 
 #include "atheme.h"
 
-static void cs_cmd_sync(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_sync = { "SYNC", "Forces channel statuses to flags.",
-                        AC_NONE, 1, cs_cmd_sync, { .path = "cservice/sync" } };
+static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static bool no_vhost_sync = false;
 
@@ -41,7 +38,7 @@ do_chanuser_sync(struct mychan *mc, struct chanuser *cu, struct chanacs *ca,
 
 	if (take && !(fl & CA_ALLPRIVS) && (mc->flags & MC_RESTRICTED) && !has_priv_user(cu->user, PRIV_JOIN_STAFFONLY))
 	{
-		/* Stay on channel if this would empty it -- jilles */
+		// Stay on channel if this would empty it -- jilles
 		if (mc->chan->nummembers - mc->chan->numsvcmembers == 1)
 		{
 			mc->flags |= MC_INHABIT;
@@ -70,7 +67,7 @@ do_chanuser_sync(struct mychan *mc, struct chanuser *cu, struct chanacs *ca,
 		struct chanacs *ca2;
 		struct metadata *md;
 
-		/* Stay on channel if this would empty it -- jilles */
+		// Stay on channel if this would empty it -- jilles
 		if (mc->chan->nummembers - mc->chan->numsvcmembers == 1)
 		{
 			mc->flags |= MC_INHABIT;
@@ -78,7 +75,7 @@ do_chanuser_sync(struct mychan *mc, struct chanuser *cu, struct chanacs *ca,
 				join(mc->chan->name, chansvs.nick);
 		}
 
-		/* use a user-given ban mask if possible -- jilles */
+		// use a user-given ban mask if possible -- jilles
 		ca2 = chanacs_find_host_by_user(mc, cu->user, CA_AKICK);
 		if (ca2 != NULL)
 		{
@@ -87,13 +84,13 @@ do_chanuser_sync(struct mychan *mc, struct chanuser *cu, struct chanacs *ca,
 				chanban_add(mc->chan, ca2->host, 'b');
 				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'b', ca2->host);
 
-				/* ban immediately */
+				// ban immediately
 				modestack_flush_channel(mc->chan);
 			}
 		}
 		else if (cu->user->myuser != NULL)
 		{
-			/* XXX this could be done more efficiently */
+			// XXX this could be done more efficiently
 			ca2 = chanacs_find(mc, entity(cu->user->myuser), CA_AKICK);
 			ban(chansvs.me->me, mc->chan, cu->user);
 		}
@@ -232,7 +229,7 @@ do_channel_sync(struct mychan *mc, struct chanacs *ca)
 	}
 }
 
-/* this could be a little slow, should probably have an option to disable it */
+// this could be a little slow, should probably have an option to disable it
 static void
 sync_user(struct user *u)
 {
@@ -339,12 +336,6 @@ cs_cmd_sync(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, "Sync complete for \2%s\2.", mc->name);
 }
 
-static void cs_cmd_set_nosync(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_set_nosync = { "NOSYNC", N_("Disables automatic channel ACL syncing."), AC_NONE, 2, cs_cmd_set_nosync, { .path = "cservice/set_nosync" } };
-
-static mowgli_patricia_t **cs_set_cmdtree = NULL;
-
 static void
 cs_cmd_set_nosync(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -404,6 +395,9 @@ cs_cmd_set_nosync(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 }
+
+static struct command cs_sync = { "SYNC", "Forces channel statuses to flags.", AC_NONE, 1, cs_cmd_sync, { .path = "cservice/sync" } };
+static struct command cs_set_nosync = { "NOSYNC", N_("Disables automatic channel ACL syncing."), AC_NONE, 2, cs_cmd_set_nosync, { .path = "cservice/set_nosync" } };
 
 static void
 mod_init(struct module *const restrict m)

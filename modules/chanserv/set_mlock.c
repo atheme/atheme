@@ -8,10 +8,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_set_mlock(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_set_mlock = { "MLOCK", N_("Sets channel mode lock."), AC_NONE, 2, cs_cmd_set_mlock, { .path = "cservice/set_mlock" } };
-
 static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static void
@@ -189,9 +185,10 @@ cs_cmd_set_mlock(struct sourceinfo *si, int parc, char *parv[])
 		}
 	}
 
-	/* note: the following does not treat +lk and extmodes correctly */
+	// note: the following does not treat +lk and extmodes correctly
 	changed = ((newlock_on ^ mc->mlock_on) | (newlock_off ^ mc->mlock_off));
 	changed &= ~mask;
+
 	/* if they're only allowed to alter oper only modes, require
 	 * them to actually change such modes -- jilles */
 	if (!changed && mask_ext)
@@ -200,12 +197,13 @@ cs_cmd_set_mlock(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* save it to mychan */
-	/* leave the modes in mask unchanged -- jilles */
+	// save it to mychan, leave the modes in mask unchanged -- jilles
 	mc->mlock_on = (newlock_on & ~mask) | (mc->mlock_on & mask);
 	mc->mlock_off = (newlock_off & ~mask) | (mc->mlock_off & mask);
+
 	if (!(mask & CMODE_LIMIT))
 		mc->mlock_limit = newlock_limit;
+
 	if (!(mask & CMODE_KEY))
 	{
 		free(mc->mlock_key);
@@ -290,6 +288,8 @@ cs_cmd_set_mlock(struct sourceinfo *si, int parc, char *parv[])
 
 	return;
 }
+
+static struct command cs_set_mlock = { "MLOCK", N_("Sets channel mode lock."), AC_NONE, 2, cs_cmd_set_mlock, { .path = "cservice/set_mlock" } };
 
 static void
 mod_init(struct module *const restrict m)

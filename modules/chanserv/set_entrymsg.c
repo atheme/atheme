@@ -8,10 +8,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_set_entrymsg(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_set_entrymsg = { "ENTRYMSG", N_("Sets the channel's entry message."), AC_NONE, 2, cs_cmd_set_entrymsg, { .path = "cservice/set_entrymsg" } };
-
 static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
 static void
@@ -59,6 +55,8 @@ cs_cmd_set_entrymsg(struct sourceinfo *si, int parc, char *parv[])
 	verbose(mc, _("\2%s\2 set the entry message for the channel to \2%s\2"), get_source_name(si), parv[1]);
 	command_success_nodata(si, _("The entry message for \2%s\2 has been set to \2%s\2"), parv[0], parv[1]);
 }
+
+static struct command cs_set_entrymsg = { "ENTRYMSG", N_("Sets the channel's entry message."), AC_NONE, 2, cs_cmd_set_entrymsg, { .path = "cservice/set_entrymsg" } };
 
 static void
 mod_init(struct module *const restrict m)

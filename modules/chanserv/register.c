@@ -11,11 +11,6 @@
 static unsigned int ratelimit_count = 0;
 static time_t ratelimit_firsttime = 0;
 
-static void cs_cmd_register(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_register = { "REGISTER", N_("Registers a channel."),
-                           AC_AUTHENTICATED, 3, cs_cmd_register, { .path = "cservice/register" } };
-
 static void
 cs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -55,7 +50,7 @@ cs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* make sure it isn't already registered */
+	// make sure it isn't already registered
 	if ((mc = mychan_find(name)))
 	{
 		if (!use_channel_private || !(mc->flags & MC_PRIVATE))
@@ -65,21 +60,21 @@ cs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* make sure the channel exists */
+	// make sure the channel exists
 	if (!(c = channel_find(name)))
 	{
 		command_fail(si, fault_nosuch_target, _("The channel \2%s\2 must exist in order to register it."), name);
 		return;
 	}
 
-	/* make sure they're in it */
+	// make sure they're in it
 	if (!(cu = chanuser_find(c, si->su)))
 	{
 		command_fail(si, fault_noprivs, _("You must be in \2%s\2 in order to register it."), name);
 		return;
 	}
 
-	/* make sure they're opped (or protected/owner on unreal/inspircd) */
+	// make sure they're opped (or protected/owner on unreal/inspircd)
 	if (!((CSTATUS_OP | CSTATUS_PROTECT | CSTATUS_OWNER) & cu->modes))
 	{
 		command_fail(si, fault_noprivs, _("You must be a channel operator in \2%s\2 in order to register it."), name);
@@ -148,7 +143,8 @@ cs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 	hdata.si = si;
 	hdata.mc = mc;
 	hook_call_channel_register(&hdata);
-	/* Allow the hook to override this. */
+
+	// Allow the hook to override this.
 	fl = chanacs_source_flags(mc, si);
 	cu = chanuser_find(mc->chan, si->su);
 	if (cu == NULL)
@@ -168,6 +164,8 @@ cs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 		cu->modes |= CSTATUS_PROTECT;
 	}
 }
+
+static struct command cs_register = { "REGISTER", N_("Registers a channel."), AC_AUTHENTICATED, 3, cs_cmd_register, { .path = "cservice/register" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

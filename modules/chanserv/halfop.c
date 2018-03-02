@@ -8,14 +8,6 @@
 #include "atheme.h"
 #include "chanserv.h"
 
-static void cs_cmd_halfop(struct sourceinfo *si, int parc, char *parv[]);
-static void cs_cmd_dehalfop(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_halfop = { "HALFOP", N_("Gives channel halfops to a user."),
-                        AC_NONE, 2, cs_cmd_halfop, { .path = "cservice/halfop" } };
-static struct command cs_dehalfop = { "DEHALFOP", N_("Removes channel halfops from a user."),
-                        AC_NONE, 2, cs_cmd_dehalfop, { .path = "cservice/halfop" } };
-
 static mowgli_list_t halfop_actions;
 
 static void
@@ -65,7 +57,7 @@ cmd_halfop(struct sourceinfo *si, bool halfopping, int parc, char *parv[])
 		nick = act->nick;
 		halfop = act->en;
 
-		/* figure out who we're going to halfop */
+		// figure out who we're going to halfop
 		if (!(tu = user_find_named(nick)))
 		{
 			command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), nick);
@@ -75,7 +67,7 @@ cmd_halfop(struct sourceinfo *si, bool halfopping, int parc, char *parv[])
 		if (is_internal_client(tu))
 			continue;
 
-		/* SECURE check; we can skip this if deopping or sender == target, because we already verified */
+		// SECURE check; we can skip this if deopping or sender == target, because we already verified
 		if (halfop && (si->su != tu) && (mc->flags & MC_SECURE) && !chanacs_user_has_flag(mc, tu, CA_HALFOP) && !chanacs_user_has_flag(mc, tu, CA_AUTOHALFOP))
 		{
 			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
@@ -132,6 +124,9 @@ cs_cmd_dehalfop(struct sourceinfo *si, int parc, char *parv[])
 
 	cmd_halfop(si, false, parc, parv);
 }
+
+static struct command cs_halfop = { "HALFOP", N_("Gives channel halfops to a user."), AC_NONE, 2, cs_cmd_halfop, { .path = "cservice/halfop" } };
+static struct command cs_dehalfop = { "DEHALFOP", N_("Removes channel halfops from a user."), AC_NONE, 2, cs_cmd_dehalfop, { .path = "cservice/halfop" } };
 
 static void
 mod_init(struct module *const restrict m)

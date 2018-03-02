@@ -7,11 +7,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_getkey(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_getkey = { "GETKEY", N_("Returns the key (+k) of a channel."),
-                        AC_NONE, 1, cs_cmd_getkey, { .path = "cservice/getkey" } };
-
 static void
 cs_cmd_getkey(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -59,6 +54,8 @@ cs_cmd_getkey(struct sourceinfo *si, int parc, char *parv[])
 	command_success_string(si, mc->chan->key, _("Channel \2%s\2 key is: %s"),
 			mc->name, mc->chan->key);
 }
+
+static struct command cs_getkey = { "GETKEY", N_("Returns the key (+k) of a channel."), AC_NONE, 1, cs_cmd_getkey, { .path = "cservice/getkey" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

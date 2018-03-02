@@ -8,14 +8,9 @@
 
 #include "atheme.h"
 
-static void cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_set_founder = { "FOUNDER", N_("Transfers foundership of a channel."), AC_NONE, 2, cs_cmd_set_founder, { .path = "cservice/set_founder" } };
-
 static mowgli_patricia_t **cs_set_cmdtree = NULL;
 
-/*
- * This is how CS SET FOUNDER behaves in the absence of channel passwords:
+/* This is how CS SET FOUNDER behaves in the absence of channel passwords:
  *
  * To transfer a channel, the original founder (OF) issues the command:
  *    /CS SET #chan FOUNDER NF
@@ -74,7 +69,7 @@ cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[])
 		 */
 		struct metadata *md;
 
-		/* XXX is it portable to compare times like that? */
+		// XXX is it portable to compare times like that?
 		if ((entity(si->smu) == mt)
 			&& (md = metadata_find(mc, "private:verify:founderchg:newfounder"))
 			&& !irccasecmp(md->value, entity(si->smu)->name)
@@ -115,10 +110,11 @@ cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[])
 			logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (completing transfer from \2%s\2)", mc->name, mt->name, mychan_founder_names(mc));
 			verbose(mc, _("Foundership transferred from \2%s\2 to \2%s\2."), mychan_founder_names(mc), mt->name);
 
-			/* add target as founder... */
+			// add target as founder...
 			MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 			{
 				ca = n->data;
+
 				/* CA_FLAGS is always on if CA_FOUNDER is on, this just
 				 * ensures we don't crash if not -- jilles
 				 */
@@ -127,11 +123,11 @@ cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[])
 			}
 			chanacs_change_simple(mc, mt, NULL, CA_FOUNDER_0, 0, entity(si->smu));
 
-			/* delete transfer metadata */
+			// delete transfer metadata
 			metadata_delete(mc, "private:verify:founderchg:newfounder");
 			metadata_delete(mc, "private:verify:founderchg:timestamp");
 
-			/* done! */
+			// done!
 			command_success_nodata(si, _("Transfer complete: \2%s\2 has been set as founder for \2%s\2."), mt->name, mc->name);
 
 			return;
@@ -182,7 +178,7 @@ cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[])
 		chanacs_close(ca);
 	}
 
-	/* check for lazy cancellation of outstanding requests */
+	// check for lazy cancellation of outstanding requests
 	if (metadata_find(mc, "private:verify:founderchg:newfounder"))
 	{
 		logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (cancelling old transfer and initializing transfer)", mc->name, mt->name);
@@ -200,6 +196,8 @@ cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("After that command is issued, the channel will be transferred."));
 	command_success_nodata(si, _("To cancel the transfer, use \2/msg %s SET %s FOUNDER %s\2"), chansvs.nick, mc->name, entity(si->smu)->name);
 }
+
+static struct command cs_set_founder = { "FOUNDER", N_("Transfers foundership of a channel."), AC_NONE, 2, cs_cmd_set_founder, { .path = "cservice/set_founder" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

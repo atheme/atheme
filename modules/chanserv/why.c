@@ -7,11 +7,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_why(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_why = { "WHY", N_("Explains channel access logic."),
-		     AC_NONE, 2, cs_cmd_why, { .path = "cservice/why" } };
-
 static void
 cs_cmd_why(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -144,6 +139,8 @@ cs_cmd_why(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("\2%s\2 has no special access to \2%s\2."),
 				u->nick, mc->name);
 }
+
+static struct command cs_why = { "WHY", N_("Explains channel access logic."), AC_NONE, 2, cs_cmd_why, { .path = "cservice/why" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

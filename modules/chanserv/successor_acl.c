@@ -15,7 +15,7 @@ channel_pick_successor_hook(hook_channel_succession_req_t *req)
 	return_if_fail(req != NULL);
 	return_if_fail(req->mc != NULL);
 
-	/* maybe some other module already chose a new successor. */
+	// maybe some other module already chose a new successor.
 	if (req->mu != NULL)
 		return;
 
@@ -31,7 +31,7 @@ channel_succession_hook(hook_channel_succession_req_t *req)
 	return_if_fail(req->mc != NULL);
 	return_if_fail(req->mu != NULL);
 
-	/* Remove the successor flag from the new founder. */
+	// Remove the successor flag from the new founder.
 	chanacs_change_simple(req->mc, entity(req->mu), NULL, 0, successor_flag, NULL);
 }
 

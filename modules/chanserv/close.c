@@ -7,14 +7,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_close(struct sourceinfo *si, int parc, char *parv[]);
-
-/* CLOSE ON|OFF -- don't pollute the root with REOPEN */
-static struct command cs_close = { "CLOSE", N_("Closes a channel."),
-			PRIV_CHAN_ADMIN, 3, cs_cmd_close , { .path = "cservice/close" }};
-
-static void close_check_join(hook_channel_joinpart_t *data);
-
 static void
 close_check_join(hook_channel_joinpart_t *data)
 {
@@ -29,22 +21,23 @@ close_check_join(hook_channel_joinpart_t *data)
 
 	if (metadata_find(mc, "private:close:closer"))
 	{
-		/* don't join if we're already in there */
+		// don't join if we're already in there
 		if (!chanuser_find(cu->chan, user_find_named(chansvs.nick)))
 			join(cu->chan->name, chansvs.nick);
 
-		/* stay for a bit to stop rejoin floods */
+		// stay for a bit to stop rejoin floods
 		mc->flags |= MC_INHABIT;
 
-		/* lock it down */
+		// lock it down
 		channel_mode_va(chansvs.me->me, cu->chan, 3, "+isbl", "*!*@*", "1");
 
-		/* clear the channel */
+		// clear the channel
 		kick(chansvs.me->me, cu->chan, cu->user, "This channel has been closed");
 		data->cu = NULL;
 	}
 }
 
+// CLOSE ON|OFF -- don't pollute the root with REOPEN
 static void
 cs_cmd_close(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -99,13 +92,13 @@ cs_cmd_close(struct sourceinfo *si, int parc, char *parv[])
 			if (!chanuser_find(c, user_find_named(chansvs.nick)))
 				join(target, chansvs.nick);
 
-			/* stay for a bit to stop rejoin floods */
+			// stay for a bit to stop rejoin floods
 			mc->flags |= MC_INHABIT;
 
-			/* lock it down */
+			// lock it down
 			channel_mode_va(chansvs.me->me, c, 3, "+isbl", "*!*@*", "1");
 
-			/* clear the channel */
+			// clear the channel
 			MOWGLI_ITER_FOREACH_SAFE(n, tn, c->members.head)
 			{
 				cu = (struct chanuser *)n->data;
@@ -138,7 +131,7 @@ cs_cmd_close(struct sourceinfo *si, int parc, char *parv[])
 		c = channel_find(target);
 		if (c != NULL)
 		{
-			/* hmm, channel still exists, probably permanent? */
+			// hmm, channel still exists, probably permanent?
 			channel_mode_va(chansvs.me->me, c, 2, "-isbl", "*!*@*");
 			check_modes(mc, true);
 		}
@@ -153,6 +146,8 @@ cs_cmd_close(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Usage: CLOSE <#channel> <ON|OFF> [reason]"));
 	}
 }
+
+static struct command cs_close = { "CLOSE", N_("Closes a channel."), PRIV_CHAN_ADMIN, 3, cs_cmd_close , { .path = "cservice/close" }};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

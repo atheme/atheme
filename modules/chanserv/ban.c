@@ -7,14 +7,6 @@
 
 #include "atheme.h"
 
-static void cs_cmd_ban(struct sourceinfo *si, int parc, char *parv[]);
-static void cs_cmd_unban(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cs_ban = { "BAN", N_("Sets a ban on a channel."),
-                        AC_AUTHENTICATED, 2, cs_cmd_ban, { .path = "cservice/ban" } };
-static struct command cs_unban = { "UNBAN", N_("Removes a ban on a channel."),
-			AC_AUTHENTICATED, 2, cs_cmd_unban, { .path = "cservice/unban" } };
-
 static void
 cs_cmd_ban(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -184,6 +176,9 @@ cs_cmd_unban(struct sourceinfo *si, int parc, char *parv[])
 		return;
         }
 }
+
+static struct command cs_ban = { "BAN", N_("Sets a ban on a channel."), AC_AUTHENTICATED, 2, cs_cmd_ban, { .path = "cservice/ban" } };
+static struct command cs_unban = { "UNBAN", N_("Removes a ban on a channel."), AC_AUTHENTICATED, 2, cs_cmd_unban, { .path = "cservice/unban" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
