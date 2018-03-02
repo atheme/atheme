@@ -155,15 +155,15 @@ jsonrpc_normalizeBuffer(const char *buf)
 	{
 		switch (buf[i])
 		{
-			/* ctrl char */
+			// ctrl char
 			case 1:
 				break;
-				/* Bold ctrl char */
+				// Bold ctrl char
 			case 2:
 				break;
-				/* Color ctrl char */
+				// Color ctrl char
 			case 3:
-				/* If the next character is a digit, its also removed */
+				// If the next character is a digit, its also removed
 				if (isdigit((unsigned char)buf[i + 1]))
 				{
 					i++;
@@ -200,24 +200,24 @@ jsonrpc_normalizeBuffer(const char *buf)
 				}
 
 				break;
-				/* tabs char */
+				// tabs char
 			case 9:
 				break;
-				/* line feed char */
+				// line feed char
 			case 10:
 				break;
-				/* carrage returns char */
+				// carrage returns char
 			case 13:
 				break;
-				/* Reverse ctrl char */
+				// Reverse ctrl char
 			case 22:
 				break;
-				/* Underline ctrl char */
+				// Underline ctrl char
 			case 31:
 				break;
-				/* A valid char gets copied into the new buffer */
+				// A valid char gets copied into the new buffer
 			default:
-				/* All valid <32 characters are handled above. */
+				// All valid <32 characters are handled above.
 				if (buf[i] > 31)
 				{
 					newbuf[j] = buf[i];
@@ -226,7 +226,7 @@ jsonrpc_normalizeBuffer(const char *buf)
 		}
 	}
 
-	/* Terminate the string */
+	// Terminate the string
 	newbuf[j] = 0;
 
 	return (newbuf);

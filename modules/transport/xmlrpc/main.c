@@ -11,39 +11,16 @@
 #include "datastream.h"
 #include "authcookie.h"
 
-static void handle_request(struct connection *cptr, void *requestbuf);
-
-static struct path_handler handle_xmlrpc = { NULL, handle_request };
-
-static struct
-{
+static struct {
 	char *path;
 } xmlrpc_config;
 
-static struct connection *current_cptr = NULL; /* XXX: Hack: src/xmlrpc.c requires us to do this */
+static struct connection *current_cptr = NULL; // XXX: Hack: src/xmlrpc.c requires us to do this
 
 static mowgli_list_t *httpd_path_handlers = NULL;
 
-static void xmlrpc_command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *message);
-static void xmlrpc_command_success_nodata(struct sourceinfo *si, const char *message);
-static void xmlrpc_command_success_string(struct sourceinfo *si, const char *result, const char *message);
-
-static int xmlrpcmethod_login(void *conn, int parc, char *parv[]);
-static int xmlrpcmethod_logout(void *conn, int parc, char *parv[]);
-static int xmlrpcmethod_command(void *conn, int parc, char *parv[]);
-static int xmlrpcmethod_privset(void *conn, int parc, char *parv[]);
-static int xmlrpcmethod_ison(void *conn, int parc, char *parv[]);
-static int xmlrpcmethod_metadata(void *conn, int parc, char *parv[]);
-
-/* Configuration */
+// Configuration
 static mowgli_list_t conf_xmlrpc_table;
-
-static struct sourceinfo_vtable xmlrpc_vtable = {
-	.description = "xmlrpc",
-	.cmd_fail = xmlrpc_command_fail,
-	.cmd_success_nodata = xmlrpc_command_success_nodata,
-	.cmd_success_string = xmlrpc_command_success_string
-};
 
 static char *
 dump_buffer(char *buf, int length)
@@ -75,6 +52,8 @@ handle_request(struct connection *cptr, void *requestbuf)
 
 	return;
 }
+
+static struct path_handler handle_xmlrpc = { NULL, handle_request };
 
 static void
 xmlrpc_config_ready(void *vptr)
@@ -158,9 +137,16 @@ xmlrpc_command_success_string(struct sourceinfo *si, const char *result, const c
 	hd->sent_reply = true;
 }
 
-/* These taken from the old modules/xmlrpc/account.c */
-/*
- * atheme.login
+static struct sourceinfo_vtable xmlrpc_vtable = {
+	.description = "xmlrpc",
+	.cmd_fail = xmlrpc_command_fail,
+	.cmd_success_nodata = xmlrpc_command_success_nodata,
+	.cmd_success_string = xmlrpc_command_success_string
+};
+
+// These taken from the old modules/xmlrpc/account.c
+
+/* atheme.login
  *
  * XML Inputs:
  *       account name, password, source ip (optional)
@@ -236,8 +222,7 @@ xmlrpcmethod_login(void *conn, int parc, char *parv[])
 	return 0;
 }
 
-/*
- * atheme.logout
+/* atheme.logout
  *
  * XML inputs:
  *       authcookie, and account name.
@@ -285,8 +270,7 @@ xmlrpcmethod_logout(void *conn, int parc, char *parv[])
 	return 0;
 }
 
-/*
- * atheme.command
+/* atheme.command
  *
  * XML inputs:
  *       authcookie, account name, source ip, service name, command name,
@@ -342,7 +326,7 @@ xmlrpcmethod_command(void *conn, int parc, char *parv[])
 	else
 		mu = NULL;
 
-	/* try literal service name first, then user-configured nickname. */
+	// try literal service name first, then user-configured nickname.
 	svs = service_find(parv[3]);
 	if ((svs == NULL && (svs = service_find_nick(parv[3])) == NULL) || svs->commands == NULL)
 	{
@@ -373,7 +357,7 @@ xmlrpcmethod_command(void *conn, int parc, char *parv[])
 	si->force_language = language_find("en");
 	command_exec(svs, si, cmd, newparc, newparv);
 
-	/* XXX: needs to be fixed up for restartable commands... */
+	// XXX: needs to be fixed up for restartable commands...
 	if (!hd->sent_reply)
 	{
 		if (hd->replybuf != NULL)
@@ -387,8 +371,7 @@ xmlrpcmethod_command(void *conn, int parc, char *parv[])
 	return 0;
 }
 
-/*
- * atheme.privset
+/* atheme.privset
  *
  * XML inputs:
  *       authcookie, account name, source ip
@@ -439,7 +422,7 @@ xmlrpcmethod_privset(void *conn, int parc, char *parv[])
 
 	if (mu == NULL || !is_soper(mu))
 	{
-		/* no privileges */
+		// no privileges
 		xmlrpc_send_string("");
 		return 0;
 	}
@@ -448,8 +431,7 @@ xmlrpcmethod_privset(void *conn, int parc, char *parv[])
 	return 0;
 }
 
-/*
- * atheme.ison
+/* atheme.ison
  *
  * XML inputs:
  *       nickname
@@ -497,8 +479,7 @@ xmlrpcmethod_ison(void *conn, int parc, char *parv[])
 	return 0;
 }
 
-/*
- * atheme.metadata
+/* atheme.metadata
  *
  * XML inputs:
  *       entity name, UID or channel name

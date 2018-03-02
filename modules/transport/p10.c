@@ -25,7 +25,7 @@
 #include "uplink.h"
 #include "pmodule.h"
 
-/* parses a P10 IRC stream */
+// parses a P10 IRC stream
 static void
 p10_parse(char *line)
 {
@@ -40,7 +40,7 @@ p10_parse(char *line)
 	unsigned int i;
 	struct proto_cmd *pcmd;
 
-	/* clear the parv */
+	// clear the parv
 	for (i = 0; i <= MAXPARC; i++)
 		parv[i] = NULL;
 
@@ -58,17 +58,18 @@ p10_parse(char *line)
 		if (*line == '\000')
 			goto cleanup;
 
-		/* copy the original line so we know what we crashed on */
+		// copy the original line so we know what we crashed on
 		memset((char *)&coreLine, '\0', BUFSIZE);
 		mowgli_strlcpy(coreLine, line, BUFSIZE);
 
 		slog(LG_RAWDATA, "-> %s", line);
 
-		/* find the first space */
+		// find the first space
 		if ((pos = strchr(line, ' ')))
 		{
 			*pos = '\0';
 			pos++;
+
 			/* if it starts with a : we have a prefix/origin
 			 * pull the origin off into `origin', and have pos for the
 			 * command, message will be the part afterwards
@@ -151,7 +152,7 @@ p10_parse(char *line)
 			goto cleanup;
 		}
 
-		/* take the command through the hash table */
+		// take the command through the hash table
 		if ((pcmd = pcommand_find(command)))
 		{
 			if (si->su && !(pcmd->sourcetype & MSRC_USER))

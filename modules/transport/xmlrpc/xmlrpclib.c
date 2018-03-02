@@ -12,8 +12,6 @@
 #include "atheme.h"
 #include "xmlrpclib.h"
 
-static int xmlrpc_error_code;
-
 typedef struct XMLRPCCmd_ XMLRPCCmd;
 
 struct XMLRPCCmd_ {
@@ -24,26 +22,17 @@ struct XMLRPCCmd_ {
 	XMLRPCCmd *next;
 };
 
-static mowgli_patricia_t *XMLRPCCMD = NULL;
-
-static struct xmlrpc_settings {
-	char *(*setbuffer)(char *buffer, int len);
+static struct {
+	char *(*setbuffer)(char *, int);
 	char *encode;
 	int httpheader;
 	char *inttagstart;
 	char *inttagend;
 } xmlrpc;
 
-static char *xmlrpc_parse(char *buffer);
-static char *xmlrpc_method(char *buffer);
-static int xmlrpc_split_buf(char *buffer, char ***argv);
-static void xmlrpc_append_char_encode(mowgli_string_t *s, const char *s1);
+static int xmlrpc_error_code;
 
-static XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func);
-static int addXMLCommand(XMLRPCCmd * xml);
-static char *xmlrpc_write_header(int length);
-
-/*************************************************************************/
+static mowgli_patricia_t *XMLRPCCMD = NULL;
 
 int
 xmlrpc_getlast_error(void)
@@ -51,7 +40,106 @@ xmlrpc_getlast_error(void)
 	return xmlrpc_error_code;
 }
 
-/*************************************************************************/
+/**
+ * Parse Data down to just the <xml> without any \r\n or \t
+ * @param buffer Incoming data buffer
+ * @return cleaned up buffer
+ */
+static char *
+xmlrpc_parse(char *buffer)
+{
+	char *tmp = NULL;
+
+	/*
+	   Okay since the buffer could contain
+	   HTTP header information, lets break
+	   off at the point that the <?xml?> starts
+	 */
+	tmp = strstr(buffer, "<?xml");
+
+	// check if its xml doc
+	if (tmp)
+	{
+		// get all the odd characters out of the data
+		return xmlrpc_normalizeBuffer(tmp);
+	}
+	return NULL;
+}
+
+static char *
+xmlrpc_method(char *buffer)
+{
+	char *data, *p, *name;
+	int namelen;
+
+	data = strstr(buffer, "<methodName>");
+	if (data)
+	{
+		data += 12;
+		p = strchr(data, '<');
+		if (p == NULL)
+			return NULL;
+		namelen = p - data;
+		name = smalloc(namelen + 1);
+		memcpy(name, data, namelen);
+		return name;
+	}
+	return NULL;
+}
+
+/* Splits up a series of values into an array of strings.
+ * The given buffer is modified and the pointers in the array point to
+ * parts of the buffer. The array itself is dynamically allocated.
+ * Returns the number of values placed in the array.
+ * Largely rewritten by jilles 20080803
+ */
+static int
+xmlrpc_split_buf(char *buffer, char ***argv)
+{
+	int ac = 0;
+	int argvsize = 8;
+	char *data, *str;
+	char *nexttag = NULL;
+	char *p;
+	int tagtype = 0;
+
+	data = buffer;
+	*argv = smalloc(sizeof(char *) * argvsize);
+	while ((data = strstr(data, "<value>")))
+	{
+		data += 7;
+		nexttag = strchr(data, '<');
+		if (nexttag == NULL)
+			break;
+		nexttag++;
+		p = strchr(nexttag, '>');
+		if (p == NULL)
+			break;
+		*p++ = '\0';
+
+		// strings
+		if (!stricmp("string", nexttag))
+			tagtype = 1;
+		else
+			tagtype = 0;
+		str = p;
+		p = strchr(str, '<');
+		if (p == NULL)
+			break;
+		*p++ = '\0';
+		if (ac >= argvsize)
+		{
+			argvsize *= 2;
+			*argv = srealloc(*argv, sizeof(char *) * argvsize);
+		}
+		if (tagtype == 1)
+			(*argv)[ac++] = xmlrpc_decode_string(str);
+		else
+			(*argv)[ac++] = str;
+		data = p;
+	}			// while
+	return ac;
+}
 
 void
 xmlrpc_process(char *buffer, void *userdata)
@@ -95,7 +183,7 @@ xmlrpc_process(char *buffer, void *userdata)
 						}
 					}
 					else
-					{	/* we assume that XMLRPC_STOP means the handler has given no output */
+					{	// we assume that XMLRPC_STOP means the handler has given no output
 						xmlrpc_error_code = -7;
 						xmlrpc_generic_error(xmlrpc_error_code, "XMLRPC error: First eligible function returned XMLRPC_STOP");
 					}
@@ -128,8 +216,6 @@ xmlrpc_process(char *buffer, void *userdata)
 	free(name);
 }
 
-/*************************************************************************/
-
 void
 xmlrpc_set_buffer(char *(*func) (char *buffer, int len))
 {
@@ -137,7 +223,25 @@ xmlrpc_set_buffer(char *(*func) (char *buffer, int len))
 	xmlrpc.setbuffer = func;
 }
 
-/*************************************************************************/
+static XMLRPCCmd * ATHEME_FATTR_MALLOC
+createXMLCommand(const char *name, XMLRPCMethodFunc func)
+{
+	XMLRPCCmd *const xml = smalloc(sizeof *xml);
+	xml->name = sstrdup(name);
+	xml->func = func;
+	return xml;
+}
+
+static int
+addXMLCommand(XMLRPCCmd * xml)
+{
+	if (XMLRPCCMD == NULL)
+		XMLRPCCMD = mowgli_patricia_create(strcasecanon);
+
+	mowgli_patricia_add(XMLRPCCMD, xml->name, xml);
+
+	return XMLRPC_ERR_OK;
+}
 
 int
 xmlrpc_register_method(const char *name, XMLRPCMethodFunc func)
@@ -151,32 +255,6 @@ xmlrpc_register_method(const char *name, XMLRPCMethodFunc func)
 	return addXMLCommand(xml);
 }
 
-/*************************************************************************/
-
-static XMLRPCCmd * ATHEME_FATTR_MALLOC
-createXMLCommand(const char *name, XMLRPCMethodFunc func)
-{
-	XMLRPCCmd *const xml = smalloc(sizeof *xml);
-	xml->name = sstrdup(name);
-	xml->func = func;
-	return xml;
-}
-
-/*************************************************************************/
-
-static int
-addXMLCommand(XMLRPCCmd * xml)
-{
-	if (XMLRPCCMD == NULL)
-		XMLRPCCMD = mowgli_patricia_create(strcasecanon);
-
-	mowgli_patricia_add(XMLRPCCMD, xml->name, xml);
-
-	return XMLRPC_ERR_OK;
-}
-
-/*************************************************************************/
-
 int
 xmlrpc_unregister_method(const char *method)
 {
@@ -186,8 +264,6 @@ xmlrpc_unregister_method(const char *method)
 
 	return XMLRPC_ERR_OK;
 }
-
-/*************************************************************************/
 
 static char *
 xmlrpc_write_header(int length)
@@ -207,113 +283,48 @@ xmlrpc_write_header(int length)
 	return sstrdup(buf);
 }
 
-/*************************************************************************/
-
-/**
- * Parse Data down to just the <xml> without any \r\n or \t
- * @param buffer Incoming data buffer
- * @return cleaned up buffer
- */
-static char *
-xmlrpc_parse(char *buffer)
+static void
+xmlrpc_append_char_encode(mowgli_string_t *s, const char *s1)
 {
-	char *tmp = NULL;
+	long unsigned int i;
+	unsigned char c;
+	char buf2[15];
 
-	/*
-	   Okay since the buffer could contain
-	   HTTP header information, lets break
-	   off at the point that the <?xml?> starts
-	 */
-	tmp = strstr(buffer, "<?xml");
-
-	/* check if its xml doc */
-	if (tmp)
+	if ((!(s1) || (*(s1) == '\0')))
 	{
-		/* get all the odd characters out of the data */
-		return xmlrpc_normalizeBuffer(tmp);
+		return;
 	}
-	return NULL;
-}
 
-/*************************************************************************/
-
-/* Splits up a series of values into an array of strings.
- * The given buffer is modified and the pointers in the array point to
- * parts of the buffer. The array itself is dynamically allocated.
- * Returns the number of values placed in the array.
- * Largely rewritten by jilles 20080803
- */
-static int
-xmlrpc_split_buf(char *buffer, char ***argv)
-{
-	int ac = 0;
-	int argvsize = 8;
-	char *data, *str;
-	char *nexttag = NULL;
-	char *p;
-	int tagtype = 0;
-
-	data = buffer;
-	*argv = smalloc(sizeof(char *) * argvsize);
-	while ((data = strstr(data, "<value>")))
+	for (i = 0; s1[i] != '\0'; i++)
 	{
-		data += 7;
-		nexttag = strchr(data, '<');
-		if (nexttag == NULL)
-			break;
-		nexttag++;
-		p = strchr(nexttag, '>');
-		if (p == NULL)
-			break;
-		*p++ = '\0';
-		/* strings */
-		if (!stricmp("string", nexttag))
-			tagtype = 1;
-		else
-			tagtype = 0;
-		str = p;
-		p = strchr(str, '<');
-		if (p == NULL)
-			break;
-		*p++ = '\0';
-		if (ac >= argvsize)
+		c = s1[i];
+		if (c > 127)
 		{
-			argvsize *= 2;
-			*argv = srealloc(*argv, sizeof(char *) * argvsize);
+			snprintf(buf2, sizeof buf2, "&#%d;", c);
+			s->append(s, buf2, strlen(buf2));
 		}
-		if (tagtype == 1)
-			(*argv)[ac++] = xmlrpc_decode_string(str);
+		else if (c == '&')
+		{
+			s->append(s, "&amp;", 5);
+		}
+		else if (c == '<')
+		{
+			s->append(s, "&lt;", 4);
+		}
+		else if (c == '>')
+		{
+			s->append(s, "&gt;", 4);
+		}
+		else if (c == '"')
+		{
+			s->append(s, "&quot;", 6);
+		}
 		else
-			(*argv)[ac++] = str;
-		data = p;
-	}			/* while */
-	return ac;
-}
-
-/*************************************************************************/
-
-static char *
-xmlrpc_method(char *buffer)
-{
-	char *data, *p, *name;
-	int namelen;
-
-	data = strstr(buffer, "<methodName>");
-	if (data)
-	{
-		data += 12;
-		p = strchr(data, '<');
-		if (p == NULL)
-			return NULL;
-		namelen = p - data;
-		name = smalloc(namelen + 1);
-		memcpy(name, data, namelen);
-		return name;
+		{
+			s->append_char(s, c);
+		}
 	}
-	return NULL;
 }
-
-/*************************************************************************/
 
 void
 xmlrpc_generic_error(int code, const char *string)
@@ -362,8 +373,6 @@ xmlrpc_generic_error(int code, const char *string)
 	s->destroy(s);
 }
 
-/*************************************************************************/
-
 int
 xmlrpc_about(void *userdata, int ac, char **av)
 {
@@ -384,8 +393,6 @@ xmlrpc_about(void *userdata, int ac, char **av)
 	free(arraydata);
 	return XMLRPC_CONT;
 }
-
-/*************************************************************************/
 
 void
 xmlrpc_send(int argc, ...)
@@ -450,8 +457,6 @@ xmlrpc_send(int argc, ...)
 	s->destroy(s);
 }
 
-/*************************************************************************/
-
 void
 xmlrpc_send_string(const char *value)
 {
@@ -507,8 +512,6 @@ xmlrpc_send_string(const char *value)
 	s->destroy(s);
 }
 
-/*************************************************************************/
-
 char *
 xmlrpc_time2date(char *buf, time_t t)
 {
@@ -517,13 +520,12 @@ xmlrpc_time2date(char *buf, time_t t)
 
 	*buf = '\0';
 	tm = localtime(&t);
-	/* <dateTime.iso8601>20011003T08:53:38</dateTime.iso8601> */
+
+	// <dateTime.iso8601>20011003T08:53:38</dateTime.iso8601>
 	strftime(timebuf, XMLRPC_BUFSIZE - 1, "%Y%m%dT%I:%M:%S", tm);
 	snprintf(buf, XMLRPC_BUFSIZE, "<dateTime.iso8601>%s</dateTime.iso8601>", timebuf);
 	return buf;
 }
-
-/*************************************************************************/
 
 char *
 xmlrpc_integer(char *buf, int value)
@@ -548,8 +550,6 @@ xmlrpc_integer(char *buf, int value)
 	return buf;
 }
 
-/*************************************************************************/
-
 char *
 xmlrpc_string(char *buf, const char *value)
 {
@@ -561,8 +561,6 @@ xmlrpc_string(char *buf, const char *value)
 	return buf;
 }
 
-/*************************************************************************/
-
 char *
 xmlrpc_boolean(char *buf, int value)
 {
@@ -571,8 +569,6 @@ xmlrpc_boolean(char *buf, int value)
 	return buf;
 }
 
-/*************************************************************************/
-
 char *
 xmlrpc_double(char *buf, double value)
 {
@@ -580,8 +576,6 @@ xmlrpc_double(char *buf, double value)
 	snprintf(buf, XMLRPC_BUFSIZE, "<double>%g</double>", value);
 	return buf;
 }
-
-/*************************************************************************/
 
 char *
 xmlrpc_array(int argc, ...)
@@ -617,8 +611,6 @@ xmlrpc_array(int argc, ...)
 	return sstrdup(buf);
 }
 
-/*************************************************************************/
-
 char *
 xmlrpc_normalizeBuffer(const char *buf)
 {
@@ -632,15 +624,15 @@ xmlrpc_normalizeBuffer(const char *buf)
 	{
 		switch (buf[i])
 		{
-			  /* ctrl char */
+			  // ctrl char
 		  case 1:
 			  break;
-			  /* Bold ctrl char */
+			  // Bold ctrl char
 		  case 2:
 			  break;
-			  /* Color ctrl char */
+			  // Color ctrl char
 		  case 3:
-			  /* If the next character is a digit, its also removed */
+			  // If the next character is a digit, its also removed
 			  if (isdigit((unsigned char)buf[i + 1]))
 			  {
 				  i++;
@@ -665,6 +657,7 @@ xmlrpc_normalizeBuffer(const char *buf)
 					  {
 						  i++;
 					  }
+
 					  /* not the best way to remove colors
 					   * which are two digit but no worse then
 					   * how the Unreal does with +S - TSL
@@ -677,24 +670,24 @@ xmlrpc_normalizeBuffer(const char *buf)
 			  }
 
 			  break;
-			  /* tabs char */
+			  // tabs char
 		  case 9:
 			  break;
-			  /* line feed char */
+			  // line feed char
 		  case 10:
 			  break;
-			  /* carrage returns char */
+			  // carrage returns char
 		  case 13:
 			  break;
-			  /* Reverse ctrl char */
+			  // Reverse ctrl char
 		  case 22:
 			  break;
-			  /* Underline ctrl char */
+			  // Underline ctrl char
 		  case 31:
 			  break;
-			  /* A valid char gets copied into the new buffer */
+			  // A valid char gets copied into the new buffer
 		  default:
-			  /* All valid <32 characters are handled above. */
+			  // All valid <32 characters are handled above.
 			  if (buf[i] > 31)
 			  {
 				newbuf[j] = buf[i];
@@ -703,13 +696,11 @@ xmlrpc_normalizeBuffer(const char *buf)
 		}
 	}
 
-	/* Terminate the string */
+	// Terminate the string
 	newbuf[j] = 0;
 
 	return (newbuf);
 }
-
-/*************************************************************************/
 
 int
 xmlrpc_set_options(int type, const char *value)
@@ -747,8 +738,6 @@ xmlrpc_set_options(int type, const char *value)
 	}
 	return 1;
 }
-
-/*************************************************************************/
 
 void
 xmlrpc_char_encode(char *outbuffer, const char *s1)
@@ -797,49 +786,6 @@ xmlrpc_char_encode(char *outbuffer, const char *s1)
 	s->append_char(s, 0);
 
 	strncpy(outbuffer, s->str, XMLRPC_BUFSIZE);
-}
-
-static void
-xmlrpc_append_char_encode(mowgli_string_t *s, const char *s1)
-{
-	long unsigned int i;
-	unsigned char c;
-	char buf2[15];
-
-	if ((!(s1) || (*(s1) == '\0')))
-	{
-		return;
-	}
-
-	for (i = 0; s1[i] != '\0'; i++)
-	{
-		c = s1[i];
-		if (c > 127)
-		{
-			snprintf(buf2, sizeof buf2, "&#%d;", c);
-			s->append(s, buf2, strlen(buf2));
-		}
-		else if (c == '&')
-		{
-			s->append(s, "&amp;", 5);
-		}
-		else if (c == '<')
-		{
-			s->append(s, "&lt;", 4);
-		}
-		else if (c == '>')
-		{
-			s->append(s, "&gt;", 4);
-		}
-		else if (c == '"')
-		{
-			s->append(s, "&quot;", 6);
-		}
-		else
-		{
-			s->append_char(s, c);
-		}
-	}
 }
 
 /* In-place decode of some entities
