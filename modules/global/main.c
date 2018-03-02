@@ -7,22 +7,14 @@
 
 #include "atheme.h"
 
-/* global list struct */
+// global list struct
 struct global_ {
 	char *text;
 };
 
 static struct service *globsvs = NULL;
 
-static void gs_cmd_global(struct sourceinfo *si, const int parc, char *parv[]);
-static void gs_cmd_help(struct sourceinfo *si, const int parc, char *parv[]);
-
-static struct command gs_help = { "HELP", N_("Displays contextual help information."),
-		      PRIV_GLOBAL, 1, gs_cmd_help, { .path = "help" } };
-static struct command gs_global = { "GLOBAL", N_("Sends a global notice."),
-			PRIV_GLOBAL, 1, gs_cmd_global, { .path = "gservice/global" } };
-
-/* HELP <command> [params] */
+// HELP <command> [params]
 static void
 gs_cmd_help(struct sourceinfo *si, const int parc, char *parv[])
 {
@@ -36,11 +28,11 @@ gs_cmd_help(struct sourceinfo *si, const int parc, char *parv[])
 		return;
 	}
 
-	/* take the command through the hash table */
+	// take the command through the hash table
 	help_display(si, si->service, command, si->service->commands);
 }
 
-/* GLOBAL <parameters>|SEND|CLEAR */
+// GLOBAL <parameters>|SEND|CLEAR
 static void
 gs_cmd_global(struct sourceinfo *si, const int parc, char *parv[])
 {
@@ -68,7 +60,7 @@ gs_cmd_global(struct sourceinfo *si, const int parc, char *parv[])
 			return;
 		}
 
-		/* destroy the list we made */
+		// destroy the list we made
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, globlist.head)
 		{
 			global = (struct global_ *)n->data;
@@ -105,17 +97,19 @@ gs_cmd_global(struct sourceinfo *si, const int parc, char *parv[])
 					isfirst ? get_source_name(si) : "",
 					isfirst ? " - " : "",
 					global->text);
+
 			/* Cannot use si->service->me here, global notices
 			 * should come from global even if /os global was
 			 * used. */
 			notice_global_sts(globsvs->me, "*", buf);
 			isfirst = false;
-			/* log everything */
+
+			// log everything
 			logcommand(si, CMDLOG_ADMIN, "GLOBAL: \2%s\2", global->text);
 		}
 		logcommand(si, CMDLOG_ADMIN, "GLOBAL: (\2%zu\2 lines sent)", MOWGLI_LIST_LENGTH(&globlist));
 
-		/* destroy the list we made */
+		// destroy the list we made
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, globlist.head)
 		{
 			global = (struct global_ *)n->data;
@@ -152,6 +146,7 @@ gs_cmd_global(struct sourceinfo *si, const int parc, char *parv[])
 					isfirst ? get_source_name(si) : "",
 					isfirst ? " - " : "",
 					global->text);
+
 			/* Use command_success_nodata here, we only want to send
 			 * to the person running the command.
 			 */
@@ -188,6 +183,9 @@ gs_cmd_global(struct sourceinfo *si, const int parc, char *parv[])
 		"Stored text to be sent as line %zu. Use \2GLOBAL SEND\2 "
 		"to send message, \2GLOBAL CLEAR\2 to delete the pending message, " "\2GLOBAL LIST\2 to preview what will be sent, " "or \2GLOBAL\2 to store additional lines.", MOWGLI_LIST_LENGTH(&globlist));
 }
+
+static struct command gs_help = { "HELP", N_("Displays contextual help information."), PRIV_GLOBAL, 1, gs_cmd_help, { .path = "help" } };
+static struct command gs_global = { "GLOBAL", N_("Sends a global notice."), PRIV_GLOBAL, 1, gs_cmd_global, { .path = "gservice/global" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
