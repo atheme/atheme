@@ -10,14 +10,16 @@
 #include "atheme.h"
 #include "exttarget.h"
 
-static mowgli_patricia_t **exttarget_tree = NULL;
-
 struct this_exttarget
 {
 	struct myentity parent;
 	stringref channel;
 	int checking;
 };
+
+static mowgli_heap_t *chanacs_ext_heap = NULL;
+static mowgli_patricia_t *chanacs_exttarget_tree = NULL;
+static mowgli_patricia_t **exttarget_tree = NULL;
 
 static struct chanacs *
 chanacs_ext_match_user(struct chanacs *ca, struct user *u)
@@ -28,7 +30,7 @@ chanacs_ext_match_user(struct chanacs *ca, struct user *u)
 
 	ent = (struct this_exttarget *) ca->entity;
 
-	if (ent->checking > 4) /* arbitrary recursion limit? */
+	if (ent->checking > 4) // arbitrary recursion limit?
 		return NULL;
 
 	if (!(mc = mychan_find(ent->channel)))
@@ -68,16 +70,6 @@ chanacs_allow_foundership(struct myentity *mt)
 	return false;
 }
 
-static const struct entity_chanacs_validation_vtable chanacs_ext_validate = {
-	.match_entity = chanacs_ext_match_entity,
-	.match_user = chanacs_ext_match_user,
-	.can_register_channel = chanacs_ext_can_register_channel,
-	.allow_foundership = chanacs_allow_foundership,
-};
-
-static mowgli_heap_t *chanacs_ext_heap = NULL;
-static mowgli_patricia_t *chanacs_exttarget_tree = NULL;
-
 static void
 chanacs_ext_delete(struct this_exttarget *e)
 {
@@ -93,6 +85,13 @@ chanacs_ext_delete(struct this_exttarget *e)
 static struct myentity *
 chanacs_validate_f(const char *param)
 {
+	static const struct entity_chanacs_validation_vtable chanacs_ext_validate = {
+		.match_entity = chanacs_ext_match_entity,
+		.match_user = chanacs_ext_match_user,
+		.can_register_channel = chanacs_ext_can_register_channel,
+		.allow_foundership = chanacs_allow_foundership,
+	};
+
 	char *name;
 	struct this_exttarget *ext;
 	size_t namelen;
@@ -103,7 +102,7 @@ chanacs_validate_f(const char *param)
 	if (*param == '\0')
 		return NULL;
 
-	/* if we already have an object, return it from our tree. */
+	// if we already have an object, return it from our tree.
 	if ((ext = mowgli_patricia_retrieve(chanacs_exttarget_tree, param)) != NULL)
 		return entity(ext);
 
@@ -111,7 +110,7 @@ chanacs_validate_f(const char *param)
 	ext->channel = strshare_get(param);
 	ext->checking = 0;
 
-	/* name the entity... $chanacs:param */
+	// name the entity... $chanacs:param
 #define NAMEPREFIX "$chanacs:"
 	namelen = sizeof NAMEPREFIX + strlen(param);
 
@@ -123,17 +122,17 @@ chanacs_validate_f(const char *param)
 	free(name);
 #undef NAMEPREFIX
 
-	/* hook up the entity's validation table. */
+	// hook up the entity's validation table.
 	entity(ext)->chanacs_validate = &chanacs_ext_validate;
 	entity(ext)->type = ENT_EXTTARGET;
 
-	/* initialize the object. */
+	// initialize the object.
 	atheme_object_init(atheme_object(ext), entity(ext)->name, (atheme_object_destructor_fn) chanacs_ext_delete);
 
-	/* add the object to the exttarget tree */
+	// add the object to the exttarget tree
 	mowgli_patricia_add(chanacs_exttarget_tree, ext->channel, ext);
 
-	/* return the object as initially unowned by sinking the reference count. */
+	// return the object as initially unowned by sinking the reference count.
 	return atheme_object_sink_ref(ext);
 }
 
@@ -144,7 +143,7 @@ mod_init(struct module *const restrict m)
 
 	mowgli_patricia_add(*exttarget_tree, "chanacs", chanacs_validate_f);
 
-	/* since we are dealing with channel names, we use irccasecanon. */
+	// since we are dealing with channel names, we use irccasecanon.
 	chanacs_exttarget_tree = mowgli_patricia_create(irccasecanon);
 	chanacs_ext_heap = mowgli_heap_create(sizeof(struct this_exttarget), 32, BH_LAZY);
 }

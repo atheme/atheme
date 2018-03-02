@@ -9,8 +9,6 @@
 
 static mowgli_patricia_t **exttarget_tree = NULL;
 
-static struct myentity dummy_entity;
-
 static struct chanacs *
 dummy_match_user(struct chanacs *ca, struct user *u)
 {

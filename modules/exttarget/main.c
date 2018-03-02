@@ -7,7 +7,7 @@
 #include "atheme.h"
 #include "exttarget.h"
 
-/* Imported by other modules/exttarget/*.so */
+// Imported by other modules/exttarget/*.so */
 mowgli_patricia_t *exttarget_tree = NULL;
 
 static void
@@ -28,7 +28,7 @@ exttarget_find(hook_myentity_req_t *req)
 	if ((j = strchr(buf, ':')) != NULL)
 		*j++ = '\0';
 
-	/* i is now the name of the exttarget.  j is the parameter. */
+	// i is now the name of the exttarget.  j is the parameter.
 	val = mowgli_patricia_retrieve(exttarget_tree, i);
 	if (val != NULL)
 		req->entity = val(j);

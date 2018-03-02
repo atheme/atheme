@@ -7,13 +7,15 @@
 #include "atheme.h"
 #include "exttarget.h"
 
-static mowgli_patricia_t **exttarget_tree = NULL;
-
 struct this_exttarget
 {
 	struct myentity parent;
 	stringref channel;
 };
+
+static mowgli_heap_t *channel_ext_heap = NULL;
+static mowgli_patricia_t *channel_exttarget_tree = NULL;
+static mowgli_patricia_t **exttarget_tree = NULL;
 
 static struct chanacs *
 channel_ext_match_user(struct chanacs *ca, struct user *u)
@@ -54,16 +56,6 @@ channel_ext_allow_foundership(struct myentity *mt)
 	return false;
 }
 
-static const struct entity_chanacs_validation_vtable channel_ext_validate = {
-	.match_entity = channel_ext_match_entity,
-	.match_user = channel_ext_match_user,
-	.can_register_channel = channel_ext_can_register_channel,
-	.allow_foundership = channel_ext_allow_foundership,
-};
-
-static mowgli_heap_t *channel_ext_heap = NULL;
-static mowgli_patricia_t *channel_exttarget_tree = NULL;
-
 static void
 channel_ext_delete(struct this_exttarget *e)
 {
@@ -79,6 +71,13 @@ channel_ext_delete(struct this_exttarget *e)
 static struct myentity *
 channel_validate_f(const char *param)
 {
+	static const struct entity_chanacs_validation_vtable channel_ext_validate = {
+		.match_entity = channel_ext_match_entity,
+		.match_user = channel_ext_match_user,
+		.can_register_channel = channel_ext_can_register_channel,
+		.allow_foundership = channel_ext_allow_foundership,
+	};
+
 	char *name;
 	struct this_exttarget *ext;
 	size_t namelen;
@@ -89,14 +88,14 @@ channel_validate_f(const char *param)
 	if (*param == '\0')
 		return NULL;
 
-	/* if we already have an object, return it from our tree. */
+	// if we already have an object, return it from our tree.
 	if ((ext = mowgli_patricia_retrieve(channel_exttarget_tree, param)) != NULL)
 		return entity(ext);
 
 	ext = mowgli_heap_alloc(channel_ext_heap);
 	ext->channel = strshare_get(param);
 
-	/* name the entity... $channel:param */
+	// name the entity... $channel:param
 #define NAMEPREFIX "$channel:"
 	namelen = sizeof NAMEPREFIX + strlen(param);
 
@@ -108,17 +107,17 @@ channel_validate_f(const char *param)
 	free(name);
 #undef NAMEPREFIX
 
-	/* hook up the entity's validation table. */
+	// hook up the entity's validation table.
 	entity(ext)->chanacs_validate = &channel_ext_validate;
 	entity(ext)->type = ENT_EXTTARGET;
 
-	/* initialize the object. */
+	// initialize the object.
 	atheme_object_init(atheme_object(ext), entity(ext)->name, (atheme_object_destructor_fn) channel_ext_delete);
 
-	/* add the object to the exttarget tree. */
+	// add the object to the exttarget tree.
 	mowgli_patricia_add(channel_exttarget_tree, ext->channel, ext);
 
-	/* return the object as initially unowned by sinking the reference count. */
+	// return the object as initially unowned by sinking the reference count.
 	return atheme_object_sink_ref(ext);
 }
 
@@ -129,7 +128,7 @@ mod_init(struct module *const restrict m)
 
 	mowgli_patricia_add(*exttarget_tree, "channel", channel_validate_f);
 
-	/* since we are dealing with channel names, we use irccasecanon. */
+	// since we are dealing with channel names, we use irccasecanon.
 	channel_exttarget_tree = mowgli_patricia_create(irccasecanon);
 	channel_ext_heap = mowgli_heap_create(sizeof(struct this_exttarget), 32, BH_LAZY);
 }

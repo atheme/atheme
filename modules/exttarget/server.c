@@ -7,13 +7,27 @@
 #include "atheme.h"
 #include "exttarget.h"
 
-static mowgli_patricia_t **exttarget_tree = NULL;
-
 struct this_exttarget
 {
 	struct myentity parent;
 	stringref server;
 };
+
+static mowgli_heap_t *server_ext_heap = NULL;
+static mowgli_patricia_t *server_exttarget_tree = NULL;
+static mowgli_patricia_t **exttarget_tree = NULL;
+
+static void
+server_ext_delete(struct this_exttarget *e)
+{
+	return_if_fail(e != NULL);
+
+	mowgli_patricia_delete(server_exttarget_tree, e->server);
+	strshare_unref(e->server);
+	strshare_unref(entity(e)->name);
+
+	mowgli_heap_free(server_ext_heap, e);
+}
 
 static struct chanacs *
 server_ext_match_user(struct chanacs *ca, struct user *u)
@@ -49,31 +63,16 @@ server_ext_allow_foundership(struct myentity *mt)
 	return false;
 }
 
-static const struct entity_chanacs_validation_vtable server_ext_validate = {
-	.match_entity = server_ext_match_entity,
-	.match_user = server_ext_match_user,
-	.can_register_channel = server_ext_can_register_channel,
-	.allow_foundership = server_ext_allow_foundership,
-};
-
-static mowgli_heap_t *server_ext_heap = NULL;
-static mowgli_patricia_t *server_exttarget_tree = NULL;
-
-static void
-server_ext_delete(struct this_exttarget *e)
-{
-	return_if_fail(e != NULL);
-
-	mowgli_patricia_delete(server_exttarget_tree, e->server);
-	strshare_unref(e->server);
-	strshare_unref(entity(e)->name);
-
-	mowgli_heap_free(server_ext_heap, e);
-}
-
 static struct myentity *
 server_validate_f(const char *param)
 {
+	static const struct entity_chanacs_validation_vtable server_ext_validate = {
+		.match_entity = server_ext_match_entity,
+		.match_user = server_ext_match_user,
+		.can_register_channel = server_ext_can_register_channel,
+		.allow_foundership = server_ext_allow_foundership,
+	};
+
 	char *name;
 	struct this_exttarget *ext;
 	size_t namelen;
@@ -84,14 +83,14 @@ server_validate_f(const char *param)
 	if (*param == '\0')
 		return NULL;
 
-	/* if we already have an object, return it from our tree. */
+	// if we already have an object, return it from our tree.
 	if ((ext = mowgli_patricia_retrieve(server_exttarget_tree, param)) != NULL)
 		return entity(ext);
 
 	ext = mowgli_heap_alloc(server_ext_heap);
 	ext->server = strshare_get(param);
 
-	/* name the entity... $server:param */
+	// name the entity... $server:param
 #define NAMEPREFIX "$server:"
 	namelen = sizeof NAMEPREFIX + strlen(param);
 
@@ -103,17 +102,17 @@ server_validate_f(const char *param)
 	free(name);
 #undef NAMEPREFIX
 
-	/* hook up the entity's validation table. */
+	// hook up the entity's validation table.
 	entity(ext)->chanacs_validate = &server_ext_validate;
 	entity(ext)->type = ENT_EXTTARGET;
 
-	/* initialize the object. */
+	// initialize the object.
 	atheme_object_init(atheme_object(ext), entity(ext)->name, (atheme_object_destructor_fn) server_ext_delete);
 
-	/* add the object to the exttarget tree. */
+	// add the object to the exttarget tree.
 	mowgli_patricia_add(server_exttarget_tree, ext->server, ext);
 
-	/* return the object as initially unowned by sinking the reference count. */
+	// return the object as initially unowned by sinking the reference count
 	return atheme_object_sink_ref(ext);
 }
 
