@@ -141,6 +141,15 @@ static const uint64_t blake2b_sigma[0x0C][0x10] = {
 	{ 0x0E, 0x0A, 0x04, 0x08, 0x09, 0x0F, 0x0D, 0x06, 0x01, 0x0C, 0x00, 0x02, 0x0B, 0x07, 0x05, 0x03 }
 };
 
+static mowgli_list_t atheme_argon2d_conf_table;
+
+/*
+ * The default memory and time cost variables
+ * These can be adjusted in the configuration file
+ */
+static unsigned int atheme_argon2d_mcost = ARGON2D_MEMCOST_DEF;
+static unsigned int atheme_argon2d_tcost = ARGON2D_TIMECOST_DEF;
+
 /*
  * This is reallocated on-demand to save allocating and freeing every time we
  * digest a password. The mempoolsz variable tracks how large (in blocks) the
@@ -689,15 +698,6 @@ argon2d_hash_raw(struct argon2d_context *const restrict ctx)
 	return blake2b_long(bhash_bytes, ARGON2_BLKSZ, ctx->hash, ATHEME_ARGON2D_HASHLEN);
 }
 
-
-
-/*
- * The default memory and time cost variables
- * These can be adjusted in the configuration file
- */
-static unsigned int atheme_argon2d_mcost = ARGON2D_MEMCOST_DEF;
-static unsigned int atheme_argon2d_tcost = ARGON2D_TIMECOST_DEF;
-
 static const char *
 atheme_argon2d_crypt(const char *const restrict password,
                      const char ATHEME_VATTR_UNUSED *const restrict parameters)
@@ -801,8 +801,6 @@ static const struct crypt_impl crypto_argon2d_impl = {
 	.crypt      = &atheme_argon2d_crypt,
 	.verify     = &atheme_argon2d_verify,
 };
-
-static mowgli_list_t atheme_argon2d_conf_table;
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

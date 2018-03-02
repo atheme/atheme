@@ -26,6 +26,8 @@
 
 #include "pbkdf2v2.h"
 
+static mowgli_list_t pbkdf2v2_conf_table;
+
 static unsigned int pbkdf2v2_digest = 0;
 static unsigned int pbkdf2v2_rounds = 0;
 static unsigned int pbkdf2v2_saltsz = 0;
@@ -592,8 +594,6 @@ static const struct crypt_impl crypto_pbkdf2v2_impl = {
 	.crypt      = &atheme_pbkdf2v2_crypt,
 	.verify     = &atheme_pbkdf2v2_verify,
 };
-
-static mowgli_list_t pbkdf2v2_conf_table;
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
