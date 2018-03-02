@@ -36,27 +36,7 @@ static unsigned int logoninfo_count = 0;
 
 static struct service *infoserv = NULL;
 
-static void is_cmd_help(struct sourceinfo *si, const int parc, char *parv[]);
-static void is_cmd_post(struct sourceinfo *si, int parc, char *parv[]);
-static void is_cmd_del(struct sourceinfo *si, int parc, char *parv[]);
-static void is_cmd_odel(struct sourceinfo *si, int parc, char *parv[]);
-static void is_cmd_list(struct sourceinfo *si, int parc, char *parv[]);
-static void is_cmd_olist(struct sourceinfo *si, int parc, char *parv[]);
-static void display_info(hook_user_nick_t *data);
-static void display_oper_info(struct user *u);
-
-static void write_infodb(struct database_handle *db);
-static void db_h_li(struct database_handle *db, const char *type);
-
-static struct command is_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, is_cmd_help, { .path = "help" } };
-static struct command is_post = { "POST", N_("Post news items for users to view."), PRIV_GLOBAL, 3, is_cmd_post, { .path = "infoserv/post" } };
-static struct command is_del = { "DEL", N_("Delete news items."), PRIV_GLOBAL, 1, is_cmd_del, { .path = "infoserv/del" } };
-static struct command is_odel = { "ODEL", N_("Delete oper news items."), PRIV_GLOBAL, 1, is_cmd_odel, { .path = "infoserv/odel" } };
-static struct command is_list = { "LIST", N_("List previously posted news items."), AC_NONE, 1, is_cmd_list, { .path = "infoserv/list" } };
-/* Should prolly change the priv for this. What would be a better priv for it though? */
-static struct command is_olist = { "OLIST", N_("List previously posted oper news items."), PRIV_GLOBAL, 1, is_cmd_olist, { .path = "infoserv/olist" } };
-
-/* HELP <command> [params] */
+// HELP <command> [params]
 void
 is_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -77,7 +57,7 @@ is_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* take the command through the hash table */
+	// take the command through the hash table
 	help_display(si, si->service, command, si->service->commands);
 }
 
@@ -168,10 +148,10 @@ display_info(hook_user_nick_t *data)
 	if (u == NULL)
 		return;
 
-	/* abort if it's an internal client */
+	// abort if it's an internal client
 	if (is_internal_client(u))
 		return;
-	/* abort if user is coming back from split */
+	// abort if user is coming back from split
 	if (!(u->server->flags & SF_EOB))
 		return;
 
@@ -194,7 +174,7 @@ display_info(hook_user_nick_t *data)
 			free(y);
 			count++;
 
-			/* only display three latest entries, max. */
+			// only display three latest entries, max.
 			if (count == logoninfo_count)
 				break;
 		}
@@ -215,10 +195,10 @@ display_oper_info(struct user *u)
 	if (u == NULL)
 		return;
 
-	/* abort if it's an internal client */
+	// abort if it's an internal client
 	if (is_internal_client(u))
 		return;
-	/* abort if user is coming back from split */
+	// abort if user is coming back from split
 	if (!(u->server->flags & SF_EOB))
 		return;
 
@@ -241,7 +221,7 @@ display_oper_info(struct user *u)
 			free(y);
 			count++;
 
-			/* only display three latest entries, max. */
+			// only display three latest entries, max.
 			if (count == logoninfo_count)
 				break;
 		}
@@ -270,7 +250,7 @@ is_cmd_post(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_node_t *n;
 	char buf[BUFSIZE];
 
-	/* make sure they're logged in */
+	// make sure they're logged in
 	if (!si->smu)
 	{
 		command_fail(si, fault_noprivs, _("You are not logged in."));
@@ -378,7 +358,7 @@ is_cmd_del(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* search for it */
+	// search for it
 	MOWGLI_ITER_FOREACH(n, logon_info.head)
 	{
 		l = n->data;
@@ -429,7 +409,7 @@ is_cmd_odel(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* search for it */
+	// search for it
 	MOWGLI_ITER_FOREACH(n, operlogon_info.head)
 	{
 		o = n->data;
@@ -512,6 +492,15 @@ is_cmd_olist(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_GET, "OLIST");
 	return;
 }
+
+static struct command is_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, is_cmd_help, { .path = "help" } };
+static struct command is_post = { "POST", N_("Post news items for users to view."), PRIV_GLOBAL, 3, is_cmd_post, { .path = "infoserv/post" } };
+static struct command is_del = { "DEL", N_("Delete news items."), PRIV_GLOBAL, 1, is_cmd_del, { .path = "infoserv/del" } };
+static struct command is_odel = { "ODEL", N_("Delete oper news items."), PRIV_GLOBAL, 1, is_cmd_odel, { .path = "infoserv/odel" } };
+static struct command is_list = { "LIST", N_("List previously posted news items."), AC_NONE, 1, is_cmd_list, { .path = "infoserv/list" } };
+
+// Should prolly change the priv for this. What would be a better priv for it though?
+static struct command is_olist = { "OLIST", N_("List previously posted oper news items."), PRIV_GLOBAL, 1, is_cmd_olist, { .path = "infoserv/olist" } };
 
 static void
 mod_init(struct module *const restrict m)
