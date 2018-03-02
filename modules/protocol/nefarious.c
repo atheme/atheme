@@ -90,13 +90,10 @@ static const struct cmode nefarious_user_mode_list[] = {
   { '\0', 0 }
 };
 
-static void check_hidehost(struct user *u);
-
-/* join a channel */
 static void
 nefarious_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
 {
-	/* If the channel doesn't exist, we need to create it. */
+	// If the channel doesn't exist, we need to create it.
 	if (isnew)
 	{
 		sts("%s C %s %lu", u->uid, c->name, (unsigned long)c->ts);
@@ -110,7 +107,6 @@ nefarious_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
 	}
 }
 
-/* kicks a user from a channel */
 static void
 nefarious_kick(struct user *source, struct channel *c, struct user *u, const char *reason)
 {
@@ -119,20 +115,18 @@ nefarious_kick(struct user *source, struct channel *c, struct user *u, const cha
 	chanuser_delete(c, u);
 }
 
-/* NOTICE wrapper */
 static void
 nefarious_notice_channel_sts(struct user *from, struct channel *target, const char *text)
 {
 	sts("%s O %s :%s", from ? from->uid : me.numeric, target->name, text);
 }
 
-/* topic wrapper */
 static void
 nefarious_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	return_if_fail(c != NULL);
 
-	/* for nefarious, set topicsetter iff we can set the proper topicTS */
+	// for nefarious, set topicsetter iff we can set the proper topicTS
 	if (ts > prevts || prevts == 0)
 		sts("%s T %s %s %lu %lu :%s", source->uid, c->name, setter, (unsigned long)c->ts, (unsigned long)ts, topic);
 	else
@@ -145,7 +139,40 @@ nefarious_topic_sts(struct channel *c, struct user *source, const char *setter, 
 	}
 }
 
-/* protocol-specific stuff to do on login */
+static void
+check_hidehost(struct user *u)
+{
+	static bool warned = false;
+	char buf[HOSTLEN + 1];
+
+	// do they qualify?
+	if (!(u->flags & UF_HIDEHOSTREQ) || u->myuser == NULL || (u->myuser->flags & MU_WAITAUTH))
+		return;
+
+	// don't use this if they have some other kind of vhost
+	if (strcmp(u->host, u->vhost))
+	{
+		slog(LG_DEBUG, "check_hidehost(): +x overruled by other vhost for %s", u->nick);
+		return;
+	}
+	if (me.hidehostsuffix == NULL)
+	{
+		if (!warned)
+		{
+			wallops("Misconfiguration: serverinfo::hidehostsuffix not set");
+			warned = true;
+		}
+		return;
+	}
+
+	snprintf(buf, sizeof buf, "%s.%s", entity(u->myuser)->name, me.hidehostsuffix);
+
+	strshare_unref(u->vhost);
+	u->vhost = strshare_get(buf);
+
+	slog(LG_DEBUG, "check_hidehost(): %s -> %s", u->nick, u->vhost);
+}
+
 static void
 nefarious_on_login(struct user *u, struct myuser *mu, const char *wantedhost)
 {
@@ -197,7 +224,8 @@ static void
 nefarious_sethost_sts(struct user *source, struct user *target, const char *host)
 {
 	sts("%s FA %s %s", me.numeric, target->uid, host);
-	/* need to set +x; this will be echoed */
+
+	// need to set +x; this will be echoed
 	if (!(target->flags & UF_HIDEHOSTREQ))
 		sts("%s M %s +x", me.numeric, target->uid);
 }
@@ -276,7 +304,7 @@ m_burst(struct sourceinfo *si, int parc, char *parv[])
 			cu = (struct chanuser *)n->data;
 			if (cu->user->server == me.me)
 			{
-				/* it's a service, reop */
+				// it's a service, reop
 				sts("%s M %s +o %s", me.numeric, c->name, CLIENT_NAME(cu->user));
 				cu->modes = CSTATUS_OP;
 			}
@@ -315,8 +343,7 @@ m_burst(struct sourceinfo *si, int parc, char *parv[])
 			userc = sjtoken(parv[j++] + 1, ' ', userv);
 			for (i = 0; i < userc; i++)
 				if (!strcmp(userv[i], "~"))
-					/* A ban "~" means exceptions are
-					 * following */
+					// A ban "~" means exceptions are following
 					bantype = 'e';
 				else
 					chanban_add(c, userv[i], bantype);
@@ -366,12 +393,10 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 	char *p;
 	int i;
 
-	/* got the right number of args for an introduction? */
+	// got the right number of args for an introduction?
 	if (parc >= 8)
 	{
-		/*
-		 * -> Mh N jilles 1 1460435852 jilles 127.0.0.1 +ixCc 1A130C.572B1.6F53B5.8DD3B8.IP 1A130C.572B1.6F53B5.8DD3B8.IP DSBHPW Mhw2O :Real Name
-		 */
+		// -> Mh N jilles 1 1460435852 jilles 127.0.0.1 +ixCc 1A130C.572B1.6F53B5.8DD3B8.IP 1A130C.572B1.6F53B5.8DD3B8.IP DSBHPW Mhw2O :Real Name
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s@%s (%s)", si->s->name, parv[0],parv[4],parv[7]);
 
 		decode_p10_ip(parv[parc - 3], ipstring);
@@ -389,9 +414,11 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 				if (p != NULL)
 					*p++ = '\0';
 				handle_burstlogin(u, parv[5+i], p ? atol(p) : 0);
-				/* killed to force logout? */
+
+				// killed to force logout?
 				if (user_find(parv[parc - 2]) == NULL)
 					return;
+
 				i++;
 			}
 			if (strchr(parv[5], 'h'))
@@ -430,14 +457,15 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 			if (strchr(parv[5], 'x'))
 			{
 				u->flags |= UF_HIDEHOSTREQ;
-				/* this must be after setting the account name */
+
+				// this must be after setting the account name
 				check_hidehost(u);
 			}
 		}
 
 		handle_nickchange(u);
 	}
-	/* if it's only 2 then it's a nickname change */
+	// if it's only 2 then it's a nickname change
 	else if (parc == 2)
 	{
 		if (!si->su)
@@ -472,7 +500,7 @@ m_mode(struct sourceinfo *si, int parc, char *parv[])
 		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
 	else
 	{
-		/* Yes this is a nick and not a UID -- jilles */
+		// Yes this is a nick and not a UID -- jilles
 		u = user_find_named(parv[0]);
 		if (u == NULL)
 		{
@@ -489,7 +517,7 @@ m_mode(struct sourceinfo *si, int parc, char *parv[])
 		{
 			if (parc > 2)
 			{
-				/* assume +h */
+				// assume +h
 				p = strchr(parv[2], '@');
 				if (p == NULL)
 				{
@@ -522,7 +550,7 @@ m_mode(struct sourceinfo *si, int parc, char *parv[])
 				strshare_unref(u->vhost);
 				u->vhost = strshare_get(u->host);
 
-				/* revert to +x vhost if applicable */
+				// revert to +x vhost if applicable
 				check_hidehost(u);
 			}
 		}
@@ -580,7 +608,7 @@ m_clearmode(struct sourceinfo *si, int parc, char *parv[])
 				cu = (struct chanuser *)n->data;
 				if (cu->user->server == me.me)
 				{
-					/* it's a service, reop */
+					// it's a service, reop
 					sts("%s M %s +o %s", me.numeric,
 							chan->name,
 							cu->user->uid);
@@ -679,39 +707,6 @@ m_sasl(struct sourceinfo *si, int parc, char *parv[])
 }
 
 static void
-check_hidehost(struct user *u)
-{
-	static bool warned = false;
-	char buf[HOSTLEN + 1];
-
-	/* do they qualify? */
-	if (!(u->flags & UF_HIDEHOSTREQ) || u->myuser == NULL || (u->myuser->flags & MU_WAITAUTH))
-		return;
-	/* don't use this if they have some other kind of vhost */
-	if (strcmp(u->host, u->vhost))
-	{
-		slog(LG_DEBUG, "check_hidehost(): +x overruled by other vhost for %s", u->nick);
-		return;
-	}
-	if (me.hidehostsuffix == NULL)
-	{
-		if (!warned)
-		{
-			wallops("Misconfiguration: serverinfo::hidehostsuffix not set");
-			warned = true;
-		}
-		return;
-	}
-
-	snprintf(buf, sizeof buf, "%s.%s", entity(u->myuser)->name, me.hidehostsuffix);
-
-	strshare_unref(u->vhost);
-	u->vhost = strshare_get(buf);
-
-	slog(LG_DEBUG, "check_hidehost(): %s -> %s", u->nick, u->vhost);
-}
-
-static void
 p10_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
 	/* hold permanent akills for four weeks -- jilles
@@ -725,7 +720,6 @@ mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/p10-generic");
 
-	/* Symbol relocation voodoo. */
 	join_sts = &nefarious_join_sts;
 	kick = &nefarious_kick;
 	notice_channel_sts = &nefarious_notice_channel_sts;
@@ -748,7 +742,6 @@ mod_init(struct module *const restrict m)
 
 	pcommand_add("SASL", m_sasl, 4, MSRC_SERVER);
 
-	/* override these */
 	pcommand_delete("B");
 	pcommand_delete("N");
 	pcommand_delete("M");
@@ -759,7 +752,7 @@ mod_init(struct module *const restrict m)
 	pcommand_add("B", m_burst, 2, MSRC_SERVER);
 	pcommand_add("N", m_nick, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("M", m_mode, 2, MSRC_USER | MSRC_SERVER);
-	pcommand_add("OM", m_mode, 2, MSRC_USER); /* OPMODE, treat as MODE */
+	pcommand_add("OM", m_mode, 2, MSRC_USER);
 	pcommand_add("CM", m_clearmode, 2, MSRC_USER);
 	pcommand_add("T", m_topic, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("AC", m_account, 2, MSRC_SERVER);

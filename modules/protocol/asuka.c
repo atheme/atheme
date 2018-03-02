@@ -79,7 +79,7 @@ static const struct cmode asuka_user_mode_list[] = {
 
 static void check_hidehost(struct user *u);
 
-/* NOTICE wrapper */
+// NOTICE wrapper
 static void
 asuka_notice_channel_sts(struct user *from, struct channel *target, const char *text)
 {
@@ -111,7 +111,7 @@ asuka_wallchops(struct user *sender, struct channel *channel, const char *messag
 	sts("%s WC %s :%s", sender->uid, channel->name, message);
 }
 
-/* protocol-specific stuff to do on login */
+// protocol-specific stuff to do on login
 static void
 asuka_on_login(struct user *u, struct myuser *account, const char *wantedhost)
 {
@@ -141,7 +141,7 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 	char *p;
 	int i;
 
-	/* got the right number of args for an introduction? */
+	// got the right number of args for an introduction?
 	if (parc >= 8)
 	{
 		/* -> AB N jilles 1 1137687480 jilles jaguar.test +oiwgrx jilles B]AAAB ABAAE :Jilles Tjoelker */
@@ -163,9 +163,11 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 				if (p != NULL)
 					*p++ = '\0';
 				handle_burstlogin(u, parv[5+i], p ? atol(p) : 0);
-				/* killed to force logout? */
+
+				// killed to force logout?
 				if (user_find(parv[parc - 2]) == NULL)
 					return;
+
 				i++;
 			}
 			if (strchr(parv[5], 'h'))
@@ -196,14 +198,15 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 			if (strchr(parv[5], 'x'))
 			{
 				u->flags |= UF_HIDEHOSTREQ;
-				/* this must be after setting the account name */
+
+				// this must be after setting the account name
 				check_hidehost(u);
 			}
 		}
 
 		handle_nickchange(u);
 	}
-	/* if it's only 2 then it's a nickname change */
+	// if it's only 2 then it's a nickname change
 	else if (parc == 2)
 	{
 		if (!si->su)
@@ -238,7 +241,7 @@ m_mode(struct sourceinfo *si, int parc, char *parv[])
 		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
 	else
 	{
-		/* Yes this is a nick and not a UID -- jilles */
+		// Yes this is a nick and not a UID -- jilles
 		u = user_find_named(parv[0]);
 		if (u == NULL)
 		{
@@ -255,7 +258,7 @@ m_mode(struct sourceinfo *si, int parc, char *parv[])
 		{
 			if (parc > 2)
 			{
-				/* assume +h */
+				// assume +h
 				p = strchr(parv[2], '@');
 				if (p == NULL)
 				{
@@ -282,14 +285,14 @@ m_mode(struct sourceinfo *si, int parc, char *parv[])
 			}
 			else
 			{
-				/* must be -h */
-				/* XXX we don't know the original ident */
+				// must be -h
+				// XXX we don't know the original ident
 				slog(LG_DEBUG, "m_mode(): user %s turning off vhost", u->nick);
 
 				strshare_unref(u->vhost);
 				u->vhost = strshare_get(u->host);
 
-				/* revert to +x vhost if applicable */
+				// revert to +x vhost if applicable
 				check_hidehost(u);
 			}
 		}
@@ -302,10 +305,10 @@ check_hidehost(struct user *u)
 	static bool warned = false;
 	char buf[HOSTLEN + 1];
 
-	/* do they qualify? */
+	// do they qualify?
 	if (!(u->flags & UF_HIDEHOSTREQ) || u->myuser == NULL || (u->myuser->flags & MU_WAITAUTH))
 		return;
-	/* don't use this if they have some other kind of vhost */
+	// don't use this if they have some other kind of vhost
 	if (strcmp(u->host, u->vhost))
 	{
 		slog(LG_DEBUG, "check_hidehost(): +x overruled by other vhost for %s", u->nick);
@@ -334,7 +337,7 @@ mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/p10-generic");
 
-	/* Symbol relocation voodoo. */
+	// Symbol relocation voodoo.
 	notice_channel_sts = &asuka_notice_channel_sts;
 	wallchops = &asuka_wallchops;
 	ircd_on_login = &asuka_on_login;
@@ -349,13 +352,13 @@ mod_init(struct module *const restrict m)
 
 	ircd = &Asuka;
 
-	/* override these */
+	// override these
 	pcommand_delete("N");
 	pcommand_delete("M");
 	pcommand_delete("OM");
 	pcommand_add("N", m_nick, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("M", m_mode, 2, MSRC_USER | MSRC_SERVER);
-	pcommand_add("OM", m_mode, 2, MSRC_USER); /* OPMODE, treat as MODE */
+	pcommand_add("OM", m_mode, 2, MSRC_USER); // OPMODE, treat as MODE
 
 	m->mflags = MODTYPE_CORE;
 

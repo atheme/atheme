@@ -55,7 +55,7 @@ static const struct cmode seven_mode_list[] = {
   { 'M', CMODE_IMMUNE },
   { 'C', CMODE_NOCTCP },
 
-  /* following modes are added as extensions */
+  // following modes are added as extensions
   { 'N', CMODE_NPC	 },
   { 'S', CMODE_SSLONLY	 },
   { 'O', CMODE_OPERONLY  },
@@ -91,9 +91,11 @@ seven_is_valid_hostslash(const char *host)
 					(*p >= 'a' && *p <= 'z') || *p == '-'))
 			return false;
 	}
-	/* hyperion allows a trailing / but RichiH does not want it, whatever */
+
+	// hyperion allows a trailing / but RichiH does not want it, whatever
 	if (dot && p[-1] == '/')
 		return false;
+
 	return dot;
 }
 
@@ -106,28 +108,27 @@ seven_wallops_sts(const char *reason)
 /* The following m_functions are copied from generic_ts6, with additions to handle the
  * "identified" / "owns this nick" flag.
  */
-
 static void
 m_euid(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct server *s;
 	struct user *u;
 
-	/* got the right number of args for an introduction? */
+	// got the right number of args for an introduction?
 	if (parc >= 11)
 	{
 		s = si->s;
 		slog(LG_DEBUG, "m_euid(): new user on `%s': %s", s->name, parv[0]);
 
-		u = user_add(parv[0],				/* nick */
-			parv[4],				/* user */
-			*parv[8] != '*' ? parv[8] : parv[5],	/* hostname */
-			parv[5],				/* hostname (visible) */
-			parv[6],				/* ip */
-			parv[7],				/* uid */
-			parv[parc - 1],				/* gecos */
-			s,					/* object parent (server) */
-			atoi(parv[2]));				/* hopcount */
+		u = user_add(parv[0],				// nick
+			parv[4],				// user
+			*parv[8] != '*' ? parv[8] : parv[5],	// hostname
+			parv[5],				// hostname (visible)
+			parv[6],				// ip
+			parv[7],				// uid
+			parv[parc - 1],				// gecos
+			s,					// object parent (server)
+			atoi(parv[2]));				// hopcount
 		if (u == NULL)
 			return;
 
@@ -135,6 +136,7 @@ m_euid(struct sourceinfo *si, int parc, char *parv[])
 		if (*parv[9] != '*')
 		{
 			handle_burstlogin(u, parv[9], 0);
+
 			/* If an account is given in burst, then either they logged in with sasl,
 			 * or they logged in before a split and are now returning. Either way we need
 			 * to check for identified-to-nick status and update the ircd state accordingly.
@@ -169,7 +171,7 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 	struct server *s;
 	struct user *u;
 
-	/* got the right number of args for an introduction? */
+	// got the right number of args for an introduction?
 	if (parc == 8)
 	{
 		s = server_find(parv[6]);
@@ -193,7 +195,7 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 			handle_nickchange(user_find(parv[0]));
 	}
 
-	/* if it's only 2 then it's a nickname change */
+	// if it's only 2 then it's a nickname change
 	else if (parc == 2)
 	{
 		bool realchange;
@@ -211,9 +213,9 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 		if (user_changenick(si->su, parv[0], atoi(parv[1])))
 			return;
 
-		/* fix up +e if necessary -- jilles */
+		// fix up +e if necessary -- jilles
 		if (realchange && should_reg_umode(si->su))
-			/* changed nick to registered one, reset +e */
+			// changed nick to registered one, reset +e
 			sts(":%s ENCAP * IDENTIFIED %s %s", ME, CLIENT_NAME(si->su), si->su->nick);
 
 		/* It could happen that our PING arrived late and the
@@ -232,7 +234,6 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-/* protocol-specific stuff to do on login */
 static void
 seven_on_login(struct user *u, struct myuser *mu, const char *wantedhost)
 {

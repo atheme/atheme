@@ -69,7 +69,6 @@ static const struct cmode ircnet_user_mode_list[] = {
   { '\0', 0 }
 };
 
-/* login to our uplink */
 static unsigned int
 ircnet_server_login(void)
 {
@@ -90,7 +89,6 @@ ircnet_server_login(void)
 	return 0;
 }
 
-/* introduce a client */
 static
 void ircnet_introduce_nick(struct user *u)
 {
@@ -99,18 +97,18 @@ void ircnet_introduce_nick(struct user *u)
 	sts(":%s UNICK %s %s %s %s 0.0.0.0 %s :%s", me.numeric, u->nick, u->uid, u->user, u->host, umode, u->gecos);
 }
 
-/* invite a user to a channel */
 static void
 ircnet_invite_sts(struct user *sender, struct user *target, struct channel *channel)
 {
 	int joined = 0;
 
-	/* Need to join to invite -- jilles */
+	// Need to join to invite -- jilles
 	if (!chanuser_find(channel, sender))
 	{
 		sts(":%s NJOIN %s :@%s", ME, channel->name, CLIENT_NAME(sender));
 		joined = 1;
 	}
+
 	/* ircnet's UID implementation is incomplete, in many places,
 	 * like this one, it does not accept UIDs -- jilles */
 	sts(":%s INVITE %s %s", CLIENT_NAME(sender), target->nick, channel->name);
@@ -124,7 +122,6 @@ ircnet_quit_sts(struct user *u, const char *reason)
 	sts(":%s QUIT :%s", u->nick, reason);
 }
 
-/* join a channel */
 static void
 ircnet_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
 {
@@ -133,7 +130,6 @@ ircnet_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
 		sts(":%s MODE %s %s", me.numeric, c->name, modes);
 }
 
-/* kicks a user from a channel */
 static void
 ircnet_kick(struct user *source, struct channel *c, struct user *u, const char *reason)
 {
@@ -144,7 +140,6 @@ ircnet_kick(struct user *source, struct channel *c, struct user *u, const char *
 	chanuser_delete(c, u);
 }
 
-/* PRIVMSG wrapper */
 static void ATHEME_FATTR_PRINTF(3, 4)
 ircnet_msg(const char *from, const char *target, const char *fmt, ...)
 {
@@ -176,7 +171,6 @@ ircnet_msg_global_sts(struct user *from, const char *mask, const char *text)
 		sts(":%s PRIVMSG %s%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, mask, text);
 }
 
-/* NOTICE wrapper */
 static void
 ircnet_notice_user_sts(struct user *from, struct user *target, const char *text)
 {
@@ -210,7 +204,6 @@ ircnet_notice_channel_sts(struct user *from, struct channel *target, const char 
 		sts(":%s NOTICE %s :[%s:%s] %s", ME, target->name, from->nick, target->name, text);
 }
 
-/* numeric wrapper */
 static void ATHEME_FATTR_PRINTF(4, 5)
 ircnet_numeric_sts(struct server *from, int numeric, struct user *target, const char *fmt, ...)
 {
@@ -221,11 +214,10 @@ ircnet_numeric_sts(struct server *from, int numeric, struct user *target, const 
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	/* if we were to use SID/UID here, the user would see SID/UID :( */
+	// if we were to use SID/UID here, the user would see SID/UID :(
 	sts(":%s %d %s %s", from->name, numeric, target->nick, buf);
 }
 
-/* KILL wrapper */
 static void
 ircnet_kill_id_sts(struct user *killer, const char *id, const char *reason)
 {
@@ -235,21 +227,18 @@ ircnet_kill_id_sts(struct user *killer, const char *id, const char *reason)
 		sts(":%s KILL %s :%s (%s)", ME, id, me.name, reason);
 }
 
-/* PART wrapper */
 static void
 ircnet_part_sts(struct channel *c, struct user *u)
 {
 	sts(":%s PART %s", u->nick, c->name);
 }
 
-/* server-to-server KLINE wrapper */
 static void
 ircnet_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
 	struct service *svs;
 
-	/* this won't propagate!
-	 * you'll need some bot/service on each server to do that */
+	// this won't propagate! you'll need some bot/service on each server to do that
 	if (irccasecmp(server, me.actual) && cnt.server > 2)
 		wallops("Missed a tkline");
 
@@ -257,7 +246,6 @@ ircnet_kline_sts(const char *server, const char *user, const char *host, long du
 	sts(":%s TKLINE %lds %s@%s :%s", svs != NULL ? CLIENT_NAME(svs->me) : me.actual, duration, user, host, reason);
 }
 
-/* server-to-server UNKLINE wrapper */
 static void
 ircnet_unkline_sts(const char *server, const char *user, const char *host)
 {
@@ -270,7 +258,6 @@ ircnet_unkline_sts(const char *server, const char *user, const char *host)
 	sts(":%s UNTKLINE %s@%s", svs != NULL ? CLIENT_NAME(svs->me) : me.actual, user, host);
 }
 
-/* topic wrapper */
 static void
 ircnet_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
@@ -278,7 +265,7 @@ ircnet_topic_sts(struct channel *c, struct user *source, const char *setter, tim
 
 	return_if_fail(c != NULL);
 
-	/* Need to join to set topic -- jilles */
+	// Need to join to set topic -- jilles
 	if (!chanuser_find(c, source))
 	{
 		sts(":%s NJOIN %s :@%s", ME, c->name, CLIENT_NAME(source));
@@ -290,7 +277,6 @@ ircnet_topic_sts(struct channel *c, struct user *source, const char *setter, tim
 				CLIENT_NAME(source), c->name, setter);
 }
 
-/* mode wrapper */
 static void
 ircnet_mode_sts(char *sender, struct channel *target, char *modes)
 {
@@ -302,31 +288,25 @@ ircnet_mode_sts(char *sender, struct channel *target, char *modes)
 
 	u = user_find(sender);
 
-	/* send it from the server if that service isn't on channel
-	 * -- jilles */
+	// send it from the server if that service isn't on channel -- jilles */
 	sts(":%s MODE %s %s", chanuser_find(target, u) ? CLIENT_NAME(u) : ME, target->name, modes);
 }
 
-/* ping wrapper */
 static void
 ircnet_ping_sts(void)
 {
 	sts("PING :%s", me.name);
 }
 
-/* protocol-specific stuff to do on login */
 static void
 ircnet_on_login(struct user *u, struct myuser *account, const char *wantedhost)
 {
-	/* nothing to do on ratbox */
 	return;
 }
 
-/* protocol-specific stuff to do on login */
 static bool
 ircnet_on_logout(struct user *u, const char *account)
 {
-	/* nothing to do on ratbox */
 	return false;
 }
 
@@ -342,14 +322,15 @@ ircnet_jupe(const char *server, const char *reason)
 	sts(":%s SQUIT %s :%s", svs != NULL ? CLIENT_NAME(svs->me) : me.actual, server, reason);
 
 	s = server_find(server);
-	/* We need to wait for the SQUIT to be processed -- jilles */
+
+	// We need to wait for the SQUIT to be processed -- jilles
 	if (s != NULL)
 	{
 		s->flags |= SF_JUPE_PENDING;
 		return;
 	}
 
-	/* dirty dirty make up some sid */
+	// dirty dirty make up some sid
 	if (sid[0] == '\0')
 		mowgli_strlcpy(sid, me.numeric, sizeof sid);
 	do
@@ -361,9 +342,11 @@ ircnet_jupe(const char *server, const char *reason)
 			{
 				sid[i] = '0';
 				i--;
-				/* eek, no more sids */
+
+				// eek, no more sids
 				if (i < 0)
 					return;
+
 				continue;
 			}
 			else if (sid[i] == '9')
@@ -390,20 +373,20 @@ m_topic(struct sourceinfo *si, int parc, char *parv[])
 static void
 m_ping(struct sourceinfo *si, int parc, char *parv[])
 {
-	/* reply to PING's */
+	// reply to PINGs
 	sts(":%s PONG %s %s", me.name, me.name, parv[0]);
 }
 
 static void
 m_pong(struct sourceinfo *si, int parc, char *parv[])
 {
-	/* someone replied to our PING */
+	// someone replied to our PING
 	if ((!parv[0]) || (strcasecmp(me.actual, parv[0])))
 		return;
 
 	me.uplinkpong = CURRTIME;
 
-	/* -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net */
+	// -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net
 }
 
 static void
@@ -477,13 +460,16 @@ m_njoin(struct sourceinfo *si, int parc, char *parv[])
 	if (!c)
 	{
 		slog(LG_DEBUG, "m_njoin(): new channel: %s", parv[0]);
+
 		/* Give channels created during burst an older "TS"
 		 * so they won't be deopped -- jilles */
 		c = channel_add(parv[0], si->s->flags & SF_EOB ? CURRTIME : CURRTIME - 601, si->s);
-		/* if !/+ channel, we don't want to do anything with it */
+
+		// if !/+ channel, we don't want to do anything with it
 		if (c == NULL)
 			return;
-		/* Check mode locks */
+
+		// Check mode locks
 		channel_mode_va(NULL, c, 1, "+");
 	}
 
@@ -517,7 +503,7 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u;
 
-	/* got the right number of args for an introduction? */
+	// got the right number of args for an introduction?
 	if (parc == 7)
 	{
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", si->s->name, parv[0]);
@@ -532,8 +518,7 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 
 		handle_nickchange(u);
 	}
-
-	/* if it's only 1 then it's a nickname change */
+	// if it's only 1 then it's a nickname change
 	else if (parc == 1)
 	{
 		if (!si->su)
@@ -576,7 +561,7 @@ m_save(struct sourceinfo *si, int parc, char *parv[])
 	{
 		slog(LG_INFO, "m_save(): service %s got hit, changing back", u->nick);
 		sts(":%s NICK %s", u->uid, u->nick);
-		/* XXX services wars */
+		// XXX services wars
 	}
 	else
 	{
@@ -594,7 +579,7 @@ m_quit(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
 
-	/* user_delete() takes care of removing channels and so forth */
+	// user_delete() takes care of removing channels and so forth
 	user_delete(si->su, parv[0]);
 }
 
@@ -621,7 +606,7 @@ m_kick(struct sourceinfo *si, int parc, char *parv[])
 	struct user *u = user_find(parv[1]);
 	struct channel *c = channel_find(parv[0]);
 
-	/* -> :rakaur KICK #shrike rintaun :test */
+	// -> :rakaur KICK #shrike rintaun :test
 	slog(LG_DEBUG, "m_kick(): user was kicked: %s -> %s", parv[1], parv[0]);
 
 	if (!u)
@@ -644,7 +629,7 @@ m_kick(struct sourceinfo *si, int parc, char *parv[])
 
 	chanuser_delete(c, u);
 
-	/* if they kicked us, let's rejoin */
+	// if they kicked us, let's rejoin
 	if (is_internal_client(u))
 	{
 		slog(LG_DEBUG, "m_kick(): %s got kicked from %s; rejoining", u->nick, parv[0]);
@@ -731,7 +716,7 @@ m_join(struct sourceinfo *si, int parc, char *parv[])
 	struct chanuser *cu;
 	mowgli_node_t *n, *tn;
 
-	/* JOIN 0 is really a part from all channels */
+	// JOIN 0 is really a part from all channels
 	if (parv[0][0] == '0')
 	{
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, si->su->channels.head)
@@ -771,7 +756,6 @@ mod_init(struct module *const restrict m)
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/base36uid");
 
-	/* Symbol relocation voodoo. */
 	server_login = &ircnet_server_login;
 	introduce_nick = &ircnet_introduce_nick;
 	quit_sts = &ircnet_quit_sts;
@@ -782,7 +766,6 @@ mod_init(struct module *const restrict m)
 	notice_user_sts = &ircnet_notice_user_sts;
 	notice_global_sts = &ircnet_notice_global_sts;
 	notice_channel_sts = &ircnet_notice_channel_sts;
-	/* no wallchops, ircnet ircd does not support this */
 	numeric_sts = &ircnet_numeric_sts;
 	kill_id_sts = &ircnet_kill_id_sts;
 	part_sts = &ircnet_part_sts;

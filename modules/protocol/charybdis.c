@@ -52,7 +52,7 @@ static const struct cmode charybdis_mode_list[] = {
   { 'F', CMODE_FTARGET},
   { 'Q', CMODE_DISFWD },
 
-  /* following modes are added as extensions */
+  // following modes are added as extensions
   { 'N', CMODE_NPC	 },
   { 'S', CMODE_SSLONLY	 },
   { 'O', CMODE_OPERONLY  },
@@ -62,15 +62,6 @@ static const struct cmode charybdis_mode_list[] = {
   { 'T', CMODE_NONOTICE  },
   { 'M', CMODE_IMMUNE	 },
 
-  { '\0', 0 }
-};
-
-static bool check_forward(const char *, struct channel *, struct mychan *, struct user *, struct myuser *);
-static bool check_jointhrottle(const char *, struct channel *, struct mychan *, struct user *, struct myuser *);
-
-static struct extmode charybdis_ignore_mode_list[] = {
-  { 'f', check_forward },
-  { 'j', check_jointhrottle },
   { '\0', 0 }
 };
 
@@ -156,9 +147,15 @@ check_jointhrottle(const char *value, struct channel *c, struct mychan *mc, stru
 	return true;
 }
 
-/* this may be slow, but it is not used much */
-/* returns true if it matches, false if not */
-/* note that the host part matches differently from a regular ban */
+static struct extmode charybdis_ignore_mode_list[] = {
+  { 'f', check_forward },
+  { 'j', check_jointhrottle },
+  { '\0', 0 }
+};
+
+/* this may be slow, but it is not used much
+ * returns true if it matches, false if not
+ * note that the host part matches differently from a regular ban */
 static bool
 extgecos_match(const char *mask, struct user *u)
 {
@@ -186,7 +183,8 @@ charybdis_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_
 
 	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
 	snprintf(realbuf, sizeof realbuf, "%s!%s@%s", u->nick, u->user, u->host);
-	/* will be nick!user@ if ip unknown, doesn't matter */
+
+	// will be nick!user@ if ip unknown, doesn't matter
 	snprintf(ipbuf, sizeof ipbuf, "%s!%s@%s", u->nick, u->user, u->ip);
 
 	MOWGLI_ITER_FOREACH(n, first)
@@ -219,9 +217,11 @@ charybdis_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_
 			exttype = *p++;
 			if (exttype == '\0')
 				continue;
-			/* check parameter */
+
+			// check parameter
 			if (*p++ != ':')
 				p = NULL;
+
 			switch (exttype)
 			{
 				case 'a':
@@ -299,12 +299,14 @@ charybdis_is_extban(const char *mask)
 	if (mask_len > 2 && mask[1] == '~')
 		offset = 1;
 
-	/* e.g. $a and $~a */
+	// e.g. $a and $~a
 	if ((mask_len == 2 + offset) && strchr(without_param, mask[1 + offset]))
 		return true;
-	/* e.g. $~a:Shutter and $~a:Shutter */
+
+	// e.g. $~a:Shutter and $~a:Shutter
 	else if ((mask_len >= 3 + offset) && mask[2 + offset] == ':' && strchr(with_param, mask[1 + offset]))
 		return true;
+
 	return false;
 }
 

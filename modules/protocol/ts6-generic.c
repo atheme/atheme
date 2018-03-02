@@ -43,10 +43,15 @@ static bool use_euid = false;
 static bool use_eopmod = false;
 static bool use_mlock = false;
 
-static void server_eob(struct server *s);
-static struct server *sid_find(const char *name);
-
 static char ts6sid[3 + 1] = "";
+
+static struct server *
+sid_find(const char *name)
+{
+	char sid[4];
+	mowgli_strlcpy(sid, name, 4);
+	return server_find(sid);
+}
 
 static bool
 ts6_is_valid_host(const char *host)
@@ -61,7 +66,6 @@ ts6_is_valid_host(const char *host)
 	return true;
 }
 
-/* login to our uplink */
 static unsigned int
 ts6_server_login(void)
 {
@@ -94,7 +98,6 @@ ts6_server_login(void)
 	return 0;
 }
 
-/* introduce a client */
 static void
 ts6_introduce_nick(struct user *u)
 {
@@ -108,7 +111,6 @@ ts6_introduce_nick(struct user *u)
 		sts("NICK %s 1 %lu %s %s %s %s :%s", u->nick, (unsigned long)u->ts, umode, u->user, u->host, me.name, u->gecos);
 }
 
-/* invite a user to a channel */
 static void
 ts6_invite_sts(struct user *sender, struct user *target, struct channel *channel)
 {
@@ -121,14 +123,12 @@ ts6_quit_sts(struct user *u, const char *reason)
 	sts(":%s QUIT :%s", CLIENT_NAME(u), reason);
 }
 
-/* WALLOPS wrapper */
 static void
 ts6_wallops_sts(const char *text)
 {
 	sts(":%s WALLOPS :%s", ME, text);
 }
 
-/* join a channel */
 static void
 ts6_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
 {
@@ -151,7 +151,6 @@ ts6_chan_lowerts(struct channel *c, struct user *u)
 		chanban_clear(c);
 }
 
-/* kicks a user from a channel */
 static void
 ts6_kick(struct user *source, struct channel *c, struct user *u, const char *reason)
 {
@@ -163,7 +162,6 @@ ts6_kick(struct user *source, struct channel *c, struct user *u, const char *rea
 	chanuser_delete(c, u);
 }
 
-/* PRIVMSG wrapper */
 static void ATHEME_FATTR_PRINTF(3, 4)
 ts6_msg(const char *from, const char *target, const char *fmt, ...)
 {
@@ -207,7 +205,6 @@ ts6_msg_global_sts(struct user *from, const char *mask, const char *text)
 		sts(":%s PRIVMSG %s%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, mask, text);
 }
 
-/* NOTICE wrapper */
 static void
 ts6_notice_user_sts(struct user *from, struct user *target, const char *text)
 {
@@ -247,11 +244,10 @@ ts6_wallchops(struct user *sender, struct channel *channel, const char *message)
 	if (chanuser_find(channel, sender))
 		sts(":%s NOTICE @%s :%s", CLIENT_NAME(sender), channel->name,
 				message);
-	else /* do not join for this, everyone would see -- jilles */
+	else // do not join for this, everyone would see -- jilles
 		generic_wallchops(sender, channel, message);
 }
 
-/* numeric wrapper */
 static void ATHEME_FATTR_PRINTF(4, 5)
 ts6_numeric_sts(struct server *from, int numeric, struct user *target, const char *fmt, ...)
 {
@@ -265,7 +261,6 @@ ts6_numeric_sts(struct server *from, int numeric, struct user *target, const cha
 	sts(":%s %d %s %s", SERVER_NAME(from), numeric, CLIENT_NAME(target), buf);
 }
 
-/* KILL wrapper */
 static void
 ts6_kill_id_sts(struct user *killer, const char *id, const char *reason)
 {
@@ -275,14 +270,12 @@ ts6_kill_id_sts(struct user *killer, const char *id, const char *reason)
 		sts(":%s KILL %s :%s (%s)", ME, id, me.name, reason);
 }
 
-/* PART wrapper */
 static void
 ts6_part_sts(struct channel *c, struct user *u)
 {
 	sts(":%s PART %s", CLIENT_NAME(u), c->name);
 }
 
-/* server-to-server KLINE wrapper */
 static void
 ts6_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
@@ -292,7 +285,6 @@ ts6_kline_sts(const char *server, const char *user, const char *host, long durat
 	sts(":%s ENCAP %s KLINE %ld %s %s :%s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, duration, user, host, reason);
 }
 
-/* server-to-server UNKLINE wrapper */
 static void
 ts6_unkline_sts(const char *server, const char *user, const char *host)
 {
@@ -302,7 +294,6 @@ ts6_unkline_sts(const char *server, const char *user, const char *host)
 	sts(":%s ENCAP %s UNKLINE %s %s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, user, host);
 }
 
-/* server-to-server XLINE wrapper */
 static void
 ts6_xline_sts(const char *server, const char *realname, long duration, const char *reason)
 {
@@ -312,7 +303,6 @@ ts6_xline_sts(const char *server, const char *realname, long duration, const cha
 	sts(":%s ENCAP %s XLINE %ld %s 2 :%s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, duration, realname, reason);
 }
 
-/* server-to-server UNXLINE wrapper */
 static void
 ts6_unxline_sts(const char *server, const char *realname)
 {
@@ -322,7 +312,6 @@ ts6_unxline_sts(const char *server, const char *realname)
 	sts(":%s ENCAP %s UNXLINE %s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, realname);
 }
 
-/* server-to-server QLINE wrapper */
 static void
 ts6_qline_sts(const char *server, const char *name, long duration, const char *reason)
 {
@@ -332,7 +321,6 @@ ts6_qline_sts(const char *server, const char *name, long duration, const char *r
 	sts(":%s ENCAP %s RESV %ld %s 0 :%s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, duration, name, reason);
 }
 
-/* server-to-server UNQLINE wrapper */
 static void
 ts6_unqline_sts(const char *server, const char *name)
 {
@@ -342,7 +330,6 @@ ts6_unqline_sts(const char *server, const char *name)
 	sts(":%s ENCAP %s UNRESV %s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, name);
 }
 
-/* server-to-server DLINE wrapper */
 static void
 ts6_dline_sts(const char *server, const char *host, long duration, const char *reason)
 {
@@ -352,7 +339,6 @@ ts6_dline_sts(const char *server, const char *host, long duration, const char *r
 	sts(":%s ENCAP %s DLINE %ld %s :%s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, duration, host, reason);
 }
 
-/* server-to-server UNDLINE wrapper */
 static void
 ts6_undline_sts(const char *server, const char *host)
 {
@@ -362,7 +348,6 @@ ts6_undline_sts(const char *server, const char *host)
 	sts(":%s ENCAP %s UNDLINE %s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, host);
 }
 
-/* topic wrapper */
 static void
 ts6_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
@@ -371,7 +356,7 @@ ts6_topic_sts(struct channel *c, struct user *source, const char *setter, time_t
 	return_if_fail(c != NULL);
 	return_if_fail(source != NULL);
 
-	/* If possible, try to use ETB */
+	// If possible, try to use ETB
 	if (use_eopmod && (c->ts > 0 || ts > prevts))
 	{
 		sts(":%s ETB 0 %s %lu %s :%s",
@@ -386,7 +371,7 @@ ts6_topic_sts(struct channel *c, struct user *source, const char *setter, time_t
 	 * -- jilles */
 	if (use_tb && *topic != '\0')
 	{
-		/* Restoring old topic */
+		// Restoring old topic
 		if (ts < prevts || prevts == 0)
 		{
 			if (prevts != 0 && ts + 60 > prevts)
@@ -395,7 +380,7 @@ ts6_topic_sts(struct channel *c, struct user *source, const char *setter, time_t
 			c->topicts = ts;
 			return;
 		}
-		/* Tweaking a topic */
+		// Tweaking a topic
 		else if (ts == prevts)
 		{
 			ts -= 60;
@@ -404,6 +389,7 @@ ts6_topic_sts(struct channel *c, struct user *source, const char *setter, time_t
 			return;
 		}
 	}
+
 	/* We have to be on channel to change topic.
 	 * We cannot nicely change topic from the server:
 	 * :server.name TOPIC doesn't propagate and TB requires
@@ -422,7 +408,6 @@ ts6_topic_sts(struct channel *c, struct user *source, const char *setter, time_t
 	c->topicts = CURRTIME;
 }
 
-/* mode wrapper */
 static void
 ts6_mode_sts(char *sender, struct channel *target, char *modes)
 {
@@ -442,14 +427,12 @@ ts6_mode_sts(char *sender, struct channel *target, char *modes)
 		sts(":%s MODE %s %s", CLIENT_NAME(u), target->name, modes);
 }
 
-/* ping wrapper */
 static void
 ts6_ping_sts(void)
 {
 	sts("PING :%s", me.name);
 }
 
-/* protocol-specific stuff to do on login */
 static void
 ts6_on_login(struct user *u, struct myuser *mu, const char *wantedhost)
 {
@@ -461,7 +444,6 @@ ts6_on_login(struct user *u, struct myuser *mu, const char *wantedhost)
 	sts(":%s ENCAP * SU %s %s", ME, CLIENT_NAME(u), entity(mu)->name);
 }
 
-/* protocol-specific stuff to do on login */
 static bool
 ts6_on_logout(struct user *u, const char *account)
 {
@@ -502,7 +484,7 @@ ts6_sethost_sts(struct user *source, struct user *target, const char *host)
 static void
 ts6_fnc_sts(struct user *source, struct user *u, const char *newnick, int type)
 {
-	/* XXX assumes the server will accept this -- jilles */
+	// XXX assumes the server will accept this -- jilles
 	sts(":%s ENCAP %s RSFNC %s %s %lu %lu", ME,
 			u->server->name,
 			CLIENT_NAME(u), newnick,
@@ -518,7 +500,7 @@ ts6_svslogin_sts(char *target, char *nick, char *user, char *host, struct myuser
 
 	if(tu)
 		s = tu->server;
-	else if(ircd->uses_uid) /* Non-announced UID - must be a SASL client. */
+	else if(ircd->uses_uid) // Non-announced UID - must be a SASL client.
 		s = sid_find(target);
 	else
 		return;
@@ -564,7 +546,7 @@ ts6_holdnick_sts(struct user *source, int duration, const char *nick, struct myu
 	else
 	{
 		if (duration == 0)
-			return; /* can't do this safely */
+			return; // can't do this safely
 		sts(":%s ENCAP * RESV %d %s 0 :Reserved by %s for nickname owner (%s)",
 				CLIENT_NAME(source), duration > 300 ? 300 : duration,
 				nick, source->nick,
@@ -594,7 +576,7 @@ m_mlock(struct sourceinfo *si, int parc, char *parv[])
 	struct mychan *mc;
 	const char *mlock;
 
-	/* Ignore MLOCK if the server isn't bursting, to avoid 'war' conditions */
+	// Ignore MLOCK if the server isn't bursting, to avoid 'war' conditions
 	if (si->s->flags & SF_EOB)
 		return;
 
@@ -603,7 +585,7 @@ m_mlock(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!(mc = mychan_from(c)))
 	{
-		/* Unregistered channel. Clear the MLOCK. */
+		// Unregistered channel. Clear the MLOCK.
 		sts(":%s MLOCK %lu %s :", ME, (unsigned long)c->ts, c->name);
 		return;
 	}
@@ -615,7 +597,7 @@ m_mlock(struct sourceinfo *si, int parc, char *parv[])
 	mlock = mychan_get_sts_mlock(mc);
 	if (0 != strcmp(parv[2], mlock))
 	{
-		/* MLOCK is changing, with the same TS. Bounce back the correct one. */
+		// MLOCK is changing, with the same TS. Bounce back the correct one.
 		sts(":%s MLOCK %lu %s :%s", ME, (unsigned long)c->ts, c->name,
 				mlock);
 	}
@@ -676,7 +658,7 @@ m_etb(struct sourceinfo *si, int parc, char *parv[])
 static void
 m_ping(struct sourceinfo *si, int parc, char *parv[])
 {
-	/* reply to PING's */
+	// reply to PINGs
 	sts(":%s PONG %s %s", ME, me.name, parv[0]);
 }
 
@@ -685,7 +667,7 @@ m_pong(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct server *s;
 
-	/* someone replied to our PING */
+	// someone replied to our PING
 	if (!parv[0])
 		return;
 	s = server_find(parv[0]);
@@ -698,7 +680,7 @@ m_pong(struct sourceinfo *si, int parc, char *parv[])
 
 	me.uplinkpong = CURRTIME;
 
-	/* -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net */
+	// -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net
 	if (me.bursting)
 	{
 #ifdef HAVE_GETTIMEOFDAY
@@ -737,7 +719,7 @@ m_notice(struct sourceinfo *si, int parc, char *parv[])
 static void
 m_sjoin(struct sourceinfo *si, int parc, char *parv[])
 {
-	/* -> :proteus.malkier.net SJOIN 1073516550 #shrike +tn :@sycobuny @+rakaur */
+	// -> :proteus.malkier.net SJOIN 1073516550 #shrike +tn :@sycobuny @+rakaur
 
 	struct channel *c;
 	bool keep_new_modes = true;
@@ -747,7 +729,7 @@ m_sjoin(struct sourceinfo *si, int parc, char *parv[])
 	time_t ts;
 	char *p;
 
-	/* :origin SJOIN ts chan modestr [key or limits] :users */
+	// :origin SJOIN ts chan modestr [key or limits] :users
 	c = channel_find(parv[1]);
 	ts = atol(parv[0]);
 
@@ -787,7 +769,7 @@ m_sjoin(struct sourceinfo *si, int parc, char *parv[])
 			cu = (struct chanuser *)n->data;
 			if (cu->user->server == me.me)
 			{
-				/* it's a service, reop */
+				// it's a service, reop
 				sts(":%s PART %s :Reop", CLIENT_NAME(cu->user), c->name);
 				sts(":%s SJOIN %lu %s + :@%s", ME, (unsigned long)ts, c->name, CLIENT_NAME(cu->user));
 				cu->modes = CSTATUS_OP;
@@ -831,15 +813,15 @@ m_sjoin(struct sourceinfo *si, int parc, char *parv[])
 static void
 m_join(struct sourceinfo *si, int parc, char *parv[])
 {
-	/* -> :1JJAAAAAB JOIN 1127474195 #test +tn */
+	// -> :1JJAAAAAB JOIN 1127474195 #test +tn
 	bool keep_new_modes = true;
 	mowgli_node_t *n, *tn;
 	struct channel *c;
 	struct chanuser *cu;
 	time_t ts;
 
-	/* JOIN 0 is really a part from all channels */
-	/* be sure to allow joins to TS 0 channels -- jilles */
+	/* JOIN 0 is really a part from all channels
+	 * be sure to allow joins to TS 0 channels -- jilles */
 	if (parv[0][0] == '0' && parc <= 2)
 	{
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, si->su->channels.head)
@@ -850,7 +832,7 @@ m_join(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* :user JOIN ts chan modestr [key or limits] */
+	// :user JOIN ts chan modestr [key or limits]
 	c = channel_find(parv[1]);
 	ts = atol(parv[0]);
 
@@ -881,7 +863,7 @@ m_join(struct sourceinfo *si, int parc, char *parv[])
 			cu = (struct chanuser *)n->data;
 			if (cu->user->server == me.me)
 			{
-				/* it's a service, reop */
+				// it's a service, reop
 				sts(":%s PART %s :Reop", CLIENT_NAME(cu->user), c->name);
 				sts(":%s SJOIN %lu %s + :@%s", ME, (unsigned long)ts, c->name, CLIENT_NAME(cu->user));
 				cu->modes = CSTATUS_OP;
@@ -910,7 +892,7 @@ m_bmask(struct sourceinfo *si, int parc, char *parv[])
 	struct channel *c = channel_find(parv[1]);
 	int type;
 
-	/* :1JJ BMASK 1127474361 #services b :*!*@*evil* *!*eviluser1@* */
+	// :1JJ BMASK 1127474361 #services b :*!*@*evil* *!*eviluser1@*
 	if (!c)
 	{
 		slog(LG_DEBUG, "m_bmask(): got bmask for unknown channel");
@@ -955,7 +937,7 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 	struct server *s;
 	struct user *u;
 
-	/* got the right number of args for an introduction? */
+	// got the right number of args for an introduction?
 	if (parc == 8)
 	{
 		s = server_find(parv[6]);
@@ -981,7 +963,7 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 			handle_nickchange(user_find(parv[0]));
 	}
 
-	/* if it's only 2 then it's a nickname change */
+	// if it's only 2 then it's a nickname change
 	else if (parc == 2)
 	{
 		if (!si->su)
@@ -1017,7 +999,7 @@ m_uid(struct sourceinfo *si, int parc, char *parv[])
 	struct server *s;
 	struct user *u;
 
-	/* got the right number of args for an introduction? */
+	// got the right number of args for an introduction?
 	if (parc == 9)
 	{
 		s = si->s;
@@ -1053,25 +1035,26 @@ m_euid(struct sourceinfo *si, int parc, char *parv[])
 	struct server *s;
 	struct user *u;
 
-	/* got the right number of args for an introduction? */
+	// got the right number of args for an introduction?
 	if (parc >= 11)
 	{
 		s = si->s;
 		slog(LG_DEBUG, "m_euid(): new user on `%s': %s", s->name, parv[0]);
 
-		u = user_add(parv[0],				/* nick */
-			parv[4],				/* user */
-			*parv[8] != '*' ? parv[8] : parv[5],	/* hostname */
-			parv[5],				/* hostname (visible) */
-			parv[6],				/* ip */
-			parv[7],				/* uid */
-			parv[parc - 1],				/* gecos */
-			s,					/* object parent (server) */
-			atoi(parv[2]));				/* hopcount */
+		u = user_add(parv[0],				// nick
+			parv[4],				// user
+			*parv[8] != '*' ? parv[8] : parv[5],	// hostname
+			parv[5],				// hostname (visible)
+			parv[6],				// ip
+			parv[7],				// uid
+			parv[parc - 1],				// gecos
+			s,					// object parent (server)
+			atoi(parv[2]));				// hopcount
 		if (u == NULL)
 			return;
 
 		user_mode(u, parv[3]);
+
 		/* Services cannot be kicked.
 		 * They are assumed not to set/clear oper immune.
 		 */
@@ -1102,7 +1085,7 @@ m_quit(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
 
-	/* user_delete() takes care of removing channels and so forth */
+	// user_delete() takes care of removing channels and so forth
 	user_delete(si->su, parv[0]);
 }
 
@@ -1120,7 +1103,7 @@ m_tmode(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c;
 
-	/* -> :1JJAAAAAB TMODE 1127511579 #new +o 2JJAAAAAB */
+	// -> :1JJAAAAAB TMODE 1127511579 #new +o 2JJAAAAAB
 	c = channel_find(parv[1]);
 	if (c == NULL)
 	{
@@ -1140,7 +1123,7 @@ m_kick(struct sourceinfo *si, int parc, char *parv[])
 	struct user *u = user_find(parv[1]);
 	struct channel *c = channel_find(parv[0]);
 
-	/* -> :rakaur KICK #shrike rintaun :test */
+	// -> :rakaur KICK #shrike rintaun :test
 	slog(LG_DEBUG, "m_kick(): user was kicked: %s -> %s", parv[1], parv[0]);
 
 	if (!u)
@@ -1163,7 +1146,7 @@ m_kick(struct sourceinfo *si, int parc, char *parv[])
 
 	chanuser_delete(c, u);
 
-	/* if they kicked us, let's rejoin */
+	// if they kicked us, let's rejoin
 	if (is_internal_client(u))
 	{
 		slog(LG_DEBUG, "m_kick(): %s got kicked from %s; rejoining", u->nick, parv[0]);
@@ -1204,7 +1187,7 @@ m_server(struct sourceinfo *si, int parc, char *parv[])
 static void
 m_sid(struct sourceinfo *si, int parc, char *parv[])
 {
-	/* -> :1JJ SID file. 2 00F :telnet server */
+	// -> :1JJ SID file. 2 00F :telnet server
 	struct server *s;
 
 	slog(LG_DEBUG, "m_sid(): new server: %s", parv[0]);
@@ -1301,7 +1284,7 @@ m_encap(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	if (!irccasecmp(parv[1], "LOGIN"))
 	{
-		/* :jilles ENCAP * LOGIN jilles */
+		// :jilles ENCAP * LOGIN jilles
 		if (!use_rserv_support)
 			return;
 		if (parc < 3)
@@ -1309,6 +1292,7 @@ m_encap(struct sourceinfo *si, int parc, char *parv[])
 		u = si->su;
 		if (u == NULL)
 			return;
+
 		/* We used to throw out LOGINs outside of a burst,
 		 * but we can't do that anymore since it's used for
 		 * SASL users.
@@ -1334,7 +1318,7 @@ m_encap(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else if (!irccasecmp(parv[1], "REALHOST"))
 	{
-		/* :1JJAAAAAC ENCAP * REALHOST localhost.stack.nl */
+		// :1JJAAAAAC ENCAP * REALHOST localhost.stack.nl
 		if (parc < 3)
 			return;
 		u = si->su;
@@ -1360,7 +1344,7 @@ m_encap(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else if (!irccasecmp(parv[1], "SASL"))
 	{
-		/* :08C ENCAP * SASL 08CAAAAAE * S d29vTklOSkFTAGRhdGEgaW4gZmlyc3QgbGluZQ== */
+		// :08C ENCAP * SASL 08CAAAAAE * S d29vTklOSkFTAGRhdGEgaW4gZmlyc3QgbGluZQ==
 		struct sasl_message smsg;
 
 		if (parc < 6)
@@ -1422,22 +1406,22 @@ m_signon(struct sourceinfo *si, int parc, char *parv[])
 	if((u = user_find(parv[0])) == NULL)
 		return;
 
-	/* NICK */
+	// NICK
 	if (user_changenick(u, parv[0], atoi(parv[3])))
 		return;
 
-	handle_nickchange(u); /* If they're logging out, this will bug them about identifying. Or something. */
+	handle_nickchange(u); // If they're logging out, this will bug them about identifying. Or something.
 
-	/* USER */
+	// USER
 	strshare_unref(u->user);
 	u->user = strshare_get(parv[1]);
 
-	/* HOST */
+	// HOST
 	strshare_unref(u->vhost);
 	u->vhost = strshare_get(parv[2]);
 
-	/* LOGIN */
-	if(*parv[4] == '*') /* explicitly unchanged */
+	// LOGIN
+	if(*parv[4] == '*') // explicitly unchanged
 		return;
 	if (!strcmp(parv[4], "0"))
 		handle_clearlogin(si, u);
@@ -1509,7 +1493,6 @@ m_motd(struct sourceinfo *si, int parc, char *parv[])
 	handle_motd(si->su);
 }
 
-/* Server ended their burst: warn all their users if necessary -- jilles */
 static void
 server_eob(struct server *s)
 {
@@ -1521,7 +1504,6 @@ server_eob(struct server *s)
 	}
 }
 
-/* Channel drop hook: clear MLOCK when a channel becomes unregistered. */
 static void
 channel_drop(struct mychan *mc)
 {
@@ -1535,21 +1517,12 @@ channel_drop(struct mychan *mc)
 			mc->chan->name);
 }
 
-static struct server *
-sid_find(const char *name)
-{
-	char sid[4];
-	mowgli_strlcpy(sid, name, 4);
-	return server_find(sid);
-}
-
 static void
 mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/base36uid");
 
-	/* Symbol relocation voodoo. */
 	server_login = &ts6_server_login;
 	introduce_nick = &ts6_introduce_nick;
 	quit_sts = &ts6_quit_sts;

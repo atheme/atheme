@@ -81,7 +81,6 @@ static const struct cmode ngircd_user_mode_list[] = {
   { '\0', 0 }
 };
 
-/* login to our uplink */
 static unsigned int
 ngircd_server_login(void)
 {
@@ -100,7 +99,6 @@ ngircd_server_login(void)
 	return 0;
 }
 
-/* introduce a client */
 static void
 ngircd_introduce_nick(struct user *u)
 {
@@ -109,7 +107,6 @@ ngircd_introduce_nick(struct user *u)
 	sts(":%s NICK %s 1 %s %s 1 %s :%s", me.name, u->nick, u->user, u->host, umode, u->gecos);
 }
 
-/* invite a user to a channel */
 static void
 ngircd_invite_sts(struct user *sender, struct user *target, struct channel *channel)
 {
@@ -133,7 +130,6 @@ ngircd_quit_sts(struct user *u, const char *reason)
 	sts(":%s QUIT :%s", CLIENT_NAME(u), reason);
 }
 
-/* join a channel */
 static void
 ngircd_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
 {
@@ -142,7 +138,6 @@ ngircd_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
 		sts(":%s MODE %s %s", ME, c->name, modes);
 }
 
-/* kicks a user from a channel */
 static void
 ngircd_kick(struct user *source, struct channel *c, struct user *u, const char *reason)
 {
@@ -151,7 +146,6 @@ ngircd_kick(struct user *source, struct channel *c, struct user *u, const char *
 	chanuser_delete(c, u);
 }
 
-/* PRIVMSG wrapper */
 static void ATHEME_FATTR_PRINTF(3, 4)
 ngircd_msg(const char *from, const char *target, const char *fmt, ...)
 {
@@ -183,7 +177,6 @@ ngircd_msg_global_sts(struct user *from, const char *mask, const char *text)
 		sts(":%s PRIVMSG %s%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, mask, text);
 }
 
-/* NOTICE wrapper */
 static void
 ngircd_notice_user_sts(struct user *from, struct user *target, const char *text)
 {
@@ -227,7 +220,6 @@ ngircd_numeric_sts(struct server *from, int numeric, struct user *target, const 
 	sts(":%s %d %s %s", SERVER_NAME(from), numeric, CLIENT_NAME(target), buf);
 }
 
-/* KILL wrapper */
 static void
 ngircd_kill_id_sts(struct user *killer, const char *id, const char *reason)
 {
@@ -237,29 +229,25 @@ ngircd_kill_id_sts(struct user *killer, const char *id, const char *reason)
 		sts(":%s KILL %s :%s (%s)", ME, id, me.name, reason);
 }
 
-/* PART wrapper */
 static void
 ngircd_part_sts(struct channel *c, struct user *u)
 {
 	sts(":%s PART %s", CLIENT_NAME(u), c->name);
 }
 
-/* server-to-server KLINE wrapper */
 static void
 ngircd_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
 	sts(":%s GLINE %s@%s %ld :%s", ME, user, host, duration, reason);
 }
 
-/* server-to-server UNKLINE wrapper */
 static void
 ngircd_unkline_sts(const char *server, const char *user, const char *host)
 {
-	/* when sent with no extra parameters, it indicates the GLINE should be removed. */
+	// when sent with no extra parameters, it indicates the GLINE should be removed.
 	sts(":%s GLINE %s@%s", ME, user, host);
 }
 
-/* topic wrapper */
 static void
 ngircd_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
@@ -277,7 +265,6 @@ ngircd_topic_sts(struct channel *c, struct user *source, const char *setter, tim
 		sts(":%s PART %s :Topic set for %s", CLIENT_NAME(source), c->name, setter);
 }
 
-/* mode wrapper */
 static void
 ngircd_mode_sts(char *sender, struct channel *target, char *modes)
 {
@@ -288,14 +275,12 @@ ngircd_mode_sts(char *sender, struct channel *target, char *modes)
 	sts(":%s MODE %s %s", sender, target->name, modes);
 }
 
-/* ping wrapper */
 static void
 ngircd_ping_sts(void)
 {
 	sts(":%s PING :%s", me.name, me.name);
 }
 
-/* protocol-specific stuff to do on login */
 static void
 ngircd_on_login(struct user *u, struct myuser *account, const char *wantedhost)
 {
@@ -307,7 +292,6 @@ ngircd_on_login(struct user *u, struct myuser *account, const char *wantedhost)
 		sts(":%s MODE %s +R", CLIENT_NAME(nicksvs.me->me), CLIENT_NAME(u));
 }
 
-/* protocol-specific stuff to do on login */
 static bool
 ngircd_on_logout(struct user *u, const char *account)
 {
@@ -339,7 +323,6 @@ ngircd_sethost_sts(struct user *source, struct user *target, const char *host)
 		sts(":%s METADATA %s cloakhost :%s", me.name, target->nick, host);
 		sts(":%s MODE %s +x", me.name, target->nick);
 
-		/* if the user sets -x and +x, they need to receive the same host */
 		if (strcmp(host, target->chost))
 		{
 			strshare_unref(target->chost);
@@ -370,7 +353,7 @@ m_topic(struct sourceinfo *si, int parc, char *parv[])
 static void
 m_ping(struct sourceinfo *si, int parc, char *parv[])
 {
-	/* reply to PING's */
+	// reply to PINGs
 	sts(":%s PONG %s", ME, parv[0]);
 }
 
@@ -381,7 +364,7 @@ m_pong(struct sourceinfo *si, int parc, char *parv[])
 
 	me.uplinkpong = CURRTIME;
 
-	/* -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net */
+	// -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net
 	if (me.bursting)
 	{
 #ifdef HAVE_GETTIMEOFDAY
@@ -459,8 +442,7 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 
 		handle_nickchange(u);
 	}
-
-	/* if it's only 1 then it's a nickname change */
+	// if it's only 1 then it's a nickname change
 	else if (parc == 1)
 	{
 		if (!si->su)
@@ -476,14 +458,14 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 		if (user_changenick(si->su, parv[0], CURRTIME))
 			return;
 
-		/* fix up +r if necessary -- jilles */
+		// fix up +r if necessary -- jilles
 		if (realchange && !nicksvs.no_nick_ownership)
 		{
 			if (should_reg_umode(si->su))
-				/* changed nick to registered one, reset +r */
+				// changed nick to registered one, reset +r
 				sts(":%s MODE %s +R", nicksvs.nick, parv[0]);
 			else
-				/* changed from registered nick, remove +r */
+				// changed from registered nick, remove +r
 				sts(":%s MODE %s -R", nicksvs.nick, parv[0]);
 		}
 
@@ -517,11 +499,11 @@ m_njoin(struct sourceinfo *si, int parc, char *parv[])
 		 * so they won't be deopped -- jilles */
 		c = channel_add(parv[0], si->s->flags & SF_EOB ? CURRTIME : CURRTIME - 601, si->s);
 
-		/* if !/+ channel, we don't want to do anything with it */
+		// if !/+ channel, we don't want to do anything with it
 		if (c == NULL)
 			return;
 
-		/* Check mode locks */
+		// Check mode locks
 		channel_mode_va(NULL, c, 1, "+");
 	}
 
@@ -556,7 +538,7 @@ m_chaninfo(struct sourceinfo *si, int parc, char *parv[])
 		 * so they won't be deopped -- jilles */
 		c = channel_add(parv[0], si->s->flags & SF_EOB ? CURRTIME : CURRTIME - 601, si->s);
 
-		/* if !/+ channel, we don't want to do anything with it */
+		// if !/+ channel, we don't want to do anything with it
 		if (c == NULL)
 			return;
 
@@ -567,7 +549,7 @@ m_chaninfo(struct sourceinfo *si, int parc, char *parv[])
 
 	if (parc >= 4)
 	{
-		/* CHANINFO #channel +modes key limit [:topic] */
+		// CHANINFO #channel +modes key limit [:topic]
 		kmode = strchr(parv[1], 'k');
 		lmode = strchr(parv[1], 'l');
 		swap = kmode == NULL || (lmode != NULL && kmode > lmode);
@@ -576,7 +558,7 @@ m_chaninfo(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else
 	{
-		/* CHANINFO #channel +modes [:topic] */
+		// CHANINFO #channel +modes [:topic]
 		channel_mode_va(NULL, c, 1, parv[1]);
 	}
 
@@ -589,7 +571,7 @@ m_quit(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
 
-	/* user_delete() takes care of removing channels and so forth */
+	// user_delete() takes care of removing channels and so forth
 	user_delete(si->su, parv[0]);
 }
 
@@ -645,7 +627,7 @@ m_kick(struct sourceinfo *si, int parc, char *parv[])
 	struct user *u = user_find(parv[1]);
 	struct channel *c = channel_find(parv[0]);
 
-	/* -> :rakaur KICK #shrike rintaun :test */
+	// -> :rakaur KICK #shrike rintaun :test
 	slog(LG_DEBUG, "m_kick(): user was kicked: %s -> %s", parv[1], parv[0]);
 
 	if (!u)
@@ -669,7 +651,7 @@ m_kick(struct sourceinfo *si, int parc, char *parv[])
 
 	chanuser_delete(c, u);
 
-	/* if they kicked us, let's rejoin */
+	// if they kicked us, let's rejoin
 	if (is_internal_client(u))
 	{
 		slog(LG_DEBUG, "m_kick(): %s got kicked from %s; rejoining", u->nick, parv[0]);
@@ -759,7 +741,7 @@ m_join(struct sourceinfo *si, int parc, char *parv[])
 	char *chanv[256];
 	int i;
 
-	/* JOIN 0 is really a part from all channels */
+	// JOIN 0 is really a part from all channels
 	if (parv[0][0] == '0')
 	{
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, si->su->channels.head)
@@ -788,8 +770,9 @@ m_join(struct sourceinfo *si, int parc, char *parv[])
 				 * otherwise it may only happen after the next
 				 * mode change.
 				 * DreamForge does not allow any redundant modes
-				 * so this will not look ugly. -- jilles */
-				/* If this is in a burst, a MODE with the
+				 * so this will not look ugly. -- jilles
+				 *
+				 * If this is in a burst, a MODE with the
 				 * simple modes will follow so we can skip
 				 * this. -- jilles */
 				if (!me.bursting)
@@ -897,7 +880,6 @@ mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
 
-	/* Symbol relocation voodoo. */
 	server_login = &ngircd_server_login;
 	introduce_nick = &ngircd_introduce_nick;
 	quit_sts = &ngircd_quit_sts;
@@ -958,8 +940,6 @@ mod_init(struct module *const restrict m)
 	pcommand_add("TOPIC", m_topic, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
 	pcommand_add("METADATA", m_metadata, 3, MSRC_SERVER);
-
-	/* XXX: not sure if this is such a great idea, but Anope does it too */
 	pcommand_add("SQUERY", m_privmsg, 2, MSRC_USER);
 
 	hook_add_event("nick_group");

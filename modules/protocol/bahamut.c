@@ -4,7 +4,6 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains protocol support for bahamut-based ircd.
- *
  */
 
 #include "atheme.h"
@@ -53,13 +52,6 @@ static const struct cmode bahamut_mode_list[] = {
   { '\0', 0 }
 };
 
-static bool check_jointhrottle(const char *, struct channel *, struct mychan *, struct user *, struct myuser *);
-
-static struct extmode bahamut_ignore_mode_list[] = {
-  { 'j', check_jointhrottle },
-  { '\0', 0 }
-};
-
 static const struct cmode bahamut_status_mode_list[] = {
   { 'o', CSTATUS_OP    },
   { 'v', CSTATUS_VOICE },
@@ -78,6 +70,8 @@ static const struct cmode bahamut_user_mode_list[] = {
   { 'o', UF_IRCOP    },
   { '\0', 0 }
 };
+
+static bool use_nickipstr = false;
 
 static bool
 check_jointhrottle(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
@@ -125,9 +119,11 @@ check_jointhrottle(const char *value, struct channel *c, struct mychan *mc, stru
 	return true;
 }
 
-static bool use_nickipstr = false;
+static struct extmode bahamut_ignore_mode_list[] = {
+  { 'j', check_jointhrottle },
+  { '\0', 0 }
+};
 
-/* login to our uplink */
 static unsigned int
 bahamut_server_login(void)
 {
@@ -146,7 +142,6 @@ bahamut_server_login(void)
 	return 0;
 }
 
-/* introduce a client */
 static void
 bahamut_introduce_nick(struct user *u)
 {
@@ -158,7 +153,6 @@ bahamut_introduce_nick(struct user *u)
 		sts("NICK %s 1 %lu %s %s %s %s 0 0 :%s", u->nick, (unsigned long)u->ts, umode, u->user, u->host, me.name, u->gecos);
 }
 
-/* invite a user to a channel */
 static void
 bahamut_invite_sts(struct user *sender, struct user *target, struct channel *channel)
 {
@@ -171,14 +165,12 @@ bahamut_quit_sts(struct user *u, const char *reason)
 	sts(":%s QUIT :%s", u->nick, reason);
 }
 
-/* WALLOPS wrapper */
 static void
 bahamut_wallops_sts(const char *text)
 {
 	sts(":%s GLOBOPS :%s", me.name, text);
 }
 
-/* join a channel */
 static void
 bahamut_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
 {
@@ -198,8 +190,8 @@ bahamut_chan_lowerts(struct channel *c, struct user *u)
 	sts(":%s SJOIN %lu %s %s :@%s", me.name, (unsigned long)c->ts, c->name,
 				channel_modes(c, true), u->nick);
 	chanban_clear(c);
-	/*handle_topic(c, "", 0, "");*/
-	/* Don't destroy keeptopic info, I'll admit this is ugly -- jilles */
+
+	// Don't destroy keeptopic info, I'll admit this is ugly -- jilles
 	if (c->topic != NULL)
 		free(c->topic);
 	if (c->topic_setter != NULL)
@@ -208,7 +200,6 @@ bahamut_chan_lowerts(struct channel *c, struct user *u)
 	c->topicts = 0;
 }
 
-/* kicks a user from a channel */
 static void
 bahamut_kick(struct user *source, struct channel *c, struct user *u, const char *reason)
 {
@@ -217,7 +208,6 @@ bahamut_kick(struct user *source, struct channel *c, struct user *u, const char 
 	chanuser_delete(c, u);
 }
 
-/* PRIVMSG wrapper */
 static void ATHEME_FATTR_PRINTF(3, 4)
 bahamut_msg(const char *from, const char *target, const char *fmt, ...)
 {
@@ -248,7 +238,6 @@ bahamut_msg_global_sts(struct user *from, const char *mask, const char *text)
 		sts(":%s PRIVMSG %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
 }
 
-/* NOTICE wrapper */
 static void
 bahamut_notice_user_sts(struct user *from, struct user *target, const char *text)
 {
@@ -298,7 +287,6 @@ bahamut_numeric_sts(struct server *from, int numeric, struct user *target, const
 	sts(":%s %d %s %s", from->name, numeric, target->nick, buf);
 }
 
-/* KILL wrapper */
 static void
 bahamut_kill_id_sts(struct user *killer, const char *id, const char *reason)
 {
@@ -308,14 +296,12 @@ bahamut_kill_id_sts(struct user *killer, const char *id, const char *reason)
 		sts(":%s KILL %s :%s (%s)", me.name, id, me.name, reason);
 }
 
-/* PART wrapper */
 static void
 bahamut_part_sts(struct channel *c, struct user *u)
 {
 	sts(":%s PART %s", u->nick, c->name);
 }
 
-/* server-to-server KLINE wrapper */
 static void
 bahamut_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
@@ -325,14 +311,12 @@ bahamut_kline_sts(const char *server, const char *user, const char *host, long d
 	sts(":%s AKILL %s %s %ld %s %lu :%s", me.name, host, user, duration, svs != NULL ? svs->nick : me.name, (unsigned long)CURRTIME, reason);
 }
 
-/* server-to-server UNKLINE wrapper */
 static void
 bahamut_unkline_sts(const char *server, const char *user, const char *host)
 {
 	sts(":%s RAKILL %s %s", me.name, host, user);
 }
 
-/* topic wrapper */
 static void
 bahamut_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
@@ -341,7 +325,6 @@ bahamut_topic_sts(struct channel *c, struct user *source, const char *setter, ti
 	sts(":%s TOPIC %s %s %lu :%s", source->nick, c->name, setter, (unsigned long)ts, topic);
 }
 
-/* mode wrapper */
 static void
 bahamut_mode_sts(char *sender, struct channel *target, char *modes)
 {
@@ -352,14 +335,12 @@ bahamut_mode_sts(char *sender, struct channel *target, char *modes)
 	sts(":%s MODE %s %lu %s", sender, target->name, (unsigned long)target->ts, modes);
 }
 
-/* ping wrapper */
 static void
 bahamut_ping_sts(void)
 {
 	sts("PING :%s", me.name);
 }
 
-/* protocol-specific stuff to do on login */
 static void
 bahamut_on_login(struct user *u, struct myuser *account, const char *wantedhost)
 {
@@ -372,7 +353,6 @@ bahamut_on_login(struct user *u, struct myuser *account, const char *wantedhost)
 		sts(":%s SVSMODE %s +rd %lu", nicksvs.nick, u->nick, (unsigned long)CURRTIME);
 }
 
-/* protocol-specific stuff to do on login */
 static bool
 bahamut_on_logout(struct user *u, const char *account)
 {
@@ -435,7 +415,7 @@ m_topic(struct sourceinfo *si, int parc, char *parv[])
 static void
 m_ping(struct sourceinfo *si, int parc, char *parv[])
 {
-	/* reply to PING's */
+	// reply to PINGs
 	sts(":%s PONG %s %s", me.name, me.name, parv[0]);
 }
 
@@ -444,13 +424,14 @@ m_pong(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct server *s;
 
-	/* someone replied to our PING */
+	// someone replied to our PING
 	if (!parv[0])
 		return;
 	s = server_find(parv[0]);
 	if (s == NULL)
 		return;
-	/* Postpone EOB for our uplink until topic burst is also done */
+
+	// Postpone EOB for our uplink until topic burst is also done
 	if (s->uplink != me.me)
 		handle_eob(s);
 
@@ -459,7 +440,7 @@ m_pong(struct sourceinfo *si, int parc, char *parv[])
 
 	me.uplinkpong = CURRTIME;
 
-	/* -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net */
+	// -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net
 }
 
 static void
@@ -467,7 +448,7 @@ m_burst(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct server *s;
 
-	/* Ignore "BURST" at start of burst */
+	// Ignore "BURST" at start of burst
 	if (parc != 1)
 		return;
 
@@ -529,7 +510,7 @@ m_sjoin(struct sourceinfo *si, int parc, char *parv[])
 
 	if (parc >= 4 && si->s != NULL)
 	{
-		/* :origin SJOIN ts chan modestr [key or limits] :users */
+		// :origin SJOIN ts chan modestr [key or limits] :users
 		c = channel_find(parv[1]);
 		ts = atol(parv[0]);
 
@@ -567,7 +548,7 @@ m_sjoin(struct sourceinfo *si, int parc, char *parv[])
 				cu = (struct chanuser *)n->data;
 				if (cu->user->server == me.me)
 				{
-					/* it's a service, reop */
+					// it's a service, reop
 					sts(":%s PART %s :Reop", cu->user->nick, c->name);
 					sts(":%s SJOIN %lu %s + :@%s", me.name, (unsigned long)ts, c->name, cu->user->nick);
 					cu->modes = CSTATUS_OP;
@@ -652,7 +633,7 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 	char ipstring[64];
 	bool realchange;
 
-	/* -> NICK jilles 1 1136143909 +oi ~jilles 192.168.1.5 jaguar.test 0 3232235781 :Jilles Tjoelker */
+	// -> NICK jilles 1 1136143909 +oi ~jilles 192.168.1.5 jaguar.test 0 3232235781 :Jilles Tjoelker
 	if (parc == 10)
 	{
 		s = server_find(parv[6]);
@@ -699,7 +680,7 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 		handle_nickchange(u);
 	}
 
-	/* if it's only 2 then it's a nickname change */
+	// if it's only 2 then it's a nickname change
 	else if (parc == 2)
 	{
 		if (!si->su)
@@ -715,9 +696,9 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 		if (user_changenick(si->su, parv[0], atoi(parv[1])))
 			return;
 
-		/* fix up +r if necessary -- jilles */
+		// fix up +r if necessary -- jilles
 		if (realchange && should_reg_umode(si->su))
-			/* changed nick to registered one, reset +r */
+			// changed nick to registered one, reset +r
 			sts(":%s SVSMODE %s +rd %lu", nicksvs.nick, parv[0], (unsigned long)CURRTIME);
 
 		handle_nickchange(si->su);
@@ -737,7 +718,7 @@ m_quit(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
 
-	/* user_delete() takes care of removing channels and so forth */
+	// user_delete() takes care of removing channels and so forth
 	user_delete(si->su, parv[0]);
 }
 
@@ -768,7 +749,7 @@ m_kick(struct sourceinfo *si, int parc, char *parv[])
 	struct user *u = user_find(parv[1]);
 	struct channel *c = channel_find(parv[0]);
 
-	/* -> :rakaur KICK #shrike rintaun :test */
+	// -> :rakaur KICK #shrike rintaun :test
 	slog(LG_DEBUG, "m_kick(): user was kicked: %s -> %s", parv[1], parv[0]);
 
 	if (!u)
@@ -791,7 +772,7 @@ m_kick(struct sourceinfo *si, int parc, char *parv[])
 
 	chanuser_delete(c, u);
 
-	/* if they kicked us, let's rejoin */
+	// if they kicked us, let's rejoin
 	if (is_internal_client(u))
 	{
 		slog(LG_DEBUG, "m_kick(): %s got kicked from %s; rejoining", u->nick, parv[0]);
@@ -877,7 +858,7 @@ m_join(struct sourceinfo *si, int parc, char *parv[])
 	struct chanuser *cu;
 	mowgli_node_t *n, *tn;
 
-	/* JOIN 0 is really a part from all channels */
+	// JOIN 0 is really a part from all channels
 	if (parv[0][0] == '0')
 	{
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, si->su->channels.head)
@@ -927,7 +908,7 @@ m_capab(struct sourceinfo *si, int parc, char *parv[])
 		}
 	}
 
-	/* now burst services with NICKIP set correctly. */
+	// now burst services with NICKIP set correctly.
 	services_init();
 }
 
@@ -956,7 +937,6 @@ mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
 
-	/* Symbol relocation voodoo. */
 	server_login = &bahamut_server_login;
 	introduce_nick = &bahamut_introduce_nick;
 	quit_sts = &bahamut_quit_sts;

@@ -15,29 +15,29 @@
 #include "protocol/chatircd.h"
 
 static struct ircd ChatIRCd = {
-	.ircdname = "ChatIRCd",                     /* IRCd name */
-	.tldprefix = "$$",                          /* TLD Prefix, used by Global. */
-	.uses_uid = true,                           /* Whether or not we use IRCNet/TS6 UID */
-	.uses_rcommand = false,                     /* Whether or not we use RCOMMAND */
-	.uses_owner = true,                         /* Whether or not we support channel owners. */
-	.uses_protect = true,                       /* Whether or not we support channel protection. */
-	.uses_halfops = true,                       /* Whether or not we support halfops. */
-	.uses_p10 = false,                          /* Whether or not we use P10 */
-	.uses_vhost = false,                        /* Whether or not we use vHosts. */
-	.oper_only_modes = CMODE_EXLIMIT | CMODE_PERM | CMODE_NETADMINONLY | CMODE_ADMINONLY | CMODE_OPERONLY,	/* Oper-only cmodes */
-	.owner_mode = CSTATUS_OWNER,                /* Integer flag for owner channel flag. */
-	.protect_mode = CSTATUS_PROTECT,            /* Integer flag for protect channel flag. */
-	.halfops_mode = CSTATUS_HALFOP,             /* Integer flag for halfops. */
-	.owner_mchar = "+y",                        /* Mode we set for owner. */
-	.protect_mchar = "+a",                      /* Mode we set for protect. */
-	.halfops_mchar = "+h",                      /* Mode we set for halfops. */
-	.type = PROTOCOL_CHARYBDIS,                 /* Protocol type */
-	.perm_mode = CMODE_PERM,                    /* Permanent cmodes */
-	.oimmune_mode = 0,                          /* Oper-immune cmode */
-	.ban_like_modes = "beIq",                   /* Ban-like cmodes */
-	.except_mchar = 'e',                        /* Except mchar */
-	.invex_mchar = 'I',                         /* Invex mchar */
-	.flags = IRCD_CIDR_BANS | IRCD_HOLDNICK,    /* Flags */
+	.ircdname = "ChatIRCd",                     // IRCd name
+	.tldprefix = "$$",                          // TLD Prefix, used by Global.
+	.uses_uid = true,                           // Whether or not we use IRCNet/TS6 UID
+	.uses_rcommand = false,                     // Whether or not we use RCOMMAND
+	.uses_owner = true,                         // Whether or not we support channel owners.
+	.uses_protect = true,                       // Whether or not we support channel protection.
+	.uses_halfops = true,                       // Whether or not we support halfops.
+	.uses_p10 = false,                          // Whether or not we use P10
+	.uses_vhost = false,                        // Whether or not we use vHosts.
+	.oper_only_modes = CMODE_EXLIMIT | CMODE_PERM | CMODE_NETADMINONLY | CMODE_ADMINONLY | CMODE_OPERONLY,	// Oper-only cmodes
+	.owner_mode = CSTATUS_OWNER,                // Integer flag for owner channel flag.
+	.protect_mode = CSTATUS_PROTECT,            // Integer flag for protect channel flag.
+	.halfops_mode = CSTATUS_HALFOP,             // Integer flag for halfops.
+	.owner_mchar = "+y",                        // Mode we set for owner.
+	.protect_mchar = "+a",                      // Mode we set for protect.
+	.halfops_mchar = "+h",                      // Mode we set for halfops.
+	.type = PROTOCOL_CHARYBDIS,                 // Protocol type
+	.perm_mode = CMODE_PERM,                    // Permanent cmodes
+	.oimmune_mode = 0,                          // Oper-immune cmode
+	.ban_like_modes = "beIq",                   // Ban-like cmodes
+	.except_mchar = 'e',                        // Except mchar
+	.invex_mchar = 'I',                         // Invex mchar
+	.flags = IRCD_CIDR_BANS | IRCD_HOLDNICK,    // Flags
 };
 
 static const struct cmode chatircd_mode_list[] = {
@@ -56,7 +56,7 @@ static const struct cmode chatircd_mode_list[] = {
   { 'Q', CMODE_DISFWD	},
   { 'T', CMODE_NONOTICE	},
 
-  /* following modes are added as extensions */
+  // following modes are added as extensions
   { 'N', CMODE_NETADMINONLY	},
   { 'S', CMODE_SSLONLY	},
   { 'O', CMODE_OPERONLY	},
@@ -85,9 +85,9 @@ static const struct cmode chatircd_prefix_mode_list[] = {
   { '\0', 0 }
 };
 
-/* this may be slow, but it is not used much */
-/* returns true if it matches, false if not */
-/* note that the host part matches differently from a regular ban */
+/* this may be slow, but it is not used much
+ * returns true if it matches, false if not
+ * note that the host part matches differently from a regular ban */
 static bool
 extgecos_match(const char *mask, struct user *u)
 {
@@ -110,14 +110,14 @@ unidentified_match(const char *mask, struct user *u)
 	char hostbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
 	char realbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
 
-	/* Is identified, so just bail. */
+	// Is identified, so just bail.
 	if (u->myuser != NULL)
 		return false;
 
 	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
 	snprintf(realbuf, sizeof realbuf, "%s!%s@%s", u->nick, u->user, u->host);
 
-	/* If here, not identified to services so just check if the given hostmask matches. */
+	// If here, not identified to services so just check if the given hostmask matches.
 	if (!match(mask, hostbuf) || !match(mask, realbuf))
 		return true;
 
@@ -140,7 +140,8 @@ chatircd_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_n
 
 	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
 	snprintf(realbuf, sizeof realbuf, "%s!%s@%s", u->nick, u->user, u->host);
-	/* will be nick!user@ if ip unknown, doesn't matter */
+
+	// will be nick!user@ if ip unknown, doesn't matter
 	snprintf(ipbuf, sizeof ipbuf, "%s!%s@%s", u->nick, u->user, u->ip);
 
 	MOWGLI_ITER_FOREACH(n, first)
@@ -150,8 +151,7 @@ chatircd_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_n
 		if (cb->type != type)
 			continue;
 
-		/*
-		 * strip any banforwards from the mask. (SRV-73)
+		/* strip any banforwards from the mask. (SRV-73)
 		 * charybdis itself doesn't support banforward but i don't feel like copying
 		 * this stuff into ircd-seven and it is possible that charybdis may support them
 		 * one day.
@@ -173,9 +173,11 @@ chatircd_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_n
 			exttype = *p++;
 			if (exttype == '\0')
 				continue;
-			/* check parameter */
+
+			// check parameter
 			if (*p++ != ':')
 				p = NULL;
+
 			switch (exttype)
 			{
 				case 'a':
@@ -234,12 +236,14 @@ chatircd_is_extban(const char *mask)
 	if (mask_len > 2 && mask[1] == '~')
 		offset = 1;
 
-	/* e.g. $a and $~a */
+	// e.g. $a and $~a
 	if ((mask_len == 2 + offset) && strchr(without_param, mask[1 + offset]))
 		return true;
-	/* e.g. $~a:Shutter and $~a:Shutter */
+
+	// e.g. $~a:Shutter and $~a:Shutter
 	else if ((mask_len >= 3 + offset) && mask[2 + offset] == ':' && strchr(with_param, mask[1 + offset]))
 		return true;
+
 	return false;
 }
 

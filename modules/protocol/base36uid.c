@@ -23,8 +23,33 @@
 
 #include "atheme.h"
 
-static char new_uid[10]; /* allow for \0 */
+static char new_uid[10]; // allow for \0
 static unsigned int uindex = 0;
+
+static void
+add_one_to_uid(unsigned int i)
+{
+	if (i != strlen(me.numeric))	// Not reached server SID portion yet?
+	{
+		if (new_uid[i] == 'Z')
+			new_uid[i] = '0';
+		else if (new_uid[i] == '9')
+		{
+			new_uid[i] = 'A';
+			add_one_to_uid(i - 1);
+		}
+		else
+			new_uid[i] = new_uid[i] + 1;
+	}
+	else
+	{
+		if (new_uid[i] == 'Z')
+			for (i = strlen(me.numeric); i < 9; i++)
+				new_uid[i] = 'A';
+		else
+			new_uid[i] = new_uid[i] + 1;
+	}
+}
 
 static void
 base36_uid_init(const char *sid)
@@ -56,46 +81,21 @@ base36_uid_init(const char *sid)
 		new_uid[i] = 'A';
 }
 
-static void
-add_one_to_uid(unsigned int i)
-{
-	if (i != strlen(me.numeric))	/* Not reached server SID portion yet? */
-	{
-		if (new_uid[i] == 'Z')
-			new_uid[i] = '0';
-		else if (new_uid[i] == '9')
-		{
-			new_uid[i] = 'A';
-			add_one_to_uid(i - 1);
-		}
-		else
-			new_uid[i] = new_uid[i] + 1;
-	}
-	else
-	{
-		if (new_uid[i] == 'Z')
-			for (i = strlen(me.numeric); i < 9; i++)
-				new_uid[i] = 'A';
-		else
-			new_uid[i] = new_uid[i] + 1;
-	}
-}
-
 static const char *
 base36_uid_get(void)
 {
-	add_one_to_uid(uindex - 1); /* index from 0 */
+	add_one_to_uid(uindex - 1); // index from 0
 	return (new_uid);
 }
-
-static const struct uid_provider base36_gen = {
-	.uid_init       = &base36_uid_init,
-	.uid_get        = &base36_uid_get,
-};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
+	static const struct uid_provider base36_gen = {
+		.uid_init       = &base36_uid_init,
+		.uid_get        = &base36_uid_get,
+	};
+
 	uid_provider_impl = &base36_gen;
 }
 

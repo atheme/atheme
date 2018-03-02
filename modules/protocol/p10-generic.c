@@ -13,7 +13,6 @@
 
 static void check_hidehost(struct user *u);
 
-/* login to our uplink */
 static unsigned int
 p10_server_login(void)
 {
@@ -25,7 +24,7 @@ p10_server_login(void)
 
 	me.bursting = true;
 
-	/* SERVER irc.p10.org 1 933022556 947908144 J10 AA]]] :[127.0.0.1] A Undernet Server */
+	// SERVER irc.p10.org 1 933022556 947908144 J10 AA]]] :[127.0.0.1] A Undernet Server
 	sts("SERVER %s 1 %lu %lu J10 %s]]] +s6 :%s", me.name, (unsigned long)me.start, (unsigned long)CURRTIME, me.numeric, me.desc);
 
 	services_init();
@@ -35,7 +34,6 @@ p10_server_login(void)
 	return 0;
 }
 
-/* introduce a client */
 static void
 p10_introduce_nick(struct user *u)
 {
@@ -44,11 +42,10 @@ p10_introduce_nick(struct user *u)
 	sts("%s N %s 1 %lu %s %s %sk ]]]]]] %s :%s", me.numeric, u->nick, (unsigned long)u->ts, u->user, u->host, umode, u->uid, u->gecos);
 }
 
-/* invite a user to a channel */
 static void
 p10_invite_sts(struct user *sender, struct user *target, struct channel *channel)
 {
-	/* target is a nick, weird eh? -- jilles */
+	// target is a nick, weird eh? -- jilles
 	sts("%s I %s %s", sender->uid, target->nick, channel->name);
 }
 
@@ -58,18 +55,16 @@ p10_quit_sts(struct user *u, const char *reason)
 	sts("%s Q :%s", u->uid, reason);
 }
 
-/* WALLOPS wrapper */
 static void
 p10_wallops_sts(const char *text)
 {
 	sts("%s WA :%s", me.numeric, text);
 }
 
-/* join a channel */
 static void
 p10_join_sts(struct channel *c, struct user *u, bool isnew, char *modes)
 {
-	/* If the channel doesn't exist, we need to create it. */
+	// If the channel doesn't exist, we need to create it.
 	if (isnew)
 	{
 		sts("%s C %s %lu", u->uid, c->name, (unsigned long)c->ts);
@@ -93,7 +88,6 @@ p10_chan_lowerts(struct channel *c, struct user *u)
 	chanban_clear(c);
 }
 
-/* kicks a user from a channel */
 static void
 p10_kick(struct user *source, struct channel *c, struct user *u, const char *reason)
 {
@@ -105,7 +99,6 @@ p10_kick(struct user *source, struct channel *c, struct user *u, const char *rea
 	chanuser_delete(c, u);
 }
 
-/* PRIVMSG wrapper */
 static void ATHEME_FATTR_PRINTF(3, 4)
 p10_msg(const char *from, const char *target, const char *fmt, ...)
 {
@@ -141,7 +134,6 @@ p10_msg_global_sts(struct user *from, const char *mask, const char *text)
 		sts("%s P %s%s :%s", from ? from->uid : me.numeric, ircd->tldprefix, mask, text);
 }
 
-/* NOTICE wrapper */
 static void
 p10_notice_user_sts(struct user *from, struct user *target, const char *text)
 {
@@ -181,7 +173,6 @@ p10_wallchops(struct user *sender, struct channel *channel, const char *message)
 	sts("%s WC %s :%s", sender->uid, channel->name, message);
 }
 
-/* numeric wrapper */
 static void ATHEME_FATTR_PRINTF(4, 5)
 p10_numeric_sts(struct server *from, int numeric, struct user *target, const char *fmt, ...)
 {
@@ -195,7 +186,6 @@ p10_numeric_sts(struct server *from, int numeric, struct user *target, const cha
 	sts("%s %d %s %s", from->sid, numeric, target->uid, buf);
 }
 
-/* KILL wrapper */
 static void
 p10_kill_id_sts(struct user *killer, const char *id, const char *reason)
 {
@@ -205,22 +195,19 @@ p10_kill_id_sts(struct user *killer, const char *id, const char *reason)
 		sts("%s D %s :%s (%s)", me.numeric, id, me.name, reason);
 }
 
-/* PART wrapper */
 static void
 p10_part_sts(struct channel *c, struct user *u)
 {
 	sts("%s L %s", u->uid, c->name);
 }
 
-/* server-to-server KLINE wrapper */
 static void
 p10_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
-	/* hold permanent akills for four weeks -- jilles */
+	// hold permanent akills for four weeks -- jilles
 	sts("%s GL * +%s@%s %ld :%s", me.numeric, user, host, duration > 0 ? duration : 2419200, reason);
 }
 
-/* server-to-server UNKLINE wrapper */
 static void
 p10_unkline_sts(const char *server, const char *user, const char *host)
 {
@@ -230,7 +217,7 @@ p10_unkline_sts(const char *server, const char *user, const char *host)
 static void
 p10_xline_sts(const char *server, const char *realname, long duration, const char *reason)
 {
-	/* hold permanent sglines for four weeks -- jilles */
+	// hold permanent sglines for four weeks -- jilles
 	sts("%s GL * +$R%s %ld :%s", me.numeric, realname, duration > 0 ? duration : 2419200, reason);
 }
 
@@ -249,7 +236,7 @@ p10_qline_sts(const char *server, const char *name, long duration, const char *r
 		return;
 	}
 
-	/* hold permanent sqlines for four weeks -- jilles */
+	// hold permanent sqlines for four weeks -- jilles
 	sts("%s GL * +%s %ld :%s", me.numeric, name, duration > 0 ? duration : 2419200, reason);
 }
 
@@ -265,7 +252,6 @@ p10_unqline_sts(const char *server, const char *name)
 	sts("%s GL * -%s", me.numeric, name);
 }
 
-/* topic wrapper */
 static void
 p10_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
@@ -281,7 +267,6 @@ p10_topic_sts(struct channel *c, struct user *source, const char *setter, time_t
 	}
 }
 
-/* mode wrapper */
 static void
 p10_mode_sts(char *sender, struct channel *target, char *modes)
 {
@@ -301,14 +286,12 @@ p10_mode_sts(char *sender, struct channel *target, char *modes)
 		sts("%s M %s %s", me.numeric, target->name, modes);
 }
 
-/* ping wrapper */
 static void
 p10_ping_sts(void)
 {
 	sts("%s G !%lu %s %lu", me.numeric, (unsigned long)CURRTIME, me.name, (unsigned long)CURRTIME);
 }
 
-/* protocol-specific stuff to do on login */
 static void
 p10_on_login(struct user *u, struct myuser *mu, const char *wantedhost)
 {
@@ -379,11 +362,11 @@ m_topic(struct sourceinfo *si, int parc, char *parv[])
 	handle_topic_from(si, c, source, ts, parv[parc - 1]);
 }
 
-/* AB G !1119920789.573932 services.atheme.org 1119920789.573932 */
+// AB G !1119920789.573932 services.atheme.org 1119920789.573932
 static void
 m_ping(struct sourceinfo *si, int parc, char *parv[])
 {
-	/* reply to PING's */
+	// reply to PINGs
 	if (si->su != NULL)
 		sts("%s Z %s %s", me.numeric, me.numeric, si->su->nick);
 	else if (parv[0][0] != '!')
@@ -397,7 +380,7 @@ m_pong(struct sourceinfo *si, int parc, char *parv[])
 {
 	me.uplinkpong = CURRTIME;
 
-	/* -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net */
+	// -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net
 	if (me.bursting)
 	{
 #ifdef HAVE_GETTIMEOFDAY
@@ -478,7 +461,7 @@ m_join(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_node_t *n, *tn;
 	struct chanuser *cu;
 
-	/* JOIN 0 is really a part from all channels */
+	// JOIN 0 is really a part from all channels
 	if (!strcmp(parv[0], "0"))
 	{
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, si->su->channels.head)
@@ -551,7 +534,7 @@ m_burst(struct sourceinfo *si, int parc, char *parv[])
 			cu = (struct chanuser *)n->data;
 			if (cu->user->server == me.me)
 			{
-				/* it's a service, reop */
+				// it's a service, reop
 				sts("%s M %s +o %s", me.numeric, c->name, CLIENT_NAME(cu->user));
 				cu->modes = CSTATUS_OP;
 			}
@@ -653,11 +636,11 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 	char ipstring[HOSTIPLEN + 1];
 	char *p;
 
-	/* got the right number of args for an introduction? */
+	// got the right number of args for an introduction?
 	if (parc >= 8)
 	{
-		/* -> AB N jilles 1 1137687480 jilles jaguar.test +oiwgrx jilles B]AAAB ABAAE :Jilles Tjoelker */
-		/* -> AB N test4 1 1137690148 jilles jaguar.test +iw B]AAAB ABAAG :Jilles Tjoelker */
+		// -> AB N jilles 1 1137687480 jilles jaguar.test +oiwgrx jilles B]AAAB ABAAE :Jilles Tjoelker
+		// -> AB N test4 1 1137690148 jilles jaguar.test +iw B]AAAB ABAAG :Jilles Tjoelker
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", si->s->name, parv[0]);
 
 		decode_p10_ip(parv[parc - 3], ipstring);
@@ -674,21 +657,23 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 				if (p != NULL)
 					*p++ = '\0';
 				handle_burstlogin(u, parv[6], p ? atol(p) : 0);
-				/* killed to force logout? */
+
+				// killed to force logout?
 				if (user_find(parv[parc - 2]) == NULL)
 					return;
 			}
 			if (strchr(parv[5], 'x'))
 			{
 				u->flags |= UF_HIDEHOSTREQ;
-				/* this must be after setting the account name */
+
+				// this must be after setting the account name
 				check_hidehost(u);
 			}
 		}
 
 		handle_nickchange(u);
 	}
-	/* if it's only 2 then it's a nickname change */
+	// if it's only 2 then it's a nickname change
 	else if (parc == 2)
 	{
 		if (!si->su)
@@ -719,7 +704,7 @@ m_quit(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
 
-	/* user_delete() takes care of removing channels and so forth */
+	// user_delete() takes care of removing channels and so forth
 	user_delete(si->su, parv[0]);
 }
 
@@ -765,7 +750,7 @@ m_mode(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else
 	{
-		/* Yes this is a nick and not a UID -- jilles */
+		// Yes this is a nick and not a UID -- jilles
 		u = user_find_named(parv[0]);
 		if (u == NULL)
 		{
@@ -790,8 +775,8 @@ m_clearmode(struct sourceinfo *si, int parc, char *parv[])
 	struct chanuser *cu;
 	int i;
 
-	/* -> ABAAA CM # b */
-	/* Note: this is an IRCop command, do not enforce mode locks. */
+	/* -> ABAAA CM # b
+	 * Note: this is an IRCop command, do not enforce mode locks. */
 	chan = channel_find(parv[0]);
 	if (chan == NULL)
 	{
@@ -818,7 +803,7 @@ m_clearmode(struct sourceinfo *si, int parc, char *parv[])
 				cu = (struct chanuser *)n->data;
 				if (cu->user->server == me.me)
 				{
-					/* it's a service, reop */
+					// it's a service, reop
 					sts("%s M %s +o %s", me.numeric,
 							chan->name,
 							cu->user->uid);
@@ -850,7 +835,7 @@ m_kick(struct sourceinfo *si, int parc, char *parv[])
 	struct user *u = user_find(parv[1]);
 	struct channel *c = channel_find(parv[0]);
 
-	/* -> :rakaur KICK #shrike rintaun :test */
+	// -> :rakaur KICK #shrike rintaun :test
 	slog(LG_DEBUG, "m_kick(): user was kicked: %s -> %s", parv[1], parv[0]);
 
 	if (!u)
@@ -873,7 +858,7 @@ m_kick(struct sourceinfo *si, int parc, char *parv[])
 
 	chanuser_delete(c, u);
 
-	/* if they kicked us, let's rejoin */
+	// if they kicked us, let's rejoin
 	if (is_internal_client(u))
 	{
 		slog(LG_DEBUG, "m_kick(): %s got kicked from %s; rejoining", u->nick, parv[0]);
@@ -894,13 +879,13 @@ m_squit(struct sourceinfo *si, int parc, char *parv[])
 	server_delete(parv[0]);
 }
 
-/* SERVER ircu.devel.atheme.org 1 1119902586 1119908830 J10 ABAP] + :lets lol */
+// SERVER ircu.devel.atheme.org 1 1119902586 1119908830 J10 ABAP] + :lets lol
 static void
 m_server(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct server *s;
 
-	/* We dont care about the max connections. */
+	// We dont care about the max connections.
 	parv[5][2] = '\0';
 
 	slog(LG_DEBUG, "m_server(): new server: %s, id %s, %s",
@@ -986,7 +971,7 @@ m_eos(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_eob(si->s);
 
-	/* acknowledge a local END_OF_BURST */
+	// acknowledge a local END_OF_BURST
 	if (si->s->uplink == me.me)
 		sts("%s EA", me.numeric);
 }
@@ -1008,10 +993,10 @@ check_hidehost(struct user *u)
 	static bool warned = false;
 	char buf[HOSTLEN + 1];
 
-	/* do they qualify? */
+	// do they qualify?
 	if (!(u->flags & UF_HIDEHOSTREQ) || u->myuser == NULL || (u->myuser->flags & MU_WAITAUTH))
 		return;
-	/* don't use this if they have some other kind of vhost */
+	// don't use this if they have some other kind of vhost
 	if (strcmp(u->host, u->vhost))
 	{
 		slog(LG_DEBUG, "check_hidehost(): +x overruled by other vhost for %s", u->nick);
@@ -1041,7 +1026,6 @@ mod_init(struct module *const restrict m)
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/p10");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/base36uid");
 
-	/* Symbol relocation voodoo. */
 	server_login = &p10_server_login;
 	introduce_nick = &p10_introduce_nick;
 	quit_sts = &p10_quit_sts;
@@ -1087,10 +1071,10 @@ mod_init(struct module *const restrict m)
 	pcommand_add("N", m_nick, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("Q", m_quit, 1, MSRC_USER);
 	pcommand_add("M", m_mode, 2, MSRC_USER | MSRC_SERVER);
-	pcommand_add("OM", m_mode, 2, MSRC_USER); /* OPMODE, treat as MODE */
+	pcommand_add("OM", m_mode, 2, MSRC_USER);
 	pcommand_add("CM", m_clearmode, 2, MSRC_USER);
 	pcommand_add("K", m_kick, 2, MSRC_USER | MSRC_SERVER);
-	pcommand_add("OK", m_kick, 2, MSRC_USER); /* OPKICK, treat as KICK */
+	pcommand_add("OK", m_kick, 2, MSRC_USER);
 	pcommand_add("D", m_kill, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("SQ", m_squit, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("S", m_server, 8, MSRC_SERVER);
