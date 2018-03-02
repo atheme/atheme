@@ -9,11 +9,11 @@
 #include "atheme.h"
 #include "template.h"
 
-/* database versions */
+// database versions
 #define DB_SHRIKE	1
 #define DB_ATHEME	2
 
-/* loads atheme.db */
+// loads atheme.db
 static void ATHEME_FATTR_NORETURN
 flatfile_db_load(const char *filename)
 {
@@ -54,7 +54,7 @@ flatfile_db_load(const char *filename)
 
 	buf = smalloc(bufsize);
 
-	/* start reading it, one line at a time */
+	// start reading it, one line at a time
 	for (;;)
 	{
 		n = 0;
@@ -81,14 +81,14 @@ flatfile_db_load(const char *filename)
 
 		linecnt++;
 
-		/* check for unimportant lines */
+		// check for unimportant lines
 		item = strtok(buf, " ");
 		strip(item);
 
 		if (item == NULL || *item == '#' || *item == '\n' || *item == '\t' || *item == ' ' || *item == '\0' || *item == '\r')
 			continue;
 
-		/* database version */
+		// database version
 		if (!strcmp("DBV", item))
 		{
 			versn = atoi(strtok(NULL, " "));
@@ -101,7 +101,7 @@ flatfile_db_load(const char *filename)
 		}
 		else if (!strcmp("CF", item))
 		{
-			/* enabled chanacs flags */
+			// enabled chanacs flags
 			s = strtok(NULL, " ");
 			if (s == NULL)
 				slog(LG_INFO, "db_load(): missing param to CF");
@@ -120,7 +120,7 @@ flatfile_db_load(const char *filename)
 		}
 		else if (!strcmp("MU", item))
 		{
-			/* myusers */
+			// myusers
 			char *muname, *mupass, *muemail;
 
 			if ((s = strtok(NULL, " ")))
@@ -187,7 +187,7 @@ flatfile_db_load(const char *filename)
 		}
 		else if (!strcmp("ME", item))
 		{
-			/* memo */
+			// memo
 			char *sender, *text;
 			time_t mtime;
 			unsigned int status;
@@ -222,7 +222,7 @@ flatfile_db_load(const char *filename)
 		}
 		else if (!strcmp("MI", item))
 		{
-			/* memo ignore */
+			// memo ignore
 			char *user, *target, *strbuf;
 
 			user = strtok(NULL, " ");
@@ -242,7 +242,7 @@ flatfile_db_load(const char *filename)
 		}
 		else if (!strcmp("AC", item))
 		{
-			/* myuser access list */
+			// myuser access list
 			char *user, *mask;
 
 			user = strtok(NULL, " ");
@@ -260,7 +260,7 @@ flatfile_db_load(const char *filename)
 		}
 		else if (!strcmp("MN", item))
 		{
-			/* registered nick */
+			// registered nick
 			char *user, *nick, *treg, *tseen;
 			struct mynick *mn;
 
@@ -288,7 +288,7 @@ flatfile_db_load(const char *filename)
 		}
 		else if (!strcmp("MCFP", item))
 		{
-			/* certfp */
+			// certfp
 			char *user, *certfp;
 			struct mycertfp *mcfp;
 
@@ -306,7 +306,7 @@ flatfile_db_load(const char *filename)
 		}
 		else if (!strcmp("NAM", item))
 		{
-			/* formerly registered name (created by a marked account being dropped) */
+			// formerly registered name (created by a marked account being dropped)
 			char *user;
 
 			user = strtok(NULL, " \n");
@@ -319,7 +319,7 @@ flatfile_db_load(const char *filename)
 		}
 		else if (!strcmp("SO", item))
 		{
-			/* services oper */
+			// services oper
 			char *user, *class, *flagstr, *password;
 
 			user = strtok(NULL, " ");
@@ -338,7 +338,7 @@ flatfile_db_load(const char *filename)
 		}
 		else if (!strcmp("MC", item))
 		{
-			/* mychans */
+			// mychans
 			char *mcname;
 
 			if ((s = strtok(NULL, " ")))
@@ -352,8 +352,9 @@ flatfile_db_load(const char *filename)
 				mcin++;
 
 				mcname = s;
-				/* unused (old password) */
-				(void)strtok(NULL, " ");
+
+				// unused (old password)
+				(void) strtok(NULL, " ");
 
 				mc = mychan_add(mcname);
 
@@ -380,7 +381,7 @@ flatfile_db_load(const char *filename)
 		}
 		else if (!strcmp("MD", item))
 		{
-			/* Metadata entry */
+			// Metadata entry
 			char *type = strtok(NULL, " ");
 			char *name = strtok(NULL, " ");
 			char *property = strtok(NULL, " ");
@@ -428,7 +429,7 @@ flatfile_db_load(const char *filename)
 		}
 		else if (!strcmp("UR", item))
 		{
-			/* Channel URLs (obsolete) */
+			// Channel URLs (obsolete)
 			char *chan, *url;
 
 			chan = strtok(NULL, " ");
@@ -446,7 +447,7 @@ flatfile_db_load(const char *filename)
 		}
 		else if (!strcmp("EM", item))
 		{
-			/* Channel entry messages (obsolete) */
+			// Channel entry messages (obsolete)
 			char *chan, *message;
 
 			chan = strtok(NULL, " ");
@@ -464,7 +465,7 @@ flatfile_db_load(const char *filename)
 		}
 		else if (!strcmp("CA", item))
 		{
-			/* chanacs */
+			// chanacs
 			struct chanacs *ca;
 			char *cachan, *causer;
 
@@ -490,8 +491,8 @@ flatfile_db_load(const char *filename)
 					const char *tsstr;
 					time_t ts = 0;
 
-					/* Compatibility with oldworld Atheme db's. --nenolod */
-					/* arbitrary cutoff to avoid touching newer +voOt entries -- jilles */
+					// Compatibility with oldworld Atheme db's. --nenolod
+					// arbitrary cutoff to avoid touching newer +voOt entries -- jilles
 					if (fl == OLD_CA_AOP && versn < 4)
 						fl = CA_AOP_DEF;
 
@@ -526,11 +527,11 @@ flatfile_db_load(const char *filename)
 					if (fl & CA_OP && !(their_ca_all & CA_HALFOP) && ca_all & CA_HALFOP)
 						fl |= CA_HALFOP;
 
-					/* Set new-style founder flag */
+					// Set new-style founder flag
 					if (founder != NULL && mu == founder && !(their_ca_all & CA_FOUNDER))
 						fl |= CA_FOUNDER;
 
-					/* Set new-style +q and +a flags */
+					// Set new-style +q and +a flags
 					if (fl & CA_SET && fl & CA_OP && !(their_ca_all & CA_USEPROTECT) && ca_all & CA_USEPROTECT)
 						fl |= CA_USEPROTECT;
 					if (fl & CA_FOUNDER && !(their_ca_all & CA_USEOWNER) && ca_all & CA_USEOWNER)
@@ -541,7 +542,7 @@ flatfile_db_load(const char *filename)
 					else
 						ca = chanacs_add(mc, entity(mu), fl, ts, NULL);
 				}
-				else if (versn == DB_SHRIKE)	/* DB_SHRIKE */
+				else if (versn == DB_SHRIKE)	// DB_SHRIKE
 				{
 					unsigned int fl = atol(strtok(NULL, " "));
 					unsigned int fl2 = 0x0;
@@ -575,7 +576,7 @@ flatfile_db_load(const char *filename)
 		}
 		else if (!strcmp("SI", item))
 		{
-				/* Services ignores */
+			// Services ignores
 			char *mask, *setby, *reason, *tmp;
 			time_t settime;
 
@@ -594,13 +595,13 @@ flatfile_db_load(const char *filename)
 		}
 		else if (!strcmp("KID", item))
 		{
-			/* unique kline id */
+			// unique kline id
 			char *id = strtok(NULL, " ");
 			me.kline_id = atol(id);
 		}
 		else if (!strcmp("KL", item))
 		{
-			/* klines */
+			// klines
 			char *user, *host, *reason, *setby, *tmp;
 			time_t settime;
 			long duration;
@@ -618,14 +619,15 @@ flatfile_db_load(const char *filename)
 
 			k = kline_add(user, host, reason, duration, setby);
 			k->settime = settime;
-			/* XXX this is not nice, oh well -- jilles */
+
+			// XXX this is not nice, oh well -- jilles
 			k->expires = k->settime + k->duration;
 
 			kin++;
 		}
 		else if (!strcmp("XID", item))
 		{
-			/* unique xline id */
+			// unique xline id
 			char *id = strtok(NULL, " ");
 			me.xline_id = atol(id);
 		}
@@ -648,14 +650,14 @@ flatfile_db_load(const char *filename)
 			x = xline_add(realname, reason, duration, setby);
 			x->settime = settime;
 
-			/* XXX this is not nice, oh well -- jilles */
+			// XXX this is not nice, oh well -- jilles
 			x->expires = x->settime + x->duration;
 
 			xin++;
 		}
 		else if (!strcmp("QID", item))
 		{
-			/* unique qline id */
+			// unique qline id
 			char *id = strtok(NULL, " ");
 			me.qline_id = atol(id);
 		}
@@ -678,14 +680,14 @@ flatfile_db_load(const char *filename)
 			q = qline_add(mask, reason, duration, setby);
 			q->settime = settime;
 
-			/* XXX this is not nice, oh well -- jilles */
+			// XXX this is not nice, oh well -- jilles
 			q->expires = q->settime + q->duration;
 
 			qin++;
 		}
 		else if (!strcmp("DE", item))
 		{
-			/* end */
+			// end
 			i = atoi(strtok(NULL, " "));
 			if (i != muin)
 				slog(LG_ERROR, "db_load(): got %d myusers; expected %d", muin, i);

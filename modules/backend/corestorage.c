@@ -21,11 +21,11 @@
 static unsigned int dbv;
 static unsigned int their_ca_all;
 
-static void corestorage_db_write(void *filename, enum db_save_strategy strategy);
-static void corestorage_db_write_blocking(void *filename);
-static void corestorage_db_saved_cb(pid_t, int, void*);
+#ifdef HAVE_FORK
+static pid_t child_pid;
+#endif
 
-/* write atheme.db (core fields) */
+// write atheme.db (core fields)
 static void
 corestorage_db_save(struct database_handle *db)
 {
@@ -46,7 +46,7 @@ corestorage_db_save(struct database_handle *db)
 
 	errno = 0;
 
-	/* write the database version */
+	// write the database version
 	db_start_row(db, "DBV");
 	db_write_int(db, 12);
 	db_commit_row(db);
@@ -154,7 +154,7 @@ corestorage_db_save(struct database_handle *db)
 		}
 	}
 
-	/* XXX: groupserv hack.  remove when we have proper dependency resolution. --nenolod */
+	// XXX: groupserv hack.  remove when we have proper dependency resolution. --nenolod
 	hook_call_db_write_pre_ca(db);
 
 	slog(LG_DEBUG, "db_save(): saving mychans");
@@ -164,7 +164,8 @@ corestorage_db_save(struct database_handle *db)
 		mowgli_patricia_iteration_state_t state2;
 
 		char *flags = gflags_tostr(mc_flags, mc->flags);
-		/* find a founder */
+
+		// find a founder
 		mu = NULL;
 		MOWGLI_ITER_FOREACH(tn, mc->chanacs.head)
 		{
@@ -175,7 +176,8 @@ corestorage_db_save(struct database_handle *db)
 				break;
 			}
 		}
-		/* MC <name> <registered> <used> <flags> <mlock_on> <mlock_off> <mlock_limit> [mlock_key] */
+
+		// MC <name> <registered> <used> <flags> <mlock_on> <mlock_off> <mlock_limit> [mlock_key]
 		db_start_row(db, "MC");
 		db_write_word(db, mc->name);
 		db_write_time(db, mc->registered);
@@ -232,7 +234,7 @@ corestorage_db_save(struct database_handle *db)
 		}
 	}
 
-	/* Old names */
+	// Old names
 	MOWGLI_PATRICIA_FOREACH(mun, &state, oldnameslist)
 	{
 		mowgli_patricia_iteration_state_t state2;
@@ -254,14 +256,14 @@ corestorage_db_save(struct database_handle *db)
 		}
 	}
 
-	/* Services ignores */
+	// Services ignores
 	slog(LG_DEBUG, "db_save(): saving svsignores");
 
 	MOWGLI_ITER_FOREACH(n, svs_ignore_list.head)
 	{
 		svsignore = (struct svsignore *)n->data;
 
-		/* SI <mask> <settime> <setby> <reason> */
+		// SI <mask> <settime> <setby> <reason>
 		db_start_row(db, "SI");
 		db_write_word(db, svsignore->mask);
 		db_write_time(db, svsignore->settime);
@@ -270,7 +272,7 @@ corestorage_db_save(struct database_handle *db)
 		db_commit_row(db);
 	}
 
-	/* Services operators */
+	// Services operators
 	slog(LG_DEBUG, "db_save(): saving sopers");
 
 	MOWGLI_ITER_FOREACH(n, soperlist.head)
@@ -282,7 +284,7 @@ corestorage_db_save(struct database_handle *db)
 		if (soper->flags & SOPER_CONF || soper->myuser == NULL)
 			continue;
 
-		/* SO <account> <operclass> <flags> [password] */
+		// SO <account> <operclass> <flags> [password]
 		db_start_row(db, "SO");
 		db_write_word(db, entity(soper->myuser)->name);
 		db_write_word(db, soper->classname);
@@ -304,7 +306,7 @@ corestorage_db_save(struct database_handle *db)
 	{
 		k = (struct kline *)n->data;
 
-		/* KL <user> <host> <duration> <settime> <setby> <reason> */
+		// KL <user> <host> <duration> <settime> <setby> <reason>
 		db_start_row(db, "KL");
 		db_write_uint(db, k->number);
 		db_write_word(db, k->user);
@@ -326,7 +328,7 @@ corestorage_db_save(struct database_handle *db)
 	{
 		x = (struct xline *)n->data;
 
-		/* XL <gecos> <duration> <settime> <setby> <reason> */
+		// XL <gecos> <duration> <settime> <setby> <reason>
 		db_start_row(db, "XL");
 		db_write_uint(db, x->number);
 		db_write_word(db, x->realname);
@@ -345,7 +347,7 @@ corestorage_db_save(struct database_handle *db)
 	{
 		q = (struct qline *)n->data;
 
-		/* QL <mask> <duration> <settime> <setby> <reason> */
+		// QL <mask> <duration> <settime> <setby> <reason>
 		db_start_row(db, "QL");
 		db_write_uint(db, q->number);
 		db_write_word(db, q->mask);
@@ -768,7 +770,7 @@ corestorage_h_ca(struct database_handle *db, const char *type)
 	target = db_sread_word(db);
 	flags = flags_to_bitmask(db_sread_word(db), 0);
 
-	/* UNBAN self and akick exempt have been split to +e per github #75 */
+	// UNBAN self and akick exempt have been split to +e per GitHub #75
 	if (!(their_ca_all & CA_EXEMPT) && (flags & CA_REMOVE))
 		flags |= CA_EXEMPT;
 
@@ -952,14 +954,31 @@ corestorage_db_load(const char *filename)
 	db_close(db);
 }
 
-#ifdef HAVE_FORK
-static pid_t child_pid;
+static void
+corestorage_db_write_blocking(void *filename)
+{
+	struct database_handle *db;
 
+	db = db_open(filename, DB_WRITE);
+
+	if (! db)
+	{
+		slog(LG_ERROR, "db_write_blocking(): db_open() failed, aborting save");
+		return;
+	}
+
+	corestorage_db_save(db);
+	hook_call_db_write(db);
+
+	db_close(db);
+}
+
+#ifdef HAVE_FORK
 static void
 corestorage_db_saved_cb(pid_t pid, int status, void *data)
 {
 	if (child_pid != pid)
-		return; /* probably killed our child for a forced write */
+		return; // probably killed our child for a forced write
 	else
 	{
 		child_pid = 0;
@@ -1015,25 +1034,6 @@ corestorage_db_write(void *filename, enum db_save_strategy strategy)
 			return;
 	}
 #endif
-}
-
-static void
-corestorage_db_write_blocking(void *filename)
-{
-	struct database_handle *db;
-
-	db = db_open(filename, DB_WRITE);
-
-	if (! db)
-	{
-		slog(LG_ERROR, "db_write_blocking(): db_open() failed, aborting save");
-		return;
-	}
-
-	corestorage_db_save(db);
-	hook_call_db_write(db);
-
-	db_close(db);
 }
 
 static void

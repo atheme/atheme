@@ -16,13 +16,13 @@
 
 struct opensex
 {
-	/* Lexing state */
+	// Lexing state
 	char *buf;
 	unsigned int bufsize;
 	char *token;
 	FILE *f;
 
-	/* Interpreting state */
+	// Interpreting state
 	unsigned int grver;
 };
 
@@ -52,8 +52,6 @@ opensex_h_grver(struct database_handle *db, const char *type)
 	if (rs->grver != 1)
 		slog(LG_ERROR, "opensex: grammar version %d is unsupported.  dazed and confused, but trying to continue.", rs->grver);
 }
-
-/***************************************************************************************************/
 
 static bool
 opensex_read_next_row(struct database_handle *hdl)
@@ -243,15 +241,12 @@ opensex_commit_row(struct database_handle *db)
 
 static const struct database_vtable opensex_vt = {
 	.name = "opensex",
-
 	.read_next_row = opensex_read_next_row,
-
 	.read_word = opensex_read_word,
 	.read_str = opensex_read_str,
 	.read_int = opensex_read_int,
 	.read_uint = opensex_read_uint,
 	.read_time = opensex_read_time,
-
 	.start_row = opensex_start_row,
 	.write_word = opensex_write_word,
 	.write_str = opensex_write_str,
@@ -276,7 +271,7 @@ opensex_db_open_read(const char *filename)
 	{
 		errno1 = errno;
 
-		/* ENOENT can happen if the database does not exist yet. */
+		// ENOENT can happen if the database does not exist yet.
 		if (errno == ENOENT)
 		{
 			slog(LG_ERROR, "db-open-read: database '%s' does not yet exist; a new one will be created.", path);
@@ -386,7 +381,7 @@ opensex_db_close(struct database_handle *db)
 
 	if (db->txn == DB_WRITE)
 	{
-		/* now, replace the old database with the new one, using an atomic rename */
+		// now, replace the old database with the new one, using an atomic rename
 		if (srename(oldpath, newpath) < 0)
 		{
 			errno1 = errno;
