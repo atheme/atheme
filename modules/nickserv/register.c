@@ -10,10 +10,6 @@
 unsigned int ratelimit_count = 0;
 time_t ratelimit_firsttime = 0;
 
-static void ns_cmd_register(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_register = { "REGISTER", N_("Registers a nickname."), AC_NONE, 3, ns_cmd_register, { .path = "nickserv/register" } };
-
 static void
 ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -96,7 +92,7 @@ ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* make sure it isn't registered already */
+	// make sure it isn't registered already
 	if (nicksvs.no_nick_ownership ? myuser_find(account) != NULL : mynick_find(account) != NULL)
 	{
 		command_fail(si, fault_alreadyexists, _("\2%s\2 is already registered."), account);
@@ -106,7 +102,7 @@ ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 	if ((unsigned int)(CURRTIME - ratelimit_firsttime) > config_options.ratelimit_period)
 		ratelimit_count = 0, ratelimit_firsttime = CURRTIME;
 
-	/* Still do flood priv checking because the user may be in the ircop operclass */
+	// Still do flood priv checking because the user may be in the ircop operclass
 	if (ratelimit_count > config_options.ratelimit_uses && !has_priv(si, PRIV_FLOOD))
 	{
 		command_fail(si, fault_toomany, _("The system is currently too busy to process your registration, please try again later."));
@@ -196,7 +192,7 @@ ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 		mowgli_node_add(si->su, n, &mu->logins);
 
 		if (!(mu->flags & MU_WAITAUTH))
-			/* only grant ircd registered status if it's verified */
+			// only grant ircd registered status if it's verified
 			ircd_on_login(si->su, mu, NULL);
 	}
 
@@ -233,6 +229,8 @@ ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 		hook_call_user_verify_register(&req);
 	}
 }
+
+static struct command ns_register = { "REGISTER", N_("Registers a nickname."), AC_NONE, 3, ns_cmd_register, { .path = "nickserv/register" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

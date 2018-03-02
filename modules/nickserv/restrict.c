@@ -9,10 +9,6 @@
 #include "list_common.h"
 #include "list.h"
 
-static void ns_cmd_restrict(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_restrict = { "RESTRICT", N_("Restrict a user from using certain commands."), PRIV_MARK, 3, ns_cmd_restrict, { .path = "nickserv/restrict" } };
-
 static bool
 is_restricted(const struct mynick *mn, const void *arg)
 {
@@ -129,6 +125,8 @@ ns_cmd_restrict(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Usage: RESTRICT <target> <ON|OFF> [note]"));
 	}
 }
+
+static struct command ns_restrict = { "RESTRICT", N_("Restrict a user from using certain commands."), PRIV_MARK, 3, ns_cmd_restrict, { .path = "nickserv/restrict" } };
 
 static void
 mod_init(struct module *const restrict m)

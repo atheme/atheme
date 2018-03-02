@@ -9,11 +9,6 @@
 #include "list_common.h"
 #include "list.h"
 
-static void ns_cmd_regnolimit(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_regnolimit = { "REGNOLIMIT", N_("Allow a user to bypass registration limits."),
-		      PRIV_ADMIN, 2, ns_cmd_regnolimit, { .path = "nickserv/regnolimit" } };
-
 static bool
 has_regnolimit(const struct mynick *mn, const void *arg)
 {
@@ -76,6 +71,8 @@ ns_cmd_regnolimit(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Usage: REGNOLIMIT <account> <ON|OFF>"));
 	}
 }
+
+static struct command ns_regnolimit = { "REGNOLIMIT", N_("Allow a user to bypass registration limits."), PRIV_ADMIN, 2, ns_cmd_regnolimit, { .path = "nickserv/regnolimit" } };
 
 static void
 mod_init(struct module *const restrict m)

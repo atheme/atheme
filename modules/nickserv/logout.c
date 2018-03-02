@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-static void ns_cmd_logout(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_logout = { "LOGOUT", N_("Logs your services session out."), AC_NONE, 2, ns_cmd_logout, { .path = "nickserv/logout" } };
-
 static void
 ns_cmd_logout(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -98,6 +94,8 @@ ns_cmd_logout(struct sourceinfo *si, int parc, char *parv[])
 		u->myuser = NULL;
 	}
 }
+
+static struct command ns_logout = { "LOGOUT", N_("Logs your services session out."), AC_NONE, 2, ns_cmd_logout, { .path = "nickserv/logout" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

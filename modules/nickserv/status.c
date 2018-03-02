@@ -7,12 +7,6 @@
 
 #include "atheme.h"
 
-static void ns_cmd_acc(struct sourceinfo *si, int parc, char *parv[]);
-static void ns_cmd_status(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_status = { "STATUS", N_("Displays session information."), AC_NONE, 0, ns_cmd_status, { .path = "nickserv/status" } };
-static struct command ns_acc = { "ACC", N_("Displays parsable session information."), AC_NONE, 2, ns_cmd_acc, { .path = "nickserv/acc" } };
-
 static void
 ns_cmd_acc(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -106,6 +100,9 @@ ns_cmd_status(struct sourceinfo *si, int parc, char *parv[])
 	if (si->su != NULL && is_ircop(si->su))
 		command_success_nodata(si, _("You are an IRC operator."));
 }
+
+static struct command ns_status = { "STATUS", N_("Displays session information."), AC_NONE, 0, ns_cmd_status, { .path = "nickserv/status" } };
+static struct command ns_acc = { "ACC", N_("Displays parsable session information."), AC_NONE, 2, ns_cmd_acc, { .path = "nickserv/acc" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

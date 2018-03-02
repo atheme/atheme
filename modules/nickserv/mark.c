@@ -12,10 +12,6 @@
 //NickServ mark module
 //Do NOT use this in combination with contrib/multimark!
 
-static void ns_cmd_mark(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_mark = { "MARK", N_("Adds a note to a user."), PRIV_MARK, 3, ns_cmd_mark, { .path = "nickserv/mark" } };
-
 static bool
 mark_match(const struct mynick *mn, const void *arg)
 {
@@ -115,6 +111,8 @@ ns_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Usage: MARK <target> <ON|OFF> [note]"));
 	}
 }
+
+static struct command ns_mark = { "MARK", N_("Adds a note to a user."), PRIV_MARK, 3, ns_cmd_mark, { .path = "nickserv/mark" } };
 
 static void
 mod_init(struct module *const restrict m)

@@ -6,20 +6,18 @@
  */
 
 #include "atheme.h"
-#include "conf.h" /* XXX conf_ni_table */
+#include "conf.h" // XXX conf_ni_table
 #include <limits.h>
 
-static struct
-{
+static struct {
 	const char *nickstring, *accountstring;
-} nick_account_trans[] =
-{
-	/* command descriptions */
+} nick_account_trans[] = {
+	// command descriptions
 	{ "Reclaims use of a nickname.", N_("Disconnects an old session.") },
 	{ "Registers a nickname.", N_("Registers an account.") },
 	{ "Lists nicknames registered matching a given pattern.", N_("Lists accounts matching a given pattern.") },
 
-	/* messages */
+	// messages
 	{ "\2%s\2 is not a registered nickname.", N_("\2%s\2 is not a registered account.") },
 	{ "Syntax: INFO <nickname>", N_("Syntax: INFO <account>") },
 	{ "No nicknames matched pattern \2%s\2", N_("No accounts matched pattern \2%s\2") },
@@ -39,11 +37,11 @@ nickserv_handle_nickchange(struct user *u)
 	if (nicksvs.me == NULL || nicksvs.no_nick_ownership)
 		return;
 
-	/* They're logged in, don't send them spam -- jilles */
+	// They're logged in, don't send them spam -- jilles
 	if (u->myuser)
 		u->flags |= UF_SEENINFO;
 
-	/* Also don't send it if they came back from a split -- jilles */
+	// Also don't send it if they came back from a split -- jilles
 	if (!(u->server->flags & SF_EOB))
 		u->flags |= UF_SEENINFO;
 
@@ -70,7 +68,7 @@ nickserv_handle_nickchange(struct user *u)
 		return;
 	}
 
-	/* OpenServices: is user on access list? -nenolod */
+	// OpenServices: is user on access list? -nenolod
 	if (myuser_access_verify(u, mn->owner))
 	{
 		notice(nicksvs.nick, u->nick, _("Please identify via \2/%s%s identify <password>\2."),

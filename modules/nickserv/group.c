@@ -7,14 +7,6 @@
 
 #include "atheme.h"
 
-static void ns_cmd_group(struct sourceinfo *si, int parc, char *parv[]);
-static void ns_cmd_ungroup(struct sourceinfo *si, int parc, char *parv[]);
-static void ns_cmd_fungroup(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_group = { "GROUP", N_("Adds a nickname to your account."), AC_AUTHENTICATED, 0, ns_cmd_group, { .path = "nickserv/group" } };
-static struct command ns_ungroup = { "UNGROUP", N_("Removes a nickname from your account."), AC_AUTHENTICATED, 1, ns_cmd_ungroup, { .path = "nickserv/ungroup" } };
-static struct command ns_fungroup = { "FUNGROUP", N_("Forces removal of a nickname from an account."), PRIV_USER_ADMIN, 2, ns_cmd_fungroup, { .path = "nickserv/fungroup" } };
-
 static void
 ns_cmd_group(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -211,6 +203,10 @@ ns_cmd_fungroup(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("Nick \2%s\2 has been removed from account \2%s\2."), mn->nick, entity(mu)->name);
 	atheme_object_unref(mn);
 }
+
+static struct command ns_group = { "GROUP", N_("Adds a nickname to your account."), AC_AUTHENTICATED, 0, ns_cmd_group, { .path = "nickserv/group" } };
+static struct command ns_ungroup = { "UNGROUP", N_("Removes a nickname from your account."), AC_AUTHENTICATED, 1, ns_cmd_ungroup, { .path = "nickserv/ungroup" } };
+static struct command ns_fungroup = { "FUNGROUP", N_("Forces removal of a nickname from an account."), PRIV_USER_ADMIN, 2, ns_cmd_fungroup, { .path = "nickserv/fungroup" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

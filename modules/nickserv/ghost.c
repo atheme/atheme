@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-static void ns_cmd_ghost(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_ghost = { "GHOST", N_("Reclaims use of a nickname."), AC_NONE, 2, ns_cmd_ghost, { .path = "nickserv/ghost" } };
-
 void
 ns_cmd_ghost(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -71,9 +67,9 @@ ns_cmd_ghost(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	if ((target_u->myuser && target_u->myuser == si->smu) || /* they're identified under our account */
-			(!nicksvs.no_nick_ownership && mn && mu == si->smu) || /* we're identified under their nick's account */
-			(!nicksvs.no_nick_ownership && password && verify_password(mu, password))) /* we have the correct password */
+	if ((target_u->myuser && target_u->myuser == si->smu) || // they're identified under our account
+			(!nicksvs.no_nick_ownership && mn && mu == si->smu) || // we're identified under their nick's account
+			(!nicksvs.no_nick_ownership && password && verify_password(mu, password))) // we have the correct password
 	{
 		logcommand(si, CMDLOG_DO, "GHOST: \2%s!%s@%s\2", target_u->nick, target_u->user, target_u->vhost);
 
@@ -105,6 +101,8 @@ ns_cmd_ghost(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, _("You may not ghost \2%s\2."), target);
 	}
 }
+
+static struct command ns_ghost = { "GHOST", N_("Reclaims use of a nickname."), AC_NONE, 2, ns_cmd_ghost, { .path = "nickserv/ghost" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

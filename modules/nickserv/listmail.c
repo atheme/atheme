@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-static void ns_cmd_listmail(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_listmail = { "LISTMAIL", N_("Lists accounts registered to an e-mail address."), PRIV_USER_AUSPEX, 1, ns_cmd_listmail, { .path = "nickserv/listmail" } };
-
 struct listmail_state
 {
 	struct sourceinfo *origin;
@@ -27,7 +23,7 @@ listmail_foreach_cb(struct myentity *mt, void *privdata)
 
 	if (state->email_canonical == mu->email_canonical || !match(state->pattern, mu->email))
 	{
-		/* in the future we could add a LIMIT parameter */
+		// in the future we could add a LIMIT parameter
 		if (state->matches == 0)
 			command_success_nodata(state->origin, "Accounts matching e-mail address \2%s\2:", state->pattern);
 
@@ -65,6 +61,8 @@ ns_cmd_listmail(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, ngettext(N_("\2%d\2 match for e-mail address \2%s\2"),
 						    N_("\2%d\2 matches for e-mail address \2%s\2"), state.matches), state.matches, email);
 }
+
+static struct command ns_listmail = { "LISTMAIL", N_("Lists accounts registered to an e-mail address."), PRIV_USER_AUSPEX, 1, ns_cmd_listmail, { .path = "nickserv/listmail" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

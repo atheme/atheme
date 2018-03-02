@@ -11,9 +11,6 @@
 static void
 mod_init(struct module *const restrict m)
 {
-	/* MODULE_TRY_REQUEST_DEPENDENCY stuff so this acts like a meta-
-	 * module like chanserv/set.c .
-	 */
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_core");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_email");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_emailmemos");

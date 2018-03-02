@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-static void ns_cmd_cert(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_cert = { "CERT", N_("Changes and shows your nickname CertFP authentication list."), AC_NONE, 2, ns_cmd_cert, { .path = "nickserv/cert" } };
-
 static void
 ns_cmd_cert(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -186,6 +182,8 @@ ns_cmd_cert(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 }
+
+static struct command ns_cert = { "CERT", N_("Changes and shows your nickname CertFP authentication list."), AC_NONE, 2, ns_cmd_cert, { .path = "nickserv/cert" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

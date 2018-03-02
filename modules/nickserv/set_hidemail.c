@@ -13,10 +13,6 @@
 
 static mowgli_patricia_t **ns_set_cmdtree = NULL;
 
-static void ns_cmd_set_hidemail(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_set_hidemail = { "HIDEMAIL", N_("Hides your e-mail address."), AC_NONE, 1, ns_cmd_set_hidemail, { .path = "nickserv/set_hidemail" } };
-
 static bool
 has_hidemail(const struct mynick *mn, const void *arg)
 {
@@ -25,7 +21,7 @@ has_hidemail(const struct mynick *mn, const void *arg)
 	return ( mu->flags & MU_HIDEMAIL ) == MU_HIDEMAIL;
 }
 
-/* SET HIDEMAIL [ON|OFF] */
+// SET HIDEMAIL [ON|OFF]
 static void
 ns_cmd_set_hidemail(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -75,6 +71,8 @@ ns_cmd_set_hidemail(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 }
+
+static struct command ns_set_hidemail = { "HIDEMAIL", N_("Hides your e-mail address."), AC_NONE, 1, ns_cmd_set_hidemail, { .path = "nickserv/set_hidemail" } };
 
 static void
 mod_init(struct module *const restrict m)

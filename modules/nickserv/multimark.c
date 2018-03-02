@@ -10,31 +10,6 @@
 #include "list.h"
 #include "account.h"
 
-static void ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[]);
-
-static void write_multimark_db(struct database_handle *db);
-static void db_h_mm(struct database_handle *db, const char *type);
-static void db_h_rm(struct database_handle *db, const char *type);
-
-static void show_multimark(hook_user_req_t *hdata);
-static void show_multimark_noexist(hook_info_noexist_req_t *hdata);
-
-static void account_drop_hook(struct myuser *mu);
-
-static void nick_group_hook(hook_user_req_t *hdata);
-static void nick_ungroup_hook(hook_user_req_t *hdata);
-static void account_register_hook(struct myuser *mu);
-static void multimark_needforce(hook_user_needforce_t *hdata);
-
-static bool is_user_marked(struct myuser *mu);
-
-int get_multimark_max(struct myuser *mu);
-static inline mowgli_list_t *multimark_list(struct myuser *mu);
-
-static mowgli_patricia_t *restored_marks;
-
-static struct command ns_multimark = { "MARK", N_("Adds a note to a user."), PRIV_MARK, 3, ns_cmd_multimark, { .path = "nickserv/multimark" } };
-
 struct multimark
 {
 	char *setter_uid;
@@ -58,6 +33,26 @@ struct restored_mark
 	char *mark;
 	mowgli_node_t node;
 };
+
+static mowgli_patricia_t *restored_marks;
+
+static inline mowgli_list_t *
+multimark_list(struct myuser *mu)
+{
+	mowgli_list_t *l;
+
+	return_val_if_fail(mu != NULL, NULL);
+
+	l = privatedata_get(mu, "mark:list");
+
+	if (l != NULL)
+		return l;
+
+	l = mowgli_list_create();
+	privatedata_set(mu, "mark:list", l);
+
+	return l;
+}
 
 static bool
 multimark_match(const struct mynick *mn, const void *arg)
@@ -84,14 +79,6 @@ multimark_match(const struct mynick *mn, const void *arg)
 }
 
 static bool
-is_marked(const struct mynick *mn, const void *arg)
-{
-	struct myuser *mu = mn->owner;
-
-	return is_user_marked(mu);
-}
-
-static bool
 is_user_marked(struct myuser *mu)
 {
 	mowgli_list_t *l = multimark_list(mu);
@@ -99,22 +86,12 @@ is_user_marked(struct myuser *mu)
 	return MOWGLI_LIST_LENGTH(l) != 0;
 }
 
-static inline mowgli_list_t *
-multimark_list(struct myuser *mu)
+static bool
+is_marked(const struct mynick *mn, const void *arg)
 {
-	mowgli_list_t *l;
+	struct myuser *mu = mn->owner;
 
-	return_val_if_fail(mu != NULL, NULL);
-
-	l = privatedata_get(mu, "mark:list");
-
-	if (l != NULL)
-		return l;
-
-	l = mowgli_list_create();
-	privatedata_set(mu, "mark:list", l);
-
-	return l;
+	return is_user_marked(mu);
 }
 
 mowgli_list_t *
@@ -266,7 +243,29 @@ db_h_rm(struct database_handle *db, const char *type)
 	mowgli_node_add(rm, &rm->node, l);
 }
 
-/* Copy old style marks */
+int
+get_multimark_max(struct myuser *mu)
+{
+	int max = 0;
+
+	mowgli_list_t *l = multimark_list(mu);
+
+	mowgli_node_t *n;
+	struct multimark *mm;
+
+	MOWGLI_ITER_FOREACH(n, l->head)
+	{
+		mm = n->data;
+		if (mm->number > max)
+		{
+			max = mm->number;
+		}
+	}
+
+	return max+1;
+}
+
+// Copy old style marks
 static void
 migrate_user(struct myuser *mu)
 {
@@ -295,8 +294,7 @@ migrate_user(struct myuser *mu)
 
 	struct multimark *const mm = smalloc(sizeof *mm);
 
-	/*
-	 * "Was MARKED by nick (actual_account)"
+	/* "Was MARKED by nick (actual_account)"
 	 * Finds the string between '(' and ')', which
 	 * is the account name
 	 */
@@ -328,7 +326,7 @@ migrate_user(struct myuser *mu)
 
 	mowgli_node_add(mm, &mm->node, l);
 
-	/* remove old style mark */
+	// remove old style mark
 	metadata_delete(mu, "private:mark:setter");
 	metadata_delete(mu, "private:mark:reason");
 	metadata_delete(mu, "private:mark:timestamp");
@@ -349,28 +347,6 @@ migrate_all(struct sourceinfo *si)
 	}
 
 	command_success_nodata(si, _("Mark data migrated successfully."));
-}
-
-int
-get_multimark_max(struct myuser *mu)
-{
-	int max = 0;
-
-	mowgli_list_t *l = multimark_list(mu);
-
-	mowgli_node_t *n;
-	struct multimark *mm;
-
-	MOWGLI_ITER_FOREACH(n, l->head)
-	{
-		mm = n->data;
-		if (mm->number > max)
-		{
-			max = mm->number;
-		}
-	}
-
-	return max+1;
 }
 
 static void
@@ -1038,6 +1014,8 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Usage: MARK <target> <ADD|DEL|LIST|MIGRATE> [note]"));
 	}
 }
+
+static struct command ns_multimark = { "MARK", N_("Adds a note to a user."), PRIV_MARK, 3, ns_cmd_multimark, { .path = "nickserv/multimark" } };
 
 static void
 mod_init(struct module *const restrict m)

@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-static void ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_sendpass = { "SENDPASS", N_("Email registration passwords."), PRIV_USER_SENDPASS, 2, ns_cmd_sendpass, { .path = "nickserv/sendpass" } };
-
 enum specialoperation
 {
 	op_none,
@@ -225,6 +221,8 @@ ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 		}
 	}
 }
+
+static struct command ns_sendpass = { "SENDPASS", N_("Email registration passwords."), PRIV_USER_SENDPASS, 2, ns_cmd_sendpass, { .path = "nickserv/sendpass" } };
 
 static void
 mod_init(struct module *const restrict m)

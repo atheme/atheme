@@ -7,13 +7,6 @@
 
 #include "atheme.h"
 
-static void vhost_on_identify(struct user *u);
-static void ns_cmd_vhost(struct sourceinfo *si, int parc, char *parv[]);
-static void ns_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_vhost = { "VHOST", N_("Manages user virtualhosts."), PRIV_USER_VHOST, 4, ns_cmd_vhost, { .path = "nickserv/vhost" } };
-static struct command ns_listvhost = { "LISTVHOST", N_("Lists user virtualhosts."), PRIV_USER_AUSPEX, 1, ns_cmd_listvhost, { .path = "nickserv/listvhost" } };
-
 static void
 do_sethost(struct user *u, stringref host)
 {
@@ -37,8 +30,8 @@ do_sethost_all(struct myuser *mu, stringref host)
 	}
 }
 
-/* VHOST <account> [host]  (legacy) */
-/* VHOST <account> ON|OFF [host] */
+// VHOST <account> [host]  (legacy)
+// VHOST <account> ON|OFF [host]
 static void
 ns_cmd_vhost(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -58,7 +51,7 @@ ns_cmd_vhost(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* find the user... */
+	// find the user...
 	if (!(mu = myuser_find_ext(target)))
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
@@ -173,7 +166,7 @@ ns_cmd_vhost(struct sourceinfo *si, int parc, char *parv[])
 		}
 	}
 
-	/* deletion action */
+	// deletion action
 	if (!host)
 	{
 		if (!metadata_find(mu, "private:usercloak"))
@@ -273,12 +266,15 @@ vhost_on_identify(struct user *u)
 	struct myuser *mu = u->myuser;
 	struct metadata *md;
 
-	/* NO CLOAK?!*$*%*&&$(!& */
+	// NO CLOAK?!*$*%*&&$(!&
 	if (!(md = metadata_find(mu, "private:usercloak")))
 		return;
 
 	do_sethost(u, md->value);
 }
+
+static struct command ns_vhost = { "VHOST", N_("Manages user virtualhosts."), PRIV_USER_VHOST, 4, ns_cmd_vhost, { .path = "nickserv/vhost" } };
+static struct command ns_listvhost = { "LISTVHOST", N_("Lists user virtualhosts."), PRIV_USER_AUSPEX, 1, ns_cmd_listvhost, { .path = "nickserv/listvhost" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -11,11 +11,7 @@
 
 static mowgli_patricia_t **ns_set_cmdtree = NULL;
 
-static void ns_cmd_set_email(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_set_email = { "EMAIL", N_("Changes your e-mail address."), AC_NONE, 1, ns_cmd_set_email, { .path = "nickserv/set_email" } };
-
-/* SET EMAIL <new address> */
+// SET EMAIL <new address>
 static void
 ns_cmd_set_email(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -84,6 +80,8 @@ ns_cmd_set_email(struct sourceinfo *si, int parc, char *parv[])
 	myuser_set_email(si->smu, email);
 	command_success_nodata(si, _("The email address for account \2%s\2 has been changed to \2%s\2."), entity(si->smu)->name, si->smu->email);
 }
+
+static struct command ns_set_email = { "EMAIL", N_("Changes your e-mail address."), AC_NONE, 1, ns_cmd_set_email, { .path = "nickserv/set_email" } };
 
 static void
 mod_init(struct module *const restrict m)

@@ -13,10 +13,6 @@
 
 static mowgli_patricia_t **ns_set_cmdtree = NULL;
 
-static void ns_cmd_set_noop(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_set_noop = { "NOOP", N_("Prevents services from setting modes upon you automatically."), AC_NONE, 1, ns_cmd_set_noop, { .path = "nickserv/set_noop" } };
-
 static bool
 has_noop(const struct mynick *mn, const void *arg)
 {
@@ -25,7 +21,7 @@ has_noop(const struct mynick *mn, const void *arg)
 	return ( mu->flags & MU_NOOP ) == MU_NOOP;
 }
 
-/* SET NOOP [ON|OFF] */
+// SET NOOP [ON|OFF]
 static void
 ns_cmd_set_noop(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -76,6 +72,8 @@ ns_cmd_set_noop(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 }
+
+static struct command ns_set_noop = { "NOOP", N_("Prevents services from setting modes upon you automatically."), AC_NONE, 1, ns_cmd_set_noop, { .path = "nickserv/set_noop" } };
 
 static void
 mod_init(struct module *const restrict m)

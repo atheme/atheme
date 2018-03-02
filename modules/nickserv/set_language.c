@@ -13,11 +13,7 @@
 
 static mowgli_patricia_t **ns_set_cmdtree = NULL;
 
-static void ns_cmd_set_language(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_set_language = { "LANGUAGE", N_("Changes the language services uses to talk to you."), AC_NONE, 1, ns_cmd_set_language, { .path = "nickserv/set_language" } };
-
-/* SET LANGUAGE <language> */
+// SET LANGUAGE <language>
 static void
 ns_cmd_set_language(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -49,6 +45,8 @@ ns_cmd_set_language(struct sourceinfo *si, int parc, char *parv[])
 
 	return;
 }
+
+static struct command ns_set_language = { "LANGUAGE", N_("Changes the language services uses to talk to you."), AC_NONE, 1, ns_cmd_set_language, { .path = "nickserv/set_language" } };
 
 static void
 mod_init(struct module *const restrict m)

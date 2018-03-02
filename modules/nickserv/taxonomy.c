@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-static void ns_cmd_taxonomy(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_taxonomy = { "TAXONOMY", N_("Displays a user's metadata."), AC_NONE, 1, ns_cmd_taxonomy, { .path = "nickserv/taxonomy" } };
-
 static void
 ns_cmd_taxonomy(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -53,6 +49,8 @@ ns_cmd_taxonomy(struct sourceinfo *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("End of \2%s\2 taxonomy."), entity(mu)->name);
 }
+
+static struct command ns_taxonomy = { "TAXONOMY", N_("Displays a user's metadata."), AC_NONE, 1, ns_cmd_taxonomy, { .path = "nickserv/taxonomy" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

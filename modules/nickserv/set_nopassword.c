@@ -14,10 +14,6 @@
 
 static mowgli_patricia_t **ns_set_cmdtree = NULL;
 
-static void ns_cmd_set_nopassword(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_set_nopassword = { "NOPASSWORD", N_("Allows you to disable any password-based authentication methods except for XMLRPC/JSONRPC."), AC_NONE, 1, ns_cmd_set_nopassword, { .path = "nickserv/set_nopassword" } };
-
 static bool
 has_nopassword(const struct mynick *mn, const void *arg)
 {
@@ -26,7 +22,7 @@ has_nopassword(const struct mynick *mn, const void *arg)
 	return ( mu->flags & MU_NOPASSWORD ) == MU_NOPASSWORD;
 }
 
-/* SET NOPASSWORD [ON|OFF] */
+// SET NOPASSWORD [ON|OFF]
 static void
 ns_cmd_set_nopassword(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -82,6 +78,8 @@ ns_cmd_set_nopassword(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 }
+
+static struct command ns_set_nopassword = { "NOPASSWORD", N_("Allows you to disable any password-based authentication methods except for XMLRPC/JSONRPC."), AC_NONE, 1, ns_cmd_set_nopassword, { .path = "nickserv/set_nopassword" } };
 
 static void
 mod_init(struct module *const restrict m)

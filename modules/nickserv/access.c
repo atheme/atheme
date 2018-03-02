@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-static void ns_cmd_access(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_access = { "ACCESS", N_("Changes and shows your nickname access list."), AC_NONE, 2, ns_cmd_access, { .path = "nickserv/access" } };
-
 static bool
 username_is_random(const char *name)
 {
@@ -57,7 +53,7 @@ construct_mask(struct user *u)
 			hostisdyn = true;
 	if (hostisdyn)
 	{
-		/* note that all dyn patterns contain a dot */
+		// note that all dyn patterns contain a dot
 		p = u->host;
 		prevdot = u->host;
 		lastdot = strrchr(u->host, '.');
@@ -143,7 +139,7 @@ myuser_access_delete_enforce(struct myuser *mu, char *mask)
 	struct user *u;
 	hook_nick_enforce_t hdata;
 
-	/* find users who get access via the access list */
+	// find users who get access via the access list
 	MOWGLI_ITER_FOREACH(n, mu->nicks.head)
 	{
 		mn = n->data;
@@ -151,9 +147,11 @@ myuser_access_delete_enforce(struct myuser *mu, char *mask)
 		if (u != NULL && u->myuser != mu && myuser_access_verify(u, mu))
 			mowgli_node_add(u, mowgli_node_create(), &l);
 	}
-	/* remove mask */
+
+	// remove mask
 	myuser_access_delete(mu, mask);
-	/* check if those users still have access */
+
+	// check if those users still have access
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, l.head)
 	{
 		u = n->data;
@@ -269,19 +267,21 @@ ns_cmd_access(struct sourceinfo *si, int parc, char *parv[])
 			p++;
 		}
 		host = strchr(mask, '@');
-		if (host == NULL) /* account name access masks? */
+		if (host == NULL) // account name access masks?
 		{
 			command_fail(si, fault_badparams, _("Invalid mask \2%s\2."), parv[1]);
 			return;
 		}
 		host++;
-		/* try mangling to cidr */
+
+		// try mangling to cidr
 		mowgli_strlcpy(mangledmask, mask, sizeof mangledmask);
 		if (mangle_wildcard_to_cidr(host, mangledmask + (host - mask), sizeof mangledmask - (host - mask)))
 			host = mangledmask + (host - mask), mask = mangledmask;
-		/* more checks */
+
+		// more checks
 		if (si->su != NULL && (!strcasecmp(host, si->su->host) || !strcasecmp(host, si->su->vhost)))
-			; /* it's their host, allow it */
+			; // it's their host, allow it
 		else if (host[0] == '.' || host[0] == ':' || host[0] == '\0' || host[1] == '\0' || host == mask + 1 || strchr(host, '@') || strstr(host, ".."))
 		{
 			command_fail(si, fault_badparams, _("Invalid mask \2%s\2."), parv[1]);
@@ -289,7 +289,7 @@ ns_cmd_access(struct sourceinfo *si, int parc, char *parv[])
 		}
 		else if ((strchr(host, '*') || strchr(host, '?')) && (mask[0] == '*' && mask[1] == '@'))
 		{
-			/* can't use * username and wildcarded host */
+			// can't use * username and wildcarded host
 			command_fail(si, fault_badparams, _("Too wide mask \2%s\2."), parv[1]);
 			return;
 		}
@@ -310,7 +310,7 @@ ns_cmd_access(struct sourceinfo *si, int parc, char *parv[])
 		{
 			if (strchr(host, ':'))
 			{
-				/* No wildcarded IPs */
+				// No wildcarded IPs
 				if (strchr(host, '?') || strchr(host, '*'))
 				{
 					command_fail(si, fault_badparams, _("Too wide mask \2%s\2."), parv[1]);
@@ -323,14 +323,14 @@ ns_cmd_access(struct sourceinfo *si, int parc, char *parv[])
 				if (p == NULL)
 					p = host;
 
-				/* No wildcarded IPs */
+				// No wildcarded IPs
 				if (isdigit((unsigned char)p[1]) && (strchr(host, '*') || strchr(host, '?')))
 				{
 					command_fail(si, fault_badparams, _("Too wide mask \2%s\2."), parv[1]);
 					return;
 				}
-				/* Require non-wildcard top and second level
-				 * domain */
+
+				// Require non-wildcard top and second level domain
 				if (strchr(p, '?') || strchr(p, '*'))
 				{
 					command_fail(si, fault_badparams, _("Too wide mask \2%s\2."), parv[1]);
@@ -395,6 +395,8 @@ ns_cmd_access(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 }
+
+static struct command ns_access = { "ACCESS", N_("Changes and shows your nickname access list."), AC_NONE, 2, ns_cmd_access, { .path = "nickserv/access" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

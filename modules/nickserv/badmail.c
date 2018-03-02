@@ -7,14 +7,6 @@
 
 #include "atheme.h"
 
-static void check_registration(hook_user_register_check_t *hdata);
-static void ns_cmd_badmail(struct sourceinfo *si, int parc, char *parv[]);
-
-static void write_bedb(struct database_handle *db);
-static void db_h_be(struct database_handle *db, const char *type);
-
-static struct command ns_badmail = { "BADMAIL", N_("Disallows registrations from certain email addresses."), PRIV_USER_ADMIN, 3, ns_cmd_badmail, { .path = "nickserv/badmail" } };
-
 struct badmail
 {
 	char *mail;
@@ -115,7 +107,7 @@ ns_cmd_badmail(struct sourceinfo *si, int parc, char *parv[])
 			return;
 		}
 
-		/* search for it */
+		// search for it
 		MOWGLI_ITER_FOREACH(n, ns_maillist.head)
 		{
 			l = n->data;
@@ -242,6 +234,8 @@ ns_cmd_badmail(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 }
+
+static struct command ns_badmail = { "BADMAIL", N_("Disallows registrations from certain email addresses."), PRIV_USER_ADMIN, 3, ns_cmd_badmail, { .path = "nickserv/badmail" } };
 
 static void
 mod_init(struct module *const restrict m)

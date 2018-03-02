@@ -7,11 +7,7 @@
 
 #include "atheme.h"
 
-static void ns_cmd_help(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 1, ns_cmd_help, { .path = "help" } };
-
-/* HELP <command> [params] */
+// HELP <command> [params]
 void
 ns_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -54,7 +50,7 @@ ns_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 
 		command_success_nodata(si, _("***** \2End of Help\2 *****"));
 
-		/* Fun for helpchan/helpurl. */
+		// Fun for helpchan/helpurl.
 		if (config_options.helpchan && config_options.helpurl)
 			command_success_nodata(si, _("If you're having trouble or you need some additional help, you may want to join the help channel %s or visit the help webpage %s"),
 					config_options.helpchan, config_options.helpurl);
@@ -74,9 +70,11 @@ ns_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* take the command through the hash table */
+	// take the command through the hash table
 	help_display(si, si->service, command, si->service->commands);
 }
+
+static struct command ns_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 1, ns_cmd_help, { .path = "help" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

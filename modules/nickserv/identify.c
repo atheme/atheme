@@ -7,21 +7,13 @@
 
 #include "atheme.h"
 
-/* Check whether we are compiling IDENTIFY or LOGIN */
+// Check whether we are compiling IDENTIFY or LOGIN
 #ifdef NICKSERV_LOGIN
 #define COMMAND_UC "LOGIN"
 #define COMMAND_LC "login"
 #else
 #define COMMAND_UC "IDENTIFY"
 #define COMMAND_LC "identify"
-#endif
-
-static void ns_cmd_login(struct sourceinfo *si, int parc, char *parv[]);
-
-#ifdef NICKSERV_LOGIN
-static struct command ns_login = { "LOGIN", N_("Authenticates to a services account."), AC_NONE, 2, ns_cmd_login, { .path = "nickserv/login" } };
-#else
-static struct command ns_identify = { "IDENTIFY", N_("Identifies to services for a nickname."), AC_NONE, 2, ns_cmd_login, { .path = "nickserv/identify" } };
 #endif
 
 static void
@@ -120,13 +112,13 @@ ns_cmd_login(struct sourceinfo *si, int parc, char *parv[])
 			return;
 		}
 
-		/* if they are identified to another account, nuke their session first */
+		// if they are identified to another account, nuke their session first
 		if (u->myuser)
 		{
 			command_success_nodata(si, _("You have been logged out of \2%s\2."), entity(u->myuser)->name);
 
 			if (ircd_on_logout(u, entity(u->myuser)->name))
-				/* logout killed the user... */
+				// logout killed the user...
 				return;
 		        u->myuser->lastlogin = CURRTIME;
 		        MOWGLI_ITER_FOREACH_SAFE(n, tn, u->myuser->logins.head)
@@ -158,14 +150,16 @@ ns_cmd_login(struct sourceinfo *si, int parc, char *parv[])
 	bad_password(si, mu);
 }
 
+#ifdef NICKSERV_LOGIN
+static struct command ns_login = { COMMAND_UC, N_("Authenticates to a services account."), AC_NONE, 2, ns_cmd_login, { .path = "nickserv/" COMMAND_LC } };
+#else
+static struct command ns_login = { COMMAND_UC, N_("Identifies to services for a nickname."), AC_NONE, 2, ns_cmd_login, { .path = "nickserv/" COMMAND_LC } };
+#endif
+
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
-#ifdef NICKSERV_LOGIN
 	service_named_bind_command("nickserv", &ns_login);
-#else
-	service_named_bind_command("nickserv", &ns_identify);
-#endif
 
 	hook_add_event("user_can_login");
 }
@@ -173,11 +167,7 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-#ifdef NICKSERV_LOGIN
 	service_named_unbind_command("nickserv", &ns_login);
-#else
-	service_named_unbind_command("nickserv", &ns_identify);
-#endif
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/" COMMAND_LC, MODULE_UNLOAD_CAPABILITY_OK)

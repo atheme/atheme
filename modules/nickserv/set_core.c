@@ -7,15 +7,10 @@
 
 #include "atheme.h"
 
-static void ns_help_set(struct sourceinfo *si, const char *subcmd);
-static void ns_cmd_set(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_set = { "SET", N_("Sets various control flags."), AC_AUTHENTICATED, 2, ns_cmd_set, { .func = ns_help_set } };
-
 // Imported by other modules/nickserv/set_*.so
 mowgli_patricia_t *ns_set_cmdtree;
 
-/* HELP SET */
+// HELP SET
 static void
 ns_help_set(struct sourceinfo *si, const char *subcmd)
 {
@@ -42,7 +37,7 @@ ns_help_set(struct sourceinfo *si, const char *subcmd)
 		help_display_as_subcmd(si, si->service, "SET", subcmd, ns_set_cmdtree);
 }
 
-/* SET <setting> <parameters> */
+// SET <setting> <parameters>
 static void
 ns_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -56,7 +51,7 @@ ns_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* take the command through the hash table */
+	// take the command through the hash table
         if ((c = command_find(ns_set_cmdtree, setting)))
 	{
 		command_exec(si->service, si, c, parc - 1, parv + 1);
@@ -66,6 +61,8 @@ ns_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Invalid set command. Use \2/%s%s HELP SET\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", nicksvs.nick);
 	}
 }
+
+static struct command ns_set = { "SET", N_("Sets various control flags."), AC_AUTHENTICATED, 2, ns_cmd_set, { .func = ns_help_set } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

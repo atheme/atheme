@@ -10,11 +10,6 @@
 #include "list_common.h"
 #include "list.h"
 
-static void ns_cmd_freeze(struct sourceinfo *si, int parc, char *parv[]);
-
-/* FREEZE ON|OFF -- don't pollute the root with THAW */
-static struct command ns_freeze = { "FREEZE", N_("Freezes an account."), PRIV_USER_ADMIN, 3, ns_cmd_freeze, { .path = "nickserv/freeze" } };
-
 static bool
 is_frozen(const struct mynick *mn, const void *arg)
 {
@@ -38,6 +33,7 @@ frozen_match(const struct mynick *mn, const void *arg)
 	return false;
 }
 
+// FREEZE ON|OFF -- don't pollute the root with THAW
 static void
 ns_cmd_freeze(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -87,7 +83,8 @@ ns_cmd_freeze(struct sourceinfo *si, int parc, char *parv[])
 		metadata_add(mu, "private:freeze:freezer", get_oper_name(si));
 		metadata_add(mu, "private:freeze:reason", reason);
 		metadata_add(mu, "private:freeze:timestamp", number_to_string(CURRTIME));
-		/* log them out */
+
+		// log them out
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->logins.head)
 		{
 			u = (struct user *)n->data;
@@ -127,6 +124,8 @@ ns_cmd_freeze(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Usage: FREEZE <account> <ON|OFF> [reason]"));
 	}
 }
+
+static struct command ns_freeze = { "FREEZE", N_("Freezes an account."), PRIV_USER_ADMIN, 3, ns_cmd_freeze, { .path = "nickserv/freeze" } };
 
 static void
 mod_init(struct module *const restrict m)

@@ -7,12 +7,6 @@
 
 #include "atheme.h"
 
-static void ns_cmd_verify(struct sourceinfo *si, int parc, char *parv[]);
-static void ns_cmd_fverify(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_verify = { "VERIFY", N_("Verifies an account registration."), AC_NONE, 3, ns_cmd_verify, { .path = "nickserv/verify" } };
-static struct command ns_fverify = { "FVERIFY", N_("Forcefully verifies an account registration."), PRIV_USER_ADMIN, 2, ns_cmd_fverify, { .path = "nickserv/fverify" } };
-
 static void
 ns_cmd_verify(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -37,9 +31,7 @@ ns_cmd_verify(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* forcing users to log in before we verify
-	 * prevents some information leaks
-	 */
+	// forcing users to log in before we verify prevents some information leaks
 	if (!(si->smu == mu))
 	{
 		command_fail(si, fault_badparams, _("Please log in before attempting to verify your registration."));
@@ -71,7 +63,7 @@ ns_cmd_verify(struct sourceinfo *si, int parc, char *parv[])
 				ircd_on_login(u, mu, NULL);
 			}
 
-			/* XXX should this indeed be after ircd_on_login? */
+			// XXX should this indeed be after ircd_on_login?
 			req.si = si;
 			req.mu = mu;
 			req.mn = mynick_find(entity(mu)->name);
@@ -179,7 +171,7 @@ ns_cmd_fverify(struct sourceinfo *si, int parc, char *parv[])
 			ircd_on_login(u, mu, NULL);
 		}
 
-		/* XXX should this indeed be after ircd_on_login? */
+		// XXX should this indeed be after ircd_on_login?
 		req.si = si;
 		req.mu = mu;
 		req.mn = mynick_find(entity(mu)->name);
@@ -216,6 +208,9 @@ ns_cmd_fverify(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 }
+
+static struct command ns_verify = { "VERIFY", N_("Verifies an account registration."), AC_NONE, 3, ns_cmd_verify, { .path = "nickserv/verify" } };
+static struct command ns_fverify = { "FVERIFY", N_("Forcefully verifies an account registration."), PRIV_USER_ADMIN, 2, ns_cmd_fverify, { .path = "nickserv/fverify" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

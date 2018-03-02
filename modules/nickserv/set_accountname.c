@@ -11,11 +11,7 @@
 
 static mowgli_patricia_t **ns_set_cmdtree = NULL;
 
-static void ns_cmd_set_accountname(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_set_accountname = { "ACCOUNTNAME", N_("Changes your account name."), AC_NONE, 1, ns_cmd_set_accountname, { .path = "nickserv/set_accountname" } };
-
-/* SET ACCOUNTNAME <nick> */
+// SET ACCOUNTNAME <nick>
 static void
 ns_cmd_set_accountname(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -64,6 +60,8 @@ ns_cmd_set_accountname(struct sourceinfo *si, int parc, char *parv[])
 	myuser_rename(si->smu, newname);
 	return;
 }
+
+static struct command ns_set_accountname = { "ACCOUNTNAME", N_("Changes your account name."), AC_NONE, 1, ns_cmd_set_accountname, { .path = "nickserv/set_accountname" } };
 
 static void
 mod_init(struct module *const restrict m)

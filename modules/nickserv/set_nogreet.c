@@ -13,10 +13,6 @@
 
 static mowgli_patricia_t **ns_set_cmdtree = NULL;
 
-static void ns_cmd_set_nogreet(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_set_nogreet = { "NOGREET", N_("Allows you to opt-out of channel entry messages."), AC_NONE, 1, ns_cmd_set_nogreet, { .path = "nickserv/set_nogreet" } };
-
 static bool
 has_nogreet(const struct mynick *mn, const void *arg)
 {
@@ -25,7 +21,7 @@ has_nogreet(const struct mynick *mn, const void *arg)
 	return ( mu->flags & MU_NOGREET ) == MU_NOGREET;
 }
 
-/* SET NOGREET [ON|OFF] */
+// SET NOGREET [ON|OFF]
 static void
 ns_cmd_set_nogreet(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -75,6 +71,8 @@ ns_cmd_set_nogreet(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 }
+
+static struct command ns_set_nogreet = { "NOGREET", N_("Allows you to opt-out of channel entry messages."), AC_NONE, 1, ns_cmd_set_nogreet, { .path = "nickserv/set_nogreet" } };
 
 static void
 mod_init(struct module *const restrict m)

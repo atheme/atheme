@@ -10,13 +10,7 @@
 #include "atheme.h"
 #include "list_common.h"
 
-static void ns_cmd_list(struct sourceinfo *si, int parc, char *parv[]);
 static mowgli_patricia_t *list_params;
-
-static struct command ns_list = { "LIST", N_("Lists nicknames registered matching a given pattern."), PRIV_USER_AUSPEX, 10, ns_cmd_list, { .path = "nickserv/list" } };
-
-void list_register(const char *param_name, struct list_param *param);
-void list_unregister(const char *param_name);
 
 static bool
 email_match(const struct mynick *mn, const void *arg)
@@ -291,13 +285,15 @@ ns_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, ngettext(N_("\2%d\2 match for criteria \2%s\2"), N_("\2%d\2 matches for criteria \2%s\2"), matches), matches, criteriastr);
 }
 
+static struct command ns_list = { "LIST", N_("Lists nicknames registered matching a given pattern."), PRIV_USER_AUSPEX, 10, ns_cmd_list, { .path = "nickserv/list" } };
+
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	list_params = mowgli_patricia_create(strcasecanon);
 	service_named_bind_command("nickserv", &ns_list);
 
-	/* list email */
+	// list email
 	static struct list_param email;
 	email.opttype = OPT_STRING;
 	email.is_match = email_match;

@@ -13,10 +13,6 @@
 
 static mowgli_patricia_t **ns_set_cmdtree = NULL;
 
-static void ns_cmd_set_quietchg(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_set_quietchg = { "QUIETCHG", N_("Allows you to opt-out of channel change messages."), AC_NONE, 1, ns_cmd_set_quietchg, { .path = "nickserv/set_quietchg" } };
-
 static bool
 has_quietchg(const struct mynick *mn, const void *arg)
 {
@@ -25,7 +21,7 @@ has_quietchg(const struct mynick *mn, const void *arg)
 	return ( mu->flags & MU_QUIETCHG ) == MU_QUIETCHG;
 }
 
-/* SET QUIETCHG [ON|OFF] */
+// SET QUIETCHG [ON|OFF]
 static void
 ns_cmd_set_quietchg(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -75,6 +71,8 @@ ns_cmd_set_quietchg(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 }
+
+static struct command ns_set_quietchg = { "QUIETCHG", N_("Allows you to opt-out of channel change messages."), AC_NONE, 1, ns_cmd_set_quietchg, { .path = "nickserv/set_quietchg" } };
 
 static void
 mod_init(struct module *const restrict m)

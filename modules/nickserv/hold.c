@@ -9,11 +9,6 @@
 #include "list_common.h"
 #include "list.h"
 
-static void ns_cmd_hold(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_hold = { "HOLD", N_("Prevents an account from expiring."),
-		      PRIV_HOLD, 2, ns_cmd_hold, { .path = "nickserv/hold" } };
-
 static bool
 is_held(const struct mynick *mn, const void *arg)
 {
@@ -76,6 +71,8 @@ ns_cmd_hold(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Usage: HOLD <account> <ON|OFF>"));
 	}
 }
+
+static struct command ns_hold = { "HOLD", N_("Prevents an account from expiring."), PRIV_HOLD, 2, ns_cmd_hold, { .path = "nickserv/hold" } };
 
 static void
 mod_init(struct module *const restrict m)

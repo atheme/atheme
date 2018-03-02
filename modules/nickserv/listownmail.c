@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-static void ns_cmd_listownmail(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_listownmail = { "LISTOWNMAIL", N_("Lists accounts registered to your e-mail address."), AC_AUTHENTICATED, 1, ns_cmd_listownmail, { .path = "nickserv/listownmail" } };
-
 static void
 ns_cmd_listownmail(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -45,7 +41,7 @@ ns_cmd_listownmail(struct sourceinfo *si, int parc, char *parv[])
 
 		if (!strcasecmp(si->smu->email_canonical, mu->email_canonical))
 		{
-			/* in the future we could add a LIMIT parameter */
+			// in the future we could add a LIMIT parameter
 			if (matches == 0)
 				command_success_nodata(si, "Accounts matching e-mail address \2%s\2:", si->smu->email);
 
@@ -58,6 +54,8 @@ ns_cmd_listownmail(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, ngettext(N_("\2%d\2 match for e-mail address \2%s\2"),
 					    N_("\2%d\2 matches for e-mail address \2%s\2"), matches), matches, si->smu->email);
 }
+
+static struct command ns_listownmail = { "LISTOWNMAIL", N_("Lists accounts registered to your e-mail address."), AC_AUTHENTICATED, 1, ns_cmd_listownmail, { .path = "nickserv/listownmail" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

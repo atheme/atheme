@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-static void ns_cmd_resetpass(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_resetpass = { "RESETPASS", N_("Resets an account password."), PRIV_USER_ADMIN, 1, ns_cmd_resetpass, { .path = "nickserv/resetpass" } };
-
 static void
 ns_cmd_resetpass(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -75,6 +71,8 @@ ns_cmd_resetpass(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "NOPASSWORD", entity(mu)->name);
 	}
 }
+
+static struct command ns_resetpass = { "RESETPASS", N_("Resets an account password."), PRIV_USER_ADMIN, 1, ns_cmd_resetpass, { .path = "nickserv/resetpass" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

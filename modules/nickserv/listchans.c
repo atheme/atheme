@@ -8,10 +8,6 @@
 
 #include "atheme.h"
 
-static void ns_cmd_listchans(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_listchans = { "LISTCHANS", N_("Lists channels that you have access to."), AC_NONE, 1, ns_cmd_listchans, { .path = "nickserv/listchans" } };
-
 static void
 ns_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -20,7 +16,7 @@ ns_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 	struct chanacs *ca;
 	unsigned int akicks = 0, i;
 
-	/* Optional target */
+	// Optional target
 	char *target = parv[0];
 
 	if (target)
@@ -50,11 +46,11 @@ ns_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	if (mu != si->smu)
-	{	/* must have been an oper */
+	{	// must have been an oper
 		logcommand(si, CMDLOG_ADMIN, "LISTCHANS: \2%s\2", entity(mu)->name);
 	}
 	else
-	{	/* just a user, or oper is listing himself */
+	{	// just a user, or oper is listing himself
 		logcommand(si, CMDLOG_GET, "LISTCHANS");
 	}
 
@@ -68,7 +64,7 @@ ns_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 	{
 		ca = (struct chanacs *)n->data;
 
-		/* don't tell users they're akicked (flag +b) */
+		// don't tell users they're akicked (flag +b)
 		if (ca->level != CA_AKICK)
 			command_success_nodata(si, _("Access flag(s) %s in %s"), bitmask_to_flags(ca->level), ca->mychan->name);
 		else
@@ -84,6 +80,8 @@ ns_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 						    N_("\2%d\2 channel access matches for the nickname \2%s\2"), i),
 						    i, entity(mu)->name);
 }
+
+static struct command ns_listchans = { "LISTCHANS", N_("Lists channels that you have access to."), AC_NONE, 1, ns_cmd_listchans, { .path = "nickserv/listchans" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

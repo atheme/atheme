@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-static void ns_cmd_info(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_info = { "INFO", N_("Displays information on registrations."), AC_NONE, 2, ns_cmd_info, { .path = "nickserv/info" } };
-
 static void
 ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -36,9 +32,7 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	hook_user_req_t req;
 	hook_info_noexist_req_t noexist_req;
 
-	/* On IRC, default the name to something.
-	 * Not currently documented.
-	 */
+	// On IRC, default the name to something. Not currently documented.
 	if (!name && si->su)
 	{
 		if (!nicksvs.no_nick_ownership)
@@ -115,7 +109,8 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	tm = *localtime(&registered);
 	strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
 	command_success_nodata(si, _("Registered : %s (%s ago)"), strfbuf, time_ago(registered));
-	/* show account's time if it's different from nick's time */
+
+	// show account's time if it's different from nick's time
 	if (mu->registered != registered)
 	{
 		tm = *localtime(&mu->registered);
@@ -182,7 +177,8 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 
 	if (recognized)
 		command_success_nodata(si, _("Recognized : now (matches access list)"));
-	/* show nick's lastseen/online, if we have a nick */
+
+	// show nick's lastseen/online, if we have a nick
 	if (u != NULL)
 		command_success_nodata(si, _("Last seen  : now"));
 	else if (mn != NULL)
@@ -250,7 +246,7 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!nicksvs.no_nick_ownership)
 	{
-		/* list registered nicks if privileged */
+		// list registered nicks if privileged
 		if (mu == si->smu || has_user_auspex)
 		{
 			buf[0] = '\0';
@@ -453,6 +449,8 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_GET, "INFO: \2%s\2", mn != NULL ? mn->nick : entity(mu)->name);
 }
+
+static struct command ns_info = { "INFO", N_("Displays information on registrations."), AC_NONE, 2, ns_cmd_info, { .path = "nickserv/info" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

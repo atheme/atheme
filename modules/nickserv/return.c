@@ -8,10 +8,6 @@
 #include "atheme.h"
 #include "authcookie.h"
 
-static void ns_cmd_return(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_return = { "RETURN", N_("Returns an account to its owner."), PRIV_USER_ADMIN, 2, ns_cmd_return, { .path = "nickserv/return" } };
-
 static void
 ns_cmd_return(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -66,14 +62,15 @@ ns_cmd_return(struct sourceinfo *si, int parc, char *parv[])
 
 	free(newpass);
 
-	/* prevents users from "stealing it back" in the event of a takeover */
+	// prevents users from "stealing it back" in the event of a takeover
 	metadata_delete(mu, "private:verify:emailchg:key");
 	metadata_delete(mu, "private:verify:emailchg:newemail");
 	metadata_delete(mu, "private:verify:emailchg:timestamp");
 	metadata_delete(mu, "private:setpass:key");
 	metadata_delete(mu, "private:sendpass:sender");
 	metadata_delete(mu, "private:sendpass:timestamp");
-	/* log them out */
+
+	// log them out
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->logins.head)
 	{
 		u = (struct user *)n->data;
@@ -94,6 +91,8 @@ ns_cmd_return(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("A random password has been set; it has been sent to \2%s\2."),
 						newmail);
 }
+
+static struct command ns_return = { "RETURN", N_("Returns an account to its owner."), PRIV_USER_ADMIN, 2, ns_cmd_return, { .path = "nickserv/return" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

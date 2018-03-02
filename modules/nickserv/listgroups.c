@@ -9,10 +9,6 @@
 
 #include "../groupserv/groupserv.h"
 
-static void ns_cmd_listgroups(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command ns_listgroups = { "LISTGROUPS", N_("Lists groups that you have access to."), AC_NONE, 1, ns_cmd_listgroups, { .path = "nickserv/listgroups" } };
-
 static void
 ns_cmd_listgroups(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -21,7 +17,7 @@ ns_cmd_listgroups(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_list_t *l;
 	unsigned int bans = 0, i;
 
-	/* Optional target */
+	// Optional target
 	char *target = parv[0];
 
 	if (target)
@@ -51,11 +47,11 @@ ns_cmd_listgroups(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	if (mu != si->smu)
-	{	/* must have been an oper */
+	{	// must have been an oper
 		logcommand(si, CMDLOG_ADMIN, "LISTGROUPS: \2%s\2", entity(mu)->name);
 	}
 	else
-	{	/* just a user, or oper is listing himself */
+	{	// just a user, or oper is listing himself
 		logcommand(si, CMDLOG_GET, "LISTGROUPS");
 	}
 
@@ -92,6 +88,8 @@ ns_cmd_listgroups(struct sourceinfo *si, int parc, char *parv[])
 						    N_("\2%d\2 group access matches for the nickname \2%s\2"), i),
 						    i, entity(mu)->name);
 }
+
+static struct command ns_listgroups = { "LISTGROUPS", N_("Lists groups that you have access to."), AC_NONE, 1, ns_cmd_listgroups, { .path = "nickserv/listgroups" } };
 
 static void
 mod_init(struct module *const restrict m)

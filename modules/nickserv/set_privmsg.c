@@ -11,7 +11,15 @@
 
 static mowgli_patricia_t **ns_set_cmdtree = NULL;
 
-/* SET PRIVMSG ON|OFF */
+static bool
+uses_privmsg(const struct mynick *mn, const void *arg)
+{
+	struct myuser *mu = mn->owner;
+
+	return ( mu->flags & MU_USE_PRIVMSG ) == MU_USE_PRIVMSG;
+}
+
+// SET PRIVMSG ON|OFF
 static void
 ns_cmd_set_privmsg(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -63,14 +71,6 @@ ns_cmd_set_privmsg(struct sourceinfo *si, int parc, char *parv[])
 }
 
 static struct command ns_set_privmsg = { "PRIVMSG", N_("Uses private messages instead of notices if enabled."), AC_NONE, 1, ns_cmd_set_privmsg, { .path = "nickserv/set_privmsg" } };
-
-static bool
-uses_privmsg(const struct mynick *mn, const void *arg)
-{
-	struct myuser *mu = mn->owner;
-
-	return ( mu->flags & MU_USE_PRIVMSG ) == MU_USE_PRIVMSG;
-}
 
 static void
 mod_init(struct module *const restrict m)
