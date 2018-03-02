@@ -5,8 +5,7 @@
  * LDAP authentication.
  */
 
-/*
- * Supports the following options:
+/* Supports the following options:
  *
  * url -- required ldap URL (e.g. ldap://host.domain.com/)
  *
@@ -28,8 +27,6 @@
 
 #include <ldap.h>
 
-static mowgli_list_t conf_ldap_table;
-
 static struct
 {
 	char *url;
@@ -42,6 +39,8 @@ static struct
 } ldap_config;
 
 static LDAP *ldap_conn;
+
+static mowgli_list_t conf_ldap_table;
 
 static void
 ldap_config_ready(void *unused)
@@ -98,7 +97,7 @@ ldap_config_ready(void *unused)
 		return;
 	}
 
-	/* short timeouts, because this blocks atheme as a whole */
+	// short timeouts, because this blocks atheme as a whole
 	ldap_set_option(ldap_conn, LDAP_OPT_TIMEOUT, &(const struct timeval){1, 0});
 	ldap_set_option(ldap_conn, LDAP_OPT_NETWORK_TIMEOUT, &(const struct timeval){1, 0});
 	ldap_set_option(ldap_conn, LDAP_OPT_DEREF, &(const int){false});
@@ -138,12 +137,13 @@ ldap_auth_user(struct myuser *mu, const char *password)
 		return false;
 	}
 
-/* Use DN to find exact match */
 	if (ldap_config.useDN)
 	{
+		// Use DN to find exact match
 		char dn[512];
 		cred.bv_len = strlen(password);
-		/* sstrdup it to remove the const */
+
+		// sstrdup it to remove the const
 		cred.bv_val = sstrdup(password);
 
 		snprintf(dn, sizeof dn, ldap_config.dnformat, entity(mu)->name);
@@ -162,12 +162,10 @@ ldap_auth_user(struct myuser *mu, const char *password)
 		}
 		slog(LG_INFO, "ldap_auth_user(): ldap_bind_s failed: %s", ldap_err2string(res));
 		return false;
-
-
-/* Use base + attribute search for Auth */
 	}
 	else
 	{
+		// Use base + attribute search for Auth
 		char what[512];
 		char *binddn = NULL;
 
@@ -200,7 +198,8 @@ ldap_auth_user(struct myuser *mu, const char *password)
 		}
 
 		cred.bv_len = strlen(password);
-		/* sstrdup it to remove the const */
+
+		// sstrdup it to remove the const
 		cred.bv_val = sstrdup(password);
 
 		for (entry = ldap_first_message(ldap_conn, message); entry && ldap_msgtype(entry) == LDAP_RES_SEARCH_ENTRY; entry = ldap_next_message(ldap_conn, entry))
