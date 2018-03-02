@@ -12,13 +12,6 @@
 // Imported by other modules/botserv/set_*.so
 mowgli_patricia_t *bs_set_cmdtree = NULL;
 
-static void bs_help_set(struct sourceinfo *si, const char *subcmd);
-static void bs_cmd_set(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command bs_set = { "SET", N_("Configures bot options."), AC_NONE, 3, bs_cmd_set, { .func =  bs_help_set } };
-
-/* ******************************************************************** */
-
 static void
 bs_help_set(struct sourceinfo *si, const char *subcmd)
 {
@@ -64,6 +57,8 @@ bs_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 	parv[1] = dest;
 	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
+
+static struct command bs_set = { "SET", N_("Configures bot options."), AC_NONE, 3, bs_cmd_set, { .func =  bs_help_set } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -13,10 +13,6 @@ static fn_botserv_bot_find *botserv_bot_find = NULL;
 static mowgli_patricia_t **bs_set_cmdtree = NULL;
 static mowgli_list_t *bs_bots = NULL;
 
-static void bs_cmd_set_private(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command bs_set_private = { "PRIVATE", N_("Prevent a bot from being assigned by non IRC operators."), PRIV_CHAN_ADMIN, 2, bs_cmd_set_private, { .path = "botserv/set_private" } };
-
 static void
 bs_cmd_set_private(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -68,6 +64,8 @@ bs_cmd_set_private(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Syntax: SET <botnick> PRIVATE {ON|OFF}"));
 	}
 }
+
+static struct command bs_set_private = { "PRIVATE", N_("Prevent a bot from being assigned by non IRC operators."), PRIV_CHAN_ADMIN, 2, bs_cmd_set_private, { .path = "botserv/set_private" } };
 
 static void
 mod_init(struct module *const restrict m)

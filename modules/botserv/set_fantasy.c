@@ -11,21 +11,6 @@
 
 static mowgli_patricia_t **bs_set_cmdtree = NULL;
 
-static void bs_set_fantasy_config_ready(void *unused);
-
-static void bs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command bs_set_fantasy = { "FANTASY", N_("Enable fantasy commands."), AC_AUTHENTICATED, 2, bs_cmd_set_fantasy, { .path = "botserv/set_fantasy" } };
-
-static void
-bs_set_fantasy_config_ready(void *unused)
-{
-	if (chansvs.fantasy)
-		bs_set_fantasy.access = NULL;
-	else
-		bs_set_fantasy.access = AC_DISABLED;
-}
-
 static void
 bs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -74,6 +59,17 @@ bs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET FANTASY");
 		command_fail(si, fault_badparams, _("Syntax: SET <#channel> FANTASY {ON|OFF}"));
 	}
+}
+
+static struct command bs_set_fantasy = { "FANTASY", N_("Enable fantasy commands."), AC_AUTHENTICATED, 2, bs_cmd_set_fantasy, { .path = "botserv/set_fantasy" } };
+
+static void
+bs_set_fantasy_config_ready(void *unused)
+{
+	if (chansvs.fantasy)
+		bs_set_fantasy.access = AC_NONE;
+	else
+		bs_set_fantasy.access = AC_DISABLED;
 }
 
 static void

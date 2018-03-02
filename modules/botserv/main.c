@@ -8,36 +8,16 @@
 #include "atheme.h"
 #include "botserv.h"
 
+static void (*topic_sts_real)(struct channel *, struct user *, const char *, time_t, time_t, const char *);
+static void (*notice_real)(const char *, const char *, const char *, ...);
+static void (*msg_real)(const char *, const char *, const char *, ...);
+
 static struct service *botsvs = NULL;
 static unsigned int min_users = 0;
 
-static void bs_join(hook_channel_joinpart_t *hdata);
-static void bs_part(hook_channel_joinpart_t *hdata);
-
-static void bs_cmd_bot(struct sourceinfo *si, int parc, char *parv[]);
-static void bs_cmd_add(struct sourceinfo *si, int parc, char *parv[]);
-static void bs_cmd_change(struct sourceinfo *si, int parc, char *parv[]);
-static void bs_cmd_delete(struct sourceinfo *si, int parc, char *parv[]);
-static void bs_cmd_assign(struct sourceinfo *si, int parc, char *parv[]);
-static void bs_cmd_unassign(struct sourceinfo *si, int parc, char *parv[]);
-static void bs_cmd_botlist(struct sourceinfo *si, int parc, char *parv[]);
-static void on_shutdown(void *unused);
-static void osinfo_hook(struct sourceinfo *si);
-
-static void botserv_save_database(struct database_handle *db);
-static void db_h_bot(struct database_handle *db, const char *type);
-static void db_h_bot_count(struct database_handle *db, const char *type);
-
-static struct command bs_bot = { "BOT", "Maintains network bot list.", PRIV_USER_ADMIN, 6, bs_cmd_bot, { .path = "botserv/bot" } };
-static struct command bs_assign = { "ASSIGN", "Assigns a bot to a channel.", AC_NONE, 2, bs_cmd_assign, { .path = "botserv/assign" } };
-static struct command bs_unassign = { "UNASSIGN", "Unassigns a bot from a channel.", AC_NONE, 1, bs_cmd_unassign, { .path = "botserv/unassign" } };
-static struct command bs_botlist = { "BOTLIST", "Lists available bots.", AC_NONE, 0, bs_cmd_botlist, { .path = "botserv/botlist" } };
-
-/* visible for other modules */
+// visible for other modules
 fn_botserv_bot_find botserv_bot_find;
 mowgli_list_t bs_bots;
-
-/* ******************************************************************** */
 
 static struct botserv_bot *
 bs_mychan_find_bot(struct mychan *mc)
@@ -59,10 +39,6 @@ bs_mychan_find_bot(struct mychan *mc)
 	}
 	return bot;
 }
-
-/* ******************************************************************** */
-
-static void (*msg_real)(const char *from, const char *target, const char *fmt, ...);
 
 static void ATHEME_FATTR_PRINTF(3, 4)
 bs_msg(const char *from, const char *target, const char *fmt, ...)
@@ -96,8 +72,6 @@ bs_msg(const char *from, const char *target, const char *fmt, ...)
 	msg_real(real_source, target, "%s", buf);
 }
 
-static void (*notice_real)(const char *from, const char *target, const char *fmt, ...);
-
 static void ATHEME_FATTR_PRINTF(3, 4)
 bs_notice(const char *from, const char *target, const char *fmt, ...)
 {
@@ -129,8 +103,6 @@ bs_notice(const char *from, const char *target, const char *fmt, ...)
 
 	notice_real(real_source, target, "%s", buf);
 }
-
-static void (*topic_sts_real)(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic);
 
 static void
 bs_topic_sts(struct channel *c, struct user *source, const char *setter, time_t ts, time_t prevts, const char *topic)
@@ -244,8 +216,6 @@ bs_try_kick(struct user *source, struct channel *chan, struct user *target, cons
 	try_kick_real(bot ? bot : source, chan, target, reason);
 }
 
-/* ******************************************************************** */
-
 static void
 bs_join_registered(bool all)
 {
@@ -279,8 +249,6 @@ bs_join_registered(bool all)
 	}
 }
 
-/* ******************************************************************** */
-
 static void
 bs_channel_drop(struct mychan *mc)
 {
@@ -294,9 +262,7 @@ bs_channel_drop(struct mychan *mc)
 	part(mc->name, bot->nick);
 }
 
-/* ******************************************************************** */
-
-/* botserv: bot handler: channel commands only. */
+// botserv: bot handler: channel commands only.
 static void
 botserv_channel_handler(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -308,24 +274,24 @@ botserv_channel_handler(struct sourceinfo *si, int parc, char *parv[])
 	char *args;
 	struct service *sptr = NULL;
 
-	/* this should never happen */
+	// this should never happen
 	if (parv[parc - 2][0] == '&')
 	{
 		slog(LG_ERROR, "services(): got parv with local channel: %s", parv[0]);
 		return;
 	}
 
-	/* is this a fantasy command? respect global fantasy settings. */
+	// is this a fantasy command? respect global fantasy settings.
 	if (chansvs.fantasy == false)
 	{
-		/* *all* fantasy disabled */
+		// *all* fantasy disabled
 		return;
 	}
 
 	mc = mychan_find(parv[parc - 2]);
 	if (!mc)
 	{
-		/* unregistered, NFI how we got this message, but let's leave it alone! */
+		// unregistered, NFI how we got this message, but let's leave it alone!
 		slog(LG_DEBUG, "botserv_channel_handler(): received message for %s (unregistered channel?)", parv[parc - 2]);
 		return;
 	}
@@ -333,14 +299,14 @@ botserv_channel_handler(struct sourceinfo *si, int parc, char *parv[])
 	md = metadata_find(mc, "disable_fantasy");
 	if (md)
 	{
-		/* fantasy disabled on this channel. don't message them, just bail. */
+		// fantasy disabled on this channel. don't message them, just bail.
 		return;
 	}
 
 	md = metadata_find(mc, "private:botserv:bot-assigned");
 	if (md == NULL)
 	{
-		/* we received this, but have no record of a bot assigned. WTF */
+		// we received this, but have no record of a bot assigned. WTF
 		slog(LG_DEBUG, "botserv_channel_handler(): received a message for a bot, but %s has no bots assigned.", mc->name);
 		return;
 	}
@@ -349,10 +315,10 @@ botserv_channel_handler(struct sourceinfo *si, int parc, char *parv[])
 	if (md == NULL || irccasecmp(si->service->me->nick, md->value))
 		return;
 
-	/* make a copy of the original for debugging */
+	// make a copy of the original for debugging
 	mowgli_strlcpy(orig, parv[parc - 1], BUFSIZE);
 
-	/* lets go through this to get the command */
+	// lets go through this to get the command
 	cmd = strtok(parv[parc - 1], " ");
 
 	if (!cmd)
@@ -363,7 +329,7 @@ botserv_channel_handler(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* take the command through the hash table, handling both !prefix and Bot, ... styles */
+	// take the command through the hash table, handling both !prefix and Bot, ... styles
 	struct metadata *mdp = metadata_find(mc, "private:prefix");
 	const char *prefix = (mdp ? mdp->value : chansvs.trigger);
 
@@ -374,13 +340,12 @@ botserv_channel_handler(struct sourceinfo *si, int parc, char *parv[])
 	{
 		const char *realcmd = service_resolve_alias(chansvs.me, NULL, cmd);
 
-		/* XXX not really nice to look up the command twice
-		* -- jilles */
+		// XXX not really nice to look up the command twice -- jilles
 		if (command_find(sptr->commands, realcmd) == NULL)
 			return;
 		if (floodcheck(si->su, si->service->me))
 			return;
-		/* construct <channel> <args> */
+		// construct <channel> <args>
 		mowgli_strlcpy(newargs, parv[parc - 2], sizeof newargs);
 		args = strtok(NULL, "");
 		if (args != NULL)
@@ -388,11 +353,13 @@ botserv_channel_handler(struct sourceinfo *si, int parc, char *parv[])
 			mowgli_strlcat(newargs, " ", sizeof newargs);
 			mowgli_strlcat(newargs, args, sizeof newargs);
 		}
-		/* let the command know it's called as fantasy cmd */
+
+		// let the command know it's called as fantasy cmd
 		si->c = mc->chan;
+
 		/* fantasy commands are always verbose
-		* (a little ugly but this way we can !set verbose)
-		*/
+		 * (a little ugly but this way we can !set verbose)
+		 */
 		mc->flags |= MC_FORCEVERBOSE;
 		command_exec_split(si->service, si, realcmd, newargs, sptr->commands);
 		mc->flags &= ~MC_FORCEVERBOSE;
@@ -421,15 +388,13 @@ botserv_channel_handler(struct sourceinfo *si, int parc, char *parv[])
 		si->c = mc->chan;
 
 		/* fantasy commands are always verbose
-		* (a little ugly but this way we can !set verbose)
-		*/
+		 * (a little ugly but this way we can !set verbose)
+		 */
 		mc->flags |= MC_FORCEVERBOSE;
 		command_exec_split(si->service, si, realcmd, newargs, sptr->commands);
 		mc->flags &= ~MC_FORCEVERBOSE;
 	}
 }
-
-/* ******************************************************************** */
 
 static void
 botserv_config_ready(void *unused)
@@ -440,14 +405,12 @@ botserv_config_ready(void *unused)
 	hook_del_config_ready(botserv_config_ready);
 }
 
-/* ******************************************************************** */
-
 void
 botserv_save_database(struct database_handle *db)
 {
 	mowgli_node_t *n;
 
-	/* iterate through and write all the metadata */
+	// iterate through and write all the metadata
 	MOWGLI_ITER_FOREACH(n, bs_bots.head)
 	{
 		struct botserv_bot *bot = (struct botserv_bot *) n->data;
@@ -502,8 +465,6 @@ db_h_bot_count(struct database_handle *db, const char *type)
 		slog(LG_ERROR, "botserv_load_database(): inconsistency: database defines %d objects, I only deserialized %zu.", i, bs_bots.count);
 }
 
-/* ******************************************************************** */
-
 struct botserv_bot *
 botserv_bot_find(char *name)
 {
@@ -523,167 +484,7 @@ botserv_bot_find(char *name)
 	return NULL;
 }
 
-/* ******************************************************************** */
-
-/* BOT CMD nick user host real */
-static void
-bs_cmd_bot(struct sourceinfo *si, int parc, char *parv[])
-{
-	if (parc < 1 || parv[0] == NULL)
-	{
-		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "BOT");
-		command_fail(si, fault_needmoreparams, _("Syntax: BOT ADD <nick> <user> <host> <real>"));
-		command_fail(si, fault_needmoreparams, _("Syntax: BOT CHANGE <oldnick> <newnick> [<user> [<host> [<real>]]]"));
-		command_fail(si, fault_needmoreparams, _("Syntax: BOT DEL <nick>"));
-		return;
-	}
-
-	if (!irccasecmp(parv[0], "ADD"))
-	{
-		bs_cmd_add(si, parc - 1, parv + 1);
-	}
-	else if(!irccasecmp(parv[0], "CHANGE"))
-	{
-		bs_cmd_change(si, parc - 1, parv + 1);
-	}
-	else if(!irccasecmp(parv[0], "DEL"))
-	{
-		bs_cmd_delete(si, parc - 1, parv + 1);
-	}
-	else
-	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "BOT");
-		command_fail(si, fault_badparams, _("Syntax: BOT ADD <nick> <user> <host> <real>"));
-		command_fail(si, fault_badparams, _("Syntax: BOT CHANGE <oldnick> <newnick> [<user> [<host> [<real>]]]"));
-		command_fail(si, fault_badparams, _("Syntax: BOT DEL <nick>"));
-	}
-}
-
-/* ******************************************************************** */
-
-static bool
-valid_misc_field(const char *field, size_t maxlen)
-{
-	if (strlen(field) > maxlen)
-		return false;
-
-	/* Never ever allow @!?* as they have special meaning in all ircds */
-	/* Empty, space anywhere and colon at the start break the protocol */
-	/* Also disallow ASCII 1-31 and "' as no sane IRCd allows them in n, u or h */
-	if (strchr(field, '@') || strchr(field, '!') || strchr(field, '?') || strchr(field, '/') ||
-			strchr(field, '*') || strchr(field, '\'') || strchr(field, ' ') ||
-			strchr(field, '"') || *field == ':' || *field == '\0' ||
-			has_ctrl_chars(field))
-		return false;
-
-	return true;
-}
-
-/* CHANGE oldnick nick [user [host [real]]] */
-static void
-bs_cmd_change(struct sourceinfo *si, int parc, char *parv[])
-{
-	struct botserv_bot *bot;
-	mowgli_patricia_iteration_state_t state;
-	struct mychan *mc;
-	struct metadata *md;
-
-	if (parc < 2 || parv[0] == NULL || parv[1] == NULL)
-	{
-		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "BOT CHANGE");
-		command_fail(si, fault_needmoreparams, _("Syntax: BOT CHANGE <oldnick> <newnick> [<user> [<host> [<real>]]]"));
-		return;
-	}
-
-	bot = botserv_bot_find(parv[0]);
-	if (bot == NULL)
-	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a bot"), parv[0]);
-		return;
-	}
-
-	if (nicksvs.no_nick_ownership ? myuser_find(parv[1]) != NULL : mynick_find(parv[1]) != NULL)
-	{
-		command_fail(si, fault_alreadyexists, _("\2%s\2 is a registered nick."), parv[1]);
-		return;
-	}
-
-	if (irccasecmp(parv[0], parv[1]))
-	{
-		if (botserv_bot_find(parv[1]) || service_find_nick(parv[1]))
-		{
-			command_fail(si, fault_alreadyexists,
-					_("\2%s\2 is already a bot or service."),
-					parv[1]);
-			return;
-		}
-	}
-
-	if (parc >= 2 && (!is_valid_nick(parv[1])))
-	{
-		command_fail(si, fault_badparams, _("\2%s\2 is an invalid nickname."), parv[1]);
-		return;
-	}
-
-	if (parc >= 4 && !check_vhost_validity(si, parv[3]))
-		return;
-
-	service_delete(bot->me);
-	switch(parc)
-	{
-		case 5:
-			if (strlen(parv[4]) <= GECOSLEN)
-			{
-				free(bot->real);
-				bot->real = sstrdup(parv[4]);
-			}
-			else
-				command_fail(si, fault_badparams, _("\2%s\2 is an invalid realname, not changing it"), parv[4]);
-		case 4:
-			free(bot->host);
-			bot->host = sstrdup(parv[3]);
-		case 3:
-			/* XXX: we really need an is_valid_user(), but this is close enough. --nenolod */
-			if (is_valid_username(parv[2])) {
-				free(bot->user);
-				bot->user = sstrndup(parv[2], USERLEN);
-			} else
-				command_fail(si, fault_badparams, _("\2%s\2 is an invalid username, not changing it."), parv[2]);
-		case 2:
-			free(bot->nick);
-			bot->nick = sstrdup(parv[1]);
-			break;
-		default:
-			command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "BOT CHANGE");
-			command_fail(si, fault_needmoreparams, _("Syntax: BOT CHANGE <oldnick> <newnick> [<user> [<host> [<real>]]]"));
-			return;
-	}
-	bot->registered = CURRTIME;
-	bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler, chansvs.me);
-	service_set_chanmsg(bot->me, true);
-
-	/* join it back and also update the metadata */
-	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
-	{
-		if ((md = metadata_find(mc, "private:botserv:bot-assigned")) == NULL)
-			continue;
-
-		if (!irccasecmp(md->value, parv[0]))
-		{
-			metadata_add(mc, "private:botserv:bot-assigned", parv[1]);
-			metadata_add(mc, "private:botserv:bot-handle-fantasy", parv[1]);
-			if (!config_options.leave_chans || (mc->chan != NULL && MOWGLI_LIST_LENGTH(&mc->chan->members) > 0))
-				join(mc->name, parv[1]);
-		}
-	}
-
-	logcommand(si, CMDLOG_ADMIN, "BOT:CHANGE: \2%s\2 (\2%s\2@\2%s\2) [\2%s\2]", bot->nick, bot->user, bot->host, bot->real);
-	command_success_nodata(si, "\2%s\2 (\2%s\2@\2%s\2) [\2%s\2] changed.", bot->nick, bot->user, bot->host, bot->real);
-}
-
-/* ******************************************************************** */
-
-/* ADD nick user host real */
+// ADD nick user host real
 static void
 bs_cmd_add(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -750,9 +551,109 @@ bs_cmd_add(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, "\2%s\2 (\2%s\2@\2%s\2) [\2%s\2] created.", bot->nick, bot->user, bot->host, bot->real);
 }
 
-/* ******************************************************************** */
+// CHANGE oldnick nick [user [host [real]]]
+static void
+bs_cmd_change(struct sourceinfo *si, int parc, char *parv[])
+{
+	struct botserv_bot *bot;
+	mowgli_patricia_iteration_state_t state;
+	struct mychan *mc;
+	struct metadata *md;
 
-/* DELETE nick */
+	if (parc < 2 || parv[0] == NULL || parv[1] == NULL)
+	{
+		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "BOT CHANGE");
+		command_fail(si, fault_needmoreparams, _("Syntax: BOT CHANGE <oldnick> <newnick> [<user> [<host> [<real>]]]"));
+		return;
+	}
+
+	bot = botserv_bot_find(parv[0]);
+	if (bot == NULL)
+	{
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a bot"), parv[0]);
+		return;
+	}
+
+	if (nicksvs.no_nick_ownership ? myuser_find(parv[1]) != NULL : mynick_find(parv[1]) != NULL)
+	{
+		command_fail(si, fault_alreadyexists, _("\2%s\2 is a registered nick."), parv[1]);
+		return;
+	}
+
+	if (irccasecmp(parv[0], parv[1]))
+	{
+		if (botserv_bot_find(parv[1]) || service_find_nick(parv[1]))
+		{
+			command_fail(si, fault_alreadyexists,
+					_("\2%s\2 is already a bot or service."),
+					parv[1]);
+			return;
+		}
+	}
+
+	if (parc >= 2 && (!is_valid_nick(parv[1])))
+	{
+		command_fail(si, fault_badparams, _("\2%s\2 is an invalid nickname."), parv[1]);
+		return;
+	}
+
+	if (parc >= 4 && !check_vhost_validity(si, parv[3]))
+		return;
+
+	service_delete(bot->me);
+	switch(parc)
+	{
+		case 5:
+			if (strlen(parv[4]) <= GECOSLEN)
+			{
+				free(bot->real);
+				bot->real = sstrdup(parv[4]);
+			}
+			else
+				command_fail(si, fault_badparams, _("\2%s\2 is an invalid realname, not changing it"), parv[4]);
+		case 4:
+			free(bot->host);
+			bot->host = sstrdup(parv[3]);
+		case 3:
+			// XXX: we really need an is_valid_user(), but this is close enough. --nenolod
+			if (is_valid_username(parv[2])) {
+				free(bot->user);
+				bot->user = sstrndup(parv[2], USERLEN);
+			} else
+				command_fail(si, fault_badparams, _("\2%s\2 is an invalid username, not changing it."), parv[2]);
+		case 2:
+			free(bot->nick);
+			bot->nick = sstrdup(parv[1]);
+			break;
+		default:
+			command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "BOT CHANGE");
+			command_fail(si, fault_needmoreparams, _("Syntax: BOT CHANGE <oldnick> <newnick> [<user> [<host> [<real>]]]"));
+			return;
+	}
+	bot->registered = CURRTIME;
+	bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler, chansvs.me);
+	service_set_chanmsg(bot->me, true);
+
+	// join it back and also update the metadata
+	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
+	{
+		if ((md = metadata_find(mc, "private:botserv:bot-assigned")) == NULL)
+			continue;
+
+		if (!irccasecmp(md->value, parv[0]))
+		{
+			metadata_add(mc, "private:botserv:bot-assigned", parv[1]);
+			metadata_add(mc, "private:botserv:bot-handle-fantasy", parv[1]);
+			if (!config_options.leave_chans || (mc->chan != NULL && MOWGLI_LIST_LENGTH(&mc->chan->members) > 0))
+				join(mc->name, parv[1]);
+		}
+	}
+
+	logcommand(si, CMDLOG_ADMIN, "BOT:CHANGE: \2%s\2 (\2%s\2@\2%s\2) [\2%s\2]", bot->nick, bot->user, bot->host, bot->real);
+	command_success_nodata(si, "\2%s\2 (\2%s\2@\2%s\2) [\2%s\2] changed.", bot->nick, bot->user, bot->host, bot->real);
+}
+
+// DELETE nick
 static void
 bs_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -804,9 +705,59 @@ bs_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, "Bot \2%s\2 has been deleted.", parv[0]);
 }
 
-/* ******************************************************************** */
+// BOT CMD nick user host real
+static void
+bs_cmd_bot(struct sourceinfo *si, int parc, char *parv[])
+{
+	if (parc < 1 || parv[0] == NULL)
+	{
+		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "BOT");
+		command_fail(si, fault_needmoreparams, _("Syntax: BOT ADD <nick> <user> <host> <real>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: BOT CHANGE <oldnick> <newnick> [<user> [<host> [<real>]]]"));
+		command_fail(si, fault_needmoreparams, _("Syntax: BOT DEL <nick>"));
+		return;
+	}
 
-/* LIST */
+	if (!irccasecmp(parv[0], "ADD"))
+	{
+		bs_cmd_add(si, parc - 1, parv + 1);
+	}
+	else if(!irccasecmp(parv[0], "CHANGE"))
+	{
+		bs_cmd_change(si, parc - 1, parv + 1);
+	}
+	else if(!irccasecmp(parv[0], "DEL"))
+	{
+		bs_cmd_delete(si, parc - 1, parv + 1);
+	}
+	else
+	{
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "BOT");
+		command_fail(si, fault_badparams, _("Syntax: BOT ADD <nick> <user> <host> <real>"));
+		command_fail(si, fault_badparams, _("Syntax: BOT CHANGE <oldnick> <newnick> [<user> [<host> [<real>]]]"));
+		command_fail(si, fault_badparams, _("Syntax: BOT DEL <nick>"));
+	}
+}
+
+static bool
+valid_misc_field(const char *field, size_t maxlen)
+{
+	if (strlen(field) > maxlen)
+		return false;
+
+	/* Never ever allow @!?* as they have special meaning in all ircds */
+	/* Empty, space anywhere and colon at the start break the protocol */
+	/* Also disallow ASCII 1-31 and "' as no sane IRCd allows them in n, u or h */
+	if (strchr(field, '@') || strchr(field, '!') || strchr(field, '?') || strchr(field, '/') ||
+			strchr(field, '*') || strchr(field, '\'') || strchr(field, ' ') ||
+			strchr(field, '"') || *field == ':' || *field == '\0' ||
+			has_ctrl_chars(field))
+		return false;
+
+	return true;
+}
+
+// LIST
 static void
 bs_cmd_botlist(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -840,9 +791,7 @@ bs_cmd_botlist(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, "Use \2/msg %s ASSIGN #chan botnick\2 to assign one to your channel.", si->service->me->nick);
 }
 
-/* ******************************************************************** */
-
-/* ASSIGN #channel nick */
+// ASSIGN #channel nick
 static void
 bs_cmd_assign(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -921,9 +870,7 @@ bs_cmd_assign(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("Assigned the bot \2%s\2 to \2%s\2."), parv[1], parv[0]);
 }
 
-/* ******************************************************************** */
-
-/* UNASSIGN #channel */
+// UNASSIGN #channel
 static void
 bs_cmd_unassign(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -966,10 +913,6 @@ bs_cmd_unassign(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("Unassigned the bot from \2%s\2."), parv[0]);
 }
 
-/* ******************************************************************** */
-
-/* ******************************************************************** */
-
 static void
 osinfo_hook(struct sourceinfo *si)
 {
@@ -1005,12 +948,12 @@ bs_join(hook_channel_joinpart_t *hdata)
 	u = cu->user;
 	chan = cu->chan;
 
-	/* first check if this is a registered channel at all */
+	// first check if this is a registered channel at all
 	mc = mychan_from(chan);
 	if (mc == NULL)
 		return;
 
-	/* chanserv's function handles those */
+	// chanserv's function handles those
 	if (metadata_find(mc, "private:botserv:bot-assigned") == NULL)
 		return;
 
@@ -1034,8 +977,6 @@ bs_join(hook_channel_joinpart_t *hdata)
 	}
 }
 
-/* ******************************************************************** */
-
 static void
 bs_part(hook_channel_joinpart_t *hdata)
 {
@@ -1051,7 +992,7 @@ bs_part(hook_channel_joinpart_t *hdata)
 	if (mc == NULL)
 		return;
 
-	/* chanserv's function handles those */
+	// chanserv's function handles those
 	if (metadata_find(mc, "private:botserv:bot-assigned") == NULL)
 		return;
 
@@ -1059,15 +1000,16 @@ bs_part(hook_channel_joinpart_t *hdata)
 	if (CURRTIME - mc->used >= 3600)
 		if (chanacs_user_flags(mc, cu->user) & CA_USEDUPDATE)
 			mc->used = CURRTIME;
+
 	/*
-	* When channel_part is fired, we haven't yet removed the
-	* user from the room. So, the channel will have two members
-	* if ChanServ is joining channels: the triggering user and
-	* itself.
-	*
-	* Do not part if we're enforcing an akick/close in an otherwise
-	* empty channel (MC_INHABIT). -- jilles
-	*/
+	 * When channel_part is fired, we haven't yet removed the
+	 * user from the room. So, the channel will have two members
+	 * if ChanServ is joining channels: the triggering user and
+	 * itself.
+	 *
+	 * Do not part if we're enforcing an akick/close in an otherwise
+	 * empty channel (MC_INHABIT). -- jilles
+	 */
 	if (config_options.leave_chans
 			&& !(mc->flags & MC_INHABIT)
 			&& (cu->chan->nummembers - cu->chan->numsvcmembers == 1)
@@ -1079,6 +1021,11 @@ bs_part(hook_channel_joinpart_t *hdata)
 			part(cu->chan->name, chansvs.nick);
 	}
 }
+
+static struct command bs_bot = { "BOT", "Maintains network bot list.", PRIV_USER_ADMIN, 6, bs_cmd_bot, { .path = "botserv/bot" } };
+static struct command bs_assign = { "ASSIGN", "Assigns a bot to a channel.", AC_NONE, 2, bs_cmd_assign, { .path = "botserv/assign" } };
+static struct command bs_unassign = { "UNASSIGN", "Unassigns a bot from a channel.", AC_NONE, 1, bs_cmd_unassign, { .path = "botserv/unassign" } };
+static struct command bs_botlist = { "BOTLIST", "Lists available bots.", AC_NONE, 0, bs_cmd_botlist, { .path = "botserv/botlist" } };
 
 static void
 mod_init(struct module *const restrict m)

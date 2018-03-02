@@ -9,12 +9,6 @@
 
 #include "atheme.h"
 
-static void bs_cmd_say(struct sourceinfo *si, int parc, char *parv[]);
-static void bs_cmd_act(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command bs_say = { "SAY", N_("Makes the bot say the given text on the given channel."), AC_AUTHENTICATED, 2, bs_cmd_say, { .path = "botserv/say" } };
-static struct command bs_act = { "ACT", N_("Makes the bot do the equivalent of a \"/me\" command."), AC_AUTHENTICATED, 2, bs_cmd_act, { .path = "botserv/act" } };
-
 static void
 bs_cmd_say(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -147,6 +141,9 @@ bs_cmd_act(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_DO, "ACT:\2%s\2: \2%s\2", channel, message);
 	}
 }
+
+static struct command bs_say = { "SAY", N_("Makes the bot say the given text on the given channel."), AC_AUTHENTICATED, 2, bs_cmd_say, { .path = "botserv/say" } };
+static struct command bs_act = { "ACT", N_("Makes the bot do the equivalent of a \"/me\" command."), AC_AUTHENTICATED, 2, bs_cmd_act, { .path = "botserv/act" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
