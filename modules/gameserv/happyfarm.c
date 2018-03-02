@@ -10,8 +10,41 @@
 #include "atheme.h"
 #include "gameserv_common.h"
 
-/* Privatedata schema... */
+// Privatedata schema...
 #define SCHEMA_KEY_HAPPYFARMER		"gameserv:happyfarm:farmer"
+
+/*
+ * The game progresses at a rate of time that we will describe as The People's
+ * Happy Time Unit For Gaming Satisfaction.  All time in this game is described as
+ * being in units of The People's Happy Time Unit For Gaming Satisfaction.
+ * The below tunable defines, in seconds, how long a Happy Time Unit For Gaming
+ * Satisfaction actually is.
+ */
+#define PEOPLES_HAPPY_TIME_UNIT_FOR_GAMING_SATISFACTION		(60)
+
+/*
+ * And the below define is an alias so that I do not have to type out The People's
+ * Happy Time Unit For Gaming Satisfaction a whole bunch.  Because I really don't
+ * want to do that.
+ */
+#define TIME_UNIT_BASE		(PEOPLES_HAPPY_TIME_UNIT_FOR_GAMING_SATISFACTION)
+
+/*
+ * Plots of land cost money.  This is the cost of the plot.
+ */
+#define PLOT_COST		(50)
+
+/*
+ * Plots of land grow over time.  We need to determine how long it takes for
+ * a crop to grow.  I think that 7 Happy Time Units sounds good, so we'll make it 7.
+ */
+#define GROWTH_RATE		(7)
+
+/*
+ * A plot of land consists of seeds that grow into plants.  A plot is planted with X
+ * number of seeds.  There is an upper limit on the number of seeds.
+ */
+#define MAX_SEEDS		(30)
 
 /*
  * Types of plants you may grow.
@@ -35,24 +68,6 @@ enum happy_plant_type
 struct happy_inventory
 {
 	unsigned int count;
-};
-
-static struct {
-	const char *name;
-	enum happy_plant_type plant;
-} happy_planttype_mapping[] = {
-	{N_("nothing"), PLANT_NOTHING},
-	{N_("turnip"), PLANT_TURNIP},
-	{N_("tomato"), PLANT_TOMATO},
-	{N_("parsley"), PLANT_PARSLEY},
-	{N_("lettuce"), PLANT_LETTUCE},
-	{N_("corn"), PLANT_CORN},
-	{N_("potato"), PLANT_POTATO},
-	{N_("beans"), PLANT_BEANS},
-	{N_("peaches"), PLANT_PEACHES},
-	{N_("pears"), PLANT_PEARS},
-	{N_("apples"), PLANT_APPLES},
-	{NULL, PLANT_NOTHING},
 };
 
 /*
@@ -103,47 +118,6 @@ struct happy_farmer
 };
 
 /*
- * The game progresses at a rate of time that we will describe as The People's
- * Happy Time Unit For Gaming Satisfaction.  All time in this game is described as
- * being in units of The People's Happy Time Unit For Gaming Satisfaction.
- * The below tunable defines, in seconds, how long a Happy Time Unit For Gaming
- * Satisfaction actually is.
- */
-#define PEOPLES_HAPPY_TIME_UNIT_FOR_GAMING_SATISFACTION		(60)
-
-/*
- * And the below define is an alias so that I do not have to type out The People's
- * Happy Time Unit For Gaming Satisfaction a whole bunch.  Because I really don't
- * want to do that.
- */
-#define TIME_UNIT_BASE		(PEOPLES_HAPPY_TIME_UNIT_FOR_GAMING_SATISFACTION)
-
-/**********************************************************************************/
-
-/*
- * Plots of land cost money.  This is the cost of the plot.
- */
-#define PLOT_COST		(50)
-
-/*
- * Plots of land grow over time.  We need to determine how long it takes for
- * a crop to grow.  I think that 7 Happy Time Units sounds good, so we'll make it 7.
- */
-#define GROWTH_RATE		(7)
-
-/*
- * The People's Glorious Land Office of Arbitration Management needs to keep a record
- * of all Happy Plots in the world.  We do so here.
- */
-static mowgli_list_t happy_plot_list = { NULL, NULL, 0 };
-
-/*
- * A plot of land consists of seeds that grow into plants.  A plot is planted with X
- * number of seeds.  There is an upper limit on the number of seeds.
- */
-#define MAX_SEEDS		(30)
-
-/*
  * A plot of land, as previously mentioned, consists of seeds, which
  * grow into plants.  Once GROWTH_RATE is reached, the plot may be harvested
  * and replotted.
@@ -173,7 +147,31 @@ struct happy_plot
 	mowgli_node_t global_node;
 };
 
-/*******************************************************************************************/
+/*
+ * The People's Glorious Land Office of Arbitration Management needs to keep a record
+ * of all Happy Plots in the world.  We do so here.
+ */
+static mowgli_list_t happy_plot_list = { NULL, NULL, 0 };
+
+static struct {
+	const char *name;
+	enum happy_plant_type plant;
+} happy_planttype_mapping[] = {
+	{N_("nothing"), PLANT_NOTHING},
+	{N_("turnip"), PLANT_TURNIP},
+	{N_("tomato"), PLANT_TOMATO},
+	{N_("parsley"), PLANT_PARSLEY},
+	{N_("lettuce"), PLANT_LETTUCE},
+	{N_("corn"), PLANT_CORN},
+	{N_("potato"), PLANT_POTATO},
+	{N_("beans"), PLANT_BEANS},
+	{N_("peaches"), PLANT_PEACHES},
+	{N_("pears"), PLANT_PEARS},
+	{N_("apples"), PLANT_APPLES},
+	{NULL, PLANT_NOTHING},
+};
+
+static mowgli_patricia_t *happyfarm_cmd_subtree = NULL;
 
 /*
  * Our happy farmers are happily stored in a magazine allocator to be quickly allocated to
@@ -302,8 +300,6 @@ happy_plant_by_name(const char *name)
 	return PLANT_NOTHING;
 }
 
-/*******************************************************************************************/
-
 /*
  * Syntax: JOIN
  * Result: Player joins the game.
@@ -318,8 +314,6 @@ __command_join(struct sourceinfo * si, int parc, char *parv[])
 	command_success_nodata(si, _("Welcome to Happy Farm!  May your farm be lucky."));
 	command_success_nodata(si, _("You have started with \2%d\2 money.  For help, use \2/msg %s HELP HAPPYFARM\2."), farmer->money, si->service->nick);
 }
-
-static struct command command_join = { "JOIN", N_("Join the Happy Farm game!"), AC_AUTHENTICATED, 0, __command_join, { .path = "gameserv/happyfarm_join" } };
 
 /*
  * Syntax: BUYPLOT
@@ -342,7 +336,7 @@ __command_buyplot(struct sourceinfo * si, int parc, char *parv[])
 		return;
 	}
 
-	/* check if the farmer has enough money. */
+	// check if the farmer has enough money.
 	if (farmer->money < PLOT_COST)
 	{
 		command_fail(si, fault_noprivs, _("You don't have enough money to buy a plot of land."));
@@ -355,8 +349,6 @@ __command_buyplot(struct sourceinfo * si, int parc, char *parv[])
 	command_success_nodata(si, _("You have bought a plot of land!"));
 	command_success_nodata(si, _("You have \2%d\2 money available."), farmer->money);
 }
-
-static struct command command_buyplot = { "BUYPLOT", N_("Buy a plot of land!"), AC_AUTHENTICATED, 0, __command_buyplot, { .path = "gameserv/happyfarm_buyplot" } };
 
 /*
  * Syntax: SELLPLOT
@@ -393,12 +385,6 @@ __command_sellplot(struct sourceinfo * si, int parc, char *parv[])
 	command_success_nodata(si, _("You have \2%d\2 money available."), farmer->money);
 }
 
-static struct command command_sellplot = { "SELLPLOT", N_("Sell a vacant plot of land."), AC_AUTHENTICATED, 0, __command_sellplot, { .path = "gameserv/happyfarm_sellplot" } };
-
-/*******************************************************************************************/
-
-static mowgli_patricia_t *happyfarm_cmd_subtree = NULL;
-
 static void
 __command_trampoline(struct sourceinfo * si, int parc, char *parv[])
 {
@@ -412,7 +398,7 @@ __command_trampoline(struct sourceinfo * si, int parc, char *parv[])
 		return;
 	}
 
-	/* take the command through the hash table */
+	// take the command through the hash table
 	if ((c = command_find(happyfarm_cmd_subtree, subcmd)))
 	{
 		command_exec(si->service, si, c, parc - 1, parv + 1);
@@ -423,9 +409,10 @@ __command_trampoline(struct sourceinfo * si, int parc, char *parv[])
 	}
 }
 
+static struct command command_join = { "JOIN", N_("Join the Happy Farm game!"), AC_AUTHENTICATED, 0, __command_join, { .path = "gameserv/happyfarm_join" } };
+static struct command command_buyplot = { "BUYPLOT", N_("Buy a plot of land!"), AC_AUTHENTICATED, 0, __command_buyplot, { .path = "gameserv/happyfarm_buyplot" } };
+static struct command command_sellplot = { "SELLPLOT", N_("Sell a vacant plot of land."), AC_AUTHENTICATED, 0, __command_sellplot, { .path = "gameserv/happyfarm_sellplot" } };
 static struct command command_happyfarm = { "HAPPYFARM", N_("Happy Farm!"), AC_AUTHENTICATED, 2, __command_trampoline, { .path = "gameserv/happyfarm" } };
-
-/*******************************************************************************************/
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

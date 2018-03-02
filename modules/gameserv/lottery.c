@@ -8,10 +8,6 @@
 #include "atheme.h"
 #include "gameserv_common.h"
 
-static void command_lottery(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cmd_lottery = { "LOTTERY", N_("Choose a random user on a channel."), AC_NONE, 2, command_lottery, { .path = "gameserv/lottery" } };
-
 static struct user *
 pick_a_sucker(struct channel *c)
 {
@@ -48,6 +44,8 @@ command_lottery(struct sourceinfo *si, int parc, char *parv[])
 
 	gs_command_report(si, "%s", u->nick);
 }
+
+static struct command cmd_lottery = { "LOTTERY", N_("Choose a random user on a channel."), AC_NONE, 2, command_lottery, { .path = "gameserv/lottery" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

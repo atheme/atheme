@@ -8,10 +8,6 @@
 #include "atheme.h"
 #include "gameserv_common.h"
 
-static void command_eightball(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cmd_eightball = { "EIGHTBALL", N_("Ask the 8-Ball a question."), AC_NONE, 2, command_eightball, { .path = "gameserv/eightball" } };
-
 static void
 command_eightball(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -53,6 +49,8 @@ command_eightball(struct sourceinfo *si, int parc, char *parv[])
 
 	gs_command_report(si, "%s", _(eightball_responses[rand() % 28]));
 }
+
+static struct command cmd_eightball = { "EIGHTBALL", N_("Ask the 8-Ball a question."), AC_NONE, 2, command_eightball, { .path = "gameserv/eightball" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -10,13 +10,7 @@
 #include "atheme.h"
 #include "gameserv_common.h"
 
-static void command_wod(struct sourceinfo *si, int parc, char *parv[]);
-static void command_nwod(struct sourceinfo *si, int parc, char *parv[]);
-static void command_df(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cmd_wod = { "WOD", N_("WOD-style dice generation."), AC_NONE, 7, command_wod, { .path = "gameserv/roll" } };
-static struct command cmd_nwod = { "NWOD", N_("New WOD-style dice generation."), AC_NONE, 7, command_nwod, { .path = "gameserv/roll" } };
-static struct command cmd_df = { "DF", N_("Fudge-style dice generation."), AC_NONE, 2, command_df, { .path = "gameserv/roll" } };
+static const char *df_dice_table[3] = { "[-]", "[ ]", "[+]" };
 
 static void
 command_wod(struct sourceinfo *si, int parc, char *parv[])
@@ -96,7 +90,7 @@ command_wod(struct sourceinfo *si, int parc, char *parv[])
 					success, failure, botches, total);
 		}
 
-		/* prepare for another go. */
+		// prepare for another go.
 		arg_dice = parv[ii++];
 		arg_difficulty = parv[ii++];
 	}
@@ -194,13 +188,11 @@ command_nwod(struct sourceinfo *si, int parc, char *parv[])
 					success, failure, botches, total);
 		}
 
-		/* prepare for another go. */
+		// prepare for another go.
 		arg_dice = parv[ii++];
 		arg_rerollflag = parv[ii++];
 	}
 }
-
-static const char *df_dice_table[3] = { "[-]", "[ ]", "[+]" };
 
 static void
 command_df(struct sourceinfo *si, int parc, char *parv[])
@@ -241,6 +233,10 @@ command_df(struct sourceinfo *si, int parc, char *parv[])
 
 	gs_command_report(si, _("Result: %s"), buf);
 }
+
+static struct command cmd_wod = { "WOD", N_("WOD-style dice generation."), AC_NONE, 7, command_wod, { .path = "gameserv/roll" } };
+static struct command cmd_nwod = { "NWOD", N_("New WOD-style dice generation."), AC_NONE, 7, command_nwod, { .path = "gameserv/roll" } };
+static struct command cmd_df = { "DF", N_("Fudge-style dice generation."), AC_NONE, 2, command_df, { .path = "gameserv/roll" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

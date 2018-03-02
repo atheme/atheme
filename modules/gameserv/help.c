@@ -7,11 +7,7 @@
 
 #include "atheme.h"
 
-static void gs_cmd_help(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command gs_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 2, gs_cmd_help, { .path = "help" } };
-
-/* HELP <command> [params] */
+// HELP <command> [params]
 void
 gs_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -32,9 +28,11 @@ gs_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	/* take the command through the hash table */
+	// take the command through the hash table
 	help_display(si, si->service, command, si->service->commands);
 }
+
+static struct command gs_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 2, gs_cmd_help, { .path = "help" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

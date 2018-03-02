@@ -12,116 +12,10 @@
 
 #include <math.h>
 
-static void command_dice(struct sourceinfo *si, int parc, char *parv[]);
-static void command_calc(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cmd_dice = { "ROLL", N_("Rolls one or more dice."), AC_NONE, 3, command_dice, {.path = "gameserv/roll"} };
-static struct command cmd_calc = { "CALC", N_("Calculate stuff."), AC_NONE, 3, command_calc, {.path = "gameserv/calc"} };
-
-static unsigned int max_rolls = 10;
-
 #define CALC_MAX_STACK		(128)
 
 #define DICE_MAX_DICE		(100)
 #define DICE_MAX_SIDES		(100)
-
-int do_calc_expr(struct sourceinfo *si, char *expr, char *errmsg, double *presult);
-int do_calc_eval(struct sourceinfo *si, double lhs, char oper, double rhs, double *out, char *errmsg);
-int is_calcoper(char oper);
-
-//
-// <expr>
-//   expr = {<op>(<expr>)}|{<op><expr>}
-//   op   = { ~ ! d * / % \ ^ + - & $ | }
-//
-// [Rank 1]                        |  [Rank 4]
-// ~   = One's compliment          |  + - = Add / Subtract
-// !   = Logical NOT               |
-// d   = Dice Generator, LOL.      |  [Rank 5]
-//                                 |  &   = Bitwise AND
-// [Rank 2]                        |
-// ^   = Power                     |  [Rank 6]
-//                                 |  $   = Bitwise XOR (eXclusive OR)
-// [Rank 3]                        |
-// * / = Multiply / Divide         |  [Rank 7]
-// % \ = Modulus / Integer-divide  |  |   = Bitwise inclusive OR
-//
-static bool
-eval_calc(struct sourceinfo *si, char *s_input)
-{
-	static char buffer[1024];
-
-	char *ci = s_input;
-
-	int err, braces = 0;
-	double expr;
-
-
-	if (s_input == NULL)
-	{
-		command_fail(si, fault_badparams, _("Error: You typed an invalid expression."));
-		return false;
-	}
-
-	// Skip leading whitespace
-	while (*ci && isspace((unsigned char)*ci))
-		ci++;
-
-	if (!*ci)
-	{
-		command_fail(si, fault_badparams, _("Error: You typed an invalid expression."));
-		return false;
-	}
-
-	// Validate braces
-	while (*ci)
-	{
-		if (*ci == '(')
-		{
-			braces++;
-		}
-		else if (*ci == ')')
-		{
-			if (--braces < 0)
-				break;	// mismatched!
-		}
-		else if (!isspace((unsigned char)*ci) && !isdigit((unsigned char)*ci) && *ci != '.' && !is_calcoper(*ci))
-		{
-			command_fail(si, fault_badparams, _("Error: You typed an invalid expression."));
-			return false;
-		}
-		ci++;
-	}
-
-	if (braces != 0)
-	{
-		command_fail(si, fault_badparams, _("Error: Mismatched braces '( )' in expression."));
-		return false;
-	}
-
-	err = do_calc_expr(si, s_input, buffer, &expr);
-
-	if (!err)
-	{
-		if (strlen(s_input) > 250)
-		{
-			mowgli_strlcpy(buffer, s_input, 150);
-			sprintf(&buffer[150], "...%s = %.8g", &s_input[strlen(s_input) - 10], expr);
-		}
-		else
-		{
-			sprintf(buffer, "%s = %.8g", s_input, expr);
-		}
-	}
-	else
-		return false;
-
-	gs_command_report(si, "%s", buffer);
-	return true;
-}
-
-
-//////////////////////////////////////////////////////////////////////////
 
 enum
 {
@@ -129,13 +23,121 @@ enum
 	CALCEXPR_OPER
 };
 
-typedef struct _tagCalcStack
+typedef struct
 {
 	double _value;
 	char _oper;
 	int _rank;
 	int _brace;
 } CalcStack;
+
+static unsigned int max_rolls = 10;
+
+int
+is_calcoper(char oper)
+{
+	static char *opers = "~!d ^ */%\\ +- & $ |";
+	char *c = opers;
+	int rank = 1;
+
+	while (*c && *c != oper)
+	{
+		if (*c == ' ')
+			rank++;
+		c++;
+	}
+
+	return (*c ? rank : 0);
+}
+
+static double
+calc_dice_simple(double lhs, double rhs)
+{
+	double out = 0.0;
+	int i, sides, dice;
+
+	dice = floor(lhs);
+	sides = floor(rhs);
+
+	if (dice < 1 || dice > 100)
+		return 0.0;
+
+	if (sides < 1 || sides > 100)
+		return 0.0;
+
+	for (i = 0; i < dice; i++)
+	{
+		out += 1.0 + arc4random_uniform(sides);
+	}
+
+	return out;
+}
+
+int
+do_calc_eval(struct sourceinfo *si, double lhs, char oper, double rhs, double *out, char *errmsg)
+{
+	switch (oper)
+	{
+	  case '~':		// 1's compliment (unary)
+		  *out = (double)(~(long long)rhs);
+		  break;
+	  case '!':		// NOT (unary)
+		  *out = (double)(!(long long)rhs);
+		  break;
+	  case 'd':
+		  *out = calc_dice_simple(lhs, rhs);
+		  break;
+	  case '*':		// multiplication
+		  *out = lhs * rhs;
+		  break;
+	  case '/':		// division
+	  case '%':		// MOD
+	  case '\\':		// DIV
+		  if (rhs <= 0.0 || (oper == '%' && ((long long)rhs == 0)))
+		  {
+			  command_fail(si, fault_badparams, _("Error: Cannot perform modulus or division by zero."));
+			  return 1;
+		  }
+
+		  switch (oper)
+		  {
+		    case '/':
+			    *out = lhs / rhs;
+			    break;
+		    case '%':
+			    *out = (double)((long long)lhs % (long long)rhs);
+			    break;
+		    case '\\':
+			    lhs /= rhs;
+			    *out = (lhs < 0) ? ceil(lhs) : floor(lhs);
+			    break;
+		  }
+		  break;
+	  case '^':		// power-of
+		  *out = pow(lhs, rhs);
+		  break;
+	  case '+':		// addition
+		  *out = lhs + rhs;
+		  break;
+	  case '-':		// subtraction
+		  *out = lhs - rhs;
+		  break;
+	  case '&':		// AND (bitwise)
+		  *out = (double)((long long)lhs & (long long)rhs);
+		  break;
+	  case '$':		// XOR (bitwise)
+		  *out = (double)((long long)lhs ^ (long long)rhs);
+		  break;
+	  case '|':		// OR (bitwise)
+		  *out = (double)((long long)lhs | (long long)rhs);
+		  break;
+	  default:
+		  command_fail(si, fault_unimplemented, _("Error: Unknown mathematical operator %c."), oper);
+		  return 1;
+	}
+
+	return 0;
+}
 
 int
 do_calc_expr(struct sourceinfo *si, char *expr, char *errmsg, double *presult)
@@ -311,119 +313,95 @@ do_calc_expr(struct sourceinfo *si, char *expr, char *errmsg, double *presult)
 	return 0;		// no error
 }
 
-static double
-calc_dice_simple(double lhs, double rhs)
-{
-	double out = 0.0;
-	int i, sides, dice;
-
-	dice = floor(lhs);
-	sides = floor(rhs);
-
-	if (dice < 1 || dice > 100)
-		return 0.0;
-
-	if (sides < 1 || sides > 100)
-		return 0.0;
-
-	for (i = 0; i < dice; i++)
-	{
-		out += 1.0 + arc4random_uniform(sides);
-	}
-
-	return out;
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-int
-do_calc_eval(struct sourceinfo *si, double lhs, char oper, double rhs, double *out, char *errmsg)
-{
-	switch (oper)
-	{
-	  case '~':		// 1's compliment (unary)
-		  *out = (double)(~(long long)rhs);
-		  break;
-	  case '!':		// NOT (unary)
-		  *out = (double)(!(long long)rhs);
-		  break;
-	  case 'd':
-		  *out = calc_dice_simple(lhs, rhs);
-		  break;
-	  case '*':		// multiplication
-		  *out = lhs * rhs;
-		  break;
-	  case '/':		// division
-	  case '%':		// MOD
-	  case '\\':		// DIV
-		  if (rhs <= 0.0 || (oper == '%' && ((long long)rhs == 0)))
-		  {
-			  command_fail(si, fault_badparams, _("Error: Cannot perform modulus or division by zero."));
-			  return 1;
-		  }
-
-		  switch (oper)
-		  {
-		    case '/':
-			    *out = lhs / rhs;
-			    break;
-		    case '%':
-			    *out = (double)((long long)lhs % (long long)rhs);
-			    break;
-		    case '\\':
-			    lhs /= rhs;
-			    *out = (lhs < 0) ? ceil(lhs) : floor(lhs);
-			    break;
-		  }
-		  break;
-	  case '^':		// power-of
-		  *out = pow(lhs, rhs);
-		  break;
-	  case '+':		// addition
-		  *out = lhs + rhs;
-		  break;
-	  case '-':		// subtraction
-		  *out = lhs - rhs;
-		  break;
-	  case '&':		// AND (bitwise)
-		  *out = (double)((long long)lhs & (long long)rhs);
-		  break;
-	  case '$':		// XOR (bitwise)
-		  *out = (double)((long long)lhs ^ (long long)rhs);
-		  break;
-	  case '|':		// OR (bitwise)
-		  *out = (double)((long long)lhs | (long long)rhs);
-		  break;
-	  default:
-		  command_fail(si, fault_unimplemented, _("Error: Unknown mathematical operator %c."), oper);
-		  return 1;
-	}
-
-	return 0;
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-// Is 'oper' an operator? If so, return its 'rank', else '0'.
+// <expr>
+//   expr = {<op>(<expr>)}|{<op><expr>}
+//   op   = { ~ ! d * / % \ ^ + - & $ | }
 //
-int
-is_calcoper(char oper)
+// [Rank 1]                        |  [Rank 4]
+// ~   = One's compliment          |  + - = Add / Subtract
+// !   = Logical NOT               |
+// d   = Dice Generator, LOL.      |  [Rank 5]
+//                                 |  &   = Bitwise AND
+// [Rank 2]                        |
+// ^   = Power                     |  [Rank 6]
+//                                 |  $   = Bitwise XOR (eXclusive OR)
+// [Rank 3]                        |
+// * / = Multiply / Divide         |  [Rank 7]
+// % \ = Modulus / Integer-divide  |  |   = Bitwise inclusive OR
+//
+static bool
+eval_calc(struct sourceinfo *si, char *s_input)
 {
-	static char *opers = "~!d ^ */%\\ +- & $ |";
-	char *c = opers;
-	int rank = 1;
+	static char buffer[1024];
 
-	while (*c && *c != oper)
+	char *ci = s_input;
+
+	int err, braces = 0;
+	double expr;
+
+
+	if (s_input == NULL)
 	{
-		if (*c == ' ')
-			rank++;
-		c++;
+		command_fail(si, fault_badparams, _("Error: You typed an invalid expression."));
+		return false;
 	}
 
-	return (*c ? rank : 0);
-}
+	// Skip leading whitespace
+	while (*ci && isspace((unsigned char)*ci))
+		ci++;
 
-/*************************************************************************************/
+	if (!*ci)
+	{
+		command_fail(si, fault_badparams, _("Error: You typed an invalid expression."));
+		return false;
+	}
+
+	// Validate braces
+	while (*ci)
+	{
+		if (*ci == '(')
+		{
+			braces++;
+		}
+		else if (*ci == ')')
+		{
+			if (--braces < 0)
+				break;	// mismatched!
+		}
+		else if (!isspace((unsigned char)*ci) && !isdigit((unsigned char)*ci) && *ci != '.' && !is_calcoper(*ci))
+		{
+			command_fail(si, fault_badparams, _("Error: You typed an invalid expression."));
+			return false;
+		}
+		ci++;
+	}
+
+	if (braces != 0)
+	{
+		command_fail(si, fault_badparams, _("Error: Mismatched braces '( )' in expression."));
+		return false;
+	}
+
+	err = do_calc_expr(si, s_input, buffer, &expr);
+
+	if (!err)
+	{
+		if (strlen(s_input) > 250)
+		{
+			mowgli_strlcpy(buffer, s_input, 150);
+			sprintf(&buffer[150], "...%s = %.8g", &s_input[strlen(s_input) - 10], expr);
+		}
+		else
+		{
+			sprintf(buffer, "%s = %.8g", s_input, expr);
+		}
+	}
+	else
+		return false;
+
+	gs_command_report(si, "%s", buffer);
+	return true;
+}
 
 static bool
 eval_dice(struct sourceinfo *si, char *s_input)
@@ -610,6 +588,9 @@ command_calc(struct sourceinfo *si, int parc, char *parv[])
 		if (!eval_calc(si, arg))
 			break;
 }
+
+static struct command cmd_dice = { "ROLL", N_("Rolls one or more dice."), AC_NONE, 3, command_dice, {.path = "gameserv/roll"} };
+static struct command cmd_calc = { "CALC", N_("Calculate stuff."), AC_NONE, 3, command_calc, {.path = "gameserv/calc"} };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

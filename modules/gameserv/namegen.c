@@ -9,10 +9,6 @@
 #include "gameserv_common.h"
 #include "namegen_tab.h"
 
-static void command_namegen(struct sourceinfo *si, int parc, char *parv[]);
-
-static struct command cmd_namegen = { "NAMEGEN", N_("Generates some names to ponder."), AC_NONE, 2, command_namegen, { .path = "gameserv/namegen" } };
-
 static void
 command_namegen(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -28,7 +24,7 @@ command_namegen(struct sourceinfo *si, int parc, char *parv[])
 		amt = atoi(parv[0]);
 
 
-	/* limit to 20 */
+	// limit to 20
 	if (amt > 20)
 		amt = 20;
 
@@ -39,7 +35,7 @@ command_namegen(struct sourceinfo *si, int parc, char *parv[])
 		char namebuf[BUFSIZE];
 		unsigned int medial_iter;
 
-		/* Here we generate the name. */
+		// Here we generate the name.
 		mowgli_strlcpy(namebuf, begin_sym[rand() % BEGIN_SYM_SZ], BUFSIZE);
 
 		for (medial_iter = rand() % 3; medial_iter > 0; medial_iter--)
@@ -57,6 +53,8 @@ command_namegen(struct sourceinfo *si, int parc, char *parv[])
 
 	gs_command_report(si, _("Some names to ponder: %s"), buf);
 }
+
+static struct command cmd_namegen = { "NAMEGEN", N_("Generates some names to ponder."), AC_NONE, 2, command_namegen, { .path = "gameserv/namegen" } };
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
