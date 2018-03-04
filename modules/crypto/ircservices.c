@@ -24,12 +24,14 @@
 
 #define XTOI(c) ((c)>9 ? (c)-'A'+10 : (c)-'0')
 
-static inline void
+static inline bool
 atheme_ircservices_encrypt(const char *const restrict src, char *const restrict dest)
 {
 	char digest[33];
 	(void) memset(digest, 0x00, sizeof digest);
-	(void) digest_oneshot(DIGALG_MD5, src, strlen(src), digest, NULL);
+
+	if (! digest_oneshot(DIGALG_MD5, src, strlen(src), digest, NULL))
+		return false;
 
 	char dest2[16];
 	for (size_t i = 0; i < 32; i += 2)
@@ -38,6 +40,8 @@ atheme_ircservices_encrypt(const char *const restrict src, char *const restrict 
 	(void) strcpy(dest, MODULE_PREFIX_STR);
 	for (size_t i = 0; i < MODULE_DIGEST_LEN; i++)
 		(void) sprintf(dest + MODULE_PREFIX_LEN + 2 * i, "%02x", 255 & dest2[i]);
+
+	return true;
 }
 
 static bool
@@ -54,7 +58,8 @@ atheme_ircservices_verify(const char *const restrict password, const char *const
 
 	char result[BUFSIZE];
 
-	(void) atheme_ircservices_encrypt(password, result);
+	if (! atheme_ircservices_encrypt(password, result))
+		return false;
 
 	if (strcmp(result, parameters) != 0)
 		return false;
