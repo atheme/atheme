@@ -7,7 +7,6 @@ SUBDIRS		= main
 SRCS =				\
 	acsnolimit.c		\
 	drop.c			\
-	fdrop.c			\
 	fflags.c		\
 	flags.c			\
 	help.c			\
