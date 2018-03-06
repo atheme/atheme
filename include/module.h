@@ -12,6 +12,15 @@
 #include "abirev.h"
 #include "serno.h"
 
+#define MODTYPE_STANDARD	0
+#define MODTYPE_CORE		1 /* Can't be unloaded. */
+#define MODTYPE_FAIL		0x8000 /* modinit failed */
+
+#define MAPI_ATHEME_MAGIC	0xdeadbeef
+#define MAPI_ATHEME_V4		4
+
+#define MAX_CMD_PARC		20
+
 enum module_unload_intent
 {
 	MODULE_UNLOAD_INTENT_PERM            = 0,
@@ -42,15 +51,6 @@ struct module
 	mowgli_list_t                   deplist;
 	mowgli_list_t                   symlist;
 };
-
-#define MODTYPE_STANDARD	0
-#define MODTYPE_CORE		1 /* Can't be unloaded. */
-#define MODTYPE_FAIL		0x8000 /* modinit failed */
-
-#define MAPI_ATHEME_MAGIC	0xdeadbeef
-#define MAPI_ATHEME_V4		4
-
-#define MAX_CMD_PARC		20
 
 struct v4_moduleheader
 {
