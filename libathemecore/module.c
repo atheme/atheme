@@ -183,7 +183,7 @@ module_load_internal(const char *pathname, char *errbuf, int errlen)
 	mowgli_strlcpy(m->name, h->name, BUFSIZE);
 	m->can_unload = h->can_unload;
 	m->handle = handle;
-	m->mflags = MODTYPE_STANDARD;
+	m->mflags = 0;
 	m->header = h;
 
 #if defined(HAVE_DLINFO) && !defined(__UCLIBC__)
