@@ -12,7 +12,6 @@
 #include "abirev.h"
 #include "serno.h"
 
-#define MODTYPE_CORE		1 /* Can't be unloaded. */
 #define MODTYPE_FAIL		0x8000 /* modinit failed */
 
 #define MAPI_ATHEME_MAGIC	0xdeadbeef

@@ -36,10 +36,8 @@ channel_succession_hook(hook_channel_succession_req_t *req)
 }
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
-	m->mflags = MODTYPE_CORE;
-
 	if ((successor_flag = flags_associate('S', 0, false, "successor")) == 0)
 	{
 		slog(LG_ERROR, "chanserv/successor_acl: Inserting +S into flagset failed.");

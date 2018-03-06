@@ -85,8 +85,6 @@ mod_init(struct module *const restrict m)
 
 	ircd = &Ratbox;
 
-	m->mflags = MODTYPE_CORE;
-
 	pmodule_loaded = true;
 }
 

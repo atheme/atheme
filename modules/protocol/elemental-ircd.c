@@ -108,8 +108,6 @@ mod_init(struct module *const restrict m)
 
 	ircd = &elemental_ircd;
 
-	m->mflags = MODTYPE_CORE;
-
 	pmodule_loaded = true;
 }
 

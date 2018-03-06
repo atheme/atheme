@@ -1793,8 +1793,6 @@ mod_init(struct module *const restrict m)
 	hook_add_event("channel_drop");
 	hook_add_channel_drop(channel_drop);
 
-	m->mflags = MODTYPE_CORE;
-
 	pmodule_loaded = true;
 }
 

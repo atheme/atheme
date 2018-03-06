@@ -817,8 +817,6 @@ mod_init(struct module *const restrict m)
 	pcommand_add("TOPIC", m_topic, 2, MSRC_USER);
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
 
-	m->mflags = MODTYPE_CORE;
-
 	pmodule_loaded = true;
 }
 

@@ -412,8 +412,6 @@ mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "backend/corestorage");
 
-	m->mflags = MODTYPE_CORE;
-
 	db_mod = &opensex_mod;
 
 	db_register_type_handler("GRVER", opensex_h_grver);

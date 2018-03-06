@@ -1092,8 +1092,6 @@ mod_init(struct module *const restrict m)
 	pcommand_add("T", m_topic, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("MO", m_motd, 1, MSRC_USER);
 	pcommand_add("AC", m_account, 2, MSRC_SERVER);
-
-	m->mflags = MODTYPE_CORE;
 }
 
 static void

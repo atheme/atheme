@@ -947,8 +947,6 @@ mod_init(struct module *const restrict m)
 	hook_add_event("nick_ungroup");
 	hook_add_nick_ungroup(nick_ungroup);
 
-	m->mflags = MODTYPE_CORE;
-
 	pmodule_loaded = true;
 }
 

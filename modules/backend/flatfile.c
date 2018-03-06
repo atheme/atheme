@@ -733,8 +733,6 @@ mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "backend/opensex");
 
-	m->mflags = MODTYPE_CORE;
-
 	db_load = &flatfile_db_load;
 
 	backend_loaded = true;

@@ -330,8 +330,6 @@ mod_init(struct module *const restrict m)
 
 	ircd = &Charybdis;
 
-	m->mflags = MODTYPE_CORE;
-
 	pmodule_loaded = true;
 }
 

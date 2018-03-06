@@ -360,8 +360,6 @@ mod_init(struct module *const restrict m)
 	pcommand_add("M", m_mode, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("OM", m_mode, 2, MSRC_USER); // OPMODE, treat as MODE
 
-	m->mflags = MODTYPE_CORE;
-
 	pmodule_loaded = true;
 }
 

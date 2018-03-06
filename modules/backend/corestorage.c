@@ -1037,10 +1037,8 @@ corestorage_db_write(void *filename, enum db_save_strategy strategy)
 }
 
 static void
-mod_init(struct module *const restrict m)
+mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
-	m->mflags = MODTYPE_CORE;
-
 	db_load = &corestorage_db_load;
 	db_save = &corestorage_db_write;
 

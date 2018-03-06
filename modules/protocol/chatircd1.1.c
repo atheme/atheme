@@ -261,8 +261,6 @@ mod_init(struct module *const restrict m)
 
 	ircd = &ChatIRCd;
 
-	m->mflags = MODTYPE_CORE;
-
 	pmodule_loaded = true;
 }
 
