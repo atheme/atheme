@@ -5,6 +5,7 @@ MODULE		= crypto
 
 SRCS =				\
 	argon2d.c		\
+	blake2b.c		\
 	crypt3-des.c		\
 	crypt3-md5.c		\
 	crypt3-sha2-256.c	\
