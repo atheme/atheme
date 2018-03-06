@@ -17,8 +17,6 @@
 #define MAPI_ATHEME_MAGIC	0xdeadbeef
 #define MAPI_ATHEME_V4		4
 
-#define MAX_CMD_PARC		20
-
 enum module_unload_intent
 {
 	MODULE_UNLOAD_INTENT_PERM            = 0,
