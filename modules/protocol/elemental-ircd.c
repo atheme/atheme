@@ -107,8 +107,6 @@ mod_init(struct module *const restrict m)
 	prefix_mode_list = elemental_prefix_mode_list;
 
 	ircd = &elemental_ircd;
-
-	pmodule_loaded = true;
 }
 
 static void

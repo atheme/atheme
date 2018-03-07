@@ -756,8 +756,6 @@ mod_init(struct module *const restrict m)
 	pcommand_add("CM", m_clearmode, 2, MSRC_USER);
 	pcommand_add("T", m_topic, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("AC", m_account, 2, MSRC_SERVER);
-
-	pmodule_loaded = true;
 }
 
 static void

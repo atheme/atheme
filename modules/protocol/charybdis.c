@@ -329,8 +329,6 @@ mod_init(struct module *const restrict m)
 	ignore_mode_list_size = ARRAY_SIZE(charybdis_ignore_mode_list);
 
 	ircd = &Charybdis;
-
-	pmodule_loaded = true;
 }
 
 static void

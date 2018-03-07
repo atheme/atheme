@@ -260,8 +260,6 @@ mod_init(struct module *const restrict m)
 	prefix_mode_list = chatircd_prefix_mode_list;
 
 	ircd = &ChatIRCd;
-
-	pmodule_loaded = true;
 }
 
 static void

@@ -29,8 +29,6 @@ extern mowgli_heap_t *pcommand_heap;
 extern mowgli_heap_t *messagetree_heap;
 extern mowgli_patricia_t *pcommands;
 
-extern bool pmodule_loaded;
-
 void pcommand_init(void);
 void pcommand_add(const char *token,
 	void (*handler)(struct sourceinfo *si, int parc, char *parv[]),

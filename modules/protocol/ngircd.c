@@ -946,8 +946,6 @@ mod_init(struct module *const restrict m)
 	hook_add_nick_group(nick_group);
 	hook_add_event("nick_ungroup");
 	hook_add_nick_ungroup(nick_ungroup);
-
-	pmodule_loaded = true;
 }
 
 static void

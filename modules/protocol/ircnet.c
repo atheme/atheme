@@ -816,8 +816,6 @@ mod_init(struct module *const restrict m)
 	pcommand_add("ERROR", m_error, 1, MSRC_UNREG | MSRC_SERVER);
 	pcommand_add("TOPIC", m_topic, 2, MSRC_USER);
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
-
-	pmodule_loaded = true;
 }
 
 static void

@@ -153,12 +153,14 @@ conf_parse(const char *file)
 	conf_process(cfp);
 	mowgli_config_file_free(cfp);
 
-	if (!pmodule_loaded)
+	if (!ircd)
 	{
 		slog(LG_ERROR, "No protocol module loaded, aborting");
 		return false;
 	}
+
 	update_chanacs_flags();
+
 	if (!conf_check())
 		return false;
 

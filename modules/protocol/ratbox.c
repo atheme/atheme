@@ -84,8 +84,6 @@ mod_init(struct module *const restrict m)
 	ignore_mode_list_size = ARRAY_SIZE(ratbox_ignore_mode_list);
 
 	ircd = &Ratbox;
-
-	pmodule_loaded = true;
 }
 
 static void
