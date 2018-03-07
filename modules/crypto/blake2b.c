@@ -22,6 +22,7 @@
 
 #include "atheme.h"
 #include "blake2b.h"
+#include "blake2b-testvecs.h"
 
 struct blake2b_param
 {
@@ -386,9 +387,74 @@ const struct blake2b_functions blake2b_functions = {
 	.b2b_long       = &blake2b_long,
 };
 
+static bool
+blake2b_selftest(void)
+{
+	uint8_t key[BLAKE2B_HASHLEN];
+	uint8_t buf[BLAKE2_KAT_LENGTH];
+
+	for (size_t i = 0; i < sizeof key; i++)
+		key[i] = (uint8_t) i;
+
+	for (size_t i = 0; i < sizeof buf; i++)
+		buf[i] = (uint8_t) i;
+
+	for (size_t step = 1; step < BLAKE2B_BLOCKLEN; step++)
+	{
+		for (size_t i = 0; i < sizeof buf; i++)
+		{
+			uint8_t result[BLAKE2B_HASHLEN];
+			struct blake2b_state state;
+			const uint8_t *p = buf;
+			size_t mlen = i;
+
+			if (!blake2b_init(&state, sizeof result, key, sizeof key))
+			{
+				(void) slog(LG_ERROR, "%s: blake2b_init() failed", __func__);
+				return false;
+			}
+			while (mlen >= step)
+			{
+				if (!blake2b_update(&state, p, step))
+				{
+					(void) slog(LG_ERROR, "%s: blake2b_update() [inner loop] failed", __func__);
+					return false;
+				}
+
+				mlen -= step;
+				p += step;
+			}
+			if (!blake2b_update(&state, p, mlen))
+			{
+				(void) slog(LG_ERROR, "%s: blake2b_update() [outer loop] failed", __func__);
+				return false;
+			}
+			if (!blake2b_final(&state, result))
+			{
+				(void) slog(LG_ERROR, "%s: blake2b_final() failed", __func__);
+				return false;
+			}
+			if (memcmp(blake2b_keyed_kat[i], result, sizeof result) != 0)
+			{
+				(void) slog(LG_ERROR, "%s: memcmp(3) mismatch", __func__);
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
 static void
 mod_init(struct module *const restrict m)
 {
+	if (!blake2b_selftest())
+	{
+		(void) slog(LG_ERROR, "%s: self-test failed (BUG)", m->name);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
 	(void) slog(LG_DEBUG, "warning: %s is not a password crypto provider; merely a dependency of others", m->name);
 }
 
