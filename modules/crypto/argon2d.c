@@ -144,7 +144,9 @@ argon2d_hash_init(struct argon2d_context *const restrict ctx, uint8_t *const res
 	struct blake2b_state state;
 	uint8_t value[4];
 
-	(void) blake2bfn->b2b_init(&state, ARGON2_PREHASH_LEN);
+	if (!blake2bfn->b2b_init(&state, ARGON2_PREHASH_LEN, NULL, 0))
+		return false;
+
 	(void) blake2bfn->b2b_store32(value, ATHEME_ARGON2D_LANECNT);
 
 	if (!blake2bfn->b2b_update(&state, value, sizeof value))
@@ -332,13 +334,13 @@ argon2d_hash_raw(struct argon2d_context *const restrict ctx)
 
 	uint8_t bhash_bytes[ARGON2_BLKSZ];
 
-	if (!blake2bfn->b2b_long(bhash_init, ARGON2_PRESEED_LEN, bhash_bytes, ARGON2_BLKSZ))
+	if (!blake2bfn->b2b_long(bhash_init, ARGON2_PRESEED_LEN, NULL, 0, bhash_bytes, ARGON2_BLKSZ))
 		return false;
 
 	(void) argon2d_load_block(&argon2d_mempool[0x00], bhash_bytes);
 	(void) blake2bfn->b2b_store32(bhash_init + ARGON2_PREHASH_LEN, 0x01);
 
-	if (!blake2bfn->b2b_long(bhash_init, ARGON2_PRESEED_LEN, bhash_bytes, ARGON2_BLKSZ))
+	if (!blake2bfn->b2b_long(bhash_init, ARGON2_PRESEED_LEN, NULL, 0, bhash_bytes, ARGON2_BLKSZ))
 		return false;
 
 	(void) argon2d_load_block(&argon2d_mempool[0x01], bhash_bytes);
@@ -356,7 +358,7 @@ argon2d_hash_raw(struct argon2d_context *const restrict ctx)
 	(void) argon2d_copy_block(&bhash_final, &argon2d_mempool[ctx->lane_len - 0x01]);
 	(void) argon2d_store_block(bhash_bytes, &bhash_final);
 
-	return blake2bfn->b2b_long(bhash_bytes, ARGON2_BLKSZ, ctx->hash, ATHEME_ARGON2D_HASHLEN);
+	return blake2bfn->b2b_long(bhash_bytes, ARGON2_BLKSZ, NULL, 0, ctx->hash, ATHEME_ARGON2D_HASHLEN);
 }
 
 static const char *

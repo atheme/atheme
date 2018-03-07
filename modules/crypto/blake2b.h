@@ -56,11 +56,11 @@ struct blake2b_functions
 	uint64_t      (*b2b_load64)(const uint8_t *);
 	uint64_t      (*b2b_rotr64)(uint64_t, unsigned int);
 	uint64_t      (*b2b_fBlaMka)(uint64_t, uint64_t);
-	void          (*b2b_init)(struct blake2b_state *, size_t);
+	bool          (*b2b_init)(struct blake2b_state *, size_t, const void *, size_t) ATHEME_FATTR_WUR;
 	bool          (*b2b_update)(struct blake2b_state *, const uint8_t *, size_t) ATHEME_FATTR_WUR;
 	bool          (*b2b_final)(struct blake2b_state *, uint8_t *) ATHEME_FATTR_WUR;
-	bool          (*b2b_full)(const uint8_t *, size_t, uint8_t *, size_t) ATHEME_FATTR_WUR;
-	bool          (*b2b_long)(const uint8_t *, size_t, uint8_t *, size_t) ATHEME_FATTR_WUR;
+	bool          (*b2b_full)(const uint8_t *, size_t, const void *, size_t, uint8_t *, size_t) ATHEME_FATTR_WUR;
+	bool          (*b2b_long)(const uint8_t *, size_t, const void *, size_t, uint8_t *, size_t) ATHEME_FATTR_WUR;
 };
 
 #endif /* !ATHEME_MOD_CRYPTO_BLAKE2B_H */

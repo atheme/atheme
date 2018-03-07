@@ -183,25 +183,6 @@ blake2b_set_lastblock(struct blake2b_state *const restrict state)
 		state->f[0x01] = (uint64_t) -1;
 }
 
-static void
-blake2b_init(struct blake2b_state *const restrict state, const size_t outlen)
-{
-	struct blake2b_param params;
-	const uint8_t *const params_byte = (const uint8_t *) &params;
-
-	(void) memset(&params, 0x00, sizeof params);
-	(void) memset(state, 0x00, sizeof *state);
-	(void) memcpy(state->h, blake2b_iv, sizeof blake2b_iv);
-
-	params.depth = 0x01;
-	params.fanout = 0x01;
-	params.hash_len = (uint8_t) outlen;
-	state->outlen = outlen;
-
-	for (size_t x = 0x00; x < 0x08; x++)
-		state->h[x] ^= blake2b_load64(&params_byte[(x * sizeof state->h[x])]);
-}
-
 static bool ATHEME_FATTR_WUR
 blake2b_update(struct blake2b_state *const restrict state, const uint8_t *restrict in, size_t inlen)
 {
@@ -240,6 +221,51 @@ blake2b_update(struct blake2b_state *const restrict state, const uint8_t *restri
 }
 
 static bool ATHEME_FATTR_WUR
+blake2b_init(struct blake2b_state *const restrict state, const size_t outlen,
+             const void *const restrict key, const size_t keylen)
+{
+	if ((! outlen) || (outlen > BLAKE2B_HASHLEN))
+		return false;
+
+	if ((! key && keylen) || (key && ! keylen) || (keylen > BLAKE2B_BLOCKLEN))
+		return false;
+
+	struct blake2b_param params;
+	const uint8_t *const params_byte = (const uint8_t *) &params;
+
+	(void) memset(&params, 0x00, sizeof params);
+	(void) memset(state, 0x00, sizeof *state);
+
+	params.hash_len = (uint8_t) outlen;
+	params.key_len = (uint8_t) keylen;
+	params.fanout = 0x01;
+	params.depth = 0x01;
+
+	(void) memcpy(state->h, blake2b_iv, sizeof blake2b_iv);
+
+	for (size_t x = 0x00; x < 0x08; x++)
+		state->h[x] ^= blake2b_load64(&params_byte[(x * sizeof state->h[x])]);
+
+	state->outlen = outlen;
+
+	if (keylen)
+	{
+		static uint8_t block[BLAKE2B_BLOCKLEN];
+
+		(void) memset(block, 0x00, sizeof block);
+		(void) memcpy(block, key, keylen);
+
+		const bool result = blake2b_update(state, block, sizeof block);
+
+		(void) explicit_bzero(block, sizeof block);
+
+		return result;
+	}
+
+	return true;
+}
+
+static bool ATHEME_FATTR_WUR
 blake2b_final(struct blake2b_state *const restrict state, uint8_t *const restrict out)
 {
 	if (state->f[0x00] != 0x00)
@@ -261,10 +287,14 @@ blake2b_final(struct blake2b_state *const restrict state, uint8_t *const restric
 }
 
 static bool ATHEME_FATTR_WUR
-blake2b_full(const uint8_t *const restrict in, const size_t inlen, uint8_t *const restrict out, const size_t outlen)
+blake2b_full(const uint8_t *const restrict in, const size_t inlen,
+             const void *const restrict key, const size_t keylen,
+             uint8_t *const restrict out, const size_t outlen)
 {
 	struct blake2b_state state;
-	(void) blake2b_init(&state, outlen);
+
+	if (!blake2b_init(&state, outlen, key, keylen))
+		return false;
 
 	if (!blake2b_update(&state, in, inlen))
 		return false;
@@ -273,7 +303,9 @@ blake2b_full(const uint8_t *const restrict in, const size_t inlen, uint8_t *cons
 }
 
 static bool ATHEME_FATTR_WUR
-blake2b_long(const uint8_t *const restrict in, const size_t inlen, uint8_t *restrict out, const size_t outlen)
+blake2b_long(const uint8_t *const restrict in, const size_t inlen,
+             const void *const restrict key, const size_t keylen,
+             uint8_t *restrict out, const size_t outlen)
 {
 	uint8_t outlen_buf[4] = { 0x00, 0x00, 0x00, 0x00 };
 	struct blake2b_state blake_state;
@@ -285,27 +317,30 @@ blake2b_long(const uint8_t *const restrict in, const size_t inlen, uint8_t *rest
 
 	if (outlen <= BLAKE2B_HASHLEN)
 	{
-		(void) blake2b_init(&blake_state, outlen);
+		if (!blake2b_init(&blake_state, outlen, key, keylen))
+			return false;
 
 		if (!blake2b_update(&blake_state, outlen_buf, sizeof outlen_buf))
 			return false;
+
 		if (!blake2b_update(&blake_state, in, inlen))
 			return false;
-		if (!blake2b_final(&blake_state, out))
-			return false;
 
-		return true;
+		return blake2b_final(&blake_state, out);
 	}
 
 	uint8_t ibuf[BLAKE2B_HASHLEN];
 	uint8_t obuf[BLAKE2B_HASHLEN];
 
-	(void) blake2b_init(&blake_state, BLAKE2B_HASHLEN);
+	if (!blake2b_init(&blake_state, BLAKE2B_HASHLEN, key, keylen))
+		return false;
 
 	if (!blake2b_update(&blake_state, outlen_buf, sizeof outlen_buf))
 		return false;
+
 	if (!blake2b_update(&blake_state, in, inlen))
 		return false;
+
 	if (!blake2b_final(&blake_state, obuf))
 		return false;
 
@@ -318,7 +353,7 @@ blake2b_long(const uint8_t *const restrict in, const size_t inlen, uint8_t *rest
 	{
 		(void) memcpy(ibuf, obuf, BLAKE2B_HASHLEN);
 
-		if (!blake2b_full(ibuf, BLAKE2B_HASHLEN, obuf, BLAKE2B_HASHLEN))
+		if (!blake2b_full(ibuf, BLAKE2B_HASHLEN, key, keylen, obuf, BLAKE2B_HASHLEN))
 			return false;
 
 		(void) memcpy(out, obuf, BLAKE2B_HASHLEN_HALF);
@@ -329,7 +364,7 @@ blake2b_long(const uint8_t *const restrict in, const size_t inlen, uint8_t *rest
 
 	(void) memcpy(ibuf, obuf, BLAKE2B_HASHLEN);
 
-	if (!blake2b_full(ibuf, BLAKE2B_HASHLEN, obuf, remain))
+	if (!blake2b_full(ibuf, BLAKE2B_HASHLEN, key, keylen, obuf, remain))
 		return false;
 
 	(void) memcpy(out, obuf, remain);
