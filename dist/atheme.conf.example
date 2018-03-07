@@ -734,7 +734,6 @@ loadmodule "modules/statserv/server";
  * Core components                              modules/groupserv/main
  * ACSNOLIMIT command                           modules/groupserv/acsnolimit
  * DROP command                                 modules/groupserv/drop
- * FDROP command                                modules/groupserv/fdrop
  * FFLAGS command                               modules/groupserv/fflags
  * FLAGS command                                modules/groupserv/flags
  * HELP command                                 modules/groupserv/help
@@ -759,7 +758,6 @@ loadmodule "modules/statserv/server";
 loadmodule "modules/groupserv/main";
 loadmodule "modules/groupserv/acsnolimit";
 loadmodule "modules/groupserv/drop";
-loadmodule "modules/groupserv/fdrop";
 loadmodule "modules/groupserv/fflags";
 loadmodule "modules/groupserv/flags";
 loadmodule "modules/groupserv/help";
