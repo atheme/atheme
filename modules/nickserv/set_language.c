@@ -7,9 +7,10 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
 
 #ifdef ENABLE_NLS
+
+#include "uplink.h"
 
 static mowgli_patricia_t **ns_set_cmdtree = NULL;
 
@@ -62,6 +63,22 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	command_delete(&ns_set_language, *ns_set_cmdtree);
 }
 
-SIMPLE_DECLARE_MODULE_V1("nickserv/set_language", MODULE_UNLOAD_CAPABILITY_OK)
+#else /* ENABLE_NLS */
 
-#endif /* ENABLE_NLS */
+static void
+mod_init(struct module *const restrict m)
+{
+	(void) slog(LG_ERROR, "Module %s requires NLS support, refusing to load.", m->name);
+
+	m->mflags |= MODTYPE_FAIL;
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	// Nothing To Do
+}
+
+#endif /* !ENABLE_NLS */
+
+SIMPLE_DECLARE_MODULE_V1("nickserv/set_language", MODULE_UNLOAD_CAPABILITY_OK)
