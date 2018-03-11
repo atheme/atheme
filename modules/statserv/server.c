@@ -102,7 +102,7 @@ static struct command ss_server = {
 	.access         = AC_NONE,
 	.maxparc        = 3,
 	.cmd            = &ss_cmd_server,
-	.help           = { .path = "statserv/server"},
+	.help           = { .path = "statserv/server" },
 };
 
 static struct command ss_server_list = {
@@ -111,7 +111,7 @@ static struct command ss_server_list = {
 	.access         = AC_NONE,
 	.maxparc        = 1,
 	.cmd            = &ss_cmd_server_list,
-	.help           = { .path = ""},
+	.help           = { .path = "" },
 };
 
 static struct command ss_server_count = {
@@ -120,7 +120,7 @@ static struct command ss_server_count = {
 	.access         = AC_NONE,
 	.maxparc        = 1,
 	.cmd            = &ss_cmd_server_count,
-	.help           = { .path = ""},
+	.help           = { .path = "" },
 };
 
 static struct command ss_server_info = {
@@ -129,7 +129,7 @@ static struct command ss_server_info = {
 	.access         = AC_NONE,
 	.maxparc        = 2,
 	.cmd            = &ss_cmd_server_info,
-	.help           = { .path = ""},
+	.help           = { .path = "" },
 };
 
 static void

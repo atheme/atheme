@@ -121,7 +121,7 @@ static struct command ss_netsplit = {
 	.access         = PRIV_SERVER_AUSPEX,
 	.maxparc        = 2,
 	.cmd            = &ss_cmd_netsplit,
-	.help           = { .path = "statserv/netsplit"},
+	.help           = { .path = "statserv/netsplit" },
 };
 
 static struct command ss_netsplit_list = {
@@ -130,7 +130,7 @@ static struct command ss_netsplit_list = {
 	.access         = PRIV_SERVER_AUSPEX,
 	.maxparc        = 1,
 	.cmd            = &ss_cmd_netsplit_list,
-	.help           = { .path = ""},
+	.help           = { .path = "" },
 };
 
 static struct command ss_netsplit_remove = {
@@ -139,7 +139,7 @@ static struct command ss_netsplit_remove = {
 	.access         = PRIV_JUPE,
 	.maxparc        = 2,
 	.cmd            = &ss_cmd_netsplit_remove,
-	.help           = { .path = ""},
+	.help           = { .path = "" },
 };
 
 static void

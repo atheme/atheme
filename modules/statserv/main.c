@@ -41,7 +41,7 @@ static struct command ss_help = {
 	.access         = AC_NONE,
 	.maxparc        = 2,
 	.cmd            = &ss_cmd_help,
-	.help           = { .path = "help"},
+	.help           = { .path = "help" },
 };
 
 static void

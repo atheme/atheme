@@ -81,7 +81,7 @@ static struct command ss_channel = {
 	.access         = AC_NONE,
 	.maxparc        = 2,
 	.cmd            = &ss_cmd_channel,
-	.help           = { .path = "statserv/channel"},
+	.help           = { .path = "statserv/channel" },
 };
 
 static struct command ss_channel_topic = {
@@ -90,7 +90,7 @@ static struct command ss_channel_topic = {
 	.access         = AC_NONE,
 	.maxparc        = 1,
 	.cmd            = &ss_cmd_channel_topic,
-	.help           = { .path = ""},
+	.help           = { .path = "" },
 };
 
 static struct command ss_channel_count = {
@@ -99,7 +99,7 @@ static struct command ss_channel_count = {
 	.access         = AC_NONE,
 	.maxparc        = 1,
 	.cmd            = &ss_cmd_channel_count,
-	.help           = { .path = ""},
+	.help           = { .path = "" },
 };
 
 static void
