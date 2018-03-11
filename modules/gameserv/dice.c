@@ -595,7 +595,7 @@ static struct command cmd_dice = {
 	.access         = AC_NONE,
 	.maxparc        = 3,
 	.cmd            = &command_dice,
-	.help           = { .path = "gameserv/roll"},
+	.help           = { .path = "gameserv/roll" },
 };
 
 static struct command cmd_calc = {
@@ -604,7 +604,7 @@ static struct command cmd_calc = {
 	.access         = AC_NONE,
 	.maxparc        = 3,
 	.cmd            = &command_calc,
-	.help           = { .path = "gameserv/calc"},
+	.help           = { .path = "gameserv/calc" },
 };
 
 static void
