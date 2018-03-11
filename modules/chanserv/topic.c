@@ -332,10 +332,41 @@ invalid_error:
 		command_success_nodata(si, _("Topic set to \2%s\2 on \2%s\2."), c->topic, chan);
 }
 
-static struct command cs_topic = { "TOPIC", N_("Sets a topic on a channel."), AC_NONE, 2, cs_cmd_topic, { .path = "cservice/topic" } };
-static struct command cs_topicappend = { "TOPICAPPEND", N_("Appends a topic on a channel."), AC_NONE, 2, cs_cmd_topicappend, { .path = "cservice/topicappend" } };
-static struct command cs_topicprepend = { "TOPICPREPEND", N_("Prepends a topic on a channel."), AC_NONE, 2, cs_cmd_topicprepend, { .path = "cservice/topicprepend" } };
-static struct command cs_topicswap = { "TOPICSWAP", N_("Swap part of the topic on a channel."), AC_NONE, 2, cs_cmd_topicswap, { .path = "cservice/topicswap" } };
+static struct command cs_topic = {
+	.name           = "TOPIC",
+	.desc           = N_("Sets a topic on a channel."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_topic,
+	.help           = { .path = "cservice/topic" },
+};
+
+static struct command cs_topicappend = {
+	.name           = "TOPICAPPEND",
+	.desc           = N_("Appends a topic on a channel."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_topicappend,
+	.help           = { .path = "cservice/topicappend" },
+};
+
+static struct command cs_topicprepend = {
+	.name           = "TOPICPREPEND",
+	.desc           = N_("Prepends a topic on a channel."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_topicprepend,
+	.help           = { .path = "cservice/topicprepend" },
+};
+
+static struct command cs_topicswap = {
+	.name           = "TOPICSWAP",
+	.desc           = N_("Swap part of the topic on a channel."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_topicswap,
+	.help           = { .path = "cservice/topicswap" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

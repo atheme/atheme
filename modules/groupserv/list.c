@@ -48,7 +48,14 @@ gs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 (\2%d\2 matches)", pattern, matches);
 }
 
-static struct command gs_list = { "LIST", N_("List registered groups."), PRIV_GROUP_AUSPEX, 1, gs_cmd_list, { .path = "groupserv/list" } };
+static struct command gs_list = {
+	.name           = "LIST",
+	.desc           = N_("List registered groups."),
+	.access         = PRIV_GROUP_AUSPEX,
+	.maxparc        = 1,
+	.cmd            = &gs_cmd_list,
+	.help           = { .path = "groupserv/list" },
+};
 
 static void
 mod_init(struct module *const restrict m)

@@ -166,7 +166,14 @@ ms_cmd_sendgroup(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-static struct command ms_sendgroup = { "SENDGROUP", N_("Sends a memo to all members on a group."), AC_AUTHENTICATED, 2, ms_cmd_sendgroup, { .path = "memoserv/sendgroup" } };
+static struct command ms_sendgroup = {
+	.name           = "SENDGROUP",
+	.desc           = N_("Sends a memo to all members on a group."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &ms_cmd_sendgroup,
+	.help           = { .path = "memoserv/sendgroup" },
+};
 
 static void
 mod_init(struct module *const restrict m)

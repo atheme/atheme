@@ -56,7 +56,14 @@ cs_cmd_set_email(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("The e-mail address for channel \2%s\2 has been set to \2%s\2."), parv[0], mail);
 }
 
-static struct command cs_set_email = { "EMAIL", N_("Sets the channel e-mail address."), AC_NONE, 2, cs_cmd_set_email, { .path = "cservice/set_email" } };
+static struct command cs_set_email = {
+	.name           = "EMAIL",
+	.desc           = N_("Sets the channel e-mail address."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_set_email,
+	.help           = { .path = "cservice/set_email" },
+};
 
 static void
 mod_init(struct module *const restrict m)

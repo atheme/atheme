@@ -107,7 +107,14 @@ bs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command bs_info = { "INFO", N_("Allows you to see BotServ information about a channel or a bot."), AC_NONE, 1, bs_cmd_info, { .path = "botserv/info" } };
+static struct command bs_info = {
+	.name           = "INFO",
+	.desc           = N_("Allows you to see BotServ information about a channel or a bot."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &bs_cmd_info,
+	.help           = { .path = "botserv/info" },
+};
 
 static void
 mod_init(struct module *const restrict m)

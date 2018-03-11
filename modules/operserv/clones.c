@@ -851,14 +851,77 @@ clones_userquit(struct user *u)
 	}
 }
 
-static struct command os_clones = { "CLONES", N_("Manages network wide clones."), PRIV_AKILL, 5, os_cmd_clones, { .path = "oservice/clones" } };
-static struct command os_clones_kline = { "KLINE", N_("Enables/disables klines for excessive clones."), AC_NONE, 1, os_cmd_clones_kline, { .path = "" } };
-static struct command os_clones_list = { "LIST", N_("Lists clones on the network."), AC_NONE, 0, os_cmd_clones_list, { .path = "" } };
-static struct command os_clones_addexempt = { "ADDEXEMPT", N_("Adds a clones exemption."), AC_NONE, 3, os_cmd_clones_addexempt, { .path = "" } };
-static struct command os_clones_delexempt = { "DELEXEMPT", N_("Deletes a clones exemption."), AC_NONE, 1, os_cmd_clones_delexempt, { .path = "" } };
-static struct command os_clones_setexempt = { "SETEXEMPT", N_("Sets a clone exemption details."), AC_NONE, 1, os_cmd_clones_setexempt, { .path = "" } };
-static struct command os_clones_listexempt = { "LISTEXEMPT", N_("Lists clones exemptions."), AC_NONE, 0, os_cmd_clones_listexempt, { .path = "" } };
-static struct command os_clones_duration = { "DURATION", N_("Sets a custom duration to ban clones for."), AC_NONE, 1, os_cmd_clones_duration, { .path = "" } };
+static struct command os_clones = {
+	.name           = "CLONES",
+	.desc           = N_("Manages network wide clones."),
+	.access         = PRIV_AKILL,
+	.maxparc        = 5,
+	.cmd            = &os_cmd_clones,
+	.help           = { .path = "oservice/clones" },
+};
+
+static struct command os_clones_kline = {
+	.name           = "KLINE",
+	.desc           = N_("Enables/disables klines for excessive clones."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_clones_kline,
+	.help           = { .path = "" },
+};
+
+static struct command os_clones_list = {
+	.name           = "LIST",
+	.desc           = N_("Lists clones on the network."),
+	.access         = AC_NONE,
+	.maxparc        = 0,
+	.cmd            = &os_cmd_clones_list,
+	.help           = { .path = "" },
+};
+
+static struct command os_clones_addexempt = {
+	.name           = "ADDEXEMPT",
+	.desc           = N_("Adds a clones exemption."),
+	.access         = AC_NONE,
+	.maxparc        = 3,
+	.cmd            = &os_cmd_clones_addexempt,
+	.help           = { .path = "" },
+};
+
+static struct command os_clones_delexempt = {
+	.name           = "DELEXEMPT",
+	.desc           = N_("Deletes a clones exemption."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_clones_delexempt,
+	.help           = { .path = "" },
+};
+
+static struct command os_clones_setexempt = {
+	.name           = "SETEXEMPT",
+	.desc           = N_("Sets a clone exemption details."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_clones_setexempt,
+	.help           = { .path = "" },
+};
+
+static struct command os_clones_listexempt = {
+	.name           = "LISTEXEMPT",
+	.desc           = N_("Lists clones exemptions."),
+	.access         = AC_NONE,
+	.maxparc        = 0,
+	.cmd            = &os_cmd_clones_listexempt,
+	.help           = { .path = "" },
+};
+
+static struct command os_clones_duration = {
+	.name           = "DURATION",
+	.desc           = N_("Sets a custom duration to ban clones for."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_clones_duration,
+	.help           = { .path = "" },
+};
 
 static void
 mod_init(struct module *const restrict m)

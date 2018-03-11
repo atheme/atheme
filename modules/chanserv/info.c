@@ -300,7 +300,14 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_GET, "INFO: \2%s\2", mc->name);
 }
 
-static struct command cs_info = { "INFO", N_("Displays information on registrations."), AC_NONE, 2, cs_cmd_info, { .path = "cservice/info" } };
+static struct command cs_info = {
+	.name           = "INFO",
+	.desc           = N_("Displays information on registrations."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_info,
+	.help           = { .path = "cservice/info" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

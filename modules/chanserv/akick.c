@@ -744,10 +744,41 @@ akickdel_list_create(void *arg)
 	}
 }
 
-static struct command cs_akick = { "AKICK", N_("Manipulates a channel's AKICK list."), AC_NONE, 4, cs_cmd_akick, { .path = "cservice/akick" } };
-static struct command cs_akick_add = { "ADD", N_("Adds a channel AKICK."), AC_NONE, 4, cs_cmd_akick_add, { .path = "" } };
-static struct command cs_akick_del = { "DEL", N_("Deletes a channel AKICK."), AC_NONE, 3, cs_cmd_akick_del, { .path = "" } };
-static struct command cs_akick_list = { "LIST", N_("Displays a channel's AKICK list."), AC_NONE, 2, cs_cmd_akick_list, { .path = "" } };
+static struct command cs_akick = {
+	.name           = "AKICK",
+	.desc           = N_("Manipulates a channel's AKICK list."),
+	.access         = AC_NONE,
+	.maxparc        = 4,
+	.cmd            = &cs_cmd_akick,
+	.help           = { .path = "cservice/akick" },
+};
+
+static struct command cs_akick_add = {
+	.name           = "ADD",
+	.desc           = N_("Adds a channel AKICK."),
+	.access         = AC_NONE,
+	.maxparc        = 4,
+	.cmd            = &cs_cmd_akick_add,
+	.help           = { .path = "" },
+};
+
+static struct command cs_akick_del = {
+	.name           = "DEL",
+	.desc           = N_("Deletes a channel AKICK."),
+	.access         = AC_NONE,
+	.maxparc        = 3,
+	.cmd            = &cs_cmd_akick_del,
+	.help           = { .path = "" },
+};
+
+static struct command cs_akick_list = {
+	.name           = "LIST",
+	.desc           = N_("Displays a channel's AKICK list."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_akick_list,
+	.help           = { .path = "" },
+};
 
 static void
 mod_init(struct module *const restrict m)

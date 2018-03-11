@@ -92,7 +92,14 @@ ns_cmd_return(struct sourceinfo *si, int parc, char *parv[])
 						newmail);
 }
 
-static struct command ns_return = { "RETURN", N_("Returns an account to its owner."), PRIV_USER_ADMIN, 2, ns_cmd_return, { .path = "nickserv/return" } };
+static struct command ns_return = {
+	.name           = "RETURN",
+	.desc           = N_("Returns an account to its owner."),
+	.access         = PRIV_USER_ADMIN,
+	.maxparc        = 2,
+	.cmd            = &ns_cmd_return,
+	.help           = { .path = "nickserv/return" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

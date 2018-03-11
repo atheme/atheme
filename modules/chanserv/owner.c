@@ -125,8 +125,23 @@ cs_cmd_deowner(struct sourceinfo *si, int parc, char *parv[])
 	cmd_owner(si, false, parc, parv);
 }
 
-static struct command cs_owner = { "OWNER", N_("Gives the channel owner flag to a user."), AC_NONE, 2, cs_cmd_owner, { .path = "cservice/owner" } };
-static struct command cs_deowner = { "DEOWNER", N_("Removes channel owner flag from a user."), AC_NONE, 2, cs_cmd_deowner, { .path = "cservice/owner" } };
+static struct command cs_owner = {
+	.name           = "OWNER",
+	.desc           = N_("Gives the channel owner flag to a user."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_owner,
+	.help           = { .path = "cservice/owner" },
+};
+
+static struct command cs_deowner = {
+	.name           = "DEOWNER",
+	.desc           = N_("Removes channel owner flag from a user."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_deowner,
+	.help           = { .path = "cservice/owner" },
+};
 
 static void
 mod_init(struct module *const restrict m)

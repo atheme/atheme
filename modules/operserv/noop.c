@@ -318,7 +318,14 @@ os_cmd_noop(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command os_noop = { "NOOP", N_("Restricts IRCop access."), PRIV_NOOP, 4, os_cmd_noop, { .path = "oservice/noop" } };
+static struct command os_noop = {
+	.name           = "NOOP",
+	.desc           = N_("Restricts IRCop access."),
+	.access         = PRIV_NOOP,
+	.maxparc        = 4,
+	.cmd            = &os_cmd_noop,
+	.help           = { .path = "oservice/noop" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

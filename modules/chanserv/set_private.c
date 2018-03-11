@@ -76,7 +76,14 @@ cs_cmd_set_private(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command cs_set_private = { "PRIVATE", N_("Hides information about a channel."), AC_NONE, 2, cs_cmd_set_private, { .path = "cservice/set_private" } };
+static struct command cs_set_private = {
+	.name           = "PRIVATE",
+	.desc           = N_("Hides information about a channel."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_set_private,
+	.help           = { .path = "cservice/set_private" },
+};
 
 static void
 mod_init(struct module *const restrict m)

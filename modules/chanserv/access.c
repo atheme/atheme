@@ -1320,18 +1320,104 @@ cs_cmd_role_del(struct sourceinfo *si, int parc, char *parv[])
 	update_role_entry(si, mc, role, 0);
 }
 
-static struct command cs_access = { "ACCESS", N_("Manage channel access."), AC_NONE, 3, cs_cmd_access, { .func = cs_help_access } };
-static struct command cs_access_list = { "LIST", N_("List channel access entries."), AC_NONE, 1, cs_cmd_access_list, { .path = "cservice/access_list" } };
-static struct command cs_access_info = { "INFO", N_("Display information on an access list entry."), AC_NONE, 2, cs_cmd_access_info, { .path = "cservice/access_info" } };
-static struct command cs_access_del = { "DEL", N_("Delete an access list entry."), AC_NONE, 2, cs_cmd_access_del, { .path = "cservice/access_del" } };
-static struct command cs_access_add = { "ADD", N_("Add an access list entry."), AC_NONE, 3, cs_cmd_access_add, { .path = "cservice/access_add" } };
-static struct command cs_access_set = { "SET", N_("Update an access list entry."), AC_NONE, 3, cs_cmd_access_set, { .path = "cservice/access_set" } };
+static struct command cs_access = {
+	.name           = "ACCESS",
+	.desc           = N_("Manage channel access."),
+	.access         = AC_NONE,
+	.maxparc        = 3,
+	.cmd            = &cs_cmd_access,
+	.help           = { .func = cs_help_access },
+};
 
-static struct command cs_role = { "ROLE", N_("Manage channel roles."), AC_NONE, 3, cs_cmd_role, { .func = cs_help_role } };
-static struct command cs_role_list = { "LIST", N_("List available roles."), AC_NONE, 1, cs_cmd_role_list, { .path = "cservice/role_list" } };
-static struct command cs_role_add = { "ADD", N_("Add a role."), AC_NONE, 20, cs_cmd_role_add, { .path = "cservice/role_add" } };
-static struct command cs_role_set = { "SET", N_("Change flags on a role."), AC_NONE, 20, cs_cmd_role_set, { .path = "cservice/role_set" } };
-static struct command cs_role_del = { "DEL", N_("Delete a role."), AC_NONE, 2, cs_cmd_role_del, { .path = "cservice/role_del" } };
+static struct command cs_role = {
+	.name           = "ROLE",
+	.desc           = N_("Manage channel roles."),
+	.access         = AC_NONE,
+	.maxparc        = 3,
+	.cmd            = &cs_cmd_role,
+	.help           = { .func = cs_help_role },
+};
+
+static struct command cs_access_list = {
+	.name           = "LIST",
+	.desc           = N_("List channel access entries."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &cs_cmd_access_list,
+	.help           = { .path = "cservice/access_list" },
+};
+
+static struct command cs_access_info = {
+	.name           = "INFO",
+	.desc           = N_("Display information on an access list entry."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_access_info,
+	.help           = { .path = "cservice/access_info" },
+};
+
+static struct command cs_access_del = {
+	.name           = "DEL",
+	.desc           = N_("Delete an access list entry."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_access_del,
+	.help           = { .path = "cservice/access_del" },
+};
+
+static struct command cs_access_add = {
+	.name           = "ADD",
+	.desc           = N_("Add an access list entry."),
+	.access         = AC_NONE,
+	.maxparc        = 3,
+	.cmd            = &cs_cmd_access_add,
+	.help           = { .path = "cservice/access_add" },
+};
+
+static struct command cs_access_set = {
+	.name           = "SET",
+	.desc           = N_("Update an access list entry."),
+	.access         = AC_NONE,
+	.maxparc        = 3,
+	.cmd            = &cs_cmd_access_set,
+	.help           = { .path = "cservice/access_set" },
+};
+
+static struct command cs_role_list = {
+	.name           = "LIST",
+	.desc           = N_("List available roles."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &cs_cmd_role_list,
+	.help           = { .path = "cservice/role_list" },
+};
+
+static struct command cs_role_add = {
+	.name           = "ADD",
+	.desc           = N_("Add a role."),
+	.access         = AC_NONE,
+	.maxparc        = 20,
+	.cmd            = &cs_cmd_role_add,
+	.help           = { .path = "cservice/role_add" },
+};
+
+static struct command cs_role_set = {
+	.name           = "SET",
+	.desc           = N_("Change flags on a role."),
+	.access         = AC_NONE,
+	.maxparc        = 20,
+	.cmd            = &cs_cmd_role_set,
+	.help           = { .path = "cservice/role_set" },
+};
+
+static struct command cs_role_del = {
+	.name           = "DEL",
+	.desc           = N_("Delete a role."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_role_del,
+	.help           = { .path = "cservice/role_del" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
@@ -1340,7 +1426,7 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 	service_named_bind_command("chanserv", &cs_role);
 
 	cs_access_cmds = mowgli_patricia_create(strcasecanon);
-	cs_role_cmds  = mowgli_patricia_create(strcasecanon);
+	cs_role_cmds = mowgli_patricia_create(strcasecanon);
 
 	command_add(&cs_access_list, cs_access_cmds);
 	command_add(&cs_access_info, cs_access_cmds);

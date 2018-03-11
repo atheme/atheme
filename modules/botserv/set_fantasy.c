@@ -61,7 +61,14 @@ bs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command bs_set_fantasy = { "FANTASY", N_("Enable fantasy commands."), AC_AUTHENTICATED, 2, bs_cmd_set_fantasy, { .path = "botserv/set_fantasy" } };
+static struct command bs_set_fantasy = {
+	.name           = "FANTASY",
+	.desc           = N_("Enable fantasy commands."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &bs_cmd_set_fantasy,
+	.help           = { .path = "botserv/set_fantasy" },
+};
 
 static void
 bs_set_fantasy_config_ready(void *unused)

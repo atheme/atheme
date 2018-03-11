@@ -102,7 +102,14 @@ ns_cmd_ghost(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_ghost = { "GHOST", N_("Reclaims use of a nickname."), AC_NONE, 2, ns_cmd_ghost, { .path = "nickserv/ghost" } };
+static struct command ns_ghost = {
+	.name           = "GHOST",
+	.desc           = N_("Reclaims use of a nickname."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &ns_cmd_ghost,
+	.help           = { .path = "nickserv/ghost" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

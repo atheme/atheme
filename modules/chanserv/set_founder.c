@@ -197,7 +197,14 @@ cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("To cancel the transfer, use \2/msg %s SET %s FOUNDER %s\2"), chansvs.nick, mc->name, entity(si->smu)->name);
 }
 
-static struct command cs_set_founder = { "FOUNDER", N_("Transfers foundership of a channel."), AC_NONE, 2, cs_cmd_set_founder, { .path = "cservice/set_founder" } };
+static struct command cs_set_founder = {
+	.name           = "FOUNDER",
+	.desc           = N_("Transfers foundership of a channel."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_set_founder,
+	.help           = { .path = "cservice/set_founder" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

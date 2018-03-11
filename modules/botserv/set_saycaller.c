@@ -66,7 +66,14 @@ bs_cmd_set_saycaller(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command bs_set_saycaller = { "SAYCALLER", N_("Enable Caller-ID on BotServ actions or messages."), AC_AUTHENTICATED, 2, bs_cmd_set_saycaller, { .path = "botserv/set_saycaller" } };
+static struct command bs_set_saycaller = {
+	.name           = "SAYCALLER",
+	.desc           = N_("Enable Caller-ID on BotServ actions or messages."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &bs_cmd_set_saycaller,
+	.help           = { .path = "botserv/set_saycaller" },
+};
 
 static void
 mod_init(struct module *const restrict m)

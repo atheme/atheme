@@ -55,7 +55,14 @@ ns_cmd_listownmail(struct sourceinfo *si, int parc, char *parv[])
 					    N_("\2%d\2 matches for e-mail address \2%s\2"), matches), matches, si->smu->email);
 }
 
-static struct command ns_listownmail = { "LISTOWNMAIL", N_("Lists accounts registered to your e-mail address."), AC_AUTHENTICATED, 1, ns_cmd_listownmail, { .path = "nickserv/listownmail" } };
+static struct command ns_listownmail = {
+	.name           = "LISTOWNMAIL",
+	.desc           = N_("Lists accounts registered to your e-mail address."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 1,
+	.cmd            = &ns_cmd_listownmail,
+	.help           = { .path = "nickserv/listownmail" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -58,7 +58,14 @@ bs_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
 
-static struct command bs_set = { "SET", N_("Configures bot options."), AC_NONE, 3, bs_cmd_set, { .func =  bs_help_set } };
+static struct command bs_set = {
+	.name           = "SET",
+	.desc           = N_("Configures bot options."),
+	.access         = AC_NONE,
+	.maxparc        = 3,
+	.cmd            = &bs_cmd_set,
+	.help           = { .func =  bs_help_set },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

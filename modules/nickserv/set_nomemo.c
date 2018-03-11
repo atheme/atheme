@@ -66,7 +66,14 @@ ns_cmd_set_nomemo(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_set_nomemo = { "NOMEMO", N_("Disables the ability to receive memos."), AC_NONE, 1, ns_cmd_set_nomemo, { .path = "nickserv/set_nomemo" } };
+static struct command ns_set_nomemo = {
+	.name           = "NOMEMO",
+	.desc           = N_("Disables the ability to receive memos."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &ns_cmd_set_nomemo,
+	.help           = { .path = "nickserv/set_nomemo" },
+};
 
 static void
 mod_init(struct module *const restrict m)

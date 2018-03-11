@@ -496,7 +496,14 @@ c_ci_antiflood_enforce_method(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-static struct command cs_set_antiflood = { "ANTIFLOOD", N_("Set anti-flood action"), AC_NONE, 2, cs_set_cmd_antiflood, { .path = "cservice/set_antiflood" } };
+static struct command cs_set_antiflood = {
+	.name           = "ANTIFLOOD",
+	.desc           = N_("Set anti-flood action"),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_set_cmd_antiflood,
+	.help           = { .path = "cservice/set_antiflood" },
+};
 
 static void
 mod_init(struct module *m)

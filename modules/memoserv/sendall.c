@@ -153,7 +153,14 @@ ms_cmd_sendall(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-static struct command ms_sendall = { "SENDALL", N_("Sends a memo to all accounts."), PRIV_ADMIN, 1, ms_cmd_sendall, { .path = "memoserv/sendall" } };
+static struct command ms_sendall = {
+	.name           = "SENDALL",
+	.desc           = N_("Sends a memo to all accounts."),
+	.access         = PRIV_ADMIN,
+	.maxparc        = 1,
+	.cmd            = &ms_cmd_sendall,
+	.help           = { .path = "memoserv/sendall" },
+};
 
 static void
 mod_init(struct module *const restrict m)

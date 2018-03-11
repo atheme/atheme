@@ -50,7 +50,14 @@ os_cmd_modinspect(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("*** \2End of Info\2 ***"));
 }
 
-static struct command os_modinspect = { "MODINSPECT", N_("Displays information about loaded modules."), PRIV_SERVER_AUSPEX, 1, os_cmd_modinspect, { .path = "oservice/modinspect" } };
+static struct command os_modinspect = {
+	.name           = "MODINSPECT",
+	.desc           = N_("Displays information about loaded modules."),
+	.access         = PRIV_SERVER_AUSPEX,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_modinspect,
+	.help           = { .path = "oservice/modinspect" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

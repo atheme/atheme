@@ -67,7 +67,14 @@ cs_cmd_set_prefix(struct sourceinfo *si, int parc, char *parv[])
 
 }
 
-static struct command cs_set_prefix = { "PREFIX", N_("Sets the channel PREFIX."), AC_NONE, 2, cs_cmd_set_prefix, { .path = "cservice/set_prefix" } };
+static struct command cs_set_prefix = {
+	.name           = "PREFIX",
+	.desc           = N_("Sets the channel PREFIX."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_set_prefix,
+	.help           = { .path = "cservice/set_prefix" },
+};
 
 static void
 cs_set_prefix_config_ready(void *unused)

@@ -493,7 +493,14 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 	free(target);
 }
 
-static struct command cs_flags = { "FLAGS", N_("Manipulates specific permissions on a channel."), AC_NONE, 3, cs_cmd_flags, { .path = "cservice/flags" } };
+static struct command cs_flags = {
+	.name           = "FLAGS",
+	.desc           = N_("Manipulates specific permissions on a channel."),
+	.access         = AC_NONE,
+	.maxparc        = 3,
+	.cmd            = &cs_cmd_flags,
+	.help           = { .path = "cservice/flags" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

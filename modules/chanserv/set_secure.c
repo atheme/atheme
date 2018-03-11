@@ -72,7 +72,14 @@ cs_cmd_set_secure(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command cs_set_secure = { "SECURE", N_("Prevents unauthorized users from gaining operator status."), AC_NONE, 2, cs_cmd_set_secure, { .path = "cservice/set_secure" } };
+static struct command cs_set_secure = {
+	.name           = "SECURE",
+	.desc           = N_("Prevents unauthorized users from gaining operator status."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_set_secure,
+	.help           = { .path = "cservice/set_secure" },
+};
 
 static void
 mod_init(struct module *const restrict m)

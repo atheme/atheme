@@ -50,7 +50,14 @@ os_cmd_jupe(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%s\2 has been jupitered."), server);
 }
 
-static struct command os_jupe = { "JUPE", N_("Jupiters a server."), PRIV_JUPE, 2, os_cmd_jupe, { .path = "oservice/jupe" } };
+static struct command os_jupe = {
+	.name           = "JUPE",
+	.desc           = N_("Jupiters a server."),
+	.access         = PRIV_JUPE,
+	.maxparc        = 2,
+	.cmd            = &os_cmd_jupe,
+	.help           = { .path = "oservice/jupe" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

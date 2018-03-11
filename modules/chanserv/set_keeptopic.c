@@ -72,7 +72,14 @@ cs_cmd_set_keeptopic(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command cs_set_keeptopic = { "KEEPTOPIC", N_("Enables topic retention."), AC_NONE, 2, cs_cmd_set_keeptopic, { .path = "cservice/set_keeptopic" } };
+static struct command cs_set_keeptopic = {
+	.name           = "KEEPTOPIC",
+	.desc           = N_("Enables topic retention."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_set_keeptopic,
+	.help           = { .path = "cservice/set_keeptopic" },
+};
 
 static void
 mod_init(struct module *const restrict m)

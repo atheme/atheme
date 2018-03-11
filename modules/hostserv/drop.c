@@ -50,7 +50,14 @@ hs_cmd_drop(struct sourceinfo *si, int parc, char *parv[])
 
 }
 
-static struct command hs_drop = { "DROP", N_("Drops your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_drop, { .path = "hostserv/drop" } };
+static struct command hs_drop = {
+	.name           = "DROP",
+	.desc           = N_("Drops your assigned vhost."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 1,
+	.cmd            = &hs_cmd_drop,
+	.help           = { .path = "hostserv/drop" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

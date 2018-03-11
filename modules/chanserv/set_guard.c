@@ -84,7 +84,14 @@ cs_cmd_set_guard(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command cs_set_guard = { "GUARD", N_("Sets whether or not services will inhabit the channel."), AC_NONE, 2, cs_cmd_set_guard, { .path = "cservice/set_guard" } };
+static struct command cs_set_guard = {
+	.name           = "GUARD",
+	.desc           = N_("Sets whether or not services will inhabit the channel."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_set_guard,
+	.help           = { .path = "cservice/set_guard" },
+};
 
 static void
 cs_set_guard_config_ready(void *unused)

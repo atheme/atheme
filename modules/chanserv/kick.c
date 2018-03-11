@@ -150,8 +150,23 @@ cs_cmd_kickban(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("\2%s\2 has been kickbanned from \2%s\2."), tu->nick, mc->name);
 }
 
-static struct command cs_kick = { "KICK", N_("Removes a user from a channel."), AC_NONE, 3, cs_cmd_kick, { .path = "cservice/kick" } };
-static struct command cs_kickban = { "KICKBAN", N_("Removes and bans a user from a channel."), AC_NONE, 3, cs_cmd_kickban, { .path = "cservice/kickban" } };
+static struct command cs_kick = {
+	.name           = "KICK",
+	.desc           = N_("Removes a user from a channel."),
+	.access         = AC_NONE,
+	.maxparc        = 3,
+	.cmd            = &cs_cmd_kick,
+	.help           = { .path = "cservice/kick" },
+};
+
+static struct command cs_kickban = {
+	.name           = "KICKBAN",
+	.desc           = N_("Removes and bans a user from a channel."),
+	.access         = AC_NONE,
+	.maxparc        = 3,
+	.cmd            = &cs_cmd_kickban,
+	.help           = { .path = "cservice/kickban" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

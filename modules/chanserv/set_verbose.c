@@ -102,7 +102,14 @@ cs_cmd_set_verbose(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command cs_set_verbose = { "VERBOSE", N_("Notifies channel about access list modifications."), AC_NONE, 2, cs_cmd_set_verbose, { .path = "cservice/set_verbose" } };
+static struct command cs_set_verbose = {
+	.name           = "VERBOSE",
+	.desc           = N_("Notifies channel about access list modifications."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_set_verbose,
+	.help           = { .path = "cservice/set_verbose" },
+};
 
 static void
 mod_init(struct module *const restrict m)

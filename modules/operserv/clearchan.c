@@ -115,7 +115,14 @@ os_cmd_clearchan(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "CLEARCHAN: \2%s\2 \2%s\2 (reason: \2%s\2) (\2%d\2 matches, \2%d\2 ignores)", actionstr, targchan, treason, matches, ignores);
 }
 
-static struct command os_clearchan = { "CLEARCHAN", N_("Clears a channel via KICK, KILL or AKILL"), PRIV_CHAN_ADMIN, 3, os_cmd_clearchan, { .path = "oservice/clearchan" } };
+static struct command os_clearchan = {
+	.name           = "CLEARCHAN",
+	.desc           = N_("Clears a channel via KICK, KILL or AKILL"),
+	.access         = PRIV_CHAN_ADMIN,
+	.maxparc        = 3,
+	.cmd            = &os_cmd_clearchan,
+	.help           = { .path = "oservice/clearchan" }
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

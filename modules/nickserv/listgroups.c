@@ -89,7 +89,14 @@ ns_cmd_listgroups(struct sourceinfo *si, int parc, char *parv[])
 						    i, entity(mu)->name);
 }
 
-static struct command ns_listgroups = { "LISTGROUPS", N_("Lists groups that you have access to."), AC_NONE, 1, ns_cmd_listgroups, { .path = "nickserv/listgroups" } };
+static struct command ns_listgroups = {
+	.name           = "LISTGROUPS",
+	.desc           = N_("Lists groups that you have access to."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &ns_cmd_listgroups,
+	.help           = { .path = "nickserv/listgroups" },
+};
 
 static void
 mod_init(struct module *const restrict m)

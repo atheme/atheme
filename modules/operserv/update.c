@@ -21,7 +21,14 @@ os_cmd_update(struct sourceinfo *si, int parc, char *parv[])
 	// db_save() will wallops/snoop/log the error
 }
 
-static struct command os_update = { "UPDATE", N_("Flushes services database to disk."), PRIV_ADMIN, 0, os_cmd_update, { .path = "oservice/update" } };
+static struct command os_update = {
+	.name           = "UPDATE",
+	.desc           = N_("Flushes services database to disk."),
+	.access         = PRIV_ADMIN,
+	.maxparc        = 0,
+	.cmd            = &os_cmd_update,
+	.help           = { .path = "oservice/update" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

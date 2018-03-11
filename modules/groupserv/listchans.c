@@ -76,7 +76,14 @@ gs_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 						    i, entity(mg)->name);
 }
 
-static struct command gs_listchans = { "LISTCHANS", N_("Lists channels that a group has access to."), AC_NONE, 1, gs_cmd_listchans, { .path = "groupserv/listchans" } };
+static struct command gs_listchans = {
+	.name           = "LISTCHANS",
+	.desc           = N_("Lists channels that a group has access to."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &gs_cmd_listchans,
+	.help           = { .path = "groupserv/listchans" },
+};
 
 static void
 mod_init(struct module *const restrict m)

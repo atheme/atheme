@@ -603,9 +603,32 @@ db_h_ble(struct database_handle *db, const char *type)
 	mowgli_node_add(de, &de->node, &dnsbl_elist);
 }
 
-static struct command os_set_dnsblaction = { "DNSBLACTION", N_("Changes what happens to a user when they hit a DNSBL."), PRIV_USER_ADMIN, 1, os_cmd_set_dnsblaction, { .path = "proxyscan/set_dnsblaction" } };
-static struct command ps_dnsblexempt = { "DNSBLEXEMPT", N_("Manage the list of IP's exempt from DNSBL checking."), PRIV_USER_ADMIN, 3, ps_cmd_dnsblexempt, { .path = "proxyscan/dnsblexempt" } };
-static struct command ps_dnsblscan = { "DNSBLSCAN", N_("Manually scan if a user is in a DNSBL."), PRIV_USER_ADMIN, 1, ps_cmd_dnsblscan, { .path = "proxyscan/dnsblscan" } };
+static struct command os_set_dnsblaction = {
+	.name           = "DNSBLACTION",
+	.desc           = N_("Changes what happens to a user when they hit a DNSBL."),
+	.access         = PRIV_USER_ADMIN,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_set_dnsblaction,
+	.help           = { .path = "proxyscan/set_dnsblaction" },
+};
+
+static struct command ps_dnsblexempt = {
+	.name           = "DNSBLEXEMPT",
+	.desc           = N_("Manage the list of IP's exempt from DNSBL checking."),
+	.access         = PRIV_USER_ADMIN,
+	.maxparc        = 3,
+	.cmd            = &ps_cmd_dnsblexempt,
+	.help           = { .path = "proxyscan/dnsblexempt" },
+};
+
+static struct command ps_dnsblscan = {
+	.name           = "DNSBLSCAN",
+	.desc           = N_("Manually scan if a user is in a DNSBL."),
+	.access         = PRIV_USER_ADMIN,
+	.maxparc        = 1,
+	.cmd            = &ps_cmd_dnsblscan,
+	.help           = { .path = "proxyscan/dnsblscan" },
+};
 
 static void
 mod_init(struct module *const restrict m)

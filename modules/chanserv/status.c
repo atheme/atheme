@@ -82,7 +82,14 @@ cs_cmd_status(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("You are an IRC operator."));
 }
 
-static struct command cs_status = { "STATUS", N_("Displays your status in services."), AC_NONE, 1, cs_cmd_status, { .path = "cservice/status" } };
+static struct command cs_status = {
+	.name           = "STATUS",
+	.desc           = N_("Displays your status in services."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &cs_cmd_status,
+	.help           = { .path = "cservice/status" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

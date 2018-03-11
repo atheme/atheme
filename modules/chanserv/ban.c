@@ -177,8 +177,23 @@ cs_cmd_unban(struct sourceinfo *si, int parc, char *parv[])
         }
 }
 
-static struct command cs_ban = { "BAN", N_("Sets a ban on a channel."), AC_AUTHENTICATED, 2, cs_cmd_ban, { .path = "cservice/ban" } };
-static struct command cs_unban = { "UNBAN", N_("Removes a ban on a channel."), AC_AUTHENTICATED, 2, cs_cmd_unban, { .path = "cservice/unban" } };
+static struct command cs_ban = {
+	.name           = "BAN",
+	.desc           = N_("Sets a ban on a channel."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_ban,
+	.help           = { .path = "cservice/ban" },
+};
+
+static struct command cs_unban = {
+	.name           = "UNBAN",
+	.desc           = N_("Removes a ban on a channel."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_unban,
+	.help           = { .path = "cservice/unban" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

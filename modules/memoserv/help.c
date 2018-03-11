@@ -32,7 +32,14 @@ ms_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 	help_display(si, si->service, command, si->service->commands);
 }
 
-static struct command ms_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, ms_cmd_help, { .path = "help" } };
+static struct command ms_help = {
+	.name           = "HELP",
+	.desc           = N_("Displays contextual help information."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &ms_cmd_help,
+	.help           = { .path = "help" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

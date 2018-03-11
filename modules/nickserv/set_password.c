@@ -52,7 +52,14 @@ ns_cmd_set_password(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-static struct command ns_set_password = { "PASSWORD", N_("Changes the password associated with your account."), AC_NONE, 1, ns_cmd_set_password, { .path = "nickserv/set_password" } };
+static struct command ns_set_password = {
+	.name           = "PASSWORD",
+	.desc           = N_("Changes the password associated with your account."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &ns_cmd_set_password,
+	.help           = { .path = "nickserv/set_password" },
+};
 
 static void
 mod_init(struct module *const restrict m)

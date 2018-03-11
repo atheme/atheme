@@ -76,7 +76,14 @@ cs_cmd_set_limitflags(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command cs_set_limitflags = { "LIMITFLAGS", N_("Limits the power of the +f flag."), AC_NONE, 2, cs_cmd_set_limitflags, { .path = "cservice/set_limitflags" } };
+static struct command cs_set_limitflags = {
+	.name           = "LIMITFLAGS",
+	.desc           = N_("Limits the power of the +f flag."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_set_limitflags,
+	.help           = { .path = "cservice/set_limitflags" },
+};
 
 static void
 mod_init(struct module *const restrict m)

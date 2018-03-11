@@ -845,10 +845,65 @@ chanfix_can_register(hook_channel_register_check_t *req)
 	}
 }
 
-struct command cmd_list = { "LIST", N_("List all channels with CHANFIX records."), PRIV_CHAN_AUSPEX, 1, chanfix_cmd_list, { .path = "chanfix/list" } };
-struct command cmd_chanfix = { "CHANFIX", N_("Manually chanfix a channel."), PRIV_CHAN_ADMIN, 1, chanfix_cmd_fix, { .path = "chanfix/chanfix" } };
-struct command cmd_scores = { "SCORES", N_("List channel scores."), PRIV_CHAN_AUSPEX, 1, chanfix_cmd_scores, { .path = "chanfix/scores" } };
-struct command cmd_info = { "INFO", N_("List information on channel."), PRIV_CHAN_AUSPEX, 1, chanfix_cmd_info, { .path = "chanfix/info" } };
-struct command cmd_mark = { "MARK", N_("Adds a note to a channel."), PRIV_MARK, 3, chanfix_cmd_mark, { .path = "chanfix/mark" } };
-struct command cmd_nofix = { "NOFIX", N_("Adds NOFIX to a channel."), PRIV_CHAN_ADMIN, 3, chanfix_cmd_nofix, { .path = "chanfix/nofix" } };
-struct command cmd_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 1, chanfix_cmd_help, { .path = "help" } };
+struct command cmd_list = {
+	.name           = "LIST",
+	.desc           = N_("List all channels with CHANFIX records."),
+	.access         = PRIV_CHAN_AUSPEX,
+	.maxparc        = 1,
+	.cmd            = &chanfix_cmd_list,
+	.help           = { .path = "chanfix/list" },
+};
+
+struct command cmd_chanfix = {
+	.name           = "CHANFIX",
+	.desc           = N_("Manually chanfix a channel."),
+	.access         = PRIV_CHAN_ADMIN,
+	.maxparc        = 1,
+	.cmd            = &chanfix_cmd_fix,
+	.help           = { .path = "chanfix/chanfix" },
+};
+
+struct command cmd_scores = {
+	.name           = "SCORES",
+	.desc           = N_("List channel scores."),
+	.access         = PRIV_CHAN_AUSPEX,
+	.maxparc        = 1,
+	.cmd            = &chanfix_cmd_scores,
+	.help           = { .path = "chanfix/scores" },
+};
+
+struct command cmd_info = {
+	.name           = "INFO",
+	.desc           = N_("List information on channel."),
+	.access         = PRIV_CHAN_AUSPEX,
+	.maxparc        = 1,
+	.cmd            = &chanfix_cmd_info,
+	.help           = { .path = "chanfix/info" },
+};
+
+struct command cmd_mark = {
+	.name           = "MARK",
+	.desc           = N_("Adds a note to a channel."),
+	.access         = PRIV_MARK,
+	.maxparc        = 3,
+	.cmd            = &chanfix_cmd_mark,
+	.help           = { .path = "chanfix/mark" },
+};
+
+struct command cmd_nofix = {
+	.name           = "NOFIX",
+	.desc           = N_("Adds NOFIX to a channel."),
+	.access         = PRIV_CHAN_ADMIN,
+	.maxparc        = 3,
+	.cmd            = &chanfix_cmd_nofix,
+	.help           = { .path = "chanfix/nofix" },
+};
+
+struct command cmd_help = {
+	.name           = "HELP",
+	.desc           = N_("Displays contextual help information."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &chanfix_cmd_help,
+	.help           = { .path = "help" },
+};

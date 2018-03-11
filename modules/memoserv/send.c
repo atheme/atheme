@@ -184,7 +184,14 @@ ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-static struct command ms_send = { "SEND", N_("Sends a memo to a user."), AC_AUTHENTICATED, 2, ms_cmd_send, { .path = "memoserv/send" } };
+static struct command ms_send = {
+	.name           = "SEND",
+	.desc           = N_("Sends a memo to a user."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &ms_cmd_send,
+	.help           = { .path = "memoserv/send" },
+};
 
 static void
 mod_init(struct module *const restrict m)

@@ -125,7 +125,14 @@ ns_cmd_freeze(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_freeze = { "FREEZE", N_("Freezes an account."), PRIV_USER_ADMIN, 3, ns_cmd_freeze, { .path = "nickserv/freeze" } };
+static struct command ns_freeze = {
+	.name           = "FREEZE",
+	.desc           = N_("Freezes an account."),
+	.access         = PRIV_USER_ADMIN,
+	.maxparc        = 3,
+	.cmd            = &ns_cmd_freeze,
+	.help           = { .path = "nickserv/freeze" },
+};
 
 static void
 mod_init(struct module *const restrict m)

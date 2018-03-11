@@ -85,7 +85,14 @@ is_vacation(const struct mynick *mn, const void *arg)
 	return ( metadata_find(mu, "private:vacation") != NULL );
 }
 
-static struct command ns_vacation = { "VACATION", N_("Sets an account as being on vacation."), AC_AUTHENTICATED, 1, ns_cmd_vacation, { .path = "nickserv/vacation" } };
+static struct command ns_vacation = {
+	.name           = "VACATION",
+	.desc           = N_("Sets an account as being on vacation."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 1,
+	.cmd            = &ns_cmd_vacation,
+	.help           = { .path = "nickserv/vacation" },
+};
 
 static void
 mod_init(struct module *const restrict m)

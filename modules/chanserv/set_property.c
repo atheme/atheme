@@ -93,7 +93,14 @@ cs_cmd_set_property(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("Metadata entry \2%s\2 added."), property);
 }
 
-static struct command cs_set_property = { "PROPERTY", N_("Manipulates channel metadata."), AC_NONE, 2, cs_cmd_set_property, { .path = "cservice/set_property" } };
+static struct command cs_set_property = {
+	.name           = "PROPERTY",
+	.desc           = N_("Manipulates channel metadata."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_set_property,
+	.help           = { .path = "cservice/set_property" },
+};
 
 static void
 mod_init(struct module *const restrict m)

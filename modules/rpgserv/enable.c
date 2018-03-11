@@ -66,8 +66,23 @@ rs_cmd_disable(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("RPGServ disabled for \2%s\2."), chan);
 }
 
-static struct command rs_enable = { "ENABLE", N_("Enable RPGServ for a channel."), AC_NONE, 1, rs_cmd_enable, { .path = "rpgserv/enable" } };
-static struct command rs_disable = { "DISABLE", N_("Disable RPGServ for a channel."), AC_NONE, 1, rs_cmd_disable, { .path = "rpgserv/disable" } };
+static struct command rs_enable = {
+	.name           = "ENABLE",
+	.desc           = N_("Enable RPGServ for a channel."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &rs_cmd_enable,
+	.help           = { .path = "rpgserv/enable" },
+};
+
+static struct command rs_disable = {
+	.name           = "DISABLE",
+	.desc           = N_("Disable RPGServ for a channel."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &rs_cmd_disable,
+	.help           = { .path = "rpgserv/disable" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

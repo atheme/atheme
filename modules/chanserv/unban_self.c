@@ -92,7 +92,14 @@ cs_cmd_unban(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command cs_unban = { "UNBAN", N_("Unbans you on a channel."), AC_AUTHENTICATED, 2, cs_cmd_unban, { .path = "cservice/unban_self" } };
+static struct command cs_unban = {
+	.name           = "UNBAN",
+	.desc           = N_("Unbans you on a channel."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_unban,
+	.help           = { .path = "cservice/unban_self" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

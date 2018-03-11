@@ -74,7 +74,14 @@ ns_cmd_set_nevergroup(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_set_nevergroup = { "NEVERGROUP", N_("Prevents you from being added to group access lists."), AC_NONE, 1, ns_cmd_set_nevergroup, { .path = "nickserv/set_nevergroup" } };
+static struct command ns_set_nevergroup = {
+	.name           = "NEVERGROUP",
+	.desc           = N_("Prevents you from being added to group access lists."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &ns_cmd_set_nevergroup,
+	.help           = { .path = "nickserv/set_nevergroup" },
+};
 
 static void
 mod_init(struct module *const restrict m)

@@ -407,11 +407,50 @@ os_cmd_sqline_sync(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("SQLINE list synchronized to servers."));
 }
 
-static struct command os_sqline = { "SQLINE", N_("Manages network name bans."), PRIV_MASS_AKILL, 3, os_cmd_sqline, { .path = "oservice/sqline" } };
-static struct command os_sqline_add = { "ADD", N_("Adds a network name ban"), AC_NONE, 2, os_cmd_sqline_add, { .path = "" } };
-static struct command os_sqline_del = { "DEL", N_("Deletes a network name ban"), AC_NONE, 1, os_cmd_sqline_del, { .path = "" } };
-static struct command os_sqline_list = { "LIST", N_("Lists all network name bans"), AC_NONE, 1, os_cmd_sqline_list, { .path = "" } };
-static struct command os_sqline_sync = { "SYNC", N_("Synchronises network name bans to servers"), AC_NONE, 0, os_cmd_sqline_sync, { .path = "" } };
+static struct command os_sqline = {
+	.name           = "SQLINE",
+	.desc           = N_("Manages network name bans."),
+	.access         = PRIV_MASS_AKILL,
+	.maxparc        = 3,
+	.cmd            = &os_cmd_sqline,
+	.help           = { .path = "oservice/sqline" },
+};
+
+static struct command os_sqline_add = {
+	.name           = "ADD",
+	.desc           = N_("Adds a network name ban"),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &os_cmd_sqline_add,
+	.help           = { .path = "" },
+};
+
+static struct command os_sqline_del = {
+	.name           = "DEL",
+	.desc           = N_("Deletes a network name ban"),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_sqline_del,
+	.help           = { .path = "" },
+};
+
+static struct command os_sqline_list = {
+	.name           = "LIST",
+	.desc           = N_("Lists all network name bans"),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_sqline_list,
+	.help           = { .path = "" },
+};
+
+static struct command os_sqline_sync = {
+	.name           = "SYNC",
+	.desc           = N_("Synchronises network name bans to servers"),
+	.access         = AC_NONE,
+	.maxparc        = 0,
+	.cmd            = &os_cmd_sqline_sync,
+	.help           = { .path = "" },
+};
 
 static void
 mod_init(struct module *const restrict m)

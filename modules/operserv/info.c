@@ -72,7 +72,14 @@ os_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	hook_call_operserv_info(si);
 }
 
-static struct command os_info = { "INFO", N_("Shows some useful information about the current settings of services."), PRIV_SERVER_AUSPEX, 1, os_cmd_info, { .path = "oservice/info" } };
+static struct command os_info = {
+	.name           = "INFO",
+	.desc           = N_("Shows some useful information about the current settings of services."),
+	.access         = PRIV_SERVER_AUSPEX,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_info,
+	.help           = { .path = "oservice/info" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

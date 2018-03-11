@@ -230,7 +230,14 @@ ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_register = { "REGISTER", N_("Registers a nickname."), AC_NONE, 3, ns_cmd_register, { .path = "nickserv/register" } };
+static struct command ns_register = {
+	.name           = "REGISTER",
+	.desc           = N_("Registers a nickname."),
+	.access         = AC_NONE,
+	.maxparc        = 3,
+	.cmd            = &ns_cmd_register,
+	.help           = { .path = "nickserv/register" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

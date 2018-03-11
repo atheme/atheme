@@ -89,7 +89,14 @@ ns_cmd_set_property(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("Metadata entry \2%s\2 added."), property);
 }
 
-static struct command ns_set_property = { "PROPERTY", N_("Manipulates metadata entries associated with an account."), AC_NONE, 2, ns_cmd_set_property, { .path = "nickserv/set_property" } };
+static struct command ns_set_property = {
+	.name           = "PROPERTY",
+	.desc           = N_("Manipulates metadata entries associated with an account."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &ns_cmd_set_property,
+	.help           = { .path = "nickserv/set_property" },
+};
 
 static void
 mod_init(struct module *const restrict m)

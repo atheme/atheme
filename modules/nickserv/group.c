@@ -204,9 +204,32 @@ ns_cmd_fungroup(struct sourceinfo *si, int parc, char *parv[])
 	atheme_object_unref(mn);
 }
 
-static struct command ns_group = { "GROUP", N_("Adds a nickname to your account."), AC_AUTHENTICATED, 0, ns_cmd_group, { .path = "nickserv/group" } };
-static struct command ns_ungroup = { "UNGROUP", N_("Removes a nickname from your account."), AC_AUTHENTICATED, 1, ns_cmd_ungroup, { .path = "nickserv/ungroup" } };
-static struct command ns_fungroup = { "FUNGROUP", N_("Forces removal of a nickname from an account."), PRIV_USER_ADMIN, 2, ns_cmd_fungroup, { .path = "nickserv/fungroup" } };
+static struct command ns_group = {
+	.name           = "GROUP",
+	.desc           = N_("Adds a nickname to your account."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 0,
+	.cmd            = &ns_cmd_group,
+	.help           = { .path = "nickserv/group" },
+};
+
+static struct command ns_ungroup = {
+	.name           = "UNGROUP",
+	.desc           = N_("Removes a nickname from your account."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 1,
+	.cmd            = &ns_cmd_ungroup,
+	.help           = { .path = "nickserv/ungroup" },
+};
+
+static struct command ns_fungroup = {
+	.name           = "FUNGROUP",
+	.desc           = N_("Forces removal of a nickname from an account."),
+	.access         = PRIV_USER_ADMIN,
+	.maxparc        = 2,
+	.cmd            = &ns_cmd_fungroup,
+	.help           = { .path = "nickserv/fungroup" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -324,11 +324,50 @@ os_cmd_sgline_sync(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("SGLINE list synchronized to servers."));
 }
 
-static struct command os_sgline = { "SGLINE", N_("Manages network realname bans."), PRIV_MASS_AKILL, 3, os_cmd_sgline, { .path = "oservice/sgline" } };
-static struct command os_sgline_add = { "ADD", N_("Adds a network realname ban"), AC_NONE, 2, os_cmd_sgline_add, { .path = "" } };
-static struct command os_sgline_del = { "DEL", N_("Deletes a network realname ban"), AC_NONE, 1, os_cmd_sgline_del, { .path = "" } };
-static struct command os_sgline_list = { "LIST", N_("Lists all network realname bans"), AC_NONE, 1, os_cmd_sgline_list, { .path = "" } };
-static struct command os_sgline_sync = { "SYNC", N_("Synchronises network realname bans to servers"), AC_NONE, 0, os_cmd_sgline_sync, { .path = "" } };
+static struct command os_sgline = {
+	.name           = "SGLINE",
+	.desc           = N_("Manages network realname bans."),
+	.access         = PRIV_MASS_AKILL,
+	.maxparc        = 3,
+	.cmd            = &os_cmd_sgline,
+	.help           = { .path = "oservice/sgline" },
+};
+
+static struct command os_sgline_add = {
+	.name           = "ADD",
+	.desc           = N_("Adds a network realname ban"),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &os_cmd_sgline_add,
+	.help           = { .path = "" },
+};
+
+static struct command os_sgline_del = {
+	.name           = "DEL",
+	.desc           = N_("Deletes a network realname ban"),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_sgline_del,
+	.help           = { .path = "" },
+};
+
+static struct command os_sgline_list = {
+	.name           = "LIST",
+	.desc           = N_("Lists all network realname bans"),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_sgline_list,
+	.help           = { .path = "" },
+};
+
+static struct command os_sgline_sync = {
+	.name           = "SYNC",
+	.desc           = N_("Synchronises network realname bans to servers"),
+	.access         = AC_NONE,
+	.maxparc        = 0,
+	.cmd            = &os_cmd_sgline_sync,
+	.help           = { .path = "" },
+};
 
 static void
 mod_init(struct module *const restrict m)

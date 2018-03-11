@@ -409,10 +409,41 @@ __command_trampoline(struct sourceinfo * si, int parc, char *parv[])
 	}
 }
 
-static struct command command_join = { "JOIN", N_("Join the Happy Farm game!"), AC_AUTHENTICATED, 0, __command_join, { .path = "gameserv/happyfarm_join" } };
-static struct command command_buyplot = { "BUYPLOT", N_("Buy a plot of land!"), AC_AUTHENTICATED, 0, __command_buyplot, { .path = "gameserv/happyfarm_buyplot" } };
-static struct command command_sellplot = { "SELLPLOT", N_("Sell a vacant plot of land."), AC_AUTHENTICATED, 0, __command_sellplot, { .path = "gameserv/happyfarm_sellplot" } };
-static struct command command_happyfarm = { "HAPPYFARM", N_("Happy Farm!"), AC_AUTHENTICATED, 2, __command_trampoline, { .path = "gameserv/happyfarm" } };
+static struct command command_join = {
+	.name           = "JOIN",
+	.desc           = N_("Join the Happy Farm game!"),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 0,
+	.cmd            = &__command_join,
+	.help           = { .path = "gameserv/happyfarm_join" },
+};
+
+static struct command command_buyplot = {
+	.name           = "BUYPLOT",
+	.desc           = N_("Buy a plot of land!"),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 0,
+	.cmd            = &__command_buyplot,
+	.help           = { .path = "gameserv/happyfarm_buyplot" },
+};
+
+static struct command command_sellplot = {
+	.name           = "SELLPLOT",
+	.desc           = N_("Sell a vacant plot of land."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 0,
+	.cmd            = &__command_sellplot,
+	.help           = { .path = "gameserv/happyfarm_sellplot" },
+};
+
+static struct command command_happyfarm = {
+	.name           = "HAPPYFARM",
+	.desc           = N_("Happy Farm!"),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &__command_trampoline,
+	.help           = { .path = "gameserv/happyfarm" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -72,7 +72,14 @@ ns_cmd_hold(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_hold = { "HOLD", N_("Prevents an account from expiring."), PRIV_HOLD, 2, ns_cmd_hold, { .path = "nickserv/hold" } };
+static struct command ns_hold = {
+	.name           = "HOLD",
+	.desc           = N_("Prevents an account from expiring."),
+	.access         = PRIV_HOLD,
+	.maxparc        = 2,
+	.cmd            = &ns_cmd_hold,
+	.help           = { .path = "nickserv/hold" },
+};
 
 static void
 mod_init(struct module *const restrict m)

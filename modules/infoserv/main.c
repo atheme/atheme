@@ -493,14 +493,60 @@ is_cmd_olist(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-static struct command is_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, is_cmd_help, { .path = "help" } };
-static struct command is_post = { "POST", N_("Post news items for users to view."), PRIV_GLOBAL, 3, is_cmd_post, { .path = "infoserv/post" } };
-static struct command is_del = { "DEL", N_("Delete news items."), PRIV_GLOBAL, 1, is_cmd_del, { .path = "infoserv/del" } };
-static struct command is_odel = { "ODEL", N_("Delete oper news items."), PRIV_GLOBAL, 1, is_cmd_odel, { .path = "infoserv/odel" } };
-static struct command is_list = { "LIST", N_("List previously posted news items."), AC_NONE, 1, is_cmd_list, { .path = "infoserv/list" } };
+static struct command is_help = {
+	.name           = "HELP",
+	.desc           = N_("Displays contextual help information."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &is_cmd_help,
+	.help           = { .path = "help" },
+};
 
-// Should prolly change the priv for this. What would be a better priv for it though?
-static struct command is_olist = { "OLIST", N_("List previously posted oper news items."), PRIV_GLOBAL, 1, is_cmd_olist, { .path = "infoserv/olist" } };
+static struct command is_post = {
+	.name           = "POST",
+	.desc           = N_("Post news items for users to view."),
+	.access         = PRIV_GLOBAL,
+	.maxparc        = 3,
+	.cmd            = &is_cmd_post,
+	.help           = { .path = "infoserv/post" },
+};
+
+static struct command is_del = {
+	.name           = "DEL",
+	.desc           = N_("Delete news items."),
+	.access         = PRIV_GLOBAL,
+	.maxparc        = 1,
+	.cmd            = &is_cmd_del,
+	.help           = { .path = "infoserv/del" },
+};
+
+static struct command is_odel = {
+	.name           = "ODEL",
+	.desc           = N_("Delete oper news items."),
+	.access         = PRIV_GLOBAL,
+	.maxparc        = 1,
+	.cmd            = &is_cmd_odel,
+	.help           = { .path = "infoserv/odel" },
+};
+
+static struct command is_list = {
+	.name           = "LIST",
+	.desc           = N_("List previously posted news items."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &is_cmd_list,
+	.help           = { .path = "infoserv/list" },
+};
+
+// Should probably change the priv for this. What would be a better priv for it though?
+static struct command is_olist = {
+	.name           = "OLIST",
+	.desc           = N_("List previously posted oper news items."),
+	.access         = PRIV_GLOBAL,
+	.maxparc        = 1,
+	.cmd            = &is_cmd_olist,
+	.help           = { .path = "infoserv/olist" },
+};
 
 static void
 mod_init(struct module *const restrict m)

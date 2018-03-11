@@ -74,7 +74,14 @@ ns_cmd_set_neverop(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_set_neverop = { "NEVEROP", N_("Prevents you from being added to access lists."), AC_NONE, 1, ns_cmd_set_neverop, { .path = "nickserv/set_neverop" } };
+static struct command ns_set_neverop = {
+	.name           = "NEVEROP",
+	.desc           = N_("Prevents you from being added to access lists."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &ns_cmd_set_neverop,
+	.help           = { .path = "nickserv/set_neverop" },
+};
 
 static void
 mod_init(struct module *const restrict m)

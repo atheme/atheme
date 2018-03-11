@@ -55,7 +55,14 @@ cs_cmd_getkey(struct sourceinfo *si, int parc, char *parv[])
 			mc->name, mc->chan->key);
 }
 
-static struct command cs_getkey = { "GETKEY", N_("Returns the key (+k) of a channel."), AC_NONE, 1, cs_cmd_getkey, { .path = "cservice/getkey" } };
+static struct command cs_getkey = {
+	.name           = "GETKEY",
+	.desc           = N_("Returns the key (+k) of a channel."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &cs_cmd_getkey,
+	.help           = { .path = "cservice/getkey" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

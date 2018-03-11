@@ -72,7 +72,14 @@ ns_cmd_set_quietchg(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_set_quietchg = { "QUIETCHG", N_("Allows you to opt-out of channel change messages."), AC_NONE, 1, ns_cmd_set_quietchg, { .path = "nickserv/set_quietchg" } };
+static struct command ns_set_quietchg = {
+	.name           = "QUIETCHG",
+	.desc           = N_("Allows you to opt-out of channel change messages."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &ns_cmd_set_quietchg,
+	.help           = { .path = "nickserv/set_quietchg" },
+};
 
 static void
 mod_init(struct module *const restrict m)

@@ -66,7 +66,14 @@ __matched:
 	logcommand(si, CMDLOG_GET, "RPGSERV:SEARCH");
 }
 
-static struct command rs_search = { "SEARCH", N_("Search for games based on specific criteria."), AC_NONE, 20, rs_cmd_search, { .path = "rpgserv/search" } };
+static struct command rs_search = {
+	.name           = "SEARCH",
+	.desc           = N_("Search for games based on specific criteria."),
+	.access         = AC_NONE,
+	.maxparc        = 20,
+	.cmd            = &rs_cmd_search,
+	.help           = { .path = "rpgserv/search" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

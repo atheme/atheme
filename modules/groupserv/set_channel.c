@@ -50,7 +50,14 @@ gs_cmd_set_channel(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("The official channel of \2%s\2 has been set to \2%s\2."), parv[0], chan);
 }
 
-static struct command gs_set_channel = { "CHANNEL", N_("Sets the official group channel."), AC_AUTHENTICATED, 2, gs_cmd_set_channel, { .path = "groupserv/set_channel" } };
+static struct command gs_set_channel = {
+	.name           = "CHANNEL",
+	.desc           = N_("Sets the official group channel."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &gs_cmd_set_channel,
+	.help           = { .path = "groupserv/set_channel" },
+};
 
 static void
 mod_init(struct module *const restrict m)

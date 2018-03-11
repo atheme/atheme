@@ -181,11 +181,50 @@ ms_cmd_ignore_list(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-static struct command ms_ignore = { "IGNORE", N_(N_("Ignores memos.")), AC_AUTHENTICATED, 2, ms_cmd_ignore, { .path = "memoserv/ignore" } };
-static struct command ms_ignore_add = { "ADD", N_(N_("Ignores memos from a user.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_add, { .path = "" } };
-static struct command ms_ignore_del = { "DEL", N_(N_("Stops ignoring memos from a user.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_del, { .path = "" } };
-static struct command ms_ignore_clear = { "CLEAR", N_(N_("Clears your memo ignore list.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_clear, { .path = "" } };
-static struct command ms_ignore_list = { "LIST", N_(N_("Shows all users you are ignoring memos from.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_list, { .path = "" } };
+static struct command ms_ignore = {
+	.name           = "IGNORE",
+	.desc           = N_("Ignores memos."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &ms_cmd_ignore,
+	.help           = { .path = "memoserv/ignore" },
+};
+
+static struct command ms_ignore_add = {
+	.name           = "ADD",
+	.desc           = N_("Ignores memos from a user."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 1,
+	.cmd            = &ms_cmd_ignore_add,
+	.help           = { .path = "" },
+};
+
+static struct command ms_ignore_del = {
+	.name           = "DEL",
+	.desc           = N_("Stops ignoring memos from a user."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 1,
+	.cmd            = &ms_cmd_ignore_del,
+	.help           = { .path = "" },
+};
+
+static struct command ms_ignore_clear = {
+	.name           = "CLEAR",
+	.desc           = N_("Clears your memo ignore list."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 1,
+	.cmd            = &ms_cmd_ignore_clear,
+	.help           = { .path = "" },
+};
+
+static struct command ms_ignore_list = {
+	.name           = "LIST",
+	.desc           = N_("Shows all users you are ignoring memos from."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 1,
+	.cmd            = &ms_cmd_ignore_list,
+	.help           = { .path = "" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

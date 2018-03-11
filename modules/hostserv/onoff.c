@@ -82,8 +82,23 @@ hs_cmd_off(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("Your vhost of \2%s\2 is now deactivated."), md->value);
 }
 
-static struct command hs_on = { "ON", N_("Activates your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_on, { .path = "hostserv/on" } };
-static struct command hs_off = { "OFF", N_("Deactivates your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_off, { .path = "hostserv/off" } };
+static struct command hs_on = {
+	.name           = "ON",
+	.desc           = N_("Activates your assigned vhost."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 1,
+	.cmd            = &hs_cmd_on,
+	.help           = { .path = "hostserv/on" },
+};
+
+static struct command hs_off = {
+	.name           = "OFF",
+	.desc           = N_("Deactivates your assigned vhost."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 1,
+	.cmd            = &hs_cmd_off,
+	.help           = { .path = "hostserv/off" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

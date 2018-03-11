@@ -296,10 +296,41 @@ helpserv_cmd_cancel(struct sourceinfo *si, int parc, char *parv[])
         command_fail(si, fault_badparams, _("You do not have a help request to cancel."));
 }
 
-static struct command helpserv_request = { "REQUEST", N_("Request help from network staff."), AC_AUTHENTICATED, 1, helpserv_cmd_request, { .path = "helpserv/request" } };
-static struct command helpserv_list = { "LIST", N_("Lists users waiting for help."), PRIV_HELPER, 1, helpserv_cmd_list, { .path = "helpserv/list" } };
-static struct command helpserv_close = { "CLOSE", N_("Close a users' help request."), PRIV_HELPER, 2, helpserv_cmd_close, { .path = "helpserv/close" } };
-static struct command helpserv_cancel = { "CANCEL", N_("Cancel your own pending help request."), AC_AUTHENTICATED, 1, helpserv_cmd_cancel, { .path = "helpserv/cancel" } };
+static struct command helpserv_request = {
+	.name           = "REQUEST",
+	.desc           = N_("Request help from network staff."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 1,
+	.cmd            = &helpserv_cmd_request,
+	.help           = { .path = "helpserv/request" },
+};
+
+static struct command helpserv_list = {
+	.name           = "LIST",
+	.desc           = N_("Lists users waiting for help."),
+	.access         = PRIV_HELPER,
+	.maxparc        = 1,
+	.cmd            = &helpserv_cmd_list,
+	.help           = { .path = "helpserv/list" },
+};
+
+static struct command helpserv_close = {
+	.name           = "CLOSE",
+	.desc           = N_("Close a users' help request."),
+	.access         = PRIV_HELPER,
+	.maxparc        = 2,
+	.cmd            = &helpserv_cmd_close,
+	.help           = { .path = "helpserv/close" },
+};
+
+static struct command helpserv_cancel = {
+	.name           = "CANCEL",
+	.desc           = N_("Cancel your own pending help request."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 1,
+	.cmd            = &helpserv_cmd_cancel,
+	.help           = { .path = "helpserv/cancel" },
+};
 
 static void
 mod_init(struct module *const restrict m)

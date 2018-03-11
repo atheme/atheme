@@ -237,7 +237,14 @@ os_cmd_override(struct sourceinfo *si, int parc, char *parv[])
 	atheme_object_unref(o_si);
 }
 
-static struct command os_override = { "OVERRIDE", N_("Perform a transaction on another user's account"), PRIV_OVERRIDE, 4, os_cmd_override, { .path = "oservice/override" } };
+static struct command os_override = {
+	.name           = "OVERRIDE",
+	.desc           = N_("Perform a transaction on another user's account"),
+	.access         = PRIV_OVERRIDE,
+	.maxparc        = 4,
+	.cmd            = &os_cmd_override,
+	.help           = { .path = "oservice/override" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

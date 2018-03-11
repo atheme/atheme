@@ -63,7 +63,14 @@ ns_cmd_set_hidelastlogin(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_set_hidelastlogin = { "HIDELASTLOGIN", N_("Opts you out of Last Login notices upon identifying to your account."), AC_NONE, 1, ns_cmd_set_hidelastlogin, { .path = "nickserv/set_hidelastlogin" } };
+static struct command ns_set_hidelastlogin = {
+	.name           = "HIDELASTLOGIN",
+	.desc           = N_("Opts you out of Last Login notices upon identifying to your account."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &ns_cmd_set_hidelastlogin,
+	.help           = { .path = "nickserv/set_hidelastlogin" },
+};
 
 static void
 mod_init(struct module *const restrict m)

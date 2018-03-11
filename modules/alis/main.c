@@ -457,8 +457,23 @@ alis_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 	help_display(si, si->service, command, alis->commands);
 }
 
-static struct command alis_list = { "LIST", "Lists channels matching given parameters.", AC_NONE, ALIS_MAX_PARC, alis_cmd_list, { .path = "alis/list" } };
-static struct command alis_help = { "HELP", "Displays contextual help information.", AC_NONE, 1, alis_cmd_help, { .path = "help" } };
+static struct command alis_list = {
+	.name           = "LIST",
+	.desc           = N_("Lists channels matching given parameters."),
+	.access         = AC_NONE,
+	.maxparc        = ALIS_MAX_PARC,
+	.cmd            = &alis_cmd_list,
+	.help           = { .path = "alis/list" },
+};
+
+static struct command alis_help = {
+	.name           = "HELP",
+	.desc           = N_("Displays contextual help information."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &alis_cmd_help,
+	.help           = { .path = "help" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

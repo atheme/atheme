@@ -80,7 +80,14 @@ hs_cmd_vhostnick(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-static struct command hs_vhostnick = { "VHOSTNICK", N_("Manages per-nick virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhostnick, { .path = "hostserv/vhostnick" } };
+static struct command hs_vhostnick = {
+	.name           = "VHOSTNICK",
+	.desc           = N_("Manages per-nick virtual hosts."),
+	.access         = PRIV_USER_VHOST,
+	.maxparc        = 2,
+	.cmd            = &hs_cmd_vhostnick,
+	.help           = { .path = "hostserv/vhostnick" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

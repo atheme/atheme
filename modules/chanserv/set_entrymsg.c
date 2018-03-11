@@ -56,7 +56,14 @@ cs_cmd_set_entrymsg(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("The entry message for \2%s\2 has been set to \2%s\2"), parv[0], parv[1]);
 }
 
-static struct command cs_set_entrymsg = { "ENTRYMSG", N_("Sets the channel's entry message."), AC_NONE, 2, cs_cmd_set_entrymsg, { .path = "cservice/set_entrymsg" } };
+static struct command cs_set_entrymsg = {
+	.name           = "ENTRYMSG",
+	.desc           = N_("Sets the channel's entry message."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_set_entrymsg,
+	.help           = { .path = "cservice/set_entrymsg" },
+};
 
 static void
 mod_init(struct module *const restrict m)

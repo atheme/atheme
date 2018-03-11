@@ -64,7 +64,14 @@ ms_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-static struct command ms_list = { "LIST", N_(N_("Lists all of your memos.")), AC_AUTHENTICATED, 0, ms_cmd_list, { .path = "memoserv/list" } };
+static struct command ms_list = {
+	.name           = "LIST",
+	.desc           = N_("Lists all of your memos."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 0,
+	.cmd            = &ms_cmd_list,
+	.help           = { .path = "memoserv/list" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

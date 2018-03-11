@@ -414,7 +414,14 @@ conf_loadscript(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-static struct command os_perl = { "PERL", N_("Inspect the Perl interpreter"), PRIV_ADMIN, 2, os_cmd_perl, { .path = "oservice/perl" } };
+static struct command os_perl = {
+	.name           = "PERL",
+	.desc           = N_("Inspect the Perl interpreter"),
+	.access         = PRIV_ADMIN,
+	.maxparc        = 2,
+	.cmd            = &os_cmd_perl,
+	.help           = { .path = "oservice/perl" },
+};
 
 static void
 mod_init(struct module *const restrict m)

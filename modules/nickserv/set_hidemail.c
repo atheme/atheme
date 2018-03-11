@@ -72,7 +72,14 @@ ns_cmd_set_hidemail(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_set_hidemail = { "HIDEMAIL", N_("Hides your e-mail address."), AC_NONE, 1, ns_cmd_set_hidemail, { .path = "nickserv/set_hidemail" } };
+static struct command ns_set_hidemail = {
+	.name           = "HIDEMAIL",
+	.desc           = N_("Hides your e-mail address."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &ns_cmd_set_hidemail,
+	.help           = { .path = "nickserv/set_hidemail" },
+};
 
 static void
 mod_init(struct module *const restrict m)

@@ -84,7 +84,14 @@ cs_cmd_set_gameserv(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command cs_set_gameserv = { "GAMESERV", N_("Allows or disallows gaming services."), AC_NONE, 2, cs_cmd_set_gameserv, { .path = "cservice/set_gameserv" } };
+static struct command cs_set_gameserv = {
+	.name           = "GAMESERV",
+	.desc           = N_("Allows or disallows gaming services."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_set_gameserv,
+	.help           = { .path = "cservice/set_gameserv" },
+};
 
 static void
 mod_init(struct module *const restrict m)

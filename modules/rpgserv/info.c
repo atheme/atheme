@@ -53,7 +53,14 @@ rs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_GET, "RPGSERV:INFO: \2%s\2", mc->name);
 }
 
-static struct command rs_info = { "INFO", N_("Displays info for a particular game."), AC_NONE, 1, rs_cmd_info, { .path = "rpgserv/info" } };
+static struct command rs_info = {
+	.name           = "INFO",
+	.desc           = N_("Displays info for a particular game."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &rs_cmd_info,
+	.help           = { .path = "rpgserv/info" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

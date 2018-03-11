@@ -114,7 +114,14 @@ cs_cmd_clear_users(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("Cleared users from \2%s\2."), channel);
 }
 
-static struct command cs_clear_users = { "USERS", N_("Kicks all users from a channel."), AC_NONE, 2, cs_cmd_clear_users, { .path = "cservice/clear_users" } };
+static struct command cs_clear_users = {
+	.name           = "USERS",
+	.desc           = N_("Kicks all users from a channel."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_clear_users,
+	.help           = { .path = "cservice/clear_users" },
+};
 
 static void
 mod_init(struct module *const restrict m)

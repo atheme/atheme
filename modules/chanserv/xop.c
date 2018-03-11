@@ -483,11 +483,50 @@ cs_cmd_forcexop(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_SET, "FORCEXOP: \2%s\2 (\2%d\2 changes)", mc->name, changes);
 }
 
-static struct command cs_sop = { "SOP", N_("Manipulates a channel SOP list."), AC_NONE, 3, cs_cmd_sop, { .path = "cservice/xop" } };
-static struct command cs_aop = { "AOP", N_("Manipulates a channel AOP list."), AC_NONE, 3, cs_cmd_aop, { .path = "cservice/xop" } };
-static struct command cs_hop = { "HOP", N_("Manipulates a channel HOP list."), AC_NONE, 3, cs_cmd_hop, { .path = "cservice/xop" } };
-static struct command cs_vop = { "VOP", N_("Manipulates a channel VOP list."), AC_NONE, 3, cs_cmd_vop, { .path = "cservice/xop" } };
-static struct command cs_forcexop = { "FORCEXOP", N_("Forces access levels to xOP levels."), AC_NONE, 1, cs_cmd_forcexop, { .path = "cservice/forcexop" } };
+static struct command cs_sop = {
+	.name           = "SOP",
+	.desc           = N_("Manipulates a channel SOP list."),
+	.access         = AC_NONE,
+	.maxparc        = 3,
+	.cmd            = &cs_cmd_sop,
+	.help           = { .path = "cservice/xop" },
+};
+
+static struct command cs_aop = {
+	.name           = "AOP",
+	.desc           = N_("Manipulates a channel AOP list."),
+	.access         = AC_NONE,
+	.maxparc        = 3,
+	.cmd            = &cs_cmd_aop,
+	.help           = { .path = "cservice/xop" },
+};
+
+static struct command cs_hop = {
+	.name           = "HOP",
+	.desc           = N_("Manipulates a channel HOP list."),
+	.access         = AC_NONE,
+	.maxparc        = 3,
+	.cmd            = &cs_cmd_hop,
+	.help           = { .path = "cservice/xop" },
+};
+
+static struct command cs_vop = {
+	.name           = "VOP",
+	.desc           = N_("Manipulates a channel VOP list."),
+	.access         = AC_NONE,
+	.maxparc        = 3,
+	.cmd            = &cs_cmd_vop,
+	.help           = { .path = "cservice/xop" },
+};
+
+static struct command cs_forcexop = {
+	.name           = "FORCEXOP",
+	.desc           = N_("Forces access levels to xOP levels."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &cs_cmd_forcexop,
+	.help           = { .path = "cservice/forcexop" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

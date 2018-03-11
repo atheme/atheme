@@ -65,7 +65,14 @@ gs_cmd_set_groupname(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("The group \2%s\2 has been renamed to \2%s\2."), oldname, newname);
 }
 
-static struct command gs_set_groupname = { "GROUPNAME", N_("Changes the group's name."), AC_NONE, 1, gs_cmd_set_groupname, { .path = "groupserv/set_groupname" } };
+static struct command gs_set_groupname = {
+	.name           = "GROUPNAME",
+	.desc           = N_("Changes the group's name."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &gs_cmd_set_groupname,
+	.help           = { .path = "groupserv/set_groupname" },
+};
 
 static void
 mod_init(struct module *const restrict m)

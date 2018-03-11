@@ -75,7 +75,14 @@ gs_cmd_join(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("You are now a member of \2%s\2."), entity(mg)->name);
 }
 
-static struct command gs_join = { "JOIN", N_("Join a open group."), AC_AUTHENTICATED, 2, gs_cmd_join, { .path = "groupserv/join" } };
+static struct command gs_join = {
+	.name           = "JOIN",
+	.desc           = N_("Join a open group."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &gs_cmd_join,
+	.help           = { .path = "groupserv/join" },
+};
 
 static void
 mod_init(struct module *const restrict m)

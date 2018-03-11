@@ -71,7 +71,14 @@ gs_cmd_set_open(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command gs_set_open = { "OPEN", N_("Sets the group as open for anyone to join."), AC_AUTHENTICATED, 2, gs_cmd_set_open, { .path = "groupserv/set_open" } };
+static struct command gs_set_open = {
+	.name           = "OPEN",
+	.desc           = N_("Sets the group as open for anyone to join."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &gs_cmd_set_open,
+	.help           = { .path = "groupserv/set_open" },
+};
 
 static void
 mod_init(struct module *const restrict m)

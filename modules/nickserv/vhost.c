@@ -273,8 +273,23 @@ vhost_on_identify(struct user *u)
 	do_sethost(u, md->value);
 }
 
-static struct command ns_vhost = { "VHOST", N_("Manages user virtualhosts."), PRIV_USER_VHOST, 4, ns_cmd_vhost, { .path = "nickserv/vhost" } };
-static struct command ns_listvhost = { "LISTVHOST", N_("Lists user virtualhosts."), PRIV_USER_AUSPEX, 1, ns_cmd_listvhost, { .path = "nickserv/listvhost" } };
+static struct command ns_vhost = {
+	.name           = "VHOST",
+	.desc           = N_("Manages user virtualhosts."),
+	.access         = PRIV_USER_VHOST,
+	.maxparc        = 4,
+	.cmd            = &ns_cmd_vhost,
+	.help           = { .path = "nickserv/vhost" },
+};
+
+static struct command ns_listvhost = {
+	.name           = "LISTVHOST",
+	.desc           = N_("Lists user virtualhosts."),
+	.access         = PRIV_USER_AUSPEX,
+	.maxparc        = 1,
+	.cmd            = &ns_cmd_listvhost,
+	.help           = { .path = "nickserv/listvhost" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

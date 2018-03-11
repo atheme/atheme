@@ -196,7 +196,14 @@ no_founder:
 	logcommand(si, CMDLOG_SET, "FLAGS: \2%s\2 now has flags \2%s\2 on \2%s\2", mt->name, gflags_tostr(ga_flags,  ga->flags), entity(mg)->name);
 }
 
-static struct command gs_flags = { "FLAGS", N_("Sets flags on a user in a group."), AC_AUTHENTICATED, 3, gs_cmd_flags, { .path = "groupserv/flags" } };
+static struct command gs_flags = {
+	.name           = "FLAGS",
+	.desc           = N_("Sets flags on a user in a group."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 3,
+	.cmd            = &gs_cmd_flags,
+	.help           = { .path = "groupserv/flags" },
+};
 
 static void
 mod_init(struct module *const restrict m)

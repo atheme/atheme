@@ -289,7 +289,14 @@ cs_cmd_set_mlock(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-static struct command cs_set_mlock = { "MLOCK", N_("Sets channel mode lock."), AC_NONE, 2, cs_cmd_set_mlock, { .path = "cservice/set_mlock" } };
+static struct command cs_set_mlock = {
+	.name           = "MLOCK",
+	.desc           = N_("Sets channel mode lock."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_set_mlock,
+	.help           = { .path = "cservice/set_mlock" },
+};
 
 static void
 mod_init(struct module *const restrict m)

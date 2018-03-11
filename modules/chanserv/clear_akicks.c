@@ -68,7 +68,14 @@ cs_cmd_clear_akicks(struct sourceinfo *si, int parc, char *parv[])
 				get_source_name(si), changes);
 }
 
-static struct command cs_clear_akicks = { "AKICKS", "Clears all channel AKICK entries.", AC_NONE, 2, cs_cmd_clear_akicks, { .path = "cservice/clear_akicks" } };
+static struct command cs_clear_akicks = {
+	.name           = "AKICKS",
+	.desc           = N_("Clears all channel AKICK entries."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_clear_akicks,
+	.help           = { .path = "cservice/clear_akicks" },
+};
 
 static void
 mod_init(struct module *const restrict m)

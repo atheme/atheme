@@ -121,7 +121,14 @@ ms_cmd_read(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("Read %d memos."), numread);
 }
 
-static struct command ms_read = { "READ", N_("Reads a memo."), AC_AUTHENTICATED, 2, ms_cmd_read, { .path = "memoserv/read" } };
+static struct command ms_read = {
+	.name           = "READ",
+	.desc           = N_("Reads a memo."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &ms_cmd_read,
+	.help           = { .path = "memoserv/read" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

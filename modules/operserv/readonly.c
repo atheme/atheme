@@ -61,7 +61,14 @@ os_cmd_readonly(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command os_readonly = { "READONLY", N_("Changes the state of read-only mode for services."), PRIV_ADMIN, 1, os_cmd_readonly, { .path = "oservice/readonly" } };
+static struct command os_readonly = {
+	.name           = "READONLY",
+	.desc           = N_("Changes the state of read-only mode for services."),
+	.access         = PRIV_ADMIN,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_readonly,
+	.help           = { .path = "oservice/readonly" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

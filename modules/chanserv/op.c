@@ -122,8 +122,23 @@ cs_cmd_deop(struct sourceinfo *si, int parc, char *parv[])
 	cmd_op(si, false, parc, parv);
 }
 
-static struct command cs_op = { "OP", N_("Gives channel ops to a user."), AC_NONE, 2, cs_cmd_op, { .path = "cservice/op_voice" } };
-static struct command cs_deop = { "DEOP", N_("Removes channel ops from a user."), AC_NONE, 2, cs_cmd_deop, { .path = "cservice/op_voice" } };
+static struct command cs_op = {
+	.name           = "OP",
+	.desc           = N_("Gives channel ops to a user."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_op,
+	.help           = { .path = "cservice/op_voice" },
+};
+
+static struct command cs_deop = {
+	.name           = "DEOP",
+	.desc           = N_("Removes channel ops from a user."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_deop,
+	.help           = { .path = "cservice/op_voice" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

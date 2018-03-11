@@ -45,7 +45,14 @@ command_lottery(struct sourceinfo *si, int parc, char *parv[])
 	gs_command_report(si, "%s", u->nick);
 }
 
-static struct command cmd_lottery = { "LOTTERY", N_("Choose a random user on a channel."), AC_NONE, 2, command_lottery, { .path = "gameserv/lottery" } };
+static struct command cmd_lottery = {
+	.name           = "LOTTERY",
+	.desc           = N_("Choose a random user on a channel."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &command_lottery,
+	.help           = { .path = "gameserv/lottery" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

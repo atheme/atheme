@@ -209,7 +209,14 @@ rs_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command rs_set = { "SET", N_("Sets RPG properties of your channel."), AC_NONE, 3, rs_cmd_set, { .path = "rpgserv/set" } };
+static struct command rs_set = {
+	.name           = "SET",
+	.desc           = N_("Sets RPG properties of your channel."),
+	.access         = AC_NONE,
+	.maxparc        = 3,
+	.cmd            = &rs_cmd_set,
+	.help           = { .path = "rpgserv/set" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

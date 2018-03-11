@@ -347,10 +347,41 @@ hs_cmd_offerlist(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_GET, "OFFERLIST");
 }
 
-static struct command hs_offer = { "OFFER", N_("Sets vhosts available for users to take."), PRIV_USER_VHOST, 2, hs_cmd_offer, { .path = "hostserv/offer" } };
-static struct command hs_unoffer = { "UNOFFER", N_("Removes a vhost from the list that users can take."), PRIV_USER_VHOST, 2, hs_cmd_unoffer, { .path = "hostserv/unoffer" } };
-static struct command hs_offerlist = { "OFFERLIST", N_("Lists all available vhosts."), AC_NONE, 1, hs_cmd_offerlist, { .path = "hostserv/offerlist" } };
-static struct command hs_take = { "TAKE", N_("Take an offered vhost for use."), AC_AUTHENTICATED, 2, hs_cmd_take, { .path = "hostserv/take" } };
+static struct command hs_offer = {
+	.name           = "OFFER",
+	.desc           = N_("Sets vhosts available for users to take."),
+	.access         = PRIV_USER_VHOST,
+	.maxparc        = 2,
+	.cmd            = &hs_cmd_offer,
+	.help           = { .path = "hostserv/offer" },
+};
+
+static struct command hs_unoffer = {
+	.name           = "UNOFFER",
+	.desc           = N_("Removes a vhost from the list that users can take."),
+	.access         = PRIV_USER_VHOST,
+	.maxparc        = 2,
+	.cmd            = &hs_cmd_unoffer,
+	.help           = { .path = "hostserv/unoffer" },
+};
+
+static struct command hs_offerlist = {
+	.name           = "OFFERLIST",
+	.desc           = N_("Lists all available vhosts."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &hs_cmd_offerlist,
+	.help           = { .path = "hostserv/offerlist" },
+};
+
+static struct command hs_take = {
+	.name           = "TAKE",
+	.desc           = N_("Take an offered vhost for use."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &hs_cmd_take,
+	.help           = { .path = "hostserv/take" },
+};
 
 static void
 mod_init(struct module *const restrict m)

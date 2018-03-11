@@ -75,7 +75,14 @@ cs_cmd_set_topiclock(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command cs_set_topiclock = { "TOPICLOCK", N_("Restricts who can change the topic."), AC_NONE, 2, cs_cmd_set_topiclock, { .path = "cservice/set_topiclock" } };
+static struct command cs_set_topiclock = {
+	.name           = "TOPICLOCK",
+	.desc           = N_("Restricts who can change the topic."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_set_topiclock,
+	.help           = { .path = "cservice/set_topiclock" },
+};
 
 static void
 mod_init(struct module *const restrict m)

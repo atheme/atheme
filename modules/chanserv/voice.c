@@ -111,8 +111,23 @@ cs_cmd_devoice(struct sourceinfo *si, int parc, char *parv[])
 	cmd_voice(si, false, parc, parv);
 }
 
-static struct command cs_voice = { "VOICE", N_("Gives channel voice to a user."), AC_NONE, 2, cs_cmd_voice, { .path = "cservice/op_voice" } };
-static struct command cs_devoice = { "DEVOICE", N_("Removes channel voice from a user."), AC_NONE, 2, cs_cmd_devoice, { .path = "cservice/op_voice" } };
+static struct command cs_voice = {
+	.name           = "VOICE",
+	.desc           = N_("Gives channel voice to a user."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_voice,
+	.help           = { .path = "cservice/op_voice" },
+};
+
+static struct command cs_devoice = {
+	.name           = "DEVOICE",
+	.desc           = N_("Removes channel voice from a user."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_devoice,
+	.help           = { .path = "cservice/op_voice" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

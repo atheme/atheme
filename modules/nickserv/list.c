@@ -285,7 +285,14 @@ ns_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, ngettext(N_("\2%d\2 match for criteria \2%s\2"), N_("\2%d\2 matches for criteria \2%s\2"), matches), matches, criteriastr);
 }
 
-static struct command ns_list = { "LIST", N_("Lists nicknames registered matching a given pattern."), PRIV_USER_AUSPEX, 10, ns_cmd_list, { .path = "nickserv/list" } };
+static struct command ns_list = {
+	.name           = "LIST",
+	.desc           = N_("Lists nicknames registered matching a given pattern."),
+	.access         = PRIV_USER_AUSPEX,
+	.maxparc        = 10,
+	.cmd            = &ns_cmd_list,
+	.help           = { .path = "nickserv/list" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

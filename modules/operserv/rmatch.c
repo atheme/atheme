@@ -85,7 +85,14 @@ os_cmd_rmatch(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "RMATCH: \2%s\2 (\2%d\2 matches)", pattern, matches);
 }
 
-static struct command os_rmatch = { "RMATCH", N_("Scans the network for users based on a specific regex pattern."), PRIV_USER_AUSPEX, 1, os_cmd_rmatch, { .path = "oservice/rmatch" } };
+static struct command os_rmatch = {
+	.name           = "RMATCH",
+	.desc           = N_("Scans the network for users based on a specific regex pattern."),
+	.access         = PRIV_USER_AUSPEX,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_rmatch,
+	.help           = { .path = "oservice/rmatch" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

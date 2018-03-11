@@ -50,7 +50,14 @@ command_eightball(struct sourceinfo *si, int parc, char *parv[])
 	gs_command_report(si, "%s", _(eightball_responses[rand() % 28]));
 }
 
-static struct command cmd_eightball = { "EIGHTBALL", N_("Ask the 8-Ball a question."), AC_NONE, 2, command_eightball, { .path = "gameserv/eightball" } };
+static struct command cmd_eightball = {
+	.name           = "EIGHTBALL",
+	.desc           = N_("Ask the 8-Ball a question."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &command_eightball,
+	.help           = { .path = "gameserv/eightball" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

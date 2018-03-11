@@ -125,8 +125,23 @@ cs_cmd_dehalfop(struct sourceinfo *si, int parc, char *parv[])
 	cmd_halfop(si, false, parc, parv);
 }
 
-static struct command cs_halfop = { "HALFOP", N_("Gives channel halfops to a user."), AC_NONE, 2, cs_cmd_halfop, { .path = "cservice/halfop" } };
-static struct command cs_dehalfop = { "DEHALFOP", N_("Removes channel halfops from a user."), AC_NONE, 2, cs_cmd_dehalfop, { .path = "cservice/halfop" } };
+static struct command cs_halfop = {
+	.name           = "HALFOP",
+	.desc           = N_("Gives channel halfops to a user."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_halfop,
+	.help           = { .path = "cservice/halfop" },
+};
+
+static struct command cs_dehalfop = {
+	.name           = "DEHALFOP",
+	.desc           = N_("Removes channel halfops from a user."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_dehalfop,
+	.help           = { .path = "cservice/halfop" },
+};
 
 static void
 mod_init(struct module *const restrict m)

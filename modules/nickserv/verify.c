@@ -209,8 +209,23 @@ ns_cmd_fverify(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_verify = { "VERIFY", N_("Verifies an account registration."), AC_NONE, 3, ns_cmd_verify, { .path = "nickserv/verify" } };
-static struct command ns_fverify = { "FVERIFY", N_("Forcefully verifies an account registration."), PRIV_USER_ADMIN, 2, ns_cmd_fverify, { .path = "nickserv/fverify" } };
+static struct command ns_verify = {
+	.name           = "VERIFY",
+	.desc           = N_("Verifies an account registration."),
+	.access         = AC_NONE,
+	.maxparc        = 3,
+	.cmd            = &ns_cmd_verify,
+	.help           = { .path = "nickserv/verify" },
+};
+
+static struct command ns_fverify = {
+	.name           = "FVERIFY",
+	.desc           = N_("Forcefully verifies an account registration."),
+	.access         = PRIV_USER_ADMIN,
+	.maxparc        = 2,
+	.cmd            = &ns_cmd_fverify,
+	.help           = { .path = "nickserv/fverify" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

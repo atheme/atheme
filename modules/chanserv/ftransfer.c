@@ -74,7 +74,14 @@ cs_cmd_ftransfer(struct sourceinfo *si, int parc, char *parv[])
 	metadata_delete(mc, "private:verify:founderchg:timestamp");
 }
 
-static struct command cs_ftransfer = { "FTRANSFER", N_("Forces foundership transfer of a channel."), PRIV_CHAN_ADMIN, 2, cs_cmd_ftransfer, { .path = "cservice/ftransfer" } };
+static struct command cs_ftransfer = {
+	.name           = "FTRANSFER",
+	.desc           = N_("Forces foundership transfer of a channel."),
+	.access         = PRIV_CHAN_ADMIN,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_ftransfer,
+	.help           = { .path = "cservice/ftransfer" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

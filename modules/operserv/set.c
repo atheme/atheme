@@ -480,22 +480,149 @@ os_cmd_set_enforceprefix(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "SET:ENFORCEPREFIX: \2%s\2", prefix);
 }
 
-static struct command os_set = { "SET", N_("Sets various control flags."), PRIV_ADMIN, 2, os_cmd_set, { .func = os_help_set } };
-static struct command os_set_recontime = { "RECONTIME", N_("Changes IRCd reconnect delay."), AC_NONE, 1, os_cmd_set_recontime, { .path = "oservice/set_recontime" } };
-static struct command os_set_maxlogins = { "MAXLOGINS", N_("Changes the maximum number of users that may be logged in to one account."), AC_NONE, 1, os_cmd_set_maxlogins, { .path = "oservice/set_maxlogins" } };
-static struct command os_set_maxnicks = { "MAXNICKS", N_("Changes the maximum number of nicks that one account may own."), AC_NONE, 1, os_cmd_set_maxnicks, { .path = "oservice/set_maxnicks" } };
-static struct command os_set_maxusers = { "MAXUSERS", N_("Changes the maximum number of accounts that one email address may have registered."), AC_NONE, 1, os_cmd_set_maxusers, { .path = "oservice/set_maxusers" } };
-static struct command os_set_maxchans = { "MAXCHANS", N_("Changes the maximum number of channels one account may own."), AC_NONE, 1, os_cmd_set_maxchans, { .path = "oservice/set_maxchans" } };
-static struct command os_set_mdlimit = { "MDLIMIT", N_("Sets the maximum amount of metadata one channel or account may have."), AC_NONE, 1, os_cmd_set_mdlimit, { .path = "oservice/set_mdlimit" } };
-static struct command os_set_klinetime = { "KLINETIME", N_("Sets the default KLINE/AKILL time."), AC_NONE, 1, os_cmd_set_klinetime, { .path = "oservice/set_klinetime" } };
-static struct command os_set_commitinterval = { "COMMITINTERVAL", N_("Changes how often the database is written to disk."), AC_NONE, 1, os_cmd_set_commitinterval, { .path = "oservice/set_commitinterval" } };
-static struct command os_set_chanexpire = { "CHANEXPIRE", N_("Sets when unused channels expire."), AC_NONE, 1, os_cmd_set_chanexpire, { .path = "oservice/set_chanexpire" } };
-static struct command os_set_maxchanacs = { "MAXCHANACS", N_("Changes the maximum number of channel access list entries per channel."), AC_NONE, 1, os_cmd_set_maxchanacs, { .path = "oservice/set_maxchanacs" } };
-static struct command os_set_maxfounders = { "MAXFOUNDERS", N_("Sets the maximum number of founders per channel."), AC_NONE, 1, os_cmd_set_maxfounders, { .path = "oservice/set_maxfounders" } };
-static struct command os_set_akicktime = { "AKICKTIME", N_("Sets the default AKICK time."), AC_NONE, 1, os_cmd_set_akicktime, { .path = "oservice/set_akicktime" } };
-static struct command os_set_spam = { "SPAM", N_("Changes whether service spams unregistered users on connect."), AC_NONE, 1, os_cmd_set_spam, { .path = "oservice/set_spam" } };
-static struct command os_set_nickexpire = { "NICKEXPIRE", N_("Sets when unused nicks and accounts expire."), AC_NONE, 1, os_cmd_set_nickexpire, { .path = "oservice/set_nickexpire" } };
-static struct command os_set_enforceprefix = { "ENFORCEPREFIX", N_("Changes the prefix to use when changing the user's nick on enforcement."), AC_NONE, 1, os_cmd_set_enforceprefix, { .path = "oservice/set_enforceprefix" } };
+static struct command os_set = {
+	.name           = "SET",
+	.desc           = N_("Sets various control flags."),
+	.access         = PRIV_ADMIN,
+	.maxparc        = 2,
+	.cmd            = &os_cmd_set,
+	.help           = { .func = os_help_set },
+};
+
+static struct command os_set_recontime = {
+	.name           = "RECONTIME",
+	.desc           = N_("Changes IRCd reconnect delay."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_set_recontime,
+	.help           = { .path = "oservice/set_recontime" },
+};
+
+static struct command os_set_maxlogins = {
+	.name           = "MAXLOGINS",
+	.desc           = N_("Changes the maximum number of users that may be logged in to one account."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_set_maxlogins,
+	.help           = { .path = "oservice/set_maxlogins" },
+};
+
+static struct command os_set_maxnicks = {
+	.name           = "MAXNICKS",
+	.desc           = N_("Changes the maximum number of nicks that one account may own."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_set_maxnicks,
+	.help           = { .path = "oservice/set_maxnicks" },
+};
+
+static struct command os_set_maxusers = {
+	.name           = "MAXUSERS",
+	.desc           = N_("Changes the maximum number of accounts that one email address may have registered."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_set_maxusers,
+	.help           = { .path = "oservice/set_maxusers" },
+};
+
+static struct command os_set_maxchans = {
+	.name           = "MAXCHANS",
+	.desc           = N_("Changes the maximum number of channels one account may own."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_set_maxchans,
+	.help           = { .path = "oservice/set_maxchans" },
+};
+
+static struct command os_set_mdlimit = {
+	.name           = "MDLIMIT",
+	.desc           = N_("Sets the maximum amount of metadata one channel or account may have."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_set_mdlimit,
+	.help           = { .path = "oservice/set_mdlimit" },
+};
+
+static struct command os_set_klinetime = {
+	.name           = "KLINETIME",
+	.desc           = N_("Sets the default KLINE/AKILL time."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_set_klinetime,
+	.help           = { .path = "oservice/set_klinetime" },
+};
+
+static struct command os_set_commitinterval = {
+	.name           = "COMMITINTERVAL",
+	.desc           = N_("Changes how often the database is written to disk."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_set_commitinterval,
+	.help           = { .path = "oservice/set_commitinterval" },
+};
+
+static struct command os_set_chanexpire = {
+	.name           = "CHANEXPIRE",
+	.desc           = N_("Sets when unused channels expire."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_set_chanexpire,
+	.help           = { .path = "oservice/set_chanexpire" },
+};
+
+static struct command os_set_maxchanacs = {
+	.name           = "MAXCHANACS",
+	.desc           = N_("Changes the maximum number of channel access list entries per channel."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_set_maxchanacs,
+	.help           = { .path = "oservice/set_maxchanacs" },
+};
+
+static struct command os_set_maxfounders = {
+	.name           = "MAXFOUNDERS",
+	.desc           = N_("Sets the maximum number of founders per channel."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_set_maxfounders,
+	.help           = { .path = "oservice/set_maxfounders" },
+};
+
+static struct command os_set_akicktime = {
+	.name           = "AKICKTIME",
+	.desc           = N_("Sets the default AKICK time."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_set_akicktime,
+	.help           = { .path = "oservice/set_akicktime" },
+};
+
+static struct command os_set_spam = {
+	.name           = "SPAM",
+	.desc           = N_("Changes whether service spams unregistered users on connect."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_set_spam,
+	.help           = { .path = "oservice/set_spam" },
+};
+
+static struct command os_set_nickexpire = {
+	.name           = "NICKEXPIRE",
+	.desc           = N_("Sets when unused nicks and accounts expire."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_set_nickexpire,
+	.help           = { .path = "oservice/set_nickexpire" },
+};
+
+static struct command os_set_enforceprefix = {
+	.name           = "ENFORCEPREFIX",
+	.desc           = N_("Changes the prefix to use when changing the user's nick on enforcement."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_set_enforceprefix,
+	.help           = { .path = "oservice/set_enforceprefix" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

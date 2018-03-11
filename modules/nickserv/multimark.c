@@ -1015,7 +1015,14 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_multimark = { "MARK", N_("Adds a note to a user."), PRIV_MARK, 3, ns_cmd_multimark, { .path = "nickserv/multimark" } };
+static struct command ns_multimark = {
+	.name           = "MARK",
+	.desc           = N_("Adds a note to a user."),
+	.access         = PRIV_MARK,
+	.maxparc        = 3,
+	.cmd            = &ns_cmd_multimark,
+	.help           = { .path = "nickserv/multimark" },
+};
 
 static void
 mod_init(struct module *const restrict m)

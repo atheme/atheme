@@ -54,7 +54,14 @@ command_namegen(struct sourceinfo *si, int parc, char *parv[])
 	gs_command_report(si, _("Some names to ponder: %s"), buf);
 }
 
-static struct command cmd_namegen = { "NAMEGEN", N_("Generates some names to ponder."), AC_NONE, 2, command_namegen, { .path = "gameserv/namegen" } };
+static struct command cmd_namegen = {
+	.name           = "NAMEGEN",
+	.desc           = N_("Generates some names to ponder."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &command_namegen,
+	.help           = { .path = "gameserv/namegen" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

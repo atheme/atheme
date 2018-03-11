@@ -69,7 +69,14 @@ cs_cmd_invite(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("You have been invited to \2%s\2."), mc->name);
 }
 
-static struct command cs_invite = { "INVITE", N_("Invites you to a channel."), AC_NONE, 2, cs_cmd_invite, { .path = "cservice/invite" } };
+static struct command cs_invite = {
+	.name           = "INVITE",
+	.desc           = N_("Invites you to a channel."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_invite,
+	.help           = { .path = "cservice/invite" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

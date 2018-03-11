@@ -62,7 +62,14 @@ ns_cmd_listmail(struct sourceinfo *si, int parc, char *parv[])
 						    N_("\2%d\2 matches for e-mail address \2%s\2"), state.matches), state.matches, email);
 }
 
-static struct command ns_listmail = { "LISTMAIL", N_("Lists accounts registered to an e-mail address."), PRIV_USER_AUSPEX, 1, ns_cmd_listmail, { .path = "nickserv/listmail" } };
+static struct command ns_listmail = {
+	.name           = "LISTMAIL",
+	.desc           = N_("Lists accounts registered to an e-mail address."),
+	.access         = PRIV_USER_AUSPEX,
+	.maxparc        = 1,
+	.cmd            = &ns_cmd_listmail,
+	.help           = { .path = "nickserv/listmail" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

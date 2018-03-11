@@ -95,8 +95,23 @@ ms_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-static struct command ms_delete = { "DELETE", N_("Deletes memos."), AC_AUTHENTICATED, 1, ms_cmd_delete, { .path = "memoserv/delete" } };
-static struct command ms_del = { "DEL", N_("Alias for DELETE"), AC_AUTHENTICATED, 1, ms_cmd_delete, { .path = "memoserv/delete" } };
+static struct command ms_delete = {
+	.name           = "DELETE",
+	.desc           = N_("Deletes memos."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 1,
+	.cmd            = &ms_cmd_delete,
+	.help           = { .path = "memoserv/delete" },
+};
+
+static struct command ms_del = {
+	.name           = "DEL",
+	.desc           = N_("Alias for DELETE"),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 1,
+	.cmd            = &ms_cmd_delete,
+	.help           = { .path = "memoserv/delete" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

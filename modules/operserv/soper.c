@@ -275,12 +275,59 @@ os_cmd_soper_setpass(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command os_soper = { "SOPER", N_("Shows and changes services operator privileges."), AC_NONE, 4, os_cmd_soper, { .path = "oservice/soper" } };
-static struct command os_soper_list = { "LIST", N_("Lists services operators."), PRIV_VIEWPRIVS, 0, os_cmd_soper_list, { .path = "" } };
-static struct command os_soper_listclass = { "LISTCLASS", N_("Lists operclasses."), PRIV_VIEWPRIVS, 0, os_cmd_soper_listclass, { .path = "" } };
-static struct command os_soper_add = { "ADD", N_("Grants services operator privileges to an account."), PRIV_GRANT, 3, os_cmd_soper_add, { .path = "" } };
-static struct command os_soper_del = { "DEL", N_("Removes services operator privileges from an account."), PRIV_GRANT, 1, os_cmd_soper_del, { .path = "" } };
-static struct command os_soper_setpass = { "SETPASS", N_("Changes a password for services operator privileges."), PRIV_GRANT, 2, os_cmd_soper_setpass, { .path = "" } };
+static struct command os_soper = {
+	.name           = "SOPER",
+	.desc           = N_("Shows and changes services operator privileges."),
+	.access         = AC_NONE,
+	.maxparc        = 4,
+	.cmd            = &os_cmd_soper,
+	.help           = { .path = "oservice/soper" },
+};
+
+static struct command os_soper_list = {
+	.name           = "LIST",
+	.desc           = N_("Lists services operators."),
+	.access         = PRIV_VIEWPRIVS,
+	.maxparc        = 0,
+	.cmd            = &os_cmd_soper_list,
+	.help           = { .path = "" },
+};
+
+static struct command os_soper_listclass = {
+	.name           = "LISTCLASS",
+	.desc           = N_("Lists operclasses."),
+	.access         = PRIV_VIEWPRIVS,
+	.maxparc        = 0,
+	.cmd            = &os_cmd_soper_listclass,
+	.help           = { .path = "" },
+};
+
+static struct command os_soper_add = {
+	.name           = "ADD",
+	.desc           = N_("Grants services operator privileges to an account."),
+	.access         = PRIV_GRANT,
+	.maxparc        = 3,
+	.cmd            = &os_cmd_soper_add,
+	.help           = { .path = "" },
+};
+
+static struct command os_soper_del = {
+	.name           = "DEL",
+	.desc           = N_("Removes services operator privileges from an account."),
+	.access         = PRIV_GRANT,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_soper_del,
+	.help           = { .path = "" },
+};
+
+static struct command os_soper_setpass = {
+	.name           = "SETPASS",
+	.desc           = N_("Changes a password for services operator privileges."),
+	.access         = PRIV_GRANT,
+	.maxparc        = 2,
+	.cmd            = &os_cmd_soper_setpass,
+	.help           = { .path = "" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

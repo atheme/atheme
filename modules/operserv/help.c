@@ -42,7 +42,14 @@ os_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 	help_display(si, si->service, command, si->service->commands);
 }
 
-static struct command os_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 1, os_cmd_help, { .path = "help" } };
+static struct command os_help = {
+	.name           = "HELP",
+	.desc           = N_("Displays contextual help information."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_help,
+	.help           = { .path = "help" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

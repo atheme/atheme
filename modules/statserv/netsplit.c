@@ -115,9 +115,32 @@ ss_cmd_netsplit_remove(struct sourceinfo * si, int parc, char *parv[])
         command_fail(si, fault_nosuch_target, _("The server \2%s\2 does is not a split server."), name);
 }
 
-static struct command ss_netsplit = { "NETSPLIT", N_("Monitor network splits."), PRIV_SERVER_AUSPEX, 2, ss_cmd_netsplit, {.path = "statserv/netsplit"} };
-static struct command ss_netsplit_list = { "LIST", N_("List currently split servers."), PRIV_SERVER_AUSPEX, 1, ss_cmd_netsplit_list, {.path = ""} };
-static struct command ss_netsplit_remove = { "REMOVE", N_("Remove a server from the netsplit list."), PRIV_JUPE, 2, ss_cmd_netsplit_remove, {.path = ""} };
+static struct command ss_netsplit = {
+	.name           = "NETSPLIT",
+	.desc           = N_("Monitor network splits."),
+	.access         = PRIV_SERVER_AUSPEX,
+	.maxparc        = 2,
+	.cmd            = &ss_cmd_netsplit,
+	.help           = { .path = "statserv/netsplit"},
+};
+
+static struct command ss_netsplit_list = {
+	.name           = "LIST",
+	.desc           = N_("List currently split servers."),
+	.access         = PRIV_SERVER_AUSPEX,
+	.maxparc        = 1,
+	.cmd            = &ss_cmd_netsplit_list,
+	.help           = { .path = ""},
+};
+
+static struct command ss_netsplit_remove = {
+	.name           = "REMOVE",
+	.desc           = N_("Remove a server from the netsplit list."),
+	.access         = PRIV_JUPE,
+	.maxparc        = 2,
+	.cmd            = &ss_cmd_netsplit_remove,
+	.help           = { .path = ""},
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

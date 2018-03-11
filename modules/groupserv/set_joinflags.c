@@ -59,7 +59,14 @@ gs_cmd_set_joinflags(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("The join flags of \2%s\2 have been set to \2%s\2."), parv[0], joinflags);
 }
 
-static struct command gs_set_joinflags = { "JOINFLAGS", N_("Sets the flags users will be given when they JOIN the group."), AC_AUTHENTICATED, 2, gs_cmd_set_joinflags, { .path = "groupserv/set_joinflags" } };
+static struct command gs_set_joinflags = {
+	.name           = "JOINFLAGS",
+	.desc           = N_("Sets the flags users will be given when they JOIN the group."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &gs_cmd_set_joinflags,
+	.help           = { .path = "groupserv/set_joinflags" },
+};
 
 static void
 mod_init(struct module *const restrict m)

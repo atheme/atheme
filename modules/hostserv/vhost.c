@@ -121,8 +121,23 @@ hs_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
 						    N_("\2%d\2 matches for pattern \2%s\2"), matches), matches, pattern);
 }
 
-static struct command hs_vhost = { "VHOST", N_("Manages per-account virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhost, { .path = "hostserv/vhost" } };
-static struct command hs_listvhost = { "LISTVHOST", N_("Lists user virtual hosts."), PRIV_USER_AUSPEX, 1, hs_cmd_listvhost, { .path = "hostserv/listvhost" } };
+static struct command hs_vhost = {
+	.name           = "VHOST",
+	.desc           = N_("Manages per-account virtual hosts."),
+	.access         = PRIV_USER_VHOST,
+	.maxparc        = 2,
+	.cmd            = &hs_cmd_vhost,
+	.help           = { .path = "hostserv/vhost" },
+};
+
+static struct command hs_listvhost = {
+	.name           = "LISTVHOST",
+	.desc           = N_("Lists user virtual hosts."),
+	.access         = PRIV_USER_AUSPEX,
+	.maxparc        = 1,
+	.cmd            = &hs_cmd_listvhost,
+	.help           = { .path = "hostserv/listvhost" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

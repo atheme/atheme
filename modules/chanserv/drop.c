@@ -158,33 +158,21 @@ cmd_cs_fdrop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_U
 }
 
 static struct command cmd_cs_drop = {
-
 	.name           = "DROP",
 	.desc           = N_("Drops a channel registration."),
 	.access         = AC_NONE,
 	.maxparc        = 2,
 	.cmd            = &cmd_cs_drop_func,
-
-	.help           = {
-
-		.path   = "cservice/drop",
-		.func   = NULL,
-	},
+	.help           = { .path = "cservice/drop" },
 };
 
 static struct command cmd_cs_fdrop = {
-
 	.name           = "FDROP",
 	.desc           = N_("Forces dropping of a channel registration."),
 	.access         = PRIV_CHAN_ADMIN,
 	.maxparc        = 1,
 	.cmd            = &cmd_cs_fdrop_func,
-
-	.help           = {
-
-		.path   = "cservice/fdrop",
-		.func   = NULL,
-	},
+	.help           = { .path = "cservice/fdrop" },
 };
 
 static void

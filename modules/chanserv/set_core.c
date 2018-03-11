@@ -68,7 +68,14 @@ cs_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
 
-static struct command cs_set = { "SET", N_("Sets various control flags."), AC_NONE, 3, cs_cmd_set, { .func = cs_help_set } };
+static struct command cs_set = {
+	.name           = "SET",
+	.desc           = N_("Sets various control flags."),
+	.access         = AC_NONE,
+	.maxparc        = 3,
+	.cmd            = &cs_cmd_set,
+	.help           = { .func = cs_help_set },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -81,7 +81,14 @@ ns_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 						    i, entity(mu)->name);
 }
 
-static struct command ns_listchans = { "LISTCHANS", N_("Lists channels that you have access to."), AC_NONE, 1, ns_cmd_listchans, { .path = "nickserv/listchans" } };
+static struct command ns_listchans = {
+	.name           = "LISTCHANS",
+	.desc           = N_("Lists channels that you have access to."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &ns_cmd_listchans,
+	.help           = { .path = "nickserv/listchans" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

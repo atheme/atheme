@@ -72,7 +72,14 @@ cs_cmd_set_pubacl(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command cs_set_pubacl = { "PUBACL", N_("Allows the channel ACL to be public."), AC_NONE, 2, cs_cmd_set_pubacl, { .path = "cservice/set_pubacl" } };
+static struct command cs_set_pubacl = {
+	.name           = "PUBACL",
+	.desc           = N_("Allows the channel ACL to be public."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_set_pubacl,
+	.help           = { .path = "cservice/set_pubacl" },
+};
 
 static void
 mod_init(struct module *const restrict m)

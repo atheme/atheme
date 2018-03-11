@@ -61,7 +61,14 @@ ns_cmd_set_accountname(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-static struct command ns_set_accountname = { "ACCOUNTNAME", N_("Changes your account name."), AC_NONE, 1, ns_cmd_set_accountname, { .path = "nickserv/set_accountname" } };
+static struct command ns_set_accountname = {
+	.name           = "ACCOUNTNAME",
+	.desc           = N_("Changes your account name."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &ns_cmd_set_accountname,
+	.help           = { .path = "nickserv/set_accountname" },
+};
 
 static void
 mod_init(struct module *const restrict m)

@@ -557,11 +557,50 @@ rwatch_nickchange(hook_user_nick_t *data)
 	}
 }
 
-static struct command os_rwatch = { "RWATCH", N_("Performs actions on connecting clients matching regexes."), PRIV_USER_AUSPEX, 2, os_cmd_rwatch, { .path = "oservice/rwatch" } };
-static struct command os_rwatch_add = { "ADD", N_("Adds an entry to the regex watch list."), AC_NONE, 1, os_cmd_rwatch_add, { .path = "" } };
-static struct command os_rwatch_del = { "DEL", N_("Removes an entry from the regex watch list."), AC_NONE, 1, os_cmd_rwatch_del, { .path = "" } };
-static struct command os_rwatch_list = { "LIST", N_("Displays the regex watch list."), AC_NONE, 1, os_cmd_rwatch_list, { .path = "" } };
-static struct command os_rwatch_set = { "SET", N_("Changes actions on an entry in the regex watch list"), AC_NONE, 1, os_cmd_rwatch_set, { .path = "" } };
+static struct command os_rwatch = {
+	.name           = "RWATCH",
+	.desc           = N_("Performs actions on connecting clients matching regexes."),
+	.access         = PRIV_USER_AUSPEX,
+	.maxparc        = 2,
+	.cmd            = &os_cmd_rwatch,
+	.help           = { .path = "oservice/rwatch" },
+};
+
+static struct command os_rwatch_add = {
+	.name           = "ADD",
+	.desc           = N_("Adds an entry to the regex watch list."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_rwatch_add,
+	.help           = { .path = "" },
+};
+
+static struct command os_rwatch_del = {
+	.name           = "DEL",
+	.desc           = N_("Removes an entry from the regex watch list."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_rwatch_del,
+	.help           = { .path = "" },
+};
+
+static struct command os_rwatch_list = {
+	.name           = "LIST",
+	.desc           = N_("Displays the regex watch list."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_rwatch_list,
+	.help           = { .path = "" },
+};
+
+static struct command os_rwatch_set = {
+	.name           = "SET",
+	.desc           = N_("Changes actions on an entry in the regex watch list"),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_rwatch_set,
+	.help           = { .path = "" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -70,7 +70,14 @@ gs_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
 
-static struct command gs_set = { "SET", N_("Sets various control flags."), AC_AUTHENTICATED, 3, gs_cmd_set, { .func = gs_help_set } };
+static struct command gs_set = {
+	.name           = "SET",
+	.desc           = N_("Sets various control flags."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 3,
+	.cmd            = &gs_cmd_set,
+	.help           = { .func = gs_help_set },
+};
 
 static void
 mod_init(struct module *const restrict m)

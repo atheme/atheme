@@ -9,11 +9,13 @@
 
 // Check whether we are compiling IDENTIFY or LOGIN
 #ifdef NICKSERV_LOGIN
-#define COMMAND_UC "LOGIN"
-#define COMMAND_LC "login"
+#define COMMAND_UC      "LOGIN"
+#define COMMAND_LC      "login"
+#define COMMAND_DESC    N_("Authenticates to a services account.")
 #else
-#define COMMAND_UC "IDENTIFY"
-#define COMMAND_LC "identify"
+#define COMMAND_UC      "IDENTIFY"
+#define COMMAND_LC      "identify"
+#define COMMAND_DESC	N_("Identifies to services for a nickname.")
 #endif
 
 static void
@@ -150,11 +152,14 @@ ns_cmd_login(struct sourceinfo *si, int parc, char *parv[])
 	bad_password(si, mu);
 }
 
-#ifdef NICKSERV_LOGIN
-static struct command ns_login = { COMMAND_UC, N_("Authenticates to a services account."), AC_NONE, 2, ns_cmd_login, { .path = "nickserv/" COMMAND_LC } };
-#else
-static struct command ns_login = { COMMAND_UC, N_("Identifies to services for a nickname."), AC_NONE, 2, ns_cmd_login, { .path = "nickserv/" COMMAND_LC } };
-#endif
+static struct command ns_login = {
+	.name           = COMMAND_UC,
+	.desc           = COMMAND_DESC,
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &ns_cmd_login,
+	.help           = { .path = "nickserv/" COMMAND_LC },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

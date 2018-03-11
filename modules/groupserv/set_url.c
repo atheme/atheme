@@ -50,7 +50,14 @@ gs_cmd_set_url(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("The URL of \2%s\2 has been set to \2%s\2."), parv[0], url);
 }
 
-static struct command gs_set_url = { "URL", N_("Sets the group URL."), AC_AUTHENTICATED, 2, gs_cmd_set_url, { .path = "groupserv/set_url" } };
+static struct command gs_set_url = {
+	.name           = "URL",
+	.desc           = N_("Sets the group URL."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &gs_cmd_set_url,
+	.help           = { .path = "groupserv/set_url" },
+};
 
 static void
 mod_init(struct module *const restrict m)

@@ -235,7 +235,14 @@ ns_cmd_badmail(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_badmail = { "BADMAIL", N_("Disallows registrations from certain email addresses."), PRIV_USER_ADMIN, 3, ns_cmd_badmail, { .path = "nickserv/badmail" } };
+static struct command ns_badmail = {
+	.name           = "BADMAIL",
+	.desc           = N_("Disallows registrations from certain email addresses."),
+	.access         = PRIV_USER_ADMIN,
+	.maxparc        = 3,
+	.cmd            = &ns_cmd_badmail,
+	.help           = { .path = "nickserv/badmail" },
+};
 
 static void
 mod_init(struct module *const restrict m)

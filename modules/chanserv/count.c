@@ -104,7 +104,14 @@ cs_cmd_count(struct sourceinfo *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_GET, "COUNT: \2%s\2", mc->name);
 }
 
-static struct command cs_count = { "COUNT", N_("Shows number of entries in access lists."), AC_NONE, 1, cs_cmd_count, { .path = "cservice/count" } };
+static struct command cs_count = {
+	.name           = "COUNT",
+	.desc           = N_("Shows number of entries in access lists."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &cs_cmd_count,
+	.help           = { .path = "cservice/count" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -222,7 +222,14 @@ ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_sendpass = { "SENDPASS", N_("Email registration passwords."), PRIV_USER_SENDPASS, 2, ns_cmd_sendpass, { .path = "nickserv/sendpass" } };
+static struct command ns_sendpass = {
+	.name           = "SENDPASS",
+	.desc           = N_("Email registration passwords."),
+	.access         = PRIV_USER_SENDPASS,
+	.maxparc        = 2,
+	.cmd            = &ns_cmd_sendpass,
+	.help           = { .path = "nickserv/sendpass" },
+};
 
 static void
 mod_init(struct module *const restrict m)

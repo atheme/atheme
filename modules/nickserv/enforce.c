@@ -612,9 +612,32 @@ idcheck_foreach_cb(struct myentity *mt, void *privdata)
 	return 0;
 }
 
-static struct command ns_set_enforce = { "ENFORCE", N_("Enables or disables automatic protection of a nickname."), AC_NONE, 1, ns_cmd_set_enforce, { .path = "nickserv/set_enforce" } };
-static struct command ns_release = { "RELEASE", N_("Releases a services enforcer."), AC_NONE, 2, ns_cmd_release, { .path = "nickserv/release" } };
-static struct command ns_regain = { "REGAIN", N_("Regain usage of a nickname."), AC_NONE, 2, ns_cmd_regain, { .path = "nickserv/regain" } };
+static struct command ns_set_enforce = {
+	.name           = "ENFORCE",
+	.desc           = N_("Enables or disables automatic protection of a nickname."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &ns_cmd_set_enforce,
+	.help           = { .path = "nickserv/set_enforce" },
+};
+
+static struct command ns_release = {
+	.name           = "RELEASE",
+	.desc           = N_("Releases a services enforcer."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &ns_cmd_release,
+	.help           = { .path = "nickserv/release" },
+};
+
+static struct command ns_regain = {
+	.name           = "REGAIN",
+	.desc           = N_("Regain usage of a nickname."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &ns_cmd_regain,
+	.help           = { .path = "nickserv/regain" },
+};
 
 static void
 mod_init(struct module *const restrict m)

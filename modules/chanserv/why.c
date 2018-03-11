@@ -140,7 +140,14 @@ cs_cmd_why(struct sourceinfo *si, int parc, char *parv[])
 				u->nick, mc->name);
 }
 
-static struct command cs_why = { "WHY", N_("Explains channel access logic."), AC_NONE, 2, cs_cmd_why, { .path = "cservice/why" } };
+static struct command cs_why = {
+	.name           = "WHY",
+	.desc           = N_("Explains channel access logic."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_why,
+	.help           = { .path = "cservice/why" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

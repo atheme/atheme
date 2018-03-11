@@ -338,9 +338,32 @@ cs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_GET, "WAITING");
 }
 
-static struct command cs_activate = { "ACTIVATE", N_("Activates a pending registration"), PRIV_CHAN_ADMIN, 2, cs_cmd_activate, { .path = "cservice/activate" } };
-static struct command cs_reject   = { "REJECT", N_("Rejects a pending registration"), PRIV_CHAN_ADMIN, 2, cs_cmd_reject, { .path = "cservice/reject" } };
-static struct command cs_waiting  = { "WAITING", N_("View pending registrations"), PRIV_CHAN_ADMIN, 1, cs_cmd_waiting, { .path = "cservice/waiting" } };
+static struct command cs_activate = {
+	.name           = "ACTIVATE",
+	.desc           = N_("Activates a pending registration"),
+	.access         = PRIV_CHAN_ADMIN,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_activate,
+	.help           = { .path = "cservice/activate" },
+};
+
+static struct command cs_reject = {
+	.name           = "REJECT",
+	.desc           = N_("Rejects a pending registration"),
+	.access         = PRIV_CHAN_ADMIN,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_reject,
+	.help           = { .path = "cservice/reject" },
+};
+
+static struct command cs_waiting = {
+	.name           = "WAITING",
+	.desc           = N_("View pending registrations"),
+	.access         = PRIV_CHAN_ADMIN,
+	.maxparc        = 1,
+	.cmd            = &cs_cmd_waiting,
+	.help           = { .path = "cservice/waiting" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

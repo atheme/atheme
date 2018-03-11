@@ -55,7 +55,14 @@ os_cmd_modunload(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command os_modunload = { "MODUNLOAD", N_("Unloads a module."), PRIV_ADMIN, 20, os_cmd_modunload, { .path = "oservice/modunload" } };
+static struct command os_modunload = {
+	.name           = "MODUNLOAD",
+	.desc           = N_("Unloads a module."),
+	.access         = PRIV_ADMIN,
+	.maxparc        = 20,
+	.cmd            = &os_cmd_modunload,
+	.help           = { .path = "oservice/modunload" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -65,7 +65,14 @@ gs_cmd_set_public(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command gs_set_public = { "PUBLIC", N_("Sets the group as public."), AC_AUTHENTICATED, 2, gs_cmd_set_public, { .path = "groupserv/set_public" } };
+static struct command gs_set_public = {
+	.name           = "PUBLIC",
+	.desc           = N_("Sets the group as public."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &gs_cmd_set_public,
+	.help           = { .path = "groupserv/set_public" },
+};
 
 static void
 mod_init(struct module *const restrict m)

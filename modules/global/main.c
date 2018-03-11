@@ -184,8 +184,23 @@ gs_cmd_global(struct sourceinfo *si, const int parc, char *parv[])
 		"to send message, \2GLOBAL CLEAR\2 to delete the pending message, " "\2GLOBAL LIST\2 to preview what will be sent, " "or \2GLOBAL\2 to store additional lines.", MOWGLI_LIST_LENGTH(&globlist));
 }
 
-static struct command gs_help = { "HELP", N_("Displays contextual help information."), PRIV_GLOBAL, 1, gs_cmd_help, { .path = "help" } };
-static struct command gs_global = { "GLOBAL", N_("Sends a global notice."), PRIV_GLOBAL, 1, gs_cmd_global, { .path = "gservice/global" } };
+static struct command gs_help = {
+	.name           = "HELP",
+	.desc           = N_("Displays contextual help information."),
+	.access         = PRIV_GLOBAL,
+	.maxparc        = 1,
+	.cmd            = &gs_cmd_help,
+	.help           = { .path = "help" },
+};
+
+static struct command gs_global = {
+	.name           = "GLOBAL",
+	.desc           = N_("Sends a global notice."),
+	.access         = PRIV_GLOBAL,
+	.maxparc        = 1,
+	.cmd            = &gs_cmd_global,
+	.help           = { .path = "gservice/global" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

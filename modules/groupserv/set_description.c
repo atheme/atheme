@@ -50,7 +50,14 @@ gs_cmd_set_description(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("The description of \2%s\2 has been set to \2%s\2."), parv[0], desc);
 }
 
-static struct command gs_set_description = { "DESCRIPTION", N_("Sets the group description."), AC_AUTHENTICATED, 2, gs_cmd_set_description, { .path = "groupserv/set_description" } };
+static struct command gs_set_description = {
+	.name           = "DESCRIPTION",
+	.desc           = N_("Sets the group description."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &gs_cmd_set_description,
+	.help           = { .path = "groupserv/set_description" },
+};
 
 static void
 mod_init(struct module *const restrict m)

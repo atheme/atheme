@@ -165,7 +165,14 @@ cs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command cs_register = { "REGISTER", N_("Registers a channel."), AC_AUTHENTICATED, 3, cs_cmd_register, { .path = "cservice/register" } };
+static struct command cs_register = {
+	.name           = "REGISTER",
+	.desc           = N_("Registers a channel."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 3,
+	.cmd            = &cs_cmd_register,
+	.help           = { .path = "cservice/register" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

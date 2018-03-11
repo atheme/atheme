@@ -102,7 +102,14 @@ os_cmd_rakill(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "RAKILL: \2%s\2 (reason: \2%s\2) (\2%d\2 matches)", pattern, reason, matches);
 }
 
-static struct command os_rakill = { "RAKILL", N_("Sets a group of AKILLs against users matching a specific regex pattern."), PRIV_MASS_AKILL, 1, os_cmd_rakill, { .path = "oservice/rakill" } };
+static struct command os_rakill = {
+	.name           = "RAKILL",
+	.desc           = N_("Sets a group of AKILLs against users matching a specific regex pattern."),
+	.access         = PRIV_MASS_AKILL,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_rakill,
+	.help           = { .path = "oservice/rakill" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

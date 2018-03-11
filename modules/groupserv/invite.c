@@ -82,7 +82,14 @@ gs_cmd_invite(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%s\2 has been invited to \2%s\2"), user, group);
 }
 
-static struct command gs_invite = { "INVITE", N_("Invites a user to a group."), AC_AUTHENTICATED, 2, gs_cmd_invite, { .path = "groupserv/invite" } };
+static struct command gs_invite = {
+	.name           = "INVITE",
+	.desc           = N_("Invites a user to a group."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &gs_cmd_invite,
+	.help           = { .path = "groupserv/invite" },
+};
 
 static void
 mod_init(struct module *const restrict m)

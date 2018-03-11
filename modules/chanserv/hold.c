@@ -68,7 +68,14 @@ cs_cmd_hold(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command cs_hold = { "HOLD", N_("Prevents a channel from expiring."), PRIV_HOLD, 2, cs_cmd_hold, { .path = "cservice/hold" } };
+static struct command cs_hold = {
+	.name           = "HOLD",
+	.desc           = N_("Prevents a channel from expiring."),
+	.access         = PRIV_HOLD,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_hold,
+	.help           = { .path = "cservice/hold" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

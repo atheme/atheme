@@ -48,7 +48,14 @@ hs_cmd_group(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("All vhosts in the group \2%s\2 have been set to \2%s\2."), entity(si->smu)->name, buf);
 }
 
-static struct command hs_group = { "GROUP", N_("Syncs the vhost for all nicks in a group."), AC_AUTHENTICATED, 1, hs_cmd_group, { .path = "hostserv/group" } };
+static struct command hs_group = {
+	.name           = "GROUP",
+	.desc           = N_("Syncs the vhost for all nicks in a group."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 1,
+	.cmd            = &hs_cmd_group,
+	.help           = { .path = "hostserv/group" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

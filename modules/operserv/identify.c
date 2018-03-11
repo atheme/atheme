@@ -65,8 +65,23 @@ os_cmd_identify(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "IDENTIFY");
 }
 
-static struct command os_identify = { "IDENTIFY", N_("Authenticate for services operator privileges."), AC_AUTHENTICATED, 1, os_cmd_identify, { .path = "oservice/identify" } };
-static struct command os_id = { "ID", N_("Alias for IDENTIFY"), AC_AUTHENTICATED, 1, os_cmd_identify, { .path = "oservice/identify" } };
+static struct command os_identify = {
+	.name           = "IDENTIFY",
+	.desc           = N_("Authenticate for services operator privileges."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_identify,
+	.help           = { .path = "oservice/identify" },
+};
+
+static struct command os_id = {
+	.name           = "ID",
+	.desc           = N_("Alias for IDENTIFY"),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_identify,
+	.help           = { .path = "oservice/identify" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

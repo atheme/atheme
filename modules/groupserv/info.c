@@ -92,7 +92,14 @@ gs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_GET, "INFO: \2%s\2", parv[0]);
 }
 
-static struct command gs_info = { "INFO", N_("Displays information about registered groups."), AC_NONE, 2, gs_cmd_info, { .path = "groupserv/info" } };
+static struct command gs_info = {
+	.name           = "INFO",
+	.desc           = N_("Displays information about registered groups."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &gs_cmd_info,
+	.help           = { .path = "groupserv/info" },
+};
 
 static void
 mod_init(struct module *const restrict m)

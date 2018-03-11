@@ -133,7 +133,14 @@ cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("Cloned \2%s\2 to \2%s\2."), source, target);
 }
 
-static struct command cs_clone = { "CLONE", "Clones a channel.", AC_NONE, 2, cs_cmd_clone, { .path = "cservice/clone" } };
+static struct command cs_clone = {
+	.name           = "CLONE",
+	.desc           = N_("Clones a channel."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_clone,
+	.help           = { .path = "cservice/clone" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

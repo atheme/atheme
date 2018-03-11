@@ -507,11 +507,50 @@ os_cmd_akill_sync(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("AKILL list synchronized to servers."));
 }
 
-static struct command os_akill = { "AKILL", N_("Manages network bans."), PRIV_AKILL, 3, os_cmd_akill, { .path = "oservice/akill" } };
-static struct command os_akill_add = { "ADD", N_("Adds a network ban"), AC_NONE, 2, os_cmd_akill_add, { .path = "" } };
-static struct command os_akill_del = { "DEL", N_("Deletes a network ban"), AC_NONE, 1, os_cmd_akill_del, { .path = "" } };
-static struct command os_akill_list = { "LIST", N_("Lists all network bans"), AC_NONE, 1, os_cmd_akill_list, { .path = "" } };
-static struct command os_akill_sync = { "SYNC", N_("Synchronises network bans to servers"), AC_NONE, 0, os_cmd_akill_sync, { .path = "" } };
+static struct command os_akill = {
+	.name           = "AKILL",
+	.desc           = N_("Manages network bans."),
+	.access         = PRIV_AKILL,
+	.maxparc        = 3,
+	.cmd            = &os_cmd_akill,
+	.help           = { .path = "oservice/akill" },
+};
+
+static struct command os_akill_add = {
+	.name           = "ADD",
+	.desc           = N_("Adds a network ban"),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &os_cmd_akill_add,
+	.help           = { .path = "" },
+};
+
+static struct command os_akill_del = {
+	.name           = "DEL",
+	.desc           = N_("Deletes a network ban"),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_akill_del,
+	.help           = { .path = "" },
+};
+
+static struct command os_akill_list = {
+	.name           = "LIST",
+	.desc           = N_("Lists all network bans"),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_akill_list,
+	.help           = { .path = "" },
+};
+
+static struct command os_akill_sync = {
+	.name           = "SYNC",
+	.desc           = N_("Synchronises network bans to servers"),
+	.access         = AC_NONE,
+	.maxparc        = 0,
+	.cmd            = &os_cmd_akill_sync,
+	.help           = { .path = "" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

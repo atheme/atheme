@@ -80,7 +80,14 @@ cs_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command cs_mark = { "MARK", N_("Adds a note to a channel."), PRIV_MARK, 3, cs_cmd_mark, { .path = "cservice/mark" } };
+static struct command cs_mark = {
+	.name           = "MARK",
+	.desc           = N_("Adds a note to a channel."),
+	.access         = PRIV_MARK,
+	.maxparc        = 3,
+	.cmd            = &cs_cmd_mark,
+	.help           = { .path = "cservice/mark" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

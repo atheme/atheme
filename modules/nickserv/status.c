@@ -101,8 +101,23 @@ ns_cmd_status(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("You are an IRC operator."));
 }
 
-static struct command ns_status = { "STATUS", N_("Displays session information."), AC_NONE, 0, ns_cmd_status, { .path = "nickserv/status" } };
-static struct command ns_acc = { "ACC", N_("Displays parsable session information."), AC_NONE, 2, ns_cmd_acc, { .path = "nickserv/acc" } };
+static struct command ns_status = {
+	.name           = "STATUS",
+	.desc           = N_("Displays session information."),
+	.access         = AC_NONE,
+	.maxparc        = 0,
+	.cmd            = &ns_cmd_status,
+	.help           = { .path = "nickserv/status" },
+};
+
+static struct command ns_acc = {
+	.name           = "ACC",
+	.desc           = N_("Displays parsable session information."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &ns_cmd_acc,
+	.help           = { .path = "nickserv/acc" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -1022,10 +1022,41 @@ bs_part(hook_channel_joinpart_t *hdata)
 	}
 }
 
-static struct command bs_bot = { "BOT", "Maintains network bot list.", PRIV_USER_ADMIN, 6, bs_cmd_bot, { .path = "botserv/bot" } };
-static struct command bs_assign = { "ASSIGN", "Assigns a bot to a channel.", AC_NONE, 2, bs_cmd_assign, { .path = "botserv/assign" } };
-static struct command bs_unassign = { "UNASSIGN", "Unassigns a bot from a channel.", AC_NONE, 1, bs_cmd_unassign, { .path = "botserv/unassign" } };
-static struct command bs_botlist = { "BOTLIST", "Lists available bots.", AC_NONE, 0, bs_cmd_botlist, { .path = "botserv/botlist" } };
+static struct command bs_bot = {
+	.name           = "BOT",
+	.desc           = N_("Maintains network bot list."),
+	.access         = PRIV_USER_ADMIN,
+	.maxparc        = 6,
+	.cmd            = &bs_cmd_bot,
+	.help           = { .path = "botserv/bot" },
+};
+
+static struct command bs_assign = {
+	.name           = "ASSIGN",
+	.desc           = N_("Assigns a bot to a channel."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &bs_cmd_assign,
+	.help           = { .path = "botserv/assign" },
+};
+
+static struct command bs_unassign = {
+	.name           = "UNASSIGN",
+	.desc           = N_("Unassigns a bot from a channel."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &bs_cmd_unassign,
+	.help           = { .path = "botserv/unassign" },
+};
+
+static struct command bs_botlist = {
+	.name           = "BOTLIST",
+	.desc           = N_("Lists available bots."),
+	.access         = AC_NONE,
+	.maxparc        = 0,
+	.cmd            = &bs_cmd_botlist,
+	.help           = { .path = "botserv/botlist" },
+};
 
 static void
 mod_init(struct module *const restrict m)

@@ -459,8 +459,23 @@ cs_cmd_unquiet(struct sourceinfo *si, int parc, char *parv[])
 	free(targetlist);
 }
 
-static struct command cs_quiet = { "QUIET", N_("Sets a quiet on a channel."), AC_AUTHENTICATED, 2, cs_cmd_quiet, { .path = "cservice/quiet" } };
-static struct command cs_unquiet = { "UNQUIET", N_("Removes a quiet on a channel."), AC_AUTHENTICATED, 2, cs_cmd_unquiet, { .path = "cservice/unquiet" } };
+static struct command cs_quiet = {
+	.name           = "QUIET",
+	.desc           = N_("Sets a quiet on a channel."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_quiet,
+	.help           = { .path = "cservice/quiet" },
+};
+
+static struct command cs_unquiet = {
+	.name           = "UNQUIET",
+	.desc           = N_("Removes a quiet on a channel."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_unquiet,
+	.help           = { .path = "cservice/unquiet" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

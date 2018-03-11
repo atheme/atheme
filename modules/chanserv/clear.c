@@ -65,7 +65,14 @@ cs_cmd_clear(struct sourceinfo *si, int parc, char *parv[])
 	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
 
-static struct command cs_clear = { "CLEAR", N_("Channel removal toolkit."), AC_NONE, 3, cs_cmd_clear, { .func = cs_help_clear } };
+static struct command cs_clear = {
+	.name           = "CLEAR",
+	.desc           = N_("Channel removal toolkit."),
+	.access         = AC_NONE,
+	.maxparc        = 3,
+	.cmd            = &cs_cmd_clear,
+	.help           = { .func = cs_help_clear },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

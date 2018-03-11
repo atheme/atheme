@@ -190,7 +190,14 @@ os_cmd_specs(struct sourceinfo *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_ADMIN, "SPECS:OPERCLASS: \2%s\2", cl->name);
 }
 
-static struct command os_specs = { "SPECS", N_("Shows oper flags."), AC_NONE, 2, os_cmd_specs, { .path = "oservice/specs" } };
+static struct command os_specs = {
+	.name           = "SPECS",
+	.desc           = N_("Shows oper flags."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &os_cmd_specs,
+	.help           = { .path = "oservice/specs" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

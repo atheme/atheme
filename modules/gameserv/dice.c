@@ -589,8 +589,23 @@ command_calc(struct sourceinfo *si, int parc, char *parv[])
 			break;
 }
 
-static struct command cmd_dice = { "ROLL", N_("Rolls one or more dice."), AC_NONE, 3, command_dice, {.path = "gameserv/roll"} };
-static struct command cmd_calc = { "CALC", N_("Calculate stuff."), AC_NONE, 3, command_calc, {.path = "gameserv/calc"} };
+static struct command cmd_dice = {
+	.name           = "ROLL",
+	.desc           = N_("Rolls one or more dice."),
+	.access         = AC_NONE,
+	.maxparc        = 3,
+	.cmd            = &command_dice,
+	.help           = { .path = "gameserv/roll"},
+};
+
+static struct command cmd_calc = {
+	.name           = "CALC",
+	.desc           = N_("Calculate stuff."),
+	.access         = AC_NONE,
+	.maxparc        = 3,
+	.cmd            = &command_calc,
+	.help           = { .path = "gameserv/calc"},
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

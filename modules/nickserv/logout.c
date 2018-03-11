@@ -95,7 +95,14 @@ ns_cmd_logout(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_logout = { "LOGOUT", N_("Logs your services session out."), AC_NONE, 2, ns_cmd_logout, { .path = "nickserv/logout" } };
+static struct command ns_logout = {
+	.name           = "LOGOUT",
+	.desc           = N_("Logs your services session out."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &ns_cmd_logout,
+	.help           = { .path = "nickserv/logout" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -146,7 +146,14 @@ cs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 	verbose(mc, _("\2%s\2 forced flags change \2%s\2 on \2%s\2."), get_source_name(si), flagstr, target);
 }
 
-static struct command cs_fflags = { "FFLAGS", N_("Forces a flags change on a channel."), PRIV_CHAN_ADMIN, 3, cs_cmd_fflags, { .path = "cservice/fflags" } };
+static struct command cs_fflags = {
+	.name           = "FFLAGS",
+	.desc           = N_("Forces a flags change on a channel."),
+	.access         = PRIV_CHAN_ADMIN,
+	.maxparc        = 3,
+	.cmd            = &cs_cmd_fflags,
+	.help           = { .path = "cservice/fflags" },
+};
 
 static void
 mod_init(struct module *const restrict m)

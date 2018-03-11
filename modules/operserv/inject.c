@@ -40,7 +40,14 @@ os_cmd_inject(struct sourceinfo *si, int parc, char *parv[])
 	injecting = false;
 }
 
-static struct command os_inject = { "INJECT", N_("Fakes data from the uplink (debugging tool)."), PRIV_ADMIN, 1, os_cmd_inject, { .path = "oservice/inject" } };
+static struct command os_inject = {
+	.name           = "INJECT",
+	.desc           = N_("Fakes data from the uplink (debugging tool)."),
+	.access         = PRIV_ADMIN,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_inject,
+	.help           = { .path = "oservice/inject" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

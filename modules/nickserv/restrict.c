@@ -126,7 +126,14 @@ ns_cmd_restrict(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_restrict = { "RESTRICT", N_("Restrict a user from using certain commands."), PRIV_MARK, 3, ns_cmd_restrict, { .path = "nickserv/restrict" } };
+static struct command ns_restrict = {
+	.name           = "RESTRICT",
+	.desc           = N_("Restrict a user from using certain commands."),
+	.access         = PRIV_MARK,
+	.maxparc        = 3,
+	.cmd            = &ns_cmd_restrict,
+	.help           = { .path = "nickserv/restrict" },
+};
 
 static void
 mod_init(struct module *const restrict m)

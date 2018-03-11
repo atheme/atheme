@@ -147,7 +147,14 @@ cs_cmd_close(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command cs_close = { "CLOSE", N_("Closes a channel."), PRIV_CHAN_ADMIN, 3, cs_cmd_close , { .path = "cservice/close" }};
+static struct command cs_close = {
+	.name           = "CLOSE",
+	.desc           = N_("Closes a channel."),
+	.access         = PRIV_CHAN_ADMIN,
+	.maxparc        = 3,
+	.cmd            = &cs_cmd_close ,
+	.help           = { .path = "cservice/close" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

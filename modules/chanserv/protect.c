@@ -125,8 +125,23 @@ cs_cmd_deprotect(struct sourceinfo *si, int parc, char *parv[])
 	cmd_protect(si, false, parc, parv);
 }
 
-static struct command cs_protect = { "PROTECT", N_("Gives the channel protection flag to a user."), AC_NONE, 2, cs_cmd_protect, { .path = "cservice/protect" } };
-static struct command cs_deprotect = { "DEPROTECT", N_("Removes channel protection flag from a user."), AC_NONE, 2, cs_cmd_deprotect, { .path = "cservice/protect" } };
+static struct command cs_protect = {
+	.name           = "PROTECT",
+	.desc           = N_("Gives the channel protection flag to a user."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_protect,
+	.help           = { .path = "cservice/protect" },
+};
+
+static struct command cs_deprotect = {
+	.name           = "DEPROTECT",
+	.desc           = N_("Removes channel protection flag from a user."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_deprotect,
+	.help           = { .path = "cservice/protect" },
+};
 
 static void
 mod_init(struct module *const restrict m)

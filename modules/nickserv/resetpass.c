@@ -72,7 +72,14 @@ ns_cmd_resetpass(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_resetpass = { "RESETPASS", N_("Resets an account password."), PRIV_USER_ADMIN, 1, ns_cmd_resetpass, { .path = "nickserv/resetpass" } };
+static struct command ns_resetpass = {
+	.name           = "RESETPASS",
+	.desc           = N_("Resets an account password."),
+	.access         = PRIV_USER_ADMIN,
+	.maxparc        = 1,
+	.cmd            = &ns_cmd_resetpass,
+	.help           = { .path = "nickserv/resetpass" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

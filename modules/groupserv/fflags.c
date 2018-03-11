@@ -101,7 +101,14 @@ gs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "FFLAGS: \2%s\2 now has flags \2%s\2 on \2%s\2", mt->name, gflags_tostr(ga_flags,  ga->flags), entity(mg)->name);
 }
 
-static struct command gs_fflags = { "FFLAGS", N_("Forces a flag change on a user in a group."), PRIV_GROUP_ADMIN, 3, gs_cmd_fflags, { .path = "groupserv/fflags" } };
+static struct command gs_fflags = {
+	.name           = "FFLAGS",
+	.desc           = N_("Forces a flag change on a user in a group."),
+	.access         = PRIV_GROUP_ADMIN,
+	.maxparc        = 3,
+	.cmd            = &gs_cmd_fflags,
+	.help           = { .path = "groupserv/fflags" },
+};
 
 static void
 mod_init(struct module *const restrict m)

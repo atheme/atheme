@@ -26,7 +26,14 @@ os_cmd_uptime(struct sourceinfo *si, int parc, char *parv[])
         command_success_nodata(si, _("Users currently online: %d"), cnt.user - me.me->users);
 }
 
-static struct command os_uptime = { "UPTIME", N_("Shows services uptime and the number of registered nicks and channels."), PRIV_SERVER_AUSPEX, 1, os_cmd_uptime, { .path = "oservice/uptime" } };
+static struct command os_uptime = {
+	.name           = "UPTIME",
+	.desc           = N_("Shows services uptime and the number of registered nicks and channels."),
+	.access         = PRIV_SERVER_AUSPEX,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_uptime,
+	.help           = { .path = "oservice/uptime" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -62,7 +62,14 @@ ns_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_set = { "SET", N_("Sets various control flags."), AC_AUTHENTICATED, 2, ns_cmd_set, { .func = ns_help_set } };
+static struct command ns_set = {
+	.name           = "SET",
+	.desc           = N_("Sets various control flags."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &ns_cmd_set,
+	.help           = { .func = ns_help_set },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

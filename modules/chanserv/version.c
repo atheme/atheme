@@ -10,7 +10,14 @@ cs_cmd_version(struct sourceinfo *si, int parc, char *parv[])
         return;
 }
 
-static struct command cs_version = { "VERSION", N_("Displays version information of the services."), AC_NONE, 0, cs_cmd_version, { .path = "" } };
+static struct command cs_version = {
+	.name           = "VERSION",
+	.desc           = N_("Displays version information of the services."),
+	.access         = AC_NONE,
+	.maxparc        = 0,
+	.cmd            = &cs_cmd_version,
+	.help           = { .path = "" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

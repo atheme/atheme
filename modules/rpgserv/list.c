@@ -32,7 +32,14 @@ rs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_GET, "RPGSERV:LIST");
 }
 
-static struct command rs_list = { "LIST", N_("Lists games."), AC_NONE, 0, rs_cmd_list, { .path = "rpgserv/list" } };
+static struct command rs_list = {
+	.name           = "LIST",
+	.desc           = N_("Lists games."),
+	.access         = AC_NONE,
+	.maxparc        = 0,
+	.cmd            = &rs_cmd_list,
+	.help           = { .path = "rpgserv/list" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

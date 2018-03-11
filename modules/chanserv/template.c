@@ -380,7 +380,14 @@ cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command cs_flags = { "TEMPLATE", N_("Manipulates predefined sets of flags."), AC_NONE, 3, cs_cmd_template, { .path = "cservice/template" } };
+static struct command cs_flags = {
+	.name           = "TEMPLATE",
+	.desc           = N_("Manipulates predefined sets of flags."),
+	.access         = AC_NONE,
+	.maxparc        = 3,
+	.cmd            = &cs_cmd_template,
+	.help           = { .path = "cservice/template" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

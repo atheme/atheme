@@ -112,7 +112,14 @@ ns_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_mark = { "MARK", N_("Adds a note to a user."), PRIV_MARK, 3, ns_cmd_mark, { .path = "nickserv/mark" } };
+static struct command ns_mark = {
+	.name           = "MARK",
+	.desc           = N_("Adds a note to a user."),
+	.access         = PRIV_MARK,
+	.maxparc        = 3,
+	.cmd            = &ns_cmd_mark,
+	.help           = { .path = "nickserv/mark" },
+};
 
 static void
 mod_init(struct module *const restrict m)

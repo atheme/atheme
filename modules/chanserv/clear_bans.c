@@ -84,7 +84,14 @@ cs_cmd_clear_bans(struct sourceinfo *si, int parc, char *parv[])
 			item, parv[0], hits);
 }
 
-static struct command cs_clear_bans = { "BANS", N_("Clears bans or other lists of a channel."), AC_NONE, 2, cs_cmd_clear_bans, { .path = "cservice/clear_bans" } };
+static struct command cs_clear_bans = {
+	.name           = "BANS",
+	.desc           = N_("Clears bans or other lists of a channel."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_clear_bans,
+	.help           = { .path = "cservice/clear_bans" },
+};
 
 static void
 mod_init(struct module *const restrict m)

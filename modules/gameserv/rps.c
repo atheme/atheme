@@ -24,7 +24,14 @@ command_rps(struct sourceinfo *si, int parc, char *parv[])
 	gs_command_report(si, "%s", _(rps_responses[rand() % 3]));
 }
 
-static struct command cmd_rps = { "RPS", N_("Rock Paper Scissors."), AC_NONE, 2, command_rps, { .path = "gameserv/rps" } };
+static struct command cmd_rps = {
+	.name           = "RPS",
+	.desc           = N_("Rock Paper Scissors."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &command_rps,
+	.help           = { .path = "gameserv/rps" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

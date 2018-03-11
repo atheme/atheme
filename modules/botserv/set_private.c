@@ -65,7 +65,14 @@ bs_cmd_set_private(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command bs_set_private = { "PRIVATE", N_("Prevent a bot from being assigned by non IRC operators."), PRIV_CHAN_ADMIN, 2, bs_cmd_set_private, { .path = "botserv/set_private" } };
+static struct command bs_set_private = {
+	.name           = "PRIVATE",
+	.desc           = N_("Prevent a bot from being assigned by non IRC operators."),
+	.access         = PRIV_CHAN_ADMIN,
+	.maxparc        = 2,
+	.cmd            = &bs_cmd_set_private,
+	.help           = { .path = "botserv/set_private" },
+};
 
 static void
 mod_init(struct module *const restrict m)

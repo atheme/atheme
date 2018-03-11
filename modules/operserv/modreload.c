@@ -164,7 +164,14 @@ os_cmd_modreload(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command os_modreload = { "MODRELOAD", N_("Reloads a module."), PRIV_ADMIN, 20, os_cmd_modreload, { .path = "oservice/modreload" } };
+static struct command os_modreload = {
+	.name           = "MODRELOAD",
+	.desc           = N_("Reloads a module."),
+	.access         = PRIV_ADMIN,
+	.maxparc        = 20,
+	.cmd            = &os_cmd_modreload,
+	.help           = { .path = "oservice/modreload" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -189,7 +189,14 @@ os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[])
 						    N_("\2%d\2 matches for pattern \2%s\2"), matches), matches, pattern);
 }
 
-static struct command os_greplog = { "GREPLOG", N_("Searches through the logs."), PRIV_CHAN_AUSPEX, 3, os_cmd_greplog, { .path = "oservice/greplog" } };
+static struct command os_greplog = {
+	.name           = "GREPLOG",
+	.desc           = N_("Searches through the logs."),
+	.access         = PRIV_CHAN_AUSPEX,
+	.maxparc        = 3,
+	.cmd            = &os_cmd_greplog,
+	.help           = { .path = "oservice/greplog" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -53,7 +53,14 @@ helpserv_cmd_helpme(struct sourceinfo *si, int parc, char *parv[])
         return;
 }
 
-static struct command helpserv_helpme = { "HELPME", N_("Request help from network staff."), AC_NONE, 1, helpserv_cmd_helpme, { .path = "helpserv/helpme" } };
+static struct command helpserv_helpme = {
+	.name           = "HELPME",
+	.desc           = N_("Request help from network staff."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &helpserv_cmd_helpme,
+	.help           = { .path = "helpserv/helpme" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -73,7 +73,14 @@ ns_cmd_set_noop(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_set_noop = { "NOOP", N_("Prevents services from setting modes upon you automatically."), AC_NONE, 1, ns_cmd_set_noop, { .path = "nickserv/set_noop" } };
+static struct command ns_set_noop = {
+	.name           = "NOOP",
+	.desc           = N_("Prevents services from setting modes upon you automatically."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &ns_cmd_set_noop,
+	.help           = { .path = "nickserv/set_noop" },
+};
 
 static void
 mod_init(struct module *const restrict m)

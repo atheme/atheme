@@ -234,9 +234,32 @@ command_df(struct sourceinfo *si, int parc, char *parv[])
 	gs_command_report(si, _("Result: %s"), buf);
 }
 
-static struct command cmd_wod = { "WOD", N_("WOD-style dice generation."), AC_NONE, 7, command_wod, { .path = "gameserv/roll" } };
-static struct command cmd_nwod = { "NWOD", N_("New WOD-style dice generation."), AC_NONE, 7, command_nwod, { .path = "gameserv/roll" } };
-static struct command cmd_df = { "DF", N_("Fudge-style dice generation."), AC_NONE, 2, command_df, { .path = "gameserv/roll" } };
+static struct command cmd_wod = {
+	.name           = "WOD",
+	.desc           = N_("WOD-style dice generation."),
+	.access         = AC_NONE,
+	.maxparc        = 7,
+	.cmd            = &command_wod,
+	.help           = { .path = "gameserv/roll" },
+};
+
+static struct command cmd_nwod = {
+	.name           = "NWOD",
+	.desc           = N_("New WOD-style dice generation."),
+	.access         = AC_NONE,
+	.maxparc        = 7,
+	.cmd            = &command_nwod,
+	.help           = { .path = "gameserv/roll" },
+};
+
+static struct command cmd_df = {
+	.name           = "DF",
+	.desc           = N_("Fudge-style dice generation."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &command_df,
+	.help           = { .path = "gameserv/roll" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

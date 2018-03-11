@@ -172,7 +172,14 @@ ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-static struct command ms_forward = { "FORWARD", N_(N_("Forwards a memo.")), AC_AUTHENTICATED, 2, ms_cmd_forward, { .path = "memoserv/forward" } };
+static struct command ms_forward = {
+	.name           = "FORWARD",
+	.desc           = N_("Forwards a memo."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &ms_cmd_forward,
+	.help           = { .path = "memoserv/forward" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

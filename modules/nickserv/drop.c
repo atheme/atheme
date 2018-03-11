@@ -189,33 +189,21 @@ cmd_ns_fdrop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_U
 }
 
 static struct command cmd_ns_drop = {
-
 	.name           = "DROP",
 	.desc           = N_("Drops an account registration."),
 	.access         = AC_NONE,
 	.maxparc        = 3,
 	.cmd            = &cmd_ns_drop_func,
-
-	.help           = {
-
-		.path   = "nickserv/drop",
-		.func   = NULL,
-	},
+	.help           = { .path = "nickserv/drop" },
 };
 
 static struct command cmd_ns_fdrop = {
-
 	.name           = "FDROP",
 	.desc           = N_("Forces dropping an account registration."),
 	.access         = PRIV_USER_ADMIN,
 	.maxparc        = 1,
 	.cmd            = &cmd_ns_fdrop_func,
-
-	.help           = {
-
-		.path   = "nickserv/fdrop",
-		.func   = NULL,
-	},
+	.help           = { .path = "nickserv/fdrop" },
 };
 
 static void

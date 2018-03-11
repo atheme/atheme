@@ -54,7 +54,14 @@ cs_cmd_set_url(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("The URL of \2%s\2 has been set to \2%s\2."), parv[0], url);
 }
 
-static struct command cs_set_url = { "URL", N_("Sets the channel URL."), AC_NONE, 2, cs_cmd_set_url, { .path = "cservice/set_url" } };
+static struct command cs_set_url = {
+	.name           = "URL",
+	.desc           = N_("Sets the channel URL."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_set_url,
+	.help           = { .path = "cservice/set_url" },
+};
 
 static void
 mod_init(struct module *const restrict m)

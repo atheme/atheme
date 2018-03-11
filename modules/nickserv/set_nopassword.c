@@ -79,7 +79,14 @@ ns_cmd_set_nopassword(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_set_nopassword = { "NOPASSWORD", N_("Allows you to disable any password-based authentication methods except for XMLRPC/JSONRPC."), AC_NONE, 1, ns_cmd_set_nopassword, { .path = "nickserv/set_nopassword" } };
+static struct command ns_set_nopassword = {
+	.name           = "NOPASSWORD",
+	.desc           = N_("Allows you to disable any password-based authentication methods except for XMLRPC/JSONRPC."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &ns_cmd_set_nopassword,
+	.help           = { .path = "nickserv/set_nopassword" },
+};
 
 static void
 mod_init(struct module *const restrict m)

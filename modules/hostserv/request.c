@@ -540,10 +540,41 @@ hs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_GET, "WAITING");
 }
 
-static struct command hs_request = { "REQUEST", N_("Requests new virtual hostname for current nick."), AC_AUTHENTICATED, 2, hs_cmd_request, { .path = "hostserv/request" } };
-static struct command hs_waiting = { "WAITING", N_("Lists vhosts currently waiting for activation."), PRIV_USER_VHOST, 1, hs_cmd_waiting, { .path = "hostserv/waiting" } };
-static struct command hs_reject = { "REJECT", N_("Reject the requested vhost for the given nick."), PRIV_USER_VHOST, 2, hs_cmd_reject, { .path = "hostserv/reject" } };
-static struct command hs_activate = { "ACTIVATE", N_("Activate the requested vhost for a given nick."), PRIV_USER_VHOST, 2, hs_cmd_activate, { .path = "hostserv/activate" } };
+static struct command hs_request = {
+	.name           = "REQUEST",
+	.desc           = N_("Requests new virtual hostname for current nick."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &hs_cmd_request,
+	.help           = { .path = "hostserv/request" },
+};
+
+static struct command hs_waiting = {
+	.name           = "WAITING",
+	.desc           = N_("Lists vhosts currently waiting for activation."),
+	.access         = PRIV_USER_VHOST,
+	.maxparc        = 1,
+	.cmd            = &hs_cmd_waiting,
+	.help           = { .path = "hostserv/waiting" },
+};
+
+static struct command hs_reject = {
+	.name           = "REJECT",
+	.desc           = N_("Reject the requested vhost for the given nick."),
+	.access         = PRIV_USER_VHOST,
+	.maxparc        = 2,
+	.cmd            = &hs_cmd_reject,
+	.help           = { .path = "hostserv/reject" },
+};
+
+static struct command hs_activate = {
+	.name           = "ACTIVATE",
+	.desc           = N_("Activate the requested vhost for a given nick."),
+	.access         = PRIV_USER_VHOST,
+	.maxparc        = 2,
+	.cmd            = &hs_cmd_activate,
+	.help           = { .path = "hostserv/activate" },
+};
 
 static void
 mod_init(struct module *const restrict m)

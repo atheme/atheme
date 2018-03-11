@@ -396,8 +396,23 @@ cs_cmd_set_nosync(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command cs_sync = { "SYNC", "Forces channel statuses to flags.", AC_NONE, 1, cs_cmd_sync, { .path = "cservice/sync" } };
-static struct command cs_set_nosync = { "NOSYNC", N_("Disables automatic channel ACL syncing."), AC_NONE, 2, cs_cmd_set_nosync, { .path = "cservice/set_nosync" } };
+static struct command cs_sync = {
+	.name           = "SYNC",
+	.desc           = N_("Forces channel statuses to flags."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &cs_cmd_sync,
+	.help           = { .path = "cservice/sync" },
+};
+
+static struct command cs_set_nosync = {
+	.name           = "NOSYNC",
+	.desc           = N_("Disables automatic channel ACL syncing."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_set_nosync,
+	.help           = { .path = "cservice/set_nosync" },
+};
 
 static void
 mod_init(struct module *const restrict m)

@@ -78,7 +78,14 @@ ns_cmd_set_emailmemos(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_set_emailmemos = { "EMAILMEMOS", N_("Forwards incoming memos to your e-mail address."), AC_NONE, 1, ns_cmd_set_emailmemos, { .path = "nickserv/set_emailmemos" } };
+static struct command ns_set_emailmemos = {
+	.name           = "EMAILMEMOS",
+	.desc           = N_("Forwards incoming memos to your e-mail address."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &ns_cmd_set_emailmemos,
+	.help           = { .path = "nickserv/set_emailmemos" },
+};
 
 static void
 mod_init(struct module *const restrict m)

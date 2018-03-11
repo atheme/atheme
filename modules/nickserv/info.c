@@ -450,7 +450,14 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_GET, "INFO: \2%s\2", mn != NULL ? mn->nick : entity(mu)->name);
 }
 
-static struct command ns_info = { "INFO", N_("Displays information on registrations."), AC_NONE, 2, ns_cmd_info, { .path = "nickserv/info" } };
+static struct command ns_info = {
+	.name           = "INFO",
+	.desc           = N_("Displays information on registrations."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &ns_cmd_info,
+	.help           = { .path = "nickserv/info" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

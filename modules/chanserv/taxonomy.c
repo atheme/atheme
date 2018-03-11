@@ -56,7 +56,14 @@ cs_cmd_taxonomy(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("End of \2%s\2 taxonomy."), target);
 }
 
-static struct command cs_taxonomy = { "TAXONOMY", N_("Displays a channel's metadata."), AC_NONE, 1, cs_cmd_taxonomy, { .path = "cservice/taxonomy" } };
+static struct command cs_taxonomy = {
+	.name           = "TAXONOMY",
+	.desc           = N_("Displays a channel's metadata."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &cs_cmd_taxonomy,
+	.help           = { .path = "cservice/taxonomy" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

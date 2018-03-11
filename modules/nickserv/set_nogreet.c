@@ -72,7 +72,14 @@ ns_cmd_set_nogreet(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_set_nogreet = { "NOGREET", N_("Allows you to opt-out of channel entry messages."), AC_NONE, 1, ns_cmd_set_nogreet, { .path = "nickserv/set_nogreet" } };
+static struct command ns_set_nogreet = {
+	.name           = "NOGREET",
+	.desc           = N_("Allows you to opt-out of channel entry messages."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &ns_cmd_set_nogreet,
+	.help           = { .path = "nickserv/set_nogreet" },
+};
 
 static void
 mod_init(struct module *const restrict m)

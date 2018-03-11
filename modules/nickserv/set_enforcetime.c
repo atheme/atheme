@@ -55,7 +55,14 @@ ns_cmd_set_enforcetime(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_set_enforcetime = { "ENFORCETIME", N_("Amount of time it takes before nickname protection occurs."), AC_NONE, 1, ns_cmd_set_enforcetime, { .path = "nickserv/set_enforcetime" } };
+static struct command ns_set_enforcetime = {
+	.name           = "ENFORCETIME",
+	.desc           = N_("Amount of time it takes before nickname protection occurs."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &ns_cmd_set_enforcetime,
+	.help           = { .path = "nickserv/set_enforcetime" },
+};
 
 static void
 mod_init(struct module *const restrict m)

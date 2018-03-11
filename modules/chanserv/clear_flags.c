@@ -62,7 +62,14 @@ cs_cmd_clear_flags(struct sourceinfo *si, int parc, char *parv[])
 				get_source_name(si), changes);
 }
 
-static struct command cs_clear_flags = { "FLAGS", "Clears all channel flags.", AC_NONE, 2, cs_cmd_clear_flags, { .path = "cservice/clear_flags" } };
+static struct command cs_clear_flags = {
+	.name           = "FLAGS",
+	.desc           = N_("Clears all channel flags."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_clear_flags,
+	.help           = { .path = "cservice/clear_flags" },
+};
 
 static void
 mod_init(struct module *const restrict m)

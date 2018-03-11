@@ -74,7 +74,14 @@ cs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command cs_set_fantasy = { "FANTASY", N_("Allows or disallows in-channel commands."), AC_NONE, 2, cs_cmd_set_fantasy, { .path = "cservice/set_fantasy" } };
+static struct command cs_set_fantasy = {
+	.name           = "FANTASY",
+	.desc           = N_("Allows or disallows in-channel commands."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &cs_cmd_set_fantasy,
+	.help           = { .path = "cservice/set_fantasy" },
+};
 
 static void
 cs_set_fantasy_config_ready(void *unused)

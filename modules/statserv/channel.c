@@ -75,9 +75,32 @@ ss_cmd_channel_count(struct sourceinfo * si, int parc, char *parv[])
     command_success_nodata(si, "There are %u channels on the network.", mowgli_patricia_size(chanlist));
 }
 
-static struct command ss_channel = { "CHANNEL", N_("Obtain various information about a channel."), AC_NONE, 2, ss_cmd_channel, {.path = "statserv/channel"} };
-static struct command ss_channel_topic = { "TOPIC", N_("Obtain the topic for a given channel."), AC_NONE, 1, ss_cmd_channel_topic, {.path = ""} };
-static struct command ss_channel_count = { "COUNT", N_("Count the number of channels on the network."), AC_NONE, 1, ss_cmd_channel_count, {.path = ""}};
+static struct command ss_channel = {
+	.name           = "CHANNEL",
+	.desc           = N_("Obtain various information about a channel."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &ss_cmd_channel,
+	.help           = { .path = "statserv/channel"},
+};
+
+static struct command ss_channel_topic = {
+	.name           = "TOPIC",
+	.desc           = N_("Obtain the topic for a given channel."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &ss_cmd_channel_topic,
+	.help           = { .path = ""},
+};
+
+static struct command ss_channel_count = {
+	.name           = "COUNT",
+	.desc           = N_("Count the number of channels on the network."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &ss_cmd_channel_count,
+	.help           = { .path = ""},
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -150,7 +150,14 @@ os_cmd_compare(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "COMPARE: \2%s\2 to \2%s\2 (\2%d\2 matches)", object1, object2, matches);
 }
 
-static struct command os_compare = { "COMPARE", N_("Compares two users or channels."), PRIV_CHAN_AUSPEX, 2, os_cmd_compare, { .path = "oservice/compare" } };
+static struct command os_compare = {
+	.name           = "COMPARE",
+	.desc           = N_("Compares two users or channels."),
+	.access         = PRIV_CHAN_AUSPEX,
+	.maxparc        = 2,
+	.cmd            = &os_cmd_compare,
+	.help           = { .path = "oservice/compare" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

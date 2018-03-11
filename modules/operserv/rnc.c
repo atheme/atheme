@@ -73,7 +73,14 @@ os_cmd_rnc(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "RNC: \2%d\2", count);
 }
 
-static struct command os_rnc = { "RNC", N_("Shows the most frequent realnames on the network"), PRIV_USER_AUSPEX, 1, os_cmd_rnc, { .path = "oservice/rnc" } };
+static struct command os_rnc = {
+	.name           = "RNC",
+	.desc           = N_("Shows the most frequent realnames on the network"),
+	.access         = PRIV_USER_AUSPEX,
+	.maxparc        = 1,
+	.cmd            = &os_cmd_rnc,
+	.help           = { .path = "oservice/rnc" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

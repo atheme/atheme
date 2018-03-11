@@ -396,7 +396,14 @@ ns_cmd_access(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_access = { "ACCESS", N_("Changes and shows your nickname access list."), AC_NONE, 2, ns_cmd_access, { .path = "nickserv/access" } };
+static struct command ns_access = {
+	.name           = "ACCESS",
+	.desc           = N_("Changes and shows your nickname access list."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &ns_cmd_access,
+	.help           = { .path = "nickserv/access" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -183,7 +183,14 @@ ns_cmd_cert(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static struct command ns_cert = { "CERT", N_("Changes and shows your nickname CertFP authentication list."), AC_NONE, 2, ns_cmd_cert, { .path = "nickserv/cert" } };
+static struct command ns_cert = {
+	.name           = "CERT",
+	.desc           = N_("Changes and shows your nickname CertFP authentication list."),
+	.access         = AC_NONE,
+	.maxparc        = 2,
+	.cmd            = &ns_cmd_cert,
+	.help           = { .path = "nickserv/cert" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)

@@ -177,7 +177,14 @@ ms_cmd_sendops(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-static struct command ms_sendops = { "SENDOPS", N_("Sends a memo to all ops on a channel."), AC_AUTHENTICATED, 2, ms_cmd_sendops, { .path = "memoserv/sendops" } };
+static struct command ms_sendops = {
+	.name           = "SENDOPS",
+	.desc           = N_("Sends a memo to all ops on a channel."),
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
+	.cmd            = &ms_cmd_sendops,
+	.help           = { .path = "memoserv/sendops" },
+};
 
 static void
 mod_init(struct module *const restrict m)

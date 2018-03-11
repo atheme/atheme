@@ -179,7 +179,14 @@ cs_cmd_recover(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("Recover complete for \2%s\2."), mc->chan->name);
 }
 
-static struct command cs_recover = { "RECOVER", N_("Regain control of your channel."), AC_NONE, 1, cs_cmd_recover, { .path = "cservice/recover" } };
+static struct command cs_recover = {
+	.name           = "RECOVER",
+	.desc           = N_("Regain control of your channel."),
+	.access         = AC_NONE,
+	.maxparc        = 1,
+	.cmd            = &cs_cmd_recover,
+	.help           = { .path = "cservice/recover" },
+};
 
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
