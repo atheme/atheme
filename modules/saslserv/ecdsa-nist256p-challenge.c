@@ -8,6 +8,8 @@
 
 #include "atheme.h"
 
+#ifdef HAVE_OPENSSL
+
 #include <openssl/ec.h>
 #include <openssl/ecdsa.h>
 #include <openssl/evp.h>
@@ -163,5 +165,23 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	(void) sasl_core_functions->mech_unregister(&mech);
 }
+
+#else /* HAVE_OPENSSL */
+
+static void
+mod_init(struct module *const restrict m)
+{
+	(void) slog(LG_ERROR, "Module %s requires OpenSSL support, refusing to load.", m->name);
+
+	m->mflags |= MODTYPE_FAIL;
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	// Nothing To Do
+}
+
+#endif /* !HAVE_OPENSSL */
 
 SIMPLE_DECLARE_MODULE_V1("saslserv/ecdsa-nist256p-challenge", MODULE_UNLOAD_CAPABILITY_OK)

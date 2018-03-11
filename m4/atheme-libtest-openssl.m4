@@ -44,9 +44,7 @@ AC_DEFUN([ATHEME_LIBTEST_OPENSSL], [
 
 		AC_CHECK_HEADERS([openssl/ec.h openssl/ecdsa.h], [], [], [])
 		AS_IF([test "x${ac_cv_header_openssl_ec_h}x${ac_cv_header_openssl_ecdsa_h}" = "xyesxyes"], [
-			ECDSA_CHALLENGE_COND_C="ecdsa-nist256p-challenge.c"
 			ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
-			AC_SUBST([ECDSA_CHALLENGE_COND_C])
 			AC_SUBST([ECDSA_TOOLS_COND_D])
 		])
 	])

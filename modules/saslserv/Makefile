@@ -5,7 +5,7 @@ MODULE		= saslserv
 
 SRCS =					\
 	authcookie.c			\
-	$(ECDSA_CHALLENGE_COND_C)	\
+	ecdsa-nist256p-challenge.c	\
 	external.c			\
 	main.c				\
 	plain.c				\
