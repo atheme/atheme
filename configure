@@ -658,7 +658,6 @@ LIBMBEDCRYPTO_LIBS
 LDAP_LIBS
 LDAP_LDFLAGS
 LDAP_CPPFLAGS
-LDAP_AUTH_COND_C
 LIBIDN_LIBS
 LIBCRYPT_LIBS
 CRACKLIB_LIBS
@@ -8801,6 +8800,10 @@ fi
 
 	LIBLDAP="No"
 
+	LDAP_CPPFLAGS=""
+	LDAP_LDFLAGS=""
+	LDAP_LIBS=""
+
 
 # Check whether --with-ldap was given.
 if test "${with_ldap+set}" = set; then :
@@ -8821,22 +8824,14 @@ fi
 	if test "x${with_ldap}" != "xno"; then :
 
 
-		LDAP_AUTH_COND_C=""
-		LDAP_CPPFLAGS=""
-		LDAP_LDFLAGS=""
-		LDAP_LIBS=""
-
-		CPPFLAGS_SAVED="${CPPFLAGS}"
-		LDFLAGS_SAVED="${LDFLAGS}"
 		LIBS_SAVED="${LIBS}"
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ldap_initialize in -lldap" >&5
-$as_echo_n "checking for ldap_initialize in -lldap... " >&6; }
-if ${ac_cv_lib_ldap_ldap_initialize+:} false; then :
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing ldap_initialize" >&5
+$as_echo_n "checking for library containing ldap_initialize... " >&6; }
+if ${ac_cv_search_ldap_initialize+:} false; then :
   $as_echo_n "(cached) " >&6
 else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lldap  $LIBS"
+  ac_func_search_save_LIBS=$LIBS
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -8855,37 +8850,53 @@ return ldap_initialize ();
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_ldap_ldap_initialize=yes
-else
-  ac_cv_lib_ldap_ldap_initialize=no
+for ac_lib in '' ldap; do
+  if test -z "$ac_lib"; then
+    ac_res="none required"
+  else
+    ac_res=-l$ac_lib
+    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
+  fi
+  if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_ldap_initialize=$ac_res
 fi
 rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
+    conftest$ac_exeext
+  if ${ac_cv_search_ldap_initialize+:} false; then :
+  break
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_ldap_ldap_initialize" >&5
-$as_echo "$ac_cv_lib_ldap_ldap_initialize" >&6; }
-if test "x$ac_cv_lib_ldap_ldap_initialize" = xyes; then :
-
-			LIBLDAP="Yes"
-			LDAP_AUTH_COND_C="ldap.c"
-			LDAP_LIBS="-lldap"
+done
+if ${ac_cv_search_ldap_initialize+:} false; then :
 
 else
+  ac_cv_search_ldap_initialize=no
+fi
+rm conftest.$ac_ext
+LIBS=$ac_func_search_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_ldap_initialize" >&5
+$as_echo "$ac_cv_search_ldap_initialize" >&6; }
+ac_res=$ac_cv_search_ldap_initialize
+if test "$ac_res" != no; then :
+  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+  LIBLDAP="Yes"
+else
 
-			unset ac_cv_lib_ldap_ldap_initialize
+
+			unset ac_cv_search_ldap_initialize
+
+			CPPFLAGS_SAVED="${CPPFLAGS}"
+			LDFLAGS_SAVED="${LDFLAGS}"
 
 			CPPFLAGS="${CPPFLAGS} -I/usr/local/include"
 			LDFLAGS="${LDFLAGS} -L/usr/local/lib"
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ldap_initialize in -lldap" >&5
-$as_echo_n "checking for ldap_initialize in -lldap... " >&6; }
-if ${ac_cv_lib_ldap_ldap_initialize+:} false; then :
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing ldap_initialize" >&5
+$as_echo_n "checking for library containing ldap_initialize... " >&6; }
+if ${ac_cv_search_ldap_initialize+:} false; then :
   $as_echo_n "(cached) " >&6
 else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lldap  $LIBS"
+  ac_func_search_save_LIBS=$LIBS
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -8904,45 +8915,74 @@ return ldap_initialize ();
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_ldap_ldap_initialize=yes
-else
-  ac_cv_lib_ldap_ldap_initialize=no
+for ac_lib in '' ldap; do
+  if test -z "$ac_lib"; then
+    ac_res="none required"
+  else
+    ac_res=-l$ac_lib
+    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
+  fi
+  if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_ldap_initialize=$ac_res
 fi
 rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
+    conftest$ac_exeext
+  if ${ac_cv_search_ldap_initialize+:} false; then :
+  break
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_ldap_ldap_initialize" >&5
-$as_echo "$ac_cv_lib_ldap_ldap_initialize" >&6; }
-if test "x$ac_cv_lib_ldap_ldap_initialize" = xyes; then :
+done
+if ${ac_cv_search_ldap_initialize+:} false; then :
+
+else
+  ac_cv_search_ldap_initialize=no
+fi
+rm conftest.$ac_ext
+LIBS=$ac_func_search_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_ldap_initialize" >&5
+$as_echo "$ac_cv_search_ldap_initialize" >&6; }
+ac_res=$ac_cv_search_ldap_initialize
+if test "$ac_res" != no; then :
+  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
 
 				LIBLDAP="Yes"
-				LDAP_AUTH_COND_C="ldap.c"
 				LDAP_CPPFLAGS="-I/usr/local/include"
 				LDAP_LDFLAGS="-L/usr/local/lib"
-				LDAP_LIBS="-lldap"
+
+else
+
+				if test "x${with_ldap}" != "xauto"; then :
+
+					as_fn_error $? "--with-ldap was specified but LDAP library could not be found" "$LINENO" 5
+
+fi
 
 fi
 
 
+			CPPFLAGS="${CPPFLAGS_SAVED}"
+			LDFLAGS="${LDFLAGS_SAVED}"
+
 fi
 
 
-
-
-
-
-
-		CPPFLAGS="${CPPFLAGS_SAVED}"
-		LDFLAGS="${LDFLAGS_SAVED}"
 		LIBS="${LIBS_SAVED}"
 
 fi
 
-	if test "x${with_ldap}x${LDAP_AUTH_COND_C}" = "xyesx"; then :
+	if test "x${LIBLDAP}" = "xYes"; then :
 
-		as_fn_error $? "LDAP support was explicitly requested but LDAP library could not be found" "$LINENO" 5
+		if test "x${ac_cv_search_ldap_initialize}" != "xnone required"; then :
+
+			LDAP_LIBS="${ac_cv_search_ldap_initialize}"
+
+fi
+
+$as_echo "#define HAVE_LDAP 1" >>confdefs.h
+
+
+
+
 
 fi
 

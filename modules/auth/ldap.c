@@ -25,6 +25,8 @@
 
 #include "atheme.h"
 
+#ifdef HAVE_LDAP
+
 #include <ldap.h>
 
 static struct
@@ -258,5 +260,23 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	del_conf_item("BINDAUTH", &conf_ldap_table);
 	del_top_conf("LDAP");
 }
+
+#else /* HAVE_LDAP */
+
+static void
+mod_init(struct module *const restrict m)
+{
+	(void) slog(LG_ERROR, "Module %s requires LDAP support, refusing to load.", m->name);
+
+	m->mflags |= MODTYPE_FAIL;
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	// Nothing To Do
+}
+
+#endif /* !HAVE_LDAP */
 
 SIMPLE_DECLARE_MODULE_V1("auth/ldap", MODULE_UNLOAD_CAPABILITY_OK)
