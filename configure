@@ -9079,6 +9079,18 @@ fi
 
 	if test "x${LIBMBEDCRYPTO}" = "xYes"; then :
 
+		for ac_header in mbedtls/error.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "mbedtls/error.h" "ac_cv_header_mbedtls_error_h" "$ac_includes_default"
+if test "x$ac_cv_header_mbedtls_error_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_MBEDTLS_ERROR_H 1
+_ACEOF
+
+fi
+
+done
+
 		for ac_header in mbedtls/md.h mbedtls/pkcs5.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
@@ -9258,19 +9270,6 @@ fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 fi
-
-	for ac_header in mbedtls/error.h
-do :
-  ac_fn_c_check_header_mongrel "$LINENO" "mbedtls/error.h" "ac_cv_header_mbedtls_error_h" "$ac_includes_default"
-if test "x$ac_cv_header_mbedtls_error_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_MBEDTLS_ERROR_H 1
-_ACEOF
-
-fi
-
-done
-
 
 	if test "x${LIBMBEDCRYPTO}" = "xYes"; then :
 
