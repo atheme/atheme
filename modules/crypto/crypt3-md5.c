@@ -99,7 +99,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 static void
 mod_init(struct module *const restrict m)
 {
-	(void) slog(LG_ERROR, "%s: crypt(3) is not available on this platform", m->name);
+	(void) slog(LG_ERROR, "Module %s requires crypt(3) support, refusing to load.", m->name);
 
 	m->mflags |= MODTYPE_FAIL;
 }
