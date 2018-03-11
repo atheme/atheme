@@ -651,7 +651,6 @@ LIBQRENCODE_CFLAGS
 PCRE_LIBS
 PCRE_CFLAGS
 ECDSA_TOOLS_COND_D
-ECDSA_CHALLENGE_COND_C
 LIBCRYPTO_LIBS
 LIBNETTLE_LIBS
 LIBMBEDCRYPTO_LIBS
@@ -661,7 +660,6 @@ LDAP_CPPFLAGS
 LIBIDN_LIBS
 LIBCRYPT_LIBS
 CRACKLIB_LIBS
-CRACKLIB_COND_C
 EXPLICIT_BZERO_COND_C
 ARC4RANDOM_COND_C
 LIBOBJS
@@ -8400,7 +8398,6 @@ fi
 
 	LIBCRACKLIB="No"
 
-	CRACKLIB_COND_C=""
 	CRACKLIB_LIBS=""
 
 
@@ -8495,7 +8492,6 @@ fi
 
 	if test "x${LIBCRACKLIB}" = "xYes"; then :
 
-		CRACKLIB_COND_C="cracklib.c"
 		if test "x${ac_cv_search_FascistCheck}" != "xnone required"; then :
 
 			CRACKLIB_LIBS="${ac_cv_search_FascistCheck}"
@@ -8503,7 +8499,6 @@ fi
 fi
 
 $as_echo "#define HAVE_CRACKLIB 1" >>confdefs.h
-
 
 
 
@@ -9574,9 +9569,7 @@ done
 
 		if test "x${ac_cv_header_openssl_ec_h}x${ac_cv_header_openssl_ecdsa_h}" = "xyesxyes"; then :
 
-			ECDSA_CHALLENGE_COND_C="ecdsa-nist256p-challenge.c"
 			ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
-
 
 
 fi
@@ -15369,10 +15362,7 @@ Configuration:
     CC ......................: ${CC}
     CFLAGS ..................: ${CFLAGS}
     CPPFLAGS ................: ${CPPFLAGS}
-
-    LD ......................: ${LD}
     LDFLAGS .................: ${LDFLAGS}
-
     LIBS ....................: ${LIBS}
 
 Type make to build Atheme, and make install to install it.

@@ -61,10 +61,7 @@ Configuration:
     CC ......................: ${CC}
     CFLAGS ..................: ${CFLAGS}
     CPPFLAGS ................: ${CPPFLAGS}
-
-    LD ......................: ${LD}
     LDFLAGS .................: ${LDFLAGS}
-
     LIBS ....................: ${LIBS}
 
 Type make to build Atheme, and make install to install it.
