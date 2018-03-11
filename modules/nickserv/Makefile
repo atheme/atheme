@@ -8,7 +8,7 @@ SRCS =				\
 	access.c		\
 	badmail.c		\
 	cert.c			\
-	$(CRACKLIB_COND_C)	\
+	cracklib.c		\
 	drop.c			\
 	enforce.c		\
 	freeze.c		\

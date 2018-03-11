@@ -6,7 +6,11 @@
  */
 
 #include "atheme.h"
+
+#ifdef HAVE_CRACKLIB
+
 #include "conf.h"
+
 #include <sys/stat.h>
 #include <crack.h>
 
@@ -78,7 +82,6 @@ osinfo_hook(struct sourceinfo *si)
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
-
 	hook_add_event("user_can_register");
 	hook_add_user_can_register(cracklib_hook);
 
@@ -100,5 +103,23 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 	del_conf_item("CRACKLIB_WARN", &nicksvs.me->conf_table);
 }
+
+#else /* HAVE_CRACKLIB */
+
+static void
+mod_init(struct module *const restrict m)
+{
+	(void) slog(LG_ERROR, "Module %s requires cracklib support, refusing to load.", m->name);
+
+	m->mflags |= MODTYPE_FAIL;
+}
+
+static void
+mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
+{
+	// Nothing To Do
+}
+
+#endif /* !HAVE_CRACKLIB */
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/cracklib", MODULE_UNLOAD_CAPABILITY_OK)
