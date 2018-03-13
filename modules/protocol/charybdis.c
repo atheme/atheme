@@ -127,7 +127,9 @@ check_jointhrottle(const char *value, struct channel *c, struct mychan *mc, stru
 {
 	const char *p, *arg2;
 
-	p = value, arg2 = NULL;
+	p = value;
+	arg2 = NULL;
+
 	while (*p != '\0')
 	{
 		if (*p == ':')
