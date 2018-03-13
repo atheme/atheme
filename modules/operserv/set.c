@@ -486,7 +486,7 @@ static struct command os_set = {
 	.access         = PRIV_ADMIN,
 	.maxparc        = 2,
 	.cmd            = &os_cmd_set,
-	.help           = { .func = os_help_set },
+	.help           = { .func = &os_help_set },
 };
 
 static struct command os_set_recontime = {
