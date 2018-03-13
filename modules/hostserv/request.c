@@ -197,7 +197,10 @@ hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	if ((unsigned int)(CURRTIME - ratelimit_firsttime) > config_options.ratelimit_period)
-		ratelimit_count = 0, ratelimit_firsttime = CURRTIME;
+	{
+		ratelimit_count = 0;
+		ratelimit_firsttime = CURRTIME;
+	}
 
 	if (metadata_find(si->smu, "private:restrict:setter"))
 	{
