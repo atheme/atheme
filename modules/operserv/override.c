@@ -104,7 +104,10 @@ text_to_parv(char *text, int maxparc, char **parv)
 
 	p = text;
 	while (count < maxparc - 1 && (parv[count] = strtok(p, " ")) != NULL)
-		count++, p = NULL;
+	{
+		count++;
+		p = NULL;
+	}
 
 	if ((parv[count] = strtok(p, "")) != NULL)
 	{
