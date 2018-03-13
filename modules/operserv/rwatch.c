@@ -355,17 +355,41 @@ os_cmd_rwatch_set(struct sourceinfo *si, int parc, char *parv[])
 	while (*args != '\0')
 	{
 		if (!strncasecmp(args, "KLINE", 5))
-			addflags |= RWACT_KLINE, removeflags &= ~RWACT_KLINE, args += 5;
+		{
+			addflags |= RWACT_KLINE;
+			removeflags &= ~RWACT_KLINE;
+			args += 5;
+		}
 		else if (!strncasecmp(args, "NOKLINE", 7))
-			removeflags |= RWACT_KLINE, addflags &= ~RWACT_KLINE, args += 7;
+		{
+			removeflags |= RWACT_KLINE;
+			addflags &= ~RWACT_KLINE;
+			args += 7;
+		}
 		else if (!strncasecmp(args, "SNOOP", 5))
-			addflags |= RWACT_SNOOP, removeflags &= ~RWACT_SNOOP, args += 5;
+		{
+			addflags |= RWACT_SNOOP;
+			removeflags &= ~RWACT_SNOOP;
+			args += 5;
+		}
 		else if (!strncasecmp(args, "NOSNOOP", 7))
-			removeflags |= RWACT_SNOOP, addflags &= ~RWACT_SNOOP, args += 7;
+		{
+			removeflags |= RWACT_SNOOP;
+			addflags &= ~RWACT_SNOOP;
+			args += 7;
+		}
 		else if (!strncasecmp(args, "QUARANTINE", 10))
-			addflags |= RWACT_QUARANTINE, removeflags &= ~RWACT_QUARANTINE, args += 10;
+		{
+			addflags |= RWACT_QUARANTINE;
+			removeflags &= ~RWACT_QUARANTINE;
+			args += 10;
+		}
 		else if (!strncasecmp(args, "NOQUARANTINE", 12))
-			removeflags |= RWACT_QUARANTINE, addflags &= ~RWACT_QUARANTINE, args += 12;
+		{
+			removeflags |= RWACT_QUARANTINE;
+			addflags &= ~RWACT_QUARANTINE;
+			args += 12;
+		}
 
 		if (*args != '\0' && *args != ' ')
 		{
