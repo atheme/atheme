@@ -37,7 +37,10 @@ command_wod(struct sourceinfo *si, int parc, char *parv[])
 
 	while (roll_count < 3 && arg_dice != NULL && arg_difficulty != NULL)
 	{
-		success = 0, failure = 0, botches = 0, rerolls = 0;
+		success = 0;
+		failure = 0;
+		botches = 0;
+		rerolls = 0;
 		roll_count++;
 
 		dice = atoi(arg_dice);
@@ -121,7 +124,10 @@ command_nwod(struct sourceinfo *si, int parc, char *parv[])
 
 	while (roll_count < 3 && arg_dice != NULL)
 	{
-		success = 0, failure = 0, botches = 0, rerolls = 0;
+		success = 0;
+		failure = 0;
+		botches = 0;
+		rerolls = 0;
 		roll_count++;
 
 		dice = atoi(arg_dice);
