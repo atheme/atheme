@@ -144,9 +144,15 @@ cs_cmd_set_mlock(struct sourceinfo *si, int parc, char *parv[])
 			  if (flag)
 			  {
 				  if (dir == MTYPE_ADD)
-					  newlock_on |= flag, newlock_off &= ~flag;
+				  {
+					  newlock_on |= flag;
+					  newlock_off &= ~flag;
+				  }
 				  else
-					  newlock_off |= flag, newlock_on &= ~flag;
+				  {
+					  newlock_off |= flag;
+					  newlock_on &= ~flag;
+				  }
 				  break;
 			  }
 
