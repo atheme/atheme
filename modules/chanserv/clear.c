@@ -77,7 +77,7 @@ static struct command cs_clear = {
 	.access         = AC_NONE,
 	.maxparc        = 3,
 	.cmd            = &cs_cmd_clear,
-	.help           = { .func = cs_help_clear },
+	.help           = { .func = &cs_help_clear },
 };
 
 static void
