@@ -352,7 +352,7 @@ xmlrpc_generic_error(int code, const char *string)
 	ss = "</int></value>\r\n    </member>\r\n    <member>\r\n     <name>faultString</name>\r\n     <value><string>";
 	s->append(s, ss, strlen(ss));
 	xmlrpc_append_char_encode(s, string);
-	ss = "</string></value>\r\n    </member>\r\n   </struct>\r\n  </value>\r\n </fault>\r\n</methodResponse>",
+	ss = "</string></value>\r\n    </member>\r\n   </struct>\r\n  </value>\r\n </fault>\r\n</methodResponse>";
 	s->append(s, ss, strlen(ss));
 
 	len = s->pos;
@@ -805,13 +805,25 @@ xmlrpc_decode_string(char *buf)
 		{
 			p++;
 			if (!strncmp(p, "gt;", 3))
-				*q++ = '>', p += 3;
+			{
+				*q++ = '>';
+				p += 3;
+			}
 			else if (!strncmp(p, "lt;", 3))
-				*q++ = '<', p += 3;
+			{
+				*q++ = '<';
+				p += 3;
+			}
 			else if (!strncmp(p, "quot;", 5))
-				*q++ = '"', p += 5;
+			{
+				*q++ = '"';
+				p += 5;
+			}
 			else if (!strncmp(p, "amp;", 4))
-				*q++ = '&', p += 4;
+			{
+				*q++ = '&';
+				p += 4;
+			}
 			else if (*p == '#')
 			{
 				p++;
