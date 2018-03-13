@@ -277,7 +277,10 @@ ns_cmd_access(struct sourceinfo *si, int parc, char *parv[])
 		// try mangling to cidr
 		mowgli_strlcpy(mangledmask, mask, sizeof mangledmask);
 		if (mangle_wildcard_to_cidr(host, mangledmask + (host - mask), sizeof mangledmask - (host - mask)))
-			host = mangledmask + (host - mask), mask = mangledmask;
+		{
+			host = mangledmask + (host - mask);
+			mask = mangledmask;
+		}
 
 		// more checks
 		if (si->su != NULL && (!strcasecmp(host, si->su->host) || !strcasecmp(host, si->su->vhost)))
