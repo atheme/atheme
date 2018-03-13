@@ -680,7 +680,11 @@ sasl_newuser(hook_user_nick_t *const restrict data)
 
 	(void) destroy_session(p);
 	(void) myuser_login(saslsvs, u, mu, false);
-	(void) logcommand_user(saslsvs, u, CMDLOG_LOGIN, "LOGIN (%s)", mptr->name);
+
+	if (strcmp(mptr->name, "EXTERNAL") == 0)
+		(void) logcommand_user(saslsvs, u, CMDLOG_LOGIN, "LOGIN (EXTERNAL) (%s)", u->certfp);
+	else
+		(void) logcommand_user(saslsvs, u, CMDLOG_LOGIN, "LOGIN (%s)", mptr->name);
 }
 
 static void
