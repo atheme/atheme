@@ -429,11 +429,13 @@ cs_cmd_unquiet(struct sourceinfo *si, int parc, char *parv[])
 			}
 			else
 				command_success_nodata(si, _("No quiets found matching \2%s\2 on \2%s\2."), target, channel);
+
 			continue;
 		}
-		else if (make_extbanmask(target_extban, sizeof target_extban, target),
-				(cb = chanban_find(c, target_extban, banlike_char)) != NULL ||
-				validhostmask(target))
+
+		(void) make_extbanmask(target_extban, sizeof target_extban, target);
+
+		if ((cb = chanban_find(c, target_extban, banlike_char)) != NULL || validhostmask(target))
 		{
 			if (cb != NULL)
 			{
@@ -455,7 +457,9 @@ cs_cmd_unquiet(struct sourceinfo *si, int parc, char *parv[])
 			command_fail(si, fault_badparams, _("Syntax: UNQUIET <#channel> [nickname|hostmask] [...]"));
 			continue;
 		}
+
 	} while ((target = strtok_r(NULL, " ", &strtokctx)) != NULL);
+
 	free(targetlist);
 }
 
