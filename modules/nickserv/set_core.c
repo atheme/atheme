@@ -68,7 +68,7 @@ static struct command ns_set = {
 	.access         = AC_AUTHENTICATED,
 	.maxparc        = 2,
 	.cmd            = &ns_cmd_set,
-	.help           = { .func = ns_help_set },
+	.help           = { .func = &ns_help_set },
 };
 
 static void
