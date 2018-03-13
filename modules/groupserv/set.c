@@ -49,9 +49,15 @@ gs_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	if (parv[0][0] == '!')
-		group = parv[0], cmd = parv[1];
+	{
+		group = parv[0];
+		cmd = parv[1];
+	}
 	else if (parv[1][0] == '!')
-		cmd = parv[0], group = parv[1];
+	{
+		cmd = parv[0];
+		group = parv[1];
+	}
 	else
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET");
