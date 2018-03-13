@@ -64,7 +64,7 @@ static struct command bs_set = {
 	.access         = AC_NONE,
 	.maxparc        = 3,
 	.cmd            = &bs_cmd_set,
-	.help           = { .func =  bs_help_set },
+	.help           = { .func = &bs_help_set },
 };
 
 static void
