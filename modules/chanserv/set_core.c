@@ -80,7 +80,7 @@ static struct command cs_set = {
 	.access         = AC_NONE,
 	.maxparc        = 3,
 	.cmd            = &cs_cmd_set,
-	.help           = { .func = cs_help_set },
+	.help           = { .func = &cs_help_set },
 };
 
 static void
