@@ -411,7 +411,10 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 				}
 			}
 			if (addflags & CA_FOUNDER)
-				addflags |= CA_FLAGS, removeflags &= ~CA_FLAGS;
+			{
+				addflags |= CA_FLAGS;
+				removeflags &= ~CA_FLAGS;
+			}
 
 			/* If NEVEROP is set, don't allow adding new entries
 			 * except sole +b. Adding flags if the current level
