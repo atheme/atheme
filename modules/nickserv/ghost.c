@@ -24,7 +24,10 @@ ns_cmd_ghost(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	if (nicksvs.no_nick_ownership)
-		mn = NULL, mu = myuser_find(target);
+	{
+		mn = NULL;
+		mu = myuser_find(target);
+	}
 	else
 	{
 		mn = mynick_find(target);
