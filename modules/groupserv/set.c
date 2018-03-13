@@ -82,7 +82,7 @@ static struct command gs_set = {
 	.access         = AC_AUTHENTICATED,
 	.maxparc        = 3,
 	.cmd            = &gs_cmd_set,
-	.help           = { .func = gs_help_set },
+	.help           = { .func = &gs_help_set },
 };
 
 static void
