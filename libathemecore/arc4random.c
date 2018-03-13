@@ -36,8 +36,7 @@ static const char atheme_pers_str[] = "Atheme IRC Services v" PACKAGE_VERSION;
 static mbedtls_entropy_context seed_ctx;
 static mbedtls_hmac_drbg_context hmac_ctx;
 
-static bool rng_ctx_initialised = false;
-static pid_t rs_stir_pid = -1;
+static pid_t rs_stir_pid = (pid_t) -1;
 
 static const char *
 atheme_arc4random_mbedtls_strerror(int err)
@@ -62,7 +61,7 @@ atheme_arc4random_mbedtls_strerror(int err)
 void
 atheme_arc4random_buf(void *const restrict out, const size_t len)
 {
-	if (! rng_ctx_initialised)
+	if (rs_stir_pid == (pid_t) -1)
 	{
 		const mbedtls_md_type_t md_type = MBEDTLS_MD_SHA256;
 		const mbedtls_md_info_t *const md_info = mbedtls_md_info_from_type(md_type);
@@ -80,7 +79,6 @@ atheme_arc4random_buf(void *const restrict out, const size_t len)
 			exit(EXIT_FAILURE);
 		}
 
-		rng_ctx_initialised = true;
 		rs_stir_pid = getpid();
 	}
 	else if (getpid() != rs_stir_pid)
