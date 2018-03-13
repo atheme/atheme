@@ -6,7 +6,6 @@
  */
 
 #include "atheme.h"
-#include "authcookie.h"
 
 static const struct sasl_core_functions *sasl_core_functions = NULL;
 
