@@ -72,7 +72,10 @@ cs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 
 		// XXX this should be more like flags.c
 		if (removeflags & CA_FLAGS)
-			removeflags |= CA_FOUNDER, addflags &= ~CA_FOUNDER;
+		{
+			removeflags |= CA_FOUNDER;
+			addflags &= ~CA_FOUNDER;
+		}
 		else if (addflags & CA_FOUNDER)
 		{
 			if (!myentity_allow_foundership(mt))
@@ -82,7 +85,8 @@ cs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 				return;
 			}
 
-			addflags |= CA_FLAGS, removeflags &= ~CA_FLAGS;
+			addflags |= CA_FLAGS;
+			removeflags &= ~CA_FLAGS;
 		}
 
 		if (is_founder(mc, mt) && removeflags & CA_FOUNDER && mychan_num_founders(mc) == 1)
