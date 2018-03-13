@@ -189,10 +189,16 @@ cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 
 		// if adding +F, also add +f
 		if (addflags & CA_FOUNDER)
-			addflags |= CA_FLAGS, removeflags &= ~CA_FLAGS;
+		{
+			addflags |= CA_FLAGS;
+			removeflags &= ~CA_FLAGS;
+		}
 		// if removing +f, also remove +F
 		else if (removeflags & CA_FLAGS)
-			removeflags |= CA_FOUNDER, addflags &= ~CA_FOUNDER;
+		{
+			removeflags |= CA_FOUNDER;
+			addflags &= ~CA_FOUNDER;
+		}
 
 		found = denied = false;
 		oldflags = 0;
