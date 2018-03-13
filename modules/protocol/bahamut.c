@@ -81,7 +81,10 @@ check_jointhrottle(const char *value, struct channel *c, struct mychan *mc, stru
 
 	if (!strcmp(value, "0") && u == NULL && mu == NULL)
 		return true;
-	p = value, arg2 = NULL;
+
+	p = value;
+	arg2 = NULL;
+
 	while (*p != '\0')
 	{
 		if (*p == ':')
