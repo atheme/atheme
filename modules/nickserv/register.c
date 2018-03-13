@@ -33,9 +33,17 @@ ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	if (nicksvs.no_nick_ownership || si->su == NULL)
-		account = parv[0], pass = parv[1], email = parv[2];
+	{
+		account = parv[0];
+		pass = parv[1];
+		email = parv[2];
+	}
 	else
-		account = si->su->nick, pass = parv[0], email = parv[1];
+	{
+		account = si->su->nick;
+		pass = parv[0];
+		email = parv[1];
+	}
 
 	if (!account || !pass || !email)
 	{
@@ -100,7 +108,10 @@ ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	if ((unsigned int)(CURRTIME - ratelimit_firsttime) > config_options.ratelimit_period)
-		ratelimit_count = 0, ratelimit_firsttime = CURRTIME;
+	{
+		ratelimit_count = 0;
+		ratelimit_firsttime = CURRTIME;
+	}
 
 	// Still do flood priv checking because the user may be in the ircop operclass
 	if (ratelimit_count > config_options.ratelimit_uses && !has_priv(si, PRIV_FLOOD))
