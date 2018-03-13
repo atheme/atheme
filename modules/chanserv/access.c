@@ -1338,7 +1338,7 @@ static struct command cs_access = {
 	.access         = AC_NONE,
 	.maxparc        = 3,
 	.cmd            = &cs_cmd_access,
-	.help           = { .func = cs_help_access },
+	.help           = { .func = &cs_help_access },
 };
 
 static struct command cs_role = {
@@ -1347,7 +1347,7 @@ static struct command cs_role = {
 	.access         = AC_NONE,
 	.maxparc        = 3,
 	.cmd            = &cs_cmd_role,
-	.help           = { .func = cs_help_role },
+	.help           = { .func = &cs_help_role },
 };
 
 static struct command cs_access_list = {
