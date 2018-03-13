@@ -80,9 +80,15 @@ cs_cmd_akick(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	if (parv[0][0] == '#')
-		chan = parv[0], cmd = parv[1];
+	{
+		chan = parv[0];
+		cmd = parv[1];
+	}
 	else if (parv[1][0] == '#')
-		cmd = parv[0], chan = parv[1];
+	{
+		cmd = parv[0];
+		chan = parv[1];
+	}
 	else
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "AKICK");
