@@ -17,7 +17,10 @@ helpserv_cmd_helpme(struct sourceinfo *si, int parc, char *parv[])
         char *topic = parv[0];
 
 	if ((unsigned int)(CURRTIME - ratelimit_firsttime) > config_options.ratelimit_period)
-		ratelimit_count = 0, ratelimit_firsttime = CURRTIME;
+	{
+		ratelimit_count = 0;
+		ratelimit_firsttime = CURRTIME;
+	}
 
 	if (ratelimit_count > config_options.ratelimit_uses && !has_priv(si, PRIV_FLOOD))
         {
