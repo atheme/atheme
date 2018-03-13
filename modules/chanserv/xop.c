@@ -444,35 +444,68 @@ cs_cmd_forcexop(struct sourceinfo *si, int parc, char *parv[])
 
 		if (ca->level & CA_AKICK)
 			continue;
+
 		if (ca->level & CA_FOUNDER)
-			newlevel = custom_founder_check(), desc = "Founder";
+		{
+			newlevel = custom_founder_check();
+			desc = "Founder";
+		}
 		else if (!(~ca->level & ca_sop))
-			newlevel = ca_sop, desc = "SOP";
+		{
+			newlevel = ca_sop;
+			desc = "SOP";
+		}
 		else if (ca->level == ca_aop)
-			newlevel = ca_aop, desc = "AOP";
+		{
+			newlevel = ca_aop;
+			desc = "AOP";
+		}
 		else if (ca->level == ca_hop)
-			newlevel = ca_hop, desc = "HOP";
+		{
+			newlevel = ca_hop;
+			desc = "HOP";
+		}
 		else if (ca->level == ca_vop)
-			newlevel = ca_vop, desc = "VOP";
+		{
+			newlevel = ca_vop;
+			desc = "VOP";
+		}
 		else if (ca->level & (CA_SET | CA_RECOVER | CA_FLAGS))
-			newlevel = ca_sop, desc = "SOP";
+		{
+			newlevel = ca_sop;
+			desc = "SOP";
+		}
 		else if (ca->level & (CA_OP | CA_AUTOOP | CA_REMOVE))
-			newlevel = ca_aop, desc = "AOP";
+		{
+			newlevel = ca_aop;
+			desc = "AOP";
+		}
 		else if (ca->level & (CA_HALFOP | CA_AUTOHALFOP | CA_TOPIC))
 		{
 			if (ca_hop == ca_vop)
-				newlevel = ca_aop, desc = "AOP";
+			{
+				newlevel = ca_aop;
+				desc = "AOP";
+			}
 			else
-				newlevel = ca_hop, desc = "HOP";
+			{
+				newlevel = ca_hop;
+				desc = "HOP";
+			}
 		}
 		else
-			newlevel = ca_vop, desc = "VOP";
+		{
+			newlevel = ca_vop;
+			desc = "VOP";
+		}
 #if 0
 		else
 			newlevel = 0;
 #endif
+
 		if (newlevel == ca->level)
 			continue;
+
 		changes++;
 		command_success_nodata(si, "%s: %s -> %s", ca->entity != NULL ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), desc);
 		chanacs_modify_simple(ca, newlevel, ~newlevel, si->smu);
