@@ -9,11 +9,15 @@ keywords with the SEARCH command. For examples, please see below.
 
 Syntax: SEARCH <keywords>
 
-Example:
+Examples:
+
     /msg &nick& SEARCH FANTASY MIDDLEAGES FREEFORM PG13 R
-         Search for a game with a genre of fantasy, period of
-         middle ages, ruleset of freeform and a rating of PG13
-         or R.
+
+    Search for a game with a genre of fantasy, period of
+    middle ages, ruleset of freeform and a rating of PG13
+    or R.
+
     /msg &nick& SEARCH CYBERPUNK FANTASY REALISTIC
-         Search for all games that have a genre of cyberpunk,
-         fantasy, or realistic.
+
+    Search for all games that have a genre of cyberpunk,
+    fantasy, or realistic.
