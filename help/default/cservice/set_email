@@ -11,4 +11,3 @@ address being associated with the channel.
 
 Example:
     /msg &nick& SET #chat EMAIL some@email.address
-
