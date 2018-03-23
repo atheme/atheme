@@ -6,5 +6,5 @@ access list can do this.
 
 Syntax: SENDOPS <#channel> <text>
 
-Examples:
+Example:
     /msg &nick& SENDOPS #chat beware of badguy

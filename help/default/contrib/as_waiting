@@ -4,5 +4,5 @@ WAITING lists all announcements currently waiting for activation.
 
 Syntax: WAITING
 
-Examples:
+Example:
     /msg &nick& WAITING

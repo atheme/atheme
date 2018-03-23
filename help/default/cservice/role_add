@@ -41,5 +41,5 @@ Flags:
     +founder - Grants full founder access.
     +banned - Enables automatic kickban.
 
-Examples:
+Example:
     /msg &nick& ROLE #atheme ADD helpers topic autovoice

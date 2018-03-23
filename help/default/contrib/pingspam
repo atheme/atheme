@@ -4,5 +4,5 @@ PINGSPAM spams a user with pings from every service, plus some bonus notices.
 
 Syntax: PINGSPAM <target>
 
-Examples:
+Example:
     /msg &nick& PINGSPAM foo-person

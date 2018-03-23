@@ -5,5 +5,5 @@ channel role.
 
 Syntax: ACCESS <#channel> ADD <user> <role>
 
-Examples:
+Example:
     /msg &nick& ACCESS #atheme ADD stitch helpers

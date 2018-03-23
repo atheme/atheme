@@ -5,5 +5,5 @@ A memo informing the user will also be sent.
 
 Syntax: REJECT <nick>
 
-Examples:
+Example:
     /msg &nick& REJECT nenolod

@@ -4,5 +4,5 @@ Remove a offered vHost from the OFFER list.
 
 Syntax: UNOFFER <vHost>
 
-Examples:
+Example:
     /msg &nick& UNOFFER users.example.net

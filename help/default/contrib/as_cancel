@@ -4,5 +4,5 @@ CANCEL a pending announcement.
 
 Syntax: CANCEL
 
-Examples:
+Example:
     /msg &nick& CANCEL

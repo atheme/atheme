@@ -14,5 +14,5 @@ address.
 
 Syntax: REGISTER <account> <password> <email-address>
 
-Examples:
+Example:
     /msg &nick& REGISTER foo sesame foo@bar.com

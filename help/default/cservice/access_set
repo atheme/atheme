@@ -5,5 +5,5 @@ channel role.
 
 Syntax: ACCESS <#channel> SET <user> <role>
 
-Examples:
+Example:
     /msg &nick& ACCESS #atheme SET stitch lowlevel-staff

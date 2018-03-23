@@ -7,5 +7,5 @@ the closest role they match.
 
 Syntax: ACCESS <#channel> LIST
 
-Examples:
+Example:
     /msg &nick& ACCESS #atheme LIST

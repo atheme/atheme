@@ -8,5 +8,5 @@ The second line shows how many access entries have each flag.
 
 Syntax: COUNT <#channel>
 
-Examples:
+Example:
     /msg &nick& COUNT #oscn

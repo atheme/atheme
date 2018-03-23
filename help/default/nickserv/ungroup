@@ -11,5 +11,5 @@ your account name.
 
 Syntax: UNGROUP [nickname]
 
-Examples:
+Example:
     /msg &nick& UNGROUP SomeNick

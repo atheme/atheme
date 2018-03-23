@@ -6,8 +6,9 @@ moderate Channel Registration requests)
 
 Syntax: ACTIVATE <#channel>
 
-Examples:
+Example:
     /msg &nick& ACTIVATE #FunChat
+
 See Also:
     /msg &nick& WAITING
     /msg &nick& REJECT #Channel

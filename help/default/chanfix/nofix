@@ -8,5 +8,5 @@ NOFIX information will be displayed in INFO output.
 
 Syntax: NOFIX <#channel> ON|OFF <reason>
 
-Examples:
+Example:
     /msg &nick& NOFIX #warez ON Channel not supported by services on this network.

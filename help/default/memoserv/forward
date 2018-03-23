@@ -7,5 +7,5 @@ You can also SEND, DELETE, LIST or READ memos.
 
 Syntax: FORWARD <user|nick> <memo number>
 
-Examples:
+Example:
     /msg &nick& FORWARD kog 1

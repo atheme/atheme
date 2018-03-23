@@ -13,5 +13,5 @@ memoserv ignore.
 
 Syntax: FSEND <user|nick> text
 
-Examples:
+Example:
     /msg &nick& FSEND Kog pay your bills

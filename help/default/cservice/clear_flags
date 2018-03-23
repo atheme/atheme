@@ -8,5 +8,5 @@ This command can only be used by channel founders.
 
 Syntax: CLEAR <#channel> FLAGS
 
-Examples:
+Example:
     /msg &nick& CLEAR #atheme FLAGS

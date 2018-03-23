@@ -5,5 +5,5 @@ user matches.
 
 Syntax: WHY <#channel> [nickname]
 
-Examples:
+Example:
     /msg &nick& WHY #atheme jilles^

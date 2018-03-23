@@ -4,5 +4,5 @@ UP grants you all access modes you have permission to have on a given channel.
 
 Syntax: UP <#channel>
 
-Examples:
+Example:
     /msg &nick& UP #foo

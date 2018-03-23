@@ -11,5 +11,5 @@ a channel to another user.
 
 Syntax: DROP <#channel>
 
-Examples:
+Example:
     /msg &nick& DROP #foo

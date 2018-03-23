@@ -11,6 +11,5 @@ Syntax: NETSPLIT REMOVE <server>
 
 Removes a given server from the netsplit list.
 
-Examples:
+Example:
    /msg &nick& NETSPLIT REMOVE moocow.int
-

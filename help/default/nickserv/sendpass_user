@@ -14,5 +14,5 @@ you can clear it using the CLEAR keyword.
 Syntax: SENDPASS <nickname> CLEAR
 #endif
 
-Examples:
+Example:
     /msg &nick& SENDPASS foo

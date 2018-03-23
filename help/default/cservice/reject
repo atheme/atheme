@@ -6,8 +6,9 @@ moderate Channel Registration requests)
 
 Syntax: REJECT <#channel>
 
-Examples:
+Example:
     /msg &nick& REJECT #BotHouse
+
 See Also:
     /msg &nick& WAITING
     /msg &nick& ACTIVATE #Channel

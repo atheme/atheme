@@ -8,5 +8,5 @@ Viewing any channel's access list is done with FLAGS.
 Syntax: FFLAGS <#channel> <nickname|hostmask> <template>
 Syntax: FFLAGS <#channel> <nickname|hostmask> <flag_changes>
 
-Examples:
+Example:
     /msg &nick& FFLAGS #foo foo AOP

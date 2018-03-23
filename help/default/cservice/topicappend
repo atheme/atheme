@@ -4,5 +4,5 @@ The TOPICAPPEND command allows for the addition to a topic on a channel.
 
 Syntax: TOPICAPPEND <#channel> <topic>
 
-Examples:
+Example:
     /msg &nick& TOPICAPPEND #foo bar

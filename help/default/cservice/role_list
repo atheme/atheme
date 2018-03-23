@@ -5,5 +5,5 @@ and the flags that each role has.
 
 Syntax: ROLE <#channel> LIST
 
-Examples:
+Example:
     /msg &nick& ROLE #baz LIST

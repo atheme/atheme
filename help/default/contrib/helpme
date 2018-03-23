@@ -6,6 +6,5 @@ operators. Requires the OPERSERV:HELPME privilege.
 
 Syntax: HELPME
 
-Examples:
+Example:
     /msg &nick& HELPME
-

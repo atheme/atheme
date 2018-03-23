@@ -6,5 +6,5 @@ patient while your request is considered by network staff.
 
 Syntax: REQUEST <topic>
 
-Examples:
+Example:
     /msg &nick& REQUEST I need help with a vHost.

@@ -8,5 +8,5 @@ it entirely.
 
 Syntax: UNASSIGN <chan>
 
-Examples:
+Example:
     /msg &nick& UNASSIGN #help

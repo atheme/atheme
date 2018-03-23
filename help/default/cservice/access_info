@@ -7,5 +7,5 @@ access was modified.
 
 Syntax: ACCESS <#channel> INFO <user>
 
-Examples:
+Example:
     /msg &nick& ACCESS #atheme INFO nenolod

@@ -17,5 +17,5 @@ address.
 
 Syntax: REGISTER <password> <email-address>
 
-Examples:
+Example:
     /msg &nick& REGISTER bar foo@bar.com

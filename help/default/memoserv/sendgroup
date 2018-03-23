@@ -5,5 +5,5 @@ of a group who have the +m flag.
 
 Syntax: SENDGROUP <!group> <text>
 
-Examples:
+Example:
     /msg &nick& SENDGROUP !opers beware of badguy

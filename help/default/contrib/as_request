@@ -15,5 +15,5 @@ They will not be replaced in the rest of the announcement.
 
 Syntax: REQUEST <subject> <announcement>
 
-Examples:
+Example:
     /msg &nick& REQUEST Some_Subject This is an announcement!

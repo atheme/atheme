@@ -9,5 +9,5 @@ MARK information will be displayed in INFO output.
 
 Syntax: MARK <#channel> ON|OFF <reason>
 
-Examples:
+Example:
     /msg &nick& MARK #lobby ON Takeover: returned to bill

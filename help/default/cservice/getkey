@@ -5,5 +5,5 @@ of the specified channel: /join #channel key
 
 Syntax: GETKEY <#channel>
 
-Examples:
+Example:
     /msg &nick& GETKEY #foo

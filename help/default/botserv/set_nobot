@@ -6,5 +6,5 @@ automatically when you enable the option.
 
 Syntax: SET <#channel> NOBOT {ON|OFF}
 
-Examples:
+Example:
     /msg &nick& SET #help NOBOT ON

@@ -5,5 +5,5 @@ The user will be notified that their request was closed.
 
 Syntax: CLOSE <nick> [reason]
 
-Examples:
+Example:
     /msg &nick& CLOSE Grue It is now no longer pitch dark.

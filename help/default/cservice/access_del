@@ -4,5 +4,5 @@ ACCESS DEL will remove all channel access from a given user.
 
 Syntax: ACCESS <#channel> DEL <user>
 
-Examples:
+Example:
     /msg &nick& ACCESS #atheme DEL stitch

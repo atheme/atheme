@@ -6,5 +6,5 @@ on you will see the vHost instead of your real IP address.
 
 Syntax: ON
 
-Examples:
+Example:
     /msg &nick& ON

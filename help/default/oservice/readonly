@@ -6,5 +6,5 @@ running.
 
 Syntax: READONLY ON|OFF
 
-Examples:
+Example:
     /msg &nick& READONLY ON

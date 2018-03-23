@@ -7,5 +7,5 @@ chanserv commands like !op, !deop, !voice, !devoice,
 
 Syntax: SET <#channel> FANTASY {ON|OFF}
 
-Examples:
+Example:
     /msg &nick& SET #help FANTASY ON

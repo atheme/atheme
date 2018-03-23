@@ -5,5 +5,5 @@ unlimited amount of channel registrations.
 
 Syntax: REGNOLIMIT <user> ON|OFF
 
-Examples:
+Example:
     /msg &nick& REGNOLIMIT nenolod ON

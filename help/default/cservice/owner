@@ -10,5 +10,5 @@ on the person requesting the command.
 
 Syntax: OWNER|DEOWNER <#channel> [nickname]
 
-Examples:
+Example:
     /msg &nick& OWNER #foo

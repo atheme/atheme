@@ -3,5 +3,5 @@ Help for TAXONOMY:
 The taxonomy command lists metadata information associated
 with registered channels.
 
-Examples:
+Example:
     /msg &nick& TAXONOMY #atheme

@@ -6,5 +6,5 @@ no privileges by default.
 
 Syntax: SET <!group> OPEN <ON|OFF>
 
-Examples:
+Example:
     /msg &nick& SET !awesome-people OPEN ON

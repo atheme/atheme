@@ -8,5 +8,5 @@ provided by IRC bots.
 
 Syntax: REGISTER <#channel>
 
-Examples:
+Example:
     /msg &nick& REGISTER #atheme

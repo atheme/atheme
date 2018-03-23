@@ -8,5 +8,5 @@ be restored.
 
 Syntax: FDROP <!group>
 
-Examples:
+Example:
     /msg &nick& FDROP !baz

@@ -9,5 +9,5 @@ This command can only be used by users with the +R and
 
 Syntax: CLEAR <#channel> AKICKS
 
-Examples:
+Example:
     /msg &nick& CLEAR #atheme AKICKS

@@ -11,5 +11,5 @@ next time you identify to &nick&.
 
 Syntax: VACATION
 
-Examples:
+Example:
     /msg &nick& VACATION

@@ -8,5 +8,5 @@ in to the account are logged out.
 
 Syntax: RETURN <account> <e-mail>
 
-Examples:
+Example:
     /msg &nick& RETURN jdoe john@example.com

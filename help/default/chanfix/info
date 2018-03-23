@@ -6,5 +6,5 @@ and the fix status of the channel.
 
 Syntax: INFO <#channel>
 
-Examples:
+Example:
     /msg &nick& INFO #foo

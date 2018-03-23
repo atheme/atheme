@@ -11,5 +11,5 @@ be recognized as the new account.
 
 Syntax: DROP <nickname> <password>
 
-Examples:
+Example:
     /msg &nick& DROP foo bar

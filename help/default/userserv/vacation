@@ -10,5 +10,5 @@ next time you log in to &nick&.
 
 Syntax: VACATION
 
-Examples:
+Example:
     /msg &nick& VACATION

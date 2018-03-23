@@ -5,5 +5,5 @@ your account's e-mail address.
 
 Syntax: LISTOWNMAIL
 
-Examples:
+Example:
     /msg &nick& LISTOWNMAIL

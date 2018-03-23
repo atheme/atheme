@@ -5,5 +5,5 @@ registration time, flags, and other details.
 
 Syntax: INFO <#channel>
 
-Examples:
+Example:
     /msg &nick& INFO #foo

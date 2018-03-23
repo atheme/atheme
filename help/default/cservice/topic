@@ -4,5 +4,5 @@ The TOPIC command allows for the changing of a topic on a channel.
 
 Syntax: TOPIC <#channel> <topic>
 
-Examples:
+Example:
     /msg &nick& TOPIC #foo bar

@@ -6,5 +6,5 @@ run this command.
 
 Syntax: SYNC <#channel>
 
-Examples:
+Example:
     /msg &nick& SYNC #bar

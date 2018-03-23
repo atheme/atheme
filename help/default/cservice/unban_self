@@ -5,5 +5,5 @@ you from a channel.
 
 Syntax: UNBAN <#channel>
 
-Examples:
+Example:
     /msg &nick& UNBAN #chat

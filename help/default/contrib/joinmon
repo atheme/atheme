@@ -27,5 +27,5 @@ JOINMON LIST allows you to list the currently monitored user patterns.
 
 Syntax: JOINMON LIST
 
-Examples:
+Example:
     /msg &nick& JOINMON LIST

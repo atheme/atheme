@@ -4,5 +4,5 @@ Lists all available bots on this network.
 
 Syntax: BOTLIST
 
-Examples:
+Example:
     /msg &nick& BOTLIST

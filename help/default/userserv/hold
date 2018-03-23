@@ -5,5 +5,5 @@ it from expiring.
 
 Syntax: HOLD <account> ON|OFF
 
-Examples:
+Example:
     /msg &nick& HOLD jilles ON

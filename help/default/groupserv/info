@@ -6,5 +6,5 @@ and founder.
 
 Syntax: INFO <!group>
 
-Examples:
+Example:
     /msg &nick& INFO !baz

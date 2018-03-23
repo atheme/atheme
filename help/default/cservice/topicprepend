@@ -4,5 +4,5 @@ The TOPICPREPEND command allows for the addition to a topic on a channel.
 
 Syntax: TOPICPREPEND <#channel> <topic>
 
-Examples:
+Example:
     /msg &nick& TOPICPREPEND #foo bar

@@ -7,5 +7,5 @@ DELETE or FORWARD a memo.
 
 Syntax: LIST
 
-Examples:
+Example:
     /msg &nick& LIST

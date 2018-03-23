@@ -5,5 +5,5 @@ to easily create a password for a services oper password.
 
 Syntax: GENERATEHASH <password>
 
-Examples:
+Example:
     /msg &nick& GENERATEHASH ThIsPassw0rd

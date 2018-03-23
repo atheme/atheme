@@ -9,5 +9,5 @@ be recognized as the new account.
 
 Syntax: FDROP <nickname>
 
-Examples:
+Example:
     /msg &nick& FDROP foo

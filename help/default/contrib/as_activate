@@ -5,5 +5,5 @@ A memo informing the user will also be sent.
 
 Syntax: ACTIVATE <nick>
 
-Examples:
+Example:
     /msg &nick& ACTIVATE nenolod

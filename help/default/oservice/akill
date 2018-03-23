@@ -52,7 +52,7 @@ Shows any AKILLs matching the given hostmask, with reasons.
 This command will not perform DNS lookups on a host,
 for best results repeat it with host and IP address.
 
-Examples:
+Example:
     /msg &nick& AKILL LIST test@192.168.1.1
 
 Syntax: AKILL LIST <number>

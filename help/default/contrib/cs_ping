@@ -5,5 +5,5 @@ having it reply with "Pong!".
 
 Syntax: PING
 
-Examples:
+Example:
     /msg &nick& PING

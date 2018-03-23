@@ -11,5 +11,5 @@ as the new account.
 
 Syntax: DROP <account> <password>
 
-Examples:
+Example:
     /msg &nick& DROP foo bar

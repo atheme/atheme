@@ -7,5 +7,5 @@ by number or read your new memos.
 Syntax: READ <memo number>
 Syntax: READ NEW
 
-Examples:
+Example:
     /msg &nick& READ 1

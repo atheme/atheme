@@ -6,5 +6,5 @@ reconnect to your network after a kill from Services.
 
 Syntax: KILL <target> <reason>
 
-Examples:
+Example:
     /msg &nick& KILL jdhore Pants!

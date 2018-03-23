@@ -7,5 +7,5 @@ listed in one of the blacklists.
 
 Syntax: DNSBLSCAN <user>
 
-Examples:
+Example:
     /msg &nick& DNSBLSCAN jdhore

@@ -5,5 +5,5 @@ INFO of members of the group.
 
 Syntax: SET <!group> PUBLIC <ON|OFF>
 
-Examples:
+Example:
     /msg &nick& SET !awesome-people PUBLIC ON

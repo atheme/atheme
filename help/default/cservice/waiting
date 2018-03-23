@@ -7,8 +7,9 @@ requests)
 
 Syntax: WAITING
 
-Examples:
+Example:
     /msg &nick& WAITING
+
 See Also:
     /msg &nick& ACTIVATE #FunChat
     /msg &nick& REJECT #BotHouse

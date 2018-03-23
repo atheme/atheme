@@ -5,5 +5,5 @@ It does not remove the flags or xOP that you have, just the modes.
 
 Syntax: DOWN <#channel>
 
-Examples:
+Example:
     /msg &nick& DOWN #foo

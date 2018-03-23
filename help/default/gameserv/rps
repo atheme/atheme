@@ -4,5 +4,5 @@ RPS will randomly reply "Rock", "Paper", or "Scissors".
 
 Syntax: RPS
 
-Examples:
+Example:
     /msg &nick& RPS

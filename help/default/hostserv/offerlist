@@ -5,5 +5,5 @@ the network staff.
 
 Syntax: OFFERLIST
 
-Examples:
+Example:
     /msg &nick& OFFERLIST

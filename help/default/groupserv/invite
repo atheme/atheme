@@ -6,5 +6,5 @@ currently full.
 
 Syntax: INVITE <!group> <user>
 
-Examples:
+Example:
     /msg &nick& INVITE !foo jdhore

@@ -7,5 +7,5 @@ To load scripts into Atheme, use the MODLOAD/MODUNLOAD/MODRELOAD
 commands, providing the script's filename instead of a compiled
 module.
 
-Examples:
+Example:
     /msg &nick& PERL

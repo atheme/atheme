@@ -10,5 +10,5 @@ Your memo cannot be more than 300 characters.
 
 Syntax: SEND <user|nick> text
 
-Examples:
+Example:
     /msg &nick& SEND Kog pay your bills

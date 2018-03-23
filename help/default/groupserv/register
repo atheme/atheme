@@ -5,5 +5,5 @@ manage a number of users and channels.
 
 Syntax: REGISTER <!group>
 
-Examples:
+Example:
     /msg &nick& REGISTER !developers

@@ -6,5 +6,5 @@ patient while your request is considered by network staff.
 
 Syntax: REQUEST <vHost>
 
-Examples:
+Example:
     /msg &nick& REQUEST may.explode.on.impact

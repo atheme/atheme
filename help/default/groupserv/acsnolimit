@@ -5,5 +5,5 @@ group access list entries.
 
 Syntax: ACSNOLIMIT <!group> ON|OFF
 
-Examples:
+Example:
     /msg &nick& ACSNOLIMIT !awesome-people ON

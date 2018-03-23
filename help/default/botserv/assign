@@ -6,5 +6,5 @@ your needs.
 
 Syntax: ASSIGN <chan> <nick>
 
-Examples:
+Example:
     /msg &nick& ASSIGN #help Security

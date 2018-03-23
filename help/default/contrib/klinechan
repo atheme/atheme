@@ -5,5 +5,5 @@ channels and the like.
 
 Syntax: KLINECHAN <#channel> <ON|OFF> [reason]
 
-Examples:
+Example:
     /msg &nick& KLINECHAN #lamers ON Channel of Lamers.

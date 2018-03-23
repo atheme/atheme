@@ -10,5 +10,5 @@ on the person requesting the command.
 
 Syntax: HALFOP|DEHALFOP <#channel> [nickname]
 
-Examples:
+Example:
     /msg &nick& HALFOP #foo

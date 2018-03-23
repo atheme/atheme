@@ -4,5 +4,5 @@ CANCEL allows you to cancel a currently pending request for help.
 
 Syntax: CANCEL
 
-Examples:
+Example:
     /msg &nick& CANCEL

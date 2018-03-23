@@ -4,5 +4,5 @@ Makes the bot say the given text on the given channel.
 
 Syntax: SAY <chan> <text>
 
-Examples:
+Example:
     /msg &nick& SAY #help Welcome to #help!

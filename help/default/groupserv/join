@@ -6,5 +6,5 @@ this way, you will only be listed as a group member.
 
 Syntax: JOIN <!group>
 
-Examples:
+Example:
     /msg &nick& JOIN !baz

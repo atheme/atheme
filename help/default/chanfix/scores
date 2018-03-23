@@ -5,5 +5,5 @@ for the specified channel.
 
 Syntax: SCORES <#channel>
 
-Examples:
+Example:
     /msg &nick& SCORES #foo

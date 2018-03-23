@@ -9,5 +9,5 @@ kick message.
 
 Syntax: CLEAR <#channel> USERS [reason]
 
-Examples:
+Example:
     /msg &nick& CLEAR #ChatZone USERS

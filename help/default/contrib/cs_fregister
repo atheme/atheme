@@ -7,5 +7,5 @@ it or even needing to be joined to it.
 
 Syntax: FREGISTER <#channel>
 
-Examples:
+Example:
     /msg &nick& FREGISTER #atheme

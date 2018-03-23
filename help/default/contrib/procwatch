@@ -5,5 +5,5 @@ only compiles and works under FreeBSD 4.1 and later FreeBSD versions.
 
 Syntax: PROCWATCH <pid>
 
-Examples:
+Example:
     /msg &nick& PROCWATCH 1234

@@ -9,5 +9,5 @@ be restored.
 
 Syntax: FDROP <#channel>
 
-Examples:
+Example:
     /msg &nick& FDROP #foo

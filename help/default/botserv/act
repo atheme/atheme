@@ -5,5 +5,5 @@ on the given channel using the given text.
 
 Syntax: ACT <chan> <text>
 
-Examples:
+Example:
     /msg &nick& ACT #help yawns!

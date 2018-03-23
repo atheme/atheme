@@ -5,5 +5,5 @@ channel by users that do not have chan:admin privilege.
 
 Syntax: SET <botnick> PRIVATE {ON|OFF}
 
-Examples:
+Example:
     /msg &nick& SET Security PRIVATE ON

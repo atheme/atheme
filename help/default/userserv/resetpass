@@ -5,5 +5,5 @@ account.
 
 Syntax: RESETPASS <account>
 
-Examples:
+Example:
     /msg &nick& RESETPASS pfish
