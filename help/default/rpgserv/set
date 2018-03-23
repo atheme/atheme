@@ -28,10 +28,16 @@ SETTING (free-form text)
 STORYLINE (free-form text)
 SUMMARY (free-form text)
 
-Example:
+Examples:
+
     /msg &nick& SET #ooc GENRE FANTASY
-         Set the GENRE for #ooc to FANTASY
+
+    Set the GENRE for #ooc to FANTASY
+
     /msg &nick& SET #ooc SYSTEM CHARAPPROVAL DICED
-         Set the SYSTEM for #ooc to "Character Approval" and "Diced"
+
+    Set the SYSTEM for #ooc to "Character Approval" and "Diced"
+
     /msg &nick& SET #ooc SYSTEM
-         Clear the setting for SYSTEM on channel #ooc
+
+    Clear the setting for SYSTEM on channel #ooc
