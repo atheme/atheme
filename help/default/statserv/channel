@@ -8,7 +8,8 @@ This would give you the total amount of channels.
 
 Syntax: CHANNEL TOPIC <channel>
 
-Examples:
-    /msg &nick& CHANNEL TOPIC #atheme
+This would give you the topic for a channel.
 
-This example would get the topic for #atheme.
+Examples:
+    /msg &nick& CHANNEL COUNT
+    /msg &nick& CHANNEL TOPIC #atheme
