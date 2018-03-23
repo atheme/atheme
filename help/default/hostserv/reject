@@ -12,4 +12,4 @@ Syntax: REJECT <nick> [reason]
 Examples:
     /msg &nick& REJECT nenolod
     /msg &nick& REJECT *
-	/msg &nick& REJECT spb Vulgar vHosts are not allowed
+    /msg &nick& REJECT spb Vulgar vHosts are not allowed
