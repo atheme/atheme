@@ -1,0 +1,9 @@
+Help for GENHASH:
+
+GENHASH generates an Atheme password hash, useful to easily
+create a password hash for use as a services oper password.
+
+Syntax: GENHASH <password>
+
+Example:
+    /msg &nick& GENHASH letmein

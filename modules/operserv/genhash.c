@@ -27,11 +27,11 @@ cmd_os_genhash_func(struct sourceinfo *const restrict si, const int parc, char *
 
 static struct command cmd_os_genhash = {
 	.name           = "GENHASH",
-	.desc           = N_("Generates a password hash for SOPER."),
+	.desc           = N_("Generates a password hash from a password."),
 	.access         = PRIV_ADMIN,
 	.maxparc        = 1,
 	.cmd            = &cmd_os_genhash_func,
-	.help           = { .path = "operserv/genhash" },
+	.help           = { .path = "oservice/genhash" },
 };
 
 static void
