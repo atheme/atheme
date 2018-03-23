@@ -9,19 +9,20 @@ asterisk to clear all lists.
 Syntax: CLEAR <#channel> BANS [types]
 
 Examples:
+
     /msg &nick& CLEAR #support BANS
 
-Clears #support ban list.
+    Clears #support ban list.
 
     /msg &nick& CLEAR #support BANS eI
 
-Removes all ban and invite exceptions on #support
-(if your ircd supports them).
+    Removes all ban and invite exceptions on #support
+    (if your ircd supports them).
 
     /msg &nick& CLEAR #support BANS *
 
-Clears all lists of #support.
+    Clears all lists of #support.
 
     /msg &nick& CLEAR #support BANS +
 
-Shows the possible letters.
+    Shows the possible letters.
