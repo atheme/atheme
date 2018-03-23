@@ -1,9 +1,0 @@
-Help for LOGSTREAM:
-
-LOGSTREAM allows you to "stream" Atheme's logfiles into a channel, similar to
-the snoop channel.
-
-Syntax: LOGSTREAM <#channel>
-
-Examples:
-    /msg &nick& LOGSTREAM #services
