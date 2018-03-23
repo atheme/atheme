@@ -11,8 +11,12 @@ Syntax: INFO <account>
 Syntax: INFO =<online user>
 
 Examples:
+
     /msg &nick& INFO w00t
-Shows information about the account w00t.
+
+    Shows information about the account w00t.
+
     /msg &nick& INFO =w00tie[home]
-Shows information about the account the user
-w00tie[home] is logged in as.
+
+    Shows information about the account the user
+    w00tie[home] is logged in as.
