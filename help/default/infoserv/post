@@ -17,9 +17,8 @@ IMPORTANCE:
     4 - Send a privmsg/query to all users now. It is important to note that this
             may annoy users and should only be used when absolutely necessary.
 
-
 Syntax: POST <importance> <subject> <message>
 
-Example:
+Examples:
     /msg &nick& POST 2 Info1 Some important information for users.
     /msg &nick& POST 1 Multi_Word_Subject Some more information.

@@ -39,6 +39,6 @@ values for <options> are:
     KLINE   - enables network bans
     NOKLINE - disables network bans
 
-Example:
+Examples:
     /msg &nick& RWATCH ADD /^m(oo|00)cow/i moocow figure
     /msg &nick& RWATCH DEL /^m(oo|00)cow/i

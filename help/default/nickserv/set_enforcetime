@@ -9,7 +9,7 @@ or a number value between 1-180 (seconds).
 
 Syntax: SET ENFORCETIME TIME|DEFAULT
 
-Example:
+Examples:
     /msg &nick& SET ENFORCETIME DEFAULT
     /msg &nick& SET ENFORCETIME 90
     /msg &nick& SET ENFORCETIME 3

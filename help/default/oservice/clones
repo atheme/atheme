@@ -63,7 +63,7 @@ Syntax: CLONES LISTEXEMPT
 
 Shows the clone exemption list with reasons.
 
-Example:
+Examples:
     /msg &nick& CLONES ADDEXEMPT 127.0.0.1 100 local
     /msg &nick& CLONES DELEXEMPT 192.168.1.2
 
@@ -75,4 +75,3 @@ restarts.
 
 Example:
     /msg &nick& CLONES DURATION 30m
-

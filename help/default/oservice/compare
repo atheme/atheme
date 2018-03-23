@@ -9,6 +9,6 @@ amongst other situations.
 
 Syntax: COMPARE <#channel|user> <#channel|user>
 
-Example:
+Examples:
     /msg &nick& COMPARE #warez #dcc
     /msg &nick& COMPARE w00t Brik

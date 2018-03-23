@@ -5,6 +5,6 @@ your account registration.
 
 Syntax: VERIFY <operation> <nickname> <key>
 
-Example:
+Examples:
     /msg &nick& VERIFY REGISTER jenny 161803399
     /msg &nick& VERIFY EMAILCHG Aeriana 271828183

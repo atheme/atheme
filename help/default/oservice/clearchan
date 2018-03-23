@@ -12,6 +12,6 @@ This command should not be used lightly.
 
 Syntax: CLEARCHAN KICK|KILL|AKILL <#channel> <reason>
 
-Example:
+Examples:
     /msg &nick& CLEARCHAN KICK #warez warez is bad, mk?
     /msg &nick& CLEARCHAN AKILL #warez you were warned!

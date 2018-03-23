@@ -11,6 +11,6 @@ are currently using.
 
 Syntax: IDENTIFY <nick> <password>
 
-Example:
+Examples:
     /msg &nick& IDENTIFY foo
     /msg &nick& IDENTIFY jilles foo

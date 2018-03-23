@@ -5,6 +5,6 @@ uses to communicate with you.
 
 Syntax: SET LANGUAGE <abbreviation>
 
-Example:
+Examples:
     /msg &nick& SET LANGUAGE en
     /msg &nick& SET LANGUAGE ru

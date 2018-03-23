@@ -22,7 +22,7 @@ number of matches will be shown.
 
 Syntax: RMATCH /<pattern>/[i][p] [FORCE]
 
-Example:
+Examples:
     /msg &nick& RMATCH /^m(oo|00)cow/i FORCE
     /msg &nick& RMATCH #^[a-z]+!~?[a-z]+@#
     /msg &nick& RMATCH /^[^ ]* [^ ]*$/

@@ -9,6 +9,6 @@ access to the given channel is returned.
 
 Syntax: STATUS [#channel]
 
-Example:
+Examples:
     /msg &nick& STATUS
     /msg &nick& STATUS #foo

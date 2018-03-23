@@ -6,6 +6,6 @@ calculations that can be done at once.
 
 Syntax: CALC [times] <expression>
 
-Example:
+Examples:
     /msg &nick& CALC 6*8
     /msg &nick& CALC 5 1+2
