@@ -11,7 +11,7 @@ plugindir	= $(MODDIR)/modules/scripting/lib
 
 CPPFLAGS	+= -I../../../../include -I. $(PERL_CFLAGS)
 LDFLAGS		+= -L../../../../libathemecore
-LIBS		+= -lathemecore
+LIBS		+= -lathemecore $(PERL_LIBS)
 
 CFLAGS		+= $(PLUGIN_CFLAGS)
 LDFLAGS		+= $(PLUGIN_LDFLAGS)
