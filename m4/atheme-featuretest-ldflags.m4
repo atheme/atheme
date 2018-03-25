@@ -1,4 +1,32 @@
-AC_DEFUN([ATHEME_FEATURETEST_LINKERFLAGS], [
+ATHEME_LD_TEST_LDFLAGS_RESULT="no"
+
+AC_DEFUN([ATHEME_LD_TEST_LDFLAGS],
+	[
+		AC_MSG_CHECKING([for C linker flag(s) $1 ])
+
+		LDFLAGS_SAVED="${LDFLAGS}"
+		LDFLAGS="${LDFLAGS} $1"
+
+		AC_LINK_IFELSE(
+			[
+				AC_LANG_PROGRAM([[]], [[]])
+			], [
+				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
+
+				AC_MSG_RESULT([yes])
+			], [
+				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
+				LDFLAGS="${LDFLAGS_SAVED}"
+
+				AC_MSG_RESULT([no])
+			]
+		)
+
+		unset LDFLAGS_SAVED
+	]
+)
+
+AC_DEFUN([ATHEME_FEATURETEST_LDFLAGS], [
 
 	AC_ARG_ENABLE([profile],
 		[AS_HELP_STRING([--enable-profile], [Enable profiling extensions])],
@@ -11,6 +39,10 @@ AC_DEFUN([ATHEME_FEATURETEST_LINKERFLAGS], [
 	AC_ARG_ENABLE([nonlazy-bind],
 		[AS_HELP_STRING([--disable-nonlazy-bind], [Disable -Wl,-z,now (resolves all symbols at program startup time)])],
 		[], [enable_nonlazy_bind="yes"])
+
+	AC_ARG_ENABLE([linker-defs],
+		[AS_HELP_STRING([--disable-linker-defs], [Disable -Wl,-z,defs (detects and rejects underlinking)])],
+		[], [enable_linker_defs="yes"])
 
 	AC_ARG_ENABLE([as-needed],
 		[AS_HELP_STRING([--disable-as-needed], [Disable -Wl,--as-needed (strips unnecessary libraries at link time)])],
@@ -50,6 +82,17 @@ AC_DEFUN([ATHEME_FEATURETEST_LINKERFLAGS], [
 			;;
 		*)
 			AC_MSG_ERROR([invalid option for --enable-nonlazy-bind])
+			;;
+	esac
+
+	case "${enable_linker_defs}" in
+		yes)
+			ATHEME_LD_TEST_LDFLAGS([-Wl,-z,defs])
+			;;
+		no)
+			;;
+		*)
+			AC_MSG_ERROR([invalid option for --enable-linker-defs])
 			;;
 	esac
 

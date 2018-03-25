@@ -801,12 +801,16 @@ enable_contrib
 enable_fhs_paths
 enable_large_net
 enable_reproducible_builds
-with_libmowgli
-enable_warnings
 enable_profile
 enable_relro
 enable_nonlazy_bind
+enable_linker_defs
 enable_as_needed
+enable_fortify_source
+enable_stack_protector
+enable_async_unwind_tables
+enable_warnings
+with_libmowgli
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1446,16 +1450,27 @@ Optional Features:
   --enable-large-net      Enable large network support
   --enable-reproducible-builds
                           Enable reproducible builds
-  --enable-warnings       Enable compiler warnings
   --enable-profile        Enable profiling extensions
   --disable-relro         Disable -Wl,-z,relro (marks the relocation table
                           read-only)
   --disable-nonlazy-bind  Disable -Wl,-z,now (resolves all symbols at program
                           startup time)
+  --disable-linker-defs   Disable -Wl,-z,defs (detects and rejects
+                          underlinking)
   --disable-as-needed     Disable -Wl,--as-needed (strips unnecessary
                           libraries at link time)
   --disable-rpath         Disable -Wl,-rpath= (builds installation path into
                           binaries)
+  --disable-fortify-source
+                          Disable -D_FORTIFY_SOURCE=2 (hardening for many C
+                          library function invocations)
+  --disable-stack-protector
+                          Disable -fstack-protector{-strong,-all,} (Stack
+                          smashing protection)
+  --disable-async-unwind-tables
+                          Disable -fasynchronous-unwind-tables (Generate
+                          precise unwind tables for more reliable backtraces)
+  --enable-warnings       Enable compiler warnings
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -10091,122 +10106,647 @@ $as_echo "#define REPRODUCIBLE_BUILDS 1" >>confdefs.h
 
 
 
-
-
-
-# Check whether --with-libmowgli was given.
-if test "${with_libmowgli+set}" = set; then :
-  withval=$with_libmowgli;
+	# Check whether --enable-profile was given.
+if test "${enable_profile+set}" = set; then :
+  enableval=$enable_profile;
 else
-  with_libmowgli="yes"
+  enable_profile="no"
 fi
 
 
-	if test "x${with_libmowgli}" = "xyes"; then :
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for MOWGLI" >&5
-$as_echo_n "checking for MOWGLI... " >&6; }
-
-if test -n "$MOWGLI_CFLAGS"; then
-    pkg_cv_MOWGLI_CFLAGS="$MOWGLI_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmowgli-2 >= 2.0.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libmowgli-2 >= 2.0.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_MOWGLI_CFLAGS=`$PKG_CONFIG --cflags "libmowgli-2 >= 2.0.0" 2>/dev/null`
-		      test "x$?" != "x0" && pkg_failed=yes
+	# Check whether --enable-relro was given.
+if test "${enable_relro+set}" = set; then :
+  enableval=$enable_relro;
 else
-  pkg_failed=yes
+  enable_relro="yes"
 fi
- else
-    pkg_failed=untried
-fi
-if test -n "$MOWGLI_LIBS"; then
-    pkg_cv_MOWGLI_LIBS="$MOWGLI_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmowgli-2 >= 2.0.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libmowgli-2 >= 2.0.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_MOWGLI_LIBS=`$PKG_CONFIG --libs "libmowgli-2 >= 2.0.0" 2>/dev/null`
-		      test "x$?" != "x0" && pkg_failed=yes
+
+
+	# Check whether --enable-nonlazy-bind was given.
+if test "${enable_nonlazy_bind+set}" = set; then :
+  enableval=$enable_nonlazy_bind;
 else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
+  enable_nonlazy_bind="yes"
 fi
 
 
-
-if test $pkg_failed = yes; then
-   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
+	# Check whether --enable-linker-defs was given.
+if test "${enable_linker_defs+set}" = set; then :
+  enableval=$enable_linker_defs;
 else
-        _pkg_short_errors_supported=no
+  enable_linker_defs="yes"
 fi
-        if test $_pkg_short_errors_supported = yes; then
-	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libmowgli-2 >= 2.0.0" 2>&1`
-        else
-	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libmowgli-2 >= 2.0.0" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$MOWGLI_PKG_ERRORS" >&5
 
 
-			with_libmowgli="no"
-
-elif test $pkg_failed = untried; then
-     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-			with_libmowgli="no"
-
+	# Check whether --enable-as-needed was given.
+if test "${enable_as_needed+set}" = set; then :
+  enableval=$enable_as_needed;
 else
-	MOWGLI_CFLAGS=$pkg_cv_MOWGLI_CFLAGS
-	MOWGLI_LIBS=$pkg_cv_MOWGLI_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+  enable_as_needed="yes"
+fi
+
+
+	# Check whether --enable-rpath was given.
+if test "${enable_rpath+set}" = set; then :
+  enableval=$enable_rpath;
+else
+  enable_rpath="yes"
+fi
+
+
+	case "${enable_profile}" in
+		yes)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -pg " >&5
+$as_echo_n "checking for C linker flag(s) -pg ... " >&6; }
+
+		LDFLAGS_SAVED="${LDFLAGS}"
+		LDFLAGS="${LDFLAGS} -pg"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-			MOWGLI_SOURCE="System"
-			CPPFLAGS="${CPPFLAGS} ${MOWGLI_CFLAGS}"
-			LIBS="${LIBS} ${MOWGLI_LIBS}"
+else
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
+				LDFLAGS="${LDFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
 
 fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
 
-fi
+		unset LDFLAGS_SAVED
 
-	if test "x${with_libmowgli}" = "xyes"; then :
 
-elif test "x${with_libmowgli}" = "xno"; then :
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-profile" "$LINENO" 5
+			;;
+	esac
 
-		MOWGLI_SOURCE="Internal"
-		LIBMOWGLI_COND_D="libmowgli-2"
+	case "${enable_relro}" in
+		yes)
 
-		CPPFLAGS="${CPPFLAGS} -I$(pwd)/libmowgli-2/src/libmowgli"
-		LDFLAGS="${LDFLAGS} -L$(pwd)/libmowgli-2/src/libmowgli"
-		LIBS="${LIBS} -lmowgli-2"
-		subdirs="$subdirs libmowgli-2"
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,-z,relro " >&5
+$as_echo_n "checking for C linker flag(s) -Wl,-z,relro ... " >&6; }
 
+		LDFLAGS_SAVED="${LDFLAGS}"
+		LDFLAGS="${LDFLAGS} -Wl,-z,relro"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
 
 else
 
-		MOWGLI_SOURCE="System"
-		CPPFLAGS="${CPPFLAGS} -I${with_libmowgli}/include/libmowgli-2"
-		LDFLAGS="${LDFLAGS} -L${with_libmowgli}/lib"
-		LIBS="${LIBS} -lmowgli-2"
+				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
+				LDFLAGS="${LDFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
 
 fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+		unset LDFLAGS_SAVED
+
+
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-relro" "$LINENO" 5
+			;;
+	esac
+
+	case "${enable_nonlazy_bind}" in
+		yes)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,-z,now " >&5
+$as_echo_n "checking for C linker flag(s) -Wl,-z,now ... " >&6; }
+
+		LDFLAGS_SAVED="${LDFLAGS}"
+		LDFLAGS="${LDFLAGS} -Wl,-z,now"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
+				LDFLAGS="${LDFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+		unset LDFLAGS_SAVED
+
+
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-nonlazy-bind" "$LINENO" 5
+			;;
+	esac
+
+	case "${enable_linker_defs}" in
+		yes)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,-z,defs " >&5
+$as_echo_n "checking for C linker flag(s) -Wl,-z,defs ... " >&6; }
+
+		LDFLAGS_SAVED="${LDFLAGS}"
+		LDFLAGS="${LDFLAGS} -Wl,-z,defs"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
+				LDFLAGS="${LDFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+		unset LDFLAGS_SAVED
+
+
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-linker-defs" "$LINENO" 5
+			;;
+	esac
+
+	case "${enable_as_needed}" in
+		yes)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,--as-needed " >&5
+$as_echo_n "checking for C linker flag(s) -Wl,--as-needed ... " >&6; }
+
+		LDFLAGS_SAVED="${LDFLAGS}"
+		LDFLAGS="${LDFLAGS} -Wl,--as-needed"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
+				LDFLAGS="${LDFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+		unset LDFLAGS_SAVED
+
+
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-as-needed" "$LINENO" 5
+			;;
+	esac
+
+	case "${enable_rpath}" in
+		yes)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) ${LDFLAGS_RPATH} " >&5
+$as_echo_n "checking for C linker flag(s) ${LDFLAGS_RPATH} ... " >&6; }
+
+		LDFLAGS_SAVED="${LDFLAGS}"
+		LDFLAGS="${LDFLAGS} ${LDFLAGS_RPATH}"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
+				LDFLAGS="${LDFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+		unset LDFLAGS_SAVED
+
+
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-rpath" "$LINENO" 5
+			;;
+	esac
+
+
+
+	# Check whether --enable-fortify-source was given.
+if test "${enable_fortify_source+set}" = set; then :
+  enableval=$enable_fortify_source;
+else
+  enable_fortify_source="yes"
+fi
+
+
+	case "${enable_fortify_source}" in
+		yes)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C preprocessor flag(s) -D_FORTIFY_SOURCE=2 " >&5
+$as_echo_n "checking for C preprocessor flag(s) -D_FORTIFY_SOURCE=2 ... " >&6; }
+
+		CPPFLAGS_SAVED="${CPPFLAGS}"
+		CPPFLAGS="${CPPFLAGS} -D_FORTIFY_SOURCE=2"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CPP_TEST_CPPFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CPP_TEST_CPPFLAGS_RESULT='no'
+				CPPFLAGS="${CPPFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CPPFLAGS_SAVED
+
+
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-fortify-source" "$LINENO" 5
+			;;
+	esac
+
+
+
+	# Check whether --enable-stack-protector was given.
+if test "${enable_stack_protector+set}" = set; then :
+  enableval=$enable_stack_protector;
+else
+  enable_stack_protector="yes"
+fi
+
+
+	# Check whether --enable-async-unwind-tables was given.
+if test "${enable_async_unwind_tables+set}" = set; then :
+  enableval=$enable_async_unwind_tables;
+else
+  enable_async_unwind_tables="yes"
+fi
+
+
+	case "${enable_stack_protector}" in
+		yes)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-protector-strong " >&5
+$as_echo_n "checking for C compiler flag(s) -fstack-protector-strong ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -fstack-protector-strong"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+
+			if test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xno"; then :
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-protector-all " >&5
+$as_echo_n "checking for C compiler flag(s) -fstack-protector-all ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -fstack-protector-all"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+
+				if test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xno"; then :
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-protector " >&5
+$as_echo_n "checking for C compiler flag(s) -fstack-protector ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -fstack-protector"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+
+fi
+
+fi
+
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-as-needed" "$LINENO" 5
+			;;
+	esac
+
+	case "${enable_async_unwind_tables}" in
+		yes)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fasynchronous-unwind-tables " >&5
+$as_echo_n "checking for C compiler flag(s) -fasynchronous-unwind-tables ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -fasynchronous-unwind-tables"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-async-unwind-tables" "$LINENO" 5
+			;;
+	esac
 
 
 
@@ -13408,300 +13948,122 @@ fi
 
 
 
-	# Check whether --enable-profile was given.
-if test "${enable_profile+set}" = set; then :
-  enableval=$enable_profile;
+
+
+
+# Check whether --with-libmowgli was given.
+if test "${with_libmowgli+set}" = set; then :
+  withval=$with_libmowgli;
 else
-  enable_profile="no"
+  with_libmowgli="yes"
 fi
 
 
-	# Check whether --enable-relro was given.
-if test "${enable_relro+set}" = set; then :
-  enableval=$enable_relro;
+	if test "x${with_libmowgli}" = "xyes"; then :
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for MOWGLI" >&5
+$as_echo_n "checking for MOWGLI... " >&6; }
+
+if test -n "$MOWGLI_CFLAGS"; then
+    pkg_cv_MOWGLI_CFLAGS="$MOWGLI_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmowgli-2 >= 2.0.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libmowgli-2 >= 2.0.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_MOWGLI_CFLAGS=`$PKG_CONFIG --cflags "libmowgli-2 >= 2.0.0" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
 else
-  enable_relro="yes"
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$MOWGLI_LIBS"; then
+    pkg_cv_MOWGLI_LIBS="$MOWGLI_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmowgli-2 >= 2.0.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libmowgli-2 >= 2.0.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_MOWGLI_LIBS=`$PKG_CONFIG --libs "libmowgli-2 >= 2.0.0" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
 fi
 
 
-	# Check whether --enable-nonlazy-bind was given.
-if test "${enable_nonlazy_bind+set}" = set; then :
-  enableval=$enable_nonlazy_bind;
-else
-  enable_nonlazy_bind="yes"
-fi
 
-
-	# Check whether --enable-as-needed was given.
-if test "${enable_as_needed+set}" = set; then :
-  enableval=$enable_as_needed;
-else
-  enable_as_needed="yes"
-fi
-
-
-	# Check whether --enable-rpath was given.
-if test "${enable_rpath+set}" = set; then :
-  enableval=$enable_rpath;
-else
-  enable_rpath="yes"
-fi
-
-
-	case "${enable_profile}" in
-		yes)
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -pg " >&5
-$as_echo_n "checking for C linker flag(s) -pg ... " >&6; }
-
-		LDFLAGS_SAVED="${LDFLAGS}"
-		LDFLAGS="${LDFLAGS} -pg"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
-				LDFLAGS="${LDFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		unset LDFLAGS_SAVED
-
-
-			;;
-		no)
-			;;
-		*)
-			as_fn_error $? "invalid option for --enable-profile" "$LINENO" 5
-			;;
-	esac
-
-	case "${enable_relro}" in
-		yes)
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,-z,relro " >&5
-$as_echo_n "checking for C linker flag(s) -Wl,-z,relro ... " >&6; }
-
-		LDFLAGS_SAVED="${LDFLAGS}"
-		LDFLAGS="${LDFLAGS} -Wl,-z,relro"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
+        if test $_pkg_short_errors_supported = yes; then
+	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libmowgli-2 >= 2.0.0" 2>&1`
+        else
+	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libmowgli-2 >= 2.0.0" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$MOWGLI_PKG_ERRORS" >&5
 
 
-int
-main ()
-{
+			with_libmowgli="no"
 
-  ;
-  return 0;
-}
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
+			with_libmowgli="no"
 
-				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+else
+	MOWGLI_CFLAGS=$pkg_cv_MOWGLI_CFLAGS
+	MOWGLI_LIBS=$pkg_cv_MOWGLI_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+
+			MOWGLI_SOURCE="System"
+			CPPFLAGS="${CPPFLAGS} ${MOWGLI_CFLAGS}"
+			LIBS="${LIBS} ${MOWGLI_LIBS}"
+
+fi
+
+fi
+
+	if test "x${with_libmowgli}" = "xyes"; then :
+
+elif test "x${with_libmowgli}" = "xno"; then :
+
+		MOWGLI_SOURCE="Internal"
+		LIBMOWGLI_COND_D="libmowgli-2"
+
+		CPPFLAGS="${CPPFLAGS} -I$(pwd)/libmowgli-2/src/libmowgli"
+		LDFLAGS="${LDFLAGS} -L$(pwd)/libmowgli-2/src/libmowgli"
+		LIBS="${LIBS} -lmowgli-2"
+		subdirs="$subdirs libmowgli-2"
+
 
 else
 
-				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
-				LDFLAGS="${LDFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		unset LDFLAGS_SAVED
-
-
-			;;
-		no)
-			;;
-		*)
-			as_fn_error $? "invalid option for --enable-relro" "$LINENO" 5
-			;;
-	esac
-
-	case "${enable_nonlazy_bind}" in
-		yes)
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,-z,now " >&5
-$as_echo_n "checking for C linker flag(s) -Wl,-z,now ... " >&6; }
-
-		LDFLAGS_SAVED="${LDFLAGS}"
-		LDFLAGS="${LDFLAGS} -Wl,-z,now"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
-				LDFLAGS="${LDFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
+		MOWGLI_SOURCE="System"
+		CPPFLAGS="${CPPFLAGS} -I${with_libmowgli}/include/libmowgli-2"
+		LDFLAGS="${LDFLAGS} -L${with_libmowgli}/lib"
+		LIBS="${LIBS} -lmowgli-2"
 
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		unset LDFLAGS_SAVED
-
-
-			;;
-		no)
-			;;
-		*)
-			as_fn_error $? "invalid option for --enable-nonlazy-bind" "$LINENO" 5
-			;;
-	esac
-
-	case "${enable_as_needed}" in
-		yes)
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,--as-needed " >&5
-$as_echo_n "checking for C linker flag(s) -Wl,--as-needed ... " >&6; }
-
-		LDFLAGS_SAVED="${LDFLAGS}"
-		LDFLAGS="${LDFLAGS} -Wl,--as-needed"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
-				LDFLAGS="${LDFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		unset LDFLAGS_SAVED
-
-
-			;;
-		no)
-			;;
-		*)
-			as_fn_error $? "invalid option for --enable-as-needed" "$LINENO" 5
-			;;
-	esac
-
-	case "${enable_rpath}" in
-		yes)
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) ${LDFLAGS_RPATH} " >&5
-$as_echo_n "checking for C linker flag(s) ${LDFLAGS_RPATH} ... " >&6; }
-
-		LDFLAGS_SAVED="${LDFLAGS}"
-		LDFLAGS="${LDFLAGS} ${LDFLAGS_RPATH}"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
-				LDFLAGS="${LDFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		unset LDFLAGS_SAVED
-
-
-			;;
-		no)
-			;;
-		*)
-			as_fn_error $? "invalid option for --enable-rpath" "$LINENO" 5
-			;;
-	esac
 
 
 
@@ -13709,6 +14071,10 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 CPPFLAGS="${CPPFLAGS} -DPREFIX=\\\"\${prefix}\\\" -DBINDIR=\\\"\${bindir}\\\" -DDATADIR=\\\"\${DATADIR}\\\""
 CPPFLAGS="${CPPFLAGS} -DLOCALEDIR=\\\"\${LOCALEDIR}\\\" -DLOGDIR=\\\"\${LOGDIR}\\\" -DMODDIR=\\\"\${MODDIR}\\\""
 CPPFLAGS="${CPPFLAGS} -DRUNDIR=\\\"\${RUNDIR}\\\" -DSHAREDIR=\\\"\${SHAREDIR}\\\" -DSYSCONFDIR=\\\"\${sysconfdir}\\\""
+
+
+
+
 
 
 

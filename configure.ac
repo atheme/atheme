@@ -151,18 +151,27 @@ ATHEME_FEATURETEST_REPROBUILDS
 
 dnl These must be here, not above, or they might interfere with library and feature tests
 dnl Explanation is that these modify one or more of CFLAGS, CPPFLAGS, LDFLAGS, and LIBS
-ATHEME_LIBTEST_MOWGLI
+dnl Linker tests should be first so that warning flags don't clutter the contents of config.log
+dnl Mowgli test must be last or it will interfere with linker tests (the library may not yet exist)
+ATHEME_FEATURETEST_LDFLAGS
+ATHEME_FEATURETEST_CPPFLAGS
+ATHEME_FEATURETEST_CFLAGS
 ATHEME_FEATURETEST_WARNINGS
-ATHEME_FEATURETEST_LINKERFLAGS
+ATHEME_LIBTEST_MOWGLI
 
 
 
+dnl Paths that source code files might want to reference
 CPPFLAGS="${CPPFLAGS} -DPREFIX=\\\"\${prefix}\\\" -DBINDIR=\\\"\${bindir}\\\" -DDATADIR=\\\"\${DATADIR}\\\""
 CPPFLAGS="${CPPFLAGS} -DLOCALEDIR=\\\"\${LOCALEDIR}\\\" -DLOGDIR=\\\"\${LOGDIR}\\\" -DMODDIR=\\\"\${MODDIR}\\\""
 CPPFLAGS="${CPPFLAGS} -DRUNDIR=\\\"\${RUNDIR}\\\" -DSHAREDIR=\\\"\${SHAREDIR}\\\" -DSYSCONFDIR=\\\"\${sysconfdir}\\\""
 
+
+
+AC_SUBST([CFLAGS])
 AC_SUBST([CPPFLAGS])
 AC_SUBST([LDFLAGS])
+AC_SUBST([LIBS])
 
 BUILDSYS_TOUCH_DEPS
 
