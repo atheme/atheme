@@ -1,5 +1,7 @@
 AC_DEFUN([ATHEME_LIBTEST_MOWGLI], [
 
+	MOWGLI_SOURCE=""
+
 	AC_ARG_WITH([libmowgli],
 		[AS_HELP_STRING([--with-libmowgli@<:@=prefix@:>@], [Specify location of system libmowgli install, "yes" to ask pkg-config (default), or "no" to force use of internal libmowgli submodule (fallback)])],
 		[], [with_libmowgli="yes"])
@@ -21,7 +23,6 @@ AC_DEFUN([ATHEME_LIBTEST_MOWGLI], [
 		CPPFLAGS="${CPPFLAGS} -I$(pwd)/libmowgli-2/src/libmowgli"
 		LDFLAGS="${LDFLAGS} -L$(pwd)/libmowgli-2/src/libmowgli"
 		LIBS="${LIBS} -lmowgli-2"
-		AC_CONFIG_SUBDIRS([libmowgli-2])
 	], [
 		MOWGLI_SOURCE="System"
 		CPPFLAGS="${CPPFLAGS} -I${with_libmowgli}/include/libmowgli-2"

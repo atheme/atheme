@@ -175,6 +175,14 @@ AC_SUBST([LIBS])
 
 BUILDSYS_TOUCH_DEPS
 
+AS_IF([test "x${MOWGLI_SOURCE}" = "xInternal"], [
+
+	dnl Run ./configure in the libmowgli submodule directory but without OpenSSL support
+	dnl Atheme does not use the OpenSSL VIO interface in Mowgli and this avoids an unnecessary -lssl
+
+	AX_SUBDIRS_CONFIGURE([libmowgli-2], [[--without-openssl]], [[]], [[]], [[--with-openssl], [--with-openssl=auto], [--with-openssl=yes]])
+])
+
 AC_CONFIG_FILES([
 	atheme-services.pc
 	buildsys.mk
