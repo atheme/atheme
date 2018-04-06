@@ -47,7 +47,6 @@
 
 enum scramsha_step
 {
-	SCRAMSHA_STEP_CLIENTFIRST   = 0,        // Waiting for client-first-message
 	SCRAMSHA_STEP_CLIENTPROOF   = 1,        // Waiting for client-final-message
 	SCRAMSHA_STEP_PASSED        = 2,        // Authentication has succeeded
 	SCRAMSHA_STEP_FAILED        = 3,        // Authentication has failed
@@ -134,13 +133,15 @@ static unsigned int
 mech_step_clientfirst(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
                       void **const restrict out, size_t *const restrict outlen, const unsigned int prf)
 {
-	if (! (in && inlen))
-		return ASASL_ERROR;
-
 	struct scramsha_session *s = NULL;
 	const char *const header = in;
 	const char *message = in;
 
+	if (! (in && inlen))
+	{
+		(void) slog(LG_DEBUG, "%s: no data received from client", __func__);
+		return ASASL_ERROR;
+	}
 	if (strnlen(in, inlen) != inlen)
 	{
 		(void) slog(LG_DEBUG, "%s: NULL byte in data received from client", __func__);
@@ -222,6 +223,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 	}
 
 	scram_attr_list input;
+
 	if (! sasl_scramsha_attrlist_parse(message, &input))
 		// Malformed SCRAM attribute list
 		goto error;
@@ -344,8 +346,10 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
                       void **const restrict out, size_t *const restrict outlen)
 {
 	if (! (in && inlen))
+	{
+		(void) slog(LG_DEBUG, "%s: no data received from client", __func__);
 		return ASASL_ERROR;
-
+	}
 	if (strnlen(in, inlen) != inlen)
 	{
 		(void) slog(LG_DEBUG, "%s: NULL byte in data received from client", __func__);
@@ -353,6 +357,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	}
 
 	scram_attr_list input;
+
 	if (! sasl_scramsha_attrlist_parse(in, &input))
 		// Malformed SCRAM attribute list
 		goto error;
@@ -536,16 +541,16 @@ static inline unsigned int
 mech_step_dispatch(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
                    void **const restrict out, size_t *const restrict outlen, const unsigned int prf)
 {
-	if (! (p && p->mechdata))
+	if (! p)
 		return ASASL_ERROR;
 
 	struct scramsha_session *const s = p->mechdata;
 
+	if (! s)
+		return mech_step_clientfirst(p, in, inlen, out, outlen, prf);
+
 	switch (s->step)
 	{
-		case SCRAMSHA_STEP_CLIENTFIRST:
-			return mech_step_clientfirst(p, in, inlen, out, outlen, prf);
-
 		case SCRAMSHA_STEP_CLIENTPROOF:
 			return mech_step_clientproof(s, in, inlen, out, outlen);
 
