@@ -531,9 +531,20 @@ sasl_input_clientdata(const struct sasl_message *const restrict smsg, struct sas
 	 *
 	 * This is also what clients send us when they do not want to send us any data at all, and in
 	 * either event, this is *NOT* *DATA* we are receiving, and we should not buffer it.
+	 *
+	 * Also, if the data is a single '*' character, the client is aborting authentication. Servers
+	 * should send us a 'D' packet instead of a 'C *' packet in this case, but this is for if they
+	 * don't. Note that this will usually result in the client getting a 904 numeric instead of 906,
+	 * but the alternative is not treating '*' specially and then going on to fail to decode it in
+	 * sasl_packet() above, which will result in ... an aborted session and a 904 numeric. So this
+	 * just saves time.
 	 */
 
 	const size_t len = strlen(smsg->parv[0]);
+
+	// Abort?
+	if (len == 1 && smsg->parv[0][0] == '*')
+		return false;
 
 	// End of data?
 	if (len == 1 && smsg->parv[0][0] == '+')
@@ -542,7 +553,7 @@ sasl_input_clientdata(const struct sasl_message *const restrict smsg, struct sas
 			return sasl_buf_process(p);
 
 		// This function already deals with the special case of 1 '+' character
-		return sasl_packet(p, smsg->parv[0], len);
+		return sasl_packet(p, "+", 1);
 	}
 
 	/* Optimisation: If there is no buffer yet and this data is less than 400 characters, we don't
