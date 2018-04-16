@@ -30,8 +30,8 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* Misc structs etc */
 	myuser_t *tmu;
-	mymemo_t *memo, *receipt;
-	mowgli_node_t *n;
+	mymemo_t *memo, *receipt, *original;
+	mowgli_node_t *n, *m;
 	unsigned int i = 1, memonum = 0, numread = 0;
 	char strfbuf[BUFSIZE];
 	struct tm tm;
@@ -92,11 +92,14 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 				if (memo->status & MEMO_CHANNEL)
 					;
 				else if (strcasecmp(si->service->nick, memo->sender) && (tmu != NULL) && (tmu->logins.count > 0))
+				{
 					myuser_notice(si->service->me->nick, tmu, "%s has read your memo, which was sent at %s", entity(si->smu)->name, strfbuf);
+					myuser_notice(si->service->me->nick, tmu, "%s", memo->text);
+				}
 				else
 				{
 					/* If they have an account, their inbox is not full and they aren't memoserv */
-					if ( (tmu != NULL) && (tmu->memos.count < me.mdlimit) && strcasecmp(si->service->nick, memo->sender))
+					if ( (tmu != NULL) && ((tmu->memos.count + 1) < me.mdlimit) && strcasecmp(si->service->nick, memo->sender))
 					{
 						/* Malloc and populate memo struct */
 						receipt = smalloc(sizeof(mymemo_t));
@@ -105,9 +108,19 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 						mowgli_strlcpy(receipt->sender, si->service->nick, sizeof receipt->sender);
 						snprintf(receipt->text, sizeof receipt->text, "%s has read a memo from you sent at %s", entity(si->smu)->name, strfbuf);
 
+						original = smalloc(sizeof(mymemo_t));
+						original->sent = CURRTIME;
+						original->status = 0;
+						mowgli_strlcpy(original->sender, si->service->nick, NICKLEN);
+						snprintf(original->text, MEMOLEN, "Original memo: %s", memo->text);
+
 						/* Attach to their linked list */
 						n = mowgli_node_create();
 						mowgli_node_add(receipt, n, &tmu->memos);
+						tmu->memoct_new++;
+
+						m = mowgli_node_create();
+						mowgli_node_add(original, m, &tmu->memos);
 						tmu->memoct_new++;
 					}
 				}
