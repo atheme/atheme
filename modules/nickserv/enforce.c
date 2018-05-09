@@ -49,7 +49,7 @@ log_enforce_victim_out(struct user *u, struct myuser *mu)
 	if ((mn = mynick_find(u->nick)) != NULL)
 		mn->lastseen = CURRTIME;
 
-	if (!ircd_on_logout(u, entity(u->myuser)->name))
+	if (!ircd_logout_or_kill(u, entity(u->myuser)->name))
 	{
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, u->myuser->logins.head)
 		{
@@ -521,7 +521,7 @@ ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 			{
 				command_success_nodata(si, _("You have been logged out of \2%s\2."), entity(si->smu)->name);
 
-				if (ircd_on_logout(si->su, entity(si->smu)->name))
+				if (ircd_logout_or_kill(si->su, entity(si->smu)->name))
 					// logout killed the user...
 					return;
 				si->smu->lastlogin = CURRTIME;

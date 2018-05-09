@@ -272,6 +272,7 @@ services_init(void)
 	}
 
 	hook_add_event("user_can_login");
+	hook_add_event("user_can_logout");
 }
 
 void
@@ -405,6 +406,26 @@ handle_nickchange(struct user *u)
 	hook_call_nick_check(u);
 }
 
+bool ircd_logout_or_kill(user_t *u, const char *login)
+{
+	service_t *svs = service_find("operserv");
+
+	hook_user_logout_check_t req = {
+		.si      = NULL,
+		.u       = u,
+		.allowed = true,
+		.relogin = false,
+	};
+
+	hook_call_user_can_logout(&req);
+
+	if (req.allowed)
+		return ircd_on_logout(u, login);
+
+	kill_user(svs == NULL ? NULL : svs->me, u, "Forcing logout %s -> %s", u->nick, login);
+	return true;
+}
+
 /* User u is bursted as being logged in to login (if not NULL) or as
  * being identified to their current nick (if login is NULL)
  * The timestamp is the time of registration of the account, if the ircd
@@ -445,7 +466,7 @@ handle_burstlogin(struct user *u, const char *login, time_t ts)
 			if (authservice_loaded)
 			{
 				notice(nicksvs.nick ? nicksvs.nick : me.name, u->nick, _("Account %s dropped, forcing logout"), login);
-				ircd_on_logout(u, login);
+				ircd_logout_or_kill(u, login);
 			}
 			return;
 		}
@@ -465,7 +486,7 @@ handle_burstlogin(struct user *u, const char *login, time_t ts)
 		if (authservice_loaded)
 		{
 			notice(nicksvs.nick ? nicksvs.nick : me.name, u->nick, _("Login to account %s is stale, forcing logout"), login);
-			ircd_on_logout(u, login);
+			ircd_logout_or_kill(u, login);
 		}
 		return;
 	}
@@ -476,7 +497,7 @@ handle_burstlogin(struct user *u, const char *login, time_t ts)
 		 * if we have an authentication service, log them out */
 		slog(LG_INFO, "handle_burstlogin(): got illegit login %s for user %s", login, u->nick);
 		notice(nicksvs.nick ? nicksvs.nick : me.name, u->nick, _("Login to account %s seems invalid, forcing logout"), login);
-		ircd_on_logout(u, login);
+		ircd_logout_or_kill(u, login);
 		return;
 	}
 	u->myuser = mu;

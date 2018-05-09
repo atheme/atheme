@@ -27,7 +27,6 @@ ns_cmd_login(struct sourceinfo *si, int parc, char *parv[])
 	const char *target = parv[0];
 	const char *password = parv[1];
 	char lau[BUFSIZE];
-	hook_user_login_check_t req;
 
 	if (si->su == NULL)
 	{
@@ -57,11 +56,22 @@ ns_cmd_login(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	req.si = si;
-	req.mu = mu;
-	req.allowed = true;
-	hook_call_user_can_login(&req);
-	if (!req.allowed)
+	hook_user_login_check_t login_req = {
+		.si      = si,
+		.mu      = mu,
+		.allowed = true,
+	};
+	hook_user_logout_check_t logout_req = {
+		.si      = si,
+		.u       = u,
+		.allowed = true,
+		.relogin = true,
+	};
+	hook_call_user_can_login(&login_req);
+	if (login_req.allowed && u->myuser)
+		hook_call_user_can_logout(&logout_req);
+
+	if (!login_req.allowed || !logout_req.allowed)
 	{
 		command_fail(si, fault_authfail, nicksvs.no_nick_ownership ? "You cannot log in as \2%s\2 because the server configuration disallows it."
 									   : "You cannot identify to \2%s\2 because the server configuration disallows it.", entity(mu)->name);
@@ -167,6 +177,7 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 	service_named_bind_command("nickserv", &ns_login);
 
 	hook_add_event("user_can_login");
+	hook_add_event("user_can_logout");
 }
 
 static void

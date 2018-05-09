@@ -88,7 +88,7 @@ ns_cmd_freeze(struct sourceinfo *si, int parc, char *parv[])
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->logins.head)
 		{
 			u = (struct user *)n->data;
-			if (!ircd_on_logout(u, entity(mu)->name))
+			if (!ircd_logout_or_kill(u, entity(mu)->name))
 			{
 				u->myuser = NULL;
 				mowgli_node_delete(n, &mu->logins);

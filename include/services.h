@@ -95,6 +95,7 @@ void verbose(struct mychan *mychan, const char *fmt, ...) ATHEME_FATTR_PRINTF(2,
 extern void (*notice)(const char *from, const char *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
 void change_notify(const char *from, struct user *to, const char *message, ...) ATHEME_FATTR_PRINTF(3, 4);
 bool bad_password(struct sourceinfo *si, struct myuser *mu);
+bool ircd_logout_or_kill(struct user *u, const char *login);
 
 struct sourceinfo *sourceinfo_create(void);
 void command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);

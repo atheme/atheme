@@ -70,6 +70,7 @@ sasl_input         sasl_message_t *
 service_introduce  service_t *
 user_can_register  hook_user_register_check_t *
 user_can_login     hook_user_login_check_t *
+user_can_logout    hook_user_logout_check_t *
 user_drop          myuser_t *
 user_identify      user_t *
 user_info          hook_user_req_t *
@@ -78,6 +79,7 @@ user_register      myuser_t *
 user_verify_register  hook_user_req_t *
 user_check_expire  hook_expiry_req_t *
 user_rename        hook_user_rename_t *
+user_can_rename    hook_user_rename_check_t *
 user_sethost       user_t *
 user_needforce     hook_user_needforce_t *
 myuser_delete      myuser_t *

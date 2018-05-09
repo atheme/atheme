@@ -17,6 +17,7 @@ ns_cmd_set_accountname(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *newname = parv[0];
 	struct mynick *mn;
+	hook_user_rename_check_t req;
 
 	if (!newname)
 	{
@@ -55,6 +56,17 @@ ns_cmd_set_accountname(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	req.si = si;
+	req.mu = si->smu;
+	req.mn = mn;
+	req.allowed = true;
+	hook_call_user_can_rename(&req);
+	if (!req.allowed)
+	{
+		command_fail(si, fault_authfail, _("You cannot change account name because the server configuration disallows it."));
+		return;
+	}
+
 	logcommand(si, CMDLOG_REGISTER, "SET:ACCOUNTNAME: \2%s\2", newname);
 	command_success_nodata(si, _("Your account name is now set to \2%s\2."), newname);
 	myuser_rename(si->smu, newname);
@@ -76,6 +88,7 @@ mod_init(struct module *const restrict m)
 	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 
 	command_add(&ns_set_accountname, *ns_set_cmdtree);
+	hook_add_event("user_can_rename");
 }
 
 static void

@@ -37,7 +37,30 @@ ns_cmd_logout(struct sourceinfo *si, int parc, char *parv[])
 			command_fail(si, fault_nosuch_target, _("\2%s\2 is not logged in."), user);
 			return;
 		}
+	}
+	else if (si->su == NULL)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "LOGOUT");
+		command_fail(si, fault_needmoreparams, _("Syntax: LOGOUT <target> <password>"));
+		return;
+	}
 
+	hook_user_logout_check_t req = {
+		.si      = si,
+		.u       = u,
+		.allowed = true,
+		.relogin = false,
+	};
+	hook_call_user_can_logout(&req);
+	if (!req.allowed)
+	{
+		logcommand(si, CMDLOG_LOGIN, "failed LOGOUT \2%s\2 (denied by hook)", u->nick);
+		command_fail(si, fault_authfail, _("You cannot log out \2%s\2 because the server configuration disallows it."), entity(u->myuser)->name);
+		return;
+	}
+
+	if (user)
+	{
 		if (u->myuser == si->smu || (pass != NULL && verify_password(u->myuser, pass)))
 			notice(nicksvs.nick, u->nick, "You were logged out by \2%s\2.", si->su->nick);
 		else if (pass != NULL)
@@ -53,13 +76,6 @@ ns_cmd_logout(struct sourceinfo *si, int parc, char *parv[])
 			return;
 		}
 	}
-	else if (si->su == NULL)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "LOGOUT");
-		command_fail(si, fault_needmoreparams, _("Syntax: LOGOUT <target> <password>"));
-		return;
-	}
-
 
 	if (is_soper(u->myuser))
 		logcommand(si, CMDLOG_ADMIN, "DESOPER: \2%s\2 as \2%s\2", u->nick, entity(u->myuser)->name);
@@ -108,6 +124,7 @@ static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_logout);
+	hook_add_event("user_can_logout");
 }
 
 static void
