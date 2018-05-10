@@ -47,6 +47,10 @@ struct user
 #define UF_DEAF        0x00004000 /* user does not receive channel msgs */
 #define UF_SERVICE     0x00008000 /* user is a service (e.g. +S on charybdis) */
 #define UF_KLINESENT   0x00010000 /* we've sent a kline for this user */
+#define UF_CUSTOM1     0x00020000 /* for internal use by protocol modules */
+#define UF_CUSTOM2     0x00040000
+#define UF_CUSTOM3     0x00080000
+#define UF_CUSTOM4     0x00100000
 
 #define CLIENT_NAME(user)	((user)->uid != NULL ? (user)->uid : (user)->nick)
 
