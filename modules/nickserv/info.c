@@ -7,6 +7,8 @@
 
 #include "atheme.h"
 
+static bool show_custom_metadata = true;
+
 static void
 ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -271,12 +273,24 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("Email      : %s%s"), mu->email,
 					(mu->flags & MU_HIDEMAIL) ? " (hidden)": "");
 
+	unsigned long mdcount = 0;
 	MOWGLI_PATRICIA_FOREACH(md, &state, atheme_object(mu)->metadata)
 	{
 		if (!strncmp(md->name, "private:", 8))
 			continue;
-		command_success_nodata(si, _("Metadata   : %s = %s"),
-				md->name, md->value);
+		if (show_custom_metadata)
+			command_success_nodata(si, _("Metadata   : %s = %s"),
+					md->name, md->value);
+		else
+			mdcount++;
+	}
+
+	if (mdcount && !show_custom_metadata)
+	{
+		if (module_find_published("nickserv/taxonomy"))
+			command_success_nodata(si, ngettext(N_("%lu custom metadata entry not shown; use \2/msg %s TAXONOMY %s\2 to view it."), N_("%lu custom metadata entries not shown; use \2/msg %s TAXONOMY %s\2 to view them."), mdcount), mdcount, si->service->disp, name);
+		else
+			command_success_nodata(si, ngettext(N_("%lu custom metadata entry not shown."), N_("%lu custom metadata entries not shown."), mdcount), mdcount);
 	}
 
 	*buf = '\0';
@@ -463,6 +477,7 @@ static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_info);
+	add_bool_conf_item("SHOW_CUSTOM_METADATA", &nicksvs.me->conf_table, 0, &show_custom_metadata, true);
 }
 
 static void

@@ -7,6 +7,8 @@
 
 #include "atheme.h"
 
+static bool show_custom_metadata = true;
+
 static void
 cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -111,6 +113,7 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!hide_info)
 	{
+		unsigned long mdcount = 0;
 		MOWGLI_PATRICIA_FOREACH(md, &state, atheme_object(mc)->metadata)
 		{
 			if (!strncmp(md->name, "private:", 8))
@@ -120,8 +123,19 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 					!strcasecmp(md->name, "url") ||
 					!strcasecmp(md->name, "disable_fantasy"))
 				continue;
-			command_success_nodata(si, _("Metadata   : %s = %s"),
-					md->name, md->value);
+			if (show_custom_metadata)
+				command_success_nodata(si, _("Metadata   : %s = %s"),
+						md->name, md->value);
+			else
+				mdcount++;
+		}
+
+		if (mdcount && !show_custom_metadata)
+		{
+			if (module_find_published("chanserv/taxonomy"))
+				command_success_nodata(si, ngettext(N_("%lu custom metadata entry not shown; use \2/msg %s TAXONOMY %s\2 to view it."), N_("%lu custom metadata entries not shown; use \2/msg %s TAXONOMY %s\2 to view them."), mdcount), mdcount, si->service->disp, name);
+			else
+				command_success_nodata(si, ngettext(N_("%lu custom metadata entry not shown."), N_("%lu custom metadata entries not shown."), mdcount), mdcount);
 		}
 	}
 
@@ -312,7 +326,8 @@ static struct command cs_info = {
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
-        service_named_bind_command("chanserv", &cs_info);
+	service_named_bind_command("chanserv", &cs_info);
+	add_bool_conf_item("SHOW_CUSTOM_METADATA", &chansvs.me->conf_table, 0, &show_custom_metadata, true);
 }
 
 static void

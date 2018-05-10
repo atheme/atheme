@@ -1186,6 +1186,13 @@ nickserv {
 	 */
 	#cracklib_warn;
 
+	/* (*)show_custom_metadata
+	 * Setting this option to false will prevent user-set metadata (via SET PROPERTY)
+	 * from showing up in the INFO output. The TAXONOMY command will still function
+	 * as usual, and INFO will point this out if users have metadata set.
+	 */
+	show_custom_metadata;
+
 	/* (*)emailexempts
 	 * A list of email addresses that will be exempt from the check of how many
 	 * accounts one user may have. Any email address in this block may register
@@ -1367,6 +1374,13 @@ chanserv {
 	 * Available options are: quiet, kickban and akill.
 	 */
 	antiflood_enforce_method = quiet;
+
+	/* (*)show_custom_metadata
+	 * Setting this option to false will prevent user-set metadata (via SET PROPERTY)
+	 * from showing up in the INFO output. The TAXONOMY command will still function
+	 * as usual, and INFO will point this out if channels have metadata set.
+	 */
+	show_custom_metadata;
 };
 
 /* CHANFIX configuration.
