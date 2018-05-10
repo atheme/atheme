@@ -309,7 +309,7 @@ p10_on_logout(struct user *u, const char *account)
 {
 	return_val_if_fail(u != NULL, false);
 
-	kill_user(NULL, u, "Forcing logout %s -> %s", u->nick, account);
+	kill_user(nicksvs.me ? nicksvs.me->me : NULL, u, "Forcing logout %s -> %s", u->nick, account);
 	return true;
 }
 

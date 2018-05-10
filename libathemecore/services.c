@@ -408,8 +408,6 @@ handle_nickchange(struct user *u)
 
 bool ircd_logout_or_kill(user_t *u, const char *login)
 {
-	service_t *svs = service_find("operserv");
-
 	hook_user_logout_check_t req = {
 		.si      = NULL,
 		.u       = u,
@@ -422,7 +420,7 @@ bool ircd_logout_or_kill(user_t *u, const char *login)
 	if (req.allowed)
 		return ircd_on_logout(u, login);
 
-	kill_user(svs == NULL ? NULL : svs->me, u, "Forcing logout %s -> %s", u->nick, login);
+	kill_user(nicksvs.me ? nicksvs.me->me : NULL, u, "Forcing logout %s -> %s", u->nick, login);
 	return true;
 }
 
