@@ -11,6 +11,8 @@
 #include "pmodule.h"
 #include "protocol/charybdis.h"
 
+#define UF_NOLOGOUT UF_CUSTOM1
+
 static struct ircd Seven = {
 	.ircdname = "ircd-seven",
 	.tldprefix = "$$",
@@ -71,6 +73,7 @@ static const struct cmode seven_user_mode_list[] = {
   { 'o', UF_IRCOP    },
   { 'D', UF_DEAF     },
   { 'S', UF_SERVICE  },
+  { 'V', UF_NOLOGOUT },
   { '\0', 0 }
 };
 
@@ -276,6 +279,13 @@ nick_ungroup(hook_user_req_t *hdata)
 }
 
 static void
+user_can_logout(hook_user_logout_check_t *hdata)
+{
+	if (hdata->u && (hdata->u->flags & UF_NOLOGOUT) && !hdata->relogin)
+		hdata->allowed = false;
+}
+
+static void
 mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/charybdis");
@@ -299,6 +309,8 @@ mod_init(struct module *const restrict m)
 	hook_add_nick_group(nick_group);
 	hook_add_event("nick_ungroup");
 	hook_add_nick_ungroup(nick_ungroup);
+	hook_add_event("user_can_logout");
+	hook_add_user_can_logout(user_can_logout);
 }
 
 static void
