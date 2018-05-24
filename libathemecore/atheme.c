@@ -60,6 +60,7 @@ bool readonly = false;
 bool strict_mode = true;
 bool offline_mode = false;
 bool permissive_mode = false;
+bool database_create = false;
 
 void (*db_save) (void *arg, enum db_save_strategy strategy) = NULL;
 void (*db_load) (const char *name) = NULL;
@@ -284,10 +285,13 @@ atheme_main(int argc, char *argv[])
 	atheme_bootstrap();
 
 	/* do command-line options */
-	while ((r = mowgli_getopt_long(argc, argv, "c:dhrtTl:np:D:v", long_opts, NULL)) != -1)
+	while ((r = mowgli_getopt_long(argc, argv, "c:bdhrtTl:np:D:v", long_opts, NULL)) != -1)
 	{
 		switch (r)
 		{
+		  case 'b':
+			  database_create = true;
+			  break;
 		  case 'c':
 			  config_file = sstrdup(mowgli_optarg);
 			  have_conf = true;
@@ -325,7 +329,7 @@ atheme_main(int argc, char *argv[])
 			  print_version();
 			  exit(EXIT_SUCCESS);
 		  default:
-			  fprintf(stderr, "usage: atheme [-dhnvr] [-t|-T] [-c conf] [-l logfile] [-p pidfile]\n");
+			  fprintf(stderr, "usage: atheme [-bdhnvr] [-t|-T] [-c conf] [-l logfile] [-p pidfile]\n");
 			  exit(EXIT_FAILURE);
 		}
 	}
@@ -432,6 +436,12 @@ atheme_main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 	db_check();
+
+	if (db_save && database_create)
+	{
+		db_save(NULL, DB_SAVE_BLOCKING);
+		return 0;
+	}
 
 #ifdef HAVE_GETPID
 	/* write pid */

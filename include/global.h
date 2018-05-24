@@ -156,6 +156,7 @@ extern bool cold_start;
 extern bool readonly;
 extern bool offline_mode;
 extern bool permissive_mode;
+extern bool database_create;
 extern char *config_file;
 extern char *datadir;
 

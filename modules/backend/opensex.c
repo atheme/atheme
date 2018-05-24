@@ -274,13 +274,26 @@ opensex_db_open_read(const char *filename)
 		// ENOENT can happen if the database does not exist yet.
 		if (errno == ENOENT)
 		{
-			slog(LG_ERROR, "db-open-read: database '%s' does not yet exist; a new one will be created.", path);
-			return NULL;
+			if (database_create)
+			{
+				slog(LG_ERROR, "db-open-read: database '%s' does not yet exist; a new one will be created.", path);
+				return NULL;
+			}
+			else
+			{
+				slog(LG_ERROR, "db-open-read: database '%s' does not yet exist; please specify the -b option to create a new one.", path);
+				exit(EXIT_FAILURE);
+			}
 		}
 
 		slog(LG_ERROR, "db-open-read: cannot open '%s' for reading: %s", path, strerror(errno1));
 		wallops(_("\2DATABASE ERROR\2: db-open-read: cannot open '%s' for reading: %s"), path, strerror(errno1));
-		return NULL;
+		exit(EXIT_FAILURE);
+	}
+	else if (database_create)
+	{
+		slog(LG_ERROR, "db-open-read: database '%s' already exists, but you specified the -b option to create a new one; please remove the old database first", path);
+		exit(EXIT_FAILURE);
 	}
 
 	rs = smalloc(sizeof *rs);
