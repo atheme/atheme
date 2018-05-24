@@ -55,6 +55,7 @@ Misc
 ----
 - Replace Base-64 codec to fix erroneous failures and add a raw encoder
 - atheme.conf.example: document SET NOPASSWORD module
+- Services will no longer begin a new database unless passed the -b option
 
 Build System
 ------------

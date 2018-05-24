@@ -176,7 +176,10 @@ services.
 --------------------
 
 Go into the directory where you installed atheme-services (by default,
-~/atheme/). Type ./bin/atheme-services to launch services.
+~/atheme/). If this is your first time running services, type
+"./bin/atheme-services -b" to create a database file.
+
+Next, type ./bin/atheme-services to launch services.
 
 Services will report any errors and/or detach into the background.
 
