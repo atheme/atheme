@@ -771,14 +771,48 @@ sendemail(struct user *u, struct myuser *mu, const char *type, const char *email
 		replace(buf, sizeof buf, "&netname&", me.netname);
 		replace(buf, sizeof buf, "&param&", param);
 		replace(buf, sizeof buf, "&sourceinfo&", sourceinfo);
-		if ((svs = service_find("nickserv")) != NULL)
-			replace(buf, sizeof buf, "&nicksvs&", svs->me->nick);
+
+		if ((svs = service_find("alis")) != NULL)
+			replace(buf, sizeof buf, "&alissvs&", svs->me->nick);
+
+		if ((svs = service_find("botserv")) != NULL)
+			replace(buf, sizeof buf, "&botsvs&", svs->me->nick);
+
+		if ((svs = service_find("chanfix")) != NULL)
+			replace(buf, sizeof buf, "&chanfix&", svs->me->nick);
+
 		if ((svs = service_find("chanserv")) != NULL)
 			replace(buf, sizeof buf, "&chansvs&", svs->me->nick);
+
+		if ((svs = service_find("gameserv")) != NULL)
+			replace(buf, sizeof buf, "&gamesvs&", svs->me->nick);
+
+		if ((svs = service_find("groupserv")) != NULL)
+			replace(buf, sizeof buf, "&groupsvs&", svs->me->nick);
+
+		if ((svs = service_find("helpserv")) != NULL)
+			replace(buf, sizeof buf, "&helpsvs&", svs->me->nick);
+
+		if ((svs = service_find("hostserv")) != NULL)
+			replace(buf, sizeof buf, "&hostsvs&", svs->me->nick);
+
+		if ((svs = service_find("infoserv")) != NULL)
+			replace(buf, sizeof buf, "&infosvs&", svs->me->nick);
+
 		if ((svs = service_find("memoserv")) != NULL)
 			replace(buf, sizeof buf, "&memosvs&", svs->me->nick);
+
+		if ((svs = service_find("nickserv")) != NULL)
+			replace(buf, sizeof buf, "&nicksvs&", svs->me->nick);
+
 		if ((svs = service_find("operserv")) != NULL)
 			replace(buf, sizeof buf, "&opersvs&", svs->me->nick);
+
+		if ((svs = service_find("rpgserv")) != NULL)
+			replace(buf, sizeof buf, "&rpgsvs&", svs->me->nick);
+
+		if ((svs = service_find("statserv")) != NULL)
+			replace(buf, sizeof buf, "&statsvs&", svs->me->nick);
 
 		fprintf(out, "%s\n", buf);
 	}
