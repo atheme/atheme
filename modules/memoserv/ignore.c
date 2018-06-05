@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (C) 2005 Atheme Project (http://atheme.org/)
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ *
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the Memoserv IGNORE functions
@@ -10,30 +12,16 @@
 static mowgli_patricia_t *ms_ignore_cmds = NULL;
 
 static void
-ms_cmd_ignore(struct sourceinfo *si, int parc, char *parv[])
+ms_cmd_ignore(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	// Grab args
-	char *cmd = parv[0];
-	struct command *c;
-
-	// Bad/missing arg
-	if (!cmd)
+	if (parc < 1)
 	{
-		command_fail(si, fault_needmoreparams,
-			STR_INSUFFICIENT_PARAMS, "IGNORE");
-
-		command_fail(si, fault_needmoreparams, _("Syntax: IGNORE ADD|DEL|LIST|CLEAR [account]"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "IGNORE");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: IGNORE ADD|DEL|LIST|CLEAR [account]"));
 		return;
 	}
 
-	c = command_find(ms_ignore_cmds, cmd);
-	if (c == NULL)
-	{
-		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
-		return;
-	}
-
-	command_exec(si->service, si, c, parc - 1, parv + 1);
+	(void) subcommand_dispatch_simple(si->service, si, parc, parv, ms_ignore_cmds, "IGNORE");
 }
 
 static void
@@ -227,31 +215,30 @@ static struct command ms_ignore_list = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
-	service_named_bind_command("memoserv", &ms_ignore);
+	if (! (ms_ignore_cmds = mowgli_patricia_create(&strcasecanon)))
+	{
+		(void) slog(LG_ERROR, "%s: mowgli_patricia_create() failed", m->name);
 
-	ms_ignore_cmds = mowgli_patricia_create(strcasecanon);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
 
-	// Add sub-commands
-	command_add(&ms_ignore_add, ms_ignore_cmds);
-	command_add(&ms_ignore_del, ms_ignore_cmds);
-	command_add(&ms_ignore_clear, ms_ignore_cmds);
-	command_add(&ms_ignore_list, ms_ignore_cmds);
+	(void) command_add(&ms_ignore_add, ms_ignore_cmds);
+	(void) command_add(&ms_ignore_del, ms_ignore_cmds);
+	(void) command_add(&ms_ignore_clear, ms_ignore_cmds);
+	(void) command_add(&ms_ignore_list, ms_ignore_cmds);
+
+	(void) service_named_bind_command("memoserv", &ms_ignore);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	service_named_unbind_command("memoserv", &ms_ignore);
+	(void) service_named_unbind_command("memoserv", &ms_ignore);
 
-	// Delete sub-commands
-	command_delete(&ms_ignore_add, ms_ignore_cmds);
-	command_delete(&ms_ignore_del, ms_ignore_cmds);
-	command_delete(&ms_ignore_clear, ms_ignore_cmds);
-	command_delete(&ms_ignore_list, ms_ignore_cmds);
-
-	mowgli_patricia_destroy(ms_ignore_cmds, NULL, NULL);
+	(void) mowgli_patricia_destroy(ms_ignore_cmds, &command_delete_trie_cb, ms_ignore_cmds);
 }
 
 SIMPLE_DECLARE_MODULE_V1("memoserv/ignore", MODULE_UNLOAD_CAPABILITY_OK)

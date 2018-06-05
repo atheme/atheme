@@ -39,28 +39,16 @@ os_akill_newuser(hook_user_nick_t *data)
 }
 
 static void
-os_cmd_akill(struct sourceinfo *si, int parc, char *parv[])
+os_cmd_akill(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	// Grab args
-	char *cmd = parv[0];
-        struct command *c;
-
-	// Bad/missing arg
-	if (!cmd)
+	if (parc < 1)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKILL");
-		command_fail(si, fault_needmoreparams, _("Syntax: AKILL ADD|DEL|LIST"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKILL");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: AKILL ADD|DEL|LIST"));
 		return;
 	}
 
-	c = command_find(os_akill_cmds, cmd);
-	if (c == NULL)
-	{
-		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
-		return;
-	}
-
-	command_exec(si->service, si, c, parc - 1, parv + 1);
+	(void) subcommand_dispatch_simple(si->service, si, parc, parv, os_akill_cmds, "AKILL");
 }
 
 static void
@@ -553,34 +541,35 @@ static struct command os_akill_sync = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
-        service_named_bind_command("operserv", &os_akill);
+	if (! (os_akill_cmds = mowgli_patricia_create(&strcasecanon)))
+	{
+		(void) slog(LG_ERROR, "%s: mowgli_patricia_create() failed", m->name);
 
-	os_akill_cmds = mowgli_patricia_create(strcasecanon);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
 
-	command_add(&os_akill_add, os_akill_cmds);
-	command_add(&os_akill_del, os_akill_cmds);
-	command_add(&os_akill_list, os_akill_cmds);
-	command_add(&os_akill_sync, os_akill_cmds);
+	(void) command_add(&os_akill_add, os_akill_cmds);
+	(void) command_add(&os_akill_del, os_akill_cmds);
+	(void) command_add(&os_akill_list, os_akill_cmds);
+	(void) command_add(&os_akill_sync, os_akill_cmds);
 
-	hook_add_event("user_add");
-	hook_add_user_add(os_akill_newuser);
+	(void) service_named_bind_command("operserv", &os_akill);
+
+	(void) hook_add_event("user_add");
+	(void) hook_add_user_add(&os_akill_newuser);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	service_named_unbind_command("operserv", &os_akill);
+	(void) hook_del_user_add(&os_akill_newuser);
 
-	command_delete(&os_akill_add, os_akill_cmds);
-	command_delete(&os_akill_del, os_akill_cmds);
-	command_delete(&os_akill_list, os_akill_cmds);
-	command_delete(&os_akill_sync, os_akill_cmds);
+	(void) service_named_unbind_command("operserv", &os_akill);
 
-	mowgli_patricia_destroy(os_akill_cmds, NULL, NULL);
-
-	hook_del_user_add(os_akill_newuser);
+	(void) mowgli_patricia_destroy(os_akill_cmds, &command_delete_trie_cb, os_akill_cmds);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/akill", MODULE_UNLOAD_CAPABILITY_OK)

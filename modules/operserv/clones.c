@@ -35,7 +35,7 @@ static struct service *serviceinfo = NULL;
 static mowgli_list_t clone_exempts;
 static bool kline_enabled;
 static unsigned int grace_count;
-static long kline_duration;
+static long kline_duration = 3600;
 static int clones_allowed, clones_warn;
 static unsigned int clones_dbversion = 1;
 
@@ -198,27 +198,16 @@ find_exempt(const char *ip)
 }
 
 static void
-os_cmd_clones(struct sourceinfo *si, int parc, char *parv[])
+os_cmd_clones(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	struct command *c;
-	char *cmd = parv[0];
-
-	// Bad/missing arg
-	if (!cmd)
+	if (parc < 1)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLONES");
 		command_fail(si, fault_needmoreparams, _("Syntax: CLONES KLINE|LIST|ADDEXEMPT|DELEXEMPT|LISTEXEMPT|SETEXEMPT|DURATION [parameters]"));
 		return;
 	}
 
-	c = command_find(os_clones_cmds, cmd);
-	if (c == NULL)
-	{
-		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
-		return;
-	}
-
-	command_exec(si->service, si, c, parc + 1, parv + 1);
+	(void) subcommand_dispatch_simple(si->service, si, parc, parv, os_clones_cmds, "CLONES");
 }
 
 static void
@@ -926,55 +915,86 @@ static struct command os_clones_duration = {
 static void
 mod_init(struct module *const restrict m)
 {
-	struct user *u;
-	mowgli_patricia_iteration_state_t state;
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "operserv/main");
 
-	if (!module_find_published("backend/opensex"))
+	if (! module_find_published("backend/opensex"))
 	{
-		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
+		(void) slog(LG_ERROR, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
+
 		m->mflags |= MODTYPE_FAIL;
 		return;
 	}
 
-	service_named_bind_command("operserv", &os_clones);
+	if (! (serviceinfo = service_find("operserv")))
+	{
+		(void) slog(LG_ERROR, "%s: cannot find OperServ (BUG?)", m->name);
 
-	os_clones_cmds = mowgli_patricia_create(strcasecanon);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
 
-	command_add(&os_clones_kline, os_clones_cmds);
-	command_add(&os_clones_list, os_clones_cmds);
-	command_add(&os_clones_addexempt, os_clones_cmds);
-	command_add(&os_clones_delexempt, os_clones_cmds);
-	command_add(&os_clones_setexempt, os_clones_cmds);
-	command_add(&os_clones_listexempt, os_clones_cmds);
-	command_add(&os_clones_duration, os_clones_cmds);
+	if (! (os_clones_cmds = mowgli_patricia_create(&strcasecanon)))
+	{
+		(void) slog(LG_ERROR, "%s: mowgli_patricia_create() failed", m->name);
 
-	hook_add_event("config_ready");
-	hook_add_config_ready(clones_configready);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
 
-	hook_add_event("user_add");
-	hook_add_user_add(clones_newuser);
-	hook_add_event("user_delete");
-	hook_add_user_delete(clones_userquit);
-	hook_add_db_write(write_exemptdb);
+	if (! (hostlist = mowgli_patricia_create(&noopcanon)))
+	{
+		(void) slog(LG_ERROR, "%s: mowgli_patricia_create() failed", m->name);
 
-	db_register_type_handler("CLONES-DBV", db_h_clonesdbv);
-	db_register_type_handler("CLONES-CK", db_h_ck);
-	db_register_type_handler("CLONES-CD", db_h_cd);
-	db_register_type_handler("CLONES-GR", db_h_gr);
-	db_register_type_handler("CLONES-EX", db_h_ex);
+		(void) mowgli_patricia_destroy(os_clones_cmds, NULL, NULL);
 
-	hostlist = mowgli_patricia_create(noopcanon);
-	hostentry_heap = mowgli_heap_create(sizeof(struct clones_hostentry), HEAP_USER, BH_NOW);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
 
-	kline_duration = 3600; // set a default
+	if (! (hostentry_heap = mowgli_heap_create(sizeof(struct clones_hostentry), HEAP_USER, BH_NOW)))
+	{
+		(void) slog(LG_ERROR, "%s: mowgli_heap_create() failed", m->name);
 
-	serviceinfo = service_find("operserv");
+		(void) mowgli_patricia_destroy(os_clones_cmds, NULL, NULL);
+		(void) mowgli_patricia_destroy(hostlist, NULL, NULL);
+
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	(void) command_add(&os_clones_kline, os_clones_cmds);
+	(void) command_add(&os_clones_list, os_clones_cmds);
+	(void) command_add(&os_clones_addexempt, os_clones_cmds);
+	(void) command_add(&os_clones_delexempt, os_clones_cmds);
+	(void) command_add(&os_clones_setexempt, os_clones_cmds);
+	(void) command_add(&os_clones_listexempt, os_clones_cmds);
+	(void) command_add(&os_clones_duration, os_clones_cmds);
+
+	(void) service_named_bind_command("operserv", &os_clones);
+
+	(void) hook_add_event("config_ready");
+	(void) hook_add_config_ready(&clones_configready);
+
+	(void) hook_add_event("user_add");
+	(void) hook_add_user_add(&clones_newuser);
+
+	(void) hook_add_event("user_delete");
+	(void) hook_add_user_delete(&clones_userquit);
+
+	(void) hook_add_event("db_write");
+	(void) hook_add_db_write(&write_exemptdb);
+
+	(void) db_register_type_handler("CLONES-DBV", &db_h_clonesdbv);
+	(void) db_register_type_handler("CLONES-CK", &db_h_ck);
+	(void) db_register_type_handler("CLONES-CD", &db_h_cd);
+	(void) db_register_type_handler("CLONES-GR", &db_h_gr);
+	(void) db_register_type_handler("CLONES-EX", &db_h_ex);
 
 	// add everyone to host hash
+	struct user *u;
+	mowgli_patricia_iteration_state_t state;
 	MOWGLI_PATRICIA_FOREACH(u, &state, userlist)
-	{
-		clones_newuser(&(hook_user_nick_t){ .u = u });
-	}
+		(void) clones_newuser(&(hook_user_nick_t){ .u = u });
 }
 
 static void

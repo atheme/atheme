@@ -10,31 +10,22 @@
 static mowgli_patricia_t *os_soper_cmds = NULL;
 
 static void
-os_cmd_soper(struct sourceinfo *si, int parc, char *parv[])
+os_cmd_soper(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	struct command *c;
-
-	if (!has_any_privs(si))
+	if (! has_any_privs(si))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		(void) command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
 	}
 
 	if (parc < 1)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SOPER");
-		command_fail(si, fault_needmoreparams, _("Syntax: SOPER LIST|LISTCLASS|ADD|DEL [account] [operclass]"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SOPER");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: SOPER LIST|LISTCLASS|ADD|DEL [account] [operclass]"));
 		return;
 	}
 
-	c = command_find(os_soper_cmds, parv[0]);
-	if (c == NULL)
-	{
-		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
-		return;
-	}
-
-	command_exec(si->service, si, c, parc - 1, parv + 1);
+	(void) subcommand_dispatch_simple(si->service, si, parc, parv, os_soper_cmds, "SOPER");
 }
 
 static void
@@ -330,29 +321,31 @@ static struct command os_soper_setpass = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
-	service_named_bind_command("operserv", &os_soper);
+	if (! (os_soper_cmds = mowgli_patricia_create(&strcasecanon)))
+	{
+		(void) slog(LG_ERROR, "%s: mowgli_patricia_create() failed", m->name);
 
-	os_soper_cmds = mowgli_patricia_create(strcasecanon);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
 
-	command_add(&os_soper_list, os_soper_cmds);
-	command_add(&os_soper_listclass, os_soper_cmds);
-	command_add(&os_soper_add, os_soper_cmds);
-	command_add(&os_soper_del, os_soper_cmds);
-	command_add(&os_soper_setpass, os_soper_cmds);
+	(void) command_add(&os_soper_list, os_soper_cmds);
+	(void) command_add(&os_soper_listclass, os_soper_cmds);
+	(void) command_add(&os_soper_add, os_soper_cmds);
+	(void) command_add(&os_soper_del, os_soper_cmds);
+	(void) command_add(&os_soper_setpass, os_soper_cmds);
+
+	(void) service_named_bind_command("operserv", &os_soper);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	service_named_unbind_command("operserv", &os_soper);
-	command_delete(&os_soper_list, os_soper_cmds);
-	command_delete(&os_soper_listclass, os_soper_cmds);
-	command_delete(&os_soper_add, os_soper_cmds);
-	command_delete(&os_soper_del, os_soper_cmds);
+	(void) service_named_unbind_command("operserv", &os_soper);
 
-	mowgli_patricia_destroy(os_soper_cmds, NULL, NULL);
+	(void) mowgli_patricia_destroy(os_soper_cmds, &command_delete_trie_cb, os_soper_cmds);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/soper", MODULE_UNLOAD_CAPABILITY_OK)

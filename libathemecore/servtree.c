@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2005-2006 Atheme Development Group
+ * Copyright (C) 2005-2006 Atheme Project (http://atheme.org/)
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ *
  * servtree.c: Services binary tree manipulation. (add_service,
  *    del_service, et al.)
  *
@@ -299,7 +301,8 @@ service_add(const char *name, void (*handler)(struct sourceinfo *si, int parc, c
 	return_val_if_fail(name != NULL, NULL);
 	return_val_if_fail(service_find(name) == NULL, NULL);
 
-	sptr = mowgli_heap_alloc(service_heap);
+	if (! (sptr = mowgli_heap_alloc(service_heap)))
+		return NULL;
 
 	sptr->internal_name = sstrdup(name);
 	/* default these, to reasonably safe values */
@@ -365,7 +368,9 @@ service_delete(struct service *sptr)
 	del_conf_item("HOST", &sptr->conf_table);
 	del_conf_item("USER", &sptr->conf_table);
 	del_conf_item("NICK", &sptr->conf_table);
+
 	subblock = find_top_conf(sptr->internal_name);
+
 	if (subblock != NULL && conftable_get_conf_handler(subblock) == conf_service)
 		del_top_conf(sptr->internal_name);
 
@@ -375,13 +380,18 @@ service_delete(struct service *sptr)
 		user_delete(sptr->me, "Service unloaded.");
 		sptr->me = NULL;
 	}
+
 	sptr->handler = NULL;
+
 	if (sptr->access)
-		mowgli_patricia_destroy(sptr->access, free_access_string, NULL);
+		mowgli_patricia_destroy(sptr->access, &free_access_string, NULL);
+
 	if (sptr->aliases)
-		mowgli_patricia_destroy(sptr->aliases, free_alias_string, NULL);
+		mowgli_patricia_destroy(sptr->aliases, &free_alias_string, NULL);
+
 	if (sptr->commands)
-		mowgli_patricia_destroy(sptr->commands, NULL, NULL);
+		mowgli_patricia_destroy(sptr->commands, &command_delete_trie_cb, sptr->commands);
+
 	free(sptr->disp);	/* service_name() does a malloc() */
 	free(sptr->internal_name);
 	free(sptr->nick);

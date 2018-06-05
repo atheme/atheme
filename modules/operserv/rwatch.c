@@ -144,28 +144,16 @@ db_h_rr(struct database_handle *db, const char *type)
 }
 
 static void
-os_cmd_rwatch(struct sourceinfo *si, int parc, char *parv[])
+os_cmd_rwatch(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	// Grab args
-	char *cmd = parv[0];
-	struct command *c;
-
-	// Bad/missing arg
-	if (!cmd)
+	if (parc < 1)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RWATCH");
-		command_fail(si, fault_needmoreparams, _("Syntax: RWATCH ADD|DEL|LIST|SET"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RWATCH");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: RWATCH ADD|DEL|LIST|SET"));
 		return;
 	}
 
-	c = command_find(os_rwatch_cmds, cmd);
-	if (c == NULL)
-	{
-		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
-		return;
-	}
-
-	command_exec(si->service, si, c, parc - 1, parv + 1);
+	(void) subcommand_dispatch_simple(si->service, si, parc, parv, os_rwatch_cmds, "RWATCH");
 }
 
 static void
@@ -627,22 +615,31 @@ static struct command os_rwatch_set = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
-	service_named_bind_command("operserv", &os_rwatch);
+	if (! (os_rwatch_cmds = mowgli_patricia_create(&strcasecanon)))
+	{
+		(void) slog(LG_ERROR, "%s: mowgli_patricia_create() failed", m->name);
 
-	os_rwatch_cmds = mowgli_patricia_create(strcasecanon);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
 
-	command_add(&os_rwatch_add, os_rwatch_cmds);
-	command_add(&os_rwatch_del, os_rwatch_cmds);
-	command_add(&os_rwatch_list, os_rwatch_cmds);
-	command_add(&os_rwatch_set, os_rwatch_cmds);
+	(void) command_add(&os_rwatch_add, os_rwatch_cmds);
+	(void) command_add(&os_rwatch_del, os_rwatch_cmds);
+	(void) command_add(&os_rwatch_list, os_rwatch_cmds);
+	(void) command_add(&os_rwatch_set, os_rwatch_cmds);
 
-	hook_add_event("user_add");
-	hook_add_user_add(rwatch_newuser);
-	hook_add_event("user_nickchange");
-	hook_add_user_nickchange(rwatch_nickchange);
-	hook_add_db_write(write_rwatchdb);
+	(void) service_named_bind_command("operserv", &os_rwatch);
+
+	(void) hook_add_event("user_add");
+	(void) hook_add_user_add(&rwatch_newuser);
+
+	(void) hook_add_event("user_nickchange");
+	(void) hook_add_user_nickchange(&rwatch_nickchange);
+
+	(void) hook_add_event("db_write");
+	(void) hook_add_db_write(&write_rwatchdb);
 
 	char path[BUFSIZE];
 	snprintf(path, BUFSIZE, "%s/%s", datadir, "rwatch.db");

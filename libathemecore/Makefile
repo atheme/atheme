@@ -13,6 +13,7 @@ SRCS =					\
 	channels.c			\
 	cidr.c				\
 	cmode.c				\
+	commandhelp.c			\
 	commandtree.c			\
 	conf.c				\
 	confprocess.c			\
@@ -29,7 +30,6 @@ SRCS =					\
 	$(EXPLICIT_BZERO_COND_C)	\
 	flags.c				\
 	function.c			\
-	help.c				\
 	hook.c				\
 	linker.c			\
 	logger.c			\

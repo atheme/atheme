@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (C) 2005 Atheme Project (http://atheme.org/)
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ *
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the main() routine.
@@ -28,21 +30,26 @@ on_user_identify(struct user *u)
 }
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
-	hook_add_event("user_identify");
-	hook_add_user_identify(on_user_identify);
+	if (! (hostsvs = service_add("hostserv", NULL)))
+	{
+		(void) slog(LG_ERROR, "%s: service_add() failed", m->name);
 
-	hostsvs = service_add("hostserv", NULL);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	(void) hook_add_event("user_identify");
+	(void) hook_add_user_identify(&on_user_identify);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	if (hostsvs != NULL)
-		service_delete(hostsvs);
+	(void) hook_del_user_identify(&on_user_identify);
 
-	hook_del_user_identify(on_user_identify);
+	(void) service_delete(hostsvs);
 }
 
 SIMPLE_DECLARE_MODULE_V1("hostserv/main", MODULE_UNLOAD_CAPABILITY_OK)

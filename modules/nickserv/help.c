@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2005 William Pitcock, et al.
+ * Copyright (C) 2005 William Pitcock, et al.
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ *
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains routines to handle the NickServ HELP command.
@@ -7,71 +9,76 @@
 
 #include "atheme.h"
 
-// HELP <command> [params]
-void
-ns_cmd_help(struct sourceinfo *si, int parc, char *parv[])
-{
-	char *command = parv[0];
+#define SHORTHELP_CMDS_DEF      "ACCESS CERT DROP GHOST GROUP IDENTIFY INFO LISTCHANS LISTGROUPS LISTLOGINS " \
+                                "LISTOWNMAIL LOGOUT REGAIN REGISTER RELEASE SENDPASS SET UNGROUP"
 
-	if (!command)
+static char *shorthelp_cmds = NULL;
+
+static void
+ns_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc, char **const restrict parv)
+{
+	if (parv[0])
 	{
-		command_success_nodata(si, _("***** \2%s Help\2 *****"), nicksvs.nick);
-		if (nicksvs.no_nick_ownership)
+		if (strcasecmp(parv[0], "COMMANDS") == 0)
 		{
-			command_success_nodata(si, _("\2%s\2 allows users to \2'register'\2 an account for use with \2%s\2."), nicksvs.nick, chansvs.nick);
-			if (nicksvs.expiry > 0)
-			{
-				command_success_nodata(si, _("If a registered account is not used by the owner for %d days,\n"
-							"\2%s\2 will drop the account, allowing it to be reregistered."),
-						(nicksvs.expiry / 86400), nicksvs.nick);
-			}
+			(void) help_display_prefix(si, nicksvs.me);
+			(void) command_help(si, nicksvs.me->commands);
+			(void) help_display_moreinfo(si, nicksvs.me, NULL);
+			(void) help_display_locations(si);
+			(void) help_display_suffix(si);
 		}
 		else
-		{
-			command_success_nodata(si, _("\2%s\2 allows users to \2'register'\2 a nickname, and stop\n"
-						"others from using that nick. \2%s\2 allows the owner of a\n"
-						"nickname to disconnect a user from the network that is using\n"
-						"their nickname."), nicksvs.nick, nicksvs.nick);
-			if (nicksvs.expiry > 0)
-			{
-				command_success_nodata(si, _("If a registered nick is not used by the owner for %d days,\n"
-							"\2%s\2 will drop the nickname, allowing it to be reregistered."),
-						(nicksvs.expiry / 86400), nicksvs.nick);
-			}
-		}
-		command_success_nodata(si, " ");
-		command_success_nodata(si, _("For more information on a command, type:"));
-		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", nicksvs.me->disp);
-		command_success_nodata(si, _("For a verbose listing of all commands, type:"));
-		command_success_nodata(si, "\2/%s%s help commands\2", (ircd->uses_rcommand == false) ? "msg " : "", nicksvs.me->disp);
-		command_success_nodata(si, " ");
-
-		command_help_short(si, si->service->commands, "REGISTER IDENTIFY GHOST RELEASE INFO LISTCHANS SET GROUP UNGROUP FDROP FUNGROUP MARK FREEZE SENDPASS VHOST");
-
-		command_success_nodata(si, _("***** \2End of Help\2 *****"));
-
-		// Fun for helpchan/helpurl.
-		if (config_options.helpchan && config_options.helpurl)
-			command_success_nodata(si, _("If you're having trouble or you need some additional help, you may want to join the help channel %s or visit the help webpage %s"),
-					config_options.helpchan, config_options.helpurl);
-		else if (config_options.helpchan && !config_options.helpurl)
-			command_success_nodata(si, _("If you're having trouble or you need some additional help, you may want to join the help channel %s"), config_options.helpchan);
-		else if (!config_options.helpchan && config_options.helpurl)
-			command_success_nodata(si, _("If you're having trouble or you need some additional help, you may want to visit the help webpage %s"), config_options.helpurl);
+			(void) help_display(si, nicksvs.me, parv[0], nicksvs.me->commands);
 
 		return;
 	}
 
-	if (!strcasecmp("COMMANDS", command))
+	(void) help_display_prefix(si, nicksvs.me);
+
+	if (nicksvs.no_nick_ownership)
 	{
-		command_success_nodata(si, _("***** \2%s Help\2 *****"), nicksvs.nick);
-		command_help(si, si->service->commands);
-		command_success_nodata(si, _("***** \2End of Help\2 *****"));
-		return;
+		(void) command_success_nodata(si, _("\2%s\2 allows users to \2'register'\2 an account for use with "
+		                                    "\2%s\2."), nicksvs.nick, chansvs.nick);
+
+		if (nicksvs.expiry > 0)
+		{
+			(void) help_display_newline(si);
+
+			(void) command_success_nodata(si, _("If a registered account is not used by the owner for "
+			                                    "%d days,\n\2%s\2 will drop the account, allowing it "
+			                                    "to be reregistered."), (nicksvs.expiry / 86400),
+			                                    nicksvs.nick);
+		}
+	}
+	else
+	{
+		(void) command_success_nodata(si, _("\2%s\2 allows users to \2'register'\2 a nickname, and stop\n"
+		                                    "others from using that nick. \2%s\2 allows the owner of a\n"
+		                                    "nickname to disconnect a user from the network that is using\n"
+		                                    "their nickname."), nicksvs.nick, nicksvs.nick);
+
+		if (nicksvs.expiry > 0)
+		{
+			(void) help_display_newline(si);
+
+			(void) command_success_nodata(si, _("If a registered nick is not used by the owner for %d "
+			                                    "days,\n\2%s\2 will drop the nickname, allowing it to "
+			                                    "be reregistered."), (nicksvs.expiry / 86400),
+			                                    nicksvs.nick);
+		}
 	}
 
-	// take the command through the hash table
-	help_display(si, si->service, command, si->service->commands);
+	(void) help_display_newline(si);
+
+	if (shorthelp_cmds)
+		(void) command_help_short(si, nicksvs.me->commands, shorthelp_cmds);
+	else
+		(void) command_help_short(si, nicksvs.me->commands, SHORTHELP_CMDS_DEF);
+
+	(void) help_display_moreinfo(si, nicksvs.me, NULL);
+	(void) help_display_verblist(si, nicksvs.me);
+	(void) help_display_locations(si);
+	(void) help_display_suffix(si);
 }
 
 static struct command ns_help = {
@@ -86,13 +93,17 @@ static struct command ns_help = {
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
-	service_named_bind_command("nickserv", &ns_help);
+	(void) add_dupstr_conf_item("SHORTHELP", &nicksvs.me->conf_table, 0, &shorthelp_cmds, NULL);
+
+	(void) service_named_bind_command("nickserv", &ns_help);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	service_named_unbind_command("nickserv", &ns_help);
+	(void) service_named_unbind_command("nickserv", &ns_help);
+
+	(void) del_conf_item("SHORTHELP", &nicksvs.me->conf_table);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/help", MODULE_UNLOAD_CAPABILITY_OK)

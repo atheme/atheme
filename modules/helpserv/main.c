@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (C) 2005 Atheme Project (http://atheme.org/)
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ *
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the main() routine.
@@ -7,60 +9,55 @@
 
 #include "atheme.h"
 
-static struct service *helpserv = NULL;
+static struct service *helpsvs = NULL;
 
-// HELP <command> [params]
-void
-helpserv_cmd_help(struct sourceinfo *si, int parc, char *parv[])
+static void
+hs_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc, char **const restrict parv)
 {
-	char *command = parv[0];
-
-	if (!command)
+	if (parv[0])
 	{
-		command_success_nodata(si, _("***** \2%s Help\2 *****"), si->service->nick);
-		command_success_nodata(si, _("\2%s\2 allows users to request help from network staff."), si->service->nick);
-		command_success_nodata(si, " ");
-		command_success_nodata(si, _("For more information on a command, type:"));
-		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", helpserv->disp);
-		command_success_nodata(si, " ");
-
-		command_help(si, si->service->commands);
-
-		command_success_nodata(si, _("***** \2End of Help\2 *****"));
+		(void) help_display(si, si->service, parv[0], si->service->commands);
 		return;
 	}
 
-	// take the command through the hash table
-	help_display(si, si->service, command, si->service->commands);
+	(void) help_display_prefix(si, si->service);
+
+	(void) command_success_nodata(si, _("\2%s\2 allows users to request help from network staff."),
+	                              si->service->nick);
+
+	(void) help_display_newline(si);
+	(void) command_help(si, si->service->commands);
+	(void) help_display_moreinfo(si, si->service, NULL);
+	(void) help_display_suffix(si);
 }
 
-static struct command helpserv_help = {
+static struct command hs_help = {
 	.name           = "HELP",
 	.desc           = N_("Displays contextual help information."),
 	.access         = AC_NONE,
 	.maxparc        = 2,
-	.cmd            = &helpserv_cmd_help,
+	.cmd            = &hs_cmd_help,
 	.help           = { .path = "help" },
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
-	helpserv = service_add("helpserv", NULL);
+	if (! (helpsvs = service_add("helpserv", NULL)))
+	{
+		(void) slog(LG_ERROR, "%s: service_add() failed", m->name);
 
-	service_bind_command(helpserv, &helpserv_help);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	(void) service_bind_command(helpsvs, &hs_help);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	service_unbind_command(helpserv, &helpserv_help);
-
-	if (helpserv)
-	{
-		service_delete(helpserv);
-		helpserv = NULL;
-	}
+	(void) service_delete(helpsvs);
 }
 
 SIMPLE_DECLARE_MODULE_V1("helpserv/main", MODULE_UNLOAD_CAPABILITY_OK)

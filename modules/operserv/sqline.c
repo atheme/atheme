@@ -55,28 +55,16 @@ os_sqline_chanjoin(hook_channel_joinpart_t *hdata)
 }
 
 static void
-os_cmd_sqline(struct sourceinfo *si, int parc, char *parv[])
+os_cmd_sqline(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	// Grab args
-	char *cmd = parv[0];
-	struct command *c;
-
-	// Bad/missing arg
-	if (!cmd)
+	if (parc < 1)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SQLINE");
-		command_fail(si, fault_needmoreparams, _("Syntax: SQLINE ADD|DEL|LIST"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SQLINE");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: SQLINE ADD|DEL|LIST"));
 		return;
 	}
 
-	c = command_find(os_sqline_cmds, cmd);
-	if(c == NULL)
-	{
-		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", si->service->disp);
-		return;
-	}
-
-	command_exec(si->service, si, c, parc - 1, parv + 1);
+	(void) subcommand_dispatch_simple(si->service, si, parc, parv, os_sqline_cmds, "SQLINE");
 }
 
 static void
@@ -455,46 +443,49 @@ static struct command os_sqline_sync = {
 static void
 mod_init(struct module *const restrict m)
 {
-	if (ircd != NULL && qline_sts == generic_qline_sts)
+	if (ircd && qline_sts == &generic_qline_sts)
 	{
-		slog(LG_INFO, "Module %s requires qline support, refusing to load.",
-				m->name);
+		(void) slog(LG_ERROR, "Module %s requires qline support, refusing to load.", m->name);
+
 		m->mflags |= MODTYPE_FAIL;
 		return;
 	}
 
-	service_named_bind_command("operserv", &os_sqline);
+	if (! (os_sqline_cmds = mowgli_patricia_create(&strcasecanon)))
+	{
+		(void) slog(LG_ERROR, "%s: mowgli_patricia_create() failed", m->name);
 
-	os_sqline_cmds = mowgli_patricia_create(strcasecanon);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
 
-	command_add(&os_sqline_add, os_sqline_cmds);
-	command_add(&os_sqline_del, os_sqline_cmds);
-	command_add(&os_sqline_list, os_sqline_cmds);
-	command_add(&os_sqline_sync, os_sqline_cmds);
+	(void) command_add(&os_sqline_add, os_sqline_cmds);
+	(void) command_add(&os_sqline_del, os_sqline_cmds);
+	(void) command_add(&os_sqline_list, os_sqline_cmds);
+	(void) command_add(&os_sqline_sync, os_sqline_cmds);
 
-	hook_add_event("user_add");
-	hook_add_user_add(os_sqline_newuser);
-	hook_add_event("user_nickchange");
-	hook_add_user_nickchange(os_sqline_newuser);
-	hook_add_event("channel_join");
-	hook_add_channel_join(os_sqline_chanjoin);
+	(void) service_named_bind_command("operserv", &os_sqline);
+
+	(void) hook_add_event("user_add");
+	(void) hook_add_user_add(&os_sqline_newuser);
+
+	(void) hook_add_event("user_nickchange");
+	(void) hook_add_user_nickchange(&os_sqline_newuser);
+
+	(void) hook_add_event("channel_join");
+	(void) hook_add_channel_join(&os_sqline_chanjoin);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	service_named_unbind_command("operserv", &os_sqline);
+	(void) hook_del_user_add(&os_sqline_newuser);
+	(void) hook_del_user_nickchange(&os_sqline_newuser);
+	(void) hook_del_channel_join(&os_sqline_chanjoin);
 
-	command_delete(&os_sqline_add, os_sqline_cmds);
-	command_delete(&os_sqline_del, os_sqline_cmds);
-	command_delete(&os_sqline_list, os_sqline_cmds);
-	command_delete(&os_sqline_sync, os_sqline_cmds);
+	(void) service_named_unbind_command("operserv", &os_sqline);
 
-	hook_del_user_add(os_sqline_newuser);
-	hook_del_user_nickchange(os_sqline_newuser);
-	hook_del_channel_join(os_sqline_chanjoin);
-
-	mowgli_patricia_destroy(os_sqline_cmds, NULL, NULL);
+	(void) mowgli_patricia_destroy(os_sqline_cmds, &command_delete_trie_cb, os_sqline_cmds);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/sqline", MODULE_UNLOAD_CAPABILITY_OK)

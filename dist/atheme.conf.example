@@ -1200,6 +1200,24 @@ nickserv {
 	 */
 	emailexempts {
 	};
+
+	/*
+	 * shorthelp
+	 *
+	 * A list of commands that are displayed (with their full description) in the
+	 * output of `/msg NickServ HELP'. Commands not in this list will be listed, but
+	 * not with their descriptions. All commands with descriptions are still listed
+	 * in `/msg NickServ HELP COMMANDS' regardless of the value set here.
+	 *
+	 * Optional; defaults to "ACCESS CERT DROP GHOST GROUP IDENTIFY INFO LISTCHANS
+	 * LISTGROUPS LISTLOGINS LISTOWNMAIL LOGOUT REGAIN REGISTER RELEASE SENDPASS SET
+	 * UNGROUP".
+	 *
+	 * A command in this list will only be printed if the corresponding module is
+	 * loaded and the user has permission to use it. Set to an empty string to
+	 * disable listing command descriptions in `/msg NickServ HELP'.
+	 */
+	#shorthelp = "";
 };
 
 /* ChanServ configuration.
@@ -1381,6 +1399,23 @@ chanserv {
 	 * as usual, and INFO will point this out if channels have metadata set.
 	 */
 	show_custom_metadata;
+
+	/*
+	 * shorthelp
+	 *
+	 * A list of commands that are displayed (with their full description) in the
+	 * output of `/msg ChanServ HELP'. Commands not in this list will be listed, but
+	 * not with their descriptions. All commands with descriptions are still listed
+	 * in `/msg ChanServ HELP COMMANDS' regardless of the value set here.
+	 *
+	 * Optional; defaults to "AKICK BAN CLEAR DEOP DEVOICE DROP FLAGS GETKEY INFO
+	 * INVITE KICK KICKBAN OP QUIET REGISTER SET TOPIC UNBAN UNQUIET VOICE WHY".
+	 *
+	 * A command in this list will only be printed if the corresponding module is
+	 * loaded and the user has permission to use it. Set to an empty string to
+	 * disable listing command descriptions in `/msg ChanServ HELP'.
+	 */
+	#shorthelp = "";
 };
 
 /* CHANFIX configuration.

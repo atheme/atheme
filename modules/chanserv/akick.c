@@ -66,45 +66,39 @@ clear_bans_matching_entity(struct mychan *mc, struct myentity *mt)
 }
 
 static void
-cs_cmd_akick(struct sourceinfo *si, int parc, char *parv[])
+cs_cmd_akick(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	char *chan;
-	char *cmd;
-	struct command *c;
-
 	if (parc < 2)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKICK");
-		command_fail(si, fault_needmoreparams, _("Syntax: AKICK <#channel> <ADD|DEL|LIST> [parameters]"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKICK");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: AKICK <#channel> <ADD|DEL|LIST> [parameters]"));
 		return;
 	}
+
+	char *subcmd;
+	char *target;
 
 	if (parv[0][0] == '#')
 	{
-		chan = parv[0];
-		cmd = parv[1];
+		subcmd = parv[1];
+		target = parv[0];
 	}
 	else if (parv[1][0] == '#')
 	{
-		cmd = parv[0];
-		chan = parv[1];
+		subcmd = parv[0];
+		target = parv[1];
 	}
 	else
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "AKICK");
-		command_fail(si, fault_badparams, _("Syntax: AKICK <#channel> <ADD|DEL|LIST> [parameters]"));
+		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "AKICK");
+		(void) command_fail(si, fault_badparams, _("Syntax: AKICK <#channel> <ADD|DEL|LIST> [parameters]"));
 		return;
 	}
 
-	c = command_find(cs_akick_cmds, cmd);
-	if (c == NULL)
-	{
-		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", chansvs.me->disp);
-		return;
-	}
+	parv[0] = subcmd;
+	parv[1] = target;
 
-	parv[1] = chan;
-	command_exec(si->service, si, c, parc - 1, parv + 1);
+	(void) subcommand_dispatch_simple(chansvs.me, si, parc, parv, cs_akick_cmds, "AKICK");
 }
 
 static struct akick_timeout *
@@ -789,38 +783,41 @@ static struct command cs_akick_list = {
 static void
 mod_init(struct module *const restrict m)
 {
-        service_named_bind_command("chanserv", &cs_akick);
+	if (! (akick_timeout_heap = mowgli_heap_create(sizeof(struct akick_timeout), 512, BH_NOW)))
+	{
+		(void) slog(LG_ERROR, "%s: mowgli_heap_create() failed", m->name);
 
-	cs_akick_cmds = mowgli_patricia_create(strcasecanon);
-
-	// Add sub-commands
-	command_add(&cs_akick_add, cs_akick_cmds);
-	command_add(&cs_akick_del, cs_akick_cmds);
-	command_add(&cs_akick_list, cs_akick_cmds);
-
-        akick_timeout_heap = mowgli_heap_create(sizeof(struct akick_timeout), 512, BH_NOW);
-
-    	if (akick_timeout_heap == NULL)
-    	{
 		m->mflags |= MODTYPE_FAIL;
-    		return;
-    	}
+		return;
+	}
 
-	mowgli_timer_add_once(base_eventloop, "akickdel_list_create", akickdel_list_create, NULL, 0);
+	if (! (cs_akick_cmds = mowgli_patricia_create(&strcasecanon)))
+	{
+		(void) slog(LG_ERROR, "%s: mowgli_patricia_create() failed", m->name);
+
+		(void) mowgli_heap_destroy(akick_timeout_heap);
+
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	(void) command_add(&cs_akick_add, cs_akick_cmds);
+	(void) command_add(&cs_akick_del, cs_akick_cmds);
+	(void) command_add(&cs_akick_list, cs_akick_cmds);
+
+	(void) service_named_bind_command("chanserv", &cs_akick);
+
+	(void) mowgli_timer_add_once(base_eventloop, "akickdel_list_create", &akickdel_list_create, NULL, 0);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	service_named_unbind_command("chanserv", &cs_akick);
+	(void) service_named_unbind_command("chanserv", &cs_akick);
 
-	// Delete sub-commands
-	command_delete(&cs_akick_add, cs_akick_cmds);
-	command_delete(&cs_akick_del, cs_akick_cmds);
-	command_delete(&cs_akick_list, cs_akick_cmds);
+	(void) mowgli_patricia_destroy(cs_akick_cmds, &command_delete_trie_cb, cs_akick_cmds);
 
-	mowgli_heap_destroy(akick_timeout_heap);
-	mowgli_patricia_destroy(cs_akick_cmds, NULL, NULL);
+	(void) mowgli_heap_destroy(akick_timeout_heap);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/akick", MODULE_UNLOAD_CAPABILITY_OK)

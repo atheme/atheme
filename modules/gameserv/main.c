@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (C) 2005 Atheme Project (http://atheme.org/)
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ *
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the main() routine.
@@ -7,19 +9,24 @@
 
 #include "atheme.h"
 
-static struct service *gs;
+static struct service *gamesvs = NULL;
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
-	gs = service_add("gameserv", NULL);
+	if (! (gamesvs = service_add("gameserv", NULL)))
+	{
+		(void) slog(LG_ERROR, "%s: service_add() failed", m->name);
+
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-        if (gs != NULL)
-                service_delete(gs);
+	(void) service_delete(gamesvs);
 }
 
 SIMPLE_DECLARE_MODULE_V1("gameserv/main", MODULE_UNLOAD_CAPABILITY_OK)

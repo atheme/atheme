@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2010 - 2011 William Pitcock <nenolod@atheme.org>.
+ * Copyright (C) 2010-2011 William Pitcock <nenolod@atheme.org>
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ *
  * Rights to this code are as documented in doc/LICENSE.
  *
  * ACCESS command implementation for ChanServ.
@@ -25,131 +27,95 @@ static mowgli_patricia_t *cs_access_cmds = NULL;
 static mowgli_patricia_t *cs_role_cmds = NULL;
 
 static void
-cs_help_access(struct sourceinfo *si, const char *subcmd)
+cs_help_wrapper(struct sourceinfo *const restrict si, const char *const restrict subcmd,
+                const char *const restrict cmdname, mowgli_patricia_t *const restrict cmdlist)
 {
-	if (!subcmd)
+	if (subcmd)
 	{
-		command_success_nodata(si, _("***** \2%s Help\2 *****"), chansvs.me->disp);
-		command_success_nodata(si, _("Help for \2ACCESS\2:"));
-		command_success_nodata(si, " ");
-		command_help(si, cs_access_cmds);
-		command_success_nodata(si, " ");
-		command_success_nodata(si, _("For more information, use \2/msg %s HELP ACCESS \37command\37\2."), chansvs.me->disp);
-		command_success_nodata(si, _("***** \2End of Help\2 *****"));
-	}
-	else
-		help_display(si, si->service, subcmd, cs_access_cmds);
-}
-
-static void
-cs_help_role(struct sourceinfo *si, const char *subcmd)
-{
-	if (!subcmd)
-	{
-		command_success_nodata(si, _("***** \2%s Help\2 *****"), chansvs.me->disp);
-		command_success_nodata(si, _("Help for \2ROLE\2:"));
-		command_success_nodata(si, " ");
-		command_help(si, cs_role_cmds);
-		command_success_nodata(si, " ");
-		command_success_nodata(si, _("For more information, use \2/msg %s HELP ROLE \37command\37\2."), chansvs.me->disp);
-		command_success_nodata(si, _("***** \2End of Help\2 *****"));
-	}
-	else
-		help_display(si, si->service, subcmd, cs_role_cmds);
-}
-
-static void
-cs_cmd_access(struct sourceinfo *si, int parc, char *parv[])
-{
-	char *chan;
-	char *cmd;
-	struct command *c;
-	char buf[BUFSIZE];
-
-	if (parc < 2)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ACCESS");
-		command_fail(si, fault_needmoreparams, _("Syntax: ACCESS <#channel> <command> [parameters]"));
+		(void) help_display_as_subcmd(si, chansvs.me, cmdname, subcmd, cmdlist);
 		return;
 	}
+
+	(void) help_display_prefix(si, chansvs.me);
+	(void) command_success_nodata(si, _("Help for \2%s\2:"), cmdname);
+	(void) help_display_newline(si);
+	(void) command_help(si, cmdlist);
+	(void) help_display_moreinfo(si, chansvs.me, cmdname);
+	(void) help_display_suffix(si);
+}
+
+static void
+cs_cmd_wrapper(struct sourceinfo *const restrict si, const int parc, char **const restrict parv,
+               const char *const restrict cmdname, mowgli_patricia_t *const restrict cmdlist)
+{
+	if (parc < 2)
+	{
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, cmdname);
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: %s <#channel> <command> [parameters]"),
+		                    cmdname);
+		return;
+	}
+
+	char *subcmd;
+	char *target;
 
 	if (parv[0][0] == '#')
 	{
-		chan = parv[0];
-		cmd = parv[1];
+		subcmd = parv[1];
+		target = parv[0];
 	}
 	else if (parv[1][0] == '#')
 	{
-		cmd = parv[0];
-		chan = parv[1];
+		subcmd = parv[0];
+		target = parv[1];
 	}
 	else
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "ACCESS");
-		command_fail(si, fault_badparams, _("Syntax: ACCESS <#channel> <command> [parameters]"));
+		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, cmdname);
+		(void) command_fail(si, fault_badparams, _("Syntax: %s <#channel> <command> [parameters]"), cmdname);
 		return;
 	}
 
-	c = command_find(cs_access_cmds, cmd);
-	if (c == NULL)
+	const struct command *const cmd = command_find(cmdlist, subcmd);
+
+	if (! cmd)
 	{
-		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", chansvs.me->disp);
+		(void) help_display_invalid(si, chansvs.me, cmdname);
 		return;
 	}
+
+	char buf[BUFSIZE];
 
 	if (parc > 2)
-		snprintf(buf, BUFSIZE, "%s %s", chan, parv[2]);
+		(void) snprintf(buf, sizeof buf, "%s %s", target, parv[2]);
 	else
-		mowgli_strlcpy(buf, chan, BUFSIZE);
+		(void) mowgli_strlcpy(buf, target, sizeof buf);
 
-	command_exec_split(si->service, si, c->name, buf, cs_access_cmds);
+	(void) command_exec_split(chansvs.me, si, cmd->name, buf, cmdlist);
 }
 
 static void
-cs_cmd_role(struct sourceinfo *si, int parc, char *parv[])
+cs_help_access(struct sourceinfo *const restrict si, const char *const restrict subcmd)
 {
-	char *chan;
-	char *cmd;
-	struct command *c;
-	char buf[BUFSIZE];
+	(void) cs_help_wrapper(si, subcmd, "ACCESS", cs_access_cmds);
+}
 
-	if (parc < 2)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ROLE");
-		command_fail(si, fault_needmoreparams, _("Syntax: ROLE <#channel> <command> [parameters]"));
-		return;
-	}
+static void
+cs_help_role(struct sourceinfo *const restrict si, const char *const restrict subcmd)
+{
+	(void) cs_help_wrapper(si, subcmd, "ROLE", cs_role_cmds);
+}
 
-	if (parv[0][0] == '#')
-	{
-		chan = parv[0];
-		cmd = parv[1];
-	}
-	else if (parv[1][0] == '#')
-	{
-		cmd = parv[0];
-		chan = parv[1];
-	}
-	else
-	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "ROLE");
-		command_fail(si, fault_badparams, _("Syntax: ROLE <#channel> <command> [parameters]"));
-		return;
-	}
+static void
+cs_cmd_access(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
+{
+	(void) cs_cmd_wrapper(si, parc, parv, "ACCESS", cs_access_cmds);
+}
 
-	c = command_find(cs_role_cmds, cmd);
-	if (c == NULL)
-	{
-		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", chansvs.me->disp);
-		return;
-	}
-
-	if (parc > 2)
-		snprintf(buf, BUFSIZE, "%s %s", chan, parv[2]);
-	else
-		mowgli_strlcpy(buf, chan, BUFSIZE);
-
-	command_exec_split(si->service, si, c->name, buf, cs_role_cmds);
+static void
+cs_cmd_role(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
+{
+	(void) cs_cmd_wrapper(si, parc, parv, "ROLE", cs_role_cmds);
 }
 
 static inline unsigned int
@@ -1440,34 +1406,49 @@ static struct command cs_role_del = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
-	service_named_bind_command("chanserv", &cs_access);
-	service_named_bind_command("chanserv", &cs_role);
+	if (! (cs_access_cmds = mowgli_patricia_create(&strcasecanon)))
+	{
+		(void) slog(LG_ERROR, "%s: mowgli_patricia_create() failed", m->name);
 
-	cs_access_cmds = mowgli_patricia_create(strcasecanon);
-	cs_role_cmds = mowgli_patricia_create(strcasecanon);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
 
-	command_add(&cs_access_list, cs_access_cmds);
-	command_add(&cs_access_info, cs_access_cmds);
-	command_add(&cs_access_del, cs_access_cmds);
-	command_add(&cs_access_add, cs_access_cmds);
-	command_add(&cs_access_set, cs_access_cmds);
+	if (! (cs_role_cmds = mowgli_patricia_create(&strcasecanon)))
+	{
+		(void) slog(LG_ERROR, "%s: mowgli_patricia_create() failed", m->name);
 
-	command_add(&cs_role_list, cs_role_cmds);
-	command_add(&cs_role_add, cs_role_cmds);
-	command_add(&cs_role_set, cs_role_cmds);
-	command_add(&cs_role_del, cs_role_cmds);
+		(void) mowgli_patricia_destroy(cs_access_cmds, NULL, NULL);
+
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	(void) command_add(&cs_access_list, cs_access_cmds);
+	(void) command_add(&cs_access_info, cs_access_cmds);
+	(void) command_add(&cs_access_del, cs_access_cmds);
+	(void) command_add(&cs_access_add, cs_access_cmds);
+	(void) command_add(&cs_access_set, cs_access_cmds);
+
+	(void) command_add(&cs_role_list, cs_role_cmds);
+	(void) command_add(&cs_role_add, cs_role_cmds);
+	(void) command_add(&cs_role_set, cs_role_cmds);
+	(void) command_add(&cs_role_del, cs_role_cmds);
+
+	(void) service_named_bind_command("chanserv", &cs_access);
+	(void) service_named_bind_command("chanserv", &cs_role);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	service_named_unbind_command("chanserv", &cs_access);
-	service_named_unbind_command("chanserv", &cs_role);
+	(void) service_named_unbind_command("chanserv", &cs_access);
+	(void) service_named_unbind_command("chanserv", &cs_role);
 
-	mowgli_patricia_destroy(cs_access_cmds, NULL, NULL);
-	mowgli_patricia_destroy(cs_role_cmds, NULL, NULL);
+	(void) mowgli_patricia_destroy(cs_access_cmds, &command_delete_trie_cb, cs_access_cmds);
+	(void) mowgli_patricia_destroy(cs_role_cmds, &command_delete_trie_cb, cs_role_cmds);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/access", MODULE_UNLOAD_CAPABILITY_OK)

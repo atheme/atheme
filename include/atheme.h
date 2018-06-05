@@ -41,6 +41,7 @@
 #include "global.h"
 #include "flags.h"
 #include "phandler.h"
+#include "commandhelp.h"
 #include "commandtree.h"
 #include "servtree.h"
 #include "services.h"

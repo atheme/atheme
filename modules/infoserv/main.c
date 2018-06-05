@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (C) 2005 Atheme Project (http://atheme.org/)
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ *
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the main() routine.
@@ -36,29 +38,21 @@ static unsigned int logoninfo_count = 0;
 
 static struct service *infoserv = NULL;
 
-// HELP <command> [params]
-void
-is_cmd_help(struct sourceinfo *si, int parc, char *parv[])
+static void
+is_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc, char **const restrict parv)
 {
-	char *command = parv[0];
-
-	if (!command)
+	if (parv[0])
 	{
-		command_success_nodata(si, _("***** \2%s Help\2 *****"), si->service->nick);
-		command_success_nodata(si, _("\2%s\2 allows users to view informational messages."), si->service->nick);
-		command_success_nodata(si, " ");
-		command_success_nodata(si, _("For more information on a command, type:"));
-		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", infoserv->disp);
-		command_success_nodata(si, " ");
-
-		command_help(si, si->service->commands);
-
-		command_success_nodata(si, _("***** \2End of Help\2 *****"));
+		(void) help_display(si, si->service, parv[0], si->service->commands);
 		return;
 	}
 
-	// take the command through the hash table
-	help_display(si, si->service, command, si->service->commands);
+	(void) help_display_prefix(si, si->service);
+	(void) command_success_nodata(si, _("\2%s\2 allows users to view informational messages."), si->service->nick);
+	(void) help_display_newline(si);
+	(void) command_help(si, si->service->commands);
+	(void) help_display_moreinfo(si, si->service, NULL);
+	(void) help_display_suffix(si);
 }
 
 static void

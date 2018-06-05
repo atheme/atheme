@@ -1,5 +1,7 @@
 /* groupserv - group services
- * Copyright (c) 2010 Atheme Development Group
+ *
+ * Copyright (C) 2010 Atheme Project (http://atheme.org/)
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
  */
 
 #include "atheme.h"
@@ -15,11 +17,19 @@ struct groupserv_persist_record
 
 extern mowgli_heap_t *mygroup_heap, *groupacs_heap;
 
-struct service *groupsvs;
+struct service *groupsvs = NULL;
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
+	if (! (groupsvs = service_add("groupserv", NULL)))
+	{
+		(void) slog(LG_ERROR, "%s: service_add() failed", m->name);
+
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
 	struct groupserv_persist_record *rec = mowgli_global_storage_get("atheme.groupserv.main.persist");
 
 	if (rec == NULL)
@@ -43,7 +53,6 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 		}
 	}
 
-	groupsvs = service_add("groupserv", NULL);
 	add_uint_conf_item("MAXGROUPS", &groupsvs->conf_table, 0, &gs_config.maxgroups, 0, 65535, 5);
 	add_uint_conf_item("MAXGROUPACS", &groupsvs->conf_table, 0, &gs_config.maxgroupacs, 0, 65535, 0);
 	add_bool_conf_item("ENABLE_OPEN_GROUPS", &groupsvs->conf_table, 0, &gs_config.enable_open_groups, false);
@@ -63,8 +72,7 @@ mod_deinit(const enum module_unload_intent intent)
 	del_conf_item("ENABLE_OPEN_GROUPS", &groupsvs->conf_table);
 	del_conf_item("JOIN_FLAGS", &groupsvs->conf_table);
 
-	if (groupsvs)
-		service_delete(groupsvs);
+	(void) service_delete(groupsvs);
 
 	switch (intent)
 	{

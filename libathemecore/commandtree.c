@@ -2,7 +2,8 @@
  * atheme-services: A collection of minimalist IRC services
  * commandtree.c: Management of services commands.
  *
- * Copyright (c) 2005-2010 Atheme Project (http://www.atheme.org)
+ * Copyright (C) 2005-2010 Atheme Project (http://atheme.org/)
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -24,7 +25,77 @@
 #include "atheme.h"
 #include "privs.h"
 
-static int text_to_parv(char *text, int maxparc, char **parv);
+static bool permissive_mode_fallback = false;
+
+static int
+text_to_parv(char *text, int maxparc, char **parv)
+{
+	int count = 0;
+	char *p;
+
+	if (maxparc == 0)
+		return 0;
+
+	if (!text)
+		return 0;
+
+	p = text;
+	while (count < maxparc - 1 && (parv[count] = strtok(p, " ")) != NULL)
+	{
+		count++;
+		p = NULL;
+	}
+
+	if ((parv[count] = strtok(p, "")) != NULL)
+	{
+		p = parv[count];
+		while (*p == ' ')
+			p++;
+		parv[count] = p;
+		if (*p != '\0')
+		{
+			p += strlen(p) - 1;
+			while (*p == ' ' && p > parv[count])
+				p--;
+			p[1] = '\0';
+			count++;
+		}
+	}
+	return count;
+}
+
+static bool
+default_cmd_auth(struct service *svs, struct sourceinfo *si, struct command *c, const char *userlevel)
+{
+	if (! (has_priv(si, c->access) && has_priv(si, userlevel)))
+	{
+		if (!permissive_mode_fallback)
+			logaudit_denycmd(si, c, userlevel);
+		return false;
+	}
+
+	return true;
+}
+
+static inline bool
+command_verify(struct service *svs, struct sourceinfo *si, struct command *c, const char *userlevel)
+{
+	if (command_authorize(svs, si, c, userlevel))
+		return true;
+
+	if (permissive_mode)
+	{
+		permissive_mode_fallback = true;
+
+		const bool ret = default_cmd_auth(svs, si, c, userlevel);
+
+		permissive_mode_fallback = false;
+
+		return ret;
+	}
+
+	return false;
+}
 
 void
 command_add(struct command *cmd, mowgli_patricia_t *commandtree)
@@ -44,6 +115,13 @@ command_delete(struct command *cmd, mowgli_patricia_t *commandtree)
 	mowgli_patricia_delete(commandtree, cmd->name);
 }
 
+void
+command_delete_trie_cb(const char ATHEME_VATTR_UNUSED *const restrict cmdname, void *const restrict cmd,
+                       void *const restrict cmdlist)
+{
+	(void) command_delete(cmd, cmdlist);
+}
+
 struct command *
 command_find(mowgli_patricia_t *commandtree, const char *command)
 {
@@ -51,43 +129,6 @@ command_find(mowgli_patricia_t *commandtree, const char *command)
 	return_val_if_fail(command != NULL, NULL);
 
 	return mowgli_patricia_retrieve(commandtree, command);
-}
-
-static bool permissive_mode_fallback = false;
-
-static bool
-default_command_authorize(struct service *svs, struct sourceinfo *si, struct command *c, const char *userlevel)
-{
-	if (!(has_priv(si, c->access) && has_priv(si, userlevel)))
-	{
-		if (!permissive_mode_fallback)
-			logaudit_denycmd(si, c, userlevel);
-		return false;
-	}
-
-	return true;
-}
-
-bool (*command_authorize)(struct service *svs, struct sourceinfo *si, struct command *c, const char *userlevel) = default_command_authorize;
-
-static inline bool
-command_verify(struct service *svs, struct sourceinfo *si, struct command *c, const char *userlevel)
-{
-	if (command_authorize(svs, si, c, userlevel))
-		return true;
-
-	if (permissive_mode)
-	{
-		bool ret;
-
-		permissive_mode_fallback = true;
-		ret = default_command_authorize(svs, si, c, userlevel);
-		permissive_mode_fallback = false;
-
-		return ret;
-	}
-
-	return false;
 }
 
 void
@@ -162,179 +203,24 @@ command_exec_split(struct service *svs, struct sourceinfo *si, const char *cmd, 
 		if (si->smu != NULL)
 			language_set_active(si->smu->language);
 
-		notice(svs->nick, si->su->nick, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", svs->disp);
+		(void) help_display_invalid(si, svs, NULL);
 
 		if (si->smu != NULL)
 			language_set_active(NULL);
 	}
 }
 
-/*
- * command_help
- *     Iterates the command tree and lists available commands.
- *
- * inputs -
- *     si:          The origin of the request.
- *     commandtree: The command tree being listed.
- *
- * outputs -
- *     A list of available commands.
- */
 void
-command_help(struct sourceinfo *si, mowgli_patricia_t *commandtree)
+subcommand_dispatch_simple(struct service *const restrict svs, struct sourceinfo *const restrict si, const int parc,
+                           char **const restrict parv, mowgli_patricia_t *const restrict commandtree,
+                           const char *const restrict subcmd)
 {
-	mowgli_patricia_iteration_state_t state;
-	struct command *c;
+	struct command *const cmd = command_find(commandtree, parv[0]);
 
-	if (si->service == NULL || si->service->commands == commandtree)
-		command_success_nodata(si, _("The following commands are available:"));
+	if (cmd)
+		(void) command_exec(svs, si, cmd, parc - 1, parv + 1);
 	else
-		command_success_nodata(si, _("The following subcommands are available:"));
-
-	MOWGLI_PATRICIA_FOREACH(c, &state, commandtree)
-	{
-		/* show only the commands we have access to
-		 * (taken from command_exec())
-		 */
-		if (has_priv(si, c->access) || (c->access != NULL && !strcasecmp(c->access, AC_AUTHENTICATED) && si->smu != NULL))
-			command_success_nodata(si, "\2%-15s\2 %s", c->name, translation_get(_(c->desc)));
-	}
+		(void) help_display_invalid(si, svs, subcmd);
 }
 
-/* name1 name2 name3... */
-static bool
-string_in_list(const char *str, const char *name)
-{
-	char *p;
-	int l;
-
-	if (str == NULL)
-		return false;
-	l = strlen(name);
-	while (*str != '\0')
-	{
-		p = strchr(str, ' ');
-		if (p != NULL ? p - str == l && !strncasecmp(str, name, p - str) : !strcasecmp(str, name))
-			return true;
-		if (p == NULL)
-			return false;
-		str = p;
-		while (*str == ' ')
-			str++;
-	}
-	return false;
-}
-
-/*
- * command_help_short
- *     Iterates over the command tree and lists available commands.
- *
- * inputs -
- *     mynick:      The nick of the services bot sending out the notices.
- *     origin:      The origin of the request.
- *     commandtree: The command tree being listed.
- *     maincmds:    The commands to list verbosely.
- *
- * outputs -
- *     A list of available commands.
- */
-void
-command_help_short(struct sourceinfo *si, mowgli_patricia_t *commandtree, const char *maincmds)
-{
-	mowgli_patricia_iteration_state_t state;
-	unsigned int l, lv;
-	char buf[256], *p;
-	struct command *c;
-
-	if (si->service == NULL || si->service->commands == commandtree)
-		command_success_nodata(si, _("The following commands are available:"));
-	else
-		command_success_nodata(si, _("The following subcommands are available:"));
-
-	MOWGLI_PATRICIA_FOREACH(c, &state, commandtree)
-	{
-		/* show only the commands we have access to
-		 * (taken from command_exec())
-		 */
-		if (string_in_list(maincmds, c->name) && (has_priv(si, c->access) || (c->access != NULL && !strcasecmp(c->access, AC_AUTHENTICATED) && si->smu != NULL)))
-			command_success_nodata(si, "\2%-15s\2 %s", c->name, translation_get(_(c->desc)));
-	}
-
-	command_success_nodata(si, " ");
-	mowgli_strlcpy(buf, translation_get(_("\2Other commands:\2 ")), sizeof buf);
-	l = strlen(buf);
-	lv = 0;
-	for (p = buf; *p != '\0'; p++)
-	{
-		if (!(*p >= '\1' && *p < ' '))
-			lv++;
-	}
-
-	MOWGLI_PATRICIA_FOREACH(c, &state, commandtree)
-	{
-		/* show only the commands we have access to
-		 * (taken from command_exec())
-		 */
-		if (!string_in_list(maincmds, c->name) && (has_priv(si, c->access) || (c->access != NULL && !strcasecmp(c->access, AC_AUTHENTICATED) && si->smu != NULL)))
-		{
-			if (strlen(buf) > l)
-				mowgli_strlcat(buf, ", ", sizeof buf);
-			if (strlen(buf) > 55)
-			{
-				command_success_nodata(si, "%s", buf);
-				l = lv;
-				buf[lv] = '\0';
-				while (--lv > 0)
-					buf[lv] = ' ';
-				buf[0] = ' ';
-				lv = l;
-			}
-			mowgli_strlcat(buf, c->name, sizeof buf);
-		}
-	}
-	if (strlen(buf) > l)
-		command_success_nodata(si, "%s", buf);
-}
-
-static int
-text_to_parv(char *text, int maxparc, char **parv)
-{
-	int count = 0;
-	char *p;
-
-        if (maxparc == 0)
-        	return 0;
-
-	if (!text)
-		return 0;
-
-	p = text;
-	while (count < maxparc - 1 && (parv[count] = strtok(p, " ")) != NULL)
-	{
-		count++;
-		p = NULL;
-	}
-
-	if ((parv[count] = strtok(p, "")) != NULL)
-	{
-		p = parv[count];
-		while (*p == ' ')
-			p++;
-		parv[count] = p;
-		if (*p != '\0')
-		{
-			p += strlen(p) - 1;
-			while (*p == ' ' && p > parv[count])
-				p--;
-			p[1] = '\0';
-			count++;
-		}
-	}
-	return count;
-}
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+bool (*command_authorize)(struct service *, struct sourceinfo *, struct command *, const char *) = &default_cmd_auth;

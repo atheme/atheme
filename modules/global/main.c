@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (C) 2005 Atheme Project (http://atheme.org/)
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ *
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the main() routine.
@@ -14,25 +16,21 @@ struct global_ {
 
 static struct service *globsvs = NULL;
 
-// HELP <command> [params]
 static void
-gs_cmd_help(struct sourceinfo *si, const int parc, char *parv[])
+gs_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc, char **const restrict parv)
 {
-	char *command = parv[0];
-
-	if (!command)
+	if (parv[0])
 	{
-		command_help(si, si->service->commands);
-		command_success_nodata(si, "For more specific help use \2HELP \37command\37\2.");
-
+		(void) help_display(si, si->service, parv[0], si->service->commands);
 		return;
 	}
 
-	// take the command through the hash table
-	help_display(si, si->service, command, si->service->commands);
+	(void) help_display_prefix(si, si->service);
+	(void) command_help(si, si->service->commands);
+	(void) help_display_moreinfo(si, si->service, NULL);
+	(void) help_display_suffix(si);
 }
 
-// GLOBAL <parameters>|SEND|CLEAR
 static void
 gs_cmd_global(struct sourceinfo *si, const int parc, char *parv[])
 {
@@ -203,25 +201,28 @@ static struct command gs_global = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
-	globsvs = service_add("global", NULL);
+	if (! (globsvs = service_add("global", NULL)))
+	{
+		(void) slog(LG_ERROR, "%s: service_add() failed", m->name);
 
-	service_bind_command(globsvs, &gs_global);
-	service_named_bind_command("operserv", &gs_global);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
 
-	service_bind_command(globsvs, &gs_help);
+	(void) service_bind_command(globsvs, &gs_help);
+	(void) service_bind_command(globsvs, &gs_global);
+
+	(void) service_named_bind_command("operserv", &gs_global);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	service_unbind_command(globsvs, &gs_help);
-	service_unbind_command(globsvs, &gs_global);
-	service_named_unbind_command("operserv", &gs_global);
+	(void) service_named_unbind_command("operserv", &gs_global);
 
-	if (globsvs != NULL)
-		service_delete(globsvs);
+	(void) service_delete(globsvs);
 }
 
 SIMPLE_DECLARE_MODULE_V1("global/main", MODULE_UNLOAD_CAPABILITY_OK)

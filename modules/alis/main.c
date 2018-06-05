@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2005-2007 William Pitcock, et al.
+ * Copyright (C) 2005-2007 William Pitcock, et al.
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ *
  * The rights to this code are as documented under doc/LICENSE.
  *
  * Copyright (C) 2003-2007 Lee Hardy <leeh@leeh.co.uk>
@@ -437,24 +439,22 @@ alis_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 static void
 alis_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 {
-	const char *command = parv[0];
-
-	if (command == NULL)
+	if (parv[0])
 	{
-		command_success_nodata(si, _("***** \2%s Help\2 *****"), alis->nick);
-		command_success_nodata(si, _("\2%s\2 allows searching for channels with more\n"
-					"flexibility than the /list command."),
-				alis->nick);
-		command_success_nodata(si, " ");
-		command_success_nodata(si, _("For more information on a command, type:"));
-		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", alis->disp);
-		command_success_nodata(si, " ");
-		command_help(si, alis->commands);
-		command_success_nodata(si, _("***** \2End of Help\2 *****"));
+		(void) help_display(si, alis, parv[0], alis->commands);
 		return;
 	}
 
-	help_display(si, si->service, command, alis->commands);
+	(void) help_display_prefix(si, alis);
+
+	(void) command_success_nodata(si, _("\2%s\2 allows searching for channels with more\n"
+	                                    "flexibility than the /list command."), alis->nick);
+
+	(void) help_display_newline(si);
+	(void) command_help(si, alis->commands);
+	(void) help_display_moreinfo(si, alis, NULL);
+	(void) help_display_locations(si);
+	(void) help_display_suffix(si);
 }
 
 static struct command alis_list = {
@@ -476,20 +476,24 @@ static struct command alis_help = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
-	alis = service_add("alis", NULL);
-	service_bind_command(alis, &alis_list);
-	service_bind_command(alis, &alis_help);
+	if (! (alis = service_add("alis", NULL)))
+	{
+		(void) slog(LG_ERROR, "%s: service_add() failed", m->name);
+
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	(void) service_bind_command(alis, &alis_list);
+	(void) service_bind_command(alis, &alis_help);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	service_unbind_command(alis, &alis_list);
-	service_unbind_command(alis, &alis_help);
-
-	service_delete(alis);
+	(void) service_delete(alis);
 }
 
 SIMPLE_DECLARE_MODULE_V1("alis/main", MODULE_UNLOAD_CAPABILITY_OK)

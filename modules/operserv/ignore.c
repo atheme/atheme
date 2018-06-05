@@ -12,27 +12,16 @@ static mowgli_patricia_t *os_ignore_cmds = NULL;
 mowgli_list_t svs_ignore_list;
 
 static void
-os_cmd_ignore(struct sourceinfo *si, int parc, char *parv[])
+os_cmd_ignore(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	char *cmd = parv[0];
-        struct command *c;
-
-	if (!cmd)
+	if (parc < 1)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "IGNORE");
-		command_fail(si, fault_needmoreparams, _("Syntax: IGNORE ADD|DEL|LIST|CLEAR <mask>"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "IGNORE");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: IGNORE ADD|DEL|LIST|CLEAR <mask>"));
 		return;
 	}
 
-        c = command_find(os_ignore_cmds, cmd);
-	if (c == NULL)
-	{
-		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
-		return;
-	}
-
-	command_exec(si->service, si, c, parc - 1, parv + 1);
-
+	(void) subcommand_dispatch_simple(si->service, si, parc, parv, os_ignore_cmds, "IGNORE");
 }
 
 static void
@@ -231,17 +220,22 @@ static struct command os_ignore_clear = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
-        service_named_bind_command("operserv", &os_ignore);
+	if (! (os_ignore_cmds = mowgli_patricia_create(&strcasecanon)))
+	{
+		(void) slog(LG_ERROR, "%s: mowgli_patricia_create() failed", m->name);
 
-	os_ignore_cmds = mowgli_patricia_create(strcasecanon);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
 
-	// Sub-commands
-	command_add(&os_ignore_add, os_ignore_cmds);
-	command_add(&os_ignore_del, os_ignore_cmds);
-	command_add(&os_ignore_clear, os_ignore_cmds);
-	command_add(&os_ignore_list, os_ignore_cmds);
+	(void) command_add(&os_ignore_add, os_ignore_cmds);
+	(void) command_add(&os_ignore_del, os_ignore_cmds);
+	(void) command_add(&os_ignore_clear, os_ignore_cmds);
+	(void) command_add(&os_ignore_list, os_ignore_cmds);
+
+	(void) service_named_bind_command("operserv", &os_ignore);
 
 	use_svsignore++;
 }
@@ -249,17 +243,11 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	service_named_unbind_command("operserv", &os_ignore);
-
-	// Sub-commands
-	command_delete(&os_ignore_add, os_ignore_cmds);
-	command_delete(&os_ignore_del, os_ignore_cmds);
-	command_delete(&os_ignore_list, os_ignore_cmds);
-	command_delete(&os_ignore_clear, os_ignore_cmds);
-
 	use_svsignore--;
 
-	mowgli_patricia_destroy(os_ignore_cmds, NULL, NULL);
+	(void) service_named_unbind_command("operserv", &os_ignore);
+
+	(void) mowgli_patricia_destroy(os_ignore_cmds, &command_delete_trie_cb, os_ignore_cmds);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/ignore", MODULE_UNLOAD_CAPABILITY_OK)

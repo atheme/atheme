@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2011 Alexandria Wolcott
+ * Copyright (C) 2011 Alexandria Wolcott
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ *
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the body of StatServ.
@@ -9,30 +11,21 @@
 
 static struct service *statsvs = NULL;
 
-void
-ss_cmd_help(struct sourceinfo * si, int parc, char *parv[])
+static void
+ss_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc, char **const restrict parv)
 {
-    char *command = parv[0];
+	if (parv[0])
+	{
+		(void) help_display(si, si->service, parv[0], si->service->commands);
+		return;
+	}
 
-    if (!command)
-    {
-        command_success_nodata(si, _("***** \2%s Help\2 *****"), si->service->nick);
-        command_success_nodata(si, _("\2%s\2 records various network statistics."),
-                si->service->nick);
-        command_success_nodata(si, " ");
-        command_success_nodata(si, _("For more information on a command, type:"));
-        command_success_nodata(si, "\2/%s%s help <command>\2",
-                (ircd->uses_rcommand == false) ? "msg " : "",
-                si->service->disp);
-        command_success_nodata(si, " ");
-
-        command_help(si, si->service->commands);
-
-        command_success_nodata(si, _("***** \2End of Help\2 *****"));
-        return;
-    }
-
-    help_display(si, si->service, command, si->service->commands);
+	(void) help_display_prefix(si, si->service);
+	(void) command_success_nodata(si, _("\2%s\2 records various network statistics."), si->service->nick);
+	(void) help_display_newline(si);
+	(void) command_help(si, si->service->commands);
+	(void) help_display_moreinfo(si, si->service, NULL);
+	(void) help_display_suffix(si);
 }
 
 static struct command ss_help = {
@@ -45,18 +38,23 @@ static struct command ss_help = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
-    statsvs = service_add("statserv", NULL);
-    service_named_bind_command("statserv", &ss_help);
+	if (! (statsvs = service_add("statserv", NULL)))
+	{
+		(void) slog(LG_ERROR, "%s: service_add() failed", m->name);
+
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	(void) service_bind_command(statsvs, &ss_help);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-    service_named_unbind_command("statserv", &ss_help);
-    if (statsvs != NULL)
-        service_delete(statsvs);
+	(void) service_delete(statsvs);
 }
 
 SIMPLE_DECLARE_MODULE_V1("statserv/main", MODULE_UNLOAD_CAPABILITY_OK)

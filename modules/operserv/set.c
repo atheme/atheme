@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2006 William Pitcock, et al.
+ * Copyright (C) 2006 William Pitcock, et al.
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ *
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains routines to handle the OperServ SET command.
@@ -10,28 +12,31 @@
 
 static mowgli_patricia_t *os_set_cmdtree = NULL;
 
-// HELP SET
 static void
-os_help_set(struct sourceinfo *si, const char *subcmd)
+os_help_set(struct sourceinfo *const restrict si, const char *const restrict subcmd)
 {
-	if (!subcmd)
+	if (subcmd)
 	{
-		command_success_nodata(si, _("***** \2%s Help\2 *****"), si->service->nick);
-		command_success_nodata(si, _("Help for \2SET\2:"));
-		command_success_nodata(si, " ");
-		command_success_nodata(si, _("SET allows you to set various control flags\n"
-					"for services that changes the way certain\n"
-					"operations are performed."));
-		command_success_nodata(si, _("Note that all settings will be reset to the values\n"
-					"in the configuration file on rehash or services restart."));
-		command_success_nodata(si, " ");
-		command_help(si, os_set_cmdtree);
-		command_success_nodata(si, " ");
-		command_success_nodata(si, _("For more information, use \2/msg %s HELP SET \37command\37\2."), si->service->nick);
-		command_success_nodata(si, _("***** \2End of Help\2 *****"));
+		(void) help_display_as_subcmd(si, si->service, "SET", subcmd, os_set_cmdtree);
+		return;
 	}
-	else
-		help_display_as_subcmd(si, si->service, "SET", subcmd, os_set_cmdtree);
+
+	(void) help_display_prefix(si, si->service);
+	(void) command_success_nodata(si, _("Help for \2SET\2:"));
+	(void) help_display_newline(si);
+
+	(void) command_success_nodata(si, _("SET allows you to set various control flags\nfor services "
+	                                    "that changes the way certain\noperations are performed."));
+
+	(void) help_display_newline(si);
+
+	(void) command_success_nodata(si, _("Note that all settings will be reset to the values\nin the "
+	                                    "configuration file on rehash or services restart."));
+
+	(void) help_display_newline(si);
+	(void) command_help(si, os_set_cmdtree);
+	(void) help_display_moreinfo(si, si->service, "SET");
+	(void) help_display_suffix(si);
 }
 
 // SET <setting> <parameters>
@@ -625,51 +630,41 @@ static struct command os_set_enforceprefix = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
-	service_named_bind_command("operserv", &os_set);
+	if (! (os_set_cmdtree = mowgli_patricia_create(&strcasecanon)))
+	{
+		(void) slog(LG_ERROR, "%s: mowgli_patricia_create() failed", m->name);
 
-	os_set_cmdtree = mowgli_patricia_create(strcasecanon);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
 
-	command_add(&os_set_recontime, os_set_cmdtree);
-	command_add(&os_set_maxlogins, os_set_cmdtree);
-	command_add(&os_set_maxnicks, os_set_cmdtree);
-	command_add(&os_set_maxusers, os_set_cmdtree);
-	command_add(&os_set_maxchans, os_set_cmdtree);
-	command_add(&os_set_mdlimit, os_set_cmdtree);
-	command_add(&os_set_klinetime, os_set_cmdtree);
-	command_add(&os_set_commitinterval, os_set_cmdtree);
-	command_add(&os_set_chanexpire, os_set_cmdtree);
-	command_add(&os_set_maxchanacs, os_set_cmdtree);
-	command_add(&os_set_maxfounders, os_set_cmdtree);
-	command_add(&os_set_akicktime, os_set_cmdtree);
-	command_add(&os_set_spam, os_set_cmdtree);
-	command_add(&os_set_nickexpire, os_set_cmdtree);
-	command_add(&os_set_enforceprefix, os_set_cmdtree);
+	(void) command_add(&os_set_recontime, os_set_cmdtree);
+	(void) command_add(&os_set_maxlogins, os_set_cmdtree);
+	(void) command_add(&os_set_maxnicks, os_set_cmdtree);
+	(void) command_add(&os_set_maxusers, os_set_cmdtree);
+	(void) command_add(&os_set_maxchans, os_set_cmdtree);
+	(void) command_add(&os_set_mdlimit, os_set_cmdtree);
+	(void) command_add(&os_set_klinetime, os_set_cmdtree);
+	(void) command_add(&os_set_commitinterval, os_set_cmdtree);
+	(void) command_add(&os_set_chanexpire, os_set_cmdtree);
+	(void) command_add(&os_set_maxchanacs, os_set_cmdtree);
+	(void) command_add(&os_set_maxfounders, os_set_cmdtree);
+	(void) command_add(&os_set_akicktime, os_set_cmdtree);
+	(void) command_add(&os_set_spam, os_set_cmdtree);
+	(void) command_add(&os_set_nickexpire, os_set_cmdtree);
+	(void) command_add(&os_set_enforceprefix, os_set_cmdtree);
+
+	(void) service_named_bind_command("operserv", &os_set);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	service_named_unbind_command("operserv", &os_set);
+	(void) service_named_unbind_command("operserv", &os_set);
 
-	command_delete(&os_set_recontime, os_set_cmdtree);
-	command_delete(&os_set_maxlogins, os_set_cmdtree);
-	command_delete(&os_set_maxnicks, os_set_cmdtree);
-	command_delete(&os_set_maxusers, os_set_cmdtree);
-	command_delete(&os_set_maxchans, os_set_cmdtree);
-	command_delete(&os_set_mdlimit, os_set_cmdtree);
-	command_delete(&os_set_klinetime, os_set_cmdtree);
-	command_delete(&os_set_commitinterval, os_set_cmdtree);
-	command_delete(&os_set_chanexpire, os_set_cmdtree);
-	command_delete(&os_set_maxchanacs, os_set_cmdtree);
-	command_delete(&os_set_maxfounders, os_set_cmdtree);
-	command_delete(&os_set_akicktime, os_set_cmdtree);
-	command_delete(&os_set_spam, os_set_cmdtree);
-	command_delete(&os_set_nickexpire, os_set_cmdtree);
-	command_delete(&os_set_enforceprefix, os_set_cmdtree);
-
-	mowgli_patricia_destroy(os_set_cmdtree, NULL, NULL);
+	(void) mowgli_patricia_destroy(os_set_cmdtree, &command_delete_trie_cb, os_set_cmdtree);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/set", MODULE_UNLOAD_CAPABILITY_OK)

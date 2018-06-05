@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2011 Alexandria Wolcott
+ * Copyright (C) 2011 Alexandria Wolcott
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ *
  * Released under the same terms as Atheme itself.
  *
  * Channel information gatherer for statistics (Useful mostly for XMLRPC)
@@ -10,69 +12,53 @@
 static mowgli_patricia_t *ss_channel_cmds = NULL;
 
 static void
-ss_cmd_channel(struct sourceinfo * si, int parc, char *parv[])
+ss_cmd_channel(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-    struct command *c;
-    char *cmd = parv[0];
+	if (parc < 1)
+	{
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CHANNEL");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: CHANNEL [TOPIC|COUNT] [parameters]"));
+		return;
+	}
 
-    if (!cmd)
-    {
-        command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CHANNEL");
-        command_fail(si, fault_needmoreparams,
-                _("Syntax: CHANNEL [TOPIC|COUNT] [parameters]"));
-        return;
-    }
-
-    c = command_find(ss_channel_cmds, cmd);
-    if (c == NULL)
-    {
-        command_fail(si, fault_badparams,
-                _("Invalid command. Use \2/%s%s help\2 for a command listing."),
-                (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
-        return;
-    }
-
-    command_exec(si->service, si, c, parc - 1, parv + 1);
+	(void) subcommand_dispatch_simple(si->service, si, parc, parv, ss_channel_cmds, "CHANNEL");
 }
 
 static void
-ss_cmd_channel_topic(struct sourceinfo * si, int parc, char *parv[])
+ss_cmd_channel_topic(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-    char *chan = parv[0];
-    struct channel *c;
+	if (parc < 1)
+	{
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CHANNEL TOPIC");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: CHANNEL TOPIC <#channel>"));
+		return;
+	}
 
-    if (!chan)
-    {
-        command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CHANNEL TOPIC");
-        command_fail(si, fault_needmoreparams, _("Syntax: CHANNEL TOPIC <#channel>"));
-        return;
-    }
+	const struct channel *const c = channel_find(parv[0]);
 
-    if (!(c = channel_find(chan)))
-    {
-        command_fail(si, fault_nosuch_target, _("The channel \2%s\2 does not exist."),
-                chan);
-        return;
-    }
+	if (! c)
+	{
+		(void) command_fail(si, fault_nosuch_target, _("The channel \2%s\2 does not exist."), parv[0]);
+		return;
+	}
 
-    if (c->modes & CMODE_SEC)
-    {
-        command_fail(si, fault_noprivs,
-                _("You are not authorised to perform this action."));
-        return;
-    }
+	if (c->modes & CMODE_SEC)
+	{
+		(void) command_fail(si, fault_noprivs, _("You are not authorised to perform this action."));
+		return;
+	}
 
-    if (c->topic)
-        command_success_nodata(si, _("Topic for %s set by %s: %s"), c->name,
-                c->topic_setter, c->topic);
-    else
-        command_success_nodata(si, _("No topic set for %s"), c->name);
+	if (c->topic)
+		(void) command_success_nodata(si, _("Topic for %s set by %s: %s"), c->name, c->topic_setter, c->topic);
+	else
+		(void) command_success_nodata(si, _("No topic set for %s"), c->name);
 }
 
 static void
-ss_cmd_channel_count(struct sourceinfo * si, int parc, char *parv[])
+ss_cmd_channel_count(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc,
+                     char ATHEME_VATTR_UNUSED **const restrict parv)
 {
-    command_success_nodata(si, "There are %u channels on the network.", mowgli_patricia_size(chanlist));
+	(void) command_success_nodata(si, _("There are %u channels on the network."), mowgli_patricia_size(chanlist));
 }
 
 static struct command ss_channel = {
@@ -103,25 +89,28 @@ static struct command ss_channel_count = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
-    service_named_bind_command("statserv", &ss_channel);
+	if (! (ss_channel_cmds = mowgli_patricia_create(&strcasecanon)))
+	{
+		(void) slog(LG_ERROR, "%s: mowgli_patricia_create() failed", m->name);
 
-    ss_channel_cmds = mowgli_patricia_create(strcasecanon);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
 
-    command_add(&ss_channel_topic, ss_channel_cmds);
-    command_add(&ss_channel_count, ss_channel_cmds);
+	(void) command_add(&ss_channel_topic, ss_channel_cmds);
+	(void) command_add(&ss_channel_count, ss_channel_cmds);
+
+	(void) service_named_bind_command("statserv", &ss_channel);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-    service_named_unbind_command("statserv", &ss_channel);
+	(void) service_named_unbind_command("statserv", &ss_channel);
 
-    command_delete(&ss_channel_topic, ss_channel_cmds);
-    command_delete(&ss_channel_count, ss_channel_cmds);
-
-    mowgli_patricia_destroy(ss_channel_cmds, NULL, NULL);
+	(void) mowgli_patricia_destroy(ss_channel_cmds, &command_delete_trie_cb, ss_channel_cmds);
 }
 
 SIMPLE_DECLARE_MODULE_V1("statserv/channel", MODULE_UNLOAD_CAPABILITY_OK)

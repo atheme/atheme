@@ -386,27 +386,16 @@ __command_sellplot(struct sourceinfo * si, int parc, char *parv[])
 }
 
 static void
-__command_trampoline(struct sourceinfo * si, int parc, char *parv[])
+__command_trampoline(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	char *subcmd = parv[0];
-	struct command *c;
-
-	if (subcmd == NULL)
+	if (parc < 1)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "HAPPYFARM");
-		command_fail(si, fault_needmoreparams, _("Syntax: HAPPYFARM <command>"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "HAPPYFARM");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: HAPPYFARM <command>"));
 		return;
 	}
 
-	// take the command through the hash table
-	if ((c = command_find(happyfarm_cmd_subtree, subcmd)))
-	{
-		command_exec(si->service, si, c, parc - 1, parv + 1);
-	}
-	else
-	{
-		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s HELP HAPPYFARM\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->nick);
-	}
+	(void) subcommand_dispatch_simple(si->service, si, parc, parv, happyfarm_cmd_subtree, "HAPPYFARM");
 }
 
 static struct command command_join = {
@@ -446,33 +435,53 @@ static struct command command_happyfarm = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
-	farmer_heap = mowgli_heap_create(sizeof(struct happy_farmer), 32, BH_LAZY);
-	plot_heap = mowgli_heap_create(sizeof(struct happy_plot), 32, BH_LAZY);
+	if (! (farmer_heap = mowgli_heap_create(sizeof(struct happy_farmer), 32, BH_NOW)))
+	{
+		(void) slog(LG_ERROR, "%s: mowgli_heap_create() failed", m->name);
 
-	service_named_bind_command("gameserv", &command_happyfarm);
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
 
-	happyfarm_cmd_subtree = mowgli_patricia_create(strcasecanon);
+	if (! (plot_heap = mowgli_heap_create(sizeof(struct happy_plot), 32, BH_NOW)))
+	{
+		(void) slog(LG_ERROR, "%s: mowgli_heap_create() failed", m->name);
 
-	command_add(&command_join, happyfarm_cmd_subtree);
-	command_add(&command_buyplot, happyfarm_cmd_subtree);
-	command_add(&command_sellplot, happyfarm_cmd_subtree);
+		(void) mowgli_heap_destroy(farmer_heap);
+
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	if (! (happyfarm_cmd_subtree = mowgli_patricia_create(&strcasecanon)))
+	{
+		(void) slog(LG_ERROR, "%s: mowgli_patricia_create() failed", m->name);
+
+		(void) mowgli_heap_destroy(farmer_heap);
+		(void) mowgli_heap_destroy(plot_heap);
+
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	(void) command_add(&command_join, happyfarm_cmd_subtree);
+	(void) command_add(&command_buyplot, happyfarm_cmd_subtree);
+	(void) command_add(&command_sellplot, happyfarm_cmd_subtree);
+
+	(void) service_named_bind_command("gameserv", &command_happyfarm);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	command_delete(&command_join, happyfarm_cmd_subtree);
-	command_delete(&command_buyplot, happyfarm_cmd_subtree);
-	command_delete(&command_sellplot, happyfarm_cmd_subtree);
+	(void) mowgli_patricia_destroy(happyfarm_cmd_subtree, &command_delete_trie_cb, happyfarm_cmd_subtree);
 
-	mowgli_patricia_destroy(happyfarm_cmd_subtree, NULL, NULL);
+	(void) service_named_unbind_command("gameserv", &command_happyfarm);
 
-	service_named_unbind_command("gameserv", &command_happyfarm);
-
-	mowgli_heap_destroy(farmer_heap);
-	mowgli_heap_destroy(plot_heap);
+	(void) mowgli_heap_destroy(farmer_heap);
+	(void) mowgli_heap_destroy(plot_heap);
 }
 
 SIMPLE_DECLARE_MODULE_V1("gameserv/happyfarm", MODULE_UNLOAD_CAPABILITY_OK)

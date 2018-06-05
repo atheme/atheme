@@ -1064,6 +1064,15 @@ mod_init(struct module *const restrict m)
 	if (!module_find_published("backend/opensex"))
 	{
 		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
+
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
+	if (! (botsvs = service_add("botserv", NULL)))
+	{
+		(void) slog(LG_ERROR, "%s: service_add() failed", m->name);
+
 		m->mflags |= MODTYPE_FAIL;
 		return;
 	}
@@ -1080,8 +1089,6 @@ mod_init(struct module *const restrict m)
 
 	hook_add_event("shutdown");
 	hook_add_shutdown(on_shutdown);
-
-	botsvs = service_add("botserv", NULL);
 
 	add_uint_conf_item("MIN_USERS", &botsvs->conf_table, 0, &min_users, 0, 65535, 0);
 	service_bind_command(botsvs, &bs_bot);
