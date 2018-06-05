@@ -134,7 +134,7 @@ static void do_list(sourceinfo_t *si, mychan_t *mc, unsigned int flags)
 
 	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
-		const char *template, *mod_ago;
+		const char *template, *mod_ago, *setter;
 		struct tm tm;
 		char mod_date[64];
 
@@ -145,16 +145,17 @@ static void do_list(sourceinfo_t *si, mychan_t *mc, unsigned int flags)
 
 		template = get_template_name(mc, ca->level);
 		mod_ago = ca->tmodified ? time_ago(ca->tmodified) : "?";
+		setter = (ca->setter && *ca->setter) ? ca->setter : "?";
 
 		tm = *localtime(&ca->tmodified);
 		strftime(mod_date, sizeof mod_date, TIME_FORMAT, &tm);
 
 		if (template != NULL)
-			command_success_nodata(si, _("%-5d %-22s %-20s (%s) (%s) [modified %s ago, on %s]"),
-				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), template, mc->name, mod_ago, mod_date);
+			command_success_nodata(si, _("%-5d %-22s %-20s (%s) (%s) [modified %s ago, on %s, by %s]"),
+				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), template, mc->name, mod_ago, mod_date, setter);
 		else
-			command_success_nodata(si, _("%-5d %-22s %-20s (%s) [modified %s ago, on %s]"),
-				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), mc->name, mod_ago, mod_date);
+			command_success_nodata(si, _("%-5d %-22s %-20s (%s) [modified %s ago, on %s, by %s]"),
+				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), mc->name, mod_ago, mod_date, setter);
 		i++;
 	}
 

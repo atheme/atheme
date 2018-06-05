@@ -637,6 +637,7 @@ static void cs_cmd_access_info(sourceinfo_t *si, int parc, char *parv[])
 	const char *target = parv[1];
 	bool operoverride = false;
 	const char *role;
+	const char *setter;
 	struct tm tm;
 	char strfbuf[BUFSIZE];
 	metadata_t *md;
@@ -692,6 +693,7 @@ static void cs_cmd_access_info(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	role = get_template_name(mc, ca->level);
+	setter = (ca->setter && *ca->setter) ? ca->setter : "?";
 
 	tm = *localtime(&ca->tmodified);
 	strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
@@ -711,7 +713,7 @@ static void cs_cmd_access_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Role       : %s"), role);
 
 	command_success_nodata(si, _("Flags      : %s (%s)"), xflag_tostr(ca->level), bitmask_to_flags2(ca->level, 0));
-	command_success_nodata(si, _("Modified   : %s (%s ago)"), strfbuf, time_ago(ca->tmodified));
+	command_success_nodata(si, _("Modified   : %s (%s ago) by %s"), strfbuf, time_ago(ca->tmodified), setter);
 	command_success_nodata(si, _("*** \2End of Info\2 ***"));
 
 	if (operoverride)
