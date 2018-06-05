@@ -123,10 +123,10 @@ do_list(struct sourceinfo *si, struct mychan *mc, unsigned int flags)
 			setter_name = "?";
 
 		if (template != NULL)
-			command_success_nodata(si, _("%-5d %-22s %-20s (%s) (%s) [modified %s ago, on %s by %s]"),
+			command_success_nodata(si, _("%-5d %-22s %-20s (%s) (%s) [modified %s ago, on %s, by %s]"),
 				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), template, mc->name, mod_ago, mod_date, setter_name);
 		else
-			command_success_nodata(si, _("%-5d %-22s %-20s (%s) [modified %s ago, on %s by %s]"),
+			command_success_nodata(si, _("%-5d %-22s %-20s (%s) [modified %s ago, on %s, by %s]"),
 				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), mc->name, mod_ago, mod_date, setter_name);
 		i++;
 	}
