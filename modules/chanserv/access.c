@@ -559,11 +559,13 @@ cs_cmd_access_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct chanacs *ca;
 	struct myentity *mt;
+	struct myentity *setter;
 	struct mychan *mc;
 	const char *channel = parv[0];
 	const char *target = parv[1];
 	bool operoverride = false;
 	const char *role;
+	const char *setter_name;
 	struct tm tm;
 	char strfbuf[BUFSIZE];
 	struct metadata *md;
@@ -620,6 +622,12 @@ cs_cmd_access_info(struct sourceinfo *si, int parc, char *parv[])
 
 	role = get_template_name(mc, ca->level);
 
+	// Taken from chanserv/flags.c
+	if (*ca->setter_uid != '\0' && (setter = myentity_find_uid(ca->setter_uid)))
+		setter_name = setter->name;
+	else
+		setter_name = "?";
+
 	tm = *localtime(&ca->tmodified);
 	strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
 
@@ -638,7 +646,7 @@ cs_cmd_access_info(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("Role       : %s"), role);
 
 	command_success_nodata(si, _("Flags      : %s (%s)"), xflag_tostr(ca->level), bitmask_to_flags2(ca->level, 0));
-	command_success_nodata(si, _("Modified   : %s (%s ago)"), strfbuf, time_ago(ca->tmodified));
+	command_success_nodata(si, _("Modified   : %s (%s ago) by %s"), strfbuf, time_ago(ca->tmodified), setter_name);
 	command_success_nodata(si, _("*** \2End of Info\2 ***"));
 
 	if (operoverride)
