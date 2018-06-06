@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2010 Atheme Development Group
- * Rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2010 Atheme Project (http://atheme.org/)
  *
  * Perl scripting module. Provides a basic interface to load
  * and call into the perl interpreter; the other direction is
