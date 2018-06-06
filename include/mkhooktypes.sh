@@ -2,7 +2,7 @@
 # atheme-services: A collection of minimalist IRC services
 # mkhooktypes.sh: Code generator for type-safe hooks.
 #
-# Copyright (c) 2009 Atheme Project (http://www.atheme.org)
+# Copyright (C) 2009 Atheme Project (http://atheme.org/)
 #
 # Permission to use, copy, modify, and/or distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
