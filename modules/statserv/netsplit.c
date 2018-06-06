@@ -1,6 +1,9 @@
 /*
- * Copyright (c) 2011 Alexandria Wolcott
- * Released under the same terms as Atheme itself.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2011 Alexandria Wolcott <alyx@sporksmoo.net>
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
  *
  * Netsplit monitor
  */
