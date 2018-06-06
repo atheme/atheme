@@ -1,3 +1,10 @@
+/*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2005-2013 Atheme Project (http://atheme.org/)
+ */
+
 #ifndef ATHEME_MOD_HOSTSERV_HOSTSERV_H
 #define ATHEME_MOD_HOSTSERV_HOSTSERV_H 1
 
