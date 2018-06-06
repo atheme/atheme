@@ -1,3 +1,10 @@
+/*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2011 Stephen Bennett
+ */
+
 #include "api/atheme_perl.h"
 
 static mowgli_list_t * perl_object_references = NULL;
