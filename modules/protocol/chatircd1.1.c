@@ -1,9 +1,10 @@
 /*
- * Copyright (c) 2014-2017 ChatLounge IRC Network Development Team
- * Copyright (c) 2005-2007 Atheme Development Group
- * Copyright (c) 2003-2004 E. Will et al.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Rights to this code are documented in doc/LICENSE.
+ * Copyright (C) 2003-2004 E. Will, et al.
+ * Copyright (C) 2005-2007 Atheme Project (http://atheme.org/)
+ * Copyright (C) 2014-2017 ChatLounge IRC Network Development Team
  *
  * This file contains protocol support for ChatIRCd, a charybdis fork.
  * Adapted from the Charybdis protocol module.
