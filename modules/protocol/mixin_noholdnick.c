@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2008 Jilles Tjoelker
- * Rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2008-2009 Jilles Tjoelker
  *
  * Module to disable holdnick enforcers.
  */
