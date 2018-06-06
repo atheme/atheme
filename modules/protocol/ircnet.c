@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2005-2006 William Pitcock, et al.
- * Rights to this code are documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2005-2007 William Pitcock, et al.
  *
  * This file contains protocol support for IRCnet ircd's.
  * Derived mainly from the documentation (or lack thereof)
