@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2016 Austin Ellis
- * Rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2016 Austin Ellis
  *
  * Enable say/act caller ID.
  */
