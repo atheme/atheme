@@ -1,6 +1,8 @@
 /*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
  * Copyright (C) 2005 William Pitcock, et al.
- * Rights to this code are as documented in doc/LICENSE.
  */
 
 #ifndef ATHEME_INC_PROTOCOL_NGIRCD_H
