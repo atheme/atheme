@@ -1,3 +1,10 @@
+/*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2007 Pippijn van Steenhoven <pip88nl@gmail.com>
+ */
+
 #ifndef ATHEME_INC_INLINE_CONNECTION_H
 #define ATHEME_INC_INLINE_CONNECTION_H 1
 
