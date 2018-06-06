@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2012 Jilles Tjoelker <jilles@stack.nl>
- * Rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2012 Jilles Tjoelker <jilles@stack.nl>
  *
  * Remembers the last quit message of a user.
  */
