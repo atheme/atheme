@@ -1,7 +1,11 @@
-/* OPENBSD ORIGINAL: lib/libc/string/explicit_bzero.c
- * $OpenBSD: explicit_bzero.c,v 1.1 2014/01/22 21:06:45 tedu Exp $
+/*
+ * SPDX-License-Identifier: CC0-1.0
+ * SPDX-URL: https://spdx.org/licenses/CC0-1.0.html
  *
  * Public domain. Written by Ted Unangst.
+ *
+ * OPENBSD ORIGINAL: lib/libc/string/explicit_bzero.c
+ * $OpenBSD: explicit_bzero.c,v 1.1 2014/01/22 21:06:45 tedu Exp $
  */
 
 #include <string.h>
