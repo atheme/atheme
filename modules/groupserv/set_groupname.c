@@ -1,9 +1,10 @@
 /*
- * Copyright (c) 2005 William Pitcock <nenolod -at- nenolod.net>
- * Copyright (c) 2007 Jilles Tjoelker
- * Rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Changes the account name to another registered nick
+ * Copyright (C) 2014 William Pitcock <nenolod -at- nenolod.net>
+ *
+ * Changes the group name
  */
 
 #include "atheme.h"
