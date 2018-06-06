@@ -1,7 +1,9 @@
 /*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
  * Copyright (C) 2013 William Pitcock <nenolod@dereferenced.org>
- * Copyright (C) 2017 Atheme Development Group
- * Rights to this code are as documented in doc/LICENSE.
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
  *
  * ECDSA-NIST256P-CHALLENGE mechanism provider.
  */
