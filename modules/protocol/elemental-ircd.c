@@ -1,9 +1,11 @@
 /*
- * Copyright (c) 2003-2004 E. Will et al.
- * Copyright (c) 2005-2008 Atheme Development Group
- * Copyright (c) 2008-2010 ShadowIRCd Development Group
- * Copyright (c) 2013 PonyChat Development Group
- * Rights to this code are documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2003-2004 E. Will, et al.
+ * Copyright (C) 2005-2008 Atheme Project (http://atheme.org/)
+ * Copyright (C) 2008-2010 ShadowIRCd Development Group
+ * Copyright (C) 2013 PonyChat Development Group
  *
  * This file contains protocol support for ponychat-ircd.
  */
