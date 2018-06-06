@@ -1,5 +1,10 @@
-/* entities.c - entity tracking
- * Copyright (C) 2010 Atheme Development Group
+/*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2010 Atheme Project (http://atheme.org/)
+ *
+ * entities.c - entity tracking
  */
 
 #include "atheme.h"
