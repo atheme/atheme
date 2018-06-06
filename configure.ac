@@ -1,5 +1,8 @@
-dnl Copyright (C) 2005-2018 Atheme Development Group
-dnl Rights to this code are as documented in doc/LICENSE.
+# SPDX-License-Identifier: ISC
+# SPDX-URL: https://spdx.org/licenses/ISC.html
+#
+# Copyright (C) 2005-2015 Atheme Project (http://atheme.org/)
+# Copyright (C) 2015-2018 Atheme Development Group (https://atheme.github.io/)
 
 AC_PREREQ([2.69])
 
