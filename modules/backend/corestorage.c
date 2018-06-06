@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2005-2012 Atheme Development Group
- * Rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2005-2012 Atheme Project (http://atheme.org/)
  *
  * This contains the core storage components, which comprises basically
  * everything which used to live in atheme.db a long time ago.  It is not
