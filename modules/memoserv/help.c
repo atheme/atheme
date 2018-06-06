@@ -1,8 +1,9 @@
 /*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
  * Copyright (C) 2005 Atheme Project (http://atheme.org/)
  * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
- *
- * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains routines to handle the MemoServ HELP command.
  */
