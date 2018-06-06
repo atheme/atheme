@@ -1,3 +1,10 @@
+/*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2011 William Pitcock <nenolod@dereferenced.org>
+ */
+
 #include "atheme.h"
 
 int
