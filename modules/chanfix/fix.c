@@ -1,8 +1,12 @@
-/* chanfix - channel fixing service
+/*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
  * Copyright (C) 2010 Atheme Project (http://atheme.org/)
  * Copyright (C) 2014-2016 Austin Ellis <siniStar@IRC4Fun.net>
  * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ *
+ * chanfix - channel fixing service
  */
 
 #include "atheme.h"
