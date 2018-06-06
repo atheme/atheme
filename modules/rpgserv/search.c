@@ -1,4 +1,10 @@
-/* search.c - rpgserv SEARCH command
+/*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2011 William Pitcock <nenolod@dereferenced.org>
+ *
+ * search.c - rpgserv SEARCH command
  */
 
 #include "atheme.h"
