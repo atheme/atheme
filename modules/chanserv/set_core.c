@@ -1,8 +1,10 @@
 /*
- * Copyright (C) 2003-2004 E. Will, et al.
- * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Rights to this code are documented in doc/LICENSE.
+ * Copyright (C) 2003-2004 E. Will, et al.
+ * Copyright (C) 2010 Atheme Project (http://atheme.org/)
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
  *
  * This file contains routines to handle the ChanServ SET command.
  */
