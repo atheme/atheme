@@ -1,7 +1,9 @@
 /*
- * Copyright (c) 2005 Robin Burchell, et al.
- * Copyright (c) 2010 William Pitcock <nenolod@atheme.org>.
- * Rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2005 Robin Burchell, et al.
+ * Copyright (C) 2010 William Pitcock <nenolod@atheme.org>
  *
  * List chanserv-controlled channels.
  */
