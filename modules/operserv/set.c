@@ -1,8 +1,9 @@
 /*
- * Copyright (C) 2006 William Pitcock, et al.
- * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Rights to this code are documented in doc/LICENSE.
+ * Copyright (C) 2006-2011 William Pitcock, et al.
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
  *
  * This file contains routines to handle the OperServ SET command.
  */
