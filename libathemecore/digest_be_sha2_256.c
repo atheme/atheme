@@ -1,4 +1,7 @@
 /*
+ * SPDX-License-Identifier: BSD-3-Clause
+ * SPDX-URL: https://spdx.org/licenses/BSD-3-Clause.html
+ *
  * FILE:	sha2.c
  * AUTHOR:	Aaron D. Gifford - http://www.aarongifford.com/
  *
