@@ -1,6 +1,8 @@
-# Copyright (c) 2015-2016 Atheme Development Group <http://atheme.github.io>
-# Copyright (c) 2003-2004 E. Will et al.
-# Rights to this code are documented in doc/LICENSE.
+# SPDX-License-Identifier: ISC
+# SPDX-URL: https://spdx.org/licenses/ISC.html
+#
+# Copyright (C) 2003-2004 E. Will, et al.
+# Copyright (C) 2015-2016 Atheme Development Group <http://atheme.github.io>
 
 MODULE		= hostserv
 
