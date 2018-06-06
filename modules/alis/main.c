@@ -1,9 +1,15 @@
 /*
+ * SPDX-License-Identifier: (ISC AND BSD-3-Clause)
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ * SPDX-URL: https://spdx.org/licenses/BSD-3-Clause.html
+ *
  * Copyright (C) 2005-2007 William Pitcock, et al.
  * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
  *
- * The rights to this code are as documented under doc/LICENSE.
- *
+ * ALIS, based on the ratbox-services implementation.
+ */
+
+/*
  * Copyright (C) 2003-2007 Lee Hardy <leeh@leeh.co.uk>
  * Copyright (C) 2003-2007 ircd-ratbox development team
  *
@@ -30,8 +36,6 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- * ALIS, based on the ratbox-services implementation.
  */
 
 #include "atheme.h"
