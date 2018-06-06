@@ -1,22 +1,15 @@
-/* OPENBSD ORIGINAL: lib/libc/crypto/arc4random.c */
-/* $OpenBSD: arc4random.c,v 1.25 2013/10/01 18:34:57 markus Exp $ */
-
 /*
- * Copyright (c) 1996, David Mazieres <dm@uun.org>
- * Copyright (c) 2008, Damien Miller <djm@openbsd.org>
- * Copyright (c) 2013, Markus Friedl <markus@openbsd.org>
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 1996 David Mazieres <dm@uun.org>
+ * Copyright (C) 2008 Damien Miller <djm@openbsd.org>
+ * Copyright (C) 2013 Markus Friedl <markus@openbsd.org>
+ * Copyright (C) 2017 Aaron M. D. Jones <aaronmdjones@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
- * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
- * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
- * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
- * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
- * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
 #include "atheme.h"
