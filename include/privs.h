@@ -1,6 +1,8 @@
 /*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
  * Copyright (C) 2005 Jilles Tjoelker, et al.
- * Rights to this code are as documented in doc/LICENSE.
  *
  * Fine grained services operator privileges
  */
