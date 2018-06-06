@@ -1,7 +1,9 @@
 /*
- * Copyright (c) 2003-2004 E. Will et al.
- * Copyright (c) 2005-2007 Atheme Development Group
- * Rights to this code are documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2003-2004 E. Will, et al.
+ * Copyright (C) 2005-2008 Atheme Project (http://atheme.org/)
  *
  * This file contains protocol support for TS6-based ircd.
  */
