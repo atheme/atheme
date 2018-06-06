@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2008 Jilles Tjoelker
- * The rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2008 Jilles Tjoelker
  *
  * Module ABI revision.
  */
