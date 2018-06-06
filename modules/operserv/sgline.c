@@ -1,7 +1,9 @@
 /*
- * Copyright (c) 2009 Atheme Development Group
- * Copyright (c) 2009 Rizon Development Team <http://redmine.rizon.net>
- * Rights to this code are documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2009 Atheme Project (http://atheme.org/)
+ * Copyright (C) 2009 Rizon Development Team (http://redmine.rizon.net/)
  *
  * This file contains functionality which implements
  * the OperServ SGLINE command.
