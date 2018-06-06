@@ -1,4 +1,8 @@
-/* Originally witten by Steve Reid <steve@edmweb.com>
+/*
+ * SPDX-License-Identifier: CC0-1.0
+ * SPDX-URL: https://spdx.org/licenses/CC0-1.0.html
+ *
+ * Originally witten by Steve Reid <steve@edmweb.com>
  *
  * Modified by Aaron D. Gifford <agifford@infowest.com>
  *
