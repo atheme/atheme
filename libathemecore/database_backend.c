@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2010 William Pitcock <nenolod@atheme.org>
- * Rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2010 William Pitcock <nenolod@atheme.org>
  *
  * Platform-agnostic database backend layer.
  */
