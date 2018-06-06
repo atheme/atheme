@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2006 William Pitcock, et al.
- * Rights to this code are documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2006 William Pitcock, et al.
  *
  * This file is a meta-module for compatibility with old
  * setups pre-SET split.
