@@ -1,8 +1,9 @@
 /*
- * Copyright (C) 2011 Alexandria Wolcott
- * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Rights to this code are documented in doc/LICENSE.
+ * Copyright (C) 2011 Alexandria Wolcott <alyx@sporksmoo.net>
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
  *
  * This file contains the body of StatServ.
  */
