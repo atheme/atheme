@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
- * Rights to this code are documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2005 Atheme Project (http://atheme.org/)
  *
  * This file contains the main() routine.
  */
