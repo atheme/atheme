@@ -1,8 +1,9 @@
 /*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
  * Copyright (C) 2005 William Pitcock, et al.
  * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
- *
- * Rights to this code are as documented in doc/LICENSE.
  *
  * Command help routines.
  */
