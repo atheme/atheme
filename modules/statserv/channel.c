@@ -1,8 +1,9 @@
 /*
- * Copyright (C) 2011 Alexandria Wolcott
- * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Released under the same terms as Atheme itself.
+ * Copyright (C) 2011 Alexandria Wolcott <alyx@sporksmoo.net>
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
  *
  * Channel information gatherer for statistics (Useful mostly for XMLRPC)
  */
