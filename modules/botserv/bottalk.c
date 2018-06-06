@@ -1,7 +1,9 @@
 /*
- * Copyright (c) 2016 Austin Ellis
- * Copyright (c) 2009 Celestin, et al.
- * Rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2009 Celestin, et al.
+ * Copyright (C) 2016 Austin Ellis
  *
  * This file contains a BService SAY and ACT which can make
  * botserv bot talk in channel.
