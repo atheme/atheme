@@ -64,7 +64,7 @@ const char *infotext[] =
 	"  spb, Stephen Bennett <spb@exherbo.org>",
 	" ",
 
-	"The following additional people have to Atheme:",
+	"The following additional people have contributed to Atheme:",
 	" ",
 	"  Adam, Adam <adam@sigterm.info>",
 	"  aji, Alex Iadicicco <alex@ajitek.net>",
