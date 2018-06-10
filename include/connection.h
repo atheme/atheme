@@ -83,6 +83,7 @@ struct connection *connection_accept_tcp(struct connection *,
 void connection_setselect_read(struct connection *, void(*)(struct connection *));
 void connection_setselect_write(struct connection *, void(*)(struct connection *));
 void connection_close(struct connection *);
+void connection_close_children(struct connection *);
 void connection_close_soon(struct connection *);
 void connection_close_soon_children(struct connection *);
 void connection_close_all(void);
