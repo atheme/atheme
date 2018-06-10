@@ -418,7 +418,7 @@ void _moddeinit(module_unload_intent_t intent)
 	mowgli_timer_destroy(base_eventloop, httpd_checkidle_timer);
 
 	hook_del_config_ready(httpd_config_ready);
-	connection_close_soon_children(listener);
+	connection_close_children(listener);
 	del_conf_item("HOST", &conf_httpd_table);
 	del_conf_item("WWW_ROOT", &conf_httpd_table);
 	del_conf_item("PORT", &conf_httpd_table);
