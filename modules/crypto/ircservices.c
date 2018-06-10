@@ -1,15 +1,12 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
- * Rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: GPL-2.0
+ * SPDX-URL: https://spdx.org/licenses/GPL-2.0.html
  *
- * IRCServices's weird password encryption thingy, taken from Anope 1.6.3.
- */
-
-/*
- * (C) 2003 Anope Team
- * Contact us at info@anope.org
+ * Copyright (C) 2003 Anope Team (https://www.anope.org/)
+ * Copyright (C) 2005-2012 Atheme Project (http://atheme.org/)
+ * Copyright (C) 2017-2018 Atheme Development Group (https://atheme.github.io/)
  *
- * Please read COPYING and README for further details.
+ * IRCServices' weird password encryption module, taken from Anope 1.6.3.
  *
  * Based on the original code of Epona by Lara.
  * Based on the original code of Services by Andy Church.
