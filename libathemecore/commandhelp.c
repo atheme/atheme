@@ -28,36 +28,6 @@
 
 static unsigned int help_display_depth = 0;
 
-static inline bool
-name_in_list(const char *const restrict name, const char *restrict list)
-{
-	if (! name || ! *name || ! list || ! *list)
-		return false;
-
-	const size_t namelen = strlen(name);
-
-	while (*list)
-	{
-		const char *const ptr = strpbrk(list, " \t\r\n");
-
-		if (ptr && (size_t)(ptr - list) == namelen && strncasecmp(list, name, namelen) == 0)
-			return true;
-
-		if (! ptr && strcasecmp(list, name) == 0)
-			return true;
-
-		if (! ptr)
-			return false;
-
-		list = ptr;
-
-		while (*list == ' ' || *list == '\t' || *list == '\r' || *list == '\n')
-			list++;
-	}
-
-	return false;
-}
-
 static void
 help_not_available(struct sourceinfo *const restrict si, const char *const restrict cmd,
                    const char *const restrict subcmd, const bool cmd_exists)
@@ -443,7 +413,7 @@ command_help_short(struct sourceinfo *const restrict si, mowgli_patricia_t *cons
 	MOWGLI_PATRICIA_FOREACH(cmd, &state, commandtree)
 	{
 		// Only display full description for commands in the shorthelp description list
-		if (! name_in_list(cmd->name, shortlist))
+		if (! string_in_list(cmd->name, shortlist))
 			continue;
 
 		// Only display commands that the user has permission to execute
@@ -473,7 +443,7 @@ additional:
 	MOWGLI_PATRICIA_FOREACH(cmd, &state, commandtree)
 	{
 		// If the command is in the shorthelp description list then it was already shown to the user above
-		if (cmds_displayed && name_in_list(cmd->name, shortlist))
+		if (cmds_displayed && string_in_list(cmd->name, shortlist))
 			continue;
 
 		// Only display commands that the user has permission to execute

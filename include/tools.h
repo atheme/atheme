@@ -133,6 +133,7 @@ struct email_canonicalizer_item
 };
 
 /* misc string stuff */
+bool string_in_list(const char *str, const char *list);
 char *random_string(size_t sz) ATHEME_FATTR_MALLOC;
 const char *create_weak_challenge(struct sourceinfo *si, const char *name);
 void tb2sp(char *line);

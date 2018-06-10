@@ -300,36 +300,12 @@ is_conf_soper(struct myuser *myuser)
 	return false;
 }
 
-/* name1 name2 name3... */
-static bool
-string_in_list(const char *str, const char *name)
-{
-	char *p;
-	int l;
-
-	if (str == NULL)
-		return false;
-	l = strlen(name);
-	while (*str != '\0')
-	{
-		p = strchr(str, ' ');
-		if (p != NULL ? p - str == l && !strncasecmp(str, name, p - str) : !strcasecmp(str, name))
-			return true;
-		if (p == NULL)
-			return false;
-		str = p;
-		while (*str == ' ')
-			str++;
-	}
-	return false;
-}
-
 bool
 has_priv_operclass(struct operclass *operclass, const char *priv)
 {
 	if (operclass == NULL)
 		return false;
-	if (string_in_list(operclass->privs, priv))
+	if (string_in_list(priv, operclass->privs))
 		return true;
 	return false;
 }

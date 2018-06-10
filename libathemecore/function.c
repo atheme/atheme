@@ -23,6 +23,36 @@
 
 #include "atheme.h"
 
+bool
+string_in_list(const char *const restrict str, const char *restrict list)
+{
+	if (! str || ! *str || ! list || ! *list)
+		return false;
+
+	const size_t len = strlen(str);
+
+	while (*list)
+	{
+		const char *const ptr = strpbrk(list, " \t\r\n");
+
+		if (ptr && (size_t)(ptr - list) == len && strncasecmp(list, str, len) == 0)
+			return true;
+
+		if (! ptr && strcasecmp(list, str) == 0)
+			return true;
+
+		if (! ptr)
+			return false;
+
+		list = ptr;
+
+		while (*list == ' ' || *list == '\t' || *list == '\r' || *list == '\n')
+			list++;
+	}
+
+	return false;
+}
+
 /* This function uses smalloc() to allocate memory.
  * You MUST free() the result when you are done with it!
  */
