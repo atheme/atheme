@@ -12,6 +12,23 @@ POTENTIAL COMPATIBILITY BREAKAGE
   NOT be compatible with earlier versions of this software (<= 7.2). PLEASE
   consider this VERY CAREFULLY! This closes issue #601.
 
+- The posix password crypto module has been removed. If you used this module on
+  Atheme <= 7.2, this module has been replaced with 4 other modules (2 of which
+  provide compatibility for the removed module). The module you need to load
+  depends upon the operating system Atheme was being used on; if it was Mac OS
+  then you need to load modules/crypto/crypt3-des instead. If it was any other
+  operating system, then you need to load modules/crypto/crypt3-md5 instead.
+  Note that these 2 modules are compatibility modules; they can only verify
+  existing encrypted passwords, they cannot encrypt new ones. You must load an
+  encryption-capable crypto module. Please see the Password Hashing Modules
+  section of dist/atheme.conf.example.
+
+- If you still use legacy password crypto (verify-only) modules (these: posix,
+  crypt3-des, crypt3-md5, ircservices, rawmd5, rawsha1), then you MUST pass
+  the --enable-legacy-pwcrypto flag to ./configure, or these modules will NOT
+  be compiled or installed. The presence of this flag can be confirmed at the
+  bottom of the configure output:   "Legacy Crypto Modules ...: Yes".
+
 Security
 --------
 - Services now accepts email addresses that may contain shell metacharacters.
@@ -103,6 +120,7 @@ Password Cryptography
   build contrib module support and use contrib/ns_generatehash.
 - The crypto/posix module has been replaced with individual crypt3-* modules.
   Please see the Password Hashing Modules section of dist/atheme.conf.example.
+- Legacy password crypto modules are now not compiled or installed by default.
 
 
 

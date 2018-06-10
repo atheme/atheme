@@ -147,6 +147,7 @@ dnl Optional features
 ATHEME_FEATURETEST_CONTRIB
 ATHEME_FEATURETEST_FHSPATHS
 ATHEME_FEATURETEST_LARGENET
+ATHEME_FEATURETEST_LEGACY_PWCRYPTO
 ATHEME_FEATURETEST_REPROBUILDS
 
 dnl These must be here, not above, or they might interfere with library and feature tests

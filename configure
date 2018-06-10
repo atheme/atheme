@@ -631,6 +631,7 @@ LTLIBOBJS
 LIBMOWGLI_COND_D
 MOWGLI_LIBS
 MOWGLI_CFLAGS
+LEGACY_PWCRYPTO_COND_C
 SHAREDIR
 RUNDIR
 MODDIR
@@ -800,6 +801,7 @@ with_perl
 enable_contrib
 enable_fhs_paths
 enable_large_net
+enable_legacy_pwcrypto
 enable_reproducible_builds
 enable_profile
 enable_relro
@@ -1448,6 +1450,8 @@ Optional Features:
   --enable-contrib        Enable contrib modules.
   --enable-fhs-paths      Use more FHS-like pathnames (for packagers)
   --enable-large-net      Enable large network support
+  --enable-legacy-pwcrypto
+                          Enable legacy password crypto modules
   --enable-reproducible-builds
                           Enable reproducible builds
   --enable-profile        Enable profiling extensions
@@ -10078,6 +10082,32 @@ $as_echo "#define LARGE_NETWORK 1" >>confdefs.h
 
 
 
+	LEGACY_PWCRYPTO="No"
+
+	# Check whether --enable-legacy-pwcrypto was given.
+if test "${enable_legacy_pwcrypto+set}" = set; then :
+  enableval=$enable_legacy_pwcrypto;
+else
+  enable_legacy_pwcrypto="no"
+fi
+
+
+	case "${enable_legacy_pwcrypto}" in
+		yes)
+			LEGACY_PWCRYPTO="Yes"
+			LEGACY_PWCRYPTO_COND_C="crypt3-des.c crypt3-md5.c ircservices.c rawmd5.c rawsha1.c"
+
+			;;
+		no)
+			LEGACY_PWCRYPTO="No"
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-legacy-pwcrypto" "$LINENO" 5
+			;;
+	esac
+
+
+
 	REPRODUCIBLE_BUILDS="No"
 
 	# Check whether --enable-reproducible-builds was given.
@@ -15816,6 +15846,7 @@ Configuration:
     Mowgli Installation .....: ${MOWGLI_SOURCE}
 
     Fallback RNG Enabled ....: ${ARC4RANDOM_BUILDING}
+    Legacy Crypto Modules ...: ${LEGACY_PWCRYPTO}
 
     CC ......................: ${CC}
     CFLAGS ..................: ${CFLAGS}

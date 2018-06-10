@@ -57,6 +57,7 @@ Configuration:
     Mowgli Installation .....: ${MOWGLI_SOURCE}
 
     Fallback RNG Enabled ....: ${ARC4RANDOM_BUILDING}
+    Legacy Crypto Modules ...: ${LEGACY_PWCRYPTO}
 
     CC ......................: ${CC}
     CFLAGS ..................: ${CFLAGS}
