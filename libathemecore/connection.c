@@ -241,6 +241,40 @@ void connection_close(connection_t *cptr)
 	free(cptr);
 }
 
+/*
+ * connection_close_children()
+ *
+ * inputs:
+ *       a listener.
+ *
+ * outputs:
+ *       none
+ *
+ * side effects:
+ *       connection_close() called on the connection itself and
+ *       for all connections accepted on this listener
+ */
+void
+connection_close_children(connection_t *cptr)
+{
+	mowgli_node_t *n;
+	connection_t *cptr2;
+
+	if (cptr == NULL)
+		return;
+
+	if (CF_IS_LISTENING(cptr))
+	{
+		MOWGLI_ITER_FOREACH(n, connection_list.head)
+		{
+			cptr2 = n->data;
+			if (cptr2->listener == cptr)
+				connection_close(cptr2);
+		}
+	}
+	connection_close(cptr);
+}
+
 /* This one is only safe for use by connection_close_soon(),
  * it will cause infinite loops otherwise
  */
