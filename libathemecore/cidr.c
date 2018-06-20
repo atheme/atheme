@@ -4,7 +4,8 @@
  *
  * Copyright (C) 1996-2002 Hybrid Development Team
  * Copyright (C) 2002-2005 ircd-ratbox development team
- * Copyright (C) 2005-2007 Atheme Project (http://atheme.org/)
+ * Copyright (C) 2005-2015 Atheme Project (http://atheme.org/)
+ * Copyright (C) 2016-2018 Atheme Development Group (https://atheme.github.io/)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above

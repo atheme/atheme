@@ -4,6 +4,7 @@
  *
  * Copyright (C) 2005-2007 Atheme Project (http://atheme.org/)
  * Copyright (C) 2013 William Pitcock <nenolod@dereferenced.org>
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above

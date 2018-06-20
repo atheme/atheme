@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: ISC
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Copyright (C) 2005-2006 Atheme Project (http://atheme.org/)
+ * Copyright (C) 2005-2014 Atheme Project (http://atheme.org/)
  * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
  *
  * Permission to use, copy, modify, and/or distribute this software for any

@@ -3,7 +3,7 @@
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  * SPDX-URL: https://spdx.org/licenses/BSD-3-Clause.html
  *
- * Copyright (C) 2005-2007 Atheme Project (http://atheme.org/)
+ * Copyright (C) 2005-2012 Atheme Project (http://atheme.org/)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
