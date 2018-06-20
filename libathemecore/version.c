@@ -19,7 +19,7 @@ const char *infotext[] =
 	"Atheme IRC Services --",
 
 	"Copyright (C) 2004 Shrike Developers (http://www.malkier.net/)",
-	"Copyright (C) 2005-2015 Atheme Project (http://atheme.org/)",
+	"Copyright (C) 2005-2016 Atheme Project (http://atheme.org/)",
 	"Copyright (C) 2015-2018 Atheme Development Group (https://atheme.github.io/)",
 	" ",
 
