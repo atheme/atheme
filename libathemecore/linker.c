@@ -62,12 +62,12 @@ linker_open_ext(const char *path, char *errbuf, int errlen)
 	if (0 != stat(buf, &s))
 	{
 		mowgli_strlcpy(errbuf, strerror(errno), errlen);
-		free(buf);
+		sfree(buf);
 		return NULL;
 	}
 
 	ret = mowgli_module_open(buf);
-	free(buf);
+	sfree(buf);
 
 	if (!ret)
 		mowgli_strlcpy(errbuf, "mowgli_module_open() failed", errlen);

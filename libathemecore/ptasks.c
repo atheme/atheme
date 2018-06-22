@@ -711,17 +711,21 @@ handle_topic(struct channel *c, const char *setter, time_t ts, const char *topic
 				(chansvs.nick && !irccasecmp(newsetter, chansvs.nick)) ||
 				ts == c->topicts))
 		return;
-	if (c->topic != NULL)
-		free(c->topic);
-	if (c->topic_setter != NULL)
-		free(c->topic_setter);
+
+	sfree(c->topic);
+	sfree(c->topic_setter);
+
 	if (topic != NULL && topic[0] != '\0')
 	{
 		c->topic = sstrdup(topic);
 		c->topic_setter = sstrdup(newsetter);
 	}
 	else
-		c->topic = c->topic_setter = NULL;
+	{
+		c->topic = NULL;
+		c->topic_setter = NULL;
+	}
+
 	c->topicts = ts;
 
 	hook_call_channel_topic(c);

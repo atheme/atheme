@@ -288,7 +288,7 @@ myuser_delete(struct myuser *mu)
 
 		mowgli_node_delete(n, &mu->memos);
 		mowgli_node_free(n);
-		free(memo);
+		sfree(memo);
 	}
 
 	/* delete access entries */
@@ -653,7 +653,7 @@ myuser_access_delete(struct myuser *mu, const char *mask)
 		{
 			mowgli_node_delete(n, &mu->access_list);
 			mowgli_node_free(n);
-			free(entry);
+			sfree(entry);
 
 			cnt.myuser_access--;
 
@@ -919,7 +919,7 @@ myuser_name_restore(const char *name, struct myuser *mu)
 					memcpy(copy, "(restored) ", 11);
 					strcpy(copy + 11, md->value);
 					metadata_add(mu, md->name, copy);
-					free(copy);
+					sfree(copy);
 				}
 			}
 		}
@@ -962,7 +962,7 @@ mycertfp_delete(struct mycertfp *mcfp)
 	mowgli_node_delete(&mcfp->node, &mcfp->mu->cert_fingerprints);
 	mowgli_patricia_delete(certfplist, mcfp->certfp);
 
-	free(mcfp->certfp);
+	sfree(mcfp->certfp);
 	mowgli_heap_free(mycertfp_heap, mcfp);
 }
 
@@ -1410,8 +1410,7 @@ chanacs_delete(struct chanacs *ca)
 
 	metadata_delete_all(ca);
 
-	if (ca->host != NULL)
-		free(ca->host);
+	sfree(ca->host);
 
 	mowgli_heap_free(chanacs_heap, ca);
 

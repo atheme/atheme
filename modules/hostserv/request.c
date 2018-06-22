@@ -75,10 +75,10 @@ nick_drop_request(hook_user_req_t *hdata)
 
 			mowgli_node_delete(m, &hs_reqlist);
 
-			free(l->nick);
-			free(l->vhost);
-			free(l->creator);
-			free(l);
+			sfree(l->nick);
+			sfree(l->vhost);
+			sfree(l->creator);
+			sfree(l);
 
 			return;
 		}
@@ -100,10 +100,10 @@ account_drop_request(struct myuser *mu)
 
 			mowgli_node_delete(n, &hs_reqlist);
 
-			free(l->nick);
-			free(l->vhost);
-			free(l->creator);
-			free(l);
+			sfree(l->nick);
+			sfree(l->vhost);
+			sfree(l->creator);
+			sfree(l);
 
 			return;
 		}
@@ -125,10 +125,10 @@ account_delete_request(struct myuser *mu)
 
 			mowgli_node_delete(n, &hs_reqlist);
 
-			free(l->nick);
-			free(l->vhost);
-			free(l->creator);
-			free(l);
+			sfree(l->nick);
+			sfree(l->vhost);
+			sfree(l->creator);
+			sfree(l);
 
 			return;
 		}
@@ -311,7 +311,7 @@ hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 				slog(LG_INFO, "VHOSTREQUEST:THROTTLED: %s", si->su->nick);
 				return;
 			}
-			free(l->vhost);
+			sfree(l->vhost);
 			l->vhost = sstrdup(host);
 			l->vhost_ts = CURRTIME;;
 
@@ -387,10 +387,10 @@ hs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 
 			mowgli_node_delete(n, &hs_reqlist);
 
-			free(l->nick);
-			free(l->vhost);
-			free(l->creator);
-			free(l);
+			sfree(l->nick);
+			sfree(l->vhost);
+			sfree(l->creator);
+			sfree(l);
 
 			command_exec_split(si->service, si, request_per_nick ? "VHOSTNICK" : "VHOST", buf, si->service->commands);
 			return;
@@ -407,10 +407,10 @@ hs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 
 			mowgli_node_delete(n, &hs_reqlist);
 
-			free(l->nick);
-			free(l->vhost);
-			free(l->creator);
-			free(l);
+			sfree(l->nick);
+			sfree(l->vhost);
+			sfree(l->creator);
+			sfree(l);
 
 			command_exec_split(si->service, si, request_per_nick ? "VHOSTNICK" : "VHOST", buf, si->service->commands);
 
@@ -476,10 +476,10 @@ hs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
 				logcommand(si, CMDLOG_REQUEST, "REJECT: \2%s\2 for \2%s\2", l->vhost, nick);
 
 			mowgli_node_delete(n, &hs_reqlist);
-			free(l->nick);
-			free(l->vhost);
-			free(l->creator);
-			free(l);
+			sfree(l->nick);
+			sfree(l->vhost);
+			sfree(l->creator);
+			sfree(l);
 			return;
 		}
 
@@ -509,10 +509,10 @@ hs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
 
 			mowgli_node_delete(n, &hs_reqlist);
 
-			free(l->nick);
-			free(l->vhost);
-			free(l->creator);
-			free(l);
+			sfree(l->nick);
+			sfree(l->vhost);
+			sfree(l->creator);
+			sfree(l);
 
 			if (hs_reqlist.count == 0)
 				return;

@@ -49,7 +49,7 @@ cmd_owner(struct sourceinfo *si, bool ownering, int parc, char *parv[])
 
 	nicks = (!nick ? sstrdup(si->su->nick) : sstrdup(nick));
 	prefix_action_set_all(&owner_actions, ownering, nicks);
-	free(nicks);
+	sfree(nicks);
 
 	MOWGLI_LIST_FOREACH(n, owner_actions.head)
 	{

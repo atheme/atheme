@@ -54,13 +54,13 @@ ns_cmd_return(struct sourceinfo *si, int parc, char *parv[])
 		myuser_set_email(mu, oldmail);
 		command_fail(si, fault_emailfail, _("Sending email failed, account \2%s\2 remains with \2%s\2."),
 				entity(mu)->name, mu->email);
-		free(newpass);
+		sfree(newpass);
 		return;
 	}
 
 	set_password(mu, newpass);
 
-	free(newpass);
+	sfree(newpass);
 
 	// prevents users from "stealing it back" in the event of a takeover
 	metadata_delete(mu, "private:verify:emailchg:key");

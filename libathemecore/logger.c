@@ -37,9 +37,9 @@ logfile_delete_file(void *vdata)
 	logfile_unregister(lf);
 
 	fclose(lf->log_file);
-	free(lf->log_path);
+	sfree(lf->log_path);
 	metadata_delete_all(lf);
-	free(lf);
+	sfree(lf);
 }
 
 static void
@@ -49,9 +49,9 @@ logfile_delete_channel(void *vdata)
 
 	logfile_unregister(lf);
 
-	free(lf->log_path);
+	sfree(lf->log_path);
 	metadata_delete_all(lf);
-	free(lf);
+	sfree(lf);
 }
 
 static void
@@ -378,7 +378,7 @@ logfile_new(const char *path, unsigned int log_mask)
 		atheme_object_init(atheme_object(lf), path, logfile_delete_file);
 		if ((lf->log_file = fopen(path, "a")) == NULL)
 		{
-			free(lf);
+			sfree(lf);
 
 			if (me.connected && lastfail + 3600 < CURRTIME)
 			{

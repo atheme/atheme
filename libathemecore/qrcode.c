@@ -121,6 +121,6 @@ command_success_qrcode(struct sourceinfo *si, const char *data)
 		command_success_nodata(si, "%s", buf);
 	}
 
-	free(buf);
+	sfree(buf);
 	QRcode_free(code);
 }

@@ -240,8 +240,7 @@ os_cmd_soper_setpass(struct sourceinfo *si, int parc, char *parv[])
 		wallops("\2%s\2 is changing services operator password for \2%s\2",
 				get_oper_name(si), entity(mu)->name);
 		logcommand(si, CMDLOG_ADMIN, "SOPER:SETPASS: \2%s\2 (set)", entity(mu)->name);
-		if (mu->soper->password)
-			free(mu->soper->password);
+		sfree(mu->soper->password);
 		mu->soper->password = sstrdup(parv[1]);
 		command_success_nodata(si, _("Set password for \2%s\2 to \2%s\2."), entity(mu)->name, parv[1]);
 		MOWGLI_ITER_FOREACH(n, mu->logins.head)
@@ -259,8 +258,7 @@ os_cmd_soper_setpass(struct sourceinfo *si, int parc, char *parv[])
 		wallops("\2%s\2 is clearing services operator password for \2%s\2",
 				get_oper_name(si), entity(mu)->name);
 		logcommand(si, CMDLOG_ADMIN, "SOPER:SETPASS: \2%s\2 (clear)", entity(mu)->name);
-		if (mu->soper->password)
-			free(mu->soper->password);
+		sfree(mu->soper->password);
 		mu->soper->password = NULL;
 		command_success_nodata(si, _("Cleared password for \2%s\2."), entity(mu)->name);
 	}

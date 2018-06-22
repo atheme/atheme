@@ -165,7 +165,7 @@ display_info(hook_user_nick_t *data)
 			notice(infoserv->nick, u->nick, "[\2%s\2] Notice from %s, posted %s:",
 				y, l->nick, dBuf);
 			notice(infoserv->nick, u->nick, "%s", l->story);
-			free(y);
+			sfree(y);
 			count++;
 
 			// only display three latest entries, max.
@@ -212,7 +212,7 @@ display_oper_info(struct user *u)
 			notice(infoserv->nick, u->nick, "[\2%s\2] Notice from %s, posted %s:",
 				y, o->nick, dBuf);
 			notice(infoserv->nick, u->nick, "%s", o->story);
-			free(y);
+			sfree(y);
 			count++;
 
 			// only display three latest entries, max.
@@ -275,7 +275,7 @@ is_cmd_post(struct sourceinfo *si, int parc, char *parv[])
 		msg_global_sts(infoserv->me, "*", buf);
 		command_success_nodata(si, _("The InfoServ message has been sent"));
 		logcommand(si, CMDLOG_ADMIN, "INFO:POST: Importance: \2%s\2, Subject: \2%s\2, Message: \2%s\2", importance, y, story);
-		free(y);
+		sfree(y);
 		return;
 	}
 
@@ -285,7 +285,7 @@ is_cmd_post(struct sourceinfo *si, int parc, char *parv[])
 		notice_global_sts(infoserv->me, "*", buf);
 		command_success_nodata(si, _("The InfoServ message has been sent"));
 		logcommand(si, CMDLOG_ADMIN, "INFO:POST: Importance: \2%s\2, Subject: \2%s\2, Message: \2%s\2", importance, y, story);
-		free(y);
+		sfree(y);
 		return;
 	}
 
@@ -322,7 +322,7 @@ is_cmd_post(struct sourceinfo *si, int parc, char *parv[])
 		notice_global_sts(infoserv->me, "*", buf);
 	}
 
-	free(y);
+	sfree(y);
 
 	return;
 }
@@ -365,9 +365,9 @@ is_cmd_del(struct sourceinfo *si, int parc, char *parv[])
 			mowgli_node_delete(n, &logon_info);
 
 			strshare_unref(l->nick);
-			free(l->subject);
-			free(l->story);
-			free(l);
+			sfree(l->subject);
+			sfree(l->story);
+			sfree(l);
 
 			command_success_nodata(si, _("Deleted entry %d from logon info."), id);
 			return;
@@ -416,9 +416,9 @@ is_cmd_odel(struct sourceinfo *si, int parc, char *parv[])
 			mowgli_node_delete(n, &operlogon_info);
 
 			strshare_unref(o->nick);
-			free(o->subject);
-			free(o->story);
-			free(o);
+			sfree(o->subject);
+			sfree(o->story);
+			sfree(o);
 
 			command_success_nodata(si, _("Deleted entry %d from oper logon info."), id);
 			return;
@@ -450,7 +450,7 @@ is_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 		strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
 		command_success_nodata(si, "%d: [\2%s\2] by \2%s\2 at \2%s\2: \2%s\2",
 			x, y, l->nick, dBuf, l->story);
-		free(y);
+		sfree(y);
 	}
 
 	command_success_nodata(si, _("End of list."));
@@ -479,7 +479,7 @@ is_cmd_olist(struct sourceinfo *si, int parc, char *parv[])
 		strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
 		command_success_nodata(si, "%d: [\2%s\2] by \2%s\2 at \2%s\2: \2%s\2",
 			x, y, o->nick, dBuf, o->story);
-		free(y);
+		sfree(y);
 	}
 
 	command_success_nodata(si, _("End of list."));

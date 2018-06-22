@@ -43,7 +43,7 @@ mod_init(struct module *const restrict m)
 		groupacs_heap = rec->groupacs_heap;
 
 		mowgli_global_storage_free("atheme.groupserv.main.persist");
-		free(rec);
+		sfree(rec);
 
 		MYENTITY_FOREACH_T(grp, &iter, ENT_GROUP)
 		{

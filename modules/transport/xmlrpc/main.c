@@ -87,7 +87,7 @@ xmlrpc_command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *
 		return;
 	newmessage = xmlrpc_normalizeBuffer(message);
 	xmlrpc_generic_error(code, newmessage);
-	free(newmessage);
+	sfree(newmessage);
 	hd->sent_reply = true;
 }
 
@@ -105,7 +105,7 @@ xmlrpc_command_success_nodata(struct sourceinfo *si, const char *message)
 	hd = cptr->userdata;
 	if (hd->sent_reply)
 	{
-		free(newmessage);
+		sfree(newmessage);
 		return;
 	}
 	if (hd->replybuf != NULL)
@@ -120,7 +120,7 @@ xmlrpc_command_success_nodata(struct sourceinfo *si, const char *message)
 		p = hd->replybuf;
 	}
         strcpy(p, newmessage);
-	free(newmessage);
+	sfree(newmessage);
 }
 
 static void
@@ -597,7 +597,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	del_conf_item("PATH", &conf_xmlrpc_table);
 	del_top_conf("XMLRPC");
 
-	free(xmlrpc_config.path);
+	sfree(xmlrpc_config.path);
 
 	hook_del_config_ready(xmlrpc_config_ready);
 }

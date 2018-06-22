@@ -1506,7 +1506,7 @@ m_metadata(struct sourceinfo *si, int parc, char *parv[])
 		memcpy(certfp, fpstr, len);
 
 		handle_certfp(si, u, certfp);
-		free(certfp);
+		sfree(certfp);
 	}
 	else if (!irccasecmp(parv[1], "mlock"))
 	{

@@ -986,12 +986,12 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 			{
 				mowgli_node_delete(&mm->node, l);
 
-				free(mm->setter_uid);
-				free(mm->setter_name);
-				free(mm->restored_from_uid);
-				free(mm->restored_from_account);
-				free(mm->mark);
-				free(mm);
+				sfree(mm->setter_uid);
+				sfree(mm->setter_name);
+				sfree(mm->restored_from_uid);
+				sfree(mm->restored_from_account);
+				sfree(mm->mark);
+				sfree(mm);
 
 				found = true;
 				break;

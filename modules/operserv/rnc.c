@@ -59,14 +59,14 @@ os_cmd_rnc(struct sourceinfo *si, int parc, char *parv[])
 
 		command_success_nodata(si, _("\2%d\2: \2%d\2 matches for realname \2%s\2"), i, biggest->count, biggest->gecos);
 		mowgli_patricia_delete(realnames, biggest->gecos);
-		free(biggest);
+		sfree(biggest);
 	}
 
 	// cleanup
 	MOWGLI_PATRICIA_FOREACH(rnc, &state, realnames)
 	{
 		mowgli_patricia_delete(realnames, rnc->gecos);
-		free(rnc);
+		sfree(rnc);
 	}
 	mowgli_patricia_destroy(realnames, NULL, NULL);
 

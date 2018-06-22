@@ -121,7 +121,7 @@ chanfix_channel_delete(struct chanfix_channel *c)
 		chanfix_oprecord_delete(orec);
 	}
 
-	free(c->name);
+	sfree(c->name);
 	mowgli_heap_free(chanfix_channel_heap, c);
 }
 

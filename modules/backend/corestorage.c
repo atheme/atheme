@@ -722,12 +722,12 @@ corestorage_h_md(struct database_handle *db, const char *type)
 	{
 		slog(LG_INFO, "db-h-md: attempting to add %s property to non-existant object %s",
 		     prop, name);
-		free(newvalue);
+		sfree(newvalue);
 		return;
 	}
 
 	metadata_add(obj, prop, value);
-	free(newvalue);
+	sfree(newvalue);
 }
 
 static void

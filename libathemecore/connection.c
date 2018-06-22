@@ -239,7 +239,7 @@ connection_close(struct connection *cptr)
 
 	sendqrecvq_free(cptr);
 
-	free(cptr);
+	sfree(cptr);
 }
 
 /*

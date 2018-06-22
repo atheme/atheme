@@ -37,7 +37,7 @@ cmd_voice(struct sourceinfo *si, bool voicing, int parc, char *parv[])
 
 	nicks = (!nick ? sstrdup(si->su->nick) : sstrdup(nick));
 	prefix_action_set_all(&voice_actions, voicing, nicks);
-	free(nicks);
+	sfree(nicks);
 
 	MOWGLI_LIST_FOREACH(n, voice_actions.head)
 	{

@@ -261,7 +261,7 @@ free_template_list(mowgli_list_t *l)
 		struct channel_template *t = n->data;
 
 		mowgli_node_delete(&t->node, l);
-		free(t);
+		sfree(t);
 	}
 }
 

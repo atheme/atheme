@@ -232,8 +232,8 @@ set_default(struct ConfTable *ct)
 			break;
 		case CONF_DUPSTR:
 			if (*ct->un.dupstr_val.var)
-				free(*ct->un.dupstr_val.var);
-			*ct->un.dupstr_val.var = ct->un.dupstr_val.def ? sstrdup(ct->un.dupstr_val.def) : NULL;
+				sfree(*ct->un.dupstr_val.var);
+			*ct->un.dupstr_val.var = sstrdup(ct->un.dupstr_val.def);
 			break;
 		case CONF_BOOL:
 			*ct->un.bool_val.var = ct->un.bool_val.def;
@@ -276,7 +276,7 @@ process_configentry(struct ConfTable *ct, mowgli_config_file_entry_t *ce)
 			else
 			{
 				if (*ct->un.dupstr_val.var)
-					free(*ct->un.dupstr_val.var);
+					sfree(*ct->un.dupstr_val.var);
 				*ct->un.dupstr_val.var = sstrdup(ce->vardata);
 			}
 			break;
@@ -598,7 +598,7 @@ del_top_conf(const char *name)
 
 	mowgli_node_delete(&ct->node, &confblocks);
 
-	free(ct->name);
+	sfree(ct->name);
 
 	mowgli_heap_free(conftable_heap, ct);
 }
@@ -621,10 +621,10 @@ del_conf_item(const char *name, mowgli_list_t *conflist)
 
 	if (ct->type == CONF_DUPSTR && ct->un.dupstr_val.def)
 	{
-		free(ct->un.dupstr_val.def);
+		sfree(ct->un.dupstr_val.def);
 	}
 
-	free(ct->name);
+	sfree(ct->name);
 
 	mowgli_heap_free(conftable_heap, ct);
 }

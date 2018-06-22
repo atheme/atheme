@@ -49,7 +49,7 @@ cmd_protect(struct sourceinfo *si, bool protecting, int parc, char *parv[])
 
 	nicks = (!nick ? sstrdup(si->su->nick) : sstrdup(nick));
 	prefix_action_set_all(&protect_actions, protecting, nicks);
-	free(nicks);
+	sfree(nicks);
 
 	MOWGLI_LIST_FOREACH(n, protect_actions.head)
 	{

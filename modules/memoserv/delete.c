@@ -85,7 +85,7 @@ ms_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
 			mowgli_node_delete(n, &si->smu->memos);
 			mowgli_node_free(n);
 
-			free(memo);
+			sfree(memo);
 		}
 
 	}

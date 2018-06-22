@@ -428,7 +428,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 			char outbuf[SASL_C2S_MAXLEN + 1];
 			const size_t rs = base64_encode(out, out_len, outbuf, sizeof outbuf);
 
-			(void) free(out);
+			(void) sfree(out);
 
 			if (rs == (size_t) -1)
 			{
@@ -464,7 +464,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 		}
 	}
 
-	(void) free(out);
+	(void) sfree(out);
 	return false;
 }
 
@@ -476,7 +476,7 @@ sasl_buf_process(struct sasl_session *const restrict p)
 	if (! sasl_packet(p, p->buf, p->len))
 		return false;
 
-	(void) free(p->buf);
+	(void) sfree(p->buf);
 
 	p->buf = NULL;
 	p->len = 0;
@@ -506,7 +506,7 @@ sasl_input_startauth(const struct sasl_message *const restrict smsg, struct sasl
 			return false;
 		}
 
-		(void) free(p->certfp);
+		(void) sfree(p->certfp);
 
 		p->certfp = sstrdup(smsg->parv[1]);
 		p->tls = true;
@@ -611,12 +611,12 @@ destroy_session(struct sasl_session *const restrict p)
 	if (p->si)
 		(void) atheme_object_unref(p->si);
 
-	(void) free(p->certfp);
-	(void) free(p->host);
-	(void) free(p->buf);
-	(void) free(p->uid);
-	(void) free(p->ip);
-	(void) free(p);
+	(void) sfree(p->certfp);
+	(void) sfree(p->host);
+	(void) sfree(p->buf);
+	(void) sfree(p->uid);
+	(void) sfree(p->ip);
+	(void) sfree(p);
 }
 
 static inline void

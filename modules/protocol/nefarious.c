@@ -595,8 +595,7 @@ m_clearmode(struct sourceinfo *si, int parc, char *parv[])
 		}
 		else if (c == 'k')
 		{
-			if (chan->key)
-				free(chan->key);
+			sfree(chan->key);
 			chan->key = NULL;
 		}
 		else if (c == 'l')

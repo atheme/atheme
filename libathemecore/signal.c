@@ -238,8 +238,8 @@ childproc_add(pid_t pid, const char *desc, void (*cb)(pid_t pid, int status, voi
 static void
 childproc_free(struct childproc *p)
 {
-	free(p->desc);
-	free(p);
+	sfree(p->desc);
+	sfree(p);
 }
 
 /* Forgets about all child processes with the given callback.

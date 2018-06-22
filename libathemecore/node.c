@@ -187,10 +187,10 @@ kline_delete(struct kline *k)
 	mowgli_node_delete(n, &klnlist);
 	mowgli_node_free(n);
 
-	free(k->user);
-	free(k->host);
-	free(k->reason);
-	free(k->setby);
+	sfree(k->user);
+	sfree(k->host);
+	sfree(k->reason);
+	sfree(k->setby);
 
 	mowgli_heap_free(kline_heap, k);
 
@@ -335,9 +335,9 @@ xline_delete(const char *realname)
 	mowgli_node_delete(n, &xlnlist);
 	mowgli_node_free(n);
 
-	free(x->realname);
-	free(x->reason);
-	free(x->setby);
+	sfree(x->realname);
+	sfree(x->reason);
+	sfree(x->setby);
 
 	mowgli_heap_free(xline_heap, x);
 
@@ -478,9 +478,9 @@ qline_delete(const char *mask)
 	mowgli_node_delete(n, &qlnlist);
 	mowgli_node_free(n);
 
-	free(q->mask);
-	free(q->reason);
-	free(q->setby);
+	sfree(q->mask);
+	sfree(q->reason);
+	sfree(q->setby);
 
 	mowgli_heap_free(qline_heap, q);
 

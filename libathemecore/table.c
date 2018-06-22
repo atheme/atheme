@@ -45,14 +45,14 @@ table_destroy(void *obj)
 		{
 			struct atheme_table_cell *c = (struct atheme_table_cell *) n2->data;
 
-			free(c->name);
-			free(c->value);
-			free(c);
+			sfree(c->name);
+			sfree(c->value);
+			sfree(c);
 			mowgli_node_delete(n2, &r->cells);
 			mowgli_node_free(n2);
 		}
 
-		free(r);
+		sfree(r);
 
 		mowgli_node_delete(n, &table->rows);
 		mowgli_node_free(n);
@@ -60,7 +60,7 @@ table_destroy(void *obj)
 
 	metadata_delete_all(table);
 
-	free(table);
+	sfree(table);
 }
 
 /*

@@ -606,23 +606,23 @@ bs_cmd_change(struct sourceinfo *si, int parc, char *parv[])
 		case 5:
 			if (strlen(parv[4]) <= GECOSLEN)
 			{
-				free(bot->real);
+				sfree(bot->real);
 				bot->real = sstrdup(parv[4]);
 			}
 			else
 				command_fail(si, fault_badparams, _("\2%s\2 is an invalid realname, not changing it"), parv[4]);
 		case 4:
-			free(bot->host);
+			sfree(bot->host);
 			bot->host = sstrdup(parv[3]);
 		case 3:
 			// XXX: we really need an is_valid_user(), but this is close enough. --nenolod
 			if (is_valid_username(parv[2])) {
-				free(bot->user);
+				sfree(bot->user);
 				bot->user = sstrndup(parv[2], USERLEN);
 			} else
 				command_fail(si, fault_badparams, _("\2%s\2 is an invalid username, not changing it."), parv[2]);
 		case 2:
-			free(bot->nick);
+			sfree(bot->nick);
 			bot->nick = sstrdup(parv[1]);
 			break;
 		default:
@@ -695,11 +695,11 @@ bs_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
 
 	mowgli_node_delete(&bot->bnode, &bs_bots);
 	service_delete(bot->me);
-	free(bot->nick);
-	free(bot->user);
-	free(bot->real);
-	free(bot->host);
-	free(bot);
+	sfree(bot->nick);
+	sfree(bot->user);
+	sfree(bot->real);
+	sfree(bot->host);
+	sfree(bot);
 
 	logcommand(si, CMDLOG_ADMIN, "BOT:DEL: \2%s\2", parv[0]);
 	command_success_nodata(si, "Bot \2%s\2 has been deleted.", parv[0]);

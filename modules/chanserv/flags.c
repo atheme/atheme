@@ -227,13 +227,13 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 	else if (anope_flags_compat && !strcasecmp(target, "LIST") && myentity_find_ext(target) == NULL)
 	{
 		do_list(si, mc, 0);
-		free(target);
+		sfree(target);
 
 		return;
 	}
 	else if (anope_flags_compat && !strcasecmp(target, "CLEAR") && myentity_find_ext(target) == NULL)
 	{
-		free(target);
+		sfree(target);
 
 		if (!chanacs_source_has_flag(mc, si, CA_FOUNDER))
 		{
@@ -259,7 +259,7 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else if (anope_flags_compat && !strcasecmp(target, "MODIFY") && myentity_find_ext(target) == NULL)
 	{
-		free(target);
+		sfree(target);
 
 		if (parc < 3)
 		{
@@ -300,7 +300,7 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 					command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 					return;
 				}
-				free(target);
+				sfree(target);
 				target = sstrdup(mt->name);
 				ca = chanacs_find_literal(mc, mt, 0);
 			}
@@ -374,7 +374,7 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 				command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 				return;
 			}
-			free(target);
+			sfree(target);
 			target = sstrdup(mt->name);
 
 			ca = chanacs_open(mc, mt, NULL, true, entity(si->smu));
@@ -493,7 +493,7 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 		verbose(mc, _("\2%s\2 set flags \2%s\2 on \2%s\2"), get_source_name(si), flagstr, target);
 	}
 
-	free(target);
+	sfree(target);
 }
 
 static struct command cs_flags = {

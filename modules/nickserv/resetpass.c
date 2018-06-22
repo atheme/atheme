@@ -63,7 +63,7 @@ ns_cmd_resetpass(struct sourceinfo *si, int parc, char *parv[])
 	set_password(mu, newpass);
 	command_success_nodata(si, _("The password for \2%s\2 has been changed to \2%s\2."), entity(mu)->name, newpass);
 
-	free(newpass);
+	sfree(newpass);
 
 	if (mu->flags & MU_NOPASSWORD)
 	{

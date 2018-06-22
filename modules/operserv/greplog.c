@@ -157,7 +157,7 @@ os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[])
 			{
 				n = loglines.tail;
 				mowgli_node_delete(n, &loglines);
-				free(n->data);
+				sfree(n->data);
 				mowgli_node_free(n);
 			}
 		}
@@ -169,7 +169,7 @@ os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[])
 			matches++;
 			command_success_nodata(si, "[%d] %s", matches, p);
 			mowgli_node_delete(n, &loglines);
-			free(n->data);
+			sfree(n->data);
 			mowgli_node_free(n);
 		}
 		if (matches == 0 && lines > linesv && lines > 0)

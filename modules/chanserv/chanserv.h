@@ -75,7 +75,7 @@ static inline void prefix_action_clear(mowgli_list_t *actions)
 
 	MOWGLI_LIST_FOREACH_SAFE(n, tn, actions->head)
 	{
-		free(n->data);
+		sfree(n->data);
 		mowgli_node_delete(n, actions);
 		mowgli_node_free(n);
 	}

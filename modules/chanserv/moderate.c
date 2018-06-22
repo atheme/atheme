@@ -62,8 +62,8 @@ csreq_destroy(struct reg_request *cs)
 	return_if_fail(cs != NULL);
 
 	mowgli_patricia_delete(csreq_list, cs->name);
-	free(cs->name);
-	free(cs);
+	sfree(cs->name);
+	sfree(cs);
 }
 
 static void

@@ -33,12 +33,12 @@ clear_httpddata(struct httpddata *hd)
 	hd->filename[0] = '\0';
 	if (hd->requestbuf != NULL)
 	{
-		free(hd->requestbuf);
+		sfree(hd->requestbuf);
 		hd->requestbuf = NULL;
 	}
 	if (hd->replybuf != NULL)
 	{
-		free(hd->replybuf);
+		sfree(hd->replybuf);
 		hd->replybuf = NULL;
 	}
 	hd->length = 0;
@@ -335,8 +335,8 @@ httpd_closehandler(struct connection *cptr)
 	hd = cptr->userdata;
 	if (hd != NULL)
 	{
-		free(hd->requestbuf);
-		free(hd);
+		sfree(hd->requestbuf);
+		sfree(hd);
 	}
 	cptr->userdata = NULL;
 }

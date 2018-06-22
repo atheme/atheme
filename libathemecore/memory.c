@@ -29,15 +29,16 @@
 #  define RAISE_EXCEPTION       raise(SIGUSR1)
 #endif
 
-/* does malloc()'s job and dies if it fails
+/* does free()'s job
  *
- * Note that this function *MUST* RETURN ZERO-INITIALIZED MEMORY
- * Parts of the codebase assume this is so and will malfunction otherwise
+ * This is only here to balance out the custom malloc()/calloc()/realloc()
+ * below. This will be useful if the allocators below are ever repurposed
+ * to do something different (e.g. use a hardened memory alloator library).
  */
-void * ATHEME_FATTR_MALLOC
-smalloc(const size_t len)
+void
+sfree(void *const restrict ptr)
 {
-	return scalloc(1, len);
+	(void) free(ptr);
 }
 
 /* does calloc()'s job and dies if it fails
@@ -54,6 +55,17 @@ scalloc(const size_t num, const size_t len)
 		RAISE_EXCEPTION;
 
 	return buf;
+}
+
+/* does malloc()'s job and dies if it fails
+ *
+ * Note that this function *MUST* RETURN ZERO-INITIALIZED MEMORY
+ * Parts of the codebase assume this is so and will malfunction otherwise
+ */
+void * ATHEME_FATTR_MALLOC
+smalloc(const size_t len)
+{
+	return scalloc(1, len);
 }
 
 /* does realloc()'s job and dies if it fails */

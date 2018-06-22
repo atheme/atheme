@@ -170,20 +170,20 @@ ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 		if (!hash)
 		{
 			command_fail(si, fault_internalerror, _("Hash generation for password change key failed."));
-			free(key);
+			sfree(key);
 			return;
 		}
 		if (!sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SETPASS, mu->email, key))
 		{
 			command_fail(si, fault_emailfail, _("Email send failed."));
-			free(key);
+			sfree(key);
 			return;
 		}
 
 		metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
 		metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));
 		metadata_add(mu, "private:setpass:key", hash);
-		free(key);
+		sfree(key);
 
 		command_success_nodata(si, _("The password change key for \2%s\2 has been sent to \2%s\2."), entity(mu)->name, mu->email);
 	}
@@ -205,12 +205,12 @@ ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 		if (!sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SENDPASS, mu->email, newpass))
 		{
 			command_fail(si, fault_emailfail, _("Email send failed."));
-			free(newpass);
+			sfree(newpass);
 			return;
 		}
 
 		set_password(mu, newpass);
-		free(newpass);
+		sfree(newpass);
 
 		command_success_nodata(si, _("The password for \2%s\2 has been sent to \2%s\2."), entity(mu)->name, mu->email);
 

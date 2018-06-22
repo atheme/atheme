@@ -64,13 +64,13 @@ gs_cmd_global(struct sourceinfo *si, const int parc, char *parv[])
 			global = (struct global_ *)n->data;
 			mowgli_node_delete(n, &globlist);
 			mowgli_node_free(n);
-			free(global->text);
+			sfree(global->text);
 			mowgli_heap_free(glob_heap, global);
 		}
 
 		mowgli_heap_destroy(glob_heap);
 		glob_heap = NULL;
-		free(sender);
+		sfree(sender);
 		sender = NULL;
 
 		command_success_nodata(si, "The pending message has been deleted.");
@@ -113,13 +113,13 @@ gs_cmd_global(struct sourceinfo *si, const int parc, char *parv[])
 			global = (struct global_ *)n->data;
 			mowgli_node_delete(n, &globlist);
 			mowgli_node_free(n);
-			free(global->text);
+			sfree(global->text);
 			mowgli_heap_free(glob_heap, global);
 		}
 
 		mowgli_heap_destroy(glob_heap);
 		glob_heap = NULL;
-		free(sender);
+		sfree(sender);
 		sender = NULL;
 
 		command_success_nodata(si, "The global notice has been sent.");

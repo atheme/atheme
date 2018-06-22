@@ -224,13 +224,13 @@ os_cmd_noop(struct sourceinfo *si, int parc, char *parv[])
 
 			n = mowgli_node_find(np, &noop_hostmask_list);
 
-			free(np->target);
-			free(np->added_by);
-			free(np->reason);
+			sfree(np->target);
+			sfree(np->added_by);
+			sfree(np->reason);
 
 			mowgli_node_delete(n, &noop_hostmask_list);
 			mowgli_node_free(n);
-			free(np);
+			sfree(np);
 
 			return;
 		}
@@ -247,13 +247,13 @@ os_cmd_noop(struct sourceinfo *si, int parc, char *parv[])
 
 			n = mowgli_node_find(np, &noop_server_list);
 
-			free(np->target);
-			free(np->added_by);
-			free(np->reason);
+			sfree(np->target);
+			sfree(np->added_by);
+			sfree(np->reason);
 
 			mowgli_node_delete(n, &noop_server_list);
 			mowgli_node_free(n);
-			free(np);
+			sfree(np);
 
 			return;
 		}

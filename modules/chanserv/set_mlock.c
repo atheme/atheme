@@ -212,7 +212,7 @@ cs_cmd_set_mlock(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!(mask & CMODE_KEY))
 	{
-		free(mc->mlock_key);
+		sfree(mc->mlock_key);
 		mc->mlock_key = *newlock_key != '\0' ? sstrdup(newlock_key) : NULL;
 	}
 

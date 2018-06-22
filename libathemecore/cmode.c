@@ -175,7 +175,7 @@ channel_mode(struct user *source, struct channel *chan, int parc, char *parv[])
 					{
 						if (strcmp(chan->extmodes[i], parv[parpos]))
 							simple_modes_changed = true;
-						free(chan->extmodes[i]);
+						sfree(chan->extmodes[i]);
 					}
 					else
 						simple_modes_changed = true;
@@ -188,7 +188,7 @@ channel_mode(struct user *source, struct channel *chan, int parc, char *parv[])
 					if (chan->extmodes[i])
 					{
 						simple_modes_changed = true;
-						free(chan->extmodes[i]);
+						sfree(chan->extmodes[i]);
 						chan->extmodes[i] = NULL;
 					}
 					if (source)
@@ -242,7 +242,7 @@ channel_mode(struct user *source, struct channel *chan, int parc, char *parv[])
 				{
 					if (strcmp(chan->key, parv[parpos]))
 						simple_modes_changed = true;
-					free(chan->key);
+					sfree(chan->key);
 				}
 				else
 					simple_modes_changed = true;
@@ -257,7 +257,7 @@ channel_mode(struct user *source, struct channel *chan, int parc, char *parv[])
 				chan->modes &= ~CMODE_KEY;
 				if (source)
 					modestack_mode_param(source->nick, chan, MTYPE_DEL, 'k', chan->key ? chan->key : "*");
-				free(chan->key);
+				sfree(chan->key);
 				chan->key = NULL;
 				/* ratbox typically sends either the key or a `*' on -k, so you
 				 * should eat a parameter
@@ -840,17 +840,21 @@ clear_simple_modes(struct channel *c)
 
 	if (c == NULL)
 		return;
+
 	c->modes = 0;
 	c->limit = 0;
-	if (c->key != NULL)
-		free(c->key);
+
+	sfree(c->key);
 	c->key = NULL;
+
 	for (i = 0; i < ignore_mode_list_size; i++)
+	{
 		if (c->extmodes[i] != NULL)
 		{
-			free(c->extmodes[i]);
+			sfree(c->extmodes[i]);
 			c->extmodes[i] = NULL;
 		}
+	}
 }
 
 char *
@@ -944,7 +948,7 @@ check_modes(struct mychan *mychan, bool sendnow)
 			/* some ircds still need this... :\ -- jilles */
 			if (sendnow)
 				modestack_mode_param(chansvs.nick, mychan->chan, MTYPE_DEL, 'k', mychan->chan->key);
-			free(mychan->chan->key);
+			sfree(mychan->chan->key);
 			mychan->chan->key = NULL;
 		}
 
@@ -974,7 +978,7 @@ check_modes(struct mychan *mychan, bool sendnow)
 	{
 		if (sendnow)
 			modestack_mode_param(chansvs.nick, mychan->chan, MTYPE_DEL, 'k', mychan->chan->key);
-		free(mychan->chan->key);
+		sfree(mychan->chan->key);
 		mychan->chan->key = NULL;
 	}
 
@@ -991,7 +995,7 @@ check_modes(struct mychan *mychan, bool sendnow)
 				{
 					if ((p[1] == ' ' || p[1] == '\0') && mychan->chan->extmodes[i] != NULL)
 					{
-						free(mychan->chan->extmodes[i]);
+						sfree(mychan->chan->extmodes[i]);
 						mychan->chan->extmodes[i] = NULL;
 						if (sendnow)
 							modestack_mode_ext(chansvs.nick, mychan->chan, MTYPE_DEL, i, NULL);
@@ -1005,7 +1009,7 @@ check_modes(struct mychan *mychan, bool sendnow)
 						if ((mychan->chan->extmodes[i] == NULL || strcmp(mychan->chan->extmodes[i], str2)) && ignore_mode_list[i].check(str2, mychan->chan, mychan, NULL, NULL))
 						{
 							if (mychan->chan->extmodes[i] != NULL)
-								free(mychan->chan->extmodes[i]);
+								sfree(mychan->chan->extmodes[i]);
 							mychan->chan->extmodes[i] = sstrdup(str2);
 							if (sendnow)
 								modestack_mode_ext(chansvs.nick, mychan->chan, MTYPE_ADD, i, mychan->chan->extmodes[i]);

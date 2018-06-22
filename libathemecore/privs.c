@@ -74,7 +74,7 @@ operclass_add(const char *name, const char *privs, int flags)
 
 		slog(LG_DEBUG, "operclass_add(): update %s [%s]", name, privs);
 
-		free(operclass->privs);
+		sfree(operclass->privs);
 		operclass->privs = sstrdup(privs);
 		operclass->flags = flags | (builtin ? OPERCLASS_BUILTIN : 0);
 
@@ -124,8 +124,8 @@ operclass_delete(struct operclass *operclass)
 			soper->operclass = NULL;
 	}
 
-	free(operclass->name);
-	free(operclass->privs);
+	sfree(operclass->name);
+	sfree(operclass->privs);
 
 	mowgli_heap_free(operclass_heap, operclass);
 	cnt.operclass--;
@@ -231,11 +231,9 @@ soper_delete(struct soper *soper)
 	if (soper->myuser)
 		soper->myuser->soper = NULL;
 
-	if (soper->name)
-		free(soper->name);
-
-	free(soper->classname);
-	free(soper->password);
+	sfree(soper->name);
+	sfree(soper->classname);
+	sfree(soper->password);
 
 	mowgli_heap_free(soper_heap, soper);
 
@@ -411,12 +409,12 @@ has_all_operclass(struct sourceinfo *si, struct operclass *operclass)
 	{
 		if (!has_priv(si, priv))
 		{
-			free(privs2);
+			sfree(privs2);
 			return false;
 		}
 		priv = strtok(NULL, " ");
 	}
-	free(privs2);
+	sfree(privs2);
 	return true;
 }
 

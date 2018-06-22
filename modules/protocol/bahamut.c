@@ -195,11 +195,10 @@ bahamut_chan_lowerts(struct channel *c, struct user *u)
 	chanban_clear(c);
 
 	// Don't destroy keeptopic info, I'll admit this is ugly -- jilles
-	if (c->topic != NULL)
-		free(c->topic);
-	if (c->topic_setter != NULL)
-		free(c->topic_setter);
-	c->topic = c->topic_setter = NULL;
+	sfree(c->topic);
+	sfree(c->topic_setter);
+	c->topic = NULL;
+	c->topic_setter = NULL;
 	c->topicts = 0;
 }
 

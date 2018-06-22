@@ -123,7 +123,7 @@ sasl_scramsha_attrlist_free(scram_attr_list *const restrict attrs)
 {
 	for (unsigned char x = 'A'; x <= 'z'; x++)
 	{
-		(void) free((*attrs)[x]);
+		(void) sfree((*attrs)[x]);
 
 		(*attrs)[x] = NULL;
 	}
@@ -587,12 +587,12 @@ mech_finish(struct sasl_session *const restrict p)
 
 	struct scramsha_session *const s = p->mechdata;
 
-	(void) free(s->cn);
-	(void) free(s->sn);
-	(void) free(s->c_gs2_buf);
-	(void) free(s->c_msg_buf);
-	(void) free(s->s_msg_buf);
-	(void) free(s);
+	(void) sfree(s->cn);
+	(void) sfree(s->sn);
+	(void) sfree(s->c_gs2_buf);
+	(void) sfree(s->c_msg_buf);
+	(void) sfree(s->s_msg_buf);
+	(void) sfree(s);
 
 	p->mechdata = NULL;
 }

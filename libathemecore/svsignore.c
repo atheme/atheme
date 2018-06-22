@@ -124,9 +124,9 @@ svsignore_delete(struct svsignore *svsignore)
 	n = mowgli_node_find(svsignore, &svs_ignore_list);
 	mowgli_node_delete(n, &svs_ignore_list);
 
-	free(svsignore->mask);
-	free(svsignore->reason);
-	free(svsignore);
+	sfree(svsignore->mask);
+	sfree(svsignore->reason);
+	sfree(svsignore);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

@@ -49,7 +49,7 @@ jsonrpc_command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char 
 
 	jsonrpc_failure_string(cptr, code, newmessage, jsi->id);
 
-	free(newmessage);
+	sfree(newmessage);
 	hd->sent_reply = true;
 }
 
@@ -83,7 +83,7 @@ jsonrpc_command_success_nodata(struct sourceinfo *si, const char *message)
 	hd = cptr->userdata;
 	if (hd->sent_reply)
 	{
-		free(newmessage);
+		sfree(newmessage);
 		return;
 	}
 	if (hd->replybuf != NULL)
@@ -99,7 +99,7 @@ jsonrpc_command_success_nodata(struct sourceinfo *si, const char *message)
 	}
 
 	strcpy(p, newmessage);
-	free(newmessage);
+	sfree(newmessage);
 }
 
 static struct sourceinfo_vtable jsonrpc_vtable = {

@@ -112,7 +112,7 @@ ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 	if (!hash)
 	{
 		command_fail(si, fault_internalerror, _("Hash generation for password change key failed."));
-		free(key);
+		sfree(key);
 		return;
 	}
 	if (sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SETPASS, mu->email, key))
@@ -127,7 +127,7 @@ ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else
 		command_fail(si, fault_emailfail, _("Email send failed."));
-	free(key);
+	sfree(key);
 }
 
 static struct command ns_sendpass = {
