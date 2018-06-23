@@ -804,6 +804,7 @@ enable_fhs_paths
 enable_large_net
 enable_legacy_pwcrypto
 enable_reproducible_builds
+enable_sodium_malloc
 enable_profile
 enable_relro
 enable_nonlazy_bind
@@ -1455,6 +1456,7 @@ Optional Features:
                           Enable legacy password crypto modules
   --enable-reproducible-builds
                           Enable reproducible builds
+  --enable-sodium-malloc  Enable libsodium secure memory allocator
   --enable-profile        Enable profiling extensions
   --disable-relro         Disable -Wl,-z,relro (marks the relocation table
                           read-only)
@@ -10266,6 +10268,45 @@ $as_echo "#define REPRODUCIBLE_BUILDS 1" >>confdefs.h
 
 
 
+	SODIUM_MALLOC="No"
+
+	# Check whether --enable-sodium-malloc was given.
+if test "${enable_sodium_malloc+set}" = set; then :
+  enableval=$enable_sodium_malloc;
+else
+  enable_sodium_malloc="no"
+fi
+
+
+	case "${enable_sodium_malloc}" in
+		yes)
+			if test "x${CONTRIB_MODULES}" != "xNo"; then :
+
+				as_fn_error $? "--enable-sodium-malloc requires --disable-contrib" "$LINENO" 5
+
+fi
+
+			if test "x${LIBSODIUM}" != "xYes"; then :
+
+				as_fn_error $? "--enable-sodium-malloc requires --with-sodium" "$LINENO" 5
+
+fi
+
+			SODIUM_MALLOC="Yes"
+
+$as_echo "#define USE_LIBSODIUM_ALLOCATOR 1" >>confdefs.h
+
+			;;
+		no)
+			SODIUM_MALLOC="No"
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-sodium-malloc" "$LINENO" 5
+			;;
+	esac
+
+
+
 
 	# Check whether --enable-profile was given.
 if test "${enable_profile+set}" = set; then :
@@ -16120,12 +16161,6 @@ Configuration:
     Data Directory ..........: ${DATADIR}
     PID Directory ...........: ${RUNDIR}
 
-    Contrib Modules .........: ${CONTRIB_MODULES}
-    Internationalization ....: ${USE_GETTEXT}
-    Large Network Support ...: ${LARGE_NET}
-    Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}
-    Build Warnings ..........: ${BUILD_WARNINGS}
-
     crypt(3) Support ........: ${LIBCRYPT}
     CrackLib Support ........: ${LIBCRACKLIB}
     LDAP Support ............: ${LIBLDAP}
@@ -16137,6 +16172,13 @@ Configuration:
     Perl Support ............: ${LIBPERL}
     QR Code Support .........: ${LIBQRENCODE}
     Sodium Support ..........: ${LIBSODIUM}
+
+    Contrib Modules .........: ${CONTRIB_MODULES}
+    Internationalization ....: ${USE_GETTEXT}
+    Large Network Support ...: ${LARGE_NET}
+    Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}
+    Sodium Memory Allocator .: ${SODIUM_MALLOC}
+    Build Warnings ..........: ${BUILD_WARNINGS}
 
     Digest Frontend .........: ${DIGEST_FRONTEND}
     Mowgli Installation .....: ${MOWGLI_SOURCE}

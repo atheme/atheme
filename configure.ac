@@ -142,6 +142,7 @@ ATHEME_FEATURETEST_FHSPATHS
 ATHEME_FEATURETEST_LARGENET
 ATHEME_FEATURETEST_LEGACY_PWCRYPTO
 ATHEME_FEATURETEST_REPROBUILDS
+ATHEME_FEATURETEST_SODIUM_MALLOC
 
 dnl These must be here, not above, or they might interfere with library and feature tests
 dnl Explanation is that these modify one or more of CFLAGS, CPPFLAGS, LDFLAGS, and LIBS

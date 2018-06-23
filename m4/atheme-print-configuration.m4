@@ -36,12 +36,6 @@ Configuration:
     Data Directory ..........: ${DATADIR}
     PID Directory ...........: ${RUNDIR}
 
-    Contrib Modules .........: ${CONTRIB_MODULES}
-    Internationalization ....: ${USE_GETTEXT}
-    Large Network Support ...: ${LARGE_NET}
-    Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}
-    Build Warnings ..........: ${BUILD_WARNINGS}
-
     crypt(3) Support ........: ${LIBCRYPT}
     CrackLib Support ........: ${LIBCRACKLIB}
     LDAP Support ............: ${LIBLDAP}
@@ -53,6 +47,13 @@ Configuration:
     Perl Support ............: ${LIBPERL}
     QR Code Support .........: ${LIBQRENCODE}
     Sodium Support ..........: ${LIBSODIUM}
+
+    Contrib Modules .........: ${CONTRIB_MODULES}
+    Internationalization ....: ${USE_GETTEXT}
+    Large Network Support ...: ${LARGE_NET}
+    Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}
+    Sodium Memory Allocator .: ${SODIUM_MALLOC}
+    Build Warnings ..........: ${BUILD_WARNINGS}
 
     Digest Frontend .........: ${DIGEST_FRONTEND}
     Mowgli Installation .....: ${MOWGLI_SOURCE}

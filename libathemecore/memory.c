@@ -33,6 +33,77 @@
 #  include <sodium/utils.h>
 #endif /* HAVE_LIBSODIUM */
 
+#ifdef USE_LIBSODIUM_ALLOCATOR
+
+struct sodium_memblock
+{
+	mowgli_node_t   node;
+	void *          ptr;
+	size_t          len;
+};
+
+static mowgli_list_t sodium_memblocks;
+
+static void
+make_sodium_memblock(void *const restrict ptr, const size_t len)
+{
+	if (! ptr || ! len)
+		/* bug in this code */
+		abort();
+
+	struct sodium_memblock *const mptr = sodium_malloc(sizeof *mptr);
+
+	if (! mptr)
+		/* no free memory? */
+		abort();
+
+	(void) mowgli_node_add(mptr, &mptr->node, &sodium_memblocks);
+
+	mptr->ptr = ptr;
+	mptr->len = len;
+
+	if (sodium_mprotect_readonly(mptr) != 0)
+		/* bug in sodium? */
+		abort();
+}
+
+static struct sodium_memblock *
+find_sodium_memblock(void *const restrict ptr)
+{
+	if (! ptr)
+		/* bug in this code */
+		abort();
+
+	mowgli_node_t *n;
+
+	MOWGLI_ITER_FOREACH(n, sodium_memblocks.head)
+	{
+		struct sodium_memblock *const mptr = n->data;
+
+		if (mptr->ptr == ptr)
+			return mptr;
+	}
+
+	return NULL;
+}
+
+static void
+free_sodium_memblock(struct sodium_memblock *const restrict mptr)
+{
+	if (! mptr)
+		/* bug in this code */
+		abort();
+
+	if (sodium_mprotect_readwrite(mptr) != 0)
+		/* bug in sodium? */
+		abort();
+
+	(void) mowgli_node_delete(&mptr->node, &sodium_memblocks);
+	(void) sodium_free(mptr);
+}
+
+#endif /* USE_LIBSODIUM_ALLOCATOR */
+
 void
 smemzero(void *const restrict p, const size_t n)
 {
@@ -87,7 +158,26 @@ smemzero(void *const restrict p, const size_t n)
 void
 sfree(void *const restrict ptr)
 {
+#ifdef USE_LIBSODIUM_ALLOCATOR
+
+	if (! ptr)
+		/* free(NULL) is well-defined to do nothing */
+		return;
+
+	struct sodium_memblock *const mptr = find_sodium_memblock(ptr);
+
+	if (! mptr)
+		/* sfree() on something that s(c|m|re)alloc() didn't provide or double-free */
+		abort();
+
+	(void) free_sodium_memblock(mptr);
+	(void) sodium_free(ptr);
+
+#else /* USE_LIBSODIUM_ALLOCATOR */
+
 	(void) free(ptr);
+
+#endif /* !USE_LIBSODIUM_ALLOCATOR */
 }
 
 /* does calloc()'s job and dies if it fails
@@ -98,12 +188,34 @@ sfree(void *const restrict ptr)
 void * ATHEME_FATTR_MALLOC
 scalloc(const size_t num, const size_t len)
 {
+#ifdef USE_LIBSODIUM_ALLOCATOR
+
+	if (! num || ! len)
+		/* calloc(x, y) for (x * y) == 0 should return NULL but that would break us */
+		abort();
+
+	if (len >= (size_t) (((size_t) SIZE_MAX) / num))
+		/* (num * len) would overflow */
+		abort();
+
+	const size_t totalsz = (num * len);
+
+	void *const buf = sodium_malloc(totalsz);
+
+	(void) make_sodium_memblock(buf, totalsz);
+
+	return memset(buf, 0x00, totalsz);
+
+#else /* USE_LIBSODIUM_ALLOCATOR */
+
 	void *const buf = calloc(num, len);
 
 	if (! buf)
 		RAISE_EXCEPTION;
 
 	return buf;
+
+#endif /* !USE_LIBSODIUM_ALLOCATOR */
 }
 
 /* does malloc()'s job and dies if it fails
@@ -114,6 +226,14 @@ scalloc(const size_t num, const size_t len)
 void * ATHEME_FATTR_MALLOC
 smalloc(const size_t len)
 {
+#ifdef USE_LIBSODIUM_ALLOCATOR
+
+	if (! len)
+		/* malloc(x) for x==0 should return NULL but that would break us */
+		abort();
+
+#endif /* USE_LIBSODIUM_ALLOCATOR */
+
 	return scalloc(1, len);
 }
 
@@ -121,12 +241,53 @@ smalloc(const size_t len)
 void * /* ATHEME_FATTR_MALLOC is not applicable -- may return same ptr */
 srealloc(void *const restrict ptr, const size_t len)
 {
+#ifdef USE_LIBSODIUM_ALLOCATOR
+
+	if (! ptr)
+		/* realloc(NULL, x) == malloc(x) */
+		return smalloc(len);
+
+	struct sodium_memblock *const mptr = find_sodium_memblock(ptr);
+
+	if (! mptr)
+		abort();
+
+	if (! len)
+	{
+		/* realloc(ptr, 0) == free(ptr) */
+
+		(void) free_sodium_memblock(mptr);
+		(void) sodium_free(ptr);
+
+		return NULL;
+	}
+
+	if (len == mptr->len)
+		/* realloc() to same size as existing alloc -- do nothing */
+		return ptr;
+
+	void *const buf = smalloc(len);
+
+	if (len > mptr->len)
+		(void) memcpy(buf, ptr, mptr->len);
+	else
+		(void) memcpy(buf, ptr, len);
+
+	(void) free_sodium_memblock(mptr);
+	(void) sodium_free(ptr);
+
+	return buf;
+
+#else /* USE_LIBSODIUM_ALLOCATOR */
+
 	void *const buf = realloc(ptr, len);
 
 	if (len && ! buf)
 		RAISE_EXCEPTION;
 
 	return buf;
+
+#endif /* !USE_LIBSODIUM_ALLOCATOR */
 }
 
 /* does strdup()'s job, only with the above memory functions */
