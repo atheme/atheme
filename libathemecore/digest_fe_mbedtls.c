@@ -262,12 +262,12 @@ digest_pbkdf2_hmac(const unsigned int alg, const void *const restrict pass, cons
 		goto error;
 
 	(void) mbedtls_md_free(&ctx);
-	(void) explicit_bzero(&ctx, sizeof ctx);
+	(void) smemzero(&ctx, sizeof ctx);
 	return true;
 
 error:
 	(void) mbedtls_md_free(&ctx);
-	(void) explicit_bzero(&ctx, sizeof ctx);
-	(void) explicit_bzero(dk, dkLen);
+	(void) smemzero(&ctx, sizeof ctx);
+	(void) smemzero(dk, dkLen);
 	return false;
 }

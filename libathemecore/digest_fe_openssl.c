@@ -234,6 +234,6 @@ digest_pbkdf2_hmac(const unsigned int alg, const void *restrict pass, const size
 	return true;
 
 error:
-	(void) explicit_bzero(dk, dkLen);
+	(void) smemzero(dk, dkLen);
 	return false;
 }

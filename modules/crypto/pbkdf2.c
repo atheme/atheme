@@ -32,6 +32,7 @@ atheme_pbkdf2_verify(const char *const restrict password, const char *const rest
 		return false;
 
 	unsigned char buf[DIGEST_MDLEN_SHA2_512];
+
 	const bool ret = digest_pbkdf2_hmac(DIGALG_SHA2_512, password, strlen(password), parameters,
 	                                    ATHEME_PBKDF2_SALTLEN, ATHEME_PBKDF2_ROUNDS, buf, sizeof buf);
 
@@ -39,11 +40,15 @@ atheme_pbkdf2_verify(const char *const restrict password, const char *const rest
 		return false;
 
 	char result[(2 * DIGEST_MDLEN_SHA2_512) + 1];
+
 	for (size_t i = 0; i < DIGEST_MDLEN_SHA2_512; i++)
 		(void) sprintf(result + (i * 2), "%02x", 255 & buf[i]);
 
 	if (strcmp(result, parameters + ATHEME_PBKDF2_SALTLEN) != 0)
 		return false;
+
+	(void) smemzero(buf, sizeof buf);
+	(void) smemzero(result, sizeof result);
 
 	return true;
 }

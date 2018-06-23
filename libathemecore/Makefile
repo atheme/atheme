@@ -27,7 +27,6 @@ SRCS =					\
 	digest_fe_shared.c		\
 	digest_testsuite.c		\
 	entity.c			\
-	$(EXPLICIT_BZERO_COND_C)	\
 	flags.c				\
 	function.c			\
 	hook.c				\

@@ -209,7 +209,7 @@ digest_transform_block(struct digest_context_sha2_512 *const ctx, const uint64_t
 	for (size_t x = 0x00U; x < DIGEST_STLEN_SHA2; x++)
 		ctx->state[x] += s[x];
 
-	(void) explicit_bzero(s, sizeof s);
+	(void) smemzero(s, sizeof s);
 }
 
 bool
@@ -369,6 +369,7 @@ digest_final_sha2_512(struct digest_context_sha2_512 *const restrict ctx,
 	else for (size_t i = 0x00U; i < DIGEST_STLEN_SHA2; i++)
 		REVERSE64(ctx->state[i], *d++);
 
-	(void) explicit_bzero(ctx, sizeof *ctx);
+	(void) smemzero(ctx, sizeof *ctx);
+
 	return true;
 }

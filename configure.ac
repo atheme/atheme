@@ -94,6 +94,7 @@ dnl Checks for header files.
 AC_CHECK_HEADERS([link.h], [], [], [])
 
 dnl Checks for library functions.
+AC_DEFINE([__STDC_WANT_LIB_EXT1__], [1], [We want ISO 9899:2011 Annex K memory functions if available])
 AC_CHECK_FUNCS([arc4random arc4random_buf arc4random_uniform explicit_bzero memset_s])
 AC_CHECK_FUNCS([execve flock fork getpid getrlimit gettimeofday strcasestr strtok_r])
 AC_CHECK_FUNC([socket], [], [AC_CHECK_LIB([socket], [socket])])
@@ -113,15 +114,6 @@ AS_IF([test "x${ac_cv_func_arc4random}x${ac_cv_func_arc4random_buf}x${ac_cv_func
 
 	AC_CHECK_HEADERS([sys/random.h], [], [], [])
 	AC_CHECK_FUNCS([getentropy getrandom])
-])
-
-
-
-dnl If we don't have explicit_bzero(3)/memset_s(3) then we need explicit_bzero.c which provides a fallback
-EXPLICIT_BZERO_COND_C=""
-AS_IF([test "x${ac_cv_func_explicit_bzero}x${ac_cv_func_memset_s}" = "xnoxno"], [
-	EXPLICIT_BZERO_COND_C="explicit_bzero.c"
-	AC_SUBST([EXPLICIT_BZERO_COND_C])
 ])
 
 

@@ -61,7 +61,7 @@ digest_oneshot(const unsigned int alg, const void *const restrict data, const si
 	if (! digest_final(&ctx, out, outLen))
 		return false;
 
-	(void) explicit_bzero(&ctx, sizeof ctx);
+	(void) smemzero(&ctx, sizeof ctx);
 	return true;
 }
 
@@ -97,6 +97,6 @@ digest_oneshot_hmac(const unsigned int alg, const void *const restrict key, cons
 	if (! digest_final(&ctx, out, outLen))
 		return false;
 
-	(void) explicit_bzero(&ctx, sizeof ctx);
+	(void) smemzero(&ctx, sizeof ctx);
 	return true;
 }

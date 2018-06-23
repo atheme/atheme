@@ -33,8 +33,12 @@
 #include <ext/getopt_long.h> /* XXX */
 
 #ifdef HAVE_GETRLIMIT
-# include <sys/resource.h>
+#  include <sys/resource.h>
 #endif
+
+#if !defined(HAVE_MEMSET_S) && !defined(HAVE_EXPLICIT_BZERO)
+void *(* volatile volatile_memset)(void *, int, size_t) = &memset;
+#endif /* !HAVE_MEMSET_S && !HAVE_EXPLICIT_BZERO */
 
 struct ConfOption config_options;
 

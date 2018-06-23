@@ -176,9 +176,9 @@ md5_process_words(struct digest_context_md5 *const ctx, const uint8_t *data)
 	for (size_t i = 0x00U; i < 0x04U; i++)
 		ctx->state[i] += s[i];
 
-	(void) explicit_bzero(x, sizeof x);
-	(void) explicit_bzero(s, sizeof s);
-	(void) explicit_bzero(&t, sizeof t);
+	(void) smemzero(x, sizeof x);
+	(void) smemzero(s, sizeof s);
+	(void) smemzero(&t, sizeof t);
 }
 
 bool
@@ -302,7 +302,7 @@ digest_final_md5(struct digest_context_md5 *const restrict ctx, void *const rest
 	for (size_t i = 0x00U; i < DIGEST_MDLEN_MD5; i++)
 		digest[i] = (uint8_t) (ctx->state[i >> 0x02U] >> ((i & 0x03U) << 0x03U));
 
-	(void) explicit_bzero(data, sizeof data);
-	(void) explicit_bzero(ctx, sizeof *ctx);
+	(void) smemzero(data, sizeof data);
+	(void) smemzero(ctx, sizeof *ctx);
 	return true;
 }

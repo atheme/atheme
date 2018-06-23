@@ -329,6 +329,9 @@
 /* Define to 1 if you need to in order for `stat' and other things to work. */
 #undef _POSIX_SOURCE
 
+/* We want ISO 9899:2011 Annex K memory functions if available */
+#undef __STDC_WANT_LIB_EXT1__
+
 /* Define to rpl_asprintf if the replacement function should be used. */
 #undef asprintf
 

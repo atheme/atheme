@@ -39,6 +39,9 @@ atheme_rawmd5_verify(const char *const restrict password, const char *const rest
 	if (strcmp(result, parameters + MODULE_PREFIX_LEN) != 0)
 		return false;
 
+	(void) smemzero(digest, sizeof digest);
+	(void) smemzero(result, sizeof result);
+
 	return true;
 }
 

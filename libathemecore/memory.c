@@ -29,6 +29,45 @@
 #  define RAISE_EXCEPTION       raise(SIGUSR1)
 #endif
 
+void
+smemzero(void *const restrict p, const size_t n)
+{
+#ifdef HAVE_MEMSET_S
+
+	if (memset_s(p, n, 0x00, n) != 0)
+		RAISE_EXECEPTION;
+
+#else /* HAVE_MEMSET_S */
+#  ifdef HAVE_EXPLICIT_BZERO
+
+	(void) explicit_bzero(p, n);
+
+#  else /* HAVE_EXPLICIT_BZERO */
+
+	/* We don't have memset_s(3) [ISO 9899:2011] or explicit_bzero(3) [OpenBSD].
+	 *
+	 * Indirect memset(3) through a volatile function pointer should hopefully prevent dead-store elimination
+	 * removing the call. This may not work if Atheme IRC Services is built with Link Time Optimisation, because
+	 * the compiler may be able to prove (for a given definition of proof) that the pointer always points to
+	 * memset(3); LTO lets the compiler analyse every compilation unit, not just this one. Alas, the C standard
+	 * only requires the compiler to read the value of the pointer, not make the function call through it; so if
+	 * it reads it and determines that it still points to memset(3), it can still decide not to call it. To
+	 * hopefully prevent the compiler making assumptions about what it points to, it is not located in this
+	 * compilation unit; and this unit (and the unit it is located in) is part of a library, so in theory a
+	 * consumer of this library could modify this extern variable to point to anything. Still, the C standard
+	 * does not guarantee that this will work, and a sufficiently clever compiler may still remove the smemzero
+	 * function calls from modules that use this library if Full LTO is used, because nothing in this program
+	 * or any of its modules sets the function pointer to any other value.
+	 *
+	 * Clang <= 7.0 with/without Thin LTO does not remove any calls; other compilers & situations are untested.
+	 */
+
+	(void) volatile_memset(p, 0x00, n);
+
+#  endif /* !HAVE_EXPLICIT_BZERO */
+#endif /* !HAVE_MEMSET_S */
+}
+
 /* does free()'s job
  *
  * This is only here to balance out the custom malloc()/calloc()/realloc()
