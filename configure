@@ -646,6 +646,7 @@ PERL_LIBS
 PERL_CFLAGS
 PERL_COND_D
 perlpath
+LIBSODIUM_LIBS
 QRCODE_COND_C
 LIBQRENCODE_LIBS
 LIBQRENCODE_CFLAGS
@@ -796,6 +797,7 @@ with_nettle
 with_openssl
 with_pcre
 with_qrencode
+with_sodium
 with_perl
 enable_contrib
 enable_fhs_paths
@@ -1499,6 +1501,8 @@ Optional Packages:
                           Expression library
   --without-qrencode      Do not attempt to detect libqrencode for generating
                           QR codes
+  --without-sodium        Do not attempt to detect libsodium for secure memory
+                          ops
   --with-perl             Enable Perl for modules/scripting/perl
   --with-libmowgli[=prefix]
                           Specify location of system libmowgli install, "yes"
@@ -9831,6 +9835,141 @@ fi
 
 
 
+	LIBSODIUM="No"
+
+	LIBSODIUM_LIBS=""
+
+
+# Check whether --with-sodium was given.
+if test "${with_sodium+set}" = set; then :
+  withval=$with_sodium;
+else
+  with_sodium="auto"
+fi
+
+
+	case "${with_sodium}" in
+		no | yes | auto)
+			;;
+		*)
+			as_fn_error $? "invalid option for --with-sodium" "$LINENO" 5
+			;;
+	esac
+
+	if test "x${with_sodium}" != "xno"; then :
+
+		LIBS_SAVED="${LIBS}"
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing sodium_memzero" >&5
+$as_echo_n "checking for library containing sodium_memzero... " >&6; }
+if ${ac_cv_search_sodium_memzero+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS=$LIBS
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char sodium_memzero ();
+int
+main ()
+{
+return sodium_memzero ();
+  ;
+  return 0;
+}
+_ACEOF
+for ac_lib in '' sodium; do
+  if test -z "$ac_lib"; then
+    ac_res="none required"
+  else
+    ac_res=-l$ac_lib
+    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
+  fi
+  if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_sodium_memzero=$ac_res
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext
+  if ${ac_cv_search_sodium_memzero+:} false; then :
+  break
+fi
+done
+if ${ac_cv_search_sodium_memzero+:} false; then :
+
+else
+  ac_cv_search_sodium_memzero=no
+fi
+rm conftest.$ac_ext
+LIBS=$ac_func_search_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_sodium_memzero" >&5
+$as_echo "$ac_cv_search_sodium_memzero" >&6; }
+ac_res=$ac_cv_search_sodium_memzero
+if test "$ac_res" != no; then :
+  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+  LIBSODIUM="Yes"
+else
+
+			if test "x${with_sodium}" != "xauto"; then :
+
+				as_fn_error $? "--with-sodium was specified but libsodium could not be found" "$LINENO" 5
+
+fi
+
+fi
+
+
+		LIBS="${LIBS_SAVED}"
+
+fi
+
+	if test "x${LIBSODIUM}" = "xYes"; then :
+
+		for ac_header in sodium/core.h sodium/utils.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+else
+
+			LIBSODIUM="No"
+			if test "x${with_sodium}" = "xyes"; then :
+  as_fn_error $? "required header file missing" "$LINENO" 5
+fi
+
+fi
+
+done
+
+
+fi
+
+	if test "x${LIBSODIUM}" = "xYes"; then :
+
+		if test "x${ac_cv_search_sodium_memzero}" != "xnone required"; then :
+
+			LIBSODIUM_LIBS="${ac_cv_search_sodium_memzero}"
+
+fi
+
+$as_echo "#define HAVE_LIBSODIUM 1" >>confdefs.h
+
+
+
+fi
+
+
+
 
 	LIBPERL="No"
 
@@ -15997,6 +16136,7 @@ Configuration:
     PCRE Support ............: ${LIBPCRE}
     Perl Support ............: ${LIBPERL}
     QR Code Support .........: ${LIBQRENCODE}
+    Sodium Support ..........: ${LIBSODIUM}
 
     Digest Frontend .........: ${DIGEST_FRONTEND}
     Mowgli Installation .....: ${MOWGLI_SOURCE}

@@ -111,6 +111,9 @@
 /* Define to 1 if you have the `socket' library (-lsocket). */
 #undef HAVE_LIBSOCKET
 
+/* Define to 1 if libsodium is available */
+#undef HAVE_LIBSODIUM
+
 /* Define to 1 if you have the <link.h> header file. */
 #undef HAVE_LINK_H
 
@@ -182,6 +185,12 @@
 
 /* Define to 1 if you have a C99 compliant `snprintf' function. */
 #undef HAVE_SNPRINTF
+
+/* Define to 1 if you have the <sodium/core.h> header file. */
+#undef HAVE_SODIUM_CORE_H
+
+/* Define to 1 if you have the <sodium/utils.h> header file. */
+#undef HAVE_SODIUM_UTILS_H
 
 /* Define to 1 if you have the <stdarg.h> header file. */
 #undef HAVE_STDARG_H

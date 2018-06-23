@@ -29,6 +29,10 @@
 #  define RAISE_EXCEPTION       raise(SIGUSR1)
 #endif
 
+#ifdef HAVE_LIBSODIUM
+#  include <sodium/utils.h>
+#endif /* HAVE_LIBSODIUM */
+
 void
 smemzero(void *const restrict p, const size_t n)
 {
@@ -43,8 +47,13 @@ smemzero(void *const restrict p, const size_t n)
 	(void) explicit_bzero(p, n);
 
 #  else /* HAVE_EXPLICIT_BZERO */
+#    ifdef HAVE_LIBSODIUM
 
-	/* We don't have memset_s(3) [ISO 9899:2011] or explicit_bzero(3) [OpenBSD].
+	(void) sodium_memzero(p, n);
+
+#    else /* HAVE_LIBSODIUM */
+
+	/* We don't have memset_s(3) [ISO 9899:2011], explicit_bzero(3) [OpenBSD], or sodium_memzero(3) [libsodium].
 	 *
 	 * Indirect memset(3) through a volatile function pointer should hopefully prevent dead-store elimination
 	 * removing the call. This may not work if Atheme IRC Services is built with Link Time Optimisation, because
@@ -64,6 +73,7 @@ smemzero(void *const restrict p, const size_t n)
 
 	(void) volatile_memset(p, 0x00, n);
 
+#    endif /* !HAVE_LIBSODIUM */
 #  endif /* !HAVE_EXPLICIT_BZERO */
 #endif /* !HAVE_MEMSET_S */
 }

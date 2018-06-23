@@ -52,6 +52,7 @@ Configuration:
     PCRE Support ............: ${LIBPCRE}
     Perl Support ............: ${LIBPERL}
     QR Code Support .........: ${LIBQRENCODE}
+    Sodium Support ..........: ${LIBSODIUM}
 
     Digest Frontend .........: ${DIGEST_FRONTEND}
     Mowgli Installation .....: ${MOWGLI_SOURCE}
