@@ -9535,7 +9535,7 @@ fi
 
 	if test "x${LIBCRYPTO}" = "xYes"; then :
 
-		for ac_header in openssl/evp.h openssl/hmac.h
+		for ac_header in openssl/evp.h openssl/hmac.h openssl/opensslv.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
 ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
@@ -9570,7 +9570,7 @@ $as_echo "#define HAVE_OPENSSL 1" >>confdefs.h
 
 
 
-		for ac_header in openssl/ec.h openssl/ecdsa.h
+		for ac_header in openssl/crypto.h openssl/ec.h openssl/ecdsa.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
 ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"

@@ -36,6 +36,19 @@
 #  include <sys/resource.h>
 #endif
 
+#ifdef HAVE_OPENSSL
+#  include <openssl/opensslv.h>
+#  ifndef OPENSSL_VERSION_NUMBER
+#    error "OPENSSL_VERSION_NUMBER is undefined"
+#  endif /* !OPENSSL_VERSION_NUMBER */
+#  ifdef HAVE_OPENSSL_CRYPTO_H
+#    include <openssl/crypto.h>
+#    if !defined(LIBRESSL_VERSION_NUMBER) && (OPENSSL_VERSION_NUMBER >= 0x10100000L)
+#      define HAVE_OPENSSL_MEMORY_API 1
+#    endif /* !LIBRESSL_VERSION_NUMBER && (OPENSSL_VERSION_NUMBER >= 0x10100000L) */
+#  endif /* HAVE_OPENSSL_CRYPTO_H */
+#endif /* HAVE_OPENSSL */
+
 #ifdef HAVE_LIBSODIUM
 #  include <sodium/core.h>
 #endif /* HAVE_LIBSODIUM */
@@ -72,6 +85,41 @@ bool database_create = false;
 
 void (*db_save) (void *arg, enum db_save_strategy strategy) = NULL;
 void (*db_load) (const char *name) = NULL;
+
+#ifdef HAVE_OPENSSL_MEMORY_API
+static void * ATHEME_FATTR_MALLOC
+atheme_openssl_malloc(const size_t len, const char *const restrict file, const int line)
+{
+	if (file && *file && line)
+		(void) slog(LG_DEBUG, "OpenSSL called malloc(%zu) at \"%s\":%d", len, file, line);
+	else
+		(void) slog(LG_DEBUG, "OpenSSL called malloc(%zu)", len);
+
+	return smalloc(len);
+}
+
+static void *
+atheme_openssl_realloc(void *const restrict ptr, const size_t len, const char *const restrict file, const int line)
+{
+	if (file && *file && line)
+		(void) slog(LG_DEBUG, "OpenSSL called realloc(%p, %zu) at \"%s\":%d", ptr, len, file, line);
+	else
+		(void) slog(LG_DEBUG, "OpenSSL called realloc(%p, %zu)", ptr, len);
+
+	return srealloc(ptr, len);
+}
+
+static void
+atheme_openssl_free(void *const restrict ptr, const char *const restrict file, const int line)
+{
+	if (file && *file && line)
+		(void) slog(LG_DEBUG, "OpenSSL called free(%p) at \"%s\":%d", ptr, file, line);
+	else
+		(void) slog(LG_DEBUG, "OpenSSL called free(%p)", ptr);
+
+	(void) sfree(ptr);
+}
+#endif /* HAVE_OPENSSL_MEMORY_API */
 
 /* *INDENT-OFF* */
 static void
@@ -289,6 +337,14 @@ atheme_main(int argc, char *argv[])
 	mowgli_getopt_option_t long_opts[] = {
 		{ NULL, 0, NULL, 0, 0 },
 	};
+
+#ifdef HAVE_OPENSSL_MEMORY_API
+	if (CRYPTO_set_mem_functions(&atheme_openssl_malloc, &atheme_openssl_realloc, &atheme_openssl_free) != 1)
+	{
+		(void) fprintf(stderr, "Error: CRYPTO_set_mem_functions() failed!\n");
+		exit(EXIT_FAILURE);
+	}
+#endif /* HAVE_OPENSSL_MEMORY_API */
 
 #ifdef HAVE_LIBSODIUM
 	if (sodium_init() == -1)
