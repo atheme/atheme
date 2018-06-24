@@ -10296,6 +10296,8 @@ fi
 
 $as_echo "#define USE_LIBSODIUM_ALLOCATOR 1" >>confdefs.h
 
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: The sodium hardened memory allocator is not intended for production usage" >&5
+$as_echo "$as_me: WARNING: The sodium hardened memory allocator is not intended for production usage" >&2;}
 			;;
 		no)
 			SODIUM_MALLOC="No"
@@ -16125,6 +16127,9 @@ fi
 
 	if test "x${ARC4RANDOM_BUILDING}" = "xYes"; then :
   ARC4RANDOM_BUILDING="Yes (Internal ChaCha20)"
+fi
+	if test "x${SODIUM_MALLOC}" = "xYes"; then :
+  SODIUM_MALLOC="Yes (NOT INTENDED FOR PRODUCTION USAGE)"
 fi
 
 	prefix="$(eval echo "${prefix}")"

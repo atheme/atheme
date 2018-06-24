@@ -42,7 +42,41 @@ struct sodium_memblock
 	size_t          len;
 };
 
-static mowgli_list_t sodium_memblocks;
+static mowgli_list_t *sodium_memblocks = NULL;
+
+static inline void
+make_sodium_memblocks_ro(void)
+{
+	mowgli_node_t *n;
+
+	if (sodium_mprotect_readonly(sodium_memblocks) != 0)
+		abort();
+
+	MOWGLI_ITER_FOREACH(n, sodium_memblocks->head)
+	{
+		struct sodium_memblock *const mptr = n->data;
+
+		if (sodium_mprotect_readonly(mptr) != 0)
+			abort();
+	}
+}
+
+static inline void
+make_sodium_memblocks_rw(void)
+{
+	mowgli_node_t *n;
+
+	if (sodium_mprotect_readwrite(sodium_memblocks) != 0)
+		abort();
+
+	MOWGLI_ITER_FOREACH(n, sodium_memblocks->head)
+	{
+		struct sodium_memblock *const mptr = n->data;
+
+		if (sodium_mprotect_readwrite(mptr) != 0)
+			abort();
+	}
+}
 
 static void
 make_sodium_memblock(void *const restrict ptr, const size_t len)
@@ -51,20 +85,27 @@ make_sodium_memblock(void *const restrict ptr, const size_t len)
 		/* bug in this code */
 		abort();
 
+	if (! sodium_memblocks)
+	{
+		if (! (sodium_memblocks = sodium_malloc(sizeof *sodium_memblocks)))
+			/* no free memory? */
+			abort();
+
+		(void) memset(sodium_memblocks, 0x00, sizeof *sodium_memblocks);
+	}
+
 	struct sodium_memblock *const mptr = sodium_malloc(sizeof *mptr);
 
 	if (! mptr)
 		/* no free memory? */
 		abort();
 
-	(void) mowgli_node_add(mptr, &mptr->node, &sodium_memblocks);
-
 	mptr->ptr = ptr;
 	mptr->len = len;
 
-	if (sodium_mprotect_readonly(mptr) != 0)
-		/* bug in sodium? */
-		abort();
+	(void) make_sodium_memblocks_rw();
+	(void) mowgli_node_add(mptr, &mptr->node, sodium_memblocks);
+	(void) make_sodium_memblocks_ro();
 }
 
 static struct sodium_memblock *
@@ -74,9 +115,13 @@ find_sodium_memblock(void *const restrict ptr)
 		/* bug in this code */
 		abort();
 
+	if (! sodium_memblocks)
+		/* srealloc(ptr!=NULL) or sfree(ptr!=NULL) before any s(c|m|re)alloc() calls */
+		abort();
+
 	mowgli_node_t *n;
 
-	MOWGLI_ITER_FOREACH(n, sodium_memblocks.head)
+	MOWGLI_ITER_FOREACH(n, sodium_memblocks->head)
 	{
 		struct sodium_memblock *const mptr = n->data;
 
@@ -94,11 +139,14 @@ free_sodium_memblock(struct sodium_memblock *const restrict mptr)
 		/* bug in this code */
 		abort();
 
-	if (sodium_mprotect_readwrite(mptr) != 0)
-		/* bug in sodium? */
+	if (! sodium_memblocks)
+		/* srealloc(ptr!=NULL,len==0) or sfree(ptr!=NULL) before any s(c|m|re)alloc() calls */
 		abort();
 
-	(void) mowgli_node_delete(&mptr->node, &sodium_memblocks);
+	(void) make_sodium_memblocks_rw();
+	(void) mowgli_node_delete(&mptr->node, sodium_memblocks);
+	(void) make_sodium_memblocks_ro();
+
 	(void) sodium_free(mptr);
 }
 

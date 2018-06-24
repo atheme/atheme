@@ -18,6 +18,7 @@ AC_DEFUN([ATHEME_FEATURETEST_SODIUM_MALLOC], [
 
 			SODIUM_MALLOC="Yes"
 			AC_DEFINE([USE_LIBSODIUM_ALLOCATOR], [1], [Enable libsodium secure memory allocator])
+			AC_MSG_WARN([The sodium hardened memory allocator is not intended for production usage])
 			;;
 		no)
 			SODIUM_MALLOC="No"
