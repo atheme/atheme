@@ -377,7 +377,7 @@ atheme_pbkdf2v2_compute(const char *const restrict password, struct pbkdf2v2_dbe
 	if (dbe->scram && ! atheme_pbkdf2v2_scram_normalize(key, sizeof key))
 	{
 		(void) slog(LG_DEBUG, "%s: SASLprep normalization of password failed", __func__);
-		(void) explicit_bzero(key, sizeof key);
+		(void) smemzero(key, sizeof key);
 		return false;
 	}
 #endif /* HAVE_LIBIDN */
@@ -387,18 +387,18 @@ atheme_pbkdf2v2_compute(const char *const restrict password, struct pbkdf2v2_dbe
 	if (! kl)
 	{
 		(void) slog(LG_DEBUG, "%s: password length == 0", __func__);
-		(void) explicit_bzero(key, sizeof key);
+		(void) smemzero(key, sizeof key);
 		return false;
 	}
 
 	if (! digest_pbkdf2_hmac(dbe->md, key, kl, dbe->salt, dbe->sl, dbe->c, dbe->cdg, dbe->dl))
 	{
 		(void) slog(LG_ERROR, "%s: digest_pbkdf2_hmac() failed", __func__);
-		(void) explicit_bzero(key, sizeof key);
+		(void) smemzero(key, sizeof key);
 		return false;
 	}
 
-	(void) explicit_bzero(key, sizeof key);
+	(void) smemzero(key, sizeof key);
 	return true;
 }
 
@@ -473,6 +473,8 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 		}
 	}
 
+	(void) smemzero(&dbe, sizeof dbe);
+
 	return res;
 }
 
@@ -542,6 +544,8 @@ atheme_pbkdf2v2_verify(const char *const restrict password, const char *const re
 
 	if (atheme_pbkdf2v2_recrypt(&dbe))
 		*flags |= PWVERIFY_FLAG_RECRYPT;
+
+	(void) smemzero(&dbe, sizeof dbe);
 
 	return true;
 }

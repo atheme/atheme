@@ -631,6 +631,7 @@ LTLIBOBJS
 LIBMOWGLI_COND_D
 MOWGLI_LIBS
 MOWGLI_CFLAGS
+LEGACY_PWCRYPTO_COND_C
 SHAREDIR
 RUNDIR
 MODDIR
@@ -645,6 +646,7 @@ PERL_LIBS
 PERL_CFLAGS
 PERL_COND_D
 perlpath
+LIBSODIUM_LIBS
 QRCODE_COND_C
 LIBQRENCODE_LIBS
 LIBQRENCODE_CFLAGS
@@ -660,7 +662,6 @@ LDAP_CPPFLAGS
 LIBIDN_LIBS
 LIBCRYPT_LIBS
 CRACKLIB_LIBS
-EXPLICIT_BZERO_COND_C
 ARC4RANDOM_COND_C
 LIBOBJS
 PODIR_COND_D
@@ -796,11 +797,14 @@ with_nettle
 with_openssl
 with_pcre
 with_qrencode
+with_sodium
 with_perl
 enable_contrib
 enable_fhs_paths
 enable_large_net
+enable_legacy_pwcrypto
 enable_reproducible_builds
+enable_sodium_malloc
 enable_profile
 enable_relro
 enable_nonlazy_bind
@@ -1448,8 +1452,11 @@ Optional Features:
   --enable-contrib        Enable contrib modules.
   --enable-fhs-paths      Use more FHS-like pathnames (for packagers)
   --enable-large-net      Enable large network support
+  --enable-legacy-pwcrypto
+                          Enable legacy password crypto modules
   --enable-reproducible-builds
                           Enable reproducible builds
+  --enable-sodium-malloc  Enable libsodium secure memory allocator
   --enable-profile        Enable profiling extensions
   --disable-relro         Disable -Wl,-z,relro (marks the relocation table
                           read-only)
@@ -1496,6 +1503,8 @@ Optional Packages:
                           Expression library
   --without-qrencode      Do not attempt to detect libqrencode for generating
                           QR codes
+  --without-sodium        Do not attempt to detect libsodium for secure memory
+                          ops
   --with-perl             Enable Perl for modules/scripting/perl
   --with-libmowgli[=prefix]
                           Specify location of system libmowgli install, "yes"
@@ -7205,6 +7214,9 @@ fi
 done
 
 
+
+$as_echo "#define __STDC_WANT_LIB_EXT1__ 1" >>confdefs.h
+
 for ac_func in arc4random arc4random_buf arc4random_uniform explicit_bzero memset_s
 do :
   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
@@ -8393,16 +8405,6 @@ _ACEOF
 
 fi
 done
-
-
-fi
-
-
-
-EXPLICIT_BZERO_COND_C=""
-if test "x${ac_cv_func_explicit_bzero}x${ac_cv_func_memset_s}" = "xnoxno"; then :
-
-	EXPLICIT_BZERO_COND_C="explicit_bzero.c"
 
 
 fi
@@ -9835,6 +9837,141 @@ fi
 
 
 
+	LIBSODIUM="No"
+
+	LIBSODIUM_LIBS=""
+
+
+# Check whether --with-sodium was given.
+if test "${with_sodium+set}" = set; then :
+  withval=$with_sodium;
+else
+  with_sodium="auto"
+fi
+
+
+	case "${with_sodium}" in
+		no | yes | auto)
+			;;
+		*)
+			as_fn_error $? "invalid option for --with-sodium" "$LINENO" 5
+			;;
+	esac
+
+	if test "x${with_sodium}" != "xno"; then :
+
+		LIBS_SAVED="${LIBS}"
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing sodium_memzero" >&5
+$as_echo_n "checking for library containing sodium_memzero... " >&6; }
+if ${ac_cv_search_sodium_memzero+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS=$LIBS
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char sodium_memzero ();
+int
+main ()
+{
+return sodium_memzero ();
+  ;
+  return 0;
+}
+_ACEOF
+for ac_lib in '' sodium; do
+  if test -z "$ac_lib"; then
+    ac_res="none required"
+  else
+    ac_res=-l$ac_lib
+    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
+  fi
+  if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_sodium_memzero=$ac_res
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext
+  if ${ac_cv_search_sodium_memzero+:} false; then :
+  break
+fi
+done
+if ${ac_cv_search_sodium_memzero+:} false; then :
+
+else
+  ac_cv_search_sodium_memzero=no
+fi
+rm conftest.$ac_ext
+LIBS=$ac_func_search_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_sodium_memzero" >&5
+$as_echo "$ac_cv_search_sodium_memzero" >&6; }
+ac_res=$ac_cv_search_sodium_memzero
+if test "$ac_res" != no; then :
+  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+  LIBSODIUM="Yes"
+else
+
+			if test "x${with_sodium}" != "xauto"; then :
+
+				as_fn_error $? "--with-sodium was specified but libsodium could not be found" "$LINENO" 5
+
+fi
+
+fi
+
+
+		LIBS="${LIBS_SAVED}"
+
+fi
+
+	if test "x${LIBSODIUM}" = "xYes"; then :
+
+		for ac_header in sodium/core.h sodium/utils.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+else
+
+			LIBSODIUM="No"
+			if test "x${with_sodium}" = "xyes"; then :
+  as_fn_error $? "required header file missing" "$LINENO" 5
+fi
+
+fi
+
+done
+
+
+fi
+
+	if test "x${LIBSODIUM}" = "xYes"; then :
+
+		if test "x${ac_cv_search_sodium_memzero}" != "xnone required"; then :
+
+			LIBSODIUM_LIBS="${ac_cv_search_sodium_memzero}"
+
+fi
+
+$as_echo "#define HAVE_LIBSODIUM 1" >>confdefs.h
+
+
+
+fi
+
+
+
 
 	LIBPERL="No"
 
@@ -10078,6 +10215,32 @@ $as_echo "#define LARGE_NETWORK 1" >>confdefs.h
 
 
 
+	LEGACY_PWCRYPTO="No"
+
+	# Check whether --enable-legacy-pwcrypto was given.
+if test "${enable_legacy_pwcrypto+set}" = set; then :
+  enableval=$enable_legacy_pwcrypto;
+else
+  enable_legacy_pwcrypto="no"
+fi
+
+
+	case "${enable_legacy_pwcrypto}" in
+		yes)
+			LEGACY_PWCRYPTO="Yes"
+			LEGACY_PWCRYPTO_COND_C="crypt3-des.c crypt3-md5.c ircservices.c rawmd5.c rawsha1.c"
+
+			;;
+		no)
+			LEGACY_PWCRYPTO="No"
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-legacy-pwcrypto" "$LINENO" 5
+			;;
+	esac
+
+
+
 	REPRODUCIBLE_BUILDS="No"
 
 	# Check whether --enable-reproducible-builds was given.
@@ -10100,6 +10263,45 @@ $as_echo "#define REPRODUCIBLE_BUILDS 1" >>confdefs.h
 			;;
 		*)
 			as_fn_error $? "invalid option for --enable-reproducible-builds" "$LINENO" 5
+			;;
+	esac
+
+
+
+	SODIUM_MALLOC="No"
+
+	# Check whether --enable-sodium-malloc was given.
+if test "${enable_sodium_malloc+set}" = set; then :
+  enableval=$enable_sodium_malloc;
+else
+  enable_sodium_malloc="no"
+fi
+
+
+	case "${enable_sodium_malloc}" in
+		yes)
+			if test "x${CONTRIB_MODULES}" != "xNo"; then :
+
+				as_fn_error $? "--enable-sodium-malloc requires --disable-contrib" "$LINENO" 5
+
+fi
+
+			if test "x${LIBSODIUM}" != "xYes"; then :
+
+				as_fn_error $? "--enable-sodium-malloc requires --with-sodium" "$LINENO" 5
+
+fi
+
+			SODIUM_MALLOC="Yes"
+
+$as_echo "#define USE_LIBSODIUM_ALLOCATOR 1" >>confdefs.h
+
+			;;
+		no)
+			SODIUM_MALLOC="No"
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-sodium-malloc" "$LINENO" 5
 			;;
 	esac
 
@@ -11474,6 +11676,47 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Warray-bounds " >&5
+$as_echo_n "checking for C compiler flag(s) -Warray-bounds ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Warray-bounds"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wbad-function-cast " >&5
 $as_echo_n "checking for C compiler flag(s) -Wbad-function-cast ... " >&6; }
 
@@ -11966,6 +12209,47 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wformat-overflow " >&5
+$as_echo_n "checking for C compiler flag(s) -Wformat-overflow ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wformat-overflow"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wformat-security " >&5
 $as_echo_n "checking for C compiler flag(s) -Wformat-security ... " >&6; }
 
@@ -12012,6 +12296,47 @@ $as_echo_n "checking for C compiler flag(s) -Wformat-signedness ... " >&6; }
 
 		CFLAGS_SAVED="${CFLAGS}"
 		CFLAGS="${CFLAGS} -Wformat-signedness"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wformat-truncation " >&5
+$as_echo_n "checking for C compiler flag(s) -Wformat-truncation ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wformat-truncation"
 
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -12422,6 +12747,47 @@ $as_echo_n "checking for C compiler flag(s) -Wmissing-prototypes ... " >&6; }
 
 		CFLAGS_SAVED="${CFLAGS}"
 		CFLAGS="${CFLAGS} -Wmissing-prototypes"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wmultistatement-macros " >&5
+$as_echo_n "checking for C compiler flag(s) -Wmultistatement-macros ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wmultistatement-macros"
 
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -15795,12 +16161,6 @@ Configuration:
     Data Directory ..........: ${DATADIR}
     PID Directory ...........: ${RUNDIR}
 
-    Contrib Modules .........: ${CONTRIB_MODULES}
-    Internationalization ....: ${USE_GETTEXT}
-    Large Network Support ...: ${LARGE_NET}
-    Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}
-    Build Warnings ..........: ${BUILD_WARNINGS}
-
     crypt(3) Support ........: ${LIBCRYPT}
     CrackLib Support ........: ${LIBCRACKLIB}
     LDAP Support ............: ${LIBLDAP}
@@ -15811,11 +16171,20 @@ Configuration:
     PCRE Support ............: ${LIBPCRE}
     Perl Support ............: ${LIBPERL}
     QR Code Support .........: ${LIBQRENCODE}
+    Sodium Support ..........: ${LIBSODIUM}
+
+    Contrib Modules .........: ${CONTRIB_MODULES}
+    Internationalization ....: ${USE_GETTEXT}
+    Large Network Support ...: ${LARGE_NET}
+    Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}
+    Sodium Memory Allocator .: ${SODIUM_MALLOC}
+    Build Warnings ..........: ${BUILD_WARNINGS}
 
     Digest Frontend .........: ${DIGEST_FRONTEND}
     Mowgli Installation .....: ${MOWGLI_SOURCE}
 
     Fallback RNG Enabled ....: ${ARC4RANDOM_BUILDING}
+    Legacy Crypto Modules ...: ${LEGACY_PWCRYPTO}
 
     CC ......................: ${CC}
     CFLAGS ..................: ${CFLAGS}

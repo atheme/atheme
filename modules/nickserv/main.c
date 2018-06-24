@@ -115,7 +115,7 @@ c_ni_emailexempts(mowgli_config_file_entry_t *ce)
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, nicksvs.emailexempts.head)
 	{
-		free(n->data);
+		sfree(n->data);
 		mowgli_node_delete(n, &nicksvs.emailexempts);
 		mowgli_node_free(n);
 	}

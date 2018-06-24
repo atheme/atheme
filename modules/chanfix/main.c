@@ -24,7 +24,7 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 
 	if (rec != NULL)
 	{
-		free(rec);
+		sfree(rec);
 		return;
 	}
 

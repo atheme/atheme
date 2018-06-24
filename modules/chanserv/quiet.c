@@ -247,7 +247,7 @@ notify_victims(struct sourceinfo *si, struct channel *c, struct chanban *cb, int
 		for (i = 0; i < to_notify_count; i++)
 			notify_one_victim(si, c, to_notify[i], dir);
 
-	free(tmpban.mask);
+	sfree(tmpban.mask);
 }
 
 static void
@@ -344,7 +344,7 @@ cs_cmd_quiet(struct sourceinfo *si, int parc, char *parv[])
 			continue;
 		}
 	} while ((target = strtok_r(NULL, " ", &strtokctx)) != NULL);
-	free(targetlist);
+	sfree(targetlist);
 }
 
 static void
@@ -462,7 +462,7 @@ cs_cmd_unquiet(struct sourceinfo *si, int parc, char *parv[])
 
 	} while ((target = strtok_r(NULL, " ", &strtokctx)) != NULL);
 
-	free(targetlist);
+	sfree(targetlist);
 }
 
 static struct command cs_quiet = {

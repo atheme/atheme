@@ -35,12 +35,12 @@ clear_httpddata(struct httpddata *hd)
 	hd->filename[0] = '\0';
 	if (hd->requestbuf != NULL)
 	{
-		free(hd->requestbuf);
+		sfree(hd->requestbuf);
 		hd->requestbuf = NULL;
 	}
 	if (hd->replybuf != NULL)
 	{
-		free(hd->replybuf);
+		sfree(hd->replybuf);
 		hd->replybuf = NULL;
 	}
 	hd->length = 0;
@@ -337,8 +337,8 @@ httpd_closehandler(struct connection *cptr)
 	hd = cptr->userdata;
 	if (hd != NULL)
 	{
-		free(hd->requestbuf);
-		free(hd);
+		sfree(hd->requestbuf);
+		sfree(hd);
 	}
 	cptr->userdata = NULL;
 }
@@ -423,7 +423,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	mowgli_timer_destroy(base_eventloop, httpd_checkidle_timer);
 
 	hook_del_config_ready(httpd_config_ready);
-	connection_close_soon_children(listener);
+	connection_close_children(listener);
 	del_conf_item("HOST", &conf_httpd_table);
 	del_conf_item("WWW_ROOT", &conf_httpd_table);
 	del_conf_item("PORT", &conf_httpd_table);

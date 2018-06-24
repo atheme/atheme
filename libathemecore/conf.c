@@ -426,7 +426,7 @@ c_operclass(mowgli_config_file_entry_t *ce)
 					strcpy(newprivs, privs);
 					strcat(newprivs, " ");
 					strcat(newprivs, ce->vardata);
-					free(privs);
+					sfree(privs);
 					privs = newprivs;
 				}
 			}
@@ -454,7 +454,7 @@ c_operclass(mowgli_config_file_entry_t *ce)
 						strcpy(newprivs, privs);
 						strcat(newprivs, " ");
 						strcat(newprivs, conf_p->varname);
-						free(privs);
+						sfree(privs);
 						privs = newprivs;
 					}
 				}
@@ -482,7 +482,7 @@ c_operclass(mowgli_config_file_entry_t *ce)
 				strcpy(newprivs, privs);
 				strcat(newprivs, " ");
 				strcat(newprivs, parent->privs);
-				free(privs);
+				sfree(privs);
 				privs = newprivs;
 			}
 		}
@@ -496,7 +496,7 @@ c_operclass(mowgli_config_file_entry_t *ce)
 	}
 
 	operclass_add(name, privs ? privs : "", flags);
-	free(privs);
+	sfree(privs);
 	return 0;
 }
 
@@ -765,7 +765,7 @@ c_gi_exempts(mowgli_config_file_entry_t *ce)
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, config_options.exempts.head)
 	{
-		free(n->data);
+		sfree(n->data);
 		mowgli_node_delete(n, &config_options.exempts);
 		mowgli_node_free(n);
 	}
@@ -824,7 +824,7 @@ copy_me(struct me *src, struct me *dst)
 	dst->adminname = sstrdup(src->adminname);
 	dst->adminemail = sstrdup(src->adminemail);
 	dst->register_email = sstrdup(src->register_email);
-	dst->mta = src->mta ? sstrdup(src->mta) : NULL;
+	dst->mta = sstrdup(src->mta);
 	dst->maxlogins = src->maxlogins;
 	dst->maxusers = src->maxusers;
 	dst->emaillimit = src->emaillimit;
@@ -835,12 +835,12 @@ copy_me(struct me *src, struct me *dst)
 static void
 free_cstructs(struct me *mesrc)
 {
-	free(mesrc->netname);
-	free(mesrc->hidehostsuffix);
-	free(mesrc->adminname);
-	free(mesrc->adminemail);
-	free(mesrc->register_email);
-	free(mesrc->mta);
+	sfree(mesrc->netname);
+	sfree(mesrc->hidehostsuffix);
+	sfree(mesrc->adminname);
+	sfree(mesrc->adminemail);
+	sfree(mesrc->register_email);
+	sfree(mesrc->mta);
 }
 
 bool
@@ -888,7 +888,7 @@ conf_rehash(void)
 		unmark_all_illegal();
 
 		free_cstructs(hold_me);
-		free(hold_me);
+		sfree(hold_me);
 
 		runflags &= ~RF_REHASHING;
 		return false;
@@ -902,7 +902,7 @@ conf_rehash(void)
 	remove_illegals();
 
 	free_cstructs(hold_me);
-	free(hold_me);
+	sfree(hold_me);
 
 	runflags &= ~RF_REHASHING;
 	return true;

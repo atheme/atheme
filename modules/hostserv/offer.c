@@ -109,8 +109,8 @@ remove_group_offered_hosts(struct mygroup *mg)
 			mowgli_node_delete(n, &hs_offeredlist);
 
 			strshare_unref(l->creator);
-			free(l->vhost);
-			free(l);
+			sfree(l->vhost);
+			sfree(l);
 		}
 	}
 }
@@ -220,8 +220,8 @@ hs_cmd_unoffer(struct sourceinfo *si, int parc, char *parv[])
 		mowgli_node_delete(&l->node, &hs_offeredlist);
 
 		strshare_unref(l->creator);
-		free(l->vhost);
-		free(l);
+		sfree(l->vhost);
+		sfree(l);
 
 		l = hs_offer_find(host, NULL);
 	}

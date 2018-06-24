@@ -35,16 +35,6 @@ uint32_t                        atheme_arc4random_uniform(uint32_t upper_bound);
 #  define arc4random_uniform    atheme_arc4random_uniform
 #endif /* !HAVE_ARC4RANDOM || !HAVE_ARC4RANDOM_BUF || !HAVE_ARC4RANDOM_UNIFORM */
 
-#ifndef HAVE_EXPLICIT_BZERO
-#  ifdef HAVE_MEMSET_S
-#    define explicit_bzero(p, n) memset_s((p), (n), 0x00, (n))
-#  else /* HAVE_MEMSET_S */
-/* explicit_bzero.c */
-extern void *(* volatile volatile_memset)(void *, int, size_t);
-void explicit_bzero(void *p, size_t n);
-#  endif /* !HAVE_MEMSET_S */
-#endif /* !HAVE_EXPLICIT_BZERO */
-
 /* cidr.c */
 int valid_ip_or_mask(const char *src);
 
@@ -135,6 +125,7 @@ struct email_canonicalizer_item
 };
 
 /* misc string stuff */
+bool string_in_list(const char *str, const char *list);
 char *random_string(size_t sz) ATHEME_FATTR_MALLOC;
 const char *create_weak_challenge(struct sourceinfo *si, const char *name);
 void tb2sp(char *line);

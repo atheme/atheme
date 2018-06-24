@@ -77,7 +77,7 @@ pcommand_delete(const char *token)
 
 	mowgli_patricia_delete(pcommands, pcmd->token);
 
-	free(pcmd->token);
+	sfree(pcmd->token);
 	pcmd->handler = NULL;
 	mowgli_heap_free(pcommand_heap, pcmd);
 }

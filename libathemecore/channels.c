@@ -181,14 +181,10 @@ channel_delete(struct channel *c)
 	clear_simple_modes(c);
 	chanban_clear(c);
 
-	if (c->extmodes != NULL)
-		free(c->extmodes);
-
-	free(c->name);
-	if (c->topic != NULL)
-		free(c->topic);
-	if (c->topic_setter != NULL)
-		free(c->topic_setter);
+	sfree(c->extmodes);
+	sfree(c->name);
+	sfree(c->topic);
+	sfree(c->topic_setter);
 
 	mowgli_heap_free(chan_heap, c);
 
@@ -269,7 +265,7 @@ chanban_delete(struct chanban * c)
 
 	mowgli_node_delete(&c->node, &c->chan->bans);
 
-	free(c->mask);
+	sfree(c->mask);
 	mowgli_heap_free(chanban_heap, c);
 }
 

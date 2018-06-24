@@ -97,6 +97,7 @@ dnl Checks for header files.
 AC_CHECK_HEADERS([link.h], [], [], [])
 
 dnl Checks for library functions.
+AC_DEFINE([__STDC_WANT_LIB_EXT1__], [1], [We want ISO 9899:2011 Annex K memory functions if available])
 AC_CHECK_FUNCS([arc4random arc4random_buf arc4random_uniform explicit_bzero memset_s])
 AC_CHECK_FUNCS([execve flock fork getpid getrlimit gettimeofday strcasestr strtok_r])
 AC_CHECK_FUNC([socket], [], [AC_CHECK_LIB([socket], [socket])])
@@ -120,15 +121,6 @@ AS_IF([test "x${ac_cv_func_arc4random}x${ac_cv_func_arc4random_buf}x${ac_cv_func
 
 
 
-dnl If we don't have explicit_bzero(3)/memset_s(3) then we need explicit_bzero.c which provides a fallback
-EXPLICIT_BZERO_COND_C=""
-AS_IF([test "x${ac_cv_func_explicit_bzero}x${ac_cv_func_memset_s}" = "xnoxno"], [
-	EXPLICIT_BZERO_COND_C="explicit_bzero.c"
-	AC_SUBST([EXPLICIT_BZERO_COND_C])
-])
-
-
-
 dnl Libraries that are autodetected (alphabetical)
 ATHEME_LIBTEST_CRACKLIB
 ATHEME_LIBTEST_CRYPT
@@ -139,6 +131,7 @@ ATHEME_LIBTEST_NETTLE
 ATHEME_LIBTEST_OPENSSL
 ATHEME_LIBTEST_PCRE
 ATHEME_LIBTEST_QRENCODE
+ATHEME_LIBTEST_SODIUM
 
 dnl Libraries that need to be explicitly enabled (alphabetical)
 ATHEME_LIBTEST_PERL
@@ -150,7 +143,9 @@ dnl Optional features
 ATHEME_FEATURETEST_CONTRIB
 ATHEME_FEATURETEST_FHSPATHS
 ATHEME_FEATURETEST_LARGENET
+ATHEME_FEATURETEST_LEGACY_PWCRYPTO
 ATHEME_FEATURETEST_REPROBUILDS
+ATHEME_FEATURETEST_SODIUM_MALLOC
 
 dnl These must be here, not above, or they might interfere with library and feature tests
 dnl Explanation is that these modify one or more of CFLAGS, CPPFLAGS, LDFLAGS, and LIBS

@@ -114,9 +114,9 @@ itranslation_destroy(const char *str)
 	if (t == NULL)
 		return;
 
-	free(t->name);
-	free(t->replacement);
-	free(t);
+	sfree(t->name);
+	sfree(t->replacement);
+	sfree(t);
 }
 
 /*
@@ -170,9 +170,9 @@ translation_destroy(const char *str)
 	if (t == NULL)
 		return;
 
-	free(t->name);
-	free(t->replacement);
-	free(t);
+	sfree(t->name);
+	sfree(t->replacement);
+	sfree(t);
 }
 
 enum

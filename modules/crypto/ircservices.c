@@ -61,6 +61,8 @@ atheme_ircservices_verify(const char *const restrict password, const char *const
 	if (strcmp(result, parameters) != 0)
 		return false;
 
+	(void) smemzero(result, sizeof result);
+
 	return true;
 }
 

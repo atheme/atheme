@@ -248,7 +248,7 @@ blake2b_init(struct blake2b_state *const restrict state, const size_t outlen,
 
 		const bool result = blake2b_update(state, block, sizeof block);
 
-		(void) explicit_bzero(block, sizeof block);
+		(void) smemzero(block, sizeof block);
 
 		return result;
 	}
@@ -274,6 +274,9 @@ blake2b_final(struct blake2b_state *const restrict state, uint8_t *const restric
 		(void) blake2b_store64(&buffer[(x * sizeof state->h[x])], state->h[x]);
 
 	(void) memcpy(out, buffer, state->outlen);
+	(void) smemzero(buffer, sizeof buffer);
+	(void) smemzero(state, sizeof *state);
+
 	return true;
 }
 
@@ -359,6 +362,9 @@ blake2b_long(const uint8_t *const restrict in, const size_t inlen,
 		return false;
 
 	(void) memcpy(out, obuf, remain);
+	(void) smemzero(ibuf, sizeof ibuf);
+	(void) smemzero(obuf, sizeof obuf);
+
 	return true;
 }
 

@@ -49,12 +49,12 @@ uplink_add(const char *name, const char *host, const char *send_password, const 
 		if (u->flags & UPF_ILLEGAL)
 		{
 			u->flags &= ~UPF_ILLEGAL;
-			free(u->name);
-			free(u->host);
-			free(u->send_pass);
-			free(u->receive_pass);
-			if (u->vhost)
-				free(u->vhost);
+
+			sfree(u->name);
+			sfree(u->host);
+			sfree(u->send_pass);
+			sfree(u->receive_pass);
+			sfree(u->vhost);
 		}
 		else
 		{
@@ -73,8 +73,7 @@ uplink_add(const char *name, const char *host, const char *send_password, const 
 	u->host = sstrdup(host);
 	u->send_pass = sstrdup(send_password);
 	u->receive_pass = sstrdup(receive_password);
-	if (vhost)
-		u->vhost = sstrdup(vhost);
+	u->vhost = sstrdup(vhost);
 	u->port = port;
 
 	return u;
@@ -83,12 +82,11 @@ uplink_add(const char *name, const char *host, const char *send_password, const 
 void
 uplink_delete(struct uplink * u)
 {
-	free(u->name);
-	free(u->host);
-	free(u->send_pass);
-	free(u->receive_pass);
-	if (u->vhost)
-		free(u->vhost);
+	sfree(u->name);
+	sfree(u->host);
+	sfree(u->send_pass);
+	sfree(u->receive_pass);
+	sfree(u->vhost);
 
 	mowgli_node_delete(&u->node, &uplinks);
 	mowgli_heap_free(uplink_heap, u);

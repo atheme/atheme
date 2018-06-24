@@ -188,14 +188,14 @@ ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 		{
 			command_fail(si, fault_emailfail, _("Sending email failed, sorry! Registration aborted."));
 			atheme_object_unref(mu);
-			free(key);
+			sfree(key);
 			return;
 		}
 
 		command_success_nodata(si, _("An email containing nickname activation instructions has been sent to \2%s\2."), mu->email);
 		command_success_nodata(si, _("If you do not complete registration within one day, your nickname will expire."));
 
-		free(key);
+		sfree(key);
 	}
 
 	if (si->su != NULL)

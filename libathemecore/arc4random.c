@@ -367,7 +367,7 @@ _rs_stir_if_needed(const size_t len)
 		else
 			(void) _rs_rekey(tmp);
 
-		(void) explicit_bzero(tmp, sizeof tmp);
+		(void) smemzero(tmp, sizeof tmp);
 		(void) memset(rs_buf, 0x00, sizeof rs_buf);
 
 		rs_stir_pid = pid;

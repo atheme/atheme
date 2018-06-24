@@ -212,9 +212,9 @@ xmlrpc_process(char *buffer, void *userdata)
 		xmlrpc_error_code = -2;
 		xmlrpc_generic_error(xmlrpc_error_code, "XMLRPC error: Invalid document end at line 1");
 	}
-	free(av);
-	free(tmp);
-	free(name);
+	sfree(av);
+	sfree(tmp);
+	sfree(name);
 }
 
 void
@@ -365,8 +365,8 @@ xmlrpc_generic_error(int code, const char *string)
 		strcpy(s2, header);
 		memcpy(s2 + strlen(header), s->str, len);
 		xmlrpc.setbuffer(s2, len + strlen(header));
-		free(header);
-		free(s2);
+		sfree(header);
+		sfree(s2);
 	}
 	else
 		xmlrpc.setbuffer(s->str, len);
@@ -391,7 +391,7 @@ xmlrpc_about(void *userdata, int ac, char **av)
 	arraydata = xmlrpc_array(4, buf, buf2, buf3, buf4);
 
 	xmlrpc_send(1, arraydata);
-	free(arraydata);
+	sfree(arraydata);
 	return XMLRPC_CONT;
 }
 
@@ -441,8 +441,8 @@ xmlrpc_send(int argc, ...)
 		strcpy(s2, header);
 		memcpy(s2 + strlen(header), s->str, len);
 		xmlrpc.setbuffer(s2, len + strlen(header));
-		free(header);
-		free(s2);
+		sfree(header);
+		sfree(s2);
 		xmlrpc.httpheader = 1;
 	}
 	else
@@ -451,7 +451,7 @@ xmlrpc_send(int argc, ...)
 	}
 	if (xmlrpc.encode)
 	{
-		free(xmlrpc.encode);
+		sfree(xmlrpc.encode);
 		xmlrpc.encode = NULL;
 	}
 
@@ -496,8 +496,8 @@ xmlrpc_send_string(const char *value)
 		strcpy(s2, header);
 		memcpy(s2 + strlen(header), s->str, len);
 		xmlrpc.setbuffer(s2, len + strlen(header));
-		free(header);
-		free(s2);
+		sfree(header);
+		sfree(s2);
 		xmlrpc.httpheader = 1;
 	}
 	else
@@ -506,7 +506,7 @@ xmlrpc_send_string(const char *value)
 	}
 	if (xmlrpc.encode)
 	{
-		free(xmlrpc.encode);
+		sfree(xmlrpc.encode);
 		xmlrpc.encode = NULL;
 	}
 
@@ -540,10 +540,10 @@ xmlrpc_integer(char *buf, int value)
 	else
 	{
 		snprintf(buf, XMLRPC_BUFSIZE, "%s%d%s", xmlrpc.inttagstart, value, xmlrpc.inttagend);
-		free(xmlrpc.inttagstart);
+		sfree(xmlrpc.inttagstart);
 		if (xmlrpc.inttagend)
 		{
-			free(xmlrpc.inttagend);
+			sfree(xmlrpc.inttagend);
 			xmlrpc.inttagend = NULL;
 		}
 		xmlrpc.inttagstart = NULL;
@@ -600,7 +600,7 @@ xmlrpc_array(int argc, ...)
 		else
 		{
 			snprintf(buf, XMLRPC_BUFSIZE, "%s\r\n     <value>%s</value>", s, a);
-			free(s);
+			sfree(s);
 			s = sstrdup(buf);
 		}
 	}
@@ -608,7 +608,7 @@ xmlrpc_array(int argc, ...)
 
 	snprintf(buf, XMLRPC_BUFSIZE, "<array>\r\n    <data>\r\n  %s\r\n    </data>\r\n   </array>", s);
 	len = strlen(buf);
-	free(s);
+	sfree(s);
 	return sstrdup(buf);
 }
 

@@ -410,10 +410,10 @@ opensex_db_close(struct database_handle *db)
 #endif
 	}
 
-	free(rs->buf);
-	free(rs);
-	free(db->file);
-	free(db);
+	sfree(rs->buf);
+	sfree(rs);
+	sfree(db->file);
+	sfree(db);
 }
 
 static const struct database_module opensex_mod = {

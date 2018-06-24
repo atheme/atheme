@@ -241,10 +241,9 @@ server_delete_serv(struct server *s)
 	if (s->flags & SF_JUPE_PENDING)
 		jupe(s->name, "Juped");
 
-	free(s->name);
-	free(s->desc);
-	if (s->sid)
-		free(s->sid);
+	sfree(s->name);
+	sfree(s->desc);
+	sfree(s->sid);
 
 	mowgli_heap_free(serv_heap, s);
 
@@ -345,7 +344,7 @@ tld_delete(const char *name)
         mowgli_node_delete(n, &tldlist);
         mowgli_node_free(n);
 
-        free(tld->name);
+        sfree(tld->name);
         mowgli_heap_free(tld_heap, tld);
 
         cnt.tld--;

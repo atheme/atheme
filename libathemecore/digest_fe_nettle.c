@@ -174,7 +174,7 @@ digest_final(struct digest_context *const restrict ctx, void *const restrict out
 		(void) ctx->init(&ctx->state);
 		(void) ctx->update(&ctx->state, ctx->blksz, ctx->okey);
 		(void) ctx->update(&ctx->state, ctx->digsz, inner_digest);
-		(void) explicit_bzero(inner_digest, sizeof inner_digest);
+		(void) smemzero(inner_digest, sizeof inner_digest);
 	}
 
 	(void) ctx->final(&ctx->state, ctx->digsz, out);
@@ -321,13 +321,13 @@ digest_pbkdf2_hmac(const unsigned int alg, const void *const restrict pass, cons
 		(void) ctx.update(&ctx.state, ctx.blksz, ctx.ikey);
 	}
 
-	(void) explicit_bzero(&ctx, sizeof ctx);
-	(void) explicit_bzero(dtmp, sizeof dtmp);
+	(void) smemzero(&ctx, sizeof ctx);
+	(void) smemzero(dtmp, sizeof dtmp);
 	return true;
 
 error:
-	(void) explicit_bzero(&ctx, sizeof ctx);
-	(void) explicit_bzero(dtmp, sizeof dtmp);
-	(void) explicit_bzero(dk, dkLen);
+	(void) smemzero(&ctx, sizeof ctx);
+	(void) smemzero(dtmp, sizeof dtmp);
+	(void) smemzero(dk, dkLen);
 	return false;
 }

@@ -718,7 +718,7 @@ flatfile_db_load(const char *filename)
 
 	fclose(f);
 
-	free(buf);
+	sfree(buf);
 
 	slog(LG_DEBUG, "db_load(): ------------------------- done -------------------------");
 	db_save(NULL, DB_SAVE_BLOCKING);

@@ -66,7 +66,7 @@ operclass_add(const char *name, const char *privs, int flags)
 
 		slog(LG_DEBUG, "operclass_add(): update %s [%s]", name, privs);
 
-		free(operclass->privs);
+		sfree(operclass->privs);
 		operclass->privs = sstrdup(privs);
 		operclass->flags = flags | (builtin ? OPERCLASS_BUILTIN : 0);
 
@@ -116,8 +116,8 @@ operclass_delete(struct operclass *operclass)
 			soper->operclass = NULL;
 	}
 
-	free(operclass->name);
-	free(operclass->privs);
+	sfree(operclass->name);
+	sfree(operclass->privs);
 
 	mowgli_heap_free(operclass_heap, operclass);
 	cnt.operclass--;
@@ -223,11 +223,9 @@ soper_delete(struct soper *soper)
 	if (soper->myuser)
 		soper->myuser->soper = NULL;
 
-	if (soper->name)
-		free(soper->name);
-
-	free(soper->classname);
-	free(soper->password);
+	sfree(soper->name);
+	sfree(soper->classname);
+	sfree(soper->password);
 
 	mowgli_heap_free(soper_heap, soper);
 
@@ -292,36 +290,12 @@ is_conf_soper(struct myuser *myuser)
 	return false;
 }
 
-/* name1 name2 name3... */
-static bool
-string_in_list(const char *str, const char *name)
-{
-	char *p;
-	int l;
-
-	if (str == NULL)
-		return false;
-	l = strlen(name);
-	while (*str != '\0')
-	{
-		p = strchr(str, ' ');
-		if (p != NULL ? p - str == l && !strncasecmp(str, name, p - str) : !strcasecmp(str, name))
-			return true;
-		if (p == NULL)
-			return false;
-		str = p;
-		while (*str == ' ')
-			str++;
-	}
-	return false;
-}
-
 bool
 has_priv_operclass(struct operclass *operclass, const char *priv)
 {
 	if (operclass == NULL)
 		return false;
-	if (string_in_list(operclass->privs, priv))
+	if (string_in_list(priv, operclass->privs))
 		return true;
 	return false;
 }
@@ -427,12 +401,12 @@ has_all_operclass(struct sourceinfo *si, struct operclass *operclass)
 	{
 		if (!has_priv(si, priv))
 		{
-			free(privs2);
+			sfree(privs2);
 			return false;
 		}
 		priv = strtok(NULL, " ");
 	}
-	free(privs2);
+	sfree(privs2);
 	return true;
 }
 

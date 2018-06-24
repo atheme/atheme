@@ -25,7 +25,7 @@ netsplit_delete_serv(struct netsplit *const restrict s)
 {
 	(void) mowgli_patricia_delete(splitlist, s->name);
 
-	(void) free(s->name);
+	(void) sfree(s->name);
 
 	(void) mowgli_heap_free(split_heap, s);
 }

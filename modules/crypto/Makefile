@@ -5,18 +5,14 @@
 
 MODULE		= crypto
 
-SRCS =				\
-	argon2d.c		\
-	blake2b.c		\
-	crypt3-des.c		\
-	crypt3-md5.c		\
-	crypt3-sha2-256.c	\
-	crypt3-sha2-512.c	\
-	ircservices.c		\
-	pbkdf2.c		\
-	pbkdf2v2.c		\
-	rawmd5.c		\
-	rawsha1.c
+SRCS =					\
+	argon2d.c			\
+	blake2b.c			\
+	crypt3-sha2-256.c		\
+	crypt3-sha2-512.c		\
+	pbkdf2.c			\
+	pbkdf2v2.c			\
+	$(LEGACY_PWCRYPTO_COND_C)
 
 include ../../extra.mk
 include ../../buildsys.mk

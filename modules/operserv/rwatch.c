@@ -113,11 +113,11 @@ load_rwatchdb(char *path)
 
 	if (rw != NULL)
 	{
-		free(rw->regex);
-		free(rw->reason);
+		sfree(rw->regex);
+		sfree(rw->reason);
 		if (rw->re != NULL)
 			regex_destroy(rw->re);
-		free(rw);
+		sfree(rw);
 	}
 }
 
@@ -270,11 +270,11 @@ os_cmd_rwatch_del(struct sourceinfo *si, int parc, char *parv[])
 				}
 				wallops("\2%s\2 disabled quarantine on regex watch pattern \2%s\2", get_oper_name(si), pattern);
 			}
-			free(rw->regex);
-			free(rw->reason);
+			sfree(rw->regex);
+			sfree(rw->reason);
 			if (rw->re != NULL)
 				regex_destroy(rw->re);
-			free(rw);
+			sfree(rw);
 			mowgli_node_delete(n, &rwatch_list);
 			mowgli_node_free(n);
 			command_success_nodata(si, _("Removed \2%s\2 from regex watch list."), pattern);

@@ -104,6 +104,17 @@ atheme_argon2d_mempool_realloc(const uint32_t mem_blocks)
 }
 
 static inline void
+atheme_argon2d_mempool_zero(void)
+{
+	if (! argon2d_mempool)
+		return;
+
+	const size_t mempool_sz_bytes = argon2d_mempoolsz * sizeof(struct argon2d_block);
+
+	(void) smemzero(argon2d_mempool, mempool_sz_bytes);
+}
+
+static inline void
 argon2d_copy_block(struct argon2d_block *const restrict dst, const struct argon2d_block *const restrict src)
 {
 	(void) memcpy(dst->v, src->v, (0x08 * ARGON2_BLK_QWORDS));
@@ -274,6 +285,9 @@ argon2d_fill_block(const struct argon2d_block *const prev, const struct argon2d_
 
 	(void) argon2d_copy_block(next, &block_x);
 	(void) argon2d_xor_block(next, &block_r);
+
+	(void) smemzero(&block_r, sizeof block_r);
+	(void) smemzero(&block_x, sizeof block_x);
 }
 
 static inline void
@@ -347,10 +361,17 @@ argon2d_hash_raw(struct argon2d_context *const restrict ctx)
 	}
 
 	struct argon2d_block bhash_final;
+
 	(void) argon2d_copy_block(&bhash_final, &argon2d_mempool[ctx->lane_len - 0x01]);
 	(void) argon2d_store_block(bhash_bytes, &bhash_final);
 
-	return blake2bfn->b2b_long(bhash_bytes, ARGON2_BLKSZ, NULL, 0, ctx->hash, ATHEME_ARGON2D_HASHLEN);
+	const bool ret = blake2bfn->b2b_long(bhash_bytes, ARGON2_BLKSZ, NULL, 0, ctx->hash, ATHEME_ARGON2D_HASHLEN);
+
+	(void) smemzero(bhash_init, sizeof bhash_init);
+	(void) smemzero(bhash_bytes, sizeof bhash_bytes);
+	(void) smemzero(&bhash_final, sizeof bhash_final);
+
+	return ret;
 }
 
 static const char *
@@ -380,6 +401,9 @@ atheme_argon2d_crypt(const char *const restrict password,
 	static char res[PASSLEN + 1];
 	if (snprintf(res, sizeof res, ATHEME_ARGON2D_SAVEHASH, ctx.m_cost, ctx.t_cost, salt_b64, hash_b64) > PASSLEN)
 		return NULL;
+
+	(void) smemzero(&ctx, sizeof ctx);
+	(void) atheme_argon2d_mempool_zero();
 
 	return res;
 }
@@ -446,6 +470,9 @@ atheme_argon2d_verify(const char *const restrict password, const char *const res
 
 	if (atheme_argon2d_recrypt(&ctx))
 		*flags |= PWVERIFY_FLAG_RECRYPT;
+
+	(void) smemzero(&ctx, sizeof ctx);
+	(void) atheme_argon2d_mempool_zero();
 
 	return true;
 }

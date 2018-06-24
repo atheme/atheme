@@ -72,9 +72,9 @@ account_drop_request(struct myuser *mu)
                         mowgli_node_delete(n, &helpserv_reqlist);
 
                         strshare_unref(l->nick);
-                        free(l->creator);
-                        free(l->topic);
-                        free(l);
+                        sfree(l->creator);
+                        sfree(l->topic);
+                        sfree(l);
 
                         return;
                 }
@@ -97,9 +97,9 @@ account_delete_request(struct myuser *mu)
                         mowgli_node_delete(n, &helpserv_reqlist);
 
                         strshare_unref(l->nick);
-                        free(l->creator);
-                        free(l->topic);
-                        free(l);
+                        sfree(l->creator);
+                        sfree(l->topic);
+                        sfree(l);
 
                         return;
                 }
@@ -151,7 +151,7 @@ helpserv_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 				slog(LG_INFO, "HELP:REQUEST:THROTTLED: %s", si->su->nick);
 				return;
 			}
-			free(l->topic);
+			sfree(l->topic);
 			l->topic = sstrdup(topic);
 			l->ticket_ts = CURRTIME;;
 
@@ -237,9 +237,9 @@ helpserv_cmd_close(struct sourceinfo *si, int parc, char *parv[])
 			mowgli_node_delete(n, &helpserv_reqlist);
 
 			strshare_unref(l->nick);
-			free(l->creator);
-			free(l->topic);
-			free(l);
+			sfree(l->creator);
+			sfree(l->topic);
+			sfree(l);
 
 			return;
 		}
@@ -288,9 +288,9 @@ helpserv_cmd_cancel(struct sourceinfo *si, int parc, char *parv[])
                         mowgli_node_delete(n, &helpserv_reqlist);
 
                         strshare_unref(l->nick);
-                        free(l->creator);
-                        free(l->topic);
-                        free(l);
+                        sfree(l->creator);
+                        sfree(l->topic);
+                        sfree(l);
 
                         command_success_nodata(si, "Your help request has been cancelled.");
 

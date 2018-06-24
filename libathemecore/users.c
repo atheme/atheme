@@ -228,8 +228,7 @@ user_delete(struct user *u, const char *comment)
 	if (u->flags & UF_INVIS)
 		u->server->invis--;
 
-	if (u->certfp != NULL)
-		free(u->certfp);
+	sfree(u->certfp);
 
 	/* remove the user from each channel */
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, u->channels.head)

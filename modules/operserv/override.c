@@ -89,7 +89,7 @@ static void
 override_sourceinfo_dispose(struct override_sourceinfo *o_si)
 {
 	atheme_object_unref(o_si->parent_si);
-	free(o_si);
+	sfree(o_si);
 }
 
 static int

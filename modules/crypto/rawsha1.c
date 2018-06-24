@@ -41,6 +41,9 @@ atheme_rawsha1_verify(const char *const restrict password, const char *const res
 	if (strcmp(result, parameters + MODULE_PREFIX_LEN) != 0)
 		return false;
 
+	(void) smemzero(digest, sizeof digest);
+	(void) smemzero(result, sizeof result);
+
 	return true;
 }
 

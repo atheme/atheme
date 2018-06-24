@@ -142,7 +142,7 @@ sendq_flush(struct connection * cptr)
 			if (MOWGLI_LIST_LENGTH(&cptr->sendq) > 1)
 			{
                         	mowgli_node_delete(&sq->node, &cptr->sendq);
-                        	free(sq);
+				sfree(sq);
 			}
 			else
 				/* keep one struct sendq */
@@ -298,7 +298,7 @@ recvq_get(struct connection *cptr, char *buf, size_t len)
 			if (MOWGLI_LIST_LENGTH(&cptr->recvq) > 1)
 			{
 				mowgli_node_delete(&sq->node, &cptr->recvq);
-				free(sq);
+				sfree(sq);
 			}
 			else
 				/* keep one struct sendq */
@@ -358,7 +358,7 @@ recvq_getline(struct connection *cptr, char *buf, size_t len)
 			if (MOWGLI_LIST_LENGTH(&cptr->recvq) > 1)
 			{
 				mowgli_node_delete(&sq->node, &cptr->recvq);
-				free(sq);
+				sfree(sq);
 			}
 			else
 				/* keep one struct sendq */
@@ -381,7 +381,7 @@ sendqrecvq_free(struct connection *cptr)
 		sq = nptr->data;
 
 		mowgli_node_delete(&sq->node, &cptr->recvq);
-		free(sq);
+		sfree(sq);
 	}
 
 	MOWGLI_ITER_FOREACH_SAFE(nptr, nptr2, cptr->sendq.head)
@@ -389,7 +389,7 @@ sendqrecvq_free(struct connection *cptr)
 		sq = nptr->data;
 
 		mowgli_node_delete(&sq->node, &cptr->sendq);
-		free(sq);
+		sfree(sq);
 	}
 }
 

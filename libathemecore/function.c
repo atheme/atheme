@@ -15,8 +15,38 @@
 
 #include "atheme.h"
 
+bool
+string_in_list(const char *const restrict str, const char *restrict list)
+{
+	if (! str || ! *str || ! list || ! *list)
+		return false;
+
+	const size_t len = strlen(str);
+
+	while (*list)
+	{
+		const char *const ptr = strpbrk(list, " \t\r\n");
+
+		if (ptr && (size_t)(ptr - list) == len && strncasecmp(list, str, len) == 0)
+			return true;
+
+		if (! ptr && strcasecmp(list, str) == 0)
+			return true;
+
+		if (! ptr)
+			return false;
+
+		list = ptr;
+
+		while (*list == ' ' || *list == '\t' || *list == '\r' || *list == '\n')
+			list++;
+	}
+
+	return false;
+}
+
 /* This function uses smalloc() to allocate memory.
- * You MUST free() the result when you are done with it!
+ * You MUST sfree() the result when you are done with it!
  */
 char * ATHEME_FATTR_MALLOC
 random_string(const size_t sz)
@@ -346,7 +376,7 @@ unregister_email_canonicalizer(email_canonicalizer_fn func, void *user_data)
 		if (item->func == func && item->user_data == user_data)
 		{
 			mowgli_node_delete(&item->node, &email_canonicalizers);
-			free(item);
+			sfree(item);
 
 			canonicalize_emails();
 
@@ -629,7 +659,7 @@ sendemail_waited(pid_t pid, int status, void *data)
 	email = data;
 	if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
 		slog(LG_INFO, "sendemail_waited(): email for %s failed", email);
-	free(email);
+	sfree(email);
 }
 #endif
 

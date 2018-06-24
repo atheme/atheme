@@ -96,9 +96,9 @@ write_exemptdb(struct database_handle *db)
 		struct clones_exemption *c = n->data;
 		if (cexempt_expired(c))
 		{
-			free(c->ip);
-			free(c->reason);
-			free(c);
+			sfree(c->ip);
+			sfree(c->reason);
+			sfree(c);
 			mowgli_node_delete(n, &clone_exempts);
 			mowgli_node_free(n);
 		}
@@ -426,7 +426,7 @@ os_cmd_clones_addexempt(struct sourceinfo *si, int parc, char *parv[])
 	{
 		if (*rreason)
 		{
-			free(c->reason);
+			sfree(c->reason);
 			c->reason = sstrdup(rreason);
 		}
 		command_success_nodata(si, _("\2Warning\2: the syntax you are using to update this exemption has been deprecated and may be removed in a future version.  Please use SETEXEMPT in the future instead."));
@@ -459,17 +459,17 @@ os_cmd_clones_delexempt(struct sourceinfo *si, int parc, char *parv[])
 
 		if (cexempt_expired(c))
 		{
-			free(c->ip);
-			free(c->reason);
-			free(c);
+			sfree(c->ip);
+			sfree(c->reason);
+			sfree(c);
 			mowgli_node_delete(n, &clone_exempts);
 			mowgli_node_free(n);
 		}
 		else if (!strcmp(c->ip, arg))
 		{
-			free(c->ip);
-			free(c->reason);
-			free(c);
+			sfree(c->ip);
+			sfree(c->reason);
+			sfree(c);
 			mowgli_node_delete(n, &clone_exempts);
 			mowgli_node_free(n);
 			command_success_nodata(si, _("Removed \2%s\2 from clone exempt list."), arg);
@@ -540,9 +540,9 @@ os_cmd_clones_setexempt(struct sourceinfo *si, int parc, char *parv[])
 
 			if (cexempt_expired(c))
 			{
-				free(c->ip);
-				free(c->reason);
-				free(c);
+				sfree(c->ip);
+				sfree(c->reason);
+				sfree(c);
 				mowgli_node_delete(n, &clone_exempts);
 				mowgli_node_free(n);
 			}
@@ -620,7 +620,7 @@ os_cmd_clones_setexempt(struct sourceinfo *si, int parc, char *parv[])
 						mowgli_strlcat(rreason, reason, BUFSIZE);
 					}
 
-					free(c->reason);
+					sfree(c->reason);
 					c->reason = sstrdup(rreason);
 					command_success_nodata(si, _("Clone exemption reason for host \2%s\2 changed to \2%s\2"), ip, c->reason);
 				}
@@ -691,9 +691,9 @@ os_cmd_clones_listexempt(struct sourceinfo *si, int parc, char *parv[])
 
 		if (cexempt_expired(c))
 		{
-			free(c->ip);
-			free(c->reason);
-			free(c);
+			sfree(c->ip);
+			sfree(c->reason);
+			sfree(c);
 			mowgli_node_delete(n, &clone_exempts);
 			mowgli_node_free(n);
 		}

@@ -111,7 +111,7 @@ ms_cmd_ignore_del(struct sourceinfo *si, int parc, char *parv[])
 			command_success_nodata(si, _("Account \2%s\2 removed from ignore list."), temp);
 			mowgli_node_delete(n, &si->smu->memo_ignores);
 			mowgli_node_free(n);
-			free(temp);
+			sfree(temp);
 
 			return;
 		}
@@ -134,7 +134,7 @@ ms_cmd_ignore_clear(struct sourceinfo *si, int parc, char *parv[])
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, si->smu->memo_ignores.head)
 	{
-		free(n->data);
+		sfree(n->data);
 		mowgli_node_delete(n,&si->smu->memo_ignores);
 		mowgli_node_free(n);
 	}

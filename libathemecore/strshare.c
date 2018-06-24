@@ -79,7 +79,7 @@ strshare_unref(stringref str)
 	if (ss->refcount == 0)
 	{
 		mowgli_patricia_delete(strshare_dict, str);
-		free(ss);
+		sfree(ss);
 	}
 }
 

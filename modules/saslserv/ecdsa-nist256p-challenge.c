@@ -140,7 +140,7 @@ mech_finish(struct sasl_session *const restrict p)
 	if (s->pubkey)
 		(void) EC_KEY_free(s->pubkey);
 
-	(void) free(s);
+	(void) sfree(s);
 
 	p->mechdata = NULL;
 }

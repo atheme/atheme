@@ -154,10 +154,10 @@ ns_cmd_badmail(struct sourceinfo *si, int parc, char *parv[])
 
 				mowgli_node_delete(n, &ns_maillist);
 
-				free(l->mail);
-				free(l->creator);
-				free(l->reason);
-				free(l);
+				sfree(l->mail);
+				sfree(l->creator);
+				sfree(l->reason);
+				sfree(l);
 
 				command_success_nodata(si, _("You have unbanned email address \2%s\2."), email);
 				return;

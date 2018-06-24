@@ -609,13 +609,13 @@ regex_create(char *pattern, int flags)
 		{
 			slog(LG_ERROR, "regex_match(): %s at offset %d in %s",
 					errptr, erroffset, pattern);
-			free(preg);
+			sfree(preg);
 			return NULL;
 		}
 		preg->type = at_pcre;
 #else
 		slog(LG_ERROR, "regex_match(): PCRE support is not compiled in");
-		free(preg);
+		sfree(preg);
 		return NULL;
 #endif
 	}
@@ -629,7 +629,7 @@ regex_create(char *pattern, int flags)
 			slog(LG_ERROR, "regex_match(): %s in %s",
 					errmsg, pattern);
 			regfree(&preg->un.posix);
-			free(preg);
+			sfree(preg);
 			return NULL;
 		}
 		preg->type = at_posix;
@@ -726,7 +726,7 @@ regex_destroy(struct atheme_regex *preg)
 			return false;
 #endif
 	}
-	free(preg);
+	sfree(preg);
 	return true;
 }
 

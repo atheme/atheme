@@ -57,7 +57,7 @@ sharedheap_destroy(struct sharedheap *s)
 	mowgli_heap_destroy(s->heap);
 	mowgli_node_delete(&s->node, &sharedheap_list);
 
-	free(s);
+	sfree(s);
 }
 
 static inline size_t

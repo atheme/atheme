@@ -25,8 +25,16 @@
 #include <ext/getopt_long.h> /* XXX */
 
 #ifdef HAVE_GETRLIMIT
-# include <sys/resource.h>
+#  include <sys/resource.h>
 #endif
+
+#ifdef HAVE_LIBSODIUM
+#  include <sodium/core.h>
+#endif /* HAVE_LIBSODIUM */
+
+#if !defined(HAVE_MEMSET_S) && !defined(HAVE_EXPLICIT_BZERO) && !defined(HAVE_LIBSODIUM)
+void *(* volatile volatile_memset)(void *, int, size_t) = &memset;
+#endif /* !HAVE_MEMSET_S && !HAVE_EXPLICIT_BZERO && !HAVE_LIBSODIUM */
 
 struct ConfOption config_options;
 
@@ -273,6 +281,14 @@ atheme_main(int argc, char *argv[])
 	mowgli_getopt_option_t long_opts[] = {
 		{ NULL, 0, NULL, 0, 0 },
 	};
+
+#ifdef HAVE_LIBSODIUM
+	if (sodium_init() == -1)
+	{
+		(void) fprintf(stderr, "Error: sodium_init() failed!\n");
+		exit(EXIT_FAILURE);
+	}
+#endif /* HAVE_LIBSODIUM */
 
 	atheme_bootstrap();
 

@@ -90,13 +90,13 @@ me_me_init(void)
 static void
 free_alias_string(const char *key, void *data, void *privdata)
 {
-	free(data);
+	sfree(data);
 }
 
 static void
 free_access_string(const char *key, void *data, void *privdata)
 {
-	free(data);
+	sfree(data);
 }
 
 static void
@@ -124,7 +124,7 @@ conf_service_nick(mowgli_config_file_entry_t *ce)
 		return -1;
 
 	mowgli_patricia_delete(services_nick, sptr->nick);
-	free(sptr->nick);
+	sfree(sptr->nick);
 
 	if (service_find_nick(ce->vardata))
 	{
@@ -152,7 +152,7 @@ conf_service_user(mowgli_config_file_entry_t *ce)
 	if (!sptr)
 		return -1;
 
-	free(sptr->user);
+	sfree(sptr->user);
 	sptr->user = sstrndup(ce->vardata, 10);
 
 	return 0;
@@ -176,7 +176,7 @@ conf_service_host(mowgli_config_file_entry_t *ce)
 	if (!sptr)
 		return -1;
 
-	free(sptr->host);
+	sfree(sptr->host);
 	sptr->host = sstrdup(ce->vardata);
 
 	return 0;
@@ -194,7 +194,7 @@ conf_service_real(mowgli_config_file_entry_t *ce)
 	if (!sptr)
 		return -1;
 
-	free(sptr->real);
+	sfree(sptr->real);
 	sptr->real = sstrdup(ce->vardata);
 
 	return 0;
@@ -383,12 +383,12 @@ service_delete(struct service *sptr)
 	if (sptr->commands)
 		mowgli_patricia_destroy(sptr->commands, &command_delete_trie_cb, sptr->commands);
 
-	free(sptr->disp);	/* service_name() does a malloc() */
-	free(sptr->internal_name);
-	free(sptr->nick);
-	free(sptr->user);
-	free(sptr->host);
-	free(sptr->real);
+	sfree(sptr->disp);	/* service_name() does a smalloc() */
+	sfree(sptr->internal_name);
+	sfree(sptr->nick);
+	sfree(sptr->user);
+	sfree(sptr->host);
+	sfree(sptr->real);
 
 	mowgli_heap_free(service_heap, sptr);
 }
@@ -402,9 +402,9 @@ service_add_static(const char *name, const char *user, const char *host, const c
 	snprintf(internal_name, sizeof internal_name, "static:%s", name);
 	sptr = service_add(internal_name, handler);
 
-	free(sptr->user);
-	free(sptr->host);
-	free(sptr->real);
+	sfree(sptr->user);
+	sfree(sptr->host);
+	sfree(sptr->real);
 	sptr->user = sstrndup(user, 10);
 	sptr->host = sstrdup(host);
 	sptr->real = sstrdup(real);
@@ -459,7 +459,7 @@ servtree_update(void *dummy)
 
 	MOWGLI_PATRICIA_FOREACH(sptr, &state, services_name)
 	{
-		free(sptr->disp);
+		sfree(sptr->disp);
 		sptr->disp = service_name(sptr->nick);
 		if (sptr->me != NULL)
 		{

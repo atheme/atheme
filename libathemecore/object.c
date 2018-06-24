@@ -204,7 +204,7 @@ atheme_object_dispose(void *object)
 	else
 	{
 		metadata_delete_all(obj);
-		free(obj);
+		sfree(obj);
 	}
 
 	if (privatedata != NULL)
@@ -258,7 +258,7 @@ metadata_delete(void *target, const char *name)
 	mowgli_patricia_delete(obj->metadata, name);
 
 	strshare_unref(md->name);
-	free(md->value);
+	sfree(md->value);
 
 	mowgli_heap_free(metadata_heap, md);
 }

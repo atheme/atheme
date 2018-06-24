@@ -51,7 +51,7 @@ cmd_halfop(struct sourceinfo *si, bool halfopping, int parc, char *parv[])
 
 	nicks = (!nick ? sstrdup(si->su->nick) : sstrdup(nick));
 	prefix_action_set_all(&halfop_actions, halfopping, nicks);
-	free(nicks);
+	sfree(nicks);
 
 	MOWGLI_LIST_FOREACH(n, halfop_actions.head)
 	{

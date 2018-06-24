@@ -66,7 +66,7 @@ static size_t antiflood_msg_count = 10;
 static void
 msg_destroy(struct flood_message *msg, struct flood_message_queue *mq)
 {
-	free(msg->message);
+	sfree(msg->message);
 	strshare_unref(msg->source);
 	mowgli_node_delete(&msg->node, &mq->entries);
 
@@ -122,7 +122,7 @@ mqueue_free(struct flood_message_queue *mq)
 		msg_destroy(msg, mq);
 	}
 
-	free(mq->name);
+	sfree(mq->name);
 	mowgli_heap_free(mqueue_heap, mq);
 }
 

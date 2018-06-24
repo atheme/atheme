@@ -111,6 +111,9 @@
 /* Define to 1 if you have the `socket' library (-lsocket). */
 #undef HAVE_LIBSOCKET
 
+/* Define to 1 if libsodium is available */
+#undef HAVE_LIBSODIUM
+
 /* Define to 1 if you have the <link.h> header file. */
 #undef HAVE_LINK_H
 
@@ -182,6 +185,12 @@
 
 /* Define to 1 if you have a C99 compliant `snprintf' function. */
 #undef HAVE_SNPRINTF
+
+/* Define to 1 if you have the <sodium/core.h> header file. */
+#undef HAVE_SODIUM_CORE_H
+
+/* Define to 1 if you have the <sodium/utils.h> header file. */
+#undef HAVE_SODIUM_UTILS_H
 
 /* Define to 1 if you have the <stdarg.h> header file. */
 #undef HAVE_STDARG_H
@@ -279,6 +288,9 @@
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 
+/* Enable libsodium secure memory allocator */
+#undef USE_LIBSODIUM_ALLOCATOR
+
 /* Enable extensions on AIX 3, Interix.  */
 #ifndef _ALL_SOURCE
 # undef _ALL_SOURCE
@@ -328,6 +340,9 @@
 
 /* Define to 1 if you need to in order for `stat' and other things to work. */
 #undef _POSIX_SOURCE
+
+/* We want ISO 9899:2011 Annex K memory functions if available */
+#undef __STDC_WANT_LIB_EXT1__
 
 /* Define to rpl_asprintf if the replacement function should be used. */
 #undef asprintf

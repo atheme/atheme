@@ -98,8 +98,8 @@ os_cmd_modreload(struct sourceinfo *si, int parc, char *parv[])
 			while (module_deplist->head != NULL)
 			{
 				dep = module_deplist->head->data;
-				free(dep->name);
-				free(dep);
+				sfree(dep->name);
+				sfree(dep);
 				mowgli_node_delete(module_deplist->head, module_deplist);
 				mowgli_list_free(module_deplist);
 				return;
@@ -158,8 +158,8 @@ os_cmd_modreload(struct sourceinfo *si, int parc, char *parv[])
 			slog(LG_ERROR, "MODRELOAD:ERROR: \2%s\2 tried to reload \2%s\2 (from \2%s\2), operation failed.", get_oper_name(si), dep->name, module);
 		}
 
-		free(dep->name);
-		free(dep);
+		sfree(dep->name);
+		sfree(dep);
 		mowgli_node_delete(n, module_deplist);
 	}
 	mowgli_list_free(module_deplist);

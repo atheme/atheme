@@ -215,10 +215,10 @@ ps_cmd_dnsblexempt(struct sourceinfo *si, int parc, char *parv[])
 
 				mowgli_node_delete(n, &dnsbl_elist);
 
-				free(de->creator);
-				free(de->reason);
-				free(de->ip);
-				free(de);
+				sfree(de->creator);
+				sfree(de->reason);
+				sfree(de->ip);
+				sfree(de);
 
 				return;
 			}
@@ -262,7 +262,7 @@ abort_blacklist_queries(struct user *u)
 
 		mowgli_dns_delete_query(dns_base, &blcptr->dns_query);
 		mowgli_node_delete(n, l);
-		free(blcptr);
+		sfree(blcptr);
 	}
 }
 
@@ -311,7 +311,7 @@ blacklist_dns_callback(mowgli_dns_reply_t *reply, int result, void *vptr)
 
 	if (blcptr->u == NULL)
 	{
-		free(blcptr);
+		sfree(blcptr);
 		return;
 	}
 
@@ -338,7 +338,7 @@ blacklist_dns_callback(mowgli_dns_reply_t *reply, int result, void *vptr)
 		dnsbl_hit(blcptr->u, blcptr->blacklist);
 
 	atheme_object_unref(blcptr->blacklist);
-	free(blcptr);
+	sfree(blcptr);
 }
 
 /* XXX: no IPv6 implementation, not to concerned right now though. */
@@ -482,7 +482,7 @@ dnsbl_config_handler(mowgli_config_file_entry_t *ce)
 	{
 		char *line = sstrdup(cce->varname);
 		new_blacklist(line);
-		free(line);
+		sfree(line);
 	}
 
 	return 0;

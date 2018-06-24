@@ -1387,7 +1387,7 @@ m_server(struct sourceinfo *si, int parc, char *parv[])
 				 * (the EOB is sent before this, therefore still with
 				 * a SID, but apparently still works) --grawity */
 				slog(LG_DEBUG, "m_server(): erasing our SID");
-				free(me.me->sid);
+				sfree(me.me->sid);
 				me.me->sid = NULL;
 			}
 		}

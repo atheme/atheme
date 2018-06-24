@@ -268,11 +268,8 @@ free_alis(struct alis_query *query)
 {
 	return_if_fail(query != NULL);
 
-	if (query->mask)
-		free(query->mask);
-
-	if (query->topic)
-		free(query->topic);
+	sfree(query->mask);
+	sfree(query->topic);
 }
 
 static void

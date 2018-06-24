@@ -105,7 +105,7 @@ channel_validate_f(const char *param)
 	memcpy(name + sizeof NAMEPREFIX - 1, param, namelen - sizeof NAMEPREFIX + 1);
 
 	entity(ext)->name = strshare_get(name);
-	free(name);
+	sfree(name);
 #undef NAMEPREFIX
 
 	// hook up the entity's validation table.

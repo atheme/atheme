@@ -126,9 +126,9 @@ os_cmd_ignore_clear(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("\2%s\2 has been removed from the services ignore list."), svsignore->mask);
 		mowgli_node_delete(n,&svs_ignore_list);
 		mowgli_node_free(n);
-		free(svsignore->mask);
-		free(svsignore->setby);
-		free(svsignore->reason);
+		sfree(svsignore->mask);
+		sfree(svsignore->setby);
+		sfree(svsignore->reason);
 
 	}
 

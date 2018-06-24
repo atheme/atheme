@@ -183,8 +183,8 @@ transform_block_sha1(struct digest_context_sha1 *const restrict ctx, const uint8
 	for (size_t i = 0x00U; i < 0x05U; i++)
 		ctx->state[i] += s[i];
 
-	(void) explicit_bzero(block, sizeof *block);
-	(void) explicit_bzero(s, sizeof s);
+	(void) smemzero(block, sizeof *block);
+	(void) smemzero(s, sizeof s);
 }
 
 bool
@@ -295,6 +295,8 @@ digest_final_sha1(struct digest_context_sha1 *const restrict ctx, void *const re
 	for (uint32_t i = 0x00U; i < DIGEST_MDLEN_SHA1; i++)
 		digest[i] = (uint8_t) ((ctx->state[i >> 0x02U] >> ((0x03U - (i & 0x03U)) * 0x08U)) & 0xFFU);
 
-	(void) explicit_bzero(ctx, sizeof *ctx);
+	(void) smemzero(data, sizeof data);
+	(void) smemzero(ctx, sizeof *ctx);
+
 	return true;
 }

@@ -27,7 +27,6 @@ SRCS =					\
 	digest_fe_shared.c		\
 	digest_testsuite.c		\
 	entity.c			\
-	$(EXPLICIT_BZERO_COND_C)	\
 	flags.c				\
 	function.c			\
 	hook.c				\
@@ -68,6 +67,6 @@ include ../buildsys.mk
 
 CPPFLAGS	+= $(PCRE_CFLAGS) $(LIBQRENCODE_CFLAGS) -I../include -I.
 CFLAGS		+= $(LIB_CFLAGS)
-LIBS		+= $(DIGEST_API_LIBS) $(LIBINTL) $(PCRE_LIBS) $(LIBQRENCODE_LIBS)
+LIBS		+= $(DIGEST_API_LIBS) $(LIBINTL) $(PCRE_LIBS) $(LIBQRENCODE_LIBS) $(LIBSODIUM_LIBS)
 
 build: depend all
