@@ -36,9 +36,18 @@
 #  include <sys/resource.h>
 #endif
 
-#ifdef HAVE_OPENSSL_MEMORY_API
-#  include <openssl/crypto.h>
-#endif /* HAVE_OPENSSL_MEMORY_API */
+#ifdef HAVE_OPENSSL
+#  include <openssl/opensslv.h>
+#  ifndef OPENSSL_VERSION_NUMBER
+#    error "OPENSSL_VERSION_NUMBER is undefined"
+#  endif /* !OPENSSL_VERSION_NUMBER */
+#  ifdef HAVE_OPENSSL_CRYPTO_H
+#    include <openssl/crypto.h>
+#    if !defined(LIBRESSL_VERSION_NUMBER) && (OPENSSL_VERSION_NUMBER >= 0x10100000L)
+#      define HAVE_OPENSSL_MEMORY_API 1
+#    endif /* !LIBRESSL_VERSION_NUMBER && (OPENSSL_VERSION_NUMBER >= 0x10100000L) */
+#  endif /* HAVE_OPENSSL_CRYPTO_H */
+#endif /* HAVE_OPENSSL */
 
 #ifdef HAVE_LIBSODIUM
 #  include <sodium/core.h>

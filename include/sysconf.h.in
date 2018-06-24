@@ -180,9 +180,6 @@
 /* Define to 1 if you have the <openssl/hmac.h> header file. */
 #undef HAVE_OPENSSL_HMAC_H
 
-/* Define to 1 if CRYPTO_set_mem_functions is available */
-#undef HAVE_OPENSSL_MEMORY_API
-
 /* Define to 1 if you have the <openssl/opensslv.h> header file. */
 #undef HAVE_OPENSSL_OPENSSLV_H
 
