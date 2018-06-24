@@ -109,6 +109,21 @@ process_mowgli_log(const char *line)
 	slog(LG_ERROR, "%s", line);
 }
 
+static inline bool
+atheme_set_mowgli_allocator(void)
+{
+	mowgli_allocation_policy_t *const policy = mowgli_allocation_policy_create("libathemecore", &smalloc, &sfree);
+
+	if (! policy)
+	{
+		(void) fprintf(stderr, "Error: mowgli_allocation_policy_create() failed!\n");
+		return false;
+	}
+
+	(void) mowgli_allocator_set_policy(policy);
+	return true;
+}
+
 static void
 daemonize(int *daemonize_pipe)
 {
@@ -297,6 +312,9 @@ atheme_main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 #endif /* HAVE_LIBSODIUM */
+
+	if (! atheme_set_mowgli_allocator())
+		exit(EXIT_FAILURE);
 
 	atheme_bootstrap();
 
