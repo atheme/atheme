@@ -165,9 +165,6 @@
 /* Define to 1 if OpenSSL is available */
 #undef HAVE_OPENSSL
 
-/* Define to 1 if you have the <openssl/crypto.h> header file. */
-#undef HAVE_OPENSSL_CRYPTO_H
-
 /* Define to 1 if you have the <openssl/ecdsa.h> header file. */
 #undef HAVE_OPENSSL_ECDSA_H
 
@@ -179,9 +176,6 @@
 
 /* Define to 1 if you have the <openssl/hmac.h> header file. */
 #undef HAVE_OPENSSL_HMAC_H
-
-/* Define to 1 if you have the <openssl/opensslv.h> header file. */
-#undef HAVE_OPENSSL_OPENSSLV_H
 
 /* Define to 1 if PCRE is available */
 #undef HAVE_PCRE

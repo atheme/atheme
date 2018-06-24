@@ -29,7 +29,7 @@ AC_DEFUN([ATHEME_LIBTEST_OPENSSL], [
 	])
 
 	AS_IF([test "x${LIBCRYPTO}" = "xYes"], [
-		AC_CHECK_HEADERS([openssl/evp.h openssl/hmac.h openssl/opensslv.h], [], [
+		AC_CHECK_HEADERS([openssl/evp.h openssl/hmac.h], [], [
 			LIBCRYPTO="No"
 			AS_IF([test "x${with_openssl}" = "xyes"], [AC_MSG_ERROR([required header file missing])])
 		], [])
@@ -42,7 +42,7 @@ AC_DEFUN([ATHEME_LIBTEST_OPENSSL], [
 		AC_DEFINE([HAVE_OPENSSL], [1], [Define to 1 if OpenSSL is available])
 		AC_SUBST([LIBCRYPTO_LIBS])
 
-		AC_CHECK_HEADERS([openssl/crypto.h openssl/ec.h openssl/ecdsa.h], [], [], [])
+		AC_CHECK_HEADERS([openssl/ec.h openssl/ecdsa.h], [], [], [])
 		AS_IF([test "x${ac_cv_header_openssl_ec_h}x${ac_cv_header_openssl_ecdsa_h}" = "xyesxyes"], [
 			ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
 			AC_SUBST([ECDSA_TOOLS_COND_D])
