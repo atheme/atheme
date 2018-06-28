@@ -120,25 +120,51 @@ mowgli_list_t conf_la_table;
 const char *
 get_conf_opts(void)
 {
-	const struct crypt_impl *const ci_default = crypt_get_default_provider();
+	static char optstr[53]; /* 26 uppercase + 26 lowercase + NULL terminator */
+	unsigned int optidx = 0;
 
-	static char opts[53];
+	(void) memset(optstr, 0x00, sizeof optstr);
 
-	snprintf(opts, sizeof opts, "%s%s%s%s%s%s%s%s%s%s%s%s%s",
-			match_mapping ? "A" : "",
-			auth_module_loaded ? "a" : "",
-			ci_default ? "c" : "",
-			log_debug_enabled() ? "d" : "",
-			me.auth ? "e" : "",
-			config_options.flood_msgs ? "F" : "",
-			config_options.leave_chans ? "l" : "",
-			config_options.join_chans ? "j" : "",
-			chansvs.changets ? "t" : "",
-			!match_mapping ? "R" : "",
-			config_options.raw ? "r" : "",
-			runflags & RF_LIVE ? "n" : "",
-			IS_TAINTED ? "T" : "");
-	return opts;
+	if (match_mapping)
+		optstr[optidx++] = 'A';
+
+	if (auth_module_loaded)
+		optstr[optidx++] = 'a';
+
+	if (crypt_get_default_provider())
+		optstr[optidx++] = 'c';
+
+	if (log_debug_enabled())
+		optstr[optidx++] = 'd';
+
+	if (me.auth)
+		optstr[optidx++] = 'e';
+
+	if (config_options.flood_msgs)
+		optstr[optidx++] = 'F';
+
+	if (config_options.join_chans)
+		optstr[optidx++] = 'j';
+
+	if (config_options.leave_chans)
+		optstr[optidx++] = 'l';
+
+	if (runflags & RF_LIVE)
+		optstr[optidx++] = 'n';
+
+	if (! match_mapping)
+		optstr[optidx++] = 'R';
+
+	if (config_options.raw)
+		optstr[optidx++] = 'r';
+
+	if (IS_TAINTED)
+		optstr[optidx++] = 'T';
+
+	if (chansvs.changets)
+		optstr[optidx++] = 't';
+
+	return optstr;
 }
 
 bool
