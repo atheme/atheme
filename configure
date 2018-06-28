@@ -1449,7 +1449,7 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --disable-nls           do not use Native Language Support
   --disable-rpath         do not hardcode runtime library paths
-  --enable-contrib        Enable contrib modules.
+  --enable-contrib        Enable contrib modules
   --enable-fhs-paths      Use more FHS-like pathnames (for packagers)
   --enable-large-net      Enable large network support
   --enable-legacy-pwcrypto
@@ -10134,6 +10134,9 @@ fi
 		yes)
 			CONTRIB_MODULES="Yes"
 			CONTRIB_COND_D="contrib"
+
+
+$as_echo "#define ENABLE_CONTRIB_MODULES 1" >>confdefs.h
 
 			;;
 		no)

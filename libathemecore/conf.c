@@ -131,6 +131,14 @@ get_conf_opts(void)
 	if (auth_module_loaded)
 		optstr[optidx++] = 'a';
 
+#ifdef REPRODUCIBLE_BUILDS
+	optstr[optidx++] = 'B';
+#endif /* REPRODUCIBLE_BUILDS */
+
+#ifdef ENABLE_CONTRIB_MODULES
+	optstr[optidx++] = 'C';
+#endif /* CONTRIB_MODULES */
+
 	if (crypt_get_default_provider())
 		optstr[optidx++] = 'c';
 
@@ -146,8 +154,16 @@ get_conf_opts(void)
 	if (config_options.join_chans)
 		optstr[optidx++] = 'j';
 
+#ifdef LARGE_NETWORK
+	optstr[optidx++] = 'L';
+#endif /* LARGE_NETWORK */
+
 	if (config_options.leave_chans)
 		optstr[optidx++] = 'l';
+
+#ifdef USE_LIBSODIUM_ALLOCATOR
+	optstr[optidx++] = 'M';
+#endif /* USE_LIBSODIUM_ALLOCATOR */
 
 	if (runflags & RF_LIVE)
 		optstr[optidx++] = 'n';
