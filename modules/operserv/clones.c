@@ -995,6 +995,8 @@ mod_init(struct module *const restrict m)
 	mowgli_patricia_iteration_state_t state;
 	MOWGLI_PATRICIA_FOREACH(u, &state, userlist)
 		(void) clones_newuser(&(hook_user_nick_t){ .u = u });
+
+	m->mflags |= MODFLAG_DBHANDLER;
 }
 
 static void

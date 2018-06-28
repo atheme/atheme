@@ -612,6 +612,8 @@ mod_init(struct module *const restrict m)
 	service_named_bind_command("hostserv", &hs_reject);
 	service_named_bind_command("hostserv", &hs_activate);
 	add_bool_conf_item("REQUEST_PER_NICK", &hostsvs->conf_table, 0, &request_per_nick, false);
+
+	m->mflags |= MODFLAG_DBHANDLER;
 }
 
 static void

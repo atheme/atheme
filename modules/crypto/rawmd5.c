@@ -55,6 +55,8 @@ static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	(void) crypt_register(&crypto_rawmd5_impl);
+
+	m->mflags |= MODFLAG_DBCRYPTO;
 }
 
 static void

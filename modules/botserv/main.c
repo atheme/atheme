@@ -1116,6 +1116,8 @@ mod_init(struct module *const restrict m)
 	msg                   = bs_msg;
 	notice_real           = notice;
 	notice                = bs_notice;
+
+	m->mflags |= MODFLAG_DBHANDLER;
 }
 
 static void

@@ -2309,6 +2309,21 @@ general {
 	 * than just opers with user:auspex or group:auspex privileges.
 	 */
 	show_entity_id;
+
+	/* load_database_mdeps
+	 *
+	 * For module dependencies listed in the services database (if any),
+	 * whether to load those modules on startup (if they are not already
+	 * loaded) or abort startup with a more helpful error message than
+	 * e.g. "db services.db:123: unknown directive 'BE'" --> "corestorage:
+	 * exiting to avoid data loss".
+	 *
+	 * Comment this out to abort startup instead of silently loading the
+	 * modules you need to process the database successfully. The abort
+	 * reason will tell you what module the database requires so that you
+	 * can fix your configuration file.
+	 */
+	load_database_mdeps;
 };
 
 proxyscan {

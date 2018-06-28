@@ -89,6 +89,7 @@ struct ConfOption
 	bool            allow_taint;            // allow tainted operation
 	unsigned int    immune_level;           // what flag is required for kick immunity
 	bool            show_entity_id;         // do not require user:auspex to see entity IDs
+	bool            load_database_mdeps;    // for core module deps listed in DB, whether to load them or abort
 };
 
 extern struct ConfOption config_options;

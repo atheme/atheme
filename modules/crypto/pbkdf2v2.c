@@ -600,7 +600,7 @@ static const struct crypt_impl crypto_pbkdf2v2_impl = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	(void) crypt_register(&crypto_pbkdf2v2_impl);
 
@@ -613,6 +613,8 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 
 	(void) hook_add_event("config_ready");
 	(void) hook_add_config_ready(&atheme_pbkdf2v2_config_ready);
+
+	m->mflags |= MODFLAG_DBCRYPTO;
 }
 
 static void

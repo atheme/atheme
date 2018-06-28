@@ -678,6 +678,8 @@ mod_init(struct module *const restrict m)
 	add_conf_item("BLACKLISTS", &proxyscan->conf_table, dnsbl_config_handler);
 
 	command_add(&os_set_dnsblaction, *os_set_cmdtree);
+
+	m->mflags |= MODFLAG_DBHANDLER;
 }
 
 static void

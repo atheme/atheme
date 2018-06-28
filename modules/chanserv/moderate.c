@@ -366,7 +366,7 @@ static struct command cs_waiting = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	csreq_list = mowgli_patricia_create(strcasecanon);
 
@@ -382,6 +382,8 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 	add_dupstr_conf_item("REGGROUP", &chansvs.me->conf_table, 0, &groupmemo, NULL);
 
 	db_register_type_handler("CSREQ", csreq_demarshal);
+
+	m->mflags |= MODFLAG_DBHANDLER;
 }
 
 static void

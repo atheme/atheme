@@ -655,6 +655,8 @@ mod_init(struct module *const restrict m)
 		db_register_type_handler("RW", db_h_rw);
 		db_register_type_handler("RR", db_h_rr);
 	}
+
+	m->mflags |= MODFLAG_DBHANDLER;
 }
 
 static void

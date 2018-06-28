@@ -18,8 +18,13 @@
 
 #include "atheme.h"
 
+// MDEPs to write to the database on commit, for reloading on startup
+#define MODFLAG_PRIV_MDEP       (MODFLAG_DBCRYPTO | MODFLAG_DBHANDLER)
+
 static unsigned int dbv;
 static unsigned int their_ca_all;
+
+static bool mdep_load_mdeps = true;
 
 #ifdef HAVE_FORK
 static pid_t child_pid;
@@ -53,7 +58,10 @@ corestorage_db_save(struct database_handle *db)
 
 	MOWGLI_ITER_FOREACH(n, modules.head)
 	{
-		struct module *m = n->data;
+		const struct module *const m = n->data;
+
+		if (! (m->mflags & MODFLAG_PRIV_MDEP))
+			continue;
 
 		db_start_row(db, "MDEP");
 		db_write_word(db, m->name);
@@ -372,6 +380,46 @@ corestorage_h_dbv(struct database_handle *db, const char *type)
 {
 	dbv = db_sread_int(db);
 	slog(LG_INFO, "corestorage: data schema version is %d.", dbv);
+}
+
+static void
+corestorage_h_mdep(struct database_handle *const restrict db, const char ATHEME_VATTR_UNUSED *const restrict type)
+{
+	if (! mdep_load_mdeps)
+		return;
+
+	const char *const modname = db_sread_word(db);
+
+	if (! modname || ! *modname)
+		return;
+
+	if (strncmp(modname, "transport/", 10) == 0 || strncmp(modname, "protocol/", 9) == 0)
+	{
+		// Old (<= 7.2) database
+		mdep_load_mdeps = false;
+		return;
+	}
+
+	if (module_find_published(modname))
+		return;
+
+	if (config_options.load_database_mdeps)
+	{
+		(void) slog(LG_INFO, "corestorage: auto-loading module '%s' (database depends on it)", modname);
+
+		if (module_request(modname))
+			return;
+
+		(void) slog(LG_ERROR, "db %s:%d: cannot load module '%s'", db->file, db->line, modname);
+	}
+	else
+		(void) slog(LG_ERROR, "db %s:%d: need module '%s' to process the database successfully, but have "
+		                      "been configured to not load any (general::load_database_mdeps)", db->file,
+		                      db->line, modname);
+
+	(void) slog(LG_ERROR, "corestorage: exiting to avoid data loss");
+
+	exit(EXIT_FAILURE);
 }
 
 static void
@@ -1037,13 +1085,13 @@ corestorage_db_write(void *filename, enum db_save_strategy strategy)
 }
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	db_load = &corestorage_db_load;
 	db_save = &corestorage_db_write;
 
 	db_register_type_handler("DBV", corestorage_h_dbv);
-	db_register_type_handler("MDEP", corestorage_ignore_row);
+	db_register_type_handler("MDEP", corestorage_h_mdep);
 	db_register_type_handler("LUID", corestorage_h_luid);
 	db_register_type_handler("CF", corestorage_h_cf);
 	db_register_type_handler("MU", corestorage_h_mu);
@@ -1075,6 +1123,8 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 	db_register_type_handler("???", corestorage_h_unknown);
 
 	backend_loaded = true;
+
+	m->mflags |= MODFLAG_DBHANDLER;
 }
 
 static void

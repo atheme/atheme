@@ -261,6 +261,8 @@ mod_init(struct module *const restrict m)
 	db_register_type_handler("BE", db_h_be);
 
 	service_named_bind_command("nickserv", &ns_badmail);
+
+	m->mflags |= MODFLAG_DBHANDLER;
 }
 
 static void

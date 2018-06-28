@@ -117,6 +117,8 @@ mod_init(struct module *const restrict m)
 	(void) slog(LG_INFO, CRYPT3_MODULE_WARNING, m->name);
 
 	(void) crypt_register(&crypto_crypt3_impl);
+
+	m->mflags |= MODFLAG_DBCRYPTO;
 }
 
 static void
