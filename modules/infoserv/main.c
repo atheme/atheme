@@ -573,6 +573,8 @@ mod_init(struct module *const restrict m)
 	service_bind_command(infoserv, &is_odel);
 	service_bind_command(infoserv, &is_list);
 	service_bind_command(infoserv, &is_olist);
+
+	m->mflags |= MODFLAG_DBHANDLER;
 }
 
 static void

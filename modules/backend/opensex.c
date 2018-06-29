@@ -432,6 +432,8 @@ mod_init(struct module *const restrict m)
 	db_register_type_handler("GRVER", opensex_h_grver);
 
 	backend_loaded = true;
+
+	m->mflags |= MODFLAG_DBHANDLER;
 }
 
 static void

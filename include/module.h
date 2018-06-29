@@ -14,7 +14,9 @@
 #include "abirev.h"
 #include "serno.h"
 
-#define MODTYPE_FAIL		0x8000 /* modinit failed */
+#define MODFLAG_DBCRYPTO	0x0100U /* starting up without us may leave users unable to login */
+#define MODFLAG_DBHANDLER	0x0200U /* starting up without us may mean we can't process the db without data loss */
+#define MODTYPE_FAIL		0x8000U /* modinit failed */
 
 #define MAPI_ATHEME_MAGIC	0xdeadbeef
 #define MAPI_ATHEME_V4		4

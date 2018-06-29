@@ -498,6 +498,8 @@ mod_init(struct module *const restrict m)
 
 	(void) add_uint_conf_item("TIME", &atheme_argon2d_conf_table, 0, &atheme_argon2d_tcost,
 	                          ARGON2D_TIMECOST_MIN, ARGON2D_TIMECOST_MAX, ARGON2D_TIMECOST_DEF);
+
+	m->mflags |= MODFLAG_DBCRYPTO;
 }
 
 static void

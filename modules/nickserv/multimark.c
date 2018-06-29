@@ -1086,6 +1086,8 @@ mod_init(struct module *const restrict m)
 	mark_check.is_match = is_marked;
 
 	list_register("marked", &mark_check);
+
+	m->mflags |= MODFLAG_DBHANDLER;
 }
 
 static void

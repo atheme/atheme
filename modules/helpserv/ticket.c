@@ -359,6 +359,8 @@ mod_init(struct module *const restrict m)
 	service_named_bind_command("helpserv", &helpserv_list);
 	service_named_bind_command("helpserv", &helpserv_close);
 	service_named_bind_command("helpserv", &helpserv_cancel);
+
+	m->mflags |= MODFLAG_DBHANDLER;
 }
 
 static void

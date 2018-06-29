@@ -64,6 +64,8 @@ mod_init(struct module *const restrict m)
 
 	gs_db_init();
 	gs_hooks_init();
+
+	m->mflags |= MODFLAG_DBHANDLER;
 }
 
 static void

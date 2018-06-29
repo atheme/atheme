@@ -79,7 +79,7 @@ sasl_sourceinfo_recreate(struct sasl_session *const restrict p)
 
 	struct sasl_sourceinfo *const ssi = smalloc(sizeof *ssi);
 
-	(void) atheme_object_init(atheme_object(ssi), "<sasl sourceinfo>", &free);
+	(void) atheme_object_init(atheme_object(ssi), "<sasl sourceinfo>", &sfree);
 
 	ssi->parent.s = p->server;
 	ssi->parent.connection = curr_uplink->conn;

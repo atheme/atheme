@@ -405,6 +405,8 @@ mod_init(struct module *const restrict m)
 	service_named_bind_command("hostserv", &hs_unoffer);
 	service_named_bind_command("hostserv", &hs_offerlist);
 	service_named_bind_command("hostserv", &hs_take);
+
+	m->mflags |= MODFLAG_DBHANDLER;
 }
 
 static void

@@ -16,7 +16,7 @@ static mowgli_eventloop_timer_t *chanfix_autofix_timer = NULL;
 struct service *chanfix;
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	struct chanfix_persist_record *rec = mowgli_global_storage_get("atheme.chanfix.main.persist");
 
@@ -43,6 +43,8 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 	add_bool_conf_item("AUTOFIX", &chanfix->conf_table, 0, &chanfix_do_autofix, false);
 
 	chanfix_autofix_timer = mowgli_timer_add(base_eventloop, "chanfix_autofix", chanfix_autofix_ev, NULL, 60);
+
+	m->mflags |= MODFLAG_DBHANDLER;
 }
 
 static void

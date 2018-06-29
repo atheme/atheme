@@ -7,7 +7,7 @@
 AC_PREREQ([2.69])
 
 AC_LANG([C])
-AC_INIT([atheme], [7.3.0-dev], [https://github.com/atheme/atheme/issues/])
+AC_INIT([atheme], [7.3.0-rc1], [https://github.com/atheme/atheme/issues/])
 
 AC_CONFIG_AUX_DIR([autoconf])
 AC_CONFIG_MACRO_DIR([m4])

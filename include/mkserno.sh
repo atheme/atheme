@@ -27,6 +27,11 @@ REVH_NEW="$(git log -n1 --abbrev=20 --format='%h')"
 if [ "x${REVH_NEW}" = "x" ]
 then
 	REVH_NEW="<unknown>"
+else
+	if ! git diff-index --quiet HEAD --
+	then
+		REVH_NEW="${REVH_NEW}-dirty"
+	fi
 fi
 
 REVH_NEW="\"${REVH_NEW}\""
