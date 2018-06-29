@@ -58,39 +58,40 @@ verify_password(struct myuser *const restrict mu, const char *const restrict pas
 	if (auth_module_loaded && auth_user_custom)
 		return auth_user_custom(mu, password);
 
-	if (mu->flags & MU_CRYPTPASS)
+	if (! (mu->flags & MU_CRYPTPASS))
 	{
-		const struct crypt_impl *ci, *ci_default;
-		unsigned int verify_flags = PWVERIFY_FLAG_NONE;
+		(void) slog(LG_INFO, _("%s: verifying unencrypted password for account '%s'!"), __func__,
+		                     entity(mu)->name);
 
-		if (! (ci = crypt_verify_password(password, mu->pass, &verify_flags)))
-			// Verification failure
-			return false;
-
-		if (! (ci_default = crypt_get_default_provider()))
-			// Verification succeeded but we don't have a module that can create new password hashes
-			return true;
-
-		if (ci != ci_default)
-			(void) slog(LG_INFO, "%s: transitioning from crypt scheme '%s' to '%s' for account '%s'",
-				             __func__, ci->id, ci_default->id, entity(mu)->name);
-		else if (verify_flags & PWVERIFY_FLAG_RECRYPT)
-			(void) slog(LG_INFO, "%s: re-encrypting password for account '%s'",
-			                     __func__, entity(mu)->name);
-		else
-			// Verification succeeded and re-encrypting not required, nothing more to do
-			return true;
-
-		const char *new_hash;
-
-		if (! (new_hash = ci_default->crypt(password, NULL)))
-			(void) slog(LG_ERROR, "%s: hash generation failed", __func__);
-		else
-			(void) mowgli_strlcpy(mu->pass, new_hash, sizeof mu->pass);
-
-		// Verification succeeded and user's password (possibly) re-encrypted
-		return true;
+		return (strcmp(mu->pass, password) == 0);
 	}
 
-	return (strcmp(mu->pass, password) == 0);
+	const char *new_hash;
+	const struct crypt_impl *ci, *ci_default;
+	unsigned int verify_flags = PWVERIFY_FLAG_NONE;
+
+	if (! (ci = crypt_verify_password(password, mu->pass, &verify_flags)))
+		// Verification failure
+		return false;
+
+	if (! (ci_default = crypt_get_default_provider()))
+		// Verification succeeded but we don't have a module that can create new password hashes
+		return true;
+
+	if (ci != ci_default)
+		(void) slog(LG_INFO, _("%s: transitioning from crypt scheme '%s' to '%s' for account '%s'"),
+		                     __func__, ci->id, ci_default->id, entity(mu)->name);
+	else if (verify_flags & PWVERIFY_FLAG_RECRYPT)
+		(void) slog(LG_INFO, _("%s: re-encrypting password for account '%s'"), __func__, entity(mu)->name);
+	else
+		// Verification succeeded and re-encrypting not required, nothing more to do
+		return true;
+
+	if (! (new_hash = ci_default->crypt(password, NULL)))
+		(void) slog(LG_ERROR, _("%s: hash generation failed"), __func__);
+	else
+		(void) mowgli_strlcpy(mu->pass, new_hash, sizeof mu->pass);
+
+	// Verification succeeded and user's password (possibly) re-encrypted
+	return true;
 }
