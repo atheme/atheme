@@ -63,7 +63,8 @@ SRCS =				\
 	taxonomy.c		\
 	vacation.c		\
 	verify.c		\
-	vhost.c
+	vhost.c			\
+	waitreg.c
 
 include ../../extra.mk
 include ../../buildsys.mk
