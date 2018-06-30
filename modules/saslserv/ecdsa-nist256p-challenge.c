@@ -143,7 +143,7 @@ mech_finish(struct sasl_session *const restrict p)
 	p->mechdata = NULL;
 }
 
-static struct sasl_mechanism mech = {
+static const struct sasl_mechanism mech = {
 
 	.name           = "ECDSA-NIST256P-CHALLENGE",
 	.mech_start     = &mech_start,

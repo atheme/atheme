@@ -36,7 +36,7 @@ mech_step(struct sasl_session *const restrict p, const void *const restrict in, 
 	return ASASL_DONE;
 }
 
-static struct sasl_mechanism mech = {
+static const struct sasl_mechanism mech = {
 
 	.name           = "EXTERNAL",
 	.mech_start     = NULL,

@@ -597,7 +597,7 @@ mech_finish(struct sasl_session *const restrict p)
 	p->mechdata = NULL;
 }
 
-static struct sasl_mechanism sasl_scramsha_mech_sha1 = {
+static const struct sasl_mechanism sasl_scramsha_mech_sha1 = {
 
 	.name           = "SCRAM-SHA-1",
 	.mech_start     = NULL,
@@ -605,7 +605,7 @@ static struct sasl_mechanism sasl_scramsha_mech_sha1 = {
 	.mech_finish    = &mech_finish,
 };
 
-static struct sasl_mechanism sasl_scramsha_mech_sha2_256 = {
+static const struct sasl_mechanism sasl_scramsha_mech_sha2_256 = {
 
 	.name           = "SCRAM-SHA-256",
 	.mech_start     = NULL,
