@@ -137,7 +137,7 @@ get_conf_opts(void)
 
 #ifdef ENABLE_CONTRIB_MODULES
 	optstr[optidx++] = 'C';
-#endif /* CONTRIB_MODULES */
+#endif /* ENABLE_CONTRIB_MODULES */
 
 	if (crypt_get_default_provider())
 		optstr[optidx++] = 'c';
