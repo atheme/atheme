@@ -44,7 +44,7 @@ waitreg_registerhook(hook_user_register_check_t *const restrict hdata)
 	{
 		(void) logcommand(hdata->si, CMDLOG_REGISTER, "denied REGISTER by \2%s\2", hdata->si->su->nick);
 		(void) command_fail(hdata->si, fault_badparams, _("You cannot register so soon after connecting. "
-		                    "Please wait %u seconds and try again."), delta_time);
+		                    "Please wait %u seconds and try again."), (waitreg_time - delta_time));
 
 		hdata->approved++;
 	}
