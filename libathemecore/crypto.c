@@ -116,6 +116,9 @@ crypt_verify_password(const char *const restrict password, const char *const res
 {
 	mowgli_node_t *n;
 
+	if (flags)
+		*flags = PWVERIFY_FLAG_NONE;
+
 	MOWGLI_ITER_FOREACH(n, crypt_impl_list.head)
 	{
 		const struct crypt_impl *const ci = n->data;
