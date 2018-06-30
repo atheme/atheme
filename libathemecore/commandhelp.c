@@ -28,6 +28,16 @@
 
 static unsigned int help_display_depth = 0;
 
+static inline bool
+can_execute_command(struct sourceinfo *const restrict si, const struct command *const restrict cmd)
+{
+	if (cmd->access != AC_NONE)
+		if (! (has_priv(si, cmd->access) || (strcmp(cmd->access, AC_AUTHENTICATED) == 0 && si->smu)))
+			return false;
+
+	return true;
+}
+
 static void
 help_not_available(struct sourceinfo *const restrict si, const char *const restrict cmd,
                    const char *const restrict subcmd, const bool cmd_exists)
@@ -370,10 +380,8 @@ command_help(struct sourceinfo *const restrict si, mowgli_patricia_t *const rest
 
 	MOWGLI_PATRICIA_FOREACH(cmd, &state, commandtree)
 	{
-		// Only display commands that the user has permission to execute
-		if (cmd->access != AC_NONE)
-			if (! (has_priv(si, cmd->access) || (strcmp(cmd->access, AC_AUTHENTICATED) == 0 && si->smu)))
-				continue;
+		if (! can_execute_command(si, cmd))
+			continue;
 
 		(void) command_success_nodata(si, "  \2%-15s\2 %s", cmd->name, translation_get(_(cmd->desc)));
 
@@ -416,10 +424,8 @@ command_help_short(struct sourceinfo *const restrict si, mowgli_patricia_t *cons
 		if (! string_in_list(cmd->name, shortlist))
 			continue;
 
-		// Only display commands that the user has permission to execute
-		if (cmd->access != AC_NONE)
-			if (! (has_priv(si, cmd->access) || (strcmp(cmd->access, AC_AUTHENTICATED) == 0 && si->smu)))
-				continue;
+		if (! can_execute_command(si, cmd))
+			continue;
 
 		(void) command_success_nodata(si, "  \2%-15s\2 %s", cmd->name, translation_get(_(cmd->desc)));
 
@@ -446,10 +452,8 @@ additional:
 		if (cmds_displayed && string_in_list(cmd->name, shortlist))
 			continue;
 
-		// Only display commands that the user has permission to execute
-		if (cmd->access != AC_NONE)
-			if (! (has_priv(si, cmd->access) || (strcmp(cmd->access, AC_AUTHENTICATED) == 0 && si->smu)))
-				continue;
+		if (! can_execute_command(si, cmd))
+			continue;
 
 		if (*buf)
 		{
