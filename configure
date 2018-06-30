@@ -10283,12 +10283,6 @@ fi
 
 	case "${enable_sodium_malloc}" in
 		yes)
-			if test "x${CONTRIB_MODULES}" != "xNo"; then :
-
-				as_fn_error $? "--enable-sodium-malloc requires --disable-contrib" "$LINENO" 5
-
-fi
-
 			if test "x${LIBSODIUM}" != "xYes"; then :
 
 				as_fn_error $? "--enable-sodium-malloc requires --with-sodium" "$LINENO" 5
