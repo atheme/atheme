@@ -787,7 +787,7 @@ mod_init(struct module *const restrict m)
 	{
 		(void) slog(LG_ERROR, "%s: mowgli_heap_create() failed", m->name);
 
-		m->mflags |= MODTYPE_FAIL;
+		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
 
@@ -797,7 +797,7 @@ mod_init(struct module *const restrict m)
 
 		(void) mowgli_heap_destroy(akick_timeout_heap);
 
-		m->mflags |= MODTYPE_FAIL;
+		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
 

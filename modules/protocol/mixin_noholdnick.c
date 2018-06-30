@@ -15,7 +15,7 @@ mod_init(struct module *const restrict m)
 	if (ircd == NULL)
 	{
 		slog(LG_ERROR, "Module %s must be loaded after a protocol module.", m->name);
-		m->mflags |= MODTYPE_FAIL;
+		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
 	oldflag = ircd->flags & IRCD_HOLDNICK;

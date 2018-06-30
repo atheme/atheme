@@ -429,13 +429,13 @@ mod_init(struct module *const restrict m)
 	perl_script_module_heap = mowgli_heap_create(sizeof(struct perl_script_module), 256, BH_NOW);
 	if (!perl_script_module_heap)
 	{
-		m->mflags |= MODTYPE_FAIL;
+		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
 
 	if (! startup_perl())
 	{
-		m->mflags |= MODTYPE_FAIL;
+		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
 

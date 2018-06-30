@@ -642,14 +642,14 @@ mod_init(struct module *const restrict m)
 	if (!module_find_published("backend/opensex"))
 	{
 		(void) slog(LG_ERROR, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
-		m->mflags |= MODTYPE_FAIL;
+		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
 
 	if (! (dns_base = mowgli_dns_create(base_eventloop, MOWGLI_DNS_TYPE_ASYNC)))
 	{
 		(void) slog(LG_ERROR, "%s: failed to create Mowgli DNS resolver object", m->name);
-		m->mflags |= MODTYPE_FAIL;
+		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
 

@@ -88,7 +88,7 @@ mod_init(struct module *const restrict m)
 	{
 		(void) slog(LG_ERROR, "%s: self-test failed, does this platform support this algorithm?", m->name);
 
-		m->mflags |= MODTYPE_FAIL;
+		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
 
@@ -112,7 +112,7 @@ mod_init(struct module *const restrict m)
 {
 	(void) slog(LG_ERROR, "Module %s requires crypt(3) support, refusing to load.", m->name);
 
-	m->mflags |= MODTYPE_FAIL;
+	m->mflags |= MODFLAG_FAIL;
 }
 
 static void

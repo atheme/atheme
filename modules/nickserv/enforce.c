@@ -653,14 +653,14 @@ mod_init(struct module *const restrict m)
 	if (nicksvs.no_nick_ownership)
 	{
 		slog(LG_ERROR, "modules/nickserv/enforce: nicks are not configured to be owned");
-		m->mflags |= MODTYPE_FAIL;
+		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
 
 	enforce_timeout_heap = mowgli_heap_create(sizeof(struct enforce_timeout), 128, BH_NOW);
 	if (enforce_timeout_heap == NULL)
 	{
-		m->mflags |= MODTYPE_FAIL;
+		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
 
