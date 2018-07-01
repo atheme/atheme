@@ -180,6 +180,10 @@ get_conf_opts(void)
 	if (chansvs.changets)
 		optstr[optidx++] = 't';
 
+#ifdef ENABLE_LEGACY_CRYPTO_MODULES
+	optstr[optidx++] = 'W';
+#endif /* ENABLE_LEGACY_CRYPTO_MODULES */
+
 	return optstr;
 }
 
