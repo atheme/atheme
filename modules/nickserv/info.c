@@ -83,8 +83,7 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	hide_info = use_account_private && mu->flags & MU_PRIVATE &&
-		mu != si->smu && !has_user_auspex;
+	hide_info = (mu->flags & MU_PRIVATE) && (mu != si->smu) && !has_user_auspex;
 
 	if (!nicksvs.no_nick_ownership)
 	{
@@ -340,7 +339,7 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 
 		strcat(buf, "NeverGroup");
 	}
-	if (use_account_private && MU_PRIVATE & mu->flags)
+	if (MU_PRIVATE & mu->flags)
 	{
 		if (*buf)
 			strcat(buf, ", ");
