@@ -205,7 +205,7 @@ module_load_internal(const char *pathname, char *errbuf, int errlen)
 	mowgli_node_delete(n, &modules_inprogress);
 	mowgli_node_free(n);
 
-	if (m->mflags & MODTYPE_FAIL)
+	if (m->mflags & MODFLAG_FAIL)
 	{
 		snprintf(errbuf, errlen, "module_load(): module \2%s\2 init failed", pathname);
 		module_unload(m, MODULE_UNLOAD_INTENT_PERM);

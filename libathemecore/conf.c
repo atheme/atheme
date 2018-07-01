@@ -129,7 +129,7 @@ get_conf_opts(void)
 
 #ifdef ENABLE_CONTRIB_MODULES
 	optstr[optidx++] = 'C';
-#endif /* CONTRIB_MODULES */
+#endif /* ENABLE_CONTRIB_MODULES */
 
 	if (crypt_get_default_provider())
 		optstr[optidx++] = 'c';
@@ -171,6 +171,10 @@ get_conf_opts(void)
 
 	if (chansvs.changets)
 		optstr[optidx++] = 't';
+
+#ifdef ENABLE_LEGACY_CRYPTO_MODULES
+	optstr[optidx++] = 'W';
+#endif /* ENABLE_LEGACY_CRYPTO_MODULES */
 
 	return optstr;
 }

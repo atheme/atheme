@@ -8,10 +8,6 @@ AC_DEFUN([ATHEME_FEATURETEST_SODIUM_MALLOC], [
 
 	case "${enable_sodium_malloc}" in
 		yes)
-			AS_IF([test "x${CONTRIB_MODULES}" != "xNo"], [
-				AC_MSG_ERROR([--enable-sodium-malloc requires --disable-contrib])
-			])
-
 			AS_IF([test "x${LIBSODIUM}" != "xYes"], [
 				AC_MSG_ERROR([--enable-sodium-malloc requires --with-sodium])
 			])

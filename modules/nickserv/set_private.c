@@ -95,8 +95,6 @@ mod_init(struct module *const restrict m)
 	private.is_match = has_private;
 
 	list_register("private", &private);
-
-	use_account_private++;
 }
 
 static void
@@ -105,8 +103,6 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	command_delete(&ns_set_private, *ns_set_cmdtree);
 
 	list_unregister("private");
-
-	use_account_private--;
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/set_private", MODULE_UNLOAD_CAPABILITY_OK)

@@ -145,7 +145,7 @@ mech_finish(struct sasl_session *const restrict p)
 	p->mechdata = NULL;
 }
 
-static struct sasl_mechanism mech = {
+static const struct sasl_mechanism mech = {
 
 	.name           = "ECDSA-NIST256P-CHALLENGE",
 	.mech_start     = &mech_start,
@@ -175,7 +175,7 @@ mod_init(struct module *const restrict m)
 {
 	(void) slog(LG_ERROR, "Module %s requires OpenSSL support, refusing to load.", m->name);
 
-	m->mflags |= MODTYPE_FAIL;
+	m->mflags |= MODFLAG_FAIL;
 }
 
 static void

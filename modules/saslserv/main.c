@@ -134,14 +134,14 @@ find_or_make_session(const char *const restrict uid, struct server *const restri
 	return p;
 }
 
-static struct sasl_mechanism *
+static const struct sasl_mechanism *
 find_mechanism(const char *const restrict name)
 {
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, mechanisms.head)
 	{
-		struct sasl_mechanism *const mptr = n->data;
+		const struct sasl_mechanism *const mptr = n->data;
 
 		if (strcmp(mptr->name, name) == 0)
 			return mptr;
@@ -690,7 +690,7 @@ sasl_newuser(hook_user_nick_t *const restrict data)
 		return;
 	}
 
-	struct sasl_mechanism *const mptr = p->mechptr;
+	const struct sasl_mechanism *const mptr = p->mechptr;
 
 	(void) destroy_session(p);
 	(void) myuser_login(saslsvs, u, mu, false);
@@ -722,17 +722,27 @@ delete_stale(void ATHEME_VATTR_UNUSED *const restrict vptr)
 }
 
 static void
-sasl_mech_register(struct sasl_mechanism *const restrict mech)
+sasl_mech_register(const struct sasl_mechanism *const restrict mech)
 {
 	mowgli_node_t *const node = mowgli_node_create();
 
 	(void) slog(LG_DEBUG, "%s: registering %s", __func__, mech->name);
-	(void) mowgli_node_add(mech, node, &mechanisms);
+
+	/* Here we cast it to (void *) because mowgli_node_add() expects that; it cannot be made const because then
+	 * it would have to return a (const void *) too which would cause multiple warnings any time it is actually
+	 * storing, and thus gets assigned to, a pointer to a mutable object.
+	 *
+	 * To avoid the cast generating a diagnostic due to dropping a const qualifier, we first cast to uintptr_t.
+	 * This is not unprecedented in this codebase; libathemecore/crypto.c & libathemecore/strshare.c do the
+	 * same thing.
+	 */
+	(void) mowgli_node_add((void *)((uintptr_t) mech), node, &mechanisms);
+
 	(void) mechlist_do_rebuild();
 }
 
 static void
-sasl_mech_unregister(struct sasl_mechanism *const restrict mech)
+sasl_mech_unregister(const struct sasl_mechanism *const restrict mech)
 {
 	mowgli_node_t *n, *tn;
 

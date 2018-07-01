@@ -16,7 +16,7 @@
 
 #define MODFLAG_DBCRYPTO	0x0100U /* starting up without us may leave users unable to login */
 #define MODFLAG_DBHANDLER	0x0200U /* starting up without us may mean we can't process the db without data loss */
-#define MODTYPE_FAIL		0x8000U /* modinit failed */
+#define MODFLAG_FAIL		0x8000U /* modinit failed */
 
 #define MAPI_ATHEME_MAGIC	0xdeadbeef
 #define MAPI_ATHEME_V4		4
@@ -122,7 +122,7 @@ extern mowgli_list_t modules;
 #define MODULE_TRY_REQUEST_DEPENDENCY(self, modname)                       \
         if (module_request(modname) == false)                              \
         {                                                                  \
-                (self)->mflags |= MODTYPE_FAIL;                            \
+                (self)->mflags |= MODFLAG_FAIL;                            \
                 return;                                                    \
         }
 
@@ -132,7 +132,7 @@ extern mowgli_list_t modules;
                 MODULE_TRY_REQUEST_DEPENDENCY(self, modname);              \
                 if ((dest = module_locate_symbol(modname, sym)) == NULL)   \
                 {                                                          \
-                        (self)->mflags |= MODTYPE_FAIL;                    \
+                        (self)->mflags |= MODFLAG_FAIL;                    \
                         return;                                            \
                 }                                                          \
         }
@@ -142,7 +142,7 @@ extern mowgli_list_t modules;
         {                                                                  \
                 slog(LG_ERROR, "module %s conflicts with %s, unloading",   \
                      self->name, modname);                                 \
-                (self)->mflags |= MODTYPE_FAIL;                            \
+                (self)->mflags |= MODFLAG_FAIL;                            \
                 return;                                                    \
         }
 

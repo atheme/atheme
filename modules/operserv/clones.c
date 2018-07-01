@@ -923,7 +923,7 @@ mod_init(struct module *const restrict m)
 	{
 		(void) slog(LG_ERROR, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
 
-		m->mflags |= MODTYPE_FAIL;
+		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
 
@@ -931,7 +931,7 @@ mod_init(struct module *const restrict m)
 	{
 		(void) slog(LG_ERROR, "%s: cannot find OperServ (BUG?)", m->name);
 
-		m->mflags |= MODTYPE_FAIL;
+		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
 
@@ -939,7 +939,7 @@ mod_init(struct module *const restrict m)
 	{
 		(void) slog(LG_ERROR, "%s: mowgli_patricia_create() failed", m->name);
 
-		m->mflags |= MODTYPE_FAIL;
+		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
 
@@ -949,7 +949,7 @@ mod_init(struct module *const restrict m)
 
 		(void) mowgli_patricia_destroy(os_clones_cmds, NULL, NULL);
 
-		m->mflags |= MODTYPE_FAIL;
+		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
 
@@ -960,7 +960,7 @@ mod_init(struct module *const restrict m)
 		(void) mowgli_patricia_destroy(os_clones_cmds, NULL, NULL);
 		(void) mowgli_patricia_destroy(hostlist, NULL, NULL);
 
-		m->mflags |= MODTYPE_FAIL;
+		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
 

@@ -10233,6 +10233,9 @@ fi
 			LEGACY_PWCRYPTO="Yes"
 			LEGACY_PWCRYPTO_COND_C="crypt3-des.c crypt3-md5.c ircservices.c rawmd5.c rawsha1.c"
 
+
+$as_echo "#define ENABLE_LEGACY_CRYPTO_MODULES 1" >>confdefs.h
+
 			;;
 		no)
 			LEGACY_PWCRYPTO="No"
@@ -10283,12 +10286,6 @@ fi
 
 	case "${enable_sodium_malloc}" in
 		yes)
-			if test "x${CONTRIB_MODULES}" != "xNo"; then :
-
-				as_fn_error $? "--enable-sodium-malloc requires --disable-contrib" "$LINENO" 5
-
-fi
-
 			if test "x${LIBSODIUM}" != "xYes"; then :
 
 				as_fn_error $? "--enable-sodium-malloc requires --with-sodium" "$LINENO" 5

@@ -21,3 +21,4 @@ R - RFC1459 casemapping is used
 r - operserv raw can be used
 T - services is tainted (running an unsupported configuration)
 t - changets is enabled (shown as of 2.1)
+W - legacy crypto modules were enabled at compile-time

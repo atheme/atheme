@@ -93,16 +93,12 @@ mod_init(struct module *const restrict m)
 	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 
 	command_add(&cs_set_private, *cs_set_cmdtree);
-
-	use_channel_private++;
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	command_delete(&cs_set_private, *cs_set_cmdtree);
-
-	use_channel_private--;
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/set_private", MODULE_UNLOAD_CAPABILITY_OK)

@@ -588,7 +588,7 @@ mech_finish(struct sasl_session *const restrict p)
 	p->mechdata = NULL;
 }
 
-static struct sasl_mechanism sasl_scramsha_mech_sha1 = {
+static const struct sasl_mechanism sasl_scramsha_mech_sha1 = {
 
 	.name           = "SCRAM-SHA-1",
 	.mech_start     = NULL,
@@ -596,7 +596,7 @@ static struct sasl_mechanism sasl_scramsha_mech_sha1 = {
 	.mech_finish    = &mech_finish,
 };
 
-static struct sasl_mechanism sasl_scramsha_mech_sha2_256 = {
+static const struct sasl_mechanism sasl_scramsha_mech_sha2_256 = {
 
 	.name           = "SCRAM-SHA-256",
 	.mech_start     = NULL,
@@ -660,7 +660,7 @@ mod_init(struct module *const restrict m)
 	{
 		(void) slog(LG_ERROR, "module %s needs module %s", m->name, PBKDF2V2_CRYPTO_MODULE_NAME);
 
-		m->mflags |= MODTYPE_FAIL;
+		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
 
@@ -690,7 +690,7 @@ mod_init(struct module *const restrict m)
 {
 	(void) slog(LG_ERROR, "Module %s requires IDN support, refusing to load.", m->name);
 
-	m->mflags |= MODTYPE_FAIL;
+	m->mflags |= MODFLAG_FAIL;
 }
 
 static void

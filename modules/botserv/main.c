@@ -1067,7 +1067,7 @@ mod_init(struct module *const restrict m)
 	{
 		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
 
-		m->mflags |= MODTYPE_FAIL;
+		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
 
@@ -1075,7 +1075,7 @@ mod_init(struct module *const restrict m)
 	{
 		(void) slog(LG_ERROR, "%s: service_add() failed", m->name);
 
-		m->mflags |= MODTYPE_FAIL;
+		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
 

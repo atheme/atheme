@@ -37,14 +37,16 @@ handle_info(struct user *u)
 int
 get_version_string(char *buf, size_t bufsize)
 {
-	const struct crypt_impl *ci = crypt_get_default_provider();
+	const struct crypt_impl *const ci = crypt_get_default_provider();
+	const char *const ci_id = ci ? ci->id : "<none>";
+
 #ifdef REPRODUCIBLE_BUILDS
 	return snprintf(buf, bufsize, "%s. %s %s :%s [%s] [enc:%s]",
-		PACKAGE_STRING, me.name, revision, get_conf_opts(), ircd->ircdname, ci->id);
-#else
+		PACKAGE_STRING, me.name, revision, get_conf_opts(), ircd->ircdname, ci_id);
+#else /* REPRODUCIBLE_BUILDS */
 	return snprintf(buf, bufsize, "%s. %s %s :%s [%s] [enc:%s] Build Date: %s",
-		PACKAGE_STRING, me.name, revision, get_conf_opts(), ircd->ircdname, ci->id, __DATE__);
-#endif
+		PACKAGE_STRING, me.name, revision, get_conf_opts(), ircd->ircdname, ci_id, __DATE__);
+#endif /* !REPRODUCIBLE_BUILDS */
 }
 
 void

@@ -15,17 +15,19 @@
 
 #include "atheme.h"
 
-#ifndef SIGUSR1
-#  define RAISE_EXCEPTION       abort()
-#else
-#  define RAISE_EXCEPTION       raise(SIGUSR1)
-#endif
-
 #ifdef HAVE_LIBSODIUM
 #  include <sodium/utils.h>
 #endif /* HAVE_LIBSODIUM */
 
-#ifdef USE_LIBSODIUM_ALLOCATOR
+#ifndef USE_LIBSODIUM_ALLOCATOR
+
+#  ifndef SIGUSR1
+#    define RAISE_EXCEPTION     abort()
+#  else /* !SIGUSR1 */
+#    define RAISE_EXCEPTION     raise(SIGUSR1)
+#  endif /* SIGUSR1 */
+
+#else /* !USE_LIBSODIUM_ALLOCATOR */
 
 struct sodium_memblock
 {

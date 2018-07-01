@@ -447,7 +447,7 @@ mod_init(struct module *const restrict m)
 	if (!blake2b_selftest())
 	{
 		(void) slog(LG_ERROR, "%s: self-test failed (BUG)", m->name);
-		m->mflags |= MODTYPE_FAIL;
+		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
 

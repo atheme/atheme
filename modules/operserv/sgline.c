@@ -366,7 +366,7 @@ mod_init(struct module *const restrict m)
 	{
 		(void) slog(LG_ERROR, "Module %s requires xline support, refusing to load.", m->name);
 
-		m->mflags |= MODTYPE_FAIL;
+		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
 
@@ -374,7 +374,7 @@ mod_init(struct module *const restrict m)
 	{
 		(void) slog(LG_ERROR, "%s: mowgli_patricia_create() failed", m->name);
 
-		m->mflags |= MODTYPE_FAIL;
+		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
 
