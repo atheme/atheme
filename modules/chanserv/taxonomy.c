@@ -31,8 +31,7 @@ cs_cmd_taxonomy(struct sourceinfo *si, int parc, char *parv[])
 
 	isoper = has_priv(si, PRIV_CHAN_AUSPEX);
 
-	if (use_channel_private && mc->flags & MC_PRIVATE &&
-			!chanacs_source_has_flag(mc, si, CA_ACLVIEW) && !isoper)
+	if ((mc->flags & MC_PRIVATE) && !chanacs_source_has_flag(mc, si, CA_ACLVIEW) && !isoper)
 	{
 		command_fail(si, fault_noprivs, _("Channel \2%s\2 is private."),
 				mc->name);

@@ -48,9 +48,9 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	hide_info = use_channel_private && mc->flags & MC_PRIVATE &&
-		!chanacs_source_has_flag(mc, si, CA_ACLVIEW) &&
+	hide_info = (mc->flags & MC_PRIVATE) && !chanacs_source_has_flag(mc, si, CA_ACLVIEW) &&
 		!has_priv(si, PRIV_CHAN_AUSPEX);
+
 	hide_acl = !chanacs_source_has_flag(mc, si, CA_ACLVIEW) &&
 		!has_priv(si, PRIV_CHAN_AUSPEX) &&
 		!(mc->flags & MC_PUBACL);
@@ -223,7 +223,7 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		strcat(buf, "NOSYNC");
 	}
 
-	if (use_channel_private && MC_PRIVATE & mc->flags)
+	if (MC_PRIVATE & mc->flags)
 	{
 		if (*buf)
 			strcat(buf, " ");
