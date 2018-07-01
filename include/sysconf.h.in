@@ -14,6 +14,9 @@
 /* Enable contrib modules */
 #undef ENABLE_CONTRIB_MODULES
 
+/* Enable legacy crypto modules */
+#undef ENABLE_LEGACY_CRYPTO_MODULES
+
 /* Define to 1 if translation of program messages to the user's native
    language is requested. */
 #undef ENABLE_NLS
