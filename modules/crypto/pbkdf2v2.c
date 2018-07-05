@@ -78,17 +78,18 @@ static const unsigned char ClientKeyStr[] = {
 
 static unsigned int pbkdf2v2_digest = PBKDF2_PRF_DEFAULT;
 static unsigned int pbkdf2v2_rounds = PBKDF2_ITERCNT_DEF;
+static unsigned int pbkdf2v2_saltsz = PBKDF2_SALTLEN_DEF;
 
 static const char *
 atheme_pbkdf2v2_salt(void)
 {
-	unsigned char salt[PBKDF2_SALTLEN_DEF];
+	unsigned char salt[PBKDF2_SALTLEN_MAX];
 
-	(void) arc4random_buf(salt, sizeof salt);
+	(void) arc4random_buf(salt, pbkdf2v2_saltsz);
 
 	char salt64[PBKDF2_SALTLEN_MAX * 3];
 
-	if (base64_encode(salt, sizeof salt, salt64, sizeof salt64) == (size_t) -1)
+	if (base64_encode(salt, pbkdf2v2_saltsz, salt64, sizeof salt64) == (size_t) -1)
 	{
 		(void) slog(LG_ERROR, "%s: base64_encode() failed (BUG)", __func__);
 		return NULL;
@@ -103,23 +104,6 @@ atheme_pbkdf2v2_salt(void)
 	}
 
 	return res;
-}
-
-static inline bool
-atheme_pbkdf2v2_salt_is_b64(const unsigned int prf)
-{
-	switch (prf)
-	{
-		case PBKDF2_PRF_HMAC_SHA1_S64:
-		case PBKDF2_PRF_HMAC_SHA2_256_S64:
-		case PBKDF2_PRF_HMAC_SHA2_512_S64:
-		case PBKDF2_PRF_SCRAM_SHA1_S64:
-		case PBKDF2_PRF_SCRAM_SHA2_256_S64:
-		case PBKDF2_PRF_SCRAM_SHA2_512_S64:
-			return true;
-	}
-
-	return false;
 }
 
 static const char *
@@ -138,6 +122,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 	const EVP_MD *md = NULL;
 	size_t hashlen = 0;
 	bool scram = false;
+	bool salt_was_b64 = false;
 
 	switch (prf)
 	{
@@ -175,6 +160,17 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 			(void) slog(LG_DEBUG, "%s: PRF ID '%u' unknown", __func__, prf);
 			return NULL;
 	}
+	switch (prf)
+	{
+		case PBKDF2_PRF_HMAC_SHA1_S64:
+		case PBKDF2_PRF_HMAC_SHA2_256_S64:
+		case PBKDF2_PRF_HMAC_SHA2_512_S64:
+		case PBKDF2_PRF_SCRAM_SHA1_S64:
+		case PBKDF2_PRF_SCRAM_SHA2_256_S64:
+		case PBKDF2_PRF_SCRAM_SHA2_512_S64:
+			salt_was_b64 = true;
+			break;
+	}
 	if (! md)
 	{
 		(void) slog(LG_ERROR, "%s: md is NULL", __func__);
@@ -189,7 +185,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 	unsigned char salt[PBKDF2_SALTLEN_MAX];
 	size_t saltlen;
 
-	if (atheme_pbkdf2v2_salt_is_b64(prf))
+	if (salt_was_b64)
 	{
 		if ((saltlen = base64_decode(salt64, salt, sizeof salt)) == (size_t) -1)
 		{
@@ -213,16 +209,10 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 		}
 
 		(void) memcpy(salt, salt64, saltlen);
-
-		if (base64_encode(salt, saltlen, salt64, sizeof salt64) == (size_t) -1)
-		{
-			(void) slog(LG_ERROR, "%s: base64_encode() failed for salt", __func__);
-			return NULL;
-		}
 	}
 
 	char key[0x1000];
-	(void) snprintf(key, sizeof key, "%s", password);
+	(void) mowgli_strlcpy(key, password, sizeof key);
 
 	if (scram)
 	{
@@ -232,6 +222,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 		if (ret != STRINGPREP_OK)
 		{
 			(void) slog(LG_DEBUG, "%s: %s", __func__, stringprep_strerror((Stringprep_rc) ret));
+			(void) explicit_bzero(key, sizeof key);
 			return NULL;
 		}
 #else /* HAVE_LIBIDN */
@@ -244,6 +235,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 	if (! keylen)
 	{
 		(void) slog(LG_ERROR, "%s: password length == 0", __func__);
+		(void) explicit_bzero(key, sizeof key);
 		return NULL;
 	}
 
@@ -251,7 +243,16 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 	if (PKCS5_PBKDF2_HMAC(key, (int) keylen, salt, (int) saltlen, (int) c, md, (int) hashlen, cdg) != 1)
 	{
 		(void) slog(LG_ERROR, "%s: PKCS5_PBKDF2_HMAC() failed", __func__);
+		(void) explicit_bzero(key, sizeof key);
 		return NULL;
+	}
+
+	(void) explicit_bzero(key, sizeof key);
+
+	if (! salt_was_b64)
+	{
+		(void) memset(salt64, 0x00, sizeof salt64);
+		(void) memcpy(salt64, salt, saltlen);
 	}
 
 	static char res[PASSLEN];
@@ -319,6 +320,7 @@ atheme_pbkdf2v2_upgrade(const char *const restrict parameters)
 {
 	unsigned int prf;
 	unsigned int c;
+	size_t saltlen;
 	char salt64[0x1000];
 
 	if (sscanf(parameters, PBKDF2_FN_LOADSALT, &prf, &c, salt64) != 3)
@@ -334,6 +336,16 @@ atheme_pbkdf2v2_upgrade(const char *const restrict parameters)
 	if (c != pbkdf2v2_rounds)
 	{
 		(void) slog(LG_DEBUG, "%s: rounds (%u) != default (%u)", __func__, c, pbkdf2v2_rounds);
+		return true;
+	}
+	if ((saltlen = base64_decode(salt64, NULL, 0)) == (size_t) -1)
+	{
+		(void) slog(LG_DEBUG, "%s: base64_decode('%s') failed", __func__, salt64);
+		return false;
+	}
+	if (saltlen != pbkdf2v2_saltsz)
+	{
+		(void) slog(LG_DEBUG, "%s: saltlen (%zu) != default (%u)", __func__, saltlen, pbkdf2v2_saltsz);
 		return true;
 	}
 
@@ -393,6 +405,8 @@ crypto_pbkdf2v2_modinit(module_t __attribute__((unused)) *const restrict m)
 	(void) add_conf_item("DIGEST", &pbkdf2v2_conf_table, c_ci_pbkdf2v2_digest);
 	(void) add_uint_conf_item("ROUNDS", &pbkdf2v2_conf_table, 0, &pbkdf2v2_rounds,
 	                          PBKDF2_ITERCNT_MIN, PBKDF2_ITERCNT_MAX, PBKDF2_ITERCNT_DEF);
+	(void) add_uint_conf_item("SALTLEN", &pbkdf2v2_conf_table, 0, &pbkdf2v2_saltsz,
+	                          PBKDF2_SALTLEN_MIN, PBKDF2_SALTLEN_MAX, PBKDF2_SALTLEN_DEF);
 }
 
 static void
@@ -400,6 +414,7 @@ crypto_pbkdf2v2_moddeinit(const module_unload_intent_t __attribute__((unused)) i
 {
 	(void) del_conf_item("DIGEST", &pbkdf2v2_conf_table);
 	(void) del_conf_item("ROUNDS", &pbkdf2v2_conf_table);
+	(void) del_conf_item("SALTLEN", &pbkdf2v2_conf_table);
 	(void) del_top_conf("PBKDF2V2");
 
 	(void) crypt_unregister(&crypto_pbkdf2v2_impl);
