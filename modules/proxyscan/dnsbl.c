@@ -302,7 +302,7 @@ dnsbl_hit(struct user *u, struct Blacklist *blptr)
 			slog(LG_INFO, "DNSBL: \2%s\2!%s@%s [%s] is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
 			break;
 
-		default:
+		case DNSBL_ACT_NONE:
 			break; // do nothing
 	}
 }
