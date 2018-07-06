@@ -1,4 +1,4 @@
-SUBDIRS = dbverify dragon $(ECDSA_TOOLS_COND_D) footprint services
+SUBDIRS = dbverify $(ECDSA_TOOLS_COND_D) services
 
 include ../extra.mk
 include ../buildsys.mk
