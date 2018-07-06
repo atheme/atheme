@@ -56,21 +56,6 @@ clones_configready(void *unused)
 }
 
 static void
-free_hostentry(const char *key, void *data, void *privdata)
-{
-	mowgli_node_t *n, *tn;
-	struct clones_hostentry *he = data;
-
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, he->clients.head)
-	{
-		mowgli_node_delete(n, &he->clients);
-		mowgli_node_free(n);
-	}
-
-	mowgli_heap_free(hostentry_heap, he);
-}
-
-static void
 write_exemptdb(struct database_handle *db)
 {
 	mowgli_node_t *n, *tn;
