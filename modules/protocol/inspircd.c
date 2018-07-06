@@ -282,7 +282,7 @@ check_rejoindelay(const char *value, struct channel *c, struct mychan *mc, struc
 		ch++;
 	}
 
-	if (atoi(value) <= 0 || atoi(value) > max_rejoindelay)
+	if (atoi(value) <= 0 || atoi(value) > (int) max_rejoindelay)
 	{
 		return false;
 	}
