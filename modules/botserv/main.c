@@ -739,24 +739,6 @@ bs_cmd_bot(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-static bool
-valid_misc_field(const char *field, size_t maxlen)
-{
-	if (strlen(field) > maxlen)
-		return false;
-
-	/* Never ever allow @!?* as they have special meaning in all ircds */
-	/* Empty, space anywhere and colon at the start break the protocol */
-	/* Also disallow ASCII 1-31 and "' as no sane IRCd allows them in n, u or h */
-	if (strchr(field, '@') || strchr(field, '!') || strchr(field, '?') || strchr(field, '/') ||
-			strchr(field, '*') || strchr(field, '\'') || strchr(field, ' ') ||
-			strchr(field, '"') || *field == ':' || *field == '\0' ||
-			has_ctrl_chars(field))
-		return false;
-
-	return true;
-}
-
 // LIST
 static void
 bs_cmd_botlist(struct sourceinfo *si, int parc, char *parv[])
