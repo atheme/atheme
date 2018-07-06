@@ -95,8 +95,6 @@ process_parvarray(struct list_option *opts, size_t optsize, int parc, char *parv
 						i++;
 					}
 					break;
-				default:
-					break;
 				}
 			}
 		}
