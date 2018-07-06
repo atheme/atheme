@@ -541,7 +541,7 @@ command_dice(struct sourceinfo *si, int parc, char *parv[])
 		times = atoi(parv[0]);
 		arg = parv[1];
 
-		if (times > max_rolls)
+		if (times > (int) max_rolls)
 			times = max_rolls;
 	}
 
@@ -580,7 +580,7 @@ command_calc(struct sourceinfo *si, int parc, char *parv[])
 		times = atoi(parv[0]);
 		arg = parv[1];
 
-		if (times > max_rolls)
+		if (times > (int) max_rolls)
 			times = max_rolls;
 	}
 
