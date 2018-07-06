@@ -25,7 +25,7 @@ static bool
 lastlogin_match(const struct mynick *mn, const void *arg)
 {
 	struct myuser *mu = mn->owner;
-	const time_t lastlogin = *(time_t *)arg;
+	const time_t lastlogin = *((const time_t *) arg);
 
 	return (CURRTIME - mu->lastlogin) > lastlogin;
 }
@@ -85,7 +85,7 @@ static bool
 registered_match(const struct mynick *mn, const void *arg)
 {
 	struct myuser *mu = mn->owner;
-	const time_t age = *(time_t *)arg;
+	const time_t age = *((const time_t *) arg);
 
 	return (CURRTIME - mu->registered) > age;
 }
