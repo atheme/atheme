@@ -17,9 +17,8 @@ LIBS		+= -lathemecore $(PERL_LIBS)
 CFLAGS		+= $(PLUGIN_CFLAGS)
 LDFLAGS		+= $(PLUGIN_LDFLAGS)
 
-# Some of the code from Perl is not designed to compile with warnings.
-CFLAGS		+= -Wno-redundant-decls -Wno-float-equal -Wno-unused-value
-CFLAGS		+= -Wno-nested-externs -Wno-unused-variable -Wno-shadow
+# Disable warnings on the Perl code; Perl's system headers are *garbage*
+CFLAGS		+= -w
 
 perlxsi.c:
 	perl -MExtUtils::Embed -e xsinit
