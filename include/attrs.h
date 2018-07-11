@@ -8,11 +8,45 @@
 #ifndef ATHEME_INC_ATTRS_H
 #define ATHEME_INC_ATTRS_H 1
 
+// Compatibility with non-Clang compilers
+#ifndef __has_attribute
+#  define __has_attribute(attr) 0
+#endif
+
+/* Informs the compiler that the size of memory reachable by the pointer returned from this function is x (or x * y)
+ * bytes, where x and y are positional function arguments (starting at 1). This aids static analysis and makes e.g.
+ * __builtin_object_size(ptr) possible.
+ *
+ * Example:
+ *   void *my_debug_malloc(const char *file, int line, size_t len) __attribute__((alloc_size(3)));
+ *   #define DEBUG_MALLOC(len) my_debug_malloc(__FILE__, __LINE__, (len))
+ */
+#if __has_attribute(alloc_size)
+#  define ATHEME_FATTR_ALLOC_SIZE(x)                    __attribute__((alloc_size((x))))
+#  define ATHEME_FATTR_ALLOC_SIZE_PRODUCT(x, y)         __attribute__((alloc_size((x), (y))))
+#else
+#  define ATHEME_FATTR_ALLOC_SIZE(x)                    /* No 'alloc_size' function attribute support */
+#  define ATHEME_FATTR_ALLOC_SIZE_PRODUCT(x, y)         /* No 'alloc_size' function attribute support */
+#endif
+
 // Diagnose when calls or references to this function are made
 #if defined(__GNUC__) || defined(__INTEL_COMPILER)
 #  define ATHEME_FATTR_DEPRECATED                       __attribute__((deprecated))
 #else
 #  define ATHEME_FATTR_DEPRECATED                       /* No 'deprecated' function attribute support */
+#endif
+
+/* Informs the compiler to generate a diagnostic (type=="warning") or compilation failure (type=="error") when
+ * calling this function with !cond; cond has access to its parameters by name. msg is the message to emit. Can
+ * only be used with conditions that can be evaluated at compilation time.
+ *
+ * Example:
+ *   void foo(void *ptr) __attribute__((diagnose_if(!ptr, "calling foo() with NULL 'ptr'", "error")));
+ */
+#if __has_attribute(diagnose_if)
+#  define ATHEME_FATTR_DIAGNOSE_IF(cond, msg, type)     __attribute__((diagnose_if((cond), (msg), (type))))
+#else
+#  define ATHEME_FATTR_DIAGNOSE_IF(cond, msg, type)     /* No 'diagnose_if' function attribute support */
 #endif
 
 /* Inform the compiler that this function does not return to its caller. This aids some compiler optimisations,
@@ -71,6 +105,13 @@
 #  define ATHEME_SATTR_PACKED                           __attribute__((packed))
 #else
 #  define ATHEME_SATTR_PACKED                           /* No 'packed' structure attribute support */
+#endif
+
+// Inform the compiler that a variable may be unused (don't warn, whether it's used or not)
+#if __has_attribute(maybe_unused)
+#  define ATHEME_VATTR_MAYBE_UNUSED                     __attribute__((maybe_unused))
+#else
+#  define ATHEME_VATTR_MAYBE_UNUSED                     /* No 'maybe_unused' variable attribute support */
 #endif
 
 // Inform the compiler that a variable is unused (don't warn if it isn't used, and maybe warn if it is used)
