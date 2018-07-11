@@ -235,7 +235,7 @@ sfree(void *const restrict ptr)
  * Note that this function *MUST* RETURN ZERO-INITIALIZED MEMORY
  * Parts of the codebase assume this is so and will malfunction otherwise
  */
-void * ATHEME_FATTR_MALLOC
+void * ATHEME_FATTR_ALLOC_SIZE_PRODUCT(1, 2) ATHEME_FATTR_MALLOC
 scalloc(const size_t num, const size_t len)
 {
 #ifdef USE_LIBSODIUM_ALLOCATOR
@@ -273,7 +273,7 @@ scalloc(const size_t num, const size_t len)
  * Note that this function *MUST* RETURN ZERO-INITIALIZED MEMORY
  * Parts of the codebase assume this is so and will malfunction otherwise
  */
-void * ATHEME_FATTR_MALLOC
+void * ATHEME_FATTR_ALLOC_SIZE(1) ATHEME_FATTR_MALLOC
 smalloc(const size_t len)
 {
 #ifdef USE_LIBSODIUM_ALLOCATOR
@@ -288,7 +288,7 @@ smalloc(const size_t len)
 }
 
 /* does realloc()'s job and dies if it fails */
-void * /* ATHEME_FATTR_MALLOC is not applicable -- may return same ptr */
+void * ATHEME_FATTR_ALLOC_SIZE(2)
 srealloc(void *const restrict ptr, const size_t len)
 {
 #ifdef USE_LIBSODIUM_ALLOCATOR
