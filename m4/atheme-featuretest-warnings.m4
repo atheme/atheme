@@ -15,7 +15,6 @@ AC_DEFUN([ATHEME_CC_ENABLE_WARNINGS], [
 		ATHEME_CC_TEST_CFLAGS([-Wno-missing-variable-declarations])
 		ATHEME_CC_TEST_CFLAGS([-Wno-pedantic])
 		ATHEME_CC_TEST_CFLAGS([-Wno-reserved-id-macro])
-		ATHEME_CC_TEST_CFLAGS([-Wno-unused-command-line-argument])
 
 	], [
 

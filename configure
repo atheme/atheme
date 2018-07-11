@@ -11426,47 +11426,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wno-unused-command-line-argument " >&5
-$as_echo_n "checking for C compiler flag(s) -Wno-unused-command-line-argument ... " >&6; }
-
-		CFLAGS_SAVED="${CFLAGS}"
-		CFLAGS="${CFLAGS} -Wno-unused-command-line-argument"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='no'
-				CFLAGS="${CFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		unset CFLAGS_SAVED
-
-
-
 
 else
 
