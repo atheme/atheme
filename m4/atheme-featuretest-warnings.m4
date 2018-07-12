@@ -61,7 +61,6 @@ AC_DEFUN([ATHEME_CC_ENABLE_WARNINGS], [
 		ATHEME_CC_TEST_CFLAGS([-Wpointer-arith])
 		ATHEME_CC_TEST_CFLAGS([-Wpointer-compare])
 		ATHEME_CC_TEST_CFLAGS([-Wredundant-decls])
-		ATHEME_CC_TEST_CFLAGS([-Wregister])
 		ATHEME_CC_TEST_CFLAGS([-Wrestrict])
 		ATHEME_CC_TEST_CFLAGS([-Wshadow])
 		ATHEME_CC_TEST_CFLAGS([-Wstack-protector])
