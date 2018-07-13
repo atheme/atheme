@@ -79,6 +79,15 @@
 #  define ATHEME_FATTR_SCANF(fmt, start)                /* No 'format' function attribute support */
 #endif
 
+/* Inform the compiler that the pointer returned by this function is never NULL.
+ * This aids compiler optimisations and static analysis.
+ */
+#if __has_attribute(returns_nonnull)
+#  define ATHEME_FATTR_RETURNS_NONNULL                  __attribute__((returns_nonnull))
+#else
+#  define ATHEME_FATTR_RETURNS_NONNULL                  /* No 'returns_nonnull' function attribute support */
+#endif
+
 // Diagnose if the return value of the function is unused by the caller (or under Clang, not explicitly discarded).
 #if defined(__GNUC__) || defined(__INTEL_COMPILER)
 #  define ATHEME_FATTR_WUR                              __attribute__((warn_unused_result))
@@ -119,6 +128,6 @@
 #  define ATHEME_VATTR_UNUSED                           __attribute__((unused))
 #else
 #  define ATHEME_VATTR_UNUSED                           /* No 'unused' variable attribute support */
-#endif /* (__GNUC__ || __INTEL_COMPILER) */
+#endif
 
 #endif /* !ATHEME_INC_ATTRS_H */
