@@ -24,11 +24,11 @@ void *srealloc(void *ptr, size_t len) ATHEME_FATTR_ALLOC_SIZE(2);
 char *sstrdup(const char *ptr) ATHEME_FATTR_MALLOC;
 char *sstrndup(const char *ptr, size_t len) ATHEME_FATTR_MALLOC;
 
-#if __has_attribute(diagnose_if)
+#ifdef ATHEME_ATTR_HAS_DIAGNOSE_IF
 void *scalloc(size_t num, size_t len) ATHEME_FATTR_DIAGNOSE_IF(!num, "calling scalloc() with !num", "error");
 void *scalloc(size_t num, size_t len) ATHEME_FATTR_DIAGNOSE_IF(!len, "calling scalloc() with !len", "error");
 void *smalloc(size_t len) ATHEME_FATTR_DIAGNOSE_IF(!len, "calling smalloc() with !len", "error");
 char *sstrndup(const char *ptr, size_t len) ATHEME_FATTR_DIAGNOSE_IF(!len, "calling sstrndup() with !len", "error");
-#endif /* __has_attribute(diagnose_if) */
+#endif /* ATHEME_ATTR_HAS_DIAGNOSE_IF */
 
 #endif /* !ATHEME_INC_ATHEME_MEMORY_H */
