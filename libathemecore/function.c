@@ -56,7 +56,7 @@ string_in_list(const char *const restrict str, const char *restrict list)
 /* This function uses smalloc() to allocate memory.
  * You MUST sfree() the result when you are done with it!
  */
-char * ATHEME_FATTR_MALLOC
+char * ATHEME_FATTR_MALLOC ATHEME_FATTR_RETURNS_NONNULL
 random_string(const size_t sz)
 {
 	static const char ch[62] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

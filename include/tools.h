@@ -124,7 +124,7 @@ struct email_canonicalizer_item
 
 /* misc string stuff */
 bool string_in_list(const char *str, const char *list);
-char *random_string(size_t sz) ATHEME_FATTR_MALLOC;
+char *random_string(size_t sz) ATHEME_FATTR_MALLOC ATHEME_FATTR_RETURNS_NONNULL;
 const char *create_weak_challenge(struct sourceinfo *si, const char *name);
 void tb2sp(char *line);
 char *replace(char *s, int size, const char *old, const char *new);
