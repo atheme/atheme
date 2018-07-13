@@ -288,7 +288,7 @@ smalloc(const size_t len)
 }
 
 /* does realloc()'s job and dies if it fails */
-void * ATHEME_FATTR_ALLOC_SIZE(2)
+void * ATHEME_FATTR_ALLOC_SIZE(2) ATHEME_FATTR_WUR
 srealloc(void *const restrict ptr, const size_t len)
 {
 #ifdef USE_LIBSODIUM_ALLOCATOR
