@@ -32,7 +32,7 @@
 #  ifndef SIGUSR1
 #    define RAISE_EXCEPTION     abort()
 #  else /* !SIGUSR1 */
-#    define RAISE_EXCEPTION     raise(SIGUSR1)
+#    define RAISE_EXCEPTION     do { raise(SIGUSR1); abort(); } while (0)
 #  endif /* SIGUSR1 */
 
 #else /* !USE_LIBSODIUM_ALLOCATOR */
@@ -235,7 +235,7 @@ sfree(void *const restrict ptr)
  * Note that this function *MUST* RETURN ZERO-INITIALIZED MEMORY
  * Parts of the codebase assume this is so and will malfunction otherwise
  */
-void * ATHEME_FATTR_ALLOC_SIZE_PRODUCT(1, 2) ATHEME_FATTR_MALLOC
+void * ATHEME_FATTR_ALLOC_SIZE_PRODUCT(1, 2) ATHEME_FATTR_MALLOC ATHEME_FATTR_RETURNS_NONNULL
 scalloc(const size_t num, const size_t len)
 {
 #ifdef USE_LIBSODIUM_ALLOCATOR
@@ -273,7 +273,7 @@ scalloc(const size_t num, const size_t len)
  * Note that this function *MUST* RETURN ZERO-INITIALIZED MEMORY
  * Parts of the codebase assume this is so and will malfunction otherwise
  */
-void * ATHEME_FATTR_ALLOC_SIZE(1) ATHEME_FATTR_MALLOC
+void * ATHEME_FATTR_ALLOC_SIZE(1) ATHEME_FATTR_MALLOC ATHEME_FATTR_RETURNS_NONNULL
 smalloc(const size_t len)
 {
 #ifdef USE_LIBSODIUM_ALLOCATOR

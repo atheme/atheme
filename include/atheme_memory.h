@@ -18,8 +18,8 @@ extern void *(* volatile volatile_memset)(void *, int, size_t);
 
 void smemzero(void *p, size_t n);
 void sfree(void *ptr);
-void *scalloc(size_t num, size_t len) ATHEME_FATTR_ALLOC_SIZE_PRODUCT(1, 2) ATHEME_FATTR_MALLOC;
-void *smalloc(size_t len) ATHEME_FATTR_ALLOC_SIZE(1) ATHEME_FATTR_MALLOC;
+void *scalloc(size_t num, size_t len) ATHEME_FATTR_ALLOC_SIZE_PRODUCT(1, 2) ATHEME_FATTR_MALLOC ATHEME_FATTR_RETURNS_NONNULL;
+void *smalloc(size_t len) ATHEME_FATTR_ALLOC_SIZE(1) ATHEME_FATTR_MALLOC ATHEME_FATTR_RETURNS_NONNULL;
 void *srealloc(void *ptr, size_t len) ATHEME_FATTR_ALLOC_SIZE(2);
 char *sstrdup(const char *ptr) ATHEME_FATTR_MALLOC;
 char *sstrndup(const char *ptr, size_t len) ATHEME_FATTR_MALLOC;
