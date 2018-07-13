@@ -36,6 +36,7 @@
 #include "sysconf.h"
 #include "account.h"
 #include "auth.h"
+#include "sharedheap.h"
 #include "tools.h"
 #include "confprocess.h"
 #include "global.h"

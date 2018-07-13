@@ -101,6 +101,9 @@ struct nicksvs;
 // Defined in include/servtree.h
 struct service;
 
+// Defined in include/sharedheap.h
+struct sharedheap;
+
 // Defined in include/sourceinfo.h
 struct sourceinfo;
 struct sourceinfo_vtable;
@@ -119,7 +122,6 @@ struct default_template;
 // Defined in include/tools.h
 struct email_canonicalizer_item;
 struct logfile;
-struct sharedheap;
 
 // Defined in include/uid.h
 struct uid_provider;
