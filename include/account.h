@@ -512,7 +512,7 @@ void db_check(void);
 extern mowgli_list_t svs_ignore_list;
 
 struct svsignore *svsignore_find(struct user *user);
-struct svsignore *svsignore_add(const char *mask, const char *reason) ATHEME_FATTR_MALLOC;
+struct svsignore *svsignore_add(const char *mask, const char *reason) ATHEME_FATTR_MALLOC ATHEME_FATTR_RETURNS_NONNULL;
 void svsignore_delete(struct svsignore *svsignore);
 
 #include "entity-validation.h"
