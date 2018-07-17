@@ -270,8 +270,6 @@ help_display_invalid(struct sourceinfo *const restrict si, const struct service 
 		(void) command_fail(si, fault_badparams, _("Invalid %s command. Use \2/msg %s HELP\2 for a %s "
 		                                           "command listing."), service->me->nick, service->disp,
 		                                           service->me->nick);
-
-	(void) help_display_newline(si);
 }
 
 void

@@ -10,11 +10,11 @@ AC_DEFUN([ATHEME_CC_ENABLE_WARNINGS], [
 		ATHEME_CC_TEST_CFLAGS([-Wno-address-of-packed-member])
 		ATHEME_CC_TEST_CFLAGS([-Wno-disabled-macro-expansion])
 		ATHEME_CC_TEST_CFLAGS([-Wno-documentation-deprecated-sync])
+		ATHEME_CC_TEST_CFLAGS([-Wno-documentation-unknown-command])
 		ATHEME_CC_TEST_CFLAGS([-Wno-format-pedantic])
 		ATHEME_CC_TEST_CFLAGS([-Wno-missing-variable-declarations])
 		ATHEME_CC_TEST_CFLAGS([-Wno-pedantic])
 		ATHEME_CC_TEST_CFLAGS([-Wno-reserved-id-macro])
-		ATHEME_CC_TEST_CFLAGS([-Wno-unused-command-line-argument])
 
 	], [
 
@@ -61,7 +61,6 @@ AC_DEFUN([ATHEME_CC_ENABLE_WARNINGS], [
 		ATHEME_CC_TEST_CFLAGS([-Wpointer-arith])
 		ATHEME_CC_TEST_CFLAGS([-Wpointer-compare])
 		ATHEME_CC_TEST_CFLAGS([-Wredundant-decls])
-		ATHEME_CC_TEST_CFLAGS([-Wregister])
 		ATHEME_CC_TEST_CFLAGS([-Wrestrict])
 		ATHEME_CC_TEST_CFLAGS([-Wshadow])
 		ATHEME_CC_TEST_CFLAGS([-Wstack-protector])

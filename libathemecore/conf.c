@@ -856,7 +856,7 @@ c_logfile(mowgli_config_file_entry_t *ce)
 		}
 	}
 
-	logfile_new(ce->vardata, logval);
+	(void) logfile_new(ce->vardata, logval);
 
 	return 0;
 }

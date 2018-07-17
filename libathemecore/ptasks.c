@@ -254,8 +254,8 @@ handle_stats(struct user *u, char req)
 		  numeric_sts(me.me, 249, u, "T :objects    %7zu", MOWGLI_LIST_LENGTH(&object_list));
 #endif
 
-		  numeric_sts(me.me, 249, u, "T :bytes sent %7.2f%s", bytes(cnt.bout), sbytes(cnt.bout));
-		  numeric_sts(me.me, 249, u, "T :bytes recv %7.2f%s", bytes(cnt.bin), sbytes(cnt.bin));
+		  numeric_sts(me.me, 249, u, "T :bytes sent %7.2f%s", (double) bytes(cnt.bout), sbytes(cnt.bout));
+		  numeric_sts(me.me, 249, u, "T :bytes recv %7.2f%s", (double) bytes(cnt.bin), sbytes(cnt.bin));
 		  break;
 
 	  case 'u':

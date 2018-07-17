@@ -589,13 +589,17 @@ chanfix_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	command_success_nodata(si, _("Highest score: \2%u\2"), highscore);
-	command_success_nodata(si, _("Usercount    : \2%zu\2"), chan->chan ? MOWGLI_LIST_LENGTH(&chan->chan->members) : 0);
-	command_success_nodata(si, _("Initial step : \2%.0f%%\2 of \2%u\2 (\2%0.1f\2)"), CHANFIX_INITIAL_STEP * 100, highscore, (highscore * CHANFIX_INITIAL_STEP));
+	command_success_nodata(si, _("Usercount    : \2%zu\2"),
+	                       chan->chan ? MOWGLI_LIST_LENGTH(&chan->chan->members) : 0);
+	command_success_nodata(si, _("Initial step : \2%.0f%%\2 of \2%u\2 (\2%0.1f\2)"),
+	                       (double) (CHANFIX_INITIAL_STEP * 100), highscore,
+	                       (double) (highscore * CHANFIX_INITIAL_STEP));
 	command_success_nodata(si, _("Current step : \2%u\2"), chanfix_get_threshold(chan));
-	command_success_nodata(si, _("Final step   : \2%.0f%%\2 of \2%u\2 (\2%0.1f\2)"), CHANFIX_FINAL_STEP * 100, highscore, (highscore * CHANFIX_FINAL_STEP));
+	command_success_nodata(si, _("Final step   : \2%.0f%%\2 of \2%u\2 (\2%0.1f\2)"),
+	                       (double) (CHANFIX_FINAL_STEP * 100), highscore,
+	                       (double) (highscore * CHANFIX_FINAL_STEP));
 	command_success_nodata(si, _("Needs fixing : \2%s\2"), chanfix_should_handle(chan, chan->chan) ? "YES" : "NO");
-	command_success_nodata(si, _("Now fixing   : \2%s\2"),
-			chan->fix_started ? "YES" : "NO");
+	command_success_nodata(si, _("Now fixing   : \2%s\2"), chan->fix_started ? "YES" : "NO");
 
 	if ((md = metadata_find(chan, "private:mark:setter")) != NULL)
 	{

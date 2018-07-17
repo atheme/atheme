@@ -126,7 +126,7 @@ struct email_canonicalizer_item
 
 /* misc string stuff */
 bool string_in_list(const char *str, const char *list);
-char *random_string(size_t sz) ATHEME_FATTR_MALLOC;
+char *random_string(size_t sz) ATHEME_FATTR_MALLOC ATHEME_FATTR_RETURNS_NONNULL;
 const char *create_weak_challenge(struct sourceinfo *si, const char *name);
 void tb2sp(char *line);
 char *replace(char *s, int size, const char *old, const char *new);
@@ -143,6 +143,7 @@ bool validtopic(const char *topic);
 bool has_ctrl_chars(const char *text);
 char *sbytes(float x);
 float bytes(float x);
+char *combine_path(const char *parent, const char *child);
 
 unsigned long makekey(void);
 int srename(const char *old_fn, const char *new_fn);
@@ -176,19 +177,6 @@ int tokenize(char *message, char **parv);
 const char *uinttobase64(char *buf, uint64_t v, int64_t count);
 unsigned int base64touint(const char *buf);
 void decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN + 1]);
-
-/* sharedheap.c */
-struct sharedheap
-{
-	struct atheme_object    parent;
-	size_t                  size;
-	mowgli_heap_t *         heap;
-	mowgli_node_t           node;
-};
-
-mowgli_heap_t *sharedheap_get(size_t size);
-void sharedheap_unref(mowgli_heap_t *heap);
-char *combine_path(const char *parent, const char *child);
 
 #if !HAVE_VSNPRINTF
 int rpl_vsnprintf(char *, size_t, const char *, va_list) ATHEME_FATTR_PRINTF(3, 0);

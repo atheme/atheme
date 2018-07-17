@@ -71,7 +71,6 @@ mod_deinit(const enum module_unload_intent intent)
 		}
 
 		case MODULE_UNLOAD_INTENT_PERM:
-		default:
 			break;
 	}
 

@@ -454,7 +454,6 @@ chanfix_gather_deinit(const enum module_unload_intent intent, struct chanfix_per
 			break;
 
 		case MODULE_UNLOAD_INTENT_PERM:
-		default:
 			mowgli_patricia_destroy(chanfix_channels, NULL, NULL);
 
 			mowgli_heap_destroy(chanfix_channel_heap);

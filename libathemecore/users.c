@@ -20,6 +20,12 @@ static mowgli_heap_t *user_heap = NULL;
 mowgli_patricia_t *userlist;
 mowgli_patricia_t *uidlist;
 
+static void
+user_delete_cb(void *const restrict user)
+{
+	(void) user_delete(user, NULL);
+}
+
 /*
  * init_users()
  *
@@ -145,7 +151,7 @@ user_add(const char *nick, const char *user, const char *host,
 	}
 
 	u = mowgli_heap_alloc(user_heap);
-	atheme_object_init(atheme_object(u), nick, (atheme_object_destructor_fn) user_delete);
+	atheme_object_init(atheme_object(u), nick, &user_delete_cb);
 
 	if (uid != NULL)
 	{

@@ -64,35 +64,35 @@ static time_t antiflood_msg_time = 60;
 static size_t antiflood_msg_count = 10;
 
 static void
-msg_destroy(struct flood_message *msg, struct flood_message_queue *mq)
+msg_destroy(struct flood_message *mesg, struct flood_message_queue *mq)
 {
-	sfree(msg->message);
-	strshare_unref(msg->source);
-	mowgli_node_delete(&msg->node, &mq->entries);
+	sfree(mesg->message);
+	strshare_unref(mesg->source);
+	mowgli_node_delete(&mesg->node, &mq->entries);
 
-	mowgli_heap_free(msg_heap, msg);
+	mowgli_heap_free(msg_heap, mesg);
 }
 
 static struct flood_message *
 msg_create(struct flood_message_queue *mq, struct user *u, const char *message)
 {
-	struct flood_message *msg;
+	struct flood_message *mesg;
 
-	msg = mowgli_heap_alloc(msg_heap);
-	msg->message = sstrdup(message);
-	msg->time = CURRTIME;
-	msg->source = u->uid != NULL ? strshare_ref(u->uid) : strshare_ref(u->nick);
+	mesg = mowgli_heap_alloc(msg_heap);
+	mesg->message = sstrdup(message);
+	mesg->time = CURRTIME;
+	mesg->source = u->uid != NULL ? strshare_ref(u->uid) : strshare_ref(u->nick);
 
 	if (MOWGLI_LIST_LENGTH(&mq->entries) > mq->max)
 	{
-		struct flood_message *head_msg = mq->entries.head->data;
-		msg_destroy(head_msg, mq);
+		struct flood_message *head_mesg = mq->entries.head->data;
+		msg_destroy(head_mesg, mq);
 	}
 
-	mowgli_node_add(msg, &msg->node, &mq->entries);
+	mowgli_node_add(mesg, &mesg->node, &mq->entries);
 	mq->last_used = CURRTIME;
 
-	return msg;
+	return mesg;
 }
 
 static struct flood_message_queue *
@@ -117,9 +117,9 @@ mqueue_free(struct flood_message_queue *mq)
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, mq->entries.head)
 	{
-		struct flood_message *msg = n->data;
+		struct flood_message *mesg = n->data;
 
-		msg_destroy(msg, mq);
+		msg_destroy(mesg, mq);
 	}
 
 	sfree(mq->name);
@@ -192,17 +192,17 @@ mqueue_should_enforce(struct flood_message_queue *mq)
 
 		MOWGLI_ITER_FOREACH(n, mq->entries.head)
 		{
-			struct flood_message *msg = n->data;
+			struct flood_message *mesg = n->data;
 
-			if (!strcasecmp(msg->message, newest->message))
+			if (!strcasecmp(mesg->message, newest->message))
 				msg_matches++;
 
-			if (msg->source == newest->source)
+			if (mesg->source == newest->source)
 			{
 				usr_matches++;
 
 				if (!usr_first_seen)
-					usr_first_seen = msg->time;
+					usr_first_seen = mesg->time;
 			}
 		}
 
@@ -333,7 +333,7 @@ on_channel_message(hook_cmessage_data_t *data)
 	struct chanuser *cu;
 	struct mychan *mc;
 	struct flood_message_queue *mq;
-	struct flood_message *msg;
+	struct flood_message *mesg;
 
 	return_if_fail(data != NULL);
 	return_if_fail(data->msg != NULL);
@@ -351,7 +351,7 @@ on_channel_message(hook_cmessage_data_t *data)
 	mq = mqueue_get(mc);
 	return_if_fail(mq != NULL);
 
-	msg = msg_create(mq, data->u, data->msg);
+	mesg = msg_create(mq, data->u, data->msg);
 
 	// never enforce against any user who has special CSTATUS flags.
 	if (cu->modes)
