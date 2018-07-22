@@ -305,6 +305,12 @@ atheme_main(int argc, char *argv[])
 		{ NULL, 0, NULL, 0, 0 },
 	};
 
+	if (geteuid() == (uid_t) 0)
+	{
+		(void) fprintf(stderr, "Error: Do not run me as root!\n");
+		exit(EXIT_FAILURE);
+	}
+
 #ifdef HAVE_LIBSODIUM
 	if (sodium_init() == -1)
 	{
