@@ -37,6 +37,10 @@ AC_DEFUN([ATHEME_FEATURETEST_CFLAGS], [
 		[AS_HELP_STRING([--disable-async-unwind-tables], [Disable -fasynchronous-unwind-tables (Generate precise unwind tables for more reliable backtraces)])],
 		[], [enable_async_unwind_tables="yes"])
 
+	AC_ARG_ENABLE([stack-clash-protection],
+		[AS_HELP_STRING([--disable-stack-clash-protection], [Disable -fstack-clash-protection (Prevents skipping over VMM guard pages)])],
+		[], [enable_stack_clash_protection="yes"])
+
 	AC_ARG_ENABLE([stack-protector],
 		[AS_HELP_STRING([--disable-stack-protector], [Disable -fstack-protector{-all,-strong,} (Stack smashing protection)])],
 		[], [enable_stack_protector="yes"])
@@ -49,6 +53,17 @@ AC_DEFUN([ATHEME_FEATURETEST_CFLAGS], [
 			;;
 		*)
 			AC_MSG_ERROR([invalid option for --enable-async-unwind-tables])
+			;;
+	esac
+
+	case "${enable_stack_clash_protection}" in
+		yes)
+			ATHEME_CC_TEST_CFLAGS([-fstack-clash-protection])
+			;;
+		no)
+			;;
+		*)
+			AC_MSG_ERROR([invalid option for --enable-stack-clash-protection])
 			;;
 	esac
 
