@@ -34,7 +34,7 @@ AC_DEFUN([ATHEME_CC_TEST_CFLAGS],
 AC_DEFUN([ATHEME_FEATURETEST_CFLAGS], [
 
 	AC_ARG_ENABLE([stack-protector],
-		[AS_HELP_STRING([--disable-stack-protector], [Disable -fstack-protector{-strong,-all,} (Stack smashing protection)])],
+		[AS_HELP_STRING([--disable-stack-protector], [Disable -fstack-protector{-all,-strong,} (Stack smashing protection)])],
 		[], [enable_stack_protector="yes"])
 
 	AC_ARG_ENABLE([async-unwind-tables],
@@ -43,11 +43,11 @@ AC_DEFUN([ATHEME_FEATURETEST_CFLAGS], [
 
 	case "${enable_stack_protector}" in
 		yes)
-			ATHEME_CC_TEST_CFLAGS([-fstack-protector-strong])
+			ATHEME_CC_TEST_CFLAGS([-fstack-protector-all])
 
 			AS_IF([test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xno"], [
 
-				ATHEME_CC_TEST_CFLAGS([-fstack-protector-all])
+				ATHEME_CC_TEST_CFLAGS([-fstack-protector-strong])
 
 				AS_IF([test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xno"], [
 
@@ -59,7 +59,7 @@ AC_DEFUN([ATHEME_FEATURETEST_CFLAGS], [
 		no)
 			;;
 		*)
-			AC_MSG_ERROR([invalid option for --enable-as-needed])
+			AC_MSG_ERROR([invalid option for --enable-stack-protector])
 			;;
 	esac
 

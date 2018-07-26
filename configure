@@ -1484,7 +1484,7 @@ Optional Features:
                           Disable -D_FORTIFY_SOURCE=2 (hardening for many C
                           library function invocations)
   --disable-stack-protector
-                          Disable -fstack-protector{-strong,-all,} (Stack
+                          Disable -fstack-protector{-all,-strong,} (Stack
                           smashing protection)
   --disable-async-unwind-tables
                           Disable -fasynchronous-unwind-tables (Generate
@@ -10770,11 +10770,11 @@ fi
 	case "${enable_stack_protector}" in
 		yes)
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-protector-strong " >&5
-$as_echo_n "checking for C compiler flag(s) -fstack-protector-strong ... " >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-protector-all " >&5
+$as_echo_n "checking for C compiler flag(s) -fstack-protector-all ... " >&6; }
 
 		CFLAGS_SAVED="${CFLAGS}"
-		CFLAGS="${CFLAGS} -fstack-protector-strong"
+		CFLAGS="${CFLAGS} -fstack-protector-all"
 
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -10815,11 +10815,11 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-protector-all " >&5
-$as_echo_n "checking for C compiler flag(s) -fstack-protector-all ... " >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-protector-strong " >&5
+$as_echo_n "checking for C compiler flag(s) -fstack-protector-strong ... " >&6; }
 
 		CFLAGS_SAVED="${CFLAGS}"
-		CFLAGS="${CFLAGS} -fstack-protector-all"
+		CFLAGS="${CFLAGS} -fstack-protector-strong"
 
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -10909,7 +10909,7 @@ fi
 		no)
 			;;
 		*)
-			as_fn_error $? "invalid option for --enable-as-needed" "$LINENO" 5
+			as_fn_error $? "invalid option for --enable-stack-protector" "$LINENO" 5
 			;;
 	esac
 
