@@ -1,5 +1,5 @@
-Fine grained operator privileges
---------------------------------
+Fine grained privileges
+-----------------------
 
 Terminology:
 
@@ -16,6 +16,8 @@ config services operator
 services operator
 	user logged into an account named in an operator{} block in
 	atheme.conf or an account granted privileges with /os soper
+authenticated user
+	user logged into an account
 
 Note that an account cannot have both an operator{} block and privileges
 granted with /os soper. If this happens, the privileges from /os soper
@@ -47,8 +49,10 @@ The OperServ SPECS command shows the privileges granted to an online user
 or operclass, in a somewhat wordy format. /stats o and SOPER LIST show all
 services operators. SOPER LISTCLASS shows all operclasses.
 
-Description of the privileges in operclasses:
+Description of the privileges in operclasses and pseudoservice access {}:
 
+special:authenticated
+	any authenticated user
 special:ircop
 	bound to AC_IRCOP, if you still have modules using that
 special:disabled
