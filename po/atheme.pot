@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-04-20 00:42+0000\n"
+"POT-Creation-Date: 2019-04-20 22:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -262,6 +262,11 @@ msgstr ""
 #: modules/chanfix/fix.c:466
 #, c-format
 msgid "%s has NOFIX enabled."
+msgstr ""
+
+#: modules/chanserv/bansearch.c:107
+#, c-format
+msgid "%s has a channel join key."
 msgstr ""
 
 #: modules/proxyscan/dnsbl.c:181
@@ -616,6 +621,13 @@ msgstr ""
 msgid "%s is an invalid username."
 msgstr ""
 
+#: modules/chanserv/bansearch.c:100
+#, c-format
+msgid ""
+"%s is blocking unidentified users from speaking,\n"
+"and %s is not identified."
+msgstr ""
+
 #: include/atheme/constants.h:76
 #, c-format
 msgid "%s is closed."
@@ -639,6 +651,26 @@ msgstr ""
 #: modules/botserv/bottalk.c:53 modules/botserv/bottalk.c:120 modules/botserv/set_saycaller.c:44
 #, c-format
 msgid "%s is frozen."
+msgstr ""
+
+#: modules/chanserv/bansearch.c:118
+#, c-format
+msgid "%s is full."
+msgstr ""
+
+#: modules/chanserv/bansearch.c:104
+#, c-format
+msgid "%s is invite-only."
+msgstr ""
+
+#: modules/chanserv/bansearch.c:112
+#, c-format
+msgid "%s is moderated and %s has no channel privileges."
+msgstr ""
+
+#: modules/chanserv/bansearch.c:115
+#, c-format
+msgid "%s is moderated."
 msgstr ""
 
 #: modules/chanserv/akick.c:322 modules/chanserv/xop.c:162
@@ -835,9 +867,9 @@ msgstr ""
 msgid "%s is not on the AKICK list for %s."
 msgstr ""
 
-#: modules/chanserv/halfop.c:65 modules/chanserv/kick.c:52 modules/chanserv/kick.c:119 modules/chanserv/op.c:53
-#: modules/chanserv/owner.c:65 modules/chanserv/protect.c:65 modules/chanserv/voice.c:53 modules/chanserv/why.c:42
-#: modules/nickserv/ghost.c:42 modules/nickserv/logout.c:33
+#: modules/chanserv/bansearch.c:36 modules/chanserv/halfop.c:65 modules/chanserv/kick.c:52
+#: modules/chanserv/kick.c:119 modules/chanserv/op.c:53 modules/chanserv/owner.c:65 modules/chanserv/protect.c:65
+#: modules/chanserv/voice.c:53 modules/chanserv/why.c:42 modules/nickserv/ghost.c:42 modules/nickserv/logout.c:33
 #, c-format
 msgid "%s is not online."
 msgstr ""
@@ -1067,6 +1099,16 @@ msgstr ""
 msgid "%s's marks:"
 msgstr ""
 
+#: modules/chanserv/bansearch.c:76
+#, c-format
+msgid "%u ban found"
+msgstr ""
+
+#: modules/chanserv/bansearch.c:76
+#, c-format
+msgid "%u bans found"
+msgstr ""
+
 #: modules/botserv/main.c:761
 #, c-format
 msgid "%u bots available."
@@ -1188,6 +1230,16 @@ msgstr ""
 #: modules/botserv/main.c:773
 #, c-format
 msgid "%u private bots available."
+msgstr ""
+
+#: modules/chanserv/bansearch.c:94
+#, c-format
+msgid "%u quiet found"
+msgstr ""
+
+#: modules/chanserv/bansearch.c:94
+#, c-format
+msgid "%u quiets found"
 msgstr ""
 
 #: modules/operserv/rnc.c:66
@@ -2084,6 +2136,11 @@ msgstr ""
 #: modules/chanserv/ban.c:66 modules/chanserv/ban.c:75
 #, c-format
 msgid "Banned %s on %s."
+msgstr ""
+
+#: modules/chanserv/bansearch.c:68
+#, c-format
+msgid "Bans matching %s in %s"
 msgstr ""
 
 #: modules/proxyscan/dnsbl.c:557
@@ -4946,6 +5003,11 @@ msgstr ""
 msgid "Quieted %s on %s."
 msgstr ""
 
+#: modules/chanserv/bansearch.c:85
+#, c-format
+msgid "Quiets matching %s in %s"
+msgstr ""
+
 #: modules/operserv/set.c:70
 #, c-format
 msgid "RECONTIME must be a positive integer, %s is invalid"
@@ -5487,6 +5549,10 @@ msgstr ""
 msgid "Search for games based on specific criteria."
 msgstr ""
 
+#: modules/chanserv/bansearch.c:125
+msgid "Searches for bans, quiets, and other channel modes affecting a user."
+msgstr ""
+
 #: modules/operserv/greplog.c:194
 msgid "Searches through the logs."
 msgstr ""
@@ -5990,6 +6056,10 @@ msgstr ""
 
 #: modules/chanserv/ban.c:25 modules/chanserv/ban.c:81
 msgid "Syntax: BAN <#channel> <nickname|hostmask>"
+msgstr ""
+
+#: modules/chanserv/bansearch.c:18
+msgid "Syntax: BANSEARCH <#channel>"
 msgstr ""
 
 #: modules/botserv/main.c:498 modules/botserv/main.c:717 modules/botserv/main.c:738
@@ -8087,8 +8157,8 @@ msgstr ""
 msgid "You are not authorized to use %s."
 msgstr ""
 
-#: modules/nickserv/access.c:207 modules/nickserv/cert.c:42 modules/nickserv/cert.c:84
-#: modules/nickserv/listchans.c:28 modules/nickserv/listgroups.c:28
+#: modules/chanserv/bansearch.c:31 modules/nickserv/access.c:207 modules/nickserv/cert.c:42
+#: modules/nickserv/cert.c:84 modules/nickserv/listchans.c:28 modules/nickserv/listgroups.c:28
 msgid "You are not authorized to use the target argument."
 msgstr ""
 

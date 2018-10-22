@@ -18,6 +18,7 @@ modules/chanserv/access.c
 modules/chanserv/akick.c
 modules/chanserv/antiflood.c
 modules/chanserv/ban.c
+modules/chanserv/bansearch.c
 modules/chanserv/clear_akicks.c
 modules/chanserv/clear_bans.c
 modules/chanserv/clear.c

@@ -10,6 +10,7 @@ SRCS =				\
 	akick.c			\
 	antiflood.c		\
 	ban.c			\
+	bansearch.c		\
 	clear.c			\
 	clear_akicks.c		\
 	clear_bans.c		\
