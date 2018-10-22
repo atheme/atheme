@@ -1,0 +1,17 @@
+Help for BANSEARCH:
+
+The BANSEARCH command searches for bans, quiets, and channel
+modes affecting you in a channel.
+
+Syntax: BANSEARCH <#channel>
+#if priv user:auspex
+
+Operators with user:auspex privilege can also search bans,
+quiets, and channel modes affecting a given user in a given
+channel.
+
+Syntax: BANSEARCH <#channel> <target>
+#endif
+
+Examples:
+    /msg &nick& BANSEARCH #atheme
