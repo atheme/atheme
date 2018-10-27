@@ -681,6 +681,34 @@ user_is_channel_banned(struct user *u, char ban_type)
 	return false;
 }
 
+struct chanuser *
+find_user_banned_channel(struct user *u, char ban_type)
+{
+	mowgli_node_t *n;
+
+	return_val_if_fail(u != NULL, false);
+	return_val_if_fail(ban_type != 0, false);
+
+	MOWGLI_ITER_FOREACH(n, u->channels.head)
+	{
+		struct chanuser *cu = n->data;
+
+		/* Assume that any prefix modes allow changing nicks even while banned */
+		if (cu->modes != 0)
+			continue;
+
+		if (next_matching_ban(cu->chan, u, ban_type, cu->chan->bans.head) != NULL)
+		{
+			if (ircd->except_mchar == '\0' || next_matching_ban(cu->chan, u, ircd->except_mchar, cu->chan->bans.head) == NULL)
+				return cu;
+			else
+				continue;
+		}
+	}
+
+	return NULL;
+}
+
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8
  * vim:sw=8

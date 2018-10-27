@@ -443,9 +443,10 @@ ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 	}
 	if ((si->smu == mn->owner) || verify_password(mn->owner, password))
 	{
-		if (si->su != NULL && (user_is_channel_banned(si->su, 'b') || user_is_channel_banned(si->su, 'q')))
+		struct chanuser *cu = NULL;
+		if (si->su != NULL && ((cu = find_user_banned_channel(si->su, 'b')) || (cu = find_user_banned_channel(si->su, 'q'))))
 		{
-			command_fail(si, fault_noprivs, _("You can not regain your nickname while banned or quieted on a channel."));
+			command_fail(si, fault_noprivs, _("You can not regain your nickname while banned or quieted on a channel: \2%s\2"), cu->chan->name);
 			return;
 		}
 
