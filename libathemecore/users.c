@@ -653,8 +653,8 @@ user_get_umodestr(struct user *u)
 	return result;
 }
 
-bool
-user_is_channel_banned(struct user *u, char ban_type)
+struct chanuser *
+find_user_banned_channel(struct user *const restrict u, const char ban_type)
 {
 	mowgli_node_t *n;
 
@@ -672,13 +672,13 @@ user_is_channel_banned(struct user *u, char ban_type)
 		if (next_matching_ban(cu->chan, u, ban_type, cu->chan->bans.head) != NULL)
 		{
 			if (ircd->except_mchar == '\0' || next_matching_ban(cu->chan, u, ircd->except_mchar, cu->chan->bans.head) == NULL)
-				return true;
+				return cu;
 			else
 				continue;
 		}
 	}
 
-	return false;
+	return NULL;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
