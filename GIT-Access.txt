@@ -1,6 +1,11 @@
 Building from the Git repository
 --------------------------------
 
+If you have already checked out the Atheme Git repository, but you have
+been instructed to read this file when configuring atheme, then use the
+following command to resolve the error:
+  $ git submodule update --init --recursive
+
 The Atheme Git repository can be checked out using the following command:
   $ git clone --recursive 'https://github.com/atheme/atheme.git' atheme-devel
   $ cd atheme-devel

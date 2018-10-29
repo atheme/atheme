@@ -88,7 +88,7 @@ bool user_changenick(struct user *u, const char *nick, time_t ts);
 void user_mode(struct user *user, const char *modes);
 void user_sethost(struct user *source, struct user *target, const char *host);
 const char *user_get_umodestr(struct user *u);
-bool user_is_channel_banned(struct user *u, char ban_type);
+struct chanuser *find_user_banned_channel(struct user *u, char ban_type);
 
 /* uid.c */
 void init_uid(void);

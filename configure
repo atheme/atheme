@@ -812,8 +812,9 @@ enable_nonlazy_bind
 enable_linker_defs
 enable_as_needed
 enable_fortify_source
-enable_stack_protector
 enable_async_unwind_tables
+enable_stack_clash_protection
+enable_stack_protector
 enable_warnings
 with_libmowgli
 '
@@ -1483,12 +1484,15 @@ Optional Features:
   --disable-fortify-source
                           Disable -D_FORTIFY_SOURCE=2 (hardening for many C
                           library function invocations)
-  --disable-stack-protector
-                          Disable -fstack-protector{-strong,-all,} (Stack
-                          smashing protection)
   --disable-async-unwind-tables
                           Disable -fasynchronous-unwind-tables (Generate
                           precise unwind tables for more reliable backtraces)
+  --disable-stack-clash-protection
+                          Disable -fstack-clash-protection (Prevents skipping
+                          over VMM guard pages)
+  --disable-stack-protector
+                          Disable -fstack-protector{-all,-strong,} (Stack
+                          smashing protection)
   --enable-warnings       Enable compiler warnings
 
 Optional Packages:
@@ -10751,14 +10755,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 
-	# Check whether --enable-stack-protector was given.
-if test "${enable_stack_protector+set}" = set; then :
-  enableval=$enable_stack_protector;
-else
-  enable_stack_protector="yes"
-fi
-
-
 	# Check whether --enable-async-unwind-tables was given.
 if test "${enable_async_unwind_tables+set}" = set; then :
   enableval=$enable_async_unwind_tables;
@@ -10767,14 +10763,132 @@ else
 fi
 
 
+	# Check whether --enable-stack-clash-protection was given.
+if test "${enable_stack_clash_protection+set}" = set; then :
+  enableval=$enable_stack_clash_protection;
+else
+  enable_stack_clash_protection="yes"
+fi
+
+
+	# Check whether --enable-stack-protector was given.
+if test "${enable_stack_protector+set}" = set; then :
+  enableval=$enable_stack_protector;
+else
+  enable_stack_protector="yes"
+fi
+
+
+	case "${enable_async_unwind_tables}" in
+		yes)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fasynchronous-unwind-tables " >&5
+$as_echo_n "checking for C compiler flag(s) -fasynchronous-unwind-tables ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -fasynchronous-unwind-tables"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-async-unwind-tables" "$LINENO" 5
+			;;
+	esac
+
+	case "${enable_stack_clash_protection}" in
+		yes)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-clash-protection " >&5
+$as_echo_n "checking for C compiler flag(s) -fstack-clash-protection ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -fstack-clash-protection"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-stack-clash-protection" "$LINENO" 5
+			;;
+	esac
+
 	case "${enable_stack_protector}" in
 		yes)
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-protector-strong " >&5
-$as_echo_n "checking for C compiler flag(s) -fstack-protector-strong ... " >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-protector-all " >&5
+$as_echo_n "checking for C compiler flag(s) -fstack-protector-all ... " >&6; }
 
 		CFLAGS_SAVED="${CFLAGS}"
-		CFLAGS="${CFLAGS} -fstack-protector-strong"
+		CFLAGS="${CFLAGS} -fstack-protector-all"
 
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -10815,11 +10929,11 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-protector-all " >&5
-$as_echo_n "checking for C compiler flag(s) -fstack-protector-all ... " >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-protector-strong " >&5
+$as_echo_n "checking for C compiler flag(s) -fstack-protector-strong ... " >&6; }
 
 		CFLAGS_SAVED="${CFLAGS}"
-		CFLAGS="${CFLAGS} -fstack-protector-all"
+		CFLAGS="${CFLAGS} -fstack-protector-strong"
 
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -10909,58 +11023,7 @@ fi
 		no)
 			;;
 		*)
-			as_fn_error $? "invalid option for --enable-as-needed" "$LINENO" 5
-			;;
-	esac
-
-	case "${enable_async_unwind_tables}" in
-		yes)
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fasynchronous-unwind-tables " >&5
-$as_echo_n "checking for C compiler flag(s) -fasynchronous-unwind-tables ... " >&6; }
-
-		CFLAGS_SAVED="${CFLAGS}"
-		CFLAGS="${CFLAGS} -fasynchronous-unwind-tables"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='no'
-				CFLAGS="${CFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		unset CFLAGS_SAVED
-
-
-			;;
-		no)
-			;;
-		*)
-			as_fn_error $? "invalid option for --enable-async-unwind-tables" "$LINENO" 5
+			as_fn_error $? "invalid option for --enable-stack-protector" "$LINENO" 5
 			;;
 	esac
 

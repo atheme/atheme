@@ -20,8 +20,15 @@ os_cmd_modlist(struct sourceinfo *si, int parc, char *parv[])
 	{
 		struct module *m = n->data;
 
-		command_success_nodata(si, _("%2d: %-20s [loaded at 0x%lx]"),
-			++i, m->name, (unsigned long)m->address);
+		if (has_priv(si, PRIV_SERVER_AUSPEX))
+		{
+			command_success_nodata(si, _("%2d: %-20s [loaded at 0x%lx]"),
+				++i, m->name, (unsigned long)m->address);
+		}
+		else
+		{
+			command_success_nodata(si, _("%2d: %-20s"), ++i, m->name);
+		}
 	}
 
 	command_success_nodata(si, _("\2%d\2 modules loaded."), i);
@@ -31,7 +38,7 @@ os_cmd_modlist(struct sourceinfo *si, int parc, char *parv[])
 static struct command os_modlist = {
 	.name           = "MODLIST",
 	.desc           = N_("Lists loaded modules."),
-	.access         = PRIV_SERVER_AUSPEX,
+	.access         = AC_NONE,
 	.maxparc        = 0,
 	.cmd            = &os_cmd_modlist,
 	.help           = { .path = "oservice/modlist" },
