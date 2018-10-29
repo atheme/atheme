@@ -1,3 +1,10 @@
+/*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ */
+
 #ifndef ATHEME_INC_INLINE_USERS_H
 #define ATHEME_INC_INLINE_USERS_H 1
 
