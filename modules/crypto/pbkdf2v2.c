@@ -301,6 +301,15 @@ atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters, struct pb
 			dbe->a = PBKDF2_PRF_SCRAM_SHA2_256_S64;
 			break;
 
+/*		// No specification
+		case PBKDF2_PRF_HMAC_SHA2_512:
+		case PBKDF2_PRF_HMAC_SHA2_512_S64:
+		case PBKDF2_PRF_SCRAM_SHA2_512:
+		case PBKDF2_PRF_SCRAM_SHA2_512_S64:
+			dbe->a = PBKDF2_PRF_SCRAM_SHA2_512_S64;
+			break;
+*/
+
 		default:
 			(void) slog(LG_DEBUG, "%s: unsupported PRF '%u'", __func__, dbe->a);
 			return false;
