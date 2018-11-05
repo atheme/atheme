@@ -143,12 +143,12 @@ atheme_pbkdf2v2_parse_dbentry(struct pbkdf2v2_dbentry *const restrict dbe, const
 
 		if (base64_decode(ssk64, dbe->ssk, sizeof dbe->ssk) != dbe->dl)
 		{
-			(void) slog(LG_ERROR, "%s: base64_decode('%s') for ssk failed", __func__, ssk64);
+			(void) slog(LG_ERROR, "%s: base64_decode('%s') for ssk failed (BUG)", __func__, ssk64);
 			return false;
 		}
 		if (base64_decode(shk64, dbe->shk, sizeof dbe->shk) != dbe->dl)
 		{
-			(void) slog(LG_ERROR, "%s: base64_decode('%s') for shk failed", __func__, shk64);
+			(void) slog(LG_ERROR, "%s: base64_decode('%s') for shk failed (BUG)", __func__, shk64);
 			return false;
 		}
 
@@ -178,12 +178,14 @@ atheme_pbkdf2v2_parse_dbentry(struct pbkdf2v2_dbentry *const restrict dbe, const
 
 		if (base64_decode(sdg64, dbe->sdg, sizeof dbe->sdg) != dbe->dl)
 		{
-			(void) slog(LG_ERROR, "%s: base64_decode('%s') for sdg failed", __func__, sdg64);
+			(void) slog(LG_ERROR, "%s: base64_decode('%s') for sdg failed (BUG)", __func__, sdg64);
 			return false;
 		}
 
 		return true;
 	}
+
+	(void) slog(LG_DEBUG, "%s: sscanf(3) was unsuccessful", __func__);
 
 	return false;
 }
@@ -193,7 +195,7 @@ atheme_pbkdf2v2_parameters_sane(const struct pbkdf2v2_dbentry *const restrict db
 {
 	if (dbe->sl < PBKDF2_SALTLEN_MIN || dbe->sl > PBKDF2_SALTLEN_MAX)
 	{
-		(void) slog(LG_ERROR, "%s: salt length %zu out of range", __func__, dbe->sl);
+		(void) slog(LG_ERROR, "%s: salt length '%zu' out of range", __func__, dbe->sl);
 		return false;
 	}
 	if (dbe->c < PBKDF2_ITERCNT_MIN || dbe->c > PBKDF2_ITERCNT_MAX)
@@ -213,17 +215,17 @@ atheme_pbkdf2v2_scram_derive(const struct pbkdf2v2_dbentry *const dbe, const uns
 
 	if (csk && ! digest_oneshot_hmac(dbe->md, idg, dbe->dl, ServerKeyStr, sizeof ServerKeyStr, csk, NULL))
 	{
-		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac(idg) failed for csk", __func__);
+		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac(idg) for csk failed (BUG)", __func__);
 		return false;
 	}
 	if (chk && ! digest_oneshot_hmac(dbe->md, idg, dbe->dl, ClientKeyStr, sizeof ClientKeyStr, cck, NULL))
 	{
-		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac(idg) failed for cck", __func__);
+		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac(idg) for cck failed (BUG)", __func__);
 		return false;
 	}
 	if (chk && ! digest_oneshot(dbe->md, cck, dbe->dl, chk, NULL))
 	{
-		(void) slog(LG_ERROR, "%s: digest_oneshot(cck) failed for chk", __func__);
+		(void) slog(LG_ERROR, "%s: digest_oneshot(cck) for chk failed (BUG)", __func__);
 		return false;
 	}
 
@@ -277,10 +279,8 @@ static bool
 atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters, struct pbkdf2v2_dbentry *const restrict dbe)
 {
 	if (! atheme_pbkdf2v2_parse_dbentry(dbe, parameters))
-	{
-		(void) slog(LG_DEBUG, "%s: could not extract necessary information from database", __func__);
+		// This function logs messages on failure
 		return false;
-	}
 
 	const bool salt_was_b64 = atheme_pbkdf2v2_salt_is_b64(dbe->a);
 
@@ -315,7 +315,7 @@ atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters, struct pb
 
 		if (base64_encode(dbe->salt, dbe->sl, dbe->salt64, sizeof dbe->salt64) == (size_t) -1)
 		{
-			(void) slog(LG_ERROR, "%s: base64_encode() failed for salt", __func__);
+			(void) slog(LG_ERROR, "%s: base64_encode() for salt failed (BUG)", __func__);
 			return false;
 		}
 	}
@@ -402,7 +402,7 @@ atheme_pbkdf2v2_compute(const char *const restrict password, struct pbkdf2v2_dbe
 
 	if (! digest_pbkdf2_hmac(dbe->md, key, kl, dbe->salt, dbe->sl, dbe->c, dbe->cdg, dbe->dl))
 	{
-		(void) slog(LG_ERROR, "%s: digest_pbkdf2_hmac() failed", __func__);
+		(void) slog(LG_ERROR, "%s: digest_pbkdf2_hmac() for cdg failed (BUG)", __func__);
 		(void) smemzero(key, sizeof key);
 		return false;
 	}
@@ -421,7 +421,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 
 	if (base64_encode(dbe.salt, (size_t) pbkdf2v2_saltsz, dbe.salt64, sizeof dbe.salt64) == (size_t) -1)
 	{
-		(void) slog(LG_ERROR, "%s: base64_encode() failed (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: base64_encode() for salt failed (BUG)", __func__);
 		return NULL;
 	}
 
@@ -452,12 +452,12 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 
 		if (base64_encode(csk, dbe.dl, csk64, sizeof csk64) == (size_t) -1)
 		{
-			(void) slog(LG_ERROR, "%s: base64_encode() failed for csk", __func__);
+			(void) slog(LG_ERROR, "%s: base64_encode() for csk failed (BUG)", __func__);
 			return NULL;
 		}
 		if (base64_encode(chk, dbe.dl, chk64, sizeof chk64) == (size_t) -1)
 		{
-			(void) slog(LG_ERROR, "%s: base64_encode() failed for chk", __func__);
+			(void) slog(LG_ERROR, "%s: base64_encode() for chk failed (BUG)", __func__);
 			return NULL;
 		}
 		if (snprintf(res, sizeof res, PBKDF2_FS_SAVEHASH, dbe.a, dbe.c, dbe.salt64, csk64, chk64) > PASSLEN)
@@ -472,7 +472,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 
 		if (base64_encode(dbe.cdg, dbe.dl, cdg64, sizeof cdg64) == (size_t) -1)
 		{
-			(void) slog(LG_ERROR, "%s: base64_encode() failed for cdg", __func__);
+			(void) slog(LG_ERROR, "%s: base64_encode() for cdg failed (BUG)", __func__);
 			return NULL;
 		}
 		if (snprintf(res, sizeof res, PBKDF2_FN_SAVEHASH, dbe.a, dbe.c, dbe.salt64, cdg64) > PASSLEN)
@@ -494,10 +494,8 @@ atheme_pbkdf2v2_verify(const char *const restrict password, const char *const re
 	struct pbkdf2v2_dbentry dbe;
 
 	if (! atheme_pbkdf2v2_parse_dbentry(&dbe, parameters))
-	{
-		(void) slog(LG_DEBUG, "%s: sscanf(3) was unsuccessful", __func__);
+		// This function logs messages on failure
 		return false;
-	}
 
 	if (atheme_pbkdf2v2_salt_is_b64(dbe.a))
 	{
