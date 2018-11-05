@@ -58,7 +58,7 @@ atheme_pbkdf2v2_config_ready(void ATHEME_VATTR_UNUSED *const restrict unused)
 	(void) atheme_pbkdf2v2_confhook_dispatch();
 }
 
-static bool
+static inline bool
 atheme_pbkdf2v2_salt_is_b64(const unsigned int prf)
 {
 	switch (prf)
