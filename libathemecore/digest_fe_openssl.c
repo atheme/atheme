@@ -230,6 +230,8 @@ digest_final(struct digest_context *const restrict ctx, void *const restrict out
 		(void) EVP_MD_CTX_destroy(ctx->ictx);
 	}
 
+	ctx->ictx = NULL;
+
 	if (outLen)
 		*outLen = (size_t) uLen;
 
