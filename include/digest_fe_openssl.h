@@ -39,16 +39,10 @@
 #include <openssl/evp.h>
 #include <openssl/hmac.h>
 
-union digest_state
-{
-	EVP_MD_CTX      d;
-	HMAC_CTX        h;
-};
-
 struct digest_context
 {
-	union digest_state      state;
 	const EVP_MD *          md;
+	void *                  ictx;
 	bool                    hmac;
 };
 
