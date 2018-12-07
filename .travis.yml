@@ -36,7 +36,7 @@ script:
   - ./configure --prefix=/home/travis/atheme-install/ --enable-nls --enable-reproducible-builds --with-crypt --with-cracklib --with-ldap --with-libidn --without-mbedtls --with-nettle --with-openssl --with-pcre --with-qrencode ${OPTIONAL_CONF_ARGS}
   - make
   - make install
-  - /home/travis/atheme-install/bin/atheme-services -d -T
+  - /home/travis/atheme-install/bin/atheme-services -d -n -T
 
 matrix:
   allow_failures:
