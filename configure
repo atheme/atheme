@@ -639,6 +639,7 @@ LOGDIR
 LOCALEDIR
 DOCDIR
 DATADIR
+CONTRIB_LIBS
 CONTRIB_COND_D
 DIGEST_API_LIBS
 DIGEST_FRONTEND_COND_C
@@ -10153,6 +10154,112 @@ fi
 
 
 $as_echo "#define ENABLE_CONTRIB_MODULES 1" >>confdefs.h
+
+
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether compiling and linking a program using res_query(3) works" >&5
+$as_echo_n "checking whether compiling and linking a program using res_query(3) works... " >&6; }
+
+	LIBS_SAVED="${LIBS}"
+
+
+
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+
+			#include <resolv.h>
+
+int
+main ()
+{
+
+
+			unsigned char nsbuf[4096];
+			const int ret = res_query("", ns_c_any, ns_t_mx, nsbuf, sizeof nsbuf);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+		ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT="yes"
+
+else
+
+		ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT="no"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+
+	if test "x${ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT}" = "xno"; then :
+
+
+		LIBS="-lresolv ${LIBS}"
+
+
+
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+
+			#include <resolv.h>
+
+int
+main ()
+{
+
+
+			unsigned char nsbuf[4096];
+			const int ret = res_query("", ns_c_any, ns_t_mx, nsbuf, sizeof nsbuf);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+		ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT="yes"
+
+else
+
+		ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT="no"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+
+		if test "x${ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT}" = "xno"; then :
+
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+			as_fn_error $? "--enable-contrib needs a functioning res_query(3)" "$LINENO" 5
+
+fi
+
+		if test "x${ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT}" = "xyes"; then :
+
+
+			CONTRIB_LIBS="-lresolv"
+
+
+fi
+
+fi
+
+	LIBS="${LIBS_SAVED}"
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
 
 			;;
 		no)
