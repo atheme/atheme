@@ -112,7 +112,7 @@ atheme_arc4random_buf(void *const restrict out, const size_t len)
  * Fall back to ChaCha20-based RNG from OpenBSD.
  */
 
-#if defined(HAVE_GETRANDOM) && defined(HAVE_SYS_RANDOM_H)
+#if !defined(HAVE_GETENTROPY) && defined(HAVE_GETRANDOM) && defined(HAVE_SYS_RANDOM_H)
 #  include <sys/random.h>
 #endif
 
