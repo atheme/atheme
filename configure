@@ -10812,11 +10812,11 @@ fi
 	case "${enable_fortify_source}" in
 		yes)
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C preprocessor flag(s) -D_FORTIFY_SOURCE=2 " >&5
-$as_echo_n "checking for C preprocessor flag(s) -D_FORTIFY_SOURCE=2 ... " >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C preprocessor flag(s) -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 " >&5
+$as_echo_n "checking for C preprocessor flag(s) -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 ... " >&6; }
 
 		CPPFLAGS_SAVED="${CPPFLAGS}"
-		CPPFLAGS="${CPPFLAGS} -D_FORTIFY_SOURCE=2"
+		CPPFLAGS="${CPPFLAGS} -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2"
 
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
