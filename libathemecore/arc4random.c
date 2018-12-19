@@ -200,6 +200,11 @@ _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 			(void) slog(LG_ERROR, "%s: getrandom(2): %s", __func__, strerror(errno));
 			exit(EXIT_FAILURE);
 		}
+		if (ret == 0)
+		{
+			(void) slog(LG_ERROR, "%s: getrandom(2): no data returned", __func__);
+			exit(EXIT_FAILURE);
+		}
 
 		out += (size_t) ret;
 	}
@@ -226,6 +231,11 @@ _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 				continue;
 
 			(void) slog(LG_ERROR, "%s: read('%s'): %s", __func__, random_dev, strerror(errno));
+			exit(EXIT_FAILURE);
+		}
+		if (ret == 0)
+		{
+			(void) slog(LG_ERROR, "%s: read('%s'): EOF", __func__, random_dev);
 			exit(EXIT_FAILURE);
 		}
 
