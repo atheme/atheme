@@ -807,16 +807,16 @@ enable_large_net
 enable_legacy_pwcrypto
 enable_reproducible_builds
 enable_sodium_malloc
-enable_profile
-enable_relro
-enable_nonlazy_bind
-enable_linker_defs
-enable_as_needed
 enable_fortify_source
 enable_async_unwind_tables
 enable_stack_clash_protection
 enable_stack_protector
 enable_debugging
+enable_profile
+enable_relro
+enable_nonlazy_bind
+enable_linker_defs
+enable_as_needed
 enable_warnings
 with_libmowgli
 '
@@ -1472,17 +1472,6 @@ Optional Features:
   --enable-reproducible-builds
                           Enable reproducible builds
   --enable-sodium-malloc  Enable libsodium secure memory allocator
-  --enable-profile        Enable profiling extensions
-  --disable-relro         Disable -Wl,-z,relro (marks the relocation table
-                          read-only)
-  --disable-nonlazy-bind  Disable -Wl,-z,now (resolves all symbols at program
-                          startup time)
-  --disable-linker-defs   Disable -Wl,-z,defs (detects and rejects
-                          underlinking)
-  --disable-as-needed     Disable -Wl,--as-needed (strips unnecessary
-                          libraries at link time)
-  --disable-rpath         Disable -Wl,-rpath= (builds installation path into
-                          binaries)
   --disable-fortify-source
                           Disable -D_FORTIFY_SOURCE=2 (hardening for many C
                           library function invocations)
@@ -1496,6 +1485,17 @@ Optional Features:
                           Disable -fstack-protector{-all,-strong,} (Stack
                           smashing protection)
   --enable-debugging      Enable extensive debugging support
+  --enable-profile        Enable profiling extensions
+  --disable-relro         Disable -Wl,-z,relro (marks the relocation table
+                          read-only)
+  --disable-nonlazy-bind  Disable -Wl,-z,now (resolves all symbols at program
+                          startup time)
+  --disable-linker-defs   Disable -Wl,-z,defs (detects and rejects
+                          underlinking)
+  --disable-as-needed     Disable -Wl,--as-needed (strips unnecessary
+                          libraries at link time)
+  --disable-rpath         Disable -Wl,-rpath= (builds installation path into
+                          binaries)
   --enable-warnings       Enable compiler warnings
 
 Optional Packages:
@@ -10435,374 +10435,6 @@ $as_echo "$as_me: WARNING: The sodium hardened memory allocator is not intended 
 
 
 
-	# Check whether --enable-profile was given.
-if test "${enable_profile+set}" = set; then :
-  enableval=$enable_profile;
-else
-  enable_profile="no"
-fi
-
-
-	# Check whether --enable-relro was given.
-if test "${enable_relro+set}" = set; then :
-  enableval=$enable_relro;
-else
-  enable_relro="yes"
-fi
-
-
-	# Check whether --enable-nonlazy-bind was given.
-if test "${enable_nonlazy_bind+set}" = set; then :
-  enableval=$enable_nonlazy_bind;
-else
-  enable_nonlazy_bind="yes"
-fi
-
-
-	# Check whether --enable-linker-defs was given.
-if test "${enable_linker_defs+set}" = set; then :
-  enableval=$enable_linker_defs;
-else
-  enable_linker_defs="yes"
-fi
-
-
-	# Check whether --enable-as-needed was given.
-if test "${enable_as_needed+set}" = set; then :
-  enableval=$enable_as_needed;
-else
-  enable_as_needed="yes"
-fi
-
-
-	# Check whether --enable-rpath was given.
-if test "${enable_rpath+set}" = set; then :
-  enableval=$enable_rpath;
-else
-  enable_rpath="yes"
-fi
-
-
-	case "${enable_profile}" in
-		yes)
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -pg " >&5
-$as_echo_n "checking for C linker flag(s) -pg ... " >&6; }
-
-		LDFLAGS_SAVED="${LDFLAGS}"
-		LDFLAGS="${LDFLAGS} -pg"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-
-				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
-				LDFLAGS="${LDFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-
-		unset LDFLAGS_SAVED
-
-
-			;;
-		no)
-			;;
-		*)
-			as_fn_error $? "invalid option for --enable-profile" "$LINENO" 5
-			;;
-	esac
-
-	case "${enable_relro}" in
-		yes)
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,-z,relro " >&5
-$as_echo_n "checking for C linker flag(s) -Wl,-z,relro ... " >&6; }
-
-		LDFLAGS_SAVED="${LDFLAGS}"
-		LDFLAGS="${LDFLAGS} -Wl,-z,relro"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-
-				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
-				LDFLAGS="${LDFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-
-		unset LDFLAGS_SAVED
-
-
-			;;
-		no)
-			;;
-		*)
-			as_fn_error $? "invalid option for --enable-relro" "$LINENO" 5
-			;;
-	esac
-
-	case "${enable_nonlazy_bind}" in
-		yes)
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,-z,now " >&5
-$as_echo_n "checking for C linker flag(s) -Wl,-z,now ... " >&6; }
-
-		LDFLAGS_SAVED="${LDFLAGS}"
-		LDFLAGS="${LDFLAGS} -Wl,-z,now"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-
-				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
-				LDFLAGS="${LDFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-
-		unset LDFLAGS_SAVED
-
-
-			;;
-		no)
-			;;
-		*)
-			as_fn_error $? "invalid option for --enable-nonlazy-bind" "$LINENO" 5
-			;;
-	esac
-
-	case "${enable_linker_defs}" in
-		yes)
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,-z,defs " >&5
-$as_echo_n "checking for C linker flag(s) -Wl,-z,defs ... " >&6; }
-
-		LDFLAGS_SAVED="${LDFLAGS}"
-		LDFLAGS="${LDFLAGS} -Wl,-z,defs"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-
-				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
-				LDFLAGS="${LDFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-
-		unset LDFLAGS_SAVED
-
-
-			;;
-		no)
-			;;
-		*)
-			as_fn_error $? "invalid option for --enable-linker-defs" "$LINENO" 5
-			;;
-	esac
-
-	case "${enable_as_needed}" in
-		yes)
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,--as-needed " >&5
-$as_echo_n "checking for C linker flag(s) -Wl,--as-needed ... " >&6; }
-
-		LDFLAGS_SAVED="${LDFLAGS}"
-		LDFLAGS="${LDFLAGS} -Wl,--as-needed"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-
-				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
-				LDFLAGS="${LDFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-
-		unset LDFLAGS_SAVED
-
-
-			;;
-		no)
-			;;
-		*)
-			as_fn_error $? "invalid option for --enable-as-needed" "$LINENO" 5
-			;;
-	esac
-
-	case "${enable_rpath}" in
-		yes)
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) ${LDFLAGS_RPATH} " >&5
-$as_echo_n "checking for C linker flag(s) ${LDFLAGS_RPATH} ... " >&6; }
-
-		LDFLAGS_SAVED="${LDFLAGS}"
-		LDFLAGS="${LDFLAGS} ${LDFLAGS_RPATH}"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-
-				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
-				LDFLAGS="${LDFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-
-		unset LDFLAGS_SAVED
-
-
-			;;
-		no)
-			;;
-		*)
-			as_fn_error $? "invalid option for --enable-rpath" "$LINENO" 5
-			;;
-	esac
-
-
-
 	# Check whether --enable-fortify-source was given.
 if test "${enable_fortify_source+set}" = set; then :
   enableval=$enable_fortify_source;
@@ -11209,6 +10841,374 @@ $as_echo "#define ATHEME_DEBUGGING 1" >>confdefs.h
 			;;
 		*)
 			as_fn_error $? "invalid option for --enable-debugging" "$LINENO" 5
+			;;
+	esac
+
+
+
+	# Check whether --enable-profile was given.
+if test "${enable_profile+set}" = set; then :
+  enableval=$enable_profile;
+else
+  enable_profile="no"
+fi
+
+
+	# Check whether --enable-relro was given.
+if test "${enable_relro+set}" = set; then :
+  enableval=$enable_relro;
+else
+  enable_relro="yes"
+fi
+
+
+	# Check whether --enable-nonlazy-bind was given.
+if test "${enable_nonlazy_bind+set}" = set; then :
+  enableval=$enable_nonlazy_bind;
+else
+  enable_nonlazy_bind="yes"
+fi
+
+
+	# Check whether --enable-linker-defs was given.
+if test "${enable_linker_defs+set}" = set; then :
+  enableval=$enable_linker_defs;
+else
+  enable_linker_defs="yes"
+fi
+
+
+	# Check whether --enable-as-needed was given.
+if test "${enable_as_needed+set}" = set; then :
+  enableval=$enable_as_needed;
+else
+  enable_as_needed="yes"
+fi
+
+
+	# Check whether --enable-rpath was given.
+if test "${enable_rpath+set}" = set; then :
+  enableval=$enable_rpath;
+else
+  enable_rpath="yes"
+fi
+
+
+	case "${enable_profile}" in
+		yes)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -pg " >&5
+$as_echo_n "checking for C linker flag(s) -pg ... " >&6; }
+
+		LDFLAGS_SAVED="${LDFLAGS}"
+		LDFLAGS="${LDFLAGS} -pg"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
+				LDFLAGS="${LDFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+		unset LDFLAGS_SAVED
+
+
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-profile" "$LINENO" 5
+			;;
+	esac
+
+	case "${enable_relro}" in
+		yes)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,-z,relro " >&5
+$as_echo_n "checking for C linker flag(s) -Wl,-z,relro ... " >&6; }
+
+		LDFLAGS_SAVED="${LDFLAGS}"
+		LDFLAGS="${LDFLAGS} -Wl,-z,relro"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
+				LDFLAGS="${LDFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+		unset LDFLAGS_SAVED
+
+
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-relro" "$LINENO" 5
+			;;
+	esac
+
+	case "${enable_nonlazy_bind}" in
+		yes)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,-z,now " >&5
+$as_echo_n "checking for C linker flag(s) -Wl,-z,now ... " >&6; }
+
+		LDFLAGS_SAVED="${LDFLAGS}"
+		LDFLAGS="${LDFLAGS} -Wl,-z,now"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
+				LDFLAGS="${LDFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+		unset LDFLAGS_SAVED
+
+
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-nonlazy-bind" "$LINENO" 5
+			;;
+	esac
+
+	case "${enable_linker_defs}" in
+		yes)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,-z,defs " >&5
+$as_echo_n "checking for C linker flag(s) -Wl,-z,defs ... " >&6; }
+
+		LDFLAGS_SAVED="${LDFLAGS}"
+		LDFLAGS="${LDFLAGS} -Wl,-z,defs"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
+				LDFLAGS="${LDFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+		unset LDFLAGS_SAVED
+
+
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-linker-defs" "$LINENO" 5
+			;;
+	esac
+
+	case "${enable_as_needed}" in
+		yes)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,--as-needed " >&5
+$as_echo_n "checking for C linker flag(s) -Wl,--as-needed ... " >&6; }
+
+		LDFLAGS_SAVED="${LDFLAGS}"
+		LDFLAGS="${LDFLAGS} -Wl,--as-needed"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
+				LDFLAGS="${LDFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+		unset LDFLAGS_SAVED
+
+
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-as-needed" "$LINENO" 5
+			;;
+	esac
+
+	case "${enable_rpath}" in
+		yes)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) ${LDFLAGS_RPATH} " >&5
+$as_echo_n "checking for C linker flag(s) ${LDFLAGS_RPATH} ... " >&6; }
+
+		LDFLAGS_SAVED="${LDFLAGS}"
+		LDFLAGS="${LDFLAGS} ${LDFLAGS_RPATH}"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_LD_TEST_LDFLAGS_RESULT='no'
+				LDFLAGS="${LDFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+		unset LDFLAGS_SAVED
+
+
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-rpath" "$LINENO" 5
 			;;
 	esac
 
