@@ -71,8 +71,8 @@ IRCds
 Misc
 ----
 - Replace Base-64 codec to fix erroneous failures and add a raw encoder
-- `dist/atheme.conf.example`: document SET NOPASSWORD module
-- Services will no longer begin a new database unless passed the -b option
+- `dist/atheme.conf.example`: document `SET NOPASSWORD` module
+- Services will no longer begin a new database unless passed the `-b` option
 - Port `contrib/ns_waitreg` to `modules/nickserv/waitreg`
 
 Build System
@@ -86,21 +86,21 @@ Build System
 - `configure`: Detect PCRE support automatically instead of requiring the
   user to ask us to build against it (--with-pcre)
 - `buildsys.mk.in`: clearly indicate link output file for 'make V=1' text
-- Makefiles: remove PCRE CFLAGS and LIBS from programs that don't use it
-- Makefiles: separate LDFLAGS from LIBS
+- Makefiles: remove PCRE `CFLAGS` and `LIBS` from programs that don't use it
+- Makefiles: separate `LDFLAGS` from `LIBS`
 - Makefiles: build source files in alphabetical order
 - `configure`: conditionally compile libathemecore/qrcode.c
 - `configure`: add --with(out)-qrencode flag to allow controlling detection
 - `configure`: Make --enable-ssl now --with-openssl to match libmowgli
 - `configure`: If --with-openssl, only build against libcrypto, not libssl
-- `configure`: cleanly separate CFLAGS from CPPFLAGS
-- `configure`: don't add MOWGLI_CFLAGS and MOWGLI_LIBS twice
+- `configure`: cleanly separate `CFLAGS` from `CPPFLAGS`
+- `configure`: don't add `MOWGLI_CFLAGS` and `MOWGLI_LIBS` twice
 - `configure`: print expanded directories
 - `configure`: print final configuration in a nicer, grouped, format
-- `configure`: print CC/CFLAGS/CPPFLAGS/LD/LDFLAGS
-- `configure`: indicate if --enable-warnings
-- `configure`: detect support for -Wl,-z,relro -Wl,-z,now -Wl,--as-needed
-- `configure`: don't link everything against -lcrypt
+- `configure`: print `CC`/`CFLAGS`/`CPPFLAGS`/`LD`/`LDFLAGS`
+- `configure`: indicate if `--enable-warnings` was given
+- `configure`: detect support for `-Wl,-z,relro`, `-Wl,-z,now`, `-Wl,--as-needed`
+- `configure`: don't link everything against `-lcrypt`
 - Update third-party files (`ABOUT-NLS`, `autoconf/*`, `m4/*.m4`)
 - Clarify that `GIT-Access` is a file by renaming it to `GIT-Access.txt`
 
@@ -116,9 +116,9 @@ Password Cryptography
 - Indicating whether a password needs re-encrypting is now much more efficient
 - Verifying a password hash no longer wastes CPU time on modules that didn't
   produce it if the module that did produce it fails to verify it
-- A new core module operserv/genhash is available to generate password hashes
+- A new core module `operserv/genhash` is available to generate password hashes
   suitable for use as services operator passwords. This alleviates the need to
-  build contrib module support and use contrib/ns_generatehash.
+  build contrib module support and use `contrib/ns_generatehash`.
 - The `crypto/posix` module has been replaced with individual `crypt3-*` modules.
   Please see the Password Hashing Modules section of `dist/atheme.conf.example`.
 - Legacy password crypto modules are now not compiled or installed by default.
