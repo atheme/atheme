@@ -50,6 +50,7 @@ Configuration:
     Sodium Support ..........: ${LIBSODIUM}
 
     Contrib Modules .........: ${CONTRIB_MODULES}
+    Debugging Support .......: ${DEBUGGING}
     Internationalization ....: ${USE_GETTEXT}
     Large Network Support ...: ${LARGE_NET}
     Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}

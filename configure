@@ -816,6 +816,7 @@ enable_fortify_source
 enable_async_unwind_tables
 enable_stack_clash_protection
 enable_stack_protector
+enable_debugging
 enable_warnings
 with_libmowgli
 '
@@ -1494,6 +1495,7 @@ Optional Features:
   --disable-stack-protector
                           Disable -fstack-protector{-all,-strong,} (Stack
                           smashing protection)
+  --enable-debugging      Enable extensive debugging support
   --enable-warnings       Enable compiler warnings
 
 Optional Packages:
@@ -11136,6 +11138,82 @@ fi
 
 
 
+	DEBUGGING="No"
+
+	# Check whether --enable-debugging was given.
+if test "${enable_debugging+set}" = set; then :
+  enableval=$enable_debugging;
+else
+  enable_debugging="no"
+fi
+
+
+	case "${enable_debugging}" in
+		yes)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -O0 -g " >&5
+$as_echo_n "checking for C compiler flag(s) -O0 -g ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -O0 -g"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+
+			if test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xno"; then :
+
+
+				as_fn_error $? "--enable-debugging requires compiler support for -O0 -g" "$LINENO" 5
+
+fi
+
+
+$as_echo "#define ATHEME_DEBUGGING 1" >>confdefs.h
+
+			DEBUGGING="Yes"
+			;;
+		no)
+			DEBUGGING="No"
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-debugging" "$LINENO" 5
+			;;
+	esac
+
+
+
 	BUILD_WARNINGS="No"
 
 	# Check whether --enable-warnings was given.
@@ -16320,6 +16398,7 @@ Configuration:
     Sodium Support ..........: ${LIBSODIUM}
 
     Contrib Modules .........: ${CONTRIB_MODULES}
+    Debugging Support .......: ${DEBUGGING}
     Internationalization ....: ${USE_GETTEXT}
     Large Network Support ...: ${LARGE_NET}
     Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}
