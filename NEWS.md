@@ -12,7 +12,7 @@ POTENTIAL COMPATIBILITY BREAKAGE
   NOT be compatible with earlier versions of this software (<= 7.2). PLEASE
   consider this VERY CAREFULLY! This closes issue #601.
 
-- The posix password crypto module has been removed. If you used this module on
+- The POSIX password crypto module has been removed. If you used this module on
   Atheme <= 7.2, this module has been replaced with 4 other modules (2 of which
   provide compatibility for the removed module). The module you need to load
   depends upon the operating system Atheme was being used on; if it was Mac OS
@@ -27,7 +27,7 @@ POTENTIAL COMPATIBILITY BREAKAGE
   `crypt3-des`, `crypt3-md5`, `ircservices`, `rawmd5`, `rawsha1`), then you
   MUST pass the `--enable-legacy-pwcrypto` flag to `./configure`, or these
   modules will NOT be compiled or installed. The presence of this flag can be
-  confirmed at the bottom of the configure output; "Legacy Crypto Modules".
+  confirmed at the bottom of the `configure` output; "Legacy Crypto Modules".
 
 Security
 --------
@@ -48,8 +48,8 @@ SASL
 - Add support for SASL SCRAM-SHA logins (see `doc/SASL-SCRAM-SHA`)
 - Advertise SASL mechanism list to UnrealIRCd servers
 - Use a parameter vector to allow an arbitrary number of S2S arguments
-- Indicate whether the client is on a plaintext connection or not
-  This can be used by user_can_login hooks
+- Indicate whether the client is on a plaintext connection or not. This can
+  be used by user_can_login hooks.
 
 MemoServ
 --------
@@ -57,7 +57,7 @@ MemoServ
 
 ChanServ
 --------
-- Save PUBACL flag to database so it isn't lost when services restarts
+- Save `PUBACL` flag to database so it isn't lost when services restarts
 
 IRCds
 -----
@@ -77,22 +77,22 @@ Misc
 
 Build System
 ------------
-- `m4/`: don't check for warning flags that gcc -Wall enables
-- `m4/`: don't check for warning flags that gcc -Wextra enables
+- `m4/`: don't check for warning flags that `gcc -Wall` enables
+- `m4/`: don't check for warning flags that `gcc -Wextra` enables
 - `m4/`: check for more warning flags
-- `m4/`: support clang's -Weverything flag
+- `m4/`: support `clang`'s `-Weverything` flag
 - `configure`: don't venture outside the build directory for headers if
   using the in-tree libmowgli-2 submodule
 - `configure`: Detect PCRE support automatically instead of requiring the
-  user to ask us to build against it (--with-pcre)
-- `buildsys.mk.in`: clearly indicate link output file for 'make V=1' text
+  user to ask us to build against it (`--with-pcre`)
+- `buildsys.mk.in`: clearly indicate link output file for `make V=1` text
 - Makefiles: remove PCRE `CFLAGS` and `LIBS` from programs that don't use it
 - Makefiles: separate `LDFLAGS` from `LIBS`
 - Makefiles: build source files in alphabetical order
-- `configure`: conditionally compile libathemecore/qrcode.c
-- `configure`: add --with(out)-qrencode flag to allow controlling detection
-- `configure`: Make --enable-ssl now --with-openssl to match libmowgli
-- `configure`: If --with-openssl, only build against libcrypto, not libssl
+- `configure`: conditionally compile `libathemecore/qrcode.c`
+- `configure`: add `--with(out)-qrencode` flag to allow controlling detection
+- `configure`: Make `--enable-ssl` now `--with-openssl` to match libmowgli
+- `configure`: If `--with-openssl`, only build against libcrypto, not libssl
 - `configure`: cleanly separate `CFLAGS` from `CPPFLAGS`
 - `configure`: don't add `MOWGLI_CFLAGS` and `MOWGLI_LIBS` twice
 - `configure`: print expanded directories
