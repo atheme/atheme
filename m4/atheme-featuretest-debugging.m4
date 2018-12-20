@@ -19,6 +19,7 @@ AC_DEFUN([ATHEME_FEATURETEST_DEBUGGING], [
 			DEBUGGING="Yes"
 			;;
 		no)
+			ATHEME_CC_TEST_CFLAGS([-O2])
 			DEBUGGING="No"
 			;;
 		*)

@@ -30,6 +30,8 @@ AS_IF([test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"], [
 ])
 
 AS_IF([test "x${prefix}" = "xNONE"], [prefix="${ac_default_prefix}"])
+AS_IF([test -z "${CFLAGS}"], [CFLAGS=""])
+AS_IF([test -z "${CPPFLAGS}"], [CPPFLAGS=""])
 
 dnl Buildsys module stuff
 BUILDSYS_INIT
