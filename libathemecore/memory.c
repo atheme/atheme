@@ -157,6 +157,9 @@ free_sodium_memblock(struct sodium_memblock *const restrict mptr)
 void
 smemzero(void *const restrict p, const size_t n)
 {
+	if (! (p && n))
+		return;
+
 #ifdef HAVE_MEMSET_S
 
 	if (memset_s(p, n, 0x00, n) != 0)
