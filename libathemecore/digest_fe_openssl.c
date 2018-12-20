@@ -11,6 +11,48 @@
 
 #include <openssl/evp.h>
 #include <openssl/hmac.h>
+#include <openssl/opensslv.h>
+
+#if (OPENSSL_VERSION_NUMBER < 0x10100000L)
+
+/*
+ * Grumble. If you're going to stop exporting the definitions of your
+ * internal structures and provide new/free functions for your API instead,
+ * you really should do it for *all* of your API. Seriously, guys. --amdj
+ */
+
+static inline HMAC_CTX * ATHEME_FATTR_WUR
+HMAC_CTX_new(void)
+{
+	HMAC_CTX *const ctx = smalloc(sizeof *ctx);
+
+	(void) HMAC_CTX_init(ctx);
+
+	return ctx;
+}
+
+static inline void
+HMAC_CTX_free(HMAC_CTX *const restrict ctx)
+{
+	(void) HMAC_CTX_cleanup(ctx);
+	(void) sfree(ctx);
+}
+
+#endif /* (OPENSSL_VERSION_NUMBER < 0x10100000L) */
+
+static inline void
+digest_free_internal(struct digest_context *const restrict ctx)
+{
+	if (! ctx || ! ctx->ictx)
+		return;
+
+	if (ctx->hmac)
+		(void) HMAC_CTX_free(ctx->ictx);
+	else
+		(void) EVP_MD_CTX_destroy(ctx->ictx);
+
+	ctx->ictx = NULL;
+}
 
 static inline const EVP_MD *
 digest_decide_md(const unsigned int alg)
@@ -44,13 +86,21 @@ digest_init(struct digest_context *const restrict ctx, const unsigned int alg)
 	}
 
 	(void) memset(ctx, 0x00, sizeof *ctx);
-	(void) EVP_MD_CTX_init(&ctx->state.d);
 
 	if (! (ctx->md = digest_decide_md(alg)))
 		return false;
 
-	if (EVP_DigestInit_ex(&ctx->state.d, ctx->md, NULL) != 1)
+	if (! (ctx->ictx = EVP_MD_CTX_create()))
+	{
+		(void) slog(LG_ERROR, "%s: EVP_MD_CTX_create(3): unknown error", __func__);
 		return false;
+	}
+	if (EVP_DigestInit_ex(ctx->ictx, ctx->md, NULL) != 1)
+	{
+		(void) slog(LG_ERROR, "%s: EVP_DigestInit_ex(3): unknown error", __func__);
+		(void) digest_free_internal(ctx);
+		return false;
+	}
 
 	return true;
 }
@@ -66,15 +116,23 @@ digest_init_hmac(struct digest_context *const restrict ctx, const unsigned int a
 	}
 
 	(void) memset(ctx, 0x00, sizeof *ctx);
-	(void) HMAC_CTX_init(&ctx->state.h);
 
 	ctx->hmac = true;
 
 	if (! (ctx->md = digest_decide_md(alg)))
 		return false;
 
-	if (HMAC_Init_ex(&ctx->state.h, key, (int) keyLen, ctx->md, NULL) != 1)
+	if (! (ctx->ictx = HMAC_CTX_new()))
+	{
+		(void) slog(LG_ERROR, "%s: HMAC_CTX_new(3): unknown error", __func__);
 		return false;
+	}
+	if (HMAC_Init_ex(ctx->ictx, key, (int) keyLen, ctx->md, NULL) != 1)
+	{
+		(void) slog(LG_ERROR, "%s: HMAC_Init_ex(3): unknown error", __func__);
+		(void) digest_free_internal(ctx);
+		return false;
+	}
 
 	return true;
 }
@@ -85,12 +143,17 @@ digest_update(struct digest_context *const restrict ctx, const void *const restr
 	if (! ctx)
 	{
 		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", __func__);
-		return false;
+		goto error;
+	}
+	if (! ctx->ictx)
+	{
+		(void) slog(LG_ERROR, "%s: called with NULL 'ctx->ictx' (BUG)", __func__);
+		goto error;
 	}
 	if ((! data && dataLen) || (data && ! dataLen))
 	{
 		(void) slog(LG_ERROR, "%s: called with mismatched data parameters (BUG)", __func__);
-		return false;
+		goto error;
 	}
 
 	if (! (data && dataLen))
@@ -98,16 +161,21 @@ digest_update(struct digest_context *const restrict ctx, const void *const restr
 
 	if (ctx->hmac)
 	{
-		if (HMAC_Update(&ctx->state.h, data, dataLen) != 1)
-			return false;
+		if (HMAC_Update(ctx->ictx, data, dataLen) != 1)
+			goto error;
 	}
 	else
 	{
-		if (EVP_DigestUpdate(&ctx->state.d, data, dataLen) != 1)
-			return false;
+		if (EVP_DigestUpdate(ctx->ictx, data, dataLen) != 1)
+			goto error;
 	}
 
 	return true;
+
+error:
+	(void) digest_free_internal(ctx);
+
+	return false;
 }
 
 bool ATHEME_FATTR_WUR
@@ -116,12 +184,17 @@ digest_final(struct digest_context *const restrict ctx, void *const restrict out
 	if (! ctx)
 	{
 		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", __func__);
-		return false;
+		goto error;
+	}
+	if (! ctx->ictx)
+	{
+		(void) slog(LG_ERROR, "%s: called with NULL 'ctx->ictx' (BUG)", __func__);
+		goto error;
 	}
 	if (! out)
 	{
 		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", __func__);
-		return false;
+		goto error;
 	}
 
 	const size_t hLen = (size_t) EVP_MD_size(ctx->md);
@@ -130,30 +203,33 @@ digest_final(struct digest_context *const restrict ctx, void *const restrict out
 	if (outLen && *outLen < hLen)
 	{
 		(void) slog(LG_ERROR, "%s: output buffer is too small (BUG)", __func__);
-		return false;
+		goto error;
 	}
 	else if (outLen)
 		uLen = *outLen;
 
 	if (ctx->hmac)
 	{
-		if (HMAC_Final(&ctx->state.h, out, &uLen) != 1)
-			return false;
-
-		(void) HMAC_CTX_cleanup(&ctx->state.h);
+		if (HMAC_Final(ctx->ictx, out, &uLen) != 1)
+			goto error;
 	}
 	else
 	{
-		if (EVP_DigestFinal_ex(&ctx->state.d, out, &uLen) != 1)
-			return false;
-
-		(void) EVP_MD_CTX_cleanup(&ctx->state.d);
+		if (EVP_DigestFinal_ex(ctx->ictx, out, &uLen) != 1)
+			goto error;
 	}
 
 	if (outLen)
 		*outLen = (size_t) uLen;
 
+	(void) digest_free_internal(ctx);
+
 	return true;
+
+error:
+	(void) digest_free_internal(ctx);
+
+	return false;
 }
 
 bool ATHEME_FATTR_WUR
@@ -195,7 +271,7 @@ digest_pbkdf2_hmac(const unsigned int alg, const void *restrict pass, const size
 	/*
 	 * PKCS5_PBKDF2_HMAC() fails if you give it a NULL argument for pass
 	 * or salt, even if the corresponding length argument is zero! This
-	 * is extremely counter-intuitive, and requires these ugly hacks.
+	 * is extremely counter-intuitive, and requires these ugly hacks.  -- amdj
 	 */
 	if (! pass)
 		pass = &passLen;
@@ -209,5 +285,6 @@ digest_pbkdf2_hmac(const unsigned int alg, const void *restrict pass, const size
 
 error:
 	(void) smemzero(dk, dkLen);
+
 	return false;
 }

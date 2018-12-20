@@ -39,7 +39,7 @@ AC_DEFUN([ATHEME_FEATURETEST_CPPFLAGS], [
 
 	case "${enable_fortify_source}" in
 		yes)
-			ATHEME_CPP_TEST_CPPFLAGS([-D_FORTIFY_SOURCE=2])
+			ATHEME_CPP_TEST_CPPFLAGS([-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2])
 			;;
 		no)
 			;;

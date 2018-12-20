@@ -639,6 +639,7 @@ LOGDIR
 LOCALEDIR
 DOCDIR
 DATADIR
+CONTRIB_LIBS
 CONTRIB_COND_D
 DIGEST_API_LIBS
 DIGEST_FRONTEND_COND_C
@@ -806,15 +807,16 @@ enable_large_net
 enable_legacy_pwcrypto
 enable_reproducible_builds
 enable_sodium_malloc
+enable_fortify_source
+enable_async_unwind_tables
+enable_stack_clash_protection
+enable_stack_protector
+enable_debugging
 enable_profile
 enable_relro
 enable_nonlazy_bind
 enable_linker_defs
 enable_as_needed
-enable_fortify_source
-enable_async_unwind_tables
-enable_stack_clash_protection
-enable_stack_protector
 enable_warnings
 with_libmowgli
 '
@@ -1470,17 +1472,6 @@ Optional Features:
   --enable-reproducible-builds
                           Enable reproducible builds
   --enable-sodium-malloc  Enable libsodium secure memory allocator
-  --enable-profile        Enable profiling extensions
-  --disable-relro         Disable -Wl,-z,relro (marks the relocation table
-                          read-only)
-  --disable-nonlazy-bind  Disable -Wl,-z,now (resolves all symbols at program
-                          startup time)
-  --disable-linker-defs   Disable -Wl,-z,defs (detects and rejects
-                          underlinking)
-  --disable-as-needed     Disable -Wl,--as-needed (strips unnecessary
-                          libraries at link time)
-  --disable-rpath         Disable -Wl,-rpath= (builds installation path into
-                          binaries)
   --disable-fortify-source
                           Disable -D_FORTIFY_SOURCE=2 (hardening for many C
                           library function invocations)
@@ -1493,6 +1484,18 @@ Optional Features:
   --disable-stack-protector
                           Disable -fstack-protector{-all,-strong,} (Stack
                           smashing protection)
+  --enable-debugging      Enable extensive debugging support
+  --enable-profile        Enable profiling extensions
+  --disable-relro         Disable -Wl,-z,relro (marks the relocation table
+                          read-only)
+  --disable-nonlazy-bind  Disable -Wl,-z,now (resolves all symbols at program
+                          startup time)
+  --disable-linker-defs   Disable -Wl,-z,defs (detects and rejects
+                          underlinking)
+  --disable-as-needed     Disable -Wl,--as-needed (strips unnecessary
+                          libraries at link time)
+  --disable-rpath         Disable -Wl,-rpath= (builds installation path into
+                          binaries)
   --enable-warnings       Enable compiler warnings
 
 Optional Packages:
@@ -2505,6 +2508,12 @@ fi
 
 if test "x${prefix}" = "xNONE"; then :
   prefix="${ac_default_prefix}"
+fi
+if test -z "${CFLAGS}"; then :
+  CFLAGS=""
+fi
+if test -z "${CPPFLAGS}"; then :
+  CPPFLAGS=""
 fi
 
 
@@ -6281,16 +6290,21 @@ else
 /* end confdefs.h.  */
 
 #include <libintl.h>
-$gt_revision_test_code
+#ifndef __GNU_GETTEXT_SUPPORTED_REVISION
 extern int _nl_msg_cat_cntr;
 extern int *_nl_domain_bindings;
+#define __GNU_GETTEXT_SYMBOL_EXPRESSION (_nl_msg_cat_cntr + *_nl_domain_bindings)
+#else
+#define __GNU_GETTEXT_SYMBOL_EXPRESSION 0
+#endif
+$gt_revision_test_code
 
 int
 main ()
 {
 
 bindtextdomain ("", "");
-return * gettext ("")$gt_expression_test_code + _nl_msg_cat_cntr + *_nl_domain_bindings
+return * gettext ("")$gt_expression_test_code + __GNU_GETTEXT_SYMBOL_EXPRESSION
 
   ;
   return 0;
@@ -6410,36 +6424,42 @@ else
       if test $am_cv_lib_iconv = yes; then
         LIBS="$LIBS $LIBICONV"
       fi
-      if test "$cross_compiling" = yes; then :
-
-         case "$host_os" in
-           aix* | hpux*) am_cv_func_iconv_works="guessing no" ;;
-           *)            am_cv_func_iconv_works="guessing yes" ;;
-         esac
-
+      am_cv_func_iconv_works=no
+      for ac_iconv_const in '' 'const'; do
+        if test "$cross_compiling" = yes; then :
+  case "$host_os" in
+             aix* | hpux*) am_cv_func_iconv_works="guessing no" ;;
+             *)            am_cv_func_iconv_works="guessing yes" ;;
+           esac
 else
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 #include <iconv.h>
 #include <string.h>
-int main ()
+
+#ifndef ICONV_CONST
+# define ICONV_CONST $ac_iconv_const
+#endif
+
+int
+main ()
 {
-  int result = 0;
+int result = 0;
   /* Test against AIX 5.1 bug: Failures are not distinguishable from successful
      returns.  */
   {
     iconv_t cd_utf8_to_88591 = iconv_open ("ISO8859-1", "UTF-8");
     if (cd_utf8_to_88591 != (iconv_t)(-1))
       {
-        static const char input[] = "\342\202\254"; /* EURO SIGN */
+        static ICONV_CONST char input[] = "\342\202\254"; /* EURO SIGN */
         char buf[10];
-        const char *inptr = input;
+        ICONV_CONST char *inptr = input;
         size_t inbytesleft = strlen (input);
         char *outptr = buf;
         size_t outbytesleft = sizeof (buf);
         size_t res = iconv (cd_utf8_to_88591,
-                            (char **) &inptr, &inbytesleft,
+                            &inptr, &inbytesleft,
                             &outptr, &outbytesleft);
         if (res == 0)
           result |= 1;
@@ -6452,14 +6472,14 @@ int main ()
     iconv_t cd_ascii_to_88591 = iconv_open ("ISO8859-1", "646");
     if (cd_ascii_to_88591 != (iconv_t)(-1))
       {
-        static const char input[] = "\263";
+        static ICONV_CONST char input[] = "\263";
         char buf[10];
-        const char *inptr = input;
+        ICONV_CONST char *inptr = input;
         size_t inbytesleft = strlen (input);
         char *outptr = buf;
         size_t outbytesleft = sizeof (buf);
         size_t res = iconv (cd_ascii_to_88591,
-                            (char **) &inptr, &inbytesleft,
+                            &inptr, &inbytesleft,
                             &outptr, &outbytesleft);
         if (res == 0)
           result |= 2;
@@ -6471,14 +6491,14 @@ int main ()
     iconv_t cd_88591_to_utf8 = iconv_open ("UTF-8", "ISO-8859-1");
     if (cd_88591_to_utf8 != (iconv_t)(-1))
       {
-        static const char input[] = "\304";
+        static ICONV_CONST char input[] = "\304";
         static char buf[2] = { (char)0xDE, (char)0xAD };
-        const char *inptr = input;
+        ICONV_CONST char *inptr = input;
         size_t inbytesleft = 1;
         char *outptr = buf;
         size_t outbytesleft = 1;
         size_t res = iconv (cd_88591_to_utf8,
-                            (char **) &inptr, &inbytesleft,
+                            &inptr, &inbytesleft,
                             &outptr, &outbytesleft);
         if (res != (size_t)(-1) || outptr - buf > 1 || buf[1] != (char)0xAD)
           result |= 4;
@@ -6491,14 +6511,14 @@ int main ()
     iconv_t cd_88591_to_utf8 = iconv_open ("utf8", "iso88591");
     if (cd_88591_to_utf8 != (iconv_t)(-1))
       {
-        static const char input[] = "\304rger mit b\366sen B\374bchen ohne Augenma\337";
+        static ICONV_CONST char input[] = "\304rger mit b\366sen B\374bchen ohne Augenma\337";
         char buf[50];
-        const char *inptr = input;
+        ICONV_CONST char *inptr = input;
         size_t inbytesleft = strlen (input);
         char *outptr = buf;
         size_t outbytesleft = sizeof (buf);
         size_t res = iconv (cd_88591_to_utf8,
-                            (char **) &inptr, &inbytesleft,
+                            &inptr, &inbytesleft,
                             &outptr, &outbytesleft);
         if ((int)res > 0)
           result |= 8;
@@ -6518,17 +6538,20 @@ int main ()
       && iconv_open ("utf8", "eucJP") == (iconv_t)(-1))
     result |= 16;
   return result;
+
+  ;
+  return 0;
 }
 _ACEOF
 if ac_fn_c_try_run "$LINENO"; then :
   am_cv_func_iconv_works=yes
-else
-  am_cv_func_iconv_works=no
 fi
 rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
   conftest.$ac_objext conftest.beam conftest.$ac_ext
 fi
 
+        test "$am_cv_func_iconv_works" = no || break
+      done
       LIBS="$am_save_LIBS"
 
 fi
@@ -7034,20 +7057,25 @@ else
 /* end confdefs.h.  */
 
 #include <libintl.h>
-$gt_revision_test_code
+#ifndef __GNU_GETTEXT_SUPPORTED_REVISION
 extern int _nl_msg_cat_cntr;
 extern
 #ifdef __cplusplus
 "C"
 #endif
 const char *_nl_expand_alias (const char *);
+#define __GNU_GETTEXT_SYMBOL_EXPRESSION (_nl_msg_cat_cntr + *_nl_expand_alias (""))
+#else
+#define __GNU_GETTEXT_SYMBOL_EXPRESSION 0
+#endif
+$gt_revision_test_code
 
 int
 main ()
 {
 
 bindtextdomain ("", "");
-return * gettext ("")$gt_expression_test_code + _nl_msg_cat_cntr + *_nl_expand_alias ("")
+return * gettext ("")$gt_expression_test_code + __GNU_GETTEXT_SYMBOL_EXPRESSION
 
   ;
   return 0;
@@ -7066,20 +7094,25 @@ rm -f core conftest.err conftest.$ac_objext \
 /* end confdefs.h.  */
 
 #include <libintl.h>
-$gt_revision_test_code
+#ifndef __GNU_GETTEXT_SUPPORTED_REVISION
 extern int _nl_msg_cat_cntr;
 extern
 #ifdef __cplusplus
 "C"
 #endif
 const char *_nl_expand_alias (const char *);
+#define __GNU_GETTEXT_SYMBOL_EXPRESSION (_nl_msg_cat_cntr + *_nl_expand_alias (""))
+#else
+#define __GNU_GETTEXT_SYMBOL_EXPRESSION 0
+#endif
+$gt_revision_test_code
 
 int
 main ()
 {
 
 bindtextdomain ("", "");
-return * gettext ("")$gt_expression_test_code + _nl_msg_cat_cntr + *_nl_expand_alias ("")
+return * gettext ("")$gt_expression_test_code + __GNU_GETTEXT_SYMBOL_EXPRESSION
 
   ;
   return 0;
@@ -10154,6 +10187,112 @@ fi
 
 $as_echo "#define ENABLE_CONTRIB_MODULES 1" >>confdefs.h
 
+
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether compiling and linking a program using res_query(3) works" >&5
+$as_echo_n "checking whether compiling and linking a program using res_query(3) works... " >&6; }
+
+	LIBS_SAVED="${LIBS}"
+
+
+
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+
+			#include <resolv.h>
+
+int
+main ()
+{
+
+
+			unsigned char nsbuf[4096];
+			const int ret = res_query("", ns_c_any, ns_t_mx, nsbuf, sizeof nsbuf);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+		ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT="yes"
+
+else
+
+		ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT="no"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+
+	if test "x${ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT}" = "xno"; then :
+
+
+		LIBS="-lresolv ${LIBS}"
+
+
+
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+
+			#include <resolv.h>
+
+int
+main ()
+{
+
+
+			unsigned char nsbuf[4096];
+			const int ret = res_query("", ns_c_any, ns_t_mx, nsbuf, sizeof nsbuf);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+		ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT="yes"
+
+else
+
+		ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT="no"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+
+		if test "x${ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT}" = "xno"; then :
+
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+			as_fn_error $? "--enable-contrib needs a functioning res_query(3)" "$LINENO" 5
+
+fi
+
+		if test "x${ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT}" = "xyes"; then :
+
+
+			CONTRIB_LIBS="-lresolv"
+
+
+fi
+
+fi
+
+	LIBS="${LIBS_SAVED}"
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 			;;
 		no)
 			CONTRIB_MODULES="No"
@@ -10323,6 +10462,458 @@ $as_echo "$as_me: WARNING: The sodium hardened memory allocator is not intended 
 			;;
 	esac
 
+
+
+
+	# Check whether --enable-fortify-source was given.
+if test "${enable_fortify_source+set}" = set; then :
+  enableval=$enable_fortify_source;
+else
+  enable_fortify_source="yes"
+fi
+
+
+	case "${enable_fortify_source}" in
+		yes)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C preprocessor flag(s) -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 " >&5
+$as_echo_n "checking for C preprocessor flag(s) -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 ... " >&6; }
+
+		CPPFLAGS_SAVED="${CPPFLAGS}"
+		CPPFLAGS="${CPPFLAGS} -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CPP_TEST_CPPFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CPP_TEST_CPPFLAGS_RESULT='no'
+				CPPFLAGS="${CPPFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CPPFLAGS_SAVED
+
+
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-fortify-source" "$LINENO" 5
+			;;
+	esac
+
+
+
+	# Check whether --enable-async-unwind-tables was given.
+if test "${enable_async_unwind_tables+set}" = set; then :
+  enableval=$enable_async_unwind_tables;
+else
+  enable_async_unwind_tables="yes"
+fi
+
+
+	# Check whether --enable-stack-clash-protection was given.
+if test "${enable_stack_clash_protection+set}" = set; then :
+  enableval=$enable_stack_clash_protection;
+else
+  enable_stack_clash_protection="yes"
+fi
+
+
+	# Check whether --enable-stack-protector was given.
+if test "${enable_stack_protector+set}" = set; then :
+  enableval=$enable_stack_protector;
+else
+  enable_stack_protector="yes"
+fi
+
+
+	case "${enable_async_unwind_tables}" in
+		yes)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fasynchronous-unwind-tables " >&5
+$as_echo_n "checking for C compiler flag(s) -fasynchronous-unwind-tables ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -fasynchronous-unwind-tables"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-async-unwind-tables" "$LINENO" 5
+			;;
+	esac
+
+	case "${enable_stack_clash_protection}" in
+		yes)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-clash-protection " >&5
+$as_echo_n "checking for C compiler flag(s) -fstack-clash-protection ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -fstack-clash-protection"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-stack-clash-protection" "$LINENO" 5
+			;;
+	esac
+
+	case "${enable_stack_protector}" in
+		yes)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-protector-all " >&5
+$as_echo_n "checking for C compiler flag(s) -fstack-protector-all ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -fstack-protector-all"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+
+			if test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xno"; then :
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-protector-strong " >&5
+$as_echo_n "checking for C compiler flag(s) -fstack-protector-strong ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -fstack-protector-strong"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+
+				if test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xno"; then :
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-protector " >&5
+$as_echo_n "checking for C compiler flag(s) -fstack-protector ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -fstack-protector"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+
+fi
+
+fi
+
+			;;
+		no)
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-stack-protector" "$LINENO" 5
+			;;
+	esac
+
+
+
+	DEBUGGING="No"
+
+	# Check whether --enable-debugging was given.
+if test "${enable_debugging+set}" = set; then :
+  enableval=$enable_debugging;
+else
+  enable_debugging="no"
+fi
+
+
+	case "${enable_debugging}" in
+		yes)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -O0 -g " >&5
+$as_echo_n "checking for C compiler flag(s) -O0 -g ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -O0 -g"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+
+			if test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xno"; then :
+
+
+				as_fn_error $? "--enable-debugging requires compiler support for -O0 -g" "$LINENO" 5
+
+fi
+
+
+$as_echo "#define ATHEME_DEBUGGING 1" >>confdefs.h
+
+			DEBUGGING="Yes"
+			;;
+		no)
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -O2 " >&5
+$as_echo_n "checking for C compiler flag(s) -O2 ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -O2"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+			DEBUGGING="No"
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-debugging" "$LINENO" 5
+			;;
+	esac
 
 
 
@@ -10689,341 +11280,6 @@ rm -f core conftest.err conftest.$ac_objext \
 			;;
 		*)
 			as_fn_error $? "invalid option for --enable-rpath" "$LINENO" 5
-			;;
-	esac
-
-
-
-	# Check whether --enable-fortify-source was given.
-if test "${enable_fortify_source+set}" = set; then :
-  enableval=$enable_fortify_source;
-else
-  enable_fortify_source="yes"
-fi
-
-
-	case "${enable_fortify_source}" in
-		yes)
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C preprocessor flag(s) -D_FORTIFY_SOURCE=2 " >&5
-$as_echo_n "checking for C preprocessor flag(s) -D_FORTIFY_SOURCE=2 ... " >&6; }
-
-		CPPFLAGS_SAVED="${CPPFLAGS}"
-		CPPFLAGS="${CPPFLAGS} -D_FORTIFY_SOURCE=2"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_CPP_TEST_CPPFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_CPP_TEST_CPPFLAGS_RESULT='no'
-				CPPFLAGS="${CPPFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		unset CPPFLAGS_SAVED
-
-
-			;;
-		no)
-			;;
-		*)
-			as_fn_error $? "invalid option for --enable-fortify-source" "$LINENO" 5
-			;;
-	esac
-
-
-
-	# Check whether --enable-async-unwind-tables was given.
-if test "${enable_async_unwind_tables+set}" = set; then :
-  enableval=$enable_async_unwind_tables;
-else
-  enable_async_unwind_tables="yes"
-fi
-
-
-	# Check whether --enable-stack-clash-protection was given.
-if test "${enable_stack_clash_protection+set}" = set; then :
-  enableval=$enable_stack_clash_protection;
-else
-  enable_stack_clash_protection="yes"
-fi
-
-
-	# Check whether --enable-stack-protector was given.
-if test "${enable_stack_protector+set}" = set; then :
-  enableval=$enable_stack_protector;
-else
-  enable_stack_protector="yes"
-fi
-
-
-	case "${enable_async_unwind_tables}" in
-		yes)
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fasynchronous-unwind-tables " >&5
-$as_echo_n "checking for C compiler flag(s) -fasynchronous-unwind-tables ... " >&6; }
-
-		CFLAGS_SAVED="${CFLAGS}"
-		CFLAGS="${CFLAGS} -fasynchronous-unwind-tables"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='no'
-				CFLAGS="${CFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		unset CFLAGS_SAVED
-
-
-			;;
-		no)
-			;;
-		*)
-			as_fn_error $? "invalid option for --enable-async-unwind-tables" "$LINENO" 5
-			;;
-	esac
-
-	case "${enable_stack_clash_protection}" in
-		yes)
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-clash-protection " >&5
-$as_echo_n "checking for C compiler flag(s) -fstack-clash-protection ... " >&6; }
-
-		CFLAGS_SAVED="${CFLAGS}"
-		CFLAGS="${CFLAGS} -fstack-clash-protection"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='no'
-				CFLAGS="${CFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		unset CFLAGS_SAVED
-
-
-			;;
-		no)
-			;;
-		*)
-			as_fn_error $? "invalid option for --enable-stack-clash-protection" "$LINENO" 5
-			;;
-	esac
-
-	case "${enable_stack_protector}" in
-		yes)
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-protector-all " >&5
-$as_echo_n "checking for C compiler flag(s) -fstack-protector-all ... " >&6; }
-
-		CFLAGS_SAVED="${CFLAGS}"
-		CFLAGS="${CFLAGS} -fstack-protector-all"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='no'
-				CFLAGS="${CFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		unset CFLAGS_SAVED
-
-
-
-			if test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xno"; then :
-
-
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-protector-strong " >&5
-$as_echo_n "checking for C compiler flag(s) -fstack-protector-strong ... " >&6; }
-
-		CFLAGS_SAVED="${CFLAGS}"
-		CFLAGS="${CFLAGS} -fstack-protector-strong"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='no'
-				CFLAGS="${CFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		unset CFLAGS_SAVED
-
-
-
-				if test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xno"; then :
-
-
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-protector " >&5
-$as_echo_n "checking for C compiler flag(s) -fstack-protector ... " >&6; }
-
-		CFLAGS_SAVED="${CFLAGS}"
-		CFLAGS="${CFLAGS} -fstack-protector"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='no'
-				CFLAGS="${CFLAGS_SAVED}"
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		unset CFLAGS_SAVED
-
-
-
-fi
-
-fi
-
-			;;
-		no)
-			;;
-		*)
-			as_fn_error $? "invalid option for --enable-stack-protector" "$LINENO" 5
 			;;
 	esac
 
@@ -13935,6 +14191,47 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wno-extra-semi-stmt " >&5
+$as_echo_n "checking for C compiler flag(s) -Wno-extra-semi-stmt ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wno-extra-semi-stmt"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wno-inline " >&5
 $as_echo_n "checking for C compiler flag(s) -Wno-inline ... " >&6; }
 
@@ -16213,6 +16510,7 @@ Configuration:
     Sodium Support ..........: ${LIBSODIUM}
 
     Contrib Modules .........: ${CONTRIB_MODULES}
+    Debugging Support .......: ${DEBUGGING}
     Internationalization ....: ${USE_GETTEXT}
     Large Network Support ...: ${LARGE_NET}
     Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}

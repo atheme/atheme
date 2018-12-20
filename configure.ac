@@ -33,6 +33,8 @@ AS_IF([test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"], [
 ])
 
 AS_IF([test "x${prefix}" = "xNONE"], [prefix="${ac_default_prefix}"])
+AS_IF([test -z "${CFLAGS}"], [CFLAGS=""])
+AS_IF([test -z "${CPPFLAGS}"], [CPPFLAGS=""])
 
 dnl Buildsys module stuff
 BUILDSYS_INIT
@@ -149,11 +151,12 @@ ATHEME_FEATURETEST_SODIUM_MALLOC
 
 dnl These must be here, not above, or they might interfere with library and feature tests
 dnl Explanation is that these modify one or more of CFLAGS, CPPFLAGS, LDFLAGS, and LIBS
-dnl Linker tests should be first so that warning flags don't clutter the contents of config.log
+dnl Warnings should be second-to-last so that they don't clutter the contents of config.log
 dnl Mowgli test must be last or it will interfere with linker tests (the library may not yet exist)
-ATHEME_FEATURETEST_LDFLAGS
 ATHEME_FEATURETEST_CPPFLAGS
 ATHEME_FEATURETEST_CFLAGS
+ATHEME_FEATURETEST_DEBUGGING
+ATHEME_FEATURETEST_LDFLAGS
 ATHEME_FEATURETEST_WARNINGS
 ATHEME_LIBTEST_MOWGLI
 

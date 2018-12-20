@@ -84,6 +84,7 @@ AC_DEFUN([ATHEME_CC_ENABLE_WARNINGS], [
 
 	ATHEME_CC_TEST_CFLAGS([-Wno-cast-align])
 	ATHEME_CC_TEST_CFLAGS([-Wno-conversion])
+	ATHEME_CC_TEST_CFLAGS([-Wno-extra-semi-stmt])
 	ATHEME_CC_TEST_CFLAGS([-Wno-inline])
 	ATHEME_CC_TEST_CFLAGS([-Wno-missing-declarations])
 	ATHEME_CC_TEST_CFLAGS([-Wno-missing-include-dirs])

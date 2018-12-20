@@ -1,2 +1,20 @@
-*.c linguist-language=C
-*.h linguist-language=C
+/aclocal.m4                     linguist-generated
+/autoconf/                      linguist-generated
+/configure                      linguist-generated
+/include/sysconf.h.in           linguist-generated
+
+/ABOUT-NLS                      linguist-vendored
+/m4/ax_subdirs_configure.m4     linguist-vendored
+/m4/gettext.m4                  linguist-vendored
+/m4/iconv.m4                    linguist-vendored
+/m4/intlmacosx.m4               linguist-vendored
+/m4/lib-ld.m4                   linguist-vendored
+/m4/lib-link.m4                 linguist-vendored
+/m4/lib-prefix.m4               linguist-vendored
+/m4/nls.m4                      linguist-vendored
+/m4/pkg.m4                      linguist-vendored
+/m4/po.m4                       linguist-vendored
+/m4/progtest.m4                 linguist-vendored
+
+*.c                             linguist-language=C
+*.h                             linguist-language=C

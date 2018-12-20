@@ -12,22 +12,22 @@ POTENTIAL COMPATIBILITY BREAKAGE
   NOT be compatible with earlier versions of this software (<= 7.2). PLEASE
   consider this VERY CAREFULLY! This closes issue #601.
 
-- The posix password crypto module has been removed. If you used this module on
+- The POSIX password crypto module has been removed. If you used this module on
   Atheme <= 7.2, this module has been replaced with 4 other modules (2 of which
   provide compatibility for the removed module). The module you need to load
   depends upon the operating system Atheme was being used on; if it was Mac OS
-  then you need to load modules/crypto/crypt3-des instead. If it was any other
-  operating system, then you need to load modules/crypto/crypt3-md5 instead.
-  Note that these 2 modules are compatibility modules; they can only verify
-  existing encrypted passwords, they cannot encrypt new ones. You must load an
-  encryption-capable crypto module. Please see the Password Hashing Modules
-  section of dist/atheme.conf.example.
+  then you need to load `modules/crypto/crypt3-des` instead. If it was any
+  other operating system, then you need to load `modules/crypto/crypt3-md5`
+  instead. Note that these 2 modules are compatibility modules; they can only
+  verify existing encrypted passwords, they cannot encrypt new ones. You must
+  load an encryption-capable crypto module. Please see the Password Hashing
+  Modules section of `dist/atheme.conf.example`.
 
-- If you still use legacy password crypto (verify-only) modules (these: posix,
-  crypt3-des, crypt3-md5, ircservices, rawmd5, rawsha1), then you MUST pass
-  the --enable-legacy-pwcrypto flag to ./configure, or these modules will NOT
-  be compiled or installed. The presence of this flag can be confirmed at the
-  bottom of the configure output:   "Legacy Crypto Modules ...: Yes".
+- If you still use legacy password crypto (verify-only) modules (`posix`,
+  `crypt3-des`, `crypt3-md5`, `ircservices`, `rawmd5`, `rawsha1`), then you
+  MUST pass the `--enable-legacy-pwcrypto` flag to `./configure`, or these
+  modules will NOT be compiled or installed. The presence of this flag can be
+  confirmed at the bottom of the `configure` output; "Legacy Crypto Modules".
 
 Security
 --------
@@ -39,17 +39,17 @@ Security
   modules. You must load an encryption-capable password crypto module if you
   want new user registrations and changed passwords to be encrypted; you will
   receive an error message every time encryption is attempted if you do not.
-  Please see dist/atheme.conf.example and the Password Cryptography section
+  Please see `dist/atheme.conf.example` and the Password Cryptography section
   below for more information.
 
 SASL
 ----
 - SASLServ and its modules have been almost entirely re-written
-- Add support for SASL SCRAM-SHA logins (see doc/SASL-SCRAM-SHA)
+- Add support for SASL SCRAM-SHA logins (see `doc/SASL-SCRAM-SHA`)
 - Advertise SASL mechanism list to UnrealIRCd servers
 - Use a parameter vector to allow an arbitrary number of S2S arguments
-- Indicate whether the client is on a plaintext connection or not
-  This can be used by user_can_login hooks
+- Indicate whether the client is on a plaintext connection or not. This can
+  be used by user_can_login hooks.
 
 MemoServ
 --------
@@ -57,11 +57,11 @@ MemoServ
 
 ChanServ
 --------
-- Save PUBACL flag to database so it isn't lost when services restarts
+- Save `PUBACL` flag to database so it isn't lost when services restarts
 
 IRCds
 -----
-- Support chm_nonotice.s (Block channel notices) extension in charybdis IRCd
+- Support `chm_nonotice.so` (Block channel notices) extension in charybdis IRCd
 - Support cmode +M in charybdis (and make it oper-only)
 - Support cmode +T in UnrealIRCd
 - Support cmode +D in UnrealIRCd 4
@@ -71,56 +71,56 @@ IRCds
 Misc
 ----
 - Replace Base-64 codec to fix erroneous failures and add a raw encoder
-- atheme.conf.example: document SET NOPASSWORD module
-- Services will no longer begin a new database unless passed the -b option
-- Port contrib/ns_waitreg to modules/nickserv/waitreg
+- `dist/atheme.conf.example`: document `SET NOPASSWORD` module
+- Services will no longer begin a new database unless passed the `-b` option
+- Port `contrib/ns_waitreg` to `modules/nickserv/waitreg`
 
 Build System
 ------------
-- m4/: don't check for warning flags that gcc -Wall enables
-- m4/: don't check for warning flags that gcc -Wextra enables
-- m4/: check for more warning flags
-- m4/: support clang's -Weverything flag
-- configure: don't venture outside the build directory for headers if
+- `m4/`: don't check for warning flags that `gcc -Wall` enables
+- `m4/`: don't check for warning flags that `gcc -Wextra` enables
+- `m4/`: check for more warning flags
+- `m4/`: support `clang`'s `-Weverything` flag
+- `configure`: don't venture outside the build directory for headers if
   using the in-tree libmowgli-2 submodule
-- configure: Detect PCRE support automatically instead of requiring the
-  user to ask us to build against it (--with-pcre)
-- buildsys.mk.in: clearly indicate link output file for 'make V=1' text
-- Makefiles: remove PCRE CFLAGS and LIBS from programs that don't use it
-- Makefiles: separate LDFLAGS from LIBS
+- `configure`: Detect PCRE support automatically instead of requiring the
+  user to ask us to build against it (`--with-pcre`)
+- `buildsys.mk.in`: clearly indicate link output file for `make V=1` text
+- Makefiles: remove PCRE `CFLAGS` and `LIBS` from programs that don't use it
+- Makefiles: separate `LDFLAGS` from `LIBS`
 - Makefiles: build source files in alphabetical order
-- configure: conditionally compile libathemecore/qrcode.c
-- configure: add --with(out)-qrencode flag to allow controlling detection
-- configure: Make --enable-ssl now --with-openssl to match libmowgli
-- configure: If --with-openssl, only build against libcrypto, not libssl
-- configure: cleanly separate CFLAGS from CPPFLAGS
-- configure: don't add MOWGLI_CFLAGS and MOWGLI_LIBS twice
-- configure: print expanded directories
-- configure: print final configuration in a nicer, grouped, format
-- configure: print CC/CFLAGS/CPPFLAGS/LD/LDFLAGS
-- configure: indicate if --enable-warnings
-- configure: detect support for -Wl,-z,relro -Wl,-z,now -Wl,--as-needed
-- configure: don't link everything against -lcrypt
-- Update third-party files (ABOUT-NLS, autoconf/*, m4/*.m4)
-- Clarify that GIT-Access is a file by renaming it to GIT-Access.txt
+- `configure`: conditionally compile `libathemecore/qrcode.c`
+- `configure`: add `--with(out)-qrencode` flag to allow controlling detection
+- `configure`: Make `--enable-ssl` now `--with-openssl` to match libmowgli
+- `configure`: If `--with-openssl`, only build against libcrypto, not libssl
+- `configure`: cleanly separate `CFLAGS` from `CPPFLAGS`
+- `configure`: don't add `MOWGLI_CFLAGS` and `MOWGLI_LIBS` twice
+- `configure`: print expanded directories
+- `configure`: print final configuration in a nicer, grouped, format
+- `configure`: print `CC`/`CFLAGS`/`CPPFLAGS`/`LD`/`LDFLAGS`
+- `configure`: indicate if `--enable-warnings` was given
+- `configure`: detect support for `-Wl,-z,relro`, `-Wl,-z,now`, `-Wl,--as-needed`
+- `configure`: don't link everything against `-lcrypt`
+- Update third-party files (`ABOUT-NLS`, `autoconf/*`, `m4/*.m4`)
+- Clarify that `GIT-Access` is a file by renaming it to `GIT-Access.txt`
 
 Password Cryptography
 ---------------------
 - Crypto modules no longer need OpenSSL (or any crypto library)
-- libathemecore/crypto: log current crypto provider on mod(un/re)load
-- libathemecore/crypto: rip out plaintext fallback implementation
-- Make old modules (ircservices, pbkdf2, rawmd5, rawsha1) verify-only
+- `libathemecore/crypto.c`: log current crypto provider on mod(un/re)load
+- `libathemecore/crypto.c`: rip out plaintext fallback implementation
+- Make old modules (`ircservices`, `pbkdf2`, `rawmd5`, `rawsha1`) verify-only
 - Warn admin if no encryption-capable crypto modules are loaded
 - Generating new encrypted passwords is now much more efficient
 - Try encrypting a password with each module in turn instead of giving up
 - Indicating whether a password needs re-encrypting is now much more efficient
 - Verifying a password hash no longer wastes CPU time on modules that didn't
   produce it if the module that did produce it fails to verify it
-- A new core module operserv/genhash is available to generate password hashes
+- A new core module `operserv/genhash` is available to generate password hashes
   suitable for use as services operator passwords. This alleviates the need to
-  build contrib module support and use contrib/ns_generatehash.
-- The crypto/posix module has been replaced with individual crypt3-* modules.
-  Please see the Password Hashing Modules section of dist/atheme.conf.example.
+  build contrib module support and use `contrib/ns_generatehash`.
+- The `crypto/posix` module has been replaced with individual `crypt3-*` modules.
+  Please see the Password Hashing Modules section of `dist/atheme.conf.example`.
 - Legacy password crypto modules are now not compiled or installed by default.
 
 

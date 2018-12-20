@@ -8,6 +8,9 @@
 /* Define if building universal (internal helper macro) */
 #undef AC_APPLE_UNIVERSAL_BUILD
 
+/* Enable extensive debugging support */
+#undef ATHEME_DEBUGGING
+
 /* Front-end header for digest interface */
 #undef DIGEST_FE_HEADER
 
