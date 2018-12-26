@@ -1,0 +1,11 @@
+COMPARE:
+
+Iki kullanici ya da kanali karsilastirir.
+
+Klon tespiti icin kullanislidir.
+
+Sentaks: COMPARE <#kanal|nick> <#kanal|nick>
+
+Kullanimi:
+    /msg &nick& COMPARE #foo #bar
+    /msg &nick& COMPARE foo bar

@@ -1,0 +1,12 @@
+GHOST:
+
+Butun eski oturumlari, ya da bir kullanicinin bir nicki
+yetkisi olmadan kullanmaya calismasini onler.
+
+Eger nickin hesabina giris yapmissaniz, sifrenizi
+belirtmeniz gerekmez. Aksi halde sifrenizi de girmelisiniz.
+
+Sentaks: GHOST <nick> [sifre]
+
+Kullanimi:
+    /msg &nick& GHOST foo bar

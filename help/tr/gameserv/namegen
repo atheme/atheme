@@ -1,0 +1,10 @@
+NAMEGEN:
+
+Rastgele isimler olusturur.
+
+Sonucu size ya da kanala gosterebilir.
+
+Sentaks: NAMEGEN [kac tane isim]
+
+Kullanimi:
+    /msg &nick& NAMEGEN 5

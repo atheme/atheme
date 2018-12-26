@@ -1,0 +1,16 @@
+SET FOUNDER:
+
+Kanalin yeni kurucusunu belirlemenize izin verir.
+Transferin tamamlanmasi icin, yeni kurucu da ayni
+komutu uygulamalidir.
+
+Sentaks: SET <#kanal> FOUNDER <yeninick>
+
+Eger kullanici henuz bu transferi onaylanmamissa,
+ayni komutu kurucu olarak kendi nickinizi
+belirterek iptal edebilirsiniz.
+
+Sentaks: SET <#kanal> FOUNDER <nickiniz>
+
+Kullanimi:
+    /msg &nick& SET #foo FOUNDER bar

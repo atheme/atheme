@@ -1,0 +1,8 @@
+RNC:
+
+Ag uzerinde en cok kullanilan realname'leri gosterir.
+
+Sentaks: RNC [numara]
+
+Kullanimi:
+    /msg &nick& RNC 10

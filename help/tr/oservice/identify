@@ -1,0 +1,10 @@
+IDENTIFY:
+
+Servisler yoneticisi olarak giris yapmanizi saglar.
+Eger yonetici ya da yonetici sinifinda ek olarak bir
+sifre belirtilmisse, bu sifreyi de girmeniz gerekir.
+
+Oncelikle servis hesabiniza giris yapmaniz gerekir.
+(NickServ identify sifre)
+
+Sentaks: IDENTIFY <sifre>

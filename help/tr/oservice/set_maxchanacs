@@ -1,0 +1,9 @@
+SET MAXCHANACS:
+
+Bir kanalin yetki listesinde en fazla kac tane
+girdinin olabilecegini ayarlar.
+
+Sentaks: SET MAXCHANACS <deger>
+
+Kullanimi:
+    /msg &nick& SET MAXCHANACS 30

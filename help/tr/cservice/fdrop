@@ -1,0 +1,10 @@
+FDROP:
+
+Kanalin kaydini sildiginizde kanal ile iliskilendirilmis
+butun veriler (erisim listesi, akick listesi gibi) de
+silinir ve kurtarilamaz.
+
+Sentaks: FDROP <#kanal>
+
+Kullanimi:
+    /msg &nick& FDROP #foo

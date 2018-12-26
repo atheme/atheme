@@ -1,0 +1,30 @@
+MARK:
+
+Operatorlerin bir hesaba not ilistirmesine izin verir.
+Ornegin, bir operator bir hesabi 'kotu niyetli' olarak
+isaretleyebilir. Boylece diger kullanicilar bu kisinin
+onceden uyarildigini gorebilir.
+
+Sentaks: MARK <nickname> ADD <not>
+
+Nicki isaretler. Isaretler MARK <nick> LIST
+ciktisinda yada NickServ info kullanilarak goruntulenebilir.
+
+Sentaks: MARK <nick> DEL <numara>
+
+Belirtilen rakamdaki isareti siler.
+
+Sentaks: MARK <nick> LIST
+
+Nick uzerindeki butun isaretleri gosterir.
+
+Sentaks: MARK MIGRATE
+
+Eski isaret modulundeki butun isaretleri belirtilen
+ile birlestirir.
+
+Kullanimi:
+    /msg &nick& MARK foo ADD Aslinda boyle biri yok
+    /msg &nick& MARK foo ADD istediginiz kadar isaretleyebilirsiniz
+    /msg &nick& MARK foo LIST
+    /msg &nick& MARK foo DEL 2

@@ -1,0 +1,9 @@
+DOWN:
+
+Belirtilen kanaldaki mevcut yetkilerinizi kaldirir.
+kipleri ya da xOP'unuzu kaldirmaz, sadece modlari kaldirir.
+
+Sentaks: DOWN <#kanal>
+
+Kullanimi:
+    /msg &nick& DOWN #foo

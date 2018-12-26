@@ -1,0 +1,9 @@
+SET CHANNEL:
+
+Bir grup icin resmi IRC kanali ayarlar. Bu kanal grup
+infosunda gorunur.
+
+Sentaks: SET <!grup> CHANNEL [#kanal]
+
+Kanal:
+    /msg &nick& SET !atheme CHANNEL #atheme

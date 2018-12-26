@@ -1,0 +1,36 @@
+SET:
+
+Kanalinizin role-play detaylarini goruntuler.
+
+GENRE (sadece tek secim; konuyla en cok ilgili coklu-tur'u secin)
+     APOCALYPSE       ANIME            ANTROPOMORPH     CYBERPUNK
+     FANTASY          HORROR           MULTIGENRE       REALISTIC
+     SCIFI            STEAMPUNK
+
+PERIOD (sadece tek secim)
+     PREHISTORIC      ANTIQUITY        MIDDLEAGES       EARLYMODERN
+     MODERN           FUTURE
+
+RULESET (sadece tek secim)
+     ADND             HOMEBREW         DND3.0           DND3.5
+     DND4.0           FREEFORM         OTHER            OWOD
+     NWOD
+
+RATING (sadece tek secim)
+     G                PG               PG13             R
+     ADULT
+
+SYSTEM (coklu secim mumkun)
+     CHARAPPROVAL     DICED            SHEETED
+
+SETTING (free-form text)
+STORYLINE (free-form text)
+SUMMARY (free-form text)
+
+Kullanimi:
+    /msg &nick& SET #ooc GENRE FANTASY
+         Set the GENRE for #ooc to FANTASY
+    /msg &nick& SET #ooc SYSTEM CHARAPPROVAL DICED
+         Set the SYSTEM for #ooc to "Character Approval" and "Diced"
+    /msg &nick& SET #ooc SYSTEM
+         Clear the setting for SYSTEM on channel #ooc

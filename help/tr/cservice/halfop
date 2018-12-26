@@ -1,0 +1,14 @@
+HALFOP|DEHALFOP:
+
+Kanaldaki durum modlarinizi degistirir.
+
+Eger baska bir kullanici uzerinde uygularsaniz, kullanici
+bunu sizin yaptiginiza dair bilgilendirilir.
+
+Eger nick belirtilmezse, eylem komutu uygulayan kullanici
+uzerinde uygulanir.
+
+Sentaks: HALFOP|DEHALFOP <#kanal> [nick]
+
+Kullanimi:
+    /msg &nick& HALFOP #foo

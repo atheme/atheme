@@ -1,0 +1,12 @@
+ACTIVATE:
+
+Bekleyen kanal kaydi isteklerini onaylamaniza
+izin verir. (kanal kaydi istekleri aktif olan aglarda)
+
+Sentaks: ACTIVATE <#kanal>
+
+Kullanimi:
+    /msg &nick& ACTIVATE #Funchat
+Ayrica bakiniz:
+    /msg &nick& WAITING
+    /msg &nick& REJECT #kanal

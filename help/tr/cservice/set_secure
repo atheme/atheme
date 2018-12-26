@@ -1,0 +1,9 @@
+SET SECURE:
+
+Kanalin erisim listesinde olmayan bir kullanicinin op ya da halfop
+olmasini onler. Eger paranoyaksaniz bu komut isinize yarayabilir.
+
+Sentaks: SET <#kanal> SECURE ON|OFF
+
+Kullanimi:
+    /msg &nick& SET #foo SECURE ON

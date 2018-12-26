@@ -1,0 +1,9 @@
+INFO:
+
+En yuksek skor, kullanici sayisi, kanalin fix durumu
+gibi chanfix bilgilerini listeler.
+
+Sentaks: INFO <#kanal>
+
+Kullanimi:
+    /msg &nick& INFO #foo

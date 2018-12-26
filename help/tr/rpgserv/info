@@ -1,0 +1,8 @@
+INFO:
+
+Bir kanalin tam profili hakkinda bilgi verir.
+
+Sentaks: INFO <#kanal>
+
+Kullanimi:
+    /msg &nick& INFO #foo

@@ -1,0 +1,11 @@
+INJECT:
+
+Uplinkten sahte bilgi enjekte eder. Bu komut sadece
+debug icindir, ve ne yaptiginizi bilmiyorsaniz
+kullanmayiniz.
+
+Sentaks: INJECT <parametreler>
+
+Kullanimi:
+    /msg &nick& INJECT :uplink.network.com PING :shrike.network.com
+    /msg &nick& INJECT :foo PRIVMSG &nick& :HELP INJECT

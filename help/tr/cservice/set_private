@@ -1,0 +1,8 @@
+SET PRIVATE:
+
+Kanal hakkinda cesitli bilgileri kullanicilardan gizler.
+
+Sentaks: SET <#kanal> PRIVATE ON|OFF
+
+Kullanimi:
+    /msg &nick& SET #foo PRIVATE ON

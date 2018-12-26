@@ -1,0 +1,14 @@
+SET DNSBLACTION:
+
+Bir kullanici belirtilen DNS karalistesiyle eslestiginde
+hangi eylemin uygulanacagini belirler.
+
+SNOOP - Servisler sadece log kanalina mesaj gonderir.
+NOTIFY - Servisler log kanalina mesaj gonderir ve kullaniciyi uyarir.
+KLINE - Servisler log kanalina mesaj gonderir ve kullaniciya k-line uygular.
+NONE - DNSBL aramasini iptal eder.
+
+Sentaks: SET DNSBLACTION <SNOOP|NOTIFY|KLINE|NONE>
+
+Kullanimi:
+    /msg &nick& SET DNSBLACTION NOTIFY

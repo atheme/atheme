@@ -1,0 +1,36 @@
+LIST:
+
+Belirtilen kriterlere uyan kanallari gosterir.
+Ayni komutta birden fazla kriter kullanilabilir.
+
+Mevcut kriterler:
+PATTERN      - Belirtilen kalipla eslesen butun kanallar.
+MARK-REASON  - Belirtilen mark sebebiyle eslesen butun isaretli kanallar.
+CLOSE-REASON - Belirtilen close sebebiyle eslesen butun kapatilmis kanallar.
+HOLD         - Zaman asimina ugramayacak sekilde ayarlanmis butun kanallar.
+NOOP         - NOOP kipi ayarlanmis butun kanallar.
+LIMITFLAGS   - LIMITFLAGS kipi ayarlanmis kanallar.
+SECURE       - SECURE kipi ayarlanmis butun kanallar.
+VERBOSE      - VERBOSE kipi ayarlanmis butun kanallar.
+RESTRICTED   - RESTRICTED kipi ayarlanmis butun kanallar.
+KEEPTOPIC    - KEEPTOPIC kipi ayarlanmis butun kanallar.
+VERBOSE-OPS  - Sadece oplar icin verbose kipi ayarlanmis butun kanallar.
+TOPICLOCK    - TOPICLOCK kipi ayarlanmis butun kanallar.
+GUARD        - GUARD kipi ayarlanmis butun kanallar.
+PRIVATE      - PRIVATE kipi ayarlanmis butun kanallar.
+CLOSED       - Ag yoneticisi tarafindan kapatilmis butun kanallar.
+MARKED       - Ag yoneticisi tarafindan isaretlenmis butun kanallar.
+ACLSIZE      - Erisim listesinde belirtilenden daha fazla girdisi olan kanallar.
+REGISTERED   - Belirtilen zamandan daha once kaydedilen kanallar.
+LASTUSED     - Son kullanim tarihi belirtilen zamandan daha once olan kanallar.
+
+Sentaks: LIST <kriter>
+
+Kullanimi:
+    /msg &nick& LIST pattern #*el*
+    /msg &nick& LIST hold
+    /msg &nick& LIST closed pattern #x*
+    /msg &nick& LIST aclsize 10
+    /msg &nick& LIST registered 30d
+    /msg &nick& LIST aclsize 20 registered 7d pattern #he*
+    /msg &nick& LIST mark-reason lamers?here

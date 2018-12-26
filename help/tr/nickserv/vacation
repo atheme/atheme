@@ -1,0 +1,14 @@
+TATIL MODU:
+
+Hesabinizin/nicklerinizin son kullanma suresini uzatir.
+(kanallariniz icin gecerli degildir.)
+Bu komutu sadece hesabiniz yeteri kadar eskiyse
+kullanabilirsiniz.
+
+Tatil modu nick sifrenizi girdiginiz anda
+deaktif olur.
+
+Sentaks: VACATION
+
+Kullanimi:
+    /msg &nick& VACATION

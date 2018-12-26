@@ -1,0 +1,10 @@
+MODEALL:
+
+Sentaks: MODEALL <mod> [parametreler]
+
+Butun kanallarda mod ayarlar. Bot saldirisi oldugunda
+kullanisli olabilir. Butun kanallari +R moduna alabilir ornegin.
+
+Kullanimi:
+    /msg &nick& MODEALL +R
+    /msg &nick& MODEALL +M

@@ -1,0 +1,8 @@
+ACCESS DEL:
+
+Kullanicidan butun kanal yetkilerini siler.
+
+Sentaks: ACCESS <#kanal> DEL <nick>
+
+Kullanimi:
+    /msg &nick& ACCESS #help DEL Lydia

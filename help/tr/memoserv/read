@@ -1,0 +1,11 @@
+READ:
+
+Bir kullanicinin size gonderdigi kisa notu
+okumaniza izin verir. Numarasini belirttiginiz bir
+notu ya da yeni notlarinizi okuyabilirsiniz.
+
+Sentaks: READ <not numarasi>
+Sentaks: READ NEW
+
+Kullanimi:
+    /msg &nick& READ 1

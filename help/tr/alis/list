@@ -1,0 +1,40 @@
+LIST:
+
+Belirtilen kaliplara uyan kanallarin listesini verir.
+
+Sentaks: LIST <kalip> [secenekler]
+
+Secenekler:
+    -min <n>: en az <n> kullanici bulunan kanallari gosterir
+    -max <n>: en cok <n> kullanici bulunan kanallari gosterir
+    -skip <n>: ilk <n> eslesmelerini atar
+    -show [m][t]: modlari/basligi gosterir
+    -mode <+|-|=><modes>: set/unset/equal modlar
+    -topic <pattern>: kaliba uyan basliklar
+#if priv chan:auspex
+    -showsecret: gizli kanallari gosterir (chan:auspex gerektirir)
+#endif
+
+
+Kalip * ve ? ya da wildcard icerebilir. Belirtilen kalip tam kanal adina
+ya da tamamen baslikla eslesmelidir. Wildcardlar,
+nerde kullanildiklarina bagli olarak onemlidirler. Ayni zamanda, kalip da
+basinda ve sonunda * icermelidir. Eger;
+- kanal ismi kalibi bir wildcard ya da # ile basliyorsa, ya da
+- topic basliginda herhangi bir * wildcard yoksa
+
+Ornegin, kanal isimleri icin en cok kullanilandan en ozele:
+ ?bar       - sonunda sadece "bar" olan herhangi bir kalip
+ #bar*      - "#bar" ile baslayan herhangi bir kalip
+ ##*bar*    - ##ile baslayan ve icinde "bar" geciyor
+ *cows*moo* - "cows" iceren herhangi kalip, 0 ya da daha fazla karakter, ve "moo"
+ *bar*      - "bar" iceren herhangi bir kalip("bar" ile ayni)
+
+Kullanimi:
+    /msg &nick& LIST aramametni
+    /msg &nick& LIST * -topic birden*fazla*arama*metni
+    /msg &nick& LIST * -min 50
+    /msg &nick& LIST #foo*
+    /msg &nick& LIST #foo* -mode =n
+    /msg &nick& LIST *freetopic* -mode -t -show mt
+    /msg &nick& LIST ##nocolors* -mode +c -show t

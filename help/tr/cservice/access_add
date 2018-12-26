@@ -1,0 +1,8 @@
+ACCESS ADD:
+
+Kullaniciya belirtilen kanal rolunu verir.
+
+Sentaks: ACCESS <#kanal> ADD <kullanici> <rol>
+
+Kullanimi:
+    /msg &nick& ACCESS #help ADD Lydia helpers

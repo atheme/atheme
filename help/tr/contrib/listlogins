@@ -1,0 +1,9 @@
+LISTLOGINS:
+
+Siz olarak taninmis mevcut clientleri nick!ident@host'lari ve gercek
+hostlari dahil butun ayrintilarini listeler.
+
+Sentaks: LISTLOGINS
+
+Kullanimi:
+    /msg &nick& LISTLOGINS

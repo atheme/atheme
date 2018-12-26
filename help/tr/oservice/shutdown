@@ -1,0 +1,9 @@
+SHUTDOWN:
+
+Servisleri kapatir.
+Bu komutu kullandiktan sonra servisler tekrar baslamaz.
+
+Sentaks: SHUTDOWN
+
+Kullanimi:
+    /msg &nick& SHUTDOWN

@@ -1,0 +1,23 @@
+ACCESS:
+
+Kanal yetkilerini goruntuler/duzenler.
+LIST alt komutu, kullanicilari ve yetkilerini listeler.
+
+Sentaks: ACCESS <#kanal> LIST
+
+ADD alt komutu, bir kullaniciyi kanal erisim
+listesine ekler ya da kanaldaki
+yetkisini degistirir.
+
+Sentaks: ACCESS <#kanal> ADD <nick> [seviye]
+
+DEL alt komutu kullaniciyi kanalin erisim listesinden cikarir.
+
+Sentaks: ACCESS <#kanal> DEL <nick>
+
+Kullanimi:
+    /msg &nick& ACCESS #foo LIST
+    /msg &nick& ACCESS #foo ADD bar OP
+    /msg &nick& ACCESS #foo DEL bar
+
+Ayrica bknz: FLAGS, TEMPLATE

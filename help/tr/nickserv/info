@@ -1,0 +1,24 @@
+INFO:
+
+Bir hesap hakkinda kayit zamani, kipleri ve diger
+detaylari gibi bazi bilgileri gosterir. Ek olarak
+belirtilen nickin kaydini ve son gorulme zamanini da
+gosterir.
+
+Bir kullanicinin giris yapmis oldugu nicki
+nickten sonra esittir isareti belirleyerek
+sorgulayabilirsiniz. '=' isareti cogu komutla
+calisir.
+
+Sentaks: INFO <nickname>
+Sentaks: INFO =<online user>
+
+Kullanimi:
+    /msg &nick& INFO foo
+
+Kayitli olan foo nicki hakkinda bilgi verir.
+
+    /msg &nick& INFO =bar[home]
+
+bar[home] kullanicisinin giris yapmis oldugu kayitli
+nick hakkinda bilgi verir.

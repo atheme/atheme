@@ -1,0 +1,10 @@
+REGISTER:
+
+Bir kanali sizin adiniza kaydeder. Kayit islemi size
+normalde IRC botlari tarafindan saglanan erisim listesi
+ve diger fonksiyonlara erisiminize olanak verir.
+
+Sentaks: REGISTER <#kanal>
+
+Kullanimi:
+    /msg &nick& REGISTER #foo

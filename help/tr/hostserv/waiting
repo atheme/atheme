@@ -1,0 +1,8 @@
+WAITING:
+
+Aktif edilmeyi bekleyen butun vhostlari listeler.
+
+Sentaks: WAITING
+
+Kullanimi:
+    /msg &nick& WAITING

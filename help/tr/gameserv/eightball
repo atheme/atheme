@@ -1,0 +1,8 @@
+EIGHTBALL:
+
+Sihirli 8 top sorusu sorar.
+
+Sentaks: EIGHTBALL
+
+Kullanimi:
+    /msg &nick& EIGHTBALL

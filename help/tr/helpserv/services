@@ -1,0 +1,8 @@
+SERVICES:
+
+Sunucuda yardim alabileceğiniz aktif olan servisleri listeler.
+
+Sentaks: SERVICES
+
+Kullanimi:
+    /msg &nick& SERVICES

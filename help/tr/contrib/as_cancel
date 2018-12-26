@@ -1,0 +1,8 @@
+CANCEL:
+
+Bekleyen bir bildiriyi iptal eder.
+
+Sentaks: CANCEL
+
+Kullanimi:
+    /msg &nick& CANCEL

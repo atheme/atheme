@@ -1,0 +1,18 @@
+REQUEST:
+
+Duyuru talebi gonderir. Bu komutu kullanabilmek icin
+kayitli bir nicke tanitilmis olmaniz gerekir. Talebiniz
+ag yetkilisi tarafindan degerlendirilir.
+
+Not, bir seferde yalniz 1 adet duyuru talebinde bulunabilirsiniz.
+Eger hata yaparsaniz, CANCEL komutu ile mevcut talebi iptal edip
+yeni bir talepte bulunabilirsiniz. Ikinci bir talep icin ilk
+talebinizin degerlendirilmesini bekleyiniz.
+
+Konudaki alt cizgiler ("_") bosluk olarak yer degistirir.
+Ayri olarak bosluk kullanamazsiniz.
+
+Sentaks: REQUEST <konu> <duyuru>
+
+Kullanimi:
+    /msg &nick& REQUEST konu bu bir duyurudur!

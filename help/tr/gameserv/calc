@@ -1,0 +1,11 @@
+CALC:
+
+Servisleri kullanarak basit matematik
+hesaplamalari yapar. Tek seferde birden fazla
+hesaplama numarasi belirtebilirsiniz.
+
+Sentaks: CALC [kere] <ifade>
+
+Kullanimi:
+    /msg &nick& CALC 6*8
+    /msg &nick& CALC 5 1+2

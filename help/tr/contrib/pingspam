@@ -1,0 +1,9 @@
+PINGSPAM:
+
+Bir kullaniciyi butun servisler tarafindan bazi ekstra noticeler ile
+ping spami uygular.
+
+Sentaks: PINGSPAM <hedef>
+
+Kullanimi:
+    /msg &nick& PINGSPAM foo-person

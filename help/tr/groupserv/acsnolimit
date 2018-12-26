@@ -1,0 +1,8 @@
+ACSNOLIMIT:
+
+Bir grup icin yetki listesi limitlerini deaktif eder.
+
+Sentaks: ACSNOLIMIT <!group> ON|OFF
+
+Kullanimi:
+    /msg &nick& ACSNOLIMIT !harika-insanlar ON

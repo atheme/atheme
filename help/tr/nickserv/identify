@@ -1,0 +1,16 @@
+IDENTIFY:
+
+Sizi servislere tanitir. Boylece kullanabilmeniz
+icin giris yapmis olmanizi gerektirien komutlar
+dizisine erisim saglarsiniz.
+
+Sentaks: IDENTIFY <sifre>
+
+Ayrica kullanmakta oldugunuz farklı bir nicki
+sisteme tanitabilirsiniz.
+
+Sentaks: IDENTIFY <nick> <sifre>
+
+Kullanimi:
+    /msg &nick& IDENTIFY foo
+    /msg &nick& IDENTIFY foo bar

@@ -1,0 +1,9 @@
+ASSIGN:
+
+Kanala belirtilen nickte bir bot atar. Kanal icin bu botu
+ihtiyaclarinizi karsilayacak sekilde duzenleyebiliriz.
+
+Sentaks: ASSIGN <kanal> <nick>
+
+Kullanimi:
+    /msg &nick& ASSIGN #foo bar

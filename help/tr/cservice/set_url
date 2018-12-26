@@ -1,0 +1,9 @@
+SET URL:
+
+Kanala bir URL adresi eklemenize izin verir.
+Bu adres kanala giren butun kullanicilara gosterilir.
+
+Sentaks: SET <#kanal> URL [url]
+
+Kullanimi:
+    /msg &nick& SET #foo URL http://www.foobar.org

@@ -1,0 +1,12 @@
+MARK:
+
+Yoneticilerin bir kanala not ilistirmesine izin verir.
+ornegin, yonetici bir kanali spammer olarak isaretleyebilir.
+Boylece diger kullanicilar da bu kanalin onceden uyarildigini bilir.
+
+MARK bilgisi INFO ciktisinda goruntulenir.
+
+Sentaks: MARK <#kanal> ON|OFF <sebep>
+
+Kullanimi:
+    /msg &nick& MARK #foo ON Luffy'e geri verildi

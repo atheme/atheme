@@ -1,0 +1,35 @@
+SOPER:
+
+Servisler yoneticisi yetkileri verir.
+
+SOPER LIST servis yoneticisi olan hesaplari listeler.
+/stats o &nick& benzeridir.
+
+SOPER LISTCLASS tanimlanan butun yonetici
+siniflarini gosterir. Belirtilen sinifa taninmis
+yetkileri goruntulemek icin SPECS kullanin.
+
+SOPER ADD bir hesaba servisler yonetici yetkileri verir.
+Verilen yetkiler yonetici sinifiyla aciklanir.
+Ayrica istege bagli olarak servisler yoneticisi icin
+bir sifre the belirleyebilirsiniz.
+
+SOPER DEL bir hesaptan servisler yoneticisi yetkisini siler.
+
+SOPER SETPASS bir hesaptaki servisler yoneticisi sifresini
+ayarlar ya da siler. Kullanici bu yetkileri almak icin
+sifresini girmek zorundadir.
+
+Konfigurasyon dosyasindaki yonetici{} bloklari duzenlenemez.
+
+Sentaks: SOPER LIST|LISTCLASS
+Sentaks: SOPER ADD <hesap> <opersinifi> [sifre]
+Sentaks: SOPER DEL <hesap>
+Sentaks: SOPER SETPASS <hesap> [sifre]
+
+Kullanimi:
+    /msg &nick& SOPER LIST
+    /msg &nick& SOPER ADD opernicki sra
+    /msg &nick& SOPER ADD yeniopernicki sra $1$bllsww$xBjenkPsZgkqy1Rx5gl2h1
+    /msg &nick& SOPER DEL opernicki
+    /msg &nick& SOPER SETPASS opernicki $1$vHFzU0jC$ePfKvERVwaDRdnHOnZZ6h.

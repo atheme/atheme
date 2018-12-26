@@ -1,0 +1,70 @@
+CLONES:
+
+Her bir IP adresi icin clientlerin sayisini takip eder.
+Ayni adresten baglanan birden fazla client olursa spam
+kanalinda gosterilir.
+
+CLONES sadece Atheme'nin bildigi IP'ler uzerinde calisir.
+
+Eger IRCd IP adreslerini yaymayi desteklemiyorsa,
+CLONES kullanisli degildir.
+
+Sentaks: CLONES KLINE ON|OFF|<sayi>
+
+IP numaralarini izin verilenden daha fazla
+client baglandiginda 1 saatligine banlar.
+Bu banlar (AKILL listesine eklenmez.)
+Bu ayarlar etc/services.db icine kaydedilir ve
+varsayilan olarak 0 ayarlanir
+
+Eger sayi belirtilmisse, <sayi> belirtisi k-line
+sebebinde gosterilir.
+
+Sentaks: CLONES LIST
+
+Ucten fazla clientle baglanan clientleri gosterir.
+(IP muaf olsa bile)
+Sentaks: CLONES ADDEXEMPT <ip> <klon> [!P|!T <dakika>] <sebep>
+
+Klon muaf listesine IP ekler.
+
+IP adresi IRCdin kullandigi formla uyusmalidir.
+(IPv6 adreslerini '::' ile kisaltabilirsiniz)
+IP adresi ayrica CIDR maski olabilir, ornegin
+129.168.1.0/24. Tek IPlerin CIDR'den onceligi vardir.
+<klon> izin verilen klon sayisi; en az 4 olmalidir.
+Bu rakama ulasildiginda uyarilar gonderilir ve
+eger rakam asilirsa, ag bani ayarlanir.
+Sebep LISTEXEMPT'te gosterilir.
+Klon muaf listesi etc/services.db'de kayitlidir.
+
+Sentaks: CLONES DELEXEMPT <ip>
+
+Klon muaf listesinden IP siler.
+
+Sentaks: CLONES SETEXEMPT [DEFAULT | <ip>] <IZIN VERILEN | UYARI> <limit>
+
+Varsayilan ya da belirlenen bir IZIN VERILEN ya da UYARI limiti
+sayisi ayarlar. O olarak ayarlanirsa uyari mesaji ya da izin verilen
+deaktif edilir.
+
+Sentaks: CLONES SETEXEMPT <ip> <SEBEP | SURE> <deger>
+
+Girilen muafin sebebini ya da suresini ayarlar. Muafi kalici
+yapmak icin DURATION degeri 0 olarak ayarlanabilir.
+
+Sentaks: CLONES LISTEXEMPT
+
+Klon muaflarini sebepleriyle birlikte listeler.
+
+Kullanimi:
+    /msg &nick& CLONES ADDEXEMPT 127.0.0.1 100 local
+    /msg &nick& CLONES DELEXEMPT 192.168.1.2
+
+Sentaks: CLONES DURATION
+
+Banli bir host icin klon suresini duzenler. Varsayilan
+ayar bir saattir. Sunucuya restart atildiginda bu ayar saklanir.
+
+Kullanimi:
+    /msg &nick& CLONES DURATION 30m

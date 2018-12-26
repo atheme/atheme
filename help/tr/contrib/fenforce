@@ -1,0 +1,6 @@
+FENFORCE:
+
+Yoneticilere bir hesap icin nick enforcement'i
+aktif deaktif etmesine izin verir.
+
+Sentaks: FENFORCE <hesap> ON|OFF

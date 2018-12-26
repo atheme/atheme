@@ -1,0 +1,9 @@
+SET MAXLOGINS:
+
+Bir hesaba ayni anda en fazla kac kullanicinin
+giris yapabilecegini ayarlar.
+
+Sentaks: SET MAXLOGINS <deger>
+
+Kullanimi:
+    /msg &nick& SET MAXLOGINS 7

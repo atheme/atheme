@@ -1,0 +1,49 @@
+SQLINE:
+
+Belirtilen nick ya da kanallarin ag capinda kullanilmasini
+engeller.
+
+Nickler *, ?, #(herhangi bir rakam) @ (herhangi bir harf)
+wildcardlari icerebilir. Kanallar icin # yada % ile baslayan
+tam bir eslesme belirtilmelidir.
+
+Sentaks: SQLINE ADD <mask> [!P|!T <dakika>] <sebep>
+
+Eger !P kullanilirsa, SQLINE kalici olarak eklenir.
+Eger !T kullanilirsa, SQLINE ne zaman kaldirilacagi dakika,
+saat ("h"), gun ("d") ya da ("w") olarak belirtilmeli.
+
+Kullanimi:
+    /msg &nick& SQLINE ADD spambot* !T 7d bar sebep
+    /msg &nick& SQLINE ADD spam??? !P foo sebep
+
+
+Ilk ornek "spambot" ile baslayan nicklerin kullanimini 7 gun
+boyunca yasaklar.
+
+Ikinci ornek "spam???" icin "foo sebebiyle" kalici SQLINE ekler.
+
+Sentaks: SQLINE DEL <mask|numara>
+
+Eger numara belirtilmisse, SQLINE listesindeki numara ile
+iliskilendirilir.
+Bir komutta birden fazla numara belirtebilirsiniz.
+Iki nokta ust uste kullanarak aralik belirtebilirsiniz.
+
+Kullanimi:
+    /msg &nick& SQLINE DEL foo
+    /msg &nick& SQLINE DEL 5
+    /msg &nick& SQLINE DEL 1,2,5,10
+    /msg &nick& SQLINE DEL 1:5,7,9:11
+
+Sentaks: SQLINE LIST [FULL]
+
+Eger FULL belirtilirse, SQLINE sebepleri gosterilir.
+
+Kullanimi:
+    /msg &nick& SQLINE LIST
+    /msg &nick& SQLINE LIST FULL
+
+Sentaks: SQLINE SYNC
+
+Sqline'lari butun sunuculara senkronize eder.

@@ -1,0 +1,9 @@
+KLINECHAN:
+
+Bir kanala giren butun kullanicilara k:line atar.
+Istenmeyen Botnet kanallari icin kullanislidir.
+
+Sentaks: KLINECHAN <#kanal> <ON|OFF> [sebep]
+
+Kullanimi:
+    /msg &nick& KLINECHAN #lamers ON Channel of Lamers.

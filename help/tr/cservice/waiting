@@ -1,0 +1,13 @@
+WAITING:
+
+Servis operatorlerine kanal kayit talebi
+listesini gosterir.(kanal kaydi talebi aktif olan aglarda)
+
+Sentaks: WAITING
+
+Kullanimi:
+    /msg &nick& WAITING
+
+Ayrica bknz:
+    /msg &nick& ACTIVATE #foo
+    /msg &nick& REJECT #lam3r

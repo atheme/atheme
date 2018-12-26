@@ -1,0 +1,8 @@
+LIST:
+
+Veritabanindaki butun bilgi mesajlarini listeler.
+
+Sentaks: LIST
+
+Kullanimi:
+    /msg &nick& LIST

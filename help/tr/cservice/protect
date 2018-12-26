@@ -1,0 +1,14 @@
+PROTECT|DEPROTECT:
+
+Bu komutlar kanalda durum modu degisikligi yapar.
+
+Eger baska bir kullanici uzerinde uygularsaniz, kullanici
+bunu sizin yaptiginiza dair bilgilendirilir.
+
+Eger nick belirtilmezse, eylem komutu uygulayan kullanici
+uzerinde uygulanir.
+
+Sentaks: PROTECT|DEPROTECT <#kanal> [nick]
+
+Kullanimi:
+    /msg &nick& PROTECT #foo

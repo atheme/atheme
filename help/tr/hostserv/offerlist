@@ -1,0 +1,8 @@
+OFFERLIST:
+
+Ag yoneticisinin mevcut vhost onerilerini listelemesini saglar.
+
+Sentaks: OFFERLIST
+
+Kullanimi:
+    /msg &nick& OFFERLIST

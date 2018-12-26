@@ -1,0 +1,9 @@
+ACT:
+
+Belirtilen botun ilgili kanalda "/me" komutunu
+uygulamasini saglar.
+
+Sentaks: ACT <kanal> <mesaj>
+
+Kullanimi:
+    /msg &nick& ACT #foo bar

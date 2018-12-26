@@ -1,0 +1,8 @@
+SET MAXNICKS:
+
+Bir hesapta en fazla kac tane nick olabilecegini ayarlar.
+
+Sentaks: SET MAXNICKS <deger>
+
+Kullanimi:
+    /msg &nick& SET MAXNICKS 7

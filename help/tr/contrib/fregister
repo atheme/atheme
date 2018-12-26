@@ -1,0 +1,9 @@
+FREGISTER:
+
+user:fregister yetkisi olan bir yoneticinin
+bir nicki baska bir kullanici adina kaydetmesine izin verir.
+
+Sentaks: FREGISTER <hesap> <sifre> <email> [CRYPTPASS|HIDEMAIL|NOOP|NEVEROP]
+
+Kullanimi:
+    /msg &nick& FREGISTER nenolod sifre nenolod@nenolod.net

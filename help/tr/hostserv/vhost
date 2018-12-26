@@ -1,0 +1,11 @@
+VHOST:
+
+Operatorlere bir hesap icin sanal host ayarlamasina izin verir.
+Bu vhost kullanici nick sifresini girdigi anda aktif olur. Eger
+vhost belirtilmemisse hesaptaki butun vhostlar temizlenir.
+
+Sentaks: VHOST <nick> [<vhost>]
+
+Kullanimi:
+    /msg &nick& VHOST foo may.explode.on.impact
+    /msg &nick& VHOST bar

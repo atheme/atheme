@@ -1,0 +1,9 @@
+INVITE:
+
+Belirtilen kanala servislerin sizi davet
+etmesini saglar.(eger kanal +i modundaysa)
+
+Sentaks: INVITE <#kanal>
+
+Kullanimi:
+    /msg &nick& INVITE #foo

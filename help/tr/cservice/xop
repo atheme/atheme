@@ -1,0 +1,36 @@
+xOP:
+
+xOP komutlari kanalin yetki listesini duzenlemenizi saglar.
+
+Yetki seviyelerinin tam karsiliklari sunucu bazinda
+degisiklik gosterebilir. Kontrol etmek icin
+/msg &nick& TEMPLATE kullanin. Ipucu olarak,
+#if halfops
+VOP kullanicilari VOice yapar, HOP kullanicilari
+HalfOP yapar, AOP kullanicilari AutoOP yapar, SOP kullanicilari
+SuperOP yapar.
+#else
+Ipucu olarak, VOP kullanicilari VOice yapar, OP
+kullanicilari AutoOP yapar, SOP kullanicilari
+SuperOP yapar.
+#endif
+
+Butun kanal yetki girdileri sadece bu komutlarla duzenlenmez.
+Detaylar icin FLAGS ve FORCEXOP icin yardim bilgilerine bakin.
+
+FORCEXOP kullanimi bir suru bilgiyi silebilir. TEMPLATE(sablon)
+sistemi sayesinde butun bu komutlari kisitlama olmadan kullanabilirsiniz.
+
+Bu komutlari kullanmak icin FLAGS komutlarindaki gibi yetkileriniz olmali.
+
+#if halfops
+Sentaks: VOP|HOP|AOP|SOP <#kanal> ADD|DEL|LIST <nick|hostmask>
+#else
+Sentaks: VOP|AOP|SOP <#kanal> ADD|DEL|LIST <nick|hostmask>
+#endif
+
+Kullanimi:
+    /msg &nick& VOP #foo ADD bar
+    /msg &nick& VOP #foo ADD foo!*@bar.com
+    /msg &nick& AOP #foo DEL bar
+    /msg &nick& SOP #foo LIST

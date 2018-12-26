@@ -1,0 +1,12 @@
+DROP:
+
+Bu komutu uygularsaniz &nick& hesabinizi ve hesabiniza
+bagli nicklerinizin kaydini veritabanindan siler. Eger
+bir nick silinmisse, baskasi tarafindan kaydedilebilir.
+Ayrica hesabinizla birlikte butun kanallarinizi ve
+kanallardaki yetkilerinizi de kaybedersiniz.
+
+Sentaks: DROP <nick> <sifre>
+
+Kullanimi:
+    /msg &nick& DROP foo bar

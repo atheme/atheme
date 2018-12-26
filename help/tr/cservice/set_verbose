@@ -1,0 +1,9 @@
+SET VERBOSE:
+
+SET VERBOSE ON Kanal erisim listesinde degisiklik yapildiginda
+kanali notice yoluyla bilgilendirir.
+
+Sentaks: SET <#kanal> VERBOSE ON|OPS|OFF
+
+Kullanimi:
+    /msg &nick& SET #foo VERBOSE ON

@@ -1,0 +1,8 @@
+REGNOLIMIT:
+
+Kullanicinin sinirsiz sayida kanal kaydetmesine olanak saglar.
+
+Sentaks: REGNOLIMIT <nick> ON|OFF
+
+Kullanimi:
+    /msg &nick& REGNOLIMIT foo ON

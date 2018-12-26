@@ -1,0 +1,9 @@
+SET SPAM:
+
+Ag personeline kullanicilar sunucuya baglanirken servisler
+hakkinda bilgilendirilip bilgilendirilmeyecegini ayarlar.
+
+Sentaks: SET SPAM TRUE|FALSE
+
+Kullanimi:
+    /msg &nick& SET SPAM TRUE

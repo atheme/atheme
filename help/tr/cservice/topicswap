@@ -1,0 +1,8 @@
+TOPICSWAP:
+
+Kanal basligindaki kelimelerin yerlerini degistirir.
+
+Sentaks: TOPICSWAP <#kanal> <search>:[<replace>]
+
+Kullanimi:
+    /msg &nick& TOPICSWAP #foo portakal:elma

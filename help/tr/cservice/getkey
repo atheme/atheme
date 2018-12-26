@@ -1,0 +1,8 @@
+GETKEY:
+
+Belirtilen kanalin sifresini alir(+k): /join #kanal sifre
+
+Sentaks: GETKEY <#kanal>
+
+Kullanimi:
+    /msg &nick& GETKEY #foo

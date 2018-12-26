@@ -1,0 +1,9 @@
+SET ENFORCEPREFIX:
+
+Eger sifresi girilmezse bir nickin hangi
+prefixi alacagini ayarlar.
+
+Sentaks: SET ENFORCEPREFIX <prefix>
+
+Kullanimi:
+    /msg &nick& SET ENFORCEPREFIX Misafir

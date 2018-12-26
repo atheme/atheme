@@ -1,0 +1,30 @@
+JOINMON:
+
+Kanal girislerinin (varsayilan log seviyesinde) log kanalina
+kaydedilen kullanicilarin nicklerini belirtilen glob kaliplariyla
+eslesen bir listesini gosterir.
+
+Bu kaliplar Atheme veritabanina kadedilir ve servisler restart'inda
+saklanir.
+
+Sentaks: JOINMON ADD <kalip> [sebep]
+
+Kullanimi:
+    /msg &nick& JOINMON ADD jdhore1 sebep
+    /msg &nick& JOINMON ADD jd* sebep
+    /msg &nick& JOINMON ADD machineg?d imposter
+
+JOINMONDEL mevcut goruntulenen kullanici kaliplari listesinden girdilerini siler.
+
+Sentaks: JOINMON DEL <kalip>
+
+Kullanimi:
+    /msg &nick& JOINMON DEL jdhore1
+    /msg &nick& JOINMON DEL machineg?d
+
+JOINMON LIST mevcut goruntulenen kullanici kaliplarini listeler.
+
+Sentaks: JOINMON LIST
+
+Kullanimi:
+    /msg &nick& JOINMON LIST

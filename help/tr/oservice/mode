@@ -1,0 +1,9 @@
+MODE:
+
+Kanal modlarini duzenler.
+
+Sentaks: MODE <#kanal> <mod> [parametreler]
+
+Kullanimi:
+    /msg &nick& MODE #foo -m
+    /msg &nick& MODE #bar +o foo

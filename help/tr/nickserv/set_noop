@@ -1,0 +1,10 @@
+SET NOOP:
+
+Yetkili oldugunuz kanallarda servislerin sizi
+otomatik olarak op(@) yapmasini onler. Manuel olarak
+OP ve VOICE komutlariyla kendinizi op/voice yapabilirsiniz.
+
+Sentaks: SET NOOP ON|OFF
+
+Kullanimi:
+    /msg &nick& SET NOOP ON

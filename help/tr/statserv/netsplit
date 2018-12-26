@@ -1,0 +1,14 @@
+NETSPLIT:
+
+Split sunuculari goruntuler.
+
+Sentaks: NETSPLIT LIST
+
+Agdaki butun split sunuculari listeler
+
+Sentaks: NETSPLIT REMOVE <sunucu>
+
+Belirtilen sunucuyu netsplit listesinden cikarir.
+
+Kullanimi:
+   /msg &nick& NETSPLIT REMOVE moocow.int

@@ -1,0 +1,16 @@
+IGNORE:
+
+Bir kullanicinin servislere mesaj gondermesini engeller.
+Engel listesindeki bir kullanici servislere mesaj gonderirse,
+cevap alamaz.
+
+    ADD   - Engel listesine bir mask ekler.
+    DEL   - Engel listesinden bir mask siler.
+    LIST  - Engel listesindeki butun girdileri listeler.
+    CLEAR - Engel listesindeki butun girdileri siler.
+
+Kullanimi:
+    /msg &nick& IGNORE ADD foobar!*@* flooding services
+    /msg &nick& IGNORE DEL foobar!*@*
+    /msg &nick& IGNORE LIST
+    /msg &nick& IGNORE CLEAR

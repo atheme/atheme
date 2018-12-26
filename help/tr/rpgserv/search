@@ -1,0 +1,16 @@
+SEARCH:
+
+Kanal bazinda secilen kriterle uyumlu role-playing oyunu aramanizi saglar.
+
+Mevcut kriterleri goruntulemek icin SET komutu hakkinda yardim
+dosyasina bakin: /msg &nick& HELP SET
+
+Arama secenekleri SET yardim dosyasinda listelenmistir ve
+SEARCH komutuyla anahtar kelimeler kullanilabilir.
+
+Sentaks: SEARCH <anahtar kelimeler>
+
+Kullanimi:
+    /msg &nick& SEARCH FANTASY MIDDLEAGES FREEFORM PG13 R
+
+    /msg &nick& SEARCH CYBERPUNK FANTASY REALISTIC

@@ -1,0 +1,13 @@
+DROP:
+
+Bir grubun kaydini siler."unregister"
+Bir grup silindiginde, iliskilendirilmis butun
+veriler(yetki listesi, metada, kisa notlar vs) silinir.
+
+Bir grubu baska bir kullaniciya transfer etmek icin
+FLAGS hakkinda yardim bilgisine bakin.
+
+Sentaks: DROP <!group>
+
+Kullanimi:
+    /msg &nick& DROP !baz

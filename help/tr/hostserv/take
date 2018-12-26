@@ -1,0 +1,11 @@
+TAKE:
+
+Ag yoneticisi tarafindan hesabiniz icin onerilen vhost'u
+almanizi saglar. Eger vhost'ta $account geciyorsa, vHost
+hesap isminiz olarak degisir.
+
+Sentaks: TAKE <vHost>
+
+Kullanimi:
+    /msg &nick& TAKE $account.users.example.net
+    /msg &nick& TAKE example.net

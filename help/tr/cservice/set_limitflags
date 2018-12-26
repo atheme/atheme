@@ -1,0 +1,13 @@
+SET LIMITFLAGS:
+
++f kipinin yetkilerini sinirlar.
+
++f kipine sahip ve +s ya da +R kiplerinden
+birine sahip olan kullanicilar sadece +b (akick)
+kullanabilir. +s ve +R kiplerine sahip
+olmayanlar +s, +R ve +f kipini kullanamazlar.
+
+Sentaks: SET <#kanal> LIMITFLAGS ON|OFF
+
+Kullanimi:
+    /msg &nick& SET #foo LIMITFLAGS ON

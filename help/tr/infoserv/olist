@@ -1,0 +1,10 @@
+OLIST:
+
+Veritabanindaki butun oper bilgilendirme mesajlarini goruntuler.
+Bu bilgiler yoneticilere oper girdiklerinde gosterilen butun
+bilgilendirme mesajlarini listeler.
+
+Sentaks: OLIST
+
+Kullanimi:
+    /msg &nick& OLIST

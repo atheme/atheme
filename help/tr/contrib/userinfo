@@ -1,0 +1,20 @@
+USERINFO:
+
+Bir kullanici kanala girdiginde gosterilecek bilgi
+satirlarini ayarlar.
+
+Sadece kanal argumani verildiginde, bilgi satirlari
+olan kullanicilar goruntulenir.
+
+Sentaks: USERINFO <#kanal>
+
+Ya da, duzenlenmis ya da silinmis bilgi satiri
+Sentaks: USERINFO <#kanal> <nickname> [yenibilgi]
+
+Verilen nick, kanalin erisim listesinde olmali ve
+girdiyi duzenleme yetkiniz olmali (+f ve girdinin kipi)
+
+Kullanimi:
+    /msg &nick& USERINFO #foo
+    /msg &nick& USERINFO #foo foouser
+    /msg &nick& USERINFO #foo foouser An info line.

@@ -1,0 +1,9 @@
+SET URL:
+
+Bir grup icin URL adresi ayarlar. Bu adres grup
+infosunda butun kullanicilara gorunur.
+
+Sentaks: SET <!grup> URL [url]
+
+Kullanimi:
+    /msg &nick& SET !foobar URL http://foobar.org

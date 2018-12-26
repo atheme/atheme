@@ -1,0 +1,15 @@
+ROLE SET:
+
+Mevcut bir rolun kiplerini duzenlemenize izin verir.
+Belirtilen role sahip kullanicilar, degisiklikler
+kaydedikten sonra duzenlenen roldeki yeni kiplere
+sahip olurlar. Birden fazla kip kullanilacaksa
+aralarinda bosluk birakilmalidir ve her bir kipten once
++ ya da - olarak tamlayici kullanilmali.
+
+Sentaks: ROLE <#kanal> SET <rol> <kipler>
+
+Kullanimi:
+    /msg &nick& ROLE #foo SET channel-ops +acl-change +set +recover
+    /msg &nick& ROLE #help SET helpers +invite
+    /msg &nick& ROLE #help SET helpers -topic -invite

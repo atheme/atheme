@@ -1,0 +1,8 @@
+FTRANSFER:
+
+Bir kanalin sahipligini zorla devreder.
+
+Sentaks: FTRANSFER <#kanal> <founder>
+
+Kullanimi:
+    /msg &nick& FTRANSFER #help Lydia

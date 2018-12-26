@@ -1,0 +1,9 @@
+SET ENFORCE:
+
+Hesabiniza kayitli butun nickler icin daha fazla
+koruma saglamaniza izin verir.
+
+Eger sifresini zamaninda girmeyen biri olursa,
+nickini degistirir ve gecici olarak bloke eder. Bknz: RELEASE
+
+Sentaks: SET ENFORCE ON|OFF

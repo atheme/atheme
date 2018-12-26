@@ -1,0 +1,10 @@
+KICKBAN:
+
+Bir kullaniciyi kanaldan banlar ve uzaklastirir.
+Eslesen herhangi bir ban muafi varsa kaldirilir.
+
+Sentaks: KICKBAN <#kanal> <nick> [sebep]
+
+Kullanimi:
+    /msg &nick& KICKBAN #foo Luffy
+    /msg &nick& KICKBAN #foo Luffy hayir

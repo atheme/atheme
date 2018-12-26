@@ -1,0 +1,9 @@
+SET EMAIL:
+
+Bir grubun email adresini degistirir. Bu email
+adresi grup infosunda gorunur.
+
+Sentaks: SET <!grup> EMAIL [email]
+
+Kullanimi:
+    /msg &nick& SET !bar EMAIL ornek@email.address
