@@ -9145,12 +9145,13 @@ fi
 
 	if test "x${LIBMBEDCRYPTO}" = "xYes"; then :
 
-		for ac_header in mbedtls/error.h
+		for ac_header in mbedtls/error.h mbedtls/version.h
 do :
-  ac_fn_c_check_header_mongrel "$LINENO" "mbedtls/error.h" "ac_cv_header_mbedtls_error_h" "$ac_includes_default"
-if test "x$ac_cv_header_mbedtls_error_h" = xyes; then :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
   cat >>confdefs.h <<_ACEOF
-#define HAVE_MBEDTLS_ERROR_H 1
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
 _ACEOF
 
 fi

@@ -38,6 +38,10 @@
 #include <mbedtls/md.h>
 #include <mbedtls/pkcs5.h>
 
+#if defined(MBEDTLS_VERSION_C) && defined(HAVE_MBEDTLS_VERSION_H)
+#  include <mbedtls/version.h>
+#endif
+
 static inline const mbedtls_md_info_t *
 digest_decide_md(const unsigned int alg)
 {
@@ -68,6 +72,23 @@ digest_decide_md(const unsigned int alg)
 	}
 
 	return mbedtls_md_info_from_type(md_type);
+}
+
+const char *
+digest_get_frontend_info(void)
+{
+#if defined(MBEDTLS_VERSION_C) && defined(HAVE_MBEDTLS_VERSION_H)
+	char verbuf[64];
+	(void) memset(verbuf, 0x00, sizeof verbuf);
+	(void) mbedtls_version_get_string(verbuf);
+
+	static char result[BUFSIZE];
+	(void) snprintf(result, sizeof result, "ARM mbedTLS (compiled %s, library %s)", MBEDTLS_VERSION_STRING, verbuf);
+
+	return result;
+#else
+	return "ARM mbedTLS (unknown version)";
+#endif
 }
 
 bool ATHEME_FATTR_WUR

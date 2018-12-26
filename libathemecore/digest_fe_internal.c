@@ -42,6 +42,12 @@
 #define DIGEST_HMAC_INNER_XORVAL        0x36U
 #define DIGEST_HMAC_OUTER_XORVAL        0x5CU
 
+const char *
+digest_get_frontend_info(void)
+{
+	return "Internal";
+}
+
 bool ATHEME_FATTR_WUR
 digest_init(struct digest_context *const restrict ctx, const unsigned int alg)
 {

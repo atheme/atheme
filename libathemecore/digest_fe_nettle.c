@@ -38,11 +38,26 @@
 #include <nettle/md5.h>
 #include <nettle/sha1.h>
 #include <nettle/sha2.h>
-
 #include <nettle/nettle-meta.h>
+#include <nettle/version.h>
 
 #define DIGEST_HMAC_INNER_XORVAL        0x36U
 #define DIGEST_HMAC_OUTER_XORVAL        0x5CU
+
+const char *
+digest_get_frontend_info(void)
+{
+	const int vcmaj = NETTLE_VERSION_MAJOR;
+	const int vcmin = NETTLE_VERSION_MINOR;
+	const int vrmaj = nettle_version_major();
+	const int vrmin = nettle_version_minor();
+
+	static char result[BUFSIZE];
+	(void) snprintf(result, sizeof result, "Nettle <https://www.lysator.liu.se/~nisse/nettle/> "
+	                                       "(compiled %d.%d, library %d.%d)", vcmaj, vcmin, vrmaj, vrmin);
+
+	return result;
+}
 
 bool ATHEME_FATTR_WUR
 digest_init(struct digest_context *const restrict ctx, const unsigned int alg)

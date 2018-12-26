@@ -153,6 +153,9 @@
 /* Define to 1 if you have the <mbedtls/pkcs5.h> header file. */
 #undef HAVE_MBEDTLS_PKCS5_H
 
+/* Define to 1 if you have the <mbedtls/version.h> header file. */
+#undef HAVE_MBEDTLS_VERSION_H
+
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 

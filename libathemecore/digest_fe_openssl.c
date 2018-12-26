@@ -102,6 +102,12 @@ digest_decide_md(const unsigned int alg)
 	return NULL;
 }
 
+const char *
+digest_get_frontend_info(void)
+{
+	return OPENSSL_VERSION_TEXT;
+}
+
 bool ATHEME_FATTR_WUR
 digest_init(struct digest_context *const restrict ctx, const unsigned int alg)
 {

@@ -71,5 +71,6 @@ bool digest_pbkdf2_hmac(unsigned int, const void *, size_t, const void *, size_t
                                void *, size_t) ATHEME_FATTR_WUR;
 
 bool digest_testsuite_run(void) ATHEME_FATTR_WUR;
+const char *digest_get_frontend_info(void);
 
 #endif /* !ATHEME_INC_DIGEST_H */

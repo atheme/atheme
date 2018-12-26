@@ -29,7 +29,7 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDTLS], [
 	])
 
 	AS_IF([test "x${LIBMBEDCRYPTO}" = "xYes"], [
-		AC_CHECK_HEADERS([mbedtls/error.h], [], [], [])
+		AC_CHECK_HEADERS([mbedtls/error.h mbedtls/version.h], [], [], [])
 		AC_CHECK_HEADERS([mbedtls/md.h mbedtls/pkcs5.h], [], [
 			LIBMBEDCRYPTO="No"
 			AS_IF([test "x${with_mbedtls}" = "xyes"], [AC_MSG_ERROR([required header file missing])])
