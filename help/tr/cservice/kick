@@ -1,0 +1,11 @@
+KICK:
+
+Bir kullaniciyi kanaldan atmaniza izin verir.
+
+Eger sebep belirtmezseniz, kick sebebine nickiniz eklenir.
+
+Sentaks: KICK <#kanal> <nick> [reason]
+
+Kullanimi:
+    /msg &nick& KICK #foo Luffy
+    /msg &nick& KICK #foo Luffy hayir.

@@ -1,0 +1,13 @@
+SET PROPERTY:
+
+Bir hesapla iliskilendirilmis verileri yonetir.
+
+Bir veri girdisi silmek icin, ismini belirtin
+ya da deger kismini bos birakin.
+
+Sentaks: SET PROPERTY <isim> [deger]
+
+Kullanimi:
+    /msg &nick& SET PROPERTY URL http://www.example.com/~jay/
+    /msg &nick& SET PROPERTY SIGN Pisces
+    /msg &nick& SET PROPERTY ICQ

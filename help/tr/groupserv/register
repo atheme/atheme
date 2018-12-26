@@ -1,0 +1,8 @@
+REGISTER:
+
+Bir grup kaydeder.
+
+Sentaks: REGISTER <!grup>
+
+Kullanimi:
+    /msg &nick& REGISTER !gelistiriciler

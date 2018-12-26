@@ -1,0 +1,10 @@
+SET NOBOT:
+
+Bu secenek bir kanali 'bot atanamaz' olarak isaretler.
+Eger daha onceden bir bot atanmissa, kanal 'bot atanabilir'
+olarak isaretlenene kadar kanaldan cikarilir.
+
+Sentaks: SET <#kanal> NOBOT {ON|OFF}
+
+Kullanimi:
+    /msg &nick& SET #foo NOBOT ON

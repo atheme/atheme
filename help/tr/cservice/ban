@@ -1,0 +1,9 @@
+BAN:
+
+Bir kullaniciyi ya da hostmaski kanaldan banlar.
+
+Sentaks: BAN <#kanal> <nick|hostmask>
+
+Kullanimi:
+      /msg &nick& BAN #chat Luffy
+      /msg &nick& BAN #chat *!*@*.ipt.aol.com

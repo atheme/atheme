@@ -1,0 +1,11 @@
+SERVER:
+
+Agdaki sunucular hakkinda cesitli bilgiler gosterir.
+
+Sentaks: SERVER COUNT
+
+Aga bagli olan sunucu sayisini gosterir.
+
+Sentaks: SERVER LIST
+
+Aga bagli butun sunuculari listeler.

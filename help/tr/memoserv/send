@@ -1,0 +1,11 @@
+SEND:
+
+Belirtilen kullaniciya kisa not gonderir
+Kullanici cevrimici oldugu zaman okunmayi bekleyen
+bir mesaji oldugu hakkinda bilgilendirilir.
+Mesajiniz 300 karakterden uzun olamaz.
+
+Sentaks: SEND <kullanici|nick> mesaj
+
+Kullanimi:
+    /msg &nick& SEND foo faturalarini ode.

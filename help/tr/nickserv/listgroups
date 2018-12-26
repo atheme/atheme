@@ -1,0 +1,17 @@
+LISTGROUPS:
+
+Sahip oldugunuz grup dahil yetkiniz olan gruplari gosterir.
+Grup BAN'lari gosterilmez.
+
+Sentaks: LISTGROUPS
+#if priv group:auspex
+
+group:auspex ayricaliklari grubuna dahil yoneticiler
+ayni zamanda diger kullanicilarin da yetkilerini
+kontrol edebilir.
+
+Sentaks: LISTGROUPS <nick>
+#endif
+
+Kullanimi:
+    /msg &nick& LISTGROUPS

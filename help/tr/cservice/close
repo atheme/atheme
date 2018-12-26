@@ -1,0 +1,16 @@
+CLOSE:
+
+Bir kanalin kullanilmasini onler. Kanala
+giren herkes kanaldan atilir. Kanalin
+kaydi silinemez ya da sahipligi devredilemez.
+
+Bu komutu kullanmak kanaldaki butun
+kullanicilari hemen kanaldan atacaktir.
+
+Kanali tekrar acmak icin CLOSE OFF kullanin.
+
+Sentaks: CLOSE <#kanal> ON|OFF [reason]
+
+Kullanimi:
+    /msg &nick& CLOSE #lamers ON spamm
+    /msg &nick& CLOSE #lamers OFF

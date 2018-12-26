@@ -1,0 +1,9 @@
+ODEL:
+
+Yoneticilerin oper girdiginde gormesini istemediginiz mesajlari siler.
+Kullanici &nick& mesajlari silinmez.
+
+Sentaks: ODEL <id>
+
+Kullanimi:
+    /msg &nick& ODEL 1

@@ -1,0 +1,9 @@
+SET PRIVATE:
+
+Bu secenek bir botun kanal:admin yetkileri olmayan bir kullanici
+tarafindan kanala atanmasini onler.
+
+Sentaks: SET <botnick> PRIVATE {ON|OFF}
+
+Kullanimi:
+    /msg &nick& SET Security PRIVATE ON

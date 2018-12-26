@@ -1,0 +1,10 @@
+QUIET:
+
+Kanalda bir kullaniciyi ya da hostmask'i susturmaniza izin verir.
+Etkilenen kullanicilar bunu sizin yaptiginiza dair bilgilendirilir.
+
+Sentaks: QUIET <#kanal> <nick|hostmask>
+
+Kullanimi:
+    /msg &nick& QUIET #foo Luffy
+    /msg &nick& QUIET #foo *!*@*.ipt.aol.com

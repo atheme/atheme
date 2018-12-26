@@ -1,0 +1,10 @@
+FORBID:
+
+Bir nickin kullanimini yasaklar.
+IRCd'inizdeki RESV ya da QLINE komutlari benzeridir.
+
+Sentaks: FORBID <nickname> ON|OFF [reason]
+
+Kullanimi:
+    /msg &nick& FORBID spb ON No reason.
+    /msg &nick& FORBID spb OFF

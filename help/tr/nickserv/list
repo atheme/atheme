@@ -1,0 +1,80 @@
+LIST:
+
+Belirtilen kritere uyan kayitli kullanicilari gosterir.
+Ayni komutta birden fazla kriter kullanilabilir.
+
+Mevcut kriterler:
+KALIP	      - Belirtilen kaliba uyan butun kullanicilar.
+EMAIL         - Belirtilen kaliptaki email adresiyle eslesen butun kullanicilar.
+#if module nickserv/mark
+MARK-REASON   - Belirtilen kaliptaki mark sebebiyle eslesen butun hesaplar.
+#endif
+#if module nickserv/freeze
+FROZEN-REASON - Belirtilen kaliptaki dondurma sebebiyle eslesen butun hesaplar.
+#endif
+#if module nickserv/restrict
+RESTRICT-REASON - Belirtilen kaliptaki kisitlanma sebebiyle eslesen butun hesaplar.
+#endif
+#if module nickserv/hold
+HOLD          - HOLD kipi ayarlanmis butun kullanicilar.
+#endif
+#if module nickserv/set_noop
+NOOP          - NOOP kipi ayarlanmis butun kullanicilar.
+#endif
+#if module nickserv/set_neverop
+NEVEROP       - NEVEROP kipi ayarlanmis butun kullanicilar.
+#endif
+WAITAUTH      - WAITAUTH kipi ayarlanmis butun kullanicilar.
+#if module nickserv/set_hidemail
+HIDEMAIL      - HIDEMAIL kipi ayarlanmis butun kullanicilar.
+#endif
+#if module nickserv/set_nomemo
+NOMEMO        - NOMEMO kipi ayarlanmis butun kullanicilar.
+#endif
+#if module nickserv/set_emailmemos
+EMAILMEMOS    - EMAILMEMOS kipi ayarlanmis butun kullanicilar.
+#endif
+#if module nickserv/set_privmsg
+USE-PRIVMSG   - USEPRIVMSG kipi ayarlanmis butun kullanicilar.
+#endif
+#if module nickserv/set_quietchg
+QUIETCHG      - QUIETCHG kipi ayarlanmis butun kullanicilar.
+#endif
+#if module nickserv/set_nogreet
+NOGREET       - NOGREET kipi ayarlanmis butun kullanicilar.
+#endif
+#if module nickserv/set_private
+PRIVATE       - PRIVATE kipi ayarlanmis butun kullanicilar.
+#endif
+#if module nickserv/set_nopassword
+NOPASSWORD    - NOPASSWORD kipi ayarlanmis butun kullanicilar.
+#endif
+#if module nickserv/regnolimit
+REGNOLIMIT    - REGNOLIMIT kipi ayarlanmis butun kullanicilar.
+#endif
+
+#if module nickserv/freeze
+FROZEN        - Sunucu yetkilisi tarafindan dondurulmus butun kullanicilar.
+#endif
+#if module nickserv/mark
+MARKED        - Sunucu yetkilisi tarafindan isaretlenmis butun kullanicilar.
+#endif
+#if module nickserv/restrict
+RESTRICTED    - Sunucu yetkilisi tarafindan kisitlanmis butun kullanicilar.
+#endif
+#if module nickserv/vacation
+VACATION      - Tatilde olan butun kullanicilar.
+#endif
+REGISTERED    - Belirtilen zamandan sonra kaydedilen butun kullanici hesaplari.
+LASTLOGIN     - Belirtilen zamandan sonra en son kullanilan kullanici hesaplari.
+
+Sentaks: LIST <kriter>
+
+Kullanimi:
+    /msg &nick& LIST kalip foo*
+    /msg &nick& LIST hold
+    /msg &nick& LIST frozen kalip x*
+    /msg &nick& LIST registered 30d
+    /msg &nick& LIST marked registered 7d kalip bar
+    /msg &nick& LIST email *@gmail.com
+    /msg &nick& LIST mark-reason *lamer*

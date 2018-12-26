@@ -1,0 +1,10 @@
+LISTVHOST:
+
+Vhost kullanan hesaplari listeler. Eger
+parametre belirlenmisse, eslesen vhostlari gosterir.
+
+Sentaks: LISTVHOST [parametre]
+
+Kullanimi:
+    /msg &nick& LISTVHOST
+    /msg &nick& LISTVHOST *foo*

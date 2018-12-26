@@ -1,0 +1,14 @@
+SPECS:
+
+Servislerdeki yetkilerinizi gosterir.
+
+Sentaks: SPECS
+
+Diger kullanicilarin da servislerdeki yetkilerini
+goruntuleyebilirsiniz.
+
+Sentaks: SPECS USER <nick>
+Sentaks: SPECS OPERCLASS <sinifismi>
+
+Kullanimi:
+    /msg &nick& SPECS USER foo

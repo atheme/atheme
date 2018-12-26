@@ -1,0 +1,17 @@
+BADWORDS:
+
+(eger BLOCKBADWORDS ayarlanmissa) kanalda yazilan kelimeleri
+badwords listesindekilerle eslestirmeye calisir.
+
+Eylem parametreleri: KICK, WARN, BAN, KICKBAN ya da (IRCdiniz
+destekliyorsa) QUIET
+
+Sentaks: BADWORDS <#kanal> LIST
+Sentaks: BADWORDS <#kanal> ADD <kelime> <eylem>
+Sentaks: BADWORDS <#kanal> DEL <kelime>
+
+Kullanimi:
+    /msg &nick& BADWORDS #atheme LIST
+    /msg &nick& BADWORDS #sailors ADD f?ck kick
+    /msg &nick& BADWORDS #sailors ADD *dam?it* quiet
+    /msg &nick& BADWORDS #desensitized DEL f?ck

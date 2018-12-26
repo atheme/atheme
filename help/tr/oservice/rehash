@@ -1,0 +1,11 @@
+REHASH:
+
+Veritabanini gunceller ve konfigurasyon
+dosyasini tekrar yukler.
+Sistem konsolundan kill -HUP
+komutunu kullanarak yapabilirsiniz.
+
+Sentaks: REHASH
+
+Kullanimi:
+    /msg &nick& REHASH

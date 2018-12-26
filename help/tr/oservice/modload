@@ -1,0 +1,16 @@
+MODLOAD:
+
+Bir yada daha fazla modul yukler.
+
+Eger adres / ile baslamazsa, PREFIX/modules ya da
+PREFIX/lib/atheme/modules olarak alinir.
+(Atheme'nin nasil derlendigine bagli)
+Opsiyonel olarak .so takisi belirtilebilir.
+
+Yuklendikten sonra rehash yapilmasini gerektiren
+bir modulse, bu otomatik olarak yapilir.
+
+Sentaks: MODLOAD <adres...>
+
+Kullanimi:
+    /msg &nick& MODLOAD ../contrib/fc_dice

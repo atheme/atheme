@@ -1,0 +1,9 @@
+SCORES:
+
+Belirtilen kanaldaki butun kullanicilarin
+chanfix skorlarini listeler.
+
+Sentaks: SCORES <#kanal>
+
+Kullanimi:
+    /msg &nick& SCORES #foo

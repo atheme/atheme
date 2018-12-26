@@ -1,0 +1,14 @@
+SET PREFIX:
+
+Kanalin fantasy komutu tetikleyen prefixi belirlemenizi saglar.
+Eger ChanServ'un varsayilan fantazi prefixiyle cakisan kanal
+botlariniz varsa bu komut kismen kullanislidir. Eger prefix
+belirtmezseniz kanal fantasy prefixi agdaki varsayilan olarak ayarlanir.
+
+Sentaks: SET <#kanal> PREFIX [prefix]
+
+Kanal:
+    /msg &nick& SET #foo PREFIX
+    /msg &nick& SET #foo PREFIX '
+    /msg &nick& SET #foo PREFIX %
+    /msg &nick& SET #foo PREFIX default

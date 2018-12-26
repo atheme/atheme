@@ -1,0 +1,9 @@
+SET EMAILMEMOS:
+
+Notlarinizi hesabinizin kayitli oldugu email adresine
+gonderilmesini saglar.
+
+Sentaks: SET EMAILMEMOS [ON|OFF]
+
+Kullanimi:
+    /msg &nick& SET EMAILMEMOS ON

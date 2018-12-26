@@ -1,0 +1,9 @@
+SET AKICKTIME:
+
+Varsayilan akick zaman asimina ugrama suresini ayarlar.
+Bu 0 olarak ayarlanirsa, akickler kalicidir.
+
+Sentaks: SET AKICKTIME <dakika olarak zaman>
+
+Kullanimi:
+    /msg &nick& SET AKICKTIME 20

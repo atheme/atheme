@@ -1,0 +1,12 @@
+SET PROPERTY:
+
+Kanalla iliskilendirilmis verileri yonetir.
+
+Veri girdisini silmek icin adini girin ve
+deger kismini bos birakin.
+
+Sentaks: SET <#kanal> PROPERTY <isim> [deger]
+
+Kullanimi:
+    /msg &nick& SET #foo PROPERTY URL http://www.foobar.org/
+    /msg &nick& SET #yemek PROPERTY arasicaklar

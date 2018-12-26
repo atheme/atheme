@@ -1,0 +1,10 @@
+DROP:
+
+Kullanilmakta olan nick uzerinde aktif olan vhostu deaktif eder.
+Bu komutu kullandiginizda /whois kullanan kullanicilara IRCd tarafindan
+verilen orijinal hostu gosterir.(cloak)
+
+Sentaks: DROP
+
+Kullanimi:
+    /msg &nick& DROP

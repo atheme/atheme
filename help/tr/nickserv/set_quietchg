@@ -1,0 +1,9 @@
+SET QUIETCHG:
+
+Uzerinizde ChanServ komutu kullanildiginda servislerin
+otomatik olarak sizi bilgilendirmesini onler.
+
+Sentaks: SET QUIETCHG ON|OFF
+
+Kullanimi:
+    /msg &nick& SET QUIETCHG ON

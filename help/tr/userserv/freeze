@@ -1,0 +1,15 @@
+FREEZE:
+
+Operatorlere kotu niyetli kullanicilarin hesaplarini
+'dondurma' yetkisi verir. Bu komut hesaba giris yapmis
+butun oturumlari sonlandirir ve sonraki girisleri onler.
+Boylece, kullanicilar hesapla iliskilendirilmis hicbir
+yetkiye erisemezler.
+
+FREEZE bilgisi INFO ciktisinda gorunur.
+
+Sentaks: FREEZE <nick> ON|OFF <sebep>
+
+Kullanimi:
+    /msg &nick& FREEZE foo ON israrla rahatsiz edici davranislar sergiliyor.
+    /msg &nick& FREEZE bar OFF

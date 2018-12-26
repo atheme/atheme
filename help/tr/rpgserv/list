@@ -1,0 +1,11 @@
+LIST:
+
+Ag uzerindeki role-playing aktif butun kanallari listeler.
+
+Bu komut yalnizca RPGServ aktif olan kanallari listeler.
+Ag uzerindeki kanal listesi icin /LIST komutunu kullanin.
+
+Sentaks: LIST
+
+Kullanimi:
+    /msg &nick& LIST

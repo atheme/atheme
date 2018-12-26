@@ -1,0 +1,14 @@
+CHANNEL:
+
+Bir kanal hakkinda cesitli bilgileri gosterir.
+
+Sentaks: CHANNEL COUNT
+
+Bu komut toplam kanal sayisini gosterir.
+
+Sentaks: CHANNEL TOPIC <kanal>
+
+Kullanimi:
+    /msg &nick& CHANNEL TOPIC #atheme
+
+Bu komut #atheme kanalinin basligini gosterir.

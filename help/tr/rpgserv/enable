@@ -1,0 +1,8 @@
+ENABLE:
+
+RPGServ'i bir kanalda aktif eder.
+
+Sentaks: ENABLE <#kanal>
+
+Kullanimi:
+    /msg &nick& ENABLE #foo

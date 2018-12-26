@@ -1,0 +1,10 @@
+VERIFY:
+
+Hesabinizda yaptiginiz herhangi bir
+degisikligi dogrular.
+
+Sentaks: VERIFY <eylem> <nick> <kod>
+
+Kullanimi:
+    /msg &nick& VERIFY REGISTER foo 161803399
+    /msg &nick& VERIFY EMAILCHG foo 271828183

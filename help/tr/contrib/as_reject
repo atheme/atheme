@@ -1,0 +1,9 @@
+REJECT:
+
+Belirtilen nick icin talep edilen duyuruyu reddeder.
+Kullanici kisa not ile bilgilendirilir.
+
+Sentaks: REJECT <nick>
+
+Kullanimi:
+    /msg &nick& REJECT nenolod

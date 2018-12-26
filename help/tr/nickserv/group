@@ -1,0 +1,16 @@
+GROUP(LINK ALTERNATIFI):
+
+Mevcut nickinizi kendi hesabiniza kaydeder.
+&nick& nickinizi hesabinizi korudugu gibi korur.
+Hesabinizin yetkisi olan butun komutlari
+kullanabilirsiniz.
+
+Gruplandirilmis nickler hesaptan ayri olarak
+zaman asimina ugrar. Bunu onlemek icin nicklerinizi
+belirli araliklarla kullanmalisiniz.
+
+Sentaks: GROUP
+
+Kullanimi:
+    /msg &nick& IDENTIFY EskiNick hesabinsifresi
+    /msg &nick& GROUP

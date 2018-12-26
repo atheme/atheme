@@ -1,0 +1,17 @@
+LISTCHANS:
+
+Erisiminizin oldugu & sahip oldugunuz kanallari listeler.
+
+AKICK'ler ya da host-tabanli yetkiler gosterilmez.
+
+Sentaks: LISTCHANS
+#if priv chan:auspex
+
+chan:auspex yetkisi olan operatorler ayni zamanda
+baska bir kullanicinin da erisimini kontrol edebilir.
+
+Sentaks: LISTCHANS <nick>
+#endif
+
+Kullanimi:
+    /msg &nick& LISTCHANS

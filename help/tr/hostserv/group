@@ -1,0 +1,10 @@
+GROUP:
+
+Mevcut nick icin belirlenen vhostun, nickin dahil oldugu
+gruptaki diger nickler icin de aktif eder. Eger gruba baska
+bir nick eklerseniz, bu nick de vhost'a dahil olur.
+
+Sentaks: GROUP
+
+Kullanimi:
+    /msg &nick& GROUP

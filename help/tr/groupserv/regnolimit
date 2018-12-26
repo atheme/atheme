@@ -1,0 +1,8 @@
+REGNOLIMIT:
+
+Bir grup icin kanal kayit limitini deaktif eder.
+
+Sentaks: REGNOLIMIT <!grup> ON|OFF
+
+Kullanimi:
+    /msg &nick& REGNOLIMIT !awesome-people ON

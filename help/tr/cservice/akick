@@ -1,0 +1,39 @@
+AKICK:
+
+Bir kanal için otomatik ban listesini duzenler.
+AKICK listesindeki kullanicilar kanala girdiklerinde
+otomatik olarak banlanip kanaldan atilir. +r kipi
+bulunan kullanicilar muaf tutulur.
+
+Sentaks: AKICK <#kanal> ADD <nick|hostmask> [!P|!T <dakika>] [sebep]
+
+AKICK listesi icin ayrica (nick!user@host)
+seklinde hostmask da belirleyebilirsiniz.
+
+Kullanici AKICK listesine eklenirken sebep kullanilir.
+Eger sebep '|' karakteri iceriyorsa, kendisinden sonra
+hiçbir sey kullanici kanaldan atilirken sebep
+kisminda gorunmez. (AKICK listesinde gorunur.)
+
+Eger !P isareti kullanilmissa, AKICK zaman asimina
+ugramaz. Eger !T isareti kullanilmissa, zaman asimi
+dakika, saat ("h"), gun ("d") ya da ("w") hafta
+seklinde belirtilmelidir.
+
+Sentaks: AKICK <#kanal> DEL <nick|hostmask>
+
+AKICK listesinden bir girdiyi siler.
+Eger kanal NOSYNC olarak ayarlanmissa bu komut ile
+bir girdi silindiginde, eslesen butun
+kanal banlari temizlenir.
+
+Sentaks: AKICK <#kanal> LIST
+
+AKICK listesindeki butun girdileri sebepleri ve
+zaman asimina ne kadar kaldigi bilgileri ile listeler.
+
+Kullanimi:
+/msg &nick& AKICK #foo ADD bar you are annoying | ozel op bilgilendirmesi
+/msg &nick& AKICK #foo ADD *!*foo@bar.com !T 5d
+/msg &nick& AKICK #foo DEL bar
+/msg &nick& AKICK #foo LIST

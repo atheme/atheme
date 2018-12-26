@@ -1,0 +1,11 @@
+LISTVHOST:
+
+Operatorlerun belirtilen kalip ile eslesen butun vhostlari
+gormesine izin verir. Eger kalip belirtilmezle mevcut
+butun vhostlar listelenir.
+
+Sentaks: LISTVHOST [<kalip>]
+
+Kullanimi:
+    /msg &nick& LISTVHOST *lulz.com*
+    /msg &nick& LISTVHOST

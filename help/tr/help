@@ -1,0 +1,6 @@
+HELP:
+
+Servisler uzerinde kullanilabilir olan butun komutlar
+hakkinda yardim goruntuler.
+
+Sentaks: HELP <komutlar> [parametreler]

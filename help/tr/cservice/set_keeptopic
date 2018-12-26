@@ -1,0 +1,9 @@
+SET KEEPTOPIC:
+
+Kanalin basligi son kullanici da kanaldan ayrildiktan sonra
+saklanir ve kanala bir kullanici girdiginde yeniden yazilir.
+
+Sentaks: SET <#kanal> KEEPTOPIC ON|OFF
+
+Kullanimi:
+    /msg &nick& SET #foo KEEPTOPIC ON

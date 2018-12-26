@@ -1,0 +1,26 @@
+GREPLOG:
+
+Servis loglarindan eslesen satirlarla ilgili
+loglari gosterir.
+
+Ilk parametre ya bir servis ismidir (belirtilen
+servisle ilgili butun komutlari arastirmak icin)
+ya da bir asteriktir (servislerdeki butun
+degisiklikleri arastirir).
+
+Ikinci parametre arastirilacak kaliptir.
+* ya da ? wildcardlarini icerebilir. Genel
+olarak *. olarak biter.
+
+Opsiyonel ucuncu parametre bir onceki gunlerin
+numarasidir.
+
+Bu komut yalnizca log dosyalarina yeterli bilgi
+yazildiginda calisir.
+
+Sentaks: GREPLOG <servis> <kalip> [gun]
+Sentaks: GREPLOG * <kalip> [gun]
+
+Kullanimi:
+    /msg &nick& GREPLOG ChanServ *#foo* 7
+    /msg &nick& GREPLOG * *#foo* 60

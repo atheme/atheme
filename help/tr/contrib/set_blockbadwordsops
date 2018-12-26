@@ -1,0 +1,10 @@
+SET BLOCKBADWORDSOPS:
+
+Kanalda oplarin badword kontrolunde olup olmayacagini ayarlar.
+
+Ayrica bknz: SET BLOCKBADWORDS
+
+Sentaks: SET <#kanal> BLOCKBADWORDSOPS ON|OFF
+
+Kullanimi:
+    /msg &nick& SET #sailors BLOCKBADWORDSOPS ON

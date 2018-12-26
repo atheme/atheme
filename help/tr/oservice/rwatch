@@ -1,0 +1,46 @@
+RWATCH:
+
+Butun baglanan clientlerin nick!user@host gecos
+ile eslesen kuralli ifade listesini duzenler.
+
+Eslesen clientler snoop kanalinda gosterilir ve/ya da
+agdan banlanir. Bu *@host uzerindeki ag banlari
+24 saat gecerlidir ve AKILL listesine eklenmez.
+RWATCH listesi /etc/rwatch.db icinde saklanir ve
+duzenlendiginde kaydedilir.
+
+Kuralli ifade sentakslari hakkinda daha fazla
+bilgi icin: RMATCH
+
+Sentaks: RWATCH ADD /<kalip>/[i][p] <sebep>
+
+RWATCH listesine kuralli bir ifade ekler.
+Sebep snoop uyarisi ve kline uyarisi ile gosterilir.
+
+Sentaks: RWATCH DEL /<pattern>/[i][p]
+
+RWATCH listesinden kuralli bir ifade siler.
+
+Sentaks: RWATCH LIST
+
+RWATCH listesini gosterir. Harflerin anlamlari:
+
+    i - buyuk/kucuk harfe duyarsiz eslesme
+    p - PCRE kalibi
+    S - Eslesen clientler snoop kanalinda gosterilir
+    K - Eslesen clientler agdan banlanir
+
+Sentaks: RWATCH SET /<kalip>/[i][p] <secenekler>
+
+
+Kuralli ifadelerin eylemlerini degistirir.
+<secenekler> icin olasi degerler:
+
+    SNOOP   - snoop kanalinda gosterimi aktif eder
+    NOSNOOP - snoop kanalinda gosterimi deaktif eder
+    KLINE   - ag banlarini aktif eder
+    NOKLINE - ag banlarini deaktif eder
+
+Kullanimi:
+    /msg &nick& RWATCH ADD /^m(oo|00)cow/i moocow figure
+    /msg &nick& RWATCH DEL /^m(oo|00)cow/i

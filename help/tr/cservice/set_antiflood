@@ -1,0 +1,17 @@
+SET ANTIFLOOD:
+
+Chanserv flood kontrol ayarlarini duzenler.
+Parametreler QUIT, KICKBAN ya da AKILL olabilir.
+
+OFF ayarlanarak deaktif edilebilir. ON ayarlanarak
+varsayilan ayarlarina dondurulur.
+
+Sentaks: SET <#kanal> ANTIFLOOD <aksiyon>
+Sentaks: SET <#kanal> ANTIFLOOD OFF
+
+Kullanimi:
+    /msg &nick& SET #foo ANTIFLOOD QUIET
+    /msg &nick& SET #foo ANTIFLOOD KICKBAN
+    /msg &nick& SET #foo ANTIFLOOD AKILL
+    /msg &nick& SET #foo ANTIFLOOD OFF
+    /msg &nick& SET #foo ANTIFLOOD ON

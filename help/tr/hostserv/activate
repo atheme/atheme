@@ -1,0 +1,13 @@
+ACTIVATE:
+
+Belirtilen nickin vhost talebini onaylar.
+Kullaniciya talebinin onaylandiğina dair kisa mesaj
+gonderilir.(memo)
+
+Eğer "*" kullanilmissa, bekleyen butun vhost istekleri onaylanir.
+
+Sentaks: ACTIVATE <nick>
+
+Kullanimi:
+    /msg &nick& ACTIVATE foo
+    /msg &nick& ACTIVATE *

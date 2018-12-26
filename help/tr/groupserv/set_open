@@ -1,0 +1,11 @@
+SET OPEN:
+
+Grubu herkese acik bir grup olarak ayarlar. Boylece
+kullanicilar JOIN kullanarak gruba katilabilirler.
+Bu komutla gruba katilan kullanicilar varsayilan olarak
+herhangi bir yetki almazlar.
+
+Sentaks: SET <!grup> OPEN <ON|OFF>
+
+Kullanimi:
+    /msg &nick& SET !awesome-people OPEN ON

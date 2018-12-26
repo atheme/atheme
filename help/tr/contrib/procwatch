@@ -1,0 +1,10 @@
+PROCWATCH:
+
+Bir islemin cikisinda snoop kanalini bilgilendirir.
+Bu modul sadece FreeBSD 4.1 ve sonraki versiyonlarinda
+derlenebilir & kullanilabilir.
+
+Sentaks: PROCWATCH <pid>
+
+Kullanimi:
+    /msg &nick& PROCWATCH 1234

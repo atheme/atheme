@@ -1,0 +1,8 @@
+WAITING:
+
+Mevcut aktivasyon bekleyen tum duyurulari listeler.
+
+Sentaks: WAITING
+
+Kullanimi:
+    /msg &nick& WAITING

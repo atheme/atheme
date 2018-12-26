@@ -1,0 +1,13 @@
+UNGROUP:
+
+Belirtilen nicki hesabinizdan cikarir. Nick başkalari
+tarafindan kaydedilebilir duruma gelir. Bu komut
+kanallarinizi ya da kisa notlarinizi etkilemez.
+
+Eger nick belirtmezseniz, mevcut nickiniz ungroup olur.
+Hesap isminize ungroup uygulayamazsiniz.
+
+Sentaks: UNGROUP [nick]
+
+Kullanimi:
+    /msg &nick& UNGROUP nick

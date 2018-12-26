@@ -1,0 +1,9 @@
+LOGIN:
+
+Servislerle birlikte kullanabileceginiz genel komutlara
+erismek icin hesabiniza giris yapmanizi saglar.
+
+Sentaks: LOGIN <hesap> <sifre>
+
+Kullanimi:
+    /msg &nick& LOGIN foo bar

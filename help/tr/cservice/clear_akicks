@@ -1,0 +1,12 @@
+CLEAR AKICKS:
+
+Kanalin erisim listesindeki sadece +b kipi bulunan girdiler
+dahil AKICK listesindeki butun girdileri siler.
+
+Bu komutu sadece kanal uzerinde +R ve +f kipleri olan
+kullanicilar kullanabilir.
+
+Sentaks: CLEAR <#kanal> AKICKS
+
+Kullanimi:
+    /msg &nick& CLEAR #atheme AKICKS

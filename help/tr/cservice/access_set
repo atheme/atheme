@@ -1,0 +1,8 @@
+ACCESS SET:
+
+Belirtilen kullaniciya kanal uzerinde istenilen rolu verir.
+
+Sentaks: ACCESS <#kanal> SET <kullanici> <rol>
+
+Kullanimi:
+    /msg &nick& ACCESS #help SET Lydia lowlevel-staff

@@ -1,0 +1,9 @@
+INFO:
+
+Bir grup hakkinda kayit zamani, grup URL'si,
+email adresi ve kurucusu gibi bilgileri gosterir.
+
+Sentaks: INFO <!grup>
+
+Kullanimi:
+    /msg &nick& INFO !baz

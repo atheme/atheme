@@ -1,0 +1,8 @@
+SET PUBACL:
+
+Kanal erisim listesin herkese gorunur olarak ayarlar
+
+Sentaks: SET <#channel> PUBACL ON|OFF
+
+Kullanımı:
+    /msg &nick& SET #foo PUBACL ON

@@ -1,0 +1,8 @@
+CANCEL:
+
+Mevcut onay bekleyen yardim istegini iptal eder.
+
+Sentaks: CANCEL
+
+Kullanimi:
+    /msg &nick& CANCEL

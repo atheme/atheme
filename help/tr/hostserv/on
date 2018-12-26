@@ -1,0 +1,8 @@
+ON:
+
+Kullanilmakta nick icin belirlenen vhostu aktif eder.
+
+Sentaks: ON
+
+Kullanimi:
+    /msg &nick& ON

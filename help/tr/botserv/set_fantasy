@@ -1,0 +1,11 @@
+SET FANTASY:
+
+Bir kanalda fantazi modunu aktif/deaktif eder.
+Aktif edildiginde, kullanicilar butun !op, !deop,
+!voice, !devoice, !kick, !kb, !unban, !akick, !info
+komutlarini kullanabilirler.
+
+Sentaks: SET <#kanal> FANTASY {ON|OFF}
+
+Kullanimi:
+    /msg &nick& SET #foo FANTASY ON

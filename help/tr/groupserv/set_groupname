@@ -1,0 +1,8 @@
+SET GROUPNAME:
+
+Grubunuzun adini degistirir. Bu isim grup infosunda gorunur.
+
+Sentaks: SET <!EskiGrupAdi> GROUPNAME <!YeniGrupAdi>
+
+Kullanimi:
+    /msg &nick& SET !EskiGrup GROUPNAME !YeniGrup

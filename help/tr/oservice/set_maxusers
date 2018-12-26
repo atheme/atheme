@@ -1,0 +1,12 @@
+SET MAXUSERS:
+
+Bir email adresine en fazla kac hesabin
+kaydedilebilecegini ayarlar. E-email
+bazinda emailexempts(email muaf) ile
+konfigurasyon dosyasinda bu ayarin uzerine
+yazilabilir.
+
+Sentaks: SET MAXUSERS <deger>
+
+Kullanimi:
+    /msg &nick& SET MAXUSERS 7

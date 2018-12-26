@@ -1,0 +1,10 @@
+CHANFIX:
+
+Kayitli olmayan bir kanali mevcut modlari ayarlayarak ve
+en yuksek skorlara sahip kullanicilara op vererek kayitli olmayan
+bir kanali manuel olarak "duzeltmenize" izin verir.
+
+Sentaks: CHANFIX <#kanal>
+
+Kullanimi:
+    /msg &nick& CHANFIX #foo

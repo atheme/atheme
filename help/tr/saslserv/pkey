@@ -1,0 +1,15 @@
+PKEY:
+
+DSA ya da RSA anahtariniz icin parmakizini
+(fingerprint) goruntuler. Saklanan guvenlik
+bilgisini guncellemek icin, bu anahtari
+degistirdikten hemen sonra hesabiniza giris yapmalisiniz.
+Parmakizi iki nokta ust uste kullanilarak
+ya da kullanilmadan hexadecimal olarak girilebilir.
+
+Sentaks: PKEY <hash>
+
+Kullanimi:
+    /msg &nick& PKEY 0123456789ABCDEF0123
+    /msg &nick& PKEY 32:10:FE:DC:BA:98:76:54:32:10
+    /msg &nick& PKEY

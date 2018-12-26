@@ -1,0 +1,9 @@
+SET ENTRYMSG:
+
+Kullanicilarin kanala giriste /NOTICE seklinde
+gorecegi mesaji belirler.
+
+Sentaks: SET <#kanal> ENTRYMSG [mesaj]
+
+Kullanimi:
+    /msg &nick& SET #foo ENTRYMSG #foo kanalina hos geldiniz! Lutfen 5 satirdan fazla satir paste'lemeyin.

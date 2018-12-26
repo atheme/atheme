@@ -1,0 +1,9 @@
+UNBAN:
+
+Kanaldan kendinizin yada bir hostmaskin banini kaldirir.
+
+Sentaks: UNBAN <#kanal> [nickname|hostmask]
+
+Kullanimi:
+    /msg &nick& UNBAN #foo pfish
+    /msg &nick& UNBAN #foo *!*@*.ucdavis.edu

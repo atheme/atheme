@@ -1,0 +1,8 @@
+SET CHANEXPIRE:
+
+Bir kanalin ne zaman zaman asimina ugrayacagini ayarlar.
+
+Sentaks: SET CHANEXPIRE <gun olarak zaman>
+
+Kullanimi:
+    /msg &nick& SET CHANEXPIRE 30

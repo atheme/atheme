@@ -1,0 +1,11 @@
+ROLL:
+
+Sanal zar atma oyunu. Sonuclar size ya da
+kanala gosterilebilir. Ayrica tek seferde
+kac tane zar atilacagini belirleyebilirsiniz.
+
+Sentaks: ROLL [kere] <#zar>d<#yanlar>
+
+Kullanimi:
+    /msg &nick& ROLL 2d16
+    /msg &nick& ROLL 5 4d16

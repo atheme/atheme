@@ -1,0 +1,10 @@
+SET PRIVATE:
+
+Hesabinizin cesitli bilgilerini diger kullanicilardan
+gizler. HIDEMAIL ozelligini otomatik olarak
+etkinlestirir.
+
+Sentaks: SET PRIVATE ON|OFF
+
+Kullanimi:
+    /msg &nick& SET PRIVATE ON

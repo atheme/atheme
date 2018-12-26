@@ -1,0 +1,17 @@
+SET MLOCK:
+
+(Mod kilidi) Kanal uzerinde bir modu sabitlemenize izin verir.
+Boylece bazi kotuye kullanimlari ya da saldirilari
++kl gibi komutlarla onleyebiliriz. Ama kanal bosken giren herkes
+belirlenmis bu modlari (kanal anahtari dahil) gorebilir.
+Bu yuzden tehlikeli olabilir.
+
+Sentak: SET <#kanal> MLOCK [modlar]
+
+Kullanimi: (bazi modlari ircd'iniz desteklemeyebilir)
+    /msg &nick& SET #foo MLOCK +nt-lk
+    /msg &nick& SET #foo MLOCK +inst-kl
+    /msg &nick& SET #foo MLOCK +ntk c
+    /msg &nick& SET #foo MLOCK +ntcjf-kl 2:30 #bar
+    /msg &nick& SET #foo MLOCK +mntF-kljf
+    /msg &nick& SET #foo MLOCK +ntlL 40 #bar

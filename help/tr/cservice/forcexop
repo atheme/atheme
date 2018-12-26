@@ -1,0 +1,19 @@
+FORCEXOP:
+
+Butun kanal erisim seviyelerini varsayilan xOP
+uyumlu degerlere sifirlar. Bu operasyondan sonra
+kurucular(founder) butun yetkilere sahip olur ve
+xOP listesindeki kiplere sahip butun kullanicilar
+otomatik olarak op olur. (autoop) Eger her bir xOP
+seviyesinin kip tanimlamalari farkliysa founder sadece
+xOP komutlari kullanmak istiyorsa bu komut kullanislidir.
+
+Bu komutu sadece founder calistirabilir.
+
+Sentaks: FORCEXOP <#kanal>
+
+#if halfops
+Ayrica bknz: SOP, AOP, HOP, VOP
+#else
+Ayrica bknz: SOP, AOP, VOP
+#endif

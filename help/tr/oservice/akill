@@ -1,0 +1,63 @@
+AKILL:
+
+Ag capinda ban kullanmaniza izin verir.
+Kolayca yonetebilmeniz icin servisler AKILL'lerinizi depolar.
+
+Sentaks: AKILL ADD <nick|hostmask> [!P|!T <dakika>] <sebep>
+
+Eger !P simgesi kullanilirsa AKILL zaman asimina ugramaz(kalici).
+Eger !T simgesi kullanilirsa devaminda ne zaman zaman asimina
+ugrayacagi dakikalar, saatler ("h"), gunler ("d"), ya da haftalar("w")
+olarak belirtilmeli.
+
+Kullanimi:
+    /msg &nick& AKILL ADD foo !T 5 sebep
+    /msg &nick& AKILL ADD foo !T 3d sebep
+    /msg &nick& AKILL ADD foo@bar.com !P foo
+    /msg &nick& AKILL ADD foo@bar.com foo
+
+Ilk ornekte nicki "foo" olan kullaniciya bar sebebiye 5 dakika AKILL atilir.
+Ikinci ornekte ayni sekildedir, sadece AKILL suresi 3 gundur.
+Ucuncu ornek foo@bar maskina "foo" sebebiyle kalici AKILL atar.
+Dorduncu ornek foo@bar.com maskina "foo" sebebiyle servislerin
+konfigurasyon dosyasindaki varsayilan sure ile AKILL atar.
+
+Sentaks: AKILL DEL <hostmask|rakam>
+
+Eger rakam belirtilirse, AKILL listesideki numara ile baglantilanir.
+Virgul ile ayirarak birden fazla rakam belirtebilirsiniz.
+":" kullanarak bir aralik belirleyebilirsiniz.
+
+Kullanimi:
+    /msg &nick& AKILL DEL foo@bar.com
+    /msg &nick& AKILL DEL 5
+    /msg &nick& AKILL DEL 1,2,5,10
+    /msg &nick& AKILL DEL 1:5,7,9:11
+
+Sentaks: AKILL LIST [FULL]
+
+Eger FULL belirtilirse, AKILL sebepleri gosterilir.
+
+Kullanimi:
+    /msg &nick& AKILL LIST
+    /msg &nick& AKILL LIST FULL
+
+Sentaks: AKILL LIST <hostmask>
+
+Sebepleriyle birlikte, verilen hostmasklar ile eslesen
+AKILL'leri gosterir.
+Bu komut host uzerinde DNS aramasi yapmaz. Daha iyi sonuc
+elde etmek icin ayni komutu host ve IP numarasi ile kullanin.
+
+Kullanimi:
+    /msg &nick& AKILL LIST test@192.168.1.1
+
+Sentaks: AKILL LIST <numara>
+
+Belirtilen AKILL'i sebebiyle birlikte gosterir.
+
+Sentaks: AKILL SYNC
+
+AKILL'leri butun sunuculara gonderir. Servisler olmadiginda
+ya da belirli bir akill ile eslesen bir kullanici goremediklerinde
+uygulanmasi kullanisli olabilir.

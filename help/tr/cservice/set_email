@@ -1,0 +1,10 @@
+SET EMAIL:
+
+Belirtilen kanal icin bir email adresi belirlenmesine
+ya da mevcut adresin degistirilmesine izin verir.
+Bu bilgi INFO kisminda butun kullanicilara gosterilir.
+
+Sentaks: SET <#kanal> EMAIL [email]
+
+Kullanimi:
+    /msg &nick& SET #foo EMAIL ornek@emailadresi

@@ -1,0 +1,15 @@
+RAKILL:
+
+Regex bazli akiller uygular. Klonlar ya da
+botnetler icin kullanislidir.
+Akiller &nick&'in listesine eklenmez ve
+bir hafta boyunca kalicidir.
+
+Regex kullanilirken cok basit hatalar
+yapilabilir, dikkatli olun. Once RMATCH
+kullanin. Regex dizilimi tam olarak ayni olmalidir.
+
+Sentaks: RAKILL /<kalip>/[i][p] <sebep>
+
+Kullanimi:
+    /msg &nick& RAKILL /^m(oo|00)cow/i No moocows allowed.

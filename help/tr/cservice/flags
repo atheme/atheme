@@ -1,0 +1,109 @@
+FLAGS:
+
+Bir kanalin ayricaliklarini daha ozgun bir sekilde
+duzenlemek icin kullanilir. Nick, grup ya da hostmask
+icerebilir.
+
+Eger sadece kanal argumani verildiyse, kullanicinin
+sahip oldugu izinler goruntulenir.
+
+Sentaks: FLAGS <#kanal>
+
+Bunun disinda erisim girdisi duzenlenir. Duzenleme,
+belirtilmis bir sablon ismiyle (sablona erisimi degistirerek)
+ya da kip degisimi (+ ya da - ile baslar) ile olur.
+Daha fazla bilgi icin TEMPLATE help konusuna bakin.
+
+#if !halfops
+Eger kurucu degilseniz, sadece sahip oldugunuz
+kipleri yonetebilirsiniz. Sizde olmayan kiplere sahip diger
+kullanicilarin da kiplerini duzenleyemezsiniz. Yani,
++v kipli bir kullanici +V alabilir, +o kipli bir kullanici
++O alabilir, +r kipli bir kullanici +b alabilir.
+#else
+Eger kurucu degilseniz, sadece sahip oldugunuz
+kipleri yonetebilirsiniz. Sizde olmayan kiplere sahip diger
+kullanicilarin da kiplerini duzenleyemezsiniz. Yani,
++v kipli bir kullanici +V alabilir, +h kipli bir kullanici
++H alabilir, +o kipli bir kullanici +O alabilir,
++r kipli bir kullanici +b alabilir.
+#endif
+
+#if module chanserv/set_limitflags
+Eger kanal icin LIMITFLAGS secenegi ayarlanmissa, bu komuttan
+daha sonrasi kisitlanir. Daha fazla bilgi icin: SET LIMITFLAGS
+#endif
+
+#if module exttarget/oper
+$oper - Oper olan herhangi bir kullanici (user mode +o).
+#endif
+#if module exttarget/registered
+$registered - Servislere tanitilmis herhangi bir kullanici.
+#endif
+#if module exttarget/channel
+$channel:#channel - Belirtilen kanalin uyesi olan herhangi bir kullanici.
+#endif
+#if module exttarget/server
+$server:server.name - Belirtilen sunucuya bagli olan herhangi bir kullanici.
+                      (Sunucu ismi wildcard icerebilir)
+#endif
+#if module exttarget/chanacs
+$chanacs:#channel - Belirtilen kanalda yetkisi olan herhangi bir kullanici.
+                      (hostmasklar dahil)
+#endif
+Eger +f kipiniz yoksa kendi yetkinizi -* ile silebilirsiniz.
+
+Sentaks: FLAGS <#kanal> [nickname|hostmask|group sablon]
+Sentaks: FLAGS <#kanal> [nickname|hostmask|group kip_degisikleri]
+
+Izinler:
+    +v - voice/devoice komutlarinin kullanimina izin verir.
+    +V - otomatik voice'e izin verir.
+#if halfops
+    +h - halfop/dehalfop komutlarinin kullanimina izin verir.
+    +H - otomatik halfop'a izin verir.
+#endif
+    +o - op/deop komutlarinin kullanimina izin verir.
+    +O - otomatik op'a izin verir.
+#if protect
+    +a - protect/deprotect komutlarinin kullanimina izin verir.
+#endif
+#if owner
+    +q - owner/deowner komutlarinin kullanimina izin verir.
+#endif
+    +s - set komutunun kullanimina izin verir.
+    +i - invite ve getkey komutlarinin kullanimina izin verir.
+#if module chanserv/kick
+    +r - kick, kickban, ban ve unban komutlarinin kullanimina izin verir.
+#else
+#if !module chanserv/unban_self
+    +r - ban ve unban komutlarinin kullanimina izin verir.
+#else
+    +r - unban komutunun kullanimina izin verir.
+#endif
+#endif
+    +R - sync ve clear komutlarinin kullanimina izin verir.
+    +f - kanal erisim listesinin duzenlenmesine izin verir.
+    +t - topic ve topicappend komutlarinin kullanimina izin verir.
+    +A - kanalin erisim listesini goruntulemeye izin verir.
+#if module chanserv/successor_acl
+    +S - kullaniciyi successor(yedek kurucu) olarak isaretler.
+#endif
+    +F - ful kurucu erisimi saglar.
+    +b - otomatik kickban'a izin verir.
+    +e - +b'den muaf tutar ve kendinizi unban yapabilirsiniz.
+
+#if module chanserv/successor_acl
+Bu ozel izin +** +b, +S, ve +F harici butun izinleri verir.
+#else
+Bu ozel izin +** +b, ve +F harici butun izinleri verir.
+#endif
+Bu ozel izin -* +b, ve +F dahil butun izinleri kaldirir.
+Kullanimi:
+    /msg &nick& FLAGS #foo
+    /msg &nick& FLAGS #foo foo!*@bar.com VOP
+    /msg &nick& FLAGS #foo foo!*@bar.com -V+oO
+    /msg &nick& FLAGS #foo foo!*@bar.com -*
+    /msg &nick& FLAGS #foo foo +oOtsi
+    /msg &nick& FLAGS #foo TroubleUser!*@*.troubleisp.net +b
+    /msg &nick& FLAGS #foo !baz +*

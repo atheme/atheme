@@ -1,0 +1,8 @@
+LISTOWNMAIL:
+
+Hesabinizin email adresine kayitli hesaplari gosterir.
+
+Sentaks: LISTOWNMAIL
+
+Kullanimi:
+    /msg &nick& LISTOWNMAIL

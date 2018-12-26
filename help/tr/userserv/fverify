@@ -1,0 +1,10 @@
+FVERIFY:
+
+Yoneticilerin bir hesabi onaylama emaili olmadan
+dogrulamasina izin verir.
+
+Sentaks: FVERIFY <eylem> <nick>
+
+Kullanimi:
+    /msg &nick& FVERIFY REGISTER foo
+    /msg &nick& FVERIFY EMAILCHG bar

@@ -1,0 +1,8 @@
+TOPIC:
+
+Kanalin basligini degistirir.
+
+Sentaks: TOPIC <#kanal> <baslik>
+
+Kullanimi:
+    /msg &nick& TOPIC #foo bar

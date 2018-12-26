@@ -1,0 +1,12 @@
+MODINSPECT:
+
+Bir modul hakkinda detayli bilgi goruntuler.
+
+Isimler MODLIST komutuyla alinabilir. MODLOAD komutuyla
+yuklemek icin bulunduklari adresi tam adiyla girmeye gerek
+yoktur.
+
+Sentaks: MODINSPECT <modulismi>
+
+Kullanimi:
+    /msg &nick& MODINSPECT protocol/charybdis

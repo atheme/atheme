@@ -1,0 +1,14 @@
+FFLAGS:
+
+Bir yoneticiye bir grup uzerindeki kipleri
+zorla degistirme yetkisi verir. Dizilim FLAGS
+komutuyla aynidir. Kip degisiklikleri belirtilmek
+zorundadir. Bir grubun access listesi FLAGS
+komutuyla goruntulenir.
+
+Sentaks: FFLAGS <!group> <nick> <flag_degisiklikleri>
+
+Kullanimi:
+    /msg &nick& FFLAGS !baz foo +F
+    /msg &nick& FFLAGS !baz foo -*
+    /msg &nick& FFLAGS !baz foo +fmc

@@ -1,0 +1,8 @@
+UNBAN:
+
+Sizinle eslesen butun banlari kanaldan kaldirir.
+
+Sentaks: UNBAN <#kanal>
+
+Kullanimi:
+    /msg &nick& UNBAN #foo

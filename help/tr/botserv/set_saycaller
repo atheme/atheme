@@ -1,0 +1,10 @@
+SET SAYCALLER:
+
+Bu secenek aktif oldugunda SAY ya da ACTION komutu mesajlari
+kullanan herhangi bir caller'in nickine prefix verir.
+
+Sentaks: SET <kanal> SAYCALLER {ON|OFF}
+
+Kullanimi:
+    /msg &nick& SET #foo SAYCALLER ON
+    /msg &nick& SET #foo SAYCALLER OFF

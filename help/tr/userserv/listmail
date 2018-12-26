@@ -1,0 +1,10 @@
+LISTMAIL:
+
+Belirtilen e-mail adresine kayitli hesaplari gosterir.
+Wilcard kullanilabilir.
+
+Sentaks: LISTMAIL <email>
+
+Kullanimi:
+    /msg &nick& LISTMAIL foo@bar.com
+    /msg &nick& LISTMAIL *@cam.ac.uk

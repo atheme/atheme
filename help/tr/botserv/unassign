@@ -1,0 +1,11 @@
+UNASSIGN:
+
+Botun kanaldan atamasini alir. Bu komutu kullandiginizda bot
+kanala bir daha girmez. Bununla birlikte, bottaki kanal ayarlari
+saklanir. Yani botu daha sonradan tekrar duzenlemek zorunda
+kalmadan kanala atayabilirsiniz.
+
+Sentaks: UNASSIGN <kanal>
+
+Kullanimi:
+    /msg &nick& UNASSIGN #foo

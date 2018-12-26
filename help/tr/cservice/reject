@@ -1,0 +1,13 @@
+REJECT:
+
+Bir kanalin kayit talebini geri cevirir.
+(kanal kayit taleplerinin aktif oldugu sunucularda)
+
+Sentaks: REJECT <#kanal>
+
+Kullanimi:
+    /msg &nick& REJECT #foo
+
+Ayrica bknz:
+    /msg &nick& WAITING
+    /msg &nick& ACTIVATE kanal

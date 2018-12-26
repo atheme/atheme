@@ -1,0 +1,8 @@
+REQUEST:
+
+Ag personeline yardim talebinde bulunmanizi saglar.
+
+Sentaks: REQUEST <konu>
+
+Kullanimi:
+    /msg &nick& REQUEST vhost hakkinda yardima ihtiyacim var.

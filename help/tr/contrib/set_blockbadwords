@@ -1,0 +1,11 @@
+SET BLOCKBADWORDS:
+
+Kanallara yazilan mesajlarin badword listesinde olup
+olmadigini kontrol eder. Bundan butun kullanicilar etkilenir.
+Eger oplarinizin badword kontrolunden muaf tutulmasini istiyorsaniz
+SET BADWORDSOPS kullanin.
+
+Sentaks: SET <#kanal> BLOCKBADWORDS ON|OFF
+
+Kullanimi:
+    /msg &nick& SET #sailors BLOCKBADWORDS ON

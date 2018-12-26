@@ -1,0 +1,14 @@
+REJECT:
+
+Belirtilen nickin vhost talebini reddeder. Kullanici
+kisa not(memo) yoluyla bilgilendirilir. Eger sebep
+belirtilirse kisa nota bu sebep de ilistirilir.
+Eger nick yerine "*" kullanilirsa beklemekte olan butun
+vHost talepleri reddedilir.
+
+Sentaks: REJECT <nick> [sebep]
+
+Kullanimi:
+    /msg &nick& REJECT foo
+    /msg &nick& REJECT *
+	/msg &nick& REJECT foo site ismi iceren vHostlara izin verilmiyor.

@@ -1,0 +1,11 @@
+REGAIN:
+
+Eger nickinizi baska biri kullaniyorsa nickinize
+tekrar erisiminizi saglar.
+Eger belirtilen nickin iliskilendirilmis oldugu
+hesaba giris yapmissaniz, sifre belirtmenize gerek yoktur.
+
+Sentaks: REGAIN <nick> [sifre]
+
+Kullanimi:
+    /msg &nick& REGAIN foo bar

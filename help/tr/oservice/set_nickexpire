@@ -1,0 +1,9 @@
+SET NICKEXPIRE:
+
+Bir nick ya da hesap isminin ne kadar zaman
+sonra asimina ugrayacagini ayarlar.
+
+Sentaks: SET NICKEXPIRE <gun olarak zaman>
+
+Kullanimi:
+    /msg &nick& SET NICKEXPIRE 30

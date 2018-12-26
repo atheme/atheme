@@ -1,0 +1,11 @@
+DNSBLSCAN:
+
+Ag yoneticisinin (anlik olarak aga bagli olan) bir kullaniciyi
+dnsbl karalistesinde taramasina izin verir. Eger kullanici
+karaliste ile eslesirse, varsayilan DNSBLACTION (eylemi) ne ise
+o uygulanir.
+
+Sentaks: DNSBLSCAN <kullanici>
+
+Kullanimi:
+    /msg &nick& DNSBLSCAN jdhore

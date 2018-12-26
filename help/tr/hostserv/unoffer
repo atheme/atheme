@@ -1,0 +1,8 @@
+UNOFFER:
+
+OFFER listesinden bir vHostu siler.
+
+Sentaks: UNOFFER <vhost>
+
+Kullanimi:
+    /msg &nick& UNOFFER users.example.net

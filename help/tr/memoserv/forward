@@ -1,0 +1,8 @@
+FORWARD:
+
+Kisa notunuzu baska bir hesaba gonderir.
+
+Sentaks: FORWARD <hesap|nick> <memo numarasi>
+
+Kullanimi:
+    /msg &nick& FORWARD foo 1

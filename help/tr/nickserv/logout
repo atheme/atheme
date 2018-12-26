@@ -1,0 +1,8 @@
+LOGOUT:
+
+Giris yapmis oldugunuz mevcut hesabinizdan cikis yapmanizi saglar.
+
+Sentaks: LOGOUT
+
+Kullanimi:
+    /msg &nick& LOGOUT

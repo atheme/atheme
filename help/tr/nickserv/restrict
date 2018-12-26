@@ -1,0 +1,15 @@
+RESTRICT:
+
+Operatorlerin bir hesabin neler yapabilecegini/yapamayacagini belirler.
+Gecerli kullanicinin nickleri gruplamasini, hesap adini degistirmesini,
+kanal kaydetmesini, grup kaydetmesini, vhost talebinde bulunmasini ya da
+vhost onerisi almasini engelleyecektir.
+
+Eger kullanici bu komutlari kotuye kullaniyorsa
+RESTRICT ozellikle kullanislidir.
+
+Sentaks: RESTRICT <nickname> ON|OFF <sebep>
+
+Kullanimi:
+    /msg &nick& RESTRICT foo ON vhost isteklerini kotuye kullaniyor.
+    /msg &nick& RESTRICT bar OFF

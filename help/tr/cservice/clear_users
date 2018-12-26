@@ -1,0 +1,12 @@
+CLEAR USERS:
+
+Sizin haricinizde kanaldaki butun kullanicilari
+kanaldan disari atar. Eger kanalda degilseniz
+kanal tekrar olusturulur. (cycle)
+
+Eger sebep belirtilmisse, kick mesajinda goruntulenir.
+
+Sentaks: CLEAR <#kanal> USERS [sebep]
+
+Kullanimi:
+    /msg &nick& CLEAR #ChatZone USERS

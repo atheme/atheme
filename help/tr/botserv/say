@@ -1,0 +1,8 @@
+SAY:
+
+Bota belirtilen kanala istenilen mesaji soyletir.
+
+Sentaks: SAY <kanal> <mesaj>
+
+Kullanimi:
+    /msg &nick& SAY #c-ircnet #c-ircnet kanalina hos geldiniz!

@@ -1,0 +1,8 @@
+SET GUARD:
+
+&nick&'un kanaliniza girmesini saglar.
+
+Sentaks: SET <#kanal> GUARD ON|OFF
+
+Kullanimi:
+    /msg &nick& SET #foo GUARD ON

@@ -1,0 +1,11 @@
+CLEAR FLAGS:
+
+Kanal kurucusu disinda kanal uzerinde yetkisi olan
+butun kullanicilarin (gruplarin) kiplerini siler.
+
+Bu komut sadece kanal kurucusu tarafindan kullanilabilir.
+
+Sentaks: CLEAR <#kanal> FLAGS
+
+Kullanimi:
+    /msg &nick& CLEAR #atheme FLAGS

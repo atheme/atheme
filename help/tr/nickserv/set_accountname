@@ -1,0 +1,10 @@
+SET ACCOUNTNAME:
+
+Hesap isminizi hesabiniza iliskilendirilmis herhangi
+bir nick olarak degistirmenize izin verir.
+Hesap isminiz sizin adiniz olarak cesitli yerlerde kullanilir.
+
+Sentaks: SET ACCOUNTNAME <nick>
+
+Kullanimi:
+    /msg &nick& SET ACCOUNTNAME foo
