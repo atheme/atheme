@@ -21,6 +21,7 @@ set -x
     --enable-legacy-pwcrypto           \
     --enable-nls                       \
     --enable-reproducible-builds       \
+    --enable-warnings                  \
     ${OPTIONAL_CONF_ARGS}
 
 make
