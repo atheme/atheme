@@ -37,7 +37,6 @@
 #define ATHEME_INC_DIGEST_FE_HEADER_H 1
 
 #include <openssl/evp.h>
-#include <openssl/hmac.h>
 
 struct digest_context
 {

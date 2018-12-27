@@ -28,7 +28,6 @@
  */
 
 #include "atheme.h"
-#include "digest_be_sha1.h"
 
 #define SHA1_ROL(value, bits) (((value) << (bits)) | ((value) >> (0x20U - (bits))))
 
@@ -76,19 +75,19 @@
         s[w] = SHA1_ROL(s[w], 0x1EU);                                                                                  \
     } while (0)
 
-union B64Q16
+union SHA1_B64Q16
 {
 	uint8_t         c[0x40U];
 	uint32_t        l[0x10U];
 };
 
 static void
-transform_block_sha1(struct digest_context_sha1 *const restrict ctx, const uint8_t *const restrict in)
+digest_transform_block_sha1(struct digest_context_sha1 *const restrict ctx, const uint8_t *const restrict in)
 {
 	const bool digest_is_big_endian = (htonl(UINT32_C(0x11223344)) == UINT32_C(0x11223344));
 
-	union B64Q16 tmp;
-	union B64Q16 *const block = &tmp;
+	union SHA1_B64Q16 tmp;
+	union SHA1_B64Q16 *const block = &tmp;
 
 	uint32_t s[0x05U];
 
@@ -183,9 +182,11 @@ transform_block_sha1(struct digest_context_sha1 *const restrict ctx, const uint8
 	(void) smemzero(s, sizeof s);
 }
 
-bool
-digest_init_sha1(struct digest_context_sha1 *const restrict ctx)
+static bool ATHEME_FATTR_WUR
+digest_init_sha1(union digest_state *const restrict state)
 {
+	struct digest_context_sha1 *const ctx = (struct digest_context_sha1 *) state;
+
 	if (! ctx)
 	{
 		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", __func__);
@@ -204,9 +205,11 @@ digest_init_sha1(struct digest_context_sha1 *const restrict ctx)
 	return true;
 }
 
-bool
-digest_update_sha1(struct digest_context_sha1 *const restrict ctx, const void *const restrict data, size_t len)
+static bool ATHEME_FATTR_WUR
+digest_update_sha1(union digest_state *const restrict state, const void *const restrict data, size_t len)
 {
+	struct digest_context_sha1 *const ctx = (struct digest_context_sha1 *) state;
+
 	if (! ctx)
 	{
 		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", __func__);
@@ -231,10 +234,10 @@ digest_update_sha1(struct digest_context_sha1 *const restrict ctx, const void *c
 		i = 0x40U - j;
 
 		(void) memcpy(ctx->buf + j, ptr, i);
-		(void) transform_block_sha1(ctx, ctx->buf);
+		(void) digest_transform_block_sha1(ctx, ctx->buf);
 
 		for ( ; (i + 0x3FU) < len; i += 0x40U)
-			(void) transform_block_sha1(ctx, ptr + i);
+			(void) digest_transform_block_sha1(ctx, ptr + i);
 
 		j = 0x00U;
 	}
@@ -243,9 +246,11 @@ digest_update_sha1(struct digest_context_sha1 *const restrict ctx, const void *c
 	return true;
 }
 
-bool
-digest_final_sha1(struct digest_context_sha1 *const restrict ctx, void *const restrict out, size_t *const restrict len)
+static bool ATHEME_FATTR_WUR
+digest_final_sha1(union digest_state *const restrict state, void *const restrict out, size_t *const restrict len)
 {
+	struct digest_context_sha1 *const ctx = (struct digest_context_sha1 *) state;
+
 	if (! ctx)
 	{
 		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", __func__);
@@ -279,12 +284,12 @@ digest_final_sha1(struct digest_context_sha1 *const restrict ctx, void *const re
 	for (uint32_t i = 0x04U; i < 0x08U; i++)
 		data[i] = (uint8_t) ((ctx->count[0x00U] >> ((0x03U - (i & 0x03U)) * 0x08U)) & 0xFFU);
 
-	(void) digest_update_sha1(ctx, &sep, sizeof sep);
+	(void) digest_update_sha1(state, &sep, sizeof sep);
 
 	while ((ctx->count[0] & 0x1F8U) != 0x1C0U)
-		(void) digest_update_sha1(ctx, &pad, sizeof pad);
+		(void) digest_update_sha1(state, &pad, sizeof pad);
 
-	(void) digest_update_sha1(ctx, data, sizeof data);
+	(void) digest_update_sha1(state, data, sizeof data);
 
 	uint8_t *const digest = out;
 

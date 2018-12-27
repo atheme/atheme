@@ -1,5 +1,5 @@
 /*
- * Frontend-agnostic shared routines for the digest interface.
+ * Frontend routines for the digest interface.
  *
  * Copyright (C) 2018 Aaron M. D. Jones <aaronmdjones@gmail.com>
  *
@@ -34,6 +34,24 @@
  */
 
 #include "atheme.h"
+
+#if (ATHEME_DIGEST_FRONTEND == ATHEME_DIGEST_FRONTEND_INTERNAL)
+#  include "digest_fe_internal.c"
+#else
+#  if (ATHEME_DIGEST_FRONTEND == ATHEME_DIGEST_FRONTEND_MBEDTLS)
+#    include "digest_fe_mbedtls.c"
+#  else
+#    if (ATHEME_DIGEST_FRONTEND == ATHEME_DIGEST_FRONTEND_NETTLE)
+#      include "digest_fe_nettle.c"
+#    else
+#      if (ATHEME_DIGEST_FRONTEND == ATHEME_DIGEST_FRONTEND_OPENSSL)
+#        include "digest_fe_openssl.c"
+#      else
+#        error "No digest frontend"
+#      endif
+#    endif
+#  endif
+#endif
 
 bool ATHEME_FATTR_WUR
 digest_oneshot(const unsigned int alg, const void *const restrict data, const size_t dataLen,

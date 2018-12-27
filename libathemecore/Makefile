@@ -23,8 +23,7 @@ SRCS =					\
 	culture.c			\
 	database_backend.c		\
 	datastream.c			\
-	$(DIGEST_FRONTEND_COND_C)	\
-	digest_fe_shared.c		\
+	digest_frontend.c		\
 	digest_testsuite.c		\
 	entity.c			\
 	flags.c				\

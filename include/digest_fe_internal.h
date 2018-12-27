@@ -76,9 +76,9 @@ union digest_state
 	struct digest_context_sha2_512  sha512ctx;
 };
 
-typedef bool (*digest_init_fn)(union digest_state *);
-typedef bool (*digest_update_fn)(union digest_state *, const void *, size_t);
-typedef bool (*digest_final_fn)(union digest_state *, void *, size_t *);
+typedef bool (*digest_init_fn)(union digest_state *) ATHEME_FATTR_WUR;
+typedef bool (*digest_update_fn)(union digest_state *, const void *, size_t) ATHEME_FATTR_WUR;
+typedef bool (*digest_final_fn)(union digest_state *, void *, size_t *) ATHEME_FATTR_WUR;
 
 struct digest_context
 {

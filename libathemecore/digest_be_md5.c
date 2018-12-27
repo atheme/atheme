@@ -43,7 +43,6 @@
  */
 
 #include "atheme.h"
-#include "digest_be_md5.h"
 
 #define MD5_ROUND1(a, b, c, d, k, r, i)                                 \
     do {                                                                \
@@ -70,7 +69,7 @@
     } while (0)
 
 static void
-md5_process_words(struct digest_context_md5 *const ctx, const uint8_t *data)
+process_words_md5(struct digest_context_md5 *const ctx, const uint8_t *data)
 {
 	static const uint32_t T[] = {
 
@@ -181,9 +180,11 @@ md5_process_words(struct digest_context_md5 *const ctx, const uint8_t *data)
 	(void) smemzero(&t, sizeof t);
 }
 
-bool
-digest_init_md5(struct digest_context_md5 *const restrict ctx)
+static bool ATHEME_FATTR_WUR
+digest_init_md5(union digest_state *const restrict state)
 {
+	struct digest_context_md5 *const ctx = (struct digest_context_md5 *) state;
+
 	if (! ctx)
 	{
 		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", __func__);
@@ -201,9 +202,11 @@ digest_init_md5(struct digest_context_md5 *const restrict ctx)
 	return true;
 }
 
-bool
-digest_update_md5(struct digest_context_md5 *const restrict ctx, const void *const restrict data, const size_t len)
+static bool ATHEME_FATTR_WUR
+digest_update_md5(union digest_state *const restrict state, const void *const restrict data, const size_t len)
 {
+	struct digest_context_md5 *const ctx = (struct digest_context_md5 *) state;
+
 	if (! ctx)
 	{
 		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", __func__);
@@ -233,7 +236,7 @@ digest_update_md5(struct digest_context_md5 *const restrict ctx, const void *con
 		if ((off + amt) < DIGEST_BKLEN_MD5)
 			return true;
 
-		(void) md5_process_words(ctx, ctx->buf);
+		(void) process_words_md5(ctx, ctx->buf);
 
 		ptr += amt;
 		rem -= amt;
@@ -241,7 +244,7 @@ digest_update_md5(struct digest_context_md5 *const restrict ctx, const void *con
 
 	while (rem >= DIGEST_BKLEN_MD5)
 	{
-		(void) md5_process_words(ctx, ptr);
+		(void) process_words_md5(ctx, ptr);
 
 		ptr += DIGEST_BKLEN_MD5;
 		rem -= DIGEST_BKLEN_MD5;
@@ -253,9 +256,11 @@ digest_update_md5(struct digest_context_md5 *const restrict ctx, const void *con
 	return true;
 }
 
-bool
-digest_final_md5(struct digest_context_md5 *const restrict ctx, void *const restrict out, size_t *const restrict len)
+static bool ATHEME_FATTR_WUR
+digest_final_md5(union digest_state *const restrict state, void *const restrict out, size_t *const restrict len)
 {
+	struct digest_context_md5 *const ctx = (struct digest_context_md5 *) state;
+
 	if (! ctx)
 	{
 		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", __func__);
@@ -294,8 +299,8 @@ digest_final_md5(struct digest_context_md5 *const restrict ctx, void *const rest
 
 	const size_t padsz = ((DIGEST_BKLEN_MD5 - 0x09U) - (ctx->count[0x00U] >> 0x03U)) & (DIGEST_BKLEN_MD5 - 0x01U);
 
-	(void) digest_update_md5(ctx, padding, padsz + 0x01U);
-	(void) digest_update_md5(ctx, data, sizeof data);
+	(void) digest_update_md5(state, padding, padsz + 0x01U);
+	(void) digest_update_md5(state, data, sizeof data);
 
 	uint8_t *const digest = out;
 
