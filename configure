@@ -9596,7 +9596,7 @@ fi
 
 	if test "x${LIBCRYPTO}" = "xYes"; then :
 
-		for ac_header in openssl/evp.h openssl/hmac.h
+		for ac_header in openssl/evp.h openssl/hmac.h openssl/opensslv.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
 ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
@@ -9650,6 +9650,49 @@ done
 
 
 fi
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if OpenSSL is really LibreSSL in disguise" >&5
+$as_echo_n "checking if OpenSSL is really LibreSSL in disguise... " >&6; }
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+
+				#include <openssl/opensslv.h>
+
+				#ifdef LIBRESSL_VERSION_NUMBER
+				#error "Detected LibreSSL"
+				#endif
+
+
+int
+main ()
+{
+
+
+				return 0;
+
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+			LIBCRYPTO_NAME="OpenSSL"
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+			LIBCRYPTO_NAME="LibreSSL"
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 fi
 
@@ -10153,7 +10196,7 @@ fi
 	if test "x${DIGEST_FRONTEND}x${LIBCRYPTO}" = "xInternalxYes"; then :
 
 		DIGEST_FRONTEND_VAL="ATHEME_DIGEST_FRONTEND_OPENSSL"
-		DIGEST_FRONTEND="OpenSSL"
+		DIGEST_FRONTEND="${LIBCRYPTO_NAME}"
 		DIGEST_API_LIBS="${LIBCRYPTO_LIBS}"
 
 fi
