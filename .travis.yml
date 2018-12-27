@@ -29,7 +29,6 @@ compiler:
 
 env:
   - OPTIONAL_CONF_ARGS=""
-  - OPTIONAL_CONF_ARGS="--with-perl"
   - OPTIONAL_CONF_ARGS="--enable-contrib"
 
 script:

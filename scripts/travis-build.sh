@@ -15,6 +15,7 @@ set -x
     --with-nettle                      \
     --with-openssl                     \
     --with-pcre                        \
+    --with-perl                        \
     --with-qrencode                    \
     --enable-legacy-pwcrypto           \
     --enable-nls                       \
