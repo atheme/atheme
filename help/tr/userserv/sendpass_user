@@ -1,0 +1,16 @@
+SENDPASS:
+
+Ilgili email adresine SETPASS komutu ile yeni bir sifre
+belirlemek icin gerekli bir anahtar kodu gonderir.
+
+Sentaks: SENDPASS <nick>
+#if priv user:sendpass
+
+Eger anahtar kodu emaile gelmisse ama henuz kullanilmamissa,
+CLEAR ile temizleyebilirsiniz.
+
+Sentaks: SENDPASS <nick> CLEAR
+#endif
+
+Kullanimi:
+    /msg &nick& SENDPASS foo

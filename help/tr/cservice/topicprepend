@@ -1,0 +1,8 @@
+TOPICPREPEND:
+
+Kanal basliginin basina farkli bir baslik ekler.
+
+Sentaks: TOPICPREPEND <#kanal> <topic>
+
+Kullanimi:
+    /msg &nick& TOPICPREPEND #foo bar

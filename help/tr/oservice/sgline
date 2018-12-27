@@ -1,0 +1,55 @@
+SGLINE:
+
+Ag capinda realname (gecos) banlari ekler.
+AKILL benzeridir.
+
+Sentaks: SGLINE ADD <gecos> [!P|!T <dakika>] <sebep>
+
+Eger !P kullanilirsa, SQLINE kalici olarak eklenir.
+Eger !T kullanilirsa, SQLINE ne zaman kaldirilacagi dakika,
+saat ("h"), gun ("d") ya da ("w") olarak belirtilmeli.
+
+Kullanimi:
+    /msg &nick& SGLINE ADD foo !T 5 bar reason
+    /msg &nick& SGLINE ADD foo !T 3d bar reason
+    /msg &nick& SGLINE ADD foo !P foo reason
+    /msg &nick& SGLINE ADD foo foo reason
+
+
+Ilk ornek realname'i "foo" olan kullanicilari arar ve
+5 dakikaligina "bar sebebiyle" SGLINE ekler.
+
+Ikinci ornek de buna benzer, 5 dakika yerine 3 gun boyunca
+SGLINE ekler.
+
+Ucundu ornek foo uzerine "foo sebebiyle" kalici SGLINE ekler.
+
+Dorduncu ornek foo uzerine "foo sebebiyle" konfigurasyon
+dosyasinda belirtilen sureyle SGLINE ekler.
+
+Sentaks: SGLINE DEL <gecos|numara>
+
+Eger numara belirtilmisse, SGLINE listesindeki numara ile
+iliskilendirilir.
+Bir komutta birden fazla numara belirtebilirsiniz.
+Iki nokta ust uste kullanarak aralik belirtebilirsiniz.
+
+Kullanimi:
+    /msg &nick& SGLINE DEL foo
+    /msg &nick& SGLINE DEL 5
+    /msg &nick& SGLINE DEL 1,2,5,10
+    /msg &nick& SGLINE DEL 1:5,7,9:11
+
+Sentaks: SGLINE LIST [FULL]
+
+Eger FULL belirtilirse, SGLINE sebepleri gosterilir.
+
+Kullanimi:
+    /msg &nick& SGLINE LIST
+    /msg &nick& SGLINE LIST FULL
+
+Sentaks: SGLINE SYNC
+
+Sgline'lari butun sunuculara senkronize eder.
+Servisler kapali oldugunda ya da belli bir sgline'a uyan bir
+kullanici bulamadiginda bu komut kullanislidir.

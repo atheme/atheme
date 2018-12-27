@@ -1,0 +1,8 @@
+RESETPASS:
+
+Belirtilen hesap icin rastgele bir sifre olusturur.
+
+Sentaks: RESETPASS <nick>
+
+Kullanimi:
+    /msg &nick& RESETPASS foo

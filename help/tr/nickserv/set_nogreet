@@ -1,0 +1,8 @@
+SET NOGREET:
+
+Kanal karsilama mesajlarini kapatir.
+
+Sentaks: SET NOGREET ON|OFF
+
+Kullanimi:
+    /msg &nick& SET NOGREET ON

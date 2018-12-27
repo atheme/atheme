@@ -1,0 +1,9 @@
+ACTIVATE:
+
+Belirtilen nick icin bir bildirim talep eder.
+Kullanici kisa not ile bilgilendirilir.
+
+Sentaks: ACTIVATE <nick>
+
+Kullanimi:
+    /msg &nick& ACTIVATE foo

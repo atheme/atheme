@@ -1,0 +1,9 @@
+SET RECONTIME:
+
+Servislerin uplink'e ne kadar sure araliginda
+baglanmaya calisacagini ayarlar.
+
+Sentaks: SET RECONTIME <saniye olarak zaman>
+
+Kullanimi:
+    /msg &nick& SET RECONTIME 5

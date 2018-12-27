@@ -1,0 +1,8 @@
+LIST:
+
+Mevcut yardim isteklerini listeler.
+
+Sentaks: LIST
+
+Kullanimi:
+    /msg &nick& LIST

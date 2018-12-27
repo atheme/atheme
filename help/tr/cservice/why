@@ -1,0 +1,9 @@
+WHY:
+
+Cevrimici bir kullaniciyla eslesen erisim girdisini
+gosterir.
+
+Sentaks: WHY <#kanal> [nickname]
+
+Kullanimi:
+    /msg &nick& WHY #foo bar

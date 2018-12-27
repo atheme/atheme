@@ -1,0 +1,9 @@
+SET PRIVMSG:
+
+Servislerin sizinle ozel mesaj yoluyla iletisim
+kurmasini saglar.
+
+Sentaks: SET PRIVMSG ON|OFF
+
+Kullanimi:
+    /msg &nick& SET PRIVMSG ON

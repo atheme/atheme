@@ -1,0 +1,9 @@
+SET MDLIMIT:
+
+Bir nesneye(hesap, grup ya da kanal) en fazla
+kac parca metadata eklenebilecegini ayarlar.
+
+Sentaks: SET MDLIMIT <deger>
+
+Kullanimi:
+    /msg &nick& SET MDLIMIT 30

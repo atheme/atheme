@@ -1,0 +1,9 @@
+READONLY:
+
+Servis yoneticilerinin readonly modunu aktif/deaktif
+etmesine izin verir.
+
+Sentaks: READONLY ON|OFF
+
+Kullanimi:
+    /msg &nick& READONLY ON

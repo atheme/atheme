@@ -1,0 +1,13 @@
+CLEARCHAN:
+
+Operatorlere bir kanali su uc sekilde temizlemeye
+olanak saglar: KICK(butun kullanicilari kanaldan
+atarak), KILL(kanaldaki butun kullanicilara KILL atarak)
+ya da AKILL(kanaldaki butun kullanicilarin hostlarina
+1 haftaligina AKILL ekleyerek).
+
+Sentaks: CLEARCHAN KICK|KILL|AKILL <#kanal> <sebep>
+
+Kullanimi:
+    /msg &nick& CLEARCHAN KICK #spammers spam yapmak kotudur?
+    /msg &nick& CLEARCHAN AKILL #spammers uyarilmistiniz!

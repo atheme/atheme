@@ -1,0 +1,23 @@
+FUNGROUP:
+
+Belirtilen nicklerin ilgili hesaptan zorla siler.
+
+#if module nickserv/set_accountname
+
+Eger bir hesap ismini ungroup yapiyorsaniz
+hesap icin yeni bir isim belirlemek zorundasiniz.
+
+#else
+Hesap isimlerini ungroup yapamazsiniz.
+#endif
+
+Sentaks: FUNGROUP <nickname>
+#if module nickserv/set_accountname
+Sentaks: FUNGROUP <hesap> <yenisim>
+#endif
+
+Kullanimi:
+    /msg &nick& FUNGROUP foo
+#if module nickserv/set_accountname
+    /msg &nick& FUNGROUP foo bar
+#endif

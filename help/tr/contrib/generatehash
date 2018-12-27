@@ -1,0 +1,9 @@
+GENERATEHASH:
+
+Rastgele bir Atheme sifresi olusturur. Servisler oper
+sifresi olusturmak icin kullanislidir.
+
+Sentaks: GENERATEHASH <sifre>
+
+Kullanimi:
+    /msg &nick& GENERATEHASH ThIsPassw0rd

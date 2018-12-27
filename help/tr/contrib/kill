@@ -1,0 +1,10 @@
+KILL:
+
+Bir kullaniciya Servisler uzerinden kill atar. IRCd'inizdeki
+kill komutundan farkli olarak, Servisler ile atilan kullanicilar
+sunucuya otomatik olarak tekrar baglanmayacaklardir.
+
+Sentaks: KILL <hedef> <sebep>
+
+Kullanimi:
+    /msg &nick& KILL jdhore Pants!

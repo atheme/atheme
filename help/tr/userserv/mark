@@ -1,0 +1,14 @@
+MARK:
+
+Operatorlerin bir hesaba not ilistirmesine izin verir.
+Ornegin, bir operator bir hesabi 'kotu niyetli' olarak
+isaretleyebilir. Boylece diger kullanicilar bu kisinin
+onceden uyarildigini gorebilir.
+
+MARK bilgisi INFO ciktisinda goruntulenir.
+
+Sentaks: MARK <nickname> ON|OFF <sebep>
+
+Kullanimi:
+    /msg &nick& MARK foo ON Kotu niyetli, reklam yapiyor.
+    /msg &nick& MARK bar OFF

@@ -2,6 +2,7 @@ AC_DEFUN([ATHEME_PRINT_CONFIGURATION], [
 
 	AS_IF([test "x${ARC4RANDOM_BUILDING}" = "xYes"], [ARC4RANDOM_BUILDING="Yes (Internal ChaCha20)"])
 	AS_IF([test "x${SODIUM_MALLOC}" = "xYes"], [SODIUM_MALLOC="Yes (NOT INTENDED FOR PRODUCTION USAGE)"])
+	AS_IF([test "x${BUILD_WARNINGS}" = "xYes"], [BUILD_WARNINGS="Yes (NOT INTENDED FOR PRODUCTION USAGE)"])
 
 	prefix="$(eval echo "${prefix}")"
 	prefix="$(eval echo "${prefix}")"

@@ -1,0 +1,39 @@
+FLAGS:
+
+Grup yetkilerinin daha ozel bir seviyede eklenip/silinmesine
+izin verir. Hedef olarak kayitli nickleri destekler.
+
+Sadece grup argumani verildiyse, kullanicilara
+verilen yetkiler listesi goruntulenir.
+
+Sentaks: FLAGS <!grup>
+
+Eger +f kipiniz varsa gruptaki kullanicilarin kiplerini
+duzenleyebilirsiniz. Dizilimi chanserv/flags ile aynidir.
++ ile kip eklenir, - ile silinir.
+
+Sentaks: FLAGS <!grup> [nick kip_degisiklikleri]
+
+Yetkiler:
+    +f - Yetki listesinde duzenlemeye izin verir.
+    +F - Ful kurucu yetkileri verir.
+    +A - Grup yetki listesini goruntulemeye izin verir.
+    +m - Gruba gonderilen kisa notlari okur.
+    +c - Grubun yetkili oldugu kanallarda ayni yetkilere sahip olur.
+    +v - Grup icin HostServ tarafindan onerilen vhostu alir.
+    +s - Grupta &nick& SET komutlarinin kullanilmasina izin verir.
+    +b - Bir kullaniciyi gruptan banlar. Kullanici gruba JOIN komutuyla
+         tekrar giremez ve NickServ INFO'sunda ya da baska herhangi bir yerde
+         grup ismi gorunmez. Bu kipin ayarlanmasi kullanicinin yetkilerini
+         otomatik olarak kaldirmaz.
+    +i - Kullanicilari gruba davet etme yetkisi verir.
+
+
++* ozel izni, +F haric butun yetkileri ekler.
+-* ozel izni, +F dahil butun yetkileri siler.
+
+Kullanimi:
+    /msg &nick& FLAGS !baz
+    /msg &nick& FLAGS !baz foo +F
+    /msg &nick& FLAGS !baz foo -*
+    /msg &nick& FLAGS !baz foo +fmc

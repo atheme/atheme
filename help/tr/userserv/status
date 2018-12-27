@@ -1,0 +1,9 @@
+STATUS:
+
+Mevcut durumunuz hakkinda bilgi verir. Nickiniz,
+yonetici, ve SRA durumu hakkinda bilgiler gosterir.
+
+Sentaks: STATUS
+
+Kullanimi:
+    /msg &nick& STATUS

@@ -1,0 +1,21 @@
+NOOP:
+
+Hostmask ya da sunucu bazinca IRCop yetkisi almanizi
+engeller. Oper girildiginde eslesen kullaniciya kill atilir.
+
+Sentaks: NOOP ADD HOSTMASK <nick!user@host> [sebep]
+Sentaks: NOOP ADD SERVER <mask> [sebep]
+
+Kullanimi:
+    /msg &nick& NOOP ADD HOSTMASK *!*@some.spoof Abusive operator
+    /msg &nick& NOOP ADD SERVER bad.server Abusive admin
+
+Sentaks: NOOP DEL HOSTMASK <nick!user@host>
+Sentaks: NOOP DEL SERVER <mask>
+
+Kullanimi:
+    /msg &nick& NOOP DEL HOSTMASK *!some@operator.host
+    /msg &nick& NOOP DEL SERVER bad.server
+
+Sentaks: NOOP LIST HOSTMASK
+Sentaks: NOOP LIST SERVER

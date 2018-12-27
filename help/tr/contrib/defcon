@@ -1,0 +1,23 @@
+DEFCON:
+
+
+Durum-tabanli savunma guvenligi uygular.
+Oldukca kotu bir sekilde ag guvenligi kontrolu oldugundan ve
+kullanicilari yuksek olasilikla rahatsiz edeceginden bu modulun
+kullanilmasi kesinlikle onerilmiyor.
+
+SEVIYELER:
+    Seviyeler uygulanacak guvenligin numarasini belirtmek icin kullanilir.
+    Her bir seviye bir onceki seviye uzerinde insa edilir.(3 herseyi icerir, 4 daha fazlasini)
+
+    1 - Baglanan butun kullanicilara 15 dakikaligina AKILL uygulanir.
+    2 - Servis operatorleri haric butun kullanicilar servisler tarafindan ignore edilir.
+    3 - Varsayilan olarak butun kanallar zorla +R modu alir.
+    4 - Nick ve kanal kaydi yapilamaz.
+    5 - Normal ag yonetimi. Kisitlama yok.
+
+
+Sentaks: DEFCON <seviye>
+
+Kullanimi:
+    /msg &nick& DEFCON 4

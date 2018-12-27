@@ -1,0 +1,8 @@
+TOPICAPPEND:
+
+Kanalin basliginin sonuna farkli bir baslik ekler.
+
+Sentaks: TOPICAPPEND <#kanal> <baslik>
+
+Kullanimi:
+    /msg &nick& TOPICAPPEND #foo bar

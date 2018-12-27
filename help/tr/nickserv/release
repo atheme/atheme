@@ -1,0 +1,12 @@
+RELEASE:
+
+Nick uzerinde bulunan enforceyi kaldirir ve nickinizi
+kullanmakta olan kullanicinin nickini degistirir.
+
+Eger nickin hesabina giris yapmissaniz sifre girmenize
+gerek yoktur. Aksi halde sifrenizi de belirtmeniz gerekir.
+
+Sentaks: RELEASE <nick> [sifre]
+
+Kullanimi:
+    /msg &nick& RELEASE foo bar

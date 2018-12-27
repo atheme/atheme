@@ -1,0 +1,12 @@
+UNQUIET:
+
+Kanaldaki bir kullaniciyi yada hostmaski unmute eder.
+Eger nick yada da hostmask belirtilmemisse, kendiniz unmute olursunuz.
+
+Komutu uyguladiginizda etkilenen kullanicilar bilgilendirilir.
+
+Sentaks: UNQUIET <#kanal> [nickname|hostmask]
+
+Kullanimi:
+    /msg &nick& UNQUIET #foo Diablo-D3
+    /msg &nick& UNQUIET #foo *!*@*.trilug.org

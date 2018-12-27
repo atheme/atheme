@@ -1,0 +1,9 @@
+GENERATEPASS:
+
+Rastgele bir sifre olusturur. Otomatik olarak her hangi bir alanda uygulanmaz.
+
+Sentaks: GENERATEPASS [uzunluk]
+
+Kullanimi:
+    /msg &nick& GENERATEPASS
+    /msg &nick& GENERATEPASS 12

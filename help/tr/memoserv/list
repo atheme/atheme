@@ -1,0 +1,9 @@
+LIST:
+
+Gelen kutunuzdaki kisa notlarinizi kimin ve ne zaman
+gonderdigi bilgisi ile gosterir.
+
+Sentaks: LIST
+
+Kullanimi:
+    /msg &nick& LIST

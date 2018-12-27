@@ -1,0 +1,10 @@
+RAW:
+
+Uplink'e veri enjekte eder. Bu komut yalnizca
+hata ayiklama icindir. Ne yaptiginizi bilmiyorsaniz
+lutfen kullanmayin.
+
+Sentaks: RAW <parametreler>
+
+Kullanimi:
+    /msg &nick& RAW :&nick& OPERWALL :My admin is a loser

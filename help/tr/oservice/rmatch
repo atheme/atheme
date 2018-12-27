@@ -1,0 +1,28 @@
+RMATCH:
+
+Masklari (nick!user@host gecos)
+belirtilen aciklamayla eslesen butun
+kullanicilari gosterir.
+
+Slash yerine harf olmayan herhangi bir karakter,
+karakter, numara bosluk ya da backslash (\)
+kullanilabilir.
+Kaliptan sonraki "i" buyuk/kucuk harfe
+duyarli oldugu anlamina gelir.
+
+Varsayilan olarak, kalip POSIX olarak
+genisletilmis duzenli bir ifadedir.
+Eger PCRE destegi derlenmisse, kaliptan sonra
+"p" kullanabilirsiniz.
+
+Varsayilan olarak, eslesmelerin numaralari
+limitlidir. Bu limitin uzerine yazmak icin
+FORCE takisini kullanin.
+
+Sentaks: RMATCH /<kalip>/[i][p] [FORCE]
+
+Kullanimi:
+    /msg &nick& RMATCH /^m(oo|00)cow/i FORCE
+    /msg &nick& RMATCH #^[a-z]+!~?[a-z]+@#
+    /msg &nick& RMATCH /^[^ ]* [^ ]*$/
+    /msg &nick& RMATCH /\d\d\d/p

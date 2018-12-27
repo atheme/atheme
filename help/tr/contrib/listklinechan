@@ -1,0 +1,9 @@
+LISTKLINECHAN
+
+Uzerlerinde aktif KLINECHAN olan butun kanallari listeler.
+
+Sentaks: LISTKLINECHAN [kalip]
+
+Kullanimi:
+    /msg &nick& LISTKLINECHAN
+    /msg &nick& LISTKLINECHAN #lame*

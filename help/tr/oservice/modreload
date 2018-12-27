@@ -1,0 +1,9 @@
+MODRELOAD:
+
+Mevcut modulu tekrar yukler. Eger komut basarisiz olursa,
+yuklu olan modul hatalar giderilene kadar kaldirilir.
+
+Sentaks: MODRELOAD <isim...>
+
+Kullanimi:
+    /msg &nick& MODRELOAD chanserv/register

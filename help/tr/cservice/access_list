@@ -1,0 +1,9 @@
+ACCESS LIST:
+
+Kanal uzerinde yetkisi olan butun kullanicilari rolleriyle
+birlikte listeler.
+
+Komut: ACCESS <#kanal> LIST
+
+Kullanimi:
+    /msg &nick& ACCESS #atheme LIST

@@ -1,0 +1,8 @@
+BOTLIST:
+
+Sunucudaki mevcut botlari listeler.
+
+Sentaks: BOTLIST
+
+Kullanimi:
+    /msg &nick& BOTLIST

@@ -1,0 +1,10 @@
+JOIN:
+
+Herkese acik bir gruba katilmanizi saglar. Bu sekilde bir
+gruba girdiginizde hicbir yetki verilmez.
+Sadece grup uyesi olursunuz.
+
+Sentaks: JOIN <!grup>
+
+Kullanimi:
+    /msg &nick& JOIN !foo

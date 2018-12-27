@@ -1,0 +1,9 @@
+PING:
+
+Kullaniciya agdaki baglantiyi &nick&'i pingleyip "Pong!"
+yanitini alarak dogrulamasini saglar.
+
+Sentaks: PING
+
+Kullanimi:
+    /msg &nick& PING

@@ -1,0 +1,15 @@
+LIST:
+
+Belirtilen kritere uyan kayitli kullanicilari gosterir.
+Ayni komutta birden fazla kriter kullanilabilir.
+
+Eger ident@host verilmisse, son gorulmesi sadece bununla
+eslesen hesaplar gosterilir.
+
+Sentaks: LIST <pattern>
+Sentaks: LIST <pattern>!<user@host>
+
+Kullanimi:
+    /msg &nick& LIST james*
+    /msg &nick& LIST *a?ambert*
+    /msg &nick& LIST *!*@*.de

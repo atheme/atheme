@@ -1,0 +1,10 @@
+HELPME:
+
++h kullanici modu ile sizi bir ag yardimcisi yapar. Eger IRCdiniz
++h kullanici modunu destekliyorsa ve yonetici olmayan bir yardim ekibiniz
+varsa kullanislidir. OPERSERV:HELPME yetkisini gerektirir.
+
+Sentaks: HELPME
+
+Kullanimi:
+    /msg &nick& HELPME

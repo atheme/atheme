@@ -1,0 +1,18 @@
+VHOST:
+
+Yoneticilerin bir hesap icin vhost olusturmasini
+saglar. Belirtilen vhost kullanici nick sifresini
+girdiginde aktif olur.
+
+Sentaks: VHOST <nick> ON <vHost>
+Sentaks: VHOST <nick> OFF
+
+Eger kullanici adi isaretlenmisse, FORCE komutu
+ile vhost komutunu kullanabilirsiniz.
+
+Sentaks: VHOST <nick> ON <vhost> FORCE
+Sentaks: VHOST <nick> OFF FORCE
+
+Kullanimi:
+    /msg &nick& VHOST foo ON i.like.to.chat.on.irc
+    /msg &nick& VHOST foo OFF

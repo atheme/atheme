@@ -1,0 +1,13 @@
+OFF:
+
+Kullanilmakta olan nick icin belirlenen vhostu deaktif eder.
+Bu komutu kullandiginizda, diger kullanicilar /whois bilgisinde
+gercek IP numaranizi gorurler.
+
+Vhost'unuzun kalici olarak kaldirilmasi icin
+ag yoneticisine basvurun.
+
+Sentaks: OFF
+
+Kullanimi:
+    /msg &nick& OFF

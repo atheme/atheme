@@ -1,0 +1,9 @@
+HOLD:
+
+Kanali zaman asimindan cikarir.
+Eger yedek kuruculari yoksa, yine de zaman asimina ugrarlar.
+
+Sentaks: HOLD <#kanal> ON|OFF
+
+Kullanimi:
+    /msg &nick& HOLD #foo ON

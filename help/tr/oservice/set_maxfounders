@@ -1,0 +1,9 @@
+SET MAXFOUNDERS:
+
+Bir kanalin en fazla kac tane kurucusu(founder)
+olabilecegini ayarlar.
+
+Sentaks: SET MAXFOUNDERS <deger>
+
+Kullanimi:
+    /msg &nick& SET MAXFOUNDERS 4

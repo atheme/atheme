@@ -73,7 +73,7 @@ static const struct crypt_impl crypto_ircservices_impl = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	(void) crypt_register(&crypto_ircservices_impl);
 

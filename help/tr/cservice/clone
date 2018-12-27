@@ -1,0 +1,13 @@
+CLONE:
+
+Bir kanalin erisim listesini ve diger bilgilerini
+yeni bir kanala kopyalar. Iki kanal da &nick& ile
+kaydedilmis olmalidir. Hedef kanalin da kurucusu siz
+olmalisiniz.
+
+Kanal basligini kopyalamaz.
+
+Sentaks: CLONE <#kaynak-kanal> <#hedef-kanal>
+
+Kullanimi:
+    /msg &nick& CLONE #help #helpers

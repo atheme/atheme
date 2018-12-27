@@ -1,0 +1,9 @@
+INVITE:
+
+Kullanicilari "ozel"/kapali ya da dolu olan bir
+gruba davet eder.
+
+Sentaks: INVITE <!grup> <kullanici>
+
+Kullanimi:
+    /msg &nick& INVITE !foo bar

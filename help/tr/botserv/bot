@@ -1,0 +1,23 @@
+BOT:
+
+Yoneticilere kullanicilarin kanallarinda kullanabilecegi bir
+bot olusturma, duzenleme ya da silme izni verir.
+
+BOT ADD Belirtilen nick, username, host ve realname ile bir bot olusturur.
+
+BOT CHANGE Botun nickini, identini, hostunu ve realnameini
+degistirmenize izin verir. (bottaki bilgiler kaybolmaz)
+
+BOT DEL Belirtilen botu siler.
+
+Not: kayitli olan bir nick ile bot olusturamazsiniz. Eger bu nicki kayitsiz bir
+kullanici kullaniyorsa, kullaniciya kill atilir.
+
+Sentaks: BOT ADD <nick> <ident> <host> <realname>
+Sentaks: BOT CHANGE <eskinick> <yeninick> [<ident> [<host> [<realname>]]]
+Sentaks: BOT DEL <nick>
+
+Kullanimi:
+    /msg &nick& BOT ADD Security Security security.example.net Security
+    /msg &nick& BOT CHANGE Security NetBot NetBot Services.Example.Net MyNet
+    /msg &nick& BOT DEL Security

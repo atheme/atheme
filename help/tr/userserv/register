@@ -1,0 +1,21 @@
+REGISTER:
+
+Kullanmakta oldugunuz nicki &nick& ile kaydeder.
+Bu komut sunucu uzerinde bir kimlik olusturmaniza
+ve yetki listelerine eklenmenize izin verir. Dahasi,
+&nick& nickinizi sifresini girmeden kullanicilari
+uyarir ve sizin ghost komutu kullanmaniza izin verir.
+
+Sifreniz buyuk/kucuk harfe duyarlidir.
+Lutfen sifrenizin ayri bir yere not ediniz. Daha
+sonra bazi ayarlarinizi degistirmeniz icin
+ihtiyaciniz olacak.
+#if auth
+Email adresinizi onaylamaniz gerekir. Bunun icin
+email adresinize gonderilen talimatlari uygulayiniz.
+#endif
+
+Sentaks: REGISTER <sifre> <email-adresi>
+
+Kullanimi:
+    /msg &nick& REGISTER bar foo@bar.com

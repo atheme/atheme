@@ -1,0 +1,9 @@
+DEL:
+
+Kullanicilarin baglanirken gormesini istemediginiz bilgi niteligindeki
+mesajlari silmek icin kullanilir. Oper &nick& mesajlarini silmez.
+
+Sentaks: DEL <id>
+
+Kullanimi:
+    /msg &nick& DEL 1

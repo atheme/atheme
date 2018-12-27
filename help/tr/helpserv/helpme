@@ -1,0 +1,9 @@
+HELPME:
+
+Sunucu yetkilisinden yardim isteginde bulunmanizi saglar.
+
+Sentaks: HELPME [konu]
+
+Kullanimi:
+    /msg &nick& HELPME
+    /msg &nick& HELPME vhost hakkinda yardima ihtiyacim var.

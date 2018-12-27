@@ -1,0 +1,8 @@
+SET PUBLIC:
+
+Kullanicilara NickServ INFO uygulandiginda, grup uyeligini gosterir.
+
+Sentaks: SET <!grup> PUBLIC <ON|OFF>
+
+Kullanimi:
+    /msg &nick& SET !awesome-people PUBLIC ON

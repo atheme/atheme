@@ -1,0 +1,10 @@
+FREGISTER:
+
+Bir kanali zorla kaydeder, boylece daha fazla
+kontrol saglar. Kanali icinde op olmadan ya da
+kanala girmeden bile kaydetmenizi saglar.
+
+Sentaks: FREGISTER <#kanal>
+
+Kullanimi:
+    /msg &nick& FREGISTER #atheme

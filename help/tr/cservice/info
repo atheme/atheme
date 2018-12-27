@@ -1,0 +1,9 @@
+INFO:
+
+Kanalin kayit tarihi, kipleri ve diger detaylari
+gibi bilgiler goruntuler.
+
+Sentaks: INFO <#help>
+
+Kullanimi:
+    /msg &nick& INFO #help

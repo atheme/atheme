@@ -1,0 +1,34 @@
+BADMAIL:
+
+Kullanici hesabi kaydedilirken kullanilmasina izin verilmeyen
+email adreslerini belirlemek icin kullanilir.
+
+Bu email adresleri Atheme veritabanina kaydedilir ve servislere restart
+atildiginda da saklanir.
+
+BADMAIL ADD ile belirtilen parametreler ile uyusan email adresleri
+icin global eslesme kullanabilirsiniz.
+
+Sentaks: BADMAIL ADD <email> [sebep]
+
+Kullanimi:
+    /msg &nick& BADMAIL ADD jdhore1@gmail.com bar sebep
+    /msg &nick& BADMAIL ADD *@aol.com sebep
+    /msg &nick& BADMAIL ADD *@*.tk foo sebep
+    /msg &nick& BADMAIL ADD spam-botu-ornegi-*@gmail.com
+
+
+BADMAIL DEL belirtilen girdiyi banli email listesinden silmenizi saglar.
+
+Sentaks: BADMAIL DEL <email>
+
+Kullanimi:
+    /msg &nick& BADMAIL DEL foo@bar.com
+    /msg &nick& BADMAIL DEL *@aol.com
+
+BADMAIL LIST mevcut banli email adreslerini listeler.
+
+Sentaks: BADMAIL LIST
+
+Kullanimi:
+    /msg &nick& BADMAIL LIST

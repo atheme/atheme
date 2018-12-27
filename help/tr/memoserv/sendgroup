@@ -1,0 +1,9 @@
+SENDGROUP:
+
++m kipi olan bir gruptaki butun
+kullanicilara kisa not gonderir.
+
+Sentaks: SENDGROUP <!group> <mesaj>
+
+Kullanimi:
+    /msg &nick& SENDGROUP !staff Luffy'ye dikkat edin.

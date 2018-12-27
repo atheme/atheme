@@ -1,0 +1,12 @@
+AJOIN:
+
+Nick sifrenizi girdiginzide otomatik olarak gireceginiz kanallar
+listesi belirlemenizi saglar.
+
+Sentaks: AJOIN ADD|DEL|LIST|CLEAR [#kanal]
+
+Kullanimi:
+    /msg &nick& AJOIN LIST
+    /msg &nick& AJOIN ADD #foo
+    /msg &nick& AJOIN DEL #foo
+    /msg &nick& AJOIN CLEAR

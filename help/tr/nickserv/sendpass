@@ -1,0 +1,24 @@
+SENDPASS:
+
+#if !module nickserv/setpass
+Belirtilen nickin sifresini ilgili email adresine gonderir.
+#else
+Ilgili email adresine SETPASS komutu ile yeni bir sifre
+belirlemek icin gerekli bir anahtar kodu gonderir.
+#endif
+
+Sentaks: SENDPASS <nick>
+
+Eger nick isaretlenmisse, FORCE ile kullanabilirsiniz.
+
+Sentaks: SENDPASS <nick> FORCE
+#if module nickserv/setpass
+
+Eger anahtar kodu emaile gelmisse ama henuz kullanilmamissa,
+CLEAR ile temizleyebilirsiniz.
+
+Sentaks: SENDPASS <nick> CLEAR
+#endif
+
+Kullanimi:
+    /msg &nick& SENDPASS foo

@@ -1,0 +1,9 @@
+CLOSE:
+
+Belirtilen nick icin yardim istegini kapatir.
+Kullanici yardim istegi kapandigina dair bilgilendirilir.
+
+Sentaks: CLOSE <nick> [sebep]
+
+Kullanimi:
+    /msg &nick& CLOSE foo Artik buna ihtiyacim yok.

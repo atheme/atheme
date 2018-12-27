@@ -1,0 +1,23 @@
+POST:
+
+Komutu girdiginiz anda kullanicilara tek seferlik gosterilicek mesajlar
+ya da sadece yoneticilerin her oper girdiklerinde
+gorecekleri mesajlar gondermenizi saglar.
+
+Alt cizgi "_" isaretleri bosluk yerine gecer.
+
+IMPORTANCE:
+    Gonderilecek mesajin turunu belirler..
+
+    0 - Sadece oper girildiginde
+    1 - Sadece kullanicilara sunucuya baglanirken
+    2 - Butun kullanicilara anlik /notice
+    3 - Kullanicilara sunucuya baglanirken VE anlik /notice
+    4 - Butun kullanicilara anlik ozel mesaj gonderir.
+
+
+Sentaks: POST <importance> <konu> <mesaj>
+
+Kullanimi:
+    /msg &nick& POST 2  Bazi onemli bilgilendirmeler.
+    /msg &nick& POST 1  Ekstra bilgilendirmeler.

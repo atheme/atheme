@@ -1,0 +1,9 @@
+SET KLINETIME:
+
+Ag personleinin eger bir AKILL icin sure belirtilmezse
+varsayilan AKILL suresini ayarlamasina izin verir.
+
+Sentaks: SET KLINETIME <gun olarak zaman>
+
+Kullanimi:
+    /msg &nick& SET KLINETIME 5

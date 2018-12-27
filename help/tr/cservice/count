@@ -1,0 +1,12 @@
+COUNT:
+
+Kanalin xOP listesinde ve erisim listesinde kac tane
+girdi oldugunu ve bunlarin kacinin xOP degeriyle
+eslesmedigini listeler.
+
+Ikinci satir kac tane yetki girdisinin kipi bulundugunu gosterir.
+
+Sentaks: COUNT <#kanal>
+
+Kullanimi:
+    /msg &nick& COUNT #oscn

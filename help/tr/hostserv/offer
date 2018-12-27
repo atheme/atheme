@@ -1,0 +1,17 @@
+OFFER:
+
+Ag uzerinde kullanicilarin yoneticiye basvuru yapmadan
+kendilerinin kullanabilecegi bir vhost listesi onerisinde
+bulunmaniza izin verir.
+Eger $account kullanirsaniz, vhost kullanicinin hesap ismi
+olarak degisir.
+
+Eger !group parametresi belirtilmisse, grupta sadece +v kipi
+olan kullanicilar OFFERLIST'i gorebilir ya da vhostu kullanabilir.
+
+Sentaks: OFFER [!group] <vhost>
+
+Kullanimi:
+    /msg &nick& OFFER ircnet.crypthon
+    /msg &nick& OFFER mynetwork.users.$account
+    /msg &nick& OFFER !atheme-users $account.users.atheme.net

@@ -1,0 +1,10 @@
+ACCESS INFO:
+
+Belirtilen kullanicinin kanal uzerindeki butun yetkilerini
+rollerini, kiplerini son duzenlenen tarihiyle birlikte
+goruntuler.
+
+Sentaks: ACCESS <#kanal> INFO <nick>
+
+Kullanimi:
+    /msg &nick& ACCESS #atheme INFO nenolod

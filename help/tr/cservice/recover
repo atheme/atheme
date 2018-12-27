@@ -1,0 +1,17 @@
+RECOVER:
+
+Kanalinizin kontrolunu tekrar kazanmanizi saglar.
+
+Daha dogrusu; herkes deop edilir, butun
+limit ve anahtarlar kaldirilir, butun banlar,
+eklediginiz butun banlar kaldirilir,
+kanal davetsel(+i)(kanala davet edilirsiniz)
+ve moderated(+m) moda alinir.
+
+Eger kanaldaysaniz op olursunuz ve
+hic bir ban muafi eklenmez.
+
+Sentaks: RECOVER <#kanal>
+
+Kullanimi:
+    /msg &nick& RECOVER #foo

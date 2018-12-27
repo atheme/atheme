@@ -1,0 +1,12 @@
+SET FANTASY:
+
+ChanServ fantazi komutlarini (!op, !deop gibi)
+atkif/deaktif yapmaniza izin verir.
+
+Fantasy komutlarinin kullanilabilmesi icin GUARD
+aktif olmalidir.
+
+Sentaks: SET <#kanal> FANTASY ON|OFF
+
+Kullanimi:
+    /msg &nick& SET #foo FANTASY ON

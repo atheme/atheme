@@ -1,0 +1,8 @@
+LOTTERY:
+
+Kullanildigi kanalda rastgele bir kullanici secer.
+
+Sentaks: LOTTERY
+
+Kullanimi:
+    /msg &nick& LOTTERY

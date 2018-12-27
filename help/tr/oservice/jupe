@@ -1,0 +1,11 @@
+JUPE:
+
+Belirtilen isimle gercek sunucunun baglanamayacagi
+sahte bir sunucu olusturur. Servisler uplink'e baglanana
+kadar kalicidir ve (cogu ircd'de) /squit komutuyla
+kaldirilabilir.
+
+Sentaks: JUPE <sunucu> <sebep>
+
+Kullanimi:
+    /msg &nick& JUPE irc.foobar.net very unstable server

@@ -388,6 +388,7 @@ atheme_main(int argc, char *argv[])
 	atheme_init(argv[0], log_p);
 
 	slog(LG_INFO, "%s is starting up...", PACKAGE_STRING);
+	slog(LG_INFO, "Using Digest API frontend: %s", digest_get_frontend_info());
 
 	/* check for pid file */
 #ifndef MOWGLI_OS_WIN

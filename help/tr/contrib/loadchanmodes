@@ -1,0 +1,12 @@
+LOADCHANMODES:
+
+SAVECHANMODES ile kaydedilmis agdaki her bir kanalin
+butun kanal modlarini, basliklarini ve banlarini yukler.
+LOADCHANMODES kaydedilmis bilgiler icin DATADIR/chanmodes.txt
+dosyasini arar. Bu dizin genellikle ~atheme/etc/chanmodex.txt'tir,
+ama yuklemenize gore degisiklik gosterir.
+
+Sentaks: LOADCHANMODES
+
+Kullanimi:
+    /msg &nick& LOADCHANMODES

@@ -1,0 +1,10 @@
+LISTCHANS:
+
+Bir grubun yetkisi oldugu kanallari listeler.
+
+AKICKler gosterilmez.
+
+Sentaks: LISTCHANS <grup>
+
+Kullanimi:
+    /msg &nick& LISTCHANS !foo

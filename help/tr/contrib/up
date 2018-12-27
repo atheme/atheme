@@ -1,0 +1,8 @@
+UP:
+
+Kanaldaki butun yetki modlarini verir.
+
+Sentaks: UP <#kanal>
+
+Kullanimi:
+    /msg &nick& UP #foo

@@ -1,0 +1,33 @@
+CERT:
+
+&nick&'in sizi tanimlamasini ve otomatik olarak dogrulamasi
+icin bir CertFP parmakizi listesini icerir.
+
+Ayni parmakizini birden fazla hesaba ekleyemezsiniz.
+
+Parmak izi formatlari IRCd'e gore farklilik gosterir ve
+CERT bunlari hesaba katamaz.
+
+Eger soz konusu ise, herhangi bir arguman belirtmeden
+CERT ADD komutunu kullanin. Mevcut parmakizini listenize
+eklersiniz. Ya da ag yoneticinize basvurun.
+
+Sentaks: CERT LIST
+Sentaks: CERT ADD [fingerprint]
+Sentaks: CERT DEL <fingerprint>
+Sentaks: CERT CLEAR
+#if priv user:auspex
+
+user:auspex ayricaligina sahip yoneticiler
+baska bir kullanicinin parmakizi listesini
+goruntuleyebilir.
+
+Sentaks: CERT LIST <nick>
+#endif
+
+Kullanimi:
+    /msg &nick& CERT LIST
+    /msg &nick& CERT ADD
+    /msg &nick& CERT ADD f3a1aad46ca88e180c25c9c7021a4b3a
+    /msg &nick& CERT DEL f3a1aad46ca88e180c25c9c7021a4b3a
+    /msg &nick& CERT CLEAR

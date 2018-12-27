@@ -1,0 +1,12 @@
+ SET EMAIL:
+
+Ilgili hesaptaki e-mail adresini degistirmek
+icin kullanilir.
+
+Yeni e-mail adresinizi dogrulamaniz gerekebilir.
+Bunun icin yeni adresinize gonderilen komutlari uygulayiniz.
+
+Sentaks: SET EMAIL <yeniemailadresi>
+
+Kullanimi:
+    /msg &nick& SET EMAIL foo@bar.com

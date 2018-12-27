@@ -1,0 +1,8 @@
+LOGSTREAM:
+
+Atheme'nin log dosyalarini bir kanalda yayinlar.
+
+Sentaks: LOGSTREAM <#kanal>
+
+Kullanimi:
+    /msg &nick& LOGSTREAM #services

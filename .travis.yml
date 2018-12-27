@@ -1,42 +1,37 @@
 language: c
 sudo: false
 os: linux
+dist: xenial
 
 notifications:
   email: false
 
 addons:
   apt:
-    sources:
-      - ubuntu-toolchain-r-test
-      - llvm-toolchain-trusty-5.0
     packages:
       - libgettextpo-dev
       - libqrencode-dev
       - libcrack2-dev
-      - libldap2-dev
+      - libsodium-dev
       - libidn11-dev
+      - libldap2-dev
       - libpcre3-dev
       - libperl-dev
       - libssl-dev
       - nettle-dev
-      - clang-5.0
-      - gcc-5
+      - clang
+      - gcc
 
 compiler:
-  - clang-5.0
+  - clang-7
   - gcc-5
 
 env:
   - OPTIONAL_CONF_ARGS=""
-  - OPTIONAL_CONF_ARGS="--with-perl"
   - OPTIONAL_CONF_ARGS="--enable-contrib"
 
 script:
-  - ./configure --prefix=/home/travis/atheme-install/ --enable-nls --enable-reproducible-builds --with-crypt --with-cracklib --with-ldap --with-libidn --without-mbedtls --with-nettle --with-openssl --with-pcre --with-qrencode ${OPTIONAL_CONF_ARGS}
-  - make
-  - make install
-  - /home/travis/atheme-install/bin/atheme-services -d -n -T
+  - scripts/travis-build.sh
 
 matrix:
   allow_failures:

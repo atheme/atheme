@@ -1,0 +1,16 @@
+FSEND:
+
+Cevrimdisi olan bir nicke zorla bir kisa not gonderir.
+Cevrimici olduklarinda okunmayi bekleyen mesajlari olduklarina
+dahil uyarilirlar ve kisa notunuzu okuma firsatini bulurlar.
+
+Kisa notunuz 300 karakterden uzun olamaz.
+
+FSEND hedef kullanicinin ayarli olan NOMEMO kipini
+ya da uzerinizdeki ignore'yi(kisa not gondermenizi engellediyse)
+gormezden gelir.
+
+Sentaks: FSEND <kullanici|nick> mesaj
+
+Kullanimi:
+    /msg &nick& FSEND foo faturalarini ode.

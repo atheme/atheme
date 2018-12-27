@@ -1,0 +1,33 @@
+TRACE:
+
+Kullanicilari herhangi bir kriter numarasiyla
+aramaniza ve uzerinde eylem yapmaniza izin verir.
+
+Mevcut kriterler:
+CHANNEL    - Belirtilen kanaldaki butun kullanicilar.
+SERVER     - Belirtilen sunucudaki butun kullanicilar.
+REGEXP     - Belirtilen regex kalibiyla eslesen butun kullanicilar.
+             RMATCH/RWATCH benzeri.
+GLOB       - Belirtilen glob kalibiyla eslesen butun kullanicilar.
+NICKAGE    - Ne kadar suredir (saniye olarak) aga bagli olan kullanicilar.
+NUMCHAN    - Kac tane kanalda bulunan kullanicilar.
+IDENTIFIED - Belirtilen kriterle eslesen tanimli kullanicilar.
+
+Mevcut eylemler:
+PRINT - Belirtilen kriterle eslesen her bir kullanici icin nick!user@host
+        ve bazi diger bilgileri goruntuler.
+COUNT - Belirtilen kriterle eslesen kullanici sayisini gosterir.
+KILL  - Belirtilen kriterle eslesen butun kullanicilara KILL atar.
+AKILL - Belirtilen kriterle eslesen butun kullanicilara AKILL atar.
+
+Sentaks: TRACE <action> <parametreler>
+
+Kullanimi:
+    /msg &nick& TRACE print channel #foo
+    /msg &nick& TRACE print server irc.dereferenced.org
+    /msg &nick& TRACE kill "reason" server alfred.staticbox.net
+    /msg &nick& TRACE print glob *!*@127.0.0.1
+    /msg &nick& TRACE kill "three word reason" channel #test nickage <60
+    /msg &nick& TRACE print numchan 0 nickage <180
+    /msg &nick& TRACE count numchan >10 identified no
+    /msg &nick& TRACE akill !P "join a channel next time" numchan 0

@@ -1,0 +1,9 @@
+SAVECHANMODES:
+
+Butun kanal modlarini kaydeder. Agdaki her bir kanalin kanal basliklari
+ve kanal banlari daha sonra geri getirmek uzere bir dosyada saklanir.
+
+Sentaks: SAVECHANMODES
+
+Kullanimi:
+    /msg &nick& SAVECHANMODES

@@ -1,0 +1,14 @@
+SET ENFORCETIME:
+
+Nickinizi kullanan birinin sifresini girmezse ne kadar surede nickinin
+degisecegini belirler.
+
+Sunucunun varsayilan degeri olarak ayarlanabilir yada 1-180 saniye
+arasi bir rakam belirlenir.
+
+Sentaks: SET ENFORCETIME TIME|DEFAULT
+
+Kullanimi:
+    /msg &nick& SET ENFORCETIME DEFAULT
+    /msg &nick& SET ENFORCETIME 90
+    /msg &nick& SET ENFORCETIME 3

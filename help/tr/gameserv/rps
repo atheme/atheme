@@ -1,0 +1,8 @@
+RPS:
+
+Rastgele "Tas", "Kagit" ya da "Makas" olarak cevap verir.
+
+Sentaks: RPS
+
+Kullanimi:
+    /msg &nick& RPS

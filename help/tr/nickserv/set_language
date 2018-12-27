@@ -1,0 +1,9 @@
+SET LANGUAGE:
+
+Servislerin sizinle iletisim kuracagi dili degistirir.
+
+Sentaks: SET LANGUAGE <kisaltma>
+
+Kullanimi:
+    /msg &nick& SET LANGUAGE en
+    /msg &nick& SET LANGUAGE tr

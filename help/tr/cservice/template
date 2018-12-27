@@ -1,0 +1,50 @@
+TEMPLATE:
+
+TEMPLATEkomutu kip ayarlarinin tanimlamalarini
+ayarlayarak FLAGS komutunun kullanimini kolaylastirir.
+
+Eger arguman belirtilmezse, ag genelindeki sablonlar gosterilir.
+#if halfops
+En az SOP/AOP/HOP/VOP icermeli.
+#else
+En az SOP/AOP/VOP icermeli.
+#endif
+
+Sentaks: TEMPLATE
+
+Sadece kanal argumani kullanilirsa, bu kanal icin
+sablonlar gosterilir.
+
+Sentaks: TEMPLATE <#kanal>
+
+Ya da sablon duzenlenir. Bu duzenleme sablon ismi
+belirtilerek yapilabilir. (sablonu kopyalar) ya da
+kipleri degistirir(+ ya da - ile baslar, istege bagli olarak
+!'den once gelir). Sablonlar bos olarak ayarlanamaz.
+(bos olarak ayarlarsaniz sablon silinir)
+
+Eger ! formu kullanildiysa, sablonla eslesen butun
+yetki girdileri buna bagli olarak degisir. Eger sablonda
+founder yetkisi varsa(+F) bu ozellik desteklenmez.
+
+Bir kanaldaki butun sablonlar icin bir uzunluk limiti vardir.
+
+Eger kurucu(founder) degilseniz, FLAGS icindeki
+benzer kisitlamalar uygulanir.
+
+Sentaks: TEMPLATE <#kanal> [sablon eskisablon]
+Sentaks: TEMPLATE <#kanal> [sablon sablon_degisiklikleri]
+Sentaks: TEMPLATE <#kanal> [sablon !sablon_degisiklikleri]
+
+Kullanimi:
+    /msg &nick& TEMPLATE #foo
+    /msg &nick& TEMPLATE #foo user VOP
+    /msg &nick& TEMPLATE #foo user !+A
+#if halfops
+    /msg &nick& TEMPLATE #foo co-founder +*-OH
+    /msg &nick& TEMPLATE #foo op -*+vVhoti
+#else
+    /msg &nick& TEMPLATE #foo co-founder +*-O
+    /msg &nick& TEMPLATE #foo op -*+vVoti
+#endif
+    /msg &nick& TEMPLATE #foo obsoletetemplate -*

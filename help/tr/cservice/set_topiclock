@@ -1,0 +1,14 @@
+SET TOPICLOCK:
+
++f kipi bulunmayan kullanicilarin kanal basligini degistirdiginde
+ya da servisler yeniden baslatildiginda &nick&'un kanal basligini
+tekrar eski durumuna getirmesini saglar.
+
+Bunun icin KEEPTOPIC gerekli oldugundan TOPICLOCK otomatik
+olarak aktif edecektir. KEEPTOPIC'i kapatirsaniz TOPICLOCK da
+iptal olur.
+
+Sentaks: SET <#kanal> TOPICLOCK ON|OFF
+
+Kullanimi:
+    /msg &nick& SET #foo TOPICLOCK ON

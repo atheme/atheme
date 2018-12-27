@@ -1,0 +1,16 @@
+DELETE:
+
+Kisa notlarinizi siler. Butun kisa notlarinizi
+ALL parametresi ile silebilir, OLD parametresi
+ile butun okudugunuz notlarinizi silebilirsiniz.
+Ya da not numarasi belirtebilirsiniz.
+
+Not numaranizi LIST komutu ile ogrenebilirsiniz.
+Bir notu sildiginizde sonrasindaki butun notlarinizin
+numarasi degisir.
+
+Sentaks: DELETE ALL|OLD|<not numarasi>
+
+Kullanimi:
+    /msg &nick& DELETE OLD
+    /msg &nick& DELETE 1

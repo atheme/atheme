@@ -1,0 +1,9 @@
+SET COMMITINTERVAL:
+
+Ag personelinin veritabaninin ne kadar sureyle
+(dakika olarak) diske yazilacagini ayarlamasina izin verir.
+
+Sentaks: SET COMMITINTERVAL <dakika olarak zaman>
+
+Kullanimi:
+    /msg &nick& SET COMMITINTERVAL 5

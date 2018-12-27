@@ -1,0 +1,9 @@
+SET DESCRIPTION:
+
+Bir grubun aciklamasini degistirir. Bu aciklama
+grup infosunda gorunur.
+
+Sentaks: SET <!grup> DESCRIPTION [aciklama]
+
+Kullanimi:
+    /msg &nick& SET !atheme DESCRIPTION Resmi Atheme Grubu

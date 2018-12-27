@@ -1,0 +1,26 @@
+ACC:
+
+Kullanicinin login durumu hakkinda bilgi verir.
+
+Belirtilen hesabin kimlik bilgisini soyle gosterir,
+<nick> [-> hesap] ACC <rakam> <EID>
+
+ciktidaki <rakam> asagidakilerden biri olabilir:
+    0 - Boyle bir hesap bulunmuyor.
+    1 - Boyle bir hesap mevcut ama kullanici giris yapmamis.
+#if module nickserv/access
+    2 - Kullanici hesaba giris yapmamis ama taninmis.(ACCESS)
+#endif
+    3 - Kullanici hesaba giris yapmis.
+
+Eger kullanicinin nicki bir hesaba dahilse,
+ciktiya "-> hesap" kismi da eklenir.
+Account * demek, kullanicinin giris yaptigi hesaptir.
+
+Sentaks: ACC
+Sentaks: ACC <nick>
+Sentaks: ACC <nick> <hesap>
+Sentaks: ACC <nick> *
+
+Kullanimi:
+    /msg &nick& ACC foo *

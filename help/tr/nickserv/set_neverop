@@ -1,0 +1,8 @@
+SET NEVEROP:
+
+Kullanicilarin sizi kanal erisim listelerine eklemesini onler.
+
+Sentaks: SET NEVEROP ON|OFF
+
+Kullanimi:
+    /msg &nick& SET NEVEROP ON

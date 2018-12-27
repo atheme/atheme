@@ -1,0 +1,10 @@
+SENDOPS:
+
+Kanaldaki butun oplara kisa not gonderir.
+Sadece erisim listesinde bulunan kullanicilar
+bu komutu kullanabilir.
+
+Sentaks: SENDOPS <#kanal> <mesaj>
+
+Kullanimi:
+    /msg &nick& SENDOPS #foo Luffy'e dikkat edin.

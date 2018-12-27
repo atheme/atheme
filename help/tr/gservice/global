@@ -1,0 +1,13 @@
+GLOBAL:
+
+IRCoplara birden fazla satiri tek bir komutla agdaki
+butun kullanicilara gondermesine izin verir.
+
+Sentaks: GLOBAL <parametreler>|SEND|CLEAR|LIST
+
+Kullanimi:
+    /msg &nick& GLOBAL satir 1
+    /msg &nick& GLOBAL satir 2 2
+    /msg &nick& GLOBAL SEND
+    /msg &nick& GLOBAL CLEAR
+    /msg &nick& GLOBAL LIST

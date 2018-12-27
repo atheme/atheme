@@ -1,0 +1,8 @@
+DISABLE:
+
+RPGServ'i bir kanalda deaktif eder.
+
+Sentaks: DISABLE <#kanal>
+
+Kullanimi:
+    /msg &nick& DISABLE #foo

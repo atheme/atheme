@@ -1,0 +1,13 @@
+SET RESTRICTED:
+
+Kanala kisitli erisim atar. Kanal erisim listesinde
+olmayan ya da chan:joinstaffonly ayricaligina sahip
+olmayan kullanicilar otomatik olarak kanaldan banlanarak
+atilir. Eger ban muaflari varsa kaldirilir.
+Kanal +i moduna ayarlanmissa ban uygulanmaz ve
+davet eksepsiyonlari kaldirilir.
+
+Sentaks: SET <#kanal> RESTRICTED ON|OFF
+
+Kullanimi:
+    /msg &nick& SET #foo RESTRICTED ON

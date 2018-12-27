@@ -1,0 +1,13 @@
+STATUS:
+
+Mevcut durumunuz hakkinda bilgi verir. Nickiniz,
+yonetici, ve SRA durumu hakkinda bilgiler gosterir.
+
+Eger kanal belirtilmisse ilgili kanala olan
+erisiminiz goruntulenir.
+
+Sentaks: STATUS [#kanal]
+
+Kanal:
+    /msg &nick& STATUS
+    /msg &nick& STATUS #lobi

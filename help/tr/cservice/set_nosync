@@ -1,0 +1,9 @@
+SET NOSYNC:
+
+Kanal personeline kanal modunun degistiginde
+otomatik olarak senkronize edilmesini iptal etmesini saglar.
+
+Sentaks: SET <#kanal> NOSYNC ON|OFF
+
+Kullanimi:
+    /msg &nick& SET #foo NOSYNC ON

@@ -1,0 +1,45 @@
+ROLE ADD:
+
+Belirtilen kiplerle birlikte kanal rolu olusturur.
+Birden fazla kip kullanilacaksa aralarinda bosluk birakilmali.
+
+Sentaks: ROLE <#kanal> ADD <rol> [kipler]
+
+Kipler:
+    +voice - voice/devoice komutlarinin kullanimina izin verir.
+    +autovoice - otomatik voice'e izin verir.
+#if halfops
+    +halfop - halfop/dehalfop komutlarinin kullanimina izin verir.
+    +autohalfop - otomatik halfop'a izin verir.
+#endif
+    +op - op/deop komutlarinin kullanimina izin verir.
+    +autoop - otomatik op'a izin verir.
+#if protect
+    +protect - protect/deprotect komutlarinin kullanimina izin verir.
+#endif
+#if owner
+    +owner - owner/deowner komutlarinin kullanimina izin verir.
+#endif
+    +set - set komutunun kullanimina izin verir.
+    +invite - invite ve getkey komutlarinin kullanimina izin verir.
+#if module chanserv/kick
+    +remove - kick, kickban, ban ve unban komutlarinin kullanimina izin verir.
+#else
+#if !module chanserv/unban_self
+    +remove - ban ve unban komutlarinin kullanimina izin verir.
+#else
+    +remove - ban ve unban komutlarinin kullanimina izin verir.
+#endif
+#endif
+    +recover - recover ve clear komutlarinin kullanimina izin verir.
+    +acl-change - kanal erisim listesinin duzenlenmesine izin verir.
+    +topic - topic ve topicappend komutlarinin kullanimina izin verir.
+    +acl-view - kanalin erisim listesini goruntulemeye izin verir.
+#if module chanserv/successor_acl
+    +successor - kullaniciyi successor(yedek kurucu) olarak isaretler.
+#endif
+    +founder - ful kurucu erisimi saglar.
+    +banned - otomatik kickban'a izin verir.
+
+Kullanimi:
+    /msg &nick& ROLE #foo ADD bar topic autovoice

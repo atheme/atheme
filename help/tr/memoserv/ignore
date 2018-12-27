@@ -1,0 +1,13 @@
+IGNORE:
+
+Kullanicilarin size kisa not gondermesini engeller.
+
+Engel listenize en fazla 40 kisi ekleyebilirsiniz.
+
+Sentaks: IGNORE ADD|DEL|LIST|CLEAR <account>
+
+Kullanimi:
+    /msg &nick& IGNORE ADD foo
+    /msg &nick& IGNORE DEL bar
+    /msg &nick& IGNORE LIST
+    /msg &nick& IGNORE CLEAR

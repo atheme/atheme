@@ -1,0 +1,14 @@
+SETPASS:
+
+Email adresine bir anahtar kodu gondererek sifrenizi
+belirlemenize izin verir. Anahtar kodu kisa bir sure
+icin gecerlidir. Eger eski sifrenizi kullanirsaniz
+gecersiz olur.
+
+Bu komut yalnizca eger email adresinize anahtar kodu
+gelmisse kullanilmalidir.
+
+Yeni bir sifre belirlemek icin mevcut sifrenizi biliyorsaniz
+SETPASS yerine SET PASSWORD komutunu kullanin.
+
+Sentaks: SETPASS <nick> <anahtarkodu> <sifre>

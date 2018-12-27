@@ -1,0 +1,12 @@
+VHOSTNICK:
+
+Operatorlere bir nick icin sanal host ayarlamasina izin verir.
+Bu vhost kullanici nick sifresini girdigi anda aktif olur. Eger
+vhost belirtilmemisse, vhost nickin dahil oldugu grubun vhostu
+ile degistirilir.
+
+Sentaks: VHOSTNICK <nick> [<vhost>]
+
+Kullanimi:
+    /msg &nick& VHOSTNICK foo may.explode.on.impact
+    /msg &nick& VHOSTNICK bar

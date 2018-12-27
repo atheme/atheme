@@ -1,0 +1,8 @@
+SET MAXCHANS:
+
+Bir hesabin en fazla kac tane kanal sahibi olabilecegini ayarlar.
+
+Sentaks: SET MAXCHANS <deger>
+
+Kullanimi:
+    /msg &nick& SET MAXCHANS 7

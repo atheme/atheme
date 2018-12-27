@@ -1,0 +1,9 @@
+LIST:
+
+Belirtilen kalipla eslesen butun gruplari listeler.
+
+Sentaks: LIST <grup kalibi>
+
+Kullanimi:
+    /msg &nick& LIST *
+    /msg &nick& LIST !foo*

@@ -1,0 +1,11 @@
+PERL:
+
+Perl yorumcusunu yuklu komut dosyalari(script)
+hakkinda hata ayiklama bilgisiyle ve daha fazlasiyla denetler.
+
+Atheme'e komut dosyasi(script) yuklemek icin
+derlenmis modul yerine scriptin dosya adini
+MODLOAD/MODUNLOAD/MODRELOAD komutlariyla kullanin.
+
+Kullanimi:
+    /msg &nick& PERL

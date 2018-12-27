@@ -1,0 +1,9 @@
+REQUEST:
+
+vHost talebinde bulunmanizi saglar. Bunun icin kayitli bir
+nickinizin olmasi ve NickServ'a tanitilmis olmaniz gerekir.
+
+Sentaks: REQUEST <vhost>
+
+Kullanimi:
+    /msg &nick& REQUEST irncet.crypthon

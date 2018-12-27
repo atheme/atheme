@@ -1,0 +1,10 @@
+SET NOMEMO:
+
+Kullanicilarin size kisa not gondermesini onler.
+Eger not almak istemiyorsaniz nickiniz icin
+bu ozelligi kapatabilirsiniz.
+
+Sentaks: SET NOMEMO ON|OFF
+
+Kullanimi:
+    /msg &nick& SET NOMEMO ON

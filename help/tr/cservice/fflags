@@ -1,0 +1,12 @@
+FFLAGS:
+
+Bir yonetici kanal uzerindeki kipleri zorla kullanir.
+Dizili FLAGS komutu gibidir. Yalnizca hedef ve kip
+degisiklikleri belirtilmelidir. Kanalin erisim listesi
+FLAGS komutu ile goruntulenir.
+
+Sentaks: FFLAGS <#kanal> <nick|hostmask> <sablon>
+Sentaks: FFLAGS <#kanal> <nick|hostmask> <kip_degisiklikleri>
+
+Kullanimi:
+    /msg &nick& FFLAGS #foo bar AOP

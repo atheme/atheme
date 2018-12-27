@@ -1,0 +1,8 @@
+OVERRIDE:
+
+Bir komutu baska bir kullanici adina calistirir.
+
+Sentaks: OVERRIDE <hedef> <servis> <komut> [parametreler]
+
+Kullanimi:
+    /msg &nick& OVERRIDE foo ChanServ FLAGS #bar Luffy +*

@@ -1,0 +1,9 @@
+FDROP:
+
+Belirtilen hesabi kayitli nickler, kanallar ve kisa notlar
+ile birlikte zorla siler.
+
+Sentaks: FDROP <nickname>
+
+Kullanimi:
+    /msg &nick& FDROP foo

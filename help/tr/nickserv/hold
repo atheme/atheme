@@ -1,0 +1,9 @@
+HOLD:
+
+Belirtilen hesabin ve hesaba iliskilendirilmis butun
+nicklerin zaman asimina ugramasini onler.
+
+Sentaks: HOLD <nick> ON|OFF
+
+Kullanimi:
+    /msg &nick& HOLD foo ON

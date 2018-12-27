@@ -1,0 +1,15 @@
+DROP:
+
+Bir kanalin kaydini silmenize izin verir.
+
+Kanalin kaydini sildiginizde kanal ile iliskilendirilmis
+butun veriler (erisim listesi, akick listesi gibi) de
+silinir ve kurtarilamaz.
+
+Bir kanali baska bir kullaniciya devretmek için
+SET FOUNDER ve FLAGS hakkinda yardim alin.
+
+Sentaks: DROP <#kanal>
+
+Kullanimi:
+    /msg &nick& DROP #foo

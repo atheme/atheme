@@ -1,0 +1,8 @@
+SET NEVERGROUP:
+
+Kullanicilarin sizi grup erisim listelerine eklemesini onler.
+
+Sentaks: SET NEVERGROUP ON|OFF
+
+Kullanimi:
+    /msg &nick& SET NEVERGROUP ON

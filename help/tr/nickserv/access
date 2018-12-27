@@ -1,0 +1,22 @@
+ACCESS:
+
+&nick&'in sizi tanimladigi user@host maskelerini muhafaza
+eder. Boylece nickinizi degistirmeniz ya da sifresiniz
+girmenizi istemez. Son kullanim suresinin dolmasi,
+kanal yetkisi ya da nick uzerinde ayarlari degistirmek icin
+yine de sifrenizi girmeniz gerekir.
+
+Erisim listesinde IP numarasi, wildcard kullanabilirsiniz.
+Kullanabileceginiz wildcard'lar sinirlidir. &nick&
+mevcut baglantinizla eslesen bir tane olusturacaktir.
+
+Sentaks: ACCESS LIST
+Sentaks: ACCESS ADD [mask]
+Sentaks: ACCESS DEL <mask>
+
+Kullanimi:
+    /msg &nick& ACCESS LIST
+    /msg &nick& ACCESS ADD foo@bar.com
+    /msg &nick& ACCESS ADD user@10.0.0.8
+    /msg &nick& ACCESS ADD luffy@192.168.1.0/24
+    /msg &nick& ACCESS DEL *biri@*.oldschool.irc.net

@@ -1,0 +1,8 @@
+SET HIDEMAIL:
+
+Bir hesabin e-mail adresinin diger kullanicilardan gizler.
+
+Sentaks: SET HIDEMAIL ON|OFF
+
+Kullanimi:
+    /msg &nick& SET HIDEMAIL ON

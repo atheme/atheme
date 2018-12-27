@@ -1,0 +1,21 @@
+SET JOINFLAGS:
+
+Kullanicilarin bir gruba girdiginde(eger aciksa)
+hangi kipleri alacagini ayarlar.
+
+Gecerli bir kip kullanidinizdan emin olun, yoksa
+gruba giren kullanicilar "+" kipini alir.
+
+Eger parametre OFF ise ya da belirtilmezse, join kipleri
+sunucunun varsayilan kipleri olarak ayarlanir.
+
+Gecerli kipler hakkinda yardim almak icin
+ "/msg &nick& HELP FLAGS" kullanin.
+
+Sentaks: SET <!grup>  JOINFLAGS [OFF|kipler]
+
+Kullanimi:
+    /msg &nick& SET !awesome-people JOINFLAGS OFF
+    /msg &nick& SET !foo JOINFLAGS +
+    /msg &nick& SET !foo JOINFLAGS +v
+    /msg &nick& SET !foo JOINFLAGS +cfv

@@ -1,0 +1,8 @@
+RESTART:
+
+Servisleri yeniden baslatir.
+
+Sentaks: RESTART
+
+Kullanimi:
+    /msg &nick& RESTART

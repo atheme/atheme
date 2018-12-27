@@ -1,0 +1,11 @@
+SYNC:
+
+Bu komut butun kanal kipleri, op/deop,
+voice/devoice gibi kanal durumlarini gunceller.
+
+Bu komutu kullanabilmek icin +R kipiniz olmali.
+
+Sentaks: SYNC <#kanal>
+
+Kullanimi:
+    /msg &nick& SYNC #lobi

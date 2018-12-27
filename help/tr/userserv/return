@@ -1,0 +1,12 @@
+RETURN:
+
+Hesabin sifresini sifirlar, sifreyi
+belirtilen e-mail adresine gonderir
+ve hesabin e-mail adresini bu adres
+olarak belirler. Eger hesaba giris
+yapmissaniz, vevrimdisi olursunuz.
+
+Sentaks: RETURN <nickname> <e-mail>
+
+Kullanimi:
+    /msg &nick& RETURN foo foo@bar.com

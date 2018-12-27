@@ -1,0 +1,16 @@
+SET GAMESERV:
+
+Kanalda oyun servislerinin kullanimina izin verir.
+
+Sentaks: /msg GameServ <komut> <kanal> <parametreler>.
+
+GameServ'u kimlerin kullanabilecegini belirleyebilirsiniz:
+    ALL   - butun kanal uyelerine izin verir
+    VOICE - oplara ve voicelere izin verir
+    OP    - oplara izin verir
+    OFF   - kimseye izin vermez
+
+Sentaks: SET <#kanal> GAMESERV ALL|VOICE|OP|OFF
+
+Kullanimi:
+    /msg &nick& SET #foo GAMESERV VOICE

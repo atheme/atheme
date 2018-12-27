@@ -1,0 +1,9 @@
+ROLE LIST:
+
+Butun kanal ve ag capindaki rolleri her bir rol icin
+belirlenmis kiplerle birlikte listeler.
+
+Sentaks: ROLE <#kanal> LIST
+
+Kullanimi:
+    /msg &nick& ROLE #foo LIST
