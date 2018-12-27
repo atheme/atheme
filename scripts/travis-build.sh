@@ -17,6 +17,7 @@ set -x
     --with-pcre                        \
     --with-perl                        \
     --with-qrencode                    \
+    --enable-debugging                 \
     --enable-legacy-pwcrypto           \
     --enable-nls                       \
     --enable-reproducible-builds       \
