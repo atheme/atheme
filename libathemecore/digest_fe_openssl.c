@@ -39,12 +39,15 @@
 #include <openssl/hmac.h>
 #include <openssl/opensslv.h>
 
-#if (OPENSSL_VERSION_NUMBER < 0x10100000L)
+#if defined(LIBRESSL_VERSION_NUMBER) || (OPENSSL_VERSION_NUMBER < 0x10100000L)
 
 /*
- * Grumble. If you're going to stop exporting the definitions of your
- * internal structures and provide new/free functions for your API instead,
- * you really should do it for *all* of your API. Seriously, guys. --amdj
+ * Grumble. If you're (OpenSSL developers) going to stop exporting the
+ * definitions of your internal structures and provide new/free functions
+ * for your API instead, you really should do it for *all* versions of your
+ * API.
+ *
+ * Seriously, guys.  --amdj
  */
 
 static inline HMAC_CTX * ATHEME_FATTR_WUR
@@ -64,7 +67,7 @@ HMAC_CTX_free(HMAC_CTX *const restrict ctx)
 	(void) sfree(ctx);
 }
 
-#endif /* (OPENSSL_VERSION_NUMBER < 0x10100000L) */
+#endif /* LIBRESSL_VERSION_NUMBER || (OPENSSL_VERSION_NUMBER < 0x10100000L) */
 
 static inline void
 digest_free_internal(struct digest_context *const restrict ctx)
