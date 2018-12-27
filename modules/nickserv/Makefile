@@ -22,6 +22,7 @@ SRCS =				\
 	list.c			\
 	listchans.c		\
 	listgroups.c		\
+	listlogins.c		\
 	listmail.c		\
 	listownmail.c		\
 	login.c			\

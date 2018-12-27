@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues>\n"
-"POT-Creation-Date: 2018-12-26 18:13+0000\n"
+"POT-Creation-Date: 2018-12-27 04:28+0000\n"
 "PO-Revision-Date: 2011-11-09 03:02+0000\n"
 "Last-Translator: Dessa <Dessa@gmake.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1560,6 +1560,16 @@ msgstr ""
 msgid "%s's marks:"
 msgstr ""
 
+#: modules/nickserv/listlogins.c:34
+#, c-format
+msgid "%u client found"
+msgstr ""
+
+#: modules/nickserv/listlogins.c:34
+#, c-format
+msgid "%u clients found"
+msgstr ""
+
 #: modules/nickserv/multimark.c:590 modules/nickserv/multimark.c:909
 #, c-format
 msgid "(Restored) Mark %d originally set on %s (%s) by %s (%s) on %s: %s"
@@ -2095,6 +2105,11 @@ msgstr ""
 #: modules/groupserv/list.c:38
 #, c-format
 msgid "- %s (%s)"
+msgstr ""
+
+#: modules/nickserv/listlogins.c:29
+#, c-format
+msgid "- %s!%s@%s (real host: %s)"
 msgstr ""
 
 #: modules/rpgserv/list.c:24
@@ -2930,6 +2945,11 @@ msgstr ""
 
 #: modules/memoserv/ignore.c:201
 msgid "Clears your memo ignore list."
+msgstr ""
+
+#: modules/nickserv/listlogins.c:20
+#, c-format
+msgid "Clients identified to account %s"
 msgstr ""
 
 #: modules/operserv/clones.c:636
@@ -4378,6 +4398,11 @@ msgid ""
 "Klines all users joining a channel for the duration set by SET KLINETIME."
 msgstr ""
 
+#: modules/nickserv/listlogins.c:35
+#, c-format
+msgid "LISTLOGINS: (%u matches)"
+msgstr ""
+
 #: modules/nickserv/info.c:376
 #, c-format
 msgid "Language   : %s"
@@ -4555,7 +4580,7 @@ msgstr ""
 msgid "Lists clones on the network."
 msgstr ""
 
-#: modules/contrib/ns_listlogins.c:36
+#: modules/contrib/ns_listlogins.c:36 modules/nickserv/listlogins.c:40
 msgid "Lists details of clients authenticated as you."
 msgstr ""
 
@@ -9464,7 +9489,8 @@ msgid ""
 "You have to verify your email address before you can enable emailing memos."
 msgstr ""
 
-#: modules/contrib/ns_listlogins.c:19 modules/nickserv/listownmail.c:19
+#: modules/contrib/ns_listlogins.c:19 modules/nickserv/listlogins.c:16
+#: modules/nickserv/listownmail.c:19
 msgid ""
 "You have to verify your email address before you can perform this operation."
 msgstr ""

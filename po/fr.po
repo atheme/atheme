@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues>\n"
-"POT-Creation-Date: 2018-12-26 18:13+0000\n"
+"POT-Creation-Date: 2018-12-27 04:28+0000\n"
 "PO-Revision-Date: 2013-02-21 22:00+0200\n"
 "Last-Translator: Jessy AMYOT <harakiri@overstack.fr>\n"
 "Language-Team: \n"
@@ -1589,6 +1589,16 @@ msgstr "L'accès de %s sur %s a été changé en %s."
 msgid "%s's marks:"
 msgstr "%s a maintenant une note."
 
+#: modules/nickserv/listlogins.c:34
+#, fuzzy, c-format
+msgid "%u client found"
+msgstr "%d client trouvé"
+
+#: modules/nickserv/listlogins.c:34
+#, fuzzy, c-format
+msgid "%u clients found"
+msgstr "%d clients trouvés"
+
 #: modules/nickserv/multimark.c:590 modules/nickserv/multimark.c:909
 #, c-format
 msgid "(Restored) Mark %d originally set on %s (%s) by %s (%s) on %s: %s"
@@ -2139,6 +2149,11 @@ msgstr "- %d Par : %s A envoyé: %s"
 #, c-format
 msgid "- %s (%s)"
 msgstr "- %s (%s)"
+
+#: modules/nickserv/listlogins.c:29
+#, c-format
+msgid "- %s!%s@%s (real host: %s)"
+msgstr ""
 
 #: modules/rpgserv/list.c:24
 msgid "<no summary>"
@@ -2996,6 +3011,11 @@ msgstr "Vide les bans (ou autres listes) d'un salon."
 #: modules/memoserv/ignore.c:201
 msgid "Clears your memo ignore list."
 msgstr "Vide votre liste d'ignore de mémos."
+
+#: modules/nickserv/listlogins.c:20
+#, fuzzy, c-format
+msgid "Clients identified to account %s"
+msgstr "Vous êtes maintenant identifié pour %s."
 
 #: modules/operserv/clones.c:636
 #, c-format
@@ -4497,6 +4517,11 @@ msgid ""
 "Klines all users joining a channel for the duration set by SET KLINETIME."
 msgstr ""
 
+#: modules/nickserv/listlogins.c:35
+#, c-format
+msgid "LISTLOGINS: (%u matches)"
+msgstr ""
+
 #: modules/nickserv/info.c:376
 #, c-format
 msgid "Language   : %s"
@@ -4674,7 +4699,7 @@ msgstr "Liste les exceptions de clones."
 msgid "Lists clones on the network."
 msgstr "Liste les clones du réseau."
 
-#: modules/contrib/ns_listlogins.c:36
+#: modules/contrib/ns_listlogins.c:36 modules/nickserv/listlogins.c:40
 msgid "Lists details of clients authenticated as you."
 msgstr "Liste les détails des clients authentifiés en tant que vous."
 
@@ -9778,7 +9803,8 @@ msgstr ""
 "Vous devez vérifier votre adresse email avant de pouvoir activer l'envoi des "
 "mémos par email."
 
-#: modules/contrib/ns_listlogins.c:19 modules/nickserv/listownmail.c:19
+#: modules/contrib/ns_listlogins.c:19 modules/nickserv/listlogins.c:16
+#: modules/nickserv/listownmail.c:19
 msgid ""
 "You have to verify your email address before you can perform this operation."
 msgstr ""
