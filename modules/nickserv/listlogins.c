@@ -1,6 +1,8 @@
 /*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
  * Copyright (c) 2005-2007 William Pitcock, et al.
- * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the NickServ LISTLOGINS function.
  */
