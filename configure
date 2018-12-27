@@ -9475,6 +9475,18 @@ fi
 
 	if test "x${LIBNETTLE}" = "xYes"; then :
 
+		for ac_header in nettle/version.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "nettle/version.h" "ac_cv_header_nettle_version_h" "$ac_includes_default"
+if test "x$ac_cv_header_nettle_version_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_NETTLE_VERSION_H 1
+_ACEOF
+
+fi
+
+done
+
 		if test "x${ac_cv_search_nettle_md5_init}" != "xnone required"; then :
 
 			LIBNETTLE_LIBS="${ac_cv_search_nettle_md5_init}"

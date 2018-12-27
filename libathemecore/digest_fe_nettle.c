@@ -39,7 +39,12 @@
 #include <nettle/sha1.h>
 #include <nettle/sha2.h>
 #include <nettle/nettle-meta.h>
-#include <nettle/version.h>
+
+#ifdef HAVE_NETTLE_VERSION_H
+#  include <nettle/version.h>
+#endif /* HAVE_NETTLE_VERSION_H */
+
+#define ATHEME_NETTLE_VERSION_PREFIX    "Nettle <https://www.lysator.liu.se/~nisse/nettle/>"
 
 #define DIGEST_HMAC_INNER_XORVAL        0x36U
 #define DIGEST_HMAC_OUTER_XORVAL        0x5CU
@@ -47,14 +52,23 @@
 const char *
 digest_get_frontend_info(void)
 {
+	static char result[BUFSIZE];
+
+#ifdef HAVE_NETTLE_VERSION_H
+
 	const int vcmaj = NETTLE_VERSION_MAJOR;
 	const int vcmin = NETTLE_VERSION_MINOR;
 	const int vrmaj = nettle_version_major();
 	const int vrmin = nettle_version_minor();
 
-	static char result[BUFSIZE];
-	(void) snprintf(result, sizeof result, "Nettle <https://www.lysator.liu.se/~nisse/nettle/> "
-	                                       "(compiled %d.%d, library %d.%d)", vcmaj, vcmin, vrmaj, vrmin);
+	(void) snprintf(result, sizeof result, ATHEME_NETTLE_VERSION_PREFIX " (compiled %d.%d, library %d.%d)",
+	                vcmaj, vcmin, vrmaj, vrmin);
+
+#else /* HAVE_NETTLE_VERSION_H */
+
+	(void) snprintf(result, sizeof result, ATHEME_NETTLE_VERSION_PREFIX " (unknown version)");
+
+#endif /* ! HAVE_NETTLE_VERSION_H */
 
 	return result;
 }

@@ -36,6 +36,7 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 	])
 
 	AS_IF([test "x${LIBNETTLE}" = "xYes"], [
+		AC_CHECK_HEADERS([nettle/version.h], [], [], [])
 		AS_IF([test "x${ac_cv_search_nettle_md5_init}" != "xnone required"], [
 			LIBNETTLE_LIBS="${ac_cv_search_nettle_md5_init}"
 		])
