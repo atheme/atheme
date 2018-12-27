@@ -30,7 +30,23 @@
 #define DIGEST_BKLEN_MAX        DIGEST_BKLEN_SHA2_512
 #define DIGEST_MDLEN_MAX        DIGEST_MDLEN_SHA2_512
 
-#include DIGEST_FE_HEADER
+#if (ATHEME_DIGEST_FRONTEND == ATHEME_DIGEST_FRONTEND_INTERNAL)
+#  include "digest_fe_internal.h"
+#else
+#  if (ATHEME_DIGEST_FRONTEND == ATHEME_DIGEST_FRONTEND_MBEDTLS)
+#    include "digest_fe_mbedtls.h"
+#  else
+#    if (ATHEME_DIGEST_FRONTEND == ATHEME_DIGEST_FRONTEND_NETTLE)
+#      include "digest_fe_nettle.h"
+#    else
+#      if (ATHEME_DIGEST_FRONTEND == ATHEME_DIGEST_FRONTEND_OPENSSL)
+#        include "digest_fe_openssl.h"
+#      else
+#        error "No digest frontend"
+#      endif
+#    endif
+#  endif
+#endif
 
 bool digest_init(struct digest_context *, unsigned int) ATHEME_FATTR_WUR;
 bool digest_init_hmac(struct digest_context *, unsigned int, const void *, size_t) ATHEME_FATTR_WUR;
@@ -38,11 +54,8 @@ bool digest_update(struct digest_context *, const void *, size_t) ATHEME_FATTR_W
 bool digest_final(struct digest_context *, void *, size_t *) ATHEME_FATTR_WUR;
 
 bool digest_oneshot(unsigned int, const void *, size_t, void *, size_t *) ATHEME_FATTR_WUR;
-bool digest_oneshot_hmac(unsigned int, const void *, size_t, const void *, size_t,
-                                void *, size_t *) ATHEME_FATTR_WUR;
-
-bool digest_pbkdf2_hmac(unsigned int, const void *, size_t, const void *, size_t, size_t,
-                               void *, size_t) ATHEME_FATTR_WUR;
+bool digest_oneshot_hmac(unsigned int, const void *, size_t, const void *, size_t, void *, size_t *) ATHEME_FATTR_WUR;
+bool digest_pbkdf2_hmac(unsigned int, const void *, size_t, const void *, size_t, size_t, void *, size_t) ATHEME_FATTR_WUR;
 
 bool digest_testsuite_run(void) ATHEME_FATTR_WUR;
 const char *digest_get_frontend_info(void);

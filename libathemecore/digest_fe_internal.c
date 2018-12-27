@@ -9,9 +9,9 @@
 
 #include "atheme.h"
 
-#include "digest_be_md5.h"
-#include "digest_be_sha1.h"
-#include "digest_be_sha2.h"
+#include "digest_be_md5.c"
+#include "digest_be_sha1.c"
+#include "digest_be_sha2.c"
 
 #define DIGEST_HMAC_INNER_XORVAL        0x36U
 #define DIGEST_HMAC_OUTER_XORVAL        0x5CU
@@ -36,33 +36,33 @@ digest_init(struct digest_context *const restrict ctx, const unsigned int alg)
 	switch (alg)
 	{
 		case DIGALG_MD5:
-			ctx->init   = (digest_init_fn)   &digest_init_md5;
-			ctx->update = (digest_update_fn) &digest_update_md5;
-			ctx->final  = (digest_final_fn)  &digest_final_md5;
+			ctx->init   = &digest_init_md5;
+			ctx->update = &digest_update_md5;
+			ctx->final  = &digest_final_md5;
 			ctx->blksz  = DIGEST_BKLEN_MD5;
 			ctx->digsz  = DIGEST_MDLEN_MD5;
 			break;
 
 		case DIGALG_SHA1:
-			ctx->init   = (digest_init_fn)   &digest_init_sha1;
-			ctx->update = (digest_update_fn) &digest_update_sha1;
-			ctx->final  = (digest_final_fn)  &digest_final_sha1;
+			ctx->init   = &digest_init_sha1;
+			ctx->update = &digest_update_sha1;
+			ctx->final  = &digest_final_sha1;
 			ctx->blksz  = DIGEST_BKLEN_SHA1;
 			ctx->digsz  = DIGEST_MDLEN_SHA1;
 			break;
 
 		case DIGALG_SHA2_256:
-			ctx->init   = (digest_init_fn)   &digest_init_sha2_256;
-			ctx->update = (digest_update_fn) &digest_update_sha2_256;
-			ctx->final  = (digest_final_fn)  &digest_final_sha2_256;
+			ctx->init   = &digest_init_sha2_256;
+			ctx->update = &digest_update_sha2_256;
+			ctx->final  = &digest_final_sha2_256;
 			ctx->blksz  = DIGEST_BKLEN_SHA2_256;
 			ctx->digsz  = DIGEST_MDLEN_SHA2_256;
 			break;
 
 		case DIGALG_SHA2_512:
-			ctx->init   = (digest_init_fn)   &digest_init_sha2_512;
-			ctx->update = (digest_update_fn) &digest_update_sha2_512;
-			ctx->final  = (digest_final_fn)  &digest_final_sha2_512;
+			ctx->init   = &digest_init_sha2_512;
+			ctx->update = &digest_update_sha2_512;
+			ctx->final  = &digest_final_sha2_512;
 			ctx->blksz  = DIGEST_BKLEN_SHA2_512;
 			ctx->digsz  = DIGEST_MDLEN_SHA2_512;
 			break;

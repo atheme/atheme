@@ -4,6 +4,11 @@
 #ifndef ATHEME_INC_SYSCONF_H
 #define ATHEME_INC_SYSCONF_H 1
 
+#define ATHEME_DIGEST_FRONTEND_INTERNAL 0x00U
+#define ATHEME_DIGEST_FRONTEND_MBEDTLS  0x01U
+#define ATHEME_DIGEST_FRONTEND_NETTLE   0x02U
+#define ATHEME_DIGEST_FRONTEND_OPENSSL  0x03U
+
 
 /* Define if building universal (internal helper macro) */
 #undef AC_APPLE_UNIVERSAL_BUILD
@@ -11,8 +16,8 @@
 /* Enable extensive debugging support */
 #undef ATHEME_DEBUGGING
 
-/* Front-end header for digest interface */
-#undef DIGEST_FE_HEADER
+/* Front-end for digest interface */
+#undef ATHEME_DIGEST_FRONTEND
 
 /* Enable contrib modules */
 #undef ENABLE_CONTRIB_MODULES
@@ -389,6 +394,10 @@
 /* Define to rpl_vsnprintf if the replacement function should be used. */
 #undef vsnprintf
 
+
+#ifndef ATHEME_DIGEST_FRONTEND
+#  error "No digest frontend"
+#endif
 
 #endif
 
