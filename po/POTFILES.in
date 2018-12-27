@@ -182,6 +182,7 @@ modules/nickserv/info.c
 modules/nickserv/list.c
 modules/nickserv/listchans.c
 modules/nickserv/listgroups.c
+modules/nickserv/listlogins.c
 modules/nickserv/listmail.c
 modules/nickserv/listownmail.c
 modules/nickserv/logout.c
