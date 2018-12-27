@@ -17,10 +17,12 @@ set -x
     --with-pcre                        \
     --with-perl                        \
     --with-qrencode                    \
+    --with-sodium                      \
     --enable-debugging                 \
     --enable-legacy-pwcrypto           \
     --enable-nls                       \
     --enable-reproducible-builds       \
+    --enable-sodium-malloc             \
     --enable-warnings                  \
     ${OPTIONAL_CONF_ARGS}
 

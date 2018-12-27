@@ -12,6 +12,7 @@ addons:
       - libgettextpo-dev
       - libqrencode-dev
       - libcrack2-dev
+      - libsodium-dev
       - libidn11-dev
       - libldap2-dev
       - libpcre3-dev
