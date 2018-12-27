@@ -16475,6 +16475,9 @@ fi
 	if test "x${SODIUM_MALLOC}" = "xYes"; then :
   SODIUM_MALLOC="Yes (NOT INTENDED FOR PRODUCTION USAGE)"
 fi
+	if test "x${BUILD_WARNINGS}" = "xYes"; then :
+  BUILD_WARNINGS="Yes (NOT INTENDED FOR PRODUCTION USAGE)"
+fi
 
 	prefix="$(eval echo "${prefix}")"
 	prefix="$(eval echo "${prefix}")"
