@@ -595,7 +595,6 @@ xmlrpc_array(int argc, ...)
 	char *a;
 	int idx = 0;
 	char *s = NULL;
-	int len;
 	char buf[XMLRPC_BUFSIZE];
 
 	va_start(va, argc);
@@ -617,7 +616,6 @@ xmlrpc_array(int argc, ...)
 	va_end(va);
 
 	snprintf(buf, XMLRPC_BUFSIZE, "<array>\r\n    <data>\r\n  %s\r\n    </data>\r\n   </array>", s);
-	len = strlen(buf);
 	sfree(s);
 	return sstrdup(buf);
 }
