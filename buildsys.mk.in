@@ -27,6 +27,7 @@
 
 #V=1
 PACKAGE_NAME = @PACKAGE_NAME@
+PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 AS = @AS@
 CC = @CC@
@@ -77,13 +78,13 @@ prefix = @prefix@
 exec_prefix = @exec_prefix@
 bindir = @bindir@
 libdir = @libdir@
-plugindir ?= ${libdir}/${PACKAGE_NAME}
+plugindir ?= ${libdir}/${PACKAGE_TARNAME}
 datarootdir = @datarootdir@
 datadir = @datadir@
 includedir = @includedir@
-includesubdir ?= ${PACKAGE_NAME}
+includesubdir ?= ${PACKAGE_TARNAME}
 localedir = @localedir@
-localename ?= ${PACKAGE_NAME}
+localename ?= ${PACKAGE_TARNAME}
 mandir = @mandir@
 mansubdir ?= man1
 
@@ -529,7 +530,7 @@ install: ${SHARED_LIB} ${STATIC_LIB} ${STATIC_PIC_LIB} ${PLUGIN} ${PROG} install
 
 	for i in ${DATA}; do \
 		${INSTALL_STATUS}; \
-		if ${MKDIR_P} $$(dirname ${DESTDIR}${datadir}/${PACKAGE_NAME}/$$i) && ${INSTALL} -m 644 $$i ${DESTDIR}${datadir}/${PACKAGE_NAME}/$$i; then \
+		if ${MKDIR_P} $$(dirname ${DESTDIR}${datadir}/${PACKAGE_TARNAME}/$$i) && ${INSTALL} -m 644 $$i ${DESTDIR}${datadir}/${PACKAGE_TARNAME}/$$i; then \
 			${INSTALL_OK}; \
 		else \
 			${INSTALL_FAILED}; \
@@ -611,16 +612,16 @@ uninstall: uninstall-extra
 	-rmdir ${DESTDIR}${plugindir} >/dev/null 2>&1
 
 	for i in ${DATA}; do \
-		if test -f ${DESTDIR}${datadir}/${PACKAGE_NAME}/$$i; then \
-			if rm -f ${DESTDIR}${datadir}/${PACKAGE_NAME}/$$i; then \
+		if test -f ${DESTDIR}${datadir}/${PACKAGE_TARNAME}/$$i; then \
+			if rm -f ${DESTDIR}${datadir}/${PACKAGE_TARNAME}/$$i; then \
 				${DELETE_OK}; \
 			else \
 				${DELETE_FAILED}; \
 			fi \
 		fi; \
-		rmdir "$$(dirname ${DESTDIR}${datadir}/${PACKAGE_NAME}/$$i)" >/dev/null 2>&1 || true; \
+		rmdir "$$(dirname ${DESTDIR}${datadir}/${PACKAGE_TARNAME}/$$i)" >/dev/null 2>&1 || true; \
 	done
-	-rmdir ${DESTDIR}${datadir}/${PACKAGE_NAME} >/dev/null 2>&1
+	-rmdir ${DESTDIR}${datadir}/${PACKAGE_TARNAME} >/dev/null 2>&1
 
 	for i in ${PROG}; do \
 		if test -f ${DESTDIR}${bindir}/$$i; then \

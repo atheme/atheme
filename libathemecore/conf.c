@@ -984,7 +984,7 @@ conf_check(void)
 		slog(LG_ERROR, "conf_check(): `name' in %s starts with a digit, probably invalid (continuing anyway)", config_file);
 
 	if (!me.desc)
-		me.desc = sstrdup("Atheme IRC Services");
+		me.desc = sstrdup(PACKAGE_NAME);
 
 	if (!me.netname)
 	{

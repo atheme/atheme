@@ -7,12 +7,13 @@
  */
 
 #include "serno.h"
+#include "sysconf.h"
 
 const char *revision = SERNO;
 
 const char *infotext[] =
 {
-  "Atheme IRC Services --",
+  PACKAGE_NAME " --",
   "Copyright (c) 2005-2016 Atheme Development Group (http://atheme.github.io)",
   "Portions copyright (c) 2004 Shrike Developers (http://www.malkier.net)",
   " ",

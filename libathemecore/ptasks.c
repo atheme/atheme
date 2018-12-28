@@ -82,7 +82,7 @@ handle_admin(struct user *u)
 
 	numeric_sts(me.me, 256, u, ":Administrative info about %s", me.name);
 	numeric_sts(me.me, 257, u, ":%s", me.adminname);
-	numeric_sts(me.me, 258, u, ":Atheme IRC Services (%s)", PACKAGE_STRING);
+	numeric_sts(me.me, 258, u, ":%s (%s)", PACKAGE_NAME, PACKAGE_VERSION);
 	numeric_sts(me.me, 259, u, ":<%s>", me.adminemail);
 }
 

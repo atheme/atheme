@@ -97,7 +97,7 @@ print_version(void)
 {
 	int i;
 
-	printf("Atheme IRC Services (%s), build-id %s\n", PACKAGE_STRING, revision);
+	printf("%s (%s), build-id %s\n", PACKAGE_NAME, PACKAGE_VERSION, revision);
 
 	for (i = 0; infotext[i] != NULL; i++)
 		printf("%s\n", infotext[i]);
@@ -208,8 +208,8 @@ atheme_bootstrap(void)
 	/* Prepare gettext */
 #ifdef ENABLE_NLS
 	setlocale(LC_ALL, "");
-	bindtextdomain(PACKAGE_NAME, LOCALEDIR);
-	textdomain(PACKAGE_NAME);
+	bindtextdomain(PACKAGE_TARNAME, LOCALEDIR);
+	textdomain(PACKAGE_TARNAME);
 #endif
 
 	/* change to our local directory */
