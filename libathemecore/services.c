@@ -115,8 +115,7 @@ try_kick_real(struct user *source, struct channel *chan, struct user *target, co
 	{
 		wallops("Not kicking oper %s!%s@%s from protected %s (%s: %s)",
 				target->nick, target->user, target->vhost,
-				chan->name, source ? source->nick : me.name,
-				reason);
+				chan->name, source->nick, reason);
 		notice(source->nick, chan->name,
 				"Not kicking oper %s (%s)",
 				target->nick, reason);
@@ -126,8 +125,7 @@ try_kick_real(struct user *source, struct channel *chan, struct user *target, co
 	{
 		wallops("Not kicking immune user %s!%s@%s from %s (%s: %s)",
 				target->nick, target->user, target->vhost,
-				chan->name, source ? source->nick : me.name,
-				reason);
+				chan->name, source->nick, reason);
 		notice(source->nick, chan->name,
 				"Not kicking immune user %s (%s)",
 				target->nick, reason);
