@@ -688,6 +688,7 @@ INSTALL_DATA
 INSTALL_SCRIPT
 INSTALL_PROGRAM
 mkdir_p
+VENDOR_STRING
 VERSION
 PACKAGE
 PKG_CONFIG_LIBDIR
@@ -4921,6 +4922,8 @@ PACKAGE=atheme
 
 VERSION=7.3.0-rc1
 
+VENDOR_STRING="Atheme Development Group <https://atheme.github.io/>"
+
 
 cat >>confdefs.h <<_ACEOF
 #define PACKAGE "${PACKAGE}"
@@ -4932,7 +4935,9 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
-$as_echo "#define VENDOR_STRING \"Atheme Development Group <https://atheme.github.io/>\"" >>confdefs.h
+cat >>confdefs.h <<_ACEOF
+#define VENDOR_STRING "${VENDOR_STRING}"
+_ACEOF
 
 
 

@@ -16,12 +16,11 @@ POTTEMPLATE=$(PACKAGE_TARNAME).pot
 
 update-pot:
 	@echo Updating $(POTTEMPLATE) ...
-	xgettext --default-domain=$(PACKAGE_TARNAME) --language=C \
+	xgettext --default-domain="$(PACKAGE_TARNAME)" --language=C \
 	--keyword=_ --keyword=N_ --from-code="utf-8" --sort-output \
-	--directory=.. --files-from=POTFILES.in -o $(POTTEMPLATE) \
-	--package-name=$(PACKAGE_TARNAME) --package-version=$(PACKAGE_VERSION) \
-	--copyright-holder='Atheme Development Group' \
-	--msgid-bugs-address='<https://github.com/atheme/atheme/issues>'
+	--directory=.. --files-from=POTFILES.in -o "$(POTTEMPLATE)" \
+	--package-name="$(PACKAGE_TARNAME)" --package-version="$(PACKAGE_VERSION)" \
+	--copyright-holder="$(VENDOR_STRING)" --msgid-bugs-address="<$(PACKAGE_BUGREPORT)>"
 
 update-po: update-pot
 	@echo Updating .po -files ...

@@ -70,9 +70,10 @@ AS_IF([test -z "${PKG_CONFIG}"], [AC_MSG_ERROR([pkg-config not found])])
 dnl Automake compatibility. --nenolod
 AC_SUBST([PACKAGE], [AC_PACKAGE_TARNAME])
 AC_SUBST([VERSION], [AC_PACKAGE_VERSION])
+AC_SUBST([VENDOR_STRING], ["Atheme Development Group <https://atheme.github.io/>"])
 AC_DEFINE_UNQUOTED([PACKAGE], ["${PACKAGE}"], [Name of package])
 AC_DEFINE_UNQUOTED([VERSION], ["${VERSION}"], [Version number of package])
-AC_DEFINE([VENDOR_STRING], ["Atheme Development Group <https://atheme.github.io/>"], [Vendor string for module headers])
+AC_DEFINE_UNQUOTED([VENDOR_STRING], ["${VENDOR_STRING}"], [Vendor string for module headers])
 
 
 
