@@ -12,7 +12,6 @@ static void
 gs_cmd_join(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mygroup *mg;
-	struct groupacs *ga;
 	struct metadata *md, *md2;
 	unsigned int flags = 0;
 	bool invited = false;
@@ -67,7 +66,7 @@ gs_cmd_join(struct sourceinfo *si, int parc, char *parv[])
 	else
 		flags = gs_flags_parser(gs_config->join_flags, 0, flags);
 
-	ga = groupacs_add(mg, entity(si->smu), flags);
+	groupacs_add(mg, entity(si->smu), flags);
 
 	if (invited)
 		metadata_delete(si->smu, "private:groupinvite");
