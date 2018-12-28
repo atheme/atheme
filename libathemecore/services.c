@@ -851,7 +851,7 @@ bool
 bad_password(struct sourceinfo *si, struct myuser *mu)
 {
 	const char *mask;
-	struct tm tm;
+	struct tm *tm;
 	char numeric[21], strfbuf[BUFSIZE];
 	int count;
 	struct metadata *md_failnum;
@@ -871,7 +871,7 @@ bad_password(struct sourceinfo *si, struct myuser *mu)
 	count = md_failnum ? atoi(md_failnum->value) : 0;
 	count++;
 	snprintf(numeric, sizeof numeric, "%d", count);
-	md_failnum = metadata_add(mu, "private:loginfail:failnum", numeric);
+	metadata_add(mu, "private:loginfail:failnum", numeric);
 	metadata_add(mu, "private:loginfail:lastfailaddr", mask);
 	snprintf(numeric, sizeof numeric, "%lu", (unsigned long)CURRTIME);
 	metadata_add(mu, "private:loginfail:lastfailtime", numeric);
@@ -890,8 +890,8 @@ bad_password(struct sourceinfo *si, struct myuser *mu)
 	if (count % 10 == 0)
 	{
 		time_t ts = CURRTIME;
-		tm = *localtime(&ts);
-		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+		tm = localtime(&ts);
+		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 		wallops("Warning: \2%d\2 failed login attempts to \2%s\2. Last attempt received from \2%s\2 on %s.", count, entity(mu)->name, mask, strfbuf);
 	}
 
