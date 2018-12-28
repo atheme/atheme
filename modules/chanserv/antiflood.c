@@ -342,7 +342,6 @@ on_channel_message(hook_cmessage_data_t *data)
 	struct chanuser *cu;
 	struct mychan *mc;
 	struct flood_message_queue *mq;
-	struct flood_message *mesg;
 
 	return_if_fail(data != NULL);
 	return_if_fail(data->msg != NULL);
@@ -360,7 +359,7 @@ on_channel_message(hook_cmessage_data_t *data)
 	mq = mqueue_get(mc);
 	return_if_fail(mq != NULL);
 
-	mesg = msg_create(mq, data->u, data->msg);
+	msg_create(mq, data->u, data->msg);
 
 	// never enforce against any user who has special CSTATUS flags.
 	if (cu->modes)
