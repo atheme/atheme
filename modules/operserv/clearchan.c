@@ -26,7 +26,6 @@ os_cmd_clearchan(struct sourceinfo *si, int parc, char *parv[])
 	char reason[512];
 	int matches = 0;
 	int ignores = 0;
-	struct kline *k;
 
 	if (!actionstr || !targchan || !treason)
 	{
@@ -103,7 +102,7 @@ os_cmd_clearchan(struct sourceinfo *si, int parc, char *parv[])
 								cu->user->nick, cu->user->user, cu->user->host);
 					} else {
 						if (! (cu->user->flags & UF_KLINESENT)) {
-							k = kline_add(cu->user->user, cu->user->host, reason, 604800, si->su->nick);
+							kline_add(cu->user->user, cu->user->host, reason, 604800, si->su->nick);
 							cu->user->flags |= UF_KLINESENT;
 						}
 					}
