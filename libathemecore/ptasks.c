@@ -962,9 +962,7 @@ floodcheck(struct user *u, struct user *t)
 
 			if (u->offenses == 2)
 			{
-				struct kline *k;
-
-				k = kline_add_user(u, "ten minute ban - flooding services", 600, chansvs.nick);
+				kline_add_user(u, "ten minute ban - flooding services", 600, chansvs.nick);
 
 				slog(LG_INFO, "FLOOD:KLINE: \2%s\2", u->nick);
 
