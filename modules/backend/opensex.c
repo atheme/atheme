@@ -91,7 +91,7 @@ static const char *
 opensex_read_word(struct database_handle *db)
 {
 	struct opensex *rs = (struct opensex *)db->priv;
-	char *ptr = rs->token;
+	char *ptr;
 	char *res;
 	static char buf[BUFSIZE];
 
