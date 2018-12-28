@@ -24,7 +24,7 @@
 #  include <mbedtls/error.h>
 #endif
 
-static const char atheme_pers_str[] = "Atheme IRC Services v" PACKAGE_VERSION;
+static const char atheme_pers_str[] = PACKAGE_STRING;
 
 static mbedtls_entropy_context seed_ctx;
 static mbedtls_hmac_drbg_context hmac_ctx;

@@ -10,13 +10,14 @@
 #include <stddef.h> /* NULL */
 
 #include "serno.h"
+#include "sysconf.h"
 
 const char *revision = SERNO;
 
 const char *infotext[] =
 {
 	" ",
-	"Atheme IRC Services --",
+	PACKAGE_NAME " --",
 	" ",
 
 	"Copyright (C) 2004 Shrike Developers (http://www.malkier.net/)",

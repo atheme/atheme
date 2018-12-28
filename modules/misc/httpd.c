@@ -123,13 +123,24 @@ send_error(struct connection *cptr, int errorcode, const char *text, bool senden
 
 	if (errorcode < 100 || errorcode > 999)
 		errorcode = 500;
-	snprintf(buf2, sizeof buf2, "HTTP/1.1 %d %s\r\n", errorcode, text);
-	snprintf(buf1, sizeof buf1, "HTTP/1.1 %d %s\r\n"
-			"Server: Atheme/%s\r\n"
-			"Content-Type: text/plain\r\n"
-			"Content-Length: %lu\r\n\r\n%s",
-			errorcode, text, PACKAGE_VERSION, (unsigned long)strlen(buf2),
-			sendentity ? buf2 : "");
+
+	memset(buf2, 0x00, sizeof buf2);
+
+	if (sendentity)
+		snprintf(buf2, sizeof buf2, "HTTP/1.1 %d %s\r\n", errorcode, text);
+
+	snprintf(buf1, sizeof buf1,
+	         "HTTP/1.1 %d %s\r\n"
+	         "Server: %s/%s\r\n"
+	         "Content-Type: text/plain\r\n"
+	         "Content-Length: %zu\r\n"
+	         "\r\n"
+	         "%s",
+	         errorcode, text,
+	         PACKAGE_TARNAME, PACKAGE_VERSION,
+	         strlen(buf2),
+	         buf2);
+
 	sendq_add(cptr, buf1, strlen(buf1));
 }
 
@@ -267,11 +278,17 @@ httpd_recvqhandler(struct connection *cptr)
 				return;
 			}
 			slog(LG_INFO, "httpd_recvqhandler(): 200 for %s", hd->filename);
+
 			snprintf(outbuf, sizeof outbuf,
-					"HTTP/1.1 200 OK\r\nServer: Atheme/%s\r\nContent-Type: %s\r\nContent-Length: %lu\r\n\r\n",
-					PACKAGE_VERSION,
-					content_type(hd->filename),
-					(unsigned long)sb.st_size);
+			         "HTTP/1.1 200 OK\r\n"
+			         "Server: %s/%s\r\n"
+			         "Content-Type: %s\r\n"
+			         "Content-Length: %lu\r\n"
+			         "\r\n",
+			         PACKAGE_TARNAME, PACKAGE_VERSION,
+			         content_type(hd->filename),
+			         (unsigned long) sb.st_size);
+
 			sendq_add(cptr, outbuf, strlen(outbuf));
 			count1 = is_get ? sb.st_size : 0;
 			while (count1 > 0)
@@ -317,8 +334,11 @@ httpd_recvqhandler(struct connection *cptr)
 			if (hd->expect_100_continue)
 			{
 				snprintf(outbuf, sizeof outbuf,
-						"HTTP/1.1 100 Continue\r\nServer: Atheme/%s\r\n\r\n",
-						PACKAGE_VERSION);
+				         "HTTP/1.1 100 Continue\r\n"
+				         "Server: %s/%s\r\n"
+				         "\r\n",
+				         PACKAGE_TARNAME, PACKAGE_VERSION);
+
 				sendq_add(cptr, outbuf, strlen(outbuf));
 			}
 			hd->requestbuf = smalloc(hd->length + 1);

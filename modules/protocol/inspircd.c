@@ -1231,10 +1231,10 @@ m_squit(struct sourceinfo *si, int parc, char *parv[])
 static void
 m_server(struct sourceinfo *si, int parc, char *parv[])
 {
-	struct server *s;
 	char ver[BUFSIZE];
 
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
+
 	if (si->s == NULL)
 	{
 		sts(":%s BURST", me.numeric);
@@ -1243,7 +1243,8 @@ m_server(struct sourceinfo *si, int parc, char *parv[])
 		services_init();
 		sts(":%s ENDBURST", me.numeric);
 	}
-	s = handle_server(si, parv[0], parv[3], atoi(parv[2]), parv[4]);
+
+	handle_server(si, parv[0], parv[3], atoi(parv[2]), parv[4]);
 }
 
 static inline void

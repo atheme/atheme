@@ -270,7 +270,6 @@ static void
 dnsbl_hit(struct user *u, struct Blacklist *blptr)
 {
 	struct service *svs;
-	struct kline *k;
 
 	svs = service_find("operserv");
 
@@ -282,7 +281,7 @@ dnsbl_hit(struct user *u, struct Blacklist *blptr)
 			if (! (u->flags & UF_KLINESENT)) {
 				slog(LG_INFO, "DNSBL: k-lining \2%s\2!%s@%s [%s] who is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
 				notice(svs->nick, u->nick, _("Your IP address %s is listed in DNS Blacklist %s"), u->ip, blptr->host);
-				k = kline_add("*", u->ip, "Banned (DNS Blacklist)", 86400, "Proxyscan");
+				kline_add("*", u->ip, "Banned (DNS Blacklist)", 86400, "Proxyscan");
 				u->flags |= UF_KLINESENT;
 			}
 			break;

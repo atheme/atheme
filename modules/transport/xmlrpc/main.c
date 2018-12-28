@@ -31,17 +31,24 @@ dump_buffer(char *buf, int length)
 	char buf1[300];
 
 	hd = current_cptr->userdata;
-	snprintf(buf1, sizeof buf1, "HTTP/1.1 200 OK\r\n"
-			"%s"
-			"Server: Atheme/%s\r\n"
-			"Content-Type: text/xml\r\n"
-			"Content-Length: %d\r\n\r\n",
-			hd->connection_close ? "Connection: close\r\n" : "",
-			PACKAGE_VERSION, length);
+
+	snprintf(buf1, sizeof buf1,
+	         "HTTP/1.1 200 OK\r\n"
+	         "Server: %s/%s\r\n"
+	         "Content-Type: text/xml\r\n"
+	         "Content-Length: %d\r\n"
+	         "%s"
+	         "\r\n",
+	         PACKAGE_TARNAME, PACKAGE_VERSION,
+	         length,
+	         hd->connection_close ? "Connection: close\r\n" : "");
+
 	sendq_add(current_cptr, buf1, strlen(buf1));
 	sendq_add(current_cptr, buf, length);
+
 	if (hd->connection_close)
 		sendq_add_eof(current_cptr);
+
 	return buf;
 }
 

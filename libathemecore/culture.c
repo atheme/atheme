@@ -309,8 +309,8 @@ language_set_active(struct language *lang)
 			currlang != NULL ? currlang->name : "default",
 			lang->name);
 	setlocale(LC_MESSAGES, lang->name);
-	textdomain(PACKAGE_NAME);
-	bindtextdomain(PACKAGE_NAME, LOCALEDIR);
+	textdomain(PACKAGE_TARNAME);
+	bindtextdomain(PACKAGE_TARNAME, LOCALEDIR);
 	currlang = lang;
 	setenv("LANGUAGE", currlang->name, 1);
 #endif

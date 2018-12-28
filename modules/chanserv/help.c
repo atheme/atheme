@@ -22,10 +22,11 @@ cs_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED 
 	if (parv[0])
 	{
 		const char *command = parv[0];
+		const char *tmp;
 
 		// Advance past the prefix and HELP command text, & channel name, for fantasy commands
-		if (si->c && (command = strchr(command, ' ')))
-			command++;
+		if (si->c && (tmp = strchr(command, ' ')))
+			command = ++tmp;
 
 		if (strcasecmp(command, "COMMANDS") == 0)
 		{

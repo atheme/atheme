@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Atheme Development Group
+# Copyright (C) YEAR Atheme Development Group <https://atheme.github.io/>
 # This file is distributed under the same license as the atheme package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: atheme 7.3.0-rc1\n"
-"Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues>\n"
-"POT-Creation-Date: 2018-12-27 04:28+0000\n"
+"Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
+"POT-Creation-Date: 2018-12-28 09:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"

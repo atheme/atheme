@@ -497,7 +497,6 @@ char *
 pretty_mask(char *mask)
 {
 	static char mask_buf[BUFSIZE];
-        int old_mask_pos;
         char star[] = "*";
         char *nick = star, *user = star, *host = star;
 	int mask_pos = 0;
@@ -511,8 +510,6 @@ pretty_mask(char *mask)
 
         if((size_t) (BUFSIZE - mask_pos) < strlen(mask) + 5)
                 return (NULL);
-
-        old_mask_pos = mask_pos;
 
         at = ex = NULL;
 	if(is_valid_host(mask))

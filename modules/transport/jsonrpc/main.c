@@ -625,13 +625,16 @@ jsonrpc_send_data(void *conn, char *str)
 
 	size_t len = strlen(str);
 
-	snprintf(buf, sizeof buf, "HTTP/1.1 200 OK\r\n"
-			"%s"
-			"Server: Atheme/%s\r\n"
-			"Content-Type: application/json\r\n"
-			"Content-Length: %lu\r\n\r\n",
-			hd->connection_close ? "Connection: close\r\n" : "",
-			PACKAGE_VERSION, (unsigned long)len);
+	snprintf(buf, sizeof buf,
+	         "HTTP/1.1 200 OK\r\n"
+	         "Server: %s/%s\r\n"
+	         "Content-Type: application/json\r\n"
+	         "Content-Length: %zu\r\n"
+	         "%s"
+	         "\r\n",
+	         PACKAGE_TARNAME, PACKAGE_VERSION,
+	         len,
+	         hd->connection_close ? "Connection: close\r\n" : "");
 
 	sendq_add((struct connection *)conn, buf, strlen(buf));
 	sendq_add((struct connection *)conn, str, len);

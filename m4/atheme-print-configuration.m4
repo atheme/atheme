@@ -26,9 +26,7 @@ AC_DEFUN([ATHEME_PRINT_CONFIGURATION], [
 	RUNDIR="$(eval echo "${RUNDIR}")"
 
 	echo "
-Configuration:
-
-    Atheme Version ..........: ${PACKAGE_VERSION}
+Configuration of ${PACKAGE_STRING}:
 
     Installation Prefix .....: ${prefix}
     Binary Directory ........: ${bindir}
@@ -70,7 +68,7 @@ Configuration:
     LDFLAGS .................: ${LDFLAGS}
     LIBS ....................: ${LIBS}
 
-Type make to build Atheme, and make install to install it.
+Type make to build ${PACKAGE_TARNAME}, and make install to install it.
 "
 
 ])

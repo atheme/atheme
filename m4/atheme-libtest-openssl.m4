@@ -29,7 +29,7 @@ AC_DEFUN([ATHEME_LIBTEST_OPENSSL], [
 	])
 
 	AS_IF([test "x${LIBCRYPTO}" = "xYes"], [
-		AC_CHECK_HEADERS([openssl/evp.h openssl/hmac.h], [], [
+		AC_CHECK_HEADERS([openssl/evp.h openssl/hmac.h openssl/opensslv.h], [], [
 			LIBCRYPTO="No"
 			AS_IF([test "x${with_openssl}" = "xyes"], [AC_MSG_ERROR([required header file missing])])
 		], [])
@@ -46,6 +46,30 @@ AC_DEFUN([ATHEME_LIBTEST_OPENSSL], [
 		AS_IF([test "x${ac_cv_header_openssl_ec_h}x${ac_cv_header_openssl_ecdsa_h}" = "xyesxyes"], [
 			ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
 			AC_SUBST([ECDSA_TOOLS_COND_D])
+		])
+
+		AC_MSG_CHECKING([if OpenSSL is really LibreSSL in disguise])
+
+		AC_COMPILE_IFELSE([
+			AC_LANG_PROGRAM([[
+
+				#include <openssl/opensslv.h>
+
+				#ifdef LIBRESSL_VERSION_NUMBER
+				#error "Detected LibreSSL"
+				#endif
+
+			]], [[
+
+				return 0;
+
+			]])
+		], [
+			AC_MSG_RESULT([no])
+			LIBCRYPTO_NAME="OpenSSL"
+		], [
+			AC_MSG_RESULT([yes])
+			LIBCRYPTO_NAME="LibreSSL"
 		])
 	])
 ])

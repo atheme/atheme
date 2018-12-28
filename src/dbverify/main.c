@@ -95,7 +95,8 @@ handle_mdep(struct database_handle *db, const char *type)
 {
 	const char *modname = db_sread_word(db);
 
-	module_load(modname);
+	if (! module_load(modname))
+		exit(EXIT_FAILURE);
 }
 
 int
@@ -104,18 +105,17 @@ main(int argc, char *argv[])
 	atheme_bootstrap();
 	atheme_init(argv[0], LOGDIR "/dbverify.log");
 	atheme_setup();
-	struct module *m;
-	unsigned int errcnt;
-	char *filename = argv[1] ? argv[1] : "services.db";
 
 	runflags = RF_LIVE;
 	datadir = DATADIR;
 	strict_mode = false;
 	offline_mode = true;
 
+	char *filename = argv[1] ? argv[1] : "services.db";
 	slog(LG_INFO, "dbverify is operating on %s", filename);
 
-	m = module_load("backend/opensex");
+	if (! module_load("backend/opensex"))
+		return EXIT_FAILURE;
 
 	db_unregister_type_handler("MDEP");
 	db_register_type_handler("MDEP", handle_mdep);
@@ -136,6 +136,7 @@ main(int argc, char *argv[])
 
 	slog(LG_INFO, "*** phase 4: verifying entity UID integrity");
 
+	unsigned int errcnt;
 	while ((errcnt = verify_entity_uids()) != 0)
 		slog(LG_INFO, "*** phase 4: %u error(s) were found; running another pass", errcnt);
 
