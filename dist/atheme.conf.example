@@ -253,6 +253,7 @@ loadmodule "modules/crypto/pbkdf2";
  * VACATION command                             modules/nickserv/vacation
  * VERIFY command                               modules/nickserv/verify
  * VHOST command                                modules/nickserv/vhost
+ * Delay services account registrations         modules/nickserv/waitreg
  */
 loadmodule "modules/nickserv/main";
 #loadmodule "modules/nickserv/access";
@@ -1177,6 +1178,15 @@ nickserv {
 	 * The prefix to use when changing the user's nick on enforcement
 	 */
 	#enforce_prefix = "Guest";
+
+	/* (*)waitreg_time
+	 * The amount of time (in seconds) users have to wait between
+	 * connecting to the network, and being able to register a services
+	 * account. Minimum value 0 (disables the enforced delay), default
+	 * value 0, maximum value 43200 (12 hours). Requires the
+	 * "modules/nickserv/waitreg" module to be loaded to do anything.
+	 */
+	#waitreg_time = 0;
 
 	/* (*)cracklib_dict
 	 * The location and filename prefix of the cracklib dictionaries
