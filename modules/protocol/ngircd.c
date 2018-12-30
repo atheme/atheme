@@ -86,7 +86,7 @@ ngircd_server_login(void)
 {
 	int ret;
 
-	ret = sts("PASS %s 0210-IRC+ atheme|%s:CLMo", curr_uplink->send_pass, PACKAGE_VERSION);
+	ret = sts("PASS %s 0210-IRC+ %s|%s:CLMo", curr_uplink->send_pass, PACKAGE_TARNAME, PACKAGE_VERSION);
 	if (ret == 1)
 		return 1;
 
