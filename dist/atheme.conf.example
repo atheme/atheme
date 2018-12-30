@@ -213,6 +213,7 @@ loadmodule "modules/crypto/pbkdf2";
  * INFO command                                 modules/nickserv/info
  * Last quit message in INFO                    modules/nickserv/info_lastquit
  * LIST command                                 modules/nickserv/list
+ * LISTLOGINS command                           modules/nickserv/listlogins
  * LISTMAIL command                             modules/nickserv/listmail
  * LISTOWNMAIL command                          modules/nickserv/listownmail
  * LOGIN command (for no_nick_ownership)        modules/nickserv/login
