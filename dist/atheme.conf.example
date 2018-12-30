@@ -467,6 +467,7 @@ loadmodule "modules/chanserv/antiflood";
  * CLEARCHAN command                            modules/operserv/clearchan
  * CLONES system                                modules/operserv/clones
  * COMPARE command                              modules/operserv/compare
+ * GENHASH command                              modules/operserv/genhash
  * GREPLOG command                              modules/operserv/greplog
  * HELP command                                 modules/operserv/help
  * IGNORE system                                modules/operserv/ignore
