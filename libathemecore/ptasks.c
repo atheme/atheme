@@ -49,11 +49,11 @@ get_version_string(char *buf, size_t bufsize)
 	const char *const ci_id = ci ? ci->id : "<none>";
 
 #ifdef REPRODUCIBLE_BUILDS
-	return snprintf(buf, bufsize, "%s. %s %s :%s [%s] [enc:%s]",
-		PACKAGE_STRING, me.name, revision, get_conf_opts(), ircd->ircdname, ci_id);
+	return snprintf(buf, bufsize, "%s %s. %s %s :%s [%s] [enc:%s]",
+		PACKAGE_TARNAME, PACKAGE_VERSION, me.name, revision, get_conf_opts(), ircd->ircdname, ci_id);
 #else /* REPRODUCIBLE_BUILDS */
-	return snprintf(buf, bufsize, "%s. %s %s :%s [%s] [enc:%s] Build Date: %s",
-		PACKAGE_STRING, me.name, revision, get_conf_opts(), ircd->ircdname, ci_id, __DATE__);
+	return snprintf(buf, bufsize, "%s %s. %s %s :%s [%s] [enc:%s] Build Date: %s",
+		PACKAGE_TARNAME, PACKAGE_VERSION, me.name, revision, get_conf_opts(), ircd->ircdname, ci_id, __DATE__);
 #endif /* !REPRODUCIBLE_BUILDS */
 }
 
