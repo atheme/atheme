@@ -271,6 +271,7 @@ loadmodule "modules/nickserv/identify";
 loadmodule "modules/nickserv/info";
 #loadmodule "modules/nickserv/info_lastquit";
 loadmodule "modules/nickserv/list";
+#loadmodule "modules/nickserv/listlogins";
 loadmodule "modules/nickserv/listmail";
 #loadmodule "modules/nickserv/listownmail";
 #loadmodule "modules/nickserv/login";
@@ -311,6 +312,7 @@ loadmodule "modules/nickserv/taxonomy";
 loadmodule "modules/nickserv/vacation";
 loadmodule "modules/nickserv/verify";
 loadmodule "modules/nickserv/vhost";
+#loadmodule "modules/nickserv/waitreg";
 
 /* ChanServ modules.
  * 
@@ -505,6 +507,7 @@ loadmodule "modules/operserv/akill";
 #loadmodule "modules/operserv/clearchan";
 #loadmodule "modules/operserv/clones";
 loadmodule "modules/operserv/compare";
+#loadmodule "modules/operserv/genhash";
 #loadmodule "modules/operserv/greplog";
 loadmodule "modules/operserv/help";
 loadmodule "modules/operserv/identify";
@@ -843,7 +846,7 @@ loadmodule "modules/groupserv/set_url";
  * is relative to PREFIX or PREFIX/lib/atheme, depending on how Atheme
  * was compiled.
  */
-#loadmodule "modules/contrib/ns_listlogins";
+#loadmodule "modules/contrib/backtrace";
 
 /******************************************************************************
  * SERVICES RUNTIME CONFIGURATION SECTION.                                    *
