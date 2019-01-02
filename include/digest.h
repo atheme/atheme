@@ -36,6 +36,8 @@
 #ifndef ATHEME_INC_DIGEST_H
 #define ATHEME_INC_DIGEST_H 1
 
+#include "attrs.h"
+
 #define DIGALG_MD5              0x01U
 #define DIGALG_SHA1             0x02U
 #define DIGALG_SHA2_256         0x03U
@@ -73,6 +75,10 @@
 #    endif
 #  endif
 #endif
+
+#ifndef ATHEME_INC_DIGEST_FE_HEADER_H
+#  error "No digest frontend"
+#endif /* !ATHEME_INC_DIGEST_FE_HEADER_H */
 
 bool digest_init(struct digest_context *, unsigned int) ATHEME_FATTR_WUR;
 bool digest_init_hmac(struct digest_context *, unsigned int, const void *, size_t) ATHEME_FATTR_WUR;
