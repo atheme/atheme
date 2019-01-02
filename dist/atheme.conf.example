@@ -213,6 +213,7 @@ loadmodule "modules/crypto/pbkdf2";
  * INFO command                                 modules/nickserv/info
  * Last quit message in INFO                    modules/nickserv/info_lastquit
  * LIST command                                 modules/nickserv/list
+ * LISTLOGINS command                           modules/nickserv/listlogins
  * LISTMAIL command                             modules/nickserv/listmail
  * LISTOWNMAIL command                          modules/nickserv/listownmail
  * LOGIN command (for no_nick_ownership)        modules/nickserv/login
@@ -253,6 +254,7 @@ loadmodule "modules/crypto/pbkdf2";
  * VACATION command                             modules/nickserv/vacation
  * VERIFY command                               modules/nickserv/verify
  * VHOST command                                modules/nickserv/vhost
+ * Delay services account registrations         modules/nickserv/waitreg
  */
 loadmodule "modules/nickserv/main";
 #loadmodule "modules/nickserv/access";
@@ -269,6 +271,7 @@ loadmodule "modules/nickserv/identify";
 loadmodule "modules/nickserv/info";
 #loadmodule "modules/nickserv/info_lastquit";
 loadmodule "modules/nickserv/list";
+#loadmodule "modules/nickserv/listlogins";
 loadmodule "modules/nickserv/listmail";
 #loadmodule "modules/nickserv/listownmail";
 #loadmodule "modules/nickserv/login";
@@ -309,6 +312,7 @@ loadmodule "modules/nickserv/taxonomy";
 loadmodule "modules/nickserv/vacation";
 loadmodule "modules/nickserv/verify";
 loadmodule "modules/nickserv/vhost";
+#loadmodule "modules/nickserv/waitreg";
 
 /* ChanServ modules.
  * 
@@ -465,6 +469,7 @@ loadmodule "modules/chanserv/antiflood";
  * CLEARCHAN command                            modules/operserv/clearchan
  * CLONES system                                modules/operserv/clones
  * COMPARE command                              modules/operserv/compare
+ * GENHASH command                              modules/operserv/genhash
  * GREPLOG command                              modules/operserv/greplog
  * HELP command                                 modules/operserv/help
  * IGNORE system                                modules/operserv/ignore
@@ -502,6 +507,7 @@ loadmodule "modules/operserv/akill";
 #loadmodule "modules/operserv/clearchan";
 #loadmodule "modules/operserv/clones";
 loadmodule "modules/operserv/compare";
+#loadmodule "modules/operserv/genhash";
 #loadmodule "modules/operserv/greplog";
 loadmodule "modules/operserv/help";
 loadmodule "modules/operserv/identify";
@@ -840,7 +846,7 @@ loadmodule "modules/groupserv/set_url";
  * is relative to PREFIX or PREFIX/lib/atheme, depending on how Atheme
  * was compiled.
  */
-#loadmodule "modules/contrib/ns_listlogins";
+#loadmodule "modules/contrib/backtrace";
 
 /******************************************************************************
  * SERVICES RUNTIME CONFIGURATION SECTION.                                    *
@@ -1177,6 +1183,15 @@ nickserv {
 	 * The prefix to use when changing the user's nick on enforcement
 	 */
 	#enforce_prefix = "Guest";
+
+	/* (*)waitreg_time
+	 * The amount of time (in seconds) users have to wait between
+	 * connecting to the network, and being able to register a services
+	 * account. Minimum value 0 (disables the enforced delay), default
+	 * value 0, maximum value 43200 (12 hours). Requires the
+	 * "modules/nickserv/waitreg" module to be loaded to do anything.
+	 */
+	#waitreg_time = 0;
 
 	/* (*)cracklib_dict
 	 * The location and filename prefix of the cracklib dictionaries

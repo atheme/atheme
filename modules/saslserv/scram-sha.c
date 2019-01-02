@@ -80,6 +80,12 @@ sasl_scramsha_attrlist_parse(const char *restrict str, scram_attr_list *const re
 			return false;
 		}
 
+		if ((*attrs)[name])
+		{
+			(void) slog(LG_DEBUG, "%s: duplicated attribute '%c'", __func__, (char) name);
+			return false;
+		}
+
 		if (*str++ == '=')
 		{
 			const char *const pos = strchr(str, ',');

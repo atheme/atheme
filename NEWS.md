@@ -42,6 +42,8 @@ Security
   Please see `dist/atheme.conf.example` and the Password Cryptography section
   below for more information.
 
+- Services will now refuse to run as root.
+
 SASL
 ----
 - SASLServ and its modules have been almost entirely re-written
@@ -74,6 +76,11 @@ Misc
 - `dist/atheme.conf.example`: document `SET NOPASSWORD` module
 - Services will no longer begin a new database unless passed the `-b` option
 - Port `contrib/ns_waitreg` to `modules/nickserv/waitreg`
+- Port `contrib/ns_listlogins` to `modules/nickserv/listlogins`
+- Blame a specific channel when a NickServ `REGAIN` fails due to a channel ban
+- Make the OperServ `MODLIST` command available to everyone
+- Document the `special:authenticated` privilege
+- Add a Turkish translation
 
 Build System
 ------------
@@ -101,7 +108,9 @@ Build System
 - `configure`: indicate if `--enable-warnings` was given
 - `configure`: detect support for `-Wl,-z,relro`, `-Wl,-z,now`, `-Wl,--as-needed`
 - `configure`: don't link everything against `-lcrypt`
+- `configure`: Add `--enable-debugging` flag
 - Update third-party files (`ABOUT-NLS`, `autoconf/*`, `m4/*.m4`)
+- Fix building contrib modules on non-Linux machines
 - Clarify that `GIT-Access` is a file by renaming it to `GIT-Access.txt`
 
 Password Cryptography
