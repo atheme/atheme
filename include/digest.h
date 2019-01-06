@@ -37,6 +37,7 @@
 #define ATHEME_INC_DIGEST_H 1
 
 #include "attrs.h"
+#include "stdinc.h"
 #include "sysconf.h"
 
 #define DIGALG_MD5              0x01U
