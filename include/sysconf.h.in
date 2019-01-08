@@ -212,6 +212,9 @@
 /* Define to 1 if the system has the type `ptrdiff_t'. */
 #undef HAVE_PTRDIFF_T
 
+/* Define to 1 if you have the <qrencode.h> header file. */
+#undef HAVE_QRENCODE_H
+
 /* Define to 1 if you have a C99 compliant `snprintf' function. */
 #undef HAVE_SNPRINTF
 
