@@ -1511,8 +1511,9 @@ Optional Packages:
                           strength)
   --without-crypt         Do not attempt to detect crypt(3) (for
                           modules/crypto/crypt3-*)
-  --without-libidn        Do not attempt to detect GNU libidn for
-                          modules/saslserv/scram-sha
+  --without-libidn        Do not attempt to detect GNU libidn (for
+                          modules/saslserv/scram-sha -- SASLprep
+                          normalization)
   --without-ldap          Do not attempt to detect LDAP for modules/auth/ldap
   --without-mbedtls       Do not attempt to detect ARM mbedTLS
   --without-nettle        Do not attempt to detect nettle (crypto library)
@@ -8795,7 +8796,6 @@ fi
 
 
 	LIBIDN="No"
-
 	LIBIDN_LIBS=""
 
 
@@ -8815,11 +8815,19 @@ fi
 			;;
 	esac
 
+	LIBS_SAVED="${LIBS}"
+
 	if test "x${with_libidn}" != "xno"; then :
 
-		LIBS_SAVED="${LIBS}"
+		for ac_header in stringprep.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "stringprep.h" "ac_cv_header_stringprep_h" "$ac_includes_default"
+if test "x$ac_cv_header_stringprep_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_STRINGPREP_H 1
+_ACEOF
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing stringprep" >&5
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing stringprep" >&5
 $as_echo_n "checking for library containing stringprep... " >&6; }
 if ${ac_cv_search_stringprep+:} false; then :
   $as_echo_n "(cached) " >&6
@@ -8872,35 +8880,91 @@ $as_echo "$ac_cv_search_stringprep" >&6; }
 ac_res=$ac_cv_search_stringprep
 if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-  LIBIDN="Yes"
-else
 
-			if test "x${with_libidn}" != "xauto"; then :
-
-				as_fn_error $? "--with-libidn was specified but GNU libidn could not be found" "$LINENO" 5
-
-fi
-
-fi
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if GNU libidn appears to be usable" >&5
+$as_echo_n "checking if GNU libidn appears to be usable... " >&6; }
+				cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
 
 
-		LIBS="${LIBS_SAVED}"
+						#include <stddef.h>
+						#include <stdio.h>
+						#include <stdlib.h>
+						#include <stringprep.h>
 
-fi
+int
+main ()
+{
 
-	if test "x${LIBIDN}" = "xYes"; then :
+						char buf[128];
+						char *const tmp = stringprep_locale_to_utf8("test");
+						(void) snprintf(buf, sizeof buf, "%s", tmp);
+						(void) free(tmp);
+						const int ret = stringprep(buf, sizeof buf, 0, stringprep_saslprep);
 
-		if test "x${ac_cv_search_stringprep}" != "xnone required"; then :
+  ;
+  return 0;
+}
 
-			LIBIDN_LIBS="${ac_cv_search_stringprep}"
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+					LIBIDN="Yes"
+					if test "x${ac_cv_search_stringprep}" != "xnone required"; then :
+
+						LIBIDN_LIBS="${ac_cv_search_stringprep}"
+
 
 fi
 
 $as_echo "#define HAVE_LIBIDN 1" >>confdefs.h
 
 
+else
+
+					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+					LIBIDN="No"
+					if test "x${with_libidn}" = "xyes"; then :
+
+						as_fn_error $? "--with-libidn was specified but GNU libidn appears to be unusable" "$LINENO" 5
 
 fi
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+else
+
+				LIBIDN="No"
+				if test "x${with_libidn}" = "xyes"; then :
+
+					as_fn_error $? "--with-libidn was specified but GNU libidn could not be found" "$LINENO" 5
+
+fi
+
+fi
+
+
+else
+
+			LIBIDN="No"
+			if test "x${with_libidn}" = "xyes"; then :
+
+				as_fn_error $? "--with-libidn was specified but a required header file is missing" "$LINENO" 5
+
+fi
+
+fi
+
+done
+
+
+fi
+
+	LIBS="${LIBS_SAVED}"
 
 
 
