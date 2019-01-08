@@ -652,8 +652,8 @@ LIBQRENCODE_LIBS
 LIBQRENCODE_CFLAGS
 PCRE_LIBS
 PCRE_CFLAGS
-ECDSA_TOOLS_COND_D
 LIBCRYPTO_LIBS
+ECDSA_TOOLS_COND_D
 LIBNETTLE_LIBS
 LIBMBEDCRYPTO_LIBS
 LDAP_LIBS
@@ -1516,8 +1516,8 @@ Optional Packages:
                           modules/auth/ldap)
   --without-mbedtls       Do not attempt to detect ARM mbedTLS
   --without-nettle        Do not attempt to detect nettle (crypto library)
-  --without-openssl       Do not attempt to detect OpenSSL for
-                          modules/saslserv/ecdsa-nist256p-challenge
+  --without-openssl       Do not attempt to detect libcrypto (for
+                          modules/saslserv/ecdsa-nist256p-challenge)
   --without-pcre          Do not attempt to detect Perl-Compatible Regular
                           Expression library
   --without-qrencode      Do not attempt to detect libqrencode for generating
@@ -9614,8 +9614,8 @@ fi
 
 
 	LIBCRYPTO="No"
-
 	LIBCRYPTO_LIBS=""
+	LIBCRYPTO_NAME=""
 
 
 # Check whether --with-openssl was given.
@@ -9634,9 +9634,9 @@ fi
 			;;
 	esac
 
-	if test "x${with_openssl}" != "xno"; then :
+	LIBS_SAVED="${LIBS}"
 
-		LIBS_SAVED="${LIBS}"
+	if test "x${with_openssl}" != "xno"; then :
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing EVP_DigestUpdate" >&5
 $as_echo_n "checking for library containing EVP_DigestUpdate... " >&6; }
@@ -9691,25 +9691,9 @@ $as_echo "$ac_cv_search_EVP_DigestUpdate" >&6; }
 ac_res=$ac_cv_search_EVP_DigestUpdate
 if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-  LIBCRYPTO="Yes"
-else
 
-			if test "x${with_openssl}" != "xauto"; then :
-
-				as_fn_error $? "--with-openssl was specified but OpenSSL could not be found" "$LINENO" 5
-
-fi
-
-fi
-
-
-		LIBS="${LIBS_SAVED}"
-
-fi
-
-	if test "x${LIBCRYPTO}" = "xYes"; then :
-
-		for ac_header in openssl/evp.h openssl/hmac.h openssl/opensslv.h
+			LIBCRYPTO="Yes"
+			for ac_header in openssl/ec.h openssl/ecdsa.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
 ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
@@ -9717,75 +9701,103 @@ if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
   cat >>confdefs.h <<_ACEOF
 #define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
 _ACEOF
+
+fi
+
+done
+
+			for ac_header in openssl/evp.h openssl/hmac.h openssl/opensslv.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+else
+
+				LIBCRYPTO="No"
+				if test "x${with_openssl}" = "xyes"; then :
+
+					as_fn_error $? "--with-openssl was specified but a required header file is missing" "$LINENO" 5
+
+fi
+
+fi
+
+done
+
 
 else
 
 			LIBCRYPTO="No"
 			if test "x${with_openssl}" = "xyes"; then :
-  as_fn_error $? "required header file missing" "$LINENO" 5
-fi
+
+				as_fn_error $? "--with-openssl was specified but libcrypto could not be found" "$LINENO" 5
 
 fi
 
-done
+fi
 
 
 fi
 
 	if test "x${LIBCRYPTO}" = "xYes"; then :
 
-		if test "x${ac_cv_search_EVP_DigestUpdate}" != "xnone required"; then :
-
-			LIBCRYPTO_LIBS="${ac_cv_search_EVP_DigestUpdate}"
-
-fi
-
-$as_echo "#define HAVE_OPENSSL 1" >>confdefs.h
-
-
-
-		for ac_header in openssl/ec.h openssl/ecdsa.h
-do :
-  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
-
-fi
-
-done
-
-		if test "x${ac_cv_header_openssl_ec_h}x${ac_cv_header_openssl_ecdsa_h}" = "xyesxyes"; then :
-
-			ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
-
-
-fi
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if OpenSSL is really LibreSSL in disguise" >&5
-$as_echo_n "checking if OpenSSL is really LibreSSL in disguise... " >&6; }
-
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libcrypto is usable" >&5
+$as_echo_n "checking if libcrypto is usable... " >&6; }
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 
-
-				#include <openssl/opensslv.h>
-
-				#ifdef LIBRESSL_VERSION_NUMBER
-				#error "Detected LibreSSL"
-				#endif
-
+				#include <openssl/evp.h>
+				#include <openssl/hmac.h>
 
 int
 main ()
 {
 
+				(void) EVP_MD_size(NULL);
+				(void) EVP_DigestInit_ex(NULL, EVP_md5(), NULL);
+				(void) EVP_DigestInit_ex(NULL, EVP_sha1(), NULL);
+				(void) EVP_DigestInit_ex(NULL, EVP_sha256(), NULL);
+				(void) EVP_DigestInit_ex(NULL, EVP_sha512(), NULL);
+				(void) EVP_DigestUpdate(NULL, NULL, 0);
+				(void) EVP_DigestFinal_ex(NULL, NULL, NULL);
+				(void) HMAC_Init_ex(NULL, NULL, 0, EVP_md5(), NULL);
+				(void) HMAC_Init_ex(NULL, NULL, 0, EVP_sha1(), NULL);
+				(void) HMAC_Init_ex(NULL, NULL, 0, EVP_sha256(), NULL);
+				(void) HMAC_Init_ex(NULL, NULL, 0, EVP_sha512(), NULL);
+				(void) HMAC_Update(NULL, NULL, 0);
+				(void) HMAC_Final(NULL, NULL, NULL);
+				(void) PKCS5_PBKDF2_HMAC(NULL, 0, NULL, 0, 0, NULL, 0, NULL);
 
-				return 0;
+  ;
+  return 0;
+}
 
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if OpenSSL is really LibreSSL in disguise" >&5
+$as_echo_n "checking if OpenSSL is really LibreSSL in disguise... " >&6; }
+			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+					#include <openssl/opensslv.h>
+					#ifdef LIBRESSL_VERSION_NUMBER
+					#  error "Detected LibreSSL"
+					#endif
+
+int
+main ()
+{
+
+					return 0;
 
   ;
   return 0;
@@ -9794,20 +9806,50 @@ main ()
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBCRYPTO_NAME="OpenSSL"
+				LIBCRYPTO_NAME="OpenSSL"
 
 else
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-			LIBCRYPTO_NAME="LibreSSL"
+				LIBCRYPTO_NAME="LibreSSL"
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+			if test "x${ac_cv_header_openssl_ec_h}x${ac_cv_header_openssl_ecdsa_h}" = "xyesxyes"; then :
+
+				ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
+
 
 fi
+			if test "x${ac_cv_search_EVP_DigestUpdate}" != "xnone required"; then :
+
+				LIBCRYPTO_LIBS="${ac_cv_search_EVP_DigestUpdate}"
+
+
+fi
+
+$as_echo "#define HAVE_OPENSSL 1" >>confdefs.h
+
+
+else
+
+			LIBCRYPTO="No"
+			if test "x${with_openssl}" = "xyes"; then :
+
+				as_fn_error $? "--with-openssl was specified but libcrypto is unusable for this task" "$LINENO" 5
+
+fi
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+
+	LIBS="${LIBS_SAVED}"
 
 
 
