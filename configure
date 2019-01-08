@@ -1509,8 +1509,8 @@ Optional Packages:
   --without-cracklib      Do not attempt to detect cracklib (for
                           modules/nickserv/cracklib -- checking password
                           strength)
-  --without-crypt         Do not attempt to detect crypt(3) for
-                          modules/crypto/crypt3-*
+  --without-crypt         Do not attempt to detect crypt(3) (for
+                          modules/crypto/crypt3-*)
   --without-libidn        Do not attempt to detect GNU libidn for
                           modules/saslserv/scram-sha
   --without-ldap          Do not attempt to detect LDAP for modules/auth/ldap
@@ -8635,7 +8635,6 @@ fi
 
 
 	LIBCRYPT="No"
-
 	LIBCRYPT_LIBS=""
 
 
@@ -8655,9 +8654,9 @@ fi
 			;;
 	esac
 
-	if test "x${with_crypt}" != "xno"; then :
+	LIBS_SAVED="${LIBS}"
 
-		LIBS_SAVED="${LIBS}"
+	if test "x${with_crypt}" != "xno"; then :
 
 		for ac_header in crypt.h
 do :
@@ -8670,7 +8669,6 @@ _ACEOF
 fi
 
 done
-
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing crypt" >&5
 $as_echo_n "checking for library containing crypt... " >&6; }
@@ -8725,50 +8723,23 @@ $as_echo "$ac_cv_search_crypt" >&6; }
 ac_res=$ac_cv_search_crypt
 if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-  LIBCRYPT="Yes"
-else
 
-			if test "x${with_crypt}" != "xauto"; then :
-
-				as_fn_error $? "--with-crypt was specified but crypt(3) could not be found" "$LINENO" 5
-
-fi
-
-fi
-
-
-		LIBS="${LIBS_SAVED}"
-
-fi
-
-	if test "x${LIBCRYPT}" = "xYes"; then :
-
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if compiling a program using crypt(3) works" >&5
-$as_echo_n "checking if compiling a program using crypt(3) works... " >&6; }
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if crypt(3) appears to be usable" >&5
+$as_echo_n "checking if crypt(3) appears to be usable... " >&6; }
+			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 
-
-
-				#include <unistd.h>
-
-				#ifdef HAVE_CRYPT_H
-				#include <crypt.h>
-				#endif
-
+					#include <unistd.h>
+					#ifdef HAVE_CRYPT_H
+					#  include <crypt.h>
+					#endif
 
 int
 main ()
 {
 
-
-				const char *const result = crypt("test", "Aa");
-
-				return 0;
-
+					const char *const result = crypt("test", "test");
 
   ;
   return 0;
@@ -8777,37 +8748,49 @@ main ()
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+				LIBCRYPT="Yes"
+				if test "x${ac_cv_search_crypt}" != "xnone required"; then :
 
-else
+					LIBCRYPT_LIBS="${ac_cv_search_crypt}"
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-			LIBCRYPT="No"
-
-			if test "x${with_crypt}" != "xauto"; then :
-  as_fn_error $? "--with-crypt was specified but cannot compile a program using crypt(3)" "$LINENO" 5
-fi
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-fi
-
-	if test "x${LIBCRYPT}" = "xYes"; then :
-
-		if test "x${ac_cv_search_crypt}" != "xnone required"; then :
-
-			LIBCRYPT_LIBS="${ac_cv_search_crypt}"
 
 fi
 
 $as_echo "#define HAVE_CRYPT 1" >>confdefs.h
 
 
+else
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+				LIBCRYPT="No"
+				if test "x${with_crypt}" = "xyes"; then :
+
+					as_fn_error $? "--with-crypt was specified but crypt(3) appears to be unusable" "$LINENO" 5
 
 fi
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+
+else
+
+			LIBCRYPT="No"
+			if test "x${with_crypt}" = "xyes"; then :
+
+				as_fn_error $? "--with-crypt was specified but crypt(3) could not be found" "$LINENO" 5
+
+fi
+
+fi
+
+
+fi
+
+	LIBS="${LIBS_SAVED}"
 
 
 
