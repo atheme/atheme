@@ -9138,7 +9138,6 @@ fi
 
 
 	LIBMBEDCRYPTO="No"
-
 	LIBMBEDCRYPTO_LIBS=""
 
 
@@ -9158,9 +9157,9 @@ fi
 			;;
 	esac
 
-	if test "x${with_mbedtls}" != "xno"; then :
+	LIBS_SAVED="${LIBS}"
 
-		LIBS_SAVED="${LIBS}"
+	if test "x${with_mbedtls}" != "xno"; then :
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing mbedtls_md_setup" >&5
 $as_echo_n "checking for library containing mbedtls_md_setup... " >&6; }
@@ -9215,10 +9214,48 @@ $as_echo "$ac_cv_search_mbedtls_md_setup" >&6; }
 ac_res=$ac_cv_search_mbedtls_md_setup
 if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-  LIBMBEDCRYPTO="Yes"
+
+			LIBMBEDCRYPTO="Yes"
+			for ac_header in mbedtls/error.h mbedtls/version.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+fi
+
+done
+
+			for ac_header in mbedtls/md.h mbedtls/pkcs5.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
 else
 
-			if test "x${with_mbedtls}" != "xauto"; then :
+				LIBMBEDCRYPTO="No"
+				if test "x${with_mbedtls}" = "xyes"; then :
+
+					as_fn_error $? "--with-mbedtls was specified but a required header file is missing" "$LINENO" 5
+
+fi
+
+fi
+
+done
+
+
+else
+
+			LIBMBEDCRYPTO="No"
+			if test "x${with_mbedtls}" = "xyes"; then :
 
 				as_fn_error $? "--with-mbedtls was specified but ARM mbedTLS could not be found" "$LINENO" 5
 
@@ -9227,218 +9264,159 @@ fi
 fi
 
 
-		LIBS="${LIBS_SAVED}"
-
 fi
 
 	if test "x${LIBMBEDCRYPTO}" = "xYes"; then :
 
-		for ac_header in mbedtls/error.h mbedtls/version.h
-do :
-  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
-
-fi
-
-done
-
-		for ac_header in mbedtls/md.h mbedtls/pkcs5.h
-do :
-  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
-
-else
-
-			LIBMBEDCRYPTO="No"
-			if test "x${with_mbedtls}" = "xyes"; then :
-  as_fn_error $? "required header file missing" "$LINENO" 5
-fi
-
-fi
-
-done
-
-
-fi
-
-	if test "x${LIBMBEDCRYPTO}" = "xYes"; then :
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if ARM mbedTLS has MD5/SHA1/SHA2 and PBKDF2 support" >&5
-$as_echo_n "checking if ARM mbedTLS has MD5/SHA1/SHA2 and PBKDF2 support... " >&6; }
-
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if ARM mbedTLS has MD5/SHA1/SHA2/PBKDF2 support" >&5
+$as_echo_n "checking if ARM mbedTLS has MD5/SHA1/SHA2/PBKDF2 support... " >&6; }
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 
-
-				#ifdef HAVE_MBEDTLS_MD_H
+				#include <stddef.h>
 				#include <mbedtls/md.h>
-				#else
-				#error "ARM mbedTLS support requires <mbedtls/md.h>"
-				#endif
-
-				#ifdef HAVE_MBEDTLS_PKCS5_H
 				#include <mbedtls/pkcs5.h>
-				#else
-				#error "ARM mbedTLS support requires <mbedtls/pkcs5.h>"
-				#endif
-
 				#ifndef MBEDTLS_MD_C
-				#error "ARM mbedTLS support requires MBEDTLS_MD_C to be enabled"
+				#  error "ARM mbedTLS support requires MBEDTLS_MD_C to be enabled"
 				#endif
-
 				#ifndef MBEDTLS_MD5_C
-				#error "ARM mbedTLS support requires MBEDTLS_MD5_C to be enabled"
+				#  error "ARM mbedTLS support requires MBEDTLS_MD5_C to be enabled"
 				#endif
-
 				#ifndef MBEDTLS_SHA1_C
-				#error "ARM mbedTLS support requires MBEDTLS_SHA1_C to be enabled"
+				#  error "ARM mbedTLS support requires MBEDTLS_SHA1_C to be enabled"
 				#endif
-
 				#ifndef MBEDTLS_SHA256_C
-				#error "ARM mbedTLS support requires MBEDTLS_SHA256_C to be enabled"
+				#  error "ARM mbedTLS support requires MBEDTLS_SHA256_C to be enabled"
 				#endif
-
 				#ifndef MBEDTLS_SHA512_C
-				#error "ARM mbedTLS support requires MBEDTLS_SHA512_C to be enabled"
+				#  error "ARM mbedTLS support requires MBEDTLS_SHA512_C to be enabled"
 				#endif
-
 				#ifndef MBEDTLS_PKCS5_C
-				#error "ARM mbedTLS support requires MBEDTLS_PKCS5_C to be enabled"
+				#  error "ARM mbedTLS support requires MBEDTLS_PKCS5_C to be enabled"
 				#endif
-
 
 int
 main ()
 {
 
-
-				return 0;
-
+				(void) mbedtls_md_info_from_type(MBEDTLS_MD_NONE);
+				(void) mbedtls_md_init(NULL);
+				(void) mbedtls_md_setup(NULL, NULL, 0);
+				(void) mbedtls_md_starts(NULL);
+				(void) mbedtls_md_update(NULL, NULL, 0);
+				(void) mbedtls_md_finish(NULL, NULL);
+				(void) mbedtls_md_hmac_starts(NULL, NULL, 0);
+				(void) mbedtls_md_hmac_update(NULL, NULL, 0);
+				(void) mbedtls_md_hmac_finish(NULL, NULL);
+				(void) mbedtls_md_free(NULL);
+				(void) mbedtls_pkcs5_pbkdf2_hmac(NULL, NULL, 0, NULL, 0, 0, 0, NULL);
 
   ;
   return 0;
 }
 
 _ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
+if ac_fn_c_try_link "$LINENO"; then :
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+			if test "x${ac_cv_search_mbedtls_md_setup}" != "xnone required"; then :
 
-else
+				LIBMBEDCRYPTO_LIBS="${ac_cv_search_mbedtls_md_setup}"
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-			LIBMBEDCRYPTO="No"
-
-			if test "x${with_mbedtls}" != "xauto"; then :
-  as_fn_error $? "--with-mbedtls was specified but ARM mbedTLS is unusable for this task" "$LINENO" 5
-fi
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-fi
-
-	if test "x${LIBMBEDCRYPTO}x${ARC4RANDOM_BUILDING}" = "xYesxYes"; then :
-
-		for ac_header in mbedtls/entropy.h mbedtls/hmac_drbg.h
-do :
-  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
-
-fi
-
-done
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if ARM mbedTLS has HMAC-DRBG support" >&5
-$as_echo_n "checking if ARM mbedTLS has HMAC-DRBG support... " >&6; }
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-
-				#ifdef HAVE_MBEDTLS_ENTROPY_H
-				#include <mbedtls/entropy.h>
-				#else
-				#error "HMAC-DRBG support requires <mbedtls/entropy.h>"
-				#endif
-
-				#ifdef HAVE_MBEDTLS_HMAC_DRBG_H
-				#include <mbedtls/hmac_drbg.h>
-				#else
-				#error "HMAC-DRBG support requires <mbedtls/hmac_drbg.h>"
-				#endif
-
-				#ifndef MBEDTLS_ENTROPY_C
-				#error "HMAC-DRBG support requires MBEDTLS_ENTROPY_C"
-				#endif
-
-				#ifndef MBEDTLS_HMAC_DRBG_C
-				#error "HMAC-DRBG support requires MBEDTLS_HMAC_DRBG_C"
-				#endif
-
-
-int
-main ()
-{
-
-
-				return 0;
-
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-$as_echo "#define HAVE_LIBMBEDCRYPTO_HMAC_DRBG 1" >>confdefs.h
-
-
-			ARC4RANDOM_BUILDING="Yes (ARM mbedTLS HMAC-DRBG)"
-
-else
-
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-fi
-
-	if test "x${LIBMBEDCRYPTO}" = "xYes"; then :
-
-		if test "x${ac_cv_search_mbedtls_md_setup}" != "xnone required"; then :
-
-			LIBMBEDCRYPTO_LIBS="${ac_cv_search_mbedtls_md_setup}"
 
 fi
 
 $as_echo "#define HAVE_LIBMBEDCRYPTO 1" >>confdefs.h
 
 
+			for ac_header in mbedtls/entropy.h mbedtls/hmac_drbg.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
 
 fi
+
+done
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if ARM mbedTLS has HMAC-DRBG support" >&5
+$as_echo_n "checking if ARM mbedTLS has HMAC-DRBG support... " >&6; }
+			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+					#ifdef HAVE_MBEDTLS_ENTROPY_H
+					#  include <mbedtls/entropy.h>
+					#else
+					#  error "HMAC-DRBG support requires <mbedtls/entropy.h>"
+					#endif
+					#ifdef HAVE_MBEDTLS_HMAC_DRBG_H
+					#  include <mbedtls/hmac_drbg.h>
+					#else
+					#  error "HMAC-DRBG support requires <mbedtls/hmac_drbg.h>"
+					#endif
+					#ifndef MBEDTLS_ENTROPY_C
+					#  error "HMAC-DRBG support requires MBEDTLS_ENTROPY_C"
+					#endif
+					#ifndef MBEDTLS_HMAC_DRBG_C
+					#  error "HMAC-DRBG support requires MBEDTLS_HMAC_DRBG_C"
+					#endif
+
+int
+main ()
+{
+
+					(void) mbedtls_entropy_init(NULL);
+					(void) mbedtls_hmac_drbg_init(NULL);
+					(void) mbedtls_hmac_drbg_seed(NULL, NULL, NULL, NULL, NULL, 0);
+					(void) mbedtls_hmac_drbg_reseed(NULL, NULL, 0);
+					(void) mbedtls_hmac_drbg_random(NULL, NULL, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBMBEDCRYPTO_HMAC_DRBG 1" >>confdefs.h
+
+
+else
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+			LIBMBEDCRYPTO="No"
+			if test "x${with_mbedtls}" = "xyes"; then :
+
+				as_fn_error $? "--with-mbedtls was specified but ARM mbedTLS appears to be unusable" "$LINENO" 5
+
+fi
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+
+	LIBS="${LIBS_SAVED}"
 
 
 
