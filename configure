@@ -9421,7 +9421,6 @@ fi
 
 
 	LIBNETTLE="No"
-
 	LIBNETTLE_LIBS=""
 
 
@@ -9441,9 +9440,9 @@ fi
 			;;
 	esac
 
-	if test "x${with_nettle}" != "xno"; then :
+	LIBS_SAVED="${LIBS}"
 
-		LIBS_SAVED="${LIBS}"
+	if test "x${with_nettle}" != "xno"; then :
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing nettle_md5_init" >&5
 $as_echo_n "checking for library containing nettle_md5_init... " >&6; }
@@ -9498,50 +9497,9 @@ $as_echo "$ac_cv_search_nettle_md5_init" >&6; }
 ac_res=$ac_cv_search_nettle_md5_init
 if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-  LIBNETTLE="Yes"
-else
 
-			if test "x${with_nettle}" != "xauto"; then :
-
-				as_fn_error $? "--with-nettle was specified but libnettle could not be found" "$LINENO" 5
-
-fi
-
-fi
-
-
-		LIBS="${LIBS_SAVED}"
-
-fi
-
-	if test "x${LIBNETTLE}" = "xYes"; then :
-
-		for ac_header in nettle/md5.h nettle/sha1.h nettle/sha2.h nettle/nettle-meta.h
-do :
-  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
-
-else
-
-			LIBNETTLE="No"
-			if test "x${with_nettle}" = "xyes"; then :
-  as_fn_error $? "required header file missing" "$LINENO" 5
-fi
-
-fi
-
-done
-
-
-fi
-
-	if test "x${LIBNETTLE}" = "xYes"; then :
-
-		for ac_header in nettle/version.h
+			LIBNETTLE="Yes"
+			for ac_header in nettle/version.h
 do :
   ac_fn_c_check_header_mongrel "$LINENO" "nettle/version.h" "ac_cv_header_nettle_version_h" "$ac_includes_default"
 if test "x$ac_cv_header_nettle_version_h" = xyes; then :
@@ -9553,17 +9511,105 @@ fi
 
 done
 
-		if test "x${ac_cv_search_nettle_md5_init}" != "xnone required"; then :
+			for ac_header in nettle/md5.h nettle/sha1.h nettle/sha2.h nettle/nettle-meta.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
 
-			LIBNETTLE_LIBS="${ac_cv_search_nettle_md5_init}"
+else
+
+				LIBNETTLE="No"
+				if test "x${with_nettle}" = "xyes"; then :
+
+					as_fn_error $? "--with-nettle was specified but a required header file is missing" "$LINENO" 5
+
+fi
+
+fi
+
+done
+
+
+else
+
+			LIBNETTLE="No"
+			if test "x${with_nettle}" = "xyes"; then :
+
+				as_fn_error $? "--with-nettle was specified but libnettle could not be found" "$LINENO" 5
+
+fi
+
+fi
+
+
+fi
+
+	if test "x${LIBNETTLE}" = "xYes"; then :
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if nettle is usable" >&5
+$as_echo_n "checking if nettle is usable... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#include <nettle/md5.h>
+				#include <nettle/sha1.h>
+				#include <nettle/sha2.h>
+
+int
+main ()
+{
+
+				struct md5_ctx md5ctx;
+				struct sha1_ctx sha1ctx;
+				struct sha256_ctx sha256ctx;
+				struct sha512_ctx sha512ctx;
+				(void) md5_init(&md5ctx);
+				(void) sha1_init(&sha1ctx);
+				(void) sha256_init(&sha256ctx);
+				(void) sha512_init(&sha512ctx);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+			if test "x${ac_cv_search_nettle_md5_init}" != "xnone required"; then :
+
+				LIBNETTLE_LIBS="${ac_cv_search_nettle_md5_init}"
+
 
 fi
 
 $as_echo "#define HAVE_LIBNETTLE 1" >>confdefs.h
 
 
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+			LIBNETTLE="No"
+			if test "x${with_nettle}" = "xyes"; then :
+
+				as_fn_error $? "--with-nettle was specified but libnettle is unusable for this task" "$LINENO" 5
 
 fi
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+
+	LIBS="${LIBS_SAVED}"
 
 
 
