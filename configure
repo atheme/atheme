@@ -1518,8 +1518,7 @@ Optional Packages:
   --without-nettle        Do not attempt to detect nettle (crypto library)
   --without-openssl       Do not attempt to detect libcrypto (for
                           modules/saslserv/ecdsa-nist256p-challenge)
-  --without-pcre          Do not attempt to detect Perl-Compatible Regular
-                          Expression library
+  --without-pcre          Do not attempt to detect libpcre
   --without-qrencode      Do not attempt to detect libqrencode for generating
                           QR codes
   --without-sodium        Do not attempt to detect libsodium for secure memory
@@ -9872,9 +9871,9 @@ fi
 			;;
 	esac
 
-	if test "x${with_pcre}" != "xno"; then :
+	LIBS_SAVED="${LIBS}"
 
-		LIBS_SAVED="${LIBS}"
+	if test "x${with_pcre}" != "xno"; then :
 
 
 pkg_failed=no
@@ -9936,9 +9935,10 @@ fi
 	echo "$PCRE_PKG_ERRORS" >&5
 
 
-			if test "x${with_pcre}" != "xauto"; then :
+			LIBPCRE="No"
+			if test "x${with_pcre}" = "xyes"; then :
 
-				as_fn_error $? "--with-pcre was specified but the PCRE library could not be found" "$LINENO" 5
+				as_fn_error $? "--with-pcre was specified but libpcre could not be found" "$LINENO" 5
 
 fi
 
@@ -9946,9 +9946,10 @@ elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-			if test "x${with_pcre}" != "xauto"; then :
+			LIBPCRE="No"
+			if test "x${with_pcre}" = "xyes"; then :
 
-				as_fn_error $? "--with-pcre was specified but the PCRE library could not be found" "$LINENO" 5
+				as_fn_error $? "--with-pcre was specified but libpcre could not be found" "$LINENO" 5
 
 fi
 
@@ -9957,22 +9958,19 @@ else
 	PCRE_LIBS=$pkg_cv_PCRE_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	LIBPCRE="Yes"
-fi
 
-		LIBS="${LIBS_SAVED}"
+			LIBPCRE="Yes"
 
-fi
-
-	if test "x${LIBPCRE}" = "xYes"; then :
 
 
 $as_echo "#define HAVE_PCRE 1" >>confdefs.h
 
 
-
+fi
 
 fi
+
+	LIBS="${LIBS_SAVED}"
 
 
 
