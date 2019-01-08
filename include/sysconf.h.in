@@ -52,6 +52,9 @@
 /* Define to 1 if cracklib is available */
 #undef HAVE_CRACKLIB
 
+/* Define to 1 if you have the <crack.h> header file. */
+#undef HAVE_CRACK_H
+
 /* Define to 1 if crypt(3) is available */
 #undef HAVE_CRYPT
 

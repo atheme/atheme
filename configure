@@ -1506,8 +1506,8 @@ Optional Packages:
   --without-libiconv-prefix     don't search for libiconv in includedir and libdir
   --with-libintl-prefix[=DIR]  search for libintl in DIR/include and DIR/lib
   --without-libintl-prefix     don't search for libintl in includedir and libdir
-  --without-cracklib      Do not attempt to detect CrackLib for
-                          modules/nickserv/cracklib (checking password
+  --without-cracklib      Do not attempt to detect cracklib (for
+                          modules/nickserv/cracklib -- checking password
                           strength)
   --without-crypt         Do not attempt to detect crypt(3) for
                           modules/crypto/crypt3-*
@@ -8468,7 +8468,6 @@ fi
 
 
 	LIBCRACKLIB="No"
-
 	CRACKLIB_LIBS=""
 
 
@@ -8488,11 +8487,19 @@ fi
 			;;
 	esac
 
+	LIBS_SAVED="${LIBS}"
+
 	if test "x${with_cracklib}" != "xno"; then :
 
-		LIBS_SAVED="${LIBS}"
+		for ac_header in crack.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "crack.h" "ac_cv_header_crack_h" "$ac_includes_default"
+if test "x$ac_cv_header_crack_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_CRACK_H 1
+_ACEOF
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing FascistCheck" >&5
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing FascistCheck" >&5
 $as_echo_n "checking for library containing FascistCheck... " >&6; }
 if ${ac_cv_search_FascistCheck+:} false; then :
   $as_echo_n "(cached) " >&6
@@ -8545,35 +8552,85 @@ $as_echo "$ac_cv_search_FascistCheck" >&6; }
 ac_res=$ac_cv_search_FascistCheck
 if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-  LIBCRACKLIB="Yes"
-else
 
-			if test "x${with_cracklib}" != "xauto"; then :
-
-				as_fn_error $? "--with-cracklib was specified but cracklib could not be found" "$LINENO" 5
-
-fi
-
-fi
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if cracklib appears to be usable" >&5
+$as_echo_n "checking if cracklib appears to be usable... " >&6; }
+				cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
 
 
-		LIBS="${LIBS_SAVED}"
+						#include <stddef.h> /* <crack.h> uses size_t but doesn't define it */
+						#include <crack.h>
 
-fi
+int
+main ()
+{
 
-	if test "x${LIBCRACKLIB}" = "xYes"; then :
+						const char *const result = FascistCheck("test", "test");
 
-		if test "x${ac_cv_search_FascistCheck}" != "xnone required"; then :
+  ;
+  return 0;
+}
 
-			CRACKLIB_LIBS="${ac_cv_search_FascistCheck}"
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+					LIBCRACKLIB="Yes"
+					if test "x${ac_cv_search_FascistCheck}" != "xnone required"; then :
+
+						CRACKLIB_LIBS="${ac_cv_search_FascistCheck}"
+
 
 fi
 
 $as_echo "#define HAVE_CRACKLIB 1" >>confdefs.h
 
 
+else
+
+					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+					LIBCRACKLIB="No"
+					if test "x${with_cracklib}" = "xyes"; then :
+
+						as_fn_error $? "--with-cracklib was specified but cracklib appears to be unusable" "$LINENO" 5
 
 fi
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+else
+
+				LIBCRACKLIB="No"
+				if test "x${with_cracklib}" = "xyes"; then :
+
+					as_fn_error $? "--with-cracklib was specified but cracklib could not be found" "$LINENO" 5
+
+fi
+
+fi
+
+
+else
+
+			LIBCRACKLIB="No"
+			if test "x${with_cracklib}" = "xyes"; then :
+
+				as_fn_error $? "--with-cracklib was specified but a required header file is missing" "$LINENO" 5
+
+fi
+
+fi
+
+done
+
+
+fi
+
+	LIBS="${LIBS_SAVED}"
 
 
 
