@@ -659,6 +659,7 @@ LIBNETTLE_LIBS
 LIBMBEDCRYPTO_LIBS
 LDAP_LIBS
 LIBIDN_LIBS
+LIBIDN_CFLAGS
 LIBCRYPT_LIBS
 CRACKLIB_LIBS
 ARC4RANDOM_COND_C
@@ -831,6 +832,8 @@ CPP
 PKG_CONFIG
 PKG_CONFIG_PATH
 PKG_CONFIG_LIBDIR
+LIBIDN_CFLAGS
+LIBIDN_LIBS
 PCRE_CFLAGS
 PCRE_LIBS
 LIBQRENCODE_CFLAGS
@@ -1546,6 +1549,9 @@ Some influential environment variables:
               directories to add to pkg-config's search path
   PKG_CONFIG_LIBDIR
               path overriding pkg-config's built-in search path
+  LIBIDN_CFLAGS
+              C compiler flags for LIBIDN, overriding pkg-config
+  LIBIDN_LIBS linker flags for LIBIDN, overriding pkg-config
   PCRE_CFLAGS C compiler flags for PCRE, overriding pkg-config
   PCRE_LIBS   linker flags for PCRE, overriding pkg-config
   LIBQRENCODE_CFLAGS
@@ -8801,7 +8807,6 @@ fi
 
 
 	LIBIDN="No"
-	LIBIDN_LIBS=""
 
 
 # Check whether --with-libidn was given.
@@ -8824,67 +8829,98 @@ fi
 
 	if test "x${with_libidn}" != "xno"; then :
 
-		for ac_header in stringprep.h
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBIDN" >&5
+$as_echo_n "checking for LIBIDN... " >&6; }
+
+if test -n "$LIBIDN_CFLAGS"; then
+    pkg_cv_LIBIDN_CFLAGS="$LIBIDN_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libidn\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libidn") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBIDN_CFLAGS=`$PKG_CONFIG --cflags "libidn" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$LIBIDN_LIBS"; then
+    pkg_cv_LIBIDN_LIBS="$LIBIDN_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libidn\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libidn") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBIDN_LIBS=`$PKG_CONFIG --libs "libidn" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        LIBIDN_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libidn" 2>&1`
+        else
+	        LIBIDN_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libidn" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$LIBIDN_PKG_ERRORS" >&5
+
+
+			LIBIDN="No"
+			if test "x${with_libidn}" = "xyes"; then :
+
+				as_fn_error $? "--with-libidn was specified but GNU libidn could not be found" "$LINENO" 5
+
+fi
+
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+			LIBIDN="No"
+			if test "x${with_libidn}" = "xyes"; then :
+
+				as_fn_error $? "--with-libidn was specified but GNU libidn could not be found" "$LINENO" 5
+
+fi
+
+else
+	LIBIDN_CFLAGS=$pkg_cv_LIBIDN_CFLAGS
+	LIBIDN_LIBS=$pkg_cv_LIBIDN_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+			LIBS="${LIBIDN_LIBS} ${LIBS}"
+			for ac_header in stringprep.h
 do :
   ac_fn_c_check_header_mongrel "$LINENO" "stringprep.h" "ac_cv_header_stringprep_h" "$ac_includes_default"
 if test "x$ac_cv_header_stringprep_h" = xyes; then :
   cat >>confdefs.h <<_ACEOF
 #define HAVE_STRINGPREP_H 1
 _ACEOF
-
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing stringprep" >&5
-$as_echo_n "checking for library containing stringprep... " >&6; }
-if ${ac_cv_search_stringprep+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_func_search_save_LIBS=$LIBS
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char stringprep ();
-int
-main ()
-{
-return stringprep ();
-  ;
-  return 0;
-}
-_ACEOF
-for ac_lib in '' idn; do
-  if test -z "$ac_lib"; then
-    ac_res="none required"
-  else
-    ac_res=-l$ac_lib
-    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
-  fi
-  if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_search_stringprep=$ac_res
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext
-  if ${ac_cv_search_stringprep+:} false; then :
-  break
-fi
-done
-if ${ac_cv_search_stringprep+:} false; then :
-
-else
-  ac_cv_search_stringprep=no
-fi
-rm conftest.$ac_ext
-LIBS=$ac_func_search_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_stringprep" >&5
-$as_echo "$ac_cv_search_stringprep" >&6; }
-ac_res=$ac_cv_search_stringprep
-if test "$ac_res" != no; then :
-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
 
 				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if GNU libidn appears to be usable" >&5
 $as_echo_n "checking if GNU libidn appears to be usable... " >&6; }
@@ -8912,17 +8948,11 @@ main ()
 }
 
 _ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
+if ac_fn_c_try_link "$LINENO"; then :
 
 					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 					LIBIDN="Yes"
-					if test "x${ac_cv_search_stringprep}" != "xnone required"; then :
-
-						LIBIDN_LIBS="${ac_cv_search_stringprep}"
-
-
-fi
 
 $as_echo "#define HAVE_LIBIDN 1" >>confdefs.h
 
@@ -8939,26 +8969,15 @@ $as_echo "no" >&6; }
 fi
 
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
 
 else
 
 				LIBIDN="No"
 				if test "x${with_libidn}" = "xyes"; then :
 
-					as_fn_error $? "--with-libidn was specified but GNU libidn could not be found" "$LINENO" 5
-
-fi
-
-fi
-
-
-else
-
-			LIBIDN="No"
-			if test "x${with_libidn}" = "xyes"; then :
-
-				as_fn_error $? "--with-libidn was specified but a required header file is missing" "$LINENO" 5
+					as_fn_error $? "--with-libidn was specified but a required header file is missing" "$LINENO" 5
 
 fi
 
@@ -8966,6 +8985,8 @@ fi
 
 done
 
+
+fi
 
 fi
 

@@ -17,6 +17,7 @@ include ../../extra.mk
 include ../../buildsys.mk
 include ../../buildsys.module.mk
 
+CFLAGS		+= $(LIBIDN_CFLAGS)
 CPPFLAGS	+= -I../../include -I.
 LDFLAGS		+= -L../../libathemecore
 LIBS 		+= -lathemecore $(LIBCRYPT_LIBS) $(LIBCRYPTO_LIBS) $(LIBIDN_LIBS)
