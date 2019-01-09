@@ -4,7 +4,7 @@ AC_DEFUN([ATHEME_CC_ENABLE_WARNINGS], [
 
 	ATHEME_CC_TEST_CFLAGS([-Weverything])
 
-	AS_IF([test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xyes"], [
+	AS_IF([test "${ATHEME_CC_TEST_CFLAGS_RESULT}" = "yes"], [
 
 		ATHEME_CC_TEST_CFLAGS([-Wno-address-of-packed-member])
 		ATHEME_CC_TEST_CFLAGS([-Wno-disabled-macro-expansion])
@@ -65,7 +65,7 @@ AC_DEFUN([ATHEME_CC_ENABLE_WARNINGS], [
 		ATHEME_CC_TEST_CFLAGS([-Wstack-protector])
 
 		ATHEME_CC_TEST_CFLAGS([-Wstrict-overflow=3])
-		AS_IF([test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xno"], [
+		AS_IF([test "${ATHEME_CC_TEST_CFLAGS_RESULT}" = "no"], [
 			ATHEME_CC_TEST_CFLAGS([-Wstrict-overflow])
 		])
 
@@ -104,7 +104,7 @@ AC_DEFUN([ATHEME_FEATURETEST_WARNINGS], [
 		[AS_HELP_STRING([--enable-warnings],[ Enable compiler warnings])],
 		[], [enable_warnings="no"])
 
-	AS_IF([test "x${enable_warnings}" = "xyes"], [
+	AS_IF([test "${enable_warnings}" = "yes"], [
 		BUILD_WARNINGS="Yes"
 		ATHEME_CC_ENABLE_WARNINGS
 	])

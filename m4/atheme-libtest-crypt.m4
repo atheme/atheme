@@ -17,7 +17,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPT], [
 
 	LIBS_SAVED="${LIBS}"
 
-	AS_IF([test "x${with_crypt}" != "xno"], [
+	AS_IF([test "${with_crypt}" != "no"], [
 		AC_CHECK_HEADERS([crypt.h], [], [], [])
 		AC_SEARCH_LIBS([crypt], [crypt], [
 			AC_MSG_CHECKING([if crypt(3) appears to be usable])
@@ -41,14 +41,14 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPT], [
 			], [
 				AC_MSG_RESULT([no])
 				LIBCRYPT="No"
-				AS_IF([test "x${with_crypt}" = "xyes"], [
+				AS_IF([test "${with_crypt}" = "yes"], [
 					AC_MSG_ERROR([--with-crypt was specified but crypt(3) appears to be unusable])
 				])
 			])
 
 		], [
 			LIBCRYPT="No"
-			AS_IF([test "x${with_crypt}" = "xyes"], [
+			AS_IF([test "${with_crypt}" = "yes"], [
 				AC_MSG_ERROR([--with-crypt was specified but crypt(3) could not be found])
 			])
 		])

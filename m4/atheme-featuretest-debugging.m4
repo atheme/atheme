@@ -10,7 +10,7 @@ AC_DEFUN([ATHEME_FEATURETEST_DEBUGGING], [
 		yes)
 			ATHEME_CC_TEST_CFLAGS([-O0 -g])
 
-			AS_IF([test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xno"], [
+			AS_IF([test "${ATHEME_CC_TEST_CFLAGS_RESULT}" = "no"], [
 
 				AC_MSG_ERROR([--enable-debugging requires compiler support for -O0 -g])
 			])

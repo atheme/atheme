@@ -16,26 +16,26 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 
 	LIBS_SAVED="${LIBS}"
 
-	AS_IF([test "x${with_nettle}" != "xno"], [
+	AS_IF([test "${with_nettle}" != "no"], [
 		PKG_CHECK_MODULES([LIBNETTLE], [nettle], [
 			LIBS="${LIBNETTLE_LIBS} ${LIBS}"
 			LIBNETTLE="Yes"
 			AC_CHECK_HEADERS([nettle/version.h], [], [], [])
 			AC_CHECK_HEADERS([nettle/md5.h nettle/sha1.h nettle/sha2.h nettle/nettle-meta.h], [], [
 				LIBNETTLE="No"
-				AS_IF([test "x${with_nettle}" = "xyes"], [
+				AS_IF([test "${with_nettle}" = "yes"], [
 					AC_MSG_ERROR([--with-nettle was specified but a required header file is missing])
 				])
 			], [])
 		], [
 			LIBNETTLE="No"
-			AS_IF([test "x${with_nettle}" = "xyes"], [
+			AS_IF([test "${with_nettle}" = "yes"], [
 				AC_MSG_ERROR([--with-nettle was specified but libnettle could not be found])
 			])
 		])
 	])
 
-	AS_IF([test "x${LIBNETTLE}" = "xYes"], [
+	AS_IF([test "${LIBNETTLE}" = "Yes"], [
 		AC_MSG_CHECKING([if nettle is usable])
 		AC_LINK_IFELSE([
 			AC_LANG_PROGRAM([[
@@ -58,7 +58,7 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 		], [
 			AC_MSG_RESULT([no])
 			LIBNETTLE="No"
-			AS_IF([test "x${with_nettle}" = "xyes"], [
+			AS_IF([test "${with_nettle}" = "yes"], [
 				AC_MSG_ERROR([--with-nettle was specified but libnettle is unusable for this task])
 			])
 		])

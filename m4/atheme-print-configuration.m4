@@ -1,9 +1,9 @@
 AC_DEFUN([ATHEME_PRINT_CONFIGURATION], [
 
-	AS_IF([test "x${DIGEST_FRONTEND}" = "xInternal"], [DIGEST_FRONTEND="None (Internal MD5/SHA/HMAC/PBKDF2 Fallback)"])
-	AS_IF([test "x${RANDOM_FRONTEND}" = "xInternal"], [RANDOM_FRONTEND="None (Internal ChaCha20-based Fallback RNG)"])
-	AS_IF([test "x${SODIUM_MALLOC}" = "xYes"], [SODIUM_MALLOC="Yes (NOT INTENDED FOR PRODUCTION USAGE)"])
-	AS_IF([test "x${BUILD_WARNINGS}" = "xYes"], [BUILD_WARNINGS="Yes (NOT INTENDED FOR PRODUCTION USAGE)"])
+	AS_IF([test "${DIGEST_FRONTEND}" = "Internal"], [DIGEST_FRONTEND="None (Internal MD5/SHA/HMAC/PBKDF2 Fallback)"])
+	AS_IF([test "${RANDOM_FRONTEND}" = "Internal"], [RANDOM_FRONTEND="None (Internal ChaCha20-based Fallback RNG)"])
+	AS_IF([test "${SODIUM_MALLOC}" = "Yes"], [SODIUM_MALLOC="Yes (NOT INTENDED FOR PRODUCTION USAGE)"])
+	AS_IF([test "${BUILD_WARNINGS}" = "Yes"], [BUILD_WARNINGS="Yes (NOT INTENDED FOR PRODUCTION USAGE)"])
 
 	prefix="$(eval echo "${prefix}")"
 	prefix="$(eval echo "${prefix}")"

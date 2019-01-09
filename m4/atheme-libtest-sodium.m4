@@ -19,25 +19,25 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 
 	LIBS_SAVED="${LIBS}"
 
-	AS_IF([test "x${with_sodium}" != "xno"], [
+	AS_IF([test "${with_sodium}" != "no"], [
 		PKG_CHECK_MODULES([LIBSODIUM], [libsodium], [
 			LIBS="${LIBSODIUM_LIBS} ${LIBS}"
 			LIBSODIUM="Yes"
 			AC_CHECK_HEADERS([sodium/core.h sodium/utils.h sodium/version.h], [], [
 				LIBSODIUM="No"
-				AS_IF([test "x${with_sodium}" = "xyes"], [
+				AS_IF([test "${with_sodium}" = "yes"], [
 					AC_MSG_ERROR([--with-sodium was specified but a required header file is missing])
 				])
 			], [])
 		], [
 			LIBSODIUM="No"
-			AS_IF([test "x${with_sodium}" = "xyes"], [
+			AS_IF([test "${with_sodium}" = "yes"], [
 				AC_MSG_ERROR([--with-sodium was specified but libsodium could not be found])
 			])
 		])
 	])
 
-	AS_IF([test "x${LIBSODIUM}" = "xYes"], [
+	AS_IF([test "${LIBSODIUM}" = "Yes"], [
 		AC_MSG_CHECKING([if libsodium is usable as a whole])
 		AC_LINK_IFELSE([
 			AC_LANG_PROGRAM([[
@@ -50,13 +50,13 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 		], [
 			AC_MSG_RESULT([no])
 			LIBSODIUM="No"
-			AS_IF([test "x${with_sodium}" = "xyes"], [
+			AS_IF([test "${with_sodium}" = "yes"], [
 				AC_MSG_ERROR([--with-sodium was specified but libsodium appears to be unusable])
 			])
 		])
 	])
 
-	AS_IF([test "x${LIBSODIUM}" = "xYes"], [
+	AS_IF([test "${LIBSODIUM}" = "Yes"], [
 		AC_MSG_CHECKING([if libsodium has usable memory manipulation functions])
 		AC_LINK_IFELSE([
 			AC_LANG_PROGRAM([[
@@ -120,9 +120,9 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 			])
 		], [], [])
 
-		AS_IF([test "x${LIBSODIUMMEMORY}x${LIBSODIUMMEMZERO}x${LIBSODIUMRNG}" = "xNoxNoxNo"], [
+		AS_IF([test "${LIBSODIUMMEMORY}${LIBSODIUMMEMZERO}${LIBSODIUMRNG}" = "NoNoNo"], [
 			LIBSODIUM="No"
-			AS_IF([test "x${with_sodium}" = "xyes"], [
+			AS_IF([test "${with_sodium}" = "yes"], [
 				AC_MSG_ERROR([--with-sodium was specified but libsodium appears to be unusable])
 			])
 		], [

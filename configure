@@ -8512,7 +8512,7 @@ fi
 
 	LIBS_SAVED="${LIBS}"
 
-	if test "x${with_cracklib}" != "xno"; then :
+	if test "${with_cracklib}" != "no"; then :
 
 		for ac_header in crack.h
 do :
@@ -8616,7 +8616,7 @@ else
 					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 					LIBCRACKLIB="No"
-					if test "x${with_cracklib}" = "xyes"; then :
+					if test "${with_cracklib}" = "yes"; then :
 
 						as_fn_error $? "--with-cracklib was specified but cracklib appears to be unusable" "$LINENO" 5
 
@@ -8628,7 +8628,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 else
 
 				LIBCRACKLIB="No"
-				if test "x${with_cracklib}" = "xyes"; then :
+				if test "${with_cracklib}" = "yes"; then :
 
 					as_fn_error $? "--with-cracklib was specified but cracklib could not be found" "$LINENO" 5
 
@@ -8640,7 +8640,7 @@ fi
 else
 
 			LIBCRACKLIB="No"
-			if test "x${with_cracklib}" = "xyes"; then :
+			if test "${with_cracklib}" = "yes"; then :
 
 				as_fn_error $? "--with-cracklib was specified but a required header file is missing" "$LINENO" 5
 
@@ -8679,7 +8679,7 @@ fi
 
 	LIBS_SAVED="${LIBS}"
 
-	if test "x${with_crypt}" != "xno"; then :
+	if test "${with_crypt}" != "no"; then :
 
 		for ac_header in crypt.h
 do :
@@ -8789,7 +8789,7 @@ else
 				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 				LIBCRYPT="No"
-				if test "x${with_crypt}" = "xyes"; then :
+				if test "${with_crypt}" = "yes"; then :
 
 					as_fn_error $? "--with-crypt was specified but crypt(3) appears to be unusable" "$LINENO" 5
 
@@ -8802,7 +8802,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 else
 
 			LIBCRYPT="No"
-			if test "x${with_crypt}" = "xyes"; then :
+			if test "${with_crypt}" = "yes"; then :
 
 				as_fn_error $? "--with-crypt was specified but crypt(3) could not be found" "$LINENO" 5
 
@@ -8838,7 +8838,7 @@ fi
 
 	LIBS_SAVED="${LIBS}"
 
-	if test "x${with_libidn}" != "xno"; then :
+	if test "${with_libidn}" != "no"; then :
 
 
 pkg_failed=no
@@ -8901,7 +8901,7 @@ fi
 
 
 			LIBIDN="No"
-			if test "x${with_libidn}" = "xyes"; then :
+			if test "${with_libidn}" = "yes"; then :
 
 				as_fn_error $? "--with-libidn was specified but GNU libidn could not be found" "$LINENO" 5
 
@@ -8912,7 +8912,7 @@ elif test $pkg_failed = untried; then
 $as_echo "no" >&6; }
 
 			LIBIDN="No"
-			if test "x${with_libidn}" = "xyes"; then :
+			if test "${with_libidn}" = "yes"; then :
 
 				as_fn_error $? "--with-libidn was specified but GNU libidn could not be found" "$LINENO" 5
 
@@ -8973,7 +8973,7 @@ else
 					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 					LIBIDN="No"
-					if test "x${with_libidn}" = "xyes"; then :
+					if test "${with_libidn}" = "yes"; then :
 
 						as_fn_error $? "--with-libidn was specified but GNU libidn appears to be unusable" "$LINENO" 5
 
@@ -8986,7 +8986,7 @@ rm -f core conftest.err conftest.$ac_objext \
 else
 
 				LIBIDN="No"
-				if test "x${with_libidn}" = "xyes"; then :
+				if test "${with_libidn}" = "yes"; then :
 
 					as_fn_error $? "--with-libidn was specified but a required header file is missing" "$LINENO" 5
 
@@ -9027,7 +9027,7 @@ fi
 
 	LIBS_SAVED="${LIBS}"
 
-	if test "x${with_ldap}" != "xno"; then :
+	if test "${with_ldap}" != "no"; then :
 
 		for ac_header in ldap.h
 do :
@@ -9134,7 +9134,7 @@ else
 					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 					LIBLDAP="No"
-					if test "x${with_ldap}" = "xyes"; then :
+					if test "${with_ldap}" = "yes"; then :
 
 						as_fn_error $? "--with-ldap was specified but libldap appears to be unusable" "$LINENO" 5
 
@@ -9146,7 +9146,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 else
 
 				LIBLDAP="No"
-				if test "x${with_ldap}" = "xyes"; then :
+				if test "${with_ldap}" = "yes"; then :
 
 					as_fn_error $? "--with-ldap was specified but libldap could not be found" "$LINENO" 5
 
@@ -9158,7 +9158,7 @@ fi
 else
 
 			LIBLDAP="No"
-			if test "x${with_ldap}" = "xyes"; then :
+			if test "${with_ldap}" = "yes"; then :
 
 				as_fn_error $? "--with-ldap was specified but a required header file is missing" "$LINENO" 5
 
@@ -9198,7 +9198,7 @@ fi
 
 	LIBS_SAVED="${LIBS}"
 
-	if test "x${with_mbedtls}" != "xno"; then :
+	if test "${with_mbedtls}" != "no"; then :
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing mbedtls_md_setup" >&5
 $as_echo_n "checking for library containing mbedtls_md_setup... " >&6; }
@@ -9280,7 +9280,7 @@ _ACEOF
 else
 
 				LIBMBEDCRYPTO="No"
-				if test "x${with_mbedtls}" = "xyes"; then :
+				if test "${with_mbedtls}" = "yes"; then :
 
 					as_fn_error $? "--with-mbedtls was specified but a required header file is missing" "$LINENO" 5
 
@@ -9294,7 +9294,7 @@ done
 else
 
 			LIBMBEDCRYPTO="No"
-			if test "x${with_mbedtls}" = "xyes"; then :
+			if test "${with_mbedtls}" = "yes"; then :
 
 				as_fn_error $? "--with-mbedtls was specified but ARM mbedTLS could not be found" "$LINENO" 5
 
@@ -9305,7 +9305,7 @@ fi
 
 fi
 
-	if test "x${LIBMBEDCRYPTO}" = "xYes"; then :
+	if test "${LIBMBEDCRYPTO}" = "Yes"; then :
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if ARM mbedTLS has MD5/SHA1/SHA2/PBKDF2 support" >&5
 $as_echo_n "checking if ARM mbedTLS has MD5/SHA1/SHA2/PBKDF2 support... " >&6; }
@@ -9445,7 +9445,7 @@ else
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 			LIBMBEDCRYPTO="No"
-			if test "x${with_mbedtls}" = "xyes"; then :
+			if test "${with_mbedtls}" = "yes"; then :
 
 				as_fn_error $? "--with-mbedtls was specified but ARM mbedTLS appears to be unusable" "$LINENO" 5
 
@@ -9482,7 +9482,7 @@ fi
 
 	LIBS_SAVED="${LIBS}"
 
-	if test "x${with_nettle}" != "xno"; then :
+	if test "${with_nettle}" != "no"; then :
 
 
 pkg_failed=no
@@ -9545,7 +9545,7 @@ fi
 
 
 			LIBNETTLE="No"
-			if test "x${with_nettle}" = "xyes"; then :
+			if test "${with_nettle}" = "yes"; then :
 
 				as_fn_error $? "--with-nettle was specified but libnettle could not be found" "$LINENO" 5
 
@@ -9556,7 +9556,7 @@ elif test $pkg_failed = untried; then
 $as_echo "no" >&6; }
 
 			LIBNETTLE="No"
-			if test "x${with_nettle}" = "xyes"; then :
+			if test "${with_nettle}" = "yes"; then :
 
 				as_fn_error $? "--with-nettle was specified but libnettle could not be found" "$LINENO" 5
 
@@ -9594,7 +9594,7 @@ _ACEOF
 else
 
 				LIBNETTLE="No"
-				if test "x${with_nettle}" = "xyes"; then :
+				if test "${with_nettle}" = "yes"; then :
 
 					as_fn_error $? "--with-nettle was specified but a required header file is missing" "$LINENO" 5
 
@@ -9609,7 +9609,7 @@ fi
 
 fi
 
-	if test "x${LIBNETTLE}" = "xYes"; then :
+	if test "${LIBNETTLE}" = "Yes"; then :
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if nettle is usable" >&5
 $as_echo_n "checking if nettle is usable... " >&6; }
@@ -9652,7 +9652,7 @@ else
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 			LIBNETTLE="No"
-			if test "x${with_nettle}" = "xyes"; then :
+			if test "${with_nettle}" = "yes"; then :
 
 				as_fn_error $? "--with-nettle was specified but libnettle is unusable for this task" "$LINENO" 5
 
@@ -9690,7 +9690,7 @@ fi
 
 	LIBS_SAVED="${LIBS}"
 
-	if test "x${with_openssl}" != "xno"; then :
+	if test "${with_openssl}" != "no"; then :
 
 
 pkg_failed=no
@@ -9753,7 +9753,7 @@ fi
 
 
 			LIBCRYPTO="No"
-			if test "x${with_openssl}" = "xyes"; then :
+			if test "${with_openssl}" = "yes"; then :
 
 				as_fn_error $? "--with-openssl was specified but libcrypto could not be found" "$LINENO" 5
 
@@ -9764,7 +9764,7 @@ elif test $pkg_failed = untried; then
 $as_echo "no" >&6; }
 
 			LIBCRYPTO="No"
-			if test "x${with_openssl}" = "xyes"; then :
+			if test "${with_openssl}" = "yes"; then :
 
 				as_fn_error $? "--with-openssl was specified but libcrypto could not be found" "$LINENO" 5
 
@@ -9803,7 +9803,7 @@ _ACEOF
 else
 
 				LIBCRYPTO="No"
-				if test "x${with_openssl}" = "xyes"; then :
+				if test "${with_openssl}" = "yes"; then :
 
 					as_fn_error $? "--with-openssl was specified but a required header file is missing" "$LINENO" 5
 
@@ -9818,7 +9818,7 @@ fi
 
 fi
 
-	if test "x${LIBCRYPTO}" = "xYes"; then :
+	if test "${LIBCRYPTO}" = "Yes"; then :
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libcrypto is usable" >&5
 $as_echo_n "checking if libcrypto is usable... " >&6; }
@@ -9893,7 +9893,7 @@ $as_echo "yes" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-			if test "x${ac_cv_header_openssl_ec_h}x${ac_cv_header_openssl_ecdsa_h}" = "xyesxyes"; then :
+			if test "x${ac_cv_header_openssl_ec_h}${ac_cv_header_openssl_ecdsa_h}" = "xyesyes"; then :
 
 				ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
 
@@ -9906,7 +9906,7 @@ $as_echo "#define HAVE_OPENSSL 1" >>confdefs.h
 else
 
 			LIBCRYPTO="No"
-			if test "x${with_openssl}" = "xyes"; then :
+			if test "${with_openssl}" = "yes"; then :
 
 				as_fn_error $? "--with-openssl was specified but libcrypto is unusable for this task" "$LINENO" 5
 
@@ -9943,7 +9943,7 @@ fi
 
 	LIBS_SAVED="${LIBS}"
 
-	if test "x${with_pcre}" != "xno"; then :
+	if test "${with_pcre}" != "no"; then :
 
 
 pkg_failed=no
@@ -10006,7 +10006,7 @@ fi
 
 
 			LIBPCRE="No"
-			if test "x${with_pcre}" = "xyes"; then :
+			if test "${with_pcre}" = "yes"; then :
 
 				as_fn_error $? "--with-pcre was specified but libpcre could not be found" "$LINENO" 5
 
@@ -10017,7 +10017,7 @@ elif test $pkg_failed = untried; then
 $as_echo "no" >&6; }
 
 			LIBPCRE="No"
-			if test "x${with_pcre}" = "xyes"; then :
+			if test "${with_pcre}" = "yes"; then :
 
 				as_fn_error $? "--with-pcre was specified but libpcre could not be found" "$LINENO" 5
 
@@ -10066,7 +10066,7 @@ fi
 
 	LIBS_SAVED="${LIBS}"
 
-	if test "x${with_qrencode}" != "xno"; then :
+	if test "${with_qrencode}" != "no"; then :
 
 		for ac_header in qrencode.h
 do :
@@ -10137,7 +10137,7 @@ fi
 
 
 				LIBQRENCODE="No"
-				if test "x${with_qrencode}" = "xyes"; then :
+				if test "${with_qrencode}" = "yes"; then :
 
 					as_fn_error $? "--with-qrencode was specified but libqrencode could not be found" "$LINENO" 5
 
@@ -10148,7 +10148,7 @@ elif test $pkg_failed = untried; then
 $as_echo "no" >&6; }
 
 				LIBQRENCODE="No"
-				if test "x${with_qrencode}" = "xyes"; then :
+				if test "${with_qrencode}" = "yes"; then :
 
 					as_fn_error $? "--with-qrencode was specified but libqrencode could not be found" "$LINENO" 5
 
@@ -10198,7 +10198,7 @@ else
 					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 					LIBQRENCODE="No"
-					if test "x${with_qrencode}" = "xyes"; then :
+					if test "${with_qrencode}" = "yes"; then :
 
 						as_fn_error $? "--with-qrencode was specified but libqrencode does not appear to be usable" "$LINENO" 5
 
@@ -10213,7 +10213,7 @@ fi
 else
 
 			LIBQRENCODE="No"
-			if test "x${with_qrencode}" = "xyes"; then :
+			if test "${with_qrencode}" = "yes"; then :
 
 				as_fn_error $? "--with-qrencode was specified but a required header file is missing" "$LINENO" 5
 
@@ -10254,7 +10254,7 @@ fi
 
 	LIBS_SAVED="${LIBS}"
 
-	if test "x${with_sodium}" != "xno"; then :
+	if test "${with_sodium}" != "no"; then :
 
 
 pkg_failed=no
@@ -10317,7 +10317,7 @@ fi
 
 
 			LIBSODIUM="No"
-			if test "x${with_sodium}" = "xyes"; then :
+			if test "${with_sodium}" = "yes"; then :
 
 				as_fn_error $? "--with-sodium was specified but libsodium could not be found" "$LINENO" 5
 
@@ -10328,7 +10328,7 @@ elif test $pkg_failed = untried; then
 $as_echo "no" >&6; }
 
 			LIBSODIUM="No"
-			if test "x${with_sodium}" = "xyes"; then :
+			if test "${with_sodium}" = "yes"; then :
 
 				as_fn_error $? "--with-sodium was specified but libsodium could not be found" "$LINENO" 5
 
@@ -10354,7 +10354,7 @@ _ACEOF
 else
 
 				LIBSODIUM="No"
-				if test "x${with_sodium}" = "xyes"; then :
+				if test "${with_sodium}" = "yes"; then :
 
 					as_fn_error $? "--with-sodium was specified but a required header file is missing" "$LINENO" 5
 
@@ -10369,7 +10369,7 @@ fi
 
 fi
 
-	if test "x${LIBSODIUM}" = "xYes"; then :
+	if test "${LIBSODIUM}" = "Yes"; then :
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libsodium is usable as a whole" >&5
 $as_echo_n "checking if libsodium is usable as a whole... " >&6; }
@@ -10400,7 +10400,7 @@ else
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 			LIBSODIUM="No"
-			if test "x${with_sodium}" = "xyes"; then :
+			if test "${with_sodium}" = "yes"; then :
 
 				as_fn_error $? "--with-sodium was specified but libsodium appears to be unusable" "$LINENO" 5
 
@@ -10412,7 +10412,7 @@ rm -f core conftest.err conftest.$ac_objext \
 
 fi
 
-	if test "x${LIBSODIUM}" = "xYes"; then :
+	if test "${LIBSODIUM}" = "Yes"; then :
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libsodium has usable memory manipulation functions" >&5
 $as_echo_n "checking if libsodium has usable memory manipulation functions... " >&6; }
@@ -10550,10 +10550,10 @@ fi
 done
 
 
-		if test "x${LIBSODIUMMEMORY}x${LIBSODIUMMEMZERO}x${LIBSODIUMRNG}" = "xNoxNoxNo"; then :
+		if test "${LIBSODIUMMEMORY}${LIBSODIUMMEMZERO}${LIBSODIUMRNG}" = "NoNoNo"; then :
 
 			LIBSODIUM="No"
-			if test "x${with_sodium}" = "xyes"; then :
+			if test "${with_sodium}" = "yes"; then :
 
 				as_fn_error $? "--with-sodium was specified but libsodium appears to be unusable" "$LINENO" 5
 
@@ -10597,7 +10597,7 @@ fi
 			;;
 	esac
 
-	if test "x${with_perl}" != "xno"; then :
+	if test "${with_perl}" != "no"; then :
 
 
 		# Extract the first word of "perl", so it can be a program name with args.
@@ -10661,7 +10661,7 @@ fi
 
 fi
 
-	if test "x${with_perl}x${PERL_CFLAGS}" = "xyesx"; then :
+	if test "${with_perl}${PERL_CFLAGS}" = "yes"; then :
 
 		as_fn_error $? "Perl support was requested but Perl could not be found" "$LINENO" 5
 
@@ -10675,7 +10675,7 @@ fi
 	DIGEST_API_CFLAGS=""
 	DIGEST_API_LIBS=""
 
-	if test "x${DIGEST_FRONTEND}x${LIBMBEDCRYPTO}" = "xInternalxYes"; then :
+	if test "${DIGEST_FRONTEND}${LIBMBEDCRYPTO}" = "InternalYes"; then :
 
 		DIGEST_FRONTEND_VAL="ATHEME_DIGEST_FRONTEND_MBEDTLS"
 		DIGEST_FRONTEND="ARM mbedTLS"
@@ -10684,7 +10684,7 @@ fi
 
 fi
 
-	if test "x${DIGEST_FRONTEND}x${LIBNETTLE}" = "xInternalxYes"; then :
+	if test "${DIGEST_FRONTEND}${LIBNETTLE}" = "InternalYes"; then :
 
 		DIGEST_FRONTEND_VAL="ATHEME_DIGEST_FRONTEND_NETTLE"
 		DIGEST_FRONTEND="Nettle"
@@ -10693,7 +10693,7 @@ fi
 
 fi
 
-	if test "x${DIGEST_FRONTEND}x${LIBCRYPTO}" = "xInternalxYes"; then :
+	if test "${DIGEST_FRONTEND}${LIBCRYPTO}" = "InternalYes"; then :
 
 		DIGEST_FRONTEND_VAL="ATHEME_DIGEST_FRONTEND_OPENSSL"
 		DIGEST_FRONTEND="${LIBCRYPTO_NAME}"
@@ -10790,7 +10790,7 @@ rm -f core conftest.err conftest.$ac_objext \
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-	if test "x${RANDOM_FRONTEND}x${LIBSODIUMRNG}" = "xInternalxYes"; then :
+	if test "${RANDOM_FRONTEND}${LIBSODIUMRNG}" = "InternalYes"; then :
 
 		RANDOM_FRONTEND_VAL="ATHEME_RANDOM_FRONTEND_SODIUM"
 		RANDOM_FRONTEND="Sodium"
@@ -10799,7 +10799,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 fi
 
-	if test "x${RANDOM_FRONTEND}x${LIBMBEDCRYPTORNG}" = "xInternalxYes"; then :
+	if test "${RANDOM_FRONTEND}${LIBMBEDCRYPTORNG}" = "InternalYes"; then :
 
 		RANDOM_FRONTEND_VAL="ATHEME_RANDOM_FRONTEND_MBEDTLS"
 		RANDOM_FRONTEND="ARM mbedTLS"
@@ -10808,7 +10808,7 @@ fi
 
 fi
 
-	if test "x${RANDOM_FRONTEND}" = "xInternal"; then :
+	if test "${RANDOM_FRONTEND}" = "Internal"; then :
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if getentropy(3) is available" >&5
 $as_echo_n "checking if getentropy(3) is available... " >&6; }
@@ -10961,7 +10961,7 @@ rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
 
-	if test "x${ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT}" = "xno"; then :
+	if test "${ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT}" = "no"; then :
 
 
 		LIBS="-lresolv ${LIBS}"
@@ -11001,7 +11001,7 @@ rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
 
-		if test "x${ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT}" = "xno"; then :
+		if test "${ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT}" = "no"; then :
 
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
@@ -11010,7 +11010,7 @@ $as_echo "no" >&6; }
 
 fi
 
-		if test "x${ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT}" = "xyes"; then :
+		if test "${ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT}" = "yes"; then :
 
 
 			CONTRIB_LIBS="-lresolv"
@@ -11173,7 +11173,7 @@ fi
 
 	case "${enable_sodium_malloc}" in
 		yes)
-			if test "x${LIBSODIUMMEMORY}" = "xNo"; then :
+			if test "${LIBSODIUMMEMORY}" = "No"; then :
 
 				as_fn_error $? "--enable-sodium-malloc requires usable libsodium memory manipulation functions" "$LINENO" 5
 
@@ -11428,7 +11428,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 
-			if test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xno"; then :
+			if test "${ATHEME_CC_TEST_CFLAGS_RESULT}" = "no"; then :
 
 
 
@@ -11473,7 +11473,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 
-				if test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xno"; then :
+				if test "${ATHEME_CC_TEST_CFLAGS_RESULT}" = "no"; then :
 
 
 
@@ -11586,7 +11586,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 
-			if test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xno"; then :
+			if test "${ATHEME_CC_TEST_CFLAGS_RESULT}" = "no"; then :
 
 
 				as_fn_error $? "--enable-debugging requires compiler support for -O0 -g" "$LINENO" 5
@@ -12027,7 +12027,7 @@ else
 fi
 
 
-	if test "x${enable_warnings}" = "xyes"; then :
+	if test "${enable_warnings}" = "yes"; then :
 
 		BUILD_WARNINGS="Yes"
 
@@ -12116,7 +12116,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 
-	if test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xyes"; then :
+	if test "${ATHEME_CC_TEST_CFLAGS_RESULT}" = "yes"; then :
 
 
 
@@ -14340,7 +14340,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 		unset CFLAGS_SAVED
 
 
-		if test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xno"; then :
+		if test "${ATHEME_CC_TEST_CFLAGS_RESULT}" = "no"; then :
 
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wstrict-overflow " >&5
@@ -17148,16 +17148,16 @@ fi
 
 
 
-	if test "x${DIGEST_FRONTEND}" = "xInternal"; then :
+	if test "${DIGEST_FRONTEND}" = "Internal"; then :
   DIGEST_FRONTEND="None (Internal MD5/SHA/HMAC/PBKDF2 Fallback)"
 fi
-	if test "x${RANDOM_FRONTEND}" = "xInternal"; then :
+	if test "${RANDOM_FRONTEND}" = "Internal"; then :
   RANDOM_FRONTEND="None (Internal ChaCha20-based Fallback RNG)"
 fi
-	if test "x${SODIUM_MALLOC}" = "xYes"; then :
+	if test "${SODIUM_MALLOC}" = "Yes"; then :
   SODIUM_MALLOC="Yes (NOT INTENDED FOR PRODUCTION USAGE)"
 fi
-	if test "x${BUILD_WARNINGS}" = "xYes"; then :
+	if test "${BUILD_WARNINGS}" = "Yes"; then :
   BUILD_WARNINGS="Yes (NOT INTENDED FOR PRODUCTION USAGE)"
 fi
 

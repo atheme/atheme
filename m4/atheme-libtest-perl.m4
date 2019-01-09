@@ -18,7 +18,7 @@ AC_DEFUN([ATHEME_LIBTEST_PERL], [
 			;;
 	esac
 
-	AS_IF([test "x${with_perl}" != "xno"], [
+	AS_IF([test "${with_perl}" != "no"], [
 
 		AC_PATH_PROG([perlpath], [perl])
 
@@ -42,7 +42,7 @@ AC_DEFUN([ATHEME_LIBTEST_PERL], [
 		fi
 	])
 
-	AS_IF([test "x${with_perl}x${PERL_CFLAGS}" = "xyesx"], [
+	AS_IF([test "${with_perl}${PERL_CFLAGS}" = "yes"], [
 		AC_MSG_ERROR([Perl support was requested but Perl could not be found])
 	])
 ])

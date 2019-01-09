@@ -17,7 +17,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRACKLIB], [
 
 	LIBS_SAVED="${LIBS}"
 
-	AS_IF([test "x${with_cracklib}" != "xno"], [
+	AS_IF([test "${with_cracklib}" != "no"], [
 		AC_CHECK_HEADERS([crack.h], [
 			AC_SEARCH_LIBS([FascistCheck], [crack], [
 				AC_MSG_CHECKING([if cracklib appears to be usable])
@@ -39,19 +39,19 @@ AC_DEFUN([ATHEME_LIBTEST_CRACKLIB], [
 				], [
 					AC_MSG_RESULT([no])
 					LIBCRACKLIB="No"
-					AS_IF([test "x${with_cracklib}" = "xyes"], [
+					AS_IF([test "${with_cracklib}" = "yes"], [
 						AC_MSG_ERROR([--with-cracklib was specified but cracklib appears to be unusable])
 					])
 				])
 			], [
 				LIBCRACKLIB="No"
-				AS_IF([test "x${with_cracklib}" = "xyes"], [
+				AS_IF([test "${with_cracklib}" = "yes"], [
 					AC_MSG_ERROR([--with-cracklib was specified but cracklib could not be found])
 				])
 			], [])
 		], [
 			LIBCRACKLIB="No"
-			AS_IF([test "x${with_cracklib}" = "xyes"], [
+			AS_IF([test "${with_cracklib}" = "yes"], [
 				AC_MSG_ERROR([--with-cracklib was specified but a required header file is missing])
 			])
 		])

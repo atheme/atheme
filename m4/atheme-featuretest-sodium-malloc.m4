@@ -8,7 +8,7 @@ AC_DEFUN([ATHEME_FEATURETEST_SODIUM_MALLOC], [
 
 	case "${enable_sodium_malloc}" in
 		yes)
-			AS_IF([test "x${LIBSODIUMMEMORY}" = "xNo"], [
+			AS_IF([test "${LIBSODIUMMEMORY}" = "No"], [
 				AC_MSG_ERROR([--enable-sodium-malloc requires usable libsodium memory manipulation functions])
 			])
 

@@ -71,11 +71,11 @@ AC_DEFUN([ATHEME_FEATURETEST_CFLAGS], [
 		yes)
 			ATHEME_CC_TEST_CFLAGS([-fstack-protector-all])
 
-			AS_IF([test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xno"], [
+			AS_IF([test "${ATHEME_CC_TEST_CFLAGS_RESULT}" = "no"], [
 
 				ATHEME_CC_TEST_CFLAGS([-fstack-protector-strong])
 
-				AS_IF([test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xno"], [
+				AS_IF([test "${ATHEME_CC_TEST_CFLAGS_RESULT}" = "no"], [
 
 					ATHEME_CC_TEST_CFLAGS([-fstack-protector])
 				])

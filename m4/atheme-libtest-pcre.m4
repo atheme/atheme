@@ -16,7 +16,7 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 
 	LIBS_SAVED="${LIBS}"
 
-	AS_IF([test "x${with_pcre}" != "xno"], [
+	AS_IF([test "${with_pcre}" != "no"], [
 		PKG_CHECK_MODULES([PCRE], [libpcre], [
 			LIBPCRE="Yes"
 			AC_SUBST([PCRE_CFLAGS])
@@ -24,7 +24,7 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 			AC_DEFINE([HAVE_PCRE], [1], [Define to 1 if PCRE is available])
 		], [
 			LIBPCRE="No"
-			AS_IF([test "x${with_pcre}" = "xyes"], [
+			AS_IF([test "${with_pcre}" = "yes"], [
 				AC_MSG_ERROR([--with-pcre was specified but libpcre could not be found])
 			])
 		])
