@@ -8755,6 +8755,7 @@ $as_echo_n "checking if crypt(3) appears to be usable... " >&6; }
 /* end confdefs.h.  */
 
 
+					#include <stddef.h>
 					#include <unistd.h>
 					#ifdef HAVE_CRYPT_H
 					#  include <crypt.h>
@@ -8764,7 +8765,7 @@ int
 main ()
 {
 
-					const char *const result = crypt("test", "test");
+					(void) crypt(NULL, NULL);
 
   ;
   return 0;
