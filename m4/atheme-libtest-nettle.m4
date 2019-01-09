@@ -1,7 +1,6 @@
 AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 
 	LIBNETTLE="No"
-	LIBNETTLE_LIBS=""
 
 	AC_ARG_WITH([nettle],
 		[AS_HELP_STRING([--without-nettle], [Do not attempt to detect nettle (crypto library)])],
@@ -18,7 +17,8 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "x${with_nettle}" != "xno"], [
-		AC_SEARCH_LIBS([nettle_md5_init], [nettle], [
+		PKG_CHECK_MODULES([LIBNETTLE], [nettle], [
+			LIBS="${LIBNETTLE_LIBS} ${LIBS}"
 			LIBNETTLE="Yes"
 			AC_CHECK_HEADERS([nettle/version.h], [], [], [])
 			AC_CHECK_HEADERS([nettle/md5.h nettle/sha1.h nettle/sha2.h nettle/nettle-meta.h], [], [
@@ -54,10 +54,6 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 			]])
 		], [
 			AC_MSG_RESULT([yes])
-			AS_IF([test "x${ac_cv_search_nettle_md5_init}" != "xnone required"], [
-				LIBNETTLE_LIBS="${ac_cv_search_nettle_md5_init}"
-				AC_SUBST([LIBNETTLE_LIBS])
-			])
 			AC_DEFINE([HAVE_LIBNETTLE], [1], [Define to 1 if we have libnettle available])
 		], [
 			AC_MSG_RESULT([no])
