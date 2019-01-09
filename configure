@@ -654,8 +654,9 @@ LIBQRENCODE_LIBS
 LIBQRENCODE_CFLAGS
 PCRE_LIBS
 PCRE_CFLAGS
-LIBCRYPTO_LIBS
 ECDSA_TOOLS_COND_D
+LIBCRYPTO_LIBS
+LIBCRYPTO_CFLAGS
 LIBNETTLE_LIBS
 LIBNETTLE_CFLAGS
 LIBMBEDCRYPTO_LIBS
@@ -838,6 +839,8 @@ LIBIDN_CFLAGS
 LIBIDN_LIBS
 LIBNETTLE_CFLAGS
 LIBNETTLE_LIBS
+LIBCRYPTO_CFLAGS
+LIBCRYPTO_LIBS
 PCRE_CFLAGS
 PCRE_LIBS
 LIBQRENCODE_CFLAGS
@@ -1560,6 +1563,10 @@ Some influential environment variables:
               C compiler flags for LIBNETTLE, overriding pkg-config
   LIBNETTLE_LIBS
               linker flags for LIBNETTLE, overriding pkg-config
+  LIBCRYPTO_CFLAGS
+              C compiler flags for LIBCRYPTO, overriding pkg-config
+  LIBCRYPTO_LIBS
+              linker flags for LIBCRYPTO, overriding pkg-config
   PCRE_CFLAGS C compiler flags for PCRE, overriding pkg-config
   PCRE_LIBS   linker flags for PCRE, overriding pkg-config
   LIBQRENCODE_CFLAGS
@@ -9663,7 +9670,6 @@ fi
 
 
 	LIBCRYPTO="No"
-	LIBCRYPTO_LIBS=""
 	LIBCRYPTO_NAME=""
 
 
@@ -9687,60 +9693,91 @@ fi
 
 	if test "x${with_openssl}" != "xno"; then :
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing EVP_DigestUpdate" >&5
-$as_echo_n "checking for library containing EVP_DigestUpdate... " >&6; }
-if ${ac_cv_search_EVP_DigestUpdate+:} false; then :
-  $as_echo_n "(cached) " >&6
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBCRYPTO" >&5
+$as_echo_n "checking for LIBCRYPTO... " >&6; }
+
+if test -n "$LIBCRYPTO_CFLAGS"; then
+    pkg_cv_LIBCRYPTO_CFLAGS="$LIBCRYPTO_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libcrypto\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libcrypto") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBCRYPTO_CFLAGS=`$PKG_CONFIG --cflags "libcrypto" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
 else
-  ac_func_search_save_LIBS=$LIBS
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$LIBCRYPTO_LIBS"; then
+    pkg_cv_LIBCRYPTO_LIBS="$LIBCRYPTO_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libcrypto\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libcrypto") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBCRYPTO_LIBS=`$PKG_CONFIG --libs "libcrypto" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
 
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char EVP_DigestUpdate ();
-int
-main ()
-{
-return EVP_DigestUpdate ();
-  ;
-  return 0;
-}
-_ACEOF
-for ac_lib in '' crypto; do
-  if test -z "$ac_lib"; then
-    ac_res="none required"
-  else
-    ac_res=-l$ac_lib
-    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
-  fi
-  if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_search_EVP_DigestUpdate=$ac_res
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
 fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext
-  if ${ac_cv_search_EVP_DigestUpdate+:} false; then :
-  break
+        if test $_pkg_short_errors_supported = yes; then
+	        LIBCRYPTO_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libcrypto" 2>&1`
+        else
+	        LIBCRYPTO_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libcrypto" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$LIBCRYPTO_PKG_ERRORS" >&5
+
+
+			LIBCRYPTO="No"
+			if test "x${with_openssl}" = "xyes"; then :
+
+				as_fn_error $? "--with-openssl was specified but libcrypto could not be found" "$LINENO" 5
+
 fi
-done
-if ${ac_cv_search_EVP_DigestUpdate+:} false; then :
+
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+			LIBCRYPTO="No"
+			if test "x${with_openssl}" = "xyes"; then :
+
+				as_fn_error $? "--with-openssl was specified but libcrypto could not be found" "$LINENO" 5
+
+fi
 
 else
-  ac_cv_search_EVP_DigestUpdate=no
-fi
-rm conftest.$ac_ext
-LIBS=$ac_func_search_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_EVP_DigestUpdate" >&5
-$as_echo "$ac_cv_search_EVP_DigestUpdate" >&6; }
-ac_res=$ac_cv_search_EVP_DigestUpdate
-if test "$ac_res" != no; then :
-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+	LIBCRYPTO_CFLAGS=$pkg_cv_LIBCRYPTO_CFLAGS
+	LIBCRYPTO_LIBS=$pkg_cv_LIBCRYPTO_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
 
+			LIBS="${LIBCRYPTO_LIBS} ${LIBS}"
 			LIBCRYPTO="Yes"
 			for ac_header in openssl/ec.h openssl/ecdsa.h
 do :
@@ -9778,17 +9815,7 @@ fi
 done
 
 
-else
-
-			LIBCRYPTO="No"
-			if test "x${with_openssl}" = "xyes"; then :
-
-				as_fn_error $? "--with-openssl was specified but libcrypto could not be found" "$LINENO" 5
-
 fi
-
-fi
-
 
 fi
 
@@ -9870,12 +9897,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 			if test "x${ac_cv_header_openssl_ec_h}x${ac_cv_header_openssl_ecdsa_h}" = "xyesxyes"; then :
 
 				ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
-
-
-fi
-			if test "x${ac_cv_search_EVP_DigestUpdate}" != "xnone required"; then :
-
-				LIBCRYPTO_LIBS="${ac_cv_search_EVP_DigestUpdate}"
 
 
 fi
@@ -10623,7 +10644,7 @@ fi
 
 		DIGEST_FRONTEND_VAL="ATHEME_DIGEST_FRONTEND_OPENSSL"
 		DIGEST_FRONTEND="${LIBCRYPTO_NAME}"
-		DIGEST_API_CFLAGS=""
+		DIGEST_API_CFLAGS="${LIBCRYPTO_CFLAGS}"
 		DIGEST_API_LIBS="${LIBCRYPTO_LIBS}"
 
 fi

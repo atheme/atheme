@@ -1,7 +1,6 @@
 AC_DEFUN([ATHEME_LIBTEST_OPENSSL], [
 
 	LIBCRYPTO="No"
-	LIBCRYPTO_LIBS=""
 	LIBCRYPTO_NAME=""
 
 	AC_ARG_WITH([openssl],
@@ -19,7 +18,8 @@ AC_DEFUN([ATHEME_LIBTEST_OPENSSL], [
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "x${with_openssl}" != "xno"], [
-		AC_SEARCH_LIBS([EVP_DigestUpdate], [crypto], [
+		PKG_CHECK_MODULES([LIBCRYPTO], [libcrypto], [
+			LIBS="${LIBCRYPTO_LIBS} ${LIBS}"
 			LIBCRYPTO="Yes"
 			AC_CHECK_HEADERS([openssl/ec.h openssl/ecdsa.h], [], [], [])
 			AC_CHECK_HEADERS([openssl/evp.h openssl/hmac.h openssl/opensslv.h], [], [
@@ -80,10 +80,6 @@ AC_DEFUN([ATHEME_LIBTEST_OPENSSL], [
 			AS_IF([test "x${ac_cv_header_openssl_ec_h}x${ac_cv_header_openssl_ecdsa_h}" = "xyesxyes"], [
 				ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
 				AC_SUBST([ECDSA_TOOLS_COND_D])
-			])
-			AS_IF([test "x${ac_cv_search_EVP_DigestUpdate}" != "xnone required"], [
-				LIBCRYPTO_LIBS="${ac_cv_search_EVP_DigestUpdate}"
-				AC_SUBST([LIBCRYPTO_LIBS])
 			])
 			AC_DEFINE([HAVE_OPENSSL], [1], [Define to 1 if OpenSSL is available])
 		], [
