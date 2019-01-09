@@ -18,8 +18,8 @@ AC_DEFUN([ATHEME_LIBTEST_LDAP], [
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "${with_ldap}" != "no"], [
-		AC_CHECK_HEADERS([ldap.h], [
-			AC_SEARCH_LIBS([ldap_initialize], [ldap], [
+		AC_SEARCH_LIBS([ldap_initialize], [ldap], [
+			AC_CHECK_HEADERS([ldap.h], [
 				AC_MSG_CHECKING([if libldap appears to be usable])
 				AC_COMPILE_IFELSE([
 					AC_LANG_PROGRAM([[
@@ -49,13 +49,13 @@ AC_DEFUN([ATHEME_LIBTEST_LDAP], [
 			], [
 				LIBLDAP="No"
 				AS_IF([test "${with_ldap}" = "yes"], [
-					AC_MSG_ERROR([--with-ldap was specified but libldap could not be found])
+					AC_MSG_ERROR([--with-ldap was specified but a required header file is missing])
 				])
-			])
+			], [])
 		], [
 			LIBLDAP="No"
 			AS_IF([test "${with_ldap}" = "yes"], [
-				AC_MSG_ERROR([--with-ldap was specified but a required header file is missing])
+				AC_MSG_ERROR([--with-ldap was specified but libldap could not be found])
 			])
 		])
 	])
