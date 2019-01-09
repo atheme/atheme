@@ -8683,18 +8683,6 @@ fi
 
 	if test "${with_crypt}" != "no"; then :
 
-		for ac_header in crypt.h
-do :
-  ac_fn_c_check_header_mongrel "$LINENO" "crypt.h" "ac_cv_header_crypt_h" "$ac_includes_default"
-if test "x$ac_cv_header_crypt_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_CRYPT_H 1
-_ACEOF
-
-fi
-
-done
-
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing crypt" >&5
 $as_echo_n "checking for library containing crypt... " >&6; }
 if ${ac_cv_search_crypt+:} false; then :
@@ -8748,6 +8736,18 @@ $as_echo "$ac_cv_search_crypt" >&6; }
 ac_res=$ac_cv_search_crypt
 if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+
+			for ac_header in crypt.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "crypt.h" "ac_cv_header_crypt_h" "$ac_includes_default"
+if test "x$ac_cv_header_crypt_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_CRYPT_H 1
+_ACEOF
+
+fi
+
+done
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if crypt(3) appears to be usable" >&5
 $as_echo_n "checking if crypt(3) appears to be usable... " >&6; }

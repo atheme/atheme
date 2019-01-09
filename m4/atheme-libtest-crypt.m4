@@ -18,8 +18,8 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPT], [
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "${with_crypt}" != "no"], [
-		AC_CHECK_HEADERS([crypt.h], [], [], [])
 		AC_SEARCH_LIBS([crypt], [crypt], [
+			AC_CHECK_HEADERS([crypt.h], [], [], [])
 			AC_MSG_CHECKING([if crypt(3) appears to be usable])
 			AC_COMPILE_IFELSE([
 				AC_LANG_PROGRAM([[
