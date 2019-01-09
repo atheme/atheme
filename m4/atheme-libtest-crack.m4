@@ -18,15 +18,15 @@ AC_DEFUN([ATHEME_LIBTEST_CRACK], [
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "${with_cracklib}" != "no"], [
-		AC_CHECK_HEADERS([crack.h], [
-			AC_SEARCH_LIBS([FascistCheck], [crack], [
+		AC_SEARCH_LIBS([FascistCheck], [crack], [
+			AC_CHECK_HEADERS([crack.h], [
 				AC_MSG_CHECKING([if cracklib appears to be usable])
 				AC_COMPILE_IFELSE([
 					AC_LANG_PROGRAM([[
-						#include <stddef.h> /* <crack.h> uses size_t but doesn't define it */
+						#include <stddef.h>
 						#include <crack.h>
 					]], [[
-						const char *const result = FascistCheck("test", "test");
+						(void) FascistCheck(NULL, NULL);
 					]])
 				], [
 					AC_MSG_RESULT([yes])
@@ -46,13 +46,13 @@ AC_DEFUN([ATHEME_LIBTEST_CRACK], [
 			], [
 				LIBCRACK="No"
 				AS_IF([test "${with_cracklib}" = "yes"], [
-					AC_MSG_ERROR([--with-cracklib was specified but cracklib could not be found])
+					AC_MSG_ERROR([--with-cracklib was specified but a required header file is missing])
 				])
 			], [])
 		], [
 			LIBCRACK="No"
 			AS_IF([test "${with_cracklib}" = "yes"], [
-				AC_MSG_ERROR([--with-cracklib was specified but a required header file is missing])
+				AC_MSG_ERROR([--with-cracklib was specified but cracklib could not be found])
 			])
 		])
 	])
