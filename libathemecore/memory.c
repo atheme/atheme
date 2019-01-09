@@ -171,11 +171,11 @@ smemzero(void *const restrict p, const size_t n)
 	(void) explicit_bzero(p, n);
 
 #  else /* HAVE_EXPLICIT_BZERO */
-#    ifdef HAVE_LIBSODIUM
+#    ifdef HAVE_LIBSODIUM_MEMZERO
 
 	(void) sodium_memzero(p, n);
 
-#    else /* HAVE_LIBSODIUM */
+#    else /* HAVE_LIBSODIUM_MEMZERO */
 
 	/* We don't have memset_s(3) [ISO 9899:2011], explicit_bzero(3) [OpenBSD], or sodium_memzero(3) [libsodium].
 	 *
@@ -197,7 +197,7 @@ smemzero(void *const restrict p, const size_t n)
 
 	(void) volatile_memset(p, 0x00, n);
 
-#    endif /* !HAVE_LIBSODIUM */
+#    endif /* !HAVE_LIBSODIUM_MEMZERO */
 #  endif /* !HAVE_EXPLICIT_BZERO */
 #endif /* !HAVE_MEMSET_S */
 }

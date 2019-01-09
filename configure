@@ -647,6 +647,7 @@ PERL_CFLAGS
 PERL_COND_D
 perlpath
 LIBSODIUM_LIBS
+LIBSODIUM_CFLAGS
 QRCODE_COND_C
 LIBQRENCODE_LIBS
 LIBQRENCODE_CFLAGS
@@ -834,6 +835,8 @@ PCRE_CFLAGS
 PCRE_LIBS
 LIBQRENCODE_CFLAGS
 LIBQRENCODE_LIBS
+LIBSODIUM_CFLAGS
+LIBSODIUM_LIBS
 MOWGLI_CFLAGS
 MOWGLI_LIBS'
 
@@ -1549,6 +1552,10 @@ Some influential environment variables:
               C compiler flags for LIBQRENCODE, overriding pkg-config
   LIBQRENCODE_LIBS
               linker flags for LIBQRENCODE, overriding pkg-config
+  LIBSODIUM_CFLAGS
+              C compiler flags for LIBSODIUM, overriding pkg-config
+  LIBSODIUM_LIBS
+              linker flags for LIBSODIUM, overriding pkg-config
   MOWGLI_CFLAGS
               C compiler flags for MOWGLI, overriding pkg-config
   MOWGLI_LIBS linker flags for MOWGLI, overriding pkg-config
@@ -10161,8 +10168,8 @@ fi
 
 
 	LIBSODIUM="No"
-
-	LIBSODIUM_LIBS=""
+	LIBSODIUMMEMORY="No"
+	LIBSODIUMMEMZERO="No"
 
 
 # Check whether --with-sodium was given.
@@ -10181,82 +10188,97 @@ fi
 			;;
 	esac
 
+	LIBS_SAVED="${LIBS}"
+
 	if test "x${with_sodium}" != "xno"; then :
 
-		LIBS_SAVED="${LIBS}"
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing sodium_memzero" >&5
-$as_echo_n "checking for library containing sodium_memzero... " >&6; }
-if ${ac_cv_search_sodium_memzero+:} false; then :
-  $as_echo_n "(cached) " >&6
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBSODIUM" >&5
+$as_echo_n "checking for LIBSODIUM... " >&6; }
+
+if test -n "$LIBSODIUM_CFLAGS"; then
+    pkg_cv_LIBSODIUM_CFLAGS="$LIBSODIUM_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libsodium\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libsodium") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBSODIUM_CFLAGS=`$PKG_CONFIG --cflags "libsodium" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
 else
-  ac_func_search_save_LIBS=$LIBS
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char sodium_memzero ();
-int
-main ()
-{
-return sodium_memzero ();
-  ;
-  return 0;
-}
-_ACEOF
-for ac_lib in '' sodium; do
-  if test -z "$ac_lib"; then
-    ac_res="none required"
-  else
-    ac_res=-l$ac_lib
-    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
-  fi
-  if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_search_sodium_memzero=$ac_res
+  pkg_failed=yes
 fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext
-  if ${ac_cv_search_sodium_memzero+:} false; then :
-  break
+ else
+    pkg_failed=untried
 fi
-done
-if ${ac_cv_search_sodium_memzero+:} false; then :
-
+if test -n "$LIBSODIUM_LIBS"; then
+    pkg_cv_LIBSODIUM_LIBS="$LIBSODIUM_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libsodium\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libsodium") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBSODIUM_LIBS=`$PKG_CONFIG --libs "libsodium" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
 else
-  ac_cv_search_sodium_memzero=no
+  pkg_failed=yes
 fi
-rm conftest.$ac_ext
-LIBS=$ac_func_search_save_LIBS
+ else
+    pkg_failed=untried
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_sodium_memzero" >&5
-$as_echo "$ac_cv_search_sodium_memzero" >&6; }
-ac_res=$ac_cv_search_sodium_memzero
-if test "$ac_res" != no; then :
-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-  LIBSODIUM="Yes"
-else
 
-			if test "x${with_sodium}" != "xauto"; then :
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        LIBSODIUM_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libsodium" 2>&1`
+        else
+	        LIBSODIUM_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libsodium" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$LIBSODIUM_PKG_ERRORS" >&5
+
+
+			LIBSODIUM="No"
+			if test "x${with_sodium}" = "xyes"; then :
 
 				as_fn_error $? "--with-sodium was specified but libsodium could not be found" "$LINENO" 5
 
 fi
 
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+			LIBSODIUM="No"
+			if test "x${with_sodium}" = "xyes"; then :
+
+				as_fn_error $? "--with-sodium was specified but libsodium could not be found" "$LINENO" 5
+
 fi
 
+else
+	LIBSODIUM_CFLAGS=$pkg_cv_LIBSODIUM_CFLAGS
+	LIBSODIUM_LIBS=$pkg_cv_LIBSODIUM_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
 
-		LIBS="${LIBS_SAVED}"
-
-fi
-
-	if test "x${LIBSODIUM}" = "xYes"; then :
-
-		for ac_header in sodium/core.h sodium/utils.h
+			LIBS="${LIBSODIUM_LIBS} ${LIBS}"
+			LIBSODIUM="Yes"
+			for ac_header in sodium/core.h sodium/utils.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
 ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
@@ -10267,9 +10289,11 @@ _ACEOF
 
 else
 
-			LIBSODIUM="No"
-			if test "x${with_sodium}" = "xyes"; then :
-  as_fn_error $? "required header file missing" "$LINENO" 5
+				LIBSODIUM="No"
+				if test "x${with_sodium}" = "xyes"; then :
+
+					as_fn_error $? "--with-sodium was specified but a required header file is missing" "$LINENO" 5
+
 fi
 
 fi
@@ -10279,19 +10303,156 @@ done
 
 fi
 
+fi
+
 	if test "x${LIBSODIUM}" = "xYes"; then :
 
-		if test "x${ac_cv_search_sodium_memzero}" != "xnone required"; then :
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libsodium is usable as a whole" >&5
+$as_echo_n "checking if libsodium is usable as a whole... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
 
-			LIBSODIUM_LIBS="${ac_cv_search_sodium_memzero}"
+
+				#include <sodium/core.h>
+
+int
+main ()
+{
+
+				(void) sodium_init();
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+			LIBSODIUM="No"
+			if test "x${with_sodium}" = "xyes"; then :
+
+				as_fn_error $? "--with-sodium was specified but libsodium appears to be unusable" "$LINENO" 5
 
 fi
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+
+	if test "x${LIBSODIUM}" = "xYes"; then :
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libsodium has usable memory manipulation functions" >&5
+$as_echo_n "checking if libsodium has usable memory manipulation functions... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#include <stddef.h>
+				#include <sodium/core.h>
+				#include <sodium/utils.h>
+
+int
+main ()
+{
+
+				(void) sodium_malloc(0);
+				(void) sodium_mlock(NULL, 0);
+				(void) sodium_mprotect_noaccess(NULL);
+				(void) sodium_mprotect_readonly(NULL);
+				(void) sodium_mprotect_readwrite(NULL);
+				(void) sodium_munlock(NULL, 0);
+				(void) sodium_free(NULL);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+			LIBSODIUMMEMORY="Yes"
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+			LIBSODIUMMEMORY="No"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libsodium has a usable memory zeroing function" >&5
+$as_echo_n "checking if libsodium has a usable memory zeroing function... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#include <stddef.h>
+				#include <sodium/core.h>
+				#include <sodium/utils.h>
+
+int
+main ()
+{
+
+				(void) sodium_memzero(NULL, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+			LIBSODIUMMEMZERO="Yes"
+
+$as_echo "#define HAVE_LIBSODIUM_MEMZERO 1" >>confdefs.h
+
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+			LIBSODIUMMEMZERO="No"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+		if test "x${LIBSODIUMMEMORY}x${LIBSODIUMMEMZERO}" = "xNoxNo"; then :
+
+			LIBSODIUM="No"
+			if test "x${with_sodium}" = "xyes"; then :
+
+				as_fn_error $? "--with-sodium was specified but libsodium appears to be unusable" "$LINENO" 5
+
+fi
+
+else
+
 
 $as_echo "#define HAVE_LIBSODIUM 1" >>confdefs.h
 
 
+fi
 
 fi
+
+	LIBS="${LIBS_SAVED}"
 
 
 
@@ -10704,9 +10865,9 @@ fi
 
 	case "${enable_sodium_malloc}" in
 		yes)
-			if test "x${LIBSODIUM}" != "xYes"; then :
+			if test "x${LIBSODIUMMEMORY}" = "xNo"; then :
 
-				as_fn_error $? "--enable-sodium-malloc requires --with-sodium" "$LINENO" 5
+				as_fn_error $? "--enable-sodium-malloc requires usable libsodium memory manipulation functions" "$LINENO" 5
 
 fi
 

@@ -21,6 +21,10 @@
 #include "atheme.h"
 #include "libathemecore.h"
 
+#ifdef HAVE_LIBSODIUM
+#  include <sodium/core.h>
+#endif /* HAVE_LIBSODIUM */
+
 static unsigned int
 verify_entity_uids(void)
 {
@@ -111,6 +115,14 @@ handle_mdep(struct database_handle *db, const char *type)
 int
 main(int argc, char *argv[])
 {
+#ifdef HAVE_LIBSODIUM
+	if (sodium_init() == -1)
+	{
+		(void) fprintf(stderr, "Error: sodium_init() failed!\n");
+		return EXIT_FAILURE;
+	}
+#endif /* HAVE_LIBSODIUM */
+
 	atheme_bootstrap();
 	atheme_init(argv[0], LOGDIR "/dbverify.log");
 	atheme_setup();

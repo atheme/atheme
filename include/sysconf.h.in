@@ -134,6 +134,9 @@
 /* Define to 1 if libsodium is available */
 #undef HAVE_LIBSODIUM
 
+/* libsodium memzero is available */
+#undef HAVE_LIBSODIUM_MEMZERO
+
 /* Define to 1 if you have the <link.h> header file. */
 #undef HAVE_LINK_H
 

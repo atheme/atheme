@@ -11,10 +11,10 @@
 #include "attrs.h"
 #include "sysconf.h"
 
-#if !defined(HAVE_MEMSET_S) && !defined(HAVE_EXPLICIT_BZERO) && !defined(HAVE_LIBSODIUM)
-// atheme.c
+#if !defined(HAVE_MEMSET_S) && !defined(HAVE_EXPLICIT_BZERO) && !defined(HAVE_LIBSODIUM_MEMZERO)
+// This symbol is located in libathemecore/atheme.c
 extern void *(* volatile volatile_memset)(void *, int, size_t);
-#endif /* !HAVE_MEMSET_S && !HAVE_EXPLICIT_BZERO && !HAVE_LIBSODIUM */
+#endif /* !HAVE_MEMSET_S && !HAVE_EXPLICIT_BZERO && !HAVE_LIBSODIUM_MEMZERO */
 
 void smemzero(void *p, size_t n);
 void sfree(void *ptr);
