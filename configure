@@ -9074,6 +9074,9 @@ fi
 
 fi
 
+
+
+
 	LIBS="${LIBS_SAVED}"
 
 
@@ -9268,6 +9271,9 @@ fi
 		LIBIDN_LIBS=""
 
 fi
+
+
+
 
 	LIBS="${LIBS_SAVED}"
 
@@ -9939,6 +9945,9 @@ fi
 
 fi
 
+
+
+
 	LIBS="${LIBS_SAVED}"
 
 
@@ -10052,8 +10061,6 @@ $as_echo "yes" >&6; }
 
 			LIBPCRE="Yes"
 
-
-
 $as_echo "#define HAVE_PCRE 1" >>confdefs.h
 
 
@@ -10067,6 +10074,9 @@ fi
 		PCRE_LIBS=""
 
 fi
+
+
+
 
 	LIBS="${LIBS_SAVED}"
 
@@ -10260,6 +10270,9 @@ fi
 		LIBQRENCODE_LIBS=""
 
 fi
+
+
+
 
 	LIBS="${LIBS_SAVED}"
 
@@ -10610,6 +10623,9 @@ fi
 		LIBSODIUM_LIBS=""
 
 fi
+
+
+
 
 	LIBS="${LIBS_SAVED}"
 
