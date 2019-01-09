@@ -47,86 +47,84 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 			]])
 		], [
 			AC_MSG_RESULT([yes])
-		], [
-			AC_MSG_RESULT([no])
-			LIBSODIUM="No"
-			AS_IF([test "${with_sodium}" = "yes"], [
-				AC_MSG_ERROR([--with-sodium was specified but libsodium appears to be unusable])
-			])
-		])
-	])
 
-	AS_IF([test "${LIBSODIUM}" = "Yes"], [
-		AC_MSG_CHECKING([if libsodium has usable memory manipulation functions])
-		AC_LINK_IFELSE([
-			AC_LANG_PROGRAM([[
-				#include <stddef.h>
-				#include <sodium/core.h>
-				#include <sodium/utils.h>
-			]], [[
-				(void) sodium_malloc(0);
-				(void) sodium_mlock(NULL, 0);
-				(void) sodium_mprotect_noaccess(NULL);
-				(void) sodium_mprotect_readonly(NULL);
-				(void) sodium_mprotect_readwrite(NULL);
-				(void) sodium_munlock(NULL, 0);
-				(void) sodium_free(NULL);
-			]])
-		], [
-			AC_MSG_RESULT([yes])
-			LIBSODIUMMEMORY="Yes"
-		], [
-			AC_MSG_RESULT([no])
-			LIBSODIUMMEMORY="No"
-		])
-
-		AC_MSG_CHECKING([if libsodium has a usable memory zeroing function])
-		AC_LINK_IFELSE([
-			AC_LANG_PROGRAM([[
-				#include <stddef.h>
-				#include <sodium/core.h>
-				#include <sodium/utils.h>
-			]], [[
-				(void) sodium_memzero(NULL, 0);
-			]])
-		], [
-			AC_MSG_RESULT([yes])
-			LIBSODIUMMEMZERO="Yes"
-			AC_DEFINE([HAVE_LIBSODIUM_MEMZERO], [1], [libsodium memzero is available])
-		], [
-			AC_MSG_RESULT([no])
-			LIBSODIUMMEMZERO="No"
-		])
-
-		AC_CHECK_HEADERS([sodium/randombytes.h], [
-			AC_MSG_CHECKING([if libsodium has a usable random number generator])
+			AC_MSG_CHECKING([if libsodium has usable memory manipulation functions])
 			AC_LINK_IFELSE([
 				AC_LANG_PROGRAM([[
 					#include <stddef.h>
 					#include <sodium/core.h>
 					#include <sodium/utils.h>
-					#include <sodium/randombytes.h>
 				]], [[
-					(void) randombytes_random();
-					(void) randombytes_uniform(0);
-					(void) randombytes_buf(NULL, 0);
+					(void) sodium_malloc(0);
+					(void) sodium_mlock(NULL, 0);
+					(void) sodium_mprotect_noaccess(NULL);
+					(void) sodium_mprotect_readonly(NULL);
+					(void) sodium_mprotect_readwrite(NULL);
+					(void) sodium_munlock(NULL, 0);
+					(void) sodium_free(NULL);
 				]])
 			], [
 				AC_MSG_RESULT([yes])
-				LIBSODIUMRNG="Yes"
+				LIBSODIUMMEMORY="Yes"
 			], [
 				AC_MSG_RESULT([no])
-				LIBSODIUMRNG="No"
+				LIBSODIUMMEMORY="No"
 			])
-		], [], [])
 
-		AS_IF([test "${LIBSODIUMMEMORY}${LIBSODIUMMEMZERO}${LIBSODIUMRNG}" = "NoNoNo"], [
+			AC_MSG_CHECKING([if libsodium has a usable memory zeroing function])
+			AC_LINK_IFELSE([
+				AC_LANG_PROGRAM([[
+					#include <stddef.h>
+					#include <sodium/core.h>
+					#include <sodium/utils.h>
+				]], [[
+					(void) sodium_memzero(NULL, 0);
+				]])
+			], [
+				AC_MSG_RESULT([yes])
+				LIBSODIUMMEMZERO="Yes"
+				AC_DEFINE([HAVE_LIBSODIUM_MEMZERO], [1], [libsodium memzero is available])
+			], [
+				AC_MSG_RESULT([no])
+				LIBSODIUMMEMZERO="No"
+			])
+
+			AC_CHECK_HEADERS([sodium/randombytes.h], [
+				AC_MSG_CHECKING([if libsodium has a usable random number generator])
+				AC_LINK_IFELSE([
+					AC_LANG_PROGRAM([[
+						#include <stddef.h>
+						#include <sodium/core.h>
+						#include <sodium/utils.h>
+						#include <sodium/randombytes.h>
+					]], [[
+						(void) randombytes_random();
+						(void) randombytes_uniform(0);
+						(void) randombytes_buf(NULL, 0);
+					]])
+				], [
+					AC_MSG_RESULT([yes])
+					LIBSODIUMRNG="Yes"
+				], [
+					AC_MSG_RESULT([no])
+					LIBSODIUMRNG="No"
+				])
+			], [], [])
+
+			AS_IF([test "${LIBSODIUMMEMORY}${LIBSODIUMMEMZERO}${LIBSODIUMRNG}" = "NoNoNo"], [
+				LIBSODIUM="No"
+				AS_IF([test "${with_sodium}" = "yes"], [
+					AC_MSG_ERROR([--with-sodium was specified but libsodium appears to be unusable])
+				])
+			], [
+				AC_DEFINE([HAVE_LIBSODIUM], [1], [Define to 1 if libsodium is available])
+			])
+		], [
+			AC_MSG_RESULT([no])
 			LIBSODIUM="No"
 			AS_IF([test "${with_sodium}" = "yes"], [
 				AC_MSG_ERROR([--with-sodium was specified but libsodium appears to be unusable])
 			])
-		], [
-			AC_DEFINE([HAVE_LIBSODIUM], [1], [Define to 1 if libsodium is available])
 		])
 	])
 
