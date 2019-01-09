@@ -117,13 +117,16 @@ void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char
 
 		*accessbuf = '\0';
 
-		if (c->access && (!cmdaccess || strcmp(c->access, cmdaccess)))
-		{
+		if (c->access)
 			mowgli_strlcat(accessbuf, c->access, BUFSIZE);
-			mowgli_strlcat(accessbuf, " ", BUFSIZE);
-		}
 
-		mowgli_strlcat(accessbuf, cmdaccess, BUFSIZE);
+		if (c->access && cmdaccess && strcmp(c->access, cmdaccess))
+		{
+			mowgli_strlcat(accessbuf, " ", BUFSIZE);
+			mowgli_strlcat(accessbuf, cmdaccess, BUFSIZE);
+		}
+		else if (! c->access)
+			mowgli_strlcat(accessbuf, cmdaccess, BUFSIZE);
 
 		command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, accessbuf);
 	}
