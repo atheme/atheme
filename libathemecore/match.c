@@ -24,7 +24,7 @@
 #include "atheme.h"
 
 #include <regex.h>
-#ifdef HAVE_PCRE
+#ifdef HAVE_LIBPCRE
 #include <pcre.h>
 #endif
 
@@ -608,7 +608,7 @@ regex_create(char *pattern, int flags)
 
 	if (flags & AREGEX_PCRE)
 	{
-#ifdef HAVE_PCRE
+#ifdef HAVE_LIBPCRE
 		const char *errptr;
 		int erroffset;
 
@@ -704,7 +704,7 @@ regex_match(struct atheme_regex *preg, char *string)
 		case at_posix:
 			return regexec(&preg->un.posix, string, 0, NULL, 0) == 0;
 		case at_pcre:
-#ifdef HAVE_PCRE
+#ifdef HAVE_LIBPCRE
 			return pcre_exec(preg->un.pcre, NULL, string, strlen(string), 0, 0, NULL, 0) >= 0;
 #else
 			slog(LG_ERROR, "regex_match(): we were given a PCRE pattern without PCRE support!");
@@ -726,7 +726,7 @@ regex_destroy(struct atheme_regex *preg)
 			regfree(&preg->un.posix);
 			break;
 		case at_pcre:
-#ifdef HAVE_PCRE
+#ifdef HAVE_LIBPCRE
 			pcre_free(preg->un.pcre);
 			break;
 #else

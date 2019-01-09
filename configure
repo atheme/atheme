@@ -654,8 +654,8 @@ LIBSODIUM_CFLAGS
 QRCODE_COND_C
 LIBQRENCODE_LIBS
 LIBQRENCODE_CFLAGS
-PCRE_LIBS
-PCRE_CFLAGS
+LIBPCRE_LIBS
+LIBPCRE_CFLAGS
 LIBNETTLE_LIBS
 LIBNETTLE_CFLAGS
 LIBMBEDCRYPTO_LIBS
@@ -842,8 +842,8 @@ LIBIDN_CFLAGS
 LIBIDN_LIBS
 LIBNETTLE_CFLAGS
 LIBNETTLE_LIBS
-PCRE_CFLAGS
-PCRE_LIBS
+LIBPCRE_CFLAGS
+LIBPCRE_LIBS
 LIBQRENCODE_CFLAGS
 LIBQRENCODE_LIBS
 LIBSODIUM_CFLAGS
@@ -1568,8 +1568,10 @@ Some influential environment variables:
               C compiler flags for LIBNETTLE, overriding pkg-config
   LIBNETTLE_LIBS
               linker flags for LIBNETTLE, overriding pkg-config
-  PCRE_CFLAGS C compiler flags for PCRE, overriding pkg-config
-  PCRE_LIBS   linker flags for PCRE, overriding pkg-config
+  LIBPCRE_CFLAGS
+              C compiler flags for LIBPCRE, overriding pkg-config
+  LIBPCRE_LIBS
+              linker flags for LIBPCRE, overriding pkg-config
   LIBQRENCODE_CFLAGS
               C compiler flags for LIBQRENCODE, overriding pkg-config
   LIBQRENCODE_LIBS
@@ -9977,11 +9979,11 @@ fi
 
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for PCRE" >&5
-$as_echo_n "checking for PCRE... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBPCRE" >&5
+$as_echo_n "checking for LIBPCRE... " >&6; }
 
-if test -n "$PCRE_CFLAGS"; then
-    pkg_cv_PCRE_CFLAGS="$PCRE_CFLAGS"
+if test -n "$LIBPCRE_CFLAGS"; then
+    pkg_cv_LIBPCRE_CFLAGS="$LIBPCRE_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre\""; } >&5
@@ -9989,7 +9991,7 @@ if test -n "$PCRE_CFLAGS"; then
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_PCRE_CFLAGS=`$PKG_CONFIG --cflags "libpcre" 2>/dev/null`
+  pkg_cv_LIBPCRE_CFLAGS=`$PKG_CONFIG --cflags "libpcre" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -9997,8 +9999,8 @@ fi
  else
     pkg_failed=untried
 fi
-if test -n "$PCRE_LIBS"; then
-    pkg_cv_PCRE_LIBS="$PCRE_LIBS"
+if test -n "$LIBPCRE_LIBS"; then
+    pkg_cv_LIBPCRE_LIBS="$LIBPCRE_LIBS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre\""; } >&5
@@ -10006,7 +10008,7 @@ if test -n "$PCRE_LIBS"; then
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_PCRE_LIBS=`$PKG_CONFIG --libs "libpcre" 2>/dev/null`
+  pkg_cv_LIBPCRE_LIBS=`$PKG_CONFIG --libs "libpcre" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -10027,12 +10029,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        PCRE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libpcre" 2>&1`
+	        LIBPCRE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libpcre" 2>&1`
         else
-	        PCRE_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libpcre" 2>&1`
+	        LIBPCRE_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libpcre" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
-	echo "$PCRE_PKG_ERRORS" >&5
+	echo "$LIBPCRE_PKG_ERRORS" >&5
 
 
 			LIBPCRE="No"
@@ -10054,14 +10056,14 @@ $as_echo "no" >&6; }
 fi
 
 else
-	PCRE_CFLAGS=$pkg_cv_PCRE_CFLAGS
-	PCRE_LIBS=$pkg_cv_PCRE_LIBS
+	LIBPCRE_CFLAGS=$pkg_cv_LIBPCRE_CFLAGS
+	LIBPCRE_LIBS=$pkg_cv_LIBPCRE_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
 			LIBPCRE="Yes"
 
-$as_echo "#define HAVE_PCRE 1" >>confdefs.h
+$as_echo "#define HAVE_LIBPCRE 1" >>confdefs.h
 
 
 fi
@@ -10070,8 +10072,8 @@ fi
 
 	if test "${LIBPCRE}" = "No"; then :
 
-		PCRE_CFLAGS=""
-		PCRE_LIBS=""
+		LIBPCRE_CFLAGS=""
+		LIBPCRE_LIBS=""
 
 fi
 

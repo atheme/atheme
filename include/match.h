@@ -13,7 +13,7 @@
 
 #include <regex.h>
 
-#ifdef HAVE_PCRE
+#ifdef HAVE_LIBPCRE
 #include <pcre.h>
 #endif
 
@@ -28,7 +28,7 @@ struct atheme_regex
 	enum atheme_regex_type  type;
 	union {
 		regex_t         posix;
-#ifdef HAVE_PCRE
+#ifdef HAVE_LIBPCRE
 		pcre *          pcre;
 #endif
 	} un;

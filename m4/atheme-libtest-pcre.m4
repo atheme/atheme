@@ -17,9 +17,9 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "${with_pcre}" != "no"], [
-		PKG_CHECK_MODULES([PCRE], [libpcre], [
+		PKG_CHECK_MODULES([LIBPCRE], [libpcre], [
 			LIBPCRE="Yes"
-			AC_DEFINE([HAVE_PCRE], [1], [Define to 1 if PCRE is available])
+			AC_DEFINE([HAVE_LIBPCRE], [1], [Define to 1 if PCRE is available])
 		], [
 			LIBPCRE="No"
 			AS_IF([test "${with_pcre}" = "yes"], [
@@ -29,12 +29,12 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 	])
 
 	AS_IF([test "${LIBPCRE}" = "No"], [
-		PCRE_CFLAGS=""
-		PCRE_LIBS=""
+		LIBPCRE_CFLAGS=""
+		LIBPCRE_LIBS=""
 	])
 
-	AC_SUBST([PCRE_CFLAGS])
-	AC_SUBST([PCRE_LIBS])
+	AC_SUBST([LIBPCRE_CFLAGS])
+	AC_SUBST([LIBPCRE_LIBS])
 
 	LIBS="${LIBS_SAVED}"
 ])
