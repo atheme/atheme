@@ -7,8 +7,8 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
 		[AS_HELP_STRING([--without-qrencode], [Do not attempt to detect libqrencode for generating QR codes])],
 		[], [with_qrencode="auto"])
 
-	case "${with_qrencode}" in
-		no | yes | auto)
+	case "x${with_qrencode}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			AC_MSG_ERROR([invalid option for --with-qrencode])

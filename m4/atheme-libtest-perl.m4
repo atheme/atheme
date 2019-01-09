@@ -6,11 +6,11 @@ AC_DEFUN([ATHEME_LIBTEST_PERL], [
 	PERL_COND_D=""
 
 	AC_ARG_WITH([perl],
-	        [AS_HELP_STRING([--with-perl], [Enable Perl for modules/scripting/perl])],
+	        [AS_HELP_STRING([--with-perl], [Enable Perl (for modules/scripting/perl)])],
 	        [], [with_perl="no"])
 
-	case "${with_perl}" in
-		no | yes | auto)
+	case "x${with_perl}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			AC_MSG_ERROR([invalid option for --with-perl])

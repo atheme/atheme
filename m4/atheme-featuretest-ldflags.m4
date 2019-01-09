@@ -52,66 +52,66 @@ AC_DEFUN([ATHEME_FEATURETEST_LDFLAGS], [
 		[AS_HELP_STRING([--disable-rpath], [Disable -Wl,-rpath= (builds installation path into binaries)])],
 		[], [enable_rpath="yes"])
 
-	case "${enable_profile}" in
-		yes)
+	case "x${enable_profile}" in
+		xyes)
 			ATHEME_LD_TEST_LDFLAGS([-pg])
 			;;
-		no)
+		xno)
 			;;
 		*)
 			AC_MSG_ERROR([invalid option for --enable-profile])
 			;;
 	esac
 
-	case "${enable_relro}" in
-		yes)
+	case "x${enable_relro}" in
+		xyes)
 			ATHEME_LD_TEST_LDFLAGS([-Wl,-z,relro])
 			;;
-		no)
+		xno)
 			;;
 		*)
 			AC_MSG_ERROR([invalid option for --enable-relro])
 			;;
 	esac
 
-	case "${enable_nonlazy_bind}" in
-		yes)
+	case "x${enable_nonlazy_bind}" in
+		xyes)
 			ATHEME_LD_TEST_LDFLAGS([-Wl,-z,now])
 			;;
-		no)
+		xno)
 			;;
 		*)
 			AC_MSG_ERROR([invalid option for --enable-nonlazy-bind])
 			;;
 	esac
 
-	case "${enable_linker_defs}" in
-		yes)
+	case "x${enable_linker_defs}" in
+		xyes)
 			ATHEME_LD_TEST_LDFLAGS([-Wl,-z,defs])
 			;;
-		no)
+		xno)
 			;;
 		*)
 			AC_MSG_ERROR([invalid option for --enable-linker-defs])
 			;;
 	esac
 
-	case "${enable_as_needed}" in
-		yes)
+	case "x${enable_as_needed}" in
+		xyes)
 			ATHEME_LD_TEST_LDFLAGS([-Wl,--as-needed])
 			;;
-		no)
+		xno)
 			;;
 		*)
 			AC_MSG_ERROR([invalid option for --enable-as-needed])
 			;;
 	esac
 
-	case "${enable_rpath}" in
-		yes)
+	case "x${enable_rpath}" in
+		xyes)
 			ATHEME_LD_TEST_LDFLAGS(${LDFLAGS_RPATH})
 			;;
-		no)
+		xno)
 			;;
 		*)
 			AC_MSG_ERROR([invalid option for --enable-rpath])

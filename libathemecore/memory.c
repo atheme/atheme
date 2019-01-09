@@ -19,15 +19,13 @@
 #  include <sodium/utils.h>
 #endif /* HAVE_LIBSODIUM */
 
-#ifndef USE_LIBSODIUM_ALLOCATOR
+#ifndef SIGUSR1
+#  define RAISE_EXCEPTION       abort()
+#else /* !SIGUSR1 */
+#  define RAISE_EXCEPTION       do { raise(SIGUSR1); abort(); } while (0)
+#endif /* SIGUSR1 */
 
-#  ifndef SIGUSR1
-#    define RAISE_EXCEPTION     abort()
-#  else /* !SIGUSR1 */
-#    define RAISE_EXCEPTION     do { raise(SIGUSR1); abort(); } while (0)
-#  endif /* SIGUSR1 */
-
-#else /* !USE_LIBSODIUM_ALLOCATOR */
+#ifdef USE_LIBSODIUM_ALLOCATOR
 
 struct sodium_memblock
 {
@@ -147,25 +145,25 @@ free_sodium_memblock(struct sodium_memblock *const restrict mptr)
 #endif /* USE_LIBSODIUM_ALLOCATOR */
 
 void
-smemzero(void *const restrict p, const size_t n)
+smemzero(void *const restrict ptr, const size_t len)
 {
-	if (! (p && n))
+	if (! (ptr && len))
 		return;
 
 #ifdef HAVE_MEMSET_S
 
-	if (memset_s(p, n, 0x00, n) != 0)
+	if (memset_s(ptr, len, 0x00, len) != 0)
 		RAISE_EXECEPTION;
 
 #else /* HAVE_MEMSET_S */
 #  ifdef HAVE_EXPLICIT_BZERO
 
-	(void) explicit_bzero(p, n);
+	(void) explicit_bzero(ptr, len);
 
 #  else /* HAVE_EXPLICIT_BZERO */
 #    ifdef HAVE_LIBSODIUM_MEMZERO
 
-	(void) sodium_memzero(p, n);
+	(void) sodium_memzero(ptr, len);
 
 #    else /* HAVE_LIBSODIUM_MEMZERO */
 
@@ -187,7 +185,7 @@ smemzero(void *const restrict p, const size_t n)
 	 * Clang <= 7.0 with/without Thin LTO does not remove any calls; other compilers & situations are untested.
 	 */
 
-	(void) volatile_memset(p, 0x00, n);
+	(void) volatile_memset(ptr, 0x00, len);
 
 #    endif /* !HAVE_LIBSODIUM_MEMZERO */
 #  endif /* !HAVE_EXPLICIT_BZERO */
@@ -271,14 +269,6 @@ scalloc(const size_t num, const size_t len)
 void * ATHEME_FATTR_ALLOC_SIZE(1) ATHEME_FATTR_MALLOC ATHEME_FATTR_RETURNS_NONNULL
 smalloc(const size_t len)
 {
-#ifdef USE_LIBSODIUM_ALLOCATOR
-
-	if (! len)
-		/* malloc(x) for x==0 should return NULL but that would break us */
-		abort();
-
-#endif /* USE_LIBSODIUM_ALLOCATOR */
-
 	return scalloc(1, len);
 }
 
@@ -345,19 +335,24 @@ sstrdup(const char *const restrict ptr)
 	const size_t len = strlen(ptr);
 	char *const buf = smalloc(len + 1);
 
-	(void) memcpy(buf, ptr, len);
+	if (len)
+		(void) memcpy(buf, ptr, len);
+
 	return buf;
 }
 
 /* does strndup()'s job, only with the above memory functions */
 char * ATHEME_FATTR_MALLOC
-sstrndup(const char *const restrict ptr, const size_t len)
+sstrndup(const char *const restrict ptr, const size_t maxlen)
 {
 	if (! ptr)
 		return NULL;
 
+	const size_t len = strnlen(ptr, maxlen);
 	char *const buf = smalloc(len + 1);
 
-	(void) mowgli_strlcpy(buf, ptr, len + 1);
+	if (len)
+		(void) memcpy(buf, ptr, len);
+
 	return buf;
 }

@@ -8,8 +8,8 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDCRYPTO], [
 		[AS_HELP_STRING([--without-mbedtls], [Do not attempt to detect ARM mbedTLS])],
 		[], [with_mbedtls="auto"])
 
-	case "${with_mbedtls}" in
-		no | yes | auto)
+	case "x${with_mbedtls}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			AC_MSG_ERROR([invalid option for --with-mbedtls])

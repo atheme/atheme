@@ -37,11 +37,11 @@ AC_DEFUN([ATHEME_FEATURETEST_CPPFLAGS], [
 		[AS_HELP_STRING([--disable-fortify-source], [Disable -D_FORTIFY_SOURCE=2 (hardening for many C library function invocations)])],
 		[], [enable_fortify_source="yes"])
 
-	case "${enable_fortify_source}" in
-		yes)
+	case "x${enable_fortify_source}" in
+		xyes)
 			ATHEME_CPP_TEST_CPPFLAGS([-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2])
 			;;
-		no)
+		xno)
 			;;
 		*)
 			AC_MSG_ERROR([invalid option for --enable-fortify-source])

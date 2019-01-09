@@ -6,8 +6,8 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 		[AS_HELP_STRING([--without-pcre], [Do not attempt to detect libpcre])],
 		[], [with_pcre="auto"])
 
-	case "${with_pcre}" in
-		no | yes | auto)
+	case "x${with_pcre}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			AC_MSG_ERROR([invalid option for --with-pcre])

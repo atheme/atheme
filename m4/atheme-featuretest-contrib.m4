@@ -60,15 +60,15 @@ AC_DEFUN([ATHEME_FEATURETEST_CONTRIB], [
 		[AS_HELP_STRING([--enable-contrib], [Enable contrib modules])],
 		[], [enable_contrib="no"])
 
-	case "${enable_contrib}" in
-		yes)
+	case "x${enable_contrib}" in
+		xyes)
 			CONTRIB_MODULES="Yes"
 			CONTRIB_COND_D="contrib"
 			AC_SUBST([CONTRIB_COND_D])
 			AC_DEFINE([ENABLE_CONTRIB_MODULES], [1], [Enable contrib modules])
 			ATHEME_LIBTEST_CONTRIB_RES_QUERY
 			;;
-		no)
+		xno)
 			CONTRIB_MODULES="No"
 			;;
 		*)

@@ -6,8 +6,8 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 		[AS_HELP_STRING([--without-libidn], [Do not attempt to detect GNU libidn (for modules/saslserv/scram-sha -- SASLprep normalization)])],
 		[], [with_libidn="auto"])
 
-	case "${with_libidn}" in
-		no | yes | auto)
+	case "x${with_libidn}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			AC_MSG_ERROR([invalid option for --with-libidn])
@@ -24,15 +24,10 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 				AC_LINK_IFELSE([
 					AC_LANG_PROGRAM([[
 						#include <stddef.h>
-						#include <stdio.h>
-						#include <stdlib.h>
 						#include <stringprep.h>
 					]], [[
-						char buf[128];
-						char *const tmp = stringprep_locale_to_utf8("test");
-						(void) snprintf(buf, sizeof buf, "%s", tmp);
-						(void) free(tmp);
-						const int ret = stringprep(buf, sizeof buf, (Stringprep_profile_flags) 0, stringprep_saslprep);
+						(void) stringprep_locale_to_utf8(NULL);
+						(void) stringprep(NULL, 0, (Stringprep_profile_flags) 0, stringprep_saslprep);
 					]])
 				], [
 					AC_MSG_RESULT([yes])
@@ -50,7 +45,7 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 				AS_IF([test "${with_libidn}" = "yes"], [
 					AC_MSG_ERROR([--with-libidn was specified but a required header file is missing])
 				])
-			])
+			], [])
 		], [
 			LIBIDN="No"
 			AS_IF([test "${with_libidn}" = "yes"], [

@@ -7,8 +7,8 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPT], [
 		[AS_HELP_STRING([--without-crypt], [Do not attempt to detect crypt(3) (for modules/crypto/crypt3-*)])],
 		[], [with_crypt="auto"])
 
-	case "${with_crypt}" in
-		no | yes | auto)
+	case "x${with_crypt}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			AC_MSG_ERROR([invalid option for --with-crypt])
@@ -18,17 +18,18 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPT], [
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "${with_crypt}" != "no"], [
-		AC_CHECK_HEADERS([crypt.h], [], [], [])
 		AC_SEARCH_LIBS([crypt], [crypt], [
+			AC_CHECK_HEADERS([crypt.h], [], [], [])
 			AC_MSG_CHECKING([if crypt(3) appears to be usable])
 			AC_COMPILE_IFELSE([
 				AC_LANG_PROGRAM([[
+					#include <stddef.h>
 					#include <unistd.h>
 					#ifdef HAVE_CRYPT_H
 					#  include <crypt.h>
 					#endif
 				]], [[
-					const char *const result = crypt("test", "test");
+					(void) crypt(NULL, NULL);
 				]])
 			], [
 				AC_MSG_RESULT([yes])
