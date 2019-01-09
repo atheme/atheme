@@ -108,7 +108,9 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 					AC_MSG_RESULT([no])
 					LIBSODIUMRNG="No"
 				])
-			], [], [])
+			], [
+				LIBSODIUMRNG="No"
+			], [])
 
 			AS_IF([test "${LIBSODIUMMEMORY}${LIBSODIUMMEMZERO}${LIBSODIUMRNG}" = "NoNoNo"], [
 				LIBSODIUM="No"
