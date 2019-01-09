@@ -62,7 +62,7 @@ command_wod(struct sourceinfo *si, int parc, char *parv[])
 
 			for (i = 0; i < dice; i++)
 			{
-				roll = arc4random_uniform(10) + 1;
+				roll = atheme_random_uniform(10) + 1;
 
 				end_p += snprintf(end_p, BUFSIZE - (end_p - buf), "%d  ", roll);
 
@@ -134,7 +134,7 @@ command_nwod(struct sourceinfo *si, int parc, char *parv[])
 
 		if (dice == 0 && !strcasecmp(arg_dice, "-chance"))
 		{
-			roll = arc4random_uniform(10) + 1;
+			roll = atheme_random_uniform(10) + 1;
 
 			if (roll == 1)
 				botches++;
@@ -163,7 +163,7 @@ command_nwod(struct sourceinfo *si, int parc, char *parv[])
 
 			for (i = 0; i < dice; i++)
 			{
-				roll = arc4random_uniform(10) + 1;
+				roll = atheme_random_uniform(10) + 1;
 
 				end_p += snprintf(end_p, BUFSIZE - (end_p - buf), "%d  ", roll);
 
@@ -229,7 +229,7 @@ command_df(struct sourceinfo *si, int parc, char *parv[])
 
 	for (i = 0; i < dice; i++)
 	{
-		int roll = arc4random() % 3;
+		int roll = atheme_random() % 3;
 
 		if (*buf != '\0')
 			mowgli_strlcat(buf, df_dice_table[roll], BUFSIZE);

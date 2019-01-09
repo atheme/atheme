@@ -641,6 +641,8 @@ DOCDIR
 DATADIR
 CONTRIB_LIBS
 CONTRIB_COND_D
+RANDOM_API_LIBS
+RANDOM_API_CFLAGS
 DIGEST_API_LIBS
 DIGEST_API_CFLAGS
 PERL_LIBS
@@ -665,7 +667,6 @@ LIBIDN_LIBS
 LIBIDN_CFLAGS
 LIBCRYPT_LIBS
 CRACKLIB_LIBS
-ARC4RANDOM_COND_C
 LIBOBJS
 PODIR_COND_D
 POSUB
@@ -7298,19 +7299,7 @@ done
 
 $as_echo "#define __STDC_WANT_LIB_EXT1__ 1" >>confdefs.h
 
-for ac_func in arc4random arc4random_buf arc4random_uniform explicit_bzero memset_s
-do :
-  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
-ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
-if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
-_ACEOF
-
-fi
-done
-
-for ac_func in execve flock fork getpid getrlimit gettimeofday strcasestr strtok_r
+for ac_func in execve explicit_bzero flock fork getpid getrlimit gettimeofday memset_s strcasestr strtok_r
 do :
   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
 ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
@@ -8455,43 +8444,6 @@ fi
 
 
 
-ARC4RANDOM_BUILDING="No"
-ARC4RANDOM_COND_C=""
-if test "x${ac_cv_func_arc4random}x${ac_cv_func_arc4random_buf}x${ac_cv_func_arc4random_uniform}" != "xyesxyesxyes"; then :
-
-	ARC4RANDOM_BUILDING="Yes"
-	ARC4RANDOM_COND_C="arc4random.c"
-
-
-	for ac_header in sys/random.h
-do :
-  ac_fn_c_check_header_mongrel "$LINENO" "sys/random.h" "ac_cv_header_sys_random_h" "$ac_includes_default"
-if test "x$ac_cv_header_sys_random_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_SYS_RANDOM_H 1
-_ACEOF
-
-fi
-
-done
-
-	for ac_func in getentropy getrandom
-do :
-  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
-ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
-if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
-_ACEOF
-
-fi
-done
-
-
-fi
-
-
-
 
 
 	LIBCRACKLIB="No"
@@ -9180,6 +9132,7 @@ fi
 
 
 	LIBMBEDCRYPTO="No"
+	LIBMBEDCRYPTORNG="No"
 	LIBMBEDCRYPTO_LIBS=""
 
 
@@ -9428,6 +9381,7 @@ if ac_fn_c_try_link "$LINENO"; then :
 
 				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+				LIBMBEDCRYPTORNG="Yes"
 
 $as_echo "#define HAVE_LIBMBEDCRYPTO_HMAC_DRBG 1" >>confdefs.h
 
@@ -9436,6 +9390,7 @@ else
 
 				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
+				LIBMBEDCRYPTORNG="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -10234,6 +10189,7 @@ fi
 	LIBSODIUM="No"
 	LIBSODIUMMEMORY="No"
 	LIBSODIUMMEMZERO="No"
+	LIBSODIUMRNG="No"
 
 
 # Check whether --with-sodium was given.
@@ -10342,7 +10298,7 @@ $as_echo "yes" >&6; }
 
 			LIBS="${LIBSODIUM_LIBS} ${LIBS}"
 			LIBSODIUM="Yes"
-			for ac_header in sodium/core.h sodium/utils.h
+			for ac_header in sodium/core.h sodium/utils.h sodium/version.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
 ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
@@ -10497,7 +10453,60 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
-		if test "x${LIBSODIUMMEMORY}x${LIBSODIUMMEMZERO}" = "xNoxNo"; then :
+		for ac_header in sodium/randombytes.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "sodium/randombytes.h" "ac_cv_header_sodium_randombytes_h" "$ac_includes_default"
+if test "x$ac_cv_header_sodium_randombytes_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_SODIUM_RANDOMBYTES_H 1
+_ACEOF
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libsodium has a usable random number generator" >&5
+$as_echo_n "checking if libsodium has a usable random number generator... " >&6; }
+			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+					#include <stddef.h>
+					#include <sodium/core.h>
+					#include <sodium/utils.h>
+					#include <sodium/randombytes.h>
+
+int
+main ()
+{
+
+					(void) randombytes_random();
+					(void) randombytes_uniform(0);
+					(void) randombytes_buf(NULL, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+				LIBSODIUMRNG="Yes"
+
+else
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+				LIBSODIUMRNG="No"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+
+done
+
+
+		if test "x${LIBSODIUMMEMORY}x${LIBSODIUMMEMZERO}x${LIBSODIUMRNG}" = "xNoxNoxNo"; then :
 
 			LIBSODIUM="No"
 			if test "x${with_sodium}" = "xyes"; then :
@@ -10652,6 +10661,192 @@ fi
 
 cat >>confdefs.h <<_ACEOF
 #define ATHEME_DIGEST_FRONTEND ${DIGEST_FRONTEND_VAL}
+_ACEOF
+
+
+
+
+
+
+	RANDOM_FRONTEND_VAL="ATHEME_RANDOM_FRONTEND_INTERNAL"
+	RANDOM_FRONTEND="Internal"
+	RANDOM_API_CFLAGS=""
+	RANDOM_API_LIBS=""
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if we are building for OpenBSD" >&5
+$as_echo_n "checking if we are building for OpenBSD... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+			#ifdef __OpenBSD__
+			#  error "Detected OpenBSD"
+			#endif
+
+int
+main ()
+{
+
+			return 0;
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+else
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if arc4random(3) is usable" >&5
+$as_echo_n "checking if arc4random(3) is usable... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#include <stddef.h>
+				#include <stdlib.h>
+
+int
+main ()
+{
+
+				(void) arc4random();
+				(void) arc4random_uniform(0);
+				(void) arc4random_buf(NULL, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+			RANDOM_FRONTEND_VAL="ATHEME_RANDOM_FRONTEND_OPENBSD"
+			RANDOM_FRONTEND="OpenBSD arc4random(3)"
+			RANDOM_API_CFLAGS=""
+			RANDOM_API_LIBS=""
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+	if test "x${RANDOM_FRONTEND}x${LIBSODIUMRNG}" = "xInternalxYes"; then :
+
+		RANDOM_FRONTEND_VAL="ATHEME_RANDOM_FRONTEND_SODIUM"
+		RANDOM_FRONTEND="Sodium"
+		RANDOM_API_CFLAGS="${LIBSODIUM_CFLAGS}"
+		RANDOM_API_LIBS="${LIBSODIUM_LIBS}"
+
+fi
+
+	if test "x${RANDOM_FRONTEND}x${LIBMBEDCRYPTORNG}" = "xInternalxYes"; then :
+
+		RANDOM_FRONTEND_VAL="ATHEME_RANDOM_FRONTEND_MBEDTLS"
+		RANDOM_FRONTEND="ARM mbedTLS"
+		RANDOM_API_CFLAGS=""
+		RANDOM_API_LIBS="${LIBMBEDCRYPTO_LIBS}"
+
+fi
+
+	if test "x${RANDOM_FRONTEND}" = "xInternal"; then :
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if getentropy(3) is available" >&5
+$as_echo_n "checking if getentropy(3) is available... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#include <stddef.h>
+				#include <stdlib.h>
+				#include <unistd.h>
+
+int
+main ()
+{
+
+				(void) getentropy(NULL, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_USABLE_GETENTROPY 1" >>confdefs.h
+
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if getrandom(2) is available" >&5
+$as_echo_n "checking if getrandom(2) is available... " >&6; }
+			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+					#include <stddef.h>
+					#include <sys/random.h>
+
+int
+main ()
+{
+
+					(void) getrandom(NULL, 0, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_USABLE_GETRANDOM 1" >>confdefs.h
+
+
+else
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: this program will need access to the urandom(4) device at run-time" >&5
+$as_echo "$as_me: WARNING: this program will need access to the urandom(4) device at run-time" >&2;}
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+
+
+cat >>confdefs.h <<_ACEOF
+#define ATHEME_RANDOM_FRONTEND ${RANDOM_FRONTEND_VAL}
 _ACEOF
 
 
@@ -16950,8 +17145,11 @@ fi
 
 
 
-	if test "x${ARC4RANDOM_BUILDING}" = "xYes"; then :
-  ARC4RANDOM_BUILDING="Yes (Internal ChaCha20)"
+	if test "x${DIGEST_FRONTEND}" = "xInternal"; then :
+  DIGEST_FRONTEND="None (Internal MD5/SHA/HMAC/PBKDF2 Fallback)"
+fi
+	if test "x${RANDOM_FRONTEND}" = "xInternal"; then :
+  RANDOM_FRONTEND="None (Internal ChaCha20-based Fallback RNG)"
 fi
 	if test "x${SODIUM_MALLOC}" = "xYes"; then :
   SODIUM_MALLOC="Yes (NOT INTENDED FOR PRODUCTION USAGE)"
@@ -17013,10 +17211,10 @@ Configuration of ${PACKAGE_STRING}:
     Build Warnings ..........: ${BUILD_WARNINGS}
 
     Digest Frontend .........: ${DIGEST_FRONTEND}
-    Mowgli Installation .....: ${MOWGLI_SOURCE}
+    RNG Frontend ............: ${RANDOM_FRONTEND}
 
-    Fallback RNG Enabled ....: ${ARC4RANDOM_BUILDING}
     Legacy Crypto Modules ...: ${LEGACY_PWCRYPTO}
+    Mowgli Installation .....: ${MOWGLI_SOURCE}
 
     CC ......................: ${CC}
     CFLAGS ..................: ${CFLAGS}

@@ -22,6 +22,7 @@
 #include "connection.h"
 #include "hook.h"
 #include "hooktypes.h"
+#include "atheme_random.h"
 #include "atheme_string.h"
 #include "atheme_memory.h"
 #include "table.h"

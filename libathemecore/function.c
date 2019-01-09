@@ -63,7 +63,7 @@ random_string(const size_t sz)
 
 	unsigned char *const buf = smalloc(sz + 1); /* NULL terminator */
 
-	(void) arc4random_buf(buf, sz);
+	(void) atheme_random_buf(buf, sz);
 
 	for (size_t i = 0; i < sz; i++)
 		buf[i] = ch[buf[i] % sizeof ch];
@@ -261,7 +261,7 @@ makekey(void)
 {
 	unsigned long k;
 
-	k = arc4random() & 0x7FFFFFFF;
+	k = atheme_random() & 0x7FFFFFFF;
 
 	/* shorten or pad it to 9 digits */
 	if (k > 1000000000)

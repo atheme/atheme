@@ -1,6 +1,7 @@
 AC_DEFUN([ATHEME_LIBTEST_MBEDTLS], [
 
 	LIBMBEDCRYPTO="No"
+	LIBMBEDCRYPTORNG="No"
 	LIBMBEDCRYPTO_LIBS=""
 
 	AC_ARG_WITH([mbedtls],
@@ -110,9 +111,11 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDTLS], [
 				]])
 			], [
 				AC_MSG_RESULT([yes])
+				LIBMBEDCRYPTORNG="Yes"
 				AC_DEFINE([HAVE_LIBMBEDCRYPTO_HMAC_DRBG], [1], [Define to 1 if ARM mbedTLS has HMAC-DRBG support.])
 			], [
 				AC_MSG_RESULT([no])
+				LIBMBEDCRYPTORNG="No"
 			])
 		], [
 			AC_MSG_RESULT([no])

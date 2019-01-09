@@ -236,7 +236,7 @@ atheme_init(char *execname, char *log_p)
 	me.kline_id = 0;
 	me.start = time(NULL);
 	CURRTIME = me.start;
-	srand(arc4random());
+	srand(atheme_random());
 
 	/* set signal handlers */
 	init_signal_handlers();
@@ -385,6 +385,7 @@ atheme_main(int argc, char *argv[])
 
 	slog(LG_INFO, "%s is starting up...", PACKAGE_STRING);
 	slog(LG_INFO, "Using Digest API frontend: %s", digest_get_frontend_info());
+	slog(LG_INFO, "Using Random API frontend: %s", random_get_frontend_info());
 
 	/* check for pid file */
 #ifndef MOWGLI_OS_WIN

@@ -19,100 +19,20 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#ifndef ATHEME_RANDOM_FRONTEND_C
+#  error "Do not compile me directly; compile random_frontend.c instead"
+#endif /* !ATHEME_RANDOM_FRONTEND_C */
+
 #include "atheme.h"
 
-#ifdef HAVE_LIBMBEDCRYPTO_HMAC_DRBG
-
-#include <mbedtls/entropy.h>
-#include <mbedtls/hmac_drbg.h>
-#include <mbedtls/md.h>
-
-#if defined(MBEDTLS_ERROR_C) && defined(HAVE_MBEDTLS_ERROR_H)
-#  include <mbedtls/error.h>
-#endif
-
-static const char atheme_pers_str[] = PACKAGE_STRING;
-
-static mbedtls_entropy_context seed_ctx;
-static mbedtls_hmac_drbg_context hmac_ctx;
-
-static pid_t rs_stir_pid = (pid_t) -1;
-
-static const char *
-atheme_arc4random_mbedtls_strerror(int err)
-{
-	static char errbuf[384];
-
-	if (err < 0)
-		err = -err;
-
-#if defined(MBEDTLS_ERROR_C) && defined(HAVE_MBEDTLS_ERROR_H)
-	char mbed_errbuf[320];
-
-	(void) mbedtls_strerror(err, mbed_errbuf, sizeof mbed_errbuf);
-	(void) snprintf(errbuf, sizeof errbuf, "-0x%X: %s", (unsigned int) err, mbed_errbuf);
-#else
-	(void) snprintf(errbuf, sizeof errbuf, "-0x%X", (unsigned int) err);
-#endif
-
-	return errbuf;
-}
-
-void
-atheme_arc4random_buf(void *const restrict out, const size_t len)
-{
-	if (rs_stir_pid == (pid_t) -1)
-	{
-		const mbedtls_md_type_t md_type = MBEDTLS_MD_SHA256;
-		const mbedtls_md_info_t *const md_info = mbedtls_md_info_from_type(md_type);
-
-		(void) mbedtls_entropy_init(&seed_ctx);
-		(void) mbedtls_hmac_drbg_init(&hmac_ctx);
-
-		const int ret = mbedtls_hmac_drbg_seed(&hmac_ctx, md_info, &mbedtls_entropy_func, &seed_ctx,
-		                                       (const void *) atheme_pers_str, sizeof atheme_pers_str);
-
-		if (ret != 0)
-		{
-			(void) slog(LG_ERROR, "%s: mbedtls_hmac_drbg_seed: error %s", __func__,
-			                      atheme_arc4random_mbedtls_strerror(ret));
-			exit(EXIT_FAILURE);
-		}
-
-		rs_stir_pid = getpid();
-	}
-	else if (getpid() != rs_stir_pid)
-	{
-		const int ret = mbedtls_hmac_drbg_reseed(&hmac_ctx, NULL, 0);
-
-		if (ret != 0)
-		{
-			(void) slog(LG_ERROR, "%s: mbedtls_hmac_drbg_reseed: error %s", __func__,
-			                      atheme_arc4random_mbedtls_strerror(ret));
-			exit(EXIT_FAILURE);
-		}
-
-		rs_stir_pid = getpid();
-	}
-
-	const int ret = mbedtls_hmac_drbg_random(&hmac_ctx, out, len);
-
-	if (ret != 0)
-	{
-		(void) slog(LG_ERROR, "%s: mbedtls_hmac_drbg_random: error %s", __func__,
-		                      atheme_arc4random_mbedtls_strerror(ret));
-		exit(EXIT_FAILURE);
-	}
-}
-
-#else /* HAVE_LIBMBEDCRYPTO_HMAC_DRBG */
+#define RANDOM_DEV_PATH "/dev/urandom"
 
 /*
  * We don't have a library that provides a high-quality RNG.
- * Fall back to ChaCha20-based RNG from OpenBSD.
+ * Fall back to Internal ChaCha20-based RNG from OpenBSD.
  */
 
-#if !defined(HAVE_GETENTROPY) && defined(HAVE_GETRANDOM) && defined(HAVE_SYS_RANDOM_H)
+#ifdef HAVE_USABLE_GETRANDOM
 #  include <sys/random.h>
 #endif
 
@@ -161,10 +81,6 @@ static const uint8_t sigma[] = {
 	0x65, 0x78, 0x70, 0x61, 0x6E, 0x64, 0x20, 0x33, 0x32, 0x2D, 0x62, 0x79, 0x74, 0x65, 0x20, 0x6B
 };
 
-static const uint8_t tau[] = {
-	0x65, 0x78, 0x70, 0x61, 0x6E, 0x64, 0x20, 0x31, 0x36, 0x2D, 0x62, 0x79, 0x74, 0x65, 0x20, 0x6B
-};
-
 static uint8_t rs_buf[CHACHA20_STATESZ];
 static size_t rs_count = 0;
 static size_t rs_have = 0;
@@ -175,7 +91,7 @@ static pid_t rs_stir_pid = -1;
 static void
 _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 {
-#ifdef HAVE_GETENTROPY
+#ifdef HAVE_USABLE_GETENTROPY
 
 	if (getentropy(buf, len) != 0)
 	{
@@ -183,8 +99,8 @@ _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 		exit(EXIT_FAILURE);
 	}
 
-#else /* HAVE_GETENTROPY */
-#  if defined(HAVE_GETRANDOM) && defined(HAVE_SYS_RANDOM_H)
+#else /* HAVE_USABLE_GETENTROPY */
+#  ifdef HAVE_USABLE_GETRANDOM
 
 	size_t out = 0;
 
@@ -209,15 +125,14 @@ _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 		out += (size_t) ret;
 	}
 
-#  else /* HAVE_GETRANDOM && HAVE_SYS_RANDOM_H */
+#  else /* HAVE_USABLE_GETRANDOM */
 
-	static const char *const random_dev = "/dev/urandom";
 	static int fd = -1;
 	size_t out = 0;
 
-	if (fd == -1 && (fd = open(random_dev, O_RDONLY)) == -1)
+	if (fd == -1 && (fd = open(RANDOM_DEV_PATH, O_RDONLY)) == -1)
 	{
-		(void) slog(LG_ERROR, "%s: open('%s'): %s", __func__, random_dev, strerror(errno));
+		(void) slog(LG_ERROR, "%s: open('%s'): %s", __func__, RANDOM_DEV_PATH, strerror(errno));
 		exit(EXIT_FAILURE);
 	}
 
@@ -230,20 +145,20 @@ _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 			if (errno == EAGAIN || errno == EINTR || errno == EWOULDBLOCK)
 				continue;
 
-			(void) slog(LG_ERROR, "%s: read('%s'): %s", __func__, random_dev, strerror(errno));
+			(void) slog(LG_ERROR, "%s: read('%s'): %s", __func__, RANDOM_DEV_PATH, strerror(errno));
 			exit(EXIT_FAILURE);
 		}
 		if (ret == 0)
 		{
-			(void) slog(LG_ERROR, "%s: read('%s'): EOF", __func__, random_dev);
+			(void) slog(LG_ERROR, "%s: read('%s'): EOF", __func__, RANDOM_DEV_PATH);
 			exit(EXIT_FAILURE);
 		}
 
 		out += (size_t) ret;
 	}
 
-#  endif /* !HAVE_GETRANDOM || !HAVE_SYS_RANDOM_H */
-#endif /* !HAVE_GETENTROPY */
+#  endif /* !HAVE_USABLE_GETRANDOM */
+#endif /* !HAVE_USABLE_GETENTROPY */
 }
 
 static void
@@ -395,8 +310,37 @@ _rs_stir_if_needed(const size_t len)
 		rs_count -= len;
 }
 
+uint32_t
+atheme_random(void)
+{
+	uint32_t val;
+
+	(void) atheme_random_buf(&val, sizeof val);
+
+	return val;
+}
+
+uint32_t
+atheme_random_uniform(const uint32_t bound)
+{
+	if (bound < 2)
+		return 0;
+
+	const uint32_t min = -bound % bound;
+
+	for (;;)
+	{
+		uint32_t candidate;
+
+		(void) atheme_random_buf(&candidate, sizeof candidate);
+
+		if (candidate >= min)
+			return candidate % bound;
+	}
+}
+
 void
-atheme_arc4random_buf(void *const restrict out, size_t len)
+atheme_random_buf(void *const restrict out, size_t len)
 {
 	uint8_t *buf = (uint8_t *) out;
 
@@ -421,33 +365,8 @@ atheme_arc4random_buf(void *const restrict out, size_t len)
 	}
 }
 
-#endif /* !HAVE_LIBMBEDCRYPTO_HMAC_DRBG */
-
-uint32_t
-atheme_arc4random(void)
+const char *
+random_get_frontend_info(void)
 {
-	uint32_t val;
-
-	(void) atheme_arc4random_buf(&val, sizeof val);
-
-	return val;
-}
-
-uint32_t
-atheme_arc4random_uniform(const uint32_t bound)
-{
-	if (bound < 2)
-		return 0;
-
-	const uint32_t min = -bound % bound;
-
-	for (;;)
-	{
-		uint32_t candidate;
-
-		(void) atheme_arc4random_buf(&candidate, sizeof candidate);
-
-		if (candidate >= min)
-			return candidate % bound;
-	}
+	return "Internal ChaCha20-based Fallback RNG";
 }

@@ -3,6 +3,7 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 	LIBSODIUM="No"
 	LIBSODIUMMEMORY="No"
 	LIBSODIUMMEMZERO="No"
+	LIBSODIUMRNG="No"
 
 	AC_ARG_WITH([sodium],
 		[AS_HELP_STRING([--without-sodium], [Do not attempt to detect libsodium for secure memory ops])],
@@ -22,7 +23,7 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 		PKG_CHECK_MODULES([LIBSODIUM], [libsodium], [
 			LIBS="${LIBSODIUM_LIBS} ${LIBS}"
 			LIBSODIUM="Yes"
-			AC_CHECK_HEADERS([sodium/core.h sodium/utils.h], [], [
+			AC_CHECK_HEADERS([sodium/core.h sodium/utils.h sodium/version.h], [], [
 				LIBSODIUM="No"
 				AS_IF([test "x${with_sodium}" = "xyes"], [
 					AC_MSG_ERROR([--with-sodium was specified but a required header file is missing])
@@ -97,7 +98,29 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 			LIBSODIUMMEMZERO="No"
 		])
 
-		AS_IF([test "x${LIBSODIUMMEMORY}x${LIBSODIUMMEMZERO}" = "xNoxNo"], [
+		AC_CHECK_HEADERS([sodium/randombytes.h], [
+			AC_MSG_CHECKING([if libsodium has a usable random number generator])
+			AC_LINK_IFELSE([
+				AC_LANG_PROGRAM([[
+					#include <stddef.h>
+					#include <sodium/core.h>
+					#include <sodium/utils.h>
+					#include <sodium/randombytes.h>
+				]], [[
+					(void) randombytes_random();
+					(void) randombytes_uniform(0);
+					(void) randombytes_buf(NULL, 0);
+				]])
+			], [
+				AC_MSG_RESULT([yes])
+				LIBSODIUMRNG="Yes"
+			], [
+				AC_MSG_RESULT([no])
+				LIBSODIUMRNG="No"
+			])
+		], [], [])
+
+		AS_IF([test "x${LIBSODIUMMEMORY}x${LIBSODIUMMEMZERO}x${LIBSODIUMRNG}" = "xNoxNoxNo"], [
 			LIBSODIUM="No"
 			AS_IF([test "x${with_sodium}" = "xyes"], [
 				AC_MSG_ERROR([--with-sodium was specified but libsodium appears to be unusable])

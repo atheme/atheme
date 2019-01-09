@@ -388,7 +388,7 @@ atheme_argon2d_crypt(const char *const restrict password,
 {
 	struct argon2d_context ctx;
 	(void) memset(&ctx, 0x00, sizeof ctx);
-	(void) arc4random_buf(ctx.salt, sizeof ctx.salt);
+	(void) atheme_random_buf(ctx.salt, sizeof ctx.salt);
 
 	ctx.pass = (const uint8_t *) password;
 	ctx.passlen = (uint32_t) strlen(password);

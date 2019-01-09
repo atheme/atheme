@@ -20,11 +20,20 @@ AH_TOP([
 #define ATHEME_DIGEST_FRONTEND_MBEDTLS  0x01U
 #define ATHEME_DIGEST_FRONTEND_NETTLE   0x02U
 #define ATHEME_DIGEST_FRONTEND_OPENSSL  0x03U
+
+#define ATHEME_RANDOM_FRONTEND_INTERNAL 0x00U
+#define ATHEME_RANDOM_FRONTEND_MBEDTLS  0x01U
+#define ATHEME_RANDOM_FRONTEND_OPENBSD  0x02U
+#define ATHEME_RANDOM_FRONTEND_SODIUM   0x03U
 ])
 
 AH_BOTTOM([
 #ifndef ATHEME_DIGEST_FRONTEND
 #  error "No digest frontend"
+#endif
+
+#ifndef ATHEME_RANDOM_FRONTEND
+#  error "No RNG frontend"
 #endif
 
 #endif
@@ -107,26 +116,11 @@ AC_CHECK_HEADERS([link.h], [], [], [])
 
 dnl Checks for library functions.
 AC_DEFINE([__STDC_WANT_LIB_EXT1__], [1], [We want ISO 9899:2011 Annex K memory functions if available])
-AC_CHECK_FUNCS([arc4random arc4random_buf arc4random_uniform explicit_bzero memset_s])
-AC_CHECK_FUNCS([execve flock fork getpid getrlimit gettimeofday strcasestr strtok_r])
+AC_CHECK_FUNCS([execve explicit_bzero flock fork getpid getrlimit gettimeofday memset_s strcasestr strtok_r])
 AC_CHECK_FUNC([socket], [], [AC_CHECK_LIB([socket], [socket])])
 AC_CHECK_FUNC([gethostbyname], [], [AC_CHECK_LIB([nsl], [gethostbyname])])
 HW_FUNC_SNPRINTF
 HW_FUNC_ASPRINTF
-
-
-
-dnl If we don't have all of arc4random*(3) then we need arc4random.c which provides implementations
-ARC4RANDOM_BUILDING="No"
-ARC4RANDOM_COND_C=""
-AS_IF([test "x${ac_cv_func_arc4random}x${ac_cv_func_arc4random_buf}x${ac_cv_func_arc4random_uniform}" != "xyesxyesxyes"], [
-	ARC4RANDOM_BUILDING="Yes"
-	ARC4RANDOM_COND_C="arc4random.c"
-	AC_SUBST([ARC4RANDOM_COND_C])
-
-	AC_CHECK_HEADERS([sys/random.h], [], [], [])
-	AC_CHECK_FUNCS([getentropy getrandom])
-])
 
 
 
@@ -145,8 +139,9 @@ ATHEME_LIBTEST_SODIUM
 dnl Libraries that need to be explicitly enabled (alphabetical)
 ATHEME_LIBTEST_PERL
 
-dnl Digest frontend to use in libathemecore
+dnl Digest and RNG frontend to use in libathemecore
 ATHEME_DECIDE_DIGEST_FRONTEND
+ATHEME_DECIDE_RANDOM_FRONTEND
 
 dnl Optional features
 ATHEME_FEATURETEST_CONTRIB

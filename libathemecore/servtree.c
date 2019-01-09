@@ -111,7 +111,7 @@ free_access_string(const char *key, void *data, void *privdata)
 static void
 create_unique_service_nick(char *dest, size_t len)
 {
-	unsigned int i = arc4random();
+	unsigned int i = atheme_random();
 
 	do
 		snprintf(dest, len, "ath%06x", (i++) & 0xFFFFFF);

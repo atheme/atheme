@@ -5,7 +5,6 @@ HELP_LINGUAS	= es ru fr
 
 SRCS =					\
 	account.c			\
-	$(ARC4RANDOM_COND_C)		\
 	atheme.c			\
 	auth.c				\
 	authcookie.c			\
@@ -42,6 +41,7 @@ SRCS =					\
 	privs.c				\
 	ptasks.c			\
 	$(QRCODE_COND_C)		\
+	random_frontend.c		\
 	send.c				\
 	servers.c			\
 	services.c			\
@@ -65,7 +65,7 @@ include ../extra.mk
 include ../buildsys.mk
 
 CPPFLAGS	+= -I../include -I.
-CFLAGS		+= $(DIGEST_API_CFLAGS) $(PCRE_CFLAGS) $(LIBQRENCODE_CFLAGS) $(LIBSODIUM_CFLAGS) $(LIB_CFLAGS)
-LIBS		+= $(DIGEST_API_LIBS) $(PCRE_LIBS) $(LIBQRENCODE_LIBS) $(LIBSODIUM_LIBS) $(LIBINTL)
+CFLAGS		+= $(DIGEST_API_CFLAGS) $(RANDOM_API_CFLAGS) $(PCRE_CFLAGS) $(LIBQRENCODE_CFLAGS) $(LIBSODIUM_CFLAGS) $(LIB_CFLAGS)
+LIBS		+= $(DIGEST_API_LIBS) $(RANDOM_API_LIBS) $(PCRE_LIBS) $(LIBQRENCODE_LIBS) $(LIBSODIUM_LIBS) $(LIBINTL)
 
 build: depend all

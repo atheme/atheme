@@ -9,6 +9,11 @@
 #define ATHEME_DIGEST_FRONTEND_NETTLE   0x02U
 #define ATHEME_DIGEST_FRONTEND_OPENSSL  0x03U
 
+#define ATHEME_RANDOM_FRONTEND_INTERNAL 0x00U
+#define ATHEME_RANDOM_FRONTEND_MBEDTLS  0x01U
+#define ATHEME_RANDOM_FRONTEND_OPENBSD  0x02U
+#define ATHEME_RANDOM_FRONTEND_SODIUM   0x03U
+
 
 /* Define if building universal (internal helper macro) */
 #undef AC_APPLE_UNIVERSAL_BUILD
@@ -19,6 +24,9 @@
 /* Front-end for digest interface */
 #undef ATHEME_DIGEST_FRONTEND
 
+/* Front-end for RNG interface */
+#undef ATHEME_RANDOM_FRONTEND
+
 /* Enable contrib modules */
 #undef ENABLE_CONTRIB_MODULES
 
@@ -28,15 +36,6 @@
 /* Define to 1 if translation of program messages to the user's native
    language is requested. */
 #undef ENABLE_NLS
-
-/* Define to 1 if you have the `arc4random' function. */
-#undef HAVE_ARC4RANDOM
-
-/* Define to 1 if you have the `arc4random_buf' function. */
-#undef HAVE_ARC4RANDOM_BUF
-
-/* Define to 1 if you have the `arc4random_uniform' function. */
-#undef HAVE_ARC4RANDOM_UNIFORM
 
 /* Define to 1 if you have the `asprintf' function. */
 #undef HAVE_ASPRINTF
@@ -77,14 +76,8 @@
 /* Define to 1 if you have the `fork' function. */
 #undef HAVE_FORK
 
-/* Define to 1 if you have the `getentropy' function. */
-#undef HAVE_GETENTROPY
-
 /* Define to 1 if you have the `getpid' function. */
 #undef HAVE_GETPID
-
-/* Define to 1 if you have the `getrandom' function. */
-#undef HAVE_GETRANDOM
 
 /* Define to 1 if you have the `getrlimit' function. */
 #undef HAVE_GETRLIMIT
@@ -224,8 +217,14 @@
 /* Define to 1 if you have the <sodium/core.h> header file. */
 #undef HAVE_SODIUM_CORE_H
 
+/* Define to 1 if you have the <sodium/randombytes.h> header file. */
+#undef HAVE_SODIUM_RANDOMBYTES_H
+
 /* Define to 1 if you have the <sodium/utils.h> header file. */
 #undef HAVE_SODIUM_UTILS_H
+
+/* Define to 1 if you have the <sodium/version.h> header file. */
+#undef HAVE_SODIUM_VERSION_H
 
 /* Define to 1 if you have the <stdarg.h> header file. */
 #undef HAVE_STDARG_H
@@ -260,9 +259,6 @@
 /* Define to 1 if `thousands_sep' is a member of `struct lconv'. */
 #undef HAVE_STRUCT_LCONV_THOUSANDS_SEP
 
-/* Define to 1 if you have the <sys/random.h> header file. */
-#undef HAVE_SYS_RANDOM_H
-
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #undef HAVE_SYS_STAT_H
 
@@ -280,6 +276,12 @@
 
 /* Define to 1 if the system has the type 'unsigned long long int'. */
 #undef HAVE_UNSIGNED_LONG_LONG_INT
+
+/* Define to 1 if getentropy(3) is usable */
+#undef HAVE_USABLE_GETENTROPY
+
+/* Define to 1 if getrandom(2) is usable */
+#undef HAVE_USABLE_GETRANDOM
 
 /* Define to 1 if you have the <varargs.h> header file. */
 #undef HAVE_VARARGS_H
@@ -415,6 +417,10 @@
 
 #ifndef ATHEME_DIGEST_FRONTEND
 #  error "No digest frontend"
+#endif
+
+#ifndef ATHEME_RANDOM_FRONTEND
+#  error "No RNG frontend"
 #endif
 
 #endif

@@ -443,7 +443,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 	const char *retval = res;
 
 	(void) memset(&dbe, 0x00, sizeof dbe);
-	(void) arc4random_buf(dbe.salt, (size_t) pbkdf2v2_saltsz);
+	(void) atheme_random_buf(dbe.salt, (size_t) pbkdf2v2_saltsz);
 
 	if (base64_encode(dbe.salt, (size_t) pbkdf2v2_saltsz, dbe.salt64, sizeof dbe.salt64) == (size_t) -1)
 	{
