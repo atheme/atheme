@@ -118,6 +118,9 @@
 /* Define to 1 if you have the `nsl' library (-lnsl). */
 #undef HAVE_LIBNSL
 
+/* Define to 1 if PCRE is available */
+#undef HAVE_LIBPCRE
+
 /* Define to 1 if libqrencode is available */
 #undef HAVE_LIBQRENCODE
 
@@ -202,8 +205,8 @@
 /* Define to 1 if you have the <openssl/opensslv.h> header file. */
 #undef HAVE_OPENSSL_OPENSSLV_H
 
-/* Define to 1 if PCRE is available */
-#undef HAVE_PCRE
+/* Define to 1 if you have the <pcre.h> header file. */
+#undef HAVE_PCRE_H
 
 /* Define to 1 if the system has the type `ptrdiff_t'. */
 #undef HAVE_PTRDIFF_T

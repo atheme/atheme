@@ -16,19 +16,52 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 
 	LIBS_SAVED="${LIBS}"
 
-	AS_IF([test "x${with_pcre}" != "xno"], [
-		PKG_CHECK_MODULES([PCRE], [libpcre], [
-			LIBPCRE="Yes"
-			AC_SUBST([PCRE_CFLAGS])
-			AC_SUBST([PCRE_LIBS])
-			AC_DEFINE([HAVE_PCRE], [1], [Define to 1 if PCRE is available])
+	AS_IF([test "${with_pcre}" != "no"], [
+		PKG_CHECK_MODULES([LIBPCRE], [libpcre], [
+			LIBS="${LIBPCRE_LIBS} ${LIBS}"
+			AC_CHECK_HEADERS([pcre.h], [
+				AC_MSG_CHECKING([if libpcre is usable])
+				AC_LINK_IFELSE([
+					AC_LANG_PROGRAM([[
+						#include <stddef.h>
+						#include <pcre.h>
+					]], [[
+						(void) pcre_compile(NULL, 0, NULL, NULL, NULL);
+						(void) pcre_exec(NULL, NULL, NULL, 0, 0, 0, NULL, 0);
+						(void) pcre_free(NULL);
+					]])
+				], [
+					AC_MSG_RESULT([yes])
+					LIBPCRE="Yes"
+					AC_DEFINE([HAVE_LIBPCRE], [1], [Define to 1 if PCRE is available])
+				], [
+					AC_MSG_RESULT([no])
+					LIBPCRE="No"
+					AS_IF([test "${with_pcre}" = "yes"], [
+						AC_MSG_ERROR([--with-pcre was specified but libpcre does not appear to be usable])
+					])
+				])
+			], [
+				LIBPCRE="No"
+				AS_IF([test "${with_pcre}" = "yes"], [
+					AC_MSG_ERROR([--with-pcre was specified but a required header file is missing])
+				])
+			], [])
 		], [
 			LIBPCRE="No"
-			AS_IF([test "x${with_pcre}" = "xyes"], [
+			AS_IF([test "${with_pcre}" = "yes"], [
 				AC_MSG_ERROR([--with-pcre was specified but libpcre could not be found])
 			])
 		])
 	])
+
+	AS_IF([test "${LIBPCRE}" = "No"], [
+		LIBPCRE_CFLAGS=""
+		LIBPCRE_LIBS=""
+	])
+
+	AC_SUBST([LIBPCRE_CFLAGS])
+	AC_SUBST([LIBPCRE_LIBS])
 
 	LIBS="${LIBS_SAVED}"
 ])

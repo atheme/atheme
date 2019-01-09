@@ -1,4 +1,4 @@
-AC_DEFUN([ATHEME_LIBTEST_OPENSSL], [
+AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 
 	LIBCRYPTO="No"
 	LIBCRYPTO_NAME=""
@@ -17,26 +17,26 @@ AC_DEFUN([ATHEME_LIBTEST_OPENSSL], [
 
 	LIBS_SAVED="${LIBS}"
 
-	AS_IF([test "x${with_openssl}" != "xno"], [
+	AS_IF([test "${with_openssl}" != "no"], [
 		PKG_CHECK_MODULES([LIBCRYPTO], [libcrypto], [
 			LIBS="${LIBCRYPTO_LIBS} ${LIBS}"
 			LIBCRYPTO="Yes"
 			AC_CHECK_HEADERS([openssl/ec.h openssl/ecdsa.h], [], [], [])
 			AC_CHECK_HEADERS([openssl/evp.h openssl/hmac.h openssl/opensslv.h], [], [
 				LIBCRYPTO="No"
-				AS_IF([test "x${with_openssl}" = "xyes"], [
+				AS_IF([test "${with_openssl}" = "yes"], [
 					AC_MSG_ERROR([--with-openssl was specified but a required header file is missing])
 				])
 			], [])
 		], [
 			LIBCRYPTO="No"
-			AS_IF([test "x${with_openssl}" = "xyes"], [
+			AS_IF([test "${with_openssl}" = "yes"], [
 				AC_MSG_ERROR([--with-openssl was specified but libcrypto could not be found])
 			])
 		])
 	])
 
-	AS_IF([test "x${LIBCRYPTO}" = "xYes"], [
+	AS_IF([test "${LIBCRYPTO}" = "Yes"], [
 		AC_MSG_CHECKING([if libcrypto is usable])
 		AC_LINK_IFELSE([
 			AC_LANG_PROGRAM([[
@@ -77,18 +77,26 @@ AC_DEFUN([ATHEME_LIBTEST_OPENSSL], [
 				AC_MSG_RESULT([yes])
 				LIBCRYPTO_NAME="LibreSSL"
 			])
-			AS_IF([test "x${ac_cv_header_openssl_ec_h}x${ac_cv_header_openssl_ecdsa_h}" = "xyesxyes"], [
+			AS_IF([test "x${ac_cv_header_openssl_ec_h}${ac_cv_header_openssl_ecdsa_h}" = "xyesyes"], [
 				ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
 				AC_SUBST([ECDSA_TOOLS_COND_D])
 			])
 			AC_DEFINE([HAVE_OPENSSL], [1], [Define to 1 if OpenSSL is available])
 		], [
 			LIBCRYPTO="No"
-			AS_IF([test "x${with_openssl}" = "xyes"], [
+			AS_IF([test "${with_openssl}" = "yes"], [
 				AC_MSG_ERROR([--with-openssl was specified but libcrypto is unusable for this task])
 			])
 		])
 	])
+
+	AS_IF([test "${LIBCRYPTO}" = "No"], [
+		LIBCRYPTO_CFLAGS=""
+		LIBCRYPTO_LIBS=""
+	])
+
+	AC_SUBST([LIBCRYPTO_CFLAGS])
+	AC_SUBST([LIBCRYPTO_LIBS])
 
 	LIBS="${LIBS_SAVED}"
 ])

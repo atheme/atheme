@@ -16,7 +16,7 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 
 	LIBS_SAVED="${LIBS}"
 
-	AS_IF([test "x${with_libidn}" != "xno"], [
+	AS_IF([test "${with_libidn}" != "no"], [
 		PKG_CHECK_MODULES([LIBIDN], [libidn], [
 			LIBS="${LIBIDN_LIBS} ${LIBS}"
 			AC_CHECK_HEADERS([stringprep.h], [
@@ -41,23 +41,31 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 				], [
 					AC_MSG_RESULT([no])
 					LIBIDN="No"
-					AS_IF([test "x${with_libidn}" = "xyes"], [
+					AS_IF([test "${with_libidn}" = "yes"], [
 						AC_MSG_ERROR([--with-libidn was specified but GNU libidn appears to be unusable])
 					])
 				])
 			], [
 				LIBIDN="No"
-				AS_IF([test "x${with_libidn}" = "xyes"], [
+				AS_IF([test "${with_libidn}" = "yes"], [
 					AC_MSG_ERROR([--with-libidn was specified but a required header file is missing])
 				])
 			])
 		], [
 			LIBIDN="No"
-			AS_IF([test "x${with_libidn}" = "xyes"], [
+			AS_IF([test "${with_libidn}" = "yes"], [
 				AC_MSG_ERROR([--with-libidn was specified but GNU libidn could not be found])
 			])
 		])
 	])
+
+	AS_IF([test "${LIBIDN}" = "No"], [
+		LIBIDN_CFLAGS=""
+		LIBIDN_LIBS=""
+	])
+
+	AC_SUBST([LIBIDN_CFLAGS])
+	AC_SUBST([LIBIDN_LIBS])
 
 	LIBS="${LIBS_SAVED}"
 ])

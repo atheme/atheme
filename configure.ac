@@ -127,24 +127,27 @@ HW_FUNC_ASPRINTF
 
 
 
+dnl This should be before any library tests so that insufficient header
+dnl inclusions in those tests are caught before they become a runtime
+dnl problem
+ATHEME_CC_TEST_CFLAGS([-Werror=implicit])
+
+
+
 dnl Libraries that are autodetected (alphabetical)
-ATHEME_LIBTEST_CRACKLIB
+ATHEME_LIBTEST_CRACK
 ATHEME_LIBTEST_CRYPT
+ATHEME_LIBTEST_CRYPTO
 ATHEME_LIBTEST_IDN
 ATHEME_LIBTEST_LDAP
-ATHEME_LIBTEST_MBEDTLS
+ATHEME_LIBTEST_MBEDCRYPTO
 ATHEME_LIBTEST_NETTLE
-ATHEME_LIBTEST_OPENSSL
 ATHEME_LIBTEST_PCRE
 ATHEME_LIBTEST_QRENCODE
 ATHEME_LIBTEST_SODIUM
 
 dnl Libraries that need to be explicitly enabled (alphabetical)
 ATHEME_LIBTEST_PERL
-
-dnl Digest and RNG frontend to use in libathemecore
-ATHEME_DECIDE_DIGEST_FRONTEND
-ATHEME_DECIDE_RANDOM_FRONTEND
 
 dnl Optional features
 ATHEME_FEATURETEST_CONTRIB
@@ -153,6 +156,10 @@ ATHEME_FEATURETEST_LARGENET
 ATHEME_FEATURETEST_LEGACY_PWCRYPTO
 ATHEME_FEATURETEST_REPROBUILDS
 ATHEME_FEATURETEST_SODIUM_MALLOC
+
+dnl Digest and RNG frontend to use in libathemecore
+ATHEME_DECIDE_DIGEST_FRONTEND
+ATHEME_DECIDE_RANDOM_FRONTEND
 
 dnl These must be here, not above, or they might interfere with library and feature tests
 dnl Explanation is that these modify one or more of CFLAGS, CPPFLAGS, LDFLAGS, and LIBS

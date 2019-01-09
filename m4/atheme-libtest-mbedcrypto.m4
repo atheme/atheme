@@ -1,4 +1,4 @@
-AC_DEFUN([ATHEME_LIBTEST_MBEDTLS], [
+AC_DEFUN([ATHEME_LIBTEST_MBEDCRYPTO], [
 
 	LIBMBEDCRYPTO="No"
 	LIBMBEDCRYPTORNG="No"
@@ -18,25 +18,25 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDTLS], [
 
 	LIBS_SAVED="${LIBS}"
 
-	AS_IF([test "x${with_mbedtls}" != "xno"], [
+	AS_IF([test "${with_mbedtls}" != "no"], [
 		AC_SEARCH_LIBS([mbedtls_md_setup], [mbedcrypto], [
 			LIBMBEDCRYPTO="Yes"
 			AC_CHECK_HEADERS([mbedtls/error.h mbedtls/version.h], [], [], [])
 			AC_CHECK_HEADERS([mbedtls/md.h mbedtls/pkcs5.h], [], [
 				LIBMBEDCRYPTO="No"
-				AS_IF([test "x${with_mbedtls}" = "xyes"], [
+				AS_IF([test "${with_mbedtls}" = "yes"], [
 					AC_MSG_ERROR([--with-mbedtls was specified but a required header file is missing])
 				])
 			], [])
 		], [
 			LIBMBEDCRYPTO="No"
-			AS_IF([test "x${with_mbedtls}" = "xyes"], [
+			AS_IF([test "${with_mbedtls}" = "yes"], [
 				AC_MSG_ERROR([--with-mbedtls was specified but ARM mbedTLS could not be found])
 			])
 		])
 	])
 
-	AS_IF([test "x${LIBMBEDCRYPTO}" = "xYes"], [
+	AS_IF([test "${LIBMBEDCRYPTO}" = "Yes"], [
 		AC_MSG_CHECKING([if ARM mbedTLS has MD5/SHA1/SHA2/PBKDF2 support])
 		AC_LINK_IFELSE([
 			AC_LANG_PROGRAM([[
@@ -120,7 +120,7 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDTLS], [
 		], [
 			AC_MSG_RESULT([no])
 			LIBMBEDCRYPTO="No"
-			AS_IF([test "x${with_mbedtls}" = "xyes"], [
+			AS_IF([test "${with_mbedtls}" = "yes"], [
 				AC_MSG_ERROR([--with-mbedtls was specified but ARM mbedTLS appears to be unusable])
 			])
 		])

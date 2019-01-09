@@ -17,10 +17,10 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
 
 	LIBS_SAVED="${LIBS}"
 
-	AS_IF([test "x${with_qrencode}" != "xno"], [
-		AC_CHECK_HEADERS([qrencode.h], [
-			PKG_CHECK_MODULES([LIBQRENCODE], [libqrencode], [
-				LIBS="${LIBQRENCODE_LIBS} ${LIBS}"
+	AS_IF([test "${with_qrencode}" != "no"], [
+		PKG_CHECK_MODULES([LIBQRENCODE], [libqrencode], [
+			LIBS="${LIBQRENCODE_LIBS} ${LIBS}"
+			AC_CHECK_HEADERS([qrencode.h], [
 				AC_MSG_CHECKING([if libqrencode is usable])
 				AC_LINK_IFELSE([
 					AC_LANG_PROGRAM([[
@@ -39,23 +39,31 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
 				], [
 					AC_MSG_RESULT([no])
 					LIBQRENCODE="No"
-					AS_IF([test "x${with_qrencode}" = "xyes"], [
+					AS_IF([test "${with_qrencode}" = "yes"], [
 						AC_MSG_ERROR([--with-qrencode was specified but libqrencode does not appear to be usable])
 					])
 				])
 			], [
 				LIBQRENCODE="No"
-				AS_IF([test "x${with_qrencode}" = "xyes"], [
-					AC_MSG_ERROR([--with-qrencode was specified but libqrencode could not be found])
+				AS_IF([test "${with_qrencode}" = "yes"], [
+					AC_MSG_ERROR([--with-qrencode was specified but a required header file is missing])
 				])
-			])
+			], [])
 		], [
 			LIBQRENCODE="No"
-			AS_IF([test "x${with_qrencode}" = "xyes"], [
-				AC_MSG_ERROR([--with-qrencode was specified but a required header file is missing])
+			AS_IF([test "${with_qrencode}" = "yes"], [
+				AC_MSG_ERROR([--with-qrencode was specified but libqrencode could not be found])
 			])
-		], [])
+		])
 	])
+
+	AS_IF([test "${LIBQRENCODE}" = "No"], [
+		LIBQRENCODE_CFLAGS=""
+		LIBQRENCODE_LIBS=""
+	])
+
+	AC_SUBST([LIBQRENCODE_CFLAGS])
+	AC_SUBST([LIBQRENCODE_LIBS])
 
 	LIBS="${LIBS_SAVED}"
 ])
