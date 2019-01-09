@@ -50,7 +50,7 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 				AS_IF([test "${with_libidn}" = "yes"], [
 					AC_MSG_ERROR([--with-libidn was specified but a required header file is missing])
 				])
-			])
+			], [])
 		], [
 			LIBIDN="No"
 			AS_IF([test "${with_libidn}" = "yes"], [
