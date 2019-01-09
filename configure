@@ -10575,9 +10575,6 @@ if ac_fn_c_try_link "$LINENO"; then :
 $as_echo "yes" >&6; }
 				LIBSODIUMMEMZERO="Yes"
 
-$as_echo "#define HAVE_LIBSODIUM_MEMZERO 1" >>confdefs.h
-
-
 else
 
 				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
@@ -10655,6 +10652,13 @@ else
 
 $as_echo "#define HAVE_LIBSODIUM 1" >>confdefs.h
 
+				if test "${LIBSODIUMMEMZERO}" = "Yes"; then :
+
+
+$as_echo "#define HAVE_LIBSODIUM_MEMZERO 1" >>confdefs.h
+
+
+fi
 
 fi
 

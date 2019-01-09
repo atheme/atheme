@@ -83,7 +83,6 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 			], [
 				AC_MSG_RESULT([yes])
 				LIBSODIUMMEMZERO="Yes"
-				AC_DEFINE([HAVE_LIBSODIUM_MEMZERO], [1], [libsodium memzero is available])
 			], [
 				AC_MSG_RESULT([no])
 				LIBSODIUMMEMZERO="No"
@@ -118,6 +117,9 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 				])
 			], [
 				AC_DEFINE([HAVE_LIBSODIUM], [1], [Define to 1 if libsodium is available])
+				AS_IF([test "${LIBSODIUMMEMZERO}" = "Yes"], [
+					AC_DEFINE([HAVE_LIBSODIUM_MEMZERO], [1], [libsodium memzero is available])
+				])
 			])
 		], [
 			AC_MSG_RESULT([no])
