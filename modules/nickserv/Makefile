@@ -73,4 +73,4 @@ include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include
 LDFLAGS		+= -L../../libathemecore
-LIBS		+= -lathemecore ${CRACKLIB_LIBS}
+LIBS		+= $(CRACKLIB_LIBS) -lathemecore

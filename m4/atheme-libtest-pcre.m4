@@ -3,7 +3,7 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 	LIBPCRE="No"
 
 	AC_ARG_WITH([pcre],
-		[AS_HELP_STRING([--without-pcre], [Do not attempt to detect Perl-Compatible Regular Expression library])],
+		[AS_HELP_STRING([--without-pcre], [Do not attempt to detect libpcre])],
 		[], [with_pcre="auto"])
 
 	case "${with_pcre}" in
@@ -14,21 +14,21 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 			;;
 	esac
 
-	AS_IF([test "x${with_pcre}" != "xno"], [
-		LIBS_SAVED="${LIBS}"
+	LIBS_SAVED="${LIBS}"
 
-		PKG_CHECK_MODULES([PCRE], [libpcre], [LIBPCRE="Yes"], [
-			AS_IF([test "x${with_pcre}" != "xauto"], [
-				AC_MSG_ERROR([--with-pcre was specified but the PCRE library could not be found])
+	AS_IF([test "x${with_pcre}" != "xno"], [
+		PKG_CHECK_MODULES([PCRE], [libpcre], [
+			LIBPCRE="Yes"
+			AC_SUBST([PCRE_CFLAGS])
+			AC_SUBST([PCRE_LIBS])
+			AC_DEFINE([HAVE_PCRE], [1], [Define to 1 if PCRE is available])
+		], [
+			LIBPCRE="No"
+			AS_IF([test "x${with_pcre}" = "xyes"], [
+				AC_MSG_ERROR([--with-pcre was specified but libpcre could not be found])
 			])
 		])
-
-		LIBS="${LIBS_SAVED}"
 	])
 
-	AS_IF([test "x${LIBPCRE}" = "xYes"], [
-		AC_DEFINE([HAVE_PCRE], [1], [Define to 1 if PCRE is available])
-		AC_SUBST([PCRE_CFLAGS])
-		AC_SUBST([PCRE_LIBS])
-	])
+	LIBS="${LIBS_SAVED}"
 ])

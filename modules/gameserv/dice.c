@@ -68,7 +68,7 @@ calc_dice_simple(double lhs, double rhs)
 
 	for (i = 0; i < dice; i++)
 	{
-		out += 1.0 + arc4random_uniform(sides);
+		out += 1.0 + atheme_random_uniform(sides);
 	}
 
 	return out;
@@ -484,7 +484,7 @@ eval_dice(struct sourceinfo *si, char *s_input)
 	snprintf(buffer, 1024, _("\2%s\2 rolled %ud%u: "), si->su->nick, x, y);
 	for (roll = 0; roll < x; ++roll)
 	{
-		snprintf(result, 32, "%d ", dice = (1 + arc4random_uniform(y)));
+		snprintf(result, 32, "%d ", dice = (1 + atheme_random_uniform(y)));
 		mowgli_strlcat(buffer, result, sizeof(buffer));
 		total += dice;
 	}

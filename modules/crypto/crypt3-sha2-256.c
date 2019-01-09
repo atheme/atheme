@@ -42,7 +42,7 @@ atheme_crypt3_sha2_256_crypt(const char *const restrict password,
 	char salt[sizeof rawsalt + 1];
 	char parv[PASSLEN + 1];
 
-	(void) arc4random_buf(rawsalt, sizeof rawsalt);
+	(void) atheme_random_buf(rawsalt, sizeof rawsalt);
 	(void) memset(salt, 0x00, sizeof salt);
 
 	for (size_t i = 0; i < sizeof rawsalt; i++)

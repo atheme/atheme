@@ -641,12 +641,16 @@ DOCDIR
 DATADIR
 CONTRIB_LIBS
 CONTRIB_COND_D
+RANDOM_API_LIBS
+RANDOM_API_CFLAGS
 DIGEST_API_LIBS
+DIGEST_API_CFLAGS
 PERL_LIBS
 PERL_CFLAGS
 PERL_COND_D
 perlpath
 LIBSODIUM_LIBS
+LIBSODIUM_CFLAGS
 QRCODE_COND_C
 LIBQRENCODE_LIBS
 LIBQRENCODE_CFLAGS
@@ -654,15 +658,15 @@ PCRE_LIBS
 PCRE_CFLAGS
 ECDSA_TOOLS_COND_D
 LIBCRYPTO_LIBS
+LIBCRYPTO_CFLAGS
 LIBNETTLE_LIBS
+LIBNETTLE_CFLAGS
 LIBMBEDCRYPTO_LIBS
 LDAP_LIBS
-LDAP_LDFLAGS
-LDAP_CPPFLAGS
 LIBIDN_LIBS
+LIBIDN_CFLAGS
 LIBCRYPT_LIBS
 CRACKLIB_LIBS
-ARC4RANDOM_COND_C
 LIBOBJS
 PODIR_COND_D
 POSUB
@@ -832,10 +836,18 @@ CPP
 PKG_CONFIG
 PKG_CONFIG_PATH
 PKG_CONFIG_LIBDIR
+LIBIDN_CFLAGS
+LIBIDN_LIBS
+LIBNETTLE_CFLAGS
+LIBNETTLE_LIBS
+LIBCRYPTO_CFLAGS
+LIBCRYPTO_LIBS
 PCRE_CFLAGS
 PCRE_LIBS
 LIBQRENCODE_CFLAGS
 LIBQRENCODE_LIBS
+LIBSODIUM_CFLAGS
+LIBSODIUM_LIBS
 MOWGLI_CFLAGS
 MOWGLI_LIBS'
 
@@ -1506,20 +1518,21 @@ Optional Packages:
   --without-libiconv-prefix     don't search for libiconv in includedir and libdir
   --with-libintl-prefix[=DIR]  search for libintl in DIR/include and DIR/lib
   --without-libintl-prefix     don't search for libintl in includedir and libdir
-  --without-cracklib      Do not attempt to detect CrackLib for
-                          modules/nickserv/cracklib (checking password
+  --without-cracklib      Do not attempt to detect cracklib (for
+                          modules/nickserv/cracklib -- checking password
                           strength)
-  --without-crypt         Do not attempt to detect crypt(3) for
-                          modules/crypto/crypt3-*
-  --without-libidn        Do not attempt to detect GNU libidn for
-                          modules/saslserv/scram-sha
-  --without-ldap          Do not attempt to detect LDAP for modules/auth/ldap
+  --without-crypt         Do not attempt to detect crypt(3) (for
+                          modules/crypto/crypt3-*)
+  --without-libidn        Do not attempt to detect GNU libidn (for
+                          modules/saslserv/scram-sha -- SASLprep
+                          normalization)
+  --without-ldap          Do not attempt to detect libldap (for
+                          modules/auth/ldap)
   --without-mbedtls       Do not attempt to detect ARM mbedTLS
   --without-nettle        Do not attempt to detect nettle (crypto library)
-  --without-openssl       Do not attempt to detect OpenSSL for
-                          modules/saslserv/ecdsa-nist256p-challenge
-  --without-pcre          Do not attempt to detect Perl-Compatible Regular
-                          Expression library
+  --without-openssl       Do not attempt to detect libcrypto (for
+                          modules/saslserv/ecdsa-nist256p-challenge)
+  --without-pcre          Do not attempt to detect libpcre
   --without-qrencode      Do not attempt to detect libqrencode for generating
                           QR codes
   --without-sodium        Do not attempt to detect libsodium for secure memory
@@ -1544,12 +1557,27 @@ Some influential environment variables:
               directories to add to pkg-config's search path
   PKG_CONFIG_LIBDIR
               path overriding pkg-config's built-in search path
+  LIBIDN_CFLAGS
+              C compiler flags for LIBIDN, overriding pkg-config
+  LIBIDN_LIBS linker flags for LIBIDN, overriding pkg-config
+  LIBNETTLE_CFLAGS
+              C compiler flags for LIBNETTLE, overriding pkg-config
+  LIBNETTLE_LIBS
+              linker flags for LIBNETTLE, overriding pkg-config
+  LIBCRYPTO_CFLAGS
+              C compiler flags for LIBCRYPTO, overriding pkg-config
+  LIBCRYPTO_LIBS
+              linker flags for LIBCRYPTO, overriding pkg-config
   PCRE_CFLAGS C compiler flags for PCRE, overriding pkg-config
   PCRE_LIBS   linker flags for PCRE, overriding pkg-config
   LIBQRENCODE_CFLAGS
               C compiler flags for LIBQRENCODE, overriding pkg-config
   LIBQRENCODE_LIBS
               linker flags for LIBQRENCODE, overriding pkg-config
+  LIBSODIUM_CFLAGS
+              C compiler flags for LIBSODIUM, overriding pkg-config
+  LIBSODIUM_LIBS
+              linker flags for LIBSODIUM, overriding pkg-config
   MOWGLI_CFLAGS
               C compiler flags for MOWGLI, overriding pkg-config
   MOWGLI_LIBS linker flags for MOWGLI, overriding pkg-config
@@ -7271,19 +7299,7 @@ done
 
 $as_echo "#define __STDC_WANT_LIB_EXT1__ 1" >>confdefs.h
 
-for ac_func in arc4random arc4random_buf arc4random_uniform explicit_bzero memset_s
-do :
-  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
-ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
-if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
-_ACEOF
-
-fi
-done
-
-for ac_func in execve flock fork getpid getrlimit gettimeofday strcasestr strtok_r
+for ac_func in execve explicit_bzero flock fork getpid getrlimit gettimeofday memset_s strcasestr strtok_r
 do :
   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
 ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
@@ -8428,47 +8444,9 @@ fi
 
 
 
-ARC4RANDOM_BUILDING="No"
-ARC4RANDOM_COND_C=""
-if test "x${ac_cv_func_arc4random}x${ac_cv_func_arc4random_buf}x${ac_cv_func_arc4random_uniform}" != "xyesxyesxyes"; then :
-
-	ARC4RANDOM_BUILDING="Yes"
-	ARC4RANDOM_COND_C="arc4random.c"
-
-
-	for ac_header in sys/random.h
-do :
-  ac_fn_c_check_header_mongrel "$LINENO" "sys/random.h" "ac_cv_header_sys_random_h" "$ac_includes_default"
-if test "x$ac_cv_header_sys_random_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_SYS_RANDOM_H 1
-_ACEOF
-
-fi
-
-done
-
-	for ac_func in getentropy getrandom
-do :
-  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
-ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
-if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
-_ACEOF
-
-fi
-done
-
-
-fi
-
-
-
 
 
 	LIBCRACKLIB="No"
-
 	CRACKLIB_LIBS=""
 
 
@@ -8488,11 +8466,19 @@ fi
 			;;
 	esac
 
+	LIBS_SAVED="${LIBS}"
+
 	if test "x${with_cracklib}" != "xno"; then :
 
-		LIBS_SAVED="${LIBS}"
+		for ac_header in crack.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "crack.h" "ac_cv_header_crack_h" "$ac_includes_default"
+if test "x$ac_cv_header_crack_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_CRACK_H 1
+_ACEOF
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing FascistCheck" >&5
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing FascistCheck" >&5
 $as_echo_n "checking for library containing FascistCheck... " >&6; }
 if ${ac_cv_search_FascistCheck+:} false; then :
   $as_echo_n "(cached) " >&6
@@ -8545,40 +8531,89 @@ $as_echo "$ac_cv_search_FascistCheck" >&6; }
 ac_res=$ac_cv_search_FascistCheck
 if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-  LIBCRACKLIB="Yes"
-else
 
-			if test "x${with_cracklib}" != "xauto"; then :
-
-				as_fn_error $? "--with-cracklib was specified but cracklib could not be found" "$LINENO" 5
-
-fi
-
-fi
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if cracklib appears to be usable" >&5
+$as_echo_n "checking if cracklib appears to be usable... " >&6; }
+				cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
 
 
-		LIBS="${LIBS_SAVED}"
+						#include <stddef.h> /* <crack.h> uses size_t but doesn't define it */
+						#include <crack.h>
 
-fi
+int
+main ()
+{
 
-	if test "x${LIBCRACKLIB}" = "xYes"; then :
+						const char *const result = FascistCheck("test", "test");
 
-		if test "x${ac_cv_search_FascistCheck}" != "xnone required"; then :
+  ;
+  return 0;
+}
 
-			CRACKLIB_LIBS="${ac_cv_search_FascistCheck}"
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+					LIBCRACKLIB="Yes"
+					if test "x${ac_cv_search_FascistCheck}" != "xnone required"; then :
+
+						CRACKLIB_LIBS="${ac_cv_search_FascistCheck}"
+
 
 fi
 
 $as_echo "#define HAVE_CRACKLIB 1" >>confdefs.h
 
 
+else
+
+					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+					LIBCRACKLIB="No"
+					if test "x${with_cracklib}" = "xyes"; then :
+
+						as_fn_error $? "--with-cracklib was specified but cracklib appears to be unusable" "$LINENO" 5
+
+fi
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+else
+
+				LIBCRACKLIB="No"
+				if test "x${with_cracklib}" = "xyes"; then :
+
+					as_fn_error $? "--with-cracklib was specified but cracklib could not be found" "$LINENO" 5
+
+fi
 
 fi
 
 
+else
+
+			LIBCRACKLIB="No"
+			if test "x${with_cracklib}" = "xyes"; then :
+
+				as_fn_error $? "--with-cracklib was specified but a required header file is missing" "$LINENO" 5
+
+fi
+
+fi
+
+done
+
+
+fi
+
+	LIBS="${LIBS_SAVED}"
+
+
 
 	LIBCRYPT="No"
-
 	LIBCRYPT_LIBS=""
 
 
@@ -8598,9 +8633,9 @@ fi
 			;;
 	esac
 
-	if test "x${with_crypt}" != "xno"; then :
+	LIBS_SAVED="${LIBS}"
 
-		LIBS_SAVED="${LIBS}"
+	if test "x${with_crypt}" != "xno"; then :
 
 		for ac_header in crypt.h
 do :
@@ -8613,7 +8648,6 @@ _ACEOF
 fi
 
 done
-
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing crypt" >&5
 $as_echo_n "checking for library containing crypt... " >&6; }
@@ -8668,50 +8702,23 @@ $as_echo "$ac_cv_search_crypt" >&6; }
 ac_res=$ac_cv_search_crypt
 if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-  LIBCRYPT="Yes"
-else
 
-			if test "x${with_crypt}" != "xauto"; then :
-
-				as_fn_error $? "--with-crypt was specified but crypt(3) could not be found" "$LINENO" 5
-
-fi
-
-fi
-
-
-		LIBS="${LIBS_SAVED}"
-
-fi
-
-	if test "x${LIBCRYPT}" = "xYes"; then :
-
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if compiling a program using crypt(3) works" >&5
-$as_echo_n "checking if compiling a program using crypt(3) works... " >&6; }
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if crypt(3) appears to be usable" >&5
+$as_echo_n "checking if crypt(3) appears to be usable... " >&6; }
+			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 
-
-
-				#include <unistd.h>
-
-				#ifdef HAVE_CRYPT_H
-				#include <crypt.h>
-				#endif
-
+					#include <unistd.h>
+					#ifdef HAVE_CRYPT_H
+					#  include <crypt.h>
+					#endif
 
 int
 main ()
 {
 
-
-				const char *const result = crypt("test", "Aa");
-
-				return 0;
-
+					const char *const result = crypt("test", "test");
 
   ;
   return 0;
@@ -8720,43 +8727,53 @@ main ()
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+				LIBCRYPT="Yes"
+				if test "x${ac_cv_search_crypt}" != "xnone required"; then :
 
-else
+					LIBCRYPT_LIBS="${ac_cv_search_crypt}"
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-			LIBCRYPT="No"
-
-			if test "x${with_crypt}" != "xauto"; then :
-  as_fn_error $? "--with-crypt was specified but cannot compile a program using crypt(3)" "$LINENO" 5
-fi
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-fi
-
-	if test "x${LIBCRYPT}" = "xYes"; then :
-
-		if test "x${ac_cv_search_crypt}" != "xnone required"; then :
-
-			LIBCRYPT_LIBS="${ac_cv_search_crypt}"
 
 fi
 
 $as_echo "#define HAVE_CRYPT 1" >>confdefs.h
 
 
+else
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+				LIBCRYPT="No"
+				if test "x${with_crypt}" = "xyes"; then :
+
+					as_fn_error $? "--with-crypt was specified but crypt(3) appears to be unusable" "$LINENO" 5
+
+fi
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+
+else
+
+			LIBCRYPT="No"
+			if test "x${with_crypt}" = "xyes"; then :
+
+				as_fn_error $? "--with-crypt was specified but crypt(3) could not be found" "$LINENO" 5
+
+fi
 
 fi
 
 
+fi
+
+	LIBS="${LIBS_SAVED}"
+
+
 
 	LIBIDN="No"
-
-	LIBIDN_LIBS=""
 
 
 # Check whether --with-libidn was given.
@@ -8775,99 +8792,176 @@ fi
 			;;
 	esac
 
+	LIBS_SAVED="${LIBS}"
+
 	if test "x${with_libidn}" != "xno"; then :
 
-		LIBS_SAVED="${LIBS}"
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing stringprep" >&5
-$as_echo_n "checking for library containing stringprep... " >&6; }
-if ${ac_cv_search_stringprep+:} false; then :
-  $as_echo_n "(cached) " >&6
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBIDN" >&5
+$as_echo_n "checking for LIBIDN... " >&6; }
+
+if test -n "$LIBIDN_CFLAGS"; then
+    pkg_cv_LIBIDN_CFLAGS="$LIBIDN_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libidn\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libidn") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBIDN_CFLAGS=`$PKG_CONFIG --cflags "libidn" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
 else
-  ac_func_search_save_LIBS=$LIBS
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char stringprep ();
-int
-main ()
-{
-return stringprep ();
-  ;
-  return 0;
-}
-_ACEOF
-for ac_lib in '' idn; do
-  if test -z "$ac_lib"; then
-    ac_res="none required"
-  else
-    ac_res=-l$ac_lib
-    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
-  fi
-  if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_search_stringprep=$ac_res
+  pkg_failed=yes
 fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext
-  if ${ac_cv_search_stringprep+:} false; then :
-  break
+ else
+    pkg_failed=untried
 fi
-done
-if ${ac_cv_search_stringprep+:} false; then :
-
+if test -n "$LIBIDN_LIBS"; then
+    pkg_cv_LIBIDN_LIBS="$LIBIDN_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libidn\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libidn") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBIDN_LIBS=`$PKG_CONFIG --libs "libidn" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
 else
-  ac_cv_search_stringprep=no
+  pkg_failed=yes
 fi
-rm conftest.$ac_ext
-LIBS=$ac_func_search_save_LIBS
+ else
+    pkg_failed=untried
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_stringprep" >&5
-$as_echo "$ac_cv_search_stringprep" >&6; }
-ac_res=$ac_cv_search_stringprep
-if test "$ac_res" != no; then :
-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-  LIBIDN="Yes"
-else
 
-			if test "x${with_libidn}" != "xauto"; then :
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        LIBIDN_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libidn" 2>&1`
+        else
+	        LIBIDN_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libidn" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$LIBIDN_PKG_ERRORS" >&5
+
+
+			LIBIDN="No"
+			if test "x${with_libidn}" = "xyes"; then :
 
 				as_fn_error $? "--with-libidn was specified but GNU libidn could not be found" "$LINENO" 5
 
 fi
 
-fi
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
+			LIBIDN="No"
+			if test "x${with_libidn}" = "xyes"; then :
 
-		LIBS="${LIBS_SAVED}"
-
-fi
-
-	if test "x${LIBIDN}" = "xYes"; then :
-
-		if test "x${ac_cv_search_stringprep}" != "xnone required"; then :
-
-			LIBIDN_LIBS="${ac_cv_search_stringprep}"
+				as_fn_error $? "--with-libidn was specified but GNU libidn could not be found" "$LINENO" 5
 
 fi
+
+else
+	LIBIDN_CFLAGS=$pkg_cv_LIBIDN_CFLAGS
+	LIBIDN_LIBS=$pkg_cv_LIBIDN_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+			LIBS="${LIBIDN_LIBS} ${LIBS}"
+			for ac_header in stringprep.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "stringprep.h" "ac_cv_header_stringprep_h" "$ac_includes_default"
+if test "x$ac_cv_header_stringprep_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_STRINGPREP_H 1
+_ACEOF
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if GNU libidn appears to be usable" >&5
+$as_echo_n "checking if GNU libidn appears to be usable... " >&6; }
+				cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+						#include <stddef.h>
+						#include <stdio.h>
+						#include <stdlib.h>
+						#include <stringprep.h>
+
+int
+main ()
+{
+
+						char buf[128];
+						char *const tmp = stringprep_locale_to_utf8("test");
+						(void) snprintf(buf, sizeof buf, "%s", tmp);
+						(void) free(tmp);
+						const int ret = stringprep(buf, sizeof buf, (Stringprep_profile_flags) 0, stringprep_saslprep);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+					LIBIDN="Yes"
 
 $as_echo "#define HAVE_LIBIDN 1" >>confdefs.h
 
 
+else
+
+					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+					LIBIDN="No"
+					if test "x${with_libidn}" = "xyes"; then :
+
+						as_fn_error $? "--with-libidn was specified but GNU libidn appears to be unusable" "$LINENO" 5
 
 fi
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+else
+
+				LIBIDN="No"
+				if test "x${with_libidn}" = "xyes"; then :
+
+					as_fn_error $? "--with-libidn was specified but a required header file is missing" "$LINENO" 5
+
+fi
+
+fi
+
+done
+
+
+fi
+
+fi
+
+	LIBS="${LIBS_SAVED}"
 
 
 
 	LIBLDAP="No"
-
-	LDAP_CPPFLAGS=""
-	LDAP_LDFLAGS=""
 	LDAP_LIBS=""
 
 
@@ -8887,75 +8981,17 @@ fi
 			;;
 	esac
 
+	LIBS_SAVED="${LIBS}"
+
 	if test "x${with_ldap}" != "xno"; then :
 
-
-		LIBS_SAVED="${LIBS}"
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing ldap_initialize" >&5
-$as_echo_n "checking for library containing ldap_initialize... " >&6; }
-if ${ac_cv_search_ldap_initialize+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_func_search_save_LIBS=$LIBS
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char ldap_initialize ();
-int
-main ()
-{
-return ldap_initialize ();
-  ;
-  return 0;
-}
+		for ac_header in ldap.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "ldap.h" "ac_cv_header_ldap_h" "$ac_includes_default"
+if test "x$ac_cv_header_ldap_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LDAP_H 1
 _ACEOF
-for ac_lib in '' ldap; do
-  if test -z "$ac_lib"; then
-    ac_res="none required"
-  else
-    ac_res=-l$ac_lib
-    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
-  fi
-  if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_search_ldap_initialize=$ac_res
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext
-  if ${ac_cv_search_ldap_initialize+:} false; then :
-  break
-fi
-done
-if ${ac_cv_search_ldap_initialize+:} false; then :
-
-else
-  ac_cv_search_ldap_initialize=no
-fi
-rm conftest.$ac_ext
-LIBS=$ac_func_search_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_ldap_initialize" >&5
-$as_echo "$ac_cv_search_ldap_initialize" >&6; }
-ac_res=$ac_cv_search_ldap_initialize
-if test "$ac_res" != no; then :
-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-  LIBLDAP="Yes"
-else
-
-
-			unset ac_cv_search_ldap_initialize
-
-			CPPFLAGS_SAVED="${CPPFLAGS}"
-			LDFLAGS_SAVED="${LDFLAGS}"
-
-			CPPFLAGS="${CPPFLAGS} -I/usr/local/include"
-			LDFLAGS="${LDFLAGS} -L/usr/local/lib"
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing ldap_initialize" >&5
 $as_echo_n "checking for library containing ldap_initialize... " >&6; }
@@ -9011,51 +9047,92 @@ ac_res=$ac_cv_search_ldap_initialize
 if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
 
-				LIBLDAP="Yes"
-				LDAP_CPPFLAGS="-I/usr/local/include"
-				LDAP_LDFLAGS="-L/usr/local/lib"
-
-else
-
-				if test "x${with_ldap}" != "xauto"; then :
-
-					as_fn_error $? "--with-ldap was specified but LDAP library could not be found" "$LINENO" 5
-
-fi
-
-fi
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libldap appears to be usable" >&5
+$as_echo_n "checking if libldap appears to be usable... " >&6; }
+				cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
 
 
-			CPPFLAGS="${CPPFLAGS_SAVED}"
-			LDFLAGS="${LDFLAGS_SAVED}"
+						#include <stddef.h>
+						#include <ldap.h>
 
-fi
+int
+main ()
+{
 
+						(void) ldap_set_option(NULL, 0, NULL);
+						(void) ldap_initialize(NULL, NULL);
+						(void) ldap_get_dn(NULL, NULL);
+						(void) ldap_err2string(0);
 
-		LIBS="${LIBS_SAVED}"
+  ;
+  return 0;
+}
 
-fi
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
 
-	if test "x${LIBLDAP}" = "xYes"; then :
+					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+					LIBLDAP="Yes"
+					if test "x${ac_cv_search_ldap_initialize}" != "xnone required"; then :
 
-		if test "x${ac_cv_search_ldap_initialize}" != "xnone required"; then :
+						LDAP_LIBS="${ac_cv_search_ldap_initialize}"
 
-			LDAP_LIBS="${ac_cv_search_ldap_initialize}"
 
 fi
 
 $as_echo "#define HAVE_LDAP 1" >>confdefs.h
 
 
+else
 
+					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+					LIBLDAP="No"
+					if test "x${with_ldap}" = "xyes"; then :
 
+						as_fn_error $? "--with-ldap was specified but libldap appears to be unusable" "$LINENO" 5
+
+fi
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+else
+
+				LIBLDAP="No"
+				if test "x${with_ldap}" = "xyes"; then :
+
+					as_fn_error $? "--with-ldap was specified but libldap could not be found" "$LINENO" 5
+
+fi
 
 fi
 
 
+else
+
+			LIBLDAP="No"
+			if test "x${with_ldap}" = "xyes"; then :
+
+				as_fn_error $? "--with-ldap was specified but a required header file is missing" "$LINENO" 5
+
+fi
+
+fi
+
+done
+
+
+fi
+
+	LIBS="${LIBS_SAVED}"
+
+
 
 	LIBMBEDCRYPTO="No"
-
+	LIBMBEDCRYPTORNG="No"
 	LIBMBEDCRYPTO_LIBS=""
 
 
@@ -9075,9 +9152,9 @@ fi
 			;;
 	esac
 
-	if test "x${with_mbedtls}" != "xno"; then :
+	LIBS_SAVED="${LIBS}"
 
-		LIBS_SAVED="${LIBS}"
+	if test "x${with_mbedtls}" != "xno"; then :
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing mbedtls_md_setup" >&5
 $as_echo_n "checking for library containing mbedtls_md_setup... " >&6; }
@@ -9132,10 +9209,48 @@ $as_echo "$ac_cv_search_mbedtls_md_setup" >&6; }
 ac_res=$ac_cv_search_mbedtls_md_setup
 if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-  LIBMBEDCRYPTO="Yes"
+
+			LIBMBEDCRYPTO="Yes"
+			for ac_header in mbedtls/error.h mbedtls/version.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+fi
+
+done
+
+			for ac_header in mbedtls/md.h mbedtls/pkcs5.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
 else
 
-			if test "x${with_mbedtls}" != "xauto"; then :
+				LIBMBEDCRYPTO="No"
+				if test "x${with_mbedtls}" = "xyes"; then :
+
+					as_fn_error $? "--with-mbedtls was specified but a required header file is missing" "$LINENO" 5
+
+fi
+
+fi
+
+done
+
+
+else
+
+			LIBMBEDCRYPTO="No"
+			if test "x${with_mbedtls}" = "xyes"; then :
 
 				as_fn_error $? "--with-mbedtls was specified but ARM mbedTLS could not be found" "$LINENO" 5
 
@@ -9144,224 +9259,165 @@ fi
 fi
 
 
-		LIBS="${LIBS_SAVED}"
-
 fi
 
 	if test "x${LIBMBEDCRYPTO}" = "xYes"; then :
 
-		for ac_header in mbedtls/error.h mbedtls/version.h
-do :
-  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
-
-fi
-
-done
-
-		for ac_header in mbedtls/md.h mbedtls/pkcs5.h
-do :
-  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
-
-else
-
-			LIBMBEDCRYPTO="No"
-			if test "x${with_mbedtls}" = "xyes"; then :
-  as_fn_error $? "required header file missing" "$LINENO" 5
-fi
-
-fi
-
-done
-
-
-fi
-
-	if test "x${LIBMBEDCRYPTO}" = "xYes"; then :
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if ARM mbedTLS has MD5/SHA1/SHA2 and PBKDF2 support" >&5
-$as_echo_n "checking if ARM mbedTLS has MD5/SHA1/SHA2 and PBKDF2 support... " >&6; }
-
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if ARM mbedTLS has MD5/SHA1/SHA2/PBKDF2 support" >&5
+$as_echo_n "checking if ARM mbedTLS has MD5/SHA1/SHA2/PBKDF2 support... " >&6; }
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 
-
-				#ifdef HAVE_MBEDTLS_MD_H
+				#include <stddef.h>
 				#include <mbedtls/md.h>
-				#else
-				#error "ARM mbedTLS support requires <mbedtls/md.h>"
-				#endif
-
-				#ifdef HAVE_MBEDTLS_PKCS5_H
 				#include <mbedtls/pkcs5.h>
-				#else
-				#error "ARM mbedTLS support requires <mbedtls/pkcs5.h>"
-				#endif
-
 				#ifndef MBEDTLS_MD_C
-				#error "ARM mbedTLS support requires MBEDTLS_MD_C to be enabled"
+				#  error "ARM mbedTLS support requires MBEDTLS_MD_C to be enabled"
 				#endif
-
 				#ifndef MBEDTLS_MD5_C
-				#error "ARM mbedTLS support requires MBEDTLS_MD5_C to be enabled"
+				#  error "ARM mbedTLS support requires MBEDTLS_MD5_C to be enabled"
 				#endif
-
 				#ifndef MBEDTLS_SHA1_C
-				#error "ARM mbedTLS support requires MBEDTLS_SHA1_C to be enabled"
+				#  error "ARM mbedTLS support requires MBEDTLS_SHA1_C to be enabled"
 				#endif
-
 				#ifndef MBEDTLS_SHA256_C
-				#error "ARM mbedTLS support requires MBEDTLS_SHA256_C to be enabled"
+				#  error "ARM mbedTLS support requires MBEDTLS_SHA256_C to be enabled"
 				#endif
-
 				#ifndef MBEDTLS_SHA512_C
-				#error "ARM mbedTLS support requires MBEDTLS_SHA512_C to be enabled"
+				#  error "ARM mbedTLS support requires MBEDTLS_SHA512_C to be enabled"
 				#endif
-
 				#ifndef MBEDTLS_PKCS5_C
-				#error "ARM mbedTLS support requires MBEDTLS_PKCS5_C to be enabled"
+				#  error "ARM mbedTLS support requires MBEDTLS_PKCS5_C to be enabled"
 				#endif
-
 
 int
 main ()
 {
 
-
-				return 0;
-
+				(void) mbedtls_md_info_from_type(MBEDTLS_MD_NONE);
+				(void) mbedtls_md_init(NULL);
+				(void) mbedtls_md_setup(NULL, NULL, 0);
+				(void) mbedtls_md_starts(NULL);
+				(void) mbedtls_md_update(NULL, NULL, 0);
+				(void) mbedtls_md_finish(NULL, NULL);
+				(void) mbedtls_md_hmac_starts(NULL, NULL, 0);
+				(void) mbedtls_md_hmac_update(NULL, NULL, 0);
+				(void) mbedtls_md_hmac_finish(NULL, NULL);
+				(void) mbedtls_md_free(NULL);
+				(void) mbedtls_pkcs5_pbkdf2_hmac(NULL, NULL, 0, NULL, 0, 0, 0, NULL);
 
   ;
   return 0;
 }
 
 _ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
+if ac_fn_c_try_link "$LINENO"; then :
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+			if test "x${ac_cv_search_mbedtls_md_setup}" != "xnone required"; then :
 
-else
+				LIBMBEDCRYPTO_LIBS="${ac_cv_search_mbedtls_md_setup}"
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-			LIBMBEDCRYPTO="No"
-
-			if test "x${with_mbedtls}" != "xauto"; then :
-  as_fn_error $? "--with-mbedtls was specified but ARM mbedTLS is unusable for this task" "$LINENO" 5
-fi
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-fi
-
-	if test "x${LIBMBEDCRYPTO}x${ARC4RANDOM_BUILDING}" = "xYesxYes"; then :
-
-		for ac_header in mbedtls/entropy.h mbedtls/hmac_drbg.h
-do :
-  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
-
-fi
-
-done
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if ARM mbedTLS has HMAC-DRBG support" >&5
-$as_echo_n "checking if ARM mbedTLS has HMAC-DRBG support... " >&6; }
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-
-				#ifdef HAVE_MBEDTLS_ENTROPY_H
-				#include <mbedtls/entropy.h>
-				#else
-				#error "HMAC-DRBG support requires <mbedtls/entropy.h>"
-				#endif
-
-				#ifdef HAVE_MBEDTLS_HMAC_DRBG_H
-				#include <mbedtls/hmac_drbg.h>
-				#else
-				#error "HMAC-DRBG support requires <mbedtls/hmac_drbg.h>"
-				#endif
-
-				#ifndef MBEDTLS_ENTROPY_C
-				#error "HMAC-DRBG support requires MBEDTLS_ENTROPY_C"
-				#endif
-
-				#ifndef MBEDTLS_HMAC_DRBG_C
-				#error "HMAC-DRBG support requires MBEDTLS_HMAC_DRBG_C"
-				#endif
-
-
-int
-main ()
-{
-
-
-				return 0;
-
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-$as_echo "#define HAVE_LIBMBEDCRYPTO_HMAC_DRBG 1" >>confdefs.h
-
-
-			ARC4RANDOM_BUILDING="Yes (ARM mbedTLS HMAC-DRBG)"
-
-else
-
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-fi
-
-	if test "x${LIBMBEDCRYPTO}" = "xYes"; then :
-
-		if test "x${ac_cv_search_mbedtls_md_setup}" != "xnone required"; then :
-
-			LIBMBEDCRYPTO_LIBS="${ac_cv_search_mbedtls_md_setup}"
 
 fi
 
 $as_echo "#define HAVE_LIBMBEDCRYPTO 1" >>confdefs.h
 
 
+			for ac_header in mbedtls/entropy.h mbedtls/hmac_drbg.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
 
 fi
+
+done
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if ARM mbedTLS has HMAC-DRBG support" >&5
+$as_echo_n "checking if ARM mbedTLS has HMAC-DRBG support... " >&6; }
+			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+					#ifdef HAVE_MBEDTLS_ENTROPY_H
+					#  include <mbedtls/entropy.h>
+					#else
+					#  error "HMAC-DRBG support requires <mbedtls/entropy.h>"
+					#endif
+					#ifdef HAVE_MBEDTLS_HMAC_DRBG_H
+					#  include <mbedtls/hmac_drbg.h>
+					#else
+					#  error "HMAC-DRBG support requires <mbedtls/hmac_drbg.h>"
+					#endif
+					#ifndef MBEDTLS_ENTROPY_C
+					#  error "HMAC-DRBG support requires MBEDTLS_ENTROPY_C"
+					#endif
+					#ifndef MBEDTLS_HMAC_DRBG_C
+					#  error "HMAC-DRBG support requires MBEDTLS_HMAC_DRBG_C"
+					#endif
+
+int
+main ()
+{
+
+					(void) mbedtls_entropy_init(NULL);
+					(void) mbedtls_hmac_drbg_init(NULL);
+					(void) mbedtls_hmac_drbg_seed(NULL, NULL, NULL, NULL, NULL, 0);
+					(void) mbedtls_hmac_drbg_reseed(NULL, NULL, 0);
+					(void) mbedtls_hmac_drbg_random(NULL, NULL, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+				LIBMBEDCRYPTORNG="Yes"
+
+$as_echo "#define HAVE_LIBMBEDCRYPTO_HMAC_DRBG 1" >>confdefs.h
+
+
+else
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+				LIBMBEDCRYPTORNG="No"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+			LIBMBEDCRYPTO="No"
+			if test "x${with_mbedtls}" = "xyes"; then :
+
+				as_fn_error $? "--with-mbedtls was specified but ARM mbedTLS appears to be unusable" "$LINENO" 5
+
+fi
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+
+	LIBS="${LIBS_SAVED}"
 
 
 
 	LIBNETTLE="No"
-
-	LIBNETTLE_LIBS=""
 
 
 # Check whether --with-nettle was given.
@@ -9380,107 +9436,97 @@ fi
 			;;
 	esac
 
+	LIBS_SAVED="${LIBS}"
+
 	if test "x${with_nettle}" != "xno"; then :
 
-		LIBS_SAVED="${LIBS}"
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing nettle_md5_init" >&5
-$as_echo_n "checking for library containing nettle_md5_init... " >&6; }
-if ${ac_cv_search_nettle_md5_init+:} false; then :
-  $as_echo_n "(cached) " >&6
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBNETTLE" >&5
+$as_echo_n "checking for LIBNETTLE... " >&6; }
+
+if test -n "$LIBNETTLE_CFLAGS"; then
+    pkg_cv_LIBNETTLE_CFLAGS="$LIBNETTLE_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"nettle\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "nettle") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBNETTLE_CFLAGS=`$PKG_CONFIG --cflags "nettle" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
 else
-  ac_func_search_save_LIBS=$LIBS
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char nettle_md5_init ();
-int
-main ()
-{
-return nettle_md5_init ();
-  ;
-  return 0;
-}
-_ACEOF
-for ac_lib in '' nettle; do
-  if test -z "$ac_lib"; then
-    ac_res="none required"
-  else
-    ac_res=-l$ac_lib
-    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
-  fi
-  if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_search_nettle_md5_init=$ac_res
+  pkg_failed=yes
 fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext
-  if ${ac_cv_search_nettle_md5_init+:} false; then :
-  break
+ else
+    pkg_failed=untried
 fi
-done
-if ${ac_cv_search_nettle_md5_init+:} false; then :
-
+if test -n "$LIBNETTLE_LIBS"; then
+    pkg_cv_LIBNETTLE_LIBS="$LIBNETTLE_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"nettle\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "nettle") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBNETTLE_LIBS=`$PKG_CONFIG --libs "nettle" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
 else
-  ac_cv_search_nettle_md5_init=no
+  pkg_failed=yes
 fi
-rm conftest.$ac_ext
-LIBS=$ac_func_search_save_LIBS
+ else
+    pkg_failed=untried
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_nettle_md5_init" >&5
-$as_echo "$ac_cv_search_nettle_md5_init" >&6; }
-ac_res=$ac_cv_search_nettle_md5_init
-if test "$ac_res" != no; then :
-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-  LIBNETTLE="Yes"
-else
 
-			if test "x${with_nettle}" != "xauto"; then :
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        LIBNETTLE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "nettle" 2>&1`
+        else
+	        LIBNETTLE_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "nettle" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$LIBNETTLE_PKG_ERRORS" >&5
+
+
+			LIBNETTLE="No"
+			if test "x${with_nettle}" = "xyes"; then :
 
 				as_fn_error $? "--with-nettle was specified but libnettle could not be found" "$LINENO" 5
 
 fi
 
-fi
-
-
-		LIBS="${LIBS_SAVED}"
-
-fi
-
-	if test "x${LIBNETTLE}" = "xYes"; then :
-
-		for ac_header in nettle/md5.h nettle/sha1.h nettle/sha2.h nettle/nettle-meta.h
-do :
-  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
-
-else
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 			LIBNETTLE="No"
 			if test "x${with_nettle}" = "xyes"; then :
-  as_fn_error $? "required header file missing" "$LINENO" 5
-fi
+
+				as_fn_error $? "--with-nettle was specified but libnettle could not be found" "$LINENO" 5
 
 fi
 
-done
+else
+	LIBNETTLE_CFLAGS=$pkg_cv_LIBNETTLE_CFLAGS
+	LIBNETTLE_LIBS=$pkg_cv_LIBNETTLE_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
 
-
-fi
-
-	if test "x${LIBNETTLE}" = "xYes"; then :
-
-		for ac_header in nettle/version.h
+			LIBS="${LIBNETTLE_LIBS} ${LIBS}"
+			LIBNETTLE="Yes"
+			for ac_header in nettle/version.h
 do :
   ac_fn_c_check_header_mongrel "$LINENO" "nettle/version.h" "ac_cv_header_nettle_version_h" "$ac_includes_default"
 if test "x$ac_cv_header_nettle_version_h" = xyes; then :
@@ -9492,23 +9538,94 @@ fi
 
 done
 
-		if test "x${ac_cv_search_nettle_md5_init}" != "xnone required"; then :
+			for ac_header in nettle/md5.h nettle/sha1.h nettle/sha2.h nettle/nettle-meta.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
 
-			LIBNETTLE_LIBS="${ac_cv_search_nettle_md5_init}"
+else
+
+				LIBNETTLE="No"
+				if test "x${with_nettle}" = "xyes"; then :
+
+					as_fn_error $? "--with-nettle was specified but a required header file is missing" "$LINENO" 5
 
 fi
+
+fi
+
+done
+
+
+fi
+
+fi
+
+	if test "x${LIBNETTLE}" = "xYes"; then :
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if nettle is usable" >&5
+$as_echo_n "checking if nettle is usable... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#include <nettle/md5.h>
+				#include <nettle/sha1.h>
+				#include <nettle/sha2.h>
+
+int
+main ()
+{
+
+				struct md5_ctx md5ctx;
+				struct sha1_ctx sha1ctx;
+				struct sha256_ctx sha256ctx;
+				struct sha512_ctx sha512ctx;
+				(void) md5_init(&md5ctx);
+				(void) sha1_init(&sha1ctx);
+				(void) sha256_init(&sha256ctx);
+				(void) sha512_init(&sha512ctx);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
 
 $as_echo "#define HAVE_LIBNETTLE 1" >>confdefs.h
 
 
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+			LIBNETTLE="No"
+			if test "x${with_nettle}" = "xyes"; then :
+
+				as_fn_error $? "--with-nettle was specified but libnettle is unusable for this task" "$LINENO" 5
 
 fi
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+
+	LIBS="${LIBS_SAVED}"
 
 
 
 	LIBCRYPTO="No"
-
-	LIBCRYPTO_LIBS=""
+	LIBCRYPTO_NAME=""
 
 
 # Check whether --with-openssl was given.
@@ -9527,117 +9644,97 @@ fi
 			;;
 	esac
 
+	LIBS_SAVED="${LIBS}"
+
 	if test "x${with_openssl}" != "xno"; then :
 
-		LIBS_SAVED="${LIBS}"
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing EVP_DigestUpdate" >&5
-$as_echo_n "checking for library containing EVP_DigestUpdate... " >&6; }
-if ${ac_cv_search_EVP_DigestUpdate+:} false; then :
-  $as_echo_n "(cached) " >&6
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBCRYPTO" >&5
+$as_echo_n "checking for LIBCRYPTO... " >&6; }
+
+if test -n "$LIBCRYPTO_CFLAGS"; then
+    pkg_cv_LIBCRYPTO_CFLAGS="$LIBCRYPTO_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libcrypto\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libcrypto") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBCRYPTO_CFLAGS=`$PKG_CONFIG --cflags "libcrypto" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
 else
-  ac_func_search_save_LIBS=$LIBS
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char EVP_DigestUpdate ();
-int
-main ()
-{
-return EVP_DigestUpdate ();
-  ;
-  return 0;
-}
-_ACEOF
-for ac_lib in '' crypto; do
-  if test -z "$ac_lib"; then
-    ac_res="none required"
-  else
-    ac_res=-l$ac_lib
-    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
-  fi
-  if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_search_EVP_DigestUpdate=$ac_res
+  pkg_failed=yes
 fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext
-  if ${ac_cv_search_EVP_DigestUpdate+:} false; then :
-  break
+ else
+    pkg_failed=untried
 fi
-done
-if ${ac_cv_search_EVP_DigestUpdate+:} false; then :
-
+if test -n "$LIBCRYPTO_LIBS"; then
+    pkg_cv_LIBCRYPTO_LIBS="$LIBCRYPTO_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libcrypto\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libcrypto") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBCRYPTO_LIBS=`$PKG_CONFIG --libs "libcrypto" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
 else
-  ac_cv_search_EVP_DigestUpdate=no
+  pkg_failed=yes
 fi
-rm conftest.$ac_ext
-LIBS=$ac_func_search_save_LIBS
+ else
+    pkg_failed=untried
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_EVP_DigestUpdate" >&5
-$as_echo "$ac_cv_search_EVP_DigestUpdate" >&6; }
-ac_res=$ac_cv_search_EVP_DigestUpdate
-if test "$ac_res" != no; then :
-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-  LIBCRYPTO="Yes"
+
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
 else
-
-			if test "x${with_openssl}" != "xauto"; then :
-
-				as_fn_error $? "--with-openssl was specified but OpenSSL could not be found" "$LINENO" 5
-
+        _pkg_short_errors_supported=no
 fi
+        if test $_pkg_short_errors_supported = yes; then
+	        LIBCRYPTO_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libcrypto" 2>&1`
+        else
+	        LIBCRYPTO_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libcrypto" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$LIBCRYPTO_PKG_ERRORS" >&5
 
-fi
-
-
-		LIBS="${LIBS_SAVED}"
-
-fi
-
-	if test "x${LIBCRYPTO}" = "xYes"; then :
-
-		for ac_header in openssl/evp.h openssl/hmac.h openssl/opensslv.h
-do :
-  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
-
-else
 
 			LIBCRYPTO="No"
 			if test "x${with_openssl}" = "xyes"; then :
-  as_fn_error $? "required header file missing" "$LINENO" 5
-fi
+
+				as_fn_error $? "--with-openssl was specified but libcrypto could not be found" "$LINENO" 5
 
 fi
 
-done
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
+			LIBCRYPTO="No"
+			if test "x${with_openssl}" = "xyes"; then :
 
-fi
-
-	if test "x${LIBCRYPTO}" = "xYes"; then :
-
-		if test "x${ac_cv_search_EVP_DigestUpdate}" != "xnone required"; then :
-
-			LIBCRYPTO_LIBS="${ac_cv_search_EVP_DigestUpdate}"
+				as_fn_error $? "--with-openssl was specified but libcrypto could not be found" "$LINENO" 5
 
 fi
 
-$as_echo "#define HAVE_OPENSSL 1" >>confdefs.h
+else
+	LIBCRYPTO_CFLAGS=$pkg_cv_LIBCRYPTO_CFLAGS
+	LIBCRYPTO_LIBS=$pkg_cv_LIBCRYPTO_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
 
-
-
-		for ac_header in openssl/ec.h openssl/ecdsa.h
+			LIBS="${LIBCRYPTO_LIBS} ${LIBS}"
+			LIBCRYPTO="Yes"
+			for ac_header in openssl/ec.h openssl/ecdsa.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
 ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
@@ -9650,35 +9747,88 @@ fi
 
 done
 
-		if test "x${ac_cv_header_openssl_ec_h}x${ac_cv_header_openssl_ecdsa_h}" = "xyesxyes"; then :
+			for ac_header in openssl/evp.h openssl/hmac.h openssl/opensslv.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
 
-			ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
+else
+
+				LIBCRYPTO="No"
+				if test "x${with_openssl}" = "xyes"; then :
+
+					as_fn_error $? "--with-openssl was specified but a required header file is missing" "$LINENO" 5
+
+fi
+
+fi
+
+done
 
 
 fi
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if OpenSSL is really LibreSSL in disguise" >&5
-$as_echo_n "checking if OpenSSL is really LibreSSL in disguise... " >&6; }
+fi
 
+	if test "x${LIBCRYPTO}" = "xYes"; then :
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libcrypto is usable" >&5
+$as_echo_n "checking if libcrypto is usable... " >&6; }
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 
-
-				#include <openssl/opensslv.h>
-
-				#ifdef LIBRESSL_VERSION_NUMBER
-				#error "Detected LibreSSL"
-				#endif
-
+				#include <openssl/evp.h>
+				#include <openssl/hmac.h>
 
 int
 main ()
 {
 
+				(void) EVP_MD_size(NULL);
+				(void) EVP_DigestInit_ex(NULL, EVP_md5(), NULL);
+				(void) EVP_DigestInit_ex(NULL, EVP_sha1(), NULL);
+				(void) EVP_DigestInit_ex(NULL, EVP_sha256(), NULL);
+				(void) EVP_DigestInit_ex(NULL, EVP_sha512(), NULL);
+				(void) EVP_DigestUpdate(NULL, NULL, 0);
+				(void) EVP_DigestFinal_ex(NULL, NULL, NULL);
+				(void) HMAC_Init_ex(NULL, NULL, 0, EVP_md5(), NULL);
+				(void) HMAC_Init_ex(NULL, NULL, 0, EVP_sha1(), NULL);
+				(void) HMAC_Init_ex(NULL, NULL, 0, EVP_sha256(), NULL);
+				(void) HMAC_Init_ex(NULL, NULL, 0, EVP_sha512(), NULL);
+				(void) HMAC_Update(NULL, NULL, 0);
+				(void) HMAC_Final(NULL, NULL, NULL);
+				(void) PKCS5_PBKDF2_HMAC(NULL, 0, NULL, 0, 0, NULL, 0, NULL);
 
-				return 0;
+  ;
+  return 0;
+}
 
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if OpenSSL is really LibreSSL in disguise" >&5
+$as_echo_n "checking if OpenSSL is really LibreSSL in disguise... " >&6; }
+			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+					#include <openssl/opensslv.h>
+					#ifdef LIBRESSL_VERSION_NUMBER
+					#  error "Detected LibreSSL"
+					#endif
+
+int
+main ()
+{
+
+					return 0;
 
   ;
   return 0;
@@ -9687,20 +9837,44 @@ main ()
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBCRYPTO_NAME="OpenSSL"
+				LIBCRYPTO_NAME="OpenSSL"
 
 else
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-			LIBCRYPTO_NAME="LibreSSL"
+				LIBCRYPTO_NAME="LibreSSL"
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+			if test "x${ac_cv_header_openssl_ec_h}x${ac_cv_header_openssl_ecdsa_h}" = "xyesxyes"; then :
+
+				ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
+
 
 fi
+
+$as_echo "#define HAVE_OPENSSL 1" >>confdefs.h
+
+
+else
+
+			LIBCRYPTO="No"
+			if test "x${with_openssl}" = "xyes"; then :
+
+				as_fn_error $? "--with-openssl was specified but libcrypto is unusable for this task" "$LINENO" 5
+
+fi
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+
+	LIBS="${LIBS_SAVED}"
 
 
 
@@ -9723,9 +9897,9 @@ fi
 			;;
 	esac
 
-	if test "x${with_pcre}" != "xno"; then :
+	LIBS_SAVED="${LIBS}"
 
-		LIBS_SAVED="${LIBS}"
+	if test "x${with_pcre}" != "xno"; then :
 
 
 pkg_failed=no
@@ -9787,9 +9961,10 @@ fi
 	echo "$PCRE_PKG_ERRORS" >&5
 
 
-			if test "x${with_pcre}" != "xauto"; then :
+			LIBPCRE="No"
+			if test "x${with_pcre}" = "xyes"; then :
 
-				as_fn_error $? "--with-pcre was specified but the PCRE library could not be found" "$LINENO" 5
+				as_fn_error $? "--with-pcre was specified but libpcre could not be found" "$LINENO" 5
 
 fi
 
@@ -9797,9 +9972,10 @@ elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-			if test "x${with_pcre}" != "xauto"; then :
+			LIBPCRE="No"
+			if test "x${with_pcre}" = "xyes"; then :
 
-				as_fn_error $? "--with-pcre was specified but the PCRE library could not be found" "$LINENO" 5
+				as_fn_error $? "--with-pcre was specified but libpcre could not be found" "$LINENO" 5
 
 fi
 
@@ -9808,27 +9984,23 @@ else
 	PCRE_LIBS=$pkg_cv_PCRE_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	LIBPCRE="Yes"
-fi
 
-		LIBS="${LIBS_SAVED}"
+			LIBPCRE="Yes"
 
-fi
-
-	if test "x${LIBPCRE}" = "xYes"; then :
 
 
 $as_echo "#define HAVE_PCRE 1" >>confdefs.h
 
 
-
+fi
 
 fi
+
+	LIBS="${LIBS_SAVED}"
 
 
 
 	LIBQRENCODE="No"
-
 	QRCODE_COND_C=""
 
 
@@ -9848,7 +10020,17 @@ fi
 			;;
 	esac
 
+	LIBS_SAVED="${LIBS}"
+
 	if test "x${with_qrencode}" != "xno"; then :
+
+		for ac_header in qrencode.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "qrencode.h" "ac_cv_header_qrencode_h" "$ac_includes_default"
+if test "x$ac_cv_header_qrencode_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_QRENCODE_H 1
+_ACEOF
 
 
 pkg_failed=no
@@ -9910,10 +10092,10 @@ fi
 	echo "$LIBQRENCODE_PKG_ERRORS" >&5
 
 
-			LIBQRENCODE="No"
-			if test "x${with_qrencode}" = "xyes"; then :
+				LIBQRENCODE="No"
+				if test "x${with_qrencode}" = "xyes"; then :
 
-				as_fn_error $? "--with-qrencode was specified but libqrencode could not be found" "$LINENO" 5
+					as_fn_error $? "--with-qrencode was specified but libqrencode could not be found" "$LINENO" 5
 
 fi
 
@@ -9921,10 +10103,10 @@ elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-			LIBQRENCODE="No"
-			if test "x${with_qrencode}" = "xyes"; then :
+				LIBQRENCODE="No"
+				if test "x${with_qrencode}" = "xyes"; then :
 
-				as_fn_error $? "--with-qrencode was specified but libqrencode could not be found" "$LINENO" 5
+					as_fn_error $? "--with-qrencode was specified but libqrencode could not be found" "$LINENO" 5
 
 fi
 
@@ -9934,22 +10116,80 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-			LIBQRENCODE="Yes"
-			QRCODE_COND_C="qrcode.c"
+				LIBS="${LIBQRENCODE_LIBS} ${LIBS}"
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libqrencode is usable" >&5
+$as_echo_n "checking if libqrencode is usable... " >&6; }
+				cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+						#include <stddef.h>
+						#include <qrencode.h>
+
+int
+main ()
+{
+
+						(void) QRcode_encodeData(0, NULL, 0, (QRecLevel) 0);
+						(void) QRcode_free(NULL);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+					LIBQRENCODE="Yes"
+					QRCODE_COND_C="qrcode.c"
 
 
 $as_echo "#define HAVE_LIBQRENCODE 1" >>confdefs.h
 
 
+else
+
+					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+					LIBQRENCODE="No"
+					if test "x${with_qrencode}" = "xyes"; then :
+
+						as_fn_error $? "--with-qrencode was specified but libqrencode does not appear to be usable" "$LINENO" 5
+
 fi
 
 fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+
+else
+
+			LIBQRENCODE="No"
+			if test "x${with_qrencode}" = "xyes"; then :
+
+				as_fn_error $? "--with-qrencode was specified but a required header file is missing" "$LINENO" 5
+
+fi
+
+fi
+
+done
+
+
+fi
+
+	LIBS="${LIBS_SAVED}"
 
 
 
 	LIBSODIUM="No"
-
-	LIBSODIUM_LIBS=""
+	LIBSODIUMMEMORY="No"
+	LIBSODIUMMEMZERO="No"
+	LIBSODIUMRNG="No"
 
 
 # Check whether --with-sodium was given.
@@ -9968,82 +10208,97 @@ fi
 			;;
 	esac
 
+	LIBS_SAVED="${LIBS}"
+
 	if test "x${with_sodium}" != "xno"; then :
 
-		LIBS_SAVED="${LIBS}"
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing sodium_memzero" >&5
-$as_echo_n "checking for library containing sodium_memzero... " >&6; }
-if ${ac_cv_search_sodium_memzero+:} false; then :
-  $as_echo_n "(cached) " >&6
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBSODIUM" >&5
+$as_echo_n "checking for LIBSODIUM... " >&6; }
+
+if test -n "$LIBSODIUM_CFLAGS"; then
+    pkg_cv_LIBSODIUM_CFLAGS="$LIBSODIUM_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libsodium\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libsodium") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBSODIUM_CFLAGS=`$PKG_CONFIG --cflags "libsodium" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
 else
-  ac_func_search_save_LIBS=$LIBS
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char sodium_memzero ();
-int
-main ()
-{
-return sodium_memzero ();
-  ;
-  return 0;
-}
-_ACEOF
-for ac_lib in '' sodium; do
-  if test -z "$ac_lib"; then
-    ac_res="none required"
-  else
-    ac_res=-l$ac_lib
-    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
-  fi
-  if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_search_sodium_memzero=$ac_res
+  pkg_failed=yes
 fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext
-  if ${ac_cv_search_sodium_memzero+:} false; then :
-  break
+ else
+    pkg_failed=untried
 fi
-done
-if ${ac_cv_search_sodium_memzero+:} false; then :
-
+if test -n "$LIBSODIUM_LIBS"; then
+    pkg_cv_LIBSODIUM_LIBS="$LIBSODIUM_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libsodium\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libsodium") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBSODIUM_LIBS=`$PKG_CONFIG --libs "libsodium" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
 else
-  ac_cv_search_sodium_memzero=no
+  pkg_failed=yes
 fi
-rm conftest.$ac_ext
-LIBS=$ac_func_search_save_LIBS
+ else
+    pkg_failed=untried
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_sodium_memzero" >&5
-$as_echo "$ac_cv_search_sodium_memzero" >&6; }
-ac_res=$ac_cv_search_sodium_memzero
-if test "$ac_res" != no; then :
-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-  LIBSODIUM="Yes"
-else
 
-			if test "x${with_sodium}" != "xauto"; then :
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        LIBSODIUM_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libsodium" 2>&1`
+        else
+	        LIBSODIUM_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libsodium" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$LIBSODIUM_PKG_ERRORS" >&5
+
+
+			LIBSODIUM="No"
+			if test "x${with_sodium}" = "xyes"; then :
 
 				as_fn_error $? "--with-sodium was specified but libsodium could not be found" "$LINENO" 5
 
 fi
 
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+			LIBSODIUM="No"
+			if test "x${with_sodium}" = "xyes"; then :
+
+				as_fn_error $? "--with-sodium was specified but libsodium could not be found" "$LINENO" 5
+
 fi
 
+else
+	LIBSODIUM_CFLAGS=$pkg_cv_LIBSODIUM_CFLAGS
+	LIBSODIUM_LIBS=$pkg_cv_LIBSODIUM_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
 
-		LIBS="${LIBS_SAVED}"
-
-fi
-
-	if test "x${LIBSODIUM}" = "xYes"; then :
-
-		for ac_header in sodium/core.h sodium/utils.h
+			LIBS="${LIBSODIUM_LIBS} ${LIBS}"
+			LIBSODIUM="Yes"
+			for ac_header in sodium/core.h sodium/utils.h sodium/version.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
 ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
@@ -10054,9 +10309,11 @@ _ACEOF
 
 else
 
-			LIBSODIUM="No"
-			if test "x${with_sodium}" = "xyes"; then :
-  as_fn_error $? "required header file missing" "$LINENO" 5
+				LIBSODIUM="No"
+				if test "x${with_sodium}" = "xyes"; then :
+
+					as_fn_error $? "--with-sodium was specified but a required header file is missing" "$LINENO" 5
+
 fi
 
 fi
@@ -10066,19 +10323,209 @@ done
 
 fi
 
+fi
+
 	if test "x${LIBSODIUM}" = "xYes"; then :
 
-		if test "x${ac_cv_search_sodium_memzero}" != "xnone required"; then :
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libsodium is usable as a whole" >&5
+$as_echo_n "checking if libsodium is usable as a whole... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
 
-			LIBSODIUM_LIBS="${ac_cv_search_sodium_memzero}"
+
+				#include <sodium/core.h>
+
+int
+main ()
+{
+
+				(void) sodium_init();
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+			LIBSODIUM="No"
+			if test "x${with_sodium}" = "xyes"; then :
+
+				as_fn_error $? "--with-sodium was specified but libsodium appears to be unusable" "$LINENO" 5
 
 fi
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+
+	if test "x${LIBSODIUM}" = "xYes"; then :
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libsodium has usable memory manipulation functions" >&5
+$as_echo_n "checking if libsodium has usable memory manipulation functions... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#include <stddef.h>
+				#include <sodium/core.h>
+				#include <sodium/utils.h>
+
+int
+main ()
+{
+
+				(void) sodium_malloc(0);
+				(void) sodium_mlock(NULL, 0);
+				(void) sodium_mprotect_noaccess(NULL);
+				(void) sodium_mprotect_readonly(NULL);
+				(void) sodium_mprotect_readwrite(NULL);
+				(void) sodium_munlock(NULL, 0);
+				(void) sodium_free(NULL);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+			LIBSODIUMMEMORY="Yes"
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+			LIBSODIUMMEMORY="No"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libsodium has a usable memory zeroing function" >&5
+$as_echo_n "checking if libsodium has a usable memory zeroing function... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#include <stddef.h>
+				#include <sodium/core.h>
+				#include <sodium/utils.h>
+
+int
+main ()
+{
+
+				(void) sodium_memzero(NULL, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+			LIBSODIUMMEMZERO="Yes"
+
+$as_echo "#define HAVE_LIBSODIUM_MEMZERO 1" >>confdefs.h
+
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+			LIBSODIUMMEMZERO="No"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+		for ac_header in sodium/randombytes.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "sodium/randombytes.h" "ac_cv_header_sodium_randombytes_h" "$ac_includes_default"
+if test "x$ac_cv_header_sodium_randombytes_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_SODIUM_RANDOMBYTES_H 1
+_ACEOF
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libsodium has a usable random number generator" >&5
+$as_echo_n "checking if libsodium has a usable random number generator... " >&6; }
+			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+					#include <stddef.h>
+					#include <sodium/core.h>
+					#include <sodium/utils.h>
+					#include <sodium/randombytes.h>
+
+int
+main ()
+{
+
+					(void) randombytes_random();
+					(void) randombytes_uniform(0);
+					(void) randombytes_buf(NULL, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+				LIBSODIUMRNG="Yes"
+
+else
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+				LIBSODIUMRNG="No"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+
+done
+
+
+		if test "x${LIBSODIUMMEMORY}x${LIBSODIUMMEMZERO}x${LIBSODIUMRNG}" = "xNoxNoxNo"; then :
+
+			LIBSODIUM="No"
+			if test "x${with_sodium}" = "xyes"; then :
+
+				as_fn_error $? "--with-sodium was specified but libsodium appears to be unusable" "$LINENO" 5
+
+fi
+
+else
+
 
 $as_echo "#define HAVE_LIBSODIUM 1" >>confdefs.h
 
 
+fi
 
 fi
+
+	LIBS="${LIBS_SAVED}"
 
 
 
@@ -10181,12 +10628,14 @@ fi
 
 	DIGEST_FRONTEND_VAL="ATHEME_DIGEST_FRONTEND_INTERNAL"
 	DIGEST_FRONTEND="Internal"
+	DIGEST_API_CFLAGS=""
 	DIGEST_API_LIBS=""
 
 	if test "x${DIGEST_FRONTEND}x${LIBMBEDCRYPTO}" = "xInternalxYes"; then :
 
 		DIGEST_FRONTEND_VAL="ATHEME_DIGEST_FRONTEND_MBEDTLS"
 		DIGEST_FRONTEND="ARM mbedTLS"
+		DIGEST_API_CFLAGS=""
 		DIGEST_API_LIBS="${LIBMBEDCRYPTO_LIBS}"
 
 fi
@@ -10195,6 +10644,7 @@ fi
 
 		DIGEST_FRONTEND_VAL="ATHEME_DIGEST_FRONTEND_NETTLE"
 		DIGEST_FRONTEND="Nettle"
+		DIGEST_API_CFLAGS="${LIBNETTLE_CFLAGS}"
 		DIGEST_API_LIBS="${LIBNETTLE_LIBS}"
 
 fi
@@ -10203,6 +10653,7 @@ fi
 
 		DIGEST_FRONTEND_VAL="ATHEME_DIGEST_FRONTEND_OPENSSL"
 		DIGEST_FRONTEND="${LIBCRYPTO_NAME}"
+		DIGEST_API_CFLAGS="${LIBCRYPTO_CFLAGS}"
 		DIGEST_API_LIBS="${LIBCRYPTO_LIBS}"
 
 fi
@@ -10211,6 +10662,193 @@ fi
 cat >>confdefs.h <<_ACEOF
 #define ATHEME_DIGEST_FRONTEND ${DIGEST_FRONTEND_VAL}
 _ACEOF
+
+
+
+
+
+
+	RANDOM_FRONTEND_VAL="ATHEME_RANDOM_FRONTEND_INTERNAL"
+	RANDOM_FRONTEND="Internal"
+	RANDOM_API_CFLAGS=""
+	RANDOM_API_LIBS=""
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if we are building for OpenBSD" >&5
+$as_echo_n "checking if we are building for OpenBSD... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+			#ifdef __OpenBSD__
+			#  error "Detected OpenBSD"
+			#endif
+
+int
+main ()
+{
+
+			return 0;
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+else
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if arc4random(3) is usable" >&5
+$as_echo_n "checking if arc4random(3) is usable... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#include <stddef.h>
+				#include <stdlib.h>
+
+int
+main ()
+{
+
+				(void) arc4random();
+				(void) arc4random_uniform(0);
+				(void) arc4random_buf(NULL, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+			RANDOM_FRONTEND_VAL="ATHEME_RANDOM_FRONTEND_OPENBSD"
+			RANDOM_FRONTEND="OpenBSD arc4random(3)"
+			RANDOM_API_CFLAGS=""
+			RANDOM_API_LIBS=""
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+	if test "x${RANDOM_FRONTEND}x${LIBSODIUMRNG}" = "xInternalxYes"; then :
+
+		RANDOM_FRONTEND_VAL="ATHEME_RANDOM_FRONTEND_SODIUM"
+		RANDOM_FRONTEND="Sodium"
+		RANDOM_API_CFLAGS="${LIBSODIUM_CFLAGS}"
+		RANDOM_API_LIBS="${LIBSODIUM_LIBS}"
+
+fi
+
+	if test "x${RANDOM_FRONTEND}x${LIBMBEDCRYPTORNG}" = "xInternalxYes"; then :
+
+		RANDOM_FRONTEND_VAL="ATHEME_RANDOM_FRONTEND_MBEDTLS"
+		RANDOM_FRONTEND="ARM mbedTLS"
+		RANDOM_API_CFLAGS=""
+		RANDOM_API_LIBS="${LIBMBEDCRYPTO_LIBS}"
+
+fi
+
+	if test "x${RANDOM_FRONTEND}" = "xInternal"; then :
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if getentropy(3) is available" >&5
+$as_echo_n "checking if getentropy(3) is available... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#include <stddef.h>
+				#include <stdlib.h>
+				#include <unistd.h>
+
+int
+main ()
+{
+
+				(void) getentropy(NULL, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_USABLE_GETENTROPY 1" >>confdefs.h
+
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if getrandom(2) is available" >&5
+$as_echo_n "checking if getrandom(2) is available... " >&6; }
+			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+					#include <stddef.h>
+					#include <sys/random.h>
+
+int
+main ()
+{
+
+					(void) getrandom(NULL, 0, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_USABLE_GETRANDOM 1" >>confdefs.h
+
+
+else
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: this program will need access to the urandom(4) device at run-time" >&5
+$as_echo "$as_me: WARNING: this program will need access to the urandom(4) device at run-time" >&2;}
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+
+
+cat >>confdefs.h <<_ACEOF
+#define ATHEME_RANDOM_FRONTEND ${RANDOM_FRONTEND_VAL}
+_ACEOF
+
 
 
 
@@ -10491,9 +11129,9 @@ fi
 
 	case "${enable_sodium_malloc}" in
 		yes)
-			if test "x${LIBSODIUM}" != "xYes"; then :
+			if test "x${LIBSODIUMMEMORY}" = "xNo"; then :
 
-				as_fn_error $? "--enable-sodium-malloc requires --with-sodium" "$LINENO" 5
+				as_fn_error $? "--enable-sodium-malloc requires usable libsodium memory manipulation functions" "$LINENO" 5
 
 fi
 
@@ -16507,8 +17145,11 @@ fi
 
 
 
-	if test "x${ARC4RANDOM_BUILDING}" = "xYes"; then :
-  ARC4RANDOM_BUILDING="Yes (Internal ChaCha20)"
+	if test "x${DIGEST_FRONTEND}" = "xInternal"; then :
+  DIGEST_FRONTEND="None (Internal MD5/SHA/HMAC/PBKDF2 Fallback)"
+fi
+	if test "x${RANDOM_FRONTEND}" = "xInternal"; then :
+  RANDOM_FRONTEND="None (Internal ChaCha20-based Fallback RNG)"
 fi
 	if test "x${SODIUM_MALLOC}" = "xYes"; then :
   SODIUM_MALLOC="Yes (NOT INTENDED FOR PRODUCTION USAGE)"
@@ -16570,10 +17211,10 @@ Configuration of ${PACKAGE_STRING}:
     Build Warnings ..........: ${BUILD_WARNINGS}
 
     Digest Frontend .........: ${DIGEST_FRONTEND}
-    Mowgli Installation .....: ${MOWGLI_SOURCE}
+    RNG Frontend ............: ${RANDOM_FRONTEND}
 
-    Fallback RNG Enabled ....: ${ARC4RANDOM_BUILDING}
     Legacy Crypto Modules ...: ${LEGACY_PWCRYPTO}
+    Mowgli Installation .....: ${MOWGLI_SOURCE}
 
     CC ......................: ${CC}
     CFLAGS ..................: ${CFLAGS}

@@ -13,13 +13,13 @@
 static struct user *
 pick_a_sucker(struct channel *c)
 {
-	int slot = arc4random_uniform(MOWGLI_LIST_LENGTH(&c->members));
+	int slot = atheme_random_uniform(MOWGLI_LIST_LENGTH(&c->members));
 	struct chanuser *cu;
 
 	cu = (struct chanuser *) mowgli_node_nth_data(&c->members, slot);
 	while (cu != NULL && is_internal_client(cu->user))
 	{
-		slot = arc4random_uniform(MOWGLI_LIST_LENGTH(&c->members));
+		slot = atheme_random_uniform(MOWGLI_LIST_LENGTH(&c->members));
 		cu = (struct chanuser *) mowgli_node_nth_data(&c->members, slot);
 	}
 

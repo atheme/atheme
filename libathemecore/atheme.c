@@ -28,13 +28,9 @@
 #  include <sys/resource.h>
 #endif
 
-#ifdef HAVE_LIBSODIUM
-#  include <sodium/core.h>
-#endif /* HAVE_LIBSODIUM */
-
-#if !defined(HAVE_MEMSET_S) && !defined(HAVE_EXPLICIT_BZERO) && !defined(HAVE_LIBSODIUM)
+#if !defined(HAVE_MEMSET_S) && !defined(HAVE_EXPLICIT_BZERO) && !defined(HAVE_LIBSODIUM_MEMZERO)
 void *(* volatile volatile_memset)(void *, int, size_t) = &memset;
-#endif /* !HAVE_MEMSET_S && !HAVE_EXPLICIT_BZERO && !HAVE_LIBSODIUM */
+#endif /* !HAVE_MEMSET_S && !HAVE_EXPLICIT_BZERO && !HAVE_LIBSODIUM_MEMZERO */
 
 struct ConfOption config_options;
 
@@ -232,7 +228,7 @@ atheme_init(char *execname, char *log_p)
 	me.kline_id = 0;
 	me.start = time(NULL);
 	CURRTIME = me.start;
-	srand(arc4random());
+	srand(atheme_random());
 
 	/* set signal handlers */
 	init_signal_handlers();
@@ -302,14 +298,6 @@ atheme_main(int argc, char *argv[])
 		(void) fprintf(stderr, "Error: Do not run me as root!\n");
 		exit(EXIT_FAILURE);
 	}
-
-#ifdef HAVE_LIBSODIUM
-	if (sodium_init() == -1)
-	{
-		(void) fprintf(stderr, "Error: sodium_init() failed!\n");
-		exit(EXIT_FAILURE);
-	}
-#endif /* HAVE_LIBSODIUM */
 
 	if (! atheme_set_mowgli_allocator())
 		exit(EXIT_FAILURE);
@@ -389,6 +377,7 @@ atheme_main(int argc, char *argv[])
 
 	slog(LG_INFO, "%s is starting up...", PACKAGE_STRING);
 	slog(LG_INFO, "Using Digest API frontend: %s", digest_get_frontend_info());
+	slog(LG_INFO, "Using Random API frontend: %s", random_get_frontend_info());
 
 	/* check for pid file */
 #ifndef MOWGLI_OS_WIN

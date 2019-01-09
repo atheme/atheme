@@ -122,7 +122,7 @@ mech_step(struct sasl_session *const restrict p, const void *const restrict in, 
 	*out = smalloc(CHALLENGE_LENGTH);
 	*outlen = CHALLENGE_LENGTH;
 
-	(void) arc4random_buf(s->challenge, CHALLENGE_LENGTH);
+	(void) atheme_random_buf(s->challenge, CHALLENGE_LENGTH);
 	(void) memcpy(*out, s->challenge, CHALLENGE_LENGTH);
 
 	s->step = ECDSA_ST_RESPONSE;

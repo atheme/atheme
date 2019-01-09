@@ -2,8 +2,6 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 
 	LIBNETTLE="No"
 
-	LIBNETTLE_LIBS=""
-
 	AC_ARG_WITH([nettle],
 		[AS_HELP_STRING([--without-nettle], [Do not attempt to detect nettle (crypto library)])],
 		[], [with_nettle="auto"])
@@ -16,31 +14,55 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 			;;
 	esac
 
-	AS_IF([test "x${with_nettle}" != "xno"], [
-		LIBS_SAVED="${LIBS}"
+	LIBS_SAVED="${LIBS}"
 
-		AC_SEARCH_LIBS([nettle_md5_init], [nettle], [LIBNETTLE="Yes"], [
-			AS_IF([test "x${with_nettle}" != "xauto"], [
+	AS_IF([test "x${with_nettle}" != "xno"], [
+		PKG_CHECK_MODULES([LIBNETTLE], [nettle], [
+			LIBS="${LIBNETTLE_LIBS} ${LIBS}"
+			LIBNETTLE="Yes"
+			AC_CHECK_HEADERS([nettle/version.h], [], [], [])
+			AC_CHECK_HEADERS([nettle/md5.h nettle/sha1.h nettle/sha2.h nettle/nettle-meta.h], [], [
+				LIBNETTLE="No"
+				AS_IF([test "x${with_nettle}" = "xyes"], [
+					AC_MSG_ERROR([--with-nettle was specified but a required header file is missing])
+				])
+			], [])
+		], [
+			LIBNETTLE="No"
+			AS_IF([test "x${with_nettle}" = "xyes"], [
 				AC_MSG_ERROR([--with-nettle was specified but libnettle could not be found])
 			])
 		])
-
-		LIBS="${LIBS_SAVED}"
 	])
 
 	AS_IF([test "x${LIBNETTLE}" = "xYes"], [
-		AC_CHECK_HEADERS([nettle/md5.h nettle/sha1.h nettle/sha2.h nettle/nettle-meta.h], [], [
+		AC_MSG_CHECKING([if nettle is usable])
+		AC_LINK_IFELSE([
+			AC_LANG_PROGRAM([[
+				#include <nettle/md5.h>
+				#include <nettle/sha1.h>
+				#include <nettle/sha2.h>
+			]], [[
+				struct md5_ctx md5ctx;
+				struct sha1_ctx sha1ctx;
+				struct sha256_ctx sha256ctx;
+				struct sha512_ctx sha512ctx;
+				(void) md5_init(&md5ctx);
+				(void) sha1_init(&sha1ctx);
+				(void) sha256_init(&sha256ctx);
+				(void) sha512_init(&sha512ctx);
+			]])
+		], [
+			AC_MSG_RESULT([yes])
+			AC_DEFINE([HAVE_LIBNETTLE], [1], [Define to 1 if we have libnettle available])
+		], [
+			AC_MSG_RESULT([no])
 			LIBNETTLE="No"
-			AS_IF([test "x${with_nettle}" = "xyes"], [AC_MSG_ERROR([required header file missing])])
-		], [])
+			AS_IF([test "x${with_nettle}" = "xyes"], [
+				AC_MSG_ERROR([--with-nettle was specified but libnettle is unusable for this task])
+			])
+		])
 	])
 
-	AS_IF([test "x${LIBNETTLE}" = "xYes"], [
-		AC_CHECK_HEADERS([nettle/version.h], [], [], [])
-		AS_IF([test "x${ac_cv_search_nettle_md5_init}" != "xnone required"], [
-			LIBNETTLE_LIBS="${ac_cv_search_nettle_md5_init}"
-		])
-		AC_DEFINE([HAVE_LIBNETTLE], [1], [Define to 1 if we have libnettle available])
-		AC_SUBST([LIBNETTLE_LIBS])
-	])
+	LIBS="${LIBS_SAVED}"
 ])

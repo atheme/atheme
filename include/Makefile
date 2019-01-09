@@ -12,6 +12,7 @@ INCLUDES = \
 	account.h		\
 	atheme.h		\
 	atheme_memory.h		\
+	atheme_random.h		\
 	atheme_string.h		\
 	auth.h			\
 	authcookie.h		\

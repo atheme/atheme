@@ -44,6 +44,20 @@ Security
 
 - Services will now refuse to run as root.
 
+- Services now has a much more rigorous random number generation interface
+  and will e.g. refuse to use arc4random(3) unless we are actually on OpenBSD
+  (which is the only platform that uses a secure algorithm for it). Support
+  for libsodium random number generation was added, and the new preferred
+  order for random number generation frontends is:
+
+  - OpenBSD `arc4random(3)`, or
+  - libsodium `randombytes(3)`, or
+  - ARM mbedTLS `hmac_drbg_random(3)`, or
+  - Internal ChaCha20-based Fallback RNG, seeded by
+    - `getentropy(3)`, or
+    - `getrandom(2)`, or
+    - `urandom(4)`
+
 SASL
 ----
 - SASLServ and its modules have been almost entirely re-written
@@ -88,6 +102,8 @@ Build System
 - `m4/`: don't check for warning flags that `gcc -Wextra` enables
 - `m4/`: check for more warning flags
 - `m4/`: support `clang`'s `-Weverything` flag
+- `m4/atheme-libtest-*.m4`: ensure most called functions are actually linkable
+- `m4/atheme-libtest-*.m4`: use pkg-config to look for libraries where possible
 - `configure`: don't venture outside the build directory for headers if
   using the in-tree libmowgli-2 submodule
 - `configure`: Detect PCRE support automatically instead of requiring the

@@ -1,6 +1,7 @@
 AC_DEFUN([ATHEME_PRINT_CONFIGURATION], [
 
-	AS_IF([test "x${ARC4RANDOM_BUILDING}" = "xYes"], [ARC4RANDOM_BUILDING="Yes (Internal ChaCha20)"])
+	AS_IF([test "x${DIGEST_FRONTEND}" = "xInternal"], [DIGEST_FRONTEND="None (Internal MD5/SHA/HMAC/PBKDF2 Fallback)"])
+	AS_IF([test "x${RANDOM_FRONTEND}" = "xInternal"], [RANDOM_FRONTEND="None (Internal ChaCha20-based Fallback RNG)"])
 	AS_IF([test "x${SODIUM_MALLOC}" = "xYes"], [SODIUM_MALLOC="Yes (NOT INTENDED FOR PRODUCTION USAGE)"])
 	AS_IF([test "x${BUILD_WARNINGS}" = "xYes"], [BUILD_WARNINGS="Yes (NOT INTENDED FOR PRODUCTION USAGE)"])
 
@@ -57,10 +58,10 @@ Configuration of ${PACKAGE_STRING}:
     Build Warnings ..........: ${BUILD_WARNINGS}
 
     Digest Frontend .........: ${DIGEST_FRONTEND}
-    Mowgli Installation .....: ${MOWGLI_SOURCE}
+    RNG Frontend ............: ${RANDOM_FRONTEND}
 
-    Fallback RNG Enabled ....: ${ARC4RANDOM_BUILDING}
     Legacy Crypto Modules ...: ${LEGACY_PWCRYPTO}
+    Mowgli Installation .....: ${MOWGLI_SOURCE}
 
     CC ......................: ${CC}
     CFLAGS ..................: ${CFLAGS}

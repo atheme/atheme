@@ -21,20 +21,6 @@ int sendemail(struct user *u, struct myuser *mu, const char *type, const char *e
 #define EMAIL_MEMO	"memo"		/* emailed memos (memo text) */
 #define EMAIL_SETPASS	"setpass"	/* send a password change key (verification code) */
 
-#if defined(HAVE_ARC4RANDOM) && defined(HAVE_ARC4RANDOM_BUF) && defined(HAVE_ARC4RANDOM_UNIFORM)
-#  define arc4random            arc4random
-#  define arc4random_buf        arc4random_buf
-#  define arc4random_uniform    arc4random_uniform
-#else
-/* arc4random.c */
-uint32_t                        atheme_arc4random(void);
-void                            atheme_arc4random_buf(void *buf, size_t n);
-uint32_t                        atheme_arc4random_uniform(uint32_t upper_bound);
-#  define arc4random            atheme_arc4random
-#  define arc4random_buf        atheme_arc4random_buf
-#  define arc4random_uniform    atheme_arc4random_uniform
-#endif /* !HAVE_ARC4RANDOM || !HAVE_ARC4RANDOM_BUF || !HAVE_ARC4RANDOM_UNIFORM */
-
 /* cidr.c */
 int valid_ip_or_mask(const char *src);
 

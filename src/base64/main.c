@@ -7,9 +7,21 @@
 
 #include "atheme.h"
 
+#ifdef HAVE_LIBSODIUM
+#  include <sodium/core.h>
+#endif /* HAVE_LIBSODIUM */
+
 int
 main(int argc, const char *argv)
 {
+#ifdef HAVE_LIBSODIUM
+	if (sodium_init() == -1)
+	{
+		(void) fprintf(stderr, "Error: sodium_init() failed!\n");
+		return EXIT_FAILURE;
+	}
+#endif /* HAVE_LIBSODIUM */
+
 	char b64[] = "Q2hyaXNUZXN0AENocmlzVGVzdABwbXpqZ3VseGF5ZWJjcGJ3cXFkaA==";
 	char b64out[BUFSIZE];
 	char b64pristine[] = "ChrisTest\0ChrisTest\0pmzjgulxayebcpbwqqdh";

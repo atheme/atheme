@@ -15,6 +15,10 @@
 #include "pmodule.h"
 #include "conf.h"
 
+#ifdef HAVE_LIBSODIUM
+#  include <sodium/core.h>
+#endif /* HAVE_LIBSODIUM */
+
 static struct timeval burstbegin;
 static bool bursting = false;
 
@@ -112,6 +116,14 @@ hijack_pong_handler(void)
 int
 main(int argc, char *argv[])
 {
+#ifdef HAVE_LIBSODIUM
+	if (sodium_init() == -1)
+	{
+		(void) fprintf(stderr, "Error: sodium_init() failed!\n");
+		return EXIT_FAILURE;
+	}
+#endif /* HAVE_LIBSODIUM */
+
 	atheme_bootstrap();
 	atheme_init(argv[0], LOGDIR "/dbverify.log");
 	atheme_setup();

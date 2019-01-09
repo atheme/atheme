@@ -19,4 +19,5 @@ include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include
 LDFLAGS		+= -L../../libathemecore
-LIBS		+= -lathemecore ${LIBCRYPTO_LIBS}
+CFLAGS		+= $(LIBCRYPTO_CFLAGS)
+LIBS		+= $(LIBCRYPTO_LIBS) -lathemecore
