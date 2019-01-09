@@ -9,8 +9,8 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 		[AS_HELP_STRING([--without-sodium], [Do not attempt to detect libsodium for secure memory ops])],
 		[], [with_sodium="auto"])
 
-	case "${with_sodium}" in
-		no | yes | auto)
+	case "x${with_sodium}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			AC_MSG_ERROR([invalid option for --with-sodium])

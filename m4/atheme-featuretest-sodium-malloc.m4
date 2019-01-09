@@ -6,8 +6,8 @@ AC_DEFUN([ATHEME_FEATURETEST_SODIUM_MALLOC], [
 		[AS_HELP_STRING([--enable-sodium-malloc], [Enable libsodium secure memory allocator])],
 		[], [enable_sodium_malloc="no"])
 
-	case "${enable_sodium_malloc}" in
-		yes)
+	case "x${enable_sodium_malloc}" in
+		xyes)
 			AS_IF([test "${LIBSODIUMMEMORY}" = "No"], [
 				AC_MSG_ERROR([--enable-sodium-malloc requires usable libsodium memory manipulation functions])
 			])
@@ -16,7 +16,7 @@ AC_DEFUN([ATHEME_FEATURETEST_SODIUM_MALLOC], [
 			AC_DEFINE([USE_LIBSODIUM_ALLOCATOR], [1], [Enable libsodium secure memory allocator])
 			AC_MSG_WARN([The sodium hardened memory allocator is not intended for production usage])
 			;;
-		no)
+		xno)
 			SODIUM_MALLOC="No"
 			;;
 		*)

@@ -7,8 +7,8 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPT], [
 		[AS_HELP_STRING([--without-crypt], [Do not attempt to detect crypt(3) (for modules/crypto/crypt3-*)])],
 		[], [with_crypt="auto"])
 
-	case "${with_crypt}" in
-		no | yes | auto)
+	case "x${with_crypt}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			AC_MSG_ERROR([invalid option for --with-crypt])

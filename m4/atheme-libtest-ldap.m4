@@ -7,8 +7,8 @@ AC_DEFUN([ATHEME_LIBTEST_LDAP], [
 		[AS_HELP_STRING([--without-ldap], [Do not attempt to detect libldap (for modules/auth/ldap)])],
 		[], [with_ldap="auto"])
 
-	case "${with_ldap}" in
-		no | yes | auto)
+	case "x${with_ldap}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			AC_MSG_ERROR([invalid option for --with-ldap])

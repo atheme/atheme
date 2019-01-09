@@ -6,8 +6,8 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 		[AS_HELP_STRING([--without-nettle], [Do not attempt to detect nettle (crypto library)])],
 		[], [with_nettle="auto"])
 
-	case "${with_nettle}" in
-		no | yes | auto)
+	case "x${with_nettle}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			AC_MSG_ERROR([invalid option for --with-nettle])

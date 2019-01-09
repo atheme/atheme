@@ -6,12 +6,12 @@ AC_DEFUN([ATHEME_FEATURETEST_REPROBUILDS], [
 		[AS_HELP_STRING([--enable-reproducible-builds], [Enable reproducible builds])],
 		[], [enable_reproducible_builds="no"])
 
-	case "${enable_reproducible_builds}" in
-		yes)
+	case "x${enable_reproducible_builds}" in
+		xyes)
 			REPRODUCIBLE_BUILDS="Yes"
 			AC_DEFINE([REPRODUCIBLE_BUILDS], [1], [Enable reproducible builds])
 			;;
-		no)
+		xno)
 			REPRODUCIBLE_BUILDS="No"
 			;;
 		*)

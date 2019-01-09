@@ -6,8 +6,8 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 		[AS_HELP_STRING([--without-libidn], [Do not attempt to detect GNU libidn (for modules/saslserv/scram-sha -- SASLprep normalization)])],
 		[], [with_libidn="auto"])
 
-	case "${with_libidn}" in
-		no | yes | auto)
+	case "x${with_libidn}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			AC_MSG_ERROR([invalid option for --with-libidn])

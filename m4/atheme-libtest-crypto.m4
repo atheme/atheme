@@ -7,8 +7,8 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 		[AS_HELP_STRING([--without-openssl], [Do not attempt to detect libcrypto (for modules/saslserv/ecdsa-nist256p-challenge)])],
 		[], [with_openssl="auto"])
 
-	case "${with_openssl}" in
-		no | yes | auto)
+	case "x${with_openssl}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			AC_MSG_ERROR([invalid option for --with-openssl])

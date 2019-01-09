@@ -7,8 +7,8 @@ AC_DEFUN([ATHEME_LIBTEST_CRACK], [
 		[AS_HELP_STRING([--without-cracklib], [Do not attempt to detect cracklib (for modules/nickserv/cracklib -- checking password strength)])],
 		[], [with_cracklib="auto"])
 
-	case "${with_cracklib}" in
-		no | yes | auto)
+	case "x${with_cracklib}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			AC_MSG_ERROR([invalid option for --with-cracklib])

@@ -1537,7 +1537,7 @@ Optional Packages:
                           QR codes
   --without-sodium        Do not attempt to detect libsodium for secure memory
                           ops
-  --with-perl             Enable Perl for modules/scripting/perl
+  --with-perl             Enable Perl (for modules/scripting/perl)
   --with-libmowgli[=prefix]
                           Specify location of system libmowgli install, "yes"
                           to ask pkg-config (default), or "no" to force use of
@@ -8504,8 +8504,8 @@ else
 fi
 
 
-	case "${with_cracklib}" in
-		no | yes | auto)
+	case "x${with_cracklib}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			as_fn_error $? "invalid option for --with-cracklib" "$LINENO" 5
@@ -8671,8 +8671,8 @@ else
 fi
 
 
-	case "${with_crypt}" in
-		no | yes | auto)
+	case "x${with_crypt}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			as_fn_error $? "invalid option for --with-crypt" "$LINENO" 5
@@ -8832,8 +8832,8 @@ else
 fi
 
 
-	case "${with_openssl}" in
-		no | yes | auto)
+	case "x${with_openssl}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			as_fn_error $? "invalid option for --with-openssl" "$LINENO" 5
@@ -9095,8 +9095,8 @@ else
 fi
 
 
-	case "${with_libidn}" in
-		no | yes | auto)
+	case "x${with_libidn}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			as_fn_error $? "invalid option for --with-libidn" "$LINENO" 5
@@ -9289,8 +9289,8 @@ else
 fi
 
 
-	case "${with_ldap}" in
-		no | yes | auto)
+	case "x${with_ldap}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			as_fn_error $? "invalid option for --with-ldap" "$LINENO" 5
@@ -9460,8 +9460,8 @@ else
 fi
 
 
-	case "${with_mbedtls}" in
-		no | yes | auto)
+	case "x${with_mbedtls}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			as_fn_error $? "invalid option for --with-mbedtls" "$LINENO" 5
@@ -9744,8 +9744,8 @@ else
 fi
 
 
-	case "${with_nettle}" in
-		no | yes | auto)
+	case "x${with_nettle}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			as_fn_error $? "invalid option for --with-nettle" "$LINENO" 5
@@ -9961,8 +9961,8 @@ else
 fi
 
 
-	case "${with_pcre}" in
-		no | yes | auto)
+	case "x${with_pcre}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			as_fn_error $? "invalid option for --with-pcre" "$LINENO" 5
@@ -10156,8 +10156,8 @@ else
 fi
 
 
-	case "${with_qrencode}" in
-		no | yes | auto)
+	case "x${with_qrencode}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			as_fn_error $? "invalid option for --with-qrencode" "$LINENO" 5
@@ -10354,8 +10354,8 @@ else
 fi
 
 
-	case "${with_sodium}" in
-		no | yes | auto)
+	case "x${with_sodium}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			as_fn_error $? "invalid option for --with-sodium" "$LINENO" 5
@@ -10712,8 +10712,8 @@ else
 fi
 
 
-	case "${with_perl}" in
-		no | yes | auto)
+	case "x${with_perl}" in
+		xno | xyes | xauto)
 			;;
 		*)
 			as_fn_error $? "invalid option for --with-perl" "$LINENO" 5
@@ -10806,8 +10806,8 @@ else
 fi
 
 
-	case "${enable_contrib}" in
-		yes)
+	case "x${enable_contrib}" in
+		xyes)
 			CONTRIB_MODULES="Yes"
 			CONTRIB_COND_D="contrib"
 
@@ -10921,7 +10921,7 @@ fi
 $as_echo "yes" >&6; }
 
 			;;
-		no)
+		xno)
 			CONTRIB_MODULES="No"
 			;;
 		*)
@@ -10947,8 +10947,8 @@ else
 fi
 
 
-	case "${enable_fhs_paths}" in
-		yes)
+	case "x${enable_fhs_paths}" in
+		xyes)
 			DATADIR='${localstatedir}/lib/atheme'
 			DOCDIR='${datadir}/doc/atheme'
 			LOGDIR='${localstatedir}/log/atheme'
@@ -10956,7 +10956,7 @@ fi
 			RUNDIR='${localstatedir}/run/atheme'
 			SHAREDIR='${datadir}/atheme'
 			;;
-		no)
+		xno)
 			;;
 		*)
 			as_fn_error $? "invalid option for --enable-fhs-paths" "$LINENO" 5
@@ -10983,14 +10983,14 @@ else
 fi
 
 
-	case "${enable_large_net}" in
-		yes)
+	case "x${enable_large_net}" in
+		xyes)
 			LARGE_NET="Yes"
 
 $as_echo "#define LARGE_NETWORK 1" >>confdefs.h
 
 			;;
-		no)
+		xno)
 			LARGE_NET="No"
 			;;
 		*)
@@ -11010,8 +11010,8 @@ else
 fi
 
 
-	case "${enable_legacy_pwcrypto}" in
-		yes)
+	case "x${enable_legacy_pwcrypto}" in
+		xyes)
 			LEGACY_PWCRYPTO="Yes"
 			LEGACY_PWCRYPTO_COND_C="crypt3-des.c crypt3-md5.c ircservices.c rawmd5.c rawsha1.c"
 
@@ -11019,7 +11019,7 @@ fi
 $as_echo "#define ENABLE_LEGACY_CRYPTO_MODULES 1" >>confdefs.h
 
 			;;
-		no)
+		xno)
 			LEGACY_PWCRYPTO="No"
 			;;
 		*)
@@ -11039,14 +11039,14 @@ else
 fi
 
 
-	case "${enable_reproducible_builds}" in
-		yes)
+	case "x${enable_reproducible_builds}" in
+		xyes)
 			REPRODUCIBLE_BUILDS="Yes"
 
 $as_echo "#define REPRODUCIBLE_BUILDS 1" >>confdefs.h
 
 			;;
-		no)
+		xno)
 			REPRODUCIBLE_BUILDS="No"
 			;;
 		*)
@@ -11066,8 +11066,8 @@ else
 fi
 
 
-	case "${enable_sodium_malloc}" in
-		yes)
+	case "x${enable_sodium_malloc}" in
+		xyes)
 			if test "${LIBSODIUMMEMORY}" = "No"; then :
 
 				as_fn_error $? "--enable-sodium-malloc requires usable libsodium memory manipulation functions" "$LINENO" 5
@@ -11081,7 +11081,7 @@ $as_echo "#define USE_LIBSODIUM_ALLOCATOR 1" >>confdefs.h
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: The sodium hardened memory allocator is not intended for production usage" >&5
 $as_echo "$as_me: WARNING: The sodium hardened memory allocator is not intended for production usage" >&2;}
 			;;
-		no)
+		xno)
 			SODIUM_MALLOC="No"
 			;;
 		*)
@@ -11329,8 +11329,8 @@ else
 fi
 
 
-	case "${enable_fortify_source}" in
-		yes)
+	case "x${enable_fortify_source}" in
+		xyes)
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C preprocessor flag(s) -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 " >&5
 $as_echo_n "checking for C preprocessor flag(s) -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 ... " >&6; }
@@ -11373,7 +11373,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 			;;
-		no)
+		xno)
 			;;
 		*)
 			as_fn_error $? "invalid option for --enable-fortify-source" "$LINENO" 5
@@ -11406,8 +11406,8 @@ else
 fi
 
 
-	case "${enable_async_unwind_tables}" in
-		yes)
+	case "x${enable_async_unwind_tables}" in
+		xyes)
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fasynchronous-unwind-tables " >&5
 $as_echo_n "checking for C compiler flag(s) -fasynchronous-unwind-tables ... " >&6; }
@@ -11450,15 +11450,15 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 			;;
-		no)
+		xno)
 			;;
 		*)
 			as_fn_error $? "invalid option for --enable-async-unwind-tables" "$LINENO" 5
 			;;
 	esac
 
-	case "${enable_stack_clash_protection}" in
-		yes)
+	case "x${enable_stack_clash_protection}" in
+		xyes)
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-clash-protection " >&5
 $as_echo_n "checking for C compiler flag(s) -fstack-clash-protection ... " >&6; }
@@ -11501,15 +11501,15 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 			;;
-		no)
+		xno)
 			;;
 		*)
 			as_fn_error $? "invalid option for --enable-stack-clash-protection" "$LINENO" 5
 			;;
 	esac
 
-	case "${enable_stack_protector}" in
-		yes)
+	case "x${enable_stack_protector}" in
+		xyes)
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-protector-all " >&5
 $as_echo_n "checking for C compiler flag(s) -fstack-protector-all ... " >&6; }
@@ -11647,7 +11647,7 @@ fi
 fi
 
 			;;
-		no)
+		xno)
 			;;
 		*)
 			as_fn_error $? "invalid option for --enable-stack-protector" "$LINENO" 5
@@ -11666,8 +11666,8 @@ else
 fi
 
 
-	case "${enable_debugging}" in
-		yes)
+	case "x${enable_debugging}" in
+		xyes)
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -O0 -g " >&5
 $as_echo_n "checking for C compiler flag(s) -O0 -g ... " >&6; }
@@ -11722,7 +11722,7 @@ $as_echo "#define ATHEME_DEBUGGING 1" >>confdefs.h
 
 			DEBUGGING="Yes"
 			;;
-		no)
+		xno)
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -O2 " >&5
 $as_echo_n "checking for C compiler flag(s) -O2 ... " >&6; }
@@ -11821,8 +11821,8 @@ else
 fi
 
 
-	case "${enable_profile}" in
-		yes)
+	case "x${enable_profile}" in
+		xyes)
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -pg " >&5
 $as_echo_n "checking for C linker flag(s) -pg ... " >&6; }
@@ -11867,15 +11867,15 @@ rm -f core conftest.err conftest.$ac_objext \
 
 
 			;;
-		no)
+		xno)
 			;;
 		*)
 			as_fn_error $? "invalid option for --enable-profile" "$LINENO" 5
 			;;
 	esac
 
-	case "${enable_relro}" in
-		yes)
+	case "x${enable_relro}" in
+		xyes)
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,-z,relro " >&5
 $as_echo_n "checking for C linker flag(s) -Wl,-z,relro ... " >&6; }
@@ -11920,15 +11920,15 @@ rm -f core conftest.err conftest.$ac_objext \
 
 
 			;;
-		no)
+		xno)
 			;;
 		*)
 			as_fn_error $? "invalid option for --enable-relro" "$LINENO" 5
 			;;
 	esac
 
-	case "${enable_nonlazy_bind}" in
-		yes)
+	case "x${enable_nonlazy_bind}" in
+		xyes)
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,-z,now " >&5
 $as_echo_n "checking for C linker flag(s) -Wl,-z,now ... " >&6; }
@@ -11973,15 +11973,15 @@ rm -f core conftest.err conftest.$ac_objext \
 
 
 			;;
-		no)
+		xno)
 			;;
 		*)
 			as_fn_error $? "invalid option for --enable-nonlazy-bind" "$LINENO" 5
 			;;
 	esac
 
-	case "${enable_linker_defs}" in
-		yes)
+	case "x${enable_linker_defs}" in
+		xyes)
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,-z,defs " >&5
 $as_echo_n "checking for C linker flag(s) -Wl,-z,defs ... " >&6; }
@@ -12026,15 +12026,15 @@ rm -f core conftest.err conftest.$ac_objext \
 
 
 			;;
-		no)
+		xno)
 			;;
 		*)
 			as_fn_error $? "invalid option for --enable-linker-defs" "$LINENO" 5
 			;;
 	esac
 
-	case "${enable_as_needed}" in
-		yes)
+	case "x${enable_as_needed}" in
+		xyes)
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,--as-needed " >&5
 $as_echo_n "checking for C linker flag(s) -Wl,--as-needed ... " >&6; }
@@ -12079,15 +12079,15 @@ rm -f core conftest.err conftest.$ac_objext \
 
 
 			;;
-		no)
+		xno)
 			;;
 		*)
 			as_fn_error $? "invalid option for --enable-as-needed" "$LINENO" 5
 			;;
 	esac
 
-	case "${enable_rpath}" in
-		yes)
+	case "x${enable_rpath}" in
+		xyes)
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) ${LDFLAGS_RPATH} " >&5
 $as_echo_n "checking for C linker flag(s) ${LDFLAGS_RPATH} ... " >&6; }
@@ -12132,7 +12132,7 @@ rm -f core conftest.err conftest.$ac_objext \
 
 
 			;;
-		no)
+		xno)
 			;;
 		*)
 			as_fn_error $? "invalid option for --enable-rpath" "$LINENO" 5
@@ -12151,9 +12151,9 @@ else
 fi
 
 
-	if test "${enable_warnings}" = "yes"; then :
-
-		BUILD_WARNINGS="Yes"
+	case "x${enable_warnings}" in
+		xyes)
+			BUILD_WARNINGS="Yes"
 
 
 
@@ -15457,8 +15457,14 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 
-
-fi
+			;;
+		xno)
+			BUILD_WARNINGS="No"
+			;;
+		*)
+			as_fn_error $? "invalid option for --enable-warnings" "$LINENO" 5
+			;;
+	esac
 
 
 
