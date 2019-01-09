@@ -1,7 +1,7 @@
-AC_DEFUN([ATHEME_LIBTEST_CRACKLIB], [
+AC_DEFUN([ATHEME_LIBTEST_CRACK], [
 
-	LIBCRACKLIB="No"
-	CRACKLIB_LIBS=""
+	LIBCRACK="No"
+	LIBCRACK_LIBS=""
 
 	AC_ARG_WITH([cracklib],
 		[AS_HELP_STRING([--without-cracklib], [Do not attempt to detect cracklib (for modules/nickserv/cracklib -- checking password strength)])],
@@ -30,27 +30,27 @@ AC_DEFUN([ATHEME_LIBTEST_CRACKLIB], [
 					]])
 				], [
 					AC_MSG_RESULT([yes])
-					LIBCRACKLIB="Yes"
+					LIBCRACK="Yes"
 					AS_IF([test "x${ac_cv_search_FascistCheck}" != "xnone required"], [
-						CRACKLIB_LIBS="${ac_cv_search_FascistCheck}"
-						AC_SUBST([CRACKLIB_LIBS])
+						LIBCRACK_LIBS="${ac_cv_search_FascistCheck}"
+						AC_SUBST([LIBCRACK_LIBS])
 					])
 					AC_DEFINE([HAVE_CRACKLIB], [1], [Define to 1 if cracklib is available])
 				], [
 					AC_MSG_RESULT([no])
-					LIBCRACKLIB="No"
+					LIBCRACK="No"
 					AS_IF([test "${with_cracklib}" = "yes"], [
 						AC_MSG_ERROR([--with-cracklib was specified but cracklib appears to be unusable])
 					])
 				])
 			], [
-				LIBCRACKLIB="No"
+				LIBCRACK="No"
 				AS_IF([test "${with_cracklib}" = "yes"], [
 					AC_MSG_ERROR([--with-cracklib was specified but cracklib could not be found])
 				])
 			], [])
 		], [
-			LIBCRACKLIB="No"
+			LIBCRACK="No"
 			AS_IF([test "${with_cracklib}" = "yes"], [
 				AC_MSG_ERROR([--with-cracklib was specified but a required header file is missing])
 			])

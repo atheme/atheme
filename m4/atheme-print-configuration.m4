@@ -38,7 +38,7 @@ Configuration of ${PACKAGE_STRING}:
     PID Directory ...........: ${RUNDIR}
 
     crypt(3) Support ........: ${LIBCRYPT}
-    CrackLib Support ........: ${LIBCRACKLIB}
+    CrackLib Support ........: ${LIBCRACK}
     LDAP Support ............: ${LIBLDAP}
     GNU libidn Support ......: ${LIBIDN}
     ARM mbedTLS Support .....: ${LIBMBEDCRYPTO}
@@ -69,7 +69,7 @@ Configuration of ${PACKAGE_STRING}:
     LDFLAGS .................: ${LDFLAGS}
     LIBS ....................: ${LIBS}
 
-Type make to build ${PACKAGE_TARNAME}, and make install to install it.
+Type 'make' to build ${PACKAGE_TARNAME}, and 'make install' to install it.
 "
 
 ])
