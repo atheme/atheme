@@ -9,12 +9,13 @@ include ../../../../buildsys.mk
 
 plugindir	= $(MODDIR)/modules/scripting/lib
 
-CPPFLAGS	+= -I../../../../include -I. $(PERL_CFLAGS)
+CPPFLAGS	+= -I../../../../include -I.
 LDFLAGS		+= -L../../../../libathemecore
-LIBS		+= -lathemecore $(PERL_LIBS)
+CFLAGS		+= $(LIBPERL_CFLAGS)
+LIBS		+= $(LIBPERL_LIBS) -lathemecore
 
-CFLAGS		+= $(PLUGIN_CFLAGS)
 LDFLAGS		+= $(PLUGIN_LDFLAGS)
+CFLAGS		+= $(PLUGIN_CFLAGS)
 
 # Disable warnings on the Perl code; Perl's system headers are *garbage*
 CFLAGS		+= -w

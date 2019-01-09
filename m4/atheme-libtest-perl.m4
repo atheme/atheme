@@ -1,10 +1,9 @@
 AC_DEFUN([ATHEME_LIBTEST_PERL], [
 
 	LIBPERL="No"
-
+	LIBPERL_CFLAGS=""
+	LIBPERL_LIBS=""
 	PERL_COND_D=""
-	PERL_CFLAGS=""
-	PERL_LIBS=""
 
 	AC_ARG_WITH([perl],
 	        [AS_HELP_STRING([--with-perl], [Enable Perl for modules/scripting/perl])],
@@ -25,24 +24,23 @@ AC_DEFUN([ATHEME_LIBTEST_PERL], [
 		if test -n "${perlpath}"
 		then
 			LIBPERL="Yes"
+			LIBPERL_CFLAGS="$(perl -MExtUtils::Embed -e ccopts)"
+			LIBPERL_LIBS="$(perl -MExtUtils::Embed -e ldopts)"
 
 			PERL_COND_D="perl"
-			PERL_CFLAGS="$(perl -MExtUtils::Embed -e ccopts)"
-			PERL_LIBS="$(perl -MExtUtils::Embed -e ldopts)"
-
 			AC_SUBST([PERL_COND_D])
-			AC_SUBST([PERL_CFLAGS])
-			AC_SUBST([PERL_LIBS])
 		fi
 
 		dnl if Perl is built with threading support, we need to link atheme against libpthread
-		if test -n "$(echo "${PERL_LIBS}" | grep pthread)"
-		then
-			LIBS="${LIBS} -lpthread"
-		fi
+		AS_IF([echo "${LIBPERL_LIBS}" | grep -q pthread], [
+			LIBS="-lpthread ${LIBS}"
+		])
 	])
 
-	AS_IF([test "${with_perl}${PERL_CFLAGS}" = "yes"], [
+	AS_IF([test "${with_perl}${LIBPERL_CFLAGS}" = "yes"], [
 		AC_MSG_ERROR([Perl support was requested but Perl could not be found])
 	])
+
+	AC_SUBST([LIBPERL_CFLAGS])
+	AC_SUBST([LIBPERL_LIBS])
 ])

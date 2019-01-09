@@ -645,8 +645,8 @@ DOCDIR
 DATADIR
 CONTRIB_LIBS
 CONTRIB_COND_D
-PERL_LIBS
-PERL_CFLAGS
+LIBPERL_LIBS
+LIBPERL_CFLAGS
 PERL_COND_D
 perlpath
 LIBSODIUM_LIBS
@@ -10699,10 +10699,9 @@ fi
 
 
 	LIBPERL="No"
-
+	LIBPERL_CFLAGS=""
+	LIBPERL_LIBS=""
 	PERL_COND_D=""
-	PERL_CFLAGS=""
-	PERL_LIBS=""
 
 
 # Check whether --with-perl was given.
@@ -10768,28 +10767,29 @@ fi
 		if test -n "${perlpath}"
 		then
 			LIBPERL="Yes"
+			LIBPERL_CFLAGS="$(perl -MExtUtils::Embed -e ccopts)"
+			LIBPERL_LIBS="$(perl -MExtUtils::Embed -e ldopts)"
 
 			PERL_COND_D="perl"
-			PERL_CFLAGS="$(perl -MExtUtils::Embed -e ccopts)"
-			PERL_LIBS="$(perl -MExtUtils::Embed -e ldopts)"
-
-
-
 
 		fi
 
-				if test -n "$(echo "${PERL_LIBS}" | grep pthread)"
-		then
-			LIBS="${LIBS} -lpthread"
-		fi
+				if echo "${LIBPERL_LIBS}" | grep -q pthread; then :
+
+			LIBS="-lpthread ${LIBS}"
 
 fi
 
-	if test "${with_perl}${PERL_CFLAGS}" = "yes"; then :
+fi
+
+	if test "${with_perl}${LIBPERL_CFLAGS}" = "yes"; then :
 
 		as_fn_error $? "Perl support was requested but Perl could not be found" "$LINENO" 5
 
 fi
+
+
+
 
 
 
