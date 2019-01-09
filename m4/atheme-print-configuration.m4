@@ -31,10 +31,10 @@ Configuration of ${PACKAGE_STRING}:
 
     Installation Prefix .....: ${prefix}
     Binary Directory ........: ${bindir}
-    Module Directory ........: ${MODDIR}/modules
     Config Directory ........: ${sysconfdir}
-    Logfile Directory .......: ${LOGDIR}
     Data Directory ..........: ${DATADIR}
+    Logfile Directory .......: ${LOGDIR}
+    Module Directory ........: ${MODDIR}/modules
     PID Directory ...........: ${RUNDIR}
 
     crypt(3) Support ........: ${LIBCRYPT}
