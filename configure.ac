@@ -124,6 +124,13 @@ HW_FUNC_ASPRINTF
 
 
 
+dnl This should be before any library tests so that insufficient header
+dnl inclusions in those tests are caught before they become a runtime
+dnl problem
+ATHEME_CC_TEST_CFLAGS([-Werror=implicit])
+
+
+
 dnl Libraries that are autodetected (alphabetical)
 ATHEME_LIBTEST_CRACKLIB
 ATHEME_LIBTEST_CRYPT

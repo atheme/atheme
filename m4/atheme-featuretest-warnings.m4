@@ -1,7 +1,6 @@
 AC_DEFUN([ATHEME_CC_ENABLE_WARNINGS], [
 
 	ATHEME_CC_TEST_CFLAGS([-Werror=unknown-warning-option])
-	ATHEME_CC_TEST_CFLAGS([-Werror=implicit])
 
 	ATHEME_CC_TEST_CFLAGS([-Weverything])
 
