@@ -1,8 +1,9 @@
 /*
- * Copyright (c) 2005-2007 William Pitcock <nenolod@nenolod.net>
- * Copyright (c) 2006-2007 Jilles Tjoelker <jilles@stack.nl>
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Rights to this code are documented in doc/LICENSE.
+ * Copyright (C) 2005-2010 William Pitcock <nenolod@nenolod.net>
+ * Copyright (C) 2006-2010 Jilles Tjoelker <jilles@stack.nl>
  *
  * Dice generator.
  */

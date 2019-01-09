@@ -1,4 +1,11 @@
-/* prettyprint helpers for rpgserv */
+/*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2005-2013 Atheme Project (http://atheme.org/)
+ *
+ * prettyprint helpers for rpgserv
+ */
 
 #ifndef ATHEME_MOD_RPGSERV_PRETTYPRINT_H
 #define ATHEME_MOD_RPGSERV_PRETTYPRINT_H 1

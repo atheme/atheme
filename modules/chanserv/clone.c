@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2010-2016 Atheme Development Group
- * Rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2010-2016 Atheme Project (http://atheme.org/)
  *
  * This file contains code for the CService CLONE functions.
  */

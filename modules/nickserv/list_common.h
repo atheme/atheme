@@ -1,5 +1,10 @@
-/* list_common.h - /ns list common definitions
- * Copyright (C) 2010 Atheme Development Group
+/*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2010-2014 Atheme Project (http://atheme.org/)
+ *
+ * list_common.h - /ns list common definitions
  */
 
 #ifndef ATHEME_MOD_NICKSERV_LIST_COMMON_H

@@ -1,9 +1,10 @@
 /*
- * Copyright (c) 2005-2006 Patrick Fish, et al
- * Copyright (c) 2011 William Pitcock <nenolod@atheme.org>.
- * Copyright (c) 2016 Atheme Development Group
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Rights to this code are documented in doc/LICENSE.
+ * Copyright (C) 2005-2006 Patrick Fish, et al.
+ * Copyright (C) 2011 William Pitcock <nenolod@atheme.org>
+ * Copyright (C) 2016 Atheme Development Group (https://atheme.github.io/)
  *
  * This file contains functionality which implements the OService SPECS command.
  */

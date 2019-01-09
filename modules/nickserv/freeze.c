@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2005-2007 Patrick Fish, et al.
- * Rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2005-2007 Patrick Fish, et al.
  *
  * Gives services the ability to freeze nicknames
  */

@@ -1,8 +1,9 @@
 /*
- * Copyright (c) 2010 Atheme Development Group, et al.
- * Copyright (c) 2017 ChatLounge IRC Network Development Team
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Rights to this code are as documented in doc/LICENSE.
+ * Copyright (C) 2010 Atheme Project (http://atheme.org/), et al.
+ * Copyright (C) 2017 ChatLounge IRC Network Development Team
  *
  * This file contains code for OS INFO
  */

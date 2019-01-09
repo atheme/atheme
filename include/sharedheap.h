@@ -1,7 +1,9 @@
 /*
- * Copyright (C) 2003-2004 E. Will et al.
- * Copyright (C) 2005-2006 Atheme Development Group
- * Rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2003-2004 E. Will, et al.
+ * Copyright (C) 2005-2006 Atheme Project (http://atheme.org/)
  *
  * Shared heaps (mowgli.heap bound to atheme.object)
  */

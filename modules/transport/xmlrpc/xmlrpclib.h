@@ -1,6 +1,9 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
- *                and Trystan Scott Lee <trystan@nomadirc.net>
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2005 Trystan Scott Lee <trystan@nomadirc.net>
+ * Copyright (C) 2005-2010 Atheme Project (http://atheme.org/)
  *
  * XMLRPC library header, hacked up for Atheme.
  */

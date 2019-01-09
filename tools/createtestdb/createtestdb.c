@@ -1,5 +1,8 @@
-/*-
- * Copyright (c) 2008 Jilles Tjoelker
+/*
+ * SPDX-License-Identifier: BSD-2-Clause
+ * SPDX-URL: https://spdx.org/licenses/BSD-2-Clause.html
+ *
+ * Copyright (C) 2008 Jilles Tjoelker
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without

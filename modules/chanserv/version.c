@@ -1,3 +1,12 @@
+/*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2005 William Pitcock, et al.
+ *
+ * This file contains code for the ChanServ VERSION function.
+ */
+
 #include "atheme.h"
 #include "serno.h"
 

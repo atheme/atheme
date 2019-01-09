@@ -1,4 +1,12 @@
 #!/bin/bash
+#
+# SPDX-License-Identifier: ISC
+# SPDX-URL: https://spdx.org/licenses/ISC.html
+#
+# Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+#
+# Bash script to execute the build and test steps necessary for Travis CI
+# <https://travis-ci.org/atheme/atheme/>
 
 PREFIX="/home/travis/atheme-install"
 

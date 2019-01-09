@@ -1,3 +1,10 @@
+/*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2010-2013 Atheme Project (http://atheme.org/)
+ */
+
 #ifndef ATHEME_MOD_SCRIPTING_PERL_API_ATHEME_PERL_H
 #define ATHEME_MOD_SCRIPTING_PERL_API_ATHEME_PERL_H 1
 

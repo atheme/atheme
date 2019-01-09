@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2016 Austin Ellis <siniStar -at- IRC4Fun.net>
- * Rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2016 Austin Ellis <siniStar -at- IRC4Fun.net>
  *
  * Hides (opts you OUT) of the automatic Last Login notice upon
  * successfully authenticating to your account.

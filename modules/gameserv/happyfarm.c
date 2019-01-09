@@ -1,9 +1,10 @@
 /*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2011 William Pitcock <nenolod@dereferenced.org>
+ *
  * gameserv/happyfarm
- *
- * Copyright (c) 2011 William Pitcock <nenolod@dereferenced.org>
- * Rights to this code are documented in doc/LICENSE.
- *
  * Grow crops, trade with and steal from your neighbors, and possibly sell your friends.
  */
 

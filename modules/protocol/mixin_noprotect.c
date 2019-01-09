@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2006 Jilles Tjoelker
- * Rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2006-2009 Jilles Tjoelker
  *
  * Module to disable protect (+a) mode.
  * This will stop Atheme setting this mode by itself, but it can still

@@ -1,13 +1,21 @@
+/*
+ * SPDX-License-Identifier: (Apache-2.0 OR CC0-1.0 OR OpenSSL)
+ * SPDX-URL: https://spdx.org/licenses/Apache-2.0.html
+ * SPDX-URL: https://spdx.org/licenses/CC0-1.0.html
+ * SPDX-URL: https://spdx.org/licenses/OpenSSL.html
+ *
+ * Copyright (C) 2012 Samuel Neves <sneves@dei.uc.pt>
+ *
+ * Test vectors for keyed BLAKE-2b, taken from:
+ *   <https://raw.githubusercontent.com/BLAKE2/BLAKE2/7728c30896d3fa0c3b4df52c/testvectors/blake2-kat.h>
+ */
+
 #ifndef ATHEME_MOD_CRYPTO_BLAKE2B_TESTVECS_H
 #define ATHEME_MOD_CRYPTO_BLAKE2B_TESTVECS_H 1
 
 #include "blake2b.h"
 
 #define BLAKE2_KAT_LENGTH 256
-
-/* Test vectors for keyed BLAKE2b.
- * Taken from <https://raw.githubusercontent.com/BLAKE2/BLAKE2/7728c30896d3fa0c3b4df52c/testvectors/blake2-kat.h>
- */
 
 static const uint8_t blake2b_keyed_kat[BLAKE2_KAT_LENGTH][BLAKE2B_HASHLEN] =
 {

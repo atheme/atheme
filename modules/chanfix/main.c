@@ -1,6 +1,11 @@
-/* chanfix - channel fixing service
- * Copyright (c) 2014-2016 Xtheme Development Group
- * Copyright (c) 2010 Atheme Development Group
+/*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2010 Atheme Project (http://atheme.org/)
+ * Copyright (C) 2014-2016 Xtheme Development Group
+ *
+ * chanfix - channel fixing service
  */
 
 #include "atheme.h"

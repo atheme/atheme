@@ -1,5 +1,10 @@
-/* groupserv_main.h - group services main module header
- * Copyright (C) 2010 Atheme Development Group
+/*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2010 Atheme Project (http://atheme.org/)
+ *
+ * groupserv_main.h - group services main module header
  */
 
 #ifndef ATHEME_MOD_GROUPSERV_MAIN_GROUPSERV_MAIN_H

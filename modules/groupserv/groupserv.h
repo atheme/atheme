@@ -1,9 +1,13 @@
-/* groupserv.h - group services public interface
+/*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2005-2010 Atheme Project (http://atheme.org/)
+ *
+ * groupserv.h - group services public interface
  *
  * Include this header for modules other than groupserv/main
  * that need to access group functionality.
- *
- * Copyright (C) 2010 Atheme Development Group
  */
 
 #ifndef ATHEME_MOD_GROUPSERV_GROUPSERV_H

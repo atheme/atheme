@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2014 Atheme Development Group
- * Rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2014 Atheme Project (http://atheme.org/)
  *
  * Allows setting multiple marks on nicknames using nickserv mark
  * Do NOT use this in combination with nickserv/mark!

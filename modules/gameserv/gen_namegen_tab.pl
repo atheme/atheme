@@ -1,4 +1,7 @@
-# Copyright (c) 2006 William Pitcock, et al.
+# SPDX-License-Identifier: BSD-3-Clause
+# SPDX-URL: https://spdx.org/licenses/BSD-3-Clause.html
+#
+# Copyright (C) 2006 William Pitcock, et al.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without

@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2007 William Pitcock <nenolod -at- atheme.org>
- * Rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2007 William Pitcock <nenolod -at- atheme.org>
  *
  * Object management.
  */

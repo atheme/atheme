@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2006 Robin Burchell <surreal.w00t@gmail.com>
- * Rights to this code are documented in doc/LICENCE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2006 Robin Burchell <surreal.w00t@gmail.com>
  *
  * This file contains functionality implementing OperServ CLEARCHAN.
  *

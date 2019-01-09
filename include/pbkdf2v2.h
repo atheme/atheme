@@ -1,6 +1,8 @@
 /*
- * Copyright (C) 2017-2018 Atheme Development Group
- * Rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2017-2018 Atheme Development Group (https://atheme.github.io/)
  *
  * Data structures and macros for the PBKDF2v2 crypto module.
  */

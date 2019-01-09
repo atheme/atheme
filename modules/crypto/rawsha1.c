@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2009 Atheme Development Group
- * Rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2009 Atheme Project (http://atheme.org/)
  *
  * Raw SHA1 password encryption, as used by e.g. Anope 1.8.
  * Hash functions are not designed to encrypt passwords directly,

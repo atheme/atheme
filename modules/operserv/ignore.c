@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2006 Patrick Fish, et al
- * Rights to this code are documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2006 Patrick Fish, et al.
  *
  * This file contains functionality which implements the OService IGNORE command.
  */

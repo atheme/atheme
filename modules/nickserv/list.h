@@ -1,9 +1,13 @@
-/* list.h - /ns list public interface
+/*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2010-2014 Atheme Project (http://atheme.org/)
+ *
+ * list.h - /ns list public interface
  *
  * Include this header for modules other than nickserv/list
  * that need to access /ns list functionality.
- *
- * Copyright (C) 2010 Atheme Development Group
  */
 
 #ifndef ATHEME_MOD_NICKSERV_LIST_H

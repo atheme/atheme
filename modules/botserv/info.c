@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2009 Celestin, et al.
- * Rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2009 Celestin, et al.
  *
  * This file contains a BService INFO which can show
  * botserv settings on channel or bot.

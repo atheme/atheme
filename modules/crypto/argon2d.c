@@ -1,23 +1,15 @@
 /*
- * Argon2 reference C implementation
- * Retrieved from <https://github.com/P-H-C/phc-winner-argon2/>
+ * SPDX-License-Identifier: (Apache-2.0 OR CC0-1.0)
+ * SPDX-URL: https://spdx.org/licenses/Apache-2.0.html
+ * SPDX-URL: https://spdx.org/licenses/CC0-1.0.html
  *
- * Copyright (C) 2015:
- * - Daniel Dinu
- * - Dmitry Khovratovich
- * - Jean-Philippe Aumasson
- * - Samuel Neves
+ * Copyright (C) 2015 Daniel Dinu
+ * Copyright (C) 2015 Dmitry Khovratovich
+ * Copyright (C) 2015 Jean-Philippe Aumasson
+ * Copyright (C) 2015 Samuel Neves <sneves@dei.uc.pt>
+ * Copyright (C) 2017-2018 Aaron M. D. Jones <aaronmdjones@gmail.com>
  *
- * You may use this work under the terms of a Creative Commons CC0 1.0
- * License/Waiver, or the Apache Public License 2.0, at your option. The
- * terms of these licenses can be found at:
- *
- * - CC0 1.0 Universal <http://creativecommons.org/publicdomain/zero/1.0>
- * - Apache 2.0        <http://www.apache.org/licenses/LICENSE-2.0>
- *
- * Heavily modified for use as a password hashing module in Atheme IRC
- * Services <https://github.com/atheme/atheme/> by Aaron M. D. Jones
- * <aaronmdjones@gmail.com> (2017-2018)
+ * Argon2 reference C implementation (modified for Atheme IRC Services)
  */
 
 #include "atheme.h"

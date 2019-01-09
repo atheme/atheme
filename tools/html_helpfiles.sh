@@ -1,6 +1,9 @@
 #!/bin/sh
-# Copyright (c) 2006-2007 Jilles Tjoelker
-# See doc/LICENSE for licensing terms
+#
+# SPDX-License-Identifier: ISC
+# SPDX-URL: https://spdx.org/licenses/ISC.html
+#
+# Copyright (C) 2006-2007 Jilles Tjoelker
 #
 # Script to create simple HTML from the help files
 

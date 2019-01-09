@@ -1,4 +1,10 @@
-/* list.c - rpgserv LIST command
+/*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2011 William Pitcock <nenolod@dereferenced.org>
+ *
+ * list.c - rpgserv LIST command
  */
 
 #include "atheme.h"

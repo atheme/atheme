@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2015-2016 Atheme Development Group <http://atheme.github.io/>
- * Rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2015-2016 Atheme Development Group (https://atheme.github.io/)
  *
  * Allows a user to drop (unset) their assigned vhost without
  * Staff intervention.

@@ -1,5 +1,10 @@
-/* entity-validation.h - entity validation
- * Copyright (C) 2010 Atheme Development Group
+/*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2010 Atheme Project (http://atheme.org/)
+ *
+ * entity-validation.h - entity validation
  */
 
 #ifndef ATHEME_INC_ENTITY_VALIDATION_H

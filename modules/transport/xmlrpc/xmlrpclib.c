@@ -1,10 +1,11 @@
-/* XML RPC Library
+/*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * (C) 2005 Trystan Scott Lee
- * Contact trystan@nomadirc.net
+ * Copyright (C) 2005 Trystan Scott Lee <trystan@nomadirc.net>
+ * Copyright (C) 2010 Atheme Project (http://atheme.org/)
  *
- * Please read COPYING and README for further details.
- *
+ * XML RPC Library
  * Based on the original code from Denora
  */
 

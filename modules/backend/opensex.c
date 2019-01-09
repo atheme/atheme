@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2005-2006 Atheme Development Group
- * Rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2005-2010 Atheme Project (http://atheme.org/)
  *
  * This file contains the OpenSEX (Open Services Exchange) database backend for
  * Atheme. The purpose of OpenSEX is to destroy the old DB format, subjugate its

@@ -1,23 +1,13 @@
 /*
- * BLAKE2 reference C implementation
- * Retrieved from <https://github.com/BLAKE2/BLAKE2/>
+ * SPDX-License-Identifier: (Apache-2.0 OR CC0-1.0 OR OpenSSL)
+ * SPDX-URL: https://spdx.org/licenses/Apache-2.0.html
+ * SPDX-URL: https://spdx.org/licenses/CC0-1.0.html
+ * SPDX-URL: https://spdx.org/licenses/OpenSSL.html
  *
  * Copyright (C) 2012 Samuel Neves <sneves@dei.uc.pt>
+ * Copyright (C) 2017-2018 Aaron M. D. Jones <aaronmdjones@gmail.com>
  *
- * You may use this work under the terms of a Creative Commons CC0 1.0
- * License/Waiver, the OpenSSL Licence, or the Apache Public License 2.0,
- * at your option. The terms of these licenses can be found at:
- *
- * - CC0 1.0 Universal <http://creativecommons.org/publicdomain/zero/1.0>
- * - OpenSSL License   <https://www.openssl.org/source/license.html>
- * - Apache 2.0        <http://www.apache.org/licenses/LICENSE-2.0>
- *
- * More information about the BLAKE2 hash function can be found at
- * <https://blake2.net/>.
- *
- * Heavily modified for use as part of a password hashing module in Atheme
- * IRC Services <https://github.com/atheme/atheme/> by Aaron M. D. Jones
- * <aaronmdjones@gmail.com> (2017-2018)
+ * BLAKE2 reference C implementation (modified for Atheme IRC Services)
  */
 
 #ifndef ATHEME_MOD_CRYPTO_BLAKE2B_H

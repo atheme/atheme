@@ -1,3 +1,10 @@
+/*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2010-2011 Stephen Bennett
+ */
+
 #include "atheme_perl.h"
 
 static void (*real_register_object_reference)(SV *) = NULL;

@@ -1,7 +1,10 @@
-/* JSONRPC Library
+/*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Copyright (c) 2014 Atheme Development Group
- * Please read COPYING and README for further details.
+ * Copyright (C) 2014 Atheme Project (http://atheme.org/)
+ *
+ * JSONRPC Library
  */
 
 #include <mowgli.h>

@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2005 William Pitcock, et al.
- * The rights to this code are as documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2005 William Pitcock, et al.
  *
  * This file contains data structures concerning modules.
  */

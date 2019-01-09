@@ -1,8 +1,9 @@
 /*
- * Copyright (C) 2009 Celestin, et al.
- * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Rights to this code are as documented in doc/LICENSE.
+ * Copyright (C) 2009-2010 Celestin, et al.
+ * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
  *
  * This file contains a BotServ SET command which can change
  * the BotServ settings on a channel or a bot.

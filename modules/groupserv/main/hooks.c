@@ -1,5 +1,10 @@
-/* groupserv - group services.
- * Copyright (C) 2010 Atheme Development Group
+/*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2010 Atheme Project (http://atheme.org/)
+ *
+ * groupserv - group services.
  */
 
 #include "groupserv_main.h"

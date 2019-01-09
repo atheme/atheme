@@ -1,3 +1,12 @@
+/*
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2009 Michael Rodriguez <dkingston@dkingston.net>
+ *
+ * Reloads a module.
+ */
+
 #include "atheme.h"
 #include "conf.h"
 #include "uplink.h" // XXX: For sendq_flush and curr_uplink

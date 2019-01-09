@@ -1,7 +1,8 @@
 /*
- * Copyright (c) 2011 William Pitcock <nenolod@dereferenced.org>
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Rights to this code are as documented in doc/LICENSE.
+ * Copyright (C) 2011 William Pitcock <nenolod@dereferenced.org>
  */
 
 #ifndef ATHEME_MOD_EXTTARGET_EXTTARGET_H

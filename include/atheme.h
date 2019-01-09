@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2003-2004 E. Will et al.
- * Rights to this code are documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2003-2004 E. Will, et al.
  *
  * Includes most headers usually needed.
  */

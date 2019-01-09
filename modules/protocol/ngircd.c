@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2012 William Pitcock <nenolod@atheme.org>
- * Rights to this code are documented in doc/LICENSE.
+ * SPDX-License-Identifier: ISC
+ * SPDX-URL: https://spdx.org/licenses/ISC.html
+ *
+ * Copyright (C) 2012 William Pitcock <nenolod@atheme.org>
  *
  * This file contains protocol support for ngircd.
  */
