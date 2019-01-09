@@ -205,6 +205,9 @@
 /* Define to 1 if you have the <openssl/opensslv.h> header file. */
 #undef HAVE_OPENSSL_OPENSSLV_H
 
+/* Define to 1 if you have the <pcre.h> header file. */
+#undef HAVE_PCRE_H
+
 /* Define to 1 if the system has the type `ptrdiff_t'. */
 #undef HAVE_PTRDIFF_T
 
