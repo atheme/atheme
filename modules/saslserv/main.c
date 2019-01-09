@@ -852,8 +852,15 @@ saslserv(struct sourceinfo *const restrict si, const int parc, char **const rest
 }
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
+	if (! (saslsvs = service_add("saslserv", &saslserv)))
+	{
+		(void) slog(LG_ERROR, "%s: service_add() failed", m->name);
+		m->mflags |= MODFLAG_FAIL;
+		return;
+	}
+
 	(void) hook_add_event("sasl_input");
 	(void) hook_add_sasl_input(&sasl_input);
 	(void) hook_add_event("user_add");
@@ -864,7 +871,6 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 	(void) hook_add_event("user_can_login");
 
 	delete_stale_timer = mowgli_timer_add(base_eventloop, "sasl_delete_stale", &delete_stale, NULL, 30);
-	saslsvs = service_add("saslserv", &saslserv);
 	authservice_loaded++;
 
 	(void) add_bool_conf_item("HIDE_SERVER_NAMES", &saslsvs->conf_table, 0, &hide_server_names, false);
@@ -880,9 +886,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	(void) mowgli_timer_destroy(base_eventloop, delete_stale_timer);
 
 	(void) del_conf_item("HIDE_SERVER_NAMES", &saslsvs->conf_table);
-
-        if (saslsvs)
-		(void) service_delete(saslsvs);
+	(void) service_delete(saslsvs);
 
 	authservice_loaded--;
 
