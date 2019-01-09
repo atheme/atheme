@@ -24,15 +24,10 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 				AC_LINK_IFELSE([
 					AC_LANG_PROGRAM([[
 						#include <stddef.h>
-						#include <stdio.h>
-						#include <stdlib.h>
 						#include <stringprep.h>
 					]], [[
-						char buf[128];
-						char *const tmp = stringprep_locale_to_utf8("test");
-						(void) snprintf(buf, sizeof buf, "%s", tmp);
-						(void) free(tmp);
-						const int ret = stringprep(buf, sizeof buf, (Stringprep_profile_flags) 0, stringprep_saslprep);
+						(void) stringprep_locale_to_utf8(NULL);
+						(void) stringprep(NULL, 0, (Stringprep_profile_flags) 0, stringprep_saslprep);
 					]])
 				], [
 					AC_MSG_RESULT([yes])

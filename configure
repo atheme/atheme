@@ -9207,19 +9207,14 @@ $as_echo_n "checking if GNU libidn appears to be usable... " >&6; }
 
 
 						#include <stddef.h>
-						#include <stdio.h>
-						#include <stdlib.h>
 						#include <stringprep.h>
 
 int
 main ()
 {
 
-						char buf[128];
-						char *const tmp = stringprep_locale_to_utf8("test");
-						(void) snprintf(buf, sizeof buf, "%s", tmp);
-						(void) free(tmp);
-						const int ret = stringprep(buf, sizeof buf, (Stringprep_profile_flags) 0, stringprep_saslprep);
+						(void) stringprep_locale_to_utf8(NULL);
+						(void) stringprep(NULL, 0, (Stringprep_profile_flags) 0, stringprep_saslprep);
 
   ;
   return 0;
