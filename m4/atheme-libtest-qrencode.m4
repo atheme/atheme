@@ -57,5 +57,10 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
 		], [])
 	])
 
+	AS_IF([test "${LIBQRENCODE}" = "No"], [
+		LIBQRENCODE_CFLAGS=""
+		LIBQRENCODE_LIBS=""
+	])
+
 	LIBS="${LIBS_SAVED}"
 ])

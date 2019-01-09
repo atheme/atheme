@@ -130,5 +130,10 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 		])
 	])
 
+	AS_IF([test "${LIBSODIUM}" = "No"], [
+		LIBSODIUM_CFLAGS=""
+		LIBSODIUM_LIBS=""
+	])
+
 	LIBS="${LIBS_SAVED}"
 ])

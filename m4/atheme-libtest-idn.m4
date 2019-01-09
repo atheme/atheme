@@ -59,5 +59,10 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 		])
 	])
 
+	AS_IF([test "${LIBIDN}" = "No"], [
+		LIBIDN_CFLAGS=""
+		LIBIDN_LIBS=""
+	])
+
 	LIBS="${LIBS_SAVED}"
 ])

@@ -64,5 +64,10 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 		])
 	])
 
+	AS_IF([test "${LIBNETTLE}" = "No"], [
+		LIBNETTLE_CFLAGS=""
+		LIBNETTLE_LIBS=""
+	])
+
 	LIBS="${LIBS_SAVED}"
 ])

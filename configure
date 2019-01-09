@@ -9001,6 +9001,13 @@ fi
 
 fi
 
+	if test "${LIBIDN}" = "No"; then :
+
+		LIBIDN_CFLAGS=""
+		LIBIDN_LIBS=""
+
+fi
+
 	LIBS="${LIBS_SAVED}"
 
 
@@ -9664,6 +9671,13 @@ rm -f core conftest.err conftest.$ac_objext \
 
 fi
 
+	if test "${LIBNETTLE}" = "No"; then :
+
+		LIBNETTLE_CFLAGS=""
+		LIBNETTLE_LIBS=""
+
+fi
+
 	LIBS="${LIBS_SAVED}"
 
 
@@ -9918,6 +9932,13 @@ rm -f core conftest.err conftest.$ac_objext \
 
 fi
 
+	if test "${LIBCRYPTO}" = "No"; then :
+
+		LIBCRYPTO_CFLAGS=""
+		LIBCRYPTO_LIBS=""
+
+fi
+
 	LIBS="${LIBS_SAVED}"
 
 
@@ -10037,6 +10058,13 @@ $as_echo "#define HAVE_PCRE 1" >>confdefs.h
 
 
 fi
+
+fi
+
+	if test "${LIBPCRE}" = "No"; then :
+
+		PCRE_CFLAGS=""
+		PCRE_LIBS=""
 
 fi
 
@@ -10223,6 +10251,13 @@ fi
 
 done
 
+
+fi
+
+	if test "${LIBQRENCODE}" = "No"; then :
+
+		LIBQRENCODE_CFLAGS=""
+		LIBQRENCODE_LIBS=""
 
 fi
 
@@ -10566,6 +10601,13 @@ $as_echo "#define HAVE_LIBSODIUM 1" >>confdefs.h
 
 
 fi
+
+fi
+
+	if test "${LIBSODIUM}" = "No"; then :
+
+		LIBSODIUM_CFLAGS=""
+		LIBSODIUM_LIBS=""
 
 fi
 

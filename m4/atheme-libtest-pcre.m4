@@ -30,5 +30,10 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 		])
 	])
 
+	AS_IF([test "${LIBPCRE}" = "No"], [
+		PCRE_CFLAGS=""
+		PCRE_LIBS=""
+	])
+
 	LIBS="${LIBS_SAVED}"
 ])

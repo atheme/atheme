@@ -90,5 +90,10 @@ AC_DEFUN([ATHEME_LIBTEST_OPENSSL], [
 		])
 	])
 
+	AS_IF([test "${LIBCRYPTO}" = "No"], [
+		LIBCRYPTO_CFLAGS=""
+		LIBCRYPTO_LIBS=""
+	])
+
 	LIBS="${LIBS_SAVED}"
 ])
