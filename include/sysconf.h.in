@@ -37,6 +37,9 @@
    language is requested. */
 #undef ENABLE_NLS
 
+/* Define to 1 if any password quality library is available */
+#undef HAVE_ANY_PASSWORD_QUALITY_LIBRARY
+
 /* Define to 1 if you have the `asprintf' function. */
 #undef HAVE_ASPRINTF
 
@@ -117,6 +120,9 @@
 
 /* Define to 1 if you have the `nsl' library (-lnsl). */
 #undef HAVE_LIBNSL
+
+/* Define to 1 if libpasswdqc is available */
+#undef HAVE_LIBPASSWDQC
 
 /* Define to 1 if PCRE is available */
 #undef HAVE_LIBPCRE
@@ -204,6 +210,9 @@
 
 /* Define to 1 if you have the <openssl/opensslv.h> header file. */
 #undef HAVE_OPENSSL_OPENSSLV_H
+
+/* Define to 1 if you have the <passwdqc.h> header file. */
+#undef HAVE_PASSWDQC_H
 
 /* Define to 1 if you have the <pcre.h> header file. */
 #undef HAVE_PCRE_H

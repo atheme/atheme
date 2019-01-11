@@ -195,14 +195,10 @@ loadmodule "modules/crypto/pbkdf2";
  * entirely. Please note however, that an authentication service
  * (either NickServ, or UserServ) is required for proper functionality.
  *
- * The CrackLib password validation module requires CrackLib to be
- * installed on your system in order to use.
- *
  * Core components                              modules/nickserv/main
  * Nickname access lists                        modules/nickserv/access
  * Bad email address blocking                   modules/nickserv/badmail
  * CertFP fingerprint managment                 modules/nickserv/cert
- * CrackLib password validation                 modules/nickserv/cracklib
  * DROP command                                 modules/nickserv/drop
  * Nickname enforcement                         modules/nickserv/enforce
  * GHOST command                                modules/nickserv/ghost
@@ -219,6 +215,7 @@ loadmodule "modules/crypto/pbkdf2";
  * LOGIN command (for no_nick_ownership)        modules/nickserv/login
  * LOGOUT command                               modules/nickserv/logout
  * MARK command                                 modules/nickserv/mark
+ * Password quality validation                  modules/nickserv/pwquality
  * FREEZE command                               modules/nickserv/freeze
  * LISTCHANS command                            modules/nickserv/listchans
  * LISTGROUPS command                           modules/nickserv/listgroups
@@ -260,7 +257,6 @@ loadmodule "modules/nickserv/main";
 #loadmodule "modules/nickserv/access";
 loadmodule "modules/nickserv/badmail";
 #loadmodule "modules/nickserv/cert";
-#loadmodule "modules/nickserv/cracklib";
 loadmodule "modules/nickserv/drop";
 #loadmodule "modules/nickserv/enforce";
 loadmodule "modules/nickserv/ghost";
@@ -277,6 +273,7 @@ loadmodule "modules/nickserv/listmail";
 #loadmodule "modules/nickserv/login";
 loadmodule "modules/nickserv/logout";
 loadmodule "modules/nickserv/mark";
+#loadmodule "modules/nickserv/pwquality";
 loadmodule "modules/nickserv/freeze";
 loadmodule "modules/nickserv/listchans";
 loadmodule "modules/nickserv/listgroups";
@@ -1195,18 +1192,18 @@ nickserv {
 
 	/* (*)cracklib_dict
 	 * The location and filename prefix of the cracklib dictionaries
-	 * for use with nickserv/cracklib. This must be provided if you are
-	 * going to be using nickserv/cracklib.
+	 * for use with nickserv/pwquality. This must be provided if you are
+	 * going to be using nickserv/pwquality with cracklib support enabled.
 	 */
 	#cracklib_dict = "/var/cache/cracklib/cracklib_dict";
 
-	/* (*)cracklib_warn
-	 * If this option is set and nickserv/cracklib is loaded, nickserv will just 
+	/* (*)pwquality_warn_only
+	 * If this option is set and nickserv/pwquality is loaded, nickserv will just 
 	 * warn users that their password is insecure, recommend they change it and 
 	 * still register the nick. If this option is unset, it will refuse to
 	 * register the nick at all until the user chooses a better password.
 	 */
-	#cracklib_warn;
+	#pwquality_warn_only;
 
 	/* (*)show_custom_metadata
 	 * Setting this option to false will prevent user-set metadata (via SET PROPERTY)

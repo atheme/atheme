@@ -4,7 +4,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRACK], [
 	LIBCRACK_LIBS=""
 
 	AC_ARG_WITH([cracklib],
-		[AS_HELP_STRING([--without-cracklib], [Do not attempt to detect cracklib (for modules/nickserv/cracklib -- checking password strength)])],
+		[AS_HELP_STRING([--without-cracklib], [Do not attempt to detect cracklib (for modules/nickserv/pwquality -- checking password strength)])],
 		[], [with_cracklib="auto"])
 
 	case "x${with_cracklib}" in
@@ -36,6 +36,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRACK], [
 						AC_SUBST([LIBCRACK_LIBS])
 					])
 					AC_DEFINE([HAVE_CRACKLIB], [1], [Define to 1 if cracklib is available])
+					AC_DEFINE([HAVE_ANY_PASSWORD_QUALITY_LIBRARY], [1], [Define to 1 if any password quality library is available])
 				], [
 					AC_MSG_RESULT([no])
 					LIBCRACK="No"

@@ -150,7 +150,6 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 	add_duration_conf_item("ENFORCE_EXPIRE", &nicksvs.me->conf_table, 0, &nicksvs.enforce_expiry, "d", 0);
 	add_duration_conf_item("ENFORCE_DELAY", &nicksvs.me->conf_table, 0, &nicksvs.enforce_delay, "s", 30);
 	add_dupstr_conf_item("ENFORCE_PREFIX", &nicksvs.me->conf_table, 0, &nicksvs.enforce_prefix, "Guest");
-	add_dupstr_conf_item("CRACKLIB_DICT", &nicksvs.me->conf_table, 0, &nicksvs.cracklib_dict, NULL);
 	add_conf_item("EMAILEXEMPTS", &nicksvs.me->conf_table, c_ni_emailexempts);
 	add_uint_conf_item("MAXNICKS", &nicksvs.me->conf_table, 9, &nicksvs.maxnicks, 1, INT_MAX, 5);
 }

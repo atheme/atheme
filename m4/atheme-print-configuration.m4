@@ -37,17 +37,18 @@ Configuration of ${PACKAGE_STRING}:
     Module Directory ........: ${MODDIR}/modules
     PID Directory ...........: ${RUNDIR}
 
-    crypt(3) Support ........: ${LIBCRYPT}
-    CrackLib Support ........: ${LIBCRACK}
-    LDAP Support ............: ${LIBLDAP}
-    GNU libidn Support ......: ${LIBIDN}
-    ARM mbedTLS Support .....: ${LIBMBEDCRYPTO}
-    Nettle Support ..........: ${LIBNETTLE}
-    OpenSSL Support .........: ${LIBCRYPTO}
-    PCRE Support ............: ${LIBPCRE}
-    Perl Support ............: ${LIBPERL}
-    QR Code Support .........: ${LIBQRENCODE}
-    Sodium Support ..........: ${LIBSODIUM}
+    crypt(3) support ........: ${LIBCRYPT}
+    CrackLib support ........: ${LIBCRACK}
+    LDAP support ............: ${LIBLDAP}
+    GNU libidn support ......: ${LIBIDN}
+    ARM mbedTLS support .....: ${LIBMBEDCRYPTO}
+    Nettle support ..........: ${LIBNETTLE}
+    OpenSSL support .........: ${LIBCRYPTO}
+    passwdqc support ........: ${LIBPASSWDQC}
+    PCRE support ............: ${LIBPCRE}
+    Perl support ............: ${LIBPERL}
+    QR Code support .........: ${LIBQRENCODE}
+    Sodium support ..........: ${LIBSODIUM}
 
     Contrib Modules .........: ${CONTRIB_MODULES}
     Debugging Support .......: ${DEBUGGING}

@@ -29,6 +29,11 @@ POTENTIAL COMPATIBILITY BREAKAGE
   modules will NOT be compiled or installed. The presence of this flag can be
   confirmed at the bottom of the `configure` output; "Legacy Crypto Modules".
 
+- The `modules/nickserv/cracklib` module has been renamed to
+  `modules/nickserv/pwquality` because it is now capable of using `libpasswdqc`
+  as well. The corresponding configuration item `nickserv::cracklib_warn` has
+  been renamed to `nickserv::pwquality_warn_only` too.
+
 Security
 --------
 - Services now accepts email addresses that may contain shell metacharacters.

@@ -10,7 +10,6 @@ SRCS =				\
 	access.c		\
 	badmail.c		\
 	cert.c			\
-	cracklib.c		\
 	drop.c			\
 	enforce.c		\
 	freeze.c		\
@@ -31,6 +30,7 @@ SRCS =				\
 	logout.c		\
 	mark.c			\
 	multimark.c		\
+	pwquality.c		\
 	register.c		\
 	regnolimit.c		\
 	resetpass.c		\

@@ -656,6 +656,7 @@ LIBQRENCODE_LIBS
 LIBQRENCODE_CFLAGS
 LIBPCRE_LIBS
 LIBPCRE_CFLAGS
+LIBPASSWDQC_LIBS
 LIBNETTLE_LIBS
 LIBNETTLE_CFLAGS
 LIBMBEDCRYPTO_LIBS
@@ -801,6 +802,7 @@ with_libidn
 with_ldap
 with_mbedtls
 with_nettle
+with_passwdqc
 with_pcre
 with_qrencode
 with_sodium
@@ -1519,7 +1521,7 @@ Optional Packages:
   --with-libintl-prefix[=DIR]  search for libintl in DIR/include and DIR/lib
   --without-libintl-prefix     don't search for libintl in includedir and libdir
   --without-cracklib      Do not attempt to detect cracklib (for
-                          modules/nickserv/cracklib -- checking password
+                          modules/nickserv/pwquality -- checking password
                           strength)
   --without-crypt         Do not attempt to detect crypt(3) (for
                           modules/crypto/crypt3-*)
@@ -1532,6 +1534,9 @@ Optional Packages:
                           modules/auth/ldap)
   --without-mbedtls       Do not attempt to detect ARM mbedTLS
   --without-nettle        Do not attempt to detect nettle (crypto library)
+  --without-passwdqc      Do not attempt to detect libpasswdqc (for
+                          modules/nickserv/pwquality -- checking password
+                          strength)
   --without-pcre          Do not attempt to detect libpcre
   --without-qrencode      Do not attempt to detect libqrencode for generating
                           QR codes
@@ -8613,6 +8618,9 @@ fi
 $as_echo "#define HAVE_CRACKLIB 1" >>confdefs.h
 
 
+$as_echo "#define HAVE_ANY_PASSWORD_QUALITY_LIBRARY 1" >>confdefs.h
+
+
 else
 
 					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
@@ -9945,6 +9953,182 @@ fi
 
 
 
+
+	LIBS="${LIBS_SAVED}"
+
+
+
+	LIBPASSWDQC="No"
+	LIBPASSWDQC_LIBS=""
+
+
+# Check whether --with-passwdqc was given.
+if test "${with_passwdqc+set}" = set; then :
+  withval=$with_passwdqc;
+else
+  with_passwdqc="auto"
+fi
+
+
+	case "x${with_passwdqc}" in
+		xno | xyes | xauto)
+			;;
+		*)
+			as_fn_error $? "invalid option for --with-passwdqc" "$LINENO" 5
+			;;
+	esac
+
+	LIBS_SAVED="${LIBS}"
+
+	if test "${with_passwdqc}" != "no"; then :
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing passwdqc_check" >&5
+$as_echo_n "checking for library containing passwdqc_check... " >&6; }
+if ${ac_cv_search_passwdqc_check+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS=$LIBS
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char passwdqc_check ();
+int
+main ()
+{
+return passwdqc_check ();
+  ;
+  return 0;
+}
+_ACEOF
+for ac_lib in '' passwdqc; do
+  if test -z "$ac_lib"; then
+    ac_res="none required"
+  else
+    ac_res=-l$ac_lib
+    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
+  fi
+  if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_passwdqc_check=$ac_res
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext
+  if ${ac_cv_search_passwdqc_check+:} false; then :
+  break
+fi
+done
+if ${ac_cv_search_passwdqc_check+:} false; then :
+
+else
+  ac_cv_search_passwdqc_check=no
+fi
+rm conftest.$ac_ext
+LIBS=$ac_func_search_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_passwdqc_check" >&5
+$as_echo "$ac_cv_search_passwdqc_check" >&6; }
+ac_res=$ac_cv_search_passwdqc_check
+if test "$ac_res" != no; then :
+  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+
+			for ac_header in passwdqc.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "passwdqc.h" "ac_cv_header_passwdqc_h" "$ac_includes_default"
+if test "x$ac_cv_header_passwdqc_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_PASSWDQC_H 1
+_ACEOF
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libpasswdqc appears to be usable" >&5
+$as_echo_n "checking if libpasswdqc appears to be usable... " >&6; }
+				cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+						#include <stddef.h>
+						#include <passwdqc.h>
+
+int
+main ()
+{
+
+						passwdqc_params_qc_t qc_config = {
+							.min                    = { 32, 24, 11, 8, 7 },
+							.max                    = 288,
+							.passphrase_words       = 3,
+							.match_length           = 4,
+						};
+						(void) passwdqc_check(&qc_config, NULL, NULL, NULL);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+					LIBPASSWDQC="Yes"
+					if test "x${ac_cv_search_passwdqc_check}" != "xnone required"; then :
+
+						LIBPASSWDQC_LIBS="${ac_cv_search_passwdqc_check}"
+
+
+fi
+
+$as_echo "#define HAVE_LIBPASSWDQC 1" >>confdefs.h
+
+
+$as_echo "#define HAVE_ANY_PASSWORD_QUALITY_LIBRARY 1" >>confdefs.h
+
+
+else
+
+					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+					LIBPASSWDQC="No"
+					if test "${with_passwdqc}" = "yes"; then :
+
+						as_fn_error $? "--with-passwdqc was specified but passwdqc appears to be unusable" "$LINENO" 5
+
+fi
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+else
+
+				LIBPASSWDQC="No"
+				if test "${with_passwdqc}" = "yes"; then :
+
+					as_fn_error $? "--with-passwdqc was specified but a required header file is missing" "$LINENO" 5
+
+fi
+
+fi
+
+done
+
+
+else
+
+			LIBPASSWDQC="No"
+			if test "${with_passwdqc}" = "yes"; then :
+
+				as_fn_error $? "--with-passwdqc was specified but passwdqc could not be found" "$LINENO" 5
+
+fi
+
+fi
+
+
+fi
 
 	LIBS="${LIBS_SAVED}"
 
@@ -17323,17 +17507,18 @@ Configuration of ${PACKAGE_STRING}:
     Module Directory ........: ${MODDIR}/modules
     PID Directory ...........: ${RUNDIR}
 
-    crypt(3) Support ........: ${LIBCRYPT}
-    CrackLib Support ........: ${LIBCRACK}
-    LDAP Support ............: ${LIBLDAP}
-    GNU libidn Support ......: ${LIBIDN}
-    ARM mbedTLS Support .....: ${LIBMBEDCRYPTO}
-    Nettle Support ..........: ${LIBNETTLE}
-    OpenSSL Support .........: ${LIBCRYPTO}
-    PCRE Support ............: ${LIBPCRE}
-    Perl Support ............: ${LIBPERL}
-    QR Code Support .........: ${LIBQRENCODE}
-    Sodium Support ..........: ${LIBSODIUM}
+    crypt(3) support ........: ${LIBCRYPT}
+    CrackLib support ........: ${LIBCRACK}
+    LDAP support ............: ${LIBLDAP}
+    GNU libidn support ......: ${LIBIDN}
+    ARM mbedTLS support .....: ${LIBMBEDCRYPTO}
+    Nettle support ..........: ${LIBNETTLE}
+    OpenSSL support .........: ${LIBCRYPTO}
+    passwdqc support ........: ${LIBPASSWDQC}
+    PCRE support ............: ${LIBPCRE}
+    Perl support ............: ${LIBPERL}
+    QR Code support .........: ${LIBQRENCODE}
+    Sodium support ..........: ${LIBSODIUM}
 
     Contrib Modules .........: ${CONTRIB_MODULES}
     Debugging Support .......: ${DEBUGGING}

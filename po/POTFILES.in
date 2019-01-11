@@ -169,7 +169,6 @@ modules/memoserv/sendops.c
 modules/nickserv/access.c
 modules/nickserv/badmail.c
 modules/nickserv/cert.c
-modules/nickserv/cracklib.c
 modules/nickserv/drop.c
 modules/nickserv/enforce.c
 modules/nickserv/freeze.c
@@ -189,6 +188,7 @@ modules/nickserv/logout.c
 modules/nickserv/main.c
 modules/nickserv/mark.c
 modules/nickserv/multimark.c
+modules/nickserv/pwquality.c
 modules/nickserv/register.c
 modules/nickserv/regnolimit.c
 modules/nickserv/resetpass.c
