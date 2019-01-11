@@ -9,8 +9,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
-#include "pmodule.h"
 
 static struct ircd Ratbox = {
 	.ircdname = "Ratbox (1.0 or later)",

@@ -14,9 +14,6 @@
  */
 
 #include "atheme.h"
-#include "datastream.h"
-#include "privs.h"
-#include "pmodule.h"
 
 static mowgli_patricia_t *ctcptree = NULL;
 

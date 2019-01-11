@@ -7,8 +7,16 @@
  * Data structures and macros for SASL mechanisms.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_SASL_H
 #define ATHEME_INC_SASL_H 1
+
+#include <stdbool.h>
+#include <stddef.h>
+
+#include "sourceinfo.h"
+#include "structures.h"
 
 // Maximum number of parameters for an SASL S2S command (arbitrary, increment in future if necessary)
 #define SASL_MESSAGE_MAXPARA        8

@@ -8,8 +8,6 @@
  */
 
 #include "atheme.h"
-#include "httpd.h"
-#include "datastream.h"
 
 #define REQUEST_MAX 65536 // maximum size of one call
 

@@ -7,8 +7,15 @@
  * Datastream query stuff.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_DATASTREAM_H
 #define ATHEME_INC_DATASTREAM_H 1
+
+#include <stdbool.h>
+#include <stddef.h>
+
+#include "structures.h"
 
 void sendq_add(struct connection *cptr, char *buf, size_t len);
 void sendq_add_eof(struct connection *cptr);

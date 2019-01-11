@@ -13,7 +13,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
 #include "rfc1459.h"
 
 static void

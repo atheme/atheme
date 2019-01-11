@@ -7,7 +7,7 @@
  * Frontend routines for the random interface.
  */
 
-#include "sysconf.h"
+#include "atheme.h"
 
 #define ATHEME_RANDOM_FRONTEND_C 1
 

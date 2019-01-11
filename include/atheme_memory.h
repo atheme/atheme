@@ -7,13 +7,14 @@
  * Memory stuff.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_ATHEME_MEMORY_H
 #define ATHEME_INC_ATHEME_MEMORY_H 1
 
 #include <stddef.h>
 
 #include "attrs.h"
-#include "sysconf.h"
 
 #if !defined(HAVE_MEMSET_S) && !defined(HAVE_EXPLICIT_BZERO) && !defined(HAVE_LIBSODIUM_MEMZERO)
 // This symbol is located in libathemecore/atheme.c

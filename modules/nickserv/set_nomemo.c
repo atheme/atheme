@@ -9,7 +9,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
 #include "list.h"
 
 static mowgli_patricia_t **ns_set_cmdtree = NULL;

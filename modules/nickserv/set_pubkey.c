@@ -13,8 +13,6 @@
 
 #ifdef HAVE_OPENSSL
 
-#include "uplink.h"
-
 static mowgli_patricia_t **ns_set_cmdtree = NULL;
 
 // SET PUBKEY <key>

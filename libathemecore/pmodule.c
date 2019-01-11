@@ -14,7 +14,6 @@
  */
 
 #include "atheme.h"
-#include "pmodule.h"
 
 mowgli_patricia_t *pcommands;
 

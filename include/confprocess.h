@@ -7,8 +7,16 @@
  * Config reader.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_CONFPROCESS_H
 #define ATHEME_INC_CONFPROCESS_H 1
+
+#include <stdbool.h>
+
+#include <mowgli.h>
+
+#include "attrs.h"
 
 #define CONF_NO_REHASH 0x1
 

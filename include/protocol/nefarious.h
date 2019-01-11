@@ -5,6 +5,8 @@
  * Copyright (C) 2005 William Pitcock, et al.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_PROTOCOL_NEFARIOUS_H
 #define ATHEME_INC_PROTOCOL_NEFARIOUS_H 1
 

@@ -14,19 +14,13 @@
  */
 
 #include "atheme.h"
-#include "conf.h"
-#include "uplink.h"
-#include "pmodule.h" /* pcommand_init */
 #include "internal.h"
-#include "datastream.h"
-#include "authcookie.h"
-#include "libathemecore.h"
-
-#include <ext/getopt_long.h> /* XXX */
 
 #ifdef HAVE_GETRLIMIT
 #  include <sys/resource.h>
 #endif
+
+#include <ext/getopt_long.h>
 
 #if !defined(HAVE_MEMSET_S) && !defined(HAVE_EXPLICIT_BZERO) && !defined(HAVE_LIBSODIUM_MEMZERO)
 void *(* volatile volatile_memset)(void *, int, size_t) = &memset;

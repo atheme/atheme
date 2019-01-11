@@ -14,9 +14,7 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
-#include "conf.h"
-#include "internal.h"
+
 #include <signal.h>
 
 #ifndef MOWGLI_OS_WIN

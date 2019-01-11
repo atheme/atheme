@@ -8,7 +8,6 @@
  */
 
 #include "atheme.h"
-#include "serno.h"
 
 #ifdef HAVE_LIBSODIUM
 #  include <sodium/core.h>

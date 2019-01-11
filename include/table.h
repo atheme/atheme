@@ -7,8 +7,13 @@
  * Table rendering class.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_TABLE_H
 #define ATHEME_INC_TABLE_H 1
+
+#include "attrs.h"
+#include "object.h"
 
 struct atheme_table
 {

@@ -7,6 +7,7 @@
  * groupserv - group services.
  */
 
+#include "atheme.h"
 #include "groupserv_main.h"
 
 static struct chanacs *

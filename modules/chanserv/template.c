@@ -8,7 +8,6 @@
  */
 
 #include "atheme.h"
-#include "template.h"
 
 static int
 display_template(const char *key, void *data, void *privdata)

@@ -8,7 +8,6 @@
  */
 
 #include "atheme.h"
-#include "authcookie.h"
 #include "list_common.h"
 #include "list.h"
 

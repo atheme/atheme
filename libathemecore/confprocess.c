@@ -14,7 +14,6 @@
  */
 
 #include "atheme.h"
-#include <limits.h>
 
 enum conftype
 {

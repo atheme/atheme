@@ -10,7 +10,6 @@
 
 #include "atheme.h"
 #include "list.h"
-#include "account.h"
 
 struct multimark
 {

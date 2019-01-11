@@ -7,8 +7,14 @@
  * Predefined flags collections
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_TEMPLATE_H
 #define ATHEME_INC_TEMPLATE_H 1
+
+#include <mowgli.h>
+
+#include "structures.h"
 
 struct default_template
 {

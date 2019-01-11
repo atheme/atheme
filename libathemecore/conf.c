@@ -14,13 +14,6 @@
  */
 
 #include "atheme.h"
-#include "conf.h"
-#include "uplink.h"
-#include "pmodule.h"
-#include "privs.h"
-#include "datastream.h"
-#include "template.h"
-#include <limits.h>
 
 static int c_uplink(mowgli_config_file_entry_t *);
 static int c_loadmodule(mowgli_config_file_entry_t *);

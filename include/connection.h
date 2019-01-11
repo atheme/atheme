@@ -7,8 +7,20 @@
  * This contains the connection structure.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_CONNECTION_H
 #define ATHEME_INC_CONNECTION_H 1
+
+#include <errno.h>
+#include <netinet/in.h>
+#include <stddef.h>
+#include <time.h>
+
+#include <mowgli.h>
+
+#include "attrs.h"
+#include "common.h"
 
 #ifndef _WIN32
 # define ioerrno()	errno

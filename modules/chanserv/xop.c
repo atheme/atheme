@@ -8,7 +8,6 @@
  */
 
 #include "atheme.h"
-#include "template.h"
 #include "chanserv.h"
 
 static void

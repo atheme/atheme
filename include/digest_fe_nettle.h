@@ -7,18 +7,26 @@
  * Nettle frontend data structures for the digest interface.
  */
 
+#include "sysconf.h"
+
+#ifndef ATHEME_INC_DIGEST_FE_HEADER_H
+#define ATHEME_INC_DIGEST_FE_HEADER_H 1
+
 #ifndef ATHEME_INC_DIGEST_H
 #  error "You should not include me directly; include digest.h instead"
 #endif /* !ATHEME_INC_DIGEST_H */
 
-#ifndef ATHEME_INC_DIGEST_FE_HEADER_H
-#define ATHEME_INC_DIGEST_FE_HEADER_H 1
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
 
 #include <nettle/md5.h>
 #include <nettle/sha1.h>
 #include <nettle/sha2.h>
 
 #include <nettle/nettle-meta.h>
+
+#include "digest.h"
 
 union digest_state
 {

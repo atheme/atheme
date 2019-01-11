@@ -9,7 +9,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
 
 static void
 os_cmd_inject(struct sourceinfo *si, int parc, char *parv[])

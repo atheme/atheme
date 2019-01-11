@@ -7,6 +7,8 @@
  * JSONRPC library header
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_MOD_TRANSPORT_JSONRPC_JSONRPCLIB_H
 #define ATHEME_MOD_TRANSPORT_JSONRPC_JSONRPCLIB_H 1
 

@@ -7,6 +7,8 @@
  * Function, structure, and variable attribute macros.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_ATTRS_H
 #define ATHEME_INC_ATTRS_H 1
 

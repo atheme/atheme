@@ -14,7 +14,6 @@
  */
 
 #include "atheme.h"
-#include "datastream.h"
 
 #define SENDQSIZE (4096 - 40)
 

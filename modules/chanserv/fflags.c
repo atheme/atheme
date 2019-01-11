@@ -8,7 +8,6 @@
  */
 
 #include "atheme.h"
-#include "template.h"
 
 // FFLAGS <channel> <user> <flags>
 static void

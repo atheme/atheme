@@ -6,6 +6,8 @@
  * Copyright (C) 2005 William Pitcock, et al.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_PROTOCOL_CHATIRCD_H
 #define ATHEME_INC_PROTOCOL_CHATIRCD_H 1
 

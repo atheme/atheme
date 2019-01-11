@@ -10,6 +10,8 @@
  * BLAKE2 reference C implementation (modified for Atheme IRC Services)
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_MOD_CRYPTO_BLAKE2B_H
 #define ATHEME_MOD_CRYPTO_BLAKE2B_H 1
 

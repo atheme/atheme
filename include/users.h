@@ -7,8 +7,20 @@
  * Data structures for connected clients.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_USERS_H
 #define ATHEME_INC_USERS_H 1
+
+#include <stdbool.h>
+#include <stddef.h>
+#include <time.h>
+
+#include <mowgli.h>
+
+#include "common.h"
+#include "object.h"
+#include "structures.h"
 
 struct user
 {

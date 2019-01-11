@@ -9,7 +9,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
 
 static mowgli_patricia_t **bs_set_cmdtree = NULL;
 

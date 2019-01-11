@@ -5,8 +5,21 @@
  * Copyright (C) 2007 Pippijn van Steenhoven <pip88nl@gmail.com>
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_INLINE_ACCOUNT_H
 #define ATHEME_INC_INLINE_ACCOUNT_H 1
+
+#include <stddef.h>
+
+#include <mowgli.h>
+
+#include "../account.h"
+#include "../channels.h"
+#include "../entity.h"
+#include "../object.h"
+#include "../services.h"
+#include "../sourceinfo.h"
 
 /*
  * myuser_find(const char *name)

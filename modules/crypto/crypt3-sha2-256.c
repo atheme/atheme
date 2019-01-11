@@ -7,6 +7,7 @@
  * POSIX-style SHA2-256 crypt(3) wrapper.
  */
 
+#include "atheme.h"
 #include "crypt3.h"
 
 #ifdef HAVE_CRYPT

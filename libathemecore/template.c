@@ -14,7 +14,6 @@
  */
 
 #include "atheme.h"
-#include "template.h"
 
 mowgli_patricia_t *global_template_dict = NULL;
 

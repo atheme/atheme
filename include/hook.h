@@ -7,8 +7,15 @@
  * A hook system.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_HOOK_H
 #define ATHEME_INC_HOOK_H 1
+
+#include <mowgli.h>
+
+#include "common.h"
+#include "structures.h"
 
 // Types necessary for the hook system (and/or for Perl scripts)
 typedef struct chanacs chanacs_t;

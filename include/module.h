@@ -7,11 +7,17 @@
  * This file contains data structures concerning modules.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_MODULE_H
 #define ATHEME_INC_MODULE_H 1
 
-#include "privs.h"
+#include <stdbool.h>
+
+#include <mowgli.h>
+
 #include "abirev.h"
+#include "common.h"
 #include "serno.h"
 
 #define MODFLAG_DBCRYPTO	0x0100U /* starting up without us may leave users unable to login */

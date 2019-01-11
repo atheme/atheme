@@ -7,8 +7,18 @@
  * Data structures related to services psuedo-clients.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_SERVICES_H
 #define ATHEME_INC_SERVICES_H 1
+
+#include <stdbool.h>
+
+#include <mowgli.h>
+
+#include "attrs.h"
+#include "common.h"
+#include "structures.h"
 
 /* The nick/user/host/real strings in these structs simply point
  * to their counterparts in the struct service, and will probably be removed

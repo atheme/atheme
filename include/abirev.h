@@ -7,6 +7,8 @@
  * Module ABI revision.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_ABIREV_H
 #define ATHEME_INC_ABIREV_H 1
 

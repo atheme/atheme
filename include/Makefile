@@ -54,7 +54,6 @@ INCLUDES = \
 	services.h		\
 	servtree.h		\
 	sourceinfo.h		\
-	stdinc.h		\
 	sysconf.h		\
 	table.h			\
 	taint.h			\

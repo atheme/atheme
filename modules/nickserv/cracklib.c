@@ -11,8 +11,6 @@
 
 #ifdef HAVE_CRACKLIB
 
-#include "conf.h"
-
 #include <sys/stat.h>
 #include <crack.h>
 

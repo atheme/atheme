@@ -8,10 +8,14 @@
  * Command help routines.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_COMMANDHELP_H
 #define ATHEME_INC_COMMANDHELP_H 1
 
-/* help.c */
+#include "servtree.h"
+#include "sourceinfo.h"
+
 void help_display(struct sourceinfo *, const struct service *, const char *, mowgli_patricia_t *);
 void help_display_as_subcmd(struct sourceinfo *, const struct service *, const char *, const char *, mowgli_patricia_t *);
 void help_display_invalid(struct sourceinfo *, const struct service *, const char *);

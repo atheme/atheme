@@ -7,11 +7,11 @@
  * Frontend routines for the random interface (ARM mbedTLS backend).
  */
 
+#include "atheme.h"
+
 #ifndef ATHEME_RANDOM_FRONTEND_C
 #  error "Do not compile me directly; compile random_frontend.c instead"
 #endif /* !ATHEME_RANDOM_FRONTEND_C */
-
-#include "atheme.h"
 
 #include <mbedtls/entropy.h>
 #include <mbedtls/hmac_drbg.h>

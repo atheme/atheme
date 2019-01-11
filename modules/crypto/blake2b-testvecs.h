@@ -10,6 +10,8 @@
  *   <https://raw.githubusercontent.com/BLAKE2/BLAKE2/7728c30896d3fa0c3b4df52c/testvectors/blake2-kat.h>
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_MOD_CRYPTO_BLAKE2B_TESTVECS_H
 #define ATHEME_MOD_CRYPTO_BLAKE2B_TESTVECS_H 1
 

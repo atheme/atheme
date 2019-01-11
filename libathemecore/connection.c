@@ -14,16 +14,14 @@
  */
 
 #include "atheme.h"
-#include "internal.h"
-#include "datastream.h"
-
-mowgli_list_t connection_list;
 
 #ifdef MOWGLI_OS_WIN
 # define EWOULDBLOCK WSAEWOULDBLOCK
 # define EINPROGRESS WSAEINPROGRESS
 # define SHUT_RDWR   SD_BOTH
 #endif
+
+mowgli_list_t connection_list;
 
 static int
 socket_setnonblocking(mowgli_descriptor_t sck)

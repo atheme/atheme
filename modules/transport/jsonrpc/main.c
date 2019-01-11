@@ -8,10 +8,7 @@
  */
 
 #include "atheme.h"
-#include "httpd.h"
 #include "jsonrpclib.h"
-#include "datastream.h"
-#include "authcookie.h"
 
 static mowgli_list_t *httpd_path_handlers = NULL;
 static mowgli_patricia_t *json_methods = NULL;

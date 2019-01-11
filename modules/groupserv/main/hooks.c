@@ -7,6 +7,7 @@
  * groupserv - group services.
  */
 
+#include "atheme.h"
 #include "groupserv_main.h"
 
 static mowgli_eventloop_timer_t *mygroup_expire_timer = NULL;

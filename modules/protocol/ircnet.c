@@ -10,8 +10,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
-#include "pmodule.h"
 
 static struct ircd IRCNet = {
 	.ircdname = "ircd 2.11.1p1 or later",

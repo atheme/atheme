@@ -14,8 +14,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
-#include "privs.h"
 
 mowgli_list_t klnlist;
 mowgli_list_t xlnlist;

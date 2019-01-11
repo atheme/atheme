@@ -9,7 +9,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
 
 static mowgli_list_t sessions;
 static mowgli_list_t mechanisms;

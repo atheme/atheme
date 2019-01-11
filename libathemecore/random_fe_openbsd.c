@@ -7,15 +7,11 @@
  * Frontend routines for the random interface (OpenBSD backend).
  */
 
+#include "atheme.h"
+
 #ifndef ATHEME_RANDOM_FRONTEND_C
 #  error "Do not compile me directly; compile random_frontend.c instead"
 #endif /* !ATHEME_RANDOM_FRONTEND_C */
-
-#include <stddef.h>
-#include <stdint.h>
-#include <stdlib.h>
-
-#include "atheme_random.h"
 
 uint32_t
 atheme_random(void)

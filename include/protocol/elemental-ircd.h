@@ -6,6 +6,8 @@
  * Copyright (C) 2008 ShadowIRCd Development Group
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_PROTOCOL_ELEMENTAL_IRCD_H
 #define ATHEME_INC_PROTOCOL_ELEMENTAL_IRCD_H 1
 

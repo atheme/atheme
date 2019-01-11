@@ -9,7 +9,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
 #include "list_common.h"
 #include "list.h"
 

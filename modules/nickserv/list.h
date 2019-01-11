@@ -10,9 +10,12 @@
  * that need to access /ns list functionality.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_MOD_NICKSERV_LIST_H
 #define ATHEME_MOD_NICKSERV_LIST_H 1
 
+#include "atheme.h"
 #include "list_common.h"
 
 void (*list_register)(const char *param_name, struct list_param *param);

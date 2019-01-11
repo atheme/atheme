@@ -8,7 +8,6 @@
  */
 
 #include "atheme.h"
-#include "conf.h"
 
 static void
 os_cmd_modload(struct sourceinfo *si, int parc, char *parv[])

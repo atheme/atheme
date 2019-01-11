@@ -9,8 +9,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
-#include "pmodule.h"
 #include "protocol/bahamut.h"
 
 static struct ircd Bahamut = {

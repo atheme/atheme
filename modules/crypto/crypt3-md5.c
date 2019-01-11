@@ -7,6 +7,7 @@
  * POSIX-style MD5 crypt(3) wrapper (verify-only).
  */
 
+#include "atheme.h"
 #include "crypt3.h"
 
 #ifdef HAVE_CRYPT

@@ -7,12 +7,16 @@
  * Atheme IRC Services digest interface.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_DIGEST_H
 #define ATHEME_INC_DIGEST_H 1
 
+#include <stdbool.h>
+#include <stddef.h>
+
 #include "attrs.h"
-#include "stdinc.h"
-#include "sysconf.h"
+#include "structures.h"
 
 #define DIGALG_MD5              0x01U
 #define DIGALG_SHA1             0x02U

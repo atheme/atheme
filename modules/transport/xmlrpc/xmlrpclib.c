@@ -9,7 +9,6 @@
  * Based on the original code from Denora
  */
 
-#include <mowgli.h>
 #include "atheme.h"
 #include "xmlrpclib.h"
 

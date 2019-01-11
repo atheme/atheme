@@ -7,6 +7,8 @@
  * String stuff.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_ATHEME_STRING_H
 #define ATHEME_INC_ATHEME_STRING_H 1
 

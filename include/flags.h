@@ -7,8 +7,14 @@
  * Data structures for flags to bitmask processing routines.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_FLAGS_H
 #define ATHEME_INC_FLAGS_H 1
+
+#include <stdbool.h>
+
+#include "structures.h"
 
 /* flags stuff */
 struct flags_table

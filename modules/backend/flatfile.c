@@ -9,7 +9,6 @@
  */
 
 #include "atheme.h"
-#include "template.h"
 
 // database versions
 #define DB_SHRIKE	1

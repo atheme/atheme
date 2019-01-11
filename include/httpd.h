@@ -7,8 +7,14 @@
  * Generic HTTP server
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_HTTPD_H
 #define ATHEME_INC_HTTPD_H 1
+
+#include <stdbool.h>
+
+#include "structures.h"
 
 struct path_handler
 {

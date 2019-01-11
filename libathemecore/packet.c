@@ -13,8 +13,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
-#include "datastream.h"
 
 /* bursting timer */
 #if HAVE_GETTIMEOFDAY

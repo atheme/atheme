@@ -7,6 +7,8 @@
  * Atheme IRC Services random number generator interface.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_RANDOM_H
 #define ATHEME_INC_RANDOM_H 1
 

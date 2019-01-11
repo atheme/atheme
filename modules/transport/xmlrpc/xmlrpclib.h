@@ -8,6 +8,8 @@
  * XMLRPC library header, hacked up for Atheme.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_MOD_TRANSPORT_XMLRPC_XMLRPCLIB_H
 #define ATHEME_MOD_TRANSPORT_XMLRPC_XMLRPCLIB_H 1
 

@@ -7,8 +7,18 @@
  * entity.h - entity tracking
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_ENTITY_H
 #define ATHEME_INC_ENTITY_H 1
+
+#include <stdbool.h>
+
+#include <mowgli.h>
+
+#include "common.h"
+#include "object.h"
+#include "structures.h"
 
 enum myentity_type
 {

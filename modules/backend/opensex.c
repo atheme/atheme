@@ -11,8 +11,8 @@
  */
 
 #include "atheme.h"
+
 #ifdef HAVE_FLOCK
-# include <unistd.h>
 # include <sys/file.h>
 #endif
 

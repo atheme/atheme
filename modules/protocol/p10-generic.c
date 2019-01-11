@@ -10,8 +10,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
-#include "pmodule.h"
 
 static void check_hidehost(struct user *u);
 

@@ -11,8 +11,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
-#include "pmodule.h"
 #include "protocol/chatircd.h"
 
 static struct ircd ChatIRCd = {

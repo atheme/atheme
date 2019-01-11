@@ -14,8 +14,6 @@
  */
 
 #include "atheme.h"
-#include "datastream.h"
-#include "uplink.h"
 
 static void uplink_close(struct connection *cptr);
 

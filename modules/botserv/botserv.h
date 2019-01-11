@@ -7,8 +7,12 @@
  * BotServ common definitions.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_MOD_BOTSERV_BOTSERV_H
 #define ATHEME_MOD_BOTSERV_BOTSERV_H 1
+
+#include "atheme.h"
 
 struct botserv_bot
 {

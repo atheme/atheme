@@ -8,7 +8,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
 
 static unsigned int ratelimit_count = 0;
 static time_t ratelimit_firsttime = 0;

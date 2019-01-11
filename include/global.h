@@ -8,8 +8,16 @@
  * Global data
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_GLOBAL_H
 #define ATHEME_INC_GLOBAL_H 1
+
+#include <stdbool.h>
+#include <time.h>
+#include <unistd.h>
+
+#include <mowgli.h>
 
 /* me, a struct containing basic configuration options and some dynamic
  * information about our uplink and program state */

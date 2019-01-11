@@ -13,7 +13,6 @@
  */
 
 #include "atheme.h"
-#include "pmodule.h"
 
 int
 sjtoken(char *message, char delimiter, char **parv)

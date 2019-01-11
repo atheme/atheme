@@ -7,8 +7,12 @@
  * Dynamic linker.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_LINKER_H
 #define ATHEME_INC_LINKER_H 1
+
+#include <mowgli.h>
 
 mowgli_module_t *linker_open_ext(const char *path, char *errbuf, int errlen);
 

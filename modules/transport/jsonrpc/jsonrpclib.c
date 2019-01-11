@@ -7,7 +7,6 @@
  * JSONRPC Library
  */
 
-#include <mowgli.h>
 #include "atheme.h"
 #include "jsonrpclib.h"
 

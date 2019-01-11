@@ -6,8 +6,12 @@
  * Copyright (C) 2006-2007 Jilles Tjoelker <jilles@stack.nl>
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_MOD_GAMESERV_GAMESERV_COMMON_H
 #define ATHEME_MOD_GAMESERV_GAMESERV_COMMON_H 1
+
+#include "atheme.h"
 
 /*
  * Handle reporting for both fantasy commands and normal commands in GameServ

@@ -9,7 +9,6 @@
  */
 
 #include "atheme.h"
-#include <limits.h>
 
 static struct service *memosvs = NULL;
 

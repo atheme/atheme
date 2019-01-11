@@ -14,7 +14,6 @@
  */
 
 #include "atheme.h"
-#include "linker.h"
 
 #include <dirent.h>
 

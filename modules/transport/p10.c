@@ -13,8 +13,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
-#include "pmodule.h"
 
 // parses a P10 IRC stream
 static void

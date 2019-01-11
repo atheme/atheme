@@ -5,8 +5,12 @@
  * Copyright (C) 2005-2013 Atheme Project (http://atheme.org/)
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_MOD_HOSTSERV_HOSTSERV_H
 #define ATHEME_MOD_HOSTSERV_HOSTSERV_H 1
+
+#include "atheme.h"
 
 typedef struct {
         const char *host;

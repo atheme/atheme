@@ -8,9 +8,6 @@
  */
 
 #include "atheme.h"
-#include "conf.h"
-#include "uplink.h" // XXX: For sendq_flush and curr_uplink
-#include "datastream.h"
 
 static void
 recurse_module_deplist(struct module *m, mowgli_list_t *deplist)

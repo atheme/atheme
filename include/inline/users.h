@@ -5,8 +5,14 @@
  * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_INLINE_USERS_H
 #define ATHEME_INC_INLINE_USERS_H 1
+
+#include <stdbool.h>
+
+#include "../users.h"
 
 static inline bool
 user_is_channel_banned(struct user *const restrict u, const char ban_type)

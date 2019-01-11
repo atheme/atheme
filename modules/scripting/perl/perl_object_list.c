@@ -5,6 +5,7 @@
  * Copyright (C) 2011 Stephen Bennett
  */
 
+#include "atheme.h"
 #include "api/atheme_perl.h"
 
 static mowgli_list_t * perl_object_references = NULL;

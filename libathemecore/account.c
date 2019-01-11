@@ -14,10 +14,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h" /* XXX, for sendq_flush(curr_uplink->conn); */
-#include "datastream.h"
-#include "privs.h"
-#include "authcookie.h"
 
 mowgli_patricia_t *nicklist;
 mowgli_patricia_t *oldnameslist;

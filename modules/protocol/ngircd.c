@@ -8,8 +8,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
-#include "pmodule.h"
 #include "protocol/ngircd.h"
 
 static struct ircd ngIRCd = {

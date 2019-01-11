@@ -14,7 +14,6 @@
  */
 
 #include "atheme.h"
-#include "internal.h"
 
 #include <dirent.h>
 

@@ -11,8 +11,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
-#include "pmodule.h"
 #include "protocol/elemental-ircd.h"
 
 static struct ircd elemental_ircd = {

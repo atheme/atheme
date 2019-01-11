@@ -5,8 +5,12 @@
  * Copyright (C) 2005-2013 Atheme Project (http://atheme.org/)
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_MOD_CHANSERV_CHANSERV_H
 #define ATHEME_MOD_CHANSERV_CHANSERV_H 1
+
+#include "atheme.h"
 
 typedef void (*cs_cmd_proto)(struct sourceinfo *, int, char**);
 

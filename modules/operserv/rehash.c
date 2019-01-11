@@ -8,7 +8,6 @@
  */
 
 #include "atheme.h"
-#include "conf.h"
 
 void
 os_cmd_rehash(struct sourceinfo *si, int parc, char *parv[])

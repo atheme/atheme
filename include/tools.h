@@ -8,8 +8,22 @@
  * Misc tools
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_TOOLS_H
 #define ATHEME_INC_TOOLS_H 1
+
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <time.h>
+
+#include <mowgli.h>
+
+#include "attrs.h"
+#include "common.h"
+#include "object.h"
+#include "structures.h"
 
 /* email stuff */
 int sendemail(struct user *u, struct myuser *mu, const char *type, const char *email, const char *param);

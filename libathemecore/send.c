@@ -13,8 +13,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
-#include "datastream.h"
 
 /* send a line to the server, append the \r\n */
 int ATHEME_FATTR_PRINTF(1, 2)

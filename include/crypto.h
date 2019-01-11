@@ -7,8 +7,12 @@
  * Cryptographic module support.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_CRYPTO_H
 #define ATHEME_INC_CRYPTO_H 1
+
+#include <stdbool.h>
 
 #define PWVERIFY_FLAG_NONE      0x0000U // Initial state
 #define PWVERIFY_FLAG_MYMODULE  0x0001U // This password hash was from 'this' crypto module

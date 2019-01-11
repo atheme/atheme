@@ -7,8 +7,16 @@
  * Management of tainted running configuration reasons and status.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_TAINT_H
 #define ATHEME_INC_TAINT_H 1
+
+#include <stdlib.h>
+
+#include <mowgli.h>
+
+#include "common.h"
 
 struct taint_reason
 {

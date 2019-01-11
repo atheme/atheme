@@ -16,6 +16,7 @@
 #include "atheme.h"
 
 #include <regex.h>
+
 #ifdef HAVE_LIBPCRE
 #include <pcre.h>
 #endif

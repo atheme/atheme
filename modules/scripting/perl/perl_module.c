@@ -9,9 +9,8 @@
  * handled in the perl API module.
  */
 
+#include "atheme.h"
 #include "api/atheme_perl.h"
-
-#include "conf.h"
 
 #include <dlfcn.h>
 

@@ -14,7 +14,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
 
 unsigned int(*server_login) (void) = generic_server_login;
 void (*introduce_nick) (struct user *u) = generic_introduce_nick;

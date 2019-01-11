@@ -39,7 +39,6 @@
  */
 
 #include "atheme.h"
-#include <limits.h>
 
 #define ALIS_MAX_PARC	10
 #define ALIS_MAX_MATCH	60

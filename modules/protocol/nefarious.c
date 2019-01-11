@@ -10,8 +10,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
-#include "pmodule.h"
 #include "protocol/nefarious.h"
 
 static struct ircd Nefarious = {

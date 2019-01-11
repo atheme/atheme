@@ -9,8 +9,6 @@
 
 #include "atheme.h"
 #include "chanserv.h"
-#include "template.h"
-#include <limits.h>
 
 static mowgli_eventloop_timer_t *cs_leave_empty_timer = NULL;
 

@@ -8,7 +8,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
 
 static void
 os_cmd_raw(struct sourceinfo *si, int parc, char *parv[])

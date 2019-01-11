@@ -9,7 +9,6 @@
  */
 
 #include "atheme.h"
-#include "template.h"
 
 struct channel_template
 {

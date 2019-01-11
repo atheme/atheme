@@ -8,16 +8,20 @@
  * String matching
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_MATCH_H
 #define ATHEME_INC_MATCH_H 1
 
-#include "sysconf.h"
-
 #include <regex.h>
+#include <stdbool.h>
+#include <stddef.h>
 
 #ifdef HAVE_LIBPCRE
 #include <pcre.h>
 #endif
+
+#include "attrs.h"
 
 enum atheme_regex_type
 {

@@ -7,59 +7,78 @@
  * Includes most headers usually needed.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_ATHEME_H
 #define ATHEME_INC_ATHEME_H 1
 
-/* *INDENT-OFF* */
+#include <ctype.h>
+#include <limits.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <unistd.h>
 
-#include "sysconf.h"
-#include "stdinc.h"
+#include <mowgli.h>
 
-#include "attrs.h"
-#include "structures.h"
-
-#include "i18n.h"
-#include "common.h"
-#include "object.h"
-#include "connection.h"
-#include "hook.h"
-#include "hooktypes.h"
+#include "abirev.h"
+#include "account.h"
+#include "atheme_memory.h"
 #include "atheme_random.h"
 #include "atheme_string.h"
-#include "atheme_memory.h"
-#include "table.h"
-#include "servers.h"
-#include "channels.h"
-#include "module.h"
-#include "crypto.h"
-#include "culture.h"
-#include "base64.h"
-#include "digest.h"
-#include "match.h"
-#include "sysconf.h"
-#include "account.h"
+#include "attrs.h"
 #include "auth.h"
-#include "sharedheap.h"
-#include "tools.h"
-#include "confprocess.h"
-#include "global.h"
-#include "flags.h"
-#include "phandler.h"
+#include "authcookie.h"
+#include "base64.h"
+#include "channels.h"
 #include "commandhelp.h"
 #include "commandtree.h"
-#include "servtree.h"
-#include "services.h"
-#include "users.h"
-#include "sourceinfo.h"
-#include "sasl.h"
-#include "taint.h"
+#include "common.h"
+#include "conf.h"
+#include "confprocess.h"
+#include "connection.h"
+#include "crypto.h"
+#include "culture.h"
 #include "database_backend.h"
+#include "datastream.h"
+#include "digest.h"
 #include "entity.h"
-#include "uid.h"
-
+#include "entity-validation.h"
+#include "flags.h"
+#include "global.h"
+#include "hook.h"
+#include "hooktypes.h"
+#include "httpd.h"
+#include "i18n.h"
 #include "inline/account.h"
 #include "inline/channels.h"
 #include "inline/connection.h"
 #include "inline/users.h"
+#include "linker.h"
+#include "match.h"
+#include "module.h"
+#include "object.h"
+#include "phandler.h"
+#include "pmodule.h"
+#include "privs.h"
+#include "sasl.h"
+#include "serno.h"
+#include "servers.h"
+#include "services.h"
+#include "servtree.h"
+#include "sharedheap.h"
+#include "sourceinfo.h"
+#include "structures.h"
+#include "table.h"
+#include "taint.h"
+#include "template.h"
+#include "tools.h"
+#include "uid.h"
+#include "uplink.h"
+#include "users.h"
 
 #endif /* !ATHEME_INC_ATHEME_H */

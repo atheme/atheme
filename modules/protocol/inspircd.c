@@ -8,8 +8,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
-#include "pmodule.h"
 #include "protocol/inspircd.h"
 
 #define PROTOCOL_MINIMUM 1202 // we do not support anything older than this

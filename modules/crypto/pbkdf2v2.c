@@ -10,12 +10,11 @@
  */
 
 #include "atheme.h"
+#include "pbkdf2v2.h"
 
 #ifdef HAVE_LIBIDN
 #include <stringprep.h>
 #endif /* HAVE_LIBIDN */
-
-#include "pbkdf2v2.h"
 
 static mowgli_list_t pbkdf2v2_conf_table;
 

@@ -7,6 +7,8 @@
  * This is the header which includes all of the internationalization stuff.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_INTL_H
 #define ATHEME_INC_INTL_H 1
 

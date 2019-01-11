@@ -8,7 +8,6 @@
  */
 
 #include "atheme.h"
-#include "template.h"
 
 static void
 cs_cmd_count(struct sourceinfo *si, int parc, char *parv[])

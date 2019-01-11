@@ -14,7 +14,6 @@
  */
 
 #include "atheme.h"
-#include "privs.h"
 
 static bool permissive_mode_fallback = false;
 

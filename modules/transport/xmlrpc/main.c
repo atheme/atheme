@@ -8,10 +8,7 @@
  */
 
 #include "atheme.h"
-#include "httpd.h"
 #include "xmlrpclib.h"
-#include "datastream.h"
-#include "authcookie.h"
 
 static struct {
 	char *path;

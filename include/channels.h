@@ -7,8 +7,17 @@
  * Data structures for channel information.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_CHANNELS_H
 #define ATHEME_INC_CHANNELS_H 1
+
+#include <stdbool.h>
+#include <time.h>
+
+#include <mowgli.h>
+
+#include "structures.h"
 
 #define VALID_GLOBAL_CHANNEL_PFX(name)	(*(name) == '#' || *(name) == '+' || *(name) == '!')
 #define VALID_CHANNEL_PFX(name)		(VALID_GLOBAL_CHANNEL_PFX(name) || *(name) == '&')

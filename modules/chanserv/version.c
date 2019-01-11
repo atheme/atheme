@@ -8,7 +8,6 @@
  */
 
 #include "atheme.h"
-#include "serno.h"
 
 static void
 cs_cmd_version(struct sourceinfo *si, int parc, char *parv[])

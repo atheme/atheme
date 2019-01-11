@@ -7,6 +7,8 @@
  * Generic stuff from libathemecore.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_LIBATHEMECORE_H
 #define ATHEME_INC_LIBATHEMECORE_H 1
 

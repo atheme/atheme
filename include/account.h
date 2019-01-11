@@ -7,10 +7,20 @@
  * Data structures for account information.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_ACCOUNT_H
 #define ATHEME_INC_ACCOUNT_H 1
 
+#include <stdbool.h>
+#include <time.h>
+
+#include <mowgli.h>
+
+#include "attrs.h"
 #include "entity.h"
+#include "object.h"
+#include "structures.h"
 
 /* kline list struct */
 struct kline
@@ -516,7 +526,5 @@ extern mowgli_list_t svs_ignore_list;
 struct svsignore *svsignore_find(struct user *user);
 struct svsignore *svsignore_add(const char *mask, const char *reason) ATHEME_FATTR_MALLOC ATHEME_FATTR_RETURNS_NONNULL;
 void svsignore_delete(struct svsignore *svsignore);
-
-#include "entity-validation.h"
 
 #endif /* !ATHEME_INC_ACCOUNT_H */

@@ -14,9 +14,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
-#include "pmodule.h"
-#include "privs.h"
 
 void
 handle_info(struct user *u)

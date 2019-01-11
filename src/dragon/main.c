@@ -11,9 +11,6 @@
 
 #include "atheme.h"
 #include "libathemecore.h"
-#include "uplink.h"
-#include "pmodule.h"
-#include "conf.h"
 
 #ifdef HAVE_LIBSODIUM
 #  include <sodium/core.h>

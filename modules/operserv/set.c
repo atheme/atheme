@@ -9,7 +9,6 @@
  */
 
 #include "atheme.h"
-#include <limits.h>
 
 static mowgli_patricia_t *os_set_cmdtree = NULL;
 

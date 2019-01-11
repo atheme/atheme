@@ -13,8 +13,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
-#include "pmodule.h"
 #include "rfc1459.h"
 
 // parses a standard 2.8.21 style IRC stream

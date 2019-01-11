@@ -7,8 +7,17 @@
  * Headers for service selection tree.
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_SERVTREE_H
 #define ATHEME_INC_SERVTREE_H 1
+
+#include <stdbool.h>
+
+#include "attrs.h"
+#include "global.h"
+#include "sourceinfo.h"
+#include "structures.h"
 
 struct service
 {

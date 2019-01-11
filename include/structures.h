@@ -7,6 +7,8 @@
  * Structures used throughout the project (forward declarations).
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_STRUCTURES_H
 #define ATHEME_INC_STRUCTURES_H 1
 
@@ -39,12 +41,13 @@ struct database_handle;
 struct database_module;
 struct database_vtable;
 
+// Defined in include/digest*.h
+struct digest_context;
+
 // Defined in include/entity.h
+struct entity_chanacs_validation_vtable;
 struct myentity;
 struct myentity_iteration_state;
-
-// Defined in include/entity-validation.h
-struct entity_chanacs_validation_vtable;
 
 // Defined in include/flags.h
 struct gflags;

@@ -7,6 +7,8 @@
  * groupserv_main.h - group services main module header
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_MOD_GROUPSERV_MAIN_GROUPSERV_MAIN_H
 #define ATHEME_MOD_GROUPSERV_MAIN_GROUPSERV_MAIN_H 1
 

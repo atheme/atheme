@@ -12,7 +12,6 @@
  *  Matches `nick!user@host realname here' for each client against a given regex, and dumps matches.
  */
 #include "atheme.h"
-#include <limits.h>
 
 #define MAXMATCHES_DEF 1000
 

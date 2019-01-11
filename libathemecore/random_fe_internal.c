@@ -34,22 +34,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "atheme.h"
+
 #ifndef ATHEME_RANDOM_FRONTEND_C
 #  error "Do not compile me directly; compile random_frontend.c instead"
 #endif /* !ATHEME_RANDOM_FRONTEND_C */
 
-#include "atheme.h"
-
-#define RANDOM_DEV_PATH "/dev/urandom"
-
-/*
- * We don't have a library that provides a high-quality RNG.
- * Fall back to Internal ChaCha20-based RNG from OpenBSD.
- */
-
 #ifdef HAVE_USABLE_GETRANDOM
 #  include <sys/random.h>
 #endif
+
+#define RANDOM_DEV_PATH         "/dev/urandom"
 
 #define CHACHA20_KEYSZ          0x20U
 #define CHACHA20_IVSZ           0x08U

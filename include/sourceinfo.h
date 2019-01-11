@@ -7,8 +7,16 @@
  * Data structures for sourceinfo
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_SOURCEINFO_H
 #define ATHEME_INC_SOURCEINFO_H 1
+
+#include <stdbool.h>
+
+#include "common.h"
+#include "object.h"
+#include "structures.h"
 
 struct sourceinfo_vtable
 {

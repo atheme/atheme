@@ -8,8 +8,6 @@
  */
 
 #include "atheme.h"
-#include "conf.h" // XXX conf_ni_table
-#include <limits.h>
 
 static struct {
 	const char *nickstring, *accountstring;

@@ -36,8 +36,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
-#include "pmodule.h"
 
 static bool use_rserv_support = false;
 static bool use_tb = false;

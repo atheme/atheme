@@ -7,8 +7,14 @@
  * Fine grained services operator privileges
  */
 
+#include "sysconf.h"
+
 #ifndef ATHEME_INC_PRIVS_H
 #define ATHEME_INC_PRIVS_H 1
+
+#include <stdbool.h>
+
+#include "sourceinfo.h"
 
 #define PRIV_NONE            NULL
 

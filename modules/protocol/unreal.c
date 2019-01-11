@@ -9,8 +9,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h"
-#include "pmodule.h"
 #include "protocol/unreal.h"
 
 #define VALID_FLOOD_CHAR(c)	((c == 'c') || (c == 'j') || (c == 'k') || (c == 'm') || (c == 'n') || (c == 't'))
