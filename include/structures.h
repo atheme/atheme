@@ -45,9 +45,11 @@ struct database_vtable;
 struct digest_context;
 
 // Defined in include/entity.h
-struct entity_chanacs_validation_vtable;
 struct myentity;
 struct myentity_iteration_state;
+
+// Defined in include/entity-validation.h
+struct entity_chanacs_validation_vtable;
 
 // Defined in include/flags.h
 struct gflags;
