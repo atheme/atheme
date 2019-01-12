@@ -64,6 +64,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 			AC_MSG_CHECKING([if OpenSSL provides HMAC_CTX_new()/HMAC_CTX_free()])
 			AC_LINK_IFELSE([
 				AC_LANG_PROGRAM([[
+					#include <stddef.h>
 					#include <openssl/hmac.h>
 				]], [[
 					(void) HMAC_CTX_new();

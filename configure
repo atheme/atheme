@@ -9024,6 +9024,7 @@ $as_echo_n "checking if OpenSSL provides HMAC_CTX_new()/HMAC_CTX_free()... " >&6
 /* end confdefs.h.  */
 
 
+					#include <stddef.h>
 					#include <openssl/hmac.h>
 
 int
