@@ -60,6 +60,22 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 			]])
 		], [
 			AC_MSG_RESULT([yes])
+
+			AC_MSG_CHECKING([if OpenSSL provides HMAC_CTX_new()/HMAC_CTX_free()])
+			AC_LINK_IFELSE([
+				AC_LANG_PROGRAM([[
+					#include <openssl/hmac.h>
+				]], [[
+					(void) HMAC_CTX_new();
+					(void) HMAC_CTX_free(NULL);
+				]])
+			], [
+				AC_MSG_RESULT([yes])
+				AC_DEFINE([HAVE_OPENSSL_HMAC_CTX_ALLOC], [1], [Define to 1 if HMAC_CTX_new()/_free() exist])
+			], [
+				AC_MSG_RESULT([no])
+			])
+
 			AC_MSG_CHECKING([if OpenSSL is really LibreSSL in disguise])
 			AC_COMPILE_IFELSE([
 				AC_LANG_PROGRAM([[
@@ -77,6 +93,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 				AC_MSG_RESULT([yes])
 				LIBCRYPTO_NAME="LibreSSL"
 			])
+
 			AS_IF([test "x${ac_cv_header_openssl_ec_h}${ac_cv_header_openssl_ecdsa_h}" = "xyesyes"], [
 				ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
 				AC_SUBST([ECDSA_TOOLS_COND_D])

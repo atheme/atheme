@@ -13,7 +13,7 @@
 #include <openssl/hmac.h>
 #include <openssl/opensslv.h>
 
-#if defined(LIBRESSL_VERSION_NUMBER) || (OPENSSL_VERSION_NUMBER < 0x10100000L)
+#ifndef HAVE_OPENSSL_HMAC_CTX_ALLOC
 
 /*
  * Grumble. If you're (OpenSSL developers) going to stop exporting the
@@ -41,7 +41,7 @@ HMAC_CTX_free(HMAC_CTX *const restrict ctx)
 	(void) sfree(ctx);
 }
 
-#endif /* LIBRESSL_VERSION_NUMBER || (OPENSSL_VERSION_NUMBER < 0x10100000L) */
+#endif /* !HAVE_OPENSSL_HMAC_CTX_ALLOC */
 
 static inline void
 digest_free_internal(struct digest_context *const restrict ctx)

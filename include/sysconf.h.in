@@ -205,6 +205,9 @@
 /* Define to 1 if you have the <openssl/evp.h> header file. */
 #undef HAVE_OPENSSL_EVP_H
 
+/* Define to 1 if HMAC_CTX_new()/_free() exist */
+#undef HAVE_OPENSSL_HMAC_CTX_ALLOC
+
 /* Define to 1 if you have the <openssl/hmac.h> header file. */
 #undef HAVE_OPENSSL_HMAC_H
 

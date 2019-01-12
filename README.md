@@ -30,6 +30,15 @@ sure you plan accordingly for this.
     $ make
     $ make install
 
+If you are on an OpenBSD system, or similar, you will need to do things
+slightly differently:
+
+    # pkg_add gmake
+    $ git submodule update --init
+    $ ./configure --disable-linker-defs
+    $ gmake
+    $ gmake install
+
 If you're still lost, read the [INSTALL](INSTALL) or
 [GIT-Access.txt](GIT-Access.txt) files or check out our wiki
 (http://github.com/atheme/atheme/wiki) for more hints.
