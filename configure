@@ -8829,6 +8829,7 @@ fi
 
 
 	LIBCRYPTO="No"
+	LIBCRYPTORNG="No"
 	LIBCRYPTO_NAME=""
 
 
@@ -9018,6 +9019,47 @@ if ac_fn_c_try_link "$LINENO"; then :
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if OpenSSL has a usable random number generator" >&5
+$as_echo_n "checking if OpenSSL has a usable random number generator... " >&6; }
+			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+					#include <stddef.h>
+					#include <openssl/err.h>
+					#include <openssl/rand.h>
+
+int
+main ()
+{
+
+					(void) ERR_get_error();
+					(void) ERR_get_error_line_data(NULL, NULL, NULL, NULL);
+					(void) RAND_add(NULL, 0, (double) 0);
+					(void) RAND_bytes(NULL, 0);
+					(void) RAND_status();
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+				LIBCRYPTORNG="Yes"
+
+else
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+				LIBCRYPTORNG="No"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if OpenSSL provides HMAC_CTX_new()/HMAC_CTX_free()" >&5
 $as_echo_n "checking if OpenSSL provides HMAC_CTX_new()/HMAC_CTX_free()... " >&6; }
 			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -9099,6 +9141,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 fi
+
 
 $as_echo "#define HAVE_OPENSSL 1" >>confdefs.h
 
@@ -11451,6 +11494,15 @@ fi
 		RANDOM_FRONTEND="ARM mbedTLS"
 		RANDOM_API_CFLAGS=""
 		RANDOM_API_LIBS="${LIBMBEDCRYPTO_LIBS}"
+
+fi
+
+	if test "${RANDOM_FRONTEND}${LIBCRYPTORNG}" = "InternalYes"; then :
+
+		RANDOM_FRONTEND_VAL="ATHEME_RANDOM_FRONTEND_OPENSSL"
+		RANDOM_FRONTEND="OpenSSL"
+		RANDOM_API_CFLAGS="${LIBCRYPTO_CFLAGS}"
+		RANDOM_API_LIBS="${LIBCRYPTO_LIBS}"
 
 fi
 

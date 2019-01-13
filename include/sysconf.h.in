@@ -13,6 +13,7 @@
 #define ATHEME_RANDOM_FRONTEND_MBEDTLS  0x01U
 #define ATHEME_RANDOM_FRONTEND_OPENBSD  0x02U
 #define ATHEME_RANDOM_FRONTEND_SODIUM   0x03U
+#define ATHEME_RANDOM_FRONTEND_OPENSSL  0x04U
 
 
 /* Define if building universal (internal helper macro) */

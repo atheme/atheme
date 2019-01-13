@@ -1,6 +1,7 @@
 AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 
 	LIBCRYPTO="No"
+	LIBCRYPTORNG="No"
 	LIBCRYPTO_NAME=""
 
 	AC_ARG_WITH([openssl],
@@ -61,6 +62,27 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 		], [
 			AC_MSG_RESULT([yes])
 
+			AC_MSG_CHECKING([if OpenSSL has a usable random number generator])
+			AC_LINK_IFELSE([
+				AC_LANG_PROGRAM([[
+					#include <stddef.h>
+					#include <openssl/err.h>
+					#include <openssl/rand.h>
+				]], [[
+					(void) ERR_get_error();
+					(void) ERR_get_error_line_data(NULL, NULL, NULL, NULL);
+					(void) RAND_add(NULL, 0, (double) 0);
+					(void) RAND_bytes(NULL, 0);
+					(void) RAND_status();
+				]])
+			], [
+				AC_MSG_RESULT([yes])
+				LIBCRYPTORNG="Yes"
+			], [
+				AC_MSG_RESULT([no])
+				LIBCRYPTORNG="No"
+			])
+
 			AC_MSG_CHECKING([if OpenSSL provides HMAC_CTX_new()/HMAC_CTX_free()])
 			AC_LINK_IFELSE([
 				AC_LANG_PROGRAM([[
@@ -99,6 +121,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 				ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
 				AC_SUBST([ECDSA_TOOLS_COND_D])
 			])
+
 			AC_DEFINE([HAVE_OPENSSL], [1], [Define to 1 if OpenSSL is available])
 		], [
 			LIBCRYPTO="No"

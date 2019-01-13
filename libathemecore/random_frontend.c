@@ -23,7 +23,11 @@
 #      if (ATHEME_RANDOM_FRONTEND == ATHEME_RANDOM_FRONTEND_MBEDTLS)
 #        include "random_fe_mbedtls.c"
 #      else
-#        error "No RNG frontend"
+#        if (ATHEME_RANDOM_FRONTEND == ATHEME_RANDOM_FRONTEND_OPENSSL)
+#          include "random_fe_openssl.c"
+#        else
+#          error "No RNG frontend"
+#        endif
 #      endif
 #    endif
 #  endif
