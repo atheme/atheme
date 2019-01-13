@@ -102,7 +102,7 @@ handle_mdep(struct database_handle *db, const char *type)
 int
 main(int argc, char *argv[])
 {
-	if (! atheme_thirdparty_libraries_early_init())
+	if (! libathemecore_early_init())
 		return EXIT_FAILURE;
 
 	atheme_bootstrap();

@@ -84,27 +84,7 @@ atheme_random_uniform(const uint32_t bound)
 void
 atheme_random_buf(void *const restrict out, const size_t len)
 {
-	if (rs_stir_pid == (pid_t) -1)
-	{
-		const mbedtls_md_type_t md_type = MBEDTLS_MD_SHA256;
-		const mbedtls_md_info_t *const md_info = mbedtls_md_info_from_type(md_type);
-
-		(void) mbedtls_entropy_init(&seed_ctx);
-		(void) mbedtls_hmac_drbg_init(&hmac_ctx);
-
-		const int ret = mbedtls_hmac_drbg_seed(&hmac_ctx, md_info, &mbedtls_entropy_func, &seed_ctx,
-		                                       (const void *) atheme_pers_str, sizeof atheme_pers_str);
-
-		if (ret != 0)
-		{
-			(void) slog(LG_ERROR, "%s: mbedtls_hmac_drbg_seed: error %s", __func__,
-			                      atheme_random_mbedtls_strerror(ret));
-			exit(EXIT_FAILURE);
-		}
-
-		rs_stir_pid = getpid();
-	}
-	else if (getpid() != rs_stir_pid)
+	if (getpid() != rs_stir_pid)
 	{
 		const int ret = mbedtls_hmac_drbg_reseed(&hmac_ctx, NULL, 0);
 
@@ -126,6 +106,28 @@ atheme_random_buf(void *const restrict out, const size_t len)
 		                      atheme_random_mbedtls_strerror(ret));
 		exit(EXIT_FAILURE);
 	}
+}
+
+bool ATHEME_FATTR_WUR
+libathemecore_random_early_init(void)
+{
+	(void) mbedtls_entropy_init(&seed_ctx);
+	(void) mbedtls_hmac_drbg_init(&hmac_ctx);
+
+	const mbedtls_md_info_t *const md_info = mbedtls_md_info_from_type(MBEDTLS_MD_SHA256);
+
+	const int ret = mbedtls_hmac_drbg_seed(&hmac_ctx, md_info, &mbedtls_entropy_func, &seed_ctx,
+	                                       (const void *) atheme_pers_str, sizeof atheme_pers_str);
+	if (ret != 0)
+	{
+		(void) fprintf(stderr, "ARM mbedTLS: Early RNG initialization failed!\n");
+		(void) fprintf(stderr, "ARM mbedTLS: Error %s\n", atheme_random_mbedtls_strerror(ret));
+		return false;
+	}
+
+	rs_stir_pid = getpid();
+
+	return true;
 }
 
 const char *

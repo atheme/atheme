@@ -182,11 +182,11 @@ detach_console(int *daemonize_pipe)
 }
 
 bool ATHEME_FATTR_WUR
-atheme_thirdparty_libraries_early_init(void)
+libathemecore_early_init(void)
 {
-	static bool libraries_early_init_done = false;
+	static bool libathemecore_early_init_done = false;
 
-	if (libraries_early_init_done)
+	if (libathemecore_early_init_done)
 		return true;
 
 #ifdef HAVE_LIBSODIUM
@@ -197,7 +197,10 @@ atheme_thirdparty_libraries_early_init(void)
 	}
 #endif /* HAVE_LIBSODIUM */
 
-	libraries_early_init_done = true;
+	if (! libathemecore_random_early_init())
+		return false;
+
+	libathemecore_early_init_done = true;
 	return true;
 }
 

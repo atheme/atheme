@@ -19,7 +19,7 @@
 int
 main(int argc, const char **argv)
 {
-	if (! atheme_thirdparty_libraries_early_init())
+	if (! libathemecore_early_init())
 		return EXIT_FAILURE;
 
 	BIO *out;

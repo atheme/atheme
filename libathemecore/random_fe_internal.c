@@ -95,18 +95,39 @@ static uint8_t rs_buf[CHACHA20_STATESZ];
 static size_t rs_count = 0;
 static size_t rs_have = 0;
 
+static bool rs_slog_errors = false;
 static bool rs_initialized = false;
-static pid_t rs_stir_pid = -1;
+static pid_t rs_stir_pid = (pid_t) -1;
 
-static void
+static void ATHEME_FATTR_PRINTF(1, 2)
+_rs_log_error(const char *const restrict format, ...)
+{
+	char buf[BUFSIZE];
+	va_list argv;
+
+	va_start(argv, format);
+	(void) vsnprintf(buf, sizeof buf, format, argv);
+	va_end(argv);
+
+	if (rs_slog_errors)
+	{
+		(void) slog(LG_ERROR, "%s", buf);
+		return;
+	}
+
+	(void) fprintf(stderr, "libathemecore: Early RNG initialization failed!\n");
+	(void) fprintf(stderr, "Error: %s\n", buf);
+}
+
+static bool ATHEME_FATTR_WUR
 _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 {
 #ifdef HAVE_USABLE_GETENTROPY
 
 	if (getentropy(buf, len) != 0)
 	{
-		(void) slog(LG_ERROR, "%s: getentropy(2): %s", __func__, strerror(errno));
-		exit(EXIT_FAILURE);
+		(void) _rs_log_error("%s: getentropy(2): %s", __func__, strerror(errno));
+		return false;
 	}
 
 #else /* HAVE_USABLE_GETENTROPY */
@@ -123,13 +144,13 @@ _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 			if (errno == EAGAIN || errno == EINTR || errno == EWOULDBLOCK)
 				continue;
 
-			(void) slog(LG_ERROR, "%s: getrandom(2): %s", __func__, strerror(errno));
-			exit(EXIT_FAILURE);
+			(void) _rs_log_error("%s: getrandom(2): %s", __func__, strerror(errno));
+			return false;
 		}
 		if (ret == 0)
 		{
-			(void) slog(LG_ERROR, "%s: getrandom(2): no data returned", __func__);
-			exit(EXIT_FAILURE);
+			(void) _rs_log_error("%s: getrandom(2): no data returned", __func__);
+			return false;
 		}
 
 		out += (size_t) ret;
@@ -142,8 +163,8 @@ _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 
 	if (fd == -1 && (fd = open(RANDOM_DEV_PATH, O_RDONLY)) == -1)
 	{
-		(void) slog(LG_ERROR, "%s: open('%s'): %s", __func__, RANDOM_DEV_PATH, strerror(errno));
-		exit(EXIT_FAILURE);
+		(void) _rs_log_error("%s: open('%s'): %s", __func__, RANDOM_DEV_PATH, strerror(errno));
+		return false;
 	}
 
 	while (out < len)
@@ -155,13 +176,13 @@ _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 			if (errno == EAGAIN || errno == EINTR || errno == EWOULDBLOCK)
 				continue;
 
-			(void) slog(LG_ERROR, "%s: read('%s'): %s", __func__, RANDOM_DEV_PATH, strerror(errno));
-			exit(EXIT_FAILURE);
+			(void) _rs_log_error("%s: read('%s'): %s", __func__, RANDOM_DEV_PATH, strerror(errno));
+			return false;
 		}
 		if (ret == 0)
 		{
-			(void) slog(LG_ERROR, "%s: read('%s'): EOF", __func__, RANDOM_DEV_PATH);
-			exit(EXIT_FAILURE);
+			(void) _rs_log_error("%s: read('%s'): EOF", __func__, RANDOM_DEV_PATH);
+			return false;
 		}
 
 		out += (size_t) ret;
@@ -169,6 +190,8 @@ _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 
 #  endif /* !HAVE_USABLE_GETRANDOM */
 #endif /* !HAVE_USABLE_GETENTROPY */
+
+	return true;
 }
 
 static void
@@ -289,7 +312,7 @@ _rs_rekey(uint8_t *const restrict buf)
 	rs_have = (CHACHA20_STATESZ - CHACHA20_KEYSZ - CHACHA20_IVSZ);
 }
 
-static void
+static bool ATHEME_FATTR_WUR
 _rs_stir_if_needed(const size_t len)
 {
 	pid_t pid = getpid();
@@ -298,7 +321,8 @@ _rs_stir_if_needed(const size_t len)
 	{
 		uint8_t tmp[CHACHA20_KEYSZ + CHACHA20_IVSZ];
 
-		(void) _rs_get_seed_material(tmp, sizeof tmp);
+		if (! _rs_get_seed_material(tmp, sizeof tmp))
+			return false;
 
 		if (! rs_initialized)
 		{
@@ -318,6 +342,8 @@ _rs_stir_if_needed(const size_t len)
 	}
 	else
 		rs_count -= len;
+
+	return true;
 }
 
 uint32_t
@@ -354,7 +380,8 @@ atheme_random_buf(void *const restrict out, size_t len)
 {
 	uint8_t *buf = (uint8_t *) out;
 
-	(void) _rs_stir_if_needed(len);
+	if (! _rs_stir_if_needed(len))
+		exit(EXIT_FAILURE);
 
 	while (len)
 	{
@@ -373,6 +400,16 @@ atheme_random_buf(void *const restrict out, size_t len)
 		if (! rs_have)
 			(void) _rs_rekey(NULL);
 	}
+}
+
+bool ATHEME_FATTR_WUR
+libathemecore_random_early_init(void)
+{
+	if (! _rs_stir_if_needed(0))
+		return false;
+
+	rs_slog_errors = true;
+	return true;
 }
 
 const char *

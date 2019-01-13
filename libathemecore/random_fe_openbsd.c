@@ -31,6 +31,14 @@ atheme_random_buf(void *const restrict out, const size_t len)
 	(void) arc4random_buf(out, len);
 }
 
+bool ATHEME_FATTR_WUR
+libathemecore_random_early_init(void)
+{
+	(void) atheme_random();
+
+	return true;
+}
+
 const char *
 random_get_frontend_info(void)
 {

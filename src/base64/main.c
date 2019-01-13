@@ -11,7 +11,7 @@
 int
 main(int argc, const char *argv)
 {
-	if (! atheme_thirdparty_libraries_early_init())
+	if (! libathemecore_early_init())
 		return EXIT_FAILURE;
 
 	char b64[] = "Q2hyaXNUZXN0AENocmlzVGVzdABwbXpqZ3VseGF5ZWJjcGJ3cXFkaA==";

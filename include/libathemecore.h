@@ -16,7 +16,7 @@
 
 #include "attrs.h"
 
-bool atheme_thirdparty_libraries_early_init(void) ATHEME_FATTR_WUR;
+bool libathemecore_early_init(void) ATHEME_FATTR_WUR;
 void atheme_bootstrap(void);
 void atheme_init(char *execname, char *log_p);
 void atheme_setup(void);
