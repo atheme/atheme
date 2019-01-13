@@ -22,6 +22,10 @@
 
 #include <ext/getopt_long.h>
 
+#ifdef HAVE_LIBSODIUM
+#  include <sodium/core.h>
+#endif /* HAVE_LIBSODIUM */
+
 #if !defined(HAVE_MEMSET_S) && !defined(HAVE_EXPLICIT_BZERO) && !defined(HAVE_LIBSODIUM_MEMZERO)
 void *(* volatile volatile_memset)(void *, int, size_t) = &memset;
 #endif /* !HAVE_MEMSET_S && !HAVE_EXPLICIT_BZERO && !HAVE_LIBSODIUM_MEMZERO */
@@ -175,6 +179,26 @@ detach_console(int *daemonize_pipe)
 #else
 	return false;
 #endif
+}
+
+bool ATHEME_FATTR_WUR
+atheme_thirdparty_libraries_early_init(void)
+{
+	static bool libraries_early_init_done = false;
+
+	if (libraries_early_init_done)
+		return true;
+
+#ifdef HAVE_LIBSODIUM
+	if (sodium_init() == -1)
+	{
+		(void) fprintf(stderr, "libsodium: library initialisation failed!\n");
+		return false;
+	}
+#endif /* HAVE_LIBSODIUM */
+
+	libraries_early_init_done = true;
+	return true;
 }
 
 void

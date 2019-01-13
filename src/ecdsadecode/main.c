@@ -12,10 +12,6 @@
 #include "atheme.h"
 #include "libathemecore.h"
 
-#ifdef HAVE_LIBSODIUM
-#  include <sodium/core.h>
-#endif /* HAVE_LIBSODIUM */
-
 #include <openssl/ec.h>
 #include <openssl/ecdsa.h>
 #include <openssl/evp.h>
@@ -23,13 +19,8 @@
 int
 main(int argc, const char **argv)
 {
-#ifdef HAVE_LIBSODIUM
-	if (sodium_init() == -1)
-	{
-		(void) fprintf(stderr, "Error: sodium_init() failed!\n");
+	if (! atheme_thirdparty_libraries_early_init())
 		return EXIT_FAILURE;
-	}
-#endif /* HAVE_LIBSODIUM */
 
 	EC_KEY *pub;
 	char workbuf[BUFSIZE];

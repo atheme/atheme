@@ -8,21 +8,13 @@
  */
 
 #include "atheme.h"
-
-#ifdef HAVE_LIBSODIUM
-#  include <sodium/core.h>
-#endif /* HAVE_LIBSODIUM */
+#include "libathemecore.h"
 
 int
 main(int argc, char *argv[])
 {
-#ifdef HAVE_LIBSODIUM
-	if (sodium_init() == -1)
-	{
-		(void) fprintf(stderr, "Error: sodium_init() failed!\n");
+	if (! atheme_thirdparty_libraries_early_init())
 		return EXIT_FAILURE;
-	}
-#endif /* HAVE_LIBSODIUM */
 
 	unsigned int usercount = 0, channelcount = 0, membercount = 0,
 		klinecount = 0, qlinecount = 0, xlinecount = 0, regchannelcount = 0,
