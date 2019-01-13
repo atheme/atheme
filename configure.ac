@@ -160,8 +160,15 @@ ATHEME_FEATURETEST_REPROBUILDS
 ATHEME_FEATURETEST_SODIUM_MALLOC
 
 dnl Digest and RNG frontend to use in libathemecore
+dnl Avoid duplicate -lcrypto or -lmbedcrypto or the like when digest API frontend == random API frontend
 ATHEME_DECIDE_DIGEST_FRONTEND
 ATHEME_DECIDE_RANDOM_FRONTEND
+AS_IF([test "x${DIGEST_API_CFLAGS}" = "x${RANDOM_API_CFLAGS}"], [RANDOM_API_CFLAGS=""])
+AS_IF([test "x${DIGEST_API_LIBS}" = "x${RANDOM_API_LIBS}"], [RANDOM_API_LIBS=""])
+AC_SUBST([DIGEST_API_CFLAGS])
+AC_SUBST([RANDOM_API_CFLAGS])
+AC_SUBST([DIGEST_API_LIBS])
+AC_SUBST([RANDOM_API_LIBS])
 
 dnl These must be here, not above, or they might interfere with library and feature tests
 dnl Explanation is that these modify one or more of CFLAGS, CPPFLAGS, LDFLAGS, and LIBS
