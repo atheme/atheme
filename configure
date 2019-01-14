@@ -9753,6 +9753,7 @@ $as_echo_n "checking if ARM mbedTLS has HMAC-DRBG support... " >&6; }
 /* end confdefs.h.  */
 
 
+					#include <stddef.h>
 					#ifdef HAVE_MBEDTLS_ENTROPY_H
 					#  include <mbedtls/entropy.h>
 					#else

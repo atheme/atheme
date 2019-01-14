@@ -86,6 +86,7 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDCRYPTO], [
 			AC_MSG_CHECKING([if ARM mbedTLS has HMAC-DRBG support])
 			AC_LINK_IFELSE([
 				AC_LANG_PROGRAM([[
+					#include <stddef.h>
 					#ifdef HAVE_MBEDTLS_ENTROPY_H
 					#  include <mbedtls/entropy.h>
 					#else
