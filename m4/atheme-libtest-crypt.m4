@@ -43,7 +43,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPT], [
 				AC_MSG_RESULT([no])
 				LIBCRYPT="No"
 				AS_IF([test "${with_crypt}" = "yes"], [
-					AC_MSG_ERROR([--with-crypt was specified but crypt(3) appears to be unusable])
+					AC_MSG_FAILURE([--with-crypt was specified but crypt(3) appears to be unusable])
 				])
 			])
 

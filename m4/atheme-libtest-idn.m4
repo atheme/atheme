@@ -37,7 +37,7 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 					AC_MSG_RESULT([no])
 					LIBIDN="No"
 					AS_IF([test "${with_libidn}" = "yes"], [
-						AC_MSG_ERROR([--with-libidn was specified but GNU libidn appears to be unusable])
+						AC_MSG_FAILURE([--with-libidn was specified but GNU libidn appears to be unusable])
 					])
 				])
 			], [

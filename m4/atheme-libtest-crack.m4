@@ -41,7 +41,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRACK], [
 					AC_MSG_RESULT([no])
 					LIBCRACK="No"
 					AS_IF([test "${with_cracklib}" = "yes"], [
-						AC_MSG_ERROR([--with-cracklib was specified but cracklib appears to be unusable])
+						AC_MSG_FAILURE([--with-cracklib was specified but cracklib appears to be unusable])
 					])
 				])
 			], [

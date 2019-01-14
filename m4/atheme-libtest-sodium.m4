@@ -115,7 +115,7 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 			AS_IF([test "${LIBSODIUMMEMORY}${LIBSODIUMMEMZERO}${LIBSODIUMRNG}" = "NoNoNo"], [
 				LIBSODIUM="No"
 				AS_IF([test "${with_sodium}" = "yes"], [
-					AC_MSG_ERROR([--with-sodium was specified but libsodium appears to be unusable])
+					AC_MSG_FAILURE([--with-sodium was specified but libsodium appears to be unusable])
 				])
 			], [
 				AC_DEFINE([HAVE_LIBSODIUM], [1], [Define to 1 if libsodium is available])
@@ -127,7 +127,7 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 			AC_MSG_RESULT([no])
 			LIBSODIUM="No"
 			AS_IF([test "${with_sodium}" = "yes"], [
-				AC_MSG_ERROR([--with-sodium was specified but libsodium appears to be unusable])
+				AC_MSG_FAILURE([--with-sodium was specified but libsodium appears to be unusable])
 			])
 		])
 	])

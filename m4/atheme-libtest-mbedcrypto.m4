@@ -122,7 +122,7 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDCRYPTO], [
 			AC_MSG_RESULT([no])
 			LIBMBEDCRYPTO="No"
 			AS_IF([test "${with_mbedtls}" = "yes"], [
-				AC_MSG_ERROR([--with-mbedtls was specified but ARM mbedTLS appears to be unusable])
+				AC_MSG_FAILURE([--with-mbedtls was specified but ARM mbedTLS appears to be unusable])
 			])
 		])
 	])

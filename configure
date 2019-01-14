@@ -8628,7 +8628,10 @@ $as_echo "no" >&6; }
 					LIBCRACK="No"
 					if test "${with_cracklib}" = "yes"; then :
 
-						as_fn_error $? "--with-cracklib was specified but cracklib appears to be unusable" "$LINENO" 5
+						{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--with-cracklib was specified but cracklib appears to be unusable
+See \`config.log' for more details" "$LINENO" 5; }
 
 fi
 
@@ -8802,7 +8805,10 @@ $as_echo "no" >&6; }
 				LIBCRYPT="No"
 				if test "${with_crypt}" = "yes"; then :
 
-					as_fn_error $? "--with-crypt was specified but crypt(3) appears to be unusable" "$LINENO" 5
+					{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--with-crypt was specified but crypt(3) appears to be unusable
+See \`config.log' for more details" "$LINENO" 5; }
 
 fi
 
@@ -9152,7 +9158,10 @@ else
 			LIBCRYPTO="No"
 			if test "${with_openssl}" = "yes"; then :
 
-				as_fn_error $? "--with-openssl was specified but libcrypto is unusable for this task" "$LINENO" 5
+				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--with-openssl was specified but libcrypto is unusable for this task
+See \`config.log' for more details" "$LINENO" 5; }
 
 fi
 
@@ -9329,7 +9338,10 @@ $as_echo "no" >&6; }
 					LIBIDN="No"
 					if test "${with_libidn}" = "yes"; then :
 
-						as_fn_error $? "--with-libidn was specified but GNU libidn appears to be unusable" "$LINENO" 5
+						{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--with-libidn was specified but GNU libidn appears to be unusable
+See \`config.log' for more details" "$LINENO" 5; }
 
 fi
 
@@ -9500,7 +9512,10 @@ $as_echo "no" >&6; }
 					LIBLDAP="No"
 					if test "${with_ldap}" = "yes"; then :
 
-						as_fn_error $? "--with-ldap was specified but libldap appears to be unusable" "$LINENO" 5
+						{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--with-ldap was specified but libldap appears to be unusable
+See \`config.log' for more details" "$LINENO" 5; }
 
 fi
 
@@ -9812,7 +9827,10 @@ $as_echo "no" >&6; }
 			LIBMBEDCRYPTO="No"
 			if test "${with_mbedtls}" = "yes"; then :
 
-				as_fn_error $? "--with-mbedtls was specified but ARM mbedTLS appears to be unusable" "$LINENO" 5
+				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--with-mbedtls was specified but ARM mbedTLS appears to be unusable
+See \`config.log' for more details" "$LINENO" 5; }
 
 fi
 
@@ -10019,7 +10037,10 @@ $as_echo "no" >&6; }
 			LIBNETTLE="No"
 			if test "${with_nettle}" = "yes"; then :
 
-				as_fn_error $? "--with-nettle was specified but libnettle is unusable for this task" "$LINENO" 5
+				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--with-nettle was specified but libnettle is unusable for this task
+See \`config.log' for more details" "$LINENO" 5; }
 
 fi
 
@@ -10180,7 +10201,10 @@ $as_echo "no" >&6; }
 					LIBPASSWDQC="No"
 					if test "${with_passwdqc}" = "yes"; then :
 
-						as_fn_error $? "--with-passwdqc was specified but passwdqc appears to be unusable" "$LINENO" 5
+						{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--with-passwdqc was specified but passwdqc appears to be unusable
+See \`config.log' for more details" "$LINENO" 5; }
 
 fi
 
@@ -10373,7 +10397,10 @@ $as_echo "no" >&6; }
 					LIBPCRE="No"
 					if test "${with_pcre}" = "yes"; then :
 
-						as_fn_error $? "--with-pcre was specified but libpcre does not appear to be usable" "$LINENO" 5
+						{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--with-pcre was specified but libpcre does not appear to be usable
+See \`config.log' for more details" "$LINENO" 5; }
 
 fi
 
@@ -10569,7 +10596,10 @@ $as_echo "no" >&6; }
 					LIBQRENCODE="No"
 					if test "${with_qrencode}" = "yes"; then :
 
-						as_fn_error $? "--with-qrencode was specified but libqrencode does not appear to be usable" "$LINENO" 5
+						{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--with-qrencode was specified but libqrencode does not appear to be usable
+See \`config.log' for more details" "$LINENO" 5; }
 
 fi
 
@@ -10916,7 +10946,10 @@ done
 				LIBSODIUM="No"
 				if test "${with_sodium}" = "yes"; then :
 
-					as_fn_error $? "--with-sodium was specified but libsodium appears to be unusable" "$LINENO" 5
+					{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--with-sodium was specified but libsodium appears to be unusable
+See \`config.log' for more details" "$LINENO" 5; }
 
 fi
 
@@ -10942,7 +10975,10 @@ $as_echo "no" >&6; }
 			LIBSODIUM="No"
 			if test "${with_sodium}" = "yes"; then :
 
-				as_fn_error $? "--with-sodium was specified but libsodium appears to be unusable" "$LINENO" 5
+				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--with-sodium was specified but libsodium appears to be unusable
+See \`config.log' for more details" "$LINENO" 5; }
 
 fi
 

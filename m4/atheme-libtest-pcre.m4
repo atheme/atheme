@@ -38,7 +38,7 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 					AC_MSG_RESULT([no])
 					LIBPCRE="No"
 					AS_IF([test "${with_pcre}" = "yes"], [
-						AC_MSG_ERROR([--with-pcre was specified but libpcre does not appear to be usable])
+						AC_MSG_FAILURE([--with-pcre was specified but libpcre does not appear to be usable])
 					])
 				])
 			], [

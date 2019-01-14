@@ -59,7 +59,7 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 			AC_MSG_RESULT([no])
 			LIBNETTLE="No"
 			AS_IF([test "${with_nettle}" = "yes"], [
-				AC_MSG_ERROR([--with-nettle was specified but libnettle is unusable for this task])
+				AC_MSG_FAILURE([--with-nettle was specified but libnettle is unusable for this task])
 			])
 		])
 	])

@@ -47,7 +47,7 @@ AC_DEFUN([ATHEME_LIBTEST_PASSWDQC], [
 					AC_MSG_RESULT([no])
 					LIBPASSWDQC="No"
 					AS_IF([test "${with_passwdqc}" = "yes"], [
-						AC_MSG_ERROR([--with-passwdqc was specified but passwdqc appears to be unusable])
+						AC_MSG_FAILURE([--with-passwdqc was specified but passwdqc appears to be unusable])
 					])
 				])
 			], [

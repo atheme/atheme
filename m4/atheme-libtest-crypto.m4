@@ -127,7 +127,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 		], [
 			LIBCRYPTO="No"
 			AS_IF([test "${with_openssl}" = "yes"], [
-				AC_MSG_ERROR([--with-openssl was specified but libcrypto is unusable for this task])
+				AC_MSG_FAILURE([--with-openssl was specified but libcrypto is unusable for this task])
 			])
 		])
 	])

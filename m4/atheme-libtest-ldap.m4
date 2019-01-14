@@ -43,7 +43,7 @@ AC_DEFUN([ATHEME_LIBTEST_LDAP], [
 					AC_MSG_RESULT([no])
 					LIBLDAP="No"
 					AS_IF([test "${with_ldap}" = "yes"], [
-						AC_MSG_ERROR([--with-ldap was specified but libldap appears to be unusable])
+						AC_MSG_FAILURE([--with-ldap was specified but libldap appears to be unusable])
 					])
 				])
 			], [
