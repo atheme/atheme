@@ -41,6 +41,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 		AC_MSG_CHECKING([if libcrypto is usable])
 		AC_LINK_IFELSE([
 			AC_LANG_PROGRAM([[
+				#include <stddef.h>
 				#include <openssl/evp.h>
 				#include <openssl/hmac.h>
 			]], [[

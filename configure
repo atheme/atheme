@@ -8987,6 +8987,7 @@ $as_echo_n "checking if libcrypto is usable... " >&6; }
 /* end confdefs.h.  */
 
 
+				#include <stddef.h>
 				#include <openssl/evp.h>
 				#include <openssl/hmac.h>
 
