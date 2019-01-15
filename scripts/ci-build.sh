@@ -16,6 +16,8 @@ then
 	exit 1
 fi
 
+[[ "x${MAKE}" == "x" ]] && MAKE="make"
+
 ATHEME_PREFIX="${HOME}/atheme-install"
 
 set -e
@@ -30,7 +32,7 @@ set -x
     --enable-reproducible-builds       \
     ${ATHEME_CONF_ARGS}
 
-make
-make install
+"${MAKE}"
+"${MAKE}" install
 
 "${ATHEME_PREFIX}"/bin/atheme-services -dnT
