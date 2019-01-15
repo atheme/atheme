@@ -27,12 +27,12 @@ compiler:
   - gcc-5
 
 env:
-  - OPTIONAL_CONF_ARGS=""
-  - OPTIONAL_CONF_ARGS="--enable-contrib"
+  - ATHEME_CONF_ARGS=""
+  - ATHEME_CONF_ARGS="--enable-contrib"
 
 script:
-  - scripts/travis-build.sh
+  - scripts/ci-build.sh
 
 matrix:
   allow_failures:
-    - env: OPTIONAL_CONF_ARGS="--enable-contrib"
+    - env: ATHEME_CONF_ARGS="--enable-contrib"
