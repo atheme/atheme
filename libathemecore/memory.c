@@ -153,7 +153,7 @@ smemzero(void *const restrict ptr, const size_t len)
 #ifdef HAVE_MEMSET_S
 
 	if (memset_s(ptr, len, 0x00, len) != 0)
-		RAISE_EXECEPTION;
+		RAISE_EXCEPTION;
 
 #else /* HAVE_MEMSET_S */
 #  ifdef HAVE_EXPLICIT_BZERO
