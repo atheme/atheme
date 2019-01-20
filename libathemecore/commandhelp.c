@@ -262,6 +262,20 @@ void
 help_display_invalid(struct sourceinfo *const restrict si, const struct service *const restrict service,
                      const char *const restrict subcmd)
 {
+	if (! command_find(service->commands, "HELP"))
+	{
+		/* Don't tell people to use `/msg foo HELP' if the respective service help module isn't loaded
+		 *   -- amdj & ilbelkyr
+		 */
+		if (subcmd && *subcmd)
+			(void) command_fail(si, fault_badparams, _("Invalid %s %s subcommand."),
+			                    service->me->nick, subcmd);
+		else
+			(void) command_fail(si, fault_badparams, _("Invalid %s command."), service->me->nick);
+
+		return;
+	}
+
 	if (subcmd && *subcmd)
 		(void) command_fail(si, fault_badparams, _("Invalid %s %s subcommand. Use \2/msg %s HELP %s\2 for "
 		                                           "a %s %s subcommand listing."), service->me->nick, subcmd,
