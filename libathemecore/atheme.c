@@ -96,7 +96,7 @@ process_mowgli_log(const char *line)
 }
 
 static inline bool
-atheme_set_mowgli_allocator(void)
+libathemecore_set_mowgli_allocator(void)
 {
 	mowgli_allocation_policy_t *const policy = mowgli_allocation_policy_create("libathemecore", &smalloc, &sfree);
 
@@ -196,6 +196,9 @@ libathemecore_early_init(void)
 		return false;
 	}
 #endif /* HAVE_LIBSODIUM */
+
+	if (! libathemecore_set_mowgli_allocator())
+		return false;
 
 	if (! libathemecore_random_early_init())
 		return false;
@@ -319,9 +322,6 @@ atheme_main(int argc, char *argv[])
 		(void) fprintf(stderr, "Error: Do not run me as root!\n");
 		exit(EXIT_FAILURE);
 	}
-
-	if (! atheme_set_mowgli_allocator())
-		exit(EXIT_FAILURE);
 
 	atheme_bootstrap();
 
