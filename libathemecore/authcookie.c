@@ -201,7 +201,7 @@ authcookie_expire(void *arg)
  * Side Effects:
  *       expired authcookies are destroyed here
  */
-bool
+bool ATHEME_FATTR_WUR
 authcookie_validate(const char *ticket, struct myuser *myuser)
 {
 	struct authcookie *ac = authcookie_find(ticket, myuser);
