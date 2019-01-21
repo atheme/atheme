@@ -374,7 +374,7 @@ argon2d_hash_raw(struct argon2d_context *const restrict ctx)
 	return ret;
 }
 
-static const char *
+static const char * ATHEME_FATTR_WUR
 atheme_argon2d_crypt(const char *const restrict password,
                      const char ATHEME_VATTR_UNUSED *const restrict parameters)
 {
@@ -431,7 +431,7 @@ atheme_argon2d_recrypt(const struct argon2d_context *const restrict ctx)
 	return false;
 }
 
-static bool
+static bool ATHEME_FATTR_WUR
 atheme_argon2d_verify(const char *const restrict password, const char *const restrict parameters,
                       unsigned int *const restrict flags)
 {

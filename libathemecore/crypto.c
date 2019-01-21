@@ -102,7 +102,7 @@ crypt_get_default_provider(void)
 	return NULL;
 }
 
-const struct crypt_impl *
+const struct crypt_impl * ATHEME_FATTR_WUR
 crypt_verify_password(const char *const restrict password, const char *const restrict parameters,
                       unsigned int *const restrict flags)
 {

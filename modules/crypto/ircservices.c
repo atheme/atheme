@@ -21,7 +21,7 @@
 
 #define XTOI(c) ((c)>9 ? (c)-'A'+10 : (c)-'0')
 
-static inline bool
+static inline bool ATHEME_FATTR_WUR
 atheme_ircservices_encrypt(const char *const restrict src, char *const restrict dest)
 {
 	char digest[33];
@@ -41,7 +41,7 @@ atheme_ircservices_encrypt(const char *const restrict src, char *const restrict 
 	return true;
 }
 
-static bool
+static bool ATHEME_FATTR_WUR
 atheme_ircservices_verify(const char *const restrict password, const char *const restrict parameters,
                           unsigned int *const restrict flags)
 {

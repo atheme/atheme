@@ -16,7 +16,7 @@
 #define MODULE_DIGEST_LEN       DIGEST_MDLEN_MD5
 #define MODULE_PARAMS_LEN       (MODULE_PREFIX_LEN + (2 * MODULE_DIGEST_LEN))
 
-static bool
+static bool ATHEME_FATTR_WUR
 atheme_rawmd5_verify(const char *const restrict password, const char *const restrict parameters,
                      unsigned int *const restrict flags)
 {

@@ -33,7 +33,7 @@ atheme_crypt3_des_selftest(void)
 	return true;
 }
 
-static bool
+static bool ATHEME_FATTR_WUR
 atheme_crypt3_des_verify(const char *const restrict password, const char *const restrict parameters,
                          unsigned int ATHEME_VATTR_UNUSED *const restrict flags)
 {

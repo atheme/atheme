@@ -15,7 +15,7 @@
 #define ATHEME_PBKDF2_ROUNDS    128000
 #define ATHEME_PBKDF2_SALTLEN   16
 
-static bool
+static bool ATHEME_FATTR_WUR
 atheme_pbkdf2_verify(const char *const restrict password, const char *const restrict parameters,
                      unsigned int ATHEME_VATTR_UNUSED *const restrict flags)
 {

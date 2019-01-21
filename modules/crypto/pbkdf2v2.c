@@ -393,7 +393,7 @@ const struct pbkdf2v2_scram_functions pbkdf2v2_scram_functions = {
 
 #endif /* HAVE_LIBIDN */
 
-static bool
+static bool ATHEME_FATTR_WUR
 atheme_pbkdf2v2_compute(const char *const restrict password, struct pbkdf2v2_dbentry *const restrict dbe)
 {
 	char key[PASSLEN + 1];
@@ -428,7 +428,7 @@ atheme_pbkdf2v2_compute(const char *const restrict password, struct pbkdf2v2_dbe
 	return true;
 }
 
-static const char *
+static const char * ATHEME_FATTR_WUR
 atheme_pbkdf2v2_crypt(const char *const restrict password,
                       const char ATHEME_VATTR_UNUSED *const restrict parameters)
 {
@@ -513,7 +513,7 @@ done:
 	return retval;
 }
 
-static bool
+static bool ATHEME_FATTR_WUR
 atheme_pbkdf2v2_verify(const char *const restrict password, const char *const restrict parameters,
                        unsigned int *const restrict flags)
 {

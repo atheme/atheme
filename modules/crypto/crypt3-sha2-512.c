@@ -33,7 +33,7 @@ atheme_crypt3_sha2_512_selftest(void)
 	return true;
 }
 
-static const char *
+static const char * ATHEME_FATTR_WUR
 atheme_crypt3_sha2_512_crypt(const char *const restrict password,
                              const char ATHEME_VATTR_UNUSED *const restrict parameters)
 {
@@ -60,7 +60,7 @@ atheme_crypt3_sha2_512_crypt(const char *const restrict password,
 	return atheme_crypt3_wrapper(password, parv, MOWGLI_FUNC_NAME);
 }
 
-static bool
+static bool ATHEME_FATTR_WUR
 atheme_crypt3_sha2_512_verify(const char *const restrict password, const char *const restrict parameters,
                               unsigned int *const restrict flags)
 {
