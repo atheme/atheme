@@ -126,7 +126,7 @@ _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 
 	if (getentropy(buf, len) != 0)
 	{
-		(void) _rs_log_error("%s: getentropy(2): %s", __func__, strerror(errno));
+		(void) _rs_log_error("%s: getentropy(2): %s", MOWGLI_FUNC_NAME, strerror(errno));
 		return false;
 	}
 
@@ -144,12 +144,12 @@ _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 			if (errno == EAGAIN || errno == EINTR || errno == EWOULDBLOCK)
 				continue;
 
-			(void) _rs_log_error("%s: getrandom(2): %s", __func__, strerror(errno));
+			(void) _rs_log_error("%s: getrandom(2): %s", MOWGLI_FUNC_NAME, strerror(errno));
 			return false;
 		}
 		if (ret == 0)
 		{
-			(void) _rs_log_error("%s: getrandom(2): no data returned", __func__);
+			(void) _rs_log_error("%s: getrandom(2): no data returned", MOWGLI_FUNC_NAME);
 			return false;
 		}
 
@@ -163,7 +163,7 @@ _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 
 	if (fd == -1 && (fd = open(RANDOM_DEV_PATH, O_RDONLY)) == -1)
 	{
-		(void) _rs_log_error("%s: open('%s'): %s", __func__, RANDOM_DEV_PATH, strerror(errno));
+		(void) _rs_log_error("%s: open('%s'): %s", MOWGLI_FUNC_NAME, RANDOM_DEV_PATH, strerror(errno));
 		return false;
 	}
 
@@ -176,12 +176,12 @@ _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 			if (errno == EAGAIN || errno == EINTR || errno == EWOULDBLOCK)
 				continue;
 
-			(void) _rs_log_error("%s: read('%s'): %s", __func__, RANDOM_DEV_PATH, strerror(errno));
+			(void) _rs_log_error("%s: read('%s'): %s", MOWGLI_FUNC_NAME, RANDOM_DEV_PATH, strerror(errno));
 			return false;
 		}
 		if (ret == 0)
 		{
-			(void) _rs_log_error("%s: read('%s'): EOF", __func__, RANDOM_DEV_PATH);
+			(void) _rs_log_error("%s: read('%s'): EOF", MOWGLI_FUNC_NAME, RANDOM_DEV_PATH);
 			return false;
 		}
 

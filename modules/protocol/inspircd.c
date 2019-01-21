@@ -1401,7 +1401,9 @@ m_encap(struct sourceinfo *si, int parc, char *parv[])
 
 		if (smsg.parc > SASL_MESSAGE_MAXPARA)
 		{
-			(void) slog(LG_ERROR, "%s: received SASL command with %d parameters", __func__, smsg.parc);
+			(void) slog(LG_ERROR, "%s: received SASL command with %d parameters",
+			                      MOWGLI_FUNC_NAME, smsg.parc);
+
 			smsg.parc = SASL_MESSAGE_MAXPARA;
 		}
 

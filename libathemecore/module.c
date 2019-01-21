@@ -340,7 +340,7 @@ module_unload(struct module *m, const enum module_unload_intent intent)
 		mowgli_node_delete(n, &modules);
 		mowgli_node_free(n);
 
-		(void) slog(LG_INFO, _("%s: unloaded \2%s\2"), __func__, m->name);
+		(void) slog(LG_INFO, _("%s: unloaded \2%s\2"), MOWGLI_FUNC_NAME, m->name);
 
 		if (me.connected)
 			(void) wallops(_("Module %s unloaded."), m->name);

@@ -37,7 +37,7 @@ crypt_register(const struct crypt_impl *const restrict impl)
 {
 	if (! impl || ! impl->id || ! (impl->crypt || impl->verify))
 	{
-		(void) slog(LG_ERROR, "%s: invalid parameters (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: invalid parameters (BUG)", MOWGLI_FUNC_NAME);
 		return;
 	}
 
@@ -45,7 +45,7 @@ crypt_register(const struct crypt_impl *const restrict impl)
 
 	if (! n)
 	{
-		(void) slog(LG_ERROR, "%s: mowgli_node_create: memory allocation failure", __func__);
+		(void) slog(LG_ERROR, "%s: mowgli_node_create: memory allocation failure", MOWGLI_FUNC_NAME);
 		return;
 	}
 
@@ -57,7 +57,7 @@ crypt_register(const struct crypt_impl *const restrict impl)
 	 * This is not unprecedented in this codebase; libathemecore/strshare.c does the same thing.
 	 */
 	(void) mowgli_node_add((void *) ((uintptr_t) impl), n, &crypt_impl_list);
-	(void) crypt_log_modchg(__func__, "registered", impl);
+	(void) crypt_log_modchg(MOWGLI_FUNC_NAME, "registered", impl);
 }
 
 void
@@ -65,7 +65,7 @@ crypt_unregister(const struct crypt_impl *const restrict impl)
 {
 	if (! impl || ! impl->id || ! (impl->crypt || impl->verify))
 	{
-		(void) slog(LG_ERROR, "%s: invalid parameters (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: invalid parameters (BUG)", MOWGLI_FUNC_NAME);
 		return;
 	}
 
@@ -78,12 +78,12 @@ crypt_unregister(const struct crypt_impl *const restrict impl)
 			(void) mowgli_node_delete(n, &crypt_impl_list);
 			(void) mowgli_node_free(n);
 
-			(void) crypt_log_modchg(__func__, "unregistered", impl);
+			(void) crypt_log_modchg(MOWGLI_FUNC_NAME, "unregistered", impl);
 			return;
 		}
 	}
 
-	(void) slog(LG_ERROR, "%s: could not find provider '%s' to unregister", __func__, impl->id);
+	(void) slog(LG_ERROR, "%s: could not find provider '%s' to unregister", MOWGLI_FUNC_NAME, impl->id);
 }
 
 const struct crypt_impl *
@@ -164,7 +164,7 @@ crypt_password(const char *const restrict password)
 
 		if (! ci->crypt)
 		{
-			(void) slog(LG_DEBUG, "%s: skipping incapable provider '%s'", __func__, ci->id);
+			(void) slog(LG_DEBUG, "%s: skipping incapable provider '%s'", MOWGLI_FUNC_NAME, ci->id);
 			continue;
 		}
 
@@ -174,18 +174,18 @@ crypt_password(const char *const restrict password)
 
 		if (! result)
 		{
-			(void) slog(LG_ERROR, "%s: ci->crypt() failed for provider '%s'", __func__, ci->id);
+			(void) slog(LG_ERROR, "%s: ci->crypt() failed for provider '%s'", MOWGLI_FUNC_NAME, ci->id);
 			continue;
 		}
 
-		(void) slog(LG_DEBUG, "%s: encrypted password with provider '%s'", __func__, ci->id);
+		(void) slog(LG_DEBUG, "%s: encrypted password with provider '%s'", MOWGLI_FUNC_NAME, ci->id);
 		return result;
 	}
 
 	if (encryption_capable_module)
-		(void) slog(LG_ERROR, "%s: all encryption-capable crypto providers failed", __func__);
+		(void) slog(LG_ERROR, "%s: all encryption-capable crypto providers failed", MOWGLI_FUNC_NAME);
 	else
-		(void) slog(LG_ERROR, "%s: no encryption-capable crypto provider is available!", __func__);
+		(void) slog(LG_ERROR, "%s: no encryption-capable crypto provider is available!", MOWGLI_FUNC_NAME);
 
 	return NULL;
 }

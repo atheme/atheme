@@ -90,7 +90,7 @@ atheme_random_buf(void *const restrict out, const size_t len)
 
 		if (ret != 0)
 		{
-			(void) slog(LG_ERROR, "%s: mbedtls_hmac_drbg_reseed: error %s", __func__,
+			(void) slog(LG_ERROR, "%s: mbedtls_hmac_drbg_reseed: error %s", MOWGLI_FUNC_NAME,
 			                      atheme_random_mbedtls_strerror(ret));
 			exit(EXIT_FAILURE);
 		}
@@ -102,7 +102,7 @@ atheme_random_buf(void *const restrict out, const size_t len)
 
 	if (ret != 0)
 	{
-		(void) slog(LG_ERROR, "%s: mbedtls_hmac_drbg_random: error %s", __func__,
+		(void) slog(LG_ERROR, "%s: mbedtls_hmac_drbg_random: error %s", MOWGLI_FUNC_NAME,
 		                      atheme_random_mbedtls_strerror(ret));
 		exit(EXIT_FAILURE);
 	}

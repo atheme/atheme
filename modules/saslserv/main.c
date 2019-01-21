@@ -146,7 +146,7 @@ find_mechanism(const char *const restrict name)
 			return mptr;
 	}
 
-	(void) slog(LG_DEBUG, "%s: cannot find mechanism '%s'!", __func__, name);
+	(void) slog(LG_DEBUG, "%s: cannot find mechanism '%s'!", MOWGLI_FUNC_NAME, name);
 
 	return NULL;
 }
@@ -373,7 +373,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 	}
 	else if (! p->mechptr)
 	{
-		(void) slog(LG_ERROR, "%s: session has no mechanism (BUG!)", __func__);
+		(void) slog(LG_ERROR, "%s: session has no mechanism (BUG!)", MOWGLI_FUNC_NAME);
 		return false;
 	}
 	else
@@ -393,7 +393,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 			rc = ASASL_ERROR;
 
 		if (tlen == (size_t) -1)
-			(void) slog(LG_DEBUG, "%s: base64_decode() failed", __func__);
+			(void) slog(LG_DEBUG, "%s: base64_decode() failed", MOWGLI_FUNC_NAME);
 	}
 
 	// Some progress has been made, reset timeout.
@@ -434,7 +434,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 
 			if (rs == (size_t) -1)
 			{
-				(void) slog(LG_ERROR, "%s: base64_encode() failed", __func__);
+				(void) slog(LG_ERROR, "%s: base64_encode() failed", MOWGLI_FUNC_NAME);
 				return false;
 			}
 
@@ -504,7 +504,7 @@ sasl_input_startauth(const struct sasl_message *const restrict smsg, struct sasl
 		if (smsg->parc < 2)
 		{
 			(void) slog(LG_DEBUG, "%s: client %s starting EXTERNAL authentication without a "
-			                      "fingerprint", __func__, smsg->uid);
+			                      "fingerprint", MOWGLI_FUNC_NAME, smsg->uid);
 			return false;
 		}
 
@@ -569,7 +569,7 @@ sasl_input_clientdata(const struct sasl_message *const restrict smsg, struct sas
 	 */
 	if ((p->len + len) > SASL_C2S_MAXLEN)
 	{
-		(void) slog(LG_DEBUG, "%s: client %s has exceeded allowed data length", __func__, smsg->uid);
+		(void) slog(LG_DEBUG, "%s: client %s has exceeded allowed data length", MOWGLI_FUNC_NAME, smsg->uid);
 		return false;
 	}
 
@@ -721,7 +721,7 @@ sasl_mech_register(const struct sasl_mechanism *const restrict mech)
 {
 	mowgli_node_t *const node = mowgli_node_create();
 
-	(void) slog(LG_DEBUG, "%s: registering %s", __func__, mech->name);
+	(void) slog(LG_DEBUG, "%s: registering %s", MOWGLI_FUNC_NAME, mech->name);
 
 	/* Here we cast it to (void *) because mowgli_node_add() expects that; it cannot be made const because then
 	 * it would have to return a (const void *) too which would cause multiple warnings any time it is actually
@@ -747,7 +747,7 @@ sasl_mech_unregister(const struct sasl_mechanism *const restrict mech)
 
 		if (session->mechptr == mech)
 		{
-			(void) slog(LG_DEBUG, "%s: destroying session %s", __func__, session->uid);
+			(void) slog(LG_DEBUG, "%s: destroying session %s", MOWGLI_FUNC_NAME, session->uid);
 			(void) destroy_session(session);
 		}
 	}
@@ -755,7 +755,7 @@ sasl_mech_unregister(const struct sasl_mechanism *const restrict mech)
 	{
 		if (n->data == mech)
 		{
-			(void) slog(LG_DEBUG, "%s: unregistering %s", __func__, mech->name);
+			(void) slog(LG_DEBUG, "%s: unregistering %s", MOWGLI_FUNC_NAME, mech->name);
 			(void) mowgli_node_delete(n, &mechanisms);
 			(void) mowgli_node_free(n);
 			(void) mechlist_do_rebuild();
@@ -828,7 +828,7 @@ saslserv(struct sourceinfo *const restrict si, const int parc, char **const rest
 	// this should never happen
 	if (parv[0][0] == '&')
 	{
-		(void) slog(LG_ERROR, "%s: got parv with local channel: %s", __func__, parv[0]);
+		(void) slog(LG_ERROR, "%s: got parv with local channel: %s", MOWGLI_FUNC_NAME, parv[0]);
 		return;
 	}
 

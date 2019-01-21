@@ -63,7 +63,7 @@ digest_testsuite_run_md5(void)
 			0xE9, 0x80, 0x09, 0x98, 0xEC, 0xF8, 0x42, 0x7E,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 1", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot(DIGALG_MD5, NULL, 0, result, &mdlen))
 			return false;
@@ -84,7 +84,7 @@ digest_testsuite_run_md5(void)
 			0x31, 0xC3, 0x99, 0xE2, 0x69, 0x77, 0x26, 0x61,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 2", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot(DIGALG_MD5, data, sizeof data, result, &mdlen))
 			return false;
@@ -105,7 +105,7 @@ digest_testsuite_run_md5(void)
 			0xD6, 0x96, 0x3F, 0x7D, 0x28, 0xE1, 0x7F, 0x72,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 3", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot(DIGALG_MD5, data, sizeof data, result, &mdlen))
 			return false;
@@ -126,7 +126,7 @@ digest_testsuite_run_md5(void)
 			0x52, 0x5A, 0x2F, 0x31, 0xAA, 0xF1, 0x61, 0xD0,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 4", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot(DIGALG_MD5, data, sizeof data, result, &mdlen))
 			return false;
@@ -147,7 +147,7 @@ digest_testsuite_run_md5(void)
 			0x7D, 0xFB, 0x49, 0x6C, 0xCA, 0x67, 0xE1, 0x3B,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 5", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 5", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot(DIGALG_MD5, data, sizeof data, result, &mdlen))
 			return false;
@@ -170,7 +170,7 @@ digest_testsuite_run_md5(void)
 			0xA5, 0x61, 0x1C, 0x2C, 0x9F, 0x41, 0x9D, 0x9F,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 6", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 6", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot(DIGALG_MD5, data, sizeof data, result, &mdlen))
 			return false;
@@ -193,7 +193,7 @@ digest_testsuite_run_md5(void)
 			0xAC, 0x49, 0xDA, 0x2E, 0x21, 0x07, 0xB6, 0x7A,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 7", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 7", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot(DIGALG_MD5, data, sizeof data, result, &mdlen))
 			return false;
@@ -231,7 +231,7 @@ digest_testsuite_run_hmac_md5(void)
 			0x13, 0xF4, 0x8E, 0xF8, 0x15, 0x8B, 0xFC, 0x9D,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 1", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_MD5, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -254,7 +254,7 @@ digest_testsuite_run_hmac_md5(void)
 			0xEA, 0xA8, 0x6E, 0x31, 0x0A, 0x5D, 0xB7, 0x38,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 2", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_MD5, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -288,7 +288,7 @@ digest_testsuite_run_hmac_md5(void)
 			0xDB, 0xB8, 0xC7, 0x33, 0xF0, 0xE8, 0xB3, 0xF6,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 3", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_MD5, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -324,7 +324,7 @@ digest_testsuite_run_hmac_md5(void)
 			0x3A, 0x75, 0x16, 0x47, 0x46, 0xFF, 0xAA, 0x79,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 4", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_MD5, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -350,7 +350,7 @@ digest_testsuite_run_hmac_md5(void)
 			0xF9, 0xBA, 0xB9, 0x95, 0x69, 0x0E, 0xFD, 0x4C,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 5", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 5", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_MD5, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -386,7 +386,7 @@ digest_testsuite_run_hmac_md5(void)
 			0x0B, 0x62, 0xE6, 0xCE, 0x61, 0xB9, 0xD0, 0xCD,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 6", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 6", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_MD5, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -422,7 +422,7 @@ digest_testsuite_run_hmac_md5(void)
 			0x1F, 0xB1, 0xF5, 0x62, 0xDB, 0x3A, 0xA5, 0x3E,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 7", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 7", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_MD5, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -470,7 +470,7 @@ digest_testsuite_run_pbkdf2_hmac_md5(void)
 			0x69, 0x8D, 0x9F, 0x20, 0x4F, 0x17, 0x93, 0xCB,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 1", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
 		if (! digest_pbkdf2_hmac(DIGALG_MD5, NULL, 0, NULL, 0, iter, result, sizeof vector))
 			return false;
@@ -489,7 +489,7 @@ digest_testsuite_run_pbkdf2_hmac_md5(void)
 			0xCC, 0xDF, 0x52, 0x22, 0x20, 0x7C, 0xDA, 0xD7,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 2", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
 
 		if (! digest_pbkdf2_hmac(DIGALG_MD5, NULL, 0, salt, sizeof salt, iter, result, sizeof vector))
 			return false;
@@ -508,7 +508,7 @@ digest_testsuite_run_pbkdf2_hmac_md5(void)
 			0xF1, 0x22, 0x6A, 0x76, 0xED, 0x80, 0x43, 0xF0,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 3", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
 
 		if (! digest_pbkdf2_hmac(DIGALG_MD5, key, sizeof key, NULL, 0, iter, result, sizeof vector))
 			return false;
@@ -536,7 +536,7 @@ digest_testsuite_run_pbkdf2_hmac_md5(void)
 			0x96, 0xAF, 0x75, 0xFE, 0x5C, 0x45, 0xE9, 0x92,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 4", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
 
 		if (! digest_pbkdf2_hmac(DIGALG_MD5, key, sizeof key, salt, sizeof salt, iter, result, sizeof vector))
 			return false;
@@ -566,7 +566,7 @@ digest_testsuite_run_sha1(void)
 			0xBF, 0xEF, 0x95, 0x60, 0x18, 0x90, 0xAF, 0xD8, 0x07, 0x09,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 1", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot(DIGALG_SHA1, NULL, 0, result, &mdlen))
 			return false;
@@ -587,7 +587,7 @@ digest_testsuite_run_sha1(void)
 			0x25, 0x71, 0x78, 0x50, 0xC2, 0x6C, 0x9C, 0xD0, 0xD8, 0x9D,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 2", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot(DIGALG_SHA1, data, sizeof data, result, &mdlen))
 			return false;
@@ -610,7 +610,7 @@ digest_testsuite_run_sha1(void)
 			0x4A, 0xA1, 0xF9, 0x51, 0x29, 0xE5, 0xE5, 0x46, 0x70, 0xF1,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 3", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot(DIGALG_SHA1, data, sizeof data, result, &mdlen))
 			return false;
@@ -636,7 +636,7 @@ digest_testsuite_run_sha1(void)
 			0xEB, 0x2B, 0xDB, 0xAD, 0x27, 0x31, 0x65, 0x34, 0x01, 0x6F,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 4", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
 
 		if (! digest_init(&ctx, DIGALG_SHA1))
 			return false;
@@ -666,7 +666,7 @@ digest_testsuite_run_sha1(void)
 			0xED, 0xC5, 0xEB, 0xB5, 0x63, 0x93, 0x4F, 0x46, 0x04, 0x52,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 5", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 5", MOWGLI_FUNC_NAME);
 
 		if (! digest_init(&ctx, DIGALG_SHA1))
 			return false;
@@ -712,7 +712,7 @@ digest_testsuite_run_hmac_sha1(void)
 			0xC0, 0xB6, 0xFB, 0x37, 0x8C, 0x8E, 0xF1, 0x46, 0xBE, 0x00,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 1", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_SHA1, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -735,7 +735,7 @@ digest_testsuite_run_hmac_sha1(void)
 			0x16, 0xD5, 0xF1, 0x84, 0xDF, 0x9C, 0x25, 0x9A, 0x7C, 0x79,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 2", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_SHA1, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -767,7 +767,7 @@ digest_testsuite_run_hmac_sha1(void)
 			0x9A, 0xF4, 0x8A, 0xA1, 0x7B, 0x4F, 0x63, 0xF1, 0x75, 0xD3,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 3", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_SHA1, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -800,7 +800,7 @@ digest_testsuite_run_hmac_sha1(void)
 			0x14, 0xF9, 0xBF, 0x50, 0xC8, 0x6C, 0x2D, 0x72, 0x35, 0xDA,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 4", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_SHA1, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -826,7 +826,7 @@ digest_testsuite_run_hmac_sha1(void)
 			0x7B, 0xE1, 0xD5, 0x8B, 0xB9, 0x32, 0x4A, 0x9A, 0x5A, 0x04,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 5", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 5", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_SHA1, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -860,7 +860,7 @@ digest_testsuite_run_hmac_sha1(void)
 			0x56, 0x37, 0xCE, 0x8A, 0x3B, 0x55, 0xED, 0x40, 0x21, 0x12,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 6", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 6", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_SHA1, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -894,7 +894,7 @@ digest_testsuite_run_hmac_sha1(void)
 			0xBA, 0xA7, 0x96, 0x5C, 0x78, 0x08, 0xBB, 0xFF, 0x1A, 0x91,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 7", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 7", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_SHA1, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -942,7 +942,7 @@ digest_testsuite_run_pbkdf2_hmac_sha1(void)
 			0x5D, 0xC3, 0x2E, 0xDA, 0xDA, 0x79, 0x8D, 0xA5, 0xBA, 0xC1,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 1", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
 		if (! digest_pbkdf2_hmac(DIGALG_SHA1, NULL, 0, NULL, 0, iter, result, sizeof vector))
 			return false;
@@ -961,7 +961,7 @@ digest_testsuite_run_pbkdf2_hmac_sha1(void)
 			0xCC, 0x36, 0x3C, 0x28, 0x1C, 0xD2, 0x3E, 0xE7, 0x32, 0x65,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 2", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
 
 		if (! digest_pbkdf2_hmac(DIGALG_SHA1, NULL, 0, salt, sizeof salt, iter, result, sizeof vector))
 			return false;
@@ -980,7 +980,7 @@ digest_testsuite_run_pbkdf2_hmac_sha1(void)
 			0x49, 0xF1, 0x8E, 0x67, 0x3C, 0x8A, 0x3E, 0x48, 0x88, 0xB5,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 3", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
 
 		if (! digest_pbkdf2_hmac(DIGALG_SHA1, key, sizeof key, NULL, 0, iter, result, sizeof vector))
 			return false;
@@ -1006,7 +1006,7 @@ digest_testsuite_run_pbkdf2_hmac_sha1(void)
 			0xA3, 0xCA, 0xA4, 0x54, 0xD7, 0x46, 0x85, 0xE6,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 4", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
 
 		if (! digest_pbkdf2_hmac(DIGALG_SHA1, key, sizeof key, salt, sizeof salt, iter, result, sizeof vector))
 			return false;
@@ -1038,7 +1038,7 @@ digest_testsuite_run_sha2_256(void)
 			0xA4, 0x95, 0x99, 0x1B, 0x78, 0x52, 0xB8, 0x55,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 1", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot(DIGALG_SHA2_256, NULL, 0, result, &mdlen))
 			return false;
@@ -1061,7 +1061,7 @@ digest_testsuite_run_sha2_256(void)
 			0xB4, 0x10, 0xFF, 0x61, 0xF2, 0x00, 0x15, 0xAD,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 2", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot(DIGALG_SHA2_256, data, sizeof data, result, &mdlen))
 			return false;
@@ -1086,7 +1086,7 @@ digest_testsuite_run_sha2_256(void)
 			0xF6, 0xEC, 0xED, 0xD4, 0x19, 0xDB, 0x06, 0xC1,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 3", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot(DIGALG_SHA2_256, data, sizeof data, result, &mdlen))
 			return false;
@@ -1111,7 +1111,7 @@ digest_testsuite_run_sha2_256(void)
 			0xAF, 0xAC, 0x45, 0x03, 0x7A, 0xFE, 0xE9, 0xD1,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 4", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot(DIGALG_SHA2_256, data, sizeof data, result, &mdlen))
 			return false;
@@ -1139,7 +1139,7 @@ digest_testsuite_run_sha2_256(void)
 			0x04, 0x6D, 0x39, 0xCC, 0xC7, 0x11, 0x2C, 0xD0,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 5", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 5", MOWGLI_FUNC_NAME);
 
 		if (! digest_init(&ctx, DIGALG_SHA2_256))
 			return false;
@@ -1188,7 +1188,7 @@ digest_testsuite_run_hmac_sha2_256(void)
 			0x26, 0xE9, 0x37, 0x6C, 0x2E, 0x32, 0xCF, 0xF7,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 1", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_SHA2_256, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -1213,7 +1213,7 @@ digest_testsuite_run_hmac_sha2_256(void)
 			0x9D, 0xEC, 0x58, 0xB9, 0x64, 0xEC, 0x38, 0x43,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 2", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_SHA2_256, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -1250,7 +1250,7 @@ digest_testsuite_run_hmac_sha2_256(void)
 			0xD9, 0x63, 0x55, 0x14, 0xCE, 0xD5, 0x65, 0xFE,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 3", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_SHA2_256, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -1288,7 +1288,7 @@ digest_testsuite_run_hmac_sha2_256(void)
 			0x7A, 0x2E, 0x3F, 0xF4, 0x67, 0x29, 0x66, 0x5B,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 4", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_SHA2_256, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -1315,7 +1315,7 @@ digest_testsuite_run_hmac_sha2_256(void)
 			0x6E, 0x0C, 0x79, 0x6C, 0x29, 0x55, 0x55, 0x2B,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 5", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 5", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_SHA2_256, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -1360,7 +1360,7 @@ digest_testsuite_run_hmac_sha2_256(void)
 			0x05, 0x46, 0x04, 0x0F, 0x0E, 0xE3, 0x7F, 0x54,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 6", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 6", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_SHA2_256, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -1407,7 +1407,7 @@ digest_testsuite_run_hmac_sha2_256(void)
 			0x8A, 0x7F, 0x51, 0x53, 0x5C, 0x3A, 0x35, 0xE2,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 7", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 7", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_SHA2_256, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -1481,7 +1481,7 @@ digest_testsuite_run_pbkdf2_hmac_sha2_256(void)
 			0xBF, 0x07, 0x9C, 0xB1, 0xAF, 0xD4, 0x72, 0x2B,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 1", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
 		if (! digest_pbkdf2_hmac(DIGALG_SHA2_256, NULL, 0, NULL, 0, iter, result, sizeof vector))
 			return false;
@@ -1502,7 +1502,7 @@ digest_testsuite_run_pbkdf2_hmac_sha2_256(void)
 			0xCC, 0xDA, 0x49, 0xCB, 0x1E, 0x0F, 0x93, 0x0D,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 2", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
 
 		if (! digest_pbkdf2_hmac(DIGALG_SHA2_256, NULL, 0, salt, sizeof salt, iter, result, sizeof vector))
 			return false;
@@ -1523,7 +1523,7 @@ digest_testsuite_run_pbkdf2_hmac_sha2_256(void)
 			0x97, 0x89, 0xA4, 0x14, 0x4E, 0xCD, 0x33, 0x98,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 3", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
 
 		if (! digest_pbkdf2_hmac(DIGALG_SHA2_256, key, sizeof key, NULL, 0, iter, result, sizeof vector))
 			return false;
@@ -1551,7 +1551,7 @@ digest_testsuite_run_pbkdf2_hmac_sha2_256(void)
 			0x57, 0x44, 0x6C, 0x52, 0x60, 0xD5, 0xF3, 0xDF,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 4", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
 
 		if (! digest_pbkdf2_hmac(DIGALG_SHA2_256, key, sizeof key, salt, sizeof salt, iter, result, sizeof vector))
 			return false;
@@ -1587,7 +1587,7 @@ digest_testsuite_run_sha2_512(void)
 			0xA5, 0x38, 0x32, 0x7A, 0xF9, 0x27, 0xDA, 0x3E,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 1", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot(DIGALG_SHA2_512, NULL, 0, result, &mdlen))
 			return false;
@@ -1614,7 +1614,7 @@ digest_testsuite_run_sha2_512(void)
 			0x2A, 0x9A, 0xC9, 0x4F, 0xA5, 0x4C, 0xA4, 0x9F,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 2", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot(DIGALG_SHA2_512, data, sizeof data, result, &mdlen))
 			return false;
@@ -1643,7 +1643,7 @@ digest_testsuite_run_sha2_512(void)
 			0x54, 0xEC, 0x63, 0x12, 0x38, 0xCA, 0x34, 0x45,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 3", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot(DIGALG_SHA2_512, data, sizeof data, result, &mdlen))
 			return false;
@@ -1672,7 +1672,7 @@ digest_testsuite_run_sha2_512(void)
 			0x5E, 0x96, 0xE5, 0x5B, 0x87, 0x4B, 0xE9, 0x09,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 4", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot(DIGALG_SHA2_512, data, sizeof data, result, &mdlen))
 			return false;
@@ -1704,7 +1704,7 @@ digest_testsuite_run_sha2_512(void)
 			0x4E, 0xAD, 0xB2, 0x17, 0xAD, 0x8C, 0xC0, 0x9B,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 5", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 5", MOWGLI_FUNC_NAME);
 
 		if (! digest_init(&ctx, DIGALG_SHA2_512))
 			return false;
@@ -1757,7 +1757,7 @@ digest_testsuite_run_hmac_sha2_512(void)
 			0x2E, 0x69, 0x6C, 0x20, 0x3A, 0x12, 0x68, 0x54,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 1", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_SHA2_512, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -1786,7 +1786,7 @@ digest_testsuite_run_hmac_sha2_512(void)
 			0x63, 0x6E, 0x07, 0x0A, 0x38, 0xBC, 0xE7, 0x37,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 2", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_SHA2_512, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -1827,7 +1827,7 @@ digest_testsuite_run_hmac_sha2_512(void)
 			0x74, 0x27, 0x88, 0x59, 0xE1, 0x32, 0x92, 0xFB,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 3", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_SHA2_512, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -1869,7 +1869,7 @@ digest_testsuite_run_hmac_sha2_512(void)
 			0xE2, 0xAD, 0xEB, 0xEB, 0x10, 0xA2, 0x98, 0xDD,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 4", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_SHA2_512, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -1896,7 +1896,7 @@ digest_testsuite_run_hmac_sha2_512(void)
 			0x1D, 0x41, 0x79, 0xBC, 0x89, 0x1D, 0x87, 0xA6,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 5", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 5", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_SHA2_512, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -1945,7 +1945,7 @@ digest_testsuite_run_hmac_sha2_512(void)
 			0x8B, 0x91, 0x5A, 0x98, 0x5D, 0x78, 0x65, 0x98,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 6", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 6", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_SHA2_512, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -1996,7 +1996,7 @@ digest_testsuite_run_hmac_sha2_512(void)
 			0x65, 0xC9, 0x74, 0x40, 0xFA, 0x8C, 0x6A, 0x58,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 7", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 7", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_hmac(DIGALG_SHA2_512, key, sizeof key, data, sizeof data, result, &mdlen))
 			return false;
@@ -2074,7 +2074,7 @@ digest_testsuite_run_pbkdf2_hmac_sha2_512(void)
 			0xD7, 0xEC, 0x94, 0x87, 0xA2, 0x06, 0x7E, 0x89,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 1", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
 		if (! digest_pbkdf2_hmac(DIGALG_SHA2_512, NULL, 0, NULL, 0, iter, result, sizeof vector))
 			return false;
@@ -2099,7 +2099,7 @@ digest_testsuite_run_pbkdf2_hmac_sha2_512(void)
 			0xDD, 0x2D, 0x2E, 0xBF, 0x1F, 0x5E, 0x7C, 0x9E,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 2", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
 
 		if (! digest_pbkdf2_hmac(DIGALG_SHA2_512, NULL, 0, salt, sizeof salt, iter, result, sizeof vector))
 			return false;
@@ -2124,7 +2124,7 @@ digest_testsuite_run_pbkdf2_hmac_sha2_512(void)
 			0x61, 0x33, 0x6D, 0x7B, 0xB1, 0x62, 0x9A, 0xFE,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 3", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
 
 		if (! digest_pbkdf2_hmac(DIGALG_SHA2_512, key, sizeof key, NULL, 0, iter, result, sizeof vector))
 			return false;
@@ -2152,7 +2152,7 @@ digest_testsuite_run_pbkdf2_hmac_sha2_512(void)
 			0xE4, 0x53, 0x5F, 0xB6, 0x91, 0xBF, 0x7F, 0x5A,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 4", __func__);
+		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
 
 		if (! digest_pbkdf2_hmac(DIGALG_SHA2_512, key, sizeof key, salt, sizeof salt, iter, result, sizeof vector))
 			return false;

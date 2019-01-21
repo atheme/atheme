@@ -37,7 +37,8 @@ set_password(struct myuser *const restrict mu, const char *const restrict passwo
 		mu->flags &= ~MU_CRYPTPASS;
 
 		(void) mowgli_strlcpy(mu->pass, password, sizeof mu->pass);
-		(void) slog(LG_ERROR, "%s: failed to encrypt password for account '%s'", __func__, entity(mu)->name);
+		(void) slog(LG_ERROR, "%s: failed to encrypt password for account '%s'",
+		                      MOWGLI_FUNC_NAME, entity(mu)->name);
 	}
 }
 
@@ -52,8 +53,8 @@ verify_password(struct myuser *const restrict mu, const char *const restrict pas
 
 	if (! (mu->flags & MU_CRYPTPASS))
 	{
-		(void) slog(LG_INFO, _("%s: verifying unencrypted password for account '%s'!"), __func__,
-		                     entity(mu)->name);
+		(void) slog(LG_INFO, _("%s: verifying unencrypted password for account '%s'!"),
+		                       MOWGLI_FUNC_NAME, entity(mu)->name);
 
 		return (strcmp(mu->pass, password) == 0);
 	}
@@ -72,15 +73,16 @@ verify_password(struct myuser *const restrict mu, const char *const restrict pas
 
 	if (ci != ci_default)
 		(void) slog(LG_INFO, _("%s: transitioning from crypt scheme '%s' to '%s' for account '%s'"),
-		                     __func__, ci->id, ci_default->id, entity(mu)->name);
+		                       MOWGLI_FUNC_NAME, ci->id, ci_default->id, entity(mu)->name);
 	else if (verify_flags & PWVERIFY_FLAG_RECRYPT)
-		(void) slog(LG_INFO, _("%s: re-encrypting password for account '%s'"), __func__, entity(mu)->name);
+		(void) slog(LG_INFO, _("%s: re-encrypting password for account '%s'"),
+		                       MOWGLI_FUNC_NAME, entity(mu)->name);
 	else
 		// Verification succeeded and re-encrypting not required, nothing more to do
 		return true;
 
 	if (! (new_hash = ci_default->crypt(password, NULL)))
-		(void) slog(LG_ERROR, _("%s: hash generation failed"), __func__);
+		(void) slog(LG_ERROR, _("%s: hash generation failed"), MOWGLI_FUNC_NAME);
 	else
 		(void) mowgli_strlcpy(mu->pass, new_hash, sizeof mu->pass);
 

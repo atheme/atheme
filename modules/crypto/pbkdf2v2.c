@@ -101,7 +101,7 @@ atheme_pbkdf2v2_determine_params(struct pbkdf2v2_dbentry *const restrict dbe)
 			break;
 
 		default:
-			(void) slog(LG_DEBUG, "%s: PRF ID '%u' unknown", __func__, dbe->a);
+			(void) slog(LG_DEBUG, "%s: PRF ID '%u' unknown", MOWGLI_FUNC_NAME, dbe->a);
 			return false;
 	}
 
@@ -121,7 +121,7 @@ atheme_pbkdf2v2_parse_dbentry(struct pbkdf2v2_dbentry *const restrict dbe, const
 
 	if (sscanf(parameters, PBKDF2_FS_LOADHASH, &dbe->a, &dbe->c, dbe->salt64, ssk64, shk64) == 5)
 	{
-		(void) slog(LG_DEBUG, "%s: matched PBKDF2_FS_LOADHASH (SCRAM-SHA)", __func__);
+		(void) slog(LG_DEBUG, "%s: matched PBKDF2_FS_LOADHASH (SCRAM-SHA)", MOWGLI_FUNC_NAME);
 
 		if (! atheme_pbkdf2v2_determine_params(dbe))
 			// This function logs messages on failure
@@ -129,24 +129,27 @@ atheme_pbkdf2v2_parse_dbentry(struct pbkdf2v2_dbentry *const restrict dbe, const
 
 		if (! dbe->scram)
 		{
-			(void) slog(LG_ERROR, "%s: is not a SCRAM-SHA PRF (BUG)", __func__);
+			(void) slog(LG_ERROR, "%s: is not a SCRAM-SHA PRF (BUG)", MOWGLI_FUNC_NAME);
 			goto err;
 		}
 
 		if (base64_decode(ssk64, dbe->ssk, sizeof dbe->ssk) != dbe->dl)
 		{
-			(void) slog(LG_ERROR, "%s: base64_decode('%s') for ssk failed (BUG)", __func__, ssk64);
+			(void) slog(LG_ERROR, "%s: base64_decode('%s') for ssk failed (BUG)", MOWGLI_FUNC_NAME, ssk64);
 			goto err;
 		}
 		if (base64_decode(shk64, dbe->shk, sizeof dbe->shk) != dbe->dl)
 		{
-			(void) slog(LG_ERROR, "%s: base64_decode('%s') for shk failed (BUG)", __func__, shk64);
+			(void) slog(LG_ERROR, "%s: base64_decode('%s') for shk failed (BUG)", MOWGLI_FUNC_NAME, shk64);
 			goto err;
 		}
 
 #ifndef HAVE_LIBIDN
-		(void) slog(LG_INFO, "%s: encountered SCRAM format hash, but GNU libidn is unavailable", __func__);
-		(void) slog(LG_INFO, "%s: user logins may fail if they have exotic password characters", __func__);
+		(void) slog(LG_INFO, "%s: encountered SCRAM format hash, but GNU libidn is unavailable",
+		                     MOWGLI_FUNC_NAME);
+
+		(void) slog(LG_INFO, "%s: user logins may fail if they have exotic password characters",
+		                     MOWGLI_FUNC_NAME);
 #endif /* !HAVE_LIBIDN */
 
 		goto done;
@@ -156,7 +159,7 @@ atheme_pbkdf2v2_parse_dbentry(struct pbkdf2v2_dbentry *const restrict dbe, const
 
 	if (sscanf(parameters, PBKDF2_FN_LOADHASH, &dbe->a, &dbe->c, dbe->salt64, sdg64) == 4)
 	{
-		(void) slog(LG_DEBUG, "%s: matched PBKDF2_FN_LOADHASH (HMAC-SHA)", __func__);
+		(void) slog(LG_DEBUG, "%s: matched PBKDF2_FN_LOADHASH (HMAC-SHA)", MOWGLI_FUNC_NAME);
 
 		if (! atheme_pbkdf2v2_determine_params(dbe))
 			// This function logs messages on failure
@@ -164,20 +167,20 @@ atheme_pbkdf2v2_parse_dbentry(struct pbkdf2v2_dbentry *const restrict dbe, const
 
 		if (dbe->scram)
 		{
-			(void) slog(LG_ERROR, "%s: is a SCRAM-SHA PRF (BUG)", __func__);
+			(void) slog(LG_ERROR, "%s: is a SCRAM-SHA PRF (BUG)", MOWGLI_FUNC_NAME);
 			goto err;
 		}
 
 		if (base64_decode(sdg64, dbe->sdg, sizeof dbe->sdg) != dbe->dl)
 		{
-			(void) slog(LG_ERROR, "%s: base64_decode('%s') for sdg failed (BUG)", __func__, sdg64);
+			(void) slog(LG_ERROR, "%s: base64_decode('%s') for sdg failed (BUG)", MOWGLI_FUNC_NAME, sdg64);
 			goto err;
 		}
 
 		goto done;
 	}
 
-	(void) slog(LG_DEBUG, "%s: sscanf(3) was unsuccessful", __func__);
+	(void) slog(LG_DEBUG, "%s: sscanf(3) was unsuccessful", MOWGLI_FUNC_NAME);
 
 err:
 	retval = false;
@@ -194,12 +197,12 @@ atheme_pbkdf2v2_parameters_sane(const struct pbkdf2v2_dbentry *const restrict db
 {
 	if (dbe->sl < PBKDF2_SALTLEN_MIN || dbe->sl > PBKDF2_SALTLEN_MAX)
 	{
-		(void) slog(LG_ERROR, "%s: salt length '%zu' out of range", __func__, dbe->sl);
+		(void) slog(LG_ERROR, "%s: salt length '%zu' out of range", MOWGLI_FUNC_NAME, dbe->sl);
 		return false;
 	}
 	if (dbe->c < PBKDF2_ITERCNT_MIN || dbe->c > PBKDF2_ITERCNT_MAX)
 	{
-		(void) slog(LG_ERROR, "%s: iteration count '%u' out of range", __func__, dbe->c);
+		(void) slog(LG_ERROR, "%s: iteration count '%u' out of range", MOWGLI_FUNC_NAME, dbe->c);
 		return false;
 	}
 
@@ -215,17 +218,17 @@ atheme_pbkdf2v2_scram_derive(const struct pbkdf2v2_dbentry *const dbe, const uns
 
 	if (csk && ! digest_oneshot_hmac(dbe->md, idg, dbe->dl, ServerKeyStr, sizeof ServerKeyStr, csk, NULL))
 	{
-		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac(idg) for csk failed (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac(idg) for csk failed (BUG)", MOWGLI_FUNC_NAME);
 		goto end;
 	}
 	if (chk && ! digest_oneshot_hmac(dbe->md, idg, dbe->dl, ClientKeyStr, sizeof ClientKeyStr, cck, NULL))
 	{
-		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac(idg) for cck failed (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac(idg) for cck failed (BUG)", MOWGLI_FUNC_NAME);
 		goto end;
 	}
 	if (chk && ! digest_oneshot(dbe->md, cck, dbe->dl, chk, NULL))
 	{
-		(void) slog(LG_ERROR, "%s: digest_oneshot(cck) for chk failed (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: digest_oneshot(cck) for chk failed (BUG)", MOWGLI_FUNC_NAME);
 		goto end;
 	}
 
@@ -241,13 +244,13 @@ atheme_pbkdf2v2_recrypt(const struct pbkdf2v2_dbentry *const restrict dbe)
 {
 	if (dbe->a != pbkdf2v2_digest)
 	{
-		(void) slog(LG_DEBUG, "%s: prf (%u) != default (%u)", __func__, dbe->a, pbkdf2v2_digest);
+		(void) slog(LG_DEBUG, "%s: prf (%u) != default (%u)", MOWGLI_FUNC_NAME, dbe->a, pbkdf2v2_digest);
 		return true;
 	}
 
 	if (dbe->c != pbkdf2v2_rounds)
 	{
-		(void) slog(LG_DEBUG, "%s: rounds (%u) != default (%u)", __func__, dbe->c, pbkdf2v2_rounds);
+		(void) slog(LG_DEBUG, "%s: rounds (%u) != default (%u)", MOWGLI_FUNC_NAME, dbe->c, pbkdf2v2_rounds);
 		return true;
 	}
 
@@ -255,14 +258,14 @@ atheme_pbkdf2v2_recrypt(const struct pbkdf2v2_dbentry *const restrict dbe)
 	{
 		if (dbe->sl != pbkdf2v2_saltsz)
 		{
-			(void) slog(LG_DEBUG, "%s: salt length (%zu) != default (%u)", __func__, dbe->sl,
+			(void) slog(LG_DEBUG, "%s: salt length (%zu) != default (%u)", MOWGLI_FUNC_NAME, dbe->sl,
 			                      pbkdf2v2_saltsz);
 			return true;
 		}
 	}
 	else
 	{
-		(void) slog(LG_DEBUG, "%s: salt wasn't base64-encoded", __func__);
+		(void) slog(LG_DEBUG, "%s: salt wasn't base64-encoded", MOWGLI_FUNC_NAME);
 		return true;
 	}
 
@@ -315,7 +318,7 @@ atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters, struct pb
 */
 
 		default:
-			(void) slog(LG_DEBUG, "%s: unsupported PRF '%u'", __func__, dbe->a);
+			(void) slog(LG_DEBUG, "%s: unsupported PRF '%u'", MOWGLI_FUNC_NAME, dbe->a);
 			return false;
 	}
 
@@ -328,7 +331,7 @@ atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters, struct pb
 
 		if (base64_encode(dbe->salt, dbe->sl, dbe->salt64, sizeof dbe->salt64) == (size_t) -1)
 		{
-			(void) slog(LG_ERROR, "%s: base64_encode() for salt failed (BUG)", __func__);
+			(void) slog(LG_ERROR, "%s: base64_encode() for salt failed (BUG)", MOWGLI_FUNC_NAME);
 			return false;
 		}
 	}
@@ -348,7 +351,8 @@ atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters, struct pb
 		 * original password). If the login is successful, the SCRAM-SHA module will convert
 		 * the database entry into a SCRAM format to avoid this. Log a message anyway.
 		 */
-		(void) slog(LG_INFO, "%s: attempting SCRAM-SHA login with regular PBKDF2 credentials", __func__);
+		(void) slog(LG_INFO, "%s: attempting SCRAM-SHA login with regular PBKDF2 credentials",
+		                     MOWGLI_FUNC_NAME);
 	}
 
 	return true;
@@ -361,7 +365,7 @@ atheme_pbkdf2v2_scram_normalize(char *const restrict buf, const size_t buflen)
 
 	if (ret != STRINGPREP_OK)
 	{
-		(void) slog(LG_DEBUG, "%s: %s", __func__, stringprep_strerror((Stringprep_rc) ret));
+		(void) slog(LG_DEBUG, "%s: %s", MOWGLI_FUNC_NAME, stringprep_strerror((Stringprep_rc) ret));
 		return false;
 	}
 
@@ -398,7 +402,7 @@ atheme_pbkdf2v2_compute(const char *const restrict password, struct pbkdf2v2_dbe
 #ifdef HAVE_LIBIDN
 	if (dbe->scram && ! atheme_pbkdf2v2_scram_normalize(key, sizeof key))
 	{
-		(void) slog(LG_DEBUG, "%s: SASLprep normalization of password failed", __func__);
+		(void) slog(LG_DEBUG, "%s: SASLprep normalization of password failed", MOWGLI_FUNC_NAME);
 		(void) smemzero(key, sizeof key);
 		return false;
 	}
@@ -408,14 +412,14 @@ atheme_pbkdf2v2_compute(const char *const restrict password, struct pbkdf2v2_dbe
 
 	if (! kl)
 	{
-		(void) slog(LG_DEBUG, "%s: password length == 0", __func__);
+		(void) slog(LG_DEBUG, "%s: password length == 0", MOWGLI_FUNC_NAME);
 		(void) smemzero(key, sizeof key);
 		return false;
 	}
 
 	if (! digest_pbkdf2_hmac(dbe->md, key, kl, dbe->salt, dbe->sl, dbe->c, dbe->cdg, dbe->dl))
 	{
-		(void) slog(LG_ERROR, "%s: digest_pbkdf2_hmac() for cdg failed (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: digest_pbkdf2_hmac() for cdg failed (BUG)", MOWGLI_FUNC_NAME);
 		(void) smemzero(key, sizeof key);
 		return false;
 	}
@@ -437,7 +441,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 
 	if (base64_encode(dbe.salt, (size_t) pbkdf2v2_saltsz, dbe.salt64, sizeof dbe.salt64) == (size_t) -1)
 	{
-		(void) slog(LG_ERROR, "%s: base64_encode() for salt failed (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: base64_encode() for salt failed (BUG)", MOWGLI_FUNC_NAME);
 		goto err;
 	}
 
@@ -466,17 +470,18 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 
 		if (base64_encode(csk, dbe.dl, csk64, sizeof csk64) == (size_t) -1)
 		{
-			(void) slog(LG_ERROR, "%s: base64_encode() for csk failed (BUG)", __func__);
+			(void) slog(LG_ERROR, "%s: base64_encode() for csk failed (BUG)", MOWGLI_FUNC_NAME);
 			goto err;
 		}
 		if (base64_encode(chk, dbe.dl, chk64, sizeof chk64) == (size_t) -1)
 		{
-			(void) slog(LG_ERROR, "%s: base64_encode() for chk failed (BUG)", __func__);
+			(void) slog(LG_ERROR, "%s: base64_encode() for chk failed (BUG)", MOWGLI_FUNC_NAME);
 			goto err;
 		}
 		if (snprintf(res, sizeof res, PBKDF2_FS_SAVEHASH, dbe.a, dbe.c, dbe.salt64, csk64, chk64) > PASSLEN)
 		{
-			(void) slog(LG_ERROR, "%s: snprintf(3) output would have been too long (BUG)", __func__);
+			(void) slog(LG_ERROR, "%s: snprintf(3) output would have been too long (BUG)",
+			                      MOWGLI_FUNC_NAME);
 			goto err;
 		}
 	}
@@ -486,12 +491,13 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 
 		if (base64_encode(dbe.cdg, dbe.dl, cdg64, sizeof cdg64) == (size_t) -1)
 		{
-			(void) slog(LG_ERROR, "%s: base64_encode() for cdg failed (BUG)", __func__);
+			(void) slog(LG_ERROR, "%s: base64_encode() for cdg failed (BUG)", MOWGLI_FUNC_NAME);
 			goto err;
 		}
 		if (snprintf(res, sizeof res, PBKDF2_FN_SAVEHASH, dbe.a, dbe.c, dbe.salt64, cdg64) > PASSLEN)
 		{
-			(void) slog(LG_ERROR, "%s: snprintf(3) output would have been too long (BUG)", __func__);
+			(void) slog(LG_ERROR, "%s: snprintf(3) output would have been too long (BUG)",
+			                      MOWGLI_FUNC_NAME);
 			goto err;
 		}
 	}
@@ -523,7 +529,7 @@ atheme_pbkdf2v2_verify(const char *const restrict password, const char *const re
 	{
 		if ((dbe.sl = base64_decode(dbe.salt64, dbe.salt, sizeof dbe.salt)) == (size_t) -1)
 		{
-			(void) slog(LG_ERROR, "%s: base64_decode('%s') for salt failed", __func__, dbe.salt64);
+			(void) slog(LG_ERROR, "%s: base64_decode('%s') for salt failed", MOWGLI_FUNC_NAME, dbe.salt64);
 			goto end;
 		}
 
@@ -556,7 +562,7 @@ atheme_pbkdf2v2_verify(const char *const restrict password, const char *const re
 
 		if (memcmp(dbe.ssk, csk, dbe.dl) != 0)
 		{
-			(void) slog(LG_DEBUG, "%s: memcmp(3) mismatch on ssk (invalid password?)", __func__);
+			(void) slog(LG_DEBUG, "%s: memcmp(3) mismatch on ssk (invalid password?)", MOWGLI_FUNC_NAME);
 			goto end;
 		}
 	}
@@ -564,7 +570,7 @@ atheme_pbkdf2v2_verify(const char *const restrict password, const char *const re
 	{
 		if (memcmp(dbe.sdg, dbe.cdg, dbe.dl) != 0)
 		{
-			(void) slog(LG_DEBUG, "%s: memcmp(3) mismatch on sdg (invalid password?)", __func__);
+			(void) slog(LG_DEBUG, "%s: memcmp(3) mismatch on sdg (invalid password?)", MOWGLI_FUNC_NAME);
 			goto end;
 		}
 	}

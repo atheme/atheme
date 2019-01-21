@@ -94,7 +94,7 @@ atheme_argon2d_mempool_realloc(const uint32_t mem_blocks)
 
 	if (!(mempool_tmp = realloc(argon2d_mempool, required_sz)))
 	{
-		(void) slog(LG_ERROR, "%s: memory allocation failure", __func__);
+		(void) slog(LG_ERROR, "%s: memory allocation failure", MOWGLI_FUNC_NAME);
 		return false;
 	}
 
@@ -416,14 +416,14 @@ atheme_argon2d_recrypt(const struct argon2d_context *const restrict ctx)
 
 	if (ctx->m_cost != m_cost_def)
 	{
-		(void) slog(LG_DEBUG, "%s: memory cost (%" PRIu32 ") != default (%" PRIu32 ")", __func__,
+		(void) slog(LG_DEBUG, "%s: memory cost (%" PRIu32 ") != default (%" PRIu32 ")", MOWGLI_FUNC_NAME,
 		                      ctx->m_cost, m_cost_def);
 		return true;
 	}
 
 	if (ctx->t_cost != t_cost_def)
 	{
-		(void) slog(LG_DEBUG, "%s: time cost (%" PRIu32 ") != default (%" PRIu32 ")", __func__,
+		(void) slog(LG_DEBUG, "%s: time cost (%" PRIu32 ") != default (%" PRIu32 ")", MOWGLI_FUNC_NAME,
 		                      ctx->t_cost, t_cost_def);
 		return true;
 	}

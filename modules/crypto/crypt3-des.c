@@ -18,15 +18,15 @@ atheme_crypt3_des_selftest(void)
 	static const char password[] = CRYPT3_MODULE_TEST_PASSWORD;
 	static const char parameters[] = CRYPT3_MODULE_TEST_VECTOR_DES;
 
-	const char *const result = atheme_crypt3_wrapper(password, parameters, __func__);
+	const char *const result = atheme_crypt3_wrapper(password, parameters, MOWGLI_FUNC_NAME);
 
 	if (! result)
 		return false;
 
 	if (strcmp(result, parameters) != 0)
 	{
-		(void) slog(LG_ERROR, "%s: crypt(3) returned an incorrect result", __func__);
-		(void) slog(LG_ERROR, "%s: expected '%s', got '%s'", __func__, parameters, result);
+		(void) slog(LG_ERROR, "%s: crypt(3) returned an incorrect result", MOWGLI_FUNC_NAME);
+		(void) slog(LG_ERROR, "%s: expected '%s', got '%s'", MOWGLI_FUNC_NAME, parameters, result);
 		return false;
 	}
 
@@ -41,17 +41,18 @@ atheme_crypt3_des_verify(const char *const restrict password, const char *const 
 
 	if (strlen(parameters) != CRYPT3_LOADHASH_LENGTH_DES)
 	{
-		(void) slog(LG_DEBUG, "%s: params not %u characters long", __func__, CRYPT3_LOADHASH_LENGTH_DES);
+		(void) slog(LG_DEBUG, "%s: params not %u characters long", MOWGLI_FUNC_NAME,
+		                      CRYPT3_LOADHASH_LENGTH_DES);
 		return false;
 	}
 	if (sscanf(parameters, CRYPT3_LOADHASH_FORMAT_DES, hash) != 1)
 	{
-		(void) slog(LG_DEBUG, "%s: sscanf(3) was unsuccessful", __func__);
+		(void) slog(LG_DEBUG, "%s: sscanf(3) was unsuccessful", MOWGLI_FUNC_NAME);
 		return false;
 	}
 	if (strcmp(parameters, hash) != 0)
 	{
-		(void) slog(LG_DEBUG, "%s: strcmp(3) mismatch", __func__);
+		(void) slog(LG_DEBUG, "%s: strcmp(3) mismatch", MOWGLI_FUNC_NAME);
 		return false;
 	}
 
@@ -61,17 +62,17 @@ atheme_crypt3_des_verify(const char *const restrict password, const char *const 
 	 * digest was indeed produced by DES crypt(3).  For this reason, we DON'T set PWVERIFY_FLAG_MYMODULE.
 	 */
 
-	(void) slog(LG_DEBUG, CRYPT3_MODULE_WARNING, __func__);
+	(void) slog(LG_DEBUG, CRYPT3_MODULE_WARNING, MOWGLI_FUNC_NAME);
 
-	const char *const result = atheme_crypt3_wrapper(password, parameters, __func__);
+	const char *const result = atheme_crypt3_wrapper(password, parameters, MOWGLI_FUNC_NAME);
 
 	if (! result)
 		return false;
 
 	if (strcmp(parameters, result) != 0)
 	{
-		(void) slog(LG_DEBUG, "%s: strcmp(3) mismatch, invalid password?", __func__);
-		(void) slog(LG_DEBUG, "%s: expected '%s', got '%s'", __func__, parameters, result);
+		(void) slog(LG_DEBUG, "%s: strcmp(3) mismatch, invalid password?", MOWGLI_FUNC_NAME);
+		(void) slog(LG_DEBUG, "%s: expected '%s', got '%s'", MOWGLI_FUNC_NAME, parameters, result);
 		return false;
 	}
 

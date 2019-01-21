@@ -353,7 +353,7 @@ digest_init_sha2_256(union digest_state *const restrict state)
 
 	if (! ctx)
 	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
 		return false;
 	}
 
@@ -376,7 +376,7 @@ digest_init_sha2_512(union digest_state *const restrict state)
 
 	if (! ctx)
 	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
 		return false;
 	}
 
@@ -402,7 +402,7 @@ digest_update_sha2_256(union digest_state *const restrict state,
 
 	if (! ctx)
 	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
 		return false;
 	}
 
@@ -466,7 +466,7 @@ digest_update_sha2_512(union digest_state *const restrict state,
 
 	if (! ctx)
 	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
 		return false;
 	}
 
@@ -530,12 +530,12 @@ digest_final_sha2_256(union digest_state *const restrict state,
 
 	if (! ctx)
 	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
 		return false;
 	}
 	if (! out)
 	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", MOWGLI_FUNC_NAME);
 		return false;
 	}
 
@@ -543,7 +543,7 @@ digest_final_sha2_256(union digest_state *const restrict state,
 	{
 		if (*len < DIGEST_MDLEN_SHA2_256)
 		{
-			(void) slog(LG_ERROR, "%s: output buffer length %zu is too small", __func__, *len);
+			(void) slog(LG_ERROR, "%s: output buffer length %zu is too small", MOWGLI_FUNC_NAME, *len);
 			return false;
 		}
 
@@ -605,12 +605,12 @@ digest_final_sha2_512(union digest_state *const restrict state,
 
 	if (! ctx)
 	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
 		return false;
 	}
 	if (! out)
 	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", MOWGLI_FUNC_NAME);
 		return false;
 	}
 
@@ -618,7 +618,7 @@ digest_final_sha2_512(union digest_state *const restrict state,
 	{
 		if (*len < DIGEST_MDLEN_SHA2_512)
 		{
-			(void) slog(LG_ERROR, "%s: output buffer length %zu is too small", __func__, *len);
+			(void) slog(LG_ERROR, "%s: output buffer length %zu is too small", MOWGLI_FUNC_NAME, *len);
 			return false;
 		}
 

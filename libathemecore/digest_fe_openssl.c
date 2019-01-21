@@ -75,7 +75,7 @@ digest_decide_md(const unsigned int alg)
 			return EVP_sha512();
 	}
 
-	(void) slog(LG_ERROR, "%s: called with unknown/unimplemented alg '%u' (BUG)", __func__, alg);
+	(void) slog(LG_ERROR, "%s: called with unknown/unimplemented alg '%u' (BUG)", MOWGLI_FUNC_NAME, alg);
 	return NULL;
 }
 
@@ -90,7 +90,7 @@ digest_init(struct digest_context *const restrict ctx, const unsigned int alg)
 {
 	if (! ctx)
 	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
 		return false;
 	}
 
@@ -101,12 +101,12 @@ digest_init(struct digest_context *const restrict ctx, const unsigned int alg)
 
 	if (! (ctx->ictx = EVP_MD_CTX_create()))
 	{
-		(void) slog(LG_ERROR, "%s: EVP_MD_CTX_create(3): unknown error", __func__);
+		(void) slog(LG_ERROR, "%s: EVP_MD_CTX_create(3): unknown error", MOWGLI_FUNC_NAME);
 		return false;
 	}
 	if (EVP_DigestInit_ex(ctx->ictx, ctx->md, NULL) != 1)
 	{
-		(void) slog(LG_ERROR, "%s: EVP_DigestInit_ex(3): unknown error", __func__);
+		(void) slog(LG_ERROR, "%s: EVP_DigestInit_ex(3): unknown error", MOWGLI_FUNC_NAME);
 		(void) digest_free_internal(ctx);
 		return false;
 	}
@@ -120,7 +120,7 @@ digest_init_hmac(struct digest_context *const restrict ctx, const unsigned int a
 {
 	if (! ctx)
 	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
 		return false;
 	}
 
@@ -133,12 +133,12 @@ digest_init_hmac(struct digest_context *const restrict ctx, const unsigned int a
 
 	if (! (ctx->ictx = HMAC_CTX_new()))
 	{
-		(void) slog(LG_ERROR, "%s: HMAC_CTX_new(3): unknown error", __func__);
+		(void) slog(LG_ERROR, "%s: HMAC_CTX_new(3): unknown error", MOWGLI_FUNC_NAME);
 		return false;
 	}
 	if (HMAC_Init_ex(ctx->ictx, key, (int) keyLen, ctx->md, NULL) != 1)
 	{
-		(void) slog(LG_ERROR, "%s: HMAC_Init_ex(3): unknown error", __func__);
+		(void) slog(LG_ERROR, "%s: HMAC_Init_ex(3): unknown error", MOWGLI_FUNC_NAME);
 		(void) digest_free_internal(ctx);
 		return false;
 	}
@@ -151,17 +151,17 @@ digest_update(struct digest_context *const restrict ctx, const void *const restr
 {
 	if (! ctx)
 	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 	if (! ctx->ictx)
 	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx->ictx' (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with NULL 'ctx->ictx' (BUG)", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 	if ((! data && dataLen) || (data && ! dataLen))
 	{
-		(void) slog(LG_ERROR, "%s: called with mismatched data parameters (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with mismatched data parameters (BUG)", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 
@@ -192,17 +192,17 @@ digest_final(struct digest_context *const restrict ctx, void *const restrict out
 {
 	if (! ctx)
 	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 	if (! ctx->ictx)
 	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx->ictx' (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with NULL 'ctx->ictx' (BUG)", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 	if (! out)
 	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 
@@ -211,7 +211,7 @@ digest_final(struct digest_context *const restrict ctx, void *const restrict out
 
 	if (outLen && *outLen < hLen)
 	{
-		(void) slog(LG_ERROR, "%s: output buffer is too small (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: output buffer is too small (BUG)", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 	else if (outLen)
@@ -248,27 +248,27 @@ digest_pbkdf2_hmac(const unsigned int alg, const void *restrict pass, const size
 {
 	if (! c)
 	{
-		(void) slog(LG_ERROR, "%s: called with zero 'c' (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with zero 'c' (BUG)", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 	if (! dk)
 	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'dk' (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with NULL 'dk' (BUG)", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 	if (! dkLen)
 	{
-		(void) slog(LG_ERROR, "%s: called with zero 'dkLen' (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with zero 'dkLen' (BUG)", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 	if ((! pass && passLen) || (pass && ! passLen))
 	{
-		(void) slog(LG_ERROR, "%s: called with mismatched pass parameters (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with mismatched pass parameters (BUG)", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 	if ((! salt && saltLen) || (salt && ! saltLen))
 	{
-		(void) slog(LG_ERROR, "%s: called with mismatched salt parameters (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with mismatched salt parameters (BUG)", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 

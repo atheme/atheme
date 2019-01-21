@@ -84,7 +84,7 @@ create_weak_challenge(struct sourceinfo *const restrict si, const char *const re
 
 	if (snprintf(result, BUFSIZE, "%" PRIX32 ":%" PRIX32, out[0], out[1]) >= BUFSIZE)
 	{
-		(void) slog(LG_ERROR, "%s: snprintf(3) would have overflowed result buffer (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: snprintf(3) would have overflowed result buffer (BUG)", MOWGLI_FUNC_NAME);
 		return NULL;
 	}
 

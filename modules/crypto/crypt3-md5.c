@@ -18,15 +18,15 @@ atheme_crypt3_md5_selftest(void)
 	static const char password[] = CRYPT3_MODULE_TEST_PASSWORD;
 	static const char parameters[] = CRYPT3_MODULE_TEST_VECTOR_MD5;
 
-	const char *const result = atheme_crypt3_wrapper(password, parameters, __func__);
+	const char *const result = atheme_crypt3_wrapper(password, parameters, MOWGLI_FUNC_NAME);
 
 	if (! result)
 		return false;
 
 	if (strcmp(result, parameters) != 0)
 	{
-		(void) slog(LG_ERROR, "%s: crypt(3) returned an incorrect result", __func__);
-		(void) slog(LG_ERROR, "%s: expected '%s', got '%s'", __func__, parameters, result);
+		(void) slog(LG_ERROR, "%s: crypt(3) returned an incorrect result", MOWGLI_FUNC_NAME);
+		(void) slog(LG_ERROR, "%s: expected '%s', got '%s'", MOWGLI_FUNC_NAME, parameters, result);
 		return false;
 	}
 
@@ -41,28 +41,29 @@ atheme_crypt3_md5_verify(const char *const restrict password, const char *const 
 
 	if (sscanf(parameters, CRYPT3_LOADHASH_FORMAT_MD5, hash) != 1)
 	{
-		(void) slog(LG_DEBUG, "%s: sscanf(3) was unsuccessful", __func__);
+		(void) slog(LG_DEBUG, "%s: sscanf(3) was unsuccessful", MOWGLI_FUNC_NAME);
 		return false;
 	}
 	if (strlen(hash) != CRYPT3_LOADHASH_LENGTH_MD5)
 	{
-		(void) slog(LG_DEBUG, "%s: digest not %u characters long", __func__, CRYPT3_LOADHASH_LENGTH_MD5);
+		(void) slog(LG_DEBUG, "%s: digest not %u characters long", MOWGLI_FUNC_NAME,
+		                      CRYPT3_LOADHASH_LENGTH_MD5);
 		return false;
 	}
 
 	*flags |= PWVERIFY_FLAG_MYMODULE;
 
-	(void) slog(LG_DEBUG, CRYPT3_MODULE_WARNING, __func__);
+	(void) slog(LG_DEBUG, CRYPT3_MODULE_WARNING, MOWGLI_FUNC_NAME);
 
-	const char *const result = atheme_crypt3_wrapper(password, parameters, __func__);
+	const char *const result = atheme_crypt3_wrapper(password, parameters, MOWGLI_FUNC_NAME);
 
 	if (! result)
 		return false;
 
 	if (strcmp(parameters, result) != 0)
 	{
-		(void) slog(LG_DEBUG, "%s: strcmp(3) mismatch, invalid password?", __func__);
-		(void) slog(LG_DEBUG, "%s: expected '%s', got '%s'", __func__, parameters, result);
+		(void) slog(LG_DEBUG, "%s: strcmp(3) mismatch, invalid password?", MOWGLI_FUNC_NAME);
+		(void) slog(LG_DEBUG, "%s: expected '%s', got '%s'", MOWGLI_FUNC_NAME, parameters, result);
 		return false;
 	}
 

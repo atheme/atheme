@@ -41,11 +41,11 @@ email_canonicalize_gmail(char email[static (EMAILLEN + 1)],
 
 	if (mowgli_strlcat(buf, GMAIL_SUFFIX, sizeof buf) >= sizeof buf)
 	{
-		(void) slog(LG_ERROR, "%s: buffer is too short (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: buffer is too short (BUG)", MOWGLI_FUNC_NAME);
 		return;
 	}
 
-	(void) slog(LG_DEBUG, "%s: '%s' -> '%s'", __func__, email, buf);
+	(void) slog(LG_DEBUG, "%s: '%s' -> '%s'", MOWGLI_FUNC_NAME, email, buf);
 	(void) memcpy(email, buf, sizeof buf);
 }
 

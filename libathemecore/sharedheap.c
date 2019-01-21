@@ -31,14 +31,14 @@ sharedheap_find_by_size(const size_t size)
 		if (s->size == size)
 		{
 #ifdef HEAP_DEBUG
-			(void) slog(LG_DEBUG, "%s: %zu --> %p", __func__, size, (void *) s);
+			(void) slog(LG_DEBUG, "%s: %zu --> %p", MOWGLI_FUNC_NAME, size, (void *) s);
 #endif
 			return s;
 		}
 	}
 
 #ifdef HEAP_DEBUG
-	(void) slog(LG_DEBUG, "%s: %zu --> NULL", __func__, size);
+	(void) slog(LG_DEBUG, "%s: %zu --> NULL", MOWGLI_FUNC_NAME, size);
 #endif
 
 	return NULL;
@@ -56,14 +56,14 @@ sharedheap_find_by_heap(mowgli_heap_t *const restrict heap)
 		if (s->heap == heap)
 		{
 #ifdef HEAP_DEBUG
-			(void) slog(LG_DEBUG, "%s: %p --> %p", __func__, (void *) heap, (void *) s);
+			(void) slog(LG_DEBUG, "%s: %p --> %p", MOWGLI_FUNC_NAME, (void *) heap, (void *) s);
 #endif
 			return s;
 		}
 	}
 
 #ifdef HEAP_DEBUG
-	(void) slog(LG_DEBUG, "%s: %p --> NULL", __func__, (void *) heap);
+	(void) slog(LG_DEBUG, "%s: %p --> NULL", MOWGLI_FUNC_NAME, (void *) heap);
 #endif
 
 	return NULL;
@@ -83,7 +83,7 @@ sharedheap_destroy(void *const restrict ptr)
 	(void) sfree(s);
 
 #ifdef HEAP_DEBUG
-	(void) slog(LG_DEBUG, "%s: sharedheap@%p: destroyed (elem_size %zu)", __func__, ptr, elem_size);
+	(void) slog(LG_DEBUG, "%s: sharedheap@%p: destroyed (elem_size %zu)", MOWGLI_FUNC_NAME, ptr, elem_size);
 #endif
 }
 
@@ -106,7 +106,7 @@ sharedheap_prealloc_size(const size_t size)
 #endif
 
 #ifdef HEAP_DEBUG
-	(void) slog(LG_DEBUG, "%s: %zu --> %zu", __func__, size, prealloc_size);
+	(void) slog(LG_DEBUG, "%s: %zu --> %zu", MOWGLI_FUNC_NAME, size, prealloc_size);
 #endif
 
 	return prealloc_size;
@@ -118,7 +118,7 @@ sharedheap_normalize_size(const size_t size)
 	const size_t normalized = ((size / sizeof(void *)) + ((size / sizeof(void *)) % 2U)) * sizeof(void *);
 
 #ifdef HEAP_DEBUG
-	(void) slog(LG_DEBUG, "%s: %zu --> %zu", __func__, size, normalized);
+	(void) slog(LG_DEBUG, "%s: %zu --> %zu", MOWGLI_FUNC_NAME, size, normalized);
 #endif
 
 	return normalized;
@@ -131,7 +131,7 @@ sharedheap_new(const size_t size)
 
 	if (! heap)
 	{
-		(void) slog(LG_ERROR, "%s: mowgli_heap_create() failed!", __func__);
+		(void) slog(LG_ERROR, "%s: mowgli_heap_create() failed!", MOWGLI_FUNC_NAME);
 		return NULL;
 	}
 
@@ -144,7 +144,7 @@ sharedheap_new(const size_t size)
 	s->heap = heap;
 
 #ifdef HEAP_DEBUG
-	(void) slog(LG_DEBUG, "%s: created (elem_size %zu)", __func__, size);
+	(void) slog(LG_DEBUG, "%s: created (elem_size %zu)", MOWGLI_FUNC_NAME, size);
 #endif
 
 	return s;

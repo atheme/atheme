@@ -76,13 +76,13 @@ sasl_scramsha_attrlist_parse(const char *restrict str, scram_attr_list *const re
 		if (name < 'A' || (name > 'Z' && name < 'a') || name > 'z')
 		{
 			// RFC 5802 Section 5: "All attribute names are single US-ASCII letters"
-			(void) slog(LG_DEBUG, "%s: invalid attribute name", __func__);
+			(void) slog(LG_DEBUG, "%s: invalid attribute name", MOWGLI_FUNC_NAME);
 			return false;
 		}
 
 		if ((*attrs)[name])
 		{
-			(void) slog(LG_DEBUG, "%s: duplicated attribute '%c'", __func__, (char) name);
+			(void) slog(LG_DEBUG, "%s: duplicated attribute '%c'", MOWGLI_FUNC_NAME, (char) name);
 			return false;
 		}
 
@@ -93,14 +93,14 @@ sasl_scramsha_attrlist_parse(const char *restrict str, scram_attr_list *const re
 			if (pos)
 			{
 				(*attrs)[name] = sstrndup(str, (size_t) (pos - str));
-				(void) slog(LG_DEBUG, "%s: parsed '%c'='%s'", __func__,
+				(void) slog(LG_DEBUG, "%s: parsed '%c'='%s'", MOWGLI_FUNC_NAME,
 				                      (char) name, (*attrs)[name]);
 				str = pos + 1;
 			}
 			else
 			{
 				(*attrs)[name] = sstrdup(str);
-				(void) slog(LG_DEBUG, "%s: parsed '%c'='%s'", __func__,
+				(void) slog(LG_DEBUG, "%s: parsed '%c'='%s'", MOWGLI_FUNC_NAME,
 				                      (char) name, (*attrs)[name]);
 
 				// Reached end of attribute list
@@ -109,7 +109,7 @@ sasl_scramsha_attrlist_parse(const char *restrict str, scram_attr_list *const re
 		}
 		else
 		{
-			(void) slog(LG_DEBUG, "%s: attribute '%c' without value", __func__, (char) name);
+			(void) slog(LG_DEBUG, "%s: attribute '%c' without value", MOWGLI_FUNC_NAME, (char) name);
 			return false;
 		}
 	}
@@ -136,12 +136,12 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 
 	if (! (in && inlen))
 	{
-		(void) slog(LG_DEBUG, "%s: no data received from client", __func__);
+		(void) slog(LG_DEBUG, "%s: no data received from client", MOWGLI_FUNC_NAME);
 		return ASASL_ERROR;
 	}
 	if (strnlen(in, inlen) != inlen)
 	{
-		(void) slog(LG_DEBUG, "%s: NULL byte in data received from client", __func__);
+		(void) slog(LG_DEBUG, "%s: NULL byte in data received from client", MOWGLI_FUNC_NAME);
 		return ASASL_ERROR;
 	}
 
@@ -153,17 +153,17 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 			break;
 
 		case 'p':
-			(void) slog(LG_DEBUG, "%s: channel binding requested but unsupported", __func__);
+			(void) slog(LG_DEBUG, "%s: channel binding requested but unsupported", MOWGLI_FUNC_NAME);
 			return ASASL_ERROR;
 
 		default:
-			(void) slog(LG_DEBUG, "%s: malformed GS2 header (invalid first byte)", __func__);
+			(void) slog(LG_DEBUG, "%s: malformed GS2 header (invalid first byte)", MOWGLI_FUNC_NAME);
 			return ASASL_ERROR;
 	}
 
 	if (*message++ != ',')
 	{
-		(void) slog(LG_DEBUG, "%s: malformed GS2 header (cbind flag not one letter)", __func__);
+		(void) slog(LG_DEBUG, "%s: malformed GS2 header (cbind flag not one letter)", MOWGLI_FUNC_NAME);
 		return ASASL_ERROR;
 	}
 
@@ -178,7 +178,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 		const char *const pos = strchr(message + 1, ',');
 		if (! pos)
 		{
-			(void) slog(LG_DEBUG, "%s: malformed GS2 header (no end to authzid)", __func__);
+			(void) slog(LG_DEBUG, "%s: malformed GS2 header (no end to authzid)", MOWGLI_FUNC_NAME);
 			return ASASL_ERROR;
 		}
 
@@ -186,7 +186,8 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 		const size_t authzid_length = (size_t) (pos - message);
 		if (authzid_length > NICKLEN)
 		{
-			(void) slog(LG_DEBUG, "%s: unacceptable authzid length '%zu'", __func__, authzid_length);
+			(void) slog(LG_DEBUG, "%s: unacceptable authzid length '%zu'",
+			                      MOWGLI_FUNC_NAME, authzid_length);
 			return ASASL_ERROR;
 		}
 
@@ -197,17 +198,17 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 		// Normalize it
 		if (! pbkdf2v2_scram_functions->normalize(authzid, sizeof authzid))
 		{
-			(void) slog(LG_DEBUG, "%s: SASLprep normalization of authzid failed", __func__);
+			(void) slog(LG_DEBUG, "%s: SASLprep normalization of authzid failed", MOWGLI_FUNC_NAME);
 			return ASASL_ERROR;
 		}
 
 		// Log it
-		(void) slog(LG_DEBUG, "%s: parsed authzid '%s'", __func__, authzid);
+		(void) slog(LG_DEBUG, "%s: parsed authzid '%s'", MOWGLI_FUNC_NAME, authzid);
 
 		// Check it exists and can login
 		if (! sasl_core_functions->authzid_can_login(p, authzid, NULL))
 		{
-			(void) slog(LG_DEBUG, "%s: authzid_can_login failed", __func__);
+			(void) slog(LG_DEBUG, "%s: authzid_can_login failed", MOWGLI_FUNC_NAME);
 			return ASASL_ERROR;
 		}
 
@@ -215,7 +216,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 	}
 	else if (*message++ != ',')
 	{
-		(void) slog(LG_DEBUG, "%s: malformed GS2 header (authzid section not empty)", __func__);
+		(void) slog(LG_DEBUG, "%s: malformed GS2 header (authzid section not empty)", MOWGLI_FUNC_NAME);
 		return ASASL_ERROR;
 	}
 
@@ -227,7 +228,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 
 	if (input['m'] || ! (input['n'] && *input['n'] && input['r'] && *input['r']))
 	{
-		(void) slog(LG_DEBUG, "%s: attribute list unacceptable", __func__);
+		(void) slog(LG_DEBUG, "%s: attribute list unacceptable", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 
@@ -235,7 +236,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 
 	if (nlen < NONCE_LENGTH_MIN || nlen > NONCE_LENGTH_MAX)
 	{
-		(void) slog(LG_DEBUG, "%s: nonce length unacceptable", __func__);
+		(void) slog(LG_DEBUG, "%s: nonce length unacceptable", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 
@@ -244,7 +245,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 
 	if (authcid_length > NICKLEN)
 	{
-		(void) slog(LG_DEBUG, "%s: unacceptable authcid length '%zu'", __func__, authcid_length);
+		(void) slog(LG_DEBUG, "%s: unacceptable authcid length '%zu'", MOWGLI_FUNC_NAME, authcid_length);
 		goto error;
 	}
 
@@ -252,34 +253,34 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 
 	if (! pbkdf2v2_scram_functions->normalize(authcid, sizeof authcid))
 	{
-		(void) slog(LG_DEBUG, "%s: SASLprep normalization of authcid failed", __func__);
+		(void) slog(LG_DEBUG, "%s: SASLprep normalization of authcid failed", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 
-	(void) slog(LG_DEBUG, "%s: parsed authcid '%s'", __func__, authcid);
+	(void) slog(LG_DEBUG, "%s: parsed authcid '%s'", MOWGLI_FUNC_NAME, authcid);
 
 	struct myuser *mu = NULL;
 
 	if (! sasl_core_functions->authcid_can_login(p, authcid, &mu))
 	{
-		(void) slog(LG_DEBUG, "%s: authcid_can_login failed", __func__);
+		(void) slog(LG_DEBUG, "%s: authcid_can_login failed", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 	if (! mu)
 	{
-		(void) slog(LG_ERROR, "%s: authcid_can_login did not set 'mu' (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: authcid_can_login did not set 'mu' (BUG)", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 
 	if (! (mu->flags & MU_CRYPTPASS))
 	{
-		(void) slog(LG_DEBUG, "%s: user's password is not encrypted", __func__);
+		(void) slog(LG_DEBUG, "%s: user's password is not encrypted", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 
 	if (mu->flags & MU_NOPASSWORD)
 	{
-		(void) slog(LG_DEBUG, "%s: user has NOPASSWORD flag set", __func__);
+		(void) slog(LG_DEBUG, "%s: user has NOPASSWORD flag set", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 
@@ -291,7 +292,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 
 	if (db.a != prf)
 	{
-		(void) slog(LG_DEBUG, "%s: PRF ID mismatch: server(%u) != client(%u)", __func__, db.a, prf);
+		(void) slog(LG_DEBUG, "%s: PRF ID mismatch: server(%u) != client(%u)", MOWGLI_FUNC_NAME, db.a, prf);
 		goto error;
 	}
 
@@ -313,7 +314,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 
 	if (ol <= (int)(NONCE_LENGTH + PBKDF2_SALTLEN_MIN + 16) || ol >= (int) sizeof response)
 	{
-		(void) slog(LG_ERROR, "%s: snprintf(3) for server-first-message failed", __func__);
+		(void) slog(LG_ERROR, "%s: snprintf(3) for server-first-message failed", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 
@@ -344,12 +345,12 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 {
 	if (! (in && inlen))
 	{
-		(void) slog(LG_DEBUG, "%s: no data received from client", __func__);
+		(void) slog(LG_DEBUG, "%s: no data received from client", MOWGLI_FUNC_NAME);
 		return ASASL_ERROR;
 	}
 	if (strnlen(in, inlen) != inlen)
 	{
-		(void) slog(LG_DEBUG, "%s: NULL byte in data received from client", __func__);
+		(void) slog(LG_DEBUG, "%s: NULL byte in data received from client", MOWGLI_FUNC_NAME);
 		return ASASL_ERROR;
 	}
 
@@ -361,7 +362,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 
 	if (input['m'] || ! (input['c'] && *input['c'] && input['p'] && *input['p'] && input['r'] && *input['r']))
 	{
-		(void) slog(LG_DEBUG, "%s: attribute list unacceptable", __func__);
+		(void) slog(LG_DEBUG, "%s: attribute list unacceptable", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 
@@ -370,12 +371,12 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	const int xl = snprintf(x_nonce, sizeof x_nonce, "%s%s", s->cn, s->sn);
 	if (xl <= (int) NONCE_LENGTH || xl >= (int) sizeof x_nonce)
 	{
-		(void) slog(LG_ERROR, "%s: snprintf(3) for concatenated salts failed (BUG?)", __func__);
+		(void) slog(LG_ERROR, "%s: snprintf(3) for concatenated salts failed (BUG?)", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 	if (strcmp(x_nonce, input['r']) != 0)
 	{
-		(void) slog(LG_DEBUG, "%s: nonce sent by client doesn't match nonce we sent", __func__);
+		(void) slog(LG_DEBUG, "%s: nonce sent by client doesn't match nonce we sent", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 
@@ -384,12 +385,12 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	const size_t c_gs2_len = base64_decode(input['c'], c_gs2_buf, sizeof c_gs2_buf);
 	if (c_gs2_len == (size_t) -1)
 	{
-		(void) slog(LG_DEBUG, "%s: base64_decode() for GS2 header failed", __func__);
+		(void) slog(LG_DEBUG, "%s: base64_decode() for GS2 header failed", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 	if (c_gs2_len != s->c_gs2_len || memcmp(s->c_gs2_buf, c_gs2_buf, c_gs2_len) != 0)
 	{
-		(void) slog(LG_DEBUG, "%s: GS2 header mismatch", __func__);
+		(void) slog(LG_DEBUG, "%s: GS2 header mismatch", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 
@@ -397,7 +398,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	unsigned char ClientProof[DIGEST_MDLEN_MAX];
 	if (base64_decode(input['p'], ClientProof, sizeof ClientProof) != s->db.dl)
 	{
-		(void) slog(LG_DEBUG, "%s: base64_decode() for ClientProof failed", __func__);
+		(void) slog(LG_DEBUG, "%s: base64_decode() for ClientProof failed", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 
@@ -408,7 +409,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 
 	if (alen <= (int) NONCE_LENGTH || alen >= (int) sizeof AuthMessage)
 	{
-		(void) slog(LG_ERROR, "%s: snprintf(3) for AuthMessage failed (BUG?)", __func__);
+		(void) slog(LG_ERROR, "%s: snprintf(3) for AuthMessage failed (BUG?)", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 
@@ -416,7 +417,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	unsigned char ClientSignature[DIGEST_MDLEN_MAX];
 	if (! digest_oneshot_hmac(s->db.md, s->db.shk, s->db.dl, AuthMessage, (size_t) alen, ClientSignature, NULL))
 	{
-		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac() for ClientSignature failed", __func__);
+		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac() for ClientSignature failed", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 
@@ -429,14 +430,14 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	unsigned char StoredKey[DIGEST_MDLEN_MAX];
 	if (! digest_oneshot(s->db.md, ClientKey, s->db.dl, StoredKey, NULL))
 	{
-		(void) slog(LG_ERROR, "%s: digest_oneshot() for StoredKey failed", __func__);
+		(void) slog(LG_ERROR, "%s: digest_oneshot() for StoredKey failed", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 
 	// Check computed StoredKey matches the database StoredKey
 	if (memcmp(StoredKey, s->db.shk, s->db.dl) != 0)
 	{
-		(void) slog(LG_DEBUG, "%s: memcmp(3) mismatch on StoredKey; incorrect password?", __func__);
+		(void) slog(LG_DEBUG, "%s: memcmp(3) mismatch on StoredKey; incorrect password?", MOWGLI_FUNC_NAME);
 		goto fail;
 	}
 
@@ -448,7 +449,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	unsigned char ServerSignature[DIGEST_MDLEN_MAX];
 	if (! digest_oneshot_hmac(s->db.md, s->db.ssk, s->db.dl, AuthMessage, (size_t) alen, ServerSignature, NULL))
 	{
-		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac() for ServerSignature failed", __func__);
+		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac() for ServerSignature failed", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 
@@ -458,7 +459,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 
 	if (rs == (size_t) -1)
 	{
-		(void) slog(LG_ERROR, "%s: base64_encode() for ServerSignature failed", __func__);
+		(void) slog(LG_ERROR, "%s: base64_encode() for ServerSignature failed", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 
@@ -503,7 +504,8 @@ mech_step_success(const struct scramsha_session *const restrict s)
 	 * from the provided plaintext password and compare it to the stored ServerKey.
 	 */
 
-	(void) slog(LG_INFO, "%s: login succeeded, attempting to convert user's hash to SCRAM format", __func__);
+	(void) slog(LG_INFO, "%s: login succeeded, attempting to convert user's hash to SCRAM format",
+	                     MOWGLI_FUNC_NAME);
 
 	char csk64[DIGEST_MDLEN_MAX * 3];
 	char chk64[DIGEST_MDLEN_MAX * 3];
@@ -511,24 +513,24 @@ mech_step_success(const struct scramsha_session *const restrict s)
 
 	if (base64_encode(s->db.ssk, s->db.dl, csk64, sizeof csk64) == (size_t) -1)
 	{
-		(void) slog(LG_ERROR, "%s: base64_encode for ssk failed", __func__);
+		(void) slog(LG_ERROR, "%s: base64_encode for ssk failed", MOWGLI_FUNC_NAME);
 	}
 	else if (base64_encode(s->db.shk, s->db.dl, chk64, sizeof chk64) == (size_t) -1)
 	{
-		(void) slog(LG_ERROR, "%s: base64_encode for shk failed", __func__);
+		(void) slog(LG_ERROR, "%s: base64_encode for shk failed", MOWGLI_FUNC_NAME);
 	}
 	else if (snprintf(res, sizeof res, PBKDF2_FS_SAVEHASH, s->db.a, s->db.c, s->db.salt64, csk64, chk64) > PASSLEN)
 	{
-		(void) slog(LG_ERROR, "%s: snprintf(3) would have overflowed result buffer (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: snprintf(3) would have overflowed result buffer (BUG)", MOWGLI_FUNC_NAME);
 	}
 	else if (strlen(res) < (sizeof(PBKDF2_FS_SAVEHASH) + PBKDF2_SALTLEN_MIN + (2 * s->db.dl)))
 	{
-		(void) slog(LG_ERROR, "%s: snprintf(3) didn't write enough data (BUG?)", __func__);
+		(void) slog(LG_ERROR, "%s: snprintf(3) didn't write enough data (BUG?)", MOWGLI_FUNC_NAME);
 	}
 	else
 	{
 		(void) mowgli_strlcpy(s->mu->pass, res, sizeof s->mu->pass);
-		(void) slog(LG_DEBUG, "%s: succeeded", __func__);
+		(void) slog(LG_DEBUG, "%s: succeeded", MOWGLI_FUNC_NAME);
 	}
 
 	return ASASL_DONE;
@@ -625,13 +627,13 @@ sasl_scramsha_pbkdf2v2_confhook(const unsigned int prf, const unsigned int iter,
 	if (! ci_default)
 	{
 		(void) slog(LG_ERROR, "%s: %s is apparently loaded but no crypto provider is available (BUG)",
-		                      __func__, PBKDF2V2_CRYPTO_MODULE_NAME);
+		                      MOWGLI_FUNC_NAME, PBKDF2V2_CRYPTO_MODULE_NAME);
 	}
 	else if (strcmp(ci_default->id, "pbkdf2v2") != 0)
 	{
 		(void) slog(LG_INFO, "%s: %s is not the default crypto provider, PLEASE INVESTIGATE THIS! "
 		                     "Newly registered users, and users who change their passwords, will not "
-		                     "be able to login with this module until this is rectified.", __func__,
+		                     "be able to login with this module until this is rectified.", MOWGLI_FUNC_NAME,
 		                     PBKDF2V2_CRYPTO_MODULE_NAME);
 	}
 
@@ -649,13 +651,14 @@ sasl_scramsha_pbkdf2v2_confhook(const unsigned int prf, const unsigned int iter,
 
 		default:
 			(void) slog(LG_ERROR, "%s: pbkdf2v2::digest is not set to a supported value -- "
-			                      "this module will not do anything", __func__);
+			                      "this module will not do anything", MOWGLI_FUNC_NAME);
 			return;
 	}
 
 	if (iter > CYRUS_SASL_ITERMAX)
 		(void) slog(LG_INFO, "%s: iteration count (%u) is higher than Cyrus SASL library maximum (%u) -- "
-		                     "client logins may fail if they use Cyrus", __func__, iter, CYRUS_SASL_ITERMAX);
+		                     "client logins may fail if they use Cyrus", MOWGLI_FUNC_NAME, iter,
+		                     CYRUS_SASL_ITERMAX);
 }
 
 static void

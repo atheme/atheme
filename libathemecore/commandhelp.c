@@ -59,7 +59,7 @@ help_evaluate_condition(struct sourceinfo *const restrict si, const char *restri
 
 	if (! *str)
 	{
-		(void) slog(LG_DEBUG, "%s: empty condition", __func__);
+		(void) slog(LG_DEBUG, "%s: empty condition", MOWGLI_FUNC_NAME);
 		return false;
 	}
 
@@ -107,7 +107,7 @@ help_evaluate_condition(struct sourceinfo *const restrict si, const char *restri
 	if (strcasecmp(condition, "protect") == 0)
 		return ircd->uses_protect;
 
-	(void) slog(LG_DEBUG, "%s: unrecognised condition '%s' (string '%s')", __func__, condition, str);
+	(void) slog(LG_DEBUG, "%s: unrecognised condition '%s' (string '%s')", MOWGLI_FUNC_NAME, condition, str);
 	return false;
 }
 
@@ -123,7 +123,7 @@ help_display_path(struct sourceinfo *const restrict si, const char *const restri
 		(void) mowgli_strlcpy(fullpath, path, sizeof fullpath);
 
 		if (! (fh = fopen(fullpath, "r")))
-			(void) slog(LG_DEBUG, "%s: fopen('%s'): %s", __func__, fullpath, strerror(errno));
+			(void) slog(LG_DEBUG, "%s: fopen('%s'): %s", MOWGLI_FUNC_NAME, fullpath, strerror(errno));
 	}
 	else
 	{
@@ -144,7 +144,8 @@ help_display_path(struct sourceinfo *const restrict si, const char *const restri
 			(void) snprintf(fullpath, sizeof fullpath, "%s/help/%s/%s", SHAREDIR, lang, subname);
 
 			if (! (fh = fopen(fullpath, "r")))
-				(void) slog(LG_DEBUG, "%s: fopen('%s'): %s", __func__, fullpath, strerror(errno));
+				(void) slog(LG_DEBUG, "%s: fopen('%s'): %s", MOWGLI_FUNC_NAME,
+				                      fullpath, strerror(errno));
 		}
 
 		if (! fh)
@@ -152,7 +153,8 @@ help_display_path(struct sourceinfo *const restrict si, const char *const restri
 			(void) snprintf(fullpath, sizeof fullpath, "%s/help/%s", SHAREDIR, subname);
 
 			if (! (fh = fopen(fullpath, "r")))
-				(void) slog(LG_DEBUG, "%s: fopen('%s'): %s", __func__, fullpath, strerror(errno));
+				(void) slog(LG_DEBUG, "%s: fopen('%s'): %s", MOWGLI_FUNC_NAME,
+				                      fullpath, strerror(errno));
 		}
 	}
 
@@ -211,7 +213,7 @@ help_display_path(struct sourceinfo *const restrict si, const char *const restri
 	}
 
 	if (ferror(fh))
-		(void) slog(LG_DEBUG, "%s: fgets('%s'): %s", __func__, fullpath, strerror(errno));
+		(void) slog(LG_DEBUG, "%s: fgets('%s'): %s", MOWGLI_FUNC_NAME, fullpath, strerror(errno));
 
 	(void) fclose(fh);
 

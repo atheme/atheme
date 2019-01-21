@@ -406,14 +406,15 @@ blake2b_selftest(void)
 
 			if (!blake2b_init(&state, sizeof result, key, sizeof key))
 			{
-				(void) slog(LG_ERROR, "%s: blake2b_init() failed", __func__);
+				(void) slog(LG_ERROR, "%s: blake2b_init() failed", MOWGLI_FUNC_NAME);
 				return false;
 			}
 			while (mlen >= step)
 			{
 				if (!blake2b_update(&state, p, step))
 				{
-					(void) slog(LG_ERROR, "%s: blake2b_update() [inner loop] failed", __func__);
+					(void) slog(LG_ERROR, "%s: blake2b_update() [inner loop] failed",
+					                      MOWGLI_FUNC_NAME);
 					return false;
 				}
 
@@ -422,17 +423,17 @@ blake2b_selftest(void)
 			}
 			if (!blake2b_update(&state, p, mlen))
 			{
-				(void) slog(LG_ERROR, "%s: blake2b_update() [outer loop] failed", __func__);
+				(void) slog(LG_ERROR, "%s: blake2b_update() [outer loop] failed", MOWGLI_FUNC_NAME);
 				return false;
 			}
 			if (!blake2b_final(&state, result))
 			{
-				(void) slog(LG_ERROR, "%s: blake2b_final() failed", __func__);
+				(void) slog(LG_ERROR, "%s: blake2b_final() failed", MOWGLI_FUNC_NAME);
 				return false;
 			}
 			if (memcmp(blake2b_keyed_kat[i], result, sizeof result) != 0)
 			{
-				(void) slog(LG_ERROR, "%s: memcmp(3) mismatch", __func__);
+				(void) slog(LG_ERROR, "%s: memcmp(3) mismatch", MOWGLI_FUNC_NAME);
 				return false;
 			}
 		}

@@ -85,7 +85,7 @@ atheme_random_buf(void *const restrict out, const size_t len)
 
 	if (RAND_bytes(out, (const int) len) != 1)
 	{
-		(void) slog(LG_ERROR, "%s: RAND_bytes(3): %s", __func__, atheme_openssl_get_strerror());
+		(void) slog(LG_ERROR, "%s: RAND_bytes(3): %s", MOWGLI_FUNC_NAME, atheme_openssl_get_strerror());
 		exit(EXIT_FAILURE);
 	}
 }

@@ -33,12 +33,12 @@ digest_oneshot(const unsigned int alg, const void *const restrict data, const si
 {
 	if (! out)
 	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", MOWGLI_FUNC_NAME);
 		return false;
 	}
 	if ((! data && dataLen) || (data && ! dataLen))
 	{
-		(void) slog(LG_ERROR, "%s: called with mismatched data parameters (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with mismatched data parameters (BUG)", MOWGLI_FUNC_NAME);
 		return false;
 	}
 
@@ -64,17 +64,17 @@ digest_oneshot_hmac(const unsigned int alg, const void *const restrict key, cons
 {
 	if (! out)
 	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", MOWGLI_FUNC_NAME);
 		return false;
 	}
 	if ((! key && keyLen) || (key && ! keyLen))
 	{
-		(void) slog(LG_ERROR, "%s: called with mismatched key parameters (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with mismatched key parameters (BUG)", MOWGLI_FUNC_NAME);
 		return false;
 	}
 	if ((! data && dataLen) || (data && ! dataLen))
 	{
-		(void) slog(LG_ERROR, "%s: called with mismatched data parameters (BUG)", __func__);
+		(void) slog(LG_ERROR, "%s: called with mismatched data parameters (BUG)", MOWGLI_FUNC_NAME);
 		return false;
 	}
 
