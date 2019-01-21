@@ -16,7 +16,7 @@
 #include "atheme.h"
 
 bool auth_module_loaded = false;
-bool (*auth_user_custom)(struct myuser *mu, const char *password);
+bool (*auth_user_custom)(struct myuser *mu, const char *password) ATHEME_FATTR_WUR;
 
 void
 set_password(struct myuser *const restrict mu, const char *const restrict password)
@@ -42,7 +42,7 @@ set_password(struct myuser *const restrict mu, const char *const restrict passwo
 	}
 }
 
-bool
+bool ATHEME_FATTR_WUR
 verify_password(struct myuser *const restrict mu, const char *const restrict password)
 {
 	if (! mu || ! password)
