@@ -28,6 +28,9 @@
 /* Front-end for RNG interface */
 #undef ATHEME_RANDOM_FRONTEND
 
+/* Disable heap allocator */
+#undef DISABLE_HEAP_ALLOCATOR
+
 /* Enable contrib modules */
 #undef ENABLE_CONTRIB_MODULES
 

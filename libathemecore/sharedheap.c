@@ -3,7 +3,7 @@
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
  * Copyright (C) 2011-2012 William Pitcock <nenolod@dereferenced.org>
- * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ * Copyright (C) 2018-2019 Atheme Development Group (https://atheme.github.io/)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,6 +14,8 @@
  */
 
 #include "atheme.h"
+
+#ifndef DISABLE_HEAP_ALLOCATOR
 
 static mowgli_list_t sharedheap_list;
 
@@ -27,8 +29,17 @@ sharedheap_find_by_size(const size_t size)
 		struct sharedheap *const s = n->data;
 
 		if (s->size == size)
+		{
+#ifdef HEAP_DEBUG
+			(void) slog(LG_DEBUG, "%s: %zu --> %p", __func__, size, (void *) s);
+#endif
 			return s;
+		}
 	}
+
+#ifdef HEAP_DEBUG
+	(void) slog(LG_DEBUG, "%s: %zu --> NULL", __func__, size);
+#endif
 
 	return NULL;
 }
@@ -43,8 +54,17 @@ sharedheap_find_by_heap(mowgli_heap_t *const restrict heap)
 		struct sharedheap *const s = n->data;
 
 		if (s->heap == heap)
+		{
+#ifdef HEAP_DEBUG
+			(void) slog(LG_DEBUG, "%s: %p --> %p", __func__, (void *) heap, (void *) s);
+#endif
 			return s;
+		}
 	}
+
+#ifdef HEAP_DEBUG
+	(void) slog(LG_DEBUG, "%s: %p --> NULL", __func__, (void *) heap);
+#endif
 
 	return NULL;
 }
@@ -56,9 +76,15 @@ sharedheap_destroy(void *const restrict ptr)
 
 	struct sharedheap *const s = ptr;
 
+	const size_t elem_size = s->size;
+
 	(void) mowgli_node_delete(&s->node, &sharedheap_list);
 	(void) mowgli_heap_destroy(s->heap);
 	(void) sfree(s);
+
+#ifdef HEAP_DEBUG
+	(void) slog(LG_DEBUG, "%s: sharedheap@%p: destroyed (elem_size %zu)", __func__, ptr, elem_size);
+#endif
 }
 
 static inline size_t
@@ -79,6 +105,10 @@ sharedheap_prealloc_size(const size_t size)
 	const size_t prealloc_size = (page_size / size) * 4U;
 #endif
 
+#ifdef HEAP_DEBUG
+	(void) slog(LG_DEBUG, "%s: %zu --> %zu", __func__, size, prealloc_size);
+#endif
+
 	return prealloc_size;
 }
 
@@ -87,7 +117,9 @@ sharedheap_normalize_size(const size_t size)
 {
 	const size_t normalized = ((size / sizeof(void *)) + ((size / sizeof(void *)) % 2U)) * sizeof(void *);
 
+#ifdef HEAP_DEBUG
 	(void) slog(LG_DEBUG, "%s: %zu --> %zu", __func__, size, normalized);
+#endif
 
 	return normalized;
 }
@@ -99,7 +131,7 @@ sharedheap_new(const size_t size)
 
 	if (! heap)
 	{
-		(void) slog(LG_DEBUG, "%s: mowgli_heap_create() failed!", __func__);
+		(void) slog(LG_ERROR, "%s: mowgli_heap_create() failed!", __func__);
 		return NULL;
 	}
 
@@ -110,6 +142,10 @@ sharedheap_new(const size_t size)
 
 	s->size = size;
 	s->heap = heap;
+
+#ifdef HEAP_DEBUG
+	(void) slog(LG_DEBUG, "%s: created (elem_size %zu)", __func__, size);
+#endif
 
 	return s;
 }
@@ -140,3 +176,26 @@ sharedheap_unref(mowgli_heap_t *const restrict heap)
 
 	(void) atheme_object_unref(s);
 }
+
+#else /* !DISABLE_HEAP_ALLOCATOR */
+
+mowgli_heap_t *
+sharedheap_get(const size_t size)
+{
+	mowgli_heap_t *const heap = mowgli_heap_create(size, 2, BH_NOW);
+
+	if (! heap)
+		return NULL;
+
+	return heap;
+}
+
+void
+sharedheap_unref(mowgli_heap_t *const restrict heap)
+{
+	return_if_fail(heap != NULL);
+
+	(void) mowgli_heap_destroy(heap);
+}
+
+#endif /* DISABLE_HEAP_ALLOCATOR */

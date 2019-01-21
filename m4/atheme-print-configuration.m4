@@ -52,6 +52,7 @@ Configuration of ${PACKAGE_STRING}:
 
     Contrib Modules .........: ${CONTRIB_MODULES}
     Debugging Support .......: ${DEBUGGING}
+    Heap Allocator ..........: ${HEAP_ALLOCATOR}
     Internationalization ....: ${USE_GETTEXT}
     Large Network Support ...: ${LARGE_NET}
     Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}

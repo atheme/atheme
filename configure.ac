@@ -154,6 +154,7 @@ ATHEME_LIBTEST_PERL
 dnl Optional features
 ATHEME_FEATURETEST_CONTRIB
 ATHEME_FEATURETEST_FHSPATHS
+ATHEME_FEATURETEST_HEAP_ALLOCATOR
 ATHEME_FEATURETEST_LARGENET
 ATHEME_FEATURETEST_LEGACY_PWCRYPTO
 ATHEME_FEATURETEST_REPROBUILDS
@@ -201,16 +202,8 @@ AS_IF([test "x${MOWGLI_SOURCE}" = "xInternal"], [
 
 	dnl Run ./configure in the libmowgli submodule directory but without OpenSSL support
 	dnl Atheme does not use the OpenSSL VIO interface in Mowgli and this avoids an unnecessary -lssl
-	dnl
-	dnl I can't figure out M4 lists to figure out how to do this optional --disable-heap-allocator
-	dnl   argument in a nicer manner.  -- amdj
-	dnl
 
-	AS_IF([test "${enable_sodium_malloc}" = "yes"], [
-		AX_SUBDIRS_CONFIGURE([libmowgli-2], [[--without-openssl], [--disable-heap-allocator]], [[]], [[]], [[--with-openssl], [--with-openssl=auto], [--with-openssl=yes]])
-	], [
-		AX_SUBDIRS_CONFIGURE([libmowgli-2], [[--without-openssl]], [[]], [[]], [[--with-openssl], [--with-openssl=auto], [--with-openssl=yes]])
-	])
+	AX_SUBDIRS_CONFIGURE([libmowgli-2], [[--without-openssl]], [[]], [[]], [[--with-openssl], [--with-openssl=auto], [--with-openssl=yes]])
 ])
 
 AC_CONFIG_FILES([
