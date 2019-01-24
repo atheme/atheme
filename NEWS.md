@@ -136,7 +136,9 @@ Build System
 
 Password Cryptography
 ---------------------
-- Crypto modules no longer need OpenSSL (or any crypto library)
+- The existing crypto modules no longer need OpenSSL (or any crypto library)
+- Add support for scrypt password verifying with `modules/crypto/sodium-scrypt`
+  This requires libsodium. It is a verify-only module.
 - `libathemecore/crypto.c`: log current crypto provider on mod(un/re)load
 - `libathemecore/crypto.c`: rip out plaintext fallback implementation
 - Make old modules (`ircservices`, `pbkdf2`, `rawmd5`, `rawsha1`) verify-only

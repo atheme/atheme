@@ -13,6 +13,7 @@ SRCS =					\
 	pbkdf2.c			\
 	pbkdf2v2.c			\
 	posix.c				\
+	sodium-scrypt.c			\
 	$(LEGACY_PWCRYPTO_COND_C)
 
 include ../../extra.mk
@@ -21,5 +22,5 @@ include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include -I.
 LDFLAGS		+= -L../../libathemecore
-CFLAGS		+= $(LIBCRYPTO_CFLAGS) $(LIBIDN_CFLAGS)
-LIBS 		+= $(LIBCRYPTO_LIBS) $(LIBIDN_LIBS) $(LIBCRYPT_LIBS) -lathemecore
+CFLAGS		+= $(LIBCRYPTO_CFLAGS) $(LIBIDN_CFLAGS) $(LIBSODIUM_CFLAGS)
+LIBS 		+= $(LIBCRYPTO_LIBS) $(LIBIDN_LIBS) $(LIBSODIUM_LIBS) $(LIBCRYPT_LIBS) -lathemecore

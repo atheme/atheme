@@ -4,9 +4,10 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 	LIBSODIUMMEMORY="No"
 	LIBSODIUMMEMZERO="No"
 	LIBSODIUMRNG="No"
+	LIBSODIUMSCRYPT="No"
 
 	AC_ARG_WITH([sodium],
-		[AS_HELP_STRING([--without-sodium], [Do not attempt to detect libsodium for secure memory ops])],
+		[AS_HELP_STRING([--without-sodium], [Do not attempt to detect libsodium (cryptographic library)])],
 		[], [with_sodium="auto"])
 
 	case "x${with_sodium}" in
@@ -112,7 +113,30 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 				LIBSODIUMRNG="No"
 			], [])
 
-			AS_IF([test "${LIBSODIUMMEMORY}${LIBSODIUMMEMZERO}${LIBSODIUMRNG}" = "NoNoNo"], [
+			AC_CHECK_HEADERS([sodium/crypto_pwhash_scryptsalsa208sha256.h], [
+				AC_MSG_CHECKING([if libsodium has a usable scrypt password hash generator])
+				AC_LINK_IFELSE([
+					AC_LANG_PROGRAM([[
+						#include <stddef.h>
+						#include <sodium/crypto_pwhash_scryptsalsa208sha256.h>
+					]], [[
+						const unsigned long long int opslimit = crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN;
+						const size_t memlimit = crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MIN;
+						(void) crypto_pwhash_scryptsalsa208sha256_str_needs_rehash(NULL, 0, 0);
+						(void) crypto_pwhash_scryptsalsa208sha256_str_verify(NULL, NULL, 0);
+					]])
+				], [
+					AC_MSG_RESULT([yes])
+					LIBSODIUMSCRYPT="Yes"
+				], [
+					AC_MSG_RESULT([no])
+					LIBSODIUMSCRYPT="No"
+				])
+			], [
+				LIBSODIUMSCRYPT="No"
+			], [])
+
+			AS_IF([test "${LIBSODIUMMEMORY}${LIBSODIUMMEMZERO}${LIBSODIUMRNG}${LIBSODIUMSCRYPT}" = "NoNoNoNo"], [
 				LIBSODIUM="No"
 				AS_IF([test "${with_sodium}" = "yes"], [
 					AC_MSG_FAILURE([--with-sodium was specified but libsodium appears to be unusable])
@@ -120,7 +144,10 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 			], [
 				AC_DEFINE([HAVE_LIBSODIUM], [1], [Define to 1 if libsodium is available])
 				AS_IF([test "${LIBSODIUMMEMZERO}" = "Yes"], [
-					AC_DEFINE([HAVE_LIBSODIUM_MEMZERO], [1], [libsodium memzero is available])
+					AC_DEFINE([HAVE_LIBSODIUM_MEMZERO], [1], [Define to 1 if libsodium memzero is available])
+				])
+				AS_IF([test "${LIBSODIUMSCRYPT}" = "Yes"], [
+					AC_DEFINE([HAVE_LIBSODIUM_SCRYPT], [1], [Define to 1 if libsodium scrypt is available])
 				])
 			])
 		], [

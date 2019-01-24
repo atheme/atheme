@@ -140,8 +140,11 @@
 /* Define to 1 if libsodium is available */
 #undef HAVE_LIBSODIUM
 
-/* libsodium memzero is available */
+/* Define to 1 if libsodium memzero is available */
 #undef HAVE_LIBSODIUM_MEMZERO
+
+/* Define to 1 if libsodium scrypt is available */
+#undef HAVE_LIBSODIUM_SCRYPT
 
 /* Define to 1 if you have the <link.h> header file. */
 #undef HAVE_LINK_H
@@ -235,6 +238,10 @@
 
 /* Define to 1 if you have the <sodium/core.h> header file. */
 #undef HAVE_SODIUM_CORE_H
+
+/* Define to 1 if you have the <sodium/crypto_pwhash_scryptsalsa208sha256.h>
+   header file. */
+#undef HAVE_SODIUM_CRYPTO_PWHASH_SCRYPTSALSA208SHA256_H
 
 /* Define to 1 if you have the <sodium/randombytes.h> header file. */
 #undef HAVE_SODIUM_RANDOMBYTES_H
