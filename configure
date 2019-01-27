@@ -2548,11 +2548,16 @@ fi
 if test "x${prefix}" = "xNONE"; then :
   prefix="${ac_default_prefix}"
 fi
-if test -z "${CFLAGS}"; then :
-  CFLAGS=""
-fi
-if test -z "${CPPFLAGS}"; then :
-  CPPFLAGS=""
+
+if test "x${CFLAGS+set}" = "xset"; then :
+
+	CFLAGS_WAS_SET="yes"
+
+else
+
+	CFLAGS_WAS_SET="no"
+	CFLAGS=""
+
 fi
 
 
@@ -12132,7 +12137,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 			if test "${ATHEME_CC_TEST_CFLAGS_RESULT}" = "no"; then :
 
-
 				as_fn_error $? "--enable-debugging requires compiler support for -O0 -g" "$LINENO" 5
 
 fi
@@ -12143,6 +12147,8 @@ $as_echo "#define ATHEME_DEBUGGING 1" >>confdefs.h
 			DEBUGGING="Yes"
 			;;
 		xno)
+			if test "${CFLAGS_WAS_SET}" = "no"; then :
+
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -O2 " >&5
 $as_echo_n "checking for C compiler flag(s) -O2 ... " >&6; }
@@ -12183,6 +12189,50 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 		unset CFLAGS_SAVED
 
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -g " >&5
+$as_echo_n "checking for C compiler flag(s) -g ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -g"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+
+fi
 
 			DEBUGGING="No"
 			;;
