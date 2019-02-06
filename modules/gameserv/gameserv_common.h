@@ -6,7 +6,7 @@
  * Copyright (C) 2006-2007 Jilles Tjoelker <jilles@stack.nl>
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_MOD_GAMESERV_GAMESERV_COMMON_H
 #define ATHEME_MOD_GAMESERV_GAMESERV_COMMON_H 1

@@ -7,7 +7,7 @@
  * groupserv_common.h - group services common definitions
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_MOD_GROUPSERV_MAIN_GROUPSERV_COMMON_H
 #define ATHEME_MOD_GROUPSERV_MAIN_GROUPSERV_COMMON_H 1

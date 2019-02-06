@@ -13,7 +13,7 @@
 #include "pbkdf2v2.h"
 
 #ifdef HAVE_LIBIDN
-#include <stringprep.h>
+#  include <stringprep.h>
 #endif /* HAVE_LIBIDN */
 
 static mowgli_list_t pbkdf2v2_conf_table;

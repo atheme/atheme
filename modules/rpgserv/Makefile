@@ -12,4 +12,4 @@ include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include
 LDFLAGS		+= -L../../libathemecore
-LIBS		+= -lathemecore -lm
+LIBS		+= -lathemecore

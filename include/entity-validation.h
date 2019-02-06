@@ -7,8 +7,12 @@
  * entity-validation.h - entity validation
  */
 
+#include "stdheaders.h"
+
 #ifndef ATHEME_INC_ENTITY_VALIDATION_H
 #define ATHEME_INC_ENTITY_VALIDATION_H 1
+
+#include "structures.h"
 
 struct entity_chanacs_validation_vtable
 {

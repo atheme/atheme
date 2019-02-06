@@ -7,12 +7,10 @@
  * Object management.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_OBJECT_H
 #define ATHEME_INC_OBJECT_H 1
-
-#include <mowgli.h>
 
 #include "common.h"
 

@@ -7,13 +7,10 @@
  * Datastream query stuff.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_DATASTREAM_H
 #define ATHEME_INC_DATASTREAM_H 1
-
-#include <stdbool.h>
-#include <stddef.h>
 
 #include "structures.h"
 

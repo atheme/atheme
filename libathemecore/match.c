@@ -15,10 +15,8 @@
 
 #include "atheme.h"
 
-#include <regex.h>
-
 #ifdef HAVE_LIBPCRE
-#include <pcre.h>
+#  include <pcre.h>
 #endif
 
 #define BadPtr(x) (!(x) || (*(x) == '\0'))

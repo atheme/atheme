@@ -7,12 +7,10 @@
  * A hook system.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_HOOK_H
 #define ATHEME_INC_HOOK_H 1
-
-#include <mowgli.h>
 
 #include "common.h"
 #include "structures.h"

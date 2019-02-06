@@ -7,12 +7,10 @@
  * Generic HTTP server
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_HTTPD_H
 #define ATHEME_INC_HTTPD_H 1
-
-#include <stdbool.h>
 
 #include "structures.h"
 

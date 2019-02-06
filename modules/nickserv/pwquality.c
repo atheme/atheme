@@ -13,7 +13,6 @@
 #ifdef HAVE_ANY_PASSWORD_QUALITY_LIBRARY
 
 #ifdef HAVE_CRACKLIB
-#  include <sys/stat.h>
 #  include <crack.h>
 #endif /* HAVE_CRACKLIB */
 

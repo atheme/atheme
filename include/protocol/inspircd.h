@@ -5,8 +5,6 @@
  * Copyright (C) 2005 Atheme Project (http://atheme.org/)
  */
 
-#include "sysconf.h"
-
 #ifndef ATHEME_INC_PROTOCOL_INSPIRCD_H
 #define ATHEME_INC_PROTOCOL_INSPIRCD_H 1
 

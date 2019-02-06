@@ -21,8 +21,12 @@ AC_DEFUN([ATHEME_DECIDE_RANDOM_FRONTEND], [
 		AC_MSG_CHECKING([if arc4random(3) is usable])
 		AC_LINK_IFELSE([
 			AC_LANG_PROGRAM([[
-				#include <stddef.h>
-				#include <stdlib.h>
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#ifdef HAVE_STDLIB_H
+				#  include <stdlib.h>
+				#endif
 			]], [[
 				(void) arc4random();
 				(void) arc4random_uniform(0);
@@ -64,9 +68,15 @@ AC_DEFUN([ATHEME_DECIDE_RANDOM_FRONTEND], [
 		AC_MSG_CHECKING([if getentropy(3) is available])
 		AC_LINK_IFELSE([
 			AC_LANG_PROGRAM([[
-				#include <stddef.h>
-				#include <stdlib.h>
-				#include <unistd.h>
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#ifdef HAVE_STDLIB_H
+				#  include <stdlib.h>
+				#endif
+				#ifdef HAVE_UNISTD_H
+				#  include <unistd.h>
+				#endif
 			]], [[
 				(void) getentropy(NULL, 0);
 			]])
@@ -78,7 +88,9 @@ AC_DEFUN([ATHEME_DECIDE_RANDOM_FRONTEND], [
 			AC_MSG_CHECKING([if getrandom(2) is available])
 			AC_LINK_IFELSE([
 				AC_LANG_PROGRAM([[
-					#include <stddef.h>
+					#ifdef HAVE_STDDEF_H
+					#  include <stddef.h>
+					#endif
 					#include <sys/random.h>
 				]], [[
 					(void) getrandom(NULL, 0, 0);

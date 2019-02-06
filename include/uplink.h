@@ -8,14 +8,10 @@
  * Modules usually don't need this.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_UPLINK_H
 #define ATHEME_INC_UPLINK_H 1
-
-#include <time.h>
-
-#include <mowgli.h>
 
 #include "attrs.h"
 #include "structures.h"

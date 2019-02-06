@@ -7,14 +7,10 @@
  * Data structures related to services psuedo-clients.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_SERVICES_H
 #define ATHEME_INC_SERVICES_H 1
-
-#include <stdbool.h>
-
-#include <mowgli.h>
 
 #include "attrs.h"
 #include "common.h"

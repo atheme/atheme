@@ -7,15 +7,12 @@
  * Remote authentication ticket management.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_AUTHCOOKIE_H
 #define ATHEME_INC_AUTHCOOKIE_H 1
 
-#include <stdbool.h>
-#include <time.h>
-
-#include <mowgli.h>
+#include "attrs.h"
 
 #define AUTHCOOKIE_LENGTH 20
 

@@ -5,7 +5,7 @@
  * Copyright (C) 2005-2013 Atheme Project (http://atheme.org/)
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_MOD_CHANSERV_CHANSERV_H
 #define ATHEME_MOD_CHANSERV_CHANSERV_H 1

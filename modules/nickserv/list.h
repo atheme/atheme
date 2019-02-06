@@ -10,7 +10,7 @@
  * that need to access /ns list functionality.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_MOD_NICKSERV_LIST_H
 #define ATHEME_MOD_NICKSERV_LIST_H 1

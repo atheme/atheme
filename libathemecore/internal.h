@@ -7,7 +7,7 @@
  * Stuff for internal use in Atheme.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_LAC_INTERNAL_H
 #define ATHEME_LAC_INTERNAL_H 1

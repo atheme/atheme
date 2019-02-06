@@ -7,14 +7,10 @@
  * Message translation stuff.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_CULTURE_H
 #define ATHEME_INC_CULTURE_H 1
-
-#include <stdbool.h>
-
-#include <mowgli.h>
 
 struct language
 {

@@ -7,7 +7,7 @@
  * Table rendering class.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_TABLE_H
 #define ATHEME_INC_TABLE_H 1

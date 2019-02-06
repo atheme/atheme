@@ -8,17 +8,10 @@
  * Misc tools
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_TOOLS_H
 #define ATHEME_INC_TOOLS_H 1
-
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
-#include <time.h>
-
-#include <mowgli.h>
 
 #include "attrs.h"
 #include "common.h"

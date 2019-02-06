@@ -7,14 +7,10 @@
  * This file contains data structures concerning modules.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_MODULE_H
 #define ATHEME_INC_MODULE_H 1
-
-#include <stdbool.h>
-
-#include <mowgli.h>
 
 #include "abirev.h"
 #include "common.h"

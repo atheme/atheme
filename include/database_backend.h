@@ -7,13 +7,10 @@
  * Platform-agnostic database backend layer.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_DATABASE_BACKEND_H
 #define ATHEME_INC_DATABASE_BACKEND_H 1
-
-#include <stdbool.h>
-#include <time.h>
 
 #include "attrs.h"
 #include "common.h"

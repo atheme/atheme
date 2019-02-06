@@ -7,7 +7,7 @@
  * prettyprint helpers for rpgserv
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_MOD_RPGSERV_PRETTYPRINT_H
 #define ATHEME_MOD_RPGSERV_PRETTYPRINT_H 1

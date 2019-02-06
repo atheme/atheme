@@ -5,12 +5,10 @@
  * Copyright (C) 2017 Aaron M. D. Jones <aaronmdjones@gmail.com>
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_BASE64_H
 #define ATHEME_INC_BASE64_H 1
-
-#include <stddef.h>
 
 #include "attrs.h"
 

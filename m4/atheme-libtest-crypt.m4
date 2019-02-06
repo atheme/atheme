@@ -23,8 +23,12 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPT], [
 			AC_MSG_CHECKING([if crypt(3) appears to be usable])
 			AC_COMPILE_IFELSE([
 				AC_LANG_PROGRAM([[
-					#include <stddef.h>
-					#include <unistd.h>
+					#ifdef HAVE_STDDEF_H
+					#  include <stddef.h>
+					#endif
+					#ifdef HAVE_UNISTD_H
+					#  include <unistd.h>
+					#endif
 					#ifdef HAVE_CRYPT_H
 					#  include <crypt.h>
 					#endif

@@ -15,12 +15,6 @@
 
 #include "atheme.h"
 
-#include <signal.h>
-
-#ifndef MOWGLI_OS_WIN
-# include <sys/wait.h>
-#endif
-
 static void childproc_check(void);
 
 static volatile sig_atomic_t got_sighup, got_sigint, got_sigterm, got_sigchld, got_sigusr2;

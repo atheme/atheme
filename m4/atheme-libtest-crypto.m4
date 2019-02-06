@@ -41,7 +41,9 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 		AC_MSG_CHECKING([if libcrypto is usable])
 		AC_LINK_IFELSE([
 			AC_LANG_PROGRAM([[
-				#include <stddef.h>
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
 				#include <openssl/evp.h>
 				#include <openssl/hmac.h>
 			]], [[
@@ -66,7 +68,9 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 			AC_MSG_CHECKING([if OpenSSL has a usable random number generator])
 			AC_LINK_IFELSE([
 				AC_LANG_PROGRAM([[
-					#include <stddef.h>
+					#ifdef HAVE_STDDEF_H
+					#  include <stddef.h>
+					#endif
 					#include <openssl/err.h>
 					#include <openssl/rand.h>
 				]], [[
@@ -87,7 +91,9 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 			AC_MSG_CHECKING([if OpenSSL provides HMAC_CTX_new()/HMAC_CTX_free()])
 			AC_LINK_IFELSE([
 				AC_LANG_PROGRAM([[
-					#include <stddef.h>
+					#ifdef HAVE_STDDEF_H
+					#  include <stddef.h>
+					#endif
 					#include <openssl/hmac.h>
 				]], [[
 					(void) HMAC_CTX_new();
@@ -132,6 +138,8 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 		])
 	])
 
+	LIBS="${LIBS_SAVED}"
+
 	AS_IF([test "${LIBCRYPTO}" = "No"], [
 		LIBCRYPTO_CFLAGS=""
 		LIBCRYPTO_LIBS=""
@@ -139,6 +147,4 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 
 	AC_SUBST([LIBCRYPTO_CFLAGS])
 	AC_SUBST([LIBCRYPTO_LIBS])
-
-	LIBS="${LIBS_SAVED}"
 ])

@@ -8,15 +8,12 @@
  * Commandlist manipulation routines.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_COMMANDTREE_H
 #define ATHEME_INC_COMMANDTREE_H 1
 
-#include <stdbool.h>
-
-#include "servtree.h"
-#include "sourceinfo.h"
+#include "structures.h"
 
 struct command
 {

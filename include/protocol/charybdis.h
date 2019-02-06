@@ -5,8 +5,6 @@
  * Copyright (C) 2005 William Pitcock, et al.
  */
 
-#include "sysconf.h"
-
 #ifndef ATHEME_INC_PROTOCOL_CHARYBDIS_H
 #define ATHEME_INC_PROTOCOL_CHARYBDIS_H 1
 

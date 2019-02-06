@@ -7,23 +7,10 @@
  * Includes most headers usually needed.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_ATHEME_H
 #define ATHEME_INC_ATHEME_H 1
-
-#include <ctype.h>
-#include <limits.h>
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <unistd.h>
-
-#include <mowgli.h>
 
 #include "abirev.h"
 #include "account.h"

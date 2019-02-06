@@ -7,7 +7,7 @@
  * UID provider stuff.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_UID_H
 #define ATHEME_INC_UID_H 1

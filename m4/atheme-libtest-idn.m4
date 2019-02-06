@@ -23,7 +23,9 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 				AC_MSG_CHECKING([if GNU libidn appears to be usable])
 				AC_LINK_IFELSE([
 					AC_LANG_PROGRAM([[
-						#include <stddef.h>
+						#ifdef HAVE_STDDEF_H
+						#  include <stddef.h>
+						#endif
 						#include <stringprep.h>
 					]], [[
 						(void) stringprep_locale_to_utf8(NULL);
@@ -54,6 +56,8 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 		])
 	])
 
+	LIBS="${LIBS_SAVED}"
+
 	AS_IF([test "${LIBIDN}" = "No"], [
 		LIBIDN_CFLAGS=""
 		LIBIDN_LIBS=""
@@ -61,6 +65,4 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 
 	AC_SUBST([LIBIDN_CFLAGS])
 	AC_SUBST([LIBIDN_LIBS])
-
-	LIBS="${LIBS_SAVED}"
 ])

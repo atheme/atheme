@@ -7,16 +7,10 @@
  * Protocol handlers, both generic and the actual declarations themselves.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_PHANDLER_H
 #define ATHEME_INC_PHANDLER_H 1
-
-#include <stdbool.h>
-#include <stddef.h>
-#include <time.h>
-
-#include <mowgli.h>
 
 #include "attrs.h"
 #include "structures.h"

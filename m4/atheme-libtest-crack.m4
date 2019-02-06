@@ -23,8 +23,12 @@ AC_DEFUN([ATHEME_LIBTEST_CRACK], [
 				AC_MSG_CHECKING([if cracklib appears to be usable])
 				AC_COMPILE_IFELSE([
 					AC_LANG_PROGRAM([[
-						#include <stddef.h>
-						#include <crack.h>
+						#ifdef HAVE_STDDEF_H
+						#  include <stddef.h>
+						#endif
+						#ifdef HAVE_CRACK_H
+						#  include <crack.h>
+						#endif
 					]], [[
 						(void) FascistCheck(NULL, NULL);
 					]])

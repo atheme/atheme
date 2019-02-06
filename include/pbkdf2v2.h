@@ -7,13 +7,10 @@
  * Data structures and macros for the PBKDF2v2 crypto module.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_PBKDF2V2_H
 #define ATHEME_INC_PBKDF2V2_H 1
-
-#include <stdbool.h>
-#include <stddef.h>
 
 #include "digest.h"
 

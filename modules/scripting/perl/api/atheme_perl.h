@@ -5,7 +5,7 @@
  * Copyright (C) 2010-2013 Atheme Project (http://atheme.org/)
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_MOD_SCRIPTING_PERL_API_ATHEME_PERL_H
 #define ATHEME_MOD_SCRIPTING_PERL_API_ATHEME_PERL_H 1

@@ -7,13 +7,10 @@
  * Atheme IRC Services digest interface.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_DIGEST_H
 #define ATHEME_INC_DIGEST_H 1
-
-#include <stdbool.h>
-#include <stddef.h>
 
 #include "attrs.h"
 #include "structures.h"

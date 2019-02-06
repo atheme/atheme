@@ -40,7 +40,9 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDCRYPTO], [
 		AC_MSG_CHECKING([if ARM mbedTLS has MD5/SHA1/SHA2/PBKDF2 support])
 		AC_LINK_IFELSE([
 			AC_LANG_PROGRAM([[
-				#include <stddef.h>
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
 				#include <mbedtls/md.h>
 				#include <mbedtls/pkcs5.h>
 				#ifndef MBEDTLS_MD_C
@@ -86,7 +88,9 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDCRYPTO], [
 			AC_MSG_CHECKING([if ARM mbedTLS has HMAC-DRBG support])
 			AC_LINK_IFELSE([
 				AC_LANG_PROGRAM([[
-					#include <stddef.h>
+					#ifdef HAVE_STDDEF_H
+					#  include <stddef.h>
+					#endif
 					#ifdef HAVE_MBEDTLS_ENTROPY_H
 					#  include <mbedtls/entropy.h>
 					#else

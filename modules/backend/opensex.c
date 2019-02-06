@@ -12,10 +12,6 @@
 
 #include "atheme.h"
 
-#ifdef HAVE_FLOCK
-# include <sys/file.h>
-#endif
-
 struct opensex
 {
 	// Lexing state

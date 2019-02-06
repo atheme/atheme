@@ -5,7 +5,7 @@
  * Copyright (C) 2011 William Pitcock <nenolod@dereferenced.org>
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_MOD_EXTTARGET_EXTTARGET_H
 #define ATHEME_MOD_EXTTARGET_EXTTARGET_H 1

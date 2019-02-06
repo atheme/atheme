@@ -7,14 +7,10 @@
  * Config reader.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_CONFPROCESS_H
 #define ATHEME_INC_CONFPROCESS_H 1
-
-#include <stdbool.h>
-
-#include <mowgli.h>
 
 #include "attrs.h"
 

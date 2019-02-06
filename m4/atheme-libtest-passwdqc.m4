@@ -23,7 +23,9 @@ AC_DEFUN([ATHEME_LIBTEST_PASSWDQC], [
 				AC_MSG_CHECKING([if libpasswdqc appears to be usable])
 				AC_COMPILE_IFELSE([
 					AC_LANG_PROGRAM([[
-						#include <stddef.h>
+						#ifdef HAVE_STDDEF_H
+						#  include <stddef.h>
+						#endif
 						#include <passwdqc.h>
 					]], [[
 						passwdqc_params_qc_t qc_config = {

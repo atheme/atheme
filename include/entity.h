@@ -7,14 +7,10 @@
  * entity.h - entity tracking
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_ENTITY_H
 #define ATHEME_INC_ENTITY_H 1
-
-#include <stdbool.h>
-
-#include <mowgli.h>
 
 #include "common.h"
 #include "object.h"

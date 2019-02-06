@@ -8,7 +8,7 @@
  * Command help routines.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_COMMANDHELP_H
 #define ATHEME_INC_COMMANDHELP_H 1

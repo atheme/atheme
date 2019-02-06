@@ -7,15 +7,10 @@
  * Data structures for channel information.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_CHANNELS_H
 #define ATHEME_INC_CHANNELS_H 1
-
-#include <stdbool.h>
-#include <time.h>
-
-#include <mowgli.h>
 
 #include "structures.h"
 

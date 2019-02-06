@@ -8,13 +8,10 @@
  * Modules usually do not need this.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_PMODULE_H
 #define ATHEME_INC_PMODULE_H 1
-
-#include <stdbool.h>
-#include <stddef.h>
 
 #include "sourceinfo.h"
 

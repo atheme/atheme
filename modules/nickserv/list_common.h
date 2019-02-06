@@ -7,7 +7,7 @@
  * list_common.h - /ns list common definitions
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_MOD_NICKSERV_LIST_COMMON_H
 #define ATHEME_MOD_NICKSERV_LIST_COMMON_H 1

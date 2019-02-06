@@ -7,14 +7,10 @@
  * Config reader.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_CONF_H
 #define ATHEME_INC_CONF_H 1
-
-#include <stdbool.h>
-
-#include <mowgli.h>
 
 bool conf_parse(const char *);
 void conf_init(void);

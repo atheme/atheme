@@ -52,7 +52,9 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 			AC_MSG_CHECKING([if libsodium has usable memory manipulation functions])
 			AC_LINK_IFELSE([
 				AC_LANG_PROGRAM([[
-					#include <stddef.h>
+					#ifdef HAVE_STDDEF_H
+					#  include <stddef.h>
+					#endif
 					#include <sodium/core.h>
 					#include <sodium/utils.h>
 				]], [[
@@ -75,7 +77,9 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 			AC_MSG_CHECKING([if libsodium has a usable memory zeroing function])
 			AC_LINK_IFELSE([
 				AC_LANG_PROGRAM([[
-					#include <stddef.h>
+					#ifdef HAVE_STDDEF_H
+					#  include <stddef.h>
+					#endif
 					#include <sodium/core.h>
 					#include <sodium/utils.h>
 				]], [[
@@ -93,7 +97,9 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 				AC_MSG_CHECKING([if libsodium has a usable random number generator])
 				AC_LINK_IFELSE([
 					AC_LANG_PROGRAM([[
-						#include <stddef.h>
+						#ifdef HAVE_STDDEF_H
+						#  include <stddef.h>
+						#endif
 						#include <sodium/core.h>
 						#include <sodium/utils.h>
 						#include <sodium/randombytes.h>
@@ -117,7 +123,9 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 				AC_MSG_CHECKING([if libsodium has a usable scrypt password hash generator])
 				AC_LINK_IFELSE([
 					AC_LANG_PROGRAM([[
-						#include <stddef.h>
+						#ifdef HAVE_STDDEF_H
+						#  include <stddef.h>
+						#endif
 						#include <sodium/crypto_pwhash_scryptsalsa208sha256.h>
 					]], [[
 						const unsigned long long int opslimit = crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN;
@@ -159,6 +167,8 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 		])
 	])
 
+	LIBS="${LIBS_SAVED}"
+
 	AS_IF([test "${LIBSODIUM}" = "No"], [
 		LIBSODIUM_CFLAGS=""
 		LIBSODIUM_LIBS=""
@@ -166,6 +176,4 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 
 	AC_SUBST([LIBSODIUM_CFLAGS])
 	AC_SUBST([LIBSODIUM_LIBS])
-
-	LIBS="${LIBS_SAVED}"
 ])

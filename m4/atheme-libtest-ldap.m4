@@ -23,7 +23,9 @@ AC_DEFUN([ATHEME_LIBTEST_LDAP], [
 				AC_MSG_CHECKING([if libldap appears to be usable])
 				AC_COMPILE_IFELSE([
 					AC_LANG_PROGRAM([[
-						#include <stddef.h>
+						#ifdef HAVE_STDDEF_H
+						#  include <stddef.h>
+						#endif
 						#include <ldap.h>
 					]], [[
 						(void) ldap_set_option(NULL, 0, NULL);

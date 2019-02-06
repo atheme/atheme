@@ -14,6 +14,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADER([include/sysconf.h])
 AC_CONFIG_SRCDIR([src/services/main.c])
 AC_PREFIX_DEFAULT([~/atheme])
+AS_IF([test "x${prefix}" = "xNONE"], [prefix="${ac_default_prefix}"])
 
 AH_TOP([
 #ifndef ATHEME_INC_SYSCONF_H
@@ -51,8 +52,6 @@ AS_IF([test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"], [
 	AC_MSG_ERROR([please read GIT-Access.txt before trying to build from git])
 ])
 
-AS_IF([test "x${prefix}" = "xNONE"], [prefix="${ac_default_prefix}"])
-
 AS_IF([test "x${CFLAGS+set}" = "xset"], [
 	CFLAGS_WAS_SET="yes"
 ], [
@@ -60,30 +59,72 @@ AS_IF([test "x${CFLAGS+set}" = "xset"], [
 	CFLAGS=""
 ])
 
-dnl Buildsys module stuff
+dnl Programs required by the build system
+AC_PROG_CC
+AC_PROG_CC_C99
+AC_PATH_PROG([AR], [ar])
+AC_PROG_AWK
+AC_PATH_PROG([CP], [cp])
+AC_PROG_GREP
+AC_PROG_EGREP
+AC_PROG_INSTALL
+AC_PATH_PROG([LN], [ln])
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_PROG_MKDIR_P
+AC_PATH_PROG([MV], [mv])
+AC_PROG_RANLIB
+AC_PATH_PROG([RM], [rm])
+AC_PROG_SED
+AC_PATH_PROG([TAR], [tar])
+PKG_PROG_PKG_CONFIG
+AS_IF([test -z "${PKG_CONFIG}"], [AC_MSG_ERROR([pkg-config not found])])
+
+dnl Initialise our build system
 BUILDSYS_INIT
 BUILDSYS_SHARED_LIB
 BUILDSYS_PROG_IMPLIB
 LIBS="${LIBS} ${DYNAMIC_LD_LIBS}"
 
-AC_PATH_PROG([RM], [rm])
-AC_PATH_PROG([MV], [mv])
-AC_PATH_PROG([CP], [cp])
-AC_PATH_PROG([LN], [ln])
-AC_PROG_LN_S
-AC_PATH_PROG([TAR], [tar])
-AC_PATH_PROG([AR], [ar])
-AC_PATH_PROG([RANLIB], [ranlib])
-
-AC_PROG_CC_C99
+dnl Checks for headers, libraries, and library functions
+LIBS_SAVED="${LIBS}"
 AC_USE_SYSTEM_EXTENSIONS
+AC_DEFINE([__STDC_WANT_LIB_EXT1__], [1], [We want ISO 9899:2011 Annex K memory functions if available])
+AC_CHECK_HEADERS([ctype.h dirent.h errno.h inttypes.h libintl.h limits.h locale.h netdb.h netinet/in.h], [], [], [])
+AC_CHECK_HEADERS([regex.h signal.h stdarg.h stdbool.h stddef.h stdint.h stdio.h stdlib.h string.h], [], [], [])
+AC_CHECK_HEADERS([strings.h sys/file.h sys/resource.h sys/stat.h sys/time.h sys/types.h sys/wait.h], [], [], [])
+AC_CHECK_HEADERS([time.h unistd.h], [], [], [])
+AC_CHECK_FUNCS([explicit_bzero fork getrlimit memset_s], [], [])
+AC_CHECK_FUNCS([dup2 execve flock gethostbyname getpid gettimeofday localeconv memchr memmove memset], [],
+	[AC_MSG_ERROR([required function not available])])
+AC_CHECK_FUNCS([regcomp regerror regexec regfree setenv setlocale strcasecmp strcasestr strchr strerror strlen], [],
+	[AC_MSG_ERROR([required function not available])])
+AC_CHECK_FUNCS([strncasecmp strnlen strpbrk strrchr strstr strtod strtok strtok_r strtol strtoul], [],
+	[AC_MSG_ERROR([required function not available])])
+HW_FUNC_ASPRINTF
+HW_FUNC_SNPRINTF
+LIBS="${LIBS_SAVED}"
+
+dnl Checks for features required of our toolchain
 AC_C_BIGENDIAN
-AC_PROG_MAKE_SET
-
-PKG_PROG_PKG_CONFIG
-AS_IF([test -z "${PKG_CONFIG}"], [AC_MSG_ERROR([pkg-config not found])])
-
-
+AC_C_CONST
+AC_C_INLINE
+AC_C_RESTRICT
+AC_TYPE_INT8_T
+AC_TYPE_INT16_T
+AC_TYPE_INT32_T
+AC_TYPE_INT64_T
+AC_TYPE_LONG_LONG_INT
+AC_TYPE_OFF_T
+AC_TYPE_PID_T
+AC_CHECK_TYPES([ptrdiff_t])
+AC_TYPE_SIZE_T
+AC_TYPE_SSIZE_T
+AC_TYPE_UID_T
+AC_TYPE_UINT8_T
+AC_TYPE_UINT16_T
+AC_TYPE_UINT32_T
+AC_TYPE_UINT64_T
 
 dnl Automake compatibility. --nenolod
 AC_SUBST([PACKAGE], [AC_PACKAGE_TARNAME])
@@ -106,8 +147,6 @@ esac
 
 
 dnl GNU gettext
-mkdir_p="mkdir -p"
-AC_SUBST([mkdir_p])
 AM_GNU_GETTEXT([external])
 LIBS="${LIBS} ${LIBINTL}"
 PODIR_COND_D=""
@@ -120,25 +159,15 @@ fi
 
 
 
-dnl Checks for header files.
-AC_CHECK_HEADERS([link.h], [], [], [])
-
-dnl Checks for library functions.
-AC_DEFINE([__STDC_WANT_LIB_EXT1__], [1], [We want ISO 9899:2011 Annex K memory functions if available])
-AC_CHECK_FUNCS([execve explicit_bzero flock fork getpid getrlimit gettimeofday memset_s strcasestr strtok_r])
-AC_CHECK_FUNC([socket], [], [AC_CHECK_LIB([socket], [socket])])
-AC_CHECK_FUNC([gethostbyname], [], [AC_CHECK_LIB([nsl], [gethostbyname])])
-HW_FUNC_SNPRINTF
-HW_FUNC_ASPRINTF
-
-
-
 dnl This should be before any library tests so that insufficient header
 dnl inclusions in those tests are caught before they become a runtime
 dnl problem
 ATHEME_CC_TEST_CFLAGS([-Werror=implicit])
 
-
+dnl Conditional libraries for standard functions (no option to control detection)
+ATHEME_LIBTEST_DL
+ATHEME_LIBTEST_MATH
+ATHEME_LIBTEST_SOCKET
 
 dnl Libraries that are autodetected (alphabetical)
 ATHEME_LIBTEST_CRACK

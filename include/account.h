@@ -7,15 +7,10 @@
  * Data structures for account information.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_ACCOUNT_H
 #define ATHEME_INC_ACCOUNT_H 1
-
-#include <stdbool.h>
-#include <time.h>
-
-#include <mowgli.h>
 
 #include "attrs.h"
 #include "entity.h"

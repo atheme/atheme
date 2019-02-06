@@ -5,7 +5,7 @@
  * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_MOD_CRYPTO_CRYPT3_H
 #define ATHEME_MOD_CRYPTO_CRYPT3_H 1
@@ -15,7 +15,7 @@
 #ifdef HAVE_CRYPT
 
 #ifdef HAVE_CRYPT_H
-#include "crypt.h"
+#  include <crypt.h>
 #endif /* HAVE_CRYPT_H */
 
 #define CRYPT3_AN_CHARS_RANGE                   "A-Za-z0-9"

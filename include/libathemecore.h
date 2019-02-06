@@ -7,12 +7,10 @@
  * Generic stuff from libathemecore.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_LIBATHEMECORE_H
 #define ATHEME_INC_LIBATHEMECORE_H 1
-
-#include <stdbool.h>
 
 #include "attrs.h"
 

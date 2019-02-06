@@ -7,7 +7,7 @@
  * Defines needed by multiple header files.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_COMMON_H
 #define ATHEME_INC_COMMON_H 1

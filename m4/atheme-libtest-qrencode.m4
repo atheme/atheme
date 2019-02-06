@@ -24,7 +24,9 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
 				AC_MSG_CHECKING([if libqrencode is usable])
 				AC_LINK_IFELSE([
 					AC_LANG_PROGRAM([[
-						#include <stddef.h>
+						#ifdef HAVE_STDDEF_H
+						#  include <stddef.h>
+						#endif
 						#include <qrencode.h>
 					]], [[
 						(void) QRcode_encodeData(0, NULL, 0, (QRecLevel) 0);
@@ -57,6 +59,8 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
 		])
 	])
 
+	LIBS="${LIBS_SAVED}"
+
 	AS_IF([test "${LIBQRENCODE}" = "No"], [
 		LIBQRENCODE_CFLAGS=""
 		LIBQRENCODE_LIBS=""
@@ -64,6 +68,4 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
 
 	AC_SUBST([LIBQRENCODE_CFLAGS])
 	AC_SUBST([LIBQRENCODE_LIBS])
-
-	LIBS="${LIBS_SAVED}"
 ])

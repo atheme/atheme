@@ -7,12 +7,10 @@
  * Data structures for sourceinfo
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_SOURCEINFO_H
 #define ATHEME_INC_SOURCEINFO_H 1
-
-#include <stdbool.h>
 
 #include "common.h"
 #include "object.h"

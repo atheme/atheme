@@ -7,24 +7,28 @@
  * This is the header which includes all of the internationalization stuff.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_INTL_H
 #define ATHEME_INC_INTL_H 1
 
 #ifdef ENABLE_NLS
-# include <locale.h>
-# include <libintl.h>
-# define _(String) gettext (String)
-# ifdef gettext_noop
-#  define N_(String) gettext_noop (String)
-# else
-# define N_(String) (String)
-# endif
+#  ifdef HAVE_LOCALE_H
+#    include <locale.h>
+#  endif
+#  ifdef HAVE_LIBINTL_H
+#    include <libintl.h>
+#  endif
+#  define _(String)             gettext((String))
+#  ifdef gettext_noop
+#    define N_(String)          gettext_noop((String))
+#  else
+#    define N_(String)          ((String))
+#  endif
 #else
-# define _(x)     	(x)
-# define N_(x)    	(x)
-# define ngettext(s1, sn, n) ((n) == 1 ? (s1) : (sn))
+#  define _(x)                  (x)
+#  define N_(x)                 (x)
+#  define ngettext(s1, sn, n)   ((n) == 1 ? (s1) : (sn))
 #endif
 
 #endif /* !ATHEME_INC_INTL_H */

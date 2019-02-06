@@ -5,12 +5,10 @@
  * Copyright (C) 2007 Pippijn van Steenhoven <pip88nl@gmail.com>
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_INLINE_CONNECTION_H
 #define ATHEME_INC_INLINE_CONNECTION_H 1
-
-#include <mowgli.h>
 
 #include "../connection.h"
 

@@ -7,16 +7,10 @@
  * Data structures for connected clients.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_USERS_H
 #define ATHEME_INC_USERS_H 1
-
-#include <stdbool.h>
-#include <stddef.h>
-#include <time.h>
-
-#include <mowgli.h>
 
 #include "common.h"
 #include "object.h"

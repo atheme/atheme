@@ -5,14 +5,10 @@
  * Copyright (C) 2007 Pippijn van Steenhoven <pip88nl@gmail.com>
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_INLINE_CHANNELS_H
 #define ATHEME_INC_INLINE_CHANNELS_H 1
-
-#include <stddef.h>
-
-#include <mowgli.h>
 
 #include "../channels.h"
 

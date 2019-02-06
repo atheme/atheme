@@ -7,12 +7,10 @@
  * Memory stuff.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_ATHEME_MEMORY_H
 #define ATHEME_INC_ATHEME_MEMORY_H 1
-
-#include <stddef.h>
 
 #include "attrs.h"
 

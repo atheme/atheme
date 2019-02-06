@@ -15,10 +15,9 @@
 
 #include "atheme.h"
 
-#include <dirent.h>
-
-#ifdef HAVE_DLINFO
-# include <dlfcn.h>
+#ifdef HAVE_USABLE_DLINFO
+#  include <dlfcn.h>
+#  include <link.h>
 #endif
 
 static struct module *module_load_internal(const char *pathname, char *errbuf, int errlen);
@@ -121,7 +120,7 @@ module_load_internal(const char *pathname, char *errbuf, int errlen)
 	struct module *m, *old_modtarget;
 	const struct v4_moduleheader *h;
 	mowgli_module_t *handle = NULL;
-#if defined(HAVE_DLINFO) && !defined(__UCLIBC__)
+#ifdef HAVE_USABLE_DLINFO
 	struct link_map *map;
 #endif
 	char linker_errbuf[BUFSIZE];
@@ -177,9 +176,9 @@ module_load_internal(const char *pathname, char *errbuf, int errlen)
 	m->mflags = 0;
 	m->header = h;
 
-#if defined(HAVE_DLINFO) && !defined(__UCLIBC__)
+#ifdef HAVE_USABLE_DLINFO
 	dlinfo(handle, RTLD_DI_LINKMAP, &map);
-	if (map != NULL)
+	if (map && map->l_addr)
 		m->address = (void *) map->l_addr;
 	else
 		m->address = handle;

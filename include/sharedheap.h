@@ -8,12 +8,10 @@
  * Shared heaps (mowgli.heap bound to atheme.object)
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_SHAREDHEAP_H
 #define ATHEME_INC_SHAREDHEAP_H 1
-
-#include <stddef.h>
 
 #include "object.h"
 

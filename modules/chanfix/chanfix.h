@@ -7,7 +7,7 @@
  * chanfix - channel fixing service
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_MOD_CHANFIX_CHANFIX_H
 #define ATHEME_MOD_CHANFIX_CHANFIX_H 1

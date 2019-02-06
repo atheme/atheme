@@ -11,8 +11,6 @@
 #include "atheme.h"
 #include "gameserv_common.h"
 
-#include <math.h>
-
 #define CALC_MAX_STACK		(128)
 
 #define DICE_MAX_DICE		(100)

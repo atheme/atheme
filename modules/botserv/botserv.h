@@ -7,7 +7,7 @@
  * BotServ common definitions.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_MOD_BOTSERV_BOTSERV_H
 #define ATHEME_MOD_BOTSERV_BOTSERV_H 1

@@ -23,7 +23,9 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 				AC_MSG_CHECKING([if libpcre is usable])
 				AC_LINK_IFELSE([
 					AC_LANG_PROGRAM([[
-						#include <stddef.h>
+						#ifdef HAVE_STDDEF_H
+						#  include <stddef.h>
+						#endif
 						#include <pcre.h>
 					]], [[
 						(void) pcre_compile(NULL, 0, NULL, NULL, NULL);
@@ -55,6 +57,8 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 		])
 	])
 
+	LIBS="${LIBS_SAVED}"
+
 	AS_IF([test "${LIBPCRE}" = "No"], [
 		LIBPCRE_CFLAGS=""
 		LIBPCRE_LIBS=""
@@ -62,6 +66,4 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 
 	AC_SUBST([LIBPCRE_CFLAGS])
 	AC_SUBST([LIBPCRE_LIBS])
-
-	LIBS="${LIBS_SAVED}"
 ])

@@ -7,13 +7,12 @@
  * Authentication.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_AUTH_H
 #define ATHEME_INC_AUTH_H 1
 
-#include <stdbool.h>
-
+#include "attrs.h"
 #include "structures.h"
 
 void set_password(struct myuser *mu, const char *newpassword);

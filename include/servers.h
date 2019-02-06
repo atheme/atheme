@@ -7,14 +7,10 @@
  * Data structures related to network servers.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_SERVERS_H
 #define ATHEME_INC_SERVERS_H 1
-
-#include <time.h>
-
-#include <mowgli.h>
 
 /* servers struct */
 struct server

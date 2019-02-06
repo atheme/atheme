@@ -16,10 +16,6 @@
 #include "atheme.h"
 #include "internal.h"
 
-#ifdef HAVE_GETRLIMIT
-#  include <sys/resource.h>
-#endif
-
 #include <ext/getopt_long.h>
 
 #ifdef HAVE_LIBSODIUM

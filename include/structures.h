@@ -7,8 +7,6 @@
  * Structures used throughout the project (forward declarations).
  */
 
-#include "sysconf.h"
-
 #ifndef ATHEME_INC_STRUCTURES_H
 #define ATHEME_INC_STRUCTURES_H 1
 

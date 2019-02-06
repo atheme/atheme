@@ -7,13 +7,10 @@
  * Data structures and macros for SASL mechanisms.
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_SASL_H
 #define ATHEME_INC_SASL_H 1
-
-#include <stdbool.h>
-#include <stddef.h>
 
 #include "sourceinfo.h"
 #include "structures.h"

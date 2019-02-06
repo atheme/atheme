@@ -5,12 +5,10 @@
  * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
  */
 
-#include "sysconf.h"
+#include "stdheaders.h"
 
 #ifndef ATHEME_INC_INLINE_USERS_H
 #define ATHEME_INC_INLINE_USERS_H 1
-
-#include <stdbool.h>
 
 #include "../users.h"
 
