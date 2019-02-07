@@ -41,6 +41,7 @@
 
 struct sasl_session
 {
+	mowgli_node_t                   node;                   // Node for entry into the active sessions list
 	const struct sasl_mechanism *   mechptr;                // Mechanism they're using
 	struct server *                 server;                 // Server they're on
 	struct sourceinfo *             si;                     // The source info for logcommand(), bad_password(), and login hooks

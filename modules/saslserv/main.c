@@ -126,8 +126,7 @@ find_or_make_session(const char *const restrict uid, struct server *const restri
 		p->uid = sstrdup(uid);
 		p->server = server;
 
-		mowgli_node_t *const n = mowgli_node_create();
-		(void) mowgli_node_add(p, n, &sessions);
+		(void) mowgli_node_add(p, &p->node, &sessions);
 	}
 
 	return p;
@@ -599,13 +598,8 @@ destroy_session(struct sasl_session *const restrict p)
 	mowgli_node_t *n, *tn;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
-	{
-		if (n->data == p)
-		{
+		if (n == &p->node && n->data == p)
 			(void) mowgli_node_delete(n, &sessions);
-			(void) mowgli_node_free(n);
-		}
-	}
 
 	if (p->mechptr && p->mechptr->mech_finish)
 		(void) p->mechptr->mech_finish(p);
@@ -706,11 +700,7 @@ delete_stale(void ATHEME_VATTR_UNUSED *const restrict vptr)
 		struct sasl_session *const p = n->data;
 
 		if (p->flags & ASASL_MARKED_FOR_DELETION)
-		{
-			(void) mowgli_node_delete(n, &sessions);
 			(void) destroy_session(p);
-			(void) mowgli_node_free(n);
-		}
 		else
 			p->flags |= ASASL_MARKED_FOR_DELETION;
 	}
@@ -719,9 +709,15 @@ delete_stale(void ATHEME_VATTR_UNUSED *const restrict vptr)
 static void
 sasl_mech_register(const struct sasl_mechanism *const restrict mech)
 {
+	(void) slog(LG_DEBUG, "%s: registering %s", MOWGLI_FUNC_NAME, mech->name);
+
 	mowgli_node_t *const node = mowgli_node_create();
 
-	(void) slog(LG_DEBUG, "%s: registering %s", MOWGLI_FUNC_NAME, mech->name);
+	if (! node)
+	{
+		(void) slog(LG_ERROR, "%s: mowgli_node_create() failed; out of memory?", MOWGLI_FUNC_NAME);
+		return;
+	}
 
 	/* Here we cast it to (void *) because mowgli_node_add() expects that; it cannot be made const because then
 	 * it would have to return a (const void *) too which would cause multiple warnings any time it is actually
