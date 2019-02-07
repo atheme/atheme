@@ -357,7 +357,7 @@ reintroduce_user(struct user *u)
 }
 
 void ATHEME_FATTR_PRINTF(2, 3)
-verbose(struct mychan *mychan, const char *fmt, ...)
+verbose(const struct mychan *mychan, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];

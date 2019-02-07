@@ -98,7 +98,7 @@ void joinall(const char *name);
 void part(const char *chan, const char *nick);
 void partall(const char *name);
 void myuser_login(struct service *svs, struct user *u, struct myuser *mu, bool sendaccount);
-void verbose(struct mychan *mychan, const char *fmt, ...) ATHEME_FATTR_PRINTF(2, 3);
+void verbose(const struct mychan *mychan, const char *fmt, ...) ATHEME_FATTR_PRINTF(2, 3);
 extern void (*notice)(const char *from, const char *target, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
 void change_notify(const char *from, struct user *to, const char *message, ...) ATHEME_FATTR_PRINTF(3, 4);
 bool bad_password(struct sourceinfo *si, struct myuser *mu);
