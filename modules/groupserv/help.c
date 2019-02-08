@@ -3,9 +3,7 @@
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
  * Copyright (C) 2005-2010 Atheme Project (http://atheme.org/)
- * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
- *
- * This file contains routines to handle the GroupServ HELP command.
+ * Copyright (C) 2018-2019 Atheme Development Group (https://atheme.github.io/)
  */
 
 #include "atheme.h"
@@ -14,9 +12,9 @@
 static const struct groupserv_core_symbols *gcsyms = NULL;
 
 static void
-gs_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc, char **const restrict parv)
+gs_cmd_help_func(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	if (parv[0])
+	if (parc)
 	{
 		(void) help_display(si, si->service, parv[0], si->service->commands);
 		return;
@@ -34,12 +32,12 @@ gs_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED 
 	(void) help_display_suffix(si);
 }
 
-static struct command gs_help = {
+static struct command gs_cmd_help = {
 	.name           = "HELP",
 	.desc           = N_("Displays contextual help information."),
 	.access         = AC_NONE,
 	.maxparc        = 1,
-	.cmd            = &gs_cmd_help,
+	.cmd            = &gs_cmd_help_func,
 	.help           = { .path = "help" },
 };
 
@@ -48,13 +46,13 @@ mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, gcsyms, "groupserv/main", "groupserv_core_symbols");
 
-	(void) service_bind_command(*gcsyms->groupsvs, &gs_help);
+	(void) service_bind_command(*gcsyms->groupsvs, &gs_cmd_help);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	(void) service_unbind_command(*gcsyms->groupsvs, &gs_help);
+	(void) service_unbind_command(*gcsyms->groupsvs, &gs_cmd_help);
 }
 
 SIMPLE_DECLARE_MODULE_V1("groupserv/help", MODULE_UNLOAD_CAPABILITY_OK)
