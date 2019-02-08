@@ -269,7 +269,7 @@ mygroup_rename(struct mygroup *const restrict mg, const char *const restrict nam
 }
 
 static void
-mygroup_set_chanacs_validator(struct myentity *mt)
+mygroup_set_chanacs_validator(struct myentity *const restrict mt)
 {
 	static const struct entity_chanacs_validation_vtable mygroup_chanacs_validate = {
 		.allow_foundership      = &mygroup_allow_foundership,
