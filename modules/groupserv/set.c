@@ -3,9 +3,7 @@
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
  * Copyright (C) 2005-2010 Atheme Project (http://atheme.org/)
- * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
- *
- * This file contains routines to handle the GroupServ HELP command.
+ * Copyright (C) 2018-2019 Atheme Development Group (https://atheme.github.io/)
  */
 
 #include "atheme.h"
@@ -18,7 +16,7 @@ extern mowgli_patricia_t *gs_set_cmdtree;
 mowgli_patricia_t *gs_set_cmdtree = NULL;
 
 static void
-gs_help_set(struct sourceinfo *const restrict si, const char *const restrict subcmd)
+gs_help_set_func(struct sourceinfo *const restrict si, const char *const restrict subcmd)
 {
 	if (subcmd)
 	{
@@ -40,32 +38,32 @@ gs_help_set(struct sourceinfo *const restrict si, const char *const restrict sub
 }
 
 static void
-gs_cmd_set(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
+gs_cmd_set_func(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
 	if (parc < 2)
 	{
 		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET");
-		(void) command_fail(si, fault_needmoreparams, _("Syntax: SET <!group> <setting> [parameters]"));
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: SET <setting> <!group> [parameters]"));
 		return;
 	}
 
 	char *subcmd;
 	char *target;
 
-	if (parv[0][0] == '!')
-	{
-		subcmd = parv[1];
-		target = parv[0];
-	}
-	else if (parv[1][0] == '!')
+	if (parv[0][0] != '!' && parv[1][0] == '!')
 	{
 		subcmd = parv[0];
 		target = parv[1];
 	}
+	else if (parv[0][0] == '!' && parv[1][0] != '!')
+	{
+		subcmd = parv[1];
+		target = parv[0];
+	}
 	else
 	{
 		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET");
-		(void) command_fail(si, fault_badparams, _("Syntax: SET <!group> <setting> [parameters]"));
+		(void) command_fail(si, fault_badparams, _("Syntax: SET <setting> <!group> [parameters]"));
 		return;
 	}
 
@@ -75,13 +73,13 @@ gs_cmd_set(struct sourceinfo *const restrict si, const int parc, char **const re
 	(void) subcommand_dispatch_simple(si->service, si, parc, parv, gs_set_cmdtree, "SET");
 }
 
-static struct command gs_set = {
+static struct command gs_cmd_set = {
 	.name           = "SET",
 	.desc           = N_("Sets various control flags."),
 	.access         = AC_AUTHENTICATED,
 	.maxparc        = 3,
-	.cmd            = &gs_cmd_set,
-	.help           = { .func = &gs_help_set },
+	.cmd            = &gs_cmd_set_func,
+	.help           = { .func = &gs_help_set_func },
 };
 
 static void
@@ -97,13 +95,13 @@ mod_init(struct module *const restrict m)
 		return;
 	}
 
-	(void) service_bind_command(*gcsyms->groupsvs, &gs_set);
+	(void) service_bind_command(*gcsyms->groupsvs, &gs_cmd_set);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	(void) service_unbind_command(*gcsyms->groupsvs, &gs_set);
+	(void) service_unbind_command(*gcsyms->groupsvs, &gs_cmd_set);
 
 	(void) mowgli_patricia_destroy(gs_set_cmdtree, &command_delete_trie_cb, gs_set_cmdtree);
 }
