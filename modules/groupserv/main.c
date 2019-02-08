@@ -609,34 +609,57 @@ grant_channel_access_hook(struct user *const restrict u)
 }
 
 static void
-user_info_hook(hook_user_req_t *req)
+user_info_hook(hook_user_req_t *const restrict req)
 {
-	static char buf[BUFSIZE];
-	mowgli_node_t *n;
-	mowgli_list_t *l;
+	return_if_fail(req != NULL);
+	return_if_fail(req->mu != NULL);
+	return_if_fail(req->si != NULL);
 
-	*buf = 0;
+	char groups[385]; // 384 + NULL; least possibility of truncation when sent over wire
+	size_t written = 0;
 
-	l = myentity_get_membership_list(entity(req->mu));
+	(void) memset(groups, 0x00, sizeof groups);
 
-	MOWGLI_ITER_FOREACH(n, l->head)
+	const mowgli_list_t *const members = myentity_get_membership_list(entity(req->mu));
+	const mowgli_node_t *n;
+
+	MOWGLI_ITER_FOREACH(n, members->head)
 	{
-		struct groupacs *ga = n->data;
+		const struct groupacs *const ga = n->data;
+		struct mygroup *const mg = ga->mg;
 
 		if (ga->flags & GA_BAN)
 			continue;
 
-		if ((ga->mg->flags & MG_PUBLIC) || (req->si->smu == req->mu || has_priv(req->si, PRIV_GROUP_AUSPEX)))
+		if ((mg->flags & MG_PUBLIC) || req->si->smu == req->mu || has_priv(req->si, PRIV_GROUP_AUSPEX))
 		{
-			if (*buf != 0)
-				mowgli_strlcat(buf, ", ", BUFSIZE);
+			if (written)
+			{
+				if ((written + 2) >= sizeof groups)
+					break;
 
-			mowgli_strlcat(buf, entity(ga->mg)->name, BUFSIZE);
+				groups[written++] = ',';
+				groups[written++] = ' ';
+			}
+
+			const size_t grouplen = strlen(entity(mg)->name);
+
+			if ((written + grouplen) >= sizeof groups)
+			{
+				if ((written + 3) < sizeof groups)
+					(void) memcpy(groups + written, "...", 3);
+
+				break;
+			}
+
+			(void) memcpy(groups + written, entity(mg)->name, grouplen);
+
+			written += grouplen;
 		}
 	}
 
-	if (*buf != 0)
-		command_success_nodata(req->si, _("Groups     : %s"), buf);
+	if (written)
+		(void) command_success_nodata(req->si, _("Groups     : %s"), groups);
 }
 
 static void
