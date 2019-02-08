@@ -10,6 +10,8 @@
 #include "atheme.h"
 #include "../groupserv/groupserv.h"
 
+static const struct groupserv_core_symbols *gcsyms = NULL;
+
 static void
 ns_cmd_listgroups(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -56,7 +58,7 @@ ns_cmd_listgroups(struct sourceinfo *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_GET, "LISTGROUPS");
 	}
 
-	l = myentity_get_membership_list(entity(mu));
+	l = gcsyms->myentity_get_membership_list(entity(mu));
 
 	if (MOWGLI_LIST_LENGTH(l) == 0)
 	{
@@ -102,7 +104,7 @@ static struct command ns_listgroups = {
 static void
 mod_init(struct module *const restrict m)
 {
-	use_groupserv_main_symbols(m);
+	MODULE_TRY_REQUEST_SYMBOL(m, gcsyms, "groupserv/main", "groupserv_core_symbols");
 
 	service_named_bind_command("nickserv", &ns_listgroups);
 }

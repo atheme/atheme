@@ -10,6 +10,8 @@
 #include "atheme.h"
 #include "groupserv.h"
 
+static const struct groupserv_core_symbols *gcsyms = NULL;
+
 static void
 gs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -26,7 +28,7 @@ gs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	if ((mg = mygroup_find(parv[0])) == NULL)
+	if ((mg = gcsyms->mygroup_find(parv[0])) == NULL)
 	{
 		command_fail(si, fault_nosuch_target, _("The group \2%s\2 does not exist."), parv[0]);
 		return;
@@ -44,21 +46,21 @@ gs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	ga = groupacs_find(mg, mt, 0, false);
+	ga = gcsyms->groupacs_find(mg, mt, 0, false);
 	if (ga != NULL)
 		flags = ga->flags;
 
-	flags = gs_flags_parser(parv[2], 1, flags);
+	flags = gcsyms->gs_flags_parser(parv[2], 1, flags);
 
-	if (!(flags & GA_FOUNDER) && groupacs_find(mg, mt, GA_FOUNDER, false))
+	if (!(flags & GA_FOUNDER) && gcsyms->groupacs_find(mg, mt, GA_FOUNDER, false))
 	{
-		if (mygroup_count_flag(mg, GA_FOUNDER) == 1)
+		if (gcsyms->mygroup_count_flag(mg, GA_FOUNDER) == 1)
 		{
 			command_fail(si, fault_noprivs, _("You may not remove the last founder."));
 			return;
 		}
 
-		if (!groupacs_sourceinfo_has_flag(mg, si, GA_FOUNDER))
+		if (! gcsyms->groupacs_sourceinfo_has_flag(mg, si, GA_FOUNDER))
 		{
 			command_fail(si, fault_noprivs, _("You may not remove a founder's +F access."));
 			return;
@@ -69,7 +71,7 @@ gs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 		ga->flags = flags;
 	else if (ga != NULL)
 	{
-		groupacs_delete(mg, mt);
+		gcsyms->groupacs_delete(mg, mt);
 		command_success_nodata(si, _("\2%s\2 has been removed from \2%s\2."), mt->name, entity(mg)->name);
 		wallops("\2%s\2 is removing flags for \2%s\2 on \2%s\2", get_oper_name(si), mt->name, entity(mg)->name);
 		logcommand(si, CMDLOG_ADMIN, "FFLAGS:REMOVE: \2%s\2 on \2%s\2", mt->name, entity(mg)->name);
@@ -77,12 +79,12 @@ gs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else
 	{
-		if (MOWGLI_LIST_LENGTH(&mg->acs) > gs_config->maxgroupacs && (!(mg->flags & MG_ACSNOLIMIT)))
+		if (MOWGLI_LIST_LENGTH(&mg->acs) > gcsyms->config->maxgroupacs && (!(mg->flags & MG_ACSNOLIMIT)))
 		{
 			command_fail(si, fault_toomany, _("Group %s access list is full."), entity(mg)->name);
 			return;
 		}
-		ga = groupacs_add(mg, mt, flags);
+		ga = gcsyms->groupacs_add(mg, mt, flags);
 	}
 
 	MOWGLI_ITER_FOREACH(n, entity(mg)->chanacs.head)
@@ -115,15 +117,15 @@ static struct command gs_fflags = {
 static void
 mod_init(struct module *const restrict m)
 {
-	use_groupserv_main_symbols(m);
+	MODULE_TRY_REQUEST_SYMBOL(m, gcsyms, "groupserv/main", "groupserv_core_symbols");
 
-	service_named_bind_command("groupserv", &gs_fflags);
+	(void) service_bind_command(*gcsyms->groupsvs, &gs_fflags);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	service_named_unbind_command("groupserv", &gs_fflags);
+	(void) service_unbind_command(*gcsyms->groupsvs, &gs_fflags);
 }
 
 SIMPLE_DECLARE_MODULE_V1("groupserv/fflags", MODULE_UNLOAD_CAPABILITY_OK)

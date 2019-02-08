@@ -10,6 +10,8 @@
 #include "atheme.h"
 #include "groupserv.h"
 
+static const struct groupserv_core_symbols *gcsyms = NULL;
+
 // Perhaps add criteria to groupser/list like there is now in chanserv/list and nickserv/list in the future
 static void
 gs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
@@ -37,7 +39,7 @@ gs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 
 		if (!match(pattern, entity(mg)->name))
 		{
-			command_success_nodata(si, _("- %s (%s)"), entity(mg)->name, mygroup_founder_names(mg));
+			command_success_nodata(si, _("- %s (%s)"), entity(mg)->name, gcsyms->mygroup_founder_names(mg));
 			matches++;
 		}
 	}
@@ -62,15 +64,15 @@ static struct command gs_list = {
 static void
 mod_init(struct module *const restrict m)
 {
-	use_groupserv_main_symbols(m);
+	MODULE_TRY_REQUEST_SYMBOL(m, gcsyms, "groupserv/main", "groupserv_core_symbols");
 
-	service_named_bind_command("groupserv", &gs_list);
+	(void) service_bind_command(*gcsyms->groupsvs, &gs_list);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	service_named_unbind_command("groupserv", &gs_list);
+	(void) service_unbind_command(*gcsyms->groupsvs, &gs_list);
 }
 
 SIMPLE_DECLARE_MODULE_V1("groupserv/list", MODULE_UNLOAD_CAPABILITY_OK)

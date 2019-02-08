@@ -9,11 +9,12 @@
  */
 
 #include "atheme.h"
-
-#define IN_GROUPSERV_SET
 #include "groupserv.h"
 
+static const struct groupserv_core_symbols *gcsyms = NULL;
+
 // Imported by other modules/groupserv/set_*.so
+extern mowgli_patricia_t *gs_set_cmdtree;
 mowgli_patricia_t *gs_set_cmdtree = NULL;
 
 static void
@@ -86,7 +87,7 @@ static struct command gs_set = {
 static void
 mod_init(struct module *const restrict m)
 {
-	use_groupserv_main_symbols(m);
+	MODULE_TRY_REQUEST_SYMBOL(m, gcsyms, "groupserv/main", "groupserv_core_symbols");
 
 	if (! (gs_set_cmdtree = mowgli_patricia_create(&strcasecanon)))
 	{
@@ -96,13 +97,13 @@ mod_init(struct module *const restrict m)
 		return;
 	}
 
-	(void) service_named_bind_command("groupserv", &gs_set);
+	(void) service_bind_command(*gcsyms->groupsvs, &gs_set);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	(void) service_named_unbind_command("groupserv", &gs_set);
+	(void) service_unbind_command(*gcsyms->groupsvs, &gs_set);
 
 	(void) mowgli_patricia_destroy(gs_set_cmdtree, &command_delete_trie_cb, gs_set_cmdtree);
 }

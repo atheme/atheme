@@ -9,6 +9,9 @@
  */
 
 #include "atheme.h"
+#include "groupserv.h"
+
+static const struct groupserv_core_symbols *gcsyms = NULL;
 
 static void
 gs_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc, char **const restrict parv)
@@ -41,15 +44,17 @@ static struct command gs_help = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
-	(void) service_named_bind_command("groupserv", &gs_help);
+	MODULE_TRY_REQUEST_SYMBOL(m, gcsyms, "groupserv/main", "groupserv_core_symbols");
+
+	(void) service_bind_command(*gcsyms->groupsvs, &gs_help);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	(void) service_named_unbind_command("groupserv", &gs_help);
+	(void) service_unbind_command(*gcsyms->groupsvs, &gs_help);
 }
 
 SIMPLE_DECLARE_MODULE_V1("groupserv/help", MODULE_UNLOAD_CAPABILITY_OK)

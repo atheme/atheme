@@ -12,6 +12,8 @@
 #include "atheme.h"
 #include "groupserv.h"
 
+static const struct groupserv_core_symbols *gcsyms = NULL;
+
 static void
 gs_cmd_invite(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -30,13 +32,13 @@ gs_cmd_invite(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	if ((mg = mygroup_find(group)) == NULL)
+	if ((mg = gcsyms->mygroup_find(group)) == NULL)
 	{
 		command_fail(si, fault_nosuch_target, _("The group \2%s\2 does not exist."), group);
 		return;
 	}
 
-	if (!groupacs_sourceinfo_has_flag(mg, si, GA_INVITE))
+	if (! gcsyms->groupacs_sourceinfo_has_flag(mg, si, GA_INVITE))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
@@ -48,7 +50,7 @@ gs_cmd_invite(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	if ((ga = groupacs_find(mg, entity(mu), 0, false)) != NULL)
+	if ((ga = gcsyms->groupacs_find(mg, entity(mu), 0, false)) != NULL)
 	{
 		command_fail(si, fault_badparams, _("\2%s\2 is already a member of \2%s\2."), user, group);
 		return;
@@ -96,15 +98,15 @@ static struct command gs_invite = {
 static void
 mod_init(struct module *const restrict m)
 {
-	use_groupserv_main_symbols(m);
+	MODULE_TRY_REQUEST_SYMBOL(m, gcsyms, "groupserv/main", "groupserv_core_symbols");
 
-	service_named_bind_command("groupserv", &gs_invite);
+	(void) service_bind_command(*gcsyms->groupsvs, &gs_invite);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	service_named_unbind_command("groupserv", &gs_invite);
+	(void) service_unbind_command(*gcsyms->groupsvs, &gs_invite);
 }
 
 SIMPLE_DECLARE_MODULE_V1("groupserv/invite", MODULE_UNLOAD_CAPABILITY_OK)

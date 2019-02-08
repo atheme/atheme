@@ -10,6 +10,8 @@
 #include "atheme.h"
 #include "groupserv.h"
 
+static const struct groupserv_core_symbols *gcsyms = NULL;
+
 static void
 gs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -29,13 +31,13 @@ gs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	if ((mg = mygroup_find(parv[0])) == NULL)
+	if ((mg = gcsyms->mygroup_find(parv[0])) == NULL)
 	{
 		command_fail(si, fault_nosuch_target, _("The group \2%s\2 does not exist."), parv[0]);
 		return;
 	}
 
-	if (!groupacs_sourceinfo_has_flag(mg, si, (parv[2] != NULL ? GA_FLAGS : GA_ACLVIEW)))
+	if (! gcsyms->groupacs_sourceinfo_has_flag(mg, si, (parv[2] != NULL ? GA_FLAGS : GA_ACLVIEW)))
 	{
 		if (has_priv(si, PRIV_GROUP_AUSPEX))
 			operoverride = true;
@@ -94,18 +96,18 @@ gs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	if (isuser(mt) && (MU_NEVERGROUP & user(mt)->flags) && (groupacs_find(mg, mt, 0, true) == NULL))
+	if (isuser(mt) && (MU_NEVERGROUP & user(mt)->flags) && (gcsyms->groupacs_find(mg, mt, 0, true) == NULL))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 does not wish to have flags in any groups."), parv[1]);
 		return;
 	}
 
-	ga = groupacs_find(mg, mt, 0, false);
+	ga = gcsyms->groupacs_find(mg, mt, 0, false);
 	if (ga != NULL)
 		flags = ga->flags;
 
 	oldflags = flags;
-	flags = gs_flags_parser(parv[2], 1, flags);
+	flags = gcsyms->gs_flags_parser(parv[2], 1, flags);
 
 	// check for MU_NEVEROP and forbid committing the change if it's enabled
 	if (!(oldflags & GA_CHANACS) && (flags & GA_CHANACS))
@@ -119,7 +121,7 @@ gs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 
 	if ((flags & GA_FOUNDER) && !(oldflags & GA_FOUNDER))
 	{
-		if (!(groupacs_sourceinfo_flags(mg, si) & GA_FOUNDER))
+		if (!(gcsyms->groupacs_sourceinfo_flags(mg, si) & GA_FOUNDER))
 		{
 			flags &= ~GA_FOUNDER;
 			goto no_founder;
@@ -127,21 +129,21 @@ gs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 
 		flags |= GA_FLAGS;
 	}
-	else if ((oldflags & GA_FOUNDER) && !(flags & GA_FOUNDER) && !(groupacs_sourceinfo_flags(mg, si) & GA_FOUNDER))
+	else if ((oldflags & GA_FOUNDER) && !(flags & GA_FOUNDER) && !(gcsyms->groupacs_sourceinfo_flags(mg, si) & GA_FOUNDER))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
 	}
 
-	if (!(flags & GA_FOUNDER) && groupacs_find(mg, mt, GA_FOUNDER, false))
+	if (!(flags & GA_FOUNDER) && gcsyms->groupacs_find(mg, mt, GA_FOUNDER, false))
 	{
-		if (mygroup_count_flag(mg, GA_FOUNDER) == 1)
+		if (gcsyms->mygroup_count_flag(mg, GA_FOUNDER) == 1)
 		{
 			command_fail(si, fault_noprivs, _("You may not remove the last founder."));
 			return;
 		}
 
-		if (!groupacs_sourceinfo_has_flag(mg, si, GA_FOUNDER))
+		if (! gcsyms->groupacs_sourceinfo_has_flag(mg, si, GA_FOUNDER))
 		{
 			command_fail(si, fault_noprivs, _("You may not remove a founder's +F access."));
 			return;
@@ -161,19 +163,19 @@ no_founder:
 	}
 	else if (ga != NULL)
 	{
-		groupacs_delete(mg, mt);
+		gcsyms->groupacs_delete(mg, mt);
 		command_success_nodata(si, _("\2%s\2 has been removed from \2%s\2."), mt->name, entity(mg)->name);
 		logcommand(si, CMDLOG_SET, "FLAGS:REMOVE: \2%s\2 on \2%s\2", mt->name, entity(mg)->name);
 		return;
 	}
 	else if (flags != 0)
 	{
-		if (MOWGLI_LIST_LENGTH(&mg->acs) > gs_config->maxgroupacs && (!(mg->flags & MG_ACSNOLIMIT)))
+		if (MOWGLI_LIST_LENGTH(&mg->acs) > gcsyms->config->maxgroupacs && (!(mg->flags & MG_ACSNOLIMIT)))
 		{
 			command_fail(si, fault_toomany, _("Group \2%s\2 access list is full."), entity(mg)->name);
 			return;
 		}
-		ga = groupacs_add(mg, mt, flags);
+		ga = gcsyms->groupacs_add(mg, mt, flags);
 	}
 	else
 	{
@@ -210,15 +212,15 @@ static struct command gs_flags = {
 static void
 mod_init(struct module *const restrict m)
 {
-	use_groupserv_main_symbols(m);
+	MODULE_TRY_REQUEST_SYMBOL(m, gcsyms, "groupserv/main", "groupserv_core_symbols");
 
-	service_named_bind_command("groupserv", &gs_flags);
+	(void) service_bind_command(*gcsyms->groupsvs, &gs_flags);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	service_named_unbind_command("groupserv", &gs_flags);
+	(void) service_unbind_command(*gcsyms->groupsvs, &gs_flags);
 }
 
 SIMPLE_DECLARE_MODULE_V1("groupserv/flags", MODULE_UNLOAD_CAPABILITY_OK)

@@ -10,6 +10,8 @@
 #include "atheme.h"
 #include "groupserv.h"
 
+static const struct groupserv_core_symbols *gcsyms = NULL;
+
 static void
 gs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -35,7 +37,7 @@ gs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	if (mygroup_find(parv[0]))
+	if (gcsyms->mygroup_find(parv[0]))
 	{
 		command_fail(si, fault_alreadyexists, _("The group \2%s\2 already exists."), parv[0]);
 		return;
@@ -47,7 +49,7 @@ gs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	if (myentity_count_group_flag(entity(si->smu), GA_FOUNDER) > gs_config->maxgroups &&
+	if (gcsyms->myentity_count_group_flag(entity(si->smu), GA_FOUNDER) > gcsyms->config->maxgroups &&
 	    !has_priv(si, PRIV_REG_NOLIMIT))
 	{
 		command_fail(si, fault_toomany, _("You have too many groups registered."));
@@ -60,8 +62,8 @@ gs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	mg = mygroup_add(parv[0]);
-	groupacs_add(mg, entity(si->smu), GA_ALL | GA_FOUNDER);
+	mg = gcsyms->mygroup_add(parv[0]);
+	gcsyms->groupacs_add(mg, entity(si->smu), GA_ALL | GA_FOUNDER);
 	hook_call_group_register(mg);
 
 	logcommand(si, CMDLOG_REGISTER, "REGISTER: \2%s\2", entity(mg)->name);
@@ -80,15 +82,15 @@ static struct command gs_register = {
 static void
 mod_init(struct module *const restrict m)
 {
-	use_groupserv_main_symbols(m);
+	MODULE_TRY_REQUEST_SYMBOL(m, gcsyms, "groupserv/main", "groupserv_core_symbols");
 
-	service_named_bind_command("groupserv", &gs_register);
+	(void) service_bind_command(*gcsyms->groupsvs, &gs_register);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	service_named_unbind_command("groupserv", &gs_register);
+	(void) service_unbind_command(*gcsyms->groupsvs, &gs_register);
 }
 
 SIMPLE_DECLARE_MODULE_V1("groupserv/register", MODULE_UNLOAD_CAPABILITY_OK)

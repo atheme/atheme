@@ -10,6 +10,8 @@
 #include "atheme.h"
 #include "groupserv.h"
 
+static const struct groupserv_core_symbols *gcsyms = NULL;
+
 static void
 gs_cmd_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc, char *parv[])
 {
@@ -32,13 +34,13 @@ gs_cmd_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 
 	struct mygroup *mg;
 
-	if (! (mg = mygroup_find(name)))
+	if (! (mg = gcsyms->mygroup_find(name)))
 	{
 		(void) command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), name);
 		return;
 	}
 
-	if (! groupacs_sourceinfo_has_flag(mg, si, GA_FOUNDER))
+	if (! gcsyms->groupacs_sourceinfo_has_flag(mg, si, GA_FOUNDER))
 	{
 		(void) command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
 		return;
@@ -77,7 +79,7 @@ gs_cmd_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 	(void) logcommand(si, CMDLOG_REGISTER, "DROP: \2%s\2", entity(mg)->name);
 	(void) command_success_nodata(si, _("The group \2%s\2 has been dropped."), entity(mg)->name);
 
-	(void) remove_group_chanacs(mg);
+	(void) gcsyms->remove_group_chanacs(mg);
 	(void) hook_call_group_drop(mg);
 	(void) atheme_object_unref(mg);
 }
@@ -103,7 +105,7 @@ gs_cmd_fdrop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_U
 
 	struct mygroup *mg;
 
-	if (! (mg = mygroup_find(name)))
+	if (! (mg = gcsyms->mygroup_find(name)))
 	{
 		(void) command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), name);
 		return;
@@ -113,7 +115,7 @@ gs_cmd_fdrop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_U
 	(void) logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FDROP: \2%s\2", entity(mg)->name);
 	(void) command_success_nodata(si, _("The group \2%s\2 has been dropped."), entity(mg)->name);
 
-	(void) remove_group_chanacs(mg);
+	(void) gcsyms->remove_group_chanacs(mg);
 	(void) hook_call_group_drop(mg);
 	(void) atheme_object_unref(mg);
 }
@@ -139,17 +141,17 @@ static struct command gs_cmd_fdrop = {
 static void
 mod_init(struct module *const restrict m)
 {
-	(void) use_groupserv_main_symbols(m);
+	MODULE_TRY_REQUEST_SYMBOL(m, gcsyms, "groupserv/main", "groupserv_core_symbols");
 
-	(void) service_named_bind_command("groupserv", &gs_cmd_drop);
-	(void) service_named_bind_command("groupserv", &gs_cmd_fdrop);
+	(void) service_bind_command(*gcsyms->groupsvs, &gs_cmd_drop);
+	(void) service_bind_command(*gcsyms->groupsvs, &gs_cmd_fdrop);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	(void) service_named_unbind_command("groupserv", &gs_cmd_drop);
-	(void) service_named_unbind_command("groupserv", &gs_cmd_fdrop);
+	(void) service_unbind_command(*gcsyms->groupsvs, &gs_cmd_drop);
+	(void) service_unbind_command(*gcsyms->groupsvs, &gs_cmd_fdrop);
 }
 
 SIMPLE_DECLARE_MODULE_V1("groupserv/drop", MODULE_UNLOAD_CAPABILITY_OK)

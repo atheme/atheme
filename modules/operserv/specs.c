@@ -10,7 +10,6 @@
  */
 
 #include "atheme.h"
-#include "../groupserv/main/groupserv_common.h"
 
 struct privilege
 {

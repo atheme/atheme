@@ -10,6 +10,8 @@
 #include "atheme.h"
 #include "groupserv.h"
 
+static const struct groupserv_core_symbols *gcsyms = NULL;
+
 static void
 gs_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -29,13 +31,13 @@ gs_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!(mg = mygroup_find(target)))
+	if (!(mg = gcsyms->mygroup_find(target)))
 	{
 		command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), target);
 		return;
 	}
 
-	if (!groupacs_sourceinfo_has_flag(mg, si, GA_CHANACS))
+	if (! gcsyms->groupacs_sourceinfo_has_flag(mg, si, GA_CHANACS))
 	{
 		if (has_priv(si, PRIV_GROUP_AUSPEX))
 			operoverride = true;
@@ -90,14 +92,15 @@ static struct command gs_listchans = {
 static void
 mod_init(struct module *const restrict m)
 {
-	use_groupserv_main_symbols(m);
-	service_named_bind_command("groupserv", &gs_listchans);
+	MODULE_TRY_REQUEST_SYMBOL(m, gcsyms, "groupserv/main", "groupserv_core_symbols");
+
+	(void) service_bind_command(*gcsyms->groupsvs, &gs_listchans);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	service_named_unbind_command("groupserv", &gs_listchans);
+	(void) service_unbind_command(*gcsyms->groupsvs, &gs_listchans);
 }
 
 SIMPLE_DECLARE_MODULE_V1("groupserv/listchans", MODULE_UNLOAD_CAPABILITY_OK)

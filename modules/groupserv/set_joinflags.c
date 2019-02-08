@@ -10,6 +10,9 @@
 #include "atheme.h"
 #include "groupserv.h"
 
+static const struct groupserv_core_symbols *gcsyms = NULL;
+static mowgli_patricia_t **gs_set_cmdtree = NULL;
+
 static void
 gs_cmd_set_joinflags(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -17,13 +20,13 @@ gs_cmd_set_joinflags(struct sourceinfo *si, int parc, char *parv[])
 	char *joinflags = parv[1];
 	unsigned int flags = 0;
 
-	if (!(mg = mygroup_find(parv[0])))
+	if (!(mg = gcsyms->mygroup_find(parv[0])))
 	{
 		command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), parv[0]);
 		return;
 	}
 
-	if (!groupacs_sourceinfo_has_flag(mg, si, GA_SET))
+	if (! gcsyms->groupacs_sourceinfo_has_flag(mg, si, GA_SET))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
 		return;
@@ -52,7 +55,7 @@ gs_cmd_set_joinflags(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	flags = gs_flags_parser(joinflags, 0, flags);
+	flags = gcsyms->gs_flags_parser(joinflags, 0, flags);
 
 	// we'll overwrite any existing metadata
 	metadata_add(mg, "joinflags", number_to_string(flags));
@@ -73,16 +76,16 @@ static struct command gs_set_joinflags = {
 static void
 mod_init(struct module *const restrict m)
 {
-	use_groupserv_main_symbols(m);
-	use_groupserv_set_symbols(m);
+	MODULE_TRY_REQUEST_SYMBOL(m, gcsyms, "groupserv/main", "groupserv_core_symbols");
+	MODULE_TRY_REQUEST_SYMBOL(m, gs_set_cmdtree, "groupserv/set", "gs_set_cmdtree");
 
-	command_add(&gs_set_joinflags, gs_set_cmdtree);
+	command_add(&gs_set_joinflags, *gs_set_cmdtree);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	command_delete(&gs_set_joinflags, gs_set_cmdtree);
+	command_delete(&gs_set_joinflags, *gs_set_cmdtree);
 }
 
 SIMPLE_DECLARE_MODULE_V1("groupserv/set_joinflags", MODULE_UNLOAD_CAPABILITY_OK)

@@ -10,6 +10,8 @@
 #include "atheme.h"
 #include "groupserv.h"
 
+static const struct groupserv_core_symbols *gcsyms = NULL;
+
 static void
 gs_cmd_acsnolimit(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -22,7 +24,7 @@ gs_cmd_acsnolimit(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	if ((mg = mygroup_find(parv[0])) == NULL)
+	if ((mg = gcsyms->mygroup_find(parv[0])) == NULL)
 	{
 		command_fail(si, fault_nosuch_target, _("The group \2%s\2 does not exist."), parv[0]);
 		return;
@@ -75,15 +77,15 @@ static struct command gs_acsnolimit = {
 static void
 mod_init(struct module *const restrict m)
 {
-	use_groupserv_main_symbols(m);
+	MODULE_TRY_REQUEST_SYMBOL(m, gcsyms, "groupserv/main", "groupserv_core_symbols");
 
-	service_named_bind_command("groupserv", &gs_acsnolimit);
+	(void) service_bind_command(*gcsyms->groupsvs, &gs_acsnolimit);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	service_named_unbind_command("groupserv", &gs_acsnolimit);
+	(void) service_unbind_command(*gcsyms->groupsvs, &gs_acsnolimit);
 }
 
 SIMPLE_DECLARE_MODULE_V1("groupserv/acsnolimit", MODULE_UNLOAD_CAPABILITY_OK)

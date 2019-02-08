@@ -4,7 +4,6 @@
 # Copyright (C) 2003-2004 E. Will, et al.
 
 MODULE		= groupserv
-SUBDIRS		= main
 
 SRCS =				\
 	acsnolimit.c		\
@@ -17,6 +16,7 @@ SRCS =				\
 	join.c			\
 	list.c			\
 	listchans.c		\
+	main.c			\
 	register.c		\
 	regnolimit.c		\
 	set.c			\
