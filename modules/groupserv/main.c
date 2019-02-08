@@ -837,19 +837,21 @@ db_h_gdbv(struct database_handle *const restrict db, const char ATHEME_VATTR_UNU
 }
 
 static void
-db_h_gfa(struct database_handle *db, const char *type)
+db_h_gfa(struct database_handle *const restrict db, const char ATHEME_VATTR_UNUSED *const restrict type)
 {
-	const char *flags = db_sread_word(db);
+	return_if_fail(db != NULL);
 
-	gflags_fromstr(ga_flags, flags, &their_ga_all);
-	if (their_ga_all & ~GA_ALL)
-	{
-		slog(LG_ERROR, "db-h-gfa: losing flags %s from file", gflags_tostr(ga_flags, their_ga_all & ~GA_ALL));
-	}
-	if (~their_ga_all & GA_ALL)
-	{
-		slog(LG_ERROR, "db-h-gfa: making up flags %s not present in file", gflags_tostr(ga_flags, ~their_ga_all & GA_ALL));
-	}
+	const char *const flags = db_sread_word(db);
+
+	(void) gflags_fromstr(ga_flags, flags, &their_ga_all);
+
+	if (their_ga_all & (~GA_ALL))
+		(void) slog(LG_ERROR, "%s: losing flags %s from file", __func__,
+		                      gflags_tostr(ga_flags, (their_ga_all & (~GA_ALL))));
+
+	if ((~their_ga_all) & GA_ALL)
+		(void) slog(LG_ERROR, "%s: making up flags %s not present in file", __func__,
+		                      gflags_tostr(ga_flags, ((~their_ga_all) & GA_ALL)));
 }
 
 static void
