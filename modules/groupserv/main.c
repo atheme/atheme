@@ -303,24 +303,26 @@ mygroup_count_flag(const struct mygroup *const restrict mg, const unsigned int f
 }
 
 static void
-mygroup_delete(struct mygroup *mg)
+mygroup_delete(struct mygroup *const restrict mg)
 {
-	mowgli_node_t *n, *tn;
+	return_if_fail(mg != NULL);
 
-	myentity_del(entity(mg));
+	(void) myentity_del(entity(mg));
+
+	mowgli_node_t *n, *tn;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, mg->acs.head)
 	{
-		struct groupacs *ga = n->data;
+		struct groupacs *const ga = n->data;
 
-		mowgli_node_delete(&ga->gnode, &mg->acs);
-		mowgli_node_delete(&ga->unode, myentity_get_membership_list(ga->mt));
-		atheme_object_unref(ga);
+		(void) mowgli_node_delete(&ga->gnode, &mg->acs);
+		(void) mowgli_node_delete(&ga->unode, myentity_get_membership_list(ga->mt));
+		(void) atheme_object_unref(ga);
 	}
 
-	metadata_delete_all(mg);
-	strshare_unref(entity(mg)->name);
-	mowgli_heap_free(mygroup_heap, mg);
+	(void) metadata_delete_all(mg);
+	(void) strshare_unref(entity(mg)->name);
+	(void) mowgli_heap_free(mygroup_heap, mg);
 }
 
 static struct mygroup *
