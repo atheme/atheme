@@ -281,22 +281,19 @@ mygroup_set_chanacs_validator(struct myentity *const restrict mt)
 }
 
 static unsigned int
-mygroup_count_flag(struct mygroup *mg, unsigned int flag)
+mygroup_count_flag(const struct mygroup *const restrict mg, const unsigned int flag)
 {
-	mowgli_node_t *n;
-	unsigned int count = 0;
-
 	return_val_if_fail(mg != NULL, 0);
 
-	/* optimization: if flags = 0, then that means select everyone, so just
-	 * return the list length.
-	 */
-	if (flag == 0)
+	if (! flag)
 		return MOWGLI_LIST_LENGTH(&mg->acs);
+
+	const mowgli_node_t *n;
+	unsigned int count = 0;
 
 	MOWGLI_ITER_FOREACH(n, mg->acs.head)
 	{
-		struct groupacs *ga = n->data;
+		const struct groupacs *const ga = n->data;
 
 		if (ga->flags & flag)
 			count++;

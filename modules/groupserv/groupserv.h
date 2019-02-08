@@ -34,7 +34,7 @@ struct groupserv_core_symbols
 	unsigned int              (*gs_flags_parser)(const char *, bool, unsigned int);
 	struct mygroup *          (*mygroup_add_id)(const char *, const char *);
 	struct mygroup *          (*mygroup_add)(const char *);
-	unsigned int              (*mygroup_count_flag)(struct mygroup *, unsigned int);
+	unsigned int              (*mygroup_count_flag)(const struct mygroup *, unsigned int);
 	struct mygroup *          (*mygroup_find)(const char *);
 	const char *              (*mygroup_founder_names)(struct mygroup *);
 	void                      (*mygroup_rename)(struct mygroup *, const char *);
