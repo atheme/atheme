@@ -303,9 +303,11 @@ mygroup_count_flag(const struct mygroup *const restrict mg, const unsigned int f
 }
 
 static void
-mygroup_delete(struct mygroup *const restrict mg)
+mygroup_delete(void *const restrict ptr)
 {
-	return_if_fail(mg != NULL);
+	return_if_fail(ptr != NULL);
+
+	struct mygroup *const mg = ptr;
 
 	(void) myentity_del(entity(mg));
 
@@ -727,29 +729,25 @@ osinfo_hook(struct sourceinfo *const restrict si)
 }
 
 static struct mygroup *
-mygroup_add_id(const char *id, const char *name)
+mygroup_add_id(const char *const restrict id, const char *const restrict name)
 {
-	struct mygroup *mg;
+	return_null_if_fail(name != NULL);
 
-	mg = mowgli_heap_alloc(mygroup_heap);
-	atheme_object_init(atheme_object(mg), NULL, (atheme_object_destructor_fn) mygroup_delete);
+	struct mygroup *const mg = mowgli_heap_alloc(mygroup_heap);
+
+	return_null_if_fail(mg != NULL);
+
+	(void) memset(mg, 0x00, sizeof *mg);
+	(void) atheme_object_init(atheme_object(mg), NULL, &mygroup_delete);
 
 	entity(mg)->type = ENT_GROUP;
-
-	if (id)
-	{
-		if (!myentity_find_uid(id))
-			mowgli_strlcpy(entity(mg)->id, id, sizeof(entity(mg)->id));
-		else
-			entity(mg)->id[0] = '\0';
-	}
-	else
-		entity(mg)->id[0] = '\0';
-
 	entity(mg)->name = strshare_get(name);
-	myentity_put(entity(mg));
 
-	mygroup_set_chanacs_validator(entity(mg));
+	if (id && ! myentity_find_uid(id))
+		(void) mowgli_strlcpy(entity(mg)->id, id, sizeof entity(mg)->id);
+
+	(void) myentity_put(entity(mg));
+	(void) mygroup_set_chanacs_validator(entity(mg));
 
 	mg->regtime = CURRTIME;
 
