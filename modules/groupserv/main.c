@@ -238,18 +238,19 @@ mygroup_can_register_channel(struct myentity *const restrict mt)
 }
 
 static struct chanacs *
-mygroup_chanacs_match_entity(struct chanacs *ca, struct myentity *mt)
+mygroup_chanacs_match_entity(struct chanacs *const restrict ca, struct myentity *const restrict mt)
 {
-	struct mygroup *mg;
+	return_null_if_fail(ca != NULL);
+	return_null_if_fail(mt != NULL);
 
-	mg = group(ca->entity);
+	struct mygroup *const mg = group(ca->entity);
 
-	return_val_if_fail(mg != NULL, NULL);
+	return_null_if_fail(mg != NULL);
 
-	if (!isuser(mt))
+	if (! isuser(mt))
 		return NULL;
 
-	return groupacs_find(mg, mt, GA_CHANACS, true) != NULL ? ca : NULL;
+	return ((groupacs_find(mg, mt, GA_CHANACS, true) != NULL) ? ca : NULL);
 }
 
 static void
