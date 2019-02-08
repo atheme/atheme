@@ -129,8 +129,7 @@ modules/groupserv/invite.c
 modules/groupserv/join.c
 modules/groupserv/list.c
 modules/groupserv/listchans.c
-modules/groupserv/main/groupserv.c
-modules/groupserv/main/hooks.c
+modules/groupserv/main.c
 modules/groupserv/register.c
 modules/groupserv/regnolimit.c
 modules/groupserv/set.c

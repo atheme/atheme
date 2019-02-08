@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-01-11 19:09+0000\n"
+"POT-Creation-Date: 2019-02-08 13:29+0000\n"
 "PO-Revision-Date: 2013-02-21 22:00+0200\n"
 "Last-Translator: Jessy AMYOT <harakiri@overstack.fr>\n"
 "Language-Team: \n"
@@ -23,20 +23,10 @@ msgstr ""
 msgid "%d bots available."
 msgstr "%d bots disponibles."
 
-#: modules/groupserv/listchans.c:76
-#, c-format
-msgid "%d channel access match for the group %s"
-msgstr "%d accès de salons correspondent au groupe %s."
-
 #: modules/nickserv/listchans.c:81
 #, c-format
 msgid "%d channel access match for the nickname %s"
 msgstr "%d accès à des salons trouvé pour votre pseudonyme %s."
-
-#: modules/groupserv/listchans.c:77
-#, c-format
-msgid "%d channel access matches for the group %s"
-msgstr "%d accès de salons correspond au groupe %s."
 
 #: modules/nickserv/listchans.c:82
 #, c-format
@@ -58,12 +48,12 @@ msgstr "%d client trouvé"
 msgid "%d clients found"
 msgstr "%d clients trouvés"
 
-#: modules/nickserv/listgroups.c:88
+#: modules/nickserv/listgroups.c:89
 #, c-format
 msgid "%d group access match for the nickname %s"
 msgstr "%d accès à des groupes correspondent au pseudo %s."
 
-#: modules/nickserv/listgroups.c:89
+#: modules/nickserv/listgroups.c:90
 #, c-format
 msgid "%d group access matches for the nickname %s"
 msgstr "%d accès à des groupes correspondent pour le pseudonyme %s."
@@ -79,7 +69,7 @@ msgstr "%d correspondance pour le critère %s"
 msgid "%d match for e-mail address %s"
 msgstr "%d correspondance pour l'adresse email %s."
 
-#: modules/contrib/os_klinechan.c:192 modules/groupserv/list.c:48
+#: modules/contrib/os_klinechan.c:192 modules/groupserv/list.c:50
 #: modules/hostserv/vhost.c:122 modules/nickserv/vhost.c:261
 #: modules/operserv/greplog.c:190
 #, c-format
@@ -117,7 +107,7 @@ msgstr "%d correspondances pour le critère %s"
 msgid "%d matches for e-mail address %s"
 msgstr "%d correspondances pour l'adresse email %s."
 
-#: modules/contrib/os_klinechan.c:193 modules/groupserv/list.c:48
+#: modules/contrib/os_klinechan.c:193 modules/groupserv/list.c:51
 #: modules/hostserv/vhost.c:123 modules/nickserv/vhost.c:262
 #: modules/operserv/greplog.c:191
 #, c-format
@@ -315,29 +305,29 @@ msgstr ""
 "%s appartient à un opérateur des services, vous devez avoir le privilège %s "
 "pour envoyer le mot de passe."
 
-#: modules/groupserv/acsnolimit.c:35
+#: modules/groupserv/acsnolimit.c:45
 #, c-format
 msgid "%s can already bypass access list limits."
 msgstr "%s peut déjà outrepasser les limites."
 
-#: modules/groupserv/regnolimit.c:35 modules/nickserv/regnolimit.c:46
+#: modules/groupserv/regnolimit.c:45 modules/nickserv/regnolimit.c:46
 #, c-format
 msgid "%s can already bypass registration limits."
 msgstr "%s peut déjà outrepasser les limites d'enregistrement."
 
-#: modules/groupserv/invite.c:59
+#: modules/groupserv/invite.c:100
 #, c-format
 msgid ""
-"%s can not be invited to a group currently because they already \t\t\t\t"
-"\thave another invitation pending."
+"%s can not be invited to a group currently because they already have another "
+"invitation pending."
 msgstr ""
 
-#: modules/groupserv/acsnolimit.c:43
+#: modules/groupserv/acsnolimit.c:54
 #, c-format
 msgid "%s can now bypass access list limits."
 msgstr "%s peut désormais outrepasser les limites de la liste d'accès."
 
-#: modules/groupserv/regnolimit.c:43 modules/nickserv/regnolimit.c:54
+#: modules/groupserv/regnolimit.c:54 modules/nickserv/regnolimit.c:54
 #, c-format
 msgid "%s can now bypass registration limits."
 msgstr "%s peut désormais outrepasser les limites d'enregistrement."
@@ -371,22 +361,22 @@ msgstr "%s ne peut pas être inspecté."
 msgid "%s cannot be used as an override service."
 msgstr "%s ne peut être utilisé pour outrepasser les services."
 
-#: modules/groupserv/acsnolimit.c:57
+#: modules/groupserv/acsnolimit.c:68
 #, c-format
 msgid "%s cannot bypass access list limits anymore."
 msgstr "%s ne peut désormais plus outrepasser les limites de la liste d'accès."
 
-#: modules/groupserv/acsnolimit.c:49
+#: modules/groupserv/acsnolimit.c:60
 #, c-format
 msgid "%s cannot bypass access list limits."
 msgstr "%s ne peut pas outrepasser les limites de la liste d'accès."
 
-#: modules/groupserv/regnolimit.c:57 modules/nickserv/regnolimit.c:68
+#: modules/groupserv/regnolimit.c:69 modules/nickserv/regnolimit.c:68
 #, c-format
 msgid "%s cannot bypass registration limits anymore."
 msgstr "%s ne peut désormais plus outrepasser les limites d'enregistrement."
 
-#: modules/groupserv/regnolimit.c:49 modules/nickserv/regnolimit.c:60
+#: modules/groupserv/regnolimit.c:60 modules/nickserv/regnolimit.c:60
 #, c-format
 msgid "%s cannot bypass registration limits."
 msgstr "%s ne peut pas outrepasser les limites d'enregistrement."
@@ -509,18 +499,18 @@ msgid "%s does not have an operclass set."
 msgstr "%s n'a pas de classe oper définie."
 
 #: modules/chanserv/flags.c:427 modules/chanserv/xop.c:98
-#: modules/groupserv/flags.c:115
+#: modules/groupserv/flags.c:131
 #, c-format
 msgid "%s does not wish to be added to channel access lists (NEVEROP set)."
 msgstr ""
 "%s ne désire pas être ajouté à la liste d'accès du salon (NEVEROP défini)."
 
-#: modules/groupserv/invite.c:66
+#: modules/groupserv/invite.c:107
 #, fuzzy, c-format
 msgid "%s does not wish to belong to any groups."
 msgstr "%s ne souhaite avoir aucun flag de groupe."
 
-#: modules/groupserv/flags.c:99
+#: modules/groupserv/flags.c:112
 #, c-format
 msgid "%s does not wish to have flags in any groups."
 msgstr "%s ne souhaite avoir aucun flag de groupe."
@@ -677,7 +667,7 @@ msgstr "%s est déjà désactivé pour %s."
 msgid "%s has been ghosted."
 msgstr "%s a été GHOST."
 
-#: modules/groupserv/invite.c:84
+#: modules/groupserv/invite.c:130
 #, fuzzy, c-format
 msgid "%s has been invited to %s"
 msgstr "%s a été voicé sur %s."
@@ -722,7 +712,7 @@ msgstr "%s a été retrouvé."
 msgid "%s has been released."
 msgstr "%s a été relâché."
 
-#: modules/groupserv/fflags.c:73 modules/groupserv/flags.c:165
+#: modules/groupserv/fflags.c:87 modules/groupserv/flags.c:183
 #, c-format
 msgid "%s has been removed from %s."
 msgstr "%s a été supprimé de %s."
@@ -828,7 +818,7 @@ msgstr "%s est un pseudo enregistré."
 msgid "%s is already a bot or service."
 msgstr "%s est déjà un bot ou un service."
 
-#: modules/groupserv/invite.c:53
+#: modules/groupserv/invite.c:94
 #, fuzzy, c-format
 msgid "%s is already a member of %s."
 msgstr "%s est déjà fondateur de %s."
@@ -871,7 +861,7 @@ msgstr "%s est déjà chargé."
 msgid "%s is already marked."
 msgstr "%s a déjà une note."
 
-#: modules/groupserv/set_open.c:60
+#: modules/groupserv/set_open.c:72
 #, c-format
 msgid "%s is already not open to anyone joining."
 msgstr "%s n'est déjà pas ouvert à tous."
@@ -891,12 +881,12 @@ msgstr "%s est déjà dans la liste %s pour %s."
 msgid "%s is already on the AKICK list for %s"
 msgstr "%s est déjà dans la liste des AKICK pour %s."
 
-#: modules/groupserv/set_open.c:47
+#: modules/groupserv/set_open.c:59
 #, c-format
 msgid "%s is already open to anyone joining."
 msgstr "%s est déjà ouvert à tous."
 
-#: modules/groupserv/set_public.c:41
+#: modules/groupserv/set_public.c:52
 #, c-format
 msgid "%s is already public."
 msgstr "%s est déjà publique."
@@ -937,7 +927,7 @@ msgstr "%s est déjà un bot ou un service."
 msgid "%s is already the founder of %s."
 msgstr "%s est déjà fondateur de %s."
 
-#: modules/operserv/specs.c:136
+#: modules/operserv/specs.c:135
 #, c-format
 msgid "%s is an internal client."
 msgstr "%s est un client interne."
@@ -1032,12 +1022,12 @@ msgstr "%s n'est ni un compte enregistré ni un hostmask."
 msgid "%s is no longer held."
 msgstr "%s n'est désormais plus suspendu."
 
-#: modules/groupserv/set_open.c:67
+#: modules/groupserv/set_open.c:80
 #, c-format
 msgid "%s is no longer open to anyone joining."
 msgstr "%s n'est désormais plus ouvert à tous."
 
-#: modules/groupserv/set_public.c:61
+#: modules/groupserv/set_public.c:72
 #, c-format
 msgid "%s is no longer public."
 msgstr "%s n'est désormais plus publique."
@@ -1068,8 +1058,8 @@ msgstr "%s n'est pas un pseudonyme interdit."
 msgid "%s is not a recognized LIST criterion"
 msgstr "%s n'est pas une action valide."
 
-#: modules/groupserv/fflags.c:43 modules/groupserv/flags.c:86
-#: modules/groupserv/invite.c:47 modules/nickserv/main.c:21
+#: modules/groupserv/fflags.c:46 modules/groupserv/flags.c:97
+#: modules/groupserv/invite.c:86 modules/nickserv/main.c:21
 #: modules/operserv/override.c:200
 #, c-format
 msgid "%s is not a registered account."
@@ -1096,7 +1086,7 @@ msgstr "%s n'est pas une action valide."
 msgid "%s is not a valid command."
 msgstr "%s n'est pas une commande valide."
 
-#: modules/chanserv/set_email.c:49 modules/groupserv/set_email.c:47
+#: modules/chanserv/set_email.c:49 modules/groupserv/set_email.c:65
 #: modules/nickserv/return.c:45
 #, c-format
 msgid "%s is not a valid e-mail address."
@@ -1215,7 +1205,7 @@ msgstr "%s n'a pas de note."
 msgid "%s is not on %s."
 msgstr "%s n'est pas sur %s."
 
-#: modules/operserv/akill.c:146 modules/operserv/specs.c:126
+#: modules/operserv/akill.c:146 modules/operserv/specs.c:125
 #, c-format
 msgid "%s is not on IRC."
 msgstr "%s n'est pas sur IRC."
@@ -1249,7 +1239,7 @@ msgstr "%s n'est pas en ligne."
 msgid "%s is not pending registration."
 msgstr "%s n'est pas un compte enregistré."
 
-#: modules/groupserv/set_public.c:54
+#: modules/groupserv/set_public.c:65
 #, c-format
 msgid "%s is not public already."
 msgstr "%s n'est déjà plus publique."
@@ -1288,7 +1278,7 @@ msgstr "%s n'est pas un salon enregistré."
 #: modules/nickserv/cert.c:90 modules/nickserv/drop.c:42
 #: modules/nickserv/drop.c:155 modules/nickserv/freeze.c:59
 #: modules/nickserv/hold.c:38 modules/nickserv/info.c:83
-#: modules/nickserv/listchans.c:36 modules/nickserv/listgroups.c:36
+#: modules/nickserv/listchans.c:36 modules/nickserv/listgroups.c:37
 #: modules/nickserv/mark.c:67 modules/nickserv/multimark.c:772
 #: modules/nickserv/regnolimit.c:38 modules/nickserv/resetpass.c:29
 #: modules/nickserv/restrict.c:81 modules/nickserv/return.c:32
@@ -1342,12 +1332,12 @@ msgstr "%s est maintenant suspendu."
 msgid "%s is now marked."
 msgstr "%s a maintenant une note."
 
-#: modules/groupserv/set_open.c:54
+#: modules/groupserv/set_open.c:66
 #, c-format
 msgid "%s is now open to anyone joining."
 msgstr "%s est désormais ouvert à tous."
 
-#: modules/groupserv/set_public.c:48
+#: modules/groupserv/set_public.c:59
 #, c-format
 msgid "%s is now public."
 msgstr "%s est désormais publique."
@@ -1405,7 +1395,7 @@ msgstr ""
 msgid "%s is the services server; it cannot be jupitered!"
 msgstr "%s est le serveur des services, il ne peut pas être jupe !"
 
-#: modules/operserv/specs.c:131
+#: modules/operserv/specs.c:130
 #, c-format
 msgid "%s is unprivileged."
 msgstr "%s ne bénéficie pas de privilèges."
@@ -1420,7 +1410,7 @@ msgstr "%s non trouvé dans la liste des exceptions de clones."
 msgid "%s not found in regex watch list."
 msgstr "%s n'a pas été trouvé dans la liste des regex actives."
 
-#: modules/groupserv/fflags.c:99 modules/groupserv/flags.c:195
+#: modules/groupserv/fflags.c:123 modules/groupserv/flags.c:218
 #, c-format
 msgid "%s now has flags %s on %s."
 msgstr "%s a désormais les flags %s sur %s."
@@ -1494,7 +1484,7 @@ msgid ""
 "has been received and should be reviewed shortly."
 msgstr ""
 
-#: modules/gameserv/dice.c:484
+#: modules/gameserv/dice.c:482
 #, fuzzy, c-format
 msgid "%s rolled %ud%u: "
 msgstr "%s lance %d dés : %s"
@@ -1589,6 +1579,16 @@ msgstr "L'accès de %s sur %s a été changé en %s."
 msgid "%s's marks:"
 msgstr "%s a maintenant une note."
 
+#: modules/groupserv/listchans.c:87
+#, fuzzy, c-format
+msgid "%u channel access match for the group %s"
+msgstr "%d accès de salons correspondent au groupe %s."
+
+#: modules/groupserv/listchans.c:88
+#, fuzzy, c-format
+msgid "%u channel access matches for the group %s"
+msgstr "%d accès de salons correspond au groupe %s."
+
 #: modules/nickserv/listlogins.c:36
 #, fuzzy, c-format
 msgid "%u client found"
@@ -1620,7 +1620,7 @@ msgid "(Restored) Mark %d originally set on %s by %s on %s: %s"
 msgstr ""
 
 #: modules/chanfix/fix.c:640 modules/chanserv/info.c:315
-#: modules/groupserv/info.c:92 modules/rpgserv/info.c:57
+#: modules/groupserv/info.c:117 modules/rpgserv/info.c:57
 msgid "*** End of Info ***"
 msgstr "*** Fin des Infos ***"
 
@@ -1639,21 +1639,21 @@ msgstr "CLEARCHAN : Ignore les IRC Operator %s!%s@%s {%s}"
 msgid "CLEARCHAN: Not klining exempt user %s!%s@%s"
 msgstr "CLEARCHAN: Utilisateurs exemtptés : %s!%s@%s"
 
-#: modules/backend/opensex.c:292
+#: modules/backend/opensex.c:288
 #, c-format
 msgid "DATABASE ERROR: db-open-read: cannot open '%s' for reading: %s"
 msgstr ""
 "ERREUR DE BASE DE DONNEES : db-open-read : impossible d'ouvrir '%s' pour "
 "lire : %s"
 
-#: modules/backend/opensex.c:348
+#: modules/backend/opensex.c:344
 #, c-format
 msgid "DATABASE ERROR: db-open-write: cannot open '%s' for writing: %s"
 msgstr ""
 "ERREUR DE BASE DE DONNEES : db-open-write : impossible d'ouvrir '%s' pour "
 "écrire : %s"
 
-#: modules/backend/opensex.c:404
+#: modules/backend/opensex.c:400
 #, c-format
 msgid ""
 "DATABASE ERROR: db_save(): cannot rename services.db.new to services.db: %s"
@@ -1732,12 +1732,12 @@ msgstr "  Options : Privées"
 msgid "  Used on : %zu channel(s)"
 msgstr "  Utilisé sur : %zu salon(s)"
 
-#: modules/gameserv/dice.c:496
+#: modules/gameserv/dice.c:494
 #, c-format
 msgid " <Total: %g(%c%u) = "
 msgstr ""
 
-#: modules/gameserv/dice.c:493
+#: modules/gameserv/dice.c:491
 #, c-format
 msgid " <Total: %g>"
 msgstr ""
@@ -1767,7 +1767,7 @@ msgstr "%-5d %-22s %s (%s) [modifié il y a %s]"
 msgid "%-5d %-22s %-20s (%s) [modified %s ago, on %s, by %s]"
 msgstr "%-5d %-22s %s (%s) [modifié il y a %s]"
 
-#: modules/chanserv/access.c:499
+#: modules/chanserv/access.c:499 modules/groupserv/flags.c:69
 #, c-format
 msgid "%-5d %-22s %s"
 msgstr "%-5d %-22s %s"
@@ -2083,6 +2083,11 @@ msgstr "%s: VOP: %d, AOP: %d, SOP: %d, AKick: %d, Autre : %d"
 msgid "%s: VOP: %d, HOP: %d, AOP: %d, SOP: %d, AKick: %d, Other: %d"
 msgstr "%s: VOP: %d, HOP: %d, AOP: %d, SOP: %d, AKick: %d, Autre : %d"
 
+#: modules/groupserv/main.c:423
+#, c-format
+msgid "%s: deleting channel %s (unused %lus, founder %s, chanacs %zu)"
+msgstr ""
+
 #: modules/contrib/os_resolve.c:119
 #, c-format
 msgid "%s: failed to create Mowgli DNS resolver object"
@@ -2091,6 +2096,11 @@ msgstr ""
 #: modules/contrib/os_resolve.c:112
 #, c-format
 msgid "%s: failed to create Mowgli heap object"
+msgstr ""
+
+#: modules/groupserv/main.c:419
+#, c-format
+msgid "%s: giving channel %s to %s (unused %lus, founder %s, chanacs %zu)"
 msgstr ""
 
 #: modules/chanserv/akick.c:683
@@ -2108,7 +2118,7 @@ msgstr "%s modifié : %s"
 msgid "%u: %s [Split %s ago]"
 msgstr "%d: %s [s'est déconnecté il y a %s]"
 
-#: modules/operserv/specs.c:181
+#: modules/operserv/specs.c:180
 #, fuzzy
 msgid "(no privileges held)"
 msgstr "Fin des privilèges"
@@ -2145,7 +2155,7 @@ msgstr "+r exempte de +b."
 msgid "- %d From: %s Sent: %s"
 msgstr "- %d Par : %s A envoyé: %s"
 
-#: modules/groupserv/list.c:40
+#: modules/groupserv/list.c:41
 #, c-format
 msgid "- %s (%s)"
 msgstr "- %s (%s)"
@@ -2155,11 +2165,15 @@ msgstr "- %s (%s)"
 msgid "- %s!%s@%s (real host: %s)"
 msgstr ""
 
+#: modules/groupserv/flags.c:60 modules/groupserv/flags.c:75
+msgid "----- ---------------------- -----"
+msgstr ""
+
 #: modules/rpgserv/list.c:30
 msgid "<no summary>"
 msgstr "<pas de sommaire>"
 
-#: modules/groupserv/set_description.c:44
+#: modules/groupserv/set_description.c:62
 #, c-format
 msgid "A description for %s was not set."
 msgstr "Aucune description définie pour %s."
@@ -2168,7 +2182,7 @@ msgstr "Aucune description définie pour %s."
 msgid "A game of Russian Roulette."
 msgstr "Un jeu de roulette russe."
 
-#: modules/groupserv/set_channel.c:44
+#: modules/groupserv/set_channel.c:62
 #, c-format
 msgid "A official channel for %s was not set."
 msgstr "Un salon officiel pour %s n'a pas été défini."
@@ -2246,8 +2260,8 @@ msgstr "AKILL sur %s@%s ajouté avec succès."
 msgid "Absolutely yes!"
 msgstr "Oui, absolument !"
 
-#: modules/groupserv/listchans.c:66 modules/nickserv/listchans.c:71
-#: modules/nickserv/listgroups.c:80
+#: modules/groupserv/listchans.c:73 modules/nickserv/listchans.c:71
+#: modules/nickserv/listgroups.c:81
 #, c-format
 msgid "Access flag(s) %s in %s"
 msgstr "Flags d'accès %s sur %s"
@@ -2452,11 +2466,11 @@ msgstr "Tout mène à croire que oui."
 msgid "All vhosts in the group %s have been set to %s."
 msgstr "Tous les vHosts du groupe %s ont été définis à %s."
 
-#: modules/groupserv/acsnolimit.c:68
+#: modules/groupserv/acsnolimit.c:79
 msgid "Allow a group to bypass access list limits."
 msgstr "Autorise un groupe a outrepasser les limites de la liste d'accès"
 
-#: modules/groupserv/regnolimit.c:68
+#: modules/groupserv/regnolimit.c:80
 msgid "Allow a group to bypass registration limits."
 msgstr "Autorise un groupe a outrepasser les limites d'enregistrement."
 
@@ -2549,6 +2563,11 @@ msgstr ""
 #: modules/chanserv/topic.c:348
 msgid "Appends a topic on a channel."
 msgstr "Ajoute une partie de topic sur le salon."
+
+#: modules/groupserv/main.c:721
+#, c-format
+msgid "Are open groups allowed: %s"
+msgstr ""
 
 #: modules/gameserv/eightball.c:57
 msgid "Ask the 8-Ball a question."
@@ -2665,7 +2684,7 @@ msgstr "Les klines CLONES sont actuellement activés."
 msgid "COMMITINTERVAL must be a positive integer, %s is invalid"
 msgstr "COMMITINTERVAL doit être un entier positif, %s est invalide"
 
-#: modules/gameserv/dice.c:604
+#: modules/gameserv/dice.c:602
 msgid "Calculate stuff."
 msgstr "Fait des calculs"
 
@@ -2674,7 +2693,7 @@ msgstr "Fait des calculs"
 msgid "Can unload : %s"
 msgstr "Déchargeable : %s"
 
-#: modules/gameserv/dice.c:478
+#: modules/gameserv/dice.c:476
 msgid "Can't divide by zero."
 msgstr "Division par 0 impossible."
 
@@ -2737,7 +2756,7 @@ msgstr "Change les modes sur tous les salon."
 msgid "Changes modes on channels."
 msgstr "Modifie les modes sur les salons."
 
-#: modules/groupserv/set_groupname.c:70
+#: modules/groupserv/set_groupname.c:68
 #, fuzzy
 msgid "Changes the group's name."
 msgstr "Change le nom de votre compte."
@@ -2897,7 +2916,7 @@ msgstr "La clé du salon %s est %s"
 msgid "Channel %s:"
 msgstr "Salon %s :"
 
-#: modules/groupserv/info.c:49
+#: modules/groupserv/info.c:98
 #, c-format
 msgid "Channel     : %s"
 msgstr "Salon         : %s"
@@ -2933,7 +2952,7 @@ msgstr "Les mémos de salon ne peuvent pas être forcés."
 msgid "Channel removal toolkit."
 msgstr "Outil de \"nettoyage\" de salon."
 
-#: modules/operserv/specs.c:45
+#: modules/operserv/specs.c:44
 msgid "Channels"
 msgstr "Salons"
 
@@ -3141,7 +3160,7 @@ msgstr ""
 msgid "DEFAULT - allowed limit %d, warn on %d"
 msgstr "DEFAULT - limite autorisée %d, avertissement à %d"
 
-#: modules/groupserv/main/groupserv.c:375
+#: modules/groupserv/main.c:422
 #, c-format
 msgid "DELETE: %s from %s"
 msgstr "SUPPRESSION : %s par %s"
@@ -3174,6 +3193,11 @@ msgstr "Déclenchement par défaut de la fantaisie des salons : %s"
 #: modules/operserv/clones.c:503
 msgid "Default clone warning has been disabled."
 msgstr "L'avertissement par defaut pour les clones a été désactivé."
+
+#: modules/groupserv/main.c:722
+#, c-format
+msgid "Default joinflags for open groups: %s"
+msgstr ""
 
 #: modules/operserv/info.c:21
 #, c-format
@@ -3292,7 +3316,7 @@ msgstr "Supprime un realname banni du réseau"
 msgid "Deletes memos."
 msgstr "Supprime des mémos."
 
-#: modules/groupserv/info.c:47
+#: modules/groupserv/info.c:101
 #, c-format
 msgid "Description : %s"
 msgstr "Description : %s"
@@ -3366,7 +3390,7 @@ msgstr "Affiche des informations sur un jeu spécifique."
 msgid "Displays information about loaded modules."
 msgstr "Affiche des informations sur les modules chargés."
 
-#: modules/groupserv/info.c:99
+#: modules/groupserv/info.c:123
 msgid "Displays information about registered groups."
 msgstr "Affiche des informations à propos des groupes enregistrés."
 
@@ -3446,7 +3470,7 @@ msgstr "L'email %s a déjà été banni."
 msgid "Email %s has already been whitelisted."
 msgstr "L'email %s a déjà été banni."
 
-#: modules/groupserv/info.c:53
+#: modules/groupserv/info.c:104
 #, c-format
 msgid "Email       : %s"
 msgstr "Email       : %s"
@@ -3536,7 +3560,7 @@ msgid "End of %s ACCESS listing."
 msgstr "Fin de la liste des ACCESS %s."
 
 #: modules/chanserv/flags.c:136 modules/contrib/cs_access_alias.c:141
-#: modules/groupserv/flags.c:67
+#: modules/groupserv/flags.c:76
 #, c-format
 msgid "End of %s FLAGS listing."
 msgstr "Fin de la liste des FLAGS %s."
@@ -3613,7 +3637,7 @@ msgstr "Fin de la liste des template de tout le réseau."
 msgid "End of oper class list"
 msgstr "Fin de la liste des classes oper"
 
-#: modules/operserv/specs.c:184
+#: modules/operserv/specs.c:183
 msgid "End of privileges"
 msgstr "Fin des privilèges"
 
@@ -3630,7 +3654,7 @@ msgstr "Fin de la liste des serveurs."
 msgid "End of services operator list"
 msgstr "Fin de la liste des services operator"
 
-#: modules/groupserv/info.c:41
+#: modules/groupserv/info.c:80
 #, c-format
 msgid "Entity ID   : %s"
 msgstr "ID              : %s"
@@ -3650,7 +3674,7 @@ msgstr "Entrée %d non trouvées dans les informations de connexion."
 msgid "Entry %d not found in oper logon info."
 msgstr "Entrée %d non trouvée dans les informations de connexion des oper."
 
-#: modules/groupserv/flags.c:53
+#: modules/groupserv/flags.c:59
 msgid "Entry Account                Flags"
 msgstr "Entrée Compte                Flags"
 
@@ -3671,28 +3695,28 @@ msgstr "Entrée Pseudonyme/Host          Rôle"
 msgid "Entry point: %p"
 msgstr "Entry point: %p"
 
-#: modules/gameserv/dice.c:99
+#: modules/gameserv/dice.c:97
 msgid "Error: Cannot perform modulus or division by zero."
 msgstr "Erreur : Ne peut pas effectuer de modulo ou division par 0."
 
-#: modules/gameserv/dice.c:284
+#: modules/gameserv/dice.c:282
 msgid "Error: Expression is too deeply nested."
 msgstr "Erreur : Trop d'expressions imbriquées."
 
-#: modules/gameserv/dice.c:382
+#: modules/gameserv/dice.c:380
 msgid "Error: Mismatched braces '( )' in expression."
 msgstr "Erreur : Expression '( )' incomplète."
 
-#: modules/gameserv/dice.c:240
+#: modules/gameserv/dice.c:238
 msgid "Error: Missing expected operator in expression."
 msgstr "Erreur : Opérateur attendu manquant dans l'expression."
 
-#: modules/gameserv/dice.c:172 modules/gameserv/dice.c:187
-#: modules/gameserv/dice.c:295
+#: modules/gameserv/dice.c:170 modules/gameserv/dice.c:185
+#: modules/gameserv/dice.c:293
 msgid "Error: Missing expected value in expression."
 msgstr "Erreur : Valeur attendue manquante dans l'expression."
 
-#: modules/gameserv/dice.c:136
+#: modules/gameserv/dice.c:134
 #, c-format
 msgid "Error: Unknown mathematical operator %c."
 msgstr "Erreur : Opérateur mathématique %c inconnu."
@@ -3702,8 +3726,8 @@ msgstr "Erreur : Opérateur mathématique %c inconnu."
 msgid "Error: Unrecognised address family %d"
 msgstr ""
 
-#: modules/gameserv/dice.c:194 modules/gameserv/dice.c:346
-#: modules/gameserv/dice.c:356 modules/gameserv/dice.c:374
+#: modules/gameserv/dice.c:192 modules/gameserv/dice.c:344
+#: modules/gameserv/dice.c:354 modules/gameserv/dice.c:372
 msgid "Error: You typed an invalid expression."
 msgstr "Erreur : Vous avez tapé une expression invalide."
 
@@ -3800,7 +3824,7 @@ msgstr "Flags"
 msgid "Flags %s were set on %s in %s."
 msgstr "Les flats %s ont été définis sur %s dans %s."
 
-#: modules/groupserv/info.c:85
+#: modules/groupserv/info.c:107 modules/groupserv/info.c:109
 #, c-format
 msgid "Flags       : %s"
 msgstr "Flags       : %s"
@@ -3877,7 +3901,7 @@ msgstr "Force la suppression de l'enregistrement d'un groupe."
 msgid "Forcefully verifies an account registration."
 msgstr "Force la vérification de l'enregistrement d'un compte."
 
-#: modules/groupserv/fflags.c:108
+#: modules/groupserv/fflags.c:130
 msgid "Forces a flag change on a user in a group."
 msgstr "Force le changement de flag de l'utilisateur d'un groupe."
 
@@ -3926,7 +3950,7 @@ msgstr "Transfert un mémo."
 msgid "Forwards incoming memos to your e-mail address."
 msgstr "Transfert les mémos entrants à votre adresse email."
 
-#: modules/groupserv/info.c:44
+#: modules/groupserv/info.c:91
 #, c-format
 msgid "Founder     : %s"
 msgstr "Fondateur : %s"
@@ -3935,6 +3959,11 @@ msgstr "Fondateur : %s"
 #, c-format
 msgid "Founder    : %s"
 msgstr "Fondateur    : %s"
+
+#: modules/groupserv/main.c:420
+#, fuzzy, c-format
+msgid "Foundership changed to %s because %s was dropped."
+msgstr "La possession de %s a été transférée de %s à %s."
 
 #: modules/chanserv/ftransfer.c:59
 #, c-format
@@ -3959,7 +3988,7 @@ msgstr "Gèle un compte."
 msgid "Fudge-style dice generation."
 msgstr "Génération de dés style Fudge."
 
-#: modules/operserv/specs.c:59
+#: modules/operserv/specs.c:58
 msgid "General"
 msgstr "Général"
 
@@ -4029,34 +4058,31 @@ msgstr "Manipule des permissions spécifiques sur un salon."
 msgid "Grants services operator privileges to an account."
 msgstr "Accorde les privilèges de service operator à un compte."
 
-#: modules/groupserv/flags.c:158 modules/groupserv/flags.c:180
+#: modules/groupserv/fflags.c:80 modules/groupserv/fflags.c:104
+#: modules/groupserv/flags.c:176 modules/groupserv/flags.c:199
 #, fuzzy, c-format
 msgid "Group %s access for %s unchanged."
 msgstr "Template %s sur %s inchangé."
 
-#: modules/groupserv/flags.c:173 modules/groupserv/join.c:62
+#: modules/groupserv/fflags.c:96 modules/groupserv/flags.c:191
+#: modules/groupserv/join.c:64
 #, fuzzy, c-format
 msgid "Group %s access list is full."
 msgstr "La liste d'accès du groupe %s est pleine."
 
-#: modules/groupserv/drop.c:37 modules/groupserv/drop.c:108
-#: modules/groupserv/info.c:30 modules/groupserv/join.c:30
-#: modules/groupserv/listchans.c:34 modules/groupserv/set_channel.c:21
-#: modules/groupserv/set_description.c:21 modules/groupserv/set_email.c:21
-#: modules/groupserv/set_joinflags.c:22 modules/groupserv/set_url.c:21
+#: modules/groupserv/drop.c:36 modules/groupserv/drop.c:108
+#: modules/groupserv/info.c:67 modules/groupserv/join.c:36
+#: modules/groupserv/listchans.c:36 modules/groupserv/set_channel.c:37
+#: modules/groupserv/set_description.c:37 modules/groupserv/set_email.c:37
+#: modules/groupserv/set_joinflags.c:37 modules/groupserv/set_url.c:37
 #, c-format
 msgid "Group %s does not exist."
 msgstr "Groupe %s inexistant."
 
-#: modules/groupserv/join.c:44
+#: modules/groupserv/join.c:59
 #, c-format
 msgid "Group %s is not open to anyone joining."
 msgstr "Le groupe %s n'est pas ouvert."
-
-#: modules/groupserv/fflags.c:82
-#, c-format
-msgid "Group %s access list is full."
-msgstr "La liste d'accès du groupe %s est pleine."
 
 #: modules/memoserv/send.c:183
 msgid "Group memos are administratively disabled."
@@ -4066,16 +4092,16 @@ msgstr "Les mémos de groupe sont désactivés par l'administration."
 msgid "Group memos may not be forced."
 msgstr "Les mémos de groupe ne peuvent pas être forcés."
 
-#: modules/operserv/specs.c:86
+#: modules/operserv/specs.c:85
 msgid "GroupServ"
 msgstr "GroupServ"
 
-#: modules/groupserv/main/hooks.c:149
+#: modules/groupserv/main.c:663
 #, c-format
 msgid "Groups     : %s"
 msgstr "Groupes     : %s"
 
-#: modules/groupserv/list.c:30
+#: modules/groupserv/list.c:27
 #, c-format
 msgid "Groups matching pattern %s:"
 msgstr "Groupes correspondants au pattern %s :"
@@ -4107,7 +4133,7 @@ msgid "Help for CLEAR:"
 msgstr "Aide pour CLEAR:"
 
 #: modules/botserv/set_core.c:28 modules/chanserv/set_core.c:27
-#: modules/groupserv/set.c:29 modules/nickserv/set_core.c:26
+#: modules/groupserv/set.c:27 modules/nickserv/set_core.c:26
 #: modules/operserv/set.c:25
 msgid "Help for SET:"
 msgstr "Aide pour SET :"
@@ -4255,7 +4281,7 @@ msgid ""
 "In order to complete the transfer, %s must perform the following command:"
 msgstr "Pour compléter le transfert, %s doit effectuer la commande suivante : "
 
-#: modules/groupserv/info.c:37
+#: modules/groupserv/info.c:76
 #, c-format
 msgid "Information for %s:"
 msgstr "Information sur %s :"
@@ -4455,7 +4481,7 @@ msgstr "user@host invalide : %s@%s. Ce mask n'est pas sécurisé."
 msgid "Invalid value %s for mode +%c."
 msgstr "Valeur %s invalide pour le mode +%c."
 
-#: modules/groupserv/invite.c:89
+#: modules/groupserv/invite.c:135
 #, fuzzy
 msgid "Invites a user to a group."
 msgstr "Applique des flags sur l'utilisateur d'un groupe."
@@ -4468,16 +4494,16 @@ msgstr "Vous invite sur un salon."
 msgid "It would take a disturbed person to even ask."
 msgstr "Il faudrait être dérangé pour oser demander."
 
-#: modules/groupserv/join.c:81
+#: modules/groupserv/info.c:112
+#, fuzzy, c-format
+msgid "Join Flags  : %s"
+msgstr "Flags      : %s"
+
+#: modules/groupserv/join.c:84
 msgid "Join a open group."
 msgstr "Joindre un groupe ouvert."
 
-#: modules/groupserv/info.c:89
-#, fuzzy, c-format
-msgid "Join flags  : %s"
-msgstr "Flags      : %s"
-
-#: modules/groupserv/set_joinflags.c:45
+#: modules/groupserv/set_joinflags.c:62
 #, c-format
 msgid "Join flags for %s were not set."
 msgstr "Les flags d'inscription pour %s n'étaient pas définis."
@@ -4605,7 +4631,7 @@ msgstr "Liste les informations précédemment envoyées."
 msgid "List previously posted oper news items."
 msgstr "Liste les informations pour les oper précédemment envoyées."
 
-#: modules/groupserv/list.c:55
+#: modules/groupserv/list.c:58
 msgid "List registered groups."
 msgstr "liste les groupes enregistrés."
 
@@ -4645,7 +4671,7 @@ msgstr "Liste les comptes enregistrés avec votre adresse email."
 msgid "Lists active K:line channels."
 msgstr "Liste les informations d'un salon."
 
-#: modules/hostserv/offer.c:372
+#: modules/hostserv/offer.c:371
 msgid "Lists all available vhosts."
 msgstr "Liste tous les vHosts disponibles."
 
@@ -4683,7 +4709,7 @@ msgstr "Liste les salons enregistré selon un certain pattern."
 msgid "Lists channels registered matching a given pattern."
 msgstr "Liste les salons enregistré selon un certain pattern."
 
-#: modules/groupserv/listchans.c:83
+#: modules/groupserv/listchans.c:94
 msgid "Lists channels that a group has access to."
 msgstr "Liste les salons où un groupe à accès."
 
@@ -4707,7 +4733,7 @@ msgstr "Liste les détails des clients authentifiés en tant que vous."
 msgid "Lists games."
 msgstr "Liste les jeux."
 
-#: modules/nickserv/listgroups.c:95
+#: modules/nickserv/listgroups.c:96
 msgid "Lists groups that you have access to."
 msgstr "Liste les groupes auxquels vous avez accès."
 
@@ -4920,6 +4946,11 @@ msgstr "Le mask %s est déjà sur votre liste d'accès."
 msgid "Mask %s is not on your access list."
 msgstr "le mask %s n'est pas sur votre liste d'accès."
 
+#: modules/groupserv/main.c:720
+#, fuzzy, c-format
+msgid "Maximum number of ACL entries allowed for one group: %u"
+msgstr "Nombre maximum de fondateurs autorisés par salon : %d"
+
 #: modules/operserv/info.c:37
 #, c-format
 msgid "Maximum number of channels that one user can own: %d"
@@ -4938,6 +4969,11 @@ msgstr ""
 #, c-format
 msgid "Maximum number of founders allowed per channel: %d"
 msgstr "Nombre maximum de fondateurs autorisés par salon : %d"
+
+#: modules/groupserv/main.c:719
+#, fuzzy, c-format
+msgid "Maximum number of groups one user can own: %u"
+msgstr "Nombre maximum de salons qu'un utilisateur peut posséder: %d"
 
 #: modules/operserv/info.c:33
 #, c-format
@@ -5064,7 +5100,7 @@ msgstr "NICKEXPIRE doit être un entier positif, %s est invalide"
 msgid "NO!"
 msgstr "NON !"
 
-#: modules/operserv/specs.c:77
+#: modules/operserv/specs.c:76
 msgid "NOOP access"
 msgstr "accède à NOOP"
 
@@ -5087,15 +5123,15 @@ msgstr "A besoin de réparation : %s"
 msgid "Network size: %u servers"
 msgstr "Taille du réseau : %u serveurs"
 
-#: modules/gameserv/dice.c:551
+#: modules/gameserv/dice.c:549
 msgid "Never gonna give you up; Never gonna let you down"
 msgstr ""
 
-#: modules/gameserv/dice.c:552
+#: modules/gameserv/dice.c:550
 msgid "Never gonna run around and desert you; Never gonna make you cry"
 msgstr ""
 
-#: modules/gameserv/dice.c:553
+#: modules/gameserv/dice.c:551
 msgid "Never gonna say goodbye; Never gonna tell a lie and hurt you"
 msgstr ""
 
@@ -5220,7 +5256,7 @@ msgstr "Délai d'expiration d'un pseudonyme : %d jours"
 msgid "Nickname ownership is disabled."
 msgstr "La propriété de pseudonyme est désactivée."
 
-#: modules/operserv/specs.c:31
+#: modules/operserv/specs.c:30
 msgid "Nicknames/Accounts"
 msgstr "Pseudonymes/Comptes"
 
@@ -5228,6 +5264,11 @@ msgstr "Pseudonymes/Comptes"
 #, c-format
 msgid "Nicks      : %s"
 msgstr "Pseudos  : %s"
+
+#: modules/groupserv/main.c:726
+#, fuzzy
+msgid "No"
+msgstr "Non."
 
 #: modules/chanserv/access.c:579 modules/chanserv/access.c:684
 #, c-format
@@ -5275,7 +5316,7 @@ msgstr "Aucun ban ne correspond à %s sur %s."
 msgid "No chance at all!"
 msgstr "Aucune chance !"
 
-#: modules/groupserv/listchans.c:56 modules/groupserv/listchans.c:74
+#: modules/groupserv/listchans.c:60 modules/groupserv/listchans.c:83
 #, c-format
 msgid "No channel access was found for the group %s."
 msgstr "Le groupe %s ne peut accéder à aucun salon."
@@ -5307,12 +5348,12 @@ msgstr ""
 msgid "No flags for %s in %s."
 msgstr "Pas de flags pour %s dans %s."
 
-#: modules/nickserv/listgroups.c:63 modules/nickserv/listgroups.c:86
+#: modules/nickserv/listgroups.c:64 modules/nickserv/listgroups.c:87
 #, c-format
 msgid "No group access was found for the nickname %s."
 msgstr "Aucun accès à un groupe n'a été trouvé pour le pseudonyme %s."
 
-#: modules/groupserv/list.c:46
+#: modules/groupserv/list.c:48
 #, c-format
 msgid "No groups matched pattern %s"
 msgstr "Aucun groupe ne correspond au pattern %s"
@@ -5391,7 +5432,7 @@ msgstr "Aucun SQLINE : %s."
 msgid "No such ban %s on %s."
 msgstr "Aucun ban %s sur %s."
 
-#: modules/operserv/soper.c:109 modules/operserv/specs.c:145
+#: modules/operserv/soper.c:109 modules/operserv/specs.c:144
 #, c-format
 msgid "No such oper class %s."
 msgstr "Aucune classe oper %s."
@@ -5540,11 +5581,11 @@ msgstr ""
 msgid "Only %d founders allowed per channel."
 msgstr "Seulement %d fondateurs autorisés par salon."
 
-#: modules/gameserv/dice.c:429
+#: modules/gameserv/dice.c:427
 msgid "Only 1-100 dice may be thrown at once."
 msgstr "Seuls 1-100 dés peuvent être jetés à la fois"
 
-#: modules/gameserv/dice.c:458
+#: modules/gameserv/dice.c:456
 msgid "Only 1-100 sides may be used on a dice."
 msgstr "Seuls 1-100 lancers peuvent être utilisés sur un dé."
 
@@ -5580,7 +5621,7 @@ msgstr ""
 msgid "Oper class list:"
 msgstr "Liste des classes oper"
 
-#: modules/operserv/specs.c:71
+#: modules/operserv/specs.c:70
 msgid "OperServ"
 msgstr "OperServ"
 
@@ -5636,12 +5677,12 @@ msgstr "Authentifie à un compte des services."
 msgid "Password hash generation failure"
 msgstr ""
 
-#: modules/nickserv/pwquality.c:91
+#: modules/nickserv/pwquality.c:90
 #, fuzzy, c-format
 msgid "Password is insecure [cracklib]: %s"
 msgstr "Le mot de passe fourni est insécurisé : %s"
 
-#: modules/nickserv/pwquality.c:94
+#: modules/nickserv/pwquality.c:93
 #, fuzzy, c-format
 msgid "Password is insecure [passwdqc]: %s"
 msgstr "Le mot de passe fourni est insécurisé : %s"
@@ -5813,12 +5854,12 @@ msgstr "Le mode privé du bot %s est maintenant inactif."
 msgid "Private mode of bot %s is now ON."
 msgstr "Le mode privé du bot %s est maintenant actif."
 
-#: modules/operserv/specs.c:159 modules/operserv/specs.c:161
+#: modules/operserv/specs.c:158 modules/operserv/specs.c:160
 #, c-format
 msgid "Privileges for %s:"
 msgstr "Privilèges pour %s :"
 
-#: modules/operserv/specs.c:163
+#: modules/operserv/specs.c:162
 #, c-format
 msgid "Privileges for oper class %s:"
 msgstr "Privilèges pour la classe oper %s :"
@@ -5989,7 +6030,7 @@ msgstr "Reprendre le contrôle de votre salon."
 msgid "Regain usage of a nickname."
 msgstr "Retrouver l'usage de votre pseudonyme."
 
-#: modules/groupserv/info.c:38
+#: modules/groupserv/info.c:77
 #, c-format
 msgid "Registered  : %s (%s ago)"
 msgstr "Enregistré  : %s (il y a %s)"
@@ -6022,7 +6063,7 @@ msgstr "L'enregistrement des pseudonymes invités est interdit."
 msgid "Registers a channel."
 msgstr "Enregistre un salon."
 
-#: modules/groupserv/register.c:73
+#: modules/groupserv/register.c:78
 msgid "Registers a group."
 msgstr "Enregistre un groupe."
 
@@ -6039,7 +6080,7 @@ msgstr "Enregistre un pseudonyme."
 msgid "Registers an account."
 msgstr "Enregistre un compte."
 
-#: modules/nickserv/pwquality.c:104
+#: modules/nickserv/pwquality.c:103
 msgid "Registration denied due to insecure password"
 msgstr ""
 
@@ -6133,7 +6174,7 @@ msgstr "Supprime le silence d'un salon."
 msgid "Removes a user from a channel."
 msgstr "Retire un utilisateur d'un salon."
 
-#: modules/hostserv/offer.c:363
+#: modules/hostserv/offer.c:362
 msgid "Removes a vhost from the list that users can take."
 msgstr "Supprime un vHost de la liste des vHost disponibles."
 
@@ -6281,7 +6322,7 @@ msgstr "Rôle       : %s"
 msgid "Role       : %s (inherited from %s)"
 msgstr "Rôle       : %s (hérité de %s)"
 
-#: modules/gameserv/dice.c:595
+#: modules/gameserv/dice.c:593
 msgid "Rolls one or more dice."
 msgstr "Lance un ou plusieurs dés."
 
@@ -6325,7 +6366,7 @@ msgstr ""
 "pour les salon, qui changent la façon dont certaines\n"
 "opérations sont effectuées dessus."
 
-#: modules/groupserv/set.c:32
+#: modules/groupserv/set.c:30
 msgid ""
 "SET allows you to set various control flags\n"
 "for groups that change the way certain\n"
@@ -6427,7 +6468,7 @@ msgstr "Les SQLINE sur %s ont été supprimés avec succès."
 msgid "SQLINE on %s was successfully added."
 msgstr "Un SQLINE sur %s ajouté avec succès."
 
-#: modules/groupserv/main/groupserv.c:358
+#: modules/groupserv/main.c:418
 #, c-format
 msgid "SUCCESSION: %s to %s from %s"
 msgstr "SUCCESSION : %s à %s par %s"
@@ -6516,7 +6557,7 @@ msgstr "Envoie un mémo à un utilisateur."
 msgid "Sends a memo to all accounts."
 msgstr "Envoie un mémo à tous les comptes."
 
-#: modules/memoserv/sendgroup.c:173
+#: modules/memoserv/sendgroup.c:172
 msgid "Sends a memo to all members on a group."
 msgstr "Envoie un mémo à tous les membres d'un groupe."
 
@@ -6676,7 +6717,7 @@ msgstr "Définit un compte comme étant en vacances."
 msgid "Sets channel mode lock."
 msgstr "Définit les modes bloqués sur un salon."
 
-#: modules/groupserv/flags.c:203
+#: modules/groupserv/flags.c:224
 msgid "Sets flags on a user in a group."
 msgstr "Applique des flags sur l'utilisateur d'un groupe."
 
@@ -6704,29 +6745,29 @@ msgstr "Définit la durée par défaut d'un AKICK"
 msgid "Sets the default KLINE/AKILL time."
 msgstr "Définit la durée par défaut d'un KLINE/AKILL"
 
-#: modules/groupserv/set_joinflags.c:66
+#: modules/groupserv/set_joinflags.c:83
 msgid "Sets the flags users will be given when they JOIN the group."
 msgstr ""
 "Définit les flags que les utilisateurs obtiennent lorsqu'ils s'inscrivent au "
 "groupe."
 
-#: modules/groupserv/set_url.c:57
+#: modules/groupserv/set_url.c:75
 msgid "Sets the group URL."
 msgstr "Définit l'URL du groupe."
 
-#: modules/groupserv/set_open.c:78
+#: modules/groupserv/set_open.c:91
 msgid "Sets the group as open for anyone to join."
 msgstr "Définit un groupe comme ouvert à tous."
 
-#: modules/groupserv/set_public.c:72
+#: modules/groupserv/set_public.c:83
 msgid "Sets the group as public."
 msgstr "Définit le groupe comme publique."
 
-#: modules/groupserv/set_description.c:57
+#: modules/groupserv/set_description.c:75
 msgid "Sets the group description."
 msgstr "Définit la description du groupe."
 
-#: modules/groupserv/set_email.c:60
+#: modules/groupserv/set_email.c:78
 msgid "Sets the group e-mail address."
 msgstr "Définit l'adresse email du groupe."
 
@@ -6739,16 +6780,16 @@ msgstr ""
 msgid "Sets the maximum number of founders per channel."
 msgstr "Définit le nombre maximum de fondateurs par salon."
 
-#: modules/groupserv/set_channel.c:57
+#: modules/groupserv/set_channel.c:75
 msgid "Sets the official group channel."
 msgstr "Définit le groupe officiel du salon."
 
-#: modules/chanserv/set_core.c:77 modules/groupserv/set.c:79
+#: modules/chanserv/set_core.c:77 modules/groupserv/set.c:77
 #: modules/nickserv/set_core.c:59 modules/operserv/set.c:490
 msgid "Sets various control flags."
 msgstr "Applique des flags de contrôle divers."
 
-#: modules/hostserv/offer.c:354
+#: modules/hostserv/offer.c:353
 msgid "Sets vhosts available for users to take."
 msgstr "Définit les vHosts disponibles que les utilisateurs peuvent prendre."
 
@@ -6779,7 +6820,7 @@ msgstr "Paramètre : %s"
 msgid "Setting for %s set."
 msgstr "Paramètre pour %s défini."
 
-#: modules/groupserv/set_open.c:41
+#: modules/groupserv/set_open.c:52
 msgid "Setting groups as open has been administratively disabled."
 msgstr ""
 "La définition des groupes ouverts a été désactivé par l'administration."
@@ -6810,7 +6851,7 @@ msgstr "Affiche et modifie les privilèges des services operator"
 msgid "Shows number of entries in access lists."
 msgstr "Affiche le nombre d'entrées de la liste d'accès."
 
-#: modules/operserv/specs.c:196
+#: modules/operserv/specs.c:195
 msgid "Shows oper flags."
 msgstr "Montre les flags oper."
 
@@ -6999,7 +7040,8 @@ msgstr "Syntaxe : ACCESS ADD|DEL|LIST [mask]"
 msgid "Syntax: ACCESS DEL <mask>"
 msgstr "Syntaxe : ACCESS DEL <mask>"
 
-#: modules/groupserv/acsnolimit.c:21 modules/groupserv/acsnolimit.c:62
+#: modules/groupserv/acsnolimit.c:19 modules/groupserv/acsnolimit.c:29
+#: modules/groupserv/acsnolimit.c:73
 msgid "Syntax: ACSNOLIMIT <!group> <ON|OFF>"
 msgstr "Syntaxe : ACSNOLIMIT <!groupe> <ON|OFF>"
 
@@ -7111,7 +7153,7 @@ msgstr ""
 msgid "Syntax: BOT DEL <nick>"
 msgstr "Syntaxe : BOT DEL <pseudo>"
 
-#: modules/gameserv/dice.c:574
+#: modules/gameserv/dice.c:572
 msgid "Syntax: CALC [times] <expression>"
 msgstr "Syntaxe : CALC [Nombre de fois] <expression>"
 
@@ -7253,8 +7295,8 @@ msgstr "Syntaxe : DNSBLEXEMPT DEL <ip>"
 msgid "Syntax: DNSBLSCAN <user>"
 msgstr "Syntaxe : DNSBLSCAN <utilistateur>"
 
-#: modules/groupserv/drop.c:22 modules/groupserv/drop.c:29
-#: modules/groupserv/drop.c:93 modules/groupserv/drop.c:100
+#: modules/groupserv/drop.c:19 modules/groupserv/drop.c:28
+#: modules/groupserv/drop.c:91 modules/groupserv/drop.c:100
 msgid "Syntax: DROP <!group>"
 msgstr "Syntaxe : DROP <!groupe>"
 
@@ -7282,22 +7324,24 @@ msgstr "Syntaxe : FDROP <compte>"
 msgid "Syntax: FENFORCE <account> ON|OFF"
 msgstr "Syntaxe : FENFORCE <compte> ON|OFF"
 
-#: modules/groupserv/fflags.c:25
+#: modules/groupserv/fflags.c:19 modules/groupserv/fflags.c:30
 #, fuzzy
-msgid "Syntax: FFLAGS <!group> [user] [changes]"
-msgstr "Syntaxe : FLAGS <!groupe> [utilisateur] [changements]"
+msgid "Syntax: FFLAGS <!group> <target> <flags>"
+msgstr "Syntaxe : FFLAGS <salon> <cible> <flags>"
 
 #: modules/chanserv/fflags.c:28
 msgid "Syntax: FFLAGS <channel> <target> <flags>"
 msgstr "Syntaxe : FFLAGS <salon> <cible> <flags>"
 
-#: modules/groupserv/flags.c:93
-msgid "Syntax: FLAGS <!group> <user> <changes>"
-msgstr "Syntaxe : FLAGS <!groupe> <utilisateur> <changements>"
+#: modules/groupserv/flags.c:106
+#, fuzzy
+msgid "Syntax: FLAGS <!group> <target> <flags>"
+msgstr "Syntaxe : FFLAGS <salon> <cible> <flags>"
 
-#: modules/groupserv/flags.c:28
-msgid "Syntax: FLAGS <!group> [user] [changes]"
-msgstr "Syntaxe : FLAGS <!groupe> [utilisateur] [changements]"
+#: modules/groupserv/flags.c:19 modules/groupserv/flags.c:28
+#, fuzzy
+msgid "Syntax: FLAGS <!group> [target [flags]]"
+msgstr "Syntaxe : FLAGS <salon> [cible] [flags]"
 
 #: modules/chanserv/flags.c:268
 #, fuzzy
@@ -7386,8 +7430,9 @@ msgstr "Syntaxe : IGNORE ADD|DEL|LIST|CLEAR <mask>"
 msgid "Syntax: IGNORE ADD|DEL|LIST|CLEAR [account]"
 msgstr "Syntaxe : IGNORE ADD|DEL|LIST|CLEAR [compte]"
 
-#: modules/groupserv/info.c:24
-msgid "Syntax: INFO <!groupname>"
+#: modules/groupserv/info.c:50 modules/groupserv/info.c:59
+#, fuzzy
+msgid "Syntax: INFO <!group>"
 msgstr "Syntaxe : INFO <!nom de groupe>"
 
 #: modules/botserv/info.c:34 modules/botserv/info.c:107
@@ -7415,17 +7460,19 @@ msgstr "Syntaxe : INFO <pseudonyme>"
 msgid "Syntax: INJECT <parameters>"
 msgstr "Syntaxe : INJECT <paramètres>"
 
-#: modules/groupserv/invite.c:29
-#, fuzzy
-msgid "Syntax: INVITE <!group> <user>"
-msgstr "Syntaxe : INFO <!nom de groupe>"
-
 #: modules/chanserv/invite.c:35
 msgid "Syntax: INVITE <#channel>"
 msgstr "Syntaxe : INVITE <#salon>"
 
-#: modules/groupserv/join.c:24
-msgid "Syntax: JOIN <!groupname>"
+#: modules/groupserv/invite.c:19 modules/groupserv/invite.c:54
+#: modules/groupserv/invite.c:64
+#, fuzzy
+msgid "Syntax: INVITE <DELETE|SHOW|!group [user]>"
+msgstr "Syntaxe : INFO <!nom de groupe>"
+
+#: modules/groupserv/join.c:19 modules/groupserv/join.c:28
+#, fuzzy
+msgid "Syntax: JOIN <!group>"
 msgstr "Syntaxe : JOIN <!nom de groupe>"
 
 #: modules/contrib/os_joinmon.c:111
@@ -7448,12 +7495,13 @@ msgstr "Syntaxe : KICK <#salon> <pseudonyme> [motif]"
 msgid "Syntax: KICKBAN <#channel> <nickname> [reason]"
 msgstr "Syntaxe : KICKBAN <#salon> <pseudonyme> [motif]"
 
-#: modules/groupserv/list.c:25
+#: modules/groupserv/list.c:20
 msgid "Syntax: LIST <group pattern>"
 msgstr "Syntaxe : LIST <pattern de groupe>"
 
-#: modules/groupserv/listchans.c:28
-msgid "Syntax: LISTCHANS <!groupname>"
+#: modules/groupserv/listchans.c:19 modules/groupserv/listchans.c:28
+#, fuzzy
+msgid "Syntax: LISTCHANS <!group>"
 msgstr "Syntaxe : LISTCHANS <!nom de groupe>"
 
 #: modules/nickserv/listmail.c:48
@@ -7505,7 +7553,7 @@ msgstr "Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <masque> [motif]"
 msgid "Syntax: NWOD [-chance] <dice> [-reroll] [reroll]"
 msgstr "Syntaxe : NWOD [-chance] <dé> [-relance] [relance]"
 
-#: modules/hostserv/offer.c:130 modules/hostserv/offer.c:145
+#: modules/hostserv/offer.c:129 modules/hostserv/offer.c:144
 msgid "Syntax: OFFER [!group] <vhost>"
 msgstr "Syntaxe : OFFER [!groupe] <vhost>"
 
@@ -7513,10 +7561,6 @@ msgstr "Syntaxe : OFFER [!groupe] <vhost>"
 #, fuzzy
 msgid "Syntax: OP <#channel> [nickname] [...]"
 msgstr "Syntaxe : OP <#salon> [pseudonyme]"
-
-#: modules/groupserv/set_open.c:21 modules/groupserv/set_open.c:72
-msgid "Syntax: OPEN <!group> <ON|OFF>"
-msgstr "Syntaxe : OPEN <!groupe> <ON|OFF>"
 
 #: modules/operserv/override.c:162
 msgid "Syntax: OVERRIDE <account> <service> <command> [params]"
@@ -7538,10 +7582,6 @@ msgstr "Syntax : PROCWATCH <pid>"
 #: modules/chanserv/protect.c:110
 msgid "Syntax: PROTECT <#channel> [nickname]"
 msgstr "Syntaxe : PROTECT <#salon> [pseudonyme]"
-
-#: modules/groupserv/set_public.c:21 modules/groupserv/set_public.c:66
-msgid "Syntax: PUBLIC <!group> <ON|OFF>"
-msgstr "Syntaxe : PUBLIC <!groupe> <ON|OFF>"
 
 #: modules/chanserv/quiet.c:343
 #, fuzzy
@@ -7578,6 +7618,11 @@ msgstr "Syntaxe : REGAIN <pseudo> [mot de passe]"
 msgid "Syntax: REGAIN <nickname> [password]"
 msgstr "Syntaxe : REGAIN <pseudonyme> [mot de passe]"
 
+#: modules/groupserv/register.c:19 modules/groupserv/register.c:28
+#, fuzzy
+msgid "Syntax: REGISTER <!group>"
+msgstr "Syntaxe : DROP <!groupe>"
+
 #: modules/chanserv/register.c:45
 msgid "Syntax: REGISTER <#channel>"
 msgstr "Syntax: REGISTER <#salon>"
@@ -7590,7 +7635,8 @@ msgstr "Syntaxe : REGISTER <compte> <mot de passe> <email>"
 msgid "Syntax: REGISTER <password> <email>"
 msgstr "Syntaxe : REGISTER <mot de passe> <email>"
 
-#: modules/groupserv/regnolimit.c:21 modules/groupserv/regnolimit.c:62
+#: modules/groupserv/regnolimit.c:19 modules/groupserv/regnolimit.c:29
+#: modules/groupserv/regnolimit.c:74
 msgid "Syntax: REGNOLIMIT <!group> <ON|OFF>"
 msgstr "Syntaxe : REGNOLIMIT <!groupe> <ON|OFF>"
 
@@ -7645,7 +7691,7 @@ msgstr "Syntaxe : ROLE <#salon> ADD|SET <rôle> [flags]"
 msgid "Syntax: ROLE <#channel> DEL <role>"
 msgstr "Syntaxe : ROLE <#salon> DEL <rôle>"
 
-#: modules/gameserv/dice.c:535
+#: modules/gameserv/dice.c:533
 msgid "Syntax: ROLL [times] [dice]d<sides>"
 msgstr "Syntaxe : ROLL [nombre de fois] [dés]d<lancers>"
 
@@ -7678,7 +7724,7 @@ msgstr "Syntaxe : SAY <#salon> <msg>"
 msgid "Syntax: SENDALL <memo>"
 msgstr "Syntaxe : SENDALL <mémo>"
 
-#: modules/memoserv/sendgroup.c:38
+#: modules/memoserv/sendgroup.c:37
 msgid "Syntax: SENDGROUP <group> <memo>"
 msgstr "Syntaxe : SENDGROUP <groupe> <mémo>"
 
@@ -7704,10 +7750,6 @@ msgstr "Syntaxe : NETSPLIT REMOVE <serveur>"
 #, fuzzy
 msgid "Syntax: SERVER [INFO|LIST|COUNT] [parameters]"
 msgstr "Syntaxe : SERVER [LIST|COUNT] [paramètres]"
-
-#: modules/groupserv/set.c:47 modules/groupserv/set.c:67
-msgid "Syntax: SET <!group> <setting> [parameters]"
-msgstr "Syntaxe : SET <!groupe> <setting> [paramètres]"
 
 #: modules/chanserv/set_core.c:45 modules/chanserv/set_core.c:65
 msgid "Syntax: SET <#channel> <setting> [parameters]"
@@ -7742,6 +7784,11 @@ msgstr "Syntaxe : SET <salon> <propriété> [valeur...]"
 msgid "Syntax: SET <destination> <setting> <parameters>"
 msgstr "Syntaxe : SET <destination> <setting> <parameters>"
 
+#: modules/groupserv/set.c:45 modules/groupserv/set.c:65
+#, fuzzy
+msgid "Syntax: SET <setting> <!group> [parameters]"
+msgstr "Syntaxe : SET <setting> <paramètres>"
+
 #: modules/nickserv/set_core.c:50 modules/operserv/set.c:52
 msgid "Syntax: SET <setting> <parameters>"
 msgstr "Syntaxe : SET <setting> <paramètres>"
@@ -7758,13 +7805,29 @@ msgstr "Syntaxe : SET AKICKTIME <minutes>"
 msgid "Syntax: SET CHANEXPIRE <days>"
 msgstr "Syntaxe : SET CHANEXPIRE <jours>"
 
+#: modules/groupserv/set_channel.c:20 modules/groupserv/set_channel.c:29
+#, fuzzy
+msgid "Syntax: SET CHANNEL <!group> [channel]"
+msgstr "Syntaxe : LISTCHANS <!nom de groupe>"
+
 #: modules/operserv/set.c:265
 msgid "Syntax: SET COMMITINTERVAL <minutes>"
 msgstr "Syntaxe : SET COMMITINTERVAL <minutes>"
 
+#: modules/groupserv/set_description.c:20
+#: modules/groupserv/set_description.c:29
+#, fuzzy
+msgid "Syntax: SET DESCRIPTION <!group> [description]"
+msgstr "Syntaxe : SET DNSBLACTION <action>"
+
 #: modules/contrib/dnsbl.c:105 modules/proxyscan/dnsbl.c:131
 msgid "Syntax: SET DNSBLACTION <action>"
 msgstr "Syntaxe : SET DNSBLACTION <action>"
+
+#: modules/groupserv/set_email.c:20 modules/groupserv/set_email.c:29
+#, fuzzy
+msgid "Syntax: SET EMAIL <!group> [email]"
+msgstr "Syntaxe : SET EMAIL <nouvelle adresse email>"
 
 #: modules/nickserv/set_email.c:25
 msgid "Syntax: SET EMAIL <new e-mail>"
@@ -7782,10 +7845,15 @@ msgstr "Syntaxe : SET ENFORCEPREFIX <préfixe>"
 msgid "Syntax: SET ENFORCETIME TIME|DEFAULT"
 msgstr "Syntaxe : SET ENFORCETIME TIME|DEFAULT"
 
-#: modules/groupserv/set_groupname.c:23 modules/groupserv/set_groupname.c:33
+#: modules/groupserv/set_groupname.c:20 modules/groupserv/set_groupname.c:30
 #, fuzzy
-msgid "Syntax: SET GROUPNAME <oldname> <newname>"
+msgid "Syntax: SET GROUPNAME <!oldname> <!newname>"
 msgstr "Syntaxe : FUNGROUP <pseudonyme> <nouveau compte>"
+
+#: modules/groupserv/set_joinflags.c:20 modules/groupserv/set_joinflags.c:29
+#, fuzzy
+msgid "Syntax: SET JOINFLAGS <!group> [flags]"
+msgstr "Syntaxe : FLAGS <!groupe> [utilisateur] [changements]"
 
 #: modules/operserv/set.c:237
 msgid "Syntax: SET KLINETIME <days>"
@@ -7823,6 +7891,12 @@ msgstr "Syntaxe : SET MDLIMIT <valeur>"
 msgid "Syntax: SET NICKEXPIRE <days>"
 msgstr "Syntaxe : SET NICKEXPIRE <jours>"
 
+#: modules/groupserv/set_open.c:20 modules/groupserv/set_open.c:30
+#: modules/groupserv/set_open.c:85
+#, fuzzy
+msgid "Syntax: SET OPEN <!group> <ON|OFF>"
+msgstr "Syntaxe : OPEN <!groupe> <ON|OFF>"
+
 #: modules/nickserv/set_password.c:43
 msgid "Syntax: SET PASSWORD <new password>"
 msgstr "Syntaxe : SET PASSWORD <nouveau mot de passe>"
@@ -7831,6 +7905,12 @@ msgstr "Syntaxe : SET PASSWORD <nouveau mot de passe>"
 msgid "Syntax: SET PROPERTY <property> [value]"
 msgstr "Syntaxe : SET PROPERTY <propriété> [valeur]"
 
+#: modules/groupserv/set_public.c:20 modules/groupserv/set_public.c:30
+#: modules/groupserv/set_public.c:77
+#, fuzzy
+msgid "Syntax: SET PUBLIC <!group> <ON|OFF>"
+msgstr "Syntaxe : PUBLIC <!groupe> <ON|OFF>"
+
 #: modules/operserv/set.c:75
 msgid "Syntax: SET RECONTIME <seconds>"
 msgstr "Syntaxe : SET RECONTIME <secondes>"
@@ -7838,6 +7918,11 @@ msgstr "Syntaxe : SET RECONTIME <secondes>"
 #: modules/operserv/set.c:406
 msgid "Syntax: SET SPAM <TRUE|FALSE>"
 msgstr "Syntaxe : SET SPAM <TRUE|FALSE>"
+
+#: modules/groupserv/set_url.c:20 modules/groupserv/set_url.c:29
+#, fuzzy
+msgid "Syntax: SET URL <!group> [url]"
+msgstr "Syntaxe : DROP <!groupe>"
 
 #: modules/nickserv/setpass.c:24 modules/nickserv/setpass.c:31
 #: modules/nickserv/setpass.c:57
@@ -7890,7 +7975,7 @@ msgstr "Syntaxe : SQLINE ADD|DEL|LIST"
 msgid "Syntax: SQLINE DEL <nick|chan>"
 msgstr "Syntaxe : SQLINE DEL <pseudo|salon>"
 
-#: modules/hostserv/offer.c:268
+#: modules/hostserv/offer.c:267
 msgid "Syntax: TAKE <vhost>"
 msgstr "Syntaxe : TAKE <vhost>"
 
@@ -7940,7 +8025,7 @@ msgstr "Syntaxe : UNBAN <#salon> <pseudonyme|hostmask>"
 msgid "Syntax: UNBAN <#channel> [nickname|hostmask]"
 msgstr "Syntaxe : UNBAN <#salon> [pseudonyme|hostmask]"
 
-#: modules/hostserv/offer.c:205
+#: modules/hostserv/offer.c:204
 msgid "Syntax: UNOFFER <vhost>"
 msgstr "Syntaxe : UNOFFER <vhost>"
 
@@ -7995,9 +8080,9 @@ msgstr "Syntaxe : WHY <salon> [utilisateur]"
 msgid "Syntax: WOD <dice> <difficulty>"
 msgstr "Syntaxe : WOD <dés> <difficulté>"
 
-#: modules/gameserv/dice.c:420 modules/gameserv/dice.c:433
-#: modules/gameserv/dice.c:445 modules/gameserv/dice.c:452
-#: modules/gameserv/dice.c:473
+#: modules/gameserv/dice.c:418 modules/gameserv/dice.c:431
+#: modules/gameserv/dice.c:443 modules/gameserv/dice.c:450
+#: modules/gameserv/dice.c:471
 msgid "Syntax: XdY [ {-|+|*|/} Z ]"
 msgstr "Syntaxe : XdY [ {-|+|*|/} Z ]"
 
@@ -8050,7 +8135,7 @@ msgstr "Explication de corruption : %s"
 msgid "Taint Location: %s:%d"
 msgstr "Endroit de corruption : %s:%d"
 
-#: modules/hostserv/offer.c:381
+#: modules/hostserv/offer.c:380
 msgid "Take an offered vhost for use."
 msgstr "Prend un vHost offert."
 
@@ -8231,17 +8316,17 @@ msgstr "Le MLOCK pour %s a été supprimé."
 msgid "The MLOCK for %s has been set to %s."
 msgstr "Le MLOCK pour %s a été défini à %s."
 
-#: modules/chanserv/set_url.c:43 modules/groupserv/set_url.c:40
+#: modules/chanserv/set_url.c:43 modules/groupserv/set_url.c:58
 #, c-format
 msgid "The URL for %s has been cleared."
 msgstr "L'URL pour %s a été réinitialisée."
 
-#: modules/chanserv/set_url.c:47 modules/groupserv/set_url.c:44
+#: modules/chanserv/set_url.c:47 modules/groupserv/set_url.c:62
 #, c-format
 msgid "The URL for %s was not set."
 msgstr "L'URL pour %s n'a pas été définie."
 
-#: modules/chanserv/set_url.c:56 modules/groupserv/set_url.c:52
+#: modules/chanserv/set_url.c:56 modules/groupserv/set_url.c:70
 #, c-format
 msgid "The URL of %s has been set to %s."
 msgstr "L'URL de %s a été définie à %s."
@@ -8293,12 +8378,12 @@ msgstr "Le salon %s est suspendu, il ne peut pas être effacé."
 msgid "The channel %s must exist in order to register it."
 msgstr "Le salon %s doit exister pour être enregistré."
 
-#: modules/groupserv/set_description.c:40
+#: modules/groupserv/set_description.c:58
 #, c-format
 msgid "The description for %s has been cleared."
 msgstr "La description pour %s a été supprimée."
 
-#: modules/groupserv/set_description.c:52
+#: modules/groupserv/set_description.c:70
 #, c-format
 msgid "The description of %s has been set to %s."
 msgstr "La description de %s a été définie à %s."
@@ -8323,17 +8408,17 @@ msgstr "L'adresse email du salon %s a été supprimée."
 msgid "The e-mail address for channel %s was not set."
 msgstr "L'adresse email du salon %s n'était pas définie."
 
-#: modules/groupserv/set_email.c:55
+#: modules/groupserv/set_email.c:73
 #, c-format
 msgid "The e-mail address for group %s has been set to %s."
 msgstr "L'adresse email du groupe %s a été définie à %s."
 
-#: modules/groupserv/set_email.c:36
+#: modules/groupserv/set_email.c:54
 #, c-format
 msgid "The e-mail address for group %s was deleted."
 msgstr "L'adresse email du groupe %s a été supprimée."
 
-#: modules/groupserv/set_email.c:41
+#: modules/groupserv/set_email.c:59
 #, c-format
 msgid "The e-mail address for group %s was not set."
 msgstr "L'adresse email du groupe %s n'a pas été définie."
@@ -8383,15 +8468,15 @@ msgstr "Le préfixe fantaisie pour le salon %s a été défini à %s."
 msgid "The fantasy prefix for the channel has been reset by %s"
 msgstr "Le préfixe fantaisie pour le salon %s a été défini à %s."
 
-#: modules/groupserv/register.c:40 modules/groupserv/set_groupname.c:58
+#: modules/groupserv/register.c:62 modules/groupserv/set_groupname.c:56
 #, c-format
 msgid "The group %s already exists."
 msgstr "Le groupe %s existe déjà."
 
-#: modules/groupserv/acsnolimit.c:27 modules/groupserv/fflags.c:31
-#: modules/groupserv/flags.c:34 modules/groupserv/invite.c:35
-#: modules/groupserv/regnolimit.c:27 modules/groupserv/set_groupname.c:40
-#: modules/groupserv/set_open.c:27 modules/groupserv/set_public.c:27
+#: modules/groupserv/acsnolimit.c:37 modules/groupserv/fflags.c:38
+#: modules/groupserv/flags.c:36 modules/groupserv/invite.c:72
+#: modules/groupserv/regnolimit.c:37 modules/groupserv/set_groupname.c:38
+#: modules/groupserv/set_open.c:38 modules/groupserv/set_public.c:38
 #, c-format
 msgid "The group %s does not exist."
 msgstr "Le groupe %s n'existe pas."
@@ -8401,33 +8486,33 @@ msgstr "Le groupe %s n'existe pas."
 msgid "The group %s has been dropped."
 msgstr "Le groupe %s a été supprimé."
 
-#: modules/groupserv/register.c:68
+#: modules/groupserv/register.c:72
 #, c-format
 msgid "The group %s has been registered to %s."
 msgstr "Le groupe %s a été enregistré par %s."
 
-#: modules/groupserv/set_groupname.c:65
+#: modules/groupserv/set_groupname.c:63
 #, fuzzy, c-format
 msgid "The group %s has been renamed to %s."
 msgstr "Le groupe %s a été enregistré par %s."
 
-#: modules/groupserv/register.c:46
-#, c-format
-msgid "The group name %s is invalid."
+#: modules/groupserv/register.c:34
+#, fuzzy, c-format
+msgid "The group name %s is too long."
 msgstr "Le nom de groupe %s est invalide."
 
-#: modules/groupserv/set_groupname.c:52
+#: modules/groupserv/set_groupname.c:50
 #, fuzzy, c-format
 msgid "The group name is already set to %s."
 msgstr "Le nom de votre compte est déjà défini en à %s."
 
-#: modules/groupserv/set_joinflags.c:41
+#: modules/groupserv/set_joinflags.c:58
 #, c-format
 msgid "The group-specific join flags for %s have been cleared."
 msgstr ""
 "Les flags spécifiques aux arrivants dans le groupe %s ont été supprimés."
 
-#: modules/groupserv/set_joinflags.c:61
+#: modules/groupserv/set_joinflags.c:78
 #, c-format
 msgid "The join flags of %s have been set to %s."
 msgstr "Les flags d'inscription à %s ont été définis à %s."
@@ -8467,7 +8552,7 @@ msgstr "Le mémo a été envoyé avec succès à %s."
 msgid "The memo has been successfully sent to %d accounts."
 msgstr "Le mémo a été envoyé à %d comptes."
 
-#: modules/memoserv/sendgroup.c:167
+#: modules/memoserv/sendgroup.c:166
 #, c-format
 msgid "The memo has been successfully sent to %d members on %s."
 msgstr "Le mémo a été envoyé à %d membres sur %s."
@@ -8509,12 +8594,12 @@ msgstr ""
 "Le pseudo %s appartient à un opérateur des services, il ne peut pas être "
 "effacé."
 
-#: modules/groupserv/set_channel.c:40
+#: modules/groupserv/set_channel.c:58
 #, c-format
 msgid "The official channel for %s has been cleared."
 msgstr "Le groupe officiel du salon %s a été supprimé."
 
-#: modules/groupserv/set_channel.c:52
+#: modules/groupserv/set_channel.c:70
 #, c-format
 msgid "The official channel of %s has been set to %s."
 msgstr "Le salon officiel de %s a été défini à %s."
@@ -8564,12 +8649,12 @@ msgstr "La regex fournie %s est invalide."
 msgid "The provided regex matches you, refusing RAKILL."
 msgstr "La regex fournie correspond à vous, RAKILL non effectué."
 
-#: modules/hostserv/offer.c:160
+#: modules/hostserv/offer.c:159
 #, fuzzy
 msgid "The requested group does not exist."
 msgstr "Le groupe %s n'existe pas."
 
-#: modules/hostserv/offer.c:168
+#: modules/hostserv/offer.c:167
 #, fuzzy
 msgid "The requested offer already exists."
 msgstr "Le groupe %s existe déjà."
@@ -8793,7 +8878,7 @@ msgstr "Pour forcer l'enregistrement d'un salon : FREGISTER <#salon>"
 
 #: modules/contrib/ms_fsend.c:131 modules/memoserv/forward.c:170
 #: modules/memoserv/sendall.c:144 modules/memoserv/send.c:163
-#: modules/memoserv/sendgroup.c:154 modules/memoserv/sendops.c:165
+#: modules/memoserv/sendgroup.c:153 modules/memoserv/sendops.c:165
 #, c-format
 msgid "To read it, type /%s%s READ %zu"
 msgstr "Pour le lire, tapez /%s%s READ %zu"
@@ -8806,10 +8891,6 @@ msgstr "Pour les lire, tapez /%s%s READ NEW"
 #: modules/chanserv/register.c:38
 msgid "To register a channel: REGISTER <#channel>"
 msgstr "Pour enregistrer un salon : REGISTER <#salon>"
-
-#: modules/groupserv/register.c:21 modules/groupserv/register.c:28
-msgid "To register a group: REGISTER <!groupname>"
-msgstr "Pour enregistrer un groupe : REGISTER <!nom de groupe>"
 
 #: modules/chanfix/fix.c:506 modules/chanfix/fix.c:564
 msgid "To view CHANFIX scores for a channel: SCORES <#channel>"
@@ -8905,7 +8986,7 @@ msgstr "Essemyez /mode %s -b %s"
 msgid "Type"
 msgstr "Type"
 
-#: modules/groupserv/info.c:51
+#: modules/groupserv/info.c:115
 #, c-format
 msgid "URL         : %s"
 msgstr "URL         : %s"
@@ -9108,6 +9189,11 @@ msgstr ""
 msgid "User %s is not on the network, you can not scan them."
 msgstr "%s est protégé des kicks, vous ne pouvez pas le kicker."
 
+#: modules/groupserv/main.c:554
+#, fuzzy
+msgid "User is banned from this channel"
+msgstr "Vous débanni d'un salon."
+
 #: modules/nickserv/info.c:121
 #, c-format
 msgid "User reg.  : %s (%s ago)"
@@ -9150,7 +9236,7 @@ msgstr "Les langues valides sont : %s"
 msgid "Valid operations are REGISTER and EMAILCHG."
 msgstr "Les opération valides sont REGISTER et EMAILCHG."
 
-#: modules/operserv/specs.c:151
+#: modules/operserv/specs.c:150
 msgid "Valid target types: USER, OPERCLASS."
 msgstr "Types de cibles valides : USER, OPERCLASS."
 
@@ -9243,6 +9329,11 @@ msgstr "Sans aucun doute."
 msgid "Word %s not found in bad word database."
 msgstr "Le mot %s n'a pas été trouvé dans la base de données."
 
+#: modules/groupserv/main.c:726
+#, fuzzy
+msgid "Yes"
+msgstr "Oui."
+
 #: modules/gameserv/eightball.c:25
 msgid "Yes, yes, yes, and yes again."
 msgstr "Oui, oui, oui et encore oui."
@@ -9260,7 +9351,7 @@ msgstr "Vous êtes un administrateur du serveur."
 msgid "You are a services operator of class %s."
 msgstr "Vous êtes un opérateur des services de classe %s."
 
-#: modules/groupserv/join.c:56
+#: modules/groupserv/join.c:47
 #, c-format
 msgid "You are already a member of group %s."
 msgstr "Vous êtes déjà un membre du groupe %s."
@@ -9334,12 +9425,12 @@ msgstr "Vous n'êtes pas autorisé à assigner le bot %s sur un salon."
 #: modules/chanserv/flags.c:292 modules/chanserv/flags.c:337
 #: modules/chanserv/set_email.c:29 modules/chanserv/set_entrymsg.c:28
 #: modules/chanserv/set_prefix.c:43 modules/chanserv/set_url.c:29
-#: modules/chanserv/template.c:139 modules/groupserv/drop.c:43
-#: modules/groupserv/join.c:50 modules/groupserv/set_channel.c:27
-#: modules/groupserv/set_description.c:27 modules/groupserv/set_email.c:27
-#: modules/groupserv/set_groupname.c:46 modules/groupserv/set_joinflags.c:28
-#: modules/groupserv/set_open.c:33 modules/groupserv/set_public.c:33
-#: modules/groupserv/set_url.c:27
+#: modules/chanserv/template.c:139 modules/groupserv/drop.c:42
+#: modules/groupserv/join.c:42 modules/groupserv/set_channel.c:43
+#: modules/groupserv/set_description.c:43 modules/groupserv/set_email.c:43
+#: modules/groupserv/set_groupname.c:44 modules/groupserv/set_joinflags.c:43
+#: modules/groupserv/set_open.c:44 modules/groupserv/set_public.c:44
+#: modules/groupserv/set_url.c:43
 msgid "You are not authorized to execute this command."
 msgstr "Vous n'êtes pas autorisé à exécuter cette commande."
 
@@ -9393,9 +9484,9 @@ msgstr "Vous n'êtes pas autorisé à effectuer cette commande."
 #: modules/chanserv/xop.c:346 modules/chanserv/xop.c:360
 #: modules/chanserv/xop.c:432 modules/contrib/cs_access_alias.c:115
 #: modules/contrib/cs_userinfo.c:46 modules/contrib/cs_userinfo.c:71
-#: modules/groupserv/flags.c:44 modules/groupserv/flags.c:80
-#: modules/groupserv/flags.c:132 modules/groupserv/invite.c:41
-#: modules/groupserv/listchans.c:44 modules/memoserv/sendops.c:89
+#: modules/groupserv/flags.c:50 modules/groupserv/flags.c:89
+#: modules/groupserv/flags.c:149 modules/groupserv/invite.c:78
+#: modules/groupserv/listchans.c:46 modules/memoserv/sendops.c:89
 #: modules/nickserv/sendpass_user.c:39 modules/operserv/soper.c:19
 #: modules/rpgserv/set.c:189
 msgid "You are not authorized to perform this operation."
@@ -9406,14 +9497,14 @@ msgstr "Vous n'êtes pas autorisé à exécuter cette action."
 msgid "You are not authorized to unassign a bot on %s."
 msgstr "Vous n'êtes pas autorisé à désassigner un bot sur %s."
 
-#: modules/operserv/help.c:19 modules/operserv/specs.c:108
+#: modules/operserv/help.c:19 modules/operserv/specs.c:107
 #, c-format
 msgid "You are not authorized to use %s."
 msgstr "Vous n'êtes pas autorisé à utiliser %s."
 
 #: modules/nickserv/access.c:207 modules/nickserv/cert.c:42
 #: modules/nickserv/cert.c:84 modules/nickserv/listchans.c:28
-#: modules/nickserv/listgroups.c:28
+#: modules/nickserv/listgroups.c:29
 msgid "You are not authorized to use the target argument."
 msgstr "Vous n'êtes pas autorisé à utiliser l'argument cible."
 
@@ -9423,14 +9514,14 @@ msgstr "Vous n'êtes pas autorisé à utiliser l'argument cible."
 #: modules/chanserv/template.c:127 modules/chanserv/unban_self.c:60
 #: modules/chanserv/xop.c:276 modules/contrib/cs_fregister.c:47
 #: modules/contrib/ms_fsend.c:38 modules/contrib/ns_goodmail.c:108
-#: modules/contrib/os_joinmon.c:117 modules/groupserv/fflags.c:37
-#: modules/hostserv/offer.c:151 modules/infoserv/main.c:250
-#: modules/nickserv/access.c:199 modules/nickserv/access.c:251
-#: modules/nickserv/access.c:384 modules/nickserv/badmail.c:108
-#: modules/nickserv/cert.c:34 modules/nickserv/cert.c:76
-#: modules/nickserv/cert.c:131 modules/nickserv/cert.c:167
-#: modules/nickserv/listchans.c:45 modules/nickserv/listgroups.c:45
-#: modules/nickserv/logout.c:23 modules/nickserv/status.c:76
+#: modules/contrib/os_joinmon.c:117 modules/hostserv/offer.c:150
+#: modules/infoserv/main.c:250 modules/nickserv/access.c:199
+#: modules/nickserv/access.c:251 modules/nickserv/access.c:384
+#: modules/nickserv/badmail.c:108 modules/nickserv/cert.c:34
+#: modules/nickserv/cert.c:76 modules/nickserv/cert.c:131
+#: modules/nickserv/cert.c:167 modules/nickserv/listchans.c:45
+#: modules/nickserv/listgroups.c:46 modules/nickserv/logout.c:23
+#: modules/nickserv/status.c:76
 msgid "You are not logged in."
 msgstr "Vous n'êtes pas authentifié."
 
@@ -9444,7 +9535,7 @@ msgstr "Vous n'êtes pas reconnu comme %s."
 msgid "You are not the founder of %s."
 msgstr "Vous n'êtes pas le fondateur de %s."
 
-#: modules/groupserv/join.c:76
+#: modules/groupserv/join.c:79
 #, c-format
 msgid "You are now a member of %s."
 msgstr "Vous êtes désormais un membre de %s."
@@ -9452,6 +9543,11 @@ msgstr "Vous êtes désormais un membre de %s."
 #: modules/contrib/os_helpme.c:16
 msgid "You are now a network helper."
 msgstr "Vous êtes maintenant un helpeur du réseau."
+
+#: modules/groupserv/main.c:421
+#, c-format
+msgid "You are now founder on %s (as %s) because %s was dropped."
+msgstr ""
 
 #: modules/nickserv/identify.c:150
 #, c-format
@@ -9498,11 +9594,11 @@ msgstr ""
 "Vous ne pouvez pas enregistrer votre pseudo aussi rapidement après votre "
 "connexion. Merci de patienter un moment et de réessayer."
 
-#: modules/groupserv/set_joinflags.c:51
+#: modules/groupserv/set_joinflags.c:68
 msgid "You can't set join flags to be removed."
 msgstr "Vous ne pouvez définir la suppression des flags d'inscription"
 
-#: modules/hostserv/offer.c:274
+#: modules/hostserv/offer.c:273
 #, fuzzy
 msgid "You can't take vhosts when not logged in"
 msgstr "Vous n'êtes pas authentifié."
@@ -9650,6 +9746,11 @@ msgstr "Vous avez %zu memo (%d nouveau)."
 msgid "You have %zu memos (%d new)."
 msgstr "Vous avez %zu mémos (Non lus : %d)"
 
+#: modules/groupserv/invite.c:45
+#, fuzzy, c-format
+msgid "You have a pending group invite to %s."
+msgstr "Vous avez été invité sur %s."
+
 #: modules/chanserv/status.c:47
 #, c-format
 msgid "You have access flags %s on %s."
@@ -9708,7 +9809,7 @@ msgstr "Vous avez été empêché de grouper vos pseudos par le staff du réseau
 msgid "You have been restricted from registering channels by network staff."
 msgstr "Vous avez été empêché d'enregistrer des salons par le staff du réseau."
 
-#: modules/groupserv/register.c:59
+#: modules/groupserv/register.c:47
 msgid "You have been restricted from registering groups by network staff."
 msgstr ""
 "Vous avez été empêché d'enregistrer des groupes par le staff du réseau."
@@ -9728,7 +9829,7 @@ msgstr "Vous avez été empêché de demander de l'aide par le staff du réseau.
 msgid "You have been restricted from requesting vhosts by network staff."
 msgstr "Vous avez été empêché de demander des vHosts par le staff du réseau."
 
-#: modules/hostserv/offer.c:280
+#: modules/hostserv/offer.c:279
 msgid "You have been restricted from taking vhosts by network staff"
 msgstr "Vous avez été empêché de prendre des vHosts par le staff du réseau."
 
@@ -9752,17 +9853,22 @@ msgstr "Vous n'avez pas de mémos."
 msgid "You have no new memos."
 msgstr "Vous n'avez pas de nouveaux mémos."
 
+#: modules/groupserv/invite.c:29
+#, fuzzy
+msgid "You have no pending group invite."
+msgstr "Vous avez trop de groupes enregistrés."
+
 #: modules/chanserv/status.c:50
 #, c-format
 msgid "You have no special access to %s."
 msgstr "Vous n'avez pas d'accès spécial pour %s."
 
-#: modules/hostserv/offer.c:182
+#: modules/hostserv/offer.c:181
 #, fuzzy, c-format
 msgid "You have offered vhost %s to group %s."
 msgstr "Vous avez offert le vHost %s."
 
-#: modules/hostserv/offer.c:187
+#: modules/hostserv/offer.c:186
 #, c-format
 msgid "You have offered vhost %s."
 msgstr "Vous avez offert le vHost %s."
@@ -9791,7 +9897,7 @@ msgid "You have started with %d money.  For help, use /msg %s HELP HAPPYFARM
 msgstr ""
 "Vous démarrez avec %d argent. Pour l'aide, utilisez /msg %s HELP HAPPYFARM."
 
-#: modules/hostserv/offer.c:310
+#: modules/hostserv/offer.c:309
 #, c-format
 msgid "You have taken vhost %s."
 msgstr "Vous avez pris le vHost %s."
@@ -9815,7 +9921,7 @@ msgstr ""
 msgid "You have too many channels registered."
 msgstr "Vous avez trop de salons enregistrés."
 
-#: modules/groupserv/register.c:53
+#: modules/groupserv/register.c:56
 msgid "You have too many groups registered."
 msgstr "Vous avez trop de groupes enregistrés."
 
@@ -9828,13 +9934,13 @@ msgstr "Vous avez déjà trop de pseudonymes enregistrés."
 msgid "You have unbanned email address %s."
 msgstr "Vous avez banni l'adresse email %s."
 
-#: modules/hostserv/offer.c:229
+#: modules/hostserv/offer.c:228
 #, c-format
 msgid "You have unoffered vhost %s."
 msgstr "Vous avez retiré le vHost %s des vHost offerts."
 
 #: modules/contrib/ms_fsend.c:47 modules/memoserv/sendall.c:52
-#: modules/memoserv/send.c:52 modules/memoserv/sendgroup.c:54
+#: modules/memoserv/send.c:52 modules/memoserv/sendgroup.c:53
 #: modules/memoserv/sendops.c:53
 msgid ""
 "You have used this command too many times; please wait a while and try again."
@@ -9897,7 +10003,7 @@ msgstr ""
 msgid "You may not remove %s from the %s role."
 msgstr "Vous ne pouvez pas supprimer tous les flags pour le rôle %s."
 
-#: modules/groupserv/fflags.c:63 modules/groupserv/flags.c:146
+#: modules/groupserv/fflags.c:67 modules/groupserv/flags.c:162
 #, fuzzy
 msgid "You may not remove a founder's +F access."
 msgstr "Vous ne voulez probablement pas supprimer un accès +f à un fondateur."
@@ -9908,7 +10014,7 @@ msgstr "Vous ne voulez probablement pas supprimer un accès +f à un fondateur."
 
 #: modules/chanserv/access.c:690 modules/chanserv/access.c:950
 #: modules/chanserv/fflags.c:95 modules/chanserv/flags.c:390
-#: modules/groupserv/fflags.c:57 modules/groupserv/flags.c:140
+#: modules/groupserv/fflags.c:62 modules/groupserv/flags.c:157
 msgid "You may not remove the last founder."
 msgstr "Vous ne voulez probablement pas supprimer le dernier fondateur."
 
@@ -9929,7 +10035,7 @@ msgstr "Vous voulez probablement altérer les modes +%s."
 msgid "You may only unban yourself via %s."
 msgstr "Vous pouvez seulement vous débannir vous-même via %s."
 
-#: modules/nickserv/pwquality.c:98
+#: modules/nickserv/pwquality.c:97
 #, fuzzy, c-format
 msgid ""
 "You may want to set a different password with: /msg %s SET PASSWORD "
@@ -9969,7 +10075,7 @@ msgstr ""
 msgid "You must specify a positive integer for limit."
 msgstr "Vous devez spécifier une valeur entière positive pour la limite."
 
-#: modules/hostserv/offer.c:288 modules/hostserv/request.c:217
+#: modules/hostserv/offer.c:287 modules/hostserv/request.c:217
 #, c-format
 msgid "You must wait at least %d days between changes to your vHost."
 msgstr ""
@@ -9989,13 +10095,13 @@ msgstr "Vous devez spécifier une valeur pour le mode +%c."
 msgid "You need to verify your email address before you may register channels."
 msgstr "Vous devez vérifier votre adresse email avant d'enregistrer des salon."
 
-#: modules/groupserv/register.c:34
+#: modules/groupserv/register.c:40
 #, fuzzy
 msgid "You need to verify your email address before you may register groups."
 msgstr "Vous devez vérifier votre adresse email avant d'enregistrer des salon."
 
 #: modules/memoserv/forward.c:42 modules/memoserv/sendall.c:43
-#: modules/memoserv/send.c:43 modules/memoserv/sendgroup.c:45
+#: modules/memoserv/send.c:43 modules/memoserv/sendgroup.c:44
 #: modules/memoserv/sendops.c:44
 msgid "You need to verify your email address before you may send memos."
 msgstr "Vous devez vérifier votre adresse email avant d'envoyer des mémos."
@@ -10086,7 +10192,7 @@ msgid "Your ignore list is full, please DEL an account."
 msgstr "Votre ligne d'ignore est pleine, merci de DEL un compte."
 
 #: modules/contrib/ms_fsend.c:65 modules/memoserv/sendall.c:70
-#: modules/memoserv/send.c:70 modules/memoserv/sendgroup.c:72
+#: modules/memoserv/send.c:70 modules/memoserv/sendgroup.c:71
 #: modules/memoserv/sendops.c:71
 msgid "Your memo contains invalid characters."
 msgstr "Votre mémo contient des caractères invalides."
@@ -10094,6 +10200,11 @@ msgstr "Votre mémo contient des caractères invalides."
 #: modules/memoserv/main.c:33 modules/memoserv/main.c:65
 msgid "Your memo inbox is full! Please delete memos you no longer need."
 msgstr ""
+
+#: modules/groupserv/invite.c:39
+#, fuzzy, c-format
+msgid "Your pending group invite to %s has been deleted."
+msgstr "Le rôle %s a été supprimé."
 
 #: modules/nickserv/set_pubkey.c:44
 #, fuzzy, c-format
@@ -10133,15 +10244,15 @@ msgstr "[%s - %s] %s"
 msgid "[unread]"
 msgstr "[non lu]"
 
-#: modules/operserv/specs.c:74
+#: modules/operserv/specs.c:73
 msgid "add and remove autokills"
 msgstr "ajoute et retire des autokills"
 
-#: modules/operserv/specs.c:89
+#: modules/operserv/specs.c:88
 msgid "administer groups"
 msgstr "administre les groupes"
 
-#: modules/operserv/specs.c:64
+#: modules/operserv/specs.c:63
 msgid "administer services"
 msgstr "administre les services"
 
@@ -10153,11 +10264,11 @@ msgstr ""
 msgid "beans"
 msgstr ""
 
-#: modules/operserv/specs.c:53
+#: modules/operserv/specs.c:52
 msgid "bypass channel registration limits"
 msgstr "contourne les restrictions d'enregistrement des salons"
 
-#: modules/operserv/specs.c:90
+#: modules/operserv/specs.c:89
 msgid "bypass group registration limits"
 msgstr "contourne les limitations d'enregistrement de groupe."
 
@@ -10165,40 +10276,40 @@ msgstr "contourne les limitations d'enregistrement de groupe."
 msgid "corn"
 msgstr ""
 
-#: modules/operserv/specs.c:34
+#: modules/operserv/specs.c:33
 msgid "drop accounts, freeze accounts, reset passwords"
 msgstr "supprime les comptes, gèle les comptes, réinitialise les mots de passe"
 
-#: modules/operserv/specs.c:48
+#: modules/operserv/specs.c:47
 msgid "drop channels, close channels, transfer ownership"
 msgstr "supprime les salons, ferme les salons, transfert la propriété"
 
-#: modules/operserv/specs.c:79
+#: modules/operserv/specs.c:78
 msgid "edit oper privileges"
 msgstr "édite les privilèges oper"
 
-#: modules/operserv/specs.c:65
+#: modules/operserv/specs.c:64
 msgid "edit private and internal metadata"
 msgstr "édite les metadonnées internes et privées"
 
-#: modules/operserv/specs.c:63
+#: modules/operserv/specs.c:62
 msgid "exempt from flood control"
 msgstr "n'est pas concerné par le contrôle du flood"
 
-#: modules/operserv/specs.c:39
+#: modules/operserv/specs.c:38
 msgid "hold accounts"
 msgstr "retient des comptes"
 
-#: modules/operserv/specs.c:52
+#: modules/operserv/specs.c:51
 #, fuzzy
 msgid "hold channels"
 msgstr "Salons"
 
-#: modules/operserv/specs.c:50
+#: modules/operserv/specs.c:49
 msgid "join staff channels"
 msgstr "joint les salons du staff"
 
-#: modules/operserv/specs.c:76
+#: modules/operserv/specs.c:75
 msgid "jupe servers"
 msgstr "bloque des serveurs"
 
@@ -10210,20 +10321,20 @@ msgstr ""
 msgid "list empty"
 msgstr "liste vide"
 
-#: modules/operserv/specs.c:38
+#: modules/operserv/specs.c:37
 msgid "mark accounts"
 msgstr "marque des comptes"
 
-#: modules/operserv/specs.c:51
+#: modules/operserv/specs.c:50
 #, fuzzy
 msgid "mark channels"
 msgstr "Salons"
 
-#: modules/operserv/specs.c:75
+#: modules/operserv/specs.c:74
 msgid "masskill channels or regexes"
 msgstr "masskill des salons ou des regexes"
 
-#: modules/operserv/specs.c:49
+#: modules/operserv/specs.c:48
 msgid "mlock operator modes"
 msgstr "mlock les modes opérateurs"
 
@@ -10251,7 +10362,7 @@ msgstr ""
 msgid "pears"
 msgstr ""
 
-#: modules/operserv/specs.c:80
+#: modules/operserv/specs.c:79
 msgid "perform actions as any other user"
 msgstr "effectue des actions comme tous les autres utilisateurs"
 
@@ -10259,23 +10370,23 @@ msgstr "effectue des actions comme tous les autres utilisateurs"
 msgid "potato"
 msgstr ""
 
-#: modules/operserv/specs.c:37
+#: modules/operserv/specs.c:36
 msgid "register accounts on behalf of another user"
 msgstr "comptes enregistrés au nom d'un autre utilisateur"
 
-#: modules/operserv/specs.c:78
+#: modules/operserv/specs.c:77
 msgid "send global notices"
 msgstr "envoie des notices globales"
 
-#: modules/operserv/specs.c:35
+#: modules/operserv/specs.c:34
 msgid "send passwords"
 msgstr "envoie les mots de passe"
 
-#: modules/operserv/specs.c:73
+#: modules/operserv/specs.c:72
 msgid "set channel modes"
 msgstr "applique des modes sur salons"
 
-#: modules/operserv/specs.c:36
+#: modules/operserv/specs.c:35
 msgid "set vhosts"
 msgstr "applique des vhosts"
 
@@ -10317,30 +10428,46 @@ msgstr "vHost     : %s"
 msgid "vHost      : unassigned%s"
 msgstr "vHost     : %s"
 
-#: modules/hostserv/offer.c:212 modules/hostserv/offer.c:318
+#: modules/hostserv/offer.c:211 modules/hostserv/offer.c:317
 #, c-format
 msgid "vhost %s not found in vhost offer database."
 msgstr "Le vHost %s n'est pas dans la base de données de vHost offerts."
 
-#: modules/operserv/specs.c:33
+#: modules/operserv/specs.c:32
 msgid "view concealed information about accounts"
 msgstr "voit les informations sur les comptes dissimulées"
 
-#: modules/operserv/specs.c:47
+#: modules/operserv/specs.c:46
 msgid "view concealed information about channels"
 msgstr "voit les informations sur les salons dissimulées"
 
-#: modules/operserv/specs.c:88
+#: modules/operserv/specs.c:87
 msgid "view concealed information about groups"
 msgstr "voir les informations dissimulées sur les groupes."
 
-#: modules/operserv/specs.c:61
+#: modules/operserv/specs.c:60
 msgid "view concealed information about servers"
 msgstr "voit les informations sur les serveurs dissimulées "
 
-#: modules/operserv/specs.c:62
+#: modules/operserv/specs.c:61
 msgid "view privileges of other users"
 msgstr "voit les privilèges des autres utilisateurs"
+
+#~ msgid "Group %s access list is full."
+#~ msgstr "La liste d'accès du groupe %s est pleine."
+
+#, fuzzy
+#~ msgid "Syntax: FFLAGS <!group> [user] [changes]"
+#~ msgstr "Syntaxe : FLAGS <!groupe> [utilisateur] [changements]"
+
+#~ msgid "Syntax: FLAGS <!group> <user> <changes>"
+#~ msgstr "Syntaxe : FLAGS <!groupe> <utilisateur> <changements>"
+
+#~ msgid "Syntax: SET <!group> <setting> [parameters]"
+#~ msgstr "Syntaxe : SET <!groupe> <setting> [paramètres]"
+
+#~ msgid "To register a group: REGISTER <!groupname>"
+#~ msgstr "Pour enregistrer un groupe : REGISTER <!nom de groupe>"
 
 #~ msgid "For more specific help use /msg %s HELP SET command."
 #~ msgstr ""
