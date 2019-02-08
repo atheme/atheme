@@ -326,14 +326,16 @@ mygroup_delete(struct mygroup *const restrict mg)
 }
 
 static struct mygroup *
-mygroup_find(const char *name)
+mygroup_find(const char *const restrict name)
 {
-	struct myentity *mg = myentity_find(name);
+	return_null_if_fail(name != NULL);
 
-	if (mg == NULL)
+	struct myentity *const mg = myentity_find(name);
+
+	if (! mg)
 		return NULL;
 
-	if (!isgroup(mg))
+	if (! isgroup(mg))
 		return NULL;
 
 	return group(mg);
