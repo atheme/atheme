@@ -3,8 +3,7 @@
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
  * Copyright (C) 2005-2010 Atheme Project (http://atheme.org/)
- *
- * This file contains routines to handle the GroupServ HELP command.
+ * Copyright (C) 2018-2019 Atheme Development Group (https://atheme.github.io/)
  */
 
 #include "atheme.h"
@@ -14,56 +13,73 @@ static const struct groupserv_core_symbols *gcsyms = NULL;
 static mowgli_patricia_t **gs_set_cmdtree = NULL;
 
 static void
-gs_cmd_set_email(struct sourceinfo *si, int parc, char *parv[])
+gs_cmd_set_email_func(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	struct mygroup *mg;
-	char *mail = parv[1];
-
-	if (!(mg = gcsyms->mygroup_find(parv[0])))
+	if (parc < 1)
 	{
-		command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), parv[0]);
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET EMAIL");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: SET EMAIL <!group> [email]"));
+		return;
+	}
+
+	const char *const group = parv[0];
+
+	if (*group != '!')
+	{
+		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET EMAIL");
+		(void) command_fail(si, fault_badparams, _("Syntax: SET EMAIL <!group> [email]"));
+		return;
+	}
+
+	struct mygroup *mg;
+
+	if (! (mg = gcsyms->mygroup_find(group)))
+	{
+		(void) command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), group);
 		return;
 	}
 
 	if (! gcsyms->groupacs_sourceinfo_has_flag(mg, si, GA_SET))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
+		(void) command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
 		return;
 	}
 
-	if (!mail || !strcasecmp(mail, "NONE") || !strcasecmp(mail, "OFF"))
+	const char *const param = parv[1];
+
+	if (! param || strcasecmp(param, "NONE") == 0 || strcasecmp(param, "OFF") == 0)
 	{
 		if (metadata_find(mg, "email"))
 		{
-			metadata_delete(mg, "email");
-			command_success_nodata(si, _("The e-mail address for group \2%s\2 was deleted."), entity(mg)->name);
-			logcommand(si, CMDLOG_SET, "SET:EMAIL:NONE: \2%s\2", entity(mg)->name);
+			(void) metadata_delete(mg, "email");
+			(void) command_success_nodata(si, _("The e-mail address for group \2%s\2 was deleted."), group);
+			(void) logcommand(si, CMDLOG_SET, "SET:EMAIL:NONE: \2%s\2", group);
 			return;
 		}
 
-		command_fail(si, fault_nochange, _("The e-mail address for group \2%s\2 was not set."), entity(mg)->name);
+		(void) command_fail(si, fault_nochange, _("The e-mail address for group \2%s\2 was not set."), group);
 		return;
 	}
 
-	if (!validemail(mail))
+	if (! validemail(param))
 	{
-		command_fail(si, fault_badparams, _("\2%s\2 is not a valid e-mail address."), mail);
+		(void) command_fail(si, fault_badparams, _("\2%s\2 is not a valid e-mail address."), param);
 		return;
 	}
 
 	// we'll overwrite any existing metadata
-	metadata_add(mg, "email", mail);
+	(void) metadata_add(mg, "email", param);
 
-	logcommand(si, CMDLOG_SET, "SET:EMAIL: \2%s\2 \2%s\2", entity(mg)->name, mail);
-	command_success_nodata(si, _("The e-mail address for group \2%s\2 has been set to \2%s\2."), parv[0], mail);
+	(void) logcommand(si, CMDLOG_SET, "SET:EMAIL: \2%s\2 \2%s\2", group, param);
+	(void) command_success_nodata(si, _("The e-mail address for group \2%s\2 has been set to \2%s\2."), group, param);
 }
 
-static struct command gs_set_email = {
+static struct command gs_cmd_set_email = {
 	.name           = "EMAIL",
 	.desc           = N_("Sets the group e-mail address."),
 	.access         = AC_AUTHENTICATED,
 	.maxparc        = 2,
-	.cmd            = &gs_cmd_set_email,
+	.cmd            = &gs_cmd_set_email_func,
 	.help           = { .path = "groupserv/set_email" },
 };
 
@@ -73,13 +89,13 @@ mod_init(struct module *const restrict m)
 	MODULE_TRY_REQUEST_SYMBOL(m, gcsyms, "groupserv/main", "groupserv_core_symbols");
 	MODULE_TRY_REQUEST_SYMBOL(m, gs_set_cmdtree, "groupserv/set", "gs_set_cmdtree");
 
-	command_add(&gs_set_email, *gs_set_cmdtree);
+	(void) command_add(&gs_cmd_set_email, *gs_set_cmdtree);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	command_delete(&gs_set_email, *gs_set_cmdtree);
+	(void) command_delete(&gs_cmd_set_email, *gs_set_cmdtree);
 }
 
 SIMPLE_DECLARE_MODULE_V1("groupserv/set_email", MODULE_UNLOAD_CAPABILITY_OK)
