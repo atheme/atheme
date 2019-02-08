@@ -693,21 +693,21 @@ sasl_may_impersonate_hook(hook_sasl_may_impersonate_t *const restrict req)
 }
 
 static void
-myuser_delete_hook(struct myuser *mu)
+myuser_delete_hook(struct myuser *const restrict mu)
 {
+	return_if_fail(mu != NULL);
+
+	mowgli_list_t *const members = myentity_get_membership_list(entity(mu));
 	mowgli_node_t *n, *tn;
-	mowgli_list_t *l;
 
-	l = myentity_get_membership_list(entity(mu));
-
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, l->head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, members->head)
 	{
-		struct groupacs *ga = n->data;
+		const struct groupacs *const ga = n->data;
 
-		groupacs_delete(ga->mg, ga->mt);
+		(void) groupacs_delete(ga->mg, ga->mt);
 	}
 
-	mowgli_list_free(l);
+	(void) mowgli_list_free(members);
 }
 
 static void
