@@ -82,41 +82,38 @@ groupacs_add(struct mygroup *const mg, struct myentity *const mt, const unsigned
 }
 
 static struct groupacs *
-groupacs_find(struct mygroup *mg, struct myentity *mt, unsigned int flags, bool allow_recurse)
+groupacs_find(struct mygroup *const mg, const struct myentity *const mt, const unsigned int flags, const bool allow_recurse)
 {
-	mowgli_node_t *n;
-	struct groupacs *out = NULL;
+	return_null_if_fail(mg != NULL);
+	return_null_if_fail(mt != NULL);
 
-	return_val_if_fail(mg != NULL, NULL);
-	return_val_if_fail(mt != NULL, NULL);
+	struct groupacs *out = NULL;
+	const mowgli_node_t *n;
 
 	mg->visited = true;
 
 	MOWGLI_ITER_FOREACH(n, mg->acs.head)
 	{
-		struct groupacs *ga = n->data;
+		struct groupacs *const ga = n->data;
 
-		if (out != NULL)
-			break;
-
-		if (isgroup(ga->mt) && allow_recurse && !(group(ga->mt)->visited))
+		if (isgroup(ga->mt) && allow_recurse && ! group(ga->mt)->visited)
 		{
-			struct groupacs *ga2;
-
-			ga2 = groupacs_find(group(ga->mt), mt, flags, allow_recurse);
-
-			if (ga2 != NULL)
+			if (groupacs_find(group(ga->mt), mt, flags, allow_recurse))
+			{
 				out = ga;
+				break;
+			}
 		}
 		else
 		{
-			if (flags)
-			{
-				if (ga->mt == mt && ga->mg == mg && (ga->flags & flags))
-					out = ga;
-			}
-			else if (ga->mt == mt && ga->mg == mg)
-				out = ga;
+			if (ga->mt != mt || ga->mg != mg)
+				continue;
+
+			if (flags && ! (ga->flags & flags))
+				continue;
+
+			out = ga;
+			break;
 		}
 	}
 

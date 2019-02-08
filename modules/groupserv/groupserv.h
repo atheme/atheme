@@ -28,7 +28,7 @@ struct groupserv_core_symbols
 	struct service **           groupsvs;
 	struct groupacs *         (*groupacs_add)(struct mygroup *, struct myentity *, unsigned int);
 	void                      (*groupacs_delete)(struct mygroup *, struct myentity *);
-	struct groupacs *         (*groupacs_find)(struct mygroup *, struct myentity *, unsigned int, bool);
+	struct groupacs *         (*groupacs_find)(struct mygroup *, const struct myentity *, unsigned int, bool);
 	unsigned int              (*groupacs_sourceinfo_flags)(struct mygroup *, struct sourceinfo *);
 	bool                      (*groupacs_sourceinfo_has_flag)(struct mygroup *, struct sourceinfo *, unsigned int);
 	unsigned int              (*gs_flags_parser)(char *, bool, unsigned int);
