@@ -139,15 +139,14 @@ groupacs_delete(struct mygroup *const mg, struct myentity *const mt)
 }
 
 static unsigned int
-groupacs_sourceinfo_flags(struct mygroup *mg, struct sourceinfo *si)
+groupacs_sourceinfo_flags(struct mygroup *const restrict mg, const struct sourceinfo *const restrict si)
 {
-	struct groupacs *ga;
+	return_val_if_fail(mg != NULL, 0);
+	return_val_if_fail(si != NULL, 0);
 
-	ga = groupacs_find(mg, entity(si->smu), 0, true);
-	if (ga == NULL)
-		return 0;
+	const struct groupacs *const ga = groupacs_find(mg, entity(si->smu), 0, true);
 
-	return ga->flags;
+	return ((ga != NULL) ? ga->flags : 0);
 }
 
 static bool
