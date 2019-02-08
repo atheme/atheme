@@ -226,18 +226,15 @@ mygroup_allow_foundership(struct myentity ATHEME_VATTR_UNUSED *const restrict mt
 }
 
 static bool
-mygroup_can_register_channel(struct myentity *mt)
+mygroup_can_register_channel(struct myentity *const restrict mt)
 {
-	struct mygroup *mg;
+	return_val_if_fail(mt != NULL, false);
 
-	mg = group(mt);
+	const struct mygroup *const mg = group(mt);
 
 	return_val_if_fail(mg != NULL, false);
 
-	if (mg->flags & MG_REGNOLIMIT)
-		return true;
-
-	return false;
+	return ((mg->flags & MG_REGNOLIMIT) ? true : false);
 }
 
 static struct chanacs *
