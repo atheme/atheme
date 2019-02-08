@@ -254,24 +254,18 @@ mygroup_chanacs_match_entity(struct chanacs *const restrict ca, struct myentity 
 }
 
 static void
-mygroup_rename(struct mygroup *mg, const char *name)
+mygroup_rename(struct mygroup *const restrict mg, const char *const restrict name)
 {
-	stringref newname;
-	char nb[GROUPLEN + 1];
-
 	return_if_fail(mg != NULL);
 	return_if_fail(name != NULL);
-	return_if_fail(strlen(name) < sizeof nb);
+	return_if_fail(strlen(name) <= GROUPLEN);
 
-	mowgli_strlcpy(nb, entity(mg)->name, sizeof nb);
-	newname = strshare_get(name);
+	(void) myentity_del(entity(mg));
+	(void) strshare_unref(entity(mg)->name);
 
-	myentity_del(entity(mg));
+	entity(mg)->name = strshare_get(name);
 
-	strshare_unref(entity(mg)->name);
-	entity(mg)->name = newname;
-
-	myentity_put(entity(mg));
+	(void) myentity_put(entity(mg));
 }
 
 static void
