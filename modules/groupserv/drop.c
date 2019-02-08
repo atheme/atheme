@@ -3,8 +3,7 @@
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
  * Copyright (C) 2005-2010 Atheme Project (http://atheme.org/)
- *
- * This file contains routines to handle the GroupServ HELP command.
+ * Copyright (C) 2018-2019 Atheme Development Group (https://atheme.github.io/)
  */
 
 #include "atheme.h"
@@ -13,19 +12,18 @@
 static const struct groupserv_core_symbols *gcsyms = NULL;
 
 static void
-gs_cmd_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc, char *parv[])
+gs_cmd_drop_func(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	const char *const name = parv[0];
-	const char *const key = parv[1];
-
-	if (! name)
+	if (parc < 1)
 	{
 		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DROP");
 		(void) command_fail(si, fault_needmoreparams, _("Syntax: DROP <!group>"));
 		return;
 	}
 
-	if (*name != '!')
+	const char *const group = parv[0];
+
+	if (*group != '!')
 	{
 		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "DROP");
 		(void) command_fail(si, fault_badparams, _("Syntax: DROP <!group>"));
@@ -34,9 +32,9 @@ gs_cmd_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 
 	struct mygroup *mg;
 
-	if (! (mg = gcsyms->mygroup_find(name)))
+	if (! (mg = gcsyms->mygroup_find(group)))
 	{
-		(void) command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), name);
+		(void) command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), group);
 		return;
 	}
 
@@ -48,7 +46,8 @@ gs_cmd_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 
 	if (si->su)
 	{
-		const char *const challenge = create_weak_challenge(si, entity(mg)->name);
+		const char *const challenge = create_weak_challenge(si, group);
+		const char *const param = parv[1];
 
 		if (! challenge)
 		{
@@ -56,12 +55,12 @@ gs_cmd_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 			return;
 		}
 
-		if (! key)
+		if (! param)
 		{
 			char fullcmd[BUFSIZE];
 
 			(void) snprintf(fullcmd, sizeof fullcmd, "/%s%s DROP %s %s", (ircd->uses_rcommand == false) ?
-			                "msg " : "", si->service->disp, entity(mg)->name, challenge);
+			                "msg " : "", si->service->disp, group, challenge);
 
 			(void) command_success_nodata(si, _("To avoid accidental use of this command, this operation "
 			                                    "has to be confirmed. Please confirm by replying with "
@@ -69,15 +68,15 @@ gs_cmd_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 			return;
 		}
 
-		if (strcmp(challenge, key) != 0)
+		if (strcmp(challenge, param) != 0)
 		{
 			(void) command_fail(si, fault_badparams, _("Invalid key for \2%s\2."), "DROP");
 			return;
 		}
 	}
 
-	(void) logcommand(si, CMDLOG_REGISTER, "DROP: \2%s\2", entity(mg)->name);
-	(void) command_success_nodata(si, _("The group \2%s\2 has been dropped."), entity(mg)->name);
+	(void) logcommand(si, CMDLOG_REGISTER, "DROP: \2%s\2", group);
+	(void) command_success_nodata(si, _("The group \2%s\2 has been dropped."), group);
 
 	(void) gcsyms->remove_group_chanacs(mg);
 	(void) hook_call_group_drop(mg);
@@ -85,18 +84,18 @@ gs_cmd_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 }
 
 static void
-gs_cmd_fdrop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc, char *parv[])
+gs_cmd_fdrop_func(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	const char *const name = parv[0];
-
-	if (! name)
+	if (parc != 1)
 	{
 		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DROP");
 		(void) command_fail(si, fault_needmoreparams, _("Syntax: DROP <!group>"));
 		return;
 	}
 
-	if (*name != '!')
+	const char *const group = parv[0];
+
+	if (*group != '!')
 	{
 		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "DROP");
 		(void) command_fail(si, fault_badparams, _("Syntax: DROP <!group>"));
@@ -105,15 +104,15 @@ gs_cmd_fdrop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_U
 
 	struct mygroup *mg;
 
-	if (! (mg = gcsyms->mygroup_find(name)))
+	if (! (mg = gcsyms->mygroup_find(group)))
 	{
-		(void) command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), name);
+		(void) command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), group);
 		return;
 	}
 
-	(void) wallops("%s dropped the group \2%s\2", get_oper_name(si), entity(mg)->name);
-	(void) logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FDROP: \2%s\2", entity(mg)->name);
-	(void) command_success_nodata(si, _("The group \2%s\2 has been dropped."), entity(mg)->name);
+	(void) wallops("%s dropped the group \2%s\2", get_oper_name(si), group);
+	(void) logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FDROP: \2%s\2", group);
+	(void) command_success_nodata(si, _("The group \2%s\2 has been dropped."), group);
 
 	(void) gcsyms->remove_group_chanacs(mg);
 	(void) hook_call_group_drop(mg);
@@ -145,6 +144,8 @@ mod_init(struct module *const restrict m)
 
 	(void) service_bind_command(*gcsyms->groupsvs, &gs_cmd_drop);
 	(void) service_bind_command(*gcsyms->groupsvs, &gs_cmd_fdrop);
+
+	(void) hook_add_event("group_drop");
 }
 
 static void
