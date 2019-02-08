@@ -51,10 +51,12 @@ myentity_get_membership_list(struct myentity *const restrict mt)
 }
 
 static void
-groupacs_des(void *ga)
+groupacs_destroy(void *const restrict ga)
 {
-	metadata_delete_all(ga);
-	mowgli_heap_free(groupacs_heap, ga);
+	return_if_fail(ga != NULL);
+
+	(void) metadata_delete_all(ga);
+	(void) mowgli_heap_free(groupacs_heap, ga);
 }
 
 static struct groupacs *
@@ -66,7 +68,7 @@ groupacs_add(struct mygroup *mg, struct myentity *mt, unsigned int flags)
 	return_val_if_fail(mt != NULL, NULL);
 
 	ga = mowgli_heap_alloc(groupacs_heap);
-	atheme_object_init(atheme_object(ga), NULL, &groupacs_des);
+	atheme_object_init(atheme_object(ga), NULL, &groupacs_destroy);
 
 	ga->mg = mg;
 	ga->mt = mt;
