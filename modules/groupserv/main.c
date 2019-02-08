@@ -755,7 +755,7 @@ mygroup_add_id(const char *const restrict id, const char *const restrict name)
 }
 
 static struct mygroup *
-mygroup_add(const char *name)
+mygroup_add(const char *const restrict name)
 {
 	return mygroup_add_id(NULL, name);
 }
