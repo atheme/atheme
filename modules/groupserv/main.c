@@ -761,67 +761,67 @@ mygroup_add(const char *const restrict name)
 }
 
 static void
-write_groupdb_hook(struct database_handle *db)
+write_groupdb_hook(struct database_handle *const restrict db)
 {
+	return_if_fail(db != NULL);
+
+	(void) db_start_row(db, "GDBV");
+	(void) db_write_uint(db, GDBV_VERSION);
+	(void) db_commit_row(db);
+
+	(void) db_start_row(db, "GFA");
+	(void) db_write_word(db, gflags_tostr(ga_flags, GA_ALL));
+	(void) db_commit_row(db);
+
+	struct myentity_iteration_state mestate;
 	struct myentity *mt;
-	struct myentity_iteration_state state;
-	mowgli_patricia_iteration_state_t state2;
-	struct metadata *md;
 
-	db_start_row(db, "GDBV");
-	db_write_uint(db, GDBV_VERSION);
-	db_commit_row(db);
-
-	db_start_row(db, "GFA");
-	db_write_word(db, gflags_tostr(ga_flags, GA_ALL));
-	db_commit_row(db);
-
-	MYENTITY_FOREACH_T(mt, &state, ENT_GROUP)
+	MYENTITY_FOREACH_T(mt, &mestate, ENT_GROUP)
 	{
 		continue_if_fail(mt != NULL);
-		struct mygroup *mg = group(mt);
+		struct mygroup *const mg = group(mt);
 		continue_if_fail(mg != NULL);
 
-		char *mgflags = gflags_tostr(mg_flags, mg->flags);
-
-		db_start_row(db, "GRP");
-		db_write_word(db, entity(mg)->id);
-		db_write_word(db, entity(mg)->name);
-		db_write_time(db, mg->regtime);
-		db_write_word(db, mgflags);
-		db_commit_row(db);
+		(void) db_start_row(db, "GRP");
+		(void) db_write_word(db, entity(mg)->id);
+		(void) db_write_word(db, entity(mg)->name);
+		(void) db_write_time(db, mg->regtime);
+		(void) db_write_word(db, gflags_tostr(mg_flags, mg->flags));
+		(void) db_commit_row(db);
 
 		if (atheme_object(mg)->metadata)
 		{
-			MOWGLI_PATRICIA_FOREACH(md, &state2, atheme_object(mg)->metadata)
+			mowgli_patricia_iteration_state_t mpstate;
+			const struct metadata *md;
+
+			MOWGLI_PATRICIA_FOREACH(md, &mpstate, atheme_object(mg)->metadata)
 			{
-				db_start_row(db, "MDG");
-				db_write_word(db, entity(mg)->name);
-				db_write_word(db, md->name);
-				db_write_str(db, md->value);
-				db_commit_row(db);
+				(void) db_start_row(db, "MDG");
+				(void) db_write_word(db, entity(mg)->name);
+				(void) db_write_word(db, md->name);
+				(void) db_write_str(db, md->value);
+				(void) db_commit_row(db);
 			}
 		}
 	}
 
-	MYENTITY_FOREACH_T(mt, &state, ENT_GROUP)
+	MYENTITY_FOREACH_T(mt, &mestate, ENT_GROUP)
 	{
-		mowgli_node_t *n;
-
 		continue_if_fail(mt != NULL);
-		struct mygroup *mg = group(mt);
+		struct mygroup *const mg = group(mt);
 		continue_if_fail(mg != NULL);
+
+		mowgli_node_t *n;
 
 		MOWGLI_ITER_FOREACH(n, mg->acs.head)
 		{
-			struct groupacs *ga = n->data;
-			char *flags = gflags_tostr(ga_flags, ga->flags);
+			const struct groupacs *const ga = n->data;
 
-			db_start_row(db, "GACL");
-			db_write_word(db, entity(mg)->name);
-			db_write_word(db, ga->mt->name);
-			db_write_word(db, flags);
-			db_commit_row(db);
+			(void) db_start_row(db, "GACL");
+			(void) db_write_word(db, entity(mg)->name);
+			(void) db_write_word(db, ga->mt->name);
+			(void) db_write_word(db, gflags_tostr(ga_flags, ga->flags));
+			(void) db_commit_row(db);
 		}
 	}
 }
