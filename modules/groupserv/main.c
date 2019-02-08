@@ -220,7 +220,7 @@ gs_flags_parser(const char *const restrict flag_string, const bool allow_subtrac
 }
 
 static bool
-mygroup_allow_foundership(struct myentity *mt)
+mygroup_allow_foundership(struct myentity ATHEME_VATTR_UNUSED *const restrict mt)
 {
 	return true;
 }
