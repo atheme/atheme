@@ -3,8 +3,7 @@
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
  * Copyright (C) 2005-2010 Atheme Project (http://atheme.org/)
- *
- * This file contains routines to handle the GroupServ HELP command.
+ * Copyright (C) 2018-2019 Atheme Development Group (https://atheme.github.io/)
  */
 
 #include "atheme.h"
@@ -13,65 +12,74 @@
 static const struct groupserv_core_symbols *gcsyms = NULL;
 
 static void
-gs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
+gs_cmd_flags_func(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	mowgli_node_t *n;
+	if (parc < 1)
+	{
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FLAGS");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: FLAGS <!group> [target [flags]]"));
+		return;
+	}
+
+	const char *const group = parv[0];
+
+	if (*group != '!')
+	{
+		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "FLAGS");
+		(void) command_fail(si, fault_badparams, _("Syntax: FLAGS <!group> [target [flags]]"));
+		return;
+	}
+
 	struct mygroup *mg;
-	struct myentity *mt;
-	struct groupacs *ga;
-	unsigned int flags = 0, oldflags = 0;
-	unsigned int dir = 0;
-	char *c;
+
+	if (! (mg = gcsyms->mygroup_find(group)))
+	{
+		(void) command_fail(si, fault_nosuch_target, _("The group \2%s\2 does not exist."), group);
+		return;
+	}
+
 	bool operoverride = false;
 
-	if (!parv[0])
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FLAGS");
-		command_fail(si, fault_needmoreparams, _("Syntax: FLAGS <!group> [user] [changes]"));
-		return;
-	}
-
-	if ((mg = gcsyms->mygroup_find(parv[0])) == NULL)
-	{
-		command_fail(si, fault_nosuch_target, _("The group \2%s\2 does not exist."), parv[0]);
-		return;
-	}
-
-	if (! gcsyms->groupacs_sourceinfo_has_flag(mg, si, (parv[2] != NULL ? GA_FLAGS : GA_ACLVIEW)))
+	if (! gcsyms->groupacs_sourceinfo_has_flag(mg, si, ((parc == 3) ? GA_FLAGS : GA_ACLVIEW)))
 	{
 		if (has_priv(si, PRIV_GROUP_AUSPEX))
+		{
 			operoverride = true;
+		}
 		else
 		{
-			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			(void) command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 			return;
 		}
 	}
 
-	if (!parv[1])
-	{
-		int i = 1;
+	const char *const param = parv[1];
 
-		command_success_nodata(si, _("Entry Account                Flags"));
-		command_success_nodata(si, "----- ---------------------- -----");
+	if (! param)
+	{
+		(void) command_success_nodata(si, _("Entry Account                Flags"));
+		(void) command_success_nodata(si, _("----- ---------------------- -----"));
+
+		mowgli_node_t *n;
+		int i = 1;
 
 		MOWGLI_ITER_FOREACH(n, mg->acs.head)
 		{
-			ga = n->data;
+			const struct groupacs *const ga = n->data;
 
-			command_success_nodata(si, "%-5d %-22s %s", i, ga->mt->name,
-					       gflags_tostr(ga_flags, ga->flags));
+			(void) command_success_nodata(si, _("%-5d %-22s %s"), i, ga->mt->name,
+			                              gflags_tostr(ga_flags, ga->flags));
 
 			i++;
 		}
 
-		command_success_nodata(si, "----- ---------------------- -----");
-		command_success_nodata(si, _("End of \2%s\2 FLAGS listing."), parv[0]);
+		(void) command_success_nodata(si, _("----- ---------------------- -----"));
+		(void) command_success_nodata(si, _("End of \2%s\2 FLAGS listing."), group);
 
 		if (operoverride)
-			logcommand(si, CMDLOG_ADMIN, "FLAGS: \2%s\2 (oper override)", parv[0]);
+			(void) logcommand(si, CMDLOG_ADMIN, "FLAGS: \2%s\2 (oper override)", group);
 		else
-			logcommand(si, CMDLOG_GET, "FLAGS: \2%s\2", parv[0]);
+			(void) logcommand(si, CMDLOG_GET, "FLAGS: \2%s\2", group);
 
 		return;
 	}
@@ -79,133 +87,145 @@ gs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 	// simple check since it's already checked above
 	if (operoverride)
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		(void) command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
 	}
 
-	if ((mt = myentity_find_ext(parv[1])) == NULL)
+	struct myentity *mt;
+
+	if (! (mt = myentity_find_ext(param)))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered account."), parv[1]);
+		(void) command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered account."), param);
 		return;
 	}
 
-	if (!parv[2])
+	const char *const flags = parv[2];
+
+	if (! flags)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FLAGS");
-		command_fail(si, fault_needmoreparams, _("Syntax: FLAGS <!group> <user> <changes>"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FLAGS");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: FLAGS <!group> <target> <flags>"));
 		return;
 	}
 
-	if (isuser(mt) && (MU_NEVERGROUP & user(mt)->flags) && (gcsyms->groupacs_find(mg, mt, 0, true) == NULL))
+	if (isuser(mt) && (user(mt)->flags & MU_NEVERGROUP) && ! gcsyms->groupacs_find(mg, mt, 0, true))
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 does not wish to have flags in any groups."), parv[1]);
+		(void) command_fail(si, fault_noprivs, _("\2%s\2 does not wish to have flags in any groups."), param);
 		return;
 	}
 
-	ga = gcsyms->groupacs_find(mg, mt, 0, false);
-	if (ga != NULL)
-		flags = ga->flags;
+	struct groupacs *ga = gcsyms->groupacs_find(mg, mt, 0, false);
+	unsigned int gaflags = 0;
 
-	oldflags = flags;
-	flags = gcsyms->gs_flags_parser(parv[2], 1, flags);
+	if (ga)
+		gaflags = ga->flags;
+
+	unsigned int oldflags = gaflags;
+
+	gaflags = gcsyms->gs_flags_parser(flags, true, gaflags);
 
 	// check for MU_NEVEROP and forbid committing the change if it's enabled
-	if (!(oldflags & GA_CHANACS) && (flags & GA_CHANACS))
+	if (! (oldflags & GA_CHANACS) && (gaflags & GA_CHANACS))
 	{
-		if (isuser(mt) && user(mt)->flags & MU_NEVEROP)
+		if (isuser(mt) && (user(mt)->flags & MU_NEVEROP))
 		{
-			command_fail(si, fault_noprivs, _("\2%s\2 does not wish to be added to channel access lists (NEVEROP set)."), mt->name);
+			(void) command_fail(si, fault_noprivs, _("\2%s\2 does not wish to be added to channel access "
+			                                         "lists (NEVEROP set)."), param);
 			return;
 		}
 	}
 
-	if ((flags & GA_FOUNDER) && !(oldflags & GA_FOUNDER))
+	if ((gaflags & GA_FOUNDER) && ! (oldflags & GA_FOUNDER))
 	{
-		if (!(gcsyms->groupacs_sourceinfo_flags(mg, si) & GA_FOUNDER))
+		if (! (gcsyms->groupacs_sourceinfo_flags(mg, si) & GA_FOUNDER))
 		{
-			flags &= ~GA_FOUNDER;
+			gaflags &= ~GA_FOUNDER;
 			goto no_founder;
 		}
 
-		flags |= GA_FLAGS;
+		gaflags |= GA_FLAGS;
 	}
-	else if ((oldflags & GA_FOUNDER) && !(flags & GA_FOUNDER) && !(gcsyms->groupacs_sourceinfo_flags(mg, si) & GA_FOUNDER))
+	else if ((oldflags & GA_FOUNDER) && ! (gaflags & GA_FOUNDER) && ! (gcsyms->groupacs_sourceinfo_flags(mg, si) & GA_FOUNDER))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		(void) command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
 	}
 
-	if (!(flags & GA_FOUNDER) && gcsyms->groupacs_find(mg, mt, GA_FOUNDER, false))
+	if (! (gaflags & GA_FOUNDER) && gcsyms->groupacs_find(mg, mt, GA_FOUNDER, false))
 	{
 		if (gcsyms->mygroup_count_flag(mg, GA_FOUNDER) == 1)
 		{
-			command_fail(si, fault_noprivs, _("You may not remove the last founder."));
+			(void) command_fail(si, fault_noprivs, _("You may not remove the last founder."));
 			return;
 		}
-
 		if (! gcsyms->groupacs_sourceinfo_has_flag(mg, si, GA_FOUNDER))
 		{
-			command_fail(si, fault_noprivs, _("You may not remove a founder's +F access."));
+			(void) command_fail(si, fault_noprivs, _("You may not remove a founder's +F access."));
 			return;
 		}
 	}
 
 no_founder:
-	if (ga != NULL && flags != 0)
+	if (ga && gaflags)
 	{
-		if (ga->flags != flags)
-			ga->flags = flags;
+		if (ga->flags != gaflags)
+		{
+			ga->flags = gaflags;
+		}
 		else
 		{
-			command_fail(si, fault_nochange, _("Group \2%s\2 access for \2%s\2 unchanged."), entity(mg)->name, mt->name);
+			(void) command_fail(si, fault_nochange, _("Group \2%s\2 access for \2%s\2 unchanged."), group, param);
 			return;
 		}
 	}
-	else if (ga != NULL)
+	else if (ga)
 	{
-		gcsyms->groupacs_delete(mg, mt);
-		command_success_nodata(si, _("\2%s\2 has been removed from \2%s\2."), mt->name, entity(mg)->name);
-		logcommand(si, CMDLOG_SET, "FLAGS:REMOVE: \2%s\2 on \2%s\2", mt->name, entity(mg)->name);
+		(void) gcsyms->groupacs_delete(mg, mt);
+		(void) command_success_nodata(si, _("\2%s\2 has been removed from \2%s\2."), param, group);
+		(void) logcommand(si, CMDLOG_SET, "FLAGS:REMOVE: \2%s\2 on \2%s\2", param, group);
 		return;
 	}
-	else if (flags != 0)
+	else if (gaflags)
 	{
-		if (MOWGLI_LIST_LENGTH(&mg->acs) > gcsyms->config->maxgroupacs && (!(mg->flags & MG_ACSNOLIMIT)))
+		if (MOWGLI_LIST_LENGTH(&mg->acs) > gcsyms->config->maxgroupacs && ! (mg->flags & MG_ACSNOLIMIT))
 		{
-			command_fail(si, fault_toomany, _("Group \2%s\2 access list is full."), entity(mg)->name);
+			(void) command_fail(si, fault_toomany, _("Group \2%s\2 access list is full."), group);
 			return;
 		}
-		ga = gcsyms->groupacs_add(mg, mt, flags);
+
+		ga = gcsyms->groupacs_add(mg, mt, gaflags);
 	}
 	else
 	{
-		command_fail(si, fault_nochange, _("Group \2%s\2 access for \2%s\2 unchanged."), entity(mg)->name, mt->name);
+		(void) command_fail(si, fault_nochange, _("Group \2%s\2 access for \2%s\2 unchanged."), group, param);
 		return;
 	}
 
+	const char *const sflags = gflags_tostr(ga_flags, ga->flags);
+
+	mowgli_node_t *n;
+
 	MOWGLI_ITER_FOREACH(n, entity(mg)->chanacs.head)
 	{
-		struct chanacs *ca = n->data;
+		struct chanacs *const ca = n->data;
+		const struct mychan *const mc = ca->mychan;
 
-		verbose(ca->mychan, "\2%s\2 now has flags \2%s\2 in the group \2%s\2 which communally has \2%s\2 on \2%s\2.",
-			mt->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name,
-			bitmask_to_flags(ca->level), ca->mychan->name);
+		(void) verbose(mc, "\2%s\2 now has flags \2%s\2 in the group \2%s\2 which communally has \2%s\2 "
+		               "on \2%s\2.", param, sflags, group, bitmask_to_flags(ca->level), mc->name);
 
-		hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
+		(void) hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
 	}
 
-	command_success_nodata(si, _("\2%s\2 now has flags \2%s\2 on \2%s\2."), mt->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name);
-
-	// XXX
-	logcommand(si, CMDLOG_SET, "FLAGS: \2%s\2 now has flags \2%s\2 on \2%s\2", mt->name, gflags_tostr(ga_flags,  ga->flags), entity(mg)->name);
+	(void) command_success_nodata(si, _("\2%s\2 now has flags \2%s\2 on \2%s\2."), param, sflags, group);
+	(void) logcommand(si, CMDLOG_SET, "FLAGS: \2%s\2 now has flags \2%s\2 on \2%s\2", param, sflags, group);
 }
 
-static struct command gs_flags = {
+static struct command gs_cmd_flags = {
 	.name           = "FLAGS",
 	.desc           = N_("Sets flags on a user in a group."),
 	.access         = AC_AUTHENTICATED,
 	.maxparc        = 3,
-	.cmd            = &gs_cmd_flags,
+	.cmd            = &gs_cmd_flags_func,
 	.help           = { .path = "groupserv/flags" },
 };
 
@@ -214,13 +234,15 @@ mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, gcsyms, "groupserv/main", "groupserv_core_symbols");
 
-	(void) service_bind_command(*gcsyms->groupsvs, &gs_flags);
+	(void) service_bind_command(*gcsyms->groupsvs, &gs_cmd_flags);
+
+	(void) hook_add_event("channel_acl_change");
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	(void) service_unbind_command(*gcsyms->groupsvs, &gs_flags);
+	(void) service_unbind_command(*gcsyms->groupsvs, &gs_cmd_flags);
 }
 
 SIMPLE_DECLARE_MODULE_V1("groupserv/flags", MODULE_UNLOAD_CAPABILITY_OK)
