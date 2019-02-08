@@ -889,46 +889,46 @@ db_h_grp(struct database_handle *const restrict db, const char ATHEME_VATTR_UNUS
 }
 
 static void
-db_h_gacl(struct database_handle *db, const char *type)
+db_h_gacl(struct database_handle *const restrict db, const char ATHEME_VATTR_UNUSED *const restrict type)
 {
-	struct mygroup *mg;
-	struct myentity *mt;
-	unsigned int flags = GA_ALL;	// GDBV 1 entires had full access
+	return_if_fail(db != NULL);
 
-	const char *name = db_sread_word(db);
-	const char *entity = db_sread_word(db);
-	const char *flagset;
+	unsigned int flags = GA_ALL;    // GDBV 1 entires had full access
 
-	mg = mygroup_find(name);
-	mt = myentity_find(entity);
-
-	if (mg == NULL)
-	{
-		slog(LG_INFO, "db-h-gacl: line %d: groupacs for nonexistent group %s", db->line, name);
-		return;
-	}
-
-	if (mt == NULL)
-	{
-		slog(LG_INFO, "db-h-gacl: line %d: groupacs for nonexistent entity %s", db->line, entity);
-		return;
-	}
+	const char *const name = db_sread_word(db);
+	const char *const entity = db_sread_word(db);
 
 	if (loading_gdbv >= 2)
 	{
-		flagset = db_sread_word(db);
+		const char *const flagset = db_sread_word(db);
 
-		if (!gflags_fromstr(ga_flags, flagset, &flags))
-			slog(LG_INFO, "db-h-gacl: line %d: confused by flags: %s", db->line, flagset);
+		if (! gflags_fromstr(ga_flags, flagset, &flags))
+			(void) slog(LG_INFO, "%s: line %u: confused by flags: %s", __func__, db->line, flagset);
 
 		/* ACL view permission was added, so make up the permission (#279), but only if the database
 		 * is from atheme 7.1 or earlier. --kaniini
 		 */
-		if (!(their_ga_all & GA_ACLVIEW) && ((flags & GA_ALL_OLD) == their_ga_all))
+		if (! (their_ga_all & GA_ACLVIEW) && ((flags & GA_ALL_OLD) == their_ga_all))
 			flags |= GA_ACLVIEW;
 	}
 
-	groupacs_add(mg, mt, flags);
+	struct mygroup *const mg = mygroup_find(name);
+
+	if (! mg)
+	{
+		(void) slog(LG_INFO, "%s: line %u: groupacs for nonexistent group %s", __func__, db->line, name);
+		return;
+	}
+
+	struct myentity *const mt = myentity_find(entity);
+
+	if (! mt)
+	{
+		(void) slog(LG_INFO, "%s: line %u: groupacs for nonexistent entity %s", __func__, db->line, entity);
+		return;
+	}
+
+	(void) groupacs_add(mg, mt, flags);
 }
 
 static void
