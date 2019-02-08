@@ -495,85 +495,114 @@ mygroup_expire(void ATHEME_VATTR_UNUSED *const restrict data)
 }
 
 static void
-grant_channel_access_hook(struct user *u)
+grant_channel_access_hook(struct user *const restrict u)
 {
+	return_if_fail(u != NULL);
+
+	struct myuser *const mu = u->myuser;
+
+	return_if_fail(mu != NULL);
+
+	if (! chansvs.me)
+		return;
+
+	const mowgli_list_t *const members = myentity_get_membership_list(entity(mu));
 	mowgli_node_t *n, *tn;
-	mowgli_list_t *l;
 
-	return_if_fail(u->myuser != NULL);
-
-	l = myentity_get_membership_list(entity(u->myuser));
-
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, l->head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, members->head)
 	{
-		struct groupacs *ga = n->data;
+		struct groupacs *const ga = n->data;
 
-		if (!(ga->flags & GA_CHANACS))
+		continue_if_fail(ga != NULL);
+		continue_if_fail(ga->mg != NULL);
+
+		if (! (ga->flags & GA_CHANACS))
 			continue;
 
 		MOWGLI_ITER_FOREACH(n, entity(ga->mg)->chanacs.head)
 		{
-			struct chanacs *ca;
-			struct chanuser *cu;
+			struct chanacs *const ca = n->data;
 
-			ca = (struct chanacs *)n->data;
+			continue_if_fail(ca != NULL);
+			continue_if_fail(ca->mychan != NULL);
 
-			if (ca->mychan->chan == NULL)
+			struct mychan *const mc = ca->mychan;
+			struct channel *const c = mc->chan;
+
+			if (! c)
 				continue;
 
-			cu = chanuser_find(ca->mychan->chan, u);
-			if (cu && chansvs.me != NULL)
+			struct chanuser *const cu = chanuser_find(c, u);
+
+			if (! cu)
+				continue;
+
+			if ((ca->level & CA_AKICK) && ! (ca->level & CA_EXEMPT))
 			{
-				if (ca->level & CA_AKICK && !(ca->level & CA_EXEMPT))
+				// Stay on channel if this would empty it -- jilles
+				if ((c->nummembers - c->numsvcmembers) == 1)
 				{
-					// Stay on channel if this would empty it -- jilles
-					if (ca->mychan->chan->nummembers - ca->mychan->chan->numsvcmembers == 1)
-					{
-						ca->mychan->flags |= MC_INHABIT;
-						if (ca->mychan->chan->numsvcmembers == 0)
-							join(cu->chan->name, chansvs.nick);
-					}
-					ban(chansvs.me->me, ca->mychan->chan, u);
-					remove_ban_exceptions(chansvs.me->me, ca->mychan->chan, u);
-					kick(chansvs.me->me, ca->mychan->chan, u, "User is banned from this channel");
-					continue;
+					mc->flags |= MC_INHABIT;
+
+					if (! c->numsvcmembers)
+						(void) join(c->name, chansvs.nick);
 				}
 
-				if (ca->level & CA_USEDUPDATE)
-					ca->mychan->used = CURRTIME;
+				(void) ban(chansvs.me->me, c, u);
+				(void) remove_ban_exceptions(chansvs.me->me, c, u);
+				(void) kick(chansvs.me->me, c, u, _("User is banned from this channel"));
+				continue;
+			}
 
-				if (ca->mychan->flags & MC_NOOP || u->myuser->flags & MU_NOOP)
-					continue;
+			if (ca->level & CA_USEDUPDATE)
+				mc->used = CURRTIME;
 
-				if (ircd->uses_owner && !(cu->modes & ircd->owner_mode) && ca->level & CA_AUTOOP && ca->level & CA_USEOWNER)
-				{
-					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(u));
-					cu->modes |= ircd->owner_mode;
-				}
+			if ((mc->flags & MC_NOOP) || (mu->flags & MU_NOOP))
+				continue;
 
-				if (ircd->uses_protect && !(cu->modes & ircd->protect_mode) && !(ircd->uses_owner && cu->modes & ircd->owner_mode) && ca->level & CA_AUTOOP && ca->level & CA_USEPROTECT)
-				{
-					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(u));
-					cu->modes |= ircd->protect_mode;
-				}
+			if (ircd->uses_owner && ! (cu->modes & ircd->owner_mode) && (ca->level & CA_AUTOOP)
+			    && (ca->level & CA_USEOWNER))
+			{
+				(void) modestack_mode_param(chansvs.nick, c, MTYPE_ADD, ircd->owner_mchar[1],
+				                            CLIENT_NAME(u));
 
-				if (!(cu->modes & CSTATUS_OP) && ca->level & CA_AUTOOP)
-				{
-					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, 'o', CLIENT_NAME(u));
-					cu->modes |= CSTATUS_OP;
-				}
+				cu->modes |= ircd->owner_mode;
+			}
 
-				if (ircd->uses_halfops && !(cu->modes & (CSTATUS_OP | ircd->halfops_mode)) && ca->level & CA_AUTOHALFOP)
-				{
-					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, 'h', CLIENT_NAME(u));
-					cu->modes |= ircd->halfops_mode;
-				}
+			if (ircd->uses_protect && ! (cu->modes & ircd->protect_mode)
+			    && ! (ircd->uses_owner && (cu->modes & ircd->owner_mode))
+			    && (ca->level & CA_AUTOOP) && (ca->level & CA_USEPROTECT))
+			{
+				(void) modestack_mode_param(chansvs.nick, c, MTYPE_ADD, ircd->protect_mchar[1],
+				                            CLIENT_NAME(u));
 
-				if (!(cu->modes & (CSTATUS_OP | ircd->halfops_mode | CSTATUS_VOICE)) && ca->level & CA_AUTOVOICE)
-				{
-					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, 'v', CLIENT_NAME(u));
-					cu->modes |= CSTATUS_VOICE;
-				}
+				cu->modes |= ircd->protect_mode;
+			}
+
+			if (! (cu->modes & CSTATUS_OP) && (ca->level & CA_AUTOOP))
+			{
+				(void) modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'o',
+				                            CLIENT_NAME(u));
+
+				cu->modes |= CSTATUS_OP;
+			}
+
+			if (ircd->uses_halfops && ! (cu->modes & (CSTATUS_OP | ircd->halfops_mode))
+			    && (ca->level & CA_AUTOHALFOP))
+			{
+				(void) modestack_mode_param(chansvs.nick, c, MTYPE_ADD, ircd->halfops_mchar[1],
+				                            CLIENT_NAME(u));
+
+				cu->modes |= ircd->halfops_mode;
+			}
+
+			if (! (cu->modes & (CSTATUS_OP | ircd->halfops_mode | CSTATUS_VOICE))
+			    && (ca->level & CA_AUTOVOICE))
+			{
+				(void) modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'v',
+				                            CLIENT_NAME(u));
+
+				cu->modes |= CSTATUS_VOICE;
 			}
 		}
 	}
