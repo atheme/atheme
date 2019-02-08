@@ -342,24 +342,50 @@ mygroup_find(const char *const restrict name)
 }
 
 static const char *
-mygroup_founder_names(struct mygroup *mg)
+mygroup_founder_names(const struct mygroup *const restrict mg)
 {
-        mowgli_node_t *n;
-        struct groupacs *ga;
-        static char names[512];
+	return_val_if_fail(mg != NULL, "");
 
-        names[0] = '\0';
-        MOWGLI_ITER_FOREACH(n, mg->acs.head)
-        {
-                ga = n->data;
-                if (ga->mt != NULL && ga->flags & GA_FOUNDER)
-                {
-                        if (names[0] != '\0')
-                                mowgli_strlcat(names, ", ", sizeof names);
-                        mowgli_strlcat(names, ga->mt->name, sizeof names);
-                }
-        }
-        return names;
+	// 384 + NULL; least possibility of truncation when sent over wire, similar to 390 for TOPIC
+	static char names[385];
+	size_t written = 0;
+
+	(void) memset(names, 0x00, sizeof names);
+
+	const mowgli_node_t *n;
+
+	MOWGLI_ITER_FOREACH(n, mg->acs.head)
+	{
+		const struct groupacs *const ga = n->data;
+
+		if (ga->mt && (ga->flags & GA_FOUNDER))
+		{
+			if (written)
+			{
+				if ((written + 2) >= sizeof names)
+					return names;
+
+				names[written++] = ',';
+				names[written++] = ' ';
+			}
+
+			const size_t namelen = strlen(ga->mt->name);
+
+			if ((written + namelen) >= sizeof names)
+			{
+				if ((written + 3) < sizeof names)
+					(void) memcpy(names + written, "...", 3);
+
+				return names;
+			}
+
+			(void) memcpy(names + written, ga->mt->name, namelen);
+
+			written += namelen;
+		}
+	}
+
+	return names;
 }
 
 static unsigned int

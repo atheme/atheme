@@ -36,7 +36,7 @@ struct groupserv_core_symbols
 	struct mygroup *          (*mygroup_add)(const char *);
 	unsigned int              (*mygroup_count_flag)(const struct mygroup *, unsigned int);
 	struct mygroup *          (*mygroup_find)(const char *);
-	const char *              (*mygroup_founder_names)(struct mygroup *);
+	const char *              (*mygroup_founder_names)(const struct mygroup *);
 	void                      (*mygroup_rename)(struct mygroup *, const char *);
 	unsigned int              (*myentity_count_group_flag)(struct myentity *, unsigned int);
 	mowgli_list_t *           (*myentity_get_membership_list)(struct myentity *);
