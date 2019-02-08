@@ -932,23 +932,23 @@ db_h_gacl(struct database_handle *const restrict db, const char ATHEME_VATTR_UNU
 }
 
 static void
-db_h_mdg(struct database_handle *db, const char *type)
+db_h_mdg(struct database_handle *const restrict db, const char ATHEME_VATTR_UNUSED *const restrict type)
 {
-	const char *name = db_sread_word(db);
-	const char *prop = db_sread_word(db);
-	const char *value = db_sread_str(db);
-	void *obj = NULL;
+	return_if_fail(db != NULL);
 
-	obj = mygroup_find(name);
+	const char *const name = db_sread_word(db);
+	const char *const prop = db_sread_word(db);
+	const char *const value = db_sread_str(db);
 
-	if (obj == NULL)
+	void *const obj = mygroup_find(name);
+
+	if (! obj)
 	{
-		slog(LG_INFO, "db-h-mdg: attempting to add %s property to non-existant object %s",
-		     prop, name);
+		(void) slog(LG_INFO, "%s: line %u: metadata for nonexistent group %s", __func__, db->line, name);
 		return;
 	}
 
-	metadata_add(obj, prop, value);
+	(void) metadata_add(obj, prop, value);
 }
 
 static void
