@@ -410,52 +410,65 @@ myentity_count_group_flag(struct myentity *const restrict mt, const unsigned int
 }
 
 static void
-remove_group_chanacs(struct mygroup *mg)
+remove_group_chanacs(struct mygroup *const restrict mg)
 {
-	struct chanacs *ca;
-	struct mychan *mc;
-	struct myuser *successor;
+	return_if_fail(mg != NULL);
+
+	const char *const msg1 = _("SUCCESSION: \2%s\2 to \2%s\2 from \2%s\2");
+	const char *const msg2 = _("%s: giving channel \2%s\2 to \2%s\2 (unused %lus, founder \2%s\2, chanacs %zu)");
+	const char *const msg3 = _("Foundership changed to \2%s\2 because \2%s\2 was dropped.");
+	const char *const msg4 = _("You are now founder on \2%s\2 (as \2%s\2) because \2%s\2 was dropped.");
+	const char *const msg5 = _("DELETE: \2%s\2 from \2%s\2");
+	const char *const msg6 = _("%s: deleting channel \2%s\2 (unused %lus, founder \2%s\2, chanacs %zu)");
+
 	mowgli_node_t *n, *tn;
 
-	// kill all their channels and chanacs
+	// Kill all their channels and chanacs
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, entity(mg)->chanacs.head)
 	{
-		ca = n->data;
-		mc = ca->mychan;
+		struct chanacs *const ca = n->data;
+		struct mychan *const mc = ca->mychan;
+		struct myuser *successor;
 
-		// attempt succession
-		if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1 && (successor = mychan_pick_successor(mc)) != NULL)
+		continue_if_fail(mc != NULL);
+
+		const unsigned long unused = (unsigned long) (CURRTIME - mc->used);
+
+		// Attempt succession
+		if ((ca->level & CA_FOUNDER) && mychan_num_founders(mc) == 1 && (successor = mychan_pick_successor(mc)))
 		{
-			slog(LG_INFO, _("SUCCESSION: \2%s\2 to \2%s\2 from \2%s\2"), mc->name, entity(successor)->name, entity(mg)->name);
-			slog(LG_VERBOSE, "myuser_delete(): giving channel %s to %s (unused %lds, founder %s, chanacs %zu)",
-					mc->name, entity(successor)->name,
-					(long)(CURRTIME - mc->used),
-					entity(mg)->name,
-					MOWGLI_LIST_LENGTH(&mc->chanacs));
-			if (chansvs.me != NULL)
-				verbose(mc, "Foundership changed to \2%s\2 because \2%s\2 was dropped.", entity(successor)->name, entity(mg)->name);
+			(void) slog(LG_INFO, msg1, mc->name, entity(successor)->name, entity(mg)->name);
+			(void) slog(LG_VERBOSE, msg2, __func__, mc->name, entity(successor)->name, unused,
+			                        entity(mg)->name, MOWGLI_LIST_LENGTH(&mc->chanacs));
 
-			chanacs_change_simple(mc, entity(successor), NULL, CA_FOUNDER_0, 0, NULL);
 			if (chansvs.me != NULL)
-				myuser_notice(chansvs.nick, successor, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, entity(successor)->name);
-			atheme_object_unref(ca);
+			{
+				(void) verbose(mc, msg3, entity(successor)->name, entity(mg)->name);
+				(void) myuser_notice(chansvs.nick, successor, msg4, mc->name, entity(successor)->name,
+				                     entity(mg)->name);
+			}
+
+			(void) chanacs_change_simple(mc, entity(successor), NULL, CA_FOUNDER_0, 0, NULL);
+			(void) atheme_object_unref(ca);
 		}
-		// no successor found
-		else if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1)
+		else if ((ca->level & CA_FOUNDER) && mychan_num_founders(mc) == 1)
 		{
-			slog(LG_REGISTER, _("DELETE: \2%s\2 from \2%s\2"), mc->name, entity(mg)->name);
-			slog(LG_VERBOSE, "myuser_delete(): deleting channel %s (unused %lds, founder %s, chanacs %zu)",
-					mc->name, (long)(CURRTIME - mc->used),
-					entity(mg)->name,
-					MOWGLI_LIST_LENGTH(&mc->chanacs));
+			// No successor found -- destroy the channel
 
-			hook_call_channel_drop(mc);
-			if (mc->chan != NULL && !(mc->chan->flags & CHAN_LOG))
-				part(mc->name, chansvs.nick);
-			atheme_object_unref(mc);
+			(void) slog(LG_INFO, msg5, mc->name, entity(mg)->name);
+			(void) slog(LG_VERBOSE, msg6, __func__, mc->name, unused, entity(mg)->name,
+			                        MOWGLI_LIST_LENGTH(&mc->chanacs));
+
+			(void) hook_call_channel_drop(mc);
+
+			if (mc->chan && ! (mc->chan->flags & CHAN_LOG))
+				(void) part(mc->name, chansvs.nick);
+
+			// Destroying mychan will destroy all its chanacs including this one
+			(void) atheme_object_unref(mc);
 		}
-		else // not founder
-			atheme_object_unref(ca);
+		else	// Not a founder, or not the only founder -- do nothing
+			(void) atheme_object_unref(ca);
 	}
 }
 
