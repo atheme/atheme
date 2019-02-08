@@ -150,9 +150,13 @@ groupacs_sourceinfo_flags(struct mygroup *const restrict mg, const struct source
 }
 
 static bool
-groupacs_sourceinfo_has_flag(struct mygroup *mg, struct sourceinfo *si, unsigned int flag)
+groupacs_sourceinfo_has_flag(struct mygroup *const restrict mg, const struct sourceinfo *const restrict si,
+                             const unsigned int flag)
 {
-	return groupacs_find(mg, entity(si->smu), flag, true) != NULL;
+	return_val_if_fail(mg != NULL, false);
+	return_val_if_fail(si != NULL, false);
+
+	return ((groupacs_find(mg, entity(si->smu), flag, true) != NULL) ? true : false);
 }
 
 static unsigned int

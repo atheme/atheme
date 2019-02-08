@@ -30,7 +30,7 @@ struct groupserv_core_symbols
 	void                      (*groupacs_delete)(struct mygroup *, struct myentity *);
 	struct groupacs *         (*groupacs_find)(struct mygroup *, const struct myentity *, unsigned int, bool);
 	unsigned int              (*groupacs_sourceinfo_flags)(struct mygroup *, const struct sourceinfo *);
-	bool                      (*groupacs_sourceinfo_has_flag)(struct mygroup *, struct sourceinfo *, unsigned int);
+	bool                      (*groupacs_sourceinfo_has_flag)(struct mygroup *, const struct sourceinfo *, unsigned int);
 	unsigned int              (*gs_flags_parser)(char *, bool, unsigned int);
 	struct mygroup *          (*mygroup_add_id)(const char *, const char *);
 	struct mygroup *          (*mygroup_add)(const char *);
