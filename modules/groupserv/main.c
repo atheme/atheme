@@ -28,8 +28,8 @@ static struct service *groupsvs = NULL;
 static mowgli_eventloop_timer_t *mygroup_expire_timer = NULL;
 static struct groupserv_config gs_config;
 
-static unsigned int loading_gdbv = -1;
-static unsigned int their_ga_all = 0;
+static unsigned int loading_gdbv = 0;
+static unsigned int their_ga_all = GA_ALL_OLD;
 
 static mowgli_list_t *
 myentity_get_membership_list(struct myentity *const restrict mt)
@@ -827,12 +827,13 @@ write_groupdb_hook(struct database_handle *const restrict db)
 }
 
 static void
-db_h_gdbv(struct database_handle *db, const char *type)
+db_h_gdbv(struct database_handle *const restrict db, const char ATHEME_VATTR_UNUSED *const restrict type)
 {
-	loading_gdbv = db_sread_uint(db);
-	slog(LG_INFO, "groupserv: opensex data schema version is %d.", loading_gdbv);
+	return_if_fail(db != NULL);
 
-	their_ga_all = GA_ALL_OLD;
+	loading_gdbv = db_sread_uint(db);
+
+	(void) slog(LG_INFO, "groupserv: opensex data schema version is %u.", loading_gdbv);
 }
 
 static void
