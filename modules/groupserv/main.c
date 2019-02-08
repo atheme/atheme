@@ -123,17 +123,19 @@ groupacs_find(struct mygroup *const mg, const struct myentity *const mt, const u
 }
 
 static void
-groupacs_delete(struct mygroup *mg, struct myentity *mt)
+groupacs_delete(struct mygroup *const mg, struct myentity *const mt)
 {
-	struct groupacs *ga;
+	return_if_fail(mg != NULL);
+	return_if_fail(mt != NULL);
 
-	ga = groupacs_find(mg, mt, 0, false);
-	if (ga != NULL)
-	{
-		mowgli_node_delete(&ga->gnode, &mg->acs);
-		mowgli_node_delete(&ga->unode, myentity_get_membership_list(mt));
-		atheme_object_unref(ga);
-	}
+	struct groupacs *const ga = groupacs_find(mg, mt, 0, false);
+
+	if (! ga)
+		return;
+
+	(void) mowgli_node_delete(&ga->gnode, &mg->acs);
+	(void) mowgli_node_delete(&ga->unode, myentity_get_membership_list(mt));
+	(void) atheme_object_unref(ga);
 }
 
 static unsigned int
