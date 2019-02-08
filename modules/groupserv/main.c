@@ -884,12 +884,12 @@ mod_init(struct module *const restrict m)
 	}
 	else
 	{
-		if (! (groupacs_heap = mowgli_heap_create(sizeof(struct groupacs), HEAP_CHANACS, BH_NOW)))
+		if (! (groupacs_heap = mowgli_heap_create(sizeof(struct groupacs), HEAP_GROUPACS, BH_NOW)))
 		{
 			(void) slog(LG_ERROR, "%s: mowgli_heap_create() failed", m->name);
 			goto fail;
 		}
-		if (! (mygroup_heap = mowgli_heap_create(sizeof(struct mygroup), HEAP_USER, BH_NOW)))
+		if (! (mygroup_heap = mowgli_heap_create(sizeof(struct mygroup), HEAP_GROUP, BH_NOW)))
 		{
 			(void) slog(LG_ERROR, "%s: mowgli_heap_create() failed", m->name);
 			goto fail;
