@@ -855,41 +855,36 @@ db_h_gfa(struct database_handle *const restrict db, const char ATHEME_VATTR_UNUS
 }
 
 static void
-db_h_grp(struct database_handle *db, const char *type)
+db_h_grp(struct database_handle *const restrict db, const char ATHEME_VATTR_UNUSED *const restrict type)
 {
-	struct mygroup *mg;
-	const char *uid = NULL;
-	const char *name;
-	time_t regtime;
-	const char *flagset;
+	return_if_fail(db != NULL);
 
-	if (loading_gdbv >= 4)
-		uid = db_sread_word(db);
-
-	name = db_sread_word(db);
+	const char *const uid = ((loading_gdbv >= 4) ? db_sread_word(db) : NULL);
+	const char *const name = db_sread_word(db);
+	const time_t regtime = db_sread_time(db);
 
 	if (mygroup_find(name))
 	{
-		slog(LG_INFO, "db-h-grp: line %d: skipping duplicate group %s", db->line, name);
+		(void) slog(LG_INFO, "%s: line %u: skipping duplicate group %s", __func__, db->line, name);
 		return;
 	}
 	if (uid && myentity_find_uid(uid))
 	{
-		slog(LG_INFO, "db-h-grp: line %d: skipping group %s with duplicate UID %s", db->line, name, uid);
+		(void) slog(LG_INFO, "%s: line %u: skipping group %s with duplicate UID %s", __func__, db->line,
+		                     name, uid);
 		return;
 	}
 
-	regtime = db_sread_time(db);
+	struct mygroup *const mg = mygroup_add_id(uid, name);
 
-	mg = mygroup_add_id(uid, name);
 	mg->regtime = regtime;
 
 	if (loading_gdbv >= 3)
 	{
-		flagset = db_sread_word(db);
+		const char *const flagset = db_sread_word(db);
 
-		if (!gflags_fromstr(mg_flags, flagset, &mg->flags))
-			slog(LG_INFO, "db-h-grp: line %d: confused by flags: %s", db->line, flagset);
+		if (! gflags_fromstr(mg_flags, flagset, &mg->flags))
+			(void) slog(LG_INFO, "%s: line %u: confused by flags: %s", __func__, db->line, flagset);
 	}
 }
 
