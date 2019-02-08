@@ -473,22 +473,23 @@ remove_group_chanacs(struct mygroup *const restrict mg)
 }
 
 static void
-mygroup_expire(void *unused)
+mygroup_expire(void ATHEME_VATTR_UNUSED *const restrict data)
 {
 	struct myentity *mt;
 	struct myentity_iteration_state state;
 
 	MYENTITY_FOREACH_T(mt, &state, ENT_GROUP)
 	{
+		continue_if_fail(mt != NULL);
+
 		struct mygroup *mg = group(mt);
 
-		continue_if_fail(mt != NULL);
 		continue_if_fail(mg != NULL);
 
-		if (!mygroup_count_flag(mg, GA_FOUNDER))
+		if (! mygroup_count_flag(mg, GA_FOUNDER))
 		{
-			remove_group_chanacs(mg);
-			atheme_object_unref(mg);
+			(void) remove_group_chanacs(mg);
+			(void) atheme_object_unref(mg);
 		}
 	}
 }
