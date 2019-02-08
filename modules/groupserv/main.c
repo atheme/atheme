@@ -389,18 +389,20 @@ mygroup_founder_names(const struct mygroup *const restrict mg)
 }
 
 static unsigned int
-myentity_count_group_flag(struct myentity *mt, unsigned int flagset)
+myentity_count_group_flag(struct myentity *const restrict mt, const unsigned int flagset)
 {
-	mowgli_list_t *l;
-	mowgli_node_t *n;
+	return_val_if_fail(mt != NULL, 0);
+
 	unsigned int count = 0;
 
-	l = myentity_get_membership_list(mt);
-	MOWGLI_ITER_FOREACH(n, l->head)
-	{
-		struct groupacs *ga = n->data;
+	const mowgli_list_t *const members = myentity_get_membership_list(mt);
+	const mowgli_node_t *n;
 
-		if (ga->mt == mt && ga->flags & flagset)
+	MOWGLI_ITER_FOREACH(n, members->head)
+	{
+		const struct groupacs *const ga = n->data;
+
+		if (ga->mt == mt && (ga->flags & flagset))
 			count++;
 	}
 
