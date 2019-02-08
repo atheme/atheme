@@ -32,18 +32,22 @@ static unsigned int loading_gdbv = -1;
 static unsigned int their_ga_all = 0;
 
 static mowgli_list_t *
-myentity_get_membership_list(struct myentity *mt)
+myentity_get_membership_list(struct myentity *const restrict mt)
 {
-	mowgli_list_t *l;
+	return_null_if_fail(mt != NULL);
 
-	l = privatedata_get(mt, "groupserv:membership");
-	if (l != NULL)
-		return l;
+	mowgli_list_t *const elist = privatedata_get(mt, "groupserv:membership");
 
-	l = mowgli_list_create();
-	privatedata_set(mt, "groupserv:membership", l);
+	if (elist)
+		return elist;
 
-	return l;
+	mowgli_list_t *const nlist = mowgli_list_create();
+
+	return_null_if_fail(nlist != NULL);
+
+	(void) privatedata_set(mt, "groupserv:membership", nlist);
+
+	return nlist;
 }
 
 static void
