@@ -711,14 +711,19 @@ myuser_delete_hook(struct myuser *const restrict mu)
 }
 
 static void
-osinfo_hook(struct sourceinfo *si)
+osinfo_hook(struct sourceinfo *const restrict si)
 {
 	return_if_fail(si != NULL);
 
-	command_success_nodata(si, "Maximum number of groups one user can own: %u", gs_config.maxgroups);
-	command_success_nodata(si, "Maximum number of ACL entries allowed for one group: %u", gs_config.maxgroupacs);
-	command_success_nodata(si, "Are open groups allowed: %s", gs_config.enable_open_groups ? "Yes" : "No");
-	command_success_nodata(si, "Default joinflags for open groups: %s", gs_config.join_flags);
+	const char *const msg1 = _("Maximum number of groups one user can own: %u");
+	const char *const msg2 = _("Maximum number of ACL entries allowed for one group: %u");
+	const char *const msg3 = _("Are open groups allowed: %s");
+	const char *const msg4 = _("Default joinflags for open groups: %s");
+
+	(void) command_success_nodata(si, msg1, gs_config.maxgroups);
+	(void) command_success_nodata(si, msg2, gs_config.maxgroupacs);
+	(void) command_success_nodata(si, msg3, gs_config.enable_open_groups ? _("Yes") : _("No"));
+	(void) command_success_nodata(si, msg4, gs_config.join_flags);
 }
 
 static struct mygroup *
