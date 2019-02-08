@@ -8,7 +8,6 @@
  */
 
 #include "atheme.h"
-#include "../groupserv/groupserv.h"
 
 static unsigned int *maxmemos;
 

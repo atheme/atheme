@@ -3,16 +3,54 @@
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
  * Copyright (C) 2005-2010 Atheme Project (http://atheme.org/)
- *
- * groupserv.h - group services public interface
+ * Copyright (C) 2018-2019 Atheme Development Group (https://atheme.github.io/)
  */
 
 #include "stdheaders.h"
 
-#ifndef ATHEME_MOD_GROUPSERV_GROUPSERV_H
-#define ATHEME_MOD_GROUPSERV_GROUPSERV_H 1
+#ifndef ATHEME_INC_GROUPSERV_H
+#define ATHEME_INC_GROUPSERV_H 1
 
+#include "entity.h"
+#include "object.h"
 #include "structures.h"
+
+#define MG_REGNOLIMIT           0x00000001
+#define MG_ACSNOLIMIT           0x00000002
+#define MG_OPEN                 0x00000004
+#define MG_PUBLIC               0x00000008
+
+#define GA_FOUNDER              0x00000001
+#define GA_FLAGS                0x00000002
+#define GA_CHANACS              0x00000004
+#define GA_MEMOS                0x00000008
+#define GA_SET                  0x00000010
+#define GA_VHOST                0x00000020
+#define GA_BAN                  0x00000040
+#define GA_INVITE               0x00000080
+#define GA_ACLVIEW              0x00000100
+
+#define GA_ALL_OLD              (GA_FLAGS | GA_CHANACS | GA_MEMOS | GA_SET | GA_VHOST | GA_INVITE)
+#define GA_ALL                  (GA_FLAGS | GA_CHANACS | GA_MEMOS | GA_SET | GA_VHOST | GA_INVITE | GA_ACLVIEW)
+
+struct mygroup
+{
+	struct myentity ent;
+	mowgli_list_t   acs;
+	time_t          regtime;
+	unsigned int    flags;
+	bool            visited;
+};
+
+struct groupacs
+{
+	struct atheme_object    parent;
+	struct mygroup *        mg;
+	struct myentity *       mt;
+	unsigned int            flags;
+	mowgli_node_t           gnode;
+	mowgli_node_t           unode;
+};
 
 struct groupserv_config
 {

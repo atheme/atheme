@@ -10,7 +10,6 @@
 
 #include "atheme.h"
 #include "hostserv.h"
-#include "../groupserv/groupserv.h"
 
 struct hsoffered
 {

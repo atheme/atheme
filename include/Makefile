@@ -36,6 +36,7 @@ INCLUDES = \
 	entity.h		\
 	flags.h			\
 	global.h		\
+	groupserv.h		\
 	hook.h			\
 	hooktypes.h		\
 	httpd.h			\

@@ -7,7 +7,6 @@
  */
 
 #include "atheme.h"
-#include "groupserv.h"
 
 #define GDBV_VERSION            4
 

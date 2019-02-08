@@ -7,7 +7,6 @@
  */
 
 #include "atheme.h"
-#include "groupserv.h"
 
 static const struct groupserv_core_symbols *gcsyms = NULL;
 static mowgli_patricia_t **gs_set_cmdtree = NULL;

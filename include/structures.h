@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: ISC
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ * Copyright (C) 2018-2019 Atheme Development Group (https://atheme.github.io/)
  *
  * Structures used throughout the project (forward declarations).
  */
@@ -12,9 +12,7 @@
 
 // Defined in include/account.h
 struct chanacs;
-struct groupacs;
 struct mychan;
-struct mygroup;
 struct mynick;
 struct myuser;
 struct svsignore;
@@ -54,6 +52,10 @@ struct gflags;
 
 // Defined in include/global.h
 struct me;
+
+// Defined in include/groupserv.h
+struct groupacs;
+struct mygroup;
 
 // Defined in include/hook.h
 struct hook;

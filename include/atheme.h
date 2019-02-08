@@ -37,6 +37,7 @@
 #include "entity-validation.h"
 #include "flags.h"
 #include "global.h"
+#include "groupserv.h"
 #include "hook.h"
 #include "hooktypes.h"
 #include "httpd.h"

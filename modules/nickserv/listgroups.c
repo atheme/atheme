@@ -8,7 +8,6 @@
  */
 
 #include "atheme.h"
-#include "../groupserv/groupserv.h"
 
 static const struct groupserv_core_symbols *gcsyms = NULL;
 
