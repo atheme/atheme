@@ -160,30 +160,35 @@ groupacs_sourceinfo_has_flag(struct mygroup *const restrict mg, const struct sou
 }
 
 static unsigned int
-gs_flags_parser(char *flagstring, bool allow_minus, unsigned int flags)
+gs_flags_parser(const char *const restrict flag_string, const bool allow_subtraction, unsigned int flags)
 {
-	char *c;
-	unsigned int dir = 0;
+	return_val_if_fail(flag_string != NULL, 0);
+
+	bool subtracting = false;
+	const char *c = flag_string;
+
 	unsigned int flag;
 	unsigned char n;
 
-	c = flagstring;
 	while (*c)
 	{
 		flag = 0;
 		n = 0;
-		switch(*c)
+
+		switch (*c)
 		{
 		case '+':
-			dir = 0;
+			subtracting = false;
 			break;
 		case '-':
-			if (allow_minus)
-				dir = 1;
+			if (allow_subtraction)
+				subtracting = true;
 			break;
 		case '*':
-			if (dir)
+			if (subtracting)
+			{
 				flags = 0;
+			}
 			else
 			{
 				// preserve existing flags except GA_BAN
@@ -192,16 +197,16 @@ gs_flags_parser(char *flagstring, bool allow_minus, unsigned int flags)
 			}
 			break;
 		default:
-			while (ga_flags[n].ch != 0 && flag == 0)
+			while (ga_flags[n].ch && ! flag)
 			{
 				if (ga_flags[n].ch == *c)
 					flag = ga_flags[n].value;
 				else
 					n++;
 			}
-			if (flag == 0)
+			if (! flag)
 				break;
-			if (dir)
+			if (subtracting)
 				flags &= ~flag;
 			else
 				flags |= flag;
