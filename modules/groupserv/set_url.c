@@ -3,8 +3,7 @@
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
  * Copyright (C) 2005-2010 Atheme Project (http://atheme.org/)
- *
- * This file contains routines to handle the GroupServ HELP command.
+ * Copyright (C) 2018-2019 Atheme Development Group (https://atheme.github.io/)
  */
 
 #include "atheme.h"
@@ -14,53 +13,70 @@ static const struct groupserv_core_symbols *gcsyms = NULL;
 static mowgli_patricia_t **gs_set_cmdtree = NULL;
 
 static void
-gs_cmd_set_url(struct sourceinfo *si, int parc, char *parv[])
+gs_cmd_set_url_func(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	struct mygroup *mg;
-	char *url = parv[1];
-
-	if (!(mg = gcsyms->mygroup_find(parv[0])))
+	if (parc < 1)
 	{
-		command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), parv[0]);
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET URL");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: SET URL <!group> [url]"));
+		return;
+	}
+
+	const char *const group = parv[0];
+
+	if (*group != '!')
+	{
+		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET URL");
+		(void) command_fail(si, fault_badparams, _("Syntax: SET URL <!group> [url]"));
+		return;
+	}
+
+	struct mygroup *mg;
+
+	if (! (mg = gcsyms->mygroup_find(group)))
+	{
+		(void) command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), group);
 		return;
 	}
 
 	if (! gcsyms->groupacs_sourceinfo_has_flag(mg, si, GA_SET))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
+		(void) command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
 		return;
 	}
 
-	if (!url || !strcasecmp("OFF", url) || !strcasecmp("NONE", url))
+	const char *const param = parv[1];
+
+	if (! param || strcasecmp("OFF", param) == 0 || strcasecmp("NONE", param) == 0)
 	{
 		/* not in a namespace to allow more natural use of SET PROPERTY.
 		 * they may be able to introduce spaces, though. c'est la vie.
 		 */
 		if (metadata_find(mg, "url"))
 		{
-			metadata_delete(mg, "url");
-			logcommand(si, CMDLOG_SET, "SET:URL:NONE: \2%s\2", entity(mg)->name);
-			command_success_nodata(si, _("The URL for \2%s\2 has been cleared."), parv[0]);
+			(void) metadata_delete(mg, "url");
+			(void) logcommand(si, CMDLOG_SET, "SET:URL:NONE: \2%s\2", group);
+			(void) command_success_nodata(si, _("The URL for \2%s\2 has been cleared."), group);
 			return;
 		}
 
-		command_fail(si, fault_nochange, _("The URL for \2%s\2 was not set."), parv[0]);
+		(void) command_fail(si, fault_nochange, _("The URL for \2%s\2 was not set."), group);
 		return;
 	}
 
 	// we'll overwrite any existing metadata
-	metadata_add(mg, "url", url);
+	(void) metadata_add(mg, "url", param);
 
-	logcommand(si, CMDLOG_SET, "SET:URL: \2%s\2 \2%s\2", entity(mg)->name, url);
-	command_success_nodata(si, _("The URL of \2%s\2 has been set to \2%s\2."), parv[0], url);
+	(void) logcommand(si, CMDLOG_SET, "SET:URL: \2%s\2 \2%s\2", group, param);
+	(void) command_success_nodata(si, _("The URL of \2%s\2 has been set to \2%s\2."), group, param);
 }
 
-static struct command gs_set_url = {
+static struct command gs_cmd_set_url = {
 	.name           = "URL",
 	.desc           = N_("Sets the group URL."),
 	.access         = AC_AUTHENTICATED,
 	.maxparc        = 2,
-	.cmd            = &gs_cmd_set_url,
+	.cmd            = &gs_cmd_set_url_func,
 	.help           = { .path = "groupserv/set_url" },
 };
 
@@ -70,13 +86,13 @@ mod_init(struct module *const restrict m)
 	MODULE_TRY_REQUEST_SYMBOL(m, gcsyms, "groupserv/main", "groupserv_core_symbols");
 	MODULE_TRY_REQUEST_SYMBOL(m, gs_set_cmdtree, "groupserv/set", "gs_set_cmdtree");
 
-	command_add(&gs_set_url, *gs_set_cmdtree);
+	(void) command_add(&gs_cmd_set_url, *gs_set_cmdtree);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	command_delete(&gs_set_url, *gs_set_cmdtree);
+	(void) command_delete(&gs_cmd_set_url, *gs_set_cmdtree);
 }
 
 SIMPLE_DECLARE_MODULE_V1("groupserv/set_url", MODULE_UNLOAD_CAPABILITY_OK)
