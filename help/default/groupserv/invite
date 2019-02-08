@@ -4,7 +4,9 @@ INVITE allows you to invite a user to join a
 "private"/non-open group or a group that is
 currently full.
 
-Syntax: INVITE <!group> <user>
+Syntax: INVITE <DELETE|SHOW|!group [user]>
 
 Example:
+    /msg &nick& INVITE DELETE
+    /msg &nick& INVITE SHOW
     /msg &nick& INVITE !foo jdhore
