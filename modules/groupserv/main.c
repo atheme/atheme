@@ -60,22 +60,23 @@ groupacs_destroy(void *const restrict ga)
 }
 
 static struct groupacs *
-groupacs_add(struct mygroup *mg, struct myentity *mt, unsigned int flags)
+groupacs_add(struct mygroup *const mg, struct myentity *const mt, const unsigned int flags)
 {
-	struct groupacs *ga;
+	return_null_if_fail(mg != NULL);
+	return_null_if_fail(mt != NULL);
 
-	return_val_if_fail(mg != NULL, NULL);
-	return_val_if_fail(mt != NULL, NULL);
+	struct groupacs *const ga = mowgli_heap_alloc(groupacs_heap);
 
-	ga = mowgli_heap_alloc(groupacs_heap);
-	atheme_object_init(atheme_object(ga), NULL, &groupacs_destroy);
+	return_null_if_fail(ga != NULL);
+
+	(void) atheme_object_init(atheme_object(ga), NULL, &groupacs_destroy);
 
 	ga->mg = mg;
 	ga->mt = mt;
 	ga->flags = flags;
 
-	mowgli_node_add(ga, &ga->gnode, &mg->acs);
-	mowgli_node_add(ga, &ga->unode, myentity_get_membership_list(mt));
+	(void) mowgli_node_add(ga, &ga->gnode, &mg->acs);
+	(void) mowgli_node_add(ga, &ga->unode, myentity_get_membership_list(mt));
 
 	return ga;
 }
