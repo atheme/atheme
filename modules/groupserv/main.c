@@ -663,23 +663,26 @@ user_info_hook(hook_user_req_t *const restrict req)
 }
 
 static void
-sasl_may_impersonate_hook(hook_sasl_may_impersonate_t *req)
+sasl_may_impersonate_hook(hook_sasl_may_impersonate_t *const restrict req)
 {
-	char priv[BUFSIZE];
-	mowgli_list_t *l;
-	mowgli_node_t *n;
+	return_if_fail(req != NULL);
+	return_if_fail(req->source_mu != NULL);
+	return_if_fail(req->target_mu != NULL);
 
 	// if the request is already granted, don't bother doing any of this.
 	if (req->allowed)
 		return;
 
-	l = myentity_get_membership_list(entity(req->target_mu));
+	const mowgli_list_t *const members = myentity_get_membership_list(entity(req->target_mu));
+	const mowgli_node_t *n;
 
-	MOWGLI_ITER_FOREACH(n, l->head)
+	MOWGLI_ITER_FOREACH(n, members->head)
 	{
-		struct groupacs *ga = n->data;
+		const struct groupacs *const ga = n->data;
+		struct mygroup *const mg = ga->mg;
 
-		snprintf(priv, sizeof(priv), PRIV_IMPERSONATE_ENTITY_FMT, entity(ga->mg)->name);
+		char priv[BUFSIZE];
+		(void) snprintf(priv, sizeof priv, PRIV_IMPERSONATE_ENTITY_FMT, entity(mg)->name);
 
 		if (has_priv_myuser(req->source_mu, priv))
 		{
