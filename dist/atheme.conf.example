@@ -762,7 +762,6 @@ loadmodule "modules/statserv/server";
  * REGISTER command                             modules/groupserv/register
  * REGNOLIMIT command                           modules/groupserv/regnolimit
  * INVITE command                               modules/groupserv/invite
- * SET command                                  modules/groupserv/set
  * SET CHANNEL command                          modules/groupserv/set_channel
  * SET DESCRIPTION command                      modules/groupserv/set_description
  * SET EMAIL command                            modules/groupserv/set_email
@@ -786,7 +785,6 @@ loadmodule "modules/groupserv/listchans";
 loadmodule "modules/groupserv/register";
 loadmodule "modules/groupserv/regnolimit";
 #loadmodule "modules/groupserv/invite";
-loadmodule "modules/groupserv/set";
 loadmodule "modules/groupserv/set_channel";
 loadmodule "modules/groupserv/set_description";
 loadmodule "modules/groupserv/set_email";

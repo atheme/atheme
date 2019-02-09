@@ -34,6 +34,12 @@ POTENTIAL COMPATIBILITY BREAKAGE
   as well. The corresponding configuration item `nickserv::cracklib_warn` has
   been renamed to `nickserv::pwquality_warn_only` too.
 
+- The `modules/groupserv/set` module has been renamed to
+  `modules/groupserv/set_core`, consistent with other pseudoservices (e.g.
+  NickServ, ChanServ). However, this module is loaded automatically when it is
+  required, so you should simply remove this module from your configuration,
+  regardless of the version of services you are using.
+
 Security
 --------
 - Services now accepts email addresses that may contain shell metacharacters.

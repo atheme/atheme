@@ -105,4 +105,4 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	(void) mowgli_patricia_destroy(gs_set_cmdtree, &command_delete_trie_cb, gs_set_cmdtree);
 }
 
-SIMPLE_DECLARE_MODULE_V1("groupserv/set", MODULE_UNLOAD_CAPABILITY_OK)
+SIMPLE_DECLARE_MODULE_V1("groupserv/set_core", MODULE_UNLOAD_CAPABILITY_OK)

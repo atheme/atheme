@@ -76,7 +76,7 @@ static void
 mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, gcsyms, "groupserv/main", "groupserv_core_symbols");
-	MODULE_TRY_REQUEST_SYMBOL(m, gs_set_cmdtree, "groupserv/set", "gs_set_cmdtree");
+	MODULE_TRY_REQUEST_SYMBOL(m, gs_set_cmdtree, "groupserv/set_core", "gs_set_cmdtree");
 
 	(void) command_add(&gs_cmd_set_groupname, *gs_set_cmdtree);
 }

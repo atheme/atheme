@@ -19,8 +19,8 @@ SRCS =				\
 	main.c			\
 	register.c		\
 	regnolimit.c		\
-	set.c			\
 	set_channel.c		\
+	set_core.c		\
 	set_description.c	\
 	set_email.c		\
 	set_groupname.c		\
