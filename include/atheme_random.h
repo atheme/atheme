@@ -17,6 +17,7 @@
 uint32_t atheme_random(void);
 uint32_t atheme_random_uniform(uint32_t bound);
 void atheme_random_buf(void *buf, size_t len);
+void atheme_random_str(char *buf, size_t len);
 
 bool libathemecore_random_early_init(void) ATHEME_FATTR_WUR;
 const char *random_get_frontend_info(void);
@@ -28,6 +29,10 @@ void atheme_random_buf(void *buf, size_t len)
     ATHEME_FATTR_DIAGNOSE_IF(!buf, "calling atheme_random_buf() with !buf", "error");
 void atheme_random_buf(void *buf, size_t len)
     ATHEME_FATTR_DIAGNOSE_IF(!len, "calling atheme_random_buf() with !len", "error");
+void atheme_random_str(char *buf, size_t len)
+    ATHEME_FATTR_DIAGNOSE_IF(!buf, "calling atheme_random_str() with !buf", "error");
+void atheme_random_str(char *buf, size_t len)
+    ATHEME_FATTR_DIAGNOSE_IF(!len, "calling atheme_random_str() with !len", "error");
 #endif /* ATHEME_ATTR_HAS_DIAGNOSE_IF */
 
 #endif /* !ATHEME_INC_RANDOM_H */

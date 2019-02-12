@@ -51,16 +51,11 @@ string_in_list(const char *const restrict str, const char *restrict list)
 char * ATHEME_FATTR_MALLOC ATHEME_FATTR_RETURNS_NONNULL
 random_string(const size_t sz)
 {
-	static const char ch[62] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	char *const buf = smalloc(sz + 1); /* NULL terminator */
 
-	unsigned char *const buf = smalloc(sz + 1); /* NULL terminator */
+	(void) atheme_random_str(buf, sz);
 
-	(void) atheme_random_buf(buf, sz);
-
-	for (size_t i = 0; i < sz; i++)
-		buf[i] = ch[buf[i] % sizeof ch];
-
-	return (char *) buf;
+	return buf;
 }
 
 const char *
