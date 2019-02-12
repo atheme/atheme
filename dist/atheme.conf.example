@@ -588,18 +588,19 @@ loadmodule "modules/infoserv/main";
  * ircd. You need the core components and at least one mechanism.
  *
  * Core components                              modules/saslserv/main
- * PLAIN mechanism                              modules/saslserv/plain
- * ECDSA-NIST256p-CHALLENGE                     modules/saslserv/ecdsa-nist256p-challenge
  * AUTHCOOKIE mechanism (for IRIS)              modules/saslserv/authcookie
+ * ECDSA-NIST256P-CHALLENGE                     modules/saslserv/ecdsa-nist256p-challenge
  * EXTERNAL mechanism (IRCv3.1+)                modules/saslserv/external
+ * PLAIN mechanism                              modules/saslserv/plain
  *
- * ECDSA-NIST256p-CHALLENGE support requires that Atheme be compiled against OpenSSL.
+ * ECDSA-NIST256P-CHALLENGE support requires that Atheme be compiled against OpenSSL.
  */
 loadmodule "modules/saslserv/main";
-loadmodule "modules/saslserv/plain";
 loadmodule "modules/saslserv/authcookie";
+#loadmodule "modules/saslserv/ecdsa-nist256p-challenge";  /* Requires OpenSSL */
 #loadmodule "modules/saslserv/external";
-#loadmodule "modules/saslserv/ecdsa-nist256p-challenge"; /* requires SSL */
+loadmodule "modules/saslserv/plain";
+#loadmodule "modules/saslserv/scram-sha";  /* Read doc/SASL-SCRAM-SHA first ! */
 
 /* GameServ modules.
  *

@@ -34,6 +34,7 @@
 #define NONCE_LENGTH                64U         // This should be more than sufficient
 #define NONCE_LENGTH_MIN            8U          // Minimum acceptable client nonce length
 #define NONCE_LENGTH_MAX            1024U       // Maximum acceptable client nonce length
+#define NONCE_LENGTH_MIN_COMBINED   (NONCE_LENGTH + NONCE_LENGTH_MIN)
 #define NONCE_LENGTH_MAX_COMBINED   (NONCE_LENGTH + NONCE_LENGTH_MAX)
 
 enum scramsha_step
@@ -48,8 +49,6 @@ struct scramsha_session
 {
 	struct pbkdf2v2_dbentry     db;         // Parsed credentials from database
 	struct myuser              *mu;         // User we are authenticating as
-	char                       *cn;         // Client nonce
-	char                       *sn;         // Server nonce
 	char                       *c_gs2_buf;  // Client's GS2 header
 	char                       *c_msg_buf;  // Client's first message
 	char                       *s_msg_buf;  // Server's first message
@@ -57,6 +56,7 @@ struct scramsha_session
 	size_t                      c_msg_len;  // Client's first message (length)
 	size_t                      s_msg_len;  // Server's first message (length)
 	enum scramsha_step          step;       // What step in authentication are we at?
+	char                        nonce[NONCE_LENGTH_MAX_COMBINED + 1];
 };
 
 typedef char *scram_attr_list[128];
@@ -236,7 +236,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 
 	if (nlen < NONCE_LENGTH_MIN || nlen > NONCE_LENGTH_MAX)
 	{
-		(void) slog(LG_DEBUG, "%s: nonce length unacceptable", MOWGLI_FUNC_NAME);
+		(void) slog(LG_DEBUG, "%s: nonce length '%zu' unacceptable", MOWGLI_FUNC_NAME, nlen);
 		goto error;
 	}
 
@@ -300,19 +300,21 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 	s = smalloc(sizeof *s);
 	s->c_gs2_len = (size_t) (message - header);
 	s->c_gs2_buf = sstrndup(header, s->c_gs2_len);
-	s->c_msg_len = inlen - s->c_gs2_len;
+	s->c_msg_len = (inlen - s->c_gs2_len);
 	s->c_msg_buf = sstrndup(message, s->c_msg_len);
-	s->cn = sstrdup(input['r']);
-	s->sn = random_string(NONCE_LENGTH);
 	s->mu = mu;
+
+	(void) memcpy(s->nonce, input['r'], nlen);
+	(void) atheme_random_str(s->nonce + nlen, NONCE_LENGTH);
 	(void) memcpy(&s->db, &db, sizeof db);
+
 	p->mechdata = s;
 
 	// Construct server-first-message
 	char response[SASL_C2S_MAXLEN];
-	const int ol = snprintf(response, sizeof response, "r=%s%s,s=%s,i=%u", s->cn, s->sn, s->db.salt64, s->db.c);
+	const int ol = snprintf(response, sizeof response, "r=%s,s=%s,i=%u", s->nonce, s->db.salt64, s->db.c);
 
-	if (ol <= (int)(NONCE_LENGTH + PBKDF2_SALTLEN_MIN + 16) || ol >= (int) sizeof response)
+	if (ol <= (int)(NONCE_LENGTH_MIN_COMBINED + (PBKDF2_SALTLEN_MIN * 1.333) + 12) || ol >= (int) sizeof response)
 	{
 		(void) slog(LG_ERROR, "%s: snprintf(3) for server-first-message failed", MOWGLI_FUNC_NAME);
 		goto error;
@@ -366,21 +368,14 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 		goto error;
 	}
 
-	// Concatenate the s-nonce to the c-nonce
-	char x_nonce[NONCE_LENGTH_MAX_COMBINED + 1];
-	const int xl = snprintf(x_nonce, sizeof x_nonce, "%s%s", s->cn, s->sn);
-	if (xl <= (int) NONCE_LENGTH || xl >= (int) sizeof x_nonce)
-	{
-		(void) slog(LG_ERROR, "%s: snprintf(3) for concatenated salts failed (BUG?)", MOWGLI_FUNC_NAME);
-		goto error;
-	}
-	if (strcmp(x_nonce, input['r']) != 0)
+	// Verify nonce received matches nonce sent
+	if (strcmp(s->nonce, input['r']) != 0)
 	{
 		(void) slog(LG_DEBUG, "%s: nonce sent by client doesn't match nonce we sent", MOWGLI_FUNC_NAME);
 		goto error;
 	}
 
-	// Decode GS2 header from client-final-message
+	// Decode and verify GS2 header from client-final-message
 	char c_gs2_buf[SASL_C2S_MAXLEN];
 	const size_t c_gs2_len = base64_decode(input['c'], c_gs2_buf, sizeof c_gs2_buf);
 	if (c_gs2_len == (size_t) -1)
@@ -407,7 +402,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	const int alen = snprintf(AuthMessage, sizeof AuthMessage, "%s,%s,c=%s,r=%s",
 	                          s->c_msg_buf, s->s_msg_buf, input['c'], input['r']);
 
-	if (alen <= (int) NONCE_LENGTH || alen >= (int) sizeof AuthMessage)
+	if (alen <= (int) NONCE_LENGTH_MIN_COMBINED || alen >= (int) sizeof AuthMessage)
 	{
 		(void) slog(LG_ERROR, "%s: snprintf(3) for AuthMessage failed (BUG?)", MOWGLI_FUNC_NAME);
 		goto error;
@@ -444,6 +439,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	/* ******************************************************** *
 	 * AUTHENTICATION OF THE CLIENT HAS SUCCEEDED AT THIS POINT *
 	 * ******************************************************** */
+	(void) slog(LG_DEBUG, "%s: authentication successful", MOWGLI_FUNC_NAME);
 
 	// Calculate ServerSignature
 	unsigned char ServerSignature[DIGEST_MDLEN_MAX];
@@ -453,9 +449,9 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 		goto error;
 	}
 
-	// Encode ServerSignature
-	char ServerSignature64[DIGEST_MDLEN_MAX * 3];
-	const size_t rs = base64_encode(ServerSignature, s->db.dl, ServerSignature64, sizeof ServerSignature64);
+	// Encode ServerSignature and construct server-final-message
+	char ServerSignature64[2 + (DIGEST_MDLEN_MAX * 3)] = "v=";
+	const size_t rs = base64_encode(ServerSignature, s->db.dl, ServerSignature64 + 2, sizeof ServerSignature64 - 2);
 
 	if (rs == (size_t) -1)
 	{
@@ -467,9 +463,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	*outlen = rs + 2;
 	*out    = smalloc(rs + 2);
 
-	// Construct server-final-message
-	(void) memcpy(*out, "v=", 2);
-	(void) memcpy(*out + 2, ServerSignature64, rs);
+	(void) memcpy(*out, ServerSignature64, rs + 2);
 
 	(void) sasl_scramsha_attrlist_free(&input);
 	s->step = SCRAMSHA_STEP_PASSED;
@@ -586,8 +580,6 @@ mech_finish(struct sasl_session *const restrict p)
 
 	struct scramsha_session *const s = p->mechdata;
 
-	(void) sfree(s->cn);
-	(void) sfree(s->sn);
 	(void) sfree(s->c_gs2_buf);
 	(void) sfree(s->c_msg_buf);
 	(void) sfree(s->s_msg_buf);
@@ -667,7 +659,7 @@ mod_init(struct module *const restrict m)
 	// Services administrators using this module should be fully aware of the requirements for correctly doing so
 	if (! module_find_published(PBKDF2V2_CRYPTO_MODULE_NAME))
 	{
-		(void) slog(LG_ERROR, "module %s needs module %s", m->name, PBKDF2V2_CRYPTO_MODULE_NAME);
+		(void) slog(LG_ERROR, "%s: Please read 'doc/SASL-SCRAM-SHA'; refusing to load.", m->name);
 
 		m->mflags |= MODFLAG_FAIL;
 		return;
