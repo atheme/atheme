@@ -27,10 +27,12 @@
 #define PBKDF2_FN_SAVEHASH              PBKDF2_FN_SAVESALT "%s"
 #define PBKDF2_FS_SAVEHASH              PBKDF2_FN_SAVEHASH "$%s"
 
+#define PBKDF2_PRF_HMAC_MD5             3U
 #define PBKDF2_PRF_HMAC_SHA1            4U
 #define PBKDF2_PRF_HMAC_SHA2_256        5U
 #define PBKDF2_PRF_HMAC_SHA2_512        6U
 
+#define PBKDF2_PRF_HMAC_MD5_S64         23U
 #define PBKDF2_PRF_HMAC_SHA1_S64        24U
 #define PBKDF2_PRF_HMAC_SHA2_256_S64    25U
 #define PBKDF2_PRF_HMAC_SHA2_512_S64    26U

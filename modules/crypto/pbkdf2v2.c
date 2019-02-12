@@ -53,6 +53,7 @@ atheme_pbkdf2v2_salt_is_b64(const unsigned int prf)
 {
 	switch (prf)
 	{
+		case PBKDF2_PRF_HMAC_MD5_S64:
 		case PBKDF2_PRF_HMAC_SHA1_S64:
 		case PBKDF2_PRF_HMAC_SHA2_256_S64:
 		case PBKDF2_PRF_HMAC_SHA2_512_S64:
@@ -70,6 +71,12 @@ atheme_pbkdf2v2_determine_params(struct pbkdf2v2_dbentry *const restrict dbe)
 {
 	switch (dbe->a)
 	{
+		case PBKDF2_PRF_HMAC_MD5:
+		case PBKDF2_PRF_HMAC_MD5_S64:
+			dbe->md = DIGALG_MD5;
+			dbe->dl = DIGEST_MDLEN_MD5;
+			break;
+
 		case PBKDF2_PRF_SCRAM_SHA1:
 		case PBKDF2_PRF_SCRAM_SHA1_S64:
 			dbe->scram = true;
