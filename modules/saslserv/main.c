@@ -352,6 +352,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 	struct sasl_output_buf outbuf = {
 		.buf = NULL,
 		.len = 0,
+		.flags = ASASL_OUTFLAG_NONE,
 	};
 
 	bool have_written = false;
@@ -419,7 +420,9 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 		char encbuf[SASL_C2S_MAXLEN + 1];
 		const size_t enclen = base64_encode(outbuf.buf, outbuf.len, encbuf, sizeof encbuf);
 
-		(void) sfree(outbuf.buf);
+		if (! (outbuf.flags & ASASL_OUTFLAG_DONT_FREE_BUF))
+			(void) sfree(outbuf.buf);
+
 		(void) memset(&outbuf, 0x00, sizeof outbuf);
 
 		if (enclen == (size_t) -1)

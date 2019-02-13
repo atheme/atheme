@@ -28,8 +28,12 @@
 #define SASL_C2S_MAXLEN             8192
 
 // Flags for sasl_session->flags
-#define ASASL_MARKED_FOR_DELETION   1U  // see delete_stale() in saslserv/main.c
-#define ASASL_NEED_LOG              2U  // user auth success needs to be logged still
+#define ASASL_MARKED_FOR_DELETION   0x00000001U  // see delete_stale() in saslserv/main.c
+#define ASASL_NEED_LOG              0x00000002U  // user auth success needs to be logged still
+
+// Flags for sasl_output_buf->flags
+#define ASASL_OUTFLAG_NONE          0x00000000U /* Nothing special */
+#define ASASL_OUTFLAG_DONT_FREE_BUF 0x00000001U /* Don't sfree() the output buffer after base64-encoding it */
 
 // Return values for sasl_mechanism -> mech_start() or mech_step()
 #define ASASL_FAIL                  0U  // client supplied invalid credentials / screwed up their formatting
@@ -83,6 +87,7 @@ struct sasl_output_buf
 {
 	void *          buf;
 	size_t          len;
+	unsigned int    flags;
 };
 
 typedef unsigned int (*sasl_mech_start_fn)(struct sasl_session *restrict, struct sasl_output_buf *restrict);
