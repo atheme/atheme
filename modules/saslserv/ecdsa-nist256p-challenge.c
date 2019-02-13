@@ -118,11 +118,11 @@ mech_step(struct sasl_session *const restrict p, const struct sasl_input_buf *co
 	if (! o2i_ECPublicKey(&s->pubkey, &pubkey_raw_p, (long) ret))
 		return ASASL_ERROR;
 
-	out->len = sizeof s->challenge;
-	out->buf = smalloc(out->len);
+	(void) atheme_random_buf(s->challenge, sizeof s->challenge);
 
-	(void) atheme_random_buf(s->challenge, out->len);
-	(void) memcpy(out->buf, s->challenge, out->len);
+	out->buf = s->challenge;
+	out->len = sizeof s->challenge;
+	out->flags |= ASASL_OUTFLAG_DONT_FREE_BUF;
 
 	s->step = ECDSA_ST_RESPONSE;
 	return ASASL_MORE;
