@@ -349,8 +349,11 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 {
 	unsigned int rc;
 
-	void *out = NULL;
-	size_t out_len = 0;
+	struct sasl_output_buf outbuf = {
+		.buf = NULL,
+		.len = 0,
+	};
+
 	bool have_written = false;
 
 	/* First piece of data in a session is the name of
@@ -367,7 +370,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 		}
 
 		if (p->mechptr->mech_start)
-			rc = p->mechptr->mech_start(p, &out, &out_len);
+			rc = p->mechptr->mech_start(p, &outbuf);
 		else
 			rc = ASASL_MORE;
 	}
@@ -378,44 +381,54 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 	}
 	else
 	{
-		unsigned char inbuf[SASL_C2S_MAXLEN + 1];
-		size_t tlen = 0;
-
-		if (len == 1 && *buf == '+')
-			rc = p->mechptr->mech_step(p, NULL, 0, &out, &out_len);
-		else if ((tlen = base64_decode(buf, inbuf, SASL_C2S_MAXLEN)) && tlen != (size_t) -1)
+		if (*buf == '+' && len == 1)
 		{
-			// Ensure input is NULL-terminated for modules that want to process the data as a string
-			inbuf[tlen] = 0x00;
-			rc = p->mechptr->mech_step(p, inbuf, tlen, &out, &out_len);
+			rc = p->mechptr->mech_step(p, NULL, &outbuf);
 		}
 		else
-			rc = ASASL_ERROR;
+		{
+			unsigned char decbuf[SASL_C2S_MAXLEN + 1];
+			const size_t declen = base64_decode(buf, decbuf, SASL_C2S_MAXLEN);
 
-		if (tlen == (size_t) -1)
-			(void) slog(LG_DEBUG, "%s: base64_decode() failed", MOWGLI_FUNC_NAME);
+			if (declen != (size_t) -1)
+			{
+				// Ensure input is NULL-terminated for modules that want to process the data as a string
+				decbuf[declen] = 0x00;
+
+				const struct sasl_input_buf inbuf = {
+					.buf = decbuf,
+					.len = declen,
+				};
+
+				rc = p->mechptr->mech_step(p, &inbuf, &outbuf);
+			}
+			else
+			{
+				(void) slog(LG_DEBUG, "%s: base64_decode() failed", MOWGLI_FUNC_NAME);
+
+				rc = ASASL_ERROR;
+			}
+		}
 	}
 
 	// Some progress has been made, reset timeout.
 	p->flags &= ~ASASL_MARKED_FOR_DELETION;
 
-	if (out && out_len)
+	if (outbuf.buf && outbuf.len)
 	{
-		char outbuf[SASL_C2S_MAXLEN + 1];
-		const size_t outbuflen = base64_encode(out, out_len, outbuf, sizeof outbuf);
+		char encbuf[SASL_C2S_MAXLEN + 1];
+		const size_t enclen = base64_encode(outbuf.buf, outbuf.len, encbuf, sizeof encbuf);
 
-		(void) sfree(out);
+		(void) sfree(outbuf.buf);
+		(void) memset(&outbuf, 0x00, sizeof outbuf);
 
-		out = NULL;
-		outlen = 0;
-
-		if (outbuflen == (size_t) -1)
+		if (enclen == (size_t) -1)
 		{
 			(void) slog(LG_ERROR, "%s: base64_encode() failed", MOWGLI_FUNC_NAME);
 			return false;
 		}
 
-		(void) sasl_write(p->uid, outbuf, outbuflen);
+		(void) sasl_write(p->uid, encbuf, enclen);
 
 		have_written = true;
 	}

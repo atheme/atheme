@@ -13,18 +13,18 @@
 static const struct sasl_core_functions *sasl_core_functions = NULL;
 
 static unsigned int
-mech_step(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
-          void ATHEME_VATTR_UNUSED **const restrict out, size_t ATHEME_VATTR_UNUSED *const restrict outlen)
+mech_step(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
+          struct sasl_output_buf ATHEME_VATTR_UNUSED *const restrict out)
 {
-	if (! (p && in && inlen))
+	if (! (p && in && in->buf && in->len))
 		return ASASL_ERROR;
 
 	// Data format: authzid 0x00 authcid 0x00 password [0x00]
-	if (inlen > (NICKLEN + 1 + NICKLEN + 1 + PASSLEN + 1))
+	if (in->len > (NICKLEN + 1 + NICKLEN + 1 + PASSLEN + 1))
 		return ASASL_ERROR;
 
-	const char *ptr = in;
-	const char *const end = ptr + inlen;
+	const char *ptr = in->buf;
+	const char *const end = ptr + in->len;
 
 	const char *const authzid = ptr;
 	if (! *authzid)

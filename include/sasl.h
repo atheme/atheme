@@ -27,13 +27,11 @@
 // Maximum length of Base-64 data a client can send in total (buffered)
 #define SASL_C2S_MAXLEN             8192
 
-/* Flags for sasl_session->flags
- */
+// Flags for sasl_session->flags
 #define ASASL_MARKED_FOR_DELETION   1U  // see delete_stale() in saslserv/main.c
 #define ASASL_NEED_LOG              2U  // user auth success needs to be logged still
 
-/* Return values for sasl_mechanism -> mech_start() or mech_step()
- */
+// Return values for sasl_mechanism -> mech_start() or mech_step()
 #define ASASL_FAIL                  0U  // client supplied invalid credentials / screwed up their formatting
 #define ASASL_MORE                  1U  // everything looks good so far, but we're not done yet
 #define ASASL_DONE                  2U  // client successfully authenticated
@@ -75,12 +73,31 @@ struct sasl_message
 	char            mode;
 };
 
+struct sasl_input_buf
+{
+	const void *    buf;
+	const size_t    len;
+};
+
+struct sasl_output_buf
+{
+	void *          buf;
+	size_t          len;
+};
+
+typedef unsigned int (*sasl_mech_start_fn)(struct sasl_session *restrict, struct sasl_output_buf *restrict);
+
+typedef unsigned int (*sasl_mech_step_fn)(struct sasl_session *restrict, const struct sasl_input_buf *restrict,
+                                          struct sasl_output_buf *restrict);
+
+typedef void (*sasl_mech_finish_fn)(struct sasl_session *);
+
 struct sasl_mechanism
 {
-	char            name[SASL_MECHANISM_MAXLEN];
-	unsigned int  (*mech_start)(struct sasl_session *, void **, size_t *);
-	unsigned int  (*mech_step)(struct sasl_session *, const void *, size_t, void **, size_t *);
-	void          (*mech_finish)(struct sasl_session *);
+	char                name[SASL_MECHANISM_MAXLEN];
+	sasl_mech_start_fn  mech_start;
+	sasl_mech_step_fn   mech_step;
+	sasl_mech_finish_fn mech_finish;
 };
 
 struct sasl_core_functions
