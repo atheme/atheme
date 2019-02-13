@@ -12,6 +12,8 @@
 
 #include "attrs.h"
 
+#define BASE64_SIZE(len)        ((((len) * 4) / 3) + 4)
+
 size_t base64_encode(const void *src, size_t srclength, char *target, size_t targsize) ATHEME_FATTR_WUR;
 size_t base64_encode_raw(const void *src, size_t srclength, char *target, size_t targsize) ATHEME_FATTR_WUR;
 size_t base64_decode(const char *src, void *target, size_t targsize) ATHEME_FATTR_WUR;

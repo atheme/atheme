@@ -450,7 +450,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	}
 
 	// Encode ServerSignature and construct server-final-message
-	char ServerSignature64[2 + (DIGEST_MDLEN_MAX * 3)] = "v=";
+	char ServerSignature64[2 + BASE64_SIZE(DIGEST_MDLEN_MAX)] = "v=";
 	const size_t rs = base64_encode(ServerSignature, s->db.dl, ServerSignature64 + 2, sizeof ServerSignature64 - 2);
 
 	if (rs == (size_t) -1)
@@ -501,8 +501,8 @@ mech_step_success(const struct scramsha_session *const restrict s)
 	(void) slog(LG_INFO, "%s: login succeeded, attempting to convert user's hash to SCRAM format",
 	                     MOWGLI_FUNC_NAME);
 
-	char csk64[DIGEST_MDLEN_MAX * 3];
-	char chk64[DIGEST_MDLEN_MAX * 3];
+	char csk64[BASE64_SIZE(DIGEST_MDLEN_MAX)];
+	char chk64[BASE64_SIZE(DIGEST_MDLEN_MAX)];
 	char res[PASSLEN + 1];
 
 	if (base64_encode(s->db.ssk, s->db.dl, csk64, sizeof csk64) == (size_t) -1)

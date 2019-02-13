@@ -468,8 +468,8 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 	{
 		unsigned char csk[DIGEST_MDLEN_MAX];
 		unsigned char chk[DIGEST_MDLEN_MAX];
-		char csk64[DIGEST_MDLEN_MAX * 3];
-		char chk64[DIGEST_MDLEN_MAX * 3];
+		char csk64[BASE64_SIZE(DIGEST_MDLEN_MAX)];
+		char chk64[BASE64_SIZE(DIGEST_MDLEN_MAX)];
 
 		if (! atheme_pbkdf2v2_scram_derive(&dbe, dbe.cdg, csk, chk))
 			// This function logs messages on failure
@@ -494,7 +494,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 	}
 	else
 	{
-		char cdg64[DIGEST_MDLEN_MAX * 3];
+		char cdg64[BASE64_SIZE(DIGEST_MDLEN_MAX)];
 
 		if (base64_encode(dbe.cdg, dbe.dl, cdg64, sizeof cdg64) == (size_t) -1)
 		{

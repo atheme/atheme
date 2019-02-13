@@ -57,18 +57,18 @@
 
 struct pbkdf2v2_dbentry
 {
-	unsigned char   cdg[DIGEST_MDLEN_MAX];          // PBKDF2 Digest (Computed)
-	unsigned char   sdg[DIGEST_MDLEN_MAX];          // PBKDF2 Digest (Stored)
-	unsigned char   ssk[DIGEST_MDLEN_MAX];          // SCRAM-SHA ServerKey (Stored)
-	unsigned char   shk[DIGEST_MDLEN_MAX];          // SCRAM-SHA StoredKey (Stored)
-	unsigned char   salt[PBKDF2_SALTLEN_MAX];       // PBKDF2 Salt
-	char            salt64[PBKDF2_SALTLEN_MAX * 3]; // PBKDF2 Salt (Base64-encoded)
-	size_t          dl;                             // Digest Length
-	size_t          sl;                             // Salt Length
-	unsigned int    md;                             // Atheme Digest Interface Algorithm Identifier
-	unsigned int    a;                              // PBKDF2v2 PRF ID (one of the macros above)
-	unsigned int    c;                              // PBKDF2 Iteration Count
-	bool            scram;                          // Whether to use HMAC-SHA or SCRAM-SHA
+	unsigned char   cdg[DIGEST_MDLEN_MAX];                      // PBKDF2 Digest (Computed)
+	unsigned char   sdg[DIGEST_MDLEN_MAX];                      // PBKDF2 Digest (Stored)
+	unsigned char   ssk[DIGEST_MDLEN_MAX];                      // SCRAM-SHA ServerKey (Stored)
+	unsigned char   shk[DIGEST_MDLEN_MAX];                      // SCRAM-SHA StoredKey (Stored)
+	unsigned char   salt[PBKDF2_SALTLEN_MAX];                   // PBKDF2 Salt
+	char            salt64[BASE64_SIZE(PBKDF2_SALTLEN_MAX)];    // PBKDF2 Salt (Base64-encoded)
+	size_t          dl;                                         // Digest Length
+	size_t          sl;                                         // Salt Length
+	unsigned int    md;                                         // Atheme Digest Interface Algorithm ID
+	unsigned int    a;                                          // PBKDF2v2 PRF ID (one of the macros above)
+	unsigned int    c;                                          // PBKDF2 Iteration Count
+	bool            scram;                                      // Whether to use HMAC-SHA or SCRAM-SHA
 };
 
 static const unsigned char ServerKeyStr[] = {
