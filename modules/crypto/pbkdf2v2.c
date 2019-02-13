@@ -226,15 +226,18 @@ static bool
 atheme_pbkdf2v2_scram_derive(const struct pbkdf2v2_dbentry *const dbe, const unsigned char *const idg,
                              unsigned char *const restrict csk, unsigned char *const restrict chk)
 {
+	static const char ClientKeyConstant[] = "Client Key";
+	static const char ServerKeyConstant[] = "Server Key";
+
 	unsigned char cck[DIGEST_MDLEN_MAX];
 	bool retval = false;
 
-	if (csk && ! digest_oneshot_hmac(dbe->md, idg, dbe->dl, ServerKeyStr, sizeof ServerKeyStr, csk, NULL))
+	if (csk && ! digest_oneshot_hmac(dbe->md, idg, dbe->dl, ServerKeyConstant, 10U, csk, NULL))
 	{
 		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac(idg) for csk failed (BUG)", MOWGLI_FUNC_NAME);
 		goto end;
 	}
-	if (chk && ! digest_oneshot_hmac(dbe->md, idg, dbe->dl, ClientKeyStr, sizeof ClientKeyStr, cck, NULL))
+	if (chk && ! digest_oneshot_hmac(dbe->md, idg, dbe->dl, ClientKeyConstant, 10U, cck, NULL))
 	{
 		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac(idg) for cck failed (BUG)", MOWGLI_FUNC_NAME);
 		goto end;

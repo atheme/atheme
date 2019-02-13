@@ -78,18 +78,6 @@ struct pbkdf2v2_scram_config
 	const unsigned int *    sl;                                 // PBKDF2 Salt Length
 };
 
-static const unsigned char ServerKeyStr[] = {
-
-	// ASCII for "Server Key"
-	0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x20, 0x4B, 0x65, 0x79
-};
-
-static const unsigned char ClientKeyStr[] = {
-
-	// ASCII for "Client Key"
-	0x43, 0x6C, 0x69, 0x65, 0x6E, 0x74, 0x20, 0x4B, 0x65, 0x79
-};
-
 typedef void (*pbkdf2v2_scram_confhook_fn)(const struct pbkdf2v2_scram_config *restrict);
 
 struct pbkdf2v2_scram_functions
