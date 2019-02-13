@@ -53,8 +53,6 @@ struct scramsha_session
 	char                       *c_msg_buf;  // Client's first message
 	char                       *s_msg_buf;  // Server's first message
 	size_t                      c_gs2_len;  // Client's GS2 header (length)
-	size_t                      c_msg_len;  // Client's first message (length)
-	size_t                      s_msg_len;  // Server's first message (length)
 	enum scramsha_step          step;       // What step in authentication are we at?
 	char                        nonce[NONCE_LENGTH_MAX_COMBINED + 1];
 };
@@ -300,8 +298,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 	s = smalloc(sizeof *s);
 	s->c_gs2_len = (size_t) (message - header);
 	s->c_gs2_buf = sstrndup(header, s->c_gs2_len);
-	s->c_msg_len = (in->len - s->c_gs2_len);
-	s->c_msg_buf = sstrndup(message, s->c_msg_len);
+	s->c_msg_buf = sstrndup(message, (in->len - s->c_gs2_len));
 	s->mu = mu;
 
 	(void) memcpy(s->nonce, input['r'], nlen);
@@ -321,10 +318,11 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 	}
 
 	// Cannot fail
-	s->s_msg_len = (size_t) ol;
 	s->s_msg_buf = sstrdup(response);
+
+	out->buf = s->s_msg_buf;
 	out->len = (size_t) ol;
-	out->buf = sstrdup(response);
+	out->flags |= ASASL_OUTFLAG_DONT_FREE_BUF;
 
 	(void) sasl_scramsha_attrlist_free(&input);
 	s->step = SCRAMSHA_STEP_CLIENTPROOF;
@@ -448,7 +446,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const struct sa
 	}
 
 	// Encode ServerSignature and construct server-final-message
-	char ServerSignature64[2 + BASE64_SIZE(DIGEST_MDLEN_MAX)] = "v=";
+	static char ServerSignature64[2 + BASE64_SIZE(DIGEST_MDLEN_MAX)] = "v=";
 	const size_t rs = base64_encode(ServerSignature, s->db.dl, ServerSignature64 + 2, sizeof ServerSignature64 - 2);
 
 	if (rs == (size_t) -1)
@@ -458,8 +456,9 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const struct sa
 	}
 
 	// This cannot fail
+	out->buf = ServerSignature64;
 	out->len = rs + 2;
-	out->buf = sstrdup(ServerSignature64);
+	out->flags |= ASASL_OUTFLAG_DONT_FREE_BUF;
 
 	(void) sasl_scramsha_attrlist_free(&input);
 	s->step = SCRAMSHA_STEP_PASSED;
