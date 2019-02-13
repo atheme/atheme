@@ -307,7 +307,7 @@ atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters, struct pb
 
 	const bool salt_was_b64 = atheme_pbkdf2v2_salt_is_b64(dbe->a);
 
-	// Ensure that the SCRAM-SHA module knows which one of 2 possible algorithms we're using
+	// Ensure that the SCRAM-SHA module knows which one of 3 possible algorithms we're using
 	switch (dbe->a)
 	{
 		case PBKDF2_PRF_HMAC_SHA1:
@@ -324,14 +324,12 @@ atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters, struct pb
 			dbe->a = PBKDF2_PRF_SCRAM_SHA2_256_S64;
 			break;
 
-/*		// No specification
 		case PBKDF2_PRF_HMAC_SHA2_512:
 		case PBKDF2_PRF_HMAC_SHA2_512_S64:
 		case PBKDF2_PRF_SCRAM_SHA2_512:
 		case PBKDF2_PRF_SCRAM_SHA2_512_S64:
 			dbe->a = PBKDF2_PRF_SCRAM_SHA2_512_S64;
 			break;
-*/
 
 		default:
 			(void) slog(LG_DEBUG, "%s: unsupported PRF '%u'", MOWGLI_FUNC_NAME, dbe->a);
@@ -624,10 +622,8 @@ c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *const restrict ce)
 		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA1_S64;
 	else if (! strcasecmp(ce->vardata, "SCRAM-SHA-256"))
 		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA2_256_S64;
-/*	// No specification
 	else if (! strcasecmp(ce->vardata, "SCRAM-SHA-512"))
 		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA2_512_S64;
-*/
 #endif /* HAVE_LIBIDN */
 	else
 		(void) conf_report_warning(ce, "invalid parameter for configuration option -- using default");

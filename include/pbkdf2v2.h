@@ -39,11 +39,11 @@
 
 #define PBKDF2_PRF_SCRAM_SHA1           44U
 #define PBKDF2_PRF_SCRAM_SHA2_256       45U
-#define PBKDF2_PRF_SCRAM_SHA2_512       46U     /* Not currently specified */
+#define PBKDF2_PRF_SCRAM_SHA2_512       46U
 
 #define PBKDF2_PRF_SCRAM_SHA1_S64       64U
 #define PBKDF2_PRF_SCRAM_SHA2_256_S64   65U
-#define PBKDF2_PRF_SCRAM_SHA2_512_S64   66U     /* Not currently specified */
+#define PBKDF2_PRF_SCRAM_SHA2_512_S64   66U
 
 #define PBKDF2_PRF_DEFAULT              PBKDF2_PRF_HMAC_SHA2_512_S64
 

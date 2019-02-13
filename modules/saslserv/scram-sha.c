@@ -572,6 +572,13 @@ mech_step_sha2_256(struct sasl_session *const restrict p, const void *const rest
 	return mech_step_dispatch(p, in, inlen, out, outlen, PBKDF2_PRF_SCRAM_SHA2_256_S64);
 }
 
+static unsigned int
+mech_step_sha2_512(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
+                   void **const restrict out, size_t *const restrict outlen)
+{
+	return mech_step_dispatch(p, in, inlen, out, outlen, PBKDF2_PRF_SCRAM_SHA2_512_S64);
+}
+
 static void
 mech_finish(struct sasl_session *const restrict p)
 {
@@ -589,7 +596,6 @@ mech_finish(struct sasl_session *const restrict p)
 }
 
 static const struct sasl_mechanism sasl_scramsha_mech_sha1 = {
-
 	.name           = "SCRAM-SHA-1",
 	.mech_start     = NULL,
 	.mech_step      = &mech_step_sha1,
@@ -597,10 +603,16 @@ static const struct sasl_mechanism sasl_scramsha_mech_sha1 = {
 };
 
 static const struct sasl_mechanism sasl_scramsha_mech_sha2_256 = {
-
 	.name           = "SCRAM-SHA-256",
 	.mech_start     = NULL,
 	.mech_step      = &mech_step_sha2_256,
+	.mech_finish    = &mech_finish,
+};
+
+static const struct sasl_mechanism sasl_scramsha_mech_sha2_512 = {
+	.name           = "SCRAM-SHA-512",
+	.mech_start     = NULL,
+	.mech_step      = &mech_step_sha2_512,
 	.mech_finish    = &mech_finish,
 };
 
@@ -609,6 +621,7 @@ sasl_scramsha_mechs_unregister(void)
 {
 	(void) sasl_core_functions->mech_unregister(&sasl_scramsha_mech_sha1);
 	(void) sasl_core_functions->mech_unregister(&sasl_scramsha_mech_sha2_256);
+	(void) sasl_core_functions->mech_unregister(&sasl_scramsha_mech_sha2_512);
 }
 
 static void
@@ -639,6 +652,10 @@ sasl_scramsha_pbkdf2v2_scram_confhook(const struct pbkdf2v2_scram_config *const 
 
 		case PBKDF2_PRF_SCRAM_SHA2_256_S64:
 			(void) sasl_core_functions->mech_register(&sasl_scramsha_mech_sha2_256);
+			break;
+
+		case PBKDF2_PRF_SCRAM_SHA2_512_S64:
+			(void) sasl_core_functions->mech_register(&sasl_scramsha_mech_sha2_512);
 			break;
 
 		default:
