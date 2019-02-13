@@ -17,7 +17,7 @@
 #endif
 
 static inline const mbedtls_md_info_t *
-digest_decide_md(const unsigned int alg)
+digest_decide_md(const enum digest_algorithm alg)
 {
 	mbedtls_md_type_t md_type = MBEDTLS_MD_NONE;
 
@@ -38,11 +38,6 @@ digest_decide_md(const unsigned int alg)
 		case DIGALG_SHA2_512:
 			md_type = MBEDTLS_MD_SHA512;
 			break;
-
-		default:
-			(void) slog(LG_ERROR, "%s: called with unknown/unimplemented alg '%u' (BUG)",
-			                      MOWGLI_FUNC_NAME, alg);
-			return NULL;
 	}
 
 	return mbedtls_md_info_from_type(md_type);
@@ -66,7 +61,7 @@ digest_get_frontend_info(void)
 }
 
 bool ATHEME_FATTR_WUR
-digest_init(struct digest_context *const restrict ctx, const unsigned int alg)
+digest_init(struct digest_context *const restrict ctx, const enum digest_algorithm alg)
 {
 	if (! ctx)
 	{
@@ -96,7 +91,7 @@ digest_init(struct digest_context *const restrict ctx, const unsigned int alg)
 }
 
 bool ATHEME_FATTR_WUR
-digest_init_hmac(struct digest_context *const restrict ctx, const unsigned int alg,
+digest_init_hmac(struct digest_context *const restrict ctx, const enum digest_algorithm alg,
                  const void *const restrict key, const size_t keyLen)
 {
 	if (! ctx)
@@ -211,7 +206,7 @@ digest_final(struct digest_context *const restrict ctx, void *const restrict out
 }
 
 bool ATHEME_FATTR_WUR
-digest_pbkdf2_hmac(const unsigned int alg, const void *const restrict pass, const size_t passLen,
+digest_pbkdf2_hmac(const enum digest_algorithm alg, const void *const restrict pass, const size_t passLen,
                    const void *const restrict salt, const size_t saltLen, const size_t c,
                    void *const restrict dk, const size_t dkLen)
 {

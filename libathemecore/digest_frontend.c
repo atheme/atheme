@@ -28,7 +28,7 @@
 #endif
 
 bool ATHEME_FATTR_WUR
-digest_oneshot(const unsigned int alg, const void *const restrict data, const size_t dataLen,
+digest_oneshot(const enum digest_algorithm alg, const void *const restrict data, const size_t dataLen,
                void *const restrict out, size_t *const restrict outLen)
 {
 	if (! out)
@@ -58,7 +58,7 @@ digest_oneshot(const unsigned int alg, const void *const restrict data, const si
 }
 
 bool ATHEME_FATTR_WUR
-digest_oneshot_hmac(const unsigned int alg, const void *const restrict key, const size_t keyLen,
+digest_oneshot_hmac(const enum digest_algorithm alg, const void *const restrict key, const size_t keyLen,
                     const void *const restrict data, const size_t dataLen, void *const restrict out,
                     size_t *const restrict outLen)
 {

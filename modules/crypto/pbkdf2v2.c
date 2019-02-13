@@ -43,7 +43,7 @@ static void
 atheme_pbkdf2v2_config_ready(void ATHEME_VATTR_UNUSED *const restrict unused)
 {
 	if (! pbkdf2v2_digest)
-		pbkdf2v2_digest = PBKDF2_PRF_DEFAULT;
+		pbkdf2v2_digest = (unsigned int) PBKDF2_PRF_DEFAULT;
 
 	if (! pbkdf2v2_rounds)
 		pbkdf2v2_rounds = PBKDF2_ITERCNT_DEF;

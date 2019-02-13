@@ -57,25 +57,25 @@
 
 struct pbkdf2v2_dbentry
 {
-	unsigned char   cdg[DIGEST_MDLEN_MAX];                      // PBKDF2 Digest (Computed)
-	unsigned char   sdg[DIGEST_MDLEN_MAX];                      // PBKDF2 Digest (Stored)
-	unsigned char   ssk[DIGEST_MDLEN_MAX];                      // SCRAM-SHA ServerKey (Stored)
-	unsigned char   shk[DIGEST_MDLEN_MAX];                      // SCRAM-SHA StoredKey (Stored)
-	unsigned char   salt[PBKDF2_SALTLEN_MAX];                   // PBKDF2 Salt
-	char            salt64[BASE64_SIZE(PBKDF2_SALTLEN_MAX)];    // PBKDF2 Salt (Base64-encoded)
-	size_t          dl;                                         // Hash/HMAC/PBKDF2 Digest Length
-	size_t          sl;                                         // PBKDF2 Salt Length
-	unsigned int    md;                                         // Atheme Digest Interface Algorithm ID
-	unsigned int    a;                                          // PBKDF2v2 PRF ID (one of the macros above)
-	unsigned int    c;                                          // PBKDF2 Iteration Count
-	bool            scram;                                      // Whether to use HMAC-SHA or SCRAM-SHA
+	unsigned char           cdg[DIGEST_MDLEN_MAX];                      // PBKDF2 Digest (Computed)
+	unsigned char           sdg[DIGEST_MDLEN_MAX];                      // PBKDF2 Digest (Stored)
+	unsigned char           ssk[DIGEST_MDLEN_MAX];                      // SCRAM-SHA ServerKey (Stored)
+	unsigned char           shk[DIGEST_MDLEN_MAX];                      // SCRAM-SHA StoredKey (Stored)
+	unsigned char           salt[PBKDF2_SALTLEN_MAX];                   // PBKDF2 Salt
+	char                    salt64[BASE64_SIZE(PBKDF2_SALTLEN_MAX)];    // PBKDF2 Salt (Base64-encoded)
+	size_t                  dl;                                         // Hash/HMAC/PBKDF2 Digest Length
+	size_t                  sl;                                         // PBKDF2 Salt Length
+	unsigned int            a;                                          // PBKDF2v2 PRF ID (one of the above)
+	unsigned int            c;                                          // PBKDF2 Iteration Count
+	enum digest_algorithm   md;                                         // Atheme Digest Interface Algorithm ID
+	bool                    scram;                                      // Whether to use HMAC-SHA or SCRAM-SHA
 };
 
 struct pbkdf2v2_scram_config
 {
-	const unsigned int *    a;                                  // PBKDF2v2 PRF ID (one of the SCRAM macros above)
-	const unsigned int *    c;                                  // PBKDF2 Iteration Count
-	const unsigned int *    sl;                                 // PBKDF2 Salt Length
+	const unsigned int *    a;      // PBKDF2v2 PRF ID (one of the above)
+	const unsigned int *    c;      // PBKDF2 Iteration Count
+	const unsigned int *    sl;     // PBKDF2 Salt Length
 };
 
 typedef void (*pbkdf2v2_scram_confhook_fn)(const struct pbkdf2v2_scram_config *restrict);
