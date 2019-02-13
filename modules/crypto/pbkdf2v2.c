@@ -22,15 +22,21 @@ static unsigned int pbkdf2v2_digest = 0;
 static unsigned int pbkdf2v2_rounds = 0;
 static unsigned int pbkdf2v2_saltsz = 0;
 
-static pbkdf2v2_confhook_fn pbkdf2v2_confhook = NULL;
+static pbkdf2v2_scram_confhook_fn pbkdf2v2_scram_confhook = NULL;
 
 static inline void
-atheme_pbkdf2v2_confhook_dispatch(void)
+atheme_pbkdf2v2_scram_confhook_dispatch(void)
 {
-	if (! pbkdf2v2_confhook || ! pbkdf2v2_digest || ! pbkdf2v2_rounds || ! pbkdf2v2_saltsz)
+	if (! pbkdf2v2_scram_confhook || ! pbkdf2v2_digest || ! pbkdf2v2_rounds || ! pbkdf2v2_saltsz)
 		return;
 
-	(void) pbkdf2v2_confhook(pbkdf2v2_digest, pbkdf2v2_rounds, pbkdf2v2_saltsz);
+	static const struct pbkdf2v2_scram_config pbkdf2v2_scram_config = {
+		.a      = &pbkdf2v2_digest,
+		.c      = &pbkdf2v2_rounds,
+		.sl     = &pbkdf2v2_saltsz,
+	};
+
+	(void) (*pbkdf2v2_scram_confhook)(&pbkdf2v2_scram_config);
 }
 
 static void
@@ -45,7 +51,7 @@ atheme_pbkdf2v2_config_ready(void ATHEME_VATTR_UNUSED *const restrict unused)
 	if (! pbkdf2v2_saltsz)
 		pbkdf2v2_saltsz = PBKDF2_SALTLEN_DEF;
 
-	(void) atheme_pbkdf2v2_confhook_dispatch();
+	(void) atheme_pbkdf2v2_scram_confhook_dispatch();
 }
 
 static inline bool
@@ -380,11 +386,11 @@ atheme_pbkdf2v2_scram_normalize(char *const restrict buf, const size_t buflen)
 }
 
 static void
-atheme_pbkdf2v2_scram_confhook(const pbkdf2v2_confhook_fn confhook)
+atheme_pbkdf2v2_scram_confhook(const pbkdf2v2_scram_confhook_fn confhook)
 {
-	pbkdf2v2_confhook = confhook;
+	pbkdf2v2_scram_confhook = confhook;
 
-	(void) atheme_pbkdf2v2_confhook_dispatch();
+	(void) atheme_pbkdf2v2_scram_confhook_dispatch();
 }
 
 const struct pbkdf2v2_scram_functions pbkdf2v2_scram_functions = {

@@ -63,12 +63,19 @@ struct pbkdf2v2_dbentry
 	unsigned char   shk[DIGEST_MDLEN_MAX];                      // SCRAM-SHA StoredKey (Stored)
 	unsigned char   salt[PBKDF2_SALTLEN_MAX];                   // PBKDF2 Salt
 	char            salt64[BASE64_SIZE(PBKDF2_SALTLEN_MAX)];    // PBKDF2 Salt (Base64-encoded)
-	size_t          dl;                                         // Digest Length
-	size_t          sl;                                         // Salt Length
+	size_t          dl;                                         // Hash/HMAC/PBKDF2 Digest Length
+	size_t          sl;                                         // PBKDF2 Salt Length
 	unsigned int    md;                                         // Atheme Digest Interface Algorithm ID
 	unsigned int    a;                                          // PBKDF2v2 PRF ID (one of the macros above)
 	unsigned int    c;                                          // PBKDF2 Iteration Count
 	bool            scram;                                      // Whether to use HMAC-SHA or SCRAM-SHA
+};
+
+struct pbkdf2v2_scram_config
+{
+	const unsigned int *    a;                                  // PBKDF2v2 PRF ID (one of the SCRAM macros above)
+	const unsigned int *    c;                                  // PBKDF2 Iteration Count
+	const unsigned int *    sl;                                 // PBKDF2 Salt Length
 };
 
 static const unsigned char ServerKeyStr[] = {
@@ -83,13 +90,13 @@ static const unsigned char ClientKeyStr[] = {
 	0x43, 0x6C, 0x69, 0x65, 0x6E, 0x74, 0x20, 0x4B, 0x65, 0x79
 };
 
-typedef void (*pbkdf2v2_confhook_fn)(unsigned int, unsigned int, unsigned int);
+typedef void (*pbkdf2v2_scram_confhook_fn)(const struct pbkdf2v2_scram_config *restrict);
 
 struct pbkdf2v2_scram_functions
 {
 	bool  (*dbextract)(const char *restrict, struct pbkdf2v2_dbentry *restrict);
 	bool  (*normalize)(char *restrict, size_t);
-	void  (*confhook)(pbkdf2v2_confhook_fn);
+	void  (*confhook)(pbkdf2v2_scram_confhook_fn);
 };
 
 #endif /* !ATHEME_INC_PBKDF2V2_H */

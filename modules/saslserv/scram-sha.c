@@ -612,7 +612,7 @@ sasl_scramsha_mechs_unregister(void)
 }
 
 static void
-sasl_scramsha_pbkdf2v2_confhook(const unsigned int prf, const unsigned int iter, const unsigned int saltlen)
+sasl_scramsha_pbkdf2v2_scram_confhook(const struct pbkdf2v2_scram_config *const restrict config)
 {
 	const struct crypt_impl *const ci_default = crypt_get_default_provider();
 
@@ -631,7 +631,7 @@ sasl_scramsha_pbkdf2v2_confhook(const unsigned int prf, const unsigned int iter,
 
 	(void) sasl_scramsha_mechs_unregister();
 
-	switch (prf)
+	switch (*config->a)
 	{
 		case PBKDF2_PRF_SCRAM_SHA1_S64:
 			(void) sasl_core_functions->mech_register(&sasl_scramsha_mech_sha1);
@@ -647,9 +647,9 @@ sasl_scramsha_pbkdf2v2_confhook(const unsigned int prf, const unsigned int iter,
 			return;
 	}
 
-	if (iter > CYRUS_SASL_ITERMAX)
+	if (*config->c > CYRUS_SASL_ITERMAX)
 		(void) slog(LG_INFO, "%s: iteration count (%u) is higher than Cyrus SASL library maximum (%u) -- "
-		                     "client logins may fail if they use Cyrus", MOWGLI_FUNC_NAME, iter,
+		                     "client logins may fail if they use Cyrus", MOWGLI_FUNC_NAME, *config->c,
 		                     CYRUS_SASL_ITERMAX);
 }
 
@@ -671,7 +671,7 @@ mod_init(struct module *const restrict m)
 	/* Pass our funcptr to the pbkdf2v2 module, which will immediately call us back with its
 	 * configuration. We use its configuration to decide which SASL mechanism to register.
 	 */
-	(void) pbkdf2v2_scram_functions->confhook(&sasl_scramsha_pbkdf2v2_confhook);
+	(void) pbkdf2v2_scram_functions->confhook(&sasl_scramsha_pbkdf2v2_scram_confhook);
 }
 
 static void
