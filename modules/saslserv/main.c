@@ -351,6 +351,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 
 	void *out = NULL;
 	size_t out_len = 0;
+	bool have_written = false;
 
 	/* First piece of data in a session is the name of
 	 * the SASL mechanism that will be used.
@@ -398,6 +399,27 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 	// Some progress has been made, reset timeout.
 	p->flags &= ~ASASL_MARKED_FOR_DELETION;
 
+	if (out && out_len)
+	{
+		char outbuf[SASL_C2S_MAXLEN + 1];
+		const size_t outbuflen = base64_encode(out, out_len, outbuf, sizeof outbuf);
+
+		(void) sfree(out);
+
+		out = NULL;
+		outlen = 0;
+
+		if (outbuflen == (size_t) -1)
+		{
+			(void) slog(LG_ERROR, "%s: base64_encode() failed", MOWGLI_FUNC_NAME);
+			return false;
+		}
+
+		(void) sasl_write(p->uid, outbuf, outbuflen);
+
+		have_written = true;
+	}
+
 	if (rc == ASASL_DONE)
 	{
 		struct myuser *const mu = login_user(p);
@@ -424,22 +446,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 
 	if (rc == ASASL_MORE)
 	{
-		if (out && out_len)
-		{
-			char outbuf[SASL_C2S_MAXLEN + 1];
-			const size_t rs = base64_encode(out, out_len, outbuf, sizeof outbuf);
-
-			(void) sfree(out);
-
-			if (rs == (size_t) -1)
-			{
-				(void) slog(LG_ERROR, "%s: base64_encode() failed", MOWGLI_FUNC_NAME);
-				return false;
-			}
-
-			(void) sasl_write(p->uid, outbuf, rs);
-		}
-		else
+		if (! have_written)
 			(void) sasl_sts(p->uid, 'C', "+");
 
 		return true;
@@ -465,7 +472,6 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 		}
 	}
 
-	(void) sfree(out);
 	return false;
 }
 
