@@ -594,7 +594,7 @@ sasl_input_clientdata(const struct sasl_message *const restrict smsg, struct sas
 			return sasl_buf_process(p);
 
 		// This function already deals with the special case of 1 '+' character
-		return sasl_packet(p, "+", 1);
+		return sasl_packet(p, smsg->parv[0], len);
 	}
 
 	/* Optimisation: If there is no buffer yet and this data is less than 400 characters, we don't
