@@ -34,6 +34,10 @@
 #define ASASL_MARKED_FOR_DELETION   0x00000001U // see delete_stale() in saslserv/main.c
 #define ASASL_NEED_LOG              0x00000002U // user auth success needs to be logged still
 
+// Flags for sasl_input_buf->flags
+#define ASASL_INFLAG_NONE           0x00000000U // Nothing special
+#define ASASL_INFLAG_WIPE_BUF       0x00000001U // Call smemzero() on the input buffers after processing them
+
 // Flags for sasl_output_buf->flags
 #define ASASL_OUTFLAG_NONE          0x00000000U // Nothing special
 #define ASASL_OUTFLAG_DONT_FREE_BUF 0x00000001U // Don't sfree() the output buffer after base64-encoding it
@@ -85,6 +89,7 @@ struct sasl_input_buf
 {
 	const void *    buf;
 	const size_t    len;
+	unsigned int *  flags;
 };
 
 struct sasl_output_buf

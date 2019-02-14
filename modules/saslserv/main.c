@@ -346,14 +346,14 @@ sasl_write(const char *const restrict target, const char *restrict data, const s
  * and feeding returned data back to client.
  */
 static bool ATHEME_FATTR_WUR
-sasl_packet(struct sasl_session *const restrict p, const char *const restrict buf, const size_t len)
+sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, const size_t len)
 {
 	unsigned int rc;
 
 	struct sasl_output_buf outbuf = {
-		.buf = NULL,
-		.len = 0,
-		.flags = ASASL_OUTFLAG_NONE,
+		.buf    = NULL,
+		.len    = 0,
+		.flags  = ASASL_OUTFLAG_NONE,
 	};
 
 	bool have_written = false;
@@ -397,14 +397,25 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 				// Ensure input is NULL-terminated for modules that want to process the data as a string
 				decbuf[declen] = 0x00;
 
+				unsigned int inflags = ASASL_INFLAG_NONE;
 				const struct sasl_input_buf inbuf = {
-					.buf = decbuf,
-					.len = declen,
+					.buf    = decbuf,
+					.len    = declen,
+					.flags  = &inflags,
 				};
 
 				rc = p->mechptr->mech_step(p, &inbuf, &outbuf);
 
-				(void) smemzero(decbuf, declen);
+				// The mechanism instructed us to wipe the input data now that it has been processed
+				if (inflags & ASASL_INFLAG_WIPE_BUF)
+				{
+					/* If we got here, the bufferred base64-encoded input data is either in a
+					 * dedicated buffer (buf == p->buf && len == p->len) or directly from a
+					 * parv[] inside struct sasl_message. Either way buf is mutable.    -- amdj
+					 */
+					(void) smemzero(buf, len);          // Erase the base64-encoded input data
+					(void) smemzero(decbuf, declen);    // Erase the base64-decoded input data
+				}
 			}
 			else
 			{
@@ -510,7 +521,6 @@ sasl_buf_process(struct sasl_session *const restrict p)
 	if (! sasl_packet(p, p->buf, p->len))
 		return false;
 
-	(void) smemzero(p->buf, p->len);
 	(void) sfree(p->buf);
 
 	p->buf = NULL;
