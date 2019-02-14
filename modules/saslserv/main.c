@@ -800,7 +800,7 @@ sasl_mech_unregister(const struct sasl_mechanism *const restrict mech)
 	}
 }
 
-static inline bool
+static inline bool ATHEME_FATTR_WUR
 sasl_authxid_can_login(struct sasl_session *const restrict p, const char *const restrict authxid,
                        struct myuser **const restrict muo, char *const restrict val_name,
                        char *const restrict val_eid, const char *const restrict other_val_eid)
@@ -838,14 +838,14 @@ sasl_authxid_can_login(struct sasl_session *const restrict p, const char *const 
 	return req.allowed;
 }
 
-static bool
+static bool ATHEME_FATTR_WUR
 sasl_authcid_can_login(struct sasl_session *const restrict p, const char *const restrict authcid,
                        struct myuser **const restrict muo)
 {
 	return sasl_authxid_can_login(p, authcid, muo, p->authcid, p->authceid, p->authzeid);
 }
 
-static bool
+static bool ATHEME_FATTR_WUR
 sasl_authzid_can_login(struct sasl_session *const restrict p, const char *const restrict authzid,
                        struct myuser **const restrict muo)
 {

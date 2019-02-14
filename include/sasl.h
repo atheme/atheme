@@ -115,12 +115,15 @@ struct sasl_mechanism
 	sasl_mech_finish_fn mech_finish;
 };
 
+typedef bool (*sasl_authxid_can_login_fn)(struct sasl_session *restrict, const char *restrict,
+                                          struct myuser **restrict) ATHEME_FATTR_WUR;
+
 struct sasl_core_functions
 {
-	void          (*mech_register)(const struct sasl_mechanism *);
-	void          (*mech_unregister)(const struct sasl_mechanism *);
-	bool          (*authcid_can_login)(struct sasl_session *, const char *, struct myuser **);
-	bool          (*authzid_can_login)(struct sasl_session *, const char *, struct myuser **);
+	void                      (*mech_register)(const struct sasl_mechanism *);
+	void                      (*mech_unregister)(const struct sasl_mechanism *);
+	sasl_authxid_can_login_fn   authcid_can_login;
+	sasl_authxid_can_login_fn   authzid_can_login;
 };
 
 typedef struct {
