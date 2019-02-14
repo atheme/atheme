@@ -22,11 +22,13 @@
 // Maximum length of an SASL mechanism name (including terminating NULL byte)
 #define SASL_MECHANISM_MAXLEN       60
 
-// Maximum length of Base-64 data a client can send in one shot
-#define SASL_S2S_MAXLEN             400
+// Maximum length of data that can be transferred in one shot
+#define SASL_S2S_MAXLEN_ATONCE_RAW  300U
+#define SASL_S2S_MAXLEN_ATONCE_B64  400U
 
-// Maximum length of Base-64 data a client can send in total (buffered)
-#define SASL_C2S_MAXLEN             8192
+// Maximum length of data that can be buffered as one message/request
+#define SASL_S2S_MAXLEN_TOTAL_RAW   6144U
+#define SASL_S2S_MAXLEN_TOTAL_B64   8192U
 
 // Flags for sasl_session->flags
 #define ASASL_MARKED_FOR_DELETION   0x00000001U  // see delete_stale() in saslserv/main.c

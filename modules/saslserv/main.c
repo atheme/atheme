@@ -12,7 +12,7 @@
 
 static mowgli_list_t sessions;
 static mowgli_list_t mechanisms;
-static char mechlist_string[SASL_S2S_MAXLEN];
+static char mechlist_string[SASL_S2S_MAXLEN_ATONCE_B64];
 static bool hide_server_names;
 
 static struct service *saslsvs = NULL;
@@ -311,20 +311,20 @@ sasl_write(const char *const restrict target, const char *restrict data, const s
 	 *     If the data we send will not require splitting it into chunks, don't.
 	 *     This avoids unnecessary memory copies.
 	 */
-	if (length < SASL_S2S_MAXLEN)
+	if (length < SASL_S2S_MAXLEN_ATONCE_B64)
 	{
 		(void) sasl_sts(target, 'C', data);
 		return;
 	}
 
-	size_t last = SASL_S2S_MAXLEN;
+	size_t last = SASL_S2S_MAXLEN_ATONCE_B64;
 	size_t rem = length;
 
 	while (rem)
 	{
-		const size_t nbytes = (rem > SASL_S2S_MAXLEN) ? SASL_S2S_MAXLEN : rem;
+		const size_t nbytes = (rem > SASL_S2S_MAXLEN_ATONCE_B64) ? SASL_S2S_MAXLEN_ATONCE_B64 : rem;
 
-		char out[SASL_S2S_MAXLEN + 1];
+		char out[SASL_S2S_MAXLEN_ATONCE_B64 + 1];
 		(void) memset(out, 0x00, sizeof out);
 		(void) memcpy(out, data, nbytes);
 		(void) sasl_sts(target, 'C', out);
@@ -337,7 +337,7 @@ sasl_write(const char *const restrict target, const char *restrict data, const s
 	/* The end of a packet is indicated by a string not of the maximum length. If last piece was the
 	 * maximum length, or if there was no data at all, send an empty string to finish the transaction.
 	 */
-	if (last == SASL_S2S_MAXLEN)
+	if (last == SASL_S2S_MAXLEN_ATONCE_B64)
 		(void) sasl_sts(target, 'C', "+");
 }
 
@@ -388,8 +388,8 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 		}
 		else
 		{
-			unsigned char decbuf[SASL_C2S_MAXLEN + 1];
-			const size_t declen = base64_decode(buf, decbuf, SASL_C2S_MAXLEN);
+			unsigned char decbuf[SASL_S2S_MAXLEN_TOTAL_RAW + 1];
+			const size_t declen = base64_decode(buf, decbuf, SASL_S2S_MAXLEN_TOTAL_RAW);
 
 			if (declen != (size_t) -1)
 			{
@@ -417,7 +417,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 
 	if (outbuf.buf && outbuf.len)
 	{
-		char encbuf[SASL_C2S_MAXLEN + 1];
+		char encbuf[SASL_S2S_MAXLEN_TOTAL_B64 + 1];
 		const size_t enclen = base64_encode(outbuf.buf, outbuf.len, encbuf, sizeof encbuf);
 
 		if (! (outbuf.flags & ASASL_OUTFLAG_DONT_FREE_BUF))
@@ -582,13 +582,13 @@ sasl_input_clientdata(const struct sasl_message *const restrict smsg, struct sas
 	/* Optimisation: If there is no buffer yet and this data is less than 400 characters, we don't
 	 * need to buffer it at all, and can process it immediately.
 	 */
-	if (! p->buf && len < SASL_S2S_MAXLEN)
+	if (! p->buf && len < SASL_S2S_MAXLEN_ATONCE_B64)
 		return sasl_packet(p, smsg->parv[0], len);
 
 	/* We need to buffer the data now, but first check if the client hasn't sent us an excessive
 	 * amount already.
 	 */
-	if ((p->len + len) > SASL_C2S_MAXLEN)
+	if ((p->len + len) > SASL_S2S_MAXLEN_TOTAL_B64)
 	{
 		(void) slog(LG_DEBUG, "%s: client %s has exceeded allowed data length", MOWGLI_FUNC_NAME, smsg->uid);
 		return false;
@@ -600,7 +600,7 @@ sasl_input_clientdata(const struct sasl_message *const restrict smsg, struct sas
 	p->len += len;
 
 	// Messages not exactly 400 characters are the end of data.
-	if (len < SASL_S2S_MAXLEN)
+	if (len < SASL_S2S_MAXLEN_ATONCE_B64)
 		return sasl_buf_process(p);
 
 	return true;

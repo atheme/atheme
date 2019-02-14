@@ -353,7 +353,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 	p->mechdata = s;
 
 	// Construct server-first-message
-	char response[SASL_C2S_MAXLEN];
+	char response[SASL_S2S_MAXLEN_TOTAL_RAW];
 	const int ol = snprintf(response, sizeof response, "r=%s,s=%s,i=%u", s->nonce, s->db.salt64, s->db.c);
 
 	if (ol <= (int)(NONCE_LENGTH_MIN_COMBINED + (PBKDF2_SALTLEN_MIN * 1.333) + 12) || ol >= (int) sizeof response)
@@ -430,7 +430,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const struct sa
 	}
 
 	// Decode and verify GS2 header from client-final-message
-	char c_gs2_buf[SASL_C2S_MAXLEN];
+	char c_gs2_buf[SASL_S2S_MAXLEN_TOTAL_RAW];
 	const size_t c_gs2_len = base64_decode(input['c'], c_gs2_buf, sizeof c_gs2_buf);
 	if (c_gs2_len == (size_t) -1)
 	{
@@ -455,7 +455,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const struct sa
 	}
 
 	// Construct AuthMessage
-	char AuthMessage[SASL_C2S_MAXLEN];
+	char AuthMessage[(3 * SASL_S2S_MAXLEN_TOTAL_RAW) + NONCE_LENGTH_MAX_COMBINED + 1];
 	const int alen = snprintf(AuthMessage, sizeof AuthMessage, "%s,%s,c=%s,r=%s",
 	                          s->c_msg_buf, s->s_msg_buf, input['c'], input['r']);
 
