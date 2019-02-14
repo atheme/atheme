@@ -400,10 +400,11 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 		char encbuf[SASL_S2S_MAXLEN_TOTAL_B64 + 1];
 		const size_t enclen = base64_encode(outbuf.buf, outbuf.len, encbuf, sizeof encbuf);
 
+		// The mechanism instructed us to wipe the output data now that it has been encoded
 		if (outbuf.flags & ASASL_OUTFLAG_WIPE_BUF)
 			(void) smemzero(outbuf.buf, outbuf.len);
 
-		// The mechanism instructed us to wipe the output data now that it has been encoded
+		// The mechanism did not indicate to us that the buffer is not dynamic -- free it now
 		if (! (outbuf.flags & ASASL_OUTFLAG_DONT_FREE_BUF))
 			(void) sfree(outbuf.buf);
 
