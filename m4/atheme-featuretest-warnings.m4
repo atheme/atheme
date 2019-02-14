@@ -77,7 +77,6 @@ AC_DEFUN([ATHEME_CC_ENABLE_WARNINGS], [
 		ATHEME_CC_TEST_CFLAGS([-Wunsafe-loop-optimizations])
 		ATHEME_CC_TEST_CFLAGS([-Wunsuffixed-float-constants])
 		ATHEME_CC_TEST_CFLAGS([-Wunused])
-		ATHEME_CC_TEST_CFLAGS([-Wvla])
 		ATHEME_CC_TEST_CFLAGS([-Wwrite-strings])
 	])
 
@@ -94,6 +93,7 @@ AC_DEFUN([ATHEME_CC_ENABLE_WARNINGS], [
 	ATHEME_CC_TEST_CFLAGS([-Wno-suggest-attribute=format])
 	ATHEME_CC_TEST_CFLAGS([-Wno-unused-parameter])
 	ATHEME_CC_TEST_CFLAGS([-Wno-unused-variable])
+	ATHEME_CC_TEST_CFLAGS([-Wno-vla])
 ])
 
 AC_DEFUN([ATHEME_FEATURETEST_WARNINGS], [
