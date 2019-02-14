@@ -19,52 +19,18 @@
 #define CHALLENGE_LENGTH	DIGEST_MDLEN_SHA2_256
 #define CURVE_IDENTIFIER	NID_X9_62_prime256v1
 
-enum ecdsa_step
+struct sasl_ecdsa_nist256p_challenge_session
 {
-	ECDSA_ST_ACCNAME    = 0,
-	ECDSA_ST_RESPONSE   = 1,
-};
-
-struct ecdsa_session
-{
-	EC_KEY          *pubkey;
 	unsigned char    challenge[CHALLENGE_LENGTH];
-	enum ecdsa_step  step;
+	EC_KEY          *pubkey;
 };
 
 static const struct sasl_core_functions *sasl_core_functions = NULL;
 
 static unsigned int ATHEME_FATTR_WUR
-mech_start(struct sasl_session *const restrict p, struct sasl_output_buf ATHEME_VATTR_UNUSED *const restrict out)
+mech_step_account_names(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
+                        struct sasl_output_buf *const restrict out)
 {
-	struct ecdsa_session *const s = smalloc(sizeof *s);
-
-	p->mechdata = s;
-	s->pubkey = EC_KEY_new_by_curve_name(CURVE_IDENTIFIER);
-	s->step = ECDSA_ST_ACCNAME;
-
-	(void) EC_KEY_set_conv_form(s->pubkey, POINT_CONVERSION_COMPRESSED);
-
-	return ASASL_MORE;
-}
-
-static unsigned int ATHEME_FATTR_WUR
-mech_step(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
-          struct sasl_output_buf *const restrict out)
-{
-	if (! (p && p->mechdata && in && in->buf && in->len))
-		return ASASL_ERROR;
-
-	struct ecdsa_session *const s = p->mechdata;
-
-	if (s->step == ECDSA_ST_RESPONSE)
-	{
-		if (ECDSA_verify(0, s->challenge, CHALLENGE_LENGTH, in->buf, (int) in->len, s->pubkey) != 1)
-			return ASASL_FAIL;
-
-		return ASASL_DONE;
-	}
-
 	char authcid[NICKLEN + 1];
 	(void) memset(authcid, 0x00, sizeof authcid);
 
@@ -108,24 +74,55 @@ mech_step(struct sasl_session *const restrict p, const struct sasl_input_buf *co
 		return ASASL_ERROR;
 
 	unsigned char pubkey_raw[0x1000];
-	(void) memset(pubkey_raw, 0x00, sizeof pubkey_raw);
-
+	const unsigned char *pubkey_raw_p = pubkey_raw;
 	const size_t ret = base64_decode(md->value, pubkey_raw, sizeof pubkey_raw);
 	if (ret == (size_t) -1)
 		return ASASL_ERROR;
 
-	const unsigned char *pubkey_raw_p = pubkey_raw;
-	if (! o2i_ECPublicKey(&s->pubkey, &pubkey_raw_p, (long) ret))
+	EC_KEY *pubkey = EC_KEY_new_by_curve_name(CURVE_IDENTIFIER);
+	(void) EC_KEY_set_conv_form(pubkey, POINT_CONVERSION_COMPRESSED);
+	if (! o2i_ECPublicKey(&pubkey, &pubkey_raw_p, (long) ret))
 		return ASASL_ERROR;
 
+	struct sasl_ecdsa_nist256p_challenge_session *const s = smalloc(sizeof *s);
 	(void) atheme_random_buf(s->challenge, sizeof s->challenge);
+	s->pubkey = pubkey;
 
 	out->buf = s->challenge;
 	out->len = sizeof s->challenge;
 	out->flags |= ASASL_OUTFLAG_DONT_FREE_BUF;
 
-	s->step = ECDSA_ST_RESPONSE;
+	p->mechdata = s;
+
 	return ASASL_MORE;
+}
+
+static unsigned int ATHEME_FATTR_WUR
+mech_step_verify_signature(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in)
+{
+	struct sasl_ecdsa_nist256p_challenge_session *const s = p->mechdata;
+
+	const int ret = ECDSA_verify(0, s->challenge, CHALLENGE_LENGTH, in->buf, (int) in->len, s->pubkey);
+
+	if (ret == 1)
+		return ASASL_DONE;
+	else if (ret == 0)
+		return ASASL_FAIL;
+	else
+		return ASASL_ERROR;
+}
+
+static unsigned int ATHEME_FATTR_WUR
+mech_step(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
+          struct sasl_output_buf *const restrict out)
+{
+	if (! (p && in && in->buf && in->len))
+		return ASASL_ERROR;
+
+	if (p->mechdata == NULL)
+		return mech_step_account_names(p, in, out);
+	else
+		return mech_step_verify_signature(p, in);
 }
 
 static void
@@ -134,7 +131,7 @@ mech_finish(struct sasl_session *const restrict p)
 	if (! (p && p->mechdata))
 		return;
 
-	struct ecdsa_session *const s = p->mechdata;
+	struct sasl_ecdsa_nist256p_challenge_session *const s = p->mechdata;
 
 	if (s->pubkey)
 		(void) EC_KEY_free(s->pubkey);
@@ -147,7 +144,7 @@ mech_finish(struct sasl_session *const restrict p)
 static const struct sasl_mechanism mech = {
 
 	.name           = "ECDSA-NIST256P-CHALLENGE",
-	.mech_start     = &mech_start,
+	.mech_start     = NULL,
 	.mech_step      = &mech_step,
 	.mech_finish    = &mech_finish,
 };
