@@ -803,7 +803,10 @@ sasl_authxid_can_login(struct sasl_session *const restrict p, const char *const 
 	struct myuser *const mu = myuser_find_by_nick(authxid);
 
 	if (! mu)
+	{
+		(void) slog(LG_DEBUG, "%s: myuser_find_by_nick: does not exist", MOWGLI_FUNC_NAME);
 		return false;
+	}
 
 	if (muo)
 		*muo = mu;
