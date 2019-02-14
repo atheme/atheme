@@ -10,8 +10,8 @@
 
 #include "atheme.h"
 
-#ifndef MAXIMUM
-#  define MAXIMUM(a, b) (((a) > (b)) ? (a) : (b))
+#ifndef MINIMUM
+#  define MINIMUM(a, b) (((a) < (b)) ? (a) : (b))
 #endif
 
 static mowgli_list_t sessions;
@@ -421,7 +421,7 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 		for (size_t encbufrem = enclen; encbufrem != 0; /* No action */)
 		{
 			char encbufpart[SASL_S2S_MAXLEN_ATONCE_B64 + 1];
-			const size_t encbufptrlen = MAXIMUM(SASL_S2S_MAXLEN_ATONCE_B64, encbufrem);
+			const size_t encbufptrlen = MINIMUM(SASL_S2S_MAXLEN_ATONCE_B64, encbufrem);
 
 			(void) memset(encbufpart, 0x00, sizeof encbufpart);
 			(void) memcpy(encbufpart, encbufptr, encbufptrlen);
