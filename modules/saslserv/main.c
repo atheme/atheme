@@ -451,24 +451,22 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 	{
 		struct myuser *const mu = login_user(p);
 
-		if (mu)
-		{
-			char *cloak = "*";
-			struct metadata *md;
+		if (! mu)
+			return false;
 
-			if ((md = metadata_find(mu, "private:usercloak")))
-				cloak = md->value;
+		char *cloak = "*";
+		struct metadata *md;
 
-			if (! (mu->flags & MU_WAITAUTH))
-				(void) svslogin_sts(p->uid, "*", "*", cloak, mu);
+		if ((md = metadata_find(mu, "private:usercloak")))
+			cloak = md->value;
 
-			(void) sasl_sts(p->uid, 'D', "S");
+		if (! (mu->flags & MU_WAITAUTH))
+			(void) svslogin_sts(p->uid, "*", "*", cloak, mu);
 
-			// Will destroy session on introduction of user to net.
-			return true;
-		}
+		(void) sasl_sts(p->uid, 'D', "S");
 
-		return false;
+		// Will destroy session on introduction of user to net.
+		return true;
 	}
 
 	if (rc == ASASL_MORE)
@@ -486,17 +484,19 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 		 */
 		struct myuser *const mu = myuser_find_uid(p->authceid);
 
-		if (mu)
-		{
-			/* We might have more information to construct a more accurate sourceinfo now?
-			 * TODO: Investigate whether this is necessary
-			 */
-			(void) sasl_sourceinfo_recreate(p);
+		if (! mu)
+			return false;
 
-			(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN (%s) to \2%s\2 (bad password)",
-			                                       p->mechptr->name, entity(mu)->name);
-			(void) bad_password(p->si, mu);
-		}
+		/* We might have more information to construct a more accurate sourceinfo now?
+		 * TODO: Investigate whether this is necessary
+		 */
+		(void) sasl_sourceinfo_recreate(p);
+
+		(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN (%s) to \2%s\2 (bad password)",
+		                                       p->mechptr->name, entity(mu)->name);
+		(void) bad_password(p->si, mu);
+
+		return false;
 	}
 
 	return false;
