@@ -19,6 +19,9 @@ mech_step(struct sasl_session *const restrict p, const struct sasl_input_buf *co
 	if (! (p && in && in->buf && in->len))
 		return ASASL_ERROR;
 
+	// This buffer contains sensitive information
+	*(in->flags) |= ASASL_INFLAG_WIPE_BUF;
+
 	// Data format: authzid 0x00 authcid 0x00 authcookie [0x00]
 	if (in->len > (NICKLEN + 1 + NICKLEN + 1 + AUTHCOOKIE_LENGTH + 1))
 		return ASASL_ERROR;
