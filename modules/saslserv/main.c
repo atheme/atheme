@@ -238,8 +238,8 @@ may_impersonate(struct myuser *const source_mu, struct myuser *const target_mu)
 static struct myuser *
 login_user(struct sasl_session *const restrict p)
 {
-	// source_mu is the user whose credentials we verified ("authentication id")
-	// target_mu is the user who will be ultimately logged in ("authorization id")
+	// source_mu is the user whose credentials we verified ("authentication id" / authcid)
+	// target_mu is the user who will be ultimately logged in ("authorization id" / authzid)
 	struct myuser *source_mu;
 	struct myuser *target_mu;
 
@@ -324,9 +324,7 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 
 	bool have_written = false;
 
-	/* First piece of data in a session is the name of
-	 * the SASL mechanism that will be used.
-	 */
+	// First piece of data in a session is the name of the SASL mechanism that will be used
 	if (! p->mechptr && ! len)
 	{
 		(void) sasl_sourceinfo_recreate(p);
@@ -512,6 +510,7 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 static bool ATHEME_FATTR_WUR
 sasl_buf_process(struct sasl_session *const restrict p)
 {
+	// Ensure the buffer is NULL-terminated so that base64_decode() doesn't overrun it
 	p->buf[p->len] = 0x00;
 
 	if (! sasl_packet(p, p->buf, p->len))
