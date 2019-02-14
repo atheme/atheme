@@ -11,8 +11,8 @@
 #include "botserv.h"
 
 static void (*topic_sts_real)(struct channel *, struct user *, const char *, time_t, time_t, const char *);
-static void (*notice_real)(const char *, const char *, const char *, ...);
-static void (*msg_real)(const char *, const char *, const char *, ...);
+static void (*notice_real)(const char *, const char *, const char *, ...) ATHEME_FATTR_PRINTF(3, 4);
+static void (*msg_real)(const char *, const char *, const char *, ...) ATHEME_FATTR_PRINTF(3, 4);
 
 static struct service *botsvs = NULL;
 static unsigned int min_users = 0;
