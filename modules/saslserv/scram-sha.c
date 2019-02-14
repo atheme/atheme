@@ -412,6 +412,10 @@ mech_step_clientproof(struct sasl_session *const restrict p, const struct sasl_i
 		(void) sasl_scramsha_error("other-error", out);
 		return ASASL_ERROR;
 	}
+
+	// This buffer contains sensitive information
+	*(in->flags) |= ASASL_INFLAG_WIPE_BUF;
+
 	if (memchr(in->buf, 0x00, in->len))
 	{
 		(void) slog(LG_DEBUG, "%s: NULL byte in data received from client", MOWGLI_FUNC_NAME);
