@@ -10,6 +10,10 @@
 
 #include "atheme.h"
 
+#ifndef MAXIMUM
+#  define MAXIMUM(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 static mowgli_list_t sessions;
 static mowgli_list_t mechanisms;
 static char mechlist_string[SASL_S2S_MAXLEN_ATONCE_B64];
@@ -304,44 +308,6 @@ login_user(struct sasl_session *const restrict p)
 	return target_mu;
 }
 
-static void
-sasl_write(const char *const restrict target, const char *restrict data, const size_t length)
-{
-	/* Optimisation:
-	 *     If the data we send will not require splitting it into chunks, don't.
-	 *     This avoids unnecessary memory copies.
-	 */
-	if (length < SASL_S2S_MAXLEN_ATONCE_B64)
-	{
-		(void) sasl_sts(target, 'C', data);
-		return;
-	}
-
-	size_t last = SASL_S2S_MAXLEN_ATONCE_B64;
-	size_t rem = length;
-
-	while (rem)
-	{
-		const size_t nbytes = (rem > SASL_S2S_MAXLEN_ATONCE_B64) ? SASL_S2S_MAXLEN_ATONCE_B64 : rem;
-
-		char out[SASL_S2S_MAXLEN_ATONCE_B64 + 1];
-		(void) memset(out, 0x00, sizeof out);
-		(void) memcpy(out, data, nbytes);
-		(void) sasl_sts(target, 'C', out);
-		(void) smemzero(out, nbytes);
-
-		data += nbytes;
-		rem -= nbytes;
-		last = nbytes;
-	}
-
-	/* The end of a packet is indicated by a string not of the maximum length. If last piece was the
-	 * maximum length, or if there was no data at all, send an empty string to finish the transaction.
-	 */
-	if (last == SASL_S2S_MAXLEN_ATONCE_B64)
-		(void) sasl_sts(target, 'C', "+");
-}
-
 /* given an entire sasl message, advance session by passing data to mechanism
  * and feeding returned data back to client.
  */
@@ -437,12 +403,12 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 		if (outbuf.flags & ASASL_OUTFLAG_WIPE_BUF)
 			(void) smemzero(outbuf.buf, outbuf.len);
 
+		// The mechanism instructed us to wipe the output data now that it has been encoded
 		if (! (outbuf.flags & ASASL_OUTFLAG_DONT_FREE_BUF))
-		{
 			(void) sfree(outbuf.buf);
-			outbuf.buf = NULL;
-			outbuf.len = 0;
-		}
+
+		outbuf.buf = NULL;
+		outbuf.len = 0;
 
 		if (enclen == (size_t) -1)
 		{
@@ -450,12 +416,49 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 			return false;
 		}
 
-		(void) sasl_write(p->uid, encbuf, enclen);
+		const char *encbufptr = encbuf;
+		size_t encbuflast = SASL_S2S_MAXLEN_ATONCE_B64;
 
+		for (size_t encbufrem = enclen; encbufrem != 0; /* No action */)
+		{
+			char encbufpart[SASL_S2S_MAXLEN_ATONCE_B64 + 1];
+			const size_t encbufptrlen = MAXIMUM(SASL_S2S_MAXLEN_ATONCE_B64, encbufrem);
+
+			(void) memset(encbufpart, 0x00, sizeof encbufpart);
+			(void) memcpy(encbufpart, encbufptr, encbufptrlen);
+			(void) sasl_sts(p->uid, 'C', encbufpart);
+
+			// The mechanism instructed us to wipe the output data now that it has been transmitted
+			if (outbuf.flags & ASASL_OUTFLAG_WIPE_BUF)
+				(void) smemzero(encbufpart, encbufptrlen);
+
+			encbufptr += encbufptrlen;
+			encbufrem -= encbufptrlen;
+			encbuflast = encbufptrlen;
+		}
+
+		/* The end of a packet is indicated by a string not of the maximum length. If the last string
+		 * was the maximum length, send another, empty string, to advance the session.    -- amdj
+		 */
+		if (encbuflast == SASL_S2S_MAXLEN_ATONCE_B64)
+			(void) sasl_sts(p->uid, 'C', "+");
+
+		// The mechanism instructed us to wipe the output data now that it has been transmitted
 		if (outbuf.flags & ASASL_OUTFLAG_WIPE_BUF)
 			(void) smemzero(encbuf, enclen);
 
 		have_written = true;
+	}
+
+	if (rc == ASASL_MORE)
+	{
+		if (! have_written)
+			/* We want more data from the client, but we haven't sent any of our own.
+			 * Send an empty string to advance the session.    -- amdj
+			 */
+			(void) sasl_sts(p->uid, 'C', "+");
+
+		return true;
 	}
 
 	if (rc == ASASL_DONE)
@@ -477,14 +480,6 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 		(void) sasl_sts(p->uid, 'D', "S");
 
 		// Will destroy session on introduction of user to net.
-		return true;
-	}
-
-	if (rc == ASASL_MORE)
-	{
-		if (! have_written)
-			(void) sasl_sts(p->uid, 'C', "+");
-
 		return true;
 	}
 
