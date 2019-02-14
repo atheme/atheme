@@ -37,6 +37,7 @@
 // Flags for sasl_output_buf->flags
 #define ASASL_OUTFLAG_NONE          0x00000000U /* Nothing special */
 #define ASASL_OUTFLAG_DONT_FREE_BUF 0x00000001U /* Don't sfree() the output buffer after base64-encoding it */
+#define ASASL_OUTFLAG_WIPE_BUF      0x00000002U /* Call smemzero() on the output buffer after base64-encoding it */
 
 // Return values for sasl_mechanism -> mech_start() or mech_step()
 #define ASASL_FAIL                  0U  // client supplied invalid credentials / screwed up their formatting

@@ -328,6 +328,7 @@ sasl_write(const char *const restrict target, const char *restrict data, const s
 		(void) memset(out, 0x00, sizeof out);
 		(void) memcpy(out, data, nbytes);
 		(void) sasl_sts(target, 'C', out);
+		(void) smemzero(out, nbytes);
 
 		data += nbytes;
 		rem -= nbytes;
@@ -402,6 +403,8 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 				};
 
 				rc = p->mechptr->mech_step(p, &inbuf, &outbuf);
+
+				(void) smemzero(decbuf, declen);
 			}
 			else
 			{
@@ -420,10 +423,15 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 		char encbuf[SASL_S2S_MAXLEN_TOTAL_B64 + 1];
 		const size_t enclen = base64_encode(outbuf.buf, outbuf.len, encbuf, sizeof encbuf);
 
-		if (! (outbuf.flags & ASASL_OUTFLAG_DONT_FREE_BUF))
-			(void) sfree(outbuf.buf);
+		if (outbuf.flags & ASASL_OUTFLAG_WIPE_BUF)
+			(void) smemzero(outbuf.buf, outbuf.len);
 
-		(void) memset(&outbuf, 0x00, sizeof outbuf);
+		if (! (outbuf.flags & ASASL_OUTFLAG_DONT_FREE_BUF))
+		{
+			(void) sfree(outbuf.buf);
+			outbuf.buf = NULL;
+			outbuf.len = 0;
+		}
 
 		if (enclen == (size_t) -1)
 		{
@@ -432,6 +440,9 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 		}
 
 		(void) sasl_write(p->uid, encbuf, enclen);
+
+		if (outbuf.flags & ASASL_OUTFLAG_WIPE_BUF)
+			(void) smemzero(encbuf, enclen);
 
 		have_written = true;
 	}
@@ -499,6 +510,7 @@ sasl_buf_process(struct sasl_session *const restrict p)
 	if (! sasl_packet(p, p->buf, p->len))
 		return false;
 
+	(void) smemzero(p->buf, p->len);
 	(void) sfree(p->buf);
 
 	p->buf = NULL;
