@@ -12,6 +12,7 @@
 #ifndef ATHEME_INC_SASL_H
 #define ATHEME_INC_SASL_H 1
 
+#include "attrs.h"
 #include "sourceinfo.h"
 #include "structures.h"
 
@@ -90,10 +91,11 @@ struct sasl_output_buf
 	unsigned int    flags;
 };
 
-typedef unsigned int (*sasl_mech_start_fn)(struct sasl_session *restrict, struct sasl_output_buf *restrict);
+typedef unsigned int (*sasl_mech_start_fn)(struct sasl_session *restrict, struct sasl_output_buf *restrict)
+    ATHEME_FATTR_WUR;
 
 typedef unsigned int (*sasl_mech_step_fn)(struct sasl_session *restrict, const struct sasl_input_buf *restrict,
-                                          struct sasl_output_buf *restrict);
+                                          struct sasl_output_buf *restrict) ATHEME_FATTR_WUR;
 
 typedef void (*sasl_mech_finish_fn)(struct sasl_session *);
 

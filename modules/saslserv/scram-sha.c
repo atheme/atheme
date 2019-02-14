@@ -62,7 +62,7 @@ typedef char *scram_attr_list[128];
 static const struct sasl_core_functions *sasl_core_functions = NULL;
 static const struct pbkdf2v2_scram_functions *pbkdf2v2_scram_functions = NULL;
 
-static bool
+static bool ATHEME_FATTR_WUR
 sasl_scramsha_attrlist_parse(const char *restrict str, scram_attr_list *const restrict attrs)
 {
 	(void) memset(*attrs, 0x00, sizeof *attrs);
@@ -139,7 +139,7 @@ sasl_scramsha_error(const char *const restrict errtext, struct sasl_output_buf *
 	}
 }
 
-static unsigned int
+static unsigned int ATHEME_FATTR_WUR
 mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
                       struct sasl_output_buf *const restrict out, const unsigned int prf)
 {
@@ -383,7 +383,7 @@ error:
 	return ASASL_ERROR;
 }
 
-static unsigned int
+static unsigned int ATHEME_FATTR_WUR
 mech_step_clientproof(struct scramsha_session *const restrict s, const struct sasl_input_buf *const restrict in,
                       struct sasl_output_buf *const restrict out)
 {
@@ -542,7 +542,7 @@ fail:
 	return ASASL_FAIL;
 }
 
-static unsigned int
+static unsigned int ATHEME_FATTR_WUR
 mech_step_success(const struct scramsha_session *const restrict s)
 {
 	if (s->db.scram)
@@ -592,7 +592,7 @@ mech_step_success(const struct scramsha_session *const restrict s)
 	return ASASL_DONE;
 }
 
-static inline unsigned int
+static inline unsigned int ATHEME_FATTR_WUR
 mech_step_dispatch(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
                    struct sasl_output_buf *const restrict out, const unsigned int prf)
 {
@@ -620,21 +620,21 @@ mech_step_dispatch(struct sasl_session *const restrict p, const struct sasl_inpu
 	}
 }
 
-static unsigned int
+static unsigned int ATHEME_FATTR_WUR
 mech_step_sha1(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
                struct sasl_output_buf *const restrict out)
 {
 	return mech_step_dispatch(p, in, out, PBKDF2_PRF_SCRAM_SHA1_S64);
 }
 
-static unsigned int
+static unsigned int ATHEME_FATTR_WUR
 mech_step_sha2_256(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
                    struct sasl_output_buf *const restrict out)
 {
 	return mech_step_dispatch(p, in, out, PBKDF2_PRF_SCRAM_SHA2_256_S64);
 }
 
-static unsigned int
+static unsigned int ATHEME_FATTR_WUR
 mech_step_sha2_512(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
                    struct sasl_output_buf *const restrict out)
 {

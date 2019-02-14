@@ -34,7 +34,7 @@ struct ecdsa_session
 
 static const struct sasl_core_functions *sasl_core_functions = NULL;
 
-static unsigned int
+static unsigned int ATHEME_FATTR_WUR
 mech_start(struct sasl_session *const restrict p, struct sasl_output_buf ATHEME_VATTR_UNUSED *const restrict out)
 {
 	struct ecdsa_session *const s = smalloc(sizeof *s);
@@ -48,7 +48,7 @@ mech_start(struct sasl_session *const restrict p, struct sasl_output_buf ATHEME_
 	return ASASL_MORE;
 }
 
-static unsigned int
+static unsigned int ATHEME_FATTR_WUR
 mech_step(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
           struct sasl_output_buf *const restrict out)
 {

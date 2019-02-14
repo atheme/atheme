@@ -12,7 +12,7 @@
 
 static const struct sasl_core_functions *sasl_core_functions = NULL;
 
-static unsigned int
+static unsigned int ATHEME_FATTR_WUR
 mech_step(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
           struct sasl_output_buf ATHEME_VATTR_UNUSED *const restrict out)
 {
