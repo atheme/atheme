@@ -124,6 +124,21 @@ sasl_scramsha_attrlist_free(scram_attr_list *const restrict attrs)
 	}
 }
 
+static void
+sasl_scramsha_error(const char *const restrict errtext, struct sasl_output_buf *const restrict out)
+{
+	static char errbuf[BUFSIZE];
+
+	const int errlen = snprintf(errbuf, sizeof errbuf, "e=%s", errtext);
+
+	if (! (errlen <= 2 || errlen >= (int) sizeof errbuf))
+	{
+		out->buf = errbuf;
+		out->len = (size_t) errlen;
+		out->flags |= ASASL_OUTFLAG_DONT_FREE_BUF;
+	}
+}
+
 static unsigned int
 mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
                       struct sasl_output_buf *const restrict out, const unsigned int prf)
@@ -131,11 +146,13 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 	if (! (in && in->buf && in->len))
 	{
 		(void) slog(LG_DEBUG, "%s: no data received from client", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
 		return ASASL_ERROR;
 	}
 	if (strnlen(in->buf, in->len) != in->len)
 	{
 		(void) slog(LG_DEBUG, "%s: NULL byte in data received from client", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
 		return ASASL_ERROR;
 	}
 
@@ -152,16 +169,19 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 
 		case 'p':
 			(void) slog(LG_DEBUG, "%s: channel binding requested but unsupported", MOWGLI_FUNC_NAME);
+			(void) sasl_scramsha_error("channel-binding-not-supported", out);
 			return ASASL_ERROR;
 
 		default:
 			(void) slog(LG_DEBUG, "%s: malformed GS2 header (invalid first byte)", MOWGLI_FUNC_NAME);
+			(void) sasl_scramsha_error("other-error", out);
 			return ASASL_ERROR;
 	}
 
 	if (*message++ != ',')
 	{
 		(void) slog(LG_DEBUG, "%s: malformed GS2 header (cbind flag not one letter)", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
 		return ASASL_ERROR;
 	}
 
@@ -177,6 +197,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 		if (! pos)
 		{
 			(void) slog(LG_DEBUG, "%s: malformed GS2 header (no end to authzid)", MOWGLI_FUNC_NAME);
+			(void) sasl_scramsha_error("other-error", out);
 			return ASASL_ERROR;
 		}
 
@@ -186,6 +207,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 		{
 			(void) slog(LG_DEBUG, "%s: unacceptable authzid length '%zu'",
 			                      MOWGLI_FUNC_NAME, authzid_length);
+			(void) sasl_scramsha_error("authzid-too-long", out);
 			return ASASL_ERROR;
 		}
 
@@ -197,6 +219,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 		if (! pbkdf2v2_scram_functions->normalize(authzid, sizeof authzid))
 		{
 			(void) slog(LG_DEBUG, "%s: SASLprep normalization of authzid failed", MOWGLI_FUNC_NAME);
+			(void) sasl_scramsha_error("invalid-username-encoding", out);
 			return ASASL_ERROR;
 		}
 
@@ -207,6 +230,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 		if (! sasl_core_functions->authzid_can_login(p, authzid, NULL))
 		{
 			(void) slog(LG_DEBUG, "%s: authzid_can_login failed", MOWGLI_FUNC_NAME);
+			(void) sasl_scramsha_error("other-error", out);
 			return ASASL_ERROR;
 		}
 
@@ -215,18 +239,28 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 	else if (*message++ != ',')
 	{
 		(void) slog(LG_DEBUG, "%s: malformed GS2 header (authzid section not empty)", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
 		return ASASL_ERROR;
 	}
 
 	scram_attr_list input;
 
 	if (! sasl_scramsha_attrlist_parse(message, &input))
-		// Malformed SCRAM attribute list
-		goto error;
-
-	if (input['m'] || ! (input['n'] && *input['n'] && input['r'] && *input['r']))
 	{
-		(void) slog(LG_DEBUG, "%s: attribute list unacceptable", MOWGLI_FUNC_NAME);
+		// Malformed SCRAM attribute list
+		(void) sasl_scramsha_error("other-error", out);
+		goto error;
+	}
+	if (input['m'])
+	{
+		(void) slog(LG_DEBUG, "%s: extensions are not supported", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("extensions-not-supported", out);
+		goto error;
+	}
+	if (! (input['n'] && *input['n'] && input['r'] && *input['r']))
+	{
+		(void) slog(LG_DEBUG, "%s: required attribute missing", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
 		goto error;
 	}
 
@@ -235,6 +269,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 	if (nlen < NONCE_LENGTH_MIN || nlen > NONCE_LENGTH_MAX)
 	{
 		(void) slog(LG_DEBUG, "%s: nonce length '%zu' unacceptable", MOWGLI_FUNC_NAME, nlen);
+		(void) sasl_scramsha_error("nonce-length-unacceptable", out);
 		goto error;
 	}
 
@@ -244,6 +279,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 	if (authcid_length > NICKLEN)
 	{
 		(void) slog(LG_DEBUG, "%s: unacceptable authcid length '%zu'", MOWGLI_FUNC_NAME, authcid_length);
+		(void) sasl_scramsha_error("authcid-too-long", out);
 		goto error;
 	}
 
@@ -252,6 +288,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 	if (! pbkdf2v2_scram_functions->normalize(authcid, sizeof authcid))
 	{
 		(void) slog(LG_DEBUG, "%s: SASLprep normalization of authcid failed", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("invalid-username-encoding", out);
 		goto error;
 	}
 
@@ -262,35 +299,43 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 	if (! sasl_core_functions->authcid_can_login(p, authcid, &mu))
 	{
 		(void) slog(LG_DEBUG, "%s: authcid_can_login failed", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
 		goto error;
 	}
 	if (! mu)
 	{
 		(void) slog(LG_ERROR, "%s: authcid_can_login did not set 'mu' (BUG)", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
 		goto error;
 	}
 
 	if (! (mu->flags & MU_CRYPTPASS))
 	{
 		(void) slog(LG_DEBUG, "%s: user's password is not encrypted", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
 		goto error;
 	}
 
 	if (mu->flags & MU_NOPASSWORD)
 	{
 		(void) slog(LG_DEBUG, "%s: user has NOPASSWORD flag set", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
 		goto error;
 	}
 
 	struct pbkdf2v2_dbentry db;
 
 	if (! pbkdf2v2_scram_functions->dbextract(mu->pass, &db))
+	{
 		// User's password hash is not in a compatible (PBKDF2 v2) format
+		(void) sasl_scramsha_error("other-error", out);
 		goto error;
+	}
 
 	if (db.a != prf)
 	{
 		(void) slog(LG_DEBUG, "%s: PRF ID mismatch: server(%u) != client(%u)", MOWGLI_FUNC_NAME, db.a, prf);
+		(void) sasl_scramsha_error("digest-algorithm-mismatch", out);
 		goto error;
 	}
 
@@ -313,7 +358,8 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 
 	if (ol <= (int)(NONCE_LENGTH_MIN_COMBINED + (PBKDF2_SALTLEN_MIN * 1.333) + 12) || ol >= (int) sizeof response)
 	{
-		(void) slog(LG_ERROR, "%s: snprintf(3) for server-first-message failed", MOWGLI_FUNC_NAME);
+		(void) slog(LG_ERROR, "%s: snprintf(3) for server-first-message failed (BUG)", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
 		goto error;
 	}
 
@@ -344,23 +390,34 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const struct sa
 	if (! (in && in->buf && in->len))
 	{
 		(void) slog(LG_DEBUG, "%s: no data received from client", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
 		return ASASL_ERROR;
 	}
 	if (strnlen(in->buf, in->len) != in->len)
 	{
 		(void) slog(LG_DEBUG, "%s: NULL byte in data received from client", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
 		return ASASL_ERROR;
 	}
 
 	scram_attr_list input;
 
 	if (! sasl_scramsha_attrlist_parse(in->buf, &input))
-		// Malformed SCRAM attribute list
-		goto error;
-
-	if (input['m'] || ! (input['c'] && *input['c'] && input['p'] && *input['p'] && input['r'] && *input['r']))
 	{
-		(void) slog(LG_DEBUG, "%s: attribute list unacceptable", MOWGLI_FUNC_NAME);
+		// Malformed SCRAM attribute list
+		(void) sasl_scramsha_error("other-error", out);
+		goto error;
+	}
+	if (input['m'])
+	{
+		(void) slog(LG_DEBUG, "%s: extensions are not supported", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("extensions-not-supported", out);
+		goto error;
+	}
+	if (! (input['c'] && *input['c'] && input['p'] && *input['p'] && input['r'] && *input['r']))
+	{
+		(void) slog(LG_DEBUG, "%s: required attribute missing", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
 		goto error;
 	}
 
@@ -368,6 +425,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const struct sa
 	if (strcmp(s->nonce, input['r']) != 0)
 	{
 		(void) slog(LG_DEBUG, "%s: nonce sent by client doesn't match nonce we sent", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
 		goto error;
 	}
 
@@ -377,11 +435,13 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const struct sa
 	if (c_gs2_len == (size_t) -1)
 	{
 		(void) slog(LG_DEBUG, "%s: base64_decode() for GS2 header failed", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
 		goto error;
 	}
 	if (c_gs2_len != s->c_gs2_len || memcmp(s->c_gs2_buf, c_gs2_buf, c_gs2_len) != 0)
 	{
 		(void) slog(LG_DEBUG, "%s: GS2 header mismatch", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
 		goto error;
 	}
 
@@ -390,6 +450,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const struct sa
 	if (base64_decode(input['p'], ClientProof, sizeof ClientProof) != s->db.dl)
 	{
 		(void) slog(LG_DEBUG, "%s: base64_decode() for ClientProof failed", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
 		goto error;
 	}
 
@@ -401,6 +462,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const struct sa
 	if (alen <= (int) NONCE_LENGTH_MIN_COMBINED || alen >= (int) sizeof AuthMessage)
 	{
 		(void) slog(LG_ERROR, "%s: snprintf(3) for AuthMessage failed (BUG?)", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
 		goto error;
 	}
 
@@ -408,7 +470,8 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const struct sa
 	unsigned char ClientSignature[DIGEST_MDLEN_MAX];
 	if (! digest_oneshot_hmac(s->db.md, s->db.shk, s->db.dl, AuthMessage, (size_t) alen, ClientSignature, NULL))
 	{
-		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac() for ClientSignature failed", MOWGLI_FUNC_NAME);
+		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac() for ClientSignature failed (BUG)", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
 		goto error;
 	}
 
@@ -421,7 +484,8 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const struct sa
 	unsigned char StoredKey[DIGEST_MDLEN_MAX];
 	if (! digest_oneshot(s->db.md, ClientKey, s->db.dl, StoredKey, NULL))
 	{
-		(void) slog(LG_ERROR, "%s: digest_oneshot() for StoredKey failed", MOWGLI_FUNC_NAME);
+		(void) slog(LG_ERROR, "%s: digest_oneshot() for StoredKey failed (BUG)", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
 		goto error;
 	}
 
@@ -429,6 +493,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const struct sa
 	if (memcmp(StoredKey, s->db.shk, s->db.dl) != 0)
 	{
 		(void) slog(LG_DEBUG, "%s: memcmp(3) mismatch on StoredKey; incorrect password?", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("invalid-proof", out);
 		goto fail;
 	}
 
@@ -441,7 +506,8 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const struct sa
 	unsigned char ServerSignature[DIGEST_MDLEN_MAX];
 	if (! digest_oneshot_hmac(s->db.md, s->db.ssk, s->db.dl, AuthMessage, (size_t) alen, ServerSignature, NULL))
 	{
-		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac() for ServerSignature failed", MOWGLI_FUNC_NAME);
+		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac() for ServerSignature failed (BUG)", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
 		goto error;
 	}
 
@@ -451,7 +517,8 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const struct sa
 
 	if (rs == (size_t) -1)
 	{
-		(void) slog(LG_ERROR, "%s: base64_encode() for ServerSignature failed", MOWGLI_FUNC_NAME);
+		(void) slog(LG_ERROR, "%s: base64_encode() for ServerSignature failed (BUG)", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
 		goto error;
 	}
 
@@ -502,11 +569,11 @@ mech_step_success(const struct scramsha_session *const restrict s)
 
 	if (base64_encode(s->db.ssk, s->db.dl, csk64, sizeof csk64) == (size_t) -1)
 	{
-		(void) slog(LG_ERROR, "%s: base64_encode for ssk failed", MOWGLI_FUNC_NAME);
+		(void) slog(LG_ERROR, "%s: base64_encode for ssk failed (BUG)", MOWGLI_FUNC_NAME);
 	}
 	else if (base64_encode(s->db.shk, s->db.dl, chk64, sizeof chk64) == (size_t) -1)
 	{
-		(void) slog(LG_ERROR, "%s: base64_encode for shk failed", MOWGLI_FUNC_NAME);
+		(void) slog(LG_ERROR, "%s: base64_encode for shk failed (BUG)", MOWGLI_FUNC_NAME);
 	}
 	else if (snprintf(res, sizeof res, PBKDF2_FS_SAVEHASH, s->db.a, s->db.c, s->db.salt64, csk64, chk64) > PASSLEN)
 	{
