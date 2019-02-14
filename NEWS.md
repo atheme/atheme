@@ -34,6 +34,10 @@ POTENTIAL COMPATIBILITY BREAKAGE
   as well. The corresponding configuration item `nickserv::cracklib_warn` has
   been renamed to `nickserv::pwquality_warn_only` too.
 
+- The `modules/gameserv/happyfarm` module has been removed, as it was never
+  completely finished and never worked anyway. Please remove this module from
+  your configuration file, regardless of the version of services you are using.
+
 Security
 --------
 - Services now accepts email addresses that may contain shell metacharacters.
