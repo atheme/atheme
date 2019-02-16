@@ -13,6 +13,7 @@
 #define ATHEME_INC_SASL_H 1
 
 #include "attrs.h"
+#include "common.h"
 #include "sourceinfo.h"
 #include "structures.h"
 
@@ -58,13 +59,13 @@ struct sasl_session
 	char *                          uid;                    // Network UID
 	char *                          buf;                    // Buffered Base-64 data from them (so far)
 	void *                          mechdata;               // Mechanism-specific allocated memory
+	char *                          certfp;                 // TLS client certificate fingerprint (if any)
+	char *                          host;                   // Hostname
+	char *                          ip;                     // IP address
 	char                            authcid[NICKLEN + 1];   // Authentication identity (user having credentials verified)
 	char                            authzid[NICKLEN + 1];   // Authorization identity (user being logged in)
 	char                            authceid[IDLEN + 1];    // Entity ID for authcid
 	char                            authzeid[IDLEN + 1];    // Entity ID for authzid
-	char *                          certfp;                 // TLS client certificate fingerprint (if any)
-	char *                          host;                   // Hostname
-	char *                          ip;                     // IP address
 	size_t                          len;                    // Length of buffered Base-64 data
 	unsigned int                    flags;                  // Flags (described above)
 	bool                            tls;                    // Whether their connection to the network is using TLS
