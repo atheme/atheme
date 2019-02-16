@@ -21,6 +21,7 @@
 #define NICKLEN			50
 #define PASSLEN			288		/* 32 bytes salt + 1024 bits digest */
 #define IDLEN			9
+#define UIDLEN			16
 #define CHANNELLEN		200
 #define GROUPLEN		31
 #define USERLEN			11

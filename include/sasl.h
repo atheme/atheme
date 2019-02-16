@@ -56,7 +56,6 @@ struct sasl_session
 	const struct sasl_mechanism *   mechptr;                // Mechanism they're using
 	struct server *                 server;                 // Server they're on
 	struct sourceinfo *             si;                     // The source info for logcommand(), bad_password(), and login hooks
-	char *                          uid;                    // Network UID
 	char *                          buf;                    // Buffered Base-64 data from them (so far)
 	void *                          mechdata;               // Mechanism-specific allocated memory
 	char *                          certfp;                 // TLS client certificate fingerprint (if any)
@@ -66,6 +65,7 @@ struct sasl_session
 	char                            authzid[NICKLEN + 1];   // Authorization identity (user being logged in)
 	char                            authceid[IDLEN + 1];    // Entity ID for authcid
 	char                            authzeid[IDLEN + 1];    // Entity ID for authzid
+	char                            uid[UIDLEN + 1];        // Network UID
 	size_t                          len;                    // Length of buffered Base-64 data
 	unsigned int                    flags;                  // Flags (described above)
 	bool                            tls;                    // Whether their connection to the network is using TLS

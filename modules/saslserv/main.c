@@ -127,9 +127,9 @@ find_or_make_session(const char *const restrict uid, struct server *const restri
 	{
 		p = smalloc(sizeof *p);
 
-		p->uid = sstrdup(uid);
 		p->server = server;
 
+		(void) mowgli_strlcpy(p->uid, uid, sizeof p->uid);
 		(void) mowgli_node_add(p, &p->node, &sessions);
 	}
 
@@ -649,7 +649,6 @@ destroy_session(struct sasl_session *const restrict p)
 	(void) sfree(p->certfp);
 	(void) sfree(p->host);
 	(void) sfree(p->buf);
-	(void) sfree(p->uid);
 	(void) sfree(p->ip);
 	(void) sfree(p);
 }
