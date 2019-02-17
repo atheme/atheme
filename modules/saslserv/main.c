@@ -665,32 +665,33 @@ sasl_input(struct sasl_message *const restrict smsg)
 {
 	struct sasl_session *const p = find_or_make_session(smsg);
 
-	switch(smsg->mode)
+	bool ret = true;
+
+	switch (smsg->mode)
 	{
-	case 'H':
-		// (H)ost information
-		(void) sasl_input_hostinfo(smsg, p);
-		return;
+		case 'H':
+			// (H)ost information
+			(void) sasl_input_hostinfo(smsg, p);
+			break;
 
-	case 'S':
-		// (S)tart authentication
-		if (! sasl_input_startauth(smsg, p))
-			(void) sasl_session_abort(p);
+		case 'S':
+			// (S)tart authentication
+			ret = sasl_input_startauth(smsg, p);
+			break;
 
-		return;
+		case 'C':
+			// (C)lient data
+			ret = sasl_input_clientdata(smsg, p);
+			break;
 
-	case 'C':
-		// (C)lient data
-		if (! sasl_input_clientdata(smsg, p))
-			(void) sasl_session_abort(p);
-
-		return;
-
-	case 'D':
-		// (D)one -- when we receive it, means client abort
-		(void) destroy_session(p);
-		return;
+		case 'D':
+			// (D)one -- when we receive it, means client abort
+			(void) destroy_session(p);
+			break;
 	}
+
+	if (! ret)
+		(void) sasl_session_abort(p);
 }
 
 static void
