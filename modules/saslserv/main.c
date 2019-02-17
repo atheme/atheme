@@ -308,6 +308,25 @@ login_user(struct sasl_session *const restrict p)
 	return target_mu;
 }
 
+static bool
+sasl_session_success(struct sasl_session *const restrict p, struct myuser *const restrict mu)
+{
+	/* Only burst an account name and vhost if the user has verified their e-mail address;
+	 * this prevents spambots from creating accounts to join registered-user-only channels
+	 */
+	if (! (mu->flags & MU_WAITAUTH))
+	{
+		const struct metadata *const md = metadata_find(mu, "private:usercloak");
+		const char *const cloak = ((md != NULL) ? md->value : "*");
+
+		(void) svslogin_sts(p->uid, "*", "*", cloak, mu);
+	}
+
+	(void) sasl_sts(p->uid, 'D', "S");
+
+	return true;
+}
+
 /* given an entire sasl message, advance session by passing data to mechanism
  * and feeding returned data back to client.
  */
@@ -467,19 +486,8 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 		if (! mu)
 			return false;
 
-		char *cloak = "*";
-		struct metadata *md;
-
-		if ((md = metadata_find(mu, "private:usercloak")))
-			cloak = md->value;
-
-		if (! (mu->flags & MU_WAITAUTH))
-			(void) svslogin_sts(p->uid, "*", "*", cloak, mu);
-
-		(void) sasl_sts(p->uid, 'D', "S");
-
 		// Will destroy session on introduction of user to net.
-		return true;
+		return sasl_session_success(p, mu);
 	}
 
 	if (rc == ASASL_FAIL && *p->authceid)
