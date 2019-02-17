@@ -668,17 +668,22 @@ sasl_session_destroy(struct sasl_session *const restrict p)
 {
 	if (p->flags & ASASL_NEED_LOG && *p->authceid)
 	{
-		struct myuser *const mu = myuser_find_uid(p->authceid);
+		const struct myuser *const mu = myuser_find_uid(p->authceid);
 
 		if (mu && ! (ircd->flags & IRCD_SASL_USE_PUID))
 			(void) logcommand(p->si, CMDLOG_LOGIN, "LOGIN (session timed out)");
 	}
 
-	mowgli_node_t *n, *tn;
+	mowgli_node_t *n;
 
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
+	MOWGLI_ITER_FOREACH(n, sessions.head)
+	{
 		if (n == &p->node && n->data == p)
+		{
 			(void) mowgli_node_delete(n, &sessions);
+			break;
+		}
+	}
 
 	if (p->mechptr && p->mechptr->mech_finish)
 		(void) p->mechptr->mech_finish(p);
