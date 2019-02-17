@@ -333,7 +333,7 @@ p10_sasl_sts(const char *target, char mode, const char *data)
 }
 
 static void
-p10_svslogin_sts(char *target, char *nick, char *user, char *host, struct myuser *account)
+p10_svslogin_sts(const char *target, const char *nick, const char *user, const char *host, struct myuser *account)
 {
 	sts("%s XR %c%c %s :SASL:L:%s", me.numeric, target[0], target[1], target, entity(account)->name);
 }

@@ -729,7 +729,7 @@ inspircd_holdnick_sts(struct user *source, int duration, const char *nick, struc
 }
 
 static void
-inspircd_svslogin_sts(char *target, char *nick, char *user, char *host, struct myuser *account)
+inspircd_svslogin_sts(const char *target, const char *nick, const char *user, const char *host, struct myuser *account)
 {
 	sts(":%s METADATA %s accountname :%s", me.numeric, target, entity(account)->name);
 
