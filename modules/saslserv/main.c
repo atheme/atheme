@@ -310,6 +310,48 @@ login_user(struct sasl_session *const restrict p)
 	return target_mu;
 }
 
+static void
+sasl_session_destroy(struct sasl_session *const restrict p)
+{
+	if (p->flags & ASASL_NEED_LOG && *p->authceid)
+	{
+		const struct myuser *const mu = myuser_find_uid(p->authceid);
+
+		if (mu && ! (ircd->flags & IRCD_SASL_USE_PUID))
+			(void) logcommand(p->si, CMDLOG_LOGIN, "LOGIN (session timed out)");
+	}
+
+	mowgli_node_t *n;
+
+	MOWGLI_ITER_FOREACH(n, sessions.head)
+	{
+		if (n == &p->node && n->data == p)
+		{
+			(void) mowgli_node_delete(n, &sessions);
+			break;
+		}
+	}
+
+	if (p->mechptr && p->mechptr->mech_finish)
+		(void) p->mechptr->mech_finish(p);
+
+	if (p->si)
+		(void) atheme_object_unref(p->si);
+
+	(void) sfree(p->certfp);
+	(void) sfree(p->host);
+	(void) sfree(p->buf);
+	(void) sfree(p->ip);
+	(void) sfree(p);
+}
+
+static inline void
+sasl_session_abort(struct sasl_session *const restrict p)
+{
+	(void) sasl_sts(p->uid, 'D', "F");
+	(void) sasl_session_destroy(p);
+}
+
 static bool
 sasl_session_success(struct sasl_session *const restrict p, struct myuser *const restrict mu)
 {
@@ -661,48 +703,6 @@ sasl_input_clientdata(const struct sasl_message *const restrict smsg, struct sas
 		return sasl_buf_process(p);
 
 	return true;
-}
-
-static void
-sasl_session_destroy(struct sasl_session *const restrict p)
-{
-	if (p->flags & ASASL_NEED_LOG && *p->authceid)
-	{
-		const struct myuser *const mu = myuser_find_uid(p->authceid);
-
-		if (mu && ! (ircd->flags & IRCD_SASL_USE_PUID))
-			(void) logcommand(p->si, CMDLOG_LOGIN, "LOGIN (session timed out)");
-	}
-
-	mowgli_node_t *n;
-
-	MOWGLI_ITER_FOREACH(n, sessions.head)
-	{
-		if (n == &p->node && n->data == p)
-		{
-			(void) mowgli_node_delete(n, &sessions);
-			break;
-		}
-	}
-
-	if (p->mechptr && p->mechptr->mech_finish)
-		(void) p->mechptr->mech_finish(p);
-
-	if (p->si)
-		(void) atheme_object_unref(p->si);
-
-	(void) sfree(p->certfp);
-	(void) sfree(p->host);
-	(void) sfree(p->buf);
-	(void) sfree(p->ip);
-	(void) sfree(p);
-}
-
-static inline void
-sasl_session_abort(struct sasl_session *const restrict p)
-{
-	(void) sasl_sts(p->uid, 'D', "F");
-	(void) sasl_session_destroy(p);
 }
 
 static void
