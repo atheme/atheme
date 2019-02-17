@@ -119,17 +119,17 @@ find_session(const char *const restrict uid)
 }
 
 static struct sasl_session *
-find_or_make_session(const char *const restrict uid, struct server *const restrict server)
+find_or_make_session(const struct sasl_message *const restrict smsg)
 {
 	struct sasl_session *p;
 
-	if (! (p = find_session(uid)))
+	if (! (p = find_session(smsg->uid)))
 	{
 		p = smalloc(sizeof *p);
 
-		p->server = server;
+		p->server = smsg->server;
 
-		(void) mowgli_strlcpy(p->uid, uid, sizeof p->uid);
+		(void) mowgli_strlcpy(p->uid, smsg->uid, sizeof p->uid);
 		(void) mowgli_node_add(p, &p->node, &sessions);
 	}
 
@@ -663,7 +663,7 @@ sasl_session_abort(struct sasl_session *const restrict p)
 static void
 sasl_input(struct sasl_message *const restrict smsg)
 {
-	struct sasl_session *const p = find_or_make_session(smsg->uid, smsg->server);
+	struct sasl_session *const p = find_or_make_session(smsg);
 
 	switch(smsg->mode)
 	{
