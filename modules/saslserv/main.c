@@ -542,7 +542,7 @@ sasl_input_startauth(const struct sasl_message *const restrict smsg, struct sasl
 		if (smsg->parc < 2)
 		{
 			(void) slog(LG_DEBUG, "%s: client %s starting EXTERNAL authentication without a "
-			                      "fingerprint", MOWGLI_FUNC_NAME, smsg->uid);
+			                      "fingerprint", MOWGLI_FUNC_NAME, p->uid);
 			return false;
 		}
 
@@ -607,7 +607,7 @@ sasl_input_clientdata(const struct sasl_message *const restrict smsg, struct sas
 	 */
 	if ((p->len + len) > SASL_S2S_MAXLEN_TOTAL_B64)
 	{
-		(void) slog(LG_DEBUG, "%s: client %s has exceeded allowed data length", MOWGLI_FUNC_NAME, smsg->uid);
+		(void) slog(LG_DEBUG, "%s: client %s has exceeded allowed data length", MOWGLI_FUNC_NAME, p->uid);
 		return false;
 	}
 
