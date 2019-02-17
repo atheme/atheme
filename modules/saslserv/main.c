@@ -14,6 +14,8 @@
 #  define MINIMUM(a, b) (((a) < (b)) ? (a) : (b))
 #endif
 
+#define LOGIN_CANCELLED_STR     _("There was a problem logging you in; login cancelled")
+
 static mowgli_list_t sessions;
 static mowgli_list_t mechanisms;
 static char mechlist_string[SASL_S2S_MAXLEN_ATONCE_B64];
@@ -325,6 +327,36 @@ sasl_session_success(struct sasl_session *const restrict p, struct myuser *const
 	(void) sasl_sts(p->uid, 'D', "S");
 
 	return true;
+}
+
+static void
+sasl_handle_login(struct sasl_session *const restrict p, struct user *const u)
+{
+	// We will log messages now ourselves, if needed
+	p->flags &= ~ASASL_NEED_LOG;
+
+	if (! *p->authzeid)
+	{
+		(void) slog(LG_INFO, "%s: session for '%s' without an authzeid (BUG)", MOWGLI_FUNC_NAME, u->nick);
+		(void) notice(saslsvs->nick, u->nick, LOGIN_CANCELLED_STR);
+		return;
+	}
+
+	// Find the account
+	struct myuser *const mu = myuser_find_uid(p->authzeid);
+	if (! mu)
+	{
+		if (*p->authzid)
+			(void) notice(saslsvs->nick, u->nick, "Account %s dropped; login cancelled", p->authzid);
+		else
+			(void) notice(saslsvs->nick, u->nick, "Account dropped; login cancelled");
+
+		// We'll remove their ircd login in handle_burstlogin()
+		return;
+	}
+
+	(void) myuser_login(saslsvs, u, mu, false);
+	(void) logcommand_user(saslsvs, u, CMDLOG_LOGIN, "LOGIN (%s)", p->mechptr->name);
 }
 
 /* given an entire sasl message, advance session by passing data to mechanism
@@ -710,31 +742,13 @@ sasl_user_add(hook_user_nick_t *const restrict data)
 	if (! u)
 		return;
 
-	// Not concerned unless it's a SASL login.
+	// Not concerned unless it's an SASL login.
 	struct sasl_session *const p = find_session(u->uid);
 	if (! p)
 		return;
 
-	// We will log it ourselves, if needed
-	p->flags &= ~ASASL_NEED_LOG;
-
-	// Find the account
-	struct myuser *const mu = *p->authzeid ? myuser_find_uid(p->authzeid) : NULL;
-	if (! mu)
-	{
-		(void) notice(saslsvs->nick, u->nick, "Account %s dropped, login cancelled",
-		                                      *p->authzid ? p->authzid : "???");
-		(void) sasl_session_destroy(p);
-
-		// We'll remove their ircd login in handle_burstlogin()
-		return;
-	}
-
-	const struct sasl_mechanism *const mptr = p->mechptr;
-
+	(void) sasl_handle_login(p, u);
 	(void) sasl_session_destroy(p);
-	(void) myuser_login(saslsvs, u, mu, false);
-	(void) logcommand_user(saslsvs, u, CMDLOG_LOGIN, "LOGIN (%s)", mptr->name);
 }
 
 static void
