@@ -624,7 +624,7 @@ sasl_input_clientdata(const struct sasl_message *const restrict smsg, struct sas
 }
 
 static void
-destroy_session(struct sasl_session *const restrict p)
+sasl_session_destroy(struct sasl_session *const restrict p)
 {
 	if (p->flags & ASASL_NEED_LOG && *p->authceid)
 	{
@@ -657,7 +657,7 @@ static inline void
 sasl_session_abort(struct sasl_session *const restrict p)
 {
 	(void) sasl_sts(p->uid, 'D', "F");
-	(void) destroy_session(p);
+	(void) sasl_session_destroy(p);
 }
 
 static void
@@ -686,7 +686,7 @@ sasl_input(struct sasl_message *const restrict smsg)
 
 		case 'D':
 			// (D)one -- when we receive it, means client abort
-			(void) destroy_session(p);
+			(void) sasl_session_destroy(p);
 			break;
 	}
 
@@ -716,7 +716,7 @@ sasl_newuser(hook_user_nick_t *const restrict data)
 	{
 		(void) notice(saslsvs->nick, u->nick, "Account %s dropped, login cancelled",
 		                                      *p->authzid ? p->authzid : "???");
-		(void) destroy_session(p);
+		(void) sasl_session_destroy(p);
 
 		// We'll remove their ircd login in handle_burstlogin()
 		return;
@@ -724,7 +724,7 @@ sasl_newuser(hook_user_nick_t *const restrict data)
 
 	const struct sasl_mechanism *const mptr = p->mechptr;
 
-	(void) destroy_session(p);
+	(void) sasl_session_destroy(p);
 	(void) myuser_login(saslsvs, u, mu, false);
 	(void) logcommand_user(saslsvs, u, CMDLOG_LOGIN, "LOGIN (%s)", mptr->name);
 }
@@ -739,7 +739,7 @@ delete_stale(void ATHEME_VATTR_UNUSED *const restrict vptr)
 		struct sasl_session *const p = n->data;
 
 		if (p->flags & ASASL_MARKED_FOR_DELETION)
-			(void) destroy_session(p);
+			(void) sasl_session_destroy(p);
 		else
 			p->flags |= ASASL_MARKED_FOR_DELETION;
 	}
@@ -783,7 +783,7 @@ sasl_mech_unregister(const struct sasl_mechanism *const restrict mech)
 		if (session->mechptr == mech)
 		{
 			(void) slog(LG_DEBUG, "%s: destroying session %s", MOWGLI_FUNC_NAME, session->uid);
-			(void) destroy_session(session);
+			(void) sasl_session_destroy(session);
 		}
 	}
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, mechanisms.head)
