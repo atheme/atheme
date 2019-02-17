@@ -378,13 +378,13 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 	// First piece of data in a session is the name of the SASL mechanism that will be used
 	if (! p->mechptr && ! len)
 	{
-		(void) sasl_sourceinfo_recreate(p);
-
 		if (! (p->mechptr = find_mechanism(buf)))
 		{
 			(void) sasl_sts(p->uid, 'M', mechlist_string);
 			return false;
 		}
+
+		(void) sasl_sourceinfo_recreate(p);
 
 		if (p->mechptr->mech_start)
 			rc = p->mechptr->mech_start(p, &outbuf);
