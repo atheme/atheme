@@ -695,7 +695,7 @@ sasl_input(struct sasl_message *const restrict smsg)
 }
 
 static void
-sasl_newuser(hook_user_nick_t *const restrict data)
+sasl_user_add(hook_user_nick_t *const restrict data)
 {
 	// If the user has been killed, don't do anything.
 	struct user *const u = data->u;
@@ -904,7 +904,7 @@ mod_init(struct module *const restrict m)
 	(void) hook_add_event("sasl_input");
 	(void) hook_add_sasl_input(&sasl_input);
 	(void) hook_add_event("user_add");
-	(void) hook_add_user_add(&sasl_newuser);
+	(void) hook_add_user_add(&sasl_user_add);
 	(void) hook_add_event("server_eob");
 	(void) hook_add_server_eob(&sasl_server_eob);
 	(void) hook_add_event("sasl_may_impersonate");
@@ -920,7 +920,7 @@ static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	(void) hook_del_sasl_input(&sasl_input);
-	(void) hook_del_user_add(&sasl_newuser);
+	(void) hook_del_user_add(&sasl_user_add);
 	(void) hook_del_server_eob(&sasl_server_eob);
 
 	(void) mowgli_timer_destroy(base_eventloop, delete_stale_timer);
