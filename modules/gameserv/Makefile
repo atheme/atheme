@@ -9,7 +9,6 @@ SRCS = 			\
 	dice.c		\
 	eightball.c	\
 	gamecalc.c	\
-	happyfarm.c	\
 	help.c		\
 	lottery.c	\
 	main.c		\

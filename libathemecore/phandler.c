@@ -47,7 +47,7 @@ void (*sethost_sts) (struct user *source, struct user *target, const char *host)
 void (*fnc_sts) (struct user *source, struct user *u, const char *newnick, int type) = generic_fnc_sts;
 void (*holdnick_sts)(struct user *source, int duration, const char *nick, struct myuser *account) = generic_holdnick_sts;
 void (*invite_sts) (struct user *source, struct user *target, struct channel *channel) = generic_invite_sts;
-void (*svslogin_sts) (char *target, char *nick, char *user, char *host, struct myuser *account) = generic_svslogin_sts;
+void (*svslogin_sts) (const char *target, const char *nick, const char *user, const char *host, struct myuser *account) = generic_svslogin_sts;
 void (*sasl_sts) (const char *target, char mode, const char *data) = generic_sasl_sts;
 void (*sasl_mechlist_sts) (const char *mechlist) = generic_sasl_mechlist_sts;
 mowgli_node_t *(*next_matching_ban)(struct channel *c, struct user *u, int type, mowgli_node_t *first) = generic_next_matching_ban;
@@ -312,7 +312,7 @@ generic_invite_sts(struct user *source, struct user *target, struct channel *cha
 }
 
 void
-generic_svslogin_sts(char *target, char *nick, char *user, char *host, struct myuser *account)
+generic_svslogin_sts(const char *target, const char *nick, const char *user, const char *host, struct myuser *account)
 {
 	/* nothing to do here. */
 }

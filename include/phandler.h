@@ -223,7 +223,7 @@ extern void (*fnc_sts)(struct user *source, struct user *u, const char *newnick,
 extern void (*holdnick_sts)(struct user *source, int duration, const char *nick, struct myuser *account);
 /* change nick, user, host and/or services login name for a user
  * target may also be a not yet fully introduced UID (for SASL) */
-extern void (*svslogin_sts)(char *target, char *nick, char *user, char *host, struct myuser *account);
+extern void (*svslogin_sts)(const char *target, const char *nick, const char *user, const char *host, struct myuser *account);
 /* send sasl message */
 extern void (*sasl_sts) (const char *target, char mode, const char *data);
 /* send sasl mech list */
@@ -284,7 +284,7 @@ void generic_jupe(const char *server, const char *reason);
 void generic_sethost_sts(struct user *source, struct user *target, const char *host);
 void generic_fnc_sts(struct user *source, struct user *u, const char *newnick, int type);
 void generic_holdnick_sts(struct user *source, int duration, const char *nick, struct myuser *account);
-void generic_svslogin_sts(char *target, char *nick, char *user, char *host, struct myuser *account);
+void generic_svslogin_sts(const char *target, const char *nick, const char *user, const char *host, struct myuser *account);
 void generic_sasl_sts(const char *target, char mode, const char *data);
 void generic_sasl_mechlist_sts(const char *mechlist);
 mowgli_node_t *generic_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_node_t *first);

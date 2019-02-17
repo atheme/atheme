@@ -58,25 +58,30 @@ digest_free_internal(struct digest_context *const restrict ctx)
 }
 
 static inline const EVP_MD *
-digest_decide_md(const unsigned int alg)
+digest_decide_md(const enum digest_algorithm alg)
 {
+	const EVP_MD *md = NULL;
+
 	switch (alg)
 	{
 		case DIGALG_MD5:
-			return EVP_md5();
+			md = EVP_md5();
+			break;
 
 		case DIGALG_SHA1:
-			return EVP_sha1();
+			md = EVP_sha1();
+			break;
 
 		case DIGALG_SHA2_256:
-			return EVP_sha256();
+			md = EVP_sha256();
+			break;
 
 		case DIGALG_SHA2_512:
-			return EVP_sha512();
+			md = EVP_sha512();
+			break;
 	}
 
-	(void) slog(LG_ERROR, "%s: called with unknown/unimplemented alg '%u' (BUG)", MOWGLI_FUNC_NAME, alg);
-	return NULL;
+	return md;
 }
 
 const char *
@@ -86,7 +91,7 @@ digest_get_frontend_info(void)
 }
 
 bool ATHEME_FATTR_WUR
-digest_init(struct digest_context *const restrict ctx, const unsigned int alg)
+digest_init(struct digest_context *const restrict ctx, const enum digest_algorithm alg)
 {
 	if (! ctx)
 	{
@@ -115,7 +120,7 @@ digest_init(struct digest_context *const restrict ctx, const unsigned int alg)
 }
 
 bool ATHEME_FATTR_WUR
-digest_init_hmac(struct digest_context *const restrict ctx, const unsigned int alg,
+digest_init_hmac(struct digest_context *const restrict ctx, const enum digest_algorithm alg,
                  const void *const restrict key, const size_t keyLen)
 {
 	if (! ctx)
@@ -242,7 +247,7 @@ error:
 }
 
 bool ATHEME_FATTR_WUR
-digest_pbkdf2_hmac(const unsigned int alg, const void *restrict pass, const size_t passLen,
+digest_pbkdf2_hmac(const enum digest_algorithm alg, const void *restrict pass, const size_t passLen,
                    const void *restrict salt, const size_t saltLen, const size_t c,
                    void *const restrict dk, const size_t dkLen)
 {

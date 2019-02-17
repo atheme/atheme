@@ -493,7 +493,7 @@ ts6_fnc_sts(struct user *source, struct user *u, const char *newnick, int type)
 }
 
 static void
-ts6_svslogin_sts(char *target, char *nick, char *user, char *host, struct myuser *account)
+ts6_svslogin_sts(const char *target, const char *nick, const char *user, const char *host, struct myuser *account)
 {
 	struct user *tu = user_find(target);
 	struct server *s;

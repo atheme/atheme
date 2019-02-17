@@ -27,21 +27,23 @@
 #define PBKDF2_FN_SAVEHASH              PBKDF2_FN_SAVESALT "%s"
 #define PBKDF2_FS_SAVEHASH              PBKDF2_FN_SAVEHASH "$%s"
 
+#define PBKDF2_PRF_HMAC_MD5             3U
 #define PBKDF2_PRF_HMAC_SHA1            4U
 #define PBKDF2_PRF_HMAC_SHA2_256        5U
 #define PBKDF2_PRF_HMAC_SHA2_512        6U
 
+#define PBKDF2_PRF_HMAC_MD5_S64         23U
 #define PBKDF2_PRF_HMAC_SHA1_S64        24U
 #define PBKDF2_PRF_HMAC_SHA2_256_S64    25U
 #define PBKDF2_PRF_HMAC_SHA2_512_S64    26U
 
 #define PBKDF2_PRF_SCRAM_SHA1           44U
 #define PBKDF2_PRF_SCRAM_SHA2_256       45U
-#define PBKDF2_PRF_SCRAM_SHA2_512       46U     /* Not currently specified */
+#define PBKDF2_PRF_SCRAM_SHA2_512       46U
 
 #define PBKDF2_PRF_SCRAM_SHA1_S64       64U
 #define PBKDF2_PRF_SCRAM_SHA2_256_S64   65U
-#define PBKDF2_PRF_SCRAM_SHA2_512_S64   66U     /* Not currently specified */
+#define PBKDF2_PRF_SCRAM_SHA2_512_S64   66U
 
 #define PBKDF2_PRF_DEFAULT              PBKDF2_PRF_HMAC_SHA2_512_S64
 
@@ -55,39 +57,34 @@
 
 struct pbkdf2v2_dbentry
 {
-	unsigned char   cdg[DIGEST_MDLEN_MAX];          // PBKDF2 Digest (Computed)
-	unsigned char   sdg[DIGEST_MDLEN_MAX];          // PBKDF2 Digest (Stored)
-	unsigned char   ssk[DIGEST_MDLEN_MAX];          // SCRAM-SHA ServerKey (Stored)
-	unsigned char   shk[DIGEST_MDLEN_MAX];          // SCRAM-SHA StoredKey (Stored)
-	unsigned char   salt[PBKDF2_SALTLEN_MAX];       // PBKDF2 Salt
-	char            salt64[PBKDF2_SALTLEN_MAX * 3]; // PBKDF2 Salt (Base64-encoded)
-	size_t          dl;                             // Digest Length
-	size_t          sl;                             // Salt Length
-	unsigned int    md;                             // Atheme Digest Interface Algorithm Identifier
-	unsigned int    a;                              // PBKDF2v2 PRF ID (one of the macros above)
-	unsigned int    c;                              // PBKDF2 Iteration Count
-	bool            scram;                          // Whether to use HMAC-SHA or SCRAM-SHA
+	unsigned char           cdg[DIGEST_MDLEN_MAX];                      // PBKDF2 Digest (Computed)
+	unsigned char           sdg[DIGEST_MDLEN_MAX];                      // PBKDF2 Digest (Stored)
+	unsigned char           ssk[DIGEST_MDLEN_MAX];                      // SCRAM-SHA ServerKey (Stored)
+	unsigned char           shk[DIGEST_MDLEN_MAX];                      // SCRAM-SHA StoredKey (Stored)
+	unsigned char           salt[PBKDF2_SALTLEN_MAX];                   // PBKDF2 Salt
+	char                    salt64[BASE64_SIZE(PBKDF2_SALTLEN_MAX)];    // PBKDF2 Salt (Base64-encoded)
+	size_t                  dl;                                         // Hash/HMAC/PBKDF2 Digest Length
+	size_t                  sl;                                         // PBKDF2 Salt Length
+	unsigned int            a;                                          // PBKDF2v2 PRF ID (one of the above)
+	unsigned int            c;                                          // PBKDF2 Iteration Count
+	enum digest_algorithm   md;                                         // Atheme Digest Interface Algorithm ID
+	bool                    scram;                                      // Whether to use HMAC-SHA or SCRAM-SHA
 };
 
-static const unsigned char ServerKeyStr[] = {
-
-	// ASCII for "Server Key"
-	0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x20, 0x4B, 0x65, 0x79
+struct pbkdf2v2_scram_config
+{
+	const unsigned int *    a;      // PBKDF2v2 PRF ID (one of the above)
+	const unsigned int *    c;      // PBKDF2 Iteration Count
+	const unsigned int *    sl;     // PBKDF2 Salt Length
 };
 
-static const unsigned char ClientKeyStr[] = {
-
-	// ASCII for "Client Key"
-	0x43, 0x6C, 0x69, 0x65, 0x6E, 0x74, 0x20, 0x4B, 0x65, 0x79
-};
-
-typedef void (*pbkdf2v2_confhook_fn)(unsigned int, unsigned int, unsigned int);
+typedef void (*pbkdf2v2_scram_confhook_fn)(const struct pbkdf2v2_scram_config *restrict);
 
 struct pbkdf2v2_scram_functions
 {
 	bool  (*dbextract)(const char *restrict, struct pbkdf2v2_dbentry *restrict);
 	bool  (*normalize)(char *restrict, size_t);
-	void  (*confhook)(pbkdf2v2_confhook_fn);
+	void  (*confhook)(pbkdf2v2_scram_confhook_fn);
 };
 
 #endif /* !ATHEME_INC_PBKDF2V2_H */

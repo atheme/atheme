@@ -40,6 +40,10 @@ POTENTIAL COMPATIBILITY BREAKAGE
   required, so you should simply remove this module from your configuration,
   regardless of the version of services you are using.
 
+- The `modules/gameserv/happyfarm` module has been removed, as it was never
+  completely finished and never worked anyway. Please remove this module from
+  your configuration file, regardless of the version of services you are using.
+
 Security
 --------
 - Services now accepts email addresses that may contain shell metacharacters.

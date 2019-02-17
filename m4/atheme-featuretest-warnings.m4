@@ -4,19 +4,10 @@ AC_DEFUN([ATHEME_CC_ENABLE_WARNINGS], [
 
 	ATHEME_CC_TEST_CFLAGS([-Weverything])
 
-	AS_IF([test "${ATHEME_CC_TEST_CFLAGS_RESULT}" = "yes"], [
+	AS_IF([test "${ATHEME_CC_TEST_CFLAGS_RESULT}" = "no"], [
 
-		ATHEME_CC_TEST_CFLAGS([-Wno-address-of-packed-member])
-		ATHEME_CC_TEST_CFLAGS([-Wno-disabled-macro-expansion])
-		ATHEME_CC_TEST_CFLAGS([-Wno-documentation-deprecated-sync])
-		ATHEME_CC_TEST_CFLAGS([-Wno-documentation-unknown-command])
-		ATHEME_CC_TEST_CFLAGS([-Wno-format-pedantic])
-		ATHEME_CC_TEST_CFLAGS([-Wno-missing-variable-declarations])
-		ATHEME_CC_TEST_CFLAGS([-Wno-pedantic])
-		ATHEME_CC_TEST_CFLAGS([-Wno-reserved-id-macro])
-
-	], [
-
+		dnl These two have to be consecutive and first for the most reliable
+		dnl results. Do not alphabetise with the flags below.    -- amdj
 		ATHEME_CC_TEST_CFLAGS([-Wall])
 		ATHEME_CC_TEST_CFLAGS([-Wextra])
 
@@ -49,7 +40,6 @@ AC_DEFUN([ATHEME_CC_ENABLE_WARNINGS], [
 		ATHEME_CC_TEST_CFLAGS([-Wlogical-op])
 		ATHEME_CC_TEST_CFLAGS([-Wmissing-declarations])
 		ATHEME_CC_TEST_CFLAGS([-Wmissing-format-attribute])
-		ATHEME_CC_TEST_CFLAGS([-Wmissing-include-dirs])
 		ATHEME_CC_TEST_CFLAGS([-Wmissing-prototypes])
 		ATHEME_CC_TEST_CFLAGS([-Wmultistatement-macros])
 		ATHEME_CC_TEST_CFLAGS([-Wnested-externs])
@@ -77,23 +67,28 @@ AC_DEFUN([ATHEME_CC_ENABLE_WARNINGS], [
 		ATHEME_CC_TEST_CFLAGS([-Wunsafe-loop-optimizations])
 		ATHEME_CC_TEST_CFLAGS([-Wunsuffixed-float-constants])
 		ATHEME_CC_TEST_CFLAGS([-Wunused])
-		ATHEME_CC_TEST_CFLAGS([-Wvla])
 		ATHEME_CC_TEST_CFLAGS([-Wwrite-strings])
 	])
 
+	ATHEME_CC_TEST_CFLAGS([-Wno-address-of-packed-member])
 	ATHEME_CC_TEST_CFLAGS([-Wno-cast-align])
 	ATHEME_CC_TEST_CFLAGS([-Wno-conversion])
+	ATHEME_CC_TEST_CFLAGS([-Wno-disabled-macro-expansion])
+	ATHEME_CC_TEST_CFLAGS([-Wno-documentation-deprecated-sync])
+	ATHEME_CC_TEST_CFLAGS([-Wno-documentation-unknown-command])
 	ATHEME_CC_TEST_CFLAGS([-Wno-extra-semi-stmt])
+	ATHEME_CC_TEST_CFLAGS([-Wno-format-pedantic])
 	ATHEME_CC_TEST_CFLAGS([-Wno-inline])
-	ATHEME_CC_TEST_CFLAGS([-Wno-missing-declarations])
 	ATHEME_CC_TEST_CFLAGS([-Wno-missing-include-dirs])
-	ATHEME_CC_TEST_CFLAGS([-Wno-missing-prototypes])
+	ATHEME_CC_TEST_CFLAGS([-Wno-missing-variable-declarations])
 	ATHEME_CC_TEST_CFLAGS([-Wno-packed])
 	ATHEME_CC_TEST_CFLAGS([-Wno-padded])
+	ATHEME_CC_TEST_CFLAGS([-Wno-pedantic])
+	ATHEME_CC_TEST_CFLAGS([-Wno-reserved-id-macro])
 	ATHEME_CC_TEST_CFLAGS([-Wno-sign-conversion])
-	ATHEME_CC_TEST_CFLAGS([-Wno-suggest-attribute=format])
 	ATHEME_CC_TEST_CFLAGS([-Wno-unused-parameter])
 	ATHEME_CC_TEST_CFLAGS([-Wno-unused-variable])
+	ATHEME_CC_TEST_CFLAGS([-Wno-vla])
 ])
 
 AC_DEFUN([ATHEME_FEATURETEST_WARNINGS], [

@@ -22,22 +22,28 @@ static unsigned int pbkdf2v2_digest = 0;
 static unsigned int pbkdf2v2_rounds = 0;
 static unsigned int pbkdf2v2_saltsz = 0;
 
-static pbkdf2v2_confhook_fn pbkdf2v2_confhook = NULL;
+static pbkdf2v2_scram_confhook_fn pbkdf2v2_scram_confhook = NULL;
 
 static inline void
-atheme_pbkdf2v2_confhook_dispatch(void)
+atheme_pbkdf2v2_scram_confhook_dispatch(void)
 {
-	if (! pbkdf2v2_confhook || ! pbkdf2v2_digest || ! pbkdf2v2_rounds || ! pbkdf2v2_saltsz)
+	if (! pbkdf2v2_scram_confhook || ! pbkdf2v2_digest || ! pbkdf2v2_rounds || ! pbkdf2v2_saltsz)
 		return;
 
-	(void) pbkdf2v2_confhook(pbkdf2v2_digest, pbkdf2v2_rounds, pbkdf2v2_saltsz);
+	static const struct pbkdf2v2_scram_config pbkdf2v2_scram_config = {
+		.a      = &pbkdf2v2_digest,
+		.c      = &pbkdf2v2_rounds,
+		.sl     = &pbkdf2v2_saltsz,
+	};
+
+	(void) (*pbkdf2v2_scram_confhook)(&pbkdf2v2_scram_config);
 }
 
 static void
 atheme_pbkdf2v2_config_ready(void ATHEME_VATTR_UNUSED *const restrict unused)
 {
 	if (! pbkdf2v2_digest)
-		pbkdf2v2_digest = PBKDF2_PRF_DEFAULT;
+		pbkdf2v2_digest = (unsigned int) PBKDF2_PRF_DEFAULT;
 
 	if (! pbkdf2v2_rounds)
 		pbkdf2v2_rounds = PBKDF2_ITERCNT_DEF;
@@ -45,7 +51,7 @@ atheme_pbkdf2v2_config_ready(void ATHEME_VATTR_UNUSED *const restrict unused)
 	if (! pbkdf2v2_saltsz)
 		pbkdf2v2_saltsz = PBKDF2_SALTLEN_DEF;
 
-	(void) atheme_pbkdf2v2_confhook_dispatch();
+	(void) atheme_pbkdf2v2_scram_confhook_dispatch();
 }
 
 static inline bool
@@ -53,6 +59,7 @@ atheme_pbkdf2v2_salt_is_b64(const unsigned int prf)
 {
 	switch (prf)
 	{
+		case PBKDF2_PRF_HMAC_MD5_S64:
 		case PBKDF2_PRF_HMAC_SHA1_S64:
 		case PBKDF2_PRF_HMAC_SHA2_256_S64:
 		case PBKDF2_PRF_HMAC_SHA2_512_S64:
@@ -70,6 +77,12 @@ atheme_pbkdf2v2_determine_params(struct pbkdf2v2_dbentry *const restrict dbe)
 {
 	switch (dbe->a)
 	{
+		case PBKDF2_PRF_HMAC_MD5:
+		case PBKDF2_PRF_HMAC_MD5_S64:
+			dbe->md = DIGALG_MD5;
+			dbe->dl = DIGEST_MDLEN_MD5;
+			break;
+
 		case PBKDF2_PRF_SCRAM_SHA1:
 		case PBKDF2_PRF_SCRAM_SHA1_S64:
 			dbe->scram = true;
@@ -213,15 +226,18 @@ static bool
 atheme_pbkdf2v2_scram_derive(const struct pbkdf2v2_dbentry *const dbe, const unsigned char *const idg,
                              unsigned char *const restrict csk, unsigned char *const restrict chk)
 {
+	static const char ClientKeyConstant[] = "Client Key";
+	static const char ServerKeyConstant[] = "Server Key";
+
 	unsigned char cck[DIGEST_MDLEN_MAX];
 	bool retval = false;
 
-	if (csk && ! digest_oneshot_hmac(dbe->md, idg, dbe->dl, ServerKeyStr, sizeof ServerKeyStr, csk, NULL))
+	if (csk && ! digest_oneshot_hmac(dbe->md, idg, dbe->dl, ServerKeyConstant, 10U, csk, NULL))
 	{
 		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac(idg) for csk failed (BUG)", MOWGLI_FUNC_NAME);
 		goto end;
 	}
-	if (chk && ! digest_oneshot_hmac(dbe->md, idg, dbe->dl, ClientKeyStr, sizeof ClientKeyStr, cck, NULL))
+	if (chk && ! digest_oneshot_hmac(dbe->md, idg, dbe->dl, ClientKeyConstant, 10U, cck, NULL))
 	{
 		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac(idg) for cck failed (BUG)", MOWGLI_FUNC_NAME);
 		goto end;
@@ -291,7 +307,7 @@ atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters, struct pb
 
 	const bool salt_was_b64 = atheme_pbkdf2v2_salt_is_b64(dbe->a);
 
-	// Ensure that the SCRAM-SHA module knows which one of 2 possible algorithms we're using
+	// Ensure that the SCRAM-SHA module knows which one of 3 possible algorithms we're using
 	switch (dbe->a)
 	{
 		case PBKDF2_PRF_HMAC_SHA1:
@@ -308,14 +324,12 @@ atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters, struct pb
 			dbe->a = PBKDF2_PRF_SCRAM_SHA2_256_S64;
 			break;
 
-/*		// No specification
 		case PBKDF2_PRF_HMAC_SHA2_512:
 		case PBKDF2_PRF_HMAC_SHA2_512_S64:
 		case PBKDF2_PRF_SCRAM_SHA2_512:
 		case PBKDF2_PRF_SCRAM_SHA2_512_S64:
 			dbe->a = PBKDF2_PRF_SCRAM_SHA2_512_S64;
 			break;
-*/
 
 		default:
 			(void) slog(LG_DEBUG, "%s: unsupported PRF '%u'", MOWGLI_FUNC_NAME, dbe->a);
@@ -373,11 +387,11 @@ atheme_pbkdf2v2_scram_normalize(char *const restrict buf, const size_t buflen)
 }
 
 static void
-atheme_pbkdf2v2_scram_confhook(const pbkdf2v2_confhook_fn confhook)
+atheme_pbkdf2v2_scram_confhook(const pbkdf2v2_scram_confhook_fn confhook)
 {
-	pbkdf2v2_confhook = confhook;
+	pbkdf2v2_scram_confhook = confhook;
 
-	(void) atheme_pbkdf2v2_confhook_dispatch();
+	(void) atheme_pbkdf2v2_scram_confhook_dispatch();
 }
 
 const struct pbkdf2v2_scram_functions pbkdf2v2_scram_functions = {
@@ -461,8 +475,8 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 	{
 		unsigned char csk[DIGEST_MDLEN_MAX];
 		unsigned char chk[DIGEST_MDLEN_MAX];
-		char csk64[DIGEST_MDLEN_MAX * 3];
-		char chk64[DIGEST_MDLEN_MAX * 3];
+		char csk64[BASE64_SIZE(DIGEST_MDLEN_MAX)];
+		char chk64[BASE64_SIZE(DIGEST_MDLEN_MAX)];
 
 		if (! atheme_pbkdf2v2_scram_derive(&dbe, dbe.cdg, csk, chk))
 			// This function logs messages on failure
@@ -487,7 +501,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 	}
 	else
 	{
-		char cdg64[DIGEST_MDLEN_MAX * 3];
+		char cdg64[BASE64_SIZE(DIGEST_MDLEN_MAX)];
 
 		if (base64_encode(dbe.cdg, dbe.dl, cdg64, sizeof cdg64) == (size_t) -1)
 		{
@@ -608,10 +622,8 @@ c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *const restrict ce)
 		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA1_S64;
 	else if (! strcasecmp(ce->vardata, "SCRAM-SHA-256"))
 		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA2_256_S64;
-/*	// No specification
 	else if (! strcasecmp(ce->vardata, "SCRAM-SHA-512"))
 		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA2_512_S64;
-*/
 #endif /* HAVE_LIBIDN */
 	else
 		(void) conf_report_warning(ce, "invalid parameter for configuration option -- using default");

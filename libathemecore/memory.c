@@ -356,3 +356,14 @@ sstrndup(const char *const restrict ptr, const size_t maxlen)
 
 	return buf;
 }
+
+void * ATHEME_FATTR_MALLOC
+smemdup(const void *const restrict ptr, const size_t len)
+{
+	if (! ptr || ! len)
+		return NULL;
+
+	void *const buf = smalloc(len);
+
+	return memcpy(buf, ptr, len);
+}

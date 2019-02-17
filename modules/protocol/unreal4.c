@@ -686,7 +686,7 @@ unreal_sasl_mechlist_sts(const char *mechlist)
 }
 
 static void
-unreal_svslogin_sts(char *target, char *nick, char *user, char *host, struct myuser *account)
+unreal_svslogin_sts(const char *target, const char *nick, const char *user, const char *host, struct myuser *account)
 {
 	char servermask[BUFSIZE], *p;
 	struct service *saslserv;

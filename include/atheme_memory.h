@@ -26,18 +26,31 @@ void *smalloc(size_t len) ATHEME_FATTR_ALLOC_SIZE(1) ATHEME_FATTR_MALLOC ATHEME_
 void *srealloc(void *ptr, size_t len) ATHEME_FATTR_ALLOC_SIZE(2) ATHEME_FATTR_WUR;
 char *sstrdup(const char *ptr) ATHEME_FATTR_MALLOC;
 char *sstrndup(const char *ptr, size_t maxlen) ATHEME_FATTR_MALLOC;
+void *smemdup(const void *ptr, size_t len) ATHEME_FATTR_MALLOC;
 
 #ifdef ATHEME_ATTR_HAS_DIAGNOSE_IF
-void smemzero(void *ptr, size_t len) ATHEME_FATTR_DIAGNOSE_IF(!ptr, "calling smemzero() with !ptr", "warning");
-void smemzero(void *ptr, size_t len) ATHEME_FATTR_DIAGNOSE_IF(!len, "calling smemzero() with !len", "warning");
-void sfree(void *ptr) ATHEME_FATTR_DIAGNOSE_IF(!ptr, "calling sfree() with !ptr", "warning");
-void *scalloc(size_t num, size_t len) ATHEME_FATTR_DIAGNOSE_IF(!num, "calling scalloc() with !num", "error");
-void *scalloc(size_t num, size_t len) ATHEME_FATTR_DIAGNOSE_IF(!len, "calling scalloc() with !len", "error");
-void *smalloc(size_t len) ATHEME_FATTR_DIAGNOSE_IF(!len, "calling smalloc() with !len", "error");
-void *realloc(void *ptr, size_t len) ATHEME_FATTR_DIAGNOSE_IF(!ptr && !len, "calling srealloc() with !ptr && !len", "warning");
-char *sstrdup(const char *ptr) ATHEME_FATTR_DIAGNOSE_IF(!ptr, "calling sstrdup() with !ptr", "warning");
-char *sstrndup(const char *ptr, size_t maxlen) ATHEME_FATTR_DIAGNOSE_IF(!ptr, "calling sstrndup() with !ptr", "warning");
-char *sstrndup(const char *ptr, size_t maxlen) ATHEME_FATTR_DIAGNOSE_IF(!maxlen, "calling sstrndup() with !len", "error");
+void smemzero(void *ptr, size_t len)
+    ATHEME_FATTR_DIAGNOSE_IF(!ptr, "calling smemzero() with !ptr", "warning");
+void smemzero(void *ptr, size_t len)
+    ATHEME_FATTR_DIAGNOSE_IF(!len, "calling smemzero() with !len", "warning");
+void *scalloc(size_t num, size_t len)
+    ATHEME_FATTR_DIAGNOSE_IF(!num, "calling scalloc() with !num", "error");
+void *scalloc(size_t num, size_t len)
+    ATHEME_FATTR_DIAGNOSE_IF(!len, "calling scalloc() with !len", "error");
+void *smalloc(size_t len)
+    ATHEME_FATTR_DIAGNOSE_IF(!len, "calling smalloc() with !len", "error");
+void *srealloc(void *ptr, size_t len)
+    ATHEME_FATTR_DIAGNOSE_IF((!ptr && !len), "calling srealloc() with (!ptr && !len)", "warning");
+char *sstrdup(const char *ptr)
+    ATHEME_FATTR_DIAGNOSE_IF(!ptr, "calling sstrdup() with !ptr", "warning");
+char *sstrndup(const char *ptr, size_t maxlen)
+    ATHEME_FATTR_DIAGNOSE_IF(!ptr, "calling sstrndup() with !ptr", "warning");
+char *sstrndup(const char *ptr, size_t maxlen)
+    ATHEME_FATTR_DIAGNOSE_IF(!maxlen, "calling sstrndup() with !maxlen", "error");
+void *smemdup(const void *ptr, size_t len)
+    ATHEME_FATTR_DIAGNOSE_IF(!ptr, "calling smemdup() with !ptr", "warning");
+void *smemdup(const void *ptr, size_t len)
+    ATHEME_FATTR_DIAGNOSE_IF(!len, "calling smemdup() with !len", "warning");
 #endif /* ATHEME_ATTR_HAS_DIAGNOSE_IF */
 
 #endif /* !ATHEME_INC_ATHEME_MEMORY_H */
