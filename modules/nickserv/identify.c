@@ -36,6 +36,12 @@ ns_cmd_login(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	if (u->flags & UF_DOING_SASL)
+	{
+		command_fail(si, fault_authfail, _("You are already performing an SASL login."));
+		return;
+	}
+
 #ifndef NICKSERV_LOGIN
 	if (!nicksvs.no_nick_ownership && target && !password)
 	{

@@ -338,6 +338,11 @@ sasl_session_destroy(struct sasl_session *const restrict p)
 	if (p->si)
 		(void) atheme_object_unref(p->si);
 
+	struct user *const u = user_find(p->uid);
+	if (u)
+		// If the user is still on the network, allow them to use NickServ IDENTIFY/LOGIN again
+		u->flags &= ~UF_DOING_SASL;
+
 	(void) sfree(p->certfp);
 	(void) sfree(p->host);
 	(void) sfree(p->buf);
@@ -353,7 +358,7 @@ sasl_session_abort(struct sasl_session *const restrict p)
 }
 
 static bool
-sasl_session_success(struct sasl_session *const restrict p, struct myuser *const restrict mu)
+sasl_session_success(struct sasl_session *const restrict p, struct myuser *const restrict mu, const bool destroy)
 {
 	/* Only burst an account name and vhost if the user has verified their e-mail address;
 	 * this prevents spambots from creating accounts to join registered-user-only channels
@@ -368,37 +373,88 @@ sasl_session_success(struct sasl_session *const restrict p, struct myuser *const
 
 	(void) sasl_sts(p->uid, 'D', "S");
 
+	if (destroy)
+		(void) sasl_session_destroy(p);
+
 	return true;
 }
 
-static void
-sasl_handle_login(struct sasl_session *const restrict p, struct user *const u)
+static bool
+sasl_handle_login(struct sasl_session *const restrict p, struct user *const u, struct myuser *mu)
 {
+	bool was_killed = false;
+
 	// We will log messages now ourselves, if needed
 	p->flags &= ~ASASL_NEED_LOG;
 
-	if (! *p->authzeid)
-	{
-		(void) slog(LG_INFO, "%s: session for '%s' without an authzeid (BUG)", MOWGLI_FUNC_NAME, u->nick);
-		(void) notice(saslsvs->nick, u->nick, LOGIN_CANCELLED_STR);
-		return;
-	}
-
-	// Find the account
-	struct myuser *const mu = myuser_find_uid(p->authzeid);
+	// Find the account if necessary
 	if (! mu)
 	{
-		if (*p->authzid)
-			(void) notice(saslsvs->nick, u->nick, "Account %s dropped; login cancelled", p->authzid);
-		else
-			(void) notice(saslsvs->nick, u->nick, "Account dropped; login cancelled");
+		if (! *p->authzeid)
+		{
+			(void) slog(LG_INFO, "%s: session for '%s' without an authzeid (BUG)",
+			                     MOWGLI_FUNC_NAME, u->nick);
+			(void) notice(saslsvs->nick, u->nick, LOGIN_CANCELLED_STR);
+			return false;
+		}
 
-		// We'll remove their ircd login in handle_burstlogin()
-		return;
+		if (! (mu = myuser_find_uid(p->authzeid)))
+		{
+			if (*p->authzid)
+				(void) notice(saslsvs->nick, u->nick, "Account %s dropped; login cancelled",
+				                                      p->authzid);
+			else
+				(void) notice(saslsvs->nick, u->nick, "Account dropped; login cancelled");
+
+			return false;
+		}
 	}
 
-	(void) myuser_login(saslsvs, u, mu, false);
-	(void) logcommand_user(saslsvs, u, CMDLOG_LOGIN, "LOGIN (%s)", p->mechptr->name);
+	// If the user is already logged in, and not to the same account, log them out first
+	if (u->myuser && u->myuser != mu)
+	{
+		if (is_soper(u->myuser))
+			(void) logcommand_user(saslsvs, u, CMDLOG_ADMIN, "DESOPER: \2%s\2 as \2%s\2",
+			                                                 u->nick, entity(u->myuser)->name);
+
+		(void) logcommand_user(saslsvs, u, CMDLOG_LOGIN, "LOGOUT");
+
+		if (! (was_killed = ircd_on_logout(u, entity(u->myuser)->name)))
+		{
+			mowgli_node_t *n;
+
+			MOWGLI_ITER_FOREACH(n, u->myuser->logins.head)
+			{
+				if (n->data == u)
+				{
+					(void) mowgli_node_delete(n, &u->myuser->logins);
+					(void) mowgli_node_free(n);
+					break;
+				}
+			}
+
+			u->myuser = NULL;
+		}
+	}
+
+	// If they were not killed above, log them in now
+	if (! was_killed)
+	{
+		if (u->myuser != mu)
+		{
+			// If they're not logged in, or logging in to a different account, do a full login
+			(void) myuser_login(saslsvs, u, mu, false);
+			(void) logcommand_user(saslsvs, u, CMDLOG_LOGIN, "LOGIN (%s)", p->mechptr->name);
+		}
+		else
+		{
+			// Otherwise, just update login time ...
+			mu->lastlogin = CURRTIME;
+			(void) logcommand_user(saslsvs, u, CMDLOG_LOGIN, "REAUTHENTICATE (%s)", p->mechptr->name);
+		}
+	}
+
+	return true;
 }
 
 /* given an entire sasl message, advance session by passing data to mechanism
@@ -555,13 +611,24 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 
 	if (rc == ASASL_DONE)
 	{
+		struct user *const u = user_find(p->uid);
 		struct myuser *const mu = login_user(p);
 
 		if (! mu)
+		{
+			if (u)
+				(void) notice(saslsvs->nick, u->nick, LOGIN_CANCELLED_STR);
+
+			return false;
+		}
+
+		/* If the user is already on the network (doing an IRCv3.2 SASL reauthentication), attempt to
+		 * log them in immediately. Otherwise, we will log them in on introduction of user to network
+		 */
+		if (u && ! sasl_handle_login(p, u, mu))
 			return false;
 
-		// Will destroy session on introduction of user to net.
-		return sasl_session_success(p, mu);
+		return sasl_session_success(p, mu, (u != NULL));
 	}
 
 	if (rc == ASASL_FAIL && *p->authceid)
@@ -632,6 +699,37 @@ sasl_input_startauth(const struct sasl_message *const restrict smsg, struct sasl
 
 		p->certfp = sstrdup(smsg->parv[1]);
 		p->tls = true;
+	}
+
+	struct user *const u = user_find(p->uid);
+
+	if (u && u->myuser)
+	{
+		/* If the user is already on the network, they're doing an IRCv3.2 SASL
+		 * reauthentication. This means that if the user is logged in, we need
+		 * to call the user_can_logout hooks and maybe abort the exchange now.
+		 */
+		(void) slog(LG_DEBUG, "%s: user %s ('%s') is logged in as '%s' -- executing user_can_logout hooks",
+		                      MOWGLI_FUNC_NAME, p->uid, u->nick, entity(u->myuser)->name);
+
+		hook_user_logout_check_t req = {
+			.si      = p->si,
+			.u       = u,
+			.allowed = true,
+			.relogin = true,
+		};
+
+		(void) hook_call_user_can_logout(&req);
+
+		if (! req.allowed)
+		{
+			(void) notice(saslsvs->nick, u->nick,
+			              _("You cannot log out \2%s\2 because the server configuration disallows it."),
+			              entity(u->myuser)->name);
+			return false;
+		}
+
+		u->flags |= UF_DOING_SASL;
 	}
 
 	return sasl_packet(p, smsg->parv[0], 0);
@@ -752,7 +850,7 @@ sasl_user_add(hook_user_nick_t *const restrict data)
 	if (! p)
 		return;
 
-	(void) sasl_handle_login(p, u);
+	(void) sasl_handle_login(p, u, NULL);
 	(void) sasl_session_destroy(p);
 }
 
@@ -936,6 +1034,7 @@ mod_init(struct module *const restrict m)
 	(void) hook_add_server_eob(&sasl_server_eob);
 	(void) hook_add_event("sasl_may_impersonate");
 	(void) hook_add_event("user_can_login");
+	(void) hook_add_event("user_can_logout");
 
 	delete_stale_timer = mowgli_timer_add(base_eventloop, "sasl_delete_stale", &delete_stale, NULL, 30);
 	authservice_loaded++;

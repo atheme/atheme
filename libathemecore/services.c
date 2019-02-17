@@ -520,11 +520,8 @@ handle_setlogin(struct sourceinfo *si, struct user *u, const char *login, time_t
 	}
 
 	if (authservice_loaded)
-	{
-		wallops("Ignoring attempt from %s to set login name for %s to %s",
-				get_oper_name(si), u->nick, login);
+		// Non-SASL logins will be ignored; SASL reauth was handled by modules/saslserv/main already
 		return;
-	}
 
 	if (u->myuser != NULL)
 	{

@@ -43,6 +43,7 @@ struct user
 
 #define UF_AWAY        0x00000002
 #define UF_INVIS       0x00000004
+#define UF_DOING_SASL  0x00000008
 #define UF_IRCOP       0x00000010
 #define UF_ADMIN       0x00000020
 #define UF_SEENINFO    0x00000080
