@@ -102,7 +102,7 @@ sasl_sourceinfo_recreate(struct sasl_session *const restrict p)
 static struct sasl_session *
 find_session(const char *const restrict uid)
 {
-	if (! uid)
+	if (! uid || ! *uid)
 		return NULL;
 
 	mowgli_node_t *n;
@@ -111,7 +111,7 @@ find_session(const char *const restrict uid)
 	{
 		struct sasl_session *const p = n->data;
 
-		if (p->uid && strcmp(p->uid, uid) == 0)
+		if (strcmp(p->uid, uid) == 0)
 			return p;
 	}
 
