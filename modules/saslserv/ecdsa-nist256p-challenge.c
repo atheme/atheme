@@ -28,8 +28,9 @@ struct sasl_ecdsa_nist256p_challenge_session
 static const struct sasl_core_functions *sasl_core_functions = NULL;
 
 static enum sasl_mechanism_result ATHEME_FATTR_WUR
-mech_step_account_names(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
-                        struct sasl_output_buf *const restrict out)
+sasl_mech_ecdsa_step_account_names(struct sasl_session *const restrict p,
+                                   const struct sasl_input_buf *const restrict in,
+                                   struct sasl_output_buf *const restrict out)
 {
 	char authcid[NICKLEN + 1];
 	(void) memset(authcid, 0x00, sizeof authcid);
@@ -97,7 +98,8 @@ mech_step_account_names(struct sasl_session *const restrict p, const struct sasl
 }
 
 static enum sasl_mechanism_result ATHEME_FATTR_WUR
-mech_step_verify_signature(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in)
+sasl_mech_ecdsa_step_verify_signature(struct sasl_session *const restrict p,
+                                      const struct sasl_input_buf *const restrict in)
 {
 	struct sasl_ecdsa_nist256p_challenge_session *const s = p->mechdata;
 
@@ -112,20 +114,20 @@ mech_step_verify_signature(struct sasl_session *const restrict p, const struct s
 }
 
 static enum sasl_mechanism_result ATHEME_FATTR_WUR
-mech_step(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
-          struct sasl_output_buf *const restrict out)
+sasl_mech_ecdsa_step(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
+                     struct sasl_output_buf *const restrict out)
 {
 	if (! (p && in && in->buf && in->len))
 		return ASASL_MRESULT_ERROR;
 
 	if (p->mechdata == NULL)
-		return mech_step_account_names(p, in, out);
+		return sasl_mech_ecdsa_step_account_names(p, in, out);
 	else
-		return mech_step_verify_signature(p, in);
+		return sasl_mech_ecdsa_step_verify_signature(p, in);
 }
 
 static void
-mech_finish(struct sasl_session *const restrict p)
+sasl_mech_ecdsa_finish(struct sasl_session *const restrict p)
 {
 	if (! (p && p->mechdata))
 		return;
@@ -140,12 +142,12 @@ mech_finish(struct sasl_session *const restrict p)
 	p->mechdata = NULL;
 }
 
-static const struct sasl_mechanism mech = {
+static const struct sasl_mechanism sasl_mech_ecdsa = {
 
 	.name           = "ECDSA-NIST256P-CHALLENGE",
 	.mech_start     = NULL,
-	.mech_step      = &mech_step,
-	.mech_finish    = &mech_finish,
+	.mech_step      = &sasl_mech_ecdsa_step,
+	.mech_finish    = &sasl_mech_ecdsa_finish,
 };
 
 static void
@@ -154,13 +156,13 @@ mod_init(struct module *const restrict m)
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_pubkey");
 	MODULE_TRY_REQUEST_SYMBOL(m, sasl_core_functions, "saslserv/main", "sasl_core_functions");
 
-	(void) sasl_core_functions->mech_register(&mech);
+	(void) sasl_core_functions->mech_register(&sasl_mech_ecdsa);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	(void) sasl_core_functions->mech_unregister(&mech);
+	(void) sasl_core_functions->mech_unregister(&sasl_mech_ecdsa);
 }
 
 #else /* HAVE_OPENSSL */

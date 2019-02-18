@@ -13,8 +13,8 @@
 static const struct sasl_core_functions *sasl_core_functions = NULL;
 
 static enum sasl_mechanism_result ATHEME_FATTR_WUR
-mech_step(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
-          struct sasl_output_buf ATHEME_VATTR_UNUSED *const restrict out)
+sasl_mech_plain_step(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
+                     struct sasl_output_buf ATHEME_VATTR_UNUSED *const restrict out)
 {
 	if (! (p && in && in->buf && in->len))
 		return ASASL_MRESULT_ERROR;
@@ -68,11 +68,11 @@ mech_step(struct sasl_session *const restrict p, const struct sasl_input_buf *co
 	return ASASL_MRESULT_SUCCESS;
 }
 
-static const struct sasl_mechanism mech = {
+static const struct sasl_mechanism sasl_mech_plain = {
 
 	.name           = "PLAIN",
 	.mech_start     = NULL,
-	.mech_step      = &mech_step,
+	.mech_step      = &sasl_mech_plain_step,
 	.mech_finish    = NULL,
 };
 
@@ -81,13 +81,13 @@ mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, sasl_core_functions, "saslserv/main", "sasl_core_functions");
 
-	(void) sasl_core_functions->mech_register(&mech);
+	(void) sasl_core_functions->mech_register(&sasl_mech_plain);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	(void) sasl_core_functions->mech_unregister(&mech);
+	(void) sasl_core_functions->mech_unregister(&sasl_mech_plain);
 }
 
 SIMPLE_DECLARE_MODULE_V1("saslserv/plain", MODULE_UNLOAD_CAPABILITY_OK)

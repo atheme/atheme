@@ -135,7 +135,7 @@ sasl_scramsha_error(const char *const restrict errtext, struct sasl_output_buf *
 }
 
 static void
-mech_finish(struct sasl_session *const restrict p)
+sasl_mech_scramsha_finish(struct sasl_session *const restrict p)
 {
 	if (! (p && p->mechdata))
 		return;
@@ -157,8 +157,10 @@ mech_finish(struct sasl_session *const restrict p)
 }
 
 static enum sasl_mechanism_result ATHEME_FATTR_WUR
-mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
-                      struct sasl_output_buf *const restrict out, const unsigned int prf)
+sasl_mech_scramsha_step_clientfirst(struct sasl_session *const restrict p,
+                                    const struct sasl_input_buf *const restrict in,
+                                    struct sasl_output_buf *const restrict out,
+                                    const unsigned int prf)
 {
 	if (! (in && in->buf && in->len))
 	{
@@ -381,7 +383,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 	goto cleanup;
 
 error:
-	(void) mech_finish(p);
+	(void) sasl_mech_scramsha_finish(p);
 	retval = ASASL_MRESULT_ERROR;
 	goto cleanup;
 
@@ -392,8 +394,9 @@ cleanup:
 }
 
 static enum sasl_mechanism_result ATHEME_FATTR_WUR
-mech_step_clientproof(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
-                      struct sasl_output_buf *const restrict out)
+sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
+                                    const struct sasl_input_buf *const restrict in,
+                                    struct sasl_output_buf *const restrict out)
 {
 	if (! (in && in->buf && in->len))
 	{
@@ -543,12 +546,12 @@ mech_step_clientproof(struct sasl_session *const restrict p, const struct sasl_i
 	goto cleanup;
 
 error:
-	(void) mech_finish(p);
+	(void) sasl_mech_scramsha_finish(p);
 	retval = ASASL_MRESULT_ERROR;
 	goto cleanup;
 
 fail:
-	(void) mech_finish(p);
+	(void) sasl_mech_scramsha_finish(p);
 	retval = ASASL_MRESULT_FAILURE;
 	goto cleanup;
 
@@ -565,7 +568,7 @@ cleanup:
 }
 
 static enum sasl_mechanism_result ATHEME_FATTR_WUR
-mech_step_success(struct sasl_session *const restrict p)
+sasl_mech_scramsha_step_success(struct sasl_session *const restrict p)
 {
 	const struct sasl_scramsha_session *const s = p->mechdata;
 
@@ -614,13 +617,15 @@ mech_step_success(struct sasl_session *const restrict p)
 	}
 
 end:
-	(void) mech_finish(p);
+	(void) sasl_mech_scramsha_finish(p);
 	return ASASL_MRESULT_SUCCESS;
 }
 
 static inline enum sasl_mechanism_result ATHEME_FATTR_WUR
-mech_step_dispatch(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
-                   struct sasl_output_buf *const restrict out, const unsigned int prf)
+sasl_mech_scramsha_step_dispatch(struct sasl_session *const restrict p,
+                                 const struct sasl_input_buf *const restrict in,
+                                 struct sasl_output_buf *const restrict out,
+                                 const unsigned int prf)
 {
 	if (! p)
 		return ASASL_MRESULT_ERROR;
@@ -628,61 +633,64 @@ mech_step_dispatch(struct sasl_session *const restrict p, const struct sasl_inpu
 	const struct sasl_scramsha_session *const s = p->mechdata;
 
 	if (! s)
-		return mech_step_clientfirst(p, in, out, prf);
+		return sasl_mech_scramsha_step_clientfirst(p, in, out, prf);
 	else if (! s->complete)
-		return mech_step_clientproof(p, in, out);
+		return sasl_mech_scramsha_step_clientproof(p, in, out);
 	else
-		return mech_step_success(p);
+		return sasl_mech_scramsha_step_success(p);
 }
 
 static enum sasl_mechanism_result ATHEME_FATTR_WUR
-mech_step_sha1(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
-               struct sasl_output_buf *const restrict out)
+sasl_mech_scramsha_1_step(struct sasl_session *const restrict p,
+                          const struct sasl_input_buf *const restrict in,
+                          struct sasl_output_buf *const restrict out)
 {
-	return mech_step_dispatch(p, in, out, PBKDF2_PRF_SCRAM_SHA1_S64);
+	return sasl_mech_scramsha_step_dispatch(p, in, out, PBKDF2_PRF_SCRAM_SHA1_S64);
 }
 
 static enum sasl_mechanism_result ATHEME_FATTR_WUR
-mech_step_sha2_256(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
-                   struct sasl_output_buf *const restrict out)
+sasl_mech_scramsha_2_256_step(struct sasl_session *const restrict p,
+                              const struct sasl_input_buf *const restrict in,
+                              struct sasl_output_buf *const restrict out)
 {
-	return mech_step_dispatch(p, in, out, PBKDF2_PRF_SCRAM_SHA2_256_S64);
+	return sasl_mech_scramsha_step_dispatch(p, in, out, PBKDF2_PRF_SCRAM_SHA2_256_S64);
 }
 
 static enum sasl_mechanism_result ATHEME_FATTR_WUR
-mech_step_sha2_512(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
-                   struct sasl_output_buf *const restrict out)
+sasl_mech_scramsha_2_512_step(struct sasl_session *const restrict p,
+                              const struct sasl_input_buf *const restrict in,
+                              struct sasl_output_buf *const restrict out)
 {
-	return mech_step_dispatch(p, in, out, PBKDF2_PRF_SCRAM_SHA2_512_S64);
+	return sasl_mech_scramsha_step_dispatch(p, in, out, PBKDF2_PRF_SCRAM_SHA2_512_S64);
 }
 
-static const struct sasl_mechanism sasl_scramsha_mech_sha1 = {
+static const struct sasl_mechanism sasl_mech_scramsha_1 = {
 	.name           = "SCRAM-SHA-1",
 	.mech_start     = NULL,
-	.mech_step      = &mech_step_sha1,
-	.mech_finish    = &mech_finish,
+	.mech_step      = &sasl_mech_scramsha_1_step,
+	.mech_finish    = &sasl_mech_scramsha_finish,
 };
 
-static const struct sasl_mechanism sasl_scramsha_mech_sha2_256 = {
+static const struct sasl_mechanism sasl_mech_scramsha_2_256 = {
 	.name           = "SCRAM-SHA-256",
 	.mech_start     = NULL,
-	.mech_step      = &mech_step_sha2_256,
-	.mech_finish    = &mech_finish,
+	.mech_step      = &sasl_mech_scramsha_2_256_step,
+	.mech_finish    = &sasl_mech_scramsha_finish,
 };
 
-static const struct sasl_mechanism sasl_scramsha_mech_sha2_512 = {
+static const struct sasl_mechanism sasl_mech_scramsha_2_512 = {
 	.name           = "SCRAM-SHA-512",
 	.mech_start     = NULL,
-	.mech_step      = &mech_step_sha2_512,
-	.mech_finish    = &mech_finish,
+	.mech_step      = &sasl_mech_scramsha_2_512_step,
+	.mech_finish    = &sasl_mech_scramsha_finish,
 };
 
 static inline void
 sasl_scramsha_mechs_unregister(void)
 {
-	(void) sasl_core_functions->mech_unregister(&sasl_scramsha_mech_sha1);
-	(void) sasl_core_functions->mech_unregister(&sasl_scramsha_mech_sha2_256);
-	(void) sasl_core_functions->mech_unregister(&sasl_scramsha_mech_sha2_512);
+	(void) sasl_core_functions->mech_unregister(&sasl_mech_scramsha_1);
+	(void) sasl_core_functions->mech_unregister(&sasl_mech_scramsha_2_256);
+	(void) sasl_core_functions->mech_unregister(&sasl_mech_scramsha_2_512);
 }
 
 static void
@@ -708,15 +716,15 @@ sasl_scramsha_pbkdf2v2_scram_confhook(const struct pbkdf2v2_scram_config *const 
 	switch (*config->a)
 	{
 		case PBKDF2_PRF_SCRAM_SHA1_S64:
-			(void) sasl_core_functions->mech_register(&sasl_scramsha_mech_sha1);
+			(void) sasl_core_functions->mech_register(&sasl_mech_scramsha_1);
 			break;
 
 		case PBKDF2_PRF_SCRAM_SHA2_256_S64:
-			(void) sasl_core_functions->mech_register(&sasl_scramsha_mech_sha2_256);
+			(void) sasl_core_functions->mech_register(&sasl_mech_scramsha_2_256);
 			break;
 
 		case PBKDF2_PRF_SCRAM_SHA2_512_S64:
-			(void) sasl_core_functions->mech_register(&sasl_scramsha_mech_sha2_512);
+			(void) sasl_core_functions->mech_register(&sasl_mech_scramsha_2_512);
 			break;
 
 		default:
