@@ -17,7 +17,7 @@
 #define ASASL_OUTFLAGS_WIPE_FREE_BUF    (ASASL_OUTFLAG_WIPE_BUF | ASASL_OUTFLAG_FREE_BUF)
 #define LOGIN_CANCELLED_STR             _("There was a problem logging you in; login cancelled")
 
-static mowgli_list_t sessions;
+static mowgli_list_t sasl_sessions;
 static mowgli_list_t mechanisms;
 static char sasl_mechlist_string[SASL_S2S_MAXLEN_ATONCE_B64];
 static bool hide_server_names;
@@ -110,7 +110,7 @@ sasl_session_find(const char *const restrict uid)
 
 	mowgli_node_t *n;
 
-	MOWGLI_ITER_FOREACH(n, sessions.head)
+	MOWGLI_ITER_FOREACH(n, sasl_sessions.head)
 	{
 		struct sasl_session *const p = n->data;
 
@@ -133,7 +133,7 @@ sasl_session_find_or_make(const struct sasl_message *const restrict smsg)
 		p->server = smsg->server;
 
 		(void) mowgli_strlcpy(p->uid, smsg->uid, sizeof p->uid);
-		(void) mowgli_node_add(p, &p->node, &sessions);
+		(void) mowgli_node_add(p, &p->node, &sasl_sessions);
 	}
 
 	return p;
@@ -324,11 +324,11 @@ sasl_session_destroy(struct sasl_session *const restrict p)
 
 	mowgli_node_t *n;
 
-	MOWGLI_ITER_FOREACH(n, sessions.head)
+	MOWGLI_ITER_FOREACH(n, sasl_sessions.head)
 	{
 		if (n == &p->node && n->data == p)
 		{
-			(void) mowgli_node_delete(n, &sessions);
+			(void) mowgli_node_delete(n, &sasl_sessions);
 			break;
 		}
 	}
@@ -892,7 +892,7 @@ sasl_delete_stale(void ATHEME_VATTR_UNUSED *const restrict vptr)
 {
 	mowgli_node_t *n, *tn;
 
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, sasl_sessions.head)
 	{
 		struct sasl_session *const p = n->data;
 
@@ -934,7 +934,7 @@ sasl_mech_unregister(const struct sasl_mechanism *const restrict mech)
 {
 	mowgli_node_t *n, *tn;
 
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, sasl_sessions.head)
 	{
 		struct sasl_session *const session = n->data;
 
@@ -1089,7 +1089,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 	authservice_loaded--;
 
-	if (sessions.head)
+	if (sasl_sessions.head)
 		(void) slog(LG_ERROR, "saslserv/main: shutting down with a non-empty session list; "
 		                      "a mechanism did not unregister itself! (BUG)");
 }
