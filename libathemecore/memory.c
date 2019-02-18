@@ -245,6 +245,10 @@ scalloc(const size_t num, const size_t len)
 
 	void *const buf = sodium_malloc(totalsz);
 
+	if (! buf)
+		/* no free memory? */
+		abort();
+
 	(void) make_sodium_memblock(buf, totalsz);
 
 	return memset(buf, 0x00, totalsz);
