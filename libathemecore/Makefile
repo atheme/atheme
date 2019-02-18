@@ -31,7 +31,7 @@ SRCS =					\
 	linker.c			\
 	logger.c			\
 	match.c				\
-	memory.c			\
+	memory_frontend.c		\
 	module.c			\
 	node.c				\
 	object.c			\
