@@ -192,7 +192,7 @@ sasl_mechlist_string_build(void)
 }
 
 static void
-mechlist_do_rebuild(void)
+sasl_mechlist_do_rebuild(void)
 {
 	(void) sasl_mechlist_string_build();
 
@@ -926,7 +926,7 @@ sasl_mech_register(const struct sasl_mechanism *const restrict mech)
 	 */
 	(void) mowgli_node_add((void *)((uintptr_t) mech), node, &mechanisms);
 
-	(void) mechlist_do_rebuild();
+	(void) sasl_mechlist_do_rebuild();
 }
 
 static void
@@ -951,7 +951,7 @@ sasl_mech_unregister(const struct sasl_mechanism *const restrict mech)
 			(void) slog(LG_DEBUG, "%s: unregistering %s", MOWGLI_FUNC_NAME, mech->name);
 			(void) mowgli_node_delete(n, &mechanisms);
 			(void) mowgli_node_free(n);
-			(void) mechlist_do_rebuild();
+			(void) sasl_mechlist_do_rebuild();
 
 			break;
 		}
