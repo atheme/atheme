@@ -20,7 +20,7 @@
 static mowgli_list_t sasl_sessions;
 static mowgli_list_t sasl_mechanisms;
 static char sasl_mechlist_string[SASL_S2S_MAXLEN_ATONCE_B64];
-static bool hide_server_names;
+static bool sasl_hide_server_names;
 
 static struct service *saslsvs = NULL;
 static mowgli_eventloop_timer_t *delete_stale_timer = NULL;
@@ -53,7 +53,7 @@ sasl_get_source_name(struct sourceinfo *const restrict si)
 
 	const struct sasl_sourceinfo *const ssi = (const struct sasl_sourceinfo *) si;
 
-	if (ssi->sess->server && ! hide_server_names)
+	if (ssi->sess->server && ! sasl_hide_server_names)
 		(void) snprintf(description, sizeof description, "Unknown user on %s (via SASL)",
 		                                                 ssi->sess->server->name);
 	else
@@ -1072,7 +1072,7 @@ mod_init(struct module *const restrict m)
 	delete_stale_timer = mowgli_timer_add(base_eventloop, "sasl_delete_stale", &sasl_delete_stale, NULL, 30);
 	authservice_loaded++;
 
-	(void) add_bool_conf_item("HIDE_SERVER_NAMES", &saslsvs->conf_table, 0, &hide_server_names, false);
+	(void) add_bool_conf_item("HIDE_SERVER_NAMES", &saslsvs->conf_table, 0, &sasl_hide_server_names, false);
 }
 
 static void
