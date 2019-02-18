@@ -201,7 +201,7 @@ sasl_mechlist_do_rebuild(void)
 }
 
 static bool
-may_impersonate(struct myuser *const source_mu, struct myuser *const target_mu)
+sasl_may_impersonate(struct myuser *const source_mu, struct myuser *const target_mu)
 {
 	// Allow same (although this function won't get called in that case anyway)
 	if (source_mu == target_mu)
@@ -267,7 +267,7 @@ login_user(struct sasl_session *const restrict p)
 
 	if (target_mu != source_mu)
 	{
-		if (! may_impersonate(source_mu, target_mu))
+		if (! sasl_may_impersonate(source_mu, target_mu))
 		{
 			(void) logcommand(p->si, CMDLOG_LOGIN, "denied IMPERSONATE by \2%s\2 to \2%s\2",
 			                                       entity(source_mu)->name, entity(target_mu)->name);
