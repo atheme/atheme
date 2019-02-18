@@ -1019,7 +1019,7 @@ const struct sasl_core_functions sasl_core_functions = {
 };
 
 static void
-saslserv(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
+saslserv_message_handler(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
 	// this should never happen
 	if (parv[0][0] == '&')
@@ -1052,7 +1052,7 @@ saslserv(struct sourceinfo *const restrict si, const int parc, char **const rest
 static void
 mod_init(struct module *const restrict m)
 {
-	if (! (saslsvs = service_add("saslserv", &saslserv)))
+	if (! (saslsvs = service_add("saslserv", &saslserv_message_handler)))
 	{
 		(void) slog(LG_ERROR, "%s: service_add() failed", m->name);
 		m->mflags |= MODFLAG_FAIL;
