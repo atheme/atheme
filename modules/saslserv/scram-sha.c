@@ -36,7 +36,9 @@
 #define NONCE_LENGTH_MAX            512U        // Maximum acceptable client nonce length
 #define NONCE_LENGTH_MIN_COMBINED   (NONCE_LENGTH + NONCE_LENGTH_MIN)
 #define NONCE_LENGTH_MAX_COMBINED   (NONCE_LENGTH + NONCE_LENGTH_MAX)
-#define MINIMUM_RESPONSE_LENGTH     (NONCE_LENGTH_MIN_COMBINED + (PBKDF2_SALTLEN_MIN * 1.333) + 12U)
+
+// strlen("r=,s=,i=") == 8U
+#define MINIMUM_RESPONSE_LENGTH     (NONCE_LENGTH_MIN_COMBINED + BASE64_SIZE(PBKDF2_SALTLEN_MIN) + 8U)
 
 struct sasl_scramsha_session
 {
