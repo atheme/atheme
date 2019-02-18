@@ -570,7 +570,7 @@ sasl_process_output(struct sasl_session *const restrict p, struct sasl_output_bu
  * and feeding returned data back to client.
  */
 static bool ATHEME_FATTR_WUR
-sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, const size_t len)
+sasl_process_packet(struct sasl_session *const restrict p, char *const restrict buf, const size_t len)
 {
 	struct sasl_output_buf outbuf = {
 		.buf    = NULL,
@@ -695,7 +695,7 @@ sasl_buf_process(struct sasl_session *const restrict p)
 	// Ensure the buffer is NULL-terminated so that base64_decode() doesn't overrun it
 	p->buf[p->len] = 0x00;
 
-	if (! sasl_packet(p, p->buf, p->len))
+	if (! sasl_process_packet(p, p->buf, p->len))
 		return false;
 
 	(void) sfree(p->buf);
@@ -765,7 +765,7 @@ sasl_input_startauth(const struct sasl_message *const restrict smsg, struct sasl
 		u->flags |= UF_DOING_SASL;
 	}
 
-	return sasl_packet(p, smsg->parv[0], 0);
+	return sasl_process_packet(p, smsg->parv[0], 0);
 }
 
 static bool ATHEME_FATTR_WUR
@@ -806,14 +806,14 @@ sasl_input_clientdata(const struct sasl_message *const restrict smsg, struct sas
 			return sasl_buf_process(p);
 
 		// This function already deals with the special case of 1 '+' character
-		return sasl_packet(p, smsg->parv[0], len);
+		return sasl_process_packet(p, smsg->parv[0], len);
 	}
 
 	/* Optimisation: If there is no buffer yet and this data is less than 400 characters, we don't
 	 * need to buffer it at all, and can process it immediately.
 	 */
 	if (! p->buf && len < SASL_S2S_MAXLEN_ATONCE_B64)
-		return sasl_packet(p, smsg->parv[0], len);
+		return sasl_process_packet(p, smsg->parv[0], len);
 
 	/* We need to buffer the data now, but first check if the client hasn't sent us an excessive
 	 * amount already.
