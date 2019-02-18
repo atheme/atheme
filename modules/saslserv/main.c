@@ -22,8 +22,8 @@ static mowgli_list_t sasl_mechanisms;
 static char sasl_mechlist_string[SASL_S2S_MAXLEN_ATONCE_B64];
 static bool sasl_hide_server_names;
 
+static mowgli_eventloop_timer_t *sasl_delete_stale_timer = NULL;
 static struct service *saslsvs = NULL;
-static mowgli_eventloop_timer_t *delete_stale_timer = NULL;
 
 static const char *
 sasl_format_sourceinfo(struct sourceinfo *const restrict si, const bool full)
@@ -1069,7 +1069,7 @@ mod_init(struct module *const restrict m)
 	(void) hook_add_event("user_can_login");
 	(void) hook_add_event("user_can_logout");
 
-	delete_stale_timer = mowgli_timer_add(base_eventloop, "sasl_delete_stale", &sasl_delete_stale, NULL, 30);
+	sasl_delete_stale_timer = mowgli_timer_add(base_eventloop, "sasl_delete_stale", &sasl_delete_stale, NULL, 30);
 	authservice_loaded++;
 
 	(void) add_bool_conf_item("HIDE_SERVER_NAMES", &saslsvs->conf_table, 0, &sasl_hide_server_names, false);
@@ -1082,7 +1082,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	(void) hook_del_user_add(&sasl_user_add);
 	(void) hook_del_server_eob(&sasl_server_eob);
 
-	(void) mowgli_timer_destroy(base_eventloop, delete_stale_timer);
+	(void) mowgli_timer_destroy(base_eventloop, sasl_delete_stale_timer);
 
 	(void) del_conf_item("HIDE_SERVER_NAMES", &saslsvs->conf_table);
 	(void) service_delete(saslsvs);
