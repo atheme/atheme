@@ -505,7 +505,20 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 			unsigned char decbuf[SASL_S2S_MAXLEN_TOTAL_RAW + 1];
 			const size_t declen = base64_decode(buf, decbuf, SASL_S2S_MAXLEN_TOTAL_RAW);
 
-			if (declen != (size_t) -1)
+			if (declen == (size_t) -1)
+			{
+				(void) slog(LG_DEBUG, "%s: base64_decode() failed", MOWGLI_FUNC_NAME);
+
+				rc = ASASL_ERROR;
+			}
+			else if (declen == 0)
+			{
+				/* Account for the fact that the client may have sent whitespace; our
+				 * decoder is tolerant of whitespace and will skip over it    -- amdj
+				 */
+				rc = p->mechptr->mech_step(p, NULL, &outbuf);
+			}
+			else
 			{
 				// Ensure input is NULL-terminated for modules that want to process the data as a string
 				decbuf[declen] = 0x00;
@@ -529,12 +542,6 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 					(void) smemzero(buf, len);          // Erase the base64-encoded input data
 					(void) smemzero(decbuf, declen);    // Erase the base64-decoded input data
 				}
-			}
-			else
-			{
-				(void) slog(LG_DEBUG, "%s: base64_decode() failed", MOWGLI_FUNC_NAME);
-
-				rc = ASASL_ERROR;
 			}
 		}
 	}
