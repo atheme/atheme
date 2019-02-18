@@ -151,6 +151,13 @@ sfree(void *const restrict ptr)
 	(void) sodium_free(ptr);
 }
 
+void
+smemzerofree(void *const restrict ptr, const size_t ATHEME_VATTR_UNUSED len)
+{
+	/* libsodium already does a sodium_memzero() on the pointer given to sodium_free() */
+	(void) sfree(ptr);
+}
+
 void * ATHEME_FATTR_ALLOC_SIZE_PRODUCT(1, 2) ATHEME_FATTR_MALLOC ATHEME_FATTR_RETURNS_NONNULL
 scalloc(const size_t num, const size_t len)
 {

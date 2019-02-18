@@ -23,6 +23,13 @@ sfree(void *const restrict ptr)
 	(void) free(ptr);
 }
 
+void
+smemzerofree(void *const restrict ptr, const size_t len)
+{
+	(void) smemzero(ptr, len);
+	(void) sfree(ptr);
+}
+
 void * ATHEME_FATTR_ALLOC_SIZE_PRODUCT(1, 2) ATHEME_FATTR_MALLOC ATHEME_FATTR_RETURNS_NONNULL
 scalloc(const size_t num, const size_t len)
 {

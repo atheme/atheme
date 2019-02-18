@@ -19,6 +19,7 @@
 extern void *(* volatile volatile_memset)(void *, int, size_t);
 #endif /* !HAVE_MEMSET_S && !HAVE_EXPLICIT_BZERO && !HAVE_LIBSODIUM_MEMZERO */
 
+void smemzerofree(void *ptr, size_t len);
 void smemzero(void *ptr, size_t len);
 void sfree(void *ptr);
 void *scalloc(size_t num, size_t len) ATHEME_FATTR_ALLOC_SIZE_PRODUCT(1, 2) ATHEME_FATTR_MALLOC ATHEME_FATTR_RETURNS_NONNULL;
