@@ -239,7 +239,7 @@ sasl_may_impersonate(struct myuser *const source_mu, struct myuser *const target
 }
 
 static struct myuser *
-login_user(struct sasl_session *const restrict p)
+sasl_user_can_login(struct sasl_session *const restrict p)
 {
 	// source_mu is the user whose credentials we verified ("authentication id" / authcid)
 	// target_mu is the user who will be ultimately logged in ("authorization id" / authzid)
@@ -634,7 +634,7 @@ sasl_process_packet(struct sasl_session *const restrict p, char *const restrict 
 		case ASASL_MRESULT_SUCCESS:
 		{
 			struct user *const u = user_find(p->uid);
-			struct myuser *const mu = login_user(p);
+			struct myuser *const mu = sasl_user_can_login(p);
 
 			if (! mu)
 			{
