@@ -19,7 +19,7 @@
 
 static mowgli_list_t sessions;
 static mowgli_list_t mechanisms;
-static char mechlist_string[SASL_S2S_MAXLEN_ATONCE_B64];
+static char sasl_mechlist_string[SASL_S2S_MAXLEN_ATONCE_B64];
 static bool hide_server_names;
 
 static struct service *saslsvs = NULL;
@@ -160,13 +160,13 @@ sasl_mechanism_find(const char *const restrict name)
 static void
 sasl_server_eob(struct server ATHEME_VATTR_UNUSED *const restrict s)
 {
-	(void) sasl_mechlist_sts(mechlist_string);
+	(void) sasl_mechlist_sts(sasl_mechlist_string);
 }
 
 static void
 sasl_mechlist_string_build(void)
 {
-	char *buf = mechlist_string;
+	char *buf = sasl_mechlist_string;
 	size_t tmplen = 0;
 	mowgli_node_t *n;
 
@@ -175,7 +175,7 @@ sasl_mechlist_string_build(void)
 		const struct sasl_mechanism *const mptr = n->data;
 		const size_t namelen = strlen(mptr->name);
 
-		if (tmplen + namelen >= sizeof mechlist_string)
+		if (tmplen + namelen >= sizeof sasl_mechlist_string)
 			break;
 
 		(void) memcpy(buf, mptr->name, namelen);
@@ -197,7 +197,7 @@ sasl_mechlist_do_rebuild(void)
 	(void) sasl_mechlist_string_build();
 
 	if (me.connected)
-		(void) sasl_mechlist_sts(mechlist_string);
+		(void) sasl_mechlist_sts(sasl_mechlist_string);
 }
 
 static bool
@@ -586,7 +586,7 @@ sasl_process_packet(struct sasl_session *const restrict p, char *const restrict 
 		// First piece of data in a session is the name of the SASL mechanism that will be used
 		if (! (p->mechptr = sasl_mechanism_find(buf)))
 		{
-			(void) sasl_sts(p->uid, 'M', mechlist_string);
+			(void) sasl_sts(p->uid, 'M', sasl_mechlist_string);
 			return false;
 		}
 
