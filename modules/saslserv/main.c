@@ -18,7 +18,7 @@
 #define LOGIN_CANCELLED_STR             _("There was a problem logging you in; login cancelled")
 
 static mowgli_list_t sasl_sessions;
-static mowgli_list_t mechanisms;
+static mowgli_list_t sasl_mechanisms;
 static char sasl_mechlist_string[SASL_S2S_MAXLEN_ATONCE_B64];
 static bool hide_server_names;
 
@@ -144,7 +144,7 @@ sasl_mechanism_find(const char *const restrict name)
 {
 	mowgli_node_t *n;
 
-	MOWGLI_ITER_FOREACH(n, mechanisms.head)
+	MOWGLI_ITER_FOREACH(n, sasl_mechanisms.head)
 	{
 		const struct sasl_mechanism *const mptr = n->data;
 
@@ -170,7 +170,7 @@ sasl_mechlist_string_build(void)
 	size_t tmplen = 0;
 	mowgli_node_t *n;
 
-	MOWGLI_ITER_FOREACH(n, mechanisms.head)
+	MOWGLI_ITER_FOREACH(n, sasl_mechanisms.head)
 	{
 		const struct sasl_mechanism *const mptr = n->data;
 		const size_t namelen = strlen(mptr->name);
@@ -924,7 +924,7 @@ sasl_mech_register(const struct sasl_mechanism *const restrict mech)
 	 * This is not unprecedented in this codebase; libathemecore/crypto.c & libathemecore/strshare.c do the
 	 * same thing.
 	 */
-	(void) mowgli_node_add((void *)((uintptr_t) mech), node, &mechanisms);
+	(void) mowgli_node_add((void *)((uintptr_t) mech), node, &sasl_mechanisms);
 
 	(void) sasl_mechlist_do_rebuild();
 }
@@ -944,12 +944,12 @@ sasl_mech_unregister(const struct sasl_mechanism *const restrict mech)
 			(void) sasl_session_destroy(session);
 		}
 	}
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, mechanisms.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, sasl_mechanisms.head)
 	{
 		if (n->data == mech)
 		{
 			(void) slog(LG_DEBUG, "%s: unregistering %s", MOWGLI_FUNC_NAME, mech->name);
-			(void) mowgli_node_delete(n, &mechanisms);
+			(void) mowgli_node_delete(n, &sasl_mechanisms);
 			(void) mowgli_node_free(n);
 			(void) sasl_mechlist_do_rebuild();
 
