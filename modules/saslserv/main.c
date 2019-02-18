@@ -888,7 +888,7 @@ sasl_user_add(hook_user_nick_t *const restrict data)
 }
 
 static void
-delete_stale(void ATHEME_VATTR_UNUSED *const restrict vptr)
+sasl_delete_stale(void ATHEME_VATTR_UNUSED *const restrict vptr)
 {
 	mowgli_node_t *n, *tn;
 
@@ -1069,7 +1069,7 @@ mod_init(struct module *const restrict m)
 	(void) hook_add_event("user_can_login");
 	(void) hook_add_event("user_can_logout");
 
-	delete_stale_timer = mowgli_timer_add(base_eventloop, "sasl_delete_stale", &delete_stale, NULL, 30);
+	delete_stale_timer = mowgli_timer_add(base_eventloop, "sasl_delete_stale", &sasl_delete_stale, NULL, 30);
 	authservice_loaded++;
 
 	(void) add_bool_conf_item("HIDE_SERVER_NAMES", &saslsvs->conf_table, 0, &hide_server_names, false);
