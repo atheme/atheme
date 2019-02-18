@@ -122,7 +122,7 @@ sasl_session_find(const char *const restrict uid)
 }
 
 static struct sasl_session *
-find_or_make_session(const struct sasl_message *const restrict smsg)
+sasl_session_find_or_make(const struct sasl_message *const restrict smsg)
 {
 	struct sasl_session *p;
 
@@ -839,7 +839,7 @@ sasl_input_clientdata(const struct sasl_message *const restrict smsg, struct sas
 static void
 sasl_input(struct sasl_message *const restrict smsg)
 {
-	struct sasl_session *const p = find_or_make_session(smsg);
+	struct sasl_session *const p = sasl_session_find_or_make(smsg);
 
 	bool ret = true;
 
