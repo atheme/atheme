@@ -33,7 +33,7 @@
 
 #define NONCE_LENGTH                64U         // This should be more than sufficient
 #define NONCE_LENGTH_MIN            8U          // Minimum acceptable client nonce length
-#define NONCE_LENGTH_MAX            1024U       // Maximum acceptable client nonce length
+#define NONCE_LENGTH_MAX            512U        // Maximum acceptable client nonce length
 #define NONCE_LENGTH_MIN_COMBINED   (NONCE_LENGTH + NONCE_LENGTH_MIN)
 #define NONCE_LENGTH_MAX_COMBINED   (NONCE_LENGTH + NONCE_LENGTH_MAX)
 #define MINIMUM_RESPONSE_LENGTH     (NONCE_LENGTH_MIN_COMBINED + (PBKDF2_SALTLEN_MIN * 1.333) + 12U)
