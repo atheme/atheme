@@ -140,7 +140,7 @@ sasl_session_find_or_make(const struct sasl_message *const restrict smsg)
 }
 
 static const struct sasl_mechanism *
-find_mechanism(const char *const restrict name)
+sasl_mechanism_find(const char *const restrict name)
 {
 	mowgli_node_t *n;
 
@@ -584,7 +584,7 @@ sasl_process_packet(struct sasl_session *const restrict p, char *const restrict 
 	if (! p->mechptr && ! len)
 	{
 		// First piece of data in a session is the name of the SASL mechanism that will be used
-		if (! (p->mechptr = find_mechanism(buf)))
+		if (! (p->mechptr = sasl_mechanism_find(buf)))
 		{
 			(void) sasl_sts(p->uid, 'M', mechlist_string);
 			return false;
