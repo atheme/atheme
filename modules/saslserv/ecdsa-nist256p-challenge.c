@@ -90,7 +90,6 @@ mech_step_account_names(struct sasl_session *const restrict p, const struct sasl
 
 	out->buf = s->challenge;
 	out->len = sizeof s->challenge;
-	out->flags |= ASASL_OUTFLAG_DONT_FREE_BUF;
 
 	p->mechdata = s;
 

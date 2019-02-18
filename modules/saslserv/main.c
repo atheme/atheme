@@ -14,7 +14,8 @@
 #  define MINIMUM(a, b) (((a) < (b)) ? (a) : (b))
 #endif
 
-#define LOGIN_CANCELLED_STR     _("There was a problem logging you in; login cancelled")
+#define ASASL_OUTFLAGS_WIPE_FREE_BUF    (ASASL_OUTFLAG_WIPE_BUF | ASASL_OUTFLAG_FREE_BUF)
+#define LOGIN_CANCELLED_STR             _("There was a problem logging you in; login cancelled")
 
 static mowgli_list_t sessions;
 static mowgli_list_t mechanisms;
@@ -554,12 +555,14 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 		char encbuf[SASL_S2S_MAXLEN_TOTAL_B64 + 1];
 		const size_t enclen = base64_encode(outbuf.buf, outbuf.len, encbuf, sizeof encbuf);
 
-		// The mechanism instructed us to wipe the output data now that it has been encoded
-		if (outbuf.flags & ASASL_OUTFLAG_WIPE_BUF)
+		if ((outbuf.flags & ASASL_OUTFLAGS_WIPE_FREE_BUF) == ASASL_OUTFLAGS_WIPE_FREE_BUF)
+			// The mechanism instructed us to wipe and free the output data now that it has been encoded
+			(void) smemzerofree(outbuf.buf, outbuf.len);
+		else if (outbuf.flags & ASASL_OUTFLAG_WIPE_BUF)
+			// The mechanism instructed us to wipe the output data now that it has been encoded
 			(void) smemzero(outbuf.buf, outbuf.len);
-
-		// The mechanism did not indicate to us that the buffer is not dynamic -- free it now
-		if (! (outbuf.flags & ASASL_OUTFLAG_DONT_FREE_BUF))
+		else if (outbuf.flags & ASASL_OUTFLAG_FREE_BUF)
+			// The mechanism instructed us to free the output data now that it has been encoded
 			(void) sfree(outbuf.buf);
 
 		outbuf.buf = NULL;

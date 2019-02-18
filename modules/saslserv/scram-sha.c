@@ -131,7 +131,6 @@ sasl_scramsha_error(const char *const restrict errtext, struct sasl_output_buf *
 	{
 		out->buf = errbuf;
 		out->len = (size_t) errlen;
-		out->flags |= ASASL_OUTFLAG_DONT_FREE_BUF;
 	}
 }
 
@@ -375,7 +374,6 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 
 	out->buf = response;
 	out->len = (size_t) respLen;
-	out->flags |= ASASL_OUTFLAG_DONT_FREE_BUF;
 
 	// Cannot fail. +1 is for including the terminating NULL byte.
 	s->s_msg_buf = smemdup(out->buf, out->len + 1);
@@ -539,7 +537,6 @@ mech_step_clientproof(struct sasl_session *const restrict p, const struct sasl_i
 
 	out->buf = ServerSig64;
 	out->len = ServerSig64Len + 2;
-	out->flags |= ASASL_OUTFLAG_DONT_FREE_BUF;
 
 	s->complete = true;
 
