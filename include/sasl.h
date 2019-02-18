@@ -3,6 +3,7 @@
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
  * Copyright (C) 2006 Atheme Project (http://atheme.org/)
+ * Copyright (C) 2019 Atheme Development Group (https://atheme.github.io/)
  *
  * Data structures and macros for SASL mechanisms.
  */
@@ -18,37 +19,38 @@
 #include "structures.h"
 
 // Maximum number of parameters for an SASL S2S command (arbitrary, increment in future if necessary)
-#define SASL_MESSAGE_MAXPARA        8
+#define SASL_MESSAGE_MAXPARA            8
 
 // Maximum length of an SASL mechanism name (including terminating NULL byte)
-#define SASL_MECHANISM_MAXLEN       60
+#define SASL_MECHANISM_MAXLEN           60U
 
 // Maximum length of data that can be transferred in one shot
-#define SASL_S2S_MAXLEN_ATONCE_RAW  300U
-#define SASL_S2S_MAXLEN_ATONCE_B64  400U
+#define SASL_S2S_MAXLEN_ATONCE_RAW      300U
+#define SASL_S2S_MAXLEN_ATONCE_B64      400U
 
 // Maximum length of data that can be buffered as one message/request
-#define SASL_S2S_MAXLEN_TOTAL_RAW   6144U
-#define SASL_S2S_MAXLEN_TOTAL_B64   8192U
+#define SASL_S2S_MAXLEN_TOTAL_RAW       6144U
+#define SASL_S2S_MAXLEN_TOTAL_B64       8192U
 
 // Flags for sasl_session->flags
-#define ASASL_MARKED_FOR_DELETION   0x00000001U // see delete_stale() in saslserv/main.c
-#define ASASL_NEED_LOG              0x00000002U // user auth success needs to be logged still
+#define ASASL_NONE                      0x00000000U // Nothing special
+#define ASASL_MARKED_FOR_DELETION       0x00000001U // See delete_stale() in modules/saslserv/main.c
+#define ASASL_NEED_LOG                  0x00000002U // User auth success/failure needs to be logged still
 
 // Flags for sasl_input_buf->flags
-#define ASASL_INFLAG_NONE           0x00000000U // Nothing special
-#define ASASL_INFLAG_WIPE_BUF       0x00000001U // Call smemzero() on the input buffers after processing them
+#define ASASL_INFLAG_NONE               0x00000000U // Nothing special
+#define ASASL_INFLAG_WIPE_BUF           0x00000001U // Call smemzero() on the input buffers after processing them
 
 // Flags for sasl_output_buf->flags
-#define ASASL_OUTFLAG_NONE          0x00000000U // Nothing special
-#define ASASL_OUTFLAG_DONT_FREE_BUF 0x00000001U // Don't sfree() the output buffer after base64-encoding it
-#define ASASL_OUTFLAG_WIPE_BUF      0x00000002U // Call smemzero() on the output buffers after processing them
+#define ASASL_OUTFLAG_NONE              0x00000000U // Nothing special
+#define ASASL_OUTFLAG_DONT_FREE_BUF     0x00000001U // Don't sfree() the output buffer after base64-encoding it
+#define ASASL_OUTFLAG_WIPE_BUF          0x00000002U // Call smemzero() on the output buffers after processing them
 
 // Return values for sasl_mechanism -> mech_start() or mech_step()
-#define ASASL_FAIL                  0U  // client supplied invalid credentials / screwed up their formatting
-#define ASASL_MORE                  1U  // everything looks good so far, but we're not done yet
-#define ASASL_DONE                  2U  // client successfully authenticated
-#define ASASL_ERROR                 3U  // an error occurred in mech or it doesn't want to bad_password() the user
+#define ASASL_FAIL                      0U  // Client supplied invalid credentials; run bad_password() on the user
+#define ASASL_MORE                      1U  // Everything looks good so far, but we need more data from the client
+#define ASASL_DONE                      2U  // The client has successfully authenticated
+#define ASASL_ERROR                     3U  // An error has occurred in the mechanism, or the client screwed up
 
 struct sasl_session
 {
