@@ -463,7 +463,7 @@ sasl_handle_login(struct sasl_session *const restrict p, struct user *const u, s
 static bool ATHEME_FATTR_WUR
 sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, const size_t len)
 {
-	unsigned int rc;
+	enum sasl_mechanism_result rc;
 
 	struct sasl_output_buf outbuf = {
 		.buf    = NULL,
@@ -487,7 +487,7 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 		if (p->mechptr->mech_start)
 			rc = p->mechptr->mech_start(p, &outbuf);
 		else
-			rc = ASASL_MORE;
+			rc = ASASL_MRESULT_CONTINUE;
 	}
 	else if (! p->mechptr)
 	{
@@ -509,7 +509,7 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 			{
 				(void) slog(LG_DEBUG, "%s: base64_decode() failed", MOWGLI_FUNC_NAME);
 
-				rc = ASASL_ERROR;
+				rc = ASASL_MRESULT_ERROR;
 			}
 			else if (declen == 0)
 			{
@@ -605,7 +605,7 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 		have_written = true;
 	}
 
-	if (rc == ASASL_MORE)
+	if (rc == ASASL_MRESULT_CONTINUE)
 	{
 		if (! have_written)
 			/* We want more data from the client, but we haven't sent any of our own.
@@ -616,7 +616,7 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 		return true;
 	}
 
-	if (rc == ASASL_DONE)
+	if (rc == ASASL_MRESULT_SUCCESS)
 	{
 		struct user *const u = user_find(p->uid);
 		struct myuser *const mu = login_user(p);
@@ -638,7 +638,7 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 		return sasl_session_success(p, mu, (u != NULL));
 	}
 
-	if (rc == ASASL_FAIL && *p->authceid)
+	if (rc == ASASL_MRESULT_FAILURE && *p->authceid)
 	{
 		/* If we reach this, they failed SASL auth, so if they were trying
 		 * to identify as a specific user, bad_password them.

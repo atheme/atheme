@@ -46,12 +46,6 @@
 #define ASASL_OUTFLAG_DONT_FREE_BUF     0x00000001U // Don't sfree() the output buffer after base64-encoding it
 #define ASASL_OUTFLAG_WIPE_BUF          0x00000002U // Call smemzero() on the output buffers after processing them
 
-// Return values for sasl_mechanism -> mech_start() or mech_step()
-#define ASASL_FAIL                      0U  // Client supplied invalid credentials; run bad_password() on the user
-#define ASASL_MORE                      1U  // Everything looks good so far, but we need more data from the client
-#define ASASL_DONE                      2U  // The client has successfully authenticated
-#define ASASL_ERROR                     3U  // An error has occurred in the mechanism, or the client screwed up
-
 struct sasl_session
 {
 	mowgli_node_t                   node;                   // Node for entry into the active sessions list
@@ -102,11 +96,19 @@ struct sasl_output_buf
 	unsigned int    flags;
 };
 
-typedef unsigned int (*sasl_mech_start_fn)(struct sasl_session *restrict, struct sasl_output_buf *restrict)
-    ATHEME_FATTR_WUR;
+enum sasl_mechanism_result
+{
+	ASASL_MRESULT_ERROR     = 1,    // An error has occurred in the mechanism, or the client screwed up
+	ASASL_MRESULT_FAILURE   = 2,    // Client supplied invalid credentials; run bad_password() on the target
+	ASASL_MRESULT_CONTINUE  = 3,    // Everything looks good so far, but we need more data from the client
+	ASASL_MRESULT_SUCCESS   = 4,    // The client has successfully authenticated
+};
 
-typedef unsigned int (*sasl_mech_step_fn)(struct sasl_session *restrict, const struct sasl_input_buf *restrict,
-                                          struct sasl_output_buf *restrict) ATHEME_FATTR_WUR;
+typedef enum sasl_mechanism_result (*sasl_mech_start_fn)(struct sasl_session *restrict,
+    struct sasl_output_buf *restrict) ATHEME_FATTR_WUR;
+
+typedef enum sasl_mechanism_result (*sasl_mech_step_fn)(struct sasl_session *restrict,
+    const struct sasl_input_buf *restrict, struct sasl_output_buf *restrict) ATHEME_FATTR_WUR;
 
 typedef void (*sasl_mech_finish_fn)(struct sasl_session *);
 

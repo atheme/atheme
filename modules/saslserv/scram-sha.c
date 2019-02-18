@@ -166,7 +166,7 @@ mech_finish(struct sasl_session *const restrict p)
 	p->mechdata = NULL;
 }
 
-static unsigned int ATHEME_FATTR_WUR
+static enum sasl_mechanism_result ATHEME_FATTR_WUR
 mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
                       struct sasl_output_buf *const restrict out, const unsigned int prf)
 {
@@ -174,19 +174,19 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 	{
 		(void) slog(LG_DEBUG, "%s: no data received from client", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("other-error", out);
-		return ASASL_ERROR;
+		return ASASL_MRESULT_ERROR;
 	}
 	if (memchr(in->buf, 0x00, in->len))
 	{
 		(void) slog(LG_DEBUG, "%s: NULL byte in data received from client", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("other-error", out);
-		return ASASL_ERROR;
+		return ASASL_MRESULT_ERROR;
 	}
 
 	const char *const header = in->buf;
 	const char *message = in->buf;
 
-	unsigned int retval = ASASL_MORE;
+	enum sasl_mechanism_result retval = ASASL_MRESULT_CONTINUE;
 	struct sasl_scramsha_session *s = NULL;
 	char authzid[NICKLEN + 1];
 	char authcid[NICKLEN + 1];
@@ -206,18 +206,18 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 		case 'p':
 			(void) slog(LG_DEBUG, "%s: channel binding requested but unsupported", MOWGLI_FUNC_NAME);
 			(void) sasl_scramsha_error("channel-binding-not-supported", out);
-			return ASASL_ERROR;
+			return ASASL_MRESULT_ERROR;
 
 		default:
 			(void) slog(LG_DEBUG, "%s: malformed GS2 header (invalid first byte)", MOWGLI_FUNC_NAME);
 			(void) sasl_scramsha_error("other-error", out);
-			return ASASL_ERROR;
+			return ASASL_MRESULT_ERROR;
 	}
 	if (*message++ != ',')
 	{
 		(void) slog(LG_DEBUG, "%s: malformed GS2 header (cbind flag not one letter)", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("other-error", out);
-		return ASASL_ERROR;
+		return ASASL_MRESULT_ERROR;
 	}
 
 	// Does GS2 header include an authzid ?
@@ -231,7 +231,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 		{
 			(void) slog(LG_DEBUG, "%s: malformed GS2 header (no end to authzid)", MOWGLI_FUNC_NAME);
 			(void) sasl_scramsha_error("other-error", out);
-			return ASASL_ERROR;
+			return ASASL_MRESULT_ERROR;
 		}
 
 		// Check its length
@@ -241,7 +241,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 			(void) slog(LG_DEBUG, "%s: unacceptable authzid length '%zu'",
 			                      MOWGLI_FUNC_NAME, authzidLen);
 			(void) sasl_scramsha_error("authzid-too-long", out);
-			return ASASL_ERROR;
+			return ASASL_MRESULT_ERROR;
 		}
 
 		// Copy it
@@ -253,7 +253,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 		{
 			(void) slog(LG_DEBUG, "%s: SASLprep normalization of authzid failed", MOWGLI_FUNC_NAME);
 			(void) sasl_scramsha_error("invalid-username-encoding", out);
-			return ASASL_ERROR;
+			return ASASL_MRESULT_ERROR;
 		}
 
 		// Log it
@@ -264,7 +264,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 		{
 			(void) slog(LG_DEBUG, "%s: authzid_can_login failed", MOWGLI_FUNC_NAME);
 			(void) sasl_scramsha_error("other-error", out);
-			return ASASL_ERROR;
+			return ASASL_MRESULT_ERROR;
 		}
 
 		message = pos + 1;
@@ -273,7 +273,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 	{
 		(void) slog(LG_DEBUG, "%s: malformed GS2 header (authzid section not empty)", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("other-error", out);
-		return ASASL_ERROR;
+		return ASASL_MRESULT_ERROR;
 	}
 
 	if (! sasl_scramsha_attrlist_parse(message, &attributes))
@@ -393,7 +393,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_i
 
 error:
 	(void) mech_finish(p);
-	retval = ASASL_ERROR;
+	retval = ASASL_MRESULT_ERROR;
 	goto cleanup;
 
 cleanup:
@@ -402,7 +402,7 @@ cleanup:
 	return retval;
 }
 
-static unsigned int ATHEME_FATTR_WUR
+static enum sasl_mechanism_result ATHEME_FATTR_WUR
 mech_step_clientproof(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
                       struct sasl_output_buf *const restrict out)
 {
@@ -410,7 +410,7 @@ mech_step_clientproof(struct sasl_session *const restrict p, const struct sasl_i
 	{
 		(void) slog(LG_DEBUG, "%s: no data received from client", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("other-error", out);
-		return ASASL_ERROR;
+		return ASASL_MRESULT_ERROR;
 	}
 
 	// This buffer contains sensitive information
@@ -420,10 +420,10 @@ mech_step_clientproof(struct sasl_session *const restrict p, const struct sasl_i
 	{
 		(void) slog(LG_DEBUG, "%s: NULL byte in data received from client", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("other-error", out);
-		return ASASL_ERROR;
+		return ASASL_MRESULT_ERROR;
 	}
 
-	unsigned int retval = ASASL_MORE;
+	enum sasl_mechanism_result retval = ASASL_MRESULT_CONTINUE;
 	struct sasl_scramsha_session *const s = p->mechdata;
 	static char ServerSig64[2 + BASE64_SIZE(DIGEST_MDLEN_MAX)] = "v=";
 
@@ -556,12 +556,12 @@ mech_step_clientproof(struct sasl_session *const restrict p, const struct sasl_i
 
 error:
 	(void) mech_finish(p);
-	retval = ASASL_ERROR;
+	retval = ASASL_MRESULT_ERROR;
 	goto cleanup;
 
 fail:
 	(void) mech_finish(p);
-	retval = ASASL_FAIL;
+	retval = ASASL_MRESULT_FAILURE;
 	goto cleanup;
 
 cleanup:
@@ -576,7 +576,7 @@ cleanup:
 	return retval;
 }
 
-static unsigned int ATHEME_FATTR_WUR
+static enum sasl_mechanism_result ATHEME_FATTR_WUR
 mech_step_success(struct sasl_session *const restrict p)
 {
 	const struct sasl_scramsha_session *const s = p->mechdata;
@@ -627,15 +627,15 @@ mech_step_success(struct sasl_session *const restrict p)
 
 end:
 	(void) mech_finish(p);
-	return ASASL_DONE;
+	return ASASL_MRESULT_SUCCESS;
 }
 
-static inline unsigned int ATHEME_FATTR_WUR
+static inline enum sasl_mechanism_result ATHEME_FATTR_WUR
 mech_step_dispatch(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
                    struct sasl_output_buf *const restrict out, const unsigned int prf)
 {
 	if (! p)
-		return ASASL_ERROR;
+		return ASASL_MRESULT_ERROR;
 
 	const struct sasl_scramsha_session *const s = p->mechdata;
 
@@ -647,21 +647,21 @@ mech_step_dispatch(struct sasl_session *const restrict p, const struct sasl_inpu
 		return mech_step_success(p);
 }
 
-static unsigned int ATHEME_FATTR_WUR
+static enum sasl_mechanism_result ATHEME_FATTR_WUR
 mech_step_sha1(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
                struct sasl_output_buf *const restrict out)
 {
 	return mech_step_dispatch(p, in, out, PBKDF2_PRF_SCRAM_SHA1_S64);
 }
 
-static unsigned int ATHEME_FATTR_WUR
+static enum sasl_mechanism_result ATHEME_FATTR_WUR
 mech_step_sha2_256(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
                    struct sasl_output_buf *const restrict out)
 {
 	return mech_step_dispatch(p, in, out, PBKDF2_PRF_SCRAM_SHA2_256_S64);
 }
 
-static unsigned int ATHEME_FATTR_WUR
+static enum sasl_mechanism_result ATHEME_FATTR_WUR
 mech_step_sha2_512(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
                    struct sasl_output_buf *const restrict out)
 {

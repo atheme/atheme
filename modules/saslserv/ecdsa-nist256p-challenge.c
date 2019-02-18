@@ -27,7 +27,7 @@ struct sasl_ecdsa_nist256p_challenge_session
 
 static const struct sasl_core_functions *sasl_core_functions = NULL;
 
-static unsigned int ATHEME_FATTR_WUR
+static enum sasl_mechanism_result ATHEME_FATTR_WUR
 mech_step_account_names(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
                         struct sasl_output_buf *const restrict out)
 {
@@ -38,7 +38,7 @@ mech_step_account_names(struct sasl_session *const restrict p, const struct sasl
 	if (! end)
 	{
 		if (in->len > NICKLEN)
-			return ASASL_ERROR;
+			return ASASL_MRESULT_ERROR;
 
 		(void) memcpy(authcid, in->buf, in->len);
 	}
@@ -53,36 +53,36 @@ mech_step_account_names(struct sasl_session *const restrict p, const struct sasl
 		const size_t authzid_length = in->len - 1 - authcid_length;
 
 		if (! authcid_length || authcid_length > NICKLEN)
-			return ASASL_ERROR;
+			return ASASL_MRESULT_ERROR;
 
 		if (! authzid_length || authzid_length > NICKLEN)
-			return ASASL_ERROR;
+			return ASASL_MRESULT_ERROR;
 
 		(void) memcpy(authcid, accnames, authcid_length);
 		(void) memcpy(authzid, end + 1, authzid_length);
 
 		if (! sasl_core_functions->authzid_can_login(p, authzid, NULL))
-			return ASASL_ERROR;
+			return ASASL_MRESULT_ERROR;
 	}
 
 	struct myuser *mu = NULL;
 	if (! sasl_core_functions->authcid_can_login(p, authcid, &mu))
-		return ASASL_ERROR;
+		return ASASL_MRESULT_ERROR;
 
 	struct metadata *md;
 	if (! (md = metadata_find(mu, "private:pubkey")) && ! (md = metadata_find(mu, "pubkey")))
-		return ASASL_ERROR;
+		return ASASL_MRESULT_ERROR;
 
 	unsigned char pubkey_raw[0x1000];
 	const unsigned char *pubkey_raw_p = pubkey_raw;
 	const size_t ret = base64_decode(md->value, pubkey_raw, sizeof pubkey_raw);
 	if (ret == (size_t) -1)
-		return ASASL_ERROR;
+		return ASASL_MRESULT_ERROR;
 
 	EC_KEY *pubkey = EC_KEY_new_by_curve_name(CURVE_IDENTIFIER);
 	(void) EC_KEY_set_conv_form(pubkey, POINT_CONVERSION_COMPRESSED);
 	if (! o2i_ECPublicKey(&pubkey, &pubkey_raw_p, (long) ret))
-		return ASASL_ERROR;
+		return ASASL_MRESULT_ERROR;
 
 	struct sasl_ecdsa_nist256p_challenge_session *const s = smalloc(sizeof *s);
 	(void) atheme_random_buf(s->challenge, sizeof s->challenge);
@@ -94,10 +94,10 @@ mech_step_account_names(struct sasl_session *const restrict p, const struct sasl
 
 	p->mechdata = s;
 
-	return ASASL_MORE;
+	return ASASL_MRESULT_CONTINUE;
 }
 
-static unsigned int ATHEME_FATTR_WUR
+static enum sasl_mechanism_result ATHEME_FATTR_WUR
 mech_step_verify_signature(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in)
 {
 	struct sasl_ecdsa_nist256p_challenge_session *const s = p->mechdata;
@@ -105,19 +105,19 @@ mech_step_verify_signature(struct sasl_session *const restrict p, const struct s
 	const int ret = ECDSA_verify(0, s->challenge, CHALLENGE_LENGTH, in->buf, (int) in->len, s->pubkey);
 
 	if (ret == 1)
-		return ASASL_DONE;
+		return ASASL_MRESULT_SUCCESS;
 	else if (ret == 0)
-		return ASASL_FAIL;
+		return ASASL_MRESULT_FAILURE;
 	else
-		return ASASL_ERROR;
+		return ASASL_MRESULT_ERROR;
 }
 
-static unsigned int ATHEME_FATTR_WUR
+static enum sasl_mechanism_result ATHEME_FATTR_WUR
 mech_step(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
           struct sasl_output_buf *const restrict out)
 {
 	if (! (p && in && in->buf && in->len))
-		return ASASL_ERROR;
+		return ASASL_MRESULT_ERROR;
 
 	if (p->mechdata == NULL)
 		return mech_step_account_names(p, in, out);

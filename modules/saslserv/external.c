@@ -12,33 +12,33 @@
 
 static const struct sasl_core_functions *sasl_core_functions = NULL;
 
-static unsigned int ATHEME_FATTR_WUR
+static enum sasl_mechanism_result ATHEME_FATTR_WUR
 mech_step(struct sasl_session *const restrict p, const struct sasl_input_buf *const restrict in,
           struct sasl_output_buf ATHEME_VATTR_UNUSED *const restrict out)
 {
 	if (! (p && p->certfp))
-		return ASASL_ERROR;
+		return ASASL_MRESULT_ERROR;
 
 	struct mycertfp *const mcfp = mycertfp_find(p->certfp);
 
 	if (! mcfp)
-		return ASASL_ERROR;
+		return ASASL_MRESULT_ERROR;
 
 	if (in && in->buf && in->len)
 	{
 		if (in->len > NICKLEN)
-			return ASASL_ERROR;
+			return ASASL_MRESULT_ERROR;
 
 		if (! sasl_core_functions->authzid_can_login(p, in->buf, NULL))
-			return ASASL_ERROR;
+			return ASASL_MRESULT_ERROR;
 	}
 
 	const char *const authcid = entity(mcfp->mu)->name;
 
 	if (! sasl_core_functions->authcid_can_login(p, authcid, NULL))
-		return ASASL_ERROR;
+		return ASASL_MRESULT_ERROR;
 
-	return ASASL_DONE;
+	return ASASL_MRESULT_SUCCESS;
 }
 
 static const struct sasl_mechanism mech = {
