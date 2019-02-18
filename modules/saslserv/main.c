@@ -572,19 +572,18 @@ sasl_process_output(struct sasl_session *const restrict p, struct sasl_output_bu
 static bool ATHEME_FATTR_WUR
 sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, const size_t len)
 {
-	enum sasl_mechanism_result rc;
-
 	struct sasl_output_buf outbuf = {
 		.buf    = NULL,
 		.len    = 0,
 		.flags  = ASASL_OUTFLAG_NONE,
 	};
 
-	bool have_written = false;
+	enum sasl_mechanism_result rc;
+	bool have_responded = false;
 
-	// First piece of data in a session is the name of the SASL mechanism that will be used
 	if (! p->mechptr && ! len)
 	{
+		// First piece of data in a session is the name of the SASL mechanism that will be used
 		if (! (p->mechptr = find_mechanism(buf)))
 		{
 			(void) sasl_sts(p->uid, 'M', mechlist_string);
@@ -608,72 +607,85 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 		rc = sasl_process_input(p, buf, len, &outbuf);
 	}
 
-	// Some progress has been made, reset timeout.
-	p->flags &= ~ASASL_SFLAG_MARKED_FOR_DELETION;
-
 	if (outbuf.buf && outbuf.len)
 	{
 		if (! sasl_process_output(p, &outbuf))
 			return false;
 
-		have_written = true;
+		have_responded = true;
 	}
 
-	if (rc == ASASL_MRESULT_CONTINUE)
+	// Some progress has been made, reset timeout.
+	p->flags &= ~ASASL_SFLAG_MARKED_FOR_DELETION;
+
+	switch (rc)
 	{
-		if (! have_written)
-			/* We want more data from the client, but we haven't sent any of our own.
-			 * Send an empty string to advance the session.    -- amdj
-			 */
-			(void) sasl_sts(p->uid, 'C', "+");
-
-		return true;
-	}
-
-	if (rc == ASASL_MRESULT_SUCCESS)
-	{
-		struct user *const u = user_find(p->uid);
-		struct myuser *const mu = login_user(p);
-
-		if (! mu)
+		case ASASL_MRESULT_CONTINUE:
 		{
-			if (u)
-				(void) notice(saslsvs->nick, u->nick, LOGIN_CANCELLED_STR);
+			if (! have_responded)
+				/* We want more data from the client, but we haven't sent any of our own.
+				 * Send an empty string to advance the session.    -- amdj
+				 */
+				(void) sasl_sts(p->uid, 'C', "+");
+
+			return true;
+		}
+
+		case ASASL_MRESULT_SUCCESS:
+		{
+			struct user *const u = user_find(p->uid);
+			struct myuser *const mu = login_user(p);
+
+			if (! mu)
+			{
+				if (u)
+					(void) notice(saslsvs->nick, u->nick, LOGIN_CANCELLED_STR);
+
+				return false;
+			}
+
+			/* If the user is already on the network, attempt to log them in immediately.
+			 * Otherwise, we will log them in on introduction of user to network
+			 */
+			if (u && ! sasl_handle_login(p, u, mu))
+				return false;
+
+			return sasl_session_success(p, mu, (u != NULL));
+		}
+
+		case ASASL_MRESULT_FAILURE:
+		{
+			if (*p->authceid)
+			{
+				/* If we reach this, they failed SASL auth, so if they were trying
+				 * to authenticate as a specific user, run bad_password() on them.
+				 */
+				struct myuser *const mu = myuser_find_uid(p->authceid);
+
+				if (! mu)
+					return false;
+
+				/* We might have more information to construct a more accurate sourceinfo now?
+				 * TODO: Investigate whether this is necessary
+				 */
+				(void) sasl_sourceinfo_recreate(p);
+
+				(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN (%s) to \2%s\2 (bad password)",
+				                                       p->mechptr->name, entity(mu)->name);
+				(void) bad_password(p->si, mu);
+			}
 
 			return false;
 		}
 
-		/* If the user is already on the network (doing an IRCv3.2 SASL reauthentication), attempt to
-		 * log them in immediately. Otherwise, we will log them in on introduction of user to network
-		 */
-		if (u && ! sasl_handle_login(p, u, mu))
+		case ASASL_MRESULT_ERROR:
 			return false;
-
-		return sasl_session_success(p, mu, (u != NULL));
 	}
 
-	if (rc == ASASL_MRESULT_FAILURE && *p->authceid)
-	{
-		/* If we reach this, they failed SASL auth, so if they were trying
-		 * to identify as a specific user, bad_password them.
-		 */
-		struct myuser *const mu = myuser_find_uid(p->authceid);
-
-		if (! mu)
-			return false;
-
-		/* We might have more information to construct a more accurate sourceinfo now?
-		 * TODO: Investigate whether this is necessary
-		 */
-		(void) sasl_sourceinfo_recreate(p);
-
-		(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN (%s) to \2%s\2 (bad password)",
-		                                       p->mechptr->name, entity(mu)->name);
-		(void) bad_password(p->si, mu);
-
-		return false;
-	}
-
+	/* This is only here to keep GCC happy -- Clang can see that the switch() handles all legal
+	 * values of the enumeration, and so knows that this function will never get to this point;
+	 * GCC is dumb, and warns that control reaches the end of this non-void function.    -- amdj
+	 */
 	return false;
 }
 
@@ -777,8 +789,8 @@ sasl_input_clientdata(const struct sasl_message *const restrict smsg, struct sas
 	 * should send us a 'D' packet instead of a 'C *' packet in this case, but this is for if they
 	 * don't. Note that this will usually result in the client getting a 904 numeric instead of 906,
 	 * but the alternative is not treating '*' specially and then going on to fail to decode it in
-	 * sasl_packet() above, which will result in ... an aborted session and a 904 numeric. So this
-	 * just saves time.
+	 * sasl_process_input() above, which will result in ... an aborted session and a 904 numeric.
+	 * So this just saves time.
 	 */
 
 	const size_t len = strlen(smsg->parv[0]);
