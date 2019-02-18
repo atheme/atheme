@@ -103,7 +103,7 @@ sasl_sourceinfo_recreate(struct sasl_session *const restrict p)
 }
 
 static struct sasl_session *
-find_session(const char *const restrict uid)
+sasl_session_find(const char *const restrict uid)
 {
 	if (! uid || ! *uid)
 		return NULL;
@@ -126,7 +126,7 @@ find_or_make_session(const struct sasl_message *const restrict smsg)
 {
 	struct sasl_session *p;
 
-	if (! (p = find_session(smsg->uid)))
+	if (! (p = sasl_session_find(smsg->uid)))
 	{
 		p = smalloc(sizeof *p);
 
@@ -879,7 +879,7 @@ sasl_user_add(hook_user_nick_t *const restrict data)
 		return;
 
 	// Not concerned unless it's an SASL login.
-	struct sasl_session *const p = find_session(u->uid);
+	struct sasl_session *const p = sasl_session_find(u->uid);
 	if (! p)
 		return;
 
