@@ -114,8 +114,7 @@ sasl_scramsha_attrlist_free(scram_attr_list *const restrict attributes)
 		if (! (*attributes)[x])
 			continue;
 
-		(void) smemzero((*attributes)[x], strlen((*attributes)[x]));
-		(void) sfree((*attributes)[x]);
+		(void) smemzerofree((*attributes)[x], strlen((*attributes)[x]));
 
 		(*attributes)[x] = NULL;
 	}
@@ -145,23 +144,15 @@ mech_finish(struct sasl_session *const restrict p)
 	struct sasl_scramsha_session *const s = p->mechdata;
 
 	if (s->c_gs2_buf && s->c_gs2_len)
-	{
-		(void) smemzero(s->c_gs2_buf, s->c_gs2_len);
-		(void) sfree(s->c_gs2_buf);
-	}
-	if (s->c_msg_buf)
-	{
-		(void) smemzero(s->c_msg_buf, strlen(s->c_msg_buf));
-		(void) sfree(s->c_msg_buf);
-	}
-	if (s->s_msg_buf)
-	{
-		(void) smemzero(s->s_msg_buf, strlen(s->s_msg_buf));
-		(void) sfree(s->s_msg_buf);
-	}
+		(void) smemzerofree(s->c_gs2_buf, s->c_gs2_len);
 
-	(void) smemzero(s, sizeof *s);
-	(void) sfree(s);
+	if (s->c_msg_buf)
+		(void) smemzerofree(s->c_msg_buf, strlen(s->c_msg_buf));
+
+	if (s->s_msg_buf)
+		(void) smemzerofree(s->s_msg_buf, strlen(s->s_msg_buf));
+
+	(void) smemzerofree(s, sizeof *s);
 
 	p->mechdata = NULL;
 }
