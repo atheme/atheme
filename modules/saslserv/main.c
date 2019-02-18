@@ -690,7 +690,7 @@ sasl_process_packet(struct sasl_session *const restrict p, char *const restrict 
 }
 
 static bool ATHEME_FATTR_WUR
-sasl_buf_process(struct sasl_session *const restrict p)
+sasl_process_buffer(struct sasl_session *const restrict p)
 {
 	// Ensure the buffer is NULL-terminated so that base64_decode() doesn't overrun it
 	p->buf[p->len] = 0x00;
@@ -803,7 +803,7 @@ sasl_input_clientdata(const struct sasl_message *const restrict smsg, struct sas
 	if (len == 1 && smsg->parv[0][0] == '+')
 	{
 		if (p->buf)
-			return sasl_buf_process(p);
+			return sasl_process_buffer(p);
 
 		// This function already deals with the special case of 1 '+' character
 		return sasl_process_packet(p, smsg->parv[0], len);
@@ -831,7 +831,7 @@ sasl_input_clientdata(const struct sasl_message *const restrict smsg, struct sas
 
 	// Messages not exactly 400 characters are the end of data.
 	if (len < SASL_S2S_MAXLEN_ATONCE_B64)
-		return sasl_buf_process(p);
+		return sasl_process_buffer(p);
 
 	return true;
 }
