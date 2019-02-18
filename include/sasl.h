@@ -36,6 +36,7 @@
 #define ASASL_SFLAG_NONE                0x00000000U // Nothing special
 #define ASASL_SFLAG_MARKED_FOR_DELETION 0x00000001U // See delete_stale() in modules/saslserv/main.c
 #define ASASL_SFLAG_NEED_LOG            0x00000002U // User auth success/failure needs to be logged still
+#define ASASL_SFLAG_CLIENT_USING_TLS    0x00000004U // The client is connected to the network via TLS
 
 // Flags for sasl_input_buf->flags
 #define ASASL_INFLAG_NONE               0x00000000U // Nothing special
@@ -64,7 +65,6 @@ struct sasl_session
 	char                            authceid[IDLEN + 1];    // Entity ID for authcid
 	char                            authzeid[IDLEN + 1];    // Entity ID for authzid
 	char                            uid[UIDLEN + 1];        // Network UID
-	bool                            tls;                    // Whether their connection to the network is using TLS
 };
 
 struct sasl_sourceinfo
