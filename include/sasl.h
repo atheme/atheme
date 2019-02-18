@@ -29,8 +29,8 @@
 #define SASL_S2S_MAXLEN_ATONCE_B64      400U
 
 // Maximum length of data that can be buffered as one message/request
-#define SASL_S2S_MAXLEN_TOTAL_RAW       6144U
-#define SASL_S2S_MAXLEN_TOTAL_B64       8192U
+#define SASL_S2S_MAXLEN_TOTAL_RAW       3072U
+#define SASL_S2S_MAXLEN_TOTAL_B64       4096U
 
 // Flags for sasl_session->flags
 #define ASASL_SFLAG_NONE                0x00000000U // Nothing special
