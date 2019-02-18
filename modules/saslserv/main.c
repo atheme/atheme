@@ -458,6 +458,56 @@ sasl_handle_login(struct sasl_session *const restrict p, struct user *const u, s
 	return true;
 }
 
+static enum sasl_mechanism_result ATHEME_FATTR_WUR
+sasl_process_input(struct sasl_session *const restrict p, char *const restrict buf, const size_t len,
+                   struct sasl_output_buf *const restrict outbuf)
+{
+	// A single + character is not data at all -- invoke mech_step without an input buffer
+	if (*buf == '+' && len == 1)
+		return p->mechptr->mech_step(p, NULL, outbuf);
+
+	unsigned char decbuf[SASL_S2S_MAXLEN_TOTAL_RAW + 1];
+	const size_t declen = base64_decode(buf, decbuf, SASL_S2S_MAXLEN_TOTAL_RAW);
+
+	if (declen == (size_t) -1)
+	{
+		(void) slog(LG_DEBUG, "%s: base64_decode() failed", MOWGLI_FUNC_NAME);
+		return ASASL_MRESULT_ERROR;
+	}
+
+	/* Account for the fact that the client may have sent whitespace; our
+	 * decoder is tolerant of whitespace and will skip over it    -- amdj
+	 */
+	if (declen == 0)
+		return p->mechptr->mech_step(p, NULL, outbuf);
+
+	unsigned int inflags = ASASL_INFLAG_NONE;
+	const struct sasl_input_buf inbuf = {
+		.buf    = decbuf,
+		.len    = declen,
+		.flags  = &inflags,
+	};
+
+	// Ensure input is NULL-terminated for modules that want to process the data as a string
+	decbuf[declen] = 0x00;
+
+	// Pass the data to the mechanism
+	const enum sasl_mechanism_result rc = p->mechptr->mech_step(p, &inbuf, outbuf);
+
+	// The mechanism instructed us to wipe the input data now that it has been processed
+	if (inflags & ASASL_INFLAG_WIPE_BUF)
+	{
+		/* If we got here, the bufferred base64-encoded input data is either in a
+		 * dedicated buffer (buf == p->buf && len == p->len) or directly from a
+		 * parv[] inside struct sasl_message. Either way buf is mutable.    -- amdj
+		 */
+		(void) smemzero(buf, len);          // Erase the base64-encoded input data
+		(void) smemzero(decbuf, declen);    // Erase the base64-decoded input data
+	}
+
+	return rc;
+}
+
 /* given an entire sasl message, advance session by passing data to mechanism
  * and feeding returned data back to client.
  */
@@ -497,54 +547,7 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 	}
 	else
 	{
-		if (*buf == '+' && len == 1)
-		{
-			rc = p->mechptr->mech_step(p, NULL, &outbuf);
-		}
-		else
-		{
-			unsigned char decbuf[SASL_S2S_MAXLEN_TOTAL_RAW + 1];
-			const size_t declen = base64_decode(buf, decbuf, SASL_S2S_MAXLEN_TOTAL_RAW);
-
-			if (declen == (size_t) -1)
-			{
-				(void) slog(LG_DEBUG, "%s: base64_decode() failed", MOWGLI_FUNC_NAME);
-
-				rc = ASASL_MRESULT_ERROR;
-			}
-			else if (declen == 0)
-			{
-				/* Account for the fact that the client may have sent whitespace; our
-				 * decoder is tolerant of whitespace and will skip over it    -- amdj
-				 */
-				rc = p->mechptr->mech_step(p, NULL, &outbuf);
-			}
-			else
-			{
-				// Ensure input is NULL-terminated for modules that want to process the data as a string
-				decbuf[declen] = 0x00;
-
-				unsigned int inflags = ASASL_INFLAG_NONE;
-				const struct sasl_input_buf inbuf = {
-					.buf    = decbuf,
-					.len    = declen,
-					.flags  = &inflags,
-				};
-
-				rc = p->mechptr->mech_step(p, &inbuf, &outbuf);
-
-				// The mechanism instructed us to wipe the input data now that it has been processed
-				if (inflags & ASASL_INFLAG_WIPE_BUF)
-				{
-					/* If we got here, the bufferred base64-encoded input data is either in a
-					 * dedicated buffer (buf == p->buf && len == p->len) or directly from a
-					 * parv[] inside struct sasl_message. Either way buf is mutable.    -- amdj
-					 */
-					(void) smemzero(buf, len);          // Erase the base64-encoded input data
-					(void) smemzero(decbuf, declen);    // Erase the base64-decoded input data
-				}
-			}
-		}
+		rc = sasl_process_input(p, buf, len, &outbuf);
 	}
 
 	// Some progress has been made, reset timeout.
