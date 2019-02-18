@@ -33,9 +33,9 @@
 #define SASL_S2S_MAXLEN_TOTAL_B64       8192U
 
 // Flags for sasl_session->flags
-#define ASASL_NONE                      0x00000000U // Nothing special
-#define ASASL_MARKED_FOR_DELETION       0x00000001U // See delete_stale() in modules/saslserv/main.c
-#define ASASL_NEED_LOG                  0x00000002U // User auth success/failure needs to be logged still
+#define ASASL_SFLAG_NONE                0x00000000U // Nothing special
+#define ASASL_SFLAG_MARKED_FOR_DELETION 0x00000001U // See delete_stale() in modules/saslserv/main.c
+#define ASASL_SFLAG_NEED_LOG            0x00000002U // User auth success/failure needs to be logged still
 
 // Flags for sasl_input_buf->flags
 #define ASASL_INFLAG_NONE               0x00000000U // Nothing special

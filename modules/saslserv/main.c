@@ -289,7 +289,7 @@ login_user(struct sasl_session *const restrict p)
 	}
 
 	// Log it with the full n!u@h later
-	p->flags |= ASASL_NEED_LOG;
+	p->flags |= ASASL_SFLAG_NEED_LOG;
 
 	/* We just did SASL authentication for a user.  With IRCds which do not
 	 * have unique UIDs for users, we will likely be expecting the login
@@ -313,7 +313,7 @@ login_user(struct sasl_session *const restrict p)
 static void
 sasl_session_destroy(struct sasl_session *const restrict p)
 {
-	if (p->flags & ASASL_NEED_LOG && *p->authceid)
+	if (p->flags & ASASL_SFLAG_NEED_LOG && *p->authceid)
 	{
 		const struct myuser *const mu = myuser_find_uid(p->authceid);
 
@@ -385,7 +385,7 @@ sasl_handle_login(struct sasl_session *const restrict p, struct user *const u, s
 	bool was_killed = false;
 
 	// We will log messages now ourselves, if needed
-	p->flags &= ~ASASL_NEED_LOG;
+	p->flags &= ~ASASL_SFLAG_NEED_LOG;
 
 	// Find the account if necessary
 	if (! mu)
@@ -547,7 +547,7 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 	}
 
 	// Some progress has been made, reset timeout.
-	p->flags &= ~ASASL_MARKED_FOR_DELETION;
+	p->flags &= ~ASASL_SFLAG_MARKED_FOR_DELETION;
 
 	if (outbuf.buf && outbuf.len)
 	{
@@ -870,10 +870,10 @@ delete_stale(void ATHEME_VATTR_UNUSED *const restrict vptr)
 	{
 		struct sasl_session *const p = n->data;
 
-		if (p->flags & ASASL_MARKED_FOR_DELETION)
+		if (p->flags & ASASL_SFLAG_MARKED_FOR_DELETION)
 			(void) sasl_session_destroy(p);
 		else
-			p->flags |= ASASL_MARKED_FOR_DELETION;
+			p->flags |= ASASL_SFLAG_MARKED_FOR_DELETION;
 	}
 }
 
