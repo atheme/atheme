@@ -164,7 +164,7 @@ sasl_server_eob(struct server ATHEME_VATTR_UNUSED *const restrict s)
 }
 
 static void
-mechlist_build_string(void)
+sasl_mechlist_string_build(void)
 {
 	char *buf = mechlist_string;
 	size_t tmplen = 0;
@@ -194,7 +194,7 @@ mechlist_build_string(void)
 static void
 mechlist_do_rebuild(void)
 {
-	(void) mechlist_build_string();
+	(void) sasl_mechlist_string_build();
 
 	if (me.connected)
 		(void) sasl_mechlist_sts(mechlist_string);
