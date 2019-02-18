@@ -508,6 +508,64 @@ sasl_process_input(struct sasl_session *const restrict p, char *const restrict b
 	return rc;
 }
 
+static bool ATHEME_FATTR_WUR
+sasl_process_output(struct sasl_session *const restrict p, struct sasl_output_buf *const restrict outbuf)
+{
+	char encbuf[SASL_S2S_MAXLEN_TOTAL_B64 + 1];
+	const size_t enclen = base64_encode(outbuf->buf, outbuf->len, encbuf, sizeof encbuf);
+
+	if ((outbuf->flags & ASASL_OUTFLAGS_WIPE_FREE_BUF) == ASASL_OUTFLAGS_WIPE_FREE_BUF)
+		// The mechanism instructed us to wipe and free the output data now that it has been encoded
+		(void) smemzerofree(outbuf->buf, outbuf->len);
+	else if (outbuf->flags & ASASL_OUTFLAG_WIPE_BUF)
+		// The mechanism instructed us to wipe the output data now that it has been encoded
+		(void) smemzero(outbuf->buf, outbuf->len);
+	else if (outbuf->flags & ASASL_OUTFLAG_FREE_BUF)
+		// The mechanism instructed us to free the output data now that it has been encoded
+		(void) sfree(outbuf->buf);
+
+	outbuf->buf = NULL;
+	outbuf->len = 0;
+
+	if (enclen == (size_t) -1)
+	{
+		(void) slog(LG_ERROR, "%s: base64_encode() failed", MOWGLI_FUNC_NAME);
+		return false;
+	}
+
+	char *encbufptr = encbuf;
+	size_t encbuflast = SASL_S2S_MAXLEN_ATONCE_B64;
+
+	for (size_t encbufrem = enclen; encbufrem != 0; /* No action */)
+	{
+		char encbufpart[SASL_S2S_MAXLEN_ATONCE_B64 + 1];
+		const size_t encbufptrlen = MINIMUM(SASL_S2S_MAXLEN_ATONCE_B64, encbufrem);
+
+		(void) memset(encbufpart, 0x00, sizeof encbufpart);
+		(void) memcpy(encbufpart, encbufptr, encbufptrlen);
+		(void) sasl_sts(p->uid, 'C', encbufpart);
+
+		// The mechanism instructed us to wipe the output data now that it has been transmitted
+		if (outbuf->flags & ASASL_OUTFLAG_WIPE_BUF)
+		{
+			(void) smemzero(encbufpart, encbufptrlen);
+			(void) smemzero(encbufptr, encbufptrlen);
+		}
+
+		encbufptr += encbufptrlen;
+		encbufrem -= encbufptrlen;
+		encbuflast = encbufptrlen;
+	}
+
+	/* The end of a packet is indicated by a string not of the maximum length. If the last string
+	 * was the maximum length, send another, empty string, to advance the session.    -- amdj
+	 */
+	if (encbuflast == SASL_S2S_MAXLEN_ATONCE_B64)
+		(void) sasl_sts(p->uid, 'C', "+");
+
+	return true;
+}
+
 /* given an entire sasl message, advance session by passing data to mechanism
  * and feeding returned data back to client.
  */
@@ -555,58 +613,8 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 
 	if (outbuf.buf && outbuf.len)
 	{
-		char encbuf[SASL_S2S_MAXLEN_TOTAL_B64 + 1];
-		const size_t enclen = base64_encode(outbuf.buf, outbuf.len, encbuf, sizeof encbuf);
-
-		if ((outbuf.flags & ASASL_OUTFLAGS_WIPE_FREE_BUF) == ASASL_OUTFLAGS_WIPE_FREE_BUF)
-			// The mechanism instructed us to wipe and free the output data now that it has been encoded
-			(void) smemzerofree(outbuf.buf, outbuf.len);
-		else if (outbuf.flags & ASASL_OUTFLAG_WIPE_BUF)
-			// The mechanism instructed us to wipe the output data now that it has been encoded
-			(void) smemzero(outbuf.buf, outbuf.len);
-		else if (outbuf.flags & ASASL_OUTFLAG_FREE_BUF)
-			// The mechanism instructed us to free the output data now that it has been encoded
-			(void) sfree(outbuf.buf);
-
-		outbuf.buf = NULL;
-		outbuf.len = 0;
-
-		if (enclen == (size_t) -1)
-		{
-			(void) slog(LG_ERROR, "%s: base64_encode() failed", MOWGLI_FUNC_NAME);
+		if (! sasl_process_output(p, &outbuf))
 			return false;
-		}
-
-		const char *encbufptr = encbuf;
-		size_t encbuflast = SASL_S2S_MAXLEN_ATONCE_B64;
-
-		for (size_t encbufrem = enclen; encbufrem != 0; /* No action */)
-		{
-			char encbufpart[SASL_S2S_MAXLEN_ATONCE_B64 + 1];
-			const size_t encbufptrlen = MINIMUM(SASL_S2S_MAXLEN_ATONCE_B64, encbufrem);
-
-			(void) memset(encbufpart, 0x00, sizeof encbufpart);
-			(void) memcpy(encbufpart, encbufptr, encbufptrlen);
-			(void) sasl_sts(p->uid, 'C', encbufpart);
-
-			// The mechanism instructed us to wipe the output data now that it has been transmitted
-			if (outbuf.flags & ASASL_OUTFLAG_WIPE_BUF)
-				(void) smemzero(encbufpart, encbufptrlen);
-
-			encbufptr += encbufptrlen;
-			encbufrem -= encbufptrlen;
-			encbuflast = encbufptrlen;
-		}
-
-		/* The end of a packet is indicated by a string not of the maximum length. If the last string
-		 * was the maximum length, send another, empty string, to advance the session.    -- amdj
-		 */
-		if (encbuflast == SASL_S2S_MAXLEN_ATONCE_B64)
-			(void) sasl_sts(p->uid, 'C', "+");
-
-		// The mechanism instructed us to wipe the output data now that it has been transmitted
-		if (outbuf.flags & ASASL_OUTFLAG_WIPE_BUF)
-			(void) smemzero(encbuf, enclen);
 
 		have_written = true;
 	}
