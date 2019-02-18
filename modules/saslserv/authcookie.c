@@ -3,7 +3,7 @@
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
  * Copyright (C) 2006-2015 Atheme Project (http://atheme.org/)
- * Copyright (C) 2017-2018 Atheme Development Group (https://atheme.github.io/)
+ * Copyright (C) 2017-2019 Atheme Development Group (https://atheme.github.io/)
  *
  * AUTHCOOKIE mechanism provider
  */
