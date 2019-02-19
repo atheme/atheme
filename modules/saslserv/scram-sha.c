@@ -38,7 +38,7 @@
 #define NONCE_LENGTH_MAX_COMBINED   (NONCE_LENGTH + NONCE_LENGTH_MAX)
 
 // strlen("r=,s=,i=") == 8U
-#define MINIMUM_RESPONSE_LENGTH     (NONCE_LENGTH_MIN_COMBINED + BASE64_SIZE(PBKDF2_SALTLEN_MIN) + 8U)
+#define MINIMUM_RESPONSE_LENGTH     (NONCE_LENGTH_MIN_COMBINED + BASE64_SIZE_STR(PBKDF2_SALTLEN_MIN) + 8U)
 
 struct sasl_scramsha_session
 {
@@ -419,7 +419,7 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 
 	enum sasl_mechanism_result retval = ASASL_MRESULT_CONTINUE;
 	struct sasl_scramsha_session *const s = p->mechdata;
-	static char ServerSig64[2 + BASE64_SIZE(DIGEST_MDLEN_MAX)] = "v=";
+	static char ServerSig64[2U + BASE64_SIZE_STR(DIGEST_MDLEN_MAX)] = "v=";
 
 	scram_attr_list attributes;
 	char c_gs2_buf[SASL_S2S_MAXLEN_TOTAL_RAW];
@@ -592,8 +592,8 @@ sasl_mech_scramsha_step_success(struct sasl_session *const restrict p)
 	(void) slog(LG_INFO, "%s: login succeeded, attempting to convert user's hash to SCRAM format",
 	                     MOWGLI_FUNC_NAME);
 
-	char csk64[BASE64_SIZE(DIGEST_MDLEN_MAX)];
-	char chk64[BASE64_SIZE(DIGEST_MDLEN_MAX)];
+	char csk64[BASE64_SIZE_STR(DIGEST_MDLEN_MAX)];
+	char chk64[BASE64_SIZE_STR(DIGEST_MDLEN_MAX)];
 	char res[PASSLEN + 1];
 
 	if (base64_encode(s->db.ssk, s->db.dl, csk64, sizeof csk64) == (size_t) -1)

@@ -31,7 +31,7 @@
  *    -- amdj
  */
 #define BASE64_SIZE_RAW(len)    ((((len) + 2U) / 3U) * 4U)
-#define BASE64_SIZE(len)        (BASE64_SIZE_RAW(len) + 1U)
+#define BASE64_SIZE_STR(len)    (BASE64_SIZE_RAW(len) + 1U)
 
 size_t base64_encode(const void *src, size_t srclength, char *target, size_t targsize) ATHEME_FATTR_WUR;
 size_t base64_encode_raw(const void *src, size_t srclength, char *target, size_t targsize) ATHEME_FATTR_WUR;
