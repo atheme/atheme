@@ -64,6 +64,7 @@
 
 struct sasl_scramsha_session
 {
+	mowgli_node_t               node;       // For entry into mowgli_list_t sasl_scramsha_sessions
 	struct pbkdf2v2_dbentry     db;         // Parsed credentials from database
 	struct myuser              *mu;         // User we are authenticating as
 	char                       *c_gs2_buf;  // Client's GS2 header
@@ -76,8 +77,23 @@ struct sasl_scramsha_session
 
 typedef char *scram_attr_list[128];
 
+static mowgli_list_t sasl_scramsha_sessions;
 static const struct sasl_core_functions *sasl_core_functions = NULL;
 static const struct pbkdf2v2_scram_functions *pbkdf2v2_scram_functions = NULL;
+
+static void
+sasl_scramsha_myuser_delete(struct myuser *const restrict mu)
+{
+	mowgli_node_t *n;
+
+	MOWGLI_ITER_FOREACH(n, sasl_scramsha_sessions.head)
+	{
+		struct sasl_scramsha_session *const s = n->data;
+
+		if (s->mu == mu)
+			s->mu = NULL;
+	}
+}
 
 static bool ATHEME_FATTR_WUR
 sasl_scramsha_attrlist_parse(const char *restrict str, scram_attr_list *const restrict attributes)
@@ -175,6 +191,7 @@ sasl_mech_scramsha_finish(struct sasl_session *const restrict p)
 	if (s->s_msg_buf)
 		(void) smemzerofree(s->s_msg_buf, strlen(s->s_msg_buf));
 
+	(void) mowgli_node_delete(&s->node, &sasl_scramsha_sessions);
 	(void) smemzerofree(s, sizeof *s);
 
 	p->mechdata = NULL;
@@ -383,6 +400,7 @@ sasl_mech_scramsha_step_clientfirst(struct sasl_session *const restrict p,
 	s->c_msg_buf = sstrndup(message, (in->len - s->c_gs2_len));
 	s->mu = mu;
 
+	(void) mowgli_node_add(s, &s->node, &sasl_scramsha_sessions);
 	(void) memcpy(s->nonce, attributes['r'], nonceLen);
 	(void) atheme_random_str(s->nonce + nonceLen, SCRAMSHA_NONCE_LENGTH);
 	(void) memcpy(&s->db, &db, sizeof db);
@@ -611,6 +629,10 @@ sasl_mech_scramsha_step_success(struct sasl_session *const restrict p)
 	char csk64[BASE64_SIZE_STR(SCRAMSHA_MDLEN_MAX)];
 	char chk64[BASE64_SIZE_STR(SCRAMSHA_MDLEN_MAX)];
 
+	if (! s->mu)
+		// The user account was dropped during negotiation, nothing to do
+		goto end;
+
 	if (s->db.scram)
 		// User's password hash was already in SCRAM format, nothing to do
 		goto end;
@@ -816,6 +838,10 @@ mod_init(struct module *const restrict m)
 	 * configuration. We use its configuration to decide which SASL mechanism to register.
 	 */
 	(void) pbkdf2v2_scram_functions->confhook(&sasl_scramsha_pbkdf2v2_scram_confhook);
+
+	// We need to be told when a user account is deleted in case there is an active SCRAM negotiation for it
+	(void) hook_add_event("myuser_delete");
+	(void) hook_add_myuser_delete(&sasl_scramsha_myuser_delete);
 }
 
 static void
@@ -826,6 +852,9 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 	// Unregister all SASL mechanisms
 	(void) sasl_scramsha_mechs_unregister();
+
+	// We no longer need this
+	(void) hook_del_myuser_delete(&sasl_scramsha_myuser_delete);
 }
 
 #else /* HAVE_LIBIDN */
