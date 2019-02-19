@@ -29,16 +29,38 @@
 /* Maximum iteration count Cyrus SASL clients will process
  * Taken from <https://github.com/cyrusimap/cyrus-sasl/blob/f76eb971d456619d0f26/plugins/scram.c#L79>
  */
-#define CYRUS_SASL_ITERMAX          0x10000U
+#define CYRUS_SASL_ITERMAX                  0x10000U
 
-#define NONCE_LENGTH                64U         // This should be more than sufficient
-#define NONCE_LENGTH_MIN            8U          // Minimum acceptable client nonce length
-#define NONCE_LENGTH_MAX            512U        // Maximum acceptable client nonce length
-#define NONCE_LENGTH_MIN_COMBINED   (NONCE_LENGTH + NONCE_LENGTH_MIN)
-#define NONCE_LENGTH_MAX_COMBINED   (NONCE_LENGTH + NONCE_LENGTH_MAX)
+#define SCRAMSHA_MDLEN_MIN                  DIGEST_MDLEN_SHA1
+#define SCRAMSHA_MDLEN_MAX                  DIGEST_MDLEN_SHA2_512
 
+#define SCRAMSHA_NONCE_LENGTH               64U         // This should be more than sufficient
+#define SCRAMSHA_NONCE_LENGTH_MIN           8U          // Minimum acceptable client nonce length
+#define SCRAMSHA_NONCE_LENGTH_MAX           512U        // Maximum acceptable client nonce length
+#define SCRAMSHA_NONCE_LENGTH_MIN_COMBINED  (SCRAMSHA_NONCE_LENGTH + SCRAMSHA_NONCE_LENGTH_MIN)
+#define SCRAMSHA_NONCE_LENGTH_MAX_COMBINED  (SCRAMSHA_NONCE_LENGTH + SCRAMSHA_NONCE_LENGTH_MAX)
+
+// strlen("10000") == 5U
+// strlen("5000000") == 7U
 // strlen("r=,s=,i=") == 8U
-#define MINIMUM_RESPONSE_LENGTH     (NONCE_LENGTH_MIN_COMBINED + BASE64_SIZE_STR(PBKDF2_SALTLEN_MIN) + 8U)
+#define SCRAMSHA_RESPONSE1_LENGTH_MIN       (SCRAMSHA_NONCE_LENGTH_MIN_COMBINED + \
+                                             BASE64_SIZE_RAW(PBKDF2_SALTLEN_MIN) + \
+                                             5U + 8U)
+#define SCRAMSHA_RESPONSE1_LENGTH_MAX       (SCRAMSHA_NONCE_LENGTH_MAX_COMBINED + \
+                                             BASE64_SIZE_RAW(PBKDF2_SALTLEN_MAX) + \
+                                             7U + 8U)
+
+// strlen("v=") == 2U
+#define SCRAMSHA_RESPONSE2_LENGTH_MIN       (BASE64_SIZE_RAW(SCRAMSHA_MDLEN_MIN) + 2U)
+#define SCRAMSHA_RESPONSE2_LENGTH_MAX       (BASE64_SIZE_RAW(SCRAMSHA_MDLEN_MAX) + 2U)
+
+// strlen("10000") == 5U
+// strlen("5000000") == 7U
+// strlen("$z$64$$$$") == 9U
+#define SCRAMSHA_PASSHASH_LENGTH_MIN        (5U + BASE64_SIZE_RAW(PBKDF2_SALTLEN_MIN) + \
+                                             (2U * BASE64_SIZE_RAW(SCRAMSHA_MDLEN_MIN)) + 9U)
+#define SCRAMSHA_PASSHASH_LENGTH_MAX        (7U + BASE64_SIZE_RAW(PBKDF2_SALTLEN_MAX) + \
+                                             (2U * BASE64_SIZE_RAW(SCRAMSHA_MDLEN_MAX)) + 9U)
 
 struct sasl_scramsha_session
 {
@@ -49,7 +71,7 @@ struct sasl_scramsha_session
 	char                       *s_msg_buf;  // Server's first message
 	size_t                      c_gs2_len;  // Client's GS2 header (length)
 	bool                        complete;   // Authentication is complete, waiting for client to confirm
-	char                        nonce[NONCE_LENGTH_MAX_COMBINED + 1];
+	char                        nonce[SCRAMSHA_NONCE_LENGTH_MAX_COMBINED + 1];
 };
 
 typedef char *scram_attr_list[128];
@@ -185,7 +207,7 @@ sasl_mech_scramsha_step_clientfirst(struct sasl_session *const restrict p,
 	char authzid[NICKLEN + 1];
 	char authcid[NICKLEN + 1];
 	struct myuser *mu = NULL;
-	static char response[SASL_S2S_MAXLEN_TOTAL_RAW];
+	static char response[SCRAMSHA_RESPONSE1_LENGTH_MAX + 1];
 
 	scram_attr_list attributes;
 	struct pbkdf2v2_dbentry db;
@@ -290,7 +312,7 @@ sasl_mech_scramsha_step_clientfirst(struct sasl_session *const restrict p,
 	}
 
 	const size_t nonceLen = strlen(attributes['r']);
-	if (nonceLen < NONCE_LENGTH_MIN || nonceLen > NONCE_LENGTH_MAX)
+	if (nonceLen < SCRAMSHA_NONCE_LENGTH_MIN || nonceLen > SCRAMSHA_NONCE_LENGTH_MAX)
 	{
 		(void) slog(LG_DEBUG, "%s: nonce length '%zu' unacceptable", MOWGLI_FUNC_NAME, nonceLen);
 		(void) sasl_scramsha_error("nonce-length-unacceptable", out);
@@ -362,14 +384,14 @@ sasl_mech_scramsha_step_clientfirst(struct sasl_session *const restrict p,
 	s->mu = mu;
 
 	(void) memcpy(s->nonce, attributes['r'], nonceLen);
-	(void) atheme_random_str(s->nonce + nonceLen, NONCE_LENGTH);
+	(void) atheme_random_str(s->nonce + nonceLen, SCRAMSHA_NONCE_LENGTH);
 	(void) memcpy(&s->db, &db, sizeof db);
 
 	p->mechdata = s;
 
 	// Construct server-first-message
 	const int respLen = snprintf(response, sizeof response, "r=%s,s=%s,i=%u", s->nonce, s->db.salt64, s->db.c);
-	if (respLen <= (int) MINIMUM_RESPONSE_LENGTH || respLen >= (int) sizeof response)
+	if (respLen < (int) SCRAMSHA_RESPONSE1_LENGTH_MIN || respLen > (int) SCRAMSHA_RESPONSE1_LENGTH_MAX)
 	{
 		(void) slog(LG_ERROR, "%s: snprintf(3) for server-first-message failed (BUG)", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("other-error", out);
@@ -419,16 +441,17 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 
 	enum sasl_mechanism_result retval = ASASL_MRESULT_CONTINUE;
 	struct sasl_scramsha_session *const s = p->mechdata;
-	static char ServerSig64[2U + BASE64_SIZE_STR(DIGEST_MDLEN_MAX)] = "v=";
+	static char response[SCRAMSHA_RESPONSE2_LENGTH_MAX + 1] = "v=";
 
 	scram_attr_list attributes;
 	char c_gs2_buf[SASL_S2S_MAXLEN_TOTAL_RAW];
-	char AuthMessage[(3 * SASL_S2S_MAXLEN_TOTAL_RAW) + NONCE_LENGTH_MAX_COMBINED + 1];
-	unsigned char ClientProof[DIGEST_MDLEN_MAX];
-	unsigned char ClientKey[DIGEST_MDLEN_MAX];
-	unsigned char StoredKey[DIGEST_MDLEN_MAX];
-	unsigned char ClientSig[DIGEST_MDLEN_MAX];
-	unsigned char ServerSig[DIGEST_MDLEN_MAX];
+	char AuthMessage[(3 * SASL_S2S_MAXLEN_TOTAL_RAW) + SCRAMSHA_NONCE_LENGTH_MAX_COMBINED + 1];
+	unsigned char ClientProof[SCRAMSHA_MDLEN_MAX];
+	unsigned char ClientKey[SCRAMSHA_MDLEN_MAX];
+	unsigned char StoredKey[SCRAMSHA_MDLEN_MAX];
+	unsigned char ClientSig[SCRAMSHA_MDLEN_MAX];
+	unsigned char ServerSig[SCRAMSHA_MDLEN_MAX];
+	char ServerSig64[BASE64_SIZE_STR(SCRAMSHA_MDLEN_MAX)];
 
 	if (! sasl_scramsha_attrlist_parse(in->buf, &attributes))
 	{
@@ -483,7 +506,7 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 	// Construct AuthMessage
 	const int AuthMsgLen = snprintf(AuthMessage, sizeof AuthMessage, "%s,%s,c=%s,r=%s",
 	                                s->c_msg_buf, s->s_msg_buf, attributes['c'], attributes['r']);
-	if (AuthMsgLen <= (int) NONCE_LENGTH_MIN_COMBINED || AuthMsgLen >= (int) sizeof AuthMessage)
+	if (AuthMsgLen <= (int) SCRAMSHA_NONCE_LENGTH_MIN_COMBINED || AuthMsgLen >= (int) sizeof AuthMessage)
 	{
 		(void) slog(LG_ERROR, "%s: snprintf(3) for AuthMessage failed (BUG?)", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("other-error", out);
@@ -531,8 +554,8 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 		goto error;
 	}
 
-	// Encode ServerSignature and construct server-final-message
-	const size_t ServerSig64Len = base64_encode(ServerSig, s->db.dl, ServerSig64 + 2, sizeof ServerSig64 - 2);
+	// Encode ServerSignature
+	const size_t ServerSig64Len = base64_encode(ServerSig, s->db.dl, ServerSig64, sizeof ServerSig64);
 	if (ServerSig64Len == (size_t) -1)
 	{
 		(void) slog(LG_ERROR, "%s: base64_encode() for ServerSignature failed (BUG)", MOWGLI_FUNC_NAME);
@@ -540,8 +563,18 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 		goto error;
 	}
 
-	out->buf = ServerSig64;
-	out->len = ServerSig64Len + 2;
+	// Construct server-final-message
+	const int respLen = snprintf(response, sizeof response, "v=%s", ServerSig64);
+	if (respLen < (int) SCRAMSHA_RESPONSE2_LENGTH_MIN || respLen > (int) SCRAMSHA_RESPONSE2_LENGTH_MAX)
+	{
+		(void) slog(LG_ERROR, "%s: base64_encode() did not write an acceptable amount of data (%zu) (BUG)",
+		                      MOWGLI_FUNC_NAME, ServerSig64Len);
+		(void) sasl_scramsha_error("other-error", out);
+		goto error;
+	}
+
+	out->buf = response;
+	out->len = (size_t) respLen;
 
 	s->complete = true;
 
@@ -565,6 +598,7 @@ cleanup:
 	(void) smemzero(StoredKey, sizeof StoredKey);
 	(void) smemzero(ClientSig, sizeof ClientSig);
 	(void) smemzero(ServerSig, sizeof ServerSig);
+	(void) smemzero(ServerSig64, sizeof ServerSig64);
 	(void) sasl_scramsha_attrlist_free(&attributes);
 	return retval;
 }
@@ -573,6 +607,9 @@ static enum sasl_mechanism_result ATHEME_FATTR_WUR
 sasl_mech_scramsha_step_success(struct sasl_session *const restrict p)
 {
 	const struct sasl_scramsha_session *const s = p->mechdata;
+
+	char csk64[BASE64_SIZE_STR(SCRAMSHA_MDLEN_MAX)];
+	char chk64[BASE64_SIZE_STR(SCRAMSHA_MDLEN_MAX)];
 
 	if (s->db.scram)
 		// User's password hash was already in SCRAM format, nothing to do
@@ -592,33 +629,52 @@ sasl_mech_scramsha_step_success(struct sasl_session *const restrict p)
 	(void) slog(LG_INFO, "%s: login succeeded, attempting to convert user's hash to SCRAM format",
 	                     MOWGLI_FUNC_NAME);
 
-	char csk64[BASE64_SIZE_STR(DIGEST_MDLEN_MAX)];
-	char chk64[BASE64_SIZE_STR(DIGEST_MDLEN_MAX)];
-	char res[PASSLEN + 1];
+	const size_t rs1 = base64_encode(s->db.ssk, s->db.dl, csk64, sizeof csk64);
 
-	if (base64_encode(s->db.ssk, s->db.dl, csk64, sizeof csk64) == (size_t) -1)
+	if (rs1 == (size_t) -1)
 	{
-		(void) slog(LG_ERROR, "%s: base64_encode for ssk failed (BUG)", MOWGLI_FUNC_NAME);
+		(void) slog(LG_ERROR, "%s: base64_encode() for ServerKey failed (BUG)", MOWGLI_FUNC_NAME);
+		goto end;
 	}
-	else if (base64_encode(s->db.shk, s->db.dl, chk64, sizeof chk64) == (size_t) -1)
+	if (rs1 < BASE64_SIZE_RAW(SCRAMSHA_MDLEN_MIN) || rs1 > BASE64_SIZE_RAW(SCRAMSHA_MDLEN_MAX))
 	{
-		(void) slog(LG_ERROR, "%s: base64_encode for shk failed (BUG)", MOWGLI_FUNC_NAME);
+		(void) slog(LG_ERROR, "%s: base64_encode() for ServerKey did not write an acceptable amount of "
+		                      "data (%zu) (BUG)", MOWGLI_FUNC_NAME, rs1);
+		goto end;
 	}
-	else if (snprintf(res, sizeof res, PBKDF2_FS_SAVEHASH, s->db.a, s->db.c, s->db.salt64, csk64, chk64) > PASSLEN)
+
+	const size_t rs2 = base64_encode(s->db.shk, s->db.dl, chk64, sizeof chk64);
+
+	if (rs2 == (size_t) -1)
 	{
-		(void) slog(LG_ERROR, "%s: snprintf(3) would have overflowed result buffer (BUG)", MOWGLI_FUNC_NAME);
+		(void) slog(LG_ERROR, "%s: base64_encode() for StoredKey failed (BUG)", MOWGLI_FUNC_NAME);
+		goto end;
 	}
-	else if (strlen(res) < (sizeof(PBKDF2_FS_SAVEHASH) + PBKDF2_SALTLEN_MIN + (2 * s->db.dl)))
+	if (rs2 < BASE64_SIZE_RAW(SCRAMSHA_MDLEN_MIN) || rs2 > BASE64_SIZE_RAW(SCRAMSHA_MDLEN_MAX))
 	{
-		(void) slog(LG_ERROR, "%s: snprintf(3) didn't write enough data (BUG?)", MOWGLI_FUNC_NAME);
+		(void) slog(LG_ERROR, "%s: base64_encode() for StoredKey did not write an acceptable amount of "
+		                      "data (%zu) (BUG)", MOWGLI_FUNC_NAME, rs2);
+		goto end;
 	}
-	else
+
+	char buf[PASSLEN + 1];
+
+	const int ret = snprintf(buf, sizeof buf, PBKDF2_FS_SAVEHASH, s->db.a, s->db.c, s->db.salt64, csk64, chk64);
+
+	if (ret < (int) SCRAMSHA_PASSHASH_LENGTH_MIN || ret > (int) SCRAMSHA_PASSHASH_LENGTH_MAX)
 	{
-		(void) mowgli_strlcpy(s->mu->pass, res, sizeof s->mu->pass);
-		(void) slog(LG_DEBUG, "%s: succeeded", MOWGLI_FUNC_NAME);
+		(void) slog(LG_ERROR, "%s: snprintf(3) did not write an acceptable amount of data (%d) (BUG)",
+		                      MOWGLI_FUNC_NAME, ret);
+		goto end;
 	}
+
+	(void) slog(LG_DEBUG, "%s: succeeded", MOWGLI_FUNC_NAME);
+	(void) memcpy(s->mu->pass, buf, ((size_t) ret) + 1);
+	(void) smemzero(buf, sizeof buf);
 
 end:
+	(void) smemzero(csk64, sizeof csk64);
+	(void) smemzero(chk64, sizeof chk64);
 	(void) sasl_mech_scramsha_finish(p);
 	return ASASL_MRESULT_SUCCESS;
 }
