@@ -208,12 +208,22 @@ AC_SUBST([RANDOM_API_LIBS])
 dnl These must be here, not above, or they might interfere with library and feature tests
 dnl Explanation is that these modify one or more of CFLAGS, CPPFLAGS, LDFLAGS, and LIBS
 dnl Warnings should be second-to-last so that they don't clutter the contents of config.log
-dnl Mowgli test must be last or it will interfere with linker tests (the library may not yet exist)
 ATHEME_FEATURETEST_CPPFLAGS
 ATHEME_FEATURETEST_CFLAGS
 ATHEME_FEATURETEST_DEBUGGING
 ATHEME_FEATURETEST_LDFLAGS
 ATHEME_FEATURETEST_WARNINGS
+
+dnl Save toolchain variables in case we will be configuring submodules
+SUBCONF_CC="${CC}"
+SUBCONF_LD="${LD}"
+SUBCONF_CFLAGS="${CFLAGS}"
+SUBCONF_CPPFLAGS="${CPPFLAGS}"
+SUBCONF_LDFLAGS="${LDFLAGS}"
+SUBCONF_LIBS="${LIBS}"
+
+dnl Mowgli test must be last or it will interfere with linker tests (the library may not yet exist)
+dnl It would also pollute CPPFLAGS, LDFLAGS and/or LIBS above
 ATHEME_LIBTEST_MOWGLI
 
 
@@ -237,7 +247,10 @@ AS_IF([test "x${MOWGLI_SOURCE}" = "xInternal"], [
 	dnl Run ./configure in the libmowgli submodule directory but without OpenSSL support
 	dnl Atheme does not use the OpenSSL VIO interface in Mowgli and this avoids an unnecessary -lssl
 
-	AX_SUBDIRS_CONFIGURE([libmowgli-2], [[--without-openssl]], [[]], [[]], [[--with-openssl], [--with-openssl=auto], [--with-openssl=yes]])
+	AX_SUBDIRS_CONFIGURE([libmowgli-2], [
+		[--without-openssl], [CC="\${SUBCONF_CC}"], [LD="\${SUBCONF_LD}"], [CFLAGS="\${SUBCONF_CFLAGS}"],
+		[CPPFLAGS="\${SUBCONF_CPPFLAGS}"], [LDFLAGS="\${SUBCONF_LDFLAGS}"], [LIBS="\${SUBCONF_LIBS}"]
+	], [[]], [[]], [[--with-openssl], [--with-openssl=auto], [--with-openssl=yes]])
 ])
 
 AC_CONFIG_FILES([
