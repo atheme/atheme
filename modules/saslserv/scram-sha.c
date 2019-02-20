@@ -459,7 +459,7 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 
 	enum sasl_mechanism_result retval = ASASL_MRESULT_CONTINUE;
 	struct sasl_scramsha_session *const s = p->mechdata;
-	static char response[SCRAMSHA_RESPONSE2_LENGTH_MAX + 1] = "v=";
+	static char response[SCRAMSHA_RESPONSE2_LENGTH_MAX + 1];
 
 	scram_attr_list attributes;
 	char c_gs2_buf[SASL_S2S_MAXLEN_TOTAL_RAW];
