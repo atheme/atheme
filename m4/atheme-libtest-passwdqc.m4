@@ -29,41 +29,43 @@ AC_DEFUN([ATHEME_LIBTEST_PASSWDQC], [
 						#include <passwdqc.h>
 					]], [[
 						passwdqc_params_qc_t qc_config = {
-							.min                    = { 32, 24, 11, 8, 7 },
-							.max                    = 288,
-							.passphrase_words       = 3,
-							.match_length           = 4,
+							.min                    = { 0, 0, 0, 0, 0 },
+							.max                    = 0,
+							.passphrase_words       = 0,
+							.match_length           = 0,
 						};
-						(void) passwdqc_check(&qc_config, NULL, NULL, NULL);
+						(void) passwdqc_check(NULL, NULL, NULL, NULL);
 					]])
 				], [
 					AC_MSG_RESULT([yes])
 					LIBPASSWDQC="Yes"
+					AC_DEFINE([HAVE_LIBPASSWDQC], [1], [Define to 1 if libpasswdqc appears to be usable])
+					AC_DEFINE([HAVE_ANY_PASSWORD_QUALITY_LIBRARY], [1], [Define to 1 if any password quality library appears to be usable])
 					AS_IF([test "x${ac_cv_search_passwdqc_check}" != "xnone required"], [
 						LIBPASSWDQC_LIBS="${ac_cv_search_passwdqc_check}"
 						AC_SUBST([LIBPASSWDQC_LIBS])
 					])
-					AC_DEFINE([HAVE_LIBPASSWDQC], [1], [Define to 1 if libpasswdqc is available])
-					AC_DEFINE([HAVE_ANY_PASSWORD_QUALITY_LIBRARY], [1], [Define to 1 if any password quality library is available])
 				], [
 					AC_MSG_RESULT([no])
 					LIBPASSWDQC="No"
 					AS_IF([test "${with_passwdqc}" = "yes"], [
-						AC_MSG_FAILURE([--with-passwdqc was specified but passwdqc appears to be unusable])
+						AC_MSG_FAILURE([--with-passwdqc was given but libpasswdqc appears to be unusable])
 					])
 				])
 			], [
 				LIBPASSWDQC="No"
 				AS_IF([test "${with_passwdqc}" = "yes"], [
-					AC_MSG_ERROR([--with-passwdqc was specified but a required header file is missing])
+					AC_MSG_ERROR([--with-passwdqc was given but a required header file is missing])
 				])
 			], [])
 		], [
 			LIBPASSWDQC="No"
 			AS_IF([test "${with_passwdqc}" = "yes"], [
-				AC_MSG_ERROR([--with-passwdqc was specified but passwdqc could not be found])
+				AC_MSG_ERROR([--with-passwdqc was given but libpasswdqc could not be found])
 			])
 		])
+	], [
+		LIBPASSWDQC="No"
 	])
 
 	LIBS="${LIBS_SAVED}"

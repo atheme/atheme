@@ -35,27 +35,27 @@
 
 #undef DEBUG_BALLOC
 
-#ifdef LARGE_NETWORK
-#define HEAP_NODE		1024
-#define HEAP_CHANNEL		1024
-#define HEAP_CHANUSER		1024
-#define HEAP_USER		1024
-#define HEAP_SERVER		16
-#define HEAP_CHANACS		1024
-#define HASH_USER		65535
-#define HASH_CHANNEL		32768
-#define HASH_SERVER		128
-#else
-#define HEAP_NODE		1024
-#define HEAP_CHANNEL		64
-#define HEAP_CHANUSER		128
-#define HEAP_USER		128
-#define HEAP_SERVER		8
-#define HEAP_CHANACS		128
-#define HASH_USER		1024
-#define HASH_CHANNEL		512
-#define HASH_SERVER		32
-#endif
+#ifdef ATHEME_ENABLE_LARGE_NET
+#  define HEAP_NODE             1024
+#  define HEAP_CHANNEL          1024
+#  define HEAP_CHANUSER         1024
+#  define HEAP_USER             1024
+#  define HEAP_SERVER           16
+#  define HEAP_CHANACS          1024
+#  define HASH_USER             65535
+#  define HASH_CHANNEL          32768
+#  define HASH_SERVER           128
+#else /* ATHEME_ENABLE_LARGE_NET */
+#  define HEAP_NODE             1024
+#  define HEAP_CHANNEL          64
+#  define HEAP_CHANUSER         128
+#  define HEAP_USER             128
+#  define HEAP_SERVER           8
+#  define HEAP_CHANACS          128
+#  define HASH_USER             1024
+#  define HASH_CHANNEL          512
+#  define HASH_SERVER           32
+#endif /* !ATHEME_ENABLE_LARGE_NET */
 
 #ifndef TIME_FORMAT
 #define TIME_FORMAT		"%b %d %H:%M:%S %Y %z"

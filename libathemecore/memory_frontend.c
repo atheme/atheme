@@ -27,11 +27,11 @@
 #  include <sodium/utils.h>
 #endif /* HAVE_LIBSODIUM_MEMZERO */
 
-#ifdef USE_LIBSODIUM_ALLOCATOR
+#ifdef ATHEME_ENABLE_SODIUM_MALLOC
 #  include "memory_fe_sodium.c"
-#else
+#else /* ATHEME_ENABLE_SODIUM_MALLOC */
 #  include "memory_fe_system.c"
-#endif
+#endif /* !ATHEME_ENABLE_SODIUM_MALLOC */
 
 void * ATHEME_FATTR_ALLOC_SIZE(1) ATHEME_FATTR_MALLOC ATHEME_FATTR_RETURNS_NONNULL
 smalloc(const size_t len)

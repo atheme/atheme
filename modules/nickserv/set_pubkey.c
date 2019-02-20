@@ -11,7 +11,7 @@
 
 #include "atheme.h"
 
-#ifdef HAVE_OPENSSL
+#ifdef HAVE_LIBCRYPTO_ECDSA
 
 static mowgli_patricia_t **ns_set_cmdtree = NULL;
 
@@ -74,12 +74,12 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	command_delete(&ns_set_pubkey, *ns_set_cmdtree);
 }
 
-#else /* HAVE_OPENSSL */
+#else /* HAVE_LIBCRYPTO_ECDSA */
 
 static void
 mod_init(struct module *const restrict m)
 {
-	(void) slog(LG_ERROR, "Module %s requires OpenSSL support, refusing to load.", m->name);
+	(void) slog(LG_ERROR, "Module %s requires OpenSSL ECDSA support, refusing to load.", m->name);
 
 	m->mflags |= MODFLAG_FAIL;
 }
@@ -90,6 +90,6 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	// Nothing To Do
 }
 
-#endif /* !HAVE_OPENSSL */
+#endif /* !HAVE_LIBCRYPTO_ECDSA */
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/set_pubkey", MODULE_UNLOAD_CAPABILITY_OK)

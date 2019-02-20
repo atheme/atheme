@@ -7,23 +7,15 @@
  * Frontend routines for the random interface (ARM mbedTLS backend).
  */
 
-#include "atheme.h"
-
-#ifndef ATHEME_RANDOM_FRONTEND_C
+#ifndef ATHEME_LAC_RANDOM_FRONTEND_C
 #  error "Do not compile me directly; compile random_frontend.c instead"
-#endif /* !ATHEME_RANDOM_FRONTEND_C */
+#endif /* !ATHEME_LAC_RANDOM_FRONTEND_C */
 
 #include <mbedtls/entropy.h>
+#include <mbedtls/error.h>
 #include <mbedtls/hmac_drbg.h>
 #include <mbedtls/md.h>
-
-#if defined(MBEDTLS_ERROR_C) && defined(HAVE_MBEDTLS_ERROR_H)
-#  include <mbedtls/error.h>
-#endif
-
-#if defined(MBEDTLS_VERSION_C) && defined(HAVE_MBEDTLS_VERSION_H)
-#  include <mbedtls/version.h>
-#endif
+#include <mbedtls/version.h>
 
 static const char atheme_pers_str[] = PACKAGE_STRING;
 
@@ -33,21 +25,13 @@ static mbedtls_hmac_drbg_context hmac_ctx;
 static pid_t rs_stir_pid = (pid_t) -1;
 
 static const char *
-atheme_random_mbedtls_strerror(int err)
+atheme_random_mbedtls_strerror(const int err)
 {
-	static char errbuf[384];
-
-	if (err < 0)
-		err = -err;
-
-#if defined(MBEDTLS_ERROR_C) && defined(HAVE_MBEDTLS_ERROR_H)
 	char mbed_errbuf[320];
-
 	(void) mbedtls_strerror(err, mbed_errbuf, sizeof mbed_errbuf);
-	(void) snprintf(errbuf, sizeof errbuf, "-0x%X: %s", (unsigned int) err, mbed_errbuf);
-#else
-	(void) snprintf(errbuf, sizeof errbuf, "-0x%X", (unsigned int) err);
-#endif
+
+	static char errbuf[384];
+	(void) snprintf(errbuf, sizeof errbuf, "-0x%X: %s", (unsigned int) -err, mbed_errbuf);
 
 	return errbuf;
 }
@@ -133,7 +117,6 @@ libathemecore_random_early_init(void)
 const char *
 random_get_frontend_info(void)
 {
-#if defined(MBEDTLS_VERSION_C) && defined(HAVE_MBEDTLS_VERSION_H)
 	char verbuf[64];
 	(void) memset(verbuf, 0x00, sizeof verbuf);
 	(void) mbedtls_version_get_string(verbuf);
@@ -142,7 +125,4 @@ random_get_frontend_info(void)
 	(void) snprintf(result, sizeof result, "ARM mbedTLS (compiled %s, library %s)", MBEDTLS_VERSION_STRING, verbuf);
 
 	return result;
-#else
-	return "ARM mbedTLS (unknown version)";
-#endif
 }

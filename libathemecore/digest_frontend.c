@@ -9,19 +9,21 @@
 
 #include "atheme.h"
 
-#if (ATHEME_DIGEST_FRONTEND == ATHEME_DIGEST_FRONTEND_INTERNAL)
+#define ATHEME_LAC_DIGEST_FRONTEND_C    1
+
+#if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_INTERNAL)
 #  include "digest_fe_internal.c"
 #else
-#  if (ATHEME_DIGEST_FRONTEND == ATHEME_DIGEST_FRONTEND_MBEDTLS)
+#  if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_MBEDTLS)
 #    include "digest_fe_mbedtls.c"
 #  else
-#    if (ATHEME_DIGEST_FRONTEND == ATHEME_DIGEST_FRONTEND_NETTLE)
+#    if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_NETTLE)
 #      include "digest_fe_nettle.c"
 #    else
-#      if (ATHEME_DIGEST_FRONTEND == ATHEME_DIGEST_FRONTEND_OPENSSL)
+#      if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_OPENSSL)
 #        include "digest_fe_openssl.c"
 #      else
-#        error "No digest frontend"
+#        error "No Digest API frontend was selected by the build system"
 #      endif
 #    endif
 #  endif

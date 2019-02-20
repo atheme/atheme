@@ -1,6 +1,7 @@
 AC_DEFUN([ATHEME_LIBTEST_DL], [
 
 	LIBDL_LIBS=""
+
 	LIBS_SAVED="${LIBS}"
 
 	AC_SEARCH_LIBS([dlinfo], [dl], [
@@ -24,16 +25,15 @@ AC_DEFUN([ATHEME_LIBTEST_DL], [
 			]])
 		], [
 			AC_MSG_RESULT([yes])
+			AC_DEFINE([HAVE_USABLE_DLINFO], [1], [Define to 1 if dlinfo(3) appears to be usable])
 			AS_IF([test "x${ac_cv_search_dlinfo}" != "xnone required"], [
 				LIBDL_LIBS="${ac_cv_search_dlinfo}"
+				AC_SUBST([LIBDL_LIBS])
 			])
-			AC_DEFINE([HAVE_USABLE_DLINFO], [1], [Define to 1 if dlinfo is usable])
 		], [
 			AC_MSG_RESULT([no])
 		])
 	], [])
 
 	LIBS="${LIBS_SAVED}"
-
-	AC_SUBST([LIBDL_LIBS])
 ])

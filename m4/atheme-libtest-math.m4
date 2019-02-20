@@ -1,6 +1,7 @@
 AC_DEFUN([ATHEME_LIBTEST_MATH], [
 
 	LIBMATH_LIBS=""
+
 	LIBS_SAVED="${LIBS}"
 
 	AC_CHECK_HEADERS([math.h], [], [], [])

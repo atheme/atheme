@@ -36,30 +36,32 @@ AC_DEFUN([ATHEME_LIBTEST_LDAP], [
 				], [
 					AC_MSG_RESULT([yes])
 					LIBLDAP="Yes"
+					AC_DEFINE([HAVE_LIBLDAP], [1], [Define to 1 if libldap appears to be usable])
 					AS_IF([test "x${ac_cv_search_ldap_initialize}" != "xnone required"], [
 						LDAP_LIBS="${ac_cv_search_ldap_initialize}"
 						AC_SUBST([LDAP_LIBS])
 					])
-					AC_DEFINE([HAVE_LDAP], [1], [Define to 1 if LDAP support is available])
 				], [
 					AC_MSG_RESULT([no])
 					LIBLDAP="No"
 					AS_IF([test "${with_ldap}" = "yes"], [
-						AC_MSG_FAILURE([--with-ldap was specified but libldap appears to be unusable])
+						AC_MSG_FAILURE([--with-ldap was given but libldap appears to be unusable])
 					])
 				])
 			], [
 				LIBLDAP="No"
 				AS_IF([test "${with_ldap}" = "yes"], [
-					AC_MSG_ERROR([--with-ldap was specified but a required header file is missing])
+					AC_MSG_ERROR([--with-ldap was given but a required header file is missing])
 				])
 			], [])
 		], [
 			LIBLDAP="No"
 			AS_IF([test "${with_ldap}" = "yes"], [
-				AC_MSG_ERROR([--with-ldap was specified but libldap could not be found])
+				AC_MSG_ERROR([--with-ldap was given but libldap could not be found])
 			])
 		])
+	], [
+		LIBLDAP="No"
 	])
 
 	LIBS="${LIBS_SAVED}"

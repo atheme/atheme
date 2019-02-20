@@ -9,7 +9,7 @@ AC_DEFUN([ATHEME_FEATURETEST_LARGENET], [
 	case "x${enable_large_net}" in
 		xyes)
 			LARGE_NET="Yes"
-			AC_DEFINE([LARGE_NETWORK], [1], [Enable large network support])
+			AC_DEFINE([ATHEME_ENABLE_LARGE_NET], [1], [Define to 1 if --enable-large-net was given to ./configure])
 			;;
 		xno)
 			LARGE_NET="No"

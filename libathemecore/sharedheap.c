@@ -15,7 +15,7 @@
 
 #include "atheme.h"
 
-#ifndef DISABLE_HEAP_ALLOCATOR
+#ifdef ATHEME_ENABLE_HEAP_ALLOCATOR
 
 static mowgli_list_t sharedheap_list;
 
@@ -99,10 +99,10 @@ sharedheap_prealloc_size(const size_t size)
 	const size_t page_size = si.dwPageSize;
 #endif
 
-#ifndef LARGE_NETWORK
-	const size_t prealloc_size = (page_size / size);
-#else
+#ifdef ATHEME_ENABLE_LARGE_NET
 	const size_t prealloc_size = (page_size / size) * 4U;
+#else
+	const size_t prealloc_size = (page_size / size);
 #endif
 
 #ifdef HEAP_DEBUG
@@ -177,7 +177,7 @@ sharedheap_unref(mowgli_heap_t *const restrict heap)
 	(void) atheme_object_unref(s);
 }
 
-#else /* !DISABLE_HEAP_ALLOCATOR */
+#else /* ATHEME_ENABLE_HEAP_ALLOCATOR */
 
 mowgli_heap_t *
 sharedheap_get(const size_t size)
@@ -198,4 +198,4 @@ sharedheap_unref(mowgli_heap_t *const restrict heap)
 	(void) mowgli_heap_destroy(heap);
 }
 
-#endif /* DISABLE_HEAP_ALLOCATOR */
+#endif /* !ATHEME_ENABLE_HEAP_ALLOCATOR */

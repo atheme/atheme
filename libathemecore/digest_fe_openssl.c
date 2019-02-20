@@ -7,13 +7,15 @@
  * OpenSSL frontend for the digest interface.
  */
 
-#include "atheme.h"
+#ifndef ATHEME_LAC_DIGEST_FRONTEND_C
+#  error "Do not compile me directly; compile digest_frontend.c instead"
+#endif /* !ATHEME_LAC_DIGEST_FRONTEND_C */
 
 #include <openssl/evp.h>
 #include <openssl/hmac.h>
 #include <openssl/opensslv.h>
 
-#ifndef HAVE_OPENSSL_HMAC_CTX_ALLOC
+#ifndef HAVE_LIBCRYPTO_HMAC_CTX_DYNAMIC
 
 /*
  * Grumble. If you're (OpenSSL developers) going to stop exporting the
@@ -41,7 +43,7 @@ HMAC_CTX_free(HMAC_CTX *const restrict ctx)
 	(void) sfree(ctx);
 }
 
-#endif /* !HAVE_OPENSSL_HMAC_CTX_ALLOC */
+#endif /* !HAVE_LIBCRYPTO_HMAC_CTX_DYNAMIC */
 
 static inline void
 digest_free_internal(struct digest_context *const restrict ctx)

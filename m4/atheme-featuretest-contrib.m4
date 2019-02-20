@@ -92,8 +92,8 @@ AC_DEFUN([ATHEME_FEATURETEST_CONTRIB], [
 			ATHEME_LIBTEST_CONTRIB
 			CONTRIB_MODULES="Yes"
 			CONTRIB_COND_D="contrib"
+			AC_DEFINE([ATHEME_ENABLE_CONTRIB], [1], [Define to 1 if --enable-contrib was given to ./configure])
 			AC_SUBST([CONTRIB_COND_D])
-			AC_DEFINE([ENABLE_CONTRIB_MODULES], [1], [Enable contrib modules])
 			;;
 		xno)
 			CONTRIB_MODULES="No"

@@ -4,44 +4,53 @@
 #ifndef ATHEME_INC_SYSCONF_H
 #define ATHEME_INC_SYSCONF_H 1
 
-#define ATHEME_DIGEST_FRONTEND_INTERNAL 0x00U
-#define ATHEME_DIGEST_FRONTEND_MBEDTLS  0x01U
-#define ATHEME_DIGEST_FRONTEND_NETTLE   0x02U
-#define ATHEME_DIGEST_FRONTEND_OPENSSL  0x03U
+#define ATHEME_API_DIGEST_FRONTEND_INTERNAL 0x00U
+#define ATHEME_API_DIGEST_FRONTEND_MBEDTLS  0x01U
+#define ATHEME_API_DIGEST_FRONTEND_NETTLE   0x02U
+#define ATHEME_API_DIGEST_FRONTEND_OPENSSL  0x03U
 
-#define ATHEME_RANDOM_FRONTEND_INTERNAL 0x00U
-#define ATHEME_RANDOM_FRONTEND_MBEDTLS  0x01U
-#define ATHEME_RANDOM_FRONTEND_OPENBSD  0x02U
-#define ATHEME_RANDOM_FRONTEND_SODIUM   0x03U
-#define ATHEME_RANDOM_FRONTEND_OPENSSL  0x04U
+#define ATHEME_API_RANDOM_FRONTEND_INTERNAL 0x00U
+#define ATHEME_API_RANDOM_FRONTEND_MBEDTLS  0x01U
+#define ATHEME_API_RANDOM_FRONTEND_OPENBSD  0x02U
+#define ATHEME_API_RANDOM_FRONTEND_SODIUM   0x03U
+#define ATHEME_API_RANDOM_FRONTEND_OPENSSL  0x04U
 
 
 /* Define if building universal (internal helper macro) */
 #undef AC_APPLE_UNIVERSAL_BUILD
 
-/* Enable extensive debugging support */
-#undef ATHEME_DEBUGGING
+/* Atheme Digest API Frontend */
+#undef ATHEME_API_DIGEST_FRONTEND
 
-/* Front-end for digest interface */
-#undef ATHEME_DIGEST_FRONTEND
+/* Atheme RNG API Frontend */
+#undef ATHEME_API_RANDOM_FRONTEND
 
-/* Front-end for RNG interface */
-#undef ATHEME_RANDOM_FRONTEND
+/* Define to 1 if --enable-contrib was given to ./configure */
+#undef ATHEME_ENABLE_CONTRIB
 
-/* Disable heap allocator */
-#undef DISABLE_HEAP_ALLOCATOR
+/* Define to 1 if --enable-debugging was given to ./configure */
+#undef ATHEME_ENABLE_DEBUGGING
 
-/* Enable contrib modules */
-#undef ENABLE_CONTRIB_MODULES
+/* Define to 1 if --disable-heap-allocator was NOT given to ./configure */
+#undef ATHEME_ENABLE_HEAP_ALLOCATOR
 
-/* Enable legacy crypto modules */
-#undef ENABLE_LEGACY_CRYPTO_MODULES
+/* Define to 1 if --enable-large-net was given to ./configure */
+#undef ATHEME_ENABLE_LARGE_NET
+
+/* Define to 1 if --enable-legacy-pwcrypto was given to ./configure */
+#undef ATHEME_ENABLE_LEGACY_PWCRYPTO
+
+/* Define to 1 if --enable-reproducible-builds was given to ./configure */
+#undef ATHEME_ENABLE_REPRODUCIBLE_BUILDS
+
+/* Define to 1 if --enable-sodium-malloc was given to ./configure */
+#undef ATHEME_ENABLE_SODIUM_MALLOC
 
 /* Define to 1 if translation of program messages to the user's native
    language is requested. */
 #undef ENABLE_NLS
 
-/* Define to 1 if any password quality library is available */
+/* Define to 1 if any password quality library appears to be usable */
 #undef HAVE_ANY_PASSWORD_QUALITY_LIBRARY
 
 /* Define to 1 if you have the <arpa/nameser.h> header file. */
@@ -58,13 +67,13 @@
    the CoreFoundation framework. */
 #undef HAVE_CFPREFERENCESCOPYAPPVALUE
 
-/* Define to 1 if cracklib is available */
+/* Define to 1 if cracklib appears to be usable */
 #undef HAVE_CRACKLIB
 
 /* Define to 1 if you have the <crack.h> header file. */
 #undef HAVE_CRACK_H
 
-/* Define to 1 if crypt(3) is available */
+/* Define to 1 if crypt(3) appears to be usable */
 #undef HAVE_CRYPT
 
 /* Define to 1 if you have the <crypt.h> header file. */
@@ -125,43 +134,53 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
-/* Define to 1 if LDAP support is available */
-#undef HAVE_LDAP
-
 /* Define to 1 if you have the <ldap.h> header file. */
 #undef HAVE_LDAP_H
 
-/* Define to 1 if we have GNU libidn available */
+/* Define to 1 if libcrypto appears to be usable */
+#undef HAVE_LIBCRYPTO
+
+/* Define to 1 if libcrypto has usable elliptic curve key construction and
+   signature verification functions */
+#undef HAVE_LIBCRYPTO_ECDSA
+
+/* Define to 1 if libcrypto has HMAC_CTX_new() & HMAC_CTX_free() */
+#undef HAVE_LIBCRYPTO_HMAC_CTX_DYNAMIC
+
+/* Define to 1 if libidn appears to be usable */
 #undef HAVE_LIBIDN
 
 /* Define to 1 if you have the <libintl.h> header file. */
 #undef HAVE_LIBINTL_H
 
-/* Define to 1 if we have ARM mbedTLS available */
+/* Define to 1 if libldap appears to be usable */
+#undef HAVE_LIBLDAP
+
+/* Define to 1 if libmbedcrypto appears to be usable */
 #undef HAVE_LIBMBEDCRYPTO
 
-/* Define to 1 if ARM mbedTLS has HMAC-DRBG support. */
+/* Define to 1 if libmbedcrypto has usable HMAC-DRBG functions */
 #undef HAVE_LIBMBEDCRYPTO_HMAC_DRBG
 
-/* Define to 1 if we have libnettle available */
+/* Define to 1 if libnettle appears to be usable */
 #undef HAVE_LIBNETTLE
 
-/* Define to 1 if libpasswdqc is available */
+/* Define to 1 if libpasswdqc appears to be usable */
 #undef HAVE_LIBPASSWDQC
 
-/* Define to 1 if PCRE is available */
+/* Define to 1 if libpcre appears to be usable */
 #undef HAVE_LIBPCRE
 
-/* Define to 1 if libqrencode is available */
+/* Define to 1 if libqrencode appears to be usable */
 #undef HAVE_LIBQRENCODE
 
-/* Define to 1 if libsodium is available */
+/* Define to 1 if libsodium appears to be usable */
 #undef HAVE_LIBSODIUM
 
-/* Define to 1 if libsodium memzero is available */
+/* Define to 1 if libsodium has a usable memory zeroing function */
 #undef HAVE_LIBSODIUM_MEMZERO
 
-/* Define to 1 if libsodium scrypt is available */
+/* Define to 1 if libsodium has a usable scrypt password hash generator */
 #undef HAVE_LIBSODIUM_SCRYPT
 
 /* Define to 1 if you have the <limits.h> header file. */
@@ -185,24 +204,6 @@
 /* Define to 1 if you have the <math.h> header file. */
 #undef HAVE_MATH_H
 
-/* Define to 1 if you have the <mbedtls/entropy.h> header file. */
-#undef HAVE_MBEDTLS_ENTROPY_H
-
-/* Define to 1 if you have the <mbedtls/error.h> header file. */
-#undef HAVE_MBEDTLS_ERROR_H
-
-/* Define to 1 if you have the <mbedtls/hmac_drbg.h> header file. */
-#undef HAVE_MBEDTLS_HMAC_DRBG_H
-
-/* Define to 1 if you have the <mbedtls/md.h> header file. */
-#undef HAVE_MBEDTLS_MD_H
-
-/* Define to 1 if you have the <mbedtls/pkcs5.h> header file. */
-#undef HAVE_MBEDTLS_PKCS5_H
-
-/* Define to 1 if you have the <mbedtls/version.h> header file. */
-#undef HAVE_MBEDTLS_VERSION_H
-
 /* Define to 1 if you have the `memchr' function. */
 #undef HAVE_MEMCHR
 
@@ -224,38 +225,8 @@
 /* Define to 1 if you have the <netinet/in.h> header file. */
 #undef HAVE_NETINET_IN_H
 
-/* Define to 1 if you have the <nettle/md5.h> header file. */
-#undef HAVE_NETTLE_MD5_H
-
-/* Define to 1 if you have the <nettle/nettle-meta.h> header file. */
-#undef HAVE_NETTLE_NETTLE_META_H
-
-/* Define to 1 if you have the <nettle/sha1.h> header file. */
-#undef HAVE_NETTLE_SHA1_H
-
-/* Define to 1 if you have the <nettle/sha2.h> header file. */
-#undef HAVE_NETTLE_SHA2_H
-
 /* Define to 1 if you have the <nettle/version.h> header file. */
 #undef HAVE_NETTLE_VERSION_H
-
-/* Define to 1 if OpenSSL is available */
-#undef HAVE_OPENSSL
-
-/* Define to 1 if you have the <openssl/ecdsa.h> header file. */
-#undef HAVE_OPENSSL_ECDSA_H
-
-/* Define to 1 if you have the <openssl/ec.h> header file. */
-#undef HAVE_OPENSSL_EC_H
-
-/* Define to 1 if you have the <openssl/evp.h> header file. */
-#undef HAVE_OPENSSL_EVP_H
-
-/* Define to 1 if HMAC_CTX_new()/_free() exist */
-#undef HAVE_OPENSSL_HMAC_CTX_ALLOC
-
-/* Define to 1 if you have the <openssl/hmac.h> header file. */
-#undef HAVE_OPENSSL_HMAC_H
 
 /* Define to 1 if you have the <openssl/opensslv.h> header file. */
 #undef HAVE_OPENSSL_OPENSSLV_H
@@ -301,22 +272,6 @@
 
 /* Define to 1 if you have a C99 compliant `snprintf' function. */
 #undef HAVE_SNPRINTF
-
-/* Define to 1 if you have the <sodium/core.h> header file. */
-#undef HAVE_SODIUM_CORE_H
-
-/* Define to 1 if you have the <sodium/crypto_pwhash_scryptsalsa208sha256.h>
-   header file. */
-#undef HAVE_SODIUM_CRYPTO_PWHASH_SCRYPTSALSA208SHA256_H
-
-/* Define to 1 if you have the <sodium/randombytes.h> header file. */
-#undef HAVE_SODIUM_RANDOMBYTES_H
-
-/* Define to 1 if you have the <sodium/utils.h> header file. */
-#undef HAVE_SODIUM_UTILS_H
-
-/* Define to 1 if you have the <sodium/version.h> header file. */
-#undef HAVE_SODIUM_VERSION_H
 
 /* Define to 1 if you have the <stdarg.h> header file. */
 #undef HAVE_STDARG_H
@@ -432,13 +387,13 @@
 /* Define to 1 if the system has the type 'unsigned long long int'. */
 #undef HAVE_UNSIGNED_LONG_LONG_INT
 
-/* Define to 1 if dlinfo is usable */
+/* Define to 1 if dlinfo(3) appears to be usable */
 #undef HAVE_USABLE_DLINFO
 
-/* Define to 1 if getentropy(3) is usable */
+/* Define to 1 if getentropy(3) appears to be usable */
 #undef HAVE_USABLE_GETENTROPY
 
-/* Define to 1 if getrandom(2) is usable */
+/* Define to 1 if getrandom(2) appears to be usable */
 #undef HAVE_USABLE_GETRANDOM
 
 /* Define to 1 if you have the <varargs.h> header file. */
@@ -455,9 +410,6 @@
 
 /* Define to 1 if you have the `__va_copy' function or macro. */
 #undef HAVE___VA_COPY
-
-/* Enable large network support */
-#undef LARGE_NETWORK
 
 /* Name of package */
 #undef PACKAGE
@@ -480,14 +432,8 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
-/* Enable reproducible builds */
-#undef REPRODUCIBLE_BUILDS
-
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
-
-/* Enable libsodium secure memory allocator */
-#undef USE_LIBSODIUM_ALLOCATOR
 
 /* Enable extensions on AIX 3, Interix.  */
 #ifndef _ALL_SOURCE
@@ -655,13 +601,13 @@
 #undef vsnprintf
 
 
-#ifndef ATHEME_DIGEST_FRONTEND
-#  error "No digest frontend"
-#endif
+#ifndef ATHEME_API_DIGEST_FRONTEND
+#  error "No Digest API frontend was selected by the build system"
+#endif /* !ATHEME_API_DIGEST_FRONTEND */
 
-#ifndef ATHEME_RANDOM_FRONTEND
-#  error "No RNG frontend"
-#endif
+#ifndef ATHEME_API_RANDOM_FRONTEND
+#  error "No RNG API frontend was selected by the build system"
+#endif /* !ATHEME_API_RANDOM_FRONTEND */
 
-#endif
+#endif /* !ATHEME_INC_SYSCONF_H */
 

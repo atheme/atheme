@@ -15,7 +15,7 @@ AC_DEFUN([ATHEME_LIBTEST_SOCKET], [
 
 	LIBS="${LIBSOCKET_LIBS} ${LIBS_SAVED}"
 
-	AC_MSG_CHECKING([if socket functions appear to be usable])
+	AC_MSG_CHECKING([if socket functions are usable])
 	AC_LINK_IFELSE([
 		AC_LANG_PROGRAM([[
 			#ifdef HAVE_SYS_TYPES_H

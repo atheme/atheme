@@ -20,7 +20,7 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 		PKG_CHECK_MODULES([LIBPCRE], [libpcre], [
 			LIBS="${LIBPCRE_LIBS} ${LIBS}"
 			AC_CHECK_HEADERS([pcre.h], [
-				AC_MSG_CHECKING([if libpcre is usable])
+				AC_MSG_CHECKING([if libpcre appears to be usable])
 				AC_LINK_IFELSE([
 					AC_LANG_PROGRAM([[
 						#ifdef HAVE_STDDEF_H
@@ -35,26 +35,28 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 				], [
 					AC_MSG_RESULT([yes])
 					LIBPCRE="Yes"
-					AC_DEFINE([HAVE_LIBPCRE], [1], [Define to 1 if PCRE is available])
+					AC_DEFINE([HAVE_LIBPCRE], [1], [Define to 1 if libpcre appears to be usable])
 				], [
 					AC_MSG_RESULT([no])
 					LIBPCRE="No"
 					AS_IF([test "${with_pcre}" = "yes"], [
-						AC_MSG_FAILURE([--with-pcre was specified but libpcre does not appear to be usable])
+						AC_MSG_FAILURE([--with-pcre was given but libpcre does not appear to be usable])
 					])
 				])
 			], [
 				LIBPCRE="No"
 				AS_IF([test "${with_pcre}" = "yes"], [
-					AC_MSG_ERROR([--with-pcre was specified but a required header file is missing])
+					AC_MSG_ERROR([--with-pcre was given but a required header file is missing])
 				])
 			], [])
 		], [
 			LIBPCRE="No"
 			AS_IF([test "${with_pcre}" = "yes"], [
-				AC_MSG_ERROR([--with-pcre was specified but libpcre could not be found])
+				AC_MSG_ERROR([--with-pcre was given but libpcre could not be found])
 			])
 		])
+	], [
+		LIBPCRE="No"
 	])
 
 	LIBS="${LIBS_SAVED}"
