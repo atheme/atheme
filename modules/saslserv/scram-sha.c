@@ -461,6 +461,14 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 	struct sasl_scramsha_session *const s = p->mechdata;
 	static char response[SCRAMSHA_RESPONSE2_LENGTH_MAX + 1];
 
+	// User account was dropped during negotiation
+	if (! s->mu)
+	{
+		(void) slog(LG_DEBUG, "%s: user account dropped during negotiation", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
+		return ASASL_MRESULT_ERROR;
+	}
+
 	scram_attr_list attributes;
 	char c_gs2_buf[SASL_S2S_MAXLEN_TOTAL_RAW];
 	char AuthMessage[(3 * SASL_S2S_MAXLEN_TOTAL_RAW) + SCRAMSHA_NONCE_LENGTH_MAX_COMBINED + 1];
@@ -629,9 +637,12 @@ sasl_mech_scramsha_step_success(struct sasl_session *const restrict p)
 	char csk64[BASE64_SIZE_STR(SCRAMSHA_MDLEN_MAX)];
 	char chk64[BASE64_SIZE_STR(SCRAMSHA_MDLEN_MAX)];
 
+	// User account was dropped during negotiation
 	if (! s->mu)
-		// The user account was dropped during negotiation, nothing to do
-		goto end;
+	{
+		(void) slog(LG_DEBUG, "%s: user account dropped during negotiation", MOWGLI_FUNC_NAME);
+		return ASASL_MRESULT_ERROR;
+	}
 
 	if (s->db.scram)
 		// User's password hash was already in SCRAM format, nothing to do
