@@ -11,6 +11,12 @@
 #  error "Do not compile me directly; compile digest_frontend.c instead"
 #endif /* !ATHEME_LAC_DIGEST_FRONTEND_C */
 
+#ifdef MBEDTLS_CONFIG_FILE
+#  include MBEDTLS_CONFIG_FILE
+#else
+#  include <mbedtls/config.h>
+#endif
+
 #include <mbedtls/md.h>
 #include <mbedtls/pkcs5.h>
 #include <mbedtls/version.h>
