@@ -15,6 +15,8 @@
 #include <openssl/opensslv.h>
 #include <openssl/rand.h>
 
+static bool rng_init_done = false;
+
 static void
 atheme_openssl_clear_errors(void)
 {
@@ -79,6 +81,9 @@ atheme_random_uniform(const uint32_t bound)
 void
 atheme_random_buf(void *const restrict out, const size_t len)
 {
+	if (! rng_init_done)
+		abort();
+
 	(void) atheme_openssl_clear_errors();
 
 	if (RAND_bytes(out, (const int) len) != 1)
@@ -106,6 +111,7 @@ libathemecore_random_early_init(void)
 	 */
 	(void) RAND_add(PACKAGE_STRING, (int) strlen(PACKAGE_STRING), (double) 0);
 
+	rng_init_done = true;
 	return true;
 }
 
