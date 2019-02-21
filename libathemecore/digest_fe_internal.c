@@ -7,14 +7,17 @@
  * Internal frontend for the digest interface.
  */
 
-#include "atheme.h"
+#ifndef ATHEME_LAC_DIGEST_FRONTEND_C
+#  error "Do not compile me directly; compile digest_frontend.c instead"
+#endif /* !ATHEME_LAC_DIGEST_FRONTEND_C */
+
+#define ATHEME_LAC_DIGEST_FE_INTERNAL_C 1
+#define DIGEST_HMAC_INNER_XORVAL        0x36U
+#define DIGEST_HMAC_OUTER_XORVAL        0x5CU
 
 #include "digest_be_md5.c"
 #include "digest_be_sha1.c"
 #include "digest_be_sha2.c"
-
-#define DIGEST_HMAC_INNER_XORVAL        0x36U
-#define DIGEST_HMAC_OUTER_XORVAL        0x5CU
 
 const char *
 digest_get_frontend_info(void)

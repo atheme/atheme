@@ -7,7 +7,9 @@
  * Nettle frontend for the digest interface.
  */
 
-#include "atheme.h"
+#ifndef ATHEME_LAC_DIGEST_FRONTEND_C
+#  error "Do not compile me directly; compile digest_frontend.c instead"
+#endif /* !ATHEME_LAC_DIGEST_FRONTEND_C */
 
 #include <nettle/md5.h>
 #include <nettle/sha1.h>

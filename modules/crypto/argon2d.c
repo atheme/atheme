@@ -390,11 +390,11 @@ atheme_argon2d_crypt(const char *const restrict password,
 	if (! argon2d_hash_raw(&ctx))
 		return NULL;
 
-	char salt_b64[BASE64_SIZE(ATHEME_ARGON2D_SALTLEN)];
+	char salt_b64[BASE64_SIZE_STR(ATHEME_ARGON2D_SALTLEN)];
 	if (base64_encode_raw(ctx.salt, sizeof ctx.salt, salt_b64, sizeof salt_b64) == (size_t) -1)
 		return NULL;
 
-	char hash_b64[BASE64_SIZE(ATHEME_ARGON2D_HASHLEN)];
+	char hash_b64[BASE64_SIZE_STR(ATHEME_ARGON2D_HASHLEN)];
 	if (base64_encode_raw(ctx.hash, sizeof ctx.hash, hash_b64, sizeof hash_b64) == (size_t) -1)
 		return NULL;
 
@@ -465,7 +465,7 @@ atheme_argon2d_verify(const char *const restrict password, const char *const res
 	if (! argon2d_hash_raw(&ctx))
 		return false;
 
-	if (memcmp(ctx.hash, dec_hash, ATHEME_ARGON2D_HASHLEN) != 0)
+	if (smemcmp(ctx.hash, dec_hash, ATHEME_ARGON2D_HASHLEN) != 0)
 		return false;
 
 	if (atheme_argon2d_recrypt(&ctx))

@@ -14,16 +14,19 @@ os_cmd_uptime(struct sourceinfo *si, int parc, char *parv[])
 {
 	logcommand(si, CMDLOG_GET, "UPTIME");
 
-#ifdef REPRODUCIBLE_BUILDS
+#ifdef ATHEME_ENABLE_REPRODUCIBLE_BUILDS
 	command_success_nodata(si, "%s [%s]", PACKAGE_STRING, revision);
-#else
+#else /* ATHEME_ENABLE_REPRODUCIBLE_BUILDS */
         command_success_nodata(si, "%s [%s] Build Date: %s", PACKAGE_STRING, revision, __DATE__);
-#endif
+#endif /* !ATHEME_ENABLE_REPRODUCIBLE_BUILDS */
+
         command_success_nodata(si, _("Services have been up for %s"), timediff(CURRTIME - me.start));
 	command_success_nodata(si, _("Current PID: %d"), getpid());
         command_success_nodata(si, _("Registered accounts: %d"), cnt.myuser);
+
 	if (!nicksvs.no_nick_ownership)
         	command_success_nodata(si, _("Registered nicknames: %d"), cnt.mynick);
+
         command_success_nodata(si, _("Registered channels: %d"), cnt.mychan);
         command_success_nodata(si, _("Users currently online: %d"), cnt.user - me.me->users);
 }

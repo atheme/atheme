@@ -7,14 +7,13 @@
  * ARM mbedTLS frontend for the digest interface.
  */
 
-#include "atheme.h"
+#ifndef ATHEME_LAC_DIGEST_FRONTEND_C
+#  error "Do not compile me directly; compile digest_frontend.c instead"
+#endif /* !ATHEME_LAC_DIGEST_FRONTEND_C */
 
 #include <mbedtls/md.h>
 #include <mbedtls/pkcs5.h>
-
-#if defined(MBEDTLS_VERSION_C) && defined(HAVE_MBEDTLS_VERSION_H)
-#  include <mbedtls/version.h>
-#endif
+#include <mbedtls/version.h>
 
 static inline const mbedtls_md_info_t *
 digest_decide_md(const enum digest_algorithm alg)
@@ -46,7 +45,6 @@ digest_decide_md(const enum digest_algorithm alg)
 const char *
 digest_get_frontend_info(void)
 {
-#if defined(MBEDTLS_VERSION_C) && defined(HAVE_MBEDTLS_VERSION_H)
 	char verbuf[64];
 	(void) memset(verbuf, 0x00, sizeof verbuf);
 	(void) mbedtls_version_get_string(verbuf);
@@ -55,9 +53,6 @@ digest_get_frontend_info(void)
 	(void) snprintf(result, sizeof result, "ARM mbedTLS (compiled %s, library %s)", MBEDTLS_VERSION_STRING, verbuf);
 
 	return result;
-#else
-	return "ARM mbedTLS (unknown version)";
-#endif
 }
 
 bool ATHEME_FATTR_WUR

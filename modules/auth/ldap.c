@@ -27,7 +27,7 @@
 
 #include "atheme.h"
 
-#ifdef HAVE_LDAP
+#ifdef HAVE_LIBLDAP
 
 #include <ldap.h>
 
@@ -263,7 +263,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	del_top_conf("LDAP");
 }
 
-#else /* HAVE_LDAP */
+#else /* HAVE_LIBLDAP */
 
 static void
 mod_init(struct module *const restrict m)
@@ -279,6 +279,6 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	// Nothing To Do
 }
 
-#endif /* !HAVE_LDAP */
+#endif /* !HAVE_LIBLDAP */
 
 SIMPLE_DECLARE_MODULE_V1("auth/ldap", MODULE_UNLOAD_CAPABILITY_OK)

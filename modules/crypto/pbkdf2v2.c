@@ -475,8 +475,8 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 	{
 		unsigned char csk[DIGEST_MDLEN_MAX];
 		unsigned char chk[DIGEST_MDLEN_MAX];
-		char csk64[BASE64_SIZE(DIGEST_MDLEN_MAX)];
-		char chk64[BASE64_SIZE(DIGEST_MDLEN_MAX)];
+		char csk64[BASE64_SIZE_STR(DIGEST_MDLEN_MAX)];
+		char chk64[BASE64_SIZE_STR(DIGEST_MDLEN_MAX)];
 
 		if (! atheme_pbkdf2v2_scram_derive(&dbe, dbe.cdg, csk, chk))
 			// This function logs messages on failure
@@ -501,7 +501,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 	}
 	else
 	{
-		char cdg64[BASE64_SIZE(DIGEST_MDLEN_MAX)];
+		char cdg64[BASE64_SIZE_STR(DIGEST_MDLEN_MAX)];
 
 		if (base64_encode(dbe.cdg, dbe.dl, cdg64, sizeof cdg64) == (size_t) -1)
 		{
@@ -574,17 +574,17 @@ atheme_pbkdf2v2_verify(const char *const restrict password, const char *const re
 			// This function logs messages on failure
 			goto end;
 
-		if (memcmp(dbe.ssk, csk, dbe.dl) != 0)
+		if (smemcmp(dbe.ssk, csk, dbe.dl) != 0)
 		{
-			(void) slog(LG_DEBUG, "%s: memcmp(3) mismatch on ssk (invalid password?)", MOWGLI_FUNC_NAME);
+			(void) slog(LG_DEBUG, "%s: smemcmp() mismatch on ssk (invalid password?)", MOWGLI_FUNC_NAME);
 			goto end;
 		}
 	}
 	else
 	{
-		if (memcmp(dbe.sdg, dbe.cdg, dbe.dl) != 0)
+		if (smemcmp(dbe.sdg, dbe.cdg, dbe.dl) != 0)
 		{
-			(void) slog(LG_DEBUG, "%s: memcmp(3) mismatch on sdg (invalid password?)", MOWGLI_FUNC_NAME);
+			(void) slog(LG_DEBUG, "%s: smemcmp() mismatch on sdg (invalid password?)", MOWGLI_FUNC_NAME);
 			goto end;
 		}
 	}

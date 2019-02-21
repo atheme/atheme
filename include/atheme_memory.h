@@ -19,6 +19,8 @@
 extern void *(* volatile volatile_memset)(void *, int, size_t);
 #endif /* !HAVE_MEMSET_S && !HAVE_EXPLICIT_BZERO && !HAVE_LIBSODIUM_MEMZERO */
 
+int smemcmp(const void *ptr1, const void *ptr2, size_t len) ATHEME_FATTR_WUR;
+void smemzerofree(void *ptr, size_t len);
 void smemzero(void *ptr, size_t len);
 void sfree(void *ptr);
 void *scalloc(size_t num, size_t len) ATHEME_FATTR_ALLOC_SIZE_PRODUCT(1, 2) ATHEME_FATTR_MALLOC ATHEME_FATTR_RETURNS_NONNULL;
@@ -29,6 +31,12 @@ char *sstrndup(const char *ptr, size_t maxlen) ATHEME_FATTR_MALLOC;
 void *smemdup(const void *ptr, size_t len) ATHEME_FATTR_MALLOC;
 
 #ifdef ATHEME_ATTR_HAS_DIAGNOSE_IF
+int smemcmp(const void *ptr1, const void *ptr2, size_t len)
+    ATHEME_FATTR_DIAGNOSE_IF(!ptr1, "calling smemcmp() with !ptr1", "error");
+int smemcmp(const void *ptr1, const void *ptr2, size_t len)
+    ATHEME_FATTR_DIAGNOSE_IF(!ptr2, "calling smemcmp() with !ptr2", "error");
+int smemcmp(const void *ptr1, const void *ptr2, size_t len)
+    ATHEME_FATTR_DIAGNOSE_IF(!len, "calling smemcmp() with !len", "warning");
 void smemzero(void *ptr, size_t len)
     ATHEME_FATTR_DIAGNOSE_IF(!ptr, "calling smemzero() with !ptr", "warning");
 void smemzero(void *ptr, size_t len)

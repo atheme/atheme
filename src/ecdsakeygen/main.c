@@ -12,9 +12,11 @@
 #include "atheme.h"
 #include "libathemecore.h"
 
+#include <openssl/bio.h>
 #include <openssl/ec.h>
 #include <openssl/ecdsa.h>
 #include <openssl/evp.h>
+#include <openssl/pem.h>
 
 int
 main(int argc, const char **argv)

@@ -7,11 +7,9 @@
  * Frontend routines for the random interface (OpenSSL backend).
  */
 
-#include "atheme.h"
-
-#ifndef ATHEME_RANDOM_FRONTEND_C
+#ifndef ATHEME_LAC_RANDOM_FRONTEND_C
 #  error "Do not compile me directly; compile random_frontend.c instead"
-#endif /* !ATHEME_RANDOM_FRONTEND_C */
+#endif /* !ATHEME_LAC_RANDOM_FRONTEND_C */
 
 #include <openssl/err.h>
 #include <openssl/opensslv.h>

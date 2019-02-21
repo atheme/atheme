@@ -13,26 +13,26 @@
 #  define MINIMUM(a, b) (((a) < (b)) ? (a) : (b))
 #endif
 
-#define ATHEME_RANDOM_FRONTEND_C        1
+#define ATHEME_LAC_RANDOM_FRONTEND_C    1
 #define RANDSTR_ALPHABET_LEN            62U
 #define RANDSTR_REQUEST_LEN             128U
 
-#if (ATHEME_RANDOM_FRONTEND == ATHEME_RANDOM_FRONTEND_INTERNAL)
+#if (ATHEME_API_RANDOM_FRONTEND == ATHEME_API_RANDOM_FRONTEND_INTERNAL)
 #  include "random_fe_internal.c"
 #else
-#  if (ATHEME_RANDOM_FRONTEND == ATHEME_RANDOM_FRONTEND_OPENBSD)
+#  if (ATHEME_API_RANDOM_FRONTEND == ATHEME_API_RANDOM_FRONTEND_OPENBSD)
 #    include "random_fe_openbsd.c"
 #  else
-#    if (ATHEME_RANDOM_FRONTEND == ATHEME_RANDOM_FRONTEND_SODIUM)
+#    if (ATHEME_API_RANDOM_FRONTEND == ATHEME_API_RANDOM_FRONTEND_SODIUM)
 #      include "random_fe_sodium.c"
 #    else
-#      if (ATHEME_RANDOM_FRONTEND == ATHEME_RANDOM_FRONTEND_MBEDTLS)
+#      if (ATHEME_API_RANDOM_FRONTEND == ATHEME_API_RANDOM_FRONTEND_MBEDTLS)
 #        include "random_fe_mbedtls.c"
 #      else
-#        if (ATHEME_RANDOM_FRONTEND == ATHEME_RANDOM_FRONTEND_OPENSSL)
+#        if (ATHEME_API_RANDOM_FRONTEND == ATHEME_API_RANDOM_FRONTEND_OPENSSL)
 #          include "random_fe_openssl.c"
 #        else
-#          error "No RNG frontend"
+#          error "No RNG API frontend was selected by the build system"
 #        endif
 #      endif
 #    endif

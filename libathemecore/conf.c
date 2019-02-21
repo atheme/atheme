@@ -106,23 +106,52 @@ const char *
 get_conf_opts(void)
 {
 	static char optstr[53]; /* 26 uppercase + 26 lowercase + NULL terminator */
-	unsigned int optidx = 0;
+	size_t optidx = 0;
 
 	(void) memset(optstr, 0x00, sizeof optstr);
 
 	if (match_mapping)
 		optstr[optidx++] = 'A';
 
+#ifdef ATHEME_ENABLE_REPRODUCIBLE_BUILDS
+	optstr[optidx++] = 'B';
+#endif /* ATHEME_ENABLE_REPRODUCIBLE_BUILDS */
+
+#ifdef ATHEME_ENABLE_CONTRIB
+	optstr[optidx++] = 'C';
+#endif /* ATHEME_ENABLE_CONTRIB */
+
+#ifdef ATHEME_ENABLE_DEBUGGING
+	optstr[optidx++] = 'D';
+#endif /* ATHEME_ENABLE_DEBUGGING */
+
+	if (config_options.flood_msgs)
+		optstr[optidx++] = 'F';
+
+#ifdef ATHEME_ENABLE_HEAP_ALLOCATOR
+	optstr[optidx++] = 'H';
+#endif /* ATHEME_ENABLE_HEAP_ALLOCATOR */
+
+#ifdef ATHEME_ENABLE_LARGE_NET
+	optstr[optidx++] = 'L';
+#endif /* ATHEME_ENABLE_LARGE_NET */
+
+#ifdef ATHEME_ENABLE_SODIUM_MALLOC
+	optstr[optidx++] = 'M';
+#endif /* ATHEME_ENABLE_SODIUM_MALLOC */
+
+	if (! match_mapping)
+		optstr[optidx++] = 'R';
+
+	if (IS_TAINTED)
+		optstr[optidx++] = 'T';
+
+#ifdef ATHEME_ENABLE_LEGACY_PWCRYPTO
+	optstr[optidx++] = 'W';
+#endif /* ATHEME_ENABLE_LEGACY_PWCRYPTO */
+
 	if (auth_module_loaded)
 		optstr[optidx++] = 'a';
-
-#ifdef REPRODUCIBLE_BUILDS
-	optstr[optidx++] = 'B';
-#endif /* REPRODUCIBLE_BUILDS */
-
-#ifdef ENABLE_CONTRIB_MODULES
-	optstr[optidx++] = 'C';
-#endif /* ENABLE_CONTRIB_MODULES */
 
 	if (crypt_get_default_provider())
 		optstr[optidx++] = 'c';
@@ -133,41 +162,20 @@ get_conf_opts(void)
 	if (me.auth)
 		optstr[optidx++] = 'e';
 
-	if (config_options.flood_msgs)
-		optstr[optidx++] = 'F';
-
 	if (config_options.join_chans)
 		optstr[optidx++] = 'j';
-
-#ifdef LARGE_NETWORK
-	optstr[optidx++] = 'L';
-#endif /* LARGE_NETWORK */
 
 	if (config_options.leave_chans)
 		optstr[optidx++] = 'l';
 
-#ifdef USE_LIBSODIUM_ALLOCATOR
-	optstr[optidx++] = 'M';
-#endif /* USE_LIBSODIUM_ALLOCATOR */
-
 	if (runflags & RF_LIVE)
 		optstr[optidx++] = 'n';
-
-	if (! match_mapping)
-		optstr[optidx++] = 'R';
 
 	if (config_options.raw)
 		optstr[optidx++] = 'r';
 
-	if (IS_TAINTED)
-		optstr[optidx++] = 'T';
-
 	if (chansvs.changets)
 		optstr[optidx++] = 't';
-
-#ifdef ENABLE_LEGACY_CRYPTO_MODULES
-	optstr[optidx++] = 'W';
-#endif /* ENABLE_LEGACY_CRYPTO_MODULES */
 
 	return optstr;
 }

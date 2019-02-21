@@ -38,25 +38,26 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPT], [
 			], [
 				AC_MSG_RESULT([yes])
 				LIBCRYPT="Yes"
+				AC_DEFINE([HAVE_CRYPT], [1], [Define to 1 if crypt(3) appears to be usable])
 				AS_IF([test "x${ac_cv_search_crypt}" != "xnone required"], [
 					LIBCRYPT_LIBS="${ac_cv_search_crypt}"
 					AC_SUBST([LIBCRYPT_LIBS])
 				])
-				AC_DEFINE([HAVE_CRYPT], [1], [Define to 1 if crypt(3) is available])
 			], [
 				AC_MSG_RESULT([no])
 				LIBCRYPT="No"
 				AS_IF([test "${with_crypt}" = "yes"], [
-					AC_MSG_FAILURE([--with-crypt was specified but crypt(3) appears to be unusable])
+					AC_MSG_FAILURE([--with-crypt was given but crypt(3) appears to be unusable])
 				])
 			])
-
 		], [
 			LIBCRYPT="No"
 			AS_IF([test "${with_crypt}" = "yes"], [
-				AC_MSG_ERROR([--with-crypt was specified but crypt(3) could not be found])
+				AC_MSG_ERROR([--with-crypt was given but crypt(3) could not be found])
 			])
 		])
+	], [
+		LIBCRYPT="No"
 	])
 
 	LIBS="${LIBS_SAVED}"

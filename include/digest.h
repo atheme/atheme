@@ -38,26 +38,26 @@ enum digest_algorithm
 #define DIGEST_BKLEN_MAX        DIGEST_BKLEN_SHA2_512
 #define DIGEST_MDLEN_MAX        DIGEST_MDLEN_SHA2_512
 
-#if (ATHEME_DIGEST_FRONTEND == ATHEME_DIGEST_FRONTEND_INTERNAL)
+#if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_INTERNAL)
 #  include "digest_fe_internal.h"
 #else
-#  if (ATHEME_DIGEST_FRONTEND == ATHEME_DIGEST_FRONTEND_MBEDTLS)
+#  if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_MBEDTLS)
 #    include "digest_fe_mbedtls.h"
 #  else
-#    if (ATHEME_DIGEST_FRONTEND == ATHEME_DIGEST_FRONTEND_NETTLE)
+#    if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_NETTLE)
 #      include "digest_fe_nettle.h"
 #    else
-#      if (ATHEME_DIGEST_FRONTEND == ATHEME_DIGEST_FRONTEND_OPENSSL)
+#      if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_OPENSSL)
 #        include "digest_fe_openssl.h"
 #      else
-#        error "No digest frontend"
+#        error "No Digest API frontend was selected by the build system"
 #      endif
 #    endif
 #  endif
 #endif
 
 #ifndef ATHEME_INC_DIGEST_FE_HEADER_H
-#  error "No digest frontend"
+#  error "No Digest API frontend header is available"
 #endif /* !ATHEME_INC_DIGEST_FE_HEADER_H */
 
 bool digest_init(struct digest_context *, enum digest_algorithm) ATHEME_FATTR_WUR;

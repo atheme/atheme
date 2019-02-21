@@ -20,28 +20,28 @@ AH_TOP([
 #ifndef ATHEME_INC_SYSCONF_H
 #define ATHEME_INC_SYSCONF_H 1
 
-#define ATHEME_DIGEST_FRONTEND_INTERNAL 0x00U
-#define ATHEME_DIGEST_FRONTEND_MBEDTLS  0x01U
-#define ATHEME_DIGEST_FRONTEND_NETTLE   0x02U
-#define ATHEME_DIGEST_FRONTEND_OPENSSL  0x03U
+#define ATHEME_API_DIGEST_FRONTEND_INTERNAL 0x00U
+#define ATHEME_API_DIGEST_FRONTEND_MBEDTLS  0x01U
+#define ATHEME_API_DIGEST_FRONTEND_NETTLE   0x02U
+#define ATHEME_API_DIGEST_FRONTEND_OPENSSL  0x03U
 
-#define ATHEME_RANDOM_FRONTEND_INTERNAL 0x00U
-#define ATHEME_RANDOM_FRONTEND_MBEDTLS  0x01U
-#define ATHEME_RANDOM_FRONTEND_OPENBSD  0x02U
-#define ATHEME_RANDOM_FRONTEND_SODIUM   0x03U
-#define ATHEME_RANDOM_FRONTEND_OPENSSL  0x04U
+#define ATHEME_API_RANDOM_FRONTEND_INTERNAL 0x00U
+#define ATHEME_API_RANDOM_FRONTEND_MBEDTLS  0x01U
+#define ATHEME_API_RANDOM_FRONTEND_OPENBSD  0x02U
+#define ATHEME_API_RANDOM_FRONTEND_SODIUM   0x03U
+#define ATHEME_API_RANDOM_FRONTEND_OPENSSL  0x04U
 ])
 
 AH_BOTTOM([
-#ifndef ATHEME_DIGEST_FRONTEND
-#  error "No digest frontend"
-#endif
+#ifndef ATHEME_API_DIGEST_FRONTEND
+#  error "No Digest API frontend was selected by the build system"
+#endif /* !ATHEME_API_DIGEST_FRONTEND */
 
-#ifndef ATHEME_RANDOM_FRONTEND
-#  error "No RNG frontend"
-#endif
+#ifndef ATHEME_API_RANDOM_FRONTEND
+#  error "No RNG API frontend was selected by the build system"
+#endif /* !ATHEME_API_RANDOM_FRONTEND */
 
-#endif
+#endif /* !ATHEME_INC_SYSCONF_H */
 ])
 
 AC_MSG_CHECKING([if you read GIT-Access.txt])
@@ -94,7 +94,7 @@ AC_CHECK_HEADERS([ctype.h dirent.h errno.h inttypes.h libintl.h limits.h locale.
 AC_CHECK_HEADERS([regex.h signal.h stdarg.h stdbool.h stddef.h stdint.h stdio.h stdlib.h string.h], [], [], [])
 AC_CHECK_HEADERS([strings.h sys/file.h sys/resource.h sys/stat.h sys/time.h sys/types.h sys/wait.h], [], [], [])
 AC_CHECK_HEADERS([time.h unistd.h], [], [], [])
-AC_CHECK_FUNCS([explicit_bzero fork getrlimit memset_s], [], [])
+AC_CHECK_FUNCS([explicit_bzero fork getrlimit memset_s timingsafe_bcmp timingsafe_memcmp], [], [])
 AC_CHECK_FUNCS([dup2 execve flock gethostbyname getpid gettimeofday localeconv memchr memmove memset], [],
 	[AC_MSG_ERROR([required function not available])])
 AC_CHECK_FUNCS([regcomp regerror regexec regfree setenv setlocale strcasecmp strcasestr strchr strerror strlen], [],
@@ -208,12 +208,22 @@ AC_SUBST([RANDOM_API_LIBS])
 dnl These must be here, not above, or they might interfere with library and feature tests
 dnl Explanation is that these modify one or more of CFLAGS, CPPFLAGS, LDFLAGS, and LIBS
 dnl Warnings should be second-to-last so that they don't clutter the contents of config.log
-dnl Mowgli test must be last or it will interfere with linker tests (the library may not yet exist)
 ATHEME_FEATURETEST_CPPFLAGS
 ATHEME_FEATURETEST_CFLAGS
 ATHEME_FEATURETEST_DEBUGGING
 ATHEME_FEATURETEST_LDFLAGS
 ATHEME_FEATURETEST_WARNINGS
+
+dnl Save toolchain variables in case we will be configuring submodules
+SUBCONF_CC="${CC}"
+SUBCONF_LD="${LD}"
+SUBCONF_CFLAGS="${CFLAGS}"
+SUBCONF_CPPFLAGS="${CPPFLAGS}"
+SUBCONF_LDFLAGS="${LDFLAGS}"
+SUBCONF_LIBS="${LIBS}"
+
+dnl Mowgli test must be last or it will interfere with linker tests (the library may not yet exist)
+dnl It would also pollute CPPFLAGS, LDFLAGS and/or LIBS above
 ATHEME_LIBTEST_MOWGLI
 
 
@@ -237,7 +247,10 @@ AS_IF([test "x${MOWGLI_SOURCE}" = "xInternal"], [
 	dnl Run ./configure in the libmowgli submodule directory but without OpenSSL support
 	dnl Atheme does not use the OpenSSL VIO interface in Mowgli and this avoids an unnecessary -lssl
 
-	AX_SUBDIRS_CONFIGURE([libmowgli-2], [[--without-openssl]], [[]], [[]], [[--with-openssl], [--with-openssl=auto], [--with-openssl=yes]])
+	AX_SUBDIRS_CONFIGURE([libmowgli-2], [
+		[--without-openssl], [CC="\${SUBCONF_CC}"], [LD="\${SUBCONF_LD}"], [CFLAGS="\${SUBCONF_CFLAGS}"],
+		[CPPFLAGS="\${SUBCONF_CPPFLAGS}"], [LDFLAGS="\${SUBCONF_LDFLAGS}"], [LIBS="\${SUBCONF_LIBS}"]
+	], [[]], [[]], [[--with-openssl], [--with-openssl=auto], [--with-openssl=yes]])
 ])
 
 AC_CONFIG_FILES([

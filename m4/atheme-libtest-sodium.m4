@@ -1,10 +1,12 @@
 AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 
 	LIBSODIUM="No"
-	LIBSODIUMMEMORY="No"
-	LIBSODIUMMEMZERO="No"
-	LIBSODIUMRNG="No"
-	LIBSODIUMSCRYPT="No"
+	LIBSODIUM_USABLE="No"
+	LIBSODIUM_MEMORY="No"
+	LIBSODIUM_MEMCMP="No"
+	LIBSODIUM_MEMZERO="No"
+	LIBSODIUM_RANDOM="No"
+	LIBSODIUM_SCRYPT="No"
 
 	AC_ARG_WITH([sodium],
 		[AS_HELP_STRING([--without-sodium], [Do not attempt to detect libsodium (cryptographic library)])],
@@ -23,146 +25,163 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 	AS_IF([test "${with_sodium}" != "no"], [
 		PKG_CHECK_MODULES([LIBSODIUM], [libsodium], [
 			LIBS="${LIBSODIUM_LIBS} ${LIBS}"
-			LIBSODIUM="Yes"
-			AC_CHECK_HEADERS([sodium/core.h sodium/utils.h sodium/version.h], [], [
+			AC_MSG_CHECKING([if libsodium appears to be usable])
+			AC_LINK_IFELSE([
+				AC_LANG_PROGRAM([[
+					#include <sodium/core.h>
+					#include <sodium/utils.h>
+					#include <sodium/version.h>
+				]], [[
+					(void) sodium_init();
+				]])
+			], [
+				AC_MSG_RESULT([yes])
+				LIBSODIUM="Yes"
+			], [
+				AC_MSG_RESULT([no])
 				LIBSODIUM="No"
 				AS_IF([test "${with_sodium}" = "yes"], [
-					AC_MSG_ERROR([--with-sodium was specified but a required header file is missing])
+					AC_MSG_FAILURE([--with-sodium was given but libsodium appears to be unusable])
 				])
-			], [])
+			])
 		], [
 			LIBSODIUM="No"
 			AS_IF([test "${with_sodium}" = "yes"], [
-				AC_MSG_ERROR([--with-sodium was specified but libsodium could not be found])
+				AC_MSG_ERROR([--with-sodium was given but libsodium could not be found])
 			])
 		])
+	], [
+		LIBSODIUM="No"
 	])
 
 	AS_IF([test "${LIBSODIUM}" = "Yes"], [
-		AC_MSG_CHECKING([if libsodium is usable as a whole])
+
+		AC_MSG_CHECKING([if libsodium has usable memory allocation and manipulation functions])
 		AC_LINK_IFELSE([
 			AC_LANG_PROGRAM([[
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
 				#include <sodium/core.h>
+				#include <sodium/utils.h>
 			]], [[
-				(void) sodium_init();
+				(void) sodium_malloc(0);
+				(void) sodium_mlock(NULL, 0);
+				(void) sodium_mprotect_noaccess(NULL);
+				(void) sodium_mprotect_readonly(NULL);
+				(void) sodium_mprotect_readwrite(NULL);
+				(void) sodium_munlock(NULL, 0);
+				(void) sodium_free(NULL);
 			]])
 		], [
 			AC_MSG_RESULT([yes])
-
-			AC_MSG_CHECKING([if libsodium has usable memory manipulation functions])
-			AC_LINK_IFELSE([
-				AC_LANG_PROGRAM([[
-					#ifdef HAVE_STDDEF_H
-					#  include <stddef.h>
-					#endif
-					#include <sodium/core.h>
-					#include <sodium/utils.h>
-				]], [[
-					(void) sodium_malloc(0);
-					(void) sodium_mlock(NULL, 0);
-					(void) sodium_mprotect_noaccess(NULL);
-					(void) sodium_mprotect_readonly(NULL);
-					(void) sodium_mprotect_readwrite(NULL);
-					(void) sodium_munlock(NULL, 0);
-					(void) sodium_free(NULL);
-				]])
-			], [
-				AC_MSG_RESULT([yes])
-				LIBSODIUMMEMORY="Yes"
-			], [
-				AC_MSG_RESULT([no])
-				LIBSODIUMMEMORY="No"
-			])
-
-			AC_MSG_CHECKING([if libsodium has a usable memory zeroing function])
-			AC_LINK_IFELSE([
-				AC_LANG_PROGRAM([[
-					#ifdef HAVE_STDDEF_H
-					#  include <stddef.h>
-					#endif
-					#include <sodium/core.h>
-					#include <sodium/utils.h>
-				]], [[
-					(void) sodium_memzero(NULL, 0);
-				]])
-			], [
-				AC_MSG_RESULT([yes])
-				LIBSODIUMMEMZERO="Yes"
-			], [
-				AC_MSG_RESULT([no])
-				LIBSODIUMMEMZERO="No"
-			])
-
-			AC_CHECK_HEADERS([sodium/randombytes.h], [
-				AC_MSG_CHECKING([if libsodium has a usable random number generator])
-				AC_LINK_IFELSE([
-					AC_LANG_PROGRAM([[
-						#ifdef HAVE_STDDEF_H
-						#  include <stddef.h>
-						#endif
-						#include <sodium/core.h>
-						#include <sodium/utils.h>
-						#include <sodium/randombytes.h>
-					]], [[
-						(void) randombytes_random();
-						(void) randombytes_uniform(0);
-						(void) randombytes_buf(NULL, 0);
-					]])
-				], [
-					AC_MSG_RESULT([yes])
-					LIBSODIUMRNG="Yes"
-				], [
-					AC_MSG_RESULT([no])
-					LIBSODIUMRNG="No"
-				])
-			], [
-				LIBSODIUMRNG="No"
-			], [])
-
-			AC_CHECK_HEADERS([sodium/crypto_pwhash_scryptsalsa208sha256.h], [
-				AC_MSG_CHECKING([if libsodium has a usable scrypt password hash generator])
-				AC_LINK_IFELSE([
-					AC_LANG_PROGRAM([[
-						#ifdef HAVE_STDDEF_H
-						#  include <stddef.h>
-						#endif
-						#include <sodium/crypto_pwhash_scryptsalsa208sha256.h>
-					]], [[
-						const unsigned long long int opslimit = crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN;
-						const size_t memlimit = crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MIN;
-						(void) crypto_pwhash_scryptsalsa208sha256_str_needs_rehash(NULL, 0, 0);
-						(void) crypto_pwhash_scryptsalsa208sha256_str_verify(NULL, NULL, 0);
-					]])
-				], [
-					AC_MSG_RESULT([yes])
-					LIBSODIUMSCRYPT="Yes"
-				], [
-					AC_MSG_RESULT([no])
-					LIBSODIUMSCRYPT="No"
-				])
-			], [
-				LIBSODIUMSCRYPT="No"
-			], [])
-
-			AS_IF([test "${LIBSODIUMMEMORY}${LIBSODIUMMEMZERO}${LIBSODIUMRNG}${LIBSODIUMSCRYPT}" = "NoNoNoNo"], [
-				LIBSODIUM="No"
-				AS_IF([test "${with_sodium}" = "yes"], [
-					AC_MSG_FAILURE([--with-sodium was specified but libsodium appears to be unusable])
-				])
-			], [
-				AC_DEFINE([HAVE_LIBSODIUM], [1], [Define to 1 if libsodium is available])
-				AS_IF([test "${LIBSODIUMMEMZERO}" = "Yes"], [
-					AC_DEFINE([HAVE_LIBSODIUM_MEMZERO], [1], [Define to 1 if libsodium memzero is available])
-				])
-				AS_IF([test "${LIBSODIUMSCRYPT}" = "Yes"], [
-					AC_DEFINE([HAVE_LIBSODIUM_SCRYPT], [1], [Define to 1 if libsodium scrypt is available])
-				])
-			])
+			LIBSODIUM_USABLE="Yes"
+			LIBSODIUM_MEMORY="Yes"
 		], [
 			AC_MSG_RESULT([no])
+			LIBSODIUM_MEMORY="No"
+		])
+
+		AC_MSG_CHECKING([if libsodium has a usable constant-time memory comparison function])
+		AC_LINK_IFELSE([
+			AC_LANG_PROGRAM([[
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <sodium/core.h>
+				#include <sodium/utils.h>
+			]], [[
+				(void) sodium_memcmp(NULL, NULL, 0);
+			]])
+		], [
+			AC_MSG_RESULT([yes])
+			LIBSODIUM_USABLE="Yes"
+			LIBSODIUM_MEMCMP="Yes"
+		], [
+			AC_MSG_RESULT([no])
+			LIBSODIUM_MEMCMP="No"
+		])
+
+		AC_MSG_CHECKING([if libsodium has a usable memory zeroing function])
+		AC_LINK_IFELSE([
+			AC_LANG_PROGRAM([[
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <sodium/core.h>
+				#include <sodium/utils.h>
+			]], [[
+				(void) sodium_memzero(NULL, 0);
+			]])
+		], [
+			AC_MSG_RESULT([yes])
+			LIBSODIUM_USABLE="Yes"
+			LIBSODIUM_MEMZERO="Yes"
+		], [
+			AC_MSG_RESULT([no])
+			LIBSODIUM_MEMZERO="No"
+		])
+
+		AC_MSG_CHECKING([if libsodium has a usable random number generator])
+		AC_LINK_IFELSE([
+			AC_LANG_PROGRAM([[
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <sodium/core.h>
+				#include <sodium/utils.h>
+				#include <sodium/randombytes.h>
+			]], [[
+				(void) randombytes_random();
+				(void) randombytes_uniform(0);
+				(void) randombytes_buf(NULL, 0);
+			]])
+		], [
+			AC_MSG_RESULT([yes])
+			LIBSODIUM_USABLE="Yes"
+			LIBSODIUM_RANDOM="Yes"
+		], [
+			AC_MSG_RESULT([no])
+			LIBSODIUM_RANDOM="No"
+		])
+
+		AC_MSG_CHECKING([if libsodium has a usable scrypt password hash generator])
+		AC_LINK_IFELSE([
+			AC_LANG_PROGRAM([[
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <sodium/crypto_pwhash_scryptsalsa208sha256.h>
+			]], [[
+				const unsigned long long int opslimit = crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN;
+				const size_t memlimit = crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MIN;
+				(void) crypto_pwhash_scryptsalsa208sha256_str_needs_rehash(NULL, 0, 0);
+				(void) crypto_pwhash_scryptsalsa208sha256_str_verify(NULL, NULL, 0);
+			]])
+		], [
+			AC_MSG_RESULT([yes])
+			LIBSODIUM_USABLE="Yes"
+			LIBSODIUM_SCRYPT="Yes"
+		], [
+			AC_MSG_RESULT([no])
+			LIBSODIUM_SCRYPT="No"
+		])
+
+		AS_IF([test "${LIBSODIUM_USABLE}" = "Yes"], [
+			AC_DEFINE([HAVE_LIBSODIUM], [1], [Define to 1 if libsodium appears to be usable])
+			AS_IF([test "${LIBSODIUM_MEMCMP}" = "Yes"], [
+				AC_DEFINE([HAVE_LIBSODIUM_MEMCMP], [1], [Define to 1 if libsodium has a usable constant-time memory comparison function])
+			])
+			AS_IF([test "${LIBSODIUM_MEMZERO}" = "Yes"], [
+				AC_DEFINE([HAVE_LIBSODIUM_MEMZERO], [1], [Define to 1 if libsodium has a usable memory zeroing function])
+			])
+			AS_IF([test "${LIBSODIUM_SCRYPT}" = "Yes"], [
+				AC_DEFINE([HAVE_LIBSODIUM_SCRYPT], [1], [Define to 1 if libsodium has a usable scrypt password hash generator])
+			])
+		], [
 			LIBSODIUM="No"
 			AS_IF([test "${with_sodium}" = "yes"], [
-				AC_MSG_FAILURE([--with-sodium was specified but libsodium appears to be unusable])
+				AC_MSG_FAILURE([--with-sodium was given but libsodium appears to be unusable])
 			])
 		])
 	])

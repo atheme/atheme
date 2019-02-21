@@ -3,7 +3,7 @@
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
  * Copyright (C) 2006-2015 Atheme Project (http://atheme.org/)
- * Copyright (C) 2017 Atheme Development Group (https://atheme.github.io/)
+ * Copyright (C) 2017-2019 Atheme Development Group (https://atheme.github.io/)
  *
  * This file contains the main() routine.
  */
@@ -14,15 +14,16 @@
 #  define MINIMUM(a, b) (((a) < (b)) ? (a) : (b))
 #endif
 
-#define LOGIN_CANCELLED_STR     _("There was a problem logging you in; login cancelled")
+#define ASASL_OUTFLAGS_WIPE_FREE_BUF    (ASASL_OUTFLAG_WIPE_BUF | ASASL_OUTFLAG_FREE_BUF)
+#define LOGIN_CANCELLED_STR             _("There was a problem logging you in; login cancelled")
 
-static mowgli_list_t sessions;
-static mowgli_list_t mechanisms;
-static char mechlist_string[SASL_S2S_MAXLEN_ATONCE_B64];
-static bool hide_server_names;
+static mowgli_list_t sasl_sessions;
+static mowgli_list_t sasl_mechanisms;
+static char sasl_mechlist_string[SASL_S2S_MAXLEN_ATONCE_B64];
+static bool sasl_hide_server_names;
 
+static mowgli_eventloop_timer_t *sasl_delete_stale_timer = NULL;
 static struct service *saslsvs = NULL;
-static mowgli_eventloop_timer_t *delete_stale_timer = NULL;
 
 static const char *
 sasl_format_sourceinfo(struct sourceinfo *const restrict si, const bool full)
@@ -52,7 +53,7 @@ sasl_get_source_name(struct sourceinfo *const restrict si)
 
 	const struct sasl_sourceinfo *const ssi = (const struct sasl_sourceinfo *) si;
 
-	if (ssi->sess->server && ! hide_server_names)
+	if (ssi->sess->server && ! sasl_hide_server_names)
 		(void) snprintf(description, sizeof description, "Unknown user on %s (via SASL)",
 		                                                 ssi->sess->server->name);
 	else
@@ -102,14 +103,14 @@ sasl_sourceinfo_recreate(struct sasl_session *const restrict p)
 }
 
 static struct sasl_session *
-find_session(const char *const restrict uid)
+sasl_session_find(const char *const restrict uid)
 {
 	if (! uid || ! *uid)
 		return NULL;
 
 	mowgli_node_t *n;
 
-	MOWGLI_ITER_FOREACH(n, sessions.head)
+	MOWGLI_ITER_FOREACH(n, sasl_sessions.head)
 	{
 		struct sasl_session *const p = n->data;
 
@@ -121,29 +122,29 @@ find_session(const char *const restrict uid)
 }
 
 static struct sasl_session *
-find_or_make_session(const struct sasl_message *const restrict smsg)
+sasl_session_find_or_make(const struct sasl_message *const restrict smsg)
 {
 	struct sasl_session *p;
 
-	if (! (p = find_session(smsg->uid)))
+	if (! (p = sasl_session_find(smsg->uid)))
 	{
 		p = smalloc(sizeof *p);
 
 		p->server = smsg->server;
 
 		(void) mowgli_strlcpy(p->uid, smsg->uid, sizeof p->uid);
-		(void) mowgli_node_add(p, &p->node, &sessions);
+		(void) mowgli_node_add(p, &p->node, &sasl_sessions);
 	}
 
 	return p;
 }
 
 static const struct sasl_mechanism *
-find_mechanism(const char *const restrict name)
+sasl_mechanism_find(const char *const restrict name)
 {
 	mowgli_node_t *n;
 
-	MOWGLI_ITER_FOREACH(n, mechanisms.head)
+	MOWGLI_ITER_FOREACH(n, sasl_mechanisms.head)
 	{
 		const struct sasl_mechanism *const mptr = n->data;
 
@@ -159,22 +160,22 @@ find_mechanism(const char *const restrict name)
 static void
 sasl_server_eob(struct server ATHEME_VATTR_UNUSED *const restrict s)
 {
-	(void) sasl_mechlist_sts(mechlist_string);
+	(void) sasl_mechlist_sts(sasl_mechlist_string);
 }
 
 static void
-mechlist_build_string(void)
+sasl_mechlist_string_build(void)
 {
-	char *buf = mechlist_string;
+	char *buf = sasl_mechlist_string;
 	size_t tmplen = 0;
 	mowgli_node_t *n;
 
-	MOWGLI_ITER_FOREACH(n, mechanisms.head)
+	MOWGLI_ITER_FOREACH(n, sasl_mechanisms.head)
 	{
 		const struct sasl_mechanism *const mptr = n->data;
 		const size_t namelen = strlen(mptr->name);
 
-		if (tmplen + namelen >= sizeof mechlist_string)
+		if (tmplen + namelen >= sizeof sasl_mechlist_string)
 			break;
 
 		(void) memcpy(buf, mptr->name, namelen);
@@ -191,16 +192,16 @@ mechlist_build_string(void)
 }
 
 static void
-mechlist_do_rebuild(void)
+sasl_mechlist_do_rebuild(void)
 {
-	(void) mechlist_build_string();
+	(void) sasl_mechlist_string_build();
 
 	if (me.connected)
-		(void) sasl_mechlist_sts(mechlist_string);
+		(void) sasl_mechlist_sts(sasl_mechlist_string);
 }
 
 static bool
-may_impersonate(struct myuser *const source_mu, struct myuser *const target_mu)
+sasl_may_impersonate(struct myuser *const source_mu, struct myuser *const target_mu)
 {
 	// Allow same (although this function won't get called in that case anyway)
 	if (source_mu == target_mu)
@@ -238,7 +239,7 @@ may_impersonate(struct myuser *const source_mu, struct myuser *const target_mu)
 }
 
 static struct myuser *
-login_user(struct sasl_session *const restrict p)
+sasl_user_can_login(struct sasl_session *const restrict p)
 {
 	// source_mu is the user whose credentials we verified ("authentication id" / authcid)
 	// target_mu is the user who will be ultimately logged in ("authorization id" / authzid)
@@ -266,7 +267,7 @@ login_user(struct sasl_session *const restrict p)
 
 	if (target_mu != source_mu)
 	{
-		if (! may_impersonate(source_mu, target_mu))
+		if (! sasl_may_impersonate(source_mu, target_mu))
 		{
 			(void) logcommand(p->si, CMDLOG_LOGIN, "denied IMPERSONATE by \2%s\2 to \2%s\2",
 			                                       entity(source_mu)->name, entity(target_mu)->name);
@@ -289,7 +290,7 @@ login_user(struct sasl_session *const restrict p)
 	}
 
 	// Log it with the full n!u@h later
-	p->flags |= ASASL_NEED_LOG;
+	p->flags |= ASASL_SFLAG_NEED_LOG;
 
 	/* We just did SASL authentication for a user.  With IRCds which do not
 	 * have unique UIDs for users, we will likely be expecting the login
@@ -313,7 +314,7 @@ login_user(struct sasl_session *const restrict p)
 static void
 sasl_session_destroy(struct sasl_session *const restrict p)
 {
-	if (p->flags & ASASL_NEED_LOG && *p->authceid)
+	if (p->flags & ASASL_SFLAG_NEED_LOG && *p->authceid)
 	{
 		const struct myuser *const mu = myuser_find_uid(p->authceid);
 
@@ -323,11 +324,11 @@ sasl_session_destroy(struct sasl_session *const restrict p)
 
 	mowgli_node_t *n;
 
-	MOWGLI_ITER_FOREACH(n, sessions.head)
+	MOWGLI_ITER_FOREACH(n, sasl_sessions.head)
 	{
 		if (n == &p->node && n->data == p)
 		{
-			(void) mowgli_node_delete(n, &sessions);
+			(void) mowgli_node_delete(n, &sasl_sessions);
 			break;
 		}
 	}
@@ -385,7 +386,7 @@ sasl_handle_login(struct sasl_session *const restrict p, struct user *const u, s
 	bool was_killed = false;
 
 	// We will log messages now ourselves, if needed
-	p->flags &= ~ASASL_NEED_LOG;
+	p->flags &= ~ASASL_SFLAG_NEED_LOG;
 
 	// Find the account if necessary
 	if (! mu)
@@ -457,28 +458,135 @@ sasl_handle_login(struct sasl_session *const restrict p, struct user *const u, s
 	return true;
 }
 
+static enum sasl_mechanism_result ATHEME_FATTR_WUR
+sasl_process_input(struct sasl_session *const restrict p, char *const restrict buf, const size_t len,
+                   struct sasl_output_buf *const restrict outbuf)
+{
+	// A single + character is not data at all -- invoke mech_step without an input buffer
+	if (*buf == '+' && len == 1)
+		return p->mechptr->mech_step(p, NULL, outbuf);
+
+	unsigned char decbuf[SASL_S2S_MAXLEN_TOTAL_RAW + 1];
+	const size_t declen = base64_decode(buf, decbuf, SASL_S2S_MAXLEN_TOTAL_RAW);
+
+	if (declen == (size_t) -1)
+	{
+		(void) slog(LG_DEBUG, "%s: base64_decode() failed", MOWGLI_FUNC_NAME);
+		return ASASL_MRESULT_ERROR;
+	}
+
+	/* Account for the fact that the client may have sent whitespace; our
+	 * decoder is tolerant of whitespace and will skip over it    -- amdj
+	 */
+	if (declen == 0)
+		return p->mechptr->mech_step(p, NULL, outbuf);
+
+	unsigned int inflags = ASASL_INFLAG_NONE;
+	const struct sasl_input_buf inbuf = {
+		.buf    = decbuf,
+		.len    = declen,
+		.flags  = &inflags,
+	};
+
+	// Ensure input is NULL-terminated for modules that want to process the data as a string
+	decbuf[declen] = 0x00;
+
+	// Pass the data to the mechanism
+	const enum sasl_mechanism_result rc = p->mechptr->mech_step(p, &inbuf, outbuf);
+
+	// The mechanism instructed us to wipe the input data now that it has been processed
+	if (inflags & ASASL_INFLAG_WIPE_BUF)
+	{
+		/* If we got here, the bufferred base64-encoded input data is either in a
+		 * dedicated buffer (buf == p->buf && len == p->len) or directly from a
+		 * parv[] inside struct sasl_message. Either way buf is mutable.    -- amdj
+		 */
+		(void) smemzero(buf, len);          // Erase the base64-encoded input data
+		(void) smemzero(decbuf, declen);    // Erase the base64-decoded input data
+	}
+
+	return rc;
+}
+
+static bool ATHEME_FATTR_WUR
+sasl_process_output(struct sasl_session *const restrict p, struct sasl_output_buf *const restrict outbuf)
+{
+	char encbuf[SASL_S2S_MAXLEN_TOTAL_B64 + 1];
+	const size_t enclen = base64_encode(outbuf->buf, outbuf->len, encbuf, sizeof encbuf);
+
+	if ((outbuf->flags & ASASL_OUTFLAGS_WIPE_FREE_BUF) == ASASL_OUTFLAGS_WIPE_FREE_BUF)
+		// The mechanism instructed us to wipe and free the output data now that it has been encoded
+		(void) smemzerofree(outbuf->buf, outbuf->len);
+	else if (outbuf->flags & ASASL_OUTFLAG_WIPE_BUF)
+		// The mechanism instructed us to wipe the output data now that it has been encoded
+		(void) smemzero(outbuf->buf, outbuf->len);
+	else if (outbuf->flags & ASASL_OUTFLAG_FREE_BUF)
+		// The mechanism instructed us to free the output data now that it has been encoded
+		(void) sfree(outbuf->buf);
+
+	outbuf->buf = NULL;
+	outbuf->len = 0;
+
+	if (enclen == (size_t) -1)
+	{
+		(void) slog(LG_ERROR, "%s: base64_encode() failed", MOWGLI_FUNC_NAME);
+		return false;
+	}
+
+	char *encbufptr = encbuf;
+	size_t encbuflast = SASL_S2S_MAXLEN_ATONCE_B64;
+
+	for (size_t encbufrem = enclen; encbufrem != 0; /* No action */)
+	{
+		char encbufpart[SASL_S2S_MAXLEN_ATONCE_B64 + 1];
+		const size_t encbufptrlen = MINIMUM(SASL_S2S_MAXLEN_ATONCE_B64, encbufrem);
+
+		(void) memset(encbufpart, 0x00, sizeof encbufpart);
+		(void) memcpy(encbufpart, encbufptr, encbufptrlen);
+		(void) sasl_sts(p->uid, 'C', encbufpart);
+
+		// The mechanism instructed us to wipe the output data now that it has been transmitted
+		if (outbuf->flags & ASASL_OUTFLAG_WIPE_BUF)
+		{
+			(void) smemzero(encbufpart, encbufptrlen);
+			(void) smemzero(encbufptr, encbufptrlen);
+		}
+
+		encbufptr += encbufptrlen;
+		encbufrem -= encbufptrlen;
+		encbuflast = encbufptrlen;
+	}
+
+	/* The end of a packet is indicated by a string not of the maximum length. If the last string
+	 * was the maximum length, send another, empty string, to advance the session.    -- amdj
+	 */
+	if (encbuflast == SASL_S2S_MAXLEN_ATONCE_B64)
+		(void) sasl_sts(p->uid, 'C', "+");
+
+	return true;
+}
+
 /* given an entire sasl message, advance session by passing data to mechanism
  * and feeding returned data back to client.
  */
 static bool ATHEME_FATTR_WUR
-sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, const size_t len)
+sasl_process_packet(struct sasl_session *const restrict p, char *const restrict buf, const size_t len)
 {
-	unsigned int rc;
-
 	struct sasl_output_buf outbuf = {
 		.buf    = NULL,
 		.len    = 0,
 		.flags  = ASASL_OUTFLAG_NONE,
 	};
 
-	bool have_written = false;
+	enum sasl_mechanism_result rc;
+	bool have_responded = false;
 
-	// First piece of data in a session is the name of the SASL mechanism that will be used
 	if (! p->mechptr && ! len)
 	{
-		if (! (p->mechptr = find_mechanism(buf)))
+		// First piece of data in a session is the name of the SASL mechanism that will be used
+		if (! (p->mechptr = sasl_mechanism_find(buf)))
 		{
-			(void) sasl_sts(p->uid, 'M', mechlist_string);
+			(void) sasl_sts(p->uid, 'M', sasl_mechlist_string);
 			return false;
 		}
 
@@ -487,7 +595,7 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 		if (p->mechptr->mech_start)
 			rc = p->mechptr->mech_start(p, &outbuf);
 		else
-			rc = ASASL_MORE;
+			rc = ASASL_MRESULT_CONTINUE;
 	}
 	else if (! p->mechptr)
 	{
@@ -496,173 +604,98 @@ sasl_packet(struct sasl_session *const restrict p, char *const restrict buf, con
 	}
 	else
 	{
-		if (*buf == '+' && len == 1)
-		{
-			rc = p->mechptr->mech_step(p, NULL, &outbuf);
-		}
-		else
-		{
-			unsigned char decbuf[SASL_S2S_MAXLEN_TOTAL_RAW + 1];
-			const size_t declen = base64_decode(buf, decbuf, SASL_S2S_MAXLEN_TOTAL_RAW);
-
-			if (declen != (size_t) -1)
-			{
-				// Ensure input is NULL-terminated for modules that want to process the data as a string
-				decbuf[declen] = 0x00;
-
-				unsigned int inflags = ASASL_INFLAG_NONE;
-				const struct sasl_input_buf inbuf = {
-					.buf    = decbuf,
-					.len    = declen,
-					.flags  = &inflags,
-				};
-
-				rc = p->mechptr->mech_step(p, &inbuf, &outbuf);
-
-				// The mechanism instructed us to wipe the input data now that it has been processed
-				if (inflags & ASASL_INFLAG_WIPE_BUF)
-				{
-					/* If we got here, the bufferred base64-encoded input data is either in a
-					 * dedicated buffer (buf == p->buf && len == p->len) or directly from a
-					 * parv[] inside struct sasl_message. Either way buf is mutable.    -- amdj
-					 */
-					(void) smemzero(buf, len);          // Erase the base64-encoded input data
-					(void) smemzero(decbuf, declen);    // Erase the base64-decoded input data
-				}
-			}
-			else
-			{
-				(void) slog(LG_DEBUG, "%s: base64_decode() failed", MOWGLI_FUNC_NAME);
-
-				rc = ASASL_ERROR;
-			}
-		}
+		rc = sasl_process_input(p, buf, len, &outbuf);
 	}
-
-	// Some progress has been made, reset timeout.
-	p->flags &= ~ASASL_MARKED_FOR_DELETION;
 
 	if (outbuf.buf && outbuf.len)
 	{
-		char encbuf[SASL_S2S_MAXLEN_TOTAL_B64 + 1];
-		const size_t enclen = base64_encode(outbuf.buf, outbuf.len, encbuf, sizeof encbuf);
-
-		// The mechanism instructed us to wipe the output data now that it has been encoded
-		if (outbuf.flags & ASASL_OUTFLAG_WIPE_BUF)
-			(void) smemzero(outbuf.buf, outbuf.len);
-
-		// The mechanism did not indicate to us that the buffer is not dynamic -- free it now
-		if (! (outbuf.flags & ASASL_OUTFLAG_DONT_FREE_BUF))
-			(void) sfree(outbuf.buf);
-
-		outbuf.buf = NULL;
-		outbuf.len = 0;
-
-		if (enclen == (size_t) -1)
-		{
-			(void) slog(LG_ERROR, "%s: base64_encode() failed", MOWGLI_FUNC_NAME);
+		if (! sasl_process_output(p, &outbuf))
 			return false;
-		}
 
-		const char *encbufptr = encbuf;
-		size_t encbuflast = SASL_S2S_MAXLEN_ATONCE_B64;
-
-		for (size_t encbufrem = enclen; encbufrem != 0; /* No action */)
-		{
-			char encbufpart[SASL_S2S_MAXLEN_ATONCE_B64 + 1];
-			const size_t encbufptrlen = MINIMUM(SASL_S2S_MAXLEN_ATONCE_B64, encbufrem);
-
-			(void) memset(encbufpart, 0x00, sizeof encbufpart);
-			(void) memcpy(encbufpart, encbufptr, encbufptrlen);
-			(void) sasl_sts(p->uid, 'C', encbufpart);
-
-			// The mechanism instructed us to wipe the output data now that it has been transmitted
-			if (outbuf.flags & ASASL_OUTFLAG_WIPE_BUF)
-				(void) smemzero(encbufpart, encbufptrlen);
-
-			encbufptr += encbufptrlen;
-			encbufrem -= encbufptrlen;
-			encbuflast = encbufptrlen;
-		}
-
-		/* The end of a packet is indicated by a string not of the maximum length. If the last string
-		 * was the maximum length, send another, empty string, to advance the session.    -- amdj
-		 */
-		if (encbuflast == SASL_S2S_MAXLEN_ATONCE_B64)
-			(void) sasl_sts(p->uid, 'C', "+");
-
-		// The mechanism instructed us to wipe the output data now that it has been transmitted
-		if (outbuf.flags & ASASL_OUTFLAG_WIPE_BUF)
-			(void) smemzero(encbuf, enclen);
-
-		have_written = true;
+		have_responded = true;
 	}
 
-	if (rc == ASASL_MORE)
+	// Some progress has been made, reset timeout.
+	p->flags &= ~ASASL_SFLAG_MARKED_FOR_DELETION;
+
+	switch (rc)
 	{
-		if (! have_written)
-			/* We want more data from the client, but we haven't sent any of our own.
-			 * Send an empty string to advance the session.    -- amdj
+		case ASASL_MRESULT_CONTINUE:
+		{
+			if (! have_responded)
+				/* We want more data from the client, but we haven't sent any of our own.
+				 * Send an empty string to advance the session.    -- amdj
+				 */
+				(void) sasl_sts(p->uid, 'C', "+");
+
+			return true;
+		}
+
+		case ASASL_MRESULT_SUCCESS:
+		{
+			struct user *const u = user_find(p->uid);
+			struct myuser *const mu = sasl_user_can_login(p);
+
+			if (! mu)
+			{
+				if (u)
+					(void) notice(saslsvs->nick, u->nick, LOGIN_CANCELLED_STR);
+
+				return false;
+			}
+
+			/* If the user is already on the network, attempt to log them in immediately.
+			 * Otherwise, we will log them in on introduction of user to network
 			 */
-			(void) sasl_sts(p->uid, 'C', "+");
+			if (u && ! sasl_handle_login(p, u, mu))
+				return false;
 
-		return true;
-	}
+			return sasl_session_success(p, mu, (u != NULL));
+		}
 
-	if (rc == ASASL_DONE)
-	{
-		struct user *const u = user_find(p->uid);
-		struct myuser *const mu = login_user(p);
-
-		if (! mu)
+		case ASASL_MRESULT_FAILURE:
 		{
-			if (u)
-				(void) notice(saslsvs->nick, u->nick, LOGIN_CANCELLED_STR);
+			if (*p->authceid)
+			{
+				/* If we reach this, they failed SASL auth, so if they were trying
+				 * to authenticate as a specific user, run bad_password() on them.
+				 */
+				struct myuser *const mu = myuser_find_uid(p->authceid);
+
+				if (! mu)
+					return false;
+
+				/* We might have more information to construct a more accurate sourceinfo now?
+				 * TODO: Investigate whether this is necessary
+				 */
+				(void) sasl_sourceinfo_recreate(p);
+
+				(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN (%s) to \2%s\2 (bad password)",
+				                                       p->mechptr->name, entity(mu)->name);
+				(void) bad_password(p->si, mu);
+			}
 
 			return false;
 		}
 
-		/* If the user is already on the network (doing an IRCv3.2 SASL reauthentication), attempt to
-		 * log them in immediately. Otherwise, we will log them in on introduction of user to network
-		 */
-		if (u && ! sasl_handle_login(p, u, mu))
+		case ASASL_MRESULT_ERROR:
 			return false;
-
-		return sasl_session_success(p, mu, (u != NULL));
 	}
 
-	if (rc == ASASL_FAIL && *p->authceid)
-	{
-		/* If we reach this, they failed SASL auth, so if they were trying
-		 * to identify as a specific user, bad_password them.
-		 */
-		struct myuser *const mu = myuser_find_uid(p->authceid);
-
-		if (! mu)
-			return false;
-
-		/* We might have more information to construct a more accurate sourceinfo now?
-		 * TODO: Investigate whether this is necessary
-		 */
-		(void) sasl_sourceinfo_recreate(p);
-
-		(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN (%s) to \2%s\2 (bad password)",
-		                                       p->mechptr->name, entity(mu)->name);
-		(void) bad_password(p->si, mu);
-
-		return false;
-	}
-
+	/* This is only here to keep GCC happy -- Clang can see that the switch() handles all legal
+	 * values of the enumeration, and so knows that this function will never get to this point;
+	 * GCC is dumb, and warns that control reaches the end of this non-void function.    -- amdj
+	 */
 	return false;
 }
 
 static bool ATHEME_FATTR_WUR
-sasl_buf_process(struct sasl_session *const restrict p)
+sasl_process_buffer(struct sasl_session *const restrict p)
 {
 	// Ensure the buffer is NULL-terminated so that base64_decode() doesn't overrun it
 	p->buf[p->len] = 0x00;
 
-	if (! sasl_packet(p, p->buf, p->len))
+	if (! sasl_process_packet(p, p->buf, p->len))
 		return false;
 
 	(void) sfree(p->buf);
@@ -680,7 +713,7 @@ sasl_input_hostinfo(const struct sasl_message *const restrict smsg, struct sasl_
 	p->ip   = sstrdup(smsg->parv[1]);
 
 	if (smsg->parc >= 3 && strcmp(smsg->parv[2], "P") != 0)
-		p->tls = true;
+		p->flags |= ASASL_SFLAG_CLIENT_USING_TLS;
 }
 
 static bool ATHEME_FATTR_WUR
@@ -698,7 +731,7 @@ sasl_input_startauth(const struct sasl_message *const restrict smsg, struct sasl
 		(void) sfree(p->certfp);
 
 		p->certfp = sstrdup(smsg->parv[1]);
-		p->tls = true;
+		p->flags |= ASASL_SFLAG_CLIENT_USING_TLS;
 	}
 
 	struct user *const u = user_find(p->uid);
@@ -732,7 +765,7 @@ sasl_input_startauth(const struct sasl_message *const restrict smsg, struct sasl
 		u->flags |= UF_DOING_SASL;
 	}
 
-	return sasl_packet(p, smsg->parv[0], 0);
+	return sasl_process_packet(p, smsg->parv[0], 0);
 }
 
 static bool ATHEME_FATTR_WUR
@@ -756,8 +789,8 @@ sasl_input_clientdata(const struct sasl_message *const restrict smsg, struct sas
 	 * should send us a 'D' packet instead of a 'C *' packet in this case, but this is for if they
 	 * don't. Note that this will usually result in the client getting a 904 numeric instead of 906,
 	 * but the alternative is not treating '*' specially and then going on to fail to decode it in
-	 * sasl_packet() above, which will result in ... an aborted session and a 904 numeric. So this
-	 * just saves time.
+	 * sasl_process_input() above, which will result in ... an aborted session and a 904 numeric.
+	 * So this just saves time.
 	 */
 
 	const size_t len = strlen(smsg->parv[0]);
@@ -770,17 +803,17 @@ sasl_input_clientdata(const struct sasl_message *const restrict smsg, struct sas
 	if (len == 1 && smsg->parv[0][0] == '+')
 	{
 		if (p->buf)
-			return sasl_buf_process(p);
+			return sasl_process_buffer(p);
 
 		// This function already deals with the special case of 1 '+' character
-		return sasl_packet(p, smsg->parv[0], len);
+		return sasl_process_packet(p, smsg->parv[0], len);
 	}
 
 	/* Optimisation: If there is no buffer yet and this data is less than 400 characters, we don't
 	 * need to buffer it at all, and can process it immediately.
 	 */
 	if (! p->buf && len < SASL_S2S_MAXLEN_ATONCE_B64)
-		return sasl_packet(p, smsg->parv[0], len);
+		return sasl_process_packet(p, smsg->parv[0], len);
 
 	/* We need to buffer the data now, but first check if the client hasn't sent us an excessive
 	 * amount already.
@@ -798,7 +831,7 @@ sasl_input_clientdata(const struct sasl_message *const restrict smsg, struct sas
 
 	// Messages not exactly 400 characters are the end of data.
 	if (len < SASL_S2S_MAXLEN_ATONCE_B64)
-		return sasl_buf_process(p);
+		return sasl_process_buffer(p);
 
 	return true;
 }
@@ -806,7 +839,7 @@ sasl_input_clientdata(const struct sasl_message *const restrict smsg, struct sas
 static void
 sasl_input(struct sasl_message *const restrict smsg)
 {
-	struct sasl_session *const p = find_or_make_session(smsg);
+	struct sasl_session *const p = sasl_session_find_or_make(smsg);
 
 	bool ret = true;
 
@@ -846,7 +879,7 @@ sasl_user_add(hook_user_nick_t *const restrict data)
 		return;
 
 	// Not concerned unless it's an SASL login.
-	struct sasl_session *const p = find_session(u->uid);
+	struct sasl_session *const p = sasl_session_find(u->uid);
 	if (! p)
 		return;
 
@@ -855,18 +888,18 @@ sasl_user_add(hook_user_nick_t *const restrict data)
 }
 
 static void
-delete_stale(void ATHEME_VATTR_UNUSED *const restrict vptr)
+sasl_delete_stale(void ATHEME_VATTR_UNUSED *const restrict vptr)
 {
 	mowgli_node_t *n, *tn;
 
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, sasl_sessions.head)
 	{
 		struct sasl_session *const p = n->data;
 
-		if (p->flags & ASASL_MARKED_FOR_DELETION)
+		if (p->flags & ASASL_SFLAG_MARKED_FOR_DELETION)
 			(void) sasl_session_destroy(p);
 		else
-			p->flags |= ASASL_MARKED_FOR_DELETION;
+			p->flags |= ASASL_SFLAG_MARKED_FOR_DELETION;
 	}
 }
 
@@ -891,9 +924,9 @@ sasl_mech_register(const struct sasl_mechanism *const restrict mech)
 	 * This is not unprecedented in this codebase; libathemecore/crypto.c & libathemecore/strshare.c do the
 	 * same thing.
 	 */
-	(void) mowgli_node_add((void *)((uintptr_t) mech), node, &mechanisms);
+	(void) mowgli_node_add((void *)((uintptr_t) mech), node, &sasl_mechanisms);
 
-	(void) mechlist_do_rebuild();
+	(void) sasl_mechlist_do_rebuild();
 }
 
 static void
@@ -901,7 +934,7 @@ sasl_mech_unregister(const struct sasl_mechanism *const restrict mech)
 {
 	mowgli_node_t *n, *tn;
 
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, sasl_sessions.head)
 	{
 		struct sasl_session *const session = n->data;
 
@@ -911,14 +944,14 @@ sasl_mech_unregister(const struct sasl_mechanism *const restrict mech)
 			(void) sasl_session_destroy(session);
 		}
 	}
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, mechanisms.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, sasl_mechanisms.head)
 	{
 		if (n->data == mech)
 		{
 			(void) slog(LG_DEBUG, "%s: unregistering %s", MOWGLI_FUNC_NAME, mech->name);
-			(void) mowgli_node_delete(n, &mechanisms);
+			(void) mowgli_node_delete(n, &sasl_mechanisms);
 			(void) mowgli_node_free(n);
-			(void) mechlist_do_rebuild();
+			(void) sasl_mechlist_do_rebuild();
 
 			break;
 		}
@@ -986,7 +1019,7 @@ const struct sasl_core_functions sasl_core_functions = {
 };
 
 static void
-saslserv(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
+saslserv_message_handler(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
 	// this should never happen
 	if (parv[0][0] == '&')
@@ -1019,7 +1052,7 @@ saslserv(struct sourceinfo *const restrict si, const int parc, char **const rest
 static void
 mod_init(struct module *const restrict m)
 {
-	if (! (saslsvs = service_add("saslserv", &saslserv)))
+	if (! (saslsvs = service_add("saslserv", &saslserv_message_handler)))
 	{
 		(void) slog(LG_ERROR, "%s: service_add() failed", m->name);
 		m->mflags |= MODFLAG_FAIL;
@@ -1036,10 +1069,10 @@ mod_init(struct module *const restrict m)
 	(void) hook_add_event("user_can_login");
 	(void) hook_add_event("user_can_logout");
 
-	delete_stale_timer = mowgli_timer_add(base_eventloop, "sasl_delete_stale", &delete_stale, NULL, 30);
+	sasl_delete_stale_timer = mowgli_timer_add(base_eventloop, "sasl_delete_stale", &sasl_delete_stale, NULL, 30);
 	authservice_loaded++;
 
-	(void) add_bool_conf_item("HIDE_SERVER_NAMES", &saslsvs->conf_table, 0, &hide_server_names, false);
+	(void) add_bool_conf_item("HIDE_SERVER_NAMES", &saslsvs->conf_table, 0, &sasl_hide_server_names, false);
 }
 
 static void
@@ -1049,14 +1082,14 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	(void) hook_del_user_add(&sasl_user_add);
 	(void) hook_del_server_eob(&sasl_server_eob);
 
-	(void) mowgli_timer_destroy(base_eventloop, delete_stale_timer);
+	(void) mowgli_timer_destroy(base_eventloop, sasl_delete_stale_timer);
 
 	(void) del_conf_item("HIDE_SERVER_NAMES", &saslsvs->conf_table);
 	(void) service_delete(saslsvs);
 
 	authservice_loaded--;
 
-	if (sessions.head)
+	if (sasl_sessions.head)
 		(void) slog(LG_ERROR, "saslserv/main: shutting down with a non-empty session list; "
 		                      "a mechanism did not unregister itself! (BUG)");
 }
