@@ -160,7 +160,7 @@ AC_DEFUN([ATHEME_DECIDE_RANDOM_FRONTEND], [
 				AC_MSG_RESULT([${RANDOM_FRONTEND} (chosen by user)])
 			], [
 				AC_MSG_RESULT([error])
-				AC_MSG_ERROR([--with-digest-api-frontend=openbsd requires OpenBSD a usable OpenBSD arc4random(3)])
+				AC_MSG_ERROR([--with-rng-api-frontend=openbsd requires OpenBSD a usable OpenBSD arc4random(3)])
 			])
 			;;
 
@@ -170,7 +170,7 @@ AC_DEFUN([ATHEME_DECIDE_RANDOM_FRONTEND], [
 				AC_MSG_RESULT([${RANDOM_FRONTEND} (chosen by user)])
 			], [
 				AC_MSG_RESULT([error])
-				AC_MSG_ERROR([--with-digest-api-frontend=sodium requires --with-sodium and a usable random number generator])
+				AC_MSG_ERROR([--with-rng-api-frontend=sodium requires --with-sodium and a usable random number generator])
 			])
 			;;
 
@@ -180,7 +180,7 @@ AC_DEFUN([ATHEME_DECIDE_RANDOM_FRONTEND], [
 				AC_MSG_RESULT([${RANDOM_FRONTEND} (chosen by user)])
 			], [
 				AC_MSG_RESULT([error])
-				AC_MSG_ERROR([--with-digest-api-frontend=mbedtls requires --with-mbedtls and a usable random number generator])
+				AC_MSG_ERROR([--with-rng-api-frontend=mbedtls requires --with-mbedtls and a usable random number generator])
 			])
 			;;
 
@@ -190,7 +190,7 @@ AC_DEFUN([ATHEME_DECIDE_RANDOM_FRONTEND], [
 				AC_MSG_RESULT([${RANDOM_FRONTEND} (chosen by user)])
 			], [
 				AC_MSG_RESULT([error])
-				AC_MSG_ERROR([--with-digest-api-frontend=openssl/libressl requires --with-openssl and a usable random number generator])
+				AC_MSG_ERROR([--with-rng-api-frontend=openssl/libressl requires --with-openssl and a usable random number generator])
 			])
 			;;
 

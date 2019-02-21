@@ -13400,7 +13400,7 @@ else
 
 				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: error" >&5
 $as_echo "error" >&6; }
-				as_fn_error $? "--with-digest-api-frontend=openbsd requires OpenBSD a usable OpenBSD arc4random(3)" "$LINENO" 5
+				as_fn_error $? "--with-rng-api-frontend=openbsd requires OpenBSD a usable OpenBSD arc4random(3)" "$LINENO" 5
 
 fi
 			;;
@@ -13422,7 +13422,7 @@ else
 
 				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: error" >&5
 $as_echo "error" >&6; }
-				as_fn_error $? "--with-digest-api-frontend=sodium requires --with-sodium and a usable random number generator" "$LINENO" 5
+				as_fn_error $? "--with-rng-api-frontend=sodium requires --with-sodium and a usable random number generator" "$LINENO" 5
 
 fi
 			;;
@@ -13444,7 +13444,7 @@ else
 
 				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: error" >&5
 $as_echo "error" >&6; }
-				as_fn_error $? "--with-digest-api-frontend=mbedtls requires --with-mbedtls and a usable random number generator" "$LINENO" 5
+				as_fn_error $? "--with-rng-api-frontend=mbedtls requires --with-mbedtls and a usable random number generator" "$LINENO" 5
 
 fi
 			;;
@@ -13466,7 +13466,7 @@ else
 
 				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: error" >&5
 $as_echo "error" >&6; }
-				as_fn_error $? "--with-digest-api-frontend=openssl/libressl requires --with-openssl and a usable random number generator" "$LINENO" 5
+				as_fn_error $? "--with-rng-api-frontend=openssl/libressl requires --with-openssl and a usable random number generator" "$LINENO" 5
 
 fi
 			;;
