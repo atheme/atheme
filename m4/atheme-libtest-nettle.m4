@@ -3,6 +3,7 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 	LIBNETTLE="No"
 	LIBNETTLE_USABLE="No"
 	LIBNETTLE_DIGEST="No"
+	LIBNETTLE_MEMEQL="No"
 
 	AC_ARG_WITH([nettle],
 		[AS_HELP_STRING([--without-nettle], [Do not attempt to detect nettle (crypto library)])],
@@ -69,8 +70,29 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 			AC_MSG_RESULT([no])
 		])
 
+		AC_MSG_CHECKING([if libnettle has a usable constant-time memory comparison function])
+		AC_LINK_IFELSE([
+			AC_LANG_PROGRAM([[
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <nettle/memops.h>
+			]], [[
+				(void) nettle_memeql_sec(NULL, NULL, 0);
+			]])
+		], [
+			AC_MSG_RESULT([yes])
+			LIBNETTLE_USABLE="Yes"
+			LIBNETTLE_MEMEQL="Yes"
+		], [
+			AC_MSG_RESULT([no])
+		])
+
 		AS_IF([test "${LIBNETTLE_USABLE}" = "Yes"], [
 			AC_DEFINE([HAVE_LIBNETTLE], [1], [Define to 1 if libnettle appears to be usable])
+			AS_IF([test "${LIBNETTLE_MEMEQL}" = "Yes"], [
+				AC_DEFINE([HAVE_LIBNETTLE_MEMEQL], [1], [Define to 1 if libnettle has a usable constant-time memory comparison function])
+			])
 			AC_CHECK_HEADERS([nettle/version.h], [], [], [])
 		], [
 			LIBNETTLE="No"

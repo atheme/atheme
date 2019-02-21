@@ -4,6 +4,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 	LIBCRYPTO_NAME=""
 	LIBCRYPTO_USABLE="No"
 	LIBCRYPTO_DIGEST="No"
+	LIBCRYPTO_MEMCMP="No"
 	LIBCRYPTO_RANDOM="No"
 	LIBCRYPTO_ECDSA="No"
 
@@ -117,6 +118,25 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 			LIBCRYPTO_RANDOM="No"
 		])
 
+		AC_MSG_CHECKING([if libcrypto has a usable constant-time memory comparison function])
+		AC_LINK_IFELSE([
+			AC_LANG_PROGRAM([[
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <openssl/crypto.h>
+			]], [[
+				(void) CRYPTO_memcmp(NULL, NULL, 0);
+			]])
+		], [
+			AC_MSG_RESULT([yes])
+			LIBCRYPTO_USABLE="Yes"
+			LIBCRYPTO_MEMCMP="Yes"
+		], [
+			AC_MSG_RESULT([no])
+			LIBCRYPTO_MEMCMP="No"
+		])
+
 		AC_MSG_CHECKING([if libcrypto has usable elliptic curve key construction and signature verification functions])
 		AC_LINK_IFELSE([
 			AC_LANG_PROGRAM([[
@@ -162,6 +182,9 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 		])
 
 		AC_DEFINE([HAVE_LIBCRYPTO], [1], [Define to 1 if libcrypto appears to be usable])
+		AS_IF([test "${LIBCRYPTO_MEMCMP}" = "Yes"], [
+			AC_DEFINE([HAVE_LIBCRYPTO_MEMCMP], [1], [Define to 1 if libcrypto has a usable constant-time memory comparison function])
+		])
 		AS_IF([test "${LIBCRYPTO_ECDSA}" = "Yes"], [
 			ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
 			AC_DEFINE([HAVE_LIBCRYPTO_ECDSA], [1], [Define to 1 if libcrypto has usable elliptic curve key construction and signature verification functions])

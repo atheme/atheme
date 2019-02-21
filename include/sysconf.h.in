@@ -147,6 +147,10 @@
 /* Define to 1 if libcrypto has HMAC_CTX_new() & HMAC_CTX_free() */
 #undef HAVE_LIBCRYPTO_HMAC_CTX_DYNAMIC
 
+/* Define to 1 if libcrypto has a usable constant-time memory comparison
+   function */
+#undef HAVE_LIBCRYPTO_MEMCMP
+
 /* Define to 1 if libidn appears to be usable */
 #undef HAVE_LIBIDN
 
@@ -165,6 +169,10 @@
 /* Define to 1 if libnettle appears to be usable */
 #undef HAVE_LIBNETTLE
 
+/* Define to 1 if libnettle has a usable constant-time memory comparison
+   function */
+#undef HAVE_LIBNETTLE_MEMEQL
+
 /* Define to 1 if libpasswdqc appears to be usable */
 #undef HAVE_LIBPASSWDQC
 
@@ -176,6 +184,10 @@
 
 /* Define to 1 if libsodium appears to be usable */
 #undef HAVE_LIBSODIUM
+
+/* Define to 1 if libsodium has a usable constant-time memory comparison
+   function */
+#undef HAVE_LIBSODIUM_MEMCMP
 
 /* Define to 1 if libsodium has a usable memory zeroing function */
 #undef HAVE_LIBSODIUM_MEMZERO
@@ -374,6 +386,12 @@
 
 /* Define to 1 if you have the <time.h> header file. */
 #undef HAVE_TIME_H
+
+/* Define to 1 if you have the `timingsafe_bcmp' function. */
+#undef HAVE_TIMINGSAFE_BCMP
+
+/* Define to 1 if you have the `timingsafe_memcmp' function. */
+#undef HAVE_TIMINGSAFE_MEMCMP
 
 /* Define to 1 if the system has the type `uintmax_t'. */
 #undef HAVE_UINTMAX_T

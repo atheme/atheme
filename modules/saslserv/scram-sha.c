@@ -560,9 +560,9 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 	}
 
 	// Check computed StoredKey matches the database StoredKey
-	if (memcmp(StoredKey, s->db.shk, s->db.dl) != 0)
+	if (smemcmp(StoredKey, s->db.shk, s->db.dl) != 0)
 	{
-		(void) slog(LG_DEBUG, "%s: memcmp(3) mismatch on StoredKey; incorrect password?", MOWGLI_FUNC_NAME);
+		(void) slog(LG_DEBUG, "%s: smemcmp() mismatch on StoredKey; incorrect password?", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("invalid-proof", out);
 		goto fail;
 	}

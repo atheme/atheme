@@ -3,6 +3,7 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 	LIBSODIUM="No"
 	LIBSODIUM_USABLE="No"
 	LIBSODIUM_MEMORY="No"
+	LIBSODIUM_MEMCMP="No"
 	LIBSODIUM_MEMZERO="No"
 	LIBSODIUM_RANDOM="No"
 	LIBSODIUM_SCRYPT="No"
@@ -81,6 +82,26 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 			LIBSODIUM_MEMORY="No"
 		])
 
+		AC_MSG_CHECKING([if libsodium has a usable constant-time memory comparison function])
+		AC_LINK_IFELSE([
+			AC_LANG_PROGRAM([[
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <sodium/core.h>
+				#include <sodium/utils.h>
+			]], [[
+				(void) sodium_memcmp(NULL, NULL, 0);
+			]])
+		], [
+			AC_MSG_RESULT([yes])
+			LIBSODIUM_USABLE="Yes"
+			LIBSODIUM_MEMCMP="Yes"
+		], [
+			AC_MSG_RESULT([no])
+			LIBSODIUM_MEMCMP="No"
+		])
+
 		AC_MSG_CHECKING([if libsodium has a usable memory zeroing function])
 		AC_LINK_IFELSE([
 			AC_LANG_PROGRAM([[
@@ -148,6 +169,9 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 
 		AS_IF([test "${LIBSODIUM_USABLE}" = "Yes"], [
 			AC_DEFINE([HAVE_LIBSODIUM], [1], [Define to 1 if libsodium appears to be usable])
+			AS_IF([test "${LIBSODIUM_MEMCMP}" = "Yes"], [
+				AC_DEFINE([HAVE_LIBSODIUM_MEMCMP], [1], [Define to 1 if libsodium has a usable constant-time memory comparison function])
+			])
 			AS_IF([test "${LIBSODIUM_MEMZERO}" = "Yes"], [
 				AC_DEFINE([HAVE_LIBSODIUM_MEMZERO], [1], [Define to 1 if libsodium has a usable memory zeroing function])
 			])

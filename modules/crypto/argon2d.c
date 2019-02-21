@@ -465,7 +465,7 @@ atheme_argon2d_verify(const char *const restrict password, const char *const res
 	if (! argon2d_hash_raw(&ctx))
 		return false;
 
-	if (memcmp(ctx.hash, dec_hash, ATHEME_ARGON2D_HASHLEN) != 0)
+	if (smemcmp(ctx.hash, dec_hash, ATHEME_ARGON2D_HASHLEN) != 0)
 		return false;
 
 	if (atheme_argon2d_recrypt(&ctx))

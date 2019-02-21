@@ -23,6 +23,22 @@
 #  define RAISE_EXCEPTION               do { raise(SIGUSR1); abort(); } while (0)
 #endif /* SIGUSR1 */
 
+#if !defined(HAVE_TIMINGSAFE_BCMP) && !defined(HAVE_TIMINGSAFE_MEMCMP)
+#  ifdef HAVE_LIBSODIUM_MEMCMP
+#    include <sodium/utils.h>
+#  else /* HAVE_LIBSODIUM_MEMCMP */
+#    ifdef HAVE_LIBCRYPTO_MEMCMP
+#      include <openssl/crypto.h>
+#    else /* HAVE_LIBCRYPTO_MEMCMP */
+#      ifdef HAVE_LIBNETTLE_MEMEQL
+#        include <nettle/memops.h>
+#      else /* HAVE_LIBNETTLE_MEMEQL */
+#        warning "No third-party cryptographically-secure constant-time memory comparison function is available"
+#      endif /* !HAVE_LIBNETTLE_MEMEQL */
+#    endif /* !HAVE_LIBCRYPTO_MEMCMP */
+#  endif /* !HAVE_LIBSODIUM_MEMCMP */
+#endif /* !HAVE_TIMINGSAFE_BCMP && !HAVE_TIMINGSAFE_MEMCMP */
+
 #ifdef HAVE_LIBSODIUM_MEMZERO
 #  include <sodium/utils.h>
 #endif /* HAVE_LIBSODIUM_MEMZERO */
@@ -37,6 +53,45 @@ void * ATHEME_FATTR_ALLOC_SIZE(1) ATHEME_FATTR_MALLOC ATHEME_FATTR_RETURNS_NONNU
 smalloc(const size_t len)
 {
 	return scalloc(1, len);
+}
+
+int ATHEME_FATTR_WUR
+smemcmp(const void *const ptr1, const void *const ptr2, const size_t len)
+{
+#ifdef HAVE_TIMINGSAFE_BCMP
+	return timingsafe_bcmp(ptr1, ptr2, len);
+#else /* HAVE_TIMINGSAFE_BCMP */
+#  ifdef HAVE_TIMINGSAFE_MEMCMP
+	return timingsafe_memcmp(ptr1, ptr2, len);
+#  else /* HAVE_TIMINGSAFE_MEMCMP */
+#    ifdef HAVE_LIBSODIUM_MEMCMP
+	return sodium_memcmp(ptr1, ptr2, len);
+#    else /* HAVE_LIBSODIUM_MEMCMP */
+#      ifdef HAVE_LIBCRYPTO_MEMCMP
+	return CRYPTO_memcmp(ptr1, ptr2, len);
+#      else /* HAVE_LIBCRYPTO_MEMCMP */
+#        ifdef HAVE_LIBNETTLE_MEMEQL
+	return !nettle_memeql_sec(ptr1, ptr2, len);
+#        else /* HAVE_LIBNETTLE_MEMEQL */
+
+	/* WARNING:
+	 *   This is highly liable to be optimised out with
+	 *   LTO builds, but it's still better than nothing.
+	 */
+	volatile const unsigned char *val1 = (volatile const unsigned char *) ptr1;
+	volatile const unsigned char *val2 = (volatile const unsigned char *) ptr2;
+	volatile int result = 0;
+
+	for (size_t i = 0; i < len; i++)
+		result |= (int) ((*val1++) ^ (*val2++));
+
+	return result;
+
+#        endif /* !HAVE_LIBNETTLE_MEMEQL */
+#      endif /* !HAVE_LIBCRYPTO_MEMCMP */
+#    endif /* !HAVE_LIBSODIUM_MEMCMP */
+#  endif /* !HAVE_TIMINGSAFE_MEMCMP */
+#endif /* !HAVE_TIMINGSAFE_BCMP */
 }
 
 void

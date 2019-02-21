@@ -5219,7 +5219,7 @@ fi
 
 done
 
-for ac_func in explicit_bzero fork getrlimit memset_s
+for ac_func in explicit_bzero fork getrlimit memset_s timingsafe_bcmp timingsafe_memcmp
 do :
   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
 ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
@@ -9945,6 +9945,7 @@ fi
 	LIBCRYPTO_NAME=""
 	LIBCRYPTO_USABLE="No"
 	LIBCRYPTO_DIGEST="No"
+	LIBCRYPTO_MEMCMP="No"
 	LIBCRYPTO_RANDOM="No"
 	LIBCRYPTO_ECDSA="No"
 
@@ -10224,6 +10225,45 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libcrypto has a usable constant-time memory comparison function" >&5
+$as_echo_n "checking if libcrypto has a usable constant-time memory comparison function... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <openssl/crypto.h>
+
+int
+main ()
+{
+
+				(void) CRYPTO_memcmp(NULL, NULL, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+			LIBCRYPTO_USABLE="Yes"
+			LIBCRYPTO_MEMCMP="Yes"
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+			LIBCRYPTO_MEMCMP="No"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libcrypto has usable elliptic curve key construction and signature verification functions" >&5
 $as_echo_n "checking if libcrypto has usable elliptic curve key construction and signature verification functions... " >&6; }
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -10312,6 +10352,13 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 $as_echo "#define HAVE_LIBCRYPTO 1" >>confdefs.h
 
+		if test "${LIBCRYPTO_MEMCMP}" = "Yes"; then :
+
+
+$as_echo "#define HAVE_LIBCRYPTO_MEMCMP 1" >>confdefs.h
+
+
+fi
 		if test "${LIBCRYPTO_ECDSA}" = "Yes"; then :
 
 			ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
@@ -11054,6 +11101,7 @@ fi
 	LIBNETTLE="No"
 	LIBNETTLE_USABLE="No"
 	LIBNETTLE_DIGEST="No"
+	LIBNETTLE_MEMEQL="No"
 
 
 # Check whether --with-nettle was given.
@@ -11229,11 +11277,56 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libnettle has a usable constant-time memory comparison function" >&5
+$as_echo_n "checking if libnettle has a usable constant-time memory comparison function... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <nettle/memops.h>
+
+int
+main ()
+{
+
+				(void) nettle_memeql_sec(NULL, NULL, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+			LIBNETTLE_USABLE="Yes"
+			LIBNETTLE_MEMEQL="Yes"
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
 		if test "${LIBNETTLE_USABLE}" = "Yes"; then :
 
 
 $as_echo "#define HAVE_LIBNETTLE 1" >>confdefs.h
 
+			if test "${LIBNETTLE_MEMEQL}" = "Yes"; then :
+
+
+$as_echo "#define HAVE_LIBNETTLE_MEMEQL 1" >>confdefs.h
+
+
+fi
 			for ac_header in nettle/version.h
 do :
   ac_fn_c_check_header_mongrel "$LINENO" "nettle/version.h" "ac_cv_header_nettle_version_h" "$ac_includes_default"
@@ -11873,6 +11966,7 @@ fi
 	LIBSODIUM="No"
 	LIBSODIUM_USABLE="No"
 	LIBSODIUM_MEMORY="No"
+	LIBSODIUM_MEMCMP="No"
 	LIBSODIUM_MEMZERO="No"
 	LIBSODIUM_RANDOM="No"
 	LIBSODIUM_SCRYPT="No"
@@ -12085,6 +12179,46 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libsodium has a usable constant-time memory comparison function" >&5
+$as_echo_n "checking if libsodium has a usable constant-time memory comparison function... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <sodium/core.h>
+				#include <sodium/utils.h>
+
+int
+main ()
+{
+
+				(void) sodium_memcmp(NULL, NULL, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+			LIBSODIUM_USABLE="Yes"
+			LIBSODIUM_MEMCMP="Yes"
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+			LIBSODIUM_MEMCMP="No"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libsodium has a usable memory zeroing function" >&5
 $as_echo_n "checking if libsodium has a usable memory zeroing function... " >&6; }
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -12215,6 +12349,13 @@ rm -f core conftest.err conftest.$ac_objext \
 
 $as_echo "#define HAVE_LIBSODIUM 1" >>confdefs.h
 
+			if test "${LIBSODIUM_MEMCMP}" = "Yes"; then :
+
+
+$as_echo "#define HAVE_LIBSODIUM_MEMCMP 1" >>confdefs.h
+
+
+fi
 			if test "${LIBSODIUM_MEMZERO}" = "Yes"; then :
 
 
