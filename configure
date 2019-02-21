@@ -13231,7 +13231,7 @@ $as_echo "error" >&6; }
 fi
 			;;
 
-		internal)
+		xinternal)
 
 
 	DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_INTERNAL"
@@ -13595,7 +13595,7 @@ $as_echo "error" >&6; }
 fi
 			;;
 
-		internal)
+		xinternal)
 
 
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if getentropy(3) is available" >&5

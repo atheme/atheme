@@ -194,7 +194,7 @@ AC_DEFUN([ATHEME_DECIDE_RANDOM_FRONTEND], [
 			])
 			;;
 
-		internal)
+		xinternal)
 			ATHEME_RANDOM_FRONTEND_USE_INTERNAL
 			AC_MSG_RESULT([${RANDOM_FRONTEND} (chosen by user)])
 			;;

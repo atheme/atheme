@@ -91,7 +91,7 @@ AC_DEFUN([ATHEME_DECIDE_DIGEST_FRONTEND], [
 			])
 			;;
 
-		internal)
+		xinternal)
 			ATHEME_DIGEST_FRONTEND_USE_INTERNAL
 			AC_MSG_RESULT([${DIGEST_FRONTEND} (chosen by user)])
 			;;
