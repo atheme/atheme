@@ -41,6 +41,7 @@ struct database_vtable;
 
 // Defined in include/digest*.h
 struct digest_context;
+struct digest_vector;
 
 // Defined in include/entity.h
 struct myentity;

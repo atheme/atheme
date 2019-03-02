@@ -30,6 +30,120 @@
 #endif
 
 bool ATHEME_FATTR_WUR
+digest_update_vector(struct digest_context *const restrict ctx, const struct digest_vector *const restrict vec,
+                     const size_t vecLen)
+{
+	if (! ctx)
+	{
+		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
+		return false;
+	}
+	if ((! vec && vecLen) || (vec && ! vecLen))
+	{
+		(void) slog(LG_ERROR, "%s: called with mismatched data parameters (BUG)", MOWGLI_FUNC_NAME);
+		return false;
+	}
+	for (size_t i = 0; i < vecLen; i++)
+	{
+		if ((! vec[i].ptr && vec[i].len) || (vec[i].ptr && ! vec[i].len))
+		{
+			(void) slog(LG_ERROR, "%s: called with mismatched data parameters (BUG)", MOWGLI_FUNC_NAME);
+			return false;
+		}
+	}
+
+	for (size_t i = 0; i < vecLen; i++)
+		if (! digest_update(ctx, vec[i].ptr, vec[i].len))
+			return false;
+
+	return true;
+}
+
+bool ATHEME_FATTR_WUR
+digest_oneshot_vector(const enum digest_algorithm alg, const struct digest_vector *const restrict vec,
+                      const size_t vecLen, void *const restrict out, size_t *const restrict outLen)
+{
+	if (! out)
+	{
+		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", MOWGLI_FUNC_NAME);
+		return false;
+	}
+	if ((! vec && vecLen) || (vec && ! vecLen))
+	{
+		(void) slog(LG_ERROR, "%s: called with mismatched data parameters (BUG)", MOWGLI_FUNC_NAME);
+		return false;
+	}
+	for (size_t i = 0; i < vecLen; i++)
+	{
+		if ((! vec[i].ptr && vec[i].len) || (vec[i].ptr && ! vec[i].len))
+		{
+			(void) slog(LG_ERROR, "%s: called with mismatched data parameters (BUG)", MOWGLI_FUNC_NAME);
+			return false;
+		}
+	}
+
+	struct digest_context ctx;
+
+	if (! digest_init(&ctx, alg))
+		return false;
+
+	for (size_t i = 0; i < vecLen; i++)
+		if (! digest_update(&ctx, vec[i].ptr, vec[i].len))
+			return false;
+
+	if (! digest_final(&ctx, out, outLen))
+		return false;
+
+	(void) smemzero(&ctx, sizeof ctx);
+	return true;
+}
+
+bool ATHEME_FATTR_WUR
+digest_oneshot_hmac_vector(const enum digest_algorithm alg, const void *const restrict key, const size_t keyLen,
+                           const struct digest_vector *const restrict vec, const size_t vecLen,
+                           void *const restrict out, size_t *const restrict outLen)
+{
+	if (! out)
+	{
+		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", MOWGLI_FUNC_NAME);
+		return false;
+	}
+	if ((! key && keyLen) || (key && ! keyLen))
+	{
+		(void) slog(LG_ERROR, "%s: called with mismatched key parameters (BUG)", MOWGLI_FUNC_NAME);
+		return false;
+	}
+	if ((! vec && vecLen) || (vec && ! vecLen))
+	{
+		(void) slog(LG_ERROR, "%s: called with mismatched data parameters (BUG)", MOWGLI_FUNC_NAME);
+		return false;
+	}
+	for (size_t i = 0; i < vecLen; i++)
+	{
+		if ((! vec[i].ptr && vec[i].len) || (vec[i].ptr && ! vec[i].len))
+		{
+			(void) slog(LG_ERROR, "%s: called with mismatched data parameters (BUG)", MOWGLI_FUNC_NAME);
+			return false;
+		}
+	}
+
+	struct digest_context ctx;
+
+	if (! digest_init_hmac(&ctx, alg, key, keyLen))
+		return false;
+
+	for (size_t i = 0; i < vecLen; i++)
+		if (! digest_update(&ctx, vec[i].ptr, vec[i].len))
+			return false;
+
+	if (! digest_final(&ctx, out, outLen))
+		return false;
+
+	(void) smemzero(&ctx, sizeof ctx);
+	return true;
+}
+
+bool ATHEME_FATTR_WUR
 digest_oneshot(const enum digest_algorithm alg, const void *const restrict data, const size_t dataLen,
                void *const restrict out, size_t *const restrict outLen)
 {

@@ -15,6 +15,12 @@
 #include "attrs.h"
 #include "structures.h"
 
+struct digest_vector
+{
+	const void *    ptr;
+	size_t          len;
+};
+
 enum digest_algorithm
 {
 	DIGALG_MD5              = 1,
@@ -70,6 +76,12 @@ bool digest_oneshot_hmac(enum digest_algorithm, const void *, size_t, const void
     ATHEME_FATTR_WUR;
 bool digest_pbkdf2_hmac(enum digest_algorithm, const void *, size_t, const void *, size_t, size_t, void *, size_t)
     ATHEME_FATTR_WUR;
+
+bool digest_update_vector(struct digest_context *, const struct digest_vector *, size_t) ATHEME_FATTR_WUR;
+bool digest_oneshot_vector(enum digest_algorithm, const struct digest_vector *, size_t, void *, size_t *)
+    ATHEME_FATTR_WUR;
+bool digest_oneshot_hmac_vector(enum digest_algorithm, const void *, size_t, const struct digest_vector *, size_t,
+    void *, size_t *) ATHEME_FATTR_WUR;
 
 bool digest_testsuite_run(void) ATHEME_FATTR_WUR;
 const char *digest_get_frontend_info(void);
