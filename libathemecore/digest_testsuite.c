@@ -671,9 +671,22 @@ digest_testsuite_run_sha1(void)
 		if (! digest_init(&ctx, DIGALG_SHA1))
 			return false;
 
-		for (size_t i = 0; i < 10; i++)
-			if (! digest_update(&ctx, data, sizeof data))
-				return false;
+		const struct digest_vector data_vec[] = {
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+		};
+		const size_t data_vec_len = (sizeof data_vec) / (sizeof data_vec[0]);
+
+		if (! digest_update_vector(&ctx, data_vec, data_vec_len))
+			return false;
 
 		if (! digest_final(&ctx, result, &mdlen))
 			return false;
