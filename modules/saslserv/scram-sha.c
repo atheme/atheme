@@ -71,6 +71,9 @@ struct sasl_scramsha_session
 	char                       *c_msg_buf;  // Client's first message
 	char                       *s_msg_buf;  // Server's first message
 	size_t                      c_gs2_len;  // Client's GS2 header (length)
+	size_t                      c_msg_len;  // Client's first message (length)
+	size_t                      s_msg_len;  // Server's first message (length)
+	size_t                      nonce_len;  // Length of (combined client + server) nonce below
 	bool                        complete;   // Authentication is complete, waiting for client to confirm
 	char                        nonce[SCRAMSHA_NONCE_LENGTH_MAX_COMBINED + 1];
 };
@@ -395,9 +398,11 @@ sasl_mech_scramsha_step_clientfirst(struct sasl_session *const restrict p,
 
 	// These cannot fail
 	s = smalloc(sizeof *s);
+	s->nonce_len = nonceLen + SCRAMSHA_NONCE_LENGTH;
 	s->c_gs2_len = (size_t) (message - header);
+	s->c_msg_len = (in->len - s->c_gs2_len);
 	s->c_gs2_buf = sstrndup(header, s->c_gs2_len);
-	s->c_msg_buf = sstrndup(message, (in->len - s->c_gs2_len));
+	s->c_msg_buf = sstrndup(message, s->c_msg_len);
 	s->mu = mu;
 
 	(void) mowgli_node_add(s, &s->node, &sasl_scramsha_sessions);
@@ -420,6 +425,7 @@ sasl_mech_scramsha_step_clientfirst(struct sasl_session *const restrict p,
 	out->len = (size_t) respLen;
 
 	// Cannot fail. +1 is for including the terminating NULL byte.
+	s->s_msg_len = out->len;
 	s->s_msg_buf = smemdup(out->buf, out->len + 1);
 
 	goto cleanup;
@@ -471,7 +477,6 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 
 	scram_attr_list attributes;
 	char c_gs2_buf[SASL_S2S_MAXLEN_TOTAL_RAW];
-	char AuthMessage[(3 * SASL_S2S_MAXLEN_TOTAL_RAW) + SCRAMSHA_NONCE_LENGTH_MAX_COMBINED + 1];
 	unsigned char ClientProof[SCRAMSHA_MDLEN_MAX];
 	unsigned char ClientKey[SCRAMSHA_MDLEN_MAX];
 	unsigned char StoredKey[SCRAMSHA_MDLEN_MAX];
@@ -530,17 +535,19 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 	}
 
 	// Construct AuthMessage
-	const int AuthMsgLen = snprintf(AuthMessage, sizeof AuthMessage, "%s,%s,c=%s,r=%s",
-	                                s->c_msg_buf, s->s_msg_buf, attributes['c'], attributes['r']);
-	if (AuthMsgLen <= (int) SCRAMSHA_NONCE_LENGTH_MIN_COMBINED || AuthMsgLen >= (int) sizeof AuthMessage)
-	{
-		(void) slog(LG_ERROR, "%s: snprintf(3) for AuthMessage failed (BUG?)", MOWGLI_FUNC_NAME);
-		(void) sasl_scramsha_error("other-error", out);
-		goto error;
-	}
+	const struct digest_vector AuthMessage[] = {
+		{    s->c_msg_buf, s->c_msg_len                  },
+		{             ",", 1                             },
+		{    s->s_msg_buf, s->s_msg_len                  },
+		{           ",c=", 3                             },
+		{ attributes['c'], BASE64_SIZE_RAW(s->c_gs2_len) },
+		{           ",r=", 3                             },
+		{        s->nonce, s->nonce_len                  },
+	};
+	const size_t AuthMsgLen = (sizeof AuthMessage) / (sizeof AuthMessage[0]);
 
 	// Calculate ClientSignature
-	if (! digest_oneshot_hmac(s->db.md, s->db.shk, s->db.dl, AuthMessage, (size_t) AuthMsgLen, ClientSig, NULL))
+	if (! digest_oneshot_hmac_vector(s->db.md, s->db.shk, s->db.dl, AuthMessage, AuthMsgLen, ClientSig, NULL))
 	{
 		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac() for ClientSignature failed (BUG)", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("other-error", out);
@@ -573,7 +580,7 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 	(void) slog(LG_DEBUG, "%s: authentication successful", MOWGLI_FUNC_NAME);
 
 	// Calculate ServerSignature
-	if (! digest_oneshot_hmac(s->db.md, s->db.ssk, s->db.dl, AuthMessage, (size_t) AuthMsgLen, ServerSig, NULL))
+	if (! digest_oneshot_hmac_vector(s->db.md, s->db.ssk, s->db.dl, AuthMessage, AuthMsgLen, ServerSig, NULL))
 	{
 		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac() for ServerSignature failed (BUG)", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("other-error", out);
@@ -618,7 +625,6 @@ fail:
 
 cleanup:
 	(void) smemzero(c_gs2_buf, sizeof c_gs2_buf);
-	(void) smemzero(AuthMessage, sizeof AuthMessage);
 	(void) smemzero(ClientProof, sizeof ClientProof);
 	(void) smemzero(ClientKey, sizeof ClientKey);
 	(void) smemzero(StoredKey, sizeof StoredKey);
