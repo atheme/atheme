@@ -39,10 +39,15 @@ sasl_mech_ecdsa_step_account_names(struct sasl_session *const restrict p,
 	if (! end)
 	{
 		if (in->len > NICKLEN)
+		{
+			(void) slog(LG_DEBUG, "%s: in->len (%zu) is unacceptable", MOWGLI_FUNC_NAME, in->len);
 			return ASASL_MRESULT_ERROR;
-
+		}
 		if (! sasl_core_functions->authcid_can_login(p, in->buf, &mu))
+		{
+			(void) slog(LG_DEBUG, "%s: authcid_can_login failed", MOWGLI_FUNC_NAME);
 			return ASASL_MRESULT_ERROR;
+		}
 	}
 	else
 	{
@@ -51,32 +56,57 @@ sasl_mech_ecdsa_step_account_names(struct sasl_session *const restrict p,
 		const size_t authzid_length = in->len - 1 - authcid_length;
 
 		if (! authcid_length || authcid_length > NICKLEN)
+		{
+			(void) slog(LG_DEBUG, "%s: authcid_length (%zu) is unacceptable",
+			                      MOWGLI_FUNC_NAME, authcid_length);
 			return ASASL_MRESULT_ERROR;
-
+		}
 		if (! authzid_length || authzid_length > NICKLEN)
+		{
+			(void) slog(LG_DEBUG, "%s: authzid_length (%zu) is unacceptable",
+			                      MOWGLI_FUNC_NAME, authzid_length);
 			return ASASL_MRESULT_ERROR;
-
+		}
 		if (! sasl_core_functions->authzid_can_login(p, end + 1, NULL))
+		{
+			(void) slog(LG_DEBUG, "%s: authzid_can_login failed", MOWGLI_FUNC_NAME);
 			return ASASL_MRESULT_ERROR;
-
+		}
 		if (! sasl_core_functions->authcid_can_login(p, in->buf, &mu))
+		{
+			(void) slog(LG_DEBUG, "%s: authcid_can_login failed", MOWGLI_FUNC_NAME);
 			return ASASL_MRESULT_ERROR;
+		}
+	}
+	if (! mu)
+	{
+		(void) slog(LG_ERROR, "%s: authcid_can_login did not set 'mu' (BUG)", MOWGLI_FUNC_NAME);
+		return ASASL_MRESULT_ERROR;
 	}
 
 	struct metadata *md;
 	if (! (md = metadata_find(mu, "private:pubkey")) && ! (md = metadata_find(mu, "pubkey")))
+	{
+		(void) slog(LG_DEBUG, "%s: metadata_find() failed", MOWGLI_FUNC_NAME);
 		return ASASL_MRESULT_ERROR;
+	}
 
 	unsigned char pubkey_raw[0x1000];
 	const unsigned char *pubkey_raw_p = pubkey_raw;
 	const size_t ret = base64_decode(md->value, pubkey_raw, sizeof pubkey_raw);
 	if (ret == (size_t) -1)
+	{
+		(void) slog(LG_DEBUG, "%s: base64_decode() failed", MOWGLI_FUNC_NAME);
 		return ASASL_MRESULT_ERROR;
+	}
 
 	EC_KEY *pubkey = EC_KEY_new_by_curve_name(CURVE_IDENTIFIER);
 	(void) EC_KEY_set_conv_form(pubkey, POINT_CONVERSION_COMPRESSED);
 	if (! o2i_ECPublicKey(&pubkey, &pubkey_raw_p, (long) ret))
+	{
+		(void) slog(LG_DEBUG, "%s: o2i_ECPublicKey() failed", MOWGLI_FUNC_NAME);
 		return ASASL_MRESULT_ERROR;
+	}
 
 	struct sasl_ecdsa_nist256p_challenge_session *const s = smalloc(sizeof *s);
 	(void) atheme_random_buf(s->challenge, sizeof s->challenge);
