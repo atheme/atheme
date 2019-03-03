@@ -32,6 +32,7 @@ sasl_mech_ecdsa_step_account_names(struct sasl_session *const restrict p,
                                    const struct sasl_input_buf *const restrict in,
                                    struct sasl_output_buf *const restrict out)
 {
+	EC_KEY *pubkey = NULL;
 	struct myuser *mu = NULL;
 
 	const char *const end = memchr(in->buf, 0x00, in->len);
@@ -100,8 +101,14 @@ sasl_mech_ecdsa_step_account_names(struct sasl_session *const restrict p,
 		return ASASL_MRESULT_ERROR;
 	}
 
-	EC_KEY *pubkey = EC_KEY_new_by_curve_name(CURVE_IDENTIFIER);
+	if (! (pubkey = EC_KEY_new_by_curve_name(CURVE_IDENTIFIER)))
+	{
+		(void) slog(LG_ERROR, "%s: EC_KEY_new_by_curve_name() failed", MOWGLI_FUNC_NAME);
+		return ASASL_MRESULT_ERROR;
+	}
+
 	(void) EC_KEY_set_conv_form(pubkey, POINT_CONVERSION_COMPRESSED);
+
 	if (! o2i_ECPublicKey(&pubkey, &pubkey_raw_p, (long) ret))
 	{
 		(void) slog(LG_DEBUG, "%s: o2i_ECPublicKey() failed", MOWGLI_FUNC_NAME);
