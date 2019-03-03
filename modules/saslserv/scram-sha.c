@@ -185,23 +185,6 @@ sasl_scramsha_error(const char *const restrict errtext, struct sasl_output_buf *
 	}
 }
 
-static void
-sasl_mech_scramsha_finish(struct sasl_session *const restrict p)
-{
-	if (! (p && p->mechdata))
-		return;
-
-	struct sasl_scramsha_session *const s = p->mechdata;
-
-	if (s->c_msg_buf)
-		(void) smemzerofree(s->c_msg_buf, s->c_msg_len);
-
-	(void) mowgli_node_delete(&s->node, &sasl_scramsha_sessions);
-	(void) smemzerofree(s, sizeof *s);
-
-	p->mechdata = NULL;
-}
-
 static enum sasl_mechanism_result ATHEME_FATTR_WUR
 sasl_mech_scramsha_step_clientfirst(struct sasl_session *const restrict p,
                                     const struct sasl_input_buf *const restrict in,
@@ -441,7 +424,6 @@ sasl_mech_scramsha_step_clientfirst(struct sasl_session *const restrict p,
 	goto cleanup;
 
 error:
-	(void) sasl_mech_scramsha_finish(p);
 	retval = ASASL_MRESULT_ERROR;
 	goto cleanup;
 
@@ -616,12 +598,10 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 	goto cleanup;
 
 error:
-	(void) sasl_mech_scramsha_finish(p);
 	retval = ASASL_MRESULT_ERROR;
 	goto cleanup;
 
 fail:
-	(void) sasl_mech_scramsha_finish(p);
 	retval = ASASL_MRESULT_FAILURE;
 	goto cleanup;
 
@@ -715,7 +695,6 @@ sasl_mech_scramsha_step_success(struct sasl_session *const restrict p)
 end:
 	(void) smemzero(csk64, sizeof csk64);
 	(void) smemzero(chk64, sizeof chk64);
-	(void) sasl_mech_scramsha_finish(p);
 	return ASASL_MRESULT_SUCCESS;
 }
 
@@ -760,6 +739,23 @@ sasl_mech_scramsha_2_512_step(struct sasl_session *const restrict p,
                               struct sasl_output_buf *const restrict out)
 {
 	return sasl_mech_scramsha_step_dispatch(p, in, out, PBKDF2_PRF_SCRAM_SHA2_512_S64);
+}
+
+static void
+sasl_mech_scramsha_finish(struct sasl_session *const restrict p)
+{
+	if (! (p && p->mechdata))
+		return;
+
+	struct sasl_scramsha_session *const s = p->mechdata;
+
+	if (s->c_msg_buf)
+		(void) smemzerofree(s->c_msg_buf, s->c_msg_len);
+
+	(void) mowgli_node_delete(&s->node, &sasl_scramsha_sessions);
+	(void) smemzerofree(s, sizeof *s);
+
+	p->mechdata = NULL;
 }
 
 static const struct sasl_mechanism sasl_mech_scramsha_1 = {
