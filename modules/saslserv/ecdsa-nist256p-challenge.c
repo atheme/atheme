@@ -112,6 +112,7 @@ sasl_mech_ecdsa_step_account_names(struct sasl_session *const restrict p,
 	if (! o2i_ECPublicKey(&pubkey, &pubkey_raw_p, (long) ret))
 	{
 		(void) slog(LG_DEBUG, "%s: o2i_ECPublicKey() failed", MOWGLI_FUNC_NAME);
+		(void) EC_KEY_free(pubkey);
 		return ASASL_MRESULT_ERROR;
 	}
 
