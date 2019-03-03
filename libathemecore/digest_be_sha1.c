@@ -268,17 +268,6 @@ digest_final_sha1(union digest_state *const restrict state, void *const restrict
 		return false;
 	}
 
-	if (len)
-	{
-		if (*len < DIGEST_MDLEN_SHA1)
-		{
-			(void) slog(LG_ERROR, "%s: output buffer length %zu is too small", MOWGLI_FUNC_NAME, *len);
-			return false;
-		}
-
-		*len = DIGEST_MDLEN_SHA1;
-	}
-
 	static const uint8_t sep = 0x80U;
 	static const uint8_t pad = 0x00U;
 
@@ -290,12 +279,26 @@ digest_final_sha1(union digest_state *const restrict state, void *const restrict
 	for (uint32_t i = 0x04U; i < 0x08U; i++)
 		data[i] = (uint8_t) ((ctx->count[0x00U] >> ((0x03U - (i & 0x03U)) * 0x08U)) & 0xFFU);
 
-	(void) digest_update_sha1(state, &sep, sizeof sep);
+	if (! digest_update_sha1(state, &sep, sizeof sep))
+		return false;
 
 	while ((ctx->count[0] & 0x1F8U) != 0x1C0U)
-		(void) digest_update_sha1(state, &pad, sizeof pad);
+		if (! digest_update_sha1(state, &pad, sizeof pad))
+			return false;
 
-	(void) digest_update_sha1(state, data, sizeof data);
+	if (! digest_update_sha1(state, data, sizeof data))
+		return false;
+
+	if (len)
+	{
+		if (*len < DIGEST_MDLEN_SHA1)
+		{
+			(void) slog(LG_ERROR, "%s: output buffer length %zu is too small", MOWGLI_FUNC_NAME, *len);
+			return false;
+		}
+
+		*len = DIGEST_MDLEN_SHA1;
+	}
 
 	uint8_t *const digest = out;
 

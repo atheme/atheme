@@ -274,17 +274,6 @@ digest_final_md5(union digest_state *const restrict state, void *const restrict 
 		return false;
 	}
 
-	if (len)
-	{
-		if (*len < DIGEST_MDLEN_MD5)
-		{
-			(void) slog(LG_ERROR, "%s: output buffer length %zu is too small", MOWGLI_FUNC_NAME, *len);
-			return false;
-		}
-
-		*len = DIGEST_MDLEN_MD5;
-	}
-
 	uint8_t data[0x08U];
 
 	for (size_t i = 0x00U; i < sizeof data; i++)
@@ -301,8 +290,22 @@ digest_final_md5(union digest_state *const restrict state, void *const restrict 
 
 	const size_t padsz = ((DIGEST_BKLEN_MD5 - 0x09U) - (ctx->count[0x00U] >> 0x03U)) & (DIGEST_BKLEN_MD5 - 0x01U);
 
-	(void) digest_update_md5(state, padding, padsz + 0x01U);
-	(void) digest_update_md5(state, data, sizeof data);
+	if (! digest_update_md5(state, padding, padsz + 0x01U))
+		return false;
+
+	if (! digest_update_md5(state, data, sizeof data))
+		return false;
+
+	if (len)
+	{
+		if (*len < DIGEST_MDLEN_MD5)
+		{
+			(void) slog(LG_ERROR, "%s: output buffer length %zu is too small", MOWGLI_FUNC_NAME, *len);
+			return false;
+		}
+
+		*len = DIGEST_MDLEN_MD5;
+	}
 
 	uint8_t *const digest = out;
 
@@ -311,5 +314,6 @@ digest_final_md5(union digest_state *const restrict state, void *const restrict 
 
 	(void) smemzero(data, sizeof data);
 	(void) smemzero(ctx, sizeof *ctx);
+
 	return true;
 }
