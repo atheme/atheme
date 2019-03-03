@@ -32,25 +32,22 @@ sasl_mech_ecdsa_step_account_names(struct sasl_session *const restrict p,
                                    const struct sasl_input_buf *const restrict in,
                                    struct sasl_output_buf *const restrict out)
 {
-	char authcid[NICKLEN + 1];
-	(void) memset(authcid, 0x00, sizeof authcid);
+	struct myuser *mu = NULL;
 
 	const char *const end = memchr(in->buf, 0x00, in->len);
+
 	if (! end)
 	{
 		if (in->len > NICKLEN)
 			return ASASL_MRESULT_ERROR;
 
-		(void) memcpy(authcid, in->buf, in->len);
+		if (! sasl_core_functions->authcid_can_login(p, in->buf, &mu))
+			return ASASL_MRESULT_ERROR;
 	}
 	else
 	{
-		char authzid[NICKLEN + 1];
-		(void) memset(authzid, 0x00, sizeof authzid);
-
-		const char *const accnames = in->buf;
-
-		const size_t authcid_length = (size_t) (end - accnames);
+		const char *const bufchrptr = in->buf;
+		const size_t authcid_length = (size_t) (end - bufchrptr);
 		const size_t authzid_length = in->len - 1 - authcid_length;
 
 		if (! authcid_length || authcid_length > NICKLEN)
@@ -59,16 +56,12 @@ sasl_mech_ecdsa_step_account_names(struct sasl_session *const restrict p,
 		if (! authzid_length || authzid_length > NICKLEN)
 			return ASASL_MRESULT_ERROR;
 
-		(void) memcpy(authcid, accnames, authcid_length);
-		(void) memcpy(authzid, end + 1, authzid_length);
+		if (! sasl_core_functions->authzid_can_login(p, end + 1, NULL))
+			return ASASL_MRESULT_ERROR;
 
-		if (! sasl_core_functions->authzid_can_login(p, authzid, NULL))
+		if (! sasl_core_functions->authcid_can_login(p, in->buf, &mu))
 			return ASASL_MRESULT_ERROR;
 	}
-
-	struct myuser *mu = NULL;
-	if (! sasl_core_functions->authcid_can_login(p, authcid, &mu))
-		return ASASL_MRESULT_ERROR;
 
 	struct metadata *md;
 	if (! (md = metadata_find(mu, "private:pubkey")) && ! (md = metadata_find(mu, "pubkey")))
