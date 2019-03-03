@@ -51,7 +51,6 @@
                                              7U + 8U)
 
 // strlen("v=") == 2U
-#define SCRAMSHA_RESPONSE2_LENGTH_MIN       (BASE64_SIZE_RAW(SCRAMSHA_MDLEN_MIN) + 2U)
 #define SCRAMSHA_RESPONSE2_LENGTH_MAX       (BASE64_SIZE_RAW(SCRAMSHA_MDLEN_MAX) + 2U)
 
 // strlen("10000") == 5U
@@ -589,7 +588,7 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 
 	// Encode ServerSignature
 	const size_t ServerSig64Len = base64_encode(ServerSig, s->db.dl, ServerSig64, sizeof ServerSig64);
-	if (ServerSig64Len == (size_t) -1)
+	if (ServerSig64Len != BASE64_SIZE_RAW(s->db.dl))
 	{
 		(void) slog(LG_ERROR, "%s: base64_encode() for ServerSignature failed (BUG)", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("other-error", out);
@@ -598,10 +597,10 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 
 	// Construct server-final-message
 	const int respLen = snprintf(response, sizeof response, "v=%s", ServerSig64);
-	if (respLen < (int) SCRAMSHA_RESPONSE2_LENGTH_MIN || respLen > (int) SCRAMSHA_RESPONSE2_LENGTH_MAX)
+	if (respLen != (int) (2U + ServerSig64Len))
 	{
-		(void) slog(LG_ERROR, "%s: base64_encode() did not write an acceptable amount of data (%zu) (BUG)",
-		                      MOWGLI_FUNC_NAME, ServerSig64Len);
+		(void) slog(LG_ERROR, "%s: snprintf(3) did not write an acceptable amount of data (%d) (BUG)",
+		                      MOWGLI_FUNC_NAME, respLen);
 		(void) sasl_scramsha_error("other-error", out);
 		goto error;
 	}
