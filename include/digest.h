@@ -69,19 +69,18 @@ enum digest_algorithm
 bool digest_init(struct digest_context *, enum digest_algorithm) ATHEME_FATTR_WUR;
 bool digest_init_hmac(struct digest_context *, enum digest_algorithm, const void *, size_t) ATHEME_FATTR_WUR;
 bool digest_update(struct digest_context *, const void *, size_t) ATHEME_FATTR_WUR;
+bool digest_update_vector(struct digest_context *, const struct digest_vector *, size_t) ATHEME_FATTR_WUR;
 bool digest_final(struct digest_context *, void *, size_t *) ATHEME_FATTR_WUR;
 
 bool digest_oneshot(enum digest_algorithm, const void *, size_t, void *, size_t *) ATHEME_FATTR_WUR;
-bool digest_oneshot_hmac(enum digest_algorithm, const void *, size_t, const void *, size_t, void *, size_t *)
-    ATHEME_FATTR_WUR;
-bool digest_oneshot_pbkdf2(enum digest_algorithm, const void *, size_t, const void *, size_t, size_t, void *, size_t)
-    ATHEME_FATTR_WUR;
-
-bool digest_update_vector(struct digest_context *, const struct digest_vector *, size_t) ATHEME_FATTR_WUR;
 bool digest_oneshot_vector(enum digest_algorithm, const struct digest_vector *, size_t, void *, size_t *)
+    ATHEME_FATTR_WUR;
+bool digest_oneshot_hmac(enum digest_algorithm, const void *, size_t, const void *, size_t, void *, size_t *)
     ATHEME_FATTR_WUR;
 bool digest_oneshot_hmac_vector(enum digest_algorithm, const void *, size_t, const struct digest_vector *, size_t,
     void *, size_t *) ATHEME_FATTR_WUR;
+bool digest_oneshot_pbkdf2(enum digest_algorithm, const void *, size_t, const void *, size_t, size_t, void *, size_t)
+    ATHEME_FATTR_WUR;
 
 bool digest_testsuite_run(void) ATHEME_FATTR_WUR;
 const char *digest_get_frontend_info(void);

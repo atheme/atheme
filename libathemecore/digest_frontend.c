@@ -60,6 +60,36 @@ digest_update_vector(struct digest_context *const restrict ctx, const struct dig
 }
 
 bool ATHEME_FATTR_WUR
+digest_oneshot(const enum digest_algorithm alg, const void *const data, const size_t dataLen,
+               void *const out, size_t *const outLen)
+{
+	if (! out)
+	{
+		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", MOWGLI_FUNC_NAME);
+		return false;
+	}
+	if ((! data && dataLen) || (data && ! dataLen))
+	{
+		(void) slog(LG_ERROR, "%s: called with mismatched data parameters (BUG)", MOWGLI_FUNC_NAME);
+		return false;
+	}
+
+	struct digest_context ctx;
+
+	if (! digest_init(&ctx, alg))
+		return false;
+
+	if (! digest_update(&ctx, data, dataLen))
+		return false;
+
+	if (! digest_final(&ctx, out, outLen))
+		return false;
+
+	(void) smemzero(&ctx, sizeof ctx);
+	return true;
+}
+
+bool ATHEME_FATTR_WUR
 digest_oneshot_vector(const enum digest_algorithm alg, const struct digest_vector *const restrict vec,
                       const size_t vecLen, void *const restrict out, size_t *const outLen)
 {
@@ -90,6 +120,42 @@ digest_oneshot_vector(const enum digest_algorithm alg, const struct digest_vecto
 	for (size_t i = 0; i < vecLen; i++)
 		if (! digest_update(&ctx, vec[i].ptr, vec[i].len))
 			return false;
+
+	if (! digest_final(&ctx, out, outLen))
+		return false;
+
+	(void) smemzero(&ctx, sizeof ctx);
+	return true;
+}
+
+bool ATHEME_FATTR_WUR
+digest_oneshot_hmac(const enum digest_algorithm alg, const void *const key, const size_t keyLen,
+                    const void *const data, const size_t dataLen, void *const out,
+                    size_t *const outLen)
+{
+	if (! out)
+	{
+		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", MOWGLI_FUNC_NAME);
+		return false;
+	}
+	if ((! key && keyLen) || (key && ! keyLen))
+	{
+		(void) slog(LG_ERROR, "%s: called with mismatched key parameters (BUG)", MOWGLI_FUNC_NAME);
+		return false;
+	}
+	if ((! data && dataLen) || (data && ! dataLen))
+	{
+		(void) slog(LG_ERROR, "%s: called with mismatched data parameters (BUG)", MOWGLI_FUNC_NAME);
+		return false;
+	}
+
+	struct digest_context ctx;
+
+	if (! digest_init_hmac(&ctx, alg, key, keyLen))
+		return false;
+
+	if (! digest_update(&ctx, data, dataLen))
+		return false;
 
 	if (! digest_final(&ctx, out, outLen))
 		return false;
@@ -135,72 +201,6 @@ digest_oneshot_hmac_vector(const enum digest_algorithm alg, const void *const ke
 	for (size_t i = 0; i < vecLen; i++)
 		if (! digest_update(&ctx, vec[i].ptr, vec[i].len))
 			return false;
-
-	if (! digest_final(&ctx, out, outLen))
-		return false;
-
-	(void) smemzero(&ctx, sizeof ctx);
-	return true;
-}
-
-bool ATHEME_FATTR_WUR
-digest_oneshot(const enum digest_algorithm alg, const void *const data, const size_t dataLen,
-               void *const out, size_t *const outLen)
-{
-	if (! out)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-	if ((! data && dataLen) || (data && ! dataLen))
-	{
-		(void) slog(LG_ERROR, "%s: called with mismatched data parameters (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-
-	struct digest_context ctx;
-
-	if (! digest_init(&ctx, alg))
-		return false;
-
-	if (! digest_update(&ctx, data, dataLen))
-		return false;
-
-	if (! digest_final(&ctx, out, outLen))
-		return false;
-
-	(void) smemzero(&ctx, sizeof ctx);
-	return true;
-}
-
-bool ATHEME_FATTR_WUR
-digest_oneshot_hmac(const enum digest_algorithm alg, const void *const key, const size_t keyLen,
-                    const void *const data, const size_t dataLen, void *const out,
-                    size_t *const outLen)
-{
-	if (! out)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-	if ((! key && keyLen) || (key && ! keyLen))
-	{
-		(void) slog(LG_ERROR, "%s: called with mismatched key parameters (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-	if ((! data && dataLen) || (data && ! dataLen))
-	{
-		(void) slog(LG_ERROR, "%s: called with mismatched data parameters (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-
-	struct digest_context ctx;
-
-	if (! digest_init_hmac(&ctx, alg, key, keyLen))
-		return false;
-
-	if (! digest_update(&ctx, data, dataLen))
-		return false;
 
 	if (! digest_final(&ctx, out, outLen))
 		return false;
