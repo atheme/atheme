@@ -438,7 +438,7 @@ digest_testsuite_run_hmac_md5(void)
 }
 
 static bool
-digest_testsuite_run_pbkdf2_hmac_md5(void)
+digest_testsuite_run_pbkdf2_md5(void)
 {
 	uint8_t result[88];
 
@@ -472,7 +472,7 @@ digest_testsuite_run_pbkdf2_hmac_md5(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
-		if (! digest_pbkdf2_hmac(DIGALG_MD5, NULL, 0, NULL, 0, iter, result, sizeof vector))
+		if (! digest_oneshot_pbkdf2(DIGALG_MD5, NULL, 0, NULL, 0, iter, result, sizeof vector))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -491,7 +491,7 @@ digest_testsuite_run_pbkdf2_hmac_md5(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
 
-		if (! digest_pbkdf2_hmac(DIGALG_MD5, NULL, 0, salt, sizeof salt, iter, result, sizeof vector))
+		if (! digest_oneshot_pbkdf2(DIGALG_MD5, NULL, 0, salt, sizeof salt, iter, result, sizeof vector))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -510,7 +510,7 @@ digest_testsuite_run_pbkdf2_hmac_md5(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
 
-		if (! digest_pbkdf2_hmac(DIGALG_MD5, key, sizeof key, NULL, 0, iter, result, sizeof vector))
+		if (! digest_oneshot_pbkdf2(DIGALG_MD5, key, sizeof key, NULL, 0, iter, result, sizeof vector))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -538,7 +538,7 @@ digest_testsuite_run_pbkdf2_hmac_md5(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
 
-		if (! digest_pbkdf2_hmac(DIGALG_MD5, key, sizeof key, salt, sizeof salt, iter, result, sizeof vector))
+		if (! digest_oneshot_pbkdf2(DIGALG_MD5, key, sizeof key, salt, sizeof salt, iter, result, sizeof vector))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -923,7 +923,7 @@ digest_testsuite_run_hmac_sha1(void)
 }
 
 static bool
-digest_testsuite_run_pbkdf2_hmac_sha1(void)
+digest_testsuite_run_pbkdf2_sha1(void)
 {
 	uint8_t result[88];
 
@@ -957,7 +957,7 @@ digest_testsuite_run_pbkdf2_hmac_sha1(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
-		if (! digest_pbkdf2_hmac(DIGALG_SHA1, NULL, 0, NULL, 0, iter, result, sizeof vector))
+		if (! digest_oneshot_pbkdf2(DIGALG_SHA1, NULL, 0, NULL, 0, iter, result, sizeof vector))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -976,7 +976,7 @@ digest_testsuite_run_pbkdf2_hmac_sha1(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
 
-		if (! digest_pbkdf2_hmac(DIGALG_SHA1, NULL, 0, salt, sizeof salt, iter, result, sizeof vector))
+		if (! digest_oneshot_pbkdf2(DIGALG_SHA1, NULL, 0, salt, sizeof salt, iter, result, sizeof vector))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -995,7 +995,7 @@ digest_testsuite_run_pbkdf2_hmac_sha1(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
 
-		if (! digest_pbkdf2_hmac(DIGALG_SHA1, key, sizeof key, NULL, 0, iter, result, sizeof vector))
+		if (! digest_oneshot_pbkdf2(DIGALG_SHA1, key, sizeof key, NULL, 0, iter, result, sizeof vector))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1021,7 +1021,7 @@ digest_testsuite_run_pbkdf2_hmac_sha1(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
 
-		if (! digest_pbkdf2_hmac(DIGALG_SHA1, key, sizeof key, salt, sizeof salt, iter, result, sizeof vector))
+		if (! digest_oneshot_pbkdf2(DIGALG_SHA1, key, sizeof key, salt, sizeof salt, iter, result, sizeof vector))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1436,7 +1436,7 @@ digest_testsuite_run_hmac_sha2_256(void)
 }
 
 static bool
-digest_testsuite_run_pbkdf2_hmac_sha2_256(void)
+digest_testsuite_run_pbkdf2_sha2_256(void)
 {
 	uint8_t result[88];
 
@@ -1496,7 +1496,7 @@ digest_testsuite_run_pbkdf2_hmac_sha2_256(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
-		if (! digest_pbkdf2_hmac(DIGALG_SHA2_256, NULL, 0, NULL, 0, iter, result, sizeof vector))
+		if (! digest_oneshot_pbkdf2(DIGALG_SHA2_256, NULL, 0, NULL, 0, iter, result, sizeof vector))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1517,7 +1517,7 @@ digest_testsuite_run_pbkdf2_hmac_sha2_256(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
 
-		if (! digest_pbkdf2_hmac(DIGALG_SHA2_256, NULL, 0, salt, sizeof salt, iter, result, sizeof vector))
+		if (! digest_oneshot_pbkdf2(DIGALG_SHA2_256, NULL, 0, salt, sizeof salt, iter, result, sizeof vector))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1538,7 +1538,7 @@ digest_testsuite_run_pbkdf2_hmac_sha2_256(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
 
-		if (! digest_pbkdf2_hmac(DIGALG_SHA2_256, key, sizeof key, NULL, 0, iter, result, sizeof vector))
+		if (! digest_oneshot_pbkdf2(DIGALG_SHA2_256, key, sizeof key, NULL, 0, iter, result, sizeof vector))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -1566,7 +1566,7 @@ digest_testsuite_run_pbkdf2_hmac_sha2_256(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
 
-		if (! digest_pbkdf2_hmac(DIGALG_SHA2_256, key, sizeof key, salt, sizeof salt, iter, result, sizeof vector))
+		if (! digest_oneshot_pbkdf2(DIGALG_SHA2_256, key, sizeof key, salt, sizeof salt, iter, result, sizeof vector))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -2025,7 +2025,7 @@ digest_testsuite_run_hmac_sha2_512(void)
 }
 
 static bool
-digest_testsuite_run_pbkdf2_hmac_sha2_512(void)
+digest_testsuite_run_pbkdf2_sha2_512(void)
 {
 	uint8_t result[88];
 
@@ -2089,7 +2089,7 @@ digest_testsuite_run_pbkdf2_hmac_sha2_512(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
-		if (! digest_pbkdf2_hmac(DIGALG_SHA2_512, NULL, 0, NULL, 0, iter, result, sizeof vector))
+		if (! digest_oneshot_pbkdf2(DIGALG_SHA2_512, NULL, 0, NULL, 0, iter, result, sizeof vector))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -2114,7 +2114,7 @@ digest_testsuite_run_pbkdf2_hmac_sha2_512(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
 
-		if (! digest_pbkdf2_hmac(DIGALG_SHA2_512, NULL, 0, salt, sizeof salt, iter, result, sizeof vector))
+		if (! digest_oneshot_pbkdf2(DIGALG_SHA2_512, NULL, 0, salt, sizeof salt, iter, result, sizeof vector))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -2139,7 +2139,7 @@ digest_testsuite_run_pbkdf2_hmac_sha2_512(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
 
-		if (! digest_pbkdf2_hmac(DIGALG_SHA2_512, key, sizeof key, NULL, 0, iter, result, sizeof vector))
+		if (! digest_oneshot_pbkdf2(DIGALG_SHA2_512, key, sizeof key, NULL, 0, iter, result, sizeof vector))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -2167,7 +2167,7 @@ digest_testsuite_run_pbkdf2_hmac_sha2_512(void)
 
 		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
 
-		if (! digest_pbkdf2_hmac(DIGALG_SHA2_512, key, sizeof key, salt, sizeof salt, iter, result, sizeof vector))
+		if (! digest_oneshot_pbkdf2(DIGALG_SHA2_512, key, sizeof key, salt, sizeof salt, iter, result, sizeof vector))
 			return false;
 
 		if (memcmp(result, vector, sizeof vector) != 0)
@@ -2186,7 +2186,7 @@ digest_testsuite_run(void)
 	if (! digest_testsuite_run_hmac_md5())
 		return false;
 
-	if (! digest_testsuite_run_pbkdf2_hmac_md5())
+	if (! digest_testsuite_run_pbkdf2_md5())
 		return false;
 
 	if (! digest_testsuite_run_sha1())
@@ -2195,7 +2195,7 @@ digest_testsuite_run(void)
 	if (! digest_testsuite_run_hmac_sha1())
 		return false;
 
-	if (! digest_testsuite_run_pbkdf2_hmac_sha1())
+	if (! digest_testsuite_run_pbkdf2_sha1())
 		return false;
 
 	if (! digest_testsuite_run_sha2_256())
@@ -2204,7 +2204,7 @@ digest_testsuite_run(void)
 	if (! digest_testsuite_run_hmac_sha2_256())
 		return false;
 
-	if (! digest_testsuite_run_pbkdf2_hmac_sha2_256())
+	if (! digest_testsuite_run_pbkdf2_sha2_256())
 		return false;
 
 	if (! digest_testsuite_run_sha2_512())
@@ -2213,7 +2213,7 @@ digest_testsuite_run(void)
 	if (! digest_testsuite_run_hmac_sha2_512())
 		return false;
 
-	if (! digest_testsuite_run_pbkdf2_hmac_sha2_512())
+	if (! digest_testsuite_run_pbkdf2_sha2_512())
 		return false;
 
 	return true;

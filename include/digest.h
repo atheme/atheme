@@ -74,7 +74,7 @@ bool digest_final(struct digest_context *, void *, size_t *) ATHEME_FATTR_WUR;
 bool digest_oneshot(enum digest_algorithm, const void *, size_t, void *, size_t *) ATHEME_FATTR_WUR;
 bool digest_oneshot_hmac(enum digest_algorithm, const void *, size_t, const void *, size_t, void *, size_t *)
     ATHEME_FATTR_WUR;
-bool digest_pbkdf2_hmac(enum digest_algorithm, const void *, size_t, const void *, size_t, size_t, void *, size_t)
+bool digest_oneshot_pbkdf2(enum digest_algorithm, const void *, size_t, const void *, size_t, size_t, void *, size_t)
     ATHEME_FATTR_WUR;
 
 bool digest_update_vector(struct digest_context *, const struct digest_vector *, size_t) ATHEME_FATTR_WUR;

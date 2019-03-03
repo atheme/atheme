@@ -249,9 +249,9 @@ error:
 }
 
 bool ATHEME_FATTR_WUR
-digest_pbkdf2_hmac(const enum digest_algorithm alg, const void *restrict pass, const size_t passLen,
-                   const void *restrict salt, const size_t saltLen, const size_t c,
-                   void *const restrict dk, const size_t dkLen)
+digest_oneshot_pbkdf2(const enum digest_algorithm alg, const void *restrict pass, const size_t passLen,
+                      const void *restrict salt, const size_t saltLen, const size_t c,
+                      void *const restrict dk, const size_t dkLen)
 {
 	if (! c)
 	{
