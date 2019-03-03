@@ -23,13 +23,15 @@ ATHEME_PREFIX="${HOME}/atheme-install"
 set -e
 set -x
 
-./configure                            \
-    --prefix="${ATHEME_PREFIX}"        \
-    --with-perl                        \
-    --enable-debugging                 \
-    --enable-legacy-pwcrypto           \
-    --enable-nls                       \
-    --enable-reproducible-builds       \
+./configure                             \
+    --prefix="${ATHEME_PREFIX}"         \
+    --with-perl                         \
+    --enable-debugging                  \
+    --enable-legacy-pwcrypto            \
+    --enable-nls                        \
+    --enable-reproducible-builds        \
+    --with-digest-api-frontend=internal \
+    --with-rng-api-frontend=internal    \
     ${ATHEME_CONF_ARGS}
 
 "${MAKE}"
