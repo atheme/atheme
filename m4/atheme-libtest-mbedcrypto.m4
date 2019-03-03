@@ -5,8 +5,6 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDCRYPTO], [
 	LIBMBEDCRYPTO_USABLE="No"
 	LIBMBEDCRYPTO_DIGEST="No"
 	LIBMBEDCRYPTO_RANDOM="No"
-	LIBMBEDCRYPTO_RANDOM_CTR_DRBG="No"
-	LIBMBEDCRYPTO_RANDOM_HMAC_DRBG="No"
 
 	AC_ARG_WITH([mbedtls],
 		[AS_HELP_STRING([--without-mbedtls], [Do not attempt to detect libmbedcrypto])],
@@ -121,7 +119,6 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDCRYPTO], [
 			LIBMBEDCRYPTO_DIGEST="Yes"
 		], [
 			AC_MSG_RESULT([no])
-			LIBMBEDCRYPTO_DIGEST="No"
 		])
 
 		AC_MSG_CHECKING([if libmbedcrypto has usable entropy-gathering functions])
@@ -169,13 +166,11 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDCRYPTO], [
 				]])
 			], [
 				AC_MSG_RESULT([yes])
+				AC_DEFINE([HAVE_LIBMBEDCRYPTO_CTR_DRBG], [1], [Define to 1 if libmbedcrypto has usable CTR-DRBG functions])
 				LIBMBEDCRYPTO_USABLE="Yes"
 				LIBMBEDCRYPTO_RANDOM="Yes"
-				LIBMBEDCRYPTO_RANDOM_CTR_DRBG="Yes"
 			], [
 				AC_MSG_RESULT([no])
-				LIBMBEDCRYPTO_RANDOM="No"
-				LIBMBEDCRYPTO_RANDOM_CTR_DRBG="No"
 			])
 
 			AC_MSG_CHECKING([if libmbedcrypto has usable HMAC-DRBG functions])
@@ -209,38 +204,27 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDCRYPTO], [
 				]])
 			], [
 				AC_MSG_RESULT([yes])
+				AC_DEFINE([HAVE_LIBMBEDCRYPTO_HMAC_DRBG], [1], [Define to 1 if libmbedcrypto has usable HMAC-DRBG functions])
 				LIBMBEDCRYPTO_USABLE="Yes"
 				LIBMBEDCRYPTO_RANDOM="Yes"
-				LIBMBEDCRYPTO_RANDOM_HMAC_DRBG="Yes"
 			], [
 				AC_MSG_RESULT([no])
-				LIBMBEDCRYPTO_RANDOM="No"
-				LIBMBEDCRYPTO_RANDOM_HMAC_DRBG="No"
 			])
 		], [
 			AC_MSG_RESULT([no])
-			LIBMBEDCRYPTO_RANDOM="No"
-			LIBMBEDCRYPTO_RANDOM_CTR_DRBG="No"
-			LIBMBEDCRYPTO_RANDOM_HMAC_DRBG="No"
 		])
+	])
 
-		AS_IF([test "${LIBMBEDCRYPTO_USABLE}" = "Yes"], [
-			AC_DEFINE([HAVE_LIBMBEDCRYPTO], [1], [Define to 1 if libmbedcrypto appears to be usable])
-			AS_IF([test "${LIBMBEDCRYPTO_RANDOM}${LIBMBEDCRYPTO_RANDOM_CTR_DRBG}" = "YesYes"], [
-				AC_DEFINE([HAVE_LIBMBEDCRYPTO_CTR_DRBG], [1], [Define to 1 if libmbedcrypto has usable CTR-DRBG functions])
-			])
-			AS_IF([test "${LIBMBEDCRYPTO_RANDOM}${LIBMBEDCRYPTO_RANDOM_HMAC_DRBG}" = "YesYes"], [
-				AC_DEFINE([HAVE_LIBMBEDCRYPTO_HMAC_DRBG], [1], [Define to 1 if libmbedcrypto has usable HMAC-DRBG functions])
-			])
-			AS_IF([test "x${ac_cv_search_mbedtls_version_get_string}" != "xnone required"], [
-				LIBMBEDCRYPTO_LIBS="${ac_cv_search_mbedtls_version_get_string}"
-				AC_SUBST([LIBMBEDCRYPTO_LIBS])
-			])
-		], [
-			LIBMBEDCRYPTO="No"
-			AS_IF([test "${with_mbedtls}" = "yes"], [
-				AC_MSG_FAILURE([--with-mbedtls was given but libmbedcrypto appears to be unusable])
-			])
+	AS_IF([test "${LIBMBEDCRYPTO_USABLE}" = "Yes"], [
+		AC_DEFINE([HAVE_LIBMBEDCRYPTO], [1], [Define to 1 if libmbedcrypto appears to be usable])
+		AS_IF([test "x${ac_cv_search_mbedtls_version_get_string}" != "xnone required"], [
+			LIBMBEDCRYPTO_LIBS="${ac_cv_search_mbedtls_version_get_string}"
+			AC_SUBST([LIBMBEDCRYPTO_LIBS])
+		])
+	], [
+		LIBMBEDCRYPTO="No"
+		AS_IF([test "${with_mbedtls}" = "yes"], [
+			AC_MSG_FAILURE([--with-mbedtls was given but libmbedcrypto appears to be unusable])
 		])
 	])
 

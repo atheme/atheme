@@ -9953,9 +9953,7 @@ fi
 	LIBCRYPTO_NAME=""
 	LIBCRYPTO_USABLE="No"
 	LIBCRYPTO_DIGEST="No"
-	LIBCRYPTO_MEMCMP="No"
 	LIBCRYPTO_RANDOM="No"
-	LIBCRYPTO_ECDSA="No"
 
 
 # Check whether --with-openssl was given.
@@ -10183,7 +10181,6 @@ else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBCRYPTO_DIGEST="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -10227,7 +10224,6 @@ else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBCRYPTO_RANDOM="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -10259,14 +10255,15 @@ if ac_fn_c_try_link "$LINENO"; then :
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBCRYPTO_MEMCMP 1" >>confdefs.h
+
 			LIBCRYPTO_USABLE="Yes"
-			LIBCRYPTO_MEMCMP="Yes"
 
 else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBCRYPTO_MEMCMP="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -10303,14 +10300,17 @@ if ac_fn_c_try_link "$LINENO"; then :
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBCRYPTO_ECDSA 1" >>confdefs.h
+
 			LIBCRYPTO_USABLE="Yes"
-			LIBCRYPTO_ECDSA="Yes"
+			ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
+
 
 else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBCRYPTO_ECDSA="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -10360,22 +10360,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 $as_echo "#define HAVE_LIBCRYPTO 1" >>confdefs.h
 
-		if test "${LIBCRYPTO_MEMCMP}" = "Yes"; then :
-
-
-$as_echo "#define HAVE_LIBCRYPTO_MEMCMP 1" >>confdefs.h
-
-
-fi
-		if test "${LIBCRYPTO_ECDSA}" = "Yes"; then :
-
-			ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
-
-$as_echo "#define HAVE_LIBCRYPTO_ECDSA 1" >>confdefs.h
-
-
-
-fi
 
 else
 
@@ -10791,8 +10775,6 @@ fi
 	LIBMBEDCRYPTO_USABLE="No"
 	LIBMBEDCRYPTO_DIGEST="No"
 	LIBMBEDCRYPTO_RANDOM="No"
-	LIBMBEDCRYPTO_RANDOM_CTR_DRBG="No"
-	LIBMBEDCRYPTO_RANDOM_HMAC_DRBG="No"
 
 
 # Check whether --with-mbedtls was given.
@@ -11018,7 +11000,6 @@ else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBMBEDCRYPTO_DIGEST="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -11097,16 +11078,16 @@ if ac_fn_c_try_link "$LINENO"; then :
 
 				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBMBEDCRYPTO_CTR_DRBG 1" >>confdefs.h
+
 				LIBMBEDCRYPTO_USABLE="Yes"
 				LIBMBEDCRYPTO_RANDOM="Yes"
-				LIBMBEDCRYPTO_RANDOM_CTR_DRBG="Yes"
 
 else
 
 				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-				LIBMBEDCRYPTO_RANDOM="No"
-				LIBMBEDCRYPTO_RANDOM_CTR_DRBG="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -11157,16 +11138,16 @@ if ac_fn_c_try_link "$LINENO"; then :
 
 				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBMBEDCRYPTO_HMAC_DRBG 1" >>confdefs.h
+
 				LIBMBEDCRYPTO_USABLE="Yes"
 				LIBMBEDCRYPTO_RANDOM="Yes"
-				LIBMBEDCRYPTO_RANDOM_HMAC_DRBG="Yes"
 
 else
 
 				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-				LIBMBEDCRYPTO_RANDOM="No"
-				LIBMBEDCRYPTO_RANDOM_HMAC_DRBG="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -11176,51 +11157,34 @@ else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBMBEDCRYPTO_RANDOM="No"
-			LIBMBEDCRYPTO_RANDOM_CTR_DRBG="No"
-			LIBMBEDCRYPTO_RANDOM_HMAC_DRBG="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
-		if test "${LIBMBEDCRYPTO_USABLE}" = "Yes"; then :
+fi
+
+	if test "${LIBMBEDCRYPTO_USABLE}" = "Yes"; then :
 
 
 $as_echo "#define HAVE_LIBMBEDCRYPTO 1" >>confdefs.h
 
-			if test "${LIBMBEDCRYPTO_RANDOM}${LIBMBEDCRYPTO_RANDOM_CTR_DRBG}" = "YesYes"; then :
+		if test "x${ac_cv_search_mbedtls_version_get_string}" != "xnone required"; then :
 
-
-$as_echo "#define HAVE_LIBMBEDCRYPTO_CTR_DRBG 1" >>confdefs.h
-
-
-fi
-			if test "${LIBMBEDCRYPTO_RANDOM}${LIBMBEDCRYPTO_RANDOM_HMAC_DRBG}" = "YesYes"; then :
-
-
-$as_echo "#define HAVE_LIBMBEDCRYPTO_HMAC_DRBG 1" >>confdefs.h
-
-
-fi
-			if test "x${ac_cv_search_mbedtls_version_get_string}" != "xnone required"; then :
-
-				LIBMBEDCRYPTO_LIBS="${ac_cv_search_mbedtls_version_get_string}"
+			LIBMBEDCRYPTO_LIBS="${ac_cv_search_mbedtls_version_get_string}"
 
 
 fi
 
 else
 
-			LIBMBEDCRYPTO="No"
-			if test "${with_mbedtls}" = "yes"; then :
+		LIBMBEDCRYPTO="No"
+		if test "${with_mbedtls}" = "yes"; then :
 
-				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+			{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "--with-mbedtls was given but libmbedcrypto appears to be unusable
 See \`config.log' for more details" "$LINENO" 5; }
-
-fi
 
 fi
 
@@ -11233,7 +11197,6 @@ fi
 	LIBNETTLE="No"
 	LIBNETTLE_USABLE="No"
 	LIBNETTLE_DIGEST="No"
-	LIBNETTLE_MEMEQL="No"
 
 
 # Check whether --with-nettle was given.
@@ -11435,8 +11398,10 @@ if ac_fn_c_try_link "$LINENO"; then :
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBNETTLE_MEMEQL 1" >>confdefs.h
+
 			LIBNETTLE_USABLE="Yes"
-			LIBNETTLE_MEMEQL="Yes"
 
 else
 
@@ -11447,19 +11412,14 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
-		if test "${LIBNETTLE_USABLE}" = "Yes"; then :
+fi
+
+	if test "${LIBNETTLE_USABLE}" = "Yes"; then :
 
 
 $as_echo "#define HAVE_LIBNETTLE 1" >>confdefs.h
 
-			if test "${LIBNETTLE_MEMEQL}" = "Yes"; then :
-
-
-$as_echo "#define HAVE_LIBNETTLE_MEMEQL 1" >>confdefs.h
-
-
-fi
-			for ac_header in nettle/version.h
+		for ac_header in nettle/version.h
 do :
   ac_fn_c_check_header_mongrel "$LINENO" "nettle/version.h" "ac_cv_header_nettle_version_h" "$ac_includes_default"
 if test "x$ac_cv_header_nettle_version_h" = xyes; then :
@@ -11474,15 +11434,13 @@ done
 
 else
 
-			LIBNETTLE="No"
-			if test "${with_nettle}" = "yes"; then :
+		LIBNETTLE="No"
+		if test "${with_nettle}" = "yes"; then :
 
-				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+			{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "--with-nettle was given but libnettle appears to be unusable
 See \`config.log' for more details" "$LINENO" 5; }
-
-fi
 
 fi
 
@@ -12098,10 +12056,7 @@ fi
 	LIBSODIUM="No"
 	LIBSODIUM_USABLE="No"
 	LIBSODIUM_MEMORY="No"
-	LIBSODIUM_MEMCMP="No"
-	LIBSODIUM_MEMZERO="No"
 	LIBSODIUM_RANDOM="No"
-	LIBSODIUM_SCRYPT="No"
 
 
 # Check whether --with-sodium was given.
@@ -12305,7 +12260,6 @@ else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBSODIUM_MEMORY="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -12338,14 +12292,15 @@ if ac_fn_c_try_link "$LINENO"; then :
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBSODIUM_MEMCMP 1" >>confdefs.h
+
 			LIBSODIUM_USABLE="Yes"
-			LIBSODIUM_MEMCMP="Yes"
 
 else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBSODIUM_MEMCMP="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -12378,14 +12333,15 @@ if ac_fn_c_try_link "$LINENO"; then :
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBSODIUM_MEMZERO 1" >>confdefs.h
+
 			LIBSODIUM_USABLE="Yes"
-			LIBSODIUM_MEMZERO="Yes"
 
 else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBSODIUM_MEMZERO="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -12428,7 +12384,6 @@ else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBSODIUM_RANDOM="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -12463,57 +12418,37 @@ if ac_fn_c_try_link "$LINENO"; then :
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBSODIUM_SCRYPT 1" >>confdefs.h
+
 			LIBSODIUM_USABLE="Yes"
-			LIBSODIUM_SCRYPT="Yes"
 
 else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBSODIUM_SCRYPT="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
-		if test "${LIBSODIUM_USABLE}" = "Yes"; then :
+fi
+
+	if test "${LIBSODIUM_USABLE}" = "Yes"; then :
 
 
 $as_echo "#define HAVE_LIBSODIUM 1" >>confdefs.h
 
-			if test "${LIBSODIUM_MEMCMP}" = "Yes"; then :
-
-
-$as_echo "#define HAVE_LIBSODIUM_MEMCMP 1" >>confdefs.h
-
-
-fi
-			if test "${LIBSODIUM_MEMZERO}" = "Yes"; then :
-
-
-$as_echo "#define HAVE_LIBSODIUM_MEMZERO 1" >>confdefs.h
-
-
-fi
-			if test "${LIBSODIUM_SCRYPT}" = "Yes"; then :
-
-
-$as_echo "#define HAVE_LIBSODIUM_SCRYPT 1" >>confdefs.h
-
-
-fi
 
 else
 
-			LIBSODIUM="No"
-			if test "${with_sodium}" = "yes"; then :
+		LIBSODIUM="No"
+		if test "${with_sodium}" = "yes"; then :
 
-				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+			{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "--with-sodium was given but libsodium appears to be unusable
 See \`config.log' for more details" "$LINENO" 5; }
-
-fi
 
 fi
 

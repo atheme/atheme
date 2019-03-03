@@ -3,10 +3,7 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 	LIBSODIUM="No"
 	LIBSODIUM_USABLE="No"
 	LIBSODIUM_MEMORY="No"
-	LIBSODIUM_MEMCMP="No"
-	LIBSODIUM_MEMZERO="No"
 	LIBSODIUM_RANDOM="No"
-	LIBSODIUM_SCRYPT="No"
 
 	AC_ARG_WITH([sodium],
 		[AS_HELP_STRING([--without-sodium], [Do not attempt to detect libsodium (cryptographic library)])],
@@ -79,7 +76,6 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 			LIBSODIUM_MEMORY="Yes"
 		], [
 			AC_MSG_RESULT([no])
-			LIBSODIUM_MEMORY="No"
 		])
 
 		AC_MSG_CHECKING([if libsodium has a usable constant-time memory comparison function])
@@ -95,11 +91,10 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 			]])
 		], [
 			AC_MSG_RESULT([yes])
+			AC_DEFINE([HAVE_LIBSODIUM_MEMCMP], [1], [Define to 1 if libsodium has a usable constant-time memory comparison function])
 			LIBSODIUM_USABLE="Yes"
-			LIBSODIUM_MEMCMP="Yes"
 		], [
 			AC_MSG_RESULT([no])
-			LIBSODIUM_MEMCMP="No"
 		])
 
 		AC_MSG_CHECKING([if libsodium has a usable memory zeroing function])
@@ -115,11 +110,10 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 			]])
 		], [
 			AC_MSG_RESULT([yes])
+			AC_DEFINE([HAVE_LIBSODIUM_MEMZERO], [1], [Define to 1 if libsodium has a usable memory zeroing function])
 			LIBSODIUM_USABLE="Yes"
-			LIBSODIUM_MEMZERO="Yes"
 		], [
 			AC_MSG_RESULT([no])
-			LIBSODIUM_MEMZERO="No"
 		])
 
 		AC_MSG_CHECKING([if libsodium has a usable random number generator])
@@ -142,7 +136,6 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 			LIBSODIUM_RANDOM="Yes"
 		], [
 			AC_MSG_RESULT([no])
-			LIBSODIUM_RANDOM="No"
 		])
 
 		AC_MSG_CHECKING([if libsodium has a usable scrypt password hash generator])
@@ -160,29 +153,19 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 			]])
 		], [
 			AC_MSG_RESULT([yes])
+			AC_DEFINE([HAVE_LIBSODIUM_SCRYPT], [1], [Define to 1 if libsodium has a usable scrypt password hash generator])
 			LIBSODIUM_USABLE="Yes"
-			LIBSODIUM_SCRYPT="Yes"
 		], [
 			AC_MSG_RESULT([no])
-			LIBSODIUM_SCRYPT="No"
 		])
+	])
 
-		AS_IF([test "${LIBSODIUM_USABLE}" = "Yes"], [
-			AC_DEFINE([HAVE_LIBSODIUM], [1], [Define to 1 if libsodium appears to be usable])
-			AS_IF([test "${LIBSODIUM_MEMCMP}" = "Yes"], [
-				AC_DEFINE([HAVE_LIBSODIUM_MEMCMP], [1], [Define to 1 if libsodium has a usable constant-time memory comparison function])
-			])
-			AS_IF([test "${LIBSODIUM_MEMZERO}" = "Yes"], [
-				AC_DEFINE([HAVE_LIBSODIUM_MEMZERO], [1], [Define to 1 if libsodium has a usable memory zeroing function])
-			])
-			AS_IF([test "${LIBSODIUM_SCRYPT}" = "Yes"], [
-				AC_DEFINE([HAVE_LIBSODIUM_SCRYPT], [1], [Define to 1 if libsodium has a usable scrypt password hash generator])
-			])
-		], [
-			LIBSODIUM="No"
-			AS_IF([test "${with_sodium}" = "yes"], [
-				AC_MSG_FAILURE([--with-sodium was given but libsodium appears to be unusable])
-			])
+	AS_IF([test "${LIBSODIUM_USABLE}" = "Yes"], [
+		AC_DEFINE([HAVE_LIBSODIUM], [1], [Define to 1 if libsodium appears to be usable])
+	], [
+		LIBSODIUM="No"
+		AS_IF([test "${with_sodium}" = "yes"], [
+			AC_MSG_FAILURE([--with-sodium was given but libsodium appears to be unusable])
 		])
 	])
 
