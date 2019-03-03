@@ -40,6 +40,9 @@
 #define SCRAMSHA_NONCE_LENGTH_MIN_COMBINED  (SCRAMSHA_NONCE_LENGTH + SCRAMSHA_NONCE_LENGTH_MIN)
 #define SCRAMSHA_NONCE_LENGTH_MAX_COMBINED  (SCRAMSHA_NONCE_LENGTH + SCRAMSHA_NONCE_LENGTH_MAX)
 
+// strlen("n,a=,") == 5U
+#define SCRAMSHA_GS2HDR_LENGTH_MAX          (5U + NICKLEN)
+
 // strlen("10000") == 5U
 // strlen("5000000") == 7U
 // strlen("r=,s=,i=") == 8U
@@ -66,14 +69,20 @@ struct sasl_scramsha_session
 	mowgli_node_t               node;       // For entry into mowgli_list_t sasl_scramsha_sessions
 	struct pbkdf2v2_dbentry     db;         // Parsed credentials from database
 	struct myuser              *mu;         // User we are authenticating as
-	char                       *c_gs2_buf;  // Client's GS2 header
 	char                       *c_msg_buf;  // Client's first message
-	char                       *s_msg_buf;  // Server's first message
-	size_t                      c_gs2_len;  // Client's GS2 header (length)
+	size_t                      c_gs2_len;  // Client's GS2 header (base64-encoded length)
 	size_t                      c_msg_len;  // Client's first message (length)
 	size_t                      s_msg_len;  // Server's first message (length)
-	size_t                      nonce_len;  // Length of (combined client + server) nonce below
+	size_t                      nonce_len;  // Length of combined (client + server) nonce below
 	bool                        complete;   // Authentication is complete, waiting for client to confirm
+
+	// Client's GS2 header (base64-encoded)
+	char                        c_gs2_b64[BASE64_SIZE_STR(SCRAMSHA_GS2HDR_LENGTH_MAX)];
+
+	// Server's first message
+	char                        s_msg_buf[SCRAMSHA_RESPONSE1_LENGTH_MAX + 1];
+
+	// Combined (client + server) nonce
 	char                        nonce[SCRAMSHA_NONCE_LENGTH_MAX_COMBINED + 1];
 };
 
@@ -184,14 +193,8 @@ sasl_mech_scramsha_finish(struct sasl_session *const restrict p)
 
 	struct sasl_scramsha_session *const s = p->mechdata;
 
-	if (s->c_gs2_buf && s->c_gs2_len)
-		(void) smemzerofree(s->c_gs2_buf, s->c_gs2_len);
-
 	if (s->c_msg_buf)
 		(void) smemzerofree(s->c_msg_buf, strlen(s->c_msg_buf));
-
-	if (s->s_msg_buf)
-		(void) smemzerofree(s->s_msg_buf, strlen(s->s_msg_buf));
 
 	(void) mowgli_node_delete(&s->node, &sasl_scramsha_sessions);
 	(void) smemzerofree(s, sizeof *s);
@@ -222,11 +225,10 @@ sasl_mech_scramsha_step_clientfirst(struct sasl_session *const restrict p,
 	const char *message = in->buf;
 
 	enum sasl_mechanism_result retval = ASASL_MRESULT_CONTINUE;
-	struct sasl_scramsha_session *s = NULL;
+	char c_gs2_b64[BASE64_SIZE_STR(SCRAMSHA_GS2HDR_LENGTH_MAX)];
 	char authzid[NICKLEN + 1];
 	char authcid[NICKLEN + 1];
 	struct myuser *mu = NULL;
-	static char response[SCRAMSHA_RESPONSE1_LENGTH_MAX + 1];
 
 	scram_attr_list attributes;
 	struct pbkdf2v2_dbentry db;
@@ -307,6 +309,14 @@ sasl_mech_scramsha_step_clientfirst(struct sasl_session *const restrict p,
 	else if (*message++ != ',')
 	{
 		(void) slog(LG_DEBUG, "%s: malformed GS2 header (authzid section not empty)", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
+		return ASASL_MRESULT_ERROR;
+	}
+
+	const size_t c_gs2_len = base64_encode(header, (size_t) (message - header), c_gs2_b64, sizeof c_gs2_b64);
+	if (c_gs2_len == (size_t) -1)
+	{
+		(void) slog(LG_ERROR, "%s: base64_encode() for GS2 header failed (BUG?)", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("other-error", out);
 		return ASASL_MRESULT_ERROR;
 	}
@@ -396,23 +406,26 @@ sasl_mech_scramsha_step_clientfirst(struct sasl_session *const restrict p,
 	}
 
 	// These cannot fail
-	s = smalloc(sizeof *s);
+	struct sasl_scramsha_session *const s = smalloc(sizeof *s);
+
 	s->nonce_len = nonceLen + SCRAMSHA_NONCE_LENGTH;
-	s->c_gs2_len = (size_t) (message - header);
-	s->c_msg_len = (in->len - s->c_gs2_len);
-	s->c_gs2_buf = sstrndup(header, s->c_gs2_len);
+	s->c_gs2_len = c_gs2_len;
+	s->c_msg_len = (in->len - ((size_t) (message - header)));
 	s->c_msg_buf = sstrndup(message, s->c_msg_len);
 	s->mu = mu;
 
 	(void) mowgli_node_add(s, &s->node, &sasl_scramsha_sessions);
+	(void) memcpy(&s->db, &db, sizeof db);
+	(void) memcpy(s->c_gs2_b64, c_gs2_b64, c_gs2_len);
 	(void) memcpy(s->nonce, attributes['r'], nonceLen);
 	(void) atheme_random_str(s->nonce + nonceLen, SCRAMSHA_NONCE_LENGTH);
-	(void) memcpy(&s->db, &db, sizeof db);
 
 	p->mechdata = s;
 
 	// Construct server-first-message
-	const int respLen = snprintf(response, sizeof response, "r=%s,s=%s,i=%u", s->nonce, s->db.salt64, s->db.c);
+	const int respLen = snprintf(s->s_msg_buf, sizeof s->s_msg_buf, "r=%s,s=%s,i=%u",
+	                             s->nonce, s->db.salt64, s->db.c);
+
 	if (respLen < (int) SCRAMSHA_RESPONSE1_LENGTH_MIN || respLen > (int) SCRAMSHA_RESPONSE1_LENGTH_MAX)
 	{
 		(void) slog(LG_ERROR, "%s: snprintf(3) for server-first-message failed (BUG)", MOWGLI_FUNC_NAME);
@@ -420,12 +433,10 @@ sasl_mech_scramsha_step_clientfirst(struct sasl_session *const restrict p,
 		goto error;
 	}
 
-	out->buf = response;
-	out->len = (size_t) respLen;
+	s->s_msg_len = (size_t) respLen;
 
-	// Cannot fail. +1 is for including the terminating NULL byte.
-	s->s_msg_len = out->len;
-	s->s_msg_buf = smemdup(out->buf, out->len + 1);
+	out->buf = s->s_msg_buf;
+	out->len = s->s_msg_len;
 
 	goto cleanup;
 
@@ -475,7 +486,6 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 	}
 
 	scram_attr_list attributes;
-	char c_gs2_buf[SASL_S2S_MAXLEN_TOTAL_RAW];
 	unsigned char ClientProof[SCRAMSHA_MDLEN_MAX];
 	unsigned char ClientKey[SCRAMSHA_MDLEN_MAX];
 	unsigned char StoredKey[SCRAMSHA_MDLEN_MAX];
@@ -510,15 +520,8 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 		goto error;
 	}
 
-	// Decode and verify GS2 header from client-final-message
-	const size_t c_gs2_len = base64_decode(attributes['c'], c_gs2_buf, sizeof c_gs2_buf);
-	if (c_gs2_len == (size_t) -1)
-	{
-		(void) slog(LG_DEBUG, "%s: base64_decode() for GS2 header failed", MOWGLI_FUNC_NAME);
-		(void) sasl_scramsha_error("other-error", out);
-		goto error;
-	}
-	if (c_gs2_len != s->c_gs2_len || memcmp(s->c_gs2_buf, c_gs2_buf, c_gs2_len) != 0)
+	// Verify GS2 header from client-final-message against the original header received above
+	if (strcmp(s->c_gs2_b64, attributes['c']) != 0)
 	{
 		(void) slog(LG_DEBUG, "%s: GS2 header mismatch", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("other-error", out);
@@ -535,13 +538,13 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 
 	// Construct AuthMessage
 	const struct digest_vector AuthMessage[] = {
-		{    s->c_msg_buf, s->c_msg_len                  },
-		{             ",", 1                             },
-		{    s->s_msg_buf, s->s_msg_len                  },
-		{           ",c=", 3                             },
-		{ attributes['c'], BASE64_SIZE_RAW(s->c_gs2_len) },
-		{           ",r=", 3                             },
-		{        s->nonce, s->nonce_len                  },
+		{ s->c_msg_buf, s->c_msg_len },
+		{          ",", 1            },
+		{ s->s_msg_buf, s->s_msg_len },
+		{        ",c=", 3            },
+		{ s->c_gs2_b64, s->c_gs2_len },
+		{        ",r=", 3            },
+		{     s->nonce, s->nonce_len },
 	};
 	const size_t AuthMsgLen = (sizeof AuthMessage) / (sizeof AuthMessage[0]);
 
@@ -623,7 +626,6 @@ fail:
 	goto cleanup;
 
 cleanup:
-	(void) smemzero(c_gs2_buf, sizeof c_gs2_buf);
 	(void) smemzero(ClientProof, sizeof ClientProof);
 	(void) smemzero(ClientKey, sizeof ClientKey);
 	(void) smemzero(StoredKey, sizeof StoredKey);
