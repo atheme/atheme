@@ -7,7 +7,7 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDCRYPTO], [
 	LIBMBEDCRYPTO_RANDOM="No"
 
 	AC_ARG_WITH([mbedtls],
-		[AS_HELP_STRING([--without-mbedtls], [Do not attempt to detect libmbedcrypto])],
+		[AS_HELP_STRING([--without-mbedtls], [Do not attempt to detect ARM mbedTLS (cryptographic library)])],
 		[], [with_mbedtls="auto"])
 
 	case "x${with_mbedtls}" in

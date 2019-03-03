@@ -1533,21 +1533,24 @@ Optional Packages:
                           strength)
   --without-crypt         Do not attempt to detect crypt(3) (for
                           modules/crypto/crypt3-*)
-  --without-openssl       Do not attempt to detect libcrypto (for
-                          modules/saslserv/ecdsa-nist256p-challenge)
-  --without-libidn        Do not attempt to detect libidn (for
+  --without-openssl       Do not attempt to detect OpenSSL (cryptographic
+                          library)
+  --without-libidn        Do not attempt to detect GNU libidn (for
                           modules/saslserv/scram-sha -- SASLprep
                           normalization)
   --without-ldap          Do not attempt to detect libldap (for
                           modules/auth/ldap)
-  --without-mbedtls       Do not attempt to detect libmbedcrypto
-  --without-nettle        Do not attempt to detect nettle (crypto library)
+  --without-mbedtls       Do not attempt to detect ARM mbedTLS (cryptographic
+                          library)
+  --without-nettle        Do not attempt to detect nettle (cryptographic
+                          library)
   --without-passwdqc      Do not attempt to detect libpasswdqc (for
                           modules/nickserv/pwquality -- checking password
                           strength)
-  --without-pcre          Do not attempt to detect libpcre
-  --without-qrencode      Do not attempt to detect libqrencode for generating
-                          QR codes
+  --without-pcre          Do not attempt to detect libpcre (Perl-Compatible
+                          Regular Expressions)
+  --without-qrencode      Do not attempt to detect libqrencode (for generating
+                          QR codes)
   --without-sodium        Do not attempt to detect libsodium (cryptographic
                           library)
   --with-perl             Enable Perl (for modules/scripting/perl)

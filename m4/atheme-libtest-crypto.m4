@@ -7,7 +7,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 	LIBCRYPTO_RANDOM="No"
 
 	AC_ARG_WITH([openssl],
-		[AS_HELP_STRING([--without-openssl], [Do not attempt to detect libcrypto (for modules/saslserv/ecdsa-nist256p-challenge)])],
+		[AS_HELP_STRING([--without-openssl], [Do not attempt to detect OpenSSL (cryptographic library)])],
 		[], [with_openssl="auto"])
 
 	case "x${with_openssl}" in

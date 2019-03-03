@@ -3,7 +3,7 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 	LIBIDN="No"
 
 	AC_ARG_WITH([libidn],
-		[AS_HELP_STRING([--without-libidn], [Do not attempt to detect libidn (for modules/saslserv/scram-sha -- SASLprep normalization)])],
+		[AS_HELP_STRING([--without-libidn], [Do not attempt to detect GNU libidn (for modules/saslserv/scram-sha -- SASLprep normalization)])],
 		[], [with_libidn="auto"])
 
 	case "x${with_libidn}" in
