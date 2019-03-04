@@ -212,6 +212,7 @@ static bool
 digest_testsuite_run_hmac_md5(void)
 {
 	uint8_t result[DIGEST_MDLEN_MD5];
+
 	size_t mdlen = sizeof result;
 
 	{
@@ -219,7 +220,7 @@ digest_testsuite_run_hmac_md5(void)
 		 * TEST VECTOR 1 *
 		 *****************/
 
-		static const uint8_t key[16] = {
+		static const uint8_t key[] = {
 			0x0BU, 0x0BU, 0x0BU, 0x0BU, 0x0BU, 0x0BU, 0x0BU, 0x0BU,
 			0x0BU, 0x0BU, 0x0BU, 0x0BU, 0x0BU, 0x0BU, 0x0BU, 0x0BU,
 		};
@@ -268,12 +269,12 @@ digest_testsuite_run_hmac_md5(void)
 		 * TEST VECTOR 3 *
 		 *****************/
 
-		static const uint8_t key[16] = {
+		static const uint8_t key[] = {
 			0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU,
 			0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU,
 		};
 
-		static const uint8_t data[50] = {
+		static const uint8_t data[] = {
 			0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU,
 			0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU,
 			0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU,
@@ -302,14 +303,14 @@ digest_testsuite_run_hmac_md5(void)
 		 * TEST VECTOR 4 *
 		 *****************/
 
-		static const uint8_t key[25] = {
+		static const uint8_t key[] = {
 			0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U, 0x08U,
 			0x09U, 0x0AU, 0x0BU, 0x0CU, 0x0DU, 0x0EU, 0x0FU, 0x10U,
 			0x11U, 0x12U, 0x13U, 0x14U, 0x15U, 0x16U, 0x17U, 0x18U,
 			0x19U,
 		};
 
-		static const uint8_t data[50] = {
+		static const uint8_t data[] = {
 			0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU,
 			0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU,
 			0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU,
@@ -338,7 +339,7 @@ digest_testsuite_run_hmac_md5(void)
 		 * TEST VECTOR 5 *
 		 *****************/
 
-		static const uint8_t key[16] = {
+		static const uint8_t key[] = {
 			0x0CU, 0x0CU, 0x0CU, 0x0CU, 0x0CU, 0x0CU, 0x0CU, 0x0CU,
 			0x0CU, 0x0CU, 0x0CU, 0x0CU, 0x0CU, 0x0CU, 0x0CU, 0x0CU,
 		};
@@ -364,7 +365,7 @@ digest_testsuite_run_hmac_md5(void)
 		 * TEST VECTOR 6 *
 		 *****************/
 
-		static const uint8_t key[80] = {
+		static const uint8_t key[] = {
 			0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU,
 			0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU,
 			0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU,
@@ -400,7 +401,7 @@ digest_testsuite_run_hmac_md5(void)
 		 * TEST VECTOR 7 *
 		 *****************/
 
-		static const uint8_t key[80] = {
+		static const uint8_t key[] = {
 			0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU,
 			0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU,
 			0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU,
@@ -440,8 +441,6 @@ digest_testsuite_run_hmac_md5(void)
 static bool
 digest_testsuite_run_pbkdf2_md5(void)
 {
-	uint8_t result[88];
-
 	static const uint8_t key[] = {
 		0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U,
 		0x08U, 0x09U, 0x0AU, 0x0BU, 0x0CU, 0x0DU, 0x0EU, 0x0FU,
@@ -480,6 +479,8 @@ digest_testsuite_run_pbkdf2_md5(void)
 			0x69U, 0x8DU, 0x9FU, 0x20U, 0x4FU, 0x17U, 0x93U, 0xCBU,
 		};
 
+		uint8_t result[sizeof vector];
+
 		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_pbkdf2(DIGALG_MD5, NULL, 0, NULL, 0, iter, result, sizeof vector))
@@ -499,6 +500,8 @@ digest_testsuite_run_pbkdf2_md5(void)
 			0xCCU, 0xDFU, 0x52U, 0x22U, 0x20U, 0x7CU, 0xDAU, 0xD7U,
 		};
 
+		uint8_t result[sizeof vector];
+
 		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_pbkdf2(DIGALG_MD5, NULL, 0, salt, sizeof salt, iter, result, sizeof vector))
@@ -517,6 +520,8 @@ digest_testsuite_run_pbkdf2_md5(void)
 			0xCCU, 0xCFU, 0x34U, 0x02U, 0xBDU, 0xB2U, 0x28U, 0x6DU,
 			0xF1U, 0x22U, 0x6AU, 0x76U, 0xEDU, 0x80U, 0x43U, 0xF0U,
 		};
+
+		uint8_t result[sizeof vector];
 
 		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
 
@@ -546,6 +551,8 @@ digest_testsuite_run_pbkdf2_md5(void)
 			0x96U, 0xAFU, 0x75U, 0xFEU, 0x5CU, 0x45U, 0xE9U, 0x92U,
 		};
 
+		uint8_t result[sizeof vector];
+
 		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_pbkdf2(DIGALG_MD5, key, sizeof key, salt, sizeof salt, iter, result, sizeof vector))
@@ -562,7 +569,6 @@ static bool
 digest_testsuite_run_sha1(void)
 {
 	uint8_t result[DIGEST_MDLEN_SHA1];
-	struct digest_context ctx;
 
 	size_t mdlen = sizeof result;
 
@@ -650,6 +656,8 @@ digest_testsuite_run_sha1(void)
 			0x65U, 0x34U, 0x01U, 0x6FU,
 		};
 
+		struct digest_context ctx;
+
 		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
 
 		if (! digest_init(&ctx, DIGALG_SHA1))
@@ -681,11 +689,6 @@ digest_testsuite_run_sha1(void)
 			0x4FU, 0x46U, 0x04U, 0x52U,
 		};
 
-		(void) slog(LG_DEBUG, "%s: vector 5", MOWGLI_FUNC_NAME);
-
-		if (! digest_init(&ctx, DIGALG_SHA1))
-			return false;
-
 		const struct digest_vector data_vec[] = {
 			{ .ptr = data, .len = sizeof data },
 			{ .ptr = data, .len = sizeof data },
@@ -698,7 +701,15 @@ digest_testsuite_run_sha1(void)
 			{ .ptr = data, .len = sizeof data },
 			{ .ptr = data, .len = sizeof data },
 		};
+
 		const size_t data_vec_len = (sizeof data_vec) / (sizeof data_vec[0]);
+
+		struct digest_context ctx;
+
+		(void) slog(LG_DEBUG, "%s: vector 5", MOWGLI_FUNC_NAME);
+
+		if (! digest_init(&ctx, DIGALG_SHA1))
+			return false;
 
 		if (! digest_update_vector(&ctx, data_vec, data_vec_len))
 			return false;
@@ -728,7 +739,7 @@ digest_testsuite_run_hmac_sha1(void)
 		 * TEST VECTOR 1 *
 		 *****************/
 
-		static const uint8_t key[20] = {
+		static const uint8_t key[] = {
 			0x0BU, 0x0BU, 0x0BU, 0x0BU, 0x0BU, 0x0BU, 0x0BU, 0x0BU,
 			0x0BU, 0x0BU, 0x0BU, 0x0BU, 0x0BU, 0x0BU, 0x0BU, 0x0BU,
 			0x0BU, 0x0BU, 0x0BU, 0x0BU,
@@ -780,13 +791,13 @@ digest_testsuite_run_hmac_sha1(void)
 		 * TEST VECTOR 3 *
 		 *****************/
 
-		static const uint8_t key[20] = {
+		static const uint8_t key[] = {
 			0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU,
 			0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU,
 			0xAAU, 0xAAU, 0xAAU, 0xAAU,
 		};
 
-		static const uint8_t data[50] = {
+		static const uint8_t data[] = {
 			0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU,
 			0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU,
 			0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU, 0xDDU,
@@ -816,14 +827,14 @@ digest_testsuite_run_hmac_sha1(void)
 		 * TEST VECTOR 4 *
 		 *****************/
 
-		static const uint8_t key[25] = {
+		static const uint8_t key[] = {
 			0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U, 0x08U,
 			0x09U, 0x0AU, 0x0BU, 0x0CU, 0x0DU, 0x0EU, 0x0FU, 0x10U,
 			0x11U, 0x12U, 0x13U, 0x14U, 0x15U, 0x16U, 0x17U, 0x18U,
 			0x19U,
 		};
 
-		static const uint8_t data[50] = {
+		static const uint8_t data[] = {
 			0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU,
 			0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU,
 			0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU, 0xCDU,
@@ -853,7 +864,7 @@ digest_testsuite_run_hmac_sha1(void)
 		 * TEST VECTOR 5 *
 		 *****************/
 
-		static const uint8_t key[20] = {
+		static const uint8_t key[] = {
 			0x0CU, 0x0CU, 0x0CU, 0x0CU, 0x0CU, 0x0CU, 0x0CU, 0x0CU,
 			0x0CU, 0x0CU, 0x0CU, 0x0CU, 0x0CU, 0x0CU, 0x0CU, 0x0CU,
 			0x0CU, 0x0CU, 0x0CU, 0x0CU,
@@ -881,7 +892,7 @@ digest_testsuite_run_hmac_sha1(void)
 		 * TEST VECTOR 6 *
 		 *****************/
 
-		static const uint8_t key[80] = {
+		static const uint8_t key[] = {
 			0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU,
 			0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU,
 			0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU,
@@ -918,7 +929,7 @@ digest_testsuite_run_hmac_sha1(void)
 		 * TEST VECTOR 7 *
 		 *****************/
 
-		static const uint8_t key[80] = {
+		static const uint8_t key[] = {
 			0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU,
 			0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU,
 			0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU, 0xAAU,
@@ -959,8 +970,6 @@ digest_testsuite_run_hmac_sha1(void)
 static bool
 digest_testsuite_run_pbkdf2_sha1(void)
 {
-	uint8_t result[88];
-
 	static const uint8_t key[] = {
 		0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U,
 		0x08U, 0x09U, 0x0AU, 0x0BU, 0x0CU, 0x0DU, 0x0EU, 0x0FU,
@@ -1000,6 +1009,8 @@ digest_testsuite_run_pbkdf2_sha1(void)
 			0x8DU, 0xA5U, 0xBAU, 0xC1U,
 		};
 
+		uint8_t result[sizeof vector];
+
 		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_pbkdf2(DIGALG_SHA1, NULL, 0, NULL, 0, iter, result, sizeof vector))
@@ -1020,6 +1031,8 @@ digest_testsuite_run_pbkdf2_sha1(void)
 			0x3EU, 0xE7U, 0x32U, 0x65U,
 		};
 
+		uint8_t result[sizeof vector];
+
 		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_pbkdf2(DIGALG_SHA1, NULL, 0, salt, sizeof salt, iter, result, sizeof vector))
@@ -1039,6 +1052,8 @@ digest_testsuite_run_pbkdf2_sha1(void)
 			0xFEU, 0xE9U, 0x49U, 0xF1U, 0x8EU, 0x67U, 0x3CU, 0x8AU,
 			0x3EU, 0x48U, 0x88U, 0xB5U,
 		};
+
+		uint8_t result[sizeof vector];
 
 		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
 
@@ -1068,6 +1083,8 @@ digest_testsuite_run_pbkdf2_sha1(void)
 			0xA3U, 0xCAU, 0xA4U, 0x54U, 0xD7U, 0x46U, 0x85U, 0xE6U,
 		};
 
+		uint8_t result[sizeof vector];
+
 		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_pbkdf2(DIGALG_SHA1, key, sizeof key, salt, sizeof salt, iter, result, sizeof vector))
@@ -1084,7 +1101,6 @@ static bool
 digest_testsuite_run_sha2_256(void)
 {
 	uint8_t result[DIGEST_MDLEN_SHA2_256];
-	struct digest_context ctx;
 
 	size_t mdlen = sizeof result;
 
@@ -1200,6 +1216,8 @@ digest_testsuite_run_sha2_256(void)
 			0xF1U, 0x80U, 0x9AU, 0x48U, 0xA4U, 0x97U, 0x20U, 0x0EU,
 			0x04U, 0x6DU, 0x39U, 0xCCU, 0xC7U, 0x11U, 0x2CU, 0xD0U,
 		};
+
+		struct digest_context ctx;
 
 		(void) slog(LG_DEBUG, "%s: vector 5", MOWGLI_FUNC_NAME);
 
@@ -1487,8 +1505,6 @@ digest_testsuite_run_hmac_sha2_256(void)
 static bool
 digest_testsuite_run_pbkdf2_sha2_256(void)
 {
-	uint8_t result[88];
-
 	static const uint8_t key[] = {
 		0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U,
 		0x08U, 0x09U, 0x0AU, 0x0BU, 0x0CU, 0x0DU, 0x0EU, 0x0FU,
@@ -1577,6 +1593,8 @@ digest_testsuite_run_pbkdf2_sha2_256(void)
 			0xBFU, 0x07U, 0x9CU, 0xB1U, 0xAFU, 0xD4U, 0x72U, 0x2BU,
 		};
 
+		uint8_t result[sizeof vector];
+
 		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_pbkdf2(DIGALG_SHA2_256, NULL, 0, NULL, 0, iter, result, sizeof vector))
@@ -1598,6 +1616,8 @@ digest_testsuite_run_pbkdf2_sha2_256(void)
 			0xCCU, 0xDAU, 0x49U, 0xCBU, 0x1EU, 0x0FU, 0x93U, 0x0DU,
 		};
 
+		uint8_t result[sizeof vector];
+
 		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_pbkdf2(DIGALG_SHA2_256, NULL, 0, salt, sizeof salt, iter, result, sizeof vector))
@@ -1618,6 +1638,8 @@ digest_testsuite_run_pbkdf2_sha2_256(void)
 			0x7FU, 0xF2U, 0xB0U, 0xD9U, 0x34U, 0x1FU, 0x1CU, 0xB8U,
 			0x97U, 0x89U, 0xA4U, 0x14U, 0x4EU, 0xCDU, 0x33U, 0x98U,
 		};
+
+		uint8_t result[sizeof vector];
 
 		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
 
@@ -1647,6 +1669,8 @@ digest_testsuite_run_pbkdf2_sha2_256(void)
 			0x57U, 0x44U, 0x6CU, 0x52U, 0x60U, 0xD5U, 0xF3U, 0xDFU,
 		};
 
+		uint8_t result[sizeof vector];
+
 		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_pbkdf2(DIGALG_SHA2_256, key, sizeof key, salt, sizeof salt, iter, result, sizeof vector))
@@ -1663,7 +1687,6 @@ static bool
 digest_testsuite_run_sha2_512(void)
 {
 	uint8_t result[DIGEST_MDLEN_SHA2_512];
-	struct digest_context ctx;
 
 	size_t mdlen = sizeof result;
 
@@ -1799,6 +1822,8 @@ digest_testsuite_run_sha2_512(void)
 			0xEBU, 0x00U, 0x9CU, 0x5CU, 0x2CU, 0x49U, 0xAAU, 0x2EU,
 			0x4EU, 0xADU, 0xB2U, 0x17U, 0xADU, 0x8CU, 0xC0U, 0x9BU,
 		};
+
+		struct digest_context ctx;
 
 		(void) slog(LG_DEBUG, "%s: vector 5", MOWGLI_FUNC_NAME);
 
@@ -2110,8 +2135,6 @@ digest_testsuite_run_hmac_sha2_512(void)
 static bool
 digest_testsuite_run_pbkdf2_sha2_512(void)
 {
-	uint8_t result[88];
-
 	static const uint8_t key[] = {
 		0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U,
 		0x08U, 0x09U, 0x0AU, 0x0BU, 0x0CU, 0x0DU, 0x0EU, 0x0FU,
@@ -2204,6 +2227,8 @@ digest_testsuite_run_pbkdf2_sha2_512(void)
 			0xD7U, 0xECU, 0x94U, 0x87U, 0xA2U, 0x06U, 0x7EU, 0x89U,
 		};
 
+		uint8_t result[sizeof vector];
+
 		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_pbkdf2(DIGALG_SHA2_512, NULL, 0, NULL, 0, iter, result, sizeof vector))
@@ -2229,6 +2254,8 @@ digest_testsuite_run_pbkdf2_sha2_512(void)
 			0xDDU, 0x2DU, 0x2EU, 0xBFU, 0x1FU, 0x5EU, 0x7CU, 0x9EU,
 		};
 
+		uint8_t result[sizeof vector];
+
 		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_pbkdf2(DIGALG_SHA2_512, NULL, 0, salt, sizeof salt, iter, result, sizeof vector))
@@ -2253,6 +2280,8 @@ digest_testsuite_run_pbkdf2_sha2_512(void)
 			0x89U, 0xBBU, 0x19U, 0x9AU, 0x98U, 0xBFU, 0xBEU, 0x34U,
 			0x61U, 0x33U, 0x6DU, 0x7BU, 0xB1U, 0x62U, 0x9AU, 0xFEU,
 		};
+
+		uint8_t result[sizeof vector];
 
 		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
 
@@ -2281,6 +2310,8 @@ digest_testsuite_run_pbkdf2_sha2_512(void)
 			0x04U, 0x54U, 0x33U, 0xD7U, 0xAFU, 0x09U, 0xD6U, 0x1EU,
 			0xE4U, 0x53U, 0x5FU, 0xB6U, 0x91U, 0xBFU, 0x7FU, 0x5AU,
 		};
+
+		uint8_t result[sizeof vector];
 
 		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
 
