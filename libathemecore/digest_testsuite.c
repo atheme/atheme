@@ -656,6 +656,21 @@ digest_testsuite_run_sha1(void)
 			0x65U, 0x34U, 0x01U, 0x6FU,
 		};
 
+		const struct digest_vector data_vec[] = {
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+		};
+
+		const size_t data_vec_len = (sizeof data_vec) / (sizeof data_vec[0]);
+
 		struct digest_context ctx;
 
 		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
@@ -663,8 +678,8 @@ digest_testsuite_run_sha1(void)
 		if (! digest_init(&ctx, DIGALG_SHA1))
 			return false;
 
-		for (size_t i = 0; i < 5000; i++)
-			if (! digest_update(&ctx, data, sizeof data))
+		for (size_t i = 0; i < 500; i++)
+			if (! digest_update_vector(&ctx, data_vec, data_vec_len))
 				return false;
 
 		if (! digest_final(&ctx, result, &mdlen))
@@ -1217,6 +1232,21 @@ digest_testsuite_run_sha2_256(void)
 			0x04U, 0x6DU, 0x39U, 0xCCU, 0xC7U, 0x11U, 0x2CU, 0xD0U,
 		};
 
+		const struct digest_vector data_vec[] = {
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+		};
+
+		const size_t data_vec_len = (sizeof data_vec) / (sizeof data_vec[0]);
+
 		struct digest_context ctx;
 
 		(void) slog(LG_DEBUG, "%s: vector 5", MOWGLI_FUNC_NAME);
@@ -1224,8 +1254,8 @@ digest_testsuite_run_sha2_256(void)
 		if (! digest_init(&ctx, DIGALG_SHA2_256))
 			return false;
 
-		for (size_t i = 0; i < 5000; i++)
-			if (! digest_update(&ctx, data, sizeof data))
+		for (size_t i = 0; i < 500; i++)
+			if (! digest_update_vector(&ctx, data_vec, data_vec_len))
 				return false;
 
 		if (! digest_final(&ctx, result, &mdlen))
@@ -1823,6 +1853,21 @@ digest_testsuite_run_sha2_512(void)
 			0x4EU, 0xADU, 0xB2U, 0x17U, 0xADU, 0x8CU, 0xC0U, 0x9BU,
 		};
 
+		const struct digest_vector data_vec[] = {
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+			{ .ptr = data, .len = sizeof data },
+		};
+
+		const size_t data_vec_len = (sizeof data_vec) / (sizeof data_vec[0]);
+
 		struct digest_context ctx;
 
 		(void) slog(LG_DEBUG, "%s: vector 5", MOWGLI_FUNC_NAME);
@@ -1830,8 +1875,8 @@ digest_testsuite_run_sha2_512(void)
 		if (! digest_init(&ctx, DIGALG_SHA2_512))
 			return false;
 
-		for (size_t i = 0; i < 5000; i++)
-			if (! digest_update(&ctx, data, sizeof data))
+		for (size_t i = 0; i < 500; i++)
+			if (! digest_update_vector(&ctx, data_vec, data_vec_len))
 				return false;
 
 		if (! digest_final(&ctx, result, &mdlen))
