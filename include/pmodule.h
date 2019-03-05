@@ -43,6 +43,7 @@ void pcommand_delete(const char *token);
 struct proto_cmd *pcommand_find(const char *token);
 
 /* ptasks.c */
+const char *get_build_date(void);
 int get_version_string(char *, size_t);
 void handle_version(struct user *);
 void handle_admin(struct user *);

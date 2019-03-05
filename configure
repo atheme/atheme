@@ -12980,6 +12980,15 @@ fi
 
 $as_echo "#define ATHEME_ENABLE_REPRODUCIBLE_BUILDS 1" >>confdefs.h
 
+			if test "x${SOURCE_DATE_EPOCH}" != "x"; then :
+
+
+cat >>confdefs.h <<_ACEOF
+#define SOURCE_DATE_EPOCH ${SOURCE_DATE_EPOCH}
+_ACEOF
+
+
+fi
 			;;
 		xno)
 			REPRODUCIBLE_BUILDS="No"
