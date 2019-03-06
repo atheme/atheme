@@ -13055,9 +13055,6 @@ else
 fi
 
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking which frontend to use for the Digest API" >&5
-$as_echo_n "checking which frontend to use for the Digest API... " >&6; }
-
 	case "x${with_digest_api_frontend}" in
 
 		xauto)
@@ -13070,8 +13067,8 @@ $as_echo_n "checking which frontend to use for the Digest API... " >&6; }
 	DIGEST_API_CFLAGS=""
 	DIGEST_API_LIBS="${LIBMBEDCRYPTO_LIBS}"
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${DIGEST_FRONTEND} (chosen automatically)" >&5
-$as_echo "${DIGEST_FRONTEND} (chosen automatically)" >&6; }
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&5
+$as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&6;}
 
 elif test "${LIBNETTLE}${LIBNETTLE_DIGEST}" = "YesYes"; then :
 
@@ -13082,8 +13079,8 @@ elif test "${LIBNETTLE}${LIBNETTLE_DIGEST}" = "YesYes"; then :
 	DIGEST_API_CFLAGS="${LIBNETTLE_CFLAGS}"
 	DIGEST_API_LIBS="${LIBNETTLE_LIBS}"
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${DIGEST_FRONTEND} (chosen automatically)" >&5
-$as_echo "${DIGEST_FRONTEND} (chosen automatically)" >&6; }
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&5
+$as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&6;}
 
 elif test "${LIBCRYPTO}${LIBCRYPTO_DIGEST}" = "YesYes"; then :
 
@@ -13094,8 +13091,8 @@ elif test "${LIBCRYPTO}${LIBCRYPTO_DIGEST}" = "YesYes"; then :
 	DIGEST_API_CFLAGS="${LIBCRYPTO_CFLAGS}"
 	DIGEST_API_LIBS="${LIBCRYPTO_LIBS}"
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${DIGEST_FRONTEND} (chosen automatically)" >&5
-$as_echo "${DIGEST_FRONTEND} (chosen automatically)" >&6; }
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&5
+$as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&6;}
 
 else
 
@@ -13106,8 +13103,8 @@ else
 	DIGEST_API_CFLAGS=""
 	DIGEST_API_LIBS=""
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${DIGEST_FRONTEND} (chosen automatically)" >&5
-$as_echo "${DIGEST_FRONTEND} (chosen automatically)" >&6; }
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&5
+$as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&6;}
 
 fi
 			;;
@@ -13122,13 +13119,11 @@ fi
 	DIGEST_API_CFLAGS=""
 	DIGEST_API_LIBS="${LIBMBEDCRYPTO_LIBS}"
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${DIGEST_FRONTEND} (chosen by user)" >&5
-$as_echo "${DIGEST_FRONTEND} (chosen by user)" >&6; }
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&5
+$as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&6;}
 
 else
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: error" >&5
-$as_echo "error" >&6; }
 				as_fn_error $? "--with-digest-api-frontend=mbedtls requires --with-mbedtls and usable MD5/SHA1/SHA2/HMAC/PBKDF2 functions" "$LINENO" 5
 
 fi
@@ -13144,13 +13139,11 @@ fi
 	DIGEST_API_CFLAGS="${LIBNETTLE_CFLAGS}"
 	DIGEST_API_LIBS="${LIBNETTLE_LIBS}"
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${DIGEST_FRONTEND} (chosen by user)" >&5
-$as_echo "${DIGEST_FRONTEND} (chosen by user)" >&6; }
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&5
+$as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&6;}
 
 else
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: error" >&5
-$as_echo "error" >&6; }
 				as_fn_error $? "--with-digest-api-frontend=nettle requires --with-nettle and usable MD5/SHA1/SHA2 functions" "$LINENO" 5
 
 fi
@@ -13166,13 +13159,11 @@ fi
 	DIGEST_API_CFLAGS="${LIBCRYPTO_CFLAGS}"
 	DIGEST_API_LIBS="${LIBCRYPTO_LIBS}"
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${DIGEST_FRONTEND} (chosen by user)" >&5
-$as_echo "${DIGEST_FRONTEND} (chosen by user)" >&6; }
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&5
+$as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&6;}
 
 else
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: error" >&5
-$as_echo "error" >&6; }
 				as_fn_error $? "--with-digest-api-frontend=openssl/libressl requires --with-openssl and usable MD5/SHA1/SHA2/HMAC/PBKDF2 functions" "$LINENO" 5
 
 fi
@@ -13186,13 +13177,11 @@ fi
 	DIGEST_API_CFLAGS=""
 	DIGEST_API_LIBS=""
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${DIGEST_FRONTEND} (chosen by user)" >&5
-$as_echo "${DIGEST_FRONTEND} (chosen by user)" >&6; }
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&5
+$as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&6;}
 			;;
 
 		*)
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: error" >&5
-$as_echo "error" >&6; }
 			as_fn_error $? "invalid option for --with-digest-api-frontend (auto, mbedtls, nettle, openssl, libressl, internal)" "$LINENO" 5
 			;;
 	esac
@@ -13301,9 +13290,6 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking which frontend to use for the RNG API" >&5
-$as_echo_n "checking which frontend to use for the RNG API... " >&6; }
-
 	case "x${with_rng_api_frontend}" in
 
 		xauto)
@@ -13316,8 +13302,8 @@ $as_echo_n "checking which frontend to use for the RNG API... " >&6; }
 	RANDOM_API_CFLAGS=""
 	RANDOM_API_LIBS=""
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${RANDOM_FRONTEND} (chosen automatically)" >&5
-$as_echo "${RANDOM_FRONTEND} (chosen automatically)" >&6; }
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
+$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&6;}
 
 elif test "${LIBSODIUM}${LIBSODIUM_RANDOM}" = "YesYes"; then :
 
@@ -13328,8 +13314,8 @@ elif test "${LIBSODIUM}${LIBSODIUM_RANDOM}" = "YesYes"; then :
 	RANDOM_API_CFLAGS="${LIBSODIUM_CFLAGS}"
 	RANDOM_API_LIBS="${LIBSODIUM_LIBS}"
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${RANDOM_FRONTEND} (chosen automatically)" >&5
-$as_echo "${RANDOM_FRONTEND} (chosen automatically)" >&6; }
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
+$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&6;}
 
 elif test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_RANDOM}" = "YesYes"; then :
 
@@ -13340,8 +13326,8 @@ elif test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_RANDOM}" = "YesYes"; then :
 	RANDOM_API_CFLAGS=""
 	RANDOM_API_LIBS="${LIBMBEDCRYPTO_LIBS}"
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${RANDOM_FRONTEND} (chosen automatically)" >&5
-$as_echo "${RANDOM_FRONTEND} (chosen automatically)" >&6; }
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
+$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&6;}
 
 elif test "${LIBCRYPTO}${LIBCRYPTO_RANDOM}" = "YesYes"; then :
 
@@ -13352,8 +13338,8 @@ elif test "${LIBCRYPTO}${LIBCRYPTO_RANDOM}" = "YesYes"; then :
 	RANDOM_API_CFLAGS="${LIBCRYPTO_CFLAGS}"
 	RANDOM_API_LIBS="${LIBCRYPTO_LIBS}"
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${RANDOM_FRONTEND} (chosen automatically)" >&5
-$as_echo "${RANDOM_FRONTEND} (chosen automatically)" >&6; }
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
+$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&6;}
 
 else
 
@@ -13448,8 +13434,8 @@ rm -f core conftest.err conftest.$ac_objext \
 	RANDOM_API_CFLAGS=""
 	RANDOM_API_LIBS=""
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${RANDOM_FRONTEND} (chosen automatically)" >&5
-$as_echo "${RANDOM_FRONTEND} (chosen automatically)" >&6; }
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
+$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&6;}
 
 fi
 			;;
@@ -13464,13 +13450,11 @@ fi
 	RANDOM_API_CFLAGS=""
 	RANDOM_API_LIBS=""
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${RANDOM_FRONTEND} (chosen by user)" >&5
-$as_echo "${RANDOM_FRONTEND} (chosen by user)" >&6; }
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
+$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&6;}
 
 else
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: error" >&5
-$as_echo "error" >&6; }
 				as_fn_error $? "--with-rng-api-frontend=openbsd requires OpenBSD a usable OpenBSD arc4random(3)" "$LINENO" 5
 
 fi
@@ -13486,13 +13470,11 @@ fi
 	RANDOM_API_CFLAGS="${LIBSODIUM_CFLAGS}"
 	RANDOM_API_LIBS="${LIBSODIUM_LIBS}"
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${RANDOM_FRONTEND} (chosen by user)" >&5
-$as_echo "${RANDOM_FRONTEND} (chosen by user)" >&6; }
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
+$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&6;}
 
 else
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: error" >&5
-$as_echo "error" >&6; }
 				as_fn_error $? "--with-rng-api-frontend=sodium requires --with-sodium and a usable random number generator" "$LINENO" 5
 
 fi
@@ -13508,13 +13490,11 @@ fi
 	RANDOM_API_CFLAGS=""
 	RANDOM_API_LIBS="${LIBMBEDCRYPTO_LIBS}"
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${RANDOM_FRONTEND} (chosen by user)" >&5
-$as_echo "${RANDOM_FRONTEND} (chosen by user)" >&6; }
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
+$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&6;}
 
 else
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: error" >&5
-$as_echo "error" >&6; }
 				as_fn_error $? "--with-rng-api-frontend=mbedtls requires --with-mbedtls and a usable random number generator" "$LINENO" 5
 
 fi
@@ -13530,13 +13510,11 @@ fi
 	RANDOM_API_CFLAGS="${LIBCRYPTO_CFLAGS}"
 	RANDOM_API_LIBS="${LIBCRYPTO_LIBS}"
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${RANDOM_FRONTEND} (chosen by user)" >&5
-$as_echo "${RANDOM_FRONTEND} (chosen by user)" >&6; }
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
+$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&6;}
 
 else
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: error" >&5
-$as_echo "error" >&6; }
 				as_fn_error $? "--with-rng-api-frontend=openssl/libressl requires --with-openssl and a usable random number generator" "$LINENO" 5
 
 fi
@@ -13634,13 +13612,11 @@ rm -f core conftest.err conftest.$ac_objext \
 	RANDOM_API_CFLAGS=""
 	RANDOM_API_LIBS=""
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${RANDOM_FRONTEND} (chosen by user)" >&5
-$as_echo "${RANDOM_FRONTEND} (chosen by user)" >&6; }
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
+$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&6;}
 			;;
 
 		*)
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: error" >&5
-$as_echo "error" >&6; }
 			as_fn_error $? "invalid option for --with-rng-api-frontend (auto, openbsd, sodium, mbedtls, openssl, libressl, internal)" "$LINENO" 5
 			;;
 	esac

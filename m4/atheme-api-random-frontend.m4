@@ -131,35 +131,32 @@ AC_DEFUN([ATHEME_DECIDE_RANDOM_FRONTEND], [
 		OPENBSD_ARC4RANDOM="No"
 	])
 
-	AC_MSG_CHECKING([which frontend to use for the RNG API])
-
 	case "x${with_rng_api_frontend}" in
 
 		xauto)
 			AS_IF([test "${OPENBSD}${OPENBSD_ARC4RANDOM}" = "YesYes"], [
 				ATHEME_RANDOM_FRONTEND_USE_OPENBSD
-				AC_MSG_RESULT([${RANDOM_FRONTEND} (chosen automatically)])
+				AC_MSG_NOTICE([using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)])
 			], [test "${LIBSODIUM}${LIBSODIUM_RANDOM}" = "YesYes"], [
 				ATHEME_RANDOM_FRONTEND_USE_SODIUM
-				AC_MSG_RESULT([${RANDOM_FRONTEND} (chosen automatically)])
+				AC_MSG_NOTICE([using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)])
 			], [test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_RANDOM}" = "YesYes"], [
 				ATHEME_RANDOM_FRONTEND_USE_MBEDTLS
-				AC_MSG_RESULT([${RANDOM_FRONTEND} (chosen automatically)])
+				AC_MSG_NOTICE([using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)])
 			], [test "${LIBCRYPTO}${LIBCRYPTO_RANDOM}" = "YesYes"], [
 				ATHEME_RANDOM_FRONTEND_USE_OPENSSL
-				AC_MSG_RESULT([${RANDOM_FRONTEND} (chosen automatically)])
+				AC_MSG_NOTICE([using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)])
 			], [
 				ATHEME_RANDOM_FRONTEND_USE_INTERNAL
-				AC_MSG_RESULT([${RANDOM_FRONTEND} (chosen automatically)])
+				AC_MSG_NOTICE([using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)])
 			])
 			;;
 
 		xopenbsd)
 			AS_IF([test "${OPENBSD}${OPENBSD_ARC4RANDOM}" = "YesYes"], [
 				ATHEME_RANDOM_FRONTEND_USE_OPENBSD
-				AC_MSG_RESULT([${RANDOM_FRONTEND} (chosen by user)])
+				AC_MSG_NOTICE([using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)])
 			], [
-				AC_MSG_RESULT([error])
 				AC_MSG_ERROR([--with-rng-api-frontend=openbsd requires OpenBSD a usable OpenBSD arc4random(3)])
 			])
 			;;
@@ -167,9 +164,8 @@ AC_DEFUN([ATHEME_DECIDE_RANDOM_FRONTEND], [
 		xsodium)
 			AS_IF([test "${LIBSODIUM}${LIBSODIUM_RANDOM}" = "YesYes"], [
 				ATHEME_RANDOM_FRONTEND_USE_SODIUM
-				AC_MSG_RESULT([${RANDOM_FRONTEND} (chosen by user)])
+				AC_MSG_NOTICE([using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)])
 			], [
-				AC_MSG_RESULT([error])
 				AC_MSG_ERROR([--with-rng-api-frontend=sodium requires --with-sodium and a usable random number generator])
 			])
 			;;
@@ -177,9 +173,8 @@ AC_DEFUN([ATHEME_DECIDE_RANDOM_FRONTEND], [
 		xmbedtls)
 			AS_IF([test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_RANDOM}" = "YesYes"], [
 				ATHEME_RANDOM_FRONTEND_USE_MBEDTLS
-				AC_MSG_RESULT([${RANDOM_FRONTEND} (chosen by user)])
+				AC_MSG_NOTICE([using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)])
 			], [
-				AC_MSG_RESULT([error])
 				AC_MSG_ERROR([--with-rng-api-frontend=mbedtls requires --with-mbedtls and a usable random number generator])
 			])
 			;;
@@ -187,20 +182,18 @@ AC_DEFUN([ATHEME_DECIDE_RANDOM_FRONTEND], [
 		xopenssl | xlibressl)
 			AS_IF([test "${LIBCRYPTO}${LIBCRYPTO_RANDOM}" = "YesYes"], [
 				ATHEME_RANDOM_FRONTEND_USE_OPENSSL
-				AC_MSG_RESULT([${RANDOM_FRONTEND} (chosen by user)])
+				AC_MSG_NOTICE([using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)])
 			], [
-				AC_MSG_RESULT([error])
 				AC_MSG_ERROR([--with-rng-api-frontend=openssl/libressl requires --with-openssl and a usable random number generator])
 			])
 			;;
 
 		xinternal)
 			ATHEME_RANDOM_FRONTEND_USE_INTERNAL
-			AC_MSG_RESULT([${RANDOM_FRONTEND} (chosen by user)])
+			AC_MSG_NOTICE([using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)])
 			;;
 
 		*)
-			AC_MSG_RESULT([error])
 			AC_MSG_ERROR([invalid option for --with-rng-api-frontend (auto, openbsd, sodium, mbedtls, openssl, libressl, internal)])
 			;;
 	esac
