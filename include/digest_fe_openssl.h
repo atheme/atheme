@@ -22,6 +22,7 @@ struct digest_context
 {
 	const EVP_MD *          md;
 	void *                  ictx;
+	enum digest_algorithm   alg;
 	bool                    hmac;
 };
 

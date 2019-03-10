@@ -67,6 +67,7 @@ enum digest_algorithm
 #endif /* !ATHEME_INC_DIGEST_FE_HEADER_H */
 
 size_t digest_size_alg(enum digest_algorithm);
+size_t digest_size_ctx(const struct digest_context *);
 
 bool digest_init(struct digest_context *, enum digest_algorithm) ATHEME_FATTR_WUR;
 bool digest_init_hmac(struct digest_context *, enum digest_algorithm, const void *, size_t) ATHEME_FATTR_WUR;

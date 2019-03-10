@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: ISC
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Copyright (C) 2018 Aaron M. D. Jones <aaronmdjones@gmail.com>
+ * Copyright (C) 2018-2019 Aaron M. D. Jones <aaronmdjones@gmail.com>
  *
  * Internal frontend for the digest interface.
  */
@@ -19,22 +19,20 @@
 #include "digest_be_sha1.c"
 #include "digest_be_sha2.c"
 
+static bool _digest_oneshot(enum digest_algorithm, const void *, size_t, void *, size_t *);
+
 const char *
 digest_get_frontend_info(void)
 {
 	return "Internal";
 }
 
-bool ATHEME_FATTR_WUR
-digest_init(struct digest_context *const restrict ctx, const enum digest_algorithm alg)
+static bool
+_digest_init(struct digest_context *const restrict ctx, const enum digest_algorithm alg)
 {
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-
 	(void) memset(ctx, 0x00, sizeof *ctx);
+
+	ctx->alg = alg;
 
 	switch (alg)
 	{
@@ -75,23 +73,19 @@ digest_init(struct digest_context *const restrict ctx, const enum digest_algorit
 	return true;
 }
 
-bool ATHEME_FATTR_WUR
-digest_init_hmac(struct digest_context *const restrict ctx, const enum digest_algorithm alg,
-                 const void *const restrict key, const size_t keyLen)
+static bool
+_digest_init_hmac(struct digest_context *const restrict ctx, const enum digest_algorithm alg,
+                  const void *const restrict key, const size_t keyLen)
 {
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
+	(void) _digest_init(ctx, alg);
 
-	(void) digest_init(ctx, alg);
+	ctx->hmac = true;
 
 	if (key && keyLen)
 	{
 		if (keyLen > ctx->blksz)
 		{
-			(void) digest_oneshot(alg, key, keyLen, ctx->ikey, NULL);
+			(void) _digest_oneshot(alg, key, keyLen, ctx->ikey, NULL);
 			(void) memcpy(ctx->okey, ctx->ikey, ctx->blksz);
 		}
 		else
@@ -107,51 +101,22 @@ digest_init_hmac(struct digest_context *const restrict ctx, const enum digest_al
 		ctx->okey[i] ^= DIGEST_HMAC_OUTER_XORVAL;
 	}
 
-	ctx->hmac = true;
-
 	(void) ctx->update(&ctx->state, ctx->ikey, ctx->blksz);
 	return true;
 }
 
-bool ATHEME_FATTR_WUR
-digest_update(struct digest_context *const restrict ctx, const void *const restrict data, const size_t dataLen)
+static bool
+_digest_update(struct digest_context *const restrict ctx, const void *const restrict data, const size_t dataLen)
 {
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-	if ((! data && dataLen) || (data && ! dataLen))
-	{
-		(void) slog(LG_ERROR, "%s: called with mismatched data parameters (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-
 	if (data && dataLen)
 		(void) ctx->update(&ctx->state, data, dataLen);
 
 	return true;
 }
 
-bool ATHEME_FATTR_WUR
-digest_final(struct digest_context *const restrict ctx, void *const restrict out, size_t *const restrict outLen)
+static bool
+_digest_final(struct digest_context *const restrict ctx, void *const restrict out, size_t *const restrict outLen)
 {
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-	if (! out)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-	if (outLen && *outLen < ctx->digsz)
-	{
-		(void) slog(LG_ERROR, "%s: output buffer is too small (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-
 	if (outLen)
 		*outLen = ctx->digsz;
 
@@ -170,10 +135,10 @@ digest_final(struct digest_context *const restrict ctx, void *const restrict out
 	return true;
 }
 
-bool ATHEME_FATTR_WUR
-digest_oneshot_pbkdf2(const enum digest_algorithm alg, const void *const restrict pass, const size_t passLen,
-                      const void *const restrict salt, const size_t saltLen, const size_t c,
-                      void *const restrict dk, const size_t dkLen)
+static bool
+_digest_oneshot_pbkdf2(const enum digest_algorithm alg, const void *const restrict pass, const size_t passLen,
+                       const void *const restrict salt, const size_t saltLen, const size_t c,
+                       void *const restrict dk, const size_t dkLen)
 {
 	/*
 	 * The PBKDF2-HMAC algorithm.
@@ -184,120 +149,89 @@ digest_oneshot_pbkdf2(const enum digest_algorithm alg, const void *const restric
 	 *         pass = Password
 	 *         salt = Salt
 	 *            c = Iteration Count
-	 *        dkLen = Desired length of DerivedKey
+	 *        dkLen = Desired length of DK; DerivedKey
 	 *
 	 * Internal Functions or Variables:
 	 *
-	 *     htonl(i) = representation of 'i' in big-endian (network) byte order,
-	 *                where 'i' is a 32-bit integer as input to T(i)
+	 *     htonl(i) = representation of 'i' in big-endian (network) byte
+	 *                order, where 'i' is a 32-bit integer input to T(i)
 	 *
-	 *   HMAC(k, d) = HMAC algorithm with 'alg' as underlying message digest,
-	 *                'k' as HMAC key, & 'd' as data to generate HMAC for
+	 *   HMAC(k, d) = HMAC algorithm with 'alg' as underlying digest,
+	 *                'k' as HMAC key, & 'd' as data to generate MAC for
 	 *
 	 *         hLen = Output length of HMAC()
 	 *
 	 * Algorithm:
 	 *
-	 *         U(x) = {
-	 *                  x = 1: HMAC(pass, salt || htonl(i))
-	 *                  x > 1: HMAC(pass, U(x - 1))
-	 *                }
+	 *         U(i, j) = {
+	 *             j = 0: HMAC(pass, salt || htonl(i))
+	 *             j > 0: HMAC(pass, U(j - 1))
+	 *         }
 	 *
-	 *         T(i) = U(1) ^ U(2) ^ U(3) ^ ... ^ U(c)
+	 *         T(i) = U(i, 0) ^ U(i, 1) ^ U(i, 2) ^ ... ^ U(i, c)
 	 *           DK = T(1) || T(2) || T(3) || ... || T(dkLen/hLen)
 	 *
-	 * This function contains 2 identical optimisations; one at the end of
-	 * the outer loop that derives T(i), and one at the beginning of the
-	 * inner loop that derives U(j + 1). The optimisation is as follows:
+	 * This function contains 2 identical optimisations; one at the
+	 * beginning of the inner loop that derives U(i, 1 ... c), and one
+	 * at the end of the outer loop that derives U(i, 0) and T(i). The
+	 * optimisation is as follows:
 	 *
-	 *   digest_init_hmac() computes the inner and outer HMAC keys and
+	 *   _digest_init_hmac() computes the inner and outer HMAC keys and
 	 *   stores them in the digest context, initialises the underlying
-	 *   context, and adds the inner key to the digest state (so it is
-	 *   ready to receive data).
+	 *   digest state, and adds the inner key to the digest state (so it
+	 *   is ready to receive data).
 	 *
-	 *   When the HMAC calculation is complete (by calling digest_final()
-	 *   on a context that was initialised by digest_init_hmac()), we
-	 *   simply reinitialise the underlying state and add the inner key
-	 *   to it again.
+	 *   When the HMAC calculation is completed (by calling the
+	 *   _digest_final() function on a context that was initialised by
+	 *   _digest_init_hmac()), we simply reinitialise the underlying
+	 *   digest state and add the inner key to it again.
 	 *
-	 *   This is what digest_init_hmac() would do, but it is more
+	 *   This is what _digest_init_hmac() would do, but it is more
 	 *   efficient; every time the loops make another pass, we're not
-	 *   constantly validating the algorithm identifier, erasing memory,
-	 *   setting function pointers, possibly performing a digest operation
-	 *   (if the HMAC key is longer than the digest's block size), and
-	 *   deriving the inner and outer keys with XOR operations again.
+	 *   constantly re-validating the algorithm identifier, erasing
+	 *   memory, setting function pointers, possibly performing a digest
+	 *   operation (if the password is longer than the underlying digest
+	 *   block size), and deriving the inner and outer HMAC keys again.
 	 *
-	 * Most invocations of this function will only ever get to i == 1; the
-	 * outer loop will be executed once, for T(1) only. Such is the case
-	 * when the requested output key length is not greater than the digest
-	 * size of the underlying digest algorithm. However, the optimisation
-	 * is still worth having.
-	 *
-	 * Similarly, we don't call digest_update(), which does some constraint
-	 * checking before passing on the data to the underlying digest driver;
-	 * we just call the underlying digest directly.
+	 * Most invocations of this function will only ever get to i == 1;
+	 * the outer loop will be executed once, for T(1) only. Such is the
+	 * case when dkLen <= hLen.
 	 */
 
-	unsigned char dtmp[DIGEST_MDLEN_MAX];
+	unsigned char tmp[DIGEST_MDLEN_MAX];
 	struct digest_context ctx;
 
-	if (! c)
-	{
-		(void) slog(LG_ERROR, "%s: called with zero 'c' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-	if (! dk)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'dk' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-	if (! dkLen)
-	{
-		(void) slog(LG_ERROR, "%s: called with zero 'dkLen' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-	if ((! pass && passLen) || (pass && ! passLen))
-	{
-		(void) slog(LG_ERROR, "%s: called with mismatched pass parameters (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-	if ((! salt && saltLen) || (salt && ! saltLen))
-	{
-		(void) slog(LG_ERROR, "%s: called with mismatched salt parameters (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-
-	(void) digest_init_hmac(&ctx, alg, pass, passLen);
+	(void) _digest_init_hmac(&ctx, alg, pass, passLen);
 
 	const size_t hLen = ctx.digsz;
-	size_t odkLen = dkLen;
-	unsigned char *odk = dk;
+	unsigned char *out = dk;
+	size_t rem = dkLen;
 
 	for (uint32_t i = 1; /* No condition */ ; i++)
 	{
+		const size_t cpLen = (rem > hLen) ? hLen : rem;
 		const uint32_t ibe = htonl(i);
-		const size_t cpLen = (odkLen > hLen) ? hLen : odkLen;
 
 		(void) ctx.update(&ctx.state, salt, saltLen);
 		(void) ctx.update(&ctx.state, &ibe, sizeof ibe);
-		(void) digest_final(&ctx, dtmp, NULL);
-		(void) memcpy(odk, dtmp, cpLen);
+		(void) _digest_final(&ctx, tmp, NULL);
+		(void) memcpy(out, tmp, cpLen);
 
 		for (size_t j = 1; j < c; j++)
 		{
 			(void) ctx.init(&ctx.state);
 			(void) ctx.update(&ctx.state, ctx.ikey, ctx.blksz);
-			(void) ctx.update(&ctx.state, dtmp, hLen);
-			(void) digest_final(&ctx, dtmp, NULL);
+			(void) ctx.update(&ctx.state, tmp, hLen);
+			(void) _digest_final(&ctx, tmp, NULL);
 
 			for (size_t k = 0; k < cpLen; k++)
-				odk[k] ^= dtmp[k];
+				out[k] ^= tmp[k];
 		}
 
-		odkLen -= cpLen;
-		odk += cpLen;
+		out += cpLen;
+		rem -= cpLen;
 
-		if (! odkLen)
+		if (! rem)
 			break;
 
 		(void) ctx.init(&ctx.state);
@@ -305,6 +239,6 @@ digest_oneshot_pbkdf2(const enum digest_algorithm alg, const void *const restric
 	}
 
 	(void) smemzero(&ctx, sizeof ctx);
-	(void) smemzero(dtmp, sizeof dtmp);
+	(void) smemzero(tmp, sizeof tmp);
 	return true;
 }

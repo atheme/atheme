@@ -22,6 +22,7 @@ struct digest_context
 {
 	mbedtls_md_context_t            state;
 	const mbedtls_md_info_t *       md;
+	enum digest_algorithm           alg;
 	bool                            hmac;
 };
 

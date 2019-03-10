@@ -70,6 +70,7 @@ struct digest_context
 	size_t                  digsz;
 	unsigned char           ikey[DIGEST_BKLEN_MAX];
 	unsigned char           okey[DIGEST_BKLEN_MAX];
+	enum digest_algorithm   alg;
 	bool                    hmac;
 };
 
