@@ -28,28 +28,28 @@ struct digest_context_md5
 {
 	uint32_t        count[0x02U];
 	uint32_t        state[DIGEST_STLEN_MD5];
-	uint8_t         buf[DIGEST_BKLEN_MD5];
+	unsigned char   buf[DIGEST_BKLEN_MD5];
 };
 
 struct digest_context_sha1
 {
 	uint32_t        count[0x02U];
 	uint32_t        state[DIGEST_STLEN_SHA1];
-	uint8_t         buf[DIGEST_BKLEN_SHA1];
+	unsigned char   buf[DIGEST_BKLEN_SHA1];
 };
 
 struct digest_context_sha2_256
 {
 	uint64_t        count;
 	uint32_t        state[DIGEST_STLEN_SHA2];
-	uint8_t         buf[DIGEST_BKLEN_SHA2_256];
+	unsigned char   buf[DIGEST_BKLEN_SHA2_256];
 };
 
 struct digest_context_sha2_512
 {
 	uint64_t        count[0x02U];
 	uint64_t        state[DIGEST_STLEN_SHA2];
-	uint8_t         buf[DIGEST_BKLEN_SHA2_512];
+	unsigned char   buf[DIGEST_BKLEN_SHA2_512];
 };
 
 union digest_state
@@ -67,8 +67,8 @@ typedef bool (*digest_final_fn)(union digest_state *, void *, size_t *) ATHEME_F
 struct digest_context
 {
 	union digest_state      state;
-	uint8_t                 ikey[DIGEST_BKLEN_MAX];
-	uint8_t                 okey[DIGEST_BKLEN_MAX];
+	unsigned char           ikey[DIGEST_BKLEN_MAX];
+	unsigned char           okey[DIGEST_BKLEN_MAX];
 	digest_init_fn          init;
 	digest_update_fn        update;
 	digest_final_fn         final;

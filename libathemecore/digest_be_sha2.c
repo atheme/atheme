@@ -411,7 +411,7 @@ digest_update_sha2_256(union digest_state *const restrict state,
 	if (! (in && len))
 		return true;
 
-	const uint8_t *ptr = in;
+	const unsigned char *ptr = in;
 	size_t rem = len;
 
 	const uint64_t usedspace = (uint64_t) ((ctx->count >> 0x03U) % DIGEST_BKLEN_SHA2_256);
@@ -475,7 +475,7 @@ digest_update_sha2_512(union digest_state *const restrict state,
 	if (! (in && len))
 		return true;
 
-	const uint8_t *ptr = in;
+	const unsigned char *ptr = in;
 	size_t rem = len;
 
 	const uint64_t usedspace = (uint64_t) ((ctx->count[0] >> 0x03U) % DIGEST_BKLEN_SHA2_512);

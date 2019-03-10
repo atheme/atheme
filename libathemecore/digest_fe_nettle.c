@@ -194,7 +194,7 @@ digest_final(struct digest_context *const restrict ctx, void *const restrict out
 
 	if (ctx->hmac)
 	{
-		uint8_t inner_digest[DIGEST_MDLEN_MAX];
+		unsigned char inner_digest[DIGEST_MDLEN_MAX];
 
 		(void) ctx->final(&ctx->state, ctx->digsz, inner_digest);
 		(void) ctx->init(&ctx->state);
@@ -275,7 +275,7 @@ digest_oneshot_pbkdf2(const enum digest_algorithm alg, const void *const restric
 	 * we just call the underlying digest directly.
 	 */
 
-	uint8_t dtmp[DIGEST_MDLEN_MAX];
+	unsigned char dtmp[DIGEST_MDLEN_MAX];
 	struct digest_context ctx;
 
 	if (! c)
@@ -309,7 +309,7 @@ digest_oneshot_pbkdf2(const enum digest_algorithm alg, const void *const restric
 
 	const size_t hLen = ctx.digsz;
 	size_t odkLen = dkLen;
-	uint8_t *odk = dk;
+	unsigned char *odk = dk;
 
 	for (uint32_t i = 1; /* No condition */ ; i++)
 	{

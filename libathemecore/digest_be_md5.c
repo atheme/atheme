@@ -71,7 +71,7 @@
     } while (0)
 
 static void
-process_words_md5(struct digest_context_md5 *const ctx, const uint8_t *data)
+process_words_md5(struct digest_context_md5 *const ctx, const unsigned char *data)
 {
 	static const uint32_t T[] = {
 
@@ -220,7 +220,7 @@ digest_update_md5(union digest_state *const restrict state, const void *const re
 
 	const size_t off = (size_t) (ctx->count[0x00U] >> 0x03U) & (DIGEST_BKLEN_MD5 - 1);
 	const uint32_t nbits = (uint32_t) (len << 0x03U);
-	const uint8_t *ptr = data;
+	const unsigned char *ptr = data;
 	size_t rem = len;
 
 	ctx->count[0x00U] += nbits;
@@ -274,12 +274,12 @@ digest_final_md5(union digest_state *const restrict state, void *const restrict 
 		return false;
 	}
 
-	uint8_t data[0x08U];
+	unsigned char data[0x08U];
 
 	for (size_t i = 0x00U; i < sizeof data; i++)
-		data[i] = (uint8_t) (ctx->count[i >> 0x02U] >> ((i & 0x03U) << 0x03U));
+		data[i] = (unsigned char) (ctx->count[i >> 0x02U] >> ((i & 0x03U) << 0x03U));
 
-	static const uint8_t padding[] = {
+	static const unsigned char padding[] = {
 
 		0x80U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U,
 		0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U,
@@ -307,10 +307,10 @@ digest_final_md5(union digest_state *const restrict state, void *const restrict 
 		*len = DIGEST_MDLEN_MD5;
 	}
 
-	uint8_t *const digest = out;
+	unsigned char *const digest = out;
 
 	for (size_t i = 0x00U; i < DIGEST_MDLEN_MD5; i++)
-		digest[i] = (uint8_t) (ctx->state[i >> 0x02U] >> ((i & 0x03U) << 0x03U));
+		digest[i] = (unsigned char) (ctx->state[i >> 0x02U] >> ((i & 0x03U) << 0x03U));
 
 	(void) smemzero(data, sizeof data);
 	(void) smemzero(ctx, sizeof *ctx);

@@ -88,7 +88,7 @@ union SHA1_B64Q16
 };
 
 static void
-digest_transform_block_sha1(struct digest_context_sha1 *const restrict ctx, const uint8_t *const restrict in)
+digest_transform_block_sha1(struct digest_context_sha1 *const restrict ctx, const unsigned char *const restrict in)
 {
 	const bool digest_is_big_endian = (htonl(UINT32_C(0x11223344)) == UINT32_C(0x11223344));
 
@@ -225,7 +225,7 @@ digest_update_sha1(union digest_state *const restrict state, const void *const r
 	if (! (data && len))
 		return true;
 
-	const uint8_t *const ptr = data;
+	const unsigned char *const ptr = data;
 
 	uint32_t i = 0x00U;
 	uint32_t j = (ctx->count[0x00U] >> 0x03U) & 0x3FU;
@@ -268,16 +268,16 @@ digest_final_sha1(union digest_state *const restrict state, void *const restrict
 		return false;
 	}
 
-	static const uint8_t sep = 0x80U;
-	static const uint8_t pad = 0x00U;
+	static const unsigned char sep = 0x80U;
+	static const unsigned char pad = 0x00U;
 
-	uint8_t	data[0x08U];
+	unsigned char data[0x08U];
 
 	for (uint32_t i = 0x00U; i < 0x04U; i++)
-		data[i] = (uint8_t) ((ctx->count[0x01U] >> ((0x03U - (i & 0x03U)) * 0x08U)) & 0xFFU);
+		data[i] = (unsigned char) ((ctx->count[0x01U] >> ((0x03U - (i & 0x03U)) * 0x08U)) & 0xFFU);
 
 	for (uint32_t i = 0x04U; i < 0x08U; i++)
-		data[i] = (uint8_t) ((ctx->count[0x00U] >> ((0x03U - (i & 0x03U)) * 0x08U)) & 0xFFU);
+		data[i] = (unsigned char) ((ctx->count[0x00U] >> ((0x03U - (i & 0x03U)) * 0x08U)) & 0xFFU);
 
 	if (! digest_update_sha1(state, &sep, sizeof sep))
 		return false;
@@ -300,10 +300,10 @@ digest_final_sha1(union digest_state *const restrict state, void *const restrict
 		*len = DIGEST_MDLEN_SHA1;
 	}
 
-	uint8_t *const digest = out;
+	unsigned char *const digest = out;
 
 	for (uint32_t i = 0x00U; i < DIGEST_MDLEN_SHA1; i++)
-		digest[i] = (uint8_t) ((ctx->state[i >> 0x02U] >> ((0x03U - (i & 0x03U)) * 0x08U)) & 0xFFU);
+		digest[i] = (unsigned char) ((ctx->state[i >> 0x02U] >> ((0x03U - (i & 0x03U)) * 0x08U)) & 0xFFU);
 
 	(void) smemzero(data, sizeof data);
 	(void) smemzero(ctx, sizeof *ctx);

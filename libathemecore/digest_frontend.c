@@ -309,7 +309,7 @@ digest_hkdf_expand(const enum digest_algorithm alg, const void *const prk, const
 	unsigned char tmp[DIGEST_MDLEN_MAX];
 	struct digest_context ctx;
 	size_t rem = okmLen;
-	uint8_t *out = okm;
+	unsigned char *out = okm;
 	bool retval;
 
 	const size_t hLen = digest_size_alg(alg);
