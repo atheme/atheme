@@ -7,12 +7,10 @@
  * groupserv_common.h - group services common definitions
  */
 
-#include "stdheaders.h"
-
 #ifndef ATHEME_MOD_GROUPSERV_MAIN_GROUPSERV_COMMON_H
 #define ATHEME_MOD_GROUPSERV_MAIN_GROUPSERV_COMMON_H 1
 
-#include "atheme.h"
+#include <atheme.h>
 
 struct groupserv_config
 {

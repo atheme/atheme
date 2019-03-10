@@ -7,7 +7,7 @@
  * Frontend routines for the random interface.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #ifndef MINIMUM
 #  define MINIMUM(a, b) (((a) < (b)) ? (a) : (b))

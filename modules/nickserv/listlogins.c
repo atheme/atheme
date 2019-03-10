@@ -7,7 +7,7 @@
  * This file contains code for the NickServ LISTLOGINS function.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 ns_cmd_listlogins_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc,

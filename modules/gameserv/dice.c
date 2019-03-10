@@ -8,7 +8,7 @@
  * Dice generator.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "gameserv_common.h"
 
 #define CALC_MAX_STACK		(128)

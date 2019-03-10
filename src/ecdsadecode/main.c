@@ -9,8 +9,8 @@
  * copyright notice and this permission notice appear in all copies.
  */
 
-#include "atheme.h"
-#include "libathemecore.h"
+#include <atheme.h>
+#include <atheme/libathemecore.h>
 
 #include <openssl/ec.h>
 #include <openssl/ecdsa.h>

@@ -10,7 +10,7 @@
  * copyright notice and this permission notice appear in all copies.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define ATHEME_PBKDF2_ROUNDS    128000
 #define ATHEME_PBKDF2_SALTLEN   16

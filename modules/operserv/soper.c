@@ -7,7 +7,7 @@
  * Dynamic services operator privileges
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_patricia_t *os_soper_cmds = NULL;
 

@@ -8,7 +8,7 @@
  * This file contains the main() routine.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #ifndef MINIMUM
 #  define MINIMUM(a, b) (((a) < (b)) ? (a) : (b))

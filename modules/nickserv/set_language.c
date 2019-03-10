@@ -8,7 +8,7 @@
  * Changes the language services uses to talk to you.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #ifdef ENABLE_NLS
 

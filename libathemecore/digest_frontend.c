@@ -7,7 +7,7 @@
  * Frontend routines for the digest interface.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #ifdef HAVE_ARPA_INET_H
 #  include <arpa/inet.h>

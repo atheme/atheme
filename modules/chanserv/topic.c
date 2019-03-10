@@ -7,7 +7,7 @@
  * This file contains code for the CService TOPIC functions.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 cs_cmd_topic(struct sourceinfo *si, int parc, char *parv[])

@@ -8,7 +8,7 @@
  * Staff intervention.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "hostserv.h"
 
 static void

@@ -12,7 +12,7 @@
  *  Matches `nick!user@host realname here' for each client against a given regex, and places akills.
  *  CHECK REGEX USING @RMATCH FIRST!
  */
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 os_cmd_rakill(struct sourceinfo *si, int parc, char *parv[])

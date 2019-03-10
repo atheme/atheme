@@ -8,8 +8,8 @@
  * This file contains protocol support for bahamut-based ircd.
  */
 
-#include "atheme.h"
-#include "protocol/bahamut.h"
+#include <atheme.h>
+#include <atheme/protocol/bahamut.h>
 
 static struct ircd Bahamut = {
 	.ircdname = "Bahamut 1.8.x",

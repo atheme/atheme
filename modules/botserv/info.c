@@ -8,7 +8,7 @@
  * botserv settings on channel or bot.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "botserv.h"
 
 static mowgli_list_t *bs_bots = NULL;

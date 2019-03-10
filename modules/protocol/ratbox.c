@@ -8,7 +8,7 @@
  * This file contains protocol support for ratbox-based ircd.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static struct ircd Ratbox = {
 	.ircdname = "Ratbox (1.0 or later)",

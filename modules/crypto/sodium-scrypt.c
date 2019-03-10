@@ -7,7 +7,7 @@
  * scrypt password hashing module using libsodium (verify-only).
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #ifdef HAVE_LIBSODIUM_SCRYPT
 

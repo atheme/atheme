@@ -9,7 +9,7 @@
  * in my protocol bridge.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static struct ircd IRCNet = {
 	.ircdname = "ircd 2.11.1p1 or later",

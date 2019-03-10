@@ -9,7 +9,7 @@
  * Do not load chanserv/ban and chanserv/unban_self together.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 cs_cmd_unban(struct sourceinfo *si, int parc, char *parv[])

@@ -7,7 +7,7 @@
  * This file contains version information.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 const char *revision = SERNO;
 

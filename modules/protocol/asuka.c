@@ -9,8 +9,8 @@
  * raw data sent by asuka.
  */
 
-#include "atheme.h"
-#include "protocol/asuka.h"
+#include <atheme.h>
+#include <atheme/protocol/asuka.h>
 
 static struct ircd Asuka = {
 	.ircdname = "Asuka 1.2.1 and later",

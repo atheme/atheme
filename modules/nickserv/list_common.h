@@ -7,12 +7,10 @@
  * list_common.h - /ns list common definitions
  */
 
-#include "stdheaders.h"
-
 #ifndef ATHEME_MOD_NICKSERV_LIST_COMMON_H
 #define ATHEME_MOD_NICKSERV_LIST_COMMON_H 1
 
-#include "atheme.h"
+#include <atheme.h>
 
 enum list_opttype
 {

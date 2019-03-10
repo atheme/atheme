@@ -7,10 +7,10 @@
  * Stuff for internal use in Atheme.
  */
 
-#include "stdheaders.h"
-
 #ifndef ATHEME_LAC_INTERNAL_H
 #define ATHEME_LAC_INTERNAL_H 1
+
+#include <atheme/stdheaders.h>
 
 /* internal functions */
 void event_init(void);

@@ -13,7 +13,7 @@
  * uplink.c: Uplink management.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void uplink_close(struct connection *cptr);
 

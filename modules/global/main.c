@@ -8,7 +8,7 @@
  * This file contains the main() routine.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 // global list struct
 struct global_ {

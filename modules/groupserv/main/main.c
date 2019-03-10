@@ -8,7 +8,7 @@
  * groupserv - group services
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "groupserv_main.h"
 
 struct groupserv_persist_record

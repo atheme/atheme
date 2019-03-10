@@ -7,7 +7,7 @@
  * This file contains code for the NickServ LISTMAIL function.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 struct listmail_state
 {

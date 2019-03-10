@@ -7,7 +7,7 @@
  * search.c - rpgserv SEARCH command
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "prettyprint.h"
 
 static void

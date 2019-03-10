@@ -7,7 +7,7 @@
  * Lists object properties via their metadata table.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 void
 cs_cmd_taxonomy(struct sourceinfo *si, int parc, char *parv[])

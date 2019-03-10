@@ -38,7 +38,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define ALIS_MAX_PARC	10
 #define ALIS_MAX_MATCH	60

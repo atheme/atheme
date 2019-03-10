@@ -7,7 +7,7 @@
  * This file contains code for OS UPTIME
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 os_cmd_uptime_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc,

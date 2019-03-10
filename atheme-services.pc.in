@@ -4,7 +4,7 @@ datarootdir=@datarootdir@
 datadir=@datadir@/@PACKAGE_TARNAME@
 
 version=@PACKAGE_VERSION@
-includedir=@includedir@/@PACKAGE_TARNAME@
+includedir=@includedir@
 libdir=@libdir@
 MODDIR=@MODDIR@/modules
 

@@ -8,7 +8,7 @@
  * based on elly's rpgserv for atheme-6.x --nenolod
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 rs_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc, char **const restrict parv)

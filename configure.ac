@@ -11,7 +11,7 @@ AC_INIT([Atheme IRC Services], [7.3.0-rc2], [https://github.com/atheme/atheme/is
 
 AC_CONFIG_AUX_DIR([autoconf])
 AC_CONFIG_MACRO_DIR([m4])
-AC_CONFIG_HEADER([include/sysconf.h])
+AC_CONFIG_HEADER([include/atheme/sysconf.h])
 AC_CONFIG_SRCDIR([src/services/main.c])
 AC_PREFIX_DEFAULT([~/atheme])
 AS_IF([test "x${prefix}" = "xNONE"], [prefix="${ac_default_prefix}"])

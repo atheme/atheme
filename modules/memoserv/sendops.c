@@ -7,7 +7,7 @@
  * This file contains code for the Memoserv SENDOPS function
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static unsigned int *maxmemos;
 

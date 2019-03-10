@@ -20,11 +20,11 @@
  *     "SCRAM-SHA-256 and SCRAM-SHA-256-PLUS SASL Mechanisms"
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #ifdef HAVE_LIBIDN
 
-#include "pbkdf2v2.h"
+#include <atheme/pbkdf2v2.h>
 
 /* Maximum iteration count Cyrus SASL clients will process
  * Taken from <https://github.com/cyrusimap/cyrus-sasl/blob/f76eb971d456619d0f26/plugins/scram.c#L79>

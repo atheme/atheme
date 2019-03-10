@@ -12,7 +12,7 @@
  * ubase64.c: ircu base64 routines.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 /*
  * base64touint() written 01/20/06 by jilles, for getting IP addresses.

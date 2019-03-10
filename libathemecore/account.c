@@ -13,7 +13,7 @@
  * account.c: Account management
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 mowgli_patricia_t *nicklist;
 mowgli_patricia_t *oldnameslist;

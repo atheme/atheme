@@ -13,7 +13,7 @@
  * datastream.c: Efficient handling of streams and packet queues.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define SENDQSIZE (4096 - 40)
 

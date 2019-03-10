@@ -9,7 +9,7 @@
  * Based on the original code from Denora
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "xmlrpclib.h"
 
 typedef struct XMLRPCCmd_ XMLRPCCmd;

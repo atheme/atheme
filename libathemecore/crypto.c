@@ -13,7 +13,7 @@
  * crypto.c: Cryptographic module support.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_list_t crypt_impl_list = { NULL, NULL, 0 };
 

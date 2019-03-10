@@ -8,7 +8,7 @@
  * Allows requesting a vhost for a nick/account
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "hostserv.h"
 
 struct hsrequest

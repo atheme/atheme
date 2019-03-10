@@ -7,7 +7,7 @@
  * Allows syncing the vhost for all nicks in a group.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "hostserv.h"
 
 static void

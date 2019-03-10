@@ -9,7 +9,7 @@
 
 // TODO: We should probably add a way for the target user to remove pending invites
 
-#include "atheme.h"
+#include <atheme.h>
 #include "groupserv.h"
 
 static void

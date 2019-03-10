@@ -7,7 +7,7 @@
  * This file contains code for the NickServ LISTOWNMAIL function.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 ns_cmd_listownmail(struct sourceinfo *si, int parc, char *parv[])

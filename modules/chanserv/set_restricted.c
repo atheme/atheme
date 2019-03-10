@@ -8,7 +8,7 @@
  * This file contains routines to handle the CService SET RESTRICTED command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_patricia_t **cs_set_cmdtree = NULL;
 

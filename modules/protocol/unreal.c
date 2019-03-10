@@ -8,8 +8,8 @@
  * This file contains protocol support for bahamut-based ircd.
  */
 
-#include "atheme.h"
-#include "protocol/unreal.h"
+#include <atheme.h>
+#include <atheme/protocol/unreal.h>
 
 #define VALID_FLOOD_CHAR(c)	((c == 'c') || (c == 'j') || (c == 'k') || (c == 'm') || (c == 'n') || (c == 't'))
 #define VALID_ACTION_CHAR(c)	((c == 'm') || (c == 'M') || (c == 'C') || (c == 'R') || (c == 'i') || (c == 'K') \

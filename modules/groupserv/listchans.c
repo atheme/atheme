@@ -7,7 +7,7 @@
  * This file contains code for the GroupServ LISTCHANS function.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "groupserv.h"
 
 static void

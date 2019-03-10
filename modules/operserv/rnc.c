@@ -7,7 +7,7 @@
  * This file contains functionality implementing OperServ RNC.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 struct rnc
 {

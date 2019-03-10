@@ -13,7 +13,7 @@
  * string.c: String functions.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 /* removes unwanted chars from a line */
 void

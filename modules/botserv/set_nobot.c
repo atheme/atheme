@@ -8,7 +8,7 @@
  * Prevent a bot from being assigned to a channel.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_patricia_t **bs_set_cmdtree = NULL;
 

@@ -7,8 +7,6 @@
  * Header for IRC code.
  */
 
-#include "stdheaders.h"
-
 #ifndef ATHEME_MOD_TRANSPORT_RFC1459_RFC1459_H
 #define ATHEME_MOD_TRANSPORT_RFC1459_RFC1459_H 1
 

@@ -7,7 +7,7 @@
  * Changes and shows nickname CertFP authentication lists.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 ns_cmd_cert(struct sourceinfo *si, int parc, char *parv[])

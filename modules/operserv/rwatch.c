@@ -7,7 +7,7 @@
  * This file contains functionality implementing OperServ RWATCH.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define RWACT_SNOOP 		1
 #define RWACT_KLINE 		2

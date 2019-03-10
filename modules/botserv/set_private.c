@@ -8,7 +8,7 @@
  * Prevent a bot from being assigned by non IRC operators.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "botserv.h"
 
 static fn_botserv_bot_find *botserv_bot_find = NULL;

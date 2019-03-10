@@ -8,7 +8,7 @@
  * entities.c - entity tracking
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_patricia_t *entities = NULL;
 static mowgli_patricia_t *entities_by_id = NULL;

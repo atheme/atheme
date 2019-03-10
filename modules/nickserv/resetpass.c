@@ -7,7 +7,7 @@
  * This file contains code for nickserv RESETPASS
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 ns_cmd_resetpass(struct sourceinfo *si, int parc, char *parv[])

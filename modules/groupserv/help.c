@@ -8,7 +8,7 @@
  * This file contains routines to handle the GroupServ HELP command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 gs_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc, char **const restrict parv)

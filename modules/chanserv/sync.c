@@ -7,7 +7,7 @@
  * This file contains code for the CService SYNC functions.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_patricia_t **cs_set_cmdtree = NULL;
 

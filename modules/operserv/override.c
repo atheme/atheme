@@ -7,7 +7,7 @@
  * This file contains functionality which implements the OService INJECT command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 struct override_sourceinfo
 {

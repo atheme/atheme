@@ -10,7 +10,7 @@
  * ever grows there again.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 struct opensex
 {

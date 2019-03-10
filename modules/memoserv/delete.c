@@ -7,7 +7,7 @@
  * This file contains code for the Memoserv DELETE function
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 ms_cmd_delete(struct sourceinfo *si, int parc, char *parv[])

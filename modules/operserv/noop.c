@@ -7,7 +7,7 @@
  * OperServ NOOP command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 struct noop
 {

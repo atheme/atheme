@@ -8,7 +8,7 @@
  * Platform-agnostic database backend layer.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_patricia_t *db_types = NULL;
 

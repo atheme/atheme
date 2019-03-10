@@ -7,7 +7,7 @@
  * Allows setting a vhost on an account
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 do_sethost(struct user *u, stringref host)

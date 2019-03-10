@@ -7,7 +7,7 @@
  * This file contains code for the CService RECOVER functions.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 cs_cmd_recover(struct sourceinfo *si, int parc, char *parv[])

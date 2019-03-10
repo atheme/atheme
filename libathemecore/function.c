@@ -13,7 +13,7 @@
  * function.c: Miscillaneous functions.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 bool
 string_in_list(const char *const restrict str, const char *restrict list)

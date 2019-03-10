@@ -7,7 +7,7 @@
  * This file contains the main() routine.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "botserv.h"
 
 static void (*topic_sts_real)(struct channel *, struct user *, const char *, time_t, time_t, const char *);

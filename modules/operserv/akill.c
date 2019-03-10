@@ -9,7 +9,7 @@
  * the OperServ AKILL command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_patricia_t *os_akill_cmds = NULL;
 

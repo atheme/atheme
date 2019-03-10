@@ -8,7 +8,7 @@
  * Forwards incoming memos to your e-mail address.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "list_common.h"
 #include "list.h"
 

@@ -8,7 +8,7 @@
  * This file contains functionality which implements the OService INJECT command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 os_cmd_inject(struct sourceinfo *si, int parc, char *parv[])

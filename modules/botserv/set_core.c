@@ -9,7 +9,7 @@
  * the BotServ settings on a channel or a bot.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "botserv.h"
 
 // Imported by other modules/botserv/set_*.so

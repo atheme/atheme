@@ -7,7 +7,7 @@
  * list.c - rpgserv LIST command
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 rs_cmd_list(struct sourceinfo *si, int parc, char *parv[])

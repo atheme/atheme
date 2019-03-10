@@ -9,7 +9,7 @@
  * This file contains routines to handle the OperServ HELP command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 os_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc, char **const restrict parv)

@@ -9,7 +9,7 @@
  * copyright notice and this permission notice appear in all copies.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define METADATA_KEY_ENFORCE_METHOD	"private:antiflood:enforce-method"
 

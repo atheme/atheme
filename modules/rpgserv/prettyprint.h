@@ -7,12 +7,10 @@
  * prettyprint helpers for rpgserv
  */
 
-#include "stdheaders.h"
-
 #ifndef ATHEME_MOD_RPGSERV_PRETTYPRINT_H
 #define ATHEME_MOD_RPGSERV_PRETTYPRINT_H 1
 
-#include "atheme.h"
+#include <atheme.h>
 
 /*
  * Important: keys and names must line up index-wise or everything

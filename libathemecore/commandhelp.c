@@ -13,7 +13,7 @@
  * commandhelp.c: Help system implementation.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define COMMAND_SHORTHELP_WRAP_COLS 55
 

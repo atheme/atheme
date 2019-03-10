@@ -7,7 +7,7 @@
  * This file contains code for the Memoserv READ function
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define MAX_READ_AT_ONCE 5
 

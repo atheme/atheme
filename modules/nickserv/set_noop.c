@@ -8,7 +8,7 @@
  * Prevents services from setting modes upon you automatically.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "list_common.h"
 #include "list.h"
 

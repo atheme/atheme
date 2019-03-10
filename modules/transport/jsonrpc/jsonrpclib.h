@@ -7,12 +7,10 @@
  * JSONRPC library header
  */
 
-#include "stdheaders.h"
-
 #ifndef ATHEME_MOD_TRANSPORT_JSONRPC_JSONRPCLIB_H
 #define ATHEME_MOD_TRANSPORT_JSONRPC_JSONRPCLIB_H 1
 
-#include "atheme.h"
+#include <atheme.h>
 
 typedef bool (*jsonrpc_method_fn)(void *conn, mowgli_list_t *params, char *id);
 

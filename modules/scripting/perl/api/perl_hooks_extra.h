@@ -5,10 +5,10 @@
  * Copyright (C) 2011-2013 Atheme Project (http://atheme.org/)
  */
 
-#include "stdheaders.h"
-
 #ifndef ATHEME_MOD_SCRIPTING_PERL_API_PERL_HOOKS_EXTRA_H
 #define ATHEME_MOD_SCRIPTING_PERL_API_PERL_HOOKS_EXTRA_H 1
+
+#include <atheme.h>
 
 /*
  * Special-case. Pass undef to the handler routine where it takes no argument.

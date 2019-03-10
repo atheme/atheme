@@ -7,7 +7,7 @@
  * This file contains functionality which implements the HelpServ SERVICES command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 helpserv_cmd_services(struct sourceinfo *si, int parc, char *parv[])

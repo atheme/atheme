@@ -7,7 +7,7 @@
  * This file contains code for the CService TEMPLATE functions.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static int
 display_template(const char *key, void *data, void *privdata)

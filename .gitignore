@@ -22,9 +22,9 @@ config.log
 config.status
 dist/atheme.conf.userserv-example
 dist/atheme.conf.operserv-example
-include/hooktypes.h
-include/serno.h
-include/sysconf.h
+include/atheme/hooktypes.h
+include/atheme/serno.h
+include/atheme/sysconf.h
 libmowgli/buildsys.mk
 libmowgli/extra.mk
 libmowgli/libmowgli.pc

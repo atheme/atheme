@@ -13,7 +13,7 @@
  * sharedheap.c: Shared heaps (mowgli.heap bound to atheme.object)
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #ifdef ATHEME_ENABLE_HEAP_ALLOCATOR
 

@@ -7,7 +7,7 @@
  * This file contains functionality which implements the OService SHUTDOWN command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 os_cmd_shutdown(struct sourceinfo *si, int parc, char *parv[])

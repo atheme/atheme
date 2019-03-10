@@ -10,7 +10,7 @@
  * copyright notice and this permission notice appear in all copies.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "chanserv.h"
 
 struct reg_request

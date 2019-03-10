@@ -8,7 +8,7 @@
  * Disables the ability to receive memos.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "list.h"
 
 static mowgli_patricia_t **ns_set_cmdtree = NULL;

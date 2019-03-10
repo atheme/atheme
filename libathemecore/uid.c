@@ -12,7 +12,7 @@
  * uid.c: UID management.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 const struct uid_provider *uid_provider_impl = NULL;
 

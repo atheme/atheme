@@ -7,7 +7,7 @@
  * This file contains routines to handle the GroupServ HELP command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "groupserv.h"
 
 // Perhaps add criteria to groupser/list like there is now in chanserv/list and nickserv/list in the future

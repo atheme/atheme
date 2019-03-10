@@ -7,12 +7,10 @@
  * groupserv_main.h - group services main module header
  */
 
-#include "stdheaders.h"
-
 #ifndef ATHEME_MOD_GROUPSERV_MAIN_GROUPSERV_MAIN_H
 #define ATHEME_MOD_GROUPSERV_MAIN_GROUPSERV_MAIN_H 1
 
-#include "atheme.h"
+#include <atheme.h>
 #include "groupserv_common.h"
 
 extern struct groupserv_config gs_config;

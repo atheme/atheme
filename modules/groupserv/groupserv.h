@@ -10,10 +10,10 @@
  * that need to access group functionality.
  */
 
-#include "stdheaders.h"
-
 #ifndef ATHEME_MOD_GROUPSERV_GROUPSERV_H
 #define ATHEME_MOD_GROUPSERV_GROUPSERV_H 1
+
+#include <atheme.h>
 
 #include "main/groupserv_common.h"
 

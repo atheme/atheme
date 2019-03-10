@@ -8,7 +8,7 @@
  *   -- Contains an alias "MYACCESS" for legacy users
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 ns_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])

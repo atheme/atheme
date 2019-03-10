@@ -5,8 +5,6 @@
  * Copyright (C) 2011 Atheme Project (http://atheme.org/)
  */
 
-#include "stdheaders.h"
-
 #ifndef ATHEME_MOD_SCRIPTING_PERL_API_PERL_HOOKS_H
 #define ATHEME_MOD_SCRIPTING_PERL_API_PERL_HOOKS_H 1
 

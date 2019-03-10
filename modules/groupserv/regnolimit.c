@@ -7,7 +7,7 @@
  * This file contains routines to handle the GroupServ HELP command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "groupserv.h"
 
 static void

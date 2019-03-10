@@ -7,7 +7,7 @@
  * Module listing.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 os_cmd_modlist(struct sourceinfo *si, int parc, char *parv[])

@@ -7,7 +7,7 @@
  * This file contains code for the ChanServ VERSION function.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 cs_cmd_version(struct sourceinfo *si, int parc, char *parv[])

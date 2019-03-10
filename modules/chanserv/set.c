@@ -9,7 +9,7 @@
  * old setups pre-SET split.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 mod_init(struct module *const restrict m)

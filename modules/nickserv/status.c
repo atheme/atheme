@@ -7,7 +7,7 @@
  * This file contains code for the CService STATUS function.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 ns_cmd_acc(struct sourceinfo *si, int parc, char *parv[])

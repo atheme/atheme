@@ -9,7 +9,7 @@
  * Sets the public key (for SASL ECDSA-NIST256p-CHALLENGE) of a user.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #ifdef HAVE_LIBCRYPTO_ECDSA
 

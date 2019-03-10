@@ -7,7 +7,7 @@
  * Changes the group name
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "groupserv.h"
 
 // SET GROUPNAME <name>

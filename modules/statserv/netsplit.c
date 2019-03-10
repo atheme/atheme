@@ -8,7 +8,7 @@
  * Netsplit monitor
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 struct netsplit
 {

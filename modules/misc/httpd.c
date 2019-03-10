@@ -7,7 +7,7 @@
  * Generic HTTPd
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define REQUEST_MAX 65536 // maximum size of one call
 

@@ -7,7 +7,7 @@
  * chanfix - channel fixing service
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "chanfix.h"
 
 #define CFDB_VERSION	1

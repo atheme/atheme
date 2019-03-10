@@ -12,7 +12,7 @@
  * qrcode.c: IRC encoding of QR codes
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #include <qrencode.h>
 

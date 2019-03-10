@@ -7,7 +7,7 @@
  * groupserv.c - group services
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "groupserv_main.h"
 
 struct groupserv_config gs_config;

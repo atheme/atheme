@@ -7,7 +7,7 @@
  * Restrictions for nicknames.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "list_common.h"
 #include "list.h"
 

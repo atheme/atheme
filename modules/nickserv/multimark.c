@@ -8,7 +8,7 @@
  * Do NOT use this in combination with nickserv/mark!
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "list.h"
 
 struct multimark

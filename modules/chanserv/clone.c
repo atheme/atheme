@@ -7,7 +7,7 @@
  * This file contains code for the CService CLONE functions.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[])

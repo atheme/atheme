@@ -8,7 +8,7 @@
  * This file contains code for the Memoserv IGNORE functions
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_patricia_t *ms_ignore_cmds = NULL;
 

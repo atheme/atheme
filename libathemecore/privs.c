@@ -13,7 +13,7 @@
  * privs.c: Fine grained services operator privileges
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 mowgli_list_t operclasslist;
 mowgli_list_t soperlist;

@@ -10,12 +10,10 @@
  * BLAKE2 reference C implementation (modified for Atheme IRC Services)
  */
 
-#include "stdheaders.h"
-
 #ifndef ATHEME_MOD_CRYPTO_BLAKE2B_H
 #define ATHEME_MOD_CRYPTO_BLAKE2B_H 1
 
-#include "atheme.h"
+#include <atheme.h>
 
 #if (defined(__BYTE_ORDER__) && (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)) || \
     defined(__LITTLE_ENDIAN__) || defined(__ARMEL__) || defined(__MIPSEL__) || defined(__AARCH64EL__) || \

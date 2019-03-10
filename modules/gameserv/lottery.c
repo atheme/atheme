@@ -7,7 +7,7 @@
  * Choose a random user on the channel.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "gameserv_common.h"
 
 static struct user *

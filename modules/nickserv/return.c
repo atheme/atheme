@@ -7,7 +7,7 @@
  * Implements nickserv RETURN.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 ns_cmd_return(struct sourceinfo *si, int parc, char *parv[])

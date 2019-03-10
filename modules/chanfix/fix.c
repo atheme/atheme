@@ -9,7 +9,7 @@
  * chanfix - channel fixing service
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "chanfix.h"
 
 bool chanfix_do_autofix;

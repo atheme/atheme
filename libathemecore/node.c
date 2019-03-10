@@ -13,7 +13,7 @@
  * node.c: Data structure management.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 mowgli_list_t klnlist;
 mowgli_list_t xlnlist;

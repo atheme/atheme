@@ -7,7 +7,7 @@
  * A simple module inspector.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 os_cmd_modinspect(struct sourceinfo *si, int parc, char *parv[])

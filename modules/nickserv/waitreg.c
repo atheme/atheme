@@ -8,7 +8,7 @@
  * This file contains code for delaying user registration.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define WAITREG_TIME_MIN        0U
 #define WAITREG_TIME_DEF        0U

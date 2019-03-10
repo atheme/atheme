@@ -7,7 +7,7 @@
  * This file contains code for the CService FFLAGS functions.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 // FFLAGS <channel> <user> <flags>
 static void

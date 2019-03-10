@@ -8,7 +8,7 @@
  * ECDSA-NIST256P-CHALLENGE mechanism provider.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #ifdef HAVE_LIBCRYPTO_ECDSA
 

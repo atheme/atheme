@@ -13,7 +13,7 @@
  * confprocess.c: Generic configuration processing.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 enum conftype
 {

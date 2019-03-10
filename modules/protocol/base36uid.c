@@ -12,7 +12,7 @@
  * base36uid.c: UID management.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static char new_uid[10]; // allow for \0
 static unsigned int uindex = 0;

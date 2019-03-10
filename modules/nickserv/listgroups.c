@@ -7,7 +7,7 @@
  * This file contains code for the nickserv LISTGROUPS function.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "../groupserv/groupserv.h"
 
 static void

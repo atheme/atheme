@@ -5,7 +5,7 @@
  * Copyright (C) 2010-2011 Stephen Bennett
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "atheme_perl.h"
 
 static void (*real_register_object_reference)(SV *) = NULL;

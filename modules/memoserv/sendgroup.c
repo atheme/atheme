@@ -7,7 +7,7 @@
  * This file contains code for the Memoserv SENDGROUP function
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "../groupserv/groupserv.h"
 
 static unsigned int *maxmemos;

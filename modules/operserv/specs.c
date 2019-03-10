@@ -9,7 +9,7 @@
  * This file contains functionality which implements the OService SPECS command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "../groupserv/main/groupserv_common.h"
 
 struct privilege

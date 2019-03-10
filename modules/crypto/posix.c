@@ -7,7 +7,7 @@
  * Old POSIX module which just wraps around the 2 that replaced it.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 mod_init(struct module *const restrict m)

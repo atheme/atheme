@@ -7,7 +7,7 @@
  * This file contains code for the CService REGISTER function.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "chanserv.h"
 
 static unsigned int ratelimit_count = 0;

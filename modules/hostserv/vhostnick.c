@@ -7,7 +7,7 @@
  * Allows setting a vhost on a nick
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "hostserv.h"
 
 // VHOSTNICK <nick> [host]

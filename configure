@@ -2665,7 +2665,7 @@ ac_configure="$SHELL $ac_aux_dir/configure"  # Please don't use this var.
 
 
 
-ac_config_headers="$ac_config_headers include/sysconf.h"
+ac_config_headers="$ac_config_headers include/atheme/sysconf.h"
 
 
 
@@ -18765,7 +18765,7 @@ cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
-    "include/sysconf.h") CONFIG_HEADERS="$CONFIG_HEADERS include/sysconf.h" ;;
+    "include/atheme/sysconf.h") CONFIG_HEADERS="$CONFIG_HEADERS include/atheme/sysconf.h" ;;
     "po-directories") CONFIG_COMMANDS="$CONFIG_COMMANDS po-directories" ;;
     "atheme-services.pc") CONFIG_FILES="$CONFIG_FILES atheme-services.pc" ;;
     "buildsys.mk") CONFIG_FILES="$CONFIG_FILES buildsys.mk" ;;

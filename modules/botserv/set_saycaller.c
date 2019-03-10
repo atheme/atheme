@@ -7,7 +7,7 @@
  * Enable say/act caller ID.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_patricia_t **bs_set_cmdtree = NULL;
 

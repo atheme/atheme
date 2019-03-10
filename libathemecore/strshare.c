@@ -13,7 +13,7 @@
  * strshare.c: Shared strings.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_patricia_t *strshare_dict = NULL;
 

@@ -8,7 +8,7 @@
  * flatfile database format, with metadata extensions.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 // database versions
 #define DB_SHRIKE	1

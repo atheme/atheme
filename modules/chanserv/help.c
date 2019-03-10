@@ -9,7 +9,7 @@
  * This file contains routines to handle the ChanServ HELP command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define SHORTHELP_CMDS_DEF      "AKICK BAN CLEAR DEOP DEVOICE DROP FLAGS GETKEY INFO INVITE KICK KICKBAN OP " \
                                 "QUIET REGISTER SET TOPIC UNBAN UNQUIET VOICE WHY"

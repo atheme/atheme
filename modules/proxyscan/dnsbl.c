@@ -45,7 +45,7 @@
 
 // To configure/use: see the proxyscan{} section of your atheme.conf
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define IRCD_RES_HOSTLEN 255
 

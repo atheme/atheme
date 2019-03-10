@@ -13,7 +13,7 @@
  * svsignore.c: Services ignore list management.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 mowgli_list_t svs_ignore_list;
 

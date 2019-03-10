@@ -7,7 +7,7 @@
  * Marking for channels.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 cs_cmd_mark(struct sourceinfo *si, int parc, char *parv[])

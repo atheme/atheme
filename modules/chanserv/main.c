@@ -7,7 +7,7 @@
  * This file contains the main() routine.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "chanserv.h"
 
 static mowgli_eventloop_timer_t *cs_leave_empty_timer = NULL;

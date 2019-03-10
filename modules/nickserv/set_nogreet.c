@@ -8,7 +8,7 @@
  * Allows you to opt-out of channel entry messages.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "list_common.h"
 #include "list.h"
 

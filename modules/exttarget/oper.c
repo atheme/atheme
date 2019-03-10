@@ -5,7 +5,7 @@
  * Copyright (C) 2011 William Pitcock <nenolod@dereferenced.org>
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "exttarget.h"
 
 static mowgli_patricia_t **exttarget_tree = NULL;

@@ -9,7 +9,7 @@
  * be used via OperServ MODE etc.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 mod_init(struct module *const restrict m)

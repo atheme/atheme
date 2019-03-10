@@ -7,7 +7,7 @@
  * This file contains code for the CService CLEAR FLAGS functions.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_patricia_t **cs_clear_cmds = NULL;
 

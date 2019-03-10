@@ -13,7 +13,7 @@
  * module.c: Module management.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #ifdef HAVE_USABLE_DLINFO
 #  include <dlfcn.h>

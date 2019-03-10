@@ -12,7 +12,7 @@
  * Argon2 reference C implementation (modified for Atheme IRC Services)
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "blake2b.h"
 
 #define ARGON2D_MEMCOST_MIN     8

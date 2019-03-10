@@ -7,7 +7,7 @@
  * This file contains functionality implementing clone detection.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define CLONESDB_VERSION	3
 #define CLONES_GRACE_TIMEPERIOD	180

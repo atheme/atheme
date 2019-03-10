@@ -18,7 +18,7 @@
  *    --nenolod
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 // MDEPs to write to the database on commit, for reloading on startup
 #define MODFLAG_PRIV_MDEP       (MODFLAG_DBCRYPTO | MODFLAG_DBHANDLER)

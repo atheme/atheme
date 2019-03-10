@@ -13,7 +13,7 @@
  * ptasks.c: Implementation of common protocol tasks.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 void
 handle_info(struct user *u)

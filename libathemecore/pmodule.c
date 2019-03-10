@@ -13,7 +13,7 @@
  * pmodule.c: Protocol command management.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 mowgli_patricia_t *pcommands;
 

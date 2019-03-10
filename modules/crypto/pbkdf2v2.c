@@ -9,8 +9,8 @@
  * copyright notice and this permission notice appear in all copies.
  */
 
-#include "atheme.h"
-#include "pbkdf2v2.h"
+#include <atheme.h>
+#include <atheme/pbkdf2v2.h>
 
 #ifdef HAVE_LIBIDN
 #  include <stringprep.h>

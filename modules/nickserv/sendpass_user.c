@@ -7,7 +7,7 @@
  * This file contains code for the CService SENDPASS function.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 enum specialoperation
 {

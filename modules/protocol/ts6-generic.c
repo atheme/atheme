@@ -35,7 +35,7 @@
  * work.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static bool use_rserv_support = false;
 static bool use_tb = false;
