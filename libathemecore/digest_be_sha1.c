@@ -253,7 +253,7 @@ digest_update_sha1(union digest_state *const restrict state, const void *const r
 }
 
 static bool ATHEME_FATTR_WUR
-digest_final_sha1(union digest_state *const restrict state, void *const restrict out, size_t *const restrict len)
+digest_final_sha1(union digest_state *const restrict state, void *const restrict out)
 {
 	struct digest_context_sha1 *const ctx = (struct digest_context_sha1 *) state;
 
@@ -288,17 +288,6 @@ digest_final_sha1(union digest_state *const restrict state, void *const restrict
 
 	if (! digest_update_sha1(state, data, sizeof data))
 		return false;
-
-	if (len)
-	{
-		if (*len < DIGEST_MDLEN_SHA1)
-		{
-			(void) slog(LG_ERROR, "%s: output buffer length %zu is too small", MOWGLI_FUNC_NAME, *len);
-			return false;
-		}
-
-		*len = DIGEST_MDLEN_SHA1;
-	}
 
 	unsigned char *const digest = out;
 

@@ -525,8 +525,7 @@ digest_update_sha2_512(union digest_state *const restrict state,
 }
 
 static bool ATHEME_FATTR_WUR
-digest_final_sha2_256(union digest_state *const restrict state,
-                      void *const restrict out, size_t *const restrict len)
+digest_final_sha2_256(union digest_state *const restrict state, void *const restrict out)
 {
 	struct digest_context_sha2_256 *const ctx = (struct digest_context_sha2_256 *) state;
 
@@ -539,17 +538,6 @@ digest_final_sha2_256(union digest_state *const restrict state,
 	{
 		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", MOWGLI_FUNC_NAME);
 		return false;
-	}
-
-	if (len)
-	{
-		if (*len < DIGEST_MDLEN_SHA2_256)
-		{
-			(void) slog(LG_ERROR, "%s: output buffer length %zu is too small", MOWGLI_FUNC_NAME, *len);
-			return false;
-		}
-
-		*len = DIGEST_MDLEN_SHA2_256;
 	}
 
 	uint64_t usedspace = (ctx->count >> 0x03U) % DIGEST_BKLEN_SHA2_256;
@@ -600,8 +588,7 @@ digest_final_sha2_256(union digest_state *const restrict state,
 }
 
 static bool ATHEME_FATTR_WUR
-digest_final_sha2_512(union digest_state *const restrict state,
-                      void *const restrict out, size_t *const restrict len)
+digest_final_sha2_512(union digest_state *const restrict state, void *const restrict out)
 {
 	struct digest_context_sha2_512 *const ctx = (struct digest_context_sha2_512 *) state;
 
@@ -614,17 +601,6 @@ digest_final_sha2_512(union digest_state *const restrict state,
 	{
 		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", MOWGLI_FUNC_NAME);
 		return false;
-	}
-
-	if (len)
-	{
-		if (*len < DIGEST_MDLEN_SHA2_512)
-		{
-			(void) slog(LG_ERROR, "%s: output buffer length %zu is too small", MOWGLI_FUNC_NAME, *len);
-			return false;
-		}
-
-		*len = DIGEST_MDLEN_SHA2_512;
 	}
 
 	uint64_t usedspace = ((ctx->count[0x00U] >> 0x03U) % DIGEST_BKLEN_SHA2_512);

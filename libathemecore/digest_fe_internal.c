@@ -163,11 +163,14 @@ digest_final(struct digest_context *const restrict ctx, void *const restrict out
 		return false;
 	}
 
+	if (outLen)
+		*outLen = ctx->digsz;
+
 	if (ctx->hmac)
 	{
 		unsigned char inner_digest[DIGEST_MDLEN_MAX];
 
-		if (! ctx->final(&ctx->state, inner_digest, NULL))
+		if (! ctx->final(&ctx->state, inner_digest))
 			return false;
 
 		if (! ctx->init(&ctx->state))
@@ -182,7 +185,7 @@ digest_final(struct digest_context *const restrict ctx, void *const restrict out
 		(void) smemzero(inner_digest, sizeof inner_digest);
 	}
 
-	return ctx->final(&ctx->state, out, outLen);
+	return ctx->final(&ctx->state, out);
 }
 
 bool ATHEME_FATTR_WUR
