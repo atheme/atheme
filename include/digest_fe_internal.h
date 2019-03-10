@@ -54,10 +54,10 @@ struct digest_context_sha2_512
 
 union digest_state
 {
-	struct digest_context_md5       md5ctx;
-	struct digest_context_sha1      sha1ctx;
-	struct digest_context_sha2_256  sha256ctx;
-	struct digest_context_sha2_512  sha512ctx;
+	struct digest_context_md5       md5_ctx;
+	struct digest_context_sha1      sha1_ctx;
+	struct digest_context_sha2_256  sha2_256_ctx;
+	struct digest_context_sha2_512  sha2_512_ctx;
 };
 
 struct digest_context

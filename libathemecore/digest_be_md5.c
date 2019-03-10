@@ -185,7 +185,7 @@ process_words_md5(struct digest_context_md5 *const ctx, const unsigned char *dat
 static void
 digest_init_md5(union digest_state *const restrict state)
 {
-	struct digest_context_md5 *const ctx = (struct digest_context_md5 *) state;
+	struct digest_context_md5 *const ctx = &state->md5_ctx;
 
 	static const uint32_t iv[] = {
 
@@ -199,7 +199,7 @@ digest_init_md5(union digest_state *const restrict state)
 static void
 digest_update_md5(union digest_state *const restrict state, const void *const restrict data, const size_t len)
 {
-	struct digest_context_md5 *const ctx = (struct digest_context_md5 *) state;
+	struct digest_context_md5 *const ctx = &state->md5_ctx;
 
 	if (! (data && len))
 		return;
@@ -245,7 +245,7 @@ digest_update_md5(union digest_state *const restrict state, const void *const re
 static void
 digest_final_md5(union digest_state *const restrict state, void *const restrict out)
 {
-	struct digest_context_md5 *const ctx = (struct digest_context_md5 *) state;
+	struct digest_context_md5 *const ctx = &state->md5_ctx;
 
 	unsigned char data[0x08U];
 

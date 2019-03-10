@@ -351,7 +351,7 @@ digest_transform_block_sha2_512(struct digest_context_sha2_512 *const ctx, const
 static void
 digest_init_sha2_256(union digest_state *const restrict state)
 {
-	struct digest_context_sha2_256 *const ctx = (struct digest_context_sha2_256 *) state;
+	struct digest_context_sha2_256 *const ctx = &state->sha2_256_ctx;
 
 	static const uint32_t iv[] = {
 
@@ -366,7 +366,7 @@ digest_init_sha2_256(union digest_state *const restrict state)
 static void
 digest_init_sha2_512(union digest_state *const restrict state)
 {
-	struct digest_context_sha2_512 *const ctx = (struct digest_context_sha2_512 *) state;
+	struct digest_context_sha2_512 *const ctx = &state->sha2_512_ctx;
 
 	static const uint64_t iv[] = {
 
@@ -384,7 +384,7 @@ static void
 digest_update_sha2_256(union digest_state *const restrict state,
                        const void *const restrict in, const size_t len)
 {
-	struct digest_context_sha2_256 *const ctx = (struct digest_context_sha2_256 *) state;
+	struct digest_context_sha2_256 *const ctx = &state->sha2_256_ctx;
 
 	if (! (in && len))
 		return;
@@ -440,7 +440,7 @@ static void
 digest_update_sha2_512(union digest_state *const restrict state,
                        const void *const restrict in, const size_t len)
 {
-	struct digest_context_sha2_512 *const ctx = (struct digest_context_sha2_512 *) state;
+	struct digest_context_sha2_512 *const ctx = &state->sha2_512_ctx;
 
 	if (! (in && len))
 		return;
@@ -495,7 +495,7 @@ digest_update_sha2_512(union digest_state *const restrict state,
 static void
 digest_final_sha2_256(union digest_state *const restrict state, void *const restrict out)
 {
-	struct digest_context_sha2_256 *const ctx = (struct digest_context_sha2_256 *) state;
+	struct digest_context_sha2_256 *const ctx = &state->sha2_256_ctx;
 
 	uint64_t usedspace = (ctx->count >> 0x03U) % DIGEST_BKLEN_SHA2_256;
 
@@ -545,7 +545,7 @@ digest_final_sha2_256(union digest_state *const restrict state, void *const rest
 static void
 digest_final_sha2_512(union digest_state *const restrict state, void *const restrict out)
 {
-	struct digest_context_sha2_512 *const ctx = (struct digest_context_sha2_512 *) state;
+	struct digest_context_sha2_512 *const ctx = &state->sha2_512_ctx;
 
 	uint64_t usedspace = ((ctx->count[0x00U] >> 0x03U) % DIGEST_BKLEN_SHA2_512);
 

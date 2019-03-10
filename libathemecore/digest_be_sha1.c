@@ -191,7 +191,7 @@ digest_transform_block_sha1(struct digest_context_sha1 *const restrict ctx, cons
 static void
 digest_init_sha1(union digest_state *const restrict state)
 {
-	struct digest_context_sha1 *const ctx = (struct digest_context_sha1 *) state;
+	struct digest_context_sha1 *const ctx = &state->sha1_ctx;
 
 	static const uint32_t iv[0x05U] = {
 
@@ -206,7 +206,7 @@ digest_init_sha1(union digest_state *const restrict state)
 static void
 digest_update_sha1(union digest_state *const restrict state, const void *const restrict data, size_t len)
 {
-	struct digest_context_sha1 *const ctx = (struct digest_context_sha1 *) state;
+	struct digest_context_sha1 *const ctx = &state->sha1_ctx;
 
 	if (! (data && len))
 		return;
@@ -240,7 +240,7 @@ digest_update_sha1(union digest_state *const restrict state, const void *const r
 static void
 digest_final_sha1(union digest_state *const restrict state, void *const restrict out)
 {
-	struct digest_context_sha1 *const ctx = (struct digest_context_sha1 *) state;
+	struct digest_context_sha1 *const ctx = &state->sha1_ctx;
 
 	static const unsigned char sep = 0x80U;
 	static const unsigned char pad = 0x00U;
