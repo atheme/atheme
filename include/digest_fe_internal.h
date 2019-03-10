@@ -67,13 +67,13 @@ typedef bool (*digest_final_fn)(union digest_state *, void *, size_t *) ATHEME_F
 struct digest_context
 {
 	union digest_state      state;
-	unsigned char           ikey[DIGEST_BKLEN_MAX];
-	unsigned char           okey[DIGEST_BKLEN_MAX];
 	digest_init_fn          init;
 	digest_update_fn        update;
 	digest_final_fn         final;
 	size_t                  blksz;
 	size_t                  digsz;
+	unsigned char           ikey[DIGEST_BKLEN_MAX];
+	unsigned char           okey[DIGEST_BKLEN_MAX];
 	bool                    hmac;
 };
 
