@@ -71,7 +71,8 @@ digest_init(struct digest_context *const restrict ctx, const enum digest_algorit
 			break;
 	}
 
-	return ctx->init(&ctx->state);
+	(void) ctx->init(&ctx->state);
+	return true;
 }
 
 bool ATHEME_FATTR_WUR
@@ -84,16 +85,13 @@ digest_init_hmac(struct digest_context *const restrict ctx, const enum digest_al
 		return false;
 	}
 
-	if (! digest_init(ctx, alg))
-		return false;
+	(void) digest_init(ctx, alg);
 
 	if (key && keyLen)
 	{
 		if (keyLen > ctx->blksz)
 		{
-			if (! digest_oneshot(alg, key, keyLen, ctx->ikey, NULL))
-				return false;
-
+			(void) digest_oneshot(alg, key, keyLen, ctx->ikey, NULL);
 			(void) memcpy(ctx->okey, ctx->ikey, ctx->blksz);
 		}
 		else
@@ -111,7 +109,8 @@ digest_init_hmac(struct digest_context *const restrict ctx, const enum digest_al
 
 	ctx->hmac = true;
 
-	return ctx->update(&ctx->state, ctx->ikey, ctx->blksz);
+	(void) ctx->update(&ctx->state, ctx->ikey, ctx->blksz);
+	return true;
 }
 
 bool ATHEME_FATTR_WUR
@@ -122,21 +121,16 @@ digest_update(struct digest_context *const restrict ctx, const void *const restr
 		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
 		return false;
 	}
-	if (! ctx->update)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx->update' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
 	if ((! data && dataLen) || (data && ! dataLen))
 	{
 		(void) slog(LG_ERROR, "%s: called with mismatched data parameters (BUG)", MOWGLI_FUNC_NAME);
 		return false;
 	}
 
-	if (! (data && dataLen))
-		return true;
+	if (data && dataLen)
+		(void) ctx->update(&ctx->state, data, dataLen);
 
-	return ctx->update(&ctx->state, data, dataLen);
+	return true;
 }
 
 bool ATHEME_FATTR_WUR
@@ -152,11 +146,6 @@ digest_final(struct digest_context *const restrict ctx, void *const restrict out
 		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", MOWGLI_FUNC_NAME);
 		return false;
 	}
-	if (! ctx->final)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx->final' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
 	if (outLen && *outLen < ctx->digsz)
 	{
 		(void) slog(LG_ERROR, "%s: output buffer is too small (BUG)", MOWGLI_FUNC_NAME);
@@ -170,22 +159,15 @@ digest_final(struct digest_context *const restrict ctx, void *const restrict out
 	{
 		unsigned char inner_digest[DIGEST_MDLEN_MAX];
 
-		if (! ctx->final(&ctx->state, inner_digest))
-			return false;
-
-		if (! ctx->init(&ctx->state))
-			return false;
-
-		if (! ctx->update(&ctx->state, ctx->okey, ctx->blksz))
-			return false;
-
-		if (! ctx->update(&ctx->state, inner_digest, ctx->digsz))
-			return false;
-
+		(void) ctx->final(&ctx->state, inner_digest);
+		(void) ctx->init(&ctx->state);
+		(void) ctx->update(&ctx->state, ctx->okey, ctx->blksz);
+		(void) ctx->update(&ctx->state, inner_digest, ctx->digsz);
 		(void) smemzero(inner_digest, sizeof inner_digest);
 	}
 
-	return ctx->final(&ctx->state, out);
+	(void) ctx->final(&ctx->state, out);
+	return true;
 }
 
 bool ATHEME_FATTR_WUR
@@ -262,31 +244,30 @@ digest_oneshot_pbkdf2(const enum digest_algorithm alg, const void *const restric
 	if (! c)
 	{
 		(void) slog(LG_ERROR, "%s: called with zero 'c' (BUG)", MOWGLI_FUNC_NAME);
-		goto error;
+		return false;
 	}
 	if (! dk)
 	{
 		(void) slog(LG_ERROR, "%s: called with NULL 'dk' (BUG)", MOWGLI_FUNC_NAME);
-		goto error;
+		return false;
 	}
 	if (! dkLen)
 	{
 		(void) slog(LG_ERROR, "%s: called with zero 'dkLen' (BUG)", MOWGLI_FUNC_NAME);
-		goto error;
+		return false;
 	}
 	if ((! pass && passLen) || (pass && ! passLen))
 	{
 		(void) slog(LG_ERROR, "%s: called with mismatched pass parameters (BUG)", MOWGLI_FUNC_NAME);
-		goto error;
+		return false;
 	}
 	if ((! salt && saltLen) || (salt && ! saltLen))
 	{
 		(void) slog(LG_ERROR, "%s: called with mismatched salt parameters (BUG)", MOWGLI_FUNC_NAME);
-		goto error;
+		return false;
 	}
 
-	if (! digest_init_hmac(&ctx, alg, pass, passLen))
-		goto error;
+	(void) digest_init_hmac(&ctx, alg, pass, passLen);
 
 	const size_t hLen = ctx.digsz;
 	size_t odkLen = dkLen;
@@ -297,30 +278,17 @@ digest_oneshot_pbkdf2(const enum digest_algorithm alg, const void *const restric
 		const uint32_t ibe = htonl(i);
 		const size_t cpLen = (odkLen > hLen) ? hLen : odkLen;
 
-		if (! ctx.update(&ctx.state, salt, saltLen))
-			goto error;
-
-		if (! ctx.update(&ctx.state, &ibe, sizeof ibe))
-			goto error;
-
-		if (! digest_final(&ctx, dtmp, NULL))
-			goto error;
-
+		(void) ctx.update(&ctx.state, salt, saltLen);
+		(void) ctx.update(&ctx.state, &ibe, sizeof ibe);
+		(void) digest_final(&ctx, dtmp, NULL);
 		(void) memcpy(odk, dtmp, cpLen);
 
 		for (size_t j = 1; j < c; j++)
 		{
-			if (! ctx.init(&ctx.state))
-				goto error;
-
-			if (! ctx.update(&ctx.state, ctx.ikey, ctx.blksz))
-				goto error;
-
-			if (! ctx.update(&ctx.state, dtmp, hLen))
-				goto error;
-
-			if (! digest_final(&ctx, dtmp, NULL))
-				goto error;
+			(void) ctx.init(&ctx.state);
+			(void) ctx.update(&ctx.state, ctx.ikey, ctx.blksz);
+			(void) ctx.update(&ctx.state, dtmp, hLen);
+			(void) digest_final(&ctx, dtmp, NULL);
 
 			for (size_t k = 0; k < cpLen; k++)
 				odk[k] ^= dtmp[k];
@@ -332,20 +300,11 @@ digest_oneshot_pbkdf2(const enum digest_algorithm alg, const void *const restric
 		if (! odkLen)
 			break;
 
-		if (! ctx.init(&ctx.state))
-			goto error;
-
-		if (! ctx.update(&ctx.state, ctx.ikey, ctx.blksz))
-			goto error;
+		(void) ctx.init(&ctx.state);
+		(void) ctx.update(&ctx.state, ctx.ikey, ctx.blksz);
 	}
 
 	(void) smemzero(&ctx, sizeof ctx);
 	(void) smemzero(dtmp, sizeof dtmp);
 	return true;
-
-error:
-	(void) smemzero(&ctx, sizeof ctx);
-	(void) smemzero(dtmp, sizeof dtmp);
-	(void) smemzero(dk, dkLen);
-	return false;
 }

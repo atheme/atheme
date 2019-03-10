@@ -182,16 +182,10 @@ process_words_md5(struct digest_context_md5 *const ctx, const unsigned char *dat
 	(void) smemzero(&t, sizeof t);
 }
 
-static bool ATHEME_FATTR_WUR
+static void
 digest_init_md5(union digest_state *const restrict state)
 {
 	struct digest_context_md5 *const ctx = (struct digest_context_md5 *) state;
-
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
 
 	static const uint32_t iv[] = {
 
@@ -200,23 +194,15 @@ digest_init_md5(union digest_state *const restrict state)
 
 	(void) memset(ctx, 0x00U, sizeof *ctx);
 	(void) memcpy(ctx->state, iv, sizeof iv);
-
-	return true;
 }
 
-static bool ATHEME_FATTR_WUR
+static void
 digest_update_md5(union digest_state *const restrict state, const void *const restrict data, const size_t len)
 {
 	struct digest_context_md5 *const ctx = (struct digest_context_md5 *) state;
 
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-
 	if (! (data && len))
-		return true;
+		return;
 
 	const size_t off = (size_t) (ctx->count[0x00U] >> 0x03U) & (DIGEST_BKLEN_MD5 - 1);
 	const uint32_t nbits = (uint32_t) (len << 0x03U);
@@ -236,7 +222,7 @@ digest_update_md5(union digest_state *const restrict state, const void *const re
 		(void) memcpy(ctx->buf + off, ptr, amt);
 
 		if ((off + amt) < DIGEST_BKLEN_MD5)
-			return true;
+			return;
 
 		(void) process_words_md5(ctx, ctx->buf);
 
@@ -254,25 +240,12 @@ digest_update_md5(union digest_state *const restrict state, const void *const re
 
 	if (rem)
 		(void) memcpy(ctx->buf, ptr, rem);
-
-	return true;
 }
 
-static bool ATHEME_FATTR_WUR
+static void
 digest_final_md5(union digest_state *const restrict state, void *const restrict out)
 {
 	struct digest_context_md5 *const ctx = (struct digest_context_md5 *) state;
-
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-	if (! out)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
 
 	unsigned char data[0x08U];
 
@@ -290,11 +263,8 @@ digest_final_md5(union digest_state *const restrict state, void *const restrict 
 
 	const size_t padsz = ((DIGEST_BKLEN_MD5 - 0x09U) - (ctx->count[0x00U] >> 0x03U)) & (DIGEST_BKLEN_MD5 - 0x01U);
 
-	if (! digest_update_md5(state, padding, padsz + 0x01U))
-		return false;
-
-	if (! digest_update_md5(state, data, sizeof data))
-		return false;
+	(void) digest_update_md5(state, padding, padsz + 0x01U);
+	(void) digest_update_md5(state, data, sizeof data);
 
 	unsigned char *const digest = out;
 
@@ -303,6 +273,4 @@ digest_final_md5(union digest_state *const restrict state, void *const restrict 
 
 	(void) smemzero(data, sizeof data);
 	(void) smemzero(ctx, sizeof *ctx);
-
-	return true;
 }

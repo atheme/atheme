@@ -348,16 +348,10 @@ digest_transform_block_sha2_512(struct digest_context_sha2_512 *const ctx, const
 	(void) smemzero(s, sizeof s);
 }
 
-static bool ATHEME_FATTR_WUR
+static void
 digest_init_sha2_256(union digest_state *const restrict state)
 {
 	struct digest_context_sha2_256 *const ctx = (struct digest_context_sha2_256 *) state;
-
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
 
 	static const uint32_t iv[] = {
 
@@ -367,20 +361,12 @@ digest_init_sha2_256(union digest_state *const restrict state)
 
 	(void) memset(ctx, 0x00U, sizeof *ctx);
 	(void) memcpy(ctx->state, iv, sizeof iv);
-
-	return true;
 }
 
-static bool ATHEME_FATTR_WUR
+static void
 digest_init_sha2_512(union digest_state *const restrict state)
 {
 	struct digest_context_sha2_512 *const ctx = (struct digest_context_sha2_512 *) state;
-
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
 
 	static const uint64_t iv[] = {
 
@@ -392,24 +378,16 @@ digest_init_sha2_512(union digest_state *const restrict state)
 
 	(void) memset(ctx, 0x00U, sizeof *ctx);
 	(void) memcpy(ctx->state, iv, sizeof iv);
-
-	return true;
 }
 
-static bool ATHEME_FATTR_WUR
+static void
 digest_update_sha2_256(union digest_state *const restrict state,
                        const void *const restrict in, const size_t len)
 {
 	struct digest_context_sha2_256 *const ctx = (struct digest_context_sha2_256 *) state;
 
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-
 	if (! (in && len))
-		return true;
+		return;
 
 	const unsigned char *ptr = in;
 	size_t rem = len;
@@ -436,7 +414,7 @@ digest_update_sha2_256(union digest_state *const restrict state,
 
 			ctx->count += (rem << 0x03U);
 
-			return true;
+			return;
 		}
 	}
 
@@ -456,24 +434,16 @@ digest_update_sha2_256(union digest_state *const restrict state,
 
 		ctx->count += (rem << 0x03U);
 	}
-
-	return true;
 }
 
-static bool ATHEME_FATTR_WUR
+static void
 digest_update_sha2_512(union digest_state *const restrict state,
                        const void *const restrict in, const size_t len)
 {
 	struct digest_context_sha2_512 *const ctx = (struct digest_context_sha2_512 *) state;
 
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-
 	if (! (in && len))
-		return true;
+		return;
 
 	const unsigned char *ptr = in;
 	size_t rem = len;
@@ -500,7 +470,7 @@ digest_update_sha2_512(union digest_state *const restrict state,
 
 			SHA2_512_ADDINC128(ctx->count, (rem << 0x03U));
 
-			return true;
+			return;
 		}
 	}
 
@@ -520,25 +490,12 @@ digest_update_sha2_512(union digest_state *const restrict state,
 
 		SHA2_512_ADDINC128(ctx->count, (rem << 0x03U));
 	}
-
-	return true;
 }
 
-static bool ATHEME_FATTR_WUR
+static void
 digest_final_sha2_256(union digest_state *const restrict state, void *const restrict out)
 {
 	struct digest_context_sha2_256 *const ctx = (struct digest_context_sha2_256 *) state;
-
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-	if (! out)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
 
 	uint64_t usedspace = (ctx->count >> 0x03U) % DIGEST_BKLEN_SHA2_256;
 
@@ -583,25 +540,12 @@ digest_final_sha2_256(union digest_state *const restrict state, void *const rest
 		SHA2_256_REVERSE32(ctx->state[i], *d++);
 
 	(void) smemzero(ctx, sizeof *ctx);
-
-	return true;
 }
 
-static bool ATHEME_FATTR_WUR
+static void
 digest_final_sha2_512(union digest_state *const restrict state, void *const restrict out)
 {
 	struct digest_context_sha2_512 *const ctx = (struct digest_context_sha2_512 *) state;
-
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-	if (! out)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
 
 	uint64_t usedspace = ((ctx->count[0x00U] >> 0x03U) % DIGEST_BKLEN_SHA2_512);
 
@@ -650,6 +594,4 @@ digest_final_sha2_512(union digest_state *const restrict state, void *const rest
 		SHA2_512_REVERSE64(ctx->state[i], *d++);
 
 	(void) smemzero(ctx, sizeof *ctx);
-
-	return true;
 }

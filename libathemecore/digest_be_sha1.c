@@ -188,16 +188,10 @@ digest_transform_block_sha1(struct digest_context_sha1 *const restrict ctx, cons
 	(void) smemzero(s, sizeof s);
 }
 
-static bool ATHEME_FATTR_WUR
+static void
 digest_init_sha1(union digest_state *const restrict state)
 {
 	struct digest_context_sha1 *const ctx = (struct digest_context_sha1 *) state;
-
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
 
 	static const uint32_t iv[0x05U] = {
 
@@ -207,23 +201,15 @@ digest_init_sha1(union digest_state *const restrict state)
 
 	(void) memset(ctx, 0x00U, sizeof *ctx);
 	(void) memcpy(ctx->state, iv, sizeof iv);
-
-	return true;
 }
 
-static bool ATHEME_FATTR_WUR
+static void
 digest_update_sha1(union digest_state *const restrict state, const void *const restrict data, size_t len)
 {
 	struct digest_context_sha1 *const ctx = (struct digest_context_sha1 *) state;
 
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-
 	if (! (data && len))
-		return true;
+		return;
 
 	const unsigned char *const ptr = data;
 
@@ -249,24 +235,12 @@ digest_update_sha1(union digest_state *const restrict state, const void *const r
 	}
 
 	(void) memcpy(ctx->buf + j, ptr + i, len - i);
-	return true;
 }
 
-static bool ATHEME_FATTR_WUR
+static void
 digest_final_sha1(union digest_state *const restrict state, void *const restrict out)
 {
 	struct digest_context_sha1 *const ctx = (struct digest_context_sha1 *) state;
-
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-	if (! out)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
 
 	static const unsigned char sep = 0x80U;
 	static const unsigned char pad = 0x00U;
@@ -279,15 +253,12 @@ digest_final_sha1(union digest_state *const restrict state, void *const restrict
 	for (uint32_t i = 0x04U; i < 0x08U; i++)
 		data[i] = (unsigned char) ((ctx->count[0x00U] >> ((0x03U - (i & 0x03U)) * 0x08U)) & 0xFFU);
 
-	if (! digest_update_sha1(state, &sep, sizeof sep))
-		return false;
+	(void) digest_update_sha1(state, &sep, sizeof sep);
 
 	while ((ctx->count[0] & 0x1F8U) != 0x1C0U)
-		if (! digest_update_sha1(state, &pad, sizeof pad))
-			return false;
+		(void) digest_update_sha1(state, &pad, sizeof pad);
 
-	if (! digest_update_sha1(state, data, sizeof data))
-		return false;
+	(void) digest_update_sha1(state, data, sizeof data);
 
 	unsigned char *const digest = out;
 
@@ -296,6 +267,4 @@ digest_final_sha1(union digest_state *const restrict state, void *const restrict
 
 	(void) smemzero(data, sizeof data);
 	(void) smemzero(ctx, sizeof *ctx);
-
-	return true;
 }

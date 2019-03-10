@@ -60,16 +60,12 @@ union digest_state
 	struct digest_context_sha2_512  sha512ctx;
 };
 
-typedef bool (*digest_init_fn)(union digest_state *) ATHEME_FATTR_WUR;
-typedef bool (*digest_update_fn)(union digest_state *, const void *, size_t) ATHEME_FATTR_WUR;
-typedef bool (*digest_final_fn)(union digest_state *, void *) ATHEME_FATTR_WUR;
-
 struct digest_context
 {
 	union digest_state      state;
-	digest_init_fn          init;
-	digest_update_fn        update;
-	digest_final_fn         final;
+	void                  (*init)(union digest_state *);
+	void                  (*update)(union digest_state *, const void *, size_t);
+	void                  (*final)(union digest_state *, void *);
 	size_t                  blksz;
 	size_t                  digsz;
 	unsigned char           ikey[DIGEST_BKLEN_MAX];
