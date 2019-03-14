@@ -16,7 +16,7 @@
 #include <openssl/ecdsa.h>
 #include <openssl/evp.h>
 
-#define CHALLENGE_LENGTH	DIGEST_MDLEN_SHA2_256
+#define CHALLENGE_LENGTH	32U
 #define CURVE_IDENTIFIER	NID_X9_62_prime256v1
 
 struct sasl_ecdsa_nist256p_challenge_session
@@ -134,7 +134,7 @@ sasl_mech_ecdsa_step_verify_signature(struct sasl_session *const restrict p,
 {
 	struct sasl_ecdsa_nist256p_challenge_session *const s = p->mechdata;
 
-	const int ret = ECDSA_verify(0, s->challenge, CHALLENGE_LENGTH, in->buf, (int) in->len, s->pubkey);
+	const int ret = ECDSA_verify(0, s->challenge, sizeof s->challenge, in->buf, (int) in->len, s->pubkey);
 
 	if (ret == 1)
 		return ASASL_MRESULT_SUCCESS;
