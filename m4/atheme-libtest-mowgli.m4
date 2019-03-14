@@ -18,11 +18,10 @@ AC_DEFUN([ATHEME_LIBTEST_MOWGLI], [
 
 	AS_IF([test "x${with_libmowgli}" = "xyes"], [], [test "x${with_libmowgli}" = "xno"], [
 		MOWGLI_SOURCE="Internal"
-		LIBMOWGLI_COND_D="libmowgli-2"
-		AC_SUBST([LIBMOWGLI_COND_D])
 		CPPFLAGS="${CPPFLAGS} -I$(pwd)/libmowgli-2/src/libmowgli"
 		LDFLAGS="${LDFLAGS} -L$(pwd)/libmowgli-2/src/libmowgli"
 		LIBS="${LIBS} -lmowgli-2"
+		ATHEME_COND_LIBMOWGLI_SUBMODULE_ENABLE
 	], [
 		MOWGLI_SOURCE="System"
 		CPPFLAGS="${CPPFLAGS} -I${with_libmowgli}/include/libmowgli-2"

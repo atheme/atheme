@@ -9,9 +9,8 @@ AC_DEFUN([ATHEME_FEATURETEST_LEGACY_PWCRYPTO], [
 	case "x${enable_legacy_pwcrypto}" in
 		xyes)
 			LEGACY_PWCRYPTO="Yes"
-			LEGACY_PWCRYPTO_COND_C="crypt3-des.c crypt3-md5.c ircservices.c rawmd5.c rawsha1.c"
 			AC_DEFINE([ATHEME_ENABLE_LEGACY_PWCRYPTO], [1], [Define to 1 if --enable-legacy-pwcrypto was given to ./configure])
-			AC_SUBST([LEGACY_PWCRYPTO_COND_C])
+			ATHEME_COND_LEGACY_PWCRYPTO_ENABLE
 			;;
 		xno)
 			LEGACY_PWCRYPTO="No"

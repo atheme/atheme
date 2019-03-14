@@ -150,9 +150,8 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 		], [
 			AC_MSG_RESULT([yes])
 			AC_DEFINE([HAVE_LIBCRYPTO_ECDSA], [1], [Define to 1 if libcrypto has usable elliptic curve key construction and signature verification functions])
+			ATHEME_COND_ECDSA_TOOLS_ENABLE
 			LIBCRYPTO_USABLE="Yes"
-			ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
-			AC_SUBST([ECDSA_TOOLS_COND_D])
 		], [
 			AC_MSG_RESULT([no])
 		])

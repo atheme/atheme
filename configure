@@ -10302,9 +10302,12 @@ $as_echo "yes" >&6; }
 
 $as_echo "#define HAVE_LIBCRYPTO_ECDSA 1" >>confdefs.h
 
-			LIBCRYPTO_USABLE="Yes"
-			ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
 
+
+	ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
+
+
+			LIBCRYPTO_USABLE="Yes"
 
 else
 
@@ -11848,7 +11851,6 @@ fi
 
 
 	LIBQRENCODE="No"
-	QRCODE_COND_C=""
 
 
 # Check whether --with-qrencode was given.
@@ -11992,9 +11994,12 @@ if ac_fn_c_try_link "$LINENO"; then :
 					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 					LIBQRENCODE="Yes"
-					QRCODE_COND_C="qrcode.c"
 
 $as_echo "#define HAVE_LIBQRENCODE 1" >>confdefs.h
+
+
+
+	QRCODE_COND_C="qrcode.c"
 
 
 
@@ -12551,7 +12556,10 @@ fi
 
 fi
 
-			PERL_COND_D="perl"
+
+
+	PERL_COND_D="perl"
+
 
 		else
 			LIBPERL="No"
@@ -12575,7 +12583,6 @@ fi
 
 
 	CONTRIB_MODULES="No"
-	CONTRIB_COND_D=""
 
 	# Check whether --enable-contrib was given.
 if test "${enable_contrib+set}" = set; then :
@@ -12819,9 +12826,12 @@ fi
 
 
 			CONTRIB_MODULES="Yes"
-			CONTRIB_COND_D="contrib"
 
 $as_echo "#define ATHEME_ENABLE_CONTRIB 1" >>confdefs.h
+
+
+
+	CONTRIB_COND_D="contrib"
 
 
 			;;
@@ -12944,9 +12954,12 @@ fi
 	case "x${enable_legacy_pwcrypto}" in
 		xyes)
 			LEGACY_PWCRYPTO="Yes"
-			LEGACY_PWCRYPTO_COND_C="crypt3-des.c crypt3-md5.c ircservices.c rawmd5.c rawsha1.c"
 
 $as_echo "#define ATHEME_ENABLE_LEGACY_PWCRYPTO 1" >>confdefs.h
+
+
+
+	LEGACY_PWCRYPTO_COND_C="crypt3-des.c crypt3-md5.c ircservices.c rawmd5.c rawsha1.c"
 
 
 			;;
@@ -17714,11 +17727,14 @@ fi
 elif test "x${with_libmowgli}" = "xno"; then :
 
 		MOWGLI_SOURCE="Internal"
-		LIBMOWGLI_COND_D="libmowgli-2"
-
 		CPPFLAGS="${CPPFLAGS} -I$(pwd)/libmowgli-2/src/libmowgli"
 		LDFLAGS="${LDFLAGS} -L$(pwd)/libmowgli-2/src/libmowgli"
 		LIBS="${LIBS} -lmowgli-2"
+
+
+	LIBMOWGLI_COND_D="libmowgli-2"
+
+
 
 else
 
