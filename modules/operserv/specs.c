@@ -77,7 +77,6 @@ os_cmd_specs(struct sourceinfo *si, int parc, char *parv[])
 			{ PRIV_NOOP, N_("NOOP access") },
 			{ PRIV_GLOBAL, N_("send global notices") },
 			{ PRIV_GRANT, N_("edit oper privileges") },
-			{ PRIV_OVERRIDE, N_("perform actions as any other user") },
 			{ NULL, NULL },
 		}
 	};

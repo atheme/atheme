@@ -38,6 +38,13 @@ POTENTIAL COMPATIBILITY BREAKAGE
   completely finished and never worked anyway. Please remove this module from
   your configuration file, regardless of the version of services you are using.
 
+- The `modules/operserv/override` module has been removed. It did not provide
+  sufficient transparency to users while providing a great potential for abuse.
+  Additionally, it caused crashes if used with certain commands. Any legitimate
+  use of this module should be possible to replace with a more specific command
+  (such as `modules/chanserv/fflags`). If you encounter a use case that cannot
+  be replaced, please report a bug to let us know.
+
 Security
 --------
 - Services now accepts email addresses that may contain shell metacharacters.

@@ -485,7 +485,6 @@ loadmodule "modules/chanserv/antiflood";
  * MODRELOAD command                            modules/operserv/modreload
  * MODUNLOAD command                            modules/operserv/modunload
  * NOOP system                                  modules/operserv/noop
- * Override access (OVERRIDE command)           modules/operserv/override
  * Regex mass akill (RAKILL command)            modules/operserv/rakill
  * RAW command                                  modules/operserv/raw
  * READONLY command                             modules/operserv/readonly
@@ -522,7 +521,6 @@ loadmodule "modules/operserv/modload";
 loadmodule "modules/operserv/modunload";
 loadmodule "modules/operserv/modreload";
 loadmodule "modules/operserv/noop";
-#loadmodule "modules/operserv/override";
 #loadmodule "modules/operserv/rakill";
 loadmodule "modules/operserv/readonly";
 loadmodule "modules/operserv/rehash";
@@ -2451,7 +2449,6 @@ operclass "sra" {
 		#operserv:akill-anymask;
 		operserv:noop;
 		operserv:grant;
-		#operserv:override;
 	};
 
 	/* needoper
