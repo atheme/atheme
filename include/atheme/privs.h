@@ -49,7 +49,6 @@
 #define PRIV_NOOP            "operserv:noop"
 #define PRIV_GLOBAL          "operserv:global"
 #define PRIV_GRANT           "operserv:grant"
-#define PRIV_OVERRIDE        "operserv:override"
 /* saslserv */
 #define PRIV_IMPERSONATE_CLASS_FMT	"impersonate:class:%s"
 #define PRIV_IMPERSONATE_ENTITY_FMT	"impersonate:entity:%s"
