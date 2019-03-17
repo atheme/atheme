@@ -113,7 +113,6 @@ modules/contrib/wumpus.c
 modules/gameserv/dice.c
 modules/gameserv/eightball.c
 modules/gameserv/gamecalc.c
-modules/gameserv/happyfarm.c
 modules/gameserv/help.c
 modules/gameserv/lottery.c
 modules/gameserv/namegen.c
@@ -242,7 +241,6 @@ modules/operserv/modload.c
 modules/operserv/modreload.c
 modules/operserv/modunload.c
 modules/operserv/noop.c
-modules/operserv/override.c
 modules/operserv/rakill.c
 modules/operserv/raw.c
 modules/operserv/readonly.c
@@ -266,6 +264,8 @@ modules/rpgserv/info.c
 modules/rpgserv/list.c
 modules/rpgserv/search.c
 modules/rpgserv/set.c
+modules/saslserv/ecdh-x25519-challenge.c
+modules/saslserv/main.c
 modules/scripting/perl/api/perl_command.c
 modules/scripting/perl/perl_module.c
 modules/statserv/channel.c

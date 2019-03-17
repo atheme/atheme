@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-01-11 19:09+0000\n"
+"POT-Creation-Date: 2019-03-17 22:04+0000\n"
 "PO-Revision-Date: 2011-11-17 23:38+0000\n"
 "Last-Translator: mickeyunagee <m@sr.dk>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -334,7 +334,7 @@ msgid "%s can now take ownership of %s."
 msgstr "%s er allerede tildelt til %s."
 
 #: modules/chanserv/invite.c:21 modules/chanserv/unban_self.c:26
-#: modules/contrib/os_testproc.c:69 modules/hostserv/drop.c:24
+#: modules/contrib/os_testproc.c:72 modules/hostserv/drop.c:24
 #: modules/hostserv/group.c:23 modules/hostserv/onoff.c:22
 #: modules/hostserv/onoff.c:59 modules/nickserv/group.c:21
 #: modules/nickserv/identify.c:35 modules/operserv/identify.c:28
@@ -350,11 +350,6 @@ msgstr "%s kan ikke lukkes."
 #: modules/operserv/modinspect.c:38
 #, c-format
 msgid "%s cannot be inspected."
-msgstr ""
-
-#: modules/operserv/override.c:215
-#, c-format
-msgid "%s cannot be used as an override service."
 msgstr ""
 
 #: modules/groupserv/acsnolimit.c:57
@@ -510,11 +505,6 @@ msgstr "%s har ikke nogen bot."
 msgid "%s does not wish to have flags in any groups."
 msgstr ""
 
-#: modules/operserv/override.c:192
-#, c-format
-msgid "%s doesn't have any founders."
-msgstr ""
-
 #: modules/chanserv/set_fantasy.c:51
 #, c-format
 msgid "%s enabled the FANTASY flag"
@@ -591,7 +581,7 @@ msgstr ""
 msgid "%s has NOFIX enabled."
 msgstr "%s er nu genaabnet."
 
-#: modules/contrib/dnsbl.c:162 modules/proxyscan/dnsbl.c:181
+#: modules/contrib/dnsbl.c:165 modules/proxyscan/dnsbl.c:181
 #, c-format
 msgid "%s has already been entered into the DNSBL exempts list."
 msgstr ""
@@ -916,7 +906,7 @@ msgstr "%s er allerede en bot eller service."
 msgid "%s is already the founder of %s."
 msgstr ""
 
-#: modules/operserv/specs.c:136
+#: modules/operserv/specs.c:135
 #, c-format
 msgid "%s is an internal client."
 msgstr ""
@@ -1048,18 +1038,17 @@ msgstr "%s er ikke registreret."
 
 #: modules/groupserv/fflags.c:43 modules/groupserv/flags.c:86
 #: modules/groupserv/invite.c:47 modules/nickserv/main.c:21
-#: modules/operserv/override.c:200
 #, c-format
 msgid "%s is not a registered account."
 msgstr ""
 
-#: modules/chanserv/taxonomy.c:30 modules/operserv/override.c:173
+#: modules/chanserv/taxonomy.c:30
 #, c-format
 msgid "%s is not a registered channel."
 msgstr ""
 
 #: modules/nickserv/enforce.c:308 modules/nickserv/enforce.c:419
-#: modules/nickserv/ghost.c:47 modules/nickserv/identify.c:57
+#: modules/nickserv/ghost.c:47 modules/nickserv/identify.c:63
 #, c-format
 msgid "%s is not a registered nickname."
 msgstr ""
@@ -1067,11 +1056,6 @@ msgstr ""
 #: modules/operserv/clearchan.c:57
 #, c-format
 msgid "%s is not a valid action"
-msgstr ""
-
-#: modules/operserv/override.c:222
-#, c-format
-msgid "%s is not a valid command."
 msgstr ""
 
 #: modules/chanserv/set_email.c:49 modules/groupserv/set_email.c:47
@@ -1109,11 +1093,6 @@ msgstr ""
 #: modules/operserv/jupe.c:29
 #, c-format
 msgid "%s is not a valid server name."
-msgstr ""
-
-#: modules/operserv/override.c:208
-#, c-format
-msgid "%s is not a valid service."
 msgstr ""
 
 #: modules/rpgserv/set.c:113
@@ -1191,7 +1170,7 @@ msgstr ""
 msgid "%s is not on %s."
 msgstr ""
 
-#: modules/operserv/akill.c:146 modules/operserv/specs.c:126
+#: modules/operserv/akill.c:146 modules/operserv/specs.c:125
 #, c-format
 msgid "%s is not on IRC."
 msgstr ""
@@ -1255,7 +1234,7 @@ msgstr "%s er ikke registreret."
 #: modules/chanserv/access.c:778 modules/chanserv/access.c:925
 #: modules/chanserv/fflags.c:67 modules/chanserv/flags.c:301
 #: modules/chanserv/flags.c:375 modules/chanserv/ftransfer.c:32
-#: modules/chanserv/set_founder.c:52 modules/contrib/cs_access_alias.c:178
+#: modules/chanserv/set_founder.c:52 modules/contrib/cs_access_alias.c:181
 #: modules/contrib/cs_userinfo.c:30 modules/contrib/cs_userinfo.c:77
 #: modules/contrib/ns_fenforce.c:26 modules/contrib/ns_forbid.c:74
 #: modules/hostserv/vhost.c:31 modules/hostserv/vhostnick.c:36
@@ -1380,7 +1359,7 @@ msgstr ""
 msgid "%s is the services server; it cannot be jupitered!"
 msgstr ""
 
-#: modules/operserv/specs.c:131
+#: modules/operserv/specs.c:130
 #, c-format
 msgid "%s is unprivileged."
 msgstr ""
@@ -1465,7 +1444,7 @@ msgid ""
 "has been received and should be reviewed shortly."
 msgstr ""
 
-#: modules/gameserv/dice.c:484
+#: modules/gameserv/dice.c:482
 #, c-format
 msgid "%s rolled %ud%u: "
 msgstr ""
@@ -1610,17 +1589,17 @@ msgstr ""
 msgid "CLEARCHAN: Not klining exempt user %s!%s@%s"
 msgstr ""
 
-#: modules/backend/opensex.c:292
+#: modules/backend/opensex.c:288
 #, c-format
 msgid "DATABASE ERROR: db-open-read: cannot open '%s' for reading: %s"
 msgstr "DATABASE FEJL: db-open-read: kan ikke aabne '%s' for at laese: %s"
 
-#: modules/backend/opensex.c:348
+#: modules/backend/opensex.c:344
 #, c-format
 msgid "DATABASE ERROR: db-open-write: cannot open '%s' for writing: %s"
 msgstr "DATABASE FEJL: db-open-write: kan ikke aabne '%s' for at skrive: %s"
 
-#: modules/backend/opensex.c:404
+#: modules/backend/opensex.c:400
 #, c-format
 msgid ""
 "DATABASE ERROR: db_save(): cannot rename services.db.new to services.db: %s"
@@ -1694,12 +1673,12 @@ msgstr "Valgmulig: Privat"
 msgid "  Used on : %zu channel(s)"
 msgstr "Brugt paa: %zu kanal(er)"
 
-#: modules/gameserv/dice.c:496
+#: modules/gameserv/dice.c:494
 #, c-format
 msgid " <Total: %g(%c%u) = "
 msgstr ""
 
-#: modules/gameserv/dice.c:493
+#: modules/gameserv/dice.c:491
 #, c-format
 msgid " <Total: %g>"
 msgstr ""
@@ -1734,12 +1713,12 @@ msgstr ""
 msgid "%-5d %-22s %s"
 msgstr "%-5d %-22s %s"
 
-#: modules/contrib/cs_access_alias.c:132
+#: modules/contrib/cs_access_alias.c:135
 #, c-format
 msgid "%-5d %-22s %s (%s) [modified %s ago]"
 msgstr ""
 
-#: modules/contrib/cs_access_alias.c:135
+#: modules/contrib/cs_access_alias.c:138
 #, c-format
 msgid "%-5d %-22s %s [modified %s ago]"
 msgstr ""
@@ -2066,7 +2045,7 @@ msgstr ""
 msgid "%u: %s [Split %s ago]"
 msgstr ""
 
-#: modules/operserv/specs.c:181
+#: modules/operserv/specs.c:180
 msgid "(no privileges held)"
 msgstr ""
 
@@ -2567,10 +2546,6 @@ msgstr ""
 msgid "Both users must exist for @compare"
 msgstr ""
 
-#: modules/gameserv/happyfarm.c:413
-msgid "Buy a plot of land!"
-msgstr ""
-
 #: modules/operserv/set.c:301
 #, c-format
 msgid "CHANEXPIRE must be a positive integer, %s is invalid"
@@ -2611,7 +2586,7 @@ msgstr ""
 msgid "COMMITINTERVAL must be a positive integer, %s is invalid"
 msgstr ""
 
-#: modules/gameserv/dice.c:604
+#: modules/gameserv/dice.c:602
 msgid "Calculate stuff."
 msgstr ""
 
@@ -2620,7 +2595,7 @@ msgstr ""
 msgid "Can unload : %s"
 msgstr ""
 
-#: modules/gameserv/dice.c:478
+#: modules/gameserv/dice.c:476
 msgid "Can't divide by zero."
 msgstr ""
 
@@ -2725,12 +2700,16 @@ msgstr ""
 msgid "Changes the state of read-only mode for services."
 msgstr ""
 
-#: modules/contrib/dnsbl.c:569 modules/proxyscan/dnsbl.c:598
+#: modules/contrib/dnsbl.c:572 modules/proxyscan/dnsbl.c:598
 msgid "Changes what happens to a user when they hit a DNSBL."
 msgstr ""
 
 #: modules/operserv/set.c:607
 msgid "Changes whether service spams unregistered users on connect."
+msgstr ""
+
+#: modules/saslserv/ecdh-x25519-challenge.c:374
+msgid "Changes your ECDH-X25519-CHALLENGE public key."
 msgstr ""
 
 #: modules/nickserv/set_pubkey.c:56
@@ -3000,7 +2979,7 @@ msgstr ""
 msgid "Closes a channel."
 msgstr "Lukker en kanal"
 
-#: modules/contrib/cs_access_alias.c:34
+#: modules/contrib/cs_access_alias.c:37
 #, c-format
 msgid "Command %s not loaded?"
 msgstr ""
@@ -3052,10 +3031,10 @@ msgstr "Tidspunkt af skabelse: %s"
 msgid "Current Ignore list entries:"
 msgstr ""
 
-#: modules/operserv/uptime.c:23
-#, c-format
-msgid "Current PID: %d"
-msgstr ""
+#: modules/operserv/uptime.c:21
+#, fuzzy, c-format
+msgid "Current PID: %lu"
+msgstr "Nuvaerende: %u"
 
 #: modules/chanfix/fix.c:597
 #, c-format
@@ -3077,12 +3056,12 @@ msgstr ""
 msgid "DELETE: %s from %s"
 msgstr ""
 
-#: modules/contrib/dnsbl.c:194 modules/proxyscan/dnsbl.c:213
+#: modules/contrib/dnsbl.c:197 modules/proxyscan/dnsbl.c:213
 #, c-format
 msgid "DNSBL Exempt IP %s has been deleted."
 msgstr ""
 
-#: modules/contrib/dnsbl.c:112 modules/contrib/dnsbl.c:119
+#: modules/contrib/dnsbl.c:115 modules/contrib/dnsbl.c:122
 #: modules/proxyscan/dnsbl.c:140
 #, c-format
 msgid "DNSBLACTION successfully set to %s"
@@ -3334,7 +3313,7 @@ msgstr ""
 msgid "Displays your status in services."
 msgstr ""
 
-#: modules/contrib/os_testproc.c:113
+#: modules/contrib/os_testproc.c:116
 msgid "Does something with child processes."
 msgstr ""
 
@@ -3456,7 +3435,7 @@ msgstr ""
 msgid "End of %s ACCESS listing."
 msgstr "Slut af %s ACCESS listen."
 
-#: modules/chanserv/flags.c:136 modules/contrib/cs_access_alias.c:141
+#: modules/chanserv/flags.c:136 modules/contrib/cs_access_alias.c:144
 #: modules/groupserv/flags.c:67
 #, c-format
 msgid "End of %s FLAGS listing."
@@ -3534,7 +3513,7 @@ msgstr ""
 msgid "End of oper class list"
 msgstr ""
 
-#: modules/operserv/specs.c:184
+#: modules/operserv/specs.c:183
 msgid "End of privileges"
 msgstr ""
 
@@ -3578,7 +3557,7 @@ msgstr ""
 msgid "Entry Hostmask                        Adder                 Reason"
 msgstr ""
 
-#: modules/chanserv/flags.c:99 modules/contrib/cs_access_alias.c:120
+#: modules/chanserv/flags.c:99 modules/contrib/cs_access_alias.c:123
 msgid "Entry Nickname/Host          Flags"
 msgstr ""
 
@@ -3591,28 +3570,28 @@ msgstr "Post Nick/HostellerIP Role"
 msgid "Entry point: %p"
 msgstr ""
 
-#: modules/gameserv/dice.c:99
+#: modules/gameserv/dice.c:97
 msgid "Error: Cannot perform modulus or division by zero."
 msgstr ""
 
-#: modules/gameserv/dice.c:284
+#: modules/gameserv/dice.c:282
 msgid "Error: Expression is too deeply nested."
 msgstr ""
 
-#: modules/gameserv/dice.c:382
+#: modules/gameserv/dice.c:380
 msgid "Error: Mismatched braces '( )' in expression."
 msgstr ""
 
-#: modules/gameserv/dice.c:240
+#: modules/gameserv/dice.c:238
 msgid "Error: Missing expected operator in expression."
 msgstr ""
 
-#: modules/gameserv/dice.c:172 modules/gameserv/dice.c:187
-#: modules/gameserv/dice.c:295
+#: modules/gameserv/dice.c:170 modules/gameserv/dice.c:185
+#: modules/gameserv/dice.c:293
 msgid "Error: Missing expected value in expression."
 msgstr ""
 
-#: modules/gameserv/dice.c:136
+#: modules/gameserv/dice.c:134
 #, c-format
 msgid "Error: Unknown mathematical operator %c."
 msgstr ""
@@ -3622,8 +3601,8 @@ msgstr ""
 msgid "Error: Unrecognised address family %d"
 msgstr ""
 
-#: modules/gameserv/dice.c:194 modules/gameserv/dice.c:346
-#: modules/gameserv/dice.c:356 modules/gameserv/dice.c:374
+#: modules/gameserv/dice.c:192 modules/gameserv/dice.c:344
+#: modules/gameserv/dice.c:354 modules/gameserv/dice.c:372
 msgid "Error: You typed an invalid expression."
 msgstr ""
 
@@ -3976,7 +3955,7 @@ msgstr ""
 msgid "Group memos may not be forced."
 msgstr ""
 
-#: modules/operserv/specs.c:86
+#: modules/operserv/specs.c:85
 msgid "GroupServ"
 msgstr ""
 
@@ -3988,10 +3967,6 @@ msgstr ""
 #: modules/groupserv/list.c:30
 #, c-format
 msgid "Groups matching pattern %s:"
-msgstr ""
-
-#: modules/gameserv/happyfarm.c:431
-msgid "Happy Farm!"
 msgstr ""
 
 #: modules/contrib/ns_generatehash.c:27
@@ -4072,7 +4047,7 @@ msgstr ""
 msgid "I'd like to think so."
 msgstr ""
 
-#: modules/contrib/dnsbl.c:206 modules/proxyscan/dnsbl.c:225
+#: modules/contrib/dnsbl.c:209 modules/proxyscan/dnsbl.c:225
 #, c-format
 msgid "IP %s not found in DNSBL Exempt database."
 msgstr ""
@@ -4194,7 +4169,7 @@ msgstr ""
 msgid "Invalid IP/mask given."
 msgstr ""
 
-#: modules/contrib/cs_badwords.c:261 modules/contrib/dnsbl.c:125
+#: modules/contrib/cs_badwords.c:261 modules/contrib/dnsbl.c:128
 #: modules/proxyscan/dnsbl.c:146
 msgid "Invalid action given."
 msgstr ""
@@ -4204,7 +4179,7 @@ msgstr ""
 msgid "Invalid character '%c' in user@host."
 msgstr ""
 
-#: modules/contrib/cs_access_alias.c:195
+#: modules/contrib/cs_access_alias.c:198
 #, c-format
 msgid "Invalid command. Use /%s%s help for a command listing."
 msgstr "Invalid kommando. Brug /%s%s help for en kommando liste."
@@ -4280,7 +4255,7 @@ msgid "Invalid operation specified for VERIFY."
 msgstr ""
 
 #: modules/nickserv/enforce.c:382 modules/nickserv/enforce.c:557
-#: modules/nickserv/ghost.c:100 modules/nickserv/identify.c:163
+#: modules/nickserv/ghost.c:100 modules/nickserv/identify.c:169
 #: modules/nickserv/register.c:172
 #, c-format
 msgid "Invalid password for %s."
@@ -4366,10 +4341,6 @@ msgstr ""
 #: modules/groupserv/set_joinflags.c:45
 #, c-format
 msgid "Join flags for %s were not set."
-msgstr ""
-
-#: modules/gameserv/happyfarm.c:404
-msgid "Join the Happy Farm game!"
 msgstr ""
 
 #: modules/contrib/wumpus.c:961
@@ -4636,7 +4607,7 @@ msgstr ""
 msgid "Loads a module."
 msgstr ""
 
-#: modules/nickserv/enforce.c:514 modules/nickserv/identify.c:124
+#: modules/nickserv/enforce.c:514 modules/nickserv/identify.c:130
 #, c-format
 msgid "Logged in nicks are: %s"
 msgstr ""
@@ -4679,7 +4650,7 @@ msgstr "Faar botten til at sige den angivne tekst paa den angivne kanal."
 msgid "Makes the cute little kitty-cat meow!"
 msgstr ""
 
-#: modules/contrib/os_helpme.c:21
+#: modules/contrib/os_helpme.c:24
 msgid "Makes you into a network helper."
 msgstr ""
 
@@ -4691,7 +4662,7 @@ msgstr "Moderer kanal adgang."
 msgid "Manage channel roles."
 msgstr "Moderer kanal roller."
 
-#: modules/contrib/dnsbl.c:578 modules/proxyscan/dnsbl.c:607
+#: modules/contrib/dnsbl.c:581 modules/proxyscan/dnsbl.c:607
 msgid "Manage the list of IP's exempt from DNSBL checking."
 msgstr ""
 
@@ -4699,7 +4670,7 @@ msgstr ""
 msgid "Manage the list of channel bad words."
 msgstr ""
 
-#: modules/contrib/ns_ajoin.c:197
+#: modules/contrib/ns_ajoin.c:200
 msgid "Manages automatic-join on identify."
 msgstr ""
 
@@ -4751,7 +4722,7 @@ msgstr ""
 msgid "Manipulates a channel's AKICK list."
 msgstr ""
 
-#: modules/contrib/cs_access_alias.c:200
+#: modules/contrib/cs_access_alias.c:203
 #, fuzzy
 msgid "Manipulates channel access lists."
 msgstr "Moderer kanal adgang."
@@ -4776,7 +4747,7 @@ msgstr ""
 msgid "Manually chanfix a channel."
 msgstr "Manuelt chanfix en kanal"
 
-#: modules/contrib/dnsbl.c:587 modules/proxyscan/dnsbl.c:616
+#: modules/contrib/dnsbl.c:590 modules/proxyscan/dnsbl.c:616
 msgid "Manually scan if a user is in a DNSBL."
 msgstr ""
 
@@ -4965,15 +4936,15 @@ msgstr "Skal fixes: %s"
 msgid "Network size: %u servers"
 msgstr ""
 
-#: modules/gameserv/dice.c:551
+#: modules/gameserv/dice.c:549
 msgid "Never gonna give you up; Never gonna let you down"
 msgstr ""
 
-#: modules/gameserv/dice.c:552
+#: modules/gameserv/dice.c:550
 msgid "Never gonna run around and desert you; Never gonna make you cry"
 msgstr ""
 
-#: modules/gameserv/dice.c:553
+#: modules/gameserv/dice.c:551
 msgid "Never gonna say goodbye; Never gonna tell a lie and hurt you"
 msgstr ""
 
@@ -5263,7 +5234,7 @@ msgstr ""
 msgid "No such ban %s on %s."
 msgstr ""
 
-#: modules/operserv/soper.c:109 modules/operserv/specs.c:145
+#: modules/operserv/soper.c:109 modules/operserv/specs.c:144
 #, c-format
 msgid "No such oper class %s."
 msgstr ""
@@ -5402,11 +5373,11 @@ msgstr ""
 msgid "Only %d founders allowed per channel."
 msgstr ""
 
-#: modules/gameserv/dice.c:429
+#: modules/gameserv/dice.c:427
 msgid "Only 1-100 dice may be thrown at once."
 msgstr ""
 
-#: modules/gameserv/dice.c:458
+#: modules/gameserv/dice.c:456
 msgid "Only 1-100 sides may be used on a dice."
 msgstr ""
 
@@ -5487,7 +5458,7 @@ msgid "Parameters are too long. Aborting."
 msgstr ""
 
 #: modules/nickserv/enforce.c:326 modules/nickserv/enforce.c:436
-#: modules/nickserv/ghost.c:70 modules/nickserv/identify.c:94
+#: modules/nickserv/ghost.c:70 modules/nickserv/identify.c:100
 msgid "Password authentication is disabled for this account."
 msgstr ""
 
@@ -5495,12 +5466,12 @@ msgstr ""
 msgid "Password hash generation failure"
 msgstr ""
 
-#: modules/nickserv/pwquality.c:91
+#: modules/nickserv/pwquality.c:90
 #, c-format
 msgid "Password is insecure [cracklib]: %s"
 msgstr ""
 
-#: modules/nickserv/pwquality.c:94
+#: modules/nickserv/pwquality.c:93
 #, c-format
 msgid "Password is insecure [passwdqc]: %s"
 msgstr ""
@@ -5517,10 +5488,6 @@ msgstr ""
 
 #: modules/contrib/os_resolve.c:100
 msgid "Perform DNS lookup on hostname"
-msgstr ""
-
-#: modules/operserv/override.c:247
-msgid "Perform a transaction on another user's account"
 msgstr ""
 
 #: modules/operserv/rwatch.c:576
@@ -5550,7 +5517,7 @@ msgstr ""
 msgid "Please change to a real nickname, and try again."
 msgstr ""
 
-#: modules/nickserv/identify.c:103
+#: modules/nickserv/identify.c:109
 msgid "Please check your email for instructions to complete your registration."
 msgstr ""
 
@@ -5659,12 +5626,12 @@ msgstr "Privat tilstand af botten %s er nu FRA."
 msgid "Private mode of bot %s is now ON."
 msgstr "Privat tilstand af botten %s er nu TIL."
 
-#: modules/operserv/specs.c:159 modules/operserv/specs.c:161
+#: modules/operserv/specs.c:158 modules/operserv/specs.c:160
 #, c-format
 msgid "Privileges for %s:"
 msgstr ""
 
-#: modules/operserv/specs.c:163
+#: modules/operserv/specs.c:162
 #, c-format
 msgid "Privileges for oper class %s:"
 msgstr ""
@@ -5678,10 +5645,12 @@ msgid "Prospect looks hopeful."
 msgstr ""
 
 #: modules/nickserv/set_pubkey.c:37
+#: modules/saslserv/ecdh-x25519-challenge.c:342
 msgid "Public key entry has been deleted."
 msgstr ""
 
 #: modules/nickserv/set_pubkey.c:31
+#: modules/saslserv/ecdh-x25519-challenge.c:336
 msgid "Public key was not set"
 msgstr ""
 
@@ -5839,22 +5808,22 @@ msgstr ""
 msgid "Registered : %s (%s ago)"
 msgstr ""
 
-#: modules/operserv/uptime.c:24
+#: modules/operserv/uptime.c:22
 #, c-format
-msgid "Registered accounts: %d"
+msgid "Registered accounts: %u"
 msgstr ""
 
 #: modules/operserv/uptime.c:27
 #, c-format
-msgid "Registered channels: %d"
+msgid "Registered channels: %u"
 msgstr ""
 
-#: modules/operserv/uptime.c:26
+#: modules/operserv/uptime.c:25
 #, c-format
-msgid "Registered nicknames: %d"
+msgid "Registered nicknames: %u"
 msgstr ""
 
-#: modules/contrib/ns_guestnoreg.c:36
+#: modules/contrib/ns_guestnoreg.c:39
 msgid "Registering of guest nicknames is disallowed."
 msgstr ""
 
@@ -5878,7 +5847,7 @@ msgstr ""
 msgid "Registers an account."
 msgstr ""
 
-#: modules/nickserv/pwquality.c:104
+#: modules/nickserv/pwquality.c:103
 msgid "Registration denied due to insecure password"
 msgstr ""
 
@@ -6110,7 +6079,7 @@ msgstr "Rolle:     %s"
 msgid "Role       : %s (inherited from %s)"
 msgstr "Rolle:     %s (Paataget fra %s)"
 
-#: modules/gameserv/dice.c:595
+#: modules/gameserv/dice.c:593
 msgid "Rolls one or more dice."
 msgstr ""
 
@@ -6281,10 +6250,6 @@ msgstr ""
 msgid "Searches through the logs."
 msgstr ""
 
-#: modules/gameserv/happyfarm.c:422
-msgid "Sell a vacant plot of land."
-msgstr ""
-
 #: modules/nickserv/return.c:56
 #, c-format
 msgid "Sending email failed, account %s remains with %s."
@@ -6379,7 +6344,7 @@ msgstr ""
 msgid "Servers linked from %s: %u"
 msgstr ""
 
-#: modules/operserv/uptime.c:22
+#: modules/operserv/uptime.c:20
 #, c-format
 msgid "Services have been up for %s"
 msgstr ""
@@ -6605,7 +6570,7 @@ msgstr ""
 msgid "Shows number of entries in access lists."
 msgstr "Viser antallet af poster paa adgangslisten."
 
-#: modules/operserv/specs.c:196
+#: modules/operserv/specs.c:195
 msgid "Shows oper flags."
 msgstr ""
 
@@ -6754,11 +6719,11 @@ msgstr "Syntax: ROLE <#channel> <command> [parametre]"
 msgid "Syntax: ACCESS <#channel> ADD <account|hostmask> <role>"
 msgstr "Syntax: ACCESS <#channel> ADD <konto|hostname>"
 
-#: modules/contrib/cs_access_alias.c:187
+#: modules/contrib/cs_access_alias.c:190
 msgid "Syntax: ACCESS <#channel> ADD|DEL <nick> [level]"
 msgstr ""
 
-#: modules/contrib/cs_access_alias.c:161 modules/contrib/cs_access_alias.c:171
+#: modules/contrib/cs_access_alias.c:164 modules/contrib/cs_access_alias.c:174
 msgid "Syntax: ACCESS <#channel> ADD|DEL|LIST [nick] [level]"
 msgstr ""
 
@@ -6895,7 +6860,7 @@ msgstr ""
 msgid "Syntax: BOT DEL <nick>"
 msgstr "Syntax: BOT DEL <botnavn>"
 
-#: modules/gameserv/dice.c:574
+#: modules/gameserv/dice.c:572
 msgid "Syntax: CALC [times] <expression>"
 msgstr ""
 
@@ -7015,20 +6980,20 @@ msgstr ""
 msgid "Syntax: DISABLE <channel>"
 msgstr ""
 
-#: modules/contrib/dnsbl.c:152 modules/proxyscan/dnsbl.c:171
+#: modules/contrib/dnsbl.c:155 modules/proxyscan/dnsbl.c:171
 msgid "Syntax: DNSBLEXEMPT ADD <ip> <reason>"
 msgstr ""
 
-#: modules/contrib/dnsbl.c:142 modules/contrib/dnsbl.c:228
+#: modules/contrib/dnsbl.c:145 modules/contrib/dnsbl.c:231
 #: modules/proxyscan/dnsbl.c:161 modules/proxyscan/dnsbl.c:247
 msgid "Syntax: DNSBLEXEMPT ADD|DEL|LIST [ip] [reason]"
 msgstr ""
 
-#: modules/contrib/dnsbl.c:183 modules/proxyscan/dnsbl.c:202
+#: modules/contrib/dnsbl.c:186 modules/proxyscan/dnsbl.c:202
 msgid "Syntax: DNSBLEXEMPT DEL <ip>"
 msgstr ""
 
-#: modules/contrib/dnsbl.c:365 modules/proxyscan/dnsbl.c:400
+#: modules/contrib/dnsbl.c:368 modules/proxyscan/dnsbl.c:400
 msgid "Syntax: DNSBLSCAN <user>"
 msgstr ""
 
@@ -7138,10 +7103,6 @@ msgstr ""
 #, fuzzy
 msgid "Syntax: HALFOP <#channel> [nickname] [...]"
 msgstr "Syntax: ASSIGN <#channel> <nick>"
-
-#: modules/gameserv/happyfarm.c:395
-msgid "Syntax: HAPPYFARM <command>"
-msgstr ""
 
 #: modules/operserv/identify.c:35
 msgid "Syntax: IDENTIFY <password>"
@@ -7294,10 +7255,6 @@ msgstr "Syntax: DROP <#channel>"
 msgid "Syntax: OPEN <!group> <ON|OFF>"
 msgstr ""
 
-#: modules/operserv/override.c:162
-msgid "Syntax: OVERRIDE <account> <service> <command> [params]"
-msgstr ""
-
 #: modules/chanserv/owner.c:110
 #, fuzzy
 msgid "Syntax: OWNER <#channel> [nickname] [...]"
@@ -7421,7 +7378,7 @@ msgstr "Syntax: ROLE <#channel> ADD|SET <role> [flags]"
 msgid "Syntax: ROLE <#channel> DEL <role>"
 msgstr ""
 
-#: modules/gameserv/dice.c:535
+#: modules/gameserv/dice.c:533
 msgid "Syntax: ROLL [times] [dice]d<sides>"
 msgstr ""
 
@@ -7536,7 +7493,7 @@ msgstr ""
 msgid "Syntax: SET COMMITINTERVAL <minutes>"
 msgstr ""
 
-#: modules/contrib/dnsbl.c:105 modules/proxyscan/dnsbl.c:131
+#: modules/contrib/dnsbl.c:108 modules/proxyscan/dnsbl.c:131
 msgid "Syntax: SET DNSBLACTION <action>"
 msgstr ""
 
@@ -7768,9 +7725,9 @@ msgstr ""
 msgid "Syntax: WOD <dice> <difficulty>"
 msgstr ""
 
-#: modules/gameserv/dice.c:420 modules/gameserv/dice.c:433
-#: modules/gameserv/dice.c:445 modules/gameserv/dice.c:452
-#: modules/gameserv/dice.c:473
+#: modules/gameserv/dice.c:418 modules/gameserv/dice.c:431
+#: modules/gameserv/dice.c:443 modules/gameserv/dice.c:450
+#: modules/gameserv/dice.c:471
 msgid "Syntax: XdY [ {-|+|*|/} Z ]"
 msgstr ""
 
@@ -8324,6 +8281,10 @@ msgstr ""
 msgid "The provided regex matches you, refusing RAKILL."
 msgstr ""
 
+#: modules/saslserv/ecdh-x25519-challenge.c:351
+msgid "The public key specified is not valid."
+msgstr ""
+
 #: modules/hostserv/offer.c:160
 #, fuzzy
 msgid "The requested group does not exist."
@@ -8389,7 +8350,7 @@ msgstr "Kanelen %s er nu droppet."
 msgid "There are %u channels on the network."
 msgstr ""
 
-#: modules/nickserv/enforce.c:505 modules/nickserv/identify.c:116
+#: modules/nickserv/enforce.c:505 modules/nickserv/identify.c:122
 #, c-format
 msgid "There are already %zu sessions logged in to %s (maximum allowed: %u)."
 msgstr ""
@@ -8431,6 +8392,10 @@ msgstr ""
 
 #: modules/hostserv/drop.c:45
 msgid "There is not a vhost assigned to this nick."
+msgstr ""
+
+#: modules/saslserv/main.c:18
+msgid "There was a problem logging you in; login cancelled"
 msgstr ""
 
 #: modules/gameserv/lottery.c:40
@@ -8864,7 +8829,7 @@ msgstr "Brugerantal:    %zu"
 
 #: modules/operserv/uptime.c:28
 #, c-format
-msgid "Users currently online: %d"
+msgid "Users currently online: %u"
 msgstr ""
 
 #: modules/nickserv/set_privmsg.c:77
@@ -8880,7 +8845,7 @@ msgstr ""
 msgid "Valid operations are REGISTER and EMAILCHG."
 msgstr ""
 
-#: modules/operserv/specs.c:151
+#: modules/operserv/specs.c:150
 msgid "Valid target types: USER, OPERCLASS."
 msgstr ""
 
@@ -8931,7 +8896,7 @@ msgid ""
 "Warned clones limit must be lower than or equal to the allowed limit of %d"
 msgstr ""
 
-#: modules/nickserv/identify.c:153
+#: modules/nickserv/identify.c:159
 msgid "Warning: Your password is not encrypted."
 msgstr ""
 
@@ -8949,10 +8914,6 @@ msgid ""
 "Welcome to %s, %s! Here on %s, we provide services to enable the "
 "registration of nicknames and channels! For details, type /%s%s help and /%s"
 "%s help."
-msgstr ""
-
-#: modules/gameserv/happyfarm.c:315
-msgid "Welcome to Happy Farm!  May your farm be lucky."
 msgstr ""
 
 #: modules/operserv/info.c:22
@@ -8996,10 +8957,14 @@ msgstr ""
 msgid "You are already identified to %s."
 msgstr ""
 
-#: modules/nickserv/identify.c:101 modules/nickserv/identify.c:108
+#: modules/nickserv/identify.c:107 modules/nickserv/identify.c:114
 #: modules/nickserv/register.c:30
 #, c-format
 msgid "You are already logged in as %s."
+msgstr ""
+
+#: modules/nickserv/identify.c:41
+msgid "You are already performing an SASL login."
 msgstr ""
 
 #: modules/chanserv/status.c:84 modules/nickserv/status.c:103
@@ -9117,7 +9082,7 @@ msgstr ""
 #: modules/chanserv/why.c:62 modules/chanserv/xop.c:315
 #: modules/chanserv/xop.c:321 modules/chanserv/xop.c:340
 #: modules/chanserv/xop.c:346 modules/chanserv/xop.c:360
-#: modules/chanserv/xop.c:432 modules/contrib/cs_access_alias.c:115
+#: modules/chanserv/xop.c:432 modules/contrib/cs_access_alias.c:118
 #: modules/contrib/cs_userinfo.c:46 modules/contrib/cs_userinfo.c:71
 #: modules/groupserv/flags.c:44 modules/groupserv/flags.c:80
 #: modules/groupserv/flags.c:132 modules/groupserv/invite.c:41
@@ -9132,7 +9097,7 @@ msgstr "Du har ikke tilladelser til denne operation."
 msgid "You are not authorized to unassign a bot on %s."
 msgstr "Du er ikke autoriseret til at fjerne tilknytningen paa %s."
 
-#: modules/operserv/help.c:19 modules/operserv/specs.c:108
+#: modules/operserv/help.c:19 modules/operserv/specs.c:107
 #, c-format
 msgid "You are not authorized to use %s."
 msgstr ""
@@ -9175,11 +9140,11 @@ msgstr "Du er ikke autoriseret til at tildele bots paa %s."
 msgid "You are now a member of %s."
 msgstr ""
 
-#: modules/contrib/os_helpme.c:16
+#: modules/contrib/os_helpme.c:19
 msgid "You are now a network helper."
 msgstr ""
 
-#: modules/nickserv/identify.c:150
+#: modules/nickserv/identify.c:156
 #, c-format
 msgid "You are now identified for %s."
 msgstr ""
@@ -9189,7 +9154,7 @@ msgstr ""
 msgid "You are now identified to %s."
 msgstr ""
 
-#: modules/nickserv/identify.c:150
+#: modules/nickserv/identify.c:156
 #, c-format
 msgid "You are now logged in as %s."
 msgstr ""
@@ -9215,7 +9180,7 @@ msgid ""
 "You can not regain your nickname while banned or quieted on a channel: %s"
 msgstr ""
 
-#: modules/contrib/ns_waitreg.c:26
+#: modules/contrib/ns_waitreg.c:30
 msgid ""
 "You can not register your nick so soon after connecting. Please wait a while "
 "and try again."
@@ -9257,7 +9222,7 @@ msgstr ""
 msgid "You cannot inject an INJECT command."
 msgstr ""
 
-#: modules/nickserv/logout.c:60
+#: modules/nickserv/logout.c:60 modules/saslserv/main.c:760
 #, c-format
 msgid "You cannot log out %s because the server configuration disallows it."
 msgstr ""
@@ -9298,13 +9263,6 @@ msgstr ""
 msgid "You cannot use your nickname as a password."
 msgstr ""
 
-#: modules/gameserv/happyfarm.c:336 modules/gameserv/happyfarm.c:372
-#, c-format
-msgid ""
-"You do not appear to be playing Happy Farm.  To join the game, use /msg %s "
-"HAPPYFARM JOIN."
-msgstr ""
-
 #: modules/helpserv/ticket.c:301
 msgid "You do not have a help request to cancel."
 msgstr ""
@@ -9317,10 +9275,6 @@ msgstr ""
 msgid "You do not have a services operator account."
 msgstr ""
 
-#: modules/gameserv/happyfarm.c:378
-msgid "You do not have any vacant plots at this time."
-msgstr ""
-
 #: modules/chanserv/access.c:1116
 #, c-format
 msgid "You do not have appropriate permissions to add flags: %s"
@@ -9329,15 +9283,6 @@ msgstr ""
 #: modules/chanserv/access.c:1207 modules/chanserv/access.c:1301
 #, c-format
 msgid "You do not have appropriate permissions to set flags: %s"
-msgstr ""
-
-#: modules/gameserv/happyfarm.c:343
-msgid "You don't have enough money to buy a plot of land."
-msgstr ""
-
-#: modules/gameserv/happyfarm.c:351 modules/gameserv/happyfarm.c:386
-#, c-format
-msgid "You have %d money available."
 msgstr ""
 
 #: modules/memoserv/main.c:25 modules/memoserv/main.c:57
@@ -9370,7 +9315,7 @@ msgstr ""
 msgid "You have added %s as a bad word."
 msgstr ""
 
-#: modules/contrib/dnsbl.c:174 modules/proxyscan/dnsbl.c:193
+#: modules/contrib/dnsbl.c:177 modules/proxyscan/dnsbl.c:193
 #, c-format
 msgid "You have added %s to the DNSBL exempts list."
 msgstr ""
@@ -9395,7 +9340,7 @@ msgstr ""
 msgid "You have been invited to %s."
 msgstr ""
 
-#: modules/nickserv/enforce.c:525 modules/nickserv/identify.c:132
+#: modules/nickserv/enforce.c:525 modules/nickserv/identify.c:138
 #, c-format
 msgid "You have been logged out of %s."
 msgstr ""
@@ -9436,10 +9381,6 @@ msgstr ""
 
 #: modules/hostserv/offer.c:280
 msgid "You have been restricted from taking vhosts by network staff"
-msgstr ""
-
-#: modules/gameserv/happyfarm.c:350
-msgid "You have bought a plot of land!"
 msgstr ""
 
 #: modules/memoserv/delete.c:38
@@ -9485,15 +9426,6 @@ msgstr ""
 #: modules/hostserv/request.c:320 modules/hostserv/request.c:348
 #, c-format
 msgid "You have requested vhost %s."
-msgstr ""
-
-#: modules/gameserv/happyfarm.c:385
-msgid "You have sold a plot of land."
-msgstr ""
-
-#: modules/gameserv/happyfarm.c:316
-#, c-format
-msgid "You have started with %d money.  For help, use /msg %s HELP HAPPYFARM."
 msgstr ""
 
 #: modules/hostserv/offer.c:310
@@ -9620,7 +9552,7 @@ msgstr ""
 msgid "You may only unban yourself via %s."
 msgstr ""
 
-#: modules/nickserv/pwquality.c:98
+#: modules/nickserv/pwquality.c:97
 #, c-format
 msgid ""
 "You may want to set a different password with: /msg %s SET PASSWORD "
@@ -9773,11 +9705,13 @@ msgid "Your memo inbox is full! Please delete memos you no longer need."
 msgstr ""
 
 #: modules/nickserv/set_pubkey.c:44
+#: modules/saslserv/ecdh-x25519-challenge.c:356
 #, fuzzy, c-format
 msgid "Your public key is already set to %s."
 msgstr "%s er allerede tildelt til %s."
 
 #: modules/nickserv/set_pubkey.c:50
+#: modules/saslserv/ecdh-x25519-challenge.c:362
 #, c-format
 msgid "Your public key is now set to %s."
 msgstr ""
@@ -9813,7 +9747,7 @@ msgstr ""
 msgid "add and remove autokills"
 msgstr ""
 
-#: modules/operserv/specs.c:89
+#: modules/operserv/specs.c:88
 msgid "administer groups"
 msgstr ""
 
@@ -9821,24 +9755,12 @@ msgstr ""
 msgid "administer services"
 msgstr ""
 
-#: modules/gameserv/happyfarm.c:171
-msgid "apples"
-msgstr ""
-
-#: modules/gameserv/happyfarm.c:168
-msgid "beans"
-msgstr ""
-
 #: modules/operserv/specs.c:53
 msgid "bypass channel registration limits"
 msgstr ""
 
-#: modules/operserv/specs.c:90
+#: modules/operserv/specs.c:89
 msgid "bypass group registration limits"
-msgstr ""
-
-#: modules/gameserv/happyfarm.c:166
-msgid "corn"
 msgstr ""
 
 #: modules/operserv/specs.c:34
@@ -9878,10 +9800,6 @@ msgstr ""
 msgid "jupe servers"
 msgstr ""
 
-#: modules/gameserv/happyfarm.c:165
-msgid "lettuce"
-msgstr ""
-
 #: modules/memoserv/ignore.c:167
 msgid "list empty"
 msgstr ""
@@ -9911,30 +9829,6 @@ msgstr ""
 msgid "no AKICK reason specified"
 msgstr ""
 
-#: modules/gameserv/happyfarm.c:161
-msgid "nothing"
-msgstr ""
-
-#: modules/gameserv/happyfarm.c:164
-msgid "parsley"
-msgstr ""
-
-#: modules/gameserv/happyfarm.c:169
-msgid "peaches"
-msgstr ""
-
-#: modules/gameserv/happyfarm.c:170
-msgid "pears"
-msgstr ""
-
-#: modules/operserv/specs.c:80
-msgid "perform actions as any other user"
-msgstr ""
-
-#: modules/gameserv/happyfarm.c:167
-msgid "potato"
-msgstr ""
-
 #: modules/operserv/specs.c:37
 msgid "register accounts on behalf of another user"
 msgstr ""
@@ -9958,14 +9852,6 @@ msgstr ""
 #: modules/chanserv/akick.c:679
 #, c-format
 msgid "setter: %s"
-msgstr ""
-
-#: modules/gameserv/happyfarm.c:163
-msgid "tomato"
-msgstr ""
-
-#: modules/gameserv/happyfarm.c:162
-msgid "turnip"
 msgstr ""
 
 #: modules/nickserv/multimark.c:766
@@ -10005,7 +9891,7 @@ msgstr ""
 msgid "view concealed information about channels"
 msgstr ""
 
-#: modules/operserv/specs.c:88
+#: modules/operserv/specs.c:87
 msgid "view concealed information about groups"
 msgstr ""
 
