@@ -145,9 +145,6 @@ static mowgli_eventloop_timer_t *ecdh_x25519_keypair_regen_timer = NULL;
 static unsigned char ecdh_x25519_server_seckey[ATHEME_ECDH_X25519_XKEY_LEN];
 static unsigned char ecdh_x25519_server_pubkey[ATHEME_ECDH_X25519_XKEY_LEN];
 
-static const char ecdh_x25519_mkdf_salt[] = "ECDH-X25519-CHALLENGE SASL Mechanism HKDF Salt Generator";
-static const char ecdh_x25519_mkdf_challenge[] = "ECDH-X25519-CHALLENGE SASL Mechanism HKDF Challenge Generator";
-
 static bool
 ecdh_x25519_keypair_regen(void)
 {
