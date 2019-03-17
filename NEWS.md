@@ -88,7 +88,7 @@ SASL
 - Add support for Curve25519 ECDH-based challenge-response logins
   - This is a private SASL mechanism that does not have widespread client
     support yet, but it is expected to eventually replace the older
-    ECDSA-NIST256P-CHALLENGE mechanism, due to concerns within the
+    `ECDSA-NIST256P-CHALLENGE` mechanism, due to concerns within the
     cryptographic community about the safety of the NIST curves.
   - A complete mechanism documentation, including the protocol, and a design
     rationale, is located in `modules/saslserv/ecdh-x25519-challenge.c`. This
@@ -106,11 +106,11 @@ SASL
     characters.
   - If you wish to build and install the tool without building and installing
     everything, simply execute the following commands in the source directory:
-    - ./configure --with-libmowgli=no
-    - make -C libmowgli-2/ install
-    - make -C libathemecore/ install
-    - make -C src/ecdh-x25519-tool/ install
-    - ~/atheme/bin/atheme-ecdh-x25519-tool -h
+    - `./configure --with-libmowgli=no`
+    - `make -C libmowgli-2/ install`
+    - `make -C libathemecore/ install`
+    - `make -C src/ecdh-x25519-tool/ install`
+    - `~/atheme/bin/atheme-ecdh-x25519-tool -h`
 
 MemoServ
 --------
