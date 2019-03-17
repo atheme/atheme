@@ -158,6 +158,26 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 		], [
 			AC_MSG_RESULT([no])
 		])
+
+		AC_MSG_CHECKING([if libsodium can provide SASL ECDH-X25519-CHALLENGE])
+		AC_LINK_IFELSE([
+			AC_LANG_PROGRAM([[
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <sodium/crypto_scalarmult_curve25519.h>
+			]], [[
+				(void) crypto_scalarmult_curve25519_base(NULL, NULL);
+				(void) crypto_scalarmult_curve25519(NULL, NULL, NULL);
+			]])
+		], [
+			AC_MSG_RESULT([yes])
+			AC_DEFINE([HAVE_LIBSODIUM_ECDH_X25519], [1], [Define to 1 if libsodium can provide SASL ECDH-X25519-CHALLENGE])
+			ATHEME_COND_ECDH_X25519_TOOL_ENABLE
+			LIBSODIUM_USABLE="Yes"
+		], [
+			AC_MSG_RESULT([no])
+		])
 	])
 
 	AS_IF([test "${LIBSODIUM_USABLE}" = "Yes"], [

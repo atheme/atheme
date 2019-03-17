@@ -213,6 +213,53 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDCRYPTO], [
 		], [
 			AC_MSG_RESULT([no])
 		])
+
+		AC_MSG_CHECKING([if libmbedcrypto can provide SASL ECDH-X25519-CHALLENGE])
+		AC_LINK_IFELSE([
+			AC_LANG_PROGRAM([[
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#ifdef MBEDTLS_CONFIG_FILE
+				#  include MBEDTLS_CONFIG_FILE
+				#else
+				#  include <mbedtls/config.h>
+				#endif
+				#include <mbedtls/bignum.h>
+				#include <mbedtls/ecdh.h>
+				#include <mbedtls/ecp.h>
+				#ifndef MBEDTLS_BIGNUM_C
+				#  error "MBEDTLS_BIGNUM_C is not enabled"
+				#endif
+				#ifndef MBEDTLS_ECDH_C
+				#  error "MBEDTLS_ECDH_C is not enabled"
+				#endif
+				#ifndef MBEDTLS_ECP_C
+				#  error "MBEDTLS_ECP_C is not enabled"
+				#endif
+			]], [[
+				(void) mbedtls_ecdh_compute_shared(NULL, NULL, NULL, NULL, NULL, NULL);
+				(void) mbedtls_ecdh_gen_public(NULL, NULL, NULL, NULL, NULL);
+				(void) mbedtls_ecp_check_pubkey(NULL, NULL);
+				(void) mbedtls_ecp_group_free(NULL);
+				(void) mbedtls_ecp_group_init(NULL);
+				(void) mbedtls_ecp_group_load(NULL, 0);
+				(void) mbedtls_ecp_point_free(NULL);
+				(void) mbedtls_ecp_point_init(NULL);
+				(void) mbedtls_mpi_free(NULL);
+				(void) mbedtls_mpi_init(NULL);
+				(void) mbedtls_mpi_lset(NULL, 0);
+				(void) mbedtls_mpi_read_binary(NULL, NULL, 0);
+				(void) mbedtls_mpi_write_binary(NULL, NULL, 0);
+			]])
+		], [
+			AC_MSG_RESULT([yes])
+			AC_DEFINE([HAVE_LIBMBEDCRYPTO_ECDH_X25519], [1], [Define to 1 if libmbedcrypto can provide SASL ECDH-X25519-CHALLENGE])
+			ATHEME_COND_ECDH_X25519_TOOL_ENABLE
+			LIBMBEDCRYPTO_USABLE="Yes"
+		], [
+			AC_MSG_RESULT([no])
+		])
 	])
 
 	AS_IF([test "${LIBMBEDCRYPTO_USABLE}" = "Yes"], [

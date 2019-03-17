@@ -50,6 +50,9 @@
    language is requested. */
 #undef ENABLE_NLS
 
+/* Define to 1 if any library can provide ECDH-X25519-CHALLENGE */
+#undef HAVE_ANYLIB_ECDH_X25519
+
 /* Define to 1 if any password quality library appears to be usable */
 #undef HAVE_ANY_PASSWORD_QUALITY_LIBRARY
 
@@ -140,8 +143,10 @@
 /* Define to 1 if libcrypto appears to be usable */
 #undef HAVE_LIBCRYPTO
 
-/* Define to 1 if libcrypto has usable elliptic curve key construction and
-   signature verification functions */
+/* Define to 1 if libcrypto can provide SASL ECDH-X25519-CHALLENGE */
+#undef HAVE_LIBCRYPTO_ECDH_X25519
+
+/* Define to 1 if libcrypto can provide SASL ECDSA-NIST256P-CHALLENGE */
 #undef HAVE_LIBCRYPTO_ECDSA
 
 /* Define to 1 if libcrypto has HMAC_CTX_new() & HMAC_CTX_free() */
@@ -166,11 +171,17 @@
 /* Define to 1 if libmbedcrypto has usable CTR-DRBG functions */
 #undef HAVE_LIBMBEDCRYPTO_CTR_DRBG
 
+/* Define to 1 if libmbedcrypto can provide SASL ECDH-X25519-CHALLENGE */
+#undef HAVE_LIBMBEDCRYPTO_ECDH_X25519
+
 /* Define to 1 if libmbedcrypto has usable HMAC-DRBG functions */
 #undef HAVE_LIBMBEDCRYPTO_HMAC_DRBG
 
 /* Define to 1 if libnettle appears to be usable */
 #undef HAVE_LIBNETTLE
+
+/* Define to 1 if libnettle can provide SASL ECDH-X25519-CHALLENGE */
+#undef HAVE_LIBNETTLE_ECDH_X25519
 
 /* Define to 1 if libnettle has a usable constant-time memory comparison
    function */
@@ -187,6 +198,9 @@
 
 /* Define to 1 if libsodium appears to be usable */
 #undef HAVE_LIBSODIUM
+
+/* Define to 1 if libsodium can provide SASL ECDH-X25519-CHALLENGE */
+#undef HAVE_LIBSODIUM_ECDH_X25519
 
 /* Define to 1 if libsodium has a usable constant-time memory comparison
    function */

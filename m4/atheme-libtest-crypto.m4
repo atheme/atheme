@@ -132,7 +132,27 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 			AC_MSG_RESULT([no])
 		])
 
-		AC_MSG_CHECKING([if libcrypto has usable elliptic curve key construction and signature verification functions])
+		AC_MSG_CHECKING([if libcrypto can provide SASL ECDH-X25519-CHALLENGE])
+		AC_LINK_IFELSE([
+			AC_LANG_PROGRAM([[
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <openssl/curve25519.h>
+			]], [[
+				(void) X25519_keypair(NULL, NULL);
+				(void) X25519(NULL, NULL, NULL);
+			]])
+		], [
+			AC_MSG_RESULT([yes])
+			AC_DEFINE([HAVE_LIBCRYPTO_ECDH_X25519], [1], [Define to 1 if libcrypto can provide SASL ECDH-X25519-CHALLENGE])
+			ATHEME_COND_ECDH_X25519_TOOL_ENABLE
+			LIBCRYPTO_USABLE="Yes"
+		], [
+			AC_MSG_RESULT([no])
+		])
+
+		AC_MSG_CHECKING([if libcrypto can provide SASL ECDSA-NIST256P-CHALLENGE])
 		AC_LINK_IFELSE([
 			AC_LANG_PROGRAM([[
 				#ifdef HAVE_STDDEF_H
@@ -149,7 +169,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 			]])
 		], [
 			AC_MSG_RESULT([yes])
-			AC_DEFINE([HAVE_LIBCRYPTO_ECDSA], [1], [Define to 1 if libcrypto has usable elliptic curve key construction and signature verification functions])
+			AC_DEFINE([HAVE_LIBCRYPTO_ECDSA], [1], [Define to 1 if libcrypto can provide SASL ECDSA-NIST256P-CHALLENGE])
 			ATHEME_COND_ECDSA_TOOLS_ENABLE
 			LIBCRYPTO_USABLE="Yes"
 		], [

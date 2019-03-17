@@ -80,11 +80,37 @@ Security
 SASL
 ----
 - SASLServ and its modules have been almost entirely re-written
-- Add support for SASL SCRAM-SHA logins (see `doc/SASL-SCRAM-SHA`)
 - Advertise SASL mechanism list to UnrealIRCd servers
 - Use a parameter vector to allow an arbitrary number of S2S arguments
-- Indicate whether the client is on a plaintext connection or not. This can
-  be used by user_can_login hooks.
+- Indicate whether the client is on a plaintext connection or not.
+  - This can be used by user_can_login hooks.
+- Add support for SASL SCRAM-SHA logins (see `doc/SASL-SCRAM-SHA`)
+- Add support for Curve25519 ECDH-based challenge-response logins
+  - This is a private SASL mechanism that does not have widespread client
+    support yet, but it is expected to eventually replace the older
+    ECDSA-NIST256P-CHALLENGE mechanism, due to concerns within the
+    cryptographic community about the safety of the NIST curves.
+  - A complete mechanism documentation, including the protocol, and a design
+    rationale, is located in `modules/saslserv/ecdh-x25519-challenge.c`. This
+    will enable client authors to integrate the functionality into their IRC
+    clients.
+  - A tool, `atheme-ecdh-x25519-tool`, is provided (and is installed into
+    `bin/` by `make install`) to enable users to generate private keys, obtain
+    their public keys in base64 format (to pass to `NickServ SET`), encode
+    keypairs as a QR-Code (should mobile clients end up implementing this
+    functionality, and users wish to easily transfer their private keys), and
+    serve as a reference tool to generate server challenges, and responses to
+    server challenges, for client authors to verify their implementations
+    against. Note that the QR-Code printing support requires a UTF-8-capable
+    terminal emulator, with a monospace font supporting Unicode box-drawing
+    characters.
+  - If you wish to build and install the tool without building and installing
+    everything, simply execute the following commands in the source directory:
+    - ./configure --with-libmowgli=no
+    - make -C libmowgli-2/ install
+    - make -C libathemecore/ install
+    - make -C src/ecdh-x25519-tool/ install
+    - ~/atheme/bin/atheme-ecdh-x25519-tool -h
 
 MemoServ
 --------

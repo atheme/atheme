@@ -591,18 +591,26 @@ loadmodule "modules/infoserv/main";
  *
  * Core components                      modules/saslserv/main
  * AUTHCOOKIE mechanism (for IRIS)      modules/saslserv/authcookie
+ * ECDH-X25519-CHALLENGE mechanism      modules/saslserv/ecdh-x25519-challenge
  * ECDSA-NIST256P-CHALLENGE mechanism   modules/saslserv/ecdsa-nist256p-challenge
  * EXTERNAL mechanism (IRCv3.1+)        modules/saslserv/external
  * PLAIN mechanism                      modules/saslserv/plain
  * SCRAM-SHA-* mechanisms               modules/saslserv/scram-sha
  *
+ * ECDH-X25519-CHALLENGE support requires that Atheme be compiled against a
+ * cryptographic library that provides X25519 ECDH support (BoringSSL,
+ * LibreSSL, ARM mbedTLS, Nettle, Sodium). This will be checked while running
+ * ./configure.
+ *
  * ECDSA-NIST256P-CHALLENGE support requires that Atheme be compiled against
  * an OpenSSL with ECDSA support (not RHEL etc. unless you compile your own).
+ * This will be checked while running ./configure.
  *
  * You MUST read doc/SASL-SCRAM-SHA before loading modules/saslserv/scram-sha!
  */
 loadmodule "modules/saslserv/main";
 loadmodule "modules/saslserv/authcookie";
+#loadmodule "modules/saslserv/ecdh-x25519-challenge";
 #loadmodule "modules/saslserv/ecdsa-nist256p-challenge";
 #loadmodule "modules/saslserv/external";
 loadmodule "modules/saslserv/plain";

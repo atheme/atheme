@@ -660,6 +660,7 @@ LDAP_LIBS
 LIBIDN_LIBS
 LIBIDN_CFLAGS
 ECDSA_TOOLS_COND_D
+ECDH_X25519_TOOL_COND_D
 LIBCRYPTO_LIBS
 LIBCRYPTO_CFLAGS
 LIBCRYPT_LIBS
@@ -10268,8 +10269,58 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libcrypto has usable elliptic curve key construction and signature verification functions" >&5
-$as_echo_n "checking if libcrypto has usable elliptic curve key construction and signature verification functions... " >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libcrypto can provide SASL ECDH-X25519-CHALLENGE" >&5
+$as_echo_n "checking if libcrypto can provide SASL ECDH-X25519-CHALLENGE... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <openssl/curve25519.h>
+
+int
+main ()
+{
+
+				(void) X25519_keypair(NULL, NULL);
+				(void) X25519(NULL, NULL, NULL);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBCRYPTO_ECDH_X25519 1" >>confdefs.h
+
+
+
+	ECDH_X25519_TOOL_COND_D="ecdh-x25519-tool"
+
+
+
+$as_echo "#define HAVE_ANYLIB_ECDH_X25519 1" >>confdefs.h
+
+
+			LIBCRYPTO_USABLE="Yes"
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libcrypto can provide SASL ECDSA-NIST256P-CHALLENGE" >&5
+$as_echo_n "checking if libcrypto can provide SASL ECDSA-NIST256P-CHALLENGE... " >&6; }
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -11164,6 +11215,83 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libmbedcrypto can provide SASL ECDH-X25519-CHALLENGE" >&5
+$as_echo_n "checking if libmbedcrypto can provide SASL ECDH-X25519-CHALLENGE... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#ifdef MBEDTLS_CONFIG_FILE
+				#  include MBEDTLS_CONFIG_FILE
+				#else
+				#  include <mbedtls/config.h>
+				#endif
+				#include <mbedtls/bignum.h>
+				#include <mbedtls/ecdh.h>
+				#include <mbedtls/ecp.h>
+				#ifndef MBEDTLS_BIGNUM_C
+				#  error "MBEDTLS_BIGNUM_C is not enabled"
+				#endif
+				#ifndef MBEDTLS_ECDH_C
+				#  error "MBEDTLS_ECDH_C is not enabled"
+				#endif
+				#ifndef MBEDTLS_ECP_C
+				#  error "MBEDTLS_ECP_C is not enabled"
+				#endif
+
+int
+main ()
+{
+
+				(void) mbedtls_ecdh_compute_shared(NULL, NULL, NULL, NULL, NULL, NULL);
+				(void) mbedtls_ecdh_gen_public(NULL, NULL, NULL, NULL, NULL);
+				(void) mbedtls_ecp_check_pubkey(NULL, NULL);
+				(void) mbedtls_ecp_group_free(NULL);
+				(void) mbedtls_ecp_group_init(NULL);
+				(void) mbedtls_ecp_group_load(NULL, 0);
+				(void) mbedtls_ecp_point_free(NULL);
+				(void) mbedtls_ecp_point_init(NULL);
+				(void) mbedtls_mpi_free(NULL);
+				(void) mbedtls_mpi_init(NULL);
+				(void) mbedtls_mpi_lset(NULL, 0);
+				(void) mbedtls_mpi_read_binary(NULL, NULL, 0);
+				(void) mbedtls_mpi_write_binary(NULL, NULL, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBMBEDCRYPTO_ECDH_X25519 1" >>confdefs.h
+
+
+
+	ECDH_X25519_TOOL_COND_D="ecdh-x25519-tool"
+
+
+
+$as_echo "#define HAVE_ANYLIB_ECDH_X25519 1" >>confdefs.h
+
+
+			LIBMBEDCRYPTO_USABLE="Yes"
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
 fi
 
 	if test "${LIBMBEDCRYPTO_USABLE}" = "Yes"; then :
@@ -11402,6 +11530,59 @@ if ac_fn_c_try_link "$LINENO"; then :
 $as_echo "yes" >&6; }
 
 $as_echo "#define HAVE_LIBNETTLE_MEMEQL 1" >>confdefs.h
+
+			LIBNETTLE_USABLE="Yes"
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libnettle can provide SASL ECDH-X25519-CHALLENGE" >&5
+$as_echo_n "checking if libnettle can provide SASL ECDH-X25519-CHALLENGE... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <nettle/curve25519.h>
+				#ifndef NETTLE_CURVE25519_RFC7748
+				#  error "NETTLE_CURVE25519_RFC7748 is not set"
+				#endif
+
+int
+main ()
+{
+
+				(void) nettle_curve25519_mul_g(NULL, NULL);
+				(void) nettle_curve25519_mul(NULL, NULL, NULL);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBNETTLE_ECDH_X25519 1" >>confdefs.h
+
+
+
+	ECDH_X25519_TOOL_COND_D="ecdh-x25519-tool"
+
+
+
+$as_echo "#define HAVE_ANYLIB_ECDH_X25519 1" >>confdefs.h
+
 
 			LIBNETTLE_USABLE="Yes"
 
@@ -12424,6 +12605,56 @@ if ac_fn_c_try_link "$LINENO"; then :
 $as_echo "yes" >&6; }
 
 $as_echo "#define HAVE_LIBSODIUM_SCRYPT 1" >>confdefs.h
+
+			LIBSODIUM_USABLE="Yes"
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libsodium can provide SASL ECDH-X25519-CHALLENGE" >&5
+$as_echo_n "checking if libsodium can provide SASL ECDH-X25519-CHALLENGE... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <sodium/crypto_scalarmult_curve25519.h>
+
+int
+main ()
+{
+
+				(void) crypto_scalarmult_curve25519_base(NULL, NULL);
+				(void) crypto_scalarmult_curve25519(NULL, NULL, NULL);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBSODIUM_ECDH_X25519 1" >>confdefs.h
+
+
+
+	ECDH_X25519_TOOL_COND_D="ecdh-x25519-tool"
+
+
+
+$as_echo "#define HAVE_ANYLIB_ECDH_X25519 1" >>confdefs.h
+
 
 			LIBSODIUM_USABLE="Yes"
 

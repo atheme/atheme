@@ -86,6 +86,29 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 		], [
 			AC_MSG_RESULT([no])
 		])
+
+		AC_MSG_CHECKING([if libnettle can provide SASL ECDH-X25519-CHALLENGE])
+		AC_LINK_IFELSE([
+			AC_LANG_PROGRAM([[
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <nettle/curve25519.h>
+				#ifndef NETTLE_CURVE25519_RFC7748
+				#  error "NETTLE_CURVE25519_RFC7748 is not set"
+				#endif
+			]], [[
+				(void) nettle_curve25519_mul_g(NULL, NULL);
+				(void) nettle_curve25519_mul(NULL, NULL, NULL);
+			]])
+		], [
+			AC_MSG_RESULT([yes])
+			AC_DEFINE([HAVE_LIBNETTLE_ECDH_X25519], [1], [Define to 1 if libnettle can provide SASL ECDH-X25519-CHALLENGE])
+			ATHEME_COND_ECDH_X25519_TOOL_ENABLE
+			LIBNETTLE_USABLE="Yes"
+		], [
+			AC_MSG_RESULT([no])
+		])
 	])
 
 	AS_IF([test "${LIBNETTLE_USABLE}" = "Yes"], [
