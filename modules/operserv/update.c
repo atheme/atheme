@@ -7,7 +7,7 @@
  * This file contains functionality which implements the OService UPDATE command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 void
 os_cmd_update(struct sourceinfo *si, int parc, char *parv[])

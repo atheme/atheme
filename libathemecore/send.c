@@ -12,7 +12,7 @@
  * send.c: Socket I/O.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 /* send a line to the server, append the \r\n */
 int ATHEME_FATTR_PRINTF(1, 2)

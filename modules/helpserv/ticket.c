@@ -7,7 +7,7 @@
  * Allows requesting help for a account
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 struct help_ticket
 {

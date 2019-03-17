@@ -10,8 +10,8 @@
  * This file contains protocol support for ponychat-ircd.
  */
 
-#include "atheme.h"
-#include "protocol/elemental-ircd.h"
+#include <atheme.h>
+#include <atheme/protocol/elemental-ircd.h>
 
 static struct ircd elemental_ircd = {
 	.ircdname = "elemental-ircd",

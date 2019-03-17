@@ -12,7 +12,7 @@
  * packet.c: IRC packet handling.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 /* bursting timer */
 #if HAVE_GETTIMEOFDAY

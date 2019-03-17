@@ -7,7 +7,7 @@
  * This file contains code for the NickServ GHOST function.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 void
 ns_cmd_ghost(struct sourceinfo *si, int parc, char *parv[])

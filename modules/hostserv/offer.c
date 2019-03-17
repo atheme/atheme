@@ -8,7 +8,7 @@
  * Allows opers to offer vhosts to users
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "hostserv.h"
 
 struct hsoffered

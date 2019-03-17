@@ -7,7 +7,7 @@
  * Module to disable holdnick enforcers.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static int oldflag;
 

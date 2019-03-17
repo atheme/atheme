@@ -13,7 +13,7 @@
  * connection.c: Connection and I/O management
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #ifdef MOWGLI_OS_WIN
 # define EWOULDBLOCK WSAEWOULDBLOCK

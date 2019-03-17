@@ -8,7 +8,7 @@
  * Prevents you from being added to group access lists.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "list_common.h"
 #include "list.h"
 

@@ -8,7 +8,7 @@
  * Changes the account name to another registered nick
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_patricia_t **ns_set_cmdtree = NULL;
 

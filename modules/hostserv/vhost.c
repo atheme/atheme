@@ -7,7 +7,7 @@
  * Allows setting a vhost on an account
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "hostserv.h"
 
 // VHOST <nick> [host]

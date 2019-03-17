@@ -7,8 +7,8 @@
  * Initialization stub for libathemecore.
  */
 
-#include "atheme.h"
-#include "libathemecore.h"
+#include <atheme.h>
+#include <atheme/libathemecore.h>
 
 int
 main(int argc, char *argv[])

@@ -13,7 +13,7 @@
  * commandtree.c: Management of services commands.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static bool permissive_mode_fallback = false;
 

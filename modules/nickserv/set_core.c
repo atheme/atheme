@@ -8,7 +8,7 @@
  * This file contains routines to handle the CService SET command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 // Imported by other modules/nickserv/set_*.so
 mowgli_patricia_t *ns_set_cmdtree = NULL;

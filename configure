@@ -631,10 +631,6 @@ LTLIBOBJS
 LIBMOWGLI_COND_D
 MOWGLI_LIBS
 MOWGLI_CFLAGS
-RANDOM_API_LIBS
-DIGEST_API_LIBS
-RANDOM_API_CFLAGS
-DIGEST_API_CFLAGS
 LEGACY_PWCRYPTO_COND_C
 SHAREDIR
 RUNDIR
@@ -664,6 +660,7 @@ LDAP_LIBS
 LIBIDN_LIBS
 LIBIDN_CFLAGS
 ECDSA_TOOLS_COND_D
+ECDH_X25519_TOOL_COND_D
 LIBCRYPTO_LIBS
 LIBCRYPTO_CFLAGS
 LIBCRYPT_LIBS
@@ -817,6 +814,8 @@ enable_large_net
 enable_legacy_pwcrypto
 enable_reproducible_builds
 enable_sodium_malloc
+with_digest_api_frontend
+with_rng_api_frontend
 enable_fortify_source
 enable_async_unwind_tables
 enable_stack_clash_protection
@@ -1531,24 +1530,33 @@ Optional Packages:
                           strength)
   --without-crypt         Do not attempt to detect crypt(3) (for
                           modules/crypto/crypt3-*)
-  --without-openssl       Do not attempt to detect libcrypto (for
-                          modules/saslserv/ecdsa-nist256p-challenge)
-  --without-libidn        Do not attempt to detect libidn (for
+  --without-openssl       Do not attempt to detect OpenSSL (cryptographic
+                          library)
+  --without-libidn        Do not attempt to detect GNU libidn (for
                           modules/saslserv/scram-sha -- SASLprep
                           normalization)
   --without-ldap          Do not attempt to detect libldap (for
                           modules/auth/ldap)
-  --without-mbedtls       Do not attempt to detect libmbedcrypto
-  --without-nettle        Do not attempt to detect nettle (crypto library)
+  --without-mbedtls       Do not attempt to detect ARM mbedTLS (cryptographic
+                          library)
+  --without-nettle        Do not attempt to detect nettle (cryptographic
+                          library)
   --without-passwdqc      Do not attempt to detect libpasswdqc (for
                           modules/nickserv/pwquality -- checking password
                           strength)
-  --without-pcre          Do not attempt to detect libpcre
-  --without-qrencode      Do not attempt to detect libqrencode for generating
-                          QR codes
+  --without-pcre          Do not attempt to detect libpcre (Perl-Compatible
+                          Regular Expressions)
+  --without-qrencode      Do not attempt to detect libqrencode (for generating
+                          QR codes)
   --without-sodium        Do not attempt to detect libsodium (cryptographic
                           library)
   --with-perl             Enable Perl (for modules/scripting/perl)
+  --with-digest-api-frontend=[frontend]
+                          Digest API frontend to use (auto, mbedtls, nettle,
+                          openssl, libressl, internal). Default: auto
+  --with-rng-api-frontend=[frontend]
+                          RNG API frontend to use (auto, openbsd, sodium,
+                          mbedtls, openssl, libressl, internal). Default: auto
   --with-libmowgli[=prefix]
                           Specify location of system libmowgli install, "yes"
                           to ask pkg-config (default), or "no" to force use of
@@ -2654,7 +2662,7 @@ ac_configure="$SHELL $ac_aux_dir/configure"  # Please don't use this var.
 
 
 
-ac_config_headers="$ac_config_headers include/sysconf.h"
+ac_config_headers="$ac_config_headers include/atheme/sysconf.h"
 
 
 
@@ -9945,9 +9953,7 @@ fi
 	LIBCRYPTO_NAME=""
 	LIBCRYPTO_USABLE="No"
 	LIBCRYPTO_DIGEST="No"
-	LIBCRYPTO_MEMCMP="No"
 	LIBCRYPTO_RANDOM="No"
-	LIBCRYPTO_ECDSA="No"
 
 
 # Check whether --with-openssl was given.
@@ -10175,7 +10181,6 @@ else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBCRYPTO_DIGEST="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -10219,7 +10224,6 @@ else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBCRYPTO_RANDOM="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -10251,21 +10255,72 @@ if ac_fn_c_try_link "$LINENO"; then :
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBCRYPTO_MEMCMP 1" >>confdefs.h
+
 			LIBCRYPTO_USABLE="Yes"
-			LIBCRYPTO_MEMCMP="Yes"
 
 else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBCRYPTO_MEMCMP="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libcrypto has usable elliptic curve key construction and signature verification functions" >&5
-$as_echo_n "checking if libcrypto has usable elliptic curve key construction and signature verification functions... " >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libcrypto can provide SASL ECDH-X25519-CHALLENGE" >&5
+$as_echo_n "checking if libcrypto can provide SASL ECDH-X25519-CHALLENGE... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <openssl/curve25519.h>
+
+int
+main ()
+{
+
+				(void) X25519_keypair(NULL, NULL);
+				(void) X25519(NULL, NULL, NULL);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBCRYPTO_ECDH_X25519 1" >>confdefs.h
+
+
+
+	ECDH_X25519_TOOL_COND_D="ecdh-x25519-tool"
+
+
+
+$as_echo "#define HAVE_ANYLIB_ECDH_X25519 1" >>confdefs.h
+
+
+			LIBCRYPTO_USABLE="Yes"
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libcrypto can provide SASL ECDSA-NIST256P-CHALLENGE" >&5
+$as_echo_n "checking if libcrypto can provide SASL ECDSA-NIST256P-CHALLENGE... " >&6; }
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -10295,14 +10350,20 @@ if ac_fn_c_try_link "$LINENO"; then :
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBCRYPTO_ECDSA 1" >>confdefs.h
+
+
+
+	ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
+
+
 			LIBCRYPTO_USABLE="Yes"
-			LIBCRYPTO_ECDSA="Yes"
 
 else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBCRYPTO_ECDSA="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -10352,22 +10413,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 $as_echo "#define HAVE_LIBCRYPTO 1" >>confdefs.h
 
-		if test "${LIBCRYPTO_MEMCMP}" = "Yes"; then :
-
-
-$as_echo "#define HAVE_LIBCRYPTO_MEMCMP 1" >>confdefs.h
-
-
-fi
-		if test "${LIBCRYPTO_ECDSA}" = "Yes"; then :
-
-			ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
-
-$as_echo "#define HAVE_LIBCRYPTO_ECDSA 1" >>confdefs.h
-
-
-
-fi
 
 else
 
@@ -10868,6 +10913,11 @@ $as_echo_n "checking if libmbedcrypto appears to be usable... " >&6; }
 					#ifdef HAVE_STDDEF_H
 					#  include <stddef.h>
 					#endif
+					#ifdef MBEDTLS_CONFIG_FILE
+					#  include MBEDTLS_CONFIG_FILE
+					#else
+					#  include <mbedtls/config.h>
+					#endif
 					#include <mbedtls/error.h>
 					#include <mbedtls/version.h>
 					#ifndef MBEDTLS_ERROR_C
@@ -10942,6 +10992,11 @@ $as_echo_n "checking if libmbedcrypto has usable MD5/SHA1/SHA2/HMAC/PBKDF2 funct
 				#ifdef HAVE_STDDEF_H
 				#  include <stddef.h>
 				#endif
+				#ifdef MBEDTLS_CONFIG_FILE
+				#  include MBEDTLS_CONFIG_FILE
+				#else
+				#  include <mbedtls/config.h>
+				#endif
 				#include <mbedtls/md.h>
 				#include <mbedtls/pkcs5.h>
 				#ifndef MBEDTLS_MD_C
@@ -10998,14 +11053,13 @@ else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBMBEDCRYPTO_DIGEST="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libmbedcrypto has usable HMAC-DRBG functions" >&5
-$as_echo_n "checking if libmbedcrypto has usable HMAC-DRBG functions... " >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libmbedcrypto has usable entropy-gathering functions" >&5
+$as_echo_n "checking if libmbedcrypto has usable entropy-gathering functions... " >&6; }
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -11013,17 +11067,14 @@ $as_echo_n "checking if libmbedcrypto has usable HMAC-DRBG functions... " >&6; }
 				#ifdef HAVE_STDDEF_H
 				#  include <stddef.h>
 				#endif
+				#ifdef MBEDTLS_CONFIG_FILE
+				#  include MBEDTLS_CONFIG_FILE
+				#else
+				#  include <mbedtls/config.h>
+				#endif
 				#include <mbedtls/entropy.h>
-				#include <mbedtls/hmac_drbg.h>
-				#include <mbedtls/md.h>
 				#ifndef MBEDTLS_ENTROPY_C
 				#  error "MBEDTLS_ENTROPY_C is not enabled"
-				#endif
-				#ifndef MBEDTLS_HMAC_DRBG_C
-				#  error "MBEDTLS_HMAC_DRBG_C is not enabled"
-				#endif
-				#ifndef MBEDTLS_MD_C
-				#  error "MBEDTLS_MD_C is not enabled"
 				#endif
 
 int
@@ -11032,10 +11083,6 @@ main ()
 
 				(void) mbedtls_entropy_init(NULL);
 				(void) mbedtls_entropy_func(NULL, NULL, 0);
-				(void) mbedtls_hmac_drbg_init(NULL);
-				(void) mbedtls_hmac_drbg_seed(NULL, NULL, NULL, NULL, NULL, 0);
-				(void) mbedtls_hmac_drbg_reseed(NULL, NULL, 0);
-				(void) mbedtls_hmac_drbg_random(NULL, NULL, 0);
 
   ;
   return 0;
@@ -11046,49 +11093,228 @@ if ac_fn_c_try_link "$LINENO"; then :
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-			LIBMBEDCRYPTO_USABLE="Yes"
-			LIBMBEDCRYPTO_RANDOM="Yes"
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libmbedcrypto has usable CTR-DRBG functions" >&5
+$as_echo_n "checking if libmbedcrypto has usable CTR-DRBG functions... " >&6; }
+			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+					#ifdef HAVE_STDDEF_H
+					#  include <stddef.h>
+					#endif
+					#ifdef MBEDTLS_CONFIG_FILE
+					#  include MBEDTLS_CONFIG_FILE
+					#else
+					#  include <mbedtls/config.h>
+					#endif
+					#include <mbedtls/ctr_drbg.h>
+					#ifndef MBEDTLS_CTR_DRBG_C
+					#  error "MBEDTLS_CTR_DRBG_C is not enabled"
+					#endif
+
+int
+main ()
+{
+
+					(void) mbedtls_ctr_drbg_init(NULL);
+					(void) mbedtls_ctr_drbg_seed(NULL, NULL, NULL, NULL, 0);
+					(void) mbedtls_ctr_drbg_reseed(NULL, NULL, 0);
+					(void) mbedtls_ctr_drbg_random(NULL, NULL, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBMBEDCRYPTO_CTR_DRBG 1" >>confdefs.h
+
+				LIBMBEDCRYPTO_USABLE="Yes"
+				LIBMBEDCRYPTO_RANDOM="Yes"
 
 else
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBMBEDCRYPTO_RANDOM="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
-		if test "${LIBMBEDCRYPTO_USABLE}" = "Yes"; then :
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libmbedcrypto has usable HMAC-DRBG functions" >&5
+$as_echo_n "checking if libmbedcrypto has usable HMAC-DRBG functions... " >&6; }
+			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+					#ifdef HAVE_STDDEF_H
+					#  include <stddef.h>
+					#endif
+					#ifdef MBEDTLS_CONFIG_FILE
+					#  include MBEDTLS_CONFIG_FILE
+					#else
+					#  include <mbedtls/config.h>
+					#endif
+					#include <mbedtls/hmac_drbg.h>
+					#include <mbedtls/md.h>
+					#ifndef MBEDTLS_HMAC_DRBG_C
+					#  error "MBEDTLS_HMAC_DRBG_C is not enabled"
+					#endif
+					#ifndef MBEDTLS_MD_C
+					#  error "MBEDTLS_MD_C is not enabled"
+					#endif
+					#if !defined(MBEDTLS_SHA256_C) && !defined(MBEDTLS_SHA512_C)
+					#  error "Neither MBEDTLS_SHA256_C nor MBEDTLS_SHA512_C are enabled"
+					#endif
+
+int
+main ()
+{
+
+					(void) mbedtls_md_info_from_type(MBEDTLS_MD_NONE);
+					(void) mbedtls_hmac_drbg_init(NULL);
+					(void) mbedtls_hmac_drbg_seed(NULL, NULL, NULL, NULL, NULL, 0);
+					(void) mbedtls_hmac_drbg_reseed(NULL, NULL, 0);
+					(void) mbedtls_hmac_drbg_random(NULL, NULL, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBMBEDCRYPTO_HMAC_DRBG 1" >>confdefs.h
+
+				LIBMBEDCRYPTO_USABLE="Yes"
+				LIBMBEDCRYPTO_RANDOM="Yes"
+
+else
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libmbedcrypto can provide SASL ECDH-X25519-CHALLENGE" >&5
+$as_echo_n "checking if libmbedcrypto can provide SASL ECDH-X25519-CHALLENGE... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#ifdef MBEDTLS_CONFIG_FILE
+				#  include MBEDTLS_CONFIG_FILE
+				#else
+				#  include <mbedtls/config.h>
+				#endif
+				#include <mbedtls/bignum.h>
+				#include <mbedtls/ecdh.h>
+				#include <mbedtls/ecp.h>
+				#ifndef MBEDTLS_BIGNUM_C
+				#  error "MBEDTLS_BIGNUM_C is not enabled"
+				#endif
+				#ifndef MBEDTLS_ECDH_C
+				#  error "MBEDTLS_ECDH_C is not enabled"
+				#endif
+				#ifndef MBEDTLS_ECP_C
+				#  error "MBEDTLS_ECP_C is not enabled"
+				#endif
+
+int
+main ()
+{
+
+				(void) mbedtls_ecdh_compute_shared(NULL, NULL, NULL, NULL, NULL, NULL);
+				(void) mbedtls_ecdh_gen_public(NULL, NULL, NULL, NULL, NULL);
+				(void) mbedtls_ecp_check_pubkey(NULL, NULL);
+				(void) mbedtls_ecp_group_free(NULL);
+				(void) mbedtls_ecp_group_init(NULL);
+				(void) mbedtls_ecp_group_load(NULL, 0);
+				(void) mbedtls_ecp_point_free(NULL);
+				(void) mbedtls_ecp_point_init(NULL);
+				(void) mbedtls_mpi_free(NULL);
+				(void) mbedtls_mpi_init(NULL);
+				(void) mbedtls_mpi_lset(NULL, 0);
+				(void) mbedtls_mpi_read_binary(NULL, NULL, 0);
+				(void) mbedtls_mpi_write_binary(NULL, NULL, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBMBEDCRYPTO_ECDH_X25519 1" >>confdefs.h
+
+
+
+	ECDH_X25519_TOOL_COND_D="ecdh-x25519-tool"
+
+
+
+$as_echo "#define HAVE_ANYLIB_ECDH_X25519 1" >>confdefs.h
+
+
+			LIBMBEDCRYPTO_USABLE="Yes"
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+
+	if test "${LIBMBEDCRYPTO_USABLE}" = "Yes"; then :
 
 
 $as_echo "#define HAVE_LIBMBEDCRYPTO 1" >>confdefs.h
 
-			if test "${LIBMBEDCRYPTO_RANDOM}" = "Yes"; then :
+		if test "x${ac_cv_search_mbedtls_version_get_string}" != "xnone required"; then :
 
-
-$as_echo "#define HAVE_LIBMBEDCRYPTO_HMAC_DRBG 1" >>confdefs.h
-
-
-fi
-			if test "x${ac_cv_search_mbedtls_version_get_string}" != "xnone required"; then :
-
-				LIBMBEDCRYPTO_LIBS="${ac_cv_search_mbedtls_version_get_string}"
+			LIBMBEDCRYPTO_LIBS="${ac_cv_search_mbedtls_version_get_string}"
 
 
 fi
 
 else
 
-			LIBMBEDCRYPTO="No"
-			if test "${with_mbedtls}" = "yes"; then :
+		LIBMBEDCRYPTO="No"
+		if test "${with_mbedtls}" = "yes"; then :
 
-				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+			{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "--with-mbedtls was given but libmbedcrypto appears to be unusable
 See \`config.log' for more details" "$LINENO" 5; }
-
-fi
 
 fi
 
@@ -11101,7 +11327,6 @@ fi
 	LIBNETTLE="No"
 	LIBNETTLE_USABLE="No"
 	LIBNETTLE_DIGEST="No"
-	LIBNETTLE_MEMEQL="No"
 
 
 # Check whether --with-nettle was given.
@@ -11303,8 +11528,10 @@ if ac_fn_c_try_link "$LINENO"; then :
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBNETTLE_MEMEQL 1" >>confdefs.h
+
 			LIBNETTLE_USABLE="Yes"
-			LIBNETTLE_MEMEQL="Yes"
 
 else
 
@@ -11315,19 +11542,67 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
-		if test "${LIBNETTLE_USABLE}" = "Yes"; then :
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libnettle can provide SASL ECDH-X25519-CHALLENGE" >&5
+$as_echo_n "checking if libnettle can provide SASL ECDH-X25519-CHALLENGE... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <nettle/curve25519.h>
+				#ifndef NETTLE_CURVE25519_RFC7748
+				#  error "NETTLE_CURVE25519_RFC7748 is not set"
+				#endif
+
+int
+main ()
+{
+
+				(void) nettle_curve25519_mul_g(NULL, NULL);
+				(void) nettle_curve25519_mul(NULL, NULL, NULL);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBNETTLE_ECDH_X25519 1" >>confdefs.h
+
+
+
+	ECDH_X25519_TOOL_COND_D="ecdh-x25519-tool"
+
+
+
+$as_echo "#define HAVE_ANYLIB_ECDH_X25519 1" >>confdefs.h
+
+
+			LIBNETTLE_USABLE="Yes"
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+
+	if test "${LIBNETTLE_USABLE}" = "Yes"; then :
 
 
 $as_echo "#define HAVE_LIBNETTLE 1" >>confdefs.h
 
-			if test "${LIBNETTLE_MEMEQL}" = "Yes"; then :
-
-
-$as_echo "#define HAVE_LIBNETTLE_MEMEQL 1" >>confdefs.h
-
-
-fi
-			for ac_header in nettle/version.h
+		for ac_header in nettle/version.h
 do :
   ac_fn_c_check_header_mongrel "$LINENO" "nettle/version.h" "ac_cv_header_nettle_version_h" "$ac_includes_default"
 if test "x$ac_cv_header_nettle_version_h" = xyes; then :
@@ -11342,15 +11617,13 @@ done
 
 else
 
-			LIBNETTLE="No"
-			if test "${with_nettle}" = "yes"; then :
+		LIBNETTLE="No"
+		if test "${with_nettle}" = "yes"; then :
 
-				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+			{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "--with-nettle was given but libnettle appears to be unusable
 See \`config.log' for more details" "$LINENO" 5; }
-
-fi
 
 fi
 
@@ -11759,7 +12032,6 @@ fi
 
 
 	LIBQRENCODE="No"
-	QRCODE_COND_C=""
 
 
 # Check whether --with-qrencode was given.
@@ -11903,9 +12175,12 @@ if ac_fn_c_try_link "$LINENO"; then :
 					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 					LIBQRENCODE="Yes"
-					QRCODE_COND_C="qrcode.c"
 
 $as_echo "#define HAVE_LIBQRENCODE 1" >>confdefs.h
+
+
+
+	QRCODE_COND_C="qrcode.c"
 
 
 
@@ -11966,10 +12241,7 @@ fi
 	LIBSODIUM="No"
 	LIBSODIUM_USABLE="No"
 	LIBSODIUM_MEMORY="No"
-	LIBSODIUM_MEMCMP="No"
-	LIBSODIUM_MEMZERO="No"
 	LIBSODIUM_RANDOM="No"
-	LIBSODIUM_SCRYPT="No"
 
 
 # Check whether --with-sodium was given.
@@ -12173,7 +12445,6 @@ else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBSODIUM_MEMORY="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -12206,14 +12477,15 @@ if ac_fn_c_try_link "$LINENO"; then :
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBSODIUM_MEMCMP 1" >>confdefs.h
+
 			LIBSODIUM_USABLE="Yes"
-			LIBSODIUM_MEMCMP="Yes"
 
 else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBSODIUM_MEMCMP="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -12246,14 +12518,15 @@ if ac_fn_c_try_link "$LINENO"; then :
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBSODIUM_MEMZERO 1" >>confdefs.h
+
 			LIBSODIUM_USABLE="Yes"
-			LIBSODIUM_MEMZERO="Yes"
 
 else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBSODIUM_MEMZERO="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -12296,7 +12569,6 @@ else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBSODIUM_RANDOM="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -12331,57 +12603,87 @@ if ac_fn_c_try_link "$LINENO"; then :
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBSODIUM_SCRYPT 1" >>confdefs.h
+
 			LIBSODIUM_USABLE="Yes"
-			LIBSODIUM_SCRYPT="Yes"
 
 else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			LIBSODIUM_SCRYPT="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
-		if test "${LIBSODIUM_USABLE}" = "Yes"; then :
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libsodium can provide SASL ECDH-X25519-CHALLENGE" >&5
+$as_echo_n "checking if libsodium can provide SASL ECDH-X25519-CHALLENGE... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <sodium/crypto_scalarmult_curve25519.h>
+
+int
+main ()
+{
+
+				(void) crypto_scalarmult_curve25519_base(NULL, NULL);
+				(void) crypto_scalarmult_curve25519(NULL, NULL, NULL);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBSODIUM_ECDH_X25519 1" >>confdefs.h
+
+
+
+	ECDH_X25519_TOOL_COND_D="ecdh-x25519-tool"
+
+
+
+$as_echo "#define HAVE_ANYLIB_ECDH_X25519 1" >>confdefs.h
+
+
+			LIBSODIUM_USABLE="Yes"
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+
+	if test "${LIBSODIUM_USABLE}" = "Yes"; then :
 
 
 $as_echo "#define HAVE_LIBSODIUM 1" >>confdefs.h
 
-			if test "${LIBSODIUM_MEMCMP}" = "Yes"; then :
-
-
-$as_echo "#define HAVE_LIBSODIUM_MEMCMP 1" >>confdefs.h
-
-
-fi
-			if test "${LIBSODIUM_MEMZERO}" = "Yes"; then :
-
-
-$as_echo "#define HAVE_LIBSODIUM_MEMZERO 1" >>confdefs.h
-
-
-fi
-			if test "${LIBSODIUM_SCRYPT}" = "Yes"; then :
-
-
-$as_echo "#define HAVE_LIBSODIUM_SCRYPT 1" >>confdefs.h
-
-
-fi
 
 else
 
-			LIBSODIUM="No"
-			if test "${with_sodium}" = "yes"; then :
+		LIBSODIUM="No"
+		if test "${with_sodium}" = "yes"; then :
 
-				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+			{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "--with-sodium was given but libsodium appears to be unusable
 See \`config.log' for more details" "$LINENO" 5; }
-
-fi
 
 fi
 
@@ -12485,7 +12787,10 @@ fi
 
 fi
 
-			PERL_COND_D="perl"
+
+
+	PERL_COND_D="perl"
+
 
 		else
 			LIBPERL="No"
@@ -12509,7 +12814,6 @@ fi
 
 
 	CONTRIB_MODULES="No"
-	CONTRIB_COND_D=""
 
 	# Check whether --enable-contrib was given.
 if test "${enable_contrib+set}" = set; then :
@@ -12753,9 +13057,12 @@ fi
 
 
 			CONTRIB_MODULES="Yes"
-			CONTRIB_COND_D="contrib"
 
 $as_echo "#define ATHEME_ENABLE_CONTRIB 1" >>confdefs.h
+
+
+
+	CONTRIB_COND_D="contrib"
 
 
 			;;
@@ -12878,9 +13185,12 @@ fi
 	case "x${enable_legacy_pwcrypto}" in
 		xyes)
 			LEGACY_PWCRYPTO="Yes"
-			LEGACY_PWCRYPTO_COND_C="crypt3-des.c crypt3-md5.c ircservices.c rawmd5.c rawsha1.c"
 
 $as_echo "#define ATHEME_ENABLE_LEGACY_PWCRYPTO 1" >>confdefs.h
+
+
+
+	LEGACY_PWCRYPTO_COND_C="crypt3-des.c crypt3-md5.c ircservices.c rawmd5.c rawsha1.c rawsha256.c rawsha512.c"
 
 
 			;;
@@ -12910,6 +13220,15 @@ fi
 
 $as_echo "#define ATHEME_ENABLE_REPRODUCIBLE_BUILDS 1" >>confdefs.h
 
+			if test "x${SOURCE_DATE_EPOCH}" != "x"; then :
+
+
+cat >>confdefs.h <<_ACEOF
+#define SOURCE_DATE_EPOCH ${SOURCE_DATE_EPOCH}
+_ACEOF
+
+
+fi
 			;;
 		xno)
 			REPRODUCIBLE_BUILDS="No"
@@ -12962,37 +13281,132 @@ $as_echo "$as_me: WARNING: The sodium hardened memory allocator is not intended 
 
 
 
+	DIGEST_FRONTEND_VAL=""
+	DIGEST_FRONTEND=""
+
+
+# Check whether --with-digest-api-frontend was given.
+if test "${with_digest_api_frontend+set}" = set; then :
+  withval=$with_digest_api_frontend;
+else
+  with_digest_api_frontend="auto"
+fi
+
+
+	case "x${with_digest_api_frontend}" in
+
+		xauto)
+			if test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_DIGEST}" = "YesYes"; then :
+
+
+
+	DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_MBEDTLS"
+	DIGEST_FRONTEND="ARM mbedTLS"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&5
+$as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&6;}
+
+elif test "${LIBNETTLE}${LIBNETTLE_DIGEST}" = "YesYes"; then :
+
+
+
+	DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_NETTLE"
+	DIGEST_FRONTEND="Nettle"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&5
+$as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&6;}
+
+elif test "${LIBCRYPTO}${LIBCRYPTO_DIGEST}" = "YesYes"; then :
+
+
+
+	DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_OPENSSL"
+	DIGEST_FRONTEND="${LIBCRYPTO_NAME}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&5
+$as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&6;}
+
+else
+
+
+
 	DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_INTERNAL"
 	DIGEST_FRONTEND="Internal"
-	DIGEST_API_CFLAGS=""
-	DIGEST_API_LIBS=""
 
-	if test "${DIGEST_FRONTEND}${LIBMBEDCRYPTO_DIGEST}" = "InternalYes"; then :
-
-		DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_MBEDTLS"
-		DIGEST_FRONTEND="ARM mbedTLS"
-		DIGEST_API_CFLAGS=""
-		DIGEST_API_LIBS="${LIBMBEDCRYPTO_LIBS}"
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&5
+$as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&6;}
 
 fi
+			;;
 
-	if test "${DIGEST_FRONTEND}${LIBNETTLE_DIGEST}" = "InternalYes"; then :
+		xmbedtls)
+			if test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_DIGEST}" = "YesYes"; then :
 
-		DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_NETTLE"
-		DIGEST_FRONTEND="Nettle"
-		DIGEST_API_CFLAGS="${LIBNETTLE_CFLAGS}"
-		DIGEST_API_LIBS="${LIBNETTLE_LIBS}"
+
+
+	DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_MBEDTLS"
+	DIGEST_FRONTEND="ARM mbedTLS"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&5
+$as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&6;}
+
+else
+
+				as_fn_error $? "--with-digest-api-frontend=mbedtls requires --with-mbedtls and usable MD5/SHA1/SHA2/HMAC/PBKDF2 functions" "$LINENO" 5
 
 fi
+			;;
 
-	if test "${DIGEST_FRONTEND}${LIBCRYPTO_DIGEST}" = "InternalYes"; then :
+		xnettle)
+			if test "${LIBNETTLE}${LIBNETTLE_DIGEST}" = "YesYes"; then :
 
-		DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_OPENSSL"
-		DIGEST_FRONTEND="${LIBCRYPTO_NAME}"
-		DIGEST_API_CFLAGS="${LIBCRYPTO_CFLAGS}"
-		DIGEST_API_LIBS="${LIBCRYPTO_LIBS}"
+
+
+	DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_NETTLE"
+	DIGEST_FRONTEND="Nettle"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&5
+$as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&6;}
+
+else
+
+				as_fn_error $? "--with-digest-api-frontend=nettle requires --with-nettle and usable MD5/SHA1/SHA2 functions" "$LINENO" 5
 
 fi
+			;;
+
+		xopenssl | xlibressl)
+			if test "${LIBCRYPTO}${LIBCRYPTO_DIGEST}" = "YesYes"; then :
+
+
+
+	DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_OPENSSL"
+	DIGEST_FRONTEND="${LIBCRYPTO_NAME}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&5
+$as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&6;}
+
+else
+
+				as_fn_error $? "--with-digest-api-frontend=openssl/libressl requires --with-openssl and usable MD5/SHA1/SHA2/HMAC/PBKDF2 functions" "$LINENO" 5
+
+fi
+			;;
+
+		xinternal)
+
+
+	DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_INTERNAL"
+	DIGEST_FRONTEND="Internal"
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&5
+$as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&6;}
+			;;
+
+		*)
+			as_fn_error $? "invalid option for --with-digest-api-frontend (auto, mbedtls, nettle, openssl, libressl, internal)" "$LINENO" 5
+			;;
+	esac
 
 
 cat >>confdefs.h <<_ACEOF
@@ -13002,10 +13416,20 @@ _ACEOF
 
 
 
-	RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_INTERNAL"
-	RANDOM_FRONTEND="Internal"
-	RANDOM_API_CFLAGS=""
-	RANDOM_API_LIBS=""
+	OPENBSD="No"
+	OPENBSD_ARC4RANDOM="No"
+
+	RANDOM_FRONTEND_VAL=""
+	RANDOM_FRONTEND=""
+
+
+# Check whether --with-rng-api-frontend was given.
+if test "${with_rng_api_frontend+set}" = set; then :
+  withval=$with_rng_api_frontend;
+else
+  with_rng_api_frontend="auto"
+fi
+
 
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if we are building for OpenBSD" >&5
 $as_echo_n "checking if we are building for OpenBSD... " >&6; }
@@ -13013,8 +13437,8 @@ $as_echo_n "checking if we are building for OpenBSD... " >&6; }
 /* end confdefs.h.  */
 
 
-			#ifdef __OpenBSD__
-			#  error "Detected OpenBSD"
+			#ifndef __OpenBSD__
+			#  error "Not building on OpenBSD"
 			#endif
 
 int
@@ -13030,13 +13454,10 @@ main ()
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-else
-
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+		OPENBSD="Yes"
+
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if arc4random(3) appears to be usable" >&5
 $as_echo_n "checking if arc4random(3) appears to be usable... " >&6; }
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -13067,54 +13488,116 @@ if ac_fn_c_try_link "$LINENO"; then :
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-			RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_OPENBSD"
-			RANDOM_FRONTEND="OpenBSD arc4random(3)"
-			RANDOM_API_CFLAGS=""
-			RANDOM_API_LIBS=""
+			OPENBSD_ARC4RANDOM="Yes"
 
 else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
+			OPENBSD_ARC4RANDOM="No"
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
+else
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+		OPENBSD="No"
+		OPENBSD_ARC4RANDOM="No"
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-	if test "${RANDOM_FRONTEND}${LIBSODIUM_RANDOM}" = "InternalYes"; then :
+	case "x${with_rng_api_frontend}" in
 
-		RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_SODIUM"
-		RANDOM_FRONTEND="Sodium"
-		RANDOM_API_CFLAGS="${LIBSODIUM_CFLAGS}"
-		RANDOM_API_LIBS="${LIBSODIUM_LIBS}"
+		xauto)
+			if test "${OPENBSD}${OPENBSD_ARC4RANDOM}" = "YesYes"; then :
 
-fi
 
-	if test "${RANDOM_FRONTEND}${LIBMBEDCRYPTO_RANDOM}" = "InternalYes"; then :
 
-		RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_MBEDTLS"
-		RANDOM_FRONTEND="ARM mbedTLS"
-		RANDOM_API_CFLAGS=""
-		RANDOM_API_LIBS="${LIBMBEDCRYPTO_LIBS}"
+	RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_OPENBSD"
+	RANDOM_FRONTEND="OpenBSD arc4random(3)"
 
-fi
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
+$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&6;}
 
-	if test "${RANDOM_FRONTEND}${LIBCRYPTO_RANDOM}" = "InternalYes"; then :
+elif test "${LIBSODIUM}${LIBSODIUM_RANDOM}" = "YesYes"; then :
 
-		RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_OPENSSL"
-		RANDOM_FRONTEND="${LIBCRYPTO_NAME}"
-		RANDOM_API_CFLAGS="${LIBCRYPTO_CFLAGS}"
-		RANDOM_API_LIBS="${LIBCRYPTO_LIBS}"
 
-fi
 
-	if test "${RANDOM_FRONTEND}" = "Internal"; then :
+	RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_SODIUM"
+	RANDOM_FRONTEND="Sodium"
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if getentropy(3) is available" >&5
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
+$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&6;}
+
+elif test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_RANDOM}" = "YesYes"; then :
+
+
+
+	RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_MBEDTLS"
+	RANDOM_FRONTEND="ARM mbedTLS"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
+$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&6;}
+
+elif test "${LIBCRYPTO}${LIBCRYPTO_RANDOM}" = "YesYes"; then :
+
+
+
+	RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_OPENSSL"
+	RANDOM_FRONTEND="${LIBCRYPTO_NAME}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
+$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&6;}
+
+else
+
+
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if getentropy(3) is available" >&5
 $as_echo_n "checking if getentropy(3) is available... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+			#ifdef HAVE_STDDEF_H
+			#  include <stddef.h>
+			#endif
+			#ifdef HAVE_STDLIB_H
+			#  include <stdlib.h>
+			#endif
+			#ifdef HAVE_UNISTD_H
+			#  include <unistd.h>
+			#endif
+
+int
+main ()
+{
+
+			(void) getentropy(NULL, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_USABLE_GETENTROPY 1" >>confdefs.h
+
+
+else
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if getrandom(2) is available" >&5
+$as_echo_n "checking if getrandom(2) is available... " >&6; }
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -13122,18 +13605,13 @@ $as_echo_n "checking if getentropy(3) is available... " >&6; }
 				#ifdef HAVE_STDDEF_H
 				#  include <stddef.h>
 				#endif
-				#ifdef HAVE_STDLIB_H
-				#  include <stdlib.h>
-				#endif
-				#ifdef HAVE_UNISTD_H
-				#  include <unistd.h>
-				#endif
+				#include <sys/random.h>
 
 int
 main ()
 {
 
-				(void) getentropy(NULL, 0);
+				(void) getrandom(NULL, 0, 0);
 
   ;
   return 0;
@@ -13145,48 +13623,14 @@ if ac_fn_c_try_link "$LINENO"; then :
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-$as_echo "#define HAVE_USABLE_GETENTROPY 1" >>confdefs.h
+$as_echo "#define HAVE_USABLE_GETRANDOM 1" >>confdefs.h
 
 
 else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if getrandom(2) is available" >&5
-$as_echo_n "checking if getrandom(2) is available... " >&6; }
-			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-					#ifdef HAVE_STDDEF_H
-					#  include <stddef.h>
-					#endif
-					#include <sys/random.h>
-
-int
-main ()
-{
-
-					(void) getrandom(NULL, 0, 0);
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-$as_echo "#define HAVE_USABLE_GETRANDOM 1" >>confdefs.h
-
-
-else
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: this program will need access to the urandom(4) device at run-time" >&5
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: this program will need access to the urandom(4) device at run-time" >&5
 $as_echo "$as_me: WARNING: this program will need access to the urandom(4) device at run-time" >&2;}
 
 fi
@@ -13197,22 +13641,190 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
+	RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_INTERNAL"
+	RANDOM_FRONTEND="Internal"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
+$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&6;}
+
 fi
+			;;
+
+		xopenbsd)
+			if test "${OPENBSD}${OPENBSD_ARC4RANDOM}" = "YesYes"; then :
+
+
+
+	RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_OPENBSD"
+	RANDOM_FRONTEND="OpenBSD arc4random(3)"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
+$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&6;}
+
+else
+
+				as_fn_error $? "--with-rng-api-frontend=openbsd requires OpenBSD a usable OpenBSD arc4random(3)" "$LINENO" 5
+
+fi
+			;;
+
+		xsodium)
+			if test "${LIBSODIUM}${LIBSODIUM_RANDOM}" = "YesYes"; then :
+
+
+
+	RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_SODIUM"
+	RANDOM_FRONTEND="Sodium"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
+$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&6;}
+
+else
+
+				as_fn_error $? "--with-rng-api-frontend=sodium requires --with-sodium and a usable random number generator" "$LINENO" 5
+
+fi
+			;;
+
+		xmbedtls)
+			if test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_RANDOM}" = "YesYes"; then :
+
+
+
+	RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_MBEDTLS"
+	RANDOM_FRONTEND="ARM mbedTLS"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
+$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&6;}
+
+else
+
+				as_fn_error $? "--with-rng-api-frontend=mbedtls requires --with-mbedtls and a usable random number generator" "$LINENO" 5
+
+fi
+			;;
+
+		xopenssl | xlibressl)
+			if test "${LIBCRYPTO}${LIBCRYPTO_RANDOM}" = "YesYes"; then :
+
+
+
+	RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_OPENSSL"
+	RANDOM_FRONTEND="${LIBCRYPTO_NAME}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
+$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&6;}
+
+else
+
+				as_fn_error $? "--with-rng-api-frontend=openssl/libressl requires --with-openssl and a usable random number generator" "$LINENO" 5
+
+fi
+			;;
+
+		xinternal)
+
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if getentropy(3) is available" >&5
+$as_echo_n "checking if getentropy(3) is available... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+			#ifdef HAVE_STDDEF_H
+			#  include <stddef.h>
+			#endif
+			#ifdef HAVE_STDLIB_H
+			#  include <stdlib.h>
+			#endif
+			#ifdef HAVE_UNISTD_H
+			#  include <unistd.h>
+			#endif
+
+int
+main ()
+{
+
+			(void) getentropy(NULL, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_USABLE_GETENTROPY 1" >>confdefs.h
+
+
+else
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if getrandom(2) is available" >&5
+$as_echo_n "checking if getrandom(2) is available... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <sys/random.h>
+
+int
+main ()
+{
+
+				(void) getrandom(NULL, 0, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_USABLE_GETRANDOM 1" >>confdefs.h
+
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: this program will need access to the urandom(4) device at run-time" >&5
+$as_echo "$as_me: WARNING: this program will need access to the urandom(4) device at run-time" >&2;}
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+	RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_INTERNAL"
+	RANDOM_FRONTEND="Internal"
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
+$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&6;}
+			;;
+
+		*)
+			as_fn_error $? "invalid option for --with-rng-api-frontend (auto, openbsd, sodium, mbedtls, openssl, libressl, internal)" "$LINENO" 5
+			;;
+	esac
 
 
 cat >>confdefs.h <<_ACEOF
 #define ATHEME_API_RANDOM_FRONTEND ${RANDOM_FRONTEND_VAL}
 _ACEOF
-
-
-if test "x${DIGEST_API_CFLAGS}" = "x${RANDOM_API_CFLAGS}"; then :
-  RANDOM_API_CFLAGS=""
-fi
-if test "x${DIGEST_API_LIBS}" = "x${RANDOM_API_LIBS}"; then :
-  RANDOM_API_LIBS=""
-fi
-
-
 
 
 
@@ -17346,11 +17958,14 @@ fi
 elif test "x${with_libmowgli}" = "xno"; then :
 
 		MOWGLI_SOURCE="Internal"
-		LIBMOWGLI_COND_D="libmowgli-2"
-
 		CPPFLAGS="${CPPFLAGS} -I$(pwd)/libmowgli-2/src/libmowgli"
 		LDFLAGS="${LDFLAGS} -L$(pwd)/libmowgli-2/src/libmowgli"
 		LIBS="${LIBS} -lmowgli-2"
+
+
+	LIBMOWGLI_COND_D="libmowgli-2"
+
+
 
 else
 
@@ -18343,7 +18958,7 @@ cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
-    "include/sysconf.h") CONFIG_HEADERS="$CONFIG_HEADERS include/sysconf.h" ;;
+    "include/atheme/sysconf.h") CONFIG_HEADERS="$CONFIG_HEADERS include/atheme/sysconf.h" ;;
     "po-directories") CONFIG_COMMANDS="$CONFIG_COMMANDS po-directories" ;;
     "atheme-services.pc") CONFIG_FILES="$CONFIG_FILES atheme-services.pc" ;;
     "buildsys.mk") CONFIG_FILES="$CONFIG_FILES buildsys.mk" ;;

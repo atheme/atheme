@@ -19,7 +19,7 @@
  * special OS support.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #ifndef INADDRSZ
 #define INADDRSZ 4

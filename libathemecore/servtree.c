@@ -13,7 +13,7 @@
  *    del_service, et al.)
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_heap_t *service_heap = NULL;
 

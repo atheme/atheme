@@ -8,7 +8,7 @@
  * Gather information about networked servers.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_patricia_t *ss_server_cmds = NULL;
 

@@ -8,7 +8,7 @@
  * Manipulates metadata entries associated with an account.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_patricia_t **ns_set_cmdtree = NULL;
 

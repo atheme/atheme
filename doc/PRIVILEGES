@@ -127,8 +127,6 @@ operserv:global
 	send global notices
 operserv:grant
 	use /os soper add/del
-operserv:override
-	use /os override to run services commands as other users
 
 group:auspex
 	see the invisible about groups and group registrations,

@@ -7,7 +7,7 @@
  * A Magic 8 Ball. Oh noes!
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "gameserv_common.h"
 
 static void

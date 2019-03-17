@@ -7,7 +7,7 @@
  * Reloads a module.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 recurse_module_deplist(struct module *m, mowgli_list_t *deplist)

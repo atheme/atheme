@@ -67,22 +67,14 @@
 #define SHA2_Ch(x, y, z)                (((x) & (y)) ^ ((~(x)) & (z)))
 #define SHA2_Maj(x, y, z)               (((x) & (y)) ^ ((x) & (z)) ^ ((y) & (z)))
 
-#define SHA2_256_REVERSE32(w, x)                                                                                    \
+#define SHA2_REVERSE32(w, x)                                                                                        \
     do {                                                                                                            \
         uint32_t tmp = (w);                                                                                         \
         tmp = (tmp >> 0x10U) | (tmp << 0x10U);                                                                      \
         (x) = ((tmp & UINT32_C(0xFF00FF00)) >> 0x08U) | ((tmp & UINT32_C(0x00FF00FF)) << 0x08U);                    \
     } while (0)
 
-#define SHA2_256_REVERSE64(w, x)                                                                                    \
-    do {                                                                                                            \
-        uint64_t tmp = (w);                                                                                         \
-        tmp = (tmp >> 0x20U) | (tmp << 0x20U);                                                                      \
-        tmp = ((tmp & UINT64_C(0xFF00FF00FF00FF00)) >> 0x08U) | ((tmp & UINT64_C(0x00FF00FF00FF00FF)) << 0x08U);    \
-        (x) = ((tmp & UINT64_C(0xFFFF0000FFFF0000)) >> 0x10U) | ((tmp & UINT64_C(0x0000FFFF0000FFFF)) << 0x10U);    \
-    } while (0)
-
-#define SHA2_512_REVERSE64(w, x)                                                                                    \
+#define SHA2_REVERSE64(w, x)                                                                                        \
     do {                                                                                                            \
         uint64_t tmp = (w);                                                                                         \
         tmp = (tmp >> 0x20U) | (tmp << 0x20U);                                                                      \
@@ -100,6 +92,11 @@
 
 #define SHA2_256_ROUND_0_TO_15(a, b, c, d, e, f, g, h)                                                              \
     do {                                                                                                            \
+        if (digest_is_big_endian_sha2())                                                                            \
+            W[j] = *data++;                                                                                         \
+        else                                                                                                        \
+            SHA2_REVERSE32(*data++, W[j]);                                                                          \
+                                                                                                                    \
         uint32_t t1 = s[h] + SHA2_256_Sigma1(s[e]) + SHA2_Ch(s[e], s[f], s[g]) + K[j] + W[j];                       \
         s[h] = t1 + SHA2_256_Sigma0(s[a]) + SHA2_Maj(s[a], s[b], s[c]);                                             \
         s[d] += t1;                                                                                                 \
@@ -108,34 +105,15 @@
 
 #define SHA2_512_ROUND_0_TO_15(a, b, c, d, e, f, g, h)                                                              \
     do {                                                                                                            \
+        if (digest_is_big_endian_sha2())                                                                            \
+            W[j] = *data++;                                                                                         \
+        else                                                                                                        \
+            SHA2_REVERSE64(*data++, W[j]);                                                                          \
+                                                                                                                    \
         uint64_t t1 = s[h] + SHA2_512_Sigma1(s[e]) + SHA2_Ch(s[e], s[f], s[g]) + K[j] + W[j];                       \
         s[h] = t1 + SHA2_512_Sigma0(s[a]) + SHA2_Maj(s[a], s[b], s[c]);                                             \
         s[d] += t1;                                                                                                 \
         j++;                                                                                                        \
-    } while (0)
-
-#define SHA2_256_ROUND_0_TO_15_BE(a, b, c, d, e, f, g, h)                                                           \
-    do {                                                                                                            \
-        W[j] = *data++;                                                                                             \
-        SHA2_256_ROUND_0_TO_15(a, b, c, d, e, f, g, h);                                                             \
-    } while (0)
-
-#define SHA2_512_ROUND_0_TO_15_BE(a, b, c, d, e, f, g, h)                                                           \
-    do {                                                                                                            \
-        W[j] = *data++;                                                                                             \
-        SHA2_512_ROUND_0_TO_15(a, b, c, d, e, f, g, h);                                                             \
-    } while (0)
-
-#define SHA2_256_ROUND_0_TO_15_LE(a, b, c, d, e, f, g, h)                                                           \
-    do {                                                                                                            \
-        SHA2_256_REVERSE32(*data++, W[j]);                                                                          \
-        SHA2_256_ROUND_0_TO_15(a, b, c, d, e, f, g, h);                                                             \
-    } while (0)
-
-#define SHA2_512_ROUND_0_TO_15_LE(a, b, c, d, e, f, g, h)                                                           \
-    do {                                                                                                            \
-        SHA2_512_REVERSE64(*data++, W[j]);                                                                          \
-        SHA2_512_ROUND_0_TO_15(a, b, c, d, e, f, g, h);                                                             \
     } while (0)
 
 #define SHA2_256_ROUND(a, b, c, d, e, f, g, h)                                                                      \
@@ -200,34 +178,17 @@ digest_transform_block_sha2_256(struct digest_context_sha2_256 *const ctx, const
 
 	(void) memcpy(s, ctx->state, sizeof s);
 
-	if (digest_is_big_endian_sha2())
-	{
-		do {
-			SHA2_256_ROUND_0_TO_15_BE(0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U);
-			SHA2_256_ROUND_0_TO_15_BE(0x07U, 0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U);
-			SHA2_256_ROUND_0_TO_15_BE(0x06U, 0x07U, 0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U);
-			SHA2_256_ROUND_0_TO_15_BE(0x05U, 0x06U, 0x07U, 0x00U, 0x01U, 0x02U, 0x03U, 0x04U);
-			SHA2_256_ROUND_0_TO_15_BE(0x04U, 0x05U, 0x06U, 0x07U, 0x00U, 0x01U, 0x02U, 0x03U);
-			SHA2_256_ROUND_0_TO_15_BE(0x03U, 0x04U, 0x05U, 0x06U, 0x07U, 0x00U, 0x01U, 0x02U);
-			SHA2_256_ROUND_0_TO_15_BE(0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U, 0x00U, 0x01U);
-			SHA2_256_ROUND_0_TO_15_BE(0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U, 0x00U);
+	do {
+		SHA2_256_ROUND_0_TO_15(0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U);
+		SHA2_256_ROUND_0_TO_15(0x07U, 0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U);
+		SHA2_256_ROUND_0_TO_15(0x06U, 0x07U, 0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U);
+		SHA2_256_ROUND_0_TO_15(0x05U, 0x06U, 0x07U, 0x00U, 0x01U, 0x02U, 0x03U, 0x04U);
+		SHA2_256_ROUND_0_TO_15(0x04U, 0x05U, 0x06U, 0x07U, 0x00U, 0x01U, 0x02U, 0x03U);
+		SHA2_256_ROUND_0_TO_15(0x03U, 0x04U, 0x05U, 0x06U, 0x07U, 0x00U, 0x01U, 0x02U);
+		SHA2_256_ROUND_0_TO_15(0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U, 0x00U, 0x01U);
+		SHA2_256_ROUND_0_TO_15(0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U, 0x00U);
 
-		} while (j < 0x10U);
-	}
-	else
-	{
-		do {
-			SHA2_256_ROUND_0_TO_15_LE(0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U);
-			SHA2_256_ROUND_0_TO_15_LE(0x07U, 0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U);
-			SHA2_256_ROUND_0_TO_15_LE(0x06U, 0x07U, 0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U);
-			SHA2_256_ROUND_0_TO_15_LE(0x05U, 0x06U, 0x07U, 0x00U, 0x01U, 0x02U, 0x03U, 0x04U);
-			SHA2_256_ROUND_0_TO_15_LE(0x04U, 0x05U, 0x06U, 0x07U, 0x00U, 0x01U, 0x02U, 0x03U);
-			SHA2_256_ROUND_0_TO_15_LE(0x03U, 0x04U, 0x05U, 0x06U, 0x07U, 0x00U, 0x01U, 0x02U);
-			SHA2_256_ROUND_0_TO_15_LE(0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U, 0x00U, 0x01U);
-			SHA2_256_ROUND_0_TO_15_LE(0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U, 0x00U);
-
-		} while (j < 0x10U);
-	}
+	} while (j < 0x10U);
 
 	do {
 		SHA2_256_ROUND(0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U);
@@ -301,34 +262,17 @@ digest_transform_block_sha2_512(struct digest_context_sha2_512 *const ctx, const
 
 	(void) memcpy(s, ctx->state, sizeof s);
 
-	if (digest_is_big_endian_sha2())
-	{
-		do {
-			SHA2_512_ROUND_0_TO_15_BE(0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U);
-			SHA2_512_ROUND_0_TO_15_BE(0x07U, 0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U);
-			SHA2_512_ROUND_0_TO_15_BE(0x06U, 0x07U, 0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U);
-			SHA2_512_ROUND_0_TO_15_BE(0x05U, 0x06U, 0x07U, 0x00U, 0x01U, 0x02U, 0x03U, 0x04U);
-			SHA2_512_ROUND_0_TO_15_BE(0x04U, 0x05U, 0x06U, 0x07U, 0x00U, 0x01U, 0x02U, 0x03U);
-			SHA2_512_ROUND_0_TO_15_BE(0x03U, 0x04U, 0x05U, 0x06U, 0x07U, 0x00U, 0x01U, 0x02U);
-			SHA2_512_ROUND_0_TO_15_BE(0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U, 0x00U, 0x01U);
-			SHA2_512_ROUND_0_TO_15_BE(0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U, 0x00U);
+	do {
+		SHA2_512_ROUND_0_TO_15(0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U);
+		SHA2_512_ROUND_0_TO_15(0x07U, 0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U);
+		SHA2_512_ROUND_0_TO_15(0x06U, 0x07U, 0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U);
+		SHA2_512_ROUND_0_TO_15(0x05U, 0x06U, 0x07U, 0x00U, 0x01U, 0x02U, 0x03U, 0x04U);
+		SHA2_512_ROUND_0_TO_15(0x04U, 0x05U, 0x06U, 0x07U, 0x00U, 0x01U, 0x02U, 0x03U);
+		SHA2_512_ROUND_0_TO_15(0x03U, 0x04U, 0x05U, 0x06U, 0x07U, 0x00U, 0x01U, 0x02U);
+		SHA2_512_ROUND_0_TO_15(0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U, 0x00U, 0x01U);
+		SHA2_512_ROUND_0_TO_15(0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U, 0x00U);
 
-		} while (j < 0x10U);
-	}
-	else
-	{
-		do {
-			SHA2_512_ROUND_0_TO_15_LE(0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U);
-			SHA2_512_ROUND_0_TO_15_LE(0x07U, 0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U);
-			SHA2_512_ROUND_0_TO_15_LE(0x06U, 0x07U, 0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U);
-			SHA2_512_ROUND_0_TO_15_LE(0x05U, 0x06U, 0x07U, 0x00U, 0x01U, 0x02U, 0x03U, 0x04U);
-			SHA2_512_ROUND_0_TO_15_LE(0x04U, 0x05U, 0x06U, 0x07U, 0x00U, 0x01U, 0x02U, 0x03U);
-			SHA2_512_ROUND_0_TO_15_LE(0x03U, 0x04U, 0x05U, 0x06U, 0x07U, 0x00U, 0x01U, 0x02U);
-			SHA2_512_ROUND_0_TO_15_LE(0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U, 0x00U, 0x01U);
-			SHA2_512_ROUND_0_TO_15_LE(0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U, 0x00U);
-
-		} while (j < 0x10U);
-	}
+	} while (j < 0x10U);
 
 	do {
 		SHA2_512_ROUND(0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U);
@@ -348,16 +292,10 @@ digest_transform_block_sha2_512(struct digest_context_sha2_512 *const ctx, const
 	(void) smemzero(s, sizeof s);
 }
 
-static bool ATHEME_FATTR_WUR
+static void
 digest_init_sha2_256(union digest_state *const restrict state)
 {
-	struct digest_context_sha2_256 *const ctx = (struct digest_context_sha2_256 *) state;
-
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
+	struct digest_context_sha2_256 *const ctx = &state->sha2_256_ctx;
 
 	static const uint32_t iv[] = {
 
@@ -367,20 +305,12 @@ digest_init_sha2_256(union digest_state *const restrict state)
 
 	(void) memset(ctx, 0x00U, sizeof *ctx);
 	(void) memcpy(ctx->state, iv, sizeof iv);
-
-	return true;
 }
 
-static bool ATHEME_FATTR_WUR
+static void
 digest_init_sha2_512(union digest_state *const restrict state)
 {
-	struct digest_context_sha2_512 *const ctx = (struct digest_context_sha2_512 *) state;
-
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
+	struct digest_context_sha2_512 *const ctx = &state->sha2_512_ctx;
 
 	static const uint64_t iv[] = {
 
@@ -392,26 +322,18 @@ digest_init_sha2_512(union digest_state *const restrict state)
 
 	(void) memset(ctx, 0x00U, sizeof *ctx);
 	(void) memcpy(ctx->state, iv, sizeof iv);
-
-	return true;
 }
 
-static bool ATHEME_FATTR_WUR
+static void
 digest_update_sha2_256(union digest_state *const restrict state,
                        const void *const restrict in, const size_t len)
 {
-	struct digest_context_sha2_256 *const ctx = (struct digest_context_sha2_256 *) state;
-
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
+	struct digest_context_sha2_256 *const ctx = &state->sha2_256_ctx;
 
 	if (! (in && len))
-		return true;
+		return;
 
-	const uint8_t *ptr = in;
+	const unsigned char *ptr = in;
 	size_t rem = len;
 
 	const uint64_t usedspace = (uint64_t) ((ctx->count >> 0x03U) % DIGEST_BKLEN_SHA2_256);
@@ -436,7 +358,7 @@ digest_update_sha2_256(union digest_state *const restrict state,
 
 			ctx->count += (rem << 0x03U);
 
-			return true;
+			return;
 		}
 	}
 
@@ -456,26 +378,18 @@ digest_update_sha2_256(union digest_state *const restrict state,
 
 		ctx->count += (rem << 0x03U);
 	}
-
-	return true;
 }
 
-static bool ATHEME_FATTR_WUR
+static void
 digest_update_sha2_512(union digest_state *const restrict state,
                        const void *const restrict in, const size_t len)
 {
-	struct digest_context_sha2_512 *const ctx = (struct digest_context_sha2_512 *) state;
-
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
+	struct digest_context_sha2_512 *const ctx = &state->sha2_512_ctx;
 
 	if (! (in && len))
-		return true;
+		return;
 
-	const uint8_t *ptr = in;
+	const unsigned char *ptr = in;
 	size_t rem = len;
 
 	const uint64_t usedspace = (uint64_t) ((ctx->count[0] >> 0x03U) % DIGEST_BKLEN_SHA2_512);
@@ -500,7 +414,7 @@ digest_update_sha2_512(union digest_state *const restrict state,
 
 			SHA2_512_ADDINC128(ctx->count, (rem << 0x03U));
 
-			return true;
+			return;
 		}
 	}
 
@@ -520,42 +434,17 @@ digest_update_sha2_512(union digest_state *const restrict state,
 
 		SHA2_512_ADDINC128(ctx->count, (rem << 0x03U));
 	}
-
-	return true;
 }
 
-static bool ATHEME_FATTR_WUR
-digest_final_sha2_256(union digest_state *const restrict state,
-                      void *const restrict out, size_t *const restrict len)
+static void
+digest_final_sha2_256(union digest_state *const restrict state, void *const restrict out)
 {
-	struct digest_context_sha2_256 *const ctx = (struct digest_context_sha2_256 *) state;
-
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-	if (! out)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-
-	if (len)
-	{
-		if (*len < DIGEST_MDLEN_SHA2_256)
-		{
-			(void) slog(LG_ERROR, "%s: output buffer length %zu is too small", MOWGLI_FUNC_NAME, *len);
-			return false;
-		}
-
-		*len = DIGEST_MDLEN_SHA2_256;
-	}
+	struct digest_context_sha2_256 *const ctx = &state->sha2_256_ctx;
 
 	uint64_t usedspace = (ctx->count >> 0x03U) % DIGEST_BKLEN_SHA2_256;
 
 	if (! digest_is_big_endian_sha2())
-		SHA2_256_REVERSE64(ctx->count, ctx->count);
+		SHA2_REVERSE64(ctx->count, ctx->count);
 
 	if (usedspace)
 	{
@@ -592,47 +481,22 @@ digest_final_sha2_256(union digest_state *const restrict state,
 	if (digest_is_big_endian_sha2())
 		(void) memcpy(d, ctx->state, sizeof ctx->state);
 	else for (size_t i = 0x00U; i < DIGEST_STLEN_SHA2; i++)
-		SHA2_256_REVERSE32(ctx->state[i], *d++);
+		SHA2_REVERSE32(ctx->state[i], *d++);
 
 	(void) smemzero(ctx, sizeof *ctx);
-
-	return true;
 }
 
-static bool ATHEME_FATTR_WUR
-digest_final_sha2_512(union digest_state *const restrict state,
-                      void *const restrict out, size_t *const restrict len)
+static void
+digest_final_sha2_512(union digest_state *const restrict state, void *const restrict out)
 {
-	struct digest_context_sha2_512 *const ctx = (struct digest_context_sha2_512 *) state;
-
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-	if (! out)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-
-	if (len)
-	{
-		if (*len < DIGEST_MDLEN_SHA2_512)
-		{
-			(void) slog(LG_ERROR, "%s: output buffer length %zu is too small", MOWGLI_FUNC_NAME, *len);
-			return false;
-		}
-
-		*len = DIGEST_MDLEN_SHA2_512;
-	}
+	struct digest_context_sha2_512 *const ctx = &state->sha2_512_ctx;
 
 	uint64_t usedspace = ((ctx->count[0x00U] >> 0x03U) % DIGEST_BKLEN_SHA2_512);
 
 	if (! digest_is_big_endian_sha2())
 	{
-		SHA2_512_REVERSE64(ctx->count[0x00U], ctx->count[0x00U]);
-		SHA2_512_REVERSE64(ctx->count[0x01U], ctx->count[0x01U]);
+		SHA2_REVERSE64(ctx->count[0x00U], ctx->count[0x00U]);
+		SHA2_REVERSE64(ctx->count[0x01U], ctx->count[0x01U]);
 	}
 
 	if (usedspace)
@@ -671,9 +535,7 @@ digest_final_sha2_512(union digest_state *const restrict state,
 	if (digest_is_big_endian_sha2())
 		(void) memcpy(d, ctx->state, sizeof ctx->state);
 	else for (size_t i = 0x00U; i < DIGEST_STLEN_SHA2; i++)
-		SHA2_512_REVERSE64(ctx->state[i], *d++);
+		SHA2_REVERSE64(ctx->state[i], *d++);
 
 	(void) smemzero(ctx, sizeof *ctx);
-
-	return true;
 }

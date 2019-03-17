@@ -379,7 +379,7 @@ atheme_random_buf(void *const restrict out, size_t len)
 	uint8_t *buf = (uint8_t *) out;
 
 	if (! _rs_stir_if_needed(len))
-		exit(EXIT_FAILURE);
+		abort();
 
 	while (len)
 	{

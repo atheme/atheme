@@ -127,6 +127,8 @@ loadmodule "modules/backend/opensex";
  *
  *   PBKDF2 (Atheme <= 7.2 compatibility)          modules/crypto/pbkdf2
  *   Scrypt (libsodium)                            modules/crypto/sodium-scrypt
+ *   RAW SHA2-512                                  modules/crypto/rawsha512
+ *   RAW SHA2-256                                  modules/crypto/rawsha256
  *   Raw SHA1 (Anope ~1.8 compatibility)           modules/crypto/rawsha1
  *   Raw MD5 (Anope ~1.8 compatibility)            modules/crypto/rawmd5
  *   IRCServices (+ Anope) compatibility           modules/crypto/ircservices
@@ -149,7 +151,7 @@ loadmodule "modules/backend/opensex";
  * modules/crypto/posix on Linux, you need crypt3-md5. If you used
  * modules/crypto/posix on OS X, you need crypt3-des. These modules issue
  * informational messages when loaded to the effect that they might break in
- * the future.
+ * the future. They also run selftests on load to verify that they will work.
  *
  * The Scrypt module requires libsodium (./configure --with-libsodium) and is
  * *NOT* available in Atheme v7.2 or earlier. This module may also require a
@@ -175,6 +177,8 @@ loadmodule "modules/crypto/crypt3-sha2-256";
 loadmodule "modules/crypto/pbkdf2";
 #loadmodule "modules/crypto/sodium-scrypt";
 #loadmodule "modules/crypto/crypt3-md5";
+#loadmodule "modules/crypto/rawsha512";
+#loadmodule "modules/crypto/rawsha256";
 #loadmodule "modules/crypto/rawsha1";
 #loadmodule "modules/crypto/rawmd5";
 #loadmodule "modules/crypto/ircservices";
@@ -485,7 +489,6 @@ loadmodule "modules/chanserv/antiflood";
  * MODRELOAD command                            modules/operserv/modreload
  * MODUNLOAD command                            modules/operserv/modunload
  * NOOP system                                  modules/operserv/noop
- * Override access (OVERRIDE command)           modules/operserv/override
  * Regex mass akill (RAKILL command)            modules/operserv/rakill
  * RAW command                                  modules/operserv/raw
  * READONLY command                             modules/operserv/readonly
@@ -522,7 +525,6 @@ loadmodule "modules/operserv/modload";
 loadmodule "modules/operserv/modunload";
 loadmodule "modules/operserv/modreload";
 loadmodule "modules/operserv/noop";
-#loadmodule "modules/operserv/override";
 #loadmodule "modules/operserv/rakill";
 loadmodule "modules/operserv/readonly";
 loadmodule "modules/operserv/rehash";
@@ -587,20 +589,32 @@ loadmodule "modules/infoserv/main";
  * Allows clients to authenticate to services via SASL with an appropriate
  * ircd. You need the core components and at least one mechanism.
  *
- * Core components                              modules/saslserv/main
- * AUTHCOOKIE mechanism (for IRIS)              modules/saslserv/authcookie
- * ECDSA-NIST256P-CHALLENGE                     modules/saslserv/ecdsa-nist256p-challenge
- * EXTERNAL mechanism (IRCv3.1+)                modules/saslserv/external
- * PLAIN mechanism                              modules/saslserv/plain
+ * Core components                      modules/saslserv/main
+ * AUTHCOOKIE mechanism (for IRIS)      modules/saslserv/authcookie
+ * ECDH-X25519-CHALLENGE mechanism      modules/saslserv/ecdh-x25519-challenge
+ * ECDSA-NIST256P-CHALLENGE mechanism   modules/saslserv/ecdsa-nist256p-challenge
+ * EXTERNAL mechanism (IRCv3.1+)        modules/saslserv/external
+ * PLAIN mechanism                      modules/saslserv/plain
+ * SCRAM-SHA-* mechanisms               modules/saslserv/scram-sha
  *
- * ECDSA-NIST256P-CHALLENGE support requires that Atheme be compiled against OpenSSL.
+ * ECDH-X25519-CHALLENGE support requires that Atheme be compiled against a
+ * cryptographic library that provides X25519 ECDH support (BoringSSL,
+ * LibreSSL, ARM mbedTLS, Nettle, Sodium). This will be checked while running
+ * ./configure.
+ *
+ * ECDSA-NIST256P-CHALLENGE support requires that Atheme be compiled against
+ * an OpenSSL with ECDSA support (not RHEL etc. unless you compile your own).
+ * This will be checked while running ./configure.
+ *
+ * You MUST read doc/SASL-SCRAM-SHA before loading modules/saslserv/scram-sha!
  */
 loadmodule "modules/saslserv/main";
 loadmodule "modules/saslserv/authcookie";
-#loadmodule "modules/saslserv/ecdsa-nist256p-challenge";  /* Requires OpenSSL */
+#loadmodule "modules/saslserv/ecdh-x25519-challenge";
+#loadmodule "modules/saslserv/ecdsa-nist256p-challenge";
 #loadmodule "modules/saslserv/external";
 loadmodule "modules/saslserv/plain";
-#loadmodule "modules/saslserv/scram-sha";  /* Read doc/SASL-SCRAM-SHA first ! */
+#loadmodule "modules/saslserv/scram-sha";
 
 /* GameServ modules.
  *
@@ -2445,7 +2459,6 @@ operclass "sra" {
 		#operserv:akill-anymask;
 		operserv:noop;
 		operserv:grant;
-		#operserv:override;
 	};
 
 	/* needoper

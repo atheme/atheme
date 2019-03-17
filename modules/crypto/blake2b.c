@@ -10,7 +10,7 @@
  * BLAKE2 reference C implementation (modified for Atheme IRC Services)
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "blake2b.h"
 #include "blake2b-testvecs.h"
 

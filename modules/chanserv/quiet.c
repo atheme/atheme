@@ -7,7 +7,7 @@
  * This file contains code for the CService QUIET/UNQUIET function.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "chanserv.h"
 
 // Notify at most this many users in private notices, otherwise channel

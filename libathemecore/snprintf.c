@@ -164,8 +164,8 @@
  * <http://www.jhweiss.de/software/snprintf.html>.
  */
 
-#include "attrs.h"
-#include "sysconf.h"
+#include <atheme/attributes.h>
+#include <atheme/sysconf.h>
 
 #ifdef TEST_SNPRINTF
 #include <math.h>	/* For pow(3), NAN, and INFINITY. */

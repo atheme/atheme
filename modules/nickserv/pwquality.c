@@ -8,7 +8,7 @@
  * This file contains code for checking password security.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #ifdef HAVE_ANY_PASSWORD_QUALITY_LIBRARY
 

@@ -8,7 +8,7 @@
  * This file contains routines to handle the OperServ SET command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_patricia_t *os_set_cmdtree = NULL;
 

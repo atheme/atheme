@@ -7,7 +7,7 @@
  * This file contains code for the CService FTRANSFER function.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 cs_cmd_ftransfer(struct sourceinfo *si, int parc, char *parv[])

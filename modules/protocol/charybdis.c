@@ -8,8 +8,8 @@
  * This file contains protocol support for charybdis-based ircd.
  */
 
-#include "atheme.h"
-#include "protocol/charybdis.h"
+#include <atheme.h>
+#include <atheme/protocol/charybdis.h>
 
 static struct ircd Charybdis = {
 	.ircdname = "Charybdis",

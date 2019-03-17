@@ -9,8 +9,8 @@
  * copyright notice and this permission notice appear in all copies.
  */
 
-#include "atheme.h"
-#include "pbkdf2v2.h"
+#include <atheme.h>
+#include <atheme/pbkdf2v2.h>
 
 #ifdef HAVE_LIBIDN
 #  include <stringprep.h>
@@ -431,9 +431,9 @@ atheme_pbkdf2v2_compute(const char *const restrict password, struct pbkdf2v2_dbe
 		return false;
 	}
 
-	if (! digest_pbkdf2_hmac(dbe->md, key, kl, dbe->salt, dbe->sl, dbe->c, dbe->cdg, dbe->dl))
+	if (! digest_oneshot_pbkdf2(dbe->md, key, kl, dbe->salt, dbe->sl, dbe->c, dbe->cdg, dbe->dl))
 	{
-		(void) slog(LG_ERROR, "%s: digest_pbkdf2_hmac() for cdg failed (BUG)", MOWGLI_FUNC_NAME);
+		(void) slog(LG_ERROR, "%s: digest_oneshot_pbkdf2() for cdg failed (BUG)", MOWGLI_FUNC_NAME);
 		(void) smemzero(key, sizeof key);
 		return false;
 	}

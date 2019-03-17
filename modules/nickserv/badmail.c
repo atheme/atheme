@@ -7,7 +7,7 @@
  * Allows banning certain email addresses from registering.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 struct badmail
 {

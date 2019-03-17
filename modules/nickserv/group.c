@@ -7,7 +7,7 @@
  * This file contains code for the NickServ GROUP command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 ns_cmd_group(struct sourceinfo *si, int parc, char *parv[])

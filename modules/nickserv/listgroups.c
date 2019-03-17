@@ -7,7 +7,7 @@
  * This file contains code for the nickserv LISTGROUPS function.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static const struct groupserv_core_symbols *gcsyms = NULL;
 

@@ -13,7 +13,7 @@
  * table.c: Table rendering class.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 table_destroy(void *obj)

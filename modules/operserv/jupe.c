@@ -7,7 +7,7 @@
  * Jupiters a server.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 os_cmd_jupe(struct sourceinfo *si, int parc, char *parv[])

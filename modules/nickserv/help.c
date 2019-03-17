@@ -8,7 +8,7 @@
  * This file contains routines to handle the NickServ HELP command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define SHORTHELP_CMDS_DEF      "ACCESS CERT DROP GHOST GROUP IDENTIFY INFO LISTCHANS LISTGROUPS LISTLOGINS " \
                                 "LISTOWNMAIL LOGOUT REGAIN REGISTER RELEASE SENDPASS SET UNGROUP"

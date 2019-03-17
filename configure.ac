@@ -11,7 +11,7 @@ AC_INIT([Atheme IRC Services], [7.3.0-rc2], [https://github.com/atheme/atheme/is
 
 AC_CONFIG_AUX_DIR([autoconf])
 AC_CONFIG_MACRO_DIR([m4])
-AC_CONFIG_HEADER([include/sysconf.h])
+AC_CONFIG_HEADER([include/atheme/sysconf.h])
 AC_CONFIG_SRCDIR([src/services/main.c])
 AC_PREFIX_DEFAULT([~/atheme])
 AS_IF([test "x${prefix}" = "xNONE"], [prefix="${ac_default_prefix}"])
@@ -195,19 +195,12 @@ ATHEME_FEATURETEST_REPROBUILDS
 ATHEME_FEATURETEST_SODIUM_MALLOC
 
 dnl Digest and RNG frontend to use in libathemecore
-dnl Avoid duplicate -lcrypto or -lmbedcrypto or the like when digest API frontend == random API frontend
 ATHEME_DECIDE_DIGEST_FRONTEND
 ATHEME_DECIDE_RANDOM_FRONTEND
-AS_IF([test "x${DIGEST_API_CFLAGS}" = "x${RANDOM_API_CFLAGS}"], [RANDOM_API_CFLAGS=""])
-AS_IF([test "x${DIGEST_API_LIBS}" = "x${RANDOM_API_LIBS}"], [RANDOM_API_LIBS=""])
-AC_SUBST([DIGEST_API_CFLAGS])
-AC_SUBST([RANDOM_API_CFLAGS])
-AC_SUBST([DIGEST_API_LIBS])
-AC_SUBST([RANDOM_API_LIBS])
 
 dnl These must be here, not above, or they might interfere with library and feature tests
 dnl Explanation is that these modify one or more of CFLAGS, CPPFLAGS, LDFLAGS, and LIBS
-dnl Warnings should be second-to-last so that they don't clutter the contents of config.log
+dnl Warnings should be last so that diagnostics don't clutter the contents of config.log
 ATHEME_FEATURETEST_CPPFLAGS
 ATHEME_FEATURETEST_CFLAGS
 ATHEME_FEATURETEST_DEBUGGING

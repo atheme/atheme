@@ -8,7 +8,7 @@
  * This file contains the main() routine.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "hostserv.h"
 
 static struct service *hostsvs = NULL;

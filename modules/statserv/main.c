@@ -8,7 +8,7 @@
  * This file contains the body of StatServ.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static struct service *statsvs = NULL;
 

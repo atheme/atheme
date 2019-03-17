@@ -14,7 +14,7 @@
  * hook.c: Hook system.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_patricia_t *hooks = NULL;
 static mowgli_heap_t *hook_heap = NULL;

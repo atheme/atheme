@@ -9,8 +9,8 @@
  * raw data sent by nefarious.
  */
 
-#include "atheme.h"
-#include "protocol/nefarious.h"
+#include <atheme.h>
+#include <atheme/protocol/nefarious.h>
 
 static struct ircd Nefarious = {
 	.ircdname = "Nefarious IRCU 0.4.0 or later",

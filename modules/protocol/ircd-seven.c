@@ -8,8 +8,8 @@
  * This file contains protocol support for ircd-seven.
  */
 
-#include "atheme.h"
-#include "protocol/charybdis.h"
+#include <atheme.h>
+#include <atheme/protocol/charybdis.h>
 
 #define UF_NOLOGOUT UF_CUSTOM1
 

@@ -9,7 +9,7 @@
  * the OperServ SQLINE command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_patricia_t *os_sqline_cmds = NULL;
 

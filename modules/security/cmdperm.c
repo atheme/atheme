@@ -9,7 +9,7 @@
  * copyright notice and this permission notice appear in all copies.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static bool (*parent_command_authorize)(struct service *, struct sourceinfo *, struct command *, const char *) = NULL;
 

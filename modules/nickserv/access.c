@@ -7,7 +7,7 @@
  * Changes and shows nickname access lists.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static bool
 username_is_random(const char *name)

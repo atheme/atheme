@@ -15,7 +15,7 @@
  * by the ircd, otherwise clients.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 struct enforce_timeout
 {

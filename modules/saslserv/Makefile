@@ -7,6 +7,7 @@ MODULE		= saslserv
 
 SRCS =					\
 	authcookie.c			\
+	ecdh-x25519-challenge.c		\
 	ecdsa-nist256p-challenge.c	\
 	external.c			\
 	main.c				\
@@ -19,5 +20,5 @@ include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include
 LDFLAGS		+= -L../../libathemecore
-CFLAGS		+= $(LIBCRYPTO_CFLAGS)
-LIBS		+= $(LIBCRYPTO_LIBS) -lathemecore
+CFLAGS		+= $(LIBCRYPTO_CFLAGS) $(LIBNETTLE_CFLAGS) $(LIBSODIUM_CFLAGS)
+LIBS		+= $(LIBCRYPTO_LIBS) $(LIBMBEDCRYPTO_LIBS) $(LIBNETTLE_LIBS) $(LIBSODIUM_LIBS) -lathemecore

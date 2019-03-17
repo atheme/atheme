@@ -13,7 +13,7 @@
  * match.c: Casemapping and matching functions.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #ifdef HAVE_LIBPCRE
 #  include <pcre.h>

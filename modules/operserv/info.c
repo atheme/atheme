@@ -8,7 +8,7 @@
  * This file contains code for OS INFO
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 os_cmd_info(struct sourceinfo *si, int parc, char *parv[])

@@ -10,7 +10,7 @@
  * copyright notice and this permission notice appear in all copies.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define ATHEME_PBKDF2_ROUNDS    128000
 #define ATHEME_PBKDF2_SALTLEN   16
@@ -24,8 +24,8 @@ atheme_pbkdf2_verify(const char *const restrict password, const char *const rest
 
 	unsigned char buf[DIGEST_MDLEN_SHA2_512];
 
-	const bool ret = digest_pbkdf2_hmac(DIGALG_SHA2_512, password, strlen(password), parameters,
-	                                    ATHEME_PBKDF2_SALTLEN, ATHEME_PBKDF2_ROUNDS, buf, sizeof buf);
+	const bool ret = digest_oneshot_pbkdf2(DIGALG_SHA2_512, password, strlen(password), parameters,
+	                                       ATHEME_PBKDF2_SALTLEN, ATHEME_PBKDF2_ROUNDS, buf, sizeof buf);
 
 	if (! ret)
 		return false;

@@ -13,7 +13,7 @@
  * ctcp-common.c: Handling of CTCP commands.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_patricia_t *ctcptree = NULL;
 

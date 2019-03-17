@@ -7,7 +7,7 @@
  * This file contains code for the NickServ INFO functions.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static bool show_custom_metadata = true;
 

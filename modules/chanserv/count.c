@@ -7,7 +7,7 @@
  * This file contains code for the CService COUNT functions.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 cs_cmd_count(struct sourceinfo *si, int parc, char *parv[])

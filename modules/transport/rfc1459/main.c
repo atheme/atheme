@@ -12,7 +12,7 @@
  * main.c: RFC1459 transport core.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "rfc1459.h"
 
 static void

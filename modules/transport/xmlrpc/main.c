@@ -7,7 +7,7 @@
  * New xmlrpc implementation
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "xmlrpclib.h"
 
 static struct {

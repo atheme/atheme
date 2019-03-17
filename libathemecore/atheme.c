@@ -13,7 +13,7 @@
  * atheme.c: Initialization and startup of the services system
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "internal.h"
 
 #include <ext/getopt_long.h>

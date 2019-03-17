@@ -12,7 +12,7 @@
  * parse.c: Parsing of IRC messages.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 // parses a P10 IRC stream
 static void

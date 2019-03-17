@@ -10,7 +10,7 @@
  * - Remove labels (+foo).
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define GMAIL_SUFFIX "@gmail.com"
 

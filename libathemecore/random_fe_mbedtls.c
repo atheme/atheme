@@ -11,18 +11,43 @@
 #  error "Do not compile me directly; compile random_frontend.c instead"
 #endif /* !ATHEME_LAC_RANDOM_FRONTEND_C */
 
+#ifdef MBEDTLS_CONFIG_FILE
+#  include MBEDTLS_CONFIG_FILE
+#else
+#  include <mbedtls/config.h>
+#endif
+
 #include <mbedtls/entropy.h>
 #include <mbedtls/error.h>
-#include <mbedtls/hmac_drbg.h>
-#include <mbedtls/md.h>
 #include <mbedtls/version.h>
 
-static const char atheme_pers_str[] = PACKAGE_STRING;
+#ifdef HAVE_LIBMBEDCRYPTO_HMAC_DRBG
+#  if defined(MBEDTLS_SHA256_C) || defined(MBEDTLS_SHA512_C)
+#    include <mbedtls/hmac_drbg.h>
+#    include <mbedtls/md.h>
+#  else /* MBEDTLS_SHA256_C || MBEDTLS_SHA512_C */
+#    error "Neither MBEDTLS_SHA256_C nor MBEDTLS_SHA256_C are defined"
+#  endif /* !MBEDTLS_SHA256_C && !MBEDTLS_SHA512_C */
+#else /* HAVE_LIBMBEDCRYPTO_HMAC_DRBG */
+#  ifdef HAVE_LIBMBEDCRYPTO_CTR_DRBG
+#    include <mbedtls/ctr_drbg.h>
+#  else /* HAVE_LIBMBEDCRYPTO_CTR_DRBG */
+#    error "Neither HAVE_LIBMBEDCRYPTO_CTR_DRBG nor HAVE_LIBMBEDCRYPTO_HMAC_DRBG are defined"
+#  endif /* !HAVE_LIBMBEDCRYPTO_CTR_DRBG */
+#endif /* !HAVE_LIBMBEDCRYPTO_HMAC_DRBG */
 
-static mbedtls_entropy_context seed_ctx;
-static mbedtls_hmac_drbg_context hmac_ctx;
+static const char               atheme_drbg_personalisation_string[] = PACKAGE_STRING;
+static const void *const        atheme_drbg_const_str = (const void *) atheme_drbg_personalisation_string;
+static const size_t             atheme_drbg_const_len = sizeof atheme_drbg_personalisation_string;
 
-static pid_t rs_stir_pid = (pid_t) -1;
+static mbedtls_entropy_context  seed_ctx;
+static pid_t                    rs_stir_pid = (pid_t) -1;
+
+#ifdef HAVE_LIBMBEDCRYPTO_HMAC_DRBG
+static mbedtls_hmac_drbg_context drbg_ctx;
+#else /* HAVE_LIBMBEDCRYPTO_HMAC_DRBG */
+static mbedtls_ctr_drbg_context drbg_ctx;
+#endif /* !HAVE_LIBMBEDCRYPTO_HMAC_DRBG */
 
 static const char *
 atheme_random_mbedtls_strerror(const int err)
@@ -68,13 +93,23 @@ atheme_random_uniform(const uint32_t bound)
 void
 atheme_random_buf(void *const restrict out, const size_t len)
 {
-	if (getpid() != rs_stir_pid)
+	if (rs_stir_pid == -1)
 	{
-		const int ret = mbedtls_hmac_drbg_reseed(&hmac_ctx, NULL, 0);
+		(void) slog(LG_ERROR, "%s: called before early init (BUG)", MOWGLI_FUNC_NAME);
+		abort();
+	}
+
+	if (rs_stir_pid != getpid())
+	{
+#ifdef HAVE_LIBMBEDCRYPTO_HMAC_DRBG
+		const int ret = mbedtls_hmac_drbg_reseed(&drbg_ctx, atheme_drbg_const_str, atheme_drbg_const_len);
+#else /* HAVE_LIBMBEDCRYPTO_HMAC_DRBG */
+		const int ret = mbedtls_ctr_drbg_reseed(&drbg_ctx, atheme_drbg_const_str, atheme_drbg_const_len);
+#endif /* !HAVE_LIBMBEDCRYPTO_HMAC_DRBG */
 
 		if (ret != 0)
 		{
-			(void) slog(LG_ERROR, "%s: mbedtls_hmac_drbg_reseed: error %s", MOWGLI_FUNC_NAME,
+			(void) slog(LG_ERROR, "%s: mbedtls_*_drbg_reseed: error %s", MOWGLI_FUNC_NAME,
 			                      atheme_random_mbedtls_strerror(ret));
 			exit(EXIT_FAILURE);
 		}
@@ -82,11 +117,15 @@ atheme_random_buf(void *const restrict out, const size_t len)
 		rs_stir_pid = getpid();
 	}
 
-	const int ret = mbedtls_hmac_drbg_random(&hmac_ctx, out, len);
+#ifdef HAVE_LIBMBEDCRYPTO_HMAC_DRBG
+	const int ret = mbedtls_hmac_drbg_random(&drbg_ctx, out, len);
+#else /* HAVE_LIBMBEDCRYPTO_HMAC_DRBG */
+	const int ret = mbedtls_ctr_drbg_random(&drbg_ctx, out, len);
+#endif /* !HAVE_LIBMBEDCRYPTO_HMAC_DRBG */
 
 	if (ret != 0)
 	{
-		(void) slog(LG_ERROR, "%s: mbedtls_hmac_drbg_random: error %s", MOWGLI_FUNC_NAME,
+		(void) slog(LG_ERROR, "%s: mbedtls_*_drbg_random: error %s", MOWGLI_FUNC_NAME,
 		                      atheme_random_mbedtls_strerror(ret));
 		exit(EXIT_FAILURE);
 	}
@@ -96,12 +135,29 @@ bool ATHEME_FATTR_WUR
 libathemecore_random_early_init(void)
 {
 	(void) mbedtls_entropy_init(&seed_ctx);
-	(void) mbedtls_hmac_drbg_init(&hmac_ctx);
 
+#ifdef HAVE_LIBMBEDCRYPTO_HMAC_DRBG
+
+	(void) mbedtls_hmac_drbg_init(&drbg_ctx);
+
+#ifdef MBEDTLS_SHA512_C
+	const mbedtls_md_info_t *const md_info = mbedtls_md_info_from_type(MBEDTLS_MD_SHA512);
+#else /* MBEDTLS_SHA512_C */
 	const mbedtls_md_info_t *const md_info = mbedtls_md_info_from_type(MBEDTLS_MD_SHA256);
+#endif /* !MBEDTLS_SHA512_C */
 
-	const int ret = mbedtls_hmac_drbg_seed(&hmac_ctx, md_info, &mbedtls_entropy_func, &seed_ctx,
-	                                       (const void *) atheme_pers_str, sizeof atheme_pers_str);
+	const int ret = mbedtls_hmac_drbg_seed(&drbg_ctx, md_info, &mbedtls_entropy_func, &seed_ctx,
+	                                       atheme_drbg_const_str, atheme_drbg_const_len);
+
+#else /* HAVE_LIBMBEDCRYPTO_HMAC_DRBG */
+
+	(void) mbedtls_ctr_drbg_init(&drbg_ctx);
+
+	const int ret = mbedtls_ctr_drbg_seed(&drbg_ctx, &mbedtls_entropy_func, &seed_ctx,
+	                                      atheme_drbg_const_str, atheme_drbg_const_len);
+
+#endif /* !HAVE_LIBMBEDCRYPTO_HMAC_DRBG */
+
 	if (ret != 0)
 	{
 		(void) fprintf(stderr, "ARM mbedTLS: Early RNG initialization failed!\n");

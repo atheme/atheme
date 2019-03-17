@@ -4,12 +4,10 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 	LIBCRYPTO_NAME=""
 	LIBCRYPTO_USABLE="No"
 	LIBCRYPTO_DIGEST="No"
-	LIBCRYPTO_MEMCMP="No"
 	LIBCRYPTO_RANDOM="No"
-	LIBCRYPTO_ECDSA="No"
 
 	AC_ARG_WITH([openssl],
-		[AS_HELP_STRING([--without-openssl], [Do not attempt to detect libcrypto (for modules/saslserv/ecdsa-nist256p-challenge)])],
+		[AS_HELP_STRING([--without-openssl], [Do not attempt to detect OpenSSL (cryptographic library)])],
 		[], [with_openssl="auto"])
 
 	case "x${with_openssl}" in
@@ -91,7 +89,6 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 			])
 		], [
 			AC_MSG_RESULT([no])
-			LIBCRYPTO_DIGEST="No"
 		])
 
 		AC_MSG_CHECKING([if libcrypto has a usable random number generator])
@@ -115,7 +112,6 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 			LIBCRYPTO_RANDOM="Yes"
 		], [
 			AC_MSG_RESULT([no])
-			LIBCRYPTO_RANDOM="No"
 		])
 
 		AC_MSG_CHECKING([if libcrypto has a usable constant-time memory comparison function])
@@ -130,14 +126,33 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 			]])
 		], [
 			AC_MSG_RESULT([yes])
+			AC_DEFINE([HAVE_LIBCRYPTO_MEMCMP], [1], [Define to 1 if libcrypto has a usable constant-time memory comparison function])
 			LIBCRYPTO_USABLE="Yes"
-			LIBCRYPTO_MEMCMP="Yes"
 		], [
 			AC_MSG_RESULT([no])
-			LIBCRYPTO_MEMCMP="No"
 		])
 
-		AC_MSG_CHECKING([if libcrypto has usable elliptic curve key construction and signature verification functions])
+		AC_MSG_CHECKING([if libcrypto can provide SASL ECDH-X25519-CHALLENGE])
+		AC_LINK_IFELSE([
+			AC_LANG_PROGRAM([[
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <openssl/curve25519.h>
+			]], [[
+				(void) X25519_keypair(NULL, NULL);
+				(void) X25519(NULL, NULL, NULL);
+			]])
+		], [
+			AC_MSG_RESULT([yes])
+			AC_DEFINE([HAVE_LIBCRYPTO_ECDH_X25519], [1], [Define to 1 if libcrypto can provide SASL ECDH-X25519-CHALLENGE])
+			ATHEME_COND_ECDH_X25519_TOOL_ENABLE
+			LIBCRYPTO_USABLE="Yes"
+		], [
+			AC_MSG_RESULT([no])
+		])
+
+		AC_MSG_CHECKING([if libcrypto can provide SASL ECDSA-NIST256P-CHALLENGE])
 		AC_LINK_IFELSE([
 			AC_LANG_PROGRAM([[
 				#ifdef HAVE_STDDEF_H
@@ -154,11 +169,11 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 			]])
 		], [
 			AC_MSG_RESULT([yes])
+			AC_DEFINE([HAVE_LIBCRYPTO_ECDSA], [1], [Define to 1 if libcrypto can provide SASL ECDSA-NIST256P-CHALLENGE])
+			ATHEME_COND_ECDSA_TOOLS_ENABLE
 			LIBCRYPTO_USABLE="Yes"
-			LIBCRYPTO_ECDSA="Yes"
 		], [
 			AC_MSG_RESULT([no])
-			LIBCRYPTO_ECDSA="No"
 		])
 	])
 
@@ -182,14 +197,6 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 		])
 
 		AC_DEFINE([HAVE_LIBCRYPTO], [1], [Define to 1 if libcrypto appears to be usable])
-		AS_IF([test "${LIBCRYPTO_MEMCMP}" = "Yes"], [
-			AC_DEFINE([HAVE_LIBCRYPTO_MEMCMP], [1], [Define to 1 if libcrypto has a usable constant-time memory comparison function])
-		])
-		AS_IF([test "${LIBCRYPTO_ECDSA}" = "Yes"], [
-			ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
-			AC_DEFINE([HAVE_LIBCRYPTO_ECDSA], [1], [Define to 1 if libcrypto has usable elliptic curve key construction and signature verification functions])
-			AC_SUBST([ECDSA_TOOLS_COND_D])
-		])
 	], [
 		LIBCRYPTO="No"
 		AS_IF([test "${with_openssl}" = "yes"], [

@@ -8,7 +8,7 @@
  * This file contains code for the CService KICK functions.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 // This is imported by modules/chanserv/clear_*.so
 mowgli_patricia_t *cs_clear_cmds = NULL;

@@ -12,7 +12,7 @@
  * parse.c: Parsing of IRC messages.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "rfc1459.h"
 
 // parses a standard 2.8.21 style IRC stream

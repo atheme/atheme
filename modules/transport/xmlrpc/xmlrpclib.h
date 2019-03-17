@@ -8,12 +8,10 @@
  * XMLRPC library header, hacked up for Atheme.
  */
 
-#include "stdheaders.h"
-
 #ifndef ATHEME_MOD_TRANSPORT_XMLRPC_XMLRPCLIB_H
 #define ATHEME_MOD_TRANSPORT_XMLRPC_XMLRPCLIB_H 1
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define stricmp strcasecmp
 

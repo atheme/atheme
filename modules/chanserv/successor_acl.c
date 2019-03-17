@@ -7,7 +7,7 @@
  * Implements a named-successor ACL flag.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static unsigned int successor_flag = 0;
 

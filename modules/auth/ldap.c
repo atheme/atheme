@@ -25,7 +25,7 @@
  *                (optional, must specify if binddn given)
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #ifdef HAVE_LIBLDAP
 

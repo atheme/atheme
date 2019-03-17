@@ -11,7 +11,7 @@
  * @match regex!here.+
  *  Matches `nick!user@host realname here' for each client against a given regex, and dumps matches.
  */
-#include "atheme.h"
+#include <atheme.h>
 
 #define MAXMATCHES_DEF 1000
 

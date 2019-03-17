@@ -7,7 +7,7 @@
  * This file contains code for the CService XOP functions.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "chanserv.h"
 
 static void

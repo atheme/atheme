@@ -8,7 +8,7 @@
  * ACCESS command implementation for ChanServ.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 struct channel_template
 {

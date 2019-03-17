@@ -5,12 +5,10 @@
  * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
  */
 
-#include "stdheaders.h"
-
 #ifndef ATHEME_MOD_CRYPTO_CRYPT3_H
 #define ATHEME_MOD_CRYPTO_CRYPT3_H 1
 
-#include "atheme.h"
+#include <atheme.h>
 
 #ifdef HAVE_CRYPT
 

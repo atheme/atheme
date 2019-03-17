@@ -8,7 +8,7 @@
  * ECDSA-NIST256P-CHALLENGE mechanism provider.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #ifdef HAVE_LIBCRYPTO_ECDSA
 
@@ -16,7 +16,7 @@
 #include <openssl/ecdsa.h>
 #include <openssl/evp.h>
 
-#define CHALLENGE_LENGTH	DIGEST_MDLEN_SHA2_256
+#define CHALLENGE_LENGTH	32U
 #define CURVE_IDENTIFIER	NID_X9_62_prime256v1
 
 struct sasl_ecdsa_nist256p_challenge_session
@@ -32,58 +32,89 @@ sasl_mech_ecdsa_step_account_names(struct sasl_session *const restrict p,
                                    const struct sasl_input_buf *const restrict in,
                                    struct sasl_output_buf *const restrict out)
 {
-	char authcid[NICKLEN + 1];
-	(void) memset(authcid, 0x00, sizeof authcid);
+	EC_KEY *pubkey = NULL;
+	struct myuser *mu = NULL;
 
 	const char *const end = memchr(in->buf, 0x00, in->len);
+
 	if (! end)
 	{
 		if (in->len > NICKLEN)
+		{
+			(void) slog(LG_DEBUG, "%s: in->len (%zu) is unacceptable", MOWGLI_FUNC_NAME, in->len);
 			return ASASL_MRESULT_ERROR;
-
-		(void) memcpy(authcid, in->buf, in->len);
+		}
+		if (! sasl_core_functions->authcid_can_login(p, in->buf, &mu))
+		{
+			(void) slog(LG_DEBUG, "%s: authcid_can_login failed", MOWGLI_FUNC_NAME);
+			return ASASL_MRESULT_ERROR;
+		}
 	}
 	else
 	{
-		char authzid[NICKLEN + 1];
-		(void) memset(authzid, 0x00, sizeof authzid);
-
-		const char *const accnames = in->buf;
-
-		const size_t authcid_length = (size_t) (end - accnames);
+		const char *const bufchrptr = in->buf;
+		const size_t authcid_length = (size_t) (end - bufchrptr);
 		const size_t authzid_length = in->len - 1 - authcid_length;
 
 		if (! authcid_length || authcid_length > NICKLEN)
+		{
+			(void) slog(LG_DEBUG, "%s: authcid_length (%zu) is unacceptable",
+			                      MOWGLI_FUNC_NAME, authcid_length);
 			return ASASL_MRESULT_ERROR;
-
+		}
 		if (! authzid_length || authzid_length > NICKLEN)
+		{
+			(void) slog(LG_DEBUG, "%s: authzid_length (%zu) is unacceptable",
+			                      MOWGLI_FUNC_NAME, authzid_length);
 			return ASASL_MRESULT_ERROR;
-
-		(void) memcpy(authcid, accnames, authcid_length);
-		(void) memcpy(authzid, end + 1, authzid_length);
-
-		if (! sasl_core_functions->authzid_can_login(p, authzid, NULL))
+		}
+		if (! sasl_core_functions->authzid_can_login(p, end + 1, NULL))
+		{
+			(void) slog(LG_DEBUG, "%s: authzid_can_login failed", MOWGLI_FUNC_NAME);
 			return ASASL_MRESULT_ERROR;
+		}
+		if (! sasl_core_functions->authcid_can_login(p, in->buf, &mu))
+		{
+			(void) slog(LG_DEBUG, "%s: authcid_can_login failed", MOWGLI_FUNC_NAME);
+			return ASASL_MRESULT_ERROR;
+		}
 	}
-
-	struct myuser *mu = NULL;
-	if (! sasl_core_functions->authcid_can_login(p, authcid, &mu))
+	if (! mu)
+	{
+		(void) slog(LG_ERROR, "%s: authcid_can_login did not set 'mu' (BUG)", MOWGLI_FUNC_NAME);
 		return ASASL_MRESULT_ERROR;
+	}
 
 	struct metadata *md;
 	if (! (md = metadata_find(mu, "private:pubkey")) && ! (md = metadata_find(mu, "pubkey")))
+	{
+		(void) slog(LG_DEBUG, "%s: metadata_find() failed", MOWGLI_FUNC_NAME);
 		return ASASL_MRESULT_ERROR;
+	}
 
 	unsigned char pubkey_raw[0x1000];
 	const unsigned char *pubkey_raw_p = pubkey_raw;
 	const size_t ret = base64_decode(md->value, pubkey_raw, sizeof pubkey_raw);
 	if (ret == (size_t) -1)
+	{
+		(void) slog(LG_DEBUG, "%s: base64_decode() failed", MOWGLI_FUNC_NAME);
 		return ASASL_MRESULT_ERROR;
+	}
 
-	EC_KEY *pubkey = EC_KEY_new_by_curve_name(CURVE_IDENTIFIER);
-	(void) EC_KEY_set_conv_form(pubkey, POINT_CONVERSION_COMPRESSED);
-	if (! o2i_ECPublicKey(&pubkey, &pubkey_raw_p, (long) ret))
+	if (! (pubkey = EC_KEY_new_by_curve_name(CURVE_IDENTIFIER)))
+	{
+		(void) slog(LG_ERROR, "%s: EC_KEY_new_by_curve_name() failed", MOWGLI_FUNC_NAME);
 		return ASASL_MRESULT_ERROR;
+	}
+
+	(void) EC_KEY_set_conv_form(pubkey, POINT_CONVERSION_COMPRESSED);
+
+	if (! o2i_ECPublicKey(&pubkey, &pubkey_raw_p, (long) ret))
+	{
+		(void) slog(LG_DEBUG, "%s: o2i_ECPublicKey() failed", MOWGLI_FUNC_NAME);
+		(void) EC_KEY_free(pubkey);
+		return ASASL_MRESULT_ERROR;
+	}
 
 	struct sasl_ecdsa_nist256p_challenge_session *const s = smalloc(sizeof *s);
 	(void) atheme_random_buf(s->challenge, sizeof s->challenge);
@@ -103,7 +134,7 @@ sasl_mech_ecdsa_step_verify_signature(struct sasl_session *const restrict p,
 {
 	struct sasl_ecdsa_nist256p_challenge_session *const s = p->mechdata;
 
-	const int ret = ECDSA_verify(0, s->challenge, CHALLENGE_LENGTH, in->buf, (int) in->len, s->pubkey);
+	const int ret = ECDSA_verify(0, s->challenge, sizeof s->challenge, in->buf, (int) in->len, s->pubkey);
 
 	if (ret == 1)
 		return ASASL_MRESULT_SUCCESS;

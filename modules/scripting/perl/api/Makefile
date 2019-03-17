@@ -25,5 +25,5 @@ CFLAGS		+= -w
 Atheme.c: $(wildcard *.xs) typemap
 	xsubpp -prototypes -typemap typemap Atheme.xs >$@ || rm -f $@
 
-perl_hooks.c: make_perl_hooks.pl ../../../../include/hooktypes.in
+perl_hooks.c: make_perl_hooks.pl ../../../../include/atheme/hooktypes.in
 	perl make_perl_hooks.pl

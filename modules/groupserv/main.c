@@ -6,7 +6,7 @@
  * Copyright (C) 2018-2019 Atheme Development Group (https://atheme.github.io/)
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define GDBV_VERSION            4
 

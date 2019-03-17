@@ -8,7 +8,7 @@
  * This file contains the main() routine.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #ifndef MINIMUM
 #  define MINIMUM(a, b) (((a) < (b)) ? (a) : (b))
@@ -761,9 +761,10 @@ sasl_input_startauth(const struct sasl_message *const restrict smsg, struct sasl
 			              entity(u->myuser)->name);
 			return false;
 		}
-
-		u->flags |= UF_DOING_SASL;
 	}
+
+	if (u)
+		u->flags |= UF_DOING_SASL;
 
 	return sasl_process_packet(p, smsg->parv[0], 0);
 }

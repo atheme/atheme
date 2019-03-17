@@ -12,7 +12,7 @@
  * Based on the original code of Services by Andy Church.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define MODULE_PREFIX_STR       "$ircservices$"
 #define MODULE_PREFIX_LEN       13

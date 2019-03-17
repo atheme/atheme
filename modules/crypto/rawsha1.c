@@ -9,7 +9,7 @@
  * but we need this to convert some Anope databases.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define MODULE_PREFIX_STR       "$rawsha1$"
 #define MODULE_PREFIX_LEN       9

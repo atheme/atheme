@@ -24,7 +24,7 @@ POTENTIAL COMPATIBILITY BREAKAGE
   Modules section of `dist/atheme.conf.example`.
 
 - If you still use legacy password crypto (verify-only) modules (`posix`,
-  `crypt3-des`, `crypt3-md5`, `ircservices`, `rawmd5`, `rawsha1`), then you
+  `crypt3-des`, `crypt3-md5`, `ircservices`, `rawmd5`, `rawsha*`), then you
   MUST pass the `--enable-legacy-pwcrypto` flag to `./configure`, or these
   modules will NOT be compiled or installed. The presence of this flag can be
   confirmed at the bottom of the `configure` output; "Legacy Crypto Modules".
@@ -43,6 +43,13 @@ POTENTIAL COMPATIBILITY BREAKAGE
 - The `modules/gameserv/happyfarm` module has been removed, as it was never
   completely finished and never worked anyway. Please remove this module from
   your configuration file, regardless of the version of services you are using.
+
+- The `modules/operserv/override` module has been removed. It did not provide
+  sufficient transparency to users while providing a great potential for abuse.
+  Additionally, it caused crashes if used with certain commands. Any legitimate
+  use of this module should be possible to replace with a more specific command
+  (such as `modules/chanserv/fflags`). If you encounter a use case that cannot
+  be replaced, please report a bug to let us know.
 
 Security
 --------
@@ -67,7 +74,10 @@ Security
 
   - OpenBSD `arc4random(3)`, or
   - libsodium `randombytes(3)`, or
-  - ARM mbedTLS `hmac_drbg_random(3)`, or
+  - ARM mbedTLS `hmac_drbg_random(3)` with SHA2-512, or
+  - ARM mbedTLS `hmac_drbg_random(3)` with SHA2-256, or
+  - ARM mbedTLS `ctr_drbg_drbg_random(3)` with AES, or
+  - OpenSSL `RAND_bytes(3)`, or
   - Internal ChaCha20-based Fallback RNG, seeded by
     - `getentropy(3)`, or
     - `getrandom(2)`, or
@@ -76,11 +86,37 @@ Security
 SASL
 ----
 - SASLServ and its modules have been almost entirely re-written
-- Add support for SASL SCRAM-SHA logins (see `doc/SASL-SCRAM-SHA`)
 - Advertise SASL mechanism list to UnrealIRCd servers
 - Use a parameter vector to allow an arbitrary number of S2S arguments
-- Indicate whether the client is on a plaintext connection or not. This can
-  be used by user_can_login hooks.
+- Indicate whether the client is on a plaintext connection or not.
+  - This can be used by user_can_login hooks.
+- Add support for SASL SCRAM-SHA logins (see `doc/SASL-SCRAM-SHA`)
+- Add support for Curve25519 ECDH-based challenge-response logins
+  - This is a private SASL mechanism that does not have widespread client
+    support yet, but it is expected to eventually replace the older
+    `ECDSA-NIST256P-CHALLENGE` mechanism, due to concerns within the
+    cryptographic community about the safety of the NIST curves.
+  - A complete mechanism documentation, including the protocol, and a design
+    rationale, is located in `modules/saslserv/ecdh-x25519-challenge.c`. This
+    will enable client authors to integrate the functionality into their IRC
+    clients.
+  - A tool, `atheme-ecdh-x25519-tool`, is provided (and is installed into
+    `bin/` by `make install`) to enable users to generate private keys, obtain
+    their public keys in base64 format (to pass to `NickServ SET`), encode
+    keypairs as a QR-Code (should mobile clients end up implementing this
+    functionality, and users wish to easily transfer their private keys), and
+    serve as a reference tool to generate server challenges, and responses to
+    server challenges, for client authors to verify their implementations
+    against. Note that the QR-Code printing support requires a UTF-8-capable
+    terminal emulator, with a monospace font supporting Unicode box-drawing
+    characters.
+  - If you wish to build and install the tool without building and installing
+    everything, simply execute the following commands in the source directory:
+    - `./configure --with-libmowgli=no`
+    - `make -C libmowgli-2/ install`
+    - `make -C libathemecore/ install`
+    - `make -C src/ecdh-x25519-tool/ install`
+    - `~/atheme/bin/atheme-ecdh-x25519-tool -h`
 
 MemoServ
 --------
@@ -152,6 +188,8 @@ Password Cryptography
 - `libathemecore/crypto.c`: log current crypto provider on mod(un/re)load
 - `libathemecore/crypto.c`: rip out plaintext fallback implementation
 - Make old modules (`ircservices`, `pbkdf2`, `rawmd5`, `rawsha1`) verify-only
+- Add verify-only `rawsha256` module to verify more password hashes from other
+  sources.
 - Warn admin if no encryption-capable crypto modules are loaded
 - Generating new encrypted passwords is now much more efficient
 - Try encrypting a password with each module in turn instead of giving up

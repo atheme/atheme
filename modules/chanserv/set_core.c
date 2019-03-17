@@ -9,7 +9,7 @@
  * This file contains routines to handle the ChanServ SET command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 // This is imported by other modules/chanserv/set_*.so
 mowgli_patricia_t *cs_set_cmdtree = NULL;

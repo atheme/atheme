@@ -6,7 +6,7 @@
  * Copyright (C) 2018-2019 Atheme Development Group (https://atheme.github.io/)
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static const struct groupserv_core_symbols *gcsyms = NULL;
 static mowgli_patricia_t **gs_set_cmdtree = NULL;

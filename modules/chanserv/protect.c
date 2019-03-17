@@ -7,7 +7,7 @@
  * This file contains code for the CService OWNER functions.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "chanserv.h"
 
 static mowgli_list_t protect_actions;

@@ -7,7 +7,7 @@
  * Loads a new module in.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 os_cmd_modload(struct sourceinfo *si, int parc, char *parv[])

@@ -13,7 +13,7 @@
  * cmode.c: Channel mode change tracking.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 /* convert mode flags to a text mode string */
 char *

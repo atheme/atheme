@@ -8,7 +8,7 @@
  * EXTERNAL IRCv3.1 SASL draft mechanism implementation.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static const struct sasl_core_functions *sasl_core_functions = NULL;
 

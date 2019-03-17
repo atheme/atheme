@@ -9,7 +9,7 @@
  * setups pre-SET split.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "botserv.h"
 
 static void

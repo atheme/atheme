@@ -5,7 +5,7 @@
  * Copyright (C) 2017 Aaron M. D. Jones <aaronmdjones@gmail.com>
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static const char base64_etable[] = {
 

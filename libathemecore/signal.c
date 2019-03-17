@@ -13,7 +13,7 @@
  * signal.c: Signal-handling routines.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void childproc_check(void);
 

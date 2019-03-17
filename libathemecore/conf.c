@@ -13,7 +13,7 @@
  * conf.c: Services-specific configuration processing.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static int c_uplink(mowgli_config_file_entry_t *);
 static int c_loadmodule(mowgli_config_file_entry_t *);

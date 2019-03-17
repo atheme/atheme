@@ -13,7 +13,7 @@
  * flags.c: Functions to convert a flags table into a bitmask.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define FLAGS_ADD       0x1
 #define FLAGS_DEL       0x2

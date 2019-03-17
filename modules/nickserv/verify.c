@@ -7,7 +7,7 @@
  * This file contains code for the NickServ VERIFY function.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 ns_cmd_verify(struct sourceinfo *si, int parc, char *parv[])

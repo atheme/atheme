@@ -8,7 +8,7 @@
  *   the user has flags in the $chanacs:#channel
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "exttarget.h"
 
 struct this_exttarget

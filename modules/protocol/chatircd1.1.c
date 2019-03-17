@@ -10,8 +10,8 @@
  * Adapted from the Charybdis protocol module.
  */
 
-#include "atheme.h"
-#include "protocol/chatircd.h"
+#include <atheme.h>
+#include <atheme/protocol/chatircd.h>
 
 static struct ircd ChatIRCd = {
 	.ircdname = "ChatIRCd",                     // IRCd name

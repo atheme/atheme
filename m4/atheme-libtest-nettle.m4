@@ -3,10 +3,9 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 	LIBNETTLE="No"
 	LIBNETTLE_USABLE="No"
 	LIBNETTLE_DIGEST="No"
-	LIBNETTLE_MEMEQL="No"
 
 	AC_ARG_WITH([nettle],
-		[AS_HELP_STRING([--without-nettle], [Do not attempt to detect nettle (crypto library)])],
+		[AS_HELP_STRING([--without-nettle], [Do not attempt to detect nettle (cryptographic library)])],
 		[], [with_nettle="auto"])
 
 	case "x${with_nettle}" in
@@ -82,23 +81,43 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 			]])
 		], [
 			AC_MSG_RESULT([yes])
+			AC_DEFINE([HAVE_LIBNETTLE_MEMEQL], [1], [Define to 1 if libnettle has a usable constant-time memory comparison function])
 			LIBNETTLE_USABLE="Yes"
-			LIBNETTLE_MEMEQL="Yes"
 		], [
 			AC_MSG_RESULT([no])
 		])
 
-		AS_IF([test "${LIBNETTLE_USABLE}" = "Yes"], [
-			AC_DEFINE([HAVE_LIBNETTLE], [1], [Define to 1 if libnettle appears to be usable])
-			AS_IF([test "${LIBNETTLE_MEMEQL}" = "Yes"], [
-				AC_DEFINE([HAVE_LIBNETTLE_MEMEQL], [1], [Define to 1 if libnettle has a usable constant-time memory comparison function])
-			])
-			AC_CHECK_HEADERS([nettle/version.h], [], [], [])
+		AC_MSG_CHECKING([if libnettle can provide SASL ECDH-X25519-CHALLENGE])
+		AC_LINK_IFELSE([
+			AC_LANG_PROGRAM([[
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <nettle/curve25519.h>
+				#ifndef NETTLE_CURVE25519_RFC7748
+				#  error "NETTLE_CURVE25519_RFC7748 is not set"
+				#endif
+			]], [[
+				(void) nettle_curve25519_mul_g(NULL, NULL);
+				(void) nettle_curve25519_mul(NULL, NULL, NULL);
+			]])
 		], [
-			LIBNETTLE="No"
-			AS_IF([test "${with_nettle}" = "yes"], [
-				AC_MSG_FAILURE([--with-nettle was given but libnettle appears to be unusable])
-			])
+			AC_MSG_RESULT([yes])
+			AC_DEFINE([HAVE_LIBNETTLE_ECDH_X25519], [1], [Define to 1 if libnettle can provide SASL ECDH-X25519-CHALLENGE])
+			ATHEME_COND_ECDH_X25519_TOOL_ENABLE
+			LIBNETTLE_USABLE="Yes"
+		], [
+			AC_MSG_RESULT([no])
+		])
+	])
+
+	AS_IF([test "${LIBNETTLE_USABLE}" = "Yes"], [
+		AC_DEFINE([HAVE_LIBNETTLE], [1], [Define to 1 if libnettle appears to be usable])
+		AC_CHECK_HEADERS([nettle/version.h], [], [], [])
+	], [
+		LIBNETTLE="No"
+		AS_IF([test "${with_nettle}" = "yes"], [
+			AC_MSG_FAILURE([--with-nettle was given but libnettle appears to be unusable])
 		])
 	])
 

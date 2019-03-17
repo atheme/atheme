@@ -7,7 +7,7 @@
  * Remembers the last quit message of a user.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 user_delete_info_hook(hook_user_delete_t *hdata)

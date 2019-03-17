@@ -5,8 +5,8 @@
  * Copyright (C) 2011 William Pitcock <nenolod@dereferenced.org>
  */
 
-#include "atheme.h"
-#include "libathemecore.h"
+#include <atheme.h>
+#include <atheme/libathemecore.h>
 
 int
 main(int argc, const char *argv)

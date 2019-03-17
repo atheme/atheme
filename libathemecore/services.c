@@ -13,7 +13,7 @@
  * services.c: Routines commonly used by various services.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_heap_t *sourceinfo_heap = NULL;
 

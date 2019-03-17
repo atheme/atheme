@@ -7,8 +7,8 @@
  * This file contains protocol support for ngircd.
  */
 
-#include "atheme.h"
-#include "protocol/ngircd.h"
+#include <atheme.h>
+#include <atheme/protocol/ngircd.h>
 
 static struct ircd ngIRCd = {
 	.ircdname = "ngIRCd",

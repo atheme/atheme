@@ -13,7 +13,7 @@
  * authcookie.c: Remote authentication ticket management
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_list_t authcookie_list;
 static mowgli_heap_t *authcookie_heap = NULL;

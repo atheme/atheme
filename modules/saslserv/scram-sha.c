@@ -20,11 +20,11 @@
  *     "SCRAM-SHA-256 and SCRAM-SHA-256-PLUS SASL Mechanisms"
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #ifdef HAVE_LIBIDN
 
-#include "pbkdf2v2.h"
+#include <atheme/pbkdf2v2.h>
 
 /* Maximum iteration count Cyrus SASL clients will process
  * Taken from <https://github.com/cyrusimap/cyrus-sasl/blob/f76eb971d456619d0f26/plugins/scram.c#L79>
@@ -40,6 +40,9 @@
 #define SCRAMSHA_NONCE_LENGTH_MIN_COMBINED  (SCRAMSHA_NONCE_LENGTH + SCRAMSHA_NONCE_LENGTH_MIN)
 #define SCRAMSHA_NONCE_LENGTH_MAX_COMBINED  (SCRAMSHA_NONCE_LENGTH + SCRAMSHA_NONCE_LENGTH_MAX)
 
+// strlen("n,a=,") == 5U
+#define SCRAMSHA_GS2HDR_LENGTH_MAX          (5U + NICKLEN)
+
 // strlen("10000") == 5U
 // strlen("5000000") == 7U
 // strlen("r=,s=,i=") == 8U
@@ -51,7 +54,6 @@
                                              7U + 8U)
 
 // strlen("v=") == 2U
-#define SCRAMSHA_RESPONSE2_LENGTH_MIN       (BASE64_SIZE_RAW(SCRAMSHA_MDLEN_MIN) + 2U)
 #define SCRAMSHA_RESPONSE2_LENGTH_MAX       (BASE64_SIZE_RAW(SCRAMSHA_MDLEN_MAX) + 2U)
 
 // strlen("10000") == 5U
@@ -62,20 +64,35 @@
 #define SCRAMSHA_PASSHASH_LENGTH_MAX        (7U + BASE64_SIZE_RAW(PBKDF2_SALTLEN_MAX) + \
                                              (2U * BASE64_SIZE_RAW(SCRAMSHA_MDLEN_MAX)) + 9U)
 
+struct sasl_scramsha_attribute
+{
+	char *                      value;
+	size_t                      length;
+};
+
 struct sasl_scramsha_session
 {
 	mowgli_node_t               node;       // For entry into mowgli_list_t sasl_scramsha_sessions
 	struct pbkdf2v2_dbentry     db;         // Parsed credentials from database
 	struct myuser              *mu;         // User we are authenticating as
-	char                       *c_gs2_buf;  // Client's GS2 header
 	char                       *c_msg_buf;  // Client's first message
-	char                       *s_msg_buf;  // Server's first message
-	size_t                      c_gs2_len;  // Client's GS2 header (length)
+	size_t                      c_gs2_len;  // Client's GS2 header (base64-encoded length)
+	size_t                      c_msg_len;  // Client's first message (length)
+	size_t                      s_msg_len;  // Server's first message (length)
+	size_t                      nonce_len;  // Length of combined (client + server) nonce below
 	bool                        complete;   // Authentication is complete, waiting for client to confirm
+
+	// Client's GS2 header (base64-encoded)
+	char                        c_gs2_b64[BASE64_SIZE_STR(SCRAMSHA_GS2HDR_LENGTH_MAX)];
+
+	// Server's first message
+	char                        s_msg_buf[SCRAMSHA_RESPONSE1_LENGTH_MAX + 1];
+
+	// Combined (client + server) nonce
 	char                        nonce[SCRAMSHA_NONCE_LENGTH_MAX_COMBINED + 1];
 };
 
-typedef char *scram_attr_list[128];
+typedef struct sasl_scramsha_attribute scram_attr_list[128];
 
 static mowgli_list_t sasl_scramsha_sessions;
 static const struct sasl_core_functions *sasl_core_functions = NULL;
@@ -96,7 +113,8 @@ sasl_scramsha_myuser_delete(struct myuser *const restrict mu)
 }
 
 static bool ATHEME_FATTR_WUR
-sasl_scramsha_attrlist_parse(const char *restrict str, scram_attr_list *const restrict attributes)
+sasl_scramsha_attrlist_parse(const char *restrict str, const char *const restrict end,
+                             scram_attr_list *const restrict attributes)
 {
 	(void) memset(*attributes, 0x00, sizeof *attributes);
 
@@ -111,7 +129,7 @@ sasl_scramsha_attrlist_parse(const char *restrict str, scram_attr_list *const re
 			return false;
 		}
 
-		if ((*attributes)[name])
+		if ((*attributes)[name].value)
 		{
 			(void) slog(LG_DEBUG, "%s: duplicated attribute '%c'", MOWGLI_FUNC_NAME, (char) name);
 			return false;
@@ -120,23 +138,19 @@ sasl_scramsha_attrlist_parse(const char *restrict str, scram_attr_list *const re
 		if (*str++ == '=' && (*str != ',' && *str != 0x00))
 		{
 			const char *const pos = strchr(str + 1, ',');
+			const char *const idx = ((pos != NULL) ? pos : end);
+
+			(*attributes)[name].length = (size_t) (idx - str);
+			(*attributes)[name].value = sstrndup(str, (*attributes)[name].length);
+
+			(void) slog(LG_DEBUG, "%s: parsed '%c'='%s'", MOWGLI_FUNC_NAME,
+			                      (char) name, (*attributes)[name].value);
 
 			if (pos)
-			{
-				(*attributes)[name] = sstrndup(str, (size_t) (pos - str));
-				(void) slog(LG_DEBUG, "%s: parsed '%c'='%s'", MOWGLI_FUNC_NAME,
-				                      (char) name, (*attributes)[name]);
 				str = pos + 1;
-			}
 			else
-			{
-				(*attributes)[name] = sstrdup(str);
-				(void) slog(LG_DEBUG, "%s: parsed '%c'='%s'", MOWGLI_FUNC_NAME,
-				                      (char) name, (*attributes)[name]);
-
 				// Reached end of attribute list
 				return true;
-			}
 		}
 		else
 		{
@@ -151,12 +165,13 @@ sasl_scramsha_attrlist_free(scram_attr_list *const restrict attributes)
 {
 	for (unsigned char x = 'A'; x <= 'z'; x++)
 	{
-		if (! (*attributes)[x])
+		if (! (*attributes)[x].value)
 			continue;
 
-		(void) smemzerofree((*attributes)[x], strlen((*attributes)[x]));
+		(void) smemzerofree((*attributes)[x].value, (*attributes)[x].length);
 
-		(*attributes)[x] = NULL;
+		(*attributes)[x].value = NULL;
+		(*attributes)[x].length = 0;
 	}
 }
 
@@ -172,29 +187,6 @@ sasl_scramsha_error(const char *const restrict errtext, struct sasl_output_buf *
 		out->buf = errbuf;
 		out->len = (size_t) errlen;
 	}
-}
-
-static void
-sasl_mech_scramsha_finish(struct sasl_session *const restrict p)
-{
-	if (! (p && p->mechdata))
-		return;
-
-	struct sasl_scramsha_session *const s = p->mechdata;
-
-	if (s->c_gs2_buf && s->c_gs2_len)
-		(void) smemzerofree(s->c_gs2_buf, s->c_gs2_len);
-
-	if (s->c_msg_buf)
-		(void) smemzerofree(s->c_msg_buf, strlen(s->c_msg_buf));
-
-	if (s->s_msg_buf)
-		(void) smemzerofree(s->s_msg_buf, strlen(s->s_msg_buf));
-
-	(void) mowgli_node_delete(&s->node, &sasl_scramsha_sessions);
-	(void) smemzerofree(s, sizeof *s);
-
-	p->mechdata = NULL;
 }
 
 static enum sasl_mechanism_result ATHEME_FATTR_WUR
@@ -220,11 +212,10 @@ sasl_mech_scramsha_step_clientfirst(struct sasl_session *const restrict p,
 	const char *message = in->buf;
 
 	enum sasl_mechanism_result retval = ASASL_MRESULT_CONTINUE;
-	struct sasl_scramsha_session *s = NULL;
+	char c_gs2_b64[BASE64_SIZE_STR(SCRAMSHA_GS2HDR_LENGTH_MAX)];
 	char authzid[NICKLEN + 1];
 	char authcid[NICKLEN + 1];
 	struct myuser *mu = NULL;
-	static char response[SCRAMSHA_RESPONSE1_LENGTH_MAX + 1];
 
 	scram_attr_list attributes;
 	struct pbkdf2v2_dbentry db;
@@ -309,43 +300,48 @@ sasl_mech_scramsha_step_clientfirst(struct sasl_session *const restrict p,
 		return ASASL_MRESULT_ERROR;
 	}
 
-	if (! sasl_scramsha_attrlist_parse(message, &attributes))
+	const size_t c_gs2_len = base64_encode(header, (size_t) (message - header), c_gs2_b64, sizeof c_gs2_b64);
+
+	if (c_gs2_len == (size_t) -1)
+	{
+		(void) slog(LG_ERROR, "%s: base64_encode() for GS2 header failed (BUG?)", MOWGLI_FUNC_NAME);
+		(void) sasl_scramsha_error("other-error", out);
+		return ASASL_MRESULT_ERROR;
+	}
+	if (! sasl_scramsha_attrlist_parse(message, ((const char *) in->buf) + in->len, &attributes))
 	{
 		// Malformed SCRAM attribute list
 		(void) sasl_scramsha_error("other-error", out);
 		goto error;
 	}
-	if (attributes['m'])
+	if (attributes['m'].value)
 	{
 		(void) slog(LG_DEBUG, "%s: extensions are not supported", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("extensions-not-supported", out);
 		goto error;
 	}
-	if (! (attributes['n'] && attributes['r']))
+	if (! (attributes['n'].value && attributes['r'].value))
 	{
 		(void) slog(LG_DEBUG, "%s: required attribute missing", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("other-error", out);
 		goto error;
 	}
-
-	const size_t nonceLen = strlen(attributes['r']);
-	if (nonceLen < SCRAMSHA_NONCE_LENGTH_MIN || nonceLen > SCRAMSHA_NONCE_LENGTH_MAX)
+	if (attributes['r'].length < SCRAMSHA_NONCE_LENGTH_MIN || attributes['r'].length > SCRAMSHA_NONCE_LENGTH_MAX)
 	{
-		(void) slog(LG_DEBUG, "%s: nonce length '%zu' unacceptable", MOWGLI_FUNC_NAME, nonceLen);
+		(void) slog(LG_DEBUG, "%s: nonce length '%zu' unacceptable", MOWGLI_FUNC_NAME, attributes['r'].length);
 		(void) sasl_scramsha_error("nonce-length-unacceptable", out);
 		goto error;
 	}
-
-	const size_t authcidLen = strlen(attributes['n']);
-	if (authcidLen > NICKLEN)
+	if (attributes['n'].length > NICKLEN)
 	{
-		(void) slog(LG_DEBUG, "%s: unacceptable authcid length '%zu'", MOWGLI_FUNC_NAME, authcidLen);
+		(void) slog(LG_DEBUG, "%s: unacceptable authcid length '%zu'", MOWGLI_FUNC_NAME, attributes['n'].length);
 		(void) sasl_scramsha_error("authcid-too-long", out);
 		goto error;
 	}
 
 	(void) memset(authcid, 0x00, sizeof authcid);
-	(void) memcpy(authcid, attributes['n'], authcidLen);
+	(void) memcpy(authcid, attributes['n'].value, attributes['n'].length);
+
 	if (! pbkdf2v2_scram_functions->normalize(authcid, sizeof authcid))
 	{
 		(void) slog(LG_DEBUG, "%s: SASLprep normalization of authcid failed", MOWGLI_FUNC_NAME);
@@ -379,7 +375,6 @@ sasl_mech_scramsha_step_clientfirst(struct sasl_session *const restrict p,
 		(void) sasl_scramsha_error("other-error", out);
 		goto error;
 	}
-
 	if (! pbkdf2v2_scram_functions->dbextract(mu->pass, &db))
 	{
 		// User's password hash is not in a compatible (PBKDF2 v2) format
@@ -394,21 +389,26 @@ sasl_mech_scramsha_step_clientfirst(struct sasl_session *const restrict p,
 	}
 
 	// These cannot fail
-	s = smalloc(sizeof *s);
-	s->c_gs2_len = (size_t) (message - header);
-	s->c_gs2_buf = sstrndup(header, s->c_gs2_len);
-	s->c_msg_buf = sstrndup(message, (in->len - s->c_gs2_len));
+	struct sasl_scramsha_session *const s = smalloc(sizeof *s);
+
+	s->nonce_len = attributes['r'].length + SCRAMSHA_NONCE_LENGTH;
+	s->c_gs2_len = c_gs2_len;
+	s->c_msg_len = (in->len - ((size_t) (message - header)));
+	s->c_msg_buf = sstrndup(message, s->c_msg_len);
 	s->mu = mu;
 
 	(void) mowgli_node_add(s, &s->node, &sasl_scramsha_sessions);
-	(void) memcpy(s->nonce, attributes['r'], nonceLen);
-	(void) atheme_random_str(s->nonce + nonceLen, SCRAMSHA_NONCE_LENGTH);
 	(void) memcpy(&s->db, &db, sizeof db);
+	(void) memcpy(s->c_gs2_b64, c_gs2_b64, c_gs2_len);
+	(void) memcpy(s->nonce, attributes['r'].value, attributes['r'].length);
+	(void) atheme_random_str(s->nonce + attributes['r'].length, SCRAMSHA_NONCE_LENGTH);
 
 	p->mechdata = s;
 
 	// Construct server-first-message
-	const int respLen = snprintf(response, sizeof response, "r=%s,s=%s,i=%u", s->nonce, s->db.salt64, s->db.c);
+	const int respLen = snprintf(s->s_msg_buf, sizeof s->s_msg_buf, "r=%s,s=%s,i=%u",
+	                             s->nonce, s->db.salt64, s->db.c);
+
 	if (respLen < (int) SCRAMSHA_RESPONSE1_LENGTH_MIN || respLen > (int) SCRAMSHA_RESPONSE1_LENGTH_MAX)
 	{
 		(void) slog(LG_ERROR, "%s: snprintf(3) for server-first-message failed (BUG)", MOWGLI_FUNC_NAME);
@@ -416,16 +416,14 @@ sasl_mech_scramsha_step_clientfirst(struct sasl_session *const restrict p,
 		goto error;
 	}
 
-	out->buf = response;
-	out->len = (size_t) respLen;
+	s->s_msg_len = (size_t) respLen;
 
-	// Cannot fail. +1 is for including the terminating NULL byte.
-	s->s_msg_buf = smemdup(out->buf, out->len + 1);
+	out->buf = s->s_msg_buf;
+	out->len = s->s_msg_len;
 
 	goto cleanup;
 
 error:
-	(void) sasl_mech_scramsha_finish(p);
 	retval = ASASL_MRESULT_ERROR;
 	goto cleanup;
 
@@ -470,8 +468,6 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 	}
 
 	scram_attr_list attributes;
-	char c_gs2_buf[SASL_S2S_MAXLEN_TOTAL_RAW];
-	char AuthMessage[(3 * SASL_S2S_MAXLEN_TOTAL_RAW) + SCRAMSHA_NONCE_LENGTH_MAX_COMBINED + 1];
 	unsigned char ClientProof[SCRAMSHA_MDLEN_MAX];
 	unsigned char ClientKey[SCRAMSHA_MDLEN_MAX];
 	unsigned char StoredKey[SCRAMSHA_MDLEN_MAX];
@@ -479,19 +475,19 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 	unsigned char ServerSig[SCRAMSHA_MDLEN_MAX];
 	char ServerSig64[BASE64_SIZE_STR(SCRAMSHA_MDLEN_MAX)];
 
-	if (! sasl_scramsha_attrlist_parse(in->buf, &attributes))
+	if (! sasl_scramsha_attrlist_parse(in->buf, ((const char *) in->buf) + in->len, &attributes))
 	{
 		// Malformed SCRAM attribute list
 		(void) sasl_scramsha_error("other-error", out);
 		goto error;
 	}
-	if (attributes['m'])
+	if (attributes['m'].value)
 	{
 		(void) slog(LG_DEBUG, "%s: extensions are not supported", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("extensions-not-supported", out);
 		goto error;
 	}
-	if (! (attributes['c'] && attributes['p'] && attributes['r']))
+	if (! (attributes['c'].value && attributes['p'].value && attributes['r'].value))
 	{
 		(void) slog(LG_DEBUG, "%s: required attribute missing", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("other-error", out);
@@ -499,22 +495,15 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 	}
 
 	// Verify nonce received matches nonce sent
-	if (strcmp(s->nonce, attributes['r']) != 0)
+	if (strcmp(s->nonce, attributes['r'].value) != 0)
 	{
 		(void) slog(LG_DEBUG, "%s: nonce sent by client doesn't match nonce we sent", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("other-error", out);
 		goto error;
 	}
 
-	// Decode and verify GS2 header from client-final-message
-	const size_t c_gs2_len = base64_decode(attributes['c'], c_gs2_buf, sizeof c_gs2_buf);
-	if (c_gs2_len == (size_t) -1)
-	{
-		(void) slog(LG_DEBUG, "%s: base64_decode() for GS2 header failed", MOWGLI_FUNC_NAME);
-		(void) sasl_scramsha_error("other-error", out);
-		goto error;
-	}
-	if (c_gs2_len != s->c_gs2_len || memcmp(s->c_gs2_buf, c_gs2_buf, c_gs2_len) != 0)
+	// Verify GS2 header from client-final-message against the original header received above
+	if (strcmp(s->c_gs2_b64, attributes['c'].value) != 0)
 	{
 		(void) slog(LG_DEBUG, "%s: GS2 header mismatch", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("other-error", out);
@@ -522,7 +511,7 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 	}
 
 	// Decode ClientProof from client-final-message
-	if (base64_decode(attributes['p'], ClientProof, sizeof ClientProof) != s->db.dl)
+	if (base64_decode(attributes['p'].value, ClientProof, sizeof ClientProof) != s->db.dl)
 	{
 		(void) slog(LG_DEBUG, "%s: base64_decode() for ClientProof failed", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("other-error", out);
@@ -530,17 +519,19 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 	}
 
 	// Construct AuthMessage
-	const int AuthMsgLen = snprintf(AuthMessage, sizeof AuthMessage, "%s,%s,c=%s,r=%s",
-	                                s->c_msg_buf, s->s_msg_buf, attributes['c'], attributes['r']);
-	if (AuthMsgLen <= (int) SCRAMSHA_NONCE_LENGTH_MIN_COMBINED || AuthMsgLen >= (int) sizeof AuthMessage)
-	{
-		(void) slog(LG_ERROR, "%s: snprintf(3) for AuthMessage failed (BUG?)", MOWGLI_FUNC_NAME);
-		(void) sasl_scramsha_error("other-error", out);
-		goto error;
-	}
+	const struct digest_vector AuthMessage[] = {
+		{ s->c_msg_buf, s->c_msg_len },
+		{          ",", 1            },
+		{ s->s_msg_buf, s->s_msg_len },
+		{        ",c=", 3            },
+		{ s->c_gs2_b64, s->c_gs2_len },
+		{        ",r=", 3            },
+		{     s->nonce, s->nonce_len },
+	};
+	const size_t AuthMsgLen = (sizeof AuthMessage) / (sizeof AuthMessage[0]);
 
 	// Calculate ClientSignature
-	if (! digest_oneshot_hmac(s->db.md, s->db.shk, s->db.dl, AuthMessage, (size_t) AuthMsgLen, ClientSig, NULL))
+	if (! digest_oneshot_hmac_vector(s->db.md, s->db.shk, s->db.dl, AuthMessage, AuthMsgLen, ClientSig, NULL))
 	{
 		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac() for ClientSignature failed (BUG)", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("other-error", out);
@@ -573,7 +564,7 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 	(void) slog(LG_DEBUG, "%s: authentication successful", MOWGLI_FUNC_NAME);
 
 	// Calculate ServerSignature
-	if (! digest_oneshot_hmac(s->db.md, s->db.ssk, s->db.dl, AuthMessage, (size_t) AuthMsgLen, ServerSig, NULL))
+	if (! digest_oneshot_hmac_vector(s->db.md, s->db.ssk, s->db.dl, AuthMessage, AuthMsgLen, ServerSig, NULL))
 	{
 		(void) slog(LG_ERROR, "%s: digest_oneshot_hmac() for ServerSignature failed (BUG)", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("other-error", out);
@@ -582,7 +573,7 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 
 	// Encode ServerSignature
 	const size_t ServerSig64Len = base64_encode(ServerSig, s->db.dl, ServerSig64, sizeof ServerSig64);
-	if (ServerSig64Len == (size_t) -1)
+	if (ServerSig64Len != BASE64_SIZE_RAW(s->db.dl))
 	{
 		(void) slog(LG_ERROR, "%s: base64_encode() for ServerSignature failed (BUG)", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("other-error", out);
@@ -591,10 +582,10 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 
 	// Construct server-final-message
 	const int respLen = snprintf(response, sizeof response, "v=%s", ServerSig64);
-	if (respLen < (int) SCRAMSHA_RESPONSE2_LENGTH_MIN || respLen > (int) SCRAMSHA_RESPONSE2_LENGTH_MAX)
+	if (respLen != (int) (2U + ServerSig64Len))
 	{
-		(void) slog(LG_ERROR, "%s: base64_encode() did not write an acceptable amount of data (%zu) (BUG)",
-		                      MOWGLI_FUNC_NAME, ServerSig64Len);
+		(void) slog(LG_ERROR, "%s: snprintf(3) did not write an acceptable amount of data (%d) (BUG)",
+		                      MOWGLI_FUNC_NAME, respLen);
 		(void) sasl_scramsha_error("other-error", out);
 		goto error;
 	}
@@ -607,18 +598,14 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 	goto cleanup;
 
 error:
-	(void) sasl_mech_scramsha_finish(p);
 	retval = ASASL_MRESULT_ERROR;
 	goto cleanup;
 
 fail:
-	(void) sasl_mech_scramsha_finish(p);
 	retval = ASASL_MRESULT_FAILURE;
 	goto cleanup;
 
 cleanup:
-	(void) smemzero(c_gs2_buf, sizeof c_gs2_buf);
-	(void) smemzero(AuthMessage, sizeof AuthMessage);
 	(void) smemzero(ClientProof, sizeof ClientProof);
 	(void) smemzero(ClientKey, sizeof ClientKey);
 	(void) smemzero(StoredKey, sizeof StoredKey);
@@ -708,7 +695,6 @@ sasl_mech_scramsha_step_success(struct sasl_session *const restrict p)
 end:
 	(void) smemzero(csk64, sizeof csk64);
 	(void) smemzero(chk64, sizeof chk64);
-	(void) sasl_mech_scramsha_finish(p);
 	return ASASL_MRESULT_SUCCESS;
 }
 
@@ -753,6 +739,23 @@ sasl_mech_scramsha_2_512_step(struct sasl_session *const restrict p,
                               struct sasl_output_buf *const restrict out)
 {
 	return sasl_mech_scramsha_step_dispatch(p, in, out, PBKDF2_PRF_SCRAM_SHA2_512_S64);
+}
+
+static void
+sasl_mech_scramsha_finish(struct sasl_session *const restrict p)
+{
+	if (! (p && p->mechdata))
+		return;
+
+	struct sasl_scramsha_session *const s = p->mechdata;
+
+	if (s->c_msg_buf)
+		(void) smemzerofree(s->c_msg_buf, s->c_msg_len);
+
+	(void) mowgli_node_delete(&s->node, &sasl_scramsha_sessions);
+	(void) smemzerofree(s, sizeof *s);
+
+	p->mechdata = NULL;
 }
 
 static const struct sasl_mechanism sasl_mech_scramsha_1 = {

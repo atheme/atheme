@@ -7,7 +7,7 @@
  * Searches through the logs.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define MAXMATCHES 100
 

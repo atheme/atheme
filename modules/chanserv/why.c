@@ -7,7 +7,7 @@
  * This file contains code for the ChanServ WHY function.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 cs_cmd_why(struct sourceinfo *si, int parc, char *parv[])

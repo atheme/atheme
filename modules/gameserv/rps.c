@@ -7,7 +7,7 @@
  * Rock Paper Scissors
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "gameserv_common.h"
 
 static void

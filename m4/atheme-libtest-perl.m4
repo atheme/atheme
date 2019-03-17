@@ -35,8 +35,7 @@ AC_DEFUN([ATHEME_LIBTEST_PERL], [
 				AC_MSG_ERROR([--with-perl was given but Perl could not be found])
 			])
 
-			PERL_COND_D="perl"
-			AC_SUBST([PERL_COND_D])
+			ATHEME_COND_PERL_ENABLE
 		else
 			LIBPERL="No"
 			AS_IF([test "${with_perl}" = "yes"], [

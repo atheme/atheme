@@ -12,7 +12,7 @@
  * tokenize.c: Tokenization routines.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 int
 sjtoken(char *message, char delimiter, char **parv)

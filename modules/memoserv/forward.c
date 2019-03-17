@@ -7,7 +7,7 @@
  * This file contains code for the Memoserv FORWARD function
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])

@@ -6,7 +6,7 @@
  * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 cmd_os_genhash_func(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)

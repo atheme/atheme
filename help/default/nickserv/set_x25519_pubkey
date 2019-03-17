@@ -1,0 +1,10 @@
+Help for SET X25519-PUBKEY:
+
+SET X25519-PUBKEY allows you to change your
+public key used for SASL ECDH-X25519-CHALLENGE
+authentication.
+
+If no pubkey is given, your public key will
+be removed from the services database.
+
+Syntax: SET X25519-PUBKEY [<pubkey>]

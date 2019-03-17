@@ -7,7 +7,7 @@
  * JSONRPC implementation
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "jsonrpclib.h"
 
 static mowgli_list_t *httpd_path_handlers = NULL;

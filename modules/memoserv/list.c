@@ -7,7 +7,7 @@
  * This file contains code for the Memoserv LIST function
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 ms_cmd_list(struct sourceinfo *si, int parc, char *parv[])

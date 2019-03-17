@@ -7,7 +7,7 @@
  * This file contains functionality which implements the OService IGNORE command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_patricia_t *os_ignore_cmds = NULL;
 

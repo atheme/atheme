@@ -9,7 +9,7 @@
  * Based on Alex Lambert's LISTEMAIL.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "list_common.h"
 
 static mowgli_patricia_t *list_params;

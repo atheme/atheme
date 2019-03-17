@@ -9,7 +9,7 @@
  * the OperServ SGLINE command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_patricia_t *os_sgline_cmds = NULL;
 

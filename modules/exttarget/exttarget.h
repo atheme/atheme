@@ -5,10 +5,10 @@
  * Copyright (C) 2011 William Pitcock <nenolod@dereferenced.org>
  */
 
-#include "stdheaders.h"
-
 #ifndef ATHEME_MOD_EXTTARGET_EXTTARGET_H
 #define ATHEME_MOD_EXTTARGET_EXTTARGET_H 1
+
+#include <atheme.h>
 
 typedef struct myentity *(*entity_validate_f)(const char *name);
 

@@ -12,7 +12,7 @@
  * linker.c: Abstraction of the dynamic linking system.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #if defined(MOWGLI_OS_HPUX)
 # define PLATFORM_SUFFIX ".sl"

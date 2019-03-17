@@ -7,7 +7,7 @@
  * Closing for channels.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 close_check_join(hook_channel_joinpart_t *data)

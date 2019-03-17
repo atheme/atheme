@@ -7,7 +7,7 @@
  * This file contains code for the NickServ IDENTIFY and LOGIN functions.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 // Check whether we are compiling IDENTIFY or LOGIN
 #ifdef NICKSERV_LOGIN

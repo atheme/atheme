@@ -9,7 +9,7 @@
  * botserv bot talk in channel.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 bs_cmd_say(struct sourceinfo *si, int parc, char *parv[])

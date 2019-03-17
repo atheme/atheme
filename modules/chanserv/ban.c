@@ -7,7 +7,7 @@
  * This file contains code for the CService BAN/UNBAN function.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 cs_cmd_ban(struct sourceinfo *si, int parc, char *parv[])

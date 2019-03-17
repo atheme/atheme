@@ -7,7 +7,7 @@
  * This file contains functionality which implements the OService MODE command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 os_cmd_mode(struct sourceinfo *si, int parc, char *parv[])

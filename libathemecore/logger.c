@@ -13,7 +13,7 @@
  * logger.c: Logging routines
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static struct logfile *log_file;
 int log_force;

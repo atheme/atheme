@@ -9,7 +9,7 @@
  * Default AKILL time is 7 days (604800 seconds)
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define CLEAR_KICK 1
 #define CLEAR_KILL 2

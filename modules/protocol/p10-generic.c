@@ -9,7 +9,7 @@
  * raw data sent by asuka.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void check_hidehost(struct user *u);
 

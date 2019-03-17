@@ -7,7 +7,7 @@
  * This file contains code for the CService OP functions.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "chanserv.h"
 
 static mowgli_list_t op_actions;

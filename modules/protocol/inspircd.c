@@ -7,8 +7,8 @@
  * InspIRCd link support
  */
 
-#include "atheme.h"
-#include "protocol/inspircd.h"
+#include <atheme.h>
+#include <atheme/protocol/inspircd.h>
 
 #define PROTOCOL_MINIMUM 1202 // we do not support anything older than this
 #define PROTOCOL_PREFERRED_STR "1202"

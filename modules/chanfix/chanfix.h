@@ -7,12 +7,10 @@
  * chanfix - channel fixing service
  */
 
-#include "stdheaders.h"
-
 #ifndef ATHEME_MOD_CHANFIX_CHANFIX_H
 #define ATHEME_MOD_CHANFIX_CHANFIX_H 1
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define CHANFIX_OP_THRESHHOLD   3
 #define CHANFIX_ACCOUNT_WEIGHT  1.5

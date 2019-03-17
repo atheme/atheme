@@ -88,7 +88,7 @@ union SHA1_B64Q16
 };
 
 static void
-digest_transform_block_sha1(struct digest_context_sha1 *const restrict ctx, const uint8_t *const restrict in)
+digest_transform_block_sha1(struct digest_context_sha1 *const restrict ctx, const unsigned char *const restrict in)
 {
 	const bool digest_is_big_endian = (htonl(UINT32_C(0x11223344)) == UINT32_C(0x11223344));
 
@@ -116,10 +116,12 @@ digest_transform_block_sha1(struct digest_context_sha1 *const restrict ctx, cons
 	SHA1_ROUND0(0x02U, 0x03U, 0x04U, 0x00U, 0x01U, 0x0DU);
 	SHA1_ROUND0(0x01U, 0x02U, 0x03U, 0x04U, 0x00U, 0x0EU);
 	SHA1_ROUND0(0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x0FU);
+
 	SHA1_ROUND1(0x04U, 0x00U, 0x01U, 0x02U, 0x03U, 0x10U);
 	SHA1_ROUND1(0x03U, 0x04U, 0x00U, 0x01U, 0x02U, 0x11U);
 	SHA1_ROUND1(0x02U, 0x03U, 0x04U, 0x00U, 0x01U, 0x12U);
 	SHA1_ROUND1(0x01U, 0x02U, 0x03U, 0x04U, 0x00U, 0x13U);
+
 	SHA1_ROUND2(0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x14U);
 	SHA1_ROUND2(0x04U, 0x00U, 0x01U, 0x02U, 0x03U, 0x15U);
 	SHA1_ROUND2(0x03U, 0x04U, 0x00U, 0x01U, 0x02U, 0x16U);
@@ -140,6 +142,7 @@ digest_transform_block_sha1(struct digest_context_sha1 *const restrict ctx, cons
 	SHA1_ROUND2(0x03U, 0x04U, 0x00U, 0x01U, 0x02U, 0x25U);
 	SHA1_ROUND2(0x02U, 0x03U, 0x04U, 0x00U, 0x01U, 0x26U);
 	SHA1_ROUND2(0x01U, 0x02U, 0x03U, 0x04U, 0x00U, 0x27U);
+
 	SHA1_ROUND3(0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x28U);
 	SHA1_ROUND3(0x04U, 0x00U, 0x01U, 0x02U, 0x03U, 0x29U);
 	SHA1_ROUND3(0x03U, 0x04U, 0x00U, 0x01U, 0x02U, 0x2AU);
@@ -160,6 +163,7 @@ digest_transform_block_sha1(struct digest_context_sha1 *const restrict ctx, cons
 	SHA1_ROUND3(0x03U, 0x04U, 0x00U, 0x01U, 0x02U, 0x39U);
 	SHA1_ROUND3(0x02U, 0x03U, 0x04U, 0x00U, 0x01U, 0x3AU);
 	SHA1_ROUND3(0x01U, 0x02U, 0x03U, 0x04U, 0x00U, 0x3BU);
+
 	SHA1_ROUND4(0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x3CU);
 	SHA1_ROUND4(0x04U, 0x00U, 0x01U, 0x02U, 0x03U, 0x3DU);
 	SHA1_ROUND4(0x03U, 0x04U, 0x00U, 0x01U, 0x02U, 0x3EU);
@@ -188,16 +192,10 @@ digest_transform_block_sha1(struct digest_context_sha1 *const restrict ctx, cons
 	(void) smemzero(s, sizeof s);
 }
 
-static bool ATHEME_FATTR_WUR
+static void
 digest_init_sha1(union digest_state *const restrict state)
 {
-	struct digest_context_sha1 *const ctx = (struct digest_context_sha1 *) state;
-
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
+	struct digest_context_sha1 *const ctx = &state->sha1_ctx;
 
 	static const uint32_t iv[0x05U] = {
 
@@ -207,25 +205,17 @@ digest_init_sha1(union digest_state *const restrict state)
 
 	(void) memset(ctx, 0x00U, sizeof *ctx);
 	(void) memcpy(ctx->state, iv, sizeof iv);
-
-	return true;
 }
 
-static bool ATHEME_FATTR_WUR
+static void
 digest_update_sha1(union digest_state *const restrict state, const void *const restrict data, size_t len)
 {
-	struct digest_context_sha1 *const ctx = (struct digest_context_sha1 *) state;
-
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
+	struct digest_context_sha1 *const ctx = &state->sha1_ctx;
 
 	if (! (data && len))
-		return true;
+		return;
 
-	const uint8_t *const ptr = data;
+	const unsigned char *const ptr = data;
 
 	uint32_t i = 0x00U;
 	uint32_t j = (ctx->count[0x00U] >> 0x03U) & 0x3FU;
@@ -249,46 +239,23 @@ digest_update_sha1(union digest_state *const restrict state, const void *const r
 	}
 
 	(void) memcpy(ctx->buf + j, ptr + i, len - i);
-	return true;
 }
 
-static bool ATHEME_FATTR_WUR
-digest_final_sha1(union digest_state *const restrict state, void *const restrict out, size_t *const restrict len)
+static void
+digest_final_sha1(union digest_state *const restrict state, void *const restrict out)
 {
-	struct digest_context_sha1 *const ctx = (struct digest_context_sha1 *) state;
+	struct digest_context_sha1 *const ctx = &state->sha1_ctx;
 
-	if (! ctx)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
-	if (! out)
-	{
-		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", MOWGLI_FUNC_NAME);
-		return false;
-	}
+	static const unsigned char sep = 0x80U;
+	static const unsigned char pad = 0x00U;
 
-	if (len)
-	{
-		if (*len < DIGEST_MDLEN_SHA1)
-		{
-			(void) slog(LG_ERROR, "%s: output buffer length %zu is too small", MOWGLI_FUNC_NAME, *len);
-			return false;
-		}
-
-		*len = DIGEST_MDLEN_SHA1;
-	}
-
-	static const uint8_t sep = 0x80U;
-	static const uint8_t pad = 0x00U;
-
-	uint8_t	data[0x08U];
+	unsigned char data[0x08U];
 
 	for (uint32_t i = 0x00U; i < 0x04U; i++)
-		data[i] = (uint8_t) ((ctx->count[0x01U] >> ((0x03U - (i & 0x03U)) * 0x08U)) & 0xFFU);
+		data[i] = (unsigned char) ((ctx->count[0x01U] >> ((0x03U - (i & 0x03U)) * 0x08U)) & 0xFFU);
 
 	for (uint32_t i = 0x04U; i < 0x08U; i++)
-		data[i] = (uint8_t) ((ctx->count[0x00U] >> ((0x03U - (i & 0x03U)) * 0x08U)) & 0xFFU);
+		data[i] = (unsigned char) ((ctx->count[0x00U] >> ((0x03U - (i & 0x03U)) * 0x08U)) & 0xFFU);
 
 	(void) digest_update_sha1(state, &sep, sizeof sep);
 
@@ -297,13 +264,11 @@ digest_final_sha1(union digest_state *const restrict state, void *const restrict
 
 	(void) digest_update_sha1(state, data, sizeof data);
 
-	uint8_t *const digest = out;
+	unsigned char *const digest = out;
 
 	for (uint32_t i = 0x00U; i < DIGEST_MDLEN_SHA1; i++)
-		digest[i] = (uint8_t) ((ctx->state[i >> 0x02U] >> ((0x03U - (i & 0x03U)) * 0x08U)) & 0xFFU);
+		digest[i] = (unsigned char) ((ctx->state[i >> 0x02U] >> ((0x03U - (i & 0x03U)) * 0x08U)) & 0xFFU);
 
 	(void) smemzero(data, sizeof data);
 	(void) smemzero(ctx, sizeof *ctx);
-
-	return true;
 }

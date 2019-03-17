@@ -13,7 +13,7 @@
  * servers.c: Server and network state tracking.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void server_delete_serv(struct server *s);
 

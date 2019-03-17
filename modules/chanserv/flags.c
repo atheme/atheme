@@ -7,7 +7,7 @@
  * This file contains code for the CService FLAGS functions.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 struct template_iter
 {

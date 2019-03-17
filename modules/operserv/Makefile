@@ -26,7 +26,6 @@ SRCS =			\
 	modreload.c	\
 	modunload.c	\
 	noop.c		\
-	override.c	\
 	raw.c		\
 	rakill.c	\
 	readonly.c	\

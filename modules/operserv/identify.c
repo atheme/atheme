@@ -8,7 +8,7 @@
  * This file contains functionality which implements the OService IDENTIFY command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static bool
 verify_operserv_password(struct soper *so, char *password)

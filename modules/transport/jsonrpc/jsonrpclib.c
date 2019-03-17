@@ -7,7 +7,7 @@
  * JSONRPC Library
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "jsonrpclib.h"
 
 void

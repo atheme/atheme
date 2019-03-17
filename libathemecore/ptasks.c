@@ -13,7 +13,7 @@
  * ptasks.c: Implementation of common protocol tasks.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 void
 handle_info(struct user *u)
@@ -31,19 +31,44 @@ handle_info(struct user *u)
 	numeric_sts(me.me, 374, u, ":End of /INFO list");
 }
 
+const char *
+get_build_date(void)
+{
+	const char *build_date = "<unknown>";
+
+#ifdef ATHEME_ENABLE_REPRODUCIBLE_BUILDS
+#  ifdef SOURCE_DATE_EPOCH
+	errno = 0;
+	const char *eptr = NULL;
+	const time_t build_time = (time_t) strtoul(SOURCE_DATE_EPOCH, &eptr, 10);
+	static char datebuf[BUFSIZE];
+
+	if (build_time && ! errno && (! eptr || (eptr && ! *eptr)))
+	{
+		const struct tm *const tm = localtime(&build_time);
+
+		if (tm && strftime(datebuf, sizeof datebuf, "%b %e %Y", tm) != 0)
+			build_date = datebuf;
+	}
+#  endif /* SOURCE_DATE_EPOCH */
+#else /* ATHEME_ENABLE_REPRODUCIBLE_BUILDS */
+#  ifdef __DATE__
+	build_date = __DATE__;
+#  endif
+#endif /* !ATHEME_ENABLE_REPRODUCIBLE_BUILDS */
+
+	return build_date;
+}
+
 int
 get_version_string(char *buf, size_t bufsize)
 {
 	const struct crypt_impl *const ci = crypt_get_default_provider();
 	const char *const ci_id = ci ? ci->id : "<none>";
 
-#ifdef ATHEME_ENABLE_REPRODUCIBLE_BUILDS
-	return snprintf(buf, bufsize, "%s %s. %s %s :%s [%s] [enc:%s]",
-		PACKAGE_TARNAME, PACKAGE_VERSION, me.name, revision, get_conf_opts(), ircd->ircdname, ci_id);
-#else /* ATHEME_ENABLE_REPRODUCIBLE_BUILDS */
 	return snprintf(buf, bufsize, "%s %s. %s %s :%s [%s] [enc:%s] Build Date: %s",
-		PACKAGE_TARNAME, PACKAGE_VERSION, me.name, revision, get_conf_opts(), ircd->ircdname, ci_id, __DATE__);
-#endif /* !ATHEME_ENABLE_REPRODUCIBLE_BUILDS */
+	                              PACKAGE_TARNAME, PACKAGE_VERSION, me.name, revision,
+	                              get_conf_opts(), ircd->ircdname, ci_id, get_build_date());
 }
 
 void

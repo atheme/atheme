@@ -13,7 +13,7 @@
  * template.c: Functions to work with predefined flags collections
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 mowgli_patricia_t *global_template_dict = NULL;
 

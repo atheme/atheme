@@ -160,7 +160,7 @@ sub c_var_from_sv {
 	}
 }
 
-open my $hooktypes, "$FindBin::Bin/../../../../include/hooktypes.in"
+open my $hooktypes, "$FindBin::Bin/../../../../include/atheme/hooktypes.in"
 	or die "Couldn't open hooktypes.in: $!";
 
 while (<$hooktypes>) {

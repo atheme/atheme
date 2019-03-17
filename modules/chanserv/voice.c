@@ -7,7 +7,7 @@
  * This file contains code for the CService VOICE functions.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "chanserv.h"
 
 static mowgli_list_t voice_actions;

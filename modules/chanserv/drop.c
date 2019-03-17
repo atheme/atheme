@@ -7,7 +7,7 @@
  * This file contains code for the CService DROP function.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 cmd_cs_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc, char *parv[])

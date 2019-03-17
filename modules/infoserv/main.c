@@ -13,7 +13,7 @@
  * few bugs and doesn't break people's existing InfoServ DB entries.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 struct logoninfo
 {

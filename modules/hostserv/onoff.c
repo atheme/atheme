@@ -7,7 +7,7 @@
  * Allows setting a vhost on/off
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "hostserv.h"
 
 static void

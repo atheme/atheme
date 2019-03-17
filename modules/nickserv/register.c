@@ -7,7 +7,7 @@
  * This file contains code for the NickServ REGISTER function.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 unsigned int ratelimit_count = 0;
 time_t ratelimit_firsttime = 0;

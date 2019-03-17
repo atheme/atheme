@@ -7,7 +7,7 @@
  * This file contains code for the CService AKICK functions.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 struct akick_timeout
 {

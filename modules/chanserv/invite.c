@@ -8,7 +8,7 @@
  * This file contains code for the CService INVITE functions.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 cs_cmd_invite(struct sourceinfo *si, int parc, char *parv[])

@@ -5,12 +5,10 @@
  * Copyright (C) 2010-2013 Atheme Project (http://atheme.org/)
  */
 
-#include "stdheaders.h"
-
 #ifndef ATHEME_MOD_SCRIPTING_PERL_API_ATHEME_PERL_H
 #define ATHEME_MOD_SCRIPTING_PERL_API_ATHEME_PERL_H 1
 
-#include "atheme.h"
+#include <atheme.h>
 
 #include <EXTERN.h>
 #include <perl.h>

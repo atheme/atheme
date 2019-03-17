@@ -8,7 +8,7 @@
  * List chanserv-controlled channels.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 enum list_opttype
 {

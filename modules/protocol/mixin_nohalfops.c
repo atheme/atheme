@@ -12,7 +12,7 @@
  * in the charybdis protocol module.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 mod_init(struct module *const restrict m)

@@ -8,7 +8,7 @@
  * Channel information gatherer for statistics (Useful mostly for XMLRPC)
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static mowgli_patricia_t *ss_channel_cmds = NULL;
 

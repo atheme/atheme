@@ -13,7 +13,7 @@
  * object.c: Object management.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #ifdef OBJECT_DEBUG
 mowgli_list_t object_list = { NULL, NULL, 0 };

@@ -7,7 +7,7 @@
  * Controls noexpire options for channels.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 cs_cmd_hold(struct sourceinfo *si, int parc, char *parv[])

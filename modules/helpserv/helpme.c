@@ -7,7 +7,7 @@
  * This file contains functionality which implements the HelpServ HELPME command.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static unsigned int ratelimit_count = 0;
 static time_t ratelimit_firsttime = 0;

@@ -13,7 +13,7 @@
  * memory.c: Memory wrappers
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 #define ATHEME_MEMORY_FRONTEND_C        1
 

@@ -8,7 +8,7 @@
  * chanfix - channel fixing service
  */
 
-#include "atheme.h"
+#include <atheme.h>
 #include "chanfix.h"
 
 static mowgli_eventloop_timer_t *chanfix_autofix_timer = NULL;

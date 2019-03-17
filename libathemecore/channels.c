@@ -13,7 +13,7 @@
  * channels.c: Channel event and state tracking
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 mowgli_patricia_t *chanlist;
 

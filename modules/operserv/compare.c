@@ -7,7 +7,7 @@
  * This file contains functionality implementing OperServ COMPARE.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 os_cmd_compare(struct sourceinfo *si, int parc, char *parv[])

@@ -7,7 +7,7 @@
  * Removes a module from memory.
  */
 
-#include "atheme.h"
+#include <atheme.h>
 
 static void
 os_cmd_modunload(struct sourceinfo *si, int parc, char *parv[])
