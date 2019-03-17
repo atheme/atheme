@@ -12959,7 +12959,7 @@ $as_echo "#define ATHEME_ENABLE_LEGACY_PWCRYPTO 1" >>confdefs.h
 
 
 
-	LEGACY_PWCRYPTO_COND_C="crypt3-des.c crypt3-md5.c ircservices.c rawmd5.c rawsha1.c rawsha256.c"
+	LEGACY_PWCRYPTO_COND_C="crypt3-des.c crypt3-md5.c ircservices.c rawmd5.c rawsha1.c rawsha256.c rawsha512.c"
 
 
 			;;

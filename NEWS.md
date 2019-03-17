@@ -24,11 +24,10 @@ POTENTIAL COMPATIBILITY BREAKAGE
   Modules section of `dist/atheme.conf.example`.
 
 - If you still use legacy password crypto (verify-only) modules (`posix`,
-  `crypt3-des`, `crypt3-md5`, `ircservices`, `rawmd5`, `rawsha1`, `rawsha256`),
-  then you MUST pass the `--enable-legacy-pwcrypto` flag to `./configure`, or
-  these modules will NOT be compiled or installed. The presence of this flag
-  can be confirmed at the bottom of the `configure` output; "Legacy Crypto
-  Modules".
+  `crypt3-des`, `crypt3-md5`, `ircservices`, `rawmd5`, `rawsha*`), then you
+  MUST pass the `--enable-legacy-pwcrypto` flag to `./configure`, or these
+  modules will NOT be compiled or installed. The presence of this flag can be
+  confirmed at the bottom of the `configure` output; "Legacy Crypto Modules".
 
 - The `modules/nickserv/cracklib` module has been renamed to
   `modules/nickserv/pwquality` because it is now capable of using `libpasswdqc`
