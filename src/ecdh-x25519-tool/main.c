@@ -251,9 +251,9 @@ ecdh_x25519_tool_print_help(void)
 	    "    -c / --create-keypair     Write new key pair to file, print public key\n"
 	    "    -p / --print-pubkey       Read existing key file, print public key\n"
 #ifdef HAVE_LIBQRENCODE
-	    "    -q / --qrcode             Print PRIVATE AND PUBLIC KEY as a QR-Code\n"
+	    "    -q / --print-qrcode       Print PRIVATE AND PUBLIC KEY as a QR-Code\n"
 #else
-	    "    -q / --qrcode             (Not supported on your system)\n"
+	    "    -q / --print-qrcode       (Not supported on your system)\n"
 #endif
 	    "    -r / --respond <msg>      Generate response to server message\n"
 	    "    -s / --server             Generate a server message for testing\n"
@@ -281,7 +281,7 @@ main(int argc, char **argv)
 		{       "key-file", required_argument, NULL, 'f', 0 },
 		{ "create-keypair",       no_argument, NULL, 'c', 0 },
 		{   "print-pubkey",       no_argument, NULL, 'p', 0 },
-		{         "qrcode",       no_argument, NULL, 'q', 0 },
+		{   "print-qrcode",       no_argument, NULL, 'q', 0 },
 		{        "respond", required_argument, NULL, 'r', 0 },
 		{         "server",       no_argument, NULL, 's', 0 },
 		{             NULL,                 0, NULL,  0 , 0 },
