@@ -28,7 +28,7 @@ struct uplink
 	unsigned int            flags;
 };
 
-#define UPF_ILLEGAL 0x80000000 /* not in conf anymore, delete when disconnected */
+#define UPF_ILLEGAL 0x80000000U /* not in conf anymore, delete when disconnected */
 
 /* uplink.c */
 extern mowgli_list_t uplinks;

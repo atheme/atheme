@@ -60,31 +60,31 @@ void logfile_register(struct logfile *lf);
 void logfile_unregister(struct logfile *lf);
 
 /* general */
-#define LG_NONE         0x00000001      /* don't log                */
-#define LG_INFO         0x00000002      /* log general info         */
-#define LG_ERROR        0x00000004      /* log real important stuff */
-#define LG_IOERROR      0x00000008      /* log I/O errors. */
-#define LG_DEBUG        0x00000010      /* log debugging stuff      */
-#define LG_VERBOSE	0x00000020	/* log a bit more verbosely than INFO or REGISTER, but not as much as DEBUG */
+#define LG_NONE         0x00000001U      /* don't log                */
+#define LG_INFO         0x00000002U      /* log general info         */
+#define LG_ERROR        0x00000004U      /* log real important stuff */
+#define LG_IOERROR      0x00000008U      /* log I/O errors. */
+#define LG_DEBUG        0x00000010U      /* log debugging stuff      */
+#define LG_VERBOSE	0x00000020U	/* log a bit more verbosely than INFO or REGISTER, but not as much as DEBUG */
 /* commands */
-#define LG_CMD_ADMIN    0x00000100 /* oper-only commands */
-#define LG_CMD_REGISTER 0x00000200 /* register/drop */
-#define LG_CMD_SET      0x00000400 /* change properties of static data */
-#define LG_CMD_DO       0x00000800 /* change properties of dynamic data */
-#define LG_CMD_LOGIN    0x00001000 /* login/logout */
-#define LG_CMD_GET      0x00002000 /* query information */
-#define LG_CMD_REQUEST	0x00004000 /* requests made by users */
+#define LG_CMD_ADMIN    0x00000100U /* oper-only commands */
+#define LG_CMD_REGISTER 0x00000200U /* register/drop */
+#define LG_CMD_SET      0x00000400U /* change properties of static data */
+#define LG_CMD_DO       0x00000800U /* change properties of dynamic data */
+#define LG_CMD_LOGIN    0x00001000U /* login/logout */
+#define LG_CMD_GET      0x00002000U /* query information */
+#define LG_CMD_REQUEST	0x00004000U /* requests made by users */
 /* other */
-#define LG_NETWORK      0x00010000 /* netsplit/netjoin */
-#define LG_WALLOPS      0x00020000 /* NOTYET wallops from opers/other servers */
-#define LG_RAWDATA      0x00040000 /* all data sent/received */
-#define LG_REGISTER     0x00080000 /* all registration related messages */
-#define LG_WARN1        0x00100000 /* NOTYET messages formerly walloped */
-#define LG_WARN2        0x00200000 /* NOTYET messages formerly snooped */
-#define LG_DENYCMD	0x00400000 /* commands denied by security policy */
+#define LG_NETWORK      0x00010000U /* netsplit/netjoin */
+#define LG_WALLOPS      0x00020000U /* NOTYET wallops from opers/other servers */
+#define LG_RAWDATA      0x00040000U /* all data sent/received */
+#define LG_REGISTER     0x00080000U /* all registration related messages */
+#define LG_WARN1        0x00100000U /* NOTYET messages formerly walloped */
+#define LG_WARN2        0x00200000U /* NOTYET messages formerly snooped */
+#define LG_DENYCMD	0x00400000U /* commands denied by security policy */
 
-#define LG_CMD_ALL      0x0000FF00
-#define LG_ALL          0x7FFFFFFF /* XXX cannot use bit 31 as it would then be equal to TOKEN_UNMATCHED */
+#define LG_CMD_ALL      0x0000FF00U
+#define LG_ALL          0x7FFFFFFFU /* XXX cannot use bit 31 as it would then be equal to TOKEN_UNMATCHED */
 
 /* aliases for use with logcommand() */
 #define CMDLOG_ADMIN    LG_CMD_ADMIN

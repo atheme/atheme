@@ -40,25 +40,25 @@ struct user
 
 #define FLOOD_MSGS_FACTOR 256
 
-#define UF_AWAY        0x00000002
-#define UF_INVIS       0x00000004
-#define UF_DOING_SASL  0x00000008
-#define UF_IRCOP       0x00000010
-#define UF_ADMIN       0x00000020
-#define UF_SEENINFO    0x00000080
-#define UF_IMMUNE      0x00000100 /* user is immune from kickban, don't bother enforcing akicks */
-#define UF_HIDEHOSTREQ 0x00000200 /* host hiding requested */
-#define UF_SOPER_PASS  0x00000400 /* services oper pass entered */
-#define UF_DOENFORCE   0x00000800 /* introduce enforcer when nick changes */
-#define UF_ENFORCER    0x00001000 /* this is an enforcer client */
-#define UF_WASENFORCED 0x00002000 /* this user was FNCed once already */
-#define UF_DEAF        0x00004000 /* user does not receive channel msgs */
-#define UF_SERVICE     0x00008000 /* user is a service (e.g. +S on charybdis) */
-#define UF_KLINESENT   0x00010000 /* we've sent a kline for this user */
-#define UF_CUSTOM1     0x00020000 /* for internal use by protocol modules */
-#define UF_CUSTOM2     0x00040000
-#define UF_CUSTOM3     0x00080000
-#define UF_CUSTOM4     0x00100000
+#define UF_AWAY        0x00000002U
+#define UF_INVIS       0x00000004U
+#define UF_DOING_SASL  0x00000008U
+#define UF_IRCOP       0x00000010U
+#define UF_ADMIN       0x00000020U
+#define UF_SEENINFO    0x00000080U
+#define UF_IMMUNE      0x00000100U /* user is immune from kickban, don't bother enforcing akicks */
+#define UF_HIDEHOSTREQ 0x00000200U /* host hiding requested */
+#define UF_SOPER_PASS  0x00000400U /* services oper pass entered */
+#define UF_DOENFORCE   0x00000800U /* introduce enforcer when nick changes */
+#define UF_ENFORCER    0x00001000U /* this is an enforcer client */
+#define UF_WASENFORCED 0x00002000U /* this user was FNCed once already */
+#define UF_DEAF        0x00004000U /* user does not receive channel msgs */
+#define UF_SERVICE     0x00008000U /* user is a service (e.g. +S on charybdis) */
+#define UF_KLINESENT   0x00010000U /* we've sent a kline for this user */
+#define UF_CUSTOM1     0x00020000U /* for internal use by protocol modules */
+#define UF_CUSTOM2     0x00040000U
+#define UF_CUSTOM3     0x00080000U
+#define UF_CUSTOM4     0x00100000U
 
 #define CLIENT_NAME(user)	((user)->uid != NULL ? (user)->uid : (user)->nick)
 

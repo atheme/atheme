@@ -30,11 +30,11 @@ struct server
 	mowgli_list_t   userlist;       // users attached to me
 };
 
-#define SF_HIDE        0x00000001
-#define SF_EOB         0x00000002 /* Burst finished (we have all users/channels) -- jilles */
-#define SF_EOB2        0x00000004 /* Is EOB but an uplink is not (for P10) */
-#define SF_JUPE_PENDING 0x00000008 /* Sent SQUIT request, will introduce jupe when it dies (unconnect semantics) */
-#define SF_MASKED      0x00000010 /* Is masked, has no own name (for ircnet) */
+#define SF_HIDE        0x00000001U
+#define SF_EOB         0x00000002U /* Burst finished (we have all users/channels) -- jilles */
+#define SF_EOB2        0x00000004U /* Is EOB but an uplink is not (for P10) */
+#define SF_JUPE_PENDING 0x00000008U /* Sent SQUIT request, will introduce jupe when it dies (unconnect semantics) */
+#define SF_MASKED      0x00000010U /* Is masked, has no own name (for ircnet) */
 
 /* tld list struct */
 struct tld

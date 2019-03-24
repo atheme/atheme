@@ -142,11 +142,11 @@ extern struct claro_state claro_state;
 /* run flags */
 extern int runflags;
 
-#define RF_LIVE         0x00000001      /* don't fork  */
-#define RF_SHUTDOWN     0x00000002      /* shut down   */
-#define RF_STARTING     0x00000004      /* starting up */
-#define RF_RESTART      0x00000008      /* restart     */
-#define RF_REHASHING    0x00000010      /* rehashing   */
+#define RF_LIVE         0x00000001U      /* don't fork  */
+#define RF_SHUTDOWN     0x00000002U      /* shut down   */
+#define RF_STARTING     0x00000004U      /* starting up */
+#define RF_RESTART      0x00000008U      /* restart     */
+#define RF_REHASHING    0x00000010U      /* rehashing   */
 
 /* node.c */
 void init_nodes(void);

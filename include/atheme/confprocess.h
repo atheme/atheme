@@ -13,7 +13,7 @@
 #include <atheme/attributes.h>
 #include <atheme/stdheaders.h>
 
-#define CONF_NO_REHASH 0x1
+#define CONF_NO_REHASH 0x1U
 
 struct Token
 {

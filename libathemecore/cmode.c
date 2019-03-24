@@ -909,7 +909,7 @@ channel_modes(struct channel *c, bool doparams)
 void
 check_modes(struct mychan *mychan, bool sendnow)
 {
-	int modes;
+	unsigned int modes;
 	int i;
 	struct metadata *md;
 	char *p, *q;
