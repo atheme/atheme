@@ -321,11 +321,17 @@ cleanup:
 
 
 
+#define ECDH_X25519_KDF(ikm, salt, okm)                                 \
+    digest_oneshot_hkdf(DIGALG_SHA2_256, ikm, DIGEST_MDLEN_SHA2_256,    \
+                        salt, ATHEME_ECDH_X25519_SALT_LEN,              \
+                        "ECDH-X25519-CHALLENGE", 21U,                   \
+                        okm, ATHEME_ECDH_X25519_CHAL_LEN)
+
 static bool ATHEME_FATTR_WUR
 ecdh_x25519_kdf(const unsigned char shared_secret[const restrict static ATHEME_ECDH_X25519_XKEY_LEN],
                 const unsigned char client_pubkey[const restrict static ATHEME_ECDH_X25519_XKEY_LEN],
                 const unsigned char server_pubkey[const restrict static ATHEME_ECDH_X25519_XKEY_LEN],
-                const unsigned char server_salt[const restrict static ATHEME_ECDH_X25519_SALT_LEN],
+                const unsigned char session_salt[const restrict static ATHEME_ECDH_X25519_SALT_LEN],
                 unsigned char better_secret[const restrict static ATHEME_ECDH_X25519_CHAL_LEN])
 {
 	const struct digest_vector secret_vec[] = {
@@ -341,11 +347,13 @@ ecdh_x25519_kdf(const unsigned char shared_secret[const restrict static ATHEME_E
 	if (! digest_oneshot_vector(DIGALG_SHA2_256, secret_vec, secret_vec_len, ikm, NULL))
 	{
 		(void) ecdh_x25519_log_error(LG_ERROR, "%s: digest_oneshot_vector() failed (BUG?)", MOWGLI_FUNC_NAME);
+		(void) smemzero(ikm, sizeof ikm);
 		return false;
 	}
-	if (! ECDH_X25519_KDF(ikm, server_salt, better_secret))
+	if (! ECDH_X25519_KDF(ikm, session_salt, better_secret))
 	{
 		(void) ecdh_x25519_log_error(LG_ERROR, "%s: digest_oneshot_hkdf() failed (BUG?)", MOWGLI_FUNC_NAME);
+		(void) smemzero(ikm, sizeof ikm);
 		return false;
 	}
 
