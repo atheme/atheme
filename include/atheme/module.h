@@ -19,8 +19,8 @@
 #define MODFLAG_DBHANDLER	0x0200U /* starting up without us may mean we can't process the db without data loss */
 #define MODFLAG_FAIL		0x8000U /* modinit failed */
 
-#define MAPI_ATHEME_MAGIC	0xdeadbeef
-#define MAPI_ATHEME_V4		4
+#define MAPI_ATHEME_MAGIC	0xDEADBEEFU
+#define MAPI_ATHEME_V4		0x00000004U
 
 enum module_unload_intent
 {

@@ -15,20 +15,20 @@
 #include "object.h"
 #include "structures.h"
 
-#define MG_REGNOLIMIT           0x00000001
-#define MG_ACSNOLIMIT           0x00000002
-#define MG_OPEN                 0x00000004
-#define MG_PUBLIC               0x00000008
+#define MG_REGNOLIMIT           0x00000001U
+#define MG_ACSNOLIMIT           0x00000002U
+#define MG_OPEN                 0x00000004U
+#define MG_PUBLIC               0x00000008U
 
-#define GA_FOUNDER              0x00000001
-#define GA_FLAGS                0x00000002
-#define GA_CHANACS              0x00000004
-#define GA_MEMOS                0x00000008
-#define GA_SET                  0x00000010
-#define GA_VHOST                0x00000020
-#define GA_BAN                  0x00000040
-#define GA_INVITE               0x00000080
-#define GA_ACLVIEW              0x00000100
+#define GA_FOUNDER              0x00000001U
+#define GA_FLAGS                0x00000002U
+#define GA_CHANACS              0x00000004U
+#define GA_MEMOS                0x00000008U
+#define GA_SET                  0x00000010U
+#define GA_VHOST                0x00000020U
+#define GA_BAN                  0x00000040U
+#define GA_INVITE               0x00000080U
+#define GA_ACLVIEW              0x00000100U
 
 #define GA_ALL_OLD              (GA_FLAGS | GA_CHANACS | GA_MEMOS | GA_SET | GA_VHOST | GA_INVITE)
 #define GA_ALL                  (GA_FLAGS | GA_CHANACS | GA_MEMOS | GA_SET | GA_VHOST | GA_INVITE | GA_ACLVIEW)

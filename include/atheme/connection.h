@@ -54,18 +54,18 @@ struct connection
 	mowgli_eventloop_pollable_t *   pollable;
 };
 
-#define CF_UPLINK     0x00000001
-#define CF_DCCOUT     0x00000002
-#define CF_DCCIN      0x00000004
+#define CF_UPLINK     0x00000001U
+#define CF_DCCOUT     0x00000002U
+#define CF_DCCIN      0x00000004U
 
-#define CF_CONNECTING 0x00000008
-#define CF_LISTENING  0x00000010
-#define CF_CONNECTED  0x00000020
-#define CF_DEAD       0x00000040
+#define CF_CONNECTING 0x00000008U
+#define CF_LISTENING  0x00000010U
+#define CF_CONNECTED  0x00000020U
+#define CF_DEAD       0x00000040U
 
-#define CF_NONEWLINE  0x00000080
-#define CF_SEND_EOF   0x00000100 /* shutdown(2) write end if sendq empty */
-#define CF_SEND_DEAD  0x00000200 /* write end shut down */
+#define CF_NONEWLINE  0x00000080U
+#define CF_SEND_EOF   0x00000100U /* shutdown(2) write end if sendq empty */
+#define CF_SEND_DEAD  0x00000200U /* write end shut down */
 
 #define CF_IS_UPLINK(x) ((x)->flags & CF_UPLINK)
 #define CF_IS_DCC(x) ((x)->flags & (CF_DCCOUT | CF_DCCIN))

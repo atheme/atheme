@@ -70,8 +70,8 @@ struct operclass
 	mowgli_node_t   node;
 };
 
-#define OPERCLASS_NEEDOPER	0x1 /* only give privs to IRCops */
-#define OPERCLASS_BUILTIN	0x2 /* builtin */
+#define OPERCLASS_NEEDOPER	0x1U /* only give privs to IRCops */
+#define OPERCLASS_BUILTIN	0x2U /* builtin */
 
 /* soper list struct */
 struct soper
@@ -84,7 +84,7 @@ struct soper
 	char *                  password;
 };
 
-#define SOPER_CONF	0x1 /* oper is listed in atheme.conf */
+#define SOPER_CONF	0x1U /* oper is listed in atheme.conf */
 
 /* privs.c */
 extern mowgli_list_t operclasslist;

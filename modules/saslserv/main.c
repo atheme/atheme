@@ -34,7 +34,7 @@ sasl_format_sourceinfo(struct sourceinfo *const restrict si, const bool full)
 
 	if (full)
 		(void) snprintf(result, sizeof result, "SASL/%s:%s[%s]:%s",
-		                ssi->sess->uid ? ssi->sess->uid : "?",
+		                *ssi->sess->uid ? ssi->sess->uid : "?",
 		                ssi->sess->host ? ssi->sess->host : "?",
 		                ssi->sess->ip ? ssi->sess->ip : "?",
 		                ssi->sess->server ? ssi->sess->server->name : "?");

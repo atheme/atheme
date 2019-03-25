@@ -48,10 +48,10 @@ extern int match_mapping;
 #define IsLower(c)  ((unsigned char)(c) > 0x5f)
 #define IsUpper(c)  ((unsigned char)(c) < 0x60)
 
-#define C_ALPHA 0x00000001
-#define C_DIGIT 0x00000002
-#define C_NICK  0x00000004
-#define C_USER  0x00000008
+#define C_ALPHA 0x00000001U
+#define C_DIGIT 0x00000002U
+#define C_NICK  0x00000004U
+#define C_USER  0x00000008U
 
 extern const unsigned int charattrs[];
 

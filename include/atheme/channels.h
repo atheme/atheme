@@ -55,33 +55,33 @@ struct chanban
 };
 
 /* for struct channel -> modes */
-#define CMODE_INVITE    0x00000001
-#define CMODE_KEY       0x00000002
-#define CMODE_LIMIT     0x00000004
-#define CMODE_MOD       0x00000008
-#define CMODE_NOEXT     0x00000010
-#define CMODE_PRIV      0x00000040      /* AKA PARA */
-#define CMODE_SEC       0x00000080
-#define CMODE_TOPIC     0x00000100
-#define CMODE_CHANREG	0x00000200
+#define CMODE_INVITE    0x00000001U
+#define CMODE_KEY       0x00000002U
+#define CMODE_LIMIT     0x00000004U
+#define CMODE_MOD       0x00000008U
+#define CMODE_NOEXT     0x00000010U
+#define CMODE_PRIV      0x00000040U      /* AKA PARA */
+#define CMODE_SEC       0x00000080U
+#define CMODE_TOPIC     0x00000100U
+#define CMODE_CHANREG	0x00000200U
 
 /* for struct channel -> flags */
-#define CHAN_LOG        0x00000001 /* logs sent to here */
+#define CHAN_LOG        0x00000001U /* logs sent to here */
 
 /* for struct chanuser -> modes */
-#define CSTATUS_OP      0x00000001
-#define CSTATUS_VOICE   0x00000002
-#define CSTATUS_OWNER   0x00000004      /* unreal/inspircd +q */
-#define CSTATUS_PROTECT 0x00000008      /* unreal/inspircd +a */
-#define CSTATUS_HALFOP  0x00000010      /* unreal/inspircd +h */
-#define CSTATUS_IMMUNE	0x00000020	/* inspircd-style per-user immune */
+#define CSTATUS_OP      0x00000001U
+#define CSTATUS_VOICE   0x00000002U
+#define CSTATUS_OWNER   0x00000004U      /* unreal/inspircd +q */
+#define CSTATUS_PROTECT 0x00000008U      /* unreal/inspircd +a */
+#define CSTATUS_HALFOP  0x00000010U      /* unreal/inspircd +h */
+#define CSTATUS_IMMUNE	0x00000020U	/* inspircd-style per-user immune */
 
 /* for struct chanban -> flags */
-#define CBAN_ANTIFLOOD  0x00000001	/* chanserv/antiflood set this */
+#define CBAN_ANTIFLOOD  0x00000001U	/* chanserv/antiflood set this */
 
-#define MTYPE_NUL 0
-#define MTYPE_ADD 1
-#define MTYPE_DEL 2
+#define MTYPE_NUL 0U
+#define MTYPE_ADD 1U
+#define MTYPE_DEL 2U
 
 struct cmode
 {
