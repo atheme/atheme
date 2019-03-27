@@ -9,7 +9,7 @@
  * purpose with or without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
  *
- * SCRAM-SHA-1 and SCRAM-SHA-256 SASL mechanisms provider.
+ * SCRAM-SHA-1, SCRAM-SHA-256 & SCRAM-SHA-512 SASL mechanisms provider.
  *
  * See the following RFCs for details:
  *
