@@ -451,7 +451,11 @@ static const char * ATHEME_FATTR_WUR
 atheme_pbkdf2v2_crypt(const char *const restrict password,
                       const char ATHEME_VATTR_UNUSED *const restrict parameters)
 {
+	char cdg64[BASE64_SIZE_STR(DIGEST_MDLEN_MAX)];
+	char csk64[BASE64_SIZE_STR(DIGEST_MDLEN_MAX)];
+	char chk64[BASE64_SIZE_STR(DIGEST_MDLEN_MAX)];
 	struct pbkdf2v2_dbentry dbe;
+
 	static char res[PASSLEN + 1];
 	const char *retval = res;
 
@@ -479,23 +483,18 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 
 	if (dbe.scram)
 	{
-		unsigned char csk[DIGEST_MDLEN_MAX];
-		unsigned char chk[DIGEST_MDLEN_MAX];
-		char csk64[BASE64_SIZE_STR(DIGEST_MDLEN_MAX)];
-		char chk64[BASE64_SIZE_STR(DIGEST_MDLEN_MAX)];
-
-		if (! atheme_pbkdf2v2_scram_derive(&dbe, dbe.cdg, csk, chk))
+		if (! atheme_pbkdf2v2_scram_derive(&dbe, dbe.cdg, dbe.ssk, dbe.shk))
 			// This function logs messages on failure
 			goto err;
 
-		if (base64_encode(csk, dbe.dl, csk64, sizeof csk64) != BASE64_SIZE_RAW(dbe.dl))
+		if (base64_encode(dbe.ssk, dbe.dl, csk64, sizeof csk64) != BASE64_SIZE_RAW(dbe.dl))
 		{
-			(void) slog(LG_ERROR, "%s: base64_encode() for csk failed (BUG)", MOWGLI_FUNC_NAME);
+			(void) slog(LG_ERROR, "%s: base64_encode() for ServerKey failed (BUG)", MOWGLI_FUNC_NAME);
 			goto err;
 		}
-		if (base64_encode(chk, dbe.dl, chk64, sizeof chk64) != BASE64_SIZE_RAW(dbe.dl))
+		if (base64_encode(dbe.shk, dbe.dl, chk64, sizeof chk64) != BASE64_SIZE_RAW(dbe.dl))
 		{
-			(void) slog(LG_ERROR, "%s: base64_encode() for chk failed (BUG)", MOWGLI_FUNC_NAME);
+			(void) slog(LG_ERROR, "%s: base64_encode() for StoredKey failed (BUG)", MOWGLI_FUNC_NAME);
 			goto err;
 		}
 		if (snprintf(res, sizeof res, PBKDF2_FS_SAVEHASH, dbe.a, dbe.c, dbe.salt64, csk64, chk64) > PASSLEN)
@@ -507,8 +506,6 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 	}
 	else
 	{
-		char cdg64[BASE64_SIZE_STR(DIGEST_MDLEN_MAX)];
-
 		if (base64_encode(dbe.cdg, dbe.dl, cdg64, sizeof cdg64) != BASE64_SIZE_RAW(dbe.dl))
 		{
 			(void) slog(LG_ERROR, "%s: base64_encode() for cdg failed (BUG)", MOWGLI_FUNC_NAME);
@@ -529,6 +526,9 @@ err:
 	(void) smemzero(res, sizeof res);
 
 done:
+	(void) smemzero(cdg64, sizeof cdg64);
+	(void) smemzero(csk64, sizeof csk64);
+	(void) smemzero(chk64, sizeof chk64);
 	(void) smemzero(&dbe, sizeof dbe);
 	return retval;
 }
