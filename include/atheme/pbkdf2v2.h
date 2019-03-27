@@ -75,9 +75,9 @@ struct pbkdf2v2_dbentry
 
 struct pbkdf2v2_scram_config
 {
-	const unsigned int *    a;      // PBKDF2v2 PRF ID (one of the above)
-	const unsigned int *    c;      // PBKDF2 Iteration Count
-	const unsigned int *    sl;     // PBKDF2 Salt Length
+	const unsigned int      a;      // PBKDF2v2 PRF ID (one of the above)
+	const unsigned int      c;      // PBKDF2 Iteration Count
+	const unsigned int      sl;     // PBKDF2 Salt Length
 };
 
 typedef void (*pbkdf2v2_scram_confhook_fn)(const struct pbkdf2v2_scram_config *restrict);

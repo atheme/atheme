@@ -792,7 +792,7 @@ sasl_scramsha_pbkdf2v2_scram_confhook(const struct pbkdf2v2_scram_config *const 
 
 	(void) sasl_scramsha_mechs_unregister();
 
-	switch (*config->a)
+	switch (config->a)
 	{
 		case PBKDF2_PRF_SCRAM_SHA1_S64:
 			(void) sasl_core_functions->mech_register(&sasl_mech_scramsha_1);
@@ -812,9 +812,9 @@ sasl_scramsha_pbkdf2v2_scram_confhook(const struct pbkdf2v2_scram_config *const 
 			return;
 	}
 
-	if (*config->c > CYRUS_SASL_ITERMAX)
+	if (config->c > CYRUS_SASL_ITERMAX)
 		(void) slog(LG_INFO, "%s: iteration count (%u) is higher than Cyrus SASL library maximum (%u) -- "
-		                     "client logins may fail if they use Cyrus", MOWGLI_FUNC_NAME, *config->c,
+		                     "client logins may fail if they use Cyrus", MOWGLI_FUNC_NAME, config->c,
 		                     CYRUS_SASL_ITERMAX);
 }
 

@@ -30,10 +30,10 @@ atheme_pbkdf2v2_scram_confhook_dispatch(void)
 	if (! pbkdf2v2_scram_confhook || ! pbkdf2v2_digest || ! pbkdf2v2_rounds || ! pbkdf2v2_saltsz)
 		return;
 
-	static const struct pbkdf2v2_scram_config pbkdf2v2_scram_config = {
-		.a      = &pbkdf2v2_digest,
-		.c      = &pbkdf2v2_rounds,
-		.sl     = &pbkdf2v2_saltsz,
+	struct pbkdf2v2_scram_config pbkdf2v2_scram_config = {
+		.a      = pbkdf2v2_digest,
+		.c      = pbkdf2v2_rounds,
+		.sl     = pbkdf2v2_saltsz,
 	};
 
 	(void) (*pbkdf2v2_scram_confhook)(&pbkdf2v2_scram_config);
@@ -43,7 +43,7 @@ static void
 atheme_pbkdf2v2_config_ready(void ATHEME_VATTR_UNUSED *const restrict unused)
 {
 	if (! pbkdf2v2_digest)
-		pbkdf2v2_digest = (unsigned int) PBKDF2_PRF_DEFAULT;
+		pbkdf2v2_digest = PBKDF2_PRF_DEFAULT;
 
 	if (! pbkdf2v2_rounds)
 		pbkdf2v2_rounds = PBKDF2_ITERCNT_DEF;
