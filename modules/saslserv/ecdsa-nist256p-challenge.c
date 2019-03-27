@@ -95,7 +95,7 @@ sasl_mech_ecdsa_step_account_names(struct sasl_session *const restrict p,
 	unsigned char pubkey_raw[0x1000];
 	const unsigned char *pubkey_raw_p = pubkey_raw;
 	const size_t ret = base64_decode(md->value, pubkey_raw, sizeof pubkey_raw);
-	if (ret == (size_t) -1)
+	if (ret == BASE64_FAIL)
 	{
 		(void) slog(LG_DEBUG, "%s: base64_decode() failed", MOWGLI_FUNC_NAME);
 		return ASASL_MRESULT_ERROR;

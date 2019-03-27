@@ -348,7 +348,7 @@ atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters, struct pb
 
 		(void) memcpy(dbe->salt, dbe->salt64, dbe->sl);
 
-		if (base64_encode(dbe->salt, dbe->sl, dbe->salt64, sizeof dbe->salt64) == (size_t) -1)
+		if (base64_encode(dbe->salt, dbe->sl, dbe->salt64, sizeof dbe->salt64) != BASE64_SIZE_RAW(dbe->sl))
 		{
 			(void) slog(LG_ERROR, "%s: base64_encode() for salt failed (BUG)", MOWGLI_FUNC_NAME);
 			return false;
@@ -456,17 +456,18 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 	const char *retval = res;
 
 	(void) memset(&dbe, 0x00, sizeof dbe);
-	(void) atheme_random_buf(dbe.salt, (size_t) pbkdf2v2_saltsz);
-
-	if (base64_encode(dbe.salt, (size_t) pbkdf2v2_saltsz, dbe.salt64, sizeof dbe.salt64) == (size_t) -1)
-	{
-		(void) slog(LG_ERROR, "%s: base64_encode() for salt failed (BUG)", MOWGLI_FUNC_NAME);
-		goto err;
-	}
 
 	dbe.sl = (size_t) pbkdf2v2_saltsz;
 	dbe.a = pbkdf2v2_digest;
 	dbe.c = pbkdf2v2_rounds;
+
+	(void) atheme_random_buf(dbe.salt, dbe.sl);
+
+	if (base64_encode(dbe.salt, dbe.sl, dbe.salt64, sizeof dbe.salt64) != BASE64_SIZE_RAW(dbe.sl))
+	{
+		(void) slog(LG_ERROR, "%s: base64_encode() for salt failed (BUG)", MOWGLI_FUNC_NAME);
+		goto err;
+	}
 
 	if (! atheme_pbkdf2v2_determine_params(&dbe))
 		// This function logs messages on failure
@@ -487,12 +488,12 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 			// This function logs messages on failure
 			goto err;
 
-		if (base64_encode(csk, dbe.dl, csk64, sizeof csk64) == (size_t) -1)
+		if (base64_encode(csk, dbe.dl, csk64, sizeof csk64) != BASE64_SIZE_RAW(dbe.dl))
 		{
 			(void) slog(LG_ERROR, "%s: base64_encode() for csk failed (BUG)", MOWGLI_FUNC_NAME);
 			goto err;
 		}
-		if (base64_encode(chk, dbe.dl, chk64, sizeof chk64) == (size_t) -1)
+		if (base64_encode(chk, dbe.dl, chk64, sizeof chk64) != BASE64_SIZE_RAW(dbe.dl))
 		{
 			(void) slog(LG_ERROR, "%s: base64_encode() for chk failed (BUG)", MOWGLI_FUNC_NAME);
 			goto err;
@@ -508,7 +509,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 	{
 		char cdg64[BASE64_SIZE_STR(DIGEST_MDLEN_MAX)];
 
-		if (base64_encode(dbe.cdg, dbe.dl, cdg64, sizeof cdg64) == (size_t) -1)
+		if (base64_encode(dbe.cdg, dbe.dl, cdg64, sizeof cdg64) != BASE64_SIZE_RAW(dbe.dl))
 		{
 			(void) slog(LG_ERROR, "%s: base64_encode() for cdg failed (BUG)", MOWGLI_FUNC_NAME);
 			goto err;
@@ -546,7 +547,7 @@ atheme_pbkdf2v2_verify(const char *const restrict password, const char *const re
 
 	if (atheme_pbkdf2v2_salt_is_b64(dbe.a))
 	{
-		if ((dbe.sl = base64_decode(dbe.salt64, dbe.salt, sizeof dbe.salt)) == (size_t) -1)
+		if ((dbe.sl = base64_decode(dbe.salt64, dbe.salt, sizeof dbe.salt)) == BASE64_FAIL)
 		{
 			(void) slog(LG_ERROR, "%s: base64_decode('%s') for salt failed", MOWGLI_FUNC_NAME, dbe.salt64);
 			goto end;

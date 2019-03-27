@@ -31,22 +31,20 @@ static size_t ATHEME_FATTR_WUR
 base64_encode_x(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len,
                 const bool terminate)
 {
-	static const size_t failure = (size_t) -1;
-
 	const unsigned char *src = (const unsigned char *) in;
 	size_t src_len = in_len;
 
 	size_t written = 0;
 
 	if (dst != NULL && dst_len == 0)
-		return failure;
+		return BASE64_FAIL;
 
 	while (src_len >= 3)
 	{
 		if (dst != NULL)
 		{
 			if ((written + 4) >= dst_len)
-				return failure;
+				return BASE64_FAIL;
 
 			dst[written++] = base64_etable[src[0] >> 0x02U];
 			dst[written++] = base64_etable[((src[0] & 0x03U) << 0x04U) + (src[1] >> 0x04U)];
@@ -65,7 +63,7 @@ base64_encode_x(const void *const restrict in, const size_t in_len, char *const 
 		if (dst != NULL)
 		{
 			if ((written + 3) >= dst_len)
-				return failure;
+				return BASE64_FAIL;
 
 			dst[written++] = base64_etable[src[0] >> 0x02U];
 			dst[written++] = base64_etable[((src[0] & 0x03U) << 0x04U) + (src[1] >> 0x04U)];
@@ -74,7 +72,7 @@ base64_encode_x(const void *const restrict in, const size_t in_len, char *const 
 			if (terminate)
 			{
 				if ((written + 1) >= dst_len)
-					return failure;
+					return BASE64_FAIL;
 
 				dst[written++] = '=';
 			}
@@ -93,7 +91,7 @@ base64_encode_x(const void *const restrict in, const size_t in_len, char *const 
 		if (dst != NULL)
 		{
 			if ((written + 2) >= dst_len)
-				return failure;
+				return BASE64_FAIL;
 
 			dst[written++] = base64_etable[src[0] >> 0x02U];
 			dst[written++] = base64_etable[(src[0] & 0x03U) << 0x04U];
@@ -101,7 +99,7 @@ base64_encode_x(const void *const restrict in, const size_t in_len, char *const 
 			if (terminate)
 			{
 				if ((written + 2) >= dst_len)
-					return failure;
+					return BASE64_FAIL;
 
 				dst[written++] = '=';
 				dst[written++] = '=';
@@ -138,8 +136,6 @@ base64_encode_raw(const void *const restrict in, const size_t in_len, char *cons
 size_t ATHEME_FATTR_WUR
 base64_decode(const char *restrict src, void *const restrict out, const size_t out_len)
 {
-	static const size_t failure = (size_t) -1;
-
 	unsigned char *const dst = (unsigned char *) out;
 	const size_t dst_len = out_len;
 
@@ -163,7 +159,7 @@ base64_decode(const char *restrict src, void *const restrict out, const size_t o
 				else if (src_len == 0 && done == 0)
 					return written;
 				else if (src_len == 0)
-					return failure;
+					return BASE64_FAIL;
 			}
 
 			och[done] = (unsigned char) src[done];
@@ -171,23 +167,23 @@ base64_decode(const char *restrict src, void *const restrict out, const size_t o
 			if ((och[done] == 0x00U || och[done] == 0x3DU) && done >= 2)
 				break;
 			else if (och[done] >= 0x80U)
-				return failure;
+				return BASE64_FAIL;
 			else if ((och[done] = base64_dtable[och[done]]) == 0xFFU)
-				return failure;
+				return BASE64_FAIL;
 		}
 
 		if (done == 0 && (written % 3) == 0)
 			return written;
 
 		if (done <= 1)
-			return failure;
+			return BASE64_FAIL;
 
 		if (done > 1)
 		{
 			if (dst != NULL)
 			{
 				if (written >= dst_len)
-					return failure;
+					return BASE64_FAIL;
 
 				dst[written] = (unsigned char) (och[0] << 0x02U);
 				dst[written++] |= (unsigned char) (och[1] >> 0x04U);
@@ -201,7 +197,7 @@ base64_decode(const char *restrict src, void *const restrict out, const size_t o
 			if (dst != NULL)
 			{
 				if (written >= dst_len)
-					return failure;
+					return BASE64_FAIL;
 
 				dst[written] = (unsigned char) ((och[1] & 0x0FU) << 0x04U);
 				dst[written++] |= (unsigned char) (och[2] >> 0x02U);
@@ -215,7 +211,7 @@ base64_decode(const char *restrict src, void *const restrict out, const size_t o
 			if (dst != NULL)
 			{
 				if (written >= dst_len)
-					return failure;
+					return BASE64_FAIL;
 
 				dst[written] = (unsigned char) ((och[2] & 0x03U) << 0x06U);
 				dst[written++] |= (unsigned char) och[3];
