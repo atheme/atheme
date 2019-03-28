@@ -12,6 +12,7 @@
 #include <atheme/protocol/charybdis.h>
 
 #define UF_NOLOGOUT UF_CUSTOM1
+#define UF_HELPER   UF_CUSTOM2
 
 static struct ircd Seven = {
 	.ircdname = "ircd-seven",
@@ -71,6 +72,7 @@ static const struct cmode seven_user_mode_list[] = {
   { 'a', UF_ADMIN    },
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },
+  { 'O', UF_HELPER   },
   { 'D', UF_DEAF     },
   { 'S', UF_SERVICE  },
   { 'V', UF_NOLOGOUT },
@@ -258,6 +260,15 @@ seven_on_logout(struct user *u, const char *account)
 	return false;
 }
 
+static bool
+seven_is_ircop(struct user *u)
+{
+	if ((UF_IRCOP | UF_HELPER) & u->flags)
+		return true;
+
+	return false;
+}
+
 static void
 nick_group(hook_user_req_t *hdata)
 {
@@ -297,6 +308,7 @@ mod_init(struct module *const restrict m)
 	ircd_on_login = &seven_on_login;
 	ircd_on_logout = &seven_on_logout;
 	is_valid_host = &seven_is_valid_hostslash;
+	is_ircop = &seven_is_ircop;
 
 	pcommand_delete("NICK");
 	pcommand_add("NICK", m_nick, 2, MSRC_USER | MSRC_SERVER);
