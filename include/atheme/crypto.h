@@ -31,6 +31,7 @@ void crypt_register(const struct crypt_impl *impl);
 void crypt_unregister(const struct crypt_impl *impl);
 
 const struct crypt_impl *crypt_get_default_provider(void);
+const struct crypt_impl *crypt_get_named_provider(const char *id);
 const struct crypt_impl *crypt_verify_password(const char *password, const char *parameters, unsigned int *flags)
     ATHEME_FATTR_WUR;
 

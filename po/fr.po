@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-03-17 22:04+0000\n"
+"POT-Creation-Date: 2019-03-28 16:41+0000\n"
 "PO-Revision-Date: 2013-02-21 22:00+0200\n"
 "Last-Translator: Jessy AMYOT <harakiri@overstack.fr>\n"
 "Language-Team: \n"
@@ -2772,7 +2772,7 @@ msgid "Changes whether service spams unregistered users on connect."
 msgstr ""
 "Modifie si les services spam les utilisateurs non enregistrés à la connexion."
 
-#: modules/saslserv/ecdh-x25519-challenge.c:374
+#: modules/saslserv/ecdh-x25519-challenge.c:371
 msgid "Changes your ECDH-X25519-CHALLENGE public key."
 msgstr ""
 
@@ -3720,6 +3720,11 @@ msgstr "Echec de l'ajout du PID %ld"
 msgid "Failed to create challenge"
 msgstr ""
 
+#: modules/operserv/genhash.c:53
+#, c-format
+msgid "Failed to encrypt password with crypto provider '%s'"
+msgstr ""
+
 #: modules/scripting/perl/perl_module.c:385
 #, c-format
 msgid "Failed to retrieve script list: %s"
@@ -3946,7 +3951,7 @@ msgstr "Général"
 msgid "Generates a hash for SOPER."
 msgstr ""
 
-#: modules/operserv/genhash.c:33
+#: modules/operserv/genhash.c:65
 #, fuzzy
 msgid "Generates a password hash from a password."
 msgstr "Génère quelques noms à réfléchir"
@@ -5266,6 +5271,10 @@ msgstr "Aucun salon ne correspond au critère %s"
 msgid "No channels matched criteria %s"
 msgstr "Aucun salon ne correspond au critère %s"
 
+#: modules/operserv/genhash.c:45
+msgid "No encryption-capable crypto provider is available"
+msgstr ""
+
 #: modules/nickserv/badmail.c:189
 #, fuzzy, c-format
 msgid "No entries matching pattern %s found in badmail database."
@@ -5603,10 +5612,6 @@ msgstr "Les paramètres sont trop longs. Annulation."
 msgid "Password authentication is disabled for this account."
 msgstr "Authentifie à un compte des services."
 
-#: modules/operserv/genhash.c:26
-msgid "Password hash generation failure"
-msgstr ""
-
 #: modules/nickserv/pwquality.c:90
 #, fuzzy, c-format
 msgid "Password is insecure [cracklib]: %s"
@@ -5799,13 +5804,13 @@ msgid "Prospect looks hopeful."
 msgstr "L'avenir est plein d'espoir."
 
 #: modules/nickserv/set_pubkey.c:37
-#: modules/saslserv/ecdh-x25519-challenge.c:342
+#: modules/saslserv/ecdh-x25519-challenge.c:339
 #, fuzzy
 msgid "Public key entry has been deleted."
 msgstr "L'entrée de métadonnées %s a été supprimée."
 
 #: modules/nickserv/set_pubkey.c:31
-#: modules/saslserv/ecdh-x25519-challenge.c:336
+#: modules/saslserv/ecdh-x25519-challenge.c:333
 msgid "Public key was not set"
 msgstr ""
 
@@ -7303,7 +7308,7 @@ msgstr "Syntaxe : GENERATEHASH <mot de passe>"
 
 #: modules/operserv/genhash.c:17
 #, fuzzy
-msgid "Syntax: GENHASH <password>"
+msgid "Syntax: GENHASH <password> [provider]"
 msgstr "Syntaxe : GENERATEHASH <mot de passe>"
 
 #: modules/chanserv/getkey.c:21
@@ -8250,6 +8255,16 @@ msgstr "Le salon %s est suspendu, il ne peut pas être effacé."
 msgid "The channel %s must exist in order to register it."
 msgstr "Le salon %s doit exister pour être enregistré."
 
+#: modules/operserv/genhash.c:31
+#, fuzzy, c-format
+msgid "The crypto provider '%s' does not exist"
+msgstr "Le groupe %s n'existe pas."
+
+#: modules/operserv/genhash.c:38
+#, c-format
+msgid "The crypto provider '%s' is not capable of encrypting passwords"
+msgstr ""
+
 #: modules/groupserv/set_description.c:40
 #, c-format
 msgid "The description for %s has been cleared."
@@ -8521,7 +8536,7 @@ msgstr "La regex fournie %s est invalide."
 msgid "The provided regex matches you, refusing RAKILL."
 msgstr "La regex fournie correspond à vous, RAKILL non effectué."
 
-#: modules/saslserv/ecdh-x25519-challenge.c:351
+#: modules/saslserv/ecdh-x25519-challenge.c:348
 msgid "The public key specified is not valid."
 msgstr ""
 
@@ -9105,6 +9120,11 @@ msgstr "Utilisateurs actuellement en ligne : %d"
 #: modules/nickserv/set_privmsg.c:77
 msgid "Uses private messages instead of notices if enabled."
 msgstr "Utilise les messages privés à la place des notices."
+
+#: modules/operserv/genhash.c:58
+#, c-format
+msgid "Using crypto provider '%s':"
+msgstr ""
 
 #: modules/nickserv/set_language.c:27 modules/nickserv/set_language.c:37
 #, c-format
@@ -10026,13 +10046,13 @@ msgid "Your memo inbox is full! Please delete memos you no longer need."
 msgstr ""
 
 #: modules/nickserv/set_pubkey.c:44
-#: modules/saslserv/ecdh-x25519-challenge.c:356
+#: modules/saslserv/ecdh-x25519-challenge.c:353
 #, fuzzy, c-format
 msgid "Your public key is already set to %s."
 msgstr "Le nom de votre compte est déjà défini en à %s."
 
 #: modules/nickserv/set_pubkey.c:50
-#: modules/saslserv/ecdh-x25519-challenge.c:362
+#: modules/saslserv/ecdh-x25519-challenge.c:359
 #, fuzzy, c-format
 msgid "Your public key is now set to %s."
 msgstr "Le nom de votre compte est maintenant défini à %s."

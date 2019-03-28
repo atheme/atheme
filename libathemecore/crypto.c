@@ -102,6 +102,22 @@ crypt_get_default_provider(void)
 	return NULL;
 }
 
+const struct crypt_impl *
+crypt_get_named_provider(const char *const restrict id)
+{
+	mowgli_node_t *n;
+
+	MOWGLI_ITER_FOREACH(n, crypt_impl_list.head)
+	{
+		const struct crypt_impl *const ci = n->data;
+
+		if (strcasecmp(ci->id, id) == 0)
+			return ci;
+	}
+
+	return NULL;
+}
+
 const struct crypt_impl * ATHEME_FATTR_WUR
 crypt_verify_password(const char *const restrict password, const char *const restrict parameters,
                       unsigned int *const restrict flags)

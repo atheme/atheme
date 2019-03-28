@@ -3,7 +3,9 @@ Help for GENHASH:
 GENHASH generates an Atheme password hash, useful to easily
 create a password hash for use as a services oper password.
 
-Syntax: GENHASH <password>
+Syntax: GENHASH <password> [provider]
 
 Example:
     /msg &nick& GENHASH letmein
+    /msg &nick& GENHASH secretpassword pbkdf2v2
+    /msg &nick& GENHASH anothersecretpassword argon2d

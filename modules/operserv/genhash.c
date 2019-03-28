@@ -14,25 +14,57 @@ cmd_os_genhash_func(struct sourceinfo *const restrict si, const int parc, char *
 	if (parc < 1)
 	{
 		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "GENHASH");
-		(void) command_fail(si, fault_needmoreparams, _("Syntax: GENHASH <password>"));
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: GENHASH <password> [provider]"));
 		return;
 	}
 
-	const char *const result = crypt_password(parv[0]);
+	const char *const password = parv[0];
+	const char *const provider = parv[1];
 
-	if (result)
-		(void) command_success_string(si, result, "%s", result);
-	else
-		(void) command_fail(si, fault_internalerror, _("Password hash generation failure"));
+	const struct crypt_impl *ci = crypt_get_default_provider();
 
-	(void) logcommand(si, CMDLOG_GET, "GENHASH");
+	if (provider)
+	{
+		if (! (ci = crypt_get_named_provider(provider)))
+		{
+			(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "GENHASH");
+			(void) command_fail(si, fault_badparams, _("The crypto provider '%s' does not exist"),
+			                                         provider);
+			return;
+		}
+		if (! ci->crypt)
+		{
+			(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "GENHASH");
+			(void) command_fail(si, fault_badparams, _("The crypto provider '%s' is not capable of "
+			                                           "encrypting passwords"), provider);
+			return;
+		}
+	}
+	else if (! ci)
+	{
+		(void) command_fail(si, fault_internalerror, _("No encryption-capable crypto provider is available"));
+		return;
+	}
+
+	const char *const result = ci->crypt(password, NULL);
+
+	if (! result)
+	{
+		(void) command_fail(si, fault_internalerror, _("Failed to encrypt password with crypto provider "
+		                                               "'%s'"), ci->id);
+		return;
+	}
+
+	(void) command_success_nodata(si, _("Using crypto provider '%s':"), ci->id);
+	(void) command_success_string(si, result, "  %s", result);
+	(void) logcommand(si, CMDLOG_GET, "GENHASH (%s)", ci->id);
 }
 
 static struct command cmd_os_genhash = {
 	.name           = "GENHASH",
 	.desc           = N_("Generates a password hash from a password."),
 	.access         = PRIV_ADMIN,
-	.maxparc        = 1,
+	.maxparc        = 2,
 	.cmd            = &cmd_os_genhash_func,
 	.help           = { .path = "oservice/genhash" },
 };

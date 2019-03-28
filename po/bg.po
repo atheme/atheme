@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: http://wiki.arabeyes.org/Technical_Dictionary\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-03-17 22:04+0000\n"
+"POT-Creation-Date: 2019-03-28 16:41+0000\n"
 "PO-Revision-Date: 2016-10-19 14:40+0300\n"
 "Last-Translator: \n"
 "Language-Team: Plamen Vasilev a.k.a Paco <p.vasileff@gmail.com>\n"
@@ -2738,7 +2738,7 @@ msgstr ""
 msgid "Changes whether service spams unregistered users on connect."
 msgstr ""
 
-#: modules/saslserv/ecdh-x25519-challenge.c:374
+#: modules/saslserv/ecdh-x25519-challenge.c:371
 msgid "Changes your ECDH-X25519-CHALLENGE public key."
 msgstr ""
 
@@ -3675,6 +3675,11 @@ msgstr ""
 msgid "Failed to create challenge"
 msgstr ""
 
+#: modules/operserv/genhash.c:53
+#, c-format
+msgid "Failed to encrypt password with crypto provider '%s'"
+msgstr ""
+
 #: modules/scripting/perl/perl_module.c:385
 #, c-format
 msgid "Failed to retrieve script list: %s"
@@ -3897,7 +3902,7 @@ msgstr ""
 msgid "Generates a hash for SOPER."
 msgstr ""
 
-#: modules/operserv/genhash.c:33
+#: modules/operserv/genhash.c:65
 msgid "Generates a password hash from a password."
 msgstr ""
 
@@ -5196,6 +5201,10 @@ msgstr ""
 "Няма съвпадащи критерии за канал %s\n"
 ""
 
+#: modules/operserv/genhash.c:45
+msgid "No encryption-capable crypto provider is available"
+msgstr ""
+
 #: modules/nickserv/badmail.c:189
 #, c-format
 msgid "No entries matching pattern %s found in badmail database."
@@ -5522,10 +5531,6 @@ msgstr "Параметрите са твърде дълги. Прекъсван�
 msgid "Password authentication is disabled for this account."
 msgstr "Упълномощава се от сервицес администратор."
 
-#: modules/operserv/genhash.c:26
-msgid "Password hash generation failure"
-msgstr ""
-
 #: modules/nickserv/pwquality.c:90
 #, c-format
 msgid "Password is insecure [cracklib]: %s"
@@ -5715,13 +5720,13 @@ msgid "Prospect looks hopeful."
 msgstr ""
 
 #: modules/nickserv/set_pubkey.c:37
-#: modules/saslserv/ecdh-x25519-challenge.c:342
+#: modules/saslserv/ecdh-x25519-challenge.c:339
 #, fuzzy
 msgid "Public key entry has been deleted."
 msgstr "Запис %s беше премахнат от таблицата с метаданни."
 
 #: modules/nickserv/set_pubkey.c:31
-#: modules/saslserv/ecdh-x25519-challenge.c:336
+#: modules/saslserv/ecdh-x25519-challenge.c:333
 msgid "Public key was not set"
 msgstr ""
 
@@ -7175,7 +7180,7 @@ msgstr ""
 
 #: modules/operserv/genhash.c:17
 #, fuzzy
-msgid "Syntax: GENHASH <password>"
+msgid "Syntax: GENHASH <password> [provider]"
 msgstr "Синтаксис:DROP <account> <password>"
 
 #: modules/chanserv/getkey.c:21
@@ -8114,6 +8119,16 @@ msgstr "Каналът %s is held; и не може да бъде премах
 msgid "The channel %s must exist in order to register it."
 msgstr "Каналът%sтрябва да съществува, за да го регистрирате."
 
+#: modules/operserv/genhash.c:31
+#, fuzzy, c-format
+msgid "The crypto provider '%s' does not exist"
+msgstr "Ролята %s не съществува."
+
+#: modules/operserv/genhash.c:38
+#, c-format
+msgid "The crypto provider '%s' is not capable of encrypting passwords"
+msgstr ""
+
 #: modules/groupserv/set_description.c:40
 #, c-format
 msgid "The description for %s has been cleared."
@@ -8382,7 +8397,7 @@ msgstr ""
 msgid "The provided regex matches you, refusing RAKILL."
 msgstr ""
 
-#: modules/saslserv/ecdh-x25519-challenge.c:351
+#: modules/saslserv/ecdh-x25519-challenge.c:348
 msgid "The public key specified is not valid."
 msgstr ""
 
@@ -8956,6 +8971,11 @@ msgstr ""
 #: modules/nickserv/set_privmsg.c:77
 msgid "Uses private messages instead of notices if enabled."
 msgstr "Използва лични съобщения, вместо на обявления, ако е активиран."
+
+#: modules/operserv/genhash.c:58
+#, c-format
+msgid "Using crypto provider '%s':"
+msgstr ""
 
 #: modules/nickserv/set_language.c:27 modules/nickserv/set_language.c:37
 #, c-format
@@ -9863,13 +9883,13 @@ msgid "Your memo inbox is full! Please delete memos you no longer need."
 msgstr ""
 
 #: modules/nickserv/set_pubkey.c:44
-#: modules/saslserv/ecdh-x25519-challenge.c:356
+#: modules/saslserv/ecdh-x25519-challenge.c:353
 #, fuzzy, c-format
 msgid "Your public key is already set to %s."
 msgstr "Името на Вашия профил вече е настроен на%s."
 
 #: modules/nickserv/set_pubkey.c:50
-#: modules/saslserv/ecdh-x25519-challenge.c:362
+#: modules/saslserv/ecdh-x25519-challenge.c:359
 #, fuzzy, c-format
 msgid "Your public key is now set to %s."
 msgstr "Името на Вашия профил вече е настроен за %s."
