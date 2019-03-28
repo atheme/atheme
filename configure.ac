@@ -148,14 +148,12 @@ esac
 
 dnl GNU gettext
 AM_GNU_GETTEXT([external])
-LIBS="${LIBS} ${LIBINTL}"
-PODIR_COND_D=""
-USE_GETTEXT="No"
-if test "x${USE_NLS}" = "xyes"; then
-	USE_GETTEXT="Yes"
-	PODIR_COND_D="po"
-	AC_SUBST([PODIR_COND_D])
-fi
+AM_GNU_GETTEXT_NEED([need-ngettext])
+AM_GNU_GETTEXT_NEED([need-formatstring-macros])
+AS_IF([test "x${USE_NLS}" = "xyes"], [
+	ATHEME_COND_NLS_ENABLE
+	LIBS="${LIBINTL} ${LIBS}"
+])
 
 
 

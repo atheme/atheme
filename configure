@@ -2563,6 +2563,8 @@ fi
 as_fn_append ac_header_list " stdarg.h"
 as_fn_append ac_header_list " varargs.h"
 gt_needs="$gt_needs "
+gt_needs="$gt_needs need-ngettext"
+gt_needs="$gt_needs need-formatstring-macros"
 # Check that the precious variables saved in the cache have kept the same
 # value.
 ac_cache_corrupted=false
@@ -9067,12 +9069,20 @@ $as_echo "#define HAVE_DCGETTEXT 1" >>confdefs.h
 
 
 
-LIBS="${LIBS} ${LIBINTL}"
-PODIR_COND_D=""
-USE_GETTEXT="No"
-if test "x${USE_NLS}" = "xyes"; then
-	USE_GETTEXT="Yes"
+
+
+
+
+
+
+if test "x${USE_NLS}" = "xyes"; then :
+
+
+
 	PODIR_COND_D="po"
+
+
+	LIBS="${LIBINTL} ${LIBS}"
 
 fi
 
@@ -19691,6 +19701,11 @@ fi
 	if test "${BUILD_WARNINGS}" = "Yes"; then :
   BUILD_WARNINGS="Yes (NOT INTENDED FOR PRODUCTION USAGE)"
 fi
+	if test "x${USE_NLS}" = "xyes"; then :
+  USE_NLS="Yes"
+else
+  USE_NLS="No"
+fi
 
 	prefix="$(eval echo "${prefix}")"
 	prefix="$(eval echo "${prefix}")"
@@ -19740,7 +19755,7 @@ Configuration of ${PACKAGE_STRING}:
     Contrib Modules .........: ${CONTRIB_MODULES}
     Debugging Support .......: ${DEBUGGING}
     Heap Allocator ..........: ${HEAP_ALLOCATOR}
-    Internationalization ....: ${USE_GETTEXT}
+    Internationalization ....: ${USE_NLS}
     Large Network Support ...: ${LARGE_NET}
     Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}
     Sodium Memory Allocator .: ${SODIUM_MALLOC}

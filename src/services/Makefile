@@ -1,4 +1,4 @@
-HELP_LINGUAS	= es ru
+HELP_LINGUAS	= es fr ru tr
 PROG		= atheme-services${PROG_SUFFIX}
 SRCS		= main.c
 

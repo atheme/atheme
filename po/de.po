@@ -1,17 +1,24 @@
-# Translation for Atheme IRC Services.
-# Copyright (C) 2004 - 2011 Atheme
-# This file is distributed under the same license as the PACKAGE package.
+# SPDX-License-Identifier: ISC
+# SPDX-URL: https://spdx.org/licenses/ISC.html
+#
+# Atheme IRC Services
+# Copyright (C) 2004 Shrike Developers <http://www.malkier.net/>
+# Copyright (C) 2005-2015 Atheme Project <http://atheme.org/>
+# Copyright (C) 2015-2019 Atheme Development Group <https://atheme.github.io/>
+#
+# This file is distributed under the same license as the Atheme IRC Services package.
 #
 # Translators:
 # Robert Förster <Dessa@gmake.de>, 2011.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: Atheme IRC Services\n"
+"Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-03-28 16:41+0000\n"
+"POT-Creation-Date: 2019-03-28 19:17+0000\n"
 "PO-Revision-Date: 2011-11-09 03:02+0000\n"
 "Last-Translator: Dessa <Dessa@gmake.de>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: \n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1656,6 +1663,10 @@ msgstr "         Bot nick : noch nicht Zugewiesen"
 msgid "     Mask : %s@%s"
 msgstr "     Mask : %s@%s"
 
+#: libathemecore/commandhelp.c:397 libathemecore/commandhelp.c:481
+msgid "  <none you have access to>"
+msgstr ""
+
 #: modules/botserv/info.c:56
 #, c-format
 msgid "  Created : %s (%s ago)"
@@ -2031,6 +2042,31 @@ msgstr ""
 msgid "%s: failed to create Mowgli heap object"
 msgstr ""
 
+#: libathemecore/auth.c:85
+#, fuzzy, c-format
+msgid "%s: hash generation failed"
+msgstr "%s ist bereits %s zugewiesen."
+
+#: libathemecore/auth.c:78
+#, c-format
+msgid "%s: re-encrypting password for account '%s'"
+msgstr ""
+
+#: libathemecore/auth.c:75
+#, c-format
+msgid "%s: transitioning from crypt scheme '%s' to '%s' for account '%s'"
+msgstr ""
+
+#: libathemecore/module.c:342
+#, c-format
+msgid "%s: unloaded %s"
+msgstr ""
+
+#: libathemecore/auth.c:56
+#, c-format
+msgid "%s: verifying unencrypted password for account '%s'!"
+msgstr ""
+
 #: modules/chanserv/akick.c:683
 #, c-format
 msgid "%sexpires: %s"
@@ -2055,12 +2091,12 @@ msgstr ""
 msgid "*** End of Info ***"
 msgstr ""
 
-#: modules/contrib/ircd_announceserv.c:95
+#: libathemecore/commandhelp.c:351 modules/contrib/ircd_announceserv.c:95
 #, c-format
 msgid "***** %s Help *****"
 msgstr "***** %s Hilfe *****"
 
-#: modules/contrib/ircd_announceserv.c:104
+#: libathemecore/commandhelp.c:360 modules/contrib/ircd_announceserv.c:104
 msgid "***** End of Help *****"
 msgstr "***** Ende der Hilfe *****"
 
@@ -2150,6 +2186,11 @@ msgstr ""
 msgid "AKILL %s@%s is already matched in the database."
 msgstr ""
 
+#: libathemecore/node.c:265
+#, c-format
+msgid "AKILL expired on %s@%s, set by %s (reason: %s)"
+msgstr ""
+
 #: modules/operserv/akill.c:432
 msgid "AKILL list (with reasons):"
 msgstr ""
@@ -2220,6 +2261,11 @@ msgstr ""
 #: modules/memoserv/ignore.c:111
 #, c-format
 msgid "Account %s removed from ignore list."
+msgstr ""
+
+#: libathemecore/services.c:455
+#, c-format
+msgid "Account %s dropped, forcing logout"
 msgstr ""
 
 #: modules/chanfix/fix.c:531
@@ -2459,6 +2505,11 @@ msgstr ""
 #, c-format
 msgid ""
 "An email containing nickname activation instructions has been sent to %s."
+msgstr ""
+
+#: libathemecore/services.c:729
+#, c-format
+msgid "An email containing nickname activation instructions was sent to %s."
 msgstr ""
 
 #: modules/gameserv/eightball.c:33
@@ -3013,6 +3064,16 @@ msgstr "Konfiguriert Bot Optionen."
 msgid "Configures different botserv bot options."
 msgstr "Konfiguriert verschiedene BotServ Bot Optionen."
 
+#: libathemecore/commandhelp.c:163
+#, fuzzy, c-format
+msgid "Could not open help file for %s."
+msgstr "Sie sind nicht berechtigt, %s Bots zuzuweisen."
+
+#: libathemecore/logger.c:378
+#, c-format
+msgid "Could not open log file (%s), log entries will be missing!"
+msgstr ""
+
 #: modules/statserv/server.c:118
 msgid "Count the amount of servers connected to the network."
 msgstr ""
@@ -3050,7 +3111,8 @@ msgstr ""
 msgid "DEFAULT - allowed limit %d, warn on %d"
 msgstr ""
 
-#: modules/groupserv/main/groupserv.c:375
+#: libathemecore/account.c:248 libathemecore/account.c:303
+#: libathemecore/account.c:315 modules/groupserv/main/groupserv.c:375
 #, c-format
 msgid "DELETE: %s from %s"
 msgstr ""
@@ -3340,6 +3402,16 @@ msgstr ""
 msgid "Dumps channel modes to a file."
 msgstr ""
 
+#: libathemecore/account.c:2114 libathemecore/account.c:2152
+#, c-format
+msgid "EXPIRE: %s from %s"
+msgstr ""
+
+#: libathemecore/account.c:2058
+#, c-format
+msgid "EXPIRE: %s from %s "
+msgstr ""
+
 #: modules/nickserv/badmail.c:119
 #, c-format
 msgid "Email %s has already been banned."
@@ -3617,6 +3689,11 @@ msgstr ""
 msgid "Exit point : %p"
 msgstr ""
 
+#: libathemecore/signal.c:154 libathemecore/signal.c:175
+#, c-format
+msgid "Exiting on signal %d."
+msgstr ""
+
 #: modules/chanserv/why.c:147
 msgid "Explains channel access logic."
 msgstr ""
@@ -3743,6 +3820,21 @@ msgstr ""
 #: modules/operserv/update.c:28
 msgid "Flushes services database to disk."
 msgstr ""
+
+#: libathemecore/commandhelp.c:366
+#, fuzzy, c-format
+msgid "For a verbose listing of all %s commands, type:"
+msgstr "Für weitere Informationen über einen Befehl, geben sie Folgendes ein:"
+
+#: libathemecore/commandhelp.c:324
+#, fuzzy, c-format
+msgid "For more information on a %s %s subcommand, type:"
+msgstr "Für weitere Informationen über einen Befehl, geben sie Folgendes ein:"
+
+#: libathemecore/commandhelp.c:331
+#, fuzzy, c-format
+msgid "For more information on a %s command, type:"
+msgstr "Für weitere Informationen über einen Befehl, geben sie Folgendes ein:"
 
 #: modules/contrib/ircd_announceserv.c:98
 msgid "For more information on a command, type:"
@@ -3909,6 +4001,19 @@ msgstr ""
 
 #: modules/chanserv/protect.c:132
 msgid "Gives the channel protection flag to a user."
+msgstr ""
+
+#: libathemecore/signal.c:131
+#, c-format
+msgid "Got SIGHUP; reloading %s."
+msgstr ""
+
+#: libathemecore/signal.c:164
+msgid "Got SIGINT; restarting."
+msgstr ""
+
+#: libathemecore/signal.c:183
+msgid "Got SIGUSR2; restarting."
 msgstr ""
 
 #: modules/contrib/cs_updown.c:204
@@ -4081,10 +4186,33 @@ msgid ""
 "If you do not complete registration within one day your account will expire."
 msgstr ""
 
-#: modules/nickserv/register.c:196
+#: libathemecore/services.c:730 modules/nickserv/register.c:196
 msgid ""
 "If you do not complete registration within one day, your nickname will "
 "expire."
+msgstr ""
+
+#: libathemecore/commandhelp.c:306
+#, c-format
+msgid ""
+"If you're having trouble, or you need some additional help,\n"
+"you may want to join the help channel '%s'"
+msgstr ""
+
+#: libathemecore/commandhelp.c:299
+#, c-format
+msgid ""
+"If you're having trouble, or you need some additional help,\n"
+"you may want to join the help channel '%s', or visit the\n"
+"help webpage <%s>"
+msgstr ""
+
+#: libathemecore/commandhelp.c:312
+#, c-format
+msgid ""
+"If you're having trouble, or you need some additional help,\n"
+"you may want to visit the help webpage\n"
+"<%s>"
 msgstr ""
 
 #: modules/operserv/ignore.c:181
@@ -4165,6 +4293,27 @@ msgstr "Anfangsschritt : %.0f%% von %u (%0.1f)"
 #: modules/scripting/perl/perl_module.c:420
 msgid "Inspect the Perl interpreter"
 msgstr ""
+
+#: libathemecore/commandhelp.c:273
+#, c-format
+msgid "Invalid %s %s subcommand."
+msgstr ""
+
+#: libathemecore/commandhelp.c:282
+#, fuzzy, c-format
+msgid ""
+"Invalid %s %s subcommand. Use /msg %s HELP %s for a %s %s subcommand listing."
+msgstr "Unbekannter Befehl. Nutzen sie /%s%s help für eine Befehlsübersicht."
+
+#: libathemecore/commandhelp.c:276
+#, fuzzy, c-format
+msgid "Invalid %s command."
+msgstr "Aktiviert fantasy Kommandos."
+
+#: libathemecore/commandhelp.c:286
+#, fuzzy, c-format
+msgid "Invalid %s command. Use /msg %s HELP for a %s command listing."
+msgstr "Unbekannter Befehl. Nutzen sie /%s%s help für eine Befehlsübersicht."
 
 #: modules/operserv/clones.c:306
 msgid "Invalid IP/mask given."
@@ -4350,6 +4499,11 @@ msgstr ""
 
 #: modules/operserv/jupe.c:57
 msgid "Jupiters a server."
+msgstr ""
+
+#: libathemecore/node.c:262
+#, c-format
+msgid "KLINE:EXPIRE: %s@%s set %s ago by %s (reason: %s)"
 msgstr ""
 
 #: modules/operserv/set.c:245
@@ -4613,6 +4767,16 @@ msgstr ""
 msgid "Logged in nicks are: %s"
 msgstr ""
 
+#: libathemecore/services.c:475
+#, c-format
+msgid "Login to account %s is stale, forcing logout"
+msgstr ""
+
+#: libathemecore/services.c:486
+#, c-format
+msgid "Login to account %s seems invalid, forcing logout"
+msgstr ""
+
 #: modules/nickserv/info.c:229 modules/nickserv/info.c:237
 #, c-format
 msgid "Logins from: %s"
@@ -4626,6 +4790,16 @@ msgstr ""
 msgid "Looks for users and performs actions on them."
 msgstr ""
 
+#: libathemecore/account.c:883
+#, c-format
+msgid "MARK:FORGET: \"%s\" for %s (%s) (already marked)"
+msgstr ""
+
+#: libathemecore/account.c:889
+#, c-format
+msgid "MARK:RESTORE: \"%s\" for %s (%s)"
+msgstr ""
+
 #: modules/chanserv/set_mlock.c:101
 msgid "MLOCK key contains invalid characters."
 msgstr ""
@@ -4633,6 +4807,11 @@ msgstr ""
 #: modules/chanserv/set_mlock.c:96
 #, c-format
 msgid "MLOCK key is too long (%zu > %u)."
+msgstr ""
+
+#: libathemecore/module.c:106
+#, c-format
+msgid "MODLOAD: %s at 0x%lx"
 msgstr ""
 
 #: modules/botserv/main.c:1011
@@ -4881,6 +5060,16 @@ msgstr ""
 #: modules/operserv/modunload.c:56
 #, c-format
 msgid "Module %s unloaded."
+msgstr ""
+
+#: libathemecore/module.c:105
+#, c-format
+msgid "Module %s loaded at 0x%lx"
+msgstr ""
+
+#: libathemecore/module.c:345
+#, c-format
+msgid "Module %s unloaded."
 msgstr ""
 
 #: modules/statserv/netsplit.c:108
@@ -5165,6 +5354,11 @@ msgstr ""
 msgid "No groups matched pattern %s"
 msgstr ""
 
+#: libathemecore/commandhelp.c:46
+#, fuzzy, c-format
+msgid "No help available for %s."
+msgstr "Liste der in %s verfügbaren Bots:"
+
 #: modules/operserv/greplog.c:188
 #, c-format
 msgid "No lines matched pattern %s"
@@ -5239,6 +5433,11 @@ msgstr ""
 msgid "No such ban %s on %s."
 msgstr ""
 
+#: libathemecore/commandhelp.c:48
+#, c-format
+msgid "No such command %s."
+msgstr ""
+
 #: modules/operserv/soper.c:109 modules/operserv/specs.c:144
 #, c-format
 msgid "No such oper class %s."
@@ -5303,6 +5502,12 @@ msgstr ""
 
 #: modules/gameserv/eightball.c:40
 msgid "Not even on a GOOD day."
+msgstr ""
+
+#: libathemecore/account.c:882
+#, c-format
+msgid ""
+"Not restoring mark \"%s\" for account %s (name %s) which is already marked"
 msgstr ""
 
 #: modules/chanserv/template.c:383
@@ -5431,6 +5636,11 @@ msgstr ""
 
 #: modules/nickserv/set_hidelastlogin.c:69
 msgid "Opts you out of Last Login notices upon identifying to your account."
+msgstr ""
+
+#: libathemecore/services.c:957
+#, c-format
+msgid "Output limit (%u) exceeded, halting output"
 msgstr ""
 
 #: modules/gameserv/eightball.c:47
@@ -5656,6 +5866,16 @@ msgstr ""
 msgid "Public key was not set"
 msgstr ""
 
+#: libathemecore/node.c:591
+#, c-format
+msgid "QLINE expired on %s, set by %s"
+msgstr ""
+
+#: libathemecore/node.c:588
+#, fuzzy, c-format
+msgid "QLINE:EXPIRE: %s set %s ago by %s"
+msgstr "%s ist bereits %s zugewiesen."
+
 #: modules/chanserv/quiet.c:328 modules/chanserv/quiet.c:337
 #, c-format
 msgid "Quieted %s on %s."
@@ -5674,8 +5894,8 @@ msgstr ""
 msgid "REHASH completed."
 msgstr ""
 
-#: modules/operserv/modload.c:49 modules/operserv/modreload.c:169
-#: modules/operserv/rehash.c:27
+#: libathemecore/signal.c:145 modules/operserv/modload.c:49
+#: modules/operserv/modreload.c:169 modules/operserv/rehash.c:27
 #, c-format
 msgid ""
 "REHASH of %s failed. Please correct any errors in the file and try again."
@@ -5864,12 +6084,23 @@ msgid ""
 "Registrations are currently disabled on this network, please try again later."
 msgstr ""
 
+#: libathemecore/signal.c:141
+#, c-format
+msgid "Rehashing %s by request of %s."
+msgstr ""
+
 #: modules/contrib/ircd_announceserv.c:367
 msgid "Reject the requested announcement for the given nick."
 msgstr ""
 
 #: modules/hostserv/request.c:568
 msgid "Reject the requested vhost for the given nick."
+msgstr ""
+
+#: libathemecore/function.c:715
+#, c-format
+msgid ""
+"Rejecting email for %s[%s@%s] due to too high load (type '%s' to %s <%s>)"
 msgstr ""
 
 #: modules/chanserv/moderate.c:343
@@ -6004,6 +6235,11 @@ msgstr ""
 
 #: modules/operserv/restart.c:23
 msgid "Restart services."
+msgstr ""
+
+#: libathemecore/signal.c:167 libathemecore/signal.c:186
+#, c-format
+msgid "Restarting by request of %s."
 msgstr ""
 
 #: modules/contrib/os_savechanmodes.c:163
@@ -6211,7 +6447,7 @@ msgstr ""
 msgid "SQLINE on %s was successfully added."
 msgstr ""
 
-#: modules/groupserv/main/groupserv.c:358
+#: libathemecore/account.c:224 modules/groupserv/main/groupserv.c:358
 #, c-format
 msgid "SUCCESSION: %s to %s from %s"
 msgstr ""
@@ -6362,6 +6598,11 @@ msgstr ""
 msgid ""
 "Services is presently TAINTED, no support will be given for this "
 "configuration."
+msgstr ""
+
+#: libathemecore/ptasks.c:817
+#, c-format
+msgid "Services kill fight (%s -> %s), shutting down!"
 msgstr ""
 
 #: modules/helpserv/services.c:18
@@ -8113,6 +8354,22 @@ msgstr ""
 msgid "The fantasy prefix for the channel has been reset by %s"
 msgstr ""
 
+#: libathemecore/commandhelp.c:445
+msgid "The following additional commands are available:"
+msgstr ""
+
+#: libathemecore/commandhelp.c:447
+msgid "The following additional subcommands are available:"
+msgstr ""
+
+#: libathemecore/commandhelp.c:380 libathemecore/commandhelp.c:414
+msgid "The following commands are available:"
+msgstr ""
+
+#: libathemecore/commandhelp.c:382 libathemecore/commandhelp.c:416
+msgid "The following subcommands are available:"
+msgstr ""
+
 #: modules/groupserv/register.c:40 modules/groupserv/set_groupname.c:58
 #, c-format
 msgid "The group %s already exists."
@@ -8351,12 +8608,29 @@ msgstr ""
 msgid "The transfer of %s has been cancelled."
 msgstr "%s ist bereits %s zugewiesen."
 
+#: libathemecore/services.c:1211
+msgid "The vhost provided contains invalid characters."
+msgstr ""
+
+#: libathemecore/services.c:1228
+msgid "The vhost provided is invalid."
+msgstr ""
+
+#: libathemecore/services.c:1216
+msgid "The vhost provided is too long."
+msgstr ""
+
+#: libathemecore/services.c:1222
+msgid "The vhost provided looks like a CIDR mask."
+msgstr ""
+
 #: modules/statserv/channel.c:62
 #, c-format
 msgid "There are %u channels on the network."
 msgstr ""
 
-#: modules/nickserv/enforce.c:505 modules/nickserv/identify.c:122
+#: libathemecore/services.c:631 modules/nickserv/enforce.c:505
+#: modules/nickserv/identify.c:122
 #, c-format
 msgid "There are already %zu sessions logged in to %s (maximum allowed: %u)."
 msgstr ""
@@ -8412,6 +8686,14 @@ msgstr ""
 #, c-format
 msgid ""
 "This is a friendly reminder that you are about to destroy the account %s."
+msgstr ""
+
+#: libathemecore/ptasks.c:955
+msgid "This is your first offense. You will be ignored for 30 seconds."
+msgstr ""
+
+#: libathemecore/ptasks.c:970
+msgid "This is your last warning. You will be ignored for 30 seconds."
 msgstr ""
 
 #: modules/nickserv/multimark.c:1009
@@ -8664,6 +8946,11 @@ msgstr "Ändert einen Accesslisteneintrag."
 #: modules/operserv/clones.c:418
 #, c-format
 msgid "Updated %s in clone exempt list."
+msgstr ""
+
+#: libathemecore/signal.c:136
+#, c-format
+msgid "Updating database by request of %s."
 msgstr ""
 
 #: modules/operserv/update.c:18
@@ -8935,6 +9222,16 @@ msgstr ""
 msgid "Word %s not found in bad word database."
 msgstr ""
 
+#: libathemecore/node.c:409
+#, c-format
+msgid "XLINE expired on %s, set by %s"
+msgstr ""
+
+#: libathemecore/node.c:406
+#, fuzzy, c-format
+msgid "XLINE:EXPIRE: %s set %s ago by %s"
+msgstr "%s ist bereits %s zugewiesen."
+
 #: modules/gameserv/eightball.c:25
 msgid "Yes, yes, yes, and yes again."
 msgstr ""
@@ -9059,41 +9356,41 @@ msgstr ""
 msgid "You are not authorized to perform this command."
 msgstr ""
 
-#: modules/alis/main.c:249 modules/botserv/bottalk.c:47
-#: modules/botserv/bottalk.c:114 modules/botserv/info.c:76
-#: modules/botserv/set_fantasy.c:39 modules/botserv/set_nobot.c:45
-#: modules/botserv/set_private.c:47 modules/botserv/set_saycaller.c:38
-#: modules/chanserv/access.c:480 modules/chanserv/access.c:559
-#: modules/chanserv/access.c:663 modules/chanserv/access.c:707
-#: modules/chanserv/access.c:768 modules/chanserv/access.c:817
-#: modules/chanserv/access.c:915 modules/chanserv/access.c:964
-#: modules/chanserv/access.c:1094 modules/chanserv/access.c:1185
-#: modules/chanserv/access.c:1281 modules/chanserv/akick.c:308
-#: modules/chanserv/akick.c:503 modules/chanserv/akick.c:643
-#: modules/chanserv/ban.c:43 modules/chanserv/ban.c:131
-#: modules/chanserv/clear_bans.c:58 modules/chanserv/clear_users.c:45
-#: modules/chanserv/count.c:45 modules/chanserv/drop.c:49
-#: modules/chanserv/flags.c:94 modules/chanserv/getkey.c:40
-#: modules/chanserv/halfop.c:42 modules/chanserv/halfop.c:75
-#: modules/chanserv/invite.c:53 modules/chanserv/kick.c:39
-#: modules/chanserv/kick.c:112 modules/chanserv/op.c:72
-#: modules/chanserv/owner.c:42 modules/chanserv/owner.c:75
-#: modules/chanserv/protect.c:42 modules/chanserv/protect.c:75
-#: modules/chanserv/quiet.c:122 modules/chanserv/quiet.c:289
-#: modules/chanserv/quiet.c:399 modules/chanserv/recover.c:47
-#: modules/chanserv/template.c:79 modules/chanserv/topic.c:51
-#: modules/chanserv/topic.c:110 modules/chanserv/topic.c:186
-#: modules/chanserv/topic.c:281 modules/chanserv/unban_self.c:67
-#: modules/chanserv/why.c:62 modules/chanserv/xop.c:315
-#: modules/chanserv/xop.c:321 modules/chanserv/xop.c:340
-#: modules/chanserv/xop.c:346 modules/chanserv/xop.c:360
-#: modules/chanserv/xop.c:432 modules/contrib/cs_access_alias.c:118
-#: modules/contrib/cs_userinfo.c:46 modules/contrib/cs_userinfo.c:71
-#: modules/groupserv/flags.c:44 modules/groupserv/flags.c:80
-#: modules/groupserv/flags.c:132 modules/groupserv/invite.c:41
-#: modules/groupserv/listchans.c:44 modules/memoserv/sendops.c:89
-#: modules/nickserv/sendpass_user.c:39 modules/operserv/soper.c:19
-#: modules/rpgserv/set.c:189
+#: libathemecore/commandtree.c:170 modules/alis/main.c:249
+#: modules/botserv/bottalk.c:47 modules/botserv/bottalk.c:114
+#: modules/botserv/info.c:76 modules/botserv/set_fantasy.c:39
+#: modules/botserv/set_nobot.c:45 modules/botserv/set_private.c:47
+#: modules/botserv/set_saycaller.c:38 modules/chanserv/access.c:480
+#: modules/chanserv/access.c:559 modules/chanserv/access.c:663
+#: modules/chanserv/access.c:707 modules/chanserv/access.c:768
+#: modules/chanserv/access.c:817 modules/chanserv/access.c:915
+#: modules/chanserv/access.c:964 modules/chanserv/access.c:1094
+#: modules/chanserv/access.c:1185 modules/chanserv/access.c:1281
+#: modules/chanserv/akick.c:308 modules/chanserv/akick.c:503
+#: modules/chanserv/akick.c:643 modules/chanserv/ban.c:43
+#: modules/chanserv/ban.c:131 modules/chanserv/clear_bans.c:58
+#: modules/chanserv/clear_users.c:45 modules/chanserv/count.c:45
+#: modules/chanserv/drop.c:49 modules/chanserv/flags.c:94
+#: modules/chanserv/getkey.c:40 modules/chanserv/halfop.c:42
+#: modules/chanserv/halfop.c:75 modules/chanserv/invite.c:53
+#: modules/chanserv/kick.c:39 modules/chanserv/kick.c:112
+#: modules/chanserv/op.c:72 modules/chanserv/owner.c:42
+#: modules/chanserv/owner.c:75 modules/chanserv/protect.c:42
+#: modules/chanserv/protect.c:75 modules/chanserv/quiet.c:122
+#: modules/chanserv/quiet.c:289 modules/chanserv/quiet.c:399
+#: modules/chanserv/recover.c:47 modules/chanserv/template.c:79
+#: modules/chanserv/topic.c:51 modules/chanserv/topic.c:110
+#: modules/chanserv/topic.c:186 modules/chanserv/topic.c:281
+#: modules/chanserv/unban_self.c:67 modules/chanserv/why.c:62
+#: modules/chanserv/xop.c:315 modules/chanserv/xop.c:321
+#: modules/chanserv/xop.c:340 modules/chanserv/xop.c:346
+#: modules/chanserv/xop.c:360 modules/chanserv/xop.c:432
+#: modules/contrib/cs_access_alias.c:118 modules/contrib/cs_userinfo.c:46
+#: modules/contrib/cs_userinfo.c:71 modules/groupserv/flags.c:44
+#: modules/groupserv/flags.c:80 modules/groupserv/flags.c:132
+#: modules/groupserv/invite.c:41 modules/groupserv/listchans.c:44
+#: modules/memoserv/sendops.c:89 modules/nickserv/sendpass_user.c:39
+#: modules/operserv/soper.c:19 modules/rpgserv/set.c:189
 msgid "You are not authorized to perform this operation."
 msgstr "Sie sind nicht berechtigt, diesen Vorgang auszuführen."
 
@@ -9113,20 +9410,21 @@ msgstr ""
 msgid "You are not authorized to use the target argument."
 msgstr ""
 
-#: modules/botserv/set_nobot.c:39 modules/botserv/set_private.c:41
-#: modules/chanserv/akick.c:617 modules/chanserv/flags.c:284
-#: modules/chanserv/set_founder.c:40 modules/chanserv/status.c:57
-#: modules/chanserv/template.c:127 modules/chanserv/unban_self.c:60
-#: modules/chanserv/xop.c:276 modules/contrib/cs_fregister.c:47
-#: modules/contrib/ms_fsend.c:38 modules/contrib/ns_goodmail.c:108
-#: modules/contrib/os_joinmon.c:117 modules/groupserv/fflags.c:37
-#: modules/hostserv/offer.c:151 modules/infoserv/main.c:250
-#: modules/nickserv/access.c:199 modules/nickserv/access.c:251
-#: modules/nickserv/access.c:384 modules/nickserv/badmail.c:108
-#: modules/nickserv/cert.c:34 modules/nickserv/cert.c:76
-#: modules/nickserv/cert.c:131 modules/nickserv/cert.c:167
-#: modules/nickserv/listchans.c:45 modules/nickserv/listgroups.c:45
-#: modules/nickserv/logout.c:23 modules/nickserv/status.c:76
+#: libathemecore/commandtree.c:135 modules/botserv/set_nobot.c:39
+#: modules/botserv/set_private.c:41 modules/chanserv/akick.c:617
+#: modules/chanserv/flags.c:284 modules/chanserv/set_founder.c:40
+#: modules/chanserv/status.c:57 modules/chanserv/template.c:127
+#: modules/chanserv/unban_self.c:60 modules/chanserv/xop.c:276
+#: modules/contrib/cs_fregister.c:47 modules/contrib/ms_fsend.c:38
+#: modules/contrib/ns_goodmail.c:108 modules/contrib/os_joinmon.c:117
+#: modules/groupserv/fflags.c:37 modules/hostserv/offer.c:151
+#: modules/infoserv/main.c:250 modules/nickserv/access.c:199
+#: modules/nickserv/access.c:251 modules/nickserv/access.c:384
+#: modules/nickserv/badmail.c:108 modules/nickserv/cert.c:34
+#: modules/nickserv/cert.c:76 modules/nickserv/cert.c:131
+#: modules/nickserv/cert.c:167 modules/nickserv/listchans.c:45
+#: modules/nickserv/listgroups.c:45 modules/nickserv/logout.c:23
+#: modules/nickserv/status.c:76
 msgid "You are not logged in."
 msgstr "Sie sind nicht angemeldet."
 
@@ -9149,7 +9447,7 @@ msgstr ""
 msgid "You are now a network helper."
 msgstr ""
 
-#: modules/nickserv/identify.c:156
+#: libathemecore/services.c:644 modules/nickserv/identify.c:156
 #, c-format
 msgid "You are now identified for %s."
 msgstr ""
@@ -9159,9 +9457,13 @@ msgstr ""
 msgid "You are now identified to %s."
 msgstr ""
 
-#: modules/nickserv/identify.c:156
+#: libathemecore/services.c:644 modules/nickserv/identify.c:156
 #, c-format
 msgid "You are now logged in as %s."
+msgstr ""
+
+#: libathemecore/ptasks.c:907
+msgid "You are on services ignore. You may not use any service."
 msgstr ""
 
 #: modules/chanserv/status.c:77 modules/nickserv/status.c:96
@@ -9288,6 +9590,10 @@ msgstr ""
 #: modules/chanserv/access.c:1207 modules/chanserv/access.c:1301
 #, c-format
 msgid "You do not have appropriate permissions to set flags: %s"
+msgstr ""
+
+#: libathemecore/services.c:728
+msgid "You have NOT COMPLETED registration verification."
 msgstr ""
 
 #: modules/memoserv/main.c:25 modules/memoserv/main.c:57
@@ -9459,6 +9765,10 @@ msgstr ""
 
 #: modules/nickserv/group.c:33
 msgid "You have too many nicks registered already."
+msgstr ""
+
+#: libathemecore/ptasks.c:954 libathemecore/ptasks.c:969
+msgid "You have triggered services flood protection."
 msgstr ""
 
 #: modules/nickserv/badmail.c:162
@@ -9865,6 +10175,11 @@ msgstr ""
 msgid "user@host mask(s) that are autokline exempt: %s"
 msgstr ""
 
+#: libathemecore/users.c:324
+#, c-format
+msgid "user_find(): found user %s by nick!"
+msgstr ""
+
 #: modules/nickserv/info.c:168
 #, c-format
 msgid "vHost      : %s"
@@ -9905,20 +10220,20 @@ msgstr ""
 msgid "view privileges of other users"
 msgstr ""
 
+#~ msgid "For more information, use /msg %s HELP ACCESS command."
+#~ msgstr "Für mehr Informationen nutzen sie /msg %s HELP ACCESS Kommando."
+
+#~ msgid "For more information, use /msg %s HELP ROLE command."
+#~ msgstr "Für mehr Informationen nutzen sie /msg %s HELP ROLE Kommando."
+
 #~ msgid "For more specific help use /msg %s HELP SET command."
 #~ msgstr "Für mehr Informationen nutzen sie /msg %s HELP SET Kommando."
 
 #~ msgid "Help for ACCESS:"
 #~ msgstr "Hilfe für ACCESS:"
 
-#~ msgid "For more information, use /msg %s HELP ACCESS command."
-#~ msgstr "Für mehr Informationen nutzen sie /msg %s HELP ACCESS Kommando."
-
 #~ msgid "Help for ROLE:"
 #~ msgstr "Hilfe für ROLE:"
-
-#~ msgid "For more information, use /msg %s HELP ROLE command."
-#~ msgstr "Für mehr Informationen nutzen sie /msg %s HELP ROLE Kommando."
 
 #~ msgid "Syntax: ACCESS <#channel> <command> [parameters]"
 #~ msgstr "Syntax: ACCESS <#channel> <Kommando> [Parameter]"

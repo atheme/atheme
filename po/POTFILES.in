@@ -1,4 +1,16 @@
-# Please don't update this file manually - use ./update-potfiles.sh instead!
+# Please don't update this file manually - use 'make update-potfiles' instead!
+libathemecore/account.c
+libathemecore/auth.c
+libathemecore/commandhelp.c
+libathemecore/commandtree.c
+libathemecore/function.c
+libathemecore/logger.c
+libathemecore/module.c
+libathemecore/node.c
+libathemecore/ptasks.c
+libathemecore/services.c
+libathemecore/signal.c
+libathemecore/users.c
 modules/alis/main.c
 modules/backend/opensex.c
 modules/botserv/bottalk.c

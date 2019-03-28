@@ -37,11 +37,6 @@ modules/Makefile.defs
 modules/scripting/perl/api/Atheme.c
 modules/scripting/perl/api/perl_hooks.c
 modules/scripting/perl/perlxsi.c
-po/Makefile.in
-po/POTFILES
-po/*.gmo
-po/*.mo
-po/stamp-po
 scripts/*.tbz2
 scripts/*.tgz
 scripts/*.tar.bz2

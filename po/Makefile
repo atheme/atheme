@@ -1,12 +1,11 @@
 # Short KISS instructions:
 #
-# - To add new languages: Add *.po target to LOCALES Make variable below
-# - Update and merge .po-files: make update-po
-# - Only update the template .pot-file only: make update-pot
-# - Run update-potfiles.sh when any new sourcefiles with translatable strings
-#   have been introduced, and then continue with 'make update-po' or
-#   'make update-pot' respectively.
-#
+# - To regenerate the list of translatable files; run `make update-potfiles'
+# - To regenerate the master template atheme.pot; run `make update-pot'
+# - To regenerate all the translation files; run `make update-po'
+# - To add a translation; add it to LOCALES below, and to the LINGUAS file
+# - When adding a translation subdirectory to help/, also add it to the
+#   HELP_LINGUAS variable in src/services/Makefile
 
 LOCALES=bg.po cy.po da.po de.po es.po fr.po ru.po tr.po
 
@@ -14,14 +13,31 @@ include ../buildsys.mk
 
 POTTEMPLATE=$(PACKAGE_TARNAME).pot
 
-update-pot:
-	@echo Updating $(POTTEMPLATE) ...
-	xgettext --default-domain="$(PACKAGE_TARNAME)" --language=C \
-	--keyword=_ --keyword=N_ --from-code="utf-8" --sort-output \
-	--directory=.. --files-from=POTFILES.in -o "$(POTTEMPLATE)" \
-	--package-name="$(PACKAGE_TARNAME)" --package-version="$(PACKAGE_VERSION)" \
-	--copyright-holder="$(VENDOR_STRING)" --msgid-bugs-address="<$(PACKAGE_BUGREPORT)>"
+update-potfiles:
+	@echo "Updating POTFILES.in ..."
+	@sh update-potfiles.sh
+
+update-pot: update-potfiles
+	@echo "Updating $(POTTEMPLATE) ..."
+	xgettext                                                \
+	    --default-domain="$(PACKAGE_TARNAME)"               \
+	    --package-name="$(PACKAGE_NAME)"                    \
+	    --package-version="$(PACKAGE_VERSION)"              \
+	    --copyright-holder="$(VENDOR_STRING)"               \
+	    --msgid-bugs-address="<$(PACKAGE_BUGREPORT)>"       \
+	    --directory=".."                                    \
+	    --files-from="POTFILES.in"                          \
+	    --from-code="utf-8"                                 \
+	    --keyword="_"                                       \
+	    --keyword="N_"                                      \
+	    --language=C                                        \
+	    --foreign-user                                      \
+	    --sort-output                                       \
+	    --width=116                                         \
+	    -o "$(POTTEMPLATE).tmp"
+	cat < "$(POTTEMPLATE).header" > "$(POTTEMPLATE)"
+	tail -n +4 < "$(POTTEMPLATE).tmp" >> "$(POTTEMPLATE)"
+	rm -f "$(POTTEMPLATE).tmp"
 
 update-po: update-pot
-	@echo Updating .po -files ...
-	@for lang in $(LOCALES); do echo -n "$$lang : "; msgmerge --backup=simple --update "$$lang" $(POTTEMPLATE); done
+	@for lang in $(LOCALES) ; do echo "Updating $$lang ..." ; msgmerge --backup=none --quiet --sort-output --update --width=116 "$$lang" $(POTTEMPLATE) ; done
