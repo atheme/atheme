@@ -861,24 +861,6 @@ is_founder(struct mychan *mychan, struct myentity *mt)
 }
 
 bool
-is_ircop(struct user *user)
-{
-	if (UF_IRCOP & user->flags)
-		return true;
-
-	return false;
-}
-
-bool
-is_admin(struct user *user)
-{
-	if (UF_ADMIN & user->flags)
-		return true;
-
-	return false;
-}
-
-bool
 is_autokline_exempt(struct user *user)
 {
 	mowgli_node_t *n;
@@ -890,15 +872,6 @@ is_autokline_exempt(struct user *user)
 		if (0 == match(n->data, buf))
 			return true;
 	}
-	return false;
-}
-
-bool
-is_service(struct user *user)
-{
-	if (UF_SERVICE & user->flags)
-		return true;
-
 	return false;
 }
 

@@ -61,6 +61,9 @@ void (*quarantine_sts)(struct user *source, struct user *victim, long duration, 
 bool (*is_extban)(const char *mask) = generic_is_extban;
 void (*dline_sts)(const char *server, const char *host, long duration, const char *reason) = generic_dline_sts;
 void (*undline_sts)(const char *server, const char *host) = generic_undline_sts;
+bool (*is_ircop)(struct user *u) = generic_is_ircop;
+bool (*is_admin)(struct user *u) = generic_is_admin;
+bool (*is_service)(struct user *u) = generic_is_service;
 
 unsigned int
 generic_server_login(void)
@@ -443,6 +446,33 @@ generic_quarantine_sts(struct user *source, struct user *victim, long duration, 
 bool
 generic_is_extban(const char *mask)
 {
+	return false;
+}
+
+bool
+generic_is_ircop(struct user *u)
+{
+	if (UF_IRCOP & u->flags)
+		return true;
+
+	return false;
+}
+
+bool
+generic_is_admin(struct user *u)
+{
+	if (UF_ADMIN & u->flags)
+		return true;
+
+	return false;
+}
+
+bool
+generic_is_service(struct user *u)
+{
+	if (UF_SERVICE & u->flags)
+		return true;
+
 	return false;
 }
 
