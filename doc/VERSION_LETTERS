@@ -5,20 +5,22 @@ Version replies (from /version or ctcp version) contain a sequence
 of letters like FljR. Their meaning is as follows:
 
 A - ASCII casemapping is used
-a - external authentication is used
 B - reproducible builds were enabled at compile-time
 C - contrib modules were enabled at compile-time
+D - debugging support was enabled at compile-time
+F - flood checking is enabled
+H - the shared heap allocator is enabled
+L - large network support was enabled at compile-time
+M - the libsodium memory allocator was enabled at compile-time
+R - RFC1459 casemapping is used
+T - services is tainted (running an unsupported configuration)
+W - legacy crypto modules were enabled at compile-time
+a - external authentication is used
 c - an encryption-capable password crypto module is loaded
 d - debug logging is enabled
 e - nick/account registration requires email verification
-F - flood checking is enabled
 j - join_chans is enabled
-L - large network support was enabled at compile-time
 l - leave_chans is enabled
-M - the libsodium memory allocator was enabled at compile-time
 n - services is attached to a terminal
-R - RFC1459 casemapping is used
 r - operserv raw can be used
-T - services is tainted (running an unsupported configuration)
 t - changets is enabled (shown as of 2.1)
-W - legacy crypto modules were enabled at compile-time
