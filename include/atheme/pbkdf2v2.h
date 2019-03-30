@@ -37,10 +37,12 @@
 #define PBKDF2_PRF_HMAC_SHA2_256_S64    25U
 #define PBKDF2_PRF_HMAC_SHA2_512_S64    26U
 
+#define PBKDF2_PRF_SCRAM_MD5            43U
 #define PBKDF2_PRF_SCRAM_SHA1           44U
 #define PBKDF2_PRF_SCRAM_SHA2_256       45U
 #define PBKDF2_PRF_SCRAM_SHA2_512       46U
 
+#define PBKDF2_PRF_SCRAM_MD5_S64        63U
 #define PBKDF2_PRF_SCRAM_SHA1_S64       64U
 #define PBKDF2_PRF_SCRAM_SHA2_256_S64   65U
 #define PBKDF2_PRF_SCRAM_SHA2_512_S64   66U
@@ -73,9 +75,9 @@ struct pbkdf2v2_dbentry
 
 struct pbkdf2v2_scram_config
 {
-	const unsigned int *    a;      // PBKDF2v2 PRF ID (one of the above)
-	const unsigned int *    c;      // PBKDF2 Iteration Count
-	const unsigned int *    sl;     // PBKDF2 Salt Length
+	const unsigned int      a;      // PBKDF2v2 PRF ID (one of the above)
+	const unsigned int      c;      // PBKDF2 Iteration Count
+	const unsigned int      sl;     // PBKDF2 Salt Length
 };
 
 typedef void (*pbkdf2v2_scram_confhook_fn)(const struct pbkdf2v2_scram_config *restrict);

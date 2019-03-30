@@ -4,6 +4,7 @@ AC_DEFUN([ATHEME_PRINT_CONFIGURATION], [
 	AS_IF([test "${RANDOM_FRONTEND}" = "Internal"], [RANDOM_FRONTEND="None (Internal ChaCha20-based Fallback RNG)"])
 	AS_IF([test "${SODIUM_MALLOC}" = "Yes"], [SODIUM_MALLOC="Yes (NOT INTENDED FOR PRODUCTION USAGE)"])
 	AS_IF([test "${BUILD_WARNINGS}" = "Yes"], [BUILD_WARNINGS="Yes (NOT INTENDED FOR PRODUCTION USAGE)"])
+	AS_IF([test "x${USE_NLS}" = "xyes"], [USE_NLS="Yes"], [USE_NLS="No"])
 
 	prefix="$(eval echo "${prefix}")"
 	prefix="$(eval echo "${prefix}")"
@@ -53,7 +54,7 @@ Configuration of ${PACKAGE_STRING}:
     Contrib Modules .........: ${CONTRIB_MODULES}
     Debugging Support .......: ${DEBUGGING}
     Heap Allocator ..........: ${HEAP_ALLOCATOR}
-    Internationalization ....: ${USE_GETTEXT}
+    Internationalization ....: ${USE_NLS}
     Large Network Support ...: ${LARGE_NET}
     Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}
     Sodium Memory Allocator .: ${SODIUM_MALLOC}

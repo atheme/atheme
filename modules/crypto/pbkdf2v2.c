@@ -30,10 +30,10 @@ atheme_pbkdf2v2_scram_confhook_dispatch(void)
 	if (! pbkdf2v2_scram_confhook || ! pbkdf2v2_digest || ! pbkdf2v2_rounds || ! pbkdf2v2_saltsz)
 		return;
 
-	static const struct pbkdf2v2_scram_config pbkdf2v2_scram_config = {
-		.a      = &pbkdf2v2_digest,
-		.c      = &pbkdf2v2_rounds,
-		.sl     = &pbkdf2v2_saltsz,
+	struct pbkdf2v2_scram_config pbkdf2v2_scram_config = {
+		.a      = pbkdf2v2_digest,
+		.c      = pbkdf2v2_rounds,
+		.sl     = pbkdf2v2_saltsz,
 	};
 
 	(void) (*pbkdf2v2_scram_confhook)(&pbkdf2v2_scram_config);
@@ -43,7 +43,7 @@ static void
 atheme_pbkdf2v2_config_ready(void ATHEME_VATTR_UNUSED *const restrict unused)
 {
 	if (! pbkdf2v2_digest)
-		pbkdf2v2_digest = (unsigned int) PBKDF2_PRF_DEFAULT;
+		pbkdf2v2_digest = PBKDF2_PRF_DEFAULT;
 
 	if (! pbkdf2v2_rounds)
 		pbkdf2v2_rounds = PBKDF2_ITERCNT_DEF;
@@ -63,6 +63,7 @@ atheme_pbkdf2v2_salt_is_b64(const unsigned int prf)
 		case PBKDF2_PRF_HMAC_SHA1_S64:
 		case PBKDF2_PRF_HMAC_SHA2_256_S64:
 		case PBKDF2_PRF_HMAC_SHA2_512_S64:
+		case PBKDF2_PRF_SCRAM_MD5_S64:
 		case PBKDF2_PRF_SCRAM_SHA1_S64:
 		case PBKDF2_PRF_SCRAM_SHA2_256_S64:
 		case PBKDF2_PRF_SCRAM_SHA2_512_S64:
@@ -77,6 +78,10 @@ atheme_pbkdf2v2_determine_params(struct pbkdf2v2_dbentry *const restrict dbe)
 {
 	switch (dbe->a)
 	{
+		case PBKDF2_PRF_SCRAM_MD5:
+		case PBKDF2_PRF_SCRAM_MD5_S64:
+			dbe->scram = true;
+			/* FALLTHROUGH */
 		case PBKDF2_PRF_HMAC_MD5:
 		case PBKDF2_PRF_HMAC_MD5_S64:
 			dbe->md = DIGALG_MD5;
@@ -343,7 +348,7 @@ atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters, struct pb
 
 		(void) memcpy(dbe->salt, dbe->salt64, dbe->sl);
 
-		if (base64_encode(dbe->salt, dbe->sl, dbe->salt64, sizeof dbe->salt64) == (size_t) -1)
+		if (base64_encode(dbe->salt, dbe->sl, dbe->salt64, sizeof dbe->salt64) != BASE64_SIZE_RAW(dbe->sl))
 		{
 			(void) slog(LG_ERROR, "%s: base64_encode() for salt failed (BUG)", MOWGLI_FUNC_NAME);
 			return false;
@@ -446,22 +451,27 @@ static const char * ATHEME_FATTR_WUR
 atheme_pbkdf2v2_crypt(const char *const restrict password,
                       const char ATHEME_VATTR_UNUSED *const restrict parameters)
 {
+	char cdg64[BASE64_SIZE_STR(DIGEST_MDLEN_MAX)];
+	char csk64[BASE64_SIZE_STR(DIGEST_MDLEN_MAX)];
+	char chk64[BASE64_SIZE_STR(DIGEST_MDLEN_MAX)];
 	struct pbkdf2v2_dbentry dbe;
+
 	static char res[PASSLEN + 1];
 	const char *retval = res;
 
 	(void) memset(&dbe, 0x00, sizeof dbe);
-	(void) atheme_random_buf(dbe.salt, (size_t) pbkdf2v2_saltsz);
-
-	if (base64_encode(dbe.salt, (size_t) pbkdf2v2_saltsz, dbe.salt64, sizeof dbe.salt64) == (size_t) -1)
-	{
-		(void) slog(LG_ERROR, "%s: base64_encode() for salt failed (BUG)", MOWGLI_FUNC_NAME);
-		goto err;
-	}
 
 	dbe.sl = (size_t) pbkdf2v2_saltsz;
 	dbe.a = pbkdf2v2_digest;
 	dbe.c = pbkdf2v2_rounds;
+
+	(void) atheme_random_buf(dbe.salt, dbe.sl);
+
+	if (base64_encode(dbe.salt, dbe.sl, dbe.salt64, sizeof dbe.salt64) != BASE64_SIZE_RAW(dbe.sl))
+	{
+		(void) slog(LG_ERROR, "%s: base64_encode() for salt failed (BUG)", MOWGLI_FUNC_NAME);
+		goto err;
+	}
 
 	if (! atheme_pbkdf2v2_determine_params(&dbe))
 		// This function logs messages on failure
@@ -473,23 +483,18 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 
 	if (dbe.scram)
 	{
-		unsigned char csk[DIGEST_MDLEN_MAX];
-		unsigned char chk[DIGEST_MDLEN_MAX];
-		char csk64[BASE64_SIZE_STR(DIGEST_MDLEN_MAX)];
-		char chk64[BASE64_SIZE_STR(DIGEST_MDLEN_MAX)];
-
-		if (! atheme_pbkdf2v2_scram_derive(&dbe, dbe.cdg, csk, chk))
+		if (! atheme_pbkdf2v2_scram_derive(&dbe, dbe.cdg, dbe.ssk, dbe.shk))
 			// This function logs messages on failure
 			goto err;
 
-		if (base64_encode(csk, dbe.dl, csk64, sizeof csk64) == (size_t) -1)
+		if (base64_encode(dbe.ssk, dbe.dl, csk64, sizeof csk64) != BASE64_SIZE_RAW(dbe.dl))
 		{
-			(void) slog(LG_ERROR, "%s: base64_encode() for csk failed (BUG)", MOWGLI_FUNC_NAME);
+			(void) slog(LG_ERROR, "%s: base64_encode() for ServerKey failed (BUG)", MOWGLI_FUNC_NAME);
 			goto err;
 		}
-		if (base64_encode(chk, dbe.dl, chk64, sizeof chk64) == (size_t) -1)
+		if (base64_encode(dbe.shk, dbe.dl, chk64, sizeof chk64) != BASE64_SIZE_RAW(dbe.dl))
 		{
-			(void) slog(LG_ERROR, "%s: base64_encode() for chk failed (BUG)", MOWGLI_FUNC_NAME);
+			(void) slog(LG_ERROR, "%s: base64_encode() for StoredKey failed (BUG)", MOWGLI_FUNC_NAME);
 			goto err;
 		}
 		if (snprintf(res, sizeof res, PBKDF2_FS_SAVEHASH, dbe.a, dbe.c, dbe.salt64, csk64, chk64) > PASSLEN)
@@ -501,9 +506,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password,
 	}
 	else
 	{
-		char cdg64[BASE64_SIZE_STR(DIGEST_MDLEN_MAX)];
-
-		if (base64_encode(dbe.cdg, dbe.dl, cdg64, sizeof cdg64) == (size_t) -1)
+		if (base64_encode(dbe.cdg, dbe.dl, cdg64, sizeof cdg64) != BASE64_SIZE_RAW(dbe.dl))
 		{
 			(void) slog(LG_ERROR, "%s: base64_encode() for cdg failed (BUG)", MOWGLI_FUNC_NAME);
 			goto err;
@@ -523,6 +526,9 @@ err:
 	(void) smemzero(res, sizeof res);
 
 done:
+	(void) smemzero(cdg64, sizeof cdg64);
+	(void) smemzero(csk64, sizeof csk64);
+	(void) smemzero(chk64, sizeof chk64);
 	(void) smemzero(&dbe, sizeof dbe);
 	return retval;
 }
@@ -541,7 +547,7 @@ atheme_pbkdf2v2_verify(const char *const restrict password, const char *const re
 
 	if (atheme_pbkdf2v2_salt_is_b64(dbe.a))
 	{
-		if ((dbe.sl = base64_decode(dbe.salt64, dbe.salt, sizeof dbe.salt)) == (size_t) -1)
+		if ((dbe.sl = base64_decode(dbe.salt64, dbe.salt, sizeof dbe.salt)) == BASE64_FAIL)
 		{
 			(void) slog(LG_ERROR, "%s: base64_decode('%s') for salt failed", MOWGLI_FUNC_NAME, dbe.salt64);
 			goto end;

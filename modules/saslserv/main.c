@@ -469,7 +469,7 @@ sasl_process_input(struct sasl_session *const restrict p, char *const restrict b
 	unsigned char decbuf[SASL_S2S_MAXLEN_TOTAL_RAW + 1];
 	const size_t declen = base64_decode(buf, decbuf, SASL_S2S_MAXLEN_TOTAL_RAW);
 
-	if (declen == (size_t) -1)
+	if (declen == BASE64_FAIL)
 	{
 		(void) slog(LG_DEBUG, "%s: base64_decode() failed", MOWGLI_FUNC_NAME);
 		return ASASL_MRESULT_ERROR;
@@ -527,7 +527,7 @@ sasl_process_output(struct sasl_session *const restrict p, struct sasl_output_bu
 	outbuf->buf = NULL;
 	outbuf->len = 0;
 
-	if (enclen == (size_t) -1)
+	if (enclen == BASE64_FAIL)
 	{
 		(void) slog(LG_ERROR, "%s: base64_encode() failed", MOWGLI_FUNC_NAME);
 		return false;

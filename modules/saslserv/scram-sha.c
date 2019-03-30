@@ -9,7 +9,7 @@
  * purpose with or without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
  *
- * SCRAM-SHA-1 and SCRAM-SHA-256 SASL mechanisms provider.
+ * SCRAM-SHA-1, SCRAM-SHA-256 & SCRAM-SHA-512 SASL mechanisms provider.
  *
  * See the following RFCs for details:
  *
@@ -300,9 +300,10 @@ sasl_mech_scramsha_step_clientfirst(struct sasl_session *const restrict p,
 		return ASASL_MRESULT_ERROR;
 	}
 
-	const size_t c_gs2_len = base64_encode(header, (size_t) (message - header), c_gs2_b64, sizeof c_gs2_b64);
+	const size_t header_len = (size_t) (message - header);
+	const size_t c_gs2_len = base64_encode(header, header_len, c_gs2_b64, sizeof c_gs2_b64);
 
-	if (c_gs2_len == (size_t) -1)
+	if (c_gs2_len != BASE64_SIZE_RAW(header_len))
 	{
 		(void) slog(LG_ERROR, "%s: base64_encode() for GS2 header failed (BUG?)", MOWGLI_FUNC_NAME);
 		(void) sasl_scramsha_error("other-error", out);
@@ -621,9 +622,6 @@ sasl_mech_scramsha_step_success(struct sasl_session *const restrict p)
 {
 	const struct sasl_scramsha_session *const s = p->mechdata;
 
-	char csk64[BASE64_SIZE_STR(SCRAMSHA_MDLEN_MAX)];
-	char chk64[BASE64_SIZE_STR(SCRAMSHA_MDLEN_MAX)];
-
 	// User account was dropped during negotiation
 	if (! s->mu)
 	{
@@ -633,7 +631,7 @@ sasl_mech_scramsha_step_success(struct sasl_session *const restrict p)
 
 	if (s->db.scram)
 		// User's password hash was already in SCRAM format, nothing to do
-		goto end;
+		return ASASL_MRESULT_SUCCESS;
 
 	/* An SASL SCRAM-SHA login has succeeded, but the user's database hash was not in SCRAM format.
 	 *
@@ -649,31 +647,18 @@ sasl_mech_scramsha_step_success(struct sasl_session *const restrict p)
 	(void) slog(LG_INFO, "%s: login succeeded, attempting to convert user's hash to SCRAM format",
 	                     MOWGLI_FUNC_NAME);
 
-	const size_t rs1 = base64_encode(s->db.ssk, s->db.dl, csk64, sizeof csk64);
+	char csk64[BASE64_SIZE_STR(SCRAMSHA_MDLEN_MAX)];
+	char chk64[BASE64_SIZE_STR(SCRAMSHA_MDLEN_MAX)];
 
-	if (rs1 == (size_t) -1)
+	if (base64_encode(s->db.ssk, s->db.dl, csk64, sizeof csk64) != BASE64_SIZE_RAW(s->db.dl))
 	{
 		(void) slog(LG_ERROR, "%s: base64_encode() for ServerKey failed (BUG)", MOWGLI_FUNC_NAME);
 		goto end;
 	}
-	if (rs1 < BASE64_SIZE_RAW(SCRAMSHA_MDLEN_MIN) || rs1 > BASE64_SIZE_RAW(SCRAMSHA_MDLEN_MAX))
-	{
-		(void) slog(LG_ERROR, "%s: base64_encode() for ServerKey did not write an acceptable amount of "
-		                      "data (%zu) (BUG)", MOWGLI_FUNC_NAME, rs1);
-		goto end;
-	}
 
-	const size_t rs2 = base64_encode(s->db.shk, s->db.dl, chk64, sizeof chk64);
-
-	if (rs2 == (size_t) -1)
+	if (base64_encode(s->db.shk, s->db.dl, chk64, sizeof chk64) != BASE64_SIZE_RAW(s->db.dl))
 	{
 		(void) slog(LG_ERROR, "%s: base64_encode() for StoredKey failed (BUG)", MOWGLI_FUNC_NAME);
-		goto end;
-	}
-	if (rs2 < BASE64_SIZE_RAW(SCRAMSHA_MDLEN_MIN) || rs2 > BASE64_SIZE_RAW(SCRAMSHA_MDLEN_MAX))
-	{
-		(void) slog(LG_ERROR, "%s: base64_encode() for StoredKey did not write an acceptable amount of "
-		                      "data (%zu) (BUG)", MOWGLI_FUNC_NAME, rs2);
 		goto end;
 	}
 
@@ -807,7 +792,7 @@ sasl_scramsha_pbkdf2v2_scram_confhook(const struct pbkdf2v2_scram_config *const 
 
 	(void) sasl_scramsha_mechs_unregister();
 
-	switch (*config->a)
+	switch (config->a)
 	{
 		case PBKDF2_PRF_SCRAM_SHA1_S64:
 			(void) sasl_core_functions->mech_register(&sasl_mech_scramsha_1);
@@ -827,9 +812,9 @@ sasl_scramsha_pbkdf2v2_scram_confhook(const struct pbkdf2v2_scram_config *const 
 			return;
 	}
 
-	if (*config->c > CYRUS_SASL_ITERMAX)
+	if (config->c > CYRUS_SASL_ITERMAX)
 		(void) slog(LG_INFO, "%s: iteration count (%u) is higher than Cyrus SASL library maximum (%u) -- "
-		                     "client logins may fail if they use Cyrus", MOWGLI_FUNC_NAME, *config->c,
+		                     "client logins may fail if they use Cyrus", MOWGLI_FUNC_NAME, config->c,
 		                     CYRUS_SASL_ITERMAX);
 }
 

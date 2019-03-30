@@ -1,4 +1,3 @@
-HELP_LINGUAS	= es ru
 PROG		= dbverify${PROG_SUFFIX}
 SRCS		= main.c
 

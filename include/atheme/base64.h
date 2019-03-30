@@ -11,6 +11,9 @@
 #include <atheme/attributes.h>
 #include <atheme/stdheaders.h>
 
+// This is returned when the encoder or decoder fails
+#define BASE64_FAIL             ((size_t) -1)
+
 /* This macro computes the base64 buffer size requirement for encoding a
  * given length of input. This is complicated by the fact that termination
  * padding is usually required if the input is not a multiple of three

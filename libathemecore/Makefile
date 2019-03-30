@@ -1,7 +1,6 @@
 SHARED_LIB	= ${LIB_PREFIX}athemecore${LIB_SUFFIX}
 LIB_MAJOR	= 1
 LIB_MINOR	= 0
-HELP_LINGUAS	= es ru fr
 
 SRCS =					\
 	account.c			\
