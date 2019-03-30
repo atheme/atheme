@@ -19,8 +19,8 @@ are working, so why would we do all the work for you?
 
 2. Which crypto module should I use?
 
-crypto/posix, unless you are importing from anope, in which case
-use the module that is appropriate for you.
+crypto/argon2d or crypto/pbkdf2v2 (see doc/SASL-SCRAM-SHA to decide
+which one).
 
 3. There is an Atheme "0day exploit"?!&%&%@!!
 
