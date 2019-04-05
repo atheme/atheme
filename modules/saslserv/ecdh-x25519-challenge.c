@@ -158,7 +158,6 @@ ecdh_x25519_keypair_regen(void)
 	(void) memcpy(ecdh_x25519_server_seckey, seckey, sizeof seckey);
 	(void) memcpy(ecdh_x25519_server_pubkey, pubkey, sizeof pubkey);
 	(void) smemzero(seckey, sizeof seckey);
-	(void) smemzero(pubkey, sizeof pubkey);
 	return true;
 }
 
