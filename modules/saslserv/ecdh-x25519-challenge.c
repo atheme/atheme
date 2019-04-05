@@ -247,7 +247,7 @@ ecdh_x25519_sasl_step_account_names(struct sasl_session *const restrict p,
 		// This function logs messages on failure
 		goto cleanup;
 
-	(void) memcpy(resp.field.pubkey, ecdh_x25519_server_pubkey, sizeof ecdh_x25519_server_pubkey);
+	(void) memcpy(resp.field.pubkey, ecdh_x25519_server_pubkey, sizeof resp.field.pubkey);
 	(void) atheme_random_buf(resp.field.salt, sizeof resp.field.salt);
 
 	if (! ecdh_x25519_kdf(shared_secret, client_pubkey, resp.field.pubkey, resp.field.salt, better_secret))
