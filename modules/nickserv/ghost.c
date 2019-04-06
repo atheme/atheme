@@ -42,7 +42,7 @@ ns_cmd_ghost(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), target);
 		return;
 	}
-	else if (target_u->flags & UF_SERVICE)
+	else if (is_service(target_u))
 	{
 		command_fail(si, fault_badparams, _("You cannot ghost a network service."));
 		return;

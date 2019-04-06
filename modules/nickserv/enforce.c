@@ -471,7 +471,7 @@ ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 				}
 			}
 		}
-		if (u != NULL && (u->flags & UF_SERVICE))
+		if (u != NULL && is_service(u))
 		{
 			command_fail(si, fault_badparams, _("You cannot regain a network service."));
 			return;
