@@ -227,8 +227,7 @@ metadata_add(void *target, const char *name, const char *value)
 
 	if (obj->metadata == NULL)
 		obj->metadata = mowgli_patricia_create(strcasecanon);
-
-	if (metadata_find(target, name))
+	else if (metadata_find(target, name))
 		metadata_delete(target, name);
 
 	md = mowgli_heap_alloc(metadata_heap);
@@ -252,8 +251,7 @@ metadata_delete(void *target, const char *name)
 
 	obj = atheme_object(target);
 
-	if (obj->metadata == NULL)
-		obj->metadata = mowgli_patricia_create(strcasecanon);
+	return_if_fail(obj->metadata != NULL);
 
 	mowgli_patricia_delete(obj->metadata, name);
 
@@ -274,7 +272,7 @@ metadata_find(void *target, const char *name)
 	obj = atheme_object(target);
 
 	if (obj->metadata == NULL)
-		obj->metadata = mowgli_patricia_create(strcasecanon);
+		return NULL;
 
 	return mowgli_patricia_retrieve(obj->metadata, name);
 }
@@ -289,7 +287,7 @@ metadata_delete_all(void *target)
 	obj = atheme_object(target);
 
 	if (obj->metadata == NULL)
-		obj->metadata = mowgli_patricia_create(strcasecanon);
+		return;
 
 	MOWGLI_PATRICIA_FOREACH(md, &state, obj->metadata)
 	{
