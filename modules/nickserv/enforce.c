@@ -471,7 +471,12 @@ ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 				}
 			}
 		}
-		if (u == NULL || is_internal_client(u))
+		if (u != NULL && is_service(u))
+		{
+			command_fail(si, fault_badparams, _("You cannot regain a network service."));
+			return;
+		}
+		else if (u == NULL || is_internal_client(u))
 		{
 			logcommand(si, CMDLOG_DO, "REGAIN: \2%s\2", target);
 			holdnick_sts(si->service->me, 0, target, mn->owner);

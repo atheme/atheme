@@ -42,6 +42,11 @@ ns_cmd_ghost(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), target);
 		return;
 	}
+	else if (is_service(target_u))
+	{
+		command_fail(si, fault_badparams, _("You cannot ghost a network service."));
+		return;
+	}
 	else if (!mu && !target_u->myuser)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered nickname."), target);

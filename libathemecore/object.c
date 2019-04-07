@@ -227,8 +227,7 @@ metadata_add(void *target, const char *name, const char *value)
 
 	if (obj->metadata == NULL)
 		obj->metadata = mowgli_patricia_create(strcasecanon);
-
-	if (metadata_find(target, name))
+	else if (metadata_find(target, name))
 		metadata_delete(target, name);
 
 	md = mowgli_heap_alloc(metadata_heap);
@@ -252,8 +251,7 @@ metadata_delete(void *target, const char *name)
 
 	obj = atheme_object(target);
 
-	if (obj->metadata == NULL)
-		obj->metadata = mowgli_patricia_create(strcasecanon);
+	return_if_fail(obj->metadata != NULL);
 
 	mowgli_patricia_delete(obj->metadata, name);
 
@@ -274,7 +272,7 @@ metadata_find(void *target, const char *name)
 	obj = atheme_object(target);
 
 	if (obj->metadata == NULL)
-		obj->metadata = mowgli_patricia_create(strcasecanon);
+		return NULL;
 
 	return mowgli_patricia_retrieve(obj->metadata, name);
 }
@@ -289,7 +287,7 @@ metadata_delete_all(void *target)
 	obj = atheme_object(target);
 
 	if (obj->metadata == NULL)
-		obj->metadata = mowgli_patricia_create(strcasecanon);
+		return;
 
 	MOWGLI_PATRICIA_FOREACH(md, &state, obj->metadata)
 	{
@@ -319,6 +317,18 @@ privatedata_set(void *target, const char *key, void *data)
 		obj->privatedata = mowgli_patricia_create(noopcanon);
 
 	mowgli_patricia_add(obj->privatedata, key, data);
+}
+
+void
+privatedata_delete(void *target, const char *key)
+{
+	struct atheme_object *obj;
+
+	obj = atheme_object(target);
+	if (obj->privatedata == NULL)
+		return;
+
+	mowgli_patricia_delete(obj->privatedata, key);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
