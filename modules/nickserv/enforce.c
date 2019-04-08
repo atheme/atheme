@@ -493,11 +493,9 @@ ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 			notice(nicksvs.nick, target, "\2%s\2 has regained your nickname.", get_source_mask(si));
 			if (!log_enforce_victim_out(u, mn->owner))
 			{
-				guest_nickname(u);
 				if (ircd->flags & IRCD_HOLDNICK)
 					holdnick_sts(nicksvs.me->me, 60 + atheme_random() % 60, u->nick, mn->owner);
-				else
-					u->flags |= UF_DOENFORCE;
+				guest_nickname(u);
 				command_success_nodata(si, _("\2%s\2 has been regained."), target);
 				logcommand(si, CMDLOG_DO, "REGAIN: \2%s!%s@%s\2", u->nick, u->user, u->vhost);
 			}
