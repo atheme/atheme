@@ -260,7 +260,7 @@ hs_cmd_take(struct sourceinfo *si, int parc, char *parv[])
 	struct hsoffered *l;
 	mowgli_node_t *n;
 	struct metadata *md;
-	time_t vhost_time;
+	time_t vhost_time = 0;
 
 	if (!host)
 	{
@@ -281,9 +281,10 @@ hs_cmd_take(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	md = metadata_find(si->smu, "private:usercloak-timestamp");
+	if ((md = metadata_find(si->smu, "private:usercloak-timestamp")))
+		vhost_time = atoi(md->value);
 
-	if (CURRTIME < (time_t)(md + config_options.vhost_change) && config_options.vhost_change > 0)
+	if (md && config_options.vhost_change && CURRTIME < (vhost_time + config_options.vhost_change))
 	{
 		command_fail(si, fault_noprivs, _("You must wait at least \2%d\2 days between changes to your vHost."),
 			(config_options.vhost_change / 3600 / 24));
