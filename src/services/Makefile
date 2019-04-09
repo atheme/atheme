@@ -1,5 +1,5 @@
 HELP_LINGUAS	= es fr ru tr
-PROG		= atheme-services${PROG_SUFFIX}
+PROG		= $(PACKAGE)-services${PROG_SUFFIX}
 SRCS		= main.c
 
 include ../../extra.mk

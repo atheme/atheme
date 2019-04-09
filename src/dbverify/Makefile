@@ -1,4 +1,4 @@
-PROG		= dbverify${PROG_SUFFIX}
+PROG		= $(PACKAGE)-dbverify${PROG_SUFFIX}
 SRCS		= main.c
 
 include ../../extra.mk

@@ -41,13 +41,6 @@ scripts/*.tbz2
 scripts/*.tgz
 scripts/*.tar.bz2
 scripts/*.tar.gz
-src/services/atheme-services
-src/dbverify/dbverify
-src/dragon/dragon
-src/ecdsadecode/ecdsadecode
-src/ecdsakeygen/ecdsakeygen
-src/ecdsasign/ecdsasign
-src/footprint/footprint
 tools/createtestdb
 tools/createburst/createburst
 tools/htmlhelp

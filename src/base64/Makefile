@@ -1,4 +1,4 @@
-PROG_NOINST	= b64test${PROG_SUFFIX}
+PROG_NOINST	= $(PACKAGE)-b64test${PROG_SUFFIX}
 SRCS		= main.c
 
 include ../../extra.mk

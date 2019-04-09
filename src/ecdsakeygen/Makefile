@@ -1,4 +1,4 @@
-PROG		= ecdsakeygen${PROG_SUFFIX}
+PROG		= $(PACKAGE)-ecdsakeygen${PROG_SUFFIX}
 SRCS		= main.c
 
 include ../../extra.mk

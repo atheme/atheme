@@ -1,4 +1,4 @@
-PROG_NOINST	= dragon${PROG_SUFFIX}
+PROG_NOINST	= $(PACKAGE)-dragon${PROG_SUFFIX}
 SRCS		= main.c
 
 include ../../extra.mk

@@ -1,4 +1,4 @@
-PROG		= ecdsasign${PROG_SUFFIX}
+PROG		= $(PACKAGE)-ecdsasign${PROG_SUFFIX}
 SRCS		= main.c
 
 include ../../extra.mk
