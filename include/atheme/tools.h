@@ -123,6 +123,7 @@ const char *create_weak_challenge(struct sourceinfo *si, const char *name);
 void tb2sp(char *line);
 char *replace(char *s, int size, const char *old, const char *new);
 const char *number_to_string(int num);
+bool string_to_uint(const char *, unsigned int *) ATHEME_FATTR_WUR;
 int validemail(const char *email);
 stringref canonicalize_email(const char *email);
 void canonicalize_email_case(char email[static (EMAILLEN + 1)], void *user_data);

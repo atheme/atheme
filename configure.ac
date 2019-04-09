@@ -99,7 +99,7 @@ AC_CHECK_FUNCS([dup2 execve flock gethostbyname getpid gettimeofday localeconv m
 	[AC_MSG_ERROR([required function not available])])
 AC_CHECK_FUNCS([regcomp regerror regexec regfree setenv setlocale strcasecmp strcasestr strchr strerror strlen], [],
 	[AC_MSG_ERROR([required function not available])])
-AC_CHECK_FUNCS([strncasecmp strnlen strpbrk strrchr strstr strtod strtok strtok_r strtol strtoul], [],
+AC_CHECK_FUNCS([strncasecmp strnlen strpbrk strrchr strstr strtod strtok strtok_r strtol strtoul strtoull], [],
 	[AC_MSG_ERROR([required function not available])])
 HW_FUNC_ASPRINTF
 HW_FUNC_SNPRINTF

@@ -169,6 +169,29 @@ number_to_string(int num)
 	return ret;
 }
 
+/* a better atoi() but detects errors and doesn't allow negative values */
+bool ATHEME_FATTR_WUR
+string_to_uint(const char *const restrict in, unsigned int *const restrict out)
+{
+	if (! in || ! *in || strchr(in, '-'))
+		return false;
+
+	errno = 0;
+	char *endptr = NULL;
+	const unsigned long long int ret = strtoull(in, &endptr, 10);
+
+	if ((endptr != NULL && *endptr != 0x00) || (ret == ULLONG_MAX && errno != 0))
+		return false;
+
+#if (UINT_MAX < ULLONG_MAX)
+	if (ret > UINT_MAX)
+		return false;
+#endif
+
+	*out = (unsigned int) ret;
+	return true;
+}
+
 /* return the time elapsed since an event */
 char *
 time_ago(time_t event)
