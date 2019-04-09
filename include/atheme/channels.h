@@ -140,7 +140,7 @@ int mode_to_flag(char c);
 void channel_mode(struct user *source, struct channel *chan, int parc, char *parv[]);
 void channel_mode_va(struct user *source, struct channel *chan, int parc, char *parv0, ...);
 void clear_simple_modes(struct channel *c);
-char *channel_modes(struct channel *c, bool doparams);
+char *channel_modes(const struct channel *c, bool doparams);
 void modestack_flush_channel(struct channel *channel);
 void modestack_forget_channel(struct channel *channel);
 void modestack_finalize_channel(struct channel *channel);

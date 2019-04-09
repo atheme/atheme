@@ -850,7 +850,7 @@ clear_simple_modes(struct channel *c)
 }
 
 char *
-channel_modes(struct channel *c, bool doparams)
+channel_modes(const struct channel *c, bool doparams)
 {
 	static char fullmode[512];
 	char params[512];
