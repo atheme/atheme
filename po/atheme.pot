@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-04-10 06:50+0000\n"
+"POT-Creation-Date: 2019-04-11 07:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -397,7 +397,7 @@ msgstr ""
 msgid "%s has been marked."
 msgstr ""
 
-#: modules/nickserv/enforce.c:489 modules/nickserv/enforce.c:499
+#: modules/nickserv/enforce.c:489 modules/nickserv/enforce.c:500
 #, c-format
 msgid "%s has been regained."
 msgstr ""
@@ -1340,10 +1340,6 @@ msgstr ""
 msgid "     Mask : %s@%s"
 msgstr ""
 
-#: libathemecore/commandhelp.c:397 libathemecore/commandhelp.c:481
-msgid "  <none you have access to>"
-msgstr ""
-
 #: modules/botserv/info.c:56
 #, c-format
 msgid "  Created : %s (%s ago)"
@@ -1750,12 +1746,12 @@ msgstr ""
 msgid "*** End of Info ***"
 msgstr ""
 
-#: libathemecore/commandhelp.c:351 modules/contrib/ircd_announceserv.c:95
+#: libathemecore/commandhelp.c:339 modules/contrib/ircd_announceserv.c:95
 #, c-format
 msgid "***** %s Help *****"
 msgstr ""
 
-#: libathemecore/commandhelp.c:360 modules/contrib/ircd_announceserv.c:104
+#: libathemecore/commandhelp.c:348 modules/contrib/ircd_announceserv.c:104
 msgid "***** End of Help *****"
 msgstr ""
 
@@ -3394,19 +3390,23 @@ msgstr ""
 msgid "Flushes services database to disk."
 msgstr ""
 
-#: libathemecore/commandhelp.c:366
+#: libathemecore/commandhelp.c:354
 #, c-format
-msgid "For a verbose listing of all %s commands, type:"
+msgid "For a verbose listing of all %s commands, type:"
 msgstr ""
 
-#: libathemecore/commandhelp.c:324
+#: libathemecore/commandhelp.c:318
 #, c-format
-msgid "For more information on a %s %s subcommand, type:"
+msgid ""
+"For more information on a %s %s subcommand, type:\n"
+"/msg %s HELP %s <subcommand>"
 msgstr ""
 
-#: libathemecore/commandhelp.c:331
+#: libathemecore/commandhelp.c:322
 #, c-format
-msgid "For more information on a %s command, type:"
+msgid ""
+"For more information on a %s command, type:\n"
+"/msg %s HELP <command>"
 msgstr ""
 
 #: modules/contrib/ircd_announceserv.c:98
@@ -3729,27 +3729,27 @@ msgstr ""
 msgid "If you do not complete registration within one day, your nickname will expire."
 msgstr ""
 
-#: libathemecore/commandhelp.c:306
+#: libathemecore/commandhelp.c:301
 #, c-format
 msgid ""
 "If you're having trouble, or you need some additional help,\n"
-"you may want to join the help channel '%s'"
+"you may wish to join the help channel %s"
 msgstr ""
 
-#: libathemecore/commandhelp.c:299
+#: libathemecore/commandhelp.c:294
 #, c-format
 msgid ""
 "If you're having trouble, or you need some additional help,\n"
-"you may want to join the help channel '%s', or visit the\n"
-"help webpage <%s>"
+"you may wish to join the help channel %s or visit the\n"
+"help webpage %s"
 msgstr ""
 
-#: libathemecore/commandhelp.c:312
+#: libathemecore/commandhelp.c:307
 #, c-format
 msgid ""
 "If you're having trouble, or you need some additional help,\n"
-"you may want to visit the help webpage\n"
-"<%s>"
+"you may wish to visit the help webpage\n"
+"%s"
 msgstr ""
 
 #: modules/operserv/ignore.c:181
@@ -3834,24 +3834,14 @@ msgstr ""
 msgid "Insufficient parameters for %s."
 msgstr ""
 
-#: libathemecore/commandhelp.c:273
+#: libathemecore/commandhelp.c:268
 #, c-format
-msgid "Invalid %s %s subcommand."
+msgid "Invalid %s %s subcommand."
 msgstr ""
 
-#: libathemecore/commandhelp.c:282
+#: libathemecore/commandhelp.c:270
 #, c-format
-msgid "Invalid %s %s subcommand. Use /msg %s HELP %s for a %s %s subcommand listing."
-msgstr ""
-
-#: libathemecore/commandhelp.c:276
-#, c-format
-msgid "Invalid %s command."
-msgstr ""
-
-#: libathemecore/commandhelp.c:286
-#, c-format
-msgid "Invalid %s command. Use /msg %s HELP for a %s command listing."
+msgid "Invalid %s command."
 msgstr ""
 
 #: modules/operserv/clones.c:306
@@ -7699,19 +7689,19 @@ msgstr ""
 msgid "The fantasy prefix for channel %s has been set to %s."
 msgstr ""
 
-#: libathemecore/commandhelp.c:445
+#: libathemecore/commandhelp.c:454
 msgid "The following additional commands are available:"
 msgstr ""
 
-#: libathemecore/commandhelp.c:447
+#: libathemecore/commandhelp.c:459
 msgid "The following additional subcommands are available:"
 msgstr ""
 
-#: libathemecore/commandhelp.c:380 libathemecore/commandhelp.c:414
+#: libathemecore/commandhelp.c:375 libathemecore/commandhelp.c:426 libathemecore/commandhelp.c:462
 msgid "The following commands are available:"
 msgstr ""
 
-#: libathemecore/commandhelp.c:382 libathemecore/commandhelp.c:416
+#: libathemecore/commandhelp.c:377 libathemecore/commandhelp.c:428 libathemecore/commandhelp.c:464
 msgid "The following subcommands are available:"
 msgstr ""
 
@@ -8375,6 +8365,16 @@ msgstr ""
 msgid "Usage: TEMPLATE %s [target flags]"
 msgstr ""
 
+#: libathemecore/commandhelp.c:282
+#, c-format
+msgid "Use /msg %s HELP for a %s command listing."
+msgstr ""
+
+#: libathemecore/commandhelp.c:279
+#, c-format
+msgid "Use /msg %s HELP %s for a %s %s subcommand listing."
+msgstr ""
+
 #: modules/nickserv/sendpass.c:82 modules/nickserv/sendpass.c:110 modules/nickserv/vhost.c:123
 #: modules/nickserv/vhost.c:159
 #, c-format
@@ -8856,6 +8856,14 @@ msgstr ""
 #: include/atheme/constants.h:78
 #, c-format
 msgid "You do not have the %s privilege."
+msgstr ""
+
+#: libathemecore/commandhelp.c:388 libathemecore/commandhelp.c:507
+msgid "You do not have the privileges to execute any commands."
+msgstr ""
+
+#: libathemecore/commandhelp.c:390 libathemecore/commandhelp.c:509
+msgid "You do not have the privileges to execute any subcommands."
 msgstr ""
 
 #: modules/memoserv/main.c:25 modules/memoserv/main.c:57

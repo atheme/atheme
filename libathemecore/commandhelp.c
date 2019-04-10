@@ -15,7 +15,7 @@
 
 #include <atheme.h>
 
-#define COMMAND_SHORTHELP_WRAP_COLS 55
+#define COMMAND_SHORTHELP_WRAP_COLS 64U
 
 static unsigned int help_display_depth = 0;
 
@@ -264,28 +264,23 @@ void
 help_display_invalid(struct sourceinfo *const restrict si, const struct service *const restrict service,
                      const char *const restrict subcmd)
 {
+	if (subcmd && *subcmd)
+		(void) command_fail(si, fault_badparams, _("Invalid \2%s\2 \2%s\2 subcommand."), service->nick, subcmd);
+	else
+		(void) command_fail(si, fault_badparams, _("Invalid \2%s\2 command."), service->nick);
+
 	if (! command_find(service->commands, "HELP"))
-	{
 		/* Don't tell people to use `/msg foo HELP' if the respective service help module isn't loaded
 		 *   -- amdj & ilbelkyr
 		 */
-		if (subcmd && *subcmd)
-			(void) command_fail(si, fault_badparams, _("Invalid %s %s subcommand."),
-			                    service->me->nick, subcmd);
-		else
-			(void) command_fail(si, fault_badparams, _("Invalid %s command."), service->me->nick);
-
 		return;
-	}
 
 	if (subcmd && *subcmd)
-		(void) command_fail(si, fault_badparams, _("Invalid %s %s subcommand. Use \2/msg %s HELP %s\2 for "
-		                                           "a %s %s subcommand listing."), service->me->nick, subcmd,
-		                                           service->disp, subcmd, service->me->nick, subcmd);
+		(void) command_fail(si, fault_badparams, _("Use \2/msg %s HELP %s\2 for a \2%s\2 \2%s\2 subcommand "
+		                                           "listing."), service->disp, subcmd, service->nick, subcmd);
 	else
-		(void) command_fail(si, fault_badparams, _("Invalid %s command. Use \2/msg %s HELP\2 for a %s "
-		                                           "command listing."), service->me->nick, service->disp,
-		                                           service->me->nick);
+		(void) command_fail(si, fault_badparams, _("Use \2/msg %s HELP\2 for a \2%s\2 command listing."),
+		                                           service->disp, service->nick);
 }
 
 void
@@ -297,20 +292,20 @@ help_display_locations(struct sourceinfo *const restrict si)
 	if (helpchan && helpurl && *helpchan && *helpurl)
 	{
 		(void) command_success_nodata(si, _("If you're having trouble, or you need some additional help,\n"
-		                                    "you may want to join the help channel '%s', or visit the\nhelp "
-		                                    "webpage <%s>"), helpchan, helpurl);
+		                                    "you may wish to join the help channel \2%s\2 or visit the\n"
+		                                    "help webpage \2%s\2"), helpchan, helpurl);
 		(void) help_display_newline(si);
 	}
 	else if (helpchan && *helpchan)
 	{
 		(void) command_success_nodata(si, _("If you're having trouble, or you need some additional help,\n"
-		                                    "you may want to join the help channel '%s'"), helpchan);
+		                                    "you may wish to join the help channel \2%s\2"), helpchan);
 		(void) help_display_newline(si);
 	}
 	else if (helpurl && *helpurl)
 	{
 		(void) command_success_nodata(si, _("If you're having trouble, or you need some additional help,\n"
-		                                    "you may want to visit the help webpage\n<%s>"), helpurl);
+		                                    "you may wish to visit the help webpage\n\2%s\2"), helpurl);
 		(void) help_display_newline(si);
 	}
 }
@@ -320,19 +315,12 @@ help_display_moreinfo(struct sourceinfo *const restrict si, const struct service
                       const char *const restrict subcmd_of)
 {
 	if (subcmd_of && *subcmd_of)
-	{
-		(void) command_success_nodata(si, _("For more information on a %s %s subcommand, type:"),
-		                              service->me->nick, subcmd_of);
-
-		(void) command_success_nodata(si, "\2/msg %s HELP %s <subcommand>\2", service->disp, subcmd_of);
-	}
+		(void) command_success_nodata(si, _("For more information on a \2%s\2 \2%s\2 subcommand, type:\n"
+		                                    "\2/msg %s HELP %s <subcommand>\2"), service->nick, subcmd_of,
+		                                    service->disp, subcmd_of);
 	else
-	{
-		(void) command_success_nodata(si, _("For more information on a %s command, type:"),
-		                              service->me->nick);
-
-		(void) command_success_nodata(si, "\2/msg %s HELP <command>\2", service->disp);
-	}
+		(void) command_success_nodata(si, _("For more information on a \2%s\2 command, type:\n"
+		                                    "\2/msg %s HELP <command>\2"), service->nick, service->disp);
 
 	(void) help_display_newline(si);
 }
@@ -363,7 +351,7 @@ help_display_suffix(struct sourceinfo *const restrict si)
 void
 help_display_verblist(struct sourceinfo *const restrict si, const struct service *const restrict service)
 {
-	(void) command_success_nodata(si, _("For a verbose listing of all %s commands, type:"), service->me->nick);
+	(void) command_success_nodata(si, _("For a verbose listing of all \2%s\2 commands, type:"), service->nick);
 	(void) command_success_nodata(si, "\2/msg %s HELP COMMANDS\2", service->disp);
 	(void) help_display_newline(si);
 }
@@ -376,25 +364,30 @@ command_help(struct sourceinfo *const restrict si, mowgli_patricia_t *const rest
 
 	bool cmds_displayed = false;
 
-	if (! si->service || si->service->commands == commandtree)
-		(void) command_success_nodata(si, _("The following commands are available:"));
-	else
-		(void) command_success_nodata(si, _("The following subcommands are available:"));
-
-	(void) help_display_newline(si);
-
 	MOWGLI_PATRICIA_FOREACH(cmd, &state, commandtree)
 	{
 		if (! can_execute_command(si, cmd))
 			continue;
 
-		(void) command_success_nodata(si, "  \2%-15s\2 %s", cmd->name, translation_get(_(cmd->desc)));
+		if (! cmds_displayed)
+		{
+			if (! si->service || si->service->commands == commandtree)
+				(void) command_success_nodata(si, _("The following commands are available:"));
+			else
+				(void) command_success_nodata(si, _("The following subcommands are available:"));
 
-		cmds_displayed = true;
+			(void) help_display_newline(si);
+
+			cmds_displayed = true;
+		}
+
+		(void) command_success_nodata(si, "  \2%-15s\2 %s", cmd->name, translation_get(_(cmd->desc)));
 	}
 
-	if (! cmds_displayed)
-		(void) command_success_nodata(si, _("  <none you have access to>"));
+	if (! cmds_displayed && (! si->service || si->service->commands == commandtree))
+		(void) command_fail(si, fault_noprivs, _("You do not have the privileges to execute any commands."));
+	else if (! cmds_displayed)
+		(void) command_fail(si, fault_noprivs, _("You do not have the privileges to execute any subcommands."));
 
 	(void) help_display_newline(si);
 }
@@ -407,78 +400,114 @@ command_help_short(struct sourceinfo *const restrict si, mowgli_patricia_t *cons
 	struct command *cmd;
 
 	char buf[BUFSIZE] = { 0x00 };
+	size_t buflen = 0;
 
-	bool cmds_displayed = false;
+	bool any_full_output_done = false;
+	bool any_short_output_done = false;
 
-	if (! si->service || si->service->commands == commandtree)
-		(void) command_success_nodata(si, _("The following commands are available:"));
-	else
-		(void) command_success_nodata(si, _("The following subcommands are available:"));
-
-	(void) help_display_newline(si);
-
-	while (shortlist && (*shortlist == ' ' || *shortlist == '\t' || *shortlist == '\r' || *shortlist == '\n'))
+	while (shortlist && *shortlist && isspace(*shortlist))
 		shortlist++;
 
-	if (! shortlist || ! *shortlist)
+	if (! (shortlist && *shortlist))
 		goto additional;
 
 	MOWGLI_PATRICIA_FOREACH(cmd, &state, commandtree)
 	{
+		if (! can_execute_command(si, cmd))
+			continue;
+
 		// Only display full description for commands in the shorthelp description list
 		if (! string_in_list(cmd->name, shortlist))
 			continue;
 
-		if (! can_execute_command(si, cmd))
-			continue;
+		if (! any_full_output_done)
+		{
+			if (! si->service || si->service->commands == commandtree)
+				(void) command_success_nodata(si, _("The following commands are available:"));
+			else
+				(void) command_success_nodata(si, _("The following subcommands are available:"));
+
+			(void) help_display_newline(si);
+
+			any_full_output_done = true;
+		}
 
 		(void) command_success_nodata(si, "  \2%-15s\2 %s", cmd->name, translation_get(_(cmd->desc)));
-
-		cmds_displayed = true;
-	}
-
-	if (cmds_displayed)
-	{
-		(void) help_display_newline(si);
-
-		if (! si->service || si->service->commands == commandtree)
-			(void) command_success_nodata(si, _("The following additional commands are available:"));
-		else
-			(void) command_success_nodata(si, _("The following additional subcommands are available:"));
-
-		(void) help_display_newline(si);
 	}
 
 additional:
 
 	MOWGLI_PATRICIA_FOREACH(cmd, &state, commandtree)
 	{
-		// If the command is in the shorthelp description list then it was already shown to the user above
-		if (cmds_displayed && string_in_list(cmd->name, shortlist))
-			continue;
-
 		if (! can_execute_command(si, cmd))
 			continue;
 
+		// If the command is in the shorthelp description list then it was already shown to the user above
+		if (string_in_list(cmd->name, shortlist))
+			continue;
+
+		if (! any_short_output_done)
+		{
+			if (any_full_output_done && (! si->service || si->service->commands == commandtree))
+			{
+				(void) help_display_newline(si);
+				(void) command_success_nodata(si, _("The following additional commands are available:"));
+			}
+			else if (any_full_output_done)
+			{
+				(void) help_display_newline(si);
+				(void) command_success_nodata(si, _("The following additional subcommands are available:"));
+			}
+			else if (! si->service || si->service->commands == commandtree)
+				(void) command_success_nodata(si, _("The following commands are available:"));
+			else
+				(void) command_success_nodata(si, _("The following subcommands are available:"));
+
+			(void) help_display_newline(si);
+
+			any_short_output_done = true;
+		}
+
+		const size_t cmdlen = strlen(cmd->name);
+
 		if (*buf)
 		{
-			(void) mowgli_strlcat(buf, ", ", sizeof buf);
+			(void) mowgli_strlcat(buf, ",", sizeof buf);
 
-			if ((strlen(buf) + strlen(cmd->name)) > COMMAND_SHORTHELP_WRAP_COLS)
+			buflen++;
+
+			if ((buflen + cmdlen) > COMMAND_SHORTHELP_WRAP_COLS)
 			{
 				(void) command_success_nodata(si, "  %s", buf);
 
 				buf[0x00] = 0x00;
+				buflen = 0;
+			}
+			else
+			{
+				(void) mowgli_strlcat(buf, " ", sizeof buf);
+
+				buflen++;
 			}
 		}
 
+		(void) mowgli_strlcat(buf, "\2", sizeof buf);
 		(void) mowgli_strlcat(buf, cmd->name, sizeof buf);
+		(void) mowgli_strlcat(buf, "\2", sizeof buf);
+
+		buflen += cmdlen + 2;
 	}
 
-	if (*buf)
+	if (buflen)
 		(void) command_success_nodata(si, "  %s", buf);
-	else
-		(void) command_success_nodata(si, _("  <none you have access to>"));
+
+	if (! any_full_output_done && ! any_short_output_done)
+	{
+		if (! si->service || si->service->commands == commandtree)
+			(void) command_fail(si, fault_noprivs, _("You do not have the privileges to execute any commands."));
+		else
+			(void) command_fail(si, fault_noprivs, _("You do not have the privileges to execute any subcommands."));
+	}
 
 	(void) help_display_newline(si);
 }
