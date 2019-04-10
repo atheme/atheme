@@ -2,6 +2,7 @@
 /autoconf/                      linguist-generated
 /configure                      linguist-generated
 /include/sysconf.h.in           linguist-generated
+/po/atheme.pot                  linguist-generated
 
 /ABOUT-NLS                      linguist-vendored
 /m4/ax_subdirs_configure.m4     linguist-vendored
