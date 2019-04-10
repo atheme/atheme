@@ -1990,6 +1990,13 @@ alis {
 	 * The realname (gecos) information we want ALIS to have.
 	 */
 	real = "Channel Directory";
+
+	/* (*)maxmatches
+	 * The default maximum number of channels returned in a query.
+	 * Privilege (chan:auspex) is required to ask for more.
+	 * Minimum 8, default 64, maximum 128.
+	 */
+	#maxmatches = 64;
 };
 
 /* HTTP server configuration.

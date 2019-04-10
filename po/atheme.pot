@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-03-28 19:34+0000\n"
+"POT-Creation-Date: 2019-04-10 01:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -184,11 +184,11 @@ msgstr ""
 msgid "%s allows for simple channel operator management."
 msgstr ""
 
-#: modules/alis/main.c:450
+#: modules/alis/main.c:401
 #, c-format
 msgid ""
 "%s allows searching for channels with more\n"
-"flexibility than the /list command."
+"flexibility than the /LIST command."
 msgstr ""
 
 #: modules/nickserv/help.c:56
@@ -629,7 +629,7 @@ msgstr ""
 msgid "%s has been disabled for %s."
 msgstr ""
 
-#: modules/nickserv/ghost.c:84
+#: modules/nickserv/ghost.c:89
 #, c-format
 msgid "%s has been ghosted."
 msgstr ""
@@ -669,7 +669,7 @@ msgstr ""
 msgid "%s has been marked."
 msgstr ""
 
-#: modules/nickserv/enforce.c:484 modules/nickserv/enforce.c:496
+#: modules/nickserv/enforce.c:489 modules/nickserv/enforce.c:499
 #, c-format
 msgid "%s has been regained."
 msgstr ""
@@ -1015,7 +1015,7 @@ msgstr ""
 msgid "%s is not a registered channel."
 msgstr ""
 
-#: modules/nickserv/enforce.c:308 modules/nickserv/enforce.c:419 modules/nickserv/ghost.c:47
+#: modules/nickserv/enforce.c:308 modules/nickserv/enforce.c:419 modules/nickserv/ghost.c:52
 #: modules/nickserv/identify.c:63
 #, c-format
 msgid "%s is not a registered nickname."
@@ -1649,12 +1649,12 @@ msgstr ""
 
 #: modules/chanserv/flags.c:127
 #, c-format
-msgid "%-5d %-22s %-20s (%s) (%s) [modified %s ago, on %s, by %s]"
+msgid "%-5d %-22s %-20s (%s) [modified %s ago, on %s, by %s]"
 msgstr ""
 
 #: modules/chanserv/flags.c:130
 #, c-format
-msgid "%-5d %-22s %-20s (%s) [modified %s ago, on %s, by %s]"
+msgid "%-5d %-22s %-20s [modified %s ago, on %s, by %s]"
 msgstr ""
 
 #: modules/chanserv/access.c:499
@@ -2675,7 +2675,7 @@ msgstr ""
 msgid "Changes whether service spams unregistered users on connect."
 msgstr ""
 
-#: modules/saslserv/ecdh-x25519-challenge.c:371
+#: modules/saslserv/ecdh-x25519-challenge.c:370
 msgid "Changes your ECDH-X25519-CHALLENGE public key."
 msgstr ""
 
@@ -3209,7 +3209,7 @@ msgstr ""
 msgid "Displays a user's metadata."
 msgstr ""
 
-#: modules/alis/main.c:471 modules/botserv/help.c:36 modules/chanfix/fix.c:910 modules/chanserv/help.c:97
+#: modules/alis/main.c:422 modules/botserv/help.c:36 modules/chanfix/fix.c:910 modules/chanserv/help.c:97
 #: modules/contrib/ircd_announceserv.c:340 modules/contrib/ircd_catserv.c:35 modules/contrib/ircd_loveserv.c:364
 #: modules/gameserv/help.c:36 modules/global/main.c:188 modules/groupserv/help.c:36 modules/helpserv/main.c:37
 #: modules/hostserv/help.c:33 modules/infoserv/main.c:492 modules/memoserv/help.c:36 modules/nickserv/help.c:87
@@ -3369,7 +3369,7 @@ msgstr ""
 msgid "Enabled CLONES klines."
 msgstr ""
 
-#: modules/nickserv/enforce.c:620
+#: modules/nickserv/enforce.c:623
 msgid "Enables or disables automatic protection of a nickname."
 msgstr ""
 
@@ -3464,6 +3464,10 @@ msgstr ""
 
 #: modules/operserv/soper.c:77
 msgid "End of oper class list"
+msgstr ""
+
+#: modules/alis/main.c:386
+msgid "End of output"
 msgstr ""
 
 #: modules/operserv/specs.c:183
@@ -4263,7 +4267,18 @@ msgstr ""
 msgid "Invalid operation specified for VERIFY."
 msgstr ""
 
-#: modules/nickserv/enforce.c:382 modules/nickserv/enforce.c:557 modules/nickserv/ghost.c:100
+#: modules/alis/main.c:226
+#, c-format
+msgid "Invalid option %s"
+msgstr ""
+
+#: modules/alis/main.c:128 modules/alis/main.c:136 modules/alis/main.c:144 modules/alis/main.c:155
+#: modules/alis/main.c:163 modules/alis/main.c:176 modules/alis/main.c:190 modules/alis/main.c:208
+#, c-format
+msgid "Invalid option for %s"
+msgstr ""
+
+#: modules/nickserv/enforce.c:382 modules/nickserv/enforce.c:560 modules/nickserv/ghost.c:105
 #: modules/nickserv/identify.c:169 modules/nickserv/register.c:172
 #, c-format
 msgid "Invalid password for %s."
@@ -4507,7 +4522,7 @@ msgstr ""
 msgid "Lists active K:line channels."
 msgstr ""
 
-#: modules/hostserv/offer.c:372
+#: modules/hostserv/offer.c:373
 msgid "Lists all available vhosts."
 msgstr ""
 
@@ -4535,7 +4550,7 @@ msgstr ""
 msgid "Lists available bots."
 msgstr ""
 
-#: modules/alis/main.c:462
+#: modules/alis/main.c:413
 msgid "Lists channels matching given parameters."
 msgstr ""
 
@@ -4611,7 +4626,7 @@ msgstr ""
 msgid "Loads a module."
 msgstr ""
 
-#: modules/nickserv/enforce.c:514 modules/nickserv/identify.c:130
+#: modules/nickserv/enforce.c:517 modules/nickserv/identify.c:130
 #, c-format
 msgid "Logged in nicks are: %s"
 msgstr ""
@@ -4801,6 +4816,10 @@ msgstr ""
 #: modules/nickserv/access.c:389
 #, c-format
 msgid "Mask %s is not on your access list."
+msgstr ""
+
+#: modules/alis/main.c:381
+msgid "Maximum channel output reached"
 msgstr ""
 
 #: modules/operserv/info.c:37
@@ -5497,7 +5516,7 @@ msgstr ""
 msgid "Parameters are too long. Aborting."
 msgstr ""
 
-#: modules/nickserv/enforce.c:326 modules/nickserv/enforce.c:436 modules/nickserv/ghost.c:70
+#: modules/nickserv/enforce.c:326 modules/nickserv/enforce.c:436 modules/nickserv/ghost.c:75
 #: modules/nickserv/identify.c:100
 msgid "Password authentication is disabled for this account."
 msgstr ""
@@ -5677,11 +5696,11 @@ msgstr ""
 msgid "Prospect looks hopeful."
 msgstr ""
 
-#: modules/nickserv/set_pubkey.c:37 modules/saslserv/ecdh-x25519-challenge.c:339
+#: modules/nickserv/set_pubkey.c:37 modules/saslserv/ecdh-x25519-challenge.c:338
 msgid "Public key entry has been deleted."
 msgstr ""
 
-#: modules/nickserv/set_pubkey.c:31 modules/saslserv/ecdh-x25519-challenge.c:333
+#: modules/nickserv/set_pubkey.c:31 modules/saslserv/ecdh-x25519-challenge.c:332
 msgid "Public key was not set"
 msgstr ""
 
@@ -5791,7 +5810,7 @@ msgstr ""
 msgid "Reason too long. It must be 150 characters or less."
 msgstr ""
 
-#: modules/nickserv/ghost.c:112
+#: modules/nickserv/ghost.c:117
 msgid "Reclaims use of a nickname."
 msgstr ""
 
@@ -5833,7 +5852,7 @@ msgstr ""
 msgid "Regain control of your channel."
 msgstr ""
 
-#: modules/nickserv/enforce.c:638
+#: modules/nickserv/enforce.c:641
 msgid "Regain usage of a nickname."
 msgstr ""
 
@@ -5912,7 +5931,7 @@ msgstr ""
 msgid "Reject the requested vhost for the given nick."
 msgstr ""
 
-#: libathemecore/function.c:715
+#: libathemecore/function.c:738
 #, c-format
 msgid "Rejecting email for %s[%s@%s] due to too high load (type '%s' to %s <%s>)"
 msgstr ""
@@ -5921,7 +5940,7 @@ msgstr ""
 msgid "Rejects a pending registration"
 msgstr ""
 
-#: modules/nickserv/enforce.c:629
+#: modules/nickserv/enforce.c:632
 msgid "Releases a services enforcer."
 msgstr ""
 
@@ -5983,7 +6002,7 @@ msgstr ""
 msgid "Removes a user from a channel."
 msgstr ""
 
-#: modules/hostserv/offer.c:363
+#: modules/hostserv/offer.c:364
 msgid "Removes a vhost from the list that users can take."
 msgstr ""
 
@@ -6083,6 +6102,11 @@ msgstr ""
 #: modules/contrib/os_resolve.c:35 modules/contrib/os_resolve.c:45 modules/gameserv/gamecalc.c:241
 #, c-format
 msgid "Result: %s"
+msgstr ""
+
+#: modules/alis/main.c:348
+#, c-format
+msgid "Returning maximum of %u channel names matching '%s'"
 msgstr ""
 
 #: modules/nickserv/return.c:98
@@ -6558,7 +6582,7 @@ msgstr ""
 msgid "Sets various control flags."
 msgstr ""
 
-#: modules/hostserv/offer.c:354
+#: modules/hostserv/offer.c:355
 msgid "Sets vhosts available for users to take."
 msgstr ""
 
@@ -7322,7 +7346,7 @@ msgstr ""
 msgid "Syntax: REGAIN <nick> [password]"
 msgstr ""
 
-#: modules/nickserv/enforce.c:551
+#: modules/nickserv/enforce.c:554
 msgid "Syntax: REGAIN <nickname> [password]"
 msgstr ""
 
@@ -7774,7 +7798,7 @@ msgstr ""
 msgid "Taint Location: %s:%d"
 msgstr ""
 
-#: modules/hostserv/offer.c:381
+#: modules/hostserv/offer.c:382
 msgid "Take an offered vhost for use."
 msgstr ""
 
@@ -8219,7 +8243,7 @@ msgstr ""
 msgid "The nick %s is now forbidden."
 msgstr ""
 
-#: modules/chanserv/flags.c:154 modules/nickserv/enforce.c:600
+#: modules/chanserv/flags.c:154 modules/nickserv/enforce.c:603
 #, c-format
 msgid "The nick %s is reserved and cannot be registered."
 msgstr ""
@@ -8278,7 +8302,7 @@ msgstr ""
 msgid "The provided regex matches you, refusing RAKILL."
 msgstr ""
 
-#: modules/saslserv/ecdh-x25519-challenge.c:348
+#: modules/saslserv/ecdh-x25519-challenge.c:347
 msgid "The public key specified is not valid."
 msgstr ""
 
@@ -8355,7 +8379,7 @@ msgstr ""
 msgid "There are %u channels on the network."
 msgstr ""
 
-#: libathemecore/services.c:631 modules/nickserv/enforce.c:505 modules/nickserv/identify.c:122
+#: libathemecore/services.c:631 modules/nickserv/enforce.c:508 modules/nickserv/identify.c:122
 #, c-format
 msgid "There are already %zu sessions logged in to %s (maximum allowed: %u)."
 msgstr ""
@@ -9048,7 +9072,7 @@ msgstr ""
 msgid "You are not authorized to perform this command."
 msgstr ""
 
-#: libathemecore/commandtree.c:170 modules/alis/main.c:249 modules/botserv/bottalk.c:47
+#: libathemecore/commandtree.c:170 modules/alis/main.c:218 modules/botserv/bottalk.c:47
 #: modules/botserv/bottalk.c:114 modules/botserv/info.c:76 modules/botserv/set_fantasy.c:39
 #: modules/botserv/set_nobot.c:45 modules/botserv/set_private.c:47 modules/botserv/set_saycaller.c:38
 #: modules/chanserv/access.c:480 modules/chanserv/access.c:559 modules/chanserv/access.c:663
@@ -9186,6 +9210,10 @@ msgstr ""
 msgid "You cannot change account name because the server configuration disallows it."
 msgstr ""
 
+#: modules/nickserv/ghost.c:47
+msgid "You cannot ghost a network service."
+msgstr ""
+
 #: modules/nickserv/drop.c:50
 #, c-format
 msgid "You cannot identify to %s because the nickname has been frozen."
@@ -9203,6 +9231,10 @@ msgstr ""
 #: modules/nickserv/drop.c:49
 #, c-format
 msgid "You cannot login as %s because the account has been frozen."
+msgstr ""
+
+#: modules/nickserv/enforce.c:476
+msgid "You cannot regain a network service."
 msgstr ""
 
 #: modules/nickserv/waitreg.c:49
@@ -9314,7 +9346,7 @@ msgstr ""
 msgid "You have been invited to %s."
 msgstr ""
 
-#: modules/nickserv/enforce.c:525 modules/nickserv/identify.c:138
+#: modules/nickserv/enforce.c:528 modules/nickserv/identify.c:138
 #, c-format
 msgid "You have been logged out of %s."
 msgstr ""
@@ -9400,7 +9432,7 @@ msgstr ""
 msgid "You have requested vhost %s."
 msgstr ""
 
-#: modules/hostserv/offer.c:310
+#: modules/hostserv/offer.c:311
 #, c-format
 msgid "You have taken vhost %s."
 msgstr ""
@@ -9454,12 +9486,12 @@ msgstr ""
 msgid "You may not add %s to the %s role."
 msgstr ""
 
-#: modules/nickserv/ghost.c:106
+#: modules/nickserv/ghost.c:111
 #, c-format
 msgid "You may not ghost %s."
 msgstr ""
 
-#: modules/nickserv/ghost.c:52
+#: modules/nickserv/ghost.c:57
 msgid "You may not ghost yourself."
 msgstr ""
 
@@ -9547,7 +9579,7 @@ msgstr ""
 msgid "You must specify a positive integer for limit."
 msgstr ""
 
-#: modules/hostserv/offer.c:288 modules/hostserv/request.c:217
+#: modules/hostserv/offer.c:289 modules/hostserv/request.c:217
 #, c-format
 msgid "You must wait at least %d days between changes to your vHost."
 msgstr ""
@@ -9575,7 +9607,7 @@ msgstr ""
 msgid "You need to verify your email address before you may send memos."
 msgstr ""
 
-#: modules/nickserv/enforce.c:504
+#: modules/nickserv/enforce.c:507
 msgid "You were not logged in."
 msgstr ""
 
@@ -9657,12 +9689,12 @@ msgstr ""
 msgid "Your memo inbox is full! Please delete memos you no longer need."
 msgstr ""
 
-#: modules/nickserv/set_pubkey.c:44 modules/saslserv/ecdh-x25519-challenge.c:353
+#: modules/nickserv/set_pubkey.c:44 modules/saslserv/ecdh-x25519-challenge.c:352
 #, c-format
 msgid "Your public key is already set to %s."
 msgstr ""
 
-#: modules/nickserv/set_pubkey.c:50 modules/saslserv/ecdh-x25519-challenge.c:359
+#: modules/nickserv/set_pubkey.c:50 modules/saslserv/ecdh-x25519-challenge.c:358
 #, c-format
 msgid "Your public key is now set to %s."
 msgstr ""
@@ -9832,7 +9864,7 @@ msgstr ""
 msgid "vHost      : unassigned%s"
 msgstr ""
 
-#: modules/hostserv/offer.c:212 modules/hostserv/offer.c:318
+#: modules/hostserv/offer.c:212 modules/hostserv/offer.c:319
 #, c-format
 msgid "vhost %s not found in vhost offer database."
 msgstr ""

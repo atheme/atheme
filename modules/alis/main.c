@@ -4,7 +4,7 @@
  * SPDX-URL: https://spdx.org/licenses/BSD-3-Clause.html
  *
  * Copyright (C) 2005-2007 William Pitcock, et al.
- * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ * Copyright (C) 2018-2019 Atheme Development Group (https://atheme.github.io/)
  *
  * ALIS, based on the ratbox-services implementation.
  */
@@ -40,445 +40,396 @@
 
 #include <atheme.h>
 
-#define ALIS_MAX_PARC	10
-#define ALIS_MAX_MATCH	60
+#define ALIS_MAXMATCH_MIN       8U
+#define ALIS_MAXMATCH_DEF       64U
+#define ALIS_MAXMATCH_MAX       128U
 
-#define DIR_NONE	-1
-#define DIR_UNSET	0
-#define DIR_SET		1
-#define DIR_EQUAL	2
+enum alis_mode_cmp
+{
+	MODECMP_NONE            = 0,
+	MODECMP_EQUAL           = 1,
+	MODECMP_UNSET           = 2,
+	MODECMP_SET             = 3,
+};
 
 struct alis_query
 {
-	char *mask;
-	char *topic;
-	int min;
-	int max;
-	int show_mode;
-	int show_topicwho;
-	unsigned int mode;
-	int mode_dir;
-	int mode_key;
-	int mode_limit;
-	int mode_ext[256];
-	int skip;
-	int maxmatches;
-	int showsecret;
+	unsigned int            min;
+	unsigned int            max;
+	unsigned int            skip;
+	unsigned int            match_limit;
+	unsigned int            mode;
+	enum alis_mode_cmp      mode_cmp;
+	bool                    mode_key;
+	bool                    mode_limit;
+	bool                    mode_ext[256];
+	bool                    show_mode;
+	bool                    show_topicwho;
+	bool                    show_secret;
+	char                    mask[BUFSIZE];
+	char                    topic[BUFSIZE];
 };
 
-static struct service *alis = NULL;
+static struct service *alissvs = NULL;
+static unsigned int alis_max_matches = ALIS_MAXMATCH_DEF;
 
-static int
-alis_parse_mode(const char *text, int *key, int *limit, int *ext)
+static void
+alis_parse_mode(const char *restrict arg, struct alis_query *const restrict query)
 {
-	int mode = 0, i;
-
-	if(!text)
-		return 0;
-
-	while(*text)
+	while (*arg)
 	{
-		switch(*text)
+		switch (*arg)
 		{
 			case 'l':
-				*limit = 1;
+				query->mode_limit = true;
 				break;
+
 			case 'k':
-				*key = 1;
+				query->mode_key = true;
 				break;
+
 			default:
-				mode |= mode_to_flag(*text);
-				for (i = 0; ignore_mode_list[i].mode != '\0'; i++)
-					if (*text == ignore_mode_list[i].mode)
-						ext[i] = 1;
+				query->mode |= mode_to_flag(*arg);
+
+				for (size_t i = 0; ignore_mode_list[i].mode; i++)
+					if (*arg == ignore_mode_list[i].mode)
+						query->mode_ext[i] = true;
+
 				break;
 		}
 
-		text++;
+		arg++;
 	}
-
-	return mode;
 }
 
-static int
-parse_alis(struct sourceinfo *si, int parc, char *parv[], struct alis_query *query)
+static bool
+alis_parse_query(struct sourceinfo *const restrict si, const int parc, char **const restrict parv,
+                 struct alis_query *const restrict query)
 {
-	int i = 1;
-	char *opt = NULL, *arg = NULL;
+	const char *arg = parv[0];
+	const char *opt = NULL;
+	size_t i = 1;
 
-	if (parc < 1)
-		query->mask = sstrdup("*");
-	else if (!VALID_GLOBAL_CHANNEL_PFX(parv[0]) && strchr(parv[0], '*') == NULL && strchr(parv[0], '?') == NULL)
-	{
-		size_t max = 1 + strlen(parv[0]) + 2;
-		query->mask = smalloc(max);
-		snprintf(query->mask, max, "*%s*", parv[0]);
-	}
+	(void) memset(query, 0x00, sizeof *query);
+
+	if (! arg)
+		(void) mowgli_strlcpy(query->mask, "*", sizeof query->mask);
+	else if (! VALID_GLOBAL_CHANNEL_PFX(arg) && ! strchr(arg, '*') && ! strchr(arg, '?'))
+		(void) snprintf(query->mask, sizeof query->mask, "*%s*", arg);
 	else
-		query->mask = sstrdup(parv[0]);
+		(void) mowgli_strlcpy(query->mask, arg, sizeof query->mask);
 
-	query->mode_dir = DIR_NONE;
-	while ((opt = parv[i++]))
+	while (parc && (opt = parv[i++]))
 	{
-		if(!strcasecmp(opt, "-min"))
+		if (strcasecmp(opt, "-min") == 0)
 		{
-			if((arg = parv[i++]) == NULL || (query->min = atoi(arg)) < 1)
+			if (! (arg = parv[i++]) || ! string_to_uint(arg, &query->min) || ! query->min)
 			{
-				command_fail(si, fault_badparams, "Invalid -min option");
-				return 0;
+				(void) command_fail(si, fault_badparams, _("Invalid option for \2%s\2"), opt);
+				return false;
 			}
 		}
-		else if(!strcasecmp(opt, "-max"))
+		else if (strcasecmp(opt, "-max") == 0)
 		{
-			if((arg = parv[i++]) == NULL || (query->max = atoi(arg)) < 1)
+			if (! (arg = parv[i++]) || ! string_to_uint(arg, &query->max) || ! query->max)
 			{
-				command_fail(si, fault_badparams, "Invalid -max option");
-				return 0;
+				(void) command_fail(si, fault_badparams, _("Invalid option for \2%s\2"), opt);
+				return false;
 			}
 		}
-		else if(!strcasecmp(opt, "-maxmatches"))
+		else if (strcasecmp(opt, "-maxmatches") == 0)
 		{
-			if((arg = parv[i++]) == NULL || (query->maxmatches = atoi(arg)) == 0)
+			if (! (arg = parv[i++]) || ! string_to_uint(arg, &query->match_limit) || ! query->match_limit)
 			{
-				command_fail(si, fault_badparams, "Invalid -maxmatches option");
-				return 0;
+				(void) command_fail(si, fault_badparams, _("Invalid option for \2%s\2"), opt);
+				return false;
 			}
-			if(si->su != NULL && !has_priv(si, PRIV_CHAN_AUSPEX))
+
+			if (si->su && ! has_priv(si, PRIV_CHAN_AUSPEX) && query->match_limit > alis_max_matches)
+				query->match_limit = alis_max_matches;
+		}
+		else if (strcasecmp(opt, "-skip") == 0)
+		{
+			if (! (arg = parv[i++]) || ! string_to_uint(arg, &query->skip) || ! query->skip)
 			{
-				if(query->maxmatches > ALIS_MAX_MATCH)
-				{
-					command_fail(si, fault_badparams, "Invalid -maxmatches option");
-					return 0;
-				}
-				if(query->maxmatches <= 0)
-					query->maxmatches = ALIS_MAX_MATCH;
+				(void) command_fail(si, fault_badparams, _("Invalid option for \2%s\2"), opt);
+				return false;
 			}
+		}
+		else if (strcasecmp(opt, "-topic") == 0)
+		{
+			if (! (arg = parv[i++]))
+			{
+				(void) command_fail(si, fault_badparams, _("Invalid option for \2%s\2"), opt);
+				return false;
+			}
+
+			if (strchr(arg, '*'))
+				(void) mowgli_strlcpy(query->topic, arg, sizeof query->topic);
 			else
-			{
-				if(query->maxmatches <= 0)
-					query->maxmatches = INT_MAX;
-			}
+				(void) snprintf(query->topic, sizeof query->topic, "*%s*", arg);
 		}
-		else if(!strcasecmp(opt, "-skip"))
+		else if (strcasecmp(opt, "-show") == 0)
 		{
-			if((arg = parv[i++]) == NULL || (query->skip = atoi(arg)) < 1)
+			if (! (arg = parv[i++]))
 			{
-				command_fail(si, fault_badparams, "Invalid -skip option");
-				return 0;
+				(void) command_fail(si, fault_badparams, _("Invalid option for \2%s\2"), opt);
+				return false;
 			}
+
+			if (strchr(arg, 'm'))
+				query->show_mode = true;
+
+			if (strchr(arg, 't'))
+				query->show_topicwho = true;
 		}
-		else if(!strcasecmp(opt, "-topic"))
+		else if (strcasecmp(opt, "-mode") == 0)
 		{
-			arg = parv[i++];
-
-			if (arg == NULL)
+			if (! (arg = parv[i++]))
 			{
-				command_fail(si, fault_badparams, "Invalid -topic option");
-				return 0;
+				(void) command_fail(si, fault_badparams, _("Invalid option for \2%s\2"), opt);
+				return false;
 			}
-
-			if (strchr(arg, '*') == NULL)
-			{
-				size_t max = 1 + strlen(arg) + 2;
-				query->topic = smalloc(max);
-				snprintf(query->topic, max, "*%s*", arg);
-			}
-			else
-				query->topic = sstrdup(arg);
-		}
-		else if(!strcasecmp(opt, "-show"))
-		{
-			arg = parv[i++];
-
-			if (arg == NULL)
-			{
-				command_fail(si, fault_badparams, "Invalid -show option");
-				return 0;
-			}
-
-			if(arg[0] == 'm')
-			{
-				query->show_mode = 1;
-
-				if(arg[1] == 't')
-					query->show_topicwho = 1;
-			}
-			else if(arg[0] == 't')
-			{
-				query->show_topicwho = 1;
-
-				if(arg[1] == 'm')
-					query->show_mode = 1;
-			}
-		}
-		else if(!strcasecmp(opt, "-mode"))
-		{
-			arg = parv[i++];
-
-			if (arg == NULL)
-			{
-				command_fail(si, fault_badparams, "Invalid -mode option");
-				return 0;
-			}
-
-			switch(*arg)
+			switch (*arg)
 			{
 				case '+':
-					query->mode_dir = DIR_SET;
+					query->mode_cmp = MODECMP_SET;
 					break;
+
 				case '-':
-					query->mode_dir = DIR_UNSET;
+					query->mode_cmp = MODECMP_UNSET;
 					break;
+
 				case '=':
-					query->mode_dir = DIR_EQUAL;
+					query->mode_cmp = MODECMP_EQUAL;
 					break;
+
 				default:
-					command_fail(si, fault_badparams, "Invalid -mode option");
-					return 0;
+					(void) command_fail(si, fault_badparams, _("Invalid option for \2%s\2"), opt);
+					return false;
 			}
 
-			query->mode = alis_parse_mode(arg+1,
-					&query->mode_key,
-					&query->mode_limit,
-					query->mode_ext);
+			(void) alis_parse_mode(arg + 1, query);
 		}
-		else if (!strcasecmp(opt, "-showsecret"))
+		else if (strcasecmp(opt, "-showsecret") == 0)
 		{
-			if (!has_priv(si, PRIV_CHAN_AUSPEX))
+			if (! has_priv(si, PRIV_CHAN_AUSPEX))
 			{
-				command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
-				return 0;
+				(void) command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+				return false;
 			}
 
-			query->showsecret = 1;
+			query->show_secret = true;
 		}
 		else
 		{
-			command_fail(si, fault_badparams, "Invalid option %s", opt);
-			return 0;
+			(void) command_fail(si, fault_badparams, _("Invalid option \2%s\2"), opt);
+			return false;
 		}
 	}
 
-	return 1;
+	if (! query->match_limit)
+		query->match_limit = alis_max_matches;
+
+	return true;
 }
 
 static void
-free_alis(struct alis_query *query)
+alis_print_channel(struct sourceinfo *const restrict si, const struct alis_query *const restrict query,
+                   const struct channel *const restrict chptr)
 {
-	return_if_fail(query != NULL);
-
-	sfree(query->mask);
-	sfree(query->topic);
-}
-
-static void
-print_channel(struct sourceinfo *si, struct channel *chptr, struct alis_query *query)
-{
-	int show_topicwho = query->show_topicwho;
-	int show_topic = 1;
+	char buf[BUFSIZE];
+	char tmp[BUFSIZE];
 	char topic[BUFSIZE];
+	bool show_topic = true;
 
-	// cant show a topicwho, when a channel has no topic
-	if(!chptr->topic)
+	if (chptr->topic && *chptr->topic)
 	{
-		show_topicwho = 0;
-		show_topic = 0;
+		(void) mowgli_strlcpy(topic, chptr->topic, sizeof topic);
+		(void) strip_ctrl(topic);
 	}
-	if(show_topic)
-	{
-		mowgli_strlcpy(topic, chptr->topic, sizeof topic);
-		strip_ctrl(topic);
-	}
-
-	if(query->show_mode && show_topicwho && show_topic)
-		command_success_nodata(si, "%-50s %-8s %3zu :%s (%s)",
-			chptr->name, channel_modes(chptr, false),
-			MOWGLI_LIST_LENGTH(&chptr->members),
-			topic, chptr->topic_setter);
-	else if(query->show_mode && show_topic)
-		command_success_nodata(si, "%-50s %-8s %3zu :%s",
-			chptr->name, channel_modes(chptr, false),
-			MOWGLI_LIST_LENGTH(&chptr->members),
-			topic);
-	else if(query->show_mode)
-		command_success_nodata(si, "%-50s %-8s %3zu",
-			chptr->name, channel_modes(chptr, false),
-			MOWGLI_LIST_LENGTH(&chptr->members));
-	else if(show_topicwho && show_topic)
-		command_success_nodata(si, "%-50s %3zu :%s (%s)",
-			chptr->name, MOWGLI_LIST_LENGTH(&chptr->members),
-			topic, chptr->topic_setter);
-	else if(show_topic)
-		command_success_nodata(si, "%-50s %3zu :%s",
-			chptr->name, MOWGLI_LIST_LENGTH(&chptr->members),
-			topic);
 	else
-		command_success_nodata(si, "%-50s %3zu",
-			chptr->name, MOWGLI_LIST_LENGTH(&chptr->members));
+		show_topic = false;
+
+	(void) memset(buf, 0x00, sizeof buf);
+
+	(void) snprintf(tmp, sizeof tmp, "%-48s ", chptr->name);
+	(void) mowgli_strlcat(buf, tmp, sizeof buf);
+
+	if (query->show_mode)
+	{
+		(void) snprintf(tmp, sizeof tmp, "%-8s ", channel_modes(chptr, false));
+		(void) mowgli_strlcat(buf, tmp, sizeof buf);
+	}
+
+	(void) snprintf(tmp, sizeof tmp, "%4zu ", MOWGLI_LIST_LENGTH(&chptr->members));
+	(void) mowgli_strlcat(buf, tmp, sizeof buf);
+
+	if (show_topic)
+	{
+		(void) snprintf(tmp, sizeof tmp, ":%s ", topic);
+		(void) mowgli_strlcat(buf, tmp, sizeof buf);
+	}
+
+	if (show_topic && query->show_topicwho)
+	{
+		(void) snprintf(tmp, sizeof tmp, "(%s)", chptr->topic_setter);
+		(void) mowgli_strlcat(buf, tmp, sizeof buf);
+	}
+
+//	(void) command_success_string(si, chptr->name, "%s", buf);
+	(void) command_success_nodata(si, "%s", buf);
 }
 
-static int
-show_channel(struct channel *chptr, struct alis_query *query)
+static bool
+alis_show_channel(const struct alis_query *const restrict query, const struct channel *const restrict chptr)
 {
-	int i;
+	if ((chptr->modes & CMODE_SEC) && ! query->show_secret)
+		return false;
+	if (query->min && MOWGLI_LIST_LENGTH(&chptr->members) < query->min)
+		return false;
+	if (query->max && MOWGLI_LIST_LENGTH(&chptr->members) > query->max)
+		return false;
 
-	// skip +s channels unless -showsecret is used
-	if(chptr->modes & CMODE_SEC && !query->showsecret)
-		return 0;
-
-	if((int)MOWGLI_LIST_LENGTH(&chptr->members) < query->min ||
-	   (query->max && (int)MOWGLI_LIST_LENGTH(&chptr->members) > query->max))
-		return 0;
-
-	if(query->mode_dir == DIR_SET)
+	if (query->mode_cmp == MODECMP_SET)
 	{
-		if(((chptr->modes & query->mode) != query->mode) ||
-		   (query->mode_key && chptr->key == NULL) ||
-		   (query->mode_limit && !chptr->limit))
-			return 0;
-		for (i = 0; ignore_mode_list[i].mode != '\0'; i++)
-			if (query->mode_ext[i] && !chptr->extmodes[i])
-				return 0;
+		if ((chptr->modes & query->mode) != query->mode)
+			return false;
+		if (query->mode_key && ! chptr->key)
+			return false;
+		if (query->mode_limit && ! chptr->limit)
+			return false;
+		for (size_t i = 0; ignore_mode_list[i].mode; i++)
+			if (query->mode_ext[i] && ! chptr->extmodes[i])
+				return false;
 	}
-	else if(query->mode_dir == DIR_UNSET)
+	else if (query->mode_cmp == MODECMP_UNSET)
 	{
-		if((chptr->modes & query->mode) ||
-		   (query->mode_key && chptr->key != NULL) ||
-		   (query->mode_limit && chptr->limit))
-			return 0;
-		for (i = 0; ignore_mode_list[i].mode != '\0'; i++)
+		if (chptr->modes & query->mode)
+			return false;
+		if (query->mode_key && chptr->key)
+			return false;
+		if (query->mode_limit && chptr->limit)
+			return false;
+		for (size_t i = 0; ignore_mode_list[i].mode; i++)
 			if (query->mode_ext[i] && chptr->extmodes[i])
-				return 0;
+				return false;
 	}
-	else if(query->mode_dir == DIR_EQUAL)
+	else if (query->mode_cmp == MODECMP_EQUAL)
 	{
-		if(((chptr->modes & ~(CMODE_LIMIT | CMODE_KEY)) != query->mode) ||
-		   (query->mode_key && chptr->key == NULL) ||
-		   (query->mode_limit && !chptr->limit))
-			return 0;
-		for (i = 0; ignore_mode_list[i].mode != '\0'; i++)
-			if (query->mode_ext[i] && !chptr->extmodes[i])
-				return 0;
+		if ((chptr->modes & ~(CMODE_KEY | CMODE_LIMIT)) != query->mode)
+			return false;
+		if (query->mode_key && ! chptr->key)
+			return false;
+		if (query->mode_limit && ! chptr->limit)
+			return false;
+		for (size_t i = 0; ignore_mode_list[i].mode; i++)
+			if (query->mode_ext[i] && ! chptr->extmodes[i])
+				return false;
 	}
 
-	if(match(query->mask, chptr->name))
-		return 0;
+	if (*query->mask && match(query->mask, chptr->name))
+		return false;
 
-	if(query->topic != NULL && match(query->topic, chptr->topic))
-		return 0;
+	if (*query->topic && match(query->topic, chptr->topic))
+		return false;
 
-	if(query->skip)
-	{
-		query->skip--;
-		return 0;
-	}
-
-	return 1;
+	return true;
 }
 
 static void
-alis_cmd_list(struct sourceinfo *si, int parc, char *parv[])
+alis_cmd_list_func(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	struct channel *chptr;
 	struct alis_query query;
+
+	if (! alis_parse_query(si, parc, parv, &query))
+		return;
+
+	(void) command_success_nodata(si, _("Returning maximum of %u channel names matching '\2%s\2'"),
+	                                    query.match_limit, query.mask);
+
+	// Hunting for one channel ?
+	if (! strchr(query.mask, '*') && ! strchr(query.mask, '?'))
+	{
+		struct channel *const chptr = channel_find(query.mask);
+
+		if (chptr && (! (chptr->modes & CMODE_SEC) || (si->su && chanuser_find(chptr, si->su))))
+			(void) alis_print_channel(si, &query, chptr);
+
+		goto end;
+	}
+
+	struct channel *chptr;
 	mowgli_patricia_iteration_state_t state;
-	int maxmatch;
-
-	memset(&query, 0, sizeof(struct alis_query));
-	query.maxmatches = ALIS_MAX_MATCH;
-
-	if (!parse_alis(si, parc, parv, &query))
-	{
-		free_alis(&query);
-		return;
-	}
-
-	logcommand(si, CMDLOG_GET, "LIST: \2%s\2", query.mask);
-
-	maxmatch = query.maxmatches;
-	command_success_nodata(si,
-		"Returning maximum of %d channel names matching '\2%s\2'",
-		query.maxmatches, query.mask);
-
-	// hunting for one channel...
-	if(strchr(query.mask, '*') == NULL && strchr(query.mask, '?') == NULL)
-	{
-		if((chptr = channel_find(query.mask)) != NULL)
-		{
-			if(!(chptr->modes & CMODE_SEC) ||
-					(si->su != NULL &&
-					 chanuser_find(chptr, si->su)))
-				print_channel(si, chptr, &query);
-		}
-
-		command_success_nodata(si, "End of output");
-		free_alis(&query);
-		return;
-	}
 
 	MOWGLI_PATRICIA_FOREACH(chptr, &state, chanlist)
 	{
-		// matches, so show it
-		if(show_channel(chptr, &query))
-		{
-			print_channel(si, chptr, &query);
+		if (! alis_show_channel(&query, chptr))
+			continue;
 
-			if(--maxmatch == 0)
-			{
-				command_success_nodata(si, "Maximum channel output reached");
-				break;
-			}
+		if (query.skip)
+		{
+			query.skip--;
+			continue;
 		}
+
+		(void) alis_print_channel(si, &query, chptr);
+
+		if (--query.match_limit)
+			continue;
+
+		(void) command_success_nodata(si, _("Maximum channel output reached"));
+		break;
 	}
 
-	command_success_nodata(si, "End of output");
-	free_alis(&query);
-	return;
+end:
+	(void) command_success_nodata(si, _("End of output"));
+	(void) logcommand(si, CMDLOG_GET, "LIST: \2%s\2", query.mask);
 }
 
 static void
-alis_cmd_help(struct sourceinfo *si, int parc, char *parv[])
+alis_cmd_help_func(struct sourceinfo *si, int parc, char *parv[])
 {
 	if (parv[0])
 	{
-		(void) help_display(si, alis, parv[0], alis->commands);
+		(void) help_display(si, alissvs, parv[0], alissvs->commands);
 		return;
 	}
 
-	(void) help_display_prefix(si, alis);
+	(void) help_display_prefix(si, alissvs);
 
 	(void) command_success_nodata(si, _("\2%s\2 allows searching for channels with more\n"
-	                                    "flexibility than the /list command."), alis->nick);
+	                                    "flexibility than the \2/LIST\2 command."), alissvs->nick);
 
 	(void) help_display_newline(si);
-	(void) command_help(si, alis->commands);
-	(void) help_display_moreinfo(si, alis, NULL);
+	(void) command_help(si, alissvs->commands);
+	(void) help_display_moreinfo(si, alissvs, NULL);
 	(void) help_display_locations(si);
 	(void) help_display_suffix(si);
 }
 
-static struct command alis_list = {
+static struct command alis_cmd_list = {
 	.name           = "LIST",
 	.desc           = N_("Lists channels matching given parameters."),
 	.access         = AC_NONE,
-	.maxparc        = ALIS_MAX_PARC,
-	.cmd            = &alis_cmd_list,
+	.maxparc        = 10,
+	.cmd            = &alis_cmd_list_func,
 	.help           = { .path = "alis/list" },
 };
 
-static struct command alis_help = {
+static struct command alis_cmd_help = {
 	.name           = "HELP",
 	.desc           = N_("Displays contextual help information."),
 	.access         = AC_NONE,
 	.maxparc        = 1,
-	.cmd            = &alis_cmd_help,
+	.cmd            = &alis_cmd_help_func,
 	.help           = { .path = "help" },
 };
 
 static void
 mod_init(struct module *const restrict m)
 {
-	if (! (alis = service_add("alis", NULL)))
+	if (! (alissvs = service_add("alis", NULL)))
 	{
 		(void) slog(LG_ERROR, "%s: service_add() failed", m->name);
 
@@ -486,14 +437,18 @@ mod_init(struct module *const restrict m)
 		return;
 	}
 
-	(void) service_bind_command(alis, &alis_list);
-	(void) service_bind_command(alis, &alis_help);
+	(void) add_uint_conf_item("MAXMATCHES", &alissvs->conf_table, 0, &alis_max_matches,
+	                          ALIS_MAXMATCH_MIN, ALIS_MAXMATCH_MAX, ALIS_MAXMATCH_DEF);
+
+	(void) service_bind_command(alissvs, &alis_cmd_list);
+	(void) service_bind_command(alissvs, &alis_cmd_help);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	(void) service_delete(alis);
+	(void) del_conf_item("MAXMATCHES", &alissvs->conf_table);
+	(void) service_delete(alissvs);
 }
 
 SIMPLE_DECLARE_MODULE_V1("alis/main", MODULE_UNLOAD_CAPABILITY_OK)
