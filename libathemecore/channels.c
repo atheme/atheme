@@ -448,7 +448,7 @@ chanuser_delete(struct channel *chan, struct user *user)
 	hdata.cu = cu;
 	hook_call_channel_part(&hdata);
 
-	slog(LG_DEBUG, "chanuser_delete(): %s -> %s (%d)", cu->chan->name, cu->user->nick, cu->chan->nummembers - 1);
+	slog(LG_DEBUG, "chanuser_delete(): %s -> %s (%u)", cu->chan->name, cu->user->nick, cu->chan->nummembers - 1);
 
 	mowgli_node_delete(&cu->cnode, &chan->members);
 	mowgli_node_delete(&cu->unode, &user->channels);

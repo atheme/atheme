@@ -260,7 +260,7 @@ cs_cmd_quiet(struct sourceinfo *si, int parc, char *parv[])
 	struct mychan *mc = mychan_find(channel);
 	struct user *tu;
 	struct chanban *cb;
-	int n;
+	unsigned int n;
 	char *targetlist;
 	char *strtokctx = NULL;
 	enum devoice_result devoice_result;
@@ -316,7 +316,7 @@ cs_cmd_quiet(struct sourceinfo *si, int parc, char *parv[])
 			cb = place_quietmask(c, MTYPE_ADD, hostbuf);
 			n = remove_ban_exceptions(si->service->me, c, tu);
 			if (n > 0)
-				command_success_nodata(si, _("To ensure the quiet takes effect, %d ban exception(s) matching \2%s\2 have been removed from \2%s\2."), n, tu->nick, c->name);
+				command_success_nodata(si, _("To ensure the quiet takes effect, %u ban exception(s) matching \2%s\2 have been removed from \2%s\2."), n, tu->nick, c->name);
 
 			// Notify if we did anything.
 			if (cb != NULL)
@@ -408,7 +408,7 @@ cs_cmd_unquiet(struct sourceinfo *si, int parc, char *parv[])
 		{
 			mowgli_node_t *n, *tn;
 			char hostbuf2[BUFSIZE];
-			int count = 0;
+			unsigned int count = 0;
 
 			make_extban(hostbuf2, sizeof hostbuf2, tu);
 			for (n = next_matching_ban(c, tu, banlike_char, c->bans.head); n != NULL; n = next_matching_ban(c, tu, banlike_char, tn))
@@ -426,8 +426,8 @@ cs_cmd_unquiet(struct sourceinfo *si, int parc, char *parv[])
 				// one notification only
 				if (chanuser_find(c, tu))
 					notify_one_victim(si, c, tu, MTYPE_DEL);
-				command_success_nodata(si, _("Unquieted \2%s\2 on \2%s\2 (%d quiet%s removed)."),
-					target, channel, count, (count != 1 ? "s" : ""));
+				command_success_nodata(si, _("Unquieted \2%s\2 on \2%s\2 (%u quiets removed)."),
+					target, channel, count);
 			}
 			else
 				command_success_nodata(si, _("No quiets found matching \2%s\2 on \2%s\2."), target, channel);

@@ -12,7 +12,7 @@
 #define ATHEME_INC_SASL_H 1
 
 #include <atheme/attributes.h>
-#include <atheme/common.h>
+#include <atheme/constants.h>
 #include <atheme/sourceinfo.h>
 #include <atheme/stdheaders.h>
 #include <atheme/structures.h>

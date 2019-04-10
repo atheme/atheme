@@ -345,14 +345,14 @@ static void
 initiate_blacklist_dnsquery(struct Blacklist *blptr, struct user *u)
 {
 	char buf[IRCD_RES_HOSTLEN + 1];
-	int ip[4];
+	unsigned int ip[4];
 	mowgli_list_t *l;
 
 	if (u->ip == NULL)
 		return;
 
 	// A sscanf worked fine for chary for many years, it'll be fine here
-	if (sscanf(u->ip, "%d.%d.%d.%d", &ip[3], &ip[2], &ip[1], &ip[0]) != 4)
+	if (sscanf(u->ip, "%u.%u.%u.%u", &ip[3], &ip[2], &ip[1], &ip[0]) != 4)
 		return;
 
 	struct BlacklistClient *blcptr = smalloc(sizeof *blcptr);
@@ -364,7 +364,7 @@ initiate_blacklist_dnsquery(struct Blacklist *blptr, struct user *u)
 	blcptr->dns_query.callback = blacklist_dns_callback;
 
 	// becomes 2.0.0.127.torbl.ahbl.org or whatever
-	snprintf(buf, sizeof buf, "%d.%d.%d.%d.%s", ip[0], ip[1], ip[2], ip[3], blptr->host);
+	snprintf(buf, sizeof buf, "%u.%u.%u.%u.%s", ip[0], ip[1], ip[2], ip[3], blptr->host);
 
 	mowgli_dns_gethost_byname(dns_base, buf, &blcptr->dns_query, MOWGLI_DNS_T_A);
 

@@ -22,8 +22,8 @@ ms_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 	char chan[CHANNELLEN + 1];
 	char *p;
 
-	command_success_nodata(si, ngettext(N_("You have %zu memo (%d new)."),
-					    N_("You have %zu memos (%d new)."),
+	command_success_nodata(si, ngettext(N_("You have %zu memo (%u new)."),
+					    N_("You have %zu memos (%u new)."),
 					    si->smu->memos.count), si->smu->memos.count, si->smu->memoct_new);
 
 	// Check to see if any memos
@@ -42,7 +42,7 @@ ms_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 		strftime(strfbuf, sizeof strfbuf,
 			TIME_FORMAT, &tm);
 
-		snprintf(line, sizeof line, _("- %d From: %s Sent: %s"),
+		snprintf(line, sizeof line, _("- %u From: %s Sent: %s"),
 				i, memo->sender, strfbuf);
 		if (memo->status & MEMO_CHANNEL && *memo->text == '#')
 		{

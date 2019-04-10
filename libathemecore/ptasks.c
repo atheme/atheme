@@ -150,7 +150,7 @@ handle_stats(struct user *u, char req)
 		  MOWGLI_ITER_FOREACH(n, uplinks.head)
 		  {
 			  uplink = (struct uplink *)n->data;
-			  numeric_sts(me.me, 213, u, "C *@127.0.0.1 A %s %d uplink", uplink->name, uplink->port);
+			  numeric_sts(me.me, 213, u, "C *@127.0.0.1 A %s %u uplink", uplink->name, uplink->port);
 		  }
 		  break;
 
@@ -253,24 +253,24 @@ handle_stats(struct user *u, char req)
 		  if (!has_priv_user(u, PRIV_SERVER_AUSPEX))
 			  break;
 
-		  numeric_sts(me.me, 249, u, "T :event      %7d", claro_state.event);
-		  numeric_sts(me.me, 249, u, "T :node       %7d", claro_state.node);
-		  numeric_sts(me.me, 249, u, "T :connection %7d", connection_count());
-		  numeric_sts(me.me, 249, u, "T :operclass  %7d", cnt.operclass);
-		  numeric_sts(me.me, 249, u, "T :soper      %7d", cnt.soper);
-		  numeric_sts(me.me, 249, u, "T :tld        %7d", cnt.tld);
-		  numeric_sts(me.me, 249, u, "T :kline      %7d", cnt.kline);
-		  numeric_sts(me.me, 249, u, "T :xline      %7d", cnt.xline);
-		  numeric_sts(me.me, 249, u, "T :server     %7d", cnt.server);
-		  numeric_sts(me.me, 249, u, "T :user       %7d", cnt.user);
-		  numeric_sts(me.me, 249, u, "T :chan       %7d", cnt.chan);
-		  numeric_sts(me.me, 249, u, "T :chanuser   %7d", cnt.chanuser);
-		  numeric_sts(me.me, 249, u, "T :myuser     %7d", cnt.myuser);
-		  numeric_sts(me.me, 249, u, "T :myuser_acc %7d", cnt.myuser_access);
-		  numeric_sts(me.me, 249, u, "T :mynick     %7d", cnt.mynick);
-		  numeric_sts(me.me, 249, u, "T :myuser_nam %7d", cnt.myuser_name);
-		  numeric_sts(me.me, 249, u, "T :mychan     %7d", cnt.mychan);
-		  numeric_sts(me.me, 249, u, "T :chanacs    %7d", cnt.chanacs);
+		  numeric_sts(me.me, 249, u, "T :event      %7u", claro_state.event);
+		  numeric_sts(me.me, 249, u, "T :node       %7u", claro_state.node);
+		  numeric_sts(me.me, 249, u, "T :connection %7zu", connection_count());
+		  numeric_sts(me.me, 249, u, "T :operclass  %7u", cnt.operclass);
+		  numeric_sts(me.me, 249, u, "T :soper      %7u", cnt.soper);
+		  numeric_sts(me.me, 249, u, "T :tld        %7u", cnt.tld);
+		  numeric_sts(me.me, 249, u, "T :kline      %7u", cnt.kline);
+		  numeric_sts(me.me, 249, u, "T :xline      %7u", cnt.xline);
+		  numeric_sts(me.me, 249, u, "T :server     %7u", cnt.server);
+		  numeric_sts(me.me, 249, u, "T :user       %7u", cnt.user);
+		  numeric_sts(me.me, 249, u, "T :chan       %7u", cnt.chan);
+		  numeric_sts(me.me, 249, u, "T :chanuser   %7u", cnt.chanuser);
+		  numeric_sts(me.me, 249, u, "T :myuser     %7u", cnt.myuser);
+		  numeric_sts(me.me, 249, u, "T :myuser_acc %7u", cnt.myuser_access);
+		  numeric_sts(me.me, 249, u, "T :mynick     %7u", cnt.mynick);
+		  numeric_sts(me.me, 249, u, "T :myuser_nam %7u", cnt.myuser_name);
+		  numeric_sts(me.me, 249, u, "T :mychan     %7u", cnt.mychan);
+		  numeric_sts(me.me, 249, u, "T :chanacs    %7u", cnt.chanacs);
 
 #ifdef OBJECT_DEBUG
 		  numeric_sts(me.me, 249, u, "T :objects    %7zu", MOWGLI_LIST_LENGTH(&object_list));
@@ -393,7 +393,7 @@ handle_trace(struct user *u, const char *target, const char *dest)
 {
 	struct user *t;
 	mowgli_node_t *n;
-	int nusers;
+	unsigned int nusers;
 
 	if (u == NULL)
 		return;
@@ -410,7 +410,7 @@ handle_trace(struct user *u, const char *target, const char *dest)
 			nusers--;
 		}
 		if (has_priv_user(u, PRIV_SERVER_AUSPEX))
-			numeric_sts(me.me, 206, u, "Serv uplink %dS %dC %s *!*@%s 0", cnt.server - 1, nusers, me.actual, me.name);
+			numeric_sts(me.me, 206, u, "Serv uplink %uS %uC %s *!*@%s 0", cnt.server - 1, nusers, me.actual, me.name);
 		target = me.name;
 	}
 	else
@@ -448,11 +448,11 @@ handle_motd(struct user *u)
 		return;
 	}
 
-	snprintf(nebuf, BUFSIZE, "%d", nicksvs.expiry / 86400);
-	snprintf(cebuf, BUFSIZE, "%d", chansvs.expiry / 86400);
-	snprintf(ubuf, BUFSIZE, "%d", cnt.myuser);
-	snprintf(nbuf, BUFSIZE, "%d", nicksvs.no_nick_ownership ? 0 : cnt.mynick);
-	snprintf(cbuf, BUFSIZE, "%d", cnt.mychan);
+	snprintf(nebuf, BUFSIZE, "%u", nicksvs.expiry / 86400);
+	snprintf(cebuf, BUFSIZE, "%u", chansvs.expiry / 86400);
+	snprintf(ubuf, BUFSIZE, "%u", cnt.myuser);
+	snprintf(nbuf, BUFSIZE, "%u", nicksvs.no_nick_ownership ? 0U : cnt.mynick);
+	snprintf(cbuf, BUFSIZE, "%u", cnt.mychan);
 
 	numeric_sts(me.me, 375, u, ":- %s Message of the Day -", me.name);
 
@@ -860,7 +860,7 @@ handle_eob(struct server *s)
 		return;
 	if (s->flags & SF_EOB)
 		return;
-	slog(LG_NETWORK, "handle_eob(): end of burst from %s (%d users)",
+	slog(LG_NETWORK, "handle_eob(): end of burst from %s (%u users)",
 			s->name, s->users);
 	hook_call_server_eob(s);
 	s->flags |= SF_EOB;

@@ -254,7 +254,7 @@ helpserv_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct help_ticket *l;
 	mowgli_node_t *n;
-	int x = 0;
+	unsigned int x = 0;
 	char buf[BUFSIZE];
 	struct tm tm;
 
@@ -265,7 +265,7 @@ helpserv_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 
 		tm = *localtime(&l->ticket_ts);
 		strftime(buf, BUFSIZE, TIME_FORMAT, &tm);
-		command_success_nodata(si, "#%d Nick:\2%s\2, topic:\2%s\2 (%s - %s)",
+		command_success_nodata(si, "#%u Nick:\2%s\2, topic:\2%s\2 (%s - %s)",
 			x, l->nick, l->topic, l->creator, buf);
 	}
 	command_success_nodata(si, "End of list.");

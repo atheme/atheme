@@ -210,7 +210,7 @@ module_load_internal(const char *pathname, char *errbuf, int errlen)
 		return NULL;
 	}
 
-	slog(LG_DEBUG, "module_load(): loaded %s [at 0x%lx; MAPI version %d]", h->name, (unsigned long)m->address, h->abi_ver);
+	slog(LG_DEBUG, "module_load(): loaded %s [at %p; MAPI version %u]", h->name, m->address, h->abi_ver);
 
 	return m;
 }

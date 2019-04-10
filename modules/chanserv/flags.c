@@ -124,10 +124,10 @@ do_list(struct sourceinfo *si, struct mychan *mc, unsigned int flags)
 			setter_name = "?";
 
 		if (template != NULL)
-			command_success_nodata(si, _("%-5d %-22s %-20s (%s) [modified %s ago, on %s, by %s]"),
+			command_success_nodata(si, _("%-5u %-22s %-20s (%s) [modified %s ago, on %s, by %s]"),
 				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), template, mod_ago, mod_date, setter_name);
 		else
-			command_success_nodata(si, _("%-5d %-22s %-20s [modified %s ago, on %s, by %s]"),
+			command_success_nodata(si, _("%-5u %-22s %-20s [modified %s ago, on %s, by %s]"),
 				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), mod_ago, mod_date, setter_name);
 		i++;
 	}
@@ -394,7 +394,7 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 			{
 				if (mychan_num_founders(mc) >= chansvs.maxfounders)
 				{
-					command_fail(si, fault_noprivs, _("Only %d founders allowed per channel."), chansvs.maxfounders);
+					command_fail(si, fault_noprivs, _("Only %u founders allowed per channel."), chansvs.maxfounders);
 					chanacs_close(ca);
 					return;
 				}

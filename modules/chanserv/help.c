@@ -54,7 +54,7 @@ cs_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED 
 	(void) help_display_newline(si);
 
 	if (chansvs.expiry > 0)
-		(void) command_success_nodata(si, _("Please note that channels will expire after %d days of "
+		(void) command_success_nodata(si, _("Please note that channels will expire after %u days of "
 		                                    "inactivity,\nor if there are no eligible channel successors.\n"
 		                                    " \nActivity is defined as a user with one of %s being on the "
 		                                    "channel."), (chansvs.expiry / 86400),

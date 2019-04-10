@@ -22,12 +22,8 @@ command_namegen(struct sourceinfo *si, int parc, char *parv[])
 	if (!gs_do_parameters(si, &parc, &parv, &mc))
 		return;
 
-	if (parv[0])
-		amt = atoi(parv[0]);
-
-
 	// limit to 20
-	if (amt > 20)
+	if ((parv[0] && ! string_to_uint(parv[0], &amt)) || amt > 20)
 		amt = 20;
 
 	*buf = '\0';

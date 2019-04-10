@@ -438,7 +438,7 @@ db_h_bot(struct database_handle *db, const char *type)
 	const char *nick = db_sread_word(db);
 	const char *user = db_sread_word(db);
 	const char *host = db_sread_word(db);
-	int private = db_sread_int(db);
+	unsigned int private = db_sread_uint(db);
 	time_t registered = db_sread_time(db);
 	const char *real = db_sread_str(db);
 
@@ -464,7 +464,7 @@ db_h_bot_count(struct database_handle *db, const char *type)
 	unsigned int i = db_sread_uint(db);
 
 	if (i != MOWGLI_LIST_LENGTH(&bs_bots))
-		slog(LG_ERROR, "botserv_load_database(): inconsistency: database defines %d objects, I only deserialized %zu.", i, bs_bots.count);
+		slog(LG_ERROR, "botserv_load_database(): inconsistency: database defines %u objects, I only deserialized %zu.", i, bs_bots.count);
 }
 
 struct botserv_bot *
@@ -745,7 +745,7 @@ bs_cmd_bot(struct sourceinfo *si, int parc, char *parv[])
 static void
 bs_cmd_botlist(struct sourceinfo *si, int parc, char *parv[])
 {
-	int i = 0;
+	unsigned int i = 0;
 	mowgli_node_t *n;
 
 	command_success_nodata(si, _("Listing of bots available on \2%s\2:"), me.netname);
@@ -755,10 +755,10 @@ bs_cmd_botlist(struct sourceinfo *si, int parc, char *parv[])
 		struct botserv_bot *bot = (struct botserv_bot *) n->data;
 
 		if (!bot->private)
-			command_success_nodata(si, "\2%d:\2 %s (%s@%s) [%s]", ++i, bot->nick, bot->user, bot->host, bot->real);
+			command_success_nodata(si, "\2%u:\2 %s (%s@%s) [%s]", ++i, bot->nick, bot->user, bot->host, bot->real);
 	}
 
-	command_success_nodata(si, _("\2%d\2 bots available."), i);
+	command_success_nodata(si, _("\2%u\2 bots available."), i);
 	if (si->su != NULL && has_priv(si, PRIV_CHAN_ADMIN))
 	{
 		i = 0;
@@ -768,9 +768,9 @@ bs_cmd_botlist(struct sourceinfo *si, int parc, char *parv[])
 			struct botserv_bot *bot = (struct botserv_bot *) n->data;
 
 			if (bot->private)
-				command_success_nodata(si, "\2%d:\2 %s (%s@%s) [%s]", ++i, bot->nick, bot->user, bot->host, bot->real);
+				command_success_nodata(si, "\2%u:\2 %s (%s@%s) [%s]", ++i, bot->nick, bot->user, bot->host, bot->real);
 		}
-		command_success_nodata(si, _("\2%d\2 private bots available."), i);
+		command_success_nodata(si, _("\2%u\2 private bots available."), i);
 	}
 	command_success_nodata(si, "Use \2/msg %s ASSIGN #chan botnick\2 to assign one to your channel.", si->service->me->nick);
 }

@@ -136,7 +136,7 @@ cs_cmd_unban(struct sourceinfo *si, int parc, char *parv[])
 	{
 		mowgli_node_t *n, *tn;
 		char hostbuf2[BUFSIZE];
-		int count = 0;
+		unsigned int count = 0;
 
 		snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->vhost);
 		for (n = next_matching_ban(c, tu, 'b', c->bans.head); n != NULL; n = next_matching_ban(c, tu, 'b', tn))
@@ -150,8 +150,8 @@ cs_cmd_unban(struct sourceinfo *si, int parc, char *parv[])
 			count++;
 		}
 		if (count > 0)
-			command_success_nodata(si, _("Unbanned \2%s\2 on \2%s\2 (%d ban%s removed)."),
-				target, channel, count, (count != 1 ? "s" : ""));
+			command_success_nodata(si, _("Unbanned \2%s\2 on \2%s\2 (%u bans removed)."),
+				target, channel, count);
 		else
 			command_success_nodata(si, _("No bans found matching \2%s\2 on \2%s\2."), target, channel);
 		return;

@@ -79,7 +79,7 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	if (CURRTIME - mc->used >= 86400)
 	{
 		if (hide_info)
-			command_success_nodata(si, _("Last used  : (about %d weeks ago)"), (int)((CURRTIME - mc->used) / 604800));
+			command_success_nodata(si, _("Last used  : (about %u weeks ago)"), (unsigned int)((CURRTIME - mc->used) / 604800));
 		else
 		{
 			tm = *localtime(&mc->used);

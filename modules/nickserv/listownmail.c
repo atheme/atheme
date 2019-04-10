@@ -52,9 +52,9 @@ ns_cmd_listownmail(struct sourceinfo *si, int parc, char *parv[])
 		}
 	}
 
-	logcommand(si, CMDLOG_GET, "LISTOWNMAIL: \2%s\2 (\2%d\2 matches)", si->smu->email, matches);
-	command_success_nodata(si, ngettext(N_("\2%d\2 match for e-mail address \2%s\2"),
-					    N_("\2%d\2 matches for e-mail address \2%s\2"), matches), matches, si->smu->email);
+	logcommand(si, CMDLOG_GET, "LISTOWNMAIL: \2%s\2 (\2%u\2 matches)", si->smu->email, matches);
+	command_success_nodata(si, ngettext(N_("\2%u\2 match for e-mail address \2%s\2"),
+					    N_("\2%u\2 matches for e-mail address \2%s\2"), matches), matches, si->smu->email);
 }
 
 static struct command ns_listownmail = {

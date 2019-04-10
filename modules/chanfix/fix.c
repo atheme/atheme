@@ -196,7 +196,7 @@ chanfix_fix_channel(struct chanfix_channel *chan)
 	modestack_flush_channel(ch);
 
 	// now report the damage
-	msg(chanfix->me->nick, chan->name, "\2%d\2 client%s should have been opped.", opped, opped != 1 ? "s" : "");
+	msg(chanfix->me->nick, chan->name, "\2%u\2 clients should have been opped.", opped);
 
 	// if this is the services log channel, continue to occupy it after the fix
 	if (ch->flags & CHAN_LOG)
@@ -421,11 +421,11 @@ chanfix_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 
 	if (chanpattern == NULL)
 		chanpattern = "*";
-	logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 (\2%d\2 matches)", chanpattern, matches);
+	logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 (\2%u\2 matches)", chanpattern, matches);
 	if (matches == 0)
 		command_success_nodata(si, _("No channels matched criteria \2%s\2"), chanpattern);
 	else
-		command_success_nodata(si, ngettext(N_("\2%d\2 match for criteria \2%s\2"), N_("\2%d\2 matches for criteria \2%s\2"), matches), matches, chanpattern);
+		command_success_nodata(si, ngettext(N_("\2%u\2 match for criteria \2%s\2"), N_("\2%u\2 matches for criteria \2%s\2"), matches), matches, chanpattern);
 }
 
 static void
@@ -526,7 +526,7 @@ chanfix_cmd_scores(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	command_success_nodata(si, _("Top \2%d\2 scores for \2%s\2 in the database:"), count, chan->name);
+	command_success_nodata(si, _("Top \2%u\2 scores for \2%s\2 in the database:"), count, chan->name);
 
 	command_success_nodata(si, "%-3s %-50s %s", _("Num"), _("Account/Hostmask"), _("Score"));
 	command_success_nodata(si, "%-3s %-50s %s", "---", "--------------------------------------------------", "-----");
@@ -541,7 +541,7 @@ chanfix_cmd_scores(struct sourceinfo *si, int parc, char *parv[])
 
 		snprintf(buf, BUFSIZE, "%s@%s", orec->user, orec->host);
 
-		command_success_nodata(si, "%-3d %-50s %d", ++i, orec->entity ? orec->entity->name : buf, score);
+		command_success_nodata(si, "%-3d %-50s %u", ++i, orec->entity ? orec->entity->name : buf, score);
 	}
 
 	command_success_nodata(si, "%-3s %-50s %s", "---", "--------------------------------------------------", "-----");

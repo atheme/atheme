@@ -23,6 +23,7 @@
 #include <atheme/conf.h>
 #include <atheme/confprocess.h>
 #include <atheme/connection.h>
+#include <atheme/constants.h>
 #include <atheme/crypto.h>
 #include <atheme/culture.h>
 #include <atheme/database_backend.h>

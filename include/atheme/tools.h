@@ -13,6 +13,7 @@
 
 #include <atheme/attributes.h>
 #include <atheme/common.h>
+#include <atheme/constants.h>
 #include <atheme/object.h>
 #include <atheme/stdheaders.h>
 #include <atheme/structures.h>

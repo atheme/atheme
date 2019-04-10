@@ -482,7 +482,7 @@ eval_dice(struct sourceinfo *si, char *s_input)
 	snprintf(buffer, 1024, _("\2%s\2 rolled %ud%u: "), si->su->nick, x, y);
 	for (roll = 0; roll < x; ++roll)
 	{
-		snprintf(result, 32, "%d ", dice = (1 + atheme_random_uniform(y)));
+		snprintf(result, 32, "%u ", dice = (1 + atheme_random_uniform(y)));
 		mowgli_strlcat(buffer, result, sizeof(buffer));
 		total += dice;
 	}
@@ -523,25 +523,28 @@ command_dice(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *arg;
 	struct mychan *mc;
-	int i, times = 1;
+	unsigned int i, times = 1;
 
 	if (!gs_do_parameters(si, &parc, &parv, &mc))
 		return;
+
 	if (parc < 1)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ROLL");
 		command_fail(si, fault_needmoreparams, _("Syntax: ROLL [times] [dice]d<sides>"));
 		return;
 	}
+
 	if (parc < 2)
+	{
 		arg = parv[0];
+	}
 	else
 	{
-		times = atoi(parv[0]);
-		arg = parv[1];
-
-		if (times > (int) max_rolls)
+		if (! string_to_uint(parv[0], &times) || times > max_rolls)
 			times = max_rolls;
+
+		arg = parv[1];
 	}
 
 	if (!strcasecmp("RICK", arg))
@@ -562,25 +565,28 @@ command_calc(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *arg;
 	struct mychan *mc;
-	int i, times = 1;
+	unsigned int i, times = 1;
 
 	if (!gs_do_parameters(si, &parc, &parv, &mc))
 		return;
+
 	if (parc < 1)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CALC");
 		command_fail(si, fault_needmoreparams, _("Syntax: CALC [times] <expression>"));
 		return;
 	}
+
 	if (parc < 2)
+	{
 		arg = parv[0];
+	}
 	else
 	{
-		times = atoi(parv[0]);
-		arg = parv[1];
-
-		if (times > (int) max_rolls)
+		if (! string_to_uint(parv[0], &times) || times > max_rolls)
 			times = max_rolls;
+
+		arg = parv[1];
 	}
 
 	for (i = 0; i < times; i++)

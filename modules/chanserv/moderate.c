@@ -218,7 +218,7 @@ cs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 	if (c != NULL && c->key == NULL)
 		mc->mlock_off |= CMODE_KEY;
 	mc->flags |= config_options.defcflags;
-	slog(LG_DEBUG, "cs_cmd_activate(): defcflags = %d, mc->flags = %d, guard? %s", config_options.defcflags, mc->flags, (mc->flags & MC_GUARD) ? "YES" : "NO");
+	slog(LG_DEBUG, "cs_cmd_activate(): defcflags = %u, mc->flags = %u, guard? %s", config_options.defcflags, mc->flags, (mc->flags & MC_GUARD) ? "YES" : "NO");
 
 	chanacs_add(mc, cs->mt, custom_founder_check(), CURRTIME, entity(si->smu));
 

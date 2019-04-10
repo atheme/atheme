@@ -170,7 +170,7 @@ ns_cmd_badmail(struct sourceinfo *si, int parc, char *parv[])
 	{
 		char buf[BUFSIZE];
 		struct tm tm;
-		unsigned long count = 0;
+		unsigned int count = 0;
 
 		MOWGLI_ITER_FOREACH(n, ns_maillist.head)
 		{
@@ -191,16 +191,16 @@ ns_cmd_badmail(struct sourceinfo *si, int parc, char *parv[])
 			command_success_nodata(si, _("End of list."));
 
 		if (email)
-			logcommand(si, CMDLOG_GET, "BADMAIL:LIST: \2%s\2 (\2%ld\2 matches)", email, count);
+			logcommand(si, CMDLOG_GET, "BADMAIL:LIST: \2%s\2 (\2%u\2 matches)", email, count);
 		else
-			logcommand(si, CMDLOG_GET, "BADMAIL:LIST (\2%ld\2 matches)", count);
+			logcommand(si, CMDLOG_GET, "BADMAIL:LIST (\2%u\2 matches)", count);
 		return;
 	}
 	else if (!strcasecmp("TEST", action))
 	{
 		char buf[BUFSIZE];
 		struct tm tm;
-		unsigned long count = 0;
+		unsigned int count = 0;
 
 		if (!email)
 		{
@@ -223,11 +223,11 @@ ns_cmd_badmail(struct sourceinfo *si, int parc, char *parv[])
 			}
 		}
 		if (count)
-			command_success_nodata(si, _("%ld badmail pattern(s) disallowing \2%s\2 found."), count, email);
+			command_success_nodata(si, _("%u badmail pattern(s) disallowing \2%s\2 found."), count, email);
 		else
 			command_success_nodata(si, _("\2%s\2 is not listed in the badmail database."), email);
 
-		logcommand(si, CMDLOG_GET, "BADMAIL:TEST: \2%s\2 (\2%ld\2 matches)", email, count);
+		logcommand(si, CMDLOG_GET, "BADMAIL:TEST: \2%s\2 (\2%u\2 matches)", email, count);
 		return;
 	}
 	else

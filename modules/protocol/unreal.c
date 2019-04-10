@@ -1210,7 +1210,7 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 		{
 			if (should_reg_umode(si->su))
 				// changed nick to registered one, reset +r
-				sts(":%s SVS2MODE %s +rd %lu", nicksvs.nick, parv[0], atol(parv[1]));
+				sts(":%s SVS2MODE %s +rd %ld", nicksvs.nick, parv[0], atol(parv[1]));
 			else
 				// changed from registered nick, remove +r
 				sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, parv[0]);

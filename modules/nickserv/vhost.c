@@ -237,7 +237,7 @@ ns_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
 	struct myentity *mt;
 	struct myuser *mu;
 	struct metadata *md;
-	int matches = 0;
+	unsigned int matches = 0;
 
 	pattern = parc >= 1 ? parv[0] : "*";
 
@@ -254,12 +254,12 @@ ns_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
 		}
 	}
 
-	logcommand(si, CMDLOG_ADMIN, "LISTVHOST: \2%s\2 (\2%d\2 matches)", pattern, matches);
+	logcommand(si, CMDLOG_ADMIN, "LISTVHOST: \2%s\2 (\2%u\2 matches)", pattern, matches);
 	if (matches == 0)
 		command_success_nodata(si, _("No vhosts matched pattern \2%s\2"), pattern);
 	else
-		command_success_nodata(si, ngettext(N_("\2%d\2 match for pattern \2%s\2"),
-						    N_("\2%d\2 matches for pattern \2%s\2"), matches), matches, pattern);
+		command_success_nodata(si, ngettext(N_("\2%u\2 match for pattern \2%s\2"),
+						    N_("\2%u\2 matches for pattern \2%s\2"), matches), matches, pattern);
 }
 
 static void

@@ -10,7 +10,7 @@
 #ifndef ATHEME_INC_ENTITY_H
 #define ATHEME_INC_ENTITY_H 1
 
-#include <atheme/common.h>
+#include <atheme/constants.h>
 #include <atheme/object.h>
 #include <atheme/stdheaders.h>
 #include <atheme/structures.h>

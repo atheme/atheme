@@ -18,7 +18,7 @@ os_cmd_compare(struct sourceinfo *si, int parc, char *parv[])
 	struct user *u1, *u2;
 	mowgli_node_t *n1, *n2;
 	struct chanuser *cu1, *cu2;
-	int matches = 0;
+	unsigned int matches = 0;
 
 	int temp = 0;
 	char buf[512];
@@ -148,8 +148,8 @@ os_cmd_compare(struct sourceinfo *si, int parc, char *parv[])
 	if (buf[0] != 0)
 		command_success_nodata(si, "%s", buf);
 
-	command_success_nodata(si, _("\2%d\2 matches comparing %s and %s"), matches, object1, object2);
-	logcommand(si, CMDLOG_ADMIN, "COMPARE: \2%s\2 to \2%s\2 (\2%d\2 matches)", object1, object2, matches);
+	command_success_nodata(si, _("\2%u\2 matches comparing %s and %s"), matches, object1, object2);
+	logcommand(si, CMDLOG_ADMIN, "COMPARE: \2%s\2 to \2%s\2 (\2%u\2 matches)", object1, object2, matches);
 }
 
 static struct command os_compare = {

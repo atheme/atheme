@@ -357,7 +357,7 @@ cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 		{
 			mowgli_node_t *n, *tn;
 			struct chanacs *ca;
-			int changes = 0, founderskipped = 0;
+			unsigned int changes = 0, founderskipped = 0;
 			char flagstr2[128];
 
 			MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chanacs.head)
@@ -374,13 +374,13 @@ cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 				chanacs_modify_simple(ca, newflags, ~newflags, si->smu);
 				chanacs_close(ca);
 			}
-			logcommand(si, CMDLOG_SET, "TEMPLATE: \2%s\2 \2%s\2 !\2%s\2 (\2%d\2 changes)", mc->name, target, flagstr, changes);
+			logcommand(si, CMDLOG_SET, "TEMPLATE: \2%s\2 \2%s\2 !\2%s\2 (\2%u\2 changes)", mc->name, target, flagstr, changes);
 			mowgli_strlcpy(flagstr2, flagstr, sizeof flagstr2);
 			if (changes > 0)
-				verbose(mc, _("\2%s\2 set \2%s\2 on %d access entries with flags \2%s\2."), get_source_name(si), flagstr2, changes, bitmask_to_flags(oldflags));
-			command_success_nodata(si, _("%d access entries updated accordingly."), changes);
+				verbose(mc, _("\2%s\2 set \2%s\2 on %u access entries with flags \2%s\2."), get_source_name(si), flagstr2, changes, bitmask_to_flags(oldflags));
+			command_success_nodata(si, _("%u access entries updated accordingly."), changes);
 			if (founderskipped)
-				command_success_nodata(si, _("Not updating %d access entries involving founder status. Please do it manually."), founderskipped);
+				command_success_nodata(si, _("Not updating %u access entries involving founder status. Please do it manually."), founderskipped);
 		}
 		else
 			logcommand(si, CMDLOG_SET, "TEMPLATE: \2%s\2 \2%s\2 \2%s\2", mc->name, target, flagstr);

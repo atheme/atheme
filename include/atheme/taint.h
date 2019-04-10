@@ -10,7 +10,7 @@
 #ifndef ATHEME_INC_TAINT_H
 #define ATHEME_INC_TAINT_H 1
 
-#include <atheme/common.h>
+#include <atheme/constants.h>
 #include <atheme/stdheaders.h>
 
 struct taint_reason
@@ -19,7 +19,7 @@ struct taint_reason
 	char            buf[BUFSIZE];
 	char            condition[BUFSIZE];
 	char            file[BUFSIZE];
-	int             line;
+	unsigned int    line;
 };
 
 extern mowgli_list_t taint_list;
@@ -33,7 +33,7 @@ extern mowgli_list_t taint_list;
                 (void) mowgli_strlcpy(tr->buf, (reason), sizeof tr->buf);               \
                 (void) mowgli_strlcpy(tr->condition, #cond, sizeof tr->condition);      \
                 (void) mowgli_strlcpy(tr->file, __FILE__, sizeof tr->file);             \
-                tr->line = __LINE__;                                                    \
+                tr->line = (unsigned int) __LINE__;                                     \
                 (void) mowgli_node_add(tr, &tr->node, &taint_list);                     \
                 (void) slog(LG_ERROR, "TAINTED: %s", (reason));                         \
                 if (! config_options.allow_taint)                                       \

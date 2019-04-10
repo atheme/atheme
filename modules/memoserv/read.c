@@ -42,9 +42,8 @@ ms_cmd_read(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	memonum = atoi(arg1);
 	readnew = !strcasecmp(arg1, "NEW");
-	if (!readnew && !memonum)
+	if (!readnew && (! string_to_uint(arg1, &memonum) || ! memonum))
 	{
 		command_fail(si, fault_badparams, _("Invalid message index."));
 		return;
@@ -99,7 +98,7 @@ ms_cmd_read(struct sourceinfo *si, int parc, char *parv[])
 			}
 
 			command_success_nodata(si,
-				"\2Memo %d - Sent by %s, %s\2",i,memo->sender, strfbuf);
+				"\2Memo %u - Sent by %s, %s\2",i,memo->sender, strfbuf);
 
 			command_success_nodata(si,
 				"------------------------------------------");
@@ -110,7 +109,7 @@ ms_cmd_read(struct sourceinfo *si, int parc, char *parv[])
 				return;
 			if (++numread >= MAX_READ_AT_ONCE && si->smu->memoct_new > 0)
 			{
-				command_success_nodata(si, _("Stopping command after %d memos."), numread);
+				command_success_nodata(si, _("Stopping command after %u memos."), numread);
 				return;
 			}
 		}
@@ -120,7 +119,7 @@ ms_cmd_read(struct sourceinfo *si, int parc, char *parv[])
 	if (readnew && numread == 0)
 		command_fail(si, fault_nosuch_key, _("You have no new memos."));
 	else if (readnew)
-		command_success_nodata(si, _("Read %d memos."), numread);
+		command_success_nodata(si, _("Read %u memos."), numread);
 }
 
 static struct command ms_read = {

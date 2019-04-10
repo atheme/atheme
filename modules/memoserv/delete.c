@@ -92,7 +92,7 @@ ms_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
 
 	}
 
-	command_success_nodata(si, ngettext(N_("%d memo deleted."), N_("%d memos deleted."), delcount), delcount);
+	command_success_nodata(si, ngettext(N_("%u memo deleted."), N_("%u memos deleted."), delcount), delcount);
 
 	return;
 }

@@ -12,18 +12,22 @@
 struct rnc
 {
 	const char *gecos;
-	int count;
+	unsigned int count;
 };
 
 static void
 os_cmd_rnc(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *param = parv[0];
-	int count = param ? atoi(param) : 20;
+	unsigned int count = 20;
+
+	if (param && ! string_to_uint(param, &count))
+		count = 20;
+
 	struct user *u;
 	struct rnc *rnc, *biggest;
 	mowgli_patricia_t *realnames;
-	int i, found = 0;
+	unsigned int i, found = 0;
 	mowgli_patricia_iteration_state_t state;
 
 	realnames = mowgli_patricia_create(noopcanon);
@@ -59,7 +63,7 @@ os_cmd_rnc(struct sourceinfo *si, int parc, char *parv[])
 		if (biggest == NULL)
 			break;
 
-		command_success_nodata(si, _("\2%d\2: \2%d\2 matches for realname \2%s\2"), i, biggest->count, biggest->gecos);
+		command_success_nodata(si, _("\2%u\2: \2%u\2 matches for realname \2%s\2"), i, biggest->count, biggest->gecos);
 		mowgli_patricia_delete(realnames, biggest->gecos);
 		sfree(biggest);
 	}
@@ -72,7 +76,7 @@ os_cmd_rnc(struct sourceinfo *si, int parc, char *parv[])
 	}
 	mowgli_patricia_destroy(realnames, NULL, NULL);
 
-	logcommand(si, CMDLOG_ADMIN, "RNC: \2%d\2", count);
+	logcommand(si, CMDLOG_ADMIN, "RNC: \2%u\2", count);
 }
 
 static struct command os_rnc = {

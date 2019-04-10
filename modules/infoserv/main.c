@@ -238,7 +238,7 @@ is_cmd_post(struct sourceinfo *si, int parc, char *parv[])
 	char *importance = parv[0];
 	char *subject = parv[1];
 	char *story = parv[2];
-	int imp;
+	unsigned int imp;
 	struct logoninfo *l;
 	struct operlogoninfo *o;
 	mowgli_node_t *n;
@@ -258,9 +258,7 @@ is_cmd_post(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	imp = atoi(importance);
-
-	if ((imp < 0) || (imp >=5))
+	if (! string_to_uint(importance, &imp) || imp < 0 || imp > 4)
 	{
 		command_fail(si, fault_badparams, _("Importance must be a digit between 0 and 4"));
 		return;
@@ -331,8 +329,8 @@ static void
 is_cmd_del(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
-	int x = 0;
-	int id;
+	unsigned int x = 0;
+	unsigned int id;
 	struct logoninfo *l;
 	mowgli_node_t *n;
 
@@ -343,9 +341,7 @@ is_cmd_del(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	id = atoi(target);
-
-	if (id <= 0)
+	if (! string_to_uint(target, &id) || ! id)
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "DEL");
 		command_fail(si, fault_badparams, "Syntax: DEL <id>");
@@ -369,12 +365,12 @@ is_cmd_del(struct sourceinfo *si, int parc, char *parv[])
 			sfree(l->story);
 			sfree(l);
 
-			command_success_nodata(si, _("Deleted entry %d from logon info."), id);
+			command_success_nodata(si, _("Deleted entry %u from logon info."), id);
 			return;
 		}
 	}
 
-	command_fail(si, fault_nosuch_target, _("Entry %d not found in logon info."), id);
+	command_fail(si, fault_nosuch_target, _("Entry %u not found in logon info."), id);
 	return;
 }
 
@@ -382,8 +378,8 @@ static void
 is_cmd_odel(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];
-	int x = 0;
-	int id;
+	unsigned int x = 0;
+	unsigned int id;
 	struct operlogoninfo *o;
 	mowgli_node_t *n;
 
@@ -394,9 +390,7 @@ is_cmd_odel(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	id = atoi(target);
-
-	if (id <= 0)
+	if (! string_to_uint(target, &id) || ! id)
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "ODEL");
 		command_fail(si, fault_badparams, "Syntax: ODEL <id>");
@@ -420,12 +414,12 @@ is_cmd_odel(struct sourceinfo *si, int parc, char *parv[])
 			sfree(o->story);
 			sfree(o);
 
-			command_success_nodata(si, _("Deleted entry %d from oper logon info."), id);
+			command_success_nodata(si, _("Deleted entry %u from oper logon info."), id);
 			return;
 		}
 	}
 
-	command_fail(si, fault_nosuch_target, _("Entry %d not found in oper logon info."), id);
+	command_fail(si, fault_nosuch_target, _("Entry %u not found in oper logon info."), id);
 	return;
 }
 
@@ -436,7 +430,7 @@ is_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_node_t *n;
 	struct tm tm;
 	char dBuf[BUFSIZE];
-	int x = 0;
+	unsigned int x = 0;
 
 	MOWGLI_ITER_FOREACH(n, logon_info.head)
 	{
@@ -448,7 +442,7 @@ is_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 
 		tm = *localtime(&l->info_ts);
 		strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
-		command_success_nodata(si, "%d: [\2%s\2] by \2%s\2 at \2%s\2: \2%s\2",
+		command_success_nodata(si, "%u: [\2%s\2] by \2%s\2 at \2%s\2: \2%s\2",
 			x, y, l->nick, dBuf, l->story);
 		sfree(y);
 	}
@@ -465,7 +459,7 @@ is_cmd_olist(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_node_t *n;
 	struct tm tm;
 	char dBuf[BUFSIZE];
-	int x = 0;
+	unsigned int x = 0;
 
 	MOWGLI_ITER_FOREACH(n, operlogon_info.head)
 	{
@@ -477,7 +471,7 @@ is_cmd_olist(struct sourceinfo *si, int parc, char *parv[])
 
 		tm = *localtime(&o->info_ts);
 		strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
-		command_success_nodata(si, "%d: [\2%s\2] by \2%s\2 at \2%s\2: \2%s\2",
+		command_success_nodata(si, "%u: [\2%s\2] by \2%s\2 at \2%s\2: \2%s\2",
 			x, y, o->nick, dBuf, o->story);
 		sfree(y);
 	}

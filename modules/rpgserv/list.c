@@ -33,7 +33,7 @@ rs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, "\2%s\2: %s", mc->name, desc);
 		listed++;
 	}
-	command_success_nodata(si, _("Listed \2%d\2 channels."), listed);
+	command_success_nodata(si, _("Listed \2%u\2 channels."), listed);
 
 	logcommand(si, CMDLOG_GET, "RPGSERV:LIST");
 }

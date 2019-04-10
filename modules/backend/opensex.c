@@ -44,11 +44,11 @@ static void
 opensex_h_grver(struct database_handle *db, const char *type)
 {
 	struct opensex *rs = (struct opensex *)db->priv;
-	rs->grver = db_sread_int(db);
-	slog(LG_INFO, "opensex: grammar version is %d.", rs->grver);
+	rs->grver = db_sread_uint(db);
+	slog(LG_INFO, "opensex: grammar version is %u.", rs->grver);
 
 	if (rs->grver != 1)
-		slog(LG_ERROR, "opensex: grammar version %d is unsupported.  dazed and confused, but trying to continue.", rs->grver);
+		slog(LG_ERROR, "opensex: grammar version %u is unsupported.  dazed and confused, but trying to continue.", rs->grver);
 }
 
 static bool
@@ -72,7 +72,7 @@ opensex_read_next_row(struct database_handle *hdl)
 
 	if (c == EOF && ferror(rs->f))
 	{
-		slog(LG_ERROR, "opensex-read-next-row: error at %s line %d: %s", hdl->file, hdl->line, strerror(errno));
+		slog(LG_ERROR, "opensex-read-next-row: error at %s line %u: %s", hdl->file, hdl->line, strerror(errno));
 		slog(LG_ERROR, "opensex-read-next-row: exiting to avoid data loss");
 		exit(EXIT_FAILURE);
 	}
@@ -220,7 +220,7 @@ static bool
 opensex_write_time(struct database_handle *db, time_t tm)
 {
 	char buf[32];
-	snprintf(buf, sizeof buf, "%lu", tm);
+	snprintf(buf, sizeof buf, "%lu", (unsigned long) tm);
 	return opensex_write_cell(db, buf, false);
 }
 
@@ -359,7 +359,7 @@ opensex_db_open_write(const char *filename)
 	db->file = sstrdup(bpath);
 
 	db_start_row(db, "GRVER");
-	db_write_int(db, rs->grver);
+	db_write_uint(db, rs->grver);
 	db_commit_row(db);
 
 	return db;

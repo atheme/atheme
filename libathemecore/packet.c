@@ -59,7 +59,7 @@ ping_uplink(void *arg)
 		if (diff >= 600)
 		{
 			slog(LG_INFO, "ping_uplink(): uplink appears to be dead, disconnecting");
-			sts("ERROR :Closing Link: 127.0.0.1 (Ping timeout: %d seconds)", diff);
+			sts("ERROR :Closing Link: 127.0.0.1 (Ping timeout: %u seconds)", diff);
 			sendq_flush(curr_uplink->conn);
 			if (me.connected)
 			{

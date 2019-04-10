@@ -78,8 +78,8 @@ ns_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 	if (i == 0)
 		command_success_nodata(si, _("No channel access was found for the nickname \2%s\2."), entity(mu)->name);
 	else
-		command_success_nodata(si, ngettext(N_("\2%d\2 channel access match for the nickname \2%s\2"),
-						    N_("\2%d\2 channel access matches for the nickname \2%s\2"), i),
+		command_success_nodata(si, ngettext(N_("\2%u\2 channel access match for the nickname \2%s\2"),
+						    N_("\2%u\2 channel access matches for the nickname \2%s\2"), i),
 						    i, entity(mu)->name);
 }
 

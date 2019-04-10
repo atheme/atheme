@@ -11,7 +11,7 @@
 #define ATHEME_INC_MODULE_H 1
 
 #include <atheme/abirev.h>
-#include <atheme/common.h>
+#include <atheme/constants.h>
 #include <atheme/serno.h>
 #include <atheme/stdheaders.h>
 

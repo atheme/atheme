@@ -18,7 +18,7 @@ cs_cmd_clear_akicks(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_node_t *n, *tn;
 	struct chanacs *ca;
 	char *name = parv[0];
-	int changes = 0;
+	unsigned int changes = 0;
 
 	if (!name)
 	{
@@ -66,7 +66,7 @@ cs_cmd_clear_akicks(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_DO, "CLEAR:AKICKS: \2%s\2", mc->name);
 	command_success_nodata(si, _("Cleared AKICK entries in \2%s\2."), name);
 	if (changes > 0)
-		verbose(mc, _("\2%s\2 removed all %d AKICK entries."),
+		verbose(mc, _("\2%s\2 removed all %u AKICK entries."),
 				get_source_name(si), changes);
 }
 

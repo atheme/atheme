@@ -234,7 +234,7 @@ os_cmd_sqline_del(struct sourceinfo *si, int parc, char *parv[])
 				{
 					if (!(q = qline_find_num(i)))
 					{
-						command_fail(si, fault_nosuch_target, _("No such SQLINE with number \2%d\2."), i);
+						command_fail(si, fault_nosuch_target, _("No such SQLINE with number \2%u\2."), i);
 						continue;
 					}
 
@@ -253,7 +253,7 @@ os_cmd_sqline_del(struct sourceinfo *si, int parc, char *parv[])
 
 			if (!(q = qline_find_num(number)))
 			{
-				command_fail(si, fault_nosuch_target, _("No such SQLINE with number \2%d\2."), number);
+				command_fail(si, fault_nosuch_target, _("No such SQLINE with number \2%u\2."), number);
 				return;
 			}
 
@@ -293,7 +293,7 @@ os_cmd_sqline_del(struct sourceinfo *si, int parc, char *parv[])
 			{
 				if (!(q = qline_find_num(i)))
 				{
-					command_fail(si, fault_nosuch_target, _("No such SQLINE with number \2%d\2."), i);
+					command_fail(si, fault_nosuch_target, _("No such SQLINE with number \2%u\2."), i);
 					continue;
 				}
 
@@ -312,7 +312,7 @@ os_cmd_sqline_del(struct sourceinfo *si, int parc, char *parv[])
 
 		if (!(q = qline_find_num(number)))
 		{
-			command_fail(si, fault_nosuch_target, _("No such SQLINE with number \2%d\2."), number);
+			command_fail(si, fault_nosuch_target, _("No such SQLINE with number \2%u\2."), number);
 			return;
 		}
 
@@ -363,13 +363,13 @@ os_cmd_sqline_list(struct sourceinfo *si, int parc, char *parv[])
 		q = (struct qline *)n->data;
 
 		if (q->duration && full)
-			command_success_nodata(si, _("%d: %s - by \2%s\2 - expires in \2%s\2 - (%s)"), q->number, q->mask, q->setby, timediff(q->expires > CURRTIME ? q->expires - CURRTIME : 0), q->reason);
+			command_success_nodata(si, _("%u: %s - by \2%s\2 - expires in \2%s\2 - (%s)"), q->number, q->mask, q->setby, timediff(q->expires > CURRTIME ? q->expires - CURRTIME : 0), q->reason);
 		else if (q->duration && !full)
-			command_success_nodata(si, _("%d: %s - by \2%s\2 - expires in \2%s\2"), q->number, q->mask, q->setby, timediff(q->expires > CURRTIME ? q->expires - CURRTIME : 0));
+			command_success_nodata(si, _("%u: %s - by \2%s\2 - expires in \2%s\2"), q->number, q->mask, q->setby, timediff(q->expires > CURRTIME ? q->expires - CURRTIME : 0));
 		else if (!q->duration && full)
-			command_success_nodata(si, _("%d: %s - by \2%s\2 - \2permanent\2 - (%s)"), q->number, q->mask, q->setby, q->reason);
+			command_success_nodata(si, _("%u: %s - by \2%s\2 - \2permanent\2 - (%s)"), q->number, q->mask, q->setby, q->reason);
 		else
-			command_success_nodata(si, _("%d: %s - by \2%s\2 - \2permanent\2"), q->number, q->mask, q->setby);
+			command_success_nodata(si, _("%u: %s - by \2%s\2 - \2permanent\2"), q->number, q->mask, q->setby);
 	}
 
 	command_success_nodata(si, _("Total of \2%zu\2 %s in SQLINE list."), qlnlist.count, (qlnlist.count == 1) ? "entry" : "entries");

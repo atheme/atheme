@@ -18,7 +18,7 @@ ms_cmd_sendall(struct sourceinfo *si, int parc, char *parv[])
 	struct myentity *mt;
 	mowgli_node_t *n;
 	struct mymemo *memo;
-	int sent = 0, tried = 0;
+	unsigned int sent = 0, tried = 0;
 	bool ignored;
 	struct service *memoserv;
 	struct myentity_iteration_state state;
@@ -150,8 +150,8 @@ ms_cmd_sendall(struct sourceinfo *si, int parc, char *parv[])
 		command_add_flood(si, FLOOD_HEAVY);
 	else if (sent > 1)
 		command_add_flood(si, FLOOD_MODERATE);
-	logcommand(si, CMDLOG_ADMIN, "SENDALL: \2%s\2 (%d/%d sent)", m, sent, tried);
-	command_success_nodata(si, _("The memo has been successfully sent to %d accounts."), sent);
+	logcommand(si, CMDLOG_ADMIN, "SENDALL: \2%s\2 (%u/%u sent)", m, sent, tried);
+	command_success_nodata(si, _("The memo has been successfully sent to %u accounts."), sent);
 	return;
 }
 

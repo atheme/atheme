@@ -286,7 +286,7 @@ hs_cmd_take(struct sourceinfo *si, int parc, char *parv[])
 
 	if (md && config_options.vhost_change && CURRTIME < (vhost_time + config_options.vhost_change))
 	{
-		command_fail(si, fault_noprivs, _("You must wait at least \2%d\2 days between changes to your vHost."),
+		command_fail(si, fault_noprivs, _("You must wait at least \2%u\2 days between changes to your vHost."),
 			(config_options.vhost_change / 3600 / 24));
 		return;
 	}

@@ -16,8 +16,8 @@ cs_cmd_count(struct sourceinfo *si, int parc, char *parv[])
 	struct chanacs *ca;
 	struct mychan *mc = mychan_find(chan);
 	unsigned int ca_sop, ca_aop, ca_hop, ca_vop;
-	int vopcnt = 0, aopcnt = 0, hopcnt = 0, sopcnt = 0, akickcnt = 0;
-	int othercnt = 0;
+	unsigned int vopcnt = 0, aopcnt = 0, hopcnt = 0, sopcnt = 0, akickcnt = 0;
+	unsigned int othercnt = 0;
 	unsigned int i;
 	mowgli_node_t *n;
 	char str[512];
@@ -76,10 +76,10 @@ cs_cmd_count(struct sourceinfo *si, int parc, char *parv[])
 			othercnt++;
 	}
 	if (ca_hop == ca_vop)
-		command_success_nodata(si, _("%s: VOP: %d, AOP: %d, SOP: %d, AKick: %d, Other: %d"),
+		command_success_nodata(si, _("%s: VOP: %u, AOP: %u, SOP: %u, AKick: %u, Other: %u"),
 				chan, vopcnt, aopcnt, sopcnt, akickcnt, othercnt);
 	else
-		command_success_nodata(si, _("%s: VOP: %d, HOP: %d, AOP: %d, SOP: %d, AKick: %d, Other: %d"),
+		command_success_nodata(si, _("%s: VOP: %u, HOP: %u, AOP: %u, SOP: %u, AKick: %u, Other: %u"),
 				chan, vopcnt, hopcnt, aopcnt, sopcnt, akickcnt, othercnt);
 	snprintf(str, sizeof str, "%s: ", chan);
 	for (i = 0; i < ARRAY_SIZE(chanacs_flags); i++)
@@ -95,7 +95,7 @@ cs_cmd_count(struct sourceinfo *si, int parc, char *parv[])
 				othercnt++;
 		}
 		snprintf(str + strlen(str), sizeof str - strlen(str),
-				"%c:%d ", (char) i, othercnt);
+				"%c:%u ", (char) i, othercnt);
 	}
 	command_success_nodata(si, "%s", str);
 

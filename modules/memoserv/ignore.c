@@ -158,7 +158,7 @@ ms_cmd_ignore_list(struct sourceinfo *si, int parc, char *parv[])
 	// Iterate through list, make sure they're not in it, if last node append
 	MOWGLI_ITER_FOREACH(n, si->smu->memo_ignores.head)
 	{
-		command_success_nodata(si, "%d - %s", i, (char *)n->data);
+		command_success_nodata(si, "%u - %s", i, (char *)n->data);
 		i++;
 	}
 

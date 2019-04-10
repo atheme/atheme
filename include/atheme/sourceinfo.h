@@ -10,7 +10,6 @@
 #ifndef ATHEME_INC_SOURCEINFO_H
 #define ATHEME_INC_SOURCEINFO_H 1
 
-#include <atheme/common.h>
 #include <atheme/object.h>
 #include <atheme/stdheaders.h>
 #include <atheme/structures.h>

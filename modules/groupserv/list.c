@@ -45,9 +45,9 @@ gs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 	if (matches == 0)
 		command_success_nodata(si, _("No groups matched pattern \2%s\2"), pattern);
 	else
-		command_success_nodata(si, ngettext(N_("\2%d\2 match for pattern \2%s\2"), N_("\2%d\2 matches for pattern \2%s\2"), matches), matches, pattern);
+		command_success_nodata(si, ngettext(N_("\2%u\2 match for pattern \2%s\2"), N_("\2%u\2 matches for pattern \2%s\2"), matches), matches, pattern);
 
-	logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 (\2%d\2 matches)", pattern, matches);
+	logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 (\2%u\2 matches)", pattern, matches);
 }
 
 static struct command gs_list = {

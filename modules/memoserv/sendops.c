@@ -19,7 +19,7 @@ ms_cmd_sendops(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_node_t *n, *tn;
 	struct mymemo *memo;
 	struct mychan *mc;
-	int sent = 0, tried = 0;
+	unsigned int sent = 0, tried = 0;
 	bool ignored, operoverride = false;
 	struct service *memoserv;
 
@@ -172,10 +172,10 @@ ms_cmd_sendops(struct sourceinfo *si, int parc, char *parv[])
 	else if (sent > 1)
 		command_add_flood(si, FLOOD_MODERATE);
 	if (operoverride)
-		logcommand(si, CMDLOG_ADMIN, "SENDOPS: to \2%s\2 (%d/%d sent) (oper override)", mc->name, sent, tried);
+		logcommand(si, CMDLOG_ADMIN, "SENDOPS: to \2%s\2 (%u/%u sent) (oper override)", mc->name, sent, tried);
 	else
-		logcommand(si, CMDLOG_SET, "SENDOPS: to \2%s\2 (%d/%d sent)", mc->name, sent, tried);
-	command_success_nodata(si, _("The memo has been successfully sent to %d ops on \2%s\2."), sent, mc->name);
+		logcommand(si, CMDLOG_SET, "SENDOPS: to \2%s\2 (%u/%u sent)", mc->name, sent, tried);
+	command_success_nodata(si, _("The memo has been successfully sent to %u ops on \2%s\2."), sent, mc->name);
 	return;
 }
 

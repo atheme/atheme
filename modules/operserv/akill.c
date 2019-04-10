@@ -281,7 +281,7 @@ os_cmd_akill_del(struct sourceinfo *si, int parc, char *parv[])
 				{
 					if (!(k = kline_find_num(i)))
 					{
-						command_fail(si, fault_nosuch_target, _("No such AKILL with number \2%d\2."), i);
+						command_fail(si, fault_nosuch_target, _("No such AKILL with number \2%u\2."), i);
 						continue;
 					}
 
@@ -300,7 +300,7 @@ os_cmd_akill_del(struct sourceinfo *si, int parc, char *parv[])
 
 			if (!(k = kline_find_num(number)))
 			{
-				command_fail(si, fault_nosuch_target, _("No such AKILL with number \2%d\2."), number);
+				command_fail(si, fault_nosuch_target, _("No such AKILL with number \2%u\2."), number);
 				return;
 			}
 
@@ -340,7 +340,7 @@ os_cmd_akill_del(struct sourceinfo *si, int parc, char *parv[])
 			{
 				if (!(k = kline_find_num(i)))
 				{
-					command_fail(si, fault_nosuch_target, _("No such AKILL with number \2%d\2."), i);
+					command_fail(si, fault_nosuch_target, _("No such AKILL with number \2%u\2."), i);
 					continue;
 				}
 
@@ -359,7 +359,7 @@ os_cmd_akill_del(struct sourceinfo *si, int parc, char *parv[])
 
 		if (!(k = kline_find_num(number)))
 		{
-			command_fail(si, fault_nosuch_target, _("No such AKILL with number \2%d\2."), number);
+			command_fail(si, fault_nosuch_target, _("No such AKILL with number \2%u\2."), number);
 			return;
 		}
 

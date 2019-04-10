@@ -35,7 +35,7 @@ extern mowgli_list_t uplinks;
 extern struct uplink *curr_uplink;
 
 void init_uplinks(void);
-struct uplink *uplink_add(const char *name, const char *host, const char *send_password, const char *receive_password, const char *vhost, int port);
+struct uplink *uplink_add(const char *name, const char *host, const char *send_password, const char *receive_password, const char *vhost, unsigned int port);
 void uplink_delete(struct uplink *u);
 struct uplink *uplink_find(const char *name);
 void uplink_connect(void);

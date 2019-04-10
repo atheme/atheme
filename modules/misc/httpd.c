@@ -114,7 +114,7 @@ check_close(struct connection *cptr)
 }
 
 static void
-send_error(struct connection *cptr, int errorcode, const char *text, bool sendentity)
+send_error(struct connection *cptr, unsigned int errorcode, const char *text, bool sendentity)
 {
 	char buf1[300];
 	char buf2[700];
@@ -125,10 +125,10 @@ send_error(struct connection *cptr, int errorcode, const char *text, bool senden
 	memset(buf2, 0x00, sizeof buf2);
 
 	if (sendentity)
-		snprintf(buf2, sizeof buf2, "HTTP/1.1 %d %s\r\n", errorcode, text);
+		snprintf(buf2, sizeof buf2, "HTTP/1.1 %u %s\r\n", errorcode, text);
 
 	snprintf(buf1, sizeof buf1,
-	         "HTTP/1.1 %d %s\r\n"
+	         "HTTP/1.1 %u %s\r\n"
 	         "Server: %s/%s\r\n"
 	         "Content-Type: text/plain\r\n"
 	         "Content-Length: %zu\r\n"
@@ -414,7 +414,7 @@ httpd_config_ready(void *vptr)
 		listener = connection_open_listener_tcp(httpd_config.host,
 			httpd_config.port, do_listen);
 		if (listener == NULL)
-			slog(LG_ERROR, "httpd_config_ready(): failed to open listener on host %s port %d", httpd_config.host, httpd_config.port);
+			slog(LG_ERROR, "httpd_config_ready(): failed to open listener on host %s port %u", httpd_config.host, httpd_config.port);
 	}
 	else
 		slog(LG_ERROR, "httpd_config_ready(): httpd {} block missing or invalid");

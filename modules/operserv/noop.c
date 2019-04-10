@@ -286,7 +286,7 @@ os_cmd_noop(struct sourceinfo *si, int parc, char *parv[])
 			{
 				np = n->data;
 
-				command_success_nodata(si, "%-5d %-31s %-21s %s", i, np->target, np->added_by, np->reason);
+				command_success_nodata(si, "%-5u %-31s %-21s %s", i, np->target, np->added_by, np->reason);
 				i++;
 			}
 
@@ -305,7 +305,7 @@ os_cmd_noop(struct sourceinfo *si, int parc, char *parv[])
 			{
 				np = n->data;
 
-				command_success_nodata(si, "%-5d %-31s %-21s %s", i, np->target, np->added_by, np->reason);
+				command_success_nodata(si, "%-5u %-31s %-21s %s", i, np->target, np->added_by, np->reason);
 				i++;
 			}
 

@@ -14,7 +14,7 @@ struct listmail_state
 	struct sourceinfo *origin;
 	char *pattern;
 	stringref email_canonical;
-	int matches;
+	unsigned int matches;
 };
 
 static int
@@ -56,12 +56,12 @@ ns_cmd_listmail(struct sourceinfo *si, int parc, char *parv[])
 	myentity_foreach_t(ENT_USER, listmail_foreach_cb, &state);
 	strshare_unref(state.email_canonical);
 
-	logcommand(si, CMDLOG_ADMIN, "LISTMAIL: \2%s\2 (\2%d\2 matches)", email, state.matches);
+	logcommand(si, CMDLOG_ADMIN, "LISTMAIL: \2%s\2 (\2%u\2 matches)", email, state.matches);
 	if (state.matches == 0)
 		command_success_nodata(si, _("No accounts matched e-mail address \2%s\2"), email);
 	else
-		command_success_nodata(si, ngettext(N_("\2%d\2 match for e-mail address \2%s\2"),
-						    N_("\2%d\2 matches for e-mail address \2%s\2"), state.matches), state.matches, email);
+		command_success_nodata(si, ngettext(N_("\2%u\2 match for e-mail address \2%s\2"),
+						    N_("\2%u\2 matches for e-mail address \2%s\2"), state.matches), state.matches, email);
 }
 
 static struct command ns_listmail = {

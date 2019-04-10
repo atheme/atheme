@@ -83,7 +83,7 @@ guest_nickname(struct user *u)
 	 * you shouldn't use this module. */
 	for (tries = 0; tries < 30; tries++)
 	{
-		snprintf(gnick, sizeof gnick, "%s%d", nicksvs.enforce_prefix, atheme_random()%100000);
+		snprintf(gnick, sizeof gnick, "%s%u", nicksvs.enforce_prefix, 1 + atheme_random_uniform(9999));
 
 		if (!user_find_named(gnick))
 			break;
@@ -209,7 +209,7 @@ check_enforce(hook_nick_enforce_t *hdata)
 		}
 	}
 
-	notice(nicksvs.nick, hdata->u->nick, "You have %d seconds to identify to your nickname before it is changed.", (int)(timeout->timelimit - CURRTIME));
+	notice(nicksvs.nick, hdata->u->nick, "You have %u seconds to identify to your nickname before it is changed.", (unsigned int)(timeout->timelimit - CURRTIME));
 }
 
 static void

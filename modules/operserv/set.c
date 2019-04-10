@@ -76,9 +76,9 @@ os_cmd_set_recontime(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	int value = atoi(recontime);
+	unsigned int value;
 
-	if (value < 0)
+	if (! string_to_uint(recontime, &value) || ! value)
 	{
 		command_fail(si, fault_badparams, _("RECONTIME must be a positive integer, %s is invalid"), recontime);
 		return;
@@ -103,9 +103,9 @@ os_cmd_set_maxlogins(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	int value = atoi(logins);
+	unsigned int value;
 
-	if (value < 3 || value > INT_MAX)
+	if (! string_to_uint(logins, &value) || value < 3)
 	{
 		command_fail(si, fault_badparams, _("%s is invalid for MAXLOGINS value."), logins);
 		return;
@@ -130,9 +130,9 @@ os_cmd_set_maxusers(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	int value = atoi(users);
+	unsigned int value;
 
-	if (value < 0 || value > INT_MAX)
+	if (! string_to_uint(users, &value) || ! value)
 	{
 		command_fail(si, fault_badparams, _("%s is invalid for MAXUSERS value."), users);
 		return;
@@ -157,9 +157,9 @@ os_cmd_set_maxnicks(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	int value = atoi(nicks);
+	unsigned int value;
 
-	if (value < 1 || value > INT_MAX)
+	if (! string_to_uint(nicks, &value) || ! value)
 	{
 		command_fail(si, fault_badparams, _("%s is invalid for MAXNICKS value."), nicks);
 		return;
@@ -184,9 +184,9 @@ os_cmd_set_maxchans(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	int value = atoi(chans);
+	unsigned int value;
 
-	if (value < 1 || value > INT_MAX)
+	if (! string_to_uint(chans, &value) || ! value)
 	{
 		command_fail(si, fault_badparams, _("%s is invalid for MAXCHANS value."), chans);
 		return;
@@ -211,9 +211,9 @@ os_cmd_set_mdlimit(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	int value = atoi(limit);
+	unsigned int value;
 
-	if (value < 1 || value > INT_MAX)
+	if (! string_to_uint(limit, &value) || ! value)
 	{
 		command_fail(si, fault_badparams, _("%s is invalid for MDLIMIT value."), limit);
 		return;
@@ -238,9 +238,9 @@ os_cmd_set_klinetime(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	int value = atoi(days);
+	unsigned int value;
 
-	if (value < 0)
+	if (! string_to_uint(days, &value) || ! value)
 	{
 		command_fail(si, fault_badparams, _("KLINETIME must be a positive integer, %s is invalid"), days);
 		return;
@@ -266,9 +266,9 @@ os_cmd_set_commitinterval(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	int value = atoi(minutes);
+	unsigned int value;
 
-	if (value < 0)
+	if (! string_to_uint(minutes, &value) || ! value)
 	{
 		command_fail(si, fault_badparams, _("COMMITINTERVAL must be a positive integer, %s is invalid"), minutes);
 		return;
@@ -294,9 +294,9 @@ os_cmd_set_chanexpire(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	int value = atoi(days);
+	unsigned int value;
 
-	if (value < 0)
+	if (! string_to_uint(days, &value) || ! value)
 	{
 		command_fail(si, fault_badparams, _("CHANEXPIRE must be a positive integer, %s is invalid"), days);
 		return;
@@ -322,9 +322,9 @@ os_cmd_set_maxchanacs(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	int value = atoi(chanacs);
+	unsigned int value;
 
-	if (value < 0 || value > INT_MAX)
+	if (! string_to_uint(chanacs, &value) || ! value)
 	{
 		command_fail(si, fault_badparams, _("%s is invalid for MAXCHANACS value."), chanacs);
 		return;
@@ -349,12 +349,12 @@ os_cmd_set_maxfounders(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	int value = atoi(founders);
+	unsigned int value;
 
 	/* Yes, I know how arbitrary the high value is, this is what it is in confprocess.c
 	 * (I rounded it down though) -- JD
 	 */
-	if (value < 1 || value > 41)
+	if (! string_to_uint(founders, &value) || ! value || value > 41)
 	{
 		command_fail(si, fault_badparams, _("%s is invalid for MAXFOUNDERS value."), founders);
 		return;
@@ -379,9 +379,9 @@ os_cmd_set_akicktime(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	int value = atoi(minutes);
+	unsigned int value;
 
-	if (value < 0)
+	if (! string_to_uint(minutes, &value) || ! value)
 	{
 		command_fail(si, fault_badparams, _("AKICKTIME must be a positive integer, %s is invalid"), minutes);
 		return;
@@ -452,9 +452,9 @@ os_cmd_set_nickexpire(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	int value = atoi(days);
+	unsigned int value;
 
-	if (value < 0)
+	if (! string_to_uint(days, &value) || ! value)
 	{
 		command_fail(si, fault_badparams, _("NICKEXPIRE must be a positive integer, %s is invalid"), days);
 		return;
@@ -473,7 +473,7 @@ os_cmd_set_enforceprefix(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *prefix = parv[0];
 
-	if (!prefix)
+	if (!prefix || !*prefix)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ENFORCEPREFIX");
 		command_fail(si, fault_needmoreparams, _("Syntax: SET ENFORCEPREFIX <prefix>"));

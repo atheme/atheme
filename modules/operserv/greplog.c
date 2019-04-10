@@ -57,7 +57,8 @@ static void
 os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[])
 {
 	const char *service, *pattern, *baselog;
-	int maxdays, matches = -1, matches1, day, days, lines, linesv;
+	unsigned int matches = 0, matches_sv = 0;
+	unsigned int day, days, maxdays, lines, linesv;
 	FILE *in;
 	char str[1024];
 	char *p, *q;
@@ -91,11 +92,10 @@ os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[])
 
 	if (parc >= 3)
 	{
-		days = atoi(parv[2]);
 		maxdays = !strcmp(service, "*") ? 120 : 30;
-		if (days < 0 || days > maxdays)
+		if (! string_to_uint(parv[2], &days) || days < 0 || days > maxdays)
 		{
-			command_fail(si, fault_badparams, _("Too many days, maximum is %d."), maxdays);
+			command_fail(si, fault_badparams, _("Too many days, maximum is %u."), maxdays);
 			return;
 		}
 	}
@@ -118,8 +118,8 @@ os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[])
 			t = CURRTIME - day * 86400;
 			tm = *localtime(&t);
 			snprintf(logfile, sizeof logfile, "%s.%04u%02u%02u",
-					baselog, tm.tm_year + 1900,
-					tm.tm_mon + 1, tm.tm_mday);
+					baselog, (unsigned int) (tm.tm_year + 1900),
+					(unsigned int) (tm.tm_mon + 1), (unsigned int) tm.tm_mday);
 		}
 		in = fopen(logfile, "r");
 		if (in == NULL)
@@ -127,9 +127,7 @@ os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[])
 			command_success_nodata(si, "Failed to open log file %s", logfile);
 			continue;
 		}
-		if (matches == -1)
-			matches = 0;
-		matches1 = matches;
+		matches_sv = matches;
 		lines = linesv = 0;
 		while (fgets(str, sizeof str, in) != NULL)
 		{
@@ -164,18 +162,18 @@ os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[])
 			}
 		}
 		fclose(in);
-		matches = matches1;
+		matches = matches_sv;
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, loglines.head)
 		{
 			p = n->data;
 			matches++;
-			command_success_nodata(si, "[%d] %s", matches, p);
+			command_success_nodata(si, "[%u] %s", matches, p);
 			mowgli_node_delete(n, &loglines);
 			sfree(n->data);
 			mowgli_node_free(n);
 		}
 		if (matches == 0 && lines > linesv && lines > 0)
-			command_success_nodata(si, "Log file may be corrupted, %d/%d unexpected lines", lines - linesv, lines);
+			command_success_nodata(si, "Log file may be corrupted, %u/%u unexpected lines", lines - linesv, lines);
 		if (matches >= MAXMATCHES)
 		{
 			command_success_nodata(si, "Too many matches, halting search");
@@ -183,12 +181,12 @@ os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[])
 		}
 	}
 
-	logcommand(si, CMDLOG_ADMIN, "GREPLOG: \2%s\2 \2%s\2 (\2%d\2 matches)", service, pattern, matches);
+	logcommand(si, CMDLOG_ADMIN, "GREPLOG: \2%s\2 \2%s\2 (\2%u\2 matches)", service, pattern, matches);
 	if (matches == 0)
 		command_success_nodata(si, _("No lines matched pattern \2%s\2"), pattern);
 	else if (matches > 0)
-		command_success_nodata(si, ngettext(N_("\2%d\2 match for pattern \2%s\2"),
-						    N_("\2%d\2 matches for pattern \2%s\2"), matches), matches, pattern);
+		command_success_nodata(si, ngettext(N_("\2%u\2 match for pattern \2%s\2"),
+						    N_("\2%u\2 matches for pattern \2%s\2"), matches), matches, pattern);
 }
 
 static struct command os_greplog = {

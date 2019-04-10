@@ -11,7 +11,7 @@
 #define ATHEME_INC_DATABASE_BACKEND_H 1
 
 #include <atheme/attributes.h>
-#include <atheme/common.h>
+#include <atheme/constants.h>
 #include <atheme/stdheaders.h>
 #include <atheme/structures.h>
 

@@ -84,7 +84,7 @@ static void
 db_h_gdbv(struct database_handle *db, const char *type)
 {
 	loading_gdbv = db_sread_uint(db);
-	slog(LG_INFO, "groupserv: opensex data schema version is %d.", loading_gdbv);
+	slog(LG_INFO, "groupserv: opensex data schema version is %u.", loading_gdbv);
 
 	their_ga_all = GA_ALL_OLD;
 }
@@ -121,12 +121,12 @@ db_h_grp(struct database_handle *db, const char *type)
 
 	if (mygroup_find(name))
 	{
-		slog(LG_INFO, "db-h-grp: line %d: skipping duplicate group %s", db->line, name);
+		slog(LG_INFO, "db-h-grp: line %u: skipping duplicate group %s", db->line, name);
 		return;
 	}
 	if (uid && myentity_find_uid(uid))
 	{
-		slog(LG_INFO, "db-h-grp: line %d: skipping group %s with duplicate UID %s", db->line, name, uid);
+		slog(LG_INFO, "db-h-grp: line %u: skipping group %s with duplicate UID %s", db->line, name, uid);
 		return;
 	}
 
@@ -140,7 +140,7 @@ db_h_grp(struct database_handle *db, const char *type)
 		flagset = db_sread_word(db);
 
 		if (!gflags_fromstr(mg_flags, flagset, &mg->flags))
-			slog(LG_INFO, "db-h-grp: line %d: confused by flags: %s", db->line, flagset);
+			slog(LG_INFO, "db-h-grp: line %u: confused by flags: %s", db->line, flagset);
 	}
 }
 
@@ -160,13 +160,13 @@ db_h_gacl(struct database_handle *db, const char *type)
 
 	if (mg == NULL)
 	{
-		slog(LG_INFO, "db-h-gacl: line %d: groupacs for nonexistent group %s", db->line, name);
+		slog(LG_INFO, "db-h-gacl: line %u: groupacs for nonexistent group %s", db->line, name);
 		return;
 	}
 
 	if (mt == NULL)
 	{
-		slog(LG_INFO, "db-h-gacl: line %d: groupacs for nonexistent entity %s", db->line, entity);
+		slog(LG_INFO, "db-h-gacl: line %u: groupacs for nonexistent entity %s", db->line, entity);
 		return;
 	}
 
@@ -175,7 +175,7 @@ db_h_gacl(struct database_handle *db, const char *type)
 		flagset = db_sread_word(db);
 
 		if (!gflags_fromstr(ga_flags, flagset, &flags))
-			slog(LG_INFO, "db-h-gacl: line %d: confused by flags: %s", db->line, flagset);
+			slog(LG_INFO, "db-h-gacl: line %u: confused by flags: %s", db->line, flagset);
 
 		/* ACL view permission was added, so make up the permission (#279), but only if the database
 		 * is from atheme 7.1 or earlier. --kaniini

@@ -192,12 +192,12 @@ server_delete_serv(struct server *s)
 	}
 
 	if (s->sid)
-		slog(me.connected ? LG_NETWORK : LG_DEBUG, "server_delete(): %s (%s), uplink %s (%d users)",
+		slog(me.connected ? LG_NETWORK : LG_DEBUG, "server_delete(): %s (%s), uplink %s (%u users)",
 				s->name, s->sid,
 				s->uplink != NULL ? s->uplink->name : "<none>",
 				s->users);
 	else
-		slog(me.connected ? LG_NETWORK : LG_DEBUG, "server_delete(): %s, uplink %s (%d users)",
+		slog(me.connected ? LG_NETWORK : LG_DEBUG, "server_delete(): %s, uplink %s (%u users)",
 				s->name, s->uplink != NULL ? s->uplink->name : "<none>",
 				s->users);
 

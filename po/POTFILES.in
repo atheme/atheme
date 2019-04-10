@@ -1,4 +1,5 @@
 # Please don't update this file manually - use 'make update-potfiles' instead!
+include/atheme/constants.h
 libathemecore/account.c
 libathemecore/auth.c
 libathemecore/commandhelp.c

@@ -20,7 +20,7 @@ ms_cmd_sendgroup(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_node_t *n, *tn;
 	struct mymemo *memo;
 	struct mygroup *mg;
-	int sent = 0, tried = 0;
+	unsigned int sent = 0, tried = 0;
 	bool ignored, operoverride = false;
 	struct service *memoserv;
 
@@ -161,10 +161,10 @@ ms_cmd_sendgroup(struct sourceinfo *si, int parc, char *parv[])
 	else if (sent > 1)
 		command_add_flood(si, FLOOD_MODERATE);
 	if (operoverride)
-		logcommand(si, CMDLOG_ADMIN, "SENDGROUP: to \2%s\2 (%d/%d sent) (oper override)", entity(mg)->name, sent, tried);
+		logcommand(si, CMDLOG_ADMIN, "SENDGROUP: to \2%s\2 (%u/%u sent) (oper override)", entity(mg)->name, sent, tried);
 	else
-		logcommand(si, CMDLOG_SET, "SENDGROUP: to \2%s\2 (%d/%d sent)", entity(mg)->name, sent, tried);
-	command_success_nodata(si, _("The memo has been successfully sent to %d members on \2%s\2."), sent, entity(mg)->name);
+		logcommand(si, CMDLOG_SET, "SENDGROUP: to \2%s\2 (%u/%u sent)", entity(mg)->name, sent, tried);
+	command_success_nodata(si, _("The memo has been successfully sent to %u members on \2%s\2."), sent, entity(mg)->name);
 	return;
 }
 

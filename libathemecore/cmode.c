@@ -792,7 +792,7 @@ modestack_mode_ext_real(const char *source, struct channel *channel, int dir, un
 	md = modestack_init(source, channel);
 	if (i >= ignore_mode_list_size)
 	{
-		slog(LG_ERROR, "modestack_mode_ext(): i=%d out of range (value=\"%s\")",
+		slog(LG_ERROR, "modestack_mode_ext(): i=%u out of range (value=\"%s\")",
 				i, value);
 		return;
 	}
@@ -875,7 +875,7 @@ channel_modes(const struct channel *c, bool doparams)
 		*p++ = 'l';
 		if (doparams)
 		{
-			snprintf(q, params + sizeof params - q, " %d", c->limit);
+			snprintf(q, params + sizeof params - q, " %u", c->limit);
 			q += strlen(q);
 		}
 	}

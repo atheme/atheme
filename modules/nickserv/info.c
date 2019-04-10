@@ -189,7 +189,7 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		tm2 = *localtime(&mn->lastseen);
 		strftime(lastlogin, sizeof lastlogin, TIME_FORMAT, &tm2);
 		if (hide_info)
-			command_success_nodata(si, _("Last seen  : (about %d weeks ago)"), (int)((CURRTIME - mn->lastseen) / 604800));
+			command_success_nodata(si, _("Last seen  : (about %u weeks ago)"), (unsigned int)((CURRTIME - mn->lastseen) / 604800));
 		else
 			command_success_nodata(si, _("Last seen  : %s (%s ago)"), lastlogin, time_ago(mn->lastseen));
 	}
@@ -204,14 +204,14 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		if (mn == NULL)
 		{
 			if (hide_info)
-				command_success_nodata(si, _("Last seen  : (about %d weeks ago)"), (int)((CURRTIME - mu->lastlogin) / 604800));
+				command_success_nodata(si, _("Last seen  : (about %u weeks ago)"), (unsigned int)((CURRTIME - mu->lastlogin) / 604800));
 			else
 				command_success_nodata(si, _("Last seen  : %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
 		}
 		else if (mn->lastseen != mu->lastlogin)
 		{
 			if (hide_info)
-				command_success_nodata(si, _("User seen  : (about %d weeks ago)"), (int)((CURRTIME - mu->lastlogin) / 604800));
+				command_success_nodata(si, _("User seen  : (about %u weeks ago)"), (unsigned int)((CURRTIME - mu->lastlogin) / 604800));
 			else
 				command_success_nodata(si, _("User seen  : %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
 		}
@@ -274,7 +274,7 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("Email      : %s%s"), mu->email,
 					(mu->flags & MU_HIDEMAIL) ? " (hidden)": "");
 
-	unsigned long mdcount = 0;
+	unsigned int mdcount = 0;
 	MOWGLI_PATRICIA_FOREACH(md, &state, atheme_object(mu)->metadata)
 	{
 		if (!strncmp(md->name, "private:", 8))
@@ -289,9 +289,9 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	if (mdcount && !show_custom_metadata)
 	{
 		if (module_find_published("nickserv/taxonomy"))
-			command_success_nodata(si, ngettext(N_("%lu custom metadata entry not shown; use \2/msg %s TAXONOMY %s\2 to view it."), N_("%lu custom metadata entries not shown; use \2/msg %s TAXONOMY %s\2 to view them."), mdcount), mdcount, si->service->disp, name);
+			command_success_nodata(si, ngettext(N_("%u custom metadata entry not shown; use \2/msg %s TAXONOMY %s\2 to view it."), N_("%u custom metadata entries not shown; use \2/msg %s TAXONOMY %s\2 to view them."), mdcount), mdcount, si->service->disp, name);
 		else
-			command_success_nodata(si, ngettext(N_("%lu custom metadata entry not shown."), N_("%lu custom metadata entries not shown."), mdcount), mdcount);
+			command_success_nodata(si, ngettext(N_("%u custom metadata entry not shown."), N_("%u custom metadata entries not shown."), mdcount), mdcount);
 	}
 
 	*buf = '\0';
@@ -387,7 +387,7 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	if (mu == si->smu || has_user_auspex || has_priv(si, PRIV_CHAN_AUSPEX))
 	{
 		struct chanacs *ca;
-		int founder = 0, other = 0;
+		unsigned int founder = 0, other = 0;
 
 		MOWGLI_ITER_FOREACH(n, entity(mu)->chanacs.head)
 		{
@@ -397,7 +397,7 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 			else if (ca->level != CA_AKICK)
 				other++;
 		}
-		command_success_nodata(si, _("Channels   : %d founder, %d other"), founder, other);
+		command_success_nodata(si, _("Channels   : %u founder, %u other"), founder, other);
 	}
 
 	if (has_user_auspex && (md = metadata_find(mu, "private:freeze:freezer")))

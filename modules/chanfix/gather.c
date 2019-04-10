@@ -12,7 +12,7 @@
 
 #define CFDB_VERSION	1
 
-static int loading_cfdbv = 0;
+static unsigned int loading_cfdbv = 0;
 
 static mowgli_heap_t *chanfix_channel_heap = NULL;
 static mowgli_heap_t *chanfix_oprecord_heap = NULL;
@@ -203,7 +203,7 @@ chanfix_gather(void *unused)
 {
 	struct channel *ch;
 	mowgli_patricia_iteration_state_t state;
-	int chans = 0, oprecords = 0;
+	unsigned int chans = 0, oprecords = 0;
 
 	MOWGLI_PATRICIA_FOREACH(ch, &state, chanlist)
 	{
@@ -232,7 +232,7 @@ chanfix_gather(void *unused)
 		chans++;
 	}
 
-	slog(LG_DEBUG, "chanfix_gather(): gathered %d channels and %d oprecords.", chans, oprecords);
+	slog(LG_DEBUG, "chanfix_gather(): gathered %u channels and %u oprecords.", chans, oprecords);
 }
 
 void
@@ -335,7 +335,7 @@ static void
 db_h_cfdbv(struct database_handle *db, const char *type)
 {
 	loading_cfdbv = db_sread_uint(db);
-	slog(LG_INFO, "chanfix: opensex data schema version is %d.", loading_cfdbv);
+	slog(LG_INFO, "chanfix: opensex data schema version is %u.", loading_cfdbv);
 }
 
 static void

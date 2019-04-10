@@ -107,7 +107,7 @@ db_sread_word(struct database_handle *db)
 	const char *w = db_read_word(db);
 	if (!w)
 	{
-		slog(LG_ERROR, "db-sread-word: needed word at file %s line %d token %d", db->file, db->line, db->token);
+		slog(LG_ERROR, "db-sread-word: needed word at file %s line %u token %u", db->file, db->line, db->token);
 		slog(LG_ERROR, "db-sread-word: exiting to avoid data loss");
 		exit(EXIT_FAILURE);
 	}
@@ -120,7 +120,7 @@ db_sread_str(struct database_handle *db)
 	const char *w = db_read_str(db);
 	if (!w)
 	{
-		slog(LG_ERROR, "db-sread-multiword: needed multiword at file %s line %d token %d", db->file, db->line, db->token);
+		slog(LG_ERROR, "db-sread-multiword: needed multiword at file %s line %u token %u", db->file, db->line, db->token);
 		slog(LG_ERROR, "db-sread-multiword: exiting to avoid data loss");
 		exit(EXIT_FAILURE);
 	}
@@ -135,7 +135,7 @@ db_sread_int(struct database_handle *db)
 
 	if (!ok)
 	{
-		slog(LG_ERROR, "db-read-int: needed int at file %s line %d token %d", db->file, db->line, db->token);
+		slog(LG_ERROR, "db-read-int: needed int at file %s line %u token %u", db->file, db->line, db->token);
 		slog(LG_ERROR, "db-read-int: exiting to avoid data loss");
 		exit(EXIT_FAILURE);
 	}
@@ -150,7 +150,7 @@ db_sread_uint(struct database_handle *db)
 
 	if (!ok)
 	{
-		slog(LG_ERROR, "db-read-uint: needed int at file %s line %d token %d", db->file, db->line, db->token);
+		slog(LG_ERROR, "db-read-uint: needed int at file %s line %u token %u", db->file, db->line, db->token);
 		slog(LG_ERROR, "db-read-uint: exiting to avoid data loss");
 		exit(EXIT_FAILURE);
 	}
@@ -165,7 +165,7 @@ db_sread_time(struct database_handle *db)
 
 	if (!ok)
 	{
-		slog(LG_ERROR, "db-read-time: needed int at file %s line %d token %d", db->file, db->line, db->token);
+		slog(LG_ERROR, "db-read-time: needed int at file %s line %u token %u", db->file, db->line, db->token);
 		slog(LG_ERROR, "db-read-time: exiting to avoid data loss");
 		exit(EXIT_FAILURE);
 	}

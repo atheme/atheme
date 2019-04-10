@@ -12,63 +12,6 @@
 
 #include <atheme/stdheaders.h>
 
-#define BUFSIZE			1024		/* maximum size of a buffer */
-#define MAXMODES		4
-#define MAX_IRC_OUTPUT_LINES	2000
-
-/* lengths of various pieces of information (without NULL terminators) */
-#define HOSTLEN			63		/* seems good enough */
-#define NICKLEN			50
-#define PASSLEN			288		/* 32 bytes salt + 1024 bits digest */
-#define IDLEN			9
-#define UIDLEN			16
-#define CHANNELLEN		200
-#define GROUPLEN		31
-#define USERLEN			11
-#define HOSTIPLEN		53
-#define GECOSLEN		50
-#define KEYLEN			23
-#define EMAILLEN		254
-#define MEMOLEN			299
-
-#define MAXMSIGNORES		40
-
-#undef DEBUG_BALLOC
-
-#ifdef ATHEME_ENABLE_LARGE_NET
-#  define HEAP_NODE             1024
-#  define HEAP_CHANNEL          1024
-#  define HEAP_CHANUSER         1024
-#  define HEAP_USER             1024
-#  define HEAP_SERVER           16
-#  define HEAP_CHANACS          1024
-#  define HASH_USER             65535
-#  define HASH_CHANNEL          32768
-#  define HASH_SERVER           128
-#else /* ATHEME_ENABLE_LARGE_NET */
-#  define HEAP_NODE             1024
-#  define HEAP_CHANNEL          64
-#  define HEAP_CHANUSER         128
-#  define HEAP_USER             128
-#  define HEAP_SERVER           8
-#  define HEAP_CHANACS          128
-#  define HASH_USER             1024
-#  define HASH_CHANNEL          512
-#  define HASH_SERVER           32
-#endif /* !ATHEME_ENABLE_LARGE_NET */
-
-#ifndef TIME_FORMAT
-#define TIME_FORMAT		"%b %d %H:%M:%S %Y %z"
-#endif
-
-#define HASH_COMMAND		256
-#define HASH_SMALL		32
-#define HASH_ITRANS		128
-#define HASH_TRANS		2048
-
-#define CACHEFILE_HEAP_SIZE	32
-#define CACHELINE_HEAP_SIZE	64
-
 enum cmd_faultcode
 {
 	fault_needmoreparams	= 1,

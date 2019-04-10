@@ -76,8 +76,8 @@ struct myuser
 	struct soper *          soper;
 	unsigned int            flags;
 	mowgli_list_t           memos;                  // store memos
-	unsigned short          memoct_new;
-	unsigned short          memo_ratelimit_num;     // memos sent recently
+	unsigned int            memoct_new;
+	unsigned int            memo_ratelimit_num;     // memos sent recently
 	time_t                  memo_ratelimit_time;    // last time a memo was sent
 	mowgli_list_t           memo_ignores;
 	mowgli_list_t           access_list;

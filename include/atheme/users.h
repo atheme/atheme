@@ -38,8 +38,6 @@ struct user
 	char *                  certfp;         // client certificate fingerprint
 };
 
-#define FLOOD_MSGS_FACTOR 256
-
 #define UF_AWAY        0x00000002U
 #define UF_INVIS       0x00000004U
 #define UF_DOING_SASL  0x00000008U

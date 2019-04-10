@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-04-10 01:10+0000\n"
+"POT-Creation-Date: 2019-04-10 06:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,36 +21,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: modules/botserv/main.c:761
-#, c-format
-msgid "%d bots available."
-msgstr ""
-
-#: modules/groupserv/listchans.c:76
-#, c-format
-msgid "%d channel access match for the group %s"
-msgstr ""
-
-#: modules/nickserv/listchans.c:81
-#, c-format
-msgid "%d channel access match for the nickname %s"
-msgstr ""
-
-#: modules/groupserv/listchans.c:77
-#, c-format
-msgid "%d channel access matches for the group %s"
-msgstr ""
-
-#: modules/nickserv/listchans.c:82
-#, c-format
-msgid "%d channel access matches for the nickname %s"
-msgstr ""
-
-#: modules/rpgserv/search.c:69
-#, c-format
-msgid "%d channels met your criteria."
-msgstr ""
 
 #: modules/contrib/ns_listlogins.c:30
 #, c-format
@@ -62,28 +32,7 @@ msgstr ""
 msgid "%d clients found"
 msgstr ""
 
-#: modules/nickserv/listgroups.c:88
-#, c-format
-msgid "%d group access match for the nickname %s"
-msgstr ""
-
-#: modules/nickserv/listgroups.c:89
-#, c-format
-msgid "%d group access matches for the nickname %s"
-msgstr ""
-
-#: modules/chanfix/fix.c:428 modules/chanserv/list.c:238 modules/nickserv/list.c:287
-#, c-format
-msgid "%d match for criteria %s"
-msgstr ""
-
-#: modules/nickserv/listmail.c:63 modules/nickserv/listownmail.c:56
-#, c-format
-msgid "%d match for e-mail address %s"
-msgstr ""
-
-#: modules/contrib/os_klinechan.c:192 modules/groupserv/list.c:48 modules/hostserv/vhost.c:122
-#: modules/nickserv/vhost.c:261 modules/operserv/greplog.c:190
+#: modules/contrib/os_klinechan.c:192
 #, c-format
 msgid "%d match for pattern %s"
 msgstr ""
@@ -93,55 +42,9 @@ msgstr ""
 msgid "%d matches"
 msgstr ""
 
-#: modules/operserv/compare.c:151
-#, c-format
-msgid "%d matches comparing %s and %s"
-msgstr ""
-
-#: modules/operserv/rmatch.c:85
-#, c-format
-msgid "%d matches for %s"
-msgstr ""
-
-#: modules/operserv/rakill.c:103
-#, c-format
-msgid "%d matches for %s akilled."
-msgstr ""
-
-#: modules/chanfix/fix.c:428 modules/chanserv/list.c:238 modules/nickserv/list.c:287
-#, c-format
-msgid "%d matches for criteria %s"
-msgstr ""
-
-#: modules/nickserv/listmail.c:64 modules/nickserv/listownmail.c:57
-#, c-format
-msgid "%d matches for e-mail address %s"
-msgstr ""
-
-#: modules/contrib/os_klinechan.c:193 modules/groupserv/list.c:48 modules/hostserv/vhost.c:123
-#: modules/nickserv/vhost.c:262 modules/operserv/greplog.c:191
+#: modules/contrib/os_klinechan.c:193
 #, c-format
 msgid "%d matches for pattern %s"
-msgstr ""
-
-#: modules/operserv/clearchan.c:115
-#, c-format
-msgid "%d matches, %d ignores for %s on %s"
-msgstr ""
-
-#: modules/operserv/modlist.c:34
-#, c-format
-msgid "%d modules loaded."
-msgstr ""
-
-#: modules/botserv/main.c:773
-#, c-format
-msgid "%d private bots available."
-msgstr ""
-
-#: modules/operserv/rnc.c:62
-#, c-format
-msgid "%d: %d matches for realname %s"
 msgstr ""
 
 #: modules/chanserv/xop.c:297
@@ -1195,7 +1098,7 @@ msgstr ""
 #: modules/chanserv/flags.c:301 modules/chanserv/flags.c:375 modules/chanserv/ftransfer.c:32
 #: modules/chanserv/set_founder.c:52 modules/contrib/cs_access_alias.c:181 modules/contrib/cs_userinfo.c:30
 #: modules/contrib/cs_userinfo.c:77 modules/contrib/ns_fenforce.c:26 modules/contrib/ns_forbid.c:74
-#: modules/hostserv/vhost.c:31 modules/hostserv/vhostnick.c:36 modules/memoserv/forward.c:56
+#: modules/hostserv/vhost.c:31 modules/hostserv/vhostnick.c:36 modules/memoserv/forward.c:50
 #: modules/memoserv/ignore.c:55 modules/nickserv/access.c:213 modules/nickserv/cert.c:48 modules/nickserv/cert.c:90
 #: modules/nickserv/drop.c:42 modules/nickserv/drop.c:155 modules/nickserv/freeze.c:59 modules/nickserv/hold.c:38
 #: modules/nickserv/info.c:83 modules/nickserv/listchans.c:36 modules/nickserv/listgroups.c:36
@@ -1314,7 +1217,7 @@ msgstr ""
 msgid "%s is unprivileged."
 msgstr ""
 
-#: modules/operserv/clones.c:466 modules/operserv/clones.c:626
+#: modules/operserv/clones.c:464 modules/operserv/clones.c:624
 #, c-format
 msgid "%s not found in clone exempt list."
 msgstr ""
@@ -1369,17 +1272,17 @@ msgstr ""
 
 #: modules/chanserv/clear_akicks.c:69
 #, c-format
-msgid "%s removed all %d AKICK entries."
+msgid "%s removed all %u AKICK entries."
 msgstr ""
 
 #: modules/chanserv/clear_flags.c:63
 #, c-format
-msgid "%s removed all %d non-founder access entries."
+msgid "%s removed all %u non-founder access entries."
 msgstr ""
 
 #: modules/chanserv/xop.c:516
 #, c-format
-msgid "%s reset access levels to xOP (%d changes)"
+msgid "%s reset access levels to xOP (%u changes)"
 msgstr ""
 
 #: modules/chanserv/set_verbose.c:68
@@ -1401,7 +1304,7 @@ msgstr ""
 
 #: modules/chanserv/template.c:380
 #, c-format
-msgid "%s set %s on %d access entries with flags %s."
+msgid "%s set %s on %u access entries with flags %s."
 msgstr ""
 
 #: modules/contrib/os_defcon.c:196
@@ -1489,6 +1392,36 @@ msgstr ""
 msgid "%s's marks:"
 msgstr ""
 
+#: modules/botserv/main.c:761
+#, c-format
+msgid "%u bots available."
+msgstr ""
+
+#: modules/groupserv/listchans.c:76
+#, c-format
+msgid "%u channel access match for the group %s"
+msgstr ""
+
+#: modules/nickserv/listchans.c:81
+#, c-format
+msgid "%u channel access match for the nickname %s"
+msgstr ""
+
+#: modules/groupserv/listchans.c:77
+#, c-format
+msgid "%u channel access matches for the group %s"
+msgstr ""
+
+#: modules/nickserv/listchans.c:82
+#, c-format
+msgid "%u channel access matches for the nickname %s"
+msgstr ""
+
+#: modules/rpgserv/search.c:69
+#, c-format
+msgid "%u channels met your criteria."
+msgstr ""
+
 #: modules/nickserv/listlogins.c:36
 #, c-format
 msgid "%u client found"
@@ -1499,24 +1432,101 @@ msgstr ""
 msgid "%u clients found"
 msgstr ""
 
+#: modules/nickserv/listgroups.c:88
+#, c-format
+msgid "%u group access match for the nickname %s"
+msgstr ""
+
+#: modules/nickserv/listgroups.c:89
+#, c-format
+msgid "%u group access matches for the nickname %s"
+msgstr ""
+
+#: modules/chanfix/fix.c:428 modules/chanserv/list.c:238 modules/nickserv/list.c:287
+#, c-format
+msgid "%u match for criteria %s"
+msgstr ""
+
+#: modules/nickserv/listmail.c:63 modules/nickserv/listownmail.c:56
+#, c-format
+msgid "%u match for e-mail address %s"
+msgstr ""
+
+#: modules/groupserv/list.c:48 modules/hostserv/vhost.c:122 modules/nickserv/vhost.c:261
+#: modules/operserv/greplog.c:188
+#, c-format
+msgid "%u match for pattern %s"
+msgstr ""
+
+#: modules/operserv/compare.c:151
+#, c-format
+msgid "%u matches comparing %s and %s"
+msgstr ""
+
+#: modules/operserv/rmatch.c:85
+#, c-format
+msgid "%u matches for %s"
+msgstr ""
+
+#: modules/operserv/rakill.c:103
+#, c-format
+msgid "%u matches for %s AKILLed."
+msgstr ""
+
+#: modules/chanfix/fix.c:428 modules/chanserv/list.c:238 modules/nickserv/list.c:287
+#, c-format
+msgid "%u matches for criteria %s"
+msgstr ""
+
+#: modules/nickserv/listmail.c:64 modules/nickserv/listownmail.c:57
+#, c-format
+msgid "%u matches for e-mail address %s"
+msgstr ""
+
+#: modules/groupserv/list.c:48 modules/hostserv/vhost.c:123 modules/nickserv/vhost.c:262
+#: modules/operserv/greplog.c:189
+#, c-format
+msgid "%u matches for pattern %s"
+msgstr ""
+
+#: modules/operserv/clearchan.c:115
+#, c-format
+msgid "%u matches, %u ignores for %s on %s"
+msgstr ""
+
+#: modules/operserv/modlist.c:34
+#, c-format
+msgid "%u modules loaded."
+msgstr ""
+
+#: modules/botserv/main.c:773
+#, c-format
+msgid "%u private bots available."
+msgstr ""
+
+#: modules/operserv/rnc.c:66
+#, c-format
+msgid "%u: %u matches for realname %s"
+msgstr ""
+
 #: modules/nickserv/multimark.c:591 modules/nickserv/multimark.c:910
 #, c-format
-msgid "(Restored) Mark %d originally set on %s (%s) by %s (%s) on %s: %s"
+msgid "(Restored) Mark %u originally set on %s (%s) by %s (%s) on %s: %s"
 msgstr ""
 
 #: modules/nickserv/multimark.c:622 modules/nickserv/multimark.c:941
 #, c-format
-msgid "(Restored) Mark %d originally set on %s (%s) by %s on %s: %s"
+msgid "(Restored) Mark %u originally set on %s (%s) by %s on %s: %s"
 msgstr ""
 
 #: modules/nickserv/multimark.c:605 modules/nickserv/multimark.c:924
 #, c-format
-msgid "(Restored) Mark %d originally set on %s by %s (%s) on %s: %s"
+msgid "(Restored) Mark %u originally set on %s by %s (%s) on %s: %s"
 msgstr ""
 
 #: modules/nickserv/multimark.c:635 modules/nickserv/multimark.c:954
 #, c-format
-msgid "(Restored) Mark %d originally set on %s by %s on %s: %s"
+msgid "(Restored) Mark %u originally set on %s by %s on %s: %s"
 msgstr ""
 
 #: modules/chanfix/fix.c:640 modules/chanserv/info.c:315 modules/groupserv/info.c:92 modules/rpgserv/info.c:57
@@ -1568,14 +1578,14 @@ msgstr ""
 msgid "Match:  %s!%s@%s %s {%s}"
 msgstr ""
 
-#: modules/operserv/clones.c:796
+#: modules/operserv/clones.c:794
 #, c-format
 msgid ""
-"WARNING: You may not have more than %d clients connected to the network at once. Any further connections risks "
+"WARNING: You may not have more than %u clients connected to the network at once. Any further connections risks "
 "being removed."
 msgstr ""
 
-#: modules/operserv/clones.c:417
+#: modules/operserv/clones.c:415
 msgid ""
 "Warning: the syntax you are using to update this exemption has been deprecated and may be removed in a future "
 "version.  Please use SETEXEMPT in the future instead."
@@ -1647,21 +1657,6 @@ msgstr ""
 msgid " on %s (%s ago)"
 msgstr ""
 
-#: modules/chanserv/flags.c:127
-#, c-format
-msgid "%-5d %-22s %-20s (%s) [modified %s ago, on %s, by %s]"
-msgstr ""
-
-#: modules/chanserv/flags.c:130
-#, c-format
-msgid "%-5d %-22s %-20s [modified %s ago, on %s, by %s]"
-msgstr ""
-
-#: modules/chanserv/access.c:499
-#, c-format
-msgid "%-5d %-22s %s"
-msgstr ""
-
 #: modules/contrib/cs_access_alias.c:135
 #, c-format
 msgid "%-5d %-22s %s (%s) [modified %s ago]"
@@ -1672,107 +1667,47 @@ msgstr ""
 msgid "%-5d %-22s %s [modified %s ago]"
 msgstr ""
 
+#: modules/chanserv/flags.c:127
+#, c-format
+msgid "%-5u %-22s %-20s (%s) [modified %s ago, on %s, by %s]"
+msgstr ""
+
+#: modules/chanserv/flags.c:130
+#, c-format
+msgid "%-5u %-22s %-20s [modified %s ago, on %s, by %s]"
+msgstr ""
+
+#: modules/chanserv/access.c:499
+#, c-format
+msgid "%-5u %-22s %s"
+msgstr ""
+
 #: modules/operserv/modlist.c:30
 #, c-format
-msgid "%2d: %-20s"
+msgid "%2u: %-20s"
 msgstr ""
 
 #: modules/operserv/modlist.c:25
 #, c-format
-msgid "%2d: %-20s [loaded at 0x%lx]"
+msgid "%2u: %-20s [loaded at %p]"
 msgstr ""
 
-#: modules/chanserv/access.c:432 modules/chanserv/template.c:381
-#, c-format
-msgid "%d access entries updated accordingly."
-msgstr ""
-
-#: modules/operserv/clones.c:277
-#, c-format
-msgid "%d from %s"
-msgstr ""
-
-#: modules/operserv/clones.c:275
-#, c-format
-msgid "%d from %s (EXEMPT; allowed %d)"
-msgstr ""
-
-#: modules/memoserv/delete.c:95
-#, c-format
-msgid "%d memo deleted."
-msgstr ""
-
-#: modules/memoserv/delete.c:95
-#, c-format
-msgid "%d memos deleted."
-msgstr ""
-
-#: modules/chanserv/akick.c:674
-#, c-format
-msgid "%d: %s (%s) ["
-msgstr ""
-
-#: modules/chanserv/xop.c:226
-#, c-format
-msgid "%d: %s (logged in)"
-msgstr ""
-
-#: modules/chanserv/xop.c:228
-#, c-format
-msgid "%d: %s (not logged in)"
-msgstr ""
-
-#: modules/botserv/info.c:68
-#, c-format
-msgid "%d: %s"
-msgstr ""
-
-#: modules/operserv/sgline.c:289 modules/operserv/sqline.c:372
-#, c-format
-msgid "%d: %s - by %s - permanent"
-msgstr ""
-
-#: modules/operserv/sgline.c:287 modules/operserv/sqline.c:370
-#, c-format
-msgid "%d: %s - by %s - permanent - (%s)"
-msgstr ""
-
-#: modules/operserv/sgline.c:285 modules/operserv/sqline.c:368
-#, c-format
-msgid "%d: %s - by %s - expires in %s"
-msgstr ""
-
-#: modules/operserv/sgline.c:283 modules/operserv/sqline.c:366
-#, c-format
-msgid "%d: %s - by %s - expires in %s - (%s)"
-msgstr ""
-
-#: modules/operserv/ignore.c:168
-#, c-format
-msgid "%d: %s by %s on %s (Reason: %s)"
-msgstr ""
-
-#: modules/nickserv/badmail.c:226
-#, c-format
-msgid "%ld badmail pattern(s) disallowing %s found."
-msgstr ""
-
-#: modules/chanserv/info.c:140 modules/nickserv/info.c:294
+#: modules/chanserv/info.c:140
 #, c-format
 msgid "%lu custom metadata entries not shown."
 msgstr ""
 
-#: modules/chanserv/info.c:138 modules/nickserv/info.c:292
+#: modules/chanserv/info.c:138
 #, c-format
 msgid "%lu custom metadata entries not shown; use /msg %s TAXONOMY %s to view them."
 msgstr ""
 
-#: modules/chanserv/info.c:140 modules/nickserv/info.c:294
+#: modules/chanserv/info.c:140
 #, c-format
 msgid "%lu custom metadata entry not shown."
 msgstr ""
 
-#: modules/chanserv/info.c:138 modules/nickserv/info.c:292
+#: modules/chanserv/info.c:138
 #, c-format
 msgid "%lu custom metadata entry not shown; use /msg %s TAXONOMY %s to view it."
 msgstr ""
@@ -1797,14 +1732,14 @@ msgstr ""
 msgid "%lu: %s@%s - by %s on %s - expires in %s - (%s)"
 msgstr ""
 
-#: modules/operserv/clones.c:688
-#, c-format
-msgid "%s - allowed limit %d, warn on %d - permanent - %s"
-msgstr ""
-
 #: modules/operserv/clones.c:686
 #, c-format
-msgid "%s - allowed limit %d, warn on %d - expires in %s - %s"
+msgid "%s - allowed limit %u, warn on %u - permanent - %s"
+msgstr ""
+
+#: modules/operserv/clones.c:684
+#, c-format
+msgid "%s - allowed limit %u, warn on %u - expires in %s - %s"
 msgstr ""
 
 #: modules/chanfix/fix.c:637
@@ -1832,7 +1767,7 @@ msgstr ""
 msgid "%s has requested an email address change to %s on %s"
 msgstr ""
 
-#: modules/contrib/ms_fsend.c:124 modules/memoserv/forward.c:164 modules/memoserv/send.c:156
+#: modules/contrib/ms_fsend.c:124 modules/memoserv/forward.c:158 modules/memoserv/send.c:156
 #, c-format
 msgid "%s is currently online, and you may talk directly, by sending a private message."
 msgstr ""
@@ -1897,19 +1832,19 @@ msgstr ""
 msgid "%s removed from the netsplit list."
 msgstr ""
 
-#: modules/gameserv/gamecalc.c:87
+#: modules/gameserv/gamecalc.c:86
 #, c-format
-msgid "%s rolls %d dice at difficulty %d: %s"
+msgid "%s rolls %u dice at difficulty %u: %s"
 msgstr ""
 
-#: modules/gameserv/gamecalc.c:188
+#: modules/gameserv/gamecalc.c:191
 #, c-format
-msgid "%s rolls %d dice: %s"
+msgid "%s rolls %u dice: %s"
 msgstr ""
 
-#: modules/gameserv/gamecalc.c:146
+#: modules/gameserv/gamecalc.c:143
 #, c-format
-msgid "%s rolls a chance die: %d"
+msgid "%s rolls a chance die: %u"
 msgstr ""
 
 #: modules/chanserv/info.c:308
@@ -1954,12 +1889,12 @@ msgstr ""
 
 #: modules/chanserv/count.c:79
 #, c-format
-msgid "%s: VOP: %d, AOP: %d, SOP: %d, AKick: %d, Other: %d"
+msgid "%s: VOP: %u, AOP: %u, SOP: %u, AKick: %u, Other: %u"
 msgstr ""
 
 #: modules/chanserv/count.c:82
 #, c-format
-msgid "%s: VOP: %d, HOP: %d, AOP: %d, SOP: %d, AKick: %d, Other: %d"
+msgid "%s: VOP: %u, HOP: %u, AOP: %u, SOP: %u, AKick: %u, Other: %u"
 msgstr ""
 
 #: modules/contrib/os_resolve.c:119
@@ -2007,9 +1942,104 @@ msgstr ""
 msgid "%smodified: %s"
 msgstr ""
 
+#: modules/chanserv/access.c:432 modules/chanserv/template.c:381
+#, c-format
+msgid "%u access entries updated accordingly."
+msgstr ""
+
+#: modules/nickserv/badmail.c:226
+#, c-format
+msgid "%u badmail pattern(s) disallowing %s found."
+msgstr ""
+
+#: modules/nickserv/info.c:294
+#, c-format
+msgid "%u custom metadata entries not shown."
+msgstr ""
+
+#: modules/nickserv/info.c:292
+#, c-format
+msgid "%u custom metadata entries not shown; use /msg %s TAXONOMY %s to view them."
+msgstr ""
+
+#: modules/nickserv/info.c:294
+#, c-format
+msgid "%u custom metadata entry not shown."
+msgstr ""
+
+#: modules/nickserv/info.c:292
+#, c-format
+msgid "%u custom metadata entry not shown; use /msg %s TAXONOMY %s to view it."
+msgstr ""
+
+#: modules/operserv/clones.c:277
+#, c-format
+msgid "%u from %s"
+msgstr ""
+
+#: modules/operserv/clones.c:275
+#, c-format
+msgid "%u from %s (EXEMPT; allowed %u)"
+msgstr ""
+
+#: modules/memoserv/delete.c:95
+#, c-format
+msgid "%u memo deleted."
+msgstr ""
+
+#: modules/memoserv/delete.c:95
+#, c-format
+msgid "%u memos deleted."
+msgstr ""
+
+#: modules/chanserv/akick.c:674
+#, c-format
+msgid "%u: %s (%s) ["
+msgstr ""
+
+#: modules/chanserv/xop.c:226
+#, c-format
+msgid "%u: %s (logged in)"
+msgstr ""
+
+#: modules/chanserv/xop.c:228
+#, c-format
+msgid "%u: %s (not logged in)"
+msgstr ""
+
+#: modules/botserv/info.c:68
+#, c-format
+msgid "%u: %s"
+msgstr ""
+
+#: modules/operserv/sgline.c:289 modules/operserv/sqline.c:372
+#, c-format
+msgid "%u: %s - by %s - permanent"
+msgstr ""
+
+#: modules/operserv/sgline.c:287 modules/operserv/sqline.c:370
+#, c-format
+msgid "%u: %s - by %s - permanent - (%s)"
+msgstr ""
+
+#: modules/operserv/sgline.c:285 modules/operserv/sqline.c:368
+#, c-format
+msgid "%u: %s - by %s - expires in %s"
+msgstr ""
+
+#: modules/operserv/sgline.c:283 modules/operserv/sqline.c:366
+#, c-format
+msgid "%u: %s - by %s - expires in %s - (%s)"
+msgstr ""
+
 #: modules/statserv/netsplit.c:78
 #, c-format
 msgid "%u: %s [Split %s ago]"
+msgstr ""
+
+#: modules/operserv/ignore.c:168
+#, c-format
+msgid "%u: %s by %s on %s (Reason: %s)"
 msgstr ""
 
 #: modules/operserv/specs.c:180
@@ -2041,11 +2071,6 @@ msgstr ""
 msgid "+e exempts from +b."
 msgstr ""
 
-#: modules/memoserv/list.c:45
-#, c-format
-msgid "- %d From: %s Sent: %s"
-msgstr ""
-
 #: modules/groupserv/list.c:40
 #, c-format
 msgid "- %s (%s)"
@@ -2054,6 +2079,11 @@ msgstr ""
 #: modules/nickserv/listlogins.c:31
 #, c-format
 msgid "- %s!%s@%s (real host: %s)"
+msgstr ""
+
+#: modules/memoserv/list.c:45
+#, c-format
+msgid "- %u From: %s Sent: %s"
 msgstr ""
 
 #: modules/rpgserv/list.c:30
@@ -2238,7 +2268,7 @@ msgstr ""
 msgid "Add the FORCE keyword to see them all"
 msgstr ""
 
-#: modules/operserv/clones.c:408
+#: modules/operserv/clones.c:406
 #, c-format
 msgid "Added %s to clone exempt list."
 msgstr ""
@@ -2258,7 +2288,7 @@ msgstr ""
 msgid "Added %s to the server NOOP list."
 msgstr ""
 
-#: modules/infoserv/main.c:316
+#: modules/infoserv/main.c:314
 msgid "Added entry to logon info"
 msgstr ""
 
@@ -2299,7 +2329,7 @@ msgstr ""
 msgid "Adds a channel AKICK."
 msgstr ""
 
-#: modules/operserv/clones.c:859
+#: modules/operserv/clones.c:857
 msgid "Adds a clones exemption."
 msgstr ""
 
@@ -2323,7 +2353,7 @@ msgstr ""
 msgid "Adds a note to a channel."
 msgstr ""
 
-#: modules/nickserv/mark.c:119 modules/nickserv/multimark.c:1021
+#: modules/nickserv/mark.c:119 modules/nickserv/multimark.c:1022
 msgid "Adds a note to a user."
 msgstr ""
 
@@ -2369,14 +2399,14 @@ msgstr ""
 msgid "Allow a user to bypass registration limits."
 msgstr ""
 
-#: modules/operserv/clones.c:545
+#: modules/operserv/clones.c:543
 #, c-format
-msgid "Allowed clones limit for host %s set to %d"
+msgid "Allowed clones limit for host %s set to %u"
 msgstr ""
 
-#: modules/operserv/clones.c:540
+#: modules/operserv/clones.c:538
 #, c-format
-msgid "Allowed clones limit must be greater than or equal to the warned limit of %d"
+msgid "Allowed clones limit must be greater than or equal to the warned limit of %u"
 msgstr ""
 
 #: modules/chanserv/set_gameserv.c:91
@@ -2405,10 +2435,6 @@ msgstr ""
 
 #: modules/botserv/info.c:114
 msgid "Allows you to see BotServ information about a channel or a bot."
-msgstr ""
-
-#: modules/nickserv/set_enforcetime.c:62
-msgid "Amount of time it takes before nickname protection occurs."
 msgstr ""
 
 #: modules/nickserv/main.c:24
@@ -2527,7 +2553,7 @@ msgstr ""
 
 #: modules/operserv/clones.c:238
 #, c-format
-msgid "CLONES kline grace is already enabled and set to %d kills."
+msgid "CLONES kline grace is already enabled and set to %u kills."
 msgstr ""
 
 #: modules/operserv/clones.c:225
@@ -2544,7 +2570,7 @@ msgstr ""
 
 #: modules/operserv/clones.c:251
 #, c-format
-msgid "CLONES klines are currently enabled with a grace of %d kills."
+msgid "CLONES klines are currently enabled with a grace of %u kills."
 msgstr ""
 
 #: modules/operserv/clones.c:253
@@ -2556,7 +2582,7 @@ msgstr ""
 msgid "COMMITINTERVAL must be a positive integer, %s is invalid"
 msgstr ""
 
-#: modules/gameserv/dice.c:602
+#: modules/gameserv/dice.c:608
 msgid "Calculate stuff."
 msgstr ""
 
@@ -2779,7 +2805,7 @@ msgstr ""
 
 #: modules/operserv/info.c:38
 #, c-format
-msgid "Channel expiration time: %d days"
+msgid "Channel expiration time: %u days"
 msgstr ""
 
 #: modules/memoserv/send.c:175
@@ -2800,7 +2826,7 @@ msgstr ""
 
 #: modules/nickserv/info.c:400
 #, c-format
-msgid "Channels   : %d founder, %d other"
+msgid "Channels   : %u founder, %u other"
 msgstr ""
 
 #: modules/chanserv/list.c:164
@@ -2818,7 +2844,7 @@ msgstr ""
 
 #: modules/chanserv/clear_bans.c:85
 #, c-format
-msgid "Cleared %s modes on %s (%d removed)."
+msgid "Cleared %s modes on %s (%u removed)."
 msgstr ""
 
 #: modules/chanserv/clear_akicks.c:67
@@ -2876,32 +2902,32 @@ msgstr ""
 msgid "Clients identified to account %s"
 msgstr ""
 
-#: modules/operserv/clones.c:638
+#: modules/operserv/clones.c:636
 #, c-format
 msgid "Clone ban duration set to %ld (%ld seconds)"
 msgstr ""
 
-#: modules/operserv/clones.c:663
+#: modules/operserv/clones.c:661
 #, c-format
 msgid "Clone ban duration set to %s (%ld seconds)"
 msgstr ""
 
-#: modules/operserv/clones.c:595
+#: modules/operserv/clones.c:593
 #, c-format
 msgid "Clone exemption duration for host %s set to %s (%ld seconds)"
 msgstr ""
 
-#: modules/operserv/clones.c:570
+#: modules/operserv/clones.c:568
 #, c-format
 msgid "Clone exemption duration for host %s set to permanent"
 msgstr ""
 
-#: modules/operserv/clones.c:610
+#: modules/operserv/clones.c:608
 #, c-format
 msgid "Clone exemption reason for host %s changed to %s"
 msgstr ""
 
-#: modules/operserv/clones.c:551
+#: modules/operserv/clones.c:549
 #, c-format
 msgid "Clone warning messages will be disabled for host %s"
 msgstr ""
@@ -2948,6 +2974,10 @@ msgstr ""
 
 #: modules/operserv/compare.c:157
 msgid "Compares two users or channels."
+msgstr ""
+
+#: modules/nickserv/set_enforcetime.c:53
+msgid "Configure amount of time it takes before nickname protection occurs."
 msgstr ""
 
 #: modules/botserv/set_core.c:66
@@ -3000,9 +3030,9 @@ msgstr ""
 msgid "Current users: %u (%u invisible)"
 msgstr ""
 
-#: modules/operserv/clones.c:670
+#: modules/operserv/clones.c:668
 #, c-format
-msgid "DEFAULT - allowed limit %d, warn on %d"
+msgid "DEFAULT - allowed limit %u, warn on %u"
 msgstr ""
 
 #: libathemecore/account.c:248 libathemecore/account.c:303 libathemecore/account.c:315
@@ -3025,9 +3055,9 @@ msgstr ""
 msgid "Deactivates your assigned vhost."
 msgstr ""
 
-#: modules/operserv/clones.c:497
+#: modules/operserv/clones.c:495
 #, c-format
-msgid "Default allowed clone limit set to %d."
+msgid "Default allowed clone limit set to %u."
 msgstr ""
 
 #: modules/operserv/info.c:40
@@ -3035,28 +3065,28 @@ msgstr ""
 msgid "Default channel fantasy trigger: %s"
 msgstr ""
 
-#: modules/operserv/clones.c:503
+#: modules/operserv/clones.c:501
 msgid "Default clone warning has been disabled."
 msgstr ""
 
 #: modules/operserv/info.c:21
 #, c-format
-msgid "Default kline time: %d days"
+msgid "Default kline time: %u days"
 msgstr ""
 
 #: modules/operserv/info.c:25
 #, c-format
-msgid "Default maximum number of clones allowed: %d"
+msgid "Default maximum number of clones allowed: %u"
 msgstr ""
 
 #: modules/operserv/info.c:31
 #, c-format
-msgid "Default nickname enforce delay: %d seconds"
+msgid "Default nickname enforce delay: %u seconds"
 msgstr ""
 
-#: modules/operserv/clones.c:509
+#: modules/operserv/clones.c:507
 #, c-format
-msgid "Default warned clone limit set to %d"
+msgid "Default warned clone limit set to %u"
 msgstr ""
 
 #: modules/contrib/os_defcon.c:170
@@ -3085,11 +3115,11 @@ msgstr ""
 msgid "Delete an access list entry."
 msgstr ""
 
-#: modules/infoserv/main.c:510
+#: modules/infoserv/main.c:504
 msgid "Delete news items."
 msgstr ""
 
-#: modules/infoserv/main.c:519
+#: modules/infoserv/main.c:513
 msgid "Delete oper news items."
 msgstr ""
 
@@ -3102,14 +3132,14 @@ msgstr ""
 msgid "Deleted all vhosts for %s."
 msgstr ""
 
-#: modules/infoserv/main.c:372
+#: modules/infoserv/main.c:368
 #, c-format
-msgid "Deleted entry %d from logon info."
+msgid "Deleted entry %u from logon info."
 msgstr ""
 
-#: modules/infoserv/main.c:423
+#: modules/infoserv/main.c:417
 #, c-format
-msgid "Deleted entry %d from oper logon info."
+msgid "Deleted entry %u from oper logon info."
 msgstr ""
 
 #: modules/nickserv/cert.c:176
@@ -3136,7 +3166,7 @@ msgstr ""
 msgid "Deletes a channel AKICK."
 msgstr ""
 
-#: modules/operserv/clones.c:868
+#: modules/operserv/clones.c:866
 msgid "Deletes a clones exemption."
 msgstr ""
 
@@ -3161,7 +3191,7 @@ msgstr ""
 msgid "Description : %s"
 msgstr ""
 
-#: modules/gameserv/gamecalc.c:57
+#: modules/gameserv/gamecalc.c:56
 msgid "Difficulty setting must be between 1 and 10."
 msgstr ""
 
@@ -3212,7 +3242,7 @@ msgstr ""
 #: modules/alis/main.c:422 modules/botserv/help.c:36 modules/chanfix/fix.c:910 modules/chanserv/help.c:97
 #: modules/contrib/ircd_announceserv.c:340 modules/contrib/ircd_catserv.c:35 modules/contrib/ircd_loveserv.c:364
 #: modules/gameserv/help.c:36 modules/global/main.c:188 modules/groupserv/help.c:36 modules/helpserv/main.c:37
-#: modules/hostserv/help.c:33 modules/infoserv/main.c:492 modules/memoserv/help.c:36 modules/nickserv/help.c:87
+#: modules/hostserv/help.c:33 modules/infoserv/main.c:486 modules/memoserv/help.c:36 modules/nickserv/help.c:87
 #: modules/operserv/help.c:43 modules/rpgserv/help.c:36 modules/statserv/main.c:34
 msgid "Displays contextual help information."
 msgstr ""
@@ -3362,7 +3392,7 @@ msgstr ""
 
 #: modules/operserv/clones.c:242
 #, c-format
-msgid "Enabled CLONES klines with a grace of %d kills"
+msgid "Enabled CLONES klines with a grace of %u kills"
 msgstr ""
 
 #: modules/operserv/clones.c:217
@@ -3381,7 +3411,7 @@ msgstr ""
 msgid "Enables topic retention."
 msgstr ""
 
-#: modules/operserv/clones.c:841
+#: modules/operserv/clones.c:839
 msgid "Enables/disables klines for excessive clones."
 msgstr ""
 
@@ -3433,7 +3463,7 @@ msgstr ""
 msgid "End of CLONES LIST"
 msgstr ""
 
-#: modules/operserv/clones.c:690
+#: modules/operserv/clones.c:688
 msgid "End of CLONES LISTEXEMPT"
 msgstr ""
 
@@ -3449,7 +3479,7 @@ msgstr ""
 msgid "End of Server NOOP list."
 msgstr ""
 
-#: modules/chanserv/moderate.c:328 modules/infoserv/main.c:456 modules/infoserv/main.c:485
+#: modules/chanserv/moderate.c:328 modules/infoserv/main.c:450 modules/infoserv/main.c:479
 #: modules/nickserv/badmail.c:191 modules/nickserv/multimark.c:966 modules/proxyscan/dnsbl.c:241
 msgid "End of list."
 msgstr ""
@@ -3496,14 +3526,14 @@ msgstr ""
 msgid "Entity ID  : %s"
 msgstr ""
 
-#: modules/infoserv/main.c:377
+#: modules/infoserv/main.c:373
 #, c-format
-msgid "Entry %d not found in logon info."
+msgid "Entry %u not found in logon info."
 msgstr ""
 
-#: modules/infoserv/main.c:428
+#: modules/infoserv/main.c:422
 #, c-format
-msgid "Entry %d not found in oper logon info."
+msgid "Entry %u not found in oper logon info."
 msgstr ""
 
 #: modules/groupserv/flags.c:53
@@ -3586,7 +3616,7 @@ msgstr ""
 
 #: modules/chanserv/xop.c:514
 #, c-format
-msgid "FORCEXOP %s done (%d changes)"
+msgid "FORCEXOP %s done (%u changes)"
 msgstr ""
 
 #: modules/contrib/os_procwatch.c:63
@@ -3785,7 +3815,7 @@ msgstr ""
 msgid "Forcibly sends a memo to a user."
 msgstr ""
 
-#: modules/memoserv/forward.c:179
+#: modules/memoserv/forward.c:173
 msgid "Forwards a memo."
 msgstr ""
 
@@ -3822,7 +3852,7 @@ msgstr ""
 msgid "Freezes an account."
 msgstr ""
 
-#: modules/gameserv/gamecalc.c:264
+#: modules/gameserv/gamecalc.c:265
 msgid "Fudge-style dice generation."
 msgstr ""
 
@@ -3842,7 +3872,7 @@ msgstr ""
 msgid "Generates a random password."
 msgstr ""
 
-#: modules/gameserv/namegen.c:61
+#: modules/gameserv/namegen.c:57
 msgid "Generates some names to ponder."
 msgstr ""
 
@@ -4005,22 +4035,22 @@ msgstr ""
 
 #: modules/operserv/info.c:27
 #, c-format
-msgid "How long before ratelimiting counter resets, (if 0, ratelimiting is disabled): %d seconds"
+msgid "How long before ratelimiting counter resets, (if 0, ratelimiting is disabled): %u seconds"
 msgstr ""
 
 #: modules/operserv/info.c:24
 #, c-format
-msgid "How long before the flood counter resets: %d seconds"
+msgid "How long before the flood counter resets: %u seconds"
 msgstr ""
 
 #: modules/operserv/info.c:23
 #, c-format
-msgid "How many messages before a flood is triggered, (if 0, flood protection is disabled): %d"
+msgid "How many messages before a flood is triggered, (if 0, flood protection is disabled): %u"
 msgstr ""
 
 #: modules/operserv/info.c:20
 #, c-format
-msgid "How often services writes changes to the database: %d minutes"
+msgid "How often services writes changes to the database: %u minutes"
 msgstr ""
 
 #: modules/gameserv/eightball.c:24
@@ -4044,14 +4074,14 @@ msgstr ""
 #: modules/nickserv/help.c:48
 #, c-format
 msgid ""
-"If a registered account is not used by the owner for %d days,\n"
+"If a registered account is not used by the owner for %u days,\n"
 "%s will drop the account, allowing it to be reregistered."
 msgstr ""
 
 #: modules/nickserv/help.c:65
 #, c-format
 msgid ""
-"If a registered nick is not used by the owner for %d days,\n"
+"If a registered nick is not used by the owner for %u days,\n"
 "%s will drop the nickname, allowing it to be reregistered."
 msgstr ""
 
@@ -4114,7 +4144,7 @@ msgstr ""
 msgid "Implements Defense Condition lockdowns."
 msgstr ""
 
-#: modules/infoserv/main.c:265
+#: modules/infoserv/main.c:263
 msgid "Importance must be a digit between 0 and 4"
 msgstr ""
 
@@ -4163,6 +4193,11 @@ msgstr ""
 msgid "Inspect the Perl interpreter"
 msgstr ""
 
+#: include/atheme/constants.h:76
+#, c-format
+msgid "Insufficient parameters for %s."
+msgstr ""
+
 #: libathemecore/commandhelp.c:273
 #, c-format
 msgid "Invalid %s %s subcommand."
@@ -4205,8 +4240,8 @@ msgstr ""
 msgid "Invalid criteria specified."
 msgstr ""
 
-#: modules/chanserv/akick.c:274 modules/operserv/akill.c:111 modules/operserv/clones.c:355
-#: modules/operserv/clones.c:590 modules/operserv/sgline.c:103 modules/operserv/sqline.c:130
+#: modules/chanserv/akick.c:274 modules/operserv/akill.c:111 modules/operserv/clones.c:353
+#: modules/operserv/clones.c:588 modules/operserv/sgline.c:103 modules/operserv/sqline.c:130
 msgid "Invalid duration given."
 msgstr ""
 
@@ -4241,11 +4276,11 @@ msgstr ""
 msgid "Invalid mask %s."
 msgstr ""
 
-#: modules/memoserv/forward.c:86
+#: modules/memoserv/forward.c:80
 msgid "Invalid memo number."
 msgstr ""
 
-#: modules/memoserv/delete.c:58 modules/memoserv/forward.c:70 modules/memoserv/read.c:49 modules/memoserv/read.c:56
+#: modules/memoserv/delete.c:58 modules/memoserv/forward.c:64 modules/memoserv/read.c:48 modules/memoserv/read.c:55
 msgid "Invalid message index."
 msgstr ""
 
@@ -4274,8 +4309,14 @@ msgstr ""
 
 #: modules/alis/main.c:128 modules/alis/main.c:136 modules/alis/main.c:144 modules/alis/main.c:155
 #: modules/alis/main.c:163 modules/alis/main.c:176 modules/alis/main.c:190 modules/alis/main.c:208
+#: modules/gameserv/gamecalc.c:158
 #, c-format
 msgid "Invalid option for %s"
+msgstr ""
+
+#: include/atheme/constants.h:77
+#, c-format
+msgid "Invalid parameters for %s."
 msgstr ""
 
 #: modules/nickserv/enforce.c:382 modules/nickserv/enforce.c:560 modules/nickserv/ghost.c:105
@@ -4297,7 +4338,7 @@ msgstr ""
 msgid "Invalid set command. Use /%s%s HELP SET for a command listing."
 msgstr ""
 
-#: modules/operserv/clones.c:514 modules/operserv/clones.c:615
+#: modules/operserv/clones.c:512 modules/operserv/clones.c:613
 msgid "Invalid syntax given."
 msgstr ""
 
@@ -4418,7 +4459,7 @@ msgstr ""
 
 #: modules/nickserv/info.c:192 modules/nickserv/info.c:207
 #, c-format
-msgid "Last seen  : (about %d weeks ago)"
+msgid "Last seen  : (about %u weeks ago)"
 msgstr ""
 
 #: modules/nickserv/info.c:186 modules/nickserv/info.c:247
@@ -4432,7 +4473,7 @@ msgstr ""
 
 #: modules/chanserv/info.c:82
 #, c-format
-msgid "Last used  : (about %d weeks ago)"
+msgid "Last used  : (about %u weeks ago)"
 msgstr ""
 
 #: modules/chanserv/set_limitflags.c:83
@@ -4475,11 +4516,11 @@ msgstr ""
 msgid "List of channel-defined roles:"
 msgstr ""
 
-#: modules/infoserv/main.c:528
+#: modules/infoserv/main.c:522
 msgid "List previously posted news items."
 msgstr ""
 
-#: modules/infoserv/main.c:538
+#: modules/infoserv/main.c:532
 msgid "List previously posted oper news items."
 msgstr ""
 
@@ -4493,7 +4534,7 @@ msgstr ""
 
 #: modules/rpgserv/list.c:36
 #, c-format
-msgid "Listed %d channels."
+msgid "Listed %u channels."
 msgstr ""
 
 #: modules/botserv/main.c:751
@@ -4566,11 +4607,11 @@ msgstr ""
 msgid "Lists channels that you have access to."
 msgstr ""
 
-#: modules/operserv/clones.c:886
+#: modules/operserv/clones.c:884
 msgid "Lists clones exemptions."
 msgstr ""
 
-#: modules/operserv/clones.c:850
+#: modules/operserv/clones.c:848
 msgid "Lists clones on the network."
 msgstr ""
 
@@ -4730,7 +4771,7 @@ msgstr ""
 msgid "Manages network realname bans."
 msgstr ""
 
-#: modules/operserv/clones.c:832
+#: modules/operserv/clones.c:830
 msgid "Manages network wide clones."
 msgstr ""
 
@@ -4796,12 +4837,12 @@ msgstr ""
 
 #: modules/nickserv/multimark.c:562 modules/nickserv/multimark.c:881
 #, c-format
-msgid "Mark %d set by %s (%s) on %s: %s"
+msgid "Mark %u set by %s (%s) on %s: %s"
 msgstr ""
 
 #: modules/nickserv/multimark.c:574 modules/nickserv/multimark.c:893
 #, c-format
-msgid "Mark %d set by %s on %s: %s"
+msgid "Mark %u set by %s on %s: %s"
 msgstr ""
 
 #: modules/nickserv/multimark.c:350
@@ -4824,32 +4865,32 @@ msgstr ""
 
 #: modules/operserv/info.c:37
 #, c-format
-msgid "Maximum number of channels that one user can own: %d"
+msgid "Maximum number of channels that one user can own: %u"
 msgstr ""
 
 #: modules/operserv/info.c:41
 #, c-format
-msgid "Maximum number of entries allowed in a channel access list (if 0, unlimited): %d"
+msgid "Maximum number of entries allowed in a channel access list (if 0, unlimited): %u"
 msgstr ""
 
 #: modules/operserv/info.c:42
 #, c-format
-msgid "Maximum number of founders allowed per channel: %d"
+msgid "Maximum number of founders allowed per channel: %u"
 msgstr ""
 
 #: modules/operserv/info.c:33
 #, c-format
-msgid "Maximum number of logins allowed per username: %d"
+msgid "Maximum number of logins allowed per username: %u"
 msgstr ""
 
 #: modules/operserv/info.c:36
 #, c-format
-msgid "Maximum number of nicknames that one user can own: %d"
+msgid "Maximum number of nicknames that one user can own: %u"
 msgstr ""
 
 #: modules/operserv/info.c:34
 #, c-format
-msgid "Maximum number of usernames that can be registered to one email address: %d"
+msgid "Maximum number of usernames that can be registered to one email address: %u"
 msgstr ""
 
 #: modules/gameserv/eightball.c:36
@@ -4986,15 +5027,15 @@ msgstr ""
 msgid "Network size: %u servers"
 msgstr ""
 
-#: modules/gameserv/dice.c:549
+#: modules/gameserv/dice.c:552
 msgid "Never gonna give you up; Never gonna let you down"
 msgstr ""
 
-#: modules/gameserv/dice.c:550
+#: modules/gameserv/dice.c:553
 msgid "Never gonna run around and desert you; Never gonna make you cry"
 msgstr ""
 
-#: modules/gameserv/dice.c:551
+#: modules/gameserv/dice.c:554
 msgid "Never gonna say goodbye; Never gonna tell a lie and hurt you"
 msgstr ""
 
@@ -5002,7 +5043,7 @@ msgstr ""
 msgid "Never."
 msgstr ""
 
-#: modules/gameserv/gamecalc.c:255
+#: modules/gameserv/gamecalc.c:256
 msgid "New WOD-style dice generation."
 msgstr ""
 
@@ -5095,7 +5136,7 @@ msgstr ""
 
 #: modules/operserv/info.c:30
 #, c-format
-msgid "Nickname enforce expiry time: %d days"
+msgid "Nickname enforce expiry time: %u days"
 msgstr ""
 
 #: modules/operserv/info.c:32
@@ -5105,7 +5146,7 @@ msgstr ""
 
 #: modules/operserv/info.c:29
 #, c-format
-msgid "Nickname expiration time: %d days"
+msgid "Nickname expiration time: %u days"
 msgstr ""
 
 #: modules/nickserv/group.c:27
@@ -5215,7 +5256,7 @@ msgstr ""
 msgid "No help available for %s."
 msgstr ""
 
-#: modules/operserv/greplog.c:188
+#: modules/operserv/greplog.c:186
 #, c-format
 msgid "No lines matched pattern %s"
 msgstr ""
@@ -5254,7 +5295,7 @@ msgstr ""
 #: modules/operserv/akill.c:284 modules/operserv/akill.c:303 modules/operserv/akill.c:343
 #: modules/operserv/akill.c:362
 #, c-format
-msgid "No such AKILL with number %d."
+msgid "No such AKILL with number %u."
 msgstr ""
 
 #: modules/operserv/akill.c:381
@@ -5264,7 +5305,7 @@ msgstr ""
 
 #: modules/operserv/sgline.c:213 modules/operserv/sgline.c:232
 #, c-format
-msgid "No such SGLINE with number %d."
+msgid "No such SGLINE with number %u."
 msgstr ""
 
 #: modules/operserv/sgline.c:249
@@ -5275,7 +5316,7 @@ msgstr ""
 #: modules/operserv/sqline.c:237 modules/operserv/sqline.c:256 modules/operserv/sqline.c:296
 #: modules/operserv/sqline.c:315
 #, c-format
-msgid "No such SQLINE with number %d."
+msgid "No such SQLINE with number %u."
 msgstr ""
 
 #: modules/operserv/sqline.c:332
@@ -5365,7 +5406,7 @@ msgstr ""
 
 #: modules/chanserv/template.c:383
 #, c-format
-msgid "Not updating %d access entries involving founder status. Please do it manually."
+msgid "Not updating %u access entries involving founder status. Please do it manually."
 msgstr ""
 
 #: modules/operserv/set.c:33
@@ -5393,7 +5434,7 @@ msgstr ""
 
 #: modules/operserv/info.c:26
 #, c-format
-msgid "Number of commands used before ratelimiting starts, (if 0, ratelimiting is disabled): %d"
+msgid "Number of commands used before ratelimiting starts, (if 0, ratelimiting is disabled): %u"
 msgstr ""
 
 #: modules/statserv/server.c:109
@@ -5427,7 +5468,7 @@ msgstr ""
 
 #: modules/chanserv/access.c:831 modules/chanserv/access.c:978 modules/chanserv/flags.c:397
 #, c-format
-msgid "Only %d founders allowed per channel."
+msgid "Only %u founders allowed per channel."
 msgstr ""
 
 #: modules/gameserv/dice.c:427
@@ -5438,7 +5479,7 @@ msgstr ""
 msgid "Only 1-100 sides may be used on a dice."
 msgstr ""
 
-#: modules/gameserv/gamecalc.c:52 modules/gameserv/gamecalc.c:153 modules/gameserv/gamecalc.c:227
+#: modules/gameserv/gamecalc.c:51 modules/gameserv/gamecalc.c:150 modules/gameserv/gamecalc.c:226
 msgid "Only 1-30 dice may be thrown at one time."
 msgstr ""
 
@@ -5596,7 +5637,7 @@ msgstr ""
 #: modules/chanserv/help.c:57
 #, c-format
 msgid ""
-"Please note that channels will expire after %d days of inactivity,\n"
+"Please note that channels will expire after %u days of inactivity,\n"
 "or if there are no eligible channel successors.\n"
 " \n"
 "Activity is defined as a user with one of %s being on the channel."
@@ -5611,7 +5652,7 @@ msgstr ""
 msgid "Please specify a new account name for %s."
 msgstr ""
 
-#: modules/infoserv/main.c:501
+#: modules/infoserv/main.c:495
 msgid "Post news items for users to view."
 msgstr ""
 
@@ -5771,9 +5812,9 @@ msgstr ""
 msgid "Reach out and hug somebody."
 msgstr ""
 
-#: modules/memoserv/read.c:123
+#: modules/memoserv/read.c:122
 #, c-format
-msgid "Read %d memos."
+msgid "Read %u memos."
 msgstr ""
 
 #: modules/operserv/readonly.c:47
@@ -5792,7 +5833,7 @@ msgstr ""
 msgid "Read-only mode is now enabled."
 msgstr ""
 
-#: modules/memoserv/read.c:128
+#: modules/memoserv/read.c:127
 msgid "Reads a memo."
 msgstr ""
 
@@ -5956,7 +5997,7 @@ msgstr ""
 msgid "Remove a server from the netsplit list."
 msgstr ""
 
-#: modules/operserv/clones.c:460
+#: modules/operserv/clones.c:458
 #, c-format
 msgid "Removed %s from clone exempt list."
 msgstr ""
@@ -6099,7 +6140,7 @@ msgstr ""
 msgid "Restricts who can change the topic."
 msgstr ""
 
-#: modules/contrib/os_resolve.c:35 modules/contrib/os_resolve.c:45 modules/gameserv/gamecalc.c:241
+#: modules/contrib/os_resolve.c:35 modules/contrib/os_resolve.c:45 modules/gameserv/gamecalc.c:242
 #, c-format
 msgid "Result: %s"
 msgstr ""
@@ -6151,7 +6192,7 @@ msgstr ""
 msgid "Role       : %s (inherited from %s)"
 msgstr ""
 
-#: modules/gameserv/dice.c:593
+#: modules/gameserv/dice.c:599
 msgid "Rolls one or more dice."
 msgstr ""
 
@@ -6316,7 +6357,7 @@ msgstr ""
 msgid "Search for games based on specific criteria."
 msgstr ""
 
-#: modules/operserv/greplog.c:196
+#: modules/operserv/greplog.c:194
 msgid "Searches through the logs."
 msgstr ""
 
@@ -6481,11 +6522,11 @@ msgstr ""
 msgid "Sets a ban on a channel."
 msgstr ""
 
-#: modules/operserv/clones.c:877
+#: modules/operserv/clones.c:875
 msgid "Sets a clone exemption details."
 msgstr ""
 
-#: modules/operserv/clones.c:895
+#: modules/operserv/clones.c:893
 msgid "Sets a custom duration to ban clones for."
 msgstr ""
 
@@ -6655,7 +6696,7 @@ msgstr ""
 msgid "Shows some useful information about the current settings of services."
 msgstr ""
 
-#: modules/operserv/rnc.c:80
+#: modules/operserv/rnc.c:84
 msgid "Shows the most frequent realnames on the network"
 msgstr ""
 
@@ -6667,7 +6708,7 @@ msgstr ""
 msgid "Silly wabbit, you can't ignore yourself."
 msgstr ""
 
-#: modules/gameserv/namegen.c:56
+#: modules/gameserv/namegen.c:52
 #, c-format
 msgid "Some names to ponder: %s"
 msgstr ""
@@ -6693,9 +6734,9 @@ msgstr ""
 msgid "Starts the game."
 msgstr ""
 
-#: modules/memoserv/read.c:113
+#: modules/memoserv/read.c:112
 #, c-format
-msgid "Stopping command after %d memos."
+msgid "Stopping command after %u memos."
 msgstr ""
 
 #: modules/memoserv/ignore.c:193
@@ -6712,24 +6753,24 @@ msgstr ""
 msgid "Storyline: %s"
 msgstr ""
 
-#: modules/gameserv/gamecalc.c:93 modules/gameserv/gamecalc.c:194
+#: modules/gameserv/gamecalc.c:92 modules/gameserv/gamecalc.c:197
 #, c-format
-msgid "Successes: %d, Failures: %d, Botches: %d, Total: %d."
+msgid "Successes: %u, Failures: %u, Botches: %u, Total: %u."
 msgstr ""
 
-#: modules/gameserv/gamecalc.c:90
+#: modules/gameserv/gamecalc.c:89
 #, c-format
-msgid "Successes: %d, Failures: %d, Botches: %d, Total: %d. You may reroll %d if you have a specialty."
+msgid "Successes: %u, Failures: %u, Botches: %u, Total: %u. You may reroll %u if you have a specialty."
 msgstr ""
 
-#: modules/gameserv/gamecalc.c:191
+#: modules/gameserv/gamecalc.c:194
 #, c-format
-msgid "Successes: %d, Failures: %d, Botches: %d, Total: %d. You may reroll %d."
+msgid "Successes: %u, Failures: %u, Botches: %u, Total: %u. You may reroll %u."
 msgstr ""
 
-#: modules/gameserv/gamecalc.c:147
+#: modules/gameserv/gamecalc.c:144
 #, c-format
-msgid "Successes: %d, Failures: %d, Botches: %d."
+msgid "Successes: %u, Failures: %u, Botches: %u."
 msgstr ""
 
 #: modules/chanserv/info.c:72
@@ -6919,7 +6960,7 @@ msgstr ""
 msgid "Syntax: BOT DEL <nick>"
 msgstr ""
 
-#: modules/gameserv/dice.c:572
+#: modules/gameserv/dice.c:576
 msgid "Syntax: CALC [times] <expression>"
 msgstr ""
 
@@ -6951,13 +6992,13 @@ msgstr ""
 msgid "Syntax: CLEARCHAN KICK|KILL|AKILL <#channel> <reason>"
 msgstr ""
 
-#: modules/operserv/clones.c:300 modules/operserv/clones.c:307 modules/operserv/clones.c:318
-#: modules/operserv/clones.c:330 modules/operserv/clones.c:356 modules/operserv/clones.c:363
-#: modules/operserv/clones.c:383 modules/operserv/clones.c:400
+#: modules/operserv/clones.c:300 modules/operserv/clones.c:307 modules/operserv/clones.c:316
+#: modules/operserv/clones.c:328 modules/operserv/clones.c:354 modules/operserv/clones.c:361
+#: modules/operserv/clones.c:381 modules/operserv/clones.c:398
 msgid "Syntax: CLONES ADDEXEMPT <ip> <clones> [!P|!T <minutes>] <reason>"
 msgstr ""
 
-#: modules/operserv/clones.c:437
+#: modules/operserv/clones.c:435
 msgid "Syntax: CLONES DELEXEMPT <ip>"
 msgstr ""
 
@@ -6965,23 +7006,23 @@ msgstr ""
 msgid "Syntax: CLONES KLINE|LIST|ADDEXEMPT|DELEXEMPT|LISTEXEMPT|SETEXEMPT|DURATION [parameters]"
 msgstr ""
 
-#: modules/operserv/clones.c:616
+#: modules/operserv/clones.c:614
 msgid "Syntax: CLONES SETEXEMPT <IP> <ALLOWED | WARN | DURATION | REASON> <value>"
 msgstr ""
 
-#: modules/operserv/clones.c:486
+#: modules/operserv/clones.c:484
 msgid "Syntax: CLONES SETEXEMPT <ip> <REASON | DURATION> <value>"
 msgstr ""
 
-#: modules/operserv/clones.c:591
+#: modules/operserv/clones.c:589
 msgid "Syntax: CLONES SETEXEMPT <ip> DURATION <value>"
 msgstr ""
 
-#: modules/operserv/clones.c:515
+#: modules/operserv/clones.c:513
 msgid "Syntax: CLONES SETEXEMPT DEFAULT <ALLOWED | WARN> <limit>"
 msgstr ""
 
-#: modules/operserv/clones.c:485
+#: modules/operserv/clones.c:483
 msgid "Syntax: CLONES SETEXEMPT [DEFAULT | <ip>] <ALLOWED | WARN> <limit>"
 msgstr ""
 
@@ -7021,7 +7062,7 @@ msgstr ""
 msgid "Syntax: DEVOICE <#channel> [nickname] [...]"
 msgstr ""
 
-#: modules/gameserv/gamecalc.c:217
+#: modules/gameserv/gamecalc.c:220
 msgid "Syntax: DF <dice>"
 msgstr ""
 
@@ -7142,7 +7183,7 @@ msgstr ""
 msgid "Syntax: GLOBAL <parameters>|SEND|CLEAR"
 msgstr ""
 
-#: modules/operserv/greplog.c:85
+#: modules/operserv/greplog.c:86
 msgid "Syntax: GREPLOG <service> <pattern> [days]"
 msgstr ""
 
@@ -7282,7 +7323,7 @@ msgstr ""
 msgid "Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]"
 msgstr ""
 
-#: modules/gameserv/gamecalc.c:120
+#: modules/gameserv/gamecalc.c:119
 msgid "Syntax: NWOD [-chance] <dice> [-reroll] [reroll]"
 msgstr ""
 
@@ -7414,7 +7455,7 @@ msgstr ""
 msgid "Syntax: ROLE <#channel> DEL <role>"
 msgstr ""
 
-#: modules/gameserv/dice.c:533
+#: modules/gameserv/dice.c:534
 msgid "Syntax: ROLL [times] [dice]d<sides>"
 msgstr ""
 
@@ -7539,7 +7580,7 @@ msgstr ""
 msgid "Syntax: SET ENFORCEPREFIX <prefix>"
 msgstr ""
 
-#: modules/nickserv/set_enforcetime.c:22
+#: modules/nickserv/set_enforcetime.c:23
 msgid "Syntax: SET ENFORCETIME TIME|DEFAULT"
 msgstr ""
 
@@ -7743,7 +7784,7 @@ msgstr ""
 msgid "Syntax: WHY <channel> [user]"
 msgstr ""
 
-#: modules/gameserv/gamecalc.c:33
+#: modules/gameserv/gamecalc.c:34
 msgid "Syntax: WOD <dice> <difficulty>"
 msgstr ""
 
@@ -7795,14 +7836,14 @@ msgstr ""
 
 #: modules/operserv/info.c:58
 #, c-format
-msgid "Taint Location: %s:%d"
+msgid "Taint Location: %s:%u"
 msgstr ""
 
 #: modules/hostserv/offer.c:382
 msgid "Take an offered vhost for use."
 msgstr ""
 
-#: modules/memoserv/forward.c:93
+#: modules/memoserv/forward.c:87
 msgid "Target inbox is full."
 msgstr ""
 
@@ -7909,10 +7950,10 @@ msgid "The %s flag is not set for %s."
 msgstr ""
 
 #: modules/contrib/ns_fenforce.c:56 modules/nickserv/enforce.c:268 modules/nickserv/set_emailmemos.c:66
-#: modules/nickserv/set_enforcetime.c:38 modules/nickserv/set_enforcetime.c:51
-#: modules/nickserv/set_hidelastlogin.c:48 modules/nickserv/set_hidemail.c:57 modules/nickserv/set_nevergroup.c:58
-#: modules/nickserv/set_neverop.c:58 modules/nickserv/set_nogreet.c:57 modules/nickserv/set_nomemo.c:54
-#: modules/nickserv/set_noop.c:57 modules/nickserv/set_nopassword.c:62 modules/nickserv/set_quietchg.c:57
+#: modules/nickserv/set_enforcetime.c:29 modules/nickserv/set_hidelastlogin.c:48 modules/nickserv/set_hidemail.c:57
+#: modules/nickserv/set_nevergroup.c:58 modules/nickserv/set_neverop.c:58 modules/nickserv/set_nogreet.c:57
+#: modules/nickserv/set_nomemo.c:54 modules/nickserv/set_noop.c:57 modules/nickserv/set_nopassword.c:62
+#: modules/nickserv/set_quietchg.c:57
 #, c-format
 msgid "The %s flag is not set for account %s."
 msgstr ""
@@ -7930,21 +7971,21 @@ msgstr ""
 msgid "The %s flag is set for %s, therefore no status will be given."
 msgstr ""
 
-#: modules/nickserv/set_enforcetime.c:34
+#: modules/nickserv/set_enforcetime.c:37
 #, c-format
-msgid "The %s for account %s has been reset to default, which is %d seconds."
+msgid "The %s for account %s has been reset to default, which is %u seconds."
 msgstr ""
 
 #: modules/nickserv/set_enforcetime.c:47
 #, c-format
-msgid "The %s for account %s has been set to %d seconds."
+msgid "The %s for account %s has been set to %u seconds."
 msgstr ""
 
 #: modules/chanserv/owner.c:29 modules/chanserv/protect.c:29
 msgid "The IRCd software you are running does not support this feature."
 msgstr ""
 
-#: modules/infoserv/main.c:276 modules/infoserv/main.c:286
+#: modules/infoserv/main.c:274 modules/infoserv/main.c:284
 msgid "The InfoServ message has been sent"
 msgstr ""
 
@@ -8186,7 +8227,7 @@ msgstr ""
 msgid "The language for %s has been changed to %s."
 msgstr ""
 
-#: modules/nickserv/multimark.c:1004
+#: modules/nickserv/multimark.c:1005
 msgid "The mark has been deleted."
 msgstr ""
 
@@ -8199,7 +8240,7 @@ msgstr ""
 msgid "The mask provided is too long."
 msgstr ""
 
-#: modules/memoserv/forward.c:126 modules/memoserv/forward.c:173
+#: modules/memoserv/forward.c:120 modules/memoserv/forward.c:167
 #, c-format
 msgid "The memo has been successfully forwarded to %s."
 msgstr ""
@@ -8211,17 +8252,17 @@ msgstr ""
 
 #: modules/memoserv/sendall.c:154
 #, c-format
-msgid "The memo has been successfully sent to %d accounts."
+msgid "The memo has been successfully sent to %u accounts."
 msgstr ""
 
 #: modules/memoserv/sendgroup.c:167
 #, c-format
-msgid "The memo has been successfully sent to %d members on %s."
+msgid "The memo has been successfully sent to %u members on %s."
 msgstr ""
 
 #: modules/memoserv/sendops.c:178
 #, c-format
-msgid "The memo has been successfully sent to %d ops on %s."
+msgid "The memo has been successfully sent to %u ops on %s."
 msgstr ""
 
 #: modules/chanserv/akick.c:341
@@ -8444,7 +8485,7 @@ msgstr ""
 msgid "This is your last warning. You will be ignored for 30 seconds."
 msgstr ""
 
-#: modules/nickserv/multimark.c:1009
+#: modules/nickserv/multimark.c:1010
 msgid "This mark does not exist."
 msgstr ""
 
@@ -8491,7 +8532,7 @@ msgstr ""
 
 #: modules/chanserv/kick.c:147
 #, c-format
-msgid "To avoid rejoin, %d ban exception(s) matching %s have been removed from %s."
+msgid "To avoid rejoin, %u ban exception(s) matching %s have been removed from %s."
 msgstr ""
 
 #: modules/chanserv/set_founder.c:199
@@ -8501,7 +8542,7 @@ msgstr ""
 
 #: modules/chanserv/quiet.c:319
 #, c-format
-msgid "To ensure the quiet takes effect, %d ban exception(s) matching %s have been removed from %s."
+msgid "To ensure the quiet takes effect, %u ban exception(s) matching %s have been removed from %s."
 msgstr ""
 
 #: modules/chanfix/fix.c:440
@@ -8512,7 +8553,7 @@ msgstr ""
 msgid "To forcibly register a channel: FREGISTER <#channel>"
 msgstr ""
 
-#: modules/contrib/ms_fsend.c:131 modules/memoserv/forward.c:170 modules/memoserv/sendall.c:144
+#: modules/contrib/ms_fsend.c:131 modules/memoserv/forward.c:164 modules/memoserv/sendall.c:144
 #: modules/memoserv/send.c:163 modules/memoserv/sendgroup.c:154 modules/memoserv/sendops.c:165
 #, c-format
 msgid "To read it, type /%s%s READ %zu"
@@ -8546,14 +8587,14 @@ msgstr ""
 
 #: modules/operserv/greplog.c:98
 #, c-format
-msgid "Too many days, maximum is %d."
+msgid "Too many days, maximum is %u."
 msgstr ""
 
 #: modules/operserv/rmatch.c:78
 msgid "Too many matches, not displaying any more"
 msgstr ""
 
-#: modules/memoserv/forward.c:103
+#: modules/memoserv/forward.c:97
 msgid "Too many memos; please wait a while and try again"
 msgstr ""
 
@@ -8566,7 +8607,7 @@ msgstr ""
 
 #: modules/chanfix/fix.c:529
 #, c-format
-msgid "Top %d scores for %s in the database:"
+msgid "Top %u scores for %s in the database:"
 msgstr ""
 
 #: modules/statserv/channel.c:53
@@ -8582,12 +8623,12 @@ msgstr ""
 
 #: modules/chanserv/akick.c:697
 #, c-format
-msgid "Total of %d %s in %s's AKICK list."
+msgid "Total of %u entries in %s's AKICK list."
 msgstr ""
 
 #: modules/chanserv/xop.c:233
 #, c-format
-msgid "Total of %d %s in %s list of %s."
+msgid "Total of %u entries in %s list of %s."
 msgstr ""
 
 #: modules/operserv/akill.c:466
@@ -8639,7 +8680,7 @@ msgstr ""
 
 #: modules/chanserv/ban.c:153 modules/chanserv/unban_self.c:89
 #, c-format
-msgid "Unbanned %s on %s (%d ban%s removed)."
+msgid "Unbanned %s on %s (%u bans removed)."
 msgstr ""
 
 #: modules/chanserv/ban.c:167
@@ -8662,7 +8703,7 @@ msgstr ""
 
 #: modules/chanserv/quiet.c:429
 #, c-format
-msgid "Unquieted %s on %s (%d quiet%s removed)."
+msgid "Unquieted %s on %s (%u quiets removed)."
 msgstr ""
 
 #: modules/chanserv/quiet.c:449
@@ -8674,7 +8715,7 @@ msgstr ""
 msgid "Update an access list entry."
 msgstr ""
 
-#: modules/operserv/clones.c:418
+#: modules/operserv/clones.c:416
 #, c-format
 msgid "Updated %s in clone exempt list."
 msgstr ""
@@ -8742,7 +8783,7 @@ msgstr ""
 msgid "Usage: MARK <#channel> ON <note>"
 msgstr ""
 
-#: modules/nickserv/multimark.c:1015
+#: modules/nickserv/multimark.c:1016
 msgid "Usage: MARK <target> <ADD|DEL|LIST|MIGRATE> [note]"
 msgstr ""
 
@@ -8754,7 +8795,7 @@ msgstr ""
 msgid "Usage: MARK <target> ADD <note>"
 msgstr ""
 
-#: modules/nickserv/multimark.c:973
+#: modules/nickserv/multimark.c:975
 msgid "Usage: MARK <target> DEL <number>"
 msgstr ""
 
@@ -8832,7 +8873,7 @@ msgstr ""
 
 #: modules/nickserv/info.c:214
 #, c-format
-msgid "User seen  : (about %d weeks ago)"
+msgid "User seen  : (about %u weeks ago)"
 msgstr ""
 
 #: modules/nickserv/info.c:245
@@ -8902,18 +8943,18 @@ msgstr ""
 msgid "View surroundings."
 msgstr ""
 
-#: modules/gameserv/gamecalc.c:246
+#: modules/gameserv/gamecalc.c:247
 msgid "WOD-style dice generation."
 msgstr ""
 
-#: modules/operserv/clones.c:562
+#: modules/operserv/clones.c:560
 #, c-format
-msgid "Warned clones limit for host %s set to %d"
+msgid "Warned clones limit for host %s set to %u"
 msgstr ""
 
-#: modules/operserv/clones.c:557
+#: modules/operserv/clones.c:555
 #, c-format
-msgid "Warned clones limit must be lower than or equal to the allowed limit of %d"
+msgid "Warned clones limit must be lower than or equal to the allowed limit of %u"
 msgstr ""
 
 #: modules/nickserv/identify.c:159
@@ -9253,7 +9294,7 @@ msgid ""
 "submit another."
 msgstr ""
 
-#: modules/memoserv/forward.c:63
+#: modules/memoserv/forward.c:57
 msgid "You cannot send yourself a memo."
 msgstr ""
 
@@ -9287,28 +9328,33 @@ msgstr ""
 msgid "You do not have appropriate permissions to set flags: %s"
 msgstr ""
 
+#: include/atheme/constants.h:78
+#, c-format
+msgid "You do not have the %s privilege."
+msgstr ""
+
 #: libathemecore/services.c:728
 msgid "You have NOT COMPLETED registration verification."
 msgstr ""
 
 #: modules/memoserv/main.c:25 modules/memoserv/main.c:57
 #, c-format
-msgid "You have %d new memo."
+msgid "You have %u new memo."
 msgstr ""
 
 #: modules/memoserv/main.c:26 modules/memoserv/main.c:58
 #, c-format
-msgid "You have %d new memos."
+msgid "You have %u new memos."
 msgstr ""
 
 #: modules/memoserv/list.c:25
 #, c-format
-msgid "You have %zu memo (%d new)."
+msgid "You have %zu memo (%u new)."
 msgstr ""
 
 #: modules/memoserv/list.c:26
 #, c-format
-msgid "You have %zu memos (%d new)."
+msgid "You have %zu memos (%u new)."
 msgstr ""
 
 #: modules/chanserv/status.c:47
@@ -9391,7 +9437,7 @@ msgstr ""
 msgid "You have no memos to delete."
 msgstr ""
 
-#: modules/memoserv/forward.c:49
+#: modules/memoserv/forward.c:43
 msgid "You have no memos to forward."
 msgstr ""
 
@@ -9399,7 +9445,7 @@ msgstr ""
 msgid "You have no memos."
 msgstr ""
 
-#: modules/memoserv/read.c:121
+#: modules/memoserv/read.c:120
 msgid "You have no new memos."
 msgstr ""
 
@@ -9564,7 +9610,7 @@ msgstr ""
 
 #: modules/nickserv/vacation.c:22
 #, c-format
-msgid "You must be registered for at least %d days in order to enable VACATION mode."
+msgid "You must be registered for at least %u days in order to enable VACATION mode."
 msgstr ""
 
 #: modules/nickserv/set_password.c:23
@@ -9581,7 +9627,7 @@ msgstr ""
 
 #: modules/hostserv/offer.c:289 modules/hostserv/request.c:217
 #, c-format
-msgid "You must wait at least %d days between changes to your vHost."
+msgid "You must wait at least %u days between changes to your vHost."
 msgstr ""
 
 #: modules/nickserv/multimark.c:753
@@ -9602,7 +9648,7 @@ msgstr ""
 msgid "You need to verify your email address before you may register groups."
 msgstr ""
 
-#: modules/memoserv/forward.c:42 modules/memoserv/sendall.c:43 modules/memoserv/send.c:43
+#: modules/memoserv/forward.c:36 modules/memoserv/sendall.c:43 modules/memoserv/send.c:43
 #: modules/memoserv/sendgroup.c:45 modules/memoserv/sendops.c:44
 msgid "You need to verify your email address before you may send memos."
 msgstr ""
@@ -9656,7 +9702,7 @@ msgstr ""
 
 #: modules/nickserv/vacation.c:36
 #, c-format
-msgid "Your account will automatically expire in %d days if you do not return."
+msgid "Your account will automatically expire in %u days if you do not return."
 msgstr ""
 
 #: modules/contrib/ircd_announceserv.c:161

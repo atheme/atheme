@@ -21,7 +21,7 @@ bs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	struct mychan *mc = NULL;
 	struct botserv_bot* bot = NULL;
 	struct metadata *md;
-	int comma = 0, i;
+	unsigned int comma = 0, i;
 	char buf[BUFSIZE], strfbuf[BUFSIZE], *end;
 	time_t registered;
 	struct tm tm;
@@ -65,7 +65,7 @@ bs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 			MOWGLI_ITER_FOREACH(n, bot->me->me->channels.head)
 			{
 				cu = (struct chanuser *)n->data;
-				command_success_nodata(si, _("%d: %s"), ++i, cu->chan->name);
+				command_success_nodata(si, _("%u: %s"), ++i, cu->chan->name);
 			}
 		}
 	}

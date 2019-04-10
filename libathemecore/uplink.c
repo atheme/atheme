@@ -36,11 +36,11 @@ init_uplinks(void)
 }
 
 struct uplink *
-uplink_add(const char *name, const char *host, const char *send_password, const char *receive_password, const char *vhost, int port)
+uplink_add(const char *name, const char *host, const char *send_password, const char *receive_password, const char *vhost, unsigned int port)
 {
 	struct uplink *u;
 
-	slog(LG_DEBUG, "uplink_add(): %s -> %s:%d", me.name, name, port);
+	slog(LG_DEBUG, "uplink_add(): %s -> %s:%u", me.name, name, port);
 
 	if ((u = uplink_find(name)))
 	{
@@ -130,19 +130,19 @@ uplink_connect(void)
 			return;
 		}
 		curr_uplink = uplinks.head->data;
-		slog(LG_INFO, "uplink_connect(): connecting to first entry %s[%s]:%d.", curr_uplink->name, curr_uplink->host, curr_uplink->port);
+		slog(LG_INFO, "uplink_connect(): connecting to first entry %s[%s]:%u.", curr_uplink->name, curr_uplink->host, curr_uplink->port);
 	}
 	else if (curr_uplink->node.next)
 	{
 		u = curr_uplink->node.next->data;
 
 		curr_uplink = u;
-		slog(LG_INFO, "uplink_connect(): trying alternate uplink %s[%s]:%d", curr_uplink->name, curr_uplink->host, curr_uplink->port);
+		slog(LG_INFO, "uplink_connect(): trying alternate uplink %s[%s]:%u", curr_uplink->name, curr_uplink->host, curr_uplink->port);
 	}
 	else
 	{
 		curr_uplink = uplinks.head->data;
-		slog(LG_INFO, "uplink_connect(): trying again first entry %s[%s]:%d", curr_uplink->name, curr_uplink->host, curr_uplink->port);
+		slog(LG_INFO, "uplink_connect(): trying again first entry %s[%s]:%u", curr_uplink->name, curr_uplink->host, curr_uplink->port);
 	}
 
 	u = curr_uplink;

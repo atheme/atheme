@@ -28,7 +28,7 @@ int use_limitflags = 0;
 #define MAX_BUF 256
 
 /* ban wrapper for cmode, returns number of bans added (0 or 1) */
-int
+unsigned int
 ban(struct user *sender, struct channel *c, struct user *user)
 {
 	char mask[MAX_BUF];
@@ -54,10 +54,10 @@ ban(struct user *sender, struct channel *c, struct user *user)
 }
 
 /* returns number of modes removed -- jilles */
-int
+unsigned int
 remove_banlike(struct user *source, struct channel *chan, int type, struct user *target)
 {
-	int count = 0;
+	unsigned int count = 0;
 	mowgli_node_t *n, *tn;
 	struct chanban *cb;
 
@@ -82,7 +82,7 @@ remove_banlike(struct user *source, struct channel *chan, int type, struct user 
 }
 
 /* returns number of exceptions removed -- jilles */
-int
+unsigned int
 remove_ban_exceptions(struct user *source, struct channel *chan, struct user *target)
 {
 	return remove_banlike(source, chan, ircd->except_mchar, target);

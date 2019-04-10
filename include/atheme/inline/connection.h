@@ -23,7 +23,7 @@
  * side effects:
  *       none
  */
-static inline int connection_count(void)
+static inline size_t connection_count(void)
 {
 	return MOWGLI_LIST_LENGTH(&connection_list);
 }

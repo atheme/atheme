@@ -24,18 +24,12 @@ ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])
 	char *arg = parv[1];
 
 	// Arg validator
-	if (!target || !arg)
+	if (! target || ! arg || ! string_to_uint(arg, &memonum))
 	{
-		command_fail(si, fault_needmoreparams,
-			STR_INSUFFICIENT_PARAMS, "FORWARD");
-
-		command_fail(si, fault_needmoreparams,
-			"Syntax: FORWARD <account> <memo number>");
-
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FORWARD");
+		command_fail(si, fault_needmoreparams, "Syntax: FORWARD <account> <memo number>");
 		return;
 	}
-	else
-		memonum = atoi(arg);
 
 	if (si->smu->flags & MU_WAITAUTH)
 	{

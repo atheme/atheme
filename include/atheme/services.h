@@ -12,6 +12,7 @@
 
 #include <atheme/attributes.h>
 #include <atheme/common.h>
+#include <atheme/constants.h>
 #include <atheme/stdheaders.h>
 #include <atheme/structures.h>
 
@@ -58,18 +59,6 @@ struct nicksvs
 	mowgli_list_t   emailexempts;   // emails exempt from maxusers checks
 };
 
-/* help us keep consistent messages */
-#define STR_INSUFFICIENT_PARAMS _("Insufficient parameters for \2%s\2.")
-#define STR_INVALID_PARAMS _("Invalid parameters for \2%s\2.")
-#define STR_NO_PRIVILEGE _("You do not have the %s privilege.")
-
-/* for command_add_flood(),
- * note that floodcheck() already does one FLOOD_MSGS_FACTOR
- */
-#define FLOOD_HEAVY (3 * FLOOD_MSGS_FACTOR)
-#define FLOOD_MODERATE FLOOD_MSGS_FACTOR
-#define FLOOD_LIGHT 0
-
 /* atheme.c */
 extern struct chansvs chansvs;
 extern struct nicksvs nicksvs;
@@ -83,9 +72,9 @@ extern int use_account_private;
 extern int use_channel_private;
 extern int use_limitflags;
 
-int ban(struct user *source, struct channel *chan, struct user *target);
-int remove_banlike(struct user *source, struct channel *chan, int type, struct user *target);
-int remove_ban_exceptions(struct user *source, struct channel *chan, struct user *target);
+unsigned int ban(struct user *source, struct channel *chan, struct user *target);
+unsigned int remove_banlike(struct user *source, struct channel *chan, int type, struct user *target);
+unsigned int remove_ban_exceptions(struct user *source, struct channel *chan, struct user *target);
 
 void try_kick_real(struct user *source, struct channel *chan, struct user *target, const char *reason);
 extern void (*try_kick)(struct user *source, struct channel *chan, struct user *target, const char *reason);

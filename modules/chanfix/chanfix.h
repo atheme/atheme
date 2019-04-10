@@ -12,23 +12,23 @@
 
 #include <atheme.h>
 
-#define CHANFIX_OP_THRESHHOLD   3
-#define CHANFIX_ACCOUNT_WEIGHT  1.5
-#define CHANFIX_MIN_FIX_SCORE	12
+#define CHANFIX_OP_THRESHHOLD   3U
+#define CHANFIX_ACCOUNT_WEIGHT  1.5f
+#define CHANFIX_MIN_FIX_SCORE	12U
 
 #define	CHANFIX_INITIAL_STEP	0.70f
 #define CHANFIX_FINAL_STEP	0.30f
 
-#define CHANFIX_RETENTION_TIME	(86400 * 28)
-#define CHANFIX_FIX_TIME	(60 * 60)
-#define CHANFIX_GATHER_INTERVAL	300
-#define CHANFIX_EXPIRE_INTERVAL 3600
+#define CHANFIX_RETENTION_TIME	(86400U * 28U)
+#define CHANFIX_FIX_TIME	(60U * 60U)
+#define CHANFIX_GATHER_INTERVAL	300U
+#define CHANFIX_EXPIRE_INTERVAL 3600U
 
 /* This value has been chosen such that the maximum score is about 8064,
  * which is the number of CHANFIX_GATHER_INTERVALs in CHANFIX_RETENTION_TIME.
  * Higher scores would decay more than they can gain (12 per hour).
  */
-#define CHANFIX_EXPIRE_DIVISOR	672
+#define CHANFIX_EXPIRE_DIVISOR	672U
 
 struct chanfix_channel
 {

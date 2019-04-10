@@ -46,7 +46,7 @@ ns_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED 
 			(void) help_display_newline(si);
 
 			(void) command_success_nodata(si, _("If a registered account is not used by the owner for "
-			                                    "%d days,\n\2%s\2 will drop the account, allowing it "
+			                                    "%u days,\n\2%s\2 will drop the account, allowing it "
 			                                    "to be reregistered."), (nicksvs.expiry / 86400),
 			                                    nicksvs.nick);
 		}
@@ -62,7 +62,7 @@ ns_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED 
 		{
 			(void) help_display_newline(si);
 
-			(void) command_success_nodata(si, _("If a registered nick is not used by the owner for %d "
+			(void) command_success_nodata(si, _("If a registered nick is not used by the owner for %u "
 			                                    "days,\n\2%s\2 will drop the nickname, allowing it to "
 			                                    "be reregistered."), (nicksvs.expiry / 86400),
 			                                    nicksvs.nick);

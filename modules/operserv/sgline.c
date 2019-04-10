@@ -210,7 +210,7 @@ os_cmd_sgline_del(struct sourceinfo *si, int parc, char *parv[])
 				{
 					if (!(x = xline_find_num(i)))
 					{
-						command_fail(si, fault_nosuch_target, _("No such SGLINE with number \2%d\2."), i);
+						command_fail(si, fault_nosuch_target, _("No such SGLINE with number \2%u\2."), i);
 						continue;
 					}
 
@@ -229,7 +229,7 @@ os_cmd_sgline_del(struct sourceinfo *si, int parc, char *parv[])
 
 			if (!(x = xline_find_num(number)))
 			{
-				command_fail(si, fault_nosuch_target, _("No such SGLINE with number \2%d\2."), number);
+				command_fail(si, fault_nosuch_target, _("No such SGLINE with number \2%u\2."), number);
 				return;
 			}
 
@@ -280,13 +280,13 @@ os_cmd_sgline_list(struct sourceinfo *si, int parc, char *parv[])
 		x = (struct xline *)n->data;
 
 		if (x->duration && full)
-			command_success_nodata(si, _("%d: %s - by \2%s\2 - expires in \2%s\2 - (%s)"), x->number, x->realname, x->setby, timediff(x->expires > CURRTIME ? x->expires - CURRTIME : 0), x->reason);
+			command_success_nodata(si, _("%u: %s - by \2%s\2 - expires in \2%s\2 - (%s)"), x->number, x->realname, x->setby, timediff(x->expires > CURRTIME ? x->expires - CURRTIME : 0), x->reason);
 		else if (x->duration && !full)
-			command_success_nodata(si, _("%d: %s - by \2%s\2 - expires in \2%s\2"), x->number, x->realname, x->setby, timediff(x->expires > CURRTIME ? x->expires - CURRTIME : 0));
+			command_success_nodata(si, _("%u: %s - by \2%s\2 - expires in \2%s\2"), x->number, x->realname, x->setby, timediff(x->expires > CURRTIME ? x->expires - CURRTIME : 0));
 		else if (!x->duration && full)
-			command_success_nodata(si, _("%d: %s - by \2%s\2 - \2permanent\2 - (%s)"), x->number, x->realname, x->setby, x->reason);
+			command_success_nodata(si, _("%u: %s - by \2%s\2 - \2permanent\2 - (%s)"), x->number, x->realname, x->setby, x->reason);
 		else
-			command_success_nodata(si, _("%d: %s - by \2%s\2 - \2permanent\2"), x->number, x->realname, x->setby);
+			command_success_nodata(si, _("%u: %s - by \2%s\2 - \2permanent\2"), x->number, x->realname, x->setby);
 	}
 
 	command_success_nodata(si, _("Total of \2%zu\2 %s in SGLINE list."), xlnlist.count, (xlnlist.count == 1) ? "entry" : "entries");

@@ -211,7 +211,7 @@ static void
 cs_xop_do_list(struct sourceinfo *si, struct mychan *mc, unsigned int level, const char *leveldesc, bool operoverride)
 {
 	struct chanacs *ca;
-	int i = 0;
+	unsigned int i = 0;
 	mowgli_node_t *n;
 
 	command_success_nodata(si, _("%s list for \2%s\2:"), leveldesc ,mc->name);
@@ -221,16 +221,16 @@ cs_xop_do_list(struct sourceinfo *si, struct mychan *mc, unsigned int level, con
 		if (ca->level == level)
 		{
 			if (ca->entity == NULL)
-				command_success_nodata(si, "%d: \2%s\2", ++i, ca->host);
+				command_success_nodata(si, "%u: \2%s\2", ++i, ca->host);
 			else if (isuser(ca->entity) && MOWGLI_LIST_LENGTH(&user(ca->entity)->logins))
-				command_success_nodata(si, _("%d: \2%s\2 (logged in)"), ++i, ca->entity->name);
+				command_success_nodata(si, _("%u: \2%s\2 (logged in)"), ++i, ca->entity->name);
 			else
-				command_success_nodata(si, _("%d: \2%s\2 (not logged in)"), ++i, ca->entity->name);
+				command_success_nodata(si, _("%u: \2%s\2 (not logged in)"), ++i, ca->entity->name);
 		}
 	}
 
 	// XXX
-	command_success_nodata(si, _("Total of \2%d\2 %s in %s list of \2%s\2."), i, (i == 1) ? "entry" : "entries", leveldesc, mc->name);
+	command_success_nodata(si, _("Total of \2%u\2 entries in %s list of \2%s\2."), i, leveldesc, mc->name);
 
 	if (operoverride)
 		logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 \2%s\2 (oper override)", mc->name, leveldesc);
@@ -403,7 +403,7 @@ cs_cmd_forcexop(struct sourceinfo *si, int parc, char *parv[])
 	struct chanacs *ca;
 	struct mychan *mc = mychan_find(chan);
 	mowgli_node_t *n;
-	int changes;
+	unsigned int changes;
 	unsigned int newlevel;
 	const char *desc;
 	unsigned int ca_sop, ca_aop, ca_hop, ca_vop;
@@ -511,10 +511,10 @@ cs_cmd_forcexop(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, "%s: %s -> %s", ca->entity != NULL ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), desc);
 		chanacs_modify_simple(ca, newlevel, ~newlevel, si->smu);
 	}
-	command_success_nodata(si, _("FORCEXOP \2%s\2 done (\2%d\2 changes)"), mc->name, changes);
+	command_success_nodata(si, _("FORCEXOP \2%s\2 done (\2%u\2 changes)"), mc->name, changes);
 	if (changes > 0)
-		verbose(mc, _("\2%s\2 reset access levels to xOP (\2%d\2 changes)"), get_source_name(si), changes);
-	logcommand(si, CMDLOG_SET, "FORCEXOP: \2%s\2 (\2%d\2 changes)", mc->name, changes);
+		verbose(mc, _("\2%s\2 reset access levels to xOP (\2%u\2 changes)"), get_source_name(si), changes);
+	logcommand(si, CMDLOG_SET, "FORCEXOP: \2%s\2 (\2%u\2 changes)", mc->name, changes);
 }
 
 static struct command cs_sop = {

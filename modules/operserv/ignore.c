@@ -165,7 +165,7 @@ os_cmd_ignore_list(struct sourceinfo *si, int parc, char *parv[])
 		tm = *localtime(&svsignore->settime);
 		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
 
-		command_success_nodata(si, _("%d: %s by %s on %s (Reason: %s)"), i, svsignore->mask, svsignore->setby, strfbuf, svsignore->reason);
+		command_success_nodata(si, _("%u: %s by %s on %s (Reason: %s)"), i, svsignore->mask, svsignore->setby, strfbuf, svsignore->reason);
 		i++;
 	}
 

@@ -18,7 +18,7 @@ struct multimark
 	char *restored_from_uid;
 	char *restored_from_account;
 	time_t time;
-	int number;
+	unsigned int number;
 	char *mark;
 	mowgli_node_t node;
 };
@@ -153,7 +153,7 @@ write_multimark_db(struct database_handle *db)
 			db_write_word(db, mm->restored_from_account);
 
 			db_write_uint(db, mm->time);
-			db_write_int(db, mm->number);
+			db_write_uint(db, mm->number);
 			db_write_str(db, mm->mark);
 			db_commit_row(db);
 		}
@@ -190,7 +190,7 @@ db_h_mm(struct database_handle *db, const char *type)
 	const char *restored_from_uid = db_sread_word(db);
 	const char *restored_from_account = db_sread_word(db);
 	time_t time = db_sread_uint(db);
-	int number = db_sread_int(db);
+	unsigned int number = db_sread_uint(db);
 	const char *mark = db_sread_str(db);
 
 	mu = myuser_find_uid(account_uid);
@@ -559,7 +559,7 @@ show_multimark(hook_user_req_t *hdata)
 			{
 				command_success_nodata(
 					hdata->si,
-					_("Mark \2%d\2 set by \2%s\2 (%s) on \2%s\2: %s"),
+					_("Mark \2%u\2 set by \2%s\2 (%s) on \2%s\2: %s"),
 					mm->number,
 					mm->setter_name,
 					setter_name,
@@ -571,7 +571,7 @@ show_multimark(hook_user_req_t *hdata)
 			{
 				command_success_nodata(
 					hdata->si,
-					_("Mark \2%d\2 set by \2%s\2 on \2%s\2: %s"),
+					_("Mark \2%u\2 set by \2%s\2 on \2%s\2: %s"),
 					mm->number,
 					setter_name,
 					time,
@@ -588,7 +588,7 @@ show_multimark(hook_user_req_t *hdata)
 				{
 					command_success_nodata(
 						hdata->si,
-						_("\2(Restored)\2 Mark \2%d\2 originally set on \2%s\2 (\2%s\2) by \2%s\2 (%s) on \2%s\2: %s"),
+						_("\2(Restored)\2 Mark \2%u\2 originally set on \2%s\2 (\2%s\2) by \2%s\2 (%s) on \2%s\2: %s"),
 						mm->number,
 						mm->restored_from_account,
 						entity(user)->name,
@@ -602,7 +602,7 @@ show_multimark(hook_user_req_t *hdata)
 				{
 					command_success_nodata(
 						hdata->si,
-						_("\2(Restored)\2 Mark \2%d\2 originally set on \2%s\2 by \2%s\2 (%s) on \2%s\2: %s"),
+						_("\2(Restored)\2 Mark \2%u\2 originally set on \2%s\2 by \2%s\2 (%s) on \2%s\2: %s"),
 						mm->number,
 						mm->restored_from_account,
 						setter_name,
@@ -619,7 +619,7 @@ show_multimark(hook_user_req_t *hdata)
 				{
 					command_success_nodata(
 						hdata->si,
-						_("\2(Restored)\2 Mark \2%d\2 originally set on \2%s\2 (\2%s\2) by \2%s\2 on \2%s\2: %s"),
+						_("\2(Restored)\2 Mark \2%u\2 originally set on \2%s\2 (\2%s\2) by \2%s\2 on \2%s\2: %s"),
 						mm->number,
 						mm->restored_from_account,
 						entity(user)->name,
@@ -632,7 +632,7 @@ show_multimark(hook_user_req_t *hdata)
 				{
 					command_success_nodata(
 						hdata->si,
-						_("\2(Restored)\2 Mark \2%d\2 originally set on \2%s\2 by \2%s\2 on \2%s\2: %s"),
+						_("\2(Restored)\2 Mark \2%u\2 originally set on \2%s\2 by \2%s\2 on \2%s\2: %s"),
 						mm->number,
 						mm->restored_from_account,
 						setter_name,
@@ -878,7 +878,7 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 				{
 					command_success_nodata(
 						si,
-						_("Mark \2%d\2 set by \2%s\2 (%s) on \2%s\2: %s"),
+						_("Mark \2%u\2 set by \2%s\2 (%s) on \2%s\2: %s"),
 						mm->number,
 						mm->setter_name,
 						setter_name,
@@ -890,7 +890,7 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 				{
 					command_success_nodata(
 						si,
-						_("Mark \2%d\2 set by \2%s\2 on \2%s\2: %s"),
+						_("Mark \2%u\2 set by \2%s\2 on \2%s\2: %s"),
 						mm->number,
 						setter_name,
 						time,
@@ -907,7 +907,7 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 					{
 						command_success_nodata(
 							si,
-							_("\2(Restored)\2 Mark \2%d\2 originally set on \2%s\2 (\2%s\2) by \2%s\2 (%s) on \2%s\2: %s"),
+							_("\2(Restored)\2 Mark \2%u\2 originally set on \2%s\2 (\2%s\2) by \2%s\2 (%s) on \2%s\2: %s"),
 							mm->number,
 							mm->restored_from_account,
 							entity(user)->name,
@@ -921,7 +921,7 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 					{
 						command_success_nodata(
 							si,
-							_("\2(Restored)\2 Mark \2%d\2 originally set on \2%s\2 by \2%s\2 (%s) on \2%s\2: %s"),
+							_("\2(Restored)\2 Mark \2%u\2 originally set on \2%s\2 by \2%s\2 (%s) on \2%s\2: %s"),
 							mm->number,
 							mm->restored_from_account,
 							setter_name,
@@ -938,7 +938,7 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 					{
 						command_success_nodata(
 							si,
-							_("\2(Restored)\2 Mark \2%d\2 originally set on \2%s\2 (\2%s\2) by \2%s\2 on \2%s\2: %s"),
+							_("\2(Restored)\2 Mark \2%u\2 originally set on \2%s\2 (\2%s\2) by \2%s\2 on \2%s\2: %s"),
 							mm->number,
 							mm->restored_from_account,
 							entity(user)->name,
@@ -951,7 +951,7 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 					{
 						command_success_nodata(
 							si,
-							_("\2(Restored)\2 Mark \2%d\2 originally set on \2%s\2 by \2%s\2 on \2%s\2: %s"),
+							_("\2(Restored)\2 Mark \2%u\2 originally set on \2%s\2 by \2%s\2 on \2%s\2: %s"),
 							mm->number,
 							mm->restored_from_account,
 							setter_name,
@@ -967,7 +967,9 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else if (!strcasecmp(action, "DEL") || !strcasecmp(action, "DELETE"))
 	{
-		if (!info)
+		unsigned int num;
+
+		if (! info || ! string_to_uint(info, &num))
 		{
 			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "MARK");
 			command_fail(si, fault_needmoreparams, _("Usage: MARK <target> DEL <number>"));
@@ -975,7 +977,6 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 		}
 
 		bool found = false;
-		int num = atoi(info);
 
 		l = multimark_list(mu);
 

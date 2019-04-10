@@ -199,7 +199,7 @@ ns_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 	struct myentity_iteration_state mestate;
 	struct mynick *mn;
 
-	int matches = 0;
+	unsigned int matches = 0;
 
 	int i;
 	bool error = false;
@@ -280,11 +280,11 @@ ns_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 
 	build_criteriastr(criteriastr, parc, parv);
 
-	logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 (\2%d\2 matches)", criteriastr, matches);
+	logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 (\2%u\2 matches)", criteriastr, matches);
 	if (matches == 0)
 		command_success_nodata(si, _("No nicknames matched criteria \2%s\2"), criteriastr);
 	else
-		command_success_nodata(si, ngettext(N_("\2%d\2 match for criteria \2%s\2"), N_("\2%d\2 matches for criteria \2%s\2"), matches), matches, criteriastr);
+		command_success_nodata(si, ngettext(N_("\2%u\2 match for criteria \2%s\2"), N_("\2%u\2 matches for criteria \2%s\2"), matches), matches, criteriastr);
 }
 
 static struct command ns_list = {

@@ -95,7 +95,7 @@ flatfile_db_load(const char *filename)
 			versn = atoi(strtok(NULL, " "));
 			if (versn > 6)
 			{
-				slog(LG_INFO, "db_load(): database version is %d; i only understand 5 (Atheme 2.0, 2.1), "
+				slog(LG_INFO, "db_load(): database version is %u; i only understand 5 (Atheme 2.0, 2.1), "
 					"4 (Atheme 0.2), 3 (Atheme 0.2 without CA_ACLVIEW), 2 (Atheme 0.1) or 1 (Shrike)", versn);
 				exit(EXIT_FAILURE);
 			}
@@ -135,7 +135,7 @@ flatfile_db_load(const char *filename)
 
 				if (myuser_find(s))
 				{
-					slog(LG_INFO, "db_load(): skipping duplicate account %s (line %d)", s, linecnt);
+					slog(LG_INFO, "db_load(): skipping duplicate account %s (line %u)", s, linecnt);
 					continue;
 				}
 
@@ -279,7 +279,7 @@ flatfile_db_load(const char *filename)
 
 			if (mynick_find(nick))
 			{
-				slog(LG_INFO, "db_load(): skipping duplicate nick %s (account %s) (line %d)", nick, user, linecnt);
+				slog(LG_INFO, "db_load(): skipping duplicate nick %s (account %s) (line %u)", nick, user, linecnt);
 				continue;
 			}
 
@@ -313,7 +313,7 @@ flatfile_db_load(const char *filename)
 			user = strtok(NULL, " \n");
 			if (!user)
 			{
-				slog(LG_INFO, "db_load(): invalid old name (line %d)", linecnt);
+				slog(LG_INFO, "db_load(): invalid old name (line %u)", linecnt);
 				continue;
 			}
 			myuser_name_add(user);
@@ -346,7 +346,7 @@ flatfile_db_load(const char *filename)
 			{
 				if (mychan_find(s))
 				{
-					slog(LG_INFO, "db_load(): skipping duplicate channel %s (line %d)", s, linecnt);
+					slog(LG_INFO, "db_load(): skipping duplicate channel %s (line %u)", s, linecnt);
 					continue;
 				}
 
@@ -480,7 +480,7 @@ flatfile_db_load(const char *filename)
 
 				if (mc == NULL || (mu == NULL && !validhostmask(causer)))
 				{
-					slog(LG_ERROR, "db_load(): invalid chanacs (line %d)", linecnt);
+					slog(LG_ERROR, "db_load(): invalid chanacs (line %u)", linecnt);
 					continue;
 				}
 
@@ -691,27 +691,27 @@ flatfile_db_load(const char *filename)
 			// end
 			i = atoi(strtok(NULL, " "));
 			if (i != muin)
-				slog(LG_ERROR, "db_load(): got %d myusers; expected %d", muin, i);
+				slog(LG_ERROR, "db_load(): got %u myusers; expected %u", muin, i);
 
 			i = atoi(strtok(NULL, " "));
 			if (i != mcin)
-				slog(LG_ERROR, "db_load(): got %d mychans; expected %d", mcin, i);
+				slog(LG_ERROR, "db_load(): got %u mychans; expected %u", mcin, i);
 
 			i = atoi(strtok(NULL, " "));
 			if (i != cain)
-				slog(LG_ERROR, "db_load(): got %d chanacs; expected %d", cain, i);
+				slog(LG_ERROR, "db_load(): got %u chanacs; expected %u", cain, i);
 
 			if ((s = strtok(NULL, " ")))
 				if ((i = atoi(s)) != kin)
-					slog(LG_ERROR, "db_load(): got %d klines; expected %d", kin, i);
+					slog(LG_ERROR, "db_load(): got %u klines; expected %u", kin, i);
 
 			if ((s = strtok(NULL, " ")))
 				if ((i = atoi(s)) != xin)
-					slog(LG_ERROR, "db_load(): got %d xlines; expected %d", xin, i);
+					slog(LG_ERROR, "db_load(): got %u xlines; expected %u", xin, i);
 
 			if ((s = strtok(NULL, " ")))
 				if ((i = atoi(s)) != qin)
-					slog(LG_ERROR, "db_load(): got %d qlines; expected %d", qin, i);
+					slog(LG_ERROR, "db_load(): got %u qlines; expected %u", qin, i);
 		}
 	}
 

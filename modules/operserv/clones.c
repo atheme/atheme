@@ -15,8 +15,8 @@
 struct clones_exemption
 {
 	char *ip;
-	int allowed;
-	int warn;
+	unsigned int allowed;
+	unsigned int warn;
 	char *reason;
 	long expires;
 };
@@ -38,7 +38,7 @@ static mowgli_list_t clone_exempts;
 static bool kline_enabled;
 static unsigned int grace_count;
 static long kline_duration = 3600;
-static int clones_allowed, clones_warn;
+static unsigned int clones_allowed, clones_warn;
 static unsigned int clones_dbversion = 1;
 
 static inline bool
@@ -109,7 +109,7 @@ db_h_clonesdbv(struct database_handle *db, const char *type)
 static void
 db_h_ck(struct database_handle *db, const char *type)
 {
-	kline_enabled = db_sread_int(db) != 0;
+	kline_enabled = db_sread_uint(db) != 0;
 }
 
 static void
@@ -235,20 +235,20 @@ os_cmd_clones_kline(struct sourceinfo *si, int parc, char *parv[])
 		unsigned int newgrace = atol(arg);
 		if (kline_enabled && grace_count == newgrace)
 		{
-			command_fail(si, fault_nochange, _("CLONES kline grace is already enabled and set to %d kills."), grace_count);
+			command_fail(si, fault_nochange, _("CLONES kline grace is already enabled and set to %u kills."), grace_count);
 		}
 		kline_enabled = true;
 		grace_count = newgrace;
-		command_success_nodata(si, _("Enabled CLONES klines with a grace of %d kills"), grace_count);
-		wallops("\2%s\2 enabled CLONES klines with a grace of %d kills", get_oper_name(si), grace_count);
-		logcommand(si, CMDLOG_ADMIN, "CLONES:KLINE:ON grace %d", grace_count);
+		command_success_nodata(si, _("Enabled CLONES klines with a grace of %u kills"), grace_count);
+		wallops("\2%s\2 enabled CLONES klines with a grace of %u kills", get_oper_name(si), grace_count);
+		logcommand(si, CMDLOG_ADMIN, "CLONES:KLINE:ON grace %u", grace_count);
 	}
 	else
 	{
 		if (kline_enabled)
 		{
 			if (grace_count)
-				command_success_string(si, "ON", _("CLONES klines are currently enabled with a grace of %d kills."), grace_count);
+				command_success_string(si, "ON", _("CLONES klines are currently enabled with a grace of %u kills."), grace_count);
 			else
 				command_success_string(si, "ON", _("CLONES klines are currently enabled."));
 		}
@@ -261,7 +261,7 @@ static void
 os_cmd_clones_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct clones_hostentry *he;
-	int k = 0;
+	unsigned int k = 0;
 	mowgli_patricia_iteration_state_t state;
 
 	MOWGLI_PATRICIA_FOREACH(he, &state, hostlist)
@@ -272,9 +272,9 @@ os_cmd_clones_list(struct sourceinfo *si, int parc, char *parv[])
 		{
 			struct clones_exemption *c = find_exempt(he->ip);
 			if (c)
-				command_success_nodata(si, _("%d from %s (\2EXEMPT\2; allowed %d)"), k, he->ip, c->allowed);
+				command_success_nodata(si, _("%u from %s (\2EXEMPT\2; allowed %u)"), k, he->ip, c->allowed);
 			else
-				command_success_nodata(si, _("%d from %s"), k, he->ip);
+				command_success_nodata(si, _("%u from %s"), k, he->ip);
 		}
 	}
 	command_success_nodata(si, _("End of CLONES LIST"));
@@ -287,14 +287,14 @@ os_cmd_clones_addexempt(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_node_t *n;
 	char *ip = parv[0];
 	char *clonesstr = parv[1];
-	int clones;
+	unsigned int clones;
 	char *expiry = parv[2];
 	char *reason = parv[3];
 	char rreason[BUFSIZE];
 	struct clones_exemption *c = NULL;
 	long duration;
 
-	if (!ip || !clonesstr || !expiry)
+	if (!ip || !clonesstr || !expiry || ! string_to_uint(clonesstr, &clones) || ! clones)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLONES ADDEXEMPT");
 		command_fail(si, fault_needmoreparams, _("Syntax: CLONES ADDEXEMPT <ip> <clones> [!P|!T <minutes>] <reason>"));
@@ -307,8 +307,6 @@ os_cmd_clones_addexempt(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Syntax: CLONES ADDEXEMPT <ip> <clones> [!P|!T <minutes>] <reason>"));
 		return;
 	}
-
-	clones = atoi(clonesstr);
 
 	if (expiry && !strcasecmp(expiry, "!P"))
 	{
@@ -422,7 +420,7 @@ os_cmd_clones_addexempt(struct sourceinfo *si, int parc, char *parv[])
 	c->warn = clones;
 	c->expires = duration ? (CURRTIME + duration) : 0;
 
-	logcommand(si, CMDLOG_ADMIN, "CLONES:ADDEXEMPT: \2%s\2 \2%d\2 (reason: \2%s\2) (duration: \2%s\2)", ip, clones, c->reason, timediff(duration));
+	logcommand(si, CMDLOG_ADMIN, "CLONES:ADDEXEMPT: \2%s\2 \2%u\2 (reason: \2%s\2) (duration: \2%s\2)", ip, clones, c->reason, timediff(duration));
 }
 
 static void
@@ -494,7 +492,7 @@ os_cmd_clones_setexempt(struct sourceinfo *si, int parc, char *parv[])
 		if (!strcasecmp(subcmd, "ALLOWED"))
 		{
 			clones_allowed = clones;
-			command_success_nodata(si, _("Default allowed clone limit set to \2%d\2."), clones_allowed);
+			command_success_nodata(si, _("Default allowed clone limit set to \2%u\2."), clones_allowed);
 		}
 		else if (!strcasecmp(subcmd,"WARN"))
 		{
@@ -506,7 +504,7 @@ os_cmd_clones_setexempt(struct sourceinfo *si, int parc, char *parv[])
 			}
 
 			clones_warn = clones;
-			command_success_nodata(si, _("Default warned clone limit set to \2%d\2"), clones_warn);
+			command_success_nodata(si, _("Default warned clone limit set to \2%u\2"), clones_warn);
 		}
 		else
 		{
@@ -516,7 +514,7 @@ os_cmd_clones_setexempt(struct sourceinfo *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_ADMIN, "CLONES:SETEXEMPT:DEFAULT: \2%s\2 \2%d\2 allowed, \2%d\2 warn", ip, clones_allowed, clones_warn);
+		logcommand(si, CMDLOG_ADMIN, "CLONES:SETEXEMPT:DEFAULT: \2%s\2 \2%u\2 allowed, \2%u\2 warn", ip, clones_allowed, clones_warn);
 	}
 	else if (ip) {
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, clone_exempts.head)
@@ -537,12 +535,12 @@ os_cmd_clones_setexempt(struct sourceinfo *si, int parc, char *parv[])
 				{
 					if (clones < c->warn)
 					{
-						command_fail(si, fault_badparams, _("Allowed clones limit must be greater than or equal to the warned limit of %d"), c->warn);
+						command_fail(si, fault_badparams, _("Allowed clones limit must be greater than or equal to the warned limit of %u"), c->warn);
 						return;
 					}
 
 					c->allowed = clones;
-					command_success_nodata(si, _("Allowed clones limit for host \2%s\2 set to \2%d\2"), ip, c->allowed);
+					command_success_nodata(si, _("Allowed clones limit for host \2%s\2 set to \2%u\2"), ip, c->allowed);
 				}
 				else if (!strcasecmp(subcmd, "WARN"))
 				{
@@ -554,12 +552,12 @@ os_cmd_clones_setexempt(struct sourceinfo *si, int parc, char *parv[])
 					}
 					else if (clones > c->allowed)
 					{
-						command_fail(si, fault_badparams, _("Warned clones limit must be lower than or equal to the allowed limit of %d"), c->allowed);
+						command_fail(si, fault_badparams, _("Warned clones limit must be lower than or equal to the allowed limit of %u"), c->allowed);
 						return;
 					}
 
 					c->warn = clones;
-					command_success_nodata(si, _("Warned clones limit for host \2%s\2 set to \2%d\2"), ip, c->warn);
+					command_success_nodata(si, _("Warned clones limit for host \2%s\2 set to \2%u\2"), ip, c->warn);
 				}
 				else if (!strcasecmp(subcmd, "DURATION"))
 				{
@@ -667,7 +665,7 @@ static void
 os_cmd_clones_listexempt(struct sourceinfo *si, int parc, char *parv[])
 {
 
-	command_success_nodata(si, _("DEFAULT - allowed limit %d, warn on %d"), clones_allowed, clones_warn);
+	command_success_nodata(si, _("DEFAULT - allowed limit %u, warn on %u"), clones_allowed, clones_warn);
 	mowgli_node_t *n, *tn;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, clone_exempts.head)
@@ -683,9 +681,9 @@ os_cmd_clones_listexempt(struct sourceinfo *si, int parc, char *parv[])
 			mowgli_node_free(n);
 		}
 		else if (c->expires)
-			command_success_nodata(si, _("%s - allowed limit %d, warn on %d - expires in %s - \2%s\2"), c->ip, c->allowed, c->warn, timediff(c->expires > CURRTIME ? c->expires - CURRTIME : 0), c->reason);
+			command_success_nodata(si, _("%s - allowed limit %u, warn on %u - expires in %s - \2%s\2"), c->ip, c->allowed, c->warn, timediff(c->expires > CURRTIME ? c->expires - CURRTIME : 0), c->reason);
 		else
-			command_success_nodata(si, _("%s - allowed limit %d, warn on %d - \2permanent\2 - \2%s\2"), c->ip, c->allowed, c->warn, c->reason);
+			command_success_nodata(si, _("%s - allowed limit %u, warn on %u - \2permanent\2 - \2%s\2"), c->ip, c->allowed, c->warn, c->reason);
 	}
 	command_success_nodata(si, _("End of CLONES LISTEXEMPT"));
 	logcommand(si, CMDLOG_ADMIN, "CLONES:LISTEXEMPT");
@@ -758,7 +756,7 @@ clones_newuser(hook_user_nick_t *data)
 	{
 		// User has exceeded the maximum number of allowed clones.
 		if (is_autokline_exempt(u))
-			slog(LG_INFO, "CLONES: \2%d\2 clones on \2%s\2 (%s!%s@%s) (user is autokline exempt)", i, u->ip, u->nick, u->user, u->host);
+			slog(LG_INFO, "CLONES: \2%u\2 clones on \2%s\2 (%s!%s@%s) (user is autokline exempt)", i, u->ip, u->nick, u->user, u->host);
 		else if (!kline_enabled || he->gracekills < grace_count || (grace_count > 0 && he->firstkill < time(NULL) - CLONES_GRACE_TIMEPERIOD))
 		{
 			if (he->firstkill < time(NULL) - CLONES_GRACE_TIMEPERIOD)
@@ -772,9 +770,9 @@ clones_newuser(hook_user_nick_t *data)
 			}
 
 			if (!kline_enabled)
-				slog(LG_INFO, "CLONES: \2%d\2 clones on \2%s\2 (%s!%s@%s) (TKLINE disabled, killing user)", i, u->ip, u->nick, u->user, u->host);
+				slog(LG_INFO, "CLONES: \2%u\2 clones on \2%s\2 (%s!%s@%s) (TKLINE disabled, killing user)", i, u->ip, u->nick, u->user, u->host);
 			else
-				slog(LG_INFO, "CLONES: \2%d\2 clones on \2%s\2 (%s!%s@%s) (grace period, killing user, %d grace kills remaining)", i, u->ip, u->nick,
+				slog(LG_INFO, "CLONES: \2%u\2 clones on \2%s\2 (%s!%s@%s) (grace period, killing user, %u grace kills remaining)", i, u->ip, u->nick,
 					u->user, u->host, grace_count - he->gracekills);
 
 			kill_user(serviceinfo->me, u, "Too many connections from this host.");
@@ -783,7 +781,7 @@ clones_newuser(hook_user_nick_t *data)
 		else
 		{
 			if (! (u->flags & UF_KLINESENT)) {
-				slog(LG_INFO, "CLONES: \2%d\2 clones on \2%s\2 (%s!%s@%s) (TKLINE due to excess clones)", i, u->ip, u->nick, u->user, u->host);
+				slog(LG_INFO, "CLONES: \2%u\2 clones on \2%s\2 (%s!%s@%s) (TKLINE due to excess clones)", i, u->ip, u->nick, u->user, u->host);
 				kline_sts("*", "*", u->ip, kline_duration, "Excessive clones");
 				u->flags |= UF_KLINESENT;
 			}
@@ -792,8 +790,8 @@ clones_newuser(hook_user_nick_t *data)
 	}
 	else if (i >= warn && warn != 0)
 	{
-		slog(LG_INFO, "CLONES: \2%d\2 clones on \2%s\2 (%s!%s@%s) (\2%d\2 allowed)", i, u->ip, u->nick, u->user, u->host, allowed);
-		msg(serviceinfo->nick, u->nick, _("\2WARNING\2: You may not have more than \2%d\2 clients connected to the network at once. Any further connections risks being removed."), allowed);
+		slog(LG_INFO, "CLONES: \2%u\2 clones on \2%s\2 (%s!%s@%s) (\2%u\2 allowed)", i, u->ip, u->nick, u->user, u->host, allowed);
+		msg(serviceinfo->nick, u->nick, _("\2WARNING\2: You may not have more than \2%u\2 clients connected to the network at once. Any further connections risks being removed."), allowed);
 	}
 }
 

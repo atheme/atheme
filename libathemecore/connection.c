@@ -566,7 +566,7 @@ connection_open_listener_tcp(char *host, unsigned int port,
 	if (s > claro_state.maxfd)
 		claro_state.maxfd = s;
 
-	snprintf(buf, BUFSIZE, "listener: %s[%d]", host, port);
+	snprintf(buf, BUFSIZE, "listener: %s[%u]", host, port);
 
 	optval = 1;
 	setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char *)&optval, sizeof(optval));
@@ -584,7 +584,7 @@ connection_open_listener_tcp(char *host, unsigned int port,
 	if (bind(s, addr->ai_addr, addr->ai_addrlen) < 0)
 	{
 		close(s);
-		slog(LG_ERROR, "connection_open_listener_tcp(): unable to bind listener %s[%d], errno [%d]", host, port,
+		slog(LG_ERROR, "connection_open_listener_tcp(): unable to bind listener %s[%u], errno [%d]", host, port,
 			ioerrno());
 		freeaddrinfo(addr);
 		return NULL;

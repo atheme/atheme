@@ -19,7 +19,7 @@ cs_cmd_clear_bans(struct sourceinfo *si, int parc, char *parv[])
 	struct chanban *cb;
 	mowgli_node_t *n, *tn;
 	const char *item = parv[1], *p;
-	int hits;
+	unsigned int hits;
 
 	if (item == NULL)
 		item = "b";
@@ -82,7 +82,7 @@ cs_cmd_clear_bans(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_DO, "CLEAR:BANS: \2%s\2 on \2%s\2",
 			item, mc->name);
 
-	command_success_nodata(si, _("Cleared %s modes on \2%s\2 (%d removed)."),
+	command_success_nodata(si, _("Cleared %s modes on \2%s\2 (%u removed)."),
 			item, parv[0], hits);
 }
 

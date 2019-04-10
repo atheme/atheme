@@ -55,7 +55,7 @@ corestorage_db_save(struct database_handle *db)
 
 	// write the database version
 	db_start_row(db, "DBV");
-	db_write_int(db, 12);
+	db_write_uint(db, 12);
 	db_commit_row(db);
 
 	MOWGLI_ITER_FOREACH(n, modules.head)
@@ -372,7 +372,7 @@ corestorage_db_save(struct database_handle *db)
 static void ATHEME_FATTR_NORETURN
 corestorage_h_unknown(struct database_handle *db, const char *type)
 {
-	slog(LG_ERROR, "db %s:%d: unknown directive '%s'", db->file, db->line, type);
+	slog(LG_ERROR, "db %s:%u: unknown directive '%s'", db->file, db->line, type);
 	slog(LG_ERROR, "corestorage: exiting to avoid data loss");
 	exit(EXIT_FAILURE);
 }
@@ -380,8 +380,8 @@ corestorage_h_unknown(struct database_handle *db, const char *type)
 static void
 corestorage_h_dbv(struct database_handle *db, const char *type)
 {
-	dbv = db_sread_int(db);
-	slog(LG_INFO, "corestorage: data schema version is %d.", dbv);
+	dbv = db_sread_uint(db);
+	slog(LG_INFO, "corestorage: data schema version is %u.", dbv);
 }
 
 static void
@@ -412,10 +412,10 @@ corestorage_h_mdep(struct database_handle *const restrict db, const char ATHEME_
 		if (module_request(modname))
 			return;
 
-		(void) slog(LG_ERROR, "db %s:%d: cannot load module '%s'", db->file, db->line, modname);
+		(void) slog(LG_ERROR, "db %s:%u: cannot load module '%s'", db->file, db->line, modname);
 	}
 	else
-		(void) slog(LG_ERROR, "db %s:%d: need module '%s' to process the database successfully, but have "
+		(void) slog(LG_ERROR, "db %s:%u: need module '%s' to process the database successfully, but have "
 		                      "been configured to not load any (general::load_database_mdeps)", db->file,
 		                      db->line, modname);
 
@@ -464,13 +464,13 @@ corestorage_h_mu(struct database_handle *db, const char *type)
 
 	if (myuser_find(name))
 	{
-		slog(LG_INFO, "db-h-mu: line %d: skipping duplicate account %s", db->line, name);
+		slog(LG_INFO, "db-h-mu: line %u: skipping duplicate account %s", db->line, name);
 		return;
 	}
 
 	if (strict_mode && uid && myuser_find_uid(uid))
 	{
-		slog(LG_INFO, "db-h-mu: line %d: skipping account %s with duplicate UID %s", db->line, name, uid);
+		slog(LG_INFO, "db-h-mu: line %u: skipping account %s with duplicate UID %s", db->line, name, uid);
 		return;
 	}
 
@@ -481,7 +481,7 @@ corestorage_h_mu(struct database_handle *db, const char *type)
 	if (dbv >= 8) {
 		sflags = db_sread_word(db);
 		if (!gflags_fromstr(mu_flags, sflags, &flags))
-			slog(LG_INFO, "db-h-mu: line %d: confused by flags: %s", db->line, sflags);
+			slog(LG_INFO, "db-h-mu: line %u: confused by flags: %s", db->line, sflags);
 	} else {
 		flags = db_sread_uint(db);
 	}
@@ -507,12 +507,12 @@ corestorage_h_me(struct database_handle *db, const char *type)
 	dest = db_sread_word(db);
 	src = db_sread_word(db);
 	sent = db_sread_time(db);
-	status = db_sread_int(db);
+	status = db_sread_uint(db);
 	text = db_sread_str(db);
 
 	if (!(mu = myuser_find(dest)))
 	{
-		slog(LG_DEBUG, "db-h-me: line %d: memo for unknown account %s", db->line, dest);
+		slog(LG_DEBUG, "db-h-me: line %u: memo for unknown account %s", db->line, dest);
 		return;
 	}
 
@@ -540,7 +540,7 @@ corestorage_h_mi(struct database_handle *db, const char *type)
 	mu = myuser_find(user);
 	if (!mu)
 	{
-		slog(LG_DEBUG, "db-h-mi: line %d: ignore for unknown account %s", db->line, user);
+		slog(LG_DEBUG, "db-h-mi: line %u: ignore for unknown account %s", db->line, user);
 		return;
 	}
 
@@ -559,7 +559,7 @@ corestorage_h_ac(struct database_handle *db, const char *type)
 	mu = myuser_find(user);
 	if (!mu)
 	{
-		slog(LG_DEBUG, "db-h-ac: line %d: access entry for unknown account %s", db->line, user);
+		slog(LG_DEBUG, "db-h-ac: line %u: access entry for unknown account %s", db->line, user);
 		return;
 	}
 
@@ -582,13 +582,13 @@ corestorage_h_mn(struct database_handle *db, const char *type)
 	mu = myuser_find(user);
 	if (!mu)
 	{
-		slog(LG_DEBUG, "db-h-mn: line %d: registered nick %s for unknown account %s", db->line, nick, user);
+		slog(LG_DEBUG, "db-h-mn: line %u: registered nick %s for unknown account %s", db->line, nick, user);
 		return;
 	}
 
 	if (mynick_find(nick))
 	{
-		slog(LG_INFO, "db-h-mn: line %d: skipping duplicate nick %s for account %s", db->line, nick, user);
+		slog(LG_INFO, "db-h-mn: line %u: skipping duplicate nick %s for account %s", db->line, nick, user);
 		return;
 	}
 
@@ -619,7 +619,7 @@ corestorage_h_mcfp(struct database_handle *db, const char *type)
 static void
 corestorage_h_su(struct database_handle *db, const char *type)
 {
-	slog(LG_INFO, "db-h-su: line %d: metadata change subscriptions have been dropped, ignoring", db->line);
+	slog(LG_INFO, "db-h-su: line %u: metadata change subscriptions have been dropped, ignoring", db->line);
 }
 
 static void
@@ -643,10 +643,10 @@ corestorage_h_so(struct database_handle *db, const char *type)
 	{
 		sflags = db_sread_word(db);
 		if (!gflags_fromstr(soper_flags, sflags, &flags))
-			slog(LG_INFO, "db-h-so: line %d: confused by flags %s",
+			slog(LG_INFO, "db-h-so: line %u: confused by flags %s",
 			     db->line, sflags);
 	} else {
-		flags = db_sread_int(db);
+		flags = db_sread_uint(db);
 	}
 	pass = db_read_word(db);
 	if (pass != NULL && !*pass)
@@ -678,7 +678,7 @@ corestorage_h_mc(struct database_handle *db, const char *type)
 	if (dbv >= 8) {
 		sflags = db_sread_word(db);
 		if (!gflags_fromstr(mc_flags, sflags, &flags))
-			slog(LG_INFO, "db-h-mc: line %d: confused by flags %s",
+			slog(LG_INFO, "db-h-mc: line %u: confused by flags %s",
 			     db->line, sflags);
 	} else {
 		flags = db_sread_uint(db);
@@ -835,17 +835,17 @@ corestorage_h_ca(struct database_handle *db, const char *type)
 
 	if (mc == NULL)
 	{
-		slog(LG_INFO, "db-h-ca: line %d: chanacs for nonexistent channel %s - exiting to avoid data loss", db->line, chan);
-		slog(LG_INFO, "db-h-ca: line %d: if this depends on a specific module or feature; please make sure", db->line);
-		slog(LG_INFO, "db-h-ca: line %d: that feature is enabled.", db->line);
+		slog(LG_INFO, "db-h-ca: line %u: chanacs for nonexistent channel %s - exiting to avoid data loss", db->line, chan);
+		slog(LG_INFO, "db-h-ca: line %u: if this depends on a specific module or feature; please make sure", db->line);
+		slog(LG_INFO, "db-h-ca: line %u: that feature is enabled.", db->line);
 		exit(EXIT_FAILURE);
 	}
 
 	if (mt == NULL && !validhostmask(target))
 	{
-		slog(LG_INFO, "db-h-ca: line %d: chanacs for nonexistent target %s - exiting to avoid data loss", db->line, target);
-		slog(LG_INFO, "db-h-ca: line %d: if this depends on a specific module or feature; please make sure", db->line);
-		slog(LG_INFO, "db-h-ca: line %d: that feature is enabled.", db->line);
+		slog(LG_INFO, "db-h-ca: line %u: chanacs for nonexistent target %s - exiting to avoid data loss", db->line, target);
+		slog(LG_INFO, "db-h-ca: line %u: if this depends on a specific module or feature; please make sure", db->line);
+		slog(LG_INFO, "db-h-ca: line %u: that feature is enabled.", db->line);
 		exit(EXIT_FAILURE);
 	}
 
@@ -882,7 +882,7 @@ corestorage_h_si(struct database_handle *db, const char *type)
 static void
 corestorage_h_kid(struct database_handle *db, const char *type)
 {
-	me.kline_id = db_sread_int(db);
+	me.kline_id = db_sread_uint(db);
 }
 
 static void
@@ -916,7 +916,7 @@ corestorage_h_kl(struct database_handle *db, const char *type)
 static void
 corestorage_h_xid(struct database_handle *db, const char *type)
 {
-	me.xline_id = db_sread_int(db);
+	me.xline_id = db_sread_uint(db);
 }
 
 static void
@@ -952,7 +952,7 @@ corestorage_h_xl(struct database_handle *db, const char *type)
 static void
 corestorage_h_qid(struct database_handle *db, const char *type)
 {
-	me.qline_id = db_sread_int(db);
+	me.qline_id = db_sread_uint(db);
 }
 
 static void

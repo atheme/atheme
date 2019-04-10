@@ -195,7 +195,7 @@ process_duration_configentry(mowgli_config_file_entry_t *ce, unsigned int *var,
 		conf_report_warning(ce, "value %lu%s is out of range [%u%s,%u%s]",
 				v,
 				duration_units[i].name,
-				0,
+				0U,
 				duration_units[i].name,
 				max,
 				duration_units[i].name);

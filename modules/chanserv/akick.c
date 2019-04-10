@@ -632,7 +632,7 @@ cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	int i = 0;
+	unsigned int i = 0;
 
 	if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 	{
@@ -671,7 +671,7 @@ cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 			ago = ca->tmodified ? time_ago(ca->tmodified) : "?";
 
 			buf_iter = buf;
-			buf_iter += snprintf(buf_iter, sizeof(buf) - (buf_iter - buf), _("%d: \2%s\2 (\2%s\2) ["),
+			buf_iter += snprintf(buf_iter, sizeof(buf) - (buf_iter - buf), _("%u: \2%s\2 (\2%s\2) ["),
 					     ++i, ca->entity != NULL ? ca->entity->name : ca->host,
 					     md != NULL ? md->value : _("no AKICK reason specified"));
 
@@ -694,7 +694,7 @@ cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 
 	}
 
-	command_success_nodata(si, _("Total of \2%d\2 %s in \2%s\2's AKICK list."), i, (i == 1) ? "entry" : "entries", mc->name);
+	command_success_nodata(si, _("Total of \2%u\2 entries in \2%s\2's AKICK list."), i, mc->name);
 
 	if (operoverride)
 		logcommand(si, CMDLOG_ADMIN, "AKICK:LIST: \2%s\2 (oper override)", mc->name);

@@ -326,7 +326,7 @@ update_role_entry(struct sourceinfo *si, struct mychan *mc, const char *role, un
 	char *flagstr;
 	mowgli_node_t *n, *tn;
 	struct chanacs *ca;
-	int changes = 0;
+	unsigned int changes = 0;
 	hook_channel_acl_req_t req;
 
 	flagstr = bitmask_to_flags2(flags, 0);
@@ -426,10 +426,10 @@ update_role_entry(struct sourceinfo *si, struct mychan *mc, const char *role, un
 		}
 	}
 
-	logcommand(si, CMDLOG_SET, "ROLE:MOD: \2%s\2 \2%s\2 !\2%s\2 (\2%d\2 changes)", mc->name, role, flagstr, changes);
+	logcommand(si, CMDLOG_SET, "ROLE:MOD: \2%s\2 \2%s\2 !\2%s\2 (\2%u\2 changes)", mc->name, role, flagstr, changes);
 
 	if (changes > 0)
-		command_success_nodata(si, _("%d access entries updated accordingly."), changes);
+		command_success_nodata(si, _("%u access entries updated accordingly."), changes);
 }
 
 static unsigned int
@@ -496,7 +496,7 @@ cs_cmd_access_list(struct sourceinfo *si, int parc, char *parv[])
 
 		role = get_template_name(mc, ca->level);
 
-		command_success_nodata(si, _("%-5d %-22s %s"), i, ca->entity ? ca->entity->name : ca->host, role);
+		command_success_nodata(si, _("%-5u %-22s %s"), i, ca->entity ? ca->entity->name : ca->host, role);
 
 		i++;
 	}
@@ -828,7 +828,7 @@ cs_cmd_access_add(struct sourceinfo *si, int parc, char *parv[])
 	{
 		if (mychan_num_founders(mc) >= chansvs.maxfounders)
 		{
-			command_fail(si, fault_noprivs, _("Only %d founders allowed per channel."), chansvs.maxfounders);
+			command_fail(si, fault_noprivs, _("Only %u founders allowed per channel."), chansvs.maxfounders);
 			chanacs_close(ca);
 			return;
 		}
@@ -975,7 +975,7 @@ cs_cmd_access_set(struct sourceinfo *si, int parc, char *parv[])
 	{
 		if (mychan_num_founders(mc) >= chansvs.maxfounders)
 		{
-			command_fail(si, fault_noprivs, _("Only %d founders allowed per channel."), chansvs.maxfounders);
+			command_fail(si, fault_noprivs, _("Only %u founders allowed per channel."), chansvs.maxfounders);
 			chanacs_close(ca);
 			return;
 		}

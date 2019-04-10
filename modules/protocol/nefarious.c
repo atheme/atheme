@@ -233,7 +233,7 @@ nefarious_sethost_sts(struct user *source, struct user *target, const char *host
 static void
 nefarious_quarantine_sts(struct user *source, struct user *victim, long duration, const char *reason)
 {
-	sts("%s SU * +*@%s %lu :%s", me.numeric, victim->host, CURRTIME + duration, reason);
+	sts("%s SU * +*@%s %lu :%s", me.numeric, victim->host, (unsigned long) (CURRTIME + duration), reason);
 }
 
 static void
@@ -654,7 +654,7 @@ m_account(struct sourceinfo *si, int parc, char *parv[])
 	{
 		if (!warned)
 		{
-			slog(LG_ERROR, "m_account(): got account with second parameter %s, %u parameters, Atheme requires F:EXTENDED_ACCOUNTS:TRUE", parv[1], parc);
+			slog(LG_ERROR, "m_account(): got account with second parameter %s, %d parameters, Atheme requires F:EXTENDED_ACCOUNTS:TRUE", parv[1], parc);
 			wallops("Invalid ACCOUNT syntax, check F:EXTENDED_ACCOUNTS:TRUE");
 			warned = true;
 		}
