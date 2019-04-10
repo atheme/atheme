@@ -375,7 +375,7 @@ logfile_new(const char *path, unsigned int log_mask)
 			if (me.connected && lastfail + 3600 < CURRTIME)
 			{
 				lastfail = CURRTIME;
-				wallops(_("Could not open log file (%s), log entries will be missing!"), strerror(errno));
+				wallops("Could not open log file (%s), log entries will be missing!", strerror(errno));
 			}
 
 			return NULL;

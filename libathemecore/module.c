@@ -73,7 +73,7 @@ module_load(const char *filespec)
 
 	if ((m = module_find(pathname)))
 	{
-		slog(LG_INFO, "module_load(): module \2%s\2 is already loaded [at 0x%lx]", pathname, (unsigned long)m->address);
+		slog(LG_INFO, "module_load(): module \2%s\2 is already loaded [at %p]", pathname, m->address);
 		return NULL;
 	}
 
@@ -102,8 +102,8 @@ module_load(const char *filespec)
 
 	if (me.connected && !cold_start)
 	{
-		wallops(_("Module %s loaded at 0x%lx"), m->name, (unsigned long)m->address);
-		slog(LG_INFO, _("MODLOAD: \2%s\2 at 0x%lx"), m->name, (unsigned long)m->address);
+		wallops("Module %s loaded at %p", m->name, m->address);
+		slog(LG_INFO, "MODLOAD: \2%s\2 at %p", m->name, m->address);
 	}
 
 	return m;
@@ -339,10 +339,10 @@ module_unload(struct module *m, const enum module_unload_intent intent)
 		mowgli_node_delete(n, &modules);
 		mowgli_node_free(n);
 
-		(void) slog(LG_INFO, _("%s: unloaded \2%s\2"), MOWGLI_FUNC_NAME, m->name);
+		(void) slog(LG_INFO, "%s: unloaded \2%s\2", MOWGLI_FUNC_NAME, m->name);
 
 		if (me.connected)
-			(void) wallops(_("Module %s unloaded."), m->name);
+			(void) wallops("Module %s unloaded.", m->name);
 	}
 
 	/* else unloaded in embryonic state */

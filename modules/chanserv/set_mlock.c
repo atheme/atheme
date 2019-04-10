@@ -280,7 +280,7 @@ cs_cmd_set_mlock(struct sourceinfo *si, int parc, char *parv[])
 	{
 		command_success_nodata(si, _("The MLOCK for \2%s\2 has been set to \2%s\2."), mc->name, modebuf);
 		logcommand(si, CMDLOG_SET, "SET:MLOCK: \2%s\2 to \2%s\2", mc->name, modebuf);
-		verbose(mc, _("\2%s\2 set the mode lock to \2%s\2"), get_source_name(si), modebuf);
+		verbose(mc, "\2%s\2 set the mode lock to \2%s\2", get_source_name(si), modebuf);
 	}
 	else
 	{
@@ -288,7 +288,7 @@ cs_cmd_set_mlock(struct sourceinfo *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_SET, "SET:MLOCK:NONE: \2%s\2", mc->name);
 	}
 	if (changed & ircd->oper_only_modes)
-		logcommand(si, CMDLOG_SET, _("SET:MLOCK: \2%s\2 to \2%s\2 by \2%s\2"), mc->name, *modebuf != '\0' ? modebuf : "+", get_oper_name(si));
+		logcommand(si, CMDLOG_SET, "SET:MLOCK: \2%s\2 to \2%s\2 by \2%s\2", mc->name, *modebuf != '\0' ? modebuf : "+", get_oper_name(si));
 
 	check_modes(mc, true);
 	if (mc->chan != NULL)

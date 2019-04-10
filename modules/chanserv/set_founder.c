@@ -110,7 +110,7 @@ cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[])
 			}
 
 			logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (completing transfer from \2%s\2)", mc->name, mt->name, mychan_founder_names(mc));
-			verbose(mc, _("Foundership transferred from \2%s\2 to \2%s\2."), mychan_founder_names(mc), mt->name);
+			verbose(mc, "Foundership transferred from \2%s\2 to \2%s\2.", mychan_founder_names(mc), mt->name);
 
 			// add target as founder...
 			MOWGLI_ITER_FOREACH(n, mc->chanacs.head)

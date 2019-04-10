@@ -50,7 +50,7 @@ cs_cmd_set_guard(struct sourceinfo *si, int parc, char *parv[])
 		}
 
 		logcommand(si, CMDLOG_SET, "SET:GUARD:ON: \2%s\2", mc->name);
-		verbose(mc, _("\2%s\2 enabled the GUARD flag"), get_source_name(si));
+		verbose(mc, "\2%s\2 enabled the GUARD flag", get_source_name(si));
 
 		mc->flags |= MC_GUARD;
 
@@ -69,7 +69,7 @@ cs_cmd_set_guard(struct sourceinfo *si, int parc, char *parv[])
 		}
 
 		logcommand(si, CMDLOG_SET, "SET:GUARD:OFF: \2%s\2", mc->name);
-		verbose(mc, _("\2%s\2 disabled the GUARD flag"), get_source_name(si));
+		verbose(mc, "\2%s\2 disabled the GUARD flag", get_source_name(si));
 
 		mc->flags &= ~MC_GUARD;
 

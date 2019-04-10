@@ -259,10 +259,10 @@ kline_expire(void *arg)
 			/* TODO: determine validity of k->reason */
 			reason = k->reason ? k->reason : "(none)";
 
-			slog(LG_INFO, _("KLINE:EXPIRE: \2%s@%s\2 set \2%s\2 ago by \2%s\2 (reason: %s)"),
+			slog(LG_INFO, "KLINE:EXPIRE: \2%s@%s\2 set \2%s\2 ago by \2%s\2 (reason: %s)",
 				k->user, k->host, time_ago(k->settime), k->setby, reason);
 
-			verbose_wallops(_("AKILL expired on \2%s@%s\2, set by \2%s\2 (reason: %s)"),
+			verbose_wallops("AKILL expired on \2%s@%s\2, set by \2%s\2 (reason: %s)",
 				k->user, k->host, k->setby, reason);
 
 			kline_delete(k);
@@ -403,10 +403,10 @@ xline_expire(void *arg)
 
 		if (x->expires <= CURRTIME)
 		{
-			slog(LG_INFO, _("XLINE:EXPIRE: \2%s\2 set \2%s\2 ago by \2%s\2"),
+			slog(LG_INFO, "XLINE:EXPIRE: \2%s\2 set \2%s\2 ago by \2%s\2",
 				x->realname, time_ago(x->settime), x->setby);
 
-			verbose_wallops(_("XLINE expired on \2%s\2, set by \2%s\2"),
+			verbose_wallops("XLINE expired on \2%s\2, set by \2%s\2",
 				x->realname, x->setby);
 
 			xline_delete(x->realname);
@@ -585,10 +585,10 @@ qline_expire(void *arg)
 
 		if (q->expires <= CURRTIME)
 		{
-			slog(LG_INFO, _("QLINE:EXPIRE: \2%s\2 set \2%s\2 ago by \2%s\2"),
+			slog(LG_INFO, "QLINE:EXPIRE: \2%s\2 set \2%s\2 ago by \2%s\2",
 				q->mask, time_ago(q->settime), q->setby);
 
-			verbose_wallops(_("QLINE expired on \2%s\2, set by \2%s\2"),
+			verbose_wallops("QLINE expired on \2%s\2, set by \2%s\2",
 				q->mask, q->setby);
 
 			qline_delete(q->mask);

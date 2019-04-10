@@ -452,7 +452,7 @@ handle_burstlogin(struct user *u, const char *login, time_t ts)
 			slog(LG_DEBUG, "handle_burstlogin(): got nonexistent login %s for user %s", login, u->nick);
 			if (authservice_loaded)
 			{
-				notice(nicksvs.nick ? nicksvs.nick : me.name, u->nick, _("Account %s dropped, forcing logout"), login);
+				notice(nicksvs.nick ? nicksvs.nick : me.name, u->nick, "Account %s dropped, forcing logout", login);
 				ircd_logout_or_kill(u, login);
 			}
 			return;
@@ -472,7 +472,7 @@ handle_burstlogin(struct user *u, const char *login, time_t ts)
 		slog(LG_INFO, "handle_burstlogin(): got stale login %s for user %s", login, u->nick);
 		if (authservice_loaded)
 		{
-			notice(nicksvs.nick ? nicksvs.nick : me.name, u->nick, _("Login to account %s is stale, forcing logout"), login);
+			notice(nicksvs.nick ? nicksvs.nick : me.name, u->nick, "Login to account %s is stale, forcing logout", login);
 			ircd_logout_or_kill(u, login);
 		}
 		return;
@@ -483,7 +483,7 @@ handle_burstlogin(struct user *u, const char *login, time_t ts)
 		 * be legit...
 		 * if we have an authentication service, log them out */
 		slog(LG_INFO, "handle_burstlogin(): got illegit login %s for user %s", login, u->nick);
-		notice(nicksvs.nick ? nicksvs.nick : me.name, u->nick, _("Login to account %s seems invalid, forcing logout"), login);
+		notice(nicksvs.nick ? nicksvs.nick : me.name, u->nick, "Login to account %s seems invalid, forcing logout", login);
 		ircd_logout_or_kill(u, login);
 		return;
 	}
@@ -628,7 +628,7 @@ handle_certfp(struct sourceinfo *si, struct user *u, const char *certfp)
 
 	if (MOWGLI_LIST_LENGTH(&mu->logins) >= me.maxlogins)
 	{
-		notice(svs->me->nick, u->nick, _("There are already \2%zu\2 sessions logged in to \2%s\2 (maximum allowed: %u)."), MOWGLI_LIST_LENGTH(&mu->logins), entity(mu)->name, me.maxlogins);
+		notice(svs->me->nick, u->nick, "There are already \2%zu\2 sessions logged in to \2%s\2 (maximum allowed: %u).", MOWGLI_LIST_LENGTH(&mu->logins), entity(mu)->name, me.maxlogins);
 		return;
 	}
 
@@ -641,7 +641,7 @@ handle_certfp(struct sourceinfo *si, struct user *u, const char *certfp)
 		return;
 	}
 
-	notice(svs->me->nick, u->nick, nicksvs.no_nick_ownership ? _("You are now logged in as \2%s\2.") : _("You are now identified for \2%s\2."), entity(mu)->name);
+	notice(svs->me->nick, u->nick, nicksvs.no_nick_ownership ? "You are now logged in as \2%s\2." : "You are now identified for \2%s\2.", entity(mu)->name);
 
 	myuser_login(svs, u, mu, true);
 	logcommand_user(svs, u, CMDLOG_LOGIN, "LOGIN via CERTFP (%s)", certfp);
@@ -725,9 +725,9 @@ myuser_login(struct service *svs, struct user *u, struct myuser *mu, bool sendac
 
 	if (mu->flags & MU_WAITAUTH)
 	{
-		notice(svs->me->nick, u->nick, _("You have \2NOT COMPLETED\2 registration verification."));
-		notice(svs->me->nick, u->nick, _("An email containing nickname activation instructions was sent to \2%s\2."), mu->email);
-		notice(svs->me->nick, u->nick, _("If you do not complete registration within one day, your nickname will expire."));
+		notice(svs->me->nick, u->nick, "You have \2NOT COMPLETED\2 registration verification.");
+		notice(svs->me->nick, u->nick, "An email containing nickname activation instructions was sent to \2%s\2.", mu->email);
+		notice(svs->me->nick, u->nick, "If you do not complete registration within one day, your nickname will expire.");
 	}
 
 	mu->lastlogin = CURRTIME;

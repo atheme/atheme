@@ -369,7 +369,7 @@ cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 			snprintf(expiry, sizeof expiry, "%ld", expireson);
 			metadata_add(ca2, "expires", expiry);
 
-			verbose(mc, _("\2%s\2 added \2%s\2 to the AKICK list, expires in %s."), get_source_name(si), uname,timediff(duration));
+			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list, expires in %s.", get_source_name(si), uname,timediff(duration));
 			logcommand(si, CMDLOG_SET, "AKICK:ADD: \2%s\2 on \2%s\2, expires in %s.", uname, mc->name,timediff(duration));
 			command_success_nodata(si, _("AKICK on \2%s\2 was successfully added for \2%s\2 and will expire in %s."), uname, mc->name,timediff(duration) );
 
@@ -386,7 +386,7 @@ cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 		}
 		else
 		{
-			verbose(mc, _("\2%s\2 added \2%s\2 to the AKICK list."), get_source_name(si), uname);
+			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", get_source_name(si), uname);
 			logcommand(si, CMDLOG_SET, "AKICK:ADD: \2%s\2 on \2%s\2", uname, mc->name);
 
 			command_success_nodata(si, _("AKICK on \2%s\2 was successfully added to the AKICK list for \2%s\2."), uname, mc->name);
@@ -436,7 +436,7 @@ cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 			metadata_add(ca2, "expires", expiry);
 
 			command_success_nodata(si, _("AKICK on \2%s\2 was successfully added for \2%s\2 and will expire in %s."), mt->name, mc->name, timediff(duration));
-			verbose(mc, _("\2%s\2 added \2%s\2 to the AKICK list, expires in %s."), get_source_name(si), mt->name, timediff(duration));
+			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list, expires in %s.", get_source_name(si), mt->name, timediff(duration));
 			logcommand(si, CMDLOG_SET, "AKICK:ADD: \2%s\2 on \2%s\2, expires in %s", mt->name, mc->name, timediff(duration));
 
 			timeout = akick_add_timeout(mc, mt, mt->name, expireson);
@@ -454,7 +454,7 @@ cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 		{
 			command_success_nodata(si, _("AKICK on \2%s\2 was successfully added to the AKICK list for \2%s\2."), mt->name, mc->name);
 
-			verbose(mc, _("\2%s\2 added \2%s\2 to the AKICK list."), get_source_name(si), mt->name);
+			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", get_source_name(si), mt->name);
 			logcommand(si, CMDLOG_SET, "AKICK:ADD: \2%s\2 on \2%s\2", mt->name, mc->name);
 		}
 
@@ -529,7 +529,7 @@ cs_cmd_akick_del(struct sourceinfo *si, int parc, char *parv[])
 		hook_call_channel_acl_change(&req);
 		chanacs_close(ca);
 
-		verbose(mc, _("\2%s\2 removed \2%s\2 from the AKICK list."), get_source_name(si), uname);
+		verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", get_source_name(si), uname);
 		logcommand(si, CMDLOG_SET, "AKICK:DEL: \2%s\2 on \2%s\2", uname, mc->name);
 		command_success_nodata(si, _("\2%s\2 has been removed from the AKICK list for \2%s\2."), uname, mc->name);
 
@@ -582,7 +582,7 @@ cs_cmd_akick_del(struct sourceinfo *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("\2%s\2 has been removed from the AKICK list for \2%s\2."), mt->name, mc->name);
 	logcommand(si, CMDLOG_SET, "AKICK:DEL: \2%s\2 on \2%s\2", mt->name, mc->name);
-	verbose(mc, _("\2%s\2 removed \2%s\2 from the AKICK list."), get_source_name(si), mt->name);
+	verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", get_source_name(si), mt->name);
 
 	return;
 }

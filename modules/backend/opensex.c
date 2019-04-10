@@ -285,7 +285,7 @@ opensex_db_open_read(const char *filename)
 		}
 
 		slog(LG_ERROR, "db-open-read: cannot open '%s' for reading: %s", path, strerror(errno1));
-		wallops(_("\2DATABASE ERROR\2: db-open-read: cannot open '%s' for reading: %s"), path, strerror(errno1));
+		wallops("\2DATABASE ERROR\2: db-open-read: cannot open '%s' for reading: %s", path, strerror(errno1));
 		exit(EXIT_FAILURE);
 	}
 	else if (database_create)
@@ -341,7 +341,7 @@ opensex_db_open_write(const char *filename)
 	{
 		errno1 = errno;
 		slog(LG_ERROR, "db-open-write: cannot open '%s' for writing: %s", path, strerror(errno1));
-		wallops(_("\2DATABASE ERROR\2: db-open-write: cannot open '%s' for writing: %s"), path, strerror(errno1));
+		wallops("\2DATABASE ERROR\2: db-open-write: cannot open '%s' for writing: %s", path, strerror(errno1));
 #ifdef HAVE_FLOCK
 		close(lockfd);
 #endif
@@ -397,7 +397,7 @@ opensex_db_close(struct database_handle *db)
 		{
 			errno1 = errno;
 			slog(LG_ERROR, "db_save(): cannot rename services.db.new to services.db: %s", strerror(errno1));
-			wallops(_("\2DATABASE ERROR\2: db_save(): cannot rename services.db.new to services.db: %s"), strerror(errno1));
+			wallops("\2DATABASE ERROR\2: db_save(): cannot rename services.db.new to services.db: %s", strerror(errno1));
 		}
 
 		hook_call_db_saved();

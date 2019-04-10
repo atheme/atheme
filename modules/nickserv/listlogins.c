@@ -34,7 +34,7 @@ ns_cmd_listlogins_func(struct sourceinfo *const restrict si, const int ATHEME_VA
 	}
 
 	(void) command_success_nodata(si, ngettext(N_("\2%u\2 client found"), N_("\2%u\2 clients found"), matches), matches);
-	(void) logcommand(si, CMDLOG_GET, _("LISTLOGINS: (\2%u\2 matches)"), matches);
+	(void) logcommand(si, CMDLOG_GET, "LISTLOGINS: (\2%u\2 matches)", matches);
 }
 
 static struct command ns_cmd_listlogins = {

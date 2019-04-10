@@ -128,21 +128,21 @@ check_signals(void)
 		got_sighup = 0;
 		slog(LG_INFO, "sighandler(): got SIGHUP, rehashing \2%s\2", config_file);
 
-		wallops(_("Got SIGHUP; reloading \2%s\2."), config_file);
+		wallops("Got SIGHUP; reloading \2%s\2.", config_file);
 
 		if (db_save && !readonly)
 		{
 			slog(LG_INFO, "UPDATE: \2%s\2", "system console");
-			wallops(_("Updating database by request of \2%s\2."), "system console");
+			wallops("Updating database by request of \2%s\2.", "system console");
 			db_save(NULL, DB_SAVE_BG_IMPORTANT);
 		}
 
 		slog(LG_INFO, "REHASH: \2%s\2", "system console");
-		wallops(_("Rehashing \2%s\2 by request of \2%s\2."), config_file, "system console");
+		wallops("Rehashing \2%s\2 by request of \2%s\2.", config_file, "system console");
 
 		/* reload the config, opening other logs besides the core log if needed. */
 		if (!conf_rehash())
-			wallops(_("REHASH of \2%s\2 failed. Please correct any errors in the file and try again."), config_file);
+			wallops("REHASH of \2%s\2 failed. Please correct any errors in the file and try again.", config_file);
 
 		return;
 	}
@@ -151,7 +151,7 @@ check_signals(void)
 	if (got_sigint && (runflags & RF_LIVE))
 	{
 		got_sigint = 0;
-		wallops(_("Exiting on signal %d."), SIGINT);
+		wallops("Exiting on signal %d.", SIGINT);
 		if (chansvs.me != NULL && chansvs.me->me != NULL)
 			quit_sts(chansvs.me->me, "caught interrupt");
 		me.connected = false;
@@ -161,10 +161,10 @@ check_signals(void)
 	else if (got_sigint && !(runflags & RF_LIVE))
 	{
 		got_sigint = 0;
-		wallops(_("Got SIGINT; restarting."));
+		wallops("Got SIGINT; restarting.");
 
 		slog(LG_INFO, "RESTART: \2%s\2", "system console");
-		wallops(_("Restarting by request of \2%s\2."), "system console");
+		wallops("Restarting by request of \2%s\2.", "system console");
 
 		runflags |= RF_RESTART;
 	}
@@ -172,7 +172,7 @@ check_signals(void)
 	if (got_sigterm)
 	{
 		got_sigterm = 0;
-		wallops(_("Exiting on signal %d."), SIGTERM);
+		wallops("Exiting on signal %d.", SIGTERM);
 		slog(LG_INFO, "sighandler(): got SIGTERM; exiting...");
 		runflags |= RF_SHUTDOWN;
 	}
@@ -180,10 +180,10 @@ check_signals(void)
 	if (got_sigusr2)
 	{
 		got_sigusr2 = 0;
-		wallops(_("Got SIGUSR2; restarting."));
+		wallops("Got SIGUSR2; restarting.");
 
 		slog(LG_INFO, "RESTART: \2%s\2", "system console");
-		wallops(_("Restarting by request of \2%s\2."), "system console");
+		wallops("Restarting by request of \2%s\2.", "system console");
 
 		runflags |= RF_RESTART;
 	}

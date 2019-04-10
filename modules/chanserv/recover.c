@@ -64,7 +64,7 @@ cs_cmd_recover(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	command_add_flood(si, FLOOD_HEAVY);
-	verbose(mc, _("\2%s\2 used RECOVER."), get_source_name(si));
+	verbose(mc, "\2%s\2 used RECOVER.", get_source_name(si));
 	logcommand(si, CMDLOG_DO, "RECOVER: \2%s\2", mc->name);
 
 	// deop everyone

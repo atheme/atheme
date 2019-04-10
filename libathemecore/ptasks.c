@@ -814,7 +814,7 @@ handle_kill(struct sourceinfo *si, const char *victim, const char *reason)
 		else
 		{
 			slog(LG_ERROR, "handle_kill(): services kill fight (\2%s\2 -> \2%s\2), shutting down", source, u->nick);
-			wallops(_("Services kill fight (%s -> %s), shutting down!"), source, u->nick);
+			wallops("Services kill fight (%s -> %s), shutting down!", source, u->nick);
 			runflags |= RF_SHUTDOWN;
 		}
 	}

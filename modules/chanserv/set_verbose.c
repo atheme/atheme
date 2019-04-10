@@ -48,7 +48,7 @@ cs_cmd_set_verbose(struct sourceinfo *si, int parc, char *parv[])
  		mc->flags &= ~MC_VERBOSE_OPS;
  		mc->flags |= MC_VERBOSE;
 
-		verbose(mc, _("\2%s\2 enabled the VERBOSE flag"), get_source_name(si));
+		verbose(mc, "\2%s\2 enabled the VERBOSE flag", get_source_name(si));
 		command_success_nodata(si, _("The \2%s\2 flag has been set for channel \2%s\2."), "VERBOSE", mc->name);
 		return;
 	}
@@ -65,14 +65,14 @@ cs_cmd_set_verbose(struct sourceinfo *si, int parc, char *parv[])
 
 		if (mc->flags & MC_VERBOSE)
 		{
-			verbose(mc, _("\2%s\2 restricted VERBOSE to chanops"), get_source_name(si));
+			verbose(mc, "\2%s\2 restricted VERBOSE to chanops", get_source_name(si));
  			mc->flags &= ~MC_VERBOSE;
  			mc->flags |= MC_VERBOSE_OPS;
 		}
 		else
 		{
  			mc->flags |= MC_VERBOSE_OPS;
-			verbose(mc, _("\2%s\2 enabled the VERBOSE_OPS flag"), get_source_name(si));
+			verbose(mc, "\2%s\2 enabled the VERBOSE_OPS flag", get_source_name(si));
 		}
 
 		command_success_nodata(si, _("The \2%s\2 flag has been set for channel \2%s\2."), "VERBOSE_OPS", mc->name);
@@ -89,9 +89,9 @@ cs_cmd_set_verbose(struct sourceinfo *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_SET, "SET:VERBOSE:OFF: \2%s\2", mc->name);
 
 		if (mc->flags & MC_VERBOSE)
-			verbose(mc, _("\2%s\2 disabled the VERBOSE flag"), get_source_name(si));
+			verbose(mc, "\2%s\2 disabled the VERBOSE flag", get_source_name(si));
 		else
-			verbose(mc, _("\2%s\2 disabled the VERBOSE_OPS flag"), get_source_name(si));
+			verbose(mc, "\2%s\2 disabled the VERBOSE_OPS flag", get_source_name(si));
 		mc->flags &= ~(MC_VERBOSE | MC_VERBOSE_OPS);
 
 		command_success_nodata(si, _("The \2%s\2 flag has been removed for channel \2%s\2."), "VERBOSE", mc->name);

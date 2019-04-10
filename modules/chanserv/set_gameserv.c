@@ -61,7 +61,7 @@ cs_cmd_set_gameserv(struct sourceinfo *si, int parc, char *parv[])
 			return;
 		}
 		logcommand(si, CMDLOG_SET, "SET:GAMESERV: \2%s\2 to \2%s\2", mc->name, val);
-		verbose(mc, _("\2%s\2 set the GAMESERV flag to \2%s\2"), get_source_name(si), val);
+		verbose(mc, "\2%s\2 set the GAMESERV flag to \2%s\2", get_source_name(si), val);
 
 		metadata_add(mc, "gameserv", val);
 
@@ -78,7 +78,7 @@ cs_cmd_set_gameserv(struct sourceinfo *si, int parc, char *parv[])
 		}
 
 		logcommand(si, CMDLOG_SET, "SET:GAMESERV:OFF: \2%s\2", mc->name);
-		verbose(mc, _("\2%s\2 disabled the GAMESERV flag"), get_source_name(si));
+		verbose(mc, "\2%s\2 disabled the GAMESERV flag", get_source_name(si));
 
 		metadata_delete(mc, "gameserv");
 

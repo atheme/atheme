@@ -62,7 +62,7 @@ cs_cmd_set_property(struct sourceinfo *si, int parc, char *parv[])
 
 		metadata_delete(mc, property);
 		logcommand(si, CMDLOG_SET, "SET:PROPERTY: \2%s\2 \2%s\2 (deleted)", mc->name, property);
-		verbose(mc, _("\2%s\2 deleted the metadata entry \2%s\2"), get_source_name(si), property);
+		verbose(mc, "\2%s\2 deleted the metadata entry \2%s\2", get_source_name(si), property);
 		command_success_nodata(si, _("Metadata entry \2%s\2 has been deleted."), property);
 		return;
 	}
@@ -91,7 +91,7 @@ cs_cmd_set_property(struct sourceinfo *si, int parc, char *parv[])
 
 	metadata_add(mc, property, value);
 	logcommand(si, CMDLOG_SET, "SET:PROPERTY: \2%s\2 on \2%s\2 to \2%s\2", property, mc->name, value);
-	verbose(mc, _("\2%s\2 added the metadata entry \2%s\2 with value \2%s\2"), get_source_name(si), property, value);
+	verbose(mc, "\2%s\2 added the metadata entry \2%s\2 with value \2%s\2", get_source_name(si), property, value);
 	command_success_nodata(si, _("Metadata entry \2%s\2 added."), property);
 }
 

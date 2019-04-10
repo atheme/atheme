@@ -221,7 +221,7 @@ myuser_delete(struct myuser *mu)
 		/* attempt succession */
 		if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1 && (successor = mychan_pick_successor(mc)) != NULL)
 		{
-			slog(LG_INFO, _("SUCCESSION: \2%s\2 to \2%s\2 from \2%s\2"), mc->name, entity(successor)->name, entity(mu)->name);
+			slog(LG_INFO, "SUCCESSION: \2%s\2 to \2%s\2 from \2%s\2", mc->name, entity(successor)->name, entity(mu)->name);
 			slog(LG_VERBOSE, "myuser_delete(): giving channel %s to %s (unused %lds, founder %s, chanacs %zu)",
 					mc->name, entity(successor)->name,
 					(long)(CURRTIME - mc->used),
@@ -245,7 +245,7 @@ myuser_delete(struct myuser *mu)
 		/* no successor found */
 		else if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1)
 		{
-			slog(LG_REGISTER, _("DELETE: \2%s\2 from \2%s\2"), mc->name, entity(mu)->name);
+			slog(LG_REGISTER, "DELETE: \2%s\2 from \2%s\2", mc->name, entity(mu)->name);
 			slog(LG_VERBOSE, "myuser_delete(): deleting channel %s (unused %lds, founder %s, chanacs %zu)",
 					mc->name, (long)(CURRTIME - mc->used),
 					entity(mu)->name,
@@ -300,7 +300,7 @@ myuser_delete(struct myuser *mu)
 					entity(mu)->name);
 			if (strlen(nicks) + strlen(mn->nick) + 3 >= sizeof nicks)
 			{
-				slog(LG_REGISTER, _("DELETE: \2%s\2 from \2%s\2"), nicks, entity(mu)->name);
+				slog(LG_REGISTER, "DELETE: \2%s\2 from \2%s\2", nicks, entity(mu)->name);
 				nicks[0] = '\0';
 			}
 			if (nicks[0] != '\0')
@@ -312,7 +312,7 @@ myuser_delete(struct myuser *mu)
 		atheme_object_unref(mn);
 	}
 	if (nicks[0] != '\0')
-		slog(LG_REGISTER, _("DELETE: \2%s\2 from \2%s\2"), nicks, entity(mu)->name);
+		slog(LG_REGISTER, "DELETE: \2%s\2 from \2%s\2", nicks, entity(mu)->name);
 
 	/* entity(mu)->name is the index for this dtree */
 	myentity_del(entity(mu));
@@ -879,14 +879,14 @@ myuser_name_restore(const char *name, struct myuser *mu)
 	md2 = metadata_find(mun, "private:mark:reason");
 	if (md != NULL && md2 != NULL && strcmp(md->value, md2->value))
 	{
-		wallops(_("Not restoring mark \2\"%s\"\2 for account \2%s\2 (name \2%s\2) which is already marked"), md2->value, entity(mu)->name, name);
-		slog(LG_INFO, _("MARK:FORGET: \2\"%s\"\2 for \2%s (%s)\2 (already marked)"), md2->value, name, entity(mu)->name);
+		wallops("Not restoring mark \2\"%s\"\2 for account \2%s\2 (name \2%s\2) which is already marked", md2->value, entity(mu)->name, name);
+		slog(LG_INFO, "MARK:FORGET: \2\"%s\"\2 for \2%s (%s)\2 (already marked)", md2->value, name, entity(mu)->name);
 		slog(LG_VERBOSE, "myuser_name_restore(): not restoring mark \"%s\" for account %s (name %s) which is already marked",
 				md2->value, entity(mu)->name, name);
 	}
 	else if (md == NULL && md2 != NULL)
 	{
-		slog(LG_INFO, _("MARK:RESTORE: \2\"%s\"\2 for \2%s (%s)\2"), md2->value, name, entity(mu)->name);
+		slog(LG_INFO, "MARK:RESTORE: \2\"%s\"\2 for \2%s (%s)\2", md2->value, name, entity(mu)->name);
 		slog(LG_VERBOSE, "myuser_name_restore(): restoring mark \"%s\" for account %s (name %s)",
 				md2->value, entity(mu)->name, name);
 	}
@@ -2055,7 +2055,7 @@ expire_myuser_cb(struct myentity *mt, void *unused)
 		if (is_conf_soper(mu))
 			return 0;
 
-		slog(LG_REGISTER, _("EXPIRE: \2%s\2 from \2%s\2 "), entity(mu)->name, mu->email);
+		slog(LG_REGISTER, "EXPIRE: \2%s\2 from \2%s\2 ", entity(mu)->name, mu->email);
 		slog(LG_VERBOSE, "expire_check(): expiring account %s (unused %ds, email %s, nicks %zu, chanacs %zu)",
 				entity(mu)->name, (int)(CURRTIME - mu->lastlogin),
 				mu->email, MOWGLI_LIST_LENGTH(&mu->nicks),
@@ -2111,7 +2111,7 @@ expire_check(void *arg)
 				continue;
 			}
 
-			slog(LG_REGISTER, _("EXPIRE: \2%s\2 from \2%s\2"), mn->nick, entity(mn->owner)->name);
+			slog(LG_REGISTER, "EXPIRE: \2%s\2 from \2%s\2", mn->nick, entity(mn->owner)->name);
 			slog(LG_VERBOSE, "expire_check(): expiring nick %s (unused %lds, account %s)",
 					mn->nick, (long)(CURRTIME - mn->lastseen),
 					entity(mn->owner)->name);
@@ -2149,7 +2149,7 @@ expire_check(void *arg)
 			if (MC_HOLD & mc->flags)
 				continue;
 
-			slog(LG_REGISTER, _("EXPIRE: \2%s\2 from \2%s\2"), mc->name, mychan_founder_names(mc));
+			slog(LG_REGISTER, "EXPIRE: \2%s\2 from \2%s\2", mc->name, mychan_founder_names(mc));
 			slog(LG_VERBOSE, "expire_check(): expiring channel %s (unused %lds, founder %s, chanacs %zu)",
 					mc->name, (long)(CURRTIME - mc->used),
 					mychan_founder_names(mc),

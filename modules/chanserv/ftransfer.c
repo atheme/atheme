@@ -55,7 +55,7 @@ cs_cmd_ftransfer(struct sourceinfo *si, int parc, char *parv[])
 	// no maxchans check (intentional -- this is an oper command)
 	wallops("%s transferred foundership of %s from %s to %s", get_oper_name(si), name, oldfndr, mt->name);
 	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FTRANSFER: \2%s\2 transferred from \2%s\2 to \2%s\2", mc->name, oldfndr, mt->name);
-	verbose(mc, _("Foundership transfer from \2%s\2 to \2%s\2 forced by %s administration."), oldfndr, mt->name, me.netname);
+	verbose(mc, "Foundership transfer from \2%s\2 to \2%s\2 forced by %s administration.", oldfndr, mt->name, me.netname);
 	command_success_nodata(si, _("Foundership of \2%s\2 has been transferred from \2%s\2 to \2%s\2."),
 		name, oldfndr, mt->name);
 

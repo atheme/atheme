@@ -66,8 +66,7 @@ cs_cmd_clear_akicks(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_DO, "CLEAR:AKICKS: \2%s\2", mc->name);
 	command_success_nodata(si, _("Cleared AKICK entries in \2%s\2."), name);
 	if (changes > 0)
-		verbose(mc, _("\2%s\2 removed all %u AKICK entries."),
-				get_source_name(si), changes);
+		verbose(mc, "\2%s\2 removed all %u AKICK entries.", get_source_name(si), changes);
 }
 
 static struct command cs_clear_akicks = {

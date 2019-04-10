@@ -48,7 +48,7 @@ cs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[])
 		metadata_delete(mc, "disable_fantasy");
 
 		logcommand(si, CMDLOG_SET, "SET:FANTASY:ON: \2%s\2", mc->name);
-		verbose(mc, _("\2%s\2 enabled the FANTASY flag"), get_source_name(si));
+		verbose(mc, "\2%s\2 enabled the FANTASY flag", get_source_name(si));
 		command_success_nodata(si, _("The \2%s\2 flag has been set for channel \2%s\2."), "FANTASY", mc->name);
 		return;
 	}
@@ -65,7 +65,7 @@ cs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[])
 		metadata_add(mc, "disable_fantasy", "on");
 
 		logcommand(si, CMDLOG_SET, "SET:FANTASY:OFF: \2%s\2", mc->name);
-		verbose(mc, _("\2%s\2 disabled the FANTASY flag"), get_source_name(si));
+		verbose(mc, "\2%s\2 disabled the FANTASY flag", get_source_name(si));
 		command_success_nodata(si, _("The \2%s\2 flag has been removed for channel \2%s\2."), "FANTASY", mc->name);
 		return;
 	}

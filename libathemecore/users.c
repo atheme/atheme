@@ -321,7 +321,7 @@ user_find(const char *nick)
 	if (u != NULL)
 	{
 		if (ircd->uses_p10)
-			wallops(_("user_find(): found user %s by nick!"), nick);
+			wallops("user_find(): found user %s by nick!", nick);
 		return u;
 	}
 

@@ -1,19 +1,10 @@
 # Please don't update this file manually - use 'make update-potfiles' instead!
 include/atheme/constants.h
-libathemecore/account.c
-libathemecore/auth.c
 libathemecore/commandhelp.c
 libathemecore/commandtree.c
-libathemecore/function.c
-libathemecore/logger.c
-libathemecore/module.c
-libathemecore/node.c
 libathemecore/ptasks.c
 libathemecore/services.c
-libathemecore/signal.c
-libathemecore/users.c
 modules/alis/main.c
-modules/backend/opensex.c
 modules/botserv/bottalk.c
 modules/botserv/help.c
 modules/botserv/info.c
@@ -141,7 +132,6 @@ modules/groupserv/invite.c
 modules/groupserv/join.c
 modules/groupserv/list.c
 modules/groupserv/listchans.c
-modules/groupserv/main/groupserv.c
 modules/groupserv/main/hooks.c
 modules/groupserv/register.c
 modules/groupserv/regnolimit.c

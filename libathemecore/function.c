@@ -735,7 +735,7 @@ sendemail(struct user *u, struct myuser *mu, const char *type, const char *email
 	{
 		if (CURRTIME - lastwallops > 60)
 		{
-			wallops(_("Rejecting email for %s[%s@%s] due to too high load (type '%s' to %s <%s>)"),
+			wallops("Rejecting email for %s[%s@%s] due to too high load (type '%s' to %s <%s>)",
 					u->nick, u->user, u->vhost,
 					type, entity(mu)->name, email);
 			slog(LG_ERROR, "sendemail(): rejecting email for %s[%s@%s] (%s) due to too high load (type '%s' to %s <%s>)",
