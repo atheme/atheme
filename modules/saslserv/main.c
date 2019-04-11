@@ -15,7 +15,7 @@
 #endif
 
 #define ASASL_OUTFLAGS_WIPE_FREE_BUF    (ASASL_OUTFLAG_WIPE_BUF | ASASL_OUTFLAG_FREE_BUF)
-#define LOGIN_CANCELLED_STR             _("There was a problem logging you in; login cancelled")
+#define LOGIN_CANCELLED_STR             "There was a problem logging you in; login cancelled"
 
 static mowgli_list_t sasl_sessions;
 static mowgli_list_t sasl_mechanisms;
@@ -757,7 +757,7 @@ sasl_input_startauth(const struct sasl_message *const restrict smsg, struct sasl
 		if (! req.allowed)
 		{
 			(void) notice(saslsvs->nick, u->nick,
-			              _("You cannot log out \2%s\2 because the server configuration disallows it."),
+			              "You cannot log out \2%s\2 because the server configuration disallows it.",
 			              entity(u->myuser)->name);
 			return false;
 		}
