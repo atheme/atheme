@@ -16,22 +16,22 @@
 #  include <crack.h>
 #endif /* HAVE_CRACKLIB */
 
-#ifdef HAVE_PASSWDQC
+#ifdef HAVE_LIBPASSWDQC
 #  include <passwdqc.h>
-#endif /* HAVE_PASSWDQC */
+#endif /* HAVE_LIBPASSWDQC */
 
 #ifdef HAVE_CRACKLIB
 static char *cracklib_dict = NULL;
 #endif /* HAVE_CRACKLIB */
 
-#ifdef HAVE_PASSWDQC
+#ifdef HAVE_LIBPASSWDQC
 static passwdqc_params_qc_t qc_config = {
 	.min                    = { 32, 24, 11, 8, 7 },
 	.max                    = PASSLEN,
 	.passphrase_words       = 3,
 	.match_length           = 4,
 };
-#endif /* HAVE_PASSWDQC */
+#endif /* HAVE_LIBPASSWDQC */
 
 static bool pwquality_warn_only = false;
 
@@ -78,10 +78,10 @@ pwquality_register_hook(hook_user_register_check_t *const restrict hdata)
 		good_password = false;
 #endif /* HAVE_CRACKLIB */
 
-#ifdef HAVE_PASSWDQC
+#ifdef HAVE_LIBPASSWDQC
 	if ((qc_reason = passwdqc_check(&qc_config, hdata->password, NULL, NULL)))
 		good_password = false;
-#endif /* HAVE_PASSWDQC */
+#endif /* HAVE_LIBPASSWDQC */
 
 	if (good_password)
 		return;
@@ -114,7 +114,7 @@ pwquality_osinfo_hook(struct sourceinfo *const restrict si)
 
 #ifdef HAVE_CRACKLIB
 	(void) command_success_nodata(si, "Cracklib dictionary path: %s", cracklib_dict);
-#endif /* HAVE_PASSWDQC */
+#endif /* HAVE_LIBPASSWDQC */
 
 	(void) command_success_nodata(si, "Registrations will fail with bad passwords: %s",
 	                                  pwquality_warn_only ? "No" : "Yes");
