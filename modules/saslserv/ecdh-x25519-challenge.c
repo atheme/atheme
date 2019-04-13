@@ -339,23 +339,28 @@ ns_cmd_set_x25519_pubkey_func(struct sourceinfo *const restrict si, const int pa
 		return;
 	}
 
-	const char *const newkey = parv[0];
-	unsigned char client_pubkey[ATHEME_ECDH_X25519_XKEY_LEN];
+	unsigned char pubkey[ATHEME_ECDH_X25519_XKEY_LEN];
+	char pubkey_b64[BASE64_SIZE_STR(sizeof pubkey)];
 
-	if (base64_decode(newkey, client_pubkey, sizeof client_pubkey) != sizeof client_pubkey)
+	if (base64_decode(parv[0], pubkey, sizeof pubkey) != sizeof pubkey)
 	{
 		(void) command_fail(si, fault_badparams, _("The public key specified is not valid."));
 		return;
 	}
-	if (md && strcmp(md->value, newkey) == 0)
+	if (base64_encode(pubkey, sizeof pubkey, pubkey_b64, sizeof pubkey_b64) != BASE64_SIZE_RAW(sizeof pubkey))
 	{
-		(void) command_fail(si, fault_nochange, _("Your public key is already set to \2%s\2."), newkey);
+		(void) command_fail(si, fault_badparams, _("The public key specified is not valid."));
+		return;
+	}
+	if (md && strcmp(md->value, pubkey_b64) == 0)
+	{
+		(void) command_fail(si, fault_nochange, _("Your public key is already set to \2%s\2."), pubkey_b64);
 		return;
 	}
 
-	(void) metadata_add(si->smu, ATHEME_ECDH_X25519_PUBKEY_MDNAME, newkey);
-	(void) logcommand(si, CMDLOG_SET, "SET:X25519-PUBKEY: \2%s\2", newkey);
-	(void) command_success_nodata(si, _("Your public key is now set to \2%s\2."), newkey);
+	(void) metadata_add(si->smu, ATHEME_ECDH_X25519_PUBKEY_MDNAME, pubkey_b64);
+	(void) logcommand(si, CMDLOG_SET, "SET:X25519-PUBKEY: \2%s\2", pubkey_b64);
+	(void) command_success_nodata(si, _("Your public key is now set to \2%s\2."), pubkey_b64);
 }
 
 static const struct sasl_mechanism sasl_mech_ecdh_x25519_challenge = {

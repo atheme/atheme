@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-04-11 07:46+0000\n"
+"POT-Creation-Date: 2019-04-13 10:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2382,7 +2382,7 @@ msgstr ""
 msgid "Changes whether service spams unregistered users on connect."
 msgstr ""
 
-#: modules/saslserv/ecdh-x25519-challenge.c:370
+#: modules/saslserv/ecdh-x25519-challenge.c:375
 msgid "Changes your ECDH-X25519-CHALLENGE public key."
 msgstr ""
 
@@ -7873,7 +7873,7 @@ msgstr ""
 msgid "The provided regex matches you, refusing RAKILL."
 msgstr ""
 
-#: modules/saslserv/ecdh-x25519-challenge.c:347
+#: modules/saslserv/ecdh-x25519-challenge.c:347 modules/saslserv/ecdh-x25519-challenge.c:352
 msgid "The public key specified is not valid."
 msgstr ""
 
@@ -7992,10 +7992,6 @@ msgstr ""
 
 #: modules/hostserv/drop.c:45
 msgid "There is not a vhost assigned to this nick."
-msgstr ""
-
-#: modules/saslserv/main.c:18
-msgid "There was a problem logging you in; login cancelled"
 msgstr ""
 
 #: modules/gameserv/lottery.c:40
@@ -8789,7 +8785,7 @@ msgstr ""
 msgid "You cannot inject an INJECT command."
 msgstr ""
 
-#: modules/nickserv/logout.c:60 modules/saslserv/main.c:760
+#: modules/nickserv/logout.c:60
 #, c-format
 msgid "You cannot log out %s because the server configuration disallows it."
 msgstr ""
@@ -9264,12 +9260,12 @@ msgstr ""
 msgid "Your memo inbox is full! Please delete memos you no longer need."
 msgstr ""
 
-#: modules/nickserv/set_pubkey.c:44 modules/saslserv/ecdh-x25519-challenge.c:352
+#: modules/nickserv/set_pubkey.c:44 modules/saslserv/ecdh-x25519-challenge.c:357
 #, c-format
 msgid "Your public key is already set to %s."
 msgstr ""
 
-#: modules/nickserv/set_pubkey.c:50 modules/saslserv/ecdh-x25519-challenge.c:358
+#: modules/nickserv/set_pubkey.c:50 modules/saslserv/ecdh-x25519-challenge.c:363
 #, c-format
 msgid "Your public key is now set to %s."
 msgstr ""

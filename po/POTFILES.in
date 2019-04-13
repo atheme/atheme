@@ -268,7 +268,6 @@ modules/rpgserv/list.c
 modules/rpgserv/search.c
 modules/rpgserv/set.c
 modules/saslserv/ecdh-x25519-challenge.c
-modules/saslserv/main.c
 modules/scripting/perl/api/perl_command.c
 modules/scripting/perl/perl_module.c
 modules/statserv/channel.c
