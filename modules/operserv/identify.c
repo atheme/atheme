@@ -25,7 +25,7 @@ os_cmd_identify(struct sourceinfo *si, int parc, char *parv[])
 	// XXX use this with authcookie also
 	if (si->su == NULL)
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 can only be executed via IRC."), "IDENTIFY");
+		command_fail(si, fault_noprivs, STR_IRC_COMMAND_ONLY, "IDENTIFY");
 		return;
 	}
 

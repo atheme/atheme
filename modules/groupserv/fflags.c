@@ -34,7 +34,7 @@ gs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 
         if (si->smu == NULL)
 	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
+		command_fail(si, fault_noprivs, STR_NOT_LOGGED_IN);
 		return;
 	}
 

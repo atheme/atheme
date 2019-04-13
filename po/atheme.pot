@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-04-13 11:27+0000\n"
+"POT-Creation-Date: 2019-04-13 14:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -173,9 +173,7 @@ msgstr ""
 msgid "%s can now take ownership of %s."
 msgstr ""
 
-#: modules/chanserv/invite.c:21 modules/chanserv/unban_self.c:26 modules/hostserv/drop.c:24
-#: modules/hostserv/group.c:23 modules/hostserv/onoff.c:22 modules/hostserv/onoff.c:59 modules/nickserv/group.c:21
-#: modules/nickserv/identify.c:35 modules/operserv/identify.c:28
+#: include/atheme/constants.h:80
 #, c-format
 msgid "%s can only be executed via IRC."
 msgstr ""
@@ -594,15 +592,7 @@ msgstr ""
 msgid "%s is an invalid username."
 msgstr ""
 
-#: modules/chanserv/akick.c:229 modules/chanserv/akick.c:494 modules/chanserv/akick.c:631 modules/chanserv/ban.c:49
-#: modules/chanserv/clear_bans.c:64 modules/chanserv/clear_users.c:51 modules/chanserv/count.c:52
-#: modules/chanserv/flags.c:189 modules/chanserv/getkey.c:34 modules/chanserv/halfop.c:48
-#: modules/chanserv/invite.c:47 modules/chanserv/kick.c:45 modules/chanserv/op.c:36 modules/chanserv/owner.c:48
-#: modules/chanserv/protect.c:48 modules/chanserv/quiet.c:295 modules/chanserv/recover.c:41
-#: modules/chanserv/status.c:38 modules/chanserv/template.c:86 modules/chanserv/template.c:147
-#: modules/chanserv/topic.c:45 modules/chanserv/topic.c:116 modules/chanserv/topic.c:192
-#: modules/chanserv/topic.c:287 modules/chanserv/voice.c:36 modules/chanserv/why.c:69 modules/chanserv/xop.c:291
-#: modules/chanserv/xop.c:427
+#: include/atheme/constants.h:76
 #, c-format
 msgid "%s is closed."
 msgstr ""
@@ -612,12 +602,7 @@ msgstr ""
 msgid "%s is closed; it cannot be transferred."
 msgstr ""
 
-#: modules/botserv/bottalk.c:41 modules/botserv/bottalk.c:108 modules/chanserv/ban.c:37 modules/chanserv/ban.c:122
-#: modules/chanserv/clear_bans.c:52 modules/chanserv/clear_users.c:39 modules/chanserv/getkey.c:46
-#: modules/chanserv/invite.c:59 modules/chanserv/quiet.c:283 modules/chanserv/quiet.c:392
-#: modules/chanserv/recover.c:61 modules/chanserv/topic.c:39 modules/chanserv/topic.c:104
-#: modules/chanserv/topic.c:180 modules/chanserv/topic.c:275 modules/chanserv/unban_self.c:54
-#: modules/gameserv/gameserv_common.h:59
+#: include/atheme/constants.h:77
 #, c-format
 msgid "%s is currently empty."
 msgstr ""
@@ -863,19 +848,7 @@ msgstr ""
 msgid "%s is not registered, and was not marked."
 msgstr ""
 
-#: modules/botserv/main.c:797 modules/botserv/main.c:873 modules/chanserv/access.c:572 modules/chanserv/access.c:675
-#: modules/chanserv/access.c:780 modules/chanserv/access.c:929 modules/chanserv/fflags.c:67
-#: modules/chanserv/flags.c:301 modules/chanserv/flags.c:375 modules/chanserv/ftransfer.c:32
-#: modules/chanserv/set_founder.c:52 modules/hostserv/vhost.c:31 modules/hostserv/vhostnick.c:36
-#: modules/memoserv/forward.c:50 modules/memoserv/ignore.c:55 modules/nickserv/access.c:213
-#: modules/nickserv/cert.c:48 modules/nickserv/cert.c:90 modules/nickserv/drop.c:42 modules/nickserv/drop.c:155
-#: modules/nickserv/freeze.c:59 modules/nickserv/hold.c:38 modules/nickserv/info.c:83
-#: modules/nickserv/listchans.c:36 modules/nickserv/listgroups.c:36 modules/nickserv/mark.c:67
-#: modules/nickserv/multimark.c:772 modules/nickserv/regnolimit.c:38 modules/nickserv/resetpass.c:29
-#: modules/nickserv/restrict.c:81 modules/nickserv/return.c:32 modules/nickserv/sendpass.c:55
-#: modules/nickserv/sendpass_user.c:56 modules/nickserv/setpass.c:37 modules/nickserv/taxonomy.c:32
-#: modules/nickserv/verify.c:32 modules/nickserv/verify.c:150 modules/nickserv/vhost.c:59
-#: modules/operserv/soper.c:96 modules/operserv/soper.c:165 modules/operserv/soper.c:211
+#: include/atheme/constants.h:81
 #, c-format
 msgid "%s is not registered."
 msgstr ""
@@ -2294,35 +2267,6 @@ msgstr ""
 msgid "Channel %s does not have RPGServ enabled."
 msgstr ""
 
-#: modules/botserv/bottalk.c:35 modules/botserv/bottalk.c:102 modules/botserv/set_fantasy.c:33
-#: modules/botserv/set_nobot.c:33 modules/botserv/set_saycaller.c:32 modules/chanserv/access.c:472
-#: modules/chanserv/access.c:544 modules/chanserv/access.c:647 modules/chanserv/access.c:754
-#: modules/chanserv/access.c:903 modules/chanserv/access.c:1047 modules/chanserv/access.c:1087
-#: modules/chanserv/access.c:1178 modules/chanserv/access.c:1274 modules/chanserv/akick.c:223
-#: modules/chanserv/akick.c:488 modules/chanserv/akick.c:625 modules/chanserv/antiflood.c:392
-#: modules/chanserv/ban.c:31 modules/chanserv/ban.c:116 modules/chanserv/clear_bans.c:46
-#: modules/chanserv/clear_users.c:33 modules/chanserv/close.c:63 modules/chanserv/count.c:35
-#: modules/chanserv/drop.c:36 modules/chanserv/drop.c:132 modules/chanserv/fflags.c:35 modules/chanserv/flags.c:183
-#: modules/chanserv/ftransfer.c:44 modules/chanserv/getkey.c:28 modules/chanserv/halfop.c:36
-#: modules/chanserv/hold.c:34 modules/chanserv/info.c:43 modules/chanserv/invite.c:41 modules/chanserv/kick.c:33
-#: modules/chanserv/kick.c:106 modules/chanserv/mark.c:35 modules/chanserv/op.c:30 modules/chanserv/owner.c:36
-#: modules/chanserv/protect.c:36 modules/chanserv/quiet.c:277 modules/chanserv/quiet.c:386
-#: modules/chanserv/recover.c:35 modules/chanserv/set_email.c:23 modules/chanserv/set_entrymsg.c:22
-#: modules/chanserv/set_fantasy.c:22 modules/chanserv/set_founder.c:63 modules/chanserv/set_gameserv.c:24
-#: modules/chanserv/set_guard.c:22 modules/chanserv/set_keeptopic.c:22 modules/chanserv/set_limitflags.c:22
-#: modules/chanserv/set_mlock.c:37 modules/chanserv/set_prefix.c:37 modules/chanserv/set_private.c:22
-#: modules/chanserv/set_property.c:40 modules/chanserv/set_pubacl.c:22 modules/chanserv/set_restricted.c:22
-#: modules/chanserv/set_secure.c:22 modules/chanserv/set_topiclock.c:22 modules/chanserv/set_url.c:23
-#: modules/chanserv/set_verbose.c:22 modules/chanserv/status.c:30 modules/chanserv/sync.c:348
-#: modules/chanserv/template.c:67 modules/chanserv/topic.c:32 modules/chanserv/topic.c:97
-#: modules/chanserv/topic.c:173 modules/chanserv/topic.c:268 modules/chanserv/unban_self.c:48
-#: modules/chanserv/voice.c:30 modules/chanserv/why.c:51 modules/chanserv/xop.c:285 modules/chanserv/xop.c:421
-#: modules/gameserv/gameserv_common.h:54 modules/rpgserv/enable.c:29 modules/rpgserv/enable.c:60
-#: modules/rpgserv/info.c:30 modules/rpgserv/set.c:183
-#, c-format
-msgid "Channel %s is not registered."
-msgstr ""
-
 #: modules/chanserv/taxonomy.c:38
 #, c-format
 msgid "Channel %s is private."
@@ -3598,7 +3542,7 @@ msgstr ""
 msgid "Inspect the Perl interpreter"
 msgstr ""
 
-#: include/atheme/constants.h:76
+#: include/atheme/constants.h:78
 #, c-format
 msgid "Insufficient parameters for %s."
 msgstr ""
@@ -3700,7 +3644,7 @@ msgstr ""
 msgid "Invalid option for %s"
 msgstr ""
 
-#: include/atheme/constants.h:77
+#: include/atheme/constants.h:79
 #, c-format
 msgid "Invalid parameters for %s."
 msgstr ""
@@ -4377,13 +4321,6 @@ msgstr ""
 #: modules/nickserv/group.c:100 modules/nickserv/set_accountname.c:50
 #, c-format
 msgid "Nick %s is not registered to your account."
-msgstr ""
-
-#: modules/hostserv/drop.c:31 modules/hostserv/group.c:30 modules/hostserv/onoff.c:29 modules/hostserv/onoff.c:66
-#: modules/hostserv/request.c:228 modules/nickserv/group.c:95 modules/nickserv/group.c:136
-#: modules/nickserv/group.c:163 modules/nickserv/set_accountname.c:45
-#, c-format
-msgid "Nick %s is not registered."
 msgstr ""
 
 #: modules/nickserv/group.c:71
@@ -8062,10 +7999,6 @@ msgstr ""
 msgid "You are not allowed to set %s on template %s in %s."
 msgstr ""
 
-#: modules/statserv/channel.c:48
-msgid "You are not authorised to perform this action."
-msgstr ""
-
 #: modules/chanserv/op.c:59
 #, c-format
 msgid "You are not authorized to (de)op %s on %s."
@@ -8086,50 +8019,12 @@ msgstr ""
 msgid "You are not authorized to assign the bot %s to a channel."
 msgstr ""
 
-#: modules/chanserv/flags.c:292 modules/chanserv/flags.c:337 modules/chanserv/set_email.c:29
-#: modules/chanserv/set_entrymsg.c:28 modules/chanserv/set_prefix.c:43 modules/chanserv/set_url.c:29
-#: modules/chanserv/template.c:139 modules/groupserv/drop.c:43 modules/groupserv/join.c:50
-#: modules/groupserv/set_channel.c:27 modules/groupserv/set_description.c:27 modules/groupserv/set_email.c:27
-#: modules/groupserv/set_groupname.c:46 modules/groupserv/set_joinflags.c:28 modules/groupserv/set_open.c:33
-#: modules/groupserv/set_public.c:33 modules/groupserv/set_url.c:27
-msgid "You are not authorized to execute this command."
-msgstr ""
-
 #: modules/chanserv/xop.c:51 modules/chanserv/xop.c:124
 #, c-format
 msgid "You are not authorized to modify the access entry for %s on %s."
 msgstr ""
 
-#: modules/chanserv/antiflood.c:400 modules/chanserv/antiflood.c:464 modules/chanserv/set_fantasy.c:34
-#: modules/chanserv/set_gameserv.c:36 modules/chanserv/set_guard.c:34 modules/chanserv/set_keeptopic.c:34
-#: modules/chanserv/set_limitflags.c:34 modules/chanserv/set_mlock.c:47 modules/chanserv/set_private.c:34
-#: modules/chanserv/set_property.c:46 modules/chanserv/set_pubacl.c:34 modules/chanserv/set_restricted.c:34
-#: modules/chanserv/set_secure.c:34 modules/chanserv/set_topiclock.c:34 modules/chanserv/set_verbose.c:34
-#: modules/chanserv/sync.c:360
-msgid "You are not authorized to perform this command."
-msgstr ""
-
-#: libathemecore/commandtree.c:170 modules/alis/main.c:218 modules/botserv/bottalk.c:47
-#: modules/botserv/bottalk.c:114 modules/botserv/info.c:76 modules/botserv/set_fantasy.c:39
-#: modules/botserv/set_nobot.c:45 modules/botserv/set_private.c:47 modules/botserv/set_saycaller.c:38
-#: modules/chanserv/access.c:482 modules/chanserv/access.c:561 modules/chanserv/access.c:665
-#: modules/chanserv/access.c:709 modules/chanserv/access.c:770 modules/chanserv/access.c:819
-#: modules/chanserv/access.c:919 modules/chanserv/access.c:968 modules/chanserv/access.c:1100
-#: modules/chanserv/access.c:1191 modules/chanserv/access.c:1287 modules/chanserv/akick.c:308
-#: modules/chanserv/akick.c:503 modules/chanserv/akick.c:643 modules/chanserv/ban.c:43 modules/chanserv/ban.c:131
-#: modules/chanserv/clear_bans.c:58 modules/chanserv/clear_users.c:45 modules/chanserv/count.c:45
-#: modules/chanserv/drop.c:49 modules/chanserv/flags.c:94 modules/chanserv/getkey.c:40 modules/chanserv/halfop.c:42
-#: modules/chanserv/halfop.c:75 modules/chanserv/invite.c:53 modules/chanserv/kick.c:39 modules/chanserv/kick.c:112
-#: modules/chanserv/op.c:72 modules/chanserv/owner.c:42 modules/chanserv/owner.c:75 modules/chanserv/protect.c:42
-#: modules/chanserv/protect.c:75 modules/chanserv/quiet.c:122 modules/chanserv/quiet.c:289
-#: modules/chanserv/quiet.c:401 modules/chanserv/recover.c:47 modules/chanserv/template.c:79
-#: modules/chanserv/topic.c:51 modules/chanserv/topic.c:110 modules/chanserv/topic.c:186
-#: modules/chanserv/topic.c:281 modules/chanserv/unban_self.c:67 modules/chanserv/why.c:62
-#: modules/chanserv/xop.c:316 modules/chanserv/xop.c:322 modules/chanserv/xop.c:341 modules/chanserv/xop.c:347
-#: modules/chanserv/xop.c:361 modules/chanserv/xop.c:433 modules/gameserv/gameserv_common.h:95
-#: modules/groupserv/flags.c:44 modules/groupserv/flags.c:80 modules/groupserv/flags.c:132
-#: modules/groupserv/invite.c:41 modules/groupserv/listchans.c:44 modules/memoserv/sendops.c:89
-#: modules/nickserv/sendpass_user.c:39 modules/operserv/soper.c:19 modules/rpgserv/set.c:189
+#: include/atheme/constants.h:83
 msgid "You are not authorized to perform this operation."
 msgstr ""
 
@@ -8148,14 +8043,7 @@ msgstr ""
 msgid "You are not authorized to use the target argument."
 msgstr ""
 
-#: libathemecore/commandtree.c:135 modules/botserv/set_nobot.c:39 modules/botserv/set_private.c:41
-#: modules/chanserv/akick.c:617 modules/chanserv/flags.c:284 modules/chanserv/set_founder.c:40
-#: modules/chanserv/status.c:57 modules/chanserv/template.c:127 modules/chanserv/unban_self.c:60
-#: modules/chanserv/xop.c:277 modules/groupserv/fflags.c:37 modules/hostserv/offer.c:151 modules/infoserv/main.c:250
-#: modules/nickserv/access.c:199 modules/nickserv/access.c:251 modules/nickserv/access.c:384
-#: modules/nickserv/badmail.c:108 modules/nickserv/cert.c:34 modules/nickserv/cert.c:76 modules/nickserv/cert.c:131
-#: modules/nickserv/cert.c:167 modules/nickserv/listchans.c:45 modules/nickserv/listgroups.c:45
-#: modules/nickserv/logout.c:23 modules/nickserv/status.c:76
+#: include/atheme/constants.h:84
 msgid "You are not logged in."
 msgstr ""
 
@@ -8308,7 +8196,7 @@ msgstr ""
 msgid "You do not have appropriate permissions to set flags: %s"
 msgstr ""
 
-#: include/atheme/constants.h:78
+#: include/atheme/constants.h:82
 #, c-format
 msgid "You do not have the %s privilege."
 msgstr ""

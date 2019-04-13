@@ -27,13 +27,13 @@ cmd_voice(struct sourceinfo *si, bool voicing, int parc, char *parv[])
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), chan);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, chan);
 		return;
 	}
 
 	if (metadata_find(mc, "private:close:closer"))
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
+		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, chan);
 		return;
 	}
 

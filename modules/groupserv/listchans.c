@@ -41,7 +41,7 @@ gs_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 			operoverride = true;
 		else
 		{
-			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 			return;
 		}
 	}

@@ -18,7 +18,7 @@ cs_cmd_invite(struct sourceinfo *si, int parc, char *parv[])
 
 	if (si->su == NULL)
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 can only be executed via IRC."), "INVITE");
+		command_fail(si, fault_noprivs, STR_IRC_COMMAND_ONLY, "INVITE");
 		return;
 	}
 
@@ -38,25 +38,25 @@ cs_cmd_invite(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(chan)))
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), chan);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, chan);
 		return;
 	}
 
 	if (metadata_find(mc, "private:close:closer"))
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
+		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, chan);
 		return;
 	}
 
 	if (!chanacs_source_has_flag(mc, si, CA_INVITE))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 
 	if (!mc->chan)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is currently empty."), mc->name);
+		command_fail(si, fault_nosuch_target, STR_CHANNEL_IS_EMPTY, mc->name);
 		return;
 	}
 

@@ -38,13 +38,13 @@ bs_cmd_set_private(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!si->smu)
 	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
+		command_fail(si, fault_noprivs, STR_NOT_LOGGED_IN);
 		return;
 	}
 
 	if (!has_priv(si, PRIV_CHAN_ADMIN))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 

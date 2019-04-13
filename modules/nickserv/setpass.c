@@ -34,7 +34,7 @@ ns_cmd_setpass(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!(mu = myuser_find(nick)))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), nick);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, nick);
 		return;
 	}
 

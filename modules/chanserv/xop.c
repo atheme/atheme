@@ -274,7 +274,7 @@ cs_xop(struct sourceinfo *si, int parc, char *parv[], const char *leveldesc)
 		// if they're opers and just want to LIST, they don't have to log in
 		if (!(has_priv(si, PRIV_CHAN_AUSPEX) && !strcasecmp("LIST", cmd)))
 		{
-			command_fail(si, fault_noprivs, _("You are not logged in."));
+			command_fail(si, fault_noprivs, STR_NOT_LOGGED_IN);
 			return;
 		}
 	}
@@ -282,13 +282,13 @@ cs_xop(struct sourceinfo *si, int parc, char *parv[], const char *leveldesc)
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), chan);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, chan);
 		return;
 	}
 
 	if (metadata_find(mc, "private:close:closer") && (!has_priv(si, PRIV_CHAN_AUSPEX) || strcasecmp("LIST", cmd)))
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
+		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, chan);
 		return;
 	}
 
@@ -313,13 +313,13 @@ cs_xop(struct sourceinfo *si, int parc, char *parv[], const char *leveldesc)
 		 * possible future denial of granting +f */
 		if (!(restrictflags & CA_FLAGS))
 		{
-			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 			return;
 		}
 		restrictflags = allow_flags(mc, restrictflags);
 		if ((restrictflags & level) != level)
 		{
-			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 			return;
 		}
 		cs_xop_do_add(si, mc, mt, uname, level, leveldesc, restrictflags);
@@ -338,13 +338,13 @@ cs_xop(struct sourceinfo *si, int parc, char *parv[], const char *leveldesc)
 		 * possible future denial of granting +f */
 		if (!(restrictflags & CA_FLAGS))
 		{
-			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 			return;
 		}
 		restrictflags = allow_flags(mc, restrictflags);
 		if ((restrictflags & level) != level)
 		{
-			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 			return;
 		}
 		cs_xop_do_del(si, mc, mt, uname, level, leveldesc);
@@ -358,7 +358,7 @@ cs_xop(struct sourceinfo *si, int parc, char *parv[], const char *leveldesc)
 				operoverride = true;
 			else
 			{
-				command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+				command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 				return;
 			}
 		}
@@ -418,19 +418,19 @@ cs_cmd_forcexop(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), chan);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, chan);
 		return;
 	}
 
 	if (metadata_find(mc, "private:close:closer"))
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
+		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, chan);
 		return;
 	}
 
 	if (!is_founder(mc, entity(si->smu)))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 

@@ -23,7 +23,7 @@ cs_cmd_unban(struct sourceinfo *si, int parc, char *parv[])
 
 	if (si->su == NULL)
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 can only be executed via IRC."), "UNBAN");
+		command_fail(si, fault_noprivs, STR_IRC_COMMAND_ONLY, "UNBAN");
 		return;
 	}
 
@@ -45,26 +45,26 @@ cs_cmd_unban(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, channel);
 		return;
 	}
 
 	if (!c)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is currently empty."), channel);
+		command_fail(si, fault_nosuch_target, STR_CHANNEL_IS_EMPTY, channel);
 		return;
 	}
 
 	if (!si->smu)
 	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
+		command_fail(si, fault_noprivs, STR_NOT_LOGGED_IN);
 		return;
 	}
 
 	if (!chanacs_source_has_flag(mc, si, CA_REMOVE) &&
 			!chanacs_source_has_flag(mc, si, CA_EXEMPT))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 

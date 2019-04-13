@@ -56,7 +56,7 @@ ns_cmd_vhost(struct sourceinfo *si, int parc, char *parv[])
 	// find the user...
 	if (!(mu = myuser_find_ext(target)))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
 		return;
 	}
 

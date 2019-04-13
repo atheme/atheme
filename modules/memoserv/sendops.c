@@ -76,7 +76,7 @@ ms_cmd_sendops(struct sourceinfo *si, int parc, char *parv[])
 
 	if (mc == NULL)
 	{
-		command_fail(si, fault_nosuch_target, "Channel \2%s\2 is not registered.", target);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
 		return;
 	}
 
@@ -86,7 +86,7 @@ ms_cmd_sendops(struct sourceinfo *si, int parc, char *parv[])
 			operoverride = true;
 		else
 		{
-			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 			return;
 		}
 	}

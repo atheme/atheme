@@ -34,7 +34,7 @@ cs_cmd_set_mlock(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, parv[0]);
 		return;
 	}
 
@@ -44,7 +44,7 @@ cs_cmd_set_mlock(struct sourceinfo *si, int parc, char *parv[])
 				!has_priv(si, PRIV_CHAN_CMODES) ||
 				!has_priv(si, PRIV_CHAN_ADMIN))
 		{
-			command_fail(si, fault_noprivs, _("You are not authorized to perform this command."));
+			command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 			return;
 		}
 		mask = ~ircd->oper_only_modes;

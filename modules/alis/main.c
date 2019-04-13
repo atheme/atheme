@@ -215,7 +215,7 @@ alis_parse_query(struct sourceinfo *const restrict si, const int parc, char **co
 		{
 			if (! has_priv(si, PRIV_CHAN_AUSPEX))
 			{
-				(void) command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+				(void) command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 				return false;
 			}
 

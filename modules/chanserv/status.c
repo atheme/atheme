@@ -27,7 +27,7 @@ cs_cmd_status(struct sourceinfo *si, int parc, char *parv[])
 
 		if (!mc)
 		{
-			command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), chan);
+			command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, chan);
 			return;
 		}
 
@@ -35,7 +35,7 @@ cs_cmd_status(struct sourceinfo *si, int parc, char *parv[])
 
 		if (metadata_find(mc, "private:close:closer"))
 		{
-			command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
+			command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, chan);
 			return;
 		}
 
@@ -54,7 +54,7 @@ cs_cmd_status(struct sourceinfo *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_GET, "STATUS");
 	if (!si->smu)
-		command_success_nodata(si, _("You are not logged in."));
+		command_success_nodata(si, STR_NOT_LOGGED_IN);
 	else
 	{
 		command_success_nodata(si, _("You are logged in as \2%s\2."), entity(si->smu)->name);

@@ -29,7 +29,7 @@ ns_cmd_return(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!(mu = myuser_find(target)))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
 		return;
 	}
 

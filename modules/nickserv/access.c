@@ -196,7 +196,7 @@ ns_cmd_access(struct sourceinfo *si, int parc, char *parv[])
 			mu = si->smu;
 			if (mu == NULL)
 			{
-				command_fail(si, fault_noprivs, _("You are not logged in."));
+				command_fail(si, fault_noprivs, STR_NOT_LOGGED_IN);
 				return;
 			}
 		}
@@ -210,7 +210,7 @@ ns_cmd_access(struct sourceinfo *si, int parc, char *parv[])
 
 			if (!(mu = myuser_find_ext(parv[1])))
 			{
-				command_fail(si, fault_badparams, _("\2%s\2 is not registered."), parv[1]);
+				command_fail(si, fault_badparams, STR_IS_NOT_REGISTERED, parv[1]);
 				return;
 			}
 		}
@@ -248,7 +248,7 @@ ns_cmd_access(struct sourceinfo *si, int parc, char *parv[])
 			mask = parv[1];
 		if (mu == NULL)
 		{
-			command_fail(si, fault_noprivs, _("You are not logged in."));
+			command_fail(si, fault_noprivs, STR_NOT_LOGGED_IN);
 			return;
 		}
 		if (mask[0] == '*' && mask[1] == '!')
@@ -381,7 +381,7 @@ ns_cmd_access(struct sourceinfo *si, int parc, char *parv[])
 		mu = si->smu;
 		if (mu == NULL)
 		{
-			command_fail(si, fault_noprivs, _("You are not logged in."));
+			command_fail(si, fault_noprivs, STR_NOT_LOGGED_IN);
 			return;
 		}
 		if ((mask = myuser_access_find(mu, parv[1])) == NULL)

@@ -469,7 +469,7 @@ cs_cmd_access_list(struct sourceinfo *si, int parc, char *parv[])
 	mc = mychan_find(channel);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, channel);
 		return;
 	}
 
@@ -479,7 +479,7 @@ cs_cmd_access_list(struct sourceinfo *si, int parc, char *parv[])
 			operoverride = true;
 		else
 		{
-			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 			return;
 		}
 	}
@@ -541,7 +541,7 @@ cs_cmd_access_info(struct sourceinfo *si, int parc, char *parv[])
 	mc = mychan_find(channel);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, channel);
 		return;
 	}
 
@@ -558,7 +558,7 @@ cs_cmd_access_info(struct sourceinfo *si, int parc, char *parv[])
 			operoverride = true;
 		else
 		{
-			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 			return;
 		}
 	}
@@ -569,7 +569,7 @@ cs_cmd_access_info(struct sourceinfo *si, int parc, char *parv[])
 	{
 		if (!(mt = myentity_find_ext(target)))
 		{
-			command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
+			command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
 			return;
 		}
 		target = mt->name;
@@ -644,7 +644,7 @@ cs_cmd_access_del(struct sourceinfo *si, int parc, char *parv[])
 	mc = mychan_find(channel);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, channel);
 		return;
 	}
 
@@ -662,7 +662,7 @@ cs_cmd_access_del(struct sourceinfo *si, int parc, char *parv[])
 	 */
 	if (!chanacs_source_has_flag(mc, si, CA_FLAGS) && entity(si->smu) != mt)
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 
@@ -672,7 +672,7 @@ cs_cmd_access_del(struct sourceinfo *si, int parc, char *parv[])
 	{
 		if (mt == NULL)
 		{
-			command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
+			command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
 			return;
 		}
 		target = mt->name;
@@ -706,7 +706,7 @@ cs_cmd_access_del(struct sourceinfo *si, int parc, char *parv[])
 	{
 		if (restrictflags & CA_AKICK && entity(si->smu) == mt)
 		{
-			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 			return;
 		}
 
@@ -751,7 +751,7 @@ cs_cmd_access_add(struct sourceinfo *si, int parc, char *parv[])
 	mc = mychan_find(channel);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, channel);
 		return;
 	}
 
@@ -767,7 +767,7 @@ cs_cmd_access_add(struct sourceinfo *si, int parc, char *parv[])
 	 */
 	if (!chanacs_source_has_flag(mc, si, CA_FLAGS))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 
@@ -777,7 +777,7 @@ cs_cmd_access_add(struct sourceinfo *si, int parc, char *parv[])
 	{
 		if (!(mt = myentity_find_ext(target)))
 		{
-			command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
+			command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
 			return;
 		}
 		target = mt->name;
@@ -816,7 +816,7 @@ cs_cmd_access_add(struct sourceinfo *si, int parc, char *parv[])
 	{
 		if (restrictflags & CA_AKICK && entity(si->smu) == mt)
 		{
-			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 			return;
 		}
 
@@ -900,7 +900,7 @@ cs_cmd_access_set(struct sourceinfo *si, int parc, char *parv[])
 	mc = mychan_find(channel);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, channel);
 		return;
 	}
 
@@ -916,7 +916,7 @@ cs_cmd_access_set(struct sourceinfo *si, int parc, char *parv[])
 	 */
 	if (!chanacs_source_has_flag(mc, si, CA_FLAGS))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 
@@ -926,7 +926,7 @@ cs_cmd_access_set(struct sourceinfo *si, int parc, char *parv[])
 	{
 		if (!(mt = myentity_find_ext(target)))
 		{
-			command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
+			command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
 			return;
 		}
 		target = mt->name;
@@ -965,7 +965,7 @@ cs_cmd_access_set(struct sourceinfo *si, int parc, char *parv[])
 	{
 		if (restrictflags & CA_AKICK && entity(si->smu) == mt)
 		{
-			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 			return;
 		}
 
@@ -1044,7 +1044,7 @@ cs_cmd_role_list(struct sourceinfo *si, int parc, char *parv[])
 	mc = mychan_find(channel);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, channel);
 		return;
 	}
 
@@ -1084,7 +1084,7 @@ cs_cmd_role_add(struct sourceinfo *si, int parc, char *parv[])
 	mc = mychan_find(channel);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, channel);
 		return;
 	}
 
@@ -1097,7 +1097,7 @@ cs_cmd_role_add(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!chanacs_source_has_flag(mc, si, CA_FLAGS))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 
@@ -1175,7 +1175,7 @@ cs_cmd_role_set(struct sourceinfo *si, int parc, char *parv[])
 	mc = mychan_find(channel);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, channel);
 		return;
 	}
 
@@ -1188,7 +1188,7 @@ cs_cmd_role_set(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!chanacs_source_has_flag(mc, si, CA_FLAGS))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 
@@ -1271,7 +1271,7 @@ cs_cmd_role_del(struct sourceinfo *si, int parc, char *parv[])
 	mc = mychan_find(channel);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, channel);
 		return;
 	}
 
@@ -1284,7 +1284,7 @@ cs_cmd_role_del(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!chanacs_source_has_flag(mc, si, CA_FLAGS))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 

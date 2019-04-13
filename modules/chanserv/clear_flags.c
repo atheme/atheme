@@ -29,19 +29,19 @@ cs_cmd_clear_flags(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(name)))
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", name);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, name);
 		return;
 	}
 
 	if (metadata_find(mc, "private:close:closer"))
 	{
-		command_fail(si, fault_noprivs, "\2%s\2 is closed.", name);
+		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, name);
 		return;
 	}
 
 	if (!chanacs_source_has_flag(mc, si, CA_FOUNDER))
 	{
-		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 

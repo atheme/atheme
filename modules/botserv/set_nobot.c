@@ -30,19 +30,19 @@ bs_cmd_set_nobot(struct sourceinfo *si, int parc, char *parv[])
 	mc = mychan_find(channel);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, channel);
 		return;
 	}
 
 	if (!si->smu)
 	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
+		command_fail(si, fault_noprivs, STR_NOT_LOGGED_IN);
 		return;
 	}
 
 	if (!has_priv(si, PRIV_CHAN_ADMIN))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 

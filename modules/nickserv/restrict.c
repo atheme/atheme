@@ -78,7 +78,7 @@ ns_cmd_restrict(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!(mu = myuser_find_ext(target)))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
 		return;
 	}
 

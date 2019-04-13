@@ -225,7 +225,7 @@ hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 		mn = mynick_find(target);
 		if (mn == NULL)
 		{
-			command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is not registered."), target);
+			command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
 			return;
 		}
 		if (mn->owner != si->smu)

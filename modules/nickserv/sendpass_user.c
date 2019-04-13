@@ -36,7 +36,7 @@ ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 	{
 		if (!has_priv(si, PRIV_USER_SENDPASS))
 		{
-			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 			return;
 		}
 		else if (!strcasecmp(parv[1], "FORCE"))
@@ -53,7 +53,7 @@ ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!(mu = myuser_find_by_nick(name)))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), name);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, name);
 		return;
 	}
 

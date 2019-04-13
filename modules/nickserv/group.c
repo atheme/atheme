@@ -18,7 +18,7 @@ ns_cmd_group(struct sourceinfo *si, int parc, char *parv[])
 
 	if (si->su == NULL)
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 can only be executed via IRC."), "GROUP");
+		command_fail(si, fault_noprivs, STR_IRC_COMMAND_ONLY, "GROUP");
 		return;
 	}
 
@@ -92,7 +92,7 @@ ns_cmd_ungroup(struct sourceinfo *si, int parc, char *parv[])
 	mn = mynick_find(target);
 	if (mn == NULL)
 	{
-		command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is not registered."), target);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
 		return;
 	}
 	if (mn->owner != si->smu)
@@ -133,7 +133,7 @@ ns_cmd_fungroup(struct sourceinfo *si, int parc, char *parv[])
 	mn = mynick_find(parv[0]);
 	if (mn == NULL)
 	{
-		command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, parv[0]);
 		return;
 	}
 	mu = mn->owner;
@@ -160,7 +160,7 @@ ns_cmd_fungroup(struct sourceinfo *si, int parc, char *parv[])
 		mn2 = mynick_find(parv[1]);
 		if (mn2 == NULL)
 		{
-			command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is not registered."), parv[1]);
+			command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, parv[1]);
 			return;
 		}
 		if (mn2 == mn)

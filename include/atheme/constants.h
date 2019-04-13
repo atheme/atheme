@@ -73,8 +73,14 @@
 #  define TIME_FORMAT           "%b %d %H:%M:%S %Y %z"
 #endif
 
+#define STR_CHANNEL_IS_CLOSED   _("\2%s\2 is closed.")
+#define STR_CHANNEL_IS_EMPTY    _("\2%s\2 is currently empty.")
 #define STR_INSUFFICIENT_PARAMS _("Insufficient parameters for \2%s\2.")
 #define STR_INVALID_PARAMS      _("Invalid parameters for \2%s\2.")
+#define STR_IRC_COMMAND_ONLY    _("\2%s\2 can only be executed via IRC.")
+#define STR_IS_NOT_REGISTERED   _("\2%s\2 is not registered.")
 #define STR_NO_PRIVILEGE        _("You do not have the \2%s\2 privilege.")
+#define STR_NOT_AUTHORIZED      _("You are not authorized to perform this operation.")
+#define STR_NOT_LOGGED_IN       _("You are not logged in.")
 
 #endif /* !ATHEME_INC_CONSTANTS_H */

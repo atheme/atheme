@@ -52,7 +52,7 @@ ms_cmd_ignore_add(struct sourceinfo *si, int parc, char *parv[])
 	// Does the target account exist?
 	if (!(tmu = myuser_find_ext(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, parv[0]);
 		return;
 	}
 	newnick = entity(tmu)->name;

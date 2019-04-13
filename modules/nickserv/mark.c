@@ -64,7 +64,7 @@ ns_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 			command_success_nodata(si, _("\2%s\2 is now unmarked."), target);
 			return;
 		}
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
 		return;
 	}
 

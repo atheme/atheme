@@ -76,7 +76,7 @@ ms_cmd_sendgroup(struct sourceinfo *si, int parc, char *parv[])
 	mg = group(myentity_find(target));
 	if (mg == NULL)
 	{
-		command_fail(si, fault_nosuch_target, "Group \2%s\2 is not registered.", target);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
 		return;
 	}
 

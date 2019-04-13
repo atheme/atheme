@@ -247,7 +247,7 @@ is_cmd_post(struct sourceinfo *si, int parc, char *parv[])
 	// make sure they're logged in
 	if (!si->smu)
 	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
+		command_fail(si, fault_noprivs, STR_NOT_LOGGED_IN);
 		return;
 	}
 

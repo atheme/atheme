@@ -20,7 +20,7 @@ ns_cmd_logout(struct sourceinfo *si, int parc, char *parv[])
 
 	if ((!si->smu) && (!user || !pass))
 	{
-		command_fail(si, fault_nochange, _("You are not logged in."));
+		command_fail(si, fault_nochange, STR_NOT_LOGGED_IN);
 		return;
 	}
 

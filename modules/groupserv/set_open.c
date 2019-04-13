@@ -30,7 +30,7 @@ gs_cmd_set_open(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!groupacs_sourceinfo_has_flag(mg, si, GA_FOUNDER))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 

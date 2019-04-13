@@ -47,7 +47,7 @@ ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])
 	// Check to see if target user exists
 	if (!(tmu = myuser_find_ext(target)))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
 		return;
 	}
 

@@ -32,7 +32,7 @@ cs_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(target)))
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), target);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
 		return;
 	}
 

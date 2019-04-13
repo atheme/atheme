@@ -16,7 +16,7 @@ os_cmd_soper(struct sourceinfo *const restrict si, const int parc, char **const 
 {
 	if (! has_any_privs(si))
 	{
-		(void) command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		(void) command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 
@@ -93,7 +93,7 @@ os_cmd_soper_add(struct sourceinfo *si, int parc, char *parv[])
 	mu = myuser_find_ext(parv[0]);
 	if (mu == NULL)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, parv[0]);
 		return;
 	}
 
@@ -162,7 +162,7 @@ os_cmd_soper_del(struct sourceinfo *si, int parc, char *parv[])
 	mu = myuser_find_ext(parv[0]);
 	if (mu == NULL)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, parv[0]);
 		return;
 	}
 
@@ -208,7 +208,7 @@ os_cmd_soper_setpass(struct sourceinfo *si, int parc, char *parv[])
 	mu = myuser_find_ext(parv[0]);
 	if (mu == NULL)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, parv[0]);
 		return;
 	}
 

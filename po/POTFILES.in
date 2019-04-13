@@ -1,7 +1,6 @@
 # Please don't update this file manually - use 'make update-potfiles' instead!
 include/atheme/constants.h
 libathemecore/commandhelp.c
-libathemecore/commandtree.c
 libathemecore/ptasks.c
 libathemecore/services.c
 modules/alis/main.c

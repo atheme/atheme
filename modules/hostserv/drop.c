@@ -21,14 +21,14 @@ hs_cmd_drop(struct sourceinfo *si, int parc, char *parv[])
 	// This is only because we need a nick to copy from.
 	if (si->su == NULL)
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 can only be executed via IRC."), "DROP");
+		command_fail(si, fault_noprivs, STR_IRC_COMMAND_ONLY, "DROP");
 		return;
 	}
 
 	mn = mynick_find(si->su->nick);
 	if (mn == NULL)
 	{
-		command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is not registered."), si->su->nick);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, si->su->nick);
 		return;
 	}
 	if (mn->owner != si->smu)

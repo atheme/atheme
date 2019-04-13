@@ -33,7 +33,7 @@ cmd_cs_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 
 	if (! (mc = mychan_find(name)))
 	{
-		(void) command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), name);
+		(void) command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, name);
 		return;
 	}
 
@@ -46,7 +46,7 @@ cmd_cs_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 
 	if (! is_founder(mc, entity(si->smu)))
 	{
-		(void) command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		(void) command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 
@@ -129,7 +129,7 @@ cmd_cs_fdrop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_U
 
 	if (! (mc = mychan_find(name)))
 	{
-		(void) command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), name);
+		(void) command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, name);
 		return;
 	}
 

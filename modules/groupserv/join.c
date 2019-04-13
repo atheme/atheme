@@ -47,7 +47,7 @@ gs_cmd_join(struct sourceinfo *si, int parc, char *parv[])
 
 	if (groupacs_sourceinfo_has_flag(mg, si, GA_BAN))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 

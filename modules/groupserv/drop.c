@@ -40,7 +40,7 @@ gs_cmd_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 
 	if (! groupacs_sourceinfo_has_flag(mg, si, GA_FOUNDER))
 	{
-		(void) command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
+		(void) command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 

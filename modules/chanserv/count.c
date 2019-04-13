@@ -32,7 +32,7 @@ cs_cmd_count(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), chan);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, chan);
 		return;
 	}
 
@@ -42,14 +42,14 @@ cs_cmd_count(struct sourceinfo *si, int parc, char *parv[])
 			operoverride = true;
 		else
 		{
-			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 			return;
 		}
 	}
 
 	if (metadata_find(mc, "private:close:closer"))
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
+		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, chan);
 		return;
 	}
 

@@ -64,7 +64,7 @@ cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 	mc = mychan_find(channel);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, channel);
 		return;
 	}
 
@@ -76,14 +76,14 @@ cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 				operoverride = true;
 			else
 			{
-				command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+				command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 				return;
 			}
 		}
 
 		if (metadata_find(mc, "private:close:closer") && !has_priv(si, PRIV_CHAN_AUSPEX))
 		{
-			command_fail(si, fault_noprivs, _("\2%s\2 is closed."), channel);
+			command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, channel);
 			return;
 		}
 
@@ -124,7 +124,7 @@ cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 
 		if (!si->smu)
 		{
-			command_fail(si, fault_noprivs, _("You are not logged in."));
+			command_fail(si, fault_noprivs, STR_NOT_LOGGED_IN);
 			return;
 		}
 
@@ -136,7 +136,7 @@ cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 		{
 			if (!(restrictflags & CA_FLAGS))
 			{
-				command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
+				command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 				return;
 			}
 			restrictflags = allow_flags(mc, restrictflags);
@@ -144,7 +144,7 @@ cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 
 		if (metadata_find(mc, "private:close:closer"))
 		{
-			command_fail(si, fault_noprivs, _("\2%s\2 is closed."), channel);
+			command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, channel);
 			return;
 		}
 

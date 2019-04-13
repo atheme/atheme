@@ -80,7 +80,7 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		}
 		else {
 			hook_call_user_info_noexist(&noexist_req);
-			command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), name);
+			command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, name);
 		}
 		return;
 	}

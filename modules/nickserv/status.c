@@ -73,7 +73,7 @@ ns_cmd_status(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_GET, "STATUS");
 
 	if (!si->smu)
-		command_success_nodata(si, _("You are not logged in."));
+		command_success_nodata(si, STR_NOT_LOGGED_IN);
 	else
 	{
 		command_success_nodata(si, _("You are logged in as \2%s\2."), entity(si->smu)->name);

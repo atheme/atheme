@@ -220,13 +220,13 @@ cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), chan);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, chan);
 		return;
 	}
 
 	if (metadata_find(mc, "private:close:closer"))
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
+		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, chan);
 		return;
 	}
 
@@ -305,7 +305,7 @@ cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 
 	if ((chanacs_source_flags(mc, si) & (CA_FLAGS | CA_REMOVE)) != (CA_FLAGS | CA_REMOVE))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 
@@ -485,13 +485,13 @@ cs_cmd_akick_del(struct sourceinfo *si, int parc, char *parv[])
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), chan);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, chan);
 		return;
 	}
 
 	if (metadata_find(mc, "private:close:closer"))
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
+		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, chan);
 		return;
 	}
 
@@ -500,7 +500,7 @@ cs_cmd_akick_del(struct sourceinfo *si, int parc, char *parv[])
 
 	if ((chanacs_source_flags(mc, si) & (CA_FLAGS | CA_REMOVE)) != (CA_FLAGS | CA_REMOVE))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 
@@ -614,7 +614,7 @@ cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 		// if they're opers and just want to LIST, they don't have to log in
 		if (!(has_priv(si, PRIV_CHAN_AUSPEX)))
 		{
-			command_fail(si, fault_noprivs, _("You are not logged in."));
+			command_fail(si, fault_noprivs, STR_NOT_LOGGED_IN);
 			return;
 		}
 	}
@@ -622,13 +622,13 @@ cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), chan);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, chan);
 		return;
 	}
 
 	if (metadata_find(mc, "private:close:closer"))
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
+		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, chan);
 		return;
 	}
 
@@ -640,7 +640,7 @@ cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 			operoverride = true;
 		else
 		{
-			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 			return;
 		}
 	}

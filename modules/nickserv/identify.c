@@ -32,7 +32,7 @@ ns_cmd_login(struct sourceinfo *si, int parc, char *parv[])
 
 	if (si->su == NULL)
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 can only be executed via IRC."), COMMAND_UC);
+		command_fail(si, fault_noprivs, STR_IRC_COMMAND_ONLY, COMMAND_UC);
 		return;
 	}
 

@@ -794,7 +794,7 @@ bs_cmd_assign(struct sourceinfo *si, int parc, char *parv[])
 
 	if (mc == NULL)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, parv[0]);
 		return;
 	}
 
@@ -870,7 +870,7 @@ bs_cmd_unassign(struct sourceinfo *si, int parc, char *parv[])
 
 	if (mc == NULL)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, parv[0]);
 		return;
 	}
 

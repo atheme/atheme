@@ -42,7 +42,7 @@ ns_cmd_set_accountname(struct sourceinfo *si, int parc, char *parv[])
 	mn = mynick_find(newname);
 	if (mn == NULL)
 	{
-		command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is not registered."), newname);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, newname);
 		return;
 	}
 	if (mn->owner != si->smu)

@@ -51,12 +51,12 @@ static inline bool gs_do_parameters(struct sourceinfo *si, int *parc, char ***pa
 		mc = mychan_find((*parv)[0]);
 		if (mc == NULL)
 		{
-			command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), (*parv)[0]);
+			command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, (*parv)[0]);
 			return false;
 		}
 		if (mc->chan == NULL)
 		{
-			command_fail(si, fault_nosuch_target, _("\2%s\2 is currently empty."), mc->name);
+			command_fail(si, fault_nosuch_target, STR_CHANNEL_IS_EMPTY, mc->name);
 			return false;
 		}
 		if (module_find_published("chanserv/set_gameserv"))
@@ -92,7 +92,7 @@ static inline bool gs_do_parameters(struct sourceinfo *si, int *parc, char ***pa
 			}
 			if (!allow)
 			{
-				command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+				command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 				return false;
 			}
 		}

@@ -81,7 +81,7 @@ ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 		if (!(tmu = myuser_find_ext(target)))
 		{
 			command_fail(si, fault_nosuch_target,
-				"\2%s\2 is not registered.", target);
+				STR_IS_NOT_REGISTERED, target);
 
 			return;
 		}

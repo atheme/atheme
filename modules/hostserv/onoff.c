@@ -19,14 +19,14 @@ hs_cmd_on(struct sourceinfo *si, int parc, char *parv[])
 
 	if (si->su == NULL)
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 can only be executed via IRC."), "ON");
+		command_fail(si, fault_noprivs, STR_IRC_COMMAND_ONLY, "ON");
 		return;
 	}
 
 	mn = mynick_find(si->su->nick);
 	if (mn == NULL)
 	{
-		command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is not registered."), si->su->nick);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, si->su->nick);
 		return;
 	}
 	if (mn->owner != si->smu && !myuser_access_verify(si->su, mn->owner))
@@ -56,14 +56,14 @@ hs_cmd_off(struct sourceinfo *si, int parc, char *parv[])
 
 	if (si->su == NULL)
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 can only be executed via IRC."), "OFF");
+		command_fail(si, fault_noprivs, STR_IRC_COMMAND_ONLY, "OFF");
 		return;
 	}
 
 	mn = mynick_find(si->su->nick);
 	if (mn == NULL)
 	{
-		command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is not registered."), si->su->nick);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, si->su->nick);
 		return;
 	}
 	if (mn->owner != si->smu && !myuser_access_verify(si->su, mn->owner))

@@ -39,7 +39,7 @@ cmd_ns_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 			}
 		}
 
-		(void) command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), acc);
+		(void) command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, acc);
 		return;
 	}
 
@@ -152,7 +152,7 @@ cmd_ns_fdrop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_U
 			}
 		}
 
-		(void) command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), acc);
+		(void) command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, acc);
 		return;
 	}
 

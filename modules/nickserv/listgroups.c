@@ -33,7 +33,7 @@ ns_cmd_listgroups(struct sourceinfo *si, int parc, char *parv[])
 
 		if (mu == NULL)
 		{
-			command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
+			command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
 			return;
 		}
 	}
@@ -42,7 +42,7 @@ ns_cmd_listgroups(struct sourceinfo *si, int parc, char *parv[])
 		mu = si->smu;
 		if (mu == NULL)
 		{
-			command_fail(si, fault_noprivs, _("You are not logged in."));
+			command_fail(si, fault_noprivs, STR_NOT_LOGGED_IN);
 			return;
 		}
 	}

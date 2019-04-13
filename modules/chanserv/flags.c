@@ -91,7 +91,7 @@ do_list(struct sourceinfo *si, struct mychan *mc, unsigned int flags)
 			operoverride = true;
 		else
 		{
-			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 			return;
 		}
 	}
@@ -180,13 +180,13 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 	mc = mychan_find(channel);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, channel);
 		return;
 	}
 
 	if (metadata_find(mc, "private:close:closer") && (target || !has_priv(si, PRIV_CHAN_AUSPEX)))
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), channel);
+		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, channel);
 		return;
 	}
 
@@ -238,7 +238,7 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 
 		if (!chanacs_source_has_flag(mc, si, CA_FOUNDER))
 		{
-			command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+			command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 			return;
 		}
 
@@ -281,7 +281,7 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 
 		if (!si->smu)
 		{
-			command_fail(si, fault_noprivs, _("You are not logged in."));
+			command_fail(si, fault_noprivs, STR_NOT_LOGGED_IN);
 			return;
 		}
 
@@ -289,7 +289,7 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 		{
 			if (!(mc->flags & MC_PUBACL) && !chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 			{
-				command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
+				command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 				return;
 			}
 			if (validhostmask(target))
@@ -298,7 +298,7 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 			{
 				if (!(mt = myentity_find_ext(target)))
 				{
-					command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
+					command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
 					return;
 				}
 				sfree(target);
@@ -334,7 +334,7 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 						irccasecmp(target, entity(si->smu)->name) ||
 						strcmp(flagstr, "-*"))
 				{
-					command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
+					command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 					return;
 				}
 			}
@@ -372,7 +372,7 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 		{
 			if (!(mt = myentity_find_ext(target)))
 			{
-				command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
+				command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
 				return;
 			}
 			sfree(target);

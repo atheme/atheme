@@ -119,7 +119,7 @@ devoice_user(struct sourceinfo *si, struct mychan *mc, struct channel *c, struct
 		flag = 0;
 	if (flag != 0 && !chanacs_source_has_flag(mc, si, flag))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return DEVOICE_FAILED;
 	}
 
@@ -274,25 +274,25 @@ cs_cmd_quiet(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, channel);
 		return;
 	}
 
 	if (!c)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is currently empty."), channel);
+		command_fail(si, fault_nosuch_target, STR_CHANNEL_IS_EMPTY, channel);
 		return;
 	}
 
 	if (!chanacs_source_has_flag(mc, si, CA_REMOVE))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 
 	if (metadata_find(mc, "private:close:closer"))
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), channel);
+		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, channel);
 		return;
 	}
 
@@ -383,13 +383,13 @@ cs_cmd_unquiet(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, channel);
 		return;
 	}
 
 	if (!c)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is currently empty."), channel);
+		command_fail(si, fault_nosuch_target, STR_CHANNEL_IS_EMPTY, channel);
 		return;
 	}
 
@@ -398,7 +398,7 @@ cs_cmd_unquiet(struct sourceinfo *si, int parc, char *parv[])
 			 !chanacs_source_has_flag(mc, si, CA_EXEMPT) ||
 			 irccasecmp(target, si->su->nick)))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 

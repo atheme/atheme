@@ -37,7 +37,7 @@ cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!si->smu)
 	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
+		command_fail(si, fault_noprivs, STR_NOT_LOGGED_IN);
 		return;
 	}
 
@@ -49,7 +49,7 @@ cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!(mt = myentity_find_ext(newfounder)))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), newfounder);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, newfounder);
 		return;
 	}
 	if (!isuser(mt))
@@ -60,7 +60,7 @@ cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, parv[0]);
 		return;
 	}
 

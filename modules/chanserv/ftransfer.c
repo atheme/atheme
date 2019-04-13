@@ -29,7 +29,7 @@ cs_cmd_ftransfer(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!(mt = myentity_find_ext(newfndr)))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), newfndr);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, newfndr);
 		return;
 	}
 
@@ -41,7 +41,7 @@ cs_cmd_ftransfer(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(name)))
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), name);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, name);
 		return;
 	}
 

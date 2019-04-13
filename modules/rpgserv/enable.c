@@ -26,7 +26,7 @@ rs_cmd_enable(struct sourceinfo *si, int parc, char *parv[])
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), chan);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, chan);
 		return;
 	}
 
@@ -57,7 +57,7 @@ rs_cmd_disable(struct sourceinfo *si, int parc, char *parv[])
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), chan);
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, chan);
 		return;
 	}
 
