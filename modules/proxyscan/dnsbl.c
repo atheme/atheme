@@ -279,14 +279,14 @@ dnsbl_hit(struct user *u, struct Blacklist *blptr)
 		case DNSBL_ACT_KLINE:
 			if (! (u->flags & UF_KLINESENT)) {
 				slog(LG_INFO, "DNSBL: k-lining \2%s\2!%s@%s [%s] who is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
-				notice(svs->nick, u->nick, _("Your IP address %s is listed in DNS Blacklist %s"), u->ip, blptr->host);
+				notice(svs->nick, u->nick, "Your IP address %s is listed in DNS Blacklist %s", u->ip, blptr->host);
 				kline_add("*", u->ip, "Banned (DNS Blacklist)", 86400, "Proxyscan");
 				u->flags |= UF_KLINESENT;
 			}
 			break;
 
 		case DNSBL_ACT_NOTIFY:
-			notice(svs->nick, u->nick, _("Your IP address %s is listed in DNS Blacklist %s"), u->ip, blptr->host);
+			notice(svs->nick, u->nick, "Your IP address %s is listed in DNS Blacklist %s", u->ip, blptr->host);
 			// FALLTHROUGH
 		case DNSBL_ACT_SNOOP:
 			slog(LG_INFO, "DNSBL: \2%s\2!%s@%s [%s] is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
