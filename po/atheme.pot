@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-04-13 10:31+0000\n"
+"POT-Creation-Date: 2019-04-13 11:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -5233,11 +5233,6 @@ msgstr ""
 msgid "Please double-check your verification e-mail."
 msgstr ""
 
-#: modules/nickserv/main.c:74
-#, c-format
-msgid "Please identify via /%s%s identify <password>."
-msgstr ""
-
 #: modules/nickserv/verify.c:39
 msgid "Please log in before attempting to verify your registration."
 msgstr ""
@@ -8072,11 +8067,6 @@ msgstr ""
 msgid "This mark does not exist."
 msgstr ""
 
-#: modules/nickserv/main.c:79
-#, c-format
-msgid "This nickname is registered. Please choose a different nickname, or identify via /%s%s identify <password>."
-msgstr ""
-
 #: modules/nickserv/sendpass.c:139 modules/nickserv/sendpass_user.c:92
 #, c-format
 msgid "This operation cannot be performed on %s, because someone is logged in to it."
@@ -8144,17 +8134,6 @@ msgstr ""
 
 #: modules/contrib/cs_fregister.c:33
 msgid "To forcibly register a channel: FREGISTER <#channel>"
-msgstr ""
-
-#: modules/contrib/ms_fsend.c:131 modules/memoserv/forward.c:164 modules/memoserv/sendall.c:144
-#: modules/memoserv/send.c:163 modules/memoserv/sendgroup.c:154 modules/memoserv/sendops.c:165
-#, c-format
-msgid "To read it, type /%s%s READ %zu"
-msgstr ""
-
-#: modules/memoserv/main.c:28 modules/memoserv/main.c:60
-#, c-format
-msgid "To read them, type /%s%s READ NEW"
 msgstr ""
 
 #: modules/chanserv/register.c:38
@@ -8607,13 +8586,6 @@ msgstr ""
 msgid "We won't go there"
 msgstr ""
 
-#: modules/nickserv/main.c:55
-#, c-format
-msgid ""
-"Welcome to %s, %s! Here on %s, we provide services to enable the registration of nicknames and channels! For "
-"details, type /%s%s help and /%s%s help."
-msgstr ""
-
 #: modules/operserv/info.c:22
 #, c-format
 msgid "Will services be sending WALLOPS/GLOBOPS about various things: %s"
@@ -8969,16 +8941,6 @@ msgstr ""
 msgid "You do not have the privileges to execute any subcommands."
 msgstr ""
 
-#: modules/memoserv/main.c:25 modules/memoserv/main.c:57
-#, c-format
-msgid "You have %u new memo."
-msgstr ""
-
-#: modules/memoserv/main.c:26 modules/memoserv/main.c:58
-#, c-format
-msgid "You have %u new memos."
-msgstr ""
-
 #: modules/memoserv/list.c:25
 #, c-format
 msgid "You have %zu memo (%u new)."
@@ -9298,21 +9260,12 @@ msgstr ""
 msgid "You're already on %s."
 msgstr ""
 
-#: modules/proxyscan/dnsbl.c:282 modules/proxyscan/dnsbl.c:289
-#, c-format
-msgid "Your IP address %s is listed in DNS Blacklist %s"
-msgstr ""
-
 #: modules/chanserv/halfop.c:29
 msgid "Your IRC server does not support halfops."
 msgstr ""
 
 #: modules/nickserv/access.c:371
 msgid "Your access list is full."
-msgstr ""
-
-#: modules/nickserv/vacation.c:46
-msgid "Your account is no longer marked as being on vacation."
 msgstr ""
 
 #: modules/nickserv/vacation.c:32
@@ -9361,10 +9314,6 @@ msgstr ""
 #: modules/contrib/ms_fsend.c:65 modules/memoserv/sendall.c:70 modules/memoserv/send.c:70
 #: modules/memoserv/sendgroup.c:72 modules/memoserv/sendops.c:71
 msgid "Your memo contains invalid characters."
-msgstr ""
-
-#: modules/memoserv/main.c:33 modules/memoserv/main.c:65
-msgid "Your memo inbox is full! Please delete memos you no longer need."
 msgstr ""
 
 #: modules/nickserv/set_pubkey.c:44 modules/saslserv/ecdh-x25519-challenge.c:357

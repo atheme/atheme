@@ -162,7 +162,6 @@ modules/memoserv/forward.c
 modules/memoserv/help.c
 modules/memoserv/ignore.c
 modules/memoserv/list.c
-modules/memoserv/main.c
 modules/memoserv/read.c
 modules/memoserv/sendall.c
 modules/memoserv/send.c
