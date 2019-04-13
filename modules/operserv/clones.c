@@ -239,7 +239,9 @@ os_cmd_clones_kline(struct sourceinfo *si, int parc, char *parv[])
 		}
 		kline_enabled = true;
 		grace_count = newgrace;
-		command_success_nodata(si, _("Enabled CLONES klines with a grace of %u kills"), grace_count);
+		command_success_nodata(si, ngettext(N_("Enabled CLONES klines with a grace of %u kill"),
+		                                    N_("Enabled CLONES klines with a grace of %u kills"),
+		                                    grace_count), grace_count);
 		wallops("\2%s\2 enabled CLONES klines with a grace of %u kills", get_oper_name(si), grace_count);
 		logcommand(si, CMDLOG_ADMIN, "CLONES:KLINE:ON grace %u", grace_count);
 	}
@@ -248,7 +250,9 @@ os_cmd_clones_kline(struct sourceinfo *si, int parc, char *parv[])
 		if (kline_enabled)
 		{
 			if (grace_count)
-				command_success_string(si, "ON", _("CLONES klines are currently enabled with a grace of %u kills."), grace_count);
+				command_success_string(si, "ON", ngettext(N_("CLONES klines are currently enabled with a grace of %u kill."),
+				                                          N_("CLONES klines are currently enabled with a grace of %u kills."),
+				                                          grace_count), grace_count);
 			else
 				command_success_string(si, "ON", _("CLONES klines are currently enabled."));
 		}

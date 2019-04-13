@@ -59,7 +59,11 @@ static void
 ss_cmd_channel_count(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc,
                      char ATHEME_VATTR_UNUSED **const restrict parv)
 {
-	(void) command_success_nodata(si, _("There are %u channels on the network."), mowgli_patricia_size(chanlist));
+	const unsigned int chancount = mowgli_patricia_size(chanlist);
+
+	(void) command_success_nodata(si, ngettext(N_("There is %u channel on the network."),
+	                                           N_("There are %u channels on the network."),
+	                                           chancount), chancount);
 }
 
 static struct command ss_channel = {

@@ -164,7 +164,10 @@ ms_cmd_sendgroup(struct sourceinfo *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_ADMIN, "SENDGROUP: to \2%s\2 (%u/%u sent) (oper override)", entity(mg)->name, sent, tried);
 	else
 		logcommand(si, CMDLOG_SET, "SENDGROUP: to \2%s\2 (%u/%u sent)", entity(mg)->name, sent, tried);
-	command_success_nodata(si, _("The memo has been successfully sent to %u members on \2%s\2."), sent, entity(mg)->name);
+
+	command_success_nodata(si, ngettext(N_("The memo has been successfully sent to %u member on \2%s\2."),
+	                                    N_("The memo has been successfully sent to %u members on \2%s\2."),
+	                                    sent), sent, entity(mg)->name);
 	return;
 }
 

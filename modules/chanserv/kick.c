@@ -144,7 +144,10 @@ cs_cmd_kickban(struct sourceinfo *si, int parc, char *parv[])
 	ban(si->service->me, mc->chan, tu);
 	n = remove_ban_exceptions(si->service->me, mc->chan, tu);
 	if (n > 0)
-		command_success_nodata(si, _("To avoid rejoin, %u ban exception(s) matching \2%s\2 have been removed from \2%s\2."), n, tu->nick, mc->name);
+		command_success_nodata(si, ngettext(N_("To avoid rejoin, %u ban exception matching \2%s\2 has been removed from \2%s\2."),
+		                                    N_("To avoid rejoin, %u ban exceptions matching \2%s\2 have been removed from \2%s\2."),
+		                                    n), n, tu->nick, mc->name);
+
 	try_kick(chansvs.me->me, mc->chan, tu, reasonbuf);
 	logcommand(si, CMDLOG_DO, "KICKBAN: \2%s!%s@%s\2 from \2%s\2", tu->nick, tu->user, tu->vhost, mc->name);
 	if (si->su == NULL ||

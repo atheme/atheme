@@ -150,8 +150,9 @@ cs_cmd_unban(struct sourceinfo *si, int parc, char *parv[])
 			count++;
 		}
 		if (count > 0)
-			command_success_nodata(si, _("Unbanned \2%s\2 on \2%s\2 (%u bans removed)."),
-				target, channel, count);
+			command_success_nodata(si, ngettext(N_("Unbanned \2%s\2 on \2%s\2 (%u ban removed)."),
+			                                    N_("Unbanned \2%s\2 on \2%s\2 (%u bans removed)."),
+			                                    count), target, channel, count);
 		else
 			command_success_nodata(si, _("No bans found matching \2%s\2 on \2%s\2."), target, channel);
 		return;

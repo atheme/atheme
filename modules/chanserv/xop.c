@@ -229,8 +229,9 @@ cs_xop_do_list(struct sourceinfo *si, struct mychan *mc, unsigned int level, con
 		}
 	}
 
-	// XXX
-	command_success_nodata(si, _("Total of \2%u\2 entries in %s list of \2%s\2."), i, leveldesc, mc->name);
+	command_success_nodata(si, ngettext(N_("Total of \2%u\2 entry in %s list of \2%s\2."),
+	                                    N_("Total of \2%u\2 entries in %s list of \2%s\2."),
+	                                    i), i, leveldesc, mc->name);
 
 	if (operoverride)
 		logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 \2%s\2 (oper override)", mc->name, leveldesc);
@@ -511,7 +512,9 @@ cs_cmd_forcexop(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, "%s: %s -> %s", ca->entity != NULL ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), desc);
 		chanacs_modify_simple(ca, newlevel, ~newlevel, si->smu);
 	}
-	command_success_nodata(si, _("FORCEXOP \2%s\2 done (\2%u\2 changes)"), mc->name, changes);
+	command_success_nodata(si, ngettext(N_("FORCEXOP \2%s\2 done (\2%u\2 change)"),
+	                                    N_("FORCEXOP \2%s\2 done (\2%u\2 changes)"),
+	                                    changes), mc->name, changes);
 	if (changes > 0)
 		verbose(mc, "\2%s\2 reset access levels to xOP (\2%u\2 changes)", get_source_name(si), changes);
 	logcommand(si, CMDLOG_SET, "FORCEXOP: \2%s\2 (\2%u\2 changes)", mc->name, changes);

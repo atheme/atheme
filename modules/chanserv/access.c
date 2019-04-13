@@ -429,7 +429,9 @@ update_role_entry(struct sourceinfo *si, struct mychan *mc, const char *role, un
 	logcommand(si, CMDLOG_SET, "ROLE:MOD: \2%s\2 \2%s\2 !\2%s\2 (\2%u\2 changes)", mc->name, role, flagstr, changes);
 
 	if (changes > 0)
-		command_success_nodata(si, _("%u access entries updated accordingly."), changes);
+		command_success_nodata(si, ngettext(N_("%u access entry updated accordingly."),
+		                                    N_("%u access entries updated accordingly."),
+		                                    changes), changes);
 }
 
 static unsigned int
@@ -828,7 +830,9 @@ cs_cmd_access_add(struct sourceinfo *si, int parc, char *parv[])
 	{
 		if (mychan_num_founders(mc) >= chansvs.maxfounders)
 		{
-			command_fail(si, fault_noprivs, _("Only %u founders allowed per channel."), chansvs.maxfounders);
+			command_fail(si, fault_noprivs, ngettext(N_("Only %u founder allowed per channel."),
+			                                         N_("Only %u founders allowed per channel."),
+			                                         chansvs.maxfounders), chansvs.maxfounders);
 			chanacs_close(ca);
 			return;
 		}
@@ -975,7 +979,9 @@ cs_cmd_access_set(struct sourceinfo *si, int parc, char *parv[])
 	{
 		if (mychan_num_founders(mc) >= chansvs.maxfounders)
 		{
-			command_fail(si, fault_noprivs, _("Only %u founders allowed per channel."), chansvs.maxfounders);
+			command_fail(si, fault_noprivs, ngettext(N_("Only %u founder allowed per channel."),
+			                                         N_("Only %u founders allowed per channel."),
+			                                         chansvs.maxfounders), chansvs.maxfounders);
 			chanacs_close(ca);
 			return;
 		}

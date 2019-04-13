@@ -394,7 +394,9 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 			{
 				if (mychan_num_founders(mc) >= chansvs.maxfounders)
 				{
-					command_fail(si, fault_noprivs, _("Only %u founders allowed per channel."), chansvs.maxfounders);
+					command_fail(si, fault_noprivs, ngettext(N_("Only %u founder allowed per channel."),
+					                                         N_("Only %u founders allowed per channel."),
+					                                         chansvs.maxfounders), chansvs.maxfounders);
 					chanacs_close(ca);
 					return;
 				}

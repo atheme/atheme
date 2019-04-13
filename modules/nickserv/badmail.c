@@ -223,7 +223,9 @@ ns_cmd_badmail(struct sourceinfo *si, int parc, char *parv[])
 			}
 		}
 		if (count)
-			command_success_nodata(si, _("%u badmail pattern(s) disallowing \2%s\2 found."), count, email);
+			command_success_nodata(si, ngettext(N_("%u badmail pattern disallowing \2%s\2 found."),
+			                                    N_("%u badmail patterns disallowing \2%s\2 found."),
+			                                    count), count, email);
 		else
 			command_success_nodata(si, _("\2%s\2 is not listed in the badmail database."), email);
 

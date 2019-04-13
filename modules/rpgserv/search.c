@@ -66,7 +66,10 @@ __matched:
 		command_success_nodata(si, _("System: %s"), rs_prettyprint_keywords(md, system_keys, system_names, ARRAY_SIZE(system_keys)));
 	}
 
-	command_success_nodata(si, _("\2%u\2 channels met your criteria."), listed);
+	command_success_nodata(si, ngettext(N_("\2%u\2 channel met your criteria."),
+	                                    N_("\2%u\2 channels met your criteria."),
+	                                    listed), listed);
+
 	command_success_nodata(si, _("For more information on a specific channel, use \2/msg %s INFO <channel>\2."), si->service->disp);
 
 	logcommand(si, CMDLOG_GET, "RPGSERV:SEARCH");

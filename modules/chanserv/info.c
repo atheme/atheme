@@ -79,7 +79,7 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	if (CURRTIME - mc->used >= 86400)
 	{
 		if (hide_info)
-			command_success_nodata(si, _("Last used  : (about %u weeks ago)"), (unsigned int)((CURRTIME - mc->used) / 604800));
+			command_success_nodata(si, _("Last used  : (about %u week(s) ago)"), (unsigned int)((CURRTIME - mc->used) / 604800));
 		else
 		{
 			tm = *localtime(&mc->used);
@@ -115,7 +115,8 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!hide_info)
 	{
-		unsigned long mdcount = 0;
+		unsigned int mdcount = 0;
+
 		MOWGLI_PATRICIA_FOREACH(md, &state, atheme_object(mc)->metadata)
 		{
 			if (!strncmp(md->name, "private:", 8))
@@ -134,10 +135,14 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 
 		if (mdcount && !show_custom_metadata)
 		{
+			command_success_nodata(si, ngettext(N_("%u custom metadata entry not shown."),
+			                                    N_("%u custom metadata entries not shown."),
+			                                    mdcount), mdcount);
+
 			if (module_find_published("chanserv/taxonomy"))
-				command_success_nodata(si, ngettext(N_("%lu custom metadata entry not shown; use \2/msg %s TAXONOMY %s\2 to view it."), N_("%lu custom metadata entries not shown; use \2/msg %s TAXONOMY %s\2 to view them."), mdcount), mdcount, si->service->disp, name);
-			else
-				command_success_nodata(si, ngettext(N_("%lu custom metadata entry not shown."), N_("%lu custom metadata entries not shown."), mdcount), mdcount);
+				command_success_nodata(si, ngettext(N_("Use \2/msg %s TAXONOMY %s\2 to view it."),
+				                                    N_("Use \2/msg %s TAXONOMY %s\2 to view them."),
+				                                    mdcount), si->service->disp, name);
 		}
 	}
 

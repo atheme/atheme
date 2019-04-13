@@ -25,6 +25,7 @@ update-pot: update-potfiles
 	    --package-version="$(PACKAGE_VERSION)"              \
 	    --copyright-holder="$(VENDOR_STRING)"               \
 	    --msgid-bugs-address="<$(PACKAGE_BUGREPORT)>"       \
+	    --add-comments="TRANSLATORS"                        \
 	    --directory=".."                                    \
 	    --files-from="POTFILES.in"                          \
 	    --from-code="utf-8"                                 \

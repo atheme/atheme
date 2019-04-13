@@ -378,7 +378,9 @@ cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 			mowgli_strlcpy(flagstr2, flagstr, sizeof flagstr2);
 			if (changes > 0)
 				verbose(mc, "\2%s\2 set \2%s\2 on %u access entries with flags \2%s\2.", get_source_name(si), flagstr2, changes, bitmask_to_flags(oldflags));
-			command_success_nodata(si, _("%u access entries updated accordingly."), changes);
+			command_success_nodata(si, ngettext(N_("%u access entry updated accordingly."),
+			                                    N_("%u access entries updated accordingly."),
+			                                    changes), changes);
 			if (founderskipped)
 				command_success_nodata(si, _("Not updating %u access entries involving founder status. Please do it manually."), founderskipped);
 		}

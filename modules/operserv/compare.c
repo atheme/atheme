@@ -148,7 +148,9 @@ os_cmd_compare(struct sourceinfo *si, int parc, char *parv[])
 	if (buf[0] != 0)
 		command_success_nodata(si, "%s", buf);
 
-	command_success_nodata(si, _("\2%u\2 matches comparing %s and %s"), matches, object1, object2);
+	command_success_nodata(si, ngettext(N_("\2%u\2 match comparing \2%s\2 and \2%s\2"),
+	                                    N_("\2%u\2 matches comparing \2%s\2 and \2%s\2"),
+	                                    matches), matches, object1, object2);
 	logcommand(si, CMDLOG_ADMIN, "COMPARE: \2%s\2 to \2%s\2 (\2%u\2 matches)", object1, object2, matches);
 }
 

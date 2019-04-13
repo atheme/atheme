@@ -112,7 +112,7 @@ os_cmd_clearchan(struct sourceinfo *si, int parc, char *parv[])
 		}
 	}
 
-	command_success_nodata(si, _("\2%u\2 matches, \2%u\2 ignores for \2%s\2 on \2%s\2"), matches, ignores, actionstr, targchan);
+	command_success_nodata(si, _("\2%u\2 match(es), \2%u\2 ignore(s) for \2%s\2 on \2%s\2"), matches, ignores, actionstr, targchan);
 	logcommand(si, CMDLOG_ADMIN, "CLEARCHAN: \2%s\2 \2%s\2 (reason: \2%s\2) (\2%u\2 matches, \2%u\2 ignores)", actionstr, targchan, treason, matches, ignores);
 }
 

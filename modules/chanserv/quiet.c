@@ -316,7 +316,9 @@ cs_cmd_quiet(struct sourceinfo *si, int parc, char *parv[])
 			cb = place_quietmask(c, MTYPE_ADD, hostbuf);
 			n = remove_ban_exceptions(si->service->me, c, tu);
 			if (n > 0)
-				command_success_nodata(si, _("To ensure the quiet takes effect, %u ban exception(s) matching \2%s\2 have been removed from \2%s\2."), n, tu->nick, c->name);
+				command_success_nodata(si, ngettext(N_("To ensure the quiet takes effect, %u ban exception matching \2%s\2 has been removed from \2%s\2."),
+				                                    N_("To ensure the quiet takes effect, %u ban exceptions matching \2%s\2 have been removed from \2%s\2."),
+				                                    n), n, tu->nick, c->name);
 
 			// Notify if we did anything.
 			if (cb != NULL)
@@ -426,8 +428,9 @@ cs_cmd_unquiet(struct sourceinfo *si, int parc, char *parv[])
 				// one notification only
 				if (chanuser_find(c, tu))
 					notify_one_victim(si, c, tu, MTYPE_DEL);
-				command_success_nodata(si, _("Unquieted \2%s\2 on \2%s\2 (%u quiets removed)."),
-					target, channel, count);
+				command_success_nodata(si, ngettext(N_("Unquieted \2%s\2 on \2%s\2 (%u quiet removed)."),
+				                                    N_("Unquieted \2%s\2 on \2%s\2 (%u quiets removed)."),
+				                                    count), target, channel, count);
 			}
 			else
 				command_success_nodata(si, _("No quiets found matching \2%s\2 on \2%s\2."), target, channel);

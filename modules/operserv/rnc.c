@@ -63,7 +63,10 @@ os_cmd_rnc(struct sourceinfo *si, int parc, char *parv[])
 		if (biggest == NULL)
 			break;
 
-		command_success_nodata(si, _("\2%u\2: \2%u\2 matches for realname \2%s\2"), i, biggest->count, biggest->gecos);
+		command_success_nodata(si, ngettext(N_("\2%u\2: \2%u\2 match for realname \2%s\2"),
+		                                    N_("\2%u\2: \2%u\2 matches for realname \2%s\2"),
+		                                    biggest->count), i, biggest->count, biggest->gecos);
+
 		mowgli_patricia_delete(realnames, biggest->gecos);
 		sfree(biggest);
 	}

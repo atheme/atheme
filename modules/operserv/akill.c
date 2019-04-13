@@ -463,7 +463,9 @@ os_cmd_akill_list(struct sourceinfo *si, int parc, char *parv[])
 	if (user || host || num)
 		command_success_nodata(si, _("End of AKILL list."));
 	else
-		command_success_nodata(si, _("Total of \2%zu\2 %s in AKILL list."), klnlist.count, (klnlist.count == 1) ? "entry" : "entries");
+		command_success_nodata(si, ngettext(N_("Total of \2%zu\2 entry in AKILL list."),
+		                                    N_("Total of \2%zu\2 entries in AKILL list."),
+		                                    klnlist.count), klnlist.count);
 	if (user || host)
 		logcommand(si, CMDLOG_GET, "AKILL:LIST: \2%s@%s\2", user ? user : "*", host ? host : "*");
 	else if (num)

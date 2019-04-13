@@ -119,7 +119,9 @@ ms_cmd_read(struct sourceinfo *si, int parc, char *parv[])
 	if (readnew && numread == 0)
 		command_fail(si, fault_nosuch_key, _("You have no new memos."));
 	else if (readnew)
-		command_success_nodata(si, _("Read %u memos."), numread);
+		command_success_nodata(si, ngettext(N_("Read %u memo."),
+		                                    N_("Read %u memos."),
+		                                    numread), numread);
 }
 
 static struct command ms_read = {

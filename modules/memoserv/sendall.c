@@ -151,7 +151,9 @@ ms_cmd_sendall(struct sourceinfo *si, int parc, char *parv[])
 	else if (sent > 1)
 		command_add_flood(si, FLOOD_MODERATE);
 	logcommand(si, CMDLOG_ADMIN, "SENDALL: \2%s\2 (%u/%u sent)", m, sent, tried);
-	command_success_nodata(si, _("The memo has been successfully sent to %u accounts."), sent);
+	command_success_nodata(si, ngettext(N_("The memo has been successfully sent to %u account."),
+	                                    N_("The memo has been successfully sent to %u accounts."),
+	                                    sent), sent);
 	return;
 }
 

@@ -82,8 +82,9 @@ cs_cmd_clear_bans(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_DO, "CLEAR:BANS: \2%s\2 on \2%s\2",
 			item, mc->name);
 
-	command_success_nodata(si, _("Cleared %s modes on \2%s\2 (%u removed)."),
-			item, parv[0], hits);
+	command_success_nodata(si, ngettext(N_("Cleared \2%s\2 modes on \2%s\2 (%u entry removed)."),
+	                                    N_("Cleared \2%s\2 modes on \2%s\2 (%u entries removed)."),
+	                                    hits), item, parv[0], hits);
 }
 
 static struct command cs_clear_bans = {

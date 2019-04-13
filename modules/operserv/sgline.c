@@ -289,7 +289,10 @@ os_cmd_sgline_list(struct sourceinfo *si, int parc, char *parv[])
 			command_success_nodata(si, _("%u: %s - by \2%s\2 - \2permanent\2"), x->number, x->realname, x->setby);
 	}
 
-	command_success_nodata(si, _("Total of \2%zu\2 %s in SGLINE list."), xlnlist.count, (xlnlist.count == 1) ? "entry" : "entries");
+	command_success_nodata(si, ngettext(N_("Total of \2%zu\2 entry in SGLINE list."),
+	                                    N_("Total of \2%zu\2 entries in SGLINE list."),
+	                                    xlnlist.count), xlnlist.count);
+
 	logcommand(si, CMDLOG_GET, "SGLINE:LIST: \2%s\2", full ? " FULL" : "");
 }
 

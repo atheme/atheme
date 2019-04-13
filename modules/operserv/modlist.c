@@ -22,15 +22,16 @@ os_cmd_modlist(struct sourceinfo *si, int parc, char *parv[])
 
 		if (has_priv(si, PRIV_SERVER_AUSPEX))
 		{
-			command_success_nodata(si, _("%2u: %-20s [loaded at %p]"),
+			command_success_nodata(si, "%2u: %-20s [%p]",
 				++i, m->name, m->address);
 		}
 		else
 		{
-			command_success_nodata(si, _("%2u: %-20s"), ++i, m->name);
+			command_success_nodata(si, "%2u: %-20s", ++i, m->name);
 		}
 	}
 
+	// TRANSLATORS: cannot ever be singular; is always plural
 	command_success_nodata(si, _("\2%u\2 modules loaded."), i);
 	logcommand(si, CMDLOG_GET, "MODLIST");
 }

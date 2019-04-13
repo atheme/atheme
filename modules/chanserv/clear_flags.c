@@ -58,7 +58,9 @@ cs_cmd_clear_flags(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	logcommand(si, CMDLOG_DO, "CLEAR:FLAGS: \2%s\2", mc->name);
-	command_success_nodata(si, _("Cleared flags in \2%s\2."), name);
+	command_success_nodata(si, ngettext(N_("Cleared %u access entry in \2%s\2."),
+	                                    N_("Cleared %u access entries in \2%s\2."),
+	                                    changes), changes, name);
 	if (changes > 0)
 		verbose(mc, "\2%s\2 removed all %u non-founder access entries.", get_source_name(si), changes);
 }

@@ -175,7 +175,10 @@ ms_cmd_sendops(struct sourceinfo *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_ADMIN, "SENDOPS: to \2%s\2 (%u/%u sent) (oper override)", mc->name, sent, tried);
 	else
 		logcommand(si, CMDLOG_SET, "SENDOPS: to \2%s\2 (%u/%u sent)", mc->name, sent, tried);
-	command_success_nodata(si, _("The memo has been successfully sent to %u ops on \2%s\2."), sent, mc->name);
+
+	command_success_nodata(si, ngettext(N_("The memo has been successfully sent to %u op on \2%s\2."),
+	                                    N_("The memo has been successfully sent to %u ops on \2%s\2."),
+	                                    sent), sent, mc->name);
 	return;
 }
 

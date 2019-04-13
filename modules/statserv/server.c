@@ -92,6 +92,7 @@ static void
 ss_cmd_server_count(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc,
                     char ATHEME_VATTR_UNUSED **const restrict parv)
 {
+	// TRANSLATORS: cannot ever be singular; is always plural
 	(void) command_success_nodata(si, _("Network size: %u servers"), mowgli_patricia_size(servlist));
 }
 

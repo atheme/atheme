@@ -82,7 +82,10 @@ os_cmd_rmatch(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	regex_destroy(regex);
-	command_success_nodata(si, _("\2%u\2 matches for %s"), matches, pattern);
+	command_success_nodata(si, ngettext(N_("\2%u\2 match for pattern \2%s\2"),
+	                                    N_("\2%u\2 matches for pattern \2%s\2"),
+	                                    matches), matches, pattern);
+
 	logcommand(si, CMDLOG_ADMIN, "RMATCH: \2%s\2 (\2%u\2 matches)", pattern, matches);
 }
 
