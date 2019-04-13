@@ -5,4 +5,5 @@ echo "# Please don't update this file manually - use 'make update-potfiles' inst
 cd ..
 
 echo 'include/atheme/constants.h' >> po/POTFILES.in
-find libathemecore/ modules/ src/ \( -name "*.c" -o -name "*.cxx" -o -name "*.cc" -o -name "*.glade" \) -exec grep -lE "translatable|_\(" \{\} \+ | sort | uniq >> po/POTFILES.in
+find libathemecore/ modules/ src/ -name '*.[ch]' -exec grep -lE 'translatable|_\(' '{}' \+ | \
+    sort | uniq | grep -v modules/contrib/ >> po/POTFILES.in
