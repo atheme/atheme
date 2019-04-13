@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-04-13 14:56+0000\n"
+"POT-Creation-Date: 2019-04-13 16:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -208,7 +208,7 @@ msgstr ""
 msgid "%s cannot bypass registration limits."
 msgstr ""
 
-#: modules/chanserv/access.c:853 modules/chanserv/fflags.c:84 modules/chanserv/flags.c:411
+#: modules/chanserv/access.c:853 modules/chanserv/fflags.c:87 modules/chanserv/flags.c:414
 #: modules/chanserv/ftransfer.c:38
 #, c-format
 msgid "%s cannot take foundership of a channel."
@@ -234,7 +234,7 @@ msgstr ""
 msgid "%s does not have an operclass set."
 msgstr ""
 
-#: modules/chanserv/flags.c:429 modules/chanserv/xop.c:98 modules/groupserv/flags.c:115
+#: modules/chanserv/flags.c:432 modules/chanserv/xop.c:98 modules/groupserv/flags.c:115
 #, c-format
 msgid "%s does not wish to be added to channel access lists (NEVEROP set)."
 msgstr ""
@@ -421,13 +421,13 @@ msgstr ""
 msgid "%s has too many accounts registered."
 msgstr ""
 
-#: modules/chanserv/access.c:847 modules/chanserv/access.c:996 modules/chanserv/flags.c:405
+#: modules/chanserv/access.c:847 modules/chanserv/access.c:996 modules/chanserv/flags.c:408
 #: modules/chanserv/set_founder.c:102
 #, c-format
 msgid "%s has too many channels registered."
 msgstr ""
 
-#: modules/nickserv/drop.c:36 modules/nickserv/drop.c:149
+#: modules/nickserv/drop.c:36 modules/nickserv/drop.c:145
 #, c-format
 msgid "%s is a grouped nick, use %s to remove it."
 msgstr ""
@@ -1375,37 +1375,37 @@ msgstr ""
 msgid "%s is currently online, and you may talk directly, by sending a private message."
 msgstr ""
 
-#: modules/operserv/set.c:329
+#: modules/operserv/set.c:318
 #, c-format
 msgid "%s is invalid for MAXCHANACS value."
 msgstr ""
 
-#: modules/operserv/set.c:191
+#: modules/operserv/set.c:180
 #, c-format
 msgid "%s is invalid for MAXCHANS value."
 msgstr ""
 
-#: modules/operserv/set.c:359
+#: modules/operserv/set.c:348
 #, c-format
 msgid "%s is invalid for MAXFOUNDERS value."
 msgstr ""
 
-#: modules/operserv/set.c:110
+#: modules/operserv/set.c:99
 #, c-format
 msgid "%s is invalid for MAXLOGINS value."
 msgstr ""
 
-#: modules/operserv/set.c:164
+#: modules/operserv/set.c:153
 #, c-format
 msgid "%s is invalid for MAXNICKS value."
 msgstr ""
 
-#: modules/operserv/set.c:137
+#: modules/operserv/set.c:126
 #, c-format
 msgid "%s is invalid for MAXUSERS value."
 msgstr ""
 
-#: modules/operserv/set.c:218
+#: modules/operserv/set.c:207
 #, c-format
 msgid "%s is invalid for MDLIMIT value."
 msgstr ""
@@ -1510,12 +1510,12 @@ msgstr ""
 msgid "%smodified: %s"
 msgstr ""
 
-#: modules/chanserv/access.c:433 modules/chanserv/template.c:382
+#: modules/chanserv/access.c:433 modules/chanserv/template.c:385
 #, c-format
 msgid "%u access entries updated accordingly."
 msgstr ""
 
-#: modules/chanserv/access.c:432 modules/chanserv/template.c:381
+#: modules/chanserv/access.c:432 modules/chanserv/template.c:384
 #, c-format
 msgid "%u access entry updated accordingly."
 msgstr ""
@@ -1694,7 +1694,7 @@ msgstr ""
 msgid "AKICK on %s was successfully added to the AKICK list for %s."
 msgstr ""
 
-#: modules/operserv/set.c:386
+#: modules/operserv/set.c:375
 #, c-format
 msgid "AKICKTIME must be a positive integer, %s is invalid"
 msgstr ""
@@ -1795,11 +1795,11 @@ msgstr ""
 msgid "Activates your assigned vhost."
 msgstr ""
 
-#: modules/chanserv/access.c:1389
+#: modules/chanserv/access.c:1391
 msgid "Add a role."
 msgstr ""
 
-#: modules/chanserv/access.c:1362
+#: modules/chanserv/access.c:1364
 msgid "Add an access list entry."
 msgstr ""
 
@@ -1845,12 +1845,12 @@ msgstr ""
 msgid "Added mask %s to your access list."
 msgstr ""
 
-#: modules/chanserv/template.c:349
+#: modules/chanserv/template.c:352
 #, c-format
 msgid "Added template %s with flags %s in %s."
 msgstr ""
 
-#: modules/chanserv/access.c:1219
+#: modules/chanserv/access.c:1220
 msgid "Adding or removing founder status from a role is not implemented."
 msgstr ""
 
@@ -2070,7 +2070,7 @@ msgstr ""
 msgid "Both users must exist for @compare"
 msgstr ""
 
-#: modules/operserv/set.c:301
+#: modules/operserv/set.c:290
 #, c-format
 msgid "CHANEXPIRE must be a positive integer, %s is invalid"
 msgstr ""
@@ -2110,7 +2110,7 @@ msgstr ""
 msgid "CLONES klines are currently enabled."
 msgstr ""
 
-#: modules/operserv/set.c:273
+#: modules/operserv/set.c:262
 #, c-format
 msgid "COMMITINTERVAL must be a positive integer, %s is invalid"
 msgstr ""
@@ -2137,16 +2137,16 @@ msgstr ""
 msgid "Cannot add %s to %s metadata table, it is full."
 msgstr ""
 
-#: modules/chanserv/access.c:1398
+#: modules/chanserv/access.c:1400
 msgid "Change flags on a role."
 msgstr ""
 
-#: modules/chanserv/template.c:353
+#: modules/chanserv/template.c:356
 #, c-format
 msgid "Changed template %s to %s in %s."
 msgstr ""
 
-#: modules/operserv/set.c:499
+#: modules/operserv/set.c:488
 msgid "Changes IRCd reconnect delay."
 msgstr ""
 
@@ -2170,7 +2170,7 @@ msgstr ""
 msgid "Changes and shows your nickname access list."
 msgstr ""
 
-#: modules/operserv/set.c:562
+#: modules/operserv/set.c:551
 msgid "Changes how often the database is written to disk."
 msgstr ""
 
@@ -2186,23 +2186,23 @@ msgstr ""
 msgid "Changes the language services uses to talk to you."
 msgstr ""
 
-#: modules/operserv/set.c:526
+#: modules/operserv/set.c:515
 msgid "Changes the maximum number of accounts that one email address may have registered."
 msgstr ""
 
-#: modules/operserv/set.c:580
+#: modules/operserv/set.c:569
 msgid "Changes the maximum number of channel access list entries per channel."
 msgstr ""
 
-#: modules/operserv/set.c:535
+#: modules/operserv/set.c:524
 msgid "Changes the maximum number of channels one account may own."
 msgstr ""
 
-#: modules/operserv/set.c:517
+#: modules/operserv/set.c:506
 msgid "Changes the maximum number of nicks that one account may own."
 msgstr ""
 
-#: modules/operserv/set.c:508
+#: modules/operserv/set.c:497
 msgid "Changes the maximum number of users that may be logged in to one account."
 msgstr ""
 
@@ -2210,7 +2210,7 @@ msgstr ""
 msgid "Changes the password associated with your account."
 msgstr ""
 
-#: modules/operserv/set.c:625
+#: modules/operserv/set.c:614
 msgid "Changes the prefix to use when changing the user's nick on enforcement."
 msgstr ""
 
@@ -2222,7 +2222,7 @@ msgstr ""
 msgid "Changes what happens to a user when they hit a DNSBL."
 msgstr ""
 
-#: modules/operserv/set.c:607
+#: modules/operserv/set.c:596
 msgid "Changes whether service spams unregistered users on connect."
 msgstr ""
 
@@ -2288,13 +2288,13 @@ msgid "Channel     : %s"
 msgstr ""
 
 #: modules/chanserv/access.c:790 modules/chanserv/akick.c:349 modules/chanserv/akick.c:415
-#: modules/chanserv/flags.c:436 modules/chanserv/flags.c:467 modules/chanserv/set_founder.c:93
+#: modules/chanserv/flags.c:439 modules/chanserv/flags.c:470 modules/chanserv/set_founder.c:93
 #: modules/chanserv/set_founder.c:176 modules/chanserv/xop.c:41 modules/chanserv/xop.c:114
 #, c-format
 msgid "Channel %s access list is full."
 msgstr ""
 
-#: modules/chanserv/fflags.c:144 modules/chanserv/flags.c:490
+#: modules/chanserv/fflags.c:147 modules/chanserv/flags.c:493
 #, c-format
 msgid "Channel access to %s for %s unchanged."
 msgstr ""
@@ -2304,7 +2304,7 @@ msgstr ""
 msgid "Channel expiration time: %u days"
 msgstr ""
 
-#: modules/memoserv/send.c:175
+#: modules/memoserv/send.c:176
 msgid "Channel memos are administratively disabled."
 msgstr ""
 
@@ -2584,11 +2584,11 @@ msgstr ""
 msgid "Definitely."
 msgstr ""
 
-#: modules/chanserv/access.c:1407
+#: modules/chanserv/access.c:1409
 msgid "Delete a role."
 msgstr ""
 
-#: modules/chanserv/access.c:1353
+#: modules/chanserv/access.c:1355
 msgid "Delete an access list entry."
 msgstr ""
 
@@ -2691,7 +2691,7 @@ msgstr ""
 msgid "Disconnects an old session."
 msgstr ""
 
-#: modules/chanserv/access.c:1344
+#: modules/chanserv/access.c:1346
 msgid "Display information on an access list entry."
 msgstr ""
 
@@ -2755,15 +2755,15 @@ msgstr ""
 msgid "Dropped all vhosts for %s."
 msgstr ""
 
-#: modules/chanserv/drop.c:164
+#: modules/chanserv/drop.c:161
 msgid "Drops a channel registration."
 msgstr ""
 
-#: modules/groupserv/drop.c:123
+#: modules/groupserv/drop.c:120
 msgid "Drops a group registration."
 msgstr ""
 
-#: modules/nickserv/drop.c:195
+#: modules/nickserv/drop.c:191
 msgid "Drops an account registration."
 msgstr ""
 
@@ -3094,7 +3094,7 @@ msgstr ""
 msgid "Flags"
 msgstr ""
 
-#: modules/chanserv/fflags.c:149 modules/chanserv/flags.c:494
+#: modules/chanserv/fflags.c:152 modules/chanserv/flags.c:497
 #, c-format
 msgid "Flags %s were set on %s in %s."
 msgstr ""
@@ -3119,7 +3119,7 @@ msgstr ""
 msgid "Flags for %s in %s are %s."
 msgstr ""
 
-#: modules/chanserv/access.c:1156 modules/chanserv/access.c:1253
+#: modules/chanserv/access.c:1157 modules/chanserv/access.c:1255
 #, c-format
 msgid "Flags for role %s were changed to: %s."
 msgstr ""
@@ -3171,11 +3171,11 @@ msgstr ""
 msgid "For security reasons, you can't register your UID."
 msgstr ""
 
-#: modules/chanserv/drop.c:42 modules/chanserv/drop.c:138
+#: modules/chanserv/drop.c:42 modules/chanserv/drop.c:135
 msgid "For security reasons, you may not drop a channel registration with a fantasy command."
 msgstr ""
 
-#: modules/groupserv/drop.c:132
+#: modules/groupserv/drop.c:129
 msgid "Force drops a group registration."
 msgstr ""
 
@@ -3187,7 +3187,7 @@ msgstr ""
 msgid "Forces a flag change on a user in a group."
 msgstr ""
 
-#: modules/chanserv/fflags.c:156
+#: modules/chanserv/fflags.c:159
 msgid "Forces a flags change on a channel."
 msgstr ""
 
@@ -3199,11 +3199,11 @@ msgstr ""
 msgid "Forces channel statuses to flags."
 msgstr ""
 
-#: modules/nickserv/drop.c:204
+#: modules/nickserv/drop.c:200
 msgid "Forces dropping an account registration."
 msgstr ""
 
-#: modules/chanserv/drop.c:173
+#: modules/chanserv/drop.c:170
 msgid "Forces dropping of a channel registration."
 msgstr ""
 
@@ -3215,7 +3215,7 @@ msgstr ""
 msgid "Forces removal of a nickname from an account."
 msgstr ""
 
-#: modules/memoserv/forward.c:173
+#: modules/memoserv/forward.c:174
 msgid "Forwards a memo."
 msgstr ""
 
@@ -3307,7 +3307,7 @@ msgstr ""
 msgid "Group %s access list is full."
 msgstr ""
 
-#: modules/groupserv/drop.c:37 modules/groupserv/drop.c:108 modules/groupserv/info.c:30 modules/groupserv/join.c:30
+#: modules/groupserv/drop.c:37 modules/groupserv/drop.c:105 modules/groupserv/info.c:30 modules/groupserv/join.c:30
 #: modules/groupserv/listchans.c:34 modules/groupserv/set_channel.c:21 modules/groupserv/set_description.c:21
 #: modules/groupserv/set_email.c:21 modules/groupserv/set_joinflags.c:22 modules/groupserv/set_url.c:21
 #, c-format
@@ -3324,7 +3324,7 @@ msgstr ""
 msgid "Group %s access list is full."
 msgstr ""
 
-#: modules/memoserv/send.c:183
+#: modules/memoserv/send.c:184
 msgid "Group memos are administratively disabled."
 msgstr ""
 
@@ -3585,12 +3585,12 @@ msgstr ""
 msgid "Invalid host mask, %s"
 msgstr ""
 
-#: modules/groupserv/drop.c:72
+#: modules/groupserv/drop.c:69
 #, c-format
 msgid "Invalid key for %s."
 msgstr ""
 
-#: modules/chanserv/drop.c:93 modules/nickserv/drop.c:111
+#: modules/chanserv/drop.c:90 modules/nickserv/drop.c:107
 #, c-format
 msgid "Invalid key for %s."
 msgstr ""
@@ -3658,11 +3658,6 @@ msgstr ""
 msgid "Invalid property name."
 msgstr ""
 
-#: modules/operserv/set.c:63
-#, c-format
-msgid "Invalid set command. Use /%s%s HELP SET for a command listing."
-msgstr ""
-
 #: modules/operserv/clones.c:516 modules/operserv/clones.c:617
 msgid "Invalid syntax given."
 msgstr ""
@@ -3677,14 +3672,19 @@ msgstr ""
 msgid "Invalid target: %s. You can not SQLINE UIDs."
 msgstr ""
 
-#: modules/chanserv/access.c:389 modules/chanserv/template.c:159 modules/chanserv/template.c:304
+#: modules/chanserv/access.c:389 modules/chanserv/template.c:159 modules/chanserv/template.c:307
 #, c-format
 msgid "Invalid template name %s."
 msgstr ""
 
-#: modules/chanserv/fflags.c:57 modules/chanserv/flags.c:365 modules/chanserv/template.c:185
+#: modules/chanserv/flags.c:366
 #, c-format
-msgid "Invalid template name given, use /%s%s TEMPLATE %s for a list"
+msgid "Invalid template name given, use /msg %s TEMPLATE %s for a list"
+msgstr ""
+
+#: modules/chanserv/fflags.c:58 modules/chanserv/template.c:186
+#, c-format
+msgid "Invalid template name given; use /msg %s TEMPLATE %s for a list"
 msgstr ""
 
 #: modules/operserv/akill.c:193
@@ -3732,7 +3732,7 @@ msgstr ""
 msgid "Jupiters a server."
 msgstr ""
 
-#: modules/operserv/set.c:245
+#: modules/operserv/set.c:234
 #, c-format
 msgid "KLINETIME must be a positive integer, %s is invalid"
 msgstr ""
@@ -3787,11 +3787,11 @@ msgstr ""
 msgid "List all services currently running on the network."
 msgstr ""
 
-#: modules/chanserv/access.c:1380
+#: modules/chanserv/access.c:1382
 msgid "List available roles."
 msgstr ""
 
-#: modules/chanserv/access.c:1335
+#: modules/chanserv/access.c:1337
 msgid "List channel access entries."
 msgstr ""
 
@@ -3993,11 +3993,11 @@ msgstr ""
 msgid "Makes the bot say the given text on the given channel."
 msgstr ""
 
-#: modules/chanserv/access.c:1317
+#: modules/chanserv/access.c:1319
 msgid "Manage channel access."
 msgstr ""
 
-#: modules/chanserv/access.c:1326
+#: modules/chanserv/access.c:1328
 msgid "Manage channel roles."
 msgstr ""
 
@@ -4061,11 +4061,11 @@ msgstr ""
 msgid "Manipulates metadata entries associated with an account."
 msgstr ""
 
-#: modules/chanserv/template.c:394
+#: modules/chanserv/template.c:397
 msgid "Manipulates predefined sets of flags."
 msgstr ""
 
-#: modules/chanserv/flags.c:504
+#: modules/chanserv/flags.c:507
 msgid "Manipulates specific permissions on a channel."
 msgstr ""
 
@@ -4219,7 +4219,7 @@ msgstr ""
 msgid "Most likely."
 msgstr ""
 
-#: modules/operserv/set.c:459
+#: modules/operserv/set.c:448
 #, c-format
 msgid "NICKEXPIRE must be a positive integer, %s is invalid"
 msgstr ""
@@ -4544,7 +4544,7 @@ msgstr ""
 msgid "No such setting %s."
 msgstr ""
 
-#: modules/chanserv/template.c:312
+#: modules/chanserv/template.c:315
 #, c-format
 msgid "No such template %s on %s."
 msgstr ""
@@ -4559,14 +4559,19 @@ msgstr ""
 msgid "No topic set for %s"
 msgstr ""
 
-#: modules/chanserv/fflags.c:44 modules/chanserv/flags.c:352 modules/chanserv/template.c:175
+#: modules/chanserv/flags.c:352
 #, c-format
-msgid "No valid flags given, use /%s%s HELP FLAGS for a list"
+msgid "No valid flags given, use /msg %s HELP FLAGS for a list"
 msgstr ""
 
-#: modules/chanserv/access.c:1132 modules/chanserv/access.c:1229
+#: modules/chanserv/access.c:1132 modules/chanserv/access.c:1230
 #, c-format
-msgid "No valid flags given, use /%s%s HELP ROLE ADD for a list"
+msgid "No valid flags given, use /msg %s HELP ROLE ADD for a list"
+msgstr ""
+
+#: modules/chanserv/fflags.c:44 modules/chanserv/template.c:175
+#, c-format
+msgid "No valid flags given; use /msg %s HELP FLAGS for a list"
 msgstr ""
 
 #: modules/hostserv/vhost.c:120 modules/nickserv/vhost.c:259
@@ -4590,7 +4595,7 @@ msgstr ""
 msgid "Not even on a GOOD day."
 msgstr ""
 
-#: modules/chanserv/template.c:385
+#: modules/chanserv/template.c:388
 #, c-format
 msgid "Not updating %u access entries involving founder status. Please do it manually."
 msgstr ""
@@ -4648,12 +4653,12 @@ msgstr ""
 msgid "Online operators: %u"
 msgstr ""
 
-#: modules/chanserv/access.c:833 modules/chanserv/access.c:982 modules/chanserv/flags.c:397
+#: modules/chanserv/access.c:833 modules/chanserv/access.c:982 modules/chanserv/flags.c:400
 #, c-format
 msgid "Only %u founder allowed per channel."
 msgstr ""
 
-#: modules/chanserv/access.c:834 modules/chanserv/access.c:983 modules/chanserv/flags.c:398
+#: modules/chanserv/access.c:834 modules/chanserv/access.c:983 modules/chanserv/flags.c:401
 #, c-format
 msgid "Only %u founders allowed per channel."
 msgstr ""
@@ -4918,7 +4923,7 @@ msgstr ""
 msgid "Quieted %s on %s."
 msgstr ""
 
-#: modules/operserv/set.c:83
+#: modules/operserv/set.c:72
 #, c-format
 msgid "RECONTIME must be a positive integer, %s is invalid"
 msgstr ""
@@ -5027,7 +5032,7 @@ msgstr ""
 msgid "Recover complete for %s."
 msgstr ""
 
-#: modules/chanserv/template.c:284
+#: modules/chanserv/template.c:287
 #, c-format
 msgid "Redefining built-in template %s."
 msgstr ""
@@ -5154,7 +5159,7 @@ msgstr ""
 msgid "Removed class for %s."
 msgstr ""
 
-#: modules/chanserv/template.c:351
+#: modules/chanserv/template.c:354
 #, c-format
 msgid "Removed template %s from %s."
 msgstr ""
@@ -5274,13 +5279,13 @@ msgstr ""
 msgid "Role %s already exists."
 msgstr ""
 
-#: modules/chanserv/access.c:808 modules/chanserv/access.c:948 modules/chanserv/access.c:1204
-#: modules/chanserv/access.c:1299
+#: modules/chanserv/access.c:808 modules/chanserv/access.c:948 modules/chanserv/access.c:1205
+#: modules/chanserv/access.c:1301
 #, c-format
 msgid "Role %s does not exist."
 msgstr ""
 
-#: modules/chanserv/access.c:1311
+#: modules/chanserv/access.c:1313
 #, c-format
 msgid "Role %s has been deleted."
 msgstr ""
@@ -5381,12 +5386,12 @@ msgstr ""
 msgid "SGLINE on %s was successfully added."
 msgstr ""
 
-#: modules/operserv/set.c:419 modules/operserv/set.c:432
+#: modules/operserv/set.c:408 modules/operserv/set.c:421
 #, c-format
 msgid "SPAM directive has been successfully set to %s."
 msgstr ""
 
-#: modules/operserv/set.c:414 modules/operserv/set.c:427
+#: modules/operserv/set.c:403 modules/operserv/set.c:416
 #, c-format
 msgid "SPAM directive is already set to %s."
 msgstr ""
@@ -5475,19 +5480,19 @@ msgstr ""
 msgid "Sends a global notice."
 msgstr ""
 
-#: modules/memoserv/send.c:191
+#: modules/memoserv/send.c:192
 msgid "Sends a memo to a user."
 msgstr ""
 
-#: modules/memoserv/sendall.c:162
+#: modules/memoserv/sendall.c:163
 msgid "Sends a memo to all accounts."
 msgstr ""
 
-#: modules/memoserv/sendgroup.c:176
+#: modules/memoserv/sendgroup.c:177
 msgid "Sends a memo to all members on a group."
 msgstr ""
 
-#: modules/memoserv/sendops.c:187
+#: modules/memoserv/sendops.c:188
 msgid "Sends a memo to all ops on a channel."
 msgstr ""
 
@@ -5617,11 +5622,11 @@ msgstr ""
 msgid "Sets the channel's entry message."
 msgstr ""
 
-#: modules/operserv/set.c:598
+#: modules/operserv/set.c:587
 msgid "Sets the default AKICK time."
 msgstr ""
 
-#: modules/operserv/set.c:553
+#: modules/operserv/set.c:542
 msgid "Sets the default KLINE/AKILL time."
 msgstr ""
 
@@ -5649,11 +5654,11 @@ msgstr ""
 msgid "Sets the group e-mail address."
 msgstr ""
 
-#: modules/operserv/set.c:544
+#: modules/operserv/set.c:533
 msgid "Sets the maximum amount of metadata one channel or account may have."
 msgstr ""
 
-#: modules/operserv/set.c:589
+#: modules/operserv/set.c:578
 msgid "Sets the maximum number of founders per channel."
 msgstr ""
 
@@ -5662,7 +5667,7 @@ msgid "Sets the official group channel."
 msgstr ""
 
 #: modules/chanserv/set_core.c:77 modules/groupserv/set.c:79 modules/nickserv/set_core.c:59
-#: modules/operserv/set.c:490
+#: modules/operserv/set.c:479
 msgid "Sets various control flags."
 msgstr ""
 
@@ -5670,11 +5675,11 @@ msgstr ""
 msgid "Sets vhosts available for users to take."
 msgstr ""
 
-#: modules/operserv/set.c:571
+#: modules/operserv/set.c:560
 msgid "Sets when unused channels expire."
 msgstr ""
 
-#: modules/operserv/set.c:616
+#: modules/operserv/set.c:605
 msgid "Sets when unused nicks and accounts expire."
 msgstr ""
 
@@ -5756,7 +5761,7 @@ msgstr ""
 msgid "Sometime in the near future."
 msgstr ""
 
-#: modules/chanserv/access.c:395 modules/chanserv/template.c:322
+#: modules/chanserv/access.c:395 modules/chanserv/template.c:325
 #, c-format
 msgid "Sorry, too many templates on %s."
 msgstr ""
@@ -6093,7 +6098,7 @@ msgstr ""
 msgid "Syntax: DNSBLSCAN <user>"
 msgstr ""
 
-#: modules/groupserv/drop.c:22 modules/groupserv/drop.c:29 modules/groupserv/drop.c:93 modules/groupserv/drop.c:100
+#: modules/groupserv/drop.c:22 modules/groupserv/drop.c:29 modules/groupserv/drop.c:90 modules/groupserv/drop.c:97
 msgid "Syntax: DROP <!group>"
 msgstr ""
 
@@ -6109,11 +6114,11 @@ msgstr ""
 msgid "Syntax: ENABLE <channel>"
 msgstr ""
 
-#: modules/chanserv/drop.c:117 modules/chanserv/drop.c:124
+#: modules/chanserv/drop.c:114 modules/chanserv/drop.c:121
 msgid "Syntax: FDROP <#channel>"
 msgstr ""
 
-#: modules/nickserv/drop.c:135
+#: modules/nickserv/drop.c:131
 msgid "Syntax: FDROP <account>"
 msgstr ""
 
@@ -6405,11 +6410,11 @@ msgstr ""
 msgid "Syntax: RMATCH /<regex>/[i] [FORCE]"
 msgstr ""
 
-#: modules/chanserv/access.c:1094 modules/chanserv/access.c:1185
+#: modules/chanserv/access.c:1094 modules/chanserv/access.c:1186
 msgid "Syntax: ROLE <#channel> ADD|SET <role> [flags]"
 msgstr ""
 
-#: modules/chanserv/access.c:1281
+#: modules/chanserv/access.c:1283
 msgid "Syntax: ROLE <#channel> DEL <role>"
 msgstr ""
 
@@ -6506,7 +6511,7 @@ msgstr ""
 msgid "Syntax: SET <destination> <setting> <parameters>"
 msgstr ""
 
-#: modules/nickserv/set_core.c:50 modules/operserv/set.c:52
+#: modules/nickserv/set_core.c:50 modules/operserv/set.c:49
 msgid "Syntax: SET <setting> <parameters>"
 msgstr ""
 
@@ -6514,15 +6519,15 @@ msgstr ""
 msgid "Syntax: SET ACCOUNTNAME <nick>"
 msgstr ""
 
-#: modules/operserv/set.c:378
+#: modules/operserv/set.c:367
 msgid "Syntax: SET AKICKTIME <minutes>"
 msgstr ""
 
-#: modules/operserv/set.c:293
+#: modules/operserv/set.c:282
 msgid "Syntax: SET CHANEXPIRE <days>"
 msgstr ""
 
-#: modules/operserv/set.c:265
+#: modules/operserv/set.c:254
 msgid "Syntax: SET COMMITINTERVAL <minutes>"
 msgstr ""
 
@@ -6538,7 +6543,7 @@ msgstr ""
 msgid "Syntax: SET ENFORCE ON|OFF"
 msgstr ""
 
-#: modules/operserv/set.c:479
+#: modules/operserv/set.c:468
 msgid "Syntax: SET ENFORCEPREFIX <prefix>"
 msgstr ""
 
@@ -6550,39 +6555,39 @@ msgstr ""
 msgid "Syntax: SET GROUPNAME <oldname> <newname>"
 msgstr ""
 
-#: modules/operserv/set.c:237
+#: modules/operserv/set.c:226
 msgid "Syntax: SET KLINETIME <days>"
 msgstr ""
 
-#: modules/operserv/set.c:321
+#: modules/operserv/set.c:310
 msgid "Syntax: SET MAXCHANACS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:183
+#: modules/operserv/set.c:172
 msgid "Syntax: SET MAXCHANS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:348
+#: modules/operserv/set.c:337
 msgid "Syntax: SET MAXFOUNDERS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:102
+#: modules/operserv/set.c:91
 msgid "Syntax: SET MAXLOGINS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:156
+#: modules/operserv/set.c:145
 msgid "Syntax: SET MAXNICKS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:129
+#: modules/operserv/set.c:118
 msgid "Syntax: SET MAXUSERS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:210
+#: modules/operserv/set.c:199
 msgid "Syntax: SET MDLIMIT <value>"
 msgstr ""
 
-#: modules/operserv/set.c:451
+#: modules/operserv/set.c:440
 msgid "Syntax: SET NICKEXPIRE <days>"
 msgstr ""
 
@@ -6598,11 +6603,11 @@ msgstr ""
 msgid "Syntax: SET QUIETCHG <ON|OFF>"
 msgstr ""
 
-#: modules/operserv/set.c:75
+#: modules/operserv/set.c:64
 msgid "Syntax: SET RECONTIME <seconds>"
 msgstr ""
 
-#: modules/operserv/set.c:406
+#: modules/operserv/set.c:395
 msgid "Syntax: SET SPAM <TRUE|FALSE>"
 msgstr ""
 
@@ -6794,7 +6799,7 @@ msgstr ""
 msgid "Taxonomy for %s:"
 msgstr ""
 
-#: modules/chanserv/template.c:310
+#: modules/chanserv/template.c:313
 #, c-format
 msgid "Template %s on %s unchanged."
 msgstr ""
@@ -6953,12 +6958,12 @@ msgstr ""
 msgid "The account %s belongs to a services operator; it cannot be frozen."
 msgstr ""
 
-#: modules/nickserv/drop.c:123 modules/nickserv/drop.c:189
+#: modules/nickserv/drop.c:119 modules/nickserv/drop.c:185
 #, c-format
 msgid "The account %s has been dropped."
 msgstr ""
 
-#: modules/nickserv/drop.c:82 modules/nickserv/drop.c:168
+#: modules/nickserv/drop.c:82 modules/nickserv/drop.c:164
 #, c-format
 msgid "The account %s is held; it cannot be dropped."
 msgstr ""
@@ -6973,7 +6978,7 @@ msgstr ""
 msgid "The channel %s does not exist."
 msgstr ""
 
-#: modules/chanserv/drop.c:105 modules/chanserv/drop.c:158
+#: modules/chanserv/drop.c:102 modules/chanserv/drop.c:155
 #, c-format
 msgid "The channel %s has been dropped."
 msgstr ""
@@ -6983,7 +6988,7 @@ msgstr ""
 msgid "The channel %s is closed; it cannot be dropped."
 msgstr ""
 
-#: modules/chanserv/drop.c:63 modules/chanserv/drop.c:145
+#: modules/chanserv/drop.c:63 modules/chanserv/drop.c:142
 #, c-format
 msgid "The channel %s is held; it cannot be dropped."
 msgstr ""
@@ -7116,7 +7121,7 @@ msgstr ""
 msgid "The group %s does not exist."
 msgstr ""
 
-#: modules/groupserv/drop.c:78 modules/groupserv/drop.c:114
+#: modules/groupserv/drop.c:75 modules/groupserv/drop.c:111
 #, c-format
 msgid "The group %s has been dropped."
 msgstr ""
@@ -7169,42 +7174,42 @@ msgstr ""
 msgid "The mask provided is too long."
 msgstr ""
 
-#: modules/memoserv/forward.c:120 modules/memoserv/forward.c:167
+#: modules/memoserv/forward.c:120 modules/memoserv/forward.c:168
 #, c-format
 msgid "The memo has been successfully forwarded to %s."
 msgstr ""
 
-#: modules/memoserv/send.c:125 modules/memoserv/send.c:167
+#: modules/memoserv/send.c:125 modules/memoserv/send.c:168
 #, c-format
 msgid "The memo has been successfully sent to %s."
 msgstr ""
 
-#: modules/memoserv/sendall.c:154
+#: modules/memoserv/sendall.c:155
 #, c-format
 msgid "The memo has been successfully sent to %u account."
 msgstr ""
 
-#: modules/memoserv/sendall.c:155
+#: modules/memoserv/sendall.c:156
 #, c-format
 msgid "The memo has been successfully sent to %u accounts."
 msgstr ""
 
-#: modules/memoserv/sendgroup.c:168
+#: modules/memoserv/sendgroup.c:169
 #, c-format
 msgid "The memo has been successfully sent to %u member on %s."
 msgstr ""
 
-#: modules/memoserv/sendgroup.c:169
+#: modules/memoserv/sendgroup.c:170
 #, c-format
 msgid "The memo has been successfully sent to %u members on %s."
 msgstr ""
 
-#: modules/memoserv/sendops.c:179
+#: modules/memoserv/sendops.c:180
 #, c-format
 msgid "The memo has been successfully sent to %u op on %s."
 msgstr ""
 
-#: modules/memoserv/sendops.c:180
+#: modules/memoserv/sendops.c:181
 #, c-format
 msgid "The memo has been successfully sent to %u ops on %s."
 msgstr ""
@@ -7228,7 +7233,7 @@ msgstr ""
 msgid "The nick %s is reserved and cannot be registered."
 msgstr ""
 
-#: modules/nickserv/drop.c:75 modules/nickserv/drop.c:161
+#: modules/nickserv/drop.c:75 modules/nickserv/drop.c:157
 #, c-format
 msgid "The nickname %s belongs to a services operator; it cannot be dropped."
 msgstr ""
@@ -7294,7 +7299,7 @@ msgstr ""
 msgid "The requested offer already exists."
 msgstr ""
 
-#: modules/chanserv/access.c:1148 modules/chanserv/access.c:1245
+#: modules/chanserv/access.c:1149 modules/chanserv/access.c:1247
 #, c-format
 msgid "The role %s already has flags %s."
 msgstr ""
@@ -7328,7 +7333,7 @@ msgstr ""
 msgid "The system is currently too busy to process your vHost request, please try again later."
 msgstr ""
 
-#: modules/chanserv/template.c:337
+#: modules/chanserv/template.c:340
 #, c-format
 msgid "The template %.*s already has flags %.*s."
 msgstr ""
@@ -7408,16 +7413,26 @@ msgstr ""
 msgid "This command may only be used on a channel."
 msgstr ""
 
-#: modules/nickserv/drop.c:101
+#: modules/nickserv/drop.c:96
 #, c-format
-msgid "This is a friendly reminder that you are about to destroy the account %s."
+msgid "This is a friendly reminder that you are about to DESTROY the account %s."
 msgstr ""
 
-#: libathemecore/ptasks.c:955
+#: modules/chanserv/drop.c:79
+#, c-format
+msgid "This is a friendly reminder that you are about to DESTROY the channel %s."
+msgstr ""
+
+#: modules/groupserv/drop.c:58
+#, c-format
+msgid "This is a friendly reminder that you are about to DESTROY the group %s."
+msgstr ""
+
+#: libathemecore/ptasks.c:954
 msgid "This is your first offense. You will be ignored for 30 seconds."
 msgstr ""
 
-#: libathemecore/ptasks.c:970
+#: libathemecore/ptasks.c:969
 msgid "This is your last warning. You will be ignored for 30 seconds."
 msgstr ""
 
@@ -7455,10 +7470,18 @@ msgstr ""
 msgid "Timed SQLINE on %s was successfully added and will expire in %s."
 msgstr ""
 
-#: modules/chanserv/drop.c:85 modules/groupserv/drop.c:64 modules/nickserv/drop.c:104
+#: modules/chanserv/drop.c:82 modules/groupserv/drop.c:61
 #, c-format
 msgid ""
-"To avoid accidental use of this command, this operation has to be confirmed. Please confirm by replying with %s"
+"To avoid accidental use of this command, this operation has to be confirmed. Please confirm by replying with /msg "
+"%s DROP %s %s"
+msgstr ""
+
+#: modules/nickserv/drop.c:99
+#, c-format
+msgid ""
+"To avoid accidental use of this command, this operation has to be confirmed. Please confirm by replying with /msg "
+"%s DROP %s <password> %s"
 msgstr ""
 
 #: modules/chanserv/kick.c:147
@@ -7667,7 +7690,7 @@ msgstr ""
 msgid "Unquieted %s on %s."
 msgstr ""
 
-#: modules/chanserv/access.c:1371
+#: modules/chanserv/access.c:1373
 msgid "Update an access list entry."
 msgstr ""
 
@@ -7688,12 +7711,12 @@ msgstr ""
 msgid "Usage: CLOSE <#channel> ON <reason>"
 msgstr ""
 
-#: modules/chanserv/fflags.c:55
+#: modules/chanserv/fflags.c:56
 #, c-format
 msgid "Usage: FFLAGS %s <target> <flags>"
 msgstr ""
 
-#: modules/chanserv/flags.c:363
+#: modules/chanserv/flags.c:364
 #, c-format
 msgid "Usage: FLAGS %s [target] [flags]"
 msgstr ""
@@ -7987,13 +8010,13 @@ msgstr ""
 msgid "You are logged in as %s."
 msgstr ""
 
-#: modules/chanserv/fflags.c:105 modules/chanserv/fflags.c:131 modules/chanserv/flags.c:446
-#: modules/chanserv/flags.c:477
+#: modules/chanserv/fflags.c:108 modules/chanserv/fflags.c:134 modules/chanserv/flags.c:449
+#: modules/chanserv/flags.c:480
 #, c-format
 msgid "You are not allowed to set %s on %s in %s."
 msgstr ""
 
-#: modules/chanserv/template.c:317
+#: modules/chanserv/template.c:320
 #, c-format
 msgid "You are not allowed to set %s on template %s in %s."
 msgstr ""
@@ -8081,7 +8104,7 @@ msgstr ""
 msgid "You are now logged in as %s."
 msgstr ""
 
-#: libathemecore/ptasks.c:907
+#: libathemecore/ptasks.c:906
 msgid "You are on services ignore. You may not use any service."
 msgstr ""
 
@@ -8160,7 +8183,7 @@ msgstr ""
 msgid "You cannot register so soon after connecting. Please wait %u seconds and try again."
 msgstr ""
 
-#: modules/chanserv/access.c:1134 modules/chanserv/access.c:1231
+#: modules/chanserv/access.c:1135 modules/chanserv/access.c:1233
 #, c-format
 msgid "You cannot remove all flags from the role %s."
 msgstr ""
@@ -8190,7 +8213,7 @@ msgstr ""
 msgid "You do not have appropriate permissions to add flags: %s"
 msgstr ""
 
-#: modules/chanserv/access.c:1213 modules/chanserv/access.c:1307
+#: modules/chanserv/access.c:1214 modules/chanserv/access.c:1309
 #, c-format
 msgid "You do not have appropriate permissions to set flags: %s"
 msgstr ""
@@ -8351,7 +8374,7 @@ msgstr ""
 msgid "You have too many nicks registered already."
 msgstr ""
 
-#: libathemecore/ptasks.c:954 libathemecore/ptasks.c:969
+#: libathemecore/ptasks.c:953 libathemecore/ptasks.c:968
 msgid "You have triggered services flood protection."
 msgstr ""
 
@@ -8412,17 +8435,17 @@ msgstr ""
 msgid "You may not remove a founder's +F access."
 msgstr ""
 
-#: modules/chanserv/flags.c:385
+#: modules/chanserv/flags.c:388
 msgid "You may not remove a founder's +f access."
 msgstr ""
 
-#: modules/chanserv/access.c:692 modules/chanserv/access.c:954 modules/chanserv/fflags.c:95
-#: modules/chanserv/flags.c:390 modules/groupserv/fflags.c:57 modules/groupserv/flags.c:140
+#: modules/chanserv/access.c:692 modules/chanserv/access.c:954 modules/chanserv/fflags.c:98
+#: modules/chanserv/flags.c:393 modules/groupserv/fflags.c:57 modules/groupserv/flags.c:140
 msgid "You may not remove the last founder."
 msgstr ""
 
-#: modules/chanserv/access.c:841 modules/chanserv/access.c:990 modules/chanserv/fflags.c:119
-#: modules/chanserv/flags.c:460
+#: modules/chanserv/access.c:841 modules/chanserv/access.c:990 modules/chanserv/fflags.c:122
+#: modules/chanserv/flags.c:463
 msgid "You may not set founder status on a hostmask."
 msgstr ""
 

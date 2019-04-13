@@ -23,8 +23,7 @@ on_user_identify(struct user *u)
 	if (mu->memoct_new > 0)
 	{
 		notice(memosvs->me->nick, u->nick, "You have %u new memo(s).", mu->memoct_new);
-		notice(memosvs->me->nick, u->nick, "To read them, type /%s%s READ NEW",
-					ircd->uses_rcommand ? "" : "msg ", memosvs->disp);
+		notice(memosvs->me->nick, u->nick, "To read them, type \2/msg %s READ NEW\2", memosvs->disp);
 	}
 	if (mu->memos.count >= maxmemos)
 	{
@@ -53,8 +52,7 @@ on_user_away(struct user *u)
 	if (mu->memoct_new > 0)
 	{
 		notice(memosvs->me->nick, u->nick, "You have %u new memo(s).", mu->memoct_new);
-		notice(memosvs->me->nick, u->nick, "To read them, type /%s%s READ NEW",
-					ircd->uses_rcommand ? "" : "msg ", memosvs->disp);
+		notice(memosvs->me->nick, u->nick, "To read them, type \2/msg %s READ NEW\2", memosvs->disp);
 	}
 	if (mu->memos.count >= maxmemos)
 	{

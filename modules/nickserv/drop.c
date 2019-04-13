@@ -93,16 +93,12 @@ cmd_ns_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 
 	if (! key)
 	{
-		char fullcmd[BUFSIZE];
-
-		(void) snprintf(fullcmd, sizeof fullcmd, "/%s%s DROP %s %s %s", (ircd->uses_rcommand == false) ?
-		                "msg " : "", nicksvs.me->disp, entity(mu)->name, pass, challenge);
-
-		(void) command_success_nodata(si, _("This is a friendly reminder that you are about to \2destroy\2 "
+		(void) command_success_nodata(si, _("This is a friendly reminder that you are about to \2DESTROY\2 "
 		                                    "the account \2%s\2."), entity(mu)->name);
 
 		(void) command_success_nodata(si, _("To avoid accidental use of this command, this operation has to "
-		                                    "be confirmed. Please confirm by replying with \2%s\2"), fullcmd);
+		                                    "be confirmed. Please confirm by replying with \2/msg %s DROP %s "
+		                                    "<password> %s\2"), nicksvs.me->disp, entity(mu)->name, challenge);
 		return;
 	}
 

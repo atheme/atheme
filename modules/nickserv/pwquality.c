@@ -95,7 +95,7 @@ pwquality_register_hook(hook_user_register_check_t *const restrict hdata)
 	if (pwquality_warn_only)
 	{
 		(void) command_fail(hdata->si, fault_badparams, _("You may want to set a different password with: "
-		                                                  "\002/msg %s SET PASSWORD <newpassword>\002"),
+		                                                  "\2/msg %s SET PASSWORD <newpassword>\2"),
 		                                                  nicksvs.me->disp);
 		return;
 	}

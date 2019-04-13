@@ -53,20 +53,17 @@ gs_cmd_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 			(void) command_fail(si, fault_internalerror, _("Failed to create challenge"));
 			return;
 		}
-
 		if (! key)
 		{
-			char fullcmd[BUFSIZE];
-
-			(void) snprintf(fullcmd, sizeof fullcmd, "/%s%s DROP %s %s", (ircd->uses_rcommand == false) ?
-			                "msg " : "", si->service->disp, entity(mg)->name, challenge);
+			(void) command_success_nodata(si, _("This is a friendly reminder that you are about to "
+			                                    "\2DESTROY\2 the group \2%s\2."), entity(mg)->name);
 
 			(void) command_success_nodata(si, _("To avoid accidental use of this command, this operation "
 			                                    "has to be confirmed. Please confirm by replying with "
-			                                    "\2%s\2"), fullcmd);
+			                                    "\2/msg %s DROP %s %s\2"), si->service->disp,
+			                                    entity(mg)->name, challenge);
 			return;
 		}
-
 		if (strcmp(challenge, key) != 0)
 		{
 			(void) command_fail(si, fault_badparams, _("Invalid key for \2%s\2."), "DROP");

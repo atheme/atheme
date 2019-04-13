@@ -644,9 +644,8 @@ handle_message(struct sourceinfo *si, char *target, bool is_notice, char *messag
 
 	if (!is_notice && config_options.secure && irccasecmp(target, si->service->disp))
 	{
-		notice(si->service->me->nick, si->su->nick, "For security reasons, \2/msg %s\2 has been disabled."
-				" Use \2/%s%s <command>\2 to send a command.",
-				si->service->me->nick, (ircd->uses_rcommand ? "" : "msg "), si->service->disp);
+		notice(si->service->me->nick, si->su->nick, "For security reasons, \2/msg %s\2 has been disabled. "
+		       "Use \2/msg %s <command>\2 to send a command.", si->service->me->nick, si->service->disp);
 		return;
 	}
 

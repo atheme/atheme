@@ -43,25 +43,14 @@ os_help_set(struct sourceinfo *const restrict si, const char *const restrict sub
 static void
 os_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 {
-	char *setting = parv[0];
-	struct command *c;
-
-	if (setting == NULL)
+	if (parc < 1)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET");
-		command_fail(si, fault_needmoreparams, _("Syntax: SET <setting> <parameters>"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: SET <setting> <parameters>"));
 		return;
 	}
 
-	// take the command through the hash table
-        if ((c = command_find(os_set_cmdtree, setting)))
-	{
-		command_exec(si->service, si, c, parc - 1, parv + 1);
-	}
-	else
-	{
-		command_fail(si, fault_badparams, _("Invalid set command. Use \2/%s%s HELP SET\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->nick);
-	}
+	(void) subcommand_dispatch_simple(si->service, si, parc, parv, os_set_cmdtree, "SET");
 }
 
 static void

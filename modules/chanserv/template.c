@@ -172,7 +172,8 @@ cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 			flags_make_bitmasks(flagstr, &addflags, &removeflags);
 			if (addflags == 0 && removeflags == 0)
 			{
-				command_fail(si, fault_badparams, _("No valid flags given, use /%s%s HELP FLAGS for a list"), ircd->uses_rcommand ? "" : "msg ", chansvs.me->disp);
+				command_fail(si, fault_badparams, _("No valid flags given; use \2/msg %s HELP FLAGS\2 "
+				                                    "for a list"), chansvs.me->disp);
 				return;
 			}
 		}
@@ -182,7 +183,9 @@ cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 			addflags = get_template_flags(mc, flagstr);
 			if (addflags == 0)
 			{
-				command_fail(si, fault_nosuch_key, _("Invalid template name given, use /%s%s TEMPLATE %s for a list"), ircd->uses_rcommand ? "" : "msg ", chansvs.me->disp, mc->name);
+				command_fail(si, fault_nosuch_key, _("Invalid template name given; use \2/msg %s "
+				                                     "TEMPLATE %s\2 for a list"), chansvs.me->disp,
+				                                     mc->name);
 				return;
 			}
 			removeflags = ca_all & ~addflags;

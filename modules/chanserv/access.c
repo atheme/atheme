@@ -1129,7 +1129,8 @@ cs_cmd_role_add(struct sourceinfo *si, int parc, char *parv[])
 	if (newflags == 0)
 	{
 		if (oldflags == 0)
-			command_fail(si, fault_badparams, _("No valid flags given, use /%s%s HELP ROLE ADD for a list"), ircd->uses_rcommand ? "" : "msg ", chansvs.me->disp);
+			command_fail(si, fault_badparams, _("No valid flags given, use \2/msg %s HELP ROLE ADD\2 "
+			                                    "for a list"), chansvs.me->disp);
 		else
 			command_fail(si, fault_nosuch_target, _("You cannot remove all flags from the role \2%s\2."), role);
 		return;
@@ -1226,7 +1227,8 @@ cs_cmd_role_set(struct sourceinfo *si, int parc, char *parv[])
 	if (newflags == 0)
 	{
 		if (oldflags == 0)
-			command_fail(si, fault_badparams, _("No valid flags given, use /%s%s HELP ROLE ADD for a list"), ircd->uses_rcommand ? "" : "msg ", chansvs.me->disp);
+			command_fail(si, fault_badparams, _("No valid flags given, use \2/msg %s HELP ROLE ADD\2 "
+			                                    "for a list"), chansvs.me->disp);
 		else
 			command_fail(si, fault_nosuch_target, _("You cannot remove all flags from the role \2%s\2."), role);
 		return;
