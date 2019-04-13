@@ -43,7 +43,7 @@ user_identify_hook(struct user *u)
 	if (!metadata_find(u->myuser, "private:vacation"))
 		return;
 
-	notice(nicksvs.nick, u->nick, _("Your account is no longer marked as being on vacation."));
+	notice(nicksvs.nick, u->nick, "Your account is no longer marked as being on vacation.");
 	metadata_delete(u->myuser, "private:vacation");
 }
 
