@@ -28,9 +28,9 @@ os_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED 
 
 	(void) help_display_prefix(si, si->service);
 
-	(void) command_success_nodata(si, _("\2%s\2 provides essential network management services, such as\nrouting "
-	                                    "manipulation and access restriction. Please do not abuse\nyour access "
-	                                    "to \2%s\2!"), si->service->nick, si->service->nick);
+	(void) command_success_nodata(si, _("\2%s\2 provides essential network management services, such as\n"
+	                                    "routing manipulation and access restriction. Please do not abuse\n"
+	                                    "your access to \2%s\2!"), si->service->nick, si->service->nick);
 
 	(void) help_display_newline(si);
 	(void) command_help(si, si->service->commands);

@@ -25,13 +25,11 @@ os_help_set(struct sourceinfo *const restrict si, const char *const restrict sub
 	(void) command_success_nodata(si, _("Help for \2SET\2:"));
 	(void) help_display_newline(si);
 
-	(void) command_success_nodata(si, _("SET allows you to set various control flags\nfor services "
-	                                    "that changes the way certain\noperations are performed."));
-
-	(void) help_display_newline(si);
-
-	(void) command_success_nodata(si, _("Note that all settings will be reset to the values\nin the "
-	                                    "configuration file on rehash or services restart."));
+	(void) command_success_nodata(si, _("SET allows you to set various control flags for\n"
+	                                    "services that changes the way certain operations\n"
+	                                    "are performed by them. Note that all settings\n"
+	                                    "will be re-set to the values in the configuration\n"
+	                                    "file when services is rehashed or restarted."));
 
 	(void) help_display_newline(si);
 	(void) command_help(si, os_set_cmdtree);

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-04-13 16:13+0000\n"
+"POT-Creation-Date: 2019-04-13 17:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,7 +44,7 @@ msgid ""
 "flexibility than the /LIST command."
 msgstr ""
 
-#: modules/nickserv/help.c:56
+#: modules/nickserv/help.c:55
 #, c-format
 msgid ""
 "%s allows users to 'register' a nickname, and stop\n"
@@ -75,7 +75,9 @@ msgstr ""
 
 #: modules/rpgserv/help.c:24
 #, c-format
-msgid "%s allows users to search for game channels by matching on properties."
+msgid ""
+"%s allows users to search for game channels by matching\n"
+"channels against certain criteria."
 msgstr ""
 
 #: modules/memoserv/help.c:24
@@ -254,10 +256,7 @@ msgstr ""
 msgid ""
 "%s gives normal users the ability to maintain control\n"
 "of a channel, without the need of a bot. Channel takeovers are\n"
-"virtually impossible when a channel is registered with %s.\n"
-" \n"
-"Registration is a quick and painless process. Once registered,\n"
-"the founder can maintain complete and total control over the channel."
+"virtually impossible when a channel is registered with %s."
 msgstr ""
 
 #: modules/chanfix/fix.c:466
@@ -1375,37 +1374,37 @@ msgstr ""
 msgid "%s is currently online, and you may talk directly, by sending a private message."
 msgstr ""
 
-#: modules/operserv/set.c:318
+#: modules/operserv/set.c:316
 #, c-format
 msgid "%s is invalid for MAXCHANACS value."
 msgstr ""
 
-#: modules/operserv/set.c:180
+#: modules/operserv/set.c:178
 #, c-format
 msgid "%s is invalid for MAXCHANS value."
 msgstr ""
 
-#: modules/operserv/set.c:348
+#: modules/operserv/set.c:346
 #, c-format
 msgid "%s is invalid for MAXFOUNDERS value."
 msgstr ""
 
-#: modules/operserv/set.c:99
+#: modules/operserv/set.c:97
 #, c-format
 msgid "%s is invalid for MAXLOGINS value."
 msgstr ""
 
-#: modules/operserv/set.c:153
+#: modules/operserv/set.c:151
 #, c-format
 msgid "%s is invalid for MAXNICKS value."
 msgstr ""
 
-#: modules/operserv/set.c:126
+#: modules/operserv/set.c:124
 #, c-format
 msgid "%s is invalid for MAXUSERS value."
 msgstr ""
 
-#: modules/operserv/set.c:207
+#: modules/operserv/set.c:205
 #, c-format
 msgid "%s is invalid for MDLIMIT value."
 msgstr ""
@@ -1694,7 +1693,7 @@ msgstr ""
 msgid "AKICK on %s was successfully added to the AKICK list for %s."
 msgstr ""
 
-#: modules/operserv/set.c:375
+#: modules/operserv/set.c:373
 #, c-format
 msgid "AKICKTIME must be a positive integer, %s is invalid"
 msgstr ""
@@ -1793,6 +1792,11 @@ msgstr ""
 
 #: modules/hostserv/onoff.c:89
 msgid "Activates your assigned vhost."
+msgstr ""
+
+#: modules/chanserv/help.c:68
+#, c-format
+msgid "Activity is defined as a user with one of %s being on the channel."
 msgstr ""
 
 #: modules/chanserv/access.c:1391
@@ -2070,7 +2074,7 @@ msgstr ""
 msgid "Both users must exist for @compare"
 msgstr ""
 
-#: modules/operserv/set.c:290
+#: modules/operserv/set.c:288
 #, c-format
 msgid "CHANEXPIRE must be a positive integer, %s is invalid"
 msgstr ""
@@ -2110,7 +2114,7 @@ msgstr ""
 msgid "CLONES klines are currently enabled."
 msgstr ""
 
-#: modules/operserv/set.c:262
+#: modules/operserv/set.c:260
 #, c-format
 msgid "COMMITINTERVAL must be a positive integer, %s is invalid"
 msgstr ""
@@ -2146,7 +2150,7 @@ msgstr ""
 msgid "Changed template %s to %s in %s."
 msgstr ""
 
-#: modules/operserv/set.c:488
+#: modules/operserv/set.c:486
 msgid "Changes IRCd reconnect delay."
 msgstr ""
 
@@ -2170,7 +2174,7 @@ msgstr ""
 msgid "Changes and shows your nickname access list."
 msgstr ""
 
-#: modules/operserv/set.c:551
+#: modules/operserv/set.c:549
 msgid "Changes how often the database is written to disk."
 msgstr ""
 
@@ -2186,23 +2190,23 @@ msgstr ""
 msgid "Changes the language services uses to talk to you."
 msgstr ""
 
-#: modules/operserv/set.c:515
+#: modules/operserv/set.c:513
 msgid "Changes the maximum number of accounts that one email address may have registered."
 msgstr ""
 
-#: modules/operserv/set.c:569
+#: modules/operserv/set.c:567
 msgid "Changes the maximum number of channel access list entries per channel."
 msgstr ""
 
-#: modules/operserv/set.c:524
+#: modules/operserv/set.c:522
 msgid "Changes the maximum number of channels one account may own."
 msgstr ""
 
-#: modules/operserv/set.c:506
+#: modules/operserv/set.c:504
 msgid "Changes the maximum number of nicks that one account may own."
 msgstr ""
 
-#: modules/operserv/set.c:497
+#: modules/operserv/set.c:495
 msgid "Changes the maximum number of users that may be logged in to one account."
 msgstr ""
 
@@ -2210,7 +2214,7 @@ msgstr ""
 msgid "Changes the password associated with your account."
 msgstr ""
 
-#: modules/operserv/set.c:614
+#: modules/operserv/set.c:612
 msgid "Changes the prefix to use when changing the user's nick on enforcement."
 msgstr ""
 
@@ -2222,7 +2226,7 @@ msgstr ""
 msgid "Changes what happens to a user when they hit a DNSBL."
 msgstr ""
 
-#: modules/operserv/set.c:596
+#: modules/operserv/set.c:594
 msgid "Changes whether service spams unregistered users on connect."
 msgstr ""
 
@@ -2456,7 +2460,7 @@ msgstr ""
 msgid "Closes a channel."
 msgstr ""
 
-#: modules/chanserv/help.c:76
+#: modules/chanserv/help.c:85
 #, c-format
 msgid ""
 "Commands can also be given on channel by prefixing one of '%s'\n"
@@ -2707,9 +2711,9 @@ msgstr ""
 msgid "Displays a user's metadata."
 msgstr ""
 
-#: modules/alis/main.c:422 modules/botserv/help.c:36 modules/chanfix/fix.c:910 modules/chanserv/help.c:97
+#: modules/alis/main.c:422 modules/botserv/help.c:36 modules/chanfix/fix.c:910 modules/chanserv/help.c:106
 #: modules/gameserv/help.c:36 modules/global/main.c:188 modules/groupserv/help.c:36 modules/helpserv/main.c:37
-#: modules/hostserv/help.c:33 modules/infoserv/main.c:486 modules/memoserv/help.c:36 modules/nickserv/help.c:87
+#: modules/hostserv/help.c:33 modules/infoserv/main.c:486 modules/memoserv/help.c:36 modules/nickserv/help.c:85
 #: modules/operserv/help.c:43 modules/rpgserv/help.c:36 modules/statserv/main.c:34
 msgid "Displays contextual help information."
 msgstr ""
@@ -3427,15 +3431,17 @@ msgstr ""
 #: modules/nickserv/help.c:48
 #, c-format
 msgid ""
-"If a registered account is not used by the owner for %u days,\n"
-"%s will drop the account, allowing it to be reregistered."
+"If a registered account is not used by the owner for %u\n"
+"days, %s will drop the account, allowing it to be\n"
+"re-registered."
 msgstr ""
 
-#: modules/nickserv/help.c:65
+#: modules/nickserv/help.c:64
 #, c-format
 msgid ""
-"If a registered nick is not used by the owner for %u days,\n"
-"%s will drop the nickname, allowing it to be reregistered."
+"If a registered nick is not used by the owner for %u\n"
+"days, %s will drop the nickname, allowing it to be\n"
+"re-registered."
 msgstr ""
 
 #: modules/nickserv/main.c:25
@@ -3732,7 +3738,7 @@ msgstr ""
 msgid "Jupiters a server."
 msgstr ""
 
-#: modules/operserv/set.c:234
+#: modules/operserv/set.c:232
 #, c-format
 msgid "KLINETIME must be a positive integer, %s is invalid"
 msgstr ""
@@ -4219,7 +4225,7 @@ msgstr ""
 msgid "Most likely."
 msgstr ""
 
-#: modules/operserv/set.c:448
+#: modules/operserv/set.c:446
 #, c-format
 msgid "NICKEXPIRE must be a positive integer, %s is invalid"
 msgstr ""
@@ -4600,12 +4606,6 @@ msgstr ""
 msgid "Not updating %u access entries involving founder status. Please do it manually."
 msgstr ""
 
-#: modules/operserv/set.c:33
-msgid ""
-"Note that all settings will be reset to the values\n"
-"in the configuration file on rehash or services restart."
-msgstr ""
-
 #: modules/chanserv/set_verbose.c:109
 msgid "Notifies channel about access list modifications."
 msgstr ""
@@ -4807,16 +4807,14 @@ msgstr ""
 msgid "Please log in before attempting to verify your registration."
 msgstr ""
 
-#: modules/chanserv/help.c:57
+#: modules/chanserv/help.c:62
 #, c-format
 msgid ""
 "Please note that channels will expire after %u days of inactivity,\n"
-"or if there are no eligible channel successors.\n"
-" \n"
-"Activity is defined as a user with one of %s being on the channel."
+"or if there are no eligible channel successors."
 msgstr ""
 
-#: modules/chanserv/help.c:63
+#: modules/chanserv/help.c:72
 msgid "Please note that channels will expire if there are no eligible channel successors."
 msgstr ""
 
@@ -4923,7 +4921,7 @@ msgstr ""
 msgid "Quieted %s on %s."
 msgstr ""
 
-#: modules/operserv/set.c:72
+#: modules/operserv/set.c:70
 #, c-format
 msgid "RECONTIME must be a positive integer, %s is invalid"
 msgstr ""
@@ -5103,6 +5101,13 @@ msgstr ""
 
 #: modules/nickserv/pwquality.c:103
 msgid "Registration denied due to insecure password"
+msgstr ""
+
+#: modules/chanserv/help.c:54
+msgid ""
+"Registration is a quick and painless process. Once registered,\n"
+"the founder can maintain complete and total control over the\n"
+"channel."
 msgstr ""
 
 #: modules/nickserv/register.c:63 modules/nickserv/setpass.c:50 modules/nickserv/set_password.c:36
@@ -5326,37 +5331,39 @@ msgstr ""
 
 #: modules/nickserv/set_core.c:30
 msgid ""
-"SET allows you to set various control flags\n"
-"for accounts that change the way certain\n"
-"operations are performed on them."
+"SET allows you to set various control flags for\n"
+"accounts that change the way certain operations\n"
+"are performed on them."
 msgstr ""
 
 #: modules/chanserv/set_core.c:30
 msgid ""
-"SET allows you to set various control flags\n"
-"for channels that change the way certain\n"
-"operations are performed on them."
+"SET allows you to set various control flags for\n"
+"channels that change the way certain operations\n"
+"are performed on them."
 msgstr ""
 
 #: modules/groupserv/set.c:32
 msgid ""
-"SET allows you to set various control flags\n"
-"for groups that change the way certain\n"
-"operations are performed on them."
+"SET allows you to set various control flags for\n"
+"groups that change the way certain operations\n"
+"are performed on them."
 msgstr ""
 
 #: modules/nickserv/set_core.c:34
 msgid ""
-"SET allows you to set various control flags\n"
-"for nicknames that change the way certain\n"
-"operations are performed on them."
+"SET allows you to set various control flags for\n"
+"nicknames that change the way certain operations\n"
+"are performed on them."
 msgstr ""
 
 #: modules/operserv/set.c:28
 msgid ""
-"SET allows you to set various control flags\n"
-"for services that changes the way certain\n"
-"operations are performed."
+"SET allows you to set various control flags for\n"
+"services that changes the way certain operations\n"
+"are performed by them. Note that all settings\n"
+"will be re-set to the values in the configuration\n"
+"file when services is rehashed or restarted."
 msgstr ""
 
 #: modules/operserv/sgline.c:153
@@ -5386,12 +5393,12 @@ msgstr ""
 msgid "SGLINE on %s was successfully added."
 msgstr ""
 
-#: modules/operserv/set.c:408 modules/operserv/set.c:421
+#: modules/operserv/set.c:406 modules/operserv/set.c:419
 #, c-format
 msgid "SPAM directive has been successfully set to %s."
 msgstr ""
 
-#: modules/operserv/set.c:403 modules/operserv/set.c:416
+#: modules/operserv/set.c:401 modules/operserv/set.c:414
 #, c-format
 msgid "SPAM directive is already set to %s."
 msgstr ""
@@ -5594,7 +5601,7 @@ msgstr ""
 msgid "Sets a topic on a channel."
 msgstr ""
 
-#: modules/nickserv/vacation.c:92
+#: modules/nickserv/vacation.c:94
 msgid "Sets an account as being on vacation."
 msgstr ""
 
@@ -5622,11 +5629,11 @@ msgstr ""
 msgid "Sets the channel's entry message."
 msgstr ""
 
-#: modules/operserv/set.c:587
+#: modules/operserv/set.c:585
 msgid "Sets the default AKICK time."
 msgstr ""
 
-#: modules/operserv/set.c:542
+#: modules/operserv/set.c:540
 msgid "Sets the default KLINE/AKILL time."
 msgstr ""
 
@@ -5654,11 +5661,11 @@ msgstr ""
 msgid "Sets the group e-mail address."
 msgstr ""
 
-#: modules/operserv/set.c:533
+#: modules/operserv/set.c:531
 msgid "Sets the maximum amount of metadata one channel or account may have."
 msgstr ""
 
-#: modules/operserv/set.c:578
+#: modules/operserv/set.c:576
 msgid "Sets the maximum number of founders per channel."
 msgstr ""
 
@@ -5666,8 +5673,8 @@ msgstr ""
 msgid "Sets the official group channel."
 msgstr ""
 
-#: modules/chanserv/set_core.c:77 modules/groupserv/set.c:79 modules/nickserv/set_core.c:59
-#: modules/operserv/set.c:479
+#: modules/chanserv/set_core.c:78 modules/groupserv/set.c:80 modules/nickserv/set_core.c:59
+#: modules/operserv/set.c:477
 msgid "Sets various control flags."
 msgstr ""
 
@@ -5675,11 +5682,11 @@ msgstr ""
 msgid "Sets vhosts available for users to take."
 msgstr ""
 
-#: modules/operserv/set.c:560
+#: modules/operserv/set.c:558
 msgid "Sets when unused channels expire."
 msgstr ""
 
-#: modules/operserv/set.c:605
+#: modules/operserv/set.c:603
 msgid "Sets when unused nicks and accounts expire."
 msgstr ""
 
@@ -5814,11 +5821,11 @@ msgstr ""
 msgid "Successor  : (none)"
 msgstr ""
 
-#: modules/chanserv/help.c:68
+#: modules/chanserv/help.c:77
 msgid ""
-"Successors are primarily those who have the +S (if available) or +R flag\n"
-"set on their account in the channel, although other people may be chosen\n"
-"depending on their access level and activity."
+"Successors are primarily those who have the +S (if available)\n"
+"or +R flag set on their account in the channel, although other\n"
+"people may be chosen depending on their access level and activity."
 msgstr ""
 
 #: modules/rpgserv/info.c:56
@@ -6467,7 +6474,7 @@ msgstr ""
 msgid "Syntax: SERVER [INFO|LIST|COUNT] [parameters]"
 msgstr ""
 
-#: modules/groupserv/set.c:47 modules/groupserv/set.c:67
+#: modules/groupserv/set.c:48 modules/groupserv/set.c:68
 msgid "Syntax: SET <!group> <setting> [parameters]"
 msgstr ""
 
@@ -6479,7 +6486,7 @@ msgstr ""
 msgid "Syntax: SET <!group> PUBLIC <ON|OFF>"
 msgstr ""
 
-#: modules/chanserv/set_core.c:45 modules/chanserv/set_core.c:65
+#: modules/chanserv/set_core.c:46 modules/chanserv/set_core.c:66
 msgid "Syntax: SET <#channel> <setting> [parameters]"
 msgstr ""
 
@@ -6511,7 +6518,7 @@ msgstr ""
 msgid "Syntax: SET <destination> <setting> <parameters>"
 msgstr ""
 
-#: modules/nickserv/set_core.c:50 modules/operserv/set.c:49
+#: modules/nickserv/set_core.c:50 modules/operserv/set.c:47
 msgid "Syntax: SET <setting> <parameters>"
 msgstr ""
 
@@ -6519,15 +6526,15 @@ msgstr ""
 msgid "Syntax: SET ACCOUNTNAME <nick>"
 msgstr ""
 
-#: modules/operserv/set.c:367
+#: modules/operserv/set.c:365
 msgid "Syntax: SET AKICKTIME <minutes>"
 msgstr ""
 
-#: modules/operserv/set.c:282
+#: modules/operserv/set.c:280
 msgid "Syntax: SET CHANEXPIRE <days>"
 msgstr ""
 
-#: modules/operserv/set.c:254
+#: modules/operserv/set.c:252
 msgid "Syntax: SET COMMITINTERVAL <minutes>"
 msgstr ""
 
@@ -6543,7 +6550,7 @@ msgstr ""
 msgid "Syntax: SET ENFORCE ON|OFF"
 msgstr ""
 
-#: modules/operserv/set.c:468
+#: modules/operserv/set.c:466
 msgid "Syntax: SET ENFORCEPREFIX <prefix>"
 msgstr ""
 
@@ -6555,39 +6562,39 @@ msgstr ""
 msgid "Syntax: SET GROUPNAME <oldname> <newname>"
 msgstr ""
 
-#: modules/operserv/set.c:226
+#: modules/operserv/set.c:224
 msgid "Syntax: SET KLINETIME <days>"
 msgstr ""
 
-#: modules/operserv/set.c:310
+#: modules/operserv/set.c:308
 msgid "Syntax: SET MAXCHANACS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:172
+#: modules/operserv/set.c:170
 msgid "Syntax: SET MAXCHANS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:337
+#: modules/operserv/set.c:335
 msgid "Syntax: SET MAXFOUNDERS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:91
+#: modules/operserv/set.c:89
 msgid "Syntax: SET MAXLOGINS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:145
+#: modules/operserv/set.c:143
 msgid "Syntax: SET MAXNICKS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:118
+#: modules/operserv/set.c:116
 msgid "Syntax: SET MAXUSERS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:199
+#: modules/operserv/set.c:197
 msgid "Syntax: SET MDLIMIT <value>"
 msgstr ""
 
-#: modules/operserv/set.c:440
+#: modules/operserv/set.c:438
 msgid "Syntax: SET NICKEXPIRE <days>"
 msgstr ""
 
@@ -6603,11 +6610,11 @@ msgstr ""
 msgid "Syntax: SET QUIETCHG <ON|OFF>"
 msgstr ""
 
-#: modules/operserv/set.c:64
+#: modules/operserv/set.c:62
 msgid "Syntax: SET RECONTIME <seconds>"
 msgstr ""
 
-#: modules/operserv/set.c:395
+#: modules/operserv/set.c:393
 msgid "Syntax: SET SPAM <TRUE|FALSE>"
 msgstr ""
 
@@ -8544,7 +8551,8 @@ msgstr ""
 #, c-format
 msgid ""
 "Your account is now marked as being on vacation.\n"
-"Please be aware that this will be automatically removed the next time you identify to %s."
+"Please be aware that this will be automatically\n"
+"removed the next time you identify to %s."
 msgstr ""
 
 #: modules/nickserv/set_accountname.c:56
@@ -8557,9 +8565,11 @@ msgstr ""
 msgid "Your account name is now set to %s."
 msgstr ""
 
-#: modules/nickserv/vacation.c:36
+#: modules/nickserv/vacation.c:38
 #, c-format
-msgid "Your account will automatically expire in %u days if you do not return."
+msgid ""
+"Your account will automatically expire in %u days\n"
+"if you do not return."
 msgstr ""
 
 #: modules/chanfix/fix.c:850

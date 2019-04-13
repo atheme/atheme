@@ -27,13 +27,13 @@ ns_help_set(struct sourceinfo *const restrict si, const char *const restrict sub
 	(void) help_display_newline(si);
 
 	if (nicksvs.no_nick_ownership)
-		(void) command_success_nodata(si, _("SET allows you to set various control flags\nfor accounts "
-		                                    "that change the way certain\noperations are performed on "
-		                                    "them."));
+		(void) command_success_nodata(si, _("SET allows you to set various control flags for\n"
+		                                    "accounts that change the way certain operations\n"
+		                                    "are performed on them."));
 	else
-		(void) command_success_nodata(si, _("SET allows you to set various control flags\nfor nicknames "
-		                                    "that change the way certain\noperations are performed on "
-		                                    "them."));
+		(void) command_success_nodata(si, _("SET allows you to set various control flags for\n"
+		                                    "nicknames that change the way certain operations\n"
+		                                    "are performed on them."));
 
 	(void) help_display_newline(si);
 	(void) command_help(si, ns_set_cmdtree);

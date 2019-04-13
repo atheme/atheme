@@ -29,8 +29,9 @@ gs_help_set(struct sourceinfo *const restrict si, const char *const restrict sub
 	(void) command_success_nodata(si, _("Help for \2SET\2:"));
 	(void) help_display_newline(si);
 
-	(void) command_success_nodata(si, _("SET allows you to set various control flags\nfor groups that "
-	                                    "change the way certain\noperations are performed on them."));
+	(void) command_success_nodata(si, _("SET allows you to set various control flags for\n"
+	                                    "groups that change the way certain operations\n"
+	                                    "are performed on them."));
 
 	(void) help_display_newline(si);
 	(void) command_help(si, gs_set_cmdtree);

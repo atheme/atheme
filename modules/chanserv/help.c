@@ -44,38 +44,47 @@ cs_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED 
 
 	(void) help_display_prefix(si, chansvs.me);
 
-	(void) command_success_nodata(si, _("\2%s\2 gives normal users the ability to maintain control\nof a "
-	                                    "channel, without the need of a bot. Channel takeovers are\nvirtually "
-	                                    "impossible when a channel is registered with \2%s\2.\n \nRegistration "
-	                                    "is a quick and painless process. Once registered,\nthe founder can "
-	                                    "maintain complete and total control over the channel."), chansvs.nick,
-	                                    chansvs.nick);
+	(void) command_success_nodata(si, _("\2%s\2 gives normal users the ability to maintain control\n"
+	                                    "of a channel, without the need of a bot. Channel takeovers are\n"
+	                                    "virtually impossible when a channel is registered with \2%s\2."),
+	                                    chansvs.nick, chansvs.nick);
+
+	(void) help_display_newline(si);
+
+	(void) command_success_nodata(si, _("Registration is a quick and painless process. Once registered,\n"
+	                                    "the founder can maintain complete and total control over the\n"
+	                                    "channel."));
 
 	(void) help_display_newline(si);
 
 	if (chansvs.expiry > 0)
-		(void) command_success_nodata(si, _("Please note that channels will expire after %u days of "
-		                                    "inactivity,\nor if there are no eligible channel successors.\n"
-		                                    " \nActivity is defined as a user with one of %s being on the "
-		                                    "channel."), (chansvs.expiry / 86400),
+	{
+		(void) command_success_nodata(si, _("Please note that channels will expire after %u days of inactivity,\n"
+		                                    "or if there are no eligible channel successors."),
+		                                    (chansvs.expiry / 86400));
+
+		(void) help_display_newline(si);
+
+		(void) command_success_nodata(si, _("Activity is defined as a user with one of %s being on the channel."),
 		                                    bitmask_to_flags2(CA_USEDUPDATE & ca_all, 0));
+	}
 	else
 		(void) command_success_nodata(si, _("Please note that channels will expire if there are no eligible "
 		                                    "channel successors."));
 
 	(void) help_display_newline(si);
 
-	(void) command_success_nodata(si, _("Successors are primarily those who have the +S (if available) or +R "
-	                                    "flag\nset on their account in the channel, although other people may "
-	                                    "be chosen\ndepending on their access level and activity."));
+	(void) command_success_nodata(si, _("Successors are primarily those who have the +S (if available)\n"
+	                                    "or +R flag set on their account in the channel, although other\n"
+	                                    "people may be chosen depending on their access level and activity."));
 
 	if (config_options.join_chans && chansvs.fantasy && *chansvs.trigger)
 	{
 		(void) help_display_newline(si);
 
-		(void) command_success_nodata(si, _("Commands can also be given on channel by prefixing one of '%s'"
-		                                    "\nand omitting the channel name. These are called \"fantasy\""
-		                                    "\ncommands and can also be disabled on a per-channel basis."),
+		(void) command_success_nodata(si, _("Commands can also be given on channel by prefixing one of '%s'\n"
+		                                    "and omitting the channel name. These are called \"fantasy\"\n"
+		                                    "commands and can also be disabled on a per-channel basis."),
 		                                    chansvs.trigger);
 	}
 

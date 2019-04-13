@@ -21,8 +21,8 @@ rs_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED 
 
 	(void) help_display_prefix(si, si->service);
 
-	(void) command_success_nodata(si, _("\2%s\2 allows users to search for game channels by matching on "
-	                                    "properties."), si->service->nick);
+	(void) command_success_nodata(si, _("\2%s\2 allows users to search for game channels by matching\n"
+	                                    "channels against certain criteria."), si->service->nick);
 
 	(void) help_display_newline(si);
 	(void) command_help(si, si->service->commands);

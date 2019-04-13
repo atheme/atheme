@@ -30,11 +30,13 @@ ns_cmd_vacation(struct sourceinfo *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_SET, "VACATION");
 
 	command_success_nodata(si, _("Your account is now marked as being on vacation.\n"
-				"Please be aware that this will be automatically removed the next time you identify to \2%s\2."),
-				nicksvs.nick);
+	                             "Please be aware that this will be automatically\n"
+	                             "removed the next time you identify to \2%s\2."),
+	                             nicksvs.nick);
+
 	if (nicksvs.expiry > 0)
-		command_success_nodata(si, _("Your account will automatically expire in %u days if you do not return."),
-				(nicksvs.expiry / 3600 / 24) * 3);
+		command_success_nodata(si, _("Your account will automatically expire in %u days\n"
+		                             "if you do not return."), (nicksvs.expiry / 3600 / 24) * 3);
 }
 
 static void
