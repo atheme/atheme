@@ -22,16 +22,14 @@ on_user_identify(struct user *u)
 
 	if (mu->memoct_new > 0)
 	{
-		notice(memosvs->me->nick, u->nick, ngettext(N_("You have %u new memo."),
-						       N_("You have %u new memos."),
-						       mu->memoct_new), mu->memoct_new);
-		notice(memosvs->me->nick, u->nick, _("To read them, type /%s%s READ NEW"),
+		notice(memosvs->me->nick, u->nick, "You have %u new memo(s).", mu->memoct_new);
+		notice(memosvs->me->nick, u->nick, "To read them, type /%s%s READ NEW",
 					ircd->uses_rcommand ? "" : "msg ", memosvs->disp);
 	}
 	if (mu->memos.count >= maxmemos)
 	{
-		notice(memosvs->me->nick, u->nick, _("Your memo inbox is full! Please "
-		                                     "delete memos you no longer need."));
+		notice(memosvs->me->nick, u->nick, "Your memo inbox is full! Please "
+		                                   "delete memos you no longer need.");
 	}
 }
 
@@ -54,16 +52,14 @@ on_user_away(struct user *u)
 		return;
 	if (mu->memoct_new > 0)
 	{
-		notice(memosvs->me->nick, u->nick, ngettext(N_("You have %u new memo."),
-						       N_("You have %u new memos."),
-						       mu->memoct_new), mu->memoct_new);
-		notice(memosvs->me->nick, u->nick, _("To read them, type /%s%s READ NEW"),
+		notice(memosvs->me->nick, u->nick, "You have %u new memo(s).", mu->memoct_new);
+		notice(memosvs->me->nick, u->nick, "To read them, type /%s%s READ NEW",
 					ircd->uses_rcommand ? "" : "msg ", memosvs->disp);
 	}
 	if (mu->memos.count >= maxmemos)
 	{
-		notice(memosvs->me->nick, u->nick, _("Your memo inbox is full! Please "
-		                                     "delete memos you no longer need."));
+		notice(memosvs->me->nick, u->nick, "Your memo inbox is full! Please "
+		                                   "delete memos you no longer need.");
 	}
 }
 

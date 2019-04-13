@@ -160,7 +160,7 @@ ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 			myuser_notice(memoserv->nick, tmu, "You have a new memo from %s (%zu).", entity(si->smu)->name, MOWGLI_LIST_LENGTH(&tmu->memos));
 		else
 			myuser_notice(memoserv->nick, tmu, "You have a new memo from %s (nick: %s) (%zu).", entity(si->smu)->name, si->su->nick, MOWGLI_LIST_LENGTH(&tmu->memos));
-		myuser_notice(memoserv->nick, tmu, _("To read it, type /%s%s READ %zu"),
+		myuser_notice(memoserv->nick, tmu, "To read it, type /%s%s READ %zu",
 					ircd->uses_rcommand ? "" : "msg ", memoserv->disp, MOWGLI_LIST_LENGTH(&tmu->memos));
 
 		// Tell user memo sent

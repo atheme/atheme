@@ -161,7 +161,7 @@ ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])
 		myuser_notice(si->service->nick, tmu, "You have a new forwarded memo from %s (%zu).", entity(si->smu)->name, MOWGLI_LIST_LENGTH(&tmu->memos));
 	else
 		myuser_notice(si->service->nick, tmu, "You have a new forwarded memo from %s (nick: %s) (%zu).", entity(si->smu)->name, si->su->nick, MOWGLI_LIST_LENGTH(&tmu->memos));
-	myuser_notice(si->service->nick, tmu, _("To read it, type /%s%s READ %zu"),
+	myuser_notice(si->service->nick, tmu, "To read it, type /%s%s READ %zu",
 				ircd->uses_rcommand ? "" : "msg ", si->service->disp, MOWGLI_LIST_LENGTH(&tmu->memos));
 
 	command_success_nodata(si, _("The memo has been successfully forwarded to \2%s\2."), target);
