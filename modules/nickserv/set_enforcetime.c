@@ -19,7 +19,7 @@ ns_cmd_set_enforcetime(struct sourceinfo *si, int parc, char *parv[])
 
 	if (! parc)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ENFORCETIME");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET ENFORCETIME");
 		command_fail(si, fault_needmoreparams, _("Syntax: SET ENFORCETIME TIME|DEFAULT"));
 		return;
 	}
@@ -38,7 +38,7 @@ ns_cmd_set_enforcetime(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else if (! string_to_uint(setting, &enforcetime) || ! enforcetime || enforcetime > 180)
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "ENFORCETIME");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET ENFORCETIME");
 	}
 	else
 	{

@@ -23,7 +23,7 @@ ns_cmd_set_language(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!language)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "LANGUAGE");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET LANGUAGE");
 		command_fail(si, fault_needmoreparams, _("Valid languages are: %s"), language_names());
 		return;
 	}
@@ -33,7 +33,7 @@ ns_cmd_set_language(struct sourceinfo *si, int parc, char *parv[])
 	if (strcmp(language, "default") &&
 			(lang == NULL || !language_is_valid(lang)))
 	{
-		command_fail(si, fault_badparams, _("Invalid language \2%s\2."), language);
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET LANGUAGE");
 		command_fail(si, fault_badparams, _("Valid languages are: %s"), language_names());
 		return;
 	}

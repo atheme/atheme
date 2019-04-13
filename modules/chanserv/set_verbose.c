@@ -99,7 +99,7 @@ cs_cmd_set_verbose(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "VERBOSE");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET VERBOSE");
 		return;
 	}
 }

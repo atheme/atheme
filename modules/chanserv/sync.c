@@ -393,7 +393,7 @@ cs_cmd_set_nosync(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "NOSYNC");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET NOSYNC");
 		return;
 	}
 }

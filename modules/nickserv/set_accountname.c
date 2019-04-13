@@ -22,7 +22,7 @@ ns_cmd_set_accountname(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!newname)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ACCOUNTNAME");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET ACCOUNTNAME");
 		command_fail(si, fault_needmoreparams, _("Syntax: SET ACCOUNTNAME <nick>"));
 		return;
 	}

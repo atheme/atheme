@@ -19,7 +19,7 @@ gs_cmd_set_groupname(struct sourceinfo *si, int parc, char *parv[])
 
 	if (parc != 2)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "GROUPNAME");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET GROUPNAME");
 		command_fail(si, fault_needmoreparams, _("Syntax: SET GROUPNAME <oldname> <newname>"));
 		return;
 	}
@@ -29,7 +29,7 @@ gs_cmd_set_groupname(struct sourceinfo *si, int parc, char *parv[])
 
 	if (*oldname != '!' || *newname != '!')
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "GROUPNAME");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET GROUPNAME");
 		command_fail(si, fault_badparams, _("Syntax: SET GROUPNAME <oldname> <newname>"));
 		return;
 	}

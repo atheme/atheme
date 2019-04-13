@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-04-13 14:20+0000\n"
+"POT-Creation-Date: 2019-04-13 14:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1963,7 +1963,7 @@ msgstr ""
 msgid "Allows you to disable any password-based authentication methods except for XMLRPC/JSONRPC."
 msgstr ""
 
-#: modules/nickserv/set_quietchg.c:78
+#: modules/nickserv/set_quietchg.c:80
 msgid "Allows you to opt-out of channel change messages."
 msgstr ""
 
@@ -2132,7 +2132,7 @@ msgstr ""
 msgid "Cancel your own pending help request."
 msgstr ""
 
-#: modules/chanserv/set_property.c:81 modules/nickserv/set_property.c:70
+#: modules/chanserv/set_property.c:81 modules/nickserv/set_property.c:71
 #, c-format
 msgid "Cannot add %s to %s metadata table, it is full."
 msgstr ""
@@ -3595,11 +3595,6 @@ msgstr ""
 msgid "Invalid key for %s."
 msgstr ""
 
-#: modules/nickserv/set_language.c:36
-#, c-format
-msgid "Invalid language %s."
-msgstr ""
-
 #: modules/nickserv/access.c:258 modules/nickserv/access.c:266 modules/nickserv/access.c:274
 #: modules/nickserv/access.c:292
 #, c-format
@@ -3659,7 +3654,7 @@ msgstr ""
 msgid "Invalid password."
 msgstr ""
 
-#: modules/chanserv/set_property.c:34 modules/nickserv/set_property.c:34
+#: modules/chanserv/set_property.c:34 modules/nickserv/set_property.c:35
 msgid "Invalid property name."
 msgstr ""
 
@@ -4062,7 +4057,7 @@ msgstr ""
 msgid "Manipulates channel metadata."
 msgstr ""
 
-#: modules/nickserv/set_property.c:95
+#: modules/nickserv/set_property.c:96
 msgid "Manipulates metadata entries associated with an account."
 msgstr ""
 
@@ -4149,17 +4144,17 @@ msgstr ""
 msgid "Metadata   : %s = %s"
 msgstr ""
 
-#: modules/chanserv/set_property.c:95 modules/nickserv/set_property.c:90
+#: modules/chanserv/set_property.c:95 modules/nickserv/set_property.c:91
 #, c-format
 msgid "Metadata entry %s added."
 msgstr ""
 
-#: modules/chanserv/set_property.c:66 modules/nickserv/set_property.c:58
+#: modules/chanserv/set_property.c:66 modules/nickserv/set_property.c:59
 #, c-format
 msgid "Metadata entry %s has been deleted."
 msgstr ""
 
-#: modules/chanserv/set_property.c:59 modules/nickserv/set_property.c:47
+#: modules/chanserv/set_property.c:59 modules/nickserv/set_property.c:48
 #, c-format
 msgid "Metadata entry %s was not set."
 msgstr ""
@@ -4745,7 +4740,7 @@ msgstr ""
 msgid "Paper"
 msgstr ""
 
-#: modules/chanserv/set_property.c:88 modules/nickserv/set_property.c:77
+#: modules/chanserv/set_property.c:88 modules/nickserv/set_property.c:78
 msgid "Parameters are too long. Aborting."
 msgstr ""
 
@@ -6318,10 +6313,6 @@ msgstr ""
 msgid "Syntax: OP <#channel> [nickname] [...]"
 msgstr ""
 
-#: modules/groupserv/set_open.c:21 modules/groupserv/set_open.c:72
-msgid "Syntax: OPEN <!group> <ON|OFF>"
-msgstr ""
-
 #: modules/chanserv/owner.c:110
 msgid "Syntax: OWNER <#channel> [nickname] [...]"
 msgstr ""
@@ -6332,10 +6323,6 @@ msgstr ""
 
 #: modules/chanserv/protect.c:110
 msgid "Syntax: PROTECT <#channel> [nickname]"
-msgstr ""
-
-#: modules/groupserv/set_public.c:21 modules/groupserv/set_public.c:66
-msgid "Syntax: PUBLIC <!group> <ON|OFF>"
 msgstr ""
 
 #: modules/chanserv/quiet.c:345
@@ -6479,6 +6466,14 @@ msgstr ""
 msgid "Syntax: SET <!group> <setting> [parameters]"
 msgstr ""
 
+#: modules/groupserv/set_open.c:21 modules/groupserv/set_open.c:72
+msgid "Syntax: SET <!group> OPEN <ON|OFF>"
+msgstr ""
+
+#: modules/groupserv/set_public.c:21 modules/groupserv/set_public.c:66
+msgid "Syntax: SET <!group> PUBLIC <ON|OFF>"
+msgstr ""
+
 #: modules/chanserv/set_core.c:45 modules/chanserv/set_core.c:65
 msgid "Syntax: SET <#channel> <setting> [parameters]"
 msgstr ""
@@ -6595,8 +6590,12 @@ msgstr ""
 msgid "Syntax: SET PASSWORD <new password>"
 msgstr ""
 
-#: modules/nickserv/set_property.c:28
+#: modules/nickserv/set_property.c:29
 msgid "Syntax: SET PROPERTY <property> [value]"
+msgstr ""
+
+#: modules/nickserv/set_quietchg.c:34 modules/nickserv/set_quietchg.c:73
+msgid "Syntax: SET QUIETCHG <ON|OFF>"
 msgstr ""
 
 #: modules/operserv/set.c:75
@@ -6824,7 +6823,7 @@ msgstr ""
 #: modules/nickserv/set_emailmemos.c:72 modules/nickserv/set_hidelastlogin.c:56 modules/nickserv/set_hidemail.c:65
 #: modules/nickserv/set_nevergroup.c:66 modules/nickserv/set_neverop.c:66 modules/nickserv/set_nogreet.c:65
 #: modules/nickserv/set_nomemo.c:60 modules/nickserv/set_noop.c:65 modules/nickserv/set_nopassword.c:70
-#: modules/nickserv/setpass.c:82 modules/nickserv/set_quietchg.c:65
+#: modules/nickserv/setpass.c:82 modules/nickserv/set_quietchg.c:66
 #, c-format
 msgid "The %s flag has been removed for account %s."
 msgstr ""
@@ -6845,7 +6844,7 @@ msgstr ""
 #: modules/nickserv/enforce.c:254 modules/nickserv/set_emailmemos.c:58 modules/nickserv/set_hidelastlogin.c:40
 #: modules/nickserv/set_hidemail.c:49 modules/nickserv/set_nevergroup.c:49 modules/nickserv/set_neverop.c:49
 #: modules/nickserv/set_nogreet.c:49 modules/nickserv/set_nomemo.c:46 modules/nickserv/set_noop.c:49
-#: modules/nickserv/set_nopassword.c:54 modules/nickserv/set_quietchg.c:49
+#: modules/nickserv/set_nopassword.c:54 modules/nickserv/set_quietchg.c:50
 #, c-format
 msgid "The %s flag has been set for account %s."
 msgstr ""
@@ -6867,7 +6866,7 @@ msgstr ""
 #: modules/nickserv/enforce.c:248 modules/nickserv/set_emailmemos.c:52 modules/nickserv/set_hidelastlogin.c:32
 #: modules/nickserv/set_hidemail.c:41 modules/nickserv/set_nevergroup.c:41 modules/nickserv/set_neverop.c:41
 #: modules/nickserv/set_nogreet.c:41 modules/nickserv/set_nomemo.c:40 modules/nickserv/set_noop.c:41
-#: modules/nickserv/set_nopassword.c:40 modules/nickserv/set_quietchg.c:41
+#: modules/nickserv/set_nopassword.c:40 modules/nickserv/set_quietchg.c:42
 #, c-format
 msgid "The %s flag is already set for account %s."
 msgstr ""
@@ -6889,7 +6888,7 @@ msgstr ""
 #: modules/nickserv/enforce.c:268 modules/nickserv/set_emailmemos.c:66 modules/nickserv/set_enforcetime.c:29
 #: modules/nickserv/set_hidelastlogin.c:48 modules/nickserv/set_hidemail.c:57 modules/nickserv/set_nevergroup.c:58
 #: modules/nickserv/set_neverop.c:58 modules/nickserv/set_nogreet.c:57 modules/nickserv/set_nomemo.c:54
-#: modules/nickserv/set_noop.c:57 modules/nickserv/set_nopassword.c:62 modules/nickserv/set_quietchg.c:57
+#: modules/nickserv/set_noop.c:57 modules/nickserv/set_nopassword.c:62 modules/nickserv/set_quietchg.c:58
 #, c-format
 msgid "The %s flag is not set for account %s."
 msgstr ""

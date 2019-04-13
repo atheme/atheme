@@ -21,7 +21,7 @@ ns_cmd_set_hidelastlogin(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!params)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "HIDELASTLOGIN");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET HIDELASTLOGIN");
 		return;
 	}
 
@@ -59,7 +59,7 @@ ns_cmd_set_hidelastlogin(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "HIDELASTLOGIN");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET HIDELASTLOGIN");
 		return;
 	}
 }

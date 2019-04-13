@@ -21,7 +21,7 @@ ns_cmd_set_email(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!email)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "EMAIL");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET EMAIL");
 		command_fail(si, fault_needmoreparams, _("Syntax: SET EMAIL <new e-mail>"));
 		return;
 	}

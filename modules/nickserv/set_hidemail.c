@@ -30,7 +30,7 @@ ns_cmd_set_hidemail(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!params)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "HIDEMAIL");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET HIDEMAIL");
 		return;
 	}
 
@@ -68,7 +68,7 @@ ns_cmd_set_hidemail(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "HIDEMAIL");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET HIDEMAIL");
 		return;
 	}
 }

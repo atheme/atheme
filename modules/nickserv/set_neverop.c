@@ -30,7 +30,7 @@ ns_cmd_set_neverop(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!params)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "NEVEROP");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET NEVEROP");
 		return;
 	}
 
@@ -70,7 +70,7 @@ ns_cmd_set_neverop(struct sourceinfo *si, int parc, char *parv[])
 
 	else
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "NEVEROP");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET NEVEROP");
 		return;
 	}
 }

@@ -25,6 +25,7 @@ ns_cmd_set_property(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!property)
 	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET PROPERTY");
 		command_fail(si, fault_needmoreparams, _("Syntax: SET PROPERTY <property> [value]"));
 		return;
 	}

@@ -26,13 +26,13 @@ ns_cmd_set_password(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!password)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "PASSWORD");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET PASSWORD");
 		return;
 	}
 
 	if (strlen(password) > PASSLEN)
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "PASSWORD");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET PASSWORD");
 		command_fail(si, fault_badparams, _("Registration passwords may not be longer than \2%u\2 characters."), PASSLEN);
 		return;
 	}

@@ -71,7 +71,7 @@ cs_cmd_set_fantasy(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "FANTASY");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET FANTASY");
 		return;
 	}
 }

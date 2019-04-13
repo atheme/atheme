@@ -17,8 +17,8 @@ gs_cmd_set_open(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!parv[0] || !parv[1])
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "OPEN");
-		command_fail(si, fault_needmoreparams, _("Syntax: OPEN <!group> <ON|OFF>"));
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET OPEN");
+		command_fail(si, fault_needmoreparams, _("Syntax: SET <!group> OPEN <ON|OFF>"));
 		return;
 	}
 
@@ -68,8 +68,8 @@ gs_cmd_set_open(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "OPEN");
-		command_fail(si, fault_badparams, _("Syntax: OPEN <!group> <ON|OFF>"));
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET OPEN");
+		command_fail(si, fault_badparams, _("Syntax: SET <!group> OPEN <ON|OFF>"));
 	}
 }
 

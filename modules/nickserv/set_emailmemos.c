@@ -36,7 +36,7 @@ ns_cmd_set_emailmemos(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!params)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "EMAILMEMOS");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET EMAILMEMOS");
 		return;
 	}
 
@@ -74,7 +74,7 @@ ns_cmd_set_emailmemos(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "EMAILMEMOS");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET EMAILMEMOS");
 		return;
 	}
 }

@@ -72,7 +72,7 @@ cs_cmd_set_topiclock(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "TOPICLOCK");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET TOPICLOCK");
 		return;
 	}
 }

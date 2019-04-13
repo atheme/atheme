@@ -69,7 +69,7 @@ cs_cmd_set_secure(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SECURE");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET SECURE");
 		return;
 	}
 }

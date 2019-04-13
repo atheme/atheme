@@ -29,7 +29,7 @@ ns_cmd_set_nopassword(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!setting)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "NOPASSWORD");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET NOPASSWORD");
 		return;
 	}
 
@@ -73,7 +73,7 @@ ns_cmd_set_nopassword(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "NOPASSWORD");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET NOPASSWORD");
 		return;
 	}
 }

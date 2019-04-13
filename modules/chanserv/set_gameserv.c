@@ -47,7 +47,7 @@ cs_cmd_set_gameserv(struct sourceinfo *si, int parc, char *parv[])
 		val = NULL;
 	else
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "GAMESERV");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET GAMESERV");
 		return;
 	}
 

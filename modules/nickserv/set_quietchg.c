@@ -30,7 +30,8 @@ ns_cmd_set_quietchg(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!setting)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "QUIETCHG");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET QUIETCHG");
+		command_fail(si, fault_needmoreparams, _("Syntax: SET QUIETCHG <ON|OFF>"));
 		return;
 	}
 
@@ -68,7 +69,8 @@ ns_cmd_set_quietchg(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "QUIETCHG");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET QUIETCHG");
+		command_fail(si, fault_needmoreparams, _("Syntax: SET QUIETCHG <ON|OFF>"));
 		return;
 	}
 }

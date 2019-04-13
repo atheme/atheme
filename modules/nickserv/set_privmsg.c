@@ -29,7 +29,7 @@ ns_cmd_set_privmsg(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!params)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "PRIVMSG");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET PRIVMSG");
 		return;
 	}
 
@@ -67,7 +67,7 @@ ns_cmd_set_privmsg(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "PRIVMSG");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET PRIVMSG");
 		return;
 	}
 }

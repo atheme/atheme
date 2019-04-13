@@ -71,7 +71,7 @@ os_cmd_set_recontime(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!recontime)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RECONTIME");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET RECONTIME");
 		command_fail(si, fault_needmoreparams, _("Syntax: SET RECONTIME <seconds>"));
 		return;
 	}
@@ -98,7 +98,7 @@ os_cmd_set_maxlogins(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!logins)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "MAXLOGINS");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET MAXLOGINS");
 		command_fail(si, fault_needmoreparams, _("Syntax: SET MAXLOGINS <value>"));
 		return;
 	}
@@ -125,7 +125,7 @@ os_cmd_set_maxusers(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!users)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "MAXUSERS");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET MAXUSERS");
 		command_fail(si, fault_needmoreparams, _("Syntax: SET MAXUSERS <value>"));
 		return;
 	}
@@ -152,7 +152,7 @@ os_cmd_set_maxnicks(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!nicks)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "MAXNICKS");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET MAXNICKS");
 		command_fail(si, fault_needmoreparams, _("Syntax: SET MAXNICKS <value>"));
 		return;
 	}
@@ -179,7 +179,7 @@ os_cmd_set_maxchans(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!chans)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "MAXCHANS");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET MAXCHANS");
 		command_fail(si, fault_needmoreparams, _("Syntax: SET MAXCHANS <value>"));
 		return;
 	}
@@ -206,7 +206,7 @@ os_cmd_set_mdlimit(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!limit)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "MDLIMIT");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET MDLIMIT");
 		command_fail(si, fault_needmoreparams, _("Syntax: SET MDLIMIT <value>"));
 		return;
 	}
@@ -233,7 +233,7 @@ os_cmd_set_klinetime(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!days)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "KLINETIME");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET KLINETIME");
 		command_fail(si, fault_needmoreparams, _("Syntax: SET KLINETIME <days>"));
 		return;
 	}
@@ -261,7 +261,7 @@ os_cmd_set_commitinterval(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!minutes)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "COMMITINTERVAL");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET COMMITINTERVAL");
 		command_fail(si, fault_needmoreparams, _("Syntax: SET COMMITINTERVAL <minutes>"));
 		return;
 	}
@@ -289,7 +289,7 @@ os_cmd_set_chanexpire(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!days)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CHANEXPIRE");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET CHANEXPIRE");
 		command_fail(si, fault_needmoreparams, _("Syntax: SET CHANEXPIRE <days>"));
 		return;
 	}
@@ -317,7 +317,7 @@ os_cmd_set_maxchanacs(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!chanacs)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "MAXCHANACS");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET MAXCHANACS");
 		command_fail(si, fault_needmoreparams, _("Syntax: SET MAXCHANACS <value>"));
 		return;
 	}
@@ -344,7 +344,7 @@ os_cmd_set_maxfounders(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!founders)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "MAXFOUNDERS");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET MAXFOUNDERS");
 		command_fail(si, fault_needmoreparams, _("Syntax: SET MAXFOUNDERS <value>"));
 		return;
 	}
@@ -374,7 +374,7 @@ os_cmd_set_akicktime(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!minutes)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKICKTIME");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET AKICKTIME");
 		command_fail(si, fault_needmoreparams, _("Syntax: SET AKICKTIME <minutes>"));
 		return;
 	}
@@ -402,7 +402,7 @@ os_cmd_set_spam(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!spam)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SPAM");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET SPAM");
 		command_fail(si, fault_needmoreparams, _("Syntax: SET SPAM <TRUE|FALSE>"));
 		return;
 	}
@@ -435,7 +435,7 @@ os_cmd_set_spam(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SPAM");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET SPAM");
 		return;
 	}
 }
@@ -447,7 +447,7 @@ os_cmd_set_nickexpire(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!days)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "NICKEXPIRE");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET NICKEXPIRE");
 		command_fail(si, fault_needmoreparams, _("Syntax: SET NICKEXPIRE <days>"));
 		return;
 	}
@@ -475,7 +475,7 @@ os_cmd_set_enforceprefix(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!prefix || !*prefix)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ENFORCEPREFIX");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET ENFORCEPREFIX");
 		command_fail(si, fault_needmoreparams, _("Syntax: SET ENFORCEPREFIX <prefix>"));
 		return;
 	}
