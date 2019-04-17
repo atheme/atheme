@@ -73,7 +73,7 @@ module_load(const char *filespec)
 
 	if ((m = module_find(pathname)))
 	{
-		slog(LG_INFO, "module_load(): module \2%s\2 is already loaded [at %p]", pathname, m->address);
+		slog(LG_VERBOSE, "module_load(): module \2%s\2 is already loaded [at %p]", pathname, m->address);
 		return NULL;
 	}
 
