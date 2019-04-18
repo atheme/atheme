@@ -38,18 +38,12 @@ get_build_date(void)
 
 #ifdef ATHEME_ENABLE_REPRODUCIBLE_BUILDS
 #  ifdef SOURCE_DATE_EPOCH
-	errno = 0;
-	const char *eptr = NULL;
-	const time_t build_time = (time_t) strtoul(SOURCE_DATE_EPOCH, &eptr, 10);
+	const time_t build_time = SOURCE_DATE_EPOCH;
+	const struct tm *const tm = localtime(&build_time);
 	static char datebuf[BUFSIZE];
 
-	if (build_time && ! errno && (! eptr || (eptr && ! *eptr)))
-	{
-		const struct tm *const tm = localtime(&build_time);
-
-		if (tm && strftime(datebuf, sizeof datebuf, "%b %e %Y", tm) != 0)
-			build_date = datebuf;
-	}
+	if (tm && strftime(datebuf, sizeof datebuf, "%b %e %Y", tm) != 0)
+		build_date = datebuf;
 #  endif /* SOURCE_DATE_EPOCH */
 #else /* ATHEME_ENABLE_REPRODUCIBLE_BUILDS */
 #  ifdef __DATE__
