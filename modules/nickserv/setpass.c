@@ -114,13 +114,13 @@ show_setpass(hook_user_req_t *hdata)
 		{
 			const char *sender = md->value;
 			time_t ts;
-			struct tm tm;
+			struct tm *tm;
 
 			md = metadata_find(hdata->mu, "private:sendpass:timestamp");
 			ts = md != NULL ? atoi(md->value) : 0;
 
-			tm = *localtime(&ts);
-			strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+			tm = localtime(&ts);
+			strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
 			command_success_nodata(hdata->si, _("%s was \2SENDPASSED\2 by %s on %s"), entity(hdata->mu)->name, sender, strfbuf);
 		}

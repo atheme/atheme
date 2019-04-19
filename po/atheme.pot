@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-04-13 17:06+0000\n"
+"POT-Creation-Date: 2019-04-19 00:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -344,7 +344,7 @@ msgstr ""
 msgid "%s has been logged out."
 msgstr ""
 
-#: modules/nickserv/multimark.c:795
+#: modules/nickserv/multimark.c:793
 #, c-format
 msgid "%s has been marked."
 msgstr ""
@@ -827,12 +827,12 @@ msgstr ""
 msgid "%s is not public already."
 msgstr ""
 
-#: modules/nickserv/multimark.c:691 modules/nickserv/multimark.c:831
+#: modules/nickserv/multimark.c:689 modules/nickserv/multimark.c:828
 #, c-format
 msgid "%s is not registered anymore but was marked by %s (%s) on %s: %s"
 msgstr ""
 
-#: modules/nickserv/multimark.c:703 modules/nickserv/multimark.c:843
+#: modules/nickserv/multimark.c:701 modules/nickserv/multimark.c:840
 #, c-format
 msgid "%s is not registered anymore but was marked by %s on %s: %s"
 msgstr ""
@@ -842,7 +842,7 @@ msgstr ""
 msgid "%s is not registered anymore, but was marked by %s on %s (%s)."
 msgstr ""
 
-#: modules/nickserv/multimark.c:807
+#: modules/nickserv/multimark.c:805
 #, c-format
 msgid "%s is not registered, and was not marked."
 msgstr ""
@@ -1037,7 +1037,7 @@ msgstr ""
 msgid "%s's access on %s has been changed to %s."
 msgstr ""
 
-#: modules/nickserv/multimark.c:855
+#: modules/nickserv/multimark.c:852
 #, c-format
 msgid "%s's marks:"
 msgstr ""
@@ -1175,22 +1175,22 @@ msgstr ""
 msgid "%u: %u matches for realname %s"
 msgstr ""
 
-#: modules/nickserv/multimark.c:591 modules/nickserv/multimark.c:910
+#: modules/nickserv/multimark.c:590 modules/nickserv/multimark.c:906
 #, c-format
 msgid "(Restored) Mark %u originally set on %s (%s) by %s (%s) on %s: %s"
 msgstr ""
 
-#: modules/nickserv/multimark.c:622 modules/nickserv/multimark.c:941
+#: modules/nickserv/multimark.c:621 modules/nickserv/multimark.c:937
 #, c-format
 msgid "(Restored) Mark %u originally set on %s (%s) by %s on %s: %s"
 msgstr ""
 
-#: modules/nickserv/multimark.c:605 modules/nickserv/multimark.c:924
+#: modules/nickserv/multimark.c:604 modules/nickserv/multimark.c:920
 #, c-format
 msgid "(Restored) Mark %u originally set on %s by %s (%s) on %s: %s"
 msgstr ""
 
-#: modules/nickserv/multimark.c:635 modules/nickserv/multimark.c:954
+#: modules/nickserv/multimark.c:634 modules/nickserv/multimark.c:950
 #, c-format
 msgid "(Restored) Mark %u originally set on %s by %s on %s: %s"
 msgstr ""
@@ -1650,7 +1650,7 @@ msgstr ""
 msgid "- %s!%s@%s (real host: %s)"
 msgstr ""
 
-#: modules/memoserv/list.c:45
+#: modules/memoserv/list.c:43
 #, c-format
 msgid "- %u From: %s Sent: %s"
 msgstr ""
@@ -1895,7 +1895,7 @@ msgstr ""
 msgid "Adds a note to a channel."
 msgstr ""
 
-#: modules/nickserv/mark.c:119 modules/nickserv/multimark.c:1022
+#: modules/nickserv/mark.c:119 modules/nickserv/multimark.c:1018
 msgid "Adds a note to a user."
 msgstr ""
 
@@ -2911,7 +2911,7 @@ msgid "End of Server NOOP list."
 msgstr ""
 
 #: modules/chanserv/moderate.c:328 modules/infoserv/main.c:450 modules/infoserv/main.c:479
-#: modules/nickserv/badmail.c:191 modules/nickserv/multimark.c:966 modules/proxyscan/dnsbl.c:241
+#: modules/nickserv/badmail.c:191 modules/nickserv/multimark.c:962 modules/proxyscan/dnsbl.c:241
 msgid "End of list."
 msgstr ""
 
@@ -3864,7 +3864,7 @@ msgstr ""
 msgid "Lists accounts registered to your e-mail address."
 msgstr ""
 
-#: modules/hostserv/offer.c:373
+#: modules/hostserv/offer.c:372
 msgid "Lists all available vhosts."
 msgstr ""
 
@@ -3880,7 +3880,7 @@ msgstr ""
 msgid "Lists all network realname bans"
 msgstr ""
 
-#: modules/memoserv/list.c:71
+#: modules/memoserv/list.c:69
 msgid "Lists all of your memos."
 msgstr ""
 
@@ -4083,12 +4083,12 @@ msgstr ""
 msgid "Manually scan if a user is in a DNSBL."
 msgstr ""
 
-#: modules/nickserv/multimark.c:562 modules/nickserv/multimark.c:881
+#: modules/nickserv/multimark.c:561 modules/nickserv/multimark.c:877
 #, c-format
 msgid "Mark %u set by %s (%s) on %s: %s"
 msgstr ""
 
-#: modules/nickserv/multimark.c:574 modules/nickserv/multimark.c:893
+#: modules/nickserv/multimark.c:573 modules/nickserv/multimark.c:889
 #, c-format
 msgid "Mark %u set by %s on %s: %s"
 msgstr ""
@@ -4968,12 +4968,12 @@ msgstr ""
 msgid "Rating: %s"
 msgstr ""
 
-#: modules/memoserv/read.c:122
+#: modules/memoserv/read.c:121
 #, c-format
 msgid "Read %u memo."
 msgstr ""
 
-#: modules/memoserv/read.c:123
+#: modules/memoserv/read.c:122
 #, c-format
 msgid "Read %u memos."
 msgstr ""
@@ -4994,7 +4994,7 @@ msgstr ""
 msgid "Read-only mode is now enabled."
 msgstr ""
 
-#: modules/memoserv/read.c:129
+#: modules/memoserv/read.c:128
 msgid "Reads a memo."
 msgstr ""
 
@@ -5185,7 +5185,7 @@ msgstr ""
 msgid "Removes a user from a channel."
 msgstr ""
 
-#: modules/hostserv/offer.c:364
+#: modules/hostserv/offer.c:363
 msgid "Removes a vhost from the list that users can take."
 msgstr ""
 
@@ -5678,7 +5678,7 @@ msgstr ""
 msgid "Sets various control flags."
 msgstr ""
 
-#: modules/hostserv/offer.c:355
+#: modules/hostserv/offer.c:354
 msgid "Sets vhosts available for users to take."
 msgstr ""
 
@@ -5773,7 +5773,7 @@ msgstr ""
 msgid "Sorry, too many templates on %s."
 msgstr ""
 
-#: modules/memoserv/read.c:112
+#: modules/memoserv/read.c:111
 #, c-format
 msgid "Stopping command after %u memos."
 msgstr ""
@@ -6793,7 +6793,7 @@ msgstr ""
 msgid "Taint Location: %s:%u"
 msgstr ""
 
-#: modules/hostserv/offer.c:382
+#: modules/hostserv/offer.c:381
 msgid "Take an offered vhost for use."
 msgstr ""
 
@@ -7168,7 +7168,7 @@ msgstr ""
 msgid "The language for %s has been changed to %s."
 msgstr ""
 
-#: modules/nickserv/multimark.c:1005
+#: modules/nickserv/multimark.c:1001
 msgid "The mark has been deleted."
 msgstr ""
 
@@ -7435,15 +7435,15 @@ msgstr ""
 msgid "This is a friendly reminder that you are about to DESTROY the group %s."
 msgstr ""
 
-#: libathemecore/ptasks.c:954
+#: libathemecore/ptasks.c:948
 msgid "This is your first offense. You will be ignored for 30 seconds."
 msgstr ""
 
-#: libathemecore/ptasks.c:969
+#: libathemecore/ptasks.c:963
 msgid "This is your last warning. You will be ignored for 30 seconds."
 msgstr ""
 
-#: modules/nickserv/multimark.c:1010
+#: modules/nickserv/multimark.c:1006
 msgid "This mark does not exist."
 msgstr ""
 
@@ -7532,7 +7532,7 @@ msgstr ""
 msgid "To view CHANFIX scores for a channel: SCORES <#channel>"
 msgstr ""
 
-#: modules/memoserv/list.c:50
+#: modules/memoserv/list.c:48
 msgid "To:"
 msgstr ""
 
@@ -7756,7 +7756,7 @@ msgstr ""
 msgid "Usage: MARK <#channel> ON <note>"
 msgstr ""
 
-#: modules/nickserv/multimark.c:1016
+#: modules/nickserv/multimark.c:1012
 msgid "Usage: MARK <target> <ADD|DEL|LIST|MIGRATE> [note]"
 msgstr ""
 
@@ -7764,11 +7764,11 @@ msgstr ""
 msgid "Usage: MARK <target> <ON|OFF> [note]"
 msgstr ""
 
-#: modules/nickserv/multimark.c:781
+#: modules/nickserv/multimark.c:779
 msgid "Usage: MARK <target> ADD <note>"
 msgstr ""
 
-#: modules/nickserv/multimark.c:975
+#: modules/nickserv/multimark.c:971
 msgid "Usage: MARK <target> DEL <number>"
 msgstr ""
 
@@ -8111,7 +8111,7 @@ msgstr ""
 msgid "You are now logged in as %s."
 msgstr ""
 
-#: libathemecore/ptasks.c:906
+#: libathemecore/ptasks.c:900
 msgid "You are on services ignore. You may not use any service."
 msgstr ""
 
@@ -8327,7 +8327,7 @@ msgstr ""
 msgid "You have no memos."
 msgstr ""
 
-#: modules/memoserv/read.c:120
+#: modules/memoserv/read.c:119
 msgid "You have no new memos."
 msgstr ""
 
@@ -8381,7 +8381,7 @@ msgstr ""
 msgid "You have too many nicks registered already."
 msgstr ""
 
-#: libathemecore/ptasks.c:953 libathemecore/ptasks.c:968
+#: libathemecore/ptasks.c:947 libathemecore/ptasks.c:962
 msgid "You have triggered services flood protection."
 msgstr ""
 
@@ -8503,7 +8503,7 @@ msgstr ""
 msgid "You must wait at least %u days between changes to your vHost."
 msgstr ""
 
-#: modules/nickserv/multimark.c:753
+#: modules/nickserv/multimark.c:751
 #, c-format
 msgid "You need the %s privilege for this operation."
 msgstr ""
@@ -8618,7 +8618,7 @@ msgstr ""
 msgid "Your vhost of %s is now deactivated."
 msgstr ""
 
-#: modules/memoserv/list.c:61
+#: modules/memoserv/list.c:59
 msgid "[unread]"
 msgstr ""
 
@@ -8727,7 +8727,7 @@ msgstr ""
 msgid "setter: %s"
 msgstr ""
 
-#: modules/nickserv/multimark.c:766
+#: modules/nickserv/multimark.c:764
 msgid "usage: MARK <target> <ADD|DEL|LIST|MIGRATE> [note]"
 msgstr ""
 

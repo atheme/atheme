@@ -17,7 +17,7 @@ ms_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_node_t *n;
 	unsigned int i = 0;
 	char strfbuf[BUFSIZE];
-	struct tm tm;
+	struct tm *tm;
 	char line[512];
 	char chan[CHANNELLEN + 1];
 	char *p;
@@ -37,10 +37,8 @@ ms_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 	{
 		i++;
 		memo = (struct mymemo *)n->data;
-		tm = *localtime(&memo->sent);
-
-		strftime(strfbuf, sizeof strfbuf,
-			TIME_FORMAT, &tm);
+		tm = localtime(&memo->sent);
+		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
 		snprintf(line, sizeof line, _("- %u From: %s Sent: %s"),
 				i, memo->sender, strfbuf);

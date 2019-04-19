@@ -24,7 +24,7 @@ bs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	unsigned int comma = 0, i;
 	char buf[BUFSIZE], strfbuf[BUFSIZE], *end;
 	time_t registered;
-	struct tm tm;
+	struct tm *tm;
 	mowgli_node_t *n;
 	struct chanuser *cu;
 
@@ -51,8 +51,8 @@ bs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("     Mask : %s@%s"), bot->user, bot->host);
 		command_success_nodata(si, _("Real name : %s"), bot->real);
 		registered = bot->registered;
-		tm = *localtime(&registered);
-		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+		tm = localtime(&registered);
+		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 		command_success_nodata(si, _("  Created : %s (%s ago)"), strfbuf, time_ago(registered));
 		if (bot->private)
 			command_success_nodata(si, _("  Options : Private"));

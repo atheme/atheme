@@ -530,14 +530,14 @@ hs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[])
 	struct hsrequest *l;
 	mowgli_node_t *n;
 	char buf[BUFSIZE];
-	struct tm tm;
+	struct tm *tm;
 
 	MOWGLI_ITER_FOREACH(n, hs_reqlist.head)
 	{
 		l = n->data;
 
-		tm = *localtime(&l->vhost_ts);
-		strftime(buf, BUFSIZE, TIME_FORMAT, &tm);
+		tm = localtime(&l->vhost_ts);
+		strftime(buf, BUFSIZE, TIME_FORMAT, tm);
 		command_success_nodata(si, "Nick:\2%s\2, vhost:\2%s\2 (%s - %s)",
 			l->nick, l->vhost, l->creator, buf);
 	}

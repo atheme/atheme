@@ -102,7 +102,7 @@ do_list(struct sourceinfo *si, struct mychan *mc, unsigned int flags)
 	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
 		const char *template, *mod_ago;
-		struct tm tm;
+		struct tm *tm;
 		char mod_date[64];
 		struct myentity *setter;
 		const char *setter_name;
@@ -115,8 +115,8 @@ do_list(struct sourceinfo *si, struct mychan *mc, unsigned int flags)
 		template = get_template_name(mc, ca->level);
 		mod_ago = ca->tmodified ? time_ago(ca->tmodified) : "?";
 
-		tm = *localtime(&ca->tmodified);
-		strftime(mod_date, sizeof mod_date, TIME_FORMAT, &tm);
+		tm = localtime(&ca->tmodified);
+		strftime(mod_date, sizeof mod_date, TIME_FORMAT, tm);
 
 		if (*ca->setter_uid != '\0' && (setter = myentity_find_uid(ca->setter_uid)))
 			setter_name = setter->name;

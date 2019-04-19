@@ -534,7 +534,7 @@ cs_cmd_access_info(struct sourceinfo *si, int parc, char *parv[])
 	bool operoverride = false;
 	const char *role;
 	const char *setter_name;
-	struct tm tm;
+	struct tm *tm;
 	char strfbuf[BUFSIZE];
 	struct metadata *md;
 
@@ -596,8 +596,8 @@ cs_cmd_access_info(struct sourceinfo *si, int parc, char *parv[])
 	else
 		setter_name = "?";
 
-	tm = *localtime(&ca->tmodified);
-	strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+	tm = localtime(&ca->tmodified);
+	strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
 	command_success_nodata(si, _("Access for \2%s\2 in \2%s\2:"), target, channel);
 

@@ -14,7 +14,7 @@ static void
 gs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mygroup *mg;
-	struct tm tm;
+	struct tm *tm;
 	char buf[BUFSIZE], strfbuf[BUFSIZE];
 	struct metadata *md;
 
@@ -31,8 +31,8 @@ gs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	tm = *localtime(&mg->regtime);
-	strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+	tm = localtime(&mg->regtime);
+	strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
 	command_success_nodata(si, _("Information for \2%s\2:"), parv[0]);
 	command_success_nodata(si, _("Registered  : %s (%s ago)"), strfbuf, time_ago(mg->regtime));

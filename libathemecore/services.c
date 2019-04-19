@@ -653,7 +653,7 @@ myuser_login(struct service *svs, struct user *u, struct myuser *mu, bool sendac
 	char lau[BUFSIZE], lao[BUFSIZE];
 	char strfbuf[BUFSIZE];
 	struct metadata *md_failnum;
-	struct tm tm;
+	struct tm *tm;
 	struct mynick *mn;
 
 	return_if_fail(svs != NULL && svs->me != NULL);
@@ -676,8 +676,8 @@ myuser_login(struct service *svs, struct user *u, struct myuser *mu, bool sendac
 			time_t ts = CURRTIME;
 
 			md_loginaddr = metadata_find(mu, "private:host:actual");
-			tm = *localtime(&mu->lastlogin);
-			strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+			tm = localtime(&mu->lastlogin);
+			strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
 			notice(svs->me->nick, u->nick, "Last login from: \2%s\2 on %s.", md_loginaddr->value, strfbuf);
 
@@ -711,8 +711,8 @@ myuser_login(struct service *svs, struct user *u, struct myuser *mu, bool sendac
 		md_failaddr = metadata_find(mu, "private:loginfail:lastfailaddr");
 		if (md_failaddr != NULL)
 		{
-			tm = *localtime(&ts);
-			strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+			tm = localtime(&ts);
+			strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
 			notice(svs->me->nick, u->nick, "Last failed attempt from: \2%s\2 on %s.",
 				md_failaddr->value, strfbuf);

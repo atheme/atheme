@@ -65,7 +65,7 @@ hs_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
 	struct metadata *md, *md_timestamp, *md_assigner;
 	mowgli_node_t *n;
 	char buf[BUFSIZE], strfbuf[BUFSIZE];
-	struct tm tm;
+	struct tm *tm;
 	size_t len;
 	time_t vhost_time;
 	unsigned int matches = 0;
@@ -90,8 +90,8 @@ hs_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
 			if (md_timestamp)
 			{
 				vhost_time = atoi(md_timestamp->value);
-				tm = *localtime(&vhost_time);
-				strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+				tm = localtime(&vhost_time);
+				strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 				len += snprintf(buf + len, BUFSIZE - len, _(" on %s (%s ago)"), strfbuf, time_ago(vhost_time));
 			}
 

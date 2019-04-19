@@ -17,7 +17,7 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	struct mychan *mc;
 	char *name = parv[0];
 	char buf[BUFSIZE], strfbuf[BUFSIZE];
-	struct tm tm;
+	struct tm *tm;
 	struct myuser *mu;
 	struct metadata *md;
 	mowgli_patricia_iteration_state_t state;
@@ -57,8 +57,8 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		!has_priv(si, PRIV_CHAN_AUSPEX) &&
 		!(mc->flags & MC_PUBACL);
 
-	tm = *localtime(&mc->registered);
-	strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+	tm = localtime(&mc->registered);
+	strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
 	command_success_nodata(si, _("Information on \2%s\2:"), mc->name);
 
@@ -82,8 +82,8 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 			command_success_nodata(si, _("Last used  : (about %u week(s) ago)"), (unsigned int)((CURRTIME - mc->used) / 604800));
 		else
 		{
-			tm = *localtime(&mc->used);
-			strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+			tm = localtime(&mc->used);
+			strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 			command_success_nodata(si, _("Last used  : %s (%s ago)"), strfbuf, time_ago(mc->used));
 		}
 	}
@@ -286,8 +286,8 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		md = metadata_find(mc, "private:mark:timestamp");
 		ts = md != NULL ? atoi(md->value) : 0;
 
-		tm = *localtime(&ts);
-		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+		tm = localtime(&ts);
+		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
 		command_success_nodata(si, _("%s was \2MARKED\2 by %s on %s (%s)"), mc->name, setter, strfbuf, reason);
 	}
@@ -307,8 +307,8 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		md = metadata_find(mc, "private:close:timestamp");
 		ts = md != NULL ? atoi(md->value) : 0;
 
-		tm = *localtime(&ts);
-		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+		tm = localtime(&ts);
+		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
 		command_success_nodata(si, _("%s was \2CLOSED\2 by %s on %s (%s)"), mc->name, setter, strfbuf, reason);
 	}

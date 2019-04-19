@@ -23,7 +23,7 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	char buf[BUFSIZE], strfbuf[BUFSIZE], lastlogin[BUFSIZE], *p;
 	size_t buflen;
 	time_t registered;
-	struct tm tm, tm2;
+	struct tm *tm, *tm2;
 	struct metadata *md;
 	mowgli_node_t *n;
 	mowgli_patricia_iteration_state_t state;
@@ -72,8 +72,8 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 			md = metadata_find(mun, "private:mark:timestamp");
 			ts = md != NULL ? atoi(md->value) : 0;
 
-			tm = *localtime(&ts);
-			strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+			tm = localtime(&ts);
+			strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
 			command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered anymore, but was marked by %s on %s (%s)."), mun->name, setter, strfbuf, reason);
 			hook_call_user_info_noexist(&noexist_req);
@@ -109,15 +109,15 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("Information on \2%s\2:"), entity(mu)->name);
 
 	registered = mn != NULL ? mn->registered : mu->registered;
-	tm = *localtime(&registered);
-	strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+	tm = localtime(&registered);
+	strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 	command_success_nodata(si, _("Registered : %s (%s ago)"), strfbuf, time_ago(registered));
 
 	// show account's time if it's different from nick's time
 	if (mu->registered != registered)
 	{
-		tm = *localtime(&mu->registered);
-		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+		tm = localtime(&mu->registered);
+		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 		command_success_nodata(si, _("User reg.  : %s (%s ago)"), strfbuf, time_ago(mu->registered));
 	}
 
@@ -156,8 +156,8 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		if (vhost_timestring && (vhost || has_user_auspex))
 		{
 			vhost_time = atoi(vhost_timestring);
-			tm2 = *localtime(&vhost_time);
-			strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm2);
+			tm2 = localtime(&vhost_time);
+			strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm2);
 			buflen += snprintf(buf + buflen, BUFSIZE - buflen, _(" on %s (%s ago)"), strfbuf, time_ago(vhost_time));
 		}
 
@@ -186,8 +186,8 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("Last seen  : now"));
 	else if (mn != NULL)
 	{
-		tm2 = *localtime(&mn->lastseen);
-		strftime(lastlogin, sizeof lastlogin, TIME_FORMAT, &tm2);
+		tm2 = localtime(&mn->lastseen);
+		strftime(lastlogin, sizeof lastlogin, TIME_FORMAT, tm2);
 		if (hide_info)
 			command_success_nodata(si, _("Last seen  : (about %u weeks ago)"), (unsigned int)((CURRTIME - mn->lastseen) / 604800));
 		else
@@ -199,8 +199,8 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	 */
 	if (MOWGLI_LIST_LENGTH(&mu->logins) == 0)
 	{
-		tm2 = *localtime(&mu->lastlogin);
-		strftime(lastlogin, sizeof lastlogin, TIME_FORMAT, &tm2);
+		tm2 = localtime(&mu->lastlogin);
+		strftime(lastlogin, sizeof lastlogin, TIME_FORMAT, tm2);
 		if (mn == NULL)
 		{
 			if (hide_info)
@@ -412,8 +412,8 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		md = metadata_find(mu, "private:freeze:timestamp");
 		ts = md != NULL ? atoi(md->value) : 0;
 
-		tm = *localtime(&ts);
-		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+		tm = localtime(&ts);
+		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
 		command_success_nodata(si, _("%s was \2FROZEN\2 by %s on %s (%s)"), entity(mu)->name, setter, strfbuf, reason);
 	}
@@ -432,8 +432,8 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		md = metadata_find(mu, "private:mark:timestamp");
 		ts = md != NULL ? atoi(md->value) : 0;
 
-		tm = *localtime(&ts);
-		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+		tm = localtime(&ts);
+		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
 		command_success_nodata(si, _("%s was \2MARKED\2 by %s on %s (%s)"), entity(mu)->name, setter, strfbuf, reason);
 	}
@@ -449,8 +449,8 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 
 		md = metadata_find(mu, "private:verify:emailchg:timestamp");
 		ts = md != NULL ? atoi(md->value) : 0;
-		tm = *localtime(&ts);
-		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+		tm = localtime(&ts);
+		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
 		command_success_nodata(si, _("%s has requested an email address change to %s on %s"), entity(mu)->name, newemail, strfbuf);
 	}

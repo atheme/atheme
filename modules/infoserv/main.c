@@ -135,7 +135,7 @@ display_info(hook_user_nick_t *data)
 	mowgli_node_t *n;
 	struct logoninfo *l;
 	char dBuf[BUFSIZE];
-	struct tm tm;
+	struct tm *tm;
 	unsigned int count = 0;
 
 	u = data->u;
@@ -160,8 +160,8 @@ display_info(hook_user_nick_t *data)
 			char *y = sstrdup(l->subject);
 			underscores_to_spaces(y);
 
-			tm = *localtime(&l->info_ts);
-			strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
+			tm = localtime(&l->info_ts);
+			strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", tm);
 			notice(infoserv->nick, u->nick, "[\2%s\2] Notice from %s, posted %s:",
 				y, l->nick, dBuf);
 			notice(infoserv->nick, u->nick, "%s", l->story);
@@ -183,7 +183,7 @@ display_oper_info(struct user *u)
 	mowgli_node_t *n;
 	struct operlogoninfo *o;
 	char dBuf[BUFSIZE];
-	struct tm tm;
+	struct tm *tm;
 	unsigned int count = 0;
 
 	if (u == NULL)
@@ -207,8 +207,8 @@ display_oper_info(struct user *u)
 			char *y = sstrdup(o->subject);
 			underscores_to_spaces(y);
 
-			tm = *localtime(&o->info_ts);
-			strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
+			tm = localtime(&o->info_ts);
+			strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", tm);
 			notice(infoserv->nick, u->nick, "[\2%s\2] Notice from %s, posted %s:",
 				y, o->nick, dBuf);
 			notice(infoserv->nick, u->nick, "%s", o->story);
@@ -428,7 +428,7 @@ is_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct logoninfo *l;
 	mowgli_node_t *n;
-	struct tm tm;
+	struct tm *tm;
 	char dBuf[BUFSIZE];
 	unsigned int x = 0;
 
@@ -440,8 +440,8 @@ is_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 		char *y = sstrdup(l->subject);
 		underscores_to_spaces(y);
 
-		tm = *localtime(&l->info_ts);
-		strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
+		tm = localtime(&l->info_ts);
+		strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", tm);
 		command_success_nodata(si, "%u: [\2%s\2] by \2%s\2 at \2%s\2: \2%s\2",
 			x, y, l->nick, dBuf, l->story);
 		sfree(y);
@@ -457,7 +457,7 @@ is_cmd_olist(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct operlogoninfo *o;
 	mowgli_node_t *n;
-	struct tm tm;
+	struct tm *tm;
 	char dBuf[BUFSIZE];
 	unsigned int x = 0;
 
@@ -469,8 +469,8 @@ is_cmd_olist(struct sourceinfo *si, int parc, char *parv[])
 		char *y = sstrdup(o->subject);
 		underscores_to_spaces(y);
 
-		tm = *localtime(&o->info_ts);
-		strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
+		tm = localtime(&o->info_ts);
+		strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", tm);
 		command_success_nodata(si, "%u: [\2%s\2] by \2%s\2 at \2%s\2: \2%s\2",
 			x, y, o->nick, dBuf, o->story);
 		sfree(y);

@@ -20,7 +20,7 @@ ms_cmd_read(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_node_t *n;
 	unsigned int i = 1, memonum = 0, numread = 0;
 	char strfbuf[BUFSIZE];
-	struct tm tm;
+	struct tm *tm;
 	bool readnew;
 
 	// Grab arg
@@ -62,9 +62,8 @@ ms_cmd_read(struct sourceinfo *si, int parc, char *parv[])
 		memo = (struct mymemo *)n->data;
 		if (i == memonum || (readnew && !(memo->status & MEMO_READ)))
 		{
-			tm = *localtime(&memo->sent);
-			strftime(strfbuf, sizeof strfbuf,
-				TIME_FORMAT, &tm);
+			tm = localtime(&memo->sent);
+			strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
 			if (!(memo->status & MEMO_READ))
 			{

@@ -64,7 +64,7 @@ os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[])
 	char *p, *q;
 	char logfile[256];
 	time_t t;
-	struct tm tm;
+	struct tm *tm;
 	mowgli_list_t loglines = { NULL, NULL, 0 };
 	mowgli_node_t *n, *tn;
 
@@ -116,10 +116,10 @@ os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[])
 		else
 		{
 			t = CURRTIME - day * 86400;
-			tm = *localtime(&t);
+			tm = localtime(&t);
 			snprintf(logfile, sizeof logfile, "%s.%04u%02u%02u",
-					baselog, (unsigned int) (tm.tm_year + 1900),
-					(unsigned int) (tm.tm_mon + 1), (unsigned int) tm.tm_mday);
+					baselog, (unsigned int) (tm->tm_year + 1900),
+					(unsigned int) (tm->tm_mon + 1), (unsigned int) tm->tm_mday);
 		}
 		in = fopen(logfile, "r");
 		if (in == NULL)

@@ -435,13 +435,13 @@ os_cmd_akill_list(struct sourceinfo *si, int parc, char *parv[])
 
 	MOWGLI_ITER_FOREACH(n, klnlist.head)
 	{
-		struct tm tm;
+		struct tm *tm;
 		char settime[64];
 
 		k = (struct kline *)n->data;
 
-		tm = *localtime(&k->settime);
-		strftime(settime, sizeof settime, TIME_FORMAT, &tm);
+		tm = localtime(&k->settime);
+		strftime(settime, sizeof settime, TIME_FORMAT, tm);
 
 		if (num != 0 && k->number != num)
 			continue;

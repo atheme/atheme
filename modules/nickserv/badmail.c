@@ -169,7 +169,7 @@ ns_cmd_badmail(struct sourceinfo *si, int parc, char *parv[])
 	else if (!strcasecmp("LIST", action))
 	{
 		char buf[BUFSIZE];
-		struct tm tm;
+		struct tm *tm;
 		unsigned int count = 0;
 
 		MOWGLI_ITER_FOREACH(n, ns_maillist.head)
@@ -179,8 +179,8 @@ ns_cmd_badmail(struct sourceinfo *si, int parc, char *parv[])
 			if ((!email) || !match(email, l->mail))
 			{
 				count++;
-				tm = *localtime(&l->mail_ts);
-				strftime(buf, BUFSIZE, TIME_FORMAT, &tm);
+				tm = localtime(&l->mail_ts);
+				strftime(buf, BUFSIZE, TIME_FORMAT, tm);
 				command_success_nodata(si, _("Email: \2%s\2, Reason: \2%s\2 (%s - %s)"),
 					l->mail, l->reason, l->creator, buf);
 			}
@@ -199,7 +199,7 @@ ns_cmd_badmail(struct sourceinfo *si, int parc, char *parv[])
 	else if (!strcasecmp("TEST", action))
 	{
 		char buf[BUFSIZE];
-		struct tm tm;
+		struct tm *tm;
 		unsigned int count = 0;
 
 		if (!email)
@@ -216,8 +216,8 @@ ns_cmd_badmail(struct sourceinfo *si, int parc, char *parv[])
 			if (!match(l->mail, email))
 			{
 				count++;
-				tm = *localtime(&l->mail_ts);
-				strftime(buf, BUFSIZE, TIME_FORMAT, &tm);
+				tm = localtime(&l->mail_ts);
+				strftime(buf, BUFSIZE, TIME_FORMAT, tm);
 				command_success_nodata(si, _("Email: \2%s\2, Reason: \2%s\2 (%s - %s)"),
 					l->mail, l->reason, l->creator, buf);
 			}

@@ -553,7 +553,7 @@ chanfix_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct chanfix_oprecord *orec;
 	struct chanfix_channel *chan;
-	struct tm tm;
+	struct tm *tm;
 	char strfbuf[BUFSIZE];
 	unsigned int highscore = 0;
 	struct metadata *md;
@@ -577,8 +577,8 @@ chanfix_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("Information on \2%s\2:"), chan->name);
 
-	tm = *localtime(&chan->ts);
-	strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+	tm = localtime(&chan->ts);
+	strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
 	command_success_nodata(si, _("Creation time: %s"), strfbuf);
 
@@ -613,8 +613,8 @@ chanfix_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		md = metadata_find(chan, "private:mark:timestamp");
 		ts = md != NULL ? atoi(md->value) : 0;
 
-		tm = *localtime(&ts);
-		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+		tm = localtime(&ts);
+		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
 		command_success_nodata(si, _("%s was \2MARKED\2 by %s on %s (%s)"), chan->name, setter, strfbuf, reason);
 	}
@@ -631,8 +631,8 @@ chanfix_cmd_info(struct sourceinfo *si, int parc, char *parv[])
                 md = metadata_find(chan, "private:mark:timestamp");
                 ts = md != NULL ? atoi(md->value) : 0;
 
-                tm = *localtime(&ts);
-                strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+                tm = localtime(&ts);
+                strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
                 command_success_nodata(si, _("%s had \2NOFIX\2 set by %s on %s (%s)"), chan->name, setter, strfbuf, reason);
         }

@@ -256,15 +256,15 @@ helpserv_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_node_t *n;
 	unsigned int x = 0;
 	char buf[BUFSIZE];
-	struct tm tm;
+	struct tm *tm;
 
 	MOWGLI_ITER_FOREACH(n, helpserv_reqlist.head)
 	{
 		l = n->data;
 		x++;
 
-		tm = *localtime(&l->ticket_ts);
-		strftime(buf, BUFSIZE, TIME_FORMAT, &tm);
+		tm = localtime(&l->ticket_ts);
+		strftime(buf, BUFSIZE, TIME_FORMAT, tm);
 		command_success_nodata(si, "#%u Nick:\2%s\2, topic:\2%s\2 (%s - %s)",
 			x, l->nick, l->topic, l->creator, buf);
 	}

@@ -326,7 +326,7 @@ hs_cmd_offerlist(struct sourceinfo *si, int parc, char *parv[])
 	struct hsoffered *l;
 	mowgli_node_t *n;
 	char buf[BUFSIZE];
-	struct tm tm;
+	struct tm *tm;
 
 	MOWGLI_ITER_FOREACH(n, hs_offeredlist.head)
 	{
@@ -335,9 +335,8 @@ hs_cmd_offerlist(struct sourceinfo *si, int parc, char *parv[])
 		if (l->group != NULL && !myuser_is_in_group(si->smu, l->group) && !has_priv(si, PRIV_GROUP_ADMIN))
 			continue;
 
-		tm = *localtime(&l->vhost_ts);
-
-		strftime(buf, BUFSIZE, TIME_FORMAT, &tm);
+		tm = localtime(&l->vhost_ts);
+		strftime(buf, BUFSIZE, TIME_FORMAT, tm);
 
 		if(l->group != NULL)
 			command_success_nodata(si, "vhost:\2%s\2, group:\2%s\2 creator:\2%s\2 (%s)",

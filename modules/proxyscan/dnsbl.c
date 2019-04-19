@@ -227,14 +227,14 @@ ps_cmd_dnsblexempt(struct sourceinfo *si, int parc, char *parv[])
 	else if (!strcasecmp("LIST", command))
 	{
 		char buf[BUFSIZE];
-		struct tm tm;
+		struct tm *tm;
 
 		MOWGLI_ITER_FOREACH(n, dnsbl_elist.head)
 		{
 			de = n->data;
 
-			tm = *localtime(&de->exempt_ts);
-			strftime(buf, BUFSIZE, TIME_FORMAT, &tm);
+			tm = localtime(&de->exempt_ts);
+			strftime(buf, BUFSIZE, TIME_FORMAT, tm);
 			command_success_nodata(si, _("IP: \2%s\2 Reason: \2%s\2 (%s - %s)"),
 					de->ip, de->reason, de->creator, buf);
 		}

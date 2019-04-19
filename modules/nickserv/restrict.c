@@ -45,7 +45,7 @@ info_hook(hook_user_req_t *hdata)
 		const char *setter = md->value;
 		const char *reason;
 		time_t ts;
-		struct tm tm;
+		struct tm *tm;
 		char strfbuf[BUFSIZE];
 
 		md = metadata_find(hdata->mu, "private:restrict:reason");
@@ -54,8 +54,8 @@ info_hook(hook_user_req_t *hdata)
 		md = metadata_find(hdata->mu, "private:restrict:timestamp");
 		ts = md != NULL ? atoi(md->value) : 0;
 
-		tm = *localtime(&ts);
-		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+		tm = localtime(&ts);
+		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
 		command_success_nodata(hdata->si, _("%s was \2RESTRICTED\2 by %s on %s (%s)"), entity(hdata->mu)->name, setter, strfbuf, reason);
 	}

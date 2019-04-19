@@ -313,13 +313,13 @@ cs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_patricia_iteration_state_t state;
 	struct reg_request *cs;
-	struct tm tm;
+	struct tm *tm;
 	char strfbuf[BUFSIZE];
 
 	MOWGLI_PATRICIA_FOREACH(cs, &state, csreq_list)
 	{
-		tm = *localtime(&cs->ts);
-		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+		tm = localtime(&cs->ts);
+		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
 		command_success_nodata(si, _("\2%s\2 (\2%s\2) [%s (%s ago)]"),
 				       cs->name, cs->mt->name, strfbuf, time_ago(cs->ts));

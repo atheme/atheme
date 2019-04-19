@@ -694,7 +694,7 @@ sendemail(struct user *u, struct myuser *mu, const char *type, const char *email
 	char timebuf[BUFSIZE], to[BUFSIZE], from[BUFSIZE], buf[BUFSIZE], pathbuf[BUFSIZE], sourceinfo[BUFSIZE];
 	FILE *in, *out;
 	time_t t;
-	struct tm tm;
+	struct tm *tm;
 	int pipfds[2];
 	pid_t pid;
 	int rc;
@@ -761,8 +761,8 @@ sendemail(struct user *u, struct myuser *mu, const char *type, const char *email
 
 	/* set up the email headers */
 	time(&t);
-	tm = *localtime(&t);
-	strftime(timebuf, sizeof timebuf, "%a, %d %b %Y %H:%M:%S %z", &tm);
+	tm = localtime(&t);
+	strftime(timebuf, sizeof timebuf, "%a, %d %b %Y %H:%M:%S %z", tm);
 
 	date = timebuf;
 

@@ -520,7 +520,7 @@ show_multimark(hook_user_req_t *hdata)
 
 	mowgli_node_t *n;
 	struct multimark *mm;
-	struct tm tm;
+	struct tm *tm;
 	char time[BUFSIZE];
 
 	struct myuser *setter;
@@ -540,9 +540,8 @@ show_multimark(hook_user_req_t *hdata)
 	MOWGLI_ITER_FOREACH(n, l->head)
 	{
 		mm = n->data;
-		tm = *localtime(&mm->time);
-
-		strftime(time, sizeof time, TIME_FORMAT, &tm);
+		tm = localtime(&mm->time);
+		strftime(time, sizeof time, TIME_FORMAT, tm);
 
 		if ((setter = myuser_find_uid(mm->setter_uid)) != NULL)
 		{
@@ -652,7 +651,7 @@ show_multimark_noexist(hook_info_noexist_req_t *hdata)
 
 	mowgli_node_t *n;
 	struct restored_mark *rm;
-	struct tm tm;
+	struct tm *tm;
 	char time[BUFSIZE];
 
 	struct myuser *setter;
@@ -671,9 +670,8 @@ show_multimark_noexist(hook_info_noexist_req_t *hdata)
 	MOWGLI_ITER_FOREACH(n, l->head)
 	{
 		rm = n->data;
-		tm = *localtime(&rm->time);
-
-		strftime(time, sizeof time, TIME_FORMAT, &tm);
+		tm = localtime(&rm->time);
+		strftime(time, sizeof time, TIME_FORMAT, tm);
 
 		if ((setter = myuser_find_uid(rm->setter_uid)) != NULL)
 		{
@@ -734,7 +732,7 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 
 	mowgli_node_t *n;
 	struct multimark *mm;
-	struct tm tm;
+	struct tm *tm;
 	char time[BUFSIZE];
 
 	struct myuser *setter;
@@ -811,9 +809,8 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 			MOWGLI_ITER_FOREACH(n, rl->head)
 			{
 				rm = n->data;
-				tm = *localtime(&rm->time);
-
-				strftime(time, sizeof time, TIME_FORMAT, &tm);
+				tm = localtime(&rm->time);
+				strftime(time, sizeof time, TIME_FORMAT, tm);
 
 				if ((setter = myuser_find_uid(rm->setter_uid)) != NULL)
 				{
@@ -859,9 +856,8 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 		MOWGLI_ITER_FOREACH(n, l->head)
 		{
 			mm = n->data;
-			tm = *localtime(&mm->time);
-
-			strftime(time, sizeof time, TIME_FORMAT, &tm);
+			tm = localtime(&mm->time);
+			strftime(time, sizeof time, TIME_FORMAT, tm);
 
 			if ((setter = myuser_find_uid(mm->setter_uid)) != NULL)
 			{
