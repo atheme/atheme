@@ -84,6 +84,8 @@ struct ConfOption
 	char *          global;                 // nick for global noticer
 	char *          languagefile;           // path to language file (if any)
 	bool            verbose_wallops;        // verbose wallops? :)
+	char *          operstring;             // "is an IRC Operator"
+	char *          servicestring;          // "is a Network Service"
 	unsigned int    default_clone_allowed;  // default clone kill
 	unsigned int    default_clone_warn;     // default clone warn
 	bool            clone_increase;         // If the clone limit will increase based on # of identified clones

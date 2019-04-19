@@ -2280,6 +2280,16 @@ general {
 	 */
 	commit_interval = 5;
 
+	/* (*)operstring
+	 * The string returned in WHOIS (against services) for IRC operators.
+	 */
+	#operstring = "is an IRC Operator";
+
+	/* (*)servicestring
+	 * The string returned in WHOIS (against services) for services.
+	 */
+	#servicestring = "is a Network Service";
+
 	/* (*)default_clone_allowed
 	 * The limit after which clones will be KILLed or TKLINEd.
 	 * Used by operserv/clones.
