@@ -112,7 +112,7 @@ cs_cmd_bansearch_func(struct sourceinfo *const restrict si, const int parc, char
 		(void) command_success_nodata(si, _("\2%s\2 is moderated and \2%s\2 has no channel privileges."),
 		                              channel, tu->nick);
 	else if (c->modes & CMODE_MOD)
-		(void) command_success_nodata(si, _("\2%s\2 is moderated."));
+		(void) command_success_nodata(si, _("\2%s\2 is moderated."), channel);
 
 	if (c->limit && c->nummembers >= c->limit && ! cu)
 		(void) command_success_nodata(si, _("\2%s\2 is full."), channel);
