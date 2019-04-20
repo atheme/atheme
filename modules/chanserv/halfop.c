@@ -84,18 +84,40 @@ cmd_halfop(struct sourceinfo *si, bool halfopping, int parc, char *parv[])
 			continue;
 		}
 
-		modestack_mode_param(chansvs.nick, mc->chan, halfop ? MTYPE_ADD : MTYPE_DEL, 'h', CLIENT_NAME(tu));
 		if (halfop)
+		{
+			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->halfops_mchar[1], CLIENT_NAME(tu));
 			cu->modes |= ircd->halfops_mode;
+
+			if (! si->c && tu != si->su)
+				change_notify(chansvs.nick, tu, "You have had halfop (+%c) status given to you on "
+				                                "\2%s\2 by \2%s\2", ircd->halfops_mchar[1], mc->name,
+				                                get_source_name(si));
+
+			if (! si->su || ! chanuser_find(mc->chan, si->su))
+				command_success_nodata(si, _("\2%s\2 has had halfop (+%c) status given to them on "
+				                             "\2%s\2"), tu->nick, ircd->halfops_mchar[1], mc->name);
+
+			logcommand(si, CMDLOG_DO, "HALFOP: \2%s!%s@%s\2 on \2%s\2", tu->nick, tu->user, tu->vhost,
+			                                                            mc->name);
+		}
 		else
+		{
+			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, ircd->halfops_mchar[1], CLIENT_NAME(tu));
 			cu->modes &= ~ircd->halfops_mode;
 
-		if (si->c == NULL && tu != si->su)
-			change_notify(chansvs.nick, tu, "You have been %shalfopped on %s by %s", halfop ? "" : "de", mc->name, get_source_name(si));
+			if (! si->c && tu != si->su)
+				change_notify(chansvs.nick, tu, "You have had halfop (+%c) status taken from you on "
+				                                "\2%s\2 by \2%s\2", ircd->halfops_mchar[1], mc->name,
+				                                get_source_name(si));
 
-		logcommand(si, CMDLOG_DO, "%sHALFOP: \2%s!%s@%s\2 on \2%s\2", halfop ? "" : "DE", tu->nick, tu->user, tu->vhost, mc->name);
-		if (si->su == NULL || !chanuser_find(mc->chan, si->su))
-			command_success_nodata(si, _("\2%s\2 has been %shalfopped on \2%s\2."), tu->nick, halfop ? "" : "de", mc->name);
+			if (! si->su || ! chanuser_find(mc->chan, si->su))
+				command_success_nodata(si, _("\2%s\2 has had halfop (+%c) status taken from them on "
+				                             "\2%s\2"), tu->nick, ircd->halfops_mchar[1], mc->name);
+
+			logcommand(si, CMDLOG_DO, "DEHALFOP: \2%s!%s@%s\2 on \2%s\2", tu->nick, tu->user, tu->vhost,
+			                                                              mc->name);
+		}
 	}
 
 	prefix_action_clear(&halfop_actions);

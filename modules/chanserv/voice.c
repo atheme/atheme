@@ -56,7 +56,7 @@ cmd_voice(struct sourceinfo *si, bool voicing, int parc, char *parv[])
 
 		if (!chanacs_source_has_flag(mc, si, CA_VOICE) && (tu != si->su || !chanacs_source_has_flag(mc, si, CA_AUTOVOICE)))
 		{
-			command_fail(si, fault_noprivs, _("You are not authorized to (de)voice \2%s\2 on \2%s\2."), nick, mc->name);
+			command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 			continue;
 		}
 
@@ -70,18 +70,38 @@ cmd_voice(struct sourceinfo *si, bool voicing, int parc, char *parv[])
 			continue;
 		}
 
-		modestack_mode_param(chansvs.nick, mc->chan, voice ? MTYPE_ADD : MTYPE_DEL, 'v', CLIENT_NAME(tu));
 		if (voice)
+		{
+			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'v', CLIENT_NAME(tu));
 			cu->modes |= CSTATUS_VOICE;
+
+			if (! si->c && tu != si->su)
+				change_notify(chansvs.nick, tu, "You have had voice (+v) status given to you on "
+				                                "\2%s\2 by \2%s\2", mc->name, get_source_name(si));
+
+			if (! si->su || ! chanuser_find(mc->chan, si->su))
+				command_success_nodata(si, _("\2%s\2 has had voice (+v) status given to them on "
+				                             "\2%s\2"), tu->nick, mc->name);
+
+			logcommand(si, CMDLOG_DO, "VOICE: \2%s!%s@%s\2 on \2%s\2", tu->nick, tu->user, tu->vhost,
+			                                                           mc->name);
+		}
 		else
+		{
+			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'v', CLIENT_NAME(tu));
 			cu->modes &= ~CSTATUS_VOICE;
 
-		if (si->c == NULL && tu != si->su)
-			change_notify(chansvs.nick, tu, "You have been %svoiced on %s by %s", voice ? "" : "de", mc->name, get_source_name(si));
+			if (! si->c && tu != si->su)
+				change_notify(chansvs.nick, tu, "You have had voice (+v) status taken from you on "
+				                                "\2%s\2 by \2%s\2", mc->name, get_source_name(si));
 
-		logcommand(si, CMDLOG_DO, "%sVOICE: \2%s!%s@%s\2 on \2%s\2", voice ? "": "DE", tu->nick, tu->user, tu->vhost, mc->name);
-		if (si->su == NULL || !chanuser_find(mc->chan, si->su))
-			command_success_nodata(si, _("\2%s\2 has been %svoiced on \2%s\2."), tu->nick, voice ? "" : "de", mc->name);
+			if (! si->su || ! chanuser_find(mc->chan, si->su))
+				command_success_nodata(si, _("\2%s\2 has had voice (+v) status taken from them on "
+				                             "\2%s\2"), tu->nick, mc->name);
+
+			logcommand(si, CMDLOG_DO, "DEVOICE: \2%s!%s@%s\2 on \2%s\2", tu->nick, tu->user, tu->vhost,
+			                                                             mc->name);
+		}
 	}
 
 	prefix_action_clear(&voice_actions);

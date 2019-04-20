@@ -84,18 +84,40 @@ cmd_protect(struct sourceinfo *si, bool protecting, int parc, char *parv[])
 			continue;
 		}
 
-		modestack_mode_param(chansvs.nick, mc->chan, protect ? MTYPE_ADD : MTYPE_DEL, ircd->protect_mchar[1], CLIENT_NAME(tu));
 		if (protect)
+		{
+			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(tu));
 			cu->modes |= CSTATUS_PROTECT;
+
+			if (! si->c && tu != si->su)
+				change_notify(chansvs.nick, tu, "You have had protected (+%c) status given to you on "
+				                                "\2%s\2 by \2%s\2", ircd->protect_mchar[1], mc->name,
+				                                get_source_name(si));
+
+			if (! si->su || ! chanuser_find(mc->chan, si->su))
+				command_success_nodata(si, _("\2%s\2 has had protected (+%c) status given to them on "
+				                             "\2%s\2"), tu->nick, ircd->protect_mchar[1], mc->name);
+
+			logcommand(si, CMDLOG_DO, "PROTECT: \2%s!%s@%s\2 on \2%s\2", tu->nick, tu->user, tu->vhost,
+			                                                             mc->name);
+		}
 		else
+		{
+			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, ircd->protect_mchar[1], CLIENT_NAME(tu));
 			cu->modes &= ~CSTATUS_PROTECT;
 
-		if (si->c == NULL && tu != si->su)
-			change_notify(chansvs.nick, tu, "You have been %sset as protected on %s by %s", protect ? "" : "un", mc->name, get_source_name(si));
+			if (! si->c && tu != si->su)
+				change_notify(chansvs.nick, tu, "You have had protected (+%c) status taken from you "
+				                                "on \2%s\2 by \2%s\2", ircd->protect_mchar[1], mc->name,
+				                                get_source_name(si));
 
-		logcommand(si, CMDLOG_DO, "%sPROTECT: \2%s!%s@%s\2 on \2%s\2", protect ? "" : "DE", tu->nick, tu->user, tu->vhost, mc->name);
-		if (si->su == NULL || !chanuser_find(mc->chan, si->su))
-			command_success_nodata(si, _("\2%s\2 has been %sset as protected on \2%s\2."), tu->nick, protect ? "" : "un", mc->name);
+			if (! si->su || ! chanuser_find(mc->chan, si->su))
+				command_success_nodata(si, _("\2%s\2 has had protected (+%c) status taken from them "
+				                             "on \2%s\2"), tu->nick, ircd->protect_mchar[1], mc->name);
+
+			logcommand(si, CMDLOG_DO, "DEPROTECT: \2%s!%s@%s\2 on \2%s\2", tu->nick, tu->user, tu->vhost,
+			                                                               mc->name);
+		}
 	}
 
 	prefix_action_clear(&protect_actions);

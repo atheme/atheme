@@ -84,18 +84,40 @@ cmd_owner(struct sourceinfo *si, bool ownering, int parc, char *parv[])
 			continue;
 		}
 
-		modestack_mode_param(chansvs.nick, mc->chan, owner ? MTYPE_ADD : MTYPE_DEL, ircd->owner_mchar[1], CLIENT_NAME(tu));
 		if (owner)
+		{
+			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(tu));
 			cu->modes |= CSTATUS_OWNER;
+
+			if (! si->c && tu != si->su)
+				change_notify(chansvs.nick, tu, "You have had owner (+%c) status given to you on "
+				                                "\2%s\2 by \2%s\2", ircd->owner_mchar[1], mc->name,
+				                                get_source_name(si));
+
+			if (! si->su || ! chanuser_find(mc->chan, si->su))
+				command_success_nodata(si, _("\2%s\2 has had owner (+%c) status given to them on "
+				                             "\2%s\2"), tu->nick, ircd->owner_mchar[1], mc->name);
+
+			logcommand(si, CMDLOG_DO, "OWNER: \2%s!%s@%s\2 on \2%s\2", tu->nick, tu->user, tu->vhost,
+			                                                           mc->name);
+		}
 		else
+		{
+			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, ircd->owner_mchar[1], CLIENT_NAME(tu));
 			cu->modes &= ~CSTATUS_OWNER;
 
-		if (si->c == NULL && tu != si->su)
-			change_notify(chansvs.nick, tu, "You have been %sset as owner on %s by %s", owner ? "" : "un", mc->name, get_source_name(si));
+			if (! si->c && tu != si->su)
+				change_notify(chansvs.nick, tu, "You have had owner (+%c) status taken from you on "
+				                                "\2%s\2 by \2%s\2", ircd->owner_mchar[1], mc->name,
+				                                get_source_name(si));
 
-		logcommand(si, CMDLOG_DO, "%sOWNER: \2%s!%s@%s\2 on \2%s\2", owner ? "" : "DE", tu->nick, tu->user, tu->vhost, mc->name);
-		if (si->su == NULL || !chanuser_find(mc->chan, si->su))
-			command_success_nodata(si, _("\2%s\2 has been %sset as owner on \2%s\2."), tu->nick, owner ? "" : "un", mc->name);
+			if (! si->su || ! chanuser_find(mc->chan, si->su))
+				command_success_nodata(si, _("\2%s\2 has had owner (+%c) status taken from them on "
+				                             "\2%s\2"), tu->nick, ircd->owner_mchar[1], mc->name);
+
+			logcommand(si, CMDLOG_DO, "OWNER: \2%s!%s@%s\2 on \2%s\2", tu->nick, tu->user, tu->vhost,
+			                                                           mc->name);
+		}
 	}
 
 	prefix_action_clear(&owner_actions);

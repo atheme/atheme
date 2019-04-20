@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-04-19 00:38+0000\n"
+"POT-Creation-Date: 2019-04-20 00:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -269,31 +269,6 @@ msgstr ""
 msgid "%s has already been entered into the DNSBL exempts list."
 msgstr ""
 
-#: modules/chanserv/halfop.c:98
-#, c-format
-msgid "%s has been %shalfopped on %s."
-msgstr ""
-
-#: modules/chanserv/op.c:95
-#, c-format
-msgid "%s has been %sopped on %s."
-msgstr ""
-
-#: modules/chanserv/owner.c:98
-#, c-format
-msgid "%s has been %sset as owner on %s."
-msgstr ""
-
-#: modules/chanserv/protect.c:98
-#, c-format
-msgid "%s has been %sset as protected on %s."
-msgstr ""
-
-#: modules/chanserv/voice.c:84
-#, c-format
-msgid "%s has been %svoiced on %s."
-msgstr ""
-
 #: modules/chanserv/xop.c:72 modules/chanserv/xop.c:145
 #, c-format
 msgid "%s has been added to the %s list for %s."
@@ -392,6 +367,56 @@ msgstr ""
 #: modules/nickserv/freeze.c:120
 #, c-format
 msgid "%s has been thawed"
+msgstr ""
+
+#: modules/chanserv/halfop.c:98
+#, c-format
+msgid "%s has had halfop (+%c) status given to them on %s"
+msgstr ""
+
+#: modules/chanserv/halfop.c:115
+#, c-format
+msgid "%s has had halfop (+%c) status taken from them on %s"
+msgstr ""
+
+#: modules/chanserv/op.c:94
+#, c-format
+msgid "%s has had operator (+o) status given to them on %s"
+msgstr ""
+
+#: modules/chanserv/op.c:110
+#, c-format
+msgid "%s has had operator (+o) status taken from them on %s"
+msgstr ""
+
+#: modules/chanserv/owner.c:98
+#, c-format
+msgid "%s has had owner (+%c) status given to them on %s"
+msgstr ""
+
+#: modules/chanserv/owner.c:115
+#, c-format
+msgid "%s has had owner (+%c) status taken from them on %s"
+msgstr ""
+
+#: modules/chanserv/protect.c:98
+#, c-format
+msgid "%s has had protected (+%c) status given to them on %s"
+msgstr ""
+
+#: modules/chanserv/protect.c:115
+#, c-format
+msgid "%s has had protected (+%c) status taken from them on %s"
+msgstr ""
+
+#: modules/chanserv/voice.c:83
+#, c-format
+msgid "%s has had voice (+v) status given to them on %s"
+msgstr ""
+
+#: modules/chanserv/voice.c:99
+#, c-format
+msgid "%s has had voice (+v) status taken from them on %s"
 msgstr ""
 
 #: modules/rpgserv/set.c:20
@@ -3277,23 +3302,23 @@ msgstr ""
 msgid "Genre: %s"
 msgstr ""
 
-#: modules/chanserv/halfop.c:132
+#: modules/chanserv/halfop.c:154
 msgid "Gives channel halfops to a user."
 msgstr ""
 
-#: modules/chanserv/op.c:129
+#: modules/chanserv/op.c:149
 msgid "Gives channel ops to a user."
 msgstr ""
 
-#: modules/chanserv/voice.c:118
+#: modules/chanserv/voice.c:138
 msgid "Gives channel voice to a user."
 msgstr ""
 
-#: modules/chanserv/owner.c:132
+#: modules/chanserv/owner.c:154
 msgid "Gives the channel owner flag to a user."
 msgstr ""
 
-#: modules/chanserv/protect.c:132
+#: modules/chanserv/protect.c:154
 msgid "Gives the channel protection flag to a user."
 msgstr ""
 
@@ -5197,23 +5222,23 @@ msgstr ""
 msgid "Removes and bans a user from a channel."
 msgstr ""
 
-#: modules/chanserv/halfop.c:141
+#: modules/chanserv/halfop.c:163
 msgid "Removes channel halfops from a user."
 msgstr ""
 
-#: modules/chanserv/op.c:138
+#: modules/chanserv/op.c:158
 msgid "Removes channel ops from a user."
 msgstr ""
 
-#: modules/chanserv/owner.c:141
+#: modules/chanserv/owner.c:163
 msgid "Removes channel owner flag from a user."
 msgstr ""
 
-#: modules/chanserv/protect.c:141
+#: modules/chanserv/protect.c:163
 msgid "Removes channel protection flag from a user."
 msgstr ""
 
-#: modules/chanserv/voice.c:127
+#: modules/chanserv/voice.c:147
 msgid "Removes channel voice from a user."
 msgstr ""
 
@@ -6057,7 +6082,7 @@ msgstr ""
 msgid "Syntax: COUNT <#channel>"
 msgstr ""
 
-#: modules/chanserv/halfop.c:123
+#: modules/chanserv/halfop.c:145
 msgid "Syntax: DEHALFOP <#channel> [nickname] [...]"
 msgstr ""
 
@@ -6065,19 +6090,19 @@ msgstr ""
 msgid "Syntax: DELETE ALL|OLD|message id"
 msgstr ""
 
-#: modules/chanserv/op.c:120
+#: modules/chanserv/op.c:140
 msgid "Syntax: DEOP <#channel> [nickname] [...]"
 msgstr ""
 
-#: modules/chanserv/owner.c:123
+#: modules/chanserv/owner.c:145
 msgid "Syntax: DEOWNER <#channel> [nickname] [...]"
 msgstr ""
 
-#: modules/chanserv/protect.c:123
+#: modules/chanserv/protect.c:145
 msgid "Syntax: DEPROTECT <#channel> [nickname]"
 msgstr ""
 
-#: modules/chanserv/voice.c:109
+#: modules/chanserv/voice.c:129
 msgid "Syntax: DEVOICE <#channel> [nickname] [...]"
 msgstr ""
 
@@ -6193,7 +6218,7 @@ msgstr ""
 msgid "Syntax: GREPLOG <service> <pattern> [days]"
 msgstr ""
 
-#: modules/chanserv/halfop.c:110
+#: modules/chanserv/halfop.c:132
 msgid "Syntax: HALFOP <#channel> [nickname] [...]"
 msgstr ""
 
@@ -6321,11 +6346,11 @@ msgstr ""
 msgid "Syntax: OFFER [!group] <vhost>"
 msgstr ""
 
-#: modules/chanserv/op.c:107
+#: modules/chanserv/op.c:127
 msgid "Syntax: OP <#channel> [nickname] [...]"
 msgstr ""
 
-#: modules/chanserv/owner.c:110
+#: modules/chanserv/owner.c:132
 msgid "Syntax: OWNER <#channel> [nickname] [...]"
 msgstr ""
 
@@ -6333,7 +6358,7 @@ msgstr ""
 msgid "Syntax: POST <importance> <subject> <message>"
 msgstr ""
 
-#: modules/chanserv/protect.c:110
+#: modules/chanserv/protect.c:132
 msgid "Syntax: PROTECT <#channel> [nickname]"
 msgstr ""
 
@@ -6746,7 +6771,7 @@ msgstr ""
 msgid "Syntax: VHOSTNICK <nick> [vhost]"
 msgstr ""
 
-#: modules/chanserv/voice.c:96
+#: modules/chanserv/voice.c:116
 msgid "Syntax: VOICE <#channel> [nickname] [...]"
 msgstr ""
 
@@ -7435,11 +7460,11 @@ msgstr ""
 msgid "This is a friendly reminder that you are about to DESTROY the group %s."
 msgstr ""
 
-#: libathemecore/ptasks.c:948
+#: libathemecore/ptasks.c:950
 msgid "This is your first offense. You will be ignored for 30 seconds."
 msgstr ""
 
-#: libathemecore/ptasks.c:963
+#: libathemecore/ptasks.c:965
 msgid "This is your last warning. You will be ignored for 30 seconds."
 msgstr ""
 
@@ -8033,11 +8058,6 @@ msgstr ""
 msgid "You are not authorized to (de)op %s on %s."
 msgstr ""
 
-#: modules/chanserv/voice.c:59
-#, c-format
-msgid "You are not authorized to (de)voice %s on %s."
-msgstr ""
-
 #: modules/botserv/main.c:815
 #, c-format
 msgid "You are not authorized to assign bots on %s."
@@ -8111,7 +8131,7 @@ msgstr ""
 msgid "You are now logged in as %s."
 msgstr ""
 
-#: libathemecore/ptasks.c:900
+#: libathemecore/ptasks.c:902
 msgid "You are on services ignore. You may not use any service."
 msgstr ""
 
@@ -8381,7 +8401,7 @@ msgstr ""
 msgid "You have too many nicks registered already."
 msgstr ""
 
-#: libathemecore/ptasks.c:947 libathemecore/ptasks.c:962
+#: libathemecore/ptasks.c:949 libathemecore/ptasks.c:964
 msgid "You have triggered services flood protection."
 msgstr ""
 

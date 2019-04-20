@@ -81,18 +81,38 @@ cmd_op(struct sourceinfo *si, bool opping, int parc, char *parv[])
 			continue;
 		}
 
-		modestack_mode_param(chansvs.nick, mc->chan, op ? MTYPE_ADD : MTYPE_DEL, 'o', CLIENT_NAME(tu));
 		if (op)
+		{
+			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'o', CLIENT_NAME(tu));
 			cu->modes |= CSTATUS_OP;
+
+			if (! si->c && tu != si->su)
+				change_notify(chansvs.nick, tu, "You have had operator (+o) status given to you on "
+				                                "\2%s\2 by \2%s\2", mc->name, get_source_name(si));
+
+			if (! si->su || ! chanuser_find(mc->chan, si->su))
+				command_success_nodata(si, _("\2%s\2 has had operator (+o) status given to them on "
+				                             "\2%s\2"), tu->nick, mc->name);
+
+			logcommand(si, CMDLOG_DO, "OP: \2%s!%s@%s\2 on \2%s\2", tu->nick, tu->user, tu->vhost,
+			                                                        mc->name);
+		}
 		else
+		{
+			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'o', CLIENT_NAME(tu));
 			cu->modes &= ~CSTATUS_OP;
 
-		if (si->c == NULL && tu != si->su)
-			change_notify(chansvs.nick, tu, "You have been %sopped on %s by %s", op ? "" : "de", mc->name, get_source_name(si));
+			if (! si->c && tu != si->su)
+				change_notify(chansvs.nick, tu, "You have had operator (+o) status taken from you on "
+				                                "\2%s\2 by \2%s\2", mc->name, get_source_name(si));
 
-		logcommand(si, CMDLOG_DO, "%sOP: \2%s!%s@%s\2 on \2%s\2", op ? "" : "DE", tu->nick, tu->user, tu->vhost, mc->name);
-		if (si->su == NULL || !chanuser_find(mc->chan, si->su))
-			command_success_nodata(si, _("\2%s\2 has been %sopped on \2%s\2."), tu->nick, op ? "" : "de", mc->name);
+			if (! si->su || ! chanuser_find(mc->chan, si->su))
+				command_success_nodata(si, _("\2%s\2 has had operator (+o) status taken from them on "
+				                             "\2%s\2"), tu->nick, mc->name);
+
+			logcommand(si, CMDLOG_DO, "DEOP: \2%s!%s@%s\2 on \2%s\2", tu->nick, tu->user, tu->vhost,
+			                                                          mc->name);
+		}
 	}
 
 	prefix_action_clear(&op_actions);
