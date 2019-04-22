@@ -78,6 +78,7 @@
 #define MINUTES_PER_WEEK        10080U
 #define HOURS_PER_DAY           24U
 #define HOURS_PER_WEEK          168U
+#define DAYS_PER_WEEK           7U
 
 #ifndef TIME_FORMAT
 #  define TIME_FORMAT           "%b %d %H:%M:%S %Y %z"
