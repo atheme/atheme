@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-04-20 22:40+0000\n"
+"POT-Creation-Date: 2019-04-22 01:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -175,7 +175,7 @@ msgstr ""
 msgid "%s can now take ownership of %s."
 msgstr ""
 
-#: include/atheme/constants.h:80
+#: include/atheme/constants.h:90
 #, c-format
 msgid "%s can only be executed via IRC."
 msgstr ""
@@ -628,7 +628,7 @@ msgid ""
 "and %s is not identified."
 msgstr ""
 
-#: include/atheme/constants.h:76
+#: include/atheme/constants.h:86
 #, c-format
 msgid "%s is closed."
 msgstr ""
@@ -638,7 +638,7 @@ msgstr ""
 msgid "%s is closed; it cannot be transferred."
 msgstr ""
 
-#: include/atheme/constants.h:77
+#: include/atheme/constants.h:87
 #, c-format
 msgid "%s is currently empty."
 msgstr ""
@@ -904,7 +904,7 @@ msgstr ""
 msgid "%s is not registered, and was not marked."
 msgstr ""
 
-#: include/atheme/constants.h:81
+#: include/atheme/constants.h:91
 #, c-format
 msgid "%s is not registered."
 msgstr ""
@@ -1451,41 +1451,6 @@ msgstr ""
 msgid "%s is currently online, and you may talk directly, by sending a private message."
 msgstr ""
 
-#: modules/operserv/set.c:316
-#, c-format
-msgid "%s is invalid for MAXCHANACS value."
-msgstr ""
-
-#: modules/operserv/set.c:178
-#, c-format
-msgid "%s is invalid for MAXCHANS value."
-msgstr ""
-
-#: modules/operserv/set.c:346
-#, c-format
-msgid "%s is invalid for MAXFOUNDERS value."
-msgstr ""
-
-#: modules/operserv/set.c:97
-#, c-format
-msgid "%s is invalid for MAXLOGINS value."
-msgstr ""
-
-#: modules/operserv/set.c:151
-#, c-format
-msgid "%s is invalid for MAXNICKS value."
-msgstr ""
-
-#: modules/operserv/set.c:124
-#, c-format
-msgid "%s is invalid for MAXUSERS value."
-msgstr ""
-
-#: modules/operserv/set.c:205
-#, c-format
-msgid "%s is invalid for MDLIMIT value."
-msgstr ""
-
 #: modules/gameserv/gameserv_common.h:67 modules/gameserv/gameserv_common.h:90
 #, c-format
 msgid "%s is not enabled on %s."
@@ -1768,11 +1733,6 @@ msgstr ""
 #: modules/chanserv/akick.c:392 modules/chanserv/akick.c:455
 #, c-format
 msgid "AKICK on %s was successfully added to the AKICK list for %s."
-msgstr ""
-
-#: modules/operserv/set.c:373
-#, c-format
-msgid "AKICKTIME must be a positive integer, %s is invalid"
 msgstr ""
 
 #: modules/operserv/akill.c:219
@@ -2156,11 +2116,6 @@ msgstr ""
 msgid "Both users must exist for @compare"
 msgstr ""
 
-#: modules/operserv/set.c:288
-#, c-format
-msgid "CHANEXPIRE must be a positive integer, %s is invalid"
-msgstr ""
-
 #: modules/chanserv/clear.c:28
 msgid "CLEAR allows you to clear various aspects of a channel."
 msgstr ""
@@ -2196,11 +2151,6 @@ msgstr ""
 msgid "CLONES klines are currently enabled."
 msgstr ""
 
-#: modules/operserv/set.c:260
-#, c-format
-msgid "COMMITINTERVAL must be a positive integer, %s is invalid"
-msgstr ""
-
 #: modules/gameserv/dice.c:608
 msgid "Calculate stuff."
 msgstr ""
@@ -2232,7 +2182,7 @@ msgstr ""
 msgid "Changed template %s to %s in %s."
 msgstr ""
 
-#: modules/operserv/set.c:486
+#: modules/operserv/set.c:477
 msgid "Changes IRCd reconnect delay."
 msgstr ""
 
@@ -2256,7 +2206,7 @@ msgstr ""
 msgid "Changes and shows your nickname access list."
 msgstr ""
 
-#: modules/operserv/set.c:549
+#: modules/operserv/set.c:540
 msgid "Changes how often the database is written to disk."
 msgstr ""
 
@@ -2272,23 +2222,23 @@ msgstr ""
 msgid "Changes the language services uses to talk to you."
 msgstr ""
 
-#: modules/operserv/set.c:513
+#: modules/operserv/set.c:504
 msgid "Changes the maximum number of accounts that one email address may have registered."
 msgstr ""
 
-#: modules/operserv/set.c:567
+#: modules/operserv/set.c:558
 msgid "Changes the maximum number of channel access list entries per channel."
 msgstr ""
 
-#: modules/operserv/set.c:522
+#: modules/operserv/set.c:513
 msgid "Changes the maximum number of channels one account may own."
 msgstr ""
 
-#: modules/operserv/set.c:504
+#: modules/operserv/set.c:495
 msgid "Changes the maximum number of nicks that one account may own."
 msgstr ""
 
-#: modules/operserv/set.c:495
+#: modules/operserv/set.c:486
 msgid "Changes the maximum number of users that may be logged in to one account."
 msgstr ""
 
@@ -2296,7 +2246,7 @@ msgstr ""
 msgid "Changes the password associated with your account."
 msgstr ""
 
-#: modules/operserv/set.c:612
+#: modules/operserv/set.c:603
 msgid "Changes the prefix to use when changing the user's nick on enforcement."
 msgstr ""
 
@@ -2308,7 +2258,7 @@ msgstr ""
 msgid "Changes what happens to a user when they hit a DNSBL."
 msgstr ""
 
-#: modules/operserv/set.c:594
+#: modules/operserv/set.c:585
 msgid "Changes whether service spams unregistered users on connect."
 msgstr ""
 
@@ -3630,7 +3580,7 @@ msgstr ""
 msgid "Inspect the Perl interpreter"
 msgstr ""
 
-#: include/atheme/constants.h:78
+#: include/atheme/constants.h:88
 #, c-format
 msgid "Insufficient parameters for %s."
 msgstr ""
@@ -3727,7 +3677,7 @@ msgstr ""
 msgid "Invalid option for %s"
 msgstr ""
 
-#: include/atheme/constants.h:79
+#: include/atheme/constants.h:89
 #, c-format
 msgid "Invalid parameters for %s."
 msgstr ""
@@ -3818,11 +3768,6 @@ msgstr ""
 
 #: modules/operserv/jupe.c:56
 msgid "Jupiters a server."
-msgstr ""
-
-#: modules/operserv/set.c:232
-#, c-format
-msgid "KLINETIME must be a positive integer, %s is invalid"
 msgstr ""
 
 #: modules/chanserv/clear_users.c:121
@@ -4305,11 +4250,6 @@ msgstr ""
 
 #: modules/gameserv/eightball.c:26
 msgid "Most likely."
-msgstr ""
-
-#: modules/operserv/set.c:446
-#, c-format
-msgid "NICKEXPIRE must be a positive integer, %s is invalid"
 msgstr ""
 
 #: modules/gameserv/eightball.c:46
@@ -5008,11 +4948,6 @@ msgstr ""
 msgid "Quiets matching %s in %s"
 msgstr ""
 
-#: modules/operserv/set.c:70
-#, c-format
-msgid "RECONTIME must be a positive integer, %s is invalid"
-msgstr ""
-
 #: modules/nickserv/enforce.c:401
 msgid "REGAIN is disabled."
 msgstr ""
@@ -5480,16 +5415,6 @@ msgstr ""
 msgid "SGLINE on %s was successfully added."
 msgstr ""
 
-#: modules/operserv/set.c:406 modules/operserv/set.c:419
-#, c-format
-msgid "SPAM directive has been successfully set to %s."
-msgstr ""
-
-#: modules/operserv/set.c:401 modules/operserv/set.c:414
-#, c-format
-msgid "SPAM directive is already set to %s."
-msgstr ""
-
 #: modules/operserv/sqline.c:177
 #, c-format
 msgid "SQLINE %s is already matched in the database."
@@ -5720,11 +5645,11 @@ msgstr ""
 msgid "Sets the channel's entry message."
 msgstr ""
 
-#: modules/operserv/set.c:585
+#: modules/operserv/set.c:576
 msgid "Sets the default AKICK time."
 msgstr ""
 
-#: modules/operserv/set.c:540
+#: modules/operserv/set.c:531
 msgid "Sets the default KLINE/AKILL time."
 msgstr ""
 
@@ -5752,11 +5677,11 @@ msgstr ""
 msgid "Sets the group e-mail address."
 msgstr ""
 
-#: modules/operserv/set.c:531
+#: modules/operserv/set.c:522
 msgid "Sets the maximum amount of metadata one channel or account may have."
 msgstr ""
 
-#: modules/operserv/set.c:576
+#: modules/operserv/set.c:567
 msgid "Sets the maximum number of founders per channel."
 msgstr ""
 
@@ -5765,7 +5690,7 @@ msgid "Sets the official group channel."
 msgstr ""
 
 #: modules/chanserv/set_core.c:78 modules/groupserv/set.c:80 modules/nickserv/set_core.c:59
-#: modules/operserv/set.c:477
+#: modules/operserv/set.c:468
 msgid "Sets various control flags."
 msgstr ""
 
@@ -5773,11 +5698,11 @@ msgstr ""
 msgid "Sets vhosts available for users to take."
 msgstr ""
 
-#: modules/operserv/set.c:558
+#: modules/operserv/set.c:549
 msgid "Sets when unused channels expire."
 msgstr ""
 
-#: modules/operserv/set.c:603
+#: modules/operserv/set.c:594
 msgid "Sets when unused nicks and accounts expire."
 msgstr ""
 
@@ -6613,7 +6538,7 @@ msgstr ""
 msgid "Syntax: SET <destination> <setting> <parameters>"
 msgstr ""
 
-#: modules/nickserv/set_core.c:50 modules/operserv/set.c:47
+#: modules/nickserv/set_core.c:50 modules/operserv/set.c:46
 msgid "Syntax: SET <setting> <parameters>"
 msgstr ""
 
@@ -6621,15 +6546,15 @@ msgstr ""
 msgid "Syntax: SET ACCOUNTNAME <nick>"
 msgstr ""
 
-#: modules/operserv/set.c:365
+#: modules/operserv/set.c:348 modules/operserv/set.c:358
 msgid "Syntax: SET AKICKTIME <minutes>"
 msgstr ""
 
-#: modules/operserv/set.c:280
+#: modules/operserv/set.c:267 modules/operserv/set.c:277
 msgid "Syntax: SET CHANEXPIRE <days>"
 msgstr ""
 
-#: modules/operserv/set.c:252
+#: modules/operserv/set.c:241 modules/operserv/set.c:251
 msgid "Syntax: SET COMMITINTERVAL <minutes>"
 msgstr ""
 
@@ -6645,7 +6570,7 @@ msgstr ""
 msgid "Syntax: SET ENFORCE ON|OFF"
 msgstr ""
 
-#: modules/operserv/set.c:466
+#: modules/operserv/set.c:445 modules/operserv/set.c:454
 msgid "Syntax: SET ENFORCEPREFIX <prefix>"
 msgstr ""
 
@@ -6657,39 +6582,39 @@ msgstr ""
 msgid "Syntax: SET GROUPNAME <oldname> <newname>"
 msgstr ""
 
-#: modules/operserv/set.c:224
+#: modules/operserv/set.c:215 modules/operserv/set.c:225
 msgid "Syntax: SET KLINETIME <days>"
 msgstr ""
 
-#: modules/operserv/set.c:308
+#: modules/operserv/set.c:293 modules/operserv/set.c:303
 msgid "Syntax: SET MAXCHANACS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:170
+#: modules/operserv/set.c:163 modules/operserv/set.c:173
 msgid "Syntax: SET MAXCHANS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:335
+#: modules/operserv/set.c:319 modules/operserv/set.c:332
 msgid "Syntax: SET MAXFOUNDERS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:89
+#: modules/operserv/set.c:85 modules/operserv/set.c:95
 msgid "Syntax: SET MAXLOGINS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:143
+#: modules/operserv/set.c:137 modules/operserv/set.c:147
 msgid "Syntax: SET MAXNICKS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:116
+#: modules/operserv/set.c:111 modules/operserv/set.c:121
 msgid "Syntax: SET MAXUSERS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:197
+#: modules/operserv/set.c:189 modules/operserv/set.c:199
 msgid "Syntax: SET MDLIMIT <value>"
 msgstr ""
 
-#: modules/operserv/set.c:438
+#: modules/operserv/set.c:419 modules/operserv/set.c:429
 msgid "Syntax: SET NICKEXPIRE <days>"
 msgstr ""
 
@@ -6705,11 +6630,11 @@ msgstr ""
 msgid "Syntax: SET QUIETCHG <ON|OFF>"
 msgstr ""
 
-#: modules/operserv/set.c:62
+#: modules/operserv/set.c:59 modules/operserv/set.c:69
 msgid "Syntax: SET RECONTIME <seconds>"
 msgstr ""
 
-#: modules/operserv/set.c:393
+#: modules/operserv/set.c:374 modules/operserv/set.c:409
 msgid "Syntax: SET SPAM <TRUE|FALSE>"
 msgstr ""
 
@@ -7038,6 +6963,22 @@ msgstr ""
 #: modules/chanserv/set_mlock.c:281
 #, c-format
 msgid "The MLOCK for %s has been set to %s."
+msgstr ""
+
+#: modules/operserv/set.c:390
+msgid "The SPAM directive has been successfully set."
+msgstr ""
+
+#: modules/operserv/set.c:403
+msgid "The SPAM directive has been successfully unset."
+msgstr ""
+
+#: modules/operserv/set.c:384
+msgid "The SPAM directive is already set."
+msgstr ""
+
+#: modules/operserv/set.c:397
+msgid "The SPAM directive is already unset."
 msgstr ""
 
 #: modules/chanserv/set_url.c:43 modules/groupserv/set_url.c:40
@@ -8143,7 +8084,7 @@ msgstr ""
 msgid "You are not authorized to modify the access entry for %s on %s."
 msgstr ""
 
-#: include/atheme/constants.h:83
+#: include/atheme/constants.h:93
 msgid "You are not authorized to perform this operation."
 msgstr ""
 
@@ -8162,7 +8103,7 @@ msgstr ""
 msgid "You are not authorized to use the target argument."
 msgstr ""
 
-#: include/atheme/constants.h:84
+#: include/atheme/constants.h:94
 msgid "You are not logged in."
 msgstr ""
 
@@ -8315,7 +8256,7 @@ msgstr ""
 msgid "You do not have appropriate permissions to set flags: %s"
 msgstr ""
 
-#: include/atheme/constants.h:82
+#: include/atheme/constants.h:92
 #, c-format
 msgid "You do not have the %s privilege."
 msgstr ""
@@ -8444,6 +8385,32 @@ msgstr ""
 #: modules/hostserv/request.c:320 modules/hostserv/request.c:348
 #, c-format
 msgid "You have requested vhost %s."
+msgstr ""
+
+#: modules/operserv/set.c:462
+#, c-format
+msgid "You have successfully set %s to %s."
+msgstr ""
+
+#: modules/operserv/set.c:231 modules/operserv/set.c:283 modules/operserv/set.c:435
+#, c-format
+msgid "You have successfully set %s to %u days."
+msgstr ""
+
+#: modules/operserv/set.c:257 modules/operserv/set.c:364
+#, c-format
+msgid "You have successfully set %s to %u minutes."
+msgstr ""
+
+#: modules/operserv/set.c:75
+#, c-format
+msgid "You have successfully set %s to %u seconds."
+msgstr ""
+
+#: modules/operserv/set.c:101 modules/operserv/set.c:127 modules/operserv/set.c:153 modules/operserv/set.c:179
+#: modules/operserv/set.c:205 modules/operserv/set.c:309 modules/operserv/set.c:338
+#, c-format
+msgid "You have successfully set %s to %u."
 msgstr ""
 
 #: modules/hostserv/offer.c:311

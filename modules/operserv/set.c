@@ -37,11 +37,10 @@ os_help_set(struct sourceinfo *const restrict si, const char *const restrict sub
 	(void) help_display_suffix(si);
 }
 
-// SET <setting> <parameters>
 static void
-os_cmd_set(struct sourceinfo *si, int parc, char *parv[])
+os_cmd_set(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	if (parc < 1)
+	if (! parc)
 	{
 		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET");
 		(void) command_fail(si, fault_needmoreparams, _("Syntax: SET <setting> <parameters>"));
@@ -52,424 +51,416 @@ os_cmd_set(struct sourceinfo *si, int parc, char *parv[])
 }
 
 static void
-os_cmd_set_recontime(struct sourceinfo *si, int parc, char *parv[])
+os_cmd_set_recontime(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	char *recontime = parv[0];
-
-	if (!recontime)
+	if (! parc)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET RECONTIME");
-		command_fail(si, fault_needmoreparams, _("Syntax: SET RECONTIME <seconds>"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET RECONTIME");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: SET RECONTIME <seconds>"));
 		return;
 	}
 
+	const char *const param = parv[0];
 	unsigned int value;
 
-	if (! string_to_uint(recontime, &value) || ! value)
+	if (! string_to_uint(param, &value) || ! value)
 	{
-		command_fail(si, fault_badparams, _("RECONTIME must be a positive integer, %s is invalid"), recontime);
+		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET RECONTIME");
+		(void) command_fail(si, fault_badparams, _("Syntax: SET RECONTIME <seconds>"));
 		return;
 	}
-	else
-	{
-		me.recontime = value;
-		command_success_nodata(si, "RECONTIME has been successfully set to %s seconds.", recontime);
-		logcommand(si, CMDLOG_ADMIN, "SET:RECONTIME: \2%s\2", recontime);
-	}
+
+	me.recontime = value;
+
+	(void) command_success_nodata(si, _("You have successfully set \2%s\2 to \2%u\2 seconds."), "RECONTIME", value);
+	(void) logcommand(si, CMDLOG_ADMIN, "SET:RECONTIME: \2%u\2", value);
 }
 
 static void
-os_cmd_set_maxlogins(struct sourceinfo *si, int parc, char *parv[])
+os_cmd_set_maxlogins(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	char *logins = parv[0];
-
-	if (!logins)
+	if (! parc)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET MAXLOGINS");
-		command_fail(si, fault_needmoreparams, _("Syntax: SET MAXLOGINS <value>"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET MAXLOGINS");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: SET MAXLOGINS <value>"));
 		return;
 	}
 
+	const char *const param = parv[0];
 	unsigned int value;
 
-	if (! string_to_uint(logins, &value) || value < 3)
+	if (! string_to_uint(param, &value) || value < 3)
 	{
-		command_fail(si, fault_badparams, _("%s is invalid for MAXLOGINS value."), logins);
+		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET MAXLOGINS");
+		(void) command_fail(si, fault_badparams, _("Syntax: SET MAXLOGINS <value>"));
 		return;
 	}
-	else
-	{
-		me.maxlogins = value;
-		command_success_nodata(si, "MAXLOGINS has been successfully set to %s.", logins);
-		logcommand(si, CMDLOG_ADMIN, "SET:MAXLOGINS: \2%s\2", logins);
-	}
+
+	me.maxlogins = value;
+
+	(void) command_success_nodata(si, _("You have successfully set \2%s\2 to \2%u\2."), "MAXLOGINS", value);
+	(void) logcommand(si, CMDLOG_ADMIN, "SET:MAXLOGINS: \2%u\2", value);
 }
 
 static void
-os_cmd_set_maxusers(struct sourceinfo *si, int parc, char *parv[])
+os_cmd_set_maxusers(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	char *users = parv[0];
-
-	if (!users)
+	if (! parc)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET MAXUSERS");
-		command_fail(si, fault_needmoreparams, _("Syntax: SET MAXUSERS <value>"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET MAXUSERS");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: SET MAXUSERS <value>"));
 		return;
 	}
 
+	const char *const param = parv[0];
 	unsigned int value;
 
-	if (! string_to_uint(users, &value) || ! value)
+	if (! string_to_uint(param, &value) || ! value)
 	{
-		command_fail(si, fault_badparams, _("%s is invalid for MAXUSERS value."), users);
+		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET MAXUSERS");
+		(void) command_fail(si, fault_badparams, _("Syntax: SET MAXUSERS <value>"));
 		return;
 	}
-	else
-	{
-		me.maxusers = value;
-		command_success_nodata(si, "MAXUSERS has been successfully set to %s.", users);
-		logcommand(si, CMDLOG_ADMIN, "SET:MAXUSERS: \2%s\2", users);
-	}
+
+	me.maxusers = value;
+
+	(void) command_success_nodata(si, _("You have successfully set \2%s\2 to \2%u\2."), "MAXUSERS", value);
+	(void) logcommand(si, CMDLOG_ADMIN, "SET:MAXUSERS: \2%u\2", value);
 }
 
 static void
-os_cmd_set_maxnicks(struct sourceinfo *si, int parc, char *parv[])
+os_cmd_set_maxnicks(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	char *nicks = parv[0];
-
-	if (!nicks)
+	if (! parc)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET MAXNICKS");
-		command_fail(si, fault_needmoreparams, _("Syntax: SET MAXNICKS <value>"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET MAXNICKS");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: SET MAXNICKS <value>"));
 		return;
 	}
 
+	const char *const param = parv[0];
 	unsigned int value;
 
-	if (! string_to_uint(nicks, &value) || ! value)
+	if (! string_to_uint(param, &value) || ! value)
 	{
-		command_fail(si, fault_badparams, _("%s is invalid for MAXNICKS value."), nicks);
+		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET MAXNICKS");
+		(void) command_fail(si, fault_badparams, _("Syntax: SET MAXNICKS <value>"));
 		return;
 	}
-	else
-	{
-		nicksvs.maxnicks = value;
-		command_success_nodata(si, "MAXNICKS has been successfully set to %s.", nicks);
-		logcommand(si, CMDLOG_ADMIN, "SET:MAXNICKS: \2%s\2", nicks);
-	}
+
+	nicksvs.maxnicks = value;
+
+	(void) command_success_nodata(si, _("You have successfully set \2%s\2 to \2%u\2."), "MAXNICKS", value);
+	(void) logcommand(si, CMDLOG_ADMIN, "SET:MAXNICKS: \2%u\2", value);
 }
 
 static void
-os_cmd_set_maxchans(struct sourceinfo *si, int parc, char *parv[])
+os_cmd_set_maxchans(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	char *chans = parv[0];
-
-	if (!chans)
+	if (! parc)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET MAXCHANS");
-		command_fail(si, fault_needmoreparams, _("Syntax: SET MAXCHANS <value>"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET MAXCHANS");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: SET MAXCHANS <value>"));
 		return;
 	}
 
+	const char *const param = parv[0];
 	unsigned int value;
 
-	if (! string_to_uint(chans, &value) || ! value)
+	if (! string_to_uint(param, &value) || ! value)
 	{
-		command_fail(si, fault_badparams, _("%s is invalid for MAXCHANS value."), chans);
+		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET MAXCHANS");
+		(void) command_fail(si, fault_badparams, _("Syntax: SET MAXCHANS <value>"));
 		return;
 	}
-	else
-	{
-		chansvs.maxchans = value;
-		command_success_nodata(si, "MAXCHANS has been successfully set to %s.", chans);
-		logcommand(si, CMDLOG_ADMIN, "SET:MAXCHANS: \2%s\2", chans);
-	}
+
+	chansvs.maxchans = value;
+
+	(void) command_success_nodata(si, _("You have successfully set \2%s\2 to \2%u\2."), "MAXCHANS", value);
+	(void) logcommand(si, CMDLOG_ADMIN, "SET:MAXCHANS: \2%u\2", value);
 }
 
 static void
-os_cmd_set_mdlimit(struct sourceinfo *si, int parc, char *parv[])
+os_cmd_set_mdlimit(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	char *limit = parv[0];
-
-	if (!limit)
+	if (! parc)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET MDLIMIT");
-		command_fail(si, fault_needmoreparams, _("Syntax: SET MDLIMIT <value>"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET MDLIMIT");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: SET MDLIMIT <value>"));
 		return;
 	}
 
+	const char *const param = parv[0];
 	unsigned int value;
 
-	if (! string_to_uint(limit, &value) || ! value)
+	if (! string_to_uint(param, &value) || ! value)
 	{
-		command_fail(si, fault_badparams, _("%s is invalid for MDLIMIT value."), limit);
+		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET MDLIMIT");
+		(void) command_fail(si, fault_badparams, _("Syntax: SET MDLIMIT <value>"));
 		return;
 	}
-	else
-	{
-		me.mdlimit = value;
-		command_success_nodata(si, "MDLIMIT has been successfully set to %s.", limit);
-		logcommand(si, CMDLOG_ADMIN, "SET:MDLIMIT: \2%s\2", limit);
-	}
+
+	me.mdlimit = value;
+
+	(void) command_success_nodata(si, _("You have successfully set \2%s\2 to \2%u\2."), "MDLIMIT", value);
+	(void) logcommand(si, CMDLOG_ADMIN, "SET:MDLIMIT: \2%u\2", value);
 }
 
 static void
-os_cmd_set_klinetime(struct sourceinfo *si, int parc, char *parv[])
+os_cmd_set_klinetime(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	char *days = parv[0];
-
-	if (!days)
+	if (! parc)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET KLINETIME");
-		command_fail(si, fault_needmoreparams, _("Syntax: SET KLINETIME <days>"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET KLINETIME");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: SET KLINETIME <days>"));
 		return;
 	}
 
+	const char *const param = parv[0];
 	unsigned int value;
 
-	if (! string_to_uint(days, &value) || ! value)
+	if (! string_to_uint(param, &value) || ! value)
 	{
-		command_fail(si, fault_badparams, _("KLINETIME must be a positive integer, %s is invalid"), days);
+		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET KLINETIME");
+		(void) command_fail(si, fault_badparams, _("Syntax: SET KLINETIME <days>"));
 		return;
 	}
-	else
-	{
-		unsigned int realvalue = value * 24 * 60 * 60;
-		config_options.kline_time = realvalue;
-		command_success_nodata(si, "KLINETIME has been successfully set to %s days.", days);
-		logcommand(si, CMDLOG_ADMIN, "SET:KLINETIME: \2%s\2", days);
-	}
+
+	config_options.kline_time = value * SECONDS_PER_DAY;
+
+	(void) command_success_nodata(si, _("You have successfully set \2%s\2 to \2%u\2 days."), "KLINETIME", value);
+	(void) logcommand(si, CMDLOG_ADMIN, "SET:KLINETIME: \2%u\2", value);
 }
 
 static void
-os_cmd_set_commitinterval(struct sourceinfo *si, int parc, char *parv[])
+os_cmd_set_commitinterval(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	char *minutes = parv[0];
-
-	if (!minutes)
+	if (! parc)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET COMMITINTERVAL");
-		command_fail(si, fault_needmoreparams, _("Syntax: SET COMMITINTERVAL <minutes>"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET COMMITINTERVAL");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: SET COMMITINTERVAL <minutes>"));
 		return;
 	}
 
+	const char *const param = parv[0];
 	unsigned int value;
 
-	if (! string_to_uint(minutes, &value) || ! value)
+	if (! string_to_uint(param, &value) || ! value)
 	{
-		command_fail(si, fault_badparams, _("COMMITINTERVAL must be a positive integer, %s is invalid"), minutes);
+		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET COMMITINTERVAL");
+		(void) command_fail(si, fault_badparams, _("Syntax: SET COMMITINTERVAL <minutes>"));
 		return;
 	}
-	else
-	{
-		unsigned int realvalue = value * 60;
-		config_options.commit_interval = realvalue;
-		command_success_nodata(si, "COMMITINTERVAL has been successfully set to %s minutes.", minutes);
-		logcommand(si, CMDLOG_ADMIN, "SET:COMMITINTERVAL: \2%s\2", minutes);
-	}
+
+	config_options.commit_interval = value * SECONDS_PER_MINUTE;
+
+	(void) command_success_nodata(si, _("You have successfully set \2%s\2 to \2%u\2 minutes."), "COMMITINTERVAL", value);
+	(void) logcommand(si, CMDLOG_ADMIN, "SET:COMMITINTERVAL: \2%u\2", value);
 }
 
 static void
-os_cmd_set_chanexpire(struct sourceinfo *si, int parc, char *parv[])
+os_cmd_set_chanexpire(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	char *days = parv[0];
-
-	if (!days)
+	if (! parc)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET CHANEXPIRE");
-		command_fail(si, fault_needmoreparams, _("Syntax: SET CHANEXPIRE <days>"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET CHANEXPIRE");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: SET CHANEXPIRE <days>"));
 		return;
 	}
 
+	const char *const param = parv[0];
 	unsigned int value;
 
-	if (! string_to_uint(days, &value) || ! value)
+	if (! string_to_uint(param, &value) || ! value)
 	{
-		command_fail(si, fault_badparams, _("CHANEXPIRE must be a positive integer, %s is invalid"), days);
+		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET CHANEXPIRE");
+		(void) command_fail(si, fault_badparams, _("Syntax: SET CHANEXPIRE <days>"));
 		return;
 	}
-	else
-	{
-		unsigned int realvalue = value * 24 * 60 * 60;
-		chansvs.expiry = realvalue;
-		command_success_nodata(si, "CHANEXPIRE has been successfully set to %s days.", days);
-		logcommand(si, CMDLOG_ADMIN, "SET:CHANEXPIRE: \2%s\2", days);
-	}
+
+	chansvs.expiry = value * SECONDS_PER_DAY;
+
+	(void) command_success_nodata(si, _("You have successfully set \2%s\2 to \2%u\2 days."), "CHANEXPIRE", value);
+	(void) logcommand(si, CMDLOG_ADMIN, "SET:CHANEXPIRE: \2%u\2", value);
 }
 
 static void
-os_cmd_set_maxchanacs(struct sourceinfo *si, int parc, char *parv[])
+os_cmd_set_maxchanacs(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	char *chanacs = parv[0];
-
-	if (!chanacs)
+	if (! parc)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET MAXCHANACS");
-		command_fail(si, fault_needmoreparams, _("Syntax: SET MAXCHANACS <value>"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET MAXCHANACS");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: SET MAXCHANACS <value>"));
 		return;
 	}
 
+	const char *const param = parv[0];
 	unsigned int value;
 
-	if (! string_to_uint(chanacs, &value) || ! value)
+	if (! string_to_uint(param, &value) || ! value)
 	{
-		command_fail(si, fault_badparams, _("%s is invalid for MAXCHANACS value."), chanacs);
+		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET MAXCHANACS");
+		(void) command_fail(si, fault_badparams, _("Syntax: SET MAXCHANACS <value>"));
 		return;
 	}
-	else
-	{
-		chansvs.maxchanacs = value;
-		command_success_nodata(si, "MAXCHANACS has been successfully set to %s.", chanacs);
-		logcommand(si, CMDLOG_ADMIN, "SET:MAXCHANACS: \2%s\2", chanacs);
-	}
+
+	chansvs.maxchanacs = value;
+
+	(void) command_success_nodata(si, _("You have successfully set \2%s\2 to \2%u\2."), "MAXCHANACS", value);
+	(void) logcommand(si, CMDLOG_ADMIN, "SET:MAXCHANACS: \2%u\2", value);
 }
 
 static void
-os_cmd_set_maxfounders(struct sourceinfo *si, int parc, char *parv[])
+os_cmd_set_maxfounders(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	char *founders = parv[0];
-
-	if (!founders)
+	if (! parc)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET MAXFOUNDERS");
-		command_fail(si, fault_needmoreparams, _("Syntax: SET MAXFOUNDERS <value>"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET MAXFOUNDERS");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: SET MAXFOUNDERS <value>"));
 		return;
 	}
 
+	const char *const param = parv[0];
 	unsigned int value;
 
 	/* Yes, I know how arbitrary the high value is, this is what it is in confprocess.c
 	 * (I rounded it down though) -- JD
 	 */
-	if (! string_to_uint(founders, &value) || ! value || value > 41)
+	if (! string_to_uint(param, &value) || ! value || value > 41)
 	{
-		command_fail(si, fault_badparams, _("%s is invalid for MAXFOUNDERS value."), founders);
+		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET MAXFOUNDERS");
+		(void) command_fail(si, fault_badparams, _("Syntax: SET MAXFOUNDERS <value>"));
 		return;
 	}
-	else
-	{
-		chansvs.maxfounders = value;
-		command_success_nodata(si, "MAXFOUNDERS has been successfully set to %s.", founders);
-		logcommand(si, CMDLOG_ADMIN, "SET:MAXFOUNDERS: \2%s\2", founders);
-	}
+
+	chansvs.maxfounders = value;
+
+	(void) command_success_nodata(si, _("You have successfully set \2%s\2 to \2%u\2."), "MAXFOUNDERS", value);
+	(void) logcommand(si, CMDLOG_ADMIN, "SET:MAXFOUNDERS: \2%u\2", value);
 }
 
 static void
-os_cmd_set_akicktime(struct sourceinfo *si, int parc, char *parv[])
+os_cmd_set_akicktime(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	char *minutes = parv[0];
-
-	if (!minutes)
+	if (! parc)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET AKICKTIME");
-		command_fail(si, fault_needmoreparams, _("Syntax: SET AKICKTIME <minutes>"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET AKICKTIME");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: SET AKICKTIME <minutes>"));
 		return;
 	}
 
+	const char *const param = parv[0];
 	unsigned int value;
 
-	if (! string_to_uint(minutes, &value) || ! value)
+	if (! string_to_uint(param, &value) || ! value)
 	{
-		command_fail(si, fault_badparams, _("AKICKTIME must be a positive integer, %s is invalid"), minutes);
+		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET AKICKTIME");
+		(void) command_fail(si, fault_badparams, _("Syntax: SET AKICKTIME <minutes>"));
 		return;
 	}
-	else
-	{
-		unsigned int realvalue = value * 60;
-		chansvs.akick_time = realvalue;
-		command_success_nodata(si, "AKICKTIME has been successfully set to %s minutes.", minutes);
-		logcommand(si, CMDLOG_ADMIN, "SET:AKICKTIME: \2%s\2", minutes);
-	}
+
+	chansvs.akick_time = value * SECONDS_PER_MINUTE;
+
+	(void) command_success_nodata(si, _("You have successfully set \2%s\2 to \2%u\2 minutes."), "AKICKTIME", value);
+	(void) logcommand(si, CMDLOG_ADMIN, "SET:AKICKTIME: \2%u\2", value);
 }
 
 static void
-os_cmd_set_spam(struct sourceinfo *si, int parc, char *parv[])
+os_cmd_set_spam(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	char *spam = parv[0];
-
-	if (!spam)
+	if (! parc)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET SPAM");
-		command_fail(si, fault_needmoreparams, _("Syntax: SET SPAM <TRUE|FALSE>"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET SPAM");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: SET SPAM <TRUE|FALSE>"));
 		return;
 	}
 
-	if (!strcasecmp("TRUE", spam) || !strcasecmp("ON", spam))
+	const char *const param = parv[0];
+
+	if (!strcasecmp("TRUE", param) || !strcasecmp("ON", param))
 	{
 		if (nicksvs.spam)
 		{
-			command_fail(si, fault_badparams, _("SPAM directive is already set to %s."), spam);
+			(void) command_fail(si, fault_nochange, _("The SPAM directive is already set."));
 			return;
 		}
 
 		nicksvs.spam = true;
-		command_success_nodata(si, _("SPAM directive has been successfully set to %s."), spam);
-		logcommand(si, CMDLOG_ADMIN, "SET:SPAM:TRUE");
-		return;
+
+		(void) command_success_nodata(si, _("The SPAM directive has been successfully set."));
+		(void) logcommand(si, CMDLOG_ADMIN, "SET:SPAM:TRUE");
 	}
-	else if (!strcasecmp("FALSE", spam) || !strcasecmp("OFF", spam))
+	else if (!strcasecmp("FALSE", param) || !strcasecmp("OFF", param))
 	{
 		if (!nicksvs.spam)
 		{
-			command_fail(si, fault_badparams, _("SPAM directive is already set to %s."), spam);
+			(void) command_fail(si, fault_nochange, _("The SPAM directive is already unset."));
 			return;
 		}
 
 		nicksvs.spam = false;
-		command_success_nodata(si, _("SPAM directive has been successfully set to %s."), spam);
-		logcommand(si, CMDLOG_ADMIN, "SET:SPAM:FALSE");
-		return;
+
+		(void) command_success_nodata(si, _("The SPAM directive has been successfully unset."));
+		(void) logcommand(si, CMDLOG_ADMIN, "SET:SPAM:FALSE");
 	}
 	else
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET SPAM");
-		return;
+		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET SPAM");
+		(void) command_fail(si, fault_badparams, _("Syntax: SET SPAM <TRUE|FALSE>"));
 	}
 }
 
 static void
-os_cmd_set_nickexpire(struct sourceinfo *si, int parc, char *parv[])
+os_cmd_set_nickexpire(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	char *days = parv[0];
-
-	if (!days)
+	if (! parc)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET NICKEXPIRE");
-		command_fail(si, fault_needmoreparams, _("Syntax: SET NICKEXPIRE <days>"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET NICKEXPIRE");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: SET NICKEXPIRE <days>"));
 		return;
 	}
 
+	const char *const param = parv[0];
 	unsigned int value;
 
-	if (! string_to_uint(days, &value) || ! value)
+	if (! string_to_uint(param, &value) || ! value)
 	{
-		command_fail(si, fault_badparams, _("NICKEXPIRE must be a positive integer, %s is invalid"), days);
+		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET NICKEXPIRE");
+		(void) command_fail(si, fault_badparams, _("Syntax: SET NICKEXPIRE <days>"));
 		return;
 	}
-	else
-	{
-		unsigned int realvalue = value * 24 * 60 * 60;
-		nicksvs.expiry = realvalue;
-		command_success_nodata(si, "NICKEXPIRE has been successfully set to %s days.", days);
-		logcommand(si, CMDLOG_ADMIN, "SET:NICKEXPIRE: \2%s\2", days);
-	}
+
+	nicksvs.expiry = value * SECONDS_PER_DAY;
+
+	(void) command_success_nodata(si, _("You have successfully set \2%s\2 to \2%u\2 days."), "NICKEXPIRE", value);
+	(void) logcommand(si, CMDLOG_ADMIN, "SET:NICKEXPIRE: \2%u\2", value);
 }
 
 static void
-os_cmd_set_enforceprefix(struct sourceinfo *si, int parc, char *parv[])
+os_cmd_set_enforceprefix(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	char *prefix = parv[0];
-
-	if (!prefix || !*prefix)
+	if (! parc)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET ENFORCEPREFIX");
-		command_fail(si, fault_needmoreparams, _("Syntax: SET ENFORCEPREFIX <prefix>"));
+		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET ENFORCEPREFIX");
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: SET ENFORCEPREFIX <prefix>"));
 		return;
 	}
 
-	nicksvs.enforce_prefix = sstrdup(prefix);
-	command_success_nodata(si, "ENFORCEPREFIX has been successfully set to %s.", prefix);
-	logcommand(si, CMDLOG_ADMIN, "SET:ENFORCEPREFIX: \2%s\2", prefix);
+	const char *const param = parv[0];
+
+	if (! *param || ! is_valid_nick(param))
+	{
+		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET ENFORCEPREFIX");
+		(void) command_fail(si, fault_badparams, _("Syntax: SET ENFORCEPREFIX <prefix>"));
+		return;
+	}
+
+	(void) sfree(nicksvs.enforce_prefix);
+
+	nicksvs.enforce_prefix = sstrdup(param);
+
+	(void) command_success_nodata(si, _("You have successfully set \2%s\2 to \2%s\2."), "ENFORCEPREFIX", param);
+	(void) logcommand(si, CMDLOG_ADMIN, "SET:ENFORCEPREFIX: \2%s\2", param);
 }
 
 static struct command os_set = {
