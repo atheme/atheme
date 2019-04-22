@@ -568,7 +568,7 @@ inspircd_topic_sts(struct channel *c, struct user *source, const char *setter, t
 	 * -- jilles */
 
 	// Restoring old topic
-	if (ts > prevts + 60 || prevts == 0)
+	if (ts > prevts + SECONDS_PER_MINUTE || prevts == 0)
 	{
 		sts(":%s FTOPIC %s %lu %s :%s", source->uid, c->name, (unsigned long)ts, setter, topic);
 		return;

@@ -322,7 +322,7 @@ blacklist_dns_callback(mowgli_dns_reply_t *reply, int result, void *vptr)
 		if (reply->addr.addr.ss_family == AF_INET &&
 				!memcmp(&((struct sockaddr_in *)&reply->addr.addr)->sin_addr, "\177", 1))
 			listed++;
-		else if (blcptr->blacklist->lastwarning + 3600 < CURRTIME)
+		else if (blcptr->blacklist->lastwarning + SECONDS_PER_HOUR < CURRTIME)
 		{
 			slog(LG_DEBUG,
 					"Garbage reply from blacklist %s",

@@ -374,8 +374,8 @@ ts6_topic_sts(struct channel *c, struct user *source, const char *setter, time_t
 		// Restoring old topic
 		if (ts < prevts || prevts == 0)
 		{
-			if (prevts != 0 && ts + 60 > prevts)
-				ts = prevts - 60;
+			if (prevts != 0 && ts + SECONDS_PER_MINUTE > prevts)
+				ts = prevts - SECONDS_PER_MINUTE;
 			sts(":%s TB %s %lu %s :%s", ME, c->name, (unsigned long)ts, setter, topic);
 			c->topicts = ts;
 			return;

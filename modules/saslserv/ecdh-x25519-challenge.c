@@ -135,7 +135,7 @@
 
 #include "ecdh-x25519-challenge-shared.c"
 
-#define ATHEME_ECDH_X25519_KEY_REGEN_INTERVAL   3600  /* 1 hour */
+#define ATHEME_ECDH_X25519_KEY_REGEN_INTERVAL   SECONDS_PER_HOUR
 #define ATHEME_ECDH_X25519_PUBKEY_MDNAME        "private:x25519pubkey"
 
 static mowgli_patricia_t **ns_set_cmdtree = NULL;

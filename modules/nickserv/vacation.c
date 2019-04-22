@@ -20,7 +20,7 @@ ns_cmd_vacation(struct sourceinfo *si, int parc, char *parv[])
 	if (CURRTIME < (time_t)(si->smu->registered + nicksvs.expiry))
 	{
 		command_fail(si, fault_noprivs, _("You must be registered for at least \2%u\2 days in order to enable VACATION mode."),
-			(nicksvs.expiry / 3600 / 24));
+			(nicksvs.expiry / SECONDS_PER_DAY));
 		return;
 	}
 
@@ -36,7 +36,7 @@ ns_cmd_vacation(struct sourceinfo *si, int parc, char *parv[])
 
 	if (nicksvs.expiry > 0)
 		command_success_nodata(si, _("Your account will automatically expire in %u days\n"
-		                             "if you do not return."), (nicksvs.expiry / 3600 / 24) * 3);
+		                             "if you do not return."), ((nicksvs.expiry * 3) / SECONDS_PER_DAY));
 }
 
 static void

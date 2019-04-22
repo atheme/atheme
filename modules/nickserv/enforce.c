@@ -129,7 +129,7 @@ enforce_timeout_check(void *arg)
 		notice(nicksvs.nick, u->nick, "You failed to identify in time for the nickname %s", mn->nick);
 		guest_nickname(u);
 		if (ircd->flags & IRCD_HOLDNICK)
-			holdnick_sts(nicksvs.me->me, u->flags & UF_WASENFORCED ? 3600 : 30, u->nick, mn->owner);
+			holdnick_sts(nicksvs.me->me, u->flags & UF_WASENFORCED ? SECONDS_PER_HOUR : 30, u->nick, mn->owner);
 		else
 			u->flags |= UF_DOENFORCE;
 		u->flags |= UF_WASENFORCED;
@@ -361,7 +361,7 @@ ns_cmd_release(struct sourceinfo *si, int parc, char *parv[])
 			{
 				guest_nickname(u);
 				if (ircd->flags & IRCD_HOLDNICK)
-					holdnick_sts(nicksvs.me->me, 60 + atheme_random() % 60, u->nick, mn->owner);
+					holdnick_sts(nicksvs.me->me, SECONDS_PER_MINUTE + atheme_random_uniform(SECONDS_PER_MINUTE), u->nick, mn->owner);
 				else
 					u->flags |= UF_DOENFORCE;
 				command_success_nodata(si, _("\2%s\2 has been released."), target);
@@ -495,7 +495,7 @@ ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 			if (!log_enforce_victim_out(u, mn->owner))
 			{
 				if (ircd->flags & IRCD_HOLDNICK)
-					holdnick_sts(nicksvs.me->me, 60 + atheme_random() % 60, u->nick, mn->owner);
+					holdnick_sts(nicksvs.me->me, SECONDS_PER_MINUTE + atheme_random_uniform(SECONDS_PER_MINUTE), u->nick, mn->owner);
 				guest_nickname(u);
 				command_success_nodata(si, _("\2%s\2 has been regained."), target);
 			}
