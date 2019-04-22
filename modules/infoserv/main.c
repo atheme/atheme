@@ -258,7 +258,7 @@ is_cmd_post(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	if (! string_to_uint(importance, &imp) || imp < 0 || imp > 4)
+	if (! string_to_uint(importance, &imp) || imp > 4)
 	{
 		command_fail(si, fault_badparams, _("Importance must be a digit between 0 and 4"));
 		return;
