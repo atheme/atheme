@@ -15,6 +15,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 static mowgli_patricia_t *hooks = NULL;
 static mowgli_heap_t *hook_heap = NULL;

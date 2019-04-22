@@ -14,6 +14,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 static mowgli_patricia_t *itranslation_tree; /* internal translations, userserv/nickserv etc */
 static mowgli_patricia_t *translation_tree; /* language translations */

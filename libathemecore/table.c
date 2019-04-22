@@ -14,6 +14,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 static void
 table_destroy(void *obj)

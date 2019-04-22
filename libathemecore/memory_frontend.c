@@ -14,6 +14,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 #define ATHEME_MEMORY_FRONTEND_C        1
 

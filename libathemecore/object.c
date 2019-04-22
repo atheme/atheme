@@ -14,6 +14,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 #ifdef OBJECT_DEBUG
 mowgli_list_t object_list = { NULL, NULL, 0 };
@@ -317,18 +318,6 @@ privatedata_set(void *target, const char *key, void *data)
 		obj->privatedata = mowgli_patricia_create(noopcanon);
 
 	mowgli_patricia_add(obj->privatedata, key, data);
-}
-
-void
-privatedata_delete(void *target, const char *key)
-{
-	struct atheme_object *obj;
-
-	obj = atheme_object(target);
-	if (obj->privatedata == NULL)
-		return;
-
-	mowgli_patricia_delete(obj->privatedata, key);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

@@ -6,6 +6,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 static const char base64_etable[] = {
 

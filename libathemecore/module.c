@@ -14,6 +14,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 #ifdef HAVE_USABLE_DLINFO
 #  include <dlfcn.h>

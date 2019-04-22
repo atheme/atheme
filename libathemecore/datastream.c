@@ -14,6 +14,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 #define SENDQSIZE (4096 - 40)
 

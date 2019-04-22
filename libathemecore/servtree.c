@@ -14,6 +14,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 static mowgli_heap_t *service_heap = NULL;
 

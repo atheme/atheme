@@ -14,6 +14,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 mowgli_list_t operclasslist;
 mowgli_list_t soperlist;

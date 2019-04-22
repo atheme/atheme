@@ -13,6 +13,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 /* bursting timer */
 #if HAVE_GETTIMEOFDAY

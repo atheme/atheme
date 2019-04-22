@@ -14,6 +14,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 mowgli_list_t klnlist;
 mowgli_list_t xlnlist;

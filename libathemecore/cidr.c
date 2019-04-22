@@ -20,6 +20,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 #ifndef INADDRSZ
 #define INADDRSZ 4

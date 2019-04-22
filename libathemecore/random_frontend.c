@@ -8,6 +8,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 #ifndef MINIMUM
 #  define MINIMUM(a, b) (((a) < (b)) ? (a) : (b))

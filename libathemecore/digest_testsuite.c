@@ -8,6 +8,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 /*
  * MD5 test vectors taken from RFC 1321 Appendix A.5:

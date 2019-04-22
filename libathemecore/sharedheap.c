@@ -14,6 +14,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 #ifdef ATHEME_ENABLE_HEAP_ALLOCATOR
 

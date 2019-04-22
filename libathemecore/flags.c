@@ -14,6 +14,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 #define FLAGS_ADD       0x1
 #define FLAGS_DEL       0x2

@@ -14,6 +14,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 static struct logfile *log_file;
 int log_force;
@@ -644,7 +645,7 @@ slog(unsigned int level, const char *fmt, ...)
 	va_end(args);
 }
 
-const char *
+static const char *
 format_user(struct user *source, bool full)
 {
 	static char buf[BUFSIZE];
@@ -671,7 +672,7 @@ format_user(struct user *source, bool full)
 	return buf;
 }
 
-const char *
+static const char *
 format_external(const char *type, struct connection *source, const char *sourcedesc, struct myuser *mu, bool full)
 {
 	static char buf[BUFSIZE];
@@ -689,7 +690,7 @@ format_external(const char *type, struct connection *source, const char *sourced
 	return buf;
 }
 
-const char *
+static const char *
 format_sourceinfo(struct sourceinfo *si, bool full)
 {
 	if(si->v != NULL && si->v->format != NULL)

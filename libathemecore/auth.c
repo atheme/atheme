@@ -14,6 +14,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 bool auth_module_loaded = false;
 bool (*auth_user_custom)(struct myuser *mu, const char *password) ATHEME_FATTR_WUR;

@@ -14,6 +14,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 static mowgli_list_t crypt_impl_list = { NULL, NULL, 0 };
 

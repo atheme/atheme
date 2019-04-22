@@ -14,6 +14,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 /* convert mode flags to a text mode string */
 char *

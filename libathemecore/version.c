@@ -8,6 +8,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 const char *revision = SERNO;
 

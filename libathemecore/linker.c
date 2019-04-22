@@ -13,6 +13,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 #if defined(MOWGLI_OS_HPUX)
 # define PLATFORM_SUFFIX ".sl"

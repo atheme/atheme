@@ -8,6 +8,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 #ifdef HAVE_ARPA_INET_H
 #  include <arpa/inet.h>

@@ -14,6 +14,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 #ifdef MOWGLI_OS_WIN
 # define EWOULDBLOCK WSAEWOULDBLOCK

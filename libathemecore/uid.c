@@ -13,6 +13,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 const struct uid_provider *uid_provider_impl = NULL;
 

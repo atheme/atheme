@@ -10,6 +10,7 @@
 #ifndef ATHEME_LAC_INTERNAL_H
 #define ATHEME_LAC_INTERNAL_H 1
 
+#include <atheme/libathemecore.h>
 #include <atheme/stdheaders.h>
 
 /* internal functions */

@@ -13,6 +13,7 @@
  */
 
 #include <atheme.h>
+#include "internal.h"
 
 #include <qrencode.h>
 
