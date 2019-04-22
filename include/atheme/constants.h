@@ -69,6 +69,16 @@
 #define FLOOD_MODERATE          FLOOD_MSGS_FACTOR
 #define FLOOD_LIGHT             0U
 
+#define SECONDS_PER_MINUTE      60U
+#define SECONDS_PER_HOUR        3600U
+#define SECONDS_PER_DAY         86400U
+#define SECONDS_PER_WEEK        604800U
+#define MINUTES_PER_HOUR        60U
+#define MINUTES_PER_DAY         1440U
+#define MINUTES_PER_WEEK        10080U
+#define HOURS_PER_DAY           24U
+#define HOURS_PER_WEEK          168U
+
 #ifndef TIME_FORMAT
 #  define TIME_FORMAT           "%b %d %H:%M:%S %Y %z"
 #endif
