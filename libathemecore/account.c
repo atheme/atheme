@@ -2130,7 +2130,7 @@ expire_check(void *arg)
 		if (!req.do_expire)
 			continue;
 
-		if ((CURRTIME - mc->used) >= 86400 - 3660)
+		if ((unsigned int) (CURRTIME - mc->used) >= (SECONDS_PER_DAY - SECONDS_PER_HOUR - SECONDS_PER_MINUTE))
 		{
 			/* keep last used time accurate to
 			 * within a day, making sure an active

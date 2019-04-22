@@ -140,10 +140,10 @@ static struct
 } duration_units[] =
 {
 	{ "s", 1 }, /* must be first */
-	{ "m", 60 },
-	{ "h", 60 * 60 },
-	{ "d", 24 * 60 * 60 },
-	{ "w", 7 * 24 * 60 * 60 },
+	{ "m", SECONDS_PER_MINUTE },
+	{ "h", SECONDS_PER_HOUR },
+	{ "d", SECONDS_PER_DAY },
+	{ "w", SECONDS_PER_WEEK },
 	{ NULL, 0 }
 };
 

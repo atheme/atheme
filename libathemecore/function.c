@@ -203,29 +203,29 @@ time_ago(time_t event)
 	event = CURRTIME - event;
 	years = weeks = days = hours = minutes = 0;
 
-	while (event >= 60 * 60 * 24 * 365)
+	while (event >= (SECONDS_PER_DAY * 365))
 	{
-		event -= 60 * 60 * 24 * 365;
+		event -= (SECONDS_PER_DAY * 365);
 		years++;
 	}
-	while (event >= 60 * 60 * 24 * 7)
+	while (event >= SECONDS_PER_WEEK)
 	{
-		event -= 60 * 60 * 24 * 7;
+		event -= SECONDS_PER_WEEK;
 		weeks++;
 	}
-	while (event >= 60 * 60 * 24)
+	while (event >= SECONDS_PER_DAY)
 	{
-		event -= 60 * 60 * 24;
+		event -= SECONDS_PER_DAY;
 		days++;
 	}
-	while (event >= 60 * 60)
+	while (event >= SECONDS_PER_HOUR)
 	{
-		event -= 60 * 60;
+		event -= SECONDS_PER_HOUR;
 		hours++;
 	}
-	while (event >= 60)
+	while (event >= SECONDS_PER_MINUTE)
 	{
-		event -= 60;
+		event -= SECONDS_PER_MINUTE;
 		minutes++;
 	}
 
