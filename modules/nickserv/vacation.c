@@ -35,8 +35,8 @@ ns_cmd_vacation(struct sourceinfo *si, int parc, char *parv[])
 	                             nicksvs.nick);
 
 	if (nicksvs.expiry > 0)
-		command_success_nodata(si, _("Your account will automatically expire in %u days\n"
-		                             "if you do not return."), ((nicksvs.expiry * 3) / SECONDS_PER_DAY));
+		command_success_nodata(si, _("Your account will automatically expire in %u days if you do not return."),
+		                             ((nicksvs.expiry * 3) / SECONDS_PER_DAY));
 }
 
 static void
@@ -78,7 +78,8 @@ static void
 info_hook(hook_user_req_t *hdata)
 {
 	if (metadata_find(hdata->mu, "private:vacation"))
-		command_success_nodata(hdata->si, "%s is on vacation and has an extended expiry time", entity(hdata->mu)->name);
+		command_success_nodata(hdata->si, _("%s is on vacation and has an extended expiry time"),
+		                                    entity(hdata->mu)->name);
 }
 
 static bool

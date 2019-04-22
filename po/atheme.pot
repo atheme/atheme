@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-04-22 01:19+0000\n"
+"POT-Creation-Date: 2019-04-22 02:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -175,7 +175,7 @@ msgstr ""
 msgid "%s can now take ownership of %s."
 msgstr ""
 
-#: include/atheme/constants.h:90
+#: include/atheme/constants.h:91
 #, c-format
 msgid "%s can only be executed via IRC."
 msgstr ""
@@ -628,7 +628,7 @@ msgid ""
 "and %s is not identified."
 msgstr ""
 
-#: include/atheme/constants.h:86
+#: include/atheme/constants.h:87
 #, c-format
 msgid "%s is closed."
 msgstr ""
@@ -638,7 +638,7 @@ msgstr ""
 msgid "%s is closed; it cannot be transferred."
 msgstr ""
 
-#: include/atheme/constants.h:87
+#: include/atheme/constants.h:88
 #, c-format
 msgid "%s is currently empty."
 msgstr ""
@@ -904,7 +904,7 @@ msgstr ""
 msgid "%s is not registered, and was not marked."
 msgstr ""
 
-#: include/atheme/constants.h:91
+#: include/atheme/constants.h:92
 #, c-format
 msgid "%s is not registered."
 msgstr ""
@@ -1456,6 +1456,11 @@ msgstr ""
 msgid "%s is not enabled on %s."
 msgstr ""
 
+#: modules/nickserv/vacation.c:81
+#, c-format
+msgid "%s is on vacation and has an extended expiry time"
+msgstr ""
+
 #: modules/chanserv/info.c:296
 #, c-format
 msgid "%s is temporarily holding this channel."
@@ -1669,12 +1674,12 @@ msgstr ""
 msgid "*** End of Info ***"
 msgstr ""
 
-#: libathemecore/commandhelp.c:339
+#: libathemecore/commandhelp.c:340
 #, c-format
 msgid "***** %s Help *****"
 msgstr ""
 
-#: libathemecore/commandhelp.c:348
+#: libathemecore/commandhelp.c:349
 msgid "***** End of Help *****"
 msgstr ""
 
@@ -2526,7 +2531,7 @@ msgstr ""
 msgid "Configures different botserv bot options."
 msgstr ""
 
-#: libathemecore/commandhelp.c:163
+#: libathemecore/commandhelp.c:164
 #, c-format
 msgid "Could not open help file for %s."
 msgstr ""
@@ -3179,19 +3184,19 @@ msgstr ""
 msgid "Flushes services database to disk."
 msgstr ""
 
-#: libathemecore/commandhelp.c:354
+#: libathemecore/commandhelp.c:355
 #, c-format
 msgid "For a verbose listing of all %s commands, type:"
 msgstr ""
 
-#: libathemecore/commandhelp.c:318
+#: libathemecore/commandhelp.c:319
 #, c-format
 msgid ""
 "For more information on a %s %s subcommand, type:\n"
 "/msg %s HELP %s <subcommand>"
 msgstr ""
 
-#: libathemecore/commandhelp.c:322
+#: libathemecore/commandhelp.c:323
 #, c-format
 msgid ""
 "For more information on a %s command, type:\n"
@@ -3484,14 +3489,14 @@ msgstr ""
 msgid "If you do not complete registration within one day, your nickname will expire."
 msgstr ""
 
-#: libathemecore/commandhelp.c:301
+#: libathemecore/commandhelp.c:302
 #, c-format
 msgid ""
 "If you're having trouble, or you need some additional help,\n"
 "you may wish to join the help channel %s"
 msgstr ""
 
-#: libathemecore/commandhelp.c:294
+#: libathemecore/commandhelp.c:295
 #, c-format
 msgid ""
 "If you're having trouble, or you need some additional help,\n"
@@ -3499,7 +3504,7 @@ msgid ""
 "help webpage %s"
 msgstr ""
 
-#: libathemecore/commandhelp.c:307
+#: libathemecore/commandhelp.c:308
 #, c-format
 msgid ""
 "If you're having trouble, or you need some additional help,\n"
@@ -3580,17 +3585,17 @@ msgstr ""
 msgid "Inspect the Perl interpreter"
 msgstr ""
 
-#: include/atheme/constants.h:88
+#: include/atheme/constants.h:89
 #, c-format
 msgid "Insufficient parameters for %s."
 msgstr ""
 
-#: libathemecore/commandhelp.c:268
+#: libathemecore/commandhelp.c:269
 #, c-format
 msgid "Invalid %s %s subcommand."
 msgstr ""
 
-#: libathemecore/commandhelp.c:270
+#: libathemecore/commandhelp.c:271
 #, c-format
 msgid "Invalid %s command."
 msgstr ""
@@ -3677,7 +3682,7 @@ msgstr ""
 msgid "Invalid option for %s"
 msgstr ""
 
-#: include/atheme/constants.h:89
+#: include/atheme/constants.h:90
 #, c-format
 msgid "Invalid parameters for %s."
 msgstr ""
@@ -4478,7 +4483,7 @@ msgstr ""
 msgid "No groups matched pattern %s"
 msgstr ""
 
-#: libathemecore/commandhelp.c:46
+#: libathemecore/commandhelp.c:47
 #, c-format
 msgid "No help available for %s."
 msgstr ""
@@ -4552,7 +4557,7 @@ msgstr ""
 msgid "No such ban %s on %s."
 msgstr ""
 
-#: libathemecore/commandhelp.c:48
+#: libathemecore/commandhelp.c:49
 #, c-format
 msgid "No such command %s."
 msgstr ""
@@ -4738,7 +4743,7 @@ msgstr ""
 msgid "Opts you out of Last Login notices upon identifying to your account."
 msgstr ""
 
-#: libathemecore/services.c:957
+#: libathemecore/services.c:958
 #, c-format
 msgid "Output limit (%u) exceeded, halting output"
 msgstr ""
@@ -5617,7 +5622,7 @@ msgstr ""
 msgid "Sets a topic on a channel."
 msgstr ""
 
-#: modules/nickserv/vacation.c:94
+#: modules/nickserv/vacation.c:95
 msgid "Sets an account as being on vacation."
 msgstr ""
 
@@ -7136,19 +7141,19 @@ msgstr ""
 msgid "The fantasy prefix for channel %s has been set to %s."
 msgstr ""
 
-#: libathemecore/commandhelp.c:454
+#: libathemecore/commandhelp.c:455
 msgid "The following additional commands are available:"
 msgstr ""
 
-#: libathemecore/commandhelp.c:459
+#: libathemecore/commandhelp.c:460
 msgid "The following additional subcommands are available:"
 msgstr ""
 
-#: libathemecore/commandhelp.c:375 libathemecore/commandhelp.c:426 libathemecore/commandhelp.c:462
+#: libathemecore/commandhelp.c:376 libathemecore/commandhelp.c:427 libathemecore/commandhelp.c:463
 msgid "The following commands are available:"
 msgstr ""
 
-#: libathemecore/commandhelp.c:377 libathemecore/commandhelp.c:428 libathemecore/commandhelp.c:464
+#: libathemecore/commandhelp.c:378 libathemecore/commandhelp.c:429 libathemecore/commandhelp.c:465
 msgid "The following subcommands are available:"
 msgstr ""
 
@@ -7386,19 +7391,19 @@ msgstr ""
 msgid "The transfer of %s has been cancelled."
 msgstr ""
 
-#: libathemecore/services.c:1211
+#: libathemecore/services.c:1212
 msgid "The vhost provided contains invalid characters."
 msgstr ""
 
-#: libathemecore/services.c:1228
+#: libathemecore/services.c:1229
 msgid "The vhost provided is invalid."
 msgstr ""
 
-#: libathemecore/services.c:1216
+#: libathemecore/services.c:1217
 msgid "The vhost provided is too long."
 msgstr ""
 
-#: libathemecore/services.c:1222
+#: libathemecore/services.c:1223
 msgid "The vhost provided looks like a CIDR mask."
 msgstr ""
 
@@ -7471,11 +7476,11 @@ msgstr ""
 msgid "This is a friendly reminder that you are about to DESTROY the group %s."
 msgstr ""
 
-#: libathemecore/ptasks.c:950
+#: libathemecore/ptasks.c:951
 msgid "This is your first offense. You will be ignored for 30 seconds."
 msgstr ""
 
-#: libathemecore/ptasks.c:965
+#: libathemecore/ptasks.c:966
 msgid "This is your last warning. You will be ignored for 30 seconds."
 msgstr ""
 
@@ -7849,12 +7854,12 @@ msgstr ""
 msgid "Usage: TEMPLATE %s [target flags]"
 msgstr ""
 
-#: libathemecore/commandhelp.c:282
+#: libathemecore/commandhelp.c:283
 #, c-format
 msgid "Use /msg %s HELP for a %s command listing."
 msgstr ""
 
-#: libathemecore/commandhelp.c:279
+#: libathemecore/commandhelp.c:280
 #, c-format
 msgid "Use /msg %s HELP %s for a %s %s subcommand listing."
 msgstr ""
@@ -8084,7 +8089,7 @@ msgstr ""
 msgid "You are not authorized to modify the access entry for %s on %s."
 msgstr ""
 
-#: include/atheme/constants.h:93
+#: include/atheme/constants.h:94
 msgid "You are not authorized to perform this operation."
 msgstr ""
 
@@ -8103,7 +8108,7 @@ msgstr ""
 msgid "You are not authorized to use the target argument."
 msgstr ""
 
-#: include/atheme/constants.h:94
+#: include/atheme/constants.h:95
 msgid "You are not logged in."
 msgstr ""
 
@@ -8142,7 +8147,7 @@ msgstr ""
 msgid "You are now logged in as %s."
 msgstr ""
 
-#: libathemecore/ptasks.c:902
+#: libathemecore/ptasks.c:903
 msgid "You are on services ignore. You may not use any service."
 msgstr ""
 
@@ -8256,16 +8261,16 @@ msgstr ""
 msgid "You do not have appropriate permissions to set flags: %s"
 msgstr ""
 
-#: include/atheme/constants.h:92
+#: include/atheme/constants.h:93
 #, c-format
 msgid "You do not have the %s privilege."
 msgstr ""
 
-#: libathemecore/commandhelp.c:388 libathemecore/commandhelp.c:507
+#: libathemecore/commandhelp.c:389 libathemecore/commandhelp.c:508
 msgid "You do not have the privileges to execute any commands."
 msgstr ""
 
-#: libathemecore/commandhelp.c:390 libathemecore/commandhelp.c:509
+#: libathemecore/commandhelp.c:391 libathemecore/commandhelp.c:510
 msgid "You do not have the privileges to execute any subcommands."
 msgstr ""
 
@@ -8438,7 +8443,7 @@ msgstr ""
 msgid "You have too many nicks registered already."
 msgstr ""
 
-#: libathemecore/ptasks.c:949 libathemecore/ptasks.c:964
+#: libathemecore/ptasks.c:950 libathemecore/ptasks.c:965
 msgid "You have triggered services flood protection."
 msgstr ""
 
@@ -8624,9 +8629,7 @@ msgstr ""
 
 #: modules/nickserv/vacation.c:38
 #, c-format
-msgid ""
-"Your account will automatically expire in %u days\n"
-"if you do not return."
+msgid "Your account will automatically expire in %u days if you do not return."
 msgstr ""
 
 #: modules/chanfix/fix.c:850
