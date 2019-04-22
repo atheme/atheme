@@ -18,7 +18,7 @@ ns_cmd_listownmail(struct sourceinfo *si, int parc, char *parv[])
 
 	if (si->smu->flags & MU_WAITAUTH)
 	{
-		command_fail(si, fault_noprivs, _("You have to verify your email address before you can perform this operation."));
+		command_fail(si, fault_notverified, STR_EMAIL_NOT_VERIFIED);
 		return;
 	}
 

@@ -87,7 +87,7 @@ cmd_cs_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 		}
 		if (strcmp(challenge, key) != 0)
 		{
-			(void) command_fail(si, fault_badparams, _("Invalid key for %s."), "DROP");
+			(void) command_fail(si, fault_badparams, _("Invalid key for \2%s\2."), "DROP");
 			return;
 		}
 	}

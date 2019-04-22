@@ -37,7 +37,7 @@ gs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 
 		if (!match(pattern, entity(mg)->name))
 		{
-			command_success_nodata(si, _("- %s (%s)"), entity(mg)->name, mygroup_founder_names(mg));
+			command_success_nodata(si, "- %s (%s)", entity(mg)->name, mygroup_founder_names(mg));
 			matches++;
 		}
 	}

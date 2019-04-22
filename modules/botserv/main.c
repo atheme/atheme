@@ -572,7 +572,7 @@ bs_cmd_change(struct sourceinfo *si, int parc, char *parv[])
 	bot = botserv_bot_find(parv[0]);
 	if (bot == NULL)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a bot"), parv[0]);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a bot."), parv[0]);
 		return;
 	}
 
@@ -612,7 +612,7 @@ bs_cmd_change(struct sourceinfo *si, int parc, char *parv[])
 				bot->real = sstrdup(parv[4]);
 			}
 			else
-				command_fail(si, fault_badparams, _("\2%s\2 is an invalid realname, not changing it"), parv[4]);
+				command_fail(si, fault_badparams, _("\2%s\2 is an invalid realname, not changing it."), parv[4]);
 		case 4:
 			sfree(bot->host);
 			bot->host = sstrdup(parv[3]);
@@ -673,7 +673,7 @@ bs_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
 
 	if (bot == NULL)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a bot"), parv[0]);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a bot."), parv[0]);
 		return;
 	}
 
@@ -758,7 +758,8 @@ bs_cmd_botlist(struct sourceinfo *si, int parc, char *parv[])
 			command_success_nodata(si, "\2%u:\2 %s (%s@%s) [%s]", ++i, bot->nick, bot->user, bot->host, bot->real);
 	}
 
-	command_success_nodata(si, _("\2%u\2 bots available."), i);
+	command_success_nodata(si, ngettext(N_("\2%u\2 bot available."), N_("\2%u\2 bots available."), i), i);
+
 	if (si->su != NULL && has_priv(si, PRIV_CHAN_ADMIN))
 	{
 		i = 0;
@@ -772,7 +773,8 @@ bs_cmd_botlist(struct sourceinfo *si, int parc, char *parv[])
 		}
 		command_success_nodata(si, _("\2%u\2 private bots available."), i);
 	}
-	command_success_nodata(si, "Use \2/msg %s ASSIGN #chan botnick\2 to assign one to your channel.", si->service->me->nick);
+
+	command_success_nodata(si, "Use \2/msg %s ASSIGN #chan botnick\2 to assign one to your channel.", si->service->disp);
 }
 
 // ASSIGN #channel nick
@@ -821,7 +823,7 @@ bs_cmd_assign(struct sourceinfo *si, int parc, char *parv[])
 	bot = botserv_bot_find(parv[1]);
 	if (bot == NULL)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a bot"), parv[1]);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a bot."), parv[1]);
 		return;
 	}
 

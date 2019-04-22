@@ -22,7 +22,7 @@ static struct {
 	{ "Syntax: INFO <nickname>", N_("Syntax: INFO <account>") },
 	{ "No nicknames matched pattern \2%s\2", N_("No accounts matched pattern \2%s\2") },
 	{ "An email containing nickname activation instructions has been sent to \2%s\2.", N_("An email containing account activation instructions has been sent to \2%s\2.") },
-	{ "If you do not complete registration within one day your nickname will expire.", N_("If you do not complete registration within one day your account will expire.") },
+	{ "If you do not complete registration within one day, your nickname will expire.", N_("If you do not complete registration within one day, your account will expire.") },
 	{ "%s registered the nick \2%s\2 and gained services operator privileges.", N_("%s registered the account \2%s\2 and gained services operator privileges.") },
 	{ "You cannot use your nickname as a password.", N_("You cannot use your account name as a password.") },
 	{ NULL, NULL }

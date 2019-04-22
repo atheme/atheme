@@ -65,8 +65,8 @@ cs_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED 
 
 		(void) help_display_newline(si);
 
-		(void) command_success_nodata(si, _("Activity is defined as a user with one of %s being on the channel."),
-		                                    bitmask_to_flags2(CA_USEDUPDATE & ca_all, 0));
+		(void) command_success_nodata(si, _("Activity is defined as a user with one of \2%s\2 being on the "
+		                                    "channel."), bitmask_to_flags2(CA_USEDUPDATE & ca_all, 0));
 	}
 	else
 		(void) command_success_nodata(si, _("Please note that channels will expire if there are no eligible "
@@ -74,8 +74,8 @@ cs_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED 
 
 	(void) help_display_newline(si);
 
-	(void) command_success_nodata(si, _("Successors are primarily those who have the +S (if available)\n"
-	                                    "or +R flag set on their account in the channel, although other\n"
+	(void) command_success_nodata(si, _("Successors are primarily those who have the \2+S\2 (if available)\n"
+	                                    "or \2+R\2 flag set on their account in the channel, although other\n"
 	                                    "people may be chosen depending on their access level and activity."));
 
 	if (config_options.join_chans && chansvs.fantasy && *chansvs.trigger)
@@ -103,7 +103,7 @@ cs_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED 
 
 static struct command cs_help = {
 	.name           = "HELP",
-	.desc           = N_("Displays contextual help information."),
+	.desc           = STR_HELP_DESCRIPTION,
 	.access         = AC_NONE,
 	.maxparc        = 1,
 	.cmd            = &cs_cmd_help,

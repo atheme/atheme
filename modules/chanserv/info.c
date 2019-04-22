@@ -289,7 +289,7 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		tm = localtime(&ts);
 		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
-		command_success_nodata(si, _("%s was \2MARKED\2 by %s on %s (%s)"), mc->name, setter, strfbuf, reason);
+		command_success_nodata(si, _("%s was \2MARKED\2 by \2%s\2 on \2%s\2 (%s)."), mc->name, setter, strfbuf, reason);
 	}
 
 	if (has_priv(si, PRIV_CHAN_AUSPEX) && (MC_INHABIT & mc->flags))

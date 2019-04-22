@@ -151,7 +151,7 @@ check_registration_keywords(hook_user_register_check_t *hdata)
 
 	if (!strcasecmp(hdata->account, "LIST") || !strcasecmp(hdata->account, "CLEAR") || !strcasecmp(hdata->account, "MODIFY"))
 	{
-		command_fail(hdata->si, fault_badparams, _("The nick \2%s\2 is reserved and cannot be registered."), hdata->account);
+		command_fail(hdata->si, fault_badparams, _("The nickname \2%s\2 is reserved and cannot be registered."), hdata->account);
 		hdata->approved = 1;
 	}
 }
@@ -436,7 +436,7 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 
 			if (ca->level == 0 && chanacs_is_table_full(ca))
 			{
-				command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
+				command_fail(si, fault_toomany, _("Channel \2%s\2 access list is full."), mc->name);
 				chanacs_close(ca);
 				return;
 			}
@@ -467,7 +467,7 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 			ca = chanacs_open(mc, NULL, target, true, entity(si->smu));
 			if (ca->level == 0 && chanacs_is_table_full(ca))
 			{
-				command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
+				command_fail(si, fault_toomany, _("Channel \2%s\2 access list is full."), mc->name);
 				chanacs_close(ca);
 				return;
 			}

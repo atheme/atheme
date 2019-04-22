@@ -686,7 +686,7 @@ show_multimark_noexist(hook_info_noexist_req_t *hdata)
 		{
 			command_success_nodata(
 				hdata->si,
-				_("\2%s\2 is not registered anymore but was \2marked\2 by \2%s\2 (%s) on \2%s\2: %s"),
+				_("\2%s\2 is not registered anymore, but was \2marked\2 by \2%s\2 (%s) on \2%s\2: %s"),
 				nick,
 				setter_name,
 				rm->setter_name,
@@ -698,7 +698,7 @@ show_multimark_noexist(hook_info_noexist_req_t *hdata)
 		{
 			command_success_nodata(
 				hdata->si,
-				_("\2%s\2 is not registered anymore but was \2marked\2 by \2%s\2 on \2%s\2: %s"),
+				_("\2%s\2 is not registered anymore, but was \2marked\2 by \2%s\2 on \2%s\2: %s"),
 				nick,
 				setter_name,
 				time,
@@ -825,7 +825,7 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 				{
 					command_success_nodata(
 						si,
-						_("\2%s\2 is not registered anymore but was \2marked\2 by \2%s\2 (%s) on \2%s\2: %s"),
+						_("\2%s\2 is not registered anymore, but was \2marked\2 by \2%s\2 (%s) on \2%s\2: %s"),
 						target,
 						setter_name,
 						rm->setter_name,
@@ -837,7 +837,7 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 				{
 					command_success_nodata(
 						si,
-						_("\2%s\2 is not registered anymore but was \2marked\2 by \2%s\2 on \2%s\2: %s"),
+						_("\2%s\2 is not registered anymore, but was \2marked\2 by \2%s\2 on \2%s\2: %s"),
 						target,
 						setter_name,
 						time,
@@ -849,7 +849,7 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 			return;
 		}
 
-		command_success_nodata(si, _("\2%s\2's marks:"), target);
+		command_success_nodata(si, _("Marks for \2%s\2:"), target);
 
 		l = multimark_list(mu);
 

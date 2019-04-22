@@ -402,7 +402,7 @@ os_cmd_sqline_sync(struct sourceinfo *si, int parc, char *parv[])
 
 static struct command os_sqline = {
 	.name           = "SQLINE",
-	.desc           = N_("Manages network name bans."),
+	.desc           = N_("Manages network nickname bans."),
 	.access         = PRIV_MASS_AKILL,
 	.maxparc        = 3,
 	.cmd            = &os_cmd_sqline,
@@ -411,7 +411,7 @@ static struct command os_sqline = {
 
 static struct command os_sqline_add = {
 	.name           = "ADD",
-	.desc           = N_("Adds a network name ban"),
+	.desc           = N_("Adds a network nickname ban."),
 	.access         = AC_NONE,
 	.maxparc        = 2,
 	.cmd            = &os_cmd_sqline_add,
@@ -420,7 +420,7 @@ static struct command os_sqline_add = {
 
 static struct command os_sqline_del = {
 	.name           = "DEL",
-	.desc           = N_("Deletes a network name ban"),
+	.desc           = N_("Deletes a network nickname ban."),
 	.access         = AC_NONE,
 	.maxparc        = 1,
 	.cmd            = &os_cmd_sqline_del,
@@ -429,7 +429,7 @@ static struct command os_sqline_del = {
 
 static struct command os_sqline_list = {
 	.name           = "LIST",
-	.desc           = N_("Lists all network name bans"),
+	.desc           = N_("Lists all network nickname bans."),
 	.access         = AC_NONE,
 	.maxparc        = 1,
 	.cmd            = &os_cmd_sqline_list,
@@ -438,7 +438,7 @@ static struct command os_sqline_list = {
 
 static struct command os_sqline_sync = {
 	.name           = "SYNC",
-	.desc           = N_("Synchronises network name bans to servers"),
+	.desc           = N_("Synchronises network nickname bans to all servers."),
 	.access         = AC_NONE,
 	.maxparc        = 0,
 	.cmd            = &os_cmd_sqline_sync,

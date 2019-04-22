@@ -136,7 +136,7 @@ cs_cmd_why(struct sourceinfo *si, int parc, char *parv[])
 					entity(mu)->name);
 	}
 	if ((fl & (CA_AKICK | CA_EXEMPT)) == (CA_AKICK | CA_EXEMPT))
-		command_success_nodata(si, _("+e exempts from +b."));
+		command_success_nodata(si, _("\2+e\2 exempts from \2+b\2."));
 	else if (fl == 0)
 		command_success_nodata(si, _("\2%s\2 has no special access to \2%s\2."),
 				u->nick, mc->name);

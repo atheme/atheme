@@ -385,7 +385,7 @@ cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 			                                    N_("%u access entries updated accordingly."),
 			                                    changes), changes);
 			if (founderskipped)
-				command_success_nodata(si, _("Not updating %u access entries involving founder status. Please do it manually."), founderskipped);
+				command_success_nodata(si, _("Not updating \2%u\2 access entries involving founder status. Please do it manually."), founderskipped);
 		}
 		else
 			logcommand(si, CMDLOG_SET, "TEMPLATE: \2%s\2 \2%s\2 \2%s\2", mc->name, target, flagstr);

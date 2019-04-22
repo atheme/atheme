@@ -63,7 +63,7 @@ gs_cmd_listchans(struct sourceinfo *si, int parc, char *parv[])
 
 		// don't tell users they're akicked (flag +b)
 		if (ca->level != CA_AKICK)
-			command_success_nodata(si, _("Access flag(s) %s in %s"), bitmask_to_flags(ca->level), ca->mychan->name);
+			command_success_nodata(si, _("Access flag(s) \2%s\2 in \2%s\2"), bitmask_to_flags(ca->level), ca->mychan->name);
 		else
 			akicks++;
 	}

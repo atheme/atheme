@@ -143,7 +143,7 @@ os_cmd_akill_add(struct sourceinfo *si, int parc, char *parv[])
 	{
 		if (!(u = user_find_named(target)))
 		{
-			command_fail(si, fault_nosuch_target, _("\2%s\2 is not on IRC."), target);
+			command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), target);
 			return;
 		}
 
@@ -501,7 +501,7 @@ os_cmd_akill_sync(struct sourceinfo *si, int parc, char *parv[])
 
 static struct command os_akill = {
 	.name           = "AKILL",
-	.desc           = N_("Manages network bans."),
+	.desc           = N_("Manages network host bans."),
 	.access         = PRIV_AKILL,
 	.maxparc        = 3,
 	.cmd            = &os_cmd_akill,
@@ -510,7 +510,7 @@ static struct command os_akill = {
 
 static struct command os_akill_add = {
 	.name           = "ADD",
-	.desc           = N_("Adds a network ban"),
+	.desc           = N_("Adds a network host ban."),
 	.access         = AC_NONE,
 	.maxparc        = 2,
 	.cmd            = &os_cmd_akill_add,
@@ -519,7 +519,7 @@ static struct command os_akill_add = {
 
 static struct command os_akill_del = {
 	.name           = "DEL",
-	.desc           = N_("Deletes a network ban"),
+	.desc           = N_("Deletes a network host ban."),
 	.access         = AC_NONE,
 	.maxparc        = 1,
 	.cmd            = &os_cmd_akill_del,
@@ -528,7 +528,7 @@ static struct command os_akill_del = {
 
 static struct command os_akill_list = {
 	.name           = "LIST",
-	.desc           = N_("Lists all network bans"),
+	.desc           = N_("Lists all network host bans."),
 	.access         = AC_NONE,
 	.maxparc        = 1,
 	.cmd            = &os_cmd_akill_list,
@@ -537,7 +537,7 @@ static struct command os_akill_list = {
 
 static struct command os_akill_sync = {
 	.name           = "SYNC",
-	.desc           = N_("Synchronises network bans to servers"),
+	.desc           = N_("Synchronises network host bans to all servers."),
 	.access         = AC_NONE,
 	.maxparc        = 0,
 	.cmd            = &os_cmd_akill_sync,

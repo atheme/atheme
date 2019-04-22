@@ -185,7 +185,7 @@ gs_cmd_global(struct sourceinfo *si, const int parc, char *parv[])
 
 static struct command gs_help = {
 	.name           = "HELP",
-	.desc           = N_("Displays contextual help information."),
+	.desc           = STR_HELP_DESCRIPTION,
 	.access         = PRIV_GLOBAL,
 	.maxparc        = 1,
 	.cmd            = &gs_cmd_help,

@@ -48,7 +48,7 @@ cs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 
 	if (si->smu->flags & MU_WAITAUTH)
 	{
-		command_fail(si, fault_notverified, _("You need to verify your email address before you may register channels."));
+		command_fail(si, fault_notverified, STR_EMAIL_NOT_VERIFIED);
 		return;
 	}
 

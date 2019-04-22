@@ -64,7 +64,7 @@ cmd_ns_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 	if (! nicksvs.no_nick_ownership && MOWGLI_LIST_LENGTH(&mu->nicks) > 1 &&
 	    command_find(si->service->commands, "UNGROUP"))
 	{
-		(void) command_fail(si, fault_noprivs, _("Account \2%s\2 has %zu other nick(s) grouped to it, "
+		(void) command_fail(si, fault_noprivs, _("Account \2%s\2 has \2%zu\2 other nick(s) grouped to it, "
 		                                         "remove those first."), entity(mu)->name,
 		                                         MOWGLI_LIST_LENGTH(&mu->nicks) - 1);
 		return;
@@ -104,7 +104,7 @@ cmd_ns_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 
 	if (strcmp(challenge, key) != 0)
 	{
-		(void) command_fail(si, fault_badparams, _("Invalid key for %s."), "DROP");
+		(void) command_fail(si, fault_badparams, _("Invalid key for \2%s\2."), "DROP");
 		return;
 	}
 

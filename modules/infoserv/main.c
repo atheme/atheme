@@ -370,7 +370,7 @@ is_cmd_del(struct sourceinfo *si, int parc, char *parv[])
 		}
 	}
 
-	command_fail(si, fault_nosuch_target, _("Entry %u not found in logon info."), id);
+	command_fail(si, fault_nosuch_target, _("Entry \2%u\2 not found in logon info."), id);
 	return;
 }
 
@@ -419,7 +419,7 @@ is_cmd_odel(struct sourceinfo *si, int parc, char *parv[])
 		}
 	}
 
-	command_fail(si, fault_nosuch_target, _("Entry %u not found in oper logon info."), id);
+	command_fail(si, fault_nosuch_target, _("Entry \2%u\2 not found in oper logon info."), id);
 	return;
 }
 
@@ -483,7 +483,7 @@ is_cmd_olist(struct sourceinfo *si, int parc, char *parv[])
 
 static struct command is_help = {
 	.name           = "HELP",
-	.desc           = N_("Displays contextual help information."),
+	.desc           = STR_HELP_DESCRIPTION,
 	.access         = AC_NONE,
 	.maxparc        = 2,
 	.cmd            = &is_cmd_help,

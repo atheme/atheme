@@ -41,7 +41,7 @@ ms_cmd_sendops(struct sourceinfo *si, int parc, char *parv[])
 
 	if (si->smu->flags & MU_WAITAUTH)
 	{
-		command_fail(si, fault_notverified, _("You need to verify your email address before you may send memos."));
+		command_fail(si, fault_notverified, STR_EMAIL_NOT_VERIFIED);
 		return;
 	}
 
@@ -177,8 +177,8 @@ ms_cmd_sendops(struct sourceinfo *si, int parc, char *parv[])
 	else
 		logcommand(si, CMDLOG_SET, "SENDOPS: to \2%s\2 (%u/%u sent)", mc->name, sent, tried);
 
-	command_success_nodata(si, ngettext(N_("The memo has been successfully sent to %u op on \2%s\2."),
-	                                    N_("The memo has been successfully sent to %u ops on \2%s\2."),
+	command_success_nodata(si, ngettext(N_("The memo has been successfully sent to \2%u\2 operator on \2%s\2."),
+	                                    N_("The memo has been successfully sent to \2%u\2 operators on \2%s\2."),
 	                                    sent), sent, mc->name);
 	return;
 }

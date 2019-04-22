@@ -787,7 +787,7 @@ cs_cmd_access_add(struct sourceinfo *si, int parc, char *parv[])
 	if (ca->level == 0 && chanacs_is_table_full(ca))
 	{
 		chanacs_close(ca);
-		command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
+		command_fail(si, fault_toomany, _("Channel \2%s\2 access list is full."), mc->name);
 		return;
 	}
 

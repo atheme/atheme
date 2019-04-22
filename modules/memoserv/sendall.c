@@ -40,7 +40,7 @@ ms_cmd_sendall(struct sourceinfo *si, int parc, char *parv[])
 
 	if (si->smu->flags & MU_WAITAUTH)
 	{
-		command_fail(si, fault_notverified, _("You need to verify your email address before you may send memos."));
+		command_fail(si, fault_notverified, STR_EMAIL_NOT_VERIFIED);
 		return;
 	}
 
@@ -152,8 +152,8 @@ ms_cmd_sendall(struct sourceinfo *si, int parc, char *parv[])
 	else if (sent > 1)
 		command_add_flood(si, FLOOD_MODERATE);
 	logcommand(si, CMDLOG_ADMIN, "SENDALL: \2%s\2 (%u/%u sent)", m, sent, tried);
-	command_success_nodata(si, ngettext(N_("The memo has been successfully sent to %u account."),
-	                                    N_("The memo has been successfully sent to %u accounts."),
+	command_success_nodata(si, ngettext(N_("The memo has been successfully sent to \2%u\2 account."),
+	                                    N_("The memo has been successfully sent to \2%u\2 accounts."),
 	                                    sent), sent);
 	return;
 }

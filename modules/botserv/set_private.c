@@ -52,13 +52,13 @@ bs_cmd_set_private(struct sourceinfo *si, int parc, char *parv[])
 	{
 		bot->private = true;
 		logcommand(si, CMDLOG_SET, "SET:PRIVATE:ON: \2%s\2", bot->nick);
-		command_success_nodata(si, _("Private mode of bot %s is now \2ON\2."), bot->nick);
+		command_success_nodata(si, _("Private mode of bot \2%s\2 is now \2ON\2."), bot->nick);
 	}
 	else if(!irccasecmp(option, "OFF"))
 	{
 		bot->private = false;
 		logcommand(si, CMDLOG_SET, "SET:PRIVATE:OFF: \2%s\2", bot->nick);
-		command_success_nodata(si, _("Private mode of bot %s is now \2OFF\2."), bot->nick);
+		command_success_nodata(si, _("Private mode of bot \2%s\2 is now \2OFF\2."), bot->nick);
 	}
 	else
 	{

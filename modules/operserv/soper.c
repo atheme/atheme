@@ -55,7 +55,7 @@ os_cmd_soper_list(struct sourceinfo *si, int parc, char *parv[])
 				soper->classname);
 	}
 	command_success_nodata(si, "%-20s %-5s %-20s", "--------------------", "-----", "--------------------");
-	command_success_nodata(si, _("End of services operator list"));
+	command_success_nodata(si, _("End of services operator list."));
 }
 
 static void

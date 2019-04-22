@@ -33,7 +33,7 @@ ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])
 
 	if (si->smu->flags & MU_WAITAUTH)
 	{
-		command_fail(si, fault_notverified, _("You need to verify your email address before you may send memos."));
+		command_fail(si, fault_notverified, STR_EMAIL_NOT_VERIFIED);
 		return;
 	}
 

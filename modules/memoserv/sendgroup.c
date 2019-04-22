@@ -42,7 +42,7 @@ ms_cmd_sendgroup(struct sourceinfo *si, int parc, char *parv[])
 
 	if (si->smu->flags & MU_WAITAUTH)
 	{
-		command_fail(si, fault_notverified, _("You need to verify your email address before you may send memos."));
+		command_fail(si, fault_notverified, STR_EMAIL_NOT_VERIFIED);
 		return;
 	}
 
@@ -166,8 +166,8 @@ ms_cmd_sendgroup(struct sourceinfo *si, int parc, char *parv[])
 	else
 		logcommand(si, CMDLOG_SET, "SENDGROUP: to \2%s\2 (%u/%u sent)", entity(mg)->name, sent, tried);
 
-	command_success_nodata(si, ngettext(N_("The memo has been successfully sent to %u member on \2%s\2."),
-	                                    N_("The memo has been successfully sent to %u members on \2%s\2."),
+	command_success_nodata(si, ngettext(N_("The memo has been successfully sent to \2%u\2 member on \2%s\2."),
+	                                    N_("The memo has been successfully sent to \2%u\2 members on \2%s\2."),
 	                                    sent), sent, entity(mg)->name);
 	return;
 }

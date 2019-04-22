@@ -122,7 +122,7 @@ os_cmd_specs(struct sourceinfo *si, int parc, char *parv[])
 			tu = user_find_named(target);
 			if (tu == NULL)
 			{
-				command_fail(si, fault_nosuch_target, _("\2%s\2 is not on IRC."), target);
+				command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), target);
 				return;
 			}
 			if (!has_any_privs_user(tu))
@@ -180,7 +180,7 @@ os_cmd_specs(struct sourceinfo *si, int parc, char *parv[])
 			command_success_nodata(si, "    %s", _("(no privileges held)"));
 	}
 
-	command_success_nodata(si, _("End of privileges"));
+	command_success_nodata(si, _("End of privileges."));
 
 	if (targettype == NULL)
 		logcommand(si, CMDLOG_ADMIN, "SPECS");

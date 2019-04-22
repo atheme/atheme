@@ -90,7 +90,7 @@ cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[])
 				ca = chanacs_open(mc, mt, NULL, true, entity(si->smu));
 				if (ca->level == 0 && chanacs_is_table_full(ca))
 				{
-					command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
+					command_fail(si, fault_toomany, _("Channel \2%s\2 access list is full."), mc->name);
 					chanacs_close(ca);
 					return;
 				}
@@ -173,7 +173,7 @@ cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[])
 		ca = chanacs_open(mc, mt, NULL, true, entity(si->smu));
 		if (ca->level == 0 && chanacs_is_table_full(ca))
 		{
-			command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
+			command_fail(si, fault_toomany, _("Channel \2%s\2 access list is full."), mc->name);
 			chanacs_close(ca);
 			return;
 		}

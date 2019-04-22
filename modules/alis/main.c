@@ -345,7 +345,7 @@ alis_cmd_list_func(struct sourceinfo *const restrict si, const int parc, char **
 	if (! alis_parse_query(si, parc, parv, &query))
 		return;
 
-	(void) command_success_nodata(si, _("Returning maximum of %u channel names matching '\2%s\2'"),
+	(void) command_success_nodata(si, _("Returning maximum of \2%u\2 channel names matching '\2%s\2'"),
 	                                    query.match_limit, query.mask);
 
 	// Hunting for one channel ?
@@ -383,7 +383,7 @@ alis_cmd_list_func(struct sourceinfo *const restrict si, const int parc, char **
 	}
 
 end:
-	(void) command_success_nodata(si, _("End of output"));
+	(void) command_success_nodata(si, _("End of output."));
 	(void) logcommand(si, CMDLOG_GET, "LIST: \2%s\2", query.mask);
 }
 
@@ -419,7 +419,7 @@ static struct command alis_cmd_list = {
 
 static struct command alis_cmd_help = {
 	.name           = "HELP",
-	.desc           = N_("Displays contextual help information."),
+	.desc           = STR_HELP_DESCRIPTION,
 	.access         = AC_NONE,
 	.maxparc        = 1,
 	.cmd            = &alis_cmd_help_func,

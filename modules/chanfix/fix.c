@@ -425,7 +425,9 @@ chanfix_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 	if (matches == 0)
 		command_success_nodata(si, _("No channels matched criteria \2%s\2"), chanpattern);
 	else
-		command_success_nodata(si, ngettext(N_("\2%u\2 match for criteria \2%s\2"), N_("\2%u\2 matches for criteria \2%s\2"), matches), matches, chanpattern);
+		command_success_nodata(si, ngettext(N_("\2%u\2 match for criteria \2%s\2."),
+		                                    N_("\2%u\2 matches for criteria \2%s\2."), matches),
+		                                    matches, chanpattern);
 }
 
 static void
@@ -616,7 +618,7 @@ chanfix_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		tm = localtime(&ts);
 		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
-		command_success_nodata(si, _("%s was \2MARKED\2 by %s on %s (%s)"), chan->name, setter, strfbuf, reason);
+		command_success_nodata(si, _("%s was \2MARKED\2 by \2%s\2 on \2%s\2 (%s)."), chan->name, setter, strfbuf, reason);
 	}
 
         if ((md = metadata_find(chan, "private:nofix:setter")) != NULL)
@@ -907,7 +909,7 @@ struct command cmd_nofix = {
 
 struct command cmd_help = {
 	.name           = "HELP",
-	.desc           = N_("Displays contextual help information."),
+	.desc           = STR_HELP_DESCRIPTION,
 	.access         = AC_NONE,
 	.maxparc        = 1,
 	.cmd            = &chanfix_cmd_help,

@@ -65,7 +65,7 @@ cs_cmd_bansearch_func(struct sourceinfo *const restrict si, const int parc, char
 	for (n = next_matching_ban(c, tu, 'b', c->bans.head); n; n = next_matching_ban(c, tu, 'b', n->next))
 	{
 		if (! count)
-			(void) command_success_nodata(si, _("Bans matching \2%s\2 in \2%s\2"), tu->nick, channel);
+			(void) command_success_nodata(si, _("Bans matching \2%s\2 in \2%s\2:"), tu->nick, channel);
 
 		const struct chanban *const cb = n->data;
 		count++;
@@ -73,7 +73,7 @@ cs_cmd_bansearch_func(struct sourceinfo *const restrict si, const int parc, char
 		(void) command_success_nodata(si, "- %s", cb->mask);
 	}
 
-	(void) command_success_nodata(si, ngettext(N_("\2%u\2 ban found"), N_("\2%u\2 bans found"), count), count);
+	(void) command_success_nodata(si, ngettext(N_("\2%u\2 ban found."), N_("\2%u\2 bans found."), count), count);
 
 	if (! (ircd->type == PROTOCOL_UNREAL || ircd->type == PROTOCOL_INSPIRCD || ircd->type == PROTOCOL_NGIRCD))
 	{
@@ -82,7 +82,7 @@ cs_cmd_bansearch_func(struct sourceinfo *const restrict si, const int parc, char
 		for (n = next_matching_ban(c, tu, 'q', c->bans.head); n; n = next_matching_ban(c, tu, 'q', n->next))
 		{
 			if (! count)
-				(void) command_success_nodata(si, _("Quiets matching \2%s\2 in \2%s\2"),
+				(void) command_success_nodata(si, _("Quiets matching \2%s\2 in \2%s\2:"),
 				                              tu->nick, channel);
 
 			const struct chanban *const cb = n->data;
@@ -91,13 +91,13 @@ cs_cmd_bansearch_func(struct sourceinfo *const restrict si, const int parc, char
 			(void) command_success_nodata(si, "- %s", cb->mask);
 		}
 
-		(void) command_success_nodata(si, ngettext(N_("\2%u\2 quiet found"), N_("\2%u\2 quiets found"),
+		(void) command_success_nodata(si, ngettext(N_("\2%u\2 quiet found."), N_("\2%u\2 quiets found."),
 		                              count), count);
 	}
 
 	if (ircd->type == PROTOCOL_CHARYBDIS && (c->modes & mode_to_flag('r')))
 		if (! tu->myuser || (tu->myuser && (tu->myuser->flags & MU_WAITAUTH)))
-			(void) command_success_nodata(si, _("\2%s\2 is blocking unidentified users from speaking,\n"
+			(void) command_success_nodata(si, _("\2%s\2 is blocking unidentified users from joining, "
 			                                    "and \2%s\2 is not identified."), channel, tu->nick);
 
 	if (c->modes & CMODE_INVITE)

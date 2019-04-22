@@ -53,7 +53,7 @@ ns_cmd_set_pubkey(struct sourceinfo *si, int parc, char *parv[])
 
 static struct command ns_set_pubkey = {
 	.name           = "PUBKEY",
-	.desc           = N_("Changes your ECDSA-NIST256p-CHALLENGE public key."),
+	.desc           = N_("Changes your ECDSA-NIST256P-CHALLENGE public key."),
 	.access         = AC_NONE,
 	.maxparc        = 1,
 	.cmd            = &ns_cmd_set_pubkey,

@@ -90,7 +90,7 @@ os_cmd_rakill(struct sourceinfo *si, int parc, char *parv[])
 		if (regex_match(regex, usermask))
 		{
 			// match
-			command_success_nodata(si, _("\2Match:\2  %s!%s@%s %s - akilling"), u->nick, u->user, u->host, u->gecos);
+			command_success_nodata(si, _("\2Match:\2  %s!%s@%s %s - AKILLing"), u->nick, u->user, u->host, u->gecos);
 			if (! (u->flags & UF_KLINESENT)) {
 				kline_sts("*", "*", u->host, 604800, reason);
 				u->flags |= UF_KLINESENT;
@@ -100,8 +100,8 @@ os_cmd_rakill(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	regex_destroy(regex);
-	command_success_nodata(si, ngettext(N_("\2%u\2 match for %s AKILLed."),
-	                                    N_("\2%u\2 matches for %s AKILLed."),
+	command_success_nodata(si, ngettext(N_("\2%u\2 match for \2%s\2 AKILLed."),
+	                                    N_("\2%u\2 matches for \2%s\2 AKILLed."),
 	                                    matches), matches, pattern);
 
 	logcommand(si, CMDLOG_ADMIN, "RAKILL: \2%s\2 (reason: \2%s\2) (\2%u\2 matches)", pattern, reason, matches);

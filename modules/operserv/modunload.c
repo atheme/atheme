@@ -30,7 +30,7 @@ os_cmd_modunload(struct sourceinfo *si, int parc, char *parv[])
 
 		if (!m)
 		{
-			command_fail(si, fault_nosuch_target, _("\2%s\2 is not loaded; it cannot be unloaded."), module);
+			command_fail(si, fault_nosuch_target, _("\2%s\2 is not loaded."), module);
 			continue;
 		}
 

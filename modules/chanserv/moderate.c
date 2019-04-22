@@ -167,8 +167,9 @@ can_register(hook_channel_register_check_t *req)
 	req->approved++;
 
 	cs = csreq_create(req->name, entity(req->si->smu));
-	command_success_nodata(req->si, _("\2%s\2 reviews every Channel Registration request.  Your request to register \2%s\2 has been received and should be reviewed shortly."),
-			       me.netname, cs->name);
+	command_success_nodata(req->si, _("\2%s\2 reviews every Channel Registration request. Your request to "
+	                                  "register \2%s\2 has been received and should be reviewed shortly."),
+	                                  me.netname, cs->name);
 
 	if (groupmemo != NULL)
 		send_group_memo(req->si, "[auto memo] Please review channel \2%s\2 for me.", req->name);

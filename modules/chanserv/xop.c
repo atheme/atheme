@@ -31,14 +31,14 @@ cs_xop_do_add(struct sourceinfo *si, struct mychan *mc, struct myentity *mt, cha
 		ca = chanacs_open(mc, NULL, target, true, entity(si->smu));
 		if (ca->level == level)
 		{
-			command_fail(si, fault_nochange, _("\2%s\2 is already on the %s list for \2%s\2"), target, leveldesc, mc->name);
+			command_fail(si, fault_nochange, _("\2%s\2 is already on the %s list for \2%s\2."), target, leveldesc, mc->name);
 			return;
 		}
 		isnew = ca->level == 0;
 
 		if (isnew && chanacs_is_table_full(ca))
 		{
-			command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
+			command_fail(si, fault_toomany, _("Channel \2%s\2 access list is full."), mc->name);
 			chanacs_close(ca);
 			return;
 		}
@@ -111,7 +111,7 @@ cs_xop_do_add(struct sourceinfo *si, struct mychan *mc, struct myentity *mt, cha
 	isnew = ca->level == 0;
 	if (isnew && chanacs_is_table_full(ca))
 	{
-		command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
+		command_fail(si, fault_toomany, _("Channel \2%s\2 access list is full."), mc->name);
 		chanacs_close(ca);
 		return;
 	}
@@ -253,14 +253,14 @@ cs_xop(struct sourceinfo *si, int parc, char *parv[], const char *leveldesc)
 
 	if (!cmd || !chan)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "xOP");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "XOP");
 		command_fail(si, fault_needmoreparams, _("Syntax: SOP|AOP|HOP|VOP <#channel> ADD|DEL|LIST <nickname>"));
 		return;
 	}
 
 	if ((strcasecmp("LIST", cmd)) && (!uname))
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "xOP");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "XOP");
 		command_fail(si, fault_needmoreparams, _("Syntax: SOP|AOP|HOP|VOP <#channel> ADD|DEL|LIST <nickname>"));
 		return;
 	}
@@ -295,7 +295,7 @@ cs_xop(struct sourceinfo *si, int parc, char *parv[], const char *leveldesc)
 	level = get_template_flags(mc, leveldesc);
 	if (level & CA_FOUNDER)
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 %s template has founder flag, not allowing xOP command."), chan, leveldesc);
+		command_fail(si, fault_noprivs, _("\2%s\2 %s template has founder flag, not allowing XOP command."), chan, leveldesc);
 		return;
 	}
 
@@ -516,7 +516,7 @@ cs_cmd_forcexop(struct sourceinfo *si, int parc, char *parv[])
 	                                    N_("FORCEXOP \2%s\2 done (\2%u\2 changes)"),
 	                                    changes), mc->name, changes);
 	if (changes > 0)
-		verbose(mc, "\2%s\2 reset access levels to xOP (\2%u\2 changes)", get_source_name(si), changes);
+		verbose(mc, "\2%s\2 reset access levels to XOP (\2%u\2 changes)", get_source_name(si), changes);
 	logcommand(si, CMDLOG_SET, "FORCEXOP: \2%s\2 (\2%u\2 changes)", mc->name, changes);
 }
 
@@ -558,7 +558,7 @@ static struct command cs_vop = {
 
 static struct command cs_forcexop = {
 	.name           = "FORCEXOP",
-	.desc           = N_("Forces access levels to xOP levels."),
+	.desc           = N_("Forces access levels to XOP levels."),
 	.access         = AC_NONE,
 	.maxparc        = 1,
 	.cmd            = &cs_cmd_forcexop,

@@ -23,9 +23,8 @@ helpserv_cmd_services(struct sourceinfo *si, int parc, char *parv[])
 			command_success_nodata(si, "%s", sptr->nick);
 	}
 
-	command_success_nodata(si, _("More information on each service is available by messaging it like so: /msg service help"));
-
-	return;
+	command_success_nodata(si, _("More information on each service is available by messaging it like so: "
+	                             "\2/msg <service> HELP\2"));
 }
 
 static struct command helpserv_services = {

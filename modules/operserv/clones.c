@@ -235,12 +235,12 @@ os_cmd_clones_kline(struct sourceinfo *si, int parc, char *parv[])
 		unsigned int newgrace = atol(arg);
 		if (kline_enabled && grace_count == newgrace)
 		{
-			command_fail(si, fault_nochange, _("CLONES kline grace is already enabled and set to %u kills."), grace_count);
+			command_fail(si, fault_nochange, _("CLONES kline grace is already enabled and set to \2%u\2 kills."), grace_count);
 		}
 		kline_enabled = true;
 		grace_count = newgrace;
-		command_success_nodata(si, ngettext(N_("Enabled CLONES klines with a grace of %u kill"),
-		                                    N_("Enabled CLONES klines with a grace of %u kills"),
+		command_success_nodata(si, ngettext(N_("Enabled CLONES klines with a grace of \2%u\2 kill"),
+		                                    N_("Enabled CLONES klines with a grace of \2%u\2 kills"),
 		                                    grace_count), grace_count);
 		wallops("\2%s\2 enabled CLONES klines with a grace of %u kills", get_oper_name(si), grace_count);
 		logcommand(si, CMDLOG_ADMIN, "CLONES:KLINE:ON grace %u", grace_count);
@@ -250,8 +250,8 @@ os_cmd_clones_kline(struct sourceinfo *si, int parc, char *parv[])
 		if (kline_enabled)
 		{
 			if (grace_count)
-				command_success_string(si, "ON", ngettext(N_("CLONES klines are currently enabled with a grace of %u kill."),
-				                                          N_("CLONES klines are currently enabled with a grace of %u kills."),
+				command_success_string(si, "ON", ngettext(N_("CLONES klines are currently enabled with a grace of \2%u\2 kill."),
+				                                          N_("CLONES klines are currently enabled with a grace of \2%u\2 kills."),
 				                                          grace_count), grace_count);
 			else
 				command_success_string(si, "ON", _("CLONES klines are currently enabled."));
@@ -416,7 +416,7 @@ os_cmd_clones_addexempt(struct sourceinfo *si, int parc, char *parv[])
 			sfree(c->reason);
 			c->reason = sstrdup(rreason);
 		}
-		command_success_nodata(si, _("\2Warning\2: the syntax you are using to update this exemption has been deprecated and may be removed in a future version.  Please use SETEXEMPT in the future instead."));
+		command_success_nodata(si, _("\2Warning\2: the syntax you are using to update this exemption has been deprecated and may be removed in a future version. Please use SETEXEMPT in the future instead."));
 		command_success_nodata(si, _("Updated \2%s\2 in clone exempt list."), ip);
 	}
 
@@ -539,7 +539,7 @@ os_cmd_clones_setexempt(struct sourceinfo *si, int parc, char *parv[])
 				{
 					if (clones < c->warn)
 					{
-						command_fail(si, fault_badparams, _("Allowed clones limit must be greater than or equal to the warned limit of %u"), c->warn);
+						command_fail(si, fault_badparams, _("Allowed clones limit must be greater than or equal to the warned limit of \2%u\2"), c->warn);
 						return;
 					}
 

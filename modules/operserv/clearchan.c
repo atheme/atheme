@@ -54,7 +54,7 @@ os_cmd_clearchan(struct sourceinfo *si, int parc, char *parv[])
 	else
 	{
 		// not valid!
-		command_fail(si, fault_badparams, _("\2%s\2 is not a valid action"), actionstr);
+		command_fail(si, fault_badparams, _("\2%s\2 is not a valid action."), actionstr);
  		return;
 	}
 

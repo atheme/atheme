@@ -86,6 +86,8 @@
 
 #define STR_CHANNEL_IS_CLOSED   _("\2%s\2 is closed.")
 #define STR_CHANNEL_IS_EMPTY    _("\2%s\2 is currently empty.")
+#define STR_EMAIL_NOT_VERIFIED  _("You must verify your e-mail address before you may perform this operation.")
+#define STR_HELP_DESCRIPTION    N_("Displays contextual help information.")
 #define STR_INSUFFICIENT_PARAMS _("Insufficient parameters for \2%s\2.")
 #define STR_INVALID_PARAMS      _("Invalid parameters for \2%s\2.")
 #define STR_IRC_COMMAND_ONLY    _("\2%s\2 can only be executed via IRC.")

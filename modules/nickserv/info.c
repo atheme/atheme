@@ -415,7 +415,7 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		tm = localtime(&ts);
 		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
-		command_success_nodata(si, _("%s was \2FROZEN\2 by %s on %s (%s)"), entity(mu)->name, setter, strfbuf, reason);
+		command_success_nodata(si, _("%s was \2FROZEN\2 by \2%s\2 on \2%s\2 (%s)."), entity(mu)->name, setter, strfbuf, reason);
 	}
 	else if (metadata_find(mu, "private:freeze:freezer"))
 		command_success_nodata(si, _("%s has been frozen by the %s administration."), entity(mu)->name, me.netname);
@@ -435,11 +435,11 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		tm = localtime(&ts);
 		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
-		command_success_nodata(si, _("%s was \2MARKED\2 by %s on %s (%s)"), entity(mu)->name, setter, strfbuf, reason);
+		command_success_nodata(si, _("%s was \2MARKED\2 by \2%s\2 on \2%s\2 (%s)."), entity(mu)->name, setter, strfbuf, reason);
 	}
 
 	if (MU_WAITAUTH & mu->flags)
-		command_success_nodata(si, _("%s has \2NOT COMPLETED\2 registration verification"), entity(mu)->name);
+		command_success_nodata(si, _("%s has \2NOT COMPLETED\2 registration verification."), entity(mu)->name);
 
 	if ((mu == si->smu || has_user_auspex) &&
 			(md = metadata_find(mu, "private:verify:emailchg:newemail")))
@@ -452,7 +452,7 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		tm = localtime(&ts);
 		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
-		command_success_nodata(si, _("%s has requested an email address change to %s on %s"), entity(mu)->name, newemail, strfbuf);
+		command_success_nodata(si, _("%s has requested an email address change to \2%s\2 on \2%s\2."), entity(mu)->name, newemail, strfbuf);
 	}
 
 	req.si = si;

@@ -328,7 +328,7 @@ static struct command os_sgline = {
 
 static struct command os_sgline_add = {
 	.name           = "ADD",
-	.desc           = N_("Adds a network realname ban"),
+	.desc           = N_("Adds a network realname ban."),
 	.access         = AC_NONE,
 	.maxparc        = 2,
 	.cmd            = &os_cmd_sgline_add,
@@ -337,7 +337,7 @@ static struct command os_sgline_add = {
 
 static struct command os_sgline_del = {
 	.name           = "DEL",
-	.desc           = N_("Deletes a network realname ban"),
+	.desc           = N_("Deletes a network realname ban."),
 	.access         = AC_NONE,
 	.maxparc        = 1,
 	.cmd            = &os_cmd_sgline_del,
@@ -346,7 +346,7 @@ static struct command os_sgline_del = {
 
 static struct command os_sgline_list = {
 	.name           = "LIST",
-	.desc           = N_("Lists all network realname bans"),
+	.desc           = N_("Lists all network realname bans."),
 	.access         = AC_NONE,
 	.maxparc        = 1,
 	.cmd            = &os_cmd_sgline_list,
@@ -355,7 +355,7 @@ static struct command os_sgline_list = {
 
 static struct command os_sgline_sync = {
 	.name           = "SYNC",
-	.desc           = N_("Synchronises network realname bans to servers"),
+	.desc           = N_("Synchronises network realname bans to all servers."),
 	.access         = AC_NONE,
 	.maxparc        = 0,
 	.cmd            = &os_cmd_sgline_sync,

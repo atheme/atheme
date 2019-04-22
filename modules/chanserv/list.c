@@ -235,8 +235,8 @@ cs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 	if (matches == 0)
 		command_success_nodata(si, _("No channel matched criteria \2%s\2"), criteriastr);
 	else
-		command_success_nodata(si, ngettext(N_("\2%u\2 match for criteria \2%s\2"),
-		                                    N_("\2%u\2 matches for criteria \2%s\2"),
+		command_success_nodata(si, ngettext(N_("\2%u\2 match for criteria \2%s\2."),
+		                                    N_("\2%u\2 matches for criteria \2%s\2."),
 		                                    matches), matches, criteriastr);
 }
 

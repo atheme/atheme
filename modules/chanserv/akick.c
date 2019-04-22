@@ -346,7 +346,7 @@ cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 		ca2 = chanacs_open(mc, NULL, uname, true, entity(si->smu));
 		if (chanacs_is_table_full(ca2))
 		{
-			command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
+			command_fail(si, fault_toomany, _("Channel \2%s\2 access list is full."), mc->name);
 			chanacs_close(ca2);
 			return;
 		}
@@ -412,7 +412,7 @@ cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 		ca2 = chanacs_open(mc, mt, NULL, true, entity(si->smu));
 		if (chanacs_is_table_full(ca2))
 		{
-			command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
+			command_fail(si, fault_toomany, _("Channel \2%s\2 access list is full."), mc->name);
 			chanacs_close(ca2);
 			return;
 		}
@@ -671,7 +671,7 @@ cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 			ago = ca->tmodified ? time_ago(ca->tmodified) : "?";
 
 			buf_iter = buf;
-			buf_iter += snprintf(buf_iter, sizeof(buf) - (buf_iter - buf), _("%u: \2%s\2 (\2%s\2) ["),
+			buf_iter += snprintf(buf_iter, sizeof(buf) - (buf_iter - buf), "%u: \2%s\2 (\2%s\2) [",
 					     ++i, ca->entity != NULL ? ca->entity->name : ca->host,
 					     md != NULL ? md->value : _("no AKICK reason specified"));
 

@@ -61,8 +61,8 @@ ss_cmd_channel_count(struct sourceinfo *const restrict si, const int ATHEME_VATT
 {
 	const unsigned int chancount = mowgli_patricia_size(chanlist);
 
-	(void) command_success_nodata(si, ngettext(N_("There is %u channel on the network."),
-	                                           N_("There are %u channels on the network."),
+	(void) command_success_nodata(si, ngettext(N_("There is \2%u\2 channel on the network."),
+	                                           N_("There are \2%u\2 channels on the network."),
 	                                           chancount), chancount);
 }
 

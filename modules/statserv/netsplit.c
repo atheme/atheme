@@ -75,7 +75,7 @@ ss_cmd_netsplit_list(struct sourceinfo *const restrict si, const int ATHEME_VATT
 	{
 		i++;
 
-		(void) command_success_nodata(si, _("%u: %s [Split %s ago]"), i, s->name, time_ago(s->since));
+		(void) command_success_nodata(si, _("%u: %s [split %s ago]"), i, s->name, time_ago(s->since));
 	}
 
 	(void) command_success_nodata(si, _("End of netsplit list."));

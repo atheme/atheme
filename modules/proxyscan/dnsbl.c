@@ -554,7 +554,7 @@ osinfo_hook(struct sourceinfo *si)
 	{
 		struct Blacklist *blptr = (struct Blacklist *) n->data;
 
-		command_success_nodata(si, _("Blacklist(s): %s"), blptr->host);
+		command_success_nodata(si, _("Using DNSBL: %s"), blptr->host);
 	}
 }
 

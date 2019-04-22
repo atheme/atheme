@@ -15,11 +15,11 @@ ns_cmd_listlogins_func(struct sourceinfo *const restrict si, const int ATHEME_VA
 {
 	if (si->smu->flags & MU_WAITAUTH)
 	{
-		(void) command_fail(si, fault_noprivs, _("You have to verify your email address before you can perform this operation."));
+		(void) command_fail(si, fault_notverified, STR_EMAIL_NOT_VERIFIED);
 		return;
 	}
 
-	(void) command_success_nodata(si, _("Clients identified to account \2%s\2"), entity(si->smu)->name);
+	(void) command_success_nodata(si, _("Clients identified to account \2%s\2:"), entity(si->smu)->name);
 
 	unsigned int matches = 0;
 	mowgli_node_t *n;
@@ -33,7 +33,9 @@ ns_cmd_listlogins_func(struct sourceinfo *const restrict si, const int ATHEME_VA
 		matches++;
 	}
 
-	(void) command_success_nodata(si, ngettext(N_("\2%u\2 client found"), N_("\2%u\2 clients found"), matches), matches);
+	(void) command_success_nodata(si, ngettext(N_("\2%u\2 client found."), N_("\2%u\2 clients found."),
+	                                  matches), matches);
+
 	(void) logcommand(si, CMDLOG_GET, "LISTLOGINS: (\2%u\2 matches)", matches);
 }
 

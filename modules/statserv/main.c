@@ -31,7 +31,7 @@ ss_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED 
 
 static struct command ss_help = {
 	.name           = "HELP",
-	.desc           = N_("Displays contextual help information."),
+	.desc           = STR_HELP_DESCRIPTION,
 	.access         = AC_NONE,
 	.maxparc        = 2,
 	.cmd            = &ss_cmd_help,
