@@ -93,7 +93,7 @@ os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[])
 	if (parc >= 3)
 	{
 		maxdays = !strcmp(service, "*") ? 120 : 30;
-		if (! string_to_uint(parv[2], &days) || days < 0 || days > maxdays)
+		if (! string_to_uint(parv[2], &days) || days > maxdays)
 		{
 			command_fail(si, fault_badparams, _("Too many days, maximum is %u."), maxdays);
 			return;
