@@ -140,7 +140,7 @@ ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!validemail(email))
 	{
-		command_fail(si, fault_badparams, _("\2%s\2 is not a valid email address."), email);
+		command_fail(si, fault_badparams, _("\2%s\2 is not a valid e-mail address."), email);
 		return;
 	}
 

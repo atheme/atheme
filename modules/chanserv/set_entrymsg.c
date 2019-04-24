@@ -60,7 +60,7 @@ cs_cmd_set_entrymsg(struct sourceinfo *si, int parc, char *parv[])
 
 static struct command cs_set_entrymsg = {
 	.name           = "ENTRYMSG",
-	.desc           = N_("Sets the channel's entry message."),
+	.desc           = N_("Sets the channel entry message."),
 	.access         = AC_NONE,
 	.maxparc        = 2,
 	.cmd            = &cs_cmd_set_entrymsg,

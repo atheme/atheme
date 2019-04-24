@@ -48,7 +48,7 @@ cs_xop_do_add(struct sourceinfo *si, struct mychan *mc, struct myentity *mt, cha
 
 		if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags, si->smu))
 		{
-			command_fail(si, fault_noprivs, _("You are not authorized to modify the access entry for \2%s\2 on \2%s\2."), target, mc->name);
+			command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 			chanacs_close(ca);
 			return;
 		}
@@ -121,7 +121,7 @@ cs_xop_do_add(struct sourceinfo *si, struct mychan *mc, struct myentity *mt, cha
 
 	if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags, si->smu))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to modify the access entry for \2%s\2 on \2%s\2."), mt->name, mc->name);
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		chanacs_close(ca);
 		return;
 	}

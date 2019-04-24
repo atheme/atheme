@@ -164,7 +164,7 @@ ms_cmd_ignore_list(struct sourceinfo *si, int parc, char *parv[])
 
 	// Ignore list footer
 	if (i == 1)
-		command_success_nodata(si, _("list empty"));
+		command_success_nodata(si, _("List empty."));
 
 	command_success_nodata(si, "-------------------------");
 	return;

@@ -28,13 +28,13 @@ ns_cmd_set_pubkey(struct sourceinfo *si, int parc, char *parv[])
 
 		if (!md)
 		{
-			command_fail(si, fault_nochange, _("Public key was not set"));
+			command_fail(si, fault_nochange, _("Your public key was not set."));
 			return;
 		}
 
 		metadata_delete(si->smu, "private:pubkey");
 		logcommand(si, CMDLOG_SET, "SET:PUBKEY:REMOVE");
-		command_success_nodata(si, _("Public key entry has been deleted."));
+		command_success_nodata(si, _("Your public key entry has been deleted."));
 		return;
 	}
 

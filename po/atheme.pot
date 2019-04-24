@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-04-24 07:26+0000\n"
+"POT-Creation-Date: 2019-04-24 09:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -758,14 +758,10 @@ msgstr ""
 msgid "%s is not a valid action."
 msgstr ""
 
-#: modules/chanserv/set_email.c:49 modules/groupserv/set_email.c:47 modules/nickserv/return.c:45
+#: modules/chanserv/set_email.c:49 modules/groupserv/set_email.c:47 modules/nickserv/register.c:143
+#: modules/nickserv/return.c:45 modules/nickserv/set_email.c:46
 #, c-format
 msgid "%s is not a valid e-mail address."
-msgstr ""
-
-#: modules/nickserv/register.c:143 modules/nickserv/set_email.c:46
-#, c-format
-msgid "%s is not a valid email address."
 msgstr ""
 
 #: modules/rpgserv/set.c:48
@@ -3865,7 +3861,7 @@ msgstr ""
 
 #: modules/nickserv/info.c:192 modules/nickserv/info.c:207
 #, c-format
-msgid "Last seen  : (about %u weeks ago)"
+msgid "Last seen  : (about %u week(s) ago)"
 msgstr ""
 
 #: modules/nickserv/info.c:186 modules/nickserv/info.c:247
@@ -3908,6 +3904,10 @@ msgstr ""
 
 #: modules/statserv/netsplit.c:117
 msgid "List currently split servers."
+msgstr ""
+
+#: modules/memoserv/ignore.c:167
+msgid "List empty."
 msgstr ""
 
 #: modules/chanfix/fix.c:885
@@ -5046,14 +5046,6 @@ msgstr ""
 msgid "Prospect looks hopeful."
 msgstr ""
 
-#: modules/nickserv/set_pubkey.c:37 modules/saslserv/ecdh-x25519-challenge.c:338
-msgid "Public key entry has been deleted."
-msgstr ""
-
-#: modules/nickserv/set_pubkey.c:31 modules/saslserv/ecdh-x25519-challenge.c:332
-msgid "Public key was not set"
-msgstr ""
-
 #: modules/chanserv/quiet.c:330 modules/chanserv/quiet.c:339
 #, c-format
 msgid "Quieted %s on %s."
@@ -5772,7 +5764,7 @@ msgid "Sets the channel e-mail address."
 msgstr ""
 
 #: modules/chanserv/set_entrymsg.c:63
-msgid "Sets the channel's entry message."
+msgid "Sets the channel entry message."
 msgstr ""
 
 #: modules/operserv/set.c:576
@@ -8110,7 +8102,7 @@ msgstr ""
 
 #: modules/nickserv/info.c:214
 #, c-format
-msgid "User seen  : (about %u weeks ago)"
+msgid "User seen  : (about %u week(s) ago)"
 msgstr ""
 
 #: modules/nickserv/info.c:245
@@ -8283,33 +8275,8 @@ msgstr ""
 msgid "You are not allowed to set %s on template %s in %s."
 msgstr ""
 
-#: modules/chanserv/op.c:59
-#, c-format
-msgid "You are not authorized to (de)op %s on %s."
-msgstr ""
-
-#: modules/botserv/main.c:817
-#, c-format
-msgid "You are not authorized to assign bots on %s."
-msgstr ""
-
-#: modules/botserv/main.c:832
-#, c-format
-msgid "You are not authorized to assign the bot %s to a channel."
-msgstr ""
-
-#: modules/chanserv/xop.c:51 modules/chanserv/xop.c:124
-#, c-format
-msgid "You are not authorized to modify the access entry for %s on %s."
-msgstr ""
-
 #: include/atheme/constants.h:96
 msgid "You are not authorized to perform this operation."
-msgstr ""
-
-#: modules/botserv/main.c:881
-#, c-format
-msgid "You are not authorized to unassign a bot on %s."
 msgstr ""
 
 #: modules/operserv/help.c:19 modules/operserv/specs.c:107
@@ -8893,6 +8860,10 @@ msgstr ""
 msgid "Your memo contains invalid characters."
 msgstr ""
 
+#: modules/nickserv/set_pubkey.c:37 modules/saslserv/ecdh-x25519-challenge.c:338
+msgid "Your public key entry has been deleted."
+msgstr ""
+
 #: modules/nickserv/set_pubkey.c:44 modules/saslserv/ecdh-x25519-challenge.c:357
 #, c-format
 msgid "Your public key is already set to %s."
@@ -8901,6 +8872,10 @@ msgstr ""
 #: modules/nickserv/set_pubkey.c:50 modules/saslserv/ecdh-x25519-challenge.c:363
 #, c-format
 msgid "Your public key is now set to %s."
+msgstr ""
+
+#: modules/nickserv/set_pubkey.c:31 modules/saslserv/ecdh-x25519-challenge.c:332
+msgid "Your public key was not set."
 msgstr ""
 
 #: modules/operserv/identify.c:47
@@ -8975,10 +8950,6 @@ msgstr ""
 
 #: modules/operserv/specs.c:76
 msgid "jupe servers"
-msgstr ""
-
-#: modules/memoserv/ignore.c:167
-msgid "list empty"
 msgstr ""
 
 #: modules/operserv/specs.c:38

@@ -329,13 +329,13 @@ ns_cmd_set_x25519_pubkey_func(struct sourceinfo *const restrict si, const int pa
 	{
 		if (! md)
 		{
-			(void) command_fail(si, fault_nochange, _("Public key was not set"));
+			(void) command_fail(si, fault_nochange, _("Your public key was not set."));
 			return;
 		}
 
 		(void) metadata_delete(si->smu, ATHEME_ECDH_X25519_PUBKEY_MDNAME);
 		(void) logcommand(si, CMDLOG_SET, "SET:X25519-PUBKEY:REMOVE");
-		(void) command_success_nodata(si, _("Public key entry has been deleted."));
+		(void) command_success_nodata(si, _("Your public key entry has been deleted."));
 		return;
 	}
 
