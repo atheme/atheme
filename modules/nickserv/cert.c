@@ -37,7 +37,7 @@ ns_cmd_cert(struct sourceinfo *si, int parc, char *parv[])
 		}
 		else
 		{
-			if (!has_priv(si, PRIV_USER_AUSPEX))
+			if (!has_priv(si, PRIV_USER_ADMIN))
 			{
 				command_fail(si, fault_noprivs, _("You are not authorized to use the target argument."));
 				return;
