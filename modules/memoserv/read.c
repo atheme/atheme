@@ -96,13 +96,10 @@ ms_cmd_read(struct sourceinfo *si, int parc, char *parv[])
 				}
 			}
 
-			command_success_nodata(si,
-				"\2Memo %u - Sent by %s, %s\2",i,memo->sender, strfbuf);
-
-			command_success_nodata(si,
-				"------------------------------------------");
-
+			command_success_nodata(si, _("\2Memo %u - Sent by %s, %s\2"), i, memo->sender, strfbuf);
+			command_success_nodata(si, "------------------------------------------");
 			command_success_nodata(si, "%s", memo->text);
+			command_success_nodata(si, " ");
 
 			if (!readnew)
 				return;

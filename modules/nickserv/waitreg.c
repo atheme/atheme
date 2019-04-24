@@ -21,7 +21,7 @@ waitreg_infohook(struct sourceinfo *const restrict si)
 {
 	return_if_fail(si != NULL);
 
-	(void) command_success_nodata(si, "Time (in seconds) before users may register an account: %u", waitreg_time);
+	(void) command_success_nodata(si, _("Time (in seconds) before users may register an account: %u"), waitreg_time);
 }
 
 static void

@@ -23,7 +23,7 @@ cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[])
 	if (!source || !target)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLONE");
-		command_fail(si, fault_needmoreparams, "Syntax: CLONE <#source> <#target>");
+		command_fail(si, fault_needmoreparams, _("Syntax: CLONE <#source> <#target>"));
 		return;
 	}
 
@@ -41,7 +41,7 @@ cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[])
 
 	if (mc == mc2)
 	{
-		command_fail(si, fault_nochange, "Cannot clone a channel to itself.");
+		command_fail(si, fault_nochange, _("You cannot clone a channel to itself."));
 		return;
 	}
 
@@ -59,13 +59,13 @@ cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!mc->chan)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 does not exist.", source);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 does not exist."), source);
 		return;
 	}
 
 	if (!mc2->chan)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 does not exist.", target);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 does not exist."), target);
 		return;
 	}
 

@@ -65,7 +65,7 @@ ns_cmd_ghost(struct sourceinfo *si, int parc, char *parv[])
 
 	if (password && metadata_find(mu, "private:freeze:freezer"))
 	{
-		command_fail(si, fault_authfail, "You cannot ghost users as \2%s\2 because the account has been frozen.", entity(mu)->name);
+		command_fail(si, fault_authfail, _("You cannot ghost users as \2%s\2 because the account has been frozen."), entity(mu)->name);
 		logcommand(si, CMDLOG_DO, "failed GHOST \2%s\2 (frozen)", target);
 		return;
 	}

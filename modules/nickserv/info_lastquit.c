@@ -28,7 +28,7 @@ info_hook(hook_user_req_t *hdata)
 	{
 		md = metadata_find(hdata->mu, "private:lastquit:message");
 		if (md != NULL)
-			command_success_nodata(hdata->si, "Last quit  : %s",
+			command_success_nodata(hdata->si, _("Last quit  : %s"),
 					md->value);
 	}
 }

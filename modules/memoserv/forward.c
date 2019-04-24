@@ -27,7 +27,7 @@ ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])
 	if (! target || ! arg || ! string_to_uint(arg, &memonum))
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FORWARD");
-		command_fail(si, fault_needmoreparams, "Syntax: FORWARD <account> <memo number>");
+		command_fail(si, fault_needmoreparams, _("Syntax: FORWARD <account> <memo number>"));
 		return;
 	}
 
@@ -68,8 +68,7 @@ ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])
 	// check if targetuser has nomemo set
 	if (tmu->flags & MU_NOMEMO)
 	{
-		command_fail(si, fault_noprivs,
-			"\2%s\2 does not wish to receive memos.", target);
+		command_fail(si, fault_noprivs, _("\2%s\2 does not wish to receive memos."), target);
 
 		return;
 	}

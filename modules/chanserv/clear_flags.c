@@ -23,7 +23,7 @@ cs_cmd_clear_flags(struct sourceinfo *si, int parc, char *parv[])
 	if (!name)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLEAR FLAGS");
-		command_fail(si, fault_needmoreparams, "Syntax: CLEAR <#channel> FLAGS");
+		command_fail(si, fault_needmoreparams, _("Syntax: CLEAR <#channel> FLAGS"));
 		return;
 	}
 

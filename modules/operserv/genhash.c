@@ -28,14 +28,14 @@ cmd_os_genhash_func(struct sourceinfo *const restrict si, const int parc, char *
 		if (! (ci = crypt_get_named_provider(provider)))
 		{
 			(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "GENHASH");
-			(void) command_fail(si, fault_badparams, _("The crypto provider '%s' does not exist"),
+			(void) command_fail(si, fault_badparams, _("The crypto provider \2%s\2 does not exist"),
 			                                         provider);
 			return;
 		}
 		if (! ci->crypt)
 		{
 			(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "GENHASH");
-			(void) command_fail(si, fault_badparams, _("The crypto provider '%s' is not capable of "
+			(void) command_fail(si, fault_badparams, _("The crypto provider \2%s\2 is not capable of "
 			                                           "encrypting passwords"), provider);
 			return;
 		}
@@ -51,11 +51,11 @@ cmd_os_genhash_func(struct sourceinfo *const restrict si, const int parc, char *
 	if (! result)
 	{
 		(void) command_fail(si, fault_internalerror, _("Failed to encrypt password with crypto provider "
-		                                               "'%s'"), ci->id);
+		                                               "\2%s\2"), ci->id);
 		return;
 	}
 
-	(void) command_success_nodata(si, _("Using crypto provider '%s':"), ci->id);
+	(void) command_success_nodata(si, _("Using crypto provider \2%s\2:"), ci->id);
 	(void) command_success_string(si, result, "  %s", result);
 	(void) logcommand(si, CMDLOG_GET, "GENHASH (%s)", ci->id);
 }

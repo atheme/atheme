@@ -27,7 +27,7 @@ listmail_foreach_cb(struct myentity *mt, void *privdata)
 	{
 		// in the future we could add a LIMIT parameter
 		if (state->matches == 0)
-			command_success_nodata(state->origin, "Accounts matching e-mail address \2%s\2:", state->pattern);
+			command_success_nodata(state->origin, _("Accounts matching e-mail address \2%s\2:"), state->pattern);
 
 		command_success_nodata(state->origin, "- %s (%s)", entity(mu)->name, mu->email);
 		state->matches++;

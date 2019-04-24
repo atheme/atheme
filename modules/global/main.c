@@ -74,7 +74,7 @@ gs_cmd_global(struct sourceinfo *si, const int parc, char *parv[])
 		sfree(sender);
 		sender = NULL;
 
-		command_success_nodata(si, "The pending message has been deleted.");
+		command_success_nodata(si, _("The pending message has been deleted."));
 
 		return;
 	}
@@ -123,7 +123,7 @@ gs_cmd_global(struct sourceinfo *si, const int parc, char *parv[])
 		sfree(sender);
 		sender = NULL;
 
-		command_success_nodata(si, "The global notice has been sent.");
+		command_success_nodata(si, _("The global notice has been sent."));
 
 		return;
 	}
@@ -154,7 +154,7 @@ gs_cmd_global(struct sourceinfo *si, const int parc, char *parv[])
 		}
 		logcommand(si, CMDLOG_ADMIN, "GLOBAL:LIST");
 
-		command_success_nodata(si, "End of list.");
+		command_success_nodata(si, _("End of list."));
 
 		return;
 	}
@@ -178,9 +178,10 @@ gs_cmd_global(struct sourceinfo *si, const int parc, char *parv[])
 	n = mowgli_node_create();
 	mowgli_node_add(global, n, &globlist);
 
-	command_success_nodata(si,
-		"Stored text to be sent as line %zu. Use \2GLOBAL SEND\2 "
-		"to send message, \2GLOBAL CLEAR\2 to delete the pending message, " "\2GLOBAL LIST\2 to preview what will be sent, " "or \2GLOBAL\2 to store additional lines.", MOWGLI_LIST_LENGTH(&globlist));
+	command_success_nodata(si, _("Stored text to be sent as line %zu. Use \2GLOBAL SEND\2 to send the message, "
+	                             "\2GLOBAL CLEAR\2 to delete the pending message, \2GLOBAL LIST\2 to preview "
+	                             "what will be sent, or \2GLOBAL\2 to store additional lines."),
+	                             MOWGLI_LIST_LENGTH(&globlist));
 }
 
 static struct command gs_help = {

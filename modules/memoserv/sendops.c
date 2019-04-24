@@ -30,12 +30,8 @@ ms_cmd_sendops(struct sourceinfo *si, int parc, char *parv[])
 	// Arg validation
 	if (!target || !m)
 	{
-		command_fail(si, fault_needmoreparams,
-			STR_INSUFFICIENT_PARAMS, "SENDOPS");
-
-		command_fail(si, fault_needmoreparams,
-			"Syntax: SENDOPS <channel> <memo>");
-
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SENDOPS");
+		command_fail(si, fault_needmoreparams, _("Syntax: SENDOPS <channel> <memo>"));
 		return;
 	}
 
@@ -57,9 +53,7 @@ ms_cmd_sendops(struct sourceinfo *si, int parc, char *parv[])
 	// Check for memo text length -- includes/common.h
 	if (strlen(m) > MEMOLEN)
 	{
-		command_fail(si, fault_badparams,
-			"Please make sure your memo is not greater than %u characters", MEMOLEN);
-
+		command_fail(si, fault_badparams, _("Please make sure your memo is not greater than %u characters"), MEMOLEN);
 		return;
 	}
 

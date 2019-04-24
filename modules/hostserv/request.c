@@ -143,7 +143,7 @@ osinfo_hook(struct sourceinfo *si)
 	return_if_fail(si != NULL);
 
 	// Can't think of a better way to phrase this, feel free to fix if you can.
-	command_success_nodata(si, "Requested vHosts will be per-nick: %s", request_per_nick ? "Yes" : "No");
+	command_success_nodata(si, _("Requested vHosts will be per-nick: %s"), request_per_nick ? _("Yes") : _("No"));
 }
 
 static void ATHEME_FATTR_PRINTF(2, 3)
@@ -538,10 +538,10 @@ hs_cmd_waiting(struct sourceinfo *si, int parc, char *parv[])
 
 		tm = localtime(&l->vhost_ts);
 		strftime(buf, BUFSIZE, TIME_FORMAT, tm);
-		command_success_nodata(si, "Nick:\2%s\2, vhost:\2%s\2 (%s - %s)",
+		command_success_nodata(si, _("Nick: \2%s\2, vHost: \2%s\2 (%s - %s)"),
 			l->nick, l->vhost, l->creator, buf);
 	}
-	command_success_nodata(si, "End of list.");
+	command_success_nodata(si, _("End of list."));
 	logcommand(si, CMDLOG_GET, "WAITING");
 }
 

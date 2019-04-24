@@ -317,7 +317,7 @@ ns_cmd_release(struct sourceinfo *si, int parc, char *parv[])
 	}
 	if (password && metadata_find(mn->owner, "private:freeze:freezer"))
 	{
-		command_fail(si, fault_authfail, "You cannot release \2%s\2 because the account has been frozen.", target);
+		command_fail(si, fault_authfail, _("You cannot release \2%s\2 because the account has been frozen."), target);
 		logcommand(si, CMDLOG_DO, "failed RELEASE \2%s\2 (frozen)", target);
 		return;
 	}
@@ -427,7 +427,7 @@ ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 	}
 	if (password && metadata_find(mn->owner, "private:freeze:freezer"))
 	{
-		command_fail(si, fault_authfail, "You cannot regain \2%s\2 because the account has been frozen.", target);
+		command_fail(si, fault_authfail, _("You cannot regain \2%s\2 because the account has been frozen."), target);
 		logcommand(si, CMDLOG_DO, "failed REGAIN \2%s\2 (frozen)", target);
 		return;
 	}
@@ -439,7 +439,7 @@ ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 	}
 	if (!is_valid_nick(target))
 	{
-		command_fail(si, fault_badparams, "\2%s\2 is not a valid nick.", target);
+		command_fail(si, fault_badparams, _("\2%s\2 is not a valid nick."), target);
 		logcommand(si, CMDLOG_DO, "failed REGAIN \2%s\2 (not a valid nickname)", target);
 		return;
 	}
@@ -583,7 +583,7 @@ static void
 show_enforce(hook_user_req_t *hdata)
 {
 	if (metadata_find(hdata->mu, "private:doenforce"))
-		command_success_nodata(hdata->si, "%s has enabled nick protection", entity(hdata->mu)->name);
+		command_success_nodata(hdata->si, _("%s has enabled nick protection"), entity(hdata->mu)->name);
 }
 
 static void

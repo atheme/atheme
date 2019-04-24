@@ -199,10 +199,10 @@ osinfo_hook(struct sourceinfo *si)
 {
 	return_if_fail(si != NULL);
 
-	command_success_nodata(si, "Maximum number of groups one user can own: %u", gs_config.maxgroups);
-	command_success_nodata(si, "Maximum number of ACL entries allowed for one group: %u", gs_config.maxgroupacs);
-	command_success_nodata(si, "Are open groups allowed: %s", gs_config.enable_open_groups ? "Yes" : "No");
-	command_success_nodata(si, "Default joinflags for open groups: %s", gs_config.join_flags);
+	command_success_nodata(si, _("Maximum number of groups one user can own: %u"), gs_config.maxgroups);
+	command_success_nodata(si, _("Maximum number of ACL entries allowed for one group: %u"), gs_config.maxgroupacs);
+	command_success_nodata(si, _("Are open groups allowed: %s"), gs_config.enable_open_groups ? _("Yes") : _("No"));
+	command_success_nodata(si, _("Default joinflags for open groups: %s"), gs_config.join_flags);
 }
 
 void

@@ -124,7 +124,7 @@ os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[])
 		in = fopen(logfile, "r");
 		if (in == NULL)
 		{
-			command_success_nodata(si, "Failed to open log file %s", logfile);
+			command_success_nodata(si, _("Failed to open log file %s"), logfile);
 			continue;
 		}
 		matches_sv = matches;
@@ -173,10 +173,10 @@ os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[])
 			mowgli_node_free(n);
 		}
 		if (matches == 0 && lines > linesv && lines > 0)
-			command_success_nodata(si, "Log file may be corrupted, %u/%u unexpected lines", lines - linesv, lines);
+			command_success_nodata(si, _("Log file may be corrupted, %u/%u unexpected lines"), lines - linesv, lines);
 		if (matches >= MAXMATCHES)
 		{
-			command_success_nodata(si, "Too many matches, halting search");
+			command_success_nodata(si, _("Too many matches, halting search"));
 			break;
 		}
 	}

@@ -68,7 +68,7 @@ check_registration(hook_user_register_check_t *hdata)
 
 		if (!match(l->mail, hdata->email))
 		{
-			command_fail(hdata->si, fault_noprivs, "Sorry, we do not accept registrations with email addresses from that domain. Use another address.");
+			command_fail(hdata->si, fault_noprivs, _("Sorry, we do not accept registrations with email addresses from that domain. Use another address."));
 			hdata->approved = 1;
 			slog(LG_INFO, "REGISTER:BADEMAIL: %s to \2%s\2 by \2%s\2",
 					hdata->account, hdata->email,

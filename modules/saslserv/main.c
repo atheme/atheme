@@ -1046,8 +1046,8 @@ saslserv_message_handler(struct sourceinfo *const restrict si, const int parc, c
 		return;
 	}
 
-	(void) command_fail(si, fault_noprivs, "This service exists to identify connecting clients to the network. "
-	                                       "It has no public interface.");
+	(void) command_fail(si, fault_noprivs, _("This service exists to identify connecting clients "
+	                                         "to the network. It has no public interface."));
 }
 
 static void

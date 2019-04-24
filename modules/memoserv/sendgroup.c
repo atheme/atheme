@@ -58,9 +58,7 @@ ms_cmd_sendgroup(struct sourceinfo *si, int parc, char *parv[])
 	// Check for memo text length -- includes/common.h
 	if (strlen(m) > MEMOLEN)
 	{
-		command_fail(si, fault_badparams,
-			"Please make sure your memo is not greater than %u characters", MEMOLEN);
-
+		command_fail(si, fault_badparams, _("Please make sure your memo is not greater than %u characters"), MEMOLEN);
 		return;
 	}
 

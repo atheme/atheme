@@ -91,21 +91,21 @@ cs_cmd_why(struct sourceinfo *si, int parc, char *parv[])
 			fl |= ca->level;
 			if (ca->entity == entity(u->myuser))
 				command_success_nodata(si,
-					"\2%s\2 has flags \2%s\2 in \2%s\2 because they are logged in as \2%s\2.",
+					_("\2%s\2 has flags \2%s\2 in \2%s\2 because they are logged in as \2%s\2."),
 					u->nick, bitmask_to_flags2(ca->level, 0), mc->name, ca->entity->name);
 			else if (isgroup(ca->entity))
 				command_success_nodata(si,
-					"\2%s\2 has flags \2%s\2 in \2%s\2 because they are a member of \2%s\2.",
+					_("\2%s\2 has flags \2%s\2 in \2%s\2 because they are a member of \2%s\2."),
 					u->nick, bitmask_to_flags2(ca->level, 0), mc->name, ca->entity->name);
 			else
 				command_success_nodata(si,
-					"\2%s\2 has flags \2%s\2 in \2%s\2 because they match \2%s\2.",
+					_("\2%s\2 has flags \2%s\2 in \2%s\2 because they match \2%s\2."),
 					u->nick, bitmask_to_flags2(ca->level, 0), mc->name, ca->entity->name);
 			if (ca->level & CA_AKICK)
 			{
 				md = metadata_find(ca, "reason");
 				if (md != NULL)
-					command_success_nodata(si, "Ban reason: %s", md->value);
+					command_success_nodata(si, _("Ban reason: %s"), md->value);
 			}
 		}
 	}
@@ -114,13 +114,13 @@ cs_cmd_why(struct sourceinfo *si, int parc, char *parv[])
 		ca = n->data;
 		fl |= ca->level;
 		command_success_nodata(si,
-				"\2%s\2 has flags \2%s\2 in \2%s\2 because they match the mask \2%s\2.",
+				_("\2%s\2 has flags \2%s\2 in \2%s\2 because they match the mask \2%s\2."),
 				u->nick, bitmask_to_flags2(ca->level, 0), mc->name, ca->host);
 		if (ca->level & CA_AKICK)
 		{
 			md = metadata_find(ca, "reason");
 			if (md != NULL)
-				command_success_nodata(si, "Ban reason: %s", md->value);
+				command_success_nodata(si, _("Ban reason: %s"), md->value);
 		}
 	}
 

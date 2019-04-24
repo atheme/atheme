@@ -302,7 +302,7 @@ cs_cmd_sync(struct sourceinfo *si, int parc, char *parv[])
 	if (!name)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SYNC");
-		command_fail(si, fault_needmoreparams, "Syntax: SYNC <#channel>");
+		command_fail(si, fault_needmoreparams, _("Syntax: SYNC <#channel>"));
 		return;
 	}
 
@@ -320,7 +320,7 @@ cs_cmd_sync(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!mc->chan)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 does not exist.", name);
+		command_fail(si, fault_nosuch_target, STR_CHANNEL_IS_EMPTY, name);
 		return;
 	}
 
@@ -335,7 +335,7 @@ cs_cmd_sync(struct sourceinfo *si, int parc, char *parv[])
 
 	do_channel_sync(mc, NULL);
 
-	command_success_nodata(si, "Sync complete for \2%s\2.", mc->name);
+	command_success_nodata(si, _("Sync complete for \2%s\2."), mc->name);
 }
 
 static void

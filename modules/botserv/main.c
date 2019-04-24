@@ -550,7 +550,7 @@ bs_cmd_add(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_node_add(bot, &bot->bnode, &bs_bots);
 
 	logcommand(si, CMDLOG_ADMIN, "BOT:ADD: \2%s\2 (\2%s\2@\2%s\2) [\2%s\2]", bot->nick, bot->user, bot->host, bot->real);
-	command_success_nodata(si, "\2%s\2 (\2%s\2@\2%s\2) [\2%s\2] created.", bot->nick, bot->user, bot->host, bot->real);
+	command_success_nodata(si, _("Bot \2%s\2 (\2%s\2@\2%s\2) [\2%s\2] created."), bot->nick, bot->user, bot->host, bot->real);
 }
 
 // CHANGE oldnick nick [user [host [real]]]
@@ -652,7 +652,7 @@ bs_cmd_change(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	logcommand(si, CMDLOG_ADMIN, "BOT:CHANGE: \2%s\2 (\2%s\2@\2%s\2) [\2%s\2]", bot->nick, bot->user, bot->host, bot->real);
-	command_success_nodata(si, "\2%s\2 (\2%s\2@\2%s\2) [\2%s\2] changed.", bot->nick, bot->user, bot->host, bot->real);
+	command_success_nodata(si, _("Bot \2%s\2 (\2%s\2@\2%s\2) [\2%s\2] changed."), bot->nick, bot->user, bot->host, bot->real);
 }
 
 // DELETE nick
@@ -704,7 +704,7 @@ bs_cmd_delete(struct sourceinfo *si, int parc, char *parv[])
 	sfree(bot);
 
 	logcommand(si, CMDLOG_ADMIN, "BOT:DEL: \2%s\2", parv[0]);
-	command_success_nodata(si, "Bot \2%s\2 has been deleted.", parv[0]);
+	command_success_nodata(si, _("Bot \2%s\2 deleted."), parv[0]);
 }
 
 // BOT CMD nick user host real
@@ -774,7 +774,7 @@ bs_cmd_botlist(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("\2%u\2 private bots available."), i);
 	}
 
-	command_success_nodata(si, "Use \2/msg %s ASSIGN #chan botnick\2 to assign one to your channel.", si->service->disp);
+	command_success_nodata(si, _("Use \2/msg %s ASSIGN #chan botnick\2 to assign one to your channel."), si->service->disp);
 }
 
 // ASSIGN #channel nick
@@ -904,7 +904,7 @@ osinfo_hook(struct sourceinfo *si)
 {
 	return_if_fail(si != NULL);
 
-	command_success_nodata(si, "Minimum number of users that must be in a channel for a bot to be assigned: %u", min_users);
+	command_success_nodata(si, _("Minimum number of users that must be in a channel for a bot to be assigned: %u"), min_users);
 }
 
 static void

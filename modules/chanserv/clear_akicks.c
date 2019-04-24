@@ -23,7 +23,7 @@ cs_cmd_clear_akicks(struct sourceinfo *si, int parc, char *parv[])
 	if (!name)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLEAR AKICKS");
-		command_fail(si, fault_needmoreparams, "Syntax: CLEAR <#channel> AKICKS");
+		command_fail(si, fault_needmoreparams, _("Syntax: CLEAR <#channel> AKICKS"));
 		return;
 	}
 
@@ -41,7 +41,7 @@ cs_cmd_clear_akicks(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!mc->chan)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 does not exist.", name);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 does not exist."), name);
 		return;
 	}
 

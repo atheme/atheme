@@ -265,10 +265,10 @@ helpserv_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 
 		tm = localtime(&l->ticket_ts);
 		strftime(buf, BUFSIZE, TIME_FORMAT, tm);
-		command_success_nodata(si, "#%u Nick:\2%s\2, topic:\2%s\2 (%s - %s)",
+		command_success_nodata(si, _("#%u Nick: \2%s\2, Topic: \2%s\2 (%s - %s)"),
 			x, l->nick, l->topic, l->creator, buf);
 	}
-	command_success_nodata(si, "End of list.");
+	command_success_nodata(si, _("End of list."));
 	logcommand(si, CMDLOG_GET, "LIST");
 }
 
@@ -292,7 +292,7 @@ helpserv_cmd_cancel(struct sourceinfo *si, int parc, char *parv[])
                         sfree(l->topic);
                         sfree(l);
 
-                        command_success_nodata(si, "Your help request has been cancelled.");
+                        command_success_nodata(si, _("Your help request has been cancelled."));
 
                         logcommand(si, CMDLOG_REQUEST, "CANCEL");
                         return;

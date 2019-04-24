@@ -15,7 +15,7 @@ os_cmd_uptime_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_
 {
 	(void) logcommand(si, CMDLOG_GET, "UPTIME");
 
-	(void) command_success_nodata(si, "%s [%s] Build Date: %s", PACKAGE_STRING, revision, get_build_date());
+	(void) command_success_nodata(si, _("%s [%s] Build Date: %s"), PACKAGE_STRING, revision, get_build_date());
 
 	(void) command_success_nodata(si, _("Services have been up for %s"), timediff(CURRTIME - me.start));
 	(void) command_success_nodata(si, _("Current PID: %lu"), (unsigned long) getpid());

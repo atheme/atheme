@@ -339,13 +339,13 @@ hs_cmd_offerlist(struct sourceinfo *si, int parc, char *parv[])
 		strftime(buf, BUFSIZE, TIME_FORMAT, tm);
 
 		if(l->group != NULL)
-			command_success_nodata(si, "vhost:\2%s\2, group:\2%s\2 creator:\2%s\2 (%s)",
+			command_success_nodata(si, _("vHost: \2%s\2, Group: \2%s\2, Creator: \2%s\2 (%s)"),
 						l->vhost, entity(l->group)->name, l->creator, buf);
 		else
-			command_success_nodata(si, "vhost:\2%s\2, creator:\2%s\2 (%s)",
+			command_success_nodata(si, _("vHost: \2%s\2, Creator: \2%s\2 (%s)"),
 						l->vhost, l->creator, buf);
 	}
-	command_success_nodata(si, "End of list.");
+	command_success_nodata(si, _("End of list."));
 	logcommand(si, CMDLOG_GET, "OFFERLIST");
 }
 

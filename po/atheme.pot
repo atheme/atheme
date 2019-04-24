@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-04-22 04:00+0000\n"
+"POT-Creation-Date: 2019-04-24 06:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -221,6 +221,11 @@ msgstr ""
 msgid "%s did not have a password change key outstanding."
 msgstr ""
 
+#: modules/chanserv/clear_akicks.c:44 modules/chanserv/clone.c:62 modules/chanserv/clone.c:68
+#, c-format
+msgid "%s does not exist."
+msgstr ""
+
 #: modules/botserv/bottalk.c:63 modules/botserv/bottalk.c:130 modules/botserv/main.c:887
 #, c-format
 msgid "%s does not have a bot assigned."
@@ -249,6 +254,11 @@ msgstr ""
 #: modules/groupserv/flags.c:99
 #, c-format
 msgid "%s does not wish to have flags in any groups."
+msgstr ""
+
+#: modules/memoserv/forward.c:71 modules/memoserv/send.c:89
+#, c-format
+msgid "%s does not wish to receive memos."
 msgstr ""
 
 #: modules/chanserv/help.c:47
@@ -372,6 +382,26 @@ msgstr ""
 #: modules/nickserv/freeze.c:120
 #, c-format
 msgid "%s has been thawed"
+msgstr ""
+
+#: modules/chanserv/why.c:98
+#, c-format
+msgid "%s has flags %s in %s because they are a member of %s."
+msgstr ""
+
+#: modules/chanserv/why.c:94
+#, c-format
+msgid "%s has flags %s in %s because they are logged in as %s."
+msgstr ""
+
+#: modules/chanserv/why.c:102
+#, c-format
+msgid "%s has flags %s in %s because they match %s."
+msgstr ""
+
+#: modules/chanserv/why.c:117
+#, c-format
+msgid "%s has flags %s in %s because they match the mask %s."
 msgstr ""
 
 #: modules/chanserv/halfop.c:98
@@ -741,6 +771,11 @@ msgstr ""
 #: modules/rpgserv/set.c:48
 #, c-format
 msgid "%s is not a valid genre."
+msgstr ""
+
+#: modules/nickserv/enforce.c:442
+#, c-format
+msgid "%s is not a valid nick."
 msgstr ""
 
 #: modules/rpgserv/set.c:69
@@ -1284,6 +1319,11 @@ msgstr ""
 msgid "Match:  %s!%s@%s %s - AKILLing"
 msgstr ""
 
+#: modules/memoserv/read.c:99
+#, c-format
+msgid "Memo %u - Sent by %s, %s"
+msgstr ""
+
 #: modules/operserv/clones.c:798
 #, c-format
 msgid ""
@@ -1359,6 +1399,11 @@ msgstr ""
 msgid " on %s (%s ago)"
 msgstr ""
 
+#: modules/helpserv/ticket.c:268
+#, c-format
+msgid "#%u Nick: %s, Topic: %s (%s - %s)"
+msgstr ""
+
 #: modules/chanserv/flags.c:127
 #, c-format
 msgid "%-5u %-22s %-20s (%s) [modified %s ago, on %s, by %s]"
@@ -1404,6 +1449,11 @@ msgstr ""
 msgid "%s - allowed limit %u, warn on %u - expires in %s - %s"
 msgstr ""
 
+#: modules/operserv/uptime.c:18
+#, c-format
+msgid "%s [%s] Build Date: %s"
+msgstr ""
+
 #: modules/chanfix/fix.c:639
 #, c-format
 msgid "%s had NOFIX set by %s on %s (%s)"
@@ -1412,6 +1462,11 @@ msgstr ""
 #: modules/nickserv/info.c:442
 #, c-format
 msgid "%s has NOT COMPLETED registration verification."
+msgstr ""
+
+#: modules/nickserv/setpass.c:108
+#, c-format
+msgid "%s has an active password reset key"
 msgstr ""
 
 #: modules/nickserv/info.c:421 modules/nickserv/sendpass.c:145 modules/nickserv/sendpass_user.c:98
@@ -1424,12 +1479,17 @@ msgstr ""
 msgid "%s has been scanned."
 msgstr ""
 
+#: modules/nickserv/enforce.c:586
+#, c-format
+msgid "%s has enabled nick protection"
+msgstr ""
+
 #: modules/nickserv/info.c:455
 #, c-format
 msgid "%s has requested an email address change to %s on %s."
 msgstr ""
 
-#: modules/memoserv/forward.c:158 modules/memoserv/send.c:156
+#: modules/memoserv/forward.c:157 modules/memoserv/send.c:148
 #, c-format
 msgid "%s is currently online, and you may talk directly, by sending a private message."
 msgstr ""
@@ -1514,7 +1574,7 @@ msgstr ""
 msgid "%s%s%s ACC 0 (offline)"
 msgstr ""
 
-#: modules/memoserv/send.c:104
+#: modules/memoserv/send.c:96
 #, c-format
 msgid "%s's inbox is full"
 msgstr ""
@@ -1642,6 +1702,11 @@ msgstr ""
 #: modules/operserv/ignore.c:168
 #, c-format
 msgid "%u: %s by %s on %s (Reason: %s)"
+msgstr ""
+
+#: modules/infoserv/main.c:445 modules/infoserv/main.c:474
+#, c-format
+msgid "%u: [%s] by %s at %s: %s"
 msgstr ""
 
 #: modules/operserv/specs.c:180
@@ -1786,6 +1851,11 @@ msgstr ""
 
 #: modules/chanfix/fix.c:533
 msgid "Account/Hostmask"
+msgstr ""
+
+#: modules/nickserv/listmail.c:30 modules/nickserv/listownmail.c:48
+#, c-format
+msgid "Accounts matching e-mail address %s:"
 msgstr ""
 
 #: modules/proxyscan/dnsbl.c:551
@@ -2022,6 +2092,11 @@ msgstr ""
 msgid "Appends a topic on a channel."
 msgstr ""
 
+#: modules/groupserv/main/hooks.c:204
+#, c-format
+msgid "Are open groups allowed: %s"
+msgstr ""
+
 #: modules/gameserv/eightball.c:57
 msgid "Ask the 8-Ball a question."
 msgstr ""
@@ -2067,6 +2142,11 @@ msgstr ""
 msgid "Ban reason : %s"
 msgstr ""
 
+#: modules/chanserv/why.c:108 modules/chanserv/why.c:123
+#, c-format
+msgid "Ban reason: %s"
+msgstr ""
+
 #: modules/chanserv/ban.c:66 modules/chanserv/ban.c:75
 #, c-format
 msgid "Banned %s on %s."
@@ -2075,6 +2155,21 @@ msgstr ""
 #: modules/chanserv/bansearch.c:68
 #, c-format
 msgid "Bans matching %s in %s:"
+msgstr ""
+
+#: modules/botserv/main.c:655
+#, c-format
+msgid "Bot %s (%s@%s) [%s] changed."
+msgstr ""
+
+#: modules/botserv/main.c:553
+#, c-format
+msgid "Bot %s (%s@%s) [%s] created."
+msgstr ""
+
+#: modules/botserv/main.c:707
+#, c-format
+msgid "Bot %s deleted."
 msgstr ""
 
 #: modules/operserv/compare.c:47
@@ -2305,7 +2400,7 @@ msgstr ""
 msgid "Channel expiration time: %u days"
 msgstr ""
 
-#: modules/memoserv/send.c:176
+#: modules/memoserv/send.c:168
 msgid "Channel memos are administratively disabled."
 msgstr ""
 
@@ -2504,6 +2599,11 @@ msgstr ""
 msgid "Count the number of channels on the network."
 msgstr ""
 
+#: modules/nickserv/pwquality.c:116
+#, c-format
+msgid "Cracklib dictionary path: %s"
+msgstr ""
+
 #: modules/chanfix/fix.c:585
 #, c-format
 msgid "Creation time: %s"
@@ -2559,6 +2659,11 @@ msgstr ""
 
 #: modules/operserv/clones.c:505
 msgid "Default clone warning has been disabled."
+msgstr ""
+
+#: modules/groupserv/main/hooks.c:205
+#, c-format
+msgid "Default joinflags for open groups: %s"
 msgstr ""
 
 #: modules/operserv/info.c:21
@@ -2904,8 +3009,10 @@ msgstr ""
 msgid "End of Server NOOP list."
 msgstr ""
 
-#: modules/chanserv/moderate.c:329 modules/infoserv/main.c:450 modules/infoserv/main.c:479
-#: modules/nickserv/badmail.c:191 modules/nickserv/multimark.c:962 modules/proxyscan/dnsbl.c:241
+#: modules/chanserv/moderate.c:329 modules/global/main.c:157 modules/helpserv/ticket.c:271
+#: modules/hostserv/offer.c:348 modules/hostserv/request.c:544 modules/infoserv/main.c:450
+#: modules/infoserv/main.c:479 modules/nickserv/badmail.c:191 modules/nickserv/multimark.c:962
+#: modules/proxyscan/dnsbl.c:241
 msgid "End of list."
 msgstr ""
 
@@ -3036,7 +3143,12 @@ msgstr ""
 
 #: modules/operserv/genhash.c:53
 #, c-format
-msgid "Failed to encrypt password with crypto provider '%s'"
+msgid "Failed to encrypt password with crypto provider %s"
+msgstr ""
+
+#: modules/operserv/greplog.c:127
+#, c-format
+msgid "Failed to open log file %s"
 msgstr ""
 
 #: modules/scripting/perl/perl_module.c:385
@@ -3213,7 +3325,7 @@ msgstr ""
 msgid "Forces removal of a nickname from an account."
 msgstr ""
 
-#: modules/memoserv/forward.c:174
+#: modules/memoserv/forward.c:173
 msgid "Forwards a memo."
 msgstr ""
 
@@ -3317,7 +3429,7 @@ msgstr ""
 msgid "Group %s is not open to anyone joining."
 msgstr ""
 
-#: modules/memoserv/send.c:184
+#: modules/memoserv/send.c:176
 msgid "Group memos are administratively disabled."
 msgstr ""
 
@@ -3392,6 +3504,11 @@ msgstr ""
 #: modules/operserv/info.c:23
 #, c-format
 msgid "How many messages before a flood is triggered, (if 0, flood protection is disabled): %u"
+msgstr ""
+
+#: modules/infoserv/main.c:232
+#, c-format
+msgid "How many messages will be sent to users on connect: %u"
 msgstr ""
 
 #: modules/operserv/info.c:20
@@ -3591,7 +3708,7 @@ msgstr ""
 msgid "Invalid mask %s."
 msgstr ""
 
-#: modules/memoserv/forward.c:80
+#: modules/memoserv/forward.c:79
 msgid "Invalid memo number."
 msgstr ""
 
@@ -3734,6 +3851,11 @@ msgstr ""
 #: modules/nickserv/info.c:148
 #, c-format
 msgid "Last addr  : %s"
+msgstr ""
+
+#: modules/nickserv/info_lastquit.c:31
+#, c-format
+msgid "Last quit  : %s"
 msgstr ""
 
 #: modules/nickserv/info.c:194 modules/nickserv/info.c:209
@@ -3943,6 +4065,11 @@ msgstr ""
 msgid "Loads a module."
 msgstr ""
 
+#: modules/operserv/greplog.c:176
+#, c-format
+msgid "Log file may be corrupted, %u/%u unexpected lines"
+msgstr ""
+
 #: modules/nickserv/enforce.c:517 modules/nickserv/identify.c:130
 #, c-format
 msgid "Logged in nicks are: %s"
@@ -4095,6 +4222,11 @@ msgstr ""
 msgid "Maximum channel output reached"
 msgstr ""
 
+#: modules/groupserv/main/hooks.c:203
+#, c-format
+msgid "Maximum number of ACL entries allowed for one group: %u"
+msgstr ""
+
 #: modules/operserv/info.c:37
 #, c-format
 msgid "Maximum number of channels that one user can own: %u"
@@ -4108,6 +4240,11 @@ msgstr ""
 #: modules/operserv/info.c:42
 #, c-format
 msgid "Maximum number of founders allowed per channel: %u"
+msgstr ""
+
+#: modules/groupserv/main/hooks.c:202
+#, c-format
+msgid "Maximum number of groups one user can own: %u"
 msgstr ""
 
 #: modules/operserv/info.c:33
@@ -4151,6 +4288,11 @@ msgstr ""
 
 #: modules/nickserv/multimark.c:342
 msgid "Migrating mark data..."
+msgstr ""
+
+#: modules/botserv/main.c:907
+#, c-format
+msgid "Minimum number of users that must be in a channel for a bot to be assigned: %u"
 msgstr ""
 
 #: modules/chanserv/info.c:101
@@ -4323,6 +4465,11 @@ msgstr ""
 msgid "Nick %s not found in vhost request database."
 msgstr ""
 
+#: modules/hostserv/request.c:541
+#, c-format
+msgid "Nick: %s, vHost: %s (%s - %s)"
+msgstr ""
+
 #: modules/operserv/info.c:30
 #, c-format
 msgid "Nickname enforce expiry time: %u days"
@@ -4349,6 +4496,11 @@ msgstr ""
 #: modules/nickserv/info.c:260 modules/nickserv/info.c:268
 #, c-format
 msgid "Nicks      : %s"
+msgstr ""
+
+#: modules/groupserv/main/hooks.c:204 modules/hostserv/request.c:146 modules/nickserv/pwquality.c:120
+#: modules/operserv/info.c:22 modules/operserv/info.c:28 modules/operserv/info.c:44
+msgid "No"
 msgstr ""
 
 #: modules/chanserv/access.c:581 modules/chanserv/access.c:686
@@ -4786,6 +4938,12 @@ msgstr ""
 msgid "Please log in before attempting to verify your registration."
 msgstr ""
 
+#: modules/memoserv/sendall.c:59 modules/memoserv/send.c:55 modules/memoserv/sendgroup.c:61
+#: modules/memoserv/sendops.c:56
+#, c-format
+msgid "Please make sure your memo is not greater than %u characters"
+msgstr ""
+
 #: modules/chanserv/help.c:62
 #, c-format
 msgid ""
@@ -4947,12 +5105,12 @@ msgstr ""
 msgid "Rating: %s"
 msgstr ""
 
-#: modules/memoserv/read.c:121
+#: modules/memoserv/read.c:118
 #, c-format
 msgid "Read %u memo."
 msgstr ""
 
-#: modules/memoserv/read.c:122
+#: modules/memoserv/read.c:119
 #, c-format
 msgid "Read %u memos."
 msgstr ""
@@ -4973,7 +5131,7 @@ msgstr ""
 msgid "Read-only mode is now enabled."
 msgstr ""
 
-#: modules/memoserv/read.c:128
+#: modules/memoserv/read.c:125
 msgid "Reads a memo."
 msgstr ""
 
@@ -5094,6 +5252,11 @@ msgstr ""
 msgid "Registration passwords may not be longer than %u characters."
 msgstr ""
 
+#: modules/nickserv/pwquality.c:119
+#, c-format
+msgid "Registrations will fail with bad passwords: %s"
+msgstr ""
+
 #: modules/hostserv/request.c:568
 msgid "Reject the requested vhost for the given nick."
 msgstr ""
@@ -5202,6 +5365,11 @@ msgstr ""
 
 #: modules/helpserv/helpme.c:62 modules/helpserv/ticket.c:306
 msgid "Request help from network staff."
+msgstr ""
+
+#: modules/hostserv/request.c:146
+#, c-format
+msgid "Requested vHosts will be per-nick: %s"
 msgstr ""
 
 #: modules/hostserv/request.c:550
@@ -5456,23 +5624,23 @@ msgstr ""
 msgid "Sending email is administratively disabled."
 msgstr ""
 
-#: modules/global/main.c:197
+#: modules/global/main.c:198
 msgid "Sends a global notice."
 msgstr ""
 
-#: modules/memoserv/send.c:192
+#: modules/memoserv/send.c:184
 msgid "Sends a memo to a user."
 msgstr ""
 
-#: modules/memoserv/sendall.c:163
+#: modules/memoserv/sendall.c:161
 msgid "Sends a memo to all accounts."
 msgstr ""
 
-#: modules/memoserv/sendgroup.c:177
+#: modules/memoserv/sendgroup.c:175
 msgid "Sends a memo to all members on a group."
 msgstr ""
 
-#: modules/memoserv/sendops.c:188
+#: modules/memoserv/sendops.c:182
 msgid "Sends a memo to all ops on a channel."
 msgstr ""
 
@@ -5728,10 +5896,6 @@ msgstr ""
 msgid "Shuts down services."
 msgstr ""
 
-#: modules/memoserv/ignore.c:48
-msgid "Silly wabbit, you can't ignore yourself."
-msgstr ""
-
 #: modules/gameserv/namegen.c:52
 #, c-format
 msgid "Some names to ponder: %s"
@@ -5746,13 +5910,24 @@ msgstr ""
 msgid "Sorry, too many templates on %s."
 msgstr ""
 
-#: modules/memoserv/read.c:111
+#: modules/nickserv/badmail.c:71
+msgid "Sorry, we do not accept registrations with email addresses from that domain. Use another address."
+msgstr ""
+
+#: modules/memoserv/read.c:108
 #, c-format
 msgid "Stopping command after %u memos."
 msgstr ""
 
 #: modules/memoserv/ignore.c:193
 msgid "Stops ignoring memos from a user."
+msgstr ""
+
+#: modules/global/main.c:181
+#, c-format
+msgid ""
+"Stored text to be sent as line %zu. Use GLOBAL SEND to send the message, GLOBAL CLEAR to delete the pending "
+"message, GLOBAL LIST to preview what will be sent, or GLOBAL to store additional lines."
 msgstr ""
 
 #: modules/rpgserv/set.c:134
@@ -5813,6 +5988,11 @@ msgstr ""
 
 #: modules/chanserv/topic.c:366
 msgid "Swap part of the topic on a channel."
+msgstr ""
+
+#: modules/chanserv/sync.c:338
+#, c-format
+msgid "Sync complete for %s."
 msgstr ""
 
 #: modules/operserv/akill.c:540
@@ -5984,8 +6164,20 @@ msgstr ""
 msgid "Syntax: CLEAR <#channel> <command> [parameters]"
 msgstr ""
 
+#: modules/chanserv/clear_akicks.c:26
+msgid "Syntax: CLEAR <#channel> AKICKS"
+msgstr ""
+
+#: modules/chanserv/clear_flags.c:26
+msgid "Syntax: CLEAR <#channel> FLAGS"
+msgstr ""
+
 #: modules/operserv/clearchan.c:35
 msgid "Syntax: CLEARCHAN KICK|KILL|AKILL <#channel> <reason>"
+msgstr ""
+
+#: modules/chanserv/clone.c:26
+msgid "Syntax: CLONE <#source> <#target>"
 msgstr ""
 
 #: modules/operserv/clones.c:304 modules/operserv/clones.c:311 modules/operserv/clones.c:320
@@ -6036,6 +6228,10 @@ msgstr ""
 
 #: modules/chanserv/halfop.c:145
 msgid "Syntax: DEHALFOP <#channel> [nickname] [...]"
+msgstr ""
+
+#: modules/infoserv/main.c:340 modules/infoserv/main.c:347
+msgid "Syntax: DEL <id>"
 msgstr ""
 
 #: modules/memoserv/delete.c:31
@@ -6132,6 +6328,10 @@ msgstr ""
 
 #: modules/chanserv/xop.c:415
 msgid "Syntax: FORCEXOP <#channel>"
+msgstr ""
+
+#: modules/memoserv/forward.c:30
+msgid "Syntax: FORWARD <account> <memo number>"
 msgstr ""
 
 #: modules/chanserv/ftransfer.c:26
@@ -6294,6 +6494,10 @@ msgstr ""
 msgid "Syntax: NWOD [-chance] <dice> [-reroll] [reroll]"
 msgstr ""
 
+#: modules/infoserv/main.c:389 modules/infoserv/main.c:396
+msgid "Syntax: ODEL <id>"
+msgstr ""
+
 #: modules/hostserv/offer.c:130 modules/hostserv/offer.c:145
 msgid "Syntax: OFFER [!group] <vhost>"
 msgstr ""
@@ -6427,12 +6631,20 @@ msgstr ""
 msgid "Syntax: SAY <#channel> <msg>"
 msgstr ""
 
+#: modules/memoserv/send.c:33
+msgid "Syntax: SEND <user> <memo>"
+msgstr ""
+
 #: modules/memoserv/sendall.c:36
 msgid "Syntax: SENDALL <memo>"
 msgstr ""
 
 #: modules/memoserv/sendgroup.c:38
 msgid "Syntax: SENDGROUP <group> <memo>"
+msgstr ""
+
+#: modules/memoserv/sendops.c:34
+msgid "Syntax: SENDOPS <channel> <memo>"
 msgstr ""
 
 #: modules/nickserv/sendpass.c:35 modules/nickserv/sendpass_user.c:31
@@ -6643,6 +6855,10 @@ msgstr ""
 msgid "Syntax: SQLINE DEL <nick|chan>"
 msgstr ""
 
+#: modules/chanserv/sync.c:305
+msgid "Syntax: SYNC <#channel>"
+msgstr ""
+
 #: modules/hostserv/offer.c:268
 msgid "Syntax: TAKE <vhost>"
 msgstr ""
@@ -6774,7 +6990,7 @@ msgstr ""
 msgid "Take an offered vhost for use."
 msgstr ""
 
-#: modules/memoserv/forward.c:87
+#: modules/memoserv/forward.c:86
 msgid "Target inbox is full."
 msgstr ""
 
@@ -7000,12 +7216,12 @@ msgstr ""
 
 #: modules/operserv/genhash.c:31
 #, c-format
-msgid "The crypto provider '%s' does not exist"
+msgid "The crypto provider %s does not exist"
 msgstr ""
 
 #: modules/operserv/genhash.c:38
 #, c-format
-msgid "The crypto provider '%s' is not capable of encrypting passwords"
+msgid "The crypto provider %s is not capable of encrypting passwords"
 msgstr ""
 
 #: modules/groupserv/set_description.c:40
@@ -7109,6 +7325,10 @@ msgstr ""
 msgid "The following subcommands are available:"
 msgstr ""
 
+#: modules/global/main.c:126
+msgid "The global notice has been sent."
+msgstr ""
+
 #: modules/groupserv/register.c:40 modules/groupserv/set_groupname.c:58
 #, c-format
 msgid "The group %s already exists."
@@ -7174,42 +7394,42 @@ msgstr ""
 msgid "The mask provided is too long."
 msgstr ""
 
-#: modules/memoserv/forward.c:120 modules/memoserv/forward.c:168
+#: modules/memoserv/forward.c:119 modules/memoserv/forward.c:167
 #, c-format
 msgid "The memo has been successfully forwarded to %s."
 msgstr ""
 
-#: modules/memoserv/send.c:125 modules/memoserv/send.c:168
+#: modules/memoserv/send.c:117 modules/memoserv/send.c:160
 #, c-format
 msgid "The memo has been successfully sent to %s."
 msgstr ""
 
-#: modules/memoserv/sendall.c:155
+#: modules/memoserv/sendall.c:153
 #, c-format
 msgid "The memo has been successfully sent to %u account."
 msgstr ""
 
-#: modules/memoserv/sendall.c:156
+#: modules/memoserv/sendall.c:154
 #, c-format
 msgid "The memo has been successfully sent to %u accounts."
 msgstr ""
 
-#: modules/memoserv/sendgroup.c:169
+#: modules/memoserv/sendgroup.c:167
 #, c-format
 msgid "The memo has been successfully sent to %u member on %s."
 msgstr ""
 
-#: modules/memoserv/sendgroup.c:170
+#: modules/memoserv/sendgroup.c:168
 #, c-format
 msgid "The memo has been successfully sent to %u members on %s."
 msgstr ""
 
-#: modules/memoserv/sendops.c:180
+#: modules/memoserv/sendops.c:174
 #, c-format
 msgid "The memo has been successfully sent to %u operator on %s."
 msgstr ""
 
-#: modules/memoserv/sendops.c:181
+#: modules/memoserv/sendops.c:175
 #, c-format
 msgid "The memo has been successfully sent to %u operators on %s."
 msgstr ""
@@ -7217,6 +7437,10 @@ msgstr ""
 #: modules/chanserv/akick.c:341
 #, c-format
 msgid "The more general mask %s is already on the AKICK list for %s"
+msgstr ""
+
+#: modules/helpserv/helpme.c:52
+msgid "The network staff has been notified that you need help and will be with you shortly."
 msgstr ""
 
 #: modules/nickserv/group.c:168
@@ -7271,6 +7495,10 @@ msgstr ""
 #: modules/nickserv/sendpass.c:217
 #, c-format
 msgid "The password for %s has been sent to %s."
+msgstr ""
+
+#: modules/global/main.c:77
+msgid "The pending message has been deleted."
 msgstr ""
 
 #: modules/chanserv/set_founder.c:187
@@ -7455,6 +7683,15 @@ msgstr ""
 msgid "This operation cannot be performed on %s, because the account has been marked."
 msgstr ""
 
+#: modules/saslserv/main.c:1049
+msgid "This service exists to identify connecting clients to the network. It has no public interface."
+msgstr ""
+
+#: modules/nickserv/waitreg.c:24
+#, c-format
+msgid "Time (in seconds) before users may register an account: %u"
+msgstr ""
+
 #: modules/operserv/akill.c:226
 #, c-format
 msgid "Timed AKILL on %s@%s was successfully added and will expire in %s."
@@ -7539,11 +7776,15 @@ msgstr ""
 msgid "Too many days, maximum is %u."
 msgstr ""
 
+#: modules/operserv/greplog.c:179
+msgid "Too many matches, halting search"
+msgstr ""
+
 #: modules/operserv/rmatch.c:78
 msgid "Too many matches, not displaying any more"
 msgstr ""
 
-#: modules/memoserv/forward.c:97
+#: modules/memoserv/forward.c:96
 msgid "Too many memos; please wait a while and try again"
 msgstr ""
 
@@ -7806,6 +8047,11 @@ msgstr ""
 msgid "Usage: TEMPLATE %s [target flags]"
 msgstr ""
 
+#: modules/botserv/main.c:777
+#, c-format
+msgid "Use /msg %s ASSIGN #chan botnick to assign one to your channel."
+msgstr ""
+
 #: libathemecore/commandhelp.c:283
 #, c-format
 msgid "Use /msg %s HELP for a %s command listing."
@@ -7887,7 +8133,7 @@ msgstr ""
 
 #: modules/operserv/genhash.c:58
 #, c-format
-msgid "Using crypto provider '%s':"
+msgid "Using crypto provider %s:"
 msgstr ""
 
 #: modules/nickserv/set_language.c:27 modules/nickserv/set_language.c:37
@@ -7959,6 +8205,11 @@ msgstr ""
 
 #: modules/gameserv/eightball.c:29
 msgid "Without a doubt."
+msgstr ""
+
+#: modules/groupserv/main/hooks.c:204 modules/hostserv/request.c:146 modules/nickserv/pwquality.c:120
+#: modules/operserv/info.c:22 modules/operserv/info.c:28 modules/operserv/info.c:44
+msgid "Yes"
 msgstr ""
 
 #: modules/gameserv/eightball.c:25
@@ -8151,17 +8402,45 @@ msgstr ""
 msgid "You cannot change account name because the server configuration disallows it."
 msgstr ""
 
+#: modules/chanserv/clone.c:44
+msgid "You cannot clone a channel to itself."
+msgstr ""
+
 #: modules/nickserv/ghost.c:47
 msgid "You cannot ghost a network service."
 msgstr ""
 
-#: modules/nickserv/drop.c:50
+#: modules/nickserv/ghost.c:68
+#, c-format
+msgid "You cannot ghost users as %s because the account has been frozen."
+msgstr ""
+
+#: modules/nickserv/drop.c:50 modules/nickserv/identify.c:93
 #, c-format
 msgid "You cannot identify to %s because the nickname has been frozen."
 msgstr ""
 
+#: modules/nickserv/identify.c:85
+#, c-format
+msgid "You cannot identify to %s because the server configuration disallows it."
+msgstr ""
+
+#: modules/memoserv/ignore.c:48
+msgid "You cannot ignore yourself."
+msgstr ""
+
 #: modules/operserv/inject.c:35
 msgid "You cannot inject an INJECT command."
+msgstr ""
+
+#: modules/nickserv/identify.c:92
+#, c-format
+msgid "You cannot log in as %s because the account has been frozen."
+msgstr ""
+
+#: modules/nickserv/identify.c:84
+#, c-format
+msgid "You cannot log in as %s because the server configuration disallows it."
 msgstr ""
 
 #: modules/nickserv/logout.c:60
@@ -8174,6 +8453,11 @@ msgstr ""
 msgid "You cannot login as %s because the account has been frozen."
 msgstr ""
 
+#: modules/nickserv/enforce.c:430
+#, c-format
+msgid "You cannot regain %s because the account has been frozen."
+msgstr ""
+
 #: modules/nickserv/enforce.c:476
 msgid "You cannot regain a network service."
 msgstr ""
@@ -8181,6 +8465,11 @@ msgstr ""
 #: modules/nickserv/waitreg.c:49
 #, c-format
 msgid "You cannot register so soon after connecting. Please wait %u seconds and try again."
+msgstr ""
+
+#: modules/nickserv/enforce.c:320
+#, c-format
+msgid "You cannot release %s because the account has been frozen."
 msgstr ""
 
 #: modules/chanserv/access.c:1135 modules/chanserv/access.c:1233
@@ -8320,7 +8609,7 @@ msgstr ""
 msgid "You have no memos."
 msgstr ""
 
-#: modules/memoserv/read.c:119
+#: modules/memoserv/read.c:116
 msgid "You have no new memos."
 msgstr ""
 
@@ -8406,8 +8695,8 @@ msgstr ""
 msgid "You have unoffered vhost %s."
 msgstr ""
 
-#: modules/memoserv/sendall.c:52 modules/memoserv/send.c:52 modules/memoserv/sendgroup.c:54
-#: modules/memoserv/sendops.c:53
+#: modules/memoserv/sendall.c:52 modules/memoserv/send.c:48 modules/memoserv/sendgroup.c:54
+#: modules/memoserv/sendops.c:49
 msgid "You have used this command too many times; please wait a while and try again."
 msgstr ""
 
@@ -8585,12 +8874,16 @@ msgstr ""
 msgid "Your fingerprint list is full."
 msgstr ""
 
+#: modules/helpserv/ticket.c:295
+msgid "Your help request has been cancelled."
+msgstr ""
+
 #: modules/memoserv/ignore.c:63
 msgid "Your ignore list is full, please DEL an account."
 msgstr ""
 
-#: modules/memoserv/sendall.c:70 modules/memoserv/send.c:70 modules/memoserv/sendgroup.c:72
-#: modules/memoserv/sendops.c:71
+#: modules/memoserv/sendall.c:68 modules/memoserv/send.c:64 modules/memoserv/sendgroup.c:70
+#: modules/memoserv/sendops.c:65
 msgid "Your memo contains invalid characters."
 msgstr ""
 
@@ -8749,6 +9042,16 @@ msgstr ""
 #: modules/nickserv/info.c:172
 #, c-format
 msgid "vHost      : unassigned%s"
+msgstr ""
+
+#: modules/hostserv/offer.c:345
+#, c-format
+msgid "vHost: %s, Creator: %s (%s)"
+msgstr ""
+
+#: modules/hostserv/offer.c:342
+#, c-format
+msgid "vHost: %s, Group: %s, Creator: %s (%s)"
 msgstr ""
 
 #: modules/hostserv/offer.c:212 modules/hostserv/offer.c:319

@@ -49,7 +49,7 @@ helpserv_cmd_helpme(struct sourceinfo *si, int parc, char *parv[])
                 wallops("\2%s\2 has requested help.", get_source_name(si));
         }
 
-	command_success_nodata(si, "The network staff has been notified that you need help and will be with you shortly.");
+	command_success_nodata(si, _("The network staff has been notified that you need help and will be with you shortly."));
 
 	if (config_options.ratelimit_uses && config_options.ratelimit_period)
 		ratelimit_count++;

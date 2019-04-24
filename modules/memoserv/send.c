@@ -29,12 +29,8 @@ ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 	// Arg validation
 	if (!target || !m)
 	{
-		command_fail(si, fault_needmoreparams,
-			STR_INSUFFICIENT_PARAMS, "SEND");
-
-		command_fail(si, fault_needmoreparams,
-			"Syntax: SEND <user> <memo>");
-
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SEND");
+		command_fail(si, fault_needmoreparams, _("Syntax: SEND <user> <memo>"));
 		return;
 	}
 
@@ -56,9 +52,7 @@ ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 	// Check for memo text length -- includes/common.h
 	if (strlen(m) > MEMOLEN)
 	{
-		command_fail(si, fault_badparams,
-			"Please make sure your memo is not greater than %u characters", MEMOLEN);
-
+		command_fail(si, fault_badparams, _("Please make sure your memo is not greater than %u characters"), MEMOLEN);
 		return;
 	}
 
@@ -92,9 +86,7 @@ ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 		// Does the user allow memos? --pfish
 		if (tmu->flags & MU_NOMEMO)
 		{
-			command_fail(si, fault_noprivs,
-				"\2%s\2 does not wish to receive memos.", target);
-
+			command_fail(si, fault_noprivs, _("\2%s\2 does not wish to receive memos."), target);
 			return;
 		}
 

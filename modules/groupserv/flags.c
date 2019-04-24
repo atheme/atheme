@@ -48,7 +48,7 @@ gs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!parv[1])
 	{
-		int i = 1;
+		unsigned int i = 1;
 
 		command_success_nodata(si, _("Entry Account                Flags"));
 		command_success_nodata(si, "----- ---------------------- -----");
@@ -57,7 +57,7 @@ gs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 		{
 			ga = n->data;
 
-			command_success_nodata(si, "%-5d %-22s %s", i, ga->mt->name,
+			command_success_nodata(si, "%-5u %-22s %s", i, ga->mt->name,
 					       gflags_tostr(ga_flags, ga->flags));
 
 			i++;

@@ -45,7 +45,7 @@ ms_cmd_ignore_add(struct sourceinfo *si, int parc, char *parv[])
 	// User attempting to ignore themself?
 	if (!irccasecmp(parv[0], entity(si->smu)->name))
 	{
-		command_fail(si, fault_badparams, _("Silly wabbit, you can't ignore yourself."));
+		command_fail(si, fault_badparams, _("You cannot ignore yourself."));
 		return;
 	}
 

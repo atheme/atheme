@@ -229,7 +229,7 @@ osinfo_hook(struct sourceinfo *si)
 {
 	return_if_fail(si != NULL);
 
-	command_success_nodata(si, "How many messages will be sent to users on connect: %u", logoninfo_count);
+	command_success_nodata(si, _("How many messages will be sent to users on connect: %u"), logoninfo_count);
 }
 
 static void
@@ -337,14 +337,14 @@ is_cmd_del(struct sourceinfo *si, int parc, char *parv[])
 	if (!target)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DEL");
-		command_fail(si, fault_needmoreparams, "Syntax: DEL <id>");
+		command_fail(si, fault_needmoreparams, _("Syntax: DEL <id>"));
 		return;
 	}
 
 	if (! string_to_uint(target, &id) || ! id)
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "DEL");
-		command_fail(si, fault_badparams, "Syntax: DEL <id>");
+		command_fail(si, fault_badparams, _("Syntax: DEL <id>"));
 		return;
 	}
 
@@ -386,14 +386,14 @@ is_cmd_odel(struct sourceinfo *si, int parc, char *parv[])
 	if (!target)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ODEL");
-		command_fail(si, fault_needmoreparams, "Syntax: ODEL <id>");
+		command_fail(si, fault_needmoreparams, _("Syntax: ODEL <id>"));
 		return;
 	}
 
 	if (! string_to_uint(target, &id) || ! id)
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "ODEL");
-		command_fail(si, fault_badparams, "Syntax: ODEL <id>");
+		command_fail(si, fault_badparams, _("Syntax: ODEL <id>"));
 		return;
 	}
 
@@ -442,7 +442,7 @@ is_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 
 		tm = localtime(&l->info_ts);
 		strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", tm);
-		command_success_nodata(si, "%u: [\2%s\2] by \2%s\2 at \2%s\2: \2%s\2",
+		command_success_nodata(si, _("%u: [\2%s\2] by \2%s\2 at \2%s\2: \2%s\2"),
 			x, y, l->nick, dBuf, l->story);
 		sfree(y);
 	}
@@ -471,7 +471,7 @@ is_cmd_olist(struct sourceinfo *si, int parc, char *parv[])
 
 		tm = localtime(&o->info_ts);
 		strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", tm);
-		command_success_nodata(si, "%u: [\2%s\2] by \2%s\2 at \2%s\2: \2%s\2",
+		command_success_nodata(si, _("%u: [\2%s\2] by \2%s\2 at \2%s\2: \2%s\2"),
 			x, y, o->nick, dBuf, o->story);
 		sfree(y);
 	}

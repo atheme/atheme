@@ -142,6 +142,7 @@ modules/nickserv/help.c
 modules/nickserv/hold.c
 modules/nickserv/identify.c
 modules/nickserv/info.c
+modules/nickserv/info_lastquit.c
 modules/nickserv/list.c
 modules/nickserv/listchans.c
 modules/nickserv/listgroups.c
@@ -230,6 +231,7 @@ modules/rpgserv/list.c
 modules/rpgserv/search.c
 modules/rpgserv/set.c
 modules/saslserv/ecdh-x25519-challenge.c
+modules/saslserv/main.c
 modules/scripting/perl/api/perl_command.c
 modules/scripting/perl/perl_module.c
 modules/statserv/channel.c

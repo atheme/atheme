@@ -45,7 +45,7 @@ ns_cmd_listownmail(struct sourceinfo *si, int parc, char *parv[])
 		{
 			// in the future we could add a LIMIT parameter
 			if (matches == 0)
-				command_success_nodata(si, "Accounts matching e-mail address \2%s\2:", si->smu->email);
+				command_success_nodata(si, _("Accounts matching e-mail address \2%s\2:"), si->smu->email);
 
 			command_success_nodata(si, "- %s (%s)", entity(mu)->name, mu->email);
 			matches++;

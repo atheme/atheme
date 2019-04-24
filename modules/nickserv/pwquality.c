@@ -113,11 +113,11 @@ pwquality_osinfo_hook(struct sourceinfo *const restrict si)
 		return;
 
 #ifdef HAVE_CRACKLIB
-	(void) command_success_nodata(si, "Cracklib dictionary path: %s", cracklib_dict);
+	(void) command_success_nodata(si, _("Cracklib dictionary path: %s"), cracklib_dict);
 #endif /* HAVE_LIBPASSWDQC */
 
-	(void) command_success_nodata(si, "Registrations will fail with bad passwords: %s",
-	                                  pwquality_warn_only ? "No" : "Yes");
+	(void) command_success_nodata(si, _("Registrations will fail with bad passwords: %s"),
+	                                  pwquality_warn_only ? _("No") : _("Yes"));
 }
 
 static void

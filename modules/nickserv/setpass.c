@@ -105,7 +105,7 @@ show_setpass(hook_user_req_t *hdata)
 	if (has_priv(hdata->si, PRIV_USER_AUSPEX))
 	{
 		if (metadata_find(hdata->mu, "private:setpass:key"))
-			command_success_nodata(hdata->si, "%s has an active password reset key", entity(hdata->mu)->name);
+			command_success_nodata(hdata->si, _("%s has an active password reset key"), entity(hdata->mu)->name);
 
 		struct metadata *md;
 		char strfbuf[BUFSIZE];

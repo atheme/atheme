@@ -194,7 +194,7 @@ cs_cmd_set_founder(struct sourceinfo *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("\2%s\2 can now take ownership of \2%s\2."), mt->name, mc->name);
 	command_success_nodata(si, _("In order to complete the transfer, \2%s\2 must perform the following command:"), mt->name);
-	command_success_nodata(si, "   \2/msg %s SET %s FOUNDER %s\2", chansvs.me->disp, mc->name, mt->name);
+	command_success_nodata(si, "  \2/msg %s SET %s FOUNDER %s\2", chansvs.me->disp, mc->name, mt->name);
 	command_success_nodata(si, _("After that command is issued, the channel will be transferred."));
 	command_success_nodata(si, _("To cancel the transfer, use \2/msg %s SET %s FOUNDER %s\2"), chansvs.me->disp, mc->name, entity(si->smu)->name);
 }

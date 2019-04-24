@@ -19,13 +19,13 @@ os_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("How often services writes changes to the database: %u minutes"), config_options.commit_interval / 60);
 	command_success_nodata(si, _("Default kline time: %u days"), config_options.kline_time / 86400);
-	command_success_nodata(si, _("Will services be sending WALLOPS/GLOBOPS about various things: %s"), config_options.silent ? "no" : "yes");
+	command_success_nodata(si, _("Will services be sending WALLOPS/GLOBOPS about various things: %s"), config_options.silent ? _("No") : _("Yes"));
 	command_success_nodata(si, _("How many messages before a flood is triggered, (if 0, flood protection is disabled): %u"), config_options.flood_msgs);
 	command_success_nodata(si, _("How long before the flood counter resets: %u seconds"), config_options.flood_time);
 	command_success_nodata(si, _("Default maximum number of clones allowed: %u"), config_options.default_clone_allowed);
 	command_success_nodata(si, _("Number of commands used before ratelimiting starts, (if 0, ratelimiting is disabled): %u"), config_options.ratelimit_uses);
 	command_success_nodata(si, _("How long before ratelimiting counter resets, (if 0, ratelimiting is disabled): %u seconds"), config_options.ratelimit_period);
-	command_success_nodata(si, _("No nick ownership enabled: %s"), nicksvs.no_nick_ownership ? "yes" : "no");
+	command_success_nodata(si, _("No nick ownership enabled: %s"), nicksvs.no_nick_ownership ? _("Yes") : _("No"));
         command_success_nodata(si, _("Nickname expiration time: %u days"), nicksvs.expiry / 86400);
 	command_success_nodata(si, _("Nickname enforce expiry time: %u days"), nicksvs.enforce_expiry / 86400);
 	command_success_nodata(si, _("Default nickname enforce delay: %u seconds"), nicksvs.enforce_delay);
@@ -41,7 +41,7 @@ os_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("Maximum number of entries allowed in a channel access list (if 0, unlimited): %u"), chansvs.maxchanacs);
 	command_success_nodata(si, _("Maximum number of founders allowed per channel: %u"), chansvs.maxfounders);
 	command_success_nodata(si, _("Show entity IDs to everyone: %s"),
-		config_options.show_entity_id ? "Yes" : "No");
+		config_options.show_entity_id ? _("Yes") : _("No"));
 
 	if (IS_TAINTED)
 	{
