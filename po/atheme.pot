@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-04-24 06:59+0000\n"
+"POT-Creation-Date: 2019-04-24 07:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4498,8 +4498,9 @@ msgstr ""
 msgid "Nicks      : %s"
 msgstr ""
 
+#: modules/chanfix/fix.c:603 modules/chanfix/fix.c:604 modules/chanserv/moderate.c:222
 #: modules/groupserv/main/hooks.c:204 modules/hostserv/request.c:146 modules/nickserv/pwquality.c:120
-#: modules/operserv/info.c:22 modules/operserv/info.c:28 modules/operserv/info.c:44
+#: modules/operserv/info.c:22 modules/operserv/info.c:28 modules/operserv/info.c:44 modules/operserv/modinspect.c:51
 msgid "No"
 msgstr ""
 
@@ -5271,6 +5272,10 @@ msgstr ""
 
 #: modules/operserv/rehash.c:32
 msgid "Reload the configuration data."
+msgstr ""
+
+#: modules/operserv/modinspect.c:51
+msgid "Reload-only"
 msgstr ""
 
 #: modules/operserv/modreload.c:175
@@ -8207,8 +8212,9 @@ msgstr ""
 msgid "Without a doubt."
 msgstr ""
 
+#: modules/chanfix/fix.c:603 modules/chanfix/fix.c:604 modules/chanserv/moderate.c:222
 #: modules/groupserv/main/hooks.c:204 modules/hostserv/request.c:146 modules/nickserv/pwquality.c:120
-#: modules/operserv/info.c:22 modules/operserv/info.c:28 modules/operserv/info.c:44
+#: modules/operserv/info.c:22 modules/operserv/info.c:28 modules/operserv/info.c:44 modules/operserv/modinspect.c:50
 msgid "Yes"
 msgstr ""
 

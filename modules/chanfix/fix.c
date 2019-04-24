@@ -600,8 +600,8 @@ chanfix_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("Final step   : \2%.0f%%\2 of \2%u\2 (\2%0.1f\2)"),
 	                       (double) (CHANFIX_FINAL_STEP * 100), highscore,
 	                       (double) (highscore * CHANFIX_FINAL_STEP));
-	command_success_nodata(si, _("Needs fixing : \2%s\2"), chanfix_should_handle(chan, chan->chan) ? "YES" : "NO");
-	command_success_nodata(si, _("Now fixing   : \2%s\2"), chan->fix_started ? "YES" : "NO");
+	command_success_nodata(si, _("Needs fixing : \2%s\2"), chanfix_should_handle(chan, chan->chan) ? _("Yes") : _("No"));
+	command_success_nodata(si, _("Now fixing   : \2%s\2"), chan->fix_started ? _("Yes") : _("No"));
 
 	if ((md = metadata_find(chan, "private:mark:setter")) != NULL)
 	{

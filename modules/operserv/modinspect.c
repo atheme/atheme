@@ -47,8 +47,8 @@ os_cmd_modinspect(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("SDK Serial : %s"), m->header->serial);
 	command_success_nodata(si, _("Version    : %s"), m->header->version);
 	command_success_nodata(si, _("Vendor     : %s"), m->header->vendor);
-	command_success_nodata(si, _("Can unload : %s"), m->can_unload == MODULE_UNLOAD_CAPABILITY_OK ? "Yes" :
-					( m->can_unload == MODULE_UNLOAD_CAPABILITY_NEVER ? "No" : "Reload only"));
+	command_success_nodata(si, _("Can unload : %s"), m->can_unload == MODULE_UNLOAD_CAPABILITY_OK ? _("Yes") :
+	                           (m->can_unload == MODULE_UNLOAD_CAPABILITY_NEVER ? _("No") : _("Reload-only")));
 	command_success_nodata(si, _("*** \2End of Info\2 ***"));
 }
 
