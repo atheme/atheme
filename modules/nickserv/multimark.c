@@ -246,10 +246,10 @@ db_h_rm(struct database_handle *db, const char *type)
 	mowgli_node_add(rm, &rm->node, l);
 }
 
-static int
+static unsigned int
 get_multimark_max(struct myuser *mu)
 {
-	int max = 0;
+	unsigned int max = 0;
 
 	mowgli_list_t *l = multimark_list(mu);
 
