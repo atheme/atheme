@@ -69,16 +69,17 @@ Security
   user's account password from persisting in on-disk log files.
 
 - Services now has a much more rigorous random number generation interface
-  and will e.g. refuse to use arc4random(3) unless we are actually on OpenBSD
-  (which is the only platform that uses a secure algorithm for it). Support
-  for libsodium random number generation was added, and the new preferred
-  order for random number generation frontends is:
+  and will e.g. refuse to use `arc4random(3)` unless we are actually on
+  OpenBSD (which is the only platform that uses a secure algorithm for it).
+  Support for libsodium random number generation was added, and the new
+  preferred order for random number generation frontends (which can be over-
+  ridden by an argument to `./configure`) is:
 
   - OpenBSD `arc4random(3)`, or
   - libsodium `randombytes(3)`, or
   - ARM mbedTLS `hmac_drbg_random(3)` with SHA2-512, or
   - ARM mbedTLS `hmac_drbg_random(3)` with SHA2-256, or
-  - ARM mbedTLS `ctr_drbg_drbg_random(3)` with AES, or
+  - ARM mbedTLS `ctr_drbg_random(3)` with AES, or
   - OpenSSL `RAND_bytes(3)`, or
   - Internal ChaCha20-based Fallback RNG, seeded by
     - `getentropy(3)`, or
