@@ -63,6 +63,11 @@ Security
 
 - Services will now refuse to run as root.
 
+- Services no longer prints plaintext passwords back to you for NickServ
+  `SETPASS` and `SET PASSWORD`. This allows IRC client password redaction
+  (where supported, e.g. in WeeChat) to achieve its purpose of preventing the
+  user's account password from persisting in on-disk log files.
+
 - Services now has a much more rigorous random number generation interface
   and will e.g. refuse to use arc4random(3) unless we are actually on OpenBSD
   (which is the only platform that uses a secure algorithm for it). Support

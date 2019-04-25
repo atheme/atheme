@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-04-25 16:35+0000\n"
+"POT-Creation-Date: 2019-04-25 16:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2302,7 +2302,7 @@ msgstr ""
 msgid "Changes the maximum number of users that may be logged in to one account."
 msgstr ""
 
-#: modules/nickserv/set_password.c:58
+#: modules/nickserv/set_password.c:56
 msgid "Changes the password associated with your account."
 msgstr ""
 
@@ -7484,7 +7484,7 @@ msgstr ""
 msgid "The password change key for %s has been sent to the corresponding email address."
 msgstr ""
 
-#: modules/nickserv/resetpass.c:66 modules/nickserv/setpass.c:77 modules/nickserv/set_password.c:51
+#: modules/nickserv/resetpass.c:66
 #, c-format
 msgid "The password for %s has been changed to %s."
 msgstr ""
@@ -7492,6 +7492,11 @@ msgstr ""
 #: modules/nickserv/sendpass.c:217
 #, c-format
 msgid "The password for %s has been sent to %s."
+msgstr ""
+
+#: modules/nickserv/setpass.c:77 modules/nickserv/set_password.c:51
+#, c-format
+msgid "The password for %s has been successfully changed."
 msgstr ""
 
 #: modules/global/main.c:77

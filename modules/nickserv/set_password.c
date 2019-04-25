@@ -48,9 +48,7 @@ ns_cmd_set_password(struct sourceinfo *si, int parc, char *parv[])
 
 	set_password(si->smu, password);
 
-	command_success_nodata(si, _("The password for \2%s\2 has been changed to \2%s\2."), entity(si->smu)->name, password);
-
-	return;
+	command_success_nodata(si, _("The password for \2%s\2 has been successfully changed."), entity(si->smu)->name);
 }
 
 static struct command ns_set_password = {

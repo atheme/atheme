@@ -74,7 +74,7 @@ ns_cmd_setpass(struct sourceinfo *si, int parc, char *parv[])
 	metadata_delete(mu, "private:sendpass:timestamp");
 
 	set_password(mu, password);
-	command_success_nodata(si, _("The password for \2%s\2 has been changed to \2%s\2."), entity(mu)->name, password);
+	command_success_nodata(si, _("The password for \2%s\2 has been successfully changed."), entity(mu)->name);
 
 	if (mu->flags & MU_NOPASSWORD)
 	{
