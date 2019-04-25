@@ -45,6 +45,9 @@ POTENTIAL COMPATIBILITY BREAKAGE
   (such as `modules/chanserv/fflags`). If you encounter a use case that cannot
   be replaced, please report a bug to let us know.
 
+- The NickServ DROP command no longer requires the user's account password as
+  an argument.
+
 Security
 --------
 - Services now accepts email addresses that may contain shell metacharacters.

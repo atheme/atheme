@@ -13,13 +13,12 @@ static void
 cmd_ns_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc, char *parv[])
 {
 	const char *const acc = parv[0];
-	const char *const pass = parv[1];
-	const char *const key = parv[2];
+	const char *const key = parv[1];
 
-	if (! acc || ! pass)
+	if (! acc)
 	{
 		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DROP");
-		(void) command_fail(si, fault_needmoreparams, _("Syntax: DROP <account> <password>"));
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: DROP <account>"));
 		return;
 	}
 
@@ -43,23 +42,13 @@ cmd_ns_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 		return;
 	}
 
-	if (metadata_find(mu, "private:freeze:freezer"))
+	if (si->smu != mu)
 	{
-		(void) command_fail(si, fault_authfail, nicksvs.no_nick_ownership ?
-		                    _("You cannot login as \2%s\2 because the account has been frozen.") :
-		                    _("You cannot identify to \2%s\2 because the nickname has been frozen."),
-		                    entity(mu)->name);
+		(void) command_fail(si, fault_noprivs, _("You are not logged in as \2%s\2."), acc);
 		return;
 	}
 
-	if (! verify_password(mu, pass))
-	{
-		(void) command_fail(si, fault_authfail, _("Authentication failed. Invalid password for \2%s\2."),
-		                    entity(mu)->name);
-
-		(void) bad_password(si, mu);
-		return;
-	}
+	return_if_fail(! metadata_find(mu, "private:freeze:freezer"));
 
 	if (! nicksvs.no_nick_ownership && MOWGLI_LIST_LENGTH(&mu->nicks) > 1 &&
 	    command_find(si->service->commands, "UNGROUP"))
@@ -98,7 +87,7 @@ cmd_ns_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 
 		(void) command_success_nodata(si, _("To avoid accidental use of this command, this operation has to "
 		                                    "be confirmed. Please confirm by replying with \2/msg %s DROP %s "
-		                                    "<password> %s\2"), nicksvs.me->disp, entity(mu)->name, challenge);
+		                                    "%s\2"), nicksvs.me->disp, entity(mu)->name, challenge);
 		return;
 	}
 
@@ -189,8 +178,8 @@ cmd_ns_fdrop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_U
 static struct command cmd_ns_drop = {
 	.name           = "DROP",
 	.desc           = N_("Drops an account registration."),
-	.access         = AC_NONE,
-	.maxparc        = 3,
+	.access         = AC_AUTHENTICATED,
+	.maxparc        = 2,
 	.cmd            = &cmd_ns_drop_func,
 	.help           = { .path = "nickserv/drop" },
 };

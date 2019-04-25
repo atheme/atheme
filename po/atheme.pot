@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-04-24 09:23+0000\n"
+"POT-Creation-Date: 2019-04-25 12:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -486,7 +486,7 @@ msgstr ""
 msgid "%s has too many channels registered."
 msgstr ""
 
-#: modules/nickserv/drop.c:36 modules/nickserv/drop.c:145
+#: modules/nickserv/drop.c:35 modules/nickserv/drop.c:134
 #, c-format
 msgid "%s is a grouped nick, use %s to remove it."
 msgstr ""
@@ -1830,7 +1830,7 @@ msgstr ""
 msgid "Account %s added to your ignore list."
 msgstr ""
 
-#: modules/nickserv/drop.c:67
+#: modules/nickserv/drop.c:56
 #, c-format
 msgid "Account %s has %zu other nick(s) grouped to it, remove those first."
 msgstr ""
@@ -2124,7 +2124,7 @@ msgstr ""
 msgid "Authenticates to a services account."
 msgstr ""
 
-#: modules/nickserv/drop.c:57 modules/nickserv/logout.c:71
+#: modules/nickserv/logout.c:71
 #, c-format
 msgid "Authentication failed. Invalid password for %s."
 msgstr ""
@@ -2862,7 +2862,7 @@ msgstr ""
 msgid "Drops a group registration."
 msgstr ""
 
-#: modules/nickserv/drop.c:191
+#: modules/nickserv/drop.c:180
 msgid "Drops an account registration."
 msgstr ""
 
@@ -3133,7 +3133,7 @@ msgstr ""
 msgid "FORCEXOP %s done (%u changes)"
 msgstr ""
 
-#: modules/chanserv/drop.c:74 modules/groupserv/drop.c:53 modules/nickserv/drop.c:90
+#: modules/chanserv/drop.c:74 modules/groupserv/drop.c:53 modules/nickserv/drop.c:79
 msgid "Failed to create challenge"
 msgstr ""
 
@@ -3305,7 +3305,7 @@ msgstr ""
 msgid "Forces channel statuses to flags."
 msgstr ""
 
-#: modules/nickserv/drop.c:200
+#: modules/nickserv/drop.c:189
 msgid "Forces dropping an account registration."
 msgstr ""
 
@@ -3693,7 +3693,7 @@ msgstr ""
 msgid "Invalid host mask, %s"
 msgstr ""
 
-#: modules/chanserv/drop.c:90 modules/groupserv/drop.c:69 modules/nickserv/drop.c:107
+#: modules/chanserv/drop.c:90 modules/groupserv/drop.c:69 modules/nickserv/drop.c:96
 #, c-format
 msgid "Invalid key for %s."
 msgstr ""
@@ -6283,8 +6283,8 @@ msgstr ""
 msgid "Syntax: DROP <#channel>"
 msgstr ""
 
-#: modules/nickserv/drop.c:22
-msgid "Syntax: DROP <account> <password>"
+#: modules/nickserv/drop.c:21
+msgid "Syntax: DROP <account>"
 msgstr ""
 
 #: modules/rpgserv/enable.c:22
@@ -6295,7 +6295,7 @@ msgstr ""
 msgid "Syntax: FDROP <#channel>"
 msgstr ""
 
-#: modules/nickserv/drop.c:131
+#: modules/nickserv/drop.c:120
 msgid "Syntax: FDROP <account>"
 msgstr ""
 
@@ -7171,12 +7171,12 @@ msgstr ""
 msgid "The account %s belongs to a services operator; it cannot be frozen."
 msgstr ""
 
-#: modules/nickserv/drop.c:119 modules/nickserv/drop.c:185
+#: modules/nickserv/drop.c:108 modules/nickserv/drop.c:174
 #, c-format
 msgid "The account %s has been dropped."
 msgstr ""
 
-#: modules/nickserv/drop.c:82 modules/nickserv/drop.c:164
+#: modules/nickserv/drop.c:71 modules/nickserv/drop.c:153
 #, c-format
 msgid "The account %s is held; it cannot be dropped."
 msgstr ""
@@ -7449,7 +7449,7 @@ msgstr ""
 msgid "The new topic is invalid or too long."
 msgstr ""
 
-#: modules/nickserv/drop.c:75 modules/nickserv/drop.c:157
+#: modules/nickserv/drop.c:64 modules/nickserv/drop.c:146
 #, c-format
 msgid "The nickname %s belongs to a services operator; it cannot be dropped."
 msgstr ""
@@ -7638,7 +7638,7 @@ msgstr ""
 msgid "This command may only be used on a channel."
 msgstr ""
 
-#: modules/nickserv/drop.c:96
+#: modules/nickserv/drop.c:85
 #, c-format
 msgid "This is a friendly reminder that you are about to DESTROY the account %s."
 msgstr ""
@@ -7704,18 +7704,11 @@ msgstr ""
 msgid "Timed SQLINE on %s was successfully added and will expire in %s."
 msgstr ""
 
-#: modules/chanserv/drop.c:82 modules/groupserv/drop.c:61
+#: modules/chanserv/drop.c:82 modules/groupserv/drop.c:61 modules/nickserv/drop.c:88
 #, c-format
 msgid ""
 "To avoid accidental use of this command, this operation has to be confirmed. Please confirm by replying with /msg "
 "%s DROP %s %s"
-msgstr ""
-
-#: modules/nickserv/drop.c:99
-#, c-format
-msgid ""
-"To avoid accidental use of this command, this operation has to be confirmed. Please confirm by replying with /msg "
-"%s DROP %s <password> %s"
 msgstr ""
 
 #: modules/chanserv/kick.c:147
@@ -8289,6 +8282,11 @@ msgstr ""
 msgid "You are not authorized to use the target argument."
 msgstr ""
 
+#: modules/nickserv/drop.c:47
+#, c-format
+msgid "You are not logged in as %s."
+msgstr ""
+
 #: include/atheme/constants.h:97
 msgid "You are not logged in."
 msgstr ""
@@ -8388,7 +8386,7 @@ msgstr ""
 msgid "You cannot ghost users as %s because the account has been frozen."
 msgstr ""
 
-#: modules/nickserv/drop.c:50 modules/nickserv/identify.c:93
+#: modules/nickserv/identify.c:93
 #, c-format
 msgid "You cannot identify to %s because the nickname has been frozen."
 msgstr ""
@@ -8419,11 +8417,6 @@ msgstr ""
 #: modules/nickserv/logout.c:60
 #, c-format
 msgid "You cannot log out %s because the server configuration disallows it."
-msgstr ""
-
-#: modules/nickserv/drop.c:49
-#, c-format
-msgid "You cannot login as %s because the account has been frozen."
 msgstr ""
 
 #: modules/nickserv/enforce.c:430
