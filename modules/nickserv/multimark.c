@@ -11,6 +11,8 @@
 #include <atheme.h>
 #include "list.h"
 
+#define MULTIMARK_PERSIST_MDNAME "atheme.nickserv.multimark"
+
 struct multimark
 {
 	char *setter_uid;
@@ -1041,7 +1043,10 @@ mod_init(struct module *const restrict m)
 		return;
 	}
 
-	restored_marks = mowgli_patricia_create(strcasecanon);
+	if (! (restored_marks = mowgli_global_storage_get(MULTIMARK_PERSIST_MDNAME)))
+		restored_marks = mowgli_patricia_create(&strcasecanon);
+	else
+		mowgli_global_storage_free(MULTIMARK_PERSIST_MDNAME);
 
 	hook_add_db_write(write_multimark_db);
 	db_register_type_handler("MM", db_h_mm);
@@ -1105,6 +1110,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 	list_unregister("mark-reason");
 	list_unregister("marked");
+
+	mowgli_global_storage_put(MULTIMARK_PERSIST_MDNAME, restored_marks);
 }
 
-SIMPLE_DECLARE_MODULE_V1("nickserv/multimark", MODULE_UNLOAD_CAPABILITY_OK)
+SIMPLE_DECLARE_MODULE_V1("nickserv/multimark", MODULE_UNLOAD_CAPABILITY_RELOAD_ONLY)

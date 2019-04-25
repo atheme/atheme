@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <https://github.com/atheme/atheme/issues/>\n"
-"POT-Creation-Date: 2019-04-25 12:31+0000\n"
+"POT-Creation-Date: 2019-04-25 16:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -334,7 +334,7 @@ msgstr ""
 msgid "%s has been logged out."
 msgstr ""
 
-#: modules/nickserv/multimark.c:793
+#: modules/nickserv/multimark.c:795
 #, c-format
 msgid "%s has been marked."
 msgstr ""
@@ -894,12 +894,12 @@ msgstr ""
 msgid "%s is not public already."
 msgstr ""
 
-#: modules/nickserv/multimark.c:689 modules/nickserv/multimark.c:828
+#: modules/nickserv/multimark.c:691 modules/nickserv/multimark.c:830
 #, c-format
 msgid "%s is not registered anymore, but was marked by %s (%s) on %s: %s"
 msgstr ""
 
-#: modules/nickserv/multimark.c:701 modules/nickserv/multimark.c:840
+#: modules/nickserv/multimark.c:703 modules/nickserv/multimark.c:842
 #, c-format
 msgid "%s is not registered anymore, but was marked by %s on %s: %s"
 msgstr ""
@@ -909,7 +909,7 @@ msgstr ""
 msgid "%s is not registered anymore, but was marked by %s on %s (%s)."
 msgstr ""
 
-#: modules/nickserv/multimark.c:805
+#: modules/nickserv/multimark.c:807
 #, c-format
 msgid "%s is not registered, and was not marked."
 msgstr ""
@@ -1262,22 +1262,22 @@ msgstr ""
 msgid "%u: %u matches for realname %s"
 msgstr ""
 
-#: modules/nickserv/multimark.c:590 modules/nickserv/multimark.c:906
+#: modules/nickserv/multimark.c:592 modules/nickserv/multimark.c:908
 #, c-format
 msgid "(Restored) Mark %u originally set on %s (%s) by %s (%s) on %s: %s"
 msgstr ""
 
-#: modules/nickserv/multimark.c:621 modules/nickserv/multimark.c:937
+#: modules/nickserv/multimark.c:623 modules/nickserv/multimark.c:939
 #, c-format
 msgid "(Restored) Mark %u originally set on %s (%s) by %s on %s: %s"
 msgstr ""
 
-#: modules/nickserv/multimark.c:604 modules/nickserv/multimark.c:920
+#: modules/nickserv/multimark.c:606 modules/nickserv/multimark.c:922
 #, c-format
 msgid "(Restored) Mark %u originally set on %s by %s (%s) on %s: %s"
 msgstr ""
 
-#: modules/nickserv/multimark.c:634 modules/nickserv/multimark.c:950
+#: modules/nickserv/multimark.c:636 modules/nickserv/multimark.c:952
 #, c-format
 msgid "(Restored) Mark %u originally set on %s by %s on %s: %s"
 msgstr ""
@@ -1972,7 +1972,7 @@ msgstr ""
 msgid "Adds a note to a channel."
 msgstr ""
 
-#: modules/nickserv/mark.c:119 modules/nickserv/multimark.c:1018
+#: modules/nickserv/mark.c:119 modules/nickserv/multimark.c:1020
 msgid "Adds a note to a user."
 msgstr ""
 
@@ -3007,7 +3007,7 @@ msgstr ""
 
 #: modules/chanserv/moderate.c:329 modules/global/main.c:157 modules/helpserv/ticket.c:271
 #: modules/hostserv/offer.c:348 modules/hostserv/request.c:544 modules/infoserv/main.c:450
-#: modules/infoserv/main.c:479 modules/nickserv/badmail.c:191 modules/nickserv/multimark.c:962
+#: modules/infoserv/main.c:479 modules/nickserv/badmail.c:191 modules/nickserv/multimark.c:964
 #: modules/proxyscan/dnsbl.c:241
 msgid "End of list."
 msgstr ""
@@ -4189,21 +4189,21 @@ msgstr ""
 msgid "Manually scan if a user is in a DNSBL."
 msgstr ""
 
-#: modules/nickserv/multimark.c:561 modules/nickserv/multimark.c:877
+#: modules/nickserv/multimark.c:563 modules/nickserv/multimark.c:879
 #, c-format
 msgid "Mark %u set by %s (%s) on %s: %s"
 msgstr ""
 
-#: modules/nickserv/multimark.c:573 modules/nickserv/multimark.c:889
+#: modules/nickserv/multimark.c:575 modules/nickserv/multimark.c:891
 #, c-format
 msgid "Mark %u set by %s on %s: %s"
 msgstr ""
 
-#: modules/nickserv/multimark.c:350
+#: modules/nickserv/multimark.c:352
 msgid "Mark data migrated successfully."
 msgstr ""
 
-#: modules/nickserv/multimark.c:852
+#: modules/nickserv/multimark.c:854
 #, c-format
 msgid "Marks for %s:"
 msgstr ""
@@ -4286,7 +4286,7 @@ msgstr ""
 msgid "Metadata entry %s was not set."
 msgstr ""
 
-#: modules/nickserv/multimark.c:342
+#: modules/nickserv/multimark.c:344
 msgid "Migrating mark data..."
 msgstr ""
 
@@ -7378,7 +7378,7 @@ msgstr ""
 msgid "The language for %s has been changed to %s."
 msgstr ""
 
-#: modules/nickserv/multimark.c:1001
+#: modules/nickserv/multimark.c:1003
 msgid "The mark has been deleted."
 msgstr ""
 
@@ -7661,7 +7661,7 @@ msgstr ""
 msgid "This is your last warning. You will be ignored for 30 seconds."
 msgstr ""
 
-#: modules/nickserv/multimark.c:1006
+#: modules/nickserv/multimark.c:1008
 msgid "This mark does not exist."
 msgstr ""
 
@@ -7980,7 +7980,7 @@ msgstr ""
 msgid "Usage: MARK <#channel> ON <note>"
 msgstr ""
 
-#: modules/nickserv/multimark.c:1012
+#: modules/nickserv/multimark.c:1014
 msgid "Usage: MARK <target> <ADD|DEL|LIST|MIGRATE> [note]"
 msgstr ""
 
@@ -7988,11 +7988,11 @@ msgstr ""
 msgid "Usage: MARK <target> <ON|OFF> [note]"
 msgstr ""
 
-#: modules/nickserv/multimark.c:779
+#: modules/nickserv/multimark.c:781
 msgid "Usage: MARK <target> ADD <note>"
 msgstr ""
 
-#: modules/nickserv/multimark.c:971
+#: modules/nickserv/multimark.c:973
 msgid "Usage: MARK <target> DEL <number>"
 msgstr ""
 
@@ -8773,7 +8773,7 @@ msgstr ""
 msgid "You must wait at least %u days between changes to your vHost."
 msgstr ""
 
-#: modules/nickserv/multimark.c:751
+#: modules/nickserv/multimark.c:753
 #, c-format
 msgid "You need the %s privilege for this operation."
 msgstr ""
@@ -8990,7 +8990,7 @@ msgstr ""
 msgid "setter: %s"
 msgstr ""
 
-#: modules/nickserv/multimark.c:764
+#: modules/nickserv/multimark.c:766
 msgid "usage: MARK <target> <ADD|DEL|LIST|MIGRATE> [note]"
 msgstr ""
 
