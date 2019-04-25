@@ -97,7 +97,7 @@ is_marked(const struct mynick *mn, const void *arg)
 	return is_user_marked(mu);
 }
 
-mowgli_list_t *
+static mowgli_list_t *
 restored_mark_list(const char *nick)
 {
 	mowgli_list_t *l = mowgli_patricia_retrieve(restored_marks, nick);
@@ -246,7 +246,7 @@ db_h_rm(struct database_handle *db, const char *type)
 	mowgli_node_add(rm, &rm->node, l);
 }
 
-int
+static int
 get_multimark_max(struct myuser *mu)
 {
 	int max = 0;
