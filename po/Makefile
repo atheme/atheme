@@ -45,7 +45,7 @@ update-pot: update-potfiles
 	@tail -n +4 < "$(POTTEMPLATE).tmp" >> "$(POTTEMPLATE)"
 	@rm -f "$(POTTEMPLATE).tmp"
 
-$(LOCALES): update-pot
+$(LOCALES):
 	@echo "Updating $@ ..."
 	@msgmerge                                               \
 	    --backup=none                                       \
