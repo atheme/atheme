@@ -3,9 +3,9 @@
 # - To regenerate the list of translatable files; run `make update-potfiles'
 # - To regenerate the master template atheme.pot; run `make update-pot'
 # - To regenerate a translation file; run `make xx.po' where xx.po is one
-#   of the files in the TRANSLATIONS variables below
+#   of the files in the LOCALES variables below
 # - To regenerate all of the translation files; run `make update-po'
-# - To add a translation; add it to the TRANSLATIONS variable below
+# - To add a translation; add it to the LOCALES variable below
 # - When adding a translation subdirectory to help/, also add it to the
 #   HELP_LINGUAS variable in src/services/Makefile
 
@@ -14,8 +14,10 @@
 
 include ../extra.mk
 
+LOCALES=bg.po cy.po da.po de.po es.po fr.po ru.po tr.po
 POTTEMPLATE=$(PACKAGE_TARNAME).pot
-TRANSLATIONS=bg.po cy.po da.po de.po es.po fr.po ru.po tr.po
+
+include ../buildsys.mk
 
 update-potfiles:
 	@echo "Updating POTFILES.in ..."
@@ -43,7 +45,7 @@ update-pot: update-potfiles
 	@tail -n +4 < "$(POTTEMPLATE).tmp" >> "$(POTTEMPLATE)"
 	@rm -f "$(POTTEMPLATE).tmp"
 
-$(TRANSLATIONS): update-pot
+$(LOCALES): update-pot
 	@echo "Updating $@ ..."
 	@msgmerge                                               \
 	    --backup=none                                       \
@@ -52,4 +54,4 @@ $(TRANSLATIONS): update-pot
 	    --update                                            \
 	    "$@" "$(POTTEMPLATE)"
 
-update-po: $(TRANSLATIONS)
+update-po: $(LOCALES)
