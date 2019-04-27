@@ -17,6 +17,7 @@
 /m4/pkg.m4                      linguist-vendored
 /m4/po.m4                       linguist-vendored
 /m4/progtest.m4                 linguist-vendored
+/po/*.po                        linguist-vendored
 
 *.c                             linguist-language=C
 *.h                             linguist-language=C
