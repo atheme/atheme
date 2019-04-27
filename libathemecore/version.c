@@ -91,7 +91,9 @@ const char *infotext[] =
 	"  zparta, Jens Holmqvist <zparta@hispan.se>",
 	" ",
 
-	"Visit our website at <https://atheme.github.io/>",
+	"Visit our website at: <https://atheme.github.io/>",
+	"Report software bugs to: <" PACKAGE_BUGREPORT ">",
+	"Report translation bugs to: <" PACKAGE_BUGREPORT_I18N ">",
 	" ",
 
 	NULL,

@@ -686,6 +686,7 @@ GMSGFMT
 MSGFMT
 GETTEXT_MACRO_VERSION
 USE_NLS
+PACKAGE_BUGREPORT_I18N
 VENDOR_STRING
 VERSION
 PACKAGE
@@ -6955,6 +6956,8 @@ VERSION=7.3.0-rc2
 
 VENDOR_STRING="Atheme Development Group <https://atheme.github.io/>"
 
+PACKAGE_BUGREPORT_I18N="ircs://chat.freenode.net:6697/atheme-i18n"
+
 
 cat >>confdefs.h <<_ACEOF
 #define PACKAGE "${PACKAGE}"
@@ -6968,6 +6971,11 @@ _ACEOF
 
 cat >>confdefs.h <<_ACEOF
 #define VENDOR_STRING "${VENDOR_STRING}"
+_ACEOF
+
+
+cat >>confdefs.h <<_ACEOF
+#define PACKAGE_BUGREPORT_I18N "${PACKAGE_BUGREPORT_I18N}"
 _ACEOF
 
 
