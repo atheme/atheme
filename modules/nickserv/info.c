@@ -189,7 +189,7 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		tm2 = localtime(&mn->lastseen);
 		strftime(lastlogin, sizeof lastlogin, TIME_FORMAT, tm2);
 		if (hide_info)
-			command_success_nodata(si, _("Last seen  : (about %u week(s) ago)"), (unsigned int)((CURRTIME - mn->lastseen) / 604800));
+			command_success_nodata(si, _("Last seen  : (about %u week(s) ago)"), (unsigned int)((CURRTIME - mn->lastseen) / SECONDS_PER_WEEK));
 		else
 			command_success_nodata(si, _("Last seen  : %s (%s ago)"), lastlogin, time_ago(mn->lastseen));
 	}
@@ -204,14 +204,14 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		if (mn == NULL)
 		{
 			if (hide_info)
-				command_success_nodata(si, _("Last seen  : (about %u week(s) ago)"), (unsigned int)((CURRTIME - mu->lastlogin) / 604800));
+				command_success_nodata(si, _("Last seen  : (about %u week(s) ago)"), (unsigned int)((CURRTIME - mu->lastlogin) / SECONDS_PER_WEEK));
 			else
 				command_success_nodata(si, _("Last seen  : %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
 		}
 		else if (mn->lastseen != mu->lastlogin)
 		{
 			if (hide_info)
-				command_success_nodata(si, _("User seen  : (about %u week(s) ago)"), (unsigned int)((CURRTIME - mu->lastlogin) / 604800));
+				command_success_nodata(si, _("User seen  : (about %u week(s) ago)"), (unsigned int)((CURRTIME - mu->lastlogin) / SECONDS_PER_WEEK));
 			else
 				command_success_nodata(si, _("User seen  : %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
 		}
