@@ -30,6 +30,12 @@ rs_cmd_enable(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	if (!chanacs_source_has_flag(mc, si, CA_SET))
+	{
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
+		return;
+	}
+
 	if (metadata_find(mc, "private:rpgserv:enabled"))
 	{
 		command_fail(si, fault_nochange, _("\2%s\2 already has RPGServ enabled."), chan);
@@ -58,6 +64,12 @@ rs_cmd_disable(struct sourceinfo *si, int parc, char *parv[])
 	if (!mc)
 	{
 		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, chan);
+		return;
+	}
+
+	if (!chanacs_source_has_flag(mc, si, CA_SET))
+	{
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 
