@@ -1103,7 +1103,7 @@ add_auto_flags(unsigned int flags)
 }
 
 /* When to consider a user recently seen */
-#define RECENTLY_SEEN (7 * 86400)
+#define RECENTLY_SEEN SECONDS_PER_WEEK
 
 /* Find a user fulfilling the conditions who can take another channel */
 struct myuser *
@@ -2048,7 +2048,7 @@ expire_myuser_cb(struct myentity *mt, void *unused)
 		return 0;
 
 	if ((nicksvs.expiry > 0 && mu->lastlogin < CURRTIME && (unsigned int)(CURRTIME - mu->lastlogin) >= nicksvs.expiry) ||
-			(mu->flags & MU_WAITAUTH && CURRTIME - mu->registered >= 86400))
+			(mu->flags & MU_WAITAUTH && (CURRTIME - mu->registered) >= SECONDS_PER_DAY))
 	{
 		/* Don't expire accounts with privs on them in atheme.conf,
 		 * otherwise someone can reregister

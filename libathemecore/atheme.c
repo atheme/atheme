@@ -516,15 +516,15 @@ atheme_main(int argc, char *argv[])
 		mowgli_timer_add(base_eventloop, "db_save", db_save_periodic, NULL, config_options.commit_interval);
 
 	/* check expires every hour */
-	mowgli_timer_add(base_eventloop, "expire_check", expire_check, NULL, 3600);
+	mowgli_timer_add(base_eventloop, "expire_check", expire_check, NULL, SECONDS_PER_HOUR);
 
 	/* check k/x/q line expires every minute */
-	mowgli_timer_add(base_eventloop, "kline_expire", kline_expire, NULL, 60);
-	mowgli_timer_add(base_eventloop, "xline_expire", xline_expire, NULL, 60);
-	mowgli_timer_add(base_eventloop, "qline_expire", qline_expire, NULL, 60);
+	mowgli_timer_add(base_eventloop, "kline_expire", kline_expire, NULL, SECONDS_PER_MINUTE);
+	mowgli_timer_add(base_eventloop, "xline_expire", xline_expire, NULL, SECONDS_PER_MINUTE);
+	mowgli_timer_add(base_eventloop, "qline_expire", qline_expire, NULL, SECONDS_PER_MINUTE);
 
 	/* check authcookie expires every ten minutes */
-	mowgli_timer_add(base_eventloop, "authcookie_expire", authcookie_expire, NULL, 600);
+	mowgli_timer_add(base_eventloop, "authcookie_expire", authcookie_expire, NULL, 10 * SECONDS_PER_MINUTE);
 
 	me.connected = false;
 	uplink_connect();

@@ -49,7 +49,7 @@ authcookie_create(struct myuser *mu)
 	struct authcookie *const au = mowgli_heap_alloc(authcookie_heap);
 	au->ticket = random_string(AUTHCOOKIE_LENGTH);
 	au->myuser = mu;
-	au->expire = CURRTIME + 3600;
+	au->expire = CURRTIME + SECONDS_PER_HOUR;
 
 	mowgli_node_add(au, &au->node, &authcookie_list);
 

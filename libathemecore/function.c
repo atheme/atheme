@@ -253,13 +253,13 @@ timediff(time_t seconds)
 	static char buf[BUFSIZE];
 	long unsigned days, hours, minutes;
 
-	days = seconds / 86400;
-	seconds %= 86400;
-	hours = seconds / 3600;
-	hours %= 3600;
-	minutes = seconds / 60;
-	minutes %= 60;
-	seconds %= 60;
+	days = seconds / SECONDS_PER_DAY;
+	seconds %= SECONDS_PER_DAY;
+	hours = seconds / SECONDS_PER_HOUR;
+	hours %= SECONDS_PER_HOUR;
+	minutes = seconds / SECONDS_PER_MINUTE;
+	minutes %= SECONDS_PER_MINUTE;
+	seconds %= SECONDS_PER_MINUTE;
 
 	snprintf(buf, sizeof(buf), "%lu day%s, %lu:%02lu:%02lu", days, (days == 1) ? "" : "s", hours, minutes, (long unsigned) seconds);
 
@@ -734,7 +734,7 @@ sendemail(struct user *u, struct myuser *mu, const char *type, const char *email
 	emailcount++;
 	if (emailcount > me.emaillimit)
 	{
-		if (CURRTIME - lastwallops > 60)
+		if ((CURRTIME - lastwallops) > SECONDS_PER_MINUTE)
 		{
 			wallops("Rejecting email for %s[%s@%s] due to too high load (type '%s' to %s <%s>)",
 					u->nick, u->user, u->vhost,

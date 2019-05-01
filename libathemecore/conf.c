@@ -1037,10 +1037,10 @@ conf_check(void)
 		fix_global_template_flags();
 	}
 
-	if (config_options.commit_interval < 60 || config_options.commit_interval > 3600)
+	if (config_options.commit_interval < SECONDS_PER_MINUTE || config_options.commit_interval > SECONDS_PER_HOUR)
 	{
 		slog(LG_INFO, "conf_check(): invalid `commit_interval' set in %s; defaulting to 5 minutes", config_file);
-		config_options.commit_interval = 300;
+		config_options.commit_interval = 5 * SECONDS_PER_MINUTE;
 	}
 
 	return true;
