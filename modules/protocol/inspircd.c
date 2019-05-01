@@ -576,7 +576,7 @@ inspircd_topic_sts(struct channel *c, struct user *source, const char *setter, t
 	// Tweaking a topic
 	else if (ts == prevts)
 	{
-		ts += SECONDS_PER_MINUTE;
+		ts -= SECONDS_PER_MINUTE;
 		sts(":%s FTOPIC %s %lu %s :%s", source->uid, c->name, (unsigned long)ts, setter, topic);
 		c->topicts = ts;
 		return;
