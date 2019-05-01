@@ -42,7 +42,7 @@ mod_init(struct module *const restrict m)
 
 	add_bool_conf_item("AUTOFIX", &chanfix->conf_table, 0, &chanfix_do_autofix, false);
 
-	chanfix_autofix_timer = mowgli_timer_add(base_eventloop, "chanfix_autofix", chanfix_autofix_ev, NULL, 60);
+	chanfix_autofix_timer = mowgli_timer_add(base_eventloop, "chanfix_autofix", chanfix_autofix_ev, NULL, SECONDS_PER_MINUTE);
 
 	m->mflags |= MODFLAG_DBHANDLER;
 }

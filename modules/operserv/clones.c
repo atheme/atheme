@@ -37,7 +37,7 @@ static struct service *serviceinfo = NULL;
 static mowgli_list_t clone_exempts;
 static bool kline_enabled;
 static unsigned int grace_count;
-static long kline_duration = 3600;
+static long kline_duration = SECONDS_PER_HOUR;
 static unsigned int clones_allowed, clones_warn;
 static unsigned int clones_dbversion = 1;
 
@@ -338,15 +338,15 @@ os_cmd_clones_addexempt(struct sourceinfo *si, int parc, char *parv[])
 			*reason++ = '\0';
 		expiry += 3;
 
-		duration = (atol(expiry) * 60);
+		duration = (atol(expiry) * SECONDS_PER_MINUTE);
 		while (isdigit((unsigned char)*expiry))
 			++expiry;
 		if (*expiry == 'h' || *expiry == 'H')
-			duration *= 60;
+			duration *= MINUTES_PER_HOUR;
 		else if (*expiry == 'd' || *expiry == 'D')
-			duration *= 1440;
+			duration *= MINUTES_PER_DAY;
 		else if (*expiry == 'w' || *expiry == 'W')
-			duration *= 10080;
+			duration *= MINUTES_PER_WEEK;
 		else if (*expiry == '\0')
 			;
 		else
@@ -573,15 +573,15 @@ os_cmd_clones_setexempt(struct sourceinfo *si, int parc, char *parv[])
 					}
 					else
 					{
-						duration = (atol(expiry) * 60);
+						duration = (atol(expiry) * SECONDS_PER_MINUTE);
 						while (isdigit((unsigned char)*expiry))
 							++expiry;
 						if (*expiry == 'h' || *expiry == 'H')
-							duration *= 60;
+							duration *= MINUTES_PER_HOUR;
 						else if (*expiry == 'd' || *expiry == 'D')
-							duration *= 1440;
+							duration *= MINUTES_PER_DAY;
 						else if (*expiry == 'w' || *expiry == 'W')
-							duration *= 10080;
+							duration *= MINUTES_PER_WEEK;
 						else if (*expiry == '\0')
 							;
 						else
@@ -637,19 +637,19 @@ os_cmd_clones_duration(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!s)
 	{
-		command_success_nodata(si, _("Clone ban duration set to \2%ld\2 (%ld seconds)"), kline_duration / 60, kline_duration);
+		command_success_nodata(si, _("Clone ban duration set to \2%ld\2 (%ld seconds)"), kline_duration / SECONDS_PER_MINUTE, kline_duration);
 		return;
 	}
 
-	duration = (atol(s) * 60);
+	duration = (atol(s) * SECONDS_PER_MINUTE);
 	while (isdigit((unsigned char)*s))
 		s++;
 	if (*s == 'h' || *s == 'H')
-		duration *= 60;
+		duration *= MINUTES_PER_HOUR;
 	else if (*s == 'd' || *s == 'D')
-		duration *= 1440;
+		duration *= MINUTES_PER_DAY;
 	else if (*s == 'w' || *s == 'W')
-		duration *= 10080;
+		duration *= MINUTES_PER_WEEK;
 	else if (*s == '\0' || *s == 'm' || *s == 'M')
 		;
 	else

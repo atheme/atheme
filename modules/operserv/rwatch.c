@@ -478,7 +478,7 @@ rwatch_newuser(hook_user_nick_t *data)
 							u->host, u->nick, u->user, u->host,
 							rw->regex, rw->reason);
 					if (! (u->flags & UF_KLINESENT)) {
-						kline_sts("*", "*", u->host, 86400, rw->reason);
+						kline_sts("*", "*", u->host, SECONDS_PER_DAY, rw->reason);
 						u->flags |= UF_KLINESENT;
 					}
 				}
@@ -494,7 +494,7 @@ rwatch_newuser(hook_user_nick_t *data)
 					slog(LG_VERBOSE, "rwatch_newuser(): quaranting *@%s (user %s!%s@%s matches %s %s)",
 							u->host, u->nick, u->user, u->host,
 							rw->regex, rw->reason);
-					quarantine_sts(service_find("operserv")->me, u, 86400, rw->reason);
+					quarantine_sts(service_find("operserv")->me, u, SECONDS_PER_DAY, rw->reason);
 				}
 			}
 		}
@@ -548,7 +548,7 @@ rwatch_nickchange(hook_user_nick_t *data)
 							u->host, data->oldnick, u->nick, u->user, u->host,
 							rw->regex, rw->reason);
 					if (! (u->flags & UF_KLINESENT)) {
-						kline_sts("*", "*", u->host, 86400, rw->reason);
+						kline_sts("*", "*", u->host, SECONDS_PER_DAY, rw->reason);
 						u->flags |= UF_KLINESENT;
 					}
 				}
@@ -564,7 +564,7 @@ rwatch_nickchange(hook_user_nick_t *data)
 					slog(LG_VERBOSE, "rwatch_newuser(): quaranting *@%s (user %s!%s@%s matches %s %s)",
 							u->host, u->nick, u->user, u->host,
 							rw->regex, rw->reason);
-					quarantine_sts(service_find("operserv")->me, u, 86400, rw->reason);
+					quarantine_sts(service_find("operserv")->me, u, SECONDS_PER_DAY, rw->reason);
 				}
 			}
 		}

@@ -383,7 +383,7 @@ ts6_topic_sts(struct channel *c, struct user *source, const char *setter, time_t
 		// Tweaking a topic
 		else if (ts == prevts)
 		{
-			ts -= 60;
+			ts -= SECONDS_PER_MINUTE;
 			sts(":%s TB %s %lu %s :%s", ME, c->name, (unsigned long)ts, setter, topic);
 			c->topicts = ts;
 			return;
@@ -488,7 +488,7 @@ ts6_fnc_sts(struct user *source, struct user *u, const char *newnick, int type)
 	sts(":%s ENCAP %s RSFNC %s %s %lu %lu", ME,
 			u->server->name,
 			CLIENT_NAME(u), newnick,
-			(unsigned long)(CURRTIME - 60),
+			(unsigned long)(CURRTIME - SECONDS_PER_MINUTE),
 			(unsigned long)u->ts);
 }
 

@@ -983,7 +983,7 @@ bs_part(hook_channel_joinpart_t *hdata)
 		return;
 
 	bot = bs_mychan_find_bot(mc);
-	if (CURRTIME - mc->used >= 3600)
+	if ((CURRTIME - mc->used) >= SECONDS_PER_HOUR)
 		if (chanacs_user_flags(mc, cu->user) & CA_USEDUPDATE)
 			mc->used = CURRTIME;
 

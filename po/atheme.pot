@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <ircs://chat.freenode.net:6697/atheme-i18n>\n"
-"POT-Creation-Date: 2019-04-27 05:30+0000\n"
+"POT-Creation-Date: 2019-05-01 21:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,7 +44,7 @@ msgid ""
 "flexibility than the /LIST command."
 msgstr ""
 
-#: modules/nickserv/help.c:55
+#: modules/nickserv/help.c:56
 #, c-format
 msgid ""
 "%s allows users to 'register' a nickname, and stop\n"
@@ -100,12 +100,12 @@ msgstr ""
 msgid "%s already has NOFIX set."
 msgstr ""
 
-#: modules/rpgserv/enable.c:66
+#: modules/rpgserv/enable.c:78
 #, c-format
 msgid "%s already has RPGServ disabled."
 msgstr ""
 
-#: modules/rpgserv/enable.c:35
+#: modules/rpgserv/enable.c:41
 #, c-format
 msgid "%s already has RPGServ enabled."
 msgstr ""
@@ -2828,7 +2828,7 @@ msgstr ""
 msgid "Difficulty setting must be between 1 and 10."
 msgstr ""
 
-#: modules/rpgserv/enable.c:86
+#: modules/rpgserv/enable.c:98
 msgid "Disable RPGServ for a channel."
 msgstr ""
 
@@ -2972,7 +2972,7 @@ msgstr ""
 msgid "Enable Caller-ID on BotServ actions or messages."
 msgstr ""
 
-#: modules/rpgserv/enable.c:77
+#: modules/rpgserv/enable.c:89
 msgid "Enable RPGServ for a channel."
 msgstr ""
 
@@ -3613,7 +3613,7 @@ msgid ""
 "re-registered."
 msgstr ""
 
-#: modules/nickserv/help.c:64
+#: modules/nickserv/help.c:65
 #, c-format
 msgid ""
 "If a registered nick is not used by the owner for %u\n"
@@ -5189,12 +5189,12 @@ msgstr ""
 msgid "RELEASE is disabled."
 msgstr ""
 
-#: modules/rpgserv/enable.c:72
+#: modules/rpgserv/enable.c:84
 #, c-format
 msgid "RPGServ disabled for %s."
 msgstr ""
 
-#: modules/rpgserv/enable.c:41
+#: modules/rpgserv/enable.c:47
 #, c-format
 msgid "RPGServ enabled for %s."
 msgstr ""
@@ -6393,7 +6393,7 @@ msgstr ""
 msgid "Syntax: DF <dice>"
 msgstr ""
 
-#: modules/rpgserv/enable.c:53
+#: modules/rpgserv/enable.c:59
 msgid "Syntax: DISABLE <channel>"
 msgstr ""
 

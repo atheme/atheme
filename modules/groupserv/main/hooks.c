@@ -208,7 +208,7 @@ osinfo_hook(struct sourceinfo *si)
 void
 gs_hooks_init(void)
 {
-	mygroup_expire_timer = mowgli_timer_add(base_eventloop, "mygroup_expire", mygroup_expire, NULL, 3600);
+	mygroup_expire_timer = mowgli_timer_add(base_eventloop, "mygroup_expire", mygroup_expire, NULL, SECONDS_PER_HOUR);
 
 	hook_add_event("myuser_delete");
 	hook_add_event("user_info");

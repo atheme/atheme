@@ -117,16 +117,16 @@ parse_age(char *s)
 {
 	time_t duration;
 
-	duration = (atol(s) * 60);
+	duration = (atol(s) * SECONDS_PER_MINUTE);
 	while (isdigit((unsigned char)*s))
 		s++;
 
 	if (*s == 'h' || *s == 'H')
-		duration *= 60;
+		duration *= MINUTES_PER_HOUR;
 	else if (*s == 'd' || *s == 'D')
-		duration *= 1440;
+		duration *= MINUTES_PER_DAY;
 	else if (*s == 'w' || *s == 'W')
-		duration *= 10080;
+		duration *= MINUTES_PER_WEEK;
 	else if (*s == '\0')
 		;
 	else

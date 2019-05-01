@@ -115,7 +115,7 @@ os_cmd_greplog(struct sourceinfo *si, int parc, char *parv[])
 			mowgli_strlcpy(logfile, baselog, sizeof logfile);
 		else
 		{
-			t = CURRTIME - day * 86400;
+			t = CURRTIME - (day * SECONDS_PER_DAY);
 			tm = localtime(&t);
 			snprintf(logfile, sizeof logfile, "%s.%04u%02u%02u",
 					baselog, (unsigned int) (tm->tm_year + 1900),

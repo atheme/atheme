@@ -637,7 +637,7 @@ static void
 unreal_fnc_sts(struct user *source, struct user *u, const char *newnick, int type)
 {
 	sts(":%s SVSNICK %s %s %lu", ME, CLIENT_NAME(u), newnick,
-			(unsigned long)(CURRTIME - 60));
+			(unsigned long)(CURRTIME - SECONDS_PER_MINUTE));
 }
 
 static void

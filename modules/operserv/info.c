@@ -17,8 +17,8 @@ os_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_GET, "INFO");
 
-	command_success_nodata(si, _("How often services writes changes to the database: %u minutes"), config_options.commit_interval / 60);
-	command_success_nodata(si, _("Default kline time: %u days"), config_options.kline_time / 86400);
+	command_success_nodata(si, _("How often services writes changes to the database: %u minutes"), config_options.commit_interval / SECONDS_PER_MINUTE);
+	command_success_nodata(si, _("Default kline time: %u days"), config_options.kline_time / SECONDS_PER_DAY);
 	command_success_nodata(si, _("Will services be sending WALLOPS/GLOBOPS about various things: %s"), config_options.silent ? _("No") : _("Yes"));
 	command_success_nodata(si, _("How many messages before a flood is triggered, (if 0, flood protection is disabled): %u"), config_options.flood_msgs);
 	command_success_nodata(si, _("How long before the flood counter resets: %u seconds"), config_options.flood_time);
@@ -26,8 +26,8 @@ os_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("Number of commands used before ratelimiting starts, (if 0, ratelimiting is disabled): %u"), config_options.ratelimit_uses);
 	command_success_nodata(si, _("How long before ratelimiting counter resets, (if 0, ratelimiting is disabled): %u seconds"), config_options.ratelimit_period);
 	command_success_nodata(si, _("No nick ownership enabled: %s"), nicksvs.no_nick_ownership ? _("Yes") : _("No"));
-        command_success_nodata(si, _("Nickname expiration time: %u days"), nicksvs.expiry / 86400);
-	command_success_nodata(si, _("Nickname enforce expiry time: %u days"), nicksvs.enforce_expiry / 86400);
+	command_success_nodata(si, _("Nickname expiration time: %u days"), nicksvs.expiry / SECONDS_PER_DAY);
+	command_success_nodata(si, _("Nickname enforce expiry time: %u days"), nicksvs.enforce_expiry / SECONDS_PER_DAY);
 	command_success_nodata(si, _("Default nickname enforce delay: %u seconds"), nicksvs.enforce_delay);
 	command_success_nodata(si, _("Nickname enforce prefix: %s"), nicksvs.enforce_prefix);
 	command_success_nodata(si, _("Maximum number of logins allowed per username: %u"), me.maxlogins);
@@ -35,7 +35,7 @@ os_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	if (!nicksvs.no_nick_ownership)
 		command_success_nodata(si, _("Maximum number of nicknames that one user can own: %u"), nicksvs.maxnicks);
 	command_success_nodata(si, _("Maximum number of channels that one user can own: %u"), chansvs.maxchans);
-        command_success_nodata(si, _("Channel expiration time: %u days"), chansvs.expiry / 86400);
+	command_success_nodata(si, _("Channel expiration time: %u days"), chansvs.expiry / SECONDS_PER_DAY);
 	if (chansvs.fantasy)
 		command_success_nodata(si, _("Default channel fantasy trigger: %s"), chansvs.trigger);
 	command_success_nodata(si, _("Maximum number of entries allowed in a channel access list (if 0, unlimited): %u"), chansvs.maxchanacs);

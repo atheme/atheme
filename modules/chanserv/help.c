@@ -61,7 +61,7 @@ cs_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED 
 	{
 		(void) command_success_nodata(si, _("Please note that channels will expire after %u days of inactivity,\n"
 		                                    "or if there are no eligible channel successors."),
-		                                    (chansvs.expiry / 86400));
+		                                    (chansvs.expiry / SECONDS_PER_DAY));
 
 		(void) help_display_newline(si);
 

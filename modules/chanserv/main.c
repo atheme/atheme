@@ -520,7 +520,7 @@ cs_part(hook_channel_joinpart_t *hdata)
 	if (metadata_find(mc, "private:botserv:bot-assigned") != NULL)
 		return;
 
-	if (CURRTIME - mc->used >= 3600)
+	if ((CURRTIME - mc->used) >= SECONDS_PER_HOUR)
 		if (chanacs_user_flags(mc, cu->user) & CA_USEDUPDATE)
 			mc->used = CURRTIME;
 
@@ -905,7 +905,7 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 	hook_add_channel_mode_change(cs_bounce_mode_change);
 	hook_add_shutdown(on_shutdown);
 
-	cs_leave_empty_timer = mowgli_timer_add(base_eventloop, "cs_leave_empty", cs_leave_empty, NULL, 300);
+	cs_leave_empty_timer = mowgli_timer_add(base_eventloop, "cs_leave_empty", cs_leave_empty, NULL, 5 * SECONDS_PER_MINUTE);
 
 	// chanserv{} block
 	add_bool_conf_item("FANTASY", &chansvs.me->conf_table, 0, &chansvs.fantasy, false);

@@ -576,7 +576,7 @@ inspircd_topic_sts(struct channel *c, struct user *source, const char *setter, t
 	// Tweaking a topic
 	else if (ts == prevts)
 	{
-		ts += 60;
+		ts += SECONDS_PER_MINUTE;
 		sts(":%s FTOPIC %s %lu %s :%s", source->uid, c->name, (unsigned long)ts, setter, topic);
 		c->topicts = ts;
 		return;
@@ -696,7 +696,7 @@ inspircd_fnc_sts(struct user *source, struct user *u, const char *newnick, int t
 {
 	// svsnick can only be sent by a server
 	sts(":%s SVSNICK %s %s %lu", me.numeric, u->uid, newnick,
-		(unsigned long)(CURRTIME - 60));
+		(unsigned long)(CURRTIME - SECONDS_PER_MINUTE));
 }
 
 static void

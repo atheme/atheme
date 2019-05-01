@@ -1070,7 +1070,7 @@ mod_init(struct module *const restrict m)
 	(void) hook_add_event("user_can_login");
 	(void) hook_add_event("user_can_logout");
 
-	sasl_delete_stale_timer = mowgli_timer_add(base_eventloop, "sasl_delete_stale", &sasl_delete_stale, NULL, 30);
+	sasl_delete_stale_timer = mowgli_timer_add(base_eventloop, "sasl_delete_stale", &sasl_delete_stale, NULL, SECONDS_PER_MINUTE / 2);
 	authservice_loaded++;
 
 	(void) add_bool_conf_item("HIDE_SERVER_NAMES", &saslsvs->conf_table, 0, &sasl_hide_server_names, false);

@@ -60,7 +60,7 @@ static mowgli_patricia_t **cs_set_cmdtree = NULL;
 static mowgli_eventloop_timer_t *mqueue_gc_timer = NULL;
 static mowgli_eventloop_timer_t *antiflood_unenforce_timer = NULL;
 
-static time_t antiflood_msg_time = 60;
+static time_t antiflood_msg_time = SECONDS_PER_MINUTE;
 static size_t antiflood_msg_count = 10;
 
 static void
@@ -162,7 +162,7 @@ mqueue_gc(void *unused)
 
 	MOWGLI_PATRICIA_FOREACH(mq, &iter, mqueue_trie)
 	{
-		if ((mq->last_used + 3600) < CURRTIME)
+		if ((mq->last_used + SECONDS_PER_HOUR) < CURRTIME)
 			mqueue_destroy(mq);
 	}
 }
@@ -280,7 +280,7 @@ antiflood_enforce_kickban(struct user *u, struct channel *c)
 static void
 antiflood_enforce_kline(struct user *u, struct channel *c)
 {
-	kline_add_user(u, "Flooding", 86400, chansvs.nick);
+	kline_add_user(u, "Flooding", SECONDS_PER_DAY, chansvs.nick);
 	slog(LG_INFO, "ANTIFLOOD:ENFORCE:AKILL: \2%s!%s@%s\2 from \2%s\2", u->nick, u->user, u->vhost, c->name);
 }
 
@@ -519,9 +519,9 @@ mod_init(struct module *m)
 
 	mqueue_heap = sharedheap_get(sizeof(struct flood_message_queue));
 	mqueue_trie = mowgli_patricia_create(irccasecanon);
-	mqueue_gc_timer = mowgli_timer_add(base_eventloop, "mqueue_gc", mqueue_gc, NULL, 300);
+	mqueue_gc_timer = mowgli_timer_add(base_eventloop, "mqueue_gc", mqueue_gc, NULL, 5 * SECONDS_PER_MINUTE);
 
-	antiflood_unenforce_timer = mowgli_timer_add(base_eventloop, "antiflood_unenforce", antiflood_unenforce_timer_cb, NULL, 3600);
+	antiflood_unenforce_timer = mowgli_timer_add(base_eventloop, "antiflood_unenforce", antiflood_unenforce_timer_cb, NULL, SECONDS_PER_HOUR);
 
 	command_add(&cs_set_antiflood, *cs_set_cmdtree);
 

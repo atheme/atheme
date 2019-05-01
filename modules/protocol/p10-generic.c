@@ -205,7 +205,7 @@ static void
 p10_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
 	// hold permanent akills for four weeks -- jilles
-	sts("%s GL * +%s@%s %ld :%s", me.numeric, user, host, duration > 0 ? duration : 2419200, reason);
+	sts("%s GL * +%s@%s %ld :%s", me.numeric, user, host, duration > 0 ? duration : (4 * SECONDS_PER_WEEK), reason);
 }
 
 static void
@@ -218,7 +218,7 @@ static void
 p10_xline_sts(const char *server, const char *realname, long duration, const char *reason)
 {
 	// hold permanent sglines for four weeks -- jilles
-	sts("%s GL * +$R%s %ld :%s", me.numeric, realname, duration > 0 ? duration : 2419200, reason);
+	sts("%s GL * +$R%s %ld :%s", me.numeric, realname, duration > 0 ? duration : (4 * SECONDS_PER_WEEK), reason);
 }
 
 static void
@@ -237,7 +237,7 @@ p10_qline_sts(const char *server, const char *name, long duration, const char *r
 	}
 
 	// hold permanent sqlines for four weeks -- jilles
-	sts("%s GL * +%s %ld :%s", me.numeric, name, duration > 0 ? duration : 2419200, reason);
+	sts("%s GL * +%s %ld :%s", me.numeric, name, duration > 0 ? duration : (4 * SECONDS_PER_WEEK), reason);
 }
 
 static void
@@ -322,8 +322,9 @@ p10_jupe(const char *server, const char *reason)
 	/* get rid of local deactivation too */
 	s = server_find(server);
 	if (s != NULL && s->uplink != NULL)
-		sts("%s JU %s +%s %d %lu :%s", me.numeric, s->uplink->sid, server, 86400, (unsigned long)CURRTIME, reason);
-	sts("%s JU * +%s %d %lu :%s", me.numeric, server, 86400, (unsigned long)CURRTIME, reason);
+		sts("%s JU %s +%s %d %lu :%s", me.numeric, s->uplink->sid, server, SECONDS_PER_DAY, (unsigned long)CURRTIME, reason);
+
+	sts("%s JU * +%s %d %lu :%s", me.numeric, server, SECONDS_PER_DAY, (unsigned long)CURRTIME, reason);
 }
 
 static void

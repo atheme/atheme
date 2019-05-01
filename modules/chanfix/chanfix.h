@@ -14,21 +14,21 @@
 
 #define CHANFIX_OP_THRESHHOLD   3U
 #define CHANFIX_ACCOUNT_WEIGHT  1.5f
-#define CHANFIX_MIN_FIX_SCORE	12U
+#define CHANFIX_MIN_FIX_SCORE   12U
 
-#define	CHANFIX_INITIAL_STEP	0.70f
-#define CHANFIX_FINAL_STEP	0.30f
+#define CHANFIX_INITIAL_STEP    0.70f
+#define CHANFIX_FINAL_STEP      0.30f
 
-#define CHANFIX_RETENTION_TIME	(86400U * 28U)
-#define CHANFIX_FIX_TIME	(60U * 60U)
-#define CHANFIX_GATHER_INTERVAL	300U
-#define CHANFIX_EXPIRE_INTERVAL 3600U
+#define CHANFIX_RETENTION_TIME  (4U * SECONDS_PER_WEEK)
+#define CHANFIX_FIX_TIME        SECONDS_PER_HOUR
+#define CHANFIX_GATHER_INTERVAL (5U * SECONDS_PER_MINUTE)
+#define CHANFIX_EXPIRE_INTERVAL SECONDS_PER_HOUR
 
 /* This value has been chosen such that the maximum score is about 8064,
  * which is the number of CHANFIX_GATHER_INTERVALs in CHANFIX_RETENTION_TIME.
  * Higher scores would decay more than they can gain (12 per hour).
  */
-#define CHANFIX_EXPIRE_DIVISOR	672U
+#define CHANFIX_EXPIRE_DIVISOR  672U
 
 struct chanfix_channel
 {

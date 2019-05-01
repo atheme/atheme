@@ -385,7 +385,7 @@ static void
 bahamut_fnc_sts(struct user *source, struct user *u, const char *newnick, int type)
 {
 	sts(":%s SVSNICK %s %s %lu", source->nick, u->nick, newnick,
-			(unsigned long)(CURRTIME - 60));
+			(unsigned long)(CURRTIME - SECONDS_PER_MINUTE));
 }
 
 static void

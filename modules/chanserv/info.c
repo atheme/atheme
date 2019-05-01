@@ -76,7 +76,7 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("Registered : %s (%s ago)"), strfbuf, time_ago(mc->registered));
 
-	if (CURRTIME - mc->used >= 86400)
+	if ((CURRTIME - mc->used) >= SECONDS_PER_DAY)
 	{
 		if (hide_info)
 			command_success_nodata(si, _("Last used  : (about %u week(s) ago)"), (unsigned int)((CURRTIME - mc->used) / SECONDS_PER_WEEK));

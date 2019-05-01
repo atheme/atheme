@@ -423,7 +423,7 @@ httpd_config_ready(void *vptr)
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
-	httpd_checkidle_timer = mowgli_timer_add(base_eventloop, "httpd_checkidle", httpd_checkidle, NULL, 60);
+	httpd_checkidle_timer = mowgli_timer_add(base_eventloop, "httpd_checkidle", httpd_checkidle, NULL, SECONDS_PER_MINUTE);
 
 	// This module needs a rehash to initialize fully if loaded at run time
 	hook_add_event("config_ready");
