@@ -1130,7 +1130,6 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 					iplen = 0;
 				af = AF_INET;
 			}
-#ifdef AF_INET6
 			else if (strlen(ipb64) == 24)
 			{
 				iplen = 16;
@@ -1138,7 +1137,6 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 					iplen = 0;
 				af = AF_INET6;
 			}
-#endif
 			if (iplen != 0)
 				if (!inet_ntop(af, ipdata, ipstring, sizeof ipstring))
 					iplen = 0;
