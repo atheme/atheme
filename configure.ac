@@ -88,8 +88,8 @@ LIBS="${LIBS} ${DYNAMIC_LD_LIBS}"
 
 dnl Checks for headers, libraries, and library functions
 LIBS_SAVED="${LIBS}"
-AC_USE_SYSTEM_EXTENSIONS
 AC_DEFINE([__STDC_WANT_LIB_EXT1__], [1], [We want ISO 9899:2011 Annex K memory functions if available])
+AC_USE_SYSTEM_EXTENSIONS
 AC_CHECK_HEADERS([ctype.h dirent.h errno.h inttypes.h libintl.h limits.h locale.h netdb.h netinet/in.h], [], [], [])
 AC_CHECK_HEADERS([regex.h signal.h stdarg.h stdbool.h stddef.h stdint.h stdio.h stdlib.h string.h], [], [], [])
 AC_CHECK_HEADERS([strings.h sys/file.h sys/resource.h sys/stat.h sys/time.h sys/types.h sys/wait.h], [], [], [])

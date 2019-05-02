@@ -4847,6 +4847,9 @@ LIBS="${LIBS} ${DYNAMIC_LD_LIBS}"
 
 LIBS_SAVED="${LIBS}"
 
+$as_echo "#define __STDC_WANT_LIB_EXT1__ 1" >>confdefs.h
+
+
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -5174,9 +5177,6 @@ $as_echo "$ac_cv_safe_to_define___extensions__" >&6; }
 
   $as_echo "#define _TANDEM_SOURCE 1" >>confdefs.h
 
-
-
-$as_echo "#define __STDC_WANT_LIB_EXT1__ 1" >>confdefs.h
 
 for ac_header in ctype.h dirent.h errno.h inttypes.h libintl.h limits.h locale.h netdb.h netinet/in.h
 do :
