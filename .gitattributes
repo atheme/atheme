@@ -1,7 +1,7 @@
 /aclocal.m4                     linguist-generated
 /autoconf/                      linguist-generated
 /configure                      linguist-generated
-/include/sysconf.h.in           linguist-generated
+/include/atheme/sysconf.h.in    linguist-generated
 /po/atheme.pot                  linguist-generated
 /po/POTFILES.in                 linguist-generated
 
