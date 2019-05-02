@@ -96,8 +96,14 @@ do_list(struct sourceinfo *si, struct mychan *mc, unsigned int flags)
 		}
 	}
 
-	command_success_nodata(si, _("Entry Nickname/Host          Flags"));
-	command_success_nodata(si, "----- ---------------------- -----");
+	/* TRANSLATORS: Adjust these numbers only if the translated column
+	 * headers would exceed that length. Pay particular attention to
+	 * also changing the numbers in the format string inside the loop
+	 * below to match them, and beware that these format strings are
+	 * shared across multiple files!
+	 */
+	command_success_nodata(si, _("%-8s %-22s %s"), _("Entry"), _("Nickname/Host"), _("Flags"));
+	command_success_nodata(si, "----------------------------------------------------------------");
 
 	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
@@ -124,15 +130,15 @@ do_list(struct sourceinfo *si, struct mychan *mc, unsigned int flags)
 			setter_name = "?";
 
 		if (template != NULL)
-			command_success_nodata(si, _("%-5u %-22s %-20s (%s) [modified %s ago, on %s, by %s]"),
+			command_success_nodata(si, _("%-8u %-22s %-20s (%s) [modified %s ago, on %s, by %s]"),
 				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), template, mod_ago, mod_date, setter_name);
 		else
-			command_success_nodata(si, _("%-5u %-22s %-20s [modified %s ago, on %s, by %s]"),
+			command_success_nodata(si, _("%-8u %-22s %-20s [modified %s ago, on %s, by %s]"),
 				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), mod_ago, mod_date, setter_name);
 		i++;
 	}
 
-	command_success_nodata(si, "----- ---------------------- -----");
+	command_success_nodata(si, "----------------------------------------------------------------");
 	command_success_nodata(si, _("End of \2%s\2 FLAGS listing."), mc->name);
 
 	if (operoverride)

@@ -156,7 +156,7 @@ os_cmd_ignore_list(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	command_success_nodata(si, _("Current Ignore list entries:"));
-	command_success_nodata(si, "-------------------------");
+	command_success_nodata(si, "----------------------------------------------------------------");
 
 	MOWGLI_ITER_FOREACH(n, svs_ignore_list.head)
 	{
@@ -169,11 +169,8 @@ os_cmd_ignore_list(struct sourceinfo *si, int parc, char *parv[])
 		i++;
 	}
 
-	command_success_nodata(si, "-------------------------");
-
+	command_success_nodata(si, "----------------------------------------------------------------");
 	logcommand(si, CMDLOG_ADMIN, "IGNORE:LIST");
-
-	return;
 }
 
 static struct command os_ignore = {

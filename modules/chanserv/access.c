@@ -484,8 +484,14 @@ cs_cmd_access_list(struct sourceinfo *si, int parc, char *parv[])
 		}
 	}
 
-	command_success_nodata(si, _("Entry Nickname/Host          Role"));
-	command_success_nodata(si, "----- ---------------------- ----");
+	/* TRANSLATORS: Adjust these numbers only if the translated column
+	 * headers would exceed that length. Pay particular attention to
+	 * also changing the numbers in the format string inside the loop
+	 * below to match them, and beware that these format strings are
+	 * shared across multiple files!
+	 */
+	command_success_nodata(si, _("%-8s %-22s %s"), _("Entry"), _("Nickname/Host"), _("Role"));
+	command_success_nodata(si, "----------------------------------------------------------------");
 
 	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
@@ -498,12 +504,12 @@ cs_cmd_access_list(struct sourceinfo *si, int parc, char *parv[])
 
 		role = get_template_name(mc, ca->level);
 
-		command_success_nodata(si, _("%-5u %-22s %s"), i, ca->entity ? ca->entity->name : ca->host, role);
+		command_success_nodata(si, _("%-8u %-22s %s"), i, ca->entity ? ca->entity->name : ca->host, role);
 
 		i++;
 	}
 
-	command_success_nodata(si, "----- ---------------------- ----");
+	command_success_nodata(si, "----------------------------------------------------------------");
 	command_success_nodata(si, _("End of \2%s\2 ACCESS listing."), channel);
 
 	if (operoverride)

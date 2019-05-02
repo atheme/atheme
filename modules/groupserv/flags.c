@@ -50,20 +50,26 @@ gs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 	{
 		unsigned int i = 1;
 
-		command_success_nodata(si, _("Entry Account                Flags"));
-		command_success_nodata(si, "----- ---------------------- -----");
+		/* TRANSLATORS: Adjust these numbers only if the translated column
+		 * headers would exceed that length. Pay particular attention to
+		 * also changing the numbers in the format string inside the loop
+		 * below to match them, and beware that these format strings are
+		 * shared across multiple files!
+		 */
+		command_success_nodata(si, _("%-8s %-22s %s"), _("Entry"), _("Account"), _("Flags"));
+		command_success_nodata(si, "----------------------------------------------------------------");
 
 		MOWGLI_ITER_FOREACH(n, mg->acs.head)
 		{
 			ga = n->data;
 
-			command_success_nodata(si, "%-5u %-22s %s", i, ga->mt->name,
+			command_success_nodata(si, _("%-8u %-22s %s"), i, ga->mt->name,
 					       gflags_tostr(ga_flags, ga->flags));
 
 			i++;
 		}
 
-		command_success_nodata(si, "----- ---------------------- -----");
+		command_success_nodata(si, "----------------------------------------------------------------");
 		command_success_nodata(si, _("End of \2%s\2 FLAGS listing."), parv[0]);
 
 		if (operoverride)

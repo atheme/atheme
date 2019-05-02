@@ -38,8 +38,16 @@ os_cmd_soper_list(struct sourceinfo *si, int parc, char *parv[])
 	const char *typestr;
 
 	logcommand(si, CMDLOG_GET, "SOPER:LIST");
-	command_success_nodata(si, "%-20s %-5s %-20s", _("Account"), _("Type"), _("Operclass"));
-	command_success_nodata(si, "%-20s %-5s %-20s", "--------------------", "-----", "--------------------");
+
+	/* TRANSLATORS: Adjust these numbers only if the translated column
+	 * headers would exceed that length. Pay particular attention to
+	 * also changing the numbers in the format string inside the loop
+	 * below to match them, and beware that these format strings are
+	 * shared across multiple files!
+	 */
+	command_success_nodata(si, _("%-20s %-8s %-20s"), _("Account"), _("Type"), _("Operclass"));
+	command_success_nodata(si, "--------------------------------------------------");
+
 	MOWGLI_ITER_FOREACH(n, soperlist.head)
 	{
 		soper = n->data;
@@ -49,12 +57,13 @@ os_cmd_soper_list(struct sourceinfo *si, int parc, char *parv[])
 			typestr = "Conf";
 		else
 			typestr = "Conf*";
-		command_success_nodata(si, "%-20s %-5s %-20s",
+		command_success_nodata(si, _("%-20s %-8s %-20s"),
 				soper->myuser != NULL ? entity(soper->myuser)->name : soper->name,
 				typestr,
 				soper->classname);
 	}
-	command_success_nodata(si, "%-20s %-5s %-20s", "--------------------", "-----", "--------------------");
+
+	command_success_nodata(si, "--------------------------------------------------");
 	command_success_nodata(si, _("End of services operator list."));
 }
 

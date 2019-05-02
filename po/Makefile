@@ -54,4 +54,4 @@ $(LOCALES):
 	    --update                                            \
 	    "$@" "$(POTTEMPLATE)"
 
-update-po: $(LOCALES)
+update-po: update-pot $(LOCALES)

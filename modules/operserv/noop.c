@@ -277,39 +277,55 @@ os_cmd_noop(struct sourceinfo *si, int parc, char *parv[])
 		if (type == type_all || type == type_hostmask)
 		{
 			unsigned int i = 1;
+
 			command_success_nodata(si, _("Hostmask NOOP list (%zu entries):"), noop_hostmask_list.count);
 			command_success_nodata(si, " ");
-			command_success_nodata(si, _("Entry Hostmask                        Adder                 Reason"));
-			command_success_nodata(si, "----- ------------------------------- --------------------- --------------------------");
+
+			/* TRANSLATORS: Adjust these numbers only if the translated column
+			 * headers would exceed that length. Pay particular attention to
+			 * also changing the numbers in the format string inside the loop
+			 * below to match them, and beware that these format strings are
+			 * shared across multiple files!
+			 */
+			command_success_nodata(si, _("%-8s %-31s %-21s %s"), _("Entry"), _("Hostmask"), _("Added By"), _("Reason"));
+			command_success_nodata(si, "--------------------------------------------------------------------------------");
 
 			MOWGLI_ITER_FOREACH(n, noop_hostmask_list.head)
 			{
 				np = n->data;
 
-				command_success_nodata(si, "%-5u %-31s %-21s %s", i, np->target, np->added_by, np->reason);
+				command_success_nodata(si, _("%-8u %-31s %-21s %s"), i, np->target, np->added_by, np->reason);
 				i++;
 			}
 
-			command_success_nodata(si, "----- ------------------------------- --------------------- --------------------------");
+			command_success_nodata(si, "--------------------------------------------------------------------------------");
 			command_success_nodata(si, _("End of Hostmask NOOP list."));
 		}
 		if (type == type_all || type == type_server)
 		{
 			unsigned int i = 1;
+
 			command_success_nodata(si, _("Server NOOP list (%zu entries):"), noop_server_list.count);
 			command_success_nodata(si, " ");
-			command_success_nodata(si, _("Entry Hostmask                        Adder                 Reason"));
-			command_success_nodata(si, "----- ------------------------------- --------------------- --------------------------");
+
+			/* TRANSLATORS: Adjust these numbers only if the translated column
+			 * headers would exceed that length. Pay particular attention to
+			 * also changing the numbers in the format string inside the loop
+			 * below to match them, and beware that these format strings are
+			 * shared across multiple files!
+			 */
+			command_success_nodata(si, _("%-8s %-31s %-21s %s"), _("Entry"), _("Hostmask"), _("Added By"), _("Reason"));
+			command_success_nodata(si, "--------------------------------------------------------------------------------");
 
 			MOWGLI_ITER_FOREACH(n, noop_server_list.head)
 			{
 				np = n->data;
 
-				command_success_nodata(si, "%-5u %-31s %-21s %s", i, np->target, np->added_by, np->reason);
+				command_success_nodata(si, _("%-8u %-31s %-21s %s"), i, np->target, np->added_by, np->reason);
 				i++;
 			}
 
-			command_success_nodata(si, "----- ------------------------------- --------------------- --------------------------");
+			command_success_nodata(si, "--------------------------------------------------------------------------------");
 			command_success_nodata(si, _("End of Server NOOP list."));
 		}
 	}

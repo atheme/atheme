@@ -153,7 +153,7 @@ ms_cmd_ignore_list(struct sourceinfo *si, int parc, char *parv[])
 
 	// Throw in list header
 	command_success_nodata(si, _("Ignore list:"));
-	command_success_nodata(si, "-------------------------");
+	command_success_nodata(si, "--------------------------------");
 
 	// Iterate through list, make sure they're not in it, if last node append
 	MOWGLI_ITER_FOREACH(n, si->smu->memo_ignores.head)
@@ -166,8 +166,7 @@ ms_cmd_ignore_list(struct sourceinfo *si, int parc, char *parv[])
 	if (i == 1)
 		command_success_nodata(si, _("List empty."));
 
-	command_success_nodata(si, "-------------------------");
-	return;
+	command_success_nodata(si, "--------------------------------");
 }
 
 static struct command ms_ignore = {

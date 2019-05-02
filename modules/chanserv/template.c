@@ -20,7 +20,7 @@ display_template(const char *key, void *data, void *privdata)
 	if (def_t->flags == vopflags && !strcasecmp(key, "HOP"))
 		return 0;
 
-	command_success_nodata(si, "%-20s %s", key, bitmask_to_flags(def_t->flags));
+	command_success_nodata(si, _("%-20s %s"), key, bitmask_to_flags(def_t->flags));
 
 	return 0;
 }
@@ -28,12 +28,17 @@ display_template(const char *key, void *data, void *privdata)
 static void
 list_generic_flags(struct sourceinfo *si)
 {
-	command_success_nodata(si, "%-20s %s", _("Name"), _("Flags"));
-	command_success_nodata(si, "%-20s %s", "--------------------", "-----");
+	/* TRANSLATORS: Adjust these numbers only if the translated column
+	 * headers would exceed that length. Pay particular attention to
+	 * also changing the numbers in the format string inside the function
+	 * above to match them!
+	 */
+	command_success_nodata(si, _("%-20s %s"), _("Name"), _("Flags"));
+	command_success_nodata(si, "--------------------------------");
 
 	mowgli_patricia_foreach(global_template_dict, display_template, si);
 
-	command_success_nodata(si, "%-20s %s", "--------------------", "-----");
+	command_success_nodata(si, "--------------------------------");
 	command_success_nodata(si, _("End of network wide template list."));
 }
 
@@ -91,8 +96,14 @@ cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 
 		if (md != NULL)
 		{
-			command_success_nodata(si, "%-20s %s", _("Name"), _("Flags"));
-			command_success_nodata(si, "%-20s %s", "--------------------", "-----");
+			/* TRANSLATORS: Adjust these numbers only if the translated column
+			 * headers would exceed that length. Pay particular attention to
+			 * also changing the numbers in the format string inside the loop
+			 * below to match them, and beware that these format strings are
+			 * shared across multiple files!
+			 */
+			command_success_nodata(si, _("%-20s %s"), _("Name"), _("Flags"));
+			command_success_nodata(si, "--------------------------------");
 
 			p = md->value;
 			while (p != NULL)
@@ -103,11 +114,11 @@ cs_cmd_template(struct sourceinfo *si, int parc, char *parv[])
 				if (q == NULL)
 					break;
 				r = strchr(q, ' ');
-				command_success_nodata(si, "%-20.*s %.*s", (int)(q - p), p, r != NULL ? (int)(r - q - 1) : (int)strlen(q + 1), q + 1);
+				command_success_nodata(si, _("%-20.*s %.*s"), (int)(q - p), p, r != NULL ? (int)(r - q - 1) : (int)strlen(q + 1), q + 1);
 				p = r;
 			}
 
-			command_success_nodata(si, "%-20s %s", "--------------------", "-----");
+			command_success_nodata(si, "--------------------------------");
 			command_success_nodata(si, _("End of \2%s\2 TEMPLATE listing."), mc->name);
 		}
 		else

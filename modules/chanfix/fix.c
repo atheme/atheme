@@ -499,7 +499,7 @@ chanfix_cmd_scores(struct sourceinfo *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
 	struct chanfix_channel *chan;
-	int i = 0;
+	unsigned int i = 0;
 	unsigned int count = 20;
 
 	if (parv[0] == NULL)
@@ -530,8 +530,14 @@ chanfix_cmd_scores(struct sourceinfo *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("Top \2%u\2 scores for \2%s\2 in the database:"), count, chan->name);
 
-	command_success_nodata(si, "%-3s %-50s %s", _("Num"), _("Account/Hostmask"), _("Score"));
-	command_success_nodata(si, "%-3s %-50s %s", "---", "--------------------------------------------------", "-----");
+	/* TRANSLATORS: Adjust these numbers only if the translated column
+	 * headers would exceed that length. Pay particular attention to
+	 * also changing the numbers in the format string inside the loop
+	 * below to match them, and beware that these format strings are
+	 * shared across multiple files!
+	 */
+	command_success_nodata(si, _("%-8s %-50s %s"), _("Num"), _("Account/Hostmask"), _("Score"));
+	command_success_nodata(si, "----------------------------------------------------------------");
 
 	MOWGLI_ITER_FOREACH(n, chan->oprecords.head)
 	{
@@ -543,10 +549,10 @@ chanfix_cmd_scores(struct sourceinfo *si, int parc, char *parv[])
 
 		snprintf(buf, BUFSIZE, "%s@%s", orec->user, orec->host);
 
-		command_success_nodata(si, "%-3d %-50s %u", ++i, orec->entity ? orec->entity->name : buf, score);
+		command_success_nodata(si, _("%-8u %-50s %u"), ++i, orec->entity ? orec->entity->name : buf, score);
 	}
 
-	command_success_nodata(si, "%-3s %-50s %s", "---", "--------------------------------------------------", "-----");
+	command_success_nodata(si, "----------------------------------------------------------------");
 	command_success_nodata(si, _("End of \2SCORES\2 listing for \2%s\2."), chan->name);
 }
 
