@@ -58,6 +58,8 @@ atheme_crypt3_des_verify(const char *const restrict password, const char *const 
 		return false;
 	}
 
+	(void) smemzero(hash, sizeof hash);
+
 	/* The above strlen(3)/sscanf(3)/strcmp(3) are only cautionary, to avoid wasting some time passing data
 	 * to crypt(3) that it obviously did not generate.  However, the DES hash format is not at all unique
 	 * or reliably identifiable, and so we cannot be sure that even though we got to this point, that the

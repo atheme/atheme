@@ -84,6 +84,8 @@ atheme_crypt3_sha2_512_verify(const char *const restrict password, const char *c
 		return false;
 	}
 
+	(void) smemzero(hash, sizeof hash);
+
 	*flags |= PWVERIFY_FLAG_MYMODULE;
 
 	(void) slog(LG_DEBUG, CRYPT3_MODULE_WARNING, MOWGLI_FUNC_NAME);

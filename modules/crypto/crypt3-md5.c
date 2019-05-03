@@ -53,6 +53,8 @@ atheme_crypt3_md5_verify(const char *const restrict password, const char *const 
 		return false;
 	}
 
+	(void) smemzero(hash, sizeof hash);
+
 	*flags |= PWVERIFY_FLAG_MYMODULE;
 
 	(void) slog(LG_DEBUG, CRYPT3_MODULE_WARNING, MOWGLI_FUNC_NAME);
