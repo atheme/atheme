@@ -38,6 +38,7 @@ update-pot: update-potfiles
 	    --keyword="_"                                       \
 	    --keyword="N_"                                      \
 	    --language=C                                        \
+	    --escape                                            \
 	    --foreign-user                                      \
 	    --sort-output                                       \
 	    -o "$(POTTEMPLATE).tmp"
