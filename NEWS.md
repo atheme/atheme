@@ -191,8 +191,8 @@ Password Cryptography
 - `libathemecore/crypto.c`: log current crypto provider on mod(un/re)load
 - `libathemecore/crypto.c`: rip out plaintext fallback implementation
 - Make old modules (`ircservices`, `pbkdf2`, `rawmd5`, `rawsha1`) verify-only
-- Add verify-only `rawsha256` module to verify more password hashes from other
-  sources.
+- Add verify-only `rawsha2-256` and `rawsha2-512` modules to verify more
+  password hashes from other sources.
 - Warn admin if no encryption-capable crypto modules are loaded
 - Generating new encrypted passwords is now much more efficient
 - Try encrypting a password with each module in turn instead of giving up
