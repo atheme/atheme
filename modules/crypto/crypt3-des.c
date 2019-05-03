@@ -8,9 +8,10 @@
  */
 
 #include <atheme.h>
-#include "crypt3.h"
 
 #ifdef HAVE_CRYPT
+
+#include "crypt3-wrapper.h"
 
 static bool ATHEME_FATTR_WUR
 atheme_crypt3_des_selftest(void)

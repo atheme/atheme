@@ -5,8 +5,8 @@
  * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
  */
 
-#ifndef ATHEME_MOD_CRYPTO_CRYPT3_H
-#define ATHEME_MOD_CRYPTO_CRYPT3_H 1
+#ifndef ATHEME_MOD_CRYPTO_CRYPT3_WRAPPER_H
+#define ATHEME_MOD_CRYPTO_CRYPT3_WRAPPER_H 1
 
 #include <atheme.h>
 
@@ -96,4 +96,4 @@ atheme_crypt3_wrapper(const char *const restrict password, const char *const res
 
 #endif /* HAVE_CRYPT */
 
-#endif /* !ATHEME_MOD_CRYPTO_CRYPT3_H */
+#endif /* !ATHEME_MOD_CRYPTO_CRYPT3_WRAPPER_H */
