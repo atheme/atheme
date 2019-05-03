@@ -22,6 +22,7 @@ atheme_crypt3_md5_selftest(void)
 	const char *const result = atheme_crypt3_wrapper(password, parameters, MOWGLI_FUNC_NAME);
 
 	if (! result)
+		// That function logs messages on failure
 		return false;
 
 	if (strcmp(result, parameters) != 0)
@@ -59,6 +60,7 @@ atheme_crypt3_md5_verify(const char *const restrict password, const char *const 
 	const char *const result = atheme_crypt3_wrapper(password, parameters, MOWGLI_FUNC_NAME);
 
 	if (! result)
+		// That function logs messages on failure
 		return false;
 
 	if (strcmp(parameters, result) != 0)
