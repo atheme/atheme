@@ -57,8 +57,6 @@ atheme_crypt3_md5_verify(const char *const restrict password, const char *const 
 
 	*flags |= PWVERIFY_FLAG_MYMODULE;
 
-	(void) slog(LG_DEBUG, CRYPT3_MODULE_WARNING, MOWGLI_FUNC_NAME);
-
 	const char *const result = atheme_crypt3_wrapper(password, parameters, MOWGLI_FUNC_NAME);
 
 	if (! result)

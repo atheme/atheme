@@ -57,8 +57,6 @@ atheme_crypt3_sha2_256_crypt(const char *const restrict password,
 		return NULL;
 	}
 
-	(void) slog(LG_DEBUG, CRYPT3_MODULE_WARNING, MOWGLI_FUNC_NAME);
-
 	// This function logs messages on failure
 	return atheme_crypt3_wrapper(password, parv, MOWGLI_FUNC_NAME);
 }
@@ -87,8 +85,6 @@ atheme_crypt3_sha2_256_verify(const char *const restrict password, const char *c
 	(void) smemzero(hash, sizeof hash);
 
 	*flags |= PWVERIFY_FLAG_MYMODULE;
-
-	(void) slog(LG_DEBUG, CRYPT3_MODULE_WARNING, MOWGLI_FUNC_NAME);
 
 	const char *const result = atheme_crypt3_wrapper(password, parameters, MOWGLI_FUNC_NAME);
 

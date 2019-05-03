@@ -66,8 +66,6 @@ atheme_crypt3_des_verify(const char *const restrict password, const char *const 
 	 * digest was indeed produced by DES crypt(3).  For this reason, we DON'T set PWVERIFY_FLAG_MYMODULE.
 	 */
 
-	(void) slog(LG_DEBUG, CRYPT3_MODULE_WARNING, MOWGLI_FUNC_NAME);
-
 	const char *const result = atheme_crypt3_wrapper(password, parameters, MOWGLI_FUNC_NAME);
 
 	if (! result)
