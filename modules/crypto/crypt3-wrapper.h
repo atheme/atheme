@@ -95,6 +95,31 @@ atheme_crypt3_wrapper(const char *const restrict password, const char *const res
 	return result;
 }
 
+static inline bool ATHEME_FATTR_WUR
+atheme_crypt3_selftest(const bool log_errors, const char *const restrict parameters)
+{
+	static const char password[] = CRYPT3_MODULE_TEST_PASSWORD;
+
+	const char *const result = atheme_crypt3_wrapper(password, parameters, MOWGLI_FUNC_NAME);
+
+	if (! result)
+		// That function logs messages on failure
+		return false;
+
+	if (strcmp(result, parameters) != 0)
+	{
+		if (log_errors)
+		{
+			(void) slog(LG_ERROR, "%s: crypt(3) returned an incorrect result", MOWGLI_FUNC_NAME);
+			(void) slog(LG_ERROR, "%s: expected '%s', got '%s'", MOWGLI_FUNC_NAME, parameters, result);
+		}
+
+		return false;
+	}
+
+	return true;
+}
+
 #endif /* HAVE_CRYPT */
 
 #endif /* !ATHEME_MOD_CRYPTO_CRYPT3_WRAPPER_H */

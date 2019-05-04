@@ -14,28 +14,6 @@
 #include "crypt3-wrapper.h"
 
 static bool ATHEME_FATTR_WUR
-atheme_crypt3_md5_selftest(void)
-{
-	static const char password[] = CRYPT3_MODULE_TEST_PASSWORD;
-	static const char parameters[] = CRYPT3_MODULE_TEST_VECTOR_MD5;
-
-	const char *const result = atheme_crypt3_wrapper(password, parameters, MOWGLI_FUNC_NAME);
-
-	if (! result)
-		// That function logs messages on failure
-		return false;
-
-	if (strcmp(result, parameters) != 0)
-	{
-		(void) slog(LG_ERROR, "%s: crypt(3) returned an incorrect result", MOWGLI_FUNC_NAME);
-		(void) slog(LG_ERROR, "%s: expected '%s', got '%s'", MOWGLI_FUNC_NAME, parameters, result);
-		return false;
-	}
-
-	return true;
-}
-
-static bool ATHEME_FATTR_WUR
 atheme_crypt3_md5_verify(const char *const restrict password, const char *const restrict parameters,
                          unsigned int *const restrict flags)
 {
@@ -82,7 +60,7 @@ static const struct crypt_impl crypto_crypt3_impl = {
 static void
 mod_init(struct module *const restrict m)
 {
-	if (! atheme_crypt3_md5_selftest())
+	if (! atheme_crypt3_selftest(true, CRYPT3_MODULE_TEST_VECTOR_MD5))
 	{
 		(void) slog(LG_ERROR, "%s: self-test failed, does this platform support this algorithm?", m->name);
 

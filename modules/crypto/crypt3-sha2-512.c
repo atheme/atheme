@@ -17,31 +17,6 @@ static mowgli_list_t crypt3_conf_table;
 
 static unsigned int crypt3_md_rounds = CRYPT3_SHA2_ITERCNT_DEF;
 
-static bool ATHEME_FATTR_WUR
-atheme_crypt3_sha2_512_selftest(const bool log_errors, const char *const restrict parameters)
-{
-	static const char password[] = CRYPT3_MODULE_TEST_PASSWORD;
-
-	const char *const result = atheme_crypt3_wrapper(password, parameters, MOWGLI_FUNC_NAME);
-
-	if (! result)
-		// That function logs messages on failure
-		return false;
-
-	if (strcmp(result, parameters) != 0)
-	{
-		if (log_errors)
-		{
-			(void) slog(LG_ERROR, "%s: crypt(3) returned an incorrect result", MOWGLI_FUNC_NAME);
-			(void) slog(LG_ERROR, "%s: expected '%s', got '%s'", MOWGLI_FUNC_NAME, parameters, result);
-		}
-
-		return false;
-	}
-
-	return true;
-}
-
 static const char * ATHEME_FATTR_WUR
 atheme_crypt3_sha2_512_crypt(const char *const restrict password,
                              const char ATHEME_VATTR_UNUSED *const restrict parameters)
@@ -138,7 +113,7 @@ static const struct crypt_impl crypto_crypt3_impl = {
 static void
 mod_init(struct module *const restrict m)
 {
-	if (! atheme_crypt3_sha2_512_selftest(true, CRYPT3_MODULE_TEST_VECTOR_SHA2_512))
+	if (! atheme_crypt3_selftest(true, CRYPT3_MODULE_TEST_VECTOR_SHA2_512))
 	{
 		(void) slog(LG_ERROR, "%s: self-test failed, does this platform support this algorithm?", m->name);
 
@@ -146,7 +121,7 @@ mod_init(struct module *const restrict m)
 		return;
 	}
 
-	if (atheme_crypt3_sha2_512_selftest(false, CRYPT3_MODULE_TEST_VECTOR_SHA2_512_EXT))
+	if (atheme_crypt3_selftest(false, CRYPT3_MODULE_TEST_VECTOR_SHA2_512_EXT))
 	{
 		(void) add_subblock_top_conf("CRYPT3SHA2512", &crypt3_conf_table);
 		(void) add_uint_conf_item("ROUNDS", &crypt3_conf_table, 0, &crypt3_md_rounds,
