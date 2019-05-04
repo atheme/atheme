@@ -172,8 +172,8 @@ loadmodule "modules/backend/opensex";
  */
 loadmodule "modules/crypto/argon2d";
 loadmodule "modules/crypto/pbkdf2v2";
-loadmodule "modules/crypto/crypt3-sha2-512";
-loadmodule "modules/crypto/crypt3-sha2-256";
+#loadmodule "modules/crypto/crypt3-sha2-512";
+#loadmodule "modules/crypto/crypt3-sha2-256";
 loadmodule "modules/crypto/pbkdf2";
 #loadmodule "modules/crypto/sodium-scrypt";
 #loadmodule "modules/crypto/crypt3-md5";
