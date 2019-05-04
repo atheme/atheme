@@ -46,17 +46,17 @@ static const char * ATHEME_FATTR_WUR
 atheme_crypt3_sha2_512_crypt(const char *const restrict password,
                              const char ATHEME_VATTR_UNUSED *const restrict parameters)
 {
-	static const char saltchars[CRYPT3_SHA2_SALTCHARS_LENGTH] = CRYPT3_SHA2_SALTCHARS;
-
-	unsigned char rawsalt[CRYPT3_SHA2_SALTLENGTH];
-	char salt[sizeof rawsalt + 1];
+	unsigned char rawsalt[CRYPT3_SHA2_SALTLEN_RAW];
+	char salt[BASE64_SIZE_STR(sizeof rawsalt)];
 	char parv[PASSLEN + 1];
 
 	(void) atheme_random_buf(rawsalt, sizeof rawsalt);
-	(void) memset(salt, 0x00, sizeof salt);
 
-	for (size_t i = 0; i < sizeof rawsalt; i++)
-		salt[i] = saltchars[rawsalt[i] % sizeof saltchars];
+	if (base64_encode_table(rawsalt, sizeof rawsalt, salt, sizeof salt, CRYPT3_BASE64_ETABLE) == BASE64_FAIL)
+	{
+		(void) slog(LG_ERROR, "%s: base64_encode_table() failed (BUG!)", MOWGLI_FUNC_NAME);
+		return NULL;
+	}
 
 	if (crypt3_md_rounds == CRYPT3_SHA2_ITERCNT_DEF)
 	{

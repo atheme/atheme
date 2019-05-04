@@ -16,15 +16,14 @@
 #  include <crypt.h>
 #endif /* HAVE_CRYPT_H */
 
-#define CRYPT3_AN_CHARS_RANGE                   "A-Za-z0-9"
-#define CRYPT3_B64_CHARS_RANGE                  "./" CRYPT3_AN_CHARS_RANGE
+#define CRYPT3_BASE64_ETABLE                    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789./"
 
-#define CRYPT3_LOADHASH_FORMAT_DES              "%[" CRYPT3_B64_CHARS_RANGE "]"
-#define CRYPT3_LOADHASH_FORMAT_MD5              "$1$%*[" CRYPT3_B64_CHARS_RANGE "]$%[" CRYPT3_B64_CHARS_RANGE "]"
-#define CRYPT3_LOADHASH_FORMAT_SHA2_256         "$5$%*[" CRYPT3_B64_CHARS_RANGE "]$%[" CRYPT3_B64_CHARS_RANGE "]"
-#define CRYPT3_LOADHASH_FORMAT_SHA2_512         "$6$%*[" CRYPT3_B64_CHARS_RANGE "]$%[" CRYPT3_B64_CHARS_RANGE "]"
-#define CRYPT3_LOADHASH_FORMAT_SHA2_256_EXT     "$5$rounds=%u$%*[" CRYPT3_B64_CHARS_RANGE "]$%[" CRYPT3_B64_CHARS_RANGE "]"
-#define CRYPT3_LOADHASH_FORMAT_SHA2_512_EXT     "$6$rounds=%u$%*[" CRYPT3_B64_CHARS_RANGE "]$%[" CRYPT3_B64_CHARS_RANGE "]"
+#define CRYPT3_LOADHASH_FORMAT_DES              "%[" CRYPT3_BASE64_ETABLE "]"
+#define CRYPT3_LOADHASH_FORMAT_MD5              "$1$%*[" CRYPT3_BASE64_ETABLE "]$%[" CRYPT3_BASE64_ETABLE "]"
+#define CRYPT3_LOADHASH_FORMAT_SHA2_256         "$5$%*[" CRYPT3_BASE64_ETABLE "]$%[" CRYPT3_BASE64_ETABLE "]"
+#define CRYPT3_LOADHASH_FORMAT_SHA2_512         "$6$%*[" CRYPT3_BASE64_ETABLE "]$%[" CRYPT3_BASE64_ETABLE "]"
+#define CRYPT3_LOADHASH_FORMAT_SHA2_256_EXT     "$5$rounds=%u$%*[" CRYPT3_BASE64_ETABLE "]$%[" CRYPT3_BASE64_ETABLE "]"
+#define CRYPT3_LOADHASH_FORMAT_SHA2_512_EXT     "$6$rounds=%u$%*[" CRYPT3_BASE64_ETABLE "]$%[" CRYPT3_BASE64_ETABLE "]"
 
 #define CRYPT3_SAVESALT_FORMAT_SHA2_256         "$5$%s$"
 #define CRYPT3_SAVESALT_FORMAT_SHA2_512         "$6$%s$"
@@ -39,26 +38,19 @@
 #define CRYPT3_SHA2_ITERCNT_MIN                 5000U
 #define CRYPT3_SHA2_ITERCNT_DEF                 5000U
 #define CRYPT3_SHA2_ITERCNT_MAX                 1000000U
+#define CRYPT3_SHA2_SALTLEN_RAW                 12U
 
-#define CRYPT3_SHA2_SALTLENGTH                  0x10U
-#define CRYPT3_SHA2_SALTCHARS                   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-#define CRYPT3_SHA2_SALTCHARS_LENGTH            0x3EU
-
-#define CRYPT3_MODULE_TEST_PASSWORD             "YnqBeyzDmb4IHyXsGbasMBbmNiPM1E8G" \
-                                                "SAOsIwKhozJC0bZnHsaZBbT4x47iq4J7" \
-                                                "PfyfpRnUpIS5TKuAcLGbXF1J8FaM10wQ" \
-                                                "pwAqOlLRmyiOhNHN5o6NPfjgpebk3jqU" \
-                                                "EtJebRswHdmg6TzKHU6RUbygbcPy6P11" \
-                                                "zvdYTCT02nMwMjMvSwtJqAq3Im5kYk2i" \
-                                                "L09wI1CsqLElabrZOx8mmpnBKWQMSOBP" \
-                                                "OWlR0jBZdqZV7ZZyKpLHP99k9XuvWFax" \
+#define CRYPT3_MODULE_TEST_PASSWORD             "YnqBeyzDmb4IHyXsGbasMBbmNiPM1E8GSAOsIwKhozJC0bZnHsaZBbT4x47iq4J7" \
+                                                "PfyfpRnUpIS5TKuAcLGbXF1J8FaM10wQpwAqOlLRmyiOhNHN5o6NPfjgpebk3jqU" \
+                                                "EtJebRswHdmg6TzKHU6RUbygbcPy6P11zvdYTCT02nMwMjMvSwtJqAq3Im5kYk2i" \
+                                                "L09wI1CsqLElabrZOx8mmpnBKWQMSOBPOWlR0jBZdqZV7ZZyKpLHP99k9XuvWFax" \
                                                 "xQDv4Qg82a1Pi4BN0IxSuwlHKgl2Kwqt"
 
 #define CRYPT3_MODULE_TEST_VECTOR_DES           "JCaMNN9g7BnPQ"
 #define CRYPT3_MODULE_TEST_VECTOR_MD5           "$1$xFIg9A$mXXbp3eKvgkOlChjAd2Eq1"
-#define CRYPT3_MODULE_TEST_VECTOR_SHA2_256      "$5$vishj8N7EZ05xejG$xz/ipkwwSKMJUEjF5gT.E7UWHQh9KI9ld0ornIVG0S1"
-#define CRYPT3_MODULE_TEST_VECTOR_SHA2_512      "$6$vishj8N7EZ05xejG$yjsXj1aO1Vh.ZuhLrAPG1ch8NA.2HaaND" \
-                                                "im5hixDtnNLr7i2c0fO7kM7ZGGkk0VBpqtaRzmnD7ob60m6JREb2/"
+#define CRYPT3_MODULE_TEST_VECTOR_SHA2_256      "$5$kcVpQifeRqqCjVKM$dhthFOcpznDllTsC2e3m5wGrZ9HIV50F9iRnUCrlLD9"
+#define CRYPT3_MODULE_TEST_VECTOR_SHA2_512      "$6$kcVpQifeRqqCjVKM$6a8TZKZazi58rwjsaBU8apGVcM6bHcTj7" \
+                                                "djfYeaEuae8N3asrlUbh6LbGCXDcYEcFJTH7Ir5ToeSOciqO5363."
 #define CRYPT3_MODULE_TEST_VECTOR_SHA2_256_EXT  "$5$rounds=1000000$kcVpQifeRqqCjVKM$aXG6EdLpgwc3.RzodKaIORZd6.5GgSCSIf5iYgTy2N/"
 #define CRYPT3_MODULE_TEST_VECTOR_SHA2_512_EXT  "$6$rounds=1000000$kcVpQifeRqqCjVKM$Nqh0Pm5R4jepPPYOjwNHcppb." \
                                                 "EOs62XBjIgvNiXBUXLyLkL6PyZXiLw58d0phVt9LD3GwWaW8i/s1bA9JTcs.0"
