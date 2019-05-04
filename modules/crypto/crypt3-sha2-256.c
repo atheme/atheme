@@ -13,11 +13,14 @@
 
 #include "crypt3-wrapper.h"
 
+static mowgli_list_t crypt3_conf_table;
+
+static unsigned int crypt3_md_rounds = CRYPT3_SHA2_ITERCNT_DEF;
+
 static bool ATHEME_FATTR_WUR
-atheme_crypt3_sha2_256_selftest(void)
+atheme_crypt3_sha2_256_selftest(const bool log_errors, const char *const restrict parameters)
 {
 	static const char password[] = CRYPT3_MODULE_TEST_PASSWORD;
-	static const char parameters[] = CRYPT3_MODULE_TEST_VECTOR_SHA2_256;
 
 	const char *const result = atheme_crypt3_wrapper(password, parameters, MOWGLI_FUNC_NAME);
 
@@ -27,8 +30,12 @@ atheme_crypt3_sha2_256_selftest(void)
 
 	if (strcmp(result, parameters) != 0)
 	{
-		(void) slog(LG_ERROR, "%s: crypt(3) returned an incorrect result", MOWGLI_FUNC_NAME);
-		(void) slog(LG_ERROR, "%s: expected '%s', got '%s'", MOWGLI_FUNC_NAME, parameters, result);
+		if (log_errors)
+		{
+			(void) slog(LG_ERROR, "%s: crypt(3) returned an incorrect result", MOWGLI_FUNC_NAME);
+			(void) slog(LG_ERROR, "%s: expected '%s', got '%s'", MOWGLI_FUNC_NAME, parameters, result);
+		}
+
 		return false;
 	}
 
@@ -51,10 +58,21 @@ atheme_crypt3_sha2_256_crypt(const char *const restrict password,
 	for (size_t i = 0; i < sizeof rawsalt; i++)
 		salt[i] = saltchars[rawsalt[i] % sizeof saltchars];
 
-	if (snprintf(parv, sizeof parv, CRYPT3_SAVESALT_FORMAT_SHA2_256, salt) > PASSLEN)
+	if (crypt3_md_rounds == CRYPT3_SHA2_ITERCNT_DEF)
 	{
-		(void) slog(LG_ERROR, "%s: snprintf(3) output would have been too long (BUG)", MOWGLI_FUNC_NAME);
-		return NULL;
+		if (snprintf(parv, sizeof parv, CRYPT3_SAVESALT_FORMAT_SHA2_256, salt) > PASSLEN)
+		{
+			(void) slog(LG_ERROR, "%s: snprintf(3) output would have been too long (BUG)", MOWGLI_FUNC_NAME);
+			return NULL;
+		}
+	}
+	else
+	{
+		if (snprintf(parv, sizeof parv, CRYPT3_SAVESALT_FORMAT_SHA2_256_EXT, crypt3_md_rounds, salt) > PASSLEN)
+		{
+			(void) slog(LG_ERROR, "%s: snprintf(3) output would have been too long (BUG)", MOWGLI_FUNC_NAME);
+			return NULL;
+		}
 	}
 
 	// This function logs messages on failure
@@ -65,11 +83,12 @@ static bool ATHEME_FATTR_WUR
 atheme_crypt3_sha2_256_verify(const char *const restrict password, const char *const restrict parameters,
                               unsigned int *const restrict flags)
 {
+	unsigned int rounds = CRYPT3_SHA2_ITERCNT_DEF;
 	char hash[BUFSIZE];
 
 	if (sscanf(parameters, CRYPT3_LOADHASH_FORMAT_SHA2_256, hash) != 1)
 	{
-		if (sscanf(parameters, CRYPT3_LOADHASH_FORMAT_SHA2_256_EXT, hash) != 1)
+		if (sscanf(parameters, CRYPT3_LOADHASH_FORMAT_SHA2_256_EXT, &rounds, hash) != 2)
 		{
 			(void) slog(LG_DEBUG, "%s: sscanf(3) was unsuccessful", MOWGLI_FUNC_NAME);
 			return false;
@@ -99,6 +118,13 @@ atheme_crypt3_sha2_256_verify(const char *const restrict password, const char *c
 		return false;
 	}
 
+	if (rounds != crypt3_md_rounds)
+	{
+		(void) slog(LG_DEBUG, "%s: rounds (%u) != default (%u)", MOWGLI_FUNC_NAME, rounds, crypt3_md_rounds);
+
+		*flags |= PWVERIFY_FLAG_RECRYPT;
+	}
+
 	return true;
 }
 
@@ -112,13 +138,22 @@ static const struct crypt_impl crypto_crypt3_impl = {
 static void
 mod_init(struct module *const restrict m)
 {
-	if (! atheme_crypt3_sha2_256_selftest())
+	if (! atheme_crypt3_sha2_256_selftest(true, CRYPT3_MODULE_TEST_VECTOR_SHA2_256))
 	{
 		(void) slog(LG_ERROR, "%s: self-test failed, does this platform support this algorithm?", m->name);
 
 		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
+
+	if (atheme_crypt3_sha2_256_selftest(false, CRYPT3_MODULE_TEST_VECTOR_SHA2_256_EXT))
+	{
+		(void) add_subblock_top_conf("CRYPT3SHA2256", &crypt3_conf_table);
+		(void) add_uint_conf_item("ROUNDS", &crypt3_conf_table, 0, &crypt3_md_rounds,
+		                          CRYPT3_SHA2_ITERCNT_MIN, CRYPT3_SHA2_ITERCNT_MAX, CRYPT3_SHA2_ITERCNT_DEF);
+	}
+	else
+		(void) slog(LG_INFO, "%s: the number of rounds is not configurable on this platform", m->name);
 
 	(void) slog(LG_INFO, CRYPT3_MODULE_WARNING, m->name);
 

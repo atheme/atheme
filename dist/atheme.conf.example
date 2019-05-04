@@ -923,6 +923,34 @@ pbkdf2v2 {
 	#saltlen = 32;
 };
 
+/*
+ * If you are using modules/crypto/crypt3-sha2-*, you may wish to edit
+ * these blocks. See the comment on the argon2d {} block above for advice
+ * regarding parameter choice that also applies here.
+ */
+crypt3sha2512 {
+	/* rounds
+	 *
+	 * Use of this option is restricted to certain C libraries!
+	 * At present, only GNU libc6 ("glibc") v2.7+ is known to work.
+	 *
+	 * Valid values are 5,000 to 1,000,000 (inclusive)
+	 * The default is 5,000
+	 */
+	#rounds = 5000;
+}
+crypt3sha2256 {
+	/* rounds
+	 *
+	 * Use of this option is restricted to certain C libraries!
+	 * At present, only GNU libc6 ("glibc") v2.7+ is known to work.
+	 *
+	 * Valid values are 5,000 to 1,000,000 (inclusive)
+	 * The default is 5,000
+	 */
+	#rounds = 5000;
+}
+
 /* The serverinfo{} block defines how we appear on the IRC network. */
 serverinfo {
 	/* name
