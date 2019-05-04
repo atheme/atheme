@@ -869,67 +869,56 @@ loadmodule "modules/groupserv/set_url";
  ******************************************************************************/
 
 /*
- * If you are using modules/crypto/argon2d, you may wish to edit this
- * block. It is recommended to either leave the values at their defaults,
- * or experiment with them so that it takes approximately 0.5-1.0 seconds
- * for users to identify. Services blocks while the digest is being
- * computed or verified, so don't set these too large, or people can hang
- * services by trying many password attempts at once.
+ * This block controls the configuration options for crypto modules.
+ *
+ * It is recommended to either leave the values at their defaults, or
+ * experiment with them so that it takes approximately 0.5-1.0 seconds
+ * for users to identify. Services blocks while the password is being
+ * encrypted or verified, so don't set these too large, or people can
+ * hang services by trying many password attempts at once.
  */
-argon2d {
+crypto {
 
-	/* memory cost (as a power of 2, in KiB)
+	/* (*) argon2d_memory
+	 * Memory cost (as a power of 2, in KiB)
 	 * Valid values are 8 (256 KiB) to 20 (1 GiB) (inclusive)
 	 * The default is 14
 	 */
-	#memory = 14;      /* 2^14 KiB == 16384 KiB (16 MiB) */
+	#argon2d_memory = 14;      /* 2^14 KiB == 16384 KiB (16 MiB) */
 
-	/* time cost (iterations over the memory)
-	 * Valid values are 4 to 16384 (inclusive)
+	/* (*) argon2d_time
+	 * Time cost (iterations over the memory)
+	 * Valid values are 4 to 16,384 (inclusive)
 	 * The default is 32
 	 */
-	#time = 32;
-};
+	#argon2d_time = 32;
 
-/*
- * If you are using modules/crypto/pbkdf2v2, you may wish to edit this
- * block. See the comment on the argon2d {} block above for advice
- * regarding parameter choice that also applies here.
- */
-pbkdf2v2 {
-
-	/* digest
+	/* (*) pbkdf2v2_digest
 	 *
 	 * Valid values are "SHA1", "SHA256", "SHA512",
-	 * "SCRAM-SHA-1" and "SCRAM-SHA-256".
+	 * "SCRAM-SHA-1", "SCRAM-SHA-256" and "SCRAM-SHA-512".
 	 *
 	 * For the SCRAM variants, please read doc/SASL-SCRAM-SHA.
 	 *
 	 * The default is "SHA512"
 	 */
-	#digest = "SHA512";
+	#pbkdf2v2_digest = "SHA512";
 
-	/* rounds
+	/* (*) pbkdf2v2_rounds
 	 * Valid values are 10,000 to 5,000,000 (inclusive)
 	 * The default is 64,000
 	 */
-	#rounds = 64000;
+	#pbkdf2v2_rounds = 64000;
 
-	/* saltlen
+	/* (*) pbkdf2v2_saltlen
 	 * You should only change this if you *really* know what you're doing
 	 * Valid values are 8 to 64 (inclusive)
 	 * The default is 32
 	 */
-	#saltlen = 32;
-};
+	#pbkdf2v2_saltlen = 32;
 
-/*
- * If you are using modules/crypto/crypt3-sha2-*, you may wish to edit
- * these blocks. See the comment on the argon2d {} block above for advice
- * regarding parameter choice that also applies here.
- */
-crypt3sha2512 {
-	/* rounds
+	/* (*) crypt3_sha2_256_rounds
+	 * (*) crypt3_sha2_512_rounds
 	 *
 	 * Use of this option is restricted to certain C libraries!
 	 * At present, only GNU libc6 ("glibc") v2.7+ is known to work.
@@ -937,18 +926,8 @@ crypt3sha2512 {
 	 * Valid values are 5,000 to 1,000,000 (inclusive)
 	 * The default is 5,000
 	 */
-	#rounds = 5000;
-};
-crypt3sha2256 {
-	/* rounds
-	 *
-	 * Use of this option is restricted to certain C libraries!
-	 * At present, only GNU libc6 ("glibc") v2.7+ is known to work.
-	 *
-	 * Valid values are 5,000 to 1,000,000 (inclusive)
-	 * The default is 5,000
-	 */
-	#rounds = 5000;
+	#crypt3_sha2_256_rounds = 5000;
+	#crypt3_sha2_512_rounds = 5000;
 };
 
 /* The serverinfo{} block defines how we appear on the IRC network. */

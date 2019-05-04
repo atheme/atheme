@@ -16,7 +16,7 @@
 #  include <stringprep.h>
 #endif /* HAVE_LIBIDN */
 
-static mowgli_list_t pbkdf2v2_conf_table;
+static mowgli_list_t **crypto_conf_table = NULL;
 
 static unsigned int pbkdf2v2_digest = 0;
 static unsigned int pbkdf2v2_rounds = 0;
@@ -647,13 +647,16 @@ static const struct crypt_impl crypto_pbkdf2v2_impl = {
 static void
 mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_SYMBOL(m, crypto_conf_table, "crypto/main", "crypto_conf_table");
+
 	(void) crypt_register(&crypto_pbkdf2v2_impl);
 
-	(void) add_subblock_top_conf("PBKDF2V2", &pbkdf2v2_conf_table);
-	(void) add_conf_item("DIGEST", &pbkdf2v2_conf_table, c_ci_pbkdf2v2_digest);
-	(void) add_uint_conf_item("ROUNDS", &pbkdf2v2_conf_table, 0, &pbkdf2v2_rounds,
+	(void) add_conf_item("pbkdf2v2_digest", *crypto_conf_table, &c_ci_pbkdf2v2_digest);
+
+	(void) add_uint_conf_item("pbkdf2v2_rounds", *crypto_conf_table, 0, &pbkdf2v2_rounds,
 	                          PBKDF2_ITERCNT_MIN, PBKDF2_ITERCNT_MAX, PBKDF2_ITERCNT_DEF);
-	(void) add_uint_conf_item("SALTLEN", &pbkdf2v2_conf_table, 0, &pbkdf2v2_saltsz,
+
+	(void) add_uint_conf_item("pbkdf2v2_saltlen", *crypto_conf_table, 0, &pbkdf2v2_saltsz,
 	                          PBKDF2_SALTLEN_MIN, PBKDF2_SALTLEN_MAX, PBKDF2_SALTLEN_DEF);
 
 	(void) hook_add_event("config_ready");
@@ -667,10 +670,9 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	(void) hook_del_config_ready(&atheme_pbkdf2v2_config_ready);
 
-	(void) del_conf_item("DIGEST", &pbkdf2v2_conf_table);
-	(void) del_conf_item("ROUNDS", &pbkdf2v2_conf_table);
-	(void) del_conf_item("SALTLEN", &pbkdf2v2_conf_table);
-	(void) del_top_conf("PBKDF2V2");
+	(void) del_conf_item("pbkdf2v2_digest", *crypto_conf_table);
+	(void) del_conf_item("pbkdf2v2_rounds", *crypto_conf_table);
+	(void) del_conf_item("pbkdf2v2_saltlen", *crypto_conf_table);
 
 	(void) crypt_unregister(&crypto_pbkdf2v2_impl);
 }

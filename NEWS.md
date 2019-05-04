@@ -48,6 +48,10 @@ POTENTIAL COMPATIBILITY BREAKAGE
 - The NickServ DROP command no longer requires the user's account password as
   an argument.
 
+- Configuration options for all crypto modules have now been merged into a
+  single top `crypto {}` block. Please see `dist/atheme.conf.example` for how
+  to adapt your current crypto module configuration, if any.
+
 Security
 --------
 - Services now accepts email addresses that may contain shell metacharacters.

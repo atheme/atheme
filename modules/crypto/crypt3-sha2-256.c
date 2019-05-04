@@ -13,7 +13,7 @@
 
 #include "crypt3-wrapper.h"
 
-static mowgli_list_t crypt3_conf_table;
+static mowgli_list_t **crypto_conf_table = NULL;
 
 static unsigned int crypt3_md_rounds = CRYPT3_SHA2_ITERCNT_DEF;
 
@@ -113,6 +113,8 @@ static const struct crypt_impl crypto_crypt3_impl = {
 static void
 mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_SYMBOL(m, crypto_conf_table, "crypto/main", "crypto_conf_table");
+
 	if (! atheme_crypt3_selftest(true, CRYPT3_MODULE_TEST_VECTOR_SHA2_256))
 	{
 		(void) slog(LG_ERROR, "%s: self-test failed, does this platform support this algorithm?", m->name);
@@ -122,11 +124,8 @@ mod_init(struct module *const restrict m)
 	}
 
 	if (atheme_crypt3_selftest(false, CRYPT3_MODULE_TEST_VECTOR_SHA2_256_EXT))
-	{
-		(void) add_subblock_top_conf("CRYPT3SHA2256", &crypt3_conf_table);
-		(void) add_uint_conf_item("ROUNDS", &crypt3_conf_table, 0, &crypt3_md_rounds,
+		(void) add_uint_conf_item("crypt3_sha2_256_rounds", *crypto_conf_table, 0, &crypt3_md_rounds,
 		                          CRYPT3_SHA2_ITERCNT_MIN, CRYPT3_SHA2_ITERCNT_MAX, CRYPT3_SHA2_ITERCNT_DEF);
-	}
 	else
 		(void) slog(LG_INFO, "%s: the number of rounds is not configurable on this platform", m->name);
 
@@ -140,8 +139,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	(void) del_conf_item("ROUNDS", &crypt3_conf_table);
-	(void) del_top_conf("CRYPT3SHA2256");
+	(void) del_conf_item("crypt3_sha2_256_rounds", *crypto_conf_table);
 
 	(void) crypt_unregister(&crypto_crypt3_impl);
 }

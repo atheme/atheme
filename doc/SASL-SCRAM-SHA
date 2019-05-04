@@ -13,9 +13,10 @@ to enable this. The 5 main steps to perform are:
 
 4) Configure pbkdf2v2 to generate SCRAM-SHA hashes (atheme.conf):
 
-   pbkdf2v2 {
-       digest = "SCRAM-SHA-256"; /* or "SCRAM-SHA-512" or "SCRAM-SHA-1" */
-       rounds = ...;             /* between 10000 and 65536 ** */
+   crypto {
+       pbkdf2v2_digest = "SCRAM-SHA-256";
+       /* or "SCRAM-SHA-512" or "SCRAM-SHA-1" */
+       #pbkdf2v2_rounds = ...;          /* between 10000 and 65536 ** */
    }
 
 5) Load modules/saslserv/scram-sha

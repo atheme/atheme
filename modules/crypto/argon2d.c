@@ -66,7 +66,7 @@ struct argon2d_context
 };
 
 static const struct blake2b_functions *blake2bfn = NULL;
-static mowgli_list_t atheme_argon2d_conf_table;
+static mowgli_list_t **crypto_conf_table = NULL;
 
 /*
  * The default memory and time cost variables
@@ -487,16 +487,15 @@ static const struct crypt_impl crypto_argon2d_impl = {
 static void
 mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_SYMBOL(m, crypto_conf_table, "crypto/main", "crypto_conf_table");
 	MODULE_TRY_REQUEST_SYMBOL(m, blake2bfn, "crypto/blake2b", "blake2b_functions");
 
 	(void) crypt_register(&crypto_argon2d_impl);
 
-	(void) add_subblock_top_conf("ARGON2D", &atheme_argon2d_conf_table);
-
-	(void) add_uint_conf_item("MEMORY", &atheme_argon2d_conf_table, 0, &atheme_argon2d_mcost,
+	(void) add_uint_conf_item("argon2d_memory", *crypto_conf_table, 0, &atheme_argon2d_mcost,
 	                          ARGON2D_MEMCOST_MIN, ARGON2D_MEMCOST_MAX, ARGON2D_MEMCOST_DEF);
 
-	(void) add_uint_conf_item("TIME", &atheme_argon2d_conf_table, 0, &atheme_argon2d_tcost,
+	(void) add_uint_conf_item("argon2d_time", *crypto_conf_table, 0, &atheme_argon2d_tcost,
 	                          ARGON2D_TIMECOST_MIN, ARGON2D_TIMECOST_MAX, ARGON2D_TIMECOST_DEF);
 
 	m->mflags |= MODFLAG_DBCRYPTO;
@@ -505,9 +504,8 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	(void) del_conf_item("TIME", &atheme_argon2d_conf_table);
-	(void) del_conf_item("MEMORY", &atheme_argon2d_conf_table);
-	(void) del_top_conf("ARGON2D");
+	(void) del_conf_item("argon2d_memory", *crypto_conf_table);
+	(void) del_conf_item("argon2d_time", *crypto_conf_table);
 
 	(void) crypt_unregister(&crypto_argon2d_impl);
 

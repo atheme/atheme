@@ -807,7 +807,7 @@ sasl_scramsha_pbkdf2v2_scram_confhook(const struct pbkdf2v2_scram_config *const 
 			break;
 
 		default:
-			(void) slog(LG_ERROR, "%s: pbkdf2v2::digest is not set to a supported value -- "
+			(void) slog(LG_ERROR, "%s: crypto::pbkdf2v2_digest is not set to a supported value -- "
 			                      "this module will not do anything", MOWGLI_FUNC_NAME);
 			return;
 	}

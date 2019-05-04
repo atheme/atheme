@@ -10,6 +10,7 @@ SRCS =					\
 	blake2b.c			\
 	crypt3-sha2-256.c		\
 	crypt3-sha2-512.c		\
+	main.c                          \
 	pbkdf2.c			\
 	pbkdf2v2.c			\
 	posix.c				\
