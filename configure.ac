@@ -94,7 +94,8 @@ AC_CHECK_HEADERS([ctype.h dirent.h errno.h inttypes.h libintl.h limits.h locale.
 AC_CHECK_HEADERS([regex.h signal.h stdarg.h stdbool.h stddef.h stdint.h stdio.h stdlib.h string.h], [], [], [])
 AC_CHECK_HEADERS([strings.h sys/file.h sys/resource.h sys/stat.h sys/time.h sys/types.h sys/wait.h], [], [], [])
 AC_CHECK_HEADERS([time.h unistd.h], [], [], [])
-AC_CHECK_FUNCS([explicit_bzero fork getrlimit memset_s timingsafe_bcmp timingsafe_memcmp], [], [])
+AC_CHECK_FUNCS([crypt_checkpass crypt_newhash explicit_bzero fork getrlimit memset_s], [], [])
+AC_CHECK_FUNCS([timingsafe_bcmp timingsafe_memcmp], [], [])
 AC_CHECK_FUNCS([dup2 execve flock gethostbyname getpid gettimeofday localeconv memchr memmove memset], [],
 	[AC_MSG_ERROR([required function not available])])
 AC_CHECK_FUNCS([regcomp regerror regexec regfree setenv setlocale strcasecmp strcasestr strchr strerror strlen], [],

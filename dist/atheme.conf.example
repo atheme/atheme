@@ -107,6 +107,7 @@ loadmodule "modules/backend/opensex";
  *
  *   Argon2d (Password Hashing Competition, v1.3)  modules/crypto/argon2d
  *   PBKDF2 (Including support for SASL SCRAM-SHA) modules/crypto/pbkdf2v2
+ *   OpenBSD crypt_newhash(3) a la '$2b$...$...'   modules/crypto/crypt3-openbsd
  *   SHA2-512 crypt(3) a la '$6$...'               modules/crypto/crypt3-sha2-512
  *   SHA2-256 crypt(3) a la '$5$...'               modules/crypto/crypt3-sha2-256
  *
@@ -172,6 +173,7 @@ loadmodule "modules/backend/opensex";
  */
 loadmodule "modules/crypto/argon2d";
 loadmodule "modules/crypto/pbkdf2v2";
+#loadmodule "modules/crypto/crypt3-openbsd";
 #loadmodule "modules/crypto/crypt3-sha2-512";
 #loadmodule "modules/crypto/crypt3-sha2-256";
 loadmodule "modules/crypto/pbkdf2";
@@ -916,6 +918,14 @@ crypto {
 	 * The default is 32
 	 */
 	#pbkdf2v2_saltlen = 32;
+
+	/* (*) crypt3_openbsd_newhash_pref
+	 *
+	 * The "pref" parameter for OpenBSD crypt_newhash(3).
+	 * Please see <https://man.openbsd.org/crypt_checkpass.3>
+	 * The default is "bcrypt,a"
+	 */
+	#crypt3_openbsd_newhash_pref = "bcrypt,a";
 
 	/* (*) crypt3_sha2_256_rounds
 	 * (*) crypt3_sha2_512_rounds
