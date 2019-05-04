@@ -35,8 +35,10 @@
 #define BASE64_SIZE_RAW(len)    ((((len) + 2U) / 3U) * 4U)
 #define BASE64_SIZE_STR(len)    (BASE64_SIZE_RAW(len) + 1U)
 
-size_t base64_encode(const void *src, size_t srclength, char *target, size_t targsize) ATHEME_FATTR_WUR;
-size_t base64_encode_raw(const void *src, size_t srclength, char *target, size_t targsize) ATHEME_FATTR_WUR;
-size_t base64_decode(const char *src, void *target, size_t targsize) ATHEME_FATTR_WUR;
+size_t base64_encode(const void *, size_t, char *, size_t) ATHEME_FATTR_WUR;
+size_t base64_encode_raw(const void *, size_t, char *, size_t) ATHEME_FATTR_WUR;
+size_t base64_encode_table(const void *, size_t, char *, size_t, const char etable[static 64]) ATHEME_FATTR_WUR;
+size_t base64_encode_table_raw(const void *, size_t, char *, size_t, const char etable[static 64]) ATHEME_FATTR_WUR;
+size_t base64_decode(const char *, void *, size_t) ATHEME_FATTR_WUR;
 
 #endif /* !ATHEME_INC_BASE64_H */

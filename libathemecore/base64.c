@@ -8,7 +8,7 @@
 #include <atheme.h>
 #include "internal.h"
 
-static const char base64_etable[] = {
+static const char base64_etable_default[] = {
 
 	0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50,
 	0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66,
@@ -29,8 +29,8 @@ static const unsigned char base64_dtable[] = {
 };
 
 static size_t ATHEME_FATTR_WUR
-base64_encode_x(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len,
-                const bool terminate)
+base64_encode_run(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len,
+                  const bool terminate, const char base64_etable[const restrict static 64])
 {
 	const unsigned char *src = (const unsigned char *) in;
 	size_t src_len = in_len;
@@ -125,13 +125,27 @@ base64_encode_x(const void *const restrict in, const size_t in_len, char *const 
 size_t ATHEME_FATTR_WUR
 base64_encode(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len)
 {
-	return base64_encode_x(in, in_len, dst, dst_len, true);
+	return base64_encode_run(in, in_len, dst, dst_len, true, base64_etable_default);
 }
 
 size_t ATHEME_FATTR_WUR
 base64_encode_raw(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len)
 {
-	return base64_encode_x(in, in_len, dst, dst_len, false);
+	return base64_encode_run(in, in_len, dst, dst_len, false, base64_etable_default);
+}
+
+size_t ATHEME_FATTR_WUR
+base64_encode_table(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len,
+                    const char base64_etable_given[const restrict static 64])
+{
+	return base64_encode_run(in, in_len, dst, dst_len, true, base64_etable_given);
+}
+
+size_t ATHEME_FATTR_WUR
+base64_encode_table_raw(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len,
+                        const char base64_etable_given[const restrict static 64])
+{
+	return base64_encode_run(in, in_len, dst, dst_len, false, base64_etable_given);
 }
 
 size_t ATHEME_FATTR_WUR
