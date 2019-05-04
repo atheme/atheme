@@ -938,7 +938,7 @@ crypt3sha2512 {
 	 * The default is 5,000
 	 */
 	#rounds = 5000;
-}
+};
 crypt3sha2256 {
 	/* rounds
 	 *
@@ -949,7 +949,7 @@ crypt3sha2256 {
 	 * The default is 5,000
 	 */
 	#rounds = 5000;
-}
+};
 
 /* The serverinfo{} block defines how we appear on the IRC network. */
 serverinfo {
