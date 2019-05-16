@@ -34,7 +34,7 @@ to enable this. The 5 main steps to perform are:
    recompute any PBKDF2 digests for users who reidentify (by plain text
    password) or change their password. This enables a seamless transition to
    SCRAM logins if you are still using the default algorithm. If you were using
-   the pbkdf2v2 module previously with SHA2-256 digests, choose SCRAM-SHA-512. 
+   the pbkdf2v2 module previously with SHA2-512 digests, choose SCRAM-SHA-512. 
    If you were not previously using the pbkdf2v2 module, choose SCRAM-SHA-256.
 
 ** Inclusive. The popular Cyrus SASL client library will refuse to perform a
