@@ -878,6 +878,13 @@ loadmodule "modules/groupserv/set_url";
  * for users to identify. Services blocks while the password is being
  * encrypted or verified, so don't set these too large, or people can
  * hang services by trying many password attempts at once.
+ *
+ * A benchmark program for the PBKDF2 code is available under src/:
+ * - ./configure ...
+ * - make -j4 libathemecore
+ * - make -C libathemecore/ install
+ * - make -C src/pbkdf2-benchmark/
+ * - src/pbkdf2-benchmark/atheme-pbkdf2-benchmark
  */
 crypto {
 
