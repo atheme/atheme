@@ -123,7 +123,7 @@ SASL
   - If you wish to build and install the tool without building and installing
     everything, simply execute the following commands in the source directory:
     - `./configure --with-libmowgli=no`
-    - `make -C libmowgli-2/ install`
+    - `make libathemecore`
     - `make -C libathemecore/ install`
     - `make -C src/ecdh-x25519-tool/ install`
     - `~/atheme/bin/atheme-ecdh-x25519-tool -h`
