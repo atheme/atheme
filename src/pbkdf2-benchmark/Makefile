@@ -1,4 +1,4 @@
-PROG_NOINST	= $(PACKAGE)-pbkdf2-benchmark${PROG_SUFFIX}
+PROG		= $(PACKAGE)-pbkdf2-benchmark${PROG_SUFFIX}
 SRCS		= main.c
 
 include ../../extra.mk

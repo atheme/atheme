@@ -879,12 +879,11 @@ loadmodule "modules/groupserv/set_url";
  * encrypted or verified, so don't set these too large, or people can
  * hang services by trying many password attempts at once.
  *
- * A benchmark program for the PBKDF2 code is available under src/:
- * - ./configure ...
- * - make -j4 libathemecore
- * - make -C libathemecore/ install
- * - make -C src/pbkdf2-benchmark/
- * - src/pbkdf2-benchmark/atheme-pbkdf2-benchmark
+ * A benchmark program for the PBKDF2 code is available:
+ * - ./configure --prefix=foo ...
+ * - make
+ * - make install
+ * - ${foo}/bin/atheme-pbkdf2-benchmark
  */
 crypto {
 
