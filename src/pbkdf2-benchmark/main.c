@@ -15,7 +15,7 @@
 
 #define BUFSIZE 1024
 
-static const enum digest_algorithm mds[] = { DIGALG_MD5, DIGALG_SHA1, DIGALG_SHA2_256, DIGALG_SHA2_512 };
+static const enum digest_algorithm mds[] = { DIGALG_SHA1, DIGALG_SHA2_256, DIGALG_SHA2_512 };
 static const size_t mds_count = (sizeof mds) / (sizeof mds[0]);
 
 static const size_t saltlengths[] = { 32 };
