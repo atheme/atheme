@@ -9,11 +9,10 @@
  * copyright notice and this permission notice appear in all copies.
  */
 
+#include <atheme/constants.h>
 #include <atheme/digest.h>
 #include <atheme/libathemecore.h>
 #include <atheme/random.h>
-
-#define BUFSIZE 1024
 
 static const enum digest_algorithm mds[] = { DIGALG_SHA1, DIGALG_SHA2_256, DIGALG_SHA2_512 };
 static const size_t mds_count = (sizeof mds) / (sizeof mds[0]);

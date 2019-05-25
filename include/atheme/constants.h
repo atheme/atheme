@@ -11,6 +11,7 @@
 #ifndef ATHEME_INC_CONSTANTS_H
 #define ATHEME_INC_CONSTANTS_H 1
 
+#include <atheme/i18n.h>
 #include <atheme/stdheaders.h>
 
 #ifdef ATHEME_ENABLE_LARGE_NET
