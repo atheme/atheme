@@ -13326,12 +13326,12 @@ fi
 	case "x${with_digest_api_frontend}" in
 
 		xauto)
-			if test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_DIGEST}" = "YesYes"; then :
+			if test "${LIBCRYPTO}${LIBCRYPTO_DIGEST}" = "YesYes"; then :
 
 
 
-	DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_MBEDTLS"
-	DIGEST_FRONTEND="ARM mbedTLS"
+	DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_OPENSSL"
+	DIGEST_FRONTEND="${LIBCRYPTO_NAME}"
 
 				{ $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&5
 $as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&6;}
@@ -13346,12 +13346,12 @@ elif test "${LIBNETTLE}${LIBNETTLE_DIGEST}" = "YesYes"; then :
 				{ $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&5
 $as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&6;}
 
-elif test "${LIBCRYPTO}${LIBCRYPTO_DIGEST}" = "YesYes"; then :
+elif test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_DIGEST}" = "YesYes"; then :
 
 
 
-	DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_OPENSSL"
-	DIGEST_FRONTEND="${LIBCRYPTO_NAME}"
+	DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_MBEDTLS"
+	DIGEST_FRONTEND="ARM mbedTLS"
 
 				{ $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&5
 $as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&6;}

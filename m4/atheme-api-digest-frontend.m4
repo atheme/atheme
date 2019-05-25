@@ -34,14 +34,14 @@ AC_DEFUN([ATHEME_DECIDE_DIGEST_FRONTEND], [
 	case "x${with_digest_api_frontend}" in
 
 		xauto)
-			AS_IF([test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_DIGEST}" = "YesYes"], [
-				ATHEME_DIGEST_FRONTEND_USE_MBEDTLS
+			AS_IF([test "${LIBCRYPTO}${LIBCRYPTO_DIGEST}" = "YesYes"], [
+				ATHEME_DIGEST_FRONTEND_USE_OPENSSL
 				AC_MSG_NOTICE([using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)])
 			], [test "${LIBNETTLE}${LIBNETTLE_DIGEST}" = "YesYes"], [
 				ATHEME_DIGEST_FRONTEND_USE_NETTLE
 				AC_MSG_NOTICE([using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)])
-			], [test "${LIBCRYPTO}${LIBCRYPTO_DIGEST}" = "YesYes"], [
-				ATHEME_DIGEST_FRONTEND_USE_OPENSSL
+			], [test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_DIGEST}" = "YesYes"], [
+				ATHEME_DIGEST_FRONTEND_USE_MBEDTLS
 				AC_MSG_NOTICE([using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)])
 			], [
 				ATHEME_DIGEST_FRONTEND_USE_INTERNAL
