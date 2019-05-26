@@ -97,8 +97,6 @@ run_benchmark(const enum digest_algorithm alg, const size_t passlen, const size_
 	unsigned char buf[BUFSIZE];
 	unsigned char salt[BUFSIZE];
 	char password[BUFSIZE];
-	char begin_str[BUFSIZE];
-	char end_str[BUFSIZE];
 	struct timespec begin;
 	struct timespec end;
 
@@ -130,11 +128,7 @@ run_benchmark(const enum digest_algorithm alg, const size_t passlen, const size_
 	const long double end_ld = ((long double) end.tv_sec) + (((long double) end.tv_nsec) / nsec_per_sec);
 	const long double elapsed = (end_ld - begin_ld);
 
-	(void) snprintf(begin_str, sizeof begin_str, "%lu.%.9lu", (unsigned long) begin.tv_sec, (unsigned long) begin.tv_nsec);
-	(void) snprintf(end_str, sizeof end_str, "%lu.%.9lu", (unsigned long) end.tv_sec, (unsigned long) end.tv_nsec);
-	(void) fprintf(stderr, "%10s %10zu %10zu %10zu %16s %16s %12LF\n", md_alg_to_name(alg),
-	               passlen, saltlen, iter, begin_str, end_str, elapsed);
-
+	(void) fprintf(stderr, "%10s %10zu %10zu %10zu %12LF\n", md_alg_to_name(alg), passlen, saltlen, iter, elapsed);
 	return true;
 }
 
@@ -293,10 +287,10 @@ main(int argc, char *argv[])
 
 	(void) fprintf(stderr, "\nUsing digest frontend: %s\n\n", digest_get_frontend_info());
 
-	(void) fprintf(stderr, "%-10s %-10s %-10s %-10s %-16s %-16s %-12s\n",
-	                       "Digest", "PassLen", "SaltLen", "Rounds", "Begin", "End", "Elapsed");
+	(void) fprintf(stderr, "%-10s %-10s %-10s %-10s %-12s\n",
+	                       "Digest", "PassLen", "SaltLen", "Rounds", "Elapsed");
 
-	(void) fprintf(stderr, "---------- ---------- ---------- ---------- ---------------- ---------------- ------------\n");
+	(void) fprintf(stderr, "---------- ---------- ---------- ---------- ------------\n");
 
 	if (! algs)
 	{
