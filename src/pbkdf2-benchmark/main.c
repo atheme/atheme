@@ -109,17 +109,17 @@ run_benchmark(const enum digest_algorithm alg, const size_t passlen, const size_
 
 	if (clock_gettime(CLOCK_THREAD_CPUTIME_ID, &begin) != 0)
 	{
-		(void) perror("clock_gettime");
+		(void) perror("clock_gettime(2)");
 		return false;
 	}
 	if (! digest_oneshot_pbkdf2(alg, password, passlen, salt, saltlen, iter, buf, mdlen))
 	{
-		(void) perror("digest_oneshot_pbkdf2");
+		(void) perror("digest_oneshot_pbkdf2()");
 		return false;
 	}
 	if (clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end) != 0)
 	{
-		(void) perror("clock_gettime");
+		(void) perror("clock_gettime(2)");
 		return false;
 	}
 
