@@ -168,6 +168,7 @@ ATHEME_CC_TEST_CFLAGS([-Werror=implicit])
 dnl Conditional libraries for standard functions (no option to control detection)
 ATHEME_LIBTEST_DL
 ATHEME_LIBTEST_MATH
+ATHEME_LIBTEST_RT
 ATHEME_LIBTEST_SOCKET
 
 dnl Libraries that are autodetected (alphabetical)
