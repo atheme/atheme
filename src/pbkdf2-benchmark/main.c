@@ -107,7 +107,7 @@ run_benchmark(const enum digest_algorithm alg, const size_t passlen, const size_
 	(void) memset(&begin, 0x00, sizeof begin);
 	(void) memset(&end, 0x00, sizeof end);
 
-	if (clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &begin) != 0)
+	if (clock_gettime(CLOCK_THREAD_CPUTIME_ID, &begin) != 0)
 	{
 		(void) perror("clock_gettime");
 		return false;
@@ -117,7 +117,7 @@ run_benchmark(const enum digest_algorithm alg, const size_t passlen, const size_
 		(void) perror("digest_oneshot_pbkdf2");
 		return false;
 	}
-	if (clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end) != 0)
+	if (clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end) != 0)
 	{
 		(void) perror("clock_gettime");
 		return false;
