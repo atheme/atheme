@@ -135,6 +135,7 @@ loadmodule "modules/backend/opensex";
  *   IRCServices (+ Anope) compatibility           modules/crypto/ircservices
  *   MD5 crypt(3) (Atheme Linux compatibility)     modules/crypto/crypt3-md5
  *   DES crypt(3) (Atheme OS X compatibility)      modules/crypto/crypt3-des
+ *   Base64 (Anope ~1.8 compatibility)             modules/crypto/base64
  *
  * To transition between crypto schemes, load the preferred scheme first,
  * and as users login or set new passwords, they will be migrated to the new
@@ -185,6 +186,7 @@ loadmodule "modules/crypto/pbkdf2";
 #loadmodule "modules/crypto/rawmd5";
 #loadmodule "modules/crypto/ircservices";
 #loadmodule "modules/crypto/crypt3-des";
+#loadmodule "modules/crypto/base64";
 
 /* Authentication module.
  *

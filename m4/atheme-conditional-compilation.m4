@@ -26,7 +26,9 @@ AC_DEFUN([ATHEME_COND_LIBMOWGLI_SUBMODULE_ENABLE], [
 
 AC_DEFUN([ATHEME_COND_LEGACY_PWCRYPTO_ENABLE], [
 
-	LEGACY_PWCRYPTO_COND_C="crypt3-des.c crypt3-md5.c ircservices.c rawmd5.c rawsha1.c rawsha2-256.c rawsha2-512.c"
+	LEGACY_PWCRYPTO_COND_C="base64.c ircservices.c"
+	LEGACY_PWCRYPTO_COND_C="${LEGACY_PWCRYPTO_COND_C} crypt3-des.c crypt3-md5.c"
+	LEGACY_PWCRYPTO_COND_C="${LEGACY_PWCRYPTO_COND_C} rawmd5.c rawsha1.c rawsha2-256.c rawsha2-512.c"
 	AC_SUBST([LEGACY_PWCRYPTO_COND_C])
 ])
 
