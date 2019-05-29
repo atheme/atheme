@@ -17,15 +17,19 @@ enum digest_algorithm
 };
 
 #define DIGEST_BKLEN_MD5        0x40U
+#define DIGEST_IVLEN_MD5        0x04U
 #define DIGEST_MDLEN_MD5        0x10U
 
 #define DIGEST_BKLEN_SHA1       0x40U
+#define DIGEST_IVLEN_SHA1       0x05U
 #define DIGEST_MDLEN_SHA1       0x14U
 
 #define DIGEST_BKLEN_SHA2_256   0x40U
+#define DIGEST_IVLEN_SHA2_256   0x08U
 #define DIGEST_MDLEN_SHA2_256   0x20U
 
 #define DIGEST_BKLEN_SHA2_512   0x80U
+#define DIGEST_IVLEN_SHA2_512   0x08U
 #define DIGEST_MDLEN_SHA2_512   0x40U
 
 #define DIGEST_BKLEN_MAX        DIGEST_BKLEN_SHA2_512

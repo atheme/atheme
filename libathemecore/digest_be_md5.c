@@ -187,7 +187,7 @@ digest_init_md5(union digest_state *const restrict state)
 {
 	struct digest_context_md5 *const ctx = &state->md5_ctx;
 
-	static const uint32_t iv[] = {
+	static const uint32_t iv[DIGEST_IVLEN_MD5] = {
 
 		UINT32_C(0x67452301), UINT32_C(0xEFCDAB89), UINT32_C(0x98BADCFE), UINT32_C(0x10325476),
 	};

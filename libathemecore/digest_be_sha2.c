@@ -297,7 +297,7 @@ digest_init_sha2_256(union digest_state *const restrict state)
 {
 	struct digest_context_sha2_256 *const ctx = &state->sha2_256_ctx;
 
-	static const uint32_t iv[] = {
+	static const uint32_t iv[DIGEST_IVLEN_SHA2_256] = {
 
 		UINT32_C(0x6A09E667), UINT32_C(0xBB67AE85), UINT32_C(0x3C6EF372), UINT32_C(0xA54FF53A),
 		UINT32_C(0x510E527F), UINT32_C(0x9B05688C), UINT32_C(0x1F83D9AB), UINT32_C(0x5BE0CD19),
@@ -312,7 +312,7 @@ digest_init_sha2_512(union digest_state *const restrict state)
 {
 	struct digest_context_sha2_512 *const ctx = &state->sha2_512_ctx;
 
-	static const uint64_t iv[] = {
+	static const uint64_t iv[DIGEST_IVLEN_SHA2_512] = {
 
 		UINT64_C(0x6A09E667F3BCC908), UINT64_C(0xBB67AE8584CAA73B),
 		UINT64_C(0x3C6EF372FE94F82B), UINT64_C(0xA54FF53A5F1D36F1),

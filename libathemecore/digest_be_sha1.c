@@ -197,7 +197,7 @@ digest_init_sha1(union digest_state *const restrict state)
 {
 	struct digest_context_sha1 *const ctx = &state->sha1_ctx;
 
-	static const uint32_t iv[0x05U] = {
+	static const uint32_t iv[DIGEST_IVLEN_SHA1] = {
 
 		UINT32_C(0x67452301), UINT32_C(0xEFCDAB89), UINT32_C(0x98BADCFE), UINT32_C(0x10325476),
 		UINT32_C(0xC3D2E1F0),
