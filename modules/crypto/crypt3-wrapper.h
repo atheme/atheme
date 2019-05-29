@@ -16,7 +16,7 @@
 #  include <crypt.h>
 #endif /* HAVE_CRYPT_H */
 
-#define CRYPT3_BASE64_ETABLE                    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789./"
+#define CRYPT3_BASE64_ETABLE                    "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
 #define CRYPT3_LOADHASH_FORMAT_DES              "%[" CRYPT3_BASE64_ETABLE "]"
 #define CRYPT3_LOADHASH_FORMAT_MD5              "$1$%*[" CRYPT3_BASE64_ETABLE "]$%[" CRYPT3_BASE64_ETABLE "]"
