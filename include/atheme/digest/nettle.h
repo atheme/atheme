@@ -14,7 +14,7 @@
 #  error "You should not include me directly; include <atheme/digest.h> instead"
 #endif /* !ATHEME_INC_DIGEST_H */
 
-#include <atheme/digest.h>
+#include <atheme/digest/constants.h>
 #include <atheme/stdheaders.h>
 
 #include <nettle/md5.h>
