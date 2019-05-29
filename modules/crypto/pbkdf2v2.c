@@ -218,9 +218,9 @@ atheme_pbkdf2v2_parameters_sane(const struct pbkdf2v2_dbentry *const restrict db
 		(void) slog(LG_ERROR, "%s: salt length '%zu' out of range", MOWGLI_FUNC_NAME, dbe->sl);
 		return false;
 	}
-	if (dbe->c < PBKDF2_ITERCNT_MIN || dbe->c > PBKDF2_ITERCNT_MAX)
+	if (! dbe->c)
 	{
-		(void) slog(LG_ERROR, "%s: iteration count '%u' out of range", MOWGLI_FUNC_NAME, dbe->c);
+		(void) slog(LG_ERROR, "%s: iteration count '%u' invalid", MOWGLI_FUNC_NAME, dbe->c);
 		return false;
 	}
 
