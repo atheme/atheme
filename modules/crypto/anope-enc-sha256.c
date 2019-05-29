@@ -34,6 +34,7 @@
  */
 
 // Since we need to avoid the Digest API, we can't include <atheme.h>
+#include <atheme/attributes.h>  // ATHEME_FATTR_WUR, ATHEME_VATTR_UNUSED
 #include <atheme/base64.h>      // base64_decode()
 #include <atheme/crypto.h>      // crypt_register(), crypt_unregister(), struct crypt_impl
 #include <atheme/memory.h>      // smemcmp(), smemzero()
