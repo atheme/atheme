@@ -42,13 +42,12 @@ atheme_rawhash_verify(const char *const restrict password, const char *const res
 	for (size_t i = 0; i < sizeof digest; i++)
 		(void) sprintf(result + RAWHASH_PREFIX_LEN + (i * 2), "%02x", 255 & digest[i]);
 
-	if (smemcmp(result, parameters, RAWHASH_PARAMS_LEN) != 0)
-		return false;
+	const int ret = smemcmp(result, parameters, RAWHASH_PARAMS_LEN);
 
 	(void) smemzero(digest, sizeof digest);
 	(void) smemzero(result, sizeof result);
 
-	return true;
+	return (ret == 0);
 }
 
 static const struct crypt_impl crypto_rawhash_impl = {
