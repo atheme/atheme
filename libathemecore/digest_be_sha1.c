@@ -31,10 +31,6 @@
  * SHA1 backend for Atheme IRC Services.
  */
 
-#ifndef ATHEME_LAC_DIGEST_FE_INTERNAL_C
-#  error "Do not compile me directly; compile digest_frontend.c instead"
-#endif /* !ATHEME_LAC_DIGEST_FE_INTERNAL_C */
-
 #define SHA1_ROL(value, bits) (((value) << (bits)) | ((value) >> (0x20U - (bits))))
 
 #define SHA1_BLK0_BE(i) block->l[i]

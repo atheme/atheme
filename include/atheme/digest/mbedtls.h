@@ -10,10 +10,6 @@
 #ifndef ATHEME_INC_DIGEST_IMPL_H
 #define ATHEME_INC_DIGEST_IMPL_H 1
 
-#ifndef ATHEME_INC_DIGEST_H
-#  error "You should not include me directly; include <atheme/digest.h> instead"
-#endif /* !ATHEME_INC_DIGEST_H */
-
 #include <atheme/digest/constants.h>
 #include <atheme/stdheaders.h>
 

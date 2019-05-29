@@ -42,10 +42,6 @@
  * MD5 backend for Atheme IRC Services.
  */
 
-#ifndef ATHEME_LAC_DIGEST_FE_INTERNAL_C
-#  error "Do not compile me directly; compile digest_frontend.c instead"
-#endif /* !ATHEME_LAC_DIGEST_FE_INTERNAL_C */
-
 #define MD5_ROUND1(a, b, c, d, k, r, i)                                 \
     do {                                                                \
         t = s[a] + ((s[b] & s[c]) | (~(s[b]) & s[d])) + x[k] + T[i];    \

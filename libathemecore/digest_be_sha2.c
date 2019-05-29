@@ -43,10 +43,6 @@
  * SHA2-256 & SHA2-512 backend for Atheme IRC Services.
  */
 
-#ifndef ATHEME_LAC_DIGEST_FE_INTERNAL_C
-#  error "Do not compile me directly; compile digest_frontend.c instead"
-#endif /* !ATHEME_LAC_DIGEST_FE_INTERNAL_C */
-
 #define DIGEST_SHORT_BKLEN_SHA2_256     (DIGEST_BKLEN_SHA2_256 - 0x08U)
 #define DIGEST_SHORT_BKLEN_SHA2_512     (DIGEST_BKLEN_SHA2_512 - 0x10U)
 

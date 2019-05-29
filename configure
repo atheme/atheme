@@ -13296,7 +13296,7 @@ $as_echo "#define ATHEME_ENABLE_LEGACY_PWCRYPTO 1" >>confdefs.h
 
 
 
-	LEGACY_PWCRYPTO_COND_C="base64.c ircservices.c"
+	LEGACY_PWCRYPTO_COND_C="anope-enc-sha256.c base64.c ircservices.c"
 	LEGACY_PWCRYPTO_COND_C="${LEGACY_PWCRYPTO_COND_C} crypt3-des.c crypt3-md5.c"
 	LEGACY_PWCRYPTO_COND_C="${LEGACY_PWCRYPTO_COND_C} rawmd5.c rawsha1.c rawsha2-256.c rawsha2-512.c"
 
