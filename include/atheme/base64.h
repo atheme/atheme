@@ -37,8 +37,8 @@
 
 size_t base64_encode(const void *, size_t, char *, size_t) ATHEME_FATTR_WUR;
 size_t base64_encode_raw(const void *, size_t, char *, size_t) ATHEME_FATTR_WUR;
-size_t base64_encode_table(const void *, size_t, char *, size_t, const char alphabet[static 64]) ATHEME_FATTR_WUR;
-size_t base64_encode_table_raw(const void *, size_t, char *, size_t, const char alphabet[static 64]) ATHEME_FATTR_WUR;
+size_t base64_encode_table(const void *, size_t, char *, size_t, const char alphabet[static 65]) ATHEME_FATTR_WUR;
+size_t base64_encode_table_raw(const void *, size_t, char *, size_t, const char alphabet[static 65]) ATHEME_FATTR_WUR;
 
 size_t base64_decode(const char *, void *, size_t) ATHEME_FATTR_WUR;
 
