@@ -8,7 +8,7 @@
 #include <atheme.h>
 #include "internal.h"
 
-static const char base64_etable_default[] = {
+static const char alphabet_default[] = {
 
 	0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50,
 	0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66,
@@ -16,7 +16,7 @@ static const char base64_etable_default[] = {
 	0x77, 0x78, 0x79, 0x7A, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x2B, 0x2F,
 };
 
-static const unsigned char base64_dtable[] = {
+static const unsigned char inverse_alphabet_default[] = {
 
 	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
@@ -30,7 +30,7 @@ static const unsigned char base64_dtable[] = {
 
 static size_t ATHEME_FATTR_WUR
 base64_encode_run(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len,
-                  const bool terminate, const char base64_etable[const restrict static 64])
+                  const bool terminate, const char alphabet[const restrict static 64])
 {
 	const unsigned char *src = (const unsigned char *) in;
 	size_t src_len = in_len;
@@ -47,10 +47,10 @@ base64_encode_run(const void *const restrict in, const size_t in_len, char *cons
 			if ((written + 4) >= dst_len)
 				return BASE64_FAIL;
 
-			dst[written++] = base64_etable[src[0] >> 0x02U];
-			dst[written++] = base64_etable[((src[0] & 0x03U) << 0x04U) + (src[1] >> 0x04U)];
-			dst[written++] = base64_etable[((src[1] & 0x0FU) << 0x02U) + (src[2] >> 0x06U)];
-			dst[written++] = base64_etable[src[2] & 0x3FU];
+			dst[written++] = alphabet[src[0] >> 0x02U];
+			dst[written++] = alphabet[((src[0] & 0x03U) << 0x04U) + (src[1] >> 0x04U)];
+			dst[written++] = alphabet[((src[1] & 0x0FU) << 0x02U) + (src[2] >> 0x06U)];
+			dst[written++] = alphabet[src[2] & 0x3FU];
 		}
 		else
 			written += 4;
@@ -66,9 +66,9 @@ base64_encode_run(const void *const restrict in, const size_t in_len, char *cons
 			if ((written + 3) >= dst_len)
 				return BASE64_FAIL;
 
-			dst[written++] = base64_etable[src[0] >> 0x02U];
-			dst[written++] = base64_etable[((src[0] & 0x03U) << 0x04U) + (src[1] >> 0x04U)];
-			dst[written++] = base64_etable[(src[1] & 0x0FU) << 0x02U];
+			dst[written++] = alphabet[src[0] >> 0x02U];
+			dst[written++] = alphabet[((src[0] & 0x03U) << 0x04U) + (src[1] >> 0x04U)];
+			dst[written++] = alphabet[(src[1] & 0x0FU) << 0x02U];
 
 			if (terminate)
 			{
@@ -94,8 +94,8 @@ base64_encode_run(const void *const restrict in, const size_t in_len, char *cons
 			if ((written + 2) >= dst_len)
 				return BASE64_FAIL;
 
-			dst[written++] = base64_etable[src[0] >> 0x02U];
-			dst[written++] = base64_etable[(src[0] & 0x03U) << 0x04U];
+			dst[written++] = alphabet[src[0] >> 0x02U];
+			dst[written++] = alphabet[(src[0] & 0x03U) << 0x04U];
 
 			if (terminate)
 			{
@@ -125,27 +125,27 @@ base64_encode_run(const void *const restrict in, const size_t in_len, char *cons
 size_t ATHEME_FATTR_WUR
 base64_encode(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len)
 {
-	return base64_encode_run(in, in_len, dst, dst_len, true, base64_etable_default);
+	return base64_encode_run(in, in_len, dst, dst_len, true, alphabet_default);
 }
 
 size_t ATHEME_FATTR_WUR
 base64_encode_raw(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len)
 {
-	return base64_encode_run(in, in_len, dst, dst_len, false, base64_etable_default);
+	return base64_encode_run(in, in_len, dst, dst_len, false, alphabet_default);
 }
 
 size_t ATHEME_FATTR_WUR
 base64_encode_table(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len,
-                    const char base64_etable_given[const restrict static 64])
+                    const char alphabet[const restrict static 64])
 {
-	return base64_encode_run(in, in_len, dst, dst_len, true, base64_etable_given);
+	return base64_encode_run(in, in_len, dst, dst_len, true, alphabet);
 }
 
 size_t ATHEME_FATTR_WUR
 base64_encode_table_raw(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len,
-                        const char base64_etable_given[const restrict static 64])
+                        const char alphabet[const restrict static 64])
 {
-	return base64_encode_run(in, in_len, dst, dst_len, false, base64_etable_given);
+	return base64_encode_run(in, in_len, dst, dst_len, false, alphabet);
 }
 
 size_t ATHEME_FATTR_WUR
@@ -183,7 +183,7 @@ base64_decode(const char *restrict src, void *const restrict out, const size_t o
 				break;
 			else if (och[done] >= 0x80U)
 				return BASE64_FAIL;
-			else if ((och[done] = base64_dtable[och[done]]) == 0xFFU)
+			else if ((och[done] = inverse_alphabet_default[och[done]]) == 0xFFU)
 				return BASE64_FAIL;
 		}
 
