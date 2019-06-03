@@ -152,8 +152,9 @@ base64_encode_table_raw(const void *const restrict in, const size_t in_len, char
 	return base64_encode_run(in, in_len, dst, dst_len, false, alphabet);
 }
 
-size_t ATHEME_FATTR_WUR
-base64_decode(const char *restrict src, void *const restrict out, const size_t out_len)
+static size_t ATHEME_FATTR_WUR
+base64_decode_run(const char *restrict src, void *const restrict out, const size_t out_len,
+                  const unsigned char inverse_alphabet[const restrict static 128])
 {
 	unsigned char *const dst = (unsigned char *) out;
 	const size_t dst_len = out_len;
@@ -186,7 +187,7 @@ base64_decode(const char *restrict src, void *const restrict out, const size_t o
 			if (och[done] >= 0x80U)
 				return BASE64_FAIL;
 
-			och[done] = inverse_alphabet_default[och[done]];
+			och[done] = inverse_alphabet[och[done]];
 
 			if (och[done] == 0xFEU)
 				break;
@@ -250,4 +251,10 @@ base64_decode(const char *restrict src, void *const restrict out, const size_t o
 	}
 
 	return written;
+}
+
+size_t ATHEME_FATTR_WUR
+base64_decode(const char *const restrict src, void *const restrict out, const size_t out_len)
+{
+	return base64_decode_run(src, out, out_len, inverse_alphabet_default);
 }
