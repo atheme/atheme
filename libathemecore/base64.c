@@ -38,7 +38,7 @@ base64_encode_run(const void *const restrict in, const size_t in_len, char *cons
 
 	size_t written = 0;
 
-	if (dst != NULL && dst_len == 0)
+	if (dst != NULL && in_len > 0 && dst_len == 0)
 		return BASE64_FAIL;
 
 	if (terminate && alphabet[64] == 0x00)
