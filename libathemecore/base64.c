@@ -39,9 +39,11 @@ base64_encode_run(const void *const restrict in, const size_t in_len, char *cons
 	size_t written = 0;
 
 	if (dst != NULL && in_len > 0 && dst_len == 0)
+		// Definitely not enough room
 		return BASE64_FAIL;
 
 	if (terminate && alphabet[64] == 0x00)
+		// Asked to terminate with padding, but not given a padding character
 		return BASE64_FAIL;
 
 	while (src_len >= 3)
@@ -49,6 +51,7 @@ base64_encode_run(const void *const restrict in, const size_t in_len, char *cons
 		if (dst != NULL)
 		{
 			if ((written + 4) >= dst_len)
+				// Insufficient output buffer space remaining
 				return BASE64_FAIL;
 
 			dst[written++] = alphabet[src[0] >> 0x02U];
@@ -68,6 +71,7 @@ base64_encode_run(const void *const restrict in, const size_t in_len, char *cons
 		if (dst != NULL)
 		{
 			if ((written + 3) >= dst_len)
+				// Insufficient output buffer space remaining
 				return BASE64_FAIL;
 
 			dst[written++] = alphabet[src[0] >> 0x02U];
@@ -77,6 +81,7 @@ base64_encode_run(const void *const restrict in, const size_t in_len, char *cons
 			if (terminate)
 			{
 				if ((written + 1) >= dst_len)
+					// Insufficient output buffer space remaining
 					return BASE64_FAIL;
 
 				dst[written++] = alphabet[64];
@@ -96,6 +101,7 @@ base64_encode_run(const void *const restrict in, const size_t in_len, char *cons
 		if (dst != NULL)
 		{
 			if ((written + 2) >= dst_len)
+				// Insufficient output buffer space remaining
 				return BASE64_FAIL;
 
 			dst[written++] = alphabet[src[0] >> 0x02U];
@@ -104,6 +110,7 @@ base64_encode_run(const void *const restrict in, const size_t in_len, char *cons
 			if (terminate)
 			{
 				if ((written + 2) >= dst_len)
+					// Insufficient output buffer space remaining
 					return BASE64_FAIL;
 
 				dst[written++] = alphabet[64];
@@ -175,30 +182,43 @@ base64_decode_run(const char *restrict src, void *const restrict out, const size
 				src_len--;
 
 				if (src_len == 0 && done >= 2)
+					// We have consumed enough input to process below
 					break;
-				else if (src_len == 0 && done == 0)
+
+				if (src_len == 0 && done == 0)
+					// We didn't consume any more input; we're done
+					// This is to handle a valid string that ends in whitespace
 					return written;
-				else if (src_len == 0)
+
+				if (src_len == 0)
+					// End of input (premature)
 					return BASE64_FAIL;
 			}
 
 			och[done] = (unsigned char) src[done];
 
 			if (och[done] >= 0x80U)
+				// Invalid input character (out of 7-bit ASCII range)
 				return BASE64_FAIL;
 
 			och[done] = inverse_alphabet[och[done]];
 
 			if (och[done] == 0xFEU)
+				// End of input (null terminator / padding character), errors will be handled below
 				break;
+
 			if (och[done] == 0xFFU)
+				// Invalid input character (not in our alphabet)
 				return BASE64_FAIL;
 		}
 
 		if (done == 0 && (written % 3) == 0)
+			// Ran out of input; we're done
+			// This is to handle a valid string that ends in whitespace
 			return written;
 
 		if (done <= 1)
+			// End of input (premature)
 			return BASE64_FAIL;
 
 		if (done > 1)
@@ -206,6 +226,7 @@ base64_decode_run(const char *restrict src, void *const restrict out, const size
 			if (dst != NULL)
 			{
 				if (written >= dst_len)
+					// Insufficient output buffer space remaining
 					return BASE64_FAIL;
 
 				dst[written] = (unsigned char) (och[0] << 0x02U);
@@ -220,6 +241,7 @@ base64_decode_run(const char *restrict src, void *const restrict out, const size
 			if (dst != NULL)
 			{
 				if (written >= dst_len)
+					// Insufficient output buffer space remaining
 					return BASE64_FAIL;
 
 				dst[written] = (unsigned char) ((och[1] & 0x0FU) << 0x04U);
@@ -234,6 +256,7 @@ base64_decode_run(const char *restrict src, void *const restrict out, const size
 			if (dst != NULL)
 			{
 				if (written >= dst_len)
+					// Insufficient output buffer space remaining
 					return BASE64_FAIL;
 
 				dst[written] = (unsigned char) ((och[2] & 0x03U) << 0x06U);
@@ -265,11 +288,14 @@ base64_decode_table(const char *const restrict src, void *const restrict out, co
 {
 	unsigned char inverse_alphabet_computed[128];
 
+	// Prefill with invalid character indicator
 	(void) memset(inverse_alphabet_computed, 0xFF, sizeof inverse_alphabet_computed);
 
 	for (unsigned char i = 0; i < 64; i++)
+		// Populate character positions
 		inverse_alphabet_computed[((unsigned char) alphabet[i])] = i;
 
+	// Indicate end-of-input bytes
 	inverse_alphabet_computed[0x00] = 0xFE;
 	inverse_alphabet_computed[((unsigned char) alphabet[64])] = 0xFE;
 
