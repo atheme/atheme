@@ -258,3 +258,20 @@ base64_decode(const char *const restrict src, void *const restrict out, const si
 {
 	return base64_decode_run(src, out, out_len, inverse_alphabet_default);
 }
+
+size_t ATHEME_FATTR_WUR
+base64_decode_table(const char *const restrict src, void *const restrict out, const size_t out_len,
+                    const char alphabet[const restrict static 65])
+{
+	unsigned char inverse_alphabet_computed[128];
+
+	(void) memset(inverse_alphabet_computed, 0xFF, sizeof inverse_alphabet_computed);
+
+	for (unsigned char i = 0; i < 64; i++)
+		inverse_alphabet_computed[((unsigned char) alphabet[i])] = i;
+
+	inverse_alphabet_computed[0x00] = 0xFE;
+	inverse_alphabet_computed[((unsigned char) alphabet[64])] = 0xFE;
+
+	return base64_decode_run(src, out, out_len, inverse_alphabet_computed);
+}

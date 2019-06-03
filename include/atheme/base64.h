@@ -41,5 +41,6 @@ size_t base64_encode_table(const void *, size_t, char *, size_t, const char alph
 size_t base64_encode_table_raw(const void *, size_t, char *, size_t, const char alphabet[static 65]) ATHEME_FATTR_WUR;
 
 size_t base64_decode(const char *, void *, size_t) ATHEME_FATTR_WUR;
+size_t base64_decode_table(const char *, void *, size_t, const char alphabet[static 65]) ATHEME_FATTR_WUR;
 
 #endif /* !ATHEME_INC_BASE64_H */
