@@ -29,6 +29,47 @@ static const unsigned char inverse_alphabet_default[] = {
 	0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F, 0x30, 0x31, 0x32, 0x33, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 };
 
+static bool ATHEME_FATTR_WUR
+base64_alphabet_invert(const char alphabet[const restrict static 65],
+                       unsigned char inverse_alphabet[const restrict static 128])
+{
+	// Prefill with invalid character indicator
+	(void) memset(inverse_alphabet, 0xFF, 128);
+
+	for (unsigned char i = 0; i < 65; i++)
+	{
+		if (isspace(alphabet[i]))
+			// Whitespace in alphabet
+			return false;
+
+		if (i < 64 && ! isprint(alphabet[i]))
+			// Non-printable character in alphabet
+			return false;
+
+		if (i == 64 && ! isprint(alphabet[i]) && alphabet[i] != 0x00)
+			// Non-printable non-null padding character
+			return false;
+
+		const unsigned char och = (unsigned char) alphabet[i];
+
+		if (inverse_alphabet[och] != 0xFF)
+			// Duplicated character in alphabet
+			return false;
+
+		// Populate character positions
+		inverse_alphabet[och] = i;
+	}
+
+	if (inverse_alphabet[0x00] != 0xFF && inverse_alphabet[0x00] != 0x40)
+		// Duplicated character in alphabet
+		return false;
+
+	// A null string terminator is always end-of-input
+	inverse_alphabet[0x00] = 0x40;
+
+	return true;
+}
+
 static size_t ATHEME_FATTR_WUR
 base64_encode_run(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len,
                   const bool terminate, const char alphabet[const restrict static 65])
@@ -146,16 +187,28 @@ base64_encode_raw(const void *const restrict in, const size_t in_len, char *cons
 }
 
 size_t ATHEME_FATTR_WUR
-base64_encode_table(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len,
-                    const char alphabet[const restrict static 65])
+base64_encode_table(const void *const restrict in, const size_t in_len, char *const restrict dst,
+                    const size_t dst_len, const char alphabet[const restrict static 65])
 {
+	unsigned char inverse_alphabet[128];
+
+	if (! base64_alphabet_invert(alphabet, inverse_alphabet))
+		// Duplicated or invalid character in alphabet
+		return BASE64_FAIL;
+
 	return base64_encode_run(in, in_len, dst, dst_len, true, alphabet);
 }
 
 size_t ATHEME_FATTR_WUR
-base64_encode_table_raw(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len,
-                        const char alphabet[const restrict static 65])
+base64_encode_table_raw(const void *const restrict in, const size_t in_len, char *const restrict dst,
+                        const size_t dst_len, const char alphabet[const restrict static 65])
 {
+	unsigned char inverse_alphabet[128];
+
+	if (! base64_alphabet_invert(alphabet, inverse_alphabet))
+		// Duplicated or invalid character in alphabet
+		return BASE64_FAIL;
+
 	return base64_encode_run(in, in_len, dst, dst_len, false, alphabet);
 }
 
@@ -286,18 +339,11 @@ size_t ATHEME_FATTR_WUR
 base64_decode_table(const char *const restrict src, void *const restrict out, const size_t out_len,
                     const char alphabet[const restrict static 65])
 {
-	unsigned char inverse_alphabet_computed[128];
+	unsigned char inverse_alphabet[128];
 
-	// Prefill with invalid character indicator
-	(void) memset(inverse_alphabet_computed, 0xFF, sizeof inverse_alphabet_computed);
+	if (! base64_alphabet_invert(alphabet, inverse_alphabet))
+		// Duplicated or invalid character in alphabet
+		return BASE64_FAIL;
 
-	for (unsigned char i = 0; i < 64; i++)
-		// Populate character positions
-		inverse_alphabet_computed[((unsigned char) alphabet[i])] = i;
-
-	// Indicate end-of-input bytes
-	inverse_alphabet_computed[0x00] = 0xFE;
-	inverse_alphabet_computed[((unsigned char) alphabet[64])] = 0xFE;
-
-	return base64_decode_run(src, out, out_len, inverse_alphabet_computed);
+	return base64_decode_run(src, out, out_len, inverse_alphabet);
 }
