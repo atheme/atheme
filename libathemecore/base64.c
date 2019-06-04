@@ -71,6 +71,142 @@ base64_alphabet_invert(const char alphabet[const restrict static 65],
 }
 
 static size_t ATHEME_FATTR_WUR
+base64_decode_run(const char *restrict src, void *const restrict out, const size_t out_len,
+                  const unsigned char inverse_alphabet[const restrict static 128])
+{
+	unsigned char *const dst = (unsigned char *) out;
+	const size_t dst_len = out_len;
+
+	size_t src_len = strlen(src);
+	size_t written = 0;
+
+	while (src_len != 0)
+	{
+		unsigned char och[4];
+		size_t done;
+
+		for (done = 0; done < 4; done++)
+		{
+			while (isspace((int) src[done]))
+			{
+				src++;
+				src_len--;
+
+				if (src_len == 0 && done >= 2)
+					// We have consumed enough input to process below
+					break;
+
+				if (src_len == 0 && done == 0)
+					// We didn't consume any more input; we're done
+					// This is to handle a valid string that ends in whitespace
+					return written;
+
+				if (src_len == 0)
+					// End of input (premature)
+					return BASE64_FAIL;
+			}
+
+			och[done] = (unsigned char) src[done];
+
+			if (och[done] >= 0x80U)
+				// Invalid input character (out of 7-bit ASCII range)
+				return BASE64_FAIL;
+
+			och[done] = inverse_alphabet[och[done]];
+
+			if (och[done] == 0xFEU)
+				// End of input (null terminator / padding character), errors will be handled below
+				break;
+
+			if (och[done] == 0xFFU)
+				// Invalid input character (not in our alphabet)
+				return BASE64_FAIL;
+		}
+
+		if (done == 0 && (written % 3) == 0)
+			// Ran out of input; we're done
+			// This is to handle a valid string that ends in whitespace
+			return written;
+
+		if (done <= 1)
+			// End of input (premature)
+			return BASE64_FAIL;
+
+		if (done > 1)
+		{
+			if (dst != NULL)
+			{
+				if (written >= dst_len)
+					// Insufficient output buffer space remaining
+					return BASE64_FAIL;
+
+				dst[written] = (unsigned char) (och[0] << 0x02U);
+				dst[written++] |= (unsigned char) (och[1] >> 0x04U);
+			}
+			else
+				written++;
+		}
+
+		if (done > 2)
+		{
+			if (dst != NULL)
+			{
+				if (written >= dst_len)
+					// Insufficient output buffer space remaining
+					return BASE64_FAIL;
+
+				dst[written] = (unsigned char) ((och[1] & 0x0FU) << 0x04U);
+				dst[written++] |= (unsigned char) (och[2] >> 0x02U);
+			}
+			else
+				written++;
+		}
+
+		if (done > 3)
+		{
+			if (dst != NULL)
+			{
+				if (written >= dst_len)
+					// Insufficient output buffer space remaining
+					return BASE64_FAIL;
+
+				dst[written] = (unsigned char) ((och[2] & 0x03U) << 0x06U);
+				dst[written++] |= (unsigned char) och[3];
+			}
+			else
+				written++;
+		}
+
+		if (done < 4)
+			break;
+
+		src += 4;
+		src_len -= 4;
+	}
+
+	return written;
+}
+
+size_t ATHEME_FATTR_WUR
+base64_decode(const char *const restrict src, void *const restrict out, const size_t out_len)
+{
+	return base64_decode_run(src, out, out_len, inverse_alphabet_default);
+}
+
+size_t ATHEME_FATTR_WUR
+base64_decode_table(const char *const restrict src, void *const restrict out, const size_t out_len,
+                    const char alphabet[const restrict static 65])
+{
+	unsigned char inverse_alphabet[128];
+
+	if (! base64_alphabet_invert(alphabet, inverse_alphabet))
+		// Duplicated or invalid character in alphabet
+		return BASE64_FAIL;
+
+	return base64_decode_run(src, out, out_len, inverse_alphabet);
+}
+
+static size_t ATHEME_FATTR_WUR
 base64_encode_run(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len,
                   const bool terminate, const char alphabet[const restrict static 65])
 {
@@ -210,140 +346,4 @@ base64_encode_table_raw(const void *const restrict in, const size_t in_len, char
 		return BASE64_FAIL;
 
 	return base64_encode_run(in, in_len, dst, dst_len, false, alphabet);
-}
-
-static size_t ATHEME_FATTR_WUR
-base64_decode_run(const char *restrict src, void *const restrict out, const size_t out_len,
-                  const unsigned char inverse_alphabet[const restrict static 128])
-{
-	unsigned char *const dst = (unsigned char *) out;
-	const size_t dst_len = out_len;
-
-	size_t src_len = strlen(src);
-	size_t written = 0;
-
-	while (src_len != 0)
-	{
-		unsigned char och[4];
-		size_t done;
-
-		for (done = 0; done < 4; done++)
-		{
-			while (isspace((int) src[done]))
-			{
-				src++;
-				src_len--;
-
-				if (src_len == 0 && done >= 2)
-					// We have consumed enough input to process below
-					break;
-
-				if (src_len == 0 && done == 0)
-					// We didn't consume any more input; we're done
-					// This is to handle a valid string that ends in whitespace
-					return written;
-
-				if (src_len == 0)
-					// End of input (premature)
-					return BASE64_FAIL;
-			}
-
-			och[done] = (unsigned char) src[done];
-
-			if (och[done] >= 0x80U)
-				// Invalid input character (out of 7-bit ASCII range)
-				return BASE64_FAIL;
-
-			och[done] = inverse_alphabet[och[done]];
-
-			if (och[done] == 0xFEU)
-				// End of input (null terminator / padding character), errors will be handled below
-				break;
-
-			if (och[done] == 0xFFU)
-				// Invalid input character (not in our alphabet)
-				return BASE64_FAIL;
-		}
-
-		if (done == 0 && (written % 3) == 0)
-			// Ran out of input; we're done
-			// This is to handle a valid string that ends in whitespace
-			return written;
-
-		if (done <= 1)
-			// End of input (premature)
-			return BASE64_FAIL;
-
-		if (done > 1)
-		{
-			if (dst != NULL)
-			{
-				if (written >= dst_len)
-					// Insufficient output buffer space remaining
-					return BASE64_FAIL;
-
-				dst[written] = (unsigned char) (och[0] << 0x02U);
-				dst[written++] |= (unsigned char) (och[1] >> 0x04U);
-			}
-			else
-				written++;
-		}
-
-		if (done > 2)
-		{
-			if (dst != NULL)
-			{
-				if (written >= dst_len)
-					// Insufficient output buffer space remaining
-					return BASE64_FAIL;
-
-				dst[written] = (unsigned char) ((och[1] & 0x0FU) << 0x04U);
-				dst[written++] |= (unsigned char) (och[2] >> 0x02U);
-			}
-			else
-				written++;
-		}
-
-		if (done > 3)
-		{
-			if (dst != NULL)
-			{
-				if (written >= dst_len)
-					// Insufficient output buffer space remaining
-					return BASE64_FAIL;
-
-				dst[written] = (unsigned char) ((och[2] & 0x03U) << 0x06U);
-				dst[written++] |= (unsigned char) och[3];
-			}
-			else
-				written++;
-		}
-
-		if (done < 4)
-			break;
-
-		src += 4;
-		src_len -= 4;
-	}
-
-	return written;
-}
-
-size_t ATHEME_FATTR_WUR
-base64_decode(const char *const restrict src, void *const restrict out, const size_t out_len)
-{
-	return base64_decode_run(src, out, out_len, inverse_alphabet_default);
-}
-
-size_t ATHEME_FATTR_WUR
-base64_decode_table(const char *const restrict src, void *const restrict out, const size_t out_len,
-                    const char alphabet[const restrict static 65])
-{
-	unsigned char inverse_alphabet[128];
-
-	if (! base64_alphabet_invert(alphabet, inverse_alphabet))
-		// Duplicated or invalid character in alphabet
-		return BASE64_FAIL;
-
-	return base64_decode_run(src, out, out_len, inverse_alphabet);
 }
