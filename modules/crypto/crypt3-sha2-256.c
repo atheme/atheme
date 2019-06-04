@@ -27,7 +27,7 @@ atheme_crypt3_sha2_256_crypt(const char *const restrict password,
 
 	(void) atheme_random_buf(rawsalt, sizeof rawsalt);
 
-	if (base64_encode_table_raw(rawsalt, sizeof rawsalt, salt, sizeof salt, CRYPT3_BASE64_ETABLE) == BASE64_FAIL)
+	if (base64_encode_table(rawsalt, sizeof rawsalt, salt, sizeof salt, BASE64_ALPHABET_CRYPT3) == BASE64_FAIL)
 	{
 		(void) slog(LG_ERROR, "%s: base64_encode_table() failed (BUG!)", MOWGLI_FUNC_NAME);
 		return NULL;

@@ -23,11 +23,9 @@
 #define ARGON2D_TIMECOST_DEF    32
 #define ARGON2D_TIMECOST_MAX    16384
 
-#define ATHEME_ARGON2D_LOADB64  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-
 // Format strings for (s)scanf(3)
-#define ATHEME_ARGON2D_LOADSALT "$argon2d$v=19$m=%" SCNu32 ",t=%" SCNu32 ",p=1$%[" ATHEME_ARGON2D_LOADB64 "]$"
-#define ATHEME_ARGON2D_LOADHASH ATHEME_ARGON2D_LOADSALT "%[" ATHEME_ARGON2D_LOADB64 "]"
+#define ATHEME_ARGON2D_LOADSALT "$argon2d$v=19$m=%" SCNu32 ",t=%" SCNu32 ",p=1$%[" BASE64_ALPHABET_RFC4648 "]$"
+#define ATHEME_ARGON2D_LOADHASH ATHEME_ARGON2D_LOADSALT "%[" BASE64_ALPHABET_RFC4648 "]"
 
 // Format strings for (sn)printf(3)
 #define ATHEME_ARGON2D_SAVESALT "$argon2d$v=19$m=%" PRIu32 ",t=%" PRIu32 ",p=1$%s$"
@@ -372,6 +370,12 @@ argon2d_hash_raw(struct argon2d_context *const restrict ctx)
 	(void) smemzero(&bhash_final, sizeof bhash_final);
 
 	return ret;
+}
+
+static inline size_t ATHEME_FATTR_WUR
+base64_encode_raw(const void *const restrict in, const size_t in_len, char *const restrict out, const size_t out_len)
+{
+	return base64_encode_table(in, in_len, out, out_len, BASE64_ALPHABET_RFC4648_NOPAD);
 }
 
 static const char * ATHEME_FATTR_WUR

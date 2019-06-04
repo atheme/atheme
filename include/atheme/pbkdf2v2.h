@@ -17,11 +17,9 @@
 #define PBKDF2V2_CRYPTO_MODULE_NAME     "crypto/pbkdf2v2"
 
 #define PBKDF2_FN_PREFIX                "$z$%u$%u$"
-#define PBKDF2_FN_BASE64                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
-
-#define PBKDF2_FN_LOADSALT              PBKDF2_FN_PREFIX "%[" PBKDF2_FN_BASE64 "]$"
-#define PBKDF2_FN_LOADHASH              PBKDF2_FN_LOADSALT "%[" PBKDF2_FN_BASE64 "]"
-#define PBKDF2_FS_LOADHASH              PBKDF2_FN_LOADHASH "$%[" PBKDF2_FN_BASE64 "]"
+#define PBKDF2_FN_LOADSALT              PBKDF2_FN_PREFIX "%[" BASE64_ALPHABET_RFC4648 "]$"
+#define PBKDF2_FN_LOADHASH              PBKDF2_FN_LOADSALT "%[" BASE64_ALPHABET_RFC4648 "]"
+#define PBKDF2_FS_LOADHASH              PBKDF2_FN_LOADHASH "$%[" BASE64_ALPHABET_RFC4648 "]"
 
 #define PBKDF2_FN_SAVESALT              PBKDF2_FN_PREFIX "%s$"
 #define PBKDF2_FN_SAVEHASH              PBKDF2_FN_SAVESALT "%s"

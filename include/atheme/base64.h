@@ -11,6 +11,11 @@
 #include <atheme/attributes.h>
 #include <atheme/stdheaders.h>
 
+#define BASE64_ALPHABET_RFC4648         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
+#define BASE64_ALPHABET_RFC4648_NOPAD   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+#define BASE64_ALPHABET_CRYPT3          "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+#define BASE64_ALPHABET_CRYPT3_BLOWFISH "./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+
 // This is returned when the encoder or decoder fails
 #define BASE64_FAIL             ((size_t) -1)
 
@@ -39,8 +44,6 @@ size_t base64_decode(const char *, void *, size_t) ATHEME_FATTR_WUR;
 size_t base64_decode_table(const char *, void *, size_t, const char alphabet[static 65]) ATHEME_FATTR_WUR;
 
 size_t base64_encode(const void *, size_t, char *, size_t) ATHEME_FATTR_WUR;
-size_t base64_encode_raw(const void *, size_t, char *, size_t) ATHEME_FATTR_WUR;
 size_t base64_encode_table(const void *, size_t, char *, size_t, const char alphabet[static 65]) ATHEME_FATTR_WUR;
-size_t base64_encode_table_raw(const void *, size_t, char *, size_t, const char alphabet[static 65]) ATHEME_FATTR_WUR;
 
 #endif /* !ATHEME_INC_BASE64_H */

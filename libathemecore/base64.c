@@ -208,7 +208,7 @@ base64_decode_table(const char *const restrict src, void *const restrict out, co
 
 static size_t ATHEME_FATTR_WUR
 base64_encode_run(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len,
-                  const bool terminate, const char alphabet[const restrict static 65])
+                  const char alphabet[const restrict static 65])
 {
 	const unsigned char *src = (const unsigned char *) in;
 	size_t src_len = in_len;
@@ -217,10 +217,6 @@ base64_encode_run(const void *const restrict in, const size_t in_len, char *cons
 
 	if (dst != NULL && in_len > 0 && dst_len == 0)
 		// Definitely not enough room
-		return BASE64_FAIL;
-
-	if (terminate && alphabet[64] == 0x00)
-		// Asked to terminate with padding, but not given a padding character
 		return BASE64_FAIL;
 
 	while (src_len >= 3)
@@ -255,20 +251,20 @@ base64_encode_run(const void *const restrict in, const size_t in_len, char *cons
 			dst[written++] = alphabet[((src[0] & 0x03U) << 0x04U) + (src[1] >> 0x04U)];
 			dst[written++] = alphabet[(src[1] & 0x0FU) << 0x02U];
 
-			if (terminate)
+			if (alphabet[0x40] != 0x00)
 			{
 				if ((written + 1) >= dst_len)
 					// Insufficient output buffer space remaining
 					return BASE64_FAIL;
 
-				dst[written++] = alphabet[64];
+				dst[written++] = alphabet[0x40];
 			}
 		}
 		else
 		{
 			written += 3;
 
-			if (terminate)
+			if (alphabet[0x40] != 0x00)
 				written++;
 		}
 	}
@@ -284,21 +280,21 @@ base64_encode_run(const void *const restrict in, const size_t in_len, char *cons
 			dst[written++] = alphabet[src[0] >> 0x02U];
 			dst[written++] = alphabet[(src[0] & 0x03U) << 0x04U];
 
-			if (terminate)
+			if (alphabet[0x40] != 0x00)
 			{
 				if ((written + 2) >= dst_len)
 					// Insufficient output buffer space remaining
 					return BASE64_FAIL;
 
-				dst[written++] = alphabet[64];
-				dst[written++] = alphabet[64];
+				dst[written++] = alphabet[0x40];
+				dst[written++] = alphabet[0x40];
 			}
 		}
 		else
 		{
 			written += 2;
 
-			if (terminate)
+			if (alphabet[0x40] != 0x00)
 				written += 2;
 		}
 	}
@@ -313,13 +309,7 @@ base64_encode_run(const void *const restrict in, const size_t in_len, char *cons
 size_t ATHEME_FATTR_WUR
 base64_encode(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len)
 {
-	return base64_encode_run(in, in_len, dst, dst_len, true, alphabet_default);
-}
-
-size_t ATHEME_FATTR_WUR
-base64_encode_raw(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len)
-{
-	return base64_encode_run(in, in_len, dst, dst_len, false, alphabet_default);
+	return base64_encode_run(in, in_len, dst, dst_len, alphabet_default);
 }
 
 size_t ATHEME_FATTR_WUR
@@ -332,18 +322,5 @@ base64_encode_table(const void *const restrict in, const size_t in_len, char *co
 		// Duplicated or invalid character in alphabet
 		return BASE64_FAIL;
 
-	return base64_encode_run(in, in_len, dst, dst_len, true, alphabet);
-}
-
-size_t ATHEME_FATTR_WUR
-base64_encode_table_raw(const void *const restrict in, const size_t in_len, char *const restrict dst,
-                        const size_t dst_len, const char alphabet[const restrict static 65])
-{
-	unsigned char inverse_alphabet[128];
-
-	if (! base64_alphabet_invert(alphabet, inverse_alphabet))
-		// Duplicated or invalid character in alphabet
-		return BASE64_FAIL;
-
-	return base64_encode_run(in, in_len, dst, dst_len, false, alphabet);
+	return base64_encode_run(in, in_len, dst, dst_len, alphabet);
 }

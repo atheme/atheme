@@ -46,8 +46,7 @@
 #include <atheme/digest/internal.h>
 #include "../../libathemecore/digest_be_sha2.c"
 
-#define BASE64_ALPHABET         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
-#define MODULE_HASH_FORMAT      "$anope$enc_sha256$%[" BASE64_ALPHABET "]$%[" BASE64_ALPHABET "]"
+#define MODULE_HASH_FORMAT      "$anope$enc_sha256$%[" BASE64_ALPHABET_RFC4648 "]$%[" BASE64_ALPHABET_RFC4648 "]"
 
 static bool ATHEME_FATTR_WUR
 anope_enc_sha256_verify(const char *const restrict password, const char *const restrict parameters,
