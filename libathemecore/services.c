@@ -702,7 +702,9 @@ myuser_login(struct service *svs, struct user *u, struct myuser *mu, bool sendac
 	metadata_add(mu, "private:host:actual", lao);
 
 	/* check for failed attempts and let them know */
-	if ((md_failnum = metadata_find(mu, "private:loginfail:failnum")) && (atoi(md_failnum->value) > 0))
+	if (! metadata_find(mu, "private:showloginfailures:optout") &&
+	    (md_failnum = metadata_find(mu, "private:loginfail:failnum")) &&
+	    (atoi(md_failnum->value) > 0))
 	{
 		struct metadata *md_failtime, *md_failaddr;
 		time_t ts = CURRTIME;
@@ -873,18 +875,24 @@ bad_password(struct sourceinfo *si, struct myuser *mu)
 		svs = service_find("nickserv");
 	if (svs != NULL)
 	{
-		myuser_notice(svs->me->nick, mu, "\2%s\2 failed to login to \2%s\2. There %s been \2%d\2 failed login %s since your last successful login.", mask, entity(mu)->name, count == 1 ? "has" : "have", count, count == 1 ? "attempt" : "attempts");
+		if (! metadata_find(mu, "private:showloginfailures:optout"))
+			myuser_notice(svs->me->nick, mu, "\2%s\2 failed to login to \2%s\2. There %s been \2%d\2 "
+			                                 "failed login %s since your last successful login.", mask,
+			                                 entity(mu)->name, count == 1 ? "has" : "have", count,
+			                                 count == 1 ? "attempt" : "attempts");
 	}
 
 	if (is_soper(mu))
-		slog(LG_INFO, "SOPER:AF: \2%s\2 FAILED Authentication as \2%s\2 (%s)", get_source_name(si), entity(mu)->name, mu->soper->operclass->name);
+		slog(LG_INFO, "SOPER:AF: \2%s\2 FAILED Authentication as \2%s\2 (%s)", get_source_name(si),
+		              entity(mu)->name, mu->soper->operclass->name);
 
 	if (count % 10 == 0)
 	{
 		time_t ts = CURRTIME;
 		tm = localtime(&ts);
 		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
-		wallops("Warning: \2%d\2 failed login attempts to \2%s\2. Last attempt received from \2%s\2 on %s.", count, entity(mu)->name, mask, strfbuf);
+		wallops("Warning: \2%d\2 failed login attempts to \2%s\2. Last attempt received from \2%s\2 on %s.",
+		        count, entity(mu)->name, mask, strfbuf);
 	}
 
 	return false;

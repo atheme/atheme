@@ -166,6 +166,7 @@ modules/nickserv/set_email.c
 modules/nickserv/set_emailmemos.c
 modules/nickserv/set_enforcetime.c
 modules/nickserv/set_hidelastlogin.c
+modules/nickserv/set_hideloginfailures.c
 modules/nickserv/set_hidemail.c
 modules/nickserv/set_language.c
 modules/nickserv/set_nevergroup.c

@@ -1,0 +1,10 @@
+Help for SET HIDELOGINFAILURES:
+
+SET HIDELOGINFAILURES will OPT you out of the Login Failure
+notices sent to you upon authenticating to Services or when
+someone fails to authenticate to you.
+
+Syntax: SET HIDELOGINFAILURES ON|OFF
+
+Example:
+    /msg &nick& SET HIDELOGINFAILURES ON
