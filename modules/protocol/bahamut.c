@@ -50,7 +50,7 @@ static const struct cmode bahamut_mode_list[] = {
   { 'O', CMODE_OPERONLY },
   { 'r', CMODE_CHANREG	},
   { 'A', CMODE_HIDING  },
-  { 'P', CMODE_PRIVACY  }
+  { 'P', CMODE_PRIVACY  },
   { '\0', 0 }
 };
 
