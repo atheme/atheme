@@ -16,8 +16,8 @@ a ban exception matching you is added (in case
 of bans Atheme can't see), the channel is set
 invite-only and moderated and you are invited.
 
-If you are on channel, you will be opped and
-no ban exception will be added.
+If you are in that channel, you will be opped
+and a ban exception will not be added.
 
 Syntax: RECOVER <#channel>
 
