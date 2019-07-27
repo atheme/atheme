@@ -1267,7 +1267,7 @@ nickserv {
 	};
 
 	/*
-	 * shorthelp
+	 * (*)shorthelp
 	 *
 	 * A list of commands that are displayed (with their full description) in the
 	 * output of `/msg NickServ HELP'. Commands not in this list will be listed, but
@@ -1466,7 +1466,7 @@ chanserv {
 	show_custom_metadata;
 
 	/*
-	 * shorthelp
+	 * (*)shorthelp
 	 *
 	 * A list of commands that are displayed (with their full description) in the
 	 * output of `/msg ChanServ HELP'. Commands not in this list will be listed, but
