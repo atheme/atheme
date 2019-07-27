@@ -48,7 +48,7 @@
  * available.
  *
  * Asuka 1.2.1 or later                         modules/protocol/asuka
- * Bahamut 1.8.x                                modules/protocol/bahamut
+ * Bahamut 2.1.x                                modules/protocol/bahamut
  * Charybdis IRCd                               modules/protocol/charybdis
  * ChatIRCd                                     modules/protocol/chatircd1.1
  * DreamForge 4.6.7 or later                    modules/protocol/dreamforge
@@ -94,6 +94,31 @@
  * Open Services Exchange database format       modules/backend/opensex
  * 
  * Most networks will want opensex.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  */
 loadmodule "modules/backend/opensex";
 

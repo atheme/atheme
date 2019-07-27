@@ -12,7 +12,7 @@
 #include <atheme/protocol/bahamut.h>
 
 static struct ircd Bahamut = {
-	.ircdname = "Bahamut 1.8.x",
+	.ircdname = "Bahamut 2.1.x",
 	.tldprefix = "$",
 	.uses_uid = false,
 	.uses_rcommand = false,
@@ -49,6 +49,8 @@ static const struct cmode bahamut_mode_list[] = {
   { 'R', CMODE_REGONLY	},
   { 'O', CMODE_OPERONLY },
   { 'r', CMODE_CHANREG	},
+  { 'A', CMODE_HIDING  },
+  { 'P', CMODE_PRIVACY  },
   { '\0', 0 }
 };
 

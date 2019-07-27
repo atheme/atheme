@@ -12,5 +12,7 @@
 #define CMODE_MODREG            0x00002000U
 #define CMODE_REGONLY           0x00004000U
 #define CMODE_OPERONLY          0x00008000U
+#define CMODE_HIDING            0x00010000U
+#define CMODE_PRIVACY           0x00020000U
 
 #endif /* !ATHEME_INC_PROTOCOL_BAHAMUT_H */

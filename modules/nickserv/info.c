@@ -172,6 +172,26 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 			command_success_nodata(si, _("vHost      : unassigned%s"), buf);
 	}
 
+  if (!nicksvs.no_nick_ownership)
+  {
+    if (si->smu == mu || has_user_auspex)
+    {
+      MOWGLI_ITER_FOREACH(n, mu->nicks.head)
+      {
+        snprintf(buf, BUFSIZE, "private:usercloak:%s", ((struct mynick *)(n->data))->nick);
+        md = metadata_find(mu, buf);
+        vhost = md ? md->value : NULL;
+
+        if (vhost)
+        {
+          command_success_nodata(si, _("vHostNick  : %s (on %s)"), vhost, ((struct mynick *)(n->data))->nick);
+          vhost = NULL;
+          md = NULL;
+        }
+      }
+    }
+  }
+
 	if (has_user_auspex)
 	{
 		if ((md = metadata_find(mu, "private:host:actual")))
