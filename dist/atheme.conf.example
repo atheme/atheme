@@ -258,6 +258,7 @@ loadmodule "modules/crypto/pbkdf2";             /* Verify-only, see prev. */
  * LISTGROUPS command                           modules/nickserv/listgroups
  * REGISTER command                             modules/nickserv/register
  * Bypass registration limits (REGNOLIMIT)      modules/nickserv/regnolimit
+ * Remind users of their email address          modules/nickserv/remind_email
  * Password reset (RESETPASS command)           modules/nickserv/resetpass
  * RESTRICT command                             modules/nickserv/restrict
  * Password return (RETURN command)             modules/nickserv/return
@@ -315,6 +316,7 @@ loadmodule "modules/nickserv/listchans";
 loadmodule "modules/nickserv/listgroups";
 loadmodule "modules/nickserv/register";
 loadmodule "modules/nickserv/regnolimit";
+#loadmodule "modules/nickserv/remind_email";
 loadmodule "modules/nickserv/resetpass";
 loadmodule "modules/nickserv/restrict";
 loadmodule "modules/nickserv/return";
@@ -1552,6 +1554,22 @@ nickserv {
 	 */
 	emailexempts {
 	};
+
+	/* (*)email_remind_interval
+	 *
+	 * If using the nickserv/remind_email module, this is how long to wait
+	 * (in weeks) between notifying users (who identify) what their email
+	 * address is, and how to change it if it is no longer appropriate.
+	 *
+	 * Note that this is only checked when users login, so for example, if
+	 * you have configured an interval of 4 weeks, but someone goes 8 weeks
+	 * between logging in, they will only receive a reminder every 8 weeks.
+	 *
+	 * Valid values are between 4 weeks and 52 weeks (~ 1 year).
+	 * Anything outside this range will be clamped to it.
+	 * The default is 52 weeks.
+	 */
+	#email_remind_interval = 52;
 
 	/*
 	 * (*)shorthelp
