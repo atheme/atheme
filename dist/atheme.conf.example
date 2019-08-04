@@ -13,7 +13,7 @@
 /*
  * These are the modules included with the core distribution of Services.
  *
- * You may be interested in the atheme community modules distribution as 
+ * You may be interested in the atheme community modules distribution as
  * well, which adds additional features that may or may not be compatible
  * with the project paradigms intended for maintainance of the core of
  * atheme-services.
@@ -83,16 +83,16 @@
 #loadmodule "modules/protocol/mixin_noowner";
 
 /* Database backend module.
- * 
+ *
  * Please select a database backend module. Different backends allow for
  * different ways in which the services data can be manipulated. YOU MAY
  * ONLY HAVE ONE OF THESE BACKENDS LOADED.
- * 
+ *
  * The following backends are available:
- * 
+ *
  * Atheme 0.1 flatfile database format          modules/backend/flatfile
  * Open Services Exchange database format       modules/backend/opensex
- * 
+ *
  * Most networks will want opensex.
 
 
@@ -353,7 +353,7 @@ loadmodule "modules/nickserv/vhost";
 #loadmodule "modules/nickserv/waitreg";
 
 /* ChanServ modules.
- * 
+ *
  * Here you can disable or enable certain features of ChanServ, by
  * defining which modules are loaded. You can even disable ChanServ
  * entirely. Please note that ChanServ requires an authentication
@@ -850,7 +850,7 @@ loadmodule "modules/groupserv/set_url";
 #loadmodule "modules/misc/httpd";
 
 /* XMLRPC server module.
- * 
+ *
  * The XML-RPC handler requires modules/misc/httpd to be loaded as it merely
  * registers a path handler for XML-RPC. The path used for XML-RPC is /xmlrpc.
  *
@@ -880,7 +880,7 @@ loadmodule "modules/groupserv/set_url";
 
 /* Proxyscan (DNSBL) modules.
  *
- * Atheme can also check set DNS Blacklists for matches and respond 
+ * Atheme can also check set DNS Blacklists for matches and respond
  * as set.  Activate modules here and customize further down under Proxyscan
  * section.
  */
@@ -993,7 +993,7 @@ serverinfo {
 	/* numeric
 	 * Some protocol drivers (Charybdis, Ratbox2, P10, IRCNet)
 	 * require a server id, also known as a numeric. Please consult your
-	 * ircd's documentation when providing this value. 
+	 * ircd's documentation when providing this value.
 	 */
 	numeric = "00A";
 
@@ -1188,7 +1188,7 @@ nickserv {
 	#no_nick_ownership;
 
 	/* (*)nick
-	 * The nickname we want NickServ to have. 
+	 * The nickname we want NickServ to have.
 	 */
 	nick = "NickServ";
 
@@ -1246,7 +1246,7 @@ nickserv {
 	 * on nicks.
 	 */
 	#enforce_delay = 30;
-	
+
 	/* (*)enforce_prefix
 	 * The prefix to use when changing the user's nick on enforcement
 	 */
@@ -1269,8 +1269,8 @@ nickserv {
 	#cracklib_dict = "/var/cache/cracklib/cracklib_dict";
 
 	/* (*)pwquality_warn_only
-	 * If this option is set and nickserv/pwquality is loaded, nickserv will just 
-	 * warn users that their password is insecure, recommend they change it and 
+	 * If this option is set and nickserv/pwquality is loaded, nickserv will just
+	 * warn users that their password is insecure, recommend they change it and
 	 * still register the nick. If this option is unset, it will refuse to
 	 * register the nick at all until the user chooses a better password.
 	 */
@@ -1338,7 +1338,7 @@ chanserv {
 	 */
 	real = "Channel Services";
 
-	/* reggroup 
+	/* reggroup
 	 * The group that will receive Memos about
 	 * channel Registration requests when
 	 * chanserv/moderate is loaded.
@@ -1350,7 +1350,7 @@ chanserv {
 	 */
 	aliases {
 	};
-	
+
 	/* (*)access
 	 * Command access changes for ChanServ.
 	 */
@@ -1383,7 +1383,7 @@ chanserv {
 	 * except that hop may be equal to vop to disable hop.
 	 * Each subsequent level should have more flags (except +VHO).
 	 * For optimal functioning of /cs forcexop, aop should not have
-	 * any of +sRf, hop should not have any of +sRfoOr and vop should 
+	 * any of +sRf, hop should not have any of +sRfoOr and vop should
 	 * not have any of +sRfoOrhHt.
 	 * If this is not specified, the values of Atheme 0.3 are used,
 	 * which are generally less intuitive than these.
@@ -1641,7 +1641,7 @@ operserv {
 	 */
 	aliases {
 	};
-	
+
 	/* (*)access
 	 * Command access changes for OperServ.
 	 */
@@ -1716,7 +1716,7 @@ memoserv {
 	 */
 	aliases {
 	};
-	
+
 	/* (*)access
 	 * Command access changes for MemoServ.
 	 */
@@ -1761,7 +1761,7 @@ gameserv {
 	 */
 	aliases {
 	};
-	
+
 	/* (*)access
 	 * Command access changes for GameServ.
 	 */
@@ -1801,7 +1801,7 @@ rpgserv {
 	 */
 	aliases {
 	};
-	
+
 	/* (*)access
 	 * Command access changes for RPGServ.
 	 */
@@ -1876,7 +1876,7 @@ groupserv {
 	 */
 	aliases {
 	};
-	
+
 	/* (*)access
 	 * Command access changes for GroupServ.
 	 */
@@ -1936,7 +1936,7 @@ hostserv {
 	 */
 	real = "Host Management Services";
 
-	/* reggroup 
+	/* reggroup
 	 * The group that will receive Memos about
 	 * vHost requests.
 	 */
@@ -1956,7 +1956,7 @@ hostserv {
 		"APPROVE" = "ACTIVATE";
 		"DENY" = "REJECT";
 	};
-	
+
 	/* (*)access
 	 * Command access changes for HostServ.
 	 */
@@ -2212,12 +2212,12 @@ general {
 	 * If you use ircu-like ircd (asuka), you must
 	 * leave this enabled, and put guard in default cflags.
 	 *
-	 * For ratbox it is recommended to leave it on and put guard in 
+	 * For ratbox it is recommended to leave it on and put guard in
 	 * default cflags, in order that ChanServ does not have to join/part
 	 * to do certain things. On the other hand, enabling this increases
 	 * potential for bots fighting with ChanServ.
 	 *
-	 * Regardless of this option, ChanServ will temporarily join 
+	 * Regardless of this option, ChanServ will temporarily join
 	 * channels which would otherwise be empty if necessary to enforce
 	 * akick/restricted/close, and to change the TS if changets is
 	 * enabled.
@@ -2284,7 +2284,7 @@ general {
 	 * After `ratelimit_uses' of a command within `ratelimit_period', users
 	 * will not be able to run that ratelimited command until the period is up.
 	 * Comment this, ratelimit_period below or both options out to disable rate limiting.
-	 * Currently used in helpserv/helpme, helpserv/ticket, hostserv/request, 
+	 * Currently used in helpserv/helpme, helpserv/ticket, hostserv/request,
 	 * nickserv/register and chanserv/register.
 	 */
 	ratelimit_uses = 5;
@@ -2294,7 +2294,7 @@ general {
 	 * After `ratelimit_uses' of a command within `ratelimit_period', users
 	 * will not be able to run that ratelimited command until the period is up.
 	 * Comment this, ratelimit_uses above or both options out to disable rate limiting.
-	 * Currently used in helpserv/helpme, helpserv/ticket, hostserv/request, 
+	 * Currently used in helpserv/helpme, helpserv/ticket, hostserv/request,
 	 * nickserv/register and chanserv/register.
 	 */
 	ratelimit_period = 60;
@@ -2400,7 +2400,7 @@ general {
 	 *    immune - require whatever ircd usermode is needed for kick
 	 *             immunity (this is the default);
 	 *    admin  - require admin privileges for kick immunity
-	 *    ircop  - require any ircop privileges for kick immunity (umode +o) 
+	 *    ircop  - require any ircop privileges for kick immunity (umode +o)
 	 */
 	immune_level = immune;
 
@@ -2428,7 +2428,7 @@ general {
 
 proxyscan {
 	/* Here you can configure the details of your Proxyscan (DNS Blacklist)
-	 * scanner service.  
+	 * scanner service.
 	 */
 
 	nick = "Proxyscan";
@@ -2441,15 +2441,21 @@ proxyscan {
 	 "rbl.efnetrbl.org";
 	 "tor.efnet.org";
 	};
-	
+
 	/* Available dnsbl_action's:
 	 * NONE - Do nothing
 	 * NOTIFY - Notify user that they are listed in a DNSBL and which one
 	 * SNOOP - Report the user to the logchannel or services channel
 	 * KLINE - AKILL the user from the network (default AKILL is 24 hours)
 	 */
-	 
+
 	dnsbl_action = kline;
+
+  /* Defines the length of the AKILL for a dnsbl_action
+   * KLINE in days.
+   */
+
+  kline_duration = 1;
 };
 
 /******************************************************************************

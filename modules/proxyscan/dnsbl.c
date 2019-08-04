@@ -84,6 +84,8 @@ static enum dnsbl_action {
 	DNSBL_ACT_KLINE,
 } action;
 
+static unsigned int kline_duration;
+
 #define ITEM_DESC(x) [DNSBL_ACT_ ## x] = #x
 
 static const char *action_names[] = {
@@ -665,6 +667,7 @@ mod_init(struct module *const restrict m)
 	hook_add_operserv_info(osinfo_hook);
 
 	add_conf_item("DNSBL_ACTION", &proxyscan->conf_table, dnsbl_action_config_handler);
+  add_duration_conf_item("KLINE_DURATION", &proxyscan->conf_table, 0, &kline_duration, "d", 1);
 	add_conf_item("BLACKLISTS", &proxyscan->conf_table, dnsbl_config_handler);
 
 	command_add(&os_set_dnsblaction, *os_set_cmdtree);
@@ -690,6 +693,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	proxyscan = service_find("proxyscan");
 
 	del_conf_item("DNSBL_ACTION", &proxyscan->conf_table);
+  del_conf_item("KLINE_DURATION", &proxyscan->conf_table);
 	del_conf_item("BLACKLISTS", &proxyscan->conf_table);
 
 	command_delete(&os_set_dnsblaction, *os_set_cmdtree);
