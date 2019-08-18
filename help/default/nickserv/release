@@ -4,9 +4,13 @@ RELEASE removes an enforcer for your nick or
 changes the nick of a user that is using your
 nick.
 
-Enforcers are created when someone uses your
-nick without identifying and prevent all use
-of it.
+Enforcers temporarily prevent all use of a nick.
+They are created when someone uses a nickserv 
+enforced nick without identifying, or if you use
+RELEASE to change the nick of a user.
+
+After changing the nick of a user you may need 
+to RELEASE a second time to remove an enforcer.
 
 If you are logged in to the nick, you need not specify
 a password, otherwise you have to.
