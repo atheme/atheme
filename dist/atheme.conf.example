@@ -2306,6 +2306,9 @@ operclass "sra" {
 	 * Only grant privileges to IRC users in this oper class if they
 	 * are opered; other use of privilege (channel succession, XMLRPC,
 	 * etc.) is unaffected by this.
+	 *
+	 * This flag is *not* inherited by operclasses that extend this one;
+	 * you will have to set it explicitly for each operclass.
 	 */
 	needoper;
 };
