@@ -3,14 +3,16 @@
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
  * Copyright (C) 2006-2011 William Pitcock, et al.
- * Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+ * Copyright (C) 2018-2019 Atheme Development Group (https://atheme.github.io/)
  *
  * This file contains routines to handle the OperServ SET command.
  */
 
 #include <atheme.h>
 
-static mowgli_patricia_t *os_set_cmdtree = NULL;
+// Imported by modules/proxyscan/dnsbl
+extern mowgli_patricia_t *os_set_cmdtree;
+mowgli_patricia_t *os_set_cmdtree = NULL;
 
 static void
 os_help_set(struct sourceinfo *const restrict si, const char *const restrict subcmd)
