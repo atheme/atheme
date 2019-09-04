@@ -130,7 +130,7 @@ xmlrpc_split_buf(char *buffer, char ***argv)
 		if (ac >= argvsize)
 		{
 			argvsize *= 2;
-			*argv = srealloc(*argv, sizeof(char *) * argvsize);
+			*argv = sreallocarray(*argv, argvsize, sizeof(char *));
 		}
 		if (tagtype == 1)
 			(*argv)[ac++] = xmlrpc_decode_string(str);

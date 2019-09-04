@@ -56,6 +56,18 @@ smalloc(const size_t len)
 	return scalloc(1, len);
 }
 
+void * ATHEME_FATTR_ALLOC_SIZE_PRODUCT(2, 3) ATHEME_FATTR_WUR
+sreallocarray(void *const restrict ptr, const size_t num, const size_t len)
+{
+	const size_t product = (num * len);
+
+	// Check for overflow
+	if (product < num || product < len || num > (SIZE_MAX / len))
+		RAISE_EXCEPTION;
+
+	return srealloc(ptr, product);
+}
+
 int ATHEME_FATTR_WUR
 smemcmp(const void *const ptr1, const void *const ptr2, const size_t len)
 {

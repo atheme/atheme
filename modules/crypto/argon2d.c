@@ -81,24 +81,14 @@ static unsigned int atheme_argon2d_tcost = ARGON2D_TIMECOST_DEF;
 static struct argon2d_block *argon2d_mempool = NULL;
 static uint32_t argon2d_mempoolsz = 0;
 
-static inline bool ATHEME_FATTR_WUR
+static inline void
 atheme_argon2d_mempool_realloc(const uint32_t mem_blocks)
 {
 	if (argon2d_mempool != NULL && argon2d_mempoolsz >= mem_blocks)
-		return true;
+		return;
 
-	struct argon2d_block *mempool_tmp;
-	const size_t required_sz = mem_blocks * sizeof(struct argon2d_block);
-
-	if (!(mempool_tmp = realloc(argon2d_mempool, required_sz)))
-	{
-		(void) slog(LG_ERROR, "%s: memory allocation failure", MOWGLI_FUNC_NAME);
-		return false;
-	}
-
-	argon2d_mempool = mempool_tmp;
+	argon2d_mempool = sreallocarray(argon2d_mempool, mem_blocks, sizeof(struct argon2d_block));
 	argon2d_mempoolsz = mem_blocks;
-	return true;
 }
 
 static inline void
@@ -325,8 +315,7 @@ argon2d_hash_raw(struct argon2d_context *const restrict ctx)
 
 	ctx->lane_len = mem_blocks;
 
-	if (!atheme_argon2d_mempool_realloc(mem_blocks))
-		return false;
+	(void) atheme_argon2d_mempool_realloc(mem_blocks);
 
 	uint8_t bhash_init[ARGON2_PRESEED_LEN];
 
@@ -513,7 +502,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 	(void) crypt_unregister(&crypto_argon2d_impl);
 
-	(void) free(argon2d_mempool);
+	(void) sfree(argon2d_mempool);
 }
 
 SIMPLE_DECLARE_MODULE_V1("crypto/argon2d", MODULE_UNLOAD_CAPABILITY_OK)

@@ -55,6 +55,12 @@ void *srealloc(void *ptr, size_t len)
     ATHEME_FATTR_WUR
     ATHEME_FATTR_DIAGNOSE_IF((!ptr && !len), "calling srealloc() with (!ptr && !len)", "warning");
 
+void *sreallocarray(void *ptr, size_t num, size_t len)
+    ATHEME_FATTR_ALLOC_SIZE_PRODUCT(2, 3)
+    ATHEME_FATTR_WUR
+    ATHEME_FATTR_DIAGNOSE_IF((!ptr && !num), "calling sreallocarray() with (!ptr && !num)", "warning")
+    ATHEME_FATTR_DIAGNOSE_IF((!ptr && !len), "calling sreallocarray() with (!ptr && !len)", "warning");
+
 char *sstrdup(const char *ptr)
     ATHEME_FATTR_MALLOC
     ATHEME_FATTR_DIAGNOSE_IF(!ptr, "calling sstrdup() with !ptr", "warning");
