@@ -12,7 +12,7 @@
 #include <atheme/constants.h>       // BUFSIZE, PASSLEN
 #include <atheme/digest.h>          // DIGALG_*, digest_oneshot_pbkdf2()
 #include <atheme/libathemecore.h>   // libathemecore_early_init()
-#include <atheme/pbkdf2v2.h>        // PBKDF2_*
+#include <atheme/pbkdf2.h>          // PBKDF2_*
 #include <atheme/random.h>          // atheme_random_*()
 #include <atheme/stdheaders.h>      // (everything else)
 #include <atheme/sysconf.h>         // PACKAGE_TARNAME
