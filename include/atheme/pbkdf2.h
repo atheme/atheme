@@ -4,15 +4,21 @@
  *
  * Copyright (C) 2017-2018 Atheme Development Group (https://atheme.github.io/)
  *
- * Data structures and macros for the PBKDF2v2 crypto module.
+ * Data structures and macros for the PBKDF2 crypto modules and the SASL
+ * SCRAM-SHA module.
  */
 
-#ifndef ATHEME_INC_PBKDF2V2_H
-#define ATHEME_INC_PBKDF2V2_H 1
+#ifndef ATHEME_INC_PBKDF2_H
+#define ATHEME_INC_PBKDF2_H 1
 
 #include <atheme/base64.h>
 #include <atheme/digest.h>
 #include <atheme/stdheaders.h>
+
+#define PBKDF2_LEGACY_ITERCNT           128000U
+#define PBKDF2_LEGACY_SALTLEN           16U
+#define PBKDF2_LEGACY_PARAMLEN          (PBKDF2_LEGACY_SALTLEN + (2 * DIGEST_MDLEN_SHA2_512))
+#define PBKDF2_LEGACY_MODULE_NAME       "crypto/pbkdf2"
 
 #define PBKDF2V2_CRYPTO_MODULE_NAME     "crypto/pbkdf2v2"
 
@@ -87,4 +93,4 @@ struct pbkdf2v2_scram_functions
 	void  (*confhook)(pbkdf2v2_scram_confhook_fn);
 };
 
-#endif /* !ATHEME_INC_PBKDF2V2_H */
+#endif /* !ATHEME_INC_PBKDF2_H */

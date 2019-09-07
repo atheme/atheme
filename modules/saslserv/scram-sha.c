@@ -24,7 +24,7 @@
 
 #ifdef HAVE_LIBIDN
 
-#include <atheme/pbkdf2v2.h>
+#include <atheme/pbkdf2.h>
 
 /* Maximum iteration count Cyrus SASL clients will process
  * Taken from <https://github.com/cyrusimap/cyrus-sasl/blob/f76eb971d456619d0f26/plugins/scram.c#L79>

@@ -52,6 +52,13 @@ POTENTIAL COMPATIBILITY BREAKAGE
   single top `crypto {}` block. Please see `dist/atheme.conf.example` for how
   to adapt your current crypto module configuration, if any.
 
+- The `crypto/pbkdf2` module has been made verify-only, as it has been
+  superceded by `crypto/pbkdf2v2`. Migration instructions are located in the
+  `crypto {}` section comments in `dist/atheme.conf.example`. This module *is*
+  still compiled and installed by default; it is *not* considered a legacy
+  module for the purposes of `./configure --enable-legacy-pwcrypto` (above)
+  because it does not use weak cryptographic primitives.
+
 Security
 --------
 - Services now accepts email addresses that may contain shell metacharacters.

@@ -11,19 +11,26 @@
  */
 
 #include <atheme.h>
+#include <atheme/pbkdf2.h>
 
-#define ATHEME_PBKDF2_ROUNDS    128000U
-#define ATHEME_PBKDF2_SALTLEN   16U
-#define ATHEME_PBKDF2_PARAMLEN  (ATHEME_PBKDF2_SALTLEN + (2 * DIGEST_MDLEN_SHA2_512))
+static void
+atheme_pbkdf2_config_ready(void ATHEME_VATTR_UNUSED *const restrict unused)
+{
+	if (! module_find_published(PBKDF2V2_CRYPTO_MODULE_NAME))
+		(void) slog(LG_INFO, "%s: this module has been superceded by %s; please arrange to have that module "
+		                     "loaded before this one, and see the comments in dist/atheme.conf.example for "
+		                     "the crypto {} section to configure it.", PBKDF2_LEGACY_MODULE_NAME,
+		                     PBKDF2V2_CRYPTO_MODULE_NAME);
+}
 
 static bool ATHEME_FATTR_WUR
 atheme_pbkdf2_verify(const char *const restrict password, const char *const restrict parameters,
                      unsigned int ATHEME_VATTR_UNUSED *const restrict flags)
 {
-	if (strlen(parameters) != ATHEME_PBKDF2_PARAMLEN)
+	if (strlen(parameters) != PBKDF2_LEGACY_PARAMLEN)
 		return false;
 
-	for (size_t i = 0; i < ATHEME_PBKDF2_PARAMLEN; i++)
+	for (size_t i = 0; i < PBKDF2_LEGACY_PARAMLEN; i++)
 		if (! isxdigit(parameters[i]))
 			return false;
 
@@ -38,7 +45,7 @@ atheme_pbkdf2_verify(const char *const restrict password, const char *const rest
 	char hexdigest[(2 * sizeof rawdigest) + 1];
 
 	const bool digest_ok = digest_oneshot_pbkdf2(DIGALG_SHA2_512, password, strlen(password), parameters,
-	                                             ATHEME_PBKDF2_SALTLEN, ATHEME_PBKDF2_ROUNDS, rawdigest,
+	                                             PBKDF2_LEGACY_SALTLEN, PBKDF2_LEGACY_ITERCNT, rawdigest,
 	                                             sizeof rawdigest);
 	if (! digest_ok)
 		return false;
@@ -46,7 +53,7 @@ atheme_pbkdf2_verify(const char *const restrict password, const char *const rest
 	for (size_t i = 0; i < sizeof rawdigest; i++)
 		(void) sprintf(hexdigest + (i * 2), "%02x", 255 & rawdigest[i]);
 
-	const int ret = smemcmp(hexdigest, parameters + ATHEME_PBKDF2_SALTLEN, sizeof hexdigest);
+	const int ret = smemcmp(hexdigest, parameters + PBKDF2_LEGACY_SALTLEN, sizeof hexdigest);
 
 	(void) smemzero(rawdigest, sizeof rawdigest);
 	(void) smemzero(hexdigest, sizeof hexdigest);
@@ -63,6 +70,9 @@ static const struct crypt_impl crypto_pbkdf2_impl = {
 static void
 mod_init(struct module *const restrict m)
 {
+	(void) hook_add_event("config_ready");
+	(void) hook_add_config_ready(&atheme_pbkdf2_config_ready);
+
 	(void) crypt_register(&crypto_pbkdf2_impl);
 
 	m->mflags |= MODFLAG_DBCRYPTO;
@@ -71,7 +81,9 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
+	(void) hook_del_config_ready(&atheme_pbkdf2_config_ready);
+
 	(void) crypt_unregister(&crypto_pbkdf2_impl);
 }
 
-SIMPLE_DECLARE_MODULE_V1("crypto/pbkdf2", MODULE_UNLOAD_CAPABILITY_OK)
+SIMPLE_DECLARE_MODULE_V1(PBKDF2_LEGACY_MODULE_NAME, MODULE_UNLOAD_CAPABILITY_OK)

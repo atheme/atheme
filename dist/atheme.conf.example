@@ -909,10 +909,28 @@ loadmodule "modules/groupserv/set_url";
  * hang services by trying many password attempts at once.
  *
  * A benchmark program for the PBKDF2 code is available:
- * - ./configure --prefix=foo ...
- * - make
- * - make install
- * - ${foo}/bin/atheme-pbkdf2-benchmark
+ *     - ./configure --prefix=foo ...
+ *     - make
+ *     - make install
+ *     - ${foo}/bin/atheme-pbkdf2-benchmark -h
+ *
+ * If you are migrating from crypto/pbkdf2 to crypto/pbkdf2v2, and wish
+ * to use the same parameters (algorithm, iteration count, salt length) as
+ * the older module, configure it as follows. Note that this will still
+ * result in passwords being re-encrypted with the newer module (as the
+ * older module successfully verifies them); another new PBKDF2 computation
+ * with a new salt will occur, but this is still no worse than an invocation
+ * of NickServ's "SET PASSWORD" command. You will still need to keep the old
+ * module in your loadmodule configuration above, as the new module cannot
+ * verify digests produced by the old one. Also note that if you wish to
+ * deploy SASL SCRAM support (see doc/SASL-SCRAM-SHA), its advice regarding
+ * parameter choice takes precedence over these parameters below.
+ *
+ *     crypto {
+ *         pbkdf2v2_digest = "SHA512";
+ *         pbkdf2v2_rounds = 128000;
+ *         pbkdf2v2_saltlen = 16;
+ *     };
  */
 crypto {
 
