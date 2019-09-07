@@ -3,7 +3,7 @@
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
  * Copyright (C) 2012 William Pitcock <nenolod@dereferenced.org>
- * Copyright (C) 2017-2018 Aaron M. D. Jones <aaronmdjones@gmail.com>
+ * Copyright (C) 2017-2019 Aaron M. D. Jones <aaronmdjones@gmail.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -12,36 +12,46 @@
 
 #include <atheme.h>
 
-#define ATHEME_PBKDF2_ROUNDS    128000
-#define ATHEME_PBKDF2_SALTLEN   16
+#define ATHEME_PBKDF2_ROUNDS    128000U
+#define ATHEME_PBKDF2_SALTLEN   16U
+#define ATHEME_PBKDF2_PARAMLEN  (ATHEME_PBKDF2_SALTLEN + (2 * DIGEST_MDLEN_SHA2_512))
 
 static bool ATHEME_FATTR_WUR
 atheme_pbkdf2_verify(const char *const restrict password, const char *const restrict parameters,
                      unsigned int ATHEME_VATTR_UNUSED *const restrict flags)
 {
-	if (strlen(parameters) != (ATHEME_PBKDF2_SALTLEN + (2 * DIGEST_MDLEN_SHA2_512)))
+	if (strlen(parameters) != ATHEME_PBKDF2_PARAMLEN)
 		return false;
 
-	unsigned char buf[DIGEST_MDLEN_SHA2_512];
+	for (size_t i = 0; i < ATHEME_PBKDF2_PARAMLEN; i++)
+		if (! isxdigit(parameters[i]))
+			return false;
 
-	const bool ret = digest_oneshot_pbkdf2(DIGALG_SHA2_512, password, strlen(password), parameters,
-	                                       ATHEME_PBKDF2_SALTLEN, ATHEME_PBKDF2_ROUNDS, buf, sizeof buf);
+	/* Note that this module's output string (from previous versions of services)
+	 * has no defined format, so we can't reliably use PWVERIFY_FLAG_MYMODULE here
+	 * (as per doc/CRYPTO-API). The most we can do is the sanitising above, to save
+	 * some CPU time sometimes. This is partly why crypto/pbkdf2v2 was created.
+	 *   -- amdj
+	 */
 
-	if (! ret)
+	unsigned char rawdigest[DIGEST_MDLEN_SHA2_512];
+	char hexdigest[(2 * sizeof rawdigest) + 1];
+
+	const bool digest_ok = digest_oneshot_pbkdf2(DIGALG_SHA2_512, password, strlen(password), parameters,
+	                                             ATHEME_PBKDF2_SALTLEN, ATHEME_PBKDF2_ROUNDS, rawdigest,
+	                                             sizeof rawdigest);
+	if (! digest_ok)
 		return false;
 
-	char result[(2 * DIGEST_MDLEN_SHA2_512) + 1];
+	for (size_t i = 0; i < sizeof rawdigest; i++)
+		(void) sprintf(hexdigest + (i * 2), "%02x", 255 & rawdigest[i]);
 
-	for (size_t i = 0; i < DIGEST_MDLEN_SHA2_512; i++)
-		(void) sprintf(result + (i * 2), "%02x", 255 & buf[i]);
+	const int ret = smemcmp(hexdigest, parameters + ATHEME_PBKDF2_SALTLEN, sizeof hexdigest);
 
-	if (strcmp(result, parameters + ATHEME_PBKDF2_SALTLEN) != 0)
-		return false;
+	(void) smemzero(rawdigest, sizeof rawdigest);
+	(void) smemzero(hexdigest, sizeof hexdigest);
 
-	(void) smemzero(buf, sizeof buf);
-	(void) smemzero(result, sizeof result);
-
-	return true;
+	return (ret == 0);
 }
 
 static const struct crypt_impl crypto_pbkdf2_impl = {
