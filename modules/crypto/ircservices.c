@@ -14,6 +14,8 @@
 
 #include <atheme.h>
 
+#define CRYPTO_MODULE_NAME      "crypto/ircservices"
+
 #define MODULE_PREFIX_STR       "$ircservices$"
 #define MODULE_PREFIX_LEN       13
 #define MODULE_DIGEST_LEN       8
@@ -68,7 +70,7 @@ atheme_ircservices_verify(const char *const restrict password, const char *const
 
 static const struct crypt_impl crypto_ircservices_impl = {
 
-	.id         = "ircservices",
+	.id         = CRYPTO_MODULE_NAME,
 	.verify     = &atheme_ircservices_verify,
 };
 
@@ -86,4 +88,4 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	(void) crypt_unregister(&crypto_ircservices_impl);
 }
 
-SIMPLE_DECLARE_MODULE_V1("crypto/ircservices", MODULE_UNLOAD_CAPABILITY_OK)
+SIMPLE_DECLARE_MODULE_V1(CRYPTO_MODULE_NAME, MODULE_UNLOAD_CAPABILITY_OK)

@@ -9,6 +9,8 @@
 
 #include <atheme.h>
 
+#define CRYPTO_MODULE_NAME "crypto/sodium-scrypt"
+
 #ifdef HAVE_LIBSODIUM_SCRYPT
 
 #include <sodium/crypto_pwhash_scryptsalsa208sha256.h>
@@ -47,7 +49,7 @@ atheme_sodium_scrypt_verify(const char *const restrict password, const char *con
 
 static const struct crypt_impl crypto_sodium_scrypt_impl = {
 
-	.id        = "sodium-scrypt",
+	.id        = CRYPTO_MODULE_NAME,
 	.verify    = &atheme_sodium_scrypt_verify,
 };
 
@@ -83,4 +85,4 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 #endif /* !HAVE_LIBSODIUM_SCRYPT */
 
-SIMPLE_DECLARE_MODULE_V1("crypto/sodium-scrypt", MODULE_UNLOAD_CAPABILITY_OK)
+SIMPLE_DECLARE_MODULE_V1(CRYPTO_MODULE_NAME, MODULE_UNLOAD_CAPABILITY_OK)

@@ -15,6 +15,8 @@
 #include <atheme.h>
 #include "blake2b.h"
 
+#define CRYPTO_MODULE_NAME      "crypto/argon2d"
+
 #define ARGON2D_MEMCOST_MIN     8
 #define ARGON2D_MEMCOST_DEF     14
 #define ARGON2D_MEMCOST_MAX     20
@@ -472,7 +474,7 @@ atheme_argon2d_verify(const char *const restrict password, const char *const res
 
 static const struct crypt_impl crypto_argon2d_impl = {
 
-	.id         = "argon2d",
+	.id         = CRYPTO_MODULE_NAME,
 	.crypt      = &atheme_argon2d_crypt,
 	.verify     = &atheme_argon2d_verify,
 };
@@ -505,4 +507,4 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	(void) sfree(argon2d_mempool);
 }
 
-SIMPLE_DECLARE_MODULE_V1("crypto/argon2d", MODULE_UNLOAD_CAPABILITY_OK)
+SIMPLE_DECLARE_MODULE_V1(CRYPTO_MODULE_NAME, MODULE_UNLOAD_CAPABILITY_OK)

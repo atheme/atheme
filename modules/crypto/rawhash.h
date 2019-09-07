@@ -52,7 +52,7 @@ atheme_rawhash_verify(const char *const restrict password, const char *const res
 
 static const struct crypt_impl crypto_rawhash_impl = {
 
-	.id         = RAWHASH_MODULE_NAME,
+	.id         = "crypto/" RAWHASH_MODULE_NAME,
 	.verify     = &atheme_rawhash_verify,
 };
 

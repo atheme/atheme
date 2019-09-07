@@ -46,6 +46,8 @@
 #include <atheme/digest/internal.h>
 #include "../../libathemecore/digest_be_sha2.c"
 
+#define CRYPTO_MODULE_NAME      "crypto/anope-enc-sha256"
+
 #define MODULE_HASH_FORMAT      "$anope$enc_sha256$%[" BASE64_ALPHABET_RFC4648 "]$%[" BASE64_ALPHABET_RFC4648 "]"
 
 static bool ATHEME_FATTR_WUR
@@ -99,7 +101,7 @@ anope_enc_sha256_verify(const char *const restrict password, const char *const r
 
 static const struct crypt_impl crypto_impl = {
 
-	.id         = "anope-enc-sha256",
+	.id         = CRYPTO_MODULE_NAME,
 	.verify     = &anope_enc_sha256_verify,
 };
 
@@ -117,4 +119,4 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	(void) crypt_unregister(&crypto_impl);
 }
 
-SIMPLE_DECLARE_MODULE_V1("crypto/anope-enc-sha256", MODULE_UNLOAD_CAPABILITY_OK)
+SIMPLE_DECLARE_MODULE_V1(CRYPTO_MODULE_NAME, MODULE_UNLOAD_CAPABILITY_OK)

@@ -9,6 +9,8 @@
 
 #include <atheme.h>
 
+#define CRYPTO_MODULE_NAME "crypto/crypt3-md5"
+
 #ifdef HAVE_CRYPT
 
 #include "crypt3-wrapper.h"
@@ -53,7 +55,7 @@ atheme_crypt3_md5_verify(const char *const restrict password, const char *const 
 
 static const struct crypt_impl crypto_crypt3_impl = {
 
-	.id        = "crypt3-md5",
+	.id        = CRYPTO_MODULE_NAME,
 	.verify    = &atheme_crypt3_md5_verify,
 };
 
@@ -99,4 +101,4 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 #endif /* !HAVE_CRYPT */
 
-SIMPLE_DECLARE_MODULE_V1("crypto/crypt3-md5", MODULE_UNLOAD_CAPABILITY_OK)
+SIMPLE_DECLARE_MODULE_V1(CRYPTO_MODULE_NAME, MODULE_UNLOAD_CAPABILITY_OK)

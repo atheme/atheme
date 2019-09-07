@@ -13,13 +13,15 @@
 #include <atheme.h>
 #include <atheme/pbkdf2.h>
 
+#define CRYPTO_MODULE_NAME PBKDF2_LEGACY_MODULE_NAME
+
 static void
 atheme_pbkdf2_config_ready(void ATHEME_VATTR_UNUSED *const restrict unused)
 {
 	if (! module_find_published(PBKDF2V2_CRYPTO_MODULE_NAME))
 		(void) slog(LG_INFO, "%s: this module has been superceded by %s; please arrange to have that module "
 		                     "loaded before this one, and see the comments in dist/atheme.conf.example for "
-		                     "the crypto {} section to configure it.", PBKDF2_LEGACY_MODULE_NAME,
+		                     "the crypto {} section to configure it.", CRYPTO_MODULE_NAME,
 		                     PBKDF2V2_CRYPTO_MODULE_NAME);
 }
 
@@ -63,7 +65,7 @@ atheme_pbkdf2_verify(const char *const restrict password, const char *const rest
 
 static const struct crypt_impl crypto_pbkdf2_impl = {
 
-	.id         = "pbkdf2",
+	.id         = CRYPTO_MODULE_NAME,
 	.verify     = &atheme_pbkdf2_verify,
 };
 
@@ -86,4 +88,4 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	(void) crypt_unregister(&crypto_pbkdf2_impl);
 }
 
-SIMPLE_DECLARE_MODULE_V1(PBKDF2_LEGACY_MODULE_NAME, MODULE_UNLOAD_CAPABILITY_OK)
+SIMPLE_DECLARE_MODULE_V1(CRYPTO_MODULE_NAME, MODULE_UNLOAD_CAPABILITY_OK)

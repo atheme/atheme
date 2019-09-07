@@ -15,6 +15,8 @@
 
 #include <atheme.h>
 
+#define CRYPTO_MODULE_NAME      "crypto/base64"
+
 #define MODULE_PREFIX_STR       "$base64$"
 #define MODULE_PREFIX_LEN       8U
 
@@ -56,7 +58,7 @@ atheme_crypto_base64_verify(const char *const restrict password, const char *con
 
 static const struct crypt_impl crypto_base64_impl = {
 
-	.id         = "base64",
+	.id         = CRYPTO_MODULE_NAME,
 	.verify     = &atheme_crypto_base64_verify,
 };
 
@@ -74,4 +76,4 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	(void) crypt_unregister(&crypto_base64_impl);
 }
 
-SIMPLE_DECLARE_MODULE_V1("crypto/base64", MODULE_UNLOAD_CAPABILITY_OK)
+SIMPLE_DECLARE_MODULE_V1(CRYPTO_MODULE_NAME, MODULE_UNLOAD_CAPABILITY_OK)

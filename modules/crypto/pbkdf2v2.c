@@ -16,6 +16,8 @@
 #  include <stringprep.h>
 #endif /* HAVE_LIBIDN */
 
+#define CRYPTO_MODULE_NAME PBKDF2V2_CRYPTO_MODULE_NAME
+
 static mowgli_list_t **crypto_conf_table = NULL;
 
 static unsigned int pbkdf2v2_digest = 0;
@@ -639,7 +641,7 @@ c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *const restrict ce)
 
 static const struct crypt_impl crypto_pbkdf2v2_impl = {
 
-	.id         = "pbkdf2v2",
+	.id         = CRYPTO_MODULE_NAME,
 	.crypt      = &atheme_pbkdf2v2_crypt,
 	.verify     = &atheme_pbkdf2v2_verify,
 };
@@ -677,4 +679,4 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	(void) crypt_unregister(&crypto_pbkdf2v2_impl);
 }
 
-SIMPLE_DECLARE_MODULE_V1(PBKDF2V2_CRYPTO_MODULE_NAME, MODULE_UNLOAD_CAPABILITY_OK)
+SIMPLE_DECLARE_MODULE_V1(CRYPTO_MODULE_NAME, MODULE_UNLOAD_CAPABILITY_OK)

@@ -14,6 +14,8 @@
 #include "blake2b.h"
 #include "blake2b-testvecs.h"
 
+#define CRYPTO_MODULE_NAME "crypto/blake2b"
+
 struct blake2b_param
 {
 	uint8_t         hash_len;
@@ -461,4 +463,4 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 }
 
-SIMPLE_DECLARE_MODULE_V1("crypto/blake2b", MODULE_UNLOAD_CAPABILITY_OK)
+SIMPLE_DECLARE_MODULE_V1(CRYPTO_MODULE_NAME, MODULE_UNLOAD_CAPABILITY_OK)

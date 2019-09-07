@@ -9,6 +9,8 @@
 
 #include <atheme.h>
 
+#define CRYPTO_MODULE_NAME "crypto/crypt3-openbsd"
+
 #if defined(__OpenBSD__) && defined(HAVE_CRYPT_CHECKPASS) && defined(HAVE_CRYPT_NEWHASH)
 
 #define CRYPT3_PREF_DEF "bcrypt,a"
@@ -47,7 +49,7 @@ atheme_crypt3_openbsd_verify(const char *const restrict password, const char *co
 
 static const struct crypt_impl crypto_crypt3_impl = {
 
-	.id        = "crypt3-openbsd",
+	.id        = CRYPTO_MODULE_NAME,
 	.crypt     = &atheme_crypt3_openbsd_crypt,
 	.verify    = &atheme_crypt3_openbsd_verify,
 };
@@ -90,4 +92,4 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 #endif /* !(__OpenBSD__ && HAVE_CRYPT_CHECKPASS && HAVE_CRYPT_NEWHASH) */
 
-SIMPLE_DECLARE_MODULE_V1("crypto/crypt3-openbsd", MODULE_UNLOAD_CAPABILITY_OK)
+SIMPLE_DECLARE_MODULE_V1(CRYPTO_MODULE_NAME, MODULE_UNLOAD_CAPABILITY_OK)
