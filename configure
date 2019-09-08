@@ -13771,7 +13771,7 @@ $as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&6;}
 
 else
 
-				as_fn_error $? "--with-rng-api-frontend=openbsd requires OpenBSD a usable OpenBSD arc4random(3)" "$LINENO" 5
+				as_fn_error $? "--with-rng-api-frontend=openbsd requires OpenBSD and a usable OpenBSD arc4random(3)" "$LINENO" 5
 
 fi
 			;;

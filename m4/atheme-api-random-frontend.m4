@@ -145,7 +145,7 @@ AC_DEFUN([ATHEME_DECIDE_RANDOM_FRONTEND], [
 				ATHEME_RANDOM_FRONTEND_USE_OPENBSD
 				AC_MSG_NOTICE([using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)])
 			], [
-				AC_MSG_ERROR([--with-rng-api-frontend=openbsd requires OpenBSD a usable OpenBSD arc4random(3)])
+				AC_MSG_ERROR([--with-rng-api-frontend=openbsd requires OpenBSD and a usable OpenBSD arc4random(3)])
 			])
 			;;
 
