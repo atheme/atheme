@@ -13,6 +13,10 @@ will need it later to change settings.
 You have to confirm the email address. To do this,
 follow the instructions in the message sent to the email
 address.
+
+If you do not receive the email, please check the address 
+in your INFO. If the address is incorrect, DROP the nick 
+and REGISTER it again.
 #endif
 
 Syntax: REGISTER <password> <email-address>
