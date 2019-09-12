@@ -3,8 +3,8 @@ AC_DEFUN([ATHEME_LIBTEST_MOWGLI], [
 	MOWGLI_SOURCE=""
 
 	AC_ARG_WITH([libmowgli],
-		[AS_HELP_STRING([--with-libmowgli@<:@=prefix@:>@], [Specify location of system libmowgli install, "yes" to ask pkg-config (default), or "no" to force use of internal libmowgli submodule (fallback)])],
-		[], [with_libmowgli="yes"])
+		[AS_HELP_STRING([--with-libmowgli@<:@=prefix@:>@], [Specify location of system libmowgli install, "yes" to ask pkg-config, or "no" to force use of internal libmowgli submodule (default)])],
+		[], [with_libmowgli="no"])
 
 	AS_IF([test "x${with_libmowgli}" = "xyes"], [
 		PKG_CHECK_MODULES([MOWGLI], [libmowgli-2 >= 2.0.0], [

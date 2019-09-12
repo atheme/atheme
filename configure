@@ -1562,8 +1562,8 @@ Optional Packages:
                           mbedtls, openssl, libressl, internal). Default: auto
   --with-libmowgli[=prefix]
                           Specify location of system libmowgli install, "yes"
-                          to ask pkg-config (default), or "no" to force use of
-                          internal libmowgli submodule (fallback)
+                          to ask pkg-config, or "no" to force use of internal
+                          libmowgli submodule (default)
 
 Some influential environment variables:
   CC          C compiler command
@@ -17973,7 +17973,7 @@ SUBCONF_LIBS="${LIBS}"
 if test "${with_libmowgli+set}" = set; then :
   withval=$with_libmowgli;
 else
-  with_libmowgli="yes"
+  with_libmowgli="no"
 fi
 
 
