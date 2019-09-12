@@ -5,6 +5,11 @@ This will allow you to assert some form of identity on
 the network and to be added to access lists. Furthermore,
 &nick& will warn users using your nick without
 identifying and allow you to kill ghosts.
+#if module nickserv/group
+
+You can also GROUP other nicknames to this one later on.
+#endif
+
 The password is a case-sensitive password that you make
 up. Please write down or memorize your password! You
 will need it later to change settings.
