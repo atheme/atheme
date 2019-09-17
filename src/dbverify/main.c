@@ -95,7 +95,7 @@ handle_mdep(struct database_handle *db, const char *type)
 {
 	const char *modname = db_sread_word(db);
 
-	if (! module_load(modname))
+	if (! module_request(modname))
 		exit(EXIT_FAILURE);
 }
 
