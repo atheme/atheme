@@ -74,15 +74,6 @@ verify_channel_registrations(void)
 				continue;
 			}
 
-			if ((ca->level & CA_AKICK) && ca->level != CA_AKICK)
-			{
-				unsigned int flags = ca->level & ~CA_AKICK;
-
-				ca->level = CA_AKICK;
-				slog(LG_INFO, "*** phase 3: %s: chanacs entry '%s' (%p) is an AKICK but has other flags -- removing %s from it",
-				     mc->name, ca->entity != NULL ? ca->entity->name : ca->host, ca, bitmask_to_flags(flags));
-			}
-
 			mowgli_patricia_add(known, key, ca);
 		}
 
@@ -95,7 +86,7 @@ handle_mdep(struct database_handle *db, const char *type)
 {
 	const char *modname = db_sread_word(db);
 
-	if (! module_load(modname))
+	if (! module_request(modname))
 		exit(EXIT_FAILURE);
 }
 
