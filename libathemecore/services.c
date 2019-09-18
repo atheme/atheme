@@ -378,22 +378,28 @@ verbose(const struct mychan *mychan, const char *fmt, ...)
 
 /* protocol wrapper for nickchange/nick burst */
 void
-handle_nickchange(struct user *u)
+handle_nickchange(struct user *const restrict u)
 {
-	struct service *svs;
-
 	return_if_fail(u != NULL);
 	return_if_fail(!is_internal_client(u));
 
-	svs = service_find("global");
+	const struct service *const svs = service_find("global");
+	const char *const source = (svs != NULL) ? svs->me->nick : me.name;
 
-	if (runflags & RF_LIVE && log_debug_enabled())
-		notice(svs != NULL ? svs->me->nick : me.name, u->nick, "Services are presently running in debug mode, attached to a console. You should take extra caution when utilizing your services passwords.");
+	if (log_debug_enabled())
+	{
+		const char *const logtarget = (runflags & RF_LIVE) ? "console" : "file or channel";
+
+		(void) notice(source, u->nick, "Services are presently running in debug mode, logging network "
+		                               "traffic to a %s. You should take extra caution when utilizing "
+		                               "your services passwords.", logtarget);
+	}
 
 	if (readonly)
-		notice(svs != NULL ? svs->me->nick : me.name, u->nick, "Services are presently running in readonly mode.  Any changes you make will not be saved.");
+		(void) notice(source, u->nick, "Services are presently running in read-only mode. Any changes "
+		                               "you make will not be saved.");
 
-	hook_call_nick_check(u);
+	(void) hook_call_nick_check(u);
 }
 
 bool ircd_logout_or_kill(user_t *u, const char *login)
