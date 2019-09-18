@@ -95,6 +95,7 @@ struct sasl_scramsha_session
 typedef struct sasl_scramsha_attribute scram_attr_list[128];
 
 static mowgli_list_t sasl_scramsha_sessions;
+static const struct sasl_mechanism *current_mechanism = NULL;
 static const struct sasl_core_functions *sasl_core_functions = NULL;
 static const struct pbkdf2v2_scram_functions *pbkdf2v2_scram_functions = NULL;
 
@@ -764,14 +765,6 @@ static const struct sasl_mechanism sasl_mech_scramsha_2_512 = {
 	.mech_finish    = &sasl_mech_scramsha_finish,
 };
 
-static inline void
-sasl_scramsha_mechs_unregister(void)
-{
-	(void) sasl_core_functions->mech_unregister(&sasl_mech_scramsha_1);
-	(void) sasl_core_functions->mech_unregister(&sasl_mech_scramsha_2_256);
-	(void) sasl_core_functions->mech_unregister(&sasl_mech_scramsha_2_512);
-}
-
 static void
 sasl_scramsha_pbkdf2v2_scram_confhook(const struct pbkdf2v2_scram_config *const restrict config)
 {
@@ -790,32 +783,43 @@ sasl_scramsha_pbkdf2v2_scram_confhook(const struct pbkdf2v2_scram_config *const 
 		                     PBKDF2V2_CRYPTO_MODULE_NAME);
 	}
 
-	(void) sasl_scramsha_mechs_unregister();
+	const struct sasl_mechanism *new_mechanism = NULL;
 
 	switch (config->a)
 	{
 		case PBKDF2_PRF_SCRAM_SHA1_S64:
-			(void) sasl_core_functions->mech_register(&sasl_mech_scramsha_1);
+			new_mechanism = &sasl_mech_scramsha_1;
 			break;
 
 		case PBKDF2_PRF_SCRAM_SHA2_256_S64:
-			(void) sasl_core_functions->mech_register(&sasl_mech_scramsha_2_256);
+			new_mechanism = &sasl_mech_scramsha_2_256;
 			break;
 
 		case PBKDF2_PRF_SCRAM_SHA2_512_S64:
-			(void) sasl_core_functions->mech_register(&sasl_mech_scramsha_2_512);
+			new_mechanism = &sasl_mech_scramsha_2_512;
 			break;
 
 		default:
 			(void) slog(LG_ERROR, "%s: crypto::pbkdf2v2_digest is not set to a supported value -- "
 			                      "this module will not do anything", MOWGLI_FUNC_NAME);
-			return;
+			break;
 	}
 
-	if (config->c > CYRUS_SASL_ITERMAX)
+	if (new_mechanism && config->c > CYRUS_SASL_ITERMAX)
 		(void) slog(LG_INFO, "%s: iteration count (%u) is higher than Cyrus SASL library maximum (%u) -- "
 		                     "client logins may fail if they use Cyrus", MOWGLI_FUNC_NAME, config->c,
 		                     CYRUS_SASL_ITERMAX);
+
+	if (new_mechanism != current_mechanism)
+	{
+		if (new_mechanism)
+			(void) sasl_core_functions->mech_register(new_mechanism);
+
+		if (current_mechanism)
+			(void) sasl_core_functions->mech_unregister(current_mechanism);
+
+		current_mechanism = new_mechanism;
+	}
 }
 
 static void
@@ -846,11 +850,12 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
+	if (current_mechanism)
+		// Unregister our SASL mechanism
+		(void) sasl_core_functions->mech_unregister(current_mechanism);
+
 	// Unregister configuration interest in the pbkdf2v2 module
 	(void) pbkdf2v2_scram_functions->confhook(NULL);
-
-	// Unregister all SASL mechanisms
-	(void) sasl_scramsha_mechs_unregister();
 
 	// We no longer need this
 	(void) hook_del_myuser_delete(&sasl_scramsha_myuser_delete);
