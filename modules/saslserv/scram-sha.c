@@ -782,7 +782,7 @@ sasl_scramsha_pbkdf2v2_scram_confhook(const struct pbkdf2v2_scram_config *const 
 		(void) slog(LG_ERROR, "%s: %s is apparently loaded but no crypto provider is available (BUG)",
 		                      MOWGLI_FUNC_NAME, PBKDF2V2_CRYPTO_MODULE_NAME);
 	}
-	else if (strcmp(ci_default->id, "pbkdf2v2") != 0)
+	else if (strcmp(ci_default->id, PBKDF2V2_CRYPTO_MODULE_NAME) != 0)
 	{
 		(void) slog(LG_INFO, "%s: %s is not the default crypto provider, PLEASE INVESTIGATE THIS! "
 		                     "Newly registered users, and users who change their passwords, will not "
