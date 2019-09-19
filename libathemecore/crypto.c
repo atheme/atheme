@@ -36,7 +36,7 @@ crypt_log_modchg(const char *const restrict caller, const char *const restrict w
 void
 crypt_register(const struct crypt_impl *const restrict impl)
 {
-	if (! impl || ! impl->id || ! (impl->crypt || impl->verify))
+	if (! impl || ! impl->id || ! *impl->id || ! (impl->crypt || impl->verify))
 	{
 		(void) slog(LG_ERROR, "%s: invalid parameters (BUG)", MOWGLI_FUNC_NAME);
 		return;
@@ -64,7 +64,7 @@ crypt_register(const struct crypt_impl *const restrict impl)
 void
 crypt_unregister(const struct crypt_impl *const restrict impl)
 {
-	if (! impl || ! impl->id || ! (impl->crypt || impl->verify))
+	if (! impl || ! impl->id || ! *impl->id || ! (impl->crypt || impl->verify))
 	{
 		(void) slog(LG_ERROR, "%s: invalid parameters (BUG)", MOWGLI_FUNC_NAME);
 		return;
