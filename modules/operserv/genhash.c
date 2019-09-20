@@ -11,6 +11,12 @@
 static void
 cmd_os_genhash_func(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
+	if (! is_ircop(si->su))
+	{
+		(void) command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
+		return;
+	}
+
 	if (parc < 1)
 	{
 		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "GENHASH");
@@ -63,7 +69,7 @@ cmd_os_genhash_func(struct sourceinfo *const restrict si, const int parc, char *
 static struct command cmd_os_genhash = {
 	.name           = "GENHASH",
 	.desc           = N_("Generates a password hash from a password."),
-	.access         = PRIV_ADMIN,
+	.access         = AC_NONE,
 	.maxparc        = 2,
 	.cmd            = &cmd_os_genhash_func,
 	.help           = { .path = "oservice/genhash" },

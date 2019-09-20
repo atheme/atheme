@@ -2570,14 +2570,22 @@ operclass "sra" {
 operator "jilles" {
 	/* operclass */
 	operclass = "sra";
+
 	/* password
+	 *
 	 * Normally, the user needs to identify/log in using the account's
 	 * password, and may need to be an IRCop (see operclass::needoper
 	 * above). If you consider this not secure enough, you can
 	 * specify an additional password here, which the user must enter
 	 * using the OperServ IDENTIFY command, before the privileges can
 	 * be used.
+	 *
 	 * The password must be encrypted if a crypto module is in use.
+	 *
+	 * If you are using modules/crypto/crypt3-*, you can probably use
+	 * the "mkpasswd" program included with most Linux distributions.
+	 * Otherwise you can use modules/operserv/genhash to encrypt a
+	 * password for use here.
 	 */
 	#password = "$1$3gJMO9by$0G60YE6GqmuHVH3AnFPor1";
 };
