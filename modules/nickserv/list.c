@@ -93,6 +93,15 @@ registered_match(const struct mynick *mn, const void *arg)
 }
 
 static bool
+primary_match(const struct mynick *mn, const void *arg)
+{
+	struct myuser *mu = mn->owner;
+	(void) arg;
+
+	return !irccasecmp(mn->nick, entity(mn->owner)->name);
+}
+
+static bool
 has_waitauth(const struct mynick *mn, const void *arg)
 {
 	struct myuser *mu = mn->owner;
@@ -321,12 +330,17 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 	registered.opttype = OPT_AGE;
 	registered.is_match = registered_match;
 
+	static struct list_param primary;
+	primary.opttype = OPT_BOOL;
+	primary.is_match = primary_match;
+
 	list_register("email", &email);
 	list_register("lastlogin", &lastlogin);
 	list_register("mail", &email);
 
 	list_register("pattern", &pattern);
 	list_register("registered", &registered);
+	list_register("primary", &primary);
 
 	static struct list_param waitauth;
 	waitauth.opttype = OPT_BOOL;
