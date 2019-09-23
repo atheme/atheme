@@ -71,6 +71,7 @@ VACATION      - All users marked as being on vacation.
 #endif
 REGISTERED    - User accounts registered longer ago than a given age.
 LASTLOGIN     - User accounts last used longer ago than a given age.
+PRIMARY       - Primary account names only.
 
 Syntax: LIST <criteria>
 
