@@ -9488,6 +9488,8 @@ rm -f core conftest.err conftest.$ac_objext \
 
 	LIBRT_LIBS=""
 
+	LIBS_SAVED="${LIBS}"
+
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing clock_gettime" >&5
 $as_echo_n "checking for library containing clock_gettime... " >&6; }
 if ${ac_cv_search_clock_gettime+:} false; then :
@@ -9558,9 +9560,12 @@ fi
 fi
 
 
+	LIBS="${LIBS_SAVED}"
+
 
 
 	LIBSOCKET_LIBS=""
+
 	LIBS_SAVED="${LIBS}"
 
 	for ac_header in netinet/in.h sys/socket.h sys/types.h

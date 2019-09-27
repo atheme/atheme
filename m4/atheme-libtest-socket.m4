@@ -1,6 +1,7 @@
 AC_DEFUN([ATHEME_LIBTEST_SOCKET], [
 
 	LIBSOCKET_LIBS=""
+
 	LIBS_SAVED="${LIBS}"
 
 	AC_CHECK_HEADERS([netinet/in.h sys/socket.h sys/types.h], [], [], [])
