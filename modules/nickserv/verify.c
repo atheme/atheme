@@ -33,13 +33,6 @@ ns_cmd_verify(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	// forcing users to log in before we verify prevents some information leaks
-	if (!(si->smu == mu))
-	{
-		command_fail(si, fault_badparams, _("Please log in before attempting to verify your registration."));
-		return;
-	}
-
 	if (!strcasecmp(op, "REGISTER"))
 	{
 		if (!(mu->flags & MU_WAITAUTH) || !(md = metadata_find(mu, "private:verify:register:key")))
@@ -80,7 +73,15 @@ ns_cmd_verify(struct sourceinfo *si, int parc, char *parv[])
 
 		return;
 	}
-	else if (!strcasecmp(op, "EMAILCHG"))
+
+	// forcing users to log in before we verify prevents some information leaks
+	if (!(si->smu == mu))
+	{
+		command_fail(si, fault_badparams, _("Please log in before attempting to verify an email address change."));
+		return;
+	}
+
+	if (!strcasecmp(op, "EMAILCHG"))
 	{
 		if (!(md = metadata_find(mu, "private:verify:emailchg:key")))
 		{
