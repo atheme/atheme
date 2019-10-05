@@ -142,7 +142,7 @@ AC_DEFINE_UNQUOTED([PACKAGE_BUGREPORT_I18N], ["${PACKAGE_BUGREPORT_I18N}"], [Whe
 dnl If we're building on Windows we need socket and regex libraries from mingw
 case "${host}" in
 	*-*-mingw32)
-		CFLAGS="-I/mingw/include ${CFLAGS}"
+		CPPFLAGS="-I/mingw/include ${CPPFLAGS}"
 		LIBS="-lwsock32 -lws2_32 -lregex ${LIBS}"
 		;;
 esac

@@ -6997,7 +6997,7 @@ _ACEOF
 
 case "${host}" in
 	*-*-mingw32)
-		CFLAGS="-I/mingw/include ${CFLAGS}"
+		CPPFLAGS="-I/mingw/include ${CPPFLAGS}"
 		LIBS="-lwsock32 -lws2_32 -lregex ${LIBS}"
 		;;
 esac
