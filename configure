@@ -10083,6 +10083,7 @@ fi
 			;;
 	esac
 
+	CPPFLAGS_SAVED="${CPPFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	if test "${with_openssl}" != "no"; then :
@@ -10171,6 +10172,7 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
+			CPPFLAGS="${LIBCRYPTO_CFLAGS} ${CPPFLAGS}"
 			LIBS="${LIBCRYPTO_LIBS} ${LIBS}"
 			LIBCRYPTO="Yes"
 			for ac_header in openssl/opensslv.h
@@ -10539,6 +10541,7 @@ fi
 
 fi
 
+	CPPFLAGS="${CPPFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 	if test "${LIBCRYPTO}" = "No"; then :
@@ -10572,6 +10575,7 @@ fi
 			;;
 	esac
 
+	CPPFLAGS_SAVED="${CPPFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	if test "${with_libidn}" != "no"; then :
@@ -10660,6 +10664,7 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
+			CPPFLAGS="${LIBIDN_CFLAGS} ${CPPFLAGS}"
 			LIBS="${LIBIDN_LIBS} ${LIBS}"
 			for ac_header in stringprep.h
 do :
@@ -10741,6 +10746,7 @@ else
 
 fi
 
+	CPPFLAGS="${CPPFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 	if test "${LIBIDN}" = "No"; then :
@@ -11456,6 +11462,7 @@ fi
 			;;
 	esac
 
+	CPPFLAGS_SAVED="${CPPFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	if test "${with_nettle}" != "no"; then :
@@ -11544,6 +11551,7 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
+			CPPFLAGS="${LIBNETTLE_CFLAGS} ${CPPFLAGS}"
 			LIBS="${LIBNETTLE_LIBS} ${LIBS}"
 			LIBNETTLE="Yes"
 
@@ -11740,6 +11748,7 @@ fi
 
 fi
 
+	CPPFLAGS="${CPPFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 	if test "${LIBNETTLE}" = "No"; then :
@@ -11958,6 +11967,7 @@ fi
 			;;
 	esac
 
+	CPPFLAGS_SAVED="${CPPFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	if test "${with_pcre}" != "no"; then :
@@ -12046,6 +12056,7 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
+			CPPFLAGS="${LIBPCRE_CFLAGS} ${CPPFLAGS}"
 			LIBS="${LIBPCRE_LIBS} ${LIBS}"
 			for ac_header in pcre.h
 do :
@@ -12128,6 +12139,7 @@ else
 
 fi
 
+	CPPFLAGS="${CPPFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 	if test "${LIBPCRE}" = "No"; then :
@@ -12161,6 +12173,7 @@ fi
 			;;
 	esac
 
+	CPPFLAGS_SAVED="${CPPFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	if test "${with_qrencode}" != "no"; then :
@@ -12249,6 +12262,7 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
+			CPPFLAGS="${LIBQRENCODE_CFLAGS} ${CPPFLAGS}"
 			LIBS="${LIBQRENCODE_LIBS} ${LIBS}"
 			for ac_header in qrencode.h
 do :
@@ -12335,6 +12349,7 @@ else
 
 fi
 
+	CPPFLAGS="${CPPFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 	if test "${LIBQRENCODE}" = "No"; then :
@@ -12371,6 +12386,7 @@ fi
 			;;
 	esac
 
+	CPPFLAGS_SAVED="${CPPFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	if test "${with_sodium}" != "no"; then :
@@ -12459,6 +12475,7 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
+			CPPFLAGS="${LIBSODIUM_CFLAGS} ${CPPFLAGS}"
 			LIBS="${LIBSODIUM_LIBS} ${LIBS}"
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libsodium appears to be usable" >&5
 $as_echo_n "checking if libsodium appears to be usable... " >&6; }
@@ -12800,6 +12817,7 @@ fi
 
 fi
 
+	CPPFLAGS="${CPPFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 	if test "${LIBSODIUM}" = "No"; then :

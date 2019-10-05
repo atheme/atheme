@@ -18,10 +18,12 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 			;;
 	esac
 
+	CPPFLAGS_SAVED="${CPPFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "${with_openssl}" != "no"], [
 		PKG_CHECK_MODULES([LIBCRYPTO], [libcrypto], [
+			CPPFLAGS="${LIBCRYPTO_CFLAGS} ${CPPFLAGS}"
 			LIBS="${LIBCRYPTO_LIBS} ${LIBS}"
 			LIBCRYPTO="Yes"
 			AC_CHECK_HEADERS([openssl/opensslv.h], [], [
@@ -204,6 +206,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 		])
 	])
 
+	CPPFLAGS="${CPPFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 	AS_IF([test "${LIBCRYPTO}" = "No"], [

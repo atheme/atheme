@@ -14,10 +14,12 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 			;;
 	esac
 
+	CPPFLAGS_SAVED="${CPPFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "${with_pcre}" != "no"], [
 		PKG_CHECK_MODULES([LIBPCRE], [libpcre], [
+			CPPFLAGS="${LIBPCRE_CFLAGS} ${CPPFLAGS}"
 			LIBS="${LIBPCRE_LIBS} ${LIBS}"
 			AC_CHECK_HEADERS([pcre.h], [
 				AC_MSG_CHECKING([if libpcre appears to be usable])
@@ -59,6 +61,7 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 		LIBPCRE="No"
 	])
 
+	CPPFLAGS="${CPPFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 	AS_IF([test "${LIBPCRE}" = "No"], [

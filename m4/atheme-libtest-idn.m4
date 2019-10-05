@@ -14,10 +14,12 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 			;;
 	esac
 
+	CPPFLAGS_SAVED="${CPPFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "${with_libidn}" != "no"], [
 		PKG_CHECK_MODULES([LIBIDN], [libidn], [
+			CPPFLAGS="${LIBIDN_CFLAGS} ${CPPFLAGS}"
 			LIBS="${LIBIDN_LIBS} ${LIBS}"
 			AC_CHECK_HEADERS([stringprep.h], [
 				AC_MSG_CHECKING([if libidn appears to be usable])
@@ -58,6 +60,7 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 		LIBIDN="No"
 	])
 
+	CPPFLAGS="${CPPFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 	AS_IF([test "${LIBIDN}" = "No"], [

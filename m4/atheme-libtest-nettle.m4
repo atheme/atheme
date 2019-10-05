@@ -16,10 +16,12 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 			;;
 	esac
 
+	CPPFLAGS_SAVED="${CPPFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "${with_nettle}" != "no"], [
 		PKG_CHECK_MODULES([LIBNETTLE], [nettle], [
+			CPPFLAGS="${LIBNETTLE_CFLAGS} ${CPPFLAGS}"
 			LIBS="${LIBNETTLE_LIBS} ${LIBS}"
 			LIBNETTLE="Yes"
 		], [
@@ -121,6 +123,7 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 		])
 	])
 
+	CPPFLAGS="${CPPFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 	AS_IF([test "${LIBNETTLE}" = "No"], [
