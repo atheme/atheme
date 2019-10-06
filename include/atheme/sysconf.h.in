@@ -73,9 +73,6 @@
 /* Define to 1 if cracklib appears to be usable */
 #undef HAVE_CRACKLIB
 
-/* Define to 1 if you have the <crack.h> header file. */
-#undef HAVE_CRACK_H
-
 /* Define to 1 if crypt(3) appears to be usable */
 #undef HAVE_CRYPT
 
@@ -142,9 +139,6 @@
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
-
-/* Define to 1 if you have the <ldap.h> header file. */
-#undef HAVE_LDAP_H
 
 /* Define to 1 if libcrypto appears to be usable */
 #undef HAVE_LIBCRYPTO
@@ -266,17 +260,8 @@
 /* Define to 1 if you have the <openssl/opensslv.h> header file. */
 #undef HAVE_OPENSSL_OPENSSLV_H
 
-/* Define to 1 if you have the <passwdqc.h> header file. */
-#undef HAVE_PASSWDQC_H
-
-/* Define to 1 if you have the <pcre.h> header file. */
-#undef HAVE_PCRE_H
-
 /* Define to 1 if the system has the type `ptrdiff_t'. */
 #undef HAVE_PTRDIFF_T
-
-/* Define to 1 if you have the <qrencode.h> header file. */
-#undef HAVE_QRENCODE_H
 
 /* Define to 1 if you have the `regcomp' function. */
 #undef HAVE_REGCOMP
@@ -337,9 +322,6 @@
 
 /* Define to 1 if you have the `strerror' function. */
 #undef HAVE_STRERROR
-
-/* Define to 1 if you have the <stringprep.h> header file. */
-#undef HAVE_STRINGPREP_H
 
 /* Define to 1 if you have the <strings.h> header file. */
 #undef HAVE_STRINGS_H

@@ -18,9 +18,11 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDCRYPTO], [
 			;;
 	esac
 
+	CPPFLAGS_SAVED="${CPPFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "${with_mbedtls}" != "no"], [
+		dnl If this library ever starts shipping a pkg-config file, change to PKG_CHECK_MODULES ?
 		AC_SEARCH_LIBS([mbedtls_version_get_string], [mbedcrypto], [
 			AC_MSG_CHECKING([if libmbedcrypto appears to be usable])
 			AC_LINK_IFELSE([
@@ -275,5 +277,6 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDCRYPTO], [
 		])
 	])
 
+	CPPFLAGS="${CPPFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 ])

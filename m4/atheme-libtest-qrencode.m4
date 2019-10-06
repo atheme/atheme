@@ -21,36 +21,29 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
 		PKG_CHECK_MODULES([LIBQRENCODE], [libqrencode], [
 			CPPFLAGS="${LIBQRENCODE_CFLAGS} ${CPPFLAGS}"
 			LIBS="${LIBQRENCODE_LIBS} ${LIBS}"
-			AC_CHECK_HEADERS([qrencode.h], [
-				AC_MSG_CHECKING([if libqrencode appears to be usable])
-				AC_LINK_IFELSE([
-					AC_LANG_PROGRAM([[
-						#ifdef HAVE_STDDEF_H
-						#  include <stddef.h>
-						#endif
-						#include <qrencode.h>
-					]], [[
-						(void) QRcode_encodeData(0, NULL, 0, (QRecLevel) 0);
-						(void) QRcode_free(NULL);
-					]])
-				], [
-					AC_MSG_RESULT([yes])
-					LIBQRENCODE="Yes"
-					AC_DEFINE([HAVE_LIBQRENCODE], [1], [Define to 1 if libqrencode appears to be usable])
-					ATHEME_COND_QRCODE_ENABLE
-				], [
-					AC_MSG_RESULT([no])
-					LIBQRENCODE="No"
-					AS_IF([test "${with_qrencode}" = "yes"], [
-						AC_MSG_FAILURE([--with-qrencode was given but libqrencode does not appear to be usable])
-					])
-				])
+			AC_MSG_CHECKING([if libqrencode appears to be usable])
+			AC_LINK_IFELSE([
+				AC_LANG_PROGRAM([[
+					#ifdef HAVE_STDDEF_H
+					#  include <stddef.h>
+					#endif
+					#include <qrencode.h>
+				]], [[
+					(void) QRcode_encodeData(0, NULL, 0, (QRecLevel) 0);
+					(void) QRcode_free(NULL);
+				]])
 			], [
+				AC_MSG_RESULT([yes])
+				LIBQRENCODE="Yes"
+				AC_DEFINE([HAVE_LIBQRENCODE], [1], [Define to 1 if libqrencode appears to be usable])
+				ATHEME_COND_QRCODE_ENABLE
+			], [
+				AC_MSG_RESULT([no])
 				LIBQRENCODE="No"
 				AS_IF([test "${with_qrencode}" = "yes"], [
-					AC_MSG_ERROR([--with-qrencode was given but a required header file is missing])
+					AC_MSG_FAILURE([--with-qrencode was given but libqrencode does not appear to be usable])
 				])
-			], [])
+			])
 		], [
 			LIBQRENCODE="No"
 			AS_IF([test "${with_qrencode}" = "yes"], [
