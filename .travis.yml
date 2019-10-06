@@ -20,11 +20,11 @@ addons:
       - libssl-dev
       - nettle-dev
       - clang-8
-      - gcc
+      - gcc-8
 
 compiler:
   - clang-8
-  - gcc-7
+  - gcc-8
 
 env:
   - ATHEME_CONF_ARGS=""
