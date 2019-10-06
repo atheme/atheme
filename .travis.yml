@@ -1,7 +1,7 @@
 language: c
 sudo: false
 os: linux
-dist: xenial
+dist: bionic
 
 notifications:
   email: false
@@ -24,7 +24,7 @@ addons:
 
 compiler:
   - clang-7
-  - gcc-5
+  - gcc-7
 
 env:
   - ATHEME_CONF_ARGS=""
