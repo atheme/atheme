@@ -19,11 +19,11 @@ addons:
       - libperl-dev
       - libssl-dev
       - nettle-dev
-      - clang
+      - clang-8
       - gcc
 
 compiler:
-  - clang-7
+  - clang-8
   - gcc-7
 
 env:
