@@ -94,31 +94,6 @@
  * Open Services Exchange database format       modules/backend/opensex
  * 
  * Most networks will want opensex.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
  */
 loadmodule "modules/backend/opensex";
 
