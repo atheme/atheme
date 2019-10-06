@@ -1261,6 +1261,19 @@ nickserv {
 	 */
 	#cracklib_dict = "/var/cache/cracklib/cracklib_dict";
 
+	/* (*)passwdqc_*
+	 * Please see the passwdqc.conf(5) documentation for an explanation
+	 * of these values. Affects modules/nickserv/pwquality if passwdqc
+	 * support is enabled. Default values given below.
+	 */
+	#passwdqc_max = 288;     /* (8 <= value <= 288) */
+	#passwdqc_min_n0 = 20;   /* (0 <= value <= passwdqc_max) */
+	#passwdqc_min_n1 = 16;   /* (0 <= value <= passwdqc_min_n0) */
+	#passwdqc_min_n2 = 16;   /* (0 <= value <= passwdqc_min_n1) */
+	#passwdqc_min_n3 = 12;   /* (0 <= value <= passwdqc_min_n2) */
+	#passwdqc_min_n4 = 8;    /* (0 <= value <= passwdqc_min_n3) */
+	#passwdqc_words = 4;     /* (2 <= value <= 8) */
+
 	/* (*)pwquality_warn_only
 	 * If this option is set and nickserv/pwquality is loaded, nickserv will just 
 	 * warn users that their password is insecure, recommend they change it and 
