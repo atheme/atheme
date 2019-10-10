@@ -10,15 +10,18 @@ pre-depend: ${DISTCLEAN}
 INCLUDES = \
 	abirev.h		\
 	account.h		\
+	attributes.h		\
 	auth.h			\
 	authcookie.h		\
 	base64.h		\
 	channels.h		\
+	commandhelp.h		\
 	commandtree.h		\
 	common.h		\
 	conf.h			\
 	confprocess.h		\
 	connection.h		\
+	constants.h		\
 	crypto.h		\
 	culture.h		\
 	database_backend.h	\
@@ -39,6 +42,7 @@ INCLUDES = \
 	memory.h		\
 	module.h		\
 	object.h		\
+	pbkdf2.h		\
 	phandler.h		\
 	pmodule.h		\
 	privs.h			\
@@ -48,8 +52,11 @@ INCLUDES = \
 	servers.h		\
 	services.h		\
 	servtree.h		\
+	sharedheap.h		\
 	sourceinfo.h		\
+	stdheaders.h		\
 	string.h		\
+	structures.h		\
 	sysconf.h		\
 	table.h			\
 	taint.h			\
