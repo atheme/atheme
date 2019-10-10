@@ -147,14 +147,14 @@
 #   You should have received a copy of the GNU General Public License along
 #   with this program. If not, see <https://www.gnu.org/licenses/>.
 
-#serial 4
+#serial 5
 
 AC_DEFUN([AX_SUBDIRS_CONFIGURE],
 [
   dnl Calls to AC_CONFIG_SUBDIRS perform preliminary steps and build a list
   dnl '$subdirs' which is used later by _AC_OUTPUT_SUBDIRS (used by AC_OUTPUT)
   dnl to actually run the configure scripts.
-  dnl This macro performs similiar preliminary steps but uses
+  dnl This macro performs similar preliminary steps but uses
   dnl AC_CONFIG_COMMANDS_PRE to delay the final tasks instead of building an
   dnl intermediary list and relying on another macro.
   dnl
@@ -172,10 +172,10 @@ AC_DEFUN([AX_SUBDIRS_CONFIGURE],
   [
     ax_dir="subdir_path"
 
-    dnl Build the argument list in a similiar fashion to AC_CONFIG_SUBDIRS.
+    dnl Build the argument list in a similar fashion to AC_CONFIG_SUBDIRS.
     dnl A few arguments found in the final call to the configure script are not
     dnl added here because they rely on variables that may not yet be available
-    dnl (see below the part that is similiar to _AC_OUTPUT_SUBDIRS).
+    dnl (see below the part that is similar to _AC_OUTPUT_SUBDIRS).
     # Do not complain, so a configure script can configure whichever parts of a
     # large source tree are present.
     if test -d "$srcdir/$ax_dir"; then
