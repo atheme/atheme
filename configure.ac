@@ -249,7 +249,6 @@ AS_IF([test "x${MOWGLI_SOURCE}" = "xInternal"], [
 ])
 
 AC_CONFIG_FILES([
-	atheme-services.pc
 	buildsys.mk
 	extra.mk
 ])

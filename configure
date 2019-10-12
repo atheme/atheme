@@ -18156,7 +18156,7 @@ $as_echo "$as_me: WARNING: could not find source tree for $ax_dir" >&2;}
 
 fi
 
-ac_config_files="$ac_config_files atheme-services.pc buildsys.mk extra.mk"
+ac_config_files="$ac_config_files buildsys.mk extra.mk"
 
 
 cat >confcache <<\_ACEOF
@@ -18965,7 +18965,6 @@ do
   case $ac_config_target in
     "include/atheme/sysconf.h") CONFIG_HEADERS="$CONFIG_HEADERS include/atheme/sysconf.h" ;;
     "po-directories") CONFIG_COMMANDS="$CONFIG_COMMANDS po-directories" ;;
-    "atheme-services.pc") CONFIG_FILES="$CONFIG_FILES atheme-services.pc" ;;
     "buildsys.mk") CONFIG_FILES="$CONFIG_FILES buildsys.mk" ;;
     "extra.mk") CONFIG_FILES="$CONFIG_FILES extra.mk" ;;
 
