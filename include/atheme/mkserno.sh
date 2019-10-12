@@ -20,7 +20,7 @@ if [ "x${REVH_NEW}" = "x" ]
 then
 	REVH_NEW="<unknown>"
 else
-	if ! git diff-index --quiet HEAD --
+	if [ -n "$(git diff --stat)" -o -n "$(git diff --cached --stat)" ]
 	then
 		REVH_NEW="${REVH_NEW}-dirty"
 	fi
