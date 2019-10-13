@@ -41,8 +41,10 @@ static struct command bs_help = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/main")
+
 	(void) service_named_bind_command("botserv", &bs_help);
 }
 

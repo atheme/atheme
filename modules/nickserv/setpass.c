@@ -137,8 +137,10 @@ static struct command ns_setpass = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/main")
+
 	hook_add_event("user_identify");
 	hook_add_user_identify(clear_setpass_key);
 	hook_add_event("user_info");

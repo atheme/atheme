@@ -18,8 +18,8 @@ mod_init(struct module *const restrict m)
 
 	(void) slog(LG_INFO, "%s: loading the 2 modules that replaced me for config compatibility ...", m->name);
 
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "crypto/crypt3-md5");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "crypto/crypt3-des");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "crypto/crypt3-md5")
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "crypto/crypt3-des")
 
 #else /* HAVE_CRYPT && ATHEME_ENABLE_LEGACY_PWCRYPTO */
 

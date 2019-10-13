@@ -178,7 +178,7 @@ cleanup:
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459")
 
 	parse = &p10_parse;
 }

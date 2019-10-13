@@ -140,12 +140,14 @@ static struct command ns_restrict = {
 static void
 mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/main")
+
+	use_nslist_main_symbols(m);
+
 	service_named_bind_command("nickserv", &ns_restrict);
 
 	hook_add_event("user_info");
 	hook_add_user_info(info_hook);
-
-	use_nslist_main_symbols(m);
 
 	static struct list_param restricted;
 	restricted.opttype = OPT_BOOL;

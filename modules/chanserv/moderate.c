@@ -360,6 +360,8 @@ static struct command cs_waiting = {
 static void
 mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/main")
+
 	csreq_list = mowgli_patricia_create(strcasecanon);
 
 	service_named_bind_command("chanserv", &cs_activate);

@@ -85,6 +85,8 @@ static struct command cs_set = {
 static void
 mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/main")
+
 	if (! (cs_set_cmdtree = mowgli_patricia_create(&strcasecanon)))
 	{
 		(void) slog(LG_ERROR, "%s: mowgli_patricia_create() failed", m->name);

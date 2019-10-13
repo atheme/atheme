@@ -79,7 +79,7 @@ static struct command bs_set_saycaller = {
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_SYMBOL(m, bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree");
+	MODULE_TRY_REQUEST_SYMBOL(m, bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree")
 
 	command_add(&bs_set_saycaller, *bs_set_cmdtree);
 }

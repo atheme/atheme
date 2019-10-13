@@ -88,7 +88,7 @@ static struct command bs_set_nobot = {
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_SYMBOL(m, bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree");
+	MODULE_TRY_REQUEST_SYMBOL(m, bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree")
 
 	command_add(&bs_set_nobot, *bs_set_cmdtree);
 }

@@ -115,7 +115,7 @@ static const struct crypt_impl crypto_crypt3_impl = {
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_SYMBOL(m, crypto_conf_table, "crypto/main", "crypto_conf_table");
+	MODULE_TRY_REQUEST_SYMBOL(m, crypto_conf_table, "crypto/main", "crypto_conf_table")
 
 	if (! atheme_crypt3_selftest(true, CRYPT3_MODULE_TEST_VECTOR_SHA2_512))
 	{

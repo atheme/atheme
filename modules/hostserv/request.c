@@ -591,7 +591,7 @@ mod_init(struct module *const restrict m)
 		return;
 	}
 
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "hostserv/main");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "hostserv/main")
 
 	hostsvs = service_find("hostserv");
 

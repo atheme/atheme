@@ -87,11 +87,11 @@ static struct command ns_set_neverop = {
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
-
-	command_add(&ns_set_neverop, *ns_set_cmdtree);
+	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree")
 
 	use_nslist_main_symbols(m);
+
+	command_add(&ns_set_neverop, *ns_set_cmdtree);
 
 	static struct list_param neverop;
 	neverop.opttype = OPT_BOOL;

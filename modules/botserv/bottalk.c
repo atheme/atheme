@@ -163,8 +163,10 @@ static struct command bs_act = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/main")
+
 	service_named_bind_command("botserv", &bs_say);
 	service_named_bind_command("botserv", &bs_act);
 }

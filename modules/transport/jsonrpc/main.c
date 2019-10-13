@@ -654,7 +654,7 @@ static struct path_handler handle_jsonrpc = { NULL, handle_request };
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_SYMBOL(m, httpd_path_handlers, "misc/httpd", "httpd_path_handlers");
+	MODULE_TRY_REQUEST_SYMBOL(m, httpd_path_handlers, "misc/httpd", "httpd_path_handlers")
 
 	handle_jsonrpc.path = "/jsonrpc";
 	mowgli_node_add(&handle_jsonrpc, mowgli_node_create(), httpd_path_handlers);

@@ -177,6 +177,8 @@ mod_init(struct module *const restrict m)
 		return;
 	}
 
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/main")
+
         service_named_bind_command("chanserv", &cs_halfop);
         service_named_bind_command("chanserv", &cs_dehalfop);
 }

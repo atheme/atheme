@@ -184,8 +184,8 @@ static const struct sasl_mechanism sasl_mech_ecdsa = {
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_pubkey");
-	MODULE_TRY_REQUEST_SYMBOL(m, sasl_core_functions, "saslserv/main", "sasl_core_functions");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_pubkey")
+	MODULE_TRY_REQUEST_SYMBOL(m, sasl_core_functions, "saslserv/main", "sasl_core_functions")
 
 	(void) sasl_core_functions->mech_register(&sasl_mech_ecdsa);
 }

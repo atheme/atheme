@@ -649,7 +649,7 @@ static const struct crypt_impl crypto_pbkdf2v2_impl = {
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_SYMBOL(m, crypto_conf_table, "crypto/main", "crypto_conf_table");
+	MODULE_TRY_REQUEST_SYMBOL(m, crypto_conf_table, "crypto/main", "crypto_conf_table")
 
 	(void) crypt_register(&crypto_pbkdf2v2_impl);
 

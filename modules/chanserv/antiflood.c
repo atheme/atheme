@@ -498,7 +498,8 @@ static struct command cs_set_antiflood = {
 static void
 mod_init(struct module *m)
 {
-	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/main")
+	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree")
 
 	/* attempt to pull in the place_quietmask() routine from chanserv/quiet,
 	   we don't see it as a hardfail because we can run without QUIET support. */

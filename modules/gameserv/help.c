@@ -41,8 +41,10 @@ static struct command gs_help = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "gameserv/main")
+
 	(void) service_named_bind_command("gameserv", &gs_help);
 }
 

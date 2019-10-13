@@ -427,7 +427,10 @@ static struct command os_perl = {
 static void
 mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "operserv/main")
+
 	perl_script_module_heap = mowgli_heap_create(sizeof(struct perl_script_module), 256, BH_NOW);
+
 	if (!perl_script_module_heap)
 	{
 		m->mflags |= MODFLAG_FAIL;

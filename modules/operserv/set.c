@@ -612,6 +612,8 @@ static struct command os_set_enforceprefix = {
 static void
 mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "operserv/main")
+
 	if (! (os_set_cmdtree = mowgli_patricia_create(&strcasecanon)))
 	{
 		(void) slog(LG_ERROR, "%s: mowgli_patricia_create() failed", m->name);

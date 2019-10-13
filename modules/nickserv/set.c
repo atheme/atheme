@@ -13,22 +13,22 @@
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_core");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_email");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_emailmemos");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_hidelastlogin");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_hidemail");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_core")
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_email")
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_emailmemos")
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_hidelastlogin")
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_hidemail")
 
 #ifdef ENABLE_NLS
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_language");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_language")
 #endif
 
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_neverop");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_nomemo");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_noop");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_password");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_property");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_quietchg");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_neverop")
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_nomemo")
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_noop")
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_password")
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_property")
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_quietchg")
 }
 
 static void

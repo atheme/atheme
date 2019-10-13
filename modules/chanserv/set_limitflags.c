@@ -90,7 +90,7 @@ static struct command cs_set_limitflags = {
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
+	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree")
 
 	command_add(&cs_set_limitflags, *cs_set_cmdtree);
 

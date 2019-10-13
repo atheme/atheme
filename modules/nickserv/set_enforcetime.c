@@ -60,8 +60,7 @@ static struct command ns_set_enforcetime = {
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/enforce");
-	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
+	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree")
 
 	command_add(&ns_set_enforcetime, *ns_set_cmdtree);
 }

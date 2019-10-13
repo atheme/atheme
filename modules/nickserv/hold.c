@@ -86,9 +86,11 @@ static struct command ns_hold = {
 static void
 mod_init(struct module *const restrict m)
 {
-	service_named_bind_command("nickserv", &ns_hold);
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/main")
 
 	use_nslist_main_symbols(m);
+
+	service_named_bind_command("nickserv", &ns_hold);
 
 	static struct list_param hold;
 	hold.opttype = OPT_BOOL;

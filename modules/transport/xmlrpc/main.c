@@ -562,7 +562,7 @@ xmlrpcmethod_metadata(void *conn, int parc, char *parv[])
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_SYMBOL(m, httpd_path_handlers, "misc/httpd", "httpd_path_handlers");
+	MODULE_TRY_REQUEST_SYMBOL(m, httpd_path_handlers, "misc/httpd", "httpd_path_handlers")
 
 	hook_add_event("config_ready");
 	hook_add_config_ready(xmlrpc_config_ready);

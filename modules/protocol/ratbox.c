@@ -74,7 +74,7 @@ static const struct cmode ratbox_user_mode_list[] = {
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/ts6-generic");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/ts6-generic")
 
 	mode_list = ratbox_mode_list;
 	ignore_mode_list = ratbox_ignore_mode_list;

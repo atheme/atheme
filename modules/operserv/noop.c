@@ -346,8 +346,10 @@ static struct command os_noop = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "operserv/main")
+
 	service_named_bind_command("operserv", &os_noop);
 	hook_add_event("user_oper");
 	hook_add_user_oper(check_user);

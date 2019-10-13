@@ -159,8 +159,10 @@ static struct command cs_close = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/main")
+
 	service_named_bind_command("chanserv", &cs_close);
 	hook_add_event("channel_join");
 	hook_add_first_channel_join(close_check_join);

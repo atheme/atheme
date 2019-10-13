@@ -1571,8 +1571,8 @@ m_protoctl(struct sourceinfo *si, int parc, char *parv[])
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/base36uid");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459")
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/base36uid")
 
 	server_login = &unreal_server_login;
 	introduce_nick = &unreal_introduce_nick;

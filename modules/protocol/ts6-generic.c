@@ -1522,8 +1522,8 @@ channel_drop(struct mychan *mc)
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/base36uid");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459")
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/base36uid")
 
 	server_login = &ts6_server_login;
 	introduce_nick = &ts6_introduce_nick;

@@ -57,7 +57,7 @@ static const struct crypt_impl crypto_crypt3_impl = {
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_SYMBOL(m, crypto_conf_table, "crypto/main", "crypto_conf_table");
+	MODULE_TRY_REQUEST_SYMBOL(m, crypto_conf_table, "crypto/main", "crypto_conf_table")
 
 	(void) add_dupstr_conf_item("crypt3_openbsd_newhash_pref", *crypto_conf_table, 0, &crypt3_pref, CRYPT3_PREF_DEF);
 

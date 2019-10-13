@@ -1707,8 +1707,8 @@ server_eob(struct server *s)
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/base36uid");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459")
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/base36uid")
 
 	next_matching_ban = &inspircd_next_matching_ban;
 	server_login = &inspircd_server_login;

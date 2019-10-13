@@ -448,6 +448,8 @@ static struct command os_sqline_sync = {
 static void
 mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "operserv/main")
+
 	if (ircd && qline_sts == &generic_qline_sts)
 	{
 		(void) slog(LG_ERROR, "Module %s requires qline support, refusing to load.", m->name);

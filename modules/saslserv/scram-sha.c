@@ -834,8 +834,8 @@ mod_init(struct module *const restrict m)
 		return;
 	}
 
-	MODULE_TRY_REQUEST_SYMBOL(m, sasl_core_functions, "saslserv/main", "sasl_core_functions");
-	MODULE_TRY_REQUEST_SYMBOL(m, pbkdf2v2_scram_functions, PBKDF2V2_CRYPTO_MODULE_NAME, "pbkdf2v2_scram_functions");
+	MODULE_TRY_REQUEST_SYMBOL(m, sasl_core_functions, "saslserv/main", "sasl_core_functions")
+	MODULE_TRY_REQUEST_SYMBOL(m, pbkdf2v2_scram_functions, PBKDF2V2_CRYPTO_MODULE_NAME, "pbkdf2v2_scram_functions")
 
 	/* Pass our funcptr to the pbkdf2v2 module, which will immediately call us back with its
 	 * configuration. We use its configuration to decide which SASL mechanism to register.

@@ -299,7 +299,7 @@ user_can_logout(hook_user_logout_check_t *hdata)
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/charybdis");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/charybdis")
 
 	mode_list = seven_mode_list;
 	user_mode_list = seven_user_mode_list;

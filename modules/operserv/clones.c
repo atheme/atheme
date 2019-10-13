@@ -904,8 +904,6 @@ static struct command os_clones_duration = {
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "operserv/main");
-
 	if (! module_find_published("backend/opensex"))
 	{
 		(void) slog(LG_ERROR, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
@@ -913,6 +911,8 @@ mod_init(struct module *const restrict m)
 		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
+
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "operserv/main")
 
 	if (! (serviceinfo = service_find("operserv")))
 	{

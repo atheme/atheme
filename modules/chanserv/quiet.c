@@ -487,8 +487,10 @@ static struct command cs_unquiet = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/main")
+
         service_named_bind_command("chanserv", &cs_quiet);
 	service_named_bind_command("chanserv", &cs_unquiet);
 }

@@ -315,7 +315,7 @@ charybdis_is_extban(const char *mask)
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/ts6-generic");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/ts6-generic")
 
 	notice_channel_sts = &charybdis_notice_channel_sts;
 

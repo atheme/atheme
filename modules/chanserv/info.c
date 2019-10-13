@@ -331,8 +331,10 @@ static struct command cs_info = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/main")
+
 	service_named_bind_command("chanserv", &cs_info);
 	add_bool_conf_item("SHOW_CUSTOM_METADATA", &chansvs.me->conf_table, 0, &show_custom_metadata, true);
 }

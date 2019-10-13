@@ -1023,8 +1023,8 @@ check_hidehost(struct user *u)
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/p10");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/base36uid");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/p10")
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/base36uid")
 
 	server_login = &p10_server_login;
 	introduce_nick = &p10_introduce_nick;

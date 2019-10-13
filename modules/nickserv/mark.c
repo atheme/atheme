@@ -126,16 +126,12 @@ static struct command ns_mark = {
 static void
 mod_init(struct module *const restrict m)
 {
-	if (module_find_published("nickserv/multimark"))
-	{
-		slog(LG_INFO, "Loading both multimark and mark has severe consequences for the space-time continuum. Refusing to load.");
-		m->mflags |= MODFLAG_FAIL;
-		return;
-	}
-
-	service_named_bind_command("nickserv", &ns_mark);
+	MODULE_CONFLICT(m, "nickserv/multimark")
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/main")
 
 	use_nslist_main_symbols(m);
+
+	service_named_bind_command("nickserv", &ns_mark);
 
 	static struct list_param mark;
 	mark.opttype = OPT_STRING;

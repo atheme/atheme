@@ -482,8 +482,8 @@ static const struct crypt_impl crypto_argon2d_impl = {
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_SYMBOL(m, crypto_conf_table, "crypto/main", "crypto_conf_table");
-	MODULE_TRY_REQUEST_SYMBOL(m, blake2bfn, "crypto/blake2b", "blake2b_functions");
+	MODULE_TRY_REQUEST_SYMBOL(m, crypto_conf_table, "crypto/main", "crypto_conf_table")
+	MODULE_TRY_REQUEST_SYMBOL(m, blake2bfn, "crypto/blake2b", "blake2b_functions")
 
 	(void) crypt_register(&crypto_argon2d_impl);
 

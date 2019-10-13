@@ -76,10 +76,9 @@ static struct command ns_set_hidelastlogin = {
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
+	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree")
 
 	command_add(&ns_set_hidelastlogin, *ns_set_cmdtree);
-
 }
 
 static void

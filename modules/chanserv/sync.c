@@ -419,7 +419,9 @@ static struct command cs_set_nosync = {
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/main")
+	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree")
+
 	service_named_bind_command("chanserv", &cs_sync);
 
 	command_add(&cs_set_nosync, *cs_set_cmdtree);

@@ -66,6 +66,8 @@ static struct command ns_set = {
 static void
 mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/main")
+
 	if (! (ns_set_cmdtree = mowgli_patricia_create(&strcasecanon)))
 	{
 		(void) slog(LG_ERROR, "%s: mowgli_patricia_create() failed", m->name);

@@ -249,7 +249,7 @@ chatircd_is_extban(const char *mask)
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/charybdis");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/charybdis")
 
 	next_matching_ban = &chatircd_next_matching_ban;
 	is_extban = &chatircd_is_extban;

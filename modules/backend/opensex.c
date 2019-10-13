@@ -421,7 +421,7 @@ static const struct database_module opensex_mod = {
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "backend/corestorage");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "backend/corestorage")
 
 	db_mod = &opensex_mod;
 

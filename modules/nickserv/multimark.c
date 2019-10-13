@@ -1027,8 +1027,6 @@ static struct command ns_multimark = {
 static void
 mod_init(struct module *const restrict m)
 {
-	static struct list_param mark_check;
-
 	if (!module_find_published("backend/opensex"))
 	{
 		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
@@ -1036,12 +1034,10 @@ mod_init(struct module *const restrict m)
 		return;
 	}
 
-	if (module_find_published("nickserv/mark"))
-	{
-		slog(LG_INFO, "Loading both multimark and mark has severe consequences for the space-time continuum. Refusing to load.");
-		m->mflags |= MODFLAG_FAIL;
-		return;
-	}
+	MODULE_CONFLICT(m, "nickserv/mark")
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/main")
+
+	use_nslist_main_symbols(m);
 
 	if (! (restored_marks = mowgli_global_storage_get(MULTIMARK_PERSIST_MDNAME)))
 		restored_marks = mowgli_patricia_create(&strcasecanon);
@@ -1075,14 +1071,13 @@ mod_init(struct module *const restrict m)
 
 	service_named_bind_command("nickserv", &ns_multimark);
 
-	use_nslist_main_symbols(m);
-
 	static struct list_param mark;
 	mark.opttype = OPT_STRING;
 	mark.is_match = multimark_match;
 
 	list_register("mark-reason", &mark);
 
+	static struct list_param mark_check;
 	mark_check.opttype = OPT_BOOL;
 	mark_check.is_match = is_marked;
 

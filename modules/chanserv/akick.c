@@ -785,6 +785,8 @@ static struct command cs_akick_list = {
 static void
 mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/main")
+
 	if (! (akick_timeout_heap = mowgli_heap_create(sizeof(struct akick_timeout), 512, BH_NOW)))
 	{
 		(void) slog(LG_ERROR, "%s: mowgli_heap_create() failed", m->name);

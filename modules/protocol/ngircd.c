@@ -878,7 +878,7 @@ nick_ungroup(hook_user_req_t *hdata)
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459")
 
 	server_login = &ngircd_server_login;
 	introduce_nick = &ngircd_introduce_nick;

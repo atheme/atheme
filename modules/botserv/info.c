@@ -121,8 +121,8 @@ static struct command bs_info = {
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_SYMBOL(m, bs_bots, "botserv/main", "bs_bots");
-	MODULE_TRY_REQUEST_SYMBOL(m, botserv_bot_find, "botserv/main", "botserv_bot_find");
+	MODULE_TRY_REQUEST_SYMBOL(m, bs_bots, "botserv/main", "bs_bots")
+	MODULE_TRY_REQUEST_SYMBOL(m, botserv_bot_find, "botserv/main", "botserv_bot_find")
 
 	service_named_bind_command("botserv", &bs_info);
 }

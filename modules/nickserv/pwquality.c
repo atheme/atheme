@@ -196,7 +196,7 @@ pwquality_osinfo_hook(struct sourceinfo *const restrict si)
 }
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
 	(void) hook_add_event("user_can_register");
 	(void) hook_add_user_can_register(&pwquality_register_hook);

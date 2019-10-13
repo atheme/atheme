@@ -102,6 +102,10 @@ static struct command ns_vacation = {
 static void
 mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/main")
+
+	use_nslist_main_symbols(m);
+
 	service_named_bind_command("nickserv", &ns_vacation);
 
 	hook_add_event("user_identify");
@@ -115,8 +119,6 @@ mod_init(struct module *const restrict m)
 
 	hook_add_event("user_info");
 	hook_add_user_info(info_hook);
-
-	use_nslist_main_symbols(m);
 
 	static struct list_param vacation;
 	vacation.opttype = OPT_BOOL;

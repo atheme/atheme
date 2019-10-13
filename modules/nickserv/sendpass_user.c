@@ -145,7 +145,8 @@ static void
 mod_init(struct module *const restrict m)
 {
 	MODULE_CONFLICT(m, "nickserv/sendpass")
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/setpass");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/main")
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/setpass")
 
 	service_named_bind_command("nickserv", &ns_sendpass);
 }

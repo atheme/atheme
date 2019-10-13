@@ -99,7 +99,7 @@ static const struct cmode elemental_user_mode_list[] = {
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/charybdis");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/charybdis")
 
 	mode_list = elemental_mode_list;
 	user_mode_list = elemental_user_mode_list;

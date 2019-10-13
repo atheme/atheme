@@ -732,7 +732,7 @@ flatfile_db_load(const char *filename)
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "backend/opensex");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "backend/opensex")
 
 	db_load = &flatfile_db_load;
 

@@ -717,7 +717,7 @@ p10_kline_sts(const char *server, const char *user, const char *host, long durat
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/p10-generic");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/p10-generic")
 
 	join_sts = &nefarious_join_sts;
 	kick = &nefarious_kick;

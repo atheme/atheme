@@ -200,8 +200,10 @@ static struct command os_specs = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "operserv/main")
+
         service_named_bind_command("operserv", &os_specs);
 }
 

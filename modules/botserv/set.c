@@ -15,11 +15,11 @@
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/set_core");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/set_fantasy");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/set_nobot");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/set_private");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/set_saycaller");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/set_core")
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/set_fantasy")
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/set_nobot")
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/set_private")
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/set_saycaller")
 }
 
 static void

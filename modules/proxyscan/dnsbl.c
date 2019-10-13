@@ -623,18 +623,16 @@ static struct command ps_dnsblscan = {
 static void
 mod_init(struct module *const restrict m)
 {
-	struct service *proxyscan;
-
-	MODULE_CONFLICT(m, "contrib/dnsbl");
-
-	MODULE_TRY_REQUEST_SYMBOL(m, os_set_cmdtree, "operserv/set", "os_set_cmdtree");
-
 	if (!module_find_published("backend/opensex"))
 	{
 		(void) slog(LG_ERROR, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
 		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
+
+	MODULE_CONFLICT(m, "contrib/dnsbl")
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "proxyscan/main")
+	MODULE_TRY_REQUEST_SYMBOL(m, os_set_cmdtree, "operserv/set", "os_set_cmdtree")
 
 	if (! (dns_base = mowgli_dns_create(base_eventloop, MOWGLI_DNS_TYPE_ASYNC)))
 	{
@@ -643,7 +641,7 @@ mod_init(struct module *const restrict m)
 		return;
 	}
 
-	proxyscan = service_find("proxyscan");
+	struct service *proxyscan = service_find("proxyscan");
 
 	hook_add_db_write(write_dnsbl_exempt_db);
 

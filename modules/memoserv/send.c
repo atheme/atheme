@@ -191,8 +191,9 @@ static struct command ms_send = {
 static void
 mod_init(struct module *const restrict m)
 {
+        MODULE_TRY_REQUEST_SYMBOL(m, maxmemos, "memoserv/main", "maxmemos")
+
         service_named_bind_command("memoserv", &ms_send);
-        MODULE_TRY_REQUEST_SYMBOL(m, maxmemos, "memoserv/main", "maxmemos");
 }
 
 static void

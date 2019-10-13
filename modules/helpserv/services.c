@@ -37,8 +37,10 @@ static struct command helpserv_services = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "helpserv/main")
+
 	service_named_bind_command("helpserv", &helpserv_services);
 }
 

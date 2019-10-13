@@ -62,8 +62,10 @@ static struct command hs_drop = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "hostserv/main")
+
 	service_named_bind_command("hostserv", &hs_drop);
 }
 

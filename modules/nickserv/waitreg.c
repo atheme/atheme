@@ -56,7 +56,7 @@ waitreg_registerhook(hook_user_register_check_t *const restrict hdata)
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_CONFLICT(m, "contrib/ns_waitreg");
+	MODULE_CONFLICT(m, "contrib/ns_waitreg")
 
 	(void) hook_add_event("operserv_info");
 	(void) hook_add_operserv_info(&waitreg_infohook);

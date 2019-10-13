@@ -22,9 +22,9 @@ void (*list_unregister)(const char *param_name);
 
 static inline void use_nslist_main_symbols(struct module *m)
 {
-    MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/list");
-    MODULE_TRY_REQUEST_SYMBOL(m, list_register, "nickserv/list", "list_register");
-    MODULE_TRY_REQUEST_SYMBOL(m, list_unregister, "nickserv/list", "list_unregister");
+    MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/list")
+    MODULE_TRY_REQUEST_SYMBOL(m, list_register, "nickserv/list", "list_register")
+    MODULE_TRY_REQUEST_SYMBOL(m, list_unregister, "nickserv/list", "list_unregister")
 }
 
 #endif /* !ATHEME_MOD_NICKSERV_LIST_H */

@@ -335,7 +335,7 @@ check_hidehost(struct user *u)
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/p10-generic");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/p10-generic")
 
 	// Symbol relocation voodoo.
 	notice_channel_sts = &asuka_notice_channel_sts;

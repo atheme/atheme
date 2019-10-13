@@ -96,6 +96,8 @@ static struct command ss_channel_count = {
 static void
 mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "statserv/main")
+
 	if (! (ss_channel_cmds = mowgli_patricia_create(&strcasecanon)))
 	{
 		(void) slog(LG_ERROR, "%s: mowgli_patricia_create() failed", m->name);

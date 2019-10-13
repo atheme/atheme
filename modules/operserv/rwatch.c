@@ -619,6 +619,8 @@ static struct command os_rwatch_set = {
 static void
 mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "operserv/main")
+
 	if (! (os_rwatch_cmds = mowgli_patricia_create(&strcasecanon)))
 	{
 		(void) slog(LG_ERROR, "%s: mowgli_patricia_create() failed", m->name);

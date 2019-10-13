@@ -648,12 +648,13 @@ static struct command ns_regain = {
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
-
 	/* Leave this for compatibility with old versions of this code
 	 * -- jilles
 	 */
 	myentity_foreach_t(ENT_USER, idcheck_foreach_cb, NULL);
+
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/main")
+	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree")
 
 	// Absolutely do not do anything like this if nicks are not considered owned
 	if (nicksvs.no_nick_ownership)

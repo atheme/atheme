@@ -128,7 +128,7 @@ static struct command cs_clear_users = {
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_SYMBOL(m, cs_clear_cmds, "chanserv/clear", "cs_clear_cmds");
+	MODULE_TRY_REQUEST_SYMBOL(m, cs_clear_cmds, "chanserv/clear", "cs_clear_cmds")
 
 	command_add(&cs_clear_users, *cs_clear_cmds);
 }

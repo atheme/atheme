@@ -111,8 +111,10 @@ static struct command cs_help = {
 };
 
 static void
-mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
+mod_init(struct module *const restrict m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/main")
+
 	(void) add_dupstr_conf_item("SHORTHELP", &chansvs.me->conf_table, 0, &shorthelp_cmds, NULL);
 
 	(void) service_named_bind_command("chanserv", &cs_help);
