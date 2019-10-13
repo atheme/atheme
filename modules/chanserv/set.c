@@ -18,7 +18,6 @@ mod_init(struct module *const restrict m)
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_email");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_entrymsg");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_fantasy");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_founder");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_guard");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_keeptopic");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_mlock");
