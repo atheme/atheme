@@ -128,14 +128,11 @@ extern mowgli_list_t modules;
         }
 
 #define MODULE_TRY_REQUEST_SYMBOL(self, dest, modname, sym)                \
-        if ((dest = module_locate_symbol(modname, sym)) == NULL)           \
+        MODULE_TRY_REQUEST_DEPENDENCY((self), (modname))                   \
+        if (((dest) = module_locate_symbol((modname), (sym))) == NULL)     \
         {                                                                  \
-                MODULE_TRY_REQUEST_DEPENDENCY(self, modname);              \
-                if ((dest = module_locate_symbol(modname, sym)) == NULL)   \
-                {                                                          \
-                        (self)->mflags |= MODFLAG_FAIL;                    \
-                        return;                                            \
-                }                                                          \
+                (self)->mflags |= MODFLAG_FAIL;                            \
+                return;                                                    \
         }
 
 #define MODULE_CONFLICT(self, modname)                                     \
