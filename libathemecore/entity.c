@@ -186,10 +186,10 @@ myentity_stats(void (*cb)(const char *line, void *privdata), void *privdata)
 }
 
 /* validation */
-static struct chanacs *
-linear_chanacs_match_entity(struct chanacs *ca, struct myentity *mt)
+static bool
+linear_match_entity(struct myentity *self, struct myentity *mt)
 {
-	return ca->entity == mt ? ca : NULL;
+	return self == mt;
 }
 
 static bool
@@ -224,16 +224,16 @@ linear_allow_foundership(struct myentity *mt)
 	return true;
 }
 
-static const struct entity_chanacs_validation_vtable linear_chanacs_validate = {
-	.match_entity = linear_chanacs_match_entity,
+static const struct entity_vtable linear_validate = {
+	.match_entity = linear_match_entity,
 	.can_register_channel = linear_can_register_channel,
 	.allow_foundership = linear_allow_foundership,
 };
 
-const struct entity_chanacs_validation_vtable *
-myentity_get_chanacs_validator(struct myentity *mt)
+const struct entity_vtable *
+myentity_get_vtable(struct myentity *mt)
 {
-	return mt->chanacs_validate != NULL ? mt->chanacs_validate : &linear_chanacs_validate;
+	return mt->vtable != NULL ? mt->vtable : &linear_validate;
 }
 
 /* chanacs */
@@ -257,11 +257,11 @@ myentity_count_channels_with_flagset(struct myentity *mt, unsigned int flagset)
 bool
 myentity_can_register_channel(struct myentity *mt)
 {
-	const struct entity_chanacs_validation_vtable *vt;
+	const struct entity_vtable *vt;
 
 	return_val_if_fail(mt != NULL, false);
 
-	vt = myentity_get_chanacs_validator(mt);
+	vt = myentity_get_vtable(mt);
 	if (vt->can_register_channel(mt))
 		return true;
 
@@ -271,11 +271,11 @@ myentity_can_register_channel(struct myentity *mt)
 bool
 myentity_allow_foundership(struct myentity *mt)
 {
-	const struct entity_chanacs_validation_vtable *vt;
+	const struct entity_vtable *vt;
 
 	return_val_if_fail(mt != NULL, false);
 
-	vt = myentity_get_chanacs_validator(mt);
+	vt = myentity_get_vtable(mt);
 	if (vt->allow_foundership)
 		return vt->allow_foundership(mt);
 

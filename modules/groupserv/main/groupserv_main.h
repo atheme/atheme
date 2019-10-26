@@ -33,7 +33,7 @@ void gs_db_deinit(void);
 void gs_hooks_init(void);
 void gs_hooks_deinit(void);
 
-void mygroup_set_chanacs_validator(struct myentity *mt);
+void mygroup_set_entity_vtable(struct myentity *mt);
 unsigned int mygroup_count_flag(struct mygroup *mg, unsigned int flag);
 unsigned int gs_flags_parser(char *flagstring, bool allow_minus, unsigned int flags);
 void remove_group_chanacs(struct mygroup *mg);

@@ -48,7 +48,7 @@ struct myentity;
 struct myentity_iteration_state;
 
 // Defined in atheme/entity-validation.h
-struct entity_chanacs_validation_vtable;
+struct entity_vtable;
 
 // Defined in atheme/flags.h
 struct gflags;

@@ -25,12 +25,12 @@ enum myentity_type
 
 struct myentity
 {
-	struct atheme_object                            parent;
-	enum myentity_type                              type;
-	stringref                                       name;
-	char                                            id[IDLEN + 1];
-	mowgli_list_t                                   chanacs;
-	const struct entity_chanacs_validation_vtable * chanacs_validate;
+	struct atheme_object         parent;
+	enum myentity_type           type;
+	stringref                    name;
+	char                         id[IDLEN + 1];
+	mowgli_list_t                chanacs;
+	const struct entity_vtable * vtable;
 };
 
 #define entity(x)	((struct myentity *)(x))

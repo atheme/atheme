@@ -22,51 +22,48 @@ static mowgli_heap_t *chanacs_ext_heap = NULL;
 static mowgli_patricia_t *chanacs_exttarget_tree = NULL;
 static mowgli_patricia_t **exttarget_tree = NULL;
 
-static struct chanacs *
-chanacs_ext_match_user(struct chanacs *ca, struct user *u)
+static bool
+chanacs_ext_match_user(struct myentity *self, struct user *u)
 {
 	struct this_exttarget *ent;
 	struct mychan *mc;
 	unsigned int flags;
 
-	ent = (struct this_exttarget *) ca->entity;
+	ent = (struct this_exttarget *) self;
 
 	if (ent->checking > 4) // arbitrary recursion limit?
-		return NULL;
+		return false;
 
 	if (!(mc = mychan_find(ent->channel)))
-		return NULL;
+		return false;
 
 	ent->checking++;
 	flags = chanacs_user_flags(mc, u);
 	ent->checking--;
 
 	if (flags & CA_AKICK)
-		return NULL;
+		return false;
 
 	if (flags)
-		return ca;
+		return true;
 
-	return NULL;
-}
-
-static struct chanacs *
-chanacs_ext_match_entity(struct chanacs *ca, struct myentity *mt)
-{
-	if (ca->entity == mt)
-		return ca;
-
-	return NULL;
+	return false;
 }
 
 static bool
-chanacs_ext_can_register_channel(struct myentity *mt)
+chanacs_ext_match_entity(struct myentity *self, struct myentity *mt)
+{
+	return self == mt;
+}
+
+static bool
+chanacs_ext_can_register_channel(struct myentity ATHEME_VATTR_UNUSED *mt)
 {
 	return false;
 }
 
 static bool
-chanacs_allow_foundership(struct myentity *mt)
+chanacs_ext_allow_foundership(struct myentity ATHEME_VATTR_UNUSED *mt)
 {
 	return false;
 }
@@ -86,11 +83,11 @@ chanacs_ext_delete(struct this_exttarget *e)
 static struct myentity *
 chanacs_validate_f(const char *param)
 {
-	static const struct entity_chanacs_validation_vtable chanacs_ext_validate = {
+	static const struct entity_vtable chanacs_ext_vtable = {
 		.match_entity = chanacs_ext_match_entity,
 		.match_user = chanacs_ext_match_user,
 		.can_register_channel = chanacs_ext_can_register_channel,
-		.allow_foundership = chanacs_allow_foundership,
+		.allow_foundership = chanacs_ext_allow_foundership,
 	};
 
 	char *name;
@@ -123,8 +120,8 @@ chanacs_validate_f(const char *param)
 	sfree(name);
 #undef NAMEPREFIX
 
-	// hook up the entity's validation table.
-	entity(ext)->chanacs_validate = &chanacs_ext_validate;
+	// hook up the entity's vtable
+	entity(ext)->vtable = &chanacs_ext_vtable;
 	entity(ext)->type = ENT_EXTTARGET;
 
 	// initialize the object.

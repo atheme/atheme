@@ -78,7 +78,7 @@ mygroup_add_id(const char *id, const char *name)
 	entity(mg)->name = strshare_get(name);
 	myentity_put(entity(mg));
 
-	mygroup_set_chanacs_validator(entity(mg));
+	mygroup_set_entity_vtable(entity(mg));
 
 	mg->regtime = CURRTIME;
 

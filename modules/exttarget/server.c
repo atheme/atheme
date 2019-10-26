@@ -30,36 +30,33 @@ server_ext_delete(struct this_exttarget *e)
 	mowgli_heap_free(server_ext_heap, e);
 }
 
-static struct chanacs *
-server_ext_match_user(struct chanacs *ca, struct user *u)
+static bool
+server_ext_match_user(struct myentity *self, struct user *u)
 {
 	struct this_exttarget *ent;
 	mowgli_node_t *n;
 
-	ent = (struct this_exttarget *) ca->entity;
+	ent = (struct this_exttarget *) self;
 	if (match(ent->server, u->server->name) == 0)
-		return ca;
+		return true;
 
-	return NULL;
-}
-
-static struct chanacs *
-server_ext_match_entity(struct chanacs *ca, struct myentity *mt)
-{
-	if (ca->entity == mt)
-		return ca;
-
-	return NULL;
+	return false;
 }
 
 static bool
-server_ext_can_register_channel(struct myentity *mt)
+server_ext_match_entity(struct myentity *self, struct myentity *mt)
+{
+	return self == mt;
+}
+
+static bool
+server_ext_can_register_channel(struct myentity ATHEME_VATTR_UNUSED *mt)
 {
 	return false;
 }
 
 static bool
-server_ext_allow_foundership(struct myentity *mt)
+server_ext_allow_foundership(struct myentity ATHEME_VATTR_UNUSED *mt)
 {
 	return false;
 }
@@ -67,7 +64,7 @@ server_ext_allow_foundership(struct myentity *mt)
 static struct myentity *
 server_validate_f(const char *param)
 {
-	static const struct entity_chanacs_validation_vtable server_ext_validate = {
+	static const struct entity_vtable server_ext_vtable = {
 		.match_entity = server_ext_match_entity,
 		.match_user = server_ext_match_user,
 		.can_register_channel = server_ext_can_register_channel,
@@ -104,7 +101,7 @@ server_validate_f(const char *param)
 #undef NAMEPREFIX
 
 	// hook up the entity's validation table.
-	entity(ext)->chanacs_validate = &server_ext_validate;
+	entity(ext)->vtable = &server_ext_vtable;
 	entity(ext)->type = ENT_EXTTARGET;
 
 	// initialize the object.

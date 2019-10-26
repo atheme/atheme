@@ -53,7 +53,7 @@ mod_init(struct module *const restrict m)
 		{
 			continue_if_fail(isgroup(grp));
 
-			mygroup_set_chanacs_validator(grp);
+			mygroup_set_entity_vtable(grp);
 		}
 	}
 

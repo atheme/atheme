@@ -10,53 +10,47 @@
 
 static mowgli_patricia_t **exttarget_tree = NULL;
 
-static struct chanacs *
-dummy_match_user(struct chanacs *ca, struct user *u)
+static bool
+oper_ext_match_user(struct myentity ATHEME_VATTR_UNUSED *self, struct user *u)
 {
-	if (is_ircop(u))
-		return ca;
-
-	return NULL;
-}
-
-static struct chanacs *
-dummy_match_entity(struct chanacs *ca, struct myentity *mt)
-{
-	if (ca->entity == mt)
-		return ca;
-
-	return NULL;
+	return is_ircop(u);
 }
 
 static bool
-dummy_can_register_channel(struct myentity *mt)
+oper_ext_match_entity(struct myentity *self, struct myentity *mt)
+{
+	return self == mt;
+}
+
+static bool
+oper_ext_can_register_channel(struct myentity ATHEME_VATTR_UNUSED *mt)
 {
 	return false;
 }
 
 static bool
-dummy_allow_foundership(struct myentity *mt)
+oper_ext_allow_foundership(struct myentity ATHEME_VATTR_UNUSED *mt)
 {
 	return false;
 }
 
-static const struct entity_chanacs_validation_vtable dummy_validate = {
-	.match_entity = dummy_match_entity,
-	.match_user = dummy_match_user,
-	.can_register_channel = dummy_can_register_channel,
-	.allow_foundership = dummy_allow_foundership,
+static const struct entity_vtable oper_ext_vtable = {
+	.match_entity = oper_ext_match_entity,
+	.match_user = oper_ext_match_user,
+	.can_register_channel = oper_ext_can_register_channel,
+	.allow_foundership = oper_ext_allow_foundership,
 };
 
-static struct myentity dummy_entity = {
+static struct myentity oper_ext_entity = {
 	.name = "$oper",
 	.type = ENT_EXTTARGET,
-	.chanacs_validate = &dummy_validate,
+	.vtable = &oper_ext_vtable,
 };
 
 static struct myentity *
-oper_validate_f(const char *param)
+oper_validate_f(const char ATHEME_VATTR_UNUSED *param)
 {
-	return &dummy_entity;
+	return &oper_ext_entity;
 }
 
 static void
@@ -66,7 +60,7 @@ mod_init(struct module *const restrict m)
 
 	mowgli_patricia_add(*exttarget_tree, "oper", oper_validate_f);
 
-	atheme_object_init(atheme_object(&dummy_entity), "$oper", NULL);
+	atheme_object_init(atheme_object(&oper_ext_entity), "$oper", NULL);
 }
 
 static void

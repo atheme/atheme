@@ -18,41 +18,38 @@ static mowgli_heap_t *channel_ext_heap = NULL;
 static mowgli_patricia_t *channel_exttarget_tree = NULL;
 static mowgli_patricia_t **exttarget_tree = NULL;
 
-static struct chanacs *
-channel_ext_match_user(struct chanacs *ca, struct user *u)
+static bool
+channel_ext_match_user(struct myentity *self, struct user *u)
 {
 	struct this_exttarget *ent;
 	mowgli_node_t *n;
 
-	ent = (struct this_exttarget *) ca->entity;
+	ent = (struct this_exttarget *) self;
 	MOWGLI_LIST_FOREACH(n, u->channels.head)
 	{
 		struct chanuser *cu = n->data;
 
 		if (!irccasecmp(cu->chan->name, ent->channel))
-			return ca;
+			return true;
 	}
 
-	return NULL;
-}
-
-static struct chanacs *
-channel_ext_match_entity(struct chanacs *ca, struct myentity *mt)
-{
-	if (ca->entity == mt)
-		return ca;
-
-	return NULL;
+	return false;
 }
 
 static bool
-channel_ext_can_register_channel(struct myentity *mt)
+channel_ext_match_entity(struct myentity *self, struct myentity *mt)
+{
+	return self == mt;
+}
+
+static bool
+channel_ext_can_register_channel(struct myentity ATHEME_VATTR_UNUSED *mt)
 {
 	return false;
 }
 
 static bool
-channel_ext_allow_foundership(struct myentity *mt)
+channel_ext_allow_foundership(struct myentity ATHEME_VATTR_UNUSED *mt)
 {
 	return false;
 }
@@ -72,7 +69,7 @@ channel_ext_delete(struct this_exttarget *e)
 static struct myentity *
 channel_validate_f(const char *param)
 {
-	static const struct entity_chanacs_validation_vtable channel_ext_validate = {
+	static const struct entity_vtable channel_ext_vtable = {
 		.match_entity = channel_ext_match_entity,
 		.match_user = channel_ext_match_user,
 		.can_register_channel = channel_ext_can_register_channel,
@@ -108,8 +105,8 @@ channel_validate_f(const char *param)
 	sfree(name);
 #undef NAMEPREFIX
 
-	// hook up the entity's validation table.
-	entity(ext)->chanacs_validate = &channel_ext_validate;
+	// hook up the entity's vtable.
+	entity(ext)->vtable = &channel_ext_vtable;
 	entity(ext)->type = ENT_EXTTARGET;
 
 	// initialize the object.

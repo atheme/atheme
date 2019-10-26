@@ -13,14 +13,14 @@
 #include <atheme/stdheaders.h>
 #include <atheme/structures.h>
 
-struct entity_chanacs_validation_vtable
+struct entity_vtable
 {
-	struct chanacs *      (*match_entity)(struct chanacs *ca, struct myentity *mt);
-	struct chanacs *      (*match_user)(struct chanacs *ca, struct user *mt);
-	bool                  (*can_register_channel)(struct myentity *mt);
-	bool                  (*allow_foundership)(struct myentity *mt);
+	bool                  (*match_entity)(struct myentity *self, struct myentity *mt);
+	bool                  (*match_user)(struct myentity *self, struct user *mt);
+	bool                  (*can_register_channel)(struct myentity *self);
+	bool                  (*allow_foundership)(struct myentity *self);
 };
 
-const struct entity_chanacs_validation_vtable *myentity_get_chanacs_validator(struct myentity *mt);
+const struct entity_vtable *myentity_get_vtable(struct myentity *mt);
 
 #endif /* !ATHEME_INC_ENTITY_VALIDATION_H */

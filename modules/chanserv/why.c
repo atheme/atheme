@@ -19,7 +19,7 @@ cs_cmd_why(struct sourceinfo *si, int parc, char *parv[])
 	struct myuser *mu;
 	mowgli_node_t *n;
 	struct chanacs *ca;
-	const struct entity_chanacs_validation_vtable *vt;
+	const struct entity_vtable *vt;
 	struct metadata *md;
 	bool operoverride = false;
 	int fl = 0;
@@ -81,12 +81,12 @@ cs_cmd_why(struct sourceinfo *si, int parc, char *parv[])
 
 		if (ca->entity == NULL)
 			continue;
-		vt = myentity_get_chanacs_validator(ca->entity);
+		vt = myentity_get_vtable(ca->entity);
 		if (ca->entity == entity(u->myuser) ||
 				(vt->match_user != NULL ?
-				 vt->match_user(ca, u) != NULL :
+				 vt->match_user(ca->entity, u) :
 				 u->myuser != NULL &&
-				 vt->match_entity(ca, entity(u->myuser)) != NULL))
+				 vt->match_entity(ca->entity, entity(u->myuser)) ))
 		{
 			fl |= ca->level;
 			if (ca->entity == entity(u->myuser))

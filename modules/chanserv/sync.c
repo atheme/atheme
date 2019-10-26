@@ -26,10 +26,10 @@ do_chanuser_sync(struct mychan *mc, struct chanuser *cu, struct chanacs *ca,
 
 	if (ca != NULL && ca->entity != NULL && cu->user->myuser != NULL)
 	{
-		const struct entity_chanacs_validation_vtable *vt;
+		const struct entity_vtable *vt;
 
-		vt = myentity_get_chanacs_validator(ca->entity);
-		if (vt->match_entity(ca, entity(cu->user->myuser)) == NULL && (!vt->match_user || vt->match_user(ca, cu->user) == NULL))
+		vt = myentity_get_vtable(ca->entity);
+		if (!vt->match_entity(ca->entity, entity(cu->user->myuser)) && (!vt->match_user || !vt->match_user(ca->entity, cu->user)))
 			return;
 	}
 	fl = chanacs_user_flags(mc, cu->user);

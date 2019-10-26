@@ -1528,20 +1528,20 @@ chanacs_find(struct mychan *mychan, struct myentity *mt, unsigned int level)
 
 	MOWGLI_ITER_FOREACH(n, mychan->chanacs.head)
 	{
-		const struct entity_chanacs_validation_vtable *vt;
+		const struct entity_vtable *vt;
 
 		ca = (struct chanacs *)n->data;
 
 		if (ca->entity == NULL)
 			continue;
 
-		vt = myentity_get_chanacs_validator(ca->entity);
+		vt = myentity_get_vtable(ca->entity);
 		if (level != 0x0)
 		{
-			if ((vt->match_entity(ca, mt) != NULL) && ((ca->level & level) == level))
+			if (vt->match_entity(ca->entity, mt) && (ca->level & level) == level)
 				return ca;
 		}
-		else if (vt->match_entity(ca, mt) != NULL)
+		else if (vt->match_entity(ca->entity, mt))
 			return ca;
 	}
 
@@ -1559,7 +1559,7 @@ chanacs_entity_flags(struct mychan *mychan, struct myentity *mt)
 
 	MOWGLI_ITER_FOREACH(n, mychan->chanacs.head)
 	{
-		const struct entity_chanacs_validation_vtable *vt;
+		const struct entity_vtable *vt;
 
 		ca = (struct chanacs *)n->data;
 
@@ -1569,8 +1569,8 @@ chanacs_entity_flags(struct mychan *mychan, struct myentity *mt)
 			result |= ca->level;
 		else
 		{
-			vt = myentity_get_chanacs_validator(ca->entity);
-			if (vt->match_entity(ca, mt) != NULL)
+			vt = myentity_get_vtable(ca->entity);
+			if (vt->match_entity(ca->entity, mt))
 				result |= ca->level;
 		}
 	}
@@ -1764,15 +1764,15 @@ chanacs_entity_flags_by_user(struct mychan *mychan, struct user *u)
 	{
 		struct chanacs *ca = n->data;
 		struct myentity *mt;
-		const struct entity_chanacs_validation_vtable *vt;
+		const struct entity_vtable *vt;
 
 		if (ca->entity == NULL)
 			continue;
 
 		mt = ca->entity;
-		vt = myentity_get_chanacs_validator(mt);
+		vt = myentity_get_vtable(mt);
 
-		if (vt->match_user && vt->match_user(ca, u) != NULL)
+		if (vt->match_user && vt->match_user(mt, u))
 			result |= ca->level;
 	}
 
