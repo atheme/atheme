@@ -227,6 +227,8 @@ extern void (*svslogin_sts)(const char *target, const char *nick, const char *us
 extern void (*sasl_sts) (const char *target, char mode, const char *data);
 /* send sasl mech list */
 extern void (*sasl_mechlist_sts)(const char *mechlist);
+/* check whether a mask matches a user */
+extern bool (*mask_matches_user)(const char *mask, struct user *u);
 /* find next channel ban (or other ban-like mode) matching user */
 extern mowgli_node_t *(*next_matching_ban)(struct channel *c, struct user *u, int type, mowgli_node_t *first);
 /* find next host channel access matching user */
@@ -293,6 +295,7 @@ void generic_holdnick_sts(struct user *source, int duration, const char *nick, s
 void generic_svslogin_sts(const char *target, const char *nick, const char *user, const char *host, struct myuser *account);
 void generic_sasl_sts(const char *target, char mode, const char *data);
 void generic_sasl_mechlist_sts(const char *mechlist);
+bool generic_mask_matches_user(const char *mask, struct user *u);
 mowgli_node_t *generic_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_node_t *first);
 mowgli_node_t *generic_next_matching_host_chanacs(struct mychan *mc, struct user *u, mowgli_node_t *first);
 bool generic_is_valid_host(const char *host);

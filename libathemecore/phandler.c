@@ -51,6 +51,7 @@ void (*invite_sts) (struct user *source, struct user *target, struct channel *ch
 void (*svslogin_sts) (const char *target, const char *nick, const char *user, const char *host, struct myuser *account) = generic_svslogin_sts;
 void (*sasl_sts) (const char *target, char mode, const char *data) = generic_sasl_sts;
 void (*sasl_mechlist_sts) (const char *mechlist) = generic_sasl_mechlist_sts;
+bool (*mask_matches_user)(const char *mask, struct user *u) = generic_mask_matches_user;
 mowgli_node_t *(*next_matching_ban)(struct channel *c, struct user *u, int type, mowgli_node_t *first) = generic_next_matching_ban;
 mowgli_node_t *(*next_matching_host_chanacs)(struct mychan *mc, struct user *u, mowgli_node_t *first) = generic_next_matching_host_chanacs;
 bool (*is_valid_nick)(const char *nick) = generic_is_valid_nick;
@@ -333,11 +334,9 @@ generic_sasl_mechlist_sts(const char *mechlist)
 	/* nothing to do here. */
 }
 
-mowgli_node_t *
-generic_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_node_t *first)
+bool
+generic_mask_matches_user(const char *mask, struct user *u)
 {
-	struct chanban *cb;
-	mowgli_node_t *n;
 	char hostbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
 	char cloakbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
 	char realbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
@@ -348,12 +347,20 @@ generic_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_no
 	snprintf(realbuf, sizeof realbuf, "%s!%s@%s", u->nick, u->user, u->host);
 	/* will be nick!user@ if ip unknown, doesn't matter */
 	snprintf(ipbuf, sizeof ipbuf, "%s!%s@%s", u->nick, u->user, u->ip);
+
+	return !match(mask, hostbuf) || !match(mask, cloakbuf) || !match(mask, realbuf) || !match(mask, ipbuf) || (ircd->flags & IRCD_CIDR_BANS && !match_cidr(mask, ipbuf));
+}
+
+mowgli_node_t *
+generic_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_node_t *first)
+{
+	mowgli_node_t *n;
+
 	MOWGLI_ITER_FOREACH(n, first)
 	{
-		cb = n->data;
+		struct chanban *cb = n->data;
 
-		if (cb->type == type &&
-				(!match(cb->mask, hostbuf) || !match(cb->mask, cloakbuf) || !match(cb->mask, realbuf) || !match(cb->mask, ipbuf) || (ircd->flags & IRCD_CIDR_BANS && !match_cidr(cb->mask, ipbuf))))
+		if (cb->type == type && mask_matches_user(cb->mask, u))
 			return n;
 	}
 	return NULL;
@@ -362,24 +369,15 @@ generic_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_no
 mowgli_node_t *
 generic_next_matching_host_chanacs(struct mychan *mc, struct user *u, mowgli_node_t *first)
 {
-	struct chanacs *ca;
 	mowgli_node_t *n;
-	char hostbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
-	char hostbuf2[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
-	char ipbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
-
-	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
-	snprintf(hostbuf2, sizeof hostbuf2, "%s!%s@%s", u->nick, u->user, u->chost);
-	/* will be nick!user@ if ip unknown, doesn't matter */
-	snprintf(ipbuf, sizeof ipbuf, "%s!%s@%s", u->nick, u->user, u->ip);
 
 	MOWGLI_ITER_FOREACH(n, first)
 	{
-		ca = n->data;
+		struct chanacs *ca = n->data;
 
 		if (ca->entity != NULL)
 		       continue;
-		if (!match(ca->host, hostbuf) || !match(ca->host, hostbuf2) || !match(ca->host, ipbuf) || (ircd->flags & IRCD_CIDR_BANS && !match_cidr(ca->host, ipbuf)))
+		if (mask_matches_user(ca->host, u))
 			return n;
 	}
 	return NULL;
