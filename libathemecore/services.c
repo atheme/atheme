@@ -89,19 +89,20 @@ remove_ban_exceptions(struct user *source, struct channel *chan, struct user *ta
 	return remove_banlike(source, chan, ircd->except_mchar, target);
 }
 
-void
+// returns true if user was actually kicked, false otherwise (or on assertion failure)
+// If the user was kicked, their chanuser is deleted; if the user was *not* kicked,
+// their chanuser remains. This currently only happens due to kick immunity.
+bool
 try_kick_real(struct user *source, struct channel *chan, struct user *target, const char *reason)
 {
-	struct chanuser *cu;
+	return_val_if_fail(source != NULL, false);
+	return_val_if_fail(chan != NULL, false);
+	return_val_if_fail(target != NULL, false);
+	return_val_if_fail(reason != NULL, false);
 
-	return_if_fail(source != NULL);
-	return_if_fail(chan != NULL);
-	return_if_fail(target != NULL);
-	return_if_fail(reason != NULL);
+	struct chanuser *cu = chanuser_find(chan, target);
 
-	cu = chanuser_find(chan, target);
-	if (cu == NULL)
-		return;
+	return_val_if_fail(cu != NULL, false);
 
 	if ((chan->modes & ircd->oimmune_mode || cu->modes & CSTATUS_IMMUNE) && is_ircop(target))
 	{
@@ -111,7 +112,7 @@ try_kick_real(struct user *source, struct channel *chan, struct user *target, co
 		notice(source->nick, chan->name,
 				"Not kicking oper %s (%s)",
 				target->nick, reason);
-		return;
+		return false;
 	}
 	if (target->flags & config_options.immune_level)
 	{
@@ -121,12 +122,13 @@ try_kick_real(struct user *source, struct channel *chan, struct user *target, co
 		notice(source->nick, chan->name,
 				"Not kicking immune user %s (%s)",
 				target->nick, reason);
-		return;
+		return false;
 	}
 	kick(source, chan, target, reason);
+	return true;
 }
 
-void (*try_kick)(struct user *source, struct channel *chan, struct user *target, const char *reason) = try_kick_real;
+bool (*try_kick)(struct user *source, struct channel *chan, struct user *target, const char *reason) = try_kick_real;
 
 /* sends a KILL message for a user and removes the user from the userlist
  * source should be a service user or NULL for a server kill

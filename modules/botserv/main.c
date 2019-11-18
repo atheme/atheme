@@ -199,15 +199,15 @@ bs_modestack_mode_param(const char *source, struct channel *channel, int dir, ch
 	modestack_mode_param_real(bot ? bot->nick : source, channel, dir, type, value);
 }
 
-static void
+static bool
 bs_try_kick(struct user *source, struct channel *chan, struct user *target, const char *reason)
 {
 	struct mychan *mc;
 	struct metadata *bs;
 	struct user *bot = NULL;
 
-	return_if_fail(source != NULL);
-	return_if_fail(chan != NULL);
+	return_val_if_fail(source != NULL, false);
+	return_val_if_fail(chan != NULL, false);
 
 	if (source != chansvs.me->me)
 		return try_kick_real(source, chan, target, reason);
@@ -215,7 +215,7 @@ bs_try_kick(struct user *source, struct channel *chan, struct user *target, cons
 	if ((mc = mychan_from(chan)) != NULL && (bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
 		bot = user_find_named(bs->value);
 
-	try_kick_real(bot ? bot : source, chan, target, reason);
+	return try_kick_real(bot ? bot : source, chan, target, reason);
 }
 
 static void

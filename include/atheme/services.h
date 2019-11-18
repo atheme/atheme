@@ -76,8 +76,8 @@ unsigned int ban(struct user *source, struct channel *chan, struct user *target)
 unsigned int remove_banlike(struct user *source, struct channel *chan, int type, struct user *target);
 unsigned int remove_ban_exceptions(struct user *source, struct channel *chan, struct user *target);
 
-void try_kick_real(struct user *source, struct channel *chan, struct user *target, const char *reason);
-extern void (*try_kick)(struct user *source, struct channel *chan, struct user *target, const char *reason);
+bool try_kick_real(struct user *source, struct channel *chan, struct user *target, const char *reason);
+extern bool (*try_kick)(struct user *source, struct channel *chan, struct user *target, const char *reason);
 
 void kill_user(struct user *source, struct user *victim, const char *fmt, ...) ATHEME_FATTR_PRINTF(3, 4);
 void introduce_enforcer(const char *nick);
