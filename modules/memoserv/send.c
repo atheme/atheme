@@ -154,7 +154,7 @@ ms_cmd_send(struct sourceinfo *si, int parc, char *parv[])
 			myuser_notice(memoserv->nick, tmu, "You have a new memo from %s (nick: %s) (%zu).", entity(si->smu)->name, si->su->nick, MOWGLI_LIST_LENGTH(&tmu->memos));
 
 		myuser_notice(si->service->nick, tmu, "To read it, type \2/msg %s READ %zu\2",
-		              si->service->disp, MOWGLI_LIST_LENGTH(&tmu->memos));
+		              memoserv->disp, MOWGLI_LIST_LENGTH(&tmu->memos));
 
 		// Tell user memo sent
 		command_success_nodata(si, _("The memo has been successfully sent to \2%s\2."), target);

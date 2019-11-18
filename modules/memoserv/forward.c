@@ -18,6 +18,7 @@ ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])
 	struct mymemo *memo, *newmemo;
 	mowgli_node_t *n, *temp;
 	unsigned int i = 1, memonum = 0;
+	struct service *const memoserv = service_find("memoserv");
 
 	// Grab args
 	char *target = parv[0];
@@ -162,7 +163,7 @@ ms_cmd_forward(struct sourceinfo *si, int parc, char *parv[])
 		myuser_notice(si->service->nick, tmu, "You have a new forwarded memo from %s (nick: %s) (%zu).", entity(si->smu)->name, si->su->nick, MOWGLI_LIST_LENGTH(&tmu->memos));
 
 	myuser_notice(si->service->nick, tmu, "To read it, type \2/msg %s READ %zu\2",
-	              si->service->disp, MOWGLI_LIST_LENGTH(&tmu->memos));
+	              memoserv->disp, MOWGLI_LIST_LENGTH(&tmu->memos));
 
 	command_success_nodata(si, _("The memo has been successfully forwarded to \2%s\2."), target);
 	return;
