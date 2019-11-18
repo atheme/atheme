@@ -331,8 +331,19 @@ sasl_mech_scramsha_step_clientfirst(struct sasl_session *const restrict p,
 	if (attributes['r'].length < SCRAMSHA_NONCE_LENGTH_MIN || attributes['r'].length > SCRAMSHA_NONCE_LENGTH_MAX)
 	{
 		(void) slog(LG_DEBUG, "%s: nonce length '%zu' unacceptable", MOWGLI_FUNC_NAME, attributes['r'].length);
-		(void) sasl_scramsha_error("nonce-length-unacceptable", out);
+		(void) sasl_scramsha_error("nonce-unacceptable", out);
 		goto error;
+	}
+	for (size_t x = 0; x < attributes['r'].length; x++)
+	{
+		const unsigned char nchar = (unsigned char) attributes['r'].value[x];
+
+		if (nchar <= 0x20U || nchar == 0x2CU || nchar >= 0x7FU)
+		{
+			(void) slog(LG_DEBUG, "%s: nonce is not entirely RFC5802 'printable'", MOWGLI_FUNC_NAME);
+			(void) sasl_scramsha_error("nonce-unacceptable", out);
+			goto error;
+		}
 	}
 	if (attributes['n'].length > NICKLEN)
 	{
@@ -500,7 +511,7 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 	if (strcmp(s->nonce, attributes['r'].value) != 0)
 	{
 		(void) slog(LG_DEBUG, "%s: nonce sent by client doesn't match nonce we sent", MOWGLI_FUNC_NAME);
-		(void) sasl_scramsha_error("other-error", out);
+		(void) sasl_scramsha_error("nonce-unacceptable", out);
 		goto error;
 	}
 
