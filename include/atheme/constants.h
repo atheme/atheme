@@ -58,7 +58,7 @@
 #define GECOSLEN                50U
 #define KEYLEN                  23U
 #define EMAILLEN                254U
-#define MEMOLEN                 299U
+#define MEMOLEN                 300U
 
 #define MAXMSIGNORES            40U
 
