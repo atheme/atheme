@@ -95,8 +95,9 @@ struct hook_channel_topic_check
 
 struct hook_chanuser_sync
 {
-	struct chanuser * cu;            // Write NULL if you kicked the user. You must not destroy the channel.
-	const bool        take_prefixes; // Whether temporary prefixes should be removed
+	struct chanuser *  cu;            // Write NULL if you kicked the user. You must not destroy the channel.
+	const unsigned int flags;         // The user's channel access, if any
+	const bool         take_prefixes; // Whether temporary prefixes should be removed
 };
 
 struct hook_expiry_req
