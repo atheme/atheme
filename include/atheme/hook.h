@@ -93,6 +93,12 @@ struct hook_channel_topic_check
 	int             approved;       // Write non-zero here to cancel the change
 };
 
+struct hook_chanuser_sync
+{
+	struct chanuser * cu;            // Write NULL if you kicked the user. You must not destroy the channel.
+	const bool        take_prefixes; // Whether temporary prefixes should be removed
+};
+
 struct hook_expiry_req
 {
 	union {
