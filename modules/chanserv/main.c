@@ -272,36 +272,6 @@ chanuser_sync(struct hook_chanuser_sync *hdata)
 
 	bool noop = (mc->flags & MC_NOOP) || (u->myuser != NULL && u->myuser->flags & MU_NOOP);
 
-	// SET RESTRICTED
-	if ((mc->flags & MC_RESTRICTED) && !(flags & CA_ALLPRIVS) && !has_priv_user(u, PRIV_JOIN_STAFFONLY))
-	{
-		// Stay on channel if this would empty it -- jilles
-		if (chan->nummembers - chan->numsvcmembers == 1)
-		{
-			mc->flags |= MC_INHABIT;
-			if (chan->numsvcmembers == 0)
-				join(chan->name, chansvs.nick);
-		}
-		if (mc->mlock_on & CMODE_INVITE || chan->modes & CMODE_INVITE)
-		{
-			if (!(chan->modes & CMODE_INVITE))
-				check_modes(mc, true);
-			remove_banlike(chansvs.me->me, chan, ircd->invex_mchar, u);
-			modestack_flush_channel(chan);
-		}
-		else
-		{
-			ban(chansvs.me->me, chan, u);
-			remove_ban_exceptions(chansvs.me->me, chan, u);
-		}
-
-		if (try_kick(chansvs.me->me, chan, u, "You are not authorized to be on this channel"))
-		{
-			hdata->cu = NULL;
-			return;
-		}
-	}
-
 	// AKICKs
 	if (flags & CA_AKICK && !(flags & CA_EXEMPT))
 	{
