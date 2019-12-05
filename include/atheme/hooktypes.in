@@ -63,7 +63,6 @@ channel_pick_successor          struct hook_channel_succession_req *
 channel_register                struct hook_channel_req *
 channel_succession              struct hook_channel_succession_req *
 chanuser_sync                   struct hook_chanuser_sync *
-grant_channel_access            struct user *
 group_drop                      struct mygroup *
 group_register                  struct mygroup *
 host_request                    struct hook_host_request *

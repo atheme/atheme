@@ -342,13 +342,6 @@ to drop or expire.
 Change C<account> to select a new successor. This may be overwritten by
 subsequent hook functions.
 
-=head2 grant_channel_access
-
-Parameters: L<Atheme::User>
-
-Called when a user should be granted any ircd-side channel access (+o, +v, etc)
-that his services login allows.
-
 =head2 operserv_info
 
 Parameter: L<Atheme::Sourceinfo>

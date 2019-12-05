@@ -87,9 +87,6 @@ sync_user(struct user *u)
 
 		do_chanuser_sync(cu, !(mc->flags & MC_NOSYNC));
 	}
-
-	if (u->myuser != NULL)
-		hook_call_grant_channel_access(u);
 }
 
 static void
