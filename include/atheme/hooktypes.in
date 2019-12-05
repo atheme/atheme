@@ -24,73 +24,73 @@
 # (main)
 config_purge                    void
 config_ready                    void
+db_saved                        void
 db_write                        database_handle_t *
 # XXX: for groupserv.  remove when we have proper dependency resolution in opensex.
 db_write_pre_ca                 database_handle_t *
-db_saved                        void
 shutdown                        void
 
 # (ircd)
 channel_add                     channel_t *
+channel_can_change_topic        hook_channel_topic_check_t *
 channel_delete                  channel_t *
-channel_tschange                channel_t *
 channel_join                    hook_channel_joinpart_t *
-channel_part                    hook_channel_joinpart_t *
+channel_message                 hook_cmessage_data_t *
 channel_mode                    hook_channel_mode_t *
 channel_mode_change             hook_channel_mode_change_t *
+channel_part                    hook_channel_joinpart_t *
 channel_topic                   channel_t *
-channel_can_change_topic        hook_channel_topic_check_t *
-channel_message                 hook_cmessage_data_t *
+channel_tschange                channel_t *
 server_add                      server_t *
-server_eob                      server_t *
 server_delete                   hook_server_delete_t *
+server_eob                      server_t *
 user_add                        hook_user_nick_t *
+user_away                       user_t *
 user_delete                     user_t *
 user_delete_info                hook_user_delete_t *
-user_nickchange                 hook_user_nick_t *
-user_away                       user_t *
 user_deoper                     user_t *
+user_nickchange                 hook_user_nick_t *
 user_oper                       user_t *
 
 # (services)
+channel_acl_change              hook_channel_acl_req_t *
 channel_can_register            hook_channel_register_check_t *
+channel_check_expire            hook_expiry_req_t *
 channel_drop                    mychan_t *
 channel_info                    hook_channel_req_t *
+channel_pick_successor          hook_channel_succession_req_t *
 channel_register                hook_channel_req_t *
-channel_check_expire            hook_expiry_req_t *
-channel_acl_change              hook_channel_acl_req_t *
+channel_succession              hook_channel_succession_req_t *
+grant_channel_access            user_t *
 group_drop                      mygroup_t *
 group_register                  mygroup_t *
+host_request                    hook_host_request_t *
+metadata_change                 hook_metadata_change_t *
+module_load                     hook_module_load_t *
+myentity_find                   hook_myentity_req_t *
+myuser_delete                   myuser_t *
 nick_can_register               hook_user_register_check_t *
-nick_group                      hook_user_req_t *
 nick_check                      user_t *
-nick_enforce                    hook_nick_enforce_t *
-nick_ungroup                    hook_user_req_t *
 nick_check_expire               hook_expiry_req_t *
+nick_enforce                    hook_nick_enforce_t *
+nick_group                      hook_user_req_t *
+nick_ungroup                    hook_user_req_t *
+operserv_info                   sourceinfo_t *
 service_introduce               service_t *
-user_can_register               hook_user_register_check_t *
 user_can_login                  hook_user_login_check_t *
 user_can_logout                 hook_user_logout_check_t *
+user_can_register               hook_user_register_check_t *
+user_can_rename                 hook_user_rename_check_t *
+user_check_expire               hook_expiry_req_t *
 user_drop                       myuser_t *
 user_identify                   user_t *
 user_info                       hook_user_req_t *
 user_info_noexist               hook_info_noexist_req_t *
-user_register                   myuser_t *
-user_verify_register            hook_user_req_t *
-user_check_expire               hook_expiry_req_t *
-user_rename                     hook_user_rename_t *
-user_can_rename                 hook_user_rename_check_t *
-user_sethost                    user_t *
 user_needforce                  hook_user_needforce_t *
-myuser_delete                   myuser_t *
-metadata_change                 hook_metadata_change_t *
-host_request                    hook_host_request_t *
-channel_pick_successor          hook_channel_succession_req_t *
-channel_succession              hook_channel_succession_req_t *
-grant_channel_access            user_t *
-operserv_info                   sourceinfo_t *
-module_load                     hook_module_load_t *
-myentity_find                   hook_myentity_req_t *
+user_register                   myuser_t *
+user_rename                     hook_user_rename_t *
+user_sethost                    user_t *
+user_verify_register            hook_user_req_t *
 
 # (sasl)
 sasl_input                      sasl_message_t *
