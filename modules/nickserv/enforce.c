@@ -676,11 +676,8 @@ mod_init(struct module *const restrict m)
 	service_named_bind_command("nickserv", &ns_release);
 	service_named_bind_command("nickserv", &ns_regain);
 	command_add(&ns_set_enforce, *ns_set_cmdtree);
-	hook_add_event("user_info");
 	hook_add_user_info(show_enforce);
-	hook_add_event("nick_can_register");
 	hook_add_nick_can_register(check_registration);
-	hook_add_event("nick_enforce");
 	hook_add_nick_enforce(check_enforce);
 }
 

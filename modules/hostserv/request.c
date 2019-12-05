@@ -595,13 +595,9 @@ mod_init(struct module *const restrict m)
 
 	hostsvs = service_find("hostserv");
 
-	hook_add_event("user_drop");
 	hook_add_user_drop(account_drop_request);
-	hook_add_event("nick_ungroup");
 	hook_add_nick_ungroup(nick_drop_request);
-	hook_add_event("myuser_delete");
 	hook_add_myuser_delete(account_delete_request);
-	hook_add_event("operserv_info");
 	hook_add_operserv_info(osinfo_hook);
 	hook_add_db_write(write_hsreqdb);
 

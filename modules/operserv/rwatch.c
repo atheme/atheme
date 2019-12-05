@@ -636,13 +636,8 @@ mod_init(struct module *const restrict m)
 
 	(void) service_named_bind_command("operserv", &os_rwatch);
 
-	(void) hook_add_event("user_add");
 	(void) hook_add_user_add(&rwatch_newuser);
-
-	(void) hook_add_event("user_nickchange");
 	(void) hook_add_user_nickchange(&rwatch_nickchange);
-
-	(void) hook_add_event("db_write");
 	(void) hook_add_db_write(&write_rwatchdb);
 
 	char path[BUFSIZE];

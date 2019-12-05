@@ -1060,15 +1060,9 @@ mod_init(struct module *const restrict m)
 		return;
 	}
 
-	(void) hook_add_event("sasl_input");
 	(void) hook_add_sasl_input(&sasl_input);
-	(void) hook_add_event("user_add");
 	(void) hook_add_user_add(&sasl_user_add);
-	(void) hook_add_event("server_eob");
 	(void) hook_add_server_eob(&sasl_server_eob);
-	(void) hook_add_event("sasl_may_impersonate");
-	(void) hook_add_event("user_can_login");
-	(void) hook_add_event("user_can_logout");
 
 	sasl_delete_stale_timer = mowgli_timer_add(base_eventloop, "sasl_delete_stale", &sasl_delete_stale, NULL, SECONDS_PER_MINUTE / 2);
 	authservice_loaded++;

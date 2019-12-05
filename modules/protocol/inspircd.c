@@ -1793,9 +1793,7 @@ mod_init(struct module *const restrict m)
 	pcommand_add("ENCAP", m_encap, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("ENDBURST", m_endburst, 0, MSRC_SERVER);
 
-	hook_add_event("server_eob");
 	hook_add_server_eob(server_eob);
-	hook_add_event("channel_drop");
 	hook_add_channel_drop(channel_drop);
 }
 

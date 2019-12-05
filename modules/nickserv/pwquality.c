@@ -198,10 +198,7 @@ pwquality_osinfo_hook(struct sourceinfo *const restrict si)
 static void
 mod_init(struct module *const restrict m)
 {
-	(void) hook_add_event("user_can_register");
 	(void) hook_add_user_can_register(&pwquality_register_hook);
-
-	(void) hook_add_event("operserv_info");
 	(void) hook_add_operserv_info(&pwquality_osinfo_hook);
 
 	(void) add_bool_conf_item("PWQUALITY_WARN_ONLY", &nicksvs.me->conf_table, 0, &pwquality_warn_only, false);

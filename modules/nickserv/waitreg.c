@@ -58,10 +58,7 @@ mod_init(struct module *const restrict m)
 {
 	MODULE_CONFLICT(m, "contrib/ns_waitreg")
 
-	(void) hook_add_event("operserv_info");
 	(void) hook_add_operserv_info(&waitreg_infohook);
-
-	(void) hook_add_event("user_can_register");
 	(void) hook_add_user_can_register(&waitreg_registerhook);
 
 	(void) add_uint_conf_item("WAITREG_TIME", &nicksvs.me->conf_table, 0, &waitreg_time,

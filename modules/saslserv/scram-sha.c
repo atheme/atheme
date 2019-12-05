@@ -854,7 +854,6 @@ mod_init(struct module *const restrict m)
 	(void) pbkdf2v2_scram_functions->confhook(&sasl_scramsha_pbkdf2v2_scram_confhook);
 
 	// We need to be told when a user account is deleted in case there is an active SCRAM negotiation for it
-	(void) hook_add_event("myuser_delete");
 	(void) hook_add_myuser_delete(&sasl_scramsha_myuser_delete);
 }
 

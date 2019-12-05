@@ -101,7 +101,6 @@ mod_init(struct module *const restrict m)
 
 	command_add(&cs_set_fantasy, *cs_set_cmdtree);
 
-	hook_add_event("config_ready");
 	hook_add_config_ready(cs_set_fantasy_config_ready);
 }
 

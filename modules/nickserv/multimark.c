@@ -1048,25 +1048,12 @@ mod_init(struct module *const restrict m)
 	db_register_type_handler("MM", db_h_mm);
 	db_register_type_handler("RM", db_h_rm);
 
-	hook_add_event("user_info");
 	hook_add_user_info(show_multimark);
-
-	hook_add_event("user_info_noexist");
 	hook_add_user_info_noexist(show_multimark_noexist);
-
-	hook_add_event("user_needforce");
 	hook_add_user_needforce(multimark_needforce);
-
-	hook_add_event("user_drop");
 	hook_add_user_drop(account_drop_hook);
-
-	hook_add_event("nick_ungroup");
 	hook_add_nick_ungroup(nick_ungroup_hook);
-
-	hook_add_event("nick_group");
 	hook_add_nick_group(nick_group_hook);
-
-	hook_add_event("user_register");
 	hook_add_user_register(account_register_hook);
 
 	service_named_bind_command("nickserv", &ns_multimark);

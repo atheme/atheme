@@ -260,7 +260,6 @@ mod_init(struct module *const restrict m)
 
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/main")
 
-	hook_add_event("user_can_register");
 	hook_add_user_can_register(check_registration);
 	hook_add_db_write(write_bedb);
 

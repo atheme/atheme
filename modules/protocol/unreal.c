@@ -1655,9 +1655,7 @@ mod_init(struct module *const restrict m)
 	pcommand_add("SASL", m_sasl, 4, MSRC_SERVER);
 	pcommand_add("MLOCK", m_mlock, 3, MSRC_SERVER);
 
-	hook_add_event("nick_group");
 	hook_add_nick_group(nick_group);
-	hook_add_event("nick_ungroup");
 	hook_add_nick_ungroup(nick_ungroup);
 }
 

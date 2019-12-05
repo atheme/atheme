@@ -317,11 +317,8 @@ mod_init(struct module *const restrict m)
 
 	ircd = &Seven;
 
-	hook_add_event("nick_group");
 	hook_add_nick_group(nick_group);
-	hook_add_event("nick_ungroup");
 	hook_add_nick_ungroup(nick_ungroup);
-	hook_add_event("user_can_logout");
 	hook_add_user_can_logout(user_can_logout);
 }
 

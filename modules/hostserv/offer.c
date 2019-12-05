@@ -400,7 +400,6 @@ mod_init(struct module *const restrict m)
 	hook_add_db_write(write_hsofferdb);
 	db_register_type_handler("HO", db_h_ho);
 
-	hook_add_event("group_drop");
 	hook_add_group_drop(remove_group_offered_hosts);
 
  	service_named_bind_command("hostserv", &hs_offer);

@@ -445,7 +445,6 @@ mod_init(struct module *const restrict m)
 
 	service_named_bind_command("operserv", &os_perl);
 
-        hook_add_event("module_load");
         hook_add_module_load(hook_module_load);
 
 	add_top_conf("LOADSCRIPT", conf_loadscript);

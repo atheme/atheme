@@ -262,9 +262,6 @@ services_init(void)
 			kill_id_sts(NULL, svs->nick, "Attempt to use service nick");
 		introduce_nick(svs->me);
 	}
-
-	hook_add_event("user_can_login");
-	hook_add_event("user_can_logout");
 }
 
 void

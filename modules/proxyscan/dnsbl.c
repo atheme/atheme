@@ -650,16 +650,9 @@ mod_init(struct module *const restrict m)
 	service_bind_command(proxyscan, &ps_dnsblexempt);
 	service_bind_command(proxyscan, &ps_dnsblscan);
 
-	hook_add_event("config_purge");
 	hook_add_config_purge(dnsbl_config_purge);
-
-	hook_add_event("user_add");
 	hook_add_user_add(check_dnsbls);
-
-	hook_add_event("user_delete");
 	hook_add_user_delete(abort_blacklist_queries);
-
-	hook_add_event("operserv_info");
 	hook_add_operserv_info(osinfo_hook);
 
 	add_conf_item("DNSBL_ACTION", &proxyscan->conf_table, dnsbl_action_config_handler);

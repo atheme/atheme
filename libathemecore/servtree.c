@@ -75,7 +75,6 @@ servtree_init(void)
 		exit(EXIT_FAILURE);
 	}
 
-        hook_add_event("config_ready");
 	hook_add_config_ready(servtree_update);
 }
 

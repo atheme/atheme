@@ -1006,9 +1006,7 @@ mod_init(struct module *const restrict m)
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
 	pcommand_add("BURST", m_burst, 0, MSRC_SERVER);
 
-	hook_add_event("nick_group");
 	hook_add_nick_group(nick_group);
-	hook_add_event("nick_ungroup");
 	hook_add_nick_ungroup(nick_ungroup);
 }
 

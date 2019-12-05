@@ -878,22 +878,10 @@ cs_bounce_mode_change(hook_channel_mode_change_t *data)
 static void
 mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
-	hook_add_event("config_ready");
 	hook_add_config_ready(chanserv_config_ready);
 
 	chansvs.me = service_add("chanserv", chanserv);
 
-	hook_add_event("channel_join");
-	hook_add_event("channel_part");
-	hook_add_event("channel_register");
-	hook_add_event("channel_succession");
-	hook_add_event("channel_add");
-	hook_add_event("channel_topic");
-	hook_add_event("channel_can_change_topic");
-	hook_add_event("channel_tschange");
-	hook_add_event("channel_mode_change");
-	hook_add_event("user_identify");
-	hook_add_event("shutdown");
 	hook_add_channel_join(cs_join);
 	hook_add_channel_part(cs_part);
 	hook_add_channel_register(cs_register);

@@ -37,7 +37,6 @@ mod_init(struct module *const restrict m)
 	service_bind_command(chanfix, &cmd_mark);
 	service_bind_command(chanfix, &cmd_nofix);
 
-	hook_add_event("channel_can_register");
 	hook_add_channel_can_register(chanfix_can_register);
 
 	add_bool_conf_item("AUTOFIX", &chanfix->conf_table, 0, &chanfix_do_autofix, false);

@@ -87,7 +87,6 @@ mod_init(struct module *const restrict m)
 
 	command_add(&bs_set_fantasy, *bs_set_cmdtree);
 
-	hook_add_event("config_ready");
 	hook_add_config_ready(bs_set_fantasy_config_ready);
 }
 

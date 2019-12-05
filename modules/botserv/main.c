@@ -1063,17 +1063,13 @@ mod_init(struct module *const restrict m)
 		return;
 	}
 
-	hook_add_event("config_ready");
 	hook_add_config_ready(botserv_config_ready);
 
 	hook_add_db_write(botserv_save_database);
 	db_register_type_handler("BOT", db_h_bot);
 	db_register_type_handler("BOT-COUNT", db_h_bot_count);
 
-	hook_add_event("channel_drop");
 	hook_add_channel_drop(bs_channel_drop);
-
-	hook_add_event("shutdown");
 	hook_add_shutdown(on_shutdown);
 
 	add_uint_conf_item("MIN_USERS", &botsvs->conf_table, 0, &min_users, 0, 65535, 0);
@@ -1081,12 +1077,7 @@ mod_init(struct module *const restrict m)
 	service_bind_command(botsvs, &bs_assign);
 	service_bind_command(botsvs, &bs_unassign);
 	service_bind_command(botsvs, &bs_botlist);
-	hook_add_event("channel_join");
-	hook_add_event("channel_part");
-	hook_add_event("channel_register");
-	hook_add_event("channel_add");
-	hook_add_event("channel_can_change_topic");
-	hook_add_event("operserv_info");
+
 	hook_add_operserv_info(osinfo_hook);
 	hook_add_first_channel_join(bs_join);
 	hook_add_channel_part(bs_part);

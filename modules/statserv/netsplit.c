@@ -169,10 +169,7 @@ mod_init(struct module *const restrict m)
 
 	(void) service_named_bind_command("statserv", &ss_netsplit);
 
-	(void) hook_add_event("server_add");
 	(void) hook_add_server_add(&netsplit_server_add);
-
-	(void) hook_add_event("server_delete");
 	(void) hook_add_server_delete(&netsplit_server_delete);
 }
 

@@ -549,11 +549,8 @@ mod_init(struct module *const restrict m)
 	infoserv = service_add("infoserv", NULL);
 	add_uint_conf_item("LOGONINFO_COUNT", &infoserv->conf_table, 0, &logoninfo_count, 0, INT_MAX, 3);
 
-	hook_add_event("user_add");
 	hook_add_user_add(display_info);
-	hook_add_event("user_oper");
 	hook_add_user_oper(display_oper_info);
-	hook_add_event("operserv_info");
 	hook_add_operserv_info(osinfo_hook);
 	hook_add_db_write(write_infodb);
 

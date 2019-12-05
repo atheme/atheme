@@ -661,7 +661,6 @@ mod_init(struct module *const restrict m)
 	(void) add_uint_conf_item("pbkdf2v2_saltlen", *crypto_conf_table, 0, &pbkdf2v2_saltsz,
 	                          PBKDF2_SALTLEN_MIN, PBKDF2_SALTLEN_MAX, PBKDF2_SALTLEN_DEF);
 
-	(void) hook_add_event("config_ready");
 	(void) hook_add_config_ready(&atheme_pbkdf2v2_config_ready);
 
 	m->mflags |= MODFLAG_DBCRYPTO;

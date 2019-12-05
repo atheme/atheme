@@ -108,16 +108,9 @@ mod_init(struct module *const restrict m)
 
 	service_named_bind_command("nickserv", &ns_vacation);
 
-	hook_add_event("user_identify");
 	hook_add_user_identify(user_identify_hook);
-
-	hook_add_event("user_check_expire");
 	hook_add_user_check_expire(user_expiry_hook);
-
-	hook_add_event("nick_check_expire");
 	hook_add_nick_check_expire(nick_expiry_hook);
-
-	hook_add_event("user_info");
 	hook_add_user_info(info_hook);
 
 	static struct list_param vacation;

@@ -1,6 +1,5 @@
 # Atheme hooks system
 #
-# hook_add_event("NAME")
 # hook_call_NAME(argument)
 # hook_add_NAME(handler)
 # hook_add_first_NAME(handler)

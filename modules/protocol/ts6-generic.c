@@ -1603,8 +1603,6 @@ mod_init(struct module *const restrict m)
 	pcommand_add("EUID", m_euid, 11, MSRC_SERVER);
 	pcommand_add("MLOCK", m_mlock, 3, MSRC_SERVER);
 
-	hook_add_event("server_eob");
-	hook_add_event("channel_drop");
 	hook_add_server_eob(server_eob);
 	hook_add_channel_drop(channel_drop);
 }

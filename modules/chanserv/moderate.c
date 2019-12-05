@@ -368,9 +368,7 @@ mod_init(struct module *const restrict m)
 	service_named_bind_command("chanserv", &cs_reject);
 	service_named_bind_command("chanserv", &cs_waiting);
 
-	hook_add_event("channel_can_register");
 	hook_add_channel_can_register(can_register);
-
 	hook_add_db_write(csreq_marshal_set);
 
 	add_dupstr_conf_item("REGGROUP", &chansvs.me->conf_table, 0, &groupmemo, NULL);

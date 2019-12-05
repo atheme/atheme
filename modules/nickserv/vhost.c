@@ -298,7 +298,6 @@ mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/main")
 
-	hook_add_event("user_identify");
 	hook_add_user_identify(vhost_on_identify);
 	service_named_bind_command("nickserv", &ns_vhost);
 	service_named_bind_command("nickserv", &ns_listvhost);

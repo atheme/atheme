@@ -72,7 +72,6 @@ static const struct crypt_impl crypto_pbkdf2_impl = {
 static void
 mod_init(struct module *const restrict m)
 {
-	(void) hook_add_event("config_ready");
 	(void) hook_add_config_ready(&atheme_pbkdf2_config_ready);
 
 	(void) crypt_register(&crypto_pbkdf2_impl);

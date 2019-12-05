@@ -146,7 +146,6 @@ mod_init(struct module *const restrict m)
 
 	service_named_bind_command("nickserv", &ns_restrict);
 
-	hook_add_event("user_info");
 	hook_add_user_info(info_hook);
 
 	static struct list_param restricted;

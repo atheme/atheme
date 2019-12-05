@@ -72,10 +72,7 @@ mod_init(struct module *const restrict m)
 		return;
 	}
 
-	(void) hook_add_event("user_identify");
 	(void) hook_add_user_identify(&on_user_identify);
-
-	(void) hook_add_event("user_away");
 	(void) hook_add_user_away(&on_user_away);
 
 	(void) add_uint_conf_item("MAXMEMOS", &memosvs->conf_table, 0, &maxmemos, 1, INT_MAX, 30);

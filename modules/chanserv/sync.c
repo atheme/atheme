@@ -428,22 +428,11 @@ mod_init(struct module *const restrict m)
 
 	add_bool_conf_item("NO_VHOST_SYNC", &chansvs.me->conf_table, 0, &no_vhost_sync, false);
 
-	hook_add_event("channel_acl_change");
 	hook_add_channel_acl_change(sync_channel_acl_change);
-
-	hook_add_event("user_sethost");
 	hook_add_user_sethost(sync_user);
-
-	hook_add_event("user_oper");
 	hook_add_user_oper(sync_user);
-
-	hook_add_event("user_deoper");
 	hook_add_user_deoper(sync_user);
-
-	hook_add_event("user_identify");
 	hook_add_user_identify(sync_user);
-
-	hook_add_event("user_register");
 	hook_add_user_register(sync_myuser);
 }
 

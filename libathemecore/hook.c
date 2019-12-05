@@ -58,7 +58,7 @@ hook_find(const char *name)
 	return mowgli_patricia_retrieve(hooks, name);
 }
 
-struct hook *
+static struct hook *
 hook_add_event(const char *name)
 {
 	struct hook *nh;
@@ -79,24 +79,6 @@ hook_destroy(struct hook *hook, hook_privfn_ctx_t *priv)
 {
 	mowgli_node_delete(&priv->node, &hook->hooks);
 	mowgli_heap_free(hook_privfn_heap, priv);
-}
-
-void
-hook_del_event(const char *name)
-{
-	struct hook *h;
-	mowgli_node_t *n, *tn;
-
-	if ((h = hook_find(name)) == NULL)
-		return;
-
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, h->hooks.head)
-		hook_destroy(h, n->data);
-
-	mowgli_patricia_delete(hooks, h->name);
-	strshare_unref(h->name);
-
-	mowgli_heap_free(hook_heap, h);
 }
 
 void

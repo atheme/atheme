@@ -128,7 +128,6 @@ mod_init(struct module *const restrict m)
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/main")
 
 	service_named_bind_command("nickserv", &ns_logout);
-	hook_add_event("user_can_logout");
 }
 
 static void

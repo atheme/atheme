@@ -390,7 +390,6 @@ mod_init(struct module *const restrict m)
 
 	(void) service_named_bind_command("operserv", &os_sgline);
 
-	(void) hook_add_event("user_add");
 	(void) hook_add_user_add(&os_sgline_newuser);
 }
 

@@ -40,7 +40,6 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 {
 	exttarget_tree = mowgli_patricia_create(strcasecanon);
 
-	hook_add_event("myentity_find");
 	hook_add_myentity_find(exttarget_find);
 }
 

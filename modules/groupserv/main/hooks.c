@@ -210,12 +210,6 @@ gs_hooks_init(void)
 {
 	mygroup_expire_timer = mowgli_timer_add(base_eventloop, "mygroup_expire", mygroup_expire, NULL, SECONDS_PER_HOUR);
 
-	hook_add_event("myuser_delete");
-	hook_add_event("user_info");
-	hook_add_event("grant_channel_access");
-	hook_add_event("operserv_info");
-	hook_add_event("sasl_may_impersonate");
-
 	hook_add_user_info(user_info_hook);
 	hook_add_myuser_delete(myuser_delete_hook);
 	hook_add_grant_channel_access(grant_channel_access_hook);

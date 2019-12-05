@@ -141,9 +141,7 @@ mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/main")
 
-	hook_add_event("user_identify");
 	hook_add_user_identify(clear_setpass_key);
-	hook_add_event("user_info");
 	hook_add_user_info(show_setpass);
 	service_named_bind_command("nickserv", &ns_setpass);
 }

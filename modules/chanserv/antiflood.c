@@ -510,10 +510,7 @@ mod_init(struct module *m)
 			antiflood_enforce_method = ANTIFLOOD_ENFORCE_KICKBAN;
 	}
 
-	hook_add_event("channel_message");
 	hook_add_channel_message(on_channel_message);
-
-	hook_add_event("channel_drop");
 	hook_add_channel_drop(on_channel_drop);
 
 	msg_heap = sharedheap_get(sizeof(struct flood_message));

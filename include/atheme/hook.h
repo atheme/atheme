@@ -40,8 +40,6 @@ struct hook
 	mowgli_list_t   hooks;
 };
 
-struct hook *hook_add_event(const char *);
-void hook_del_event(const char *);
 void hook_del_hook(const char *, hook_fn);
 void hook_add_hook(const char *, hook_fn);
 void hook_add_hook_first(const char *, hook_fn);

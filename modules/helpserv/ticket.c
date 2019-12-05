@@ -349,9 +349,7 @@ mod_init(struct module *const restrict m)
 
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "helpserv/main")
 
-	hook_add_event("user_drop");
 	hook_add_user_drop(account_drop_request);
-	hook_add_event("myuser_delete");
 	hook_add_myuser_delete(account_delete_request);
 	hook_add_db_write(write_ticket_db);
 

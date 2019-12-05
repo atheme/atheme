@@ -426,7 +426,6 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 	httpd_checkidle_timer = mowgli_timer_add(base_eventloop, "httpd_checkidle", httpd_checkidle, NULL, SECONDS_PER_MINUTE);
 
 	// This module needs a rehash to initialize fully if loaded at run time
-	hook_add_event("config_ready");
 	hook_add_config_ready(httpd_config_ready);
 
 	add_subblock_top_conf("HTTPD", &conf_httpd_table);

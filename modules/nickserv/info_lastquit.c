@@ -38,10 +38,7 @@ mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/info")
 
-	hook_add_event("user_delete_info");
 	hook_add_user_delete_info(user_delete_info_hook);
-
-	hook_add_event("user_info");
 	hook_add_first_user_info(info_hook);
 }
 

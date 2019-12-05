@@ -942,9 +942,7 @@ mod_init(struct module *const restrict m)
 	pcommand_add("METADATA", m_metadata, 3, MSRC_SERVER);
 	pcommand_add("SQUERY", m_privmsg, 2, MSRC_USER);
 
-	hook_add_event("nick_group");
 	hook_add_nick_group(nick_group);
-	hook_add_event("nick_ungroup");
 	hook_add_nick_ungroup(nick_ungroup);
 }
 

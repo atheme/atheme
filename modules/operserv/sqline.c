@@ -473,13 +473,8 @@ mod_init(struct module *const restrict m)
 
 	(void) service_named_bind_command("operserv", &os_sqline);
 
-	(void) hook_add_event("user_add");
 	(void) hook_add_user_add(&os_sqline_newuser);
-
-	(void) hook_add_event("user_nickchange");
 	(void) hook_add_user_nickchange(&os_sqline_newuser);
-
-	(void) hook_add_event("channel_join");
 	(void) hook_add_channel_join(&os_sqline_chanjoin);
 }
 

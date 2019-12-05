@@ -405,11 +405,8 @@ logfile_new(const char *path, unsigned int log_mask)
 		}
 		if (!hooked)
 		{
-			hook_add_event("channel_add");
 			hook_add_channel_add(logfile_join_channels);
-			hook_add_event("service_introduce");
 			hook_add_service_introduce(logfile_join_service);
-			hook_add_event("config_ready");
 			hook_add_config_ready(logfile_part_removed);
 			hooked = true;
 		}

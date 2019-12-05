@@ -961,16 +961,9 @@ mod_init(struct module *const restrict m)
 
 	(void) service_named_bind_command("operserv", &os_clones);
 
-	(void) hook_add_event("config_ready");
 	(void) hook_add_config_ready(&clones_configready);
-
-	(void) hook_add_event("user_add");
 	(void) hook_add_user_add(&clones_newuser);
-
-	(void) hook_add_event("user_delete");
 	(void) hook_add_user_delete(&clones_userquit);
-
-	(void) hook_add_event("db_write");
 	(void) hook_add_db_write(&write_exemptdb);
 
 	(void) db_register_type_handler("CLONES-DBV", &db_h_clonesdbv);
