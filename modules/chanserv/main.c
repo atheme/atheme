@@ -504,9 +504,6 @@ cs_join(struct hook_channel_joinpart *hdata)
 			part(chan->name, chansvs.nick);
 	}
 
-	if (u->server->flags & SF_EOB && (md = metadata_find(mc, "url")))
-		numeric_sts(me.me, 328, cu->user, "%s :%s", mc->name, md->value);
-
 	if (flags & CA_USEDUPDATE)
 		mc->used = CURRTIME;
 }
