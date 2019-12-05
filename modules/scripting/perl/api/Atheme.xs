@@ -11,7 +11,7 @@ typedef struct myuser *Atheme_Account;
 typedef channel_t *Atheme_Channel;
 typedef chanuser_t *Atheme_ChanUser;
 typedef struct mychan *Atheme_ChannelRegistration;
-typedef chanacs_t *Atheme_ChanAcs;
+typedef struct chanacs *Atheme_ChanAcs;
 typedef struct mynick *Atheme_NickRegistration;
 typedef struct server *Atheme_Server;
 

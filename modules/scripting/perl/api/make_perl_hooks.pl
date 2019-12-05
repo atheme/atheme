@@ -30,7 +30,7 @@ my %perl_api_types = (
 	myuser_t => 'Atheme::Account',
 	mynick_t => 'Atheme::NickRegistration',
 	mychan_t => 'Atheme::ChannelRegistration',
-	chanacs_t => 'Atheme::ChanAcs',
+	'struct chanacs' => 'Atheme::ChanAcs',
 
 	'char *' => [ sub { "sv_setpv($_[0], $_[1]);" }, sub { die "Don't know how to unmarshal a read-write string"; } ],
 	'const char *' => [ sub { "sv_setpv($_[0], $_[1]);" }, sub { die "Don't know how to unmarshal a read-write string"; } ],
