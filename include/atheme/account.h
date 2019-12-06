@@ -294,13 +294,6 @@ struct mymemo
 
 /* account related hooks */
 typedef struct {
-	struct sourceinfo * si;
-	struct myuser *     mu;
-	struct mynick *     mn;
-	bool                allowed;
-} hook_user_rename_check_t;
-
-typedef struct {
 	struct myuser * mu;
 	const char *    oldname;
 } hook_user_rename_t;

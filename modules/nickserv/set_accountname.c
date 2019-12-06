@@ -18,7 +18,7 @@ ns_cmd_set_accountname(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *newname = parv[0];
 	struct mynick *mn;
-	hook_user_rename_check_t req;
+	struct hook_user_rename_check req;
 
 	if (!newname)
 	{

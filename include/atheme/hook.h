@@ -182,6 +182,14 @@ struct hook_user_register_check
 	int                 approved;   // Write non-zero here to disallow the registration
 };
 
+struct hook_user_rename_check
+{
+	struct sourceinfo * si;
+	struct myuser *     mu;
+	struct mynick *     mn;
+	bool                allowed;
+};
+
 struct hook_user_req
 {
 	struct sourceinfo * si;
