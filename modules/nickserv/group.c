@@ -14,7 +14,7 @@ ns_cmd_group(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mynick *mn;
 	hook_user_req_t hdata;
-	hook_user_register_check_t hdata_reg;
+	struct hook_user_register_check hdata_reg;
 
 	if (si->su == NULL)
 	{

@@ -152,6 +152,15 @@ struct hook_user_nick
 	const char *     oldnick;       // Previous nick for nick changes. u->nick is the new nick
 };
 
+struct hook_user_register_check
+{
+	struct sourceinfo * si;
+	const char *        account;    // or nick
+	const char *        email;
+	const char *        password;
+	int                 approved;   // Write non-zero here to disallow the registration
+};
+
 void hook_del_hook(const char *, hook_fn);
 void hook_add_hook(const char *, hook_fn);
 void hook_add_hook_first(const char *, hook_fn);

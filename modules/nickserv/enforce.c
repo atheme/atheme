@@ -587,7 +587,7 @@ show_enforce(hook_user_req_t *hdata)
 }
 
 static void
-check_registration(hook_user_register_check_t *hdata)
+check_registration(struct hook_user_register_check *hdata)
 {
 	int prefixlen;
 

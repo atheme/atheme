@@ -80,7 +80,7 @@ my %hook_structs = (
 		mu => [ 'struct myuser', 'account' ],
 		mn => [ 'struct mynick', 'nick' ],
 	},
-	hook_user_register_check_t => {
+	'struct hook_user_register_check' => {
 		si => [ 'struct sourceinfo', 'source' ],
 		account => 'const char *',
 		email => 'const char *',

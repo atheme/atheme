@@ -148,7 +148,7 @@ do_list(struct sourceinfo *si, struct mychan *mc, unsigned int flags)
 }
 
 static void
-check_registration_keywords(hook_user_register_check_t *hdata)
+check_registration_keywords(struct hook_user_register_check *hdata)
 {
 	if (hdata->approved || !anope_flags_compat)
 	{

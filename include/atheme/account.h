@@ -301,14 +301,6 @@ typedef struct {
 
 typedef struct {
 	struct sourceinfo *     si;
-	const char *            account;        // or nick
-	const char *            email;
-	const char *            password;
-	int                     approved;       // Write non-zero here to disallow the registration
-} hook_user_register_check_t;
-
-typedef struct {
-	struct sourceinfo *     si;
 	struct myuser *         mu;
 	bool                    allowed;
 } hook_user_login_check_t;
