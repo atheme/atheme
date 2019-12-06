@@ -56,7 +56,7 @@ user_oper                       user_t *
 channel_acl_change              hook_channel_acl_req_t *
 channel_can_register            hook_channel_register_check_t *
 channel_check_expire            hook_expiry_req_t *
-channel_drop                    mychan_t *
+channel_drop                    struct mychan *
 channel_info                    hook_channel_req_t *
 channel_pick_successor          hook_channel_succession_req_t *
 channel_register                hook_channel_req_t *

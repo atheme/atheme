@@ -29,7 +29,7 @@ my %perl_api_types = (
 	service_t => 'Atheme::Service',
 	myuser_t => 'Atheme::Account',
 	mynick_t => 'Atheme::NickRegistration',
-	mychan_t => 'Atheme::ChannelRegistration',
+	'struct mychan' => 'Atheme::ChannelRegistration',
 	'struct chanacs' => 'Atheme::ChanAcs',
 
 	'char *' => [ sub { "sv_setpv($_[0], $_[1]);" }, sub { die "Don't know how to unmarshal a read-write string"; } ],
@@ -62,11 +62,11 @@ my %hook_structs = (
 		approved => [ 'int', '+approved' ],
 	},
 	hook_channel_req_t => {
-		mc => [ 'mychan_t', 'channel' ],
+		mc => [ 'struct mychan', 'channel' ],
 		si => [ 'sourceinfo_t', 'source' ],
 	},
 	hook_channel_succession_req_t => {
-		mc => [ 'mychan_t', 'channel' ],
+		mc => [ 'struct mychan', 'channel' ],
 		mu => [ 'myuser_t', '+account' ],
 	},
 	hook_channel_register_check_t => {
