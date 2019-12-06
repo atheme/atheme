@@ -25,8 +25,8 @@ my %perl_api_types = (
 	user_t => 'Atheme::User',
 	'struct channel' => 'Atheme::Channel',
 	'struct chanuser' => 'Atheme::ChanUser',
-	server_t => 'Atheme::Server',
-	service_t => 'Atheme::Service',
+	'struct server' => 'Atheme::Server',
+	'struct service' => 'Atheme::Service',
 	'struct myuser' => 'Atheme::Account',
 	'struct mynick' => 'Atheme::NickRegistration',
 	'struct mychan' => 'Atheme::ChannelRegistration',
@@ -54,7 +54,7 @@ my %hook_structs = (
 	},
 	hook_channel_topic_check_t => {
 		u => [ 'user_t', 'user' ],
-		s => [ 'server_t', 'server' ],
+		s => [ 'struct server', 'server' ],
 		c => [ 'struct channel', 'channel' ],
 		setter => 'char *',
 		ts => 'time_t',
@@ -101,7 +101,7 @@ my %hook_structs = (
 		oldname => 'const char *',
 	},
 	hook_server_delete_t => {
-		s => [ 'server_t', 'server' ],
+		s => [ 'struct server', 'server' ],
 	},
 	hook_user_nick_t => {
 		u => [ 'user_t', '+user' ],

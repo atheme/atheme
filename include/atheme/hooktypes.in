@@ -41,9 +41,9 @@ channel_mode_change             hook_channel_mode_change_t *
 channel_part                    hook_channel_joinpart_t *
 channel_topic                   struct channel *
 channel_tschange                struct channel *
-server_add                      server_t *
+server_add                      struct server *
 server_delete                   hook_server_delete_t *
-server_eob                      server_t *
+server_eob                      struct server *
 user_add                        hook_user_nick_t *
 user_away                       user_t *
 user_delete                     user_t *
@@ -76,7 +76,7 @@ nick_enforce                    hook_nick_enforce_t *
 nick_group                      hook_user_req_t *
 nick_ungroup                    hook_user_req_t *
 operserv_info                   sourceinfo_t *
-service_introduce               service_t *
+service_introduce               struct service *
 user_can_login                  hook_user_login_check_t *
 user_can_logout                 hook_user_logout_check_t *
 user_can_register               hook_user_register_check_t *

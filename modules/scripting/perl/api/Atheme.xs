@@ -2,7 +2,7 @@
 
 typedef sourceinfo_t *Atheme_Sourceinfo;
 typedef struct perl_command *Atheme_Command;
-typedef service_t *Atheme_Service;
+typedef struct service *Atheme_Service;
 typedef struct user *Atheme_User;
 typedef struct atheme_object *Atheme_Object;
 typedef struct atheme_object *Atheme_Object_MetadataHash;
