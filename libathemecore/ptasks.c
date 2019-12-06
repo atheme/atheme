@@ -497,7 +497,7 @@ static void
 handle_channel_message(struct sourceinfo *si, char *target, bool is_notice, char *message)
 {
 	char *vec[3];
-	hook_cmessage_data_t cdata;
+	struct hook_channel_message cdata;
 	mowgli_node_t *n, *tn;
 	mowgli_list_t l = { NULL, NULL, 0 };
 	struct service *svs;

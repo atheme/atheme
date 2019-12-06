@@ -35,7 +35,7 @@ channel_add                     struct channel *
 channel_can_change_topic        struct hook_channel_topic_check *
 channel_delete                  struct channel *
 channel_join                    struct hook_channel_joinpart *
-channel_message                 hook_cmessage_data_t *
+channel_message                 struct hook_channel_message *
 channel_mode                    hook_channel_mode_t *
 channel_mode_change             hook_channel_mode_change_t *
 channel_part                    struct hook_channel_joinpart *

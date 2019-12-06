@@ -47,7 +47,7 @@ my %hook_structs = (
 	'struct hook_channel_joinpart' => {
 		cu => [ 'struct chanuser', '+chanuser' ]
 	},
-	hook_cmessage_data_t => {
+	'struct hook_channel_message' => {
 		u => [ 'struct user', 'user' ],
 		c => [ 'struct channel', 'channel' ],
 		msg => [ 'char *', 'message' ],

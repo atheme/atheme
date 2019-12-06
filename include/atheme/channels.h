@@ -98,12 +98,6 @@ struct extmode
 typedef struct {
 	struct user *   u;
 	struct channel *c;
-	char *          msg;
-} hook_cmessage_data_t;
-
-typedef struct {
-	struct user *   u;
-	struct channel *c;
 } hook_channel_mode_t;
 
 typedef struct {

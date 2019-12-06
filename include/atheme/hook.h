@@ -32,6 +32,13 @@ struct hook_channel_joinpart
 	struct chanuser *   cu;
 };
 
+struct hook_channel_message
+{
+	struct user *   u;              // Online user that sent the message
+	struct channel *c;              // Channel the message was sent to
+	char *          msg;            // The message itself
+};
+
 struct hook_channel_topic_check
 {
 	struct user *   u;              // Online user that changed the topic

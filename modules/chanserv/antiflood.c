@@ -328,7 +328,7 @@ antiflood_unenforce_timer_cb(void *unused)
 }
 
 static void
-on_channel_message(hook_cmessage_data_t *data)
+on_channel_message(struct hook_channel_message *data)
 {
 	struct chanuser *cu;
 	struct mychan *mc;
