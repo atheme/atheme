@@ -226,7 +226,7 @@ sasl_may_impersonate(struct myuser *const source_mu, struct myuser *const target
 		return true;
 
 	// Allow modules to check too
-	hook_sasl_may_impersonate_t req = {
+	struct hook_sasl_may_impersonate req = {
 
 		.source_mu = source_mu,
 		.target_mu = target_mu,

@@ -94,4 +94,4 @@ user_verify_register            struct hook_user_req *
 
 # (sasl)
 sasl_input                      struct sasl_message *
-sasl_may_impersonate            hook_sasl_may_impersonate_t *
+sasl_may_impersonate            struct hook_sasl_may_impersonate *

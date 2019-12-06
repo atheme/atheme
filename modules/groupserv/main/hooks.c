@@ -150,7 +150,7 @@ user_info_hook(struct hook_user_req *req)
 }
 
 static void
-sasl_may_impersonate_hook(hook_sasl_may_impersonate_t *req)
+sasl_may_impersonate_hook(struct hook_sasl_may_impersonate *req)
 {
 	char priv[BUFSIZE];
 	mowgli_list_t *l;

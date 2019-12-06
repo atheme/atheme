@@ -130,12 +130,4 @@ struct sasl_core_functions
 	sasl_authxid_can_login_fn   authzid_can_login;
 };
 
-typedef struct {
-
-	struct myuser * source_mu;
-	struct myuser * target_mu;
-	bool            allowed;
-
-} hook_sasl_may_impersonate_t;
-
 #endif /* !ATHEME_INC_SASL_H */

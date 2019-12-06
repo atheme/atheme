@@ -146,6 +146,13 @@ struct hook_nick_enforce
 	struct mynick * mn;
 };
 
+struct hook_sasl_may_impersonate
+{
+	struct myuser * source_mu;
+	struct myuser * target_mu;
+	bool            allowed;
+};
+
 struct hook_server_delete
 {
 	struct server * s;

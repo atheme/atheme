@@ -122,7 +122,7 @@ my %hook_structs = (
 		u => [ 'struct user', 'user' ],
 		comment => 'const char *',
 	},
-	hook_sasl_may_impersonate_t => {
+	'struct hook_sasl_may_impersonate' => {
 		source_mu => [ 'struct myuser', 'source' ],
 		target_mu => [ 'struct myuser', 'target' ],
 		allowed => [ 'int', '+allowed' ]
