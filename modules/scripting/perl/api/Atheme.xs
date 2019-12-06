@@ -1,6 +1,6 @@
 #include "atheme_perl.h"
 
-typedef sourceinfo_t *Atheme_Sourceinfo;
+typedef struct sourceinfo *Atheme_Sourceinfo;
 typedef struct perl_command *Atheme_Command;
 typedef struct service *Atheme_Service;
 typedef struct user *Atheme_User;

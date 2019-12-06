@@ -75,7 +75,7 @@ nick_check_expire               hook_expiry_req_t *
 nick_enforce                    hook_nick_enforce_t *
 nick_group                      hook_user_req_t *
 nick_ungroup                    hook_user_req_t *
-operserv_info                   sourceinfo_t *
+operserv_info                   struct sourceinfo *
 service_introduce               struct service *
 user_can_login                  hook_user_login_check_t *
 user_can_logout                 hook_user_logout_check_t *

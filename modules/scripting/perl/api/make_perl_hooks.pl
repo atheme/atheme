@@ -21,7 +21,7 @@ my @special_types = ( 'hook_expiry_req_t' );
 
 # XXX: Duplication here with the typedefs in Atheme.xs.
 my %perl_api_types = (
-	sourceinfo_t => 'Atheme::Sourceinfo',
+	'struct sourceinfo' => 'Atheme::Sourceinfo',
 	user_t => 'Atheme::User',
 	'struct channel' => 'Atheme::Channel',
 	'struct chanuser' => 'Atheme::ChanUser',
@@ -63,25 +63,25 @@ my %hook_structs = (
 	},
 	hook_channel_req_t => {
 		mc => [ 'struct mychan', 'channel' ],
-		si => [ 'sourceinfo_t', 'source' ],
+		si => [ 'struct sourceinfo', 'source' ],
 	},
 	hook_channel_succession_req_t => {
 		mc => [ 'struct mychan', 'channel' ],
 		mu => [ 'struct myuser', '+account' ],
 	},
 	hook_channel_register_check_t => {
-		si => [ 'sourceinfo_t', 'source' ],
+		si => [ 'struct sourceinfo', 'source' ],
 		name => 'const char *',
 		chan => [ 'struct channel', 'channel' ],
 		approved => [ 'int', '+approved' ],
 	},
 	hook_user_req_t => {
-		si => [ 'sourceinfo_t', 'source' ],
+		si => [ 'struct sourceinfo', 'source' ],
 		mu => [ 'struct myuser', 'account' ],
 		mn => [ 'struct mynick', 'nick' ],
 	},
 	hook_user_register_check_t => {
-		si => [ 'sourceinfo_t', 'source' ],
+		si => [ 'struct sourceinfo', 'source' ],
 		account => 'const char *',
 		email => 'const char *',
 		password => 'const char *',
@@ -126,11 +126,11 @@ my %hook_structs = (
 		allowed => [ 'int', '+allowed' ]
 	},
 	hook_info_noexist_req_t => {
-		si => [ 'sourceinfo_t', 'source' ],
+		si => [ 'struct sourceinfo', 'source' ],
 		nick => 'const char *'
 	},
 	hook_user_needforce_t => {
-		si => [ 'sourceinfo_t', 'source' ],
+		si => [ 'struct sourceinfo', 'source' ],
 		mu => [ 'struct myuser', 'account' ],
 		allowed => [ 'int', '+allowed' ]
 	},
