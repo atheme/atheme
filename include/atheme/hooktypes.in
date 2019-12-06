@@ -72,7 +72,7 @@ myuser_delete                   struct myuser *
 nick_can_register               struct hook_user_register_check *
 nick_check                      struct user *
 nick_check_expire               struct hook_expiry_req *
-nick_enforce                    hook_nick_enforce_t *
+nick_enforce                    struct hook_nick_enforce *
 nick_group                      hook_user_req_t *
 nick_ungroup                    hook_user_req_t *
 operserv_info                   struct sourceinfo *

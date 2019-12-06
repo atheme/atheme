@@ -137,7 +137,7 @@ enforce_timeout_check(void *arg)
 }
 
 static void
-check_enforce(hook_nick_enforce_t *hdata)
+check_enforce(struct hook_nick_enforce *hdata)
 {
 	struct enforce_timeout *timeout, *timeout2;
 	mowgli_node_t *n;
@@ -225,7 +225,7 @@ check_enforce_all(struct myuser *mu)
 		u = user_find(mn->nick);
 		if (u != NULL && u->myuser != mn->owner &&
 				!myuser_access_verify(u, mn->owner))
-			check_enforce(&(hook_nick_enforce_t){ .u = u, .mn = mn });
+			check_enforce(&(struct hook_nick_enforce){ .u = u, .mn = mn });
 	}
 }
 

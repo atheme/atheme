@@ -134,6 +134,12 @@ struct hook_myentity_req
 	bool                approval;
 };
 
+struct hook_nick_enforce
+{
+	struct user *   u;
+	struct mynick * mn;
+};
+
 struct hook_server_delete
 {
 	struct server * s;

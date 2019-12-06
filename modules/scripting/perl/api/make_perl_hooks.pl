@@ -87,7 +87,7 @@ my %hook_structs = (
 		password => 'const char *',
 		approved => [ 'int', '+approved' ]
 	},
-	hook_nick_enforce_t => {
+	'struct hook_nick_enforce' => {
 		u => [ 'struct user', 'user' ],
 		mn => [ 'struct mynick', 'nick' ],
 	},

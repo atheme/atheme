@@ -139,7 +139,7 @@ myuser_access_delete_enforce(struct myuser *mu, char *mask)
 	mowgli_node_t *n, *tn;
 	struct mynick *mn;
 	struct user *u;
-	hook_nick_enforce_t hdata;
+	struct hook_nick_enforce hdata;
 
 	// find users who get access via the access list
 	MOWGLI_ITER_FOREACH(n, mu->nicks.head)

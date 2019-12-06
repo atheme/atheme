@@ -313,11 +313,6 @@ typedef struct {
 } hook_user_logout_check_t;
 
 typedef struct {
-	struct user *   u;
-	struct mynick * mn;
-} hook_nick_enforce_t;
-
-typedef struct {
 	struct sourceinfo * si;
 	struct myuser *     mu;
 	struct mynick *     mn;
