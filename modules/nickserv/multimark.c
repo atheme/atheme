@@ -647,7 +647,7 @@ show_multimark(struct hook_user_req *hdata)
 }
 
 static void
-show_multimark_noexist(hook_info_noexist_req_t *hdata)
+show_multimark_noexist(struct hook_info_noexist_req *hdata)
 {
 	const char *nick = hdata->nick;
 

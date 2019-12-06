@@ -300,11 +300,6 @@ typedef struct {
 
 typedef struct {
 	struct sourceinfo *     si;
-	const char *            nick;
-} hook_info_noexist_req_t;
-
-typedef struct {
-	struct sourceinfo *     si;
 	struct myuser *         mu;
 	int                     allowed;
 } hook_user_needforce_t;

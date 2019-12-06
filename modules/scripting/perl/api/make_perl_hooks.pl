@@ -127,7 +127,7 @@ my %hook_structs = (
 		target_mu => [ 'struct myuser', 'target' ],
 		allowed => [ 'int', '+allowed' ]
 	},
-	hook_info_noexist_req_t => {
+	'struct hook_info_noexist_req' => {
 		si => [ 'struct sourceinfo', 'source' ],
 		nick => 'const char *'
 	},

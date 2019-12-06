@@ -112,6 +112,12 @@ struct hook_host_request
 	const char *        target;
 };
 
+struct hook_info_noexist_req
+{
+	struct sourceinfo * si;
+	const char *        nick;
+};
+
 struct hook_metadata_change
 {
 	struct myuser * target;
