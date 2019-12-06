@@ -27,7 +27,7 @@ my %perl_api_types = (
 	'struct chanuser' => 'Atheme::ChanUser',
 	server_t => 'Atheme::Server',
 	service_t => 'Atheme::Service',
-	myuser_t => 'Atheme::Account',
+	'struct myuser' => 'Atheme::Account',
 	'struct mynick' => 'Atheme::NickRegistration',
 	'struct mychan' => 'Atheme::ChannelRegistration',
 	'struct chanacs' => 'Atheme::ChanAcs',
@@ -67,7 +67,7 @@ my %hook_structs = (
 	},
 	hook_channel_succession_req_t => {
 		mc => [ 'struct mychan', 'channel' ],
-		mu => [ 'myuser_t', '+account' ],
+		mu => [ 'struct myuser', '+account' ],
 	},
 	hook_channel_register_check_t => {
 		si => [ 'sourceinfo_t', 'source' ],
@@ -77,7 +77,7 @@ my %hook_structs = (
 	},
 	hook_user_req_t => {
 		si => [ 'sourceinfo_t', 'source' ],
-		mu => [ 'myuser_t', 'account' ],
+		mu => [ 'struct myuser', 'account' ],
 		mn => [ 'struct mynick', 'nick' ],
 	},
 	hook_user_register_check_t => {
@@ -92,12 +92,12 @@ my %hook_structs = (
 		mn => [ 'struct mynick', 'nick' ],
 	},
 	hook_metadata_change_t => {
-		target => 'myuser_t',
+		target => 'struct myuser',
 		name => 'const char *',
 		value => 'char *',
 	},
 	hook_user_rename_t => {
-		mu => [ 'myuser_t', 'account' ],
+		mu => [ 'struct myuser', 'account' ],
 		oldname => 'const char *',
 	},
 	hook_server_delete_t => {
@@ -121,8 +121,8 @@ my %hook_structs = (
 		comment => 'const char *',
 	},
 	hook_sasl_may_impersonate_t => {
-		source_mu => [ 'myuser_t', 'source' ],
-		target_mu => [ 'myuser_t', 'target' ],
+		source_mu => [ 'struct myuser', 'source' ],
+		target_mu => [ 'struct myuser', 'target' ],
 		allowed => [ 'int', '+allowed' ]
 	},
 	hook_info_noexist_req_t => {
@@ -131,7 +131,7 @@ my %hook_structs = (
 	},
 	hook_user_needforce_t => {
 		si => [ 'sourceinfo_t', 'source' ],
-		mu => [ 'myuser_t', 'account' ],
+		mu => [ 'struct myuser', 'account' ],
 		allowed => [ 'int', '+allowed' ]
 	},
 );
