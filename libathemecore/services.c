@@ -403,7 +403,7 @@ handle_nickchange(struct user *const restrict u)
 
 bool ircd_logout_or_kill(struct user *u, const char *login)
 {
-	hook_user_logout_check_t req = {
+	struct hook_user_logout_check req = {
 		.si      = NULL,
 		.u       = u,
 		.allowed = true,

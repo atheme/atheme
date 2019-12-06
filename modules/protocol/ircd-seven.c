@@ -290,7 +290,7 @@ nick_ungroup(struct hook_user_req *hdata)
 }
 
 static void
-user_can_logout(hook_user_logout_check_t *hdata)
+user_can_logout(struct hook_user_logout_check *hdata)
 {
 	if (hdata->u && (hdata->u->flags & UF_NOLOGOUT) && !hdata->relogin)
 		hdata->allowed = false;

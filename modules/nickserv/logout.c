@@ -47,7 +47,7 @@ ns_cmd_logout(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	hook_user_logout_check_t req = {
+	struct hook_user_logout_check req = {
 		.si      = si,
 		.u       = u,
 		.allowed = true,

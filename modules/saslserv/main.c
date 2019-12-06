@@ -745,7 +745,7 @@ sasl_input_startauth(const struct sasl_message *const restrict smsg, struct sasl
 		(void) slog(LG_DEBUG, "%s: user %s ('%s') is logged in as '%s' -- executing user_can_logout hooks",
 		                      MOWGLI_FUNC_NAME, p->uid, u->nick, entity(u->myuser)->name);
 
-		hook_user_logout_check_t req = {
+		struct hook_user_logout_check req = {
 			.si      = p->si,
 			.u       = u,
 			.allowed = true,

@@ -78,7 +78,7 @@ nick_ungroup                    struct hook_user_req *
 operserv_info                   struct sourceinfo *
 service_introduce               struct service *
 user_can_login                  struct hook_user_login_check *
-user_can_logout                 hook_user_logout_check_t *
+user_can_logout                 struct hook_user_logout_check *
 user_can_register               struct hook_user_register_check *
 user_can_rename                 hook_user_rename_check_t *
 user_check_expire               struct hook_expiry_req *

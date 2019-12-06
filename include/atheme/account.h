@@ -294,13 +294,6 @@ struct mymemo
 
 /* account related hooks */
 typedef struct {
-	struct sourceinfo *     si;
-	struct user *           u;
-	const bool              relogin;
-	bool                    allowed;
-} hook_user_logout_check_t;
-
-typedef struct {
 	struct sourceinfo * si;
 	struct myuser *     mu;
 	struct mynick *     mn;

@@ -159,6 +159,14 @@ struct hook_user_login_check
 	bool                allowed;
 };
 
+struct hook_user_logout_check
+{
+	struct sourceinfo * si;
+	struct user *       u;
+	const bool          relogin;
+	bool                allowed;
+};
+
 struct hook_user_nick
 {
 	struct user *    u;             // User in question. Write NULL here if you delete the user
