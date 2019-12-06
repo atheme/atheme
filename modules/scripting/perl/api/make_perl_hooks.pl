@@ -91,7 +91,7 @@ my %hook_structs = (
 		u => [ 'struct user', 'user' ],
 		mn => [ 'struct mynick', 'nick' ],
 	},
-	hook_metadata_change_t => {
+	'struct hook_metadata_change' => {
 		target => 'struct myuser',
 		name => 'const char *',
 		value => 'char *',

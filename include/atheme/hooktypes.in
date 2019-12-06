@@ -65,7 +65,7 @@ grant_channel_access            struct user *
 group_drop                      struct mygroup *
 group_register                  struct mygroup *
 host_request                    struct hook_host_request *
-metadata_change                 hook_metadata_change_t *
+metadata_change                 struct hook_metadata_change *
 module_load                     hook_module_load_t *
 myentity_find                   hook_myentity_req_t *
 myuser_delete                   struct myuser *

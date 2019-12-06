@@ -326,12 +326,6 @@ typedef struct {
 } hook_nick_enforce_t;
 
 typedef struct {
-	struct myuser * target;
-	const char *    name;
-	char *          value;
-} hook_metadata_change_t;
-
-typedef struct {
 	struct sourceinfo * si;
 	struct myuser *     mu;
 	struct mynick *     mn;

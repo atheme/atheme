@@ -112,6 +112,13 @@ struct hook_host_request
 	const char *        target;
 };
 
+struct hook_metadata_change
+{
+	struct myuser * target;
+	const char *    name;
+	char *          value;
+};
+
 struct hook_server_delete
 {
 	struct server * s;
