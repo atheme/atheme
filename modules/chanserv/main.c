@@ -578,7 +578,7 @@ get_changets_user(struct mychan *mc)
 }
 
 static void
-cs_register(hook_channel_req_t *hdata)
+cs_register(struct hook_channel_req *hdata)
 {
 	struct mychan *mc;
 

@@ -187,7 +187,7 @@ cs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 	struct user *u;
 	struct channel *c;
 	char str[BUFSIZE];
-	hook_channel_req_t hdata;
+	struct hook_channel_req hdata;
 	struct sourceinfo baked_si;
 	unsigned int fl;
 

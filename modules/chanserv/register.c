@@ -22,7 +22,7 @@ cs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 	char *name = parv[0];
 	char str[21];
 	struct hook_channel_register_check hdatac;
-	hook_channel_req_t hdata;
+	struct hook_channel_req hdata;
 	unsigned int fl;
 
 	/* This command is not useful on registered channels, ignore it if

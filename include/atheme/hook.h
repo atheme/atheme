@@ -70,6 +70,12 @@ struct hook_channel_register_check
 	int                 approved;   // Write non-zero here to disallow the registration
 };
 
+struct hook_channel_req
+{
+	struct mychan *     mc;
+	struct sourceinfo * si;
+};
+
 struct hook_channel_topic_check
 {
 	struct user *   u;              // Online user that changed the topic

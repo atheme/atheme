@@ -33,7 +33,7 @@ register (Atheme_Channel self, Atheme_Sourceinfo si, Atheme_Account user)
 CODE:
     char *name = self->name;
     struct mychan *mc = mychan_add(name);
-    hook_channel_req_t hdata;
+    struct hook_channel_req hdata;
 
     if (mc == NULL) {
         Perl_croak (aTHX_ "Failed to create channel registration for %s", name);

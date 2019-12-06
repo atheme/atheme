@@ -61,7 +61,7 @@ my %hook_structs = (
 		topic => [ 'char *', 'topic' ],
 		approved => [ 'int', '+approved' ],
 	},
-	hook_channel_req_t => {
+	'struct hook_channel_req' => {
 		mc => [ 'struct mychan', 'channel' ],
 		si => [ 'struct sourceinfo', 'source' ],
 	},

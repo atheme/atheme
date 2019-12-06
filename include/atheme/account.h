@@ -294,11 +294,6 @@ struct mymemo
 
 /* account related hooks */
 typedef struct {
-	struct mychan *         mc;
-	struct sourceinfo *     si;
-} hook_channel_req_t;
-
-typedef struct {
 	struct mychan * mc;
 	struct myuser * mu;
 } hook_channel_succession_req_t;
