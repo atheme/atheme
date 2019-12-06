@@ -214,13 +214,16 @@ EOF
 foreach my $arg_type (sort keys %arg_types) {
 	next if ($arg_type eq 'void');
 
+	my $arg_type_underscored = $arg_type;
+	$arg_type_underscored =~ s/ /_/g;
+
 	if (defined $perl_api_types{$arg_type}) {
 		# Simple type. Straightforward marshaller.
 
 		my $conv_code = c_var_to_sv("data", $arg_type, "*psv");
 
 		print $outfile <<"EOF";
-static void perl_hook_marshal_$arg_type (perl_hook_marshal_direction_t dir, $arg_type * data, SV ** psv)
+static void perl_hook_marshal_$arg_type_underscored (perl_hook_marshal_direction_t dir, $arg_type * data, SV ** psv)
 { if (dir == PERL_HOOK_TO_PERL) $conv_code }
 
 EOF
@@ -255,7 +258,7 @@ EOF
 		}
 
 		print $outfile <<"EOF";
-static void perl_hook_marshal_$arg_type (perl_hook_marshal_direction_t dir, $arg_type * data, SV ** psv)
+static void perl_hook_marshal_$arg_type_underscored (perl_hook_marshal_direction_t dir, $arg_type * data, SV ** psv)
 {
 	if (dir == PERL_HOOK_TO_PERL)
 	{
@@ -312,11 +315,15 @@ EOF
 foreach my $hookname (sort keys %hooks) {
 	my $arg_type = $hooks{$hookname};
 	next if grep { $_ eq $arg_type } @special_types;
+
+	my $arg_type_underscored = $arg_type;
+	$arg_type_underscored =~ s/ /_/g;
+
 	print $outfile <<"EOF";
 static void perl_hook_$hookname ($arg_type * data)
 {
 	SV *arg;
-	perl_hook_marshal_$arg_type(PERL_HOOK_TO_PERL, data, &arg);
+	perl_hook_marshal_$arg_type_underscored(PERL_HOOK_TO_PERL, data, &arg);
 
 	dSP;
 	ENTER;
@@ -339,7 +346,7 @@ static void perl_hook_$hookname ($arg_type * data)
 	FREETMPS;
 	LEAVE;
 
-	perl_hook_marshal_$arg_type(PERL_HOOK_FROM_PERL, data, &arg);
+	perl_hook_marshal_$arg_type_underscored(PERL_HOOK_FROM_PERL, data, &arg);
 	SvREFCNT_dec(arg);
 	invalidate_object_references();
 }
