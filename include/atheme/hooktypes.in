@@ -62,8 +62,8 @@ channel_pick_successor          hook_channel_succession_req_t *
 channel_register                hook_channel_req_t *
 channel_succession              hook_channel_succession_req_t *
 grant_channel_access            user_t *
-group_drop                      mygroup_t *
-group_register                  mygroup_t *
+group_drop                      struct mygroup *
+group_register                  struct mygroup *
 host_request                    hook_host_request_t *
 metadata_change                 hook_metadata_change_t *
 module_load                     hook_module_load_t *

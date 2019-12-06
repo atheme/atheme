@@ -15,7 +15,6 @@
 #include <atheme/structures.h>
 
 // Types necessary for the hook system (and/or for Perl scripts)
-typedef struct mygroup mygroup_t;
 typedef struct mynick mynick_t;
 typedef struct myuser myuser_t;
 typedef struct sasl_message sasl_message_t;
