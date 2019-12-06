@@ -69,6 +69,12 @@ struct hook_server_delete
 	/* space for reason etc here */
 };
 
+struct hook_user_nick
+{
+	struct user *    u;             // User in question. Write NULL here if you delete the user
+	const char *     oldnick;       // Previous nick for nick changes. u->nick is the new nick
+};
+
 void hook_del_hook(const char *, hook_fn);
 void hook_add_hook(const char *, hook_fn);
 void hook_add_hook_first(const char *, hook_fn);

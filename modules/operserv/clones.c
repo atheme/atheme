@@ -694,7 +694,7 @@ os_cmd_clones_listexempt(struct sourceinfo *si, int parc, char *parv[])
 }
 
 static void
-clones_newuser(hook_user_nick_t *data)
+clones_newuser(struct hook_user_nick *data)
 {
 	struct user *u = data->u;
 	unsigned int i;
@@ -976,7 +976,7 @@ mod_init(struct module *const restrict m)
 	struct user *u;
 	mowgli_patricia_iteration_state_t state;
 	MOWGLI_PATRICIA_FOREACH(u, &state, userlist)
-		(void) clones_newuser(&(hook_user_nick_t){ .u = u });
+		(void) clones_newuser(&(struct hook_user_nick){ .u = u });
 
 	m->mflags |= MODFLAG_DBHANDLER;
 }

@@ -129,7 +129,7 @@ db_h_lio(struct database_handle *db, const char *type)
 }
 
 static void
-display_info(hook_user_nick_t *data)
+display_info(struct hook_user_nick *data)
 {
 	struct user *u;
 	mowgli_node_t *n;

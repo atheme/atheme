@@ -437,7 +437,7 @@ os_cmd_rwatch_set(struct sourceinfo *si, int parc, char *parv[])
 }
 
 static void
-rwatch_newuser(hook_user_nick_t *data)
+rwatch_newuser(struct hook_user_nick *data)
 {
 	struct user *u = data->u;
 	char usermask[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + GECOSLEN + 1];
@@ -502,7 +502,7 @@ rwatch_newuser(hook_user_nick_t *data)
 }
 
 static void
-rwatch_nickchange(hook_user_nick_t *data)
+rwatch_nickchange(struct hook_user_nick *data)
 {
 	struct user *u = data->u;
 	char usermask[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + GECOSLEN + 1];

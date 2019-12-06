@@ -103,7 +103,7 @@ my %hook_structs = (
 	'struct hook_server_delete' => {
 		s => [ 'struct server', 'server' ],
 	},
-	hook_user_nick_t => {
+	'struct hook_user_nick' => {
 		u => [ 'struct user', '+user' ],
 		oldnick => 'const char *',
 	},

@@ -14,7 +14,7 @@
 static mowgli_patricia_t *os_sqline_cmds = NULL;
 
 static void
-os_sqline_newuser(hook_user_nick_t *data)
+os_sqline_newuser(struct hook_user_nick *data)
 {
 	struct user *u = data->u;
 	struct qline *q;

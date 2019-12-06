@@ -44,12 +44,12 @@ channel_tschange                struct channel *
 server_add                      struct server *
 server_delete                   struct hook_server_delete *
 server_eob                      struct server *
-user_add                        hook_user_nick_t *
+user_add                        struct hook_user_nick *
 user_away                       struct user *
 user_delete                     struct user *
 user_delete_info                hook_user_delete_t *
 user_deoper                     struct user *
-user_nickchange                 hook_user_nick_t *
+user_nickchange                 struct hook_user_nick *
 user_oper                       struct user *
 
 # (services)

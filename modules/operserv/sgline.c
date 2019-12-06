@@ -14,7 +14,7 @@
 static mowgli_patricia_t *os_sgline_cmds = NULL;
 
 static void
-os_sgline_newuser(hook_user_nick_t *data)
+os_sgline_newuser(struct hook_user_nick *data)
 {
 	struct user *u = data->u;
 	struct xline *x;

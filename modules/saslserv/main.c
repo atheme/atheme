@@ -872,7 +872,7 @@ sasl_input(struct sasl_message *const restrict smsg)
 }
 
 static void
-sasl_user_add(hook_user_nick_t *const restrict data)
+sasl_user_add(struct hook_user_nick *const restrict data)
 {
 	// If the user has been killed, don't do anything.
 	struct user *const u = data->u;
