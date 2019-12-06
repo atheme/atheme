@@ -296,12 +296,6 @@ struct mymemo
 typedef struct {
 	struct sourceinfo *     si;
 	struct myuser *         mu;
-	struct mynick *         mn;
-} hook_user_req_t;
-
-typedef struct {
-	struct sourceinfo *     si;
-	struct myuser *         mu;
 	bool                    allowed;
 } hook_user_login_check_t;
 

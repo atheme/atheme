@@ -75,7 +75,7 @@ my %hook_structs = (
 		chan => [ 'struct channel', 'channel' ],
 		approved => [ 'int', '+approved' ],
 	},
-	hook_user_req_t => {
+	'struct hook_user_req' => {
 		si => [ 'struct sourceinfo', 'source' ],
 		mu => [ 'struct myuser', 'account' ],
 		mn => [ 'struct mynick', 'nick' ],

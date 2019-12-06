@@ -75,7 +75,7 @@ nick_expiry_hook(struct hook_expiry_req *req)
 }
 
 static void
-info_hook(hook_user_req_t *hdata)
+info_hook(struct hook_user_req *hdata)
 {
 	if (metadata_find(hdata->mu, "private:vacation"))
 		command_success_nodata(hdata->si, _("%s is on vacation and has an extended expiry time"),

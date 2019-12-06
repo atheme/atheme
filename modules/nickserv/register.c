@@ -23,7 +23,7 @@ ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 	const char *email;
 	char lau[BUFSIZE], lao[BUFSIZE];
 	struct hook_user_register_check hdata;
-	hook_user_req_t req;
+	struct hook_user_req req;
 
 	if (si->smu)
 	{

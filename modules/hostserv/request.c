@@ -63,7 +63,7 @@ db_h_hr(struct database_handle *db, const char *type)
 }
 
 static void
-nick_drop_request(hook_user_req_t *hdata)
+nick_drop_request(struct hook_user_req *hdata)
 {
 	mowgli_node_t *m;
 	struct hsrequest *l;

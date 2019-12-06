@@ -73,8 +73,8 @@ nick_can_register               struct hook_user_register_check *
 nick_check                      struct user *
 nick_check_expire               struct hook_expiry_req *
 nick_enforce                    struct hook_nick_enforce *
-nick_group                      hook_user_req_t *
-nick_ungroup                    hook_user_req_t *
+nick_group                      struct hook_user_req *
+nick_ungroup                    struct hook_user_req *
 operserv_info                   struct sourceinfo *
 service_introduce               struct service *
 user_can_login                  hook_user_login_check_t *
@@ -84,13 +84,13 @@ user_can_rename                 hook_user_rename_check_t *
 user_check_expire               struct hook_expiry_req *
 user_drop                       struct myuser *
 user_identify                   struct user *
-user_info                       hook_user_req_t *
+user_info                       struct hook_user_req *
 user_info_noexist               hook_info_noexist_req_t *
 user_needforce                  hook_user_needforce_t *
 user_register                   struct myuser *
 user_rename                     hook_user_rename_t *
 user_sethost                    struct user *
-user_verify_register            hook_user_req_t *
+user_verify_register            struct hook_user_req *
 
 # (sasl)
 sasl_input                      struct sasl_message *

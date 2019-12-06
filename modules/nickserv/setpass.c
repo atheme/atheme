@@ -100,7 +100,7 @@ clear_setpass_key(struct user *u)
 }
 
 static void
-show_setpass(hook_user_req_t *hdata)
+show_setpass(struct hook_user_req *hdata)
 {
 	if (has_priv(hdata->si, PRIV_USER_AUSPEX))
 	{

@@ -36,7 +36,7 @@ restricted_match(const struct mynick *mn, const void *arg)
 }
 
 static void
-info_hook(hook_user_req_t *hdata)
+info_hook(struct hook_user_req *hdata)
 {
 	struct metadata *md;
 

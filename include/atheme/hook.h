@@ -167,6 +167,13 @@ struct hook_user_register_check
 	int                 approved;   // Write non-zero here to disallow the registration
 };
 
+struct hook_user_req
+{
+	struct sourceinfo * si;
+	struct myuser *     mu;
+	struct mynick *     mn;
+};
+
 void hook_del_hook(const char *, hook_fn);
 void hook_add_hook(const char *, hook_fn);
 void hook_add_hook_first(const char *, hook_fn);

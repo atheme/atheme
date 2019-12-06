@@ -1537,7 +1537,7 @@ m_md(struct sourceinfo *si, int parc, char *parv[])
 }
 
 static void
-nick_group(hook_user_req_t *hdata)
+nick_group(struct hook_user_req *hdata)
 {
 	struct user *u;
 
@@ -1548,7 +1548,7 @@ nick_group(hook_user_req_t *hdata)
 }
 
 static void
-nick_ungroup(hook_user_req_t *hdata)
+nick_ungroup(struct hook_user_req *hdata)
 {
 	struct user *u;
 

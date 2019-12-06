@@ -580,7 +580,7 @@ enforce_remove_enforcers(void *arg)
 }
 
 static void
-show_enforce(hook_user_req_t *hdata)
+show_enforce(struct hook_user_req *hdata)
 {
 	if (metadata_find(hdata->mu, "private:doenforce"))
 		command_success_nodata(hdata->si, _("%s has enabled nick protection"), entity(hdata->mu)->name);

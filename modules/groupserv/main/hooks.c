@@ -119,7 +119,7 @@ grant_channel_access_hook(struct user *u)
 }
 
 static void
-user_info_hook(hook_user_req_t *req)
+user_info_hook(struct hook_user_req *req)
 {
 	static char buf[BUFSIZE];
 	mowgli_node_t *n;

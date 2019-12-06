@@ -19,7 +19,7 @@ user_delete_info_hook(struct hook_user_delete_info *hdata)
 }
 
 static void
-info_hook(hook_user_req_t *hdata)
+info_hook(struct hook_user_req *hdata)
 {
 	struct metadata *md;
 
