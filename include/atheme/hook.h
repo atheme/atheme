@@ -119,6 +119,14 @@ struct hook_metadata_change
 	char *          value;
 };
 
+struct hook_module_load
+{
+	const char *    name;       // The module name we're searching for
+	const char *    path;       // The likely path name, which may be ignored
+	struct module * module;     // If a module is loaded, set this to point to it
+	int             handled;
+};
+
 struct hook_server_delete
 {
 	struct server * s;

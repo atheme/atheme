@@ -60,7 +60,7 @@ module_load(const char *filespec)
 	struct module *m;
 	char pathbuf[BUFSIZE], errbuf[BUFSIZE];
 	const char *pathname;
-	hook_module_load_t hdata;
+	struct hook_module_load hdata;
 
 	/* / or C:\... */
 	if (*filespec == '/' || *(filespec + 1) == ':')
