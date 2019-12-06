@@ -839,7 +839,7 @@ cs_leave_empty(void *unused)
 }
 
 static void
-cs_bounce_mode_change(hook_channel_mode_change_t *data)
+cs_bounce_mode_change(struct hook_channel_mode_change *data)
 {
 	struct mychan *mc;
 	struct chanuser *cu;

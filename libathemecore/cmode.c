@@ -320,7 +320,7 @@ channel_mode(struct user *source, struct channel *chan, int parc, char *parv[])
 					/* see if they did something we have to undo */
 					if (source == NULL && cu->user->server != me.me)
 					{
-						hook_channel_mode_change_t hookmsg_chg = {
+						struct hook_channel_mode_change hookmsg_chg = {
 							.cu = cu,
 							.mchar = status_mode_list[i].mode,
 							.mvalue = status_mode_list[i].value

@@ -95,12 +95,6 @@ struct extmode
 	bool  (*check)(const char *, struct channel *, struct mychan *, struct user *, struct myuser *);
 };
 
-typedef struct {
-	struct chanuser *       cu;
-	const char              mchar;
-	const unsigned int      mvalue;
-} hook_channel_mode_change_t;
-
 /* cmode.c */
 char *flags_to_string(unsigned int flags);
 int mode_to_flag(char c);

@@ -45,6 +45,13 @@ struct hook_channel_mode
 	struct channel *c;
 };
 
+struct hook_channel_mode_change
+{
+	struct chanuser *   cu;
+	const char          mchar;
+	const unsigned int  mvalue;
+};
+
 struct hook_channel_topic_check
 {
 	struct user *   u;              // Online user that changed the topic

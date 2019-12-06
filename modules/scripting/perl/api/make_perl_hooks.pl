@@ -111,7 +111,7 @@ my %hook_structs = (
 		u => [ 'struct user', 'user' ],
 		c => [ 'struct channel', 'channel' ],
 	},
-	hook_channel_mode_change_t => {
+	'struct hook_channel_mode_change' => {
 		cu => [ 'struct chanuser', 'chanuser' ],
 		mchar => 'int',
 		mvalue => 'int',
