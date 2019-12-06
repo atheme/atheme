@@ -52,7 +52,7 @@ my %hook_structs = (
 		c => [ 'struct channel', 'channel' ],
 		msg => [ 'char *', 'message' ],
 	},
-	hook_channel_topic_check_t => {
+	'struct hook_channel_topic_check' => {
 		u => [ 'struct user', 'user' ],
 		s => [ 'struct server', 'server' ],
 		c => [ 'struct channel', 'channel' ],

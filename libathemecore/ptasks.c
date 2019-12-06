@@ -663,7 +663,7 @@ handle_message(struct sourceinfo *si, char *target, bool is_notice, char *messag
 void
 handle_topic_from(struct sourceinfo *si, struct channel *c, const char *setter, time_t ts, const char *topic)
 {
-	hook_channel_topic_check_t hdata;
+	struct hook_channel_topic_check hdata;
 
 	if (topic != NULL && topic[0] == '\0')
 		topic = NULL;

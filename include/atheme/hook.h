@@ -22,6 +22,17 @@ struct hook
 	mowgli_list_t   hooks;
 };
 
+struct hook_channel_topic_check
+{
+	struct user *   u;              // Online user that changed the topic
+	struct server * s;              // Server that restored a topic
+	struct channel *c;              // Channel still has old topic
+	const char *    setter;         // Stored setter string, can be nick, nick!user@host or server
+	time_t          ts;             // Time the topic was changed
+	const char *    topic;          // New topic
+	int             approved;       // Write non-zero here to cancel the change
+};
+
 void hook_del_hook(const char *, hook_fn);
 void hook_add_hook(const char *, hook_fn);
 void hook_add_hook_first(const char *, hook_fn);

@@ -32,7 +32,7 @@ shutdown                        void
 
 # (ircd)
 channel_add                     struct channel *
-channel_can_change_topic        hook_channel_topic_check_t *
+channel_can_change_topic        struct hook_channel_topic_check *
 channel_delete                  struct channel *
 channel_join                    hook_channel_joinpart_t *
 channel_message                 hook_cmessage_data_t *

@@ -646,7 +646,7 @@ cs_keeptopic_topicset(struct channel *c)
 /* Called when a topic change is received from the network, before altering
  * our internal structures */
 static void
-cs_topiccheck(hook_channel_topic_check_t *data)
+cs_topiccheck(struct hook_channel_topic_check *data)
 {
 	struct mychan *mc;
 	unsigned int accessfl = 0;
