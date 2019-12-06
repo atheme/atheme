@@ -93,5 +93,5 @@ user_sethost                    user_t *
 user_verify_register            hook_user_req_t *
 
 # (sasl)
-sasl_input                      sasl_message_t *
+sasl_input                      struct sasl_message *
 sasl_may_impersonate            hook_sasl_may_impersonate_t *
