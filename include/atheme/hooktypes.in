@@ -67,7 +67,7 @@ group_register                  struct mygroup *
 host_request                    struct hook_host_request *
 metadata_change                 struct hook_metadata_change *
 module_load                     struct hook_module_load *
-myentity_find                   hook_myentity_req_t *
+myentity_find                   struct hook_myentity_req *
 myuser_delete                   struct myuser *
 nick_can_register               hook_user_register_check_t *
 nick_check                      struct user *

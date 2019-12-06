@@ -73,10 +73,4 @@ unsigned int myentity_count_channels_with_flagset(struct myentity *mt, unsigned 
 bool myentity_can_register_channel(struct myentity *mt);
 bool myentity_allow_foundership(struct myentity *mt);
 
-typedef struct {
-	struct myentity *       entity;
-	const char *            name;
-	bool                    approval;
-} hook_myentity_req_t;
-
 #endif /* !ATHEME_INC_ENTITY_H */

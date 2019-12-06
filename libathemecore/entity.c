@@ -93,7 +93,7 @@ struct myentity *
 myentity_find(const char *name)
 {
 	struct myentity *ent;
-	hook_myentity_req_t req;
+	struct hook_myentity_req req;
 
 	return_val_if_fail(name != NULL, NULL);
 

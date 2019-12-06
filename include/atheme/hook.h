@@ -127,6 +127,13 @@ struct hook_module_load
 	int             handled;
 };
 
+struct hook_myentity_req
+{
+	struct myentity *   entity;
+	const char *        name;
+	bool                approval;
+};
+
 struct hook_server_delete
 {
 	struct server * s;
