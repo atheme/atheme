@@ -10,7 +10,7 @@
 #include <atheme.h>
 
 static void
-user_delete_info_hook(hook_user_delete_t *hdata)
+user_delete_info_hook(struct hook_user_delete_info *hdata)
 {
 	if (hdata->u->myuser == NULL)
 		return;

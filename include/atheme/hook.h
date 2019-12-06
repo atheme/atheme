@@ -69,6 +69,12 @@ struct hook_server_delete
 	/* space for reason etc here */
 };
 
+struct hook_user_delete_info
+{
+	struct user * const u;
+	const char *        comment;
+};
+
 struct hook_user_nick
 {
 	struct user *    u;             // User in question. Write NULL here if you delete the user

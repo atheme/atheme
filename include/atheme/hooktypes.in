@@ -47,7 +47,7 @@ server_eob                      struct server *
 user_add                        struct hook_user_nick *
 user_away                       struct user *
 user_delete                     struct user *
-user_delete_info                hook_user_delete_t *
+user_delete_info                struct hook_user_delete_info *
 user_deoper                     struct user *
 user_nickchange                 struct hook_user_nick *
 user_oper                       struct user *

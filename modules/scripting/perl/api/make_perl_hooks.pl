@@ -116,7 +116,7 @@ my %hook_structs = (
 		mchar => 'int',
 		mvalue => 'int',
 	},
-	hook_user_delete_t => {
+	'struct hook_user_delete_info' => {
 		u => [ 'struct user', 'user' ],
 		comment => 'const char *',
 	},
