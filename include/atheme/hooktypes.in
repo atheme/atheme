@@ -55,7 +55,7 @@ user_oper                       struct user *
 # (services)
 channel_acl_change              struct hook_channel_acl_req *
 channel_can_register            struct hook_channel_register_check *
-channel_check_expire            hook_expiry_req_t *
+channel_check_expire            struct hook_expiry_req *
 channel_drop                    struct mychan *
 channel_info                    hook_channel_req_t *
 channel_pick_successor          hook_channel_succession_req_t *
@@ -71,7 +71,7 @@ myentity_find                   hook_myentity_req_t *
 myuser_delete                   struct myuser *
 nick_can_register               hook_user_register_check_t *
 nick_check                      struct user *
-nick_check_expire               hook_expiry_req_t *
+nick_check_expire               struct hook_expiry_req *
 nick_enforce                    hook_nick_enforce_t *
 nick_group                      hook_user_req_t *
 nick_ungroup                    hook_user_req_t *
@@ -81,7 +81,7 @@ user_can_login                  hook_user_login_check_t *
 user_can_logout                 hook_user_logout_check_t *
 user_can_register               hook_user_register_check_t *
 user_can_rename                 hook_user_rename_check_t *
-user_check_expire               hook_expiry_req_t *
+user_check_expire               struct hook_expiry_req *
 user_drop                       struct myuser *
 user_identify                   struct user *
 user_info                       hook_user_req_t *

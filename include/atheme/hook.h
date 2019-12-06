@@ -81,6 +81,17 @@ struct hook_channel_topic_check
 	int             approved;       // Write non-zero here to cancel the change
 };
 
+struct hook_expiry_req
+{
+	union {
+		struct mychan * mc;
+		struct myuser * mu;
+		struct mynick * mn;
+	}                       data;
+
+	int                     do_expire;  // Write zero here to disallow expiry
+};
+
 struct hook_server_delete
 {
 	struct server * s;

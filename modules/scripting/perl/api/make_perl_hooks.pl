@@ -17,7 +17,7 @@ my @unsupported_types = ( 'struct database_handle', 'struct sasl_message',
 
 # Types that need special handling. Define the dispatch for these, but the handler
 # functions themselves are hand-written.
-my @special_types = ( 'hook_expiry_req_t' );
+my @special_types = ( 'struct hook_expiry_req' );
 
 # XXX: Duplication here with the typedefs in Atheme.xs.
 my %perl_api_types = (

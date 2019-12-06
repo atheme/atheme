@@ -304,15 +304,6 @@ typedef struct {
 } hook_channel_succession_req_t;
 
 typedef struct {
-	union {
-		struct mychan * mc;
-		struct myuser * mu;
-		struct mynick * mn;
-	}                       data;
-	int                     do_expire;      // Write zero here to disallow expiry
-} hook_expiry_req_t;
-
-typedef struct {
 	struct sourceinfo *     si;
 	struct myuser *         mu;
 	struct mynick *         mn;

@@ -50,7 +50,7 @@ user_identify_hook(struct user *u)
 }
 
 static void
-user_expiry_hook(hook_expiry_req_t *req)
+user_expiry_hook(struct hook_expiry_req *req)
 {
 	struct myuser *mu = req->data.mu;
 
@@ -62,7 +62,7 @@ user_expiry_hook(hook_expiry_req_t *req)
 }
 
 static void
-nick_expiry_hook(hook_expiry_req_t *req)
+nick_expiry_hook(struct hook_expiry_req *req)
 {
 	struct mynick *mn = req->data.mn;
 	struct myuser *mu = mn->owner;

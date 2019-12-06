@@ -2021,7 +2021,7 @@ chanacs_change_simple(struct mychan *mychan, struct myentity *mt, const char *ho
 static int
 expire_myuser_cb(struct myentity *mt, void *unused)
 {
-	hook_expiry_req_t req;
+	struct hook_expiry_req req;
 	struct myuser *mu = user(mt);
 
 	return_val_if_fail(isuser(mt), 0);
@@ -2074,7 +2074,7 @@ expire_check(void *arg)
 	struct mychan *mc;
 	struct user *u;
 	mowgli_patricia_iteration_state_t state;
-	hook_expiry_req_t req;
+	struct hook_expiry_req req;
 
 	/* Let them know about this and the likely subsequent db_save()
 	 * right away -- jilles */
