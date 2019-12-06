@@ -6,6 +6,8 @@
 PLUGIN		= Atheme$(PLUGIN_SUFFIX)
 SRCS		= Atheme.c perl_command.c perl_hooks.c perl_utilities.c
 
+DISTCLEAN	= Atheme.c perl_hooks.c
+
 include ../../../../extra.mk
 include ../../../../buildsys.mk
 
