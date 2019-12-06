@@ -7,6 +7,8 @@ PLUGIN		= perl$(PLUGIN_SUFFIX)
 SUBDIRS		= api
 SRCS		= perl_module.c perl_object_list.c perlxsi.c
 
+DISTCLEAN	= perlxsi.c
+
 include ../../../extra.mk
 include ../../../buildsys.mk
 
