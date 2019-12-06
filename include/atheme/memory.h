@@ -25,7 +25,7 @@ int smemcmp(const void *ptr1, const void *ptr2, size_t len)
     ATHEME_FATTR_WUR
     ATHEME_FATTR_DIAGNOSE_IF(!ptr1, "calling smemcmp() with !ptr1", "error")
     ATHEME_FATTR_DIAGNOSE_IF(!ptr2, "calling smemcmp() with !ptr2", "error")
-    ATHEME_FATTR_DIAGNOSE_IF(!len, "calling smemcmp() with !len", "warning");
+    ATHEME_FATTR_DIAGNOSE_IF(!len, "calling smemcmp() with !len", "error");
 
 void smemzerofree(void *ptr, size_t len)
     ATHEME_FATTR_DIAGNOSE_IF(!ptr, "calling smemzerofree() with !ptr", "warning")
@@ -33,7 +33,7 @@ void smemzerofree(void *ptr, size_t len)
 
 void smemzero(void *ptr, size_t len)
     ATHEME_FATTR_DIAGNOSE_IF(!ptr, "calling smemzero() with !ptr", "warning")
-    ATHEME_FATTR_DIAGNOSE_IF(!len, "calling smemzero() with !len", "warning");
+    ATHEME_FATTR_DIAGNOSE_IF(!len, "calling smemzero() with !len", "error");
 
 void sfree(void *ptr);
 
@@ -73,6 +73,6 @@ char *sstrndup(const char *ptr, size_t maxlen)
 void *smemdup(const void *ptr, size_t len)
     ATHEME_FATTR_MALLOC
     ATHEME_FATTR_DIAGNOSE_IF(!ptr, "calling smemdup() with !ptr", "warning")
-    ATHEME_FATTR_DIAGNOSE_IF(!len, "calling smemdup() with !len", "warning");
+    ATHEME_FATTR_DIAGNOSE_IF(!len, "calling smemdup() with !len", "error");
 
 #endif /* !ATHEME_INC_MEMORY_H */
