@@ -22,6 +22,16 @@ struct hook
 	mowgli_list_t   hooks;
 };
 
+struct hook_channel_joinpart
+{
+	/* Write NULL here if you kicked the user. When kicking the last user, you must join a service first,
+	 * otherwise the channel may be destroyed and crashes may occur. The service may not part until you
+	 * return; chanserv provides MC_INHABIT to help with this. This also prevents kick/rejoin floods. If
+	 * this is NULL, a previous function kicked the user.
+	 */
+	struct chanuser *   cu;
+};
+
 struct hook_channel_topic_check
 {
 	struct user *   u;              // Online user that changed the topic

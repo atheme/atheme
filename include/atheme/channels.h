@@ -95,18 +95,6 @@ struct extmode
 	bool  (*check)(const char *, struct channel *, struct mychan *, struct user *, struct myuser *);
 };
 
-/* channel related hooks */
-typedef struct {
-
-	/* Write NULL here if you kicked the user. When kicking the last user, you must join a service first,
-	 * otherwise the channel may be destroyed and crashes may occur. The service may not part until you
-	 * return; chanserv provides MC_INHABIT to help with this. This also prevents kick/rejoin floods. If
-	 * this is NULL, a previous function kicked the user
-	 */
-	struct chanuser *       cu;
-
-} hook_channel_joinpart_t;
-
 typedef struct {
 	struct user *   u;
 	struct channel *c;

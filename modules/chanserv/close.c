@@ -10,7 +10,7 @@
 #include <atheme.h>
 
 static void
-close_check_join(hook_channel_joinpart_t *data)
+close_check_join(struct hook_channel_joinpart *data)
 {
 	struct mychan *mc;
 	struct chanuser *cu = data->cu;

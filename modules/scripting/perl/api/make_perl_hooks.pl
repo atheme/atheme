@@ -44,7 +44,7 @@ my %perl_api_types = (
 # or an arrayref of [type, name], if the name on the perl side is to be different from the
 # member name in the structure. Prefix name with '+' if this value may be modified by the hook.
 my %hook_structs = (
-	hook_channel_joinpart_t => {
+	'struct hook_channel_joinpart' => {
 		cu => [ 'struct chanuser', '+chanuser' ]
 	},
 	hook_cmessage_data_t => {

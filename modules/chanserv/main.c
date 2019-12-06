@@ -255,7 +255,7 @@ c_ci_templates(mowgli_config_file_entry_t *ce)
 }
 
 static void
-cs_join(hook_channel_joinpart_t *hdata)
+cs_join(struct hook_channel_joinpart *hdata)
 {
 	struct chanuser *cu = hdata->cu;
 	struct user *u;
@@ -506,7 +506,7 @@ cs_join(hook_channel_joinpart_t *hdata)
 }
 
 static void
-cs_part(hook_channel_joinpart_t *hdata)
+cs_part(struct hook_channel_joinpart *hdata)
 {
 	struct chanuser *cu;
 	struct mychan *mc;

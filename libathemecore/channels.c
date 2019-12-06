@@ -345,7 +345,7 @@ chanuser_add(struct channel *chan, const char *nick)
 	struct chanuser *cu, *tcu;
 	unsigned int flags = 0;
 	int i = 0;
-	hook_channel_joinpart_t hdata;
+	struct hook_channel_joinpart hdata;
 
 	return_val_if_fail(chan != NULL, NULL);
 	return_val_if_fail(chan->name != NULL, NULL);
@@ -436,7 +436,7 @@ void
 chanuser_delete(struct channel *chan, struct user *user)
 {
 	struct chanuser *cu;
-	hook_channel_joinpart_t hdata;
+	struct hook_channel_joinpart hdata;
 
 	return_if_fail(chan != NULL);
 	return_if_fail(user != NULL);
