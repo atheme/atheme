@@ -31,16 +31,16 @@ db_write_pre_ca                 database_handle_t *
 shutdown                        void
 
 # (ircd)
-channel_add                     channel_t *
+channel_add                     struct channel *
 channel_can_change_topic        hook_channel_topic_check_t *
-channel_delete                  channel_t *
+channel_delete                  struct channel *
 channel_join                    hook_channel_joinpart_t *
 channel_message                 hook_cmessage_data_t *
 channel_mode                    hook_channel_mode_t *
 channel_mode_change             hook_channel_mode_change_t *
 channel_part                    hook_channel_joinpart_t *
-channel_topic                   channel_t *
-channel_tschange                channel_t *
+channel_topic                   struct channel *
+channel_tschange                struct channel *
 server_add                      server_t *
 server_delete                   hook_server_delete_t *
 server_eob                      server_t *

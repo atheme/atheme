@@ -23,7 +23,7 @@ my @special_types = ( 'hook_expiry_req_t' );
 my %perl_api_types = (
 	sourceinfo_t => 'Atheme::Sourceinfo',
 	user_t => 'Atheme::User',
-	channel_t => 'Atheme::Channel',
+	'struct channel' => 'Atheme::Channel',
 	chanuser_t => 'Atheme::ChanUser',
 	server_t => 'Atheme::Server',
 	service_t => 'Atheme::Service',
@@ -49,13 +49,13 @@ my %hook_structs = (
 	},
 	hook_cmessage_data_t => {
 		u => [ 'user_t', 'user' ],
-		c => [ 'channel_t', 'channel' ],
+		c => [ 'struct channel', 'channel' ],
 		msg => [ 'char *', 'message' ],
 	},
 	hook_channel_topic_check_t => {
 		u => [ 'user_t', 'user' ],
 		s => [ 'server_t', 'server' ],
-		c => [ 'channel_t', 'channel' ],
+		c => [ 'struct channel', 'channel' ],
 		setter => 'char *',
 		ts => 'time_t',
 		topic => [ 'char *', 'topic' ],
@@ -72,7 +72,7 @@ my %hook_structs = (
 	hook_channel_register_check_t => {
 		si => [ 'sourceinfo_t', 'source' ],
 		name => 'const char *',
-		chan => [ 'channel_t', 'channel' ],
+		chan => [ 'struct channel', 'channel' ],
 		approved => [ 'int', '+approved' ],
 	},
 	hook_user_req_t => {
@@ -109,7 +109,7 @@ my %hook_structs = (
 	},
 	hook_channel_mode_t => {
 		u => [ 'user_t', 'user' ],
-		c => [ 'channel_t', 'channel' ],
+		c => [ 'struct channel', 'channel' ],
 	},
 	hook_channel_mode_change_t => {
 		cu => [ 'chanuser_t', 'chanuser' ],
