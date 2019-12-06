@@ -6,7 +6,7 @@ typedef service_t *Atheme_Service;
 typedef struct user *Atheme_User;
 typedef struct atheme_object *Atheme_Object;
 typedef struct atheme_object *Atheme_Object_MetadataHash;
-typedef myentity_t *Atheme_Entity;
+typedef struct myentity *Atheme_Entity;
 typedef struct myuser *Atheme_Account;
 typedef struct channel *Atheme_Channel;
 typedef struct chanuser *Atheme_ChanUser;
