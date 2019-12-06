@@ -609,7 +609,7 @@ handle_certfp(struct sourceinfo *si, struct user *u, const char *certfp)
 	struct myuser *mu;
 	struct mycertfp *mcfp;
 	struct service *svs;
-	hook_user_login_check_t req;
+	struct hook_user_login_check req;
 
 	sfree(u->certfp);
 	u->certfp = sstrdup(certfp);

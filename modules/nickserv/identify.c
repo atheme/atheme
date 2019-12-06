@@ -64,7 +64,7 @@ ns_cmd_login(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	hook_user_login_check_t login_req = {
+	struct hook_user_login_check login_req = {
 		.si      = si,
 		.mu      = mu,
 		.allowed = true,

@@ -152,6 +152,13 @@ struct hook_user_delete_info
 	const char *        comment;
 };
 
+struct hook_user_login_check
+{
+	struct sourceinfo * si;
+	struct myuser *     mu;
+	bool                allowed;
+};
+
 struct hook_user_nick
 {
 	struct user *    u;             // User in question. Write NULL here if you delete the user

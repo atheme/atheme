@@ -982,7 +982,7 @@ sasl_authxid_can_login(struct sasl_session *const restrict p, const char *const 
 		// We have already executed the user_can_login hook for this user
 		return true;
 
-	hook_user_login_check_t req = {
+	struct hook_user_login_check req = {
 
 		.si         = p->si,
 		.mu         = mu,

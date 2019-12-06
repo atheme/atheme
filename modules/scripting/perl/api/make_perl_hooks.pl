@@ -13,7 +13,8 @@ my %arg_types;
 # WITH MEMBERS THAT WE CAN'T SUPPORT YET.
 my @unsupported_types = ( 'struct database_handle', 'struct sasl_message',
     'struct hook_module_load', 'struct hook_myentity_req', 'struct hook_host_request',
-    'struct hook_channel_acl_req', 'hook_email_canonicalize_t', 'struct mygroup' );
+    'struct hook_channel_acl_req', 'hook_email_canonicalize_t', 'struct mygroup',
+    'struct hook_user_login_check' );
 
 # Types that need special handling. Define the dispatch for these, but the handler
 # functions themselves are hand-written.
