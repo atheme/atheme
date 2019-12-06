@@ -292,12 +292,6 @@ struct mymemo
 #define MEMO_READ          0x00000001U
 #define MEMO_CHANNEL       0x00000002U
 
-/* account related hooks */
-typedef struct {
-	struct myuser * mu;
-	const char *    oldname;
-} hook_user_rename_t;
-
 /* pmodule.c XXX */
 extern bool backend_loaded;
 

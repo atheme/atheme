@@ -98,7 +98,7 @@ my %hook_structs = (
 		name => 'const char *',
 		value => 'char *',
 	},
-	hook_user_rename_t => {
+	'struct hook_user_rename' => {
 		mu => [ 'struct myuser', 'account' ],
 		oldname => 'const char *',
 	},

@@ -345,7 +345,7 @@ myuser_rename(struct myuser *mu, const char *name)
 {
 	mowgli_node_t *n, *tn;
 	struct user *u;
-	hook_user_rename_t data;
+	struct hook_user_rename data;
 	stringref newname;
 	char nb[NICKLEN + 1];
 

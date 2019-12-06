@@ -88,7 +88,7 @@ user_info                       struct hook_user_req *
 user_info_noexist               struct hook_info_noexist *
 user_needforce                  struct hook_user_needforce *
 user_register                   struct myuser *
-user_rename                     hook_user_rename_t *
+user_rename                     struct hook_user_rename *
 user_sethost                    struct user *
 user_verify_register            struct hook_user_req *
 

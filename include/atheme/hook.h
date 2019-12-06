@@ -195,6 +195,12 @@ struct hook_user_register_check
 	int                 approved;   // Write non-zero here to disallow the registration
 };
 
+struct hook_user_rename
+{
+	struct myuser * mu;
+	const char *    oldname;
+};
+
 struct hook_user_rename_check
 {
 	struct sourceinfo * si;
