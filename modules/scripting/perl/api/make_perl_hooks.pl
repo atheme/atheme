@@ -12,7 +12,7 @@ my %arg_types;
 # THIS LIST IS NOT A SUBSTITUTE FOR ACTUALLY DEFINING HOOK STRUCTURES. IT IS FOR STRUCTURES
 # WITH MEMBERS THAT WE CAN'T SUPPORT YET.
 my @unsupported_types = ( 'struct database_handle', 'struct sasl_message',
-    'hook_module_load_t', 'hook_myentity_req_t', 'hook_host_request_t',
+    'hook_module_load_t', 'hook_myentity_req_t', 'struct hook_host_request',
     'struct hook_channel_acl_req', 'hook_email_canonicalize_t', 'struct mygroup' );
 
 # Types that need special handling. Define the dispatch for these, but the handler

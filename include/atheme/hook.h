@@ -104,6 +104,14 @@ struct hook_expiry_req
 	int                     do_expire;  // Write zero here to disallow expiry
 };
 
+struct hook_host_request
+{
+        const char *        host;
+	struct sourceinfo * si;
+	int                 approved;
+	const char *        target;
+};
+
 struct hook_server_delete
 {
 	struct server * s;

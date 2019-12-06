@@ -188,7 +188,7 @@ hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 	struct metadata *md, *md_timestamp, *md_assigner;
 	mowgli_node_t *n;
 	struct hsrequest *l;
-	hook_host_request_t hdata;
+	struct hook_host_request hdata;
 	int matches = 0;
 
 	if (!host)
