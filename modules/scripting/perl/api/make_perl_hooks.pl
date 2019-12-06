@@ -24,7 +24,7 @@ my %perl_api_types = (
 	sourceinfo_t => 'Atheme::Sourceinfo',
 	user_t => 'Atheme::User',
 	'struct channel' => 'Atheme::Channel',
-	chanuser_t => 'Atheme::ChanUser',
+	'struct chanuser' => 'Atheme::ChanUser',
 	server_t => 'Atheme::Server',
 	service_t => 'Atheme::Service',
 	myuser_t => 'Atheme::Account',
@@ -45,7 +45,7 @@ my %perl_api_types = (
 # member name in the structure. Prefix name with '+' if this value may be modified by the hook.
 my %hook_structs = (
 	hook_channel_joinpart_t => {
-		cu => [ 'chanuser_t', '+chanuser' ]
+		cu => [ 'struct chanuser', '+chanuser' ]
 	},
 	hook_cmessage_data_t => {
 		u => [ 'user_t', 'user' ],
@@ -112,7 +112,7 @@ my %hook_structs = (
 		c => [ 'struct channel', 'channel' ],
 	},
 	hook_channel_mode_change_t => {
-		cu => [ 'chanuser_t', 'chanuser' ],
+		cu => [ 'struct chanuser', 'chanuser' ],
 		mchar => 'int',
 		mvalue => 'int',
 	},

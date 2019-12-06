@@ -9,7 +9,7 @@ typedef struct atheme_object *Atheme_Object_MetadataHash;
 typedef myentity_t *Atheme_Entity;
 typedef struct myuser *Atheme_Account;
 typedef struct channel *Atheme_Channel;
-typedef chanuser_t *Atheme_ChanUser;
+typedef struct chanuser *Atheme_ChanUser;
 typedef struct mychan *Atheme_ChannelRegistration;
 typedef struct chanacs *Atheme_ChanAcs;
 typedef struct mynick *Atheme_NickRegistration;

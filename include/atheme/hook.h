@@ -15,7 +15,6 @@
 #include <atheme/structures.h>
 
 // Types necessary for the hook system (and/or for Perl scripts)
-typedef struct chanuser chanuser_t;
 typedef struct database_handle database_handle_t;
 typedef struct mychan mychan_t;
 typedef struct myentity myentity_t;
