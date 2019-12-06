@@ -44,7 +44,7 @@ ns_cmd_vhost(struct sourceinfo *si, int parc, char *parv[])
 	bool force = false, ismarked = false;
 	char cmdtext[NICKLEN + HOSTLEN + 20];
 	char timestring[16];
-	hook_user_needforce_t needforce_hdata;
+	struct hook_user_needforce needforce_hdata;
 
 	if (!target)
 	{

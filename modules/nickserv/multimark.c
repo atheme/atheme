@@ -711,7 +711,7 @@ show_multimark_noexist(struct hook_info_noexist_req *hdata)
 }
 
 static void
-multimark_needforce(hook_user_needforce_t *hdata)
+multimark_needforce(struct hook_user_needforce *hdata)
 {
 	struct myuser *mu;
 	bool marked;

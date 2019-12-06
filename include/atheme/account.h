@@ -298,12 +298,6 @@ typedef struct {
 	const char *    oldname;
 } hook_user_rename_t;
 
-typedef struct {
-	struct sourceinfo *     si;
-	struct myuser *         mu;
-	int                     allowed;
-} hook_user_needforce_t;
-
 /* pmodule.c XXX */
 extern bool backend_loaded;
 

@@ -173,6 +173,13 @@ struct hook_user_logout_check
 	bool                allowed;
 };
 
+struct hook_user_needforce
+{
+	struct sourceinfo * si;
+	struct myuser *     mu;
+	int                 allowed;
+};
+
 struct hook_user_nick
 {
 	struct user *    u;             // User in question. Write NULL here if you delete the user

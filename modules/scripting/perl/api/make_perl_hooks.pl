@@ -131,7 +131,7 @@ my %hook_structs = (
 		si => [ 'struct sourceinfo', 'source' ],
 		nick => 'const char *'
 	},
-	hook_user_needforce_t => {
+	'struct hook_user_needforce' => {
 		si => [ 'struct sourceinfo', 'source' ],
 		mu => [ 'struct myuser', 'account' ],
 		allowed => [ 'int', '+allowed' ]
