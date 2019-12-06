@@ -28,7 +28,7 @@ my %perl_api_types = (
 	server_t => 'Atheme::Server',
 	service_t => 'Atheme::Service',
 	myuser_t => 'Atheme::Account',
-	mynick_t => 'Atheme::NickRegistration',
+	'struct mynick' => 'Atheme::NickRegistration',
 	'struct mychan' => 'Atheme::ChannelRegistration',
 	'struct chanacs' => 'Atheme::ChanAcs',
 
@@ -78,7 +78,7 @@ my %hook_structs = (
 	hook_user_req_t => {
 		si => [ 'sourceinfo_t', 'source' ],
 		mu => [ 'myuser_t', 'account' ],
-		mn => [ 'mynick_t', 'nick' ],
+		mn => [ 'struct mynick', 'nick' ],
 	},
 	hook_user_register_check_t => {
 		si => [ 'sourceinfo_t', 'source' ],
@@ -89,7 +89,7 @@ my %hook_structs = (
 	},
 	hook_nick_enforce_t => {
 		u => [ 'user_t', 'user' ],
-		mn => [ 'mynick_t', 'nick' ],
+		mn => [ 'struct mynick', 'nick' ],
 	},
 	hook_metadata_change_t => {
 		target => 'myuser_t',
