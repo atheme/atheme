@@ -62,6 +62,14 @@ struct hook_channel_mode_change
 	const unsigned int  mvalue;
 };
 
+struct hook_channel_register_check
+{
+	struct sourceinfo * si;
+	const char *        name;
+	struct channel *    chan;
+	int                 approved;   // Write non-zero here to disallow the registration
+};
+
 struct hook_channel_topic_check
 {
 	struct user *   u;              // Online user that changed the topic

@@ -69,7 +69,7 @@ my %hook_structs = (
 		mc => [ 'struct mychan', 'channel' ],
 		mu => [ 'struct myuser', '+account' ],
 	},
-	hook_channel_register_check_t => {
+	'struct hook_channel_register_check' => {
 		si => [ 'struct sourceinfo', 'source' ],
 		name => 'const char *',
 		chan => [ 'struct channel', 'channel' ],

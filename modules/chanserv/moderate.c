@@ -152,7 +152,7 @@ send_group_memo(struct sourceinfo *si, const char *memo, ...)
 
 // deny chanserv registrations but turn them into a request
 static void
-can_register(hook_channel_register_check_t *req)
+can_register(struct hook_channel_register_check *req)
 {
 	struct reg_request *cs;
 

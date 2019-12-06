@@ -90,7 +90,7 @@ void chanfix_expire(void *unused);
 
 extern bool chanfix_do_autofix;
 void chanfix_autofix_ev(void *unused);
-void chanfix_can_register(hook_channel_register_check_t *req);
+void chanfix_can_register(struct hook_channel_register_check *req);
 
 extern struct command cmd_list;
 extern struct command cmd_chanfix;

@@ -314,13 +314,6 @@ typedef struct {
 
 typedef struct {
 	struct sourceinfo *     si;
-	const char *            name;
-	struct channel *        chan;
-	int                     approved;       // Write non-zero here to disallow the registration
-} hook_channel_register_check_t;
-
-typedef struct {
-	struct sourceinfo *     si;
 	struct myuser *         mu;
 	struct mynick *         mn;
 } hook_user_req_t;

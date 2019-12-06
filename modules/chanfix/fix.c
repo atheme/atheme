@@ -817,7 +817,7 @@ chanfix_cmd_help(struct sourceinfo *si, int parc, char *parv[])
 }
 
 void
-chanfix_can_register(hook_channel_register_check_t *req)
+chanfix_can_register(struct hook_channel_register_check *req)
 {
 	struct chanfix_channel *chan;
 	struct chanfix_oprecord *orec;

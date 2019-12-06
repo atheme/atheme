@@ -21,7 +21,7 @@ cs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 	struct mychan *mc;
 	char *name = parv[0];
 	char str[21];
-	hook_channel_register_check_t hdatac;
+	struct hook_channel_register_check hdatac;
 	hook_channel_req_t hdata;
 	unsigned int fl;
 
