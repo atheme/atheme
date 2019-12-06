@@ -96,11 +96,6 @@ struct extmode
 };
 
 typedef struct {
-	struct user *   u;
-	struct channel *c;
-} hook_channel_mode_t;
-
-typedef struct {
 	struct chanuser *       cu;
 	const char              mchar;
 	const unsigned int      mvalue;

@@ -39,6 +39,12 @@ struct hook_channel_message
 	char *          msg;            // The message itself
 };
 
+struct hook_channel_mode
+{
+	struct user *   u;
+	struct channel *c;
+};
+
 struct hook_channel_topic_check
 {
 	struct user *   u;              // Online user that changed the topic

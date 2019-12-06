@@ -94,7 +94,7 @@ channel_mode(struct user *source, struct channel *chan, int parc, char *parv[])
 	struct user *target;
 	struct chanuser *cu = NULL;
 	struct user *first_deopped_service = NULL;
-	hook_channel_mode_t hookmsg;
+	struct hook_channel_mode hookmsg;
 
 	if ((!pos) || (*pos == '\0'))
 		return;
