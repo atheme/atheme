@@ -45,12 +45,12 @@ server_add                      struct server *
 server_delete                   hook_server_delete_t *
 server_eob                      struct server *
 user_add                        hook_user_nick_t *
-user_away                       user_t *
-user_delete                     user_t *
+user_away                       struct user *
+user_delete                     struct user *
 user_delete_info                hook_user_delete_t *
-user_deoper                     user_t *
+user_deoper                     struct user *
 user_nickchange                 hook_user_nick_t *
-user_oper                       user_t *
+user_oper                       struct user *
 
 # (services)
 channel_acl_change              hook_channel_acl_req_t *
@@ -61,7 +61,7 @@ channel_info                    hook_channel_req_t *
 channel_pick_successor          hook_channel_succession_req_t *
 channel_register                hook_channel_req_t *
 channel_succession              hook_channel_succession_req_t *
-grant_channel_access            user_t *
+grant_channel_access            struct user *
 group_drop                      struct mygroup *
 group_register                  struct mygroup *
 host_request                    hook_host_request_t *
@@ -70,7 +70,7 @@ module_load                     hook_module_load_t *
 myentity_find                   hook_myentity_req_t *
 myuser_delete                   struct myuser *
 nick_can_register               hook_user_register_check_t *
-nick_check                      user_t *
+nick_check                      struct user *
 nick_check_expire               hook_expiry_req_t *
 nick_enforce                    hook_nick_enforce_t *
 nick_group                      hook_user_req_t *
@@ -83,13 +83,13 @@ user_can_register               hook_user_register_check_t *
 user_can_rename                 hook_user_rename_check_t *
 user_check_expire               hook_expiry_req_t *
 user_drop                       struct myuser *
-user_identify                   user_t *
+user_identify                   struct user *
 user_info                       hook_user_req_t *
 user_info_noexist               hook_info_noexist_req_t *
 user_needforce                  hook_user_needforce_t *
 user_register                   struct myuser *
 user_rename                     hook_user_rename_t *
-user_sethost                    user_t *
+user_sethost                    struct user *
 user_verify_register            hook_user_req_t *
 
 # (sasl)

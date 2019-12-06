@@ -14,11 +14,6 @@
 #include <atheme/stdheaders.h>
 #include <atheme/structures.h>
 
-// Types necessary for the hook system (and/or for Perl scripts)
-typedef struct user user_t;
-
-
-
 typedef void (*hook_fn)(void *data);
 
 struct hook

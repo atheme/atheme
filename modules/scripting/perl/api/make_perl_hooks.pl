@@ -22,7 +22,7 @@ my @special_types = ( 'hook_expiry_req_t' );
 # XXX: Duplication here with the typedefs in Atheme.xs.
 my %perl_api_types = (
 	'struct sourceinfo' => 'Atheme::Sourceinfo',
-	user_t => 'Atheme::User',
+	'struct user' => 'Atheme::User',
 	'struct channel' => 'Atheme::Channel',
 	'struct chanuser' => 'Atheme::ChanUser',
 	'struct server' => 'Atheme::Server',
@@ -48,12 +48,12 @@ my %hook_structs = (
 		cu => [ 'struct chanuser', '+chanuser' ]
 	},
 	hook_cmessage_data_t => {
-		u => [ 'user_t', 'user' ],
+		u => [ 'struct user', 'user' ],
 		c => [ 'struct channel', 'channel' ],
 		msg => [ 'char *', 'message' ],
 	},
 	hook_channel_topic_check_t => {
-		u => [ 'user_t', 'user' ],
+		u => [ 'struct user', 'user' ],
 		s => [ 'struct server', 'server' ],
 		c => [ 'struct channel', 'channel' ],
 		setter => 'char *',
@@ -88,7 +88,7 @@ my %hook_structs = (
 		approved => [ 'int', '+approved' ]
 	},
 	hook_nick_enforce_t => {
-		u => [ 'user_t', 'user' ],
+		u => [ 'struct user', 'user' ],
 		mn => [ 'struct mynick', 'nick' ],
 	},
 	hook_metadata_change_t => {
@@ -104,11 +104,11 @@ my %hook_structs = (
 		s => [ 'struct server', 'server' ],
 	},
 	hook_user_nick_t => {
-		u => [ 'user_t', '+user' ],
+		u => [ 'struct user', '+user' ],
 		oldnick => 'const char *',
 	},
 	hook_channel_mode_t => {
-		u => [ 'user_t', 'user' ],
+		u => [ 'struct user', 'user' ],
 		c => [ 'struct channel', 'channel' ],
 	},
 	hook_channel_mode_change_t => {
@@ -117,7 +117,7 @@ my %hook_structs = (
 		mvalue => 'int',
 	},
 	hook_user_delete_t => {
-		u => [ 'user_t', 'user' ],
+		u => [ 'struct user', 'user' ],
 		comment => 'const char *',
 	},
 	hook_sasl_may_impersonate_t => {

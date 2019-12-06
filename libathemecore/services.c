@@ -401,7 +401,7 @@ handle_nickchange(struct user *const restrict u)
 	(void) hook_call_nick_check(u);
 }
 
-bool ircd_logout_or_kill(user_t *u, const char *login)
+bool ircd_logout_or_kill(struct user *u, const char *login)
 {
 	hook_user_logout_check_t req = {
 		.si      = NULL,
