@@ -25,9 +25,9 @@
 config_purge                    void
 config_ready                    void
 db_saved                        void
-db_write                        database_handle_t *
+db_write                        struct database_handle *
 # XXX: for groupserv.  remove when we have proper dependency resolution in opensex.
-db_write_pre_ca                 database_handle_t *
+db_write_pre_ca                 struct database_handle *
 shutdown                        void
 
 # (ircd)
