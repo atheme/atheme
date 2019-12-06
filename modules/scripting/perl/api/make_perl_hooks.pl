@@ -65,7 +65,7 @@ my %hook_structs = (
 		mc => [ 'struct mychan', 'channel' ],
 		si => [ 'struct sourceinfo', 'source' ],
 	},
-	hook_channel_succession_req_t => {
+	'struct hook_channel_succession_req' => {
 		mc => [ 'struct mychan', 'channel' ],
 		mu => [ 'struct myuser', '+account' ],
 	},

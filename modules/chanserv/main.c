@@ -597,7 +597,7 @@ cs_register(struct hook_channel_req *hdata)
 }
 
 static void
-cs_succession(hook_channel_succession_req_t *data)
+cs_succession(struct hook_channel_succession_req *data)
 {
 	chanacs_change_simple(data->mc, entity(data->mu), NULL, custom_founder_check(), 0, NULL);
 }

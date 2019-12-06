@@ -76,6 +76,12 @@ struct hook_channel_req
 	struct sourceinfo * si;
 };
 
+struct hook_channel_succession_req
+{
+	struct mychan * mc;
+	struct myuser * mu;
+};
+
 struct hook_channel_topic_check
 {
 	struct user *   u;              // Online user that changed the topic

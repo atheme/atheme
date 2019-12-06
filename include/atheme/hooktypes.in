@@ -58,9 +58,9 @@ channel_can_register            struct hook_channel_register_check *
 channel_check_expire            struct hook_expiry_req *
 channel_drop                    struct mychan *
 channel_info                    struct hook_channel_req *
-channel_pick_successor          hook_channel_succession_req_t *
+channel_pick_successor          struct hook_channel_succession_req *
 channel_register                struct hook_channel_req *
-channel_succession              hook_channel_succession_req_t *
+channel_succession              struct hook_channel_succession_req *
 grant_channel_access            struct user *
 group_drop                      struct mygroup *
 group_register                  struct mygroup *

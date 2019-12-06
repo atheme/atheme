@@ -233,11 +233,7 @@ myuser_delete(struct myuser *mu)
 
 			/* CA_FOUNDER | CA_FLAGS is the minimum required for full control; let chanserv take care of assigning the rest via founder_flags */
 			chanacs_change_simple(mc, entity(successor), NULL, CA_FOUNDER | CA_FLAGS, 0, NULL);
-			hook_call_channel_succession((
-					&(hook_channel_succession_req_t){
-						.mc = mc,
-						.mu = successor
-					}));
+			hook_call_channel_succession((&(struct hook_channel_succession_req){ .mc = mc, .mu = successor }));
 
 			if (chansvs.me != NULL)
 				myuser_notice(chansvs.nick, successor, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, entity(successor)->name);
@@ -1169,7 +1165,7 @@ struct myuser *
 mychan_pick_successor(struct mychan *mc)
 {
 	struct myuser *mu;
-	hook_channel_succession_req_t req;
+	struct hook_channel_succession_req req;
 
 	return_val_if_fail(mc != NULL, NULL);
 
