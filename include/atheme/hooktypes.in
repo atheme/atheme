@@ -42,7 +42,7 @@ channel_part                    struct hook_channel_joinpart *
 channel_topic                   struct channel *
 channel_tschange                struct channel *
 server_add                      struct server *
-server_delete                   hook_server_delete_t *
+server_delete                   struct hook_server_delete *
 server_eob                      struct server *
 user_add                        hook_user_nick_t *
 user_away                       struct user *

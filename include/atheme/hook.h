@@ -63,6 +63,12 @@ struct hook_channel_topic_check
 	int             approved;       // Write non-zero here to cancel the change
 };
 
+struct hook_server_delete
+{
+	struct server * s;
+	/* space for reason etc here */
+};
+
 void hook_del_hook(const char *, hook_fn);
 void hook_add_hook(const char *, hook_fn);
 void hook_add_hook_first(const char *, hook_fn);

@@ -202,7 +202,7 @@ server_delete_serv(struct server *s)
 				s->name, s->uplink != NULL ? s->uplink->name : "<none>",
 				s->users);
 
-	hook_call_server_delete((&(hook_server_delete_t){ .s = s }));
+	hook_call_server_delete((&(struct hook_server_delete){ .s = s }));
 
 	/* first go through it's users and kill all of them */
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, s->userlist.head)
