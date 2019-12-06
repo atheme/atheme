@@ -299,15 +299,6 @@ typedef struct {
 } hook_channel_req_t;
 
 typedef struct {
-	struct chanacs *        ca;
-	struct sourceinfo *     si;
-	struct myentity *       parent;
-	unsigned int            oldlevel;
-	unsigned int            newlevel;
-	int                     approved;
-} hook_channel_acl_req_t;
-
-typedef struct {
 	struct mychan * mc;
 	struct myuser * mu;
 } hook_channel_succession_req_t;

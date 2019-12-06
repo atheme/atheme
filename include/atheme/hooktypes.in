@@ -53,7 +53,7 @@ user_nickchange                 struct hook_user_nick *
 user_oper                       struct user *
 
 # (services)
-channel_acl_change              hook_channel_acl_req_t *
+channel_acl_change              struct hook_channel_acl_req *
 channel_can_register            hook_channel_register_check_t *
 channel_check_expire            hook_expiry_req_t *
 channel_drop                    struct mychan *

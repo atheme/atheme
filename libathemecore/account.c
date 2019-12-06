@@ -1915,7 +1915,7 @@ bool
 chanacs_change(struct mychan *mychan, struct myentity *mt, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, struct myentity *setter)
 {
 	struct chanacs *ca;
-	hook_channel_acl_req_t req;
+	struct hook_channel_acl_req req;
 
 	/* wrt the second assert: only one of mu or hostmask can be not-NULL --nenolod */
 	return_val_if_fail(mychan != NULL, false);

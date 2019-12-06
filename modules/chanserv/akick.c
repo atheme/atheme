@@ -196,7 +196,7 @@ cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myentity *mt;
 	struct mychan *mc;
-	hook_channel_acl_req_t req;
+	struct hook_channel_acl_req req;
 	struct chanacs *ca, *ca2;
 	char *chan = parv[0];
 	long duration;
@@ -469,7 +469,7 @@ cs_cmd_akick_del(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myentity *mt;
 	struct mychan *mc;
-	hook_channel_acl_req_t req;
+	struct hook_channel_acl_req req;
 	struct chanacs *ca;
 	mowgli_node_t *n, *tn;
 	char *chan = parv[0];

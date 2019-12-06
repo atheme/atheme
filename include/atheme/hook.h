@@ -22,6 +22,16 @@ struct hook
 	mowgli_list_t   hooks;
 };
 
+struct hook_channel_acl_req
+{
+	struct chanacs *    ca;
+	struct sourceinfo * si;
+	struct myentity *   parent;
+	unsigned int        oldlevel;
+	unsigned int        newlevel;
+	int                 approved;
+};
+
 struct hook_channel_joinpart
 {
 	/* Write NULL here if you kicked the user. When kicking the last user, you must join a service first,

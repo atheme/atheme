@@ -195,7 +195,7 @@ no_founder:
 			mt->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name,
 			bitmask_to_flags(ca->level), ca->mychan->name);
 
-		hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
+		hook_call_channel_acl_change(&(struct hook_channel_acl_req){ .ca = ca });
 	}
 
 	command_success_nodata(si, _("\2%s\2 now has flags \2%s\2 on \2%s\2."), mt->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name);

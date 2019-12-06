@@ -275,7 +275,7 @@ sync_myuser(struct myuser *mu)
 }
 
 static void
-sync_channel_acl_change(hook_channel_acl_req_t *hookdata)
+sync_channel_acl_change(struct hook_channel_acl_req *hookdata)
 {
 	struct mychan *mc;
 
