@@ -632,7 +632,7 @@ mod_init(struct module *const restrict m)
 
 	MODULE_CONFLICT(m, "contrib/dnsbl")
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "proxyscan/main")
-	MODULE_TRY_REQUEST_SYMBOL(m, os_set_cmdtree, "operserv/set", "os_set_cmdtree")
+	MODULE_TRY_REQUEST_SYMBOL(m, os_set_cmdtree, "operserv/set_core", "os_set_cmdtree")
 
 	if (! (dns_base = mowgli_dns_create(base_eventloop, MOWGLI_DNS_TYPE_ASYNC)))
 	{
