@@ -12,7 +12,6 @@ my %arg_types;
 # THIS LIST IS NOT A SUBSTITUTE FOR ACTUALLY DEFINING HOOK STRUCTURES. IT IS FOR STRUCTURES
 # WITH MEMBERS THAT WE CAN'T SUPPORT YET.
 my @unsupported_types = (
-	'hook_email_canonicalize_t',
 	'struct database_handle',
 	'struct hook_channel_acl_req',
 	'struct hook_host_request',
