@@ -55,112 +55,112 @@ my %perl_api_types = (
 my %hook_structs = (
 
 	'struct hook_channel_joinpart' => {
-		cu => [ 'struct chanuser', '+chanuser' ]
+		'cu'            => [ 'struct chanuser', '+chanuser' ],
 	},
 
 	'struct hook_channel_message' => {
-		u => [ 'struct user', 'user' ],
-		c => [ 'struct channel', 'channel' ],
-		msg => [ 'char *', 'message' ],
+		'u'             => [ 'struct user', 'user' ],
+		'c'             => [ 'struct channel', 'channel' ],
+		'msg'           => [ 'char *', 'message' ],
 	},
 
 	'struct hook_channel_mode' => {
-		u => [ 'struct user', 'user' ],
-		c => [ 'struct channel', 'channel' ],
+		'u'             => [ 'struct user', 'user' ],
+		'c'             => [ 'struct channel', 'channel' ],
 	},
 
 	'struct hook_channel_mode_change' => {
-		cu => [ 'struct chanuser', 'chanuser' ],
-		mchar => 'int',
-		mvalue => 'int',
+		'cu'            => [ 'struct chanuser', 'chanuser' ],
+		'mchar'         => 'int',
+		'mvalue'        => 'int',
 	},
 
 	'struct hook_channel_register_check' => {
-		si => [ 'struct sourceinfo', 'source' ],
-		name => 'const char *',
-		chan => [ 'struct channel', 'channel' ],
-		approved => [ 'int', '+approved' ],
+		'si'            => [ 'struct sourceinfo', 'source' ],
+		'name'          => 'const char *',
+		'chan'          => [ 'struct channel', 'channel' ],
+		'approved'      => [ 'int', '+approved' ],
 	},
 
 	'struct hook_channel_req' => {
-		mc => [ 'struct mychan', 'channel' ],
-		si => [ 'struct sourceinfo', 'source' ],
+		'mc'            => [ 'struct mychan', 'channel' ],
+		'si'            => [ 'struct sourceinfo', 'source' ],
 	},
 
 	'struct hook_channel_succession_req' => {
-		mc => [ 'struct mychan', 'channel' ],
-		mu => [ 'struct myuser', '+account' ],
+		'mc'            => [ 'struct mychan', 'channel' ],
+		'mu'            => [ 'struct myuser', '+account' ],
 	},
 
 	'struct hook_channel_topic_check' => {
-		u => [ 'struct user', 'user' ],
-		s => [ 'struct server', 'server' ],
-		c => [ 'struct channel', 'channel' ],
-		setter => 'char *',
-		ts => 'time_t',
-		topic => [ 'char *', 'topic' ],
-		approved => [ 'int', '+approved' ],
+		'u'             => [ 'struct user', 'user' ],
+		's'             => [ 'struct server', 'server' ],
+		'c'             => [ 'struct channel', 'channel' ],
+		'setter'        => 'char *',
+		'ts'            => 'time_t',
+		'topic'         => [ 'char *', 'topic' ],
+		'approved'      => [ 'int', '+approved' ],
 	},
 
 	'struct hook_info_noexist_req' => {
-		si => [ 'struct sourceinfo', 'source' ],
-		nick => 'const char *'
+		'si'            => [ 'struct sourceinfo', 'source' ],
+		'nick'          => 'const char *',
 	},
 
 	'struct hook_metadata_change' => {
-		target => 'struct myuser',
-		name => 'const char *',
-		value => 'char *',
+		'target'        => 'struct myuser',
+		'name'          => 'const char *',
+		'value'         => 'char *',
 	},
 
 	'struct hook_nick_enforce' => {
-		u => [ 'struct user', 'user' ],
-		mn => [ 'struct mynick', 'nick' ],
+		'u'             => [ 'struct user', 'user' ],
+		'mn'            => [ 'struct mynick', 'nick' ],
 	},
 
 	'struct hook_sasl_may_impersonate' => {
-		source_mu => [ 'struct myuser', 'source' ],
-		target_mu => [ 'struct myuser', 'target' ],
-		allowed => [ 'int', '+allowed' ]
+		'source_mu'     => [ 'struct myuser', 'source' ],
+		'target_mu'     => [ 'struct myuser', 'target' ],
+		'allowed'       => [ 'int', '+allowed' ],
 	},
 
 	'struct hook_server_delete' => {
-		s => [ 'struct server', 'server' ],
+		's'             => [ 'struct server', 'server' ],
 	},
 
 	'struct hook_user_delete_info' => {
-		u => [ 'struct user', 'user' ],
-		comment => 'const char *',
+		'u'             => [ 'struct user', 'user' ],
+		'comment'       => 'const char *',
 	},
 
 	'struct hook_user_needforce' => {
-		si => [ 'struct sourceinfo', 'source' ],
-		mu => [ 'struct myuser', 'account' ],
-		allowed => [ 'int', '+allowed' ]
+		'si'            => [ 'struct sourceinfo', 'source' ],
+		'mu'            => [ 'struct myuser', 'account' ],
+		'allowed'       => [ 'int', '+allowed' ],
 	},
 
 	'struct hook_user_nick' => {
-		u => [ 'struct user', '+user' ],
-		oldnick => 'const char *',
+		'u'             => [ 'struct user', '+user' ],
+		'oldnick'       => 'const char *',
 	},
 
 	'struct hook_user_register_check' => {
-		si => [ 'struct sourceinfo', 'source' ],
-		account => 'const char *',
-		email => 'const char *',
-		password => 'const char *',
-		approved => [ 'int', '+approved' ]
+		'si'            => [ 'struct sourceinfo', 'source' ],
+		'account'       => 'const char *',
+		'email'         => 'const char *',
+		'password'      => 'const char *',
+		'approved'      => [ 'int', '+approved' ],
 	},
 
 	'struct hook_user_rename' => {
-		mu => [ 'struct myuser', 'account' ],
-		oldname => 'const char *',
+		'mu'            => [ 'struct myuser', 'account' ],
+		'oldname'       => 'const char *',
 	},
 
 	'struct hook_user_req' => {
-		si => [ 'struct sourceinfo', 'source' ],
-		mu => [ 'struct myuser', 'account' ],
-		mn => [ 'struct mynick', 'nick' ],
+		'si'            => [ 'struct sourceinfo', 'source' ],
+		'mu'            => [ 'struct myuser', 'account' ],
+		'mn'            => [ 'struct mynick', 'nick' ],
 	},
 );
 
