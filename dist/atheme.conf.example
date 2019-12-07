@@ -505,7 +505,26 @@ loadmodule "modules/chanserv/antiflood";
  * Display regex matching (RMATCH command)      modules/operserv/rmatch
  * Most common realnames (RNC command)          modules/operserv/rnc
  * RWATCH system                                modules/operserv/rwatch
- * Temporarily modify config options (SET command)  modules/operserv/set
+ *
+ * Note that ALL of these SET commands only apply until the next rehash!
+ *
+ * ALL of the below SET commands (deprecated)   modules/operserv/set
+ * SET AKICKTIME subcommand (temporarily)       modules/operserv/set_akicktime
+ * SET CHANEXPIRE subcommand (temporarily)      modules/operserv/set_chanexpire
+ * SET COMMITINTERVAL subcommand (temporarily)  modules/operserv/set_commitinterval
+ * SET ENFORCEPREFIX subcommand (temporarily)   modules/operserv/set_enforceprefix
+ * SET KLINETIME subcommand (temporarily)       modules/operserv/set_klinetime
+ * SET MAXCHANACS subcommand (temporarily)      modules/operserv/set_maxchanacs
+ * SET MAXCHANS subcommand (temporarily)        modules/operserv/set_maxchans
+ * SET MAXFOUNDERS subcommand (temporarily)     modules/operserv/set_maxfounders
+ * SET MAXLOGINS subcommand (temporarily)       modules/operserv/set_maxlogins
+ * SET MAXNICKS subcommand (temporarily)        modules/operserv/set_maxnicks
+ * SET MAXUSERS subcommand (temporarily)        modules/operserv/set_maxusers
+ * SET MDLIMIT subcommand (temporarily)         modules/operserv/set_mdlimit
+ * SET NICKEXPIRE subcommand (temporarily)      modules/operserv/set_nickexpire
+ * SET RECONTIME subcommand (temporarily)       modules/operserv/set_recontime
+ * SET SPAM subcommand (temporarily)            modules/operserv/set_spam
+ *
  * SGLINE system                                modules/operserv/sgline
  * SHUTDOWN command                             modules/operserv/shutdown
  * Non-config oper privileges (SOPER command)   modules/operserv/soper

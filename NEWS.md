@@ -45,6 +45,11 @@ POTENTIAL COMPATIBILITY BREAKAGE
   (such as `modules/chanserv/fflags`). If you encounter a use case that cannot
   be replaced, please report a bug to let us know.
 
+- The `modules/operserv/set` module has been broken up into individual modules.
+  Existing loadmodule configurations will continue to work, but you will
+  receive a module deprecation warning if you load it. Please see the
+  `dist/atheme.conf.example` file for the new submodule names.
+
 - The NickServ DROP command no longer requires the user's account password as
   an argument.
 
