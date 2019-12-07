@@ -11,11 +11,19 @@ my %arg_types;
 # XXX: Types we haven't exposed to perl yet. Remove these if they do become supported.
 # THIS LIST IS NOT A SUBSTITUTE FOR ACTUALLY DEFINING HOOK STRUCTURES. IT IS FOR STRUCTURES
 # WITH MEMBERS THAT WE CAN'T SUPPORT YET.
-my @unsupported_types = ( 'struct database_handle', 'struct sasl_message',
-    'struct hook_module_load', 'struct hook_myentity_req', 'struct hook_host_request',
-    'struct hook_channel_acl_req', 'hook_email_canonicalize_t', 'struct mygroup',
-    'struct hook_user_login_check', 'struct hook_user_logout_check',
-    'struct hook_user_rename_check' );
+my @unsupported_types = (
+	'hook_email_canonicalize_t',
+	'struct database_handle',
+	'struct hook_channel_acl_req',
+	'struct hook_host_request',
+	'struct hook_module_load',
+	'struct hook_myentity_req',
+	'struct hook_user_login_check',
+	'struct hook_user_logout_check',
+	'struct hook_user_rename_check',
+	'struct mygroup',
+	'struct sasl_message',
+);
 
 # Types that need special handling. Define the dispatch for these, but the handler
 # functions themselves are hand-written.
@@ -23,16 +31,16 @@ my @special_types = ( 'struct hook_expiry_req' );
 
 # XXX: Duplication here with the typedefs in Atheme.xs.
 my %perl_api_types = (
-	'struct sourceinfo' => 'Atheme::Sourceinfo',
-	'struct user' => 'Atheme::User',
-	'struct channel' => 'Atheme::Channel',
-	'struct chanuser' => 'Atheme::ChanUser',
-	'struct server' => 'Atheme::Server',
-	'struct service' => 'Atheme::Service',
-	'struct myuser' => 'Atheme::Account',
-	'struct mynick' => 'Atheme::NickRegistration',
-	'struct mychan' => 'Atheme::ChannelRegistration',
-	'struct chanacs' => 'Atheme::ChanAcs',
+	'struct chanacs'        => 'Atheme::ChanAcs',
+	'struct channel'        => 'Atheme::Channel',
+	'struct chanuser'       => 'Atheme::ChanUser',
+	'struct mychan'         => 'Atheme::ChannelRegistration',
+	'struct mynick'         => 'Atheme::NickRegistration',
+	'struct myuser'         => 'Atheme::Account',
+	'struct server'         => 'Atheme::Server',
+	'struct service'        => 'Atheme::Service',
+	'struct sourceinfo'     => 'Atheme::Sourceinfo',
+	'struct user'           => 'Atheme::User',
 
 	'char *' => [ sub { "sv_setpv($_[0], $_[1]);" }, sub { die "Don't know how to unmarshal a read-write string"; } ],
 	'const char *' => [ sub { "sv_setpv($_[0], $_[1]);" }, sub { die "Don't know how to unmarshal a read-write string"; } ],
@@ -46,14 +54,45 @@ my %perl_api_types = (
 # or an arrayref of [type, name], if the name on the perl side is to be different from the
 # member name in the structure. Prefix name with '+' if this value may be modified by the hook.
 my %hook_structs = (
+
 	'struct hook_channel_joinpart' => {
 		cu => [ 'struct chanuser', '+chanuser' ]
 	},
+
 	'struct hook_channel_message' => {
 		u => [ 'struct user', 'user' ],
 		c => [ 'struct channel', 'channel' ],
 		msg => [ 'char *', 'message' ],
 	},
+
+	'struct hook_channel_mode' => {
+		u => [ 'struct user', 'user' ],
+		c => [ 'struct channel', 'channel' ],
+	},
+
+	'struct hook_channel_mode_change' => {
+		cu => [ 'struct chanuser', 'chanuser' ],
+		mchar => 'int',
+		mvalue => 'int',
+	},
+
+	'struct hook_channel_register_check' => {
+		si => [ 'struct sourceinfo', 'source' ],
+		name => 'const char *',
+		chan => [ 'struct channel', 'channel' ],
+		approved => [ 'int', '+approved' ],
+	},
+
+	'struct hook_channel_req' => {
+		mc => [ 'struct mychan', 'channel' ],
+		si => [ 'struct sourceinfo', 'source' ],
+	},
+
+	'struct hook_channel_succession_req' => {
+		mc => [ 'struct mychan', 'channel' ],
+		mu => [ 'struct myuser', '+account' ],
+	},
+
 	'struct hook_channel_topic_check' => {
 		u => [ 'struct user', 'user' ],
 		s => [ 'struct server', 'server' ],
@@ -63,25 +102,49 @@ my %hook_structs = (
 		topic => [ 'char *', 'topic' ],
 		approved => [ 'int', '+approved' ],
 	},
-	'struct hook_channel_req' => {
-		mc => [ 'struct mychan', 'channel' ],
+
+	'struct hook_info_noexist_req' => {
 		si => [ 'struct sourceinfo', 'source' ],
+		nick => 'const char *'
 	},
-	'struct hook_channel_succession_req' => {
-		mc => [ 'struct mychan', 'channel' ],
-		mu => [ 'struct myuser', '+account' ],
-	},
-	'struct hook_channel_register_check' => {
-		si => [ 'struct sourceinfo', 'source' ],
+
+	'struct hook_metadata_change' => {
+		target => 'struct myuser',
 		name => 'const char *',
-		chan => [ 'struct channel', 'channel' ],
-		approved => [ 'int', '+approved' ],
+		value => 'char *',
 	},
-	'struct hook_user_req' => {
-		si => [ 'struct sourceinfo', 'source' ],
-		mu => [ 'struct myuser', 'account' ],
+
+	'struct hook_nick_enforce' => {
+		u => [ 'struct user', 'user' ],
 		mn => [ 'struct mynick', 'nick' ],
 	},
+
+	'struct hook_sasl_may_impersonate' => {
+		source_mu => [ 'struct myuser', 'source' ],
+		target_mu => [ 'struct myuser', 'target' ],
+		allowed => [ 'int', '+allowed' ]
+	},
+
+	'struct hook_server_delete' => {
+		s => [ 'struct server', 'server' ],
+	},
+
+	'struct hook_user_delete_info' => {
+		u => [ 'struct user', 'user' ],
+		comment => 'const char *',
+	},
+
+	'struct hook_user_needforce' => {
+		si => [ 'struct sourceinfo', 'source' ],
+		mu => [ 'struct myuser', 'account' ],
+		allowed => [ 'int', '+allowed' ]
+	},
+
+	'struct hook_user_nick' => {
+		u => [ 'struct user', '+user' ],
+		oldnick => 'const char *',
+	},
+
 	'struct hook_user_register_check' => {
 		si => [ 'struct sourceinfo', 'source' ],
 		account => 'const char *',
@@ -89,52 +152,16 @@ my %hook_structs = (
 		password => 'const char *',
 		approved => [ 'int', '+approved' ]
 	},
-	'struct hook_nick_enforce' => {
-		u => [ 'struct user', 'user' ],
-		mn => [ 'struct mynick', 'nick' ],
-	},
-	'struct hook_metadata_change' => {
-		target => 'struct myuser',
-		name => 'const char *',
-		value => 'char *',
-	},
+
 	'struct hook_user_rename' => {
 		mu => [ 'struct myuser', 'account' ],
 		oldname => 'const char *',
 	},
-	'struct hook_server_delete' => {
-		s => [ 'struct server', 'server' ],
-	},
-	'struct hook_user_nick' => {
-		u => [ 'struct user', '+user' ],
-		oldnick => 'const char *',
-	},
-	'struct hook_channel_mode' => {
-		u => [ 'struct user', 'user' ],
-		c => [ 'struct channel', 'channel' ],
-	},
-	'struct hook_channel_mode_change' => {
-		cu => [ 'struct chanuser', 'chanuser' ],
-		mchar => 'int',
-		mvalue => 'int',
-	},
-	'struct hook_user_delete_info' => {
-		u => [ 'struct user', 'user' ],
-		comment => 'const char *',
-	},
-	'struct hook_sasl_may_impersonate' => {
-		source_mu => [ 'struct myuser', 'source' ],
-		target_mu => [ 'struct myuser', 'target' ],
-		allowed => [ 'int', '+allowed' ]
-	},
-	'struct hook_info_noexist_req' => {
-		si => [ 'struct sourceinfo', 'source' ],
-		nick => 'const char *'
-	},
-	'struct hook_user_needforce' => {
+
+	'struct hook_user_req' => {
 		si => [ 'struct sourceinfo', 'source' ],
 		mu => [ 'struct myuser', 'account' ],
-		allowed => [ 'int', '+allowed' ]
+		mn => [ 'struct mynick', 'nick' ],
 	},
 );
 
