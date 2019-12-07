@@ -96,9 +96,9 @@ my %hook_structs = (
 		'u'             => [ 'struct user', 'user' ],
 		's'             => [ 'struct server', 'server' ],
 		'c'             => [ 'struct channel', 'channel' ],
-		'setter'        => 'char *',
+		'setter'        => 'const char *',
 		'ts'            => 'time_t',
-		'topic'         => [ 'char *', 'topic' ],
+		'topic'         => [ 'const char *', 'topic' ],
 		'approved'      => [ 'int', '+approved' ],
 	},
 
