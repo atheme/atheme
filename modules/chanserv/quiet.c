@@ -10,6 +10,9 @@
 #include <atheme.h>
 #include "chanserv.h"
 
+// Imported by modules/chanserv/antiflood
+extern struct chanban *place_quietmask(struct channel *, int, const char *);
+
 // Notify at most this many users in private notices, otherwise channel
 #define MAX_SINGLE_NOTIFY 3
 

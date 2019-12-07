@@ -26,6 +26,7 @@ struct groupacs *groupacs_find(struct mygroup *mg, struct myentity *mt, unsigned
 void groupacs_delete(struct mygroup *mg, struct myentity *mt);
 
 bool groupacs_sourceinfo_has_flag(struct mygroup *mg, struct sourceinfo *si, unsigned int flag);
+unsigned int groupacs_sourceinfo_flags(struct mygroup *mg, struct sourceinfo *si);
 
 void gs_db_init(void);
 void gs_db_deinit(void);
@@ -42,6 +43,7 @@ mowgli_list_t *myentity_get_membership_list(struct myentity *mt);
 unsigned int myentity_count_group_flag(struct myentity *mt, unsigned int flagset);
 
 const char *mygroup_founder_names(struct mygroup *mg);
+void mygroup_rename(struct mygroup *mg, const char *name);
 
 /* services plumbing */
 extern struct service *groupsvs;

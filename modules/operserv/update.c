@@ -9,7 +9,7 @@
 
 #include <atheme.h>
 
-void
+static void
 os_cmd_update(struct sourceinfo *si, int parc, char *parv[])
 {
 	logcommand(si, CMDLOG_ADMIN, "UPDATE");

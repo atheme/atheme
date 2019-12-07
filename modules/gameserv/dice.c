@@ -32,7 +32,7 @@ typedef struct
 
 static unsigned int max_rolls = 10;
 
-int
+static int
 is_calcoper(char oper)
 {
 	static char *opers = "~!d ^ */%\\ +- & $ |";
@@ -72,7 +72,7 @@ calc_dice_simple(double lhs, double rhs)
 	return out;
 }
 
-int
+static int
 do_calc_eval(struct sourceinfo *si, double lhs, char oper, double rhs, double *out, char *errmsg)
 {
 	switch (oper)
@@ -138,7 +138,7 @@ do_calc_eval(struct sourceinfo *si, double lhs, char oper, double rhs, double *o
 	return 0;
 }
 
-int
+static int
 do_calc_expr(struct sourceinfo *si, char *expr, char *errmsg, double *presult)
 {
 	int expect = CALCEXPR_VALUE, lastrank, currank;

@@ -133,7 +133,7 @@ akick_add_timeout(struct mychan *mc, struct myentity *mt, const char *host, time
 	return timeout;
 }
 
-void
+static void
 akick_timeout_check(void *arg)
 {
 	mowgli_node_t *n, *tn;
@@ -191,7 +191,7 @@ akick_timeout_check(void *arg)
 	}
 }
 
-void
+static void
 cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myentity *mt;
@@ -464,7 +464,7 @@ cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
-void
+static void
 cs_cmd_akick_del(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myentity *mt;
@@ -587,7 +587,7 @@ cs_cmd_akick_del(struct sourceinfo *si, int parc, char *parv[])
 	return;
 }
 
-void
+static void
 cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
@@ -702,7 +702,7 @@ cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_GET, "AKICK:LIST: \2%s\2", mc->name);
 }
 
-void
+static void
 akickdel_list_create(void *arg)
 {
 	struct mychan *mc;

@@ -9,7 +9,7 @@
 
 #include <atheme.h>
 
-void
+static void
 os_cmd_rehash(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_INFO, "UPDATE (due to REHASH): \2%s\2", get_oper_name(si));

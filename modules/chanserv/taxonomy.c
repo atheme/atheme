@@ -9,7 +9,7 @@
 
 #include <atheme.h>
 
-void
+static void
 cs_cmd_taxonomy(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[0];

@@ -9,7 +9,7 @@
 
 #include <atheme.h>
 
-void
+static void
 ns_cmd_ghost(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;

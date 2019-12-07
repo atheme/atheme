@@ -91,7 +91,7 @@ guest_nickname(struct user *u)
 	fnc_sts(nicksvs.me->me, u, gnick, FNC_FORCE);
 }
 
-void
+static void
 enforce_timeout_check(void *arg)
 {
 	mowgli_node_t *n, *tn;

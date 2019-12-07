@@ -12,6 +12,10 @@
 #include <atheme.h>
 #include "list_common.h"
 
+// Imported by many other modules
+extern void list_register(const char *, struct list_param *);
+extern void list_unregister(const char *);
+
 static mowgli_patricia_t *list_params;
 
 static bool

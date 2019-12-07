@@ -407,7 +407,7 @@ botserv_config_ready(void *unused)
 	hook_del_config_ready(botserv_config_ready);
 }
 
-void
+static void
 botserv_save_database(struct database_handle *db)
 {
 	mowgli_node_t *n;
