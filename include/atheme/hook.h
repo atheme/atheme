@@ -106,7 +106,7 @@ struct hook_expiry_req
 
 struct hook_host_request
 {
-        const char *        host;
+	const char *        host;
 	struct sourceinfo * si;
 	int                 approved;
 	const char *        target;
