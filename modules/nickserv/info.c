@@ -33,8 +33,8 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	time_t vhost_time;
 	bool has_user_auspex;
 	bool hide_info;
-	hook_user_req_t req;
-	hook_info_noexist_req_t noexist_req;
+	struct hook_user_req req;
+	struct hook_info_noexist_req noexist_req;
 
 	// On IRC, default the name to something. Not currently documented.
 	if (!name && si->su)

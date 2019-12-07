@@ -24,7 +24,7 @@ static void perl_hook_marshal_void(perl_hook_marshal_direction_t dir, void * dat
  * used (and hence the package to which to bless it) dependent on the hook that's
  * being called.
  */
-static void perl_hook_marshal_hook_expiry_req_t(perl_hook_marshal_direction_t dir, hook_expiry_req_t * data, SV **psv,
+static void perl_hook_marshal_struct_hook_expiry_req(perl_hook_marshal_direction_t dir, struct hook_expiry_req * data, SV **psv,
 		const char * argname, const char * packagename)
 {
 	if (dir == PERL_HOOK_TO_PERL)
@@ -54,10 +54,10 @@ static void perl_hook_marshal_hook_expiry_req_t(perl_hook_marshal_direction_t di
  * structure but need to populate it in different ways.
  */
 
-static void perl_hook_expiry_check(hook_expiry_req_t * data, const char *hookname, const char *packagename, const char * argname)
+static void perl_hook_expiry_check(struct hook_expiry_req * data, const char *hookname, const char *packagename, const char * argname)
 {
 	SV *arg;
-	perl_hook_marshal_hook_expiry_req_t(PERL_HOOK_TO_PERL, data, &arg, packagename, argname);
+	perl_hook_marshal_struct_hook_expiry_req(PERL_HOOK_TO_PERL, data, &arg, packagename, argname);
 
 	dSP;
 	ENTER;
@@ -73,24 +73,24 @@ static void perl_hook_expiry_check(hook_expiry_req_t * data, const char *hooknam
 	FREETMPS;
 	LEAVE;
 
-	perl_hook_marshal_hook_expiry_req_t(PERL_HOOK_FROM_PERL, data, &arg, NULL, NULL);
+	perl_hook_marshal_struct_hook_expiry_req(PERL_HOOK_FROM_PERL, data, &arg, NULL, NULL);
 	SvREFCNT_dec(arg);
 	invalidate_object_references();
 }
 
 
 
-static void perl_hook_user_check_expire(hook_expiry_req_t * data)
+static void perl_hook_user_check_expire(struct hook_expiry_req * data)
 {
 	perl_hook_expiry_check(data, "user_check_expire", "Atheme::Account", "account");
 }
 
-static void perl_hook_nick_check_expire(hook_expiry_req_t * data)
+static void perl_hook_nick_check_expire(struct hook_expiry_req * data)
 {
 	perl_hook_expiry_check(data, "nick_check_expire", "Atheme::NickRegistration", "nick");
 }
 
-static void perl_hook_channel_check_expire(hook_expiry_req_t * data)
+static void perl_hook_channel_check_expire(struct hook_expiry_req * data)
 {
 	perl_hook_expiry_check(data, "channel_check_expire", "Atheme::ChannelRegistration", "channel");
 }

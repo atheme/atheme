@@ -21,7 +21,7 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	struct myuser *mu;
 	struct metadata *md;
 	mowgli_patricia_iteration_state_t state;
-	hook_channel_req_t req;
+	struct hook_channel_req req;
 	bool hide_info, hide_acl;
 
 	if (!name)

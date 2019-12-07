@@ -1,17 +1,17 @@
 #include "atheme_perl.h"
 
-typedef sourceinfo_t *Atheme_Sourceinfo;
+typedef struct sourceinfo *Atheme_Sourceinfo;
 typedef struct perl_command *Atheme_Command;
-typedef service_t *Atheme_Service;
+typedef struct service *Atheme_Service;
 typedef struct user *Atheme_User;
 typedef struct atheme_object *Atheme_Object;
 typedef struct atheme_object *Atheme_Object_MetadataHash;
-typedef myentity_t *Atheme_Entity;
+typedef struct myentity *Atheme_Entity;
 typedef struct myuser *Atheme_Account;
-typedef channel_t *Atheme_Channel;
-typedef chanuser_t *Atheme_ChanUser;
+typedef struct channel *Atheme_Channel;
+typedef struct chanuser *Atheme_ChanUser;
 typedef struct mychan *Atheme_ChannelRegistration;
-typedef chanacs_t *Atheme_ChanAcs;
+typedef struct chanacs *Atheme_ChanAcs;
 typedef struct mynick *Atheme_NickRegistration;
 typedef struct server *Atheme_Server;
 

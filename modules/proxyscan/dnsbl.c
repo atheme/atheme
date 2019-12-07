@@ -515,7 +515,7 @@ dnsbl_action_config_handler(mowgli_config_file_entry_t *ce)
 }
 
 static void
-check_dnsbls(hook_user_nick_t *data)
+check_dnsbls(struct hook_user_nick *data)
 {
 	struct user *u = data->u;
 	mowgli_node_t *n;

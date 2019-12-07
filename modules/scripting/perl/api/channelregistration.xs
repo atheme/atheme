@@ -44,7 +44,7 @@ transfer (Atheme_ChannelRegistration self, Atheme_Sourceinfo si, Atheme_Entity u
 CODE:
 	mowgli_node_t *n;
 
-	chanacs_t *ca;
+	struct chanacs *ca;
 
     MOWGLI_ITER_FOREACH(n, self->chanacs.head)
 	{

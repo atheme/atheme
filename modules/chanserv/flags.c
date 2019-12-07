@@ -148,7 +148,7 @@ do_list(struct sourceinfo *si, struct mychan *mc, unsigned int flags)
 }
 
 static void
-check_registration_keywords(hook_user_register_check_t *hdata)
+check_registration_keywords(struct hook_user_register_check *hdata)
 {
 	if (hdata->approved || !anope_flags_compat)
 	{
@@ -173,7 +173,7 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 	char *flagstr = parv[2];
 	const char *str1;
 	unsigned int addflags, removeflags, restrictflags;
-	hook_channel_acl_req_t req;
+	struct hook_channel_acl_req req;
 	struct mychan *mc;
 
 	if (parc < 1)

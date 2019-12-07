@@ -18,7 +18,7 @@ ns_cmd_verify(struct sourceinfo *si, int parc, char *parv[])
 	char *op = parv[0];
 	char *nick = parv[1];
 	char *key = parv[2];
-	hook_user_req_t req;
+	struct hook_user_req req;
 
 	if (!op || !nick || !key)
 	{
@@ -137,7 +137,7 @@ ns_cmd_fverify(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_node_t *n;
 	char *op = parv[0];
 	char *nick = parv[1];
-	hook_user_req_t req;
+	struct hook_user_req req;
 
 	if (!op || !nick)
 	{

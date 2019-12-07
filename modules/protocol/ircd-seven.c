@@ -270,7 +270,7 @@ seven_is_ircop(struct user *u)
 }
 
 static void
-nick_group(hook_user_req_t *hdata)
+nick_group(struct hook_user_req *hdata)
 {
 	struct user *u;
 
@@ -280,7 +280,7 @@ nick_group(hook_user_req_t *hdata)
 }
 
 static void
-nick_ungroup(hook_user_req_t *hdata)
+nick_ungroup(struct hook_user_req *hdata)
 {
 	struct user *u;
 
@@ -290,7 +290,7 @@ nick_ungroup(hook_user_req_t *hdata)
 }
 
 static void
-user_can_logout(hook_user_logout_check_t *hdata)
+user_can_logout(struct hook_user_logout_check *hdata)
 {
 	if (hdata->u && (hdata->u->flags & UF_NOLOGOUT) && !hdata->relogin)
 		hdata->allowed = false;

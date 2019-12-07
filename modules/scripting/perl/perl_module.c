@@ -319,7 +319,7 @@ do_script_list(struct sourceinfo *si)
 
 // Connect all of the above to OperServ.
 static void
-hook_module_load(hook_module_load_t *data)
+hook_module_load(struct hook_module_load *data)
 {
 	struct stat s;
 	char buf[BUFSIZE];

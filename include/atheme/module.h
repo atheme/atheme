@@ -67,17 +67,6 @@ struct v4_moduleheader
 	const char *                    version;
 };
 
-/* name is the module name we're searching for.
- * path is the likely full path name, which may be ignored.
- * If it is found, set module to the loaded struct module pointer
- */
-typedef struct {
-	const char *    name;
-	const char *    path;
-	struct module * module;
-	int             handled;
-} hook_module_load_t;
-
 struct module_dependency
 {
 	char *                          name;

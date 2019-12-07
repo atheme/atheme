@@ -64,18 +64,21 @@ ns_cmd_login(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	hook_user_login_check_t login_req = {
+	struct hook_user_login_check login_req = {
 		.si      = si,
 		.mu      = mu,
 		.allowed = true,
 	};
-	hook_user_logout_check_t logout_req = {
+
+	struct hook_user_logout_check logout_req = {
 		.si      = si,
 		.u       = u,
 		.allowed = true,
 		.relogin = true,
 	};
+
 	hook_call_user_can_login(&login_req);
+
 	if (login_req.allowed && u->myuser)
 		hook_call_user_can_logout(&logout_req);
 

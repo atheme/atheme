@@ -95,45 +95,6 @@ struct extmode
 	bool  (*check)(const char *, struct channel *, struct mychan *, struct user *, struct myuser *);
 };
 
-/* channel related hooks */
-typedef struct {
-
-	/* Write NULL here if you kicked the user. When kicking the last user, you must join a service first,
-	 * otherwise the channel may be destroyed and crashes may occur. The service may not part until you
-	 * return; chanserv provides MC_INHABIT to help with this. This also prevents kick/rejoin floods. If
-	 * this is NULL, a previous function kicked the user
-	 */
-	struct chanuser *       cu;
-
-} hook_channel_joinpart_t;
-
-typedef struct {
-	struct user *   u;
-	struct channel *c;
-	char *          msg;
-} hook_cmessage_data_t;
-
-typedef struct {
-	struct user *   u;              // Online user that changed the topic
-	struct server * s;              // Server that restored a topic
-	struct channel *c;              // Channel still has old topic
-	const char *    setter;         // Stored setter string, can be nick, nick!user@host or server
-	time_t          ts;             // Time the topic was changed
-	const char *    topic;          // New topic
-	int             approved;       // Write non-zero here to cancel the change
-} hook_channel_topic_check_t;
-
-typedef struct {
-	struct user *   u;
-	struct channel *c;
-} hook_channel_mode_t;
-
-typedef struct {
-	struct chanuser *       cu;
-	const char              mchar;
-	const unsigned int      mvalue;
-} hook_channel_mode_change_t;
-
 /* cmode.c */
 char *flags_to_string(unsigned int flags);
 int mode_to_flag(char c);

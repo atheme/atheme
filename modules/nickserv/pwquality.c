@@ -125,7 +125,7 @@ pwquality_config_check(void)
 }
 
 static void
-pwquality_register_hook(hook_user_register_check_t *const restrict hdata)
+pwquality_register_hook(struct hook_user_register_check *const restrict hdata)
 {
 	return_if_fail(hdata != NULL);
 	return_if_fail(hdata->si != NULL);

@@ -137,7 +137,7 @@ enforce_timeout_check(void *arg)
 }
 
 static void
-check_enforce(hook_nick_enforce_t *hdata)
+check_enforce(struct hook_nick_enforce *hdata)
 {
 	struct enforce_timeout *timeout, *timeout2;
 	mowgli_node_t *n;
@@ -225,7 +225,7 @@ check_enforce_all(struct myuser *mu)
 		u = user_find(mn->nick);
 		if (u != NULL && u->myuser != mn->owner &&
 				!myuser_access_verify(u, mn->owner))
-			check_enforce(&(hook_nick_enforce_t){ .u = u, .mn = mn });
+			check_enforce(&(struct hook_nick_enforce){ .u = u, .mn = mn });
 	}
 }
 
@@ -580,14 +580,14 @@ enforce_remove_enforcers(void *arg)
 }
 
 static void
-show_enforce(hook_user_req_t *hdata)
+show_enforce(struct hook_user_req *hdata)
 {
 	if (metadata_find(hdata->mu, "private:doenforce"))
 		command_success_nodata(hdata->si, _("%s has enabled nick protection"), entity(hdata->mu)->name);
 }
 
 static void
-check_registration(hook_user_register_check_t *hdata)
+check_registration(struct hook_user_register_check *hdata)
 {
 	int prefixlen;
 

@@ -119,7 +119,7 @@ grant_channel_access_hook(struct user *u)
 }
 
 static void
-user_info_hook(hook_user_req_t *req)
+user_info_hook(struct hook_user_req *req)
 {
 	static char buf[BUFSIZE];
 	mowgli_node_t *n;
@@ -150,7 +150,7 @@ user_info_hook(hook_user_req_t *req)
 }
 
 static void
-sasl_may_impersonate_hook(hook_sasl_may_impersonate_t *req)
+sasl_may_impersonate_hook(struct hook_sasl_may_impersonate *req)
 {
 	char priv[BUFSIZE];
 	mowgli_list_t *l;

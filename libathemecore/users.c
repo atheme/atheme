@@ -87,7 +87,7 @@ user_add(const char *nick, const char *user, const char *host,
 	struct server *server, time_t ts)
 {
 	struct user *u, *u2;
-	hook_user_nick_t hdata;
+	struct hook_user_nick hdata;
 
 	slog(LG_DEBUG, "user_add(): %s (%s@%s) -> %s", nick, user, host, server->name);
 
@@ -225,8 +225,7 @@ user_delete(struct user *u, const char *comment)
 
 	slog(LG_DEBUG, "user_delete(): removing user: %s -> %s (%s)", u->nick, u->server->name, comment);
 
-	hook_call_user_delete_info((&(hook_user_delete_t){ .u = u,
-				.comment = comment}));
+	hook_call_user_delete_info((&(struct hook_user_delete_info){.u = u, .comment = comment}));
 	hook_call_user_delete(u);
 
 	u->server->users--;
@@ -404,7 +403,7 @@ user_changenick(struct user *u, const char *nick, time_t ts)
 	struct user *u2;
 	char oldnick[NICKLEN + 1];
 	bool doenforcer = false;
-	hook_user_nick_t hdata;
+	struct hook_user_nick hdata;
 
 	return_val_if_fail(u != NULL, false);
 	return_val_if_fail(nick != NULL, false);

@@ -353,7 +353,7 @@ migrate_all(struct sourceinfo *si)
 }
 
 static void
-nick_ungroup_hook(hook_user_req_t *hdata)
+nick_ungroup_hook(struct hook_user_req *hdata)
 {
 	struct myuser *mu = hdata->mu;
 	mowgli_list_t *l = multimark_list(mu);
@@ -460,7 +460,7 @@ account_register_hook(struct myuser *mu)
 }
 
 static void
-nick_group_hook(hook_user_req_t *hdata)
+nick_group_hook(struct hook_user_req *hdata)
 {
 	struct myuser *smu = hdata->si->smu;
 	mowgli_list_t *l;
@@ -516,7 +516,7 @@ nick_group_hook(hook_user_req_t *hdata)
 }
 
 static void
-show_multimark(hook_user_req_t *hdata)
+show_multimark(struct hook_user_req *hdata)
 {
 	mowgli_list_t *l;
 
@@ -647,7 +647,7 @@ show_multimark(hook_user_req_t *hdata)
 }
 
 static void
-show_multimark_noexist(hook_info_noexist_req_t *hdata)
+show_multimark_noexist(struct hook_info_noexist_req *hdata)
 {
 	const char *nick = hdata->nick;
 
@@ -711,7 +711,7 @@ show_multimark_noexist(hook_info_noexist_req_t *hdata)
 }
 
 static void
-multimark_needforce(hook_user_needforce_t *hdata)
+multimark_needforce(struct hook_user_needforce *hdata)
 {
 	struct myuser *mu;
 	bool marked;

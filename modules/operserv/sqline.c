@@ -14,7 +14,7 @@
 static mowgli_patricia_t *os_sqline_cmds = NULL;
 
 static void
-os_sqline_newuser(hook_user_nick_t *data)
+os_sqline_newuser(struct hook_user_nick *data)
 {
 	struct user *u = data->u;
 	struct qline *q;
@@ -36,7 +36,7 @@ os_sqline_newuser(hook_user_nick_t *data)
 }
 
 static void
-os_sqline_chanjoin(hook_channel_joinpart_t *hdata)
+os_sqline_chanjoin(struct hook_channel_joinpart *hdata)
 {
 	struct chanuser *cu = hdata->cu;
 	struct qline *q;

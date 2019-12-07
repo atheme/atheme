@@ -10,13 +10,6 @@
 
 #include <atheme.h>
 
-typedef struct {
-        const char *host;
-	struct sourceinfo *si;
-	int approved;
-	const char *target;
-} hook_host_request_t;
-
 /*
  * do_sethost(struct user *u, char *host)
  *

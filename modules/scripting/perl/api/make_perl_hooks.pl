@@ -11,26 +11,35 @@ my %arg_types;
 # XXX: Types we haven't exposed to perl yet. Remove these if they do become supported.
 # THIS LIST IS NOT A SUBSTITUTE FOR ACTUALLY DEFINING HOOK STRUCTURES. IT IS FOR STRUCTURES
 # WITH MEMBERS THAT WE CAN'T SUPPORT YET.
-my @unsupported_types = ( 'database_handle_t', 'sasl_message_t',
-    'hook_module_load_t', 'hook_myentity_req_t', 'hook_host_request_t',
-    'hook_channel_acl_req_t', 'hook_email_canonicalize_t', 'mygroup_t' );
+my @unsupported_types = (
+	'struct database_handle',
+	'struct hook_channel_acl_req',
+	'struct hook_host_request',
+	'struct hook_module_load',
+	'struct hook_myentity_req',
+	'struct hook_user_login_check',
+	'struct hook_user_logout_check',
+	'struct hook_user_rename_check',
+	'struct mygroup',
+	'struct sasl_message',
+);
 
 # Types that need special handling. Define the dispatch for these, but the handler
 # functions themselves are hand-written.
-my @special_types = ( 'hook_expiry_req_t' );
+my @special_types = ( 'struct hook_expiry_req' );
 
 # XXX: Duplication here with the typedefs in Atheme.xs.
 my %perl_api_types = (
-	sourceinfo_t => 'Atheme::Sourceinfo',
-	user_t => 'Atheme::User',
-	channel_t => 'Atheme::Channel',
-	chanuser_t => 'Atheme::ChanUser',
-	server_t => 'Atheme::Server',
-	service_t => 'Atheme::Service',
-	myuser_t => 'Atheme::Account',
-	mynick_t => 'Atheme::NickRegistration',
-	mychan_t => 'Atheme::ChannelRegistration',
-	chanacs_t => 'Atheme::ChanAcs',
+	'struct chanacs'        => 'Atheme::ChanAcs',
+	'struct channel'        => 'Atheme::Channel',
+	'struct chanuser'       => 'Atheme::ChanUser',
+	'struct mychan'         => 'Atheme::ChannelRegistration',
+	'struct mynick'         => 'Atheme::NickRegistration',
+	'struct myuser'         => 'Atheme::Account',
+	'struct server'         => 'Atheme::Server',
+	'struct service'        => 'Atheme::Service',
+	'struct sourceinfo'     => 'Atheme::Sourceinfo',
+	'struct user'           => 'Atheme::User',
 
 	'char *' => [ sub { "sv_setpv($_[0], $_[1]);" }, sub { die "Don't know how to unmarshal a read-write string"; } ],
 	'const char *' => [ sub { "sv_setpv($_[0], $_[1]);" }, sub { die "Don't know how to unmarshal a read-write string"; } ],
@@ -44,95 +53,114 @@ my %perl_api_types = (
 # or an arrayref of [type, name], if the name on the perl side is to be different from the
 # member name in the structure. Prefix name with '+' if this value may be modified by the hook.
 my %hook_structs = (
-	hook_channel_joinpart_t => {
-		cu => [ 'chanuser_t', '+chanuser' ]
+
+	'struct hook_channel_joinpart' => {
+		'cu'            => [ 'struct chanuser', '+chanuser' ],
 	},
-	hook_cmessage_data_t => {
-		u => [ 'user_t', 'user' ],
-		c => [ 'channel_t', 'channel' ],
-		msg => [ 'char *', 'message' ],
+
+	'struct hook_channel_message' => {
+		'u'             => [ 'struct user', 'user' ],
+		'c'             => [ 'struct channel', 'channel' ],
+		'msg'           => [ 'char *', 'message' ],
 	},
-	hook_channel_topic_check_t => {
-		u => [ 'user_t', 'user' ],
-		s => [ 'server_t', 'server' ],
-		c => [ 'channel_t', 'channel' ],
-		setter => 'char *',
-		ts => 'time_t',
-		topic => [ 'char *', 'topic' ],
-		approved => [ 'int', '+approved' ],
+
+	'struct hook_channel_mode' => {
+		'u'             => [ 'struct user', 'user' ],
+		'c'             => [ 'struct channel', 'channel' ],
 	},
-	hook_channel_req_t => {
-		mc => [ 'mychan_t', 'channel' ],
-		si => [ 'sourceinfo_t', 'source' ],
+
+	'struct hook_channel_mode_change' => {
+		'cu'            => [ 'struct chanuser', 'chanuser' ],
+		'mchar'         => 'int',
+		'mvalue'        => 'int',
 	},
-	hook_channel_succession_req_t => {
-		mc => [ 'mychan_t', 'channel' ],
-		mu => [ 'myuser_t', '+account' ],
+
+	'struct hook_channel_register_check' => {
+		'si'            => [ 'struct sourceinfo', 'source' ],
+		'name'          => 'const char *',
+		'chan'          => [ 'struct channel', 'channel' ],
+		'approved'      => [ 'int', '+approved' ],
 	},
-	hook_channel_register_check_t => {
-		si => [ 'sourceinfo_t', 'source' ],
-		name => 'const char *',
-		chan => [ 'channel_t', 'channel' ],
-		approved => [ 'int', '+approved' ],
+
+	'struct hook_channel_req' => {
+		'mc'            => [ 'struct mychan', 'channel' ],
+		'si'            => [ 'struct sourceinfo', 'source' ],
 	},
-	hook_user_req_t => {
-		si => [ 'sourceinfo_t', 'source' ],
-		mu => [ 'myuser_t', 'account' ],
-		mn => [ 'mynick_t', 'nick' ],
+
+	'struct hook_channel_succession_req' => {
+		'mc'            => [ 'struct mychan', 'channel' ],
+		'mu'            => [ 'struct myuser', '+account' ],
 	},
-	hook_user_register_check_t => {
-		si => [ 'sourceinfo_t', 'source' ],
-		account => 'const char *',
-		email => 'const char *',
-		password => 'const char *',
-		approved => [ 'int', '+approved' ]
+
+	'struct hook_channel_topic_check' => {
+		'u'             => [ 'struct user', 'user' ],
+		's'             => [ 'struct server', 'server' ],
+		'c'             => [ 'struct channel', 'channel' ],
+		'setter'        => 'const char *',
+		'ts'            => 'time_t',
+		'topic'         => [ 'const char *', 'topic' ],
+		'approved'      => [ 'int', '+approved' ],
 	},
-	hook_nick_enforce_t => {
-		u => [ 'user_t', 'user' ],
-		mn => [ 'mynick_t', 'nick' ],
+
+	'struct hook_info_noexist_req' => {
+		'si'            => [ 'struct sourceinfo', 'source' ],
+		'nick'          => 'const char *',
 	},
-	hook_metadata_change_t => {
-		target => 'myuser_t',
-		name => 'const char *',
-		value => 'char *',
+
+	'struct hook_metadata_change' => {
+		'target'        => 'struct myuser',
+		'name'          => 'const char *',
+		'value'         => 'char *',
 	},
-	hook_user_rename_t => {
-		mu => [ 'myuser_t', 'account' ],
-		oldname => 'const char *',
+
+	'struct hook_nick_enforce' => {
+		'u'             => [ 'struct user', 'user' ],
+		'mn'            => [ 'struct mynick', 'nick' ],
 	},
-	hook_server_delete_t => {
-		s => [ 'server_t', 'server' ],
+
+	'struct hook_sasl_may_impersonate' => {
+		'source_mu'     => [ 'struct myuser', 'source' ],
+		'target_mu'     => [ 'struct myuser', 'target' ],
+		'allowed'       => [ 'int', '+allowed' ],
 	},
-	hook_user_nick_t => {
-		u => [ 'user_t', '+user' ],
-		oldnick => 'const char *',
+
+	'struct hook_server_delete' => {
+		's'             => [ 'struct server', 'server' ],
 	},
-	hook_channel_mode_t => {
-		u => [ 'user_t', 'user' ],
-		c => [ 'channel_t', 'channel' ],
+
+	'struct hook_user_delete_info' => {
+		'u'             => [ 'struct user', 'user' ],
+		'comment'       => 'const char *',
 	},
-	hook_channel_mode_change_t => {
-		cu => [ 'chanuser_t', 'chanuser' ],
-		mchar => 'int',
-		mvalue => 'int',
+
+	'struct hook_user_needforce' => {
+		'si'            => [ 'struct sourceinfo', 'source' ],
+		'mu'            => [ 'struct myuser', 'account' ],
+		'allowed'       => [ 'int', '+allowed' ],
 	},
-	hook_user_delete_t => {
-		u => [ 'user_t', 'user' ],
-		comment => 'const char *',
+
+	'struct hook_user_nick' => {
+		'u'             => [ 'struct user', '+user' ],
+		'oldnick'       => 'const char *',
 	},
-	hook_sasl_may_impersonate_t => {
-		source_mu => [ 'myuser_t', 'source' ],
-		target_mu => [ 'myuser_t', 'target' ],
-		allowed => [ 'int', '+allowed' ]
+
+	'struct hook_user_register_check' => {
+		'si'            => [ 'struct sourceinfo', 'source' ],
+		'account'       => 'const char *',
+		'email'         => 'const char *',
+		'password'      => 'const char *',
+		'approved'      => [ 'int', '+approved' ],
 	},
-	hook_info_noexist_req_t => {
-		si => [ 'sourceinfo_t', 'source' ],
-		nick => 'const char *'
+
+	'struct hook_user_rename' => {
+		'mu'            => [ 'struct myuser', 'account' ],
+		'oldname'       => 'const char *',
 	},
-	hook_user_needforce_t => {
-		si => [ 'sourceinfo_t', 'source' ],
-		mu => [ 'myuser_t', 'account' ],
-		allowed => [ 'int', '+allowed' ]
+
+	'struct hook_user_req' => {
+		'si'            => [ 'struct sourceinfo', 'source' ],
+		'mu'            => [ 'struct myuser', 'account' ],
+		'mn'            => [ 'struct mynick', 'nick' ],
 	},
 );
 
@@ -214,13 +242,16 @@ EOF
 foreach my $arg_type (sort keys %arg_types) {
 	next if ($arg_type eq 'void');
 
+	my $arg_type_underscored = $arg_type;
+	$arg_type_underscored =~ s/ /_/g;
+
 	if (defined $perl_api_types{$arg_type}) {
 		# Simple type. Straightforward marshaller.
 
 		my $conv_code = c_var_to_sv("data", $arg_type, "*psv");
 
 		print $outfile <<"EOF";
-static void perl_hook_marshal_$arg_type (perl_hook_marshal_direction_t dir, $arg_type * data, SV ** psv)
+static void perl_hook_marshal_$arg_type_underscored (perl_hook_marshal_direction_t dir, $arg_type * data, SV ** psv)
 { if (dir == PERL_HOOK_TO_PERL) $conv_code }
 
 EOF
@@ -255,7 +286,7 @@ EOF
 		}
 
 		print $outfile <<"EOF";
-static void perl_hook_marshal_$arg_type (perl_hook_marshal_direction_t dir, $arg_type * data, SV ** psv)
+static void perl_hook_marshal_$arg_type_underscored (perl_hook_marshal_direction_t dir, $arg_type * data, SV ** psv)
 {
 	if (dir == PERL_HOOK_TO_PERL)
 	{
@@ -312,11 +343,15 @@ EOF
 foreach my $hookname (sort keys %hooks) {
 	my $arg_type = $hooks{$hookname};
 	next if grep { $_ eq $arg_type } @special_types;
+
+	my $arg_type_underscored = $arg_type;
+	$arg_type_underscored =~ s/ /_/g;
+
 	print $outfile <<"EOF";
 static void perl_hook_$hookname ($arg_type * data)
 {
 	SV *arg;
-	perl_hook_marshal_$arg_type(PERL_HOOK_TO_PERL, data, &arg);
+	perl_hook_marshal_$arg_type_underscored(PERL_HOOK_TO_PERL, data, &arg);
 
 	dSP;
 	ENTER;
@@ -339,7 +374,7 @@ static void perl_hook_$hookname ($arg_type * data)
 	FREETMPS;
 	LEAVE;
 
-	perl_hook_marshal_$arg_type(PERL_HOOK_FROM_PERL, data, &arg);
+	perl_hook_marshal_$arg_type_underscored(PERL_HOOK_FROM_PERL, data, &arg);
 	SvREFCNT_dec(arg);
 	invalidate_object_references();
 }

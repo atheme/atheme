@@ -25,7 +25,7 @@ waitreg_infohook(struct sourceinfo *const restrict si)
 }
 
 static void
-waitreg_registerhook(hook_user_register_check_t *const restrict hdata)
+waitreg_registerhook(struct hook_user_register_check *const restrict hdata)
 {
 	if (! waitreg_time)
 		return;

@@ -50,7 +50,7 @@ user_identify_hook(struct user *u)
 }
 
 static void
-user_expiry_hook(hook_expiry_req_t *req)
+user_expiry_hook(struct hook_expiry_req *req)
 {
 	struct myuser *mu = req->data.mu;
 
@@ -62,7 +62,7 @@ user_expiry_hook(hook_expiry_req_t *req)
 }
 
 static void
-nick_expiry_hook(hook_expiry_req_t *req)
+nick_expiry_hook(struct hook_expiry_req *req)
 {
 	struct mynick *mn = req->data.mn;
 	struct myuser *mu = mn->owner;
@@ -75,7 +75,7 @@ nick_expiry_hook(hook_expiry_req_t *req)
 }
 
 static void
-info_hook(hook_user_req_t *hdata)
+info_hook(struct hook_user_req *hdata)
 {
 	if (metadata_find(hdata->mu, "private:vacation"))
 		command_success_nodata(hdata->si, _("%s is on vacation and has an extended expiry time"),

@@ -16,7 +16,7 @@ cs_xop_do_add(struct sourceinfo *si, struct mychan *mc, struct myentity *mt, cha
 	struct chanacs *ca;
 	unsigned int addflags = level, removeflags = ~level;
 	bool isnew;
-	hook_channel_acl_req_t req;
+	struct hook_channel_acl_req req;
 
 	if (!mt)
 	{
@@ -151,7 +151,7 @@ static void
 cs_xop_do_del(struct sourceinfo *si, struct mychan *mc, struct myentity *mt, char *target, unsigned int level, const char *leveldesc)
 {
 	struct chanacs *ca;
-	hook_channel_acl_req_t req;
+	struct hook_channel_acl_req req;
 
 	// let's finally make this sane.. --w00t
 	if (!mt)

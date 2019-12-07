@@ -27,7 +27,7 @@ ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 	enum specialoperation op = op_none;
 	bool ismarked = false;
 	char cmdtext[NICKLEN + 20];
-	hook_user_needforce_t needforce_hdata;
+	struct hook_user_needforce needforce_hdata;
 
 	if (!name)
 	{

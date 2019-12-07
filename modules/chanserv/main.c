@@ -255,7 +255,7 @@ c_ci_templates(mowgli_config_file_entry_t *ce)
 }
 
 static void
-cs_join(hook_channel_joinpart_t *hdata)
+cs_join(struct hook_channel_joinpart *hdata)
 {
 	struct chanuser *cu = hdata->cu;
 	struct user *u;
@@ -506,7 +506,7 @@ cs_join(hook_channel_joinpart_t *hdata)
 }
 
 static void
-cs_part(hook_channel_joinpart_t *hdata)
+cs_part(struct hook_channel_joinpart *hdata)
 {
 	struct chanuser *cu;
 	struct mychan *mc;
@@ -578,7 +578,7 @@ get_changets_user(struct mychan *mc)
 }
 
 static void
-cs_register(hook_channel_req_t *hdata)
+cs_register(struct hook_channel_req *hdata)
 {
 	struct mychan *mc;
 
@@ -597,7 +597,7 @@ cs_register(hook_channel_req_t *hdata)
 }
 
 static void
-cs_succession(hook_channel_succession_req_t *data)
+cs_succession(struct hook_channel_succession_req *data)
 {
 	chanacs_change_simple(data->mc, entity(data->mu), NULL, custom_founder_check(), 0, NULL);
 }
@@ -646,7 +646,7 @@ cs_keeptopic_topicset(struct channel *c)
 /* Called when a topic change is received from the network, before altering
  * our internal structures */
 static void
-cs_topiccheck(hook_channel_topic_check_t *data)
+cs_topiccheck(struct hook_channel_topic_check *data)
 {
 	struct mychan *mc;
 	unsigned int accessfl = 0;
@@ -839,7 +839,7 @@ cs_leave_empty(void *unused)
 }
 
 static void
-cs_bounce_mode_change(hook_channel_mode_change_t *data)
+cs_bounce_mode_change(struct hook_channel_mode_change *data)
 {
 	struct mychan *mc;
 	struct chanuser *cu;

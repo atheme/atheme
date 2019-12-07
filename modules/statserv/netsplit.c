@@ -40,7 +40,7 @@ netsplit_server_add(struct server *const restrict s)
 }
 
 static void
-netsplit_server_delete(hook_server_delete_t *const restrict serv)
+netsplit_server_delete(struct hook_server_delete *const restrict serv)
 {
 	struct netsplit *const s = mowgli_heap_alloc(split_heap);
 

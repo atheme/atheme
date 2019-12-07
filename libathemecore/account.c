@@ -233,11 +233,7 @@ myuser_delete(struct myuser *mu)
 
 			/* CA_FOUNDER | CA_FLAGS is the minimum required for full control; let chanserv take care of assigning the rest via founder_flags */
 			chanacs_change_simple(mc, entity(successor), NULL, CA_FOUNDER | CA_FLAGS, 0, NULL);
-			hook_call_channel_succession((
-					&(hook_channel_succession_req_t){
-						.mc = mc,
-						.mu = successor
-					}));
+			hook_call_channel_succession((&(struct hook_channel_succession_req){ .mc = mc, .mu = successor }));
 
 			if (chansvs.me != NULL)
 				myuser_notice(chansvs.nick, successor, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, entity(successor)->name);
@@ -349,7 +345,7 @@ myuser_rename(struct myuser *mu, const char *name)
 {
 	mowgli_node_t *n, *tn;
 	struct user *u;
-	hook_user_rename_t data;
+	struct hook_user_rename data;
 	stringref newname;
 	char nb[NICKLEN + 1];
 
@@ -1169,7 +1165,7 @@ struct myuser *
 mychan_pick_successor(struct mychan *mc)
 {
 	struct myuser *mu;
-	hook_channel_succession_req_t req;
+	struct hook_channel_succession_req req;
 
 	return_val_if_fail(mc != NULL, NULL);
 
@@ -1915,7 +1911,7 @@ bool
 chanacs_change(struct mychan *mychan, struct myentity *mt, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, struct myentity *setter)
 {
 	struct chanacs *ca;
-	hook_channel_acl_req_t req;
+	struct hook_channel_acl_req req;
 
 	/* wrt the second assert: only one of mu or hostmask can be not-NULL --nenolod */
 	return_val_if_fail(mychan != NULL, false);
@@ -2021,7 +2017,7 @@ chanacs_change_simple(struct mychan *mychan, struct myentity *mt, const char *ho
 static int
 expire_myuser_cb(struct myentity *mt, void *unused)
 {
-	hook_expiry_req_t req;
+	struct hook_expiry_req req;
 	struct myuser *mu = user(mt);
 
 	return_val_if_fail(isuser(mt), 0);
@@ -2074,7 +2070,7 @@ expire_check(void *arg)
 	struct mychan *mc;
 	struct user *u;
 	mowgli_patricia_iteration_state_t state;
-	hook_expiry_req_t req;
+	struct hook_expiry_req req;
 
 	/* Let them know about this and the likely subsequent db_save()
 	 * right away -- jilles */

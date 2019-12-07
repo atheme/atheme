@@ -25,73 +25,73 @@
 config_purge                    void
 config_ready                    void
 db_saved                        void
-db_write                        database_handle_t *
+db_write                        struct database_handle *
 # XXX: for groupserv.  remove when we have proper dependency resolution in opensex.
-db_write_pre_ca                 database_handle_t *
+db_write_pre_ca                 struct database_handle *
 shutdown                        void
 
 # (ircd)
-channel_add                     channel_t *
-channel_can_change_topic        hook_channel_topic_check_t *
-channel_delete                  channel_t *
-channel_join                    hook_channel_joinpart_t *
-channel_message                 hook_cmessage_data_t *
-channel_mode                    hook_channel_mode_t *
-channel_mode_change             hook_channel_mode_change_t *
-channel_part                    hook_channel_joinpart_t *
-channel_topic                   channel_t *
-channel_tschange                channel_t *
-server_add                      server_t *
-server_delete                   hook_server_delete_t *
-server_eob                      server_t *
-user_add                        hook_user_nick_t *
-user_away                       user_t *
-user_delete                     user_t *
-user_delete_info                hook_user_delete_t *
-user_deoper                     user_t *
-user_nickchange                 hook_user_nick_t *
-user_oper                       user_t *
+channel_add                     struct channel *
+channel_can_change_topic        struct hook_channel_topic_check *
+channel_delete                  struct channel *
+channel_join                    struct hook_channel_joinpart *
+channel_message                 struct hook_channel_message *
+channel_mode                    struct hook_channel_mode *
+channel_mode_change             struct hook_channel_mode_change *
+channel_part                    struct hook_channel_joinpart *
+channel_topic                   struct channel *
+channel_tschange                struct channel *
+server_add                      struct server *
+server_delete                   struct hook_server_delete *
+server_eob                      struct server *
+user_add                        struct hook_user_nick *
+user_away                       struct user *
+user_delete                     struct user *
+user_delete_info                struct hook_user_delete_info *
+user_deoper                     struct user *
+user_nickchange                 struct hook_user_nick *
+user_oper                       struct user *
 
 # (services)
-channel_acl_change              hook_channel_acl_req_t *
-channel_can_register            hook_channel_register_check_t *
-channel_check_expire            hook_expiry_req_t *
-channel_drop                    mychan_t *
-channel_info                    hook_channel_req_t *
-channel_pick_successor          hook_channel_succession_req_t *
-channel_register                hook_channel_req_t *
-channel_succession              hook_channel_succession_req_t *
-grant_channel_access            user_t *
-group_drop                      mygroup_t *
-group_register                  mygroup_t *
-host_request                    hook_host_request_t *
-metadata_change                 hook_metadata_change_t *
-module_load                     hook_module_load_t *
-myentity_find                   hook_myentity_req_t *
-myuser_delete                   myuser_t *
-nick_can_register               hook_user_register_check_t *
-nick_check                      user_t *
-nick_check_expire               hook_expiry_req_t *
-nick_enforce                    hook_nick_enforce_t *
-nick_group                      hook_user_req_t *
-nick_ungroup                    hook_user_req_t *
-operserv_info                   sourceinfo_t *
-service_introduce               service_t *
-user_can_login                  hook_user_login_check_t *
-user_can_logout                 hook_user_logout_check_t *
-user_can_register               hook_user_register_check_t *
-user_can_rename                 hook_user_rename_check_t *
-user_check_expire               hook_expiry_req_t *
-user_drop                       myuser_t *
-user_identify                   user_t *
-user_info                       hook_user_req_t *
-user_info_noexist               hook_info_noexist_req_t *
-user_needforce                  hook_user_needforce_t *
-user_register                   myuser_t *
-user_rename                     hook_user_rename_t *
-user_sethost                    user_t *
-user_verify_register            hook_user_req_t *
+channel_acl_change              struct hook_channel_acl_req *
+channel_can_register            struct hook_channel_register_check *
+channel_check_expire            struct hook_expiry_req *
+channel_drop                    struct mychan *
+channel_info                    struct hook_channel_req *
+channel_pick_successor          struct hook_channel_succession_req *
+channel_register                struct hook_channel_req *
+channel_succession              struct hook_channel_succession_req *
+grant_channel_access            struct user *
+group_drop                      struct mygroup *
+group_register                  struct mygroup *
+host_request                    struct hook_host_request *
+metadata_change                 struct hook_metadata_change *
+module_load                     struct hook_module_load *
+myentity_find                   struct hook_myentity_req *
+myuser_delete                   struct myuser *
+nick_can_register               struct hook_user_register_check *
+nick_check                      struct user *
+nick_check_expire               struct hook_expiry_req *
+nick_enforce                    struct hook_nick_enforce *
+nick_group                      struct hook_user_req *
+nick_ungroup                    struct hook_user_req *
+operserv_info                   struct sourceinfo *
+service_introduce               struct service *
+user_can_login                  struct hook_user_login_check *
+user_can_logout                 struct hook_user_logout_check *
+user_can_register               struct hook_user_register_check *
+user_can_rename                 struct hook_user_rename_check *
+user_check_expire               struct hook_expiry_req *
+user_drop                       struct myuser *
+user_identify                   struct user *
+user_info                       struct hook_user_req *
+user_info_noexist               struct hook_info_noexist_req *
+user_needforce                  struct hook_user_needforce *
+user_register                   struct myuser *
+user_rename                     struct hook_user_rename *
+user_sethost                    struct user *
+user_verify_register            struct hook_user_req *
 
 # (sasl)
-sasl_input                      sasl_message_t *
-sasl_may_impersonate            hook_sasl_may_impersonate_t *
+sasl_input                      struct sasl_message *
+sasl_may_impersonate            struct hook_sasl_may_impersonate *

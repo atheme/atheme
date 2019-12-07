@@ -21,7 +21,7 @@ ns_cmd_set_property(struct sourceinfo *si, int parc, char *parv[])
 	unsigned int count;
 	mowgli_patricia_iteration_state_t state;
 	struct metadata *md;
-	hook_metadata_change_t mdchange;
+	struct hook_metadata_change mdchange;
 
 	if (!property)
 	{

@@ -12,7 +12,7 @@
 static unsigned int successor_flag = 0;
 
 static void
-channel_pick_successor_hook(hook_channel_succession_req_t *req)
+channel_pick_successor_hook(struct hook_channel_succession_req *req)
 {
 	return_if_fail(req != NULL);
 	return_if_fail(req->mc != NULL);
@@ -27,7 +27,7 @@ channel_pick_successor_hook(hook_channel_succession_req_t *req)
 }
 
 static void
-channel_succession_hook(hook_channel_succession_req_t *req)
+channel_succession_hook(struct hook_channel_succession_req *req)
 {
 	return_if_fail(req != NULL);
 	return_if_fail(req->mc != NULL);

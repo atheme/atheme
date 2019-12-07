@@ -226,7 +226,7 @@ sasl_may_impersonate(struct myuser *const source_mu, struct myuser *const target
 		return true;
 
 	// Allow modules to check too
-	hook_sasl_may_impersonate_t req = {
+	struct hook_sasl_may_impersonate req = {
 
 		.source_mu = source_mu,
 		.target_mu = target_mu,
@@ -745,7 +745,7 @@ sasl_input_startauth(const struct sasl_message *const restrict smsg, struct sasl
 		(void) slog(LG_DEBUG, "%s: user %s ('%s') is logged in as '%s' -- executing user_can_logout hooks",
 		                      MOWGLI_FUNC_NAME, p->uid, u->nick, entity(u->myuser)->name);
 
-		hook_user_logout_check_t req = {
+		struct hook_user_logout_check req = {
 			.si      = p->si,
 			.u       = u,
 			.allowed = true,
@@ -872,7 +872,7 @@ sasl_input(struct sasl_message *const restrict smsg)
 }
 
 static void
-sasl_user_add(hook_user_nick_t *const restrict data)
+sasl_user_add(struct hook_user_nick *const restrict data)
 {
 	// If the user has been killed, don't do anything.
 	struct user *const u = data->u;
@@ -982,7 +982,7 @@ sasl_authxid_can_login(struct sasl_session *const restrict p, const char *const 
 		// We have already executed the user_can_login hook for this user
 		return true;
 
-	hook_user_login_check_t req = {
+	struct hook_user_login_check req = {
 
 		.si         = p->si,
 		.mu         = mu,

@@ -327,7 +327,7 @@ update_role_entry(struct sourceinfo *si, struct mychan *mc, const char *role, un
 	mowgli_node_t *n, *tn;
 	struct chanacs *ca;
 	unsigned int changes = 0;
-	hook_channel_acl_req_t req;
+	struct hook_channel_acl_req req;
 
 	flagstr = bitmask_to_flags2(flags, 0);
 	oldflags = get_template_flags(mc, role);
@@ -641,7 +641,7 @@ cs_cmd_access_del(struct sourceinfo *si, int parc, char *parv[])
 	struct chanacs *ca;
 	struct myentity *mt;
 	struct mychan *mc;
-	hook_channel_acl_req_t req;
+	struct hook_channel_acl_req req;
 	unsigned int restrictflags;
 	const char *channel = parv[0];
 	const char *target = parv[1];
@@ -747,7 +747,7 @@ cs_cmd_access_add(struct sourceinfo *si, int parc, char *parv[])
 	struct chanacs *ca;
 	struct myentity *mt = NULL;
 	struct mychan *mc;
-	hook_channel_acl_req_t req;
+	struct hook_channel_acl_req req;
 	unsigned int oldflags, restrictflags;
 	unsigned int newflags, addflags, removeflags;
 	const char *channel = parv[0];
@@ -896,7 +896,7 @@ cs_cmd_access_set(struct sourceinfo *si, int parc, char *parv[])
 	struct chanacs *ca;
 	struct myentity *mt = NULL;
 	struct mychan *mc;
-	hook_channel_acl_req_t req;
+	struct hook_channel_acl_req req;
 	unsigned int oldflags, restrictflags;
 	unsigned int newflags, addflags, removeflags;
 	const char *channel = parv[0];

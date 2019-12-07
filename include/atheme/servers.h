@@ -42,12 +42,6 @@ struct tld
 	char *  name;
 };
 
-/* server related hooks */
-typedef struct {
-	struct server * s;
-	/* space for reason etc here */
-} hook_server_delete_t;
-
 #define SERVER_NAME(serv)	(((serv)->sid && ircd->uses_uid) ? (serv)->sid : (serv)->name)
 #define ME			(ircd->uses_uid ? me.numeric : me.name)
 

@@ -13,8 +13,8 @@ static void
 ns_cmd_group(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mynick *mn;
-	hook_user_req_t hdata;
-	hook_user_register_check_t hdata_reg;
+	struct hook_user_req hdata;
+	struct hook_user_register_check hdata_reg;
 
 	if (si->su == NULL)
 	{
@@ -80,7 +80,7 @@ ns_cmd_ungroup(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mynick *mn;
 	const char *target;
-	hook_user_req_t hdata;
+	struct hook_user_req hdata;
 
 	if (parc >= 1)
 		target = parv[0];
@@ -121,7 +121,7 @@ ns_cmd_fungroup(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mynick *mn, *mn2 = NULL;
 	struct myuser *mu;
-	hook_user_req_t hdata;
+	struct hook_user_req hdata;
 
 	if (parc < 1)
 	{

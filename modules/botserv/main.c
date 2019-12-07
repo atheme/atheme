@@ -920,7 +920,7 @@ on_shutdown(void *unused)
 }
 
 static void
-bs_join(hook_channel_joinpart_t *hdata)
+bs_join(struct hook_channel_joinpart *hdata)
 {
 	struct chanuser *cu = hdata->cu;
 	struct channel *chan;
@@ -964,7 +964,7 @@ bs_join(hook_channel_joinpart_t *hdata)
 }
 
 static void
-bs_part(hook_channel_joinpart_t *hdata)
+bs_part(struct hook_channel_joinpart *hdata)
 {
 	struct chanuser *cu;
 	struct mychan *mc;

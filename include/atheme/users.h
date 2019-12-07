@@ -60,16 +60,6 @@ struct user
 
 #define CLIENT_NAME(user)	((user)->uid != NULL ? (user)->uid : (user)->nick)
 
-typedef struct {
-	struct user *    u;             // User in question. Write NULL here if you delete the user
-	const char *     oldnick;       // Previous nick for nick changes. u->nick is the new nick
-} hook_user_nick_t;
-
-typedef struct {
-	struct user * const     u;
-	const char *            comment;
-} hook_user_delete_t;
-
 /* function.c */
 bool is_internal_client(struct user *user);
 bool is_autokline_exempt(struct user *user);

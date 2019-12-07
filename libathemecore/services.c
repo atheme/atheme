@@ -401,9 +401,9 @@ handle_nickchange(struct user *const restrict u)
 	(void) hook_call_nick_check(u);
 }
 
-bool ircd_logout_or_kill(user_t *u, const char *login)
+bool ircd_logout_or_kill(struct user *u, const char *login)
 {
-	hook_user_logout_check_t req = {
+	struct hook_user_logout_check req = {
 		.si      = NULL,
 		.u       = u,
 		.allowed = true,
@@ -609,7 +609,7 @@ handle_certfp(struct sourceinfo *si, struct user *u, const char *certfp)
 	struct myuser *mu;
 	struct mycertfp *mcfp;
 	struct service *svs;
-	hook_user_login_check_t req;
+	struct hook_user_login_check req;
 
 	sfree(u->certfp);
 	u->certfp = sstrdup(certfp);

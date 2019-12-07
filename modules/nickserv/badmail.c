@@ -54,7 +54,7 @@ db_h_be(struct database_handle *db, const char *type)
 }
 
 static void
-check_registration(hook_user_register_check_t *hdata)
+check_registration(struct hook_user_register_check *hdata)
 {
 	mowgli_node_t *n;
 	struct badmail *l;
