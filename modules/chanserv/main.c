@@ -272,65 +272,6 @@ chanuser_sync(struct hook_chanuser_sync *hdata)
 
 	bool noop = (mc->flags & MC_NOOP) || (u->myuser != NULL && u->myuser->flags & MU_NOOP);
 
-	// AKICKs
-	if (flags & CA_AKICK && !(flags & CA_EXEMPT))
-	{
-		// Stay on channel if this would empty it -- jilles
-		if (chan->nummembers - chan->numsvcmembers == 1)
-		{
-			mc->flags |= MC_INHABIT;
-			if (chan->numsvcmembers == 0)
-				join(chan->name, chansvs.nick);
-		}
-
-		// use a user-given ban mask if possible -- jilles
-		struct chanacs *ca = chanacs_find_host_by_user(mc, u, CA_AKICK);
-		if (ca != NULL)
-		{
-			if (chanban_find(chan, ca->host, 'b') == NULL)
-			{
-				chanban_add(chan, ca->host, 'b');
-				modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'b', ca->host);
-				modestack_flush_channel(chan);
-			}
-		}
-		else
-		{
-			// XXX this could be done more efficiently
-			ca = chanacs_find(mc, entity(u->myuser), CA_AKICK);
-			ban(chansvs.me->me, chan, u);
-		}
-		remove_ban_exceptions(chansvs.me->me, chan, u);
-
-		char akickreason[120] = "User is banned from this channel", *p;
-
-		if (ca != NULL)
-		{
-			struct metadata *md = metadata_find(ca, "reason");
-			if (md != NULL && *md->value != '|')
-			{
-				snprintf(akickreason, sizeof akickreason,
-						"Banned: %s", md->value);
-				p = strchr(akickreason, '|');
-				if (p != NULL)
-					*p = '\0';
-				else
-					p = akickreason + strlen(akickreason);
-				/* strip trailing spaces, so as not to
-				 * disclose the existence of an oper reason */
-				p--;
-				while (p > akickreason && *p == ' ')
-					p--;
-				p[1] = '\0';
-			}
-		}
-		if (try_kick(chansvs.me->me, chan, u, akickreason))
-		{
-			hdata->cu = NULL;
-			return;
-		}
-	}
-
 	if (ircd->uses_owner)
 	{
 		if (flags & CA_USEOWNER)
