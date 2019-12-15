@@ -56,6 +56,28 @@ cs_cmd_set_url(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("The URL of \2%s\2 has been set to \2%s\2."), parv[0], url);
 }
 
+static void
+send_url(struct hook_channel_joinpart *hdata)
+{
+	struct chanuser *cu = hdata->cu;
+
+	if (cu == NULL || is_internal_client(cu->user))
+		return;
+
+	struct mychan *mc = mychan_find(cu->chan->name);
+	if (mc == NULL)
+		return;
+
+	struct user *u = cu->user;
+	// Don't (re-)send on-join messages during burst
+	if (!(u->server->flags & SF_EOB))
+		return;
+
+	struct metadata *md = metadata_find(mc, "url");
+	if (md)
+		numeric_sts(me.me, 328, u, "%s :%s", mc->name, md->value);
+}
+
 static struct command cs_set_url = {
 	.name           = "URL",
 	.desc           = N_("Sets the channel URL."),
@@ -71,11 +93,13 @@ mod_init(struct module *const restrict m)
 	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree")
 
 	command_add(&cs_set_url, *cs_set_cmdtree);
+	hook_add_channel_join(&send_url);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
+	hook_del_channel_join(&send_url);
 	command_delete(&cs_set_url, *cs_set_cmdtree);
 }
 

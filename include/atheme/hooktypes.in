@@ -12,9 +12,10 @@
 # structure to indicate what should happen. They are not allowed to destroy
 # the object.
 #
-# The hooks channel_join, user_add, and user_nickchange, may destroy the
-# object by setting the pointer in the argument structure to NULL, deleting
-# the object from Atheme's state and sending an appropriate message to ircd.
+# The hooks channel_join, chanuser_sync, user_add, and user_nickchange,
+# may destroy the object by setting the pointer in the argument structure
+# to NULL, deleting the object from Atheme's state and sending an appropriate
+# message to ircd.
 # Note that channel_join may kick the user, but may not clear the channel.
 #
 # Most other hooks may not destroy the object or prevent the action.
@@ -61,7 +62,7 @@ channel_info                    struct hook_channel_req *
 channel_pick_successor          struct hook_channel_succession_req *
 channel_register                struct hook_channel_req *
 channel_succession              struct hook_channel_succession_req *
-grant_channel_access            struct user *
+chanuser_sync                   struct hook_chanuser_sync *
 group_drop                      struct mygroup *
 group_register                  struct mygroup *
 host_request                    struct hook_host_request *

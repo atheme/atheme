@@ -34,91 +34,6 @@ mygroup_expire(void *unused)
 }
 
 static void
-grant_channel_access_hook(struct user *u)
-{
-	mowgli_node_t *n, *tn;
-	mowgli_list_t *l;
-
-	return_if_fail(u->myuser != NULL);
-
-	l = myentity_get_membership_list(entity(u->myuser));
-
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, l->head)
-	{
-		struct groupacs *ga = n->data;
-
-		if (!(ga->flags & GA_CHANACS))
-			continue;
-
-		MOWGLI_ITER_FOREACH(n, entity(ga->mg)->chanacs.head)
-		{
-			struct chanacs *ca;
-			struct chanuser *cu;
-
-			ca = (struct chanacs *)n->data;
-
-			if (ca->mychan->chan == NULL)
-				continue;
-
-			cu = chanuser_find(ca->mychan->chan, u);
-			if (cu && chansvs.me != NULL)
-			{
-				if (ca->level & CA_AKICK && !(ca->level & CA_EXEMPT))
-				{
-					// Stay on channel if this would empty it -- jilles
-					if (ca->mychan->chan->nummembers - ca->mychan->chan->numsvcmembers == 1)
-					{
-						ca->mychan->flags |= MC_INHABIT;
-						if (ca->mychan->chan->numsvcmembers == 0)
-							join(cu->chan->name, chansvs.nick);
-					}
-					ban(chansvs.me->me, ca->mychan->chan, u);
-					remove_ban_exceptions(chansvs.me->me, ca->mychan->chan, u);
-					kick(chansvs.me->me, ca->mychan->chan, u, "User is banned from this channel");
-					continue;
-				}
-
-				if (ca->level & CA_USEDUPDATE)
-					ca->mychan->used = CURRTIME;
-
-				if (ca->mychan->flags & MC_NOOP || u->myuser->flags & MU_NOOP)
-					continue;
-
-				if (ircd->uses_owner && !(cu->modes & ircd->owner_mode) && ca->level & CA_AUTOOP && ca->level & CA_USEOWNER)
-				{
-					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(u));
-					cu->modes |= ircd->owner_mode;
-				}
-
-				if (ircd->uses_protect && !(cu->modes & ircd->protect_mode) && !(ircd->uses_owner && cu->modes & ircd->owner_mode) && ca->level & CA_AUTOOP && ca->level & CA_USEPROTECT)
-				{
-					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(u));
-					cu->modes |= ircd->protect_mode;
-				}
-
-				if (!(cu->modes & CSTATUS_OP) && ca->level & CA_AUTOOP)
-				{
-					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, 'o', CLIENT_NAME(u));
-					cu->modes |= CSTATUS_OP;
-				}
-
-				if (ircd->uses_halfops && !(cu->modes & (CSTATUS_OP | ircd->halfops_mode)) && ca->level & CA_AUTOHALFOP)
-				{
-					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, 'h', CLIENT_NAME(u));
-					cu->modes |= ircd->halfops_mode;
-				}
-
-				if (!(cu->modes & (CSTATUS_OP | ircd->halfops_mode | CSTATUS_VOICE)) && ca->level & CA_AUTOVOICE)
-				{
-					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, 'v', CLIENT_NAME(u));
-					cu->modes |= CSTATUS_VOICE;
-				}
-			}
-		}
-	}
-}
-
-static void
 user_info_hook(struct hook_user_req *req)
 {
 	static char buf[BUFSIZE];
@@ -212,7 +127,6 @@ gs_hooks_init(void)
 
 	hook_add_user_info(user_info_hook);
 	hook_add_myuser_delete(myuser_delete_hook);
-	hook_add_grant_channel_access(grant_channel_access_hook);
 	hook_add_operserv_info(osinfo_hook);
 	hook_add_sasl_may_impersonate(sasl_may_impersonate_hook);
 }
@@ -224,7 +138,6 @@ gs_hooks_deinit(void)
 
 	hook_del_user_info(user_info_hook);
 	hook_del_myuser_delete(myuser_delete_hook);
-	hook_del_grant_channel_access(grant_channel_access_hook);
 	hook_del_operserv_info(osinfo_hook);
 	hook_del_sasl_may_impersonate(sasl_may_impersonate_hook);
 }

@@ -255,6 +255,104 @@ c_ci_templates(mowgli_config_file_entry_t *ce)
 }
 
 static void
+chanuser_sync(struct hook_chanuser_sync *hdata)
+{
+	struct chanuser *cu    = hdata->cu;
+	bool             take  = hdata->take_prefixes;
+	unsigned int     flags = hdata->flags;
+
+	if (!cu)
+		return;
+
+	struct channel *chan = cu->chan;
+	struct user    *u    = cu->user;
+	struct mychan  *mc   = chan->mychan;
+
+	return_if_fail(mc != NULL);
+
+	bool noop = (mc->flags & MC_NOOP) || (u->myuser != NULL && u->myuser->flags & MU_NOOP);
+
+	if (ircd->uses_owner)
+	{
+		if (flags & CA_USEOWNER)
+		{
+			if (flags & CA_AUTOOP && !(noop || cu->modes & ircd->owner_mode))
+			{
+				modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(u));
+				cu->modes |= ircd->owner_mode;
+			}
+		}
+		else if (take && (cu->modes & ircd->owner_mode))
+		{
+			modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, ircd->owner_mchar[1], CLIENT_NAME(u));
+			cu->modes &= ~ircd->owner_mode;
+		}
+	}
+
+	if (ircd->uses_protect)
+	{
+		if (flags & CA_USEPROTECT)
+		{
+			if (flags & CA_AUTOOP && !(noop || cu->modes & ircd->protect_mode || (ircd->uses_owner && cu->modes & ircd->owner_mode)))
+			{
+				modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(u));
+				cu->modes |= ircd->protect_mode;
+			}
+		}
+		else if (take && (cu->modes & ircd->protect_mode))
+		{
+			modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, ircd->protect_mchar[1], CLIENT_NAME(u));
+			cu->modes &= ~ircd->protect_mode;
+		}
+	}
+
+	if (flags & CA_AUTOOP)
+	{
+		if (!(noop || cu->modes & CSTATUS_OP))
+		{
+			modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'o', CLIENT_NAME(u));
+			cu->modes |= CSTATUS_OP;
+		}
+	}
+	else if (take && (cu->modes & CSTATUS_OP) && !(flags & CA_OP) && !is_service(cu->user))
+	{
+		modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, 'o', CLIENT_NAME(u));
+		cu->modes &= ~CSTATUS_OP;
+	}
+
+	if (ircd->uses_halfops)
+	{
+		if (flags & CA_AUTOHALFOP)
+		{
+			if (!(noop || cu->modes & (CSTATUS_OP | ircd->halfops_mode)))
+			{
+				modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'h', CLIENT_NAME(u));
+				cu->modes |= ircd->halfops_mode;
+			}
+		}
+		else if (take && (cu->modes & ircd->halfops_mode) && !(flags & CA_HALFOP))
+		{
+			modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, 'h', CLIENT_NAME(u));
+			cu->modes &= ~ircd->halfops_mode;
+		}
+	}
+
+	if (flags & CA_AUTOVOICE)
+	{
+		if (!(noop || cu->modes & (CSTATUS_OP | ircd->halfops_mode | CSTATUS_VOICE)))
+		{
+			modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'v', CLIENT_NAME(u));
+			cu->modes |= CSTATUS_VOICE;
+		}
+	}
+	else if (take && (cu->modes & CSTATUS_VOICE) && !(flags & CA_VOICE))
+	{
+		modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, 'v', CLIENT_NAME(u));
+		cu->modes &= ~CSTATUS_VOICE;
+	}
+}
+
+static void
 cs_join(struct hook_channel_joinpart *hdata)
 {
 	struct chanuser *cu = hdata->cu;
@@ -266,7 +364,6 @@ cs_join(struct hook_channel_joinpart *hdata)
 	bool secure;
 	struct metadata *md;
 	struct chanacs *ca2;
-	char akickreason[120] = "User is banned from this channel", *p;
 
 	if (cu == NULL || is_internal_client(cu->user))
 		return;
@@ -289,88 +386,6 @@ cs_join(struct hook_channel_joinpart *hdata)
 	if (chan->nummembers == 1 && mc->flags & MC_GUARD &&
 		metadata_find(mc, "private:botserv:bot-assigned") == NULL)
 		join(chan->name, chansvs.nick);
-
-	/* CS SET RESTRICTED: if they don't have any access (excluding AKICK)
-	 * or special privs to join restricted chans, boot them. -- w00t
-	 */
-	if ((mc->flags & MC_RESTRICTED) && !(flags & CA_ALLPRIVS) && !has_priv_user(u, PRIV_JOIN_STAFFONLY))
-	{
-		// Stay on channel if this would empty it -- jilles
-		if (chan->nummembers - chan->numsvcmembers == 1)
-		{
-			mc->flags |= MC_INHABIT;
-			if (chan->numsvcmembers == 0)
-				join(chan->name, chansvs.nick);
-		}
-		if (mc->mlock_on & CMODE_INVITE || chan->modes & CMODE_INVITE)
-		{
-			if (!(chan->modes & CMODE_INVITE))
-				check_modes(mc, true);
-			remove_banlike(chansvs.me->me, chan, ircd->invex_mchar, u);
-			modestack_flush_channel(chan);
-		}
-		else
-		{
-			ban(chansvs.me->me, chan, u);
-			remove_ban_exceptions(chansvs.me->me, chan, u);
-		}
-		try_kick(chansvs.me->me, chan, u, "You are not authorized to be on this channel");
-		hdata->cu = NULL;
-		return;
-	}
-
-	if (flags & CA_AKICK && !(flags & CA_EXEMPT))
-	{
-		// Stay on channel if this would empty it -- jilles
-		if (chan->nummembers - chan->numsvcmembers == 1)
-		{
-			mc->flags |= MC_INHABIT;
-			if (chan->numsvcmembers == 0)
-				join(chan->name, chansvs.nick);
-		}
-
-		// use a user-given ban mask if possible -- jilles
-		ca2 = chanacs_find_host_by_user(mc, u, CA_AKICK);
-		if (ca2 != NULL)
-		{
-			if (chanban_find(chan, ca2->host, 'b') == NULL)
-			{
-				chanban_add(chan, ca2->host, 'b');
-				modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'b', ca2->host);
-				modestack_flush_channel(chan);
-			}
-		}
-		else
-		{
-			// XXX this could be done more efficiently
-			ca2 = chanacs_find(mc, entity(u->myuser), CA_AKICK);
-			ban(chansvs.me->me, chan, u);
-		}
-		remove_ban_exceptions(chansvs.me->me, chan, u);
-		if (ca2 != NULL)
-		{
-			md = metadata_find(ca2, "reason");
-			if (md != NULL && *md->value != '|')
-			{
-				snprintf(akickreason, sizeof akickreason,
-						"Banned: %s", md->value);
-				p = strchr(akickreason, '|');
-				if (p != NULL)
-					*p = '\0';
-				else
-					p = akickreason + strlen(akickreason);
-				/* strip trailing spaces, so as not to
-				 * disclose the existence of an oper reason */
-				p--;
-				while (p > akickreason && *p == ' ')
-					p--;
-				p[1] = '\0';
-			}
-		}
-		try_kick(chansvs.me->me, chan, u, akickreason);
-		hdata->cu = NULL;
-		return;
-	}
 
 	/* Kick out users who may be recreating channels mlocked +i.
 	 * Users with +i flag are allowed to join, as are users matching
@@ -397,7 +412,22 @@ cs_join(struct hook_channel_joinpart *hdata)
 		if (!(chan->modes & CMODE_INVITE))
 			check_modes(mc, true);
 		modestack_flush_channel(chan);
-		try_kick(chansvs.me->me, chan, u, "Invite only channel");
+		if (try_kick(chansvs.me->me, chan, u, "Invite only channel"))
+		{
+			hdata->cu = NULL;
+			return;
+		}
+	}
+
+	struct hook_chanuser_sync sync_hdata = {
+		.cu = cu,
+		.flags = flags,
+		.take_prefixes = secure,
+	};
+	hook_call_chanuser_sync(&sync_hdata);
+
+	if (!sync_hdata.cu)
+	{
 		hdata->cu = NULL;
 		return;
 	}
@@ -414,92 +444,6 @@ cs_join(struct hook_channel_joinpart *hdata)
 		if (!(mc->flags & MC_GUARD) && !(chan->flags & CHAN_LOG) && chanuser_find(chan, chansvs.me->me))
 			part(chan->name, chansvs.nick);
 	}
-
-	if (ircd->uses_owner)
-	{
-		if (flags & CA_USEOWNER)
-		{
-			if (flags & CA_AUTOOP && !(noop || cu->modes & ircd->owner_mode))
-			{
-				modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(u));
-				cu->modes |= ircd->owner_mode;
-			}
-		}
-		else if (secure && (cu->modes & ircd->owner_mode))
-		{
-			modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, ircd->owner_mchar[1], CLIENT_NAME(u));
-			cu->modes &= ~ircd->owner_mode;
-		}
-	}
-
-	if (ircd->uses_protect)
-	{
-		if (flags & CA_USEPROTECT)
-		{
-			if (flags & CA_AUTOOP && !(noop || cu->modes & ircd->protect_mode || (ircd->uses_owner && cu->modes & ircd->owner_mode)))
-			{
-				modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(u));
-				cu->modes |= ircd->protect_mode;
-			}
-		}
-		else if (secure && (cu->modes & ircd->protect_mode))
-		{
-			modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, ircd->protect_mchar[1], CLIENT_NAME(u));
-			cu->modes &= ~ircd->protect_mode;
-		}
-	}
-
-	if (flags & CA_AUTOOP)
-	{
-		if (!(noop || cu->modes & CSTATUS_OP))
-		{
-			modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'o', CLIENT_NAME(u));
-			cu->modes |= CSTATUS_OP;
-		}
-	}
-	else if (secure && (cu->modes & CSTATUS_OP) && !(flags & CA_OP) && !is_service(cu->user))
-	{
-		modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, 'o', CLIENT_NAME(u));
-		cu->modes &= ~CSTATUS_OP;
-	}
-
-	if (ircd->uses_halfops)
-	{
-		if (flags & CA_AUTOHALFOP)
-		{
-			if (!(noop || cu->modes & (CSTATUS_OP | ircd->halfops_mode)))
-			{
-				modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'h', CLIENT_NAME(u));
-				cu->modes |= ircd->halfops_mode;
-			}
-		}
-		else if (secure && (cu->modes & ircd->halfops_mode) && !(flags & CA_HALFOP))
-		{
-			modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, 'h', CLIENT_NAME(u));
-			cu->modes &= ~ircd->halfops_mode;
-		}
-	}
-
-	if (flags & CA_AUTOVOICE)
-	{
-		if (!(noop || cu->modes & (CSTATUS_OP | ircd->halfops_mode | CSTATUS_VOICE)))
-		{
-			modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'v', CLIENT_NAME(u));
-			cu->modes |= CSTATUS_VOICE;
-		}
-	}
-
-	if (u->server->flags & SF_EOB && (md = metadata_find(mc, "private:entrymsg")))
-	{
-		if (metadata_find(mc, "private:botserv:bot-assigned") == NULL)
-		{
-			if (!u->myuser || !(u->myuser->flags & MU_NOGREET))
-				notice(chansvs.nick, cu->user->nick, "[%s] %s", mc->name, md->value);
-		}
-	}
-
-	if (u->server->flags & SF_EOB && (md = metadata_find(mc, "url")))
-		numeric_sts(me.me, 328, cu->user, "%s :%s", mc->name, md->value);
 
 	if (flags & CA_USEDUPDATE)
 		mc->used = CURRTIME;
@@ -891,6 +835,7 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 	hook_add_channel_can_change_topic(cs_topiccheck);
 	hook_add_channel_tschange(cs_tschange);
 	hook_add_channel_mode_change(cs_bounce_mode_change);
+	hook_add_chanuser_sync(chanuser_sync);
 	hook_add_shutdown(on_shutdown);
 
 	cs_leave_empty_timer = mowgli_timer_add(base_eventloop, "cs_leave_empty", cs_leave_empty, NULL, 5 * SECONDS_PER_MINUTE);
