@@ -9,34 +9,45 @@ to enable this. The 5 main steps to perform are:
 
    This ensures that it will become the primary crypto provider
 
-3) Decide which SCRAM mechanism you want to use *
+3) Decide which SCRAM mechanism you want to use:
+
+   - SCRAM-SHA-256 is suitable for most cases. This is what you should use
+     unless you have a good reason to pick another mechanism.(*)
+   - SCRAM-SHA-512 is not supported by most clients, but may be suitable
+     for certain use cases.
+   - SCRAM-SHA-1 is provided exclusively for standard compliance.
+     You almost certainly don't want this mechanism.
 
 4) Configure pbkdf2v2 to generate SCRAM-SHA hashes (atheme.conf):
 
    crypto {
        pbkdf2v2_digest = "SCRAM-SHA-256";
        /* or "SCRAM-SHA-512" or "SCRAM-SHA-1" */
-       #pbkdf2v2_rounds = ...;          /* between 10000 and 65536 ** */
+       #pbkdf2v2_rounds = ...;          /* between 10000 and 65536 (**) */
    }
 
 5) Load modules/saslserv/scram-sha
 
  * It is highly recommended that you choose SCRAM-SHA-256. You cannot enable
-   more than one. SCRAM-SHA-1 is only supported to comply with RFC 5802, which
+   more than one.
+
+   SCRAM-SHA-1 is only supported to comply with RFC 5802, which
    states that supporting SHA-1 is required. However, all modern client SASL
    libraries that support SCRAM, support SCRAM-SHA-256 (RFC 7677), and any new
    client implementations are expected to as well. You should only choose
-   SCRAM-SHA-1 if you have a large user base that wants to use SCRAM, but whom
-   cannot use SCRAM-SHA-256 or SCRAM-SHA-512. SCRAM-SHA-512 is not officially
-   specified, and so is not widely implemented, but RFC 5802 Section 4
-   indirectly allows it, and the default PBKDF2v2 digest was (and remains)
-   SHA2-512, which will allow SCRAM-SHA-512 logins without services having to
-   recompute any PBKDF2 digests for users who reidentify (by plain text
-   password) or change their password. This enables a seamless transition to
-   SCRAM logins if you are still using the default algorithm. If you were using
-   the pbkdf2v2 module previously with SHA2-256 digests, choose SCRAM-SHA-256
-   instead. If you were not previously using the pbkdf2v2 module, choose
-   SCRAM-SHA-256 instead.
+   SCRAM-SHA-1 if you have a large user base that wants to use SCRAM, but who
+   cannot use SCRAM-SHA-256 or SCRAM-SHA-512.
+
+   SCRAM-SHA-512 is not officially specified, and so is not widely implemented,
+   but RFC 5802 Section 4 indirectly allows it, and the default PBKDF2v2 digest
+   was (and remains) SHA2-512, which will allow SCRAM-SHA-512 logins without
+   services having to recompute any PBKDF2 digests for users who reidentify
+   (by plain text password) or change their password. This enables a seamless
+   transition to SCRAM logins if you are still using the default algorithm.
+   If you were using the pbkdf2v2 module previously with SHA2-512 digests,
+   this might outweigh the compatibility issues for you, especially if you
+   can reasonably expect your clients to support SCRAM-SHA-512 (e.g. if you
+   are also providing the client software).
 
 ** Inclusive. The popular Cyrus SASL client library will refuse to perform a
    PBKDF2 calculation with an iteration count greater than 65536, and the
