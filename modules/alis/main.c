@@ -387,7 +387,7 @@ end:
 	(void) command_success_nodata(si, _("End of output."));
 
 	if (query.show_secret)
-		(void) logcommand(si, CMDLOG_GET, "LIST: \2%s\2 (SHOWSECRET)", query.mask);
+		(void) logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 (SHOWSECRET)", query.mask);
 	else
 		(void) logcommand(si, CMDLOG_GET, "LIST: \2%s\2", query.mask);
 }
