@@ -343,6 +343,7 @@ alis_cmd_list_func(struct sourceinfo *const restrict si, const int parc, char **
 	struct alis_query query;
 
 	if (! alis_parse_query(si, parc, parv, &query))
+		// This function logs error messages on failure
 		return;
 
 	(void) command_success_nodata(si, _("Returning maximum of \2%u\2 channel names matching '\2%s\2'"),
@@ -384,7 +385,11 @@ alis_cmd_list_func(struct sourceinfo *const restrict si, const int parc, char **
 
 end:
 	(void) command_success_nodata(si, _("End of output."));
-	(void) logcommand(si, CMDLOG_GET, "LIST: \2%s\2", query.mask);
+
+	if (query.show_secret)
+		(void) logcommand(si, CMDLOG_GET, "LIST: \2%s\2 (SHOWSECRET)", query.mask);
+	else
+		(void) logcommand(si, CMDLOG_GET, "LIST: \2%s\2", query.mask);
 }
 
 static void
