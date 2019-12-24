@@ -22,7 +22,7 @@ sasl_mech_plain_step(struct sasl_session *const restrict p, const struct sasl_in
 	// This buffer contains sensitive information
 	*(in->flags) |= ASASL_INFLAG_WIPE_BUF;
 
-	// Data format: authzid 0x00 authcid 0x00 password [0x00]
+	// Data format: [authzid] 0x00 authcid 0x00 password [0x00]
 	if (in->len > (NICKLEN + 1 + NICKLEN + 1 + PASSLEN + 1))
 		return ASASL_MRESULT_ERROR;
 
@@ -30,8 +30,6 @@ sasl_mech_plain_step(struct sasl_session *const restrict p, const struct sasl_in
 	const char *const end = ptr + in->len;
 
 	const char *const authzid = ptr;
-	if (! *authzid)
-		return ASASL_MRESULT_ERROR;
 	if (strlen(authzid) > NICKLEN)
 		return ASASL_MRESULT_ERROR;
 	if ((ptr += strlen(authzid) + 1) >= end)
@@ -51,7 +49,7 @@ sasl_mech_plain_step(struct sasl_session *const restrict p, const struct sasl_in
 	if (strlen(secret) > PASSLEN)
 		return ASASL_MRESULT_ERROR;
 
-	if (! sasl_core_functions->authzid_can_login(p, authzid, NULL))
+	if (*authzid && ! sasl_core_functions->authzid_can_login(p, authzid, NULL))
 		return ASASL_MRESULT_ERROR;
 
 	struct myuser *mu = NULL;
