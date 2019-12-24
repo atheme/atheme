@@ -61,7 +61,7 @@ get_version_string(char *buf, size_t bufsize)
 	const struct crypt_impl *const ci = crypt_get_default_provider();
 	const char *const ci_id = ci ? ci->id : "<none>";
 
-	return snprintf(buf, bufsize, "%s %s. %s %s :%s [%s] [enc:%s] Build Date: %s",
+	return snprintf(buf, bufsize, "%s-%s %s :%s %s [%s] [enc:%s] Build Date: %s",
 	                              PACKAGE_TARNAME, PACKAGE_VERSION, me.name, revision,
 	                              get_conf_opts(), ircd->ircdname, ci_id, get_build_date());
 }
