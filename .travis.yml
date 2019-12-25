@@ -1,26 +1,25 @@
 language: c
 sudo: false
 os: linux
+dist: bionic
 
 notifications:
   email: false
 
 addons:
   apt:
-    sources:
-      - ubuntu-toolchain-r-test
-      - llvm-toolchain-trusty-5.0
     packages:
       - libgettextpo-dev
       - libcrack2-dev
+      - libpcre3-dev
       - libperl-dev
       - libssl-dev
-      - clang-5.0
-      - gcc-5
+      - clang-8
+      - gcc-8
 
 compiler:
-  - clang-5.0
-  - gcc-5
+  - clang-8
+  - gcc-8
 
 env:
   - OPTIONAL_CONF_ARGS=""
