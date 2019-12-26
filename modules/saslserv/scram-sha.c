@@ -688,7 +688,8 @@ sasl_mech_scramsha_step_success(struct sasl_session *const restrict p)
 	}
 
 	(void) slog(LG_DEBUG, "%s: succeeded", MOWGLI_FUNC_NAME);
-	(void) memcpy(s->mu->pass, buf, ((size_t) ret) + 1);
+	(void) smemzero(s->mu->pass, sizeof s->mu->pass);
+	(void) memcpy(s->mu->pass, buf, (size_t) ret);
 	(void) smemzero(buf, sizeof buf);
 
 end:
