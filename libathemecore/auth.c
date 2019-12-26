@@ -83,9 +83,14 @@ verify_password(struct myuser *const restrict mu, const char *const restrict pas
 		return true;
 
 	if (! (new_hash = ci_default->crypt(password, NULL)))
+	{
 		(void) slog(LG_ERROR, "%s: hash generation failed", MOWGLI_FUNC_NAME);
+	}
 	else
+	{
+		(void) smemzero(mu->pass, sizeof mu->pass);
 		(void) mowgli_strlcpy(mu->pass, new_hash, sizeof mu->pass);
+	}
 
 	// Verification succeeded and user's password (possibly) re-encrypted
 	return true;
