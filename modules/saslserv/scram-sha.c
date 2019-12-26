@@ -749,10 +749,8 @@ sasl_mech_scramsha_finish(struct sasl_session *const restrict p)
 
 	struct sasl_scramsha_session *const s = p->mechdata;
 
-	if (s->c_msg_buf)
-		(void) smemzerofree(s->c_msg_buf, s->c_msg_len);
-
 	(void) mowgli_node_delete(&s->node, &sasl_scramsha_sessions);
+	(void) sfree(s->c_msg_buf);
 	(void) smemzerofree(s, sizeof *s);
 
 	p->mechdata = NULL;
