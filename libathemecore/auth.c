@@ -27,6 +27,8 @@ set_password(struct myuser *const restrict mu, const char *const restrict passwo
 
 	const char *const hash = crypt_password(password);
 
+	(void) smemzero(mu->pass, sizeof mu->pass);
+
 	if (hash)
 	{
 		mu->flags |= MU_CRYPTPASS;
