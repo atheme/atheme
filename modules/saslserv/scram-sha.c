@@ -603,6 +603,8 @@ sasl_mech_scramsha_step_clientproof(struct sasl_session *const restrict p,
 		goto error;
 	}
 
+	// This buffer contains sensitive information
+	out->flags |= ASASL_OUTFLAG_WIPE_BUF;
 	out->buf = response;
 	out->len = (size_t) respLen;
 
