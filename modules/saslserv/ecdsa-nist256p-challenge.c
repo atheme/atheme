@@ -134,14 +134,32 @@ sasl_mech_ecdsa_step_verify_signature(struct sasl_session *const restrict p,
 {
 	struct sasl_ecdsa_nist256p_challenge_session *const s = p->mechdata;
 
-	const int ret = ECDSA_verify(0, s->challenge, sizeof s->challenge, in->buf, (int) in->len, s->pubkey);
+	const int retd = ECDSA_verify(0, s->challenge, sizeof s->challenge, in->buf, (int) in->len, s->pubkey);
 
-	if (ret == 1)
+	if (retd == 1)
 		return ASASL_MRESULT_SUCCESS;
-	else if (ret == 0)
-		return ASASL_MRESULT_FAILURE;
-	else
+	if (retd != 0)
 		return ASASL_MRESULT_ERROR;
+
+	/* Some cryptographic signature abstractions *require* hashing, so make it easier for clients of all types
+	 * to sign the challenge. If they are forced to hash it, hash it on this side too and try verifying it
+	 * again. NIST FIPS186-4 calls for SHA2-256, which is why this module uses a 32-byte challenge anyway.
+	 * We're not going to support any other digests.   <https://github.com/atheme/atheme/issues/684>    -- amdj
+	 */
+	unsigned char digestbuf[DIGEST_MDLEN_SHA2_256];
+
+	if (! digest_oneshot(DIGALG_SHA2_256, s->challenge, sizeof s->challenge, digestbuf, NULL))
+		return ASASL_MRESULT_ERROR;
+
+	const int reth = ECDSA_verify(0, digestbuf, sizeof digestbuf, in->buf, (int) in->len, s->pubkey);
+
+	if (reth == 1)
+		return ASASL_MRESULT_SUCCESS;
+	if (reth != 0)
+		return ASASL_MRESULT_ERROR;
+
+	// The signature is formatted correctly, but is not valid for the challenge or the hashed challenge
+	return ASASL_MRESULT_FAILURE;
 }
 
 static enum sasl_mechanism_result ATHEME_FATTR_WUR
