@@ -13,10 +13,10 @@
  *
  * Higher values will likely result in exceeding the PASSLEN limit:
  *
- *     strlen("$argon2id$v=19$m=4294967295,t=1048576,p=255$$") [45]
+ *     strlen("$argon2id$v=255$m=1073741824,t=1048576,p=255$$") [46]
  *     + BASE64_SIZE_RAW(ARGON2_SALTLEN_MAX [48]) [64]
  *     + BASE64_SIZE_RAW(ARGON2_HASHLEN_MAX [128]) [172]
- *     == 281
+ *     == 282
  *
  * Note that these restrictions do not apply to /verifying/ a password hash,
  * only computing a new one, so password hashes from other sources are allowed
