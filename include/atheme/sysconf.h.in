@@ -140,6 +140,9 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
+/* Define to 1 if libargon2 appears to be usable */
+#undef HAVE_LIBARGON2
+
 /* Define to 1 if libcrypto appears to be usable */
 #undef HAVE_LIBCRYPTO
 
@@ -287,8 +290,14 @@
 /* Define to 1 if you have the `setlocale' function. */
 #undef HAVE_SETLOCALE
 
+/* Define to 1 if you have the `sigfillset' function. */
+#undef HAVE_SIGFILLSET
+
 /* Define to 1 if you have the <signal.h> header file. */
 #undef HAVE_SIGNAL_H
+
+/* Define to 1 if you have the `sigprocmask' function. */
+#undef HAVE_SIGPROCMASK
 
 /* Define to 1 if you have a C99 compliant `snprintf' function. */
 #undef HAVE_SNPRINTF
@@ -358,6 +367,9 @@
 
 /* Define to 1 if you have the `strtol' function. */
 #undef HAVE_STRTOL
+
+/* Define to 1 if you have the `strtold' function. */
+#undef HAVE_STRTOLD
 
 /* Define to 1 if you have the `strtoul' function. */
 #undef HAVE_STRTOUL

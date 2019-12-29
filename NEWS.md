@@ -64,6 +64,14 @@ POTENTIAL COMPATIBILITY BREAKAGE
   module for the purposes of `./configure --enable-legacy-pwcrypto` (above)
   because it does not use weak cryptographic primitives.
 
+- The `crypto/argon2d` module has been removed, and replaced with a more
+  generic `crypto/argon2` module that links against `libargon2` and supports
+  more features, including pseudo-threading and different subtypes (Argon2i
+  and Argon2id) too. If you were using this module on version 7.2, please see
+  the `dist/atheme.conf.example` file for migration instructions. The names of
+  the configuration options have changed! You will need libargon2 available at
+  configure-time.
+
 Security
 --------
 - Services now accepts email addresses that may contain shell metacharacters.

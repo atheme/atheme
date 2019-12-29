@@ -105,7 +105,7 @@ loadmodule "modules/backend/opensex";
  *
  * The following encryption-capable crypto modules are available:
  *
- *   Argon2d (Password Hashing Competition, v1.3)  modules/crypto/argon2d
+ *   Argon2 (Password Hashing Competition 2015)    modules/crypto/argon2
  *   PBKDF2 (Including support for SASL SCRAM-SHA) modules/crypto/pbkdf2v2
  *   OpenBSD crypt_newhash(3) a la '$2b$...$...'   modules/crypto/crypt3-openbsd
  *   SHA2-512 crypt(3) a la '$6$...'               modules/crypto/crypt3-sha2-512
@@ -142,7 +142,7 @@ loadmodule "modules/backend/opensex";
  * and as users login or set new passwords, they will be migrated to the new
  * preferred scheme. Like so:
  *
- * loadmodule "modules/crypto/argon2d";
+ * loadmodule "modules/crypto/argon2";
  * loadmodule "modules/crypto/pbkdf2v2";
  * loadmodule "modules/crypto/pbkdf2";
  * loadmodule "modules/crypto/sodium-scrypt";
@@ -156,11 +156,16 @@ loadmodule "modules/backend/opensex";
  * informational messages when loaded to the effect that they might break in
  * the future. They also run selftests on load to verify that they will work.
  *
+ * The Argon2 module requires the argon2 reference library (./configure
+ * --with-libargon2) and is *NOT* available in Atheme v7.2 or earlier. If you
+ * wish to use this module while retaining the possibility to downgrade to
+ * v7.2, please see the crypto {} documentation below.
+ *
  * The Scrypt module requires libsodium (./configure --with-libsodium) and is
  * *NOT* available in Atheme v7.2 or earlier. This module may also require a
  * 64-bit Operating System to function correctly.
  *
- * The Argon2d and PBKDF2v2 modules have no dependencies and are recommended.
+ * The PBKDF2v2 module has no dependencies and is recommended.
  *
  * All available modules are listed below, in the preferred load order. The
  * modules that are commented out are not available by default (please see
@@ -173,7 +178,7 @@ loadmodule "modules/backend/opensex";
  * verification for a user whose password was not encrypted by them is
  * attempted.
  */
-loadmodule "modules/crypto/argon2d";
+#loadmodule "modules/crypto/argon2";
 loadmodule "modules/crypto/pbkdf2v2";
 #loadmodule "modules/crypto/crypt3-openbsd";
 #loadmodule "modules/crypto/crypt3-sha2-512";
@@ -897,50 +902,204 @@ loadmodule "modules/groupserv/set_url";
  * This block controls the configuration options for crypto modules.
  *
  * It is recommended to either leave the values at their defaults, or
- * experiment with them so that it takes approximately 0.5-1.0 seconds
+ * experiment with them so that it takes approximately 0.2-0.4 seconds
  * for users to identify. Services blocks while the password is being
  * encrypted or verified, so don't set these too large, or people can
  * hang services by trying many password attempts at once.
  *
- * A benchmark program for the PBKDF2 code is available:
+ * A benchmark program for the Argon2 & PBKDF2 crypto code is available to
+ * assist with tuning these parameters:
+ *
  *     - ./configure --prefix=foo ...
  *     - make
  *     - make install
- *     - ${foo}/bin/atheme-pbkdf2-benchmark -h
+ *     - ${foo}/bin/atheme-crypto-benchmark -h
  *
- * If you are migrating from crypto/pbkdf2 to crypto/pbkdf2v2, and wish
- * to use the same parameters (algorithm, iteration count, salt length) as
- * the older module, configure it as follows. Note that this will still
- * result in passwords being re-encrypted with the newer module (as the
- * older module successfully verifies them); another new PBKDF2 computation
- * with a new salt will occur, but this is still no worse than an invocation
- * of NickServ's "SET PASSWORD" command. You will still need to keep the old
- * module in your loadmodule configuration above, as the new module cannot
- * verify digests produced by the old one. Also note that if you wish to
- * deploy SASL SCRAM support (see doc/SASL-SCRAM-SHA), its advice regarding
- * parameter choice takes precedence over these parameters below.
+ * If you are using the PBKDF2 module, its performance will be significantly
+ * affected by your choice of cryptographic digest library. This software can
+ * currently interface with 3 libraries; in decreasing order of performance:
+ *
+ *     - OpenSSL (libcrypto)
+ *     - GNU Nettle (libnettle)
+ *     - ARM mbedTLS (libmbedcrypto)
+ *
+ * If you have one of these libraries available at configure-time, the PBKDF2
+ * module will perform significantly better, allowing you to raise its
+ * iteration count without affecting the computation time. This is indicated
+ * by the output of the configure script; "Digest Frontend". The benchmark
+ * program will also inform you what cryptographic digest library it is using,
+ * if any.
+ *
+ *
+ *
+ * If you are migrating from crypto/argon2d (v7.2) to crypto/argon2, and you
+ * wish to use the same parameters as the older module's defaults, configure
+ * it like so:
+ *
+ *     crypto {
+ *         argon2_type = "argon2d";
+ *         argon2_memcost = 14;
+ *         argon2_timecost = 32;
+ *         argon2_threads = 1;
+ *         argon2_saltlen = 32;
+ *         argon2_hashlen = 64;
+ *     };
+ *
+ *
+ *
+ * If you are migrating from crypto/pbkdf2 (v7.2) to crypto/pbkdf2v2, and you
+ * wish to use the same parameters as the older module, configure it like so:
  *
  *     crypto {
  *         pbkdf2v2_digest = "SHA512";
  *         pbkdf2v2_rounds = 128000;
- *         pbkdf2v2_saltlen = 16;
  *     };
+ *
+ * Note that this will still result in passwords being re-encrypted with the
+ * newer module (as the older module successfully verifies them); another new
+ * PBKDF2 computation with a new salt will occur, but this is still no worse
+ * than an invocation of NickServ's "SET PASSWORD" command. You will still
+ * need to keep the old module in your loadmodule configuration above, as the
+ * new module cannot verify digests produced by the old one. Also note that
+ * if you wish to deploy SASL SCRAM support (see doc/SASL-SCRAM-SHA), its
+ * advice regarding parameter choice takes precedence over this.
  */
 crypto {
 
-	/* (*) argon2d_memory
-	 * Memory cost (as a power of 2, in KiB)
-	 * Valid values are 8 (256 KiB) to 20 (1 GiB) (inclusive)
-	 * The default is 14
+	/* (*) argon2_type
+	 *
+	 * The algorithm type to use for new passwords.
+	 *
+	 * Argon2d is suitable for use on a dedicated machine that has
+	 * limited access. It provides the most resistance to GPU and ASIC
+	 * cracking attacks, but its operation is data-dependent; that is,
+	 * during its operation, keying material derived from the password
+	 * itself is indirectly affecting the execution choices made by the
+	 * algorithm. This creates a side-channel that can leak information
+	 * about the password to other software running on the same physical
+	 * machine.
+	 *
+	 * Argon2i avoids this by being data-independent. The order of memory
+	 * accesses, conditional execution, etc. does not depend on the
+	 * password, or any material derived from the password, so no side-
+	 * channel that can reveal any information about the password is
+	 * created. However, this means that it is easier to bruteforce by a
+	 * password cracker, which does not have to account for execution
+	 * differences in its implementation. This is the most suitable
+	 * choice for running on a virtual machine that is co-located with
+	 * other, untrusted, virtual machines, or on a dedicated machine that
+	 * runs other, untrusted, software, or has untrusted user access.
+	 *
+	 * Argon2id is a blend of both, limiting the exploitability of any
+	 * side-channels while retaining excellent resistance to GPU and ASIC
+	 * cracking. This is suitable for all but the most sensitive of
+	 * deployments.
+	 *
+	 * All algorithm types perform about equally as well as each other;
+	 * changing this will not significantly affect the computation time.
+	 *
+	 * Valid values are "argon2d", "argon2i", and "argon2id"
+	 * The default is "argon2id"
 	 */
-	#argon2d_memory = 14;      /* 2^14 KiB == 16384 KiB (16 MiB) */
+	#argon2_type = "argon2id";
 
-	/* (*) argon2d_time
-	 * Time cost (iterations over the memory)
-	 * Valid values are 4 to 16,384 (inclusive)
-	 * The default is 32
+	/* (*) argon2_memcost
+	 *
+	 * Memory cost (as a power of 2, in KiB) to use for new passwords.
+	 *
+	 * You should set this as high as is reasonable for the machine you
+	 * will be running this software on. If this results in too slow a
+	 * computation time, reset the time cost below to its default value.
+	 * If it is still too slow, decrement the time cost below until it is
+	 * fast enough. If you reach the minimum time cost and it is still
+	 * too slow, decrement this value (halving the memory usage) until it
+	 * is fast enough. Alternatively, if it is still too fast after
+	 * setting this to its highest reasonable value, raise the time cost
+	 * below until it is not. A benchmark program is available alongside
+	 * this software to aid in this process.
+	 *
+	 * WARNING: Do *NOT* set this to more than 20 (1 GiB RAM) on a 32-bit
+	 *          machine or a 32-bit Operating System!
+	 *
+	 * Valid values are 3 (8 KiB RAM) to 30 (1 TiB RAM) (inclusive)
+	 * The default is 16 (64 MiB RAM)
 	 */
-	#argon2d_time = 32;
+	#argon2_memcost = 16;
+
+	/* (*) argon2_timecost
+	 *
+	 * Time cost (iterations over the memory pool). You should not reduce
+	 * this to less than its default value unless necessary (see above).
+	 *
+	 * Valid values are 3 to 16,384 (inclusive)
+	 * The default is 3
+	 */
+	#argon2_timecost = 3;
+
+	/* (*) argon2_threads
+	 *
+	 * Number of processor threads to use for new passwords.
+	 *
+	 * If you want to increase the amount of computation effort required,
+	 * while not increasing the real ("wall clock") time required, raise
+	 * this setting to its maximum reasonable value for the machine you
+	 * will be running this software on.
+	 *
+	 * This software is not multi-threaded, so only one password will be
+	 * verified at a time. Therefore, you do NOT need to divide this by
+	 * the expected maximum number of simultaneous logins.
+	 *
+	 * It is pointless to set this higher than the number of hardware
+	 * processing threads you have; increase the time cost above instead
+	 * if you want to make it arbitrarily slower. Diminishing returns are
+	 * to be expected once you exceed the number of hardware processing
+	 * /cores/ you have; hyperthreading does NOT provide much (if any) of
+	 * a boost for this workload.
+	 *
+	 * Increasing this value will *decrease* the real time required, so
+	 * you may have to subsequently increase the time cost above again to
+	 * make it "just slow enough" once more. A benchmark program is
+	 * available alongside this software to aid in this process.
+	 *
+	 * WARNING: The (size of the) memory pool configured above is split
+	 * between the threads, which can result in too small a memory area
+	 * per-thread if many threads are used. If you set this value, it is
+	 * HIGHLY RECOMMENDED that you run the included benchmarking program
+	 * with the same configuration options, to confirm that it works!
+	 *
+	 * WARNING: This feature is experimental. Some of the code in this
+	 * software is not thread-safe, and although every effort has been
+	 * made to ensure that this feature will not interfere with the
+	 * operation of this software, this cannot be guaranteed.
+	 *
+	 * Valid values are 1 to 1024 (inclusive)
+	 * The default is 1 (do not use any computation parallelism)
+	 */
+	#argon2_threads = 1;
+
+	/* (*) argon2_saltlen
+	 *
+	 * Salt length (in bytes) to use for new passwords. You should only
+	 * change this if absolutely necessary; for example, to interoperate
+	 * with other software. Its value doesn't significantly affect the
+	 * computation time.
+	 *
+	 * Valid values are 4 to 48 (inclusive)
+	 * The default is 16
+	 */
+	#argon2_saltlen = 16;
+
+	/* (*) argon2_hashlen
+	 *
+	 * Digest length (in bytes) to use for new passwords. You should only
+	 * change this if absolutely necessary; for example, to interoperate
+	 * with other software. Its value doesn't significantly affect the
+	 * computation time.
+	 *
+	 * Valid values are 16 to 128 (inclusive)
+	 * The default is 64
+	 */
+	#argon2_hashlen = 64;
 
 	/* (*) pbkdf2v2_digest
 	 *

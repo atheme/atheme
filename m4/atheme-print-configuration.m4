@@ -38,6 +38,7 @@ Configuration of ${PACKAGE_STRING}:
     Module Directory ........: ${MODDIR}/modules
     PID Directory ...........: ${RUNDIR}
 
+    Argon2 support ..........: ${LIBARGON2}
     crypt(3) support ........: ${LIBCRYPT}
     CrackLib support ........: ${LIBCRACK}
     LDAP support ............: ${LIBLDAP}
@@ -60,6 +61,7 @@ Configuration of ${PACKAGE_STRING}:
     Sodium Memory Allocator .: ${SODIUM_MALLOC}
     Build Warnings ..........: ${BUILD_WARNINGS}
 
+    Crypto Benchmarking .....: ${LIBRT}
     Digest Frontend .........: ${DIGEST_FRONTEND}
     RNG Frontend ............: ${RANDOM_FRONTEND}
 

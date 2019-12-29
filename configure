@@ -665,8 +665,10 @@ LIBCRYPTO_LIBS
 LIBCRYPTO_CFLAGS
 LIBCRYPT_LIBS
 LIBCRACK_LIBS
+LIBARGON2_LIBS
+LIBARGON2_CFLAGS
 LIBSOCKET_LIBS
-PBKDF2_BENCHMARK_COND_D
+CRYPTO_BENCHMARK_COND_D
 LIBRT_LIBS
 LIBMATH_LIBS
 LIBDL_LIBS
@@ -798,6 +800,7 @@ with_gnu_ld
 enable_rpath
 with_libiconv_prefix
 with_libintl_prefix
+with_libargon2
 with_cracklib
 with_crypt
 with_openssl
@@ -844,6 +847,8 @@ PKG_CONFIG
 PKG_CONFIG_PATH
 PKG_CONFIG_LIBDIR
 CPP
+LIBARGON2_CFLAGS
+LIBARGON2_LIBS
 LIBCRYPTO_CFLAGS
 LIBCRYPTO_LIBS
 LIBIDN_CFLAGS
@@ -1528,6 +1533,8 @@ Optional Packages:
   --without-libiconv-prefix     don't search for libiconv in includedir and libdir
   --with-libintl-prefix[=DIR]  search for libintl in DIR/include and DIR/lib
   --without-libintl-prefix     don't search for libintl in includedir and libdir
+  --without-libargon2     Do not attempt to detect libargon2 (for
+                          modules/crypto/argon2)
   --without-cracklib      Do not attempt to detect cracklib (for
                           modules/nickserv/pwquality -- checking password
                           strength)
@@ -1579,6 +1586,10 @@ Some influential environment variables:
   PKG_CONFIG_LIBDIR
               path overriding pkg-config's built-in search path
   CPP         C preprocessor
+  LIBARGON2_CFLAGS
+              C compiler flags for LIBARGON2, overriding pkg-config
+  LIBARGON2_LIBS
+              linker flags for LIBARGON2, overriding pkg-config
   LIBCRYPTO_CFLAGS
               C compiler flags for LIBCRYPTO, overriding pkg-config
   LIBCRYPTO_LIBS
@@ -5232,7 +5243,7 @@ fi
 
 done
 
-for ac_func in crypt_checkpass crypt_newhash explicit_bzero fork getrlimit memset_s
+for ac_func in crypt_checkpass crypt_newhash explicit_bzero fork getrlimit memset_s timingsafe_bcmp
 do :
   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
 ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
@@ -5244,33 +5255,18 @@ _ACEOF
 fi
 done
 
-for ac_func in timingsafe_bcmp timingsafe_memcmp
+for ac_func in timingsafe_memcmp
 do :
-  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
-ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
-if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
+  ac_fn_c_check_func "$LINENO" "timingsafe_memcmp" "ac_cv_func_timingsafe_memcmp"
+if test "x$ac_cv_func_timingsafe_memcmp" = xyes; then :
   cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
+#define HAVE_TIMINGSAFE_MEMCMP 1
 _ACEOF
 
 fi
 done
 
-for ac_func in dup2 execve flock gethostbyname getpid gettimeofday localeconv memchr memmove memset
-do :
-  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
-ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
-if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
-_ACEOF
-
-else
-  as_fn_error $? "required function not available" "$LINENO" 5
-fi
-done
-
-for ac_func in regcomp regerror regexec regfree setenv setlocale strcasecmp strcasestr strchr strerror strlen
+for ac_func in dup2 execve flock gethostbyname getpid
 do :
   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
 ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
@@ -5284,7 +5280,77 @@ else
 fi
 done
 
-for ac_func in strncasecmp strnlen strpbrk strrchr strstr strtod strtok strtok_r strtol strtoul strtoull
+for ac_func in gettimeofday localeconv memchr memmove memset
+do :
+  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
+ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
+if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
+_ACEOF
+
+else
+  as_fn_error $? "required function not available" "$LINENO" 5
+fi
+done
+
+for ac_func in regcomp regerror regexec regfree setenv
+do :
+  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
+ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
+if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
+_ACEOF
+
+else
+  as_fn_error $? "required function not available" "$LINENO" 5
+fi
+done
+
+for ac_func in setlocale strcasecmp strcasestr strchr
+do :
+  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
+ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
+if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
+_ACEOF
+
+else
+  as_fn_error $? "required function not available" "$LINENO" 5
+fi
+done
+
+for ac_func in strerror strlen strncasecmp strnlen strpbrk
+do :
+  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
+ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
+if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
+_ACEOF
+
+else
+  as_fn_error $? "required function not available" "$LINENO" 5
+fi
+done
+
+for ac_func in strrchr strstr strtod strtok strtok_r strtol
+do :
+  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
+ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
+if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
+_ACEOF
+
+else
+  as_fn_error $? "required function not available" "$LINENO" 5
+fi
+done
+
+for ac_func in strtold strtoul strtoull
 do :
   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
 ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
@@ -9486,6 +9552,7 @@ rm -f core conftest.err conftest.$ac_objext \
 
 
 
+	LIBRT="No"
 	LIBRT_LIBS=""
 
 	LIBS_SAVED="${LIBS}"
@@ -9550,10 +9617,11 @@ if test "$ac_res" != no; then :
 
 fi
 
+		LIBRT="Yes"
 
 
 
-	PBKDF2_BENCHMARK_COND_D="pbkdf2-benchmark"
+	CRYPTO_BENCHMARK_COND_D="crypto-benchmark"
 
 
 
@@ -9702,6 +9770,243 @@ rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
 	LIBS="${LIBS_SAVED}"
+
+
+
+
+
+
+	LIBARGON2="No"
+
+
+# Check whether --with-libargon2 was given.
+if test "${with_libargon2+set}" = set; then :
+  withval=$with_libargon2;
+else
+  with_libargon2="auto"
+fi
+
+
+	case "x${with_libargon2}" in
+		xno | xyes | xauto)
+			;;
+		*)
+			as_fn_error $? "invalid option for --with-libargon2" "$LINENO" 5
+			;;
+	esac
+
+	CPPFLAGS_SAVED="${CPPFLAGS}"
+	LIBS_SAVED="${LIBS}"
+
+	if test "${with_libargon2}" != "no"; then :
+
+		LIBARGON2="Yes"
+
+				for ac_func in sigfillset sigprocmask
+do :
+  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
+ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
+if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
+_ACEOF
+
+else
+
+			LIBARGON2="No"
+			if test "${with_libargon2}" = "yes"; then :
+
+				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--with-libargon2 was given but required signal functions are not available
+See \`config.log' for more details" "$LINENO" 5; }
+
+fi
+
+fi
+done
+
+
+else
+
+		LIBARGON2="No"
+
+fi
+
+	if test "${LIBARGON2}" = "Yes"; then :
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBARGON2" >&5
+$as_echo_n "checking for LIBARGON2... " >&6; }
+
+if test -n "$LIBARGON2_CFLAGS"; then
+    pkg_cv_LIBARGON2_CFLAGS="$LIBARGON2_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libargon2\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libargon2") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBARGON2_CFLAGS=`$PKG_CONFIG --cflags "libargon2" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$LIBARGON2_LIBS"; then
+    pkg_cv_LIBARGON2_LIBS="$LIBARGON2_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libargon2\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libargon2") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBARGON2_LIBS=`$PKG_CONFIG --libs "libargon2" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        LIBARGON2_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libargon2" 2>&1`
+        else
+	        LIBARGON2_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libargon2" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$LIBARGON2_PKG_ERRORS" >&5
+
+
+			LIBARGON2="No"
+			if test "${with_libargon2}" = "yes"; then :
+
+				as_fn_error $? "--with-libargon2 was given but libargon2 could not be found" "$LINENO" 5
+
+fi
+
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+			LIBARGON2="No"
+			if test "${with_libargon2}" = "yes"; then :
+
+				as_fn_error $? "--with-libargon2 was given but libargon2 could not be found" "$LINENO" 5
+
+fi
+
+else
+	LIBARGON2_CFLAGS=$pkg_cv_LIBARGON2_CFLAGS
+	LIBARGON2_LIBS=$pkg_cv_LIBARGON2_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+			CPPFLAGS="${LIBARGON2_CFLAGS} ${CPPFLAGS}"
+			LIBS="${LIBARGON2_LIBS} ${LIBS}"
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libargon2 appears to be usable" >&5
+$as_echo_n "checking if libargon2 appears to be usable... " >&6; }
+			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+					#ifdef HAVE_STDDEF_H
+					#  include <stddef.h>
+					#endif
+					#include <argon2.h>
+
+int
+main ()
+{
+
+					argon2_context ctx = {
+						.out = NULL,
+						.outlen = 0,
+						.pwd = NULL,
+						.pwdlen = 0,
+						.salt = NULL,
+						.saltlen = 0,
+						.secret = NULL,
+						.secretlen = 0,
+						.ad = NULL,
+						.adlen = 0,
+						.t_cost = ARGON2_MAX_TIME,
+						.m_cost = ARGON2_MAX_MEMORY,
+						.lanes = 1,
+						.threads = 1,
+						.version = ARGON2_VERSION_13,
+						.allocate_cbk = NULL,
+						.free_cbk = NULL,
+						.flags = 0,
+					};
+					(void) argon2_ctx(&ctx, Argon2_d);
+					(void) argon2_ctx(&ctx, Argon2_i);
+					(void) argon2_ctx(&ctx, Argon2_id);
+					(void) argon2_error_message(0);
+					(void) argon2_type2string(0, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+				LIBARGON2="Yes"
+
+$as_echo "#define HAVE_LIBARGON2 1" >>confdefs.h
+
+
+else
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+				LIBARGON2="No"
+				if test "${with_libargon2}" = "yes"; then :
+
+					{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--with-libargon2 was given but libargon2 appears to be unusable
+See \`config.log' for more details" "$LINENO" 5; }
+
+fi
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+
+fi
+
+	CPPFLAGS="${CPPFLAGS_SAVED}"
+	LIBS="${LIBS_SAVED}"
+
+	if test "${LIBARGON2}" = "No"; then :
+
+		LIBARGON2_CFLAGS=""
+		LIBARGON2_LIBS=""
+
+fi
 
 
 
@@ -19733,6 +20038,7 @@ Configuration of ${PACKAGE_STRING}:
     Module Directory ........: ${MODDIR}/modules
     PID Directory ...........: ${RUNDIR}
 
+    Argon2 support ..........: ${LIBARGON2}
     crypt(3) support ........: ${LIBCRYPT}
     CrackLib support ........: ${LIBCRACK}
     LDAP support ............: ${LIBLDAP}
@@ -19755,6 +20061,7 @@ Configuration of ${PACKAGE_STRING}:
     Sodium Memory Allocator .: ${SODIUM_MALLOC}
     Build Warnings ..........: ${BUILD_WARNINGS}
 
+    Crypto Benchmarking .....: ${LIBRT}
     Digest Frontend .........: ${DIGEST_FRONTEND}
     RNG Frontend ............: ${RANDOM_FRONTEND}
 

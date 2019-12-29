@@ -10,6 +10,7 @@ pre-depend: ${DISTCLEAN}
 INCLUDES = \
 	abirev.h		\
 	account.h		\
+	argon2.h		\
 	attributes.h		\
 	auth.h			\
 	authcookie.h		\

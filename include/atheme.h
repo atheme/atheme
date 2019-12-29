@@ -12,6 +12,7 @@
 
 #include <atheme/abirev.h>
 #include <atheme/account.h>
+#include <atheme/argon2.h>
 #include <atheme/attributes.h>
 #include <atheme/auth.h>
 #include <atheme/authcookie.h>

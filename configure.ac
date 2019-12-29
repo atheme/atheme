@@ -94,14 +94,15 @@ AC_CHECK_HEADERS([ctype.h dirent.h errno.h inttypes.h libintl.h limits.h locale.
 AC_CHECK_HEADERS([regex.h signal.h stdarg.h stdbool.h stddef.h stdint.h stdio.h stdlib.h string.h], [], [], [])
 AC_CHECK_HEADERS([strings.h sys/file.h sys/resource.h sys/stat.h sys/time.h sys/types.h sys/wait.h], [], [], [])
 AC_CHECK_HEADERS([time.h unistd.h], [], [], [])
-AC_CHECK_FUNCS([crypt_checkpass crypt_newhash explicit_bzero fork getrlimit memset_s], [], [])
-AC_CHECK_FUNCS([timingsafe_bcmp timingsafe_memcmp], [], [])
-AC_CHECK_FUNCS([dup2 execve flock gethostbyname getpid gettimeofday localeconv memchr memmove memset], [],
-	[AC_MSG_ERROR([required function not available])])
-AC_CHECK_FUNCS([regcomp regerror regexec regfree setenv setlocale strcasecmp strcasestr strchr strerror strlen], [],
-	[AC_MSG_ERROR([required function not available])])
-AC_CHECK_FUNCS([strncasecmp strnlen strpbrk strrchr strstr strtod strtok strtok_r strtol strtoul strtoull], [],
-	[AC_MSG_ERROR([required function not available])])
+AC_CHECK_FUNCS([crypt_checkpass crypt_newhash explicit_bzero fork getrlimit memset_s timingsafe_bcmp], [], [])
+AC_CHECK_FUNCS([timingsafe_memcmp], [], [])
+AC_CHECK_FUNCS([dup2 execve flock gethostbyname getpid], [], [AC_MSG_ERROR([required function not available])])
+AC_CHECK_FUNCS([gettimeofday localeconv memchr memmove memset], [], [AC_MSG_ERROR([required function not available])])
+AC_CHECK_FUNCS([regcomp regerror regexec regfree setenv], [], [AC_MSG_ERROR([required function not available])])
+AC_CHECK_FUNCS([setlocale strcasecmp strcasestr strchr], [], [AC_MSG_ERROR([required function not available])])
+AC_CHECK_FUNCS([strerror strlen strncasecmp strnlen strpbrk], [], [AC_MSG_ERROR([required function not available])])
+AC_CHECK_FUNCS([strrchr strstr strtod strtok strtok_r strtol], [], [AC_MSG_ERROR([required function not available])])
+AC_CHECK_FUNCS([strtold strtoul strtoull], [], [AC_MSG_ERROR([required function not available])])
 HW_FUNC_ASPRINTF
 HW_FUNC_SNPRINTF
 LIBS="${LIBS_SAVED}"
@@ -172,6 +173,7 @@ ATHEME_LIBTEST_RT
 ATHEME_LIBTEST_SOCKET
 
 dnl Libraries that are autodetected (alphabetical)
+ATHEME_LIBTEST_ARGON2
 ATHEME_LIBTEST_CRACK
 ATHEME_LIBTEST_CRYPT
 ATHEME_LIBTEST_CRYPTO

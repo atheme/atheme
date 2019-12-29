@@ -10,6 +10,7 @@ addons:
   apt:
     packages:
       - libgettextpo-dev
+      - libargon2-0-dev
       - libqrencode-dev
       - libcrack2-dev
       - libsodium-dev

@@ -6,8 +6,7 @@
 MODULE		= crypto
 
 SRCS =					\
-	argon2d.c			\
-	blake2b.c			\
+	argon2.c			\
 	crypt3-openbsd.c                \
 	crypt3-sha2-256.c		\
 	crypt3-sha2-512.c		\
@@ -24,5 +23,5 @@ include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include -I.
 LDFLAGS		+= -L../../libathemecore
-CFLAGS		+= $(LIBCRYPTO_CFLAGS) $(LIBIDN_CFLAGS) $(LIBSODIUM_CFLAGS)
-LIBS 		+= $(LIBCRYPTO_LIBS) $(LIBIDN_LIBS) $(LIBSODIUM_LIBS) $(LIBCRYPT_LIBS) -lathemecore
+CFLAGS		+= $(LIBARGON2_CFLAGS) $(LIBCRYPTO_CFLAGS) $(LIBIDN_CFLAGS) $(LIBSODIUM_CFLAGS)
+LIBS 		+= $(LIBARGON2_LIBS) $(LIBCRYPTO_LIBS) $(LIBIDN_LIBS) $(LIBSODIUM_LIBS) $(LIBCRYPT_LIBS) -lathemecore
