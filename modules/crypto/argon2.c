@@ -201,8 +201,7 @@ atheme_argon2_crypt(const char *const restrict password,
 	}
 
 	if (snprintf(resultbuf, sizeof resultbuf, MODULE_SAVEHASH_FORMAT, argon2_type2string(atheme_argon2_type, 0),
-	               (unsigned int) ARGON2_VERSION_NUMBER, (1U << atheme_argon2_memcost), atheme_argon2_timecost,
-	               atheme_argon2_threads, salt64, hash64) >= (int) PASSLEN)
+	               ctx.version, ctx.m_cost, ctx.t_cost, atheme_argon2_threads, salt64, hash64) >= (int) PASSLEN)
 	{
 		(void) slog(LG_ERROR, "%s: snprintf(3) would have overflowed result buffer (BUG)", MOWGLI_FUNC_NAME);
 		(void) smemzero(resultbuf, sizeof resultbuf);
