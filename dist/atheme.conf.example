@@ -1028,10 +1028,9 @@ crypto {
 
 	/* (*) argon2_timecost
 	 *
-	 * Time cost (iterations over the memory pool). You should not reduce
-	 * this to less than its default value unless necessary (see above).
+	 * Time cost (iterations over the memory pool).
 	 *
-	 * Valid values are 3 to 16,384 (inclusive)
+	 * Valid values are 3 to 1,048,576 (inclusive)
 	 * The default is 3
 	 */
 	#argon2_timecost = 3;
@@ -1072,7 +1071,7 @@ crypto {
 	 * made to ensure that this feature will not interfere with the
 	 * operation of this software, this cannot be guaranteed.
 	 *
-	 * Valid values are 1 to 1024 (inclusive)
+	 * Valid values are 1 to 255 (inclusive)
 	 * The default is 1 (do not use any computation parallelism)
 	 */
 	#argon2_threads = 1;
