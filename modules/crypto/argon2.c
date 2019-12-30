@@ -11,11 +11,11 @@
 
 #include <atheme.h>
 
+#define CRYPTO_MODULE_NAME      "crypto/argon2"
+
 #ifdef HAVE_LIBARGON2
 
 #include <argon2.h>
-
-#define CRYPTO_MODULE_NAME      "crypto/argon2"
 
 #define MODULE_SAVEHASH_FORMAT  "$%s$v=%u$m=%u,t=%u,p=%u$%s$%s"
 #define MODULE_LOADHASH_FORMAT  "$%*[A-Za-z0-9]$v=%" SCNu32 "$m=%" SCNu32 ",t=%" SCNu32 ",p=%" SCNu32 "$" \
