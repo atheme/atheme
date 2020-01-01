@@ -63,7 +63,7 @@ atheme_argon2_needs_rehash(const uint32_t ver, const argon2_type type, const uin
 {
 	if (ver != ARGON2_VERSION_NUMBER)
 	{
-		(void) slog(LG_DEBUG, "%s: ver (0x%" PRIu32 ") is not current (0x%04X)", MOWGLI_FUNC_NAME,
+		(void) slog(LG_DEBUG, "%s: version (0x%08" PRIX32 ") is not current (0x%08X)", MOWGLI_FUNC_NAME,
 		                      ver, (unsigned int) ARGON2_VERSION_NUMBER);
 		return true;
 	}
