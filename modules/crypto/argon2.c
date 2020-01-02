@@ -253,19 +253,18 @@ atheme_argon2_verify(const char *const restrict password, const char *const rest
 		(void) slog(LG_DEBUG, "%s: sscanf(3) was unsuccessful", MOWGLI_FUNC_NAME);
 		goto cleanup;
 	}
-
-	*flags |= PWVERIFY_FLAG_MYMODULE;
-
-	if ((saltlen = base64_decode(salt64, salt, sizeof salt)) < ARGON2_SALTLEN_MIN)
+	if ((saltlen = base64_decode(salt64, salt, sizeof salt)) == BASE64_FAIL || saltlen < ARGON2_SALTLEN_MIN)
 	{
 		(void) slog(LG_DEBUG, "%s: base64_decode() for salt failed", MOWGLI_FUNC_NAME);
 		goto cleanup;
 	}
-	if ((hashlen = base64_decode(hash64, hash, sizeof hash)) < ARGON2_HASHLEN_MIN)
+	if ((hashlen = base64_decode(hash64, hash, sizeof hash)) == BASE64_FAIL || hashlen < ARGON2_HASHLEN_MIN)
 	{
 		(void) slog(LG_DEBUG, "%s: base64_decode() for hash failed", MOWGLI_FUNC_NAME);
 		goto cleanup;
 	}
+
+	*flags |= PWVERIFY_FLAG_MYMODULE;
 
 	argon2_context ctx = {
 		.version        = ver,
