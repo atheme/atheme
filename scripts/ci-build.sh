@@ -10,18 +10,17 @@
 #
 # <https://travis-ci.org/atheme/atheme/>
 
-if [[ "x${HOME}" == "x" ]]
+set -euxo pipefail
+
+if [[ -z "${HOME:-}" ]]
 then
 	echo "HOME is unset" >&2
 	exit 1
 fi
 
-[[ "x${MAKE}" == "x" ]] && MAKE="make"
+[[ -z "${MAKE:-}" ]] && MAKE="make"
 
 ATHEME_PREFIX="${HOME}/atheme-install"
-
-set -e
-set -x
 
 ./configure                             \
     --prefix="${ATHEME_PREFIX}"         \
@@ -32,7 +31,7 @@ set -x
     --enable-reproducible-builds        \
     --with-digest-api-frontend=internal \
     --with-rng-api-frontend=internal    \
-    ${ATHEME_CONF_ARGS}
+    ${ATHEME_CONF_ARGS:-}
 
 "${MAKE}"
 "${MAKE}" install
