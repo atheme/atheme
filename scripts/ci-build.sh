@@ -38,3 +38,4 @@ set -x
 "${MAKE}" install
 
 "${ATHEME_PREFIX}"/bin/atheme-services -dnT
+"${ATHEME_PREFIX}"/bin/atheme-crypto-benchmark -o
