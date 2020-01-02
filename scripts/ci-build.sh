@@ -31,6 +31,7 @@ ATHEME_PREFIX="${HOME}/atheme-install"
     --enable-reproducible-builds        \
     --with-digest-api-frontend=internal \
     --with-rng-api-frontend=internal    \
+    --without-libmowgli                 \
     ${ATHEME_CONF_ARGS:-}
 
 "${MAKE}"
