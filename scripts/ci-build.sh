@@ -39,3 +39,4 @@ ATHEME_PREFIX="${HOME}/atheme-install"
 
 "${ATHEME_PREFIX}"/bin/atheme-services -dnT
 "${ATHEME_PREFIX}"/bin/atheme-crypto-benchmark -o
+"${ATHEME_PREFIX}"/bin/atheme-ecdh-x25519-tool -T
