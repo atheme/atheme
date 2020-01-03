@@ -32,7 +32,8 @@ ATHEME_PREFIX="${HOME}/atheme-install"
     --with-digest-api-frontend=internal \
     --with-rng-api-frontend=internal    \
     --without-libmowgli                 \
-    ${ATHEME_CONF_ARGS:-}
+    ${ATHEME_CONF_ARGS:-}               \
+    CPPFLAGS="-DIN_CI_BUILD_ENVIRONMENT=1 ${CPPFLAGS:-}"
 
 "${MAKE}"
 "${MAKE}" install

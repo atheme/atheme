@@ -120,11 +120,21 @@ do_optimal_pbkdf2_benchmark(const long double clocklimit)
 
 	enum digest_algorithm md;
 
-	if (! benchmark_pbkdf2(DIGALG_SHA2_512, PBKDF2_ITERCNT_MAX, &elapsed_sha512))
+#ifdef IN_CI_BUILD_ENVIRONMENT
+	/* Go easier on Travis CI's build infrastructure;
+	 * With the internal digest frontend, max takes upwards of 30 seconds!
+	 *    -- amdj
+	 */
+	const size_t initial = PBKDF2_ITERCNT_DEF;
+#else
+	const size_t initial = PBKDF2_ITERCNT_MAX;
+#endif
+
+	if (! benchmark_pbkdf2(DIGALG_SHA2_512, initial, &elapsed_sha512))
 		// This function logs error messages on failure
 		return false;
 
-	if (! benchmark_pbkdf2(DIGALG_SHA2_256, PBKDF2_ITERCNT_MAX, &elapsed_sha256))
+	if (! benchmark_pbkdf2(DIGALG_SHA2_256, initial, &elapsed_sha256))
 		// This function logs error messages on failure
 		return false;
 
@@ -140,7 +150,7 @@ do_optimal_pbkdf2_benchmark(const long double clocklimit)
 	}
 
 	const char *const mdname = md_digest_to_name(md);
-	size_t iterations = (size_t) (PBKDF2_ITERCNT_MAX / (elapsed / clocklimit));
+	size_t iterations = (size_t) (initial / (elapsed / clocklimit));
 	iterations -= (iterations % 1000U);
 
 	while (elapsed > clocklimit)
