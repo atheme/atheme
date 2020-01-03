@@ -446,6 +446,12 @@ main(int argc, char *argv[])
 	(void) fprintf(stderr, "Using digest frontend: %s\n", digest_get_frontend_info());
 	(void) fprintf(stderr, "\n");
 
+#if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_INTERNAL) && !defined(IN_CI_BUILD_ENVIRONMENT)
+	(void) fprintf(stderr, "WARNING: This program will perform significantly better if you build it\n");
+	(void) fprintf(stderr, "         against a supported third-party cryptographic digest library.\n");
+	(void) fprintf(stderr, "\n");
+#endif
+
 	if (run_optimal_benchmarks && ! do_optimal_benchmarks(optimal_clocklimit, optimal_memlimit))
 		// This function logs error messages on failure
 		return EXIT_FAILURE;
