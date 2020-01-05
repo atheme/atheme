@@ -61,6 +61,7 @@ static const struct cmode charybdis_mode_list[] = {
   { 'C', CMODE_NOCTCP	 },
   { 'T', CMODE_NONOTICE  },
   { 'M', CMODE_IMMUNE	 },
+  { 'u', CMODE_NOFILTER	 },
 
   { '\0', 0 }
 };
