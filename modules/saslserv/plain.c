@@ -57,8 +57,13 @@ sasl_mech_plain_step(struct sasl_session *const restrict p, const struct sasl_in
 		return ASASL_MRESULT_ERROR;
 
 	if (mu->flags & MU_NOPASSWORD)
+	{
+		(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN %s to \2%s\2 (password authentication disabled)",
+		                  p->mechptr->name, entity(mu)->name);
+
 		// Don't bad_password() the user
 		return ASASL_MRESULT_ERROR;
+	}
 
 	if (! verify_password(mu, secret))
 		return ASASL_MRESULT_FAILURE;
