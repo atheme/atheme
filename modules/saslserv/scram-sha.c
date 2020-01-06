@@ -384,8 +384,11 @@ sasl_mech_scramsha_step_clientfirst(struct sasl_session *const restrict p,
 	}
 	if (mu->flags & MU_NOPASSWORD)
 	{
+		(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN %s to \2%s\2 (password authentication disabled)",
+		                  p->mechptr->name, entity(mu)->name);
+
 		(void) slog(LG_DEBUG, "%s: user has NOPASSWORD flag set", MOWGLI_FUNC_NAME);
-		(void) sasl_scramsha_error("other-error", out);
+		(void) sasl_scramsha_error("password-authentication-disabled", out);
 		goto error;
 	}
 	if (! pbkdf2v2_scram_functions->dbextract(mu->pass, &db))
