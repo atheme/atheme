@@ -62,7 +62,7 @@ pkg-config discovery for those libraries. For example, if you wish to use
 GNU libidn, and it is installed into a default search path for your compiler
 and linker, and you do not have pkg-config installed, execute:
 
-    $ ./configure LIBIDN_CFLAGS="" LIBIDN_LIBS=""
+    $ ./configure LIBIDN_CFLAGS="" LIBIDN_LIBS="-lidn"
 
 If a library relies on populating `LIBFOO_CFLAGS` with some preprocessor
 definitions, or populating `LIBFOO_LIBS` with some library linking flags,
