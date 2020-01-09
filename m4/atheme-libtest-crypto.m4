@@ -1,6 +1,7 @@
 AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 
 	LIBCRYPTO="No"
+	LIBCRYPTO_PATH=""
 	LIBCRYPTO_NAME=""
 	LIBCRYPTO_USABLE="No"
 	LIBCRYPTO_DIGEST="No"
@@ -13,6 +14,10 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 	case "x${with_openssl}" in
 		xno | xyes | xauto)
 			;;
+		x/*)
+			LIBCRYPTO_PATH="${with_openssl}"
+			with_openssl="yes"
+			;;
 		*)
 			AC_MSG_ERROR([invalid option for --with-openssl])
 			;;
@@ -22,27 +27,33 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "${with_openssl}" != "no"], [
-		PKG_CHECK_MODULES([LIBCRYPTO], [libcrypto], [
-			CPPFLAGS="${LIBCRYPTO_CFLAGS} ${CPPFLAGS}"
-			LIBS="${LIBCRYPTO_LIBS} ${LIBS}"
+		AS_IF([test -n "${LIBCRYPTO_PATH}"], [
+			dnl Allow for user to provide custom installation directory
+			AS_IF([test -d "${LIBCRYPTO_PATH}/include" -a -d "${LIBCRYPTO_PATH}/lib"], [
+				LIBCRYPTO_CFLAGS="-I${LIBCRYPTO_PATH}/include"
+				LIBCRYPTO_LIBS="-L${LIBCRYPTO_PATH}/lib"
+			], [
+				AC_MSG_ERROR([${LIBCRYPTO_PATH} is not a suitable directory for OpenSSL])
+			])
+		], [test -n "${PKG_CONFIG}"], [
+			dnl Allow for the user to "override" pkg-config without it being installed
+			PKG_CHECK_MODULES([LIBCRYPTO], [libcrypto], [], [])
+		])
+		AS_IF([test -n "${LIBCRYPTO_CFLAGS+set}" -a -n "${LIBCRYPTO_LIBS+set}"], [
+			dnl Only proceed with library tests if custom paths were given or pkg-config succeeded
 			LIBCRYPTO="Yes"
-			AC_CHECK_HEADERS([openssl/opensslv.h], [], [
-				LIBCRYPTO="No"
-				AS_IF([test "${with_openssl}" = "yes"], [
-					AC_MSG_ERROR([--with-openssl was given but a required header file is missing])
-				])
-			], [])
 		], [
 			LIBCRYPTO="No"
-			AS_IF([test "${with_openssl}" = "yes"], [
-				AC_MSG_ERROR([--with-openssl was given but libcrypto could not be found])
+			AS_IF([test "${with_openssl}" != "auto"], [
+				AC_MSG_FAILURE([--with-openssl was given but OpenSSL could not be found])
 			])
 		])
-	], [
-		LIBCRYPTO="No"
 	])
 
 	AS_IF([test "${LIBCRYPTO}" = "Yes"], [
+		CPPFLAGS="${LIBCRYPTO_CFLAGS} ${CPPFLAGS}"
+		LIBS="${LIBCRYPTO_LIBS} ${LIBS}"
+
 		AC_MSG_CHECKING([if libcrypto has usable MD5/SHA1/SHA2/HMAC/PBKDF2 functions])
 		AC_LINK_IFELSE([
 			AC_LANG_PROGRAM([[
@@ -51,6 +62,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 				#endif
 				#include <openssl/evp.h>
 				#include <openssl/hmac.h>
+				#include <openssl/opensslv.h>
 			]], [[
 				(void) EVP_MD_size(NULL);
 				(void) EVP_DigestInit_ex(NULL, EVP_md5(), NULL);
@@ -79,6 +91,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 					#  include <stddef.h>
 					#endif
 					#include <openssl/hmac.h>
+					#include <openssl/opensslv.h>
 				]], [[
 					(void) HMAC_CTX_new();
 					(void) HMAC_CTX_free(NULL);
@@ -101,6 +114,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 				#endif
 				#include <openssl/err.h>
 				#include <openssl/rand.h>
+				#include <openssl/opensslv.h>
 			]], [[
 				(void) ERR_get_error();
 				(void) ERR_get_error_line_data(NULL, NULL, NULL, NULL);
@@ -123,6 +137,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 				#  include <stddef.h>
 				#endif
 				#include <openssl/crypto.h>
+				#include <openssl/opensslv.h>
 			]], [[
 				(void) CRYPTO_memcmp(NULL, NULL, 0);
 			]])
@@ -141,6 +156,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 				#  include <stddef.h>
 				#endif
 				#include <openssl/curve25519.h>
+				#include <openssl/opensslv.h>
 			]], [[
 				(void) X25519_keypair(NULL, NULL);
 				(void) X25519(NULL, NULL, NULL);
@@ -163,6 +179,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 				#include <openssl/ec.h>
 				#include <openssl/ecdsa.h>
 				#include <openssl/evp.h>
+				#include <openssl/opensslv.h>
 			]], [[
 				EC_KEY *pubkey = EC_KEY_new_by_curve_name(NID_X9_62_prime256v1);
 				(void) EC_KEY_set_conv_form(pubkey, POINT_CONVERSION_COMPRESSED);
@@ -201,7 +218,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 		AC_DEFINE([HAVE_LIBCRYPTO], [1], [Define to 1 if libcrypto appears to be usable])
 	], [
 		LIBCRYPTO="No"
-		AS_IF([test "${with_openssl}" = "yes"], [
+		AS_IF([test "${with_openssl}" != "auto"], [
 			AC_MSG_FAILURE([--with-openssl was given but libcrypto appears to be unusable])
 		])
 	])

@@ -180,13 +180,13 @@
 /* Define to 1 if libmbedcrypto has usable HMAC-DRBG functions */
 #undef HAVE_LIBMBEDCRYPTO_HMAC_DRBG
 
-/* Define to 1 if libnettle appears to be usable */
+/* Define to 1 if GNU Nettle appears to be usable */
 #undef HAVE_LIBNETTLE
 
-/* Define to 1 if libnettle can provide SASL ECDH-X25519-CHALLENGE */
+/* Define to 1 if GNU Nettle can provide SASL ECDH-X25519-CHALLENGE */
 #undef HAVE_LIBNETTLE_ECDH_X25519
 
-/* Define to 1 if libnettle has a usable constant-time memory comparison
+/* Define to 1 if GNU Nettle has a usable constant-time memory comparison
    function */
 #undef HAVE_LIBNETTLE_MEMEQL
 
@@ -260,9 +260,6 @@
 /* Define to 1 if you have the <nettle/version.h> header file. */
 #undef HAVE_NETTLE_VERSION_H
 
-/* Define to 1 if you have the <openssl/opensslv.h> header file. */
-#undef HAVE_OPENSSL_OPENSSLV_H
-
 /* Define to 1 if the system has the type `ptrdiff_t'. */
 #undef HAVE_PTRDIFF_T
 
@@ -290,14 +287,8 @@
 /* Define to 1 if you have the `setlocale' function. */
 #undef HAVE_SETLOCALE
 
-/* Define to 1 if you have the `sigfillset' function. */
-#undef HAVE_SIGFILLSET
-
 /* Define to 1 if you have the <signal.h> header file. */
 #undef HAVE_SIGNAL_H
-
-/* Define to 1 if you have the `sigprocmask' function. */
-#undef HAVE_SIGPROCMASK
 
 /* Define to 1 if you have a C99 compliant `snprintf' function. */
 #undef HAVE_SNPRINTF

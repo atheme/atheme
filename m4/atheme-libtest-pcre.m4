@@ -1,6 +1,7 @@
 AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 
 	LIBPCRE="No"
+	LIBPCRE_PATH=""
 
 	AC_ARG_WITH([pcre],
 		[AS_HELP_STRING([--without-pcre], [Do not attempt to detect libpcre (Perl-Compatible Regular Expressions)])],
@@ -8,6 +9,10 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 
 	case "x${with_pcre}" in
 		xno | xyes | xauto)
+			;;
+		x/*)
+			LIBPCRE_PATH="${with_pcre}"
+			with_pcre="yes"
 			;;
 		*)
 			AC_MSG_ERROR([invalid option for --with-pcre])
@@ -18,40 +23,56 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "${with_pcre}" != "no"], [
-		PKG_CHECK_MODULES([LIBPCRE], [libpcre], [
-			CPPFLAGS="${LIBPCRE_CFLAGS} ${CPPFLAGS}"
-			LIBS="${LIBPCRE_LIBS} ${LIBS}"
-			AC_MSG_CHECKING([if libpcre appears to be usable])
-			AC_LINK_IFELSE([
-				AC_LANG_PROGRAM([[
-					#ifdef HAVE_STDDEF_H
-					#  include <stddef.h>
-					#endif
-					#include <pcre.h>
-				]], [[
-					(void) pcre_compile(NULL, 0, NULL, NULL, NULL);
-					(void) pcre_exec(NULL, NULL, NULL, 0, 0, 0, NULL, 0);
-					(void) pcre_free(NULL);
-				]])
+		AS_IF([test -n "${LIBPCRE_PATH}"], [
+			dnl Allow for user to provide custom installation directory
+			AS_IF([test -d "${LIBPCRE_PATH}/include" -a -d "${LIBPCRE_PATH}/lib"], [
+				LIBPCRE_CFLAGS="-I${LIBPCRE_PATH}/include"
+				LIBPCRE_LIBS="-L${LIBPCRE_PATH}/lib"
 			], [
-				AC_MSG_RESULT([yes])
-				LIBPCRE="Yes"
-				AC_DEFINE([HAVE_LIBPCRE], [1], [Define to 1 if libpcre appears to be usable])
-			], [
-				AC_MSG_RESULT([no])
-				LIBPCRE="No"
-				AS_IF([test "${with_pcre}" = "yes"], [
-					AC_MSG_FAILURE([--with-pcre was given but libpcre does not appear to be usable])
-				])
+				AC_MSG_ERROR([${LIBPCRE_PATH} is not a suitable directory for libpcre])
 			])
+		], [test -n "${PKG_CONFIG}"], [
+			dnl Allow for the user to "override" pkg-config without it being installed
+			PKG_CHECK_MODULES([LIBPCRE], [libpcre], [], [])
+		])
+		AS_IF([test -n "${LIBPCRE_CFLAGS+set}" -a -n "${LIBPCRE_LIBS+set}"], [
+			dnl Only proceed with library tests if custom paths were given or pkg-config succeeded
+			LIBPCRE="Yes"
 		], [
 			LIBPCRE="No"
-			AS_IF([test "${with_pcre}" = "yes"], [
-				AC_MSG_ERROR([--with-pcre was given but libpcre could not be found])
+			AS_IF([test "${with_pcre}" != "auto"], [
+				AC_MSG_FAILURE([--with-pcre was given but libpcre could not be found])
 			])
 		])
-	], [
-		LIBPCRE="No"
+	])
+
+	AS_IF([test "${LIBPCRE}" = "Yes"], [
+		CPPFLAGS="${LIBPCRE_CFLAGS} ${CPPFLAGS}"
+		LIBS="${LIBPCRE_LIBS} ${LIBS}"
+
+		AC_MSG_CHECKING([if libpcre appears to be usable])
+		AC_LINK_IFELSE([
+			AC_LANG_PROGRAM([[
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <pcre.h>
+			]], [[
+				(void) pcre_compile(NULL, 0, NULL, NULL, NULL);
+				(void) pcre_exec(NULL, NULL, NULL, 0, 0, 0, NULL, 0);
+				(void) pcre_free(NULL);
+			]])
+		], [
+			AC_MSG_RESULT([yes])
+			LIBPCRE="Yes"
+			AC_DEFINE([HAVE_LIBPCRE], [1], [Define to 1 if libpcre appears to be usable])
+		], [
+			AC_MSG_RESULT([no])
+			LIBPCRE="No"
+			AS_IF([test "${with_pcre}" != "auto"], [
+				AC_MSG_FAILURE([--with-pcre was given but libpcre does not appear to be usable])
+			])
+		])
 	])
 
 	CPPFLAGS="${CPPFLAGS_SAVED}"

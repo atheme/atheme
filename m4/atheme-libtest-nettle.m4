@@ -1,6 +1,7 @@
 AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 
 	LIBNETTLE="No"
+	LIBNETTLE_PATH=""
 	LIBNETTLE_USABLE="No"
 	LIBNETTLE_DIGEST="No"
 
@@ -11,6 +12,10 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 	case "x${with_nettle}" in
 		xno | xyes | xauto)
 			;;
+		x/*)
+			LIBNETTLE_PATH="${with_nettle}"
+			with_nettle="yes"
+			;;
 		*)
 			AC_MSG_ERROR([invalid option for --with-nettle])
 			;;
@@ -20,22 +25,34 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "${with_nettle}" != "no"], [
-		PKG_CHECK_MODULES([LIBNETTLE], [nettle], [
-			CPPFLAGS="${LIBNETTLE_CFLAGS} ${CPPFLAGS}"
-			LIBS="${LIBNETTLE_LIBS} ${LIBS}"
+		AS_IF([test -n "${LIBNETTLE_PATH}"], [
+			dnl Allow for user to provide custom installation directory
+			AS_IF([test -d "${LIBNETTLE_PATH}/include" -a -d "${LIBNETTLE_PATH}/lib"], [
+				LIBNETTLE_CFLAGS="-I${LIBNETTLE_PATH}/include"
+				LIBNETTLE_LIBS="-L${LIBNETTLE_PATH}/lib"
+			], [
+				AC_MSG_ERROR([${LIBNETTLE_PATH} is not a suitable directory for GNU Nettle])
+			])
+		], [test -n "${PKG_CONFIG}"], [
+			dnl Allow for the user to "override" pkg-config without it being installed
+			PKG_CHECK_MODULES([LIBNETTLE], [nettle], [], [])
+		])
+		AS_IF([test -n "${LIBNETTLE_CFLAGS+set}" -a -n "${LIBNETTLE_LIBS+set}"], [
+			dnl Only proceed with library tests if custom paths were given or pkg-config succeeded
 			LIBNETTLE="Yes"
 		], [
 			LIBNETTLE="No"
-			AS_IF([test "${with_nettle}" = "yes"], [
-				AC_MSG_ERROR([--with-nettle was given but libnettle could not be found])
+			AS_IF([test "${with_nettle}" != "auto"], [
+				AC_MSG_FAILURE([--with-nettle was given but GNU Nettle could not be found])
 			])
 		])
-	], [
-		LIBNETTLE="No"
 	])
 
 	AS_IF([test "${LIBNETTLE}" = "Yes"], [
-		AC_MSG_CHECKING([if libnettle has usable MD5/SHA1/SHA2 functions])
+		CPPFLAGS="${LIBNETTLE_CFLAGS} ${CPPFLAGS}"
+		LIBS="${LIBNETTLE_LIBS} ${LIBS}"
+
+		AC_MSG_CHECKING([if GNU Nettle has usable MD5/SHA1/SHA2 functions])
 		AC_LINK_IFELSE([
 			AC_LANG_PROGRAM([[
 				#ifdef HAVE_STDDEF_H
@@ -71,7 +88,7 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 			AC_MSG_RESULT([no])
 		])
 
-		AC_MSG_CHECKING([if libnettle has a usable constant-time memory comparison function])
+		AC_MSG_CHECKING([if GNU Nettle has a usable constant-time memory comparison function])
 		AC_LINK_IFELSE([
 			AC_LANG_PROGRAM([[
 				#ifdef HAVE_STDDEF_H
@@ -83,13 +100,13 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 			]])
 		], [
 			AC_MSG_RESULT([yes])
-			AC_DEFINE([HAVE_LIBNETTLE_MEMEQL], [1], [Define to 1 if libnettle has a usable constant-time memory comparison function])
+			AC_DEFINE([HAVE_LIBNETTLE_MEMEQL], [1], [Define to 1 if GNU Nettle has a usable constant-time memory comparison function])
 			LIBNETTLE_USABLE="Yes"
 		], [
 			AC_MSG_RESULT([no])
 		])
 
-		AC_MSG_CHECKING([if libnettle can provide SASL ECDH-X25519-CHALLENGE])
+		AC_MSG_CHECKING([if GNU Nettle can provide SASL ECDH-X25519-CHALLENGE])
 		AC_LINK_IFELSE([
 			AC_LANG_PROGRAM([[
 				#ifdef HAVE_STDDEF_H
@@ -105,7 +122,7 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 			]])
 		], [
 			AC_MSG_RESULT([yes])
-			AC_DEFINE([HAVE_LIBNETTLE_ECDH_X25519], [1], [Define to 1 if libnettle can provide SASL ECDH-X25519-CHALLENGE])
+			AC_DEFINE([HAVE_LIBNETTLE_ECDH_X25519], [1], [Define to 1 if GNU Nettle can provide SASL ECDH-X25519-CHALLENGE])
 			ATHEME_COND_ECDH_X25519_TOOL_ENABLE
 			LIBNETTLE_USABLE="Yes"
 		], [
@@ -114,12 +131,12 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 	])
 
 	AS_IF([test "${LIBNETTLE_USABLE}" = "Yes"], [
-		AC_DEFINE([HAVE_LIBNETTLE], [1], [Define to 1 if libnettle appears to be usable])
+		AC_DEFINE([HAVE_LIBNETTLE], [1], [Define to 1 if GNU Nettle appears to be usable])
 		AC_CHECK_HEADERS([nettle/version.h], [], [], [])
 	], [
 		LIBNETTLE="No"
-		AS_IF([test "${with_nettle}" = "yes"], [
-			AC_MSG_FAILURE([--with-nettle was given but libnettle appears to be unusable])
+		AS_IF([test "${with_nettle}" != "auto"], [
+			AC_MSG_FAILURE([--with-nettle was given but GNU Nettle appears to be unusable])
 		])
 	])
 

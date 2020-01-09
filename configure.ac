@@ -78,7 +78,6 @@ AC_PATH_PROG([RM], [rm])
 AC_PROG_SED
 AC_PATH_PROG([TAR], [tar])
 PKG_PROG_PKG_CONFIG
-AS_IF([test -z "${PKG_CONFIG}"], [AC_MSG_ERROR([pkg-config not found])])
 
 dnl Initialise our build system
 BUILDSYS_INIT

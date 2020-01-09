@@ -1,6 +1,7 @@
 AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 
 	LIBSODIUM="No"
+	LIBSODIUM_PATH=""
 	LIBSODIUM_USABLE="No"
 	LIBSODIUM_MEMORY="No"
 	LIBSODIUM_RANDOM="No"
@@ -12,6 +13,10 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 	case "x${with_sodium}" in
 		xno | xyes | xauto)
 			;;
+		x/*)
+			LIBSODIUM_PATH="${with_sodium}"
+			with_sodium="yes"
+			;;
 		*)
 			AC_MSG_ERROR([invalid option for --with-sodium])
 			;;
@@ -21,36 +26,52 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "${with_sodium}" != "no"], [
-		PKG_CHECK_MODULES([LIBSODIUM], [libsodium], [
-			CPPFLAGS="${LIBSODIUM_CFLAGS} ${CPPFLAGS}"
-			LIBS="${LIBSODIUM_LIBS} ${LIBS}"
-			AC_MSG_CHECKING([if libsodium appears to be usable])
-			AC_LINK_IFELSE([
-				AC_LANG_PROGRAM([[
-					#include <sodium/core.h>
-					#include <sodium/utils.h>
-					#include <sodium/version.h>
-				]], [[
-					(void) sodium_init();
-				]])
+		AS_IF([test -n "${LIBSODIUM_PATH}"], [
+			dnl Allow for user to provide custom installation directory
+			AS_IF([test -d "${LIBSODIUM_PATH}/include" -a -d "${LIBSODIUM_PATH}/lib"], [
+				LIBSODIUM_CFLAGS="-I${LIBSODIUM_PATH}/include"
+				LIBSODIUM_LIBS="-L${LIBSODIUM_PATH}/lib"
 			], [
-				AC_MSG_RESULT([yes])
-				LIBSODIUM="Yes"
-			], [
-				AC_MSG_RESULT([no])
-				LIBSODIUM="No"
-				AS_IF([test "${with_sodium}" = "yes"], [
-					AC_MSG_FAILURE([--with-sodium was given but libsodium appears to be unusable])
-				])
+				AC_MSG_ERROR([${LIBSODIUM_PATH} is not a suitable directory for libsodium])
 			])
+		], [test -n "${PKG_CONFIG}"], [
+			dnl Allow for the user to "override" pkg-config without it being installed
+			PKG_CHECK_MODULES([LIBSODIUM], [libsodium], [], [])
+		])
+		AS_IF([test -n "${LIBSODIUM_CFLAGS+set}" -a -n "${LIBSODIUM_LIBS+set}"], [
+			dnl Only proceed with library tests if custom paths were given or pkg-config succeeded
+			LIBSODIUM="Yes"
 		], [
 			LIBSODIUM="No"
-			AS_IF([test "${with_sodium}" = "yes"], [
-				AC_MSG_ERROR([--with-sodium was given but libsodium could not be found])
+			AS_IF([test "${with_sodium}" != "auto"], [
+				AC_MSG_FAILURE([--with-sodium was given but libsodium could not be found])
 			])
 		])
-	], [
-		LIBSODIUM="No"
+	])
+
+	AS_IF([test "${LIBSODIUM}" = "Yes"], [
+		CPPFLAGS="${LIBSODIUM_CFLAGS} ${CPPFLAGS}"
+		LIBS="${LIBSODIUM_LIBS} ${LIBS}"
+
+		AC_MSG_CHECKING([if libsodium appears to be usable])
+		AC_LINK_IFELSE([
+			AC_LANG_PROGRAM([[
+				#include <sodium/core.h>
+				#include <sodium/utils.h>
+				#include <sodium/version.h>
+			]], [[
+				(void) sodium_init();
+			]])
+		], [
+			AC_MSG_RESULT([yes])
+			LIBSODIUM="Yes"
+		], [
+			AC_MSG_RESULT([no])
+			LIBSODIUM="No"
+			AS_IF([test "${with_sodium}" != "auto"], [
+				AC_MSG_FAILURE([--with-sodium was given but libsodium appears to be unusable])
+			])
+		])
 	])
 
 	AS_IF([test "${LIBSODIUM}" = "Yes"], [
@@ -186,7 +207,7 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 		AC_DEFINE([HAVE_LIBSODIUM], [1], [Define to 1 if libsodium appears to be usable])
 	], [
 		LIBSODIUM="No"
-		AS_IF([test "${with_sodium}" = "yes"], [
+		AS_IF([test "${with_sodium}" != "auto"], [
 			AC_MSG_FAILURE([--with-sodium was given but libsodium appears to be unusable])
 		])
 	])

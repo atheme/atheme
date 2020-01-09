@@ -4552,9 +4552,6 @@ $as_echo "no" >&6; }
 		PKG_CONFIG=""
 	fi
 fi
-if test -z "${PKG_CONFIG}"; then :
-  as_fn_error $? "pkg-config not found" "$LINENO" 5
-fi
 
 
 	# Extract the first word of "tput", so it can be a program name with args.
@@ -9777,6 +9774,7 @@ rm -f core conftest.err conftest.$ac_objext \
 
 
 	LIBARGON2="No"
+	LIBARGON2_PATH=""
 
 
 # Check whether --with-libargon2 was given.
@@ -9790,6 +9788,10 @@ fi
 	case "x${with_libargon2}" in
 		xno | xyes | xauto)
 			;;
+		x/*)
+			LIBARGON2_PATH="${with_libargon2}"
+			with_libargon2="yes"
+			;;
 		*)
 			as_fn_error $? "invalid option for --with-libargon2" "$LINENO" 5
 			;;
@@ -9800,40 +9802,20 @@ fi
 
 	if test "${with_libargon2}" != "no"; then :
 
-		LIBARGON2="Yes"
+		if test -n "${LIBARGON2_PATH}"; then :
 
-				for ac_func in sigfillset sigprocmask
-do :
-  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
-ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
-if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
-_ACEOF
+						if test -d "${LIBARGON2_PATH}/include" -a -d "${LIBARGON2_PATH}/lib"; then :
+
+				LIBARGON2_CFLAGS="-I${LIBARGON2_PATH}/include"
+				LIBARGON2_LIBS="-L${LIBARGON2_PATH}/lib"
 
 else
 
-			LIBARGON2="No"
-			if test "${with_libargon2}" = "yes"; then :
-
-				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "--with-libargon2 was given but required signal functions are not available
-See \`config.log' for more details" "$LINENO" 5; }
+				as_fn_error $? "${LIBARGON2_PATH} is not a suitable directory for libargon2" "$LINENO" 5
 
 fi
 
-fi
-done
-
-
-else
-
-		LIBARGON2="No"
-
-fi
-
-	if test "${LIBARGON2}" = "Yes"; then :
+elif test -n "${PKG_CONFIG}"; then :
 
 
 pkg_failed=no
@@ -9894,73 +9876,107 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$LIBARGON2_PKG_ERRORS" >&5
 
+	as_fn_error $? "Package requirements (libargon2) were not met:
 
-			LIBARGON2="No"
-			if test "${with_libargon2}" = "yes"; then :
+$LIBARGON2_PKG_ERRORS
 
-				as_fn_error $? "--with-libargon2 was given but libargon2 could not be found" "$LINENO" 5
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
 
-fi
-
+Alternatively, you may set the environment variables LIBARGON2_CFLAGS
+and LIBARGON2_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
+	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
 
-			LIBARGON2="No"
-			if test "${with_libargon2}" = "yes"; then :
+Alternatively, you may set the environment variables LIBARGON2_CFLAGS
+and LIBARGON2_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
 
-				as_fn_error $? "--with-libargon2 was given but libargon2 could not be found" "$LINENO" 5
-
-fi
-
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+See \`config.log' for more details" "$LINENO" 5; }
 else
 	LIBARGON2_CFLAGS=$pkg_cv_LIBARGON2_CFLAGS
 	LIBARGON2_LIBS=$pkg_cv_LIBARGON2_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-			CPPFLAGS="${LIBARGON2_CFLAGS} ${CPPFLAGS}"
-			LIBS="${LIBARGON2_LIBS} ${LIBS}"
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libargon2 appears to be usable" >&5
+fi
+
+fi
+		if test -n "${LIBARGON2_CFLAGS+set}" -a -n "${LIBARGON2_LIBS+set}"; then :
+
+						LIBARGON2="Yes"
+
+else
+
+			LIBARGON2="No"
+			if test "${with_libargon2}" != "auto"; then :
+
+				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--with-libargon2 was given but libargon2 could not be found
+See \`config.log' for more details" "$LINENO" 5; }
+
+fi
+
+fi
+
+fi
+
+	if test "${LIBARGON2}" = "Yes"; then :
+
+		CPPFLAGS="${LIBARGON2_CFLAGS} ${CPPFLAGS}"
+		LIBS="${LIBARGON2_LIBS} ${LIBS}"
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libargon2 appears to be usable" >&5
 $as_echo_n "checking if libargon2 appears to be usable... " >&6; }
-			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 
-					#ifdef HAVE_STDDEF_H
-					#  include <stddef.h>
-					#endif
-					#include <argon2.h>
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#ifdef HAVE_SIGNAL_H
+				#  include <signal.h>
+				#endif
+				#include <argon2.h>
 
 int
 main ()
 {
 
-					argon2_context ctx = {
-						.out = NULL,
-						.outlen = 0,
-						.pwd = NULL,
-						.pwdlen = 0,
-						.salt = NULL,
-						.saltlen = 0,
-						.secret = NULL,
-						.secretlen = 0,
-						.ad = NULL,
-						.adlen = 0,
-						.t_cost = ARGON2_MAX_TIME,
-						.m_cost = ARGON2_MAX_MEMORY,
-						.lanes = 1,
-						.threads = 1,
-						.version = ARGON2_VERSION_13,
-						.allocate_cbk = NULL,
-						.free_cbk = NULL,
-						.flags = 0,
-					};
-					(void) argon2_ctx(&ctx, Argon2_d);
-					(void) argon2_ctx(&ctx, Argon2_i);
-					(void) argon2_ctx(&ctx, Argon2_id);
-					(void) argon2_error_message(0);
-					(void) argon2_type2string(0, 0);
+				// POSIX.1-2001 Signal-blocking functions are necessary for thread-safety
+				sigset_t oldset;
+				sigset_t newset;
+				(void) sigfillset(&newset);
+				(void) sigprocmask(SIG_BLOCK, &newset, &oldset);
+
+				argon2_context ctx = {
+					.out = NULL,
+					.outlen = 0,
+					.pwd = NULL,
+					.pwdlen = 0,
+					.salt = NULL,
+					.saltlen = 0,
+					.t_cost = ARGON2_MAX_TIME,
+					.m_cost = ARGON2_MAX_MEMORY,
+					.lanes = 1,
+					.threads = 1,
+					.version = ARGON2_VERSION_NUMBER,
+				};
+				(void) argon2_ctx(&ctx, Argon2_d);
+				(void) argon2_ctx(&ctx, Argon2_i);
+				(void) argon2_ctx(&ctx, Argon2_id);
+				(void) argon2_error_message(0);
+				(void) argon2_type2string(0, 0);
 
   ;
   return 0;
@@ -9969,21 +9985,21 @@ main ()
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-				LIBARGON2="Yes"
+			LIBARGON2="Yes"
 
 $as_echo "#define HAVE_LIBARGON2 1" >>confdefs.h
 
 
 else
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-				LIBARGON2="No"
-				if test "${with_libargon2}" = "yes"; then :
+			LIBARGON2="No"
+			if test "${with_libargon2}" != "auto"; then :
 
-					{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "--with-libargon2 was given but libargon2 appears to be unusable
 See \`config.log' for more details" "$LINENO" 5; }
@@ -9993,8 +10009,6 @@ fi
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
-
-fi
 
 fi
 
@@ -10344,6 +10358,7 @@ fi
 
 
 	LIBCRYPTO="No"
+	LIBCRYPTO_PATH=""
 	LIBCRYPTO_NAME=""
 	LIBCRYPTO_USABLE="No"
 	LIBCRYPTO_DIGEST="No"
@@ -10361,6 +10376,10 @@ fi
 	case "x${with_openssl}" in
 		xno | xyes | xauto)
 			;;
+		x/*)
+			LIBCRYPTO_PATH="${with_openssl}"
+			with_openssl="yes"
+			;;
 		*)
 			as_fn_error $? "invalid option for --with-openssl" "$LINENO" 5
 			;;
@@ -10370,6 +10389,21 @@ fi
 	LIBS_SAVED="${LIBS}"
 
 	if test "${with_openssl}" != "no"; then :
+
+		if test -n "${LIBCRYPTO_PATH}"; then :
+
+						if test -d "${LIBCRYPTO_PATH}/include" -a -d "${LIBCRYPTO_PATH}/lib"; then :
+
+				LIBCRYPTO_CFLAGS="-I${LIBCRYPTO_PATH}/include"
+				LIBCRYPTO_LIBS="-L${LIBCRYPTO_PATH}/lib"
+
+else
+
+				as_fn_error $? "${LIBCRYPTO_PATH} is not a suitable directory for OpenSSL" "$LINENO" 5
+
+fi
+
+elif test -n "${PKG_CONFIG}"; then :
 
 
 pkg_failed=no
@@ -10430,65 +10464,64 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$LIBCRYPTO_PKG_ERRORS" >&5
 
+	as_fn_error $? "Package requirements (libcrypto) were not met:
 
-			LIBCRYPTO="No"
-			if test "${with_openssl}" = "yes"; then :
+$LIBCRYPTO_PKG_ERRORS
 
-				as_fn_error $? "--with-openssl was given but libcrypto could not be found" "$LINENO" 5
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
 
-fi
-
+Alternatively, you may set the environment variables LIBCRYPTO_CFLAGS
+and LIBCRYPTO_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
+	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
 
-			LIBCRYPTO="No"
-			if test "${with_openssl}" = "yes"; then :
+Alternatively, you may set the environment variables LIBCRYPTO_CFLAGS
+and LIBCRYPTO_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
 
-				as_fn_error $? "--with-openssl was given but libcrypto could not be found" "$LINENO" 5
-
-fi
-
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+See \`config.log' for more details" "$LINENO" 5; }
 else
 	LIBCRYPTO_CFLAGS=$pkg_cv_LIBCRYPTO_CFLAGS
 	LIBCRYPTO_LIBS=$pkg_cv_LIBCRYPTO_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-			CPPFLAGS="${LIBCRYPTO_CFLAGS} ${CPPFLAGS}"
-			LIBS="${LIBCRYPTO_LIBS} ${LIBS}"
-			LIBCRYPTO="Yes"
-			for ac_header in openssl/opensslv.h
-do :
-  ac_fn_c_check_header_mongrel "$LINENO" "openssl/opensslv.h" "ac_cv_header_openssl_opensslv_h" "$ac_includes_default"
-if test "x$ac_cv_header_openssl_opensslv_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_OPENSSL_OPENSSLV_H 1
-_ACEOF
+fi
+
+fi
+		if test -n "${LIBCRYPTO_CFLAGS+set}" -a -n "${LIBCRYPTO_LIBS+set}"; then :
+
+						LIBCRYPTO="Yes"
 
 else
 
-				LIBCRYPTO="No"
-				if test "${with_openssl}" = "yes"; then :
+			LIBCRYPTO="No"
+			if test "${with_openssl}" != "auto"; then :
 
-					as_fn_error $? "--with-openssl was given but a required header file is missing" "$LINENO" 5
-
-fi
-
-fi
-
-done
-
+				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--with-openssl was given but OpenSSL could not be found
+See \`config.log' for more details" "$LINENO" 5; }
 
 fi
 
-else
-
-		LIBCRYPTO="No"
+fi
 
 fi
 
 	if test "${LIBCRYPTO}" = "Yes"; then :
+
+		CPPFLAGS="${LIBCRYPTO_CFLAGS} ${CPPFLAGS}"
+		LIBS="${LIBCRYPTO_LIBS} ${LIBS}"
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libcrypto has usable MD5/SHA1/SHA2/HMAC/PBKDF2 functions" >&5
 $as_echo_n "checking if libcrypto has usable MD5/SHA1/SHA2/HMAC/PBKDF2 functions... " >&6; }
@@ -10501,6 +10534,7 @@ $as_echo_n "checking if libcrypto has usable MD5/SHA1/SHA2/HMAC/PBKDF2 functions
 				#endif
 				#include <openssl/evp.h>
 				#include <openssl/hmac.h>
+				#include <openssl/opensslv.h>
 
 int
 main ()
@@ -10543,6 +10577,7 @@ $as_echo_n "checking if libcrypto has HMAC_CTX_new() & HMAC_CTX_free()... " >&6;
 					#  include <stddef.h>
 					#endif
 					#include <openssl/hmac.h>
+					#include <openssl/opensslv.h>
 
 int
 main ()
@@ -10593,6 +10628,7 @@ $as_echo_n "checking if libcrypto has a usable random number generator... " >&6;
 				#endif
 				#include <openssl/err.h>
 				#include <openssl/rand.h>
+				#include <openssl/opensslv.h>
 
 int
 main ()
@@ -10635,6 +10671,7 @@ $as_echo_n "checking if libcrypto has a usable constant-time memory comparison f
 				#  include <stddef.h>
 				#endif
 				#include <openssl/crypto.h>
+				#include <openssl/opensslv.h>
 
 int
 main ()
@@ -10675,6 +10712,7 @@ $as_echo_n "checking if libcrypto can provide SASL ECDH-X25519-CHALLENGE... " >&
 				#  include <stddef.h>
 				#endif
 				#include <openssl/curve25519.h>
+				#include <openssl/opensslv.h>
 
 int
 main ()
@@ -10727,6 +10765,7 @@ $as_echo_n "checking if libcrypto can provide SASL ECDSA-NIST256P-CHALLENGE... "
 				#include <openssl/ec.h>
 				#include <openssl/ecdsa.h>
 				#include <openssl/evp.h>
+				#include <openssl/opensslv.h>
 
 int
 main ()
@@ -10813,7 +10852,7 @@ $as_echo "#define HAVE_LIBCRYPTO 1" >>confdefs.h
 else
 
 		LIBCRYPTO="No"
-		if test "${with_openssl}" = "yes"; then :
+		if test "${with_openssl}" != "auto"; then :
 
 			{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
@@ -10840,6 +10879,7 @@ fi
 
 
 	LIBIDN="No"
+	LIBIDN_PATH=""
 
 
 # Check whether --with-libidn was given.
@@ -10853,6 +10893,10 @@ fi
 	case "x${with_libidn}" in
 		xno | xyes | xauto)
 			;;
+		x/*)
+			LIBIDN_PATH="${with_libidn}"
+			with_libidn="yes"
+			;;
 		*)
 			as_fn_error $? "invalid option for --with-libidn" "$LINENO" 5
 			;;
@@ -10862,6 +10906,21 @@ fi
 	LIBS_SAVED="${LIBS}"
 
 	if test "${with_libidn}" != "no"; then :
+
+		if test -n "${LIBIDN_PATH}"; then :
+
+						if test -d "${LIBIDN_PATH}/include" -a -d "${LIBIDN_PATH}/lib"; then :
+
+				LIBIDN_CFLAGS="-I${LIBIDN_PATH}/include"
+				LIBIDN_LIBS="-L${LIBIDN_PATH}/lib"
+
+else
+
+				as_fn_error $? "${LIBIDN_PATH} is not a suitable directory for GNU libidn" "$LINENO" 5
+
+fi
+
+elif test -n "${PKG_CONFIG}"; then :
 
 
 pkg_failed=no
@@ -10922,50 +10981,82 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$LIBIDN_PKG_ERRORS" >&5
 
+	as_fn_error $? "Package requirements (libidn) were not met:
 
-			LIBIDN="No"
-			if test "${with_libidn}" = "yes"; then :
+$LIBIDN_PKG_ERRORS
 
-				as_fn_error $? "--with-libidn was given but libidn could not be found" "$LINENO" 5
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
 
-fi
-
+Alternatively, you may set the environment variables LIBIDN_CFLAGS
+and LIBIDN_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
+	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
 
-			LIBIDN="No"
-			if test "${with_libidn}" = "yes"; then :
+Alternatively, you may set the environment variables LIBIDN_CFLAGS
+and LIBIDN_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
 
-				as_fn_error $? "--with-libidn was given but libidn could not be found" "$LINENO" 5
-
-fi
-
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+See \`config.log' for more details" "$LINENO" 5; }
 else
 	LIBIDN_CFLAGS=$pkg_cv_LIBIDN_CFLAGS
 	LIBIDN_LIBS=$pkg_cv_LIBIDN_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-			CPPFLAGS="${LIBIDN_CFLAGS} ${CPPFLAGS}"
-			LIBS="${LIBIDN_LIBS} ${LIBS}"
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libidn appears to be usable" >&5
-$as_echo_n "checking if libidn appears to be usable... " >&6; }
-			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+fi
+
+fi
+		if test -n "${LIBIDN_CFLAGS+set}" -a -n "${LIBIDN_LIBS+set}"; then :
+
+						LIBIDN="Yes"
+
+else
+
+			LIBIDN="No"
+			if test "${with_libidn}" != "auto"; then :
+
+				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--with-libidn was given but GNU libidn could not be found
+See \`config.log' for more details" "$LINENO" 5; }
+
+fi
+
+fi
+
+fi
+
+	if test "${LIBIDN}" = "Yes"; then :
+
+		CPPFLAGS="${LIBIDN_CFLAGS} ${CPPFLAGS}"
+		LIBS="${LIBIDN_LIBS} ${LIBS}"
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if GNU libidn appears to be usable" >&5
+$as_echo_n "checking if GNU libidn appears to be usable... " >&6; }
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 
-					#ifdef HAVE_STDDEF_H
-					#  include <stddef.h>
-					#endif
-					#include <stringprep.h>
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <stringprep.h>
 
 int
 main ()
 {
 
-					(void) stringprep_locale_to_utf8(NULL);
-					(void) stringprep(NULL, 0, (Stringprep_profile_flags) 0, stringprep_saslprep);
+				(void) stringprep_locale_to_utf8(NULL);
+				(void) stringprep(NULL, 0, (Stringprep_profile_flags) 0, stringprep_saslprep);
 
   ;
   return 0;
@@ -10974,23 +11065,23 @@ main ()
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-				LIBIDN="Yes"
+			LIBIDN="Yes"
 
 $as_echo "#define HAVE_LIBIDN 1" >>confdefs.h
 
 
 else
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-				LIBIDN="No"
-				if test "${with_libidn}" = "yes"; then :
+			LIBIDN="No"
+			if test "${with_libidn}" != "auto"; then :
 
-					{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "--with-libidn was given but libidn appears to be unusable
+as_fn_error $? "--with-libidn was given but GNU libidn appears to be unusable
 See \`config.log' for more details" "$LINENO" 5; }
 
 fi
@@ -10998,12 +11089,6 @@ fi
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
-
-fi
-
-else
-
-		LIBIDN="No"
 
 fi
 
@@ -11685,6 +11770,7 @@ fi
 
 
 	LIBNETTLE="No"
+	LIBNETTLE_PATH=""
 	LIBNETTLE_USABLE="No"
 	LIBNETTLE_DIGEST="No"
 
@@ -11700,6 +11786,10 @@ fi
 	case "x${with_nettle}" in
 		xno | xyes | xauto)
 			;;
+		x/*)
+			LIBNETTLE_PATH="${with_nettle}"
+			with_nettle="yes"
+			;;
 		*)
 			as_fn_error $? "invalid option for --with-nettle" "$LINENO" 5
 			;;
@@ -11709,6 +11799,21 @@ fi
 	LIBS_SAVED="${LIBS}"
 
 	if test "${with_nettle}" != "no"; then :
+
+		if test -n "${LIBNETTLE_PATH}"; then :
+
+						if test -d "${LIBNETTLE_PATH}/include" -a -d "${LIBNETTLE_PATH}/lib"; then :
+
+				LIBNETTLE_CFLAGS="-I${LIBNETTLE_PATH}/include"
+				LIBNETTLE_LIBS="-L${LIBNETTLE_PATH}/lib"
+
+else
+
+				as_fn_error $? "${LIBNETTLE_PATH} is not a suitable directory for GNU Nettle" "$LINENO" 5
+
+fi
+
+elif test -n "${PKG_CONFIG}"; then :
 
 
 pkg_failed=no
@@ -11769,47 +11874,67 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$LIBNETTLE_PKG_ERRORS" >&5
 
+	as_fn_error $? "Package requirements (nettle) were not met:
 
-			LIBNETTLE="No"
-			if test "${with_nettle}" = "yes"; then :
+$LIBNETTLE_PKG_ERRORS
 
-				as_fn_error $? "--with-nettle was given but libnettle could not be found" "$LINENO" 5
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
 
-fi
-
+Alternatively, you may set the environment variables LIBNETTLE_CFLAGS
+and LIBNETTLE_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
+	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
 
-			LIBNETTLE="No"
-			if test "${with_nettle}" = "yes"; then :
+Alternatively, you may set the environment variables LIBNETTLE_CFLAGS
+and LIBNETTLE_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
 
-				as_fn_error $? "--with-nettle was given but libnettle could not be found" "$LINENO" 5
-
-fi
-
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+See \`config.log' for more details" "$LINENO" 5; }
 else
 	LIBNETTLE_CFLAGS=$pkg_cv_LIBNETTLE_CFLAGS
 	LIBNETTLE_LIBS=$pkg_cv_LIBNETTLE_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-			CPPFLAGS="${LIBNETTLE_CFLAGS} ${CPPFLAGS}"
-			LIBS="${LIBNETTLE_LIBS} ${LIBS}"
-			LIBNETTLE="Yes"
+fi
 
 fi
+		if test -n "${LIBNETTLE_CFLAGS+set}" -a -n "${LIBNETTLE_LIBS+set}"; then :
+
+						LIBNETTLE="Yes"
 
 else
 
-		LIBNETTLE="No"
+			LIBNETTLE="No"
+			if test "${with_nettle}" != "auto"; then :
+
+				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--with-nettle was given but GNU Nettle could not be found
+See \`config.log' for more details" "$LINENO" 5; }
+
+fi
+
+fi
 
 fi
 
 	if test "${LIBNETTLE}" = "Yes"; then :
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libnettle has usable MD5/SHA1/SHA2 functions" >&5
-$as_echo_n "checking if libnettle has usable MD5/SHA1/SHA2 functions... " >&6; }
+		CPPFLAGS="${LIBNETTLE_CFLAGS} ${CPPFLAGS}"
+		LIBS="${LIBNETTLE_LIBS} ${LIBS}"
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if GNU Nettle has usable MD5/SHA1/SHA2 functions" >&5
+$as_echo_n "checking if GNU Nettle has usable MD5/SHA1/SHA2 functions... " >&6; }
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -11864,8 +11989,8 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libnettle has a usable constant-time memory comparison function" >&5
-$as_echo_n "checking if libnettle has a usable constant-time memory comparison function... " >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if GNU Nettle has a usable constant-time memory comparison function" >&5
+$as_echo_n "checking if GNU Nettle has a usable constant-time memory comparison function... " >&6; }
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -11904,8 +12029,8 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libnettle can provide SASL ECDH-X25519-CHALLENGE" >&5
-$as_echo_n "checking if libnettle can provide SASL ECDH-X25519-CHALLENGE... " >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if GNU Nettle can provide SASL ECDH-X25519-CHALLENGE" >&5
+$as_echo_n "checking if GNU Nettle can provide SASL ECDH-X25519-CHALLENGE... " >&6; }
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -11980,11 +12105,11 @@ done
 else
 
 		LIBNETTLE="No"
-		if test "${with_nettle}" = "yes"; then :
+		if test "${with_nettle}" != "auto"; then :
 
 			{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "--with-nettle was given but libnettle appears to be unusable
+as_fn_error $? "--with-nettle was given but GNU Nettle appears to be unusable
 See \`config.log' for more details" "$LINENO" 5; }
 
 fi
@@ -12172,6 +12297,7 @@ fi
 
 
 	LIBPCRE="No"
+	LIBPCRE_PATH=""
 
 
 # Check whether --with-pcre was given.
@@ -12185,6 +12311,10 @@ fi
 	case "x${with_pcre}" in
 		xno | xyes | xauto)
 			;;
+		x/*)
+			LIBPCRE_PATH="${with_pcre}"
+			with_pcre="yes"
+			;;
 		*)
 			as_fn_error $? "invalid option for --with-pcre" "$LINENO" 5
 			;;
@@ -12194,6 +12324,21 @@ fi
 	LIBS_SAVED="${LIBS}"
 
 	if test "${with_pcre}" != "no"; then :
+
+		if test -n "${LIBPCRE_PATH}"; then :
+
+						if test -d "${LIBPCRE_PATH}/include" -a -d "${LIBPCRE_PATH}/lib"; then :
+
+				LIBPCRE_CFLAGS="-I${LIBPCRE_PATH}/include"
+				LIBPCRE_LIBS="-L${LIBPCRE_PATH}/lib"
+
+else
+
+				as_fn_error $? "${LIBPCRE_PATH} is not a suitable directory for libpcre" "$LINENO" 5
+
+fi
+
+elif test -n "${PKG_CONFIG}"; then :
 
 
 pkg_failed=no
@@ -12254,51 +12399,83 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$LIBPCRE_PKG_ERRORS" >&5
 
+	as_fn_error $? "Package requirements (libpcre) were not met:
 
-			LIBPCRE="No"
-			if test "${with_pcre}" = "yes"; then :
+$LIBPCRE_PKG_ERRORS
 
-				as_fn_error $? "--with-pcre was given but libpcre could not be found" "$LINENO" 5
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
 
-fi
-
+Alternatively, you may set the environment variables LIBPCRE_CFLAGS
+and LIBPCRE_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
+	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
 
-			LIBPCRE="No"
-			if test "${with_pcre}" = "yes"; then :
+Alternatively, you may set the environment variables LIBPCRE_CFLAGS
+and LIBPCRE_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
 
-				as_fn_error $? "--with-pcre was given but libpcre could not be found" "$LINENO" 5
-
-fi
-
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+See \`config.log' for more details" "$LINENO" 5; }
 else
 	LIBPCRE_CFLAGS=$pkg_cv_LIBPCRE_CFLAGS
 	LIBPCRE_LIBS=$pkg_cv_LIBPCRE_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-			CPPFLAGS="${LIBPCRE_CFLAGS} ${CPPFLAGS}"
-			LIBS="${LIBPCRE_LIBS} ${LIBS}"
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libpcre appears to be usable" >&5
+fi
+
+fi
+		if test -n "${LIBPCRE_CFLAGS+set}" -a -n "${LIBPCRE_LIBS+set}"; then :
+
+						LIBPCRE="Yes"
+
+else
+
+			LIBPCRE="No"
+			if test "${with_pcre}" != "auto"; then :
+
+				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--with-pcre was given but libpcre could not be found
+See \`config.log' for more details" "$LINENO" 5; }
+
+fi
+
+fi
+
+fi
+
+	if test "${LIBPCRE}" = "Yes"; then :
+
+		CPPFLAGS="${LIBPCRE_CFLAGS} ${CPPFLAGS}"
+		LIBS="${LIBPCRE_LIBS} ${LIBS}"
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libpcre appears to be usable" >&5
 $as_echo_n "checking if libpcre appears to be usable... " >&6; }
-			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 
-					#ifdef HAVE_STDDEF_H
-					#  include <stddef.h>
-					#endif
-					#include <pcre.h>
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <pcre.h>
 
 int
 main ()
 {
 
-					(void) pcre_compile(NULL, 0, NULL, NULL, NULL);
-					(void) pcre_exec(NULL, NULL, NULL, 0, 0, 0, NULL, 0);
-					(void) pcre_free(NULL);
+				(void) pcre_compile(NULL, 0, NULL, NULL, NULL);
+				(void) pcre_exec(NULL, NULL, NULL, 0, 0, 0, NULL, 0);
+				(void) pcre_free(NULL);
 
   ;
   return 0;
@@ -12307,21 +12484,21 @@ main ()
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-				LIBPCRE="Yes"
+			LIBPCRE="Yes"
 
 $as_echo "#define HAVE_LIBPCRE 1" >>confdefs.h
 
 
 else
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-				LIBPCRE="No"
-				if test "${with_pcre}" = "yes"; then :
+			LIBPCRE="No"
+			if test "${with_pcre}" != "auto"; then :
 
-					{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "--with-pcre was given but libpcre does not appear to be usable
 See \`config.log' for more details" "$LINENO" 5; }
@@ -12331,12 +12508,6 @@ fi
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
-
-fi
-
-else
-
-		LIBPCRE="No"
 
 fi
 
@@ -12356,6 +12527,7 @@ fi
 
 
 	LIBQRENCODE="No"
+	LIBQRENCODE_PATH=""
 
 
 # Check whether --with-qrencode was given.
@@ -12369,6 +12541,10 @@ fi
 	case "x${with_qrencode}" in
 		xno | xyes | xauto)
 			;;
+		x/*)
+			LIBQRENCODE_PATH="${with_qrencode}"
+			with_qrencode="yes"
+			;;
 		*)
 			as_fn_error $? "invalid option for --with-qrencode" "$LINENO" 5
 			;;
@@ -12378,6 +12554,21 @@ fi
 	LIBS_SAVED="${LIBS}"
 
 	if test "${with_qrencode}" != "no"; then :
+
+		if test -n "${LIBQRENCODE_PATH}"; then :
+
+						if test -d "${LIBQRENCODE_PATH}/include" -a -d "${LIBQRENCODE_PATH}/lib"; then :
+
+				LIBQRENCODE_CFLAGS="-I${LIBQRENCODE_PATH}/include"
+				LIBQRENCODE_LIBS="-L${LIBQRENCODE_PATH}/lib"
+
+else
+
+				as_fn_error $? "${LIBQRENCODE_PATH} is not a suitable directory for libqrencode" "$LINENO" 5
+
+fi
+
+elif test -n "${PKG_CONFIG}"; then :
 
 
 pkg_failed=no
@@ -12438,50 +12629,82 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$LIBQRENCODE_PKG_ERRORS" >&5
 
+	as_fn_error $? "Package requirements (libqrencode) were not met:
 
-			LIBQRENCODE="No"
-			if test "${with_qrencode}" = "yes"; then :
+$LIBQRENCODE_PKG_ERRORS
 
-				as_fn_error $? "--with-qrencode was given but libqrencode could not be found" "$LINENO" 5
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
 
-fi
-
+Alternatively, you may set the environment variables LIBQRENCODE_CFLAGS
+and LIBQRENCODE_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
+	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
 
-			LIBQRENCODE="No"
-			if test "${with_qrencode}" = "yes"; then :
+Alternatively, you may set the environment variables LIBQRENCODE_CFLAGS
+and LIBQRENCODE_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
 
-				as_fn_error $? "--with-qrencode was given but libqrencode could not be found" "$LINENO" 5
-
-fi
-
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+See \`config.log' for more details" "$LINENO" 5; }
 else
 	LIBQRENCODE_CFLAGS=$pkg_cv_LIBQRENCODE_CFLAGS
 	LIBQRENCODE_LIBS=$pkg_cv_LIBQRENCODE_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-			CPPFLAGS="${LIBQRENCODE_CFLAGS} ${CPPFLAGS}"
-			LIBS="${LIBQRENCODE_LIBS} ${LIBS}"
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libqrencode appears to be usable" >&5
+fi
+
+fi
+		if test -n "${LIBQRENCODE_CFLAGS+set}" -a -n "${LIBQRENCODE_LIBS+set}"; then :
+
+						LIBQRENCODE="Yes"
+
+else
+
+			LIBQRENCODE="No"
+			if test "${with_qrencode}" != "auto"; then :
+
+				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--with-qrencode was given but libqrencode could not be found
+See \`config.log' for more details" "$LINENO" 5; }
+
+fi
+
+fi
+
+fi
+
+	if test "${LIBQRENCODE}" = "Yes"; then :
+
+		CPPFLAGS="${LIBQRENCODE_CFLAGS} ${CPPFLAGS}"
+		LIBS="${LIBQRENCODE_LIBS} ${LIBS}"
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libqrencode appears to be usable" >&5
 $as_echo_n "checking if libqrencode appears to be usable... " >&6; }
-			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 
-					#ifdef HAVE_STDDEF_H
-					#  include <stddef.h>
-					#endif
-					#include <qrencode.h>
+				#ifdef HAVE_STDDEF_H
+				#  include <stddef.h>
+				#endif
+				#include <qrencode.h>
 
 int
 main ()
 {
 
-					(void) QRcode_encodeData(0, NULL, 0, (QRecLevel) 0);
-					(void) QRcode_free(NULL);
+				(void) QRcode_encodeData(0, NULL, 0, (QRecLevel) 0);
+				(void) QRcode_free(NULL);
 
   ;
   return 0;
@@ -12490,9 +12713,9 @@ main ()
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-				LIBQRENCODE="Yes"
+			LIBQRENCODE="Yes"
 
 $as_echo "#define HAVE_LIBQRENCODE 1" >>confdefs.h
 
@@ -12504,12 +12727,12 @@ $as_echo "#define HAVE_LIBQRENCODE 1" >>confdefs.h
 
 else
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-				LIBQRENCODE="No"
-				if test "${with_qrencode}" = "yes"; then :
+			LIBQRENCODE="No"
+			if test "${with_qrencode}" != "auto"; then :
 
-					{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "--with-qrencode was given but libqrencode does not appear to be usable
 See \`config.log' for more details" "$LINENO" 5; }
@@ -12519,12 +12742,6 @@ fi
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
-
-fi
-
-else
-
-		LIBQRENCODE="No"
 
 fi
 
@@ -12544,6 +12761,7 @@ fi
 
 
 	LIBSODIUM="No"
+	LIBSODIUM_PATH=""
 	LIBSODIUM_USABLE="No"
 	LIBSODIUM_MEMORY="No"
 	LIBSODIUM_RANDOM="No"
@@ -12560,6 +12778,10 @@ fi
 	case "x${with_sodium}" in
 		xno | xyes | xauto)
 			;;
+		x/*)
+			LIBSODIUM_PATH="${with_sodium}"
+			with_sodium="yes"
+			;;
 		*)
 			as_fn_error $? "invalid option for --with-sodium" "$LINENO" 5
 			;;
@@ -12569,6 +12791,21 @@ fi
 	LIBS_SAVED="${LIBS}"
 
 	if test "${with_sodium}" != "no"; then :
+
+		if test -n "${LIBSODIUM_PATH}"; then :
+
+						if test -d "${LIBSODIUM_PATH}/include" -a -d "${LIBSODIUM_PATH}/lib"; then :
+
+				LIBSODIUM_CFLAGS="-I${LIBSODIUM_PATH}/include"
+				LIBSODIUM_LIBS="-L${LIBSODIUM_PATH}/lib"
+
+else
+
+				as_fn_error $? "${LIBSODIUM_PATH} is not a suitable directory for libsodium" "$LINENO" 5
+
+fi
+
+elif test -n "${PKG_CONFIG}"; then :
 
 
 pkg_failed=no
@@ -12629,48 +12866,80 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$LIBSODIUM_PKG_ERRORS" >&5
 
+	as_fn_error $? "Package requirements (libsodium) were not met:
 
-			LIBSODIUM="No"
-			if test "${with_sodium}" = "yes"; then :
+$LIBSODIUM_PKG_ERRORS
 
-				as_fn_error $? "--with-sodium was given but libsodium could not be found" "$LINENO" 5
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
 
-fi
-
+Alternatively, you may set the environment variables LIBSODIUM_CFLAGS
+and LIBSODIUM_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
+	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
 
-			LIBSODIUM="No"
-			if test "${with_sodium}" = "yes"; then :
+Alternatively, you may set the environment variables LIBSODIUM_CFLAGS
+and LIBSODIUM_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
 
-				as_fn_error $? "--with-sodium was given but libsodium could not be found" "$LINENO" 5
-
-fi
-
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+See \`config.log' for more details" "$LINENO" 5; }
 else
 	LIBSODIUM_CFLAGS=$pkg_cv_LIBSODIUM_CFLAGS
 	LIBSODIUM_LIBS=$pkg_cv_LIBSODIUM_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-			CPPFLAGS="${LIBSODIUM_CFLAGS} ${CPPFLAGS}"
-			LIBS="${LIBSODIUM_LIBS} ${LIBS}"
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libsodium appears to be usable" >&5
+fi
+
+fi
+		if test -n "${LIBSODIUM_CFLAGS+set}" -a -n "${LIBSODIUM_LIBS+set}"; then :
+
+						LIBSODIUM="Yes"
+
+else
+
+			LIBSODIUM="No"
+			if test "${with_sodium}" != "auto"; then :
+
+				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--with-sodium was given but libsodium could not be found
+See \`config.log' for more details" "$LINENO" 5; }
+
+fi
+
+fi
+
+fi
+
+	if test "${LIBSODIUM}" = "Yes"; then :
+
+		CPPFLAGS="${LIBSODIUM_CFLAGS} ${CPPFLAGS}"
+		LIBS="${LIBSODIUM_LIBS} ${LIBS}"
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libsodium appears to be usable" >&5
 $as_echo_n "checking if libsodium appears to be usable... " >&6; }
-			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 
-					#include <sodium/core.h>
-					#include <sodium/utils.h>
-					#include <sodium/version.h>
+				#include <sodium/core.h>
+				#include <sodium/utils.h>
+				#include <sodium/version.h>
 
 int
 main ()
 {
 
-					(void) sodium_init();
+				(void) sodium_init();
 
   ;
   return 0;
@@ -12679,18 +12948,18 @@ main ()
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-				LIBSODIUM="Yes"
+			LIBSODIUM="Yes"
 
 else
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-				LIBSODIUM="No"
-				if test "${with_sodium}" = "yes"; then :
+			LIBSODIUM="No"
+			if test "${with_sodium}" != "auto"; then :
 
-					{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "--with-sodium was given but libsodium appears to be unusable
 See \`config.log' for more details" "$LINENO" 5; }
@@ -12700,12 +12969,6 @@ fi
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
-
-fi
-
-else
-
-		LIBSODIUM="No"
 
 fi
 
@@ -12985,7 +13248,7 @@ $as_echo "#define HAVE_LIBSODIUM 1" >>confdefs.h
 else
 
 		LIBSODIUM="No"
-		if test "${with_sodium}" = "yes"; then :
+		if test "${with_sodium}" != "auto"; then :
 
 			{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
@@ -18179,7 +18442,19 @@ else
 fi
 
 
+	case "x${with_libmowgli}" in
+		xno | xyes)
+			;;
+		x/*)
+			;;
+		*)
+			as_fn_error $? "invalid option for --with-libmowgli" "$LINENO" 5
+			;;
+	esac
+
 	if test "x${with_libmowgli}" = "xyes"; then :
+
+		if test -n "${PKG_CONFIG}"; then :
 
 
 pkg_failed=no
@@ -18240,30 +18515,32 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$MOWGLI_PKG_ERRORS" >&5
 
-
-			with_libmowgli="no"
-
+	with_libmowgli="no"
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-
-			with_libmowgli="no"
-
+	with_libmowgli="no"
 else
 	MOWGLI_CFLAGS=$pkg_cv_MOWGLI_CFLAGS
 	MOWGLI_LIBS=$pkg_cv_MOWGLI_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-			MOWGLI_SOURCE="System"
-			CPPFLAGS="${CPPFLAGS} ${MOWGLI_CFLAGS}"
-			LIBS="${LIBS} ${MOWGLI_LIBS}"
+fi
+
+else
+
+			with_libmowgli="no"
 
 fi
 
 fi
 
 	if test "x${with_libmowgli}" = "xyes"; then :
+
+		MOWGLI_SOURCE="System"
+		CPPFLAGS="${CPPFLAGS} ${MOWGLI_CFLAGS}"
+		LIBS="${LIBS} ${MOWGLI_LIBS}"
 
 elif test "x${with_libmowgli}" = "xno"; then :
 
@@ -18277,12 +18554,16 @@ elif test "x${with_libmowgli}" = "xno"; then :
 
 
 
-else
+elif test -d "${with_libmowgli}/include/libmowgli-2" -a -d "${with_libmowgli}/lib"; then :
 
 		MOWGLI_SOURCE="System"
 		CPPFLAGS="${CPPFLAGS} -I${with_libmowgli}/include/libmowgli-2"
 		LDFLAGS="${LDFLAGS} -L${with_libmowgli}/lib"
 		LIBS="${LIBS} -lmowgli-2"
+
+else
+
+		as_fn_error $? "${with_libmowgli} is not a suitable directory for libmowgli" "$LINENO" 5
 
 fi
 
