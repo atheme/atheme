@@ -9796,7 +9796,7 @@ fi
 			;;
 	esac
 
-	CPPFLAGS_SAVED="${CPPFLAGS}"
+	CFLAGS_SAVED="${CFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	if test "${with_argon2}" != "no"; then :
@@ -9931,7 +9931,7 @@ fi
 
 	if test "${LIBARGON2}" = "Yes"; then :
 
-		CPPFLAGS="${LIBARGON2_CFLAGS} ${CPPFLAGS}"
+		CFLAGS="${LIBARGON2_CFLAGS} ${CFLAGS}"
 		LIBS="${LIBARGON2_LIBS} ${LIBS}"
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libargon2 appears to be usable" >&5
@@ -10011,7 +10011,7 @@ rm -f core conftest.err conftest.$ac_objext \
 
 fi
 
-	CPPFLAGS="${CPPFLAGS_SAVED}"
+	CFLAGS="${CFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 	if test "${LIBARGON2}" = "No"; then :
@@ -10046,7 +10046,7 @@ fi
 			;;
 	esac
 
-	CPPFLAGS_SAVED="${CPPFLAGS}"
+	CFLAGS_SAVED="${CFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	if test "${with_cracklib}" != "no"; then :
@@ -10180,7 +10180,7 @@ else
 
 fi
 
-	CPPFLAGS="${CPPFLAGS_SAVED}"
+	CFLAGS="${CFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 
@@ -10384,7 +10384,7 @@ fi
 			;;
 	esac
 
-	CPPFLAGS_SAVED="${CPPFLAGS}"
+	CFLAGS_SAVED="${CFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	if test "${with_openssl}" != "no"; then :
@@ -10519,7 +10519,7 @@ fi
 
 	if test "${LIBCRYPTO}" = "Yes"; then :
 
-		CPPFLAGS="${LIBCRYPTO_CFLAGS} ${CPPFLAGS}"
+		CFLAGS="${LIBCRYPTO_CFLAGS} ${CFLAGS}"
 		LIBS="${LIBCRYPTO_LIBS} ${LIBS}"
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libcrypto has usable MD5/SHA1/SHA2/HMAC/PBKDF2 functions" >&5
@@ -10862,7 +10862,7 @@ fi
 
 fi
 
-	CPPFLAGS="${CPPFLAGS_SAVED}"
+	CFLAGS="${CFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 	if test "${LIBCRYPTO}" = "No"; then :
@@ -10901,7 +10901,7 @@ fi
 			;;
 	esac
 
-	CPPFLAGS_SAVED="${CPPFLAGS}"
+	CFLAGS_SAVED="${CFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	if test "${with_idn}" != "no"; then :
@@ -11036,7 +11036,7 @@ fi
 
 	if test "${LIBIDN}" = "Yes"; then :
 
-		CPPFLAGS="${LIBIDN_CFLAGS} ${CPPFLAGS}"
+		CFLAGS="${LIBIDN_CFLAGS} ${CFLAGS}"
 		LIBS="${LIBIDN_LIBS} ${LIBS}"
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if GNU libidn appears to be usable" >&5
@@ -11088,7 +11088,7 @@ rm -f core conftest.err conftest.$ac_objext \
 
 fi
 
-	CPPFLAGS="${CPPFLAGS_SAVED}"
+	CFLAGS="${CFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 	if test "${LIBIDN}" = "No"; then :
@@ -11123,7 +11123,7 @@ fi
 			;;
 	esac
 
-	CPPFLAGS_SAVED="${CPPFLAGS}"
+	CFLAGS_SAVED="${CFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	if test "${with_ldap}" != "no"; then :
@@ -11257,7 +11257,7 @@ else
 
 fi
 
-	CPPFLAGS="${CPPFLAGS_SAVED}"
+	CFLAGS="${CFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 
@@ -11285,7 +11285,7 @@ fi
 			;;
 	esac
 
-	CPPFLAGS_SAVED="${CPPFLAGS}"
+	CFLAGS_SAVED="${CFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	if test "${with_mbedtls}" != "no"; then :
@@ -11760,7 +11760,7 @@ fi
 
 fi
 
-	CPPFLAGS="${CPPFLAGS_SAVED}"
+	CFLAGS="${CFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 
@@ -11791,7 +11791,7 @@ fi
 			;;
 	esac
 
-	CPPFLAGS_SAVED="${CPPFLAGS}"
+	CFLAGS_SAVED="${CFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	if test "${with_nettle}" != "no"; then :
@@ -11926,7 +11926,7 @@ fi
 
 	if test "${LIBNETTLE}" = "Yes"; then :
 
-		CPPFLAGS="${LIBNETTLE_CFLAGS} ${CPPFLAGS}"
+		CFLAGS="${LIBNETTLE_CFLAGS} ${CFLAGS}"
 		LIBS="${LIBNETTLE_LIBS} ${LIBS}"
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if GNU Nettle has usable MD5/SHA1/SHA2 functions" >&5
@@ -12112,7 +12112,7 @@ fi
 
 fi
 
-	CPPFLAGS="${CPPFLAGS_SAVED}"
+	CFLAGS="${CFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 	if test "${LIBNETTLE}" = "No"; then :
@@ -12147,7 +12147,7 @@ fi
 			;;
 	esac
 
-	CPPFLAGS_SAVED="${CPPFLAGS}"
+	CFLAGS_SAVED="${CFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	if test "${with_passwdqc}" != "no"; then :
@@ -12287,7 +12287,7 @@ else
 
 fi
 
-	CPPFLAGS="${CPPFLAGS_SAVED}"
+	CFLAGS="${CFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 
@@ -12316,7 +12316,7 @@ fi
 			;;
 	esac
 
-	CPPFLAGS_SAVED="${CPPFLAGS}"
+	CFLAGS_SAVED="${CFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	if test "${with_pcre}" != "no"; then :
@@ -12451,7 +12451,7 @@ fi
 
 	if test "${LIBPCRE}" = "Yes"; then :
 
-		CPPFLAGS="${LIBPCRE_CFLAGS} ${CPPFLAGS}"
+		CFLAGS="${LIBPCRE_CFLAGS} ${CFLAGS}"
 		LIBS="${LIBPCRE_LIBS} ${LIBS}"
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libpcre appears to be usable" >&5
@@ -12507,7 +12507,7 @@ rm -f core conftest.err conftest.$ac_objext \
 
 fi
 
-	CPPFLAGS="${CPPFLAGS_SAVED}"
+	CFLAGS="${CFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 	if test "${LIBPCRE}" = "No"; then :
@@ -12546,7 +12546,7 @@ fi
 			;;
 	esac
 
-	CPPFLAGS_SAVED="${CPPFLAGS}"
+	CFLAGS_SAVED="${CFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	if test "${with_qrencode}" != "no"; then :
@@ -12681,7 +12681,7 @@ fi
 
 	if test "${LIBQRENCODE}" = "Yes"; then :
 
-		CPPFLAGS="${LIBQRENCODE_CFLAGS} ${CPPFLAGS}"
+		CFLAGS="${LIBQRENCODE_CFLAGS} ${CFLAGS}"
 		LIBS="${LIBQRENCODE_LIBS} ${LIBS}"
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libqrencode appears to be usable" >&5
@@ -12741,7 +12741,7 @@ rm -f core conftest.err conftest.$ac_objext \
 
 fi
 
-	CPPFLAGS="${CPPFLAGS_SAVED}"
+	CFLAGS="${CFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 	if test "${LIBQRENCODE}" = "No"; then :
@@ -12783,7 +12783,7 @@ fi
 			;;
 	esac
 
-	CPPFLAGS_SAVED="${CPPFLAGS}"
+	CFLAGS_SAVED="${CFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	if test "${with_sodium}" != "no"; then :
@@ -12918,7 +12918,7 @@ fi
 
 	if test "${LIBSODIUM}" = "Yes"; then :
 
-		CPPFLAGS="${LIBSODIUM_CFLAGS} ${CPPFLAGS}"
+		CFLAGS="${LIBSODIUM_CFLAGS} ${CFLAGS}"
 		LIBS="${LIBSODIUM_LIBS} ${LIBS}"
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if libsodium appears to be usable" >&5
@@ -13255,7 +13255,7 @@ fi
 
 fi
 
-	CPPFLAGS="${CPPFLAGS_SAVED}"
+	CFLAGS="${CFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 	if test "${LIBSODIUM}" = "No"; then :
@@ -18535,7 +18535,7 @@ fi
 	if test "x${with_libmowgli}" = "xyes"; then :
 
 		MOWGLI_SOURCE="System"
-		CPPFLAGS="${CPPFLAGS} ${MOWGLI_CFLAGS}"
+		CFLAGS="${CFLAGS} ${MOWGLI_CFLAGS}"
 		LIBS="${LIBS} ${MOWGLI_LIBS}"
 
 elif test "x${with_libmowgli}" = "xno"; then :

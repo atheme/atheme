@@ -21,7 +21,7 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 			;;
 	esac
 
-	CPPFLAGS_SAVED="${CPPFLAGS}"
+	CFLAGS_SAVED="${CFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "${with_nettle}" != "no"], [
@@ -49,7 +49,7 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 	])
 
 	AS_IF([test "${LIBNETTLE}" = "Yes"], [
-		CPPFLAGS="${LIBNETTLE_CFLAGS} ${CPPFLAGS}"
+		CFLAGS="${LIBNETTLE_CFLAGS} ${CFLAGS}"
 		LIBS="${LIBNETTLE_LIBS} ${LIBS}"
 
 		AC_MSG_CHECKING([if GNU Nettle has usable MD5/SHA1/SHA2 functions])
@@ -140,7 +140,7 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 		])
 	])
 
-	CPPFLAGS="${CPPFLAGS_SAVED}"
+	CFLAGS="${CFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 	AS_IF([test "${LIBNETTLE}" = "No"], [

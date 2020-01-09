@@ -19,7 +19,7 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 			;;
 	esac
 
-	CPPFLAGS_SAVED="${CPPFLAGS}"
+	CFLAGS_SAVED="${CFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "${with_idn}" != "no"], [
@@ -47,7 +47,7 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 	])
 
 	AS_IF([test "${LIBIDN}" = "Yes"], [
-		CPPFLAGS="${LIBIDN_CFLAGS} ${CPPFLAGS}"
+		CFLAGS="${LIBIDN_CFLAGS} ${CFLAGS}"
 		LIBS="${LIBIDN_LIBS} ${LIBS}"
 
 		AC_MSG_CHECKING([if GNU libidn appears to be usable])
@@ -74,7 +74,7 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 		])
 	])
 
-	CPPFLAGS="${CPPFLAGS_SAVED}"
+	CFLAGS="${CFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 	AS_IF([test "${LIBIDN}" = "No"], [

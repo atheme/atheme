@@ -23,7 +23,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 			;;
 	esac
 
-	CPPFLAGS_SAVED="${CPPFLAGS}"
+	CFLAGS_SAVED="${CFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "${with_openssl}" != "no"], [
@@ -51,7 +51,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 	])
 
 	AS_IF([test "${LIBCRYPTO}" = "Yes"], [
-		CPPFLAGS="${LIBCRYPTO_CFLAGS} ${CPPFLAGS}"
+		CFLAGS="${LIBCRYPTO_CFLAGS} ${CFLAGS}"
 		LIBS="${LIBCRYPTO_LIBS} ${LIBS}"
 
 		AC_MSG_CHECKING([if libcrypto has usable MD5/SHA1/SHA2/HMAC/PBKDF2 functions])
@@ -223,7 +223,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 		])
 	])
 
-	CPPFLAGS="${CPPFLAGS_SAVED}"
+	CFLAGS="${CFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 	AS_IF([test "${LIBCRYPTO}" = "No"], [

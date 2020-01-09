@@ -19,7 +19,7 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
 			;;
 	esac
 
-	CPPFLAGS_SAVED="${CPPFLAGS}"
+	CFLAGS_SAVED="${CFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "${with_qrencode}" != "no"], [
@@ -47,7 +47,7 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
 	])
 
 	AS_IF([test "${LIBQRENCODE}" = "Yes"], [
-		CPPFLAGS="${LIBQRENCODE_CFLAGS} ${CPPFLAGS}"
+		CFLAGS="${LIBQRENCODE_CFLAGS} ${CFLAGS}"
 		LIBS="${LIBQRENCODE_LIBS} ${LIBS}"
 
 		AC_MSG_CHECKING([if libqrencode appears to be usable])
@@ -75,7 +75,7 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
 		])
 	])
 
-	CPPFLAGS="${CPPFLAGS_SAVED}"
+	CFLAGS="${CFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 	AS_IF([test "${LIBQRENCODE}" = "No"], [

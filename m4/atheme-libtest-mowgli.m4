@@ -26,7 +26,7 @@ AC_DEFUN([ATHEME_LIBTEST_MOWGLI], [
 
 	AS_IF([test "x${with_libmowgli}" = "xyes"], [
 		MOWGLI_SOURCE="System"
-		CPPFLAGS="${CPPFLAGS} ${MOWGLI_CFLAGS}"
+		CFLAGS="${CFLAGS} ${MOWGLI_CFLAGS}"
 		LIBS="${LIBS} ${MOWGLI_LIBS}"
 	], [test "x${with_libmowgli}" = "xno"], [
 		MOWGLI_SOURCE="Internal"

@@ -15,7 +15,7 @@ AC_DEFUN([ATHEME_LIBTEST_LDAP], [
 			;;
 	esac
 
-	CPPFLAGS_SAVED="${CPPFLAGS}"
+	CFLAGS_SAVED="${CFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "${with_ldap}" != "no"], [
@@ -59,6 +59,6 @@ AC_DEFUN([ATHEME_LIBTEST_LDAP], [
 		LIBLDAP="No"
 	])
 
-	CPPFLAGS="${CPPFLAGS_SAVED}"
+	CFLAGS="${CFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 ])

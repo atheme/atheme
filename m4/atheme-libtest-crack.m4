@@ -15,7 +15,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRACK], [
 			;;
 	esac
 
-	CPPFLAGS_SAVED="${CPPFLAGS}"
+	CFLAGS_SAVED="${CFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "${with_cracklib}" != "no"], [
@@ -57,6 +57,6 @@ AC_DEFUN([ATHEME_LIBTEST_CRACK], [
 		LIBCRACK="No"
 	])
 
-	CPPFLAGS="${CPPFLAGS_SAVED}"
+	CFLAGS="${CFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 ])

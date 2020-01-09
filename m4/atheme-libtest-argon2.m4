@@ -19,7 +19,7 @@ AC_DEFUN([ATHEME_LIBTEST_ARGON2], [
 			;;
 	esac
 
-	CPPFLAGS_SAVED="${CPPFLAGS}"
+	CFLAGS_SAVED="${CFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "${with_argon2}" != "no"], [
@@ -47,7 +47,7 @@ AC_DEFUN([ATHEME_LIBTEST_ARGON2], [
 	])
 
 	AS_IF([test "${LIBARGON2}" = "Yes"], [
-		CPPFLAGS="${LIBARGON2_CFLAGS} ${CPPFLAGS}"
+		CFLAGS="${LIBARGON2_CFLAGS} ${CFLAGS}"
 		LIBS="${LIBARGON2_LIBS} ${LIBS}"
 
 		AC_MSG_CHECKING([if libargon2 appears to be usable])
@@ -99,7 +99,7 @@ AC_DEFUN([ATHEME_LIBTEST_ARGON2], [
 		])
 	])
 
-	CPPFLAGS="${CPPFLAGS_SAVED}"
+	CFLAGS="${CFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 	AS_IF([test "${LIBARGON2}" = "No"], [

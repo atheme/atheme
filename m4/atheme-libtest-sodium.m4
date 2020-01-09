@@ -22,7 +22,7 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 			;;
 	esac
 
-	CPPFLAGS_SAVED="${CPPFLAGS}"
+	CFLAGS_SAVED="${CFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
 	AS_IF([test "${with_sodium}" != "no"], [
@@ -50,7 +50,7 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 	])
 
 	AS_IF([test "${LIBSODIUM}" = "Yes"], [
-		CPPFLAGS="${LIBSODIUM_CFLAGS} ${CPPFLAGS}"
+		CFLAGS="${LIBSODIUM_CFLAGS} ${CFLAGS}"
 		LIBS="${LIBSODIUM_LIBS} ${LIBS}"
 
 		AC_MSG_CHECKING([if libsodium appears to be usable])
@@ -212,7 +212,7 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 		])
 	])
 
-	CPPFLAGS="${CPPFLAGS_SAVED}"
+	CFLAGS="${CFLAGS_SAVED}"
 	LIBS="${LIBS_SAVED}"
 
 	AS_IF([test "${LIBSODIUM}" = "No"], [
