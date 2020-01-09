@@ -46,17 +46,17 @@ AH_BOTTOM([
 
 AC_MSG_CHECKING([if you read GIT-Access.txt])
 AS_IF([test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"], [
-	AC_MSG_RESULT([yes])
+    AC_MSG_RESULT([yes])
 ], [
-	AC_MSG_RESULT([no])
-	AC_MSG_ERROR([please read GIT-Access.txt before trying to build from git])
+    AC_MSG_RESULT([no])
+    AC_MSG_ERROR([please read GIT-Access.txt before trying to build from git])
 ])
 
 AS_IF([test "x${CFLAGS+set}" = "xset"], [
-	CFLAGS_WAS_SET="yes"
+    CFLAGS_WAS_SET="yes"
 ], [
-	CFLAGS_WAS_SET="no"
-	CFLAGS=""
+    CFLAGS_WAS_SET="no"
+    CFLAGS=""
 ])
 
 dnl Programs required by the build system
@@ -141,10 +141,10 @@ AC_DEFINE_UNQUOTED([PACKAGE_BUGREPORT_I18N], ["${PACKAGE_BUGREPORT_I18N}"], [Whe
 
 dnl If we're building on Windows we need socket and regex libraries from mingw
 case "${host}" in
-	*-*-mingw32)
-		CPPFLAGS="-I/mingw/include ${CPPFLAGS}"
-		LIBS="-lwsock32 -lws2_32 -lregex ${LIBS}"
-		;;
+    *-*-mingw32)
+        CPPFLAGS="-I/mingw/include ${CPPFLAGS}"
+        LIBS="-lwsock32 -lws2_32 -lregex ${LIBS}"
+        ;;
 esac
 
 
@@ -154,8 +154,8 @@ AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_NEED([need-ngettext])
 AM_GNU_GETTEXT_NEED([need-formatstring-macros])
 AS_IF([test "x${USE_NLS}" = "xyes"], [
-	ATHEME_COND_NLS_ENABLE
-	LIBS="${LIBINTL} ${LIBS}"
+    ATHEME_COND_NLS_ENABLE
+    LIBS="${LIBINTL} ${LIBS}"
 ])
 
 
@@ -240,18 +240,18 @@ BUILDSYS_TOUCH_DEPS
 
 AS_IF([test "x${MOWGLI_SOURCE}" = "xInternal"], [
 
-	dnl Run ./configure in the libmowgli submodule directory but without OpenSSL support
-	dnl Atheme does not use the OpenSSL VIO interface in Mowgli and this avoids an unnecessary -lssl
+    dnl Run ./configure in the libmowgli submodule directory but without OpenSSL support
+    dnl Atheme does not use the OpenSSL VIO interface in Mowgli and this avoids an unnecessary -lssl
 
-	AX_SUBDIRS_CONFIGURE([libmowgli-2], [
-		[--without-openssl], [CC="\${SUBCONF_CC}"], [LD="\${SUBCONF_LD}"], [CFLAGS="\${SUBCONF_CFLAGS}"],
-		[CPPFLAGS="\${SUBCONF_CPPFLAGS}"], [LDFLAGS="\${SUBCONF_LDFLAGS}"], [LIBS="\${SUBCONF_LIBS}"]
-	], [[]], [[]], [[--with-openssl], [--with-openssl=auto], [--with-openssl=yes]])
+    AX_SUBDIRS_CONFIGURE([libmowgli-2], [
+        [--without-openssl], [CC="\${SUBCONF_CC}"], [LD="\${SUBCONF_LD}"], [CFLAGS="\${SUBCONF_CFLAGS}"],
+        [CPPFLAGS="\${SUBCONF_CPPFLAGS}"], [LDFLAGS="\${SUBCONF_LDFLAGS}"], [LIBS="\${SUBCONF_LIBS}"]
+    ], [[]], [[]], [[--with-openssl], [--with-openssl=auto], [--with-openssl=yes]])
 ])
 
 AC_CONFIG_FILES([
-	buildsys.mk
-	extra.mk
+    buildsys.mk
+    extra.mk
 ])
 
 AC_OUTPUT
