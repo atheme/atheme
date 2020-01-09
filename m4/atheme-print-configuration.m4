@@ -1,3 +1,12 @@
+dnl SPDX-License-Identifier: ISC
+dnl SPDX-URL: https://spdx.org/licenses/ISC.html
+dnl
+dnl Copyright (C) 2005-2009 Atheme Project (http://atheme.org/)
+dnl Copyright (C) 2018-2019 Aaron Jones <aaronmdjones@gmail.com>
+dnl
+dnl -*- Atheme IRC Services -*-
+dnl Atheme Build System Component
+
 AC_DEFUN([ATHEME_PRINT_CONFIGURATION], [
 
     AS_IF([test "${DIGEST_FRONTEND}" = "Internal"], [DIGEST_FRONTEND="None (Internal MD5/SHA/HMAC/PBKDF2 Fallback)"])

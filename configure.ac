@@ -2,7 +2,7 @@
 # SPDX-URL: https://spdx.org/licenses/ISC.html
 #
 # Copyright (C) 2005-2015 Atheme Project (http://atheme.org/)
-# Copyright (C) 2015-2018 Atheme Development Group (https://atheme.github.io/)
+# Copyright (C) 2015-2019 Atheme Development Group (https://atheme.github.io/)
 
 AC_PREREQ([2.69])
 
