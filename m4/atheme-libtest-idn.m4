@@ -3,26 +3,26 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 	LIBIDN="No"
 	LIBIDN_PATH=""
 
-	AC_ARG_WITH([libidn],
-		[AS_HELP_STRING([--without-libidn], [Do not attempt to detect GNU libidn (for modules/saslserv/scram-sha -- SASLprep normalization)])],
-		[], [with_libidn="auto"])
+	AC_ARG_WITH([idn],
+		[AS_HELP_STRING([--without-idn], [Do not attempt to detect GNU libidn (for modules/saslserv/scram-sha)])],
+		[], [with_idn="auto"])
 
-	case "x${with_libidn}" in
+	case "x${with_idn}" in
 		xno | xyes | xauto)
 			;;
 		x/*)
-			LIBIDN_PATH="${with_libidn}"
-			with_libidn="yes"
+			LIBIDN_PATH="${with_idn}"
+			with_idn="yes"
 			;;
 		*)
-			AC_MSG_ERROR([invalid option for --with-libidn])
+			AC_MSG_ERROR([invalid option for --with-idn])
 			;;
 	esac
 
 	CPPFLAGS_SAVED="${CPPFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
-	AS_IF([test "${with_libidn}" != "no"], [
+	AS_IF([test "${with_idn}" != "no"], [
 		AS_IF([test -n "${LIBIDN_PATH}"], [
 			dnl Allow for user to provide custom installation directory
 			AS_IF([test -d "${LIBIDN_PATH}/include" -a -d "${LIBIDN_PATH}/lib"], [
@@ -40,8 +40,8 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 			LIBIDN="Yes"
 		], [
 			LIBIDN="No"
-			AS_IF([test "${with_libidn}" != "auto"], [
-				AC_MSG_FAILURE([--with-libidn was given but GNU libidn could not be found])
+			AS_IF([test "${with_idn}" != "auto"], [
+				AC_MSG_FAILURE([--with-idn was given but GNU libidn could not be found])
 			])
 		])
 	])
@@ -64,12 +64,12 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 		], [
 			AC_MSG_RESULT([yes])
 			LIBIDN="Yes"
-			AC_DEFINE([HAVE_LIBIDN], [1], [Define to 1 if libidn appears to be usable])
+			AC_DEFINE([HAVE_LIBIDN], [1], [Define to 1 if GNU libidn appears to be usable])
 		], [
 			AC_MSG_RESULT([no])
 			LIBIDN="No"
-			AS_IF([test "${with_libidn}" != "auto"], [
-				AC_MSG_FAILURE([--with-libidn was given but GNU libidn appears to be unusable])
+			AS_IF([test "${with_idn}" != "auto"], [
+				AC_MSG_ERROR([--with-idn was given but GNU libidn could not be found])
 			])
 		])
 	])

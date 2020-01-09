@@ -3,26 +3,26 @@ AC_DEFUN([ATHEME_LIBTEST_ARGON2], [
 	LIBARGON2="No"
 	LIBARGON2_PATH=""
 
-	AC_ARG_WITH([libargon2],
-		[AS_HELP_STRING([--without-libargon2], [Do not attempt to detect libargon2 (for modules/crypto/argon2)])],
-		[], [with_libargon2="auto"])
+	AC_ARG_WITH([argon2],
+		[AS_HELP_STRING([--without-argon2], [Do not attempt to detect libargon2 (for modules/crypto/argon2)])],
+		[], [with_argon2="auto"])
 
-	case "x${with_libargon2}" in
+	case "x${with_argon2}" in
 		xno | xyes | xauto)
 			;;
 		x/*)
-			LIBARGON2_PATH="${with_libargon2}"
-			with_libargon2="yes"
+			LIBARGON2_PATH="${with_argon2}"
+			with_argon2="yes"
 			;;
 		*)
-			AC_MSG_ERROR([invalid option for --with-libargon2])
+			AC_MSG_ERROR([invalid option for --with-argon2])
 			;;
 	esac
 
 	CPPFLAGS_SAVED="${CPPFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
-	AS_IF([test "${with_libargon2}" != "no"], [
+	AS_IF([test "${with_argon2}" != "no"], [
 		AS_IF([test -n "${LIBARGON2_PATH}"], [
 			dnl Allow for user to provide custom installation directory
 			AS_IF([test -d "${LIBARGON2_PATH}/include" -a -d "${LIBARGON2_PATH}/lib"], [
@@ -40,8 +40,8 @@ AC_DEFUN([ATHEME_LIBTEST_ARGON2], [
 			LIBARGON2="Yes"
 		], [
 			LIBARGON2="No"
-			AS_IF([test "${with_libargon2}" != "auto"], [
-				AC_MSG_FAILURE([--with-libargon2 was given but libargon2 could not be found])
+			AS_IF([test "${with_argon2}" != "auto"], [
+				AC_MSG_FAILURE([--with-argon2 was given but libargon2 could not be found])
 			])
 		])
 	])
@@ -93,8 +93,8 @@ AC_DEFUN([ATHEME_LIBTEST_ARGON2], [
 		], [
 			AC_MSG_RESULT([no])
 			LIBARGON2="No"
-			AS_IF([test "${with_libargon2}" != "auto"], [
-				AC_MSG_FAILURE([--with-libargon2 was given but libargon2 appears to be unusable])
+			AS_IF([test "${with_argon2}" != "auto"], [
+				AC_MSG_FAILURE([--with-argon2 was given but libargon2 appears to be unusable])
 			])
 		])
 	])

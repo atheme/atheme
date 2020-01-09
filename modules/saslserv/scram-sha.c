@@ -880,7 +880,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 static void
 mod_init(struct module *const restrict m)
 {
-	(void) slog(LG_ERROR, "Module %s requires IDN support, refusing to load.", m->name);
+	(void) slog(LG_ERROR, "Module %s requires GNU libidn support, refusing to load.", m->name);
 
 	m->mflags |= MODFLAG_FAIL;
 }

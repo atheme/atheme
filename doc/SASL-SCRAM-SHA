@@ -3,7 +3,7 @@ Atheme IRC Services version 7.3 and above supports SASL SCRAM-SHA logins.
 Some work needs to be performed by the prospective IRC network administrator
 to enable this. The 5 main steps to perform are:
 
-1) Build Atheme with GNU libidn support (./configure --with-libidn)
+1) Build Atheme with GNU libidn support (./configure --with-idn)
 
 2) Load modules/crypto/pbkdf2v2 *before* any other crypto module
 

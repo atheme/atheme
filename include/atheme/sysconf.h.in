@@ -159,7 +159,7 @@
    function */
 #undef HAVE_LIBCRYPTO_MEMCMP
 
-/* Define to 1 if libidn appears to be usable */
+/* Define to 1 if GNU libidn appears to be usable */
 #undef HAVE_LIBIDN
 
 /* Define to 1 if you have the <libintl.h> header file. */

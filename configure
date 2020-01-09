@@ -800,11 +800,11 @@ with_gnu_ld
 enable_rpath
 with_libiconv_prefix
 with_libintl_prefix
-with_libargon2
+with_argon2
 with_cracklib
 with_crypt
 with_openssl
-with_libidn
+with_idn
 with_ldap
 with_mbedtls
 with_nettle
@@ -1533,7 +1533,7 @@ Optional Packages:
   --without-libiconv-prefix     don't search for libiconv in includedir and libdir
   --with-libintl-prefix[=DIR]  search for libintl in DIR/include and DIR/lib
   --without-libintl-prefix     don't search for libintl in includedir and libdir
-  --without-libargon2     Do not attempt to detect libargon2 (for
+  --without-argon2        Do not attempt to detect libargon2 (for
                           modules/crypto/argon2)
   --without-cracklib      Do not attempt to detect cracklib (for
                           modules/nickserv/pwquality -- checking password
@@ -1542,9 +1542,8 @@ Optional Packages:
                           modules/crypto/crypt3-*)
   --without-openssl       Do not attempt to detect OpenSSL (cryptographic
                           library)
-  --without-libidn        Do not attempt to detect GNU libidn (for
-                          modules/saslserv/scram-sha -- SASLprep
-                          normalization)
+  --without-idn           Do not attempt to detect GNU libidn (for
+                          modules/saslserv/scram-sha)
   --without-ldap          Do not attempt to detect libldap (for
                           modules/auth/ldap)
   --without-mbedtls       Do not attempt to detect ARM mbedTLS (cryptographic
@@ -9777,30 +9776,30 @@ rm -f core conftest.err conftest.$ac_objext \
 	LIBARGON2_PATH=""
 
 
-# Check whether --with-libargon2 was given.
-if test "${with_libargon2+set}" = set; then :
-  withval=$with_libargon2;
+# Check whether --with-argon2 was given.
+if test "${with_argon2+set}" = set; then :
+  withval=$with_argon2;
 else
-  with_libargon2="auto"
+  with_argon2="auto"
 fi
 
 
-	case "x${with_libargon2}" in
+	case "x${with_argon2}" in
 		xno | xyes | xauto)
 			;;
 		x/*)
-			LIBARGON2_PATH="${with_libargon2}"
-			with_libargon2="yes"
+			LIBARGON2_PATH="${with_argon2}"
+			with_argon2="yes"
 			;;
 		*)
-			as_fn_error $? "invalid option for --with-libargon2" "$LINENO" 5
+			as_fn_error $? "invalid option for --with-argon2" "$LINENO" 5
 			;;
 	esac
 
 	CPPFLAGS_SAVED="${CPPFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
-	if test "${with_libargon2}" != "no"; then :
+	if test "${with_argon2}" != "no"; then :
 
 		if test -n "${LIBARGON2_PATH}"; then :
 
@@ -9917,11 +9916,11 @@ fi
 else
 
 			LIBARGON2="No"
-			if test "${with_libargon2}" != "auto"; then :
+			if test "${with_argon2}" != "auto"; then :
 
 				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "--with-libargon2 was given but libargon2 could not be found
+as_fn_error $? "--with-argon2 was given but libargon2 could not be found
 See \`config.log' for more details" "$LINENO" 5; }
 
 fi
@@ -9997,11 +9996,11 @@ else
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 			LIBARGON2="No"
-			if test "${with_libargon2}" != "auto"; then :
+			if test "${with_argon2}" != "auto"; then :
 
 				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "--with-libargon2 was given but libargon2 appears to be unusable
+as_fn_error $? "--with-argon2 was given but libargon2 appears to be unusable
 See \`config.log' for more details" "$LINENO" 5; }
 
 fi
@@ -10882,30 +10881,30 @@ fi
 	LIBIDN_PATH=""
 
 
-# Check whether --with-libidn was given.
-if test "${with_libidn+set}" = set; then :
-  withval=$with_libidn;
+# Check whether --with-idn was given.
+if test "${with_idn+set}" = set; then :
+  withval=$with_idn;
 else
-  with_libidn="auto"
+  with_idn="auto"
 fi
 
 
-	case "x${with_libidn}" in
+	case "x${with_idn}" in
 		xno | xyes | xauto)
 			;;
 		x/*)
-			LIBIDN_PATH="${with_libidn}"
-			with_libidn="yes"
+			LIBIDN_PATH="${with_idn}"
+			with_idn="yes"
 			;;
 		*)
-			as_fn_error $? "invalid option for --with-libidn" "$LINENO" 5
+			as_fn_error $? "invalid option for --with-idn" "$LINENO" 5
 			;;
 	esac
 
 	CPPFLAGS_SAVED="${CPPFLAGS}"
 	LIBS_SAVED="${LIBS}"
 
-	if test "${with_libidn}" != "no"; then :
+	if test "${with_idn}" != "no"; then :
 
 		if test -n "${LIBIDN_PATH}"; then :
 
@@ -11022,11 +11021,11 @@ fi
 else
 
 			LIBIDN="No"
-			if test "${with_libidn}" != "auto"; then :
+			if test "${with_idn}" != "auto"; then :
 
 				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "--with-libidn was given but GNU libidn could not be found
+as_fn_error $? "--with-idn was given but GNU libidn could not be found
 See \`config.log' for more details" "$LINENO" 5; }
 
 fi
@@ -11077,12 +11076,9 @@ else
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 			LIBIDN="No"
-			if test "${with_libidn}" != "auto"; then :
+			if test "${with_idn}" != "auto"; then :
 
-				{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "--with-libidn was given but GNU libidn appears to be unusable
-See \`config.log' for more details" "$LINENO" 5; }
+				as_fn_error $? "--with-idn was given but GNU libidn could not be found" "$LINENO" 5
 
 fi
 
