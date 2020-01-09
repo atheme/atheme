@@ -39,6 +39,35 @@ slightly differently:
     $ gmake
     $ gmake install
 
+If your user-installed libraries that you want Atheme to use are installed by
+your package manager to a directory such as /usr/local/, you may need to
+supplement the default compiler and linker search paths so that Atheme can
+detect those libraries (e.g. cracklib from FreeBSD Ports):
+
+    $ ./configure CPPFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib"
+
+The following libraries generally require pkg-config to be installed:
+
+- Argon2 (`libargon2.pc`)
+- OpenSSL (`libcrypto.pc`)
+- GNU libidn (`libidn.pc`)
+- GNU Nettle (`nettle.pc`)
+- PCRE (`libpcre.pc`)
+- libqrencode (`libqrencode.pc`)
+- Sodium (`libsodium.pc`)
+
+If you do not have pkg-config installed and want to use one or more of these
+libraries, please see `./configure --help` for the options to set to override
+pkg-config discovery for those libraries. For example, if you wish to use
+GNU libidn, and it is installed into a default search path for your compiler
+and linker, and you do not have pkg-config installed, execute:
+
+    $ ./configure LIBIDN_CFLAGS="" LIBIDN_LIBS=""
+
+If a library relies on populating `LIBFOO_CFLAGS` with some preprocessor
+definitions, or populating `LIBFOO_LIBS` with some library linking flags,
+this will generally fail. Install pkg-config for the best results.
+
 If you're still lost, read the [INSTALL](INSTALL) or
 [GIT-Access.txt](GIT-Access.txt) files or check out our wiki
 (http://github.com/atheme/atheme/wiki) for more hints.
