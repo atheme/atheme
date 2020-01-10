@@ -68,7 +68,7 @@ crypto_type_to_name(const enum crypto_type type)
 	switch (type)
 	{
 		case TYPE_NONE:
-			return "NONE (PLAINTEXT)";
+			return "NONE (\00304PLAIN-TEXT!\003)";
 		case TYPE_UNKNOWN:
 			return "(unknown)";
 		case TYPE_ANOPE_ENC_SHA256:
@@ -80,15 +80,15 @@ crypto_type_to_name(const enum crypto_type type)
 		case TYPE_ARGON2ID:
 			return "crypto/argon2 (Argon2id)";
 		case TYPE_BASE64:
-			return "crypto/base64";
+			return "crypto/base64 (\00304PLAIN-TEXT!\003)";
 		case TYPE_CRYPT3_DES:
-			return "crypto/crypt3-des";
+			return "crypto/crypt3-des (DES)";
 		case TYPE_CRYPT3_MD5:
-			return "crypto/crypt3-md5";
+			return "crypto/crypt3-md5 (MD5)";
 		case TYPE_CRYPT3_SHA2_256:
-			return "crypto/crypt3-sha2-256";
+			return "crypto/crypt3-sha2-256 (SHA2-256)";
 		case TYPE_CRYPT3_SHA2_512:
-			return "crypto/crypt3-sha2-512";
+			return "crypto/crypt3-sha2-512 (SHA2-512)";
 		case TYPE_IRCSERVICES:
 			return "crypto/ircservices (MD5)";
 		case TYPE_PBKDF2:
@@ -110,15 +110,15 @@ crypto_type_to_name(const enum crypto_type type)
 		case TYPE_PBKDF2V2_SCRAM_SHA2_512:
 			return "crypto/pbkdf2v2 (SCRAM-SHA-512)";
 		case TYPE_RAWMD5:
-			return "crypto/rawmd5";
+			return "crypto/rawmd5 (MD5)";
 		case TYPE_RAWSHA1:
-			return "crypto/rawsha1";
+			return "crypto/rawsha1 (SHA1)";
 		case TYPE_RAWSHA2_256:
-			return "crypto/rawsha2-256";
+			return "crypto/rawsha2-256 (SHA2-256)";
 		case TYPE_RAWSHA2_512:
-			return "crypto/rawsha2-512";
+			return "crypto/rawsha2-512 (SHA2-512)";
 		case TYPE_SCRYPT:
-			return "crypto/sodium-scrypt";
+			return "crypto/sodium-scrypt (scrypt)";
 		case TYPE_TOTAL_COUNT:
 			// Just to silence diagnostics
 			break;
