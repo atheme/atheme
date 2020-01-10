@@ -129,7 +129,7 @@ crypto_type_to_name(const enum crypto_type type)
 
 static void
 ss_cmd_pwhashes_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc,
-                     char **const restrict parv)
+                     char ATHEME_VATTR_UNUSED **const restrict parv)
 {
 	(void) logcommand(si, CMDLOG_GET, "PWHASHES");
 
