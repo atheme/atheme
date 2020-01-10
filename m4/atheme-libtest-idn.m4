@@ -1,8 +1,8 @@
 # SPDX-License-Identifier: ISC
 # SPDX-URL: https://spdx.org/licenses/ISC.html
-dnl
+#
 # Copyright (C) 2018-2020 Aaron Jones <aaronmdjones@gmail.com>
-dnl
+#
 # -*- Atheme IRC Services -*-
 # Atheme Build System Component
 
