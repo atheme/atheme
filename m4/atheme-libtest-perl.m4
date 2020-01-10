@@ -1,11 +1,11 @@
-dnl SPDX-License-Identifier: ISC
-dnl SPDX-URL: https://spdx.org/licenses/ISC.html
+# SPDX-License-Identifier: ISC
+# SPDX-URL: https://spdx.org/licenses/ISC.html
 dnl
-dnl Copyright (C) 2005-2009 Atheme Project (http://atheme.org/)
-dnl Copyright (C) 2018-2019 Atheme Development Group (https://atheme.github.io/)
+# Copyright (C) 2005-2009 Atheme Project (http://atheme.org/)
+# Copyright (C) 2018-2019 Atheme Development Group (https://atheme.github.io/)
 dnl
-dnl -*- Atheme IRC Services -*-
-dnl Atheme Build System Component
+# -*- Atheme IRC Services -*-
+# Atheme Build System Component
 
 AC_DEFUN([ATHEME_LIBTEST_PERL], [
 
@@ -35,7 +35,7 @@ AC_DEFUN([ATHEME_LIBTEST_PERL], [
             LIBPERL_CFLAGS="$(perl -MExtUtils::Embed -e ccopts)"
             LIBPERL_LIBS="$(perl -MExtUtils::Embed -e ldopts)"
 
-            dnl if Perl is built with threading support, we need to link atheme against libpthread
+            # if Perl is built with threading support, we need to link atheme against libpthread
             AS_IF([echo "${LIBPERL_LIBS}" | grep -q pthread], [
                 LIBS="-lpthread ${LIBS}"
             ])

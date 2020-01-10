@@ -1,11 +1,11 @@
-dnl SPDX-License-Identifier: ISC
-dnl SPDX-URL: https://spdx.org/licenses/ISC.html
+# SPDX-License-Identifier: ISC
+# SPDX-URL: https://spdx.org/licenses/ISC.html
 dnl
-dnl Copyright (C) 2005-2009 Atheme Project (http://atheme.org/)
-dnl Copyright (C) 2018-2019 Aaron Jones <aaronmdjones@gmail.com>
+# Copyright (C) 2005-2009 Atheme Project (http://atheme.org/)
+# Copyright (C) 2018-2019 Aaron Jones <aaronmdjones@gmail.com>
 dnl
-dnl -*- Atheme IRC Services -*-
-dnl Atheme Build System Component
+# -*- Atheme IRC Services -*-
+# Atheme Build System Component
 
 AC_DEFUN([ATHEME_FEATURETEST_LEGACY_PWCRYPTO], [
 

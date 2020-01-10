@@ -1,10 +1,10 @@
-dnl SPDX-License-Identifier: ISC
-dnl SPDX-URL: https://spdx.org/licenses/ISC.html
+# SPDX-License-Identifier: ISC
+# SPDX-URL: https://spdx.org/licenses/ISC.html
 dnl
-dnl Copyright (C) 2018-2019 Aaron Jones <aaronmdjones@gmail.com>
+# Copyright (C) 2018-2019 Aaron Jones <aaronmdjones@gmail.com>
 dnl
-dnl -*- Atheme IRC Services -*-
-dnl Atheme Build System Component
+# -*- Atheme IRC Services -*-
+# Atheme Build System Component
 
 AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 
@@ -35,7 +35,7 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 
     AS_IF([test "${with_sodium}" != "no"], [
         AS_IF([test -n "${LIBSODIUM_PATH}"], [
-            dnl Allow for user to provide custom installation directory
+            # Allow for user to provide custom installation directory
             AS_IF([test -d "${LIBSODIUM_PATH}/include" -a -d "${LIBSODIUM_PATH}/lib"], [
                 LIBSODIUM_CFLAGS="-I${LIBSODIUM_PATH}/include"
                 LIBSODIUM_LIBS="-L${LIBSODIUM_PATH}/lib"
@@ -43,11 +43,11 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
                 AC_MSG_ERROR([${LIBSODIUM_PATH} is not a suitable directory for libsodium])
             ])
         ], [test -n "${PKG_CONFIG}"], [
-            dnl Allow for the user to "override" pkg-config without it being installed
+            # Allow for the user to "override" pkg-config without it being installed
             PKG_CHECK_MODULES([LIBSODIUM], [libsodium], [], [])
         ])
         AS_IF([test -n "${LIBSODIUM_CFLAGS+set}" -a -n "${LIBSODIUM_LIBS+set}"], [
-            dnl Only proceed with library tests if custom paths were given or pkg-config succeeded
+            # Only proceed with library tests if custom paths were given or pkg-config succeeded
             LIBSODIUM="Yes"
         ], [
             LIBSODIUM="No"

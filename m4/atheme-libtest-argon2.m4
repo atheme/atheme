@@ -1,10 +1,10 @@
-dnl SPDX-License-Identifier: ISC
-dnl SPDX-URL: https://spdx.org/licenses/ISC.html
+# SPDX-License-Identifier: ISC
+# SPDX-URL: https://spdx.org/licenses/ISC.html
 dnl
-dnl Copyright (C) 2018-2020 Aaron Jones <aaronmdjones@gmail.com>
+# Copyright (C) 2018-2020 Aaron Jones <aaronmdjones@gmail.com>
 dnl
-dnl -*- Atheme IRC Services -*-
-dnl Atheme Build System Component
+# -*- Atheme IRC Services -*-
+# Atheme Build System Component
 
 AC_DEFUN([ATHEME_LIBTEST_ARGON2], [
 
@@ -32,7 +32,7 @@ AC_DEFUN([ATHEME_LIBTEST_ARGON2], [
 
     AS_IF([test "${with_argon2}" != "no"], [
         AS_IF([test -n "${LIBARGON2_PATH}"], [
-            dnl Allow for user to provide custom installation directory
+            # Allow for user to provide custom installation directory
             AS_IF([test -d "${LIBARGON2_PATH}/include" -a -d "${LIBARGON2_PATH}/lib"], [
                 LIBARGON2_CFLAGS="-I${LIBARGON2_PATH}/include"
                 LIBARGON2_LIBS="-L${LIBARGON2_PATH}/lib"
@@ -40,11 +40,11 @@ AC_DEFUN([ATHEME_LIBTEST_ARGON2], [
                 AC_MSG_ERROR([${LIBARGON2_PATH} is not a suitable directory for libargon2])
             ])
         ], [test -n "${PKG_CONFIG}"], [
-            dnl Allow for the user to "override" pkg-config without it being installed
+            # Allow for the user to "override" pkg-config without it being installed
             PKG_CHECK_MODULES([LIBARGON2], [libargon2], [], [])
         ])
         AS_IF([test -n "${LIBARGON2_CFLAGS+set}" -a -n "${LIBARGON2_LIBS+set}"], [
-            dnl Only proceed with library tests if custom paths were given or pkg-config succeeded
+            # Only proceed with library tests if custom paths were given or pkg-config succeeded
             LIBARGON2="Yes"
         ], [
             LIBARGON2="No"

@@ -1,11 +1,11 @@
-dnl SPDX-License-Identifier: ISC
-dnl SPDX-URL: https://spdx.org/licenses/ISC.html
+# SPDX-License-Identifier: ISC
+# SPDX-URL: https://spdx.org/licenses/ISC.html
 dnl
-dnl Copyright (C) 2005-2009 Atheme Project (http://atheme.org/)
-dnl Copyright (C) 2018-2019 Atheme Development Group (https://atheme.github.io/)
+# Copyright (C) 2005-2009 Atheme Project (http://atheme.org/)
+# Copyright (C) 2018-2019 Atheme Development Group (https://atheme.github.io/)
 dnl
-dnl -*- Atheme IRC Services -*-
-dnl Atheme Build System Component
+# -*- Atheme IRC Services -*-
+# Atheme Build System Component
 
 AC_DEFUN([ATHEME_LIBTEST_CRACK], [
 
@@ -28,7 +28,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRACK], [
     LIBS_SAVED="${LIBS}"
 
     AS_IF([test "${with_cracklib}" != "no"], [
-        dnl If this library ever starts shipping a pkg-config file, change to PKG_CHECK_MODULES ?
+        # If this library ever starts shipping a pkg-config file, change to PKG_CHECK_MODULES ?
         AC_SEARCH_LIBS([FascistCheck], [crack], [
             AC_MSG_CHECKING([if cracklib appears to be usable])
             AC_COMPILE_IFELSE([

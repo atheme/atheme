@@ -1,10 +1,10 @@
-dnl SPDX-License-Identifier: ISC
-dnl SPDX-URL: https://spdx.org/licenses/ISC.html
+# SPDX-License-Identifier: ISC
+# SPDX-URL: https://spdx.org/licenses/ISC.html
 dnl
-dnl Copyright (C) 2018-2019 Aaron Jones <aaronmdjones@gmail.com>
+# Copyright (C) 2018-2019 Aaron Jones <aaronmdjones@gmail.com>
 dnl
-dnl -*- Atheme IRC Services -*-
-dnl Atheme Build System Component
+# -*- Atheme IRC Services -*-
+# Atheme Build System Component
 
 AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 
@@ -34,7 +34,7 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 
     AS_IF([test "${with_nettle}" != "no"], [
         AS_IF([test -n "${LIBNETTLE_PATH}"], [
-            dnl Allow for user to provide custom installation directory
+            # Allow for user to provide custom installation directory
             AS_IF([test -d "${LIBNETTLE_PATH}/include" -a -d "${LIBNETTLE_PATH}/lib"], [
                 LIBNETTLE_CFLAGS="-I${LIBNETTLE_PATH}/include"
                 LIBNETTLE_LIBS="-L${LIBNETTLE_PATH}/lib"
@@ -42,11 +42,11 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
                 AC_MSG_ERROR([${LIBNETTLE_PATH} is not a suitable directory for GNU Nettle])
             ])
         ], [test -n "${PKG_CONFIG}"], [
-            dnl Allow for the user to "override" pkg-config without it being installed
+            # Allow for the user to "override" pkg-config without it being installed
             PKG_CHECK_MODULES([LIBNETTLE], [nettle], [], [])
         ])
         AS_IF([test -n "${LIBNETTLE_CFLAGS+set}" -a -n "${LIBNETTLE_LIBS+set}"], [
-            dnl Only proceed with library tests if custom paths were given or pkg-config succeeded
+            # Only proceed with library tests if custom paths were given or pkg-config succeeded
             LIBNETTLE="Yes"
         ], [
             LIBNETTLE="No"

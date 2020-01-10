@@ -1,11 +1,11 @@
-dnl SPDX-License-Identifier: ISC
-dnl SPDX-URL: https://spdx.org/licenses/ISC.html
+# SPDX-License-Identifier: ISC
+# SPDX-URL: https://spdx.org/licenses/ISC.html
 dnl
-dnl Copyright (C) 2005-2009 Atheme Project (http://atheme.org/)
-dnl Copyright (C) 2018-2019 Atheme Development Group (https://atheme.github.io/)
+# Copyright (C) 2005-2009 Atheme Project (http://atheme.org/)
+# Copyright (C) 2018-2019 Atheme Development Group (https://atheme.github.io/)
 dnl
-dnl -*- Atheme IRC Services -*-
-dnl Atheme Build System Component
+# -*- Atheme IRC Services -*-
+# Atheme Build System Component
 
 AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
 
@@ -33,7 +33,7 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
 
     AS_IF([test "${with_qrencode}" != "no"], [
         AS_IF([test -n "${LIBQRENCODE_PATH}"], [
-            dnl Allow for user to provide custom installation directory
+            # Allow for user to provide custom installation directory
             AS_IF([test -d "${LIBQRENCODE_PATH}/include" -a -d "${LIBQRENCODE_PATH}/lib"], [
                 LIBQRENCODE_CFLAGS="-I${LIBQRENCODE_PATH}/include"
                 LIBQRENCODE_LIBS="-L${LIBQRENCODE_PATH}/lib"
@@ -41,11 +41,11 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
                 AC_MSG_ERROR([${LIBQRENCODE_PATH} is not a suitable directory for libqrencode])
             ])
         ], [test -n "${PKG_CONFIG}"], [
-            dnl Allow for the user to "override" pkg-config without it being installed
+            # Allow for the user to "override" pkg-config without it being installed
             PKG_CHECK_MODULES([LIBQRENCODE], [libqrencode], [], [])
         ])
         AS_IF([test -n "${LIBQRENCODE_CFLAGS+set}" -a -n "${LIBQRENCODE_LIBS+set}"], [
-            dnl Only proceed with library tests if custom paths were given or pkg-config succeeded
+            # Only proceed with library tests if custom paths were given or pkg-config succeeded
             LIBQRENCODE="Yes"
         ], [
             LIBQRENCODE="No"

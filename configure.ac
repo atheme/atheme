@@ -59,7 +59,7 @@ AS_IF([test "x${CFLAGS+set}" = "xset"], [
     CFLAGS=""
 ])
 
-dnl Programs required by the build system
+# Programs required by the build system
 AC_PROG_CC
 AC_PROG_CC_C99
 AC_PATH_PROG([AR], [ar])
@@ -79,13 +79,13 @@ AC_PROG_SED
 AC_PATH_PROG([TAR], [tar])
 PKG_PROG_PKG_CONFIG
 
-dnl Initialise our build system
+# Initialise our build system
 BUILDSYS_INIT
 BUILDSYS_SHARED_LIB
 BUILDSYS_PROG_IMPLIB
 LIBS="${LIBS} ${DYNAMIC_LD_LIBS}"
 
-dnl Checks for headers, libraries, and library functions
+# Checks for headers, libraries, and library functions
 LIBS_SAVED="${LIBS}"
 AC_DEFINE([__STDC_WANT_LIB_EXT1__], [1], [We want ISO 9899:2011 Annex K memory functions if available])
 AC_USE_SYSTEM_EXTENSIONS
@@ -106,7 +106,7 @@ HW_FUNC_ASPRINTF
 HW_FUNC_SNPRINTF
 LIBS="${LIBS_SAVED}"
 
-dnl Checks for features required of our toolchain
+# Checks for features required of our toolchain
 AC_C_BIGENDIAN
 AC_C_CONST
 AC_C_INLINE
@@ -127,7 +127,7 @@ AC_TYPE_UINT16_T
 AC_TYPE_UINT32_T
 AC_TYPE_UINT64_T
 
-dnl Automake compatibility. --nenolod
+# Automake compatibility. --nenolod
 AC_SUBST([PACKAGE], [AC_PACKAGE_TARNAME])
 AC_SUBST([VERSION], [AC_PACKAGE_VERSION])
 AC_SUBST([VENDOR_STRING], ["Atheme Development Group <https://atheme.github.io/>"])
@@ -139,7 +139,7 @@ AC_DEFINE_UNQUOTED([PACKAGE_BUGREPORT_I18N], ["${PACKAGE_BUGREPORT_I18N}"], [Whe
 
 
 
-dnl If we're building on Windows we need socket and regex libraries from mingw
+# If we're building on Windows we need socket and regex libraries from mingw
 case "${host}" in
     *-*-mingw32)
         CPPFLAGS="-I/mingw/include ${CPPFLAGS}"
@@ -149,7 +149,7 @@ esac
 
 
 
-dnl GNU gettext
+# GNU gettext
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_NEED([need-ngettext])
 AM_GNU_GETTEXT_NEED([need-formatstring-macros])
@@ -160,18 +160,18 @@ AS_IF([test "x${USE_NLS}" = "xyes"], [
 
 
 
-dnl This should be before any library tests so that insufficient header
-dnl inclusions in those tests are caught before they become a runtime
-dnl problem
+# This should be before any library tests so that insufficient header
+# inclusions in those tests are caught before they become a runtime
+# problem
 ATHEME_CC_TEST_CFLAGS([-Werror=implicit])
 
-dnl Conditional libraries for standard functions (no option to control detection)
+# Conditional libraries for standard functions (no option to control detection)
 ATHEME_LIBTEST_DL
 ATHEME_LIBTEST_MATH
 ATHEME_LIBTEST_RT
 ATHEME_LIBTEST_SOCKET
 
-dnl Libraries that are autodetected (alphabetical)
+# Libraries that are autodetected (alphabetical)
 ATHEME_LIBTEST_ARGON2
 ATHEME_LIBTEST_CRACK
 ATHEME_LIBTEST_CRYPT
@@ -185,10 +185,10 @@ ATHEME_LIBTEST_PCRE
 ATHEME_LIBTEST_QRENCODE
 ATHEME_LIBTEST_SODIUM
 
-dnl Libraries that need to be explicitly enabled (alphabetical)
+# Libraries that need to be explicitly enabled (alphabetical)
 ATHEME_LIBTEST_PERL
 
-dnl Optional features
+# Optional features
 ATHEME_FEATURETEST_CONTRIB
 ATHEME_FEATURETEST_FHSPATHS
 ATHEME_FEATURETEST_HEAP_ALLOCATOR
@@ -197,20 +197,20 @@ ATHEME_FEATURETEST_LEGACY_PWCRYPTO
 ATHEME_FEATURETEST_REPROBUILDS
 ATHEME_FEATURETEST_SODIUM_MALLOC
 
-dnl Digest and RNG frontend to use in libathemecore
+# Digest and RNG frontend to use in libathemecore
 ATHEME_DECIDE_DIGEST_FRONTEND
 ATHEME_DECIDE_RANDOM_FRONTEND
 
-dnl These must be here, not above, or they might interfere with library and feature tests
-dnl Explanation is that these modify one or more of CFLAGS, CPPFLAGS, LDFLAGS, and LIBS
-dnl Warnings should be last so that diagnostics don't clutter the contents of config.log
+# These must be here, not above, or they might interfere with library and feature tests
+# Explanation is that these modify one or more of CFLAGS, CPPFLAGS, LDFLAGS, and LIBS
+# Warnings should be last so that diagnostics don't clutter the contents of config.log
 ATHEME_FEATURETEST_CPPFLAGS
 ATHEME_FEATURETEST_CFLAGS
 ATHEME_FEATURETEST_DEBUGGING
 ATHEME_FEATURETEST_LDFLAGS
 ATHEME_FEATURETEST_WARNINGS
 
-dnl Save toolchain variables in case we will be configuring submodules
+# Save toolchain variables in case we will be configuring submodules
 SUBCONF_CC="${CC}"
 SUBCONF_LD="${LD}"
 SUBCONF_CFLAGS="${CFLAGS}"
@@ -218,13 +218,13 @@ SUBCONF_CPPFLAGS="${CPPFLAGS}"
 SUBCONF_LDFLAGS="${LDFLAGS}"
 SUBCONF_LIBS="${LIBS}"
 
-dnl Mowgli test must be last or it will interfere with linker tests (the library may not yet exist)
-dnl It would also pollute CPPFLAGS, LDFLAGS and/or LIBS above
+# Mowgli test must be last or it will interfere with linker tests (the library may not yet exist)
+# It would also pollute CPPFLAGS, LDFLAGS and/or LIBS above
 ATHEME_LIBTEST_MOWGLI
 
 
 
-dnl Paths that source code files might want to reference
+# Paths that source code files might want to reference
 CPPFLAGS="${CPPFLAGS} -DPREFIX=\\\"\${prefix}\\\" -DBINDIR=\\\"\${bindir}\\\" -DDATADIR=\\\"\${DATADIR}\\\""
 CPPFLAGS="${CPPFLAGS} -DLOCALEDIR=\\\"\${LOCALEDIR}\\\" -DLOGDIR=\\\"\${LOGDIR}\\\" -DMODDIR=\\\"\${MODDIR}\\\""
 CPPFLAGS="${CPPFLAGS} -DRUNDIR=\\\"\${RUNDIR}\\\" -DSHAREDIR=\\\"\${SHAREDIR}\\\" -DSYSCONFDIR=\\\"\${sysconfdir}\\\""
@@ -240,8 +240,8 @@ BUILDSYS_TOUCH_DEPS
 
 AS_IF([test "x${MOWGLI_SOURCE}" = "xInternal"], [
 
-    dnl Run ./configure in the libmowgli submodule directory but without OpenSSL support
-    dnl Atheme does not use the OpenSSL VIO interface in Mowgli and this avoids an unnecessary -lssl
+    # Run ./configure in the libmowgli submodule directory but without OpenSSL support
+    # Atheme does not use the OpenSSL VIO interface in Mowgli and this avoids an unnecessary -lssl
 
     AX_SUBDIRS_CONFIGURE([libmowgli-2], [
         [--without-openssl], [CC="\${SUBCONF_CC}"], [LD="\${SUBCONF_LD}"], [CFLAGS="\${SUBCONF_CFLAGS}"],

@@ -1,10 +1,10 @@
-dnl SPDX-License-Identifier: ISC
-dnl SPDX-URL: https://spdx.org/licenses/ISC.html
+# SPDX-License-Identifier: ISC
+# SPDX-URL: https://spdx.org/licenses/ISC.html
 dnl
-dnl Copyright (C) 2018-2020 Aaron Jones <aaronmdjones@gmail.com>
+# Copyright (C) 2018-2020 Aaron Jones <aaronmdjones@gmail.com>
 dnl
-dnl -*- Atheme IRC Services -*-
-dnl Atheme Build System Component
+# -*- Atheme IRC Services -*-
+# Atheme Build System Component
 
 AC_DEFUN([ATHEME_LIBTEST_IDN], [
 
@@ -32,7 +32,7 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 
     AS_IF([test "${with_idn}" != "no"], [
         AS_IF([test -n "${LIBIDN_PATH}"], [
-            dnl Allow for user to provide custom installation directory
+            # Allow for user to provide custom installation directory
             AS_IF([test -d "${LIBIDN_PATH}/include" -a -d "${LIBIDN_PATH}/lib"], [
                 LIBIDN_CFLAGS="-I${LIBIDN_PATH}/include"
                 LIBIDN_LIBS="-L${LIBIDN_PATH}/lib"
@@ -40,11 +40,11 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
                 AC_MSG_ERROR([${LIBIDN_PATH} is not a suitable directory for GNU libidn])
             ])
         ], [test -n "${PKG_CONFIG}"], [
-            dnl Allow for the user to "override" pkg-config without it being installed
+            # Allow for the user to "override" pkg-config without it being installed
             PKG_CHECK_MODULES([LIBIDN], [libidn], [], [])
         ])
         AS_IF([test -n "${LIBIDN_CFLAGS+set}" -a -n "${LIBIDN_LIBS+set}"], [
-            dnl Only proceed with library tests if custom paths were given or pkg-config succeeded
+            # Only proceed with library tests if custom paths were given or pkg-config succeeded
             LIBIDN="Yes"
         ], [
             LIBIDN="No"

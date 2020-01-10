@@ -2715,6 +2715,7 @@ else
 
 fi
 
+# Programs required by the build system
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -4552,6 +4553,7 @@ $as_echo "no" >&6; }
 	fi
 fi
 
+# Initialise our build system
 
 	# Extract the first word of "tput", so it can be a program name with args.
 set dummy tput; ac_word=$2
@@ -4854,6 +4856,7 @@ $as_echo "no" >&6; }
 
 LIBS="${LIBS} ${DYNAMIC_LD_LIBS}"
 
+# Checks for headers, libraries, and library functions
 LIBS_SAVED="${LIBS}"
 
 $as_echo "#define __STDC_WANT_LIB_EXT1__ 1" >>confdefs.h
@@ -6390,6 +6393,7 @@ fi
 
 LIBS="${LIBS_SAVED}"
 
+# Checks for features required of our toolchain
  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether byte ordering is bigendian" >&5
 $as_echo_n "checking whether byte ordering is bigendian... " >&6; }
 if ${ac_cv_c_bigendian+:} false; then :
@@ -7026,6 +7030,7 @@ _ACEOF
   esac
 
 
+# Automake compatibility. --nenolod
 PACKAGE=atheme
 
 VERSION=7.3.0-rc2
@@ -7057,6 +7062,7 @@ _ACEOF
 
 
 
+# If we're building on Windows we need socket and regex libraries from mingw
 case "${host}" in
     *-*-mingw32)
         CPPFLAGS="-I/mingw/include ${CPPFLAGS}"
@@ -7066,6 +7072,7 @@ esac
 
 
 
+# GNU gettext
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether NLS is requested" >&5
 $as_echo_n "checking whether NLS is requested... " >&6; }
@@ -9172,6 +9179,9 @@ fi
 
 
 
+# This should be before any library tests so that insufficient header
+# inclusions in those tests are caught before they become a runtime
+# problem
 
         { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Werror=implicit " >&5
 $as_echo_n "checking for C compiler flag(s) -Werror=implicit ... " >&6; }
@@ -9214,6 +9224,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 
+# Conditional libraries for standard functions (no option to control detection)
 
 
     LIBDL_LIBS=""
@@ -9770,6 +9781,7 @@ rm -f core conftest.err conftest.$ac_objext \
 
 
 
+# Libraries that are autodetected (alphabetical)
 
 
     LIBARGON2="No"
@@ -9803,7 +9815,8 @@ fi
 
         if test -n "${LIBARGON2_PATH}"; then :
 
-                        if test -d "${LIBARGON2_PATH}/include" -a -d "${LIBARGON2_PATH}/lib"; then :
+            # Allow for user to provide custom installation directory
+            if test -d "${LIBARGON2_PATH}/include" -a -d "${LIBARGON2_PATH}/lib"; then :
 
                 LIBARGON2_CFLAGS="-I${LIBARGON2_PATH}/include"
                 LIBARGON2_LIBS="-L${LIBARGON2_PATH}/lib"
@@ -9816,6 +9829,7 @@ fi
 
 elif test -n "${PKG_CONFIG}"; then :
 
+            # Allow for the user to "override" pkg-config without it being installed
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBARGON2" >&5
@@ -9911,7 +9925,8 @@ fi
 fi
         if test -n "${LIBARGON2_CFLAGS+set}" -a -n "${LIBARGON2_LIBS+set}"; then :
 
-                        LIBARGON2="Yes"
+            # Only proceed with library tests if custom paths were given or pkg-config succeeded
+            LIBARGON2="Yes"
 
 else
 
@@ -10051,7 +10066,8 @@ fi
 
     if test "${with_cracklib}" != "no"; then :
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing FascistCheck" >&5
+        # If this library ever starts shipping a pkg-config file, change to PKG_CHECK_MODULES ?
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing FascistCheck" >&5
 $as_echo_n "checking for library containing FascistCheck... " >&6; }
 if ${ac_cv_search_FascistCheck+:} false; then :
   $as_echo_n "(cached) " >&6
@@ -10391,7 +10407,8 @@ fi
 
         if test -n "${LIBCRYPTO_PATH}"; then :
 
-                        if test -d "${LIBCRYPTO_PATH}/include" -a -d "${LIBCRYPTO_PATH}/lib"; then :
+            # Allow for user to provide custom installation directory
+            if test -d "${LIBCRYPTO_PATH}/include" -a -d "${LIBCRYPTO_PATH}/lib"; then :
 
                 LIBCRYPTO_CFLAGS="-I${LIBCRYPTO_PATH}/include"
                 LIBCRYPTO_LIBS="-L${LIBCRYPTO_PATH}/lib"
@@ -10404,6 +10421,7 @@ fi
 
 elif test -n "${PKG_CONFIG}"; then :
 
+            # Allow for the user to "override" pkg-config without it being installed
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBCRYPTO" >&5
@@ -10499,7 +10517,8 @@ fi
 fi
         if test -n "${LIBCRYPTO_CFLAGS+set}" -a -n "${LIBCRYPTO_LIBS+set}"; then :
 
-                        LIBCRYPTO="Yes"
+            # Only proceed with library tests if custom paths were given or pkg-config succeeded
+            LIBCRYPTO="Yes"
 
 else
 
@@ -10908,7 +10927,8 @@ fi
 
         if test -n "${LIBIDN_PATH}"; then :
 
-                        if test -d "${LIBIDN_PATH}/include" -a -d "${LIBIDN_PATH}/lib"; then :
+            # Allow for user to provide custom installation directory
+            if test -d "${LIBIDN_PATH}/include" -a -d "${LIBIDN_PATH}/lib"; then :
 
                 LIBIDN_CFLAGS="-I${LIBIDN_PATH}/include"
                 LIBIDN_LIBS="-L${LIBIDN_PATH}/lib"
@@ -10921,6 +10941,7 @@ fi
 
 elif test -n "${PKG_CONFIG}"; then :
 
+            # Allow for the user to "override" pkg-config without it being installed
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBIDN" >&5
@@ -11016,7 +11037,8 @@ fi
 fi
         if test -n "${LIBIDN_CFLAGS+set}" -a -n "${LIBIDN_LIBS+set}"; then :
 
-                        LIBIDN="Yes"
+            # Only proceed with library tests if custom paths were given or pkg-config succeeded
+            LIBIDN="Yes"
 
 else
 
@@ -11128,7 +11150,8 @@ fi
 
     if test "${with_ldap}" != "no"; then :
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing ldap_initialize" >&5
+        # If this library ever starts shipping a pkg-config file, change to PKG_CHECK_MODULES ?
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing ldap_initialize" >&5
 $as_echo_n "checking for library containing ldap_initialize... " >&6; }
 if ${ac_cv_search_ldap_initialize+:} false; then :
   $as_echo_n "(cached) " >&6
@@ -11290,7 +11313,8 @@ fi
 
     if test "${with_mbedtls}" != "no"; then :
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing mbedtls_version_get_string" >&5
+        # If this library ever starts shipping a pkg-config file, change to PKG_CHECK_MODULES ?
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing mbedtls_version_get_string" >&5
 $as_echo_n "checking for library containing mbedtls_version_get_string... " >&6; }
 if ${ac_cv_search_mbedtls_version_get_string+:} false; then :
   $as_echo_n "(cached) " >&6
@@ -11798,7 +11822,8 @@ fi
 
         if test -n "${LIBNETTLE_PATH}"; then :
 
-                        if test -d "${LIBNETTLE_PATH}/include" -a -d "${LIBNETTLE_PATH}/lib"; then :
+            # Allow for user to provide custom installation directory
+            if test -d "${LIBNETTLE_PATH}/include" -a -d "${LIBNETTLE_PATH}/lib"; then :
 
                 LIBNETTLE_CFLAGS="-I${LIBNETTLE_PATH}/include"
                 LIBNETTLE_LIBS="-L${LIBNETTLE_PATH}/lib"
@@ -11811,6 +11836,7 @@ fi
 
 elif test -n "${PKG_CONFIG}"; then :
 
+            # Allow for the user to "override" pkg-config without it being installed
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBNETTLE" >&5
@@ -11906,7 +11932,8 @@ fi
 fi
         if test -n "${LIBNETTLE_CFLAGS+set}" -a -n "${LIBNETTLE_LIBS+set}"; then :
 
-                        LIBNETTLE="Yes"
+            # Only proceed with library tests if custom paths were given or pkg-config succeeded
+            LIBNETTLE="Yes"
 
 else
 
@@ -12152,7 +12179,8 @@ fi
 
     if test "${with_passwdqc}" != "no"; then :
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing passwdqc_check" >&5
+        # If this library ever starts shipping a pkg-config file, change to PKG_CHECK_MODULES ?
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing passwdqc_check" >&5
 $as_echo_n "checking for library containing passwdqc_check... " >&6; }
 if ${ac_cv_search_passwdqc_check+:} false; then :
   $as_echo_n "(cached) " >&6
@@ -12323,7 +12351,8 @@ fi
 
         if test -n "${LIBPCRE_PATH}"; then :
 
-                        if test -d "${LIBPCRE_PATH}/include" -a -d "${LIBPCRE_PATH}/lib"; then :
+            # Allow for user to provide custom installation directory
+            if test -d "${LIBPCRE_PATH}/include" -a -d "${LIBPCRE_PATH}/lib"; then :
 
                 LIBPCRE_CFLAGS="-I${LIBPCRE_PATH}/include"
                 LIBPCRE_LIBS="-L${LIBPCRE_PATH}/lib"
@@ -12336,6 +12365,7 @@ fi
 
 elif test -n "${PKG_CONFIG}"; then :
 
+            # Allow for the user to "override" pkg-config without it being installed
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBPCRE" >&5
@@ -12431,7 +12461,8 @@ fi
 fi
         if test -n "${LIBPCRE_CFLAGS+set}" -a -n "${LIBPCRE_LIBS+set}"; then :
 
-                        LIBPCRE="Yes"
+            # Only proceed with library tests if custom paths were given or pkg-config succeeded
+            LIBPCRE="Yes"
 
 else
 
@@ -12553,7 +12584,8 @@ fi
 
         if test -n "${LIBQRENCODE_PATH}"; then :
 
-                        if test -d "${LIBQRENCODE_PATH}/include" -a -d "${LIBQRENCODE_PATH}/lib"; then :
+            # Allow for user to provide custom installation directory
+            if test -d "${LIBQRENCODE_PATH}/include" -a -d "${LIBQRENCODE_PATH}/lib"; then :
 
                 LIBQRENCODE_CFLAGS="-I${LIBQRENCODE_PATH}/include"
                 LIBQRENCODE_LIBS="-L${LIBQRENCODE_PATH}/lib"
@@ -12566,6 +12598,7 @@ fi
 
 elif test -n "${PKG_CONFIG}"; then :
 
+            # Allow for the user to "override" pkg-config without it being installed
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBQRENCODE" >&5
@@ -12661,7 +12694,8 @@ fi
 fi
         if test -n "${LIBQRENCODE_CFLAGS+set}" -a -n "${LIBQRENCODE_LIBS+set}"; then :
 
-                        LIBQRENCODE="Yes"
+            # Only proceed with library tests if custom paths were given or pkg-config succeeded
+            LIBQRENCODE="Yes"
 
 else
 
@@ -12790,7 +12824,8 @@ fi
 
         if test -n "${LIBSODIUM_PATH}"; then :
 
-                        if test -d "${LIBSODIUM_PATH}/include" -a -d "${LIBSODIUM_PATH}/lib"; then :
+            # Allow for user to provide custom installation directory
+            if test -d "${LIBSODIUM_PATH}/include" -a -d "${LIBSODIUM_PATH}/lib"; then :
 
                 LIBSODIUM_CFLAGS="-I${LIBSODIUM_PATH}/include"
                 LIBSODIUM_LIBS="-L${LIBSODIUM_PATH}/lib"
@@ -12803,6 +12838,7 @@ fi
 
 elif test -n "${PKG_CONFIG}"; then :
 
+            # Allow for the user to "override" pkg-config without it being installed
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBSODIUM" >&5
@@ -12898,7 +12934,8 @@ fi
 fi
         if test -n "${LIBSODIUM_CFLAGS+set}" -a -n "${LIBSODIUM_LIBS+set}"; then :
 
-                        LIBSODIUM="Yes"
+            # Only proceed with library tests if custom paths were given or pkg-config succeeded
+            LIBSODIUM="Yes"
 
 else
 
@@ -13269,6 +13306,7 @@ fi
 
 
 
+# Libraries that need to be explicitly enabled (alphabetical)
 
 
     LIBPERL="No"
@@ -13342,7 +13380,8 @@ fi
             LIBPERL_CFLAGS="$(perl -MExtUtils::Embed -e ccopts)"
             LIBPERL_LIBS="$(perl -MExtUtils::Embed -e ldopts)"
 
-                        if echo "${LIBPERL_LIBS}" | grep -q pthread; then :
+            # if Perl is built with threading support, we need to link atheme against libpthread
+            if echo "${LIBPERL_LIBS}" | grep -q pthread; then :
 
                 LIBS="-lpthread ${LIBS}"
 
@@ -13378,6 +13417,7 @@ fi
 
 
 
+# Optional features
 
 
     CONTRIB_MODULES="No"
@@ -13848,6 +13888,7 @@ $as_echo "$as_me: WARNING: The sodium hardened memory allocator is not intended 
     esac
 
 
+# Digest and RNG frontend to use in libathemecore
 
 
     DIGEST_FRONTEND_VAL=""
@@ -14397,6 +14438,9 @@ _ACEOF
 
 
 
+# These must be here, not above, or they might interfere with library and feature tests
+# Explanation is that these modify one or more of CFLAGS, CPPFLAGS, LDFLAGS, and LIBS
+# Warnings should be last so that diagnostics don't clutter the contents of config.log
 
 
     # Check whether --enable-fortify-source was given.
@@ -15363,6 +15407,8 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
     if test "${ATHEME_CC_TEST_CFLAGS_RESULT}" = "no"; then :
 
 
+        # These two have to be consecutive and first for the most reliable
+        # results. Do not alphabetise with the flags below.    -- amdj
 
         { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wall " >&5
 $as_echo_n "checking for C compiler flag(s) -Wall ... " >&6; }
@@ -18418,6 +18464,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
     esac
 
 
+# Save toolchain variables in case we will be configuring submodules
 SUBCONF_CC="${CC}"
 SUBCONF_LD="${LD}"
 SUBCONF_CFLAGS="${CFLAGS}"
@@ -18425,6 +18472,8 @@ SUBCONF_CPPFLAGS="${CPPFLAGS}"
 SUBCONF_LDFLAGS="${LDFLAGS}"
 SUBCONF_LIBS="${LIBS}"
 
+# Mowgli test must be last or it will interfere with linker tests (the library may not yet exist)
+# It would also pollute CPPFLAGS, LDFLAGS and/or LIBS above
 
 
     MOWGLI_SOURCE=""
@@ -18566,6 +18615,7 @@ fi
 
 
 
+# Paths that source code files might want to reference
 CPPFLAGS="${CPPFLAGS} -DPREFIX=\\\"\${prefix}\\\" -DBINDIR=\\\"\${bindir}\\\" -DDATADIR=\\\"\${DATADIR}\\\""
 CPPFLAGS="${CPPFLAGS} -DLOCALEDIR=\\\"\${LOCALEDIR}\\\" -DLOGDIR=\\\"\${LOGDIR}\\\" -DMODDIR=\\\"\${MODDIR}\\\""
 CPPFLAGS="${CPPFLAGS} -DRUNDIR=\\\"\${RUNDIR}\\\" -DSHAREDIR=\\\"\${SHAREDIR}\\\" -DSYSCONFDIR=\\\"\${sysconfdir}\\\""
@@ -18591,6 +18641,8 @@ CPPFLAGS="${CPPFLAGS} -DRUNDIR=\\\"\${RUNDIR}\\\" -DSHAREDIR=\\\"\${SHAREDIR}\\\
 if test "x${MOWGLI_SOURCE}" = "xInternal"; then :
 
 
+    # Run ./configure in the libmowgli submodule directory but without OpenSSL support
+    # Atheme does not use the OpenSSL VIO interface in Mowgli and this avoids an unnecessary -lssl
 
 
 
