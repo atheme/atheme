@@ -131,7 +131,7 @@ static void
 ss_cmd_pwhashes_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc,
                      char **const restrict parv)
 {
-	(void) logcommand(si, CMDLOG_GET, "PWSTATS");
+	(void) logcommand(si, CMDLOG_GET, "PWHASHES");
 
 	unsigned int pwhashes[TYPE_TOTAL_COUNT];
 
