@@ -152,6 +152,7 @@ do_optimal_pbkdf2_benchmark(const long double clocklimit)
 	const char *const mdname = md_digest_to_name(md);
 	size_t iterations = (size_t) (initial / (elapsed / clocklimit));
 	iterations -= (iterations % 1000U);
+	iterations = BENCH_MIN(initial, iterations);
 
 	while (elapsed > clocklimit)
 	{
