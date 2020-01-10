@@ -4,7 +4,7 @@
 # Copyright (C) 2003-2004 E. Will, et al.
 
 MODULE		= statserv
-SRCS		= channel.c main.c netsplit.c server.c
+SRCS		= channel.c main.c netsplit.c pwhashes.c server.c
 
 include ../../extra.mk
 include ../../buildsys.mk

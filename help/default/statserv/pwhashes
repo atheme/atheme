@@ -1,0 +1,9 @@
+Help for PWHASHES:
+
+PWHASHES provides statistics on the types of password hashes
+in the services database.
+
+Syntax: PWHASHES
+
+Examples:
+    /msg &nick& PWHASHES
