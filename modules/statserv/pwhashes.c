@@ -297,7 +297,7 @@ ss_cmd_pwhashes_func(struct sourceinfo *const restrict si, const int ATHEME_VATT
 
 	for (enum crypto_type i = TYPE_NONE; i < TYPE_TOTAL_COUNT; i++)
 		if (pwhashes[i])
-			(void) command_success_nodata(si, "%-20s: %u", crypto_type_to_name(i), pwhashes[i]);
+			(void) command_success_nodata(si, "%-36s: %u", crypto_type_to_name(i), pwhashes[i]);
 }
 
 static struct command ss_cmd_pwhashes = {
