@@ -35,7 +35,7 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
             # Allow for user to provide custom installation directory
             AS_IF([test -d "${LIBIDN_PATH}/include" -a -d "${LIBIDN_PATH}/lib"], [
                 LIBIDN_CFLAGS="-I${LIBIDN_PATH}/include"
-                LIBIDN_LIBS="-L${LIBIDN_PATH}/lib"
+                LIBIDN_LIBS="-L${LIBIDN_PATH}/lib -lidn"
             ], [
                 AC_MSG_ERROR([${LIBIDN_PATH} is not a suitable directory for GNU libidn])
             ])

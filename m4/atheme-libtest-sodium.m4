@@ -38,7 +38,7 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
             # Allow for user to provide custom installation directory
             AS_IF([test -d "${LIBSODIUM_PATH}/include" -a -d "${LIBSODIUM_PATH}/lib"], [
                 LIBSODIUM_CFLAGS="-I${LIBSODIUM_PATH}/include"
-                LIBSODIUM_LIBS="-L${LIBSODIUM_PATH}/lib"
+                LIBSODIUM_LIBS="-L${LIBSODIUM_PATH}/lib -lsodium"
             ], [
                 AC_MSG_ERROR([${LIBSODIUM_PATH} is not a suitable directory for libsodium])
             ])

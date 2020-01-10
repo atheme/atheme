@@ -36,7 +36,7 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
             # Allow for user to provide custom installation directory
             AS_IF([test -d "${LIBPCRE_PATH}/include" -a -d "${LIBPCRE_PATH}/lib"], [
                 LIBPCRE_CFLAGS="-I${LIBPCRE_PATH}/include"
-                LIBPCRE_LIBS="-L${LIBPCRE_PATH}/lib"
+                LIBPCRE_LIBS="-L${LIBPCRE_PATH}/lib -lpcre"
             ], [
                 AC_MSG_ERROR([${LIBPCRE_PATH} is not a suitable directory for libpcre])
             ])

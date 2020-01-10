@@ -40,7 +40,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
             # Allow for user to provide custom installation directory
             AS_IF([test -d "${LIBCRYPTO_PATH}/include" -a -d "${LIBCRYPTO_PATH}/lib"], [
                 LIBCRYPTO_CFLAGS="-I${LIBCRYPTO_PATH}/include"
-                LIBCRYPTO_LIBS="-L${LIBCRYPTO_PATH}/lib"
+                LIBCRYPTO_LIBS="-L${LIBCRYPTO_PATH}/lib -lcrypto"
             ], [
                 AC_MSG_ERROR([${LIBCRYPTO_PATH} is not a suitable directory for OpenSSL])
             ])

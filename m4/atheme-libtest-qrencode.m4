@@ -36,7 +36,7 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
             # Allow for user to provide custom installation directory
             AS_IF([test -d "${LIBQRENCODE_PATH}/include" -a -d "${LIBQRENCODE_PATH}/lib"], [
                 LIBQRENCODE_CFLAGS="-I${LIBQRENCODE_PATH}/include"
-                LIBQRENCODE_LIBS="-L${LIBQRENCODE_PATH}/lib"
+                LIBQRENCODE_LIBS="-L${LIBQRENCODE_PATH}/lib -lqrencode"
             ], [
                 AC_MSG_ERROR([${LIBQRENCODE_PATH} is not a suitable directory for libqrencode])
             ])

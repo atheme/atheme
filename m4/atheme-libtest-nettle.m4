@@ -37,7 +37,7 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
             # Allow for user to provide custom installation directory
             AS_IF([test -d "${LIBNETTLE_PATH}/include" -a -d "${LIBNETTLE_PATH}/lib"], [
                 LIBNETTLE_CFLAGS="-I${LIBNETTLE_PATH}/include"
-                LIBNETTLE_LIBS="-L${LIBNETTLE_PATH}/lib"
+                LIBNETTLE_LIBS="-L${LIBNETTLE_PATH}/lib -lnettle"
             ], [
                 AC_MSG_ERROR([${LIBNETTLE_PATH} is not a suitable directory for GNU Nettle])
             ])

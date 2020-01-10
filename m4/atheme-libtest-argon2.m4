@@ -35,7 +35,7 @@ AC_DEFUN([ATHEME_LIBTEST_ARGON2], [
             # Allow for user to provide custom installation directory
             AS_IF([test -d "${LIBARGON2_PATH}/include" -a -d "${LIBARGON2_PATH}/lib"], [
                 LIBARGON2_CFLAGS="-I${LIBARGON2_PATH}/include"
-                LIBARGON2_LIBS="-L${LIBARGON2_PATH}/lib"
+                LIBARGON2_LIBS="-L${LIBARGON2_PATH}/lib -largon2"
             ], [
                 AC_MSG_ERROR([${LIBARGON2_PATH} is not a suitable directory for libargon2])
             ])
