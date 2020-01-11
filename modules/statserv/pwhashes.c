@@ -165,7 +165,7 @@ ss_cmd_pwhashes_func(struct sourceinfo *const restrict si, const int ATHEME_VATT
 		{
 			pwhashes[TYPE_ANOPE_ENC_SHA256]++;
 		}
-		else if (sscanf(pw, SCANFMT_ARGON2, s1, &i1, &i2, &i3, &i4, s2, s3) == 8)
+		else if (sscanf(pw, SCANFMT_ARGON2, s1, &i1, &i2, &i3, &i4, s2, s3) == 7)
 		{
 			if (strcasecmp(s1, "argon2d") == 0)
 				pwhashes[TYPE_ARGON2D]++;
