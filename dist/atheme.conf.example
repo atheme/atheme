@@ -1009,14 +1009,12 @@ crypto {
 	 *
 	 * You should set this as high as is reasonable for the machine you
 	 * will be running this software on. If this results in too slow a
-	 * computation time, reset the time cost below to its default value.
-	 * If it is still too slow, decrement the time cost below until it is
-	 * fast enough. If you reach the minimum time cost and it is still
-	 * too slow, decrement this value (halving the memory usage) until it
-	 * is fast enough. Alternatively, if it is still too fast after
-	 * setting this to its highest reasonable value, raise the time cost
-	 * below until it is not. A benchmark program is available alongside
-	 * this software to aid in this process.
+	 * computation time, reset the time cost below to its minimum value.
+	 * If it is still too slow, decrement this value (halving the memory
+	 * usage) until it is fast enough. Alternatively, if it is still too
+	 * fast after setting this to its highest reasonable value, raise the
+	 * time cost below until it is not. A benchmark program is available
+	 * alongside this software to aid in this process.
 	 *
 	 * WARNING: Do *NOT* set this to more than 20 (1 GiB RAM) on a 32-bit
 	 *          machine or a 32-bit Operating System!
