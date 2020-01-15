@@ -906,13 +906,13 @@ loadmodule "modules/groupserv/set_url";
  * encrypted or verified, so don't set these too large, or people can
  * hang services by trying many password attempts at once.
  *
- * A benchmark program for the Argon2 & PBKDF2 crypto code is available to
- * assist with tuning these parameters:
+ * A benchmark program for the Argon2, scrypt & PBKDF2 crypto code is
+ * available to assist with tuning these parameters:
  *
  *     - ./configure --prefix=foo ...
  *     - make
  *     - make install
- *     - ${foo}/bin/atheme-crypto-benchmark -h
+ *     - ${foo}/bin/atheme-crypto-benchmark -o
  *
  * If you are using the PBKDF2 module, its performance will be significantly
  * affected by your choice of cryptographic digest library. This software can
@@ -1107,7 +1107,8 @@ crypto {
 	 * If it is still too slow, decrement this value (halving the memory
 	 * usage) until it is fast enough. Alternatively, if it is still too
 	 * fast after setting this to its highest reasonable value, raise the
-	 * opslimit below until it is not.
+	 * opslimit below until it is not. A benchmark program is available
+	 * alongside this software to aid in this process.
 	 *
 	 * WARNING: Do *NOT* set this to more than 20 (1 GiB RAM) on a 32-bit
 	 *          machine or a 32-bit Operating System!
