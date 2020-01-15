@@ -9819,7 +9819,7 @@ fi
             if test -d "${LIBARGON2_PATH}/include" -a -d "${LIBARGON2_PATH}/lib"; then :
 
                 LIBARGON2_CFLAGS="-I${LIBARGON2_PATH}/include"
-                LIBARGON2_LIBS="-L${LIBARGON2_PATH}/lib"
+                LIBARGON2_LIBS="-L${LIBARGON2_PATH}/lib -largon2"
 
 else
 
@@ -10411,7 +10411,7 @@ fi
             if test -d "${LIBCRYPTO_PATH}/include" -a -d "${LIBCRYPTO_PATH}/lib"; then :
 
                 LIBCRYPTO_CFLAGS="-I${LIBCRYPTO_PATH}/include"
-                LIBCRYPTO_LIBS="-L${LIBCRYPTO_PATH}/lib"
+                LIBCRYPTO_LIBS="-L${LIBCRYPTO_PATH}/lib -lcrypto"
 
 else
 
@@ -10931,7 +10931,7 @@ fi
             if test -d "${LIBIDN_PATH}/include" -a -d "${LIBIDN_PATH}/lib"; then :
 
                 LIBIDN_CFLAGS="-I${LIBIDN_PATH}/include"
-                LIBIDN_LIBS="-L${LIBIDN_PATH}/lib"
+                LIBIDN_LIBS="-L${LIBIDN_PATH}/lib -lidn"
 
 else
 
@@ -11826,7 +11826,7 @@ fi
             if test -d "${LIBNETTLE_PATH}/include" -a -d "${LIBNETTLE_PATH}/lib"; then :
 
                 LIBNETTLE_CFLAGS="-I${LIBNETTLE_PATH}/include"
-                LIBNETTLE_LIBS="-L${LIBNETTLE_PATH}/lib"
+                LIBNETTLE_LIBS="-L${LIBNETTLE_PATH}/lib -lnettle"
 
 else
 
@@ -12355,7 +12355,7 @@ fi
             if test -d "${LIBPCRE_PATH}/include" -a -d "${LIBPCRE_PATH}/lib"; then :
 
                 LIBPCRE_CFLAGS="-I${LIBPCRE_PATH}/include"
-                LIBPCRE_LIBS="-L${LIBPCRE_PATH}/lib"
+                LIBPCRE_LIBS="-L${LIBPCRE_PATH}/lib -lpcre"
 
 else
 
@@ -12588,7 +12588,7 @@ fi
             if test -d "${LIBQRENCODE_PATH}/include" -a -d "${LIBQRENCODE_PATH}/lib"; then :
 
                 LIBQRENCODE_CFLAGS="-I${LIBQRENCODE_PATH}/include"
-                LIBQRENCODE_LIBS="-L${LIBQRENCODE_PATH}/lib"
+                LIBQRENCODE_LIBS="-L${LIBQRENCODE_PATH}/lib -lqrencode"
 
 else
 
@@ -12828,7 +12828,7 @@ fi
             if test -d "${LIBSODIUM_PATH}/include" -a -d "${LIBSODIUM_PATH}/lib"; then :
 
                 LIBSODIUM_CFLAGS="-I${LIBSODIUM_PATH}/include"
-                LIBSODIUM_LIBS="-L${LIBSODIUM_PATH}/lib"
+                LIBSODIUM_LIBS="-L${LIBSODIUM_PATH}/lib -lsodium"
 
 else
 
