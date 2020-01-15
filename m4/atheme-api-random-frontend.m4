@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: ISC
 # SPDX-URL: https://spdx.org/licenses/ISC.html
 #
-# Copyright (C) 2018-2019 Atheme Development Group (https://atheme.github.io/)
+# Copyright (C) 2018-2020 Atheme Development Group (https://atheme.github.io/)
 #
 # -*- Atheme IRC Services -*-
 # Atheme Build System Component
@@ -18,16 +18,16 @@ AC_DEFUN([ATHEME_RANDOM_FRONTEND_USE_SODIUM], [
     RANDOM_FRONTEND="Sodium"
 ])
 
-AC_DEFUN([ATHEME_RANDOM_FRONTEND_USE_MBEDTLS], [
-
-    RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_MBEDTLS"
-    RANDOM_FRONTEND="ARM mbedTLS"
-])
-
 AC_DEFUN([ATHEME_RANDOM_FRONTEND_USE_OPENSSL], [
 
     RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_OPENSSL"
     RANDOM_FRONTEND="${LIBCRYPTO_NAME}"
+])
+
+AC_DEFUN([ATHEME_RANDOM_FRONTEND_USE_MBEDTLS], [
+
+    RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_MBEDTLS"
+    RANDOM_FRONTEND="ARM mbedTLS"
 ])
 
 AC_DEFUN([ATHEME_RANDOM_FRONTEND_USE_INTERNAL], [
@@ -84,7 +84,7 @@ AC_DEFUN([ATHEME_DECIDE_RANDOM_FRONTEND], [
     RANDOM_FRONTEND=""
 
     AC_ARG_WITH([rng-api-frontend],
-        [AS_HELP_STRING([--with-rng-api-frontend=@<:@frontend@:>@], [RNG API frontend to use (auto, openbsd, sodium, mbedtls, openssl, libressl, internal). Default: auto])],
+        [AS_HELP_STRING([--with-rng-api-frontend=@<:@frontend@:>@], [RNG API frontend to use (auto, openbsd, sodium, openssl, libressl, mbedtls, internal). Default: auto])],
         [], [with_rng_api_frontend="auto"])
 
     AC_MSG_CHECKING([if we are building for OpenBSD])
@@ -136,11 +136,11 @@ AC_DEFUN([ATHEME_DECIDE_RANDOM_FRONTEND], [
             ], [test "${LIBSODIUM}${LIBSODIUM_RANDOM}" = "YesYes"], [
                 ATHEME_RANDOM_FRONTEND_USE_SODIUM
                 AC_MSG_NOTICE([using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)])
-            ], [test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_RANDOM}" = "YesYes"], [
-                ATHEME_RANDOM_FRONTEND_USE_MBEDTLS
-                AC_MSG_NOTICE([using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)])
             ], [test "${LIBCRYPTO}${LIBCRYPTO_RANDOM}" = "YesYes"], [
                 ATHEME_RANDOM_FRONTEND_USE_OPENSSL
+                AC_MSG_NOTICE([using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)])
+            ], [test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_RANDOM}" = "YesYes"], [
+                ATHEME_RANDOM_FRONTEND_USE_MBEDTLS
                 AC_MSG_NOTICE([using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)])
             ], [
                 ATHEME_RANDOM_FRONTEND_USE_INTERNAL
@@ -166,15 +166,6 @@ AC_DEFUN([ATHEME_DECIDE_RANDOM_FRONTEND], [
             ])
             ;;
 
-        xmbedtls)
-            AS_IF([test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_RANDOM}" = "YesYes"], [
-                ATHEME_RANDOM_FRONTEND_USE_MBEDTLS
-                AC_MSG_NOTICE([using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)])
-            ], [
-                AC_MSG_ERROR([--with-rng-api-frontend=mbedtls requires --with-mbedtls and a usable random number generator])
-            ])
-            ;;
-
         xopenssl | xlibressl)
             AS_IF([test "${LIBCRYPTO}${LIBCRYPTO_RANDOM}" = "YesYes"], [
                 ATHEME_RANDOM_FRONTEND_USE_OPENSSL
@@ -184,13 +175,22 @@ AC_DEFUN([ATHEME_DECIDE_RANDOM_FRONTEND], [
             ])
             ;;
 
+        xmbedtls)
+            AS_IF([test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_RANDOM}" = "YesYes"], [
+                ATHEME_RANDOM_FRONTEND_USE_MBEDTLS
+                AC_MSG_NOTICE([using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)])
+            ], [
+                AC_MSG_ERROR([--with-rng-api-frontend=mbedtls requires --with-mbedtls and a usable random number generator])
+            ])
+            ;;
+
         xinternal)
             ATHEME_RANDOM_FRONTEND_USE_INTERNAL
             AC_MSG_NOTICE([using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)])
             ;;
 
         *)
-            AC_MSG_ERROR([invalid option for --with-rng-api-frontend (auto, openbsd, sodium, mbedtls, openssl, libressl, internal)])
+            AC_MSG_ERROR([invalid option for --with-rng-api-frontend (auto, openbsd, sodium, openssl, libressl, mbedtls, internal)])
             ;;
     esac
 

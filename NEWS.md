@@ -104,10 +104,10 @@ Security
 
   - OpenBSD `arc4random(3)`, or
   - libsodium `randombytes(3)`, or
+  - OpenSSL `RAND_bytes(3)`, or
   - ARM mbedTLS `hmac_drbg_random(3)` with SHA2-512, or
   - ARM mbedTLS `hmac_drbg_random(3)` with SHA2-256, or
   - ARM mbedTLS `ctr_drbg_random(3)` with AES, or
-  - OpenSSL `RAND_bytes(3)`, or
   - Internal ChaCha20-based Fallback RNG, seeded by
     - `getentropy(3)`, or
     - `getrandom(2)`, or

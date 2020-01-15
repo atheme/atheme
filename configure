@@ -1565,7 +1565,7 @@ Optional Packages:
                           openssl, libressl, internal). Default: auto
   --with-rng-api-frontend=[frontend]
                           RNG API frontend to use (auto, openbsd, sodium,
-                          mbedtls, openssl, libressl, internal). Default: auto
+                          openssl, libressl, mbedtls, internal). Default: auto
   --with-libmowgli[=prefix]
                           Specify location of system libmowgli install, "yes"
                           to ask pkg-config, or "no" to force use of internal
@@ -14142,22 +14142,22 @@ elif test "${LIBSODIUM}${LIBSODIUM_RANDOM}" = "YesYes"; then :
                 { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
 $as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&6;}
 
-elif test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_RANDOM}" = "YesYes"; then :
-
-
-
-    RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_MBEDTLS"
-    RANDOM_FRONTEND="ARM mbedTLS"
-
-                { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
-$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&6;}
-
 elif test "${LIBCRYPTO}${LIBCRYPTO_RANDOM}" = "YesYes"; then :
 
 
 
     RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_OPENSSL"
     RANDOM_FRONTEND="${LIBCRYPTO_NAME}"
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
+$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&6;}
+
+elif test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_RANDOM}" = "YesYes"; then :
+
+
+
+    RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_MBEDTLS"
+    RANDOM_FRONTEND="ARM mbedTLS"
 
                 { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
 $as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&6;}
@@ -14295,24 +14295,6 @@ else
 fi
             ;;
 
-        xmbedtls)
-            if test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_RANDOM}" = "YesYes"; then :
-
-
-
-    RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_MBEDTLS"
-    RANDOM_FRONTEND="ARM mbedTLS"
-
-                { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
-$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&6;}
-
-else
-
-                as_fn_error $? "--with-rng-api-frontend=mbedtls requires --with-mbedtls and a usable random number generator" "$LINENO" 5
-
-fi
-            ;;
-
         xopenssl | xlibressl)
             if test "${LIBCRYPTO}${LIBCRYPTO_RANDOM}" = "YesYes"; then :
 
@@ -14327,6 +14309,24 @@ $as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&6;}
 else
 
                 as_fn_error $? "--with-rng-api-frontend=openssl/libressl requires --with-openssl and a usable random number generator" "$LINENO" 5
+
+fi
+            ;;
+
+        xmbedtls)
+            if test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_RANDOM}" = "YesYes"; then :
+
+
+
+    RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_MBEDTLS"
+    RANDOM_FRONTEND="ARM mbedTLS"
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
+$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&6;}
+
+else
+
+                as_fn_error $? "--with-rng-api-frontend=mbedtls requires --with-mbedtls and a usable random number generator" "$LINENO" 5
 
 fi
             ;;
@@ -14426,7 +14426,7 @@ $as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&6;}
             ;;
 
         *)
-            as_fn_error $? "invalid option for --with-rng-api-frontend (auto, openbsd, sodium, mbedtls, openssl, libressl, internal)" "$LINENO" 5
+            as_fn_error $? "invalid option for --with-rng-api-frontend (auto, openbsd, sodium, openssl, libressl, mbedtls, internal)" "$LINENO" 5
             ;;
     esac
 
