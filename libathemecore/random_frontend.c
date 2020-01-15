@@ -69,5 +69,5 @@ atheme_random_str(char *const restrict buf, const size_t len)
 			buf[written++] = alphabet[tmp[i++] % RANDSTR_ALPHABET_LEN];
 	}
 
-	buf[len + 1] = 0x00;
+	buf[len] = 0x00;
 }
