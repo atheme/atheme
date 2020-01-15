@@ -12,11 +12,9 @@
 #ifndef ATHEME_SRC_CRYPTO_BENCHMARK_OPTIMAL_H
 #define ATHEME_SRC_CRYPTO_BENCHMARK_OPTIMAL_H 1
 
-#define BENCH_MIN(a, b) (((a) <= (b)) ? (a) : (b))
+#include <atheme/attributes.h>      // ATHEME_FATTR_WUR
+#include <atheme/stdheaders.h>      // bool
 
-#include <atheme/attributes.h>  // ATHEME_FATTR_WUR
-#include <atheme/stdheaders.h>  // bool
-
-bool do_optimal_benchmarks(long double, unsigned int) ATHEME_FATTR_WUR;
+bool do_optimal_benchmarks(long double, size_t, bool) ATHEME_FATTR_WUR;
 
 #endif /* !ATHEME_SRC_CRYPTO_BENCHMARK_OPTIMAL_H */

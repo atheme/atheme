@@ -1,5 +1,5 @@
 PROG		= $(PACKAGE)-crypto-benchmark${PROG_SUFFIX}
-SRCS		= benchmark.c main.c optimal.c utils.c
+SRCS		= benchmark.c main.c optimal.c
 
 include ../../extra.mk
 include ../../buildsys.mk

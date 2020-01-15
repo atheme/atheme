@@ -9,36 +9,40 @@
  * copyright notice and this permission notice appear in all copies.
  */
 
-#include <atheme/attributes.h>  // ATHEME_FATTR_WUR
-#include <atheme/argon2.h>      // ARGON2_*
-#include <atheme/digest.h>      // DIGALG_*, digest_oneshot_pbkdf2()
-#include <atheme/pbkdf2.h>      // PBKDF2_*
-#include <atheme/stdheaders.h>  // (everything else)
-#include <atheme/sysconf.h>     // HAVE_LIBARGON2
+#include <atheme/attributes.h>      // ATHEME_FATTR_WUR
+#include <atheme/argon2.h>          // ARGON2_*
+#include <atheme/digest.h>          // DIGALG_*, digest_oneshot_pbkdf2()
+#include <atheme/pbkdf2.h>          // PBKDF2_*
+#include <atheme/stdheaders.h>      // (everything else)
+#include <atheme/sysconf.h>         // HAVE_LIBARGON2
 
-#include "benchmark.h"          // benchmark_*()
-#include "optimal.h"            // self-declarations
-#include "utils.h"              // (everything else)
+#ifdef HAVE_LIBARGON2
+#  include <argon2.h>               // argon2_type, argon2_type2string()
+#endif
+
+#include "benchmark.h"              // (everything else)
+#include "optimal.h"                // self-declarations
 
 #ifdef HAVE_LIBARGON2
 
 static bool ATHEME_FATTR_WUR
-do_optimal_argon2_benchmark(const long double clocklimit, const size_t memlimit)
+do_optimal_argon2_benchmark(const long double optimal_clocklimit, const size_t optimal_memlimit)
 {
 	(void) fprintf(stderr, "Beginning automatic optimal Argon2 benchmark ...\n");
+	(void) fprintf(stderr, "\n");
 	(void) fprintf(stderr, "NOTE: This does not test multithreading. Use '-a -p' for thread testing.\n");
 	(void) fprintf(stderr, "\n");
 
 	(void) argon2_print_colheaders();
 
-	const argon2_type type = Argon2_id;
-	size_t memcost = memlimit;
-	size_t timecost = ARGON2_TIMECOST_MIN;
-	const size_t threads = 1U;
-
-	bool timecost_raised = false;
 	long double elapsed_prev = 0L;
 	long double elapsed = 0L;
+	size_t timecost_prev = 0U;
+
+	const argon2_type type = Argon2_id;
+	size_t memcost = optimal_memlimit;
+	size_t timecost = ARGON2_TIMECOST_MIN;
+	const size_t threads = 1ULL;
 
 	// First try at our memory limit and the minimum time cost
 	if (! benchmark_argon2(type, memcost, timecost, threads, &elapsed))
@@ -46,7 +50,7 @@ do_optimal_argon2_benchmark(const long double clocklimit, const size_t memlimit)
 		return false;
 
 	// If that's still too slow, halve the memory usage until it isn't
-	while (elapsed > clocklimit)
+	while (elapsed > optimal_clocklimit)
 	{
 		if (memcost <= ARGON2_MEMCOST_MIN)
 		{
@@ -65,22 +69,22 @@ do_optimal_argon2_benchmark(const long double clocklimit, const size_t memlimit)
 	}
 
 	// Now that it's fast enough, raise the time cost until it isn't
-	while (elapsed <= clocklimit)
+	while (elapsed < optimal_clocklimit)
 	{
-		timecost++;
-		timecost_raised = true;
 		elapsed_prev = elapsed;
+		timecost_prev = timecost;
+		timecost++;
 
 		if (! benchmark_argon2(type, memcost, timecost, threads, &elapsed))
 			// This function logs error messages on failure
 			return false;
 	}
 
-	// If it was raised, go back to the previous loop's outputs
-	if (timecost_raised)
+	// If it was raised, go back to the previous loop's outputs (now that it's too slow)
+	if (timecost_prev)
 	{
-		timecost--;
 		elapsed = elapsed_prev;
+		timecost = timecost_prev;
 	}
 
 	(void) fprintf(stderr, "\n");
@@ -88,13 +92,16 @@ do_optimal_argon2_benchmark(const long double clocklimit, const size_t memlimit)
 	(void) fprintf(stderr, "\n");
 	(void) fflush(stderr);
 	(void) fprintf(stdout, "crypto {\n");
-	(void) fprintf(stdout, "\t/* Target: %LFs; Benchmarked: %LFs */\n", clocklimit, elapsed);
-	(void) fprintf(stdout, "\targon2_type = \"%s\";\n", argon2_type_to_name(type));
-	(void) fprintf(stdout, "\targon2_memcost = %zu; /* %u KiB */ \n", memcost, (1U << memcost));
+	(void) fprintf(stdout, "\t/* Target: %LFs; Benchmarked: %LFs */\n", optimal_clocklimit, elapsed);
+	(void) fprintf(stdout, "\targon2_type = \"%s\";\n", argon2_type2string(type, 0));
+	(void) fprintf(stdout, "\targon2_memcost = %zu; /* %llu KiB */ \n", memcost, (1ULL << memcost));
 	(void) fprintf(stdout, "\targon2_timecost = %zu;\n", timecost);
 	(void) fprintf(stdout, "\targon2_threads = %zu;\n", threads);
 	(void) fprintf(stdout, "};\n");
 	(void) fflush(stdout);
+	(void) fsync(fileno(stdout));
+	(void) fprintf(stderr, "\n");
+	(void) fprintf(stderr, "\n");
 	(void) fprintf(stderr, "\n");
 	(void) fflush(stderr);
 	return true;
@@ -103,13 +110,15 @@ do_optimal_argon2_benchmark(const long double clocklimit, const size_t memlimit)
 #endif /* HAVE_LIBARGON2 */
 
 static bool ATHEME_FATTR_WUR
-do_optimal_pbkdf2_benchmark(const long double clocklimit)
+do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit)
 {
 	(void) fprintf(stderr, "Beginning automatic optimal PBKDF2 benchmark ...\n");
+	(void) fprintf(stderr, "\n");
 	(void) fprintf(stderr, "NOTE: This does not test SHA1. Use '-k -d' for SHA1 testing.\n");
-	(void) fprintf(stderr, "NOTE: If you wish to support SASL SCRAM logins, please see\n");
-	(void) fprintf(stderr, "      the 'doc/SASL-SCRAM-SHA' file, whose parameter advice\n");
-	(void) fprintf(stderr, "      takes precedence over the advice given here.\n");
+	(void) fprintf(stderr, "\n");
+	(void) fprintf(stderr, "NOTE: If you wish to support SASL SCRAM logins, please see the\n");
+	(void) fprintf(stderr, "      'doc/SASL-SCRAM-SHA' file in the source code repository, whose parameter\n");
+	(void) fprintf(stderr, "      advice takes precedence over the advice given by this benchmark utility!\n");
 	(void) fprintf(stderr, "\n");
 
 	(void) pbkdf2_print_colheaders();
@@ -149,12 +158,16 @@ do_optimal_pbkdf2_benchmark(const long double clocklimit)
 		elapsed = elapsed_sha512;
 	}
 
+	/* PBKDF2 is pretty linear: There's only one parameter (iteration count), and it has
+	 * almost perfect scaling on the algorithm's runtime. This enables a very simplified
+	 * optimal parameter discovery process, compared to the other functions above.
+	 */
 	const char *const mdname = md_digest_to_name(md);
-	size_t iterations = (size_t) (initial / (elapsed / clocklimit));
+	size_t iterations = (size_t) (initial * (optimal_clocklimit / elapsed));
 	iterations -= (iterations % 1000U);
 	iterations = BENCH_MIN(initial, iterations);
 
-	while (elapsed > clocklimit)
+	while (elapsed > optimal_clocklimit)
 	{
 		if (iterations <= PBKDF2_ITERCNT_MIN)
 		{
@@ -177,25 +190,38 @@ do_optimal_pbkdf2_benchmark(const long double clocklimit)
 	(void) fprintf(stderr, "\n");
 	(void) fflush(stderr);
 	(void) fprintf(stdout, "crypto {\n");
-	(void) fprintf(stdout, "\t/* Target: %LFs; Benchmarked: %LFs */\n", clocklimit, elapsed);
+	(void) fprintf(stdout, "\t/* Target: %LFs; Benchmarked: %LFs */\n", optimal_clocklimit, elapsed);
 	(void) fprintf(stdout, "\tpbkdf2v2_digest = \"%s\";\n", mdname);
 	(void) fprintf(stdout, "\tpbkdf2v2_rounds = %zu;\n", iterations);
 	(void) fprintf(stdout, "};\n");
 	(void) fflush(stdout);
+	(void) fsync(fileno(stdout));
+	(void) fprintf(stderr, "\n");
+	(void) fprintf(stderr, "\n");
 	(void) fprintf(stderr, "\n");
 	(void) fflush(stderr);
 	return true;
 }
 
 bool ATHEME_FATTR_WUR
-do_optimal_benchmarks(const long double clocklimit, const unsigned int memlimit)
+do_optimal_benchmarks(const long double optimal_clocklimit, const size_t ATHEME_VATTR_MAYBE_UNUSED optimal_memlimit,
+                      const bool ATHEME_VATTR_MAYBE_UNUSED optimal_memlimit_given)
 {
 #ifdef HAVE_LIBARGON2
-	if (! do_optimal_argon2_benchmark(clocklimit, memlimit))
+	if (! optimal_memlimit_given)
+	{
+		(void) fprintf(stderr, "Be sure to specify -L/--optimal-memory-limit appropriately for this machine!\n");
+		(void) fprintf(stderr, "\n");
+		(void) fprintf(stderr, "\n");
+		(void) fprintf(stderr, "\n");
+	}
+
+	if (! do_optimal_argon2_benchmark(optimal_clocklimit, optimal_memlimit))
 		// This function logs error messages on failure
 		return false;
 #endif
-	if (! do_optimal_pbkdf2_benchmark(clocklimit))
+
+	if (! do_optimal_pbkdf2_benchmark(optimal_clocklimit))
 		// This function logs error messages on failure
 		return false;
 
