@@ -16,13 +16,18 @@
 #include <atheme/libathemecore.h>   // libathemecore_early_init()
 #include <atheme/pbkdf2.h>          // PBKDF2_*
 #include <atheme/random.h>          // atheme_random_*()
+#include <atheme/scrypt.h>          // ATHEME_SCRYPT_*
 #include <atheme/stdheaders.h>      // (everything else)
-#include <atheme/sysconf.h>         // HAVE_LIBARGON2
+#include <atheme/sysconf.h>         // HAVE_*
 
 #include "benchmark.h"              // (everything else)
 
 #ifdef HAVE_LIBARGON2
 #  include <argon2.h>               // argon2_context, argon2_type, argon2_*(), ARGON2_VERSION_NUMBER
+#endif
+
+#ifdef HAVE_LIBSODIUM_SCRYPT
+#  include <sodium/crypto_pwhash_scryptsalsa208sha256.h> // crypto_pwhash_scryptsalsa208sha256_str()
 #endif
 
 static const long double nsec_per_sec = 1000000000.0L;
@@ -129,6 +134,61 @@ benchmark_argon2(const argon2_type type, const size_t memcost, const size_t time
 }
 
 #endif /* HAVE_LIBARGON2 */
+
+#ifdef HAVE_LIBSODIUM_SCRYPT
+
+void
+scrypt_print_colheaders(void)
+{
+	(void) fprintf(stderr, "%-14s %-14s %-14s\n", "MemLimit", "OpsLimit", "Elapsed");
+	(void) fprintf(stderr, "-------------- -------------- --------------\n");
+}
+
+void
+scrypt_print_rowstats(const size_t memlimit, const size_t opslimit, const long double elapsed)
+{
+	(void) fprintf(stderr, "%13uK %14zu %13LFs\n", (1U << memlimit), opslimit, elapsed);
+}
+
+bool ATHEME_FATTR_WUR
+benchmark_scrypt(const size_t memlimit, const size_t opslimit, long double *const restrict elapsed)
+{
+	const size_t memlimit_real = ((1ULL << memlimit) * 1024ULL);
+
+	struct timespec begin;
+	struct timespec end;
+
+	(void) memset(&begin, 0x00, sizeof begin);
+	(void) memset(&end, 0x00, sizeof end);
+
+	if (clock_gettime(CLOCK_MONOTONIC, &begin) != 0)
+	{
+		(void) perror("clock_gettime(2)");
+		return false;
+	}
+	if (crypto_pwhash_scryptsalsa208sha256_str(hashbuf, passbuf, PASSLEN, opslimit, memlimit_real) != 0)
+	{
+		(void) perror("crypto_pwhash_scryptsalsa208sha256_str(3)");
+		return false;
+	}
+	if (clock_gettime(CLOCK_MONOTONIC, &end) != 0)
+	{
+		(void) perror("clock_gettime(2)");
+		return false;
+	}
+
+	const long double begin_ld = ((long double) begin.tv_sec) + (((long double) begin.tv_nsec) / nsec_per_sec);
+	const long double end_ld = ((long double) end.tv_sec) + (((long double) end.tv_nsec) / nsec_per_sec);
+	const long double duration = (end_ld - begin_ld);
+
+	if (elapsed)
+		*elapsed = duration;
+
+	(void) scrypt_print_rowstats(memlimit, opslimit, duration);
+	return true;
+}
+
+#endif /* HAVE_LIBSODIUM_SCRYPT */
 
 const char *
 md_digest_to_name(const enum digest_algorithm b_digest)

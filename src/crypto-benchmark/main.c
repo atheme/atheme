@@ -13,8 +13,9 @@
 #include <atheme/digest.h>          // DIGALG_*
 #include <atheme/memory.h>          // sreallocarray()
 #include <atheme/pbkdf2.h>          // PBKDF2_*
+#include <atheme/scrypt.h>          // ATHEME_SCRYPT_*
 #include <atheme/stdheaders.h>      // (everything else)
-#include <atheme/sysconf.h>         // HAVE_LIBARGON2
+#include <atheme/sysconf.h>         // HAVE_*
 #include <atheme/tools.h>           // string_to_uint()
 
 #include <ext/getopt_long.h>        // mowgli_getopt_option_t, mowgli_getopt_long()
@@ -28,9 +29,9 @@
 #define BENCH_CLOCKTIME_DEF         0.25L
 #define BENCH_CLOCKTIME_MAX         1.00L
 
-#define BENCH_MEMLIMIT_MIN          ATHEME_ARGON2_MEMCOST_MIN
-#define BENCH_MEMLIMIT_DEF          ATHEME_ARGON2_MEMCOST_DEF
-#define BENCH_MEMLIMIT_MAX          ATHEME_ARGON2_MEMCOST_MAX
+#define BENCH_MEMLIMIT_MIN          BENCH_MAX(ATHEME_ARGON2_MEMCOST_MIN, ATHEME_SCRYPT_MEMLIMIT_MIN)
+#define BENCH_MEMLIMIT_DEF          BENCH_MAX(ATHEME_ARGON2_MEMCOST_DEF, ATHEME_SCRYPT_MEMLIMIT_DEF)
+#define BENCH_MEMLIMIT_MAX          BENCH_MIN(ATHEME_ARGON2_MEMCOST_MAX, ATHEME_SCRYPT_MEMLIMIT_MAX)
 
 #ifdef HAVE_LIBARGON2
 
@@ -51,6 +52,18 @@ static size_t *b_argon2_threads = NULL;
 static size_t b_argon2_threads_count = 0;
 
 #endif /* HAVE_LIBARGON2 */
+
+#ifdef HAVE_LIBSODIUM_SCRYPT
+
+static size_t b_scrypt_memlimits_default[] = { ATHEME_SCRYPT_MEMLIMIT_DEF };
+static size_t *b_scrypt_memlimits = NULL;
+static size_t b_scrypt_memlimits_count = 0;
+
+static size_t b_scrypt_opslimits_default[] = { ATHEME_SCRYPT_OPSLIMIT_DEF };
+static size_t *b_scrypt_opslimits = NULL;
+static size_t b_scrypt_opslimits_count = 0;
+
+#endif /* HAVE_LIBSODIUM_SCRYPT */
 
 static size_t b_pbkdf2_itercounts_default[] = { PBKDF2_ITERCNT_MIN, PBKDF2_ITERCNT_DEF, PBKDF2_ITERCNT_MAX };
 static size_t *b_pbkdf2_itercounts = NULL;
@@ -73,13 +86,20 @@ static const mowgli_getopt_option_t bench_long_opts[] = {
 
 	{   "run-optimal-benchmarks",       no_argument, NULL, 'o', 0 },
 	{      "optimal-clock-limit", required_argument, NULL, 'g', 0 },
-#ifdef HAVE_LIBARGON2
+#ifdef HAVE_ANY_MEMORY_HARD_ALGORITHM
 	{     "optimal-memory-limit", required_argument, NULL, 'l', 0 },
+#endif
+#ifdef HAVE_LIBARGON2
 	{    "run-argon2-benchmarks",       no_argument, NULL, 'a', 0 },
 	{             "argon2-types", required_argument, NULL, 'n', 0 },
 	{      "argon2-memory-costs", required_argument, NULL, 'm', 0 },
 	{        "argon2-time-costs", required_argument, NULL, 't', 0 },
 	{           "argon2-threads", required_argument, NULL, 'p', 0 },
+#endif
+#ifdef HAVE_LIBSODIUM_SCRYPT
+	{    "run-scrypt-benchmarks",       no_argument, NULL, 's', 0 },
+	{         "scrypt-memlimits", required_argument, NULL, 'e', 0 },
+	{         "scrypt-opslimits", required_argument, NULL, 'f', 0 },
 #endif
 	{    "run-pbkdf2-benchmarks",       no_argument, NULL, 'k', 0 },
 	{        "pbkdf2-iterations", required_argument, NULL, 'c', 0 },
@@ -106,6 +126,9 @@ print_usage(void)
 #ifdef HAVE_LIBARGON2
 	"         " PACKAGE_TARNAME "-crypto-benchmark -a [-n ...] [-m ...] [-t ...] [-p ...]\n"
 #endif
+#ifdef HAVE_LIBSODIUM_SCRYPT
+	"         " PACKAGE_TARNAME "-crypto-benchmark -s [-e ...] [-f ...]\n"
+#endif
 	"         " PACKAGE_TARNAME "-crypto-benchmark -k [-c ...] [-d ...]\n"
 	"\n"
 	"  -h/--help                    Display this help information and exit\n"
@@ -114,7 +137,7 @@ print_usage(void)
 	"  -o/--run-optimal-benchmarks  Perform an automatic parameter tuning benchmark:\n"
 	"  -g/--optimal-clock-limit       Wall clock time limit for optimal benchmarks\n"
 	"                                   (in seconds, fractional values accepted)\n"
-#ifdef HAVE_LIBARGON2
+#ifdef HAVE_ANY_MEMORY_HARD_ALGORITHM
 	"  -l/--optimal-memory-limit      Memory limit for optimal benchmarking\n"
 	"                                   (as a power of 2, in KiB)\n"
 	"                                   For example, '-l 16' means 2^16 KiB; 64 MiB\n"
@@ -132,6 +155,12 @@ print_usage(void)
 	"  -p/--argon2-threads            Comma-separated thread counts\n"
 	"\n"
 	"    Valid types are: Argon2d, Argon2i, Argon2id (case-insensitive)\n"
+#endif
+#ifdef HAVE_LIBSODIUM_SCRYPT
+	"\n"
+	"  -s/--run-scrypt-benchmarks   Benchmark the scrypt code with configurations:\n"
+	"  -e/--scrypt-memlimits          Comma-separated memlimits\n"
+	"  -f/--scrypt-opslimits          Comma-separated opslimits\n"
 #endif
 	"\n"
 	"  -k/--run-pbkdf2-benchmarks   Benchmark the PBKDF2 code with configurations:\n"
@@ -246,7 +275,7 @@ process_options(int argc, char *argv[])
 				break;
 			}
 
-#ifdef HAVE_LIBARGON2
+#ifdef HAVE_ANY_MEMORY_HARD_ALGORITHM
 			case 'l':
 				if (! string_to_uint(mowgli_optarg, &optimal_memlimit))
 				{
@@ -266,7 +295,9 @@ process_options(int argc, char *argv[])
 				}
 				optimal_memlimit_given = true;
 				break;
+#endif /* HAVE_ANY_MEMORY_HARD_ALGORITHM */
 
+#ifdef HAVE_LIBARGON2
 			case 'a':
 				run_options |= BENCH_RUN_OPTIONS_ARGON2;
 				break;
@@ -324,6 +355,30 @@ process_options(int argc, char *argv[])
 
 				break;
 #endif /* HAVE_LIBARGON2 */
+
+#ifdef HAVE_LIBSODIUM_SCRYPT
+			case 's':
+				run_options |= BENCH_RUN_OPTIONS_SCRYPT;
+				break;
+
+			case 'e':
+				if (! process_uint_option(c, mowgli_optarg, &b_scrypt_memlimits,
+				                          &b_scrypt_memlimits_count, ATHEME_SCRYPT_MEMLIMIT_MIN,
+				                          ATHEME_SCRYPT_MEMLIMIT_MAX))
+					// This function logs error messages on failure
+					return false;
+
+				break;
+
+			case 'f':
+				if (! process_uint_option(c, mowgli_optarg, &b_scrypt_opslimits,
+				                          &b_scrypt_opslimits_count, ATHEME_SCRYPT_OPSLIMIT_MIN,
+				                          ATHEME_SCRYPT_OPSLIMIT_MAX))
+					// This function logs error messages on failure
+					return false;
+
+				break;
+#endif /* HAVE_LIBSODIUM_SCRYPT */
 
 			case 'k':
 				run_options |= BENCH_RUN_OPTIONS_PBKDF2;
@@ -400,6 +455,19 @@ process_options(int argc, char *argv[])
 	}
 #endif /* HAVE_LIBARGON2 */
 
+#ifdef HAVE_LIBSODIUM_SCRYPT
+	if (! b_scrypt_memlimits)
+	{
+		b_scrypt_memlimits = b_scrypt_memlimits_default;
+		b_scrypt_memlimits_count = BENCH_ARRAY_SIZE(b_scrypt_memlimits_default);
+	}
+	if (! b_scrypt_opslimits)
+	{
+		b_scrypt_opslimits = b_scrypt_opslimits_default;
+		b_scrypt_opslimits_count = BENCH_ARRAY_SIZE(b_scrypt_opslimits_default);
+	}
+#endif /* HAVE_LIBSODIUM_SCRYPT */
+
 	if (! b_pbkdf2_itercounts)
 	{
 		b_pbkdf2_itercounts = b_pbkdf2_itercounts_default;
@@ -440,6 +508,30 @@ do_argon2_benchmarks(void)
 }
 
 #endif /* HAVE_LIBARGON2 */
+
+#ifdef HAVE_LIBSODIUM_SCRYPT
+
+static bool ATHEME_FATTR_WUR
+do_scrypt_benchmarks(void)
+{
+	(void) fprintf(stderr, "\n");
+	(void) fprintf(stderr, "Beginning scrypt benchmark ...\n");
+	(void) fprintf(stderr, "\n");
+
+	(void) scrypt_print_colheaders();
+
+	for (size_t b_scrypt_memlimit = 0; b_scrypt_memlimit < b_scrypt_memlimits_count; b_scrypt_memlimit++)
+	  for (size_t b_scrypt_opslimit = 0; b_scrypt_opslimit < b_scrypt_opslimits_count; b_scrypt_opslimit++)
+	    if (! benchmark_scrypt(b_scrypt_memlimits[b_scrypt_memlimit], b_scrypt_opslimits[b_scrypt_opslimit], NULL))
+	      // This function logs error messages on failure
+	      return false;
+
+	(void) fprintf(stderr, "\n");
+	(void) fprintf(stderr, "\n");
+	return true;
+}
+
+#endif /* HAVE_LIBSODIUM_SCRYPT */
 
 static bool ATHEME_FATTR_WUR
 do_pbkdf2_benchmarks(void)
@@ -494,6 +586,12 @@ main(int argc, char *argv[])
 		// This function logs error messages on failure
 		return EXIT_FAILURE;
 #endif /* HAVE_LIBARGON2 */
+
+#ifdef HAVE_LIBSODIUM_SCRYPT
+	if ((run_options & BENCH_RUN_OPTIONS_SCRYPT) && ! do_scrypt_benchmarks())
+		// This function logs error messages on failure
+		return EXIT_FAILURE;
+#endif /* HAVE_LIBSODIUM_SCRYPT */
 
 	if ((run_options & BENCH_RUN_OPTIONS_PBKDF2) && ! do_pbkdf2_benchmarks())
 		// This function logs error messages on failure

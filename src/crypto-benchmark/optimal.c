@@ -13,6 +13,7 @@
 #include <atheme/argon2.h>          // ATHEME_ARGON2_*
 #include <atheme/digest.h>          // DIGALG_*, digest_oneshot_pbkdf2()
 #include <atheme/pbkdf2.h>          // PBKDF2_*
+#include <atheme/scrypt.h>          // ATHEME_SCRYPT_*
 #include <atheme/stdheaders.h>      // (everything else)
 #include <atheme/sysconf.h>         // HAVE_LIBARGON2
 
@@ -108,6 +109,95 @@ do_optimal_argon2_benchmark(const long double optimal_clocklimit, const size_t o
 }
 
 #endif /* HAVE_LIBARGON2 */
+
+#ifdef HAVE_LIBSODIUM_SCRYPT
+
+static bool ATHEME_FATTR_WUR
+do_optimal_scrypt_benchmark(const long double optimal_clocklimit, const size_t optimal_memlimit)
+{
+	(void) fprintf(stderr, "Beginning automatic optimal scrypt benchmark ...\n");
+	(void) fprintf(stderr, "\n");
+
+	(void) scrypt_print_colheaders();
+
+	long double elapsed_prev = 0L;
+	long double elapsed = 0L;
+	size_t opslimit_prev = 0U;
+
+	/* For tuning, the recommendation is set opslimit to (memlimit / 32),
+	 * but we interpret memlimit as a KiB power of 2, so we need to make
+	 * memlimit a power of two, and then multiply it by 1024 (to make it
+	 * a value in KiB), and then divide it by 32. Those last 2 operations
+	 * are equivalent to just multiplying by 32. The benchmark_scrypt()
+	 * function itself takes care of the above calculations as far as the
+	 * memory limit is concerned.
+	 */
+	size_t memlimit = optimal_memlimit;
+	size_t opslimit = ((1ULL << memlimit) * 32ULL);
+
+	// First try at our memory limit and the corresponding default opslimit
+	if (! benchmark_scrypt(memlimit, opslimit, &elapsed))
+		// This function logs error messages on failure
+		return false;
+
+	// If that's still too slow, halve the memory limit and re-calculate opslimit until it isn't
+	while (elapsed > optimal_clocklimit)
+	{
+		if (memlimit <= ATHEME_SCRYPT_MEMLIMIT_MIN)
+		{
+			(void) fprintf(stderr, "Reached minimum memory limit.\n");
+			(void) fprintf(stderr, "Algorithm is still too slow; giving up.\n");
+			(void) fprintf(stderr, "\n");
+			(void) fflush(stderr);
+			return true;
+		}
+
+		memlimit--;
+		opslimit = ((1ULL << memlimit) * 32ULL);
+
+		if (! benchmark_scrypt(memlimit, opslimit, &elapsed))
+			// This function logs error messages on failure
+			return false;
+	}
+
+	// Now that it's fast enough, raise the opslimit until it isn't
+	while (elapsed < optimal_clocklimit)
+	{
+		elapsed_prev = elapsed;
+		opslimit_prev = opslimit;
+		opslimit *= 2U;
+
+		if (! benchmark_scrypt(memlimit, opslimit, &elapsed))
+			// This function logs error messages on failure
+			return false;
+	}
+
+	// If it was raised, go back to the previous loop's outputs (now that it's too slow)
+	if (opslimit_prev)
+	{
+		elapsed = elapsed_prev;
+		opslimit = opslimit_prev;
+	}
+
+	(void) fprintf(stderr, "\n");
+	(void) fprintf(stderr, "Recommended parameters:\n");
+	(void) fprintf(stderr, "\n");
+	(void) fflush(stderr);
+	(void) fprintf(stdout, "crypto {\n");
+	(void) fprintf(stdout, "\t/* Target: %LFs; Benchmarked: %LFs */\n", optimal_clocklimit, elapsed);
+	(void) fprintf(stdout, "\tscrypt_memlimit = %zu; /* %llu KiB */ \n", memlimit, (1ULL << memlimit));
+	(void) fprintf(stdout, "\tscrypt_opslimit = %zu;\n", opslimit);
+	(void) fprintf(stdout, "};\n");
+	(void) fflush(stdout);
+	(void) fsync(fileno(stdout));
+	(void) fprintf(stderr, "\n");
+	(void) fprintf(stderr, "\n");
+	(void) fprintf(stderr, "\n");
+	(void) fflush(stderr);
+	return true;
+}
+
+#endif /* HAVE_LIBSODIUM_SCRYPT */
 
 static bool ATHEME_FATTR_WUR
 do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit)
@@ -207,7 +297,7 @@ bool ATHEME_FATTR_WUR
 do_optimal_benchmarks(const long double optimal_clocklimit, const size_t ATHEME_VATTR_MAYBE_UNUSED optimal_memlimit,
                       const bool ATHEME_VATTR_MAYBE_UNUSED optimal_memlimit_given)
 {
-#ifdef HAVE_LIBARGON2
+#ifdef HAVE_ANY_MEMORY_HARD_ALGORITHM
 	if (! optimal_memlimit_given)
 	{
 		(void) fprintf(stderr, "Be sure to specify -L/--optimal-memory-limit appropriately for this machine!\n");
@@ -215,8 +305,16 @@ do_optimal_benchmarks(const long double optimal_clocklimit, const size_t ATHEME_
 		(void) fprintf(stderr, "\n");
 		(void) fprintf(stderr, "\n");
 	}
+#endif
 
+#ifdef HAVE_LIBARGON2
 	if (! do_optimal_argon2_benchmark(optimal_clocklimit, optimal_memlimit))
+		// This function logs error messages on failure
+		return false;
+#endif
+
+#ifdef HAVE_LIBSODIUM_SCRYPT
+	if (! do_optimal_scrypt_benchmark(optimal_clocklimit, optimal_memlimit))
 		// This function logs error messages on failure
 		return false;
 #endif

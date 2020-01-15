@@ -27,7 +27,12 @@
 #define BENCH_RUN_OPTIONS_NONE      0x0000U
 #define BENCH_RUN_OPTIONS_OPTIMAL   0x0001U
 #define BENCH_RUN_OPTIONS_ARGON2    0x0002U
-#define BENCH_RUN_OPTIONS_PBKDF2    0x0004U
+#define BENCH_RUN_OPTIONS_SCRYPT    0x0004U
+#define BENCH_RUN_OPTIONS_PBKDF2    0x0008U
+
+#if defined(HAVE_LIBARGON2) || defined(HAVE_LIBSODIUM_SCRYPT)
+#  define HAVE_ANY_MEMORY_HARD_ALGORITHM 1
+#endif
 
 bool benchmark_init(void) ATHEME_FATTR_WUR;
 
@@ -36,6 +41,12 @@ argon2_type argon2_name_to_type(const char *);
 void argon2_print_colheaders(void);
 void argon2_print_rowstats(argon2_type, size_t, size_t, size_t, long double);
 bool benchmark_argon2(argon2_type, size_t, size_t, size_t, long double *) ATHEME_FATTR_WUR;
+#endif
+
+#ifdef HAVE_LIBSODIUM_SCRYPT
+void scrypt_print_colheaders(void);
+void scrypt_print_rowstats(size_t, size_t, long double);
+bool benchmark_scrypt(size_t, size_t, long double *) ATHEME_FATTR_WUR;
 #endif
 
 enum digest_algorithm md_name_to_digest(const char *);
