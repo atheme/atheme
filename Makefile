@@ -1,4 +1,4 @@
-SUBDIRS		= include libathemecore $(LIBMOWGLI_COND_D) modules src $(PODIR_COND_D)
+SUBDIRS		= $(LIBMOWGLI_COND_D) include libathemecore modules src $(PODIR_COND_D)
 CLEANDIRS	= ${SUBDIRS}
 DISTCLEAN	= buildsys.mk config.log config.status extra.mk
 
@@ -6,7 +6,7 @@ DISTCLEAN	= buildsys.mk config.log config.status extra.mk
 -include buildsys.mk
 
 # explicit dependencies need to be expressed to ensure parallel builds don't die
-libathemecore: include $(LIBMOWGLI_COND_D)
+libathemecore: $(LIBMOWGLI_COND_D) include
 modules: libathemecore
 src: libathemecore
 
