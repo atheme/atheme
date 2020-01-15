@@ -10,7 +10,7 @@
  */
 
 #include <atheme/attributes.h>      // ATHEME_FATTR_WUR
-#include <atheme/argon2.h>          // ARGON2_*
+#include <atheme/argon2.h>          // ATHEME_ARGON2_*
 #include <atheme/constants.h>       // BUFSIZE, PASSLEN
 #include <atheme/digest.h>          // digest_oneshot_pbkdf2()
 #include <atheme/libathemecore.h>   // libathemecore_early_init()
@@ -82,11 +82,11 @@ benchmark_argon2(const argon2_type type, const size_t memcost, const size_t time
 {
 	argon2_context ctx = {
 		.out            = (void *) hashbuf,
-		.outlen         = ARGON2_HASHLEN_DEF,
+		.outlen         = ATHEME_ARGON2_HASHLEN_DEF,
 		.pwd            = (void *) passbuf,
 		.pwdlen         = PASSLEN,
 		.salt           = saltbuf,
-		.saltlen        = ARGON2_SALTLEN_DEF,
+		.saltlen        = ATHEME_ARGON2_SALTLEN_DEF,
 		.t_cost         = timecost,
 		.m_cost         = (1U << memcost),
 		.lanes          = threadcount,

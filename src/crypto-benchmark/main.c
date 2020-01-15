@@ -9,7 +9,7 @@
  * copyright notice and this permission notice appear in all copies.
  */
 
-#include <atheme/argon2.h>          // ARGON2_*
+#include <atheme/argon2.h>          // ATHEME_ARGON2_*
 #include <atheme/digest.h>          // DIGALG_*
 #include <atheme/memory.h>          // sreallocarray()
 #include <atheme/pbkdf2.h>          // PBKDF2_*
@@ -28,9 +28,9 @@
 #define BENCH_CLOCKTIME_DEF         0.25L
 #define BENCH_CLOCKTIME_MAX         1.00L
 
-#define BENCH_MEMLIMIT_MIN          ARGON2_MEMCOST_MIN
-#define BENCH_MEMLIMIT_DEF          ARGON2_MEMCOST_DEF
-#define BENCH_MEMLIMIT_MAX          ARGON2_MEMCOST_MAX
+#define BENCH_MEMLIMIT_MIN          ATHEME_ARGON2_MEMCOST_MIN
+#define BENCH_MEMLIMIT_DEF          ATHEME_ARGON2_MEMCOST_DEF
+#define BENCH_MEMLIMIT_MAX          ATHEME_ARGON2_MEMCOST_MAX
 
 #ifdef HAVE_LIBARGON2
 
@@ -38,15 +38,15 @@ static argon2_type b_argon2_types_default[] = { Argon2_id };
 static argon2_type *b_argon2_types = NULL;
 static size_t b_argon2_types_count = 0;
 
-static size_t b_argon2_memcosts_default[] = { ARGON2_MEMCOST_MIN, ARGON2_MEMCOST_DEF };
+static size_t b_argon2_memcosts_default[] = { ATHEME_ARGON2_MEMCOST_MIN, ATHEME_ARGON2_MEMCOST_DEF };
 static size_t *b_argon2_memcosts = NULL;
 static size_t b_argon2_memcosts_count = 0;
 
-static size_t b_argon2_timecosts_default[] = { ARGON2_TIMECOST_MIN, ARGON2_TIMECOST_DEF };
+static size_t b_argon2_timecosts_default[] = { ATHEME_ARGON2_TIMECOST_MIN, ATHEME_ARGON2_TIMECOST_DEF };
 static size_t *b_argon2_timecosts = NULL;
 static size_t b_argon2_timecosts_count = 0;
 
-static size_t b_argon2_threads_default[] = { ARGON2_THREADS_DEF };
+static size_t b_argon2_threads_default[] = { ATHEME_ARGON2_THREADS_DEF };
 static size_t *b_argon2_threads = NULL;
 static size_t b_argon2_threads_count = 0;
 
@@ -299,8 +299,8 @@ process_options(int argc, char *argv[])
 
 			case 'm':
 				if (! process_uint_option(c, mowgli_optarg, &b_argon2_memcosts,
-				                          &b_argon2_memcosts_count, ARGON2_MEMCOST_MIN,
-				                          ARGON2_MEMCOST_MAX))
+				                          &b_argon2_memcosts_count, ATHEME_ARGON2_MEMCOST_MIN,
+				                          ATHEME_ARGON2_MEMCOST_MAX))
 					// This function logs error messages on failure
 					return false;
 
@@ -308,8 +308,8 @@ process_options(int argc, char *argv[])
 
 			case 't':
 				if (! process_uint_option(c, mowgli_optarg, &b_argon2_timecosts,
-				                          &b_argon2_timecosts_count, ARGON2_TIMECOST_MIN,
-				                          ARGON2_TIMECOST_MAX))
+				                          &b_argon2_timecosts_count, ATHEME_ARGON2_TIMECOST_MIN,
+				                          ATHEME_ARGON2_TIMECOST_MAX))
 					// This function logs error messages on failure
 					return false;
 
@@ -317,8 +317,8 @@ process_options(int argc, char *argv[])
 
 			case 'p':
 				if (! process_uint_option(c, mowgli_optarg, &b_argon2_threads,
-				                          &b_argon2_threads_count, ARGON2_THREADS_MIN,
-				                          ARGON2_THREADS_MAX))
+				                          &b_argon2_threads_count, ATHEME_ARGON2_THREADS_MIN,
+				                          ATHEME_ARGON2_THREADS_MAX))
 					// This function logs error messages on failure
 					return false;
 

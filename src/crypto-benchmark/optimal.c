@@ -10,7 +10,7 @@
  */
 
 #include <atheme/attributes.h>      // ATHEME_FATTR_WUR
-#include <atheme/argon2.h>          // ARGON2_*
+#include <atheme/argon2.h>          // ATHEME_ARGON2_*
 #include <atheme/digest.h>          // DIGALG_*, digest_oneshot_pbkdf2()
 #include <atheme/pbkdf2.h>          // PBKDF2_*
 #include <atheme/stdheaders.h>      // (everything else)
@@ -41,7 +41,7 @@ do_optimal_argon2_benchmark(const long double optimal_clocklimit, const size_t o
 
 	const argon2_type type = Argon2_id;
 	size_t memcost = optimal_memlimit;
-	size_t timecost = ARGON2_TIMECOST_MIN;
+	size_t timecost = ATHEME_ARGON2_TIMECOST_MIN;
 	const size_t threads = 1ULL;
 
 	// First try at our memory limit and the minimum time cost
@@ -52,7 +52,7 @@ do_optimal_argon2_benchmark(const long double optimal_clocklimit, const size_t o
 	// If that's still too slow, halve the memory usage until it isn't
 	while (elapsed > optimal_clocklimit)
 	{
-		if (memcost <= ARGON2_MEMCOST_MIN)
+		if (memcost <= ATHEME_ARGON2_MEMCOST_MIN)
 		{
 			(void) fprintf(stderr, "Reached minimum memory and time cost.\n");
 			(void) fprintf(stderr, "Algorithm is still too slow; giving up.\n");

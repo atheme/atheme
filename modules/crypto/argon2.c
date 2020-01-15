@@ -28,11 +28,11 @@
 static mowgli_list_t **crypto_conf_table = NULL;
 
 static argon2_type atheme_argon2_type = Argon2_id;
-static unsigned int atheme_argon2_memcost = ARGON2_MEMCOST_DEF;
-static unsigned int atheme_argon2_timecost = ARGON2_TIMECOST_DEF;
-static unsigned int atheme_argon2_threads = ARGON2_THREADS_DEF;
-static unsigned int atheme_argon2_saltlen = ARGON2_SALTLEN_DEF;
-static unsigned int atheme_argon2_hashlen = ARGON2_HASHLEN_DEF;
+static unsigned int atheme_argon2_memcost = ATHEME_ARGON2_MEMCOST_DEF;
+static unsigned int atheme_argon2_timecost = ATHEME_ARGON2_TIMECOST_DEF;
+static unsigned int atheme_argon2_threads = ATHEME_ARGON2_THREADS_DEF;
+static unsigned int atheme_argon2_saltlen = ATHEME_ARGON2_SALTLEN_DEF;
+static unsigned int atheme_argon2_hashlen = ATHEME_ARGON2_HASHLEN_DEF;
 
 static int
 c_ci_argon2_type(mowgli_config_file_entry_t *const restrict ce)
@@ -164,8 +164,8 @@ atheme_argon2_crypt(const char *const restrict password,
                     const char ATHEME_VATTR_UNUSED *const restrict parameters)
 {
 	static char resultbuf[PASSLEN + 1];
-	unsigned char hash[ARGON2_HASHLEN_MAX];
-	unsigned char salt[ARGON2_SALTLEN_MAX];
+	unsigned char hash[ATHEME_ARGON2_HASHLEN_MAX];
+	unsigned char salt[ATHEME_ARGON2_SALTLEN_MAX];
 	char hash64[BASE64_SIZE_STR(sizeof hash)];
 	char salt64[BASE64_SIZE_STR(sizeof salt)];
 	const char *result = NULL;
@@ -253,12 +253,12 @@ atheme_argon2_verify(const char *const restrict password, const char *const rest
 		(void) slog(LG_DEBUG, "%s: sscanf(3) was unsuccessful", MOWGLI_FUNC_NAME);
 		goto cleanup;
 	}
-	if ((saltlen = base64_decode(salt64, salt, sizeof salt)) == BASE64_FAIL || saltlen < ARGON2_SALTLEN_MIN)
+	if ((saltlen = base64_decode(salt64, salt, sizeof salt)) == BASE64_FAIL || saltlen < ATHEME_ARGON2_SALTLEN_MIN)
 	{
 		(void) slog(LG_DEBUG, "%s: base64_decode() for salt failed", MOWGLI_FUNC_NAME);
 		goto cleanup;
 	}
-	if ((hashlen = base64_decode(hash64, hash, sizeof hash)) == BASE64_FAIL || hashlen < ARGON2_HASHLEN_MIN)
+	if ((hashlen = base64_decode(hash64, hash, sizeof hash)) == BASE64_FAIL || hashlen < ATHEME_ARGON2_HASHLEN_MIN)
 	{
 		(void) slog(LG_DEBUG, "%s: base64_decode() for hash failed", MOWGLI_FUNC_NAME);
 		goto cleanup;
@@ -313,19 +313,19 @@ mod_init(struct module *const restrict m)
 	(void) add_conf_item("argon2_type", *crypto_conf_table, &c_ci_argon2_type);
 
 	(void) add_uint_conf_item("argon2_memcost", *crypto_conf_table, 0, &atheme_argon2_memcost,
-	                          ARGON2_MEMCOST_MIN, ARGON2_MEMCOST_MAX, ARGON2_MEMCOST_DEF);
+	                          ATHEME_ARGON2_MEMCOST_MIN, ATHEME_ARGON2_MEMCOST_MAX, ATHEME_ARGON2_MEMCOST_DEF);
 
 	(void) add_uint_conf_item("argon2_timecost", *crypto_conf_table, 0, &atheme_argon2_timecost,
-	                          ARGON2_TIMECOST_MIN, ARGON2_TIMECOST_MAX, ARGON2_TIMECOST_DEF);
+	                          ATHEME_ARGON2_TIMECOST_MIN, ATHEME_ARGON2_TIMECOST_MAX, ATHEME_ARGON2_TIMECOST_DEF);
 
 	(void) add_uint_conf_item("argon2_threads", *crypto_conf_table, 0, &atheme_argon2_threads,
-	                          ARGON2_THREADS_MIN, ARGON2_THREADS_MAX, ARGON2_THREADS_DEF);
+	                          ATHEME_ARGON2_THREADS_MIN, ATHEME_ARGON2_THREADS_MAX, ATHEME_ARGON2_THREADS_DEF);
 
 	(void) add_uint_conf_item("argon2_saltlen", *crypto_conf_table, 0, &atheme_argon2_saltlen,
-	                          ARGON2_SALTLEN_MIN, ARGON2_SALTLEN_MAX, ARGON2_SALTLEN_DEF);
+	                          ATHEME_ARGON2_SALTLEN_MIN, ATHEME_ARGON2_SALTLEN_MAX, ATHEME_ARGON2_SALTLEN_DEF);
 
 	(void) add_uint_conf_item("argon2_hashlen", *crypto_conf_table, 0, &atheme_argon2_hashlen,
-	                          ARGON2_HASHLEN_MIN, ARGON2_HASHLEN_MAX, ARGON2_HASHLEN_DEF);
+	                          ATHEME_ARGON2_HASHLEN_MIN, ATHEME_ARGON2_HASHLEN_MAX, ATHEME_ARGON2_HASHLEN_DEF);
 
 	(void) crypt_register(&crypto_argon2_impl);
 
