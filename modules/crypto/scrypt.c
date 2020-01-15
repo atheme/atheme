@@ -9,7 +9,7 @@
 
 #include <atheme.h>
 
-#define CRYPTO_MODULE_NAME "crypto/sodium-scrypt"
+#define CRYPTO_MODULE_NAME "crypto/scrypt"
 
 #ifdef HAVE_LIBSODIUM_SCRYPT
 
