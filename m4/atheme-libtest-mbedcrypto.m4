@@ -131,7 +131,7 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDCRYPTO], [
             AC_MSG_RESULT([no])
         ])
 
-        AC_MSG_CHECKING([if libmbedcrypto has usable entropy-gathering functions])
+        AC_MSG_CHECKING([if libmbedcrypto has a usable HMAC-DRBG random number generator])
         AC_LINK_IFELSE([
             AC_LANG_PROGRAM([[
                 #ifdef HAVE_STDDEF_H
@@ -143,83 +143,33 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDCRYPTO], [
                 #  include <mbedtls/config.h>
                 #endif
                 #include <mbedtls/entropy.h>
+                #include <mbedtls/hmac_drbg.h>
+                #include <mbedtls/md.h>
                 #ifndef MBEDTLS_ENTROPY_C
                 #  error "MBEDTLS_ENTROPY_C is not enabled"
+                #endif
+                #ifndef MBEDTLS_HMAC_DRBG_C
+                #  error "MBEDTLS_HMAC_DRBG_C is not enabled"
+                #endif
+                #ifndef MBEDTLS_MD_C
+                #  error "MBEDTLS_MD_C is not enabled"
+                #endif
+                #if !defined(MBEDTLS_SHA256_C) && !defined(MBEDTLS_SHA512_C)
+                #  error "Neither MBEDTLS_SHA256_C nor MBEDTLS_SHA512_C are enabled"
                 #endif
             ]], [[
                 (void) mbedtls_entropy_init(NULL);
                 (void) mbedtls_entropy_func(NULL, NULL, 0);
+                (void) mbedtls_md_info_from_type(MBEDTLS_MD_NONE);
+                (void) mbedtls_hmac_drbg_init(NULL);
+                (void) mbedtls_hmac_drbg_seed(NULL, NULL, NULL, NULL, NULL, 0);
+                (void) mbedtls_hmac_drbg_reseed(NULL, NULL, 0);
+                (void) mbedtls_hmac_drbg_random(NULL, NULL, 0);
             ]])
         ], [
             AC_MSG_RESULT([yes])
-
-            AC_MSG_CHECKING([if libmbedcrypto has usable CTR-DRBG functions])
-            AC_LINK_IFELSE([
-                AC_LANG_PROGRAM([[
-                    #ifdef HAVE_STDDEF_H
-                    #  include <stddef.h>
-                    #endif
-                    #ifdef MBEDTLS_CONFIG_FILE
-                    #  include MBEDTLS_CONFIG_FILE
-                    #else
-                    #  include <mbedtls/config.h>
-                    #endif
-                    #include <mbedtls/ctr_drbg.h>
-                    #ifndef MBEDTLS_CTR_DRBG_C
-                    #  error "MBEDTLS_CTR_DRBG_C is not enabled"
-                    #endif
-                ]], [[
-                    (void) mbedtls_ctr_drbg_init(NULL);
-                    (void) mbedtls_ctr_drbg_seed(NULL, NULL, NULL, NULL, 0);
-                    (void) mbedtls_ctr_drbg_reseed(NULL, NULL, 0);
-                    (void) mbedtls_ctr_drbg_random(NULL, NULL, 0);
-                ]])
-            ], [
-                AC_MSG_RESULT([yes])
-                AC_DEFINE([HAVE_LIBMBEDCRYPTO_CTR_DRBG], [1], [Define to 1 if libmbedcrypto has usable CTR-DRBG functions])
-                LIBMBEDCRYPTO_USABLE="Yes"
-                LIBMBEDCRYPTO_RANDOM="Yes"
-            ], [
-                AC_MSG_RESULT([no])
-            ])
-
-            AC_MSG_CHECKING([if libmbedcrypto has usable HMAC-DRBG functions])
-            AC_LINK_IFELSE([
-                AC_LANG_PROGRAM([[
-                    #ifdef HAVE_STDDEF_H
-                    #  include <stddef.h>
-                    #endif
-                    #ifdef MBEDTLS_CONFIG_FILE
-                    #  include MBEDTLS_CONFIG_FILE
-                    #else
-                    #  include <mbedtls/config.h>
-                    #endif
-                    #include <mbedtls/hmac_drbg.h>
-                    #include <mbedtls/md.h>
-                    #ifndef MBEDTLS_HMAC_DRBG_C
-                    #  error "MBEDTLS_HMAC_DRBG_C is not enabled"
-                    #endif
-                    #ifndef MBEDTLS_MD_C
-                    #  error "MBEDTLS_MD_C is not enabled"
-                    #endif
-                    #if !defined(MBEDTLS_SHA256_C) && !defined(MBEDTLS_SHA512_C)
-                    #  error "Neither MBEDTLS_SHA256_C nor MBEDTLS_SHA512_C are enabled"
-                    #endif
-                ]], [[
-                    (void) mbedtls_md_info_from_type(MBEDTLS_MD_NONE);
-                    (void) mbedtls_hmac_drbg_init(NULL);
-                    (void) mbedtls_hmac_drbg_seed(NULL, NULL, NULL, NULL, NULL, 0);
-                    (void) mbedtls_hmac_drbg_reseed(NULL, NULL, 0);
-                    (void) mbedtls_hmac_drbg_random(NULL, NULL, 0);
-                ]])
-            ], [
-                AC_MSG_RESULT([yes])
-                AC_DEFINE([HAVE_LIBMBEDCRYPTO_HMAC_DRBG], [1], [Define to 1 if libmbedcrypto has usable HMAC-DRBG functions])
-                LIBMBEDCRYPTO_USABLE="Yes"
-                LIBMBEDCRYPTO_RANDOM="Yes"
-            ], [
-                AC_MSG_RESULT([no])
-            ])
+            LIBMBEDCRYPTO_USABLE="Yes"
+            LIBMBEDCRYPTO_RANDOM="Yes"
         ], [
             AC_MSG_RESULT([no])
         ])

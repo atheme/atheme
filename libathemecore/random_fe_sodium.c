@@ -44,7 +44,7 @@ libathemecore_random_early_init(void)
 const char *
 random_get_frontend_info(void)
 {
-	static char result[1024];
+	static char result[BUFSIZE];
 	(void) snprintf(result, sizeof result, "libsodium (compiled %s, library %s)",
 	                SODIUM_VERSION_STRING, sodium_version_string());
 

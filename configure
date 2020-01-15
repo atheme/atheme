@@ -11522,8 +11522,8 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking if libmbedcrypto has usable entropy-gathering functions" >&5
-$as_echo_n "checking if libmbedcrypto has usable entropy-gathering functions... " >&6; }
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking if libmbedcrypto has a usable HMAC-DRBG random number generator" >&5
+$as_echo_n "checking if libmbedcrypto has a usable HMAC-DRBG random number generator... " >&6; }
         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -11537,8 +11537,19 @@ $as_echo_n "checking if libmbedcrypto has usable entropy-gathering functions... 
                 #  include <mbedtls/config.h>
                 #endif
                 #include <mbedtls/entropy.h>
+                #include <mbedtls/hmac_drbg.h>
+                #include <mbedtls/md.h>
                 #ifndef MBEDTLS_ENTROPY_C
                 #  error "MBEDTLS_ENTROPY_C is not enabled"
+                #endif
+                #ifndef MBEDTLS_HMAC_DRBG_C
+                #  error "MBEDTLS_HMAC_DRBG_C is not enabled"
+                #endif
+                #ifndef MBEDTLS_MD_C
+                #  error "MBEDTLS_MD_C is not enabled"
+                #endif
+                #if !defined(MBEDTLS_SHA256_C) && !defined(MBEDTLS_SHA512_C)
+                #  error "Neither MBEDTLS_SHA256_C nor MBEDTLS_SHA512_C are enabled"
                 #endif
 
 int
@@ -11547,6 +11558,11 @@ main ()
 
                 (void) mbedtls_entropy_init(NULL);
                 (void) mbedtls_entropy_func(NULL, NULL, 0);
+                (void) mbedtls_md_info_from_type(MBEDTLS_MD_NONE);
+                (void) mbedtls_hmac_drbg_init(NULL);
+                (void) mbedtls_hmac_drbg_seed(NULL, NULL, NULL, NULL, NULL, 0);
+                (void) mbedtls_hmac_drbg_reseed(NULL, NULL, 0);
+                (void) mbedtls_hmac_drbg_random(NULL, NULL, 0);
 
   ;
   return 0;
@@ -11557,118 +11573,8 @@ if ac_fn_c_try_link "$LINENO"; then :
 
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-
-            { $as_echo "$as_me:${as_lineno-$LINENO}: checking if libmbedcrypto has usable CTR-DRBG functions" >&5
-$as_echo_n "checking if libmbedcrypto has usable CTR-DRBG functions... " >&6; }
-            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-                    #ifdef HAVE_STDDEF_H
-                    #  include <stddef.h>
-                    #endif
-                    #ifdef MBEDTLS_CONFIG_FILE
-                    #  include MBEDTLS_CONFIG_FILE
-                    #else
-                    #  include <mbedtls/config.h>
-                    #endif
-                    #include <mbedtls/ctr_drbg.h>
-                    #ifndef MBEDTLS_CTR_DRBG_C
-                    #  error "MBEDTLS_CTR_DRBG_C is not enabled"
-                    #endif
-
-int
-main ()
-{
-
-                    (void) mbedtls_ctr_drbg_init(NULL);
-                    (void) mbedtls_ctr_drbg_seed(NULL, NULL, NULL, NULL, 0);
-                    (void) mbedtls_ctr_drbg_reseed(NULL, NULL, 0);
-                    (void) mbedtls_ctr_drbg_random(NULL, NULL, 0);
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-
-                { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-$as_echo "#define HAVE_LIBMBEDCRYPTO_CTR_DRBG 1" >>confdefs.h
-
-                LIBMBEDCRYPTO_USABLE="Yes"
-                LIBMBEDCRYPTO_RANDOM="Yes"
-
-else
-
-                { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-
-            { $as_echo "$as_me:${as_lineno-$LINENO}: checking if libmbedcrypto has usable HMAC-DRBG functions" >&5
-$as_echo_n "checking if libmbedcrypto has usable HMAC-DRBG functions... " >&6; }
-            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-                    #ifdef HAVE_STDDEF_H
-                    #  include <stddef.h>
-                    #endif
-                    #ifdef MBEDTLS_CONFIG_FILE
-                    #  include MBEDTLS_CONFIG_FILE
-                    #else
-                    #  include <mbedtls/config.h>
-                    #endif
-                    #include <mbedtls/hmac_drbg.h>
-                    #include <mbedtls/md.h>
-                    #ifndef MBEDTLS_HMAC_DRBG_C
-                    #  error "MBEDTLS_HMAC_DRBG_C is not enabled"
-                    #endif
-                    #ifndef MBEDTLS_MD_C
-                    #  error "MBEDTLS_MD_C is not enabled"
-                    #endif
-                    #if !defined(MBEDTLS_SHA256_C) && !defined(MBEDTLS_SHA512_C)
-                    #  error "Neither MBEDTLS_SHA256_C nor MBEDTLS_SHA512_C are enabled"
-                    #endif
-
-int
-main ()
-{
-
-                    (void) mbedtls_md_info_from_type(MBEDTLS_MD_NONE);
-                    (void) mbedtls_hmac_drbg_init(NULL);
-                    (void) mbedtls_hmac_drbg_seed(NULL, NULL, NULL, NULL, NULL, 0);
-                    (void) mbedtls_hmac_drbg_reseed(NULL, NULL, 0);
-                    (void) mbedtls_hmac_drbg_random(NULL, NULL, 0);
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-
-                { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-$as_echo "#define HAVE_LIBMBEDCRYPTO_HMAC_DRBG 1" >>confdefs.h
-
-                LIBMBEDCRYPTO_USABLE="Yes"
-                LIBMBEDCRYPTO_RANDOM="Yes"
-
-else
-
-                { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
+            LIBMBEDCRYPTO_USABLE="Yes"
+            LIBMBEDCRYPTO_RANDOM="Yes"
 
 else
 

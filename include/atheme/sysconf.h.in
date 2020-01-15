@@ -177,14 +177,8 @@
 /* Define to 1 if libmbedcrypto appears to be usable */
 #undef HAVE_LIBMBEDCRYPTO
 
-/* Define to 1 if libmbedcrypto has usable CTR-DRBG functions */
-#undef HAVE_LIBMBEDCRYPTO_CTR_DRBG
-
 /* Define to 1 if libmbedcrypto can provide SASL ECDH-X25519-CHALLENGE */
 #undef HAVE_LIBMBEDCRYPTO_ECDH_X25519
-
-/* Define to 1 if libmbedcrypto has usable HMAC-DRBG functions */
-#undef HAVE_LIBMBEDCRYPTO_HMAC_DRBG
 
 /* Define to 1 if GNU Nettle appears to be usable */
 #undef HAVE_LIBNETTLE
