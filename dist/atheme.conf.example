@@ -106,6 +106,7 @@ loadmodule "modules/backend/opensex";
  * The following encryption-capable crypto modules are available:
  *
  *   Argon2 (Password Hashing Competition 2015)    modules/crypto/argon2
+ *   scrypt (Tarsnap Online Backup Service)        modules/crypto/scrypt
  *   PBKDF2 (Including support for SASL SCRAM-SHA) modules/crypto/pbkdf2v2
  *   OpenBSD crypt_newhash(3) a la '$2b$...$...'   modules/crypto/crypt3-openbsd
  *   SHA2-512 crypt(3) a la '$6$...'               modules/crypto/crypt3-sha2-512
@@ -127,7 +128,6 @@ loadmodule "modules/backend/opensex";
  * software, or migrating from something else:
  *
  *   PBKDF2 (Atheme <= 7.2 compatibility)          modules/crypto/pbkdf2
- *   Scrypt (libsodium)                            modules/crypto/sodium-scrypt
  *   RAW SHA2-512                                  modules/crypto/rawsha2-512
  *   RAW SHA2-256                                  modules/crypto/rawsha2-256
  *   Anope SHA2-256 (Anope 2.0 compatibility)      modules/crypto/anope-enc-sha256
@@ -143,11 +143,10 @@ loadmodule "modules/backend/opensex";
  * preferred scheme. Like so:
  *
  * loadmodule "modules/crypto/argon2";
+ * loadmodule "modules/crypto/scrypt";
  * loadmodule "modules/crypto/pbkdf2v2";
  * loadmodule "modules/crypto/pbkdf2";
- * loadmodule "modules/crypto/sodium-scrypt";
  * loadmodule "modules/crypto/crypt3-md5";
- * loadmodule "modules/crypto/crypt3-des";
  *
  * The crypt3-* modules depend on your platform crypt(3) supporting the
  * respective algorithms. This is not guaranteed to be the case. If you used
@@ -179,12 +178,12 @@ loadmodule "modules/backend/opensex";
  * attempted.
  */
 #loadmodule "modules/crypto/argon2";
+#loadmodule "modules/crypto/scrypt";
 loadmodule "modules/crypto/pbkdf2v2";
 #loadmodule "modules/crypto/crypt3-openbsd";
 #loadmodule "modules/crypto/crypt3-sha2-512";
 #loadmodule "modules/crypto/crypt3-sha2-256";
 loadmodule "modules/crypto/pbkdf2";
-#loadmodule "modules/crypto/sodium-scrypt";
 #loadmodule "modules/crypto/crypt3-md5";
 #loadmodule "modules/crypto/rawsha2-512";
 #loadmodule "modules/crypto/rawsha2-256";
@@ -1097,6 +1096,38 @@ crypto {
 	 * The default is 64
 	 */
 	#argon2_hashlen = 64;
+
+	/* (*) scrypt_memlimit
+	 *
+	 * Memory limit (as a power of 2, in KiB) to use for new passwords.
+	 *
+	 * You should set this as high as is reasonable for the machine you
+	 * will be running this software on. If this results in too slow a
+	 * computation time, reset the opslimit below to its default value.
+	 * If it is still too slow, decrement this value (halving the memory
+	 * usage) until it is fast enough. Alternatively, if it is still too
+	 * fast after setting this to its highest reasonable value, raise the
+	 * opslimit below until it is not.
+	 *
+	 * WARNING: Do *NOT* set this to more than 20 (1 GiB RAM) on a 32-bit
+	 *          machine or a 32-bit Operating System!
+	 *
+	 * Valid values are 14 (16 MiB RAM) to 26 (64 GiB RAM) (inclusive)
+	 * The default is 14 (16 MiB RAM)
+	 */
+	#scrypt_memlimit = 14;
+
+	/* (*) scrypt_opslimit
+	 *
+	 * Amount of computation to perform for new passwords.
+	 *
+	 * The default value for this option is based on the default value of
+	 * the above option. The recommended value is (memlimit_bytes / 32).
+	 *
+	 * Valid values are 32,768 to 4,294,967,295 (inclusive)
+	 * The default is 524,288
+	 */
+	#scrypt_opslimit = 524288;
 
 	/* (*) pbkdf2v2_digest
 	 *

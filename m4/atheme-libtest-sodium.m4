@@ -177,10 +177,9 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
                 #endif
                 #include <sodium/crypto_pwhash_scryptsalsa208sha256.h>
             ]], [[
-                const unsigned long long int opslimit = crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN;
-                const size_t memlimit = crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MIN;
                 (void) crypto_pwhash_scryptsalsa208sha256_str_needs_rehash(NULL, 0, 0);
                 (void) crypto_pwhash_scryptsalsa208sha256_str_verify(NULL, NULL, 0);
+                (void) crypto_pwhash_scryptsalsa208sha256_str(NULL, NULL, 0, 0, 0);
             ]])
         ], [
             AC_MSG_RESULT([yes])

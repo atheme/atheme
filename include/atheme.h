@@ -49,6 +49,7 @@
 #include <atheme/privs.h>
 #include <atheme/random.h>
 #include <atheme/sasl.h>
+#include <atheme/scrypt.h>
 #include <atheme/serno.h>
 #include <atheme/servers.h>
 #include <atheme/services.h>

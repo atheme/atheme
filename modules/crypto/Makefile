@@ -14,7 +14,7 @@ SRCS =					\
 	pbkdf2.c			\
 	pbkdf2v2.c			\
 	posix.c				\
-	sodium-scrypt.c			\
+	scrypt.c			\
 	$(LEGACY_PWCRYPTO_COND_C)
 
 include ../../extra.mk
