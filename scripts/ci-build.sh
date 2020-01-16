@@ -31,6 +31,7 @@ esac
 ./configure                                                 \
     --prefix="${ATHEME_PREFIX}"                             \
     --disable-heap-allocator                                \
+    --disable-linker-defs                                   \
     --enable-compiler-sanitizers                            \
     --enable-legacy-pwcrypto                                \
     --enable-nls                                            \
