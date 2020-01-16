@@ -25,11 +25,11 @@
 /* Atheme RNG API Frontend */
 #undef ATHEME_API_RANDOM_FRONTEND
 
+/* Define to 1 if --enable-compiler-sanitizers was given to ./configure */
+#undef ATHEME_ENABLE_COMPILER_SANITIZERS
+
 /* Define to 1 if --enable-contrib was given to ./configure */
 #undef ATHEME_ENABLE_CONTRIB
-
-/* Define to 1 if --enable-debugging was given to ./configure */
-#undef ATHEME_ENABLE_DEBUGGING
 
 /* Define to 1 if --disable-heap-allocator was NOT given to ./configure */
 #undef ATHEME_ENABLE_HEAP_ALLOCATOR

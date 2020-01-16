@@ -822,11 +822,11 @@ enable_reproducible_builds
 enable_sodium_malloc
 with_digest_api_frontend
 with_rng_api_frontend
+enable_compiler_sanitizers
 enable_fortify_source
 enable_async_unwind_tables
 enable_stack_clash_protection
 enable_stack_protector
-enable_debugging
 enable_profile
 enable_relro
 enable_nonlazy_bind
@@ -1499,6 +1499,9 @@ Optional Features:
   --enable-reproducible-builds
                           Enable reproducible builds
   --enable-sodium-malloc  Enable libsodium hardened memory allocator
+  --enable-compiler-sanitizers
+                          Enable various compiler run-time-instrumented
+                          sanitizers
   --disable-fortify-source
                           Disable -D_FORTIFY_SOURCE=2 (hardening for many C
                           library function invocations)
@@ -1511,7 +1514,6 @@ Optional Features:
   --disable-stack-protector
                           Disable -fstack-protector{-all,-strong,} (Stack
                           smashing protection)
-  --enable-debugging      Enable extensive debugging support
   --enable-profile        Enable profiling extensions
   --disable-relro         Disable -Wl,-z,relro (marks the relocation table
                           read-only)
@@ -2701,17 +2703,6 @@ else
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
     as_fn_error $? "please read GIT-Access.txt before trying to build from git" "$LINENO" 5
-
-fi
-
-if test "x${CFLAGS+set}" = "xset"; then :
-
-    CFLAGS_WAS_SET="yes"
-
-else
-
-    CFLAGS_WAS_SET="no"
-    CFLAGS=""
 
 fi
 
@@ -14344,6 +14335,711 @@ _ACEOF
 # These must be here, not above, or they might interfere with library and feature tests
 # Explanation is that these modify one or more of CFLAGS, CPPFLAGS, LDFLAGS, and LIBS
 # Warnings should be last so that diagnostics don't clutter the contents of config.log
+# Sanitizers must be before CFLAGS and LDFLAGS
+
+
+    COMPILER_SANITIZERS="No"
+
+    # Check whether --enable-compiler-sanitizers was given.
+if test "${enable_compiler_sanitizers+set}" = set; then :
+  enableval=$enable_compiler_sanitizers;
+else
+  enable_compiler_sanitizers="no"
+fi
+
+
+    # Test for this whether this option was given or not
+    # This option is required for meaningful sanitizer output, but it is also useful without any sanitizers
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -g " >&5
+$as_echo_n "checking for C compiler flag(s) -g ... " >&6; }
+
+        CFLAGS_SAVED="${CFLAGS}"
+        CFLAGS="${CFLAGS} -g"
+
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+                ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+                ATHEME_CC_TEST_CFLAGS_RESULT='no'
+                CFLAGS="${CFLAGS_SAVED}"
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+        unset CFLAGS_SAVED
+
+
+
+    CFLAGS_SAVED_FT="${CFLAGS}"
+    LDFLAGS_SAVED_FT="${LDFLAGS}"
+
+    case "x${enable_compiler_sanitizers}" in
+        xyes)
+            # -fsanitize= benefits from these, but they're not strictly necessary
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fno-omit-frame-pointer " >&5
+$as_echo_n "checking for C compiler flag(s) -fno-omit-frame-pointer ... " >&6; }
+
+        CFLAGS_SAVED="${CFLAGS}"
+        CFLAGS="${CFLAGS} -fno-omit-frame-pointer"
+
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+                ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+                ATHEME_CC_TEST_CFLAGS_RESULT='no'
+                CFLAGS="${CFLAGS_SAVED}"
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+        unset CFLAGS_SAVED
+
+
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fno-optimize-sibling-calls " >&5
+$as_echo_n "checking for C compiler flag(s) -fno-optimize-sibling-calls ... " >&6; }
+
+        CFLAGS_SAVED="${CFLAGS}"
+        CFLAGS="${CFLAGS} -fno-optimize-sibling-calls"
+
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+                ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+                ATHEME_CC_TEST_CFLAGS_RESULT='no'
+                CFLAGS="${CFLAGS_SAVED}"
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+        unset CFLAGS_SAVED
+
+
+
+            # This, however, is necessary. This test will fail if you are using Clang and not using an LLVM
+            # bitcode-parsing-capable linker. Clang in LTO mode compiles to LLVM bitcode, not machine code.
+            #
+            # The linker is responsible for translating that to machine code. If you want to use Clang, you
+            # must set LDFLAGS="-fuse-ld=lld", to use the LLVM linker, or you can use the Gold linker with
+            # the LLVM linker plugin.
+
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler *and* linker flag(s) -fvisibility=default -flto " >&5
+$as_echo_n "checking for C compiler *and* linker flag(s) -fvisibility=default -flto ... " >&6; }
+
+    CFLAGS_SAVED="${CFLAGS}"
+    CFLAGS="${CFLAGS} -fvisibility=default -flto"
+
+    LDFLAGS_SAVED="${LDFLAGS}"
+    LDFLAGS="${LDFLAGS} -fvisibility=default -flto"
+
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+            #ifdef HAVE_STDDEF_H
+            #  include <stddef.h>
+            #endif
+            static int
+            retfoo(void)
+            {
+                return 0;
+            }
+
+int
+main ()
+{
+
+            return retfoo();
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        COMPILER_SANITIZERS="Yes"
+
+else
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        CFLAGS="${CFLAGS_SAVED}"
+        LDFLAGS="${LDFLAGS_SAVED}"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+
+            if test "${COMPILER_SANITIZERS}" = "Yes"; then :
+
+
+                # However, just because that succeeded, don't enable this feature. We need at least one of the below.
+                COMPILER_SANITIZERS="No"
+
+                # Now on to the good stuff ...
+
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler *and* linker flag(s) -fsanitize=address " >&5
+$as_echo_n "checking for C compiler *and* linker flag(s) -fsanitize=address ... " >&6; }
+
+    CFLAGS_SAVED="${CFLAGS}"
+    CFLAGS="${CFLAGS} -fsanitize=address"
+
+    LDFLAGS_SAVED="${LDFLAGS}"
+    LDFLAGS="${LDFLAGS} -fsanitize=address"
+
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+            #ifdef HAVE_STDDEF_H
+            #  include <stddef.h>
+            #endif
+            static int
+            retfoo(void)
+            {
+                return 0;
+            }
+
+int
+main ()
+{
+
+            return retfoo();
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        COMPILER_SANITIZERS="Yes"
+
+else
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        CFLAGS="${CFLAGS_SAVED}"
+        LDFLAGS="${LDFLAGS_SAVED}"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler *and* linker flag(s) -fsanitize=bool " >&5
+$as_echo_n "checking for C compiler *and* linker flag(s) -fsanitize=bool ... " >&6; }
+
+    CFLAGS_SAVED="${CFLAGS}"
+    CFLAGS="${CFLAGS} -fsanitize=bool"
+
+    LDFLAGS_SAVED="${LDFLAGS}"
+    LDFLAGS="${LDFLAGS} -fsanitize=bool"
+
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+            #ifdef HAVE_STDDEF_H
+            #  include <stddef.h>
+            #endif
+            static int
+            retfoo(void)
+            {
+                return 0;
+            }
+
+int
+main ()
+{
+
+            return retfoo();
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        COMPILER_SANITIZERS="Yes"
+
+else
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        CFLAGS="${CFLAGS_SAVED}"
+        LDFLAGS="${LDFLAGS_SAVED}"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler *and* linker flag(s) -fsanitize=function " >&5
+$as_echo_n "checking for C compiler *and* linker flag(s) -fsanitize=function ... " >&6; }
+
+    CFLAGS_SAVED="${CFLAGS}"
+    CFLAGS="${CFLAGS} -fsanitize=function"
+
+    LDFLAGS_SAVED="${LDFLAGS}"
+    LDFLAGS="${LDFLAGS} -fsanitize=function"
+
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+            #ifdef HAVE_STDDEF_H
+            #  include <stddef.h>
+            #endif
+            static int
+            retfoo(void)
+            {
+                return 0;
+            }
+
+int
+main ()
+{
+
+            return retfoo();
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        COMPILER_SANITIZERS="Yes"
+
+else
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        CFLAGS="${CFLAGS_SAVED}"
+        LDFLAGS="${LDFLAGS_SAVED}"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler *and* linker flag(s) -fsanitize=implicit-conversion " >&5
+$as_echo_n "checking for C compiler *and* linker flag(s) -fsanitize=implicit-conversion ... " >&6; }
+
+    CFLAGS_SAVED="${CFLAGS}"
+    CFLAGS="${CFLAGS} -fsanitize=implicit-conversion"
+
+    LDFLAGS_SAVED="${LDFLAGS}"
+    LDFLAGS="${LDFLAGS} -fsanitize=implicit-conversion"
+
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+            #ifdef HAVE_STDDEF_H
+            #  include <stddef.h>
+            #endif
+            static int
+            retfoo(void)
+            {
+                return 0;
+            }
+
+int
+main ()
+{
+
+            return retfoo();
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        COMPILER_SANITIZERS="Yes"
+
+else
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        CFLAGS="${CFLAGS_SAVED}"
+        LDFLAGS="${LDFLAGS_SAVED}"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler *and* linker flag(s) -fsanitize=integer " >&5
+$as_echo_n "checking for C compiler *and* linker flag(s) -fsanitize=integer ... " >&6; }
+
+    CFLAGS_SAVED="${CFLAGS}"
+    CFLAGS="${CFLAGS} -fsanitize=integer"
+
+    LDFLAGS_SAVED="${LDFLAGS}"
+    LDFLAGS="${LDFLAGS} -fsanitize=integer"
+
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+            #ifdef HAVE_STDDEF_H
+            #  include <stddef.h>
+            #endif
+            static int
+            retfoo(void)
+            {
+                return 0;
+            }
+
+int
+main ()
+{
+
+            return retfoo();
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        COMPILER_SANITIZERS="Yes"
+
+else
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        CFLAGS="${CFLAGS_SAVED}"
+        LDFLAGS="${LDFLAGS_SAVED}"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler *and* linker flag(s) -fsanitize=leak " >&5
+$as_echo_n "checking for C compiler *and* linker flag(s) -fsanitize=leak ... " >&6; }
+
+    CFLAGS_SAVED="${CFLAGS}"
+    CFLAGS="${CFLAGS} -fsanitize=leak"
+
+    LDFLAGS_SAVED="${LDFLAGS}"
+    LDFLAGS="${LDFLAGS} -fsanitize=leak"
+
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+            #ifdef HAVE_STDDEF_H
+            #  include <stddef.h>
+            #endif
+            static int
+            retfoo(void)
+            {
+                return 0;
+            }
+
+int
+main ()
+{
+
+            return retfoo();
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        COMPILER_SANITIZERS="Yes"
+
+else
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        CFLAGS="${CFLAGS_SAVED}"
+        LDFLAGS="${LDFLAGS_SAVED}"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler *and* linker flag(s) -fsanitize=nullability " >&5
+$as_echo_n "checking for C compiler *and* linker flag(s) -fsanitize=nullability ... " >&6; }
+
+    CFLAGS_SAVED="${CFLAGS}"
+    CFLAGS="${CFLAGS} -fsanitize=nullability"
+
+    LDFLAGS_SAVED="${LDFLAGS}"
+    LDFLAGS="${LDFLAGS} -fsanitize=nullability"
+
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+            #ifdef HAVE_STDDEF_H
+            #  include <stddef.h>
+            #endif
+            static int
+            retfoo(void)
+            {
+                return 0;
+            }
+
+int
+main ()
+{
+
+            return retfoo();
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        COMPILER_SANITIZERS="Yes"
+
+else
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        CFLAGS="${CFLAGS_SAVED}"
+        LDFLAGS="${LDFLAGS_SAVED}"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler *and* linker flag(s) -fsanitize=shift " >&5
+$as_echo_n "checking for C compiler *and* linker flag(s) -fsanitize=shift ... " >&6; }
+
+    CFLAGS_SAVED="${CFLAGS}"
+    CFLAGS="${CFLAGS} -fsanitize=shift"
+
+    LDFLAGS_SAVED="${LDFLAGS}"
+    LDFLAGS="${LDFLAGS} -fsanitize=shift"
+
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+            #ifdef HAVE_STDDEF_H
+            #  include <stddef.h>
+            #endif
+            static int
+            retfoo(void)
+            {
+                return 0;
+            }
+
+int
+main ()
+{
+
+            return retfoo();
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        COMPILER_SANITIZERS="Yes"
+
+else
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        CFLAGS="${CFLAGS_SAVED}"
+        LDFLAGS="${LDFLAGS_SAVED}"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler *and* linker flag(s) -fsanitize=undefined " >&5
+$as_echo_n "checking for C compiler *and* linker flag(s) -fsanitize=undefined ... " >&6; }
+
+    CFLAGS_SAVED="${CFLAGS}"
+    CFLAGS="${CFLAGS} -fsanitize=undefined"
+
+    LDFLAGS_SAVED="${LDFLAGS}"
+    LDFLAGS="${LDFLAGS} -fsanitize=undefined"
+
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+            #ifdef HAVE_STDDEF_H
+            #  include <stddef.h>
+            #endif
+            static int
+            retfoo(void)
+            {
+                return 0;
+            }
+
+int
+main ()
+{
+
+            return retfoo();
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        COMPILER_SANITIZERS="Yes"
+
+else
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        CFLAGS="${CFLAGS_SAVED}"
+        LDFLAGS="${LDFLAGS_SAVED}"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+
+fi
+
+            ;;
+        xno)
+            ;;
+        *)
+            as_fn_error $? "invalid option for --enable-compiler-sanitizers" "$LINENO" 5
+            ;;
+    esac
+
+    if test "${COMPILER_SANITIZERS}" = "Yes"; then :
+
+
+$as_echo "#define ATHEME_ENABLE_COMPILER_SANITIZERS 1" >>confdefs.h
+
+
+else
+
+        # None of the sanitizers are available, give up ...
+        CFLAGS="${CFLAGS_SAVED_FT}"
+        LDFLAGS="${LDFLAGS_SAVED_FT}"
+
+fi
+
 
 
     # Check whether --enable-fortify-source was given.
@@ -14681,165 +15377,6 @@ fi
 
 
 
-    DEBUGGING="No"
-
-    # Check whether --enable-debugging was given.
-if test "${enable_debugging+set}" = set; then :
-  enableval=$enable_debugging;
-else
-  enable_debugging="no"
-fi
-
-
-    case "x${enable_debugging}" in
-        xyes)
-
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -O0 -g " >&5
-$as_echo_n "checking for C compiler flag(s) -O0 -g ... " >&6; }
-
-        CFLAGS_SAVED="${CFLAGS}"
-        CFLAGS="${CFLAGS} -O0 -g"
-
-        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-                ATHEME_CC_TEST_CFLAGS_RESULT='yes'
-
-                { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-                ATHEME_CC_TEST_CFLAGS_RESULT='no'
-                CFLAGS="${CFLAGS_SAVED}"
-
-                { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-        unset CFLAGS_SAVED
-
-
-            if test "${ATHEME_CC_TEST_CFLAGS_RESULT}" = "no"; then :
-
-                as_fn_error $? "--enable-debugging requires compiler support for -O0 -g" "$LINENO" 5
-
-fi
-            DEBUGGING="Yes"
-
-$as_echo "#define ATHEME_ENABLE_DEBUGGING 1" >>confdefs.h
-
-            ;;
-        xno)
-            if test "${CFLAGS_WAS_SET}" = "no"; then :
-
-
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -O2 " >&5
-$as_echo_n "checking for C compiler flag(s) -O2 ... " >&6; }
-
-        CFLAGS_SAVED="${CFLAGS}"
-        CFLAGS="${CFLAGS} -O2"
-
-        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-                ATHEME_CC_TEST_CFLAGS_RESULT='yes'
-
-                { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-                ATHEME_CC_TEST_CFLAGS_RESULT='no'
-                CFLAGS="${CFLAGS_SAVED}"
-
-                { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-        unset CFLAGS_SAVED
-
-
-
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -g " >&5
-$as_echo_n "checking for C compiler flag(s) -g ... " >&6; }
-
-        CFLAGS_SAVED="${CFLAGS}"
-        CFLAGS="${CFLAGS} -g"
-
-        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-                ATHEME_CC_TEST_CFLAGS_RESULT='yes'
-
-                { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-else
-
-                ATHEME_CC_TEST_CFLAGS_RESULT='no'
-                CFLAGS="${CFLAGS_SAVED}"
-
-                { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-        unset CFLAGS_SAVED
-
-
-
-fi
-            DEBUGGING="No"
-            ;;
-        *)
-            as_fn_error $? "invalid option for --enable-debugging" "$LINENO" 5
-            ;;
-    esac
-
-
-
     # Check whether --enable-profile was given.
 if test "${enable_profile+set}" = set; then :
   enableval=$enable_profile;
@@ -15049,6 +15586,12 @@ rm -f core conftest.err conftest.$ac_objext \
 
     case "x${enable_linker_defs}" in
         xyes)
+            if test "${COMPILER_SANITIZERS}" = "Yes"; then :
+
+                as_fn_error $? "--enable-linker-defs is incompatible with --enable-compiler-sanitizers" "$LINENO" 5
+
+else
+
 
         { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,-z,defs " >&5
 $as_echo_n "checking for C linker flag(s) -Wl,-z,defs ... " >&6; }
@@ -15092,6 +15635,8 @@ rm -f core conftest.err conftest.$ac_objext \
         unset LDFLAGS_SAVED
 
 
+
+fi
             ;;
         xno)
             ;;
@@ -20232,6 +20777,9 @@ fi
     if test "${BUILD_WARNINGS}" = "Yes"; then :
   BUILD_WARNINGS="Yes (NOT INTENDED FOR PRODUCTION USAGE)"
 fi
+    if test "${COMPILER_SANITIZERS}" = "Yes"; then :
+  COMPILER_SANITIZERS="Yes (NOT INTENDED FOR PRODUCTION USAGE)"
+fi
     if test "x${USE_NLS}" = "xyes"; then :
   USE_NLS="Yes"
 else
@@ -20285,13 +20833,14 @@ Configuration of ${PACKAGE_STRING}:
     Sodium support ..........: ${LIBSODIUM}
 
     Contrib Modules .........: ${CONTRIB_MODULES}
-    Debugging Support .......: ${DEBUGGING}
     Heap Allocator ..........: ${HEAP_ALLOCATOR}
     Internationalization ....: ${USE_NLS}
     Large Network Support ...: ${LARGE_NET}
     Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}
     Sodium Memory Allocator .: ${SODIUM_MALLOC}
+
     Build Warnings ..........: ${BUILD_WARNINGS}
+    Compiler sanitizers .....: ${COMPILER_SANITIZERS}
 
     Crypto Benchmarking .....: ${LIBRT}
     Digest Frontend .........: ${DIGEST_FRONTEND}

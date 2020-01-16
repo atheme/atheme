@@ -122,9 +122,9 @@ get_conf_opts(void)
 	optstr[optidx++] = 'C';
 #endif /* ATHEME_ENABLE_CONTRIB */
 
-#ifdef ATHEME_ENABLE_DEBUGGING
+#ifdef ATHEME_ENABLE_COMPILER_SANITIZERS
 	optstr[optidx++] = 'D';
-#endif /* ATHEME_ENABLE_DEBUGGING */
+#endif /* ATHEME_ENABLE_COMPILER_SANITIZERS */
 
 	if (config_options.flood_msgs)
 		optstr[optidx++] = 'F';

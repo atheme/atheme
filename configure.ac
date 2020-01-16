@@ -52,13 +52,6 @@ AS_IF([test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"], [
     AC_MSG_ERROR([please read GIT-Access.txt before trying to build from git])
 ])
 
-AS_IF([test "x${CFLAGS+set}" = "xset"], [
-    CFLAGS_WAS_SET="yes"
-], [
-    CFLAGS_WAS_SET="no"
-    CFLAGS=""
-])
-
 # Programs required by the build system
 AC_PROG_CC
 AC_PROG_CC_C99
@@ -204,9 +197,10 @@ ATHEME_DECIDE_RANDOM_FRONTEND
 # These must be here, not above, or they might interfere with library and feature tests
 # Explanation is that these modify one or more of CFLAGS, CPPFLAGS, LDFLAGS, and LIBS
 # Warnings should be last so that diagnostics don't clutter the contents of config.log
+# Sanitizers must be before CFLAGS and LDFLAGS
+ATHEME_FEATURETEST_COMPILER_SANITIZERS
 ATHEME_FEATURETEST_CPPFLAGS
 ATHEME_FEATURETEST_CFLAGS
-ATHEME_FEATURETEST_DEBUGGING
 ATHEME_FEATURETEST_LDFLAGS
 ATHEME_FEATURETEST_WARNINGS
 

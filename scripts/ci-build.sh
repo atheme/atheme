@@ -22,18 +22,27 @@ fi
 
 ATHEME_PREFIX="${HOME}/atheme-install"
 
-./configure                             \
-    --prefix="${ATHEME_PREFIX}"         \
-    --with-perl                         \
-    --enable-debugging                  \
-    --enable-legacy-pwcrypto            \
-    --enable-nls                        \
-    --enable-reproducible-builds        \
-    --with-digest-api-frontend=internal \
-    --with-rng-api-frontend=internal    \
-    --without-libmowgli                 \
-    ${ATHEME_CONF_ARGS:-}               \
-    CPPFLAGS="-DIN_CI_BUILD_ENVIRONMENT=1 ${CPPFLAGS:-}"
+case "x${CC:-}" in
+    xclang*)
+        LDFLAGS="-fuse-ld=lld"
+        ;;
+esac
+
+./configure                                                 \
+    --prefix="${ATHEME_PREFIX}"                             \
+    --disable-heap-allocator                                \
+    --enable-compiler-sanitizers                            \
+    --enable-legacy-pwcrypto                                \
+    --enable-nls                                            \
+    --enable-reproducible-builds                            \
+    --enable-warnings                                       \
+    --without-libmowgli                                     \
+    --with-perl                                             \
+    --with-digest-api-frontend=internal                     \
+    --with-rng-api-frontend=internal                        \
+    ${ATHEME_CONF_ARGS:-}                                   \
+    CPPFLAGS="-DIN_CI_BUILD_ENVIRONMENT=1 ${CPPFLAGS:-}"    \
+    LDFLAGS="${LDFLAGS:-}"
 
 "${MAKE}"
 "${MAKE}" install

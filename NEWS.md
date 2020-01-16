@@ -204,7 +204,7 @@ Build System
 - `configure`: indicate if `--enable-warnings` was given
 - `configure`: detect support for `-Wl,-z,relro`, `-Wl,-z,now`, `-Wl,--as-needed`
 - `configure`: don't link everything against `-lcrypt`
-- `configure`: Add `--enable-debugging` flag
+- `configure`: add `--enable-compiler-sanitizers` flag for ASan, UBSan, etc.
 - Update third-party files (`ABOUT-NLS`, `autoconf/*`, `m4/*.m4`)
 - Fix building contrib modules on non-Linux machines
 - Clarify that `GIT-Access` is a file by renaming it to `GIT-Access.txt`

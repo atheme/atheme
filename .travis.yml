@@ -23,6 +23,7 @@ addons:
       - nettle-dev
       - clang-8
       - gcc-8
+      - lld-8
 
 compiler:
   - clang-8
