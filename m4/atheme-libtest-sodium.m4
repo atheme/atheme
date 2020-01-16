@@ -94,11 +94,9 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
                 #include <sodium/utils.h>
             ]], [[
                 (void) sodium_malloc(0);
-                (void) sodium_mlock(NULL, 0);
-                (void) sodium_mprotect_noaccess(NULL);
+                (void) sodium_allocarray(0, 0);
                 (void) sodium_mprotect_readonly(NULL);
                 (void) sodium_mprotect_readwrite(NULL);
-                (void) sodium_munlock(NULL, 0);
                 (void) sodium_free(NULL);
             ]])
         ], [

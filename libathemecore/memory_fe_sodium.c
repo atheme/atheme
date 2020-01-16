@@ -195,18 +195,15 @@ scalloc(const size_t num, const size_t len)
 		// A calloc(num, len) call where the product is 0 should return NULL, but codebase assumes it doesn't
 		abort();
 
-	if (len >= (((size_t) SIZE_MAX) / num))
-		// The product of num and len would overflow and result in too small an allocation
-		abort();
-
-	const size_t totalsz = (num * len);
-
 	// Allocate the memory
-	void *const buf = sodium_malloc(totalsz);
+	void *const buf = sodium_allocarray(num, len);
 
 	if (! buf)
-		// No free memory? Library failure?
+		// No free memory? Library failure? Multiplication overflow?
 		abort();
+
+	// We now know that this doesn't overflow
+	const size_t totalsz = (num * len);
 
 	// Store it in the allocations list
 	(void) make_sodium_memblock(buf, totalsz);
