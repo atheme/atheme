@@ -15018,6 +15018,64 @@ rm -f core conftest.err conftest.$ac_objext \
 
 fi
 
+            if test "${COMPILER_SANITIZERS}" = "Yes"; then :
+
+                # This causes pointless noise, turn it off.
+
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler *and* linker flag(s) -fno-sanitize=unsigned-integer-overflow " >&5
+$as_echo_n "checking for C compiler *and* linker flag(s) -fno-sanitize=unsigned-integer-overflow ... " >&6; }
+
+    CFLAGS_SAVED="${CFLAGS}"
+    CFLAGS="${CFLAGS} -fno-sanitize=unsigned-integer-overflow"
+
+    LDFLAGS_SAVED="${LDFLAGS}"
+    LDFLAGS="${LDFLAGS} -fno-sanitize=unsigned-integer-overflow"
+
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+            #ifdef HAVE_STDDEF_H
+            #  include <stddef.h>
+            #endif
+            static int
+            retfoo(void)
+            {
+                return 0;
+            }
+
+int
+main ()
+{
+
+            return retfoo();
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        COMPILER_SANITIZERS="Yes"
+
+else
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        CFLAGS="${CFLAGS_SAVED}"
+        LDFLAGS="${LDFLAGS_SAVED}"
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+
+fi
+
             ;;
         xno)
             ;;

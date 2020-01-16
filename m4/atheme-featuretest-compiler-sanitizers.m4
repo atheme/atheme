@@ -85,6 +85,11 @@ AC_DEFUN([ATHEME_FEATURETEST_COMPILER_SANITIZERS], [
                 ATHEME_FEATURETEST_COMPILER_SANITIZERS_DRIVER([-fsanitize=undefined])
             ])
 
+            AS_IF([test "${COMPILER_SANITIZERS}" = "Yes"], [
+                # This causes pointless noise, turn it off.
+                ATHEME_FEATURETEST_COMPILER_SANITIZERS_DRIVER([-fno-sanitize=unsigned-integer-overflow])
+            ])
+
             ;;
         xno)
             ;;
