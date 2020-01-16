@@ -50,6 +50,8 @@ Configuration of ${PACKAGE_STRING}:
 
     Argon2 support ..........: ${LIBARGON2}
     crypt(3) support ........: ${LIBCRYPT}
+    scrypt support ..........: ${LIBSODIUM_SCRYPT}
+
     CrackLib support ........: ${LIBCRACK}
     LDAP support ............: ${LIBLDAP}
     GNU libidn support ......: ${LIBIDN}

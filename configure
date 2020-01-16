@@ -12692,6 +12692,7 @@ fi
     LIBSODIUM_USABLE="No"
     LIBSODIUM_MEMORY="No"
     LIBSODIUM_RANDOM="No"
+    LIBSODIUM_SCRYPT="No"
 
 
 # Check whether --with-sodium was given.
@@ -13104,6 +13105,7 @@ $as_echo "yes" >&6; }
 $as_echo "#define HAVE_LIBSODIUM_SCRYPT 1" >>confdefs.h
 
             LIBSODIUM_USABLE="Yes"
+            LIBSODIUM_SCRYPT="Yes"
 
 else
 
@@ -20878,6 +20880,8 @@ Configuration of ${PACKAGE_STRING}:
 
     Argon2 support ..........: ${LIBARGON2}
     crypt(3) support ........: ${LIBCRYPT}
+    scrypt support ..........: ${LIBSODIUM_SCRYPT}
+
     CrackLib support ........: ${LIBCRACK}
     LDAP support ............: ${LIBLDAP}
     GNU libidn support ......: ${LIBIDN}

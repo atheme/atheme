@@ -13,6 +13,7 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
     LIBSODIUM_USABLE="No"
     LIBSODIUM_MEMORY="No"
     LIBSODIUM_RANDOM="No"
+    LIBSODIUM_SCRYPT="No"
 
     AC_ARG_WITH([sodium],
         [AS_HELP_STRING([--without-sodium], [Do not attempt to detect libsodium (cryptographic library)])],
@@ -183,6 +184,7 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
             AC_MSG_RESULT([yes])
             AC_DEFINE([HAVE_LIBSODIUM_SCRYPT], [1], [Define to 1 if libsodium has a usable scrypt password hash generator])
             LIBSODIUM_USABLE="Yes"
+            LIBSODIUM_SCRYPT="Yes"
         ], [
             AC_MSG_RESULT([no])
         ])
