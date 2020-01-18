@@ -626,7 +626,7 @@ loadmodule "modules/infoserv/main";
  * ECDSA-NIST256P-CHALLENGE mechanism   modules/saslserv/ecdsa-nist256p-challenge
  * EXTERNAL mechanism (IRCv3.1+)        modules/saslserv/external
  * PLAIN mechanism                      modules/saslserv/plain
- * SCRAM-SHA-* mechanisms               modules/saslserv/scram-sha
+ * SCRAM-SHA-* mechanisms               modules/saslserv/scram
  *
  * ECDH-X25519-CHALLENGE support requires that Atheme be compiled against a
  * cryptographic library that provides X25519 ECDH support (BoringSSL,
@@ -637,7 +637,7 @@ loadmodule "modules/infoserv/main";
  * an OpenSSL with ECDSA support (not RHEL etc. unless you compile your own).
  * This will be checked while running ./configure.
  *
- * You MUST read doc/SASL-SCRAM-SHA before loading modules/saslserv/scram-sha!
+ * You MUST read doc/SASL-SCRAM before loading modules/saslserv/scram!
  */
 loadmodule "modules/saslserv/main";
 loadmodule "modules/saslserv/authcookie";
@@ -645,7 +645,7 @@ loadmodule "modules/saslserv/authcookie";
 #loadmodule "modules/saslserv/ecdsa-nist256p-challenge";
 #loadmodule "modules/saslserv/external";
 loadmodule "modules/saslserv/plain";
-#loadmodule "modules/saslserv/scram-sha";
+#loadmodule "modules/saslserv/scram";
 
 /* GameServ modules.
  *

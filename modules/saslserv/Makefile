@@ -12,7 +12,7 @@ SRCS =					\
 	external.c			\
 	main.c				\
 	plain.c				\
-	scram-sha.c
+	scram.c
 
 include ../../extra.mk
 include ../../buildsys.mk

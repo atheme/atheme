@@ -206,9 +206,9 @@ do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit)
 	(void) fprintf(stderr, "\n");
 	(void) fprintf(stderr, "NOTE: This does not test SHA1. Use '-k -d' for SHA1 testing.\n");
 	(void) fprintf(stderr, "\n");
-	(void) fprintf(stderr, "NOTE: If you wish to support SASL SCRAM logins, please see the\n");
-	(void) fprintf(stderr, "      'doc/SASL-SCRAM-SHA' file in the source code repository, whose parameter\n");
-	(void) fprintf(stderr, "      advice takes precedence over the advice given by this benchmark utility!\n");
+	(void) fprintf(stderr, "NOTE: If you wish to support SASL SCRAM logins, please see the 'doc/SASL-SCRAM'\n");
+	(void) fprintf(stderr, "      file in the source code repository, whose parameter advice takes\n");
+	(void) fprintf(stderr, "      precedence over the advice given by this benchmark utility!\n");
 	(void) fprintf(stderr, "\n");
 
 	(void) pbkdf2_print_colheaders();

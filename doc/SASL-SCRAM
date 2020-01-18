@@ -1,4 +1,4 @@
-Atheme IRC Services version 7.3 and above supports SASL SCRAM-SHA logins.
+Atheme IRC Services version 7.3 and above supports SASL SCRAM logins.
 
 Some work needs to be performed by the prospective IRC network administrator
 to enable this. The 5 main steps to perform are:
@@ -18,7 +18,7 @@ to enable this. The 5 main steps to perform are:
    - SCRAM-SHA-1 is provided exclusively for standard compliance.
      You almost certainly don't want this mechanism.
 
-4) Configure pbkdf2v2 to generate SCRAM-SHA hashes (atheme.conf):
+4) Configure pbkdf2v2 to generate SCRAM-style hashes (atheme.conf):
 
    crypto {
        pbkdf2v2_digest = "SCRAM-SHA-256";
@@ -26,7 +26,7 @@ to enable this. The 5 main steps to perform are:
        #pbkdf2v2_rounds = ...;          /* between 10000 and 65536 (**) */
    }
 
-5) Load modules/saslserv/scram-sha
+5) Load modules/saslserv/scram
 
  * It is highly recommended that you choose SCRAM-SHA-256. You cannot enable
    more than one.

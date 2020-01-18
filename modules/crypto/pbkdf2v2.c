@@ -141,7 +141,7 @@ atheme_pbkdf2v2_parse_dbentry(struct pbkdf2v2_dbentry *const restrict dbe, const
 
 	if (sscanf(parameters, PBKDF2_FS_LOADHASH, &dbe->a, &dbe->c, dbe->salt64, ssk64, shk64) == 5)
 	{
-		(void) slog(LG_DEBUG, "%s: matched PBKDF2_FS_LOADHASH (SCRAM-SHA)", MOWGLI_FUNC_NAME);
+		(void) slog(LG_DEBUG, "%s: matched PBKDF2_FS_LOADHASH (SCRAM)", MOWGLI_FUNC_NAME);
 
 		if (! atheme_pbkdf2v2_determine_params(dbe))
 			// This function logs messages on failure
@@ -149,7 +149,7 @@ atheme_pbkdf2v2_parse_dbentry(struct pbkdf2v2_dbentry *const restrict dbe, const
 
 		if (! dbe->scram)
 		{
-			(void) slog(LG_ERROR, "%s: is not a SCRAM-SHA PRF (BUG)", MOWGLI_FUNC_NAME);
+			(void) slog(LG_ERROR, "%s: is not a SCRAM PRF (BUG)", MOWGLI_FUNC_NAME);
 			goto err;
 		}
 
@@ -187,7 +187,7 @@ atheme_pbkdf2v2_parse_dbentry(struct pbkdf2v2_dbentry *const restrict dbe, const
 
 		if (dbe->scram)
 		{
-			(void) slog(LG_ERROR, "%s: is a SCRAM-SHA PRF (BUG)", MOWGLI_FUNC_NAME);
+			(void) slog(LG_ERROR, "%s: is a SCRAM PRF (BUG)", MOWGLI_FUNC_NAME);
 			goto err;
 		}
 
@@ -297,13 +297,14 @@ atheme_pbkdf2v2_recrypt(const struct pbkdf2v2_dbentry *const restrict dbe)
 
 #ifdef HAVE_LIBIDN
 
-/* **********************************************************************************************
- * These 3 functions are provided for modules/saslserv/scram-sha (RFC 5802, RFC 7677, RFC 4013) *
- * The second function is also used by *this* module for password normalization (in SCRAM mode) *
- *                                                                                              *
- * A structure containing pointers to them appears last, so that it can be imported by the      *
- * SCRAM-SHA module.                                                                            *
- ********************************************************************************************** */
+/* *************************************************************
+ * These 3 functions are provided for modules/saslserv/scram   *
+ * (RFC 5802, RFC 7677, RFC 4013). The second function is also *
+ * used by *this* module for password normalization.           *
+ *                                                             *
+ * A structure containing pointers to them appears last,       *
+ * so that it can be imported by the SASL SCRAM module.        *
+ ************************************************************* */
 
 static bool
 atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters, struct pbkdf2v2_dbentry *const restrict dbe)
@@ -314,7 +315,7 @@ atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters, struct pb
 
 	const bool salt_was_b64 = atheme_pbkdf2v2_salt_is_b64(dbe->a);
 
-	// Ensure that the SCRAM-SHA module knows which one of 3 possible algorithms we're using
+	// Ensure that the SCRAM module knows which one of 3 possible algorithms we're using
 	switch (dbe->a)
 	{
 		case PBKDF2_PRF_HMAC_SHA1:
@@ -343,7 +344,7 @@ atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters, struct pb
 			return false;
 	}
 
-	// Ensure that the SCRAM-SHA module has a base64-encoded salt if it wasn't already so
+	// Ensure that the SCRAM module has a base64-encoded salt if it wasn't already so
 	if (! salt_was_b64)
 	{
 		dbe->sl = strlen(dbe->salt64);
@@ -369,10 +370,10 @@ atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters, struct pb
 
 		/* If the database is breached in the future, SaltedPassword can be used to compute
 		 * the ClientKey and impersonate the client to this service (without knowing the
-		 * original password). If the login is successful, the SCRAM-SHA module will convert
+		 * original password). If the login is successful, the SCRAM module will convert
 		 * the database entry into a SCRAM format to avoid this. Log a message anyway.
 		 */
-		(void) slog(LG_INFO, "%s: attempting SCRAM-SHA login with regular PBKDF2 credentials",
+		(void) slog(LG_INFO, "%s: attempting SASL SCRAM login with regular PBKDF2 credentials",
 		                     MOWGLI_FUNC_NAME);
 	}
 
@@ -408,9 +409,9 @@ const struct pbkdf2v2_scram_functions pbkdf2v2_scram_functions = {
 	.confhook       = &atheme_pbkdf2v2_scram_confhook,
 };
 
-/* **********************************************************************************************
- * End SCRAM-SHA functions                                                                      *
- ********************************************************************************************** */
+/* *************************************************************
+ * End SCRAM functions                                         *
+ ************************************************************* */
 
 #endif /* HAVE_LIBIDN */
 

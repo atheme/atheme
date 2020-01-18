@@ -119,7 +119,7 @@ SASL
 - Use a parameter vector to allow an arbitrary number of S2S arguments
 - Indicate whether the client is on a plaintext connection or not.
   - This can be used by user_can_login hooks.
-- Add support for SASL SCRAM-SHA logins (see `doc/SASL-SCRAM-SHA`)
+- Add support for SASL SCRAM logins (see `doc/SASL-SCRAM`)
 - Add support for Curve25519 ECDH-based challenge-response logins
   - This is a private SASL mechanism that does not have widespread client
     support yet, but it is expected to eventually replace the older
