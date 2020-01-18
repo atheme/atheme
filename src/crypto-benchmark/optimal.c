@@ -95,7 +95,7 @@ do_optimal_argon2_benchmark(const long double optimal_clocklimit, const size_t o
 	(void) fprintf(stdout, "crypto {\n");
 	(void) fprintf(stdout, "\t/* Target: %LFs; Benchmarked: %LFs */\n", optimal_clocklimit, elapsed);
 	(void) fprintf(stdout, "\targon2_type = \"%s\";\n", argon2_type2string(type, 0));
-	(void) fprintf(stdout, "\targon2_memcost = %zu; /* %llu KiB */ \n", memcost, (1ULL << memcost));
+	(void) fprintf(stdout, "\targon2_memcost = %zu; /* %s */ \n", memcost, memory_power2k_to_str(memcost));
 	(void) fprintf(stdout, "\targon2_timecost = %zu;\n", timecost);
 	(void) fprintf(stdout, "\targon2_threads = %zu;\n", threads);
 	(void) fprintf(stdout, "};\n");
@@ -185,7 +185,7 @@ do_optimal_scrypt_benchmark(const long double optimal_clocklimit, const size_t o
 	(void) fflush(stderr);
 	(void) fprintf(stdout, "crypto {\n");
 	(void) fprintf(stdout, "\t/* Target: %LFs; Benchmarked: %LFs */\n", optimal_clocklimit, elapsed);
-	(void) fprintf(stdout, "\tscrypt_memlimit = %zu; /* %llu KiB */ \n", memlimit, (1ULL << memlimit));
+	(void) fprintf(stdout, "\tscrypt_memlimit = %zu; /* %s */ \n", memlimit, memory_power2k_to_str(memlimit));
 	(void) fprintf(stdout, "\tscrypt_opslimit = %zu;\n", opslimit);
 	(void) fprintf(stdout, "};\n");
 	(void) fflush(stdout);

@@ -36,6 +36,10 @@
 
 bool benchmark_init(void) ATHEME_FATTR_WUR;
 
+#ifdef HAVE_ANY_MEMORY_HARD_ALGORITHM
+const char *memory_power2k_to_str(size_t);
+#endif
+
 #ifdef HAVE_LIBARGON2
 argon2_type argon2_name_to_type(const char *);
 void argon2_print_colheaders(void);

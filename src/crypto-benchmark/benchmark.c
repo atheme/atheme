@@ -47,6 +47,29 @@ benchmark_init(void)
 	return true;
 }
 
+#ifdef HAVE_ANY_MEMORY_HARD_ALGORITHM
+
+const char *
+memory_power2k_to_str(size_t power)
+{
+	static const char suffixes[] = "KMGT";
+	static char result[BUFSIZE];
+
+	size_t memlimit = (1U << power);
+	size_t index = 0U;
+
+	while (memlimit >= 1024U && index < 4U)
+	{
+		memlimit /= 1024U;
+		index++;
+	}
+
+	(void) snprintf(result, sizeof result, "%zu %ciB", memlimit, suffixes[index]);
+	return result;
+}
+
+#endif
+
 #ifdef HAVE_LIBARGON2
 
 argon2_type
@@ -68,17 +91,17 @@ argon2_name_to_type(const char *const restrict b_name)
 void
 argon2_print_colheaders(void)
 {
-	(void) fprintf(stderr, "%-10s %-14s %-10s %-10s %-14s\n",
+	(void) fprintf(stderr, "%-10s %-10s %-10s %-10s %-14s\n",
 	                       "Type", "MemCost", "TimeCost", "Threads", "Elapsed");
-	(void) fprintf(stderr, "---------- -------------- ---------- ---------- --------------\n");
+	(void) fprintf(stderr, "---------- ---------- ---------- ---------- --------------\n");
 }
 
 void
 argon2_print_rowstats(const argon2_type type, const size_t memcost, const size_t timecost, const size_t threads,
                       const long double elapsed)
 {
-	(void) fprintf(stderr, "%10s %13uK %10zu %10zu %13LFs\n", argon2_type2string(type, 1),
-	                       (1U << memcost), timecost, threads, elapsed);
+	(void) fprintf(stderr, "%10s %10s %10zu %10zu %13LFs\n", argon2_type2string(type, 1),
+	                       memory_power2k_to_str(memcost), timecost, threads, elapsed);
 }
 
 bool ATHEME_FATTR_WUR
@@ -140,14 +163,14 @@ benchmark_argon2(const argon2_type type, const size_t memcost, const size_t time
 void
 scrypt_print_colheaders(void)
 {
-	(void) fprintf(stderr, "%-14s %-14s %-14s\n", "MemLimit", "OpsLimit", "Elapsed");
-	(void) fprintf(stderr, "-------------- -------------- --------------\n");
+	(void) fprintf(stderr, "%-10s %-14s %-14s\n", "MemLimit", "OpsLimit", "Elapsed");
+	(void) fprintf(stderr, "---------- -------------- --------------\n");
 }
 
 void
 scrypt_print_rowstats(const size_t memlimit, const size_t opslimit, const long double elapsed)
 {
-	(void) fprintf(stderr, "%13uK %14zu %13LFs\n", (1U << memlimit), opslimit, elapsed);
+	(void) fprintf(stderr, "%10s %14zu %13LFs\n", memory_power2k_to_str(memlimit), opslimit, elapsed);
 }
 
 bool ATHEME_FATTR_WUR

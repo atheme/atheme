@@ -15,7 +15,7 @@
 #include <atheme/pbkdf2.h>          // PBKDF2_*
 #include <atheme/scrypt.h>          // ATHEME_SCRYPT_*
 #include <atheme/stdheaders.h>      // (everything else)
-#include <atheme/sysconf.h>         // HAVE_*
+#include <atheme/sysconf.h>         // HAVE_*, PACKAGE_*
 #include <atheme/tools.h>           // string_to_uint()
 
 #include <ext/getopt_long.h>        // mowgli_getopt_option_t, mowgli_getopt_long()
