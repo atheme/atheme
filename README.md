@@ -48,7 +48,7 @@ detect those libraries (e.g. cracklib from FreeBSD Ports):
 
 The following libraries generally require pkg-config to be installed:
 
-- Argon2 (`libargon2.pc`)
+- PHC Argon2 Reference Implementation (`libargon2.pc`)
 - OpenSSL (`libcrypto.pc`)
 - GNU libidn (`libidn.pc`)
 - GNU Nettle (`nettle.pc`)
