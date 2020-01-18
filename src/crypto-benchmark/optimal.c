@@ -200,16 +200,22 @@ do_optimal_scrypt_benchmark(const long double optimal_clocklimit, const size_t o
 #endif /* HAVE_LIBSODIUM_SCRYPT */
 
 static bool ATHEME_FATTR_WUR
-do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit)
+do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit, const bool with_sasl_scram)
 {
 	(void) fprintf(stderr, "Beginning automatic optimal PBKDF2 benchmark ...\n");
 	(void) fprintf(stderr, "\n");
 	(void) fprintf(stderr, "NOTE: This does not test SHA1. Use '-k -d' for SHA1 testing.\n");
 	(void) fprintf(stderr, "\n");
-	(void) fprintf(stderr, "NOTE: If you wish to support SASL SCRAM logins, please see the 'doc/SASL-SCRAM'\n");
-	(void) fprintf(stderr, "      file in the source code repository, whose parameter advice takes\n");
-	(void) fprintf(stderr, "      precedence over the advice given by this benchmark utility!\n");
-	(void) fprintf(stderr, "\n");
+
+	if (! with_sasl_scram)
+	{
+		(void) fprintf(stderr, "WARNING: If you wish to support SASL SCRAM logins, please see the\n");
+		(void) fprintf(stderr, "         'doc/SASL-SCRAM' file in the source code repository, whose\n");
+		(void) fprintf(stderr, "         parameter advice takes precedence over the advice given by\n");
+		(void) fprintf(stderr, "         this benchmark utility! Pass -i to this utility to enable\n");
+		(void) fprintf(stderr, "         SASL SCRAM support and silence this warning.\n");
+		(void) fprintf(stderr, "\n");
+	}
 
 	(void) pbkdf2_print_colheaders();
 
@@ -218,6 +224,7 @@ do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit)
 	long double elapsed;
 
 	enum digest_algorithm md;
+	bool itercapped = false;
 
 #ifdef IN_CI_BUILD_ENVIRONMENT
 	/* Go easier on Travis CI's build infrastructure;
@@ -229,11 +236,11 @@ do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit)
 	const size_t initial = PBKDF2_ITERCNT_MAX;
 #endif
 
-	if (! benchmark_pbkdf2(DIGALG_SHA2_512, initial, &elapsed_sha512))
+	if (! benchmark_pbkdf2(DIGALG_SHA2_512, initial, with_sasl_scram, &elapsed_sha512))
 		// This function logs error messages on failure
 		return false;
 
-	if (! benchmark_pbkdf2(DIGALG_SHA2_256, initial, &elapsed_sha256))
+	if (! benchmark_pbkdf2(DIGALG_SHA2_256, initial, with_sasl_scram, &elapsed_sha256))
 		// This function logs error messages on failure
 		return false;
 
@@ -252,10 +259,21 @@ do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit)
 	 * almost perfect scaling on the algorithm's runtime. This enables a very simplified
 	 * optimal parameter discovery process, compared to the other functions above.
 	 */
-	const char *const mdname = md_digest_to_name(md);
+	const char *const mdname = md_digest_to_name(md, with_sasl_scram);
 	size_t iterations = (size_t) (initial * (optimal_clocklimit / elapsed));
 	iterations -= (iterations % 1000U);
-	iterations = BENCH_MIN(initial, iterations);
+	iterations = BENCH_MIN(PBKDF2_ITERCNT_MAX, iterations);
+	iterations = BENCH_MAX(PBKDF2_ITERCNT_MIN, iterations);
+
+	if (with_sasl_scram && iterations > CYRUS_SASL_ITERCNT_MAX)
+	{
+		iterations = CYRUS_SASL_ITERCNT_MAX;
+		itercapped = true;
+	}
+
+	if (! benchmark_pbkdf2(md, iterations, with_sasl_scram, &elapsed))
+		// This function logs error messages on failure
+		return false;
 
 	while (elapsed > optimal_clocklimit)
 	{
@@ -270,7 +288,7 @@ do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit)
 
 		iterations -= 1000U;
 
-		if (! benchmark_pbkdf2(md, iterations, &elapsed))
+		if (! benchmark_pbkdf2(md, iterations, with_sasl_scram, &elapsed))
 			// This function logs error messages on failure
 			return false;
 	}
@@ -282,6 +300,10 @@ do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit)
 	(void) fprintf(stdout, "crypto {\n");
 	(void) fprintf(stdout, "\t/* Target: %LFs; Benchmarked: %LFs */\n", optimal_clocklimit, elapsed);
 	(void) fprintf(stdout, "\tpbkdf2v2_digest = \"%s\";\n", mdname);
+
+	if (itercapped)
+		(void) fprintf(stdout, "\t/* Capped because SASL SCRAM support was enabled */\n");
+
 	(void) fprintf(stdout, "\tpbkdf2v2_rounds = %zu;\n", iterations);
 	(void) fprintf(stdout, "};\n");
 	(void) fflush(stdout);
@@ -295,7 +317,7 @@ do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit)
 
 bool ATHEME_FATTR_WUR
 do_optimal_benchmarks(const long double optimal_clocklimit, const size_t ATHEME_VATTR_MAYBE_UNUSED optimal_memlimit,
-                      const bool ATHEME_VATTR_MAYBE_UNUSED optimal_memlimit_given)
+                      const bool ATHEME_VATTR_MAYBE_UNUSED optimal_memlimit_given, const bool with_sasl_scram)
 {
 #ifdef HAVE_ANY_MEMORY_HARD_ALGORITHM
 	if (! optimal_memlimit_given)
@@ -319,7 +341,7 @@ do_optimal_benchmarks(const long double optimal_clocklimit, const size_t ATHEME_
 		return false;
 #endif
 
-	if (! do_optimal_pbkdf2_benchmark(optimal_clocklimit))
+	if (! do_optimal_pbkdf2_benchmark(optimal_clocklimit, with_sasl_scram))
 		// This function logs error messages on failure
 		return false;
 

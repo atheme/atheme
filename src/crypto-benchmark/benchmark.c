@@ -191,18 +191,35 @@ benchmark_scrypt(const size_t memlimit, const size_t opslimit, long double *cons
 #endif /* HAVE_LIBSODIUM_SCRYPT */
 
 const char *
-md_digest_to_name(const enum digest_algorithm b_digest)
+md_digest_to_name(const enum digest_algorithm b_digest, const bool with_sasl_scram)
 {
-	switch (b_digest)
+	if (with_sasl_scram)
 	{
-		case DIGALG_MD5:
-			return "MD5";
-		case DIGALG_SHA1:
-			return "SHA1";
-		case DIGALG_SHA2_256:
-			return "SHA256";
-		case DIGALG_SHA2_512:
-			return "SHA512";
+		switch (b_digest)
+		{
+			case DIGALG_MD5:
+				return "SCRAM-MD5";
+			case DIGALG_SHA1:
+				return "SCRAM-SHA-1";
+			case DIGALG_SHA2_256:
+				return "SCRAM-SHA-256";
+			case DIGALG_SHA2_512:
+				return "SCRAM-SHA-512";
+		}
+	}
+	else
+	{
+		switch (b_digest)
+		{
+			case DIGALG_MD5:
+				return "MD5";
+			case DIGALG_SHA1:
+				return "SHA1";
+			case DIGALG_SHA2_256:
+				return "SHA256";
+			case DIGALG_SHA2_512:
+				return "SHA512";
+		}
 	}
 
 	return NULL;
@@ -229,18 +246,20 @@ md_name_to_digest(const char *const restrict b_name)
 void
 pbkdf2_print_colheaders(void)
 {
-	(void) fprintf(stderr, "%-10s %-10s %-14s\n", "Digest", "Iterations", "Elapsed");
-	(void) fprintf(stderr, "---------- ---------- --------------\n");
+	(void) fprintf(stderr, "%-16s %-10s %-14s\n", "Digest", "Iterations", "Elapsed");
+	(void) fprintf(stderr, "---------------- ---------- --------------\n");
 }
 
 void
-pbkdf2_print_rowstats(const enum digest_algorithm digest, const size_t iterations, const long double elapsed)
+pbkdf2_print_rowstats(const enum digest_algorithm digest, const size_t iterations, const bool with_sasl_scram,
+                      const long double elapsed)
 {
-	(void) fprintf(stderr, "%10s %10zu %13LFs\n", md_digest_to_name(digest), iterations, elapsed);
+	(void) fprintf(stderr, "%16s %10zu %13LFs\n", md_digest_to_name(digest, with_sasl_scram), iterations, elapsed);
 }
 
 bool ATHEME_FATTR_WUR
-benchmark_pbkdf2(const enum digest_algorithm digest, const size_t itercount, long double *const restrict elapsed)
+benchmark_pbkdf2(const enum digest_algorithm digest, const size_t itercount, const bool with_sasl_scram,
+                 long double *const restrict elapsed)
 {
 	const size_t mdlen = digest_size_alg(digest);
 	struct timespec begin;
@@ -259,6 +278,30 @@ benchmark_pbkdf2(const enum digest_algorithm digest, const size_t itercount, lon
 		(void) fprintf(stderr, "digest_oneshot_pbkdf2() failed\n");
 		return false;
 	}
+	if (with_sasl_scram)
+	{
+		static const char ServerKeyConstant[] = "Server Key";
+		static const char ClientKeyConstant[] = "Client Key";
+		unsigned char ServerKey[DIGEST_MDLEN_MAX];
+		unsigned char ClientKey[DIGEST_MDLEN_MAX];
+		unsigned char StoredKey[DIGEST_MDLEN_MAX];
+
+		if (! digest_oneshot_hmac(digest, hashbuf, mdlen, ServerKeyConstant, 10U, ServerKey, NULL))
+		{
+			(void) fprintf(stderr, "digest_oneshot_hmac(ServerKey) failed\n");
+			return false;
+		}
+		if (! digest_oneshot_hmac(digest, hashbuf, mdlen, ClientKeyConstant, 10U, ClientKey, NULL))
+		{
+			(void) fprintf(stderr, "digest_oneshot_hmac(ClientKey) failed\n");
+			return false;
+		}
+		if (! digest_oneshot(digest, ClientKey, mdlen, StoredKey, NULL))
+		{
+			(void) fprintf(stderr, "digest_oneshot() failed\n");
+			return false;
+		}
+	}
 	if (clock_gettime(CLOCK_MONOTONIC, &end) != 0)
 	{
 		(void) perror("clock_gettime(2)");
@@ -272,6 +315,6 @@ benchmark_pbkdf2(const enum digest_algorithm digest, const size_t itercount, lon
 	if (elapsed)
 		*elapsed = duration;
 
-	(void) pbkdf2_print_rowstats(digest, itercount, duration);
+	(void) pbkdf2_print_rowstats(digest, itercount, with_sasl_scram, duration);
 	return true;
 }

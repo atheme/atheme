@@ -45,6 +45,7 @@
 #include <atheme/memory.h>
 #include <atheme/module.h>
 #include <atheme/object.h>
+#include <atheme/pbkdf2.h>
 #include <atheme/phandler.h>
 #include <atheme/pmodule.h>
 #include <atheme/privs.h>

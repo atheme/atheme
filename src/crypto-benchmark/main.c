@@ -76,6 +76,7 @@ static size_t b_pbkdf2_digests_count = 0;
 static long double optimal_clocklimit = BENCH_CLOCKTIME_DEF;
 static unsigned int optimal_memlimit = BENCH_MEMLIMIT_DEF;
 static bool optimal_memlimit_given = false;
+static bool with_sasl_scram = false;
 
 static unsigned int run_options = BENCH_RUN_OPTIONS_NONE;
 
@@ -88,6 +89,9 @@ static const mowgli_getopt_option_t bench_long_opts[] = {
 	{      "optimal-clock-limit", required_argument, NULL, 'g', 0 },
 #ifdef HAVE_ANY_MEMORY_HARD_ALGORITHM
 	{     "optimal-memory-limit", required_argument, NULL, 'l', 0 },
+#endif
+#ifdef HAVE_LIBIDN
+	{          "with-sasl-scram",       no_argument, NULL, 'i', 0 },
 #endif
 #ifdef HAVE_LIBARGON2
 	{    "run-argon2-benchmarks",       no_argument, NULL, 'a', 0 },
@@ -122,14 +126,14 @@ print_usage(void)
 	(void) fprintf(stderr, "\n"
 	"  Usage: " PACKAGE_TARNAME "-crypto-benchmark -h\n"
 	"         " PACKAGE_TARNAME "-crypto-benchmark -v\n"
-	"         " PACKAGE_TARNAME "-crypto-benchmark -o [-g ...] [-l ...]\n"
+	"         " PACKAGE_TARNAME "-crypto-benchmark -o [-g ...] [-l ...] [-i]\n"
 #ifdef HAVE_LIBARGON2
 	"         " PACKAGE_TARNAME "-crypto-benchmark -a [-n ...] [-m ...] [-t ...] [-p ...]\n"
 #endif
 #ifdef HAVE_LIBSODIUM_SCRYPT
 	"         " PACKAGE_TARNAME "-crypto-benchmark -s [-e ...] [-f ...]\n"
 #endif
-	"         " PACKAGE_TARNAME "-crypto-benchmark -k [-c ...] [-d ...]\n"
+	"         " PACKAGE_TARNAME "-crypto-benchmark -k [-c ...] [-d ...] [-i]\n"
 	"\n"
 	"  -h/--help                    Display this help information and exit\n"
 	"  -v/--version                 Display program version and exit\n"
@@ -143,6 +147,12 @@ print_usage(void)
 	"                                   For example, '-l 16' means 2^16 KiB; 64 MiB\n"
 #else
 	"  -l/--optimal-memory-limit      Unsupported\n"
+#endif
+#ifdef HAVE_LIBIDN
+	"  -i/--with-sasl-scram           Indicate that you wish to deploy SASL SCRAM\n"
+	"                                   This changes the PBKDF2 configuration advice\n"
+#else
+	"  -i/--with-sasl-scram           Unsupported\n"
 #endif
 	"\n"
 	"    If one of the above limits are not given, defaults are used.\n"
@@ -274,6 +284,12 @@ process_options(int argc, char *argv[])
 				optimal_clocklimit = ret;
 				break;
 			}
+
+#ifdef HAVE_LIBIDN
+			case 'i':
+				with_sasl_scram = true;
+				break;
+#endif
 
 #ifdef HAVE_ANY_MEMORY_HARD_ALGORITHM
 			case 'l':
@@ -420,6 +436,7 @@ process_options(int argc, char *argv[])
 			}
 
 			default:
+				(void) print_usage();
 				return false;
 		}
 	}
@@ -540,11 +557,25 @@ do_pbkdf2_benchmarks(void)
 	(void) fprintf(stderr, "Beginning PBKDF2 benchmark ...\n");
 	(void) fprintf(stderr, "\n");
 
+	for (size_t b_pbkdf2_itercount = 0; b_pbkdf2_itercount < b_pbkdf2_itercounts_count; b_pbkdf2_itercount++)
+	{
+		if (b_pbkdf2_itercounts[b_pbkdf2_itercount] > CYRUS_SASL_ITERCNT_MAX)
+		{
+			(void) fprintf(stderr, "WARNING: Cyrus SASL clients will not perform more than %u\n",
+			                                 CYRUS_SASL_ITERCNT_MAX);
+			(void) fprintf(stderr, "         iterations! This may break SASL SCRAM compatibility.\n");
+			(void) fprintf(stderr, "\n");
+
+			break;
+		}
+	}
+
 	(void) pbkdf2_print_colheaders();
 
 	for (size_t b_pbkdf2_digest = 0; b_pbkdf2_digest < b_pbkdf2_digests_count; b_pbkdf2_digest++)
 	  for (size_t b_pbkdf2_itercount = 0; b_pbkdf2_itercount < b_pbkdf2_itercounts_count; b_pbkdf2_itercount++)
-	    if (! benchmark_pbkdf2(b_pbkdf2_digests[b_pbkdf2_digest], b_pbkdf2_itercounts[b_pbkdf2_itercount], NULL))
+	    if (! benchmark_pbkdf2(b_pbkdf2_digests[b_pbkdf2_digest], b_pbkdf2_itercounts[b_pbkdf2_itercount],
+	                           with_sasl_scram, NULL))
 	      // This function logs error messages on failure
 	      return false;
 
@@ -577,7 +608,7 @@ main(int argc, char *argv[])
 	(void) fprintf(stderr, "\n");
 
 	if ((run_options & BENCH_RUN_OPTIONS_OPTIMAL) &&
-	    ! do_optimal_benchmarks(optimal_clocklimit, optimal_memlimit, optimal_memlimit_given))
+	    ! do_optimal_benchmarks(optimal_clocklimit, optimal_memlimit, optimal_memlimit_given, with_sasl_scram))
 		// This function logs error messages on failure
 		return EXIT_FAILURE;
 

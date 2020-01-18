@@ -914,6 +914,9 @@ loadmodule "modules/groupserv/set_url";
  *     - make install
  *     - ${foo}/bin/atheme-crypto-benchmark -o
  *
+ * If you wish to deploy SASL SCRAM support, please read 'doc/SASL-SCRAM' and
+ * pass the '-i' flag to the included cryptographic benchmarking utility too.
+ *
  * If you are using the PBKDF2 module, its performance will be significantly
  * affected by your choice of cryptographic digest library. This software can
  * currently interface with 3 libraries; in decreasing order of performance:
@@ -959,9 +962,10 @@ loadmodule "modules/groupserv/set_url";
  * PBKDF2 computation with a new salt will occur, but this is still no worse
  * than an invocation of NickServ's "SET PASSWORD" command. You will still
  * need to keep the old module in your loadmodule configuration above, as the
- * new module cannot verify digests produced by the old one. Also note that
- * if you wish to deploy SASL SCRAM support (see doc/SASL-SCRAM-SHA), its
- * advice regarding parameter choice takes precedence over this.
+ * new module cannot verify digests produced by the old one.
+ *
+ * If you wish to deploy SASL SCRAM support, please read 'doc/SASL-SCRAM'.
+ * Its advice regarding parameter choice takes precedence over this!
  */
 crypto {
 
@@ -1135,7 +1139,7 @@ crypto {
 	 * Valid values are "SHA1", "SHA256", "SHA512",
 	 * "SCRAM-SHA-1", "SCRAM-SHA-256" and "SCRAM-SHA-512".
 	 *
-	 * For the SCRAM variants, please read doc/SASL-SCRAM-SHA.
+	 * For the SCRAM-* variants, please read doc/SASL-SCRAM.
 	 *
 	 * The default is "SHA512"
 	 */

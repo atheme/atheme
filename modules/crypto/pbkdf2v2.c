@@ -10,7 +10,6 @@
  */
 
 #include <atheme.h>
-#include <atheme/pbkdf2.h>
 
 #ifdef HAVE_LIBIDN
 #  include <stringprep.h>

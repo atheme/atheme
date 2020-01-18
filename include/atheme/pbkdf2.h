@@ -61,6 +61,11 @@
 #define PBKDF2_SALTLEN_MAX              64U
 #define PBKDF2_SALTLEN_DEF              32U
 
+/* Maximum iteration count Cyrus SASL clients will process
+ * Taken from <https://github.com/cyrusimap/cyrus-sasl/blob/f76eb971d456619d0f26/plugins/scram.c#L79>
+ */
+#define CYRUS_SASL_ITERCNT_MAX          0x10000U
+
 struct pbkdf2v2_dbentry
 {
 	unsigned char           cdg[DIGEST_MDLEN_MAX];                        // PBKDF2 Digest (Computed)

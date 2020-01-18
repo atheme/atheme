@@ -60,3 +60,8 @@ to enable this. The 5 main steps to perform are:
    pbkdf2v2 crypto module will refuse an iteration count lower than 10000.
    The default is 64000, so you can continue to omit this parameter from your
    configuration file if you are doing so already.
+
+   If you are uncertain on the number of rounds to use, please use the
+   included cryptographic benchmarking utility, and pass it the '-o' & '-i'
+   command-line arguments to perform an optimal PBKDF2 parameter discovery
+   benchmark with SASL SCRAM support.

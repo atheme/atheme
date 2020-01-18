@@ -24,13 +24,6 @@
 
 #ifdef HAVE_LIBIDN
 
-#include <atheme/pbkdf2.h>
-
-/* Maximum iteration count Cyrus SASL clients will process
- * Taken from <https://github.com/cyrusimap/cyrus-sasl/blob/f76eb971d456619d0f26/plugins/scram.c#L79>
- */
-#define CYRUS_SASL_ITERMAX              0x10000U
-
 #define SCRAM_MDLEN_MIN                 DIGEST_MDLEN_SHA1
 #define SCRAM_MDLEN_MAX                 DIGEST_MDLEN_SHA2_512
 
@@ -817,10 +810,10 @@ scram_pbkdf2v2_scram_confhook(const struct pbkdf2v2_scram_config *const restrict
 			break;
 	}
 
-	if (config->c > CYRUS_SASL_ITERMAX)
+	if (config->c > CYRUS_SASL_ITERCNT_MAX)
 		(void) slog(LG_INFO, "%s: iteration count (%u) is higher than Cyrus SASL library maximum (%u) -- "
 		                     "client logins may fail if they use Cyrus", MOWGLI_FUNC_NAME, config->c,
-		                     CYRUS_SASL_ITERMAX);
+		                     CYRUS_SASL_ITERCNT_MAX);
 }
 
 static void

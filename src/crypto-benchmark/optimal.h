@@ -15,6 +15,6 @@
 #include <atheme/attributes.h>      // ATHEME_FATTR_WUR
 #include <atheme/stdheaders.h>      // bool
 
-bool do_optimal_benchmarks(long double, size_t, bool) ATHEME_FATTR_WUR;
+bool do_optimal_benchmarks(long double, size_t, bool, bool) ATHEME_FATTR_WUR;
 
 #endif /* !ATHEME_SRC_CRYPTO_BENCHMARK_OPTIMAL_H */

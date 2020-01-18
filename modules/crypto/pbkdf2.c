@@ -11,7 +11,6 @@
  */
 
 #include <atheme.h>
-#include <atheme/pbkdf2.h>
 
 #define CRYPTO_MODULE_NAME PBKDF2_LEGACY_MODULE_NAME
 

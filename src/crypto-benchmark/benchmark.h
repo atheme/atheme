@@ -50,9 +50,9 @@ bool benchmark_scrypt(size_t, size_t, long double *) ATHEME_FATTR_WUR;
 #endif
 
 enum digest_algorithm md_name_to_digest(const char *);
-const char *md_digest_to_name(enum digest_algorithm);
+const char *md_digest_to_name(enum digest_algorithm, bool);
 void pbkdf2_print_colheaders(void);
-void pbkdf2_print_rowstats(enum digest_algorithm, size_t, long double);
-bool benchmark_pbkdf2(enum digest_algorithm, size_t, long double *) ATHEME_FATTR_WUR;
+void pbkdf2_print_rowstats(enum digest_algorithm, size_t, bool, long double);
+bool benchmark_pbkdf2(enum digest_algorithm, size_t, bool, long double *) ATHEME_FATTR_WUR;
 
 #endif /* !ATHEME_SRC_CRYPTO_BENCHMARK_BENCHMARK_H */
