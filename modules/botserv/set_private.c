@@ -9,11 +9,9 @@
  */
 
 #include <atheme.h>
-#include "botserv.h"
 
-static fn_botserv_bot_find *botserv_bot_find = NULL;
+static struct botserv_main_symbols *bs_main_syms = NULL;
 static mowgli_patricia_t **bs_set_cmdtree = NULL;
-static mowgli_list_t *bs_bots = NULL;
 
 static void
 bs_cmd_set_private(struct sourceinfo *si, int parc, char *parv[])
@@ -29,7 +27,7 @@ bs_cmd_set_private(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	bot = botserv_bot_find(botserv);
+	bot = bs_main_syms->bot_find(botserv);
 	if (!bot)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a bot."), botserv);
@@ -79,9 +77,8 @@ static struct command bs_set_private = {
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_SYMBOL(m, botserv_bot_find, "botserv/main", "botserv_bot_find")
+	MODULE_TRY_REQUEST_SYMBOL(m, bs_main_syms, "botserv/main", "botserv_main_symbols")
 	MODULE_TRY_REQUEST_SYMBOL(m, bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree")
-	MODULE_TRY_REQUEST_SYMBOL(m, bs_bots, "botserv/main", "bs_bots")
 
 	command_add(&bs_set_private, *bs_set_cmdtree);
 }

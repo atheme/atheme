@@ -9,10 +9,8 @@
  */
 
 #include <atheme.h>
-#include "botserv.h"
 
-static mowgli_list_t *bs_bots = NULL;
-static fn_botserv_bot_find *botserv_bot_find = NULL;
+static struct botserv_main_symbols *bs_main_syms = NULL;
 
 static void
 bs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
@@ -42,7 +40,7 @@ bs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else
 	{
-		bot = botserv_bot_find(dest);
+		bot = bs_main_syms->bot_find(dest);
 	}
 
 	if (bot != NULL)
@@ -121,8 +119,7 @@ static struct command bs_info = {
 static void
 mod_init(struct module *const restrict m)
 {
-	MODULE_TRY_REQUEST_SYMBOL(m, bs_bots, "botserv/main", "bs_bots")
-	MODULE_TRY_REQUEST_SYMBOL(m, botserv_bot_find, "botserv/main", "botserv_bot_find")
+	MODULE_TRY_REQUEST_SYMBOL(m, bs_main_syms, "botserv/main", "botserv_main_symbols")
 
 	service_named_bind_command("botserv", &bs_info);
 }

@@ -10,9 +10,9 @@
  */
 
 #include <atheme.h>
-#include "botserv.h"
 
 // Imported by other modules/botserv/set_*.so
+extern mowgli_patricia_t *bs_set_cmdtree;
 mowgli_patricia_t *bs_set_cmdtree = NULL;
 
 static void

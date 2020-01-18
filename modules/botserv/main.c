@@ -8,7 +8,6 @@
  */
 
 #include <atheme.h>
-#include "botserv.h"
 
 static void (*topic_sts_real)(struct channel *, struct user *, const char *, time_t, time_t, const char *);
 static void (*notice_real)(const char *, const char *, const char *, ...) ATHEME_FATTR_PRINTF(3, 4);
@@ -17,9 +16,26 @@ static void (*msg_real)(const char *, const char *, const char *, ...) ATHEME_FA
 static struct service *botsvs = NULL;
 static unsigned int min_users = 0;
 
-// visible for other modules
-fn_botserv_bot_find botserv_bot_find;
-mowgli_list_t bs_bots;
+static mowgli_list_t bs_bots;
+
+static struct botserv_bot *
+botserv_bot_find(const char *name)
+{
+	mowgli_node_t *n;
+
+	if (name == NULL)
+		return NULL;
+
+	MOWGLI_ITER_FOREACH(n, bs_bots.head)
+	{
+		struct botserv_bot *bot = (struct botserv_bot *) n->data;
+
+		if (!irccasecmp(name, bot->nick))
+			return bot;
+	}
+
+	return NULL;
+}
 
 static struct botserv_bot *
 bs_mychan_find_bot(struct mychan *mc)
@@ -465,25 +481,6 @@ db_h_bot_count(struct database_handle *db, const char *type)
 
 	if (i != MOWGLI_LIST_LENGTH(&bs_bots))
 		slog(LG_ERROR, "botserv_load_database(): inconsistency: database defines %u objects, I only deserialized %zu.", i, bs_bots.count);
-}
-
-struct botserv_bot *
-botserv_bot_find(char *name)
-{
-	mowgli_node_t *n;
-
-	if (name == NULL)
-		return NULL;
-
-	MOWGLI_ITER_FOREACH(n, bs_bots.head)
-	{
-		struct botserv_bot *bot = (struct botserv_bot *) n->data;
-
-		if (!irccasecmp(name, bot->nick))
-			return bot;
-	}
-
-	return NULL;
 }
 
 // ADD nick user host real
@@ -1102,5 +1099,12 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 
 }
+
+// Imported by other modules
+extern struct botserv_main_symbols botserv_main_symbols;
+struct botserv_main_symbols botserv_main_symbols = {
+	.bot_find     = &botserv_bot_find,
+	.bots         = &bs_bots,
+};
 
 SIMPLE_DECLARE_MODULE_V1("botserv/main", MODULE_UNLOAD_CAPABILITY_NEVER)

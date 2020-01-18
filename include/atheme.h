@@ -17,6 +17,7 @@
 #include <atheme/auth.h>
 #include <atheme/authcookie.h>
 #include <atheme/base64.h>
+#include <atheme/botserv.h>
 #include <atheme/channels.h>
 #include <atheme/commandhelp.h>
 #include <atheme/commandtree.h>

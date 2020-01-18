@@ -19,6 +19,10 @@ struct mynick;
 struct myuser;
 struct svsignore;
 
+// Defined in atheme/botserv.h
+struct botserv_bot;
+struct botserv_main_symbols;
+
 // Defined in atheme/channels.h
 struct chanban;
 struct channel;

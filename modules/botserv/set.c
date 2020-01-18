@@ -10,7 +10,6 @@
  */
 
 #include <atheme.h>
-#include "botserv.h"
 
 static void
 mod_init(struct module *const restrict m)
