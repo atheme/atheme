@@ -12,6 +12,7 @@
 #include <atheme.h>
 
 // This is imported by other modules/chanserv/set_*.so
+extern mowgli_patricia_t *cs_set_cmdtree;
 mowgli_patricia_t *cs_set_cmdtree = NULL;
 
 static void

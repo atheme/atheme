@@ -19,13 +19,13 @@ struct hsrequest
 	char *creator;
 };
 
-bool request_per_nick;
-struct service *hostsvs;
+static bool request_per_nick;
+static struct service *hostsvs;
 
 static unsigned int ratelimit_count = 0;
 static time_t ratelimit_firsttime = 0;
 
-mowgli_list_t hs_reqlist;
+static mowgli_list_t hs_reqlist;
 static char *groupmemo;
 
 static void

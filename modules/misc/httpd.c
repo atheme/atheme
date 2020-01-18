@@ -24,6 +24,7 @@ static struct {
 } httpd_config;
 
 // Imported by modules/transport/*rpc/*rpc.so */
+extern mowgli_list_t httpd_path_handlers;
 mowgli_list_t httpd_path_handlers;
 
 static void

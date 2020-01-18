@@ -9,6 +9,7 @@
 #include "exttarget.h"
 
 // Imported by other modules/exttarget/*.so */
+extern mowgli_patricia_t *exttarget_tree;
 mowgli_patricia_t *exttarget_tree = NULL;
 
 static void

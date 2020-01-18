@@ -11,6 +11,7 @@
 #include <atheme.h>
 
 // This is imported by modules/chanserv/clear_*.so
+extern mowgli_patricia_t *cs_clear_cmds;
 mowgli_patricia_t *cs_clear_cmds = NULL;
 
 static void

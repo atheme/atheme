@@ -19,14 +19,15 @@
 mowgli_patricia_t *nicklist;
 mowgli_patricia_t *oldnameslist;
 mowgli_patricia_t *mclist;
-mowgli_patricia_t *certfplist;
 
-mowgli_heap_t *myuser_heap;   /* HEAP_USER */
-mowgli_heap_t *mynick_heap;   /* HEAP_USER */
-mowgli_heap_t *mycertfp_heap; /* HEAP_USER */
-mowgli_heap_t *myuser_name_heap;	/* HEAP_USER / 2 */
-mowgli_heap_t *mychan_heap;	/* HEAP_CHANNEL */
-mowgli_heap_t *chanacs_heap;	/* HEAP_CHANACS */
+static mowgli_patricia_t *certfplist;
+
+static mowgli_heap_t *myuser_heap;   /* HEAP_USER */
+static mowgli_heap_t *mynick_heap;   /* HEAP_USER */
+static mowgli_heap_t *mycertfp_heap; /* HEAP_USER */
+static mowgli_heap_t *myuser_name_heap;	/* HEAP_USER / 2 */
+static mowgli_heap_t *mychan_heap;	/* HEAP_CHANNEL */
+static mowgli_heap_t *chanacs_heap;	/* HEAP_CHANACS */
 
 /*
  * init_accounts()

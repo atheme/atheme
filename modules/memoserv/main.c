@@ -13,6 +13,7 @@
 static struct service *memosvs = NULL;
 
 // Imported by modules/memoserv/send*.so
+extern unsigned int maxmemos;
 unsigned int maxmemos;
 
 static void

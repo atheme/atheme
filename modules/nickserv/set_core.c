@@ -11,6 +11,7 @@
 #include <atheme.h>
 
 // Imported by other modules/nickserv/set_*.so
+extern mowgli_patricia_t *ns_set_cmdtree;
 mowgli_patricia_t *ns_set_cmdtree = NULL;
 
 static void

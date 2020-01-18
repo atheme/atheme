@@ -25,9 +25,8 @@ struct rwatch
 static struct rwatch *rwread = NULL;
 static FILE *f;
 
-mowgli_patricia_t *os_rwatch_cmds;
-
-mowgli_list_t rwatch_list;
+static mowgli_patricia_t *os_rwatch_cmds;
+static mowgli_list_t rwatch_list;
 
 static void
 write_rwatchdb(struct database_handle *db)

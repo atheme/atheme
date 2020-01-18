@@ -32,7 +32,7 @@ static mowgli_eventloop_timer_t *enforce_remove_enforcers_timer = NULL;
 static mowgli_list_t enforce_list;
 static time_t enforce_next;
 
-mowgli_patricia_t **ns_set_cmdtree;
+static mowgli_patricia_t **ns_set_cmdtree;
 
 // logs a released nickname out
 static bool

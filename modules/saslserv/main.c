@@ -1011,6 +1011,7 @@ sasl_authzid_can_login(struct sasl_session *const restrict p, const char *const 
 	return sasl_authxid_can_login(p, authzid, muo, p->authzid, p->authzeid, p->authceid);
 }
 
+extern const struct sasl_core_functions sasl_core_functions;
 const struct sasl_core_functions sasl_core_functions = {
 
 	.mech_register      = &sasl_mech_register,

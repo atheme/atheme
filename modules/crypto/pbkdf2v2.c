@@ -402,6 +402,7 @@ atheme_pbkdf2v2_scram_confhook(const pbkdf2v2_scram_confhook_fn confhook)
 	(void) atheme_pbkdf2v2_scram_confhook_dispatch();
 }
 
+extern const struct pbkdf2v2_scram_functions pbkdf2v2_scram_functions;
 const struct pbkdf2v2_scram_functions pbkdf2v2_scram_functions = {
 
 	.dbextract      = &atheme_pbkdf2v2_scram_dbextract,
