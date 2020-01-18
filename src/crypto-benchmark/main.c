@@ -559,7 +559,7 @@ do_pbkdf2_benchmarks(void)
 
 	for (size_t b_pbkdf2_itercount = 0; b_pbkdf2_itercount < b_pbkdf2_itercounts_count; b_pbkdf2_itercount++)
 	{
-		if (b_pbkdf2_itercounts[b_pbkdf2_itercount] > CYRUS_SASL_ITERCNT_MAX)
+		if (with_sasl_scram && b_pbkdf2_itercounts[b_pbkdf2_itercount] > CYRUS_SASL_ITERCNT_MAX)
 		{
 			(void) fprintf(stderr, "WARNING: Cyrus SASL clients will not perform more than %u\n",
 			                                 CYRUS_SASL_ITERCNT_MAX);
