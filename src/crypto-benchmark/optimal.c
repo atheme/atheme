@@ -24,6 +24,16 @@
 #include "benchmark.h"              // (everything else)
 #include "optimal.h"                // self-declarations
 
+/* Go easier on Travis CI's build infrastructure;
+ * With the internal digest frontend, max takes upwards of 30 seconds!
+ *    -- amdj
+ */
+#ifdef IN_CI_BUILD_ENVIRONMENT
+#  define PBKDF2_ITERCNT_INITIAL    PBKDF2_ITERCNT_DEF
+#else
+#  define PBKDF2_ITERCNT_INITIAL    PBKDF2_ITERCNT_MAX
+#endif
+
 #ifdef HAVE_LIBARGON2
 
 static bool ATHEME_FATTR_WUR
@@ -206,8 +216,6 @@ do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit, const bool wit
 {
 	(void) fprintf(stderr, "Beginning automatic optimal PBKDF2 benchmark ...\n");
 	(void) fprintf(stderr, "\n");
-	(void) fprintf(stderr, "NOTE: This does not test SHA1. Use '-k -d' for SHA1 testing.\n");
-	(void) fprintf(stderr, "\n");
 
 	if (! with_sasl_scram)
 	{
@@ -219,26 +227,20 @@ do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit, const bool wit
 		(void) fprintf(stderr, "\n");
 	}
 
+	const size_t initial = ((with_sasl_scram) ? CYRUS_SASL_ITERCNT_MAX : PBKDF2_ITERCNT_INITIAL);
+
+	(void) fprintf(stderr, "Selecting iterations starting point: %zu\n", initial);
+	(void) fprintf(stderr, "\n");
+
 	(void) pbkdf2_print_colheaders();
 
-	long double elapsed_sha256;
-	long double elapsed_sha512;
+	long double elapsed_sha512 = 0L;
+	long double elapsed_sha256 = 0L;
 	long double elapsed;
 
 	enum digest_algorithm md;
-	bool itercapped = false;
 
-#ifdef IN_CI_BUILD_ENVIRONMENT
-	/* Go easier on Travis CI's build infrastructure;
-	 * With the internal digest frontend, max takes upwards of 30 seconds!
-	 *    -- amdj
-	 */
-	const size_t initial = PBKDF2_ITERCNT_DEF;
-#else
-	const size_t initial = PBKDF2_ITERCNT_MAX;
-#endif
-
-	if (! benchmark_pbkdf2(DIGALG_SHA2_512, initial, with_sasl_scram, &elapsed_sha512))
+	if (! benchmark_pbkdf2(DIGALG_SHA1, initial, with_sasl_scram, NULL))
 		// This function logs error messages on failure
 		return false;
 
@@ -246,13 +248,24 @@ do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit, const bool wit
 		// This function logs error messages on failure
 		return false;
 
-	if (elapsed_sha256 < elapsed_sha512)
+	if (! benchmark_pbkdf2(DIGALG_SHA2_512, initial, with_sasl_scram, &elapsed_sha512))
+		// This function logs error messages on failure
+		return false;
+
+	(void) fprintf(stderr, "\n");
+
+	/* This if / else if / else intentionally does not consider SHA1, which could hardly
+	 * be considered "optimal"! Always recommend SCRAM-SHA-256 over SCRAM-SHA-512 due to
+	 * poor client support for the latter.
+	 */
+	if (with_sasl_scram || elapsed_sha256 <= elapsed_sha512)
 	{
 		md = DIGALG_SHA2_256;
 		elapsed = elapsed_sha256;
 	}
 	else
 	{
+		// This *can* happen!
 		md = DIGALG_SHA2_512;
 		elapsed = elapsed_sha512;
 	}
@@ -262,38 +275,44 @@ do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit, const bool wit
 	 * optimal parameter discovery process, compared to the other functions above.
 	 */
 	const char *const mdname = md_digest_to_name(md, with_sasl_scram);
-	size_t iterations = (size_t) (initial * (optimal_clocklimit / elapsed));
-	iterations -= (iterations % 1000U);
+	size_t iterations = (size_t) (1.1L * (initial * (optimal_clocklimit / elapsed)));
+	iterations += (1000U - (iterations % 1000U));
 	iterations = BENCH_MIN(PBKDF2_ITERCNT_MAX, iterations);
 	iterations = BENCH_MAX(PBKDF2_ITERCNT_MIN, iterations);
 
-	if (with_sasl_scram && iterations > CYRUS_SASL_ITERCNT_MAX)
+	if (with_sasl_scram)
+		iterations = BENCH_MIN(CYRUS_SASL_ITERCNT_MAX, iterations);
+
+	(void) fprintf(stderr, "Selecting optimal algorithm: %s\n", mdname);
+
+	if (iterations != initial)
 	{
-		iterations = CYRUS_SASL_ITERCNT_MAX;
-		itercapped = true;
-	}
+		(void) fprintf(stderr, "\n");
 
-	if (! benchmark_pbkdf2(md, iterations, with_sasl_scram, &elapsed))
-		// This function logs error messages on failure
-		return false;
-
-	while (elapsed > optimal_clocklimit)
-	{
-		if (iterations <= PBKDF2_ITERCNT_MIN)
-		{
-			(void) fprintf(stderr, "\n");
-			(void) fprintf(stderr, "    Reached minimum iteration count!\n");
-			(void) fprintf(stderr, "    Algorithm is still too slow; giving up.\n");
-			(void) fprintf(stderr, "\n");
-			(void) fflush(stderr);
-			return true;
-		}
-
-		iterations -= 1000U;
+		(void) pbkdf2_print_colheaders();
 
 		if (! benchmark_pbkdf2(md, iterations, with_sasl_scram, &elapsed))
 			// This function logs error messages on failure
 			return false;
+
+		while (elapsed > optimal_clocklimit)
+		{
+			if (iterations <= PBKDF2_ITERCNT_MIN)
+			{
+				(void) fprintf(stderr, "\n");
+				(void) fprintf(stderr, "    Reached minimum iteration count!\n");
+				(void) fprintf(stderr, "    Algorithm is still too slow; giving up.\n");
+				(void) fprintf(stderr, "\n");
+				(void) fflush(stderr);
+				return true;
+			}
+
+			iterations -= 1000U;
+
+			if (! benchmark_pbkdf2(md, iterations, with_sasl_scram, &elapsed))
+				// This function logs error messages on failure
+				return false;
+		}
 	}
 
 	(void) fprintf(stderr, "\n");
@@ -303,10 +322,6 @@ do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit, const bool wit
 	(void) fprintf(stdout, "crypto {\n");
 	(void) fprintf(stdout, "\t/* Target: %LFs; Benchmarked: %LFs */\n", optimal_clocklimit, elapsed);
 	(void) fprintf(stdout, "\tpbkdf2v2_digest = \"%s\";\n", mdname);
-
-	if (itercapped)
-		(void) fprintf(stdout, "\t/* Capped because SASL SCRAM support was enabled */\n");
-
 	(void) fprintf(stdout, "\tpbkdf2v2_rounds = %zu;\n", iterations);
 	(void) fprintf(stdout, "};\n");
 	(void) fflush(stdout);
