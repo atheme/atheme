@@ -15,6 +15,7 @@ INCLUDES = \
 	auth.h			\
 	authcookie.h		\
 	base64.h		\
+	botserv.h		\
 	channels.h		\
 	commandhelp.h		\
 	commandtree.h		\
@@ -49,6 +50,7 @@ INCLUDES = \
 	privs.h			\
 	random.h		\
 	sasl.h			\
+	scrypt.h		\
 	serno.h			\
 	servers.h		\
 	services.h		\
