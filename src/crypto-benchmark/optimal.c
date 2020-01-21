@@ -55,8 +55,9 @@ do_optimal_argon2_benchmark(const long double optimal_clocklimit, const size_t o
 	{
 		if (memcost <= ATHEME_ARGON2_MEMCOST_MIN)
 		{
-			(void) fprintf(stderr, "Reached minimum memory and time cost.\n");
-			(void) fprintf(stderr, "Algorithm is still too slow; giving up.\n");
+			(void) fprintf(stderr, "\n");
+			(void) fprintf(stderr, "    Reached minimum memory and time cost!\n");
+			(void) fprintf(stderr, "    Algorithm is still too slow; giving up.\n");
 			(void) fprintf(stderr, "\n");
 			(void) fflush(stderr);
 			return true;
@@ -145,8 +146,9 @@ do_optimal_scrypt_benchmark(const long double optimal_clocklimit, const size_t o
 	{
 		if (memlimit <= ATHEME_SCRYPT_MEMLIMIT_MIN)
 		{
-			(void) fprintf(stderr, "Reached minimum memory limit.\n");
-			(void) fprintf(stderr, "Algorithm is still too slow; giving up.\n");
+			(void) fprintf(stderr, "\n");
+			(void) fprintf(stderr, "    Reached minimum memory limit!\n");
+			(void) fprintf(stderr, "    Algorithm is still too slow; giving up.\n");
 			(void) fprintf(stderr, "\n");
 			(void) fflush(stderr);
 			return true;
@@ -279,8 +281,9 @@ do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit, const bool wit
 	{
 		if (iterations <= PBKDF2_ITERCNT_MIN)
 		{
-			(void) fprintf(stderr, "Reached minimum iteration count.\n");
-			(void) fprintf(stderr, "Algorithm is still too slow; giving up.\n");
+			(void) fprintf(stderr, "\n");
+			(void) fprintf(stderr, "    Reached minimum iteration count!\n");
+			(void) fprintf(stderr, "    Algorithm is still too slow; giving up.\n");
 			(void) fprintf(stderr, "\n");
 			(void) fflush(stderr);
 			return true;
