@@ -42,12 +42,11 @@ esac
     --with-digest-api-frontend=internal                     \
     --with-rng-api-frontend=internal                        \
     ${ATHEME_CONF_ARGS:-}                                   \
-    CPPFLAGS="-DIN_CI_BUILD_ENVIRONMENT=1 ${CPPFLAGS:-}"    \
     LDFLAGS="${LDFLAGS:-}"
 
 "${MAKE}"
 "${MAKE}" install
 
 "${ATHEME_PREFIX}"/bin/atheme-services -dnT
-"${ATHEME_PREFIX}"/bin/atheme-crypto-benchmark -o
+"${ATHEME_PREFIX}"/bin/atheme-crypto-benchmark -io
 "${ATHEME_PREFIX}"/bin/atheme-ecdh-x25519-tool -T

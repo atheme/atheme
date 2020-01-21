@@ -15,7 +15,7 @@
 #include <atheme/pbkdf2.h>          // PBKDF2_*
 #include <atheme/scrypt.h>          // ATHEME_SCRYPT_*
 #include <atheme/stdheaders.h>      // (everything else)
-#include <atheme/sysconf.h>         // HAVE_LIBARGON2
+#include <atheme/sysconf.h>         // HAVE_*, ATHEME_API_*
 
 #ifdef HAVE_LIBARGON2
 #  include <argon2.h>               // argon2_type, argon2_type2string()
@@ -23,16 +23,6 @@
 
 #include "benchmark.h"              // (everything else)
 #include "optimal.h"                // self-declarations
-
-/* Go easier on Travis CI's build infrastructure;
- * With the internal digest frontend, max takes upwards of 30 seconds!
- *    -- amdj
- */
-#ifdef IN_CI_BUILD_ENVIRONMENT
-#  define PBKDF2_ITERCNT_INITIAL    PBKDF2_ITERCNT_DEF
-#else
-#  define PBKDF2_ITERCNT_INITIAL    PBKDF2_ITERCNT_MAX
-#endif
 
 #ifdef HAVE_LIBARGON2
 
@@ -217,6 +207,12 @@ do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit, const bool wit
 	(void) fprintf(stderr, "Beginning automatic optimal PBKDF2 benchmark ...\n");
 	(void) fprintf(stderr, "\n");
 
+#if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_INTERNAL)
+	(void) fprintf(stderr, "WARNING: This program may perform significantly better if you build it\n");
+	(void) fprintf(stderr, "         against a supported third-party cryptographic digest library!\n");
+	(void) fprintf(stderr, "\n");
+#endif
+
 	if (! with_sasl_scram)
 	{
 		(void) fprintf(stderr, "WARNING: If you wish to support SASL SCRAM logins, please see the\n");
@@ -227,7 +223,7 @@ do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit, const bool wit
 		(void) fprintf(stderr, "\n");
 	}
 
-	const size_t initial = ((with_sasl_scram) ? CYRUS_SASL_ITERCNT_MAX : PBKDF2_ITERCNT_INITIAL);
+	const size_t initial = ((with_sasl_scram) ? CYRUS_SASL_ITERCNT_MAX : PBKDF2_ITERCNT_MAX);
 
 	(void) fprintf(stderr, "Selecting iterations starting point: %zu\n", initial);
 	(void) fprintf(stderr, "\n");

@@ -597,16 +597,6 @@ main(int argc, char *argv[])
 		// This function logs error messages on failure
 		return EXIT_FAILURE;
 
-#if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_INTERNAL) && !defined(IN_CI_BUILD_ENVIRONMENT)
-	(void) fprintf(stderr, "\n");
-	(void) fprintf(stderr, "NOTE: This program may perform significantly better if you build it\n");
-	(void) fprintf(stderr, "      against a supported third-party cryptographic digest library!\n");
-#endif
-
-	(void) fprintf(stderr, "\n");
-	(void) fprintf(stderr, "\n");
-	(void) fprintf(stderr, "\n");
-
 	if ((run_options & BENCH_RUN_OPTIONS_OPTIMAL) &&
 	    ! do_optimal_benchmarks(optimal_clocklimit, optimal_memlimit, optimal_memlimit_given, with_sasl_scram))
 		// This function logs error messages on failure
