@@ -185,6 +185,25 @@ libathemecore_early_init(void)
 	if (libathemecore_early_init_done)
 		return true;
 
+#ifdef ENABLE_NLS
+	/* Prepare gettext */
+	if (! setlocale(LC_ALL, ""))
+	{
+		(void) perror("setlocale(3)");
+		return false;
+	}
+	if (! textdomain(PACKAGE_TARNAME))
+	{
+		(void) perror("textdomain(3)");
+		return false;
+	}
+	if (! bindtextdomain(PACKAGE_TARNAME, LOCALEDIR))
+	{
+		(void) perror("bindtextdomain(3)");
+		return false;
+	}
+#endif /* ENABLE_NLS */
+
 #ifdef HAVE_LIBSODIUM
 	if (sodium_init() == -1)
 	{
@@ -212,13 +231,6 @@ atheme_bootstrap(void)
 
 	/* shutdown mowgli threading support */
 	mowgli_thread_set_policy(MOWGLI_THREAD_POLICY_DISABLED);
-
-	/* Prepare gettext */
-#ifdef ENABLE_NLS
-	setlocale(LC_ALL, "");
-	bindtextdomain(PACKAGE_TARNAME, LOCALEDIR);
-	textdomain(PACKAGE_TARNAME);
-#endif
 
 	/* change to our local directory */
 	if (chdir(PREFIX) < 0)

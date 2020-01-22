@@ -13,6 +13,7 @@
 #include <atheme/argon2.h>          // ATHEME_ARGON2_*
 #include <atheme/constants.h>       // BUFSIZE, PASSLEN
 #include <atheme/digest.h>          // digest_oneshot_pbkdf2()
+#include <atheme/i18n.h>            // _() (gettext)
 #include <atheme/libathemecore.h>   // libathemecore_early_init()
 #include <atheme/pbkdf2.h>          // PBKDF2_*
 #include <atheme/random.h>          // atheme_random_*()
@@ -36,10 +37,22 @@ static unsigned char saltbuf[BUFSIZE];
 static char hashbuf[BUFSIZE];
 static char passbuf[BUFSIZE];
 
+void ATHEME_FATTR_PRINTF(1, 2)
+bench_print(const char *const restrict format, ...)
+{
+	va_list ap;
+	va_start(ap, format);
+	(void) vfprintf(stderr, format, ap);
+	(void) fprintf(stderr, "\n");
+	(void) fflush(stderr);
+	va_end(ap);
+}
+
 bool ATHEME_FATTR_WUR
 benchmark_init(void)
 {
 	if (! libathemecore_early_init())
+		// This function logs error messages on failure
 		return false;
 
 	(void) atheme_random_buf(saltbuf, BUFSIZE);
@@ -82,8 +95,12 @@ argon2_name_to_type(const char *const restrict b_name)
 	else if (strcasecmp(b_name, "Argon2id") == 0)
 		return Argon2_id;
 
-	(void) fprintf(stderr, "%s: '%s' is not a valid type name\n", MOWGLI_FUNC_NAME, b_name);
-	(void) fprintf(stderr, "%s: valid names are: Argon2d, Argon2i, Argon2id\n", MOWGLI_FUNC_NAME);
+	(void) bench_print("");
+	(void) bench_print(_(""
+		"%s: '%s' is not a valid type name\n"
+		"    valid names are: Argon2d, Argon2i, Argon2id\n"
+		"    please see --help\n"
+	), MOWGLI_FUNC_NAME, b_name);
 
 	exit(EXIT_FAILURE);
 }
@@ -91,16 +108,18 @@ argon2_name_to_type(const char *const restrict b_name)
 void
 argon2_print_colheaders(void)
 {
-	(void) fprintf(stderr, "%-10s %-10s %-10s %-10s %-14s\n",
-	                       "Type", "MemCost", "TimeCost", "Threads", "Elapsed");
-	(void) fprintf(stderr, "---------- ---------- ---------- ---------- --------------\n");
+	(void) bench_print(_(""
+		"\n"
+		"Type       MemCost    TimeCost   Threads    Elapsed\n"
+		"---------- ---------- ---------- ---------- --------------"
+	));
 }
 
 void
 argon2_print_rowstats(const argon2_type type, const size_t memcost, const size_t timecost, const size_t threads,
                       const long double elapsed)
 {
-	(void) fprintf(stderr, "%10s %10s %10zu %10zu %13LFs\n", argon2_type2string(type, 1),
+	(void) bench_print(_("%10s %10s %10zu %10zu %13LFs"), argon2_type2string(type, 1),
 	                       memory_power2k_to_str(memcost), timecost, threads, elapsed);
 }
 
@@ -136,7 +155,7 @@ benchmark_argon2(const argon2_type type, const size_t memcost, const size_t time
 	}
 	if ((ret = argon2_ctx(&ctx, type)) != (int) ARGON2_OK)
 	{
-		(void) fprintf(stderr, "argon2_ctx() failed: %s\n", argon2_error_message(ret));
+		(void) bench_print("argon2_ctx(): %s", argon2_error_message(ret));
 		return false;
 	}
 	if (clock_gettime(CLOCK_MONOTONIC, &end) != 0)
@@ -163,14 +182,17 @@ benchmark_argon2(const argon2_type type, const size_t memcost, const size_t time
 void
 scrypt_print_colheaders(void)
 {
-	(void) fprintf(stderr, "%-10s %-14s %-14s\n", "MemLimit", "OpsLimit", "Elapsed");
-	(void) fprintf(stderr, "---------- -------------- --------------\n");
+	(void) bench_print(_(""
+		"\n"
+		"MemLimit   OpsLimit       Elapsed\n"
+		"---------- -------------- --------------"
+	));
 }
 
 void
 scrypt_print_rowstats(const size_t memlimit, const size_t opslimit, const long double elapsed)
 {
-	(void) fprintf(stderr, "%10s %14zu %13LFs\n", memory_power2k_to_str(memlimit), opslimit, elapsed);
+	(void) bench_print(_("%10s %14zu %13LFs"), memory_power2k_to_str(memlimit), opslimit, elapsed);
 }
 
 bool ATHEME_FATTR_WUR
@@ -260,8 +282,12 @@ md_name_to_digest(const char *const restrict b_name)
 	else if (strcasecmp(b_name, "SHA2-512") == 0)
 		return DIGALG_SHA2_512;
 
-	(void) fprintf(stderr, "%s: '%s' is not a valid algorithm name\n", MOWGLI_FUNC_NAME, b_name);
-	(void) fprintf(stderr, "%s: valid names are: MD5, SHA1, SHA2-256, SHA2-512\n", MOWGLI_FUNC_NAME);
+	(void) bench_print("");
+	(void) bench_print(_(""
+		"%s: '%s' is not a valid algorithm name\n"
+		"    valid names are: MD5, SHA1, SHA2-256, SHA2-512\n"
+		"    please see --help\n"
+	), MOWGLI_FUNC_NAME, b_name);
 
 	exit(EXIT_FAILURE);
 }
@@ -269,15 +295,18 @@ md_name_to_digest(const char *const restrict b_name)
 void
 pbkdf2_print_colheaders(void)
 {
-	(void) fprintf(stderr, "%-16s %-10s %-14s\n", "Digest", "Iterations", "Elapsed");
-	(void) fprintf(stderr, "---------------- ---------- --------------\n");
+	(void) bench_print(_(""
+		"\n"
+		"Digest           Iterations     Elapsed\n"
+		"---------------- -------------- --------------"
+	));
 }
 
 void
 pbkdf2_print_rowstats(const enum digest_algorithm digest, const size_t iterations, const bool with_sasl_scram,
                       const long double elapsed)
 {
-	(void) fprintf(stderr, "%16s %10zu %13LFs\n", md_digest_to_name(digest, with_sasl_scram), iterations, elapsed);
+	(void) bench_print(_("%16s %14zu %13LFs"), md_digest_to_name(digest, with_sasl_scram), iterations, elapsed);
 }
 
 bool ATHEME_FATTR_WUR
@@ -298,7 +327,7 @@ benchmark_pbkdf2(const enum digest_algorithm digest, const size_t itercount, con
 	}
 	if (! digest_oneshot_pbkdf2(digest, passbuf, PASSLEN, saltbuf, PBKDF2_SALTLEN_DEF, itercount, hashbuf, mdlen))
 	{
-		(void) fprintf(stderr, "digest_oneshot_pbkdf2() failed\n");
+		(void) bench_print("digest_oneshot_pbkdf2() failed");
 		return false;
 	}
 	if (with_sasl_scram)
@@ -311,17 +340,17 @@ benchmark_pbkdf2(const enum digest_algorithm digest, const size_t itercount, con
 
 		if (! digest_oneshot_hmac(digest, hashbuf, mdlen, ServerKeyConstant, 10U, ServerKey, NULL))
 		{
-			(void) fprintf(stderr, "digest_oneshot_hmac(ServerKey) failed\n");
+			(void) bench_print("digest_oneshot_hmac(ServerKey) failed");
 			return false;
 		}
 		if (! digest_oneshot_hmac(digest, hashbuf, mdlen, ClientKeyConstant, 10U, ClientKey, NULL))
 		{
-			(void) fprintf(stderr, "digest_oneshot_hmac(ClientKey) failed\n");
+			(void) bench_print("digest_oneshot_hmac(ClientKey) failed");
 			return false;
 		}
 		if (! digest_oneshot(digest, ClientKey, mdlen, StoredKey, NULL))
 		{
-			(void) fprintf(stderr, "digest_oneshot() failed\n");
+			(void) bench_print("digest_oneshot() failed");
 			return false;
 		}
 	}

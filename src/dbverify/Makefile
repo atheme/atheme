@@ -6,6 +6,6 @@ include ../../buildsys.mk
 
 CPPFLAGS	+= -I../../include
 LDFLAGS		+= -L../../libathemecore
-LIBS		+= -lathemecore
+LIBS		+= $(LIBINTL) -lathemecore
 
 build: all

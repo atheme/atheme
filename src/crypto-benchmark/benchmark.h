@@ -34,6 +34,7 @@
 #  define HAVE_ANY_MEMORY_HARD_ALGORITHM 1
 #endif
 
+void bench_print(const char *, ...) ATHEME_FATTR_PRINTF(1, 2);
 bool benchmark_init(void) ATHEME_FATTR_WUR;
 
 #ifdef HAVE_ANY_MEMORY_HARD_ALGORITHM

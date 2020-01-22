@@ -12,6 +12,7 @@
 #include <atheme/attributes.h>      // ATHEME_FATTR_WUR
 #include <atheme/argon2.h>          // ATHEME_ARGON2_*
 #include <atheme/digest.h>          // DIGALG_*, digest_oneshot_pbkdf2()
+#include <atheme/i18n.h>            // _() (gettext)
 #include <atheme/pbkdf2.h>          // PBKDF2_*
 #include <atheme/scrypt.h>          // ATHEME_SCRYPT_*
 #include <atheme/stdheaders.h>      // (everything else)
@@ -29,10 +30,15 @@
 static bool ATHEME_FATTR_WUR
 do_optimal_argon2_benchmark(const long double optimal_clocklimit, const size_t optimal_memlimit)
 {
-	(void) fprintf(stderr, "Beginning automatic optimal Argon2 benchmark ...\n");
-	(void) fprintf(stderr, "\n");
-	(void) fprintf(stderr, "NOTE: This does not test multithreading. Use '-a -p' for thread testing.\n");
-	(void) fprintf(stderr, "\n");
+	(void) bench_print("");
+	(void) bench_print("");
+	(void) bench_print(_("Beginning automatic optimal Argon2 benchmark ..."));
+
+	(void) bench_print("");
+	(void) bench_print(_(""
+		"NOTICE: This does not test multithreading.\n"
+		"Use '-a -p' for thread testing."
+	));
 
 	(void) argon2_print_colheaders();
 
@@ -55,11 +61,9 @@ do_optimal_argon2_benchmark(const long double optimal_clocklimit, const size_t o
 	{
 		if (memcost <= ATHEME_ARGON2_MEMCOST_MIN)
 		{
-			(void) fprintf(stderr, "\n");
-			(void) fprintf(stderr, "    Reached minimum memory and time cost!\n");
-			(void) fprintf(stderr, "    Algorithm is still too slow; giving up.\n");
-			(void) fprintf(stderr, "\n");
-			(void) fflush(stderr);
+			(void) bench_print("");
+			(void) bench_print(_("Reached minimum memory and time cost!"));
+			(void) bench_print(_("Algorithm is still too slow; giving up."));
 			return true;
 		}
 
@@ -89,23 +93,19 @@ do_optimal_argon2_benchmark(const long double optimal_clocklimit, const size_t o
 		timecost = timecost_prev;
 	}
 
-	(void) fprintf(stderr, "\n");
-	(void) fprintf(stderr, "Recommended parameters:\n");
-	(void) fprintf(stderr, "\n");
-	(void) fflush(stderr);
+	(void) bench_print("");
+	(void) bench_print(_("Recommended parameters:"));
+	(void) bench_print("");
+
 	(void) fprintf(stdout, "crypto {\n");
-	(void) fprintf(stdout, "\t/* Target: %LFs; Benchmarked: %LFs */\n", optimal_clocklimit, elapsed);
+	(void) fprintf(stdout, _("\t/* Target: %LFs; Benchmarked: %LFs */\n"), optimal_clocklimit, elapsed);
 	(void) fprintf(stdout, "\targon2_type = \"%s\";\n", argon2_type2string(type, 0));
 	(void) fprintf(stdout, "\targon2_memcost = %zu; /* %s */ \n", memcost, memory_power2k_to_str(memcost));
 	(void) fprintf(stdout, "\targon2_timecost = %zu;\n", timecost);
 	(void) fprintf(stdout, "\targon2_threads = %zu;\n", threads);
 	(void) fprintf(stdout, "};\n");
 	(void) fflush(stdout);
-	(void) fsync(fileno(stdout));
-	(void) fprintf(stderr, "\n");
-	(void) fprintf(stderr, "\n");
-	(void) fprintf(stderr, "\n");
-	(void) fflush(stderr);
+
 	return true;
 }
 
@@ -116,8 +116,9 @@ do_optimal_argon2_benchmark(const long double optimal_clocklimit, const size_t o
 static bool ATHEME_FATTR_WUR
 do_optimal_scrypt_benchmark(const long double optimal_clocklimit, const size_t optimal_memlimit)
 {
-	(void) fprintf(stderr, "Beginning automatic optimal scrypt benchmark ...\n");
-	(void) fprintf(stderr, "\n");
+	(void) bench_print("");
+	(void) bench_print("");
+	(void) bench_print(_("Beginning automatic optimal scrypt benchmark ..."));
 
 	(void) scrypt_print_colheaders();
 
@@ -146,11 +147,9 @@ do_optimal_scrypt_benchmark(const long double optimal_clocklimit, const size_t o
 	{
 		if (memlimit <= ATHEME_SCRYPT_MEMLIMIT_MIN)
 		{
-			(void) fprintf(stderr, "\n");
-			(void) fprintf(stderr, "    Reached minimum memory limit!\n");
-			(void) fprintf(stderr, "    Algorithm is still too slow; giving up.\n");
-			(void) fprintf(stderr, "\n");
-			(void) fflush(stderr);
+			(void) bench_print("");
+			(void) bench_print(_("Reached minimum memory limit!"));
+			(void) bench_print(_("Algorithm is still too slow; giving up."));
 			return true;
 		}
 
@@ -181,21 +180,17 @@ do_optimal_scrypt_benchmark(const long double optimal_clocklimit, const size_t o
 		opslimit = opslimit_prev;
 	}
 
-	(void) fprintf(stderr, "\n");
-	(void) fprintf(stderr, "Recommended parameters:\n");
-	(void) fprintf(stderr, "\n");
-	(void) fflush(stderr);
+	(void) bench_print("");
+	(void) bench_print(_("Recommended parameters:"));
+	(void) bench_print("");
+
 	(void) fprintf(stdout, "crypto {\n");
-	(void) fprintf(stdout, "\t/* Target: %LFs; Benchmarked: %LFs */\n", optimal_clocklimit, elapsed);
+	(void) fprintf(stdout, _("\t/* Target: %LFs; Benchmarked: %LFs */\n"), optimal_clocklimit, elapsed);
 	(void) fprintf(stdout, "\tscrypt_memlimit = %zu; /* %s */ \n", memlimit, memory_power2k_to_str(memlimit));
 	(void) fprintf(stdout, "\tscrypt_opslimit = %zu;\n", opslimit);
 	(void) fprintf(stdout, "};\n");
 	(void) fflush(stdout);
-	(void) fsync(fileno(stdout));
-	(void) fprintf(stderr, "\n");
-	(void) fprintf(stderr, "\n");
-	(void) fprintf(stderr, "\n");
-	(void) fflush(stderr);
+
 	return true;
 }
 
@@ -204,29 +199,34 @@ do_optimal_scrypt_benchmark(const long double optimal_clocklimit, const size_t o
 static bool ATHEME_FATTR_WUR
 do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit, const bool with_sasl_scram)
 {
-	(void) fprintf(stderr, "Beginning automatic optimal PBKDF2 benchmark ...\n");
-	(void) fprintf(stderr, "\n");
+	(void) bench_print("");
+	(void) bench_print("");
+	(void) bench_print(_("Beginning automatic optimal PBKDF2 benchmark ..."));
 
 #if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_INTERNAL)
-	(void) fprintf(stderr, "WARNING: This program may perform significantly better if you build it\n");
-	(void) fprintf(stderr, "         against a supported third-party cryptographic digest library!\n");
-	(void) fprintf(stderr, "\n");
+	(void) bench_print("");
+	(void) bench_print(_(""
+		"NOTICE: This program may perform significantly better if you build it\n"
+		"        against a supported third-party cryptographic digest library!"
+	));
 #endif
 
 	if (! with_sasl_scram)
 	{
-		(void) fprintf(stderr, "WARNING: If you wish to support SASL SCRAM logins, please see the\n");
-		(void) fprintf(stderr, "         'doc/SASL-SCRAM' file in the source code repository, whose\n");
-		(void) fprintf(stderr, "         parameter advice takes precedence over the advice given by\n");
-		(void) fprintf(stderr, "         this benchmark utility! Pass -i to this utility to enable\n");
-		(void) fprintf(stderr, "         SASL SCRAM support and silence this warning.\n");
-		(void) fprintf(stderr, "\n");
+		(void) bench_print("");
+		(void) bench_print(_(""
+			"WARNING: If you wish to support SASL SCRAM (RFC 5802) logins, please see\n"
+			"         the 'doc/SASL-SCRAM' file in the source code repository, whose\n"
+			"         parameter advice takes precedence over the advice given by this\n"
+			"         benchmark utility! Pass -i to this utility to enable SASL SCRAM\n"
+			"         support and silence this warning."
+		));
 	}
 
 	const size_t initial = ((with_sasl_scram) ? CYRUS_SASL_ITERCNT_MAX : PBKDF2_ITERCNT_MAX);
 
-	(void) fprintf(stderr, "Selecting iterations starting point: %zu\n", initial);
-	(void) fprintf(stderr, "\n");
+	(void) bench_print("");
+	(void) bench_print(_("Selecting iterations starting point: %zu"), initial);
 
 	(void) pbkdf2_print_colheaders();
 
@@ -247,8 +247,6 @@ do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit, const bool wit
 	if (! benchmark_pbkdf2(DIGALG_SHA2_512, initial, with_sasl_scram, &elapsed_sha512))
 		// This function logs error messages on failure
 		return false;
-
-	(void) fprintf(stderr, "\n");
 
 	/* This if / else if / else intentionally does not consider SHA1, which could hardly
 	 * be considered "optimal"! Always recommend SCRAM-SHA-256 over SCRAM-SHA-512 due to
@@ -277,55 +275,47 @@ do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit, const bool wit
 	iterations = BENCH_MAX(PBKDF2_ITERCNT_MIN, iterations);
 
 	if (with_sasl_scram)
+		// The adjustments above might have raised it above the recommended maximum
 		iterations = BENCH_MIN(CYRUS_SASL_ITERCNT_MAX, iterations);
 
-	(void) fprintf(stderr, "Selecting optimal algorithm: %s\n", mdname);
+	(void) bench_print("");
+	(void) bench_print(_("Selecting optimal algorithm: %s"), mdname);
 
-	if (iterations != initial)
-	{
-		(void) fprintf(stderr, "\n");
-
+	if (iterations != initial || elapsed > optimal_clocklimit)
 		(void) pbkdf2_print_colheaders();
+
+	if (iterations != initial && ! benchmark_pbkdf2(md, iterations, with_sasl_scram, &elapsed))
+		// This function logs error messages on failure
+		return false;
+
+	while (elapsed > optimal_clocklimit)
+	{
+		if (iterations <= PBKDF2_ITERCNT_MIN)
+		{
+			(void) bench_print("");
+			(void) bench_print(_("Reached minimum iteration count!"));
+			(void) bench_print(_("Algorithm is still too slow; giving up."));
+			return true;
+		}
+
+		iterations -= (1000U - (iterations % 1000U));
 
 		if (! benchmark_pbkdf2(md, iterations, with_sasl_scram, &elapsed))
 			// This function logs error messages on failure
 			return false;
-
-		while (elapsed > optimal_clocklimit)
-		{
-			if (iterations <= PBKDF2_ITERCNT_MIN)
-			{
-				(void) fprintf(stderr, "\n");
-				(void) fprintf(stderr, "    Reached minimum iteration count!\n");
-				(void) fprintf(stderr, "    Algorithm is still too slow; giving up.\n");
-				(void) fprintf(stderr, "\n");
-				(void) fflush(stderr);
-				return true;
-			}
-
-			iterations -= 1000U;
-
-			if (! benchmark_pbkdf2(md, iterations, with_sasl_scram, &elapsed))
-				// This function logs error messages on failure
-				return false;
-		}
 	}
 
-	(void) fprintf(stderr, "\n");
-	(void) fprintf(stderr, "Recommended parameters:\n");
-	(void) fprintf(stderr, "\n");
-	(void) fflush(stderr);
+	(void) bench_print("");
+	(void) bench_print(_("Recommended parameters:"));
+	(void) bench_print("");
+
 	(void) fprintf(stdout, "crypto {\n");
-	(void) fprintf(stdout, "\t/* Target: %LFs; Benchmarked: %LFs */\n", optimal_clocklimit, elapsed);
+	(void) fprintf(stdout, _("\t/* Target: %LFs; Benchmarked: %LFs */\n"), optimal_clocklimit, elapsed);
 	(void) fprintf(stdout, "\tpbkdf2v2_digest = \"%s\";\n", mdname);
 	(void) fprintf(stdout, "\tpbkdf2v2_rounds = %zu;\n", iterations);
 	(void) fprintf(stdout, "};\n");
 	(void) fflush(stdout);
-	(void) fsync(fileno(stdout));
-	(void) fprintf(stderr, "\n");
-	(void) fprintf(stderr, "\n");
-	(void) fprintf(stderr, "\n");
-	(void) fflush(stderr);
+
 	return true;
 }
 
@@ -336,10 +326,12 @@ do_optimal_benchmarks(const long double optimal_clocklimit, const size_t ATHEME_
 #ifdef HAVE_ANY_MEMORY_HARD_ALGORITHM
 	if (! optimal_memlimit_given)
 	{
-		(void) fprintf(stderr, "Be sure to specify -L/--optimal-memory-limit appropriately for this machine!\n");
-		(void) fprintf(stderr, "\n");
-		(void) fprintf(stderr, "\n");
-		(void) fprintf(stderr, "\n");
+		(void) bench_print("");
+		(void) bench_print("");
+		(void) bench_print(_(""
+			"NOTICE: Please be sure to specify -l/--optimal-memory-limit\n"
+			"        appropriately for this machine!"
+		));
 	}
 #endif
 
@@ -359,5 +351,6 @@ do_optimal_benchmarks(const long double optimal_clocklimit, const size_t ATHEME_
 		// This function logs error messages on failure
 		return false;
 
+	(void) fsync(fileno(stdout));
 	return true;
 }

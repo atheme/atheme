@@ -11,6 +11,7 @@
 
 #include <atheme/argon2.h>          // ATHEME_ARGON2_*
 #include <atheme/digest.h>          // DIGALG_*
+#include <atheme/i18n.h>            // _() (gettext)
 #include <atheme/memory.h>          // sreallocarray()
 #include <atheme/pbkdf2.h>          // PBKDF2_*
 #include <atheme/scrypt.h>          // ATHEME_SCRYPT_*
@@ -115,72 +116,47 @@ static const mowgli_getopt_option_t bench_long_opts[] = {
 static inline void
 print_version(void)
 {
-	(void) fprintf(stderr, "\n");
-	(void) fprintf(stderr, "%s (Cryptographic Benchmarking Utility)\n", PACKAGE_STRING);
-	(void) fprintf(stderr, "Using digest frontend: %s\n", digest_get_frontend_info());
+	(void) bench_print("");
+	(void) bench_print(_("%s (Cryptographic Benchmarking Utility)"), PACKAGE_STRING);
 }
 
 static inline void
 print_usage(void)
 {
-	(void) fprintf(stderr, "\n"
-	"  Usage: " PACKAGE_TARNAME "-crypto-benchmark -h\n"
-	"         " PACKAGE_TARNAME "-crypto-benchmark -v\n"
-	"         " PACKAGE_TARNAME "-crypto-benchmark -o [-g ...] [-l ...] [-i]\n"
-#ifdef HAVE_LIBARGON2
-	"         " PACKAGE_TARNAME "-crypto-benchmark -a [-n ...] [-m ...] [-t ...] [-p ...]\n"
-#endif
-#ifdef HAVE_LIBSODIUM_SCRYPT
-	"         " PACKAGE_TARNAME "-crypto-benchmark -s [-e ...] [-f ...]\n"
-#endif
-	"         " PACKAGE_TARNAME "-crypto-benchmark -k [-c ...] [-d ...] [-i]\n"
-	"\n"
-	"  -h/--help                    Display this help information and exit\n"
-	"  -v/--version                 Display program version and exit\n"
-	"\n"
-	"  -o/--run-optimal-benchmarks  Perform an automatic parameter tuning benchmark:\n"
-	"  -g/--optimal-clock-limit       Wall clock time limit for optimal benchmarks\n"
-	"                                   (in seconds, fractional values accepted)\n"
-#ifdef HAVE_ANY_MEMORY_HARD_ALGORITHM
-	"  -l/--optimal-memory-limit      Memory limit for optimal benchmarking\n"
-	"                                   (as a power of 2, in KiB)\n"
-	"                                   For example, '-l 16' means 2^16 KiB; 64 MiB\n"
-#else
-	"  -l/--optimal-memory-limit      Unsupported\n"
-#endif
-#ifdef HAVE_LIBIDN
-	"  -i/--with-sasl-scram           Indicate that you wish to deploy SASL SCRAM\n"
-	"                                   This changes the PBKDF2 configuration advice\n"
-#else
-	"  -i/--with-sasl-scram           Unsupported\n"
-#endif
-	"\n"
-	"    If one of the above limits are not given, defaults are used.\n"
-#ifdef HAVE_LIBARGON2
-	"\n"
-	"  -a/--run-argon2-benchmarks   Benchmark the Argon2 code with configurations:\n"
-	"  -n/--argon2-types              Comma-separated types\n"
-	"  -m/--argon2-memory-costs       Comma-separated memory costs\n"
-	"  -t/--argon2-time-costs         Comma-separated time costs\n"
-	"  -p/--argon2-threads            Comma-separated thread counts\n"
-	"\n"
-	"    Valid types are: Argon2d, Argon2i, Argon2id (case-insensitive)\n"
-#endif
-#ifdef HAVE_LIBSODIUM_SCRYPT
-	"\n"
-	"  -s/--run-scrypt-benchmarks   Benchmark the scrypt code with configurations:\n"
-	"  -e/--scrypt-memlimits          Comma-separated memlimits\n"
-	"  -f/--scrypt-opslimits          Comma-separated opslimits\n"
-#endif
-	"\n"
-	"  -k/--run-pbkdf2-benchmarks   Benchmark the PBKDF2 code with configurations:\n"
-	"  -c/--pbkdf2-iterations         Comma-separated iteration counts\n"
-	"  -d/--pbkdf2-digests            Comma-separated digest algorithms\n"
-	"\n"
-	"    Valid digests are: MD5, SHA1, SHA2-256, SHA2-512 (case-insensitive)\n"
-	"\n"
-	"    If one of the comma-separated options are not given, defaults are used.\n"
-	"\n");
+	(void) bench_print(_(""
+		"\n"
+		"  -h/--help                    Display this help information and exit\n"
+		"  -v/--version                 Display program version and exit\n"
+		"\n"
+		"  -o/--run-optimal-benchmarks  Perform an automatic parameter tuning benchmark:\n"
+		"  -g/--optimal-clock-limit       Wall clock time limit for optimal benchmarks\n"
+		"                                   (in seconds, fractional values accepted)\n"
+		"  -l/--optimal-memory-limit      Memory limit for optimal benchmarking\n"
+		"                                   (as a power of 2, in KiB)\n"
+		"                                   For example, '-l 16' means 2^16 KiB; 64 MiB\n"
+		"  -i/--with-sasl-scram           Indicate that you wish to deploy SASL SCRAM\n"
+		"                                   This changes the PBKDF2 configuration advice\n"
+		"\n"
+		"  -a/--run-argon2-benchmarks   Benchmark the Argon2 code with configurations:\n"
+		"  -n/--argon2-types              Comma-separated types\n"
+		"  -m/--argon2-memory-costs       Comma-separated memory costs\n"
+		"  -t/--argon2-time-costs         Comma-separated time costs\n"
+		"  -p/--argon2-threads            Comma-separated thread counts\n"
+		"\n"
+		"  -s/--run-scrypt-benchmarks   Benchmark the scrypt code with configurations:\n"
+		"  -e/--scrypt-memlimits          Comma-separated memlimits\n"
+		"  -f/--scrypt-opslimits          Comma-separated opslimits\n"
+		"\n"
+		"  -k/--run-pbkdf2-benchmarks   Benchmark the PBKDF2 code with configurations:\n"
+		"  -c/--pbkdf2-iterations         Comma-separated iteration counts\n"
+		"  -d/--pbkdf2-digests            Comma-separated digest algorithms\n"
+		"\n"
+		"  Valid Argon2 types are: Argon2d, Argon2i, Argon2id (case-insensitive)\n"
+		"  Valid PBKDF2 digests are: MD5, SHA1, SHA2-256, SHA2-512 (case-insensitive)\n"
+		"\n"
+		"  If one of the above customisable options are not given, defaults are used.\n"
+		"  One of -h/-v/-o/-a/-s/-k MUST be given. They are all mutually-exclusive.\n"
+	));
 }
 
 static inline bool
@@ -201,8 +177,11 @@ process_uint_option(const int sw, const char *const restrict val, size_t **const
 
 		if (! string_to_uint(tok, &b_value) || b_value < val_min || b_value > val_max)
 		{
-			(void) fprintf(stderr, "'%s' is not a valid value for integer option '%c'\n", tok, sw);
-			(void) fprintf(stderr, "range of valid values: %u to %u (inclusive)\n", val_min, val_max);
+			(void) bench_print(_(""
+				"'%s' is not a valid value for integer option '%c'\n"
+				"range of valid values: %u to %u (inclusive)\n"
+			), tok, sw, val_min, val_max);
+
 			return false;
 		}
 		if (! (*arr = sreallocarray(*arr, (*arr_len) + 1, sizeof **arr)))
@@ -268,16 +247,20 @@ process_options(int argc, char *argv[])
 
 				if (! ret || (end && *end) || errno != 0)
 				{
-					(void) fprintf(stderr, "'%s' is not a valid value for decimal option '%c'\n",
-					                       mowgli_optarg, c);
+					(void) bench_print(_(""
+						"'%s' is not a valid value for decimal option '%c'\n"
+						"range of valid values: %LF to %LF (inclusive)\n"
+					), mowgli_optarg, c, BENCH_CLOCKTIME_MIN, BENCH_CLOCKTIME_MAX);
+
 					return false;
 				}
 				if (ret < BENCH_CLOCKTIME_MIN || ret > BENCH_CLOCKTIME_MAX)
 				{
-					(void) fprintf(stderr, "'%s' is not a valid value for decimal option '%c'\n",
-					                       mowgli_optarg, c);
-					(void) fprintf(stderr, "range of valid values: %LF to %LF (inclusive)\n",
-					                       BENCH_CLOCKTIME_MIN, BENCH_CLOCKTIME_MAX);
+					(void) bench_print(_(""
+						"'%s' is not a valid value for decimal option '%c'\n"
+						"range of valid values: %LF to %LF (inclusive)\n"
+					), mowgli_optarg, c, BENCH_CLOCKTIME_MIN, BENCH_CLOCKTIME_MAX);
+
 					return false;
 				}
 
@@ -295,18 +278,20 @@ process_options(int argc, char *argv[])
 			case 'l':
 				if (! string_to_uint(mowgli_optarg, &optimal_memlimit))
 				{
-					(void) fprintf(stderr, "'%s' is not a valid value for integer option '%c'\n",
-					                       mowgli_optarg, c);
-					(void) fprintf(stderr, "range of valid values: %u to %u (inclusive)\n",
-					                       BENCH_MEMLIMIT_MIN, BENCH_MEMLIMIT_MAX);
+					(void) bench_print(_(""
+						"'%s' is not a valid value for integer option '%c'\n"
+						"range of valid values: %u to %u (inclusive)\n"
+					), mowgli_optarg, c, BENCH_MEMLIMIT_MIN, BENCH_MEMLIMIT_MAX);
+
 					return false;
 				}
 				if (optimal_memlimit < BENCH_MEMLIMIT_MIN || optimal_memlimit > BENCH_MEMLIMIT_MAX)
 				{
-					(void) fprintf(stderr, "'%u' is not a valid value for integer option '%c'\n",
-					                       optimal_memlimit, c);
-					(void) fprintf(stderr, "range of valid values: %u to %u (inclusive)\n",
-					                       BENCH_MEMLIMIT_MIN, BENCH_MEMLIMIT_MAX);
+					(void) bench_print(_(""
+						"'%s' is not a valid value for integer option '%c'\n"
+						"range of valid values: %u to %u (inclusive)\n"
+					), mowgli_optarg, c, BENCH_MEMLIMIT_MIN, BENCH_MEMLIMIT_MAX);
+
 					return false;
 				}
 				optimal_memlimit_given = true;
@@ -444,8 +429,8 @@ process_options(int argc, char *argv[])
 	if (! run_options || (run_options & (run_options - 1U)))
 	{
 		(void) print_usage();
-		(void) fprintf(stderr, "Error: Conflicting options (or no options) given.\n");
-		(void) fprintf(stderr, "\n");
+		(void) bench_print(_("Error: Conflicting options (or no options) given. Exiting."));
+		(void) bench_print("");
 		return false;
 	}
 
@@ -504,10 +489,9 @@ process_options(int argc, char *argv[])
 static bool ATHEME_FATTR_WUR
 do_argon2_benchmarks(void)
 {
-	(void) fprintf(stderr, "\n");
-	(void) fprintf(stderr, "Beginning Argon2 benchmark ...\n");
-	(void) fprintf(stderr, "\n");
-
+	(void) bench_print("");
+	(void) bench_print("");
+	(void) bench_print(_("Beginning customizable Argon2 benchmark ..."));
 	(void) argon2_print_colheaders();
 
 	for (size_t b_argon2_type = 0; b_argon2_type < b_argon2_types_count; b_argon2_type++)
@@ -519,8 +503,6 @@ do_argon2_benchmarks(void)
 	          // This function logs error messages on failure
 	          return false;
 
-	(void) fprintf(stderr, "\n");
-	(void) fprintf(stderr, "\n");
 	return true;
 }
 
@@ -531,10 +513,9 @@ do_argon2_benchmarks(void)
 static bool ATHEME_FATTR_WUR
 do_scrypt_benchmarks(void)
 {
-	(void) fprintf(stderr, "\n");
-	(void) fprintf(stderr, "Beginning scrypt benchmark ...\n");
-	(void) fprintf(stderr, "\n");
-
+	(void) bench_print("");
+	(void) bench_print("");
+	(void) bench_print(_("Beginning customizable scrypt benchmark ..."));
 	(void) scrypt_print_colheaders();
 
 	for (size_t b_scrypt_memlimit = 0; b_scrypt_memlimit < b_scrypt_memlimits_count; b_scrypt_memlimit++)
@@ -543,8 +524,6 @@ do_scrypt_benchmarks(void)
 	      // This function logs error messages on failure
 	      return false;
 
-	(void) fprintf(stderr, "\n");
-	(void) fprintf(stderr, "\n");
 	return true;
 }
 
@@ -553,18 +532,19 @@ do_scrypt_benchmarks(void)
 static bool ATHEME_FATTR_WUR
 do_pbkdf2_benchmarks(void)
 {
-	(void) fprintf(stderr, "\n");
-	(void) fprintf(stderr, "Beginning PBKDF2 benchmark ...\n");
-	(void) fprintf(stderr, "\n");
+	(void) bench_print("");
+	(void) bench_print("");
+	(void) bench_print(_("Beginning customizable PBKDF2 benchmark ..."));
 
 	for (size_t b_pbkdf2_itercount = 0; b_pbkdf2_itercount < b_pbkdf2_itercounts_count; b_pbkdf2_itercount++)
 	{
 		if (with_sasl_scram && b_pbkdf2_itercounts[b_pbkdf2_itercount] > CYRUS_SASL_ITERCNT_MAX)
 		{
-			(void) fprintf(stderr, "WARNING: Cyrus SASL clients will not perform more than %u\n",
-			                                 CYRUS_SASL_ITERCNT_MAX);
-			(void) fprintf(stderr, "         iterations! This may break SASL SCRAM compatibility.\n");
-			(void) fprintf(stderr, "\n");
+			(void) bench_print("");
+			(void) bench_print(_(""
+				"WARNING: Cyrus SASL clients will not perform more than %u\n"
+				"         iterations! This may break SASL SCRAM compatibility."
+			), CYRUS_SASL_ITERCNT_MAX);
 
 			break;
 		}
@@ -579,8 +559,6 @@ do_pbkdf2_benchmarks(void)
 	      // This function logs error messages on failure
 	      return false;
 
-	(void) fprintf(stderr, "\n");
-	(void) fprintf(stderr, "\n");
 	return true;
 }
 
@@ -596,6 +574,9 @@ main(int argc, char *argv[])
 	if (! process_options(argc, argv))
 		// This function logs error messages on failure
 		return EXIT_FAILURE;
+
+	(void) bench_print("");
+	(void) bench_print(_("Using digest frontend: %s"), digest_get_frontend_info());
 
 	if ((run_options & BENCH_RUN_OPTIONS_OPTIMAL) &&
 	    ! do_optimal_benchmarks(optimal_clocklimit, optimal_memlimit, optimal_memlimit_given, with_sasl_scram))

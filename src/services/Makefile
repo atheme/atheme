@@ -7,7 +7,7 @@ include ../../buildsys.mk
 
 CPPFLAGS	+= -I../../include
 LDFLAGS		+= -L../../libathemecore
-LIBS		+= -lathemecore
+LIBS		+= $(LIBINTL) -lathemecore
 
 build: all ../../dist/atheme.conf.userserv-example ../../dist/atheme.conf.operserv-example
 

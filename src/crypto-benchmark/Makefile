@@ -7,6 +7,6 @@ include ../../buildsys.mk
 CPPFLAGS	+= -I../../include
 LDFLAGS		+= -L../../libathemecore
 CFLAGS		+= $(LIBARGON2_CFLAGS) $(LIBSODIUM_CFLAGS)
-LIBS		+= $(LIBARGON2_LIBS) $(LIBSODIUM_LIBS) $(LIBRT_LIBS) -lathemecore
+LIBS		+= $(LIBARGON2_LIBS) $(LIBSODIUM_LIBS) $(LIBRT_LIBS) $(LIBINTL) -lathemecore
 
 build: all
