@@ -57,9 +57,6 @@ anope_enc_sha256_verify(const char *const restrict password, const char *const r
 	char iv64[BUFSIZE];
 	char md64[BUFSIZE];
 
-	(void) memset(iv64, 0x00, sizeof iv64);
-	(void) memset(md64, 0x00, sizeof md64);
-
 	if (sscanf(parameters, MODULE_HASH_FORMAT, iv64, md64) != 2)
 		return false;
 
