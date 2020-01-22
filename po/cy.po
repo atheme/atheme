@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <ircs://chat.freenode.net:6697/atheme-i18n>\n"
-"POT-Creation-Date: 2019-10-10 06:40+0000\n"
+"POT-Creation-Date: 2020-01-22 01:10+0000\n"
 "PO-Revision-Date: 2011-10-30 19:12+0000\n"
 "Last-Translator: nenolod <nenolod@dereferenced.org>\n"
 "Language-Team: \n"
@@ -41,7 +41,7 @@ msgstr "Diwethaf a ddefnyddir: %s (%s yn ôl)"
 msgid "%s allows for simple channel operator management."
 msgstr "%s yn caniatáu ar gyfer weithredwr sianel rheoli syml."
 
-#: modules/alis/main.c:401
+#: modules/alis/main.c:406
 #, fuzzy, c-format
 msgid ""
 "%s allows searching for channels with more\n"
@@ -96,7 +96,7 @@ msgstr ""
 msgid "%s allows users to view informational messages."
 msgstr ""
 
-#: modules/operserv/rwatch.c:202
+#: modules/operserv/rwatch.c:201
 #, c-format
 msgid "%s already found in regex watch list; not adding."
 msgstr ""
@@ -182,11 +182,6 @@ msgstr ""
 msgid "%s can now bypass registration limits."
 msgstr ""
 
-#: modules/chanserv/set_founder.c:195
-#, c-format
-msgid "%s can now take ownership of %s."
-msgstr "Gall %s bellach yn cymryd perchnogaeth o'r %s."
-
 #: include/atheme/constants.h:94
 #, c-format
 msgid "%s can only be executed via IRC."
@@ -240,7 +235,7 @@ msgid "%s does not exist."
 msgstr "Nid %s Rôl yn bodoli."
 
 #: modules/botserv/bottalk.c:63 modules/botserv/bottalk.c:130
-#: modules/botserv/main.c:887
+#: modules/botserv/main.c:884
 #, c-format
 msgid "%s does not have a bot assigned."
 msgstr "Nid %s oes gan bot neilltuo."
@@ -272,7 +267,7 @@ msgstr "Nid %s oes gan bot neilltuo."
 msgid "%s does not wish to have flags in any groups."
 msgstr ""
 
-#: modules/memoserv/forward.c:71 modules/memoserv/send.c:89
+#: modules/memoserv/forward.c:72 modules/memoserv/send.c:89
 #, fuzzy, c-format
 msgid "%s does not wish to receive memos."
 msgstr "Nid %s oes gan bot neilltuo."
@@ -507,7 +502,7 @@ msgid "%s has too many accounts registered."
 msgstr ""
 
 #: modules/chanserv/access.c:853 modules/chanserv/access.c:1002
-#: modules/chanserv/flags.c:414 modules/chanserv/set_founder.c:102
+#: modules/chanserv/flags.c:414
 #, c-format
 msgid "%s has too many channels registered."
 msgstr "%s wedi gormod o sianeli cofrestredig."
@@ -533,12 +528,12 @@ msgstr ""
 msgid "%s is a permanent module; it cannot be unloaded."
 msgstr ""
 
-#: modules/botserv/main.c:512 modules/botserv/main.c:581
+#: modules/botserv/main.c:509 modules/botserv/main.c:578
 #, c-format
 msgid "%s is a registered nick."
 msgstr "%s yn llysenw cofrestredig."
 
-#: modules/botserv/main.c:505 modules/botserv/main.c:590
+#: modules/botserv/main.c:502 modules/botserv/main.c:587
 #, c-format
 msgid "%s is already a bot or service."
 msgstr "%s eisoes yn bot neu wasanaeth."
@@ -548,7 +543,7 @@ msgstr "%s eisoes yn bot neu wasanaeth."
 msgid "%s is already a member of %s."
 msgstr "%s eisoes yn sylfaenydd %s."
 
-#: modules/botserv/main.c:838
+#: modules/botserv/main.c:835
 #, c-format
 msgid "%s is already assigned to %s."
 msgstr "%s eisoes yn cael ei neilltuo i %s."
@@ -642,7 +637,7 @@ msgstr "%s eisoes yn bot neu wasanaeth."
 msgid "%s is already the active vhost for your nick."
 msgstr "%s eisoes yn bot neu wasanaeth."
 
-#: modules/chanserv/ftransfer.c:51 modules/chanserv/set_founder.c:160
+#: modules/chanserv/ftransfer.c:51
 #, c-format
 msgid "%s is already the founder of %s."
 msgstr "%s eisoes yn sylfaenydd %s."
@@ -652,27 +647,27 @@ msgstr "%s eisoes yn sylfaenydd %s."
 msgid "%s is an internal client."
 msgstr ""
 
-#: modules/botserv/main.c:523 modules/botserv/main.c:598
+#: modules/botserv/main.c:520 modules/botserv/main.c:595
 #, c-format
 msgid "%s is an invalid nickname."
 msgstr "%s yn llysenw annilys."
 
-#: modules/botserv/main.c:615
+#: modules/botserv/main.c:612
 #, fuzzy, c-format
 msgid "%s is an invalid realname, not changing it."
 msgstr "%s yn iawn annilys, nid ei newid"
 
-#: modules/botserv/main.c:538
+#: modules/botserv/main.c:535
 #, c-format
 msgid "%s is an invalid realname."
 msgstr "%s yn realname annilys."
 
-#: modules/botserv/main.c:625
+#: modules/botserv/main.c:622
 #, c-format
 msgid "%s is an invalid username, not changing it."
 msgstr "%s yn defnyddiwr annilys, nid ei newid."
 
-#: modules/botserv/main.c:529
+#: modules/botserv/main.c:526
 #, c-format
 msgid "%s is an invalid username."
 msgstr "%s yn enw defnyddiwr annilys."
@@ -687,11 +682,6 @@ msgstr ""
 #, c-format
 msgid "%s is closed."
 msgstr "%s ar gau."
-
-#: modules/chanserv/set_founder.c:108
-#, c-format
-msgid "%s is closed; it cannot be transferred."
-msgstr "%s wedi cau; ni ellir ei drosglwyddo."
 
 #: include/atheme/constants.h:89
 #, c-format
@@ -761,13 +751,13 @@ msgstr ""
 msgid "%s is no longer set to NOFIX."
 msgstr "%s yn cael ei gynnal bellach."
 
-#: modules/botserv/main.c:575 modules/botserv/main.c:676
-#: modules/botserv/main.c:826 modules/botserv/set_private.c:35
+#: modules/botserv/main.c:572 modules/botserv/main.c:673
+#: modules/botserv/main.c:823 modules/botserv/set_private.c:33
 #, c-format
 msgid "%s is not a bot."
 msgstr "Nid %s yn bot."
 
-#: modules/nickserv/list.c:226
+#: modules/nickserv/list.c:230
 #, fuzzy, c-format
 msgid "%s is not a recognized LIST criterion"
 msgstr "Nid %s yn sianel cofrestredig."
@@ -1041,7 +1031,7 @@ msgstr ""
 msgid "%s is protected from kicks; you cannot kick them."
 msgstr "%s yn cael ei ddiogelu rhag cychwyn; nad ydych yn gallu eu cicio."
 
-#: modules/chanserv/quiet.c:128
+#: modules/chanserv/quiet.c:131
 #, fuzzy, c-format
 msgid "%s is protected from quiets; you cannot quiet them."
 msgstr "%s yn cael ei ddiogelu rhag cychwyn; nad ydych yn gallu eu cicio."
@@ -1071,7 +1061,7 @@ msgstr ""
 msgid "%s not found in clone exempt list."
 msgstr ""
 
-#: modules/operserv/rwatch.c:286 modules/operserv/rwatch.c:436
+#: modules/operserv/rwatch.c:285 modules/operserv/rwatch.c:435
 #, c-format
 msgid "%s not found in regex watch list."
 msgstr ""
@@ -1161,12 +1151,12 @@ msgstr ""
 msgid "%u bans found."
 msgstr ""
 
-#: modules/botserv/main.c:761
+#: modules/botserv/main.c:758
 #, fuzzy, c-format
 msgid "%u bot available."
 msgstr "%d botiau sydd ar gael."
 
-#: modules/botserv/main.c:761
+#: modules/botserv/main.c:758
 #, fuzzy, c-format
 msgid "%u bots available."
 msgstr "%d botiau sydd ar gael."
@@ -1232,7 +1222,7 @@ msgid "%u match for %s AKILLed."
 msgstr "%d cyfatebol ar gyfer meini prawf %s"
 
 #: modules/chanfix/fix.c:428 modules/chanserv/list.c:238
-#: modules/nickserv/list.c:296
+#: modules/nickserv/list.c:300
 #, fuzzy, c-format
 msgid "%u match for criteria %s."
 msgstr "%d cyfatebol ar gyfer meini prawf %s"
@@ -1265,7 +1255,7 @@ msgid "%u matches for %s AKILLed."
 msgstr "Gemau %d ar gyfer meini prawf %s"
 
 #: modules/chanfix/fix.c:429 modules/chanserv/list.c:239
-#: modules/nickserv/list.c:297
+#: modules/nickserv/list.c:301
 #, fuzzy, c-format
 msgid "%u matches for criteria %s."
 msgstr "Gemau %d ar gyfer meini prawf %s"
@@ -1288,7 +1278,7 @@ msgstr "Gemau %d ar gyfer meini prawf %s"
 msgid "%u modules loaded."
 msgstr ""
 
-#: modules/botserv/main.c:774
+#: modules/botserv/main.c:771
 #, fuzzy, c-format
 msgid "%u private bots available."
 msgstr "%d botiau preifat ar gael."
@@ -1387,39 +1377,112 @@ msgid ""
 "the future instead."
 msgstr ""
 
-#: modules/botserv/info.c:102
+#: src/crypto-benchmark/optimal.c:101 src/crypto-benchmark/optimal.c:188
+#: src/crypto-benchmark/optimal.c:313
+#, c-format
+msgid "\t/* Target: %LFs; Benchmarked: %LFs */\n"
+msgstr ""
+
+#: src/crypto-benchmark/main.c:126
+msgid ""
+"\n"
+"  -h/--help                    Display this help information and exit\n"
+"  -v/--version                 Display program version and exit\n"
+"\n"
+"  -o/--run-optimal-benchmarks  Perform an automatic parameter tuning "
+"benchmark:\n"
+"  -g/--optimal-clock-limit       Wall clock time limit for optimal "
+"benchmarks\n"
+"                                   (in seconds, fractional values accepted)\n"
+"  -l/--optimal-memory-limit      Memory limit for optimal benchmarking\n"
+"                                   (as a power of 2, in KiB)\n"
+"                                   For example, '-l 16' means 2^16 KiB; 64 "
+"MiB\n"
+"  -i/--with-sasl-scram           Indicate that you wish to deploy SASL "
+"SCRAM\n"
+"                                   This changes the PBKDF2 configuration "
+"advice\n"
+"\n"
+"  -a/--run-argon2-benchmarks   Benchmark the Argon2 code with "
+"configurations:\n"
+"  -n/--argon2-types              Comma-separated types\n"
+"  -m/--argon2-memory-costs       Comma-separated memory costs\n"
+"  -t/--argon2-time-costs         Comma-separated time costs\n"
+"  -p/--argon2-threads            Comma-separated thread counts\n"
+"\n"
+"  -s/--run-scrypt-benchmarks   Benchmark the scrypt code with "
+"configurations:\n"
+"  -e/--scrypt-memlimits          Comma-separated memlimits\n"
+"  -f/--scrypt-opslimits          Comma-separated opslimits\n"
+"\n"
+"  -k/--run-pbkdf2-benchmarks   Benchmark the PBKDF2 code with "
+"configurations:\n"
+"  -c/--pbkdf2-iterations         Comma-separated iteration counts\n"
+"  -d/--pbkdf2-digests            Comma-separated digest algorithms\n"
+"\n"
+"  Valid Argon2 types are: Argon2d, Argon2i, Argon2id (case-insensitive)\n"
+"  Valid PBKDF2 digests are: MD5, SHA1, SHA2-256, SHA2-512 (case-"
+"insensitive)\n"
+"\n"
+"  If one of the above customisable options are not given, defaults are "
+"used.\n"
+"  One of -h/-v/-o/-a/-s/-k MUST be given. They are all mutually-exclusive.\n"
+msgstr ""
+
+#: src/crypto-benchmark/benchmark.c:298
+msgid ""
+"\n"
+"Digest           Iterations     Elapsed\n"
+"---------------- -------------- --------------"
+msgstr ""
+
+#: src/crypto-benchmark/benchmark.c:185
+msgid ""
+"\n"
+"MemLimit   OpsLimit       Elapsed\n"
+"---------- -------------- --------------"
+msgstr ""
+
+#: src/crypto-benchmark/benchmark.c:111
+msgid ""
+"\n"
+"Type       MemCost    TimeCost   Threads    Elapsed\n"
+"---------- ---------- ---------- ---------- --------------"
+msgstr ""
+
+#: modules/botserv/info.c:100
 #, c-format
 msgid "          Options : %s"
 msgstr "Dewisiadau: %s"
 
-#: modules/botserv/info.c:82
+#: modules/botserv/info.c:80
 #, c-format
 msgid "         Bot nick : %s"
 msgstr "Bot llysenw: %s"
 
-#: modules/botserv/info.c:84
+#: modules/botserv/info.c:82
 msgid "         Bot nick : not assigned yet"
 msgstr "Bot llysenw: Nid yw eto a bennwyd"
 
-#: modules/botserv/info.c:51
+#: modules/botserv/info.c:49
 #, c-format
 msgid "     Mask : %s@%s"
 msgstr "Mwgwd: %s@%s"
 
-#: modules/botserv/info.c:56
+#: modules/botserv/info.c:54
 #, c-format
 msgid "  Created : %s (%s ago)"
 msgstr "Creu: %s (%s yn ôl)"
 
-#: modules/botserv/info.c:60
+#: modules/botserv/info.c:58
 msgid "  Options : None"
 msgstr "Dewisiadau: Dim"
 
-#: modules/botserv/info.c:58
+#: modules/botserv/info.c:56
 msgid "  Options : Private"
 msgstr "Dewisiadau: Preifat"
 
-#: modules/botserv/info.c:61
+#: modules/botserv/info.c:59
 #, c-format
 msgid "  Used on : %zu channel(s)"
 msgstr "Eu defnyddio ar: %zu sianel (au)"
@@ -1546,6 +1609,21 @@ msgstr "%-5d %-22s %s"
 msgid "%-8u %-50s %u"
 msgstr ""
 
+#: src/crypto-benchmark/benchmark.c:122
+#, fuzzy, c-format
+msgid "%10s %10s %10zu %10zu %13LFs"
+msgstr "%-5d %-22s %s"
+
+#: src/crypto-benchmark/benchmark.c:195
+#, fuzzy, c-format
+msgid "%10s %14zu %13LFs"
+msgstr "%-5d %-22s %s"
+
+#: src/crypto-benchmark/benchmark.c:309
+#, fuzzy, c-format
+msgid "%16s %14zu %13LFs"
+msgstr "%-5d %-22s %s"
+
 #: modules/operserv/akill.c:460
 #, c-format
 msgid "%lu: %s@%s - by %s on %s - permanent"
@@ -1564,6 +1642,11 @@ msgstr ""
 #: modules/operserv/akill.c:454
 #, c-format
 msgid "%lu: %s@%s - by %s on %s - expires in %s - (%s)"
+msgstr ""
+
+#: src/crypto-benchmark/main.c:120
+#, c-format
+msgid "%s (Cryptographic Benchmarking Utility)"
 msgstr ""
 
 #: modules/operserv/clones.c:690
@@ -1617,7 +1700,7 @@ msgstr ""
 msgid "%s has requested an email address change to %s on %s."
 msgstr "%s eisoes wedi baneri %s ar %s"
 
-#: modules/memoserv/forward.c:157 modules/memoserv/send.c:148
+#: modules/memoserv/forward.c:158 modules/memoserv/send.c:148
 #, c-format
 msgid ""
 "%s is currently online, and you may talk directly, by sending a private "
@@ -1708,6 +1791,22 @@ msgstr ""
 #: modules/memoserv/send.c:96
 #, c-format
 msgid "%s's inbox is full"
+msgstr ""
+
+#: src/crypto-benchmark/benchmark.c:286
+#, c-format
+msgid ""
+"%s: '%s' is not a valid algorithm name\n"
+"    valid names are: MD5, SHA1, SHA2-256, SHA2-512\n"
+"    please see --help\n"
+msgstr ""
+
+#: src/crypto-benchmark/benchmark.c:99
+#, c-format
+msgid ""
+"%s: '%s' is not a valid type name\n"
+"    valid names are: Argon2d, Argon2i, Argon2id\n"
+"    please see --help\n"
 msgstr ""
 
 #: modules/chanserv/count.c:79
@@ -1801,7 +1900,7 @@ msgstr ""
 msgid "%u: %s (not logged in)"
 msgstr "Nid ydych chi wedi mewngofnodi"
 
-#: modules/botserv/info.c:68
+#: modules/botserv/info.c:66
 #, fuzzy, c-format
 msgid "%u: %s"
 msgstr "%d: %s"
@@ -1840,6 +1939,21 @@ msgstr "%s oedd CLOSED gan %s am %s (%s)"
 #, fuzzy, c-format
 msgid "%u: [%s] by %s at %s: %s"
 msgstr "Roedd %s osod baneri ar %s yn %s."
+
+#: src/crypto-benchmark/main.c:250 src/crypto-benchmark/main.c:259
+#, fuzzy, c-format
+msgid ""
+"'%s' is not a valid value for decimal option '%c'\n"
+"range of valid values: %LF to %LF (inclusive)\n"
+msgstr "Nid %s yn ddilys cyfeiriad e-bost."
+
+#: src/crypto-benchmark/main.c:180 src/crypto-benchmark/main.c:281
+#: src/crypto-benchmark/main.c:290
+#, fuzzy, c-format
+msgid ""
+"'%s' is not a valid value for integer option '%c'\n"
+"range of valid values: %u to %u (inclusive)\n"
+msgstr "Nid %s yn ddilys cyfeiriad e-bost."
 
 #: modules/operserv/specs.c:180
 msgid "(no privileges held)"
@@ -2040,7 +2154,7 @@ msgstr ""
 msgid "Added %s to clone exempt list."
 msgstr ""
 
-#: modules/operserv/rwatch.c:222
+#: modules/operserv/rwatch.c:221
 #, c-format
 msgid "Added %s to regex watch list."
 msgstr ""
@@ -2092,7 +2206,7 @@ msgstr ""
 msgid "Adds NOFIX to a channel."
 msgstr "Yn ychwanegu nodyn i sianel."
 
-#: modules/chanserv/akick.c:760
+#: modules/chanserv/akick.c:834
 msgid "Adds a channel AKICK."
 msgstr "Yn ychwanegu AKICK sianel."
 
@@ -2127,15 +2241,14 @@ msgstr "Yn ychwanegu nodyn i sianel."
 msgid "Adds a note to a user."
 msgstr ""
 
-#: modules/operserv/rwatch.c:585
+#: modules/operserv/rwatch.c:584
 msgid "Adds an entry to the regex watch list."
 msgstr ""
 
-#: modules/chanserv/set_founder.c:198
-msgid "After that command is issued, the channel will be transferred."
+#: src/crypto-benchmark/optimal.c:66 src/crypto-benchmark/optimal.c:152
+#: src/crypto-benchmark/optimal.c:297
+msgid "Algorithm is still too slow; giving up."
 msgstr ""
-"Ar ôl bod gorchymyn yn cael ei gyhoeddi, bydd y sianel yn cael ei "
-"drosglwyddo."
 
 #: modules/memoserv/delete.c:111
 msgid "Alias for DELETE"
@@ -2208,7 +2321,7 @@ msgstr ""
 msgid "Allows you to opt-out of channel entry messages."
 msgstr ""
 
-#: modules/botserv/info.c:114
+#: modules/botserv/info.c:112
 msgid "Allows you to see BotServ information about a channel or a bot."
 msgstr "Yn eich galluogi i weld gwybodaeth BotServ am sianel neu bot."
 
@@ -2246,7 +2359,7 @@ msgstr ""
 msgid "Appends a topic on a channel."
 msgstr "Atodi bwnc ar sianel."
 
-#: modules/groupserv/main/hooks.c:204
+#: modules/groupserv/main/hooks.c:119
 #, c-format
 msgid "Are open groups allowed: %s"
 msgstr ""
@@ -2255,7 +2368,7 @@ msgstr ""
 msgid "Ask the 8-Ball a question."
 msgstr ""
 
-#: modules/botserv/main.c:856
+#: modules/botserv/main.c:853
 #, c-format
 msgid "Assigned the bot %s to %s."
 msgstr "Priodoli y bot %s at %s."
@@ -2270,7 +2383,7 @@ msgstr ""
 msgid "Assigned vhost %s to all nicks in account %s."
 msgstr ""
 
-#: modules/botserv/main.c:1022
+#: modules/botserv/main.c:1019
 #, fuzzy
 msgid "Assigns a bot to a channel."
 msgstr "Yn ychwanegu nodyn i sianel."
@@ -2312,17 +2425,41 @@ msgstr "Banio %s ar %s."
 msgid "Bans matching %s in %s:"
 msgstr "Dim gwaharddiadau o hyd cyfateb %s ar %s."
 
-#: modules/botserv/main.c:655
+#: src/crypto-benchmark/optimal.c:35
+msgid "Beginning automatic optimal Argon2 benchmark ..."
+msgstr ""
+
+#: src/crypto-benchmark/optimal.c:204
+msgid "Beginning automatic optimal PBKDF2 benchmark ..."
+msgstr ""
+
+#: src/crypto-benchmark/optimal.c:121
+msgid "Beginning automatic optimal scrypt benchmark ..."
+msgstr ""
+
+#: src/crypto-benchmark/main.c:494
+msgid "Beginning customizable Argon2 benchmark ..."
+msgstr ""
+
+#: src/crypto-benchmark/main.c:537
+msgid "Beginning customizable PBKDF2 benchmark ..."
+msgstr ""
+
+#: src/crypto-benchmark/main.c:518
+msgid "Beginning customizable scrypt benchmark ..."
+msgstr ""
+
+#: modules/botserv/main.c:652
 #, fuzzy, c-format
 msgid "Bot %s (%s@%s) [%s] changed."
 msgstr "Templed %s ar %s y newid."
 
-#: modules/botserv/main.c:553
+#: modules/botserv/main.c:550
 #, c-format
 msgid "Bot %s (%s@%s) [%s] created."
 msgstr ""
 
-#: modules/botserv/main.c:707
+#: modules/botserv/main.c:704
 #, fuzzy, c-format
 msgid "Bot %s deleted."
 msgstr "%s rôl wedi cael ei ddileu."
@@ -2335,7 +2472,7 @@ msgstr ""
 msgid "Both users must exist for @compare"
 msgstr ""
 
-#: modules/chanserv/clear.c:28
+#: modules/chanserv/clear.c:29
 msgid "CLEAR allows you to clear various aspects of a channel."
 msgstr "GLIR yn eich galluogi i clir gwahanol agweddau ar sianel."
 
@@ -2401,7 +2538,7 @@ msgstr "Newid baneri ar rôl."
 msgid "Changed template %s to %s in %s."
 msgstr "Wedi newid templed %s i %s yn %s."
 
-#: modules/operserv/set.c:479
+#: modules/operserv/set_recontime.c:43
 msgid "Changes IRCd reconnect delay."
 msgstr ""
 
@@ -2413,7 +2550,7 @@ msgstr ""
 msgid "Changes a password using an authcode."
 msgstr ""
 
-#: modules/operserv/rwatch.c:612
+#: modules/operserv/rwatch.c:611
 msgid "Changes actions on an entry in the regex watch list"
 msgstr ""
 
@@ -2425,7 +2562,7 @@ msgstr ""
 msgid "Changes and shows your nickname access list."
 msgstr ""
 
-#: modules/operserv/set.c:542
+#: modules/operserv/set_commitinterval.c:43
 msgid "Changes how often the database is written to disk."
 msgstr ""
 
@@ -2441,25 +2578,25 @@ msgstr ""
 msgid "Changes the language services uses to talk to you."
 msgstr ""
 
-#: modules/operserv/set.c:506
+#: modules/operserv/set_maxusers.c:43
 msgid ""
 "Changes the maximum number of accounts that one email address may have "
 "registered."
 msgstr ""
 
-#: modules/operserv/set.c:560
+#: modules/operserv/set_maxchanacs.c:43
 msgid "Changes the maximum number of channel access list entries per channel."
 msgstr ""
 
-#: modules/operserv/set.c:515
+#: modules/operserv/set_maxchans.c:43
 msgid "Changes the maximum number of channels one account may own."
 msgstr ""
 
-#: modules/operserv/set.c:497
+#: modules/operserv/set_maxnicks.c:43
 msgid "Changes the maximum number of nicks that one account may own."
 msgstr ""
 
-#: modules/operserv/set.c:488
+#: modules/operserv/set_maxlogins.c:43
 msgid ""
 "Changes the maximum number of users that may be logged in to one account."
 msgstr ""
@@ -2468,7 +2605,7 @@ msgstr ""
 msgid "Changes the password associated with your account."
 msgstr ""
 
-#: modules/operserv/set.c:605
+#: modules/operserv/set_enforceprefix.c:44
 msgid "Changes the prefix to use when changing the user's nick on enforcement."
 msgstr ""
 
@@ -2480,7 +2617,7 @@ msgstr ""
 msgid "Changes what happens to a user when they hit a DNSBL."
 msgstr "Newidiadau beth sy'n digwydd i ddefnyddiwr pan fyddant yn daro DNSBL."
 
-#: modules/operserv/set.c:587
+#: modules/operserv/set_spam.c:62
 msgid "Changes whether service spams unregistered users on connect."
 msgstr ""
 
@@ -2503,7 +2640,6 @@ msgstr ""
 #: modules/chanserv/access.c:796 modules/chanserv/access.c:945
 #: modules/chanserv/akick.c:349 modules/chanserv/akick.c:415
 #: modules/chanserv/flags.c:445 modules/chanserv/flags.c:476
-#: modules/chanserv/set_founder.c:93 modules/chanserv/set_founder.c:176
 #: modules/chanserv/xop.c:41 modules/chanserv/xop.c:114
 #, c-format
 msgid "Channel %s access list is full."
@@ -2568,7 +2704,7 @@ msgstr "Amser Creu : %s"
 msgid "Channel memos are administratively disabled."
 msgstr ""
 
-#: modules/chanserv/clear.c:73
+#: modules/chanserv/clear.c:74
 msgid "Channel removal toolkit."
 msgstr "Pecyn cymorth symud Sianel."
 
@@ -2836,7 +2972,7 @@ msgstr ""
 msgid "Default clone warning has been disabled."
 msgstr ""
 
-#: modules/groupserv/main/hooks.c:205
+#: modules/groupserv/main/hooks.c:120
 #, c-format
 msgid "Default joinflags for open groups: %s"
 msgstr ""
@@ -2915,7 +3051,7 @@ msgstr ""
 msgid "Deleted vhost for %s."
 msgstr ""
 
-#: modules/chanserv/akick.c:769
+#: modules/chanserv/akick.c:843
 msgid "Deletes a channel AKICK."
 msgstr "Dileu a AKICK sianel."
 
@@ -2956,7 +3092,7 @@ msgstr ""
 msgid "Disabled CLONES klines."
 msgstr ""
 
-#: modules/chanserv/sync.c:412
+#: modules/chanserv/sync.c:243
 msgid "Disables automatic channel ACL syncing."
 msgstr "Analluogi'r awtomatig cydamseru sianel ACL."
 
@@ -2976,7 +3112,7 @@ msgstr ""
 msgid "Display information on an access list entry."
 msgstr "Arddangos gwybodaeth ar restr fynediad mynediad."
 
-#: modules/chanserv/akick.c:778
+#: modules/chanserv/akick.c:852
 msgid "Displays a channel's AKICK list."
 msgstr "Arddangosfeydd rhestr AKICK sianel yn."
 
@@ -3017,7 +3153,7 @@ msgstr "Arddangosfeydd gwybodaeth gyd-destunol helpu."
 msgid "Displays session information."
 msgstr ""
 
-#: modules/operserv/rwatch.c:603
+#: modules/operserv/rwatch.c:602
 msgid "Displays the regex watch list."
 msgstr ""
 
@@ -3178,7 +3314,7 @@ msgstr ""
 msgid "End of Hostmask NOOP list."
 msgstr ""
 
-#: modules/operserv/rwatch.c:306
+#: modules/operserv/rwatch.c:305
 msgid "End of RWATCH LIST"
 msgstr ""
 
@@ -3206,7 +3342,7 @@ msgstr "Diwedd y rhestr rhwydwaith templed eang."
 msgid "End of oper class list"
 msgstr ""
 
-#: modules/alis/main.c:386
+#: modules/alis/main.c:387
 msgid "End of output."
 msgstr ""
 
@@ -3262,6 +3398,10 @@ msgstr ""
 #: modules/gameserv/dice.c:97
 msgid "Error: Cannot perform modulus or division by zero."
 msgstr "Gwall: Does dim modd perfformio modwlws neu is-adran gan sero."
+
+#: src/crypto-benchmark/main.c:432
+msgid "Error: Conflicting options (or no options) given. Exiting."
+msgstr ""
 
 #: modules/gameserv/dice.c:282
 msgid "Error: Expression is too deeply nested."
@@ -3485,7 +3625,7 @@ msgstr "Grymoedd a faneri newid ar sianel."
 msgid "Forces access levels to XOP levels."
 msgstr "Lluoedd lefelau mynediad i lefelau xOP."
 
-#: modules/chanserv/sync.c:403
+#: modules/chanserv/sync.c:234
 #, fuzzy
 msgid "Forces channel statuses to flags."
 msgstr "Rhoi ops sianel i ddefnyddiwr."
@@ -3506,7 +3646,7 @@ msgstr "Trosglwyddo foundership Lluoedd o sianel."
 msgid "Forces removal of a nickname from an account."
 msgstr ""
 
-#: modules/memoserv/forward.c:173
+#: modules/memoserv/forward.c:174
 msgid "Forwards a memo."
 msgstr ""
 
@@ -3621,7 +3761,7 @@ msgstr ""
 msgid "GroupServ"
 msgstr ""
 
-#: modules/groupserv/main/hooks.c:149
+#: modules/groupserv/main/hooks.c:64
 #, c-format
 msgid "Groups     : %s"
 msgstr ""
@@ -3644,13 +3784,13 @@ msgstr ""
 msgid "Help for %s:"
 msgstr "Cymorth i SET:"
 
-#: modules/chanserv/clear.c:26
+#: modules/chanserv/clear.c:27
 msgid "Help for CLEAR:"
 msgstr "Cymorth i CLEAR:"
 
-#: modules/botserv/set_core.c:28 modules/chanserv/set_core.c:27
-#: modules/groupserv/set.c:29 modules/nickserv/set_core.c:26
-#: modules/operserv/set.c:27
+#: modules/botserv/set_core.c:28 modules/chanserv/set_core.c:28
+#: modules/groupserv/set.c:29 modules/nickserv/set_core.c:27
+#: modules/operserv/set_core.c:27
 msgid "Help for SET:"
 msgstr "Cymorth i SET:"
 
@@ -3812,25 +3952,17 @@ msgstr ""
 msgid "Importance must be a digit between 0 and 4"
 msgstr ""
 
-#: modules/chanserv/set_founder.c:196
-#, c-format
-msgid ""
-"In order to complete the transfer, %s must perform the following command:"
-msgstr ""
-"Er mwyn cwblhau'r trosglwyddiad, mae'n rhaid i %s berfformio r yn canlyn "
-"archa:"
-
 #: modules/groupserv/info.c:37
 #, c-format
 msgid "Information for %s:"
 msgstr ""
 
-#: modules/botserv/info.c:50
+#: modules/botserv/info.c:48
 #, c-format
 msgid "Information for bot %s:"
 msgstr "Gwybodaeth i bot %s:"
 
-#: modules/botserv/info.c:80
+#: modules/botserv/info.c:78
 #, c-format
 msgid "Information for channel %s:"
 msgstr "Gwybodaeth ar gyfer sianel %s:"
@@ -3918,11 +4050,11 @@ msgstr "Annilys allweddol ar gyfer %s."
 msgid "Invalid mask %s."
 msgstr ""
 
-#: modules/memoserv/forward.c:79
+#: modules/memoserv/forward.c:80
 msgid "Invalid memo number."
 msgstr ""
 
-#: modules/memoserv/delete.c:58 modules/memoserv/forward.c:64
+#: modules/memoserv/delete.c:58 modules/memoserv/forward.c:65
 #: modules/memoserv/read.c:48 modules/memoserv/read.c:55
 msgid "Invalid message index."
 msgstr ""
@@ -3933,7 +4065,7 @@ msgid "Invalid mode; valid ones are %s."
 msgstr "Annilys dull; rhai dilys yn cael eu %s."
 
 #: modules/chanserv/ban.c:80 modules/chanserv/ban.c:177
-#: modules/chanserv/quiet.c:344 modules/chanserv/quiet.c:461
+#: modules/chanserv/quiet.c:347 modules/chanserv/quiet.c:464
 #, c-format
 msgid "Invalid nickname/hostmask provided: %s"
 msgstr "Annilys llysenw / mwgwd cynnal amod: %s"
@@ -3965,7 +4097,7 @@ msgid "Invalid parameters for %s."
 msgstr "Annilys allweddol ar gyfer %s."
 
 #: modules/nickserv/enforce.c:382 modules/nickserv/enforce.c:560
-#: modules/nickserv/ghost.c:105 modules/nickserv/identify.c:169
+#: modules/nickserv/ghost.c:105 modules/nickserv/identify.c:172
 #: modules/nickserv/register.c:172
 #, c-format
 msgid "Invalid password for %s."
@@ -4166,12 +4298,12 @@ msgstr ""
 msgid "Listed %u channels."
 msgstr "Rhestr sgoriau sianel."
 
-#: modules/botserv/main.c:751
+#: modules/botserv/main.c:748
 #, c-format
 msgid "Listing of bots available on %s:"
 msgstr "Rhestr o botiau sydd ar gael ar %s:"
 
-#: modules/botserv/main.c:766
+#: modules/botserv/main.c:763
 #, c-format
 msgid "Listing of private bots available on %s:"
 msgstr "Rhestr o botiau preifat sydd ar gael ar %s:"
@@ -4210,12 +4342,12 @@ msgstr ""
 msgid "Lists all of your memos."
 msgstr ""
 
-#: modules/botserv/main.c:1040
+#: modules/botserv/main.c:1037
 #, fuzzy
 msgid "Lists available bots."
 msgstr "Rhestr swyddi sydd ar gael."
 
-#: modules/alis/main.c:413
+#: modules/alis/main.c:418
 #, fuzzy
 msgid "Lists channels matching given parameters."
 msgstr "Sianelau Rhestrau cofrestredig cyfateb batrwm a roddir."
@@ -4256,7 +4388,7 @@ msgstr ""
 msgid "Lists loaded modules."
 msgstr ""
 
-#: modules/nickserv/list.c:303
+#: modules/nickserv/list.c:307
 msgid "Lists nicknames registered matching a given pattern."
 msgstr ""
 
@@ -4297,7 +4429,7 @@ msgstr ""
 msgid "Log file may be corrupted, %u/%u unexpected lines"
 msgstr ""
 
-#: modules/nickserv/enforce.c:517 modules/nickserv/identify.c:130
+#: modules/nickserv/enforce.c:517 modules/nickserv/identify.c:133
 #, c-format
 msgid "Logged in nicks are: %s"
 msgstr ""
@@ -4320,7 +4452,7 @@ msgstr "MLOCK allweddol yn cynnwys nodau annilys."
 msgid "MLOCK key is too long (%zu > %u)."
 msgstr "MLOCK allweddol yn rhy hir (%d > %d)."
 
-#: modules/botserv/main.c:1013
+#: modules/botserv/main.c:1010
 msgid "Maintains network bot list."
 msgstr ""
 
@@ -4388,7 +4520,7 @@ msgstr "Sianel yn trin rhestr SOP."
 msgid "Manipulates a channel VOP list."
 msgstr "Sianel yn trin rhestr VOP."
 
-#: modules/chanserv/akick.c:751
+#: modules/chanserv/akick.c:825
 msgid "Manipulates a channel's AKICK list."
 msgstr "Rhestr yn trin AKICK sianel yn."
 
@@ -4445,11 +4577,11 @@ msgstr ""
 msgid "Mask %s is not on your access list."
 msgstr ""
 
-#: modules/alis/main.c:381
+#: modules/alis/main.c:382
 msgid "Maximum channel output reached"
 msgstr ""
 
-#: modules/groupserv/main/hooks.c:203
+#: modules/groupserv/main/hooks.c:118
 #, c-format
 msgid "Maximum number of ACL entries allowed for one group: %u"
 msgstr ""
@@ -4471,7 +4603,7 @@ msgstr ""
 msgid "Maximum number of founders allowed per channel: %u"
 msgstr "Dim ond sylfaenwyr %d ganiateir bob sianel."
 
-#: modules/groupserv/main/hooks.c:202
+#: modules/groupserv/main/hooks.c:117
 #, c-format
 msgid "Maximum number of groups one user can own: %u"
 msgstr ""
@@ -4520,7 +4652,7 @@ msgstr "Nid yw Metadata cofnod %s osodwyd."
 msgid "Migrating mark data..."
 msgstr ""
 
-#: modules/botserv/main.c:907
+#: modules/botserv/main.c:904
 #, c-format
 msgid ""
 "Minimum number of users that must be in a channel for a bot to be assigned: "
@@ -4593,6 +4725,24 @@ msgstr ""
 
 #: modules/operserv/specs.c:77
 msgid "NOOP access"
+msgstr ""
+
+#: src/crypto-benchmark/optimal.c:331
+msgid ""
+"NOTICE: Please be sure to specify -l/--optimal-memory-limit\n"
+"        appropriately for this machine!"
+msgstr ""
+
+#: src/crypto-benchmark/optimal.c:38
+msgid ""
+"NOTICE: This does not test multithreading.\n"
+"Use '-a -p' for thread testing."
+msgstr ""
+
+#: src/crypto-benchmark/optimal.c:208
+msgid ""
+"NOTICE: This program may perform significantly better if you build it\n"
+"        against a supported third-party cryptographic digest library!"
 msgstr ""
 
 #: modules/chanserv/template.c:36 modules/chanserv/template.c:105
@@ -4740,7 +4890,7 @@ msgid "Nicks      : %s"
 msgstr ""
 
 #: modules/chanfix/fix.c:609 modules/chanfix/fix.c:610
-#: modules/chanserv/moderate.c:222 modules/groupserv/main/hooks.c:204
+#: modules/chanserv/moderate.c:222 modules/groupserv/main/hooks.c:119
 #: modules/hostserv/request.c:146 modules/nickserv/pwquality.c:195
 #: modules/operserv/info.c:22 modules/operserv/info.c:28
 #: modules/operserv/info.c:44 modules/operserv/modinspect.c:51
@@ -4860,12 +5010,12 @@ msgstr ""
 msgid "No nick ownership enabled: %s"
 msgstr ""
 
-#: modules/nickserv/list.c:294
+#: modules/nickserv/list.c:298
 #, c-format
 msgid "No nicknames matched criteria %s"
 msgstr ""
 
-#: modules/chanserv/quiet.c:436
+#: modules/chanserv/quiet.c:439
 #, c-format
 msgid "No quiets found matching %s on %s."
 msgstr "Dim quiets dod o hyd cyfateb %s ar %s."
@@ -4917,7 +5067,7 @@ msgstr "Dim %s gwaharddiad ar %s o'r fath."
 msgid "No such oper class %s."
 msgstr ""
 
-#: modules/chanserv/quiet.c:455
+#: modules/chanserv/quiet.c:458
 #, c-format
 msgid "No such quiet %s on %s."
 msgstr "Dim %s tawel o'r fath ar %s."
@@ -5096,7 +5246,7 @@ msgstr ""
 msgid "Operclass"
 msgstr ""
 
-#: modules/operserv/rwatch.c:414
+#: modules/operserv/rwatch.c:413
 #, c-format
 msgid "Options for %s unchanged."
 msgstr ""
@@ -5105,7 +5255,7 @@ msgstr ""
 msgid "Opts you out of Last Login notices upon identifying to your account."
 msgstr ""
 
-#: libathemecore/services.c:964
+#: libathemecore/services.c:963
 #, c-format
 msgid "Output limit (%u) exceeded, halting output"
 msgstr ""
@@ -5140,7 +5290,7 @@ msgid "Parameters are too long. Aborting."
 msgstr "Paramedrau yn rhy hir. Erthylu."
 
 #: modules/nickserv/enforce.c:326 modules/nickserv/enforce.c:436
-#: modules/nickserv/ghost.c:75 modules/nickserv/identify.c:100
+#: modules/nickserv/ghost.c:75 modules/nickserv/identify.c:103
 msgid "Password authentication is disabled for this account."
 msgstr ""
 
@@ -5154,7 +5304,7 @@ msgstr ""
 msgid "Password is insecure [passwdqc]: %s"
 msgstr ""
 
-#: modules/operserv/rwatch.c:576
+#: modules/operserv/rwatch.c:575
 msgid "Performs actions on connecting clients matching regexes."
 msgstr ""
 
@@ -5187,7 +5337,7 @@ msgid ""
 "then REGISTER again."
 msgstr ""
 
-#: modules/nickserv/identify.c:109
+#: modules/nickserv/identify.c:112
 msgid "Please check your email for instructions to complete your registration."
 msgstr ""
 
@@ -5257,7 +5407,7 @@ msgstr ""
 msgid "Prepends a topic on a channel."
 msgstr "Dechrau bwnc ar sianel."
 
-#: modules/botserv/set_private.c:72
+#: modules/botserv/set_private.c:70
 msgid "Prevent a bot from being assigned by non IRC operators."
 msgstr "Bot atal rhag cael ei neilltuo gan weithredwyr IRC di."
 
@@ -5289,12 +5439,12 @@ msgstr ""
 msgid "Prevents you from being added to group access lists."
 msgstr ""
 
-#: modules/botserv/set_private.c:61
+#: modules/botserv/set_private.c:59
 #, fuzzy, c-format
 msgid "Private mode of bot %s is now OFF."
 msgstr "Dull preifat o %s bot yn awr ODDI."
 
-#: modules/botserv/set_private.c:55
+#: modules/botserv/set_private.c:53
 #, fuzzy, c-format
 msgid "Private mode of bot %s is now ON."
 msgstr "Dull preifat o %s bot yn awr AR."
@@ -5317,7 +5467,7 @@ msgstr ""
 msgid "Prospect looks hopeful."
 msgstr ""
 
-#: modules/chanserv/quiet.c:330 modules/chanserv/quiet.c:339
+#: modules/chanserv/quiet.c:333 modules/chanserv/quiet.c:342
 #, c-format
 msgid "Quieted %s on %s."
 msgstr "Quieted %s ar %s."
@@ -5371,6 +5521,18 @@ msgstr ""
 msgid "Rating: %s"
 msgstr ""
 
+#: src/crypto-benchmark/optimal.c:296
+msgid "Reached minimum iteration count!"
+msgstr ""
+
+#: src/crypto-benchmark/optimal.c:65
+msgid "Reached minimum memory and time cost!"
+msgstr ""
+
+#: src/crypto-benchmark/optimal.c:151
+msgid "Reached minimum memory limit!"
+msgstr ""
+
 #: modules/memoserv/read.c:118
 #, c-format
 msgid "Read %u memo."
@@ -5406,7 +5568,7 @@ msgstr ""
 msgid "Real addr  : %s"
 msgstr ""
 
-#: modules/botserv/info.c:52
+#: modules/botserv/info.c:50
 #, c-format
 msgid "Real name : %s"
 msgstr "Enw go iawn: %s"
@@ -5425,6 +5587,11 @@ msgstr ""
 
 #: modules/nickserv/info.c:202
 msgid "Recognized : now (matches access list)"
+msgstr ""
+
+#: src/crypto-benchmark/optimal.c:97 src/crypto-benchmark/optimal.c:184
+#: src/crypto-benchmark/optimal.c:309
+msgid "Recommended parameters:"
 msgstr ""
 
 #: modules/chanserv/recover.c:179
@@ -5563,7 +5730,7 @@ msgstr ""
 msgid "Removed %s from clone exempt list."
 msgstr ""
 
-#: modules/operserv/rwatch.c:280
+#: modules/operserv/rwatch.c:279
 #, c-format
 msgid "Removed %s from regex watch list."
 msgstr ""
@@ -5596,7 +5763,7 @@ msgstr "Dileu gwaharddiad ar sianel."
 msgid "Removes a nickname from your account."
 msgstr ""
 
-#: modules/chanserv/quiet.c:482
+#: modules/chanserv/quiet.c:485
 msgid "Removes a quiet on a channel."
 msgstr "Dileu dawel ar sianel."
 
@@ -5608,7 +5775,7 @@ msgstr "Tynnu defnyddiwr o sianel."
 msgid "Removes a vhost from the list that users can take."
 msgstr ""
 
-#: modules/operserv/rwatch.c:594
+#: modules/operserv/rwatch.c:593
 msgid "Removes an entry from the regex watch list."
 msgstr ""
 
@@ -5669,7 +5836,7 @@ msgstr ""
 msgid "Restricts IRCop access."
 msgstr ""
 
-#: modules/chanserv/set_restricted.c:79
+#: modules/chanserv/set_restricted.c:125
 msgid ""
 "Restricts access to the channel to users on the access list. (Other users "
 "are kickbanned.)"
@@ -5686,7 +5853,7 @@ msgstr "Cyfyngu a all newid y pwnc."
 msgid "Result: %s"
 msgstr ""
 
-#: modules/alis/main.c:348
+#: modules/alis/main.c:349
 #, c-format
 msgid "Returning maximum of %u channel names matching '%s'"
 msgstr ""
@@ -5761,7 +5928,7 @@ msgstr ""
 msgid "SDK Serial : %s"
 msgstr ""
 
-#: modules/nickserv/set_core.c:30
+#: modules/nickserv/set_core.c:31
 #, fuzzy
 msgid ""
 "SET allows you to set various control flags for\n"
@@ -5773,7 +5940,7 @@ msgstr ""
 "gweithrediadau penodol yn cael eu perfformio\n"
 "ar eu cyfer."
 
-#: modules/chanserv/set_core.c:30
+#: modules/chanserv/set_core.c:31
 #, fuzzy
 msgid ""
 "SET allows you to set various control flags for\n"
@@ -5797,7 +5964,7 @@ msgstr ""
 "gweithrediadau penodol yn cael eu perfformio\n"
 "ar eu cyfer."
 
-#: modules/nickserv/set_core.c:34
+#: modules/nickserv/set_core.c:35
 #, fuzzy
 msgid ""
 "SET allows you to set various control flags for\n"
@@ -5809,7 +5976,7 @@ msgstr ""
 "gweithrediadau penodol yn cael eu perfformio\n"
 "ar eu cyfer."
 
-#: modules/operserv/set.c:30
+#: modules/operserv/set_core.c:30
 #, fuzzy
 msgid ""
 "SET allows you to set various control flags for\n"
@@ -5919,6 +6086,16 @@ msgstr ""
 msgid "Searches through the logs."
 msgstr ""
 
+#: src/crypto-benchmark/optimal.c:229
+#, c-format
+msgid "Selecting iterations starting point: %zu"
+msgstr ""
+
+#: src/crypto-benchmark/optimal.c:282
+#, c-format
+msgid "Selecting optimal algorithm: %s"
+msgstr ""
+
 #: modules/nickserv/return.c:56
 #, c-format
 msgid "Sending email failed, account %s remains with %s."
@@ -6018,7 +6195,7 @@ msgstr ""
 msgid "Set class for %s to %s."
 msgstr ""
 
-#: modules/operserv/rwatch.c:419
+#: modules/operserv/rwatch.c:418
 #, c-format
 msgid "Set options %s on %s."
 msgstr ""
@@ -6048,7 +6225,7 @@ msgstr ""
 msgid "Sets a group of AKILLs against users matching a specific regex pattern."
 msgstr ""
 
-#: modules/chanserv/quiet.c:473
+#: modules/chanserv/quiet.c:476
 msgid "Sets a quiet on a channel."
 msgstr "Gosod dawel ar sianel."
 
@@ -6072,7 +6249,7 @@ msgstr ""
 msgid "Sets the channel PREFIX."
 msgstr "Gosod y rhagddodiad sianel."
 
-#: modules/chanserv/set_url.c:61
+#: modules/chanserv/set_url.c:83
 msgid "Sets the channel URL."
 msgstr "Gosod yr URL sianel."
 
@@ -6080,16 +6257,16 @@ msgstr "Gosod yr URL sianel."
 msgid "Sets the channel e-mail address."
 msgstr "Gosod y sianel cyfeiriad e-bost."
 
-#: modules/chanserv/set_entrymsg.c:63
+#: modules/chanserv/set_entrymsg.c:90
 #, fuzzy
 msgid "Sets the channel entry message."
 msgstr "Yn gosod neges cofnod y sianel."
 
-#: modules/operserv/set.c:578
+#: modules/operserv/set_akicktime.c:43
 msgid "Sets the default AKICK time."
 msgstr ""
 
-#: modules/operserv/set.c:533
+#: modules/operserv/set_klinetime.c:43
 msgid "Sets the default KLINE/AKILL time."
 msgstr ""
 
@@ -6117,11 +6294,11 @@ msgstr ""
 msgid "Sets the group e-mail address."
 msgstr ""
 
-#: modules/operserv/set.c:524
+#: modules/operserv/set_mdlimit.c:43
 msgid "Sets the maximum amount of metadata one channel or account may have."
 msgstr ""
 
-#: modules/operserv/set.c:569
+#: modules/operserv/set_maxfounders.c:46
 msgid "Sets the maximum number of founders per channel."
 msgstr ""
 
@@ -6129,8 +6306,8 @@ msgstr ""
 msgid "Sets the official group channel."
 msgstr ""
 
-#: modules/chanserv/set_core.c:78 modules/groupserv/set.c:80
-#: modules/nickserv/set_core.c:59 modules/operserv/set.c:470
+#: modules/chanserv/set_core.c:79 modules/groupserv/set.c:80
+#: modules/nickserv/set_core.c:60 modules/operserv/set_core.c:57
 msgid "Sets various control flags."
 msgstr "Yn gosod baneri rheoli gwahanol."
 
@@ -6138,11 +6315,11 @@ msgstr "Yn gosod baneri rheoli gwahanol."
 msgid "Sets vhosts available for users to take."
 msgstr ""
 
-#: modules/operserv/set.c:551
+#: modules/operserv/set_chanexpire.c:43
 msgid "Sets when unused channels expire."
 msgstr ""
 
-#: modules/operserv/set.c:596
+#: modules/operserv/set_nickexpire.c:43
 msgid "Sets when unused nicks and accounts expire."
 msgstr ""
 
@@ -6185,6 +6362,10 @@ msgstr ""
 
 #: modules/operserv/soper.c:280
 msgid "Shows and changes services operator privileges."
+msgstr ""
+
+#: modules/statserv/pwhashes.c:305
+msgid "Shows database password hash statistics."
 msgstr ""
 
 #: modules/chanserv/count.c:110
@@ -6315,7 +6496,7 @@ msgstr ""
 msgid "Swap part of the topic on a channel."
 msgstr "Yn gosod bwnc ar sianel."
 
-#: modules/chanserv/sync.c:338
+#: modules/chanserv/sync.c:169
 #, fuzzy, c-format
 msgid "Sync complete for %s."
 msgstr "Adfer cyflawn ar gyfer %s."
@@ -6428,7 +6609,7 @@ msgstr ""
 msgid "Syntax: AKILL DEL <hostmask>"
 msgstr ""
 
-#: modules/botserv/main.c:793
+#: modules/botserv/main.c:790
 msgid "Syntax: ASSIGN <#channel> <nick>"
 msgstr "Cystrawen: ASSIGN <#sianel> <llysenw>"
 
@@ -6459,20 +6640,20 @@ msgstr "Cystrawen: BAN <#sianel> <llysenw|mwgwdcynnal>"
 msgid "Syntax: BANSEARCH <#channel>"
 msgstr "Cystrawen: UNBAN <#sianel>"
 
-#: modules/botserv/main.c:498 modules/botserv/main.c:717
-#: modules/botserv/main.c:738
+#: modules/botserv/main.c:495 modules/botserv/main.c:714
+#: modules/botserv/main.c:735
 msgid "Syntax: BOT ADD <nick> <user> <host> <real>"
 msgstr "Cystrawen: BOT ADD <llysenw> <defnyddiwr> <gwesteiwr> <iawn>"
 
-#: modules/botserv/main.c:568 modules/botserv/main.c:632
-#: modules/botserv/main.c:718 modules/botserv/main.c:739
+#: modules/botserv/main.c:565 modules/botserv/main.c:629
+#: modules/botserv/main.c:715 modules/botserv/main.c:736
 msgid "Syntax: BOT CHANGE <oldnick> <newnick> [<user> [<host> [<real>]]]"
 msgstr ""
 "Cystrawen: BOT CHANGE <hen-llysenw> <llysenw-newydd> [<defnyddiwr> "
 "[<gwesteiwr> [<iawn>]]]"
 
-#: modules/botserv/main.c:670 modules/botserv/main.c:719
-#: modules/botserv/main.c:740
+#: modules/botserv/main.c:667 modules/botserv/main.c:716
+#: modules/botserv/main.c:737
 msgid "Syntax: BOT DEL <nick>"
 msgstr "Cystrawen: BOT DEL <llysenw>"
 
@@ -6500,7 +6681,7 @@ msgstr ""
 msgid "Syntax: CHANNEL [TOPIC|COUNT] [parameters]"
 msgstr ""
 
-#: modules/chanserv/clear.c:41 modules/chanserv/clear.c:61
+#: modules/chanserv/clear.c:42 modules/chanserv/clear.c:62
 msgid "Syntax: CLEAR <#channel> <command> [parameters]"
 msgstr "Cystrawen: CLEAR <#sianel> <gorchymyn> [paramedrau]"
 
@@ -6688,7 +6869,7 @@ msgstr "Cystrawen: FLAGS <sianel> [targed] [baneri]"
 msgid "Syntax: FORCEXOP <#channel>"
 msgstr ""
 
-#: modules/memoserv/forward.c:30
+#: modules/memoserv/forward.c:31
 #, fuzzy
 msgid "Syntax: FORWARD <account> <memo number>"
 msgstr "Cystrawen: FTRANSFER <#sianel> <iawr>"
@@ -6758,7 +6939,7 @@ msgstr ""
 msgid "Syntax: INFO <!groupname>"
 msgstr ""
 
-#: modules/botserv/info.c:34 modules/botserv/info.c:107
+#: modules/botserv/info.c:32 modules/botserv/info.c:105
 #: modules/chanserv/info.c:30 modules/chanserv/info.c:37
 msgid "Syntax: INFO <#channel>"
 msgstr "Cystrawen: INFO <#sianel>"
@@ -6767,7 +6948,7 @@ msgstr "Cystrawen: INFO <#sianel>"
 msgid "Syntax: INFO <account>"
 msgstr ""
 
-#: modules/botserv/info.c:35 modules/botserv/info.c:108
+#: modules/botserv/info.c:33 modules/botserv/info.c:106
 msgid "Syntax: INFO <botnick>"
 msgstr "Cystrawen: INFO <llysenw>"
 
@@ -6884,12 +7065,12 @@ msgstr ""
 msgid "Syntax: PROTECT <#channel> [nickname]"
 msgstr "Cystrawen: PROTECT <#sianel> [llysenw]"
 
-#: modules/chanserv/quiet.c:345
+#: modules/chanserv/quiet.c:348
 #, fuzzy
 msgid "Syntax: QUIET <#channel> <nickname|hostmask> [,,,]"
 msgstr "Cystrawen: QUIET <#sianel> <llysenw|mwgwdcynnal>"
 
-#: modules/chanserv/quiet.c:271
+#: modules/chanserv/quiet.c:274
 #, fuzzy
 msgid "Syntax: QUIET <#channel> <nickname|hostmask> [...]"
 msgstr "Cystrawen: QUIET <#sianel> <llysenw|mwgwdcynnal>"
@@ -6982,21 +7163,21 @@ msgstr "Cystrawen: ROLE <#sianel> DEL <>"
 msgid "Syntax: ROLL [times] [dice]d<sides>"
 msgstr ""
 
-#: modules/operserv/rwatch.c:174 modules/operserv/rwatch.c:182
-#: modules/operserv/rwatch.c:192
+#: modules/operserv/rwatch.c:173 modules/operserv/rwatch.c:181
+#: modules/operserv/rwatch.c:191
 msgid "Syntax: RWATCH ADD /<regex>/[i] <reason>"
 msgstr ""
 
-#: modules/operserv/rwatch.c:154
+#: modules/operserv/rwatch.c:153
 msgid "Syntax: RWATCH ADD|DEL|LIST|SET"
 msgstr ""
 
-#: modules/operserv/rwatch.c:237 modules/operserv/rwatch.c:245
+#: modules/operserv/rwatch.c:236 modules/operserv/rwatch.c:244
 msgid "Syntax: RWATCH DEL /<regex>/[i]"
 msgstr ""
 
-#: modules/operserv/rwatch.c:323 modules/operserv/rwatch.c:331
-#: modules/operserv/rwatch.c:340 modules/operserv/rwatch.c:387
+#: modules/operserv/rwatch.c:322 modules/operserv/rwatch.c:330
+#: modules/operserv/rwatch.c:339 modules/operserv/rwatch.c:386
 msgid ""
 "Syntax: RWATCH SET /<regex>/[i] [KLINE] [NOKLINE] [SNOOP] [NOSNOOP] "
 "[QUARANTINE] [NOQUARANTINE]"
@@ -7055,7 +7236,7 @@ msgstr "Cystrawen: SET <llysenw> PRIVATE {ON | OFF}"
 msgid "Syntax: SET <!group> PUBLIC <ON|OFF>"
 msgstr "Cystrawen: SET <llysenw> PRIVATE {ON | OFF}"
 
-#: modules/chanserv/set_core.c:46 modules/chanserv/set_core.c:66
+#: modules/chanserv/set_core.c:47 modules/chanserv/set_core.c:67
 msgid "Syntax: SET <#channel> <setting> [parameters]"
 msgstr "Cystrawen: SET <#sianel> <gosod> [paramedrau]"
 
@@ -7076,7 +7257,7 @@ msgstr "Cystrawen: SET <#sianel> PROPERTY <eiddo> [gwerth]"
 msgid "Syntax: SET <#channel> SAYCALLER {ON|OFF}"
 msgstr "Cystrawen: SET <#sianel> FANTASY {ON | OFF}"
 
-#: modules/botserv/set_private.c:28 modules/botserv/set_private.c:66
+#: modules/botserv/set_private.c:26 modules/botserv/set_private.c:64
 msgid "Syntax: SET <botnick> PRIVATE {ON|OFF}"
 msgstr "Cystrawen: SET <llysenw> PRIVATE {ON | OFF}"
 
@@ -7088,7 +7269,7 @@ msgstr ""
 msgid "Syntax: SET <destination> <setting> <parameters>"
 msgstr "Cystrawen: SET <cyrchfan> <gosod> <>"
 
-#: modules/nickserv/set_core.c:50 modules/operserv/set.c:48
+#: modules/nickserv/set_core.c:51 modules/operserv/set_core.c:48
 msgid "Syntax: SET <setting> <parameters>"
 msgstr ""
 
@@ -7096,15 +7277,16 @@ msgstr ""
 msgid "Syntax: SET ACCOUNTNAME <nick>"
 msgstr ""
 
-#: modules/operserv/set.c:350 modules/operserv/set.c:360
+#: modules/operserv/set_akicktime.c:21 modules/operserv/set_akicktime.c:31
 msgid "Syntax: SET AKICKTIME <minutes>"
 msgstr ""
 
-#: modules/operserv/set.c:269 modules/operserv/set.c:279
+#: modules/operserv/set_chanexpire.c:21 modules/operserv/set_chanexpire.c:31
 msgid "Syntax: SET CHANEXPIRE <days>"
 msgstr ""
 
-#: modules/operserv/set.c:243 modules/operserv/set.c:253
+#: modules/operserv/set_commitinterval.c:21
+#: modules/operserv/set_commitinterval.c:31
 msgid "Syntax: SET COMMITINTERVAL <minutes>"
 msgstr ""
 
@@ -7120,7 +7302,8 @@ msgstr ""
 msgid "Syntax: SET ENFORCE ON|OFF"
 msgstr ""
 
-#: modules/operserv/set.c:447 modules/operserv/set.c:456
+#: modules/operserv/set_enforceprefix.c:21
+#: modules/operserv/set_enforceprefix.c:30
 msgid "Syntax: SET ENFORCEPREFIX <prefix>"
 msgstr ""
 
@@ -7133,39 +7316,39 @@ msgstr ""
 msgid "Syntax: SET GROUPNAME <oldname> <newname>"
 msgstr "Cystrawen: FTRANSFER <#sianel> <iawr>"
 
-#: modules/operserv/set.c:217 modules/operserv/set.c:227
+#: modules/operserv/set_klinetime.c:21 modules/operserv/set_klinetime.c:31
 msgid "Syntax: SET KLINETIME <days>"
 msgstr ""
 
-#: modules/operserv/set.c:295 modules/operserv/set.c:305
+#: modules/operserv/set_maxchanacs.c:21 modules/operserv/set_maxchanacs.c:31
 msgid "Syntax: SET MAXCHANACS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:165 modules/operserv/set.c:175
+#: modules/operserv/set_maxchans.c:21 modules/operserv/set_maxchans.c:31
 msgid "Syntax: SET MAXCHANS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:321 modules/operserv/set.c:334
+#: modules/operserv/set_maxfounders.c:21 modules/operserv/set_maxfounders.c:34
 msgid "Syntax: SET MAXFOUNDERS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:87 modules/operserv/set.c:97
+#: modules/operserv/set_maxlogins.c:21 modules/operserv/set_maxlogins.c:31
 msgid "Syntax: SET MAXLOGINS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:139 modules/operserv/set.c:149
+#: modules/operserv/set_maxnicks.c:21 modules/operserv/set_maxnicks.c:31
 msgid "Syntax: SET MAXNICKS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:113 modules/operserv/set.c:123
+#: modules/operserv/set_maxusers.c:21 modules/operserv/set_maxusers.c:31
 msgid "Syntax: SET MAXUSERS <value>"
 msgstr ""
 
-#: modules/operserv/set.c:191 modules/operserv/set.c:201
+#: modules/operserv/set_mdlimit.c:21 modules/operserv/set_mdlimit.c:31
 msgid "Syntax: SET MDLIMIT <value>"
 msgstr ""
 
-#: modules/operserv/set.c:421 modules/operserv/set.c:431
+#: modules/operserv/set_nickexpire.c:21 modules/operserv/set_nickexpire.c:31
 msgid "Syntax: SET NICKEXPIRE <days>"
 msgstr ""
 
@@ -7182,11 +7365,11 @@ msgstr ""
 msgid "Syntax: SET QUIETCHG <ON|OFF>"
 msgstr "Cystrawen: SET <llysenw> PRIVATE {ON | OFF}"
 
-#: modules/operserv/set.c:61 modules/operserv/set.c:71
+#: modules/operserv/set_recontime.c:21 modules/operserv/set_recontime.c:31
 msgid "Syntax: SET RECONTIME <seconds>"
 msgstr ""
 
-#: modules/operserv/set.c:376 modules/operserv/set.c:411
+#: modules/operserv/set_spam.c:21 modules/operserv/set_spam.c:56
 msgid "Syntax: SET SPAM <TRUE|FALSE>"
 msgstr ""
 
@@ -7241,7 +7424,7 @@ msgstr ""
 msgid "Syntax: SQLINE DEL <nick|chan>"
 msgstr ""
 
-#: modules/chanserv/sync.c:305
+#: modules/chanserv/sync.c:136
 #, fuzzy
 msgid "Syntax: SYNC <#channel>"
 msgstr "Cystrawen: INFO <#sianel>"
@@ -7275,7 +7458,7 @@ msgstr "Cystrawen: TOPICPREPEND <#sianel> <bwnc>"
 msgid "Syntax: TOPICSWAP <#channel> <search>:[<replace>]"
 msgstr "Cystrawen: TOPIC <#sianel> <bwnc>"
 
-#: modules/botserv/main.c:869
+#: modules/botserv/main.c:866
 msgid "Syntax: UNASSIGN <#channel>"
 msgstr "Cystrawen: UNASSIGN <#sianel>"
 
@@ -7295,12 +7478,12 @@ msgstr "Cystrawen: UNBAN <#sianel> [llysenw|mwgwdcynnal]"
 msgid "Syntax: UNOFFER <vhost>"
 msgstr ""
 
-#: modules/chanserv/quiet.c:369 modules/chanserv/quiet.c:378
+#: modules/chanserv/quiet.c:372 modules/chanserv/quiet.c:381
 #, fuzzy
 msgid "Syntax: UNQUIET <#channel> <nickname|hostmask> [...]"
 msgstr "Cystrawen: UNQUIET <#sianel> <llysenw|mwgwdcynnal>"
 
-#: modules/chanserv/quiet.c:462
+#: modules/chanserv/quiet.c:465
 #, fuzzy
 msgid "Syntax: UNQUIET <#channel> [nickname|hostmask] [...]"
 msgstr "Cystrawen: UNQUIET <#sianel> [llysenw | mwgwdcynnal]"
@@ -7382,7 +7565,7 @@ msgstr ""
 msgid "Take an offered vhost for use."
 msgstr ""
 
-#: modules/memoserv/forward.c:86
+#: modules/memoserv/forward.c:87
 msgid "Target inbox is full."
 msgstr ""
 
@@ -7429,9 +7612,9 @@ msgstr ""
 
 #: modules/chanserv/set_fantasy.c:69 modules/chanserv/set_guard.c:79
 #: modules/chanserv/set_keeptopic.c:67 modules/chanserv/set_pubacl.c:67
-#: modules/chanserv/set_restricted.c:67 modules/chanserv/set_secure.c:67
+#: modules/chanserv/set_restricted.c:113 modules/chanserv/set_secure.c:67
 #: modules/chanserv/set_topiclock.c:70 modules/chanserv/set_verbose.c:97
-#: modules/chanserv/sync.c:391
+#: modules/chanserv/sync.c:222
 #, c-format
 msgid "The %s flag has been removed for channel %s."
 msgstr "Baner y %s wedi cael ei symud i %s sianel."
@@ -7454,9 +7637,9 @@ msgstr ""
 
 #: modules/chanserv/set_fantasy.c:52 modules/chanserv/set_guard.c:60
 #: modules/chanserv/set_keeptopic.c:51 modules/chanserv/set_pubacl.c:51
-#: modules/chanserv/set_restricted.c:51 modules/chanserv/set_secure.c:51
+#: modules/chanserv/set_restricted.c:97 modules/chanserv/set_secure.c:51
 #: modules/chanserv/set_topiclock.c:52 modules/chanserv/set_verbose.c:52
-#: modules/chanserv/set_verbose.c:78 modules/chanserv/sync.c:376
+#: modules/chanserv/set_verbose.c:78 modules/chanserv/sync.c:207
 #, c-format
 msgid "The %s flag has been set for channel %s."
 msgstr "Baner y %s wedi cael ei osod ar gyfer %s sianel."
@@ -7479,10 +7662,10 @@ msgstr ""
 
 #: modules/chanserv/antiflood.c:423 modules/chanserv/set_fantasy.c:44
 #: modules/chanserv/set_guard.c:42 modules/chanserv/set_keeptopic.c:42
-#: modules/chanserv/set_pubacl.c:42 modules/chanserv/set_restricted.c:42
+#: modules/chanserv/set_pubacl.c:42 modules/chanserv/set_restricted.c:88
 #: modules/chanserv/set_secure.c:42 modules/chanserv/set_topiclock.c:42
 #: modules/chanserv/set_verbose.c:42 modules/chanserv/set_verbose.c:60
-#: modules/chanserv/sync.c:368
+#: modules/chanserv/sync.c:199
 #, c-format
 msgid "The %s flag is already set for channel %s."
 msgstr "Baner y %s wedi ei osod yn barod ar gyfer %s sianel."
@@ -7506,9 +7689,9 @@ msgstr ""
 
 #: modules/chanserv/set_fantasy.c:61 modules/chanserv/set_guard.c:67
 #: modules/chanserv/set_keeptopic.c:58 modules/chanserv/set_pubacl.c:58
-#: modules/chanserv/set_restricted.c:58 modules/chanserv/set_secure.c:58
+#: modules/chanserv/set_restricted.c:104 modules/chanserv/set_secure.c:58
 #: modules/chanserv/set_topiclock.c:60 modules/chanserv/set_verbose.c:85
-#: modules/chanserv/sync.c:383
+#: modules/chanserv/sync.c:214
 #, c-format
 msgid "The %s flag is not set for channel %s."
 msgstr "Nid yw baner y %s wedi ei osod ar gyfer %s sianel."
@@ -7547,20 +7730,20 @@ msgstr "Mae'r MLOCK am %s wedi cael ei ddileu."
 msgid "The MLOCK for %s has been set to %s."
 msgstr "Mae'r MLOCK am %s wedi ei osod i %s."
 
-#: modules/operserv/set.c:392
+#: modules/operserv/set_spam.c:37
 msgid "The SPAM directive has been successfully set."
 msgstr ""
 
-#: modules/operserv/set.c:405
+#: modules/operserv/set_spam.c:50
 msgid "The SPAM directive has been successfully unset."
 msgstr ""
 
-#: modules/operserv/set.c:386
+#: modules/operserv/set_spam.c:31
 #, fuzzy
 msgid "The SPAM directive is already set."
 msgstr "Baner y %s wedi ei osod yn barod ar gyfer %s."
 
-#: modules/operserv/set.c:399
+#: modules/operserv/set_spam.c:44
 msgid "The SPAM directive is already unset."
 msgstr ""
 
@@ -7694,17 +7877,17 @@ msgstr ""
 msgid "The email address for account %s is already set to %s."
 msgstr ""
 
-#: modules/chanserv/set_entrymsg.c:42
+#: modules/chanserv/set_entrymsg.c:44
 #, c-format
 msgid "The entry message for %s has been cleared."
 msgstr "Y neges mynediad ar gyfer %s wedi cael ei glirio."
 
-#: modules/chanserv/set_entrymsg.c:58
+#: modules/chanserv/set_entrymsg.c:60
 #, c-format
 msgid "The entry message for %s has been set to %s"
 msgstr "Y neges mynediad ar gyfer %s wedi ei osod i %s"
 
-#: modules/chanserv/set_entrymsg.c:46
+#: modules/chanserv/set_entrymsg.c:48
 #, c-format
 msgid "The entry message for %s was not set."
 msgstr "Nid oedd y neges mynediad ar gyfer %s osodwyd."
@@ -7809,7 +7992,7 @@ msgstr ""
 msgid "The mask provided is too long."
 msgstr ""
 
-#: modules/memoserv/forward.c:119 modules/memoserv/forward.c:167
+#: modules/memoserv/forward.c:120 modules/memoserv/forward.c:168
 #, c-format
 msgid "The memo has been successfully forwarded to %s."
 msgstr ""
@@ -7926,13 +8109,8 @@ msgstr "Mae trosglwyddo %s wedi cael ei ganslo."
 msgid "The pending message has been deleted."
 msgstr "%s rôl wedi cael ei ddileu."
 
-#: modules/chanserv/set_founder.c:187
-#, c-format
-msgid "The previous transfer request for %s has been cancelled."
-msgstr "Roedd y cais blaenorol am drosglwyddo %s wedi cael ei ganslo."
-
 #: modules/operserv/rakill.c:66 modules/operserv/rmatch.c:63
-#: modules/operserv/rwatch.c:210
+#: modules/operserv/rwatch.c:209
 #, c-format
 msgid "The provided regex %s is invalid."
 msgstr ""
@@ -8004,26 +8182,21 @@ msgstr ""
 msgid "The template %.*s already has flags %.*s."
 msgstr "Mae'r templed %.*s eisoes wedi baneri %.*s"
 
-#: modules/chanserv/set_founder.c:155
-#, c-format
-msgid "The transfer of %s has been cancelled."
-msgstr "Mae trosglwyddo %s wedi cael ei ganslo."
-
-#: libathemecore/services.c:1218
+#: libathemecore/services.c:1217
 #, fuzzy
 msgid "The vhost provided contains invalid characters."
 msgstr "Eich memo yn cynnwys nodau annilys."
 
-#: libathemecore/services.c:1235
+#: libathemecore/services.c:1234
 msgid "The vhost provided is invalid."
 msgstr ""
 
-#: libathemecore/services.c:1223
+#: libathemecore/services.c:1222
 #, fuzzy
 msgid "The vhost provided is too long."
 msgstr "Mae'r pwnc newydd yn annilys neu'n rhy hir."
 
-#: libathemecore/services.c:1229
+#: libathemecore/services.c:1228
 msgid "The vhost provided looks like a CIDR mask."
 msgstr ""
 
@@ -8032,7 +8205,7 @@ msgstr ""
 msgid "There are %u channels on the network."
 msgstr ""
 
-#: modules/nickserv/enforce.c:508 modules/nickserv/identify.c:122
+#: modules/nickserv/enforce.c:508 modules/nickserv/identify.c:125
 #, c-format
 msgid "There are already %zu sessions logged in to %s (maximum allowed: %u)."
 msgstr ""
@@ -8042,7 +8215,7 @@ msgstr ""
 msgid "There are no scores in the CHANFIX database for %s."
 msgstr "Nid oes unrhyw sgoriau yn y gronfa ddata CHANFIX ar gyfer %s."
 
-#: modules/botserv/main.c:805
+#: modules/botserv/main.c:802
 #, c-format
 msgid "There are not enough users in %s to be able to assign a bot."
 msgstr "Nid oes digon o ddefnyddwyr mewn %s i allu neilltuo bot."
@@ -8132,7 +8305,7 @@ msgid ""
 "marked."
 msgstr ""
 
-#: modules/saslserv/main.c:1049
+#: modules/saslserv/main.c:1050
 msgid ""
 "This service exists to identify connecting clients to the network. It has no "
 "public interface."
@@ -8183,12 +8356,7 @@ msgstr ""
 "Er mwyn osgoi ailymuno, eithriad %d gwaharddiad(au) gyfateb %s wedi cael eu "
 "tynnu oddi ar %s."
 
-#: modules/chanserv/set_founder.c:199
-#, c-format
-msgid "To cancel the transfer, use /msg %s SET %s FOUNDER %s"
-msgstr "I ddileu'r trosglwyddo, defnyddiwch /msg %s SET %s FOUNDER %s"
-
-#: modules/chanserv/quiet.c:319
+#: modules/chanserv/quiet.c:322
 #, fuzzy, c-format
 msgid ""
 "To ensure the quiet takes effect, %u ban exception matching %s has been "
@@ -8197,7 +8365,7 @@ msgstr ""
 "Er mwyn osgoi ailymuno, eithriad %d gwaharddiad(au) gyfateb %s wedi cael eu "
 "tynnu oddi ar %s."
 
-#: modules/chanserv/quiet.c:320
+#: modules/chanserv/quiet.c:323
 #, fuzzy, c-format
 msgid ""
 "To ensure the quiet takes effect, %u ban exceptions matching %s have been "
@@ -8244,7 +8412,7 @@ msgstr ""
 msgid "Too many matches, not displaying any more"
 msgstr ""
 
-#: modules/memoserv/forward.c:96
+#: modules/memoserv/forward.c:97
 msgid "Too many memos; please wait a while and try again"
 msgstr ""
 
@@ -8317,16 +8485,6 @@ msgstr "Cyfanswm %d %s yn y rhestr %s's AKICK."
 msgid "Total of %zu entry in SQLINE list."
 msgstr "Cyfanswm %d %s yn y rhestr %s's AKICK."
 
-#: modules/chanserv/set_founder.c:133
-#, c-format
-msgid "Transfer complete: %s has been set as founder for %s."
-msgstr "Trosglwyddo gwblhau: %s wedi cael ei osod fel sylfaenydd ar gyfer %s."
-
-#: modules/chanserv/set_founder.c:204
-#, fuzzy
-msgid "Transfers foundership of a channel."
-msgstr "Trosglwyddo foundership Lluoedd o sianel."
-
 #: modules/chanserv/unban_self.c:41
 #, c-format
 msgid "Try /mode %s -b %s"
@@ -8341,12 +8499,12 @@ msgstr ""
 msgid "URL         : %s"
 msgstr ""
 
-#: modules/botserv/main.c:899
+#: modules/botserv/main.c:896
 #, c-format
 msgid "Unassigned the bot from %s."
 msgstr "Ddadneilltuo y bot o %s."
 
-#: modules/botserv/main.c:1031
+#: modules/botserv/main.c:1028
 #, fuzzy
 msgid "Unassigns a bot from a channel."
 msgstr " Cael gwared gwahardd yn erbyn chi ar sianel."
@@ -8379,17 +8537,17 @@ msgstr ""
 msgid "Unloads a module."
 msgstr ""
 
-#: modules/chanserv/quiet.c:431
+#: modules/chanserv/quiet.c:434
 #, fuzzy, c-format
 msgid "Unquieted %s on %s (%u quiet removed)."
 msgstr "Unquieted %s ar %s (%d gwaharddiad%s symud)."
 
-#: modules/chanserv/quiet.c:432
+#: modules/chanserv/quiet.c:435
 #, fuzzy, c-format
 msgid "Unquieted %s on %s (%u quiets removed)."
 msgstr "Unquieted %s ar %s (%d gwaharddiad%s symud)."
 
-#: modules/chanserv/quiet.c:452
+#: modules/chanserv/quiet.c:455
 #, c-format
 msgid "Unquieted %s on %s."
 msgstr "Unquieted %s ar %s."
@@ -8517,7 +8675,7 @@ msgstr ""
 msgid "Usage: TEMPLATE %s [target flags]"
 msgstr "Defnydd: TEMPLATE %s [targed baneri]"
 
-#: modules/botserv/main.c:777
+#: modules/botserv/main.c:774
 #, c-format
 msgid "Use /msg %s ASSIGN #chan botnick to assign one to your channel."
 msgstr ""
@@ -8606,6 +8764,11 @@ msgstr ""
 msgid "Using crypto provider %s:"
 msgstr ""
 
+#: src/crypto-benchmark/main.c:579
+#, c-format
+msgid "Using digest frontend: %s"
+msgstr ""
+
 #: modules/nickserv/set_language.c:27 modules/nickserv/set_language.c:37
 #, c-format
 msgid "Valid languages are: %s"
@@ -8643,6 +8806,22 @@ msgstr ""
 msgid "View pending registrations"
 msgstr ""
 
+#: src/crypto-benchmark/main.c:544
+#, c-format
+msgid ""
+"WARNING: Cyrus SASL clients will not perform more than %u\n"
+"         iterations! This may break SASL SCRAM compatibility."
+msgstr ""
+
+#: src/crypto-benchmark/optimal.c:217
+msgid ""
+"WARNING: If you wish to support SASL SCRAM (RFC 5802) logins, please see\n"
+"         the 'doc/SASL-SCRAM' file in the source code repository, whose\n"
+"         parameter advice takes precedence over the advice given by this\n"
+"         benchmark utility! Pass -i to this utility to enable SASL SCRAM\n"
+"         support and silence this warning."
+msgstr ""
+
 #: modules/gameserv/gamecalc.c:247
 msgid "WOD-style dice generation."
 msgstr ""
@@ -8658,7 +8837,7 @@ msgid ""
 "Warned clones limit must be lower than or equal to the allowed limit of %u"
 msgstr ""
 
-#: modules/nickserv/identify.c:159
+#: modules/nickserv/identify.c:162
 msgid "Warning: Your password is not encrypted."
 msgstr ""
 
@@ -8680,7 +8859,7 @@ msgid "Without a doubt."
 msgstr ""
 
 #: modules/chanfix/fix.c:609 modules/chanfix/fix.c:610
-#: modules/chanserv/moderate.c:222 modules/groupserv/main/hooks.c:204
+#: modules/chanserv/moderate.c:222 modules/groupserv/main/hooks.c:119
 #: modules/hostserv/request.c:146 modules/nickserv/pwquality.c:195
 #: modules/operserv/info.c:22 modules/operserv/info.c:28
 #: modules/operserv/info.c:44 modules/operserv/modinspect.c:50
@@ -8714,7 +8893,7 @@ msgstr ""
 msgid "You are already identified to %s."
 msgstr ""
 
-#: modules/nickserv/identify.c:107 modules/nickserv/identify.c:114
+#: modules/nickserv/identify.c:110 modules/nickserv/identify.c:117
 #: modules/nickserv/register.c:30
 #, c-format
 msgid "You are already logged in as %s."
@@ -8789,17 +8968,12 @@ msgstr "Nid ydych yn sylfaenydd %s."
 msgid "You are not recognized as %s."
 msgstr ""
 
-#: modules/chanserv/set_founder.c:138
-#, c-format
-msgid "You are not the founder of %s."
-msgstr "Nid ydych yn sylfaenydd %s."
-
 #: modules/groupserv/join.c:76
 #, c-format
 msgid "You are now a member of %s."
 msgstr ""
 
-#: modules/nickserv/identify.c:156
+#: modules/nickserv/identify.c:159
 #, c-format
 msgid "You are now identified for %s."
 msgstr ""
@@ -8809,7 +8983,7 @@ msgstr ""
 msgid "You are now identified to %s."
 msgstr ""
 
-#: modules/nickserv/identify.c:156
+#: modules/nickserv/identify.c:159
 #, c-format
 msgid "You are now logged in as %s."
 msgstr ""
@@ -8856,7 +9030,7 @@ msgstr ""
 msgid "You cannot RELEASE yourself."
 msgstr ""
 
-#: modules/botserv/main.c:811
+#: modules/botserv/main.c:808
 #, c-format
 msgid "You cannot assign bots to %s."
 msgstr "Ni allwch aseinio botiau i %s."
@@ -8880,12 +9054,12 @@ msgstr "Rydych yn awr cynorthwy-ydd rhwydwaith."
 msgid "You cannot ghost users as %s because the account has been frozen."
 msgstr ""
 
-#: modules/nickserv/identify.c:93
+#: modules/nickserv/identify.c:96
 #, c-format
 msgid "You cannot identify to %s because the nickname has been frozen."
 msgstr ""
 
-#: modules/nickserv/identify.c:85
+#: modules/nickserv/identify.c:88
 #, c-format
 msgid ""
 "You cannot identify to %s because the server configuration disallows it."
@@ -8900,12 +9074,12 @@ msgstr "Ni allwch aseinio botiau i %s."
 msgid "You cannot inject an INJECT command."
 msgstr ""
 
-#: modules/nickserv/identify.c:92
+#: modules/nickserv/identify.c:95
 #, c-format
 msgid "You cannot log in as %s because the account has been frozen."
 msgstr ""
 
-#: modules/nickserv/identify.c:84
+#: modules/nickserv/identify.c:87
 #, c-format
 msgid "You cannot log in as %s because the server configuration disallows it."
 msgstr ""
@@ -8944,7 +9118,7 @@ msgstr ""
 msgid "You cannot remove all flags from the role %s."
 msgstr "Ni allwch symud yr holl baneri o'r rôl %s."
 
-#: modules/memoserv/forward.c:57
+#: modules/memoserv/forward.c:58
 msgid "You cannot send yourself a memo."
 msgstr ""
 
@@ -9030,7 +9204,7 @@ msgstr ""
 msgid "You have been invited to %s."
 msgstr "Rydych wedi cael eich gwahodd i %s."
 
-#: modules/nickserv/enforce.c:528 modules/nickserv/identify.c:138
+#: modules/nickserv/enforce.c:528 modules/nickserv/identify.c:141
 #, c-format
 msgid "You have been logged out of %s."
 msgstr ""
@@ -9075,7 +9249,7 @@ msgstr ""
 msgid "You have no memos to delete."
 msgstr ""
 
-#: modules/memoserv/forward.c:43
+#: modules/memoserv/forward.c:44
 msgid "You have no memos to forward."
 msgstr ""
 
@@ -9112,31 +9286,31 @@ msgstr ""
 msgid "You have requested vhost %s."
 msgstr ""
 
-#: modules/operserv/set.c:464
+#: modules/operserv/set_enforceprefix.c:38
 #, fuzzy, c-format
 msgid "You have successfully set %s to %s."
 msgstr "Mae gennych fynediad baneri %s ar %s."
 
-#: modules/operserv/set.c:233 modules/operserv/set.c:285
-#: modules/operserv/set.c:437
+#: modules/operserv/set_chanexpire.c:37 modules/operserv/set_klinetime.c:37
+#: modules/operserv/set_nickexpire.c:37
 #, fuzzy, c-format
 msgid "You have successfully set %s to %u days."
 msgstr "Mae gennych fynediad baneri %s ar %s."
 
-#: modules/operserv/set.c:259 modules/operserv/set.c:366
+#: modules/operserv/set_akicktime.c:37 modules/operserv/set_commitinterval.c:37
 #, fuzzy, c-format
 msgid "You have successfully set %s to %u minutes."
 msgstr "Mae gennych fynediad baneri %s ar %s."
 
-#: modules/operserv/set.c:77
+#: modules/operserv/set_recontime.c:37
 #, fuzzy, c-format
 msgid "You have successfully set %s to %u seconds."
 msgstr "Mae gennych fynediad baneri %s ar %s."
 
-#: modules/operserv/set.c:103 modules/operserv/set.c:129
-#: modules/operserv/set.c:155 modules/operserv/set.c:181
-#: modules/operserv/set.c:207 modules/operserv/set.c:311
-#: modules/operserv/set.c:340
+#: modules/operserv/set_maxchanacs.c:37 modules/operserv/set_maxchans.c:37
+#: modules/operserv/set_maxfounders.c:40 modules/operserv/set_maxlogins.c:37
+#: modules/operserv/set_maxnicks.c:37 modules/operserv/set_maxusers.c:37
+#: modules/operserv/set_mdlimit.c:37
 #, fuzzy, c-format
 msgid "You have successfully set %s to %u."
 msgstr "Mae gennych fynediad baneri %s ar %s."
@@ -9618,6 +9792,9 @@ msgstr ""
 #~ msgid "%s added the metadata entry %s with value %s"
 #~ msgstr "Oedd %s ychwanegwyd â rôl %s y s yn %s."
 
+#~ msgid "%s can now take ownership of %s."
+#~ msgstr "Gall %s bellach yn cymryd perchnogaeth o'r %s."
+
 #, fuzzy
 #~ msgid "%s changed %s's access to %s."
 #~ msgstr "%s Nid oes mynediad arbennig i %s."
@@ -9679,6 +9856,9 @@ msgstr ""
 
 #~ msgid "%s has been unset as owner on %s."
 #~ msgstr "%s wedi cael ei heb ei setio fel perchennog ar %s."
+
+#~ msgid "%s is closed; it cannot be transferred."
+#~ msgstr "%s wedi cau; ni ellir ei drosglwyddo."
 
 #~ msgid "%s is not a bot"
 #~ msgstr "Nid %s yn bot"
@@ -9748,12 +9928,28 @@ msgstr ""
 #~ "services.db: %s"
 
 #, fuzzy
+#~ msgid "%-10s %-14s %-14s\n"
+#~ msgstr "%-5d %-22s %s"
+
+#, fuzzy
 #~ msgid "%2d: %-20s"
 #~ msgstr "%d: %s"
 
 #, fuzzy
+#~ msgid "%s: '%s' is not a valid algorithm name\n"
+#~ msgstr "Nid %s yn ddilys cyfeiriad e-bost."
+
+#, fuzzy
+#~ msgid "%s: '%s' is not a valid type name\n"
+#~ msgstr "Nid %s yn ddilys cyfeiriad e-bost."
+
+#, fuzzy
 #~ msgid "%s: hash generation failed"
 #~ msgstr "%s wedi cael ei akilled."
+
+#, fuzzy
+#~ msgid "'%s' is not a valid value for decimal option '%c'\n"
+#~ msgstr "Nid %s yn ddilys cyfeiriad e-bost."
 
 #~ msgid "*BANG*"
 #~ msgstr "*BANG*"
@@ -9769,6 +9965,11 @@ msgstr ""
 
 #~ msgid "Activate the requested announcement for a given nick."
 #~ msgstr "Activate y cyhoeddiad gofyn am Nick a roddir."
+
+#~ msgid "After that command is issued, the channel will be transferred."
+#~ msgstr ""
+#~ "Ar ôl bod gorchymyn yn cael ei gyhoeddi, bydd y sianel yn cael ei "
+#~ "drosglwyddo."
 
 #~ msgid "Cancels your requested announcement."
 #~ msgstr "Canslo eich cyhoeddiad y gofynnwyd amdani."
@@ -9850,6 +10051,12 @@ msgstr ""
 
 #~ msgid "Implements Defense Condition lockdowns."
 #~ msgstr "Offer lockdowns Cyflwr Defense."
+
+#~ msgid ""
+#~ "In order to complete the transfer, %s must perform the following command:"
+#~ msgstr ""
+#~ "Er mwyn cwblhau'r trosglwyddiad, mae'n rhaid i %s berfformio r yn canlyn "
+#~ "archa:"
 
 #~ msgid "Invalid command. Use /%s%s help for a command listing."
 #~ msgstr ""
@@ -9964,8 +10171,25 @@ msgstr ""
 #~ msgid "The fantasy prefix for the channel has been reset by %s"
 #~ msgstr "Mae'r rhagddodiad ffantasi am %s sianel wedi ei osod i %s."
 
+#~ msgid "The previous transfer request for %s has been cancelled."
+#~ msgstr "Roedd y cais blaenorol am drosglwyddo %s wedi cael ei ganslo."
+
+#~ msgid "The transfer of %s has been cancelled."
+#~ msgstr "Mae trosglwyddo %s wedi cael ei ganslo."
+
 #~ msgid "There are no badwords set in this channel."
 #~ msgstr "Nid oes unrhyw badwords a bennir yn y sianel."
+
+#~ msgid "To cancel the transfer, use /msg %s SET %s FOUNDER %s"
+#~ msgstr "I ddileu'r trosglwyddo, defnyddiwch /msg %s SET %s FOUNDER %s"
+
+#~ msgid "Transfer complete: %s has been set as founder for %s."
+#~ msgstr ""
+#~ "Trosglwyddo gwblhau: %s wedi cael ei osod fel sylfaenydd ar gyfer %s."
+
+#, fuzzy
+#~ msgid "Transfers foundership of a channel."
+#~ msgstr "Trosglwyddo foundership Lluoedd o sianel."
 
 #, fuzzy
 #~ msgid "XLINE:EXPIRE: %s set %s ago by %s"
@@ -9993,6 +10217,9 @@ msgstr ""
 
 #~ msgid "You are not authorized to unassign a bot on %s."
 #~ msgstr "Nid ydych wedi'ch awdurdodi i unassign bot ar %s."
+
+#~ msgid "You are not the founder of %s."
+#~ msgstr "Nid ydych yn sylfaenydd %s."
 
 #~ msgid ""
 #~ "You can not register your nick so soon after connecting. Please wait a "
