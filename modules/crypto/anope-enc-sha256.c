@@ -76,6 +76,8 @@ anope_enc_sha256_verify(const char *const restrict password, const char *const r
 		return false;
 	}
 
+	(void) smemzero(md64, sizeof md64);
+
 	if (! digest_is_big_endian_sha2())
 		for (size_t i = 0; i < DIGEST_IVLEN_SHA2_256; i++)
 			SHA2_REVERSE32(iv[i], iv[i]);
