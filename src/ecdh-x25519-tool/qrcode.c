@@ -71,12 +71,12 @@ ecdh_x25519_tool_print_qrcode(const char *const restrict keyfile_path)
 
 	if (! fh)
 	{
-		(void) fprintf(stderr, "fopen('%s', 'rb'): %s\n", keyfile_path, strerror(errno));
+		(void) print_stderr("fopen('%s', 'rb'): %s", keyfile_path, strerror(errno));
 		return EXIT_FAILURE;
 	}
 	if (fread(secpubkey, sizeof secpubkey, 1, fh) != 1)
 	{
-		(void) fprintf(stderr, "Could not read private and public keys\n");
+		(void) print_stderr(_("Could not read private and public keypair from key file"));
 		return EXIT_FAILURE;
 	}
 
@@ -86,7 +86,7 @@ ecdh_x25519_tool_print_qrcode(const char *const restrict keyfile_path)
 
 	if (! qrcode)
 	{
-		(void) fprintf(stderr, "Unable to encode keypair: %s\n", strerror(errno));
+		(void) print_stderr(_("Unable to encode keypair: %s"), strerror(errno));
 		return EXIT_FAILURE;
 	}
 
@@ -99,7 +99,7 @@ ecdh_x25519_tool_print_qrcode(const char *const restrict keyfile_path)
 int
 ecdh_x25519_tool_print_qrcode(const char ATHEME_VATTR_UNUSED *const restrict keyfile_path)
 {
-	(void) fprintf(stderr, "This program was not built with QR-Code support!\n");
+	(void) print_stderr(_("This program was not built with QR-Code support!"));
 	return EXIT_FAILURE;
 }
 

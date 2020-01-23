@@ -17,6 +17,28 @@
 #include <atheme/libathemecore.h>
 #include <ext/getopt_long.h>
 
+void ATHEME_FATTR_PRINTF(1, 2)
+print_stderr(const char *const restrict format, ...)
+{
+	va_list ap;
+	va_start(ap, format);
+	(void) vfprintf(stderr, format, ap);
+	(void) fprintf(stderr, "\n");
+	(void) fflush(stderr);
+	va_end(ap);
+}
+
+void ATHEME_FATTR_PRINTF(1, 2)
+print_stdout(const char *const restrict format, ...)
+{
+	va_list ap;
+	va_start(ap, format);
+	(void) vfprintf(stdout, format, ap);
+	(void) fprintf(stdout, "\n");
+	(void) fflush(stdout);
+	va_end(ap);
+}
+
 static int
 ecdh_x25519_tool_create_keypair(const char *const restrict keyfile_path)
 {
@@ -28,7 +50,7 @@ ecdh_x25519_tool_create_keypair(const char *const restrict keyfile_path)
 
 	if (keyfile_path != NULL && access(keyfile_path, F_OK) == 0)
 	{
-		(void) fprintf(stderr, "Key file '%s' already exists\n", keyfile_path);
+		(void) print_stderr(_("Key file '%s' already exists"), keyfile_path);
 		return EXIT_FAILURE;
 	}
 
@@ -36,7 +58,7 @@ ecdh_x25519_tool_create_keypair(const char *const restrict keyfile_path)
 
 	if (! fh)
 	{
-		(void) fprintf(stderr, "fopen('%s', 'wb'): %s\n", keyfile_path, strerror(errno));
+		(void) print_stderr("fopen('%s', 'wb'): %s", keyfile_path, strerror(errno));
 		return EXIT_FAILURE;
 	}
 
@@ -46,12 +68,12 @@ ecdh_x25519_tool_create_keypair(const char *const restrict keyfile_path)
 
 	if (fwrite(seckey, sizeof seckey, 1, fh) != 1)
 	{
-		(void) fprintf(stderr, "Could not write private key\n");
+		(void) print_stderr(_("Could not write private key to key file"));
 		return EXIT_FAILURE;
 	}
 	if (fwrite(pubkey, sizeof pubkey, 1, fh) != 1)
 	{
-		(void) fprintf(stderr, "Could not write public key\n");
+		(void) print_stderr(_("Could not write public key to key file"));
 		return EXIT_FAILURE;
 	}
 
@@ -60,13 +82,13 @@ ecdh_x25519_tool_create_keypair(const char *const restrict keyfile_path)
 
 	if (keyfile_path != NULL)
 	{
-		if (base64_encode(pubkey, sizeof pubkey, pubkey_b64, sizeof pubkey_b64) == (size_t) -1)
+		if (base64_encode(pubkey, sizeof pubkey, pubkey_b64, sizeof pubkey_b64) == BASE64_FAIL)
 		{
-			(void) fprintf(stderr, "base64_encode() failed (BUG?)\n");
+			(void) print_stderr(_("base64_encode() failed (BUG?)"));
 			return EXIT_FAILURE;
 		}
 
-		(void) fprintf(stdout, "%s\n", pubkey_b64);
+		(void) print_stdout("%s", pubkey_b64);
 	}
 
 	return EXIT_SUCCESS;
@@ -83,29 +105,29 @@ ecdh_x25519_tool_print_pubkey(const char *const restrict keyfile_path)
 
 	if (! fh)
 	{
-		(void) fprintf(stderr, "fopen('%s', 'rb'): %s\n", keyfile_path, strerror(errno));
+		(void) print_stderr("fopen('%s', 'rb'): %s", keyfile_path, strerror(errno));
 		return EXIT_FAILURE;
 	}
 	if (fread(seckey, sizeof seckey, 1, fh) != 1)
 	{
-		(void) fprintf(stderr, "Could not read private key\n");
+		(void) print_stderr(_("Could not read private key from key file"));
 		return EXIT_FAILURE;
 	}
 	if (fread(pubkey, sizeof pubkey, 1, fh) != 1)
 	{
-		(void) fprintf(stderr, "Could not read public key\n");
+		(void) print_stderr(_("Could not read public key from key file"));
 		return EXIT_FAILURE;
 	}
 
 	(void) fclose(fh);
 
-	if (base64_encode(pubkey, sizeof pubkey, pubkey_b64, sizeof pubkey_b64) == (size_t) -1)
+	if (base64_encode(pubkey, sizeof pubkey, pubkey_b64, sizeof pubkey_b64) == BASE64_FAIL)
 	{
-		(void) fprintf(stderr, "base64_encode() failed (BUG?)\n");
+		(void) print_stderr(_("base64_encode() failed (BUG?)"));
 		return EXIT_FAILURE;
 	}
 
-	(void) fprintf(stdout, "%s\n", pubkey_b64);
+	(void) print_stdout("%s", pubkey_b64);
 	return EXIT_SUCCESS;
 }
 
@@ -124,17 +146,17 @@ ecdh_x25519_tool_respond(const char *const restrict keyfile_path, const char *co
 
 	if (! fh)
 	{
-		(void) fprintf(stderr, "fopen('%s', 'rb'): %s\n", keyfile_path, strerror(errno));
+		(void) print_stderr("fopen('%s', 'rb'): %s", keyfile_path, strerror(errno));
 		return EXIT_FAILURE;
 	}
 	if (fread(seckey, sizeof seckey, 1, fh) != 1)
 	{
-		(void) fprintf(stderr, "Could not read private key\n");
+		(void) print_stderr(_("Could not read private key from key file"));
 		return EXIT_FAILURE;
 	}
 	if (fread(pubkey, sizeof pubkey, 1, fh) != 1)
 	{
-		(void) fprintf(stderr, "Could not read public key\n");
+		(void) print_stderr(_("Could not read public key from key file"));
 		return EXIT_FAILURE;
 	}
 
@@ -142,7 +164,7 @@ ecdh_x25519_tool_respond(const char *const restrict keyfile_path, const char *co
 
 	if (base64_decode(server_message_str, resp.octets, sizeof resp.octets) != sizeof resp.octets)
 	{
-		(void) fprintf(stderr, "Server Message is invalid\n");
+		(void) print_stderr(_("Server message is invalid"));
 		return EXIT_FAILURE;
 	}
 
@@ -157,13 +179,13 @@ ecdh_x25519_tool_respond(const char *const restrict keyfile_path, const char *co
 	for (size_t x = 0; x < sizeof challenge; x++)
 		challenge[x] = resp.field.challenge[x] ^ better_secret[x];
 
-	if (base64_encode(challenge, sizeof challenge, challenge_b64, sizeof challenge_b64) == (size_t) -1)
+	if (base64_encode(challenge, sizeof challenge, challenge_b64, sizeof challenge_b64) == BASE64_FAIL)
 	{
-		(void) fprintf(stderr, "base64_encode() failed (BUG?)\n");
+		(void) print_stderr(_("base64_encode() failed (BUG?)"));
 		return EXIT_FAILURE;
 	}
 
-	(void) fprintf(stdout, "%s\n", challenge_b64);
+	(void) print_stdout("%s", challenge_b64);
 	return EXIT_SUCCESS;
 }
 
@@ -185,17 +207,17 @@ ecdh_x25519_tool_server(const char *const restrict keyfile_path)
 
 	if (! fh)
 	{
-		(void) fprintf(stderr, "fopen('%s', 'rb'): %s\n", keyfile_path, strerror(errno));
+		(void) print_stderr("fopen('%s', 'rb'): %s", keyfile_path, strerror(errno));
 		return EXIT_FAILURE;
 	}
 	if (fread(client_seckey, sizeof client_seckey, 1, fh) != 1)
 	{
-		(void) fprintf(stderr, "Could not read private key\n");
+		(void) print_stderr(_("Could not read private key from key file"));
 		return EXIT_FAILURE;
 	}
 	if (fread(client_pubkey, sizeof client_pubkey, 1, fh) != 1)
 	{
-		(void) fprintf(stderr, "Could not read public key\n");
+		(void) print_stderr(_("Could not read public key from key file"));
 		return EXIT_FAILURE;
 	}
 
@@ -220,49 +242,45 @@ ecdh_x25519_tool_server(const char *const restrict keyfile_path)
 	for (size_t x = 0; x < sizeof resp.field.challenge; x++)
 		resp.field.challenge[x] = challenge[x] ^ better_secret[x];
 
-	if (base64_encode(challenge, sizeof challenge, challenge_b64, sizeof challenge_b64) == (size_t) -1)
+	if (base64_encode(challenge, sizeof challenge, challenge_b64, sizeof challenge_b64) == BASE64_FAIL)
 	{
-		(void) fprintf(stderr, "base64_encode() failed (BUG?)\n");
+		(void) print_stderr(_("base64_encode() failed (BUG?)"));
 		return EXIT_FAILURE;
 	}
-	if (base64_encode(resp.octets, sizeof resp.octets, resp_octets_b64, sizeof resp_octets_b64) == (size_t) -1)
+	if (base64_encode(resp.octets, sizeof resp.octets, resp_octets_b64, sizeof resp_octets_b64) == BASE64_FAIL)
 	{
-		(void) fprintf(stderr, "base64_encode() failed (BUG?)\n");
+		(void) print_stderr(_("base64_encode() failed (BUG?)"));
 		return EXIT_FAILURE;
 	}
 
-	(void) fprintf(stdout, "Original challenge: %s\n", challenge_b64);
-	(void) fprintf(stdout, "Server response:    %s\n", resp_octets_b64);
+	(void) print_stdout(_("Original challenge: %s"), challenge_b64);
+	(void) print_stdout(_("Server message:     %s"), resp_octets_b64);
 	return EXIT_SUCCESS;
 }
 
 static void
 ecdh_x25519_tool_print_help(void)
 {
-	(void) fprintf(stdout, ""
-	    "  \n"
-	    "  Usage: ecdh-x25519-tool [-h | -v | -T]\n"
-	    "         ecdh-x25519-tool [-f <path>] [-c | -p | -q | -r <msg> | -s]\n"
-	    "  \n"
-	    "    -h / --help               Print this message\n"
-	    "    -v / --version            Print version information\n"
-	    "    -T / --selftest-only      Exit after running X25519 ECDH self-test\n"
-	    "    -f / --key-file <path>    Path to key file for reading or writing\n"
-	    "    -c / --create-keypair     Write new key pair to file, print public key\n"
-	    "    -p / --print-pubkey       Read existing key file, print public key\n"
-#ifdef HAVE_LIBQRENCODE
-	    "    -q / --print-qrcode       Print PRIVATE AND PUBLIC KEY as a QR-Code\n"
-#else
-	    "    -q / --print-qrcode       (Not supported on your system)\n"
-#endif
-	    "    -r / --respond <msg>      Generate response to server message\n"
-	    "    -s / --server             Generate a server message for testing\n"
-	    "  \n"
-	    "  If \"-f\" is not given, \"-f -\" is assumed. This means use stdin/stdout.\n"
-	    "  \n"
-	    "  If \"-c -f -\" is given, the entire RAW key pair will be written to stdout.\n"
-	    "      Please ensure that stdout is NOT a terminal if this is the case!\n"
-	    "  \n");
+	(void) print_stdout(_(""
+		"\n"
+		"Usage: ecdh-x25519-tool [-h | -v | -T]\n"
+		"       ecdh-x25519-tool [-f <path>] [-c | -p | -q | -r <msg> | -s]\n"
+		"\n"
+		"  -h / --help               Print this message\n"
+		"  -v / --version            Print version information\n"
+		"  -T / --selftest-only      Exit after running X25519 ECDH self-test\n"
+		"  -f / --key-file <path>    Path to key file for reading or writing\n"
+		"  -c / --create-keypair     Write new key pair to file, print public key\n"
+		"  -p / --print-pubkey       Read existing key file, print public key\n"
+		"  -q / --print-qrcode       Print PRIVATE AND PUBLIC KEY as a QR-Code\n"
+		"  -r / --respond <msg>      Generate response to a server message\n"
+		"  -s / --server             Generate a server message (for testing)\n"
+		"\n"
+		"If \"-f\" is not given, \"-f -\" is assumed. This means use stdin/stdout.\n"
+		"\n"
+		"If \"-c -f -\" is given, the entire RAW key pair will be written to stdout.\n"
+		"     Please ensure that stdout is NOT a terminal if this is the case!\n"
+	));
 }
 
 int
@@ -303,7 +321,7 @@ main(int argc, char **argv)
 				return EXIT_SUCCESS;
 
 			case 'v':
-				(void) fprintf(stdout, "This is ecdh-x25519-tool from %s (%s)\n", PACKAGE_STRING, SERNO);
+				(void) print_stdout("This is ecdh-x25519-tool from %s (%s)", PACKAGE_STRING, SERNO);
 				return EXIT_SUCCESS;
 
 			case 'T':
