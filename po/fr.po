@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <ircs://chat.freenode.net:6697/atheme-i18n>\n"
-"POT-Creation-Date: 2020-01-22 01:10+0000\n"
+"POT-Creation-Date: 2020-01-23 03:45+0000\n"
 "PO-Revision-Date: 2013-02-21 22:00+0200\n"
 "Last-Translator: Jessy AMYOT <harakiri@overstack.fr>\n"
 "Language-Team: \n"
@@ -1471,6 +1471,28 @@ msgid ""
 "\n"
 "Type       MemCost    TimeCost   Threads    Elapsed\n"
 "---------- ---------- ---------- ---------- --------------"
+msgstr ""
+
+#: src/ecdh-x25519-tool/main.c:264
+msgid ""
+"\n"
+"Usage: ecdh-x25519-tool [-h | -v | -T]\n"
+"       ecdh-x25519-tool [-f <path>] [-c | -p | -q | -r <msg> | -s]\n"
+"\n"
+"  -h / --help               Print this message\n"
+"  -v / --version            Print version information\n"
+"  -T / --selftest-only      Exit after running X25519 ECDH self-test\n"
+"  -f / --key-file <path>    Path to key file for reading or writing\n"
+"  -c / --create-keypair     Write new key pair to file, print public key\n"
+"  -p / --print-pubkey       Read existing key file, print public key\n"
+"  -q / --print-qrcode       Print PRIVATE AND PUBLIC KEY as a QR-Code\n"
+"  -r / --respond <msg>      Generate response to a server message\n"
+"  -s / --server             Generate a server message (for testing)\n"
+"\n"
+"If \"-f\" is not given, \"-f -\" is assumed. This means use stdin/stdout.\n"
+"\n"
+"If \"-c -f -\" is given, the entire RAW key pair will be written to stdout.\n"
+"     Please ensure that stdout is NOT a terminal if this is the case!\n"
 msgstr ""
 
 #: modules/botserv/info.c:100
@@ -2947,6 +2969,28 @@ msgstr "Configure les différentes options des bots de BotServ"
 msgid "Could not open help file for %s."
 msgstr "Vous êtes maintenant identifié pour %s."
 
+#: src/ecdh-x25519-tool/qrcode.c:79
+msgid "Could not read private and public keypair from key file"
+msgstr ""
+
+#: src/ecdh-x25519-tool/main.c:113 src/ecdh-x25519-tool/main.c:154
+#: src/ecdh-x25519-tool/main.c:215
+msgid "Could not read private key from key file"
+msgstr ""
+
+#: src/ecdh-x25519-tool/main.c:118 src/ecdh-x25519-tool/main.c:159
+#: src/ecdh-x25519-tool/main.c:220
+msgid "Could not read public key from key file"
+msgstr ""
+
+#: src/ecdh-x25519-tool/main.c:71
+msgid "Could not write private key to key file"
+msgstr ""
+
+#: src/ecdh-x25519-tool/main.c:76
+msgid "Could not write public key to key file"
+msgstr ""
+
 #: modules/statserv/server.c:119
 msgid "Count the amount of servers connected to the network."
 msgstr "Compte le nombre de serveurs connectés au réseau."
@@ -4271,6 +4315,11 @@ msgstr "Les flags d'inscription pour %s n'étaient pas définis."
 msgid "Jupiters a server."
 msgstr "Jupe un serveur."
 
+#: src/ecdh-x25519-tool/main.c:53
+#, fuzzy, c-format
+msgid "Key file '%s' already exists"
+msgstr "Le rôle %s existe déjà."
+
 #: modules/chanserv/clear_users.c:121
 msgid "Kicks all users from a channel."
 msgstr "Kicke tous les utilisateurs d'un salon."
@@ -5362,6 +5411,11 @@ msgstr "Options pour %s inchangées."
 msgid "Opts you out of Last Login notices upon identifying to your account."
 msgstr ""
 
+#: src/ecdh-x25519-tool/main.c:256
+#, c-format
+msgid "Original challenge: %s"
+msgstr ""
+
 #: libathemecore/services.c:963
 #, c-format
 msgid "Output limit (%u) exceeded, halting output"
@@ -6269,6 +6323,16 @@ msgstr "Liste des serveur NOOP (%zu entrées) :"
 #, fuzzy, c-format
 msgid "Server description: %s"
 msgstr "Description : %s"
+
+#: src/ecdh-x25519-tool/main.c:167
+#, fuzzy
+msgid "Server message is invalid"
+msgstr "La regex fournie %s est invalide."
+
+#: src/ecdh-x25519-tool/main.c:257
+#, c-format
+msgid "Server message:     %s"
+msgstr ""
 
 #: modules/statserv/server.c:82
 #, fuzzy, c-format
@@ -8473,6 +8537,10 @@ msgstr ""
 "Cette opération ne peut être effectuée sur %s, parce que le compte a été "
 "marqué par %s."
 
+#: src/ecdh-x25519-tool/qrcode.c:102
+msgid "This program was not built with QR-Code support!"
+msgstr ""
+
 #: modules/saslserv/main.c:1050
 msgid ""
 "This service exists to identify connecting clients to the network. It has no "
@@ -8667,6 +8735,11 @@ msgstr "Type"
 #, c-format
 msgid "URL         : %s"
 msgstr "URL         : %s"
+
+#: src/ecdh-x25519-tool/qrcode.c:89
+#, c-format
+msgid "Unable to encode keypair: %s"
+msgstr ""
 
 #: modules/botserv/main.c:896
 #, c-format
@@ -9831,6 +9904,12 @@ msgstr "administre les groupes"
 #: modules/operserv/specs.c:64
 msgid "administer services"
 msgstr "administre les services"
+
+#: src/ecdh-x25519-tool/main.c:87 src/ecdh-x25519-tool/main.c:126
+#: src/ecdh-x25519-tool/main.c:184 src/ecdh-x25519-tool/main.c:247
+#: src/ecdh-x25519-tool/main.c:252
+msgid "base64_encode() failed (BUG?)"
+msgstr ""
 
 #: modules/operserv/specs.c:53
 msgid "bypass channel registration limits"
