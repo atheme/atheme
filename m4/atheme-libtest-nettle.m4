@@ -50,7 +50,7 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
             LIBNETTLE="Yes"
         ], [
             LIBNETTLE="No"
-            AS_IF([test "${with_nettle}" != "auto"], [
+            AS_IF([test "${with_nettle}" != "no" && test "${with_nettle}" != "auto"], [
                 AC_MSG_FAILURE([--with-nettle was given but GNU Nettle could not be found])
             ])
         ])
@@ -143,7 +143,7 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
         AC_CHECK_HEADERS([nettle/version.h], [], [], [])
     ], [
         LIBNETTLE="No"
-        AS_IF([test "${with_nettle}" != "auto"], [
+        AS_IF([test "${with_nettle}" != "no" && test "${with_nettle}" != "auto"], [
             AC_MSG_FAILURE([--with-nettle was given but GNU Nettle appears to be unusable])
         ])
     ])

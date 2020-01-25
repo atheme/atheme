@@ -48,7 +48,7 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
             LIBIDN="Yes"
         ], [
             LIBIDN="No"
-            AS_IF([test "${with_idn}" != "auto"], [
+            AS_IF([test "${with_idn}" != "no" && test "${with_idn}" != "auto"], [
                 AC_MSG_FAILURE([--with-idn was given but GNU libidn could not be found])
             ])
         ])
@@ -76,7 +76,7 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
         ], [
             AC_MSG_RESULT([no])
             LIBIDN="No"
-            AS_IF([test "${with_idn}" != "auto"], [
+            AS_IF([test "${with_idn}" != "no" && test "${with_idn}" != "auto"], [
                 AC_MSG_ERROR([--with-idn was given but GNU libidn could not be found])
             ])
         ])

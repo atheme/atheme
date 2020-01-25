@@ -53,7 +53,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
             LIBCRYPTO="Yes"
         ], [
             LIBCRYPTO="No"
-            AS_IF([test "${with_openssl}" != "auto"], [
+            AS_IF([test "${with_openssl}" != "no" && test "${with_openssl}" != "auto"], [
                 AC_MSG_FAILURE([--with-openssl was given but OpenSSL could not be found])
             ])
         ])
@@ -227,7 +227,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
         AC_DEFINE([HAVE_LIBCRYPTO], [1], [Define to 1 if libcrypto appears to be usable])
     ], [
         LIBCRYPTO="No"
-        AS_IF([test "${with_openssl}" != "auto"], [
+        AS_IF([test "${with_openssl}" != "no" && test "${with_openssl}" != "auto"], [
             AC_MSG_FAILURE([--with-openssl was given but libcrypto appears to be unusable])
         ])
     ])

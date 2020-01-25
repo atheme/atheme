@@ -49,7 +49,7 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
             LIBPCRE="Yes"
         ], [
             LIBPCRE="No"
-            AS_IF([test "${with_pcre}" != "auto"], [
+            AS_IF([test "${with_pcre}" != "no" && test "${with_pcre}" != "auto"], [
                 AC_MSG_FAILURE([--with-pcre was given but libpcre could not be found])
             ])
         ])
@@ -78,7 +78,7 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
         ], [
             AC_MSG_RESULT([no])
             LIBPCRE="No"
-            AS_IF([test "${with_pcre}" != "auto"], [
+            AS_IF([test "${with_pcre}" != "no" && test "${with_pcre}" != "auto"], [
                 AC_MSG_FAILURE([--with-pcre was given but libpcre does not appear to be usable])
             ])
         ])

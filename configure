@@ -9922,7 +9922,7 @@ fi
 else
 
             LIBARGON2="No"
-            if test "${with_argon2}" != "auto"; then :
+            if test "${with_argon2}" != "no" && test "${with_argon2}" != "auto"; then :
 
                 { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
@@ -10002,7 +10002,7 @@ else
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
             LIBARGON2="No"
-            if test "${with_argon2}" != "auto"; then :
+            if test "${with_argon2}" != "no" && test "${with_argon2}" != "auto"; then :
 
                 { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
@@ -10514,7 +10514,7 @@ fi
 else
 
             LIBCRYPTO="No"
-            if test "${with_openssl}" != "auto"; then :
+            if test "${with_openssl}" != "no" && test "${with_openssl}" != "auto"; then :
 
                 { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
@@ -10861,7 +10861,7 @@ $as_echo "#define HAVE_LIBCRYPTO 1" >>confdefs.h
 else
 
         LIBCRYPTO="No"
-        if test "${with_openssl}" != "auto"; then :
+        if test "${with_openssl}" != "no" && test "${with_openssl}" != "auto"; then :
 
             { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
@@ -11034,7 +11034,7 @@ fi
 else
 
             LIBIDN="No"
-            if test "${with_idn}" != "auto"; then :
+            if test "${with_idn}" != "no" && test "${with_idn}" != "auto"; then :
 
                 { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
@@ -11089,7 +11089,7 @@ else
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
             LIBIDN="No"
-            if test "${with_idn}" != "auto"; then :
+            if test "${with_idn}" != "no" && test "${with_idn}" != "auto"; then :
 
                 as_fn_error $? "--with-idn was given but GNU libidn could not be found" "$LINENO" 5
 
@@ -11835,7 +11835,7 @@ fi
 else
 
             LIBNETTLE="No"
-            if test "${with_nettle}" != "auto"; then :
+            if test "${with_nettle}" != "no" && test "${with_nettle}" != "auto"; then :
 
                 { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
@@ -12025,7 +12025,7 @@ done
 else
 
         LIBNETTLE="No"
-        if test "${with_nettle}" != "auto"; then :
+        if test "${with_nettle}" != "no" && test "${with_nettle}" != "auto"; then :
 
             { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
@@ -12364,7 +12364,7 @@ fi
 else
 
             LIBPCRE="No"
-            if test "${with_pcre}" != "auto"; then :
+            if test "${with_pcre}" != "no" && test "${with_pcre}" != "auto"; then :
 
                 { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
@@ -12420,7 +12420,7 @@ else
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
             LIBPCRE="No"
-            if test "${with_pcre}" != "auto"; then :
+            if test "${with_pcre}" != "no" && test "${with_pcre}" != "auto"; then :
 
                 { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
@@ -12597,7 +12597,7 @@ fi
 else
 
             LIBQRENCODE="No"
-            if test "${with_qrencode}" != "auto"; then :
+            if test "${with_qrencode}" != "no" && test "${with_qrencode}" != "auto"; then :
 
                 { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
@@ -12657,7 +12657,7 @@ else
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
             LIBQRENCODE="No"
-            if test "${with_qrencode}" != "auto"; then :
+            if test "${with_qrencode}" != "no" && test "${with_qrencode}" != "auto"; then :
 
                 { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
@@ -12838,7 +12838,7 @@ fi
 else
 
             LIBSODIUM="No"
-            if test "${with_sodium}" != "auto"; then :
+            if test "${with_sodium}" != "no" && test "${with_sodium}" != "auto"; then :
 
                 { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
@@ -12888,7 +12888,7 @@ else
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
             LIBSODIUM="No"
-            if test "${with_sodium}" != "auto"; then :
+            if test "${with_sodium}" != "no" && test "${with_sodium}" != "auto"; then :
 
                 { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
@@ -13177,7 +13177,7 @@ $as_echo "#define HAVE_LIBSODIUM 1" >>confdefs.h
 else
 
         LIBSODIUM="No"
-        if test "${with_sodium}" != "auto"; then :
+        if test "${with_sodium}" != "no" && test "${with_sodium}" != "auto"; then :
 
             { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}

@@ -49,7 +49,7 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
             LIBQRENCODE="Yes"
         ], [
             LIBQRENCODE="No"
-            AS_IF([test "${with_qrencode}" != "auto"], [
+            AS_IF([test "${with_qrencode}" != "no" && test "${with_qrencode}" != "auto"], [
                 AC_MSG_FAILURE([--with-qrencode was given but libqrencode could not be found])
             ])
         ])
@@ -78,7 +78,7 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
         ], [
             AC_MSG_RESULT([no])
             LIBQRENCODE="No"
-            AS_IF([test "${with_qrencode}" != "auto"], [
+            AS_IF([test "${with_qrencode}" != "no" && test "${with_qrencode}" != "auto"], [
                 AC_MSG_FAILURE([--with-qrencode was given but libqrencode does not appear to be usable])
             ])
         ])

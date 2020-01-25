@@ -52,7 +52,7 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
             LIBSODIUM="Yes"
         ], [
             LIBSODIUM="No"
-            AS_IF([test "${with_sodium}" != "auto"], [
+            AS_IF([test "${with_sodium}" != "no" && test "${with_sodium}" != "auto"], [
                 AC_MSG_FAILURE([--with-sodium was given but libsodium could not be found])
             ])
         ])
@@ -77,7 +77,7 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
         ], [
             AC_MSG_RESULT([no])
             LIBSODIUM="No"
-            AS_IF([test "${with_sodium}" != "auto"], [
+            AS_IF([test "${with_sodium}" != "no" && test "${with_sodium}" != "auto"], [
                 AC_MSG_FAILURE([--with-sodium was given but libsodium appears to be unusable])
             ])
         ])
@@ -214,7 +214,7 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
         AC_DEFINE([HAVE_LIBSODIUM], [1], [Define to 1 if libsodium appears to be usable])
     ], [
         LIBSODIUM="No"
-        AS_IF([test "${with_sodium}" != "auto"], [
+        AS_IF([test "${with_sodium}" != "no" && test "${with_sodium}" != "auto"], [
             AC_MSG_FAILURE([--with-sodium was given but libsodium appears to be unusable])
         ])
     ])

@@ -48,7 +48,7 @@ AC_DEFUN([ATHEME_LIBTEST_ARGON2], [
             LIBARGON2="Yes"
         ], [
             LIBARGON2="No"
-            AS_IF([test "${with_argon2}" != "auto"], [
+            AS_IF([test "${with_argon2}" != "no" && test "${with_argon2}" != "auto"], [
                 AC_MSG_FAILURE([--with-argon2 was given but libargon2 could not be found])
             ])
         ])
@@ -101,7 +101,7 @@ AC_DEFUN([ATHEME_LIBTEST_ARGON2], [
         ], [
             AC_MSG_RESULT([no])
             LIBARGON2="No"
-            AS_IF([test "${with_argon2}" != "auto"], [
+            AS_IF([test "${with_argon2}" != "no" && test "${with_argon2}" != "auto"], [
                 AC_MSG_FAILURE([--with-argon2 was given but libargon2 appears to be unusable])
             ])
         ])
