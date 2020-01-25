@@ -59,9 +59,6 @@
 /* Define to 1 if you have the <arpa/nameser.h> header file. */
 #undef HAVE_ARPA_NAMESER_H
 
-/* Define to 1 if you have the `asprintf' function. */
-#undef HAVE_ASPRINTF
-
 /* Define to 1 if you have the Mac OS X function CFLocaleCopyCurrent in the
    CoreFoundation framework. */
 #undef HAVE_CFLOCALECOPYCURRENT
@@ -139,9 +136,6 @@
 
 /* Define if you have the iconv() function and it works. */
 #undef HAVE_ICONV
-
-/* Define to 1 if the system has the type `intmax_t'. */
-#undef HAVE_INTMAX_T
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
@@ -299,7 +293,7 @@
 /* Define to 1 if you have the <signal.h> header file. */
 #undef HAVE_SIGNAL_H
 
-/* Define to 1 if you have a C99 compliant `snprintf' function. */
+/* Define to 1 if you have the `snprintf' function. */
 #undef HAVE_SNPRINTF
 
 /* Define to 1 if you have the <stdarg.h> header file. */
@@ -377,12 +371,6 @@
 /* Define to 1 if you have the `strtoull' function. */
 #undef HAVE_STRTOULL
 
-/* Define to 1 if `decimal_point' is a member of `struct lconv'. */
-#undef HAVE_STRUCT_LCONV_DECIMAL_POINT
-
-/* Define to 1 if `thousands_sep' is a member of `struct lconv'. */
-#undef HAVE_STRUCT_LCONV_THOUSANDS_SEP
-
 /* Define to 1 if you have the <sys/file.h> header file. */
 #undef HAVE_SYS_FILE_H
 
@@ -413,9 +401,6 @@
 /* Define to 1 if you have the `timingsafe_memcmp' function. */
 #undef HAVE_TIMINGSAFE_MEMCMP
 
-/* Define to 1 if the system has the type `uintmax_t'. */
-#undef HAVE_UINTMAX_T
-
 /* Define to 1 if the system has the type `uintptr_t'. */
 #undef HAVE_UINTPTR_T
 
@@ -434,20 +419,8 @@
 /* Define to 1 if getrandom(2) appears to be usable */
 #undef HAVE_USABLE_GETRANDOM
 
-/* Define to 1 if you have the <varargs.h> header file. */
-#undef HAVE_VARARGS_H
-
-/* Define to 1 if you have the `vasprintf' function. */
-#undef HAVE_VASPRINTF
-
-/* Define to 1 if you have the `va_copy' function or macro. */
-#undef HAVE_VA_COPY
-
-/* Define to 1 if you have a C99 compliant `vsnprintf' function. */
+/* Define to 1 if you have the `vsnprintf' function. */
 #undef HAVE_VSNPRINTF
-
-/* Define to 1 if you have the `__va_copy' function or macro. */
-#undef HAVE___VA_COPY
 
 /* Name of package */
 #undef PACKAGE
@@ -547,9 +520,6 @@
 /* We want ISO 9899:2011 Annex K memory functions if available */
 #undef __STDC_WANT_LIB_EXT1__
 
-/* Define to rpl_asprintf if the replacement function should be used. */
-#undef asprintf
-
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const
 
@@ -578,10 +548,6 @@
    a type exists and the standard includes do not define it. */
 #undef int8_t
 
-/* Define to the widest signed integer type if <stdint.h> and <inttypes.h> do
-   not define. */
-#undef intmax_t
-
 /* Define to `long int' if <sys/types.h> does not define. */
 #undef off_t
 
@@ -605,9 +571,6 @@
 /* Define to `unsigned int' if <sys/types.h> does not define. */
 #undef size_t
 
-/* Define to rpl_snprintf if the replacement function should be used. */
-#undef snprintf
-
 /* Define to `int' if <sys/types.h> does not define. */
 #undef ssize_t
 
@@ -630,19 +593,9 @@
    such a type exists and the standard includes do not define it. */
 #undef uint8_t
 
-/* Define to the widest unsigned integer type if <stdint.h> and <inttypes.h>
-   do not define. */
-#undef uintmax_t
-
 /* Define to the type of an unsigned integer type wide enough to hold a
    pointer, if such a type exists, and if the system does not define it. */
 #undef uintptr_t
-
-/* Define to rpl_vasprintf if the replacement function should be used. */
-#undef vasprintf
-
-/* Define to rpl_vsnprintf if the replacement function should be used. */
-#undef vsnprintf
 
 
 #ifndef ATHEME_API_DIGEST_FRONTEND

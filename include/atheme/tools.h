@@ -172,17 +172,4 @@ const char *uinttobase64(char *buf, uint64_t v, int64_t count);
 unsigned int base64touint(const char *buf);
 void decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN + 1]);
 
-#if !HAVE_VSNPRINTF
-int rpl_vsnprintf(char *, size_t, const char *, va_list) ATHEME_FATTR_PRINTF(3, 0);
-#endif
-#if !HAVE_SNPRINTF
-int rpl_snprintf(char *, size_t, const char *, ...) ATHEME_FATTR_PRINTF(3, 4);
-#endif
-#if !HAVE_VASPRINTF
-int rpl_vasprintf(char **, const char *, va_list) ATHEME_FATTR_PRINTF(2, 0);
-#endif
-#if !HAVE_ASPRINTF
-int rpl_asprintf(char **, const char *, ...) ATHEME_FATTR_PRINTF(2, 3);
-#endif
-
 #endif /* !ATHEME_INC_TOOLS_H */

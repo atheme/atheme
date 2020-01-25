@@ -181,6 +181,40 @@ detach_console(int *daemonize_pipe)
 #endif
 }
 
+#ifdef ENABLE_NLS
+static int ATHEME_FATTR_PRINTF(3, 4)
+test_vsnprintf_iso_c99_driver(char *const restrict buf, const size_t len, const char *const restrict fmt, ...)
+{
+	va_list ap;
+	va_start(ap, fmt);
+	const int result = vsnprintf(buf, len, fmt, ap);
+	va_end(ap);
+	return result;
+}
+
+static bool
+test_vsnprintf_iso_c99_positional(void)
+{
+	char buf[BUFSIZE];
+
+	(void) memset(buf, 0xFF, sizeof buf);
+	(void) test_vsnprintf_iso_c99_driver(buf, sizeof buf, "%3$s %1$s %4$u %2$s", "foo", "bar", "baz", 42U);
+
+	return (strcmp(buf, "baz foo 42 bar") == 0);
+}
+
+static bool
+test_snprintf_iso_c99_positional(void)
+{
+	char buf[BUFSIZE];
+
+	(void) memset(buf, 0xFF, sizeof buf);
+	(void) snprintf(buf, sizeof buf, "%3$s %1$s %4$u %2$s", "foo", "bar", "baz", 42U);
+
+	return (strcmp(buf, "baz foo 42 bar") == 0);
+}
+#endif
+
 bool ATHEME_FATTR_WUR
 libathemecore_early_init(void)
 {
@@ -190,21 +224,37 @@ libathemecore_early_init(void)
 		return true;
 
 #ifdef ENABLE_NLS
-	/* Prepare gettext */
-	if (! setlocale(LC_ALL, ""))
+	(void) languages_set_available(false);
+
+	/* For translations to make any sense most of the time, the order of words or values has to be changed.
+	 * Here we verify that does work, so that we can decide whether to enable translations or not.
+	 * If it doesn't work, there's no point enabling translations, because the output will be garbage.
+	 */
+	if (! test_vsnprintf_iso_c99_positional())
+	{
+		(void) fprintf(stderr, "Your vsnprintf(3) does not support positional format tokens!\n");
+		(void) fprintf(stderr, "Not enabling language support. Build with '--disable-nls' to silence.\n");
+	}
+	else if (! test_snprintf_iso_c99_positional())
+	{
+		(void) fprintf(stderr, "Your snprintf(3) does not support positional format tokens!\n");
+		(void) fprintf(stderr, "Not enabling language support. Build with '--disable-nls' to silence.\n");
+	}
+	else if (! setlocale(LC_ALL, ""))
 	{
 		(void) perror("setlocale(3)");
-		return false;
 	}
-	if (! textdomain(PACKAGE_TARNAME))
-	{
-		(void) perror("textdomain(3)");
-		return false;
-	}
-	if (! bindtextdomain(PACKAGE_TARNAME, LOCALEDIR))
+	else if (! bindtextdomain(PACKAGE_TARNAME, LOCALEDIR))
 	{
 		(void) perror("bindtextdomain(3)");
-		return false;
+	}
+	else if (! textdomain(PACKAGE_TARNAME))
+	{
+		(void) perror("textdomain(3)");
+	}
+	else
+	{
+		(void) languages_set_available(true);
 	}
 #endif /* ENABLE_NLS */
 

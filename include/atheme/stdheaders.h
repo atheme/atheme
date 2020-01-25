@@ -18,6 +18,11 @@
 #  include <stddef.h>
 #endif
 
+#ifdef HAVE_STDARG_H
+// va_list, va_arg(), va_start(), va_end()
+#  include <stdarg.h>
+#endif
+
 #ifdef HAVE_SYS_TYPES_H
 // Misc compiler/system types
 #  include <sys/types.h>
@@ -76,11 +81,6 @@
 #ifdef HAVE_SIGNAL_H
 // kill(), raise(), sigaction(), sigprocmask(), ...
 #  include <signal.h>
-#endif
-
-#ifdef HAVE_STDARG_H
-// va_list, va_arg(), va_start(), va_end()
-#  include <stdarg.h>
 #endif
 
 #ifdef HAVE_STDBOOL_H
