@@ -4,7 +4,8 @@
 # Copyright (C) 2010 William Pitcock <nenolod@dereferenced.org>
 # Copyright (C) 2020 Aaron M. D. Jones <aaronmdjones@gmail.com>
 
+include ../extra.mk
+
 SUBDIRS = createburst createtestdb
 
-include ../extra.mk
 include ../buildsys.mk

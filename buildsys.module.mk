@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: ISC
 # SPDX-URL: https://spdx.org/licenses/ISC.html
 #
-# Copyright (C) 2010-2012 William Pitcock <nenolod@atheme.org>
+# Copyright (C) 2010-2012 William Pitcock <nenolod@dereferenced.org>
 # Copyright (C) 2010-2013 Jilles Tjoelker <jilles@stack.nl>
 # Copyright (C) 2010 Nathan Phillip Brink <binki@gentoo.org>
 # Copyright (C) 2011 Stephen Bennett <spb@exherbo.org>
