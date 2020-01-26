@@ -9,6 +9,9 @@
 
 AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
+
     LIBCRYPTO="No"
     LIBCRYPTO_PATH=""
     LIBCRYPTO_NAME=""
@@ -31,9 +34,6 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
             AC_MSG_ERROR([invalid option for --with-openssl])
             ;;
     esac
-
-    CFLAGS_SAVED="${CFLAGS}"
-    LIBS_SAVED="${LIBS}"
 
     AS_IF([test "${with_openssl}" != "no"], [
         AS_IF([test -n "${LIBCRYPTO_PATH}"], [
@@ -232,9 +232,6 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
         ])
     ])
 
-    CFLAGS="${CFLAGS_SAVED}"
-    LIBS="${LIBS_SAVED}"
-
     AS_IF([test "${LIBCRYPTO}" = "No"], [
         LIBCRYPTO_CFLAGS=""
         LIBCRYPTO_LIBS=""
@@ -242,4 +239,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
 
     AC_SUBST([LIBCRYPTO_CFLAGS])
     AC_SUBST([LIBCRYPTO_LIBS])
+
+    CFLAGS="${CFLAGS_SAVED}"
+    LIBS="${LIBS_SAVED}"
 ])

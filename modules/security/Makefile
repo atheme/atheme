@@ -1,15 +1,17 @@
 # SPDX-License-Identifier: ISC
 # SPDX-URL: https://spdx.org/licenses/ISC.html
 #
-# Copyright (C) 2003-2004 E. Will, et al.
-
-MODULE		= security
-SRCS		= cmdperm.c
+# Copyright (C) 2012 William Pitcock <nenolod@dereferenced.org>
+# Copyright (C) 2018-2020 Aaron M. D. Jones <aaronmdjones@gmail.com>
 
 include ../../extra.mk
+
+MODULE = security
+SRCS   = cmdperm.c
+
 include ../../buildsys.mk
 include ../../buildsys.module.mk
 
-CPPFLAGS	+= -I../../include
-LDFLAGS		+= -L../../libathemecore
-LIBS		+= -lathemecore
+CPPFLAGS += -I../../include
+LDFLAGS  += -L../../libathemecore
+LIBS     += -lathemecore

@@ -1,15 +1,22 @@
 # SPDX-License-Identifier: ISC
 # SPDX-URL: https://spdx.org/licenses/ISC.html
 #
-# Copyright (C) 2003-2004 E. Will, et al.
-
-MODULE		= statserv
-SRCS		= channel.c main.c netsplit.c pwhashes.c server.c
+# Copyright (C) 2011 Alyx <alyx@sporksmoo.net>
+# Copyright (C) 2018-2020 Aaron M. D. Jones <aaronmdjones@gmail.com>
 
 include ../../extra.mk
+
+MODULE = statserv
+SRCS   =            \
+    channel.c       \
+    main.c          \
+    netsplit.c      \
+    pwhashes.c      \
+    server.c
+
 include ../../buildsys.mk
 include ../../buildsys.module.mk
 
-CPPFLAGS	+= -I../../include
-LDFLAGS		+= -L../../libathemecore
-LIBS		+= -lathemecore
+CPPFLAGS += -I../../include
+LDFLAGS  += -L../../libathemecore
+LIBS     += -lathemecore

@@ -8,11 +8,16 @@
 
 AC_DEFUN([ATHEME_LIBTEST_MBEDCRYPTO], [
 
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
+
     LIBMBEDCRYPTO="No"
-    LIBMBEDCRYPTO_LIBS=""
     LIBMBEDCRYPTO_USABLE="No"
     LIBMBEDCRYPTO_DIGEST="No"
     LIBMBEDCRYPTO_RANDOM="No"
+
+    LIBMBEDCRYPTO_CFLAGS=""
+    LIBMBEDCRYPTO_LIBS=""
 
     AC_ARG_WITH([mbedtls],
         [AS_HELP_STRING([--without-mbedtls], [Do not attempt to detect ARM mbedTLS (cryptographic library)])],
@@ -25,9 +30,6 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDCRYPTO], [
             AC_MSG_ERROR([invalid option for --with-mbedtls])
             ;;
     esac
-
-    CFLAGS_SAVED="${CFLAGS}"
-    LIBS_SAVED="${LIBS}"
 
     AS_IF([test "${with_mbedtls}" != "no"], [
         # If this library ever starts shipping a pkg-config file, change to PKG_CHECK_MODULES ?
@@ -226,7 +228,6 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDCRYPTO], [
         AC_DEFINE([HAVE_LIBMBEDCRYPTO], [1], [Define to 1 if libmbedcrypto appears to be usable])
         AS_IF([test "x${ac_cv_search_mbedtls_version_get_string}" != "xnone required"], [
             LIBMBEDCRYPTO_LIBS="${ac_cv_search_mbedtls_version_get_string}"
-            AC_SUBST([LIBMBEDCRYPTO_LIBS])
         ])
     ], [
         LIBMBEDCRYPTO="No"
@@ -234,6 +235,14 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDCRYPTO], [
             AC_MSG_FAILURE([--with-mbedtls was given but libmbedcrypto appears to be unusable])
         ])
     ])
+
+    AS_IF([test "${LIBMBEDCRYPTO}" = "No"], [
+        LIBMBEDCRYPTO_CFLAGS=""
+        LIBMBEDCRYPTO_LIBS=""
+    ])
+
+    AC_SUBST([LIBMBEDCRYPTO_CFLAGS])
+    AC_SUBST([LIBMBEDCRYPTO_LIBS])
 
     CFLAGS="${CFLAGS_SAVED}"
     LIBS="${LIBS_SAVED}"

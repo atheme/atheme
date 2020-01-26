@@ -89,6 +89,7 @@ AC_DEFUN([ATHEME_CC_ENABLE_WARNINGS], [
     ATHEME_CC_TEST_CFLAGS([-Wno-documentation-unknown-command])
     ATHEME_CC_TEST_CFLAGS([-Wno-extra-semi-stmt])
     ATHEME_CC_TEST_CFLAGS([-Wno-format-pedantic])
+    ATHEME_CC_TEST_CFLAGS([-Wno-format-zero-length])
     ATHEME_CC_TEST_CFLAGS([-Wno-inline])
     ATHEME_CC_TEST_CFLAGS([-Wno-packed])
     ATHEME_CC_TEST_CFLAGS([-Wno-padded])

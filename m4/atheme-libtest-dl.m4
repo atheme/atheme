@@ -9,9 +9,10 @@
 
 AC_DEFUN([ATHEME_LIBTEST_DL], [
 
-    LIBDL_LIBS=""
-
+    CFLAGS_SAVED="${CFLAGS}"
     LIBS_SAVED="${LIBS}"
+
+    LIBDL_LIBS=""
 
     AC_SEARCH_LIBS([dlinfo], [dl], [
         AC_CHECK_HEADERS([dlfcn.h link.h], [], [], [])
@@ -44,5 +45,6 @@ AC_DEFUN([ATHEME_LIBTEST_DL], [
         ])
     ], [])
 
+    CFLAGS="${CFLAGS_SAVED}"
     LIBS="${LIBS_SAVED}"
 ])

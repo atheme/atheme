@@ -9,9 +9,9 @@
 
 AC_DEFUN([ATHEME_LIBTEST_SOCKET], [
 
-    LIBSOCKET_LIBS=""
-
     LIBS_SAVED="${LIBS}"
+
+    LIBSOCKET_LIBS=""
 
     AC_CHECK_HEADERS([netinet/in.h sys/socket.h sys/types.h], [], [], [])
 
@@ -52,7 +52,7 @@ AC_DEFUN([ATHEME_LIBTEST_SOCKET], [
         AC_MSG_FAILURE([socket functions appear to be unusable])
     ])
 
-    LIBS="${LIBS_SAVED}"
-
     AC_SUBST([LIBSOCKET_LIBS])
+
+    LIBS="${LIBS_SAVED}"
 ])

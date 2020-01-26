@@ -8,6 +8,9 @@
 
 AC_DEFUN([ATHEME_LIBTEST_IDN], [
 
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
+
     LIBIDN="No"
     LIBIDN_PATH=""
 
@@ -26,9 +29,6 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
             AC_MSG_ERROR([invalid option for --with-idn])
             ;;
     esac
-
-    CFLAGS_SAVED="${CFLAGS}"
-    LIBS_SAVED="${LIBS}"
 
     AS_IF([test "${with_idn}" != "no"], [
         AS_IF([test -n "${LIBIDN_PATH}"], [
@@ -82,9 +82,6 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
         ])
     ])
 
-    CFLAGS="${CFLAGS_SAVED}"
-    LIBS="${LIBS_SAVED}"
-
     AS_IF([test "${LIBIDN}" = "No"], [
         LIBIDN_CFLAGS=""
         LIBIDN_LIBS=""
@@ -92,4 +89,7 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 
     AC_SUBST([LIBIDN_CFLAGS])
     AC_SUBST([LIBIDN_LIBS])
+
+    CFLAGS="${CFLAGS_SAVED}"
+    LIBS="${LIBS_SAVED}"
 ])

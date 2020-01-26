@@ -8,7 +8,12 @@
 
 AC_DEFUN([ATHEME_LIBTEST_CRYPT], [
 
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
+
     LIBCRYPT="No"
+
+    LIBCRYPT_CFLAGS=""
     LIBCRYPT_LIBS=""
 
     AC_ARG_WITH([crypt],
@@ -22,8 +27,6 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPT], [
             AC_MSG_ERROR([invalid option for --with-crypt])
             ;;
     esac
-
-    LIBS_SAVED="${LIBS}"
 
     AS_IF([test "${with_crypt}" != "no"], [
         AC_SEARCH_LIBS([crypt], [crypt], [
@@ -49,7 +52,6 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPT], [
                 AC_DEFINE([HAVE_CRYPT], [1], [Define to 1 if crypt(3) appears to be usable])
                 AS_IF([test "x${ac_cv_search_crypt}" != "xnone required"], [
                     LIBCRYPT_LIBS="${ac_cv_search_crypt}"
-                    AC_SUBST([LIBCRYPT_LIBS])
                 ])
             ], [
                 AC_MSG_RESULT([no])
@@ -68,5 +70,14 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPT], [
         LIBCRYPT="No"
     ])
 
+    AS_IF([test "${LIBCRYPT}" = "No"], [
+        LIBCRYPT_CFLAGS=""
+        LIBCRYPT_LIBS=""
+    ])
+
+    AC_SUBST([LIBCRYPT_CFLAGS])
+    AC_SUBST([LIBCRYPT_LIBS])
+
+    CFLAGS="${CFLAGS_SAVED}"
     LIBS="${LIBS_SAVED}"
 ])

@@ -55,6 +55,7 @@ AS_IF([test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"], [
 # Programs required by the build system
 AC_PROG_CC
 AC_PROG_CC_C99
+AC_PROG_CPP
 AC_PATH_PROG([AR], [ar])
 AC_PROG_AWK
 AC_PATH_PROG([CP], [cp])

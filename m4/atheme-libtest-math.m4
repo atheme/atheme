@@ -9,15 +9,15 @@
 
 AC_DEFUN([ATHEME_LIBTEST_MATH], [
 
-    LIBMATH_LIBS=""
-
     LIBS_SAVED="${LIBS}"
+
+    LIBMATH_LIBS=""
 
     AC_CHECK_HEADERS([math.h], [], [], [])
 
     AC_SEARCH_LIBS([floor], [m], [
         AS_IF([test "x${ac_cv_search_floor}" != "xnone required"], [
-            LIBMATH_LIBS="${ac_cv_search_floor}"
+            LIBMATH_LIBS="${LIBMATH_LIBS:-} ${ac_cv_search_floor}"
         ])
     ], [
         AC_MSG_ERROR([math functions appear to be unusable])
@@ -27,7 +27,7 @@ AC_DEFUN([ATHEME_LIBTEST_MATH], [
 
     AC_SEARCH_LIBS([pow], [m], [
         AS_IF([test "x${ac_cv_search_pow}" != "xnone required"], [
-            LIBMATH_LIBS="${ac_cv_search_pow}"
+            LIBMATH_LIBS="${LIBMATH_LIBS:-} ${ac_cv_search_pow}"
         ])
     ], [
         AC_MSG_ERROR([math functions appear to be unusable])
@@ -53,7 +53,7 @@ AC_DEFUN([ATHEME_LIBTEST_MATH], [
         AC_MSG_FAILURE([math functions appear to be unusable])
     ])
 
-    LIBS="${LIBS_SAVED}"
-
     AC_SUBST([LIBMATH_LIBS])
+
+    LIBS="${LIBS_SAVED}"
 ])

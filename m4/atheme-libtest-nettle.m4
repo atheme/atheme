@@ -8,6 +8,9 @@
 
 AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
+
     LIBNETTLE="No"
     LIBNETTLE_PATH=""
     LIBNETTLE_USABLE="No"
@@ -28,9 +31,6 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
             AC_MSG_ERROR([invalid option for --with-nettle])
             ;;
     esac
-
-    CFLAGS_SAVED="${CFLAGS}"
-    LIBS_SAVED="${LIBS}"
 
     AS_IF([test "${with_nettle}" != "no"], [
         AS_IF([test -n "${LIBNETTLE_PATH}"], [
@@ -148,9 +148,6 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
         ])
     ])
 
-    CFLAGS="${CFLAGS_SAVED}"
-    LIBS="${LIBS_SAVED}"
-
     AS_IF([test "${LIBNETTLE}" = "No"], [
         LIBNETTLE_CFLAGS=""
         LIBNETTLE_LIBS=""
@@ -158,4 +155,7 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
 
     AC_SUBST([LIBNETTLE_CFLAGS])
     AC_SUBST([LIBNETTLE_LIBS])
+
+    CFLAGS="${CFLAGS_SAVED}"
+    LIBS="${LIBS_SAVED}"
 ])

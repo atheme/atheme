@@ -1,13 +1,23 @@
-HELP_LINGUAS	= es fr ru tr
-PROG		= $(PACKAGE)-services${PROG_SUFFIX}
-SRCS		= main.c
+# SPDX-License-Identifier: ISC
+# SPDX-URL: https://spdx.org/licenses/ISC.html
+#
+# Copyright (C) 2010-2012 William Pitcock <nenolod@dereferenced.org>
+# Copyright (C) 2010-2012 JD Horelick <jdhore1@gmail.com>
+# Copyright (C) 2012 Jilles Tjoelker <jilles@stack.nl>
+# Copyright (C) 2018-2020 Aaron M. D. Jones <aaronmdjones@gmail.com>
 
 include ../../extra.mk
+
+HELP_LINGUAS = es fr ru tr
+
+PROG = ${PACKAGE_TARNAME}-services${PROG_SUFFIX}
+SRCS = main.c
+
 include ../../buildsys.mk
 
-CPPFLAGS	+= -I../../include
-LDFLAGS		+= -L../../libathemecore
-LIBS		+= $(LIBINTL) -lathemecore
+CPPFLAGS += -I../../include
+LDFLAGS  += -L../../libathemecore
+LIBS     += -lathemecore
 
 build: all ../../dist/atheme.conf.userserv-example ../../dist/atheme.conf.operserv-example
 
@@ -55,71 +65,74 @@ build: all ../../dist/atheme.conf.userserv-example ../../dist/atheme.conf.operse
 	  -e 's/port = 8080/port = 8081/' ../../dist/atheme.conf.example) >../../dist/atheme.conf.operserv-example
 
 install-extra: ../../dist/atheme.conf.userserv-example ../../dist/atheme.conf.operserv-example
-	-$(INSTALL) -m 755 -d $(DESTDIR)$(prefix)
-	-$(INSTALL) -m 755 -d $(DESTDIR)$(bindir)
-	-$(INSTALL) -m 755 -d $(DESTDIR)$(sysconfdir)
-	-$(INSTALL) -m 755 -d $(DESTDIR)$(localstatedir)
-	-$(INSTALL) -m 755 -d $(DESTDIR)$(DOCDIR)
-	-$(INSTALL) -m 755 -d $(DESTDIR)$(LOGDIR)
-	-$(INSTALL) -m 755 -d $(DESTDIR)$(RUNDIR)
-	-$(INSTALL) -m 755 -d $(DESTDIR)$(DATADIR)
-	-$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/help
-	-$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/email
-	$(INSTALL) -m 600 -c ../../dist/atheme.conf.example $(DESTDIR)$(sysconfdir)
-	$(INSTALL) -m 644 -c ../../dist/atheme.motd.example $(DESTDIR)$(sysconfdir)
-	[ -r $(DESTDIR)$(sysconfdir)/atheme.motd ] || $(INSTALL) -m 644 -c ../../dist/atheme.motd.example $(DESTDIR)$(sysconfdir)/atheme.motd || :
-	$(INSTALL) -m 600 -c ../../dist/atheme.conf.userserv-example $(DESTDIR)$(sysconfdir)
-	$(INSTALL) -m 600 -c ../../dist/atheme.conf.operserv-example $(DESTDIR)$(sysconfdir)
-	$(INSTALL) -m 644 -c ../../dist/atheme.cron.example $(DESTDIR)$(sysconfdir)
-	[ -f ${DESTDIR}${bindir}/atheme ] && ${RM} ${DESTDIR}${bindir}/atheme || :
-	-${RM} -f $(DESTDIR)${DOCDIR}/HOOKS $(DESTDIR)${DOCDIR}/MODES $(DESTDIR)${DOCDIR}/XMLRPCLIB $(DESTDIR)${DOCDIR}/technical/HOOKS
+	-${INSTALL} -m 755 -d ${DESTDIR}${prefix}
+	-${INSTALL} -m 755 -d ${DESTDIR}${bindir}
+	-${INSTALL} -m 755 -d ${DESTDIR}${sysconfdir}
+	-${INSTALL} -m 755 -d ${DESTDIR}${localstatedir}
+	-${INSTALL} -m 755 -d ${DESTDIR}${DOCDIR}
+	-${INSTALL} -m 755 -d ${DESTDIR}${LOGDIR}
+	-${INSTALL} -m 755 -d ${DESTDIR}${RUNDIR}
+	-${INSTALL} -m 755 -d ${DESTDIR}${DATADIR}
+	-${INSTALL} -m 755 -d ${DESTDIR}${SHAREDIR}/help
+	-${INSTALL} -m 755 -d ${DESTDIR}${SHAREDIR}/email
+	${INSTALL} -m 600 -c ../../dist/atheme.conf.example ${DESTDIR}${sysconfdir}
+	${INSTALL} -m 644 -c ../../dist/atheme.motd.example ${DESTDIR}${sysconfdir}
+	[ -r ${DESTDIR}${sysconfdir}/atheme.motd ] || ${INSTALL} -m 644 -c ../../dist/atheme.motd.example ${DESTDIR}${sysconfdir}/atheme.motd || :
+	${INSTALL} -m 600 -c ../../dist/atheme.conf.userserv-example ${DESTDIR}${sysconfdir}
+	${INSTALL} -m 600 -c ../../dist/atheme.conf.operserv-example ${DESTDIR}${sysconfdir}
+	${INSTALL} -m 644 -c ../../dist/atheme.cron.example ${DESTDIR}${sysconfdir}
+	${INSTALL} -m 644 ../../NEWS.md ${DESTDIR}${DOCDIR}/RELEASE
 	(cd ../../doc; for i in *; do \
-		[ -f $$i ] && $(INSTALL) -m 644 $$i $(DESTDIR)$(DOCDIR); \
+		[ -f $$i ] && ${INSTALL} -m 644 $$i ${DESTDIR}${DOCDIR}; \
 		if [ -d $$i ]; then \
 			cd $$i; \
-			$(INSTALL) -m 755 -d $(DESTDIR)$(DOCDIR)/$$i; \
+			${INSTALL} -m 755 -d ${DESTDIR}${DOCDIR}/$$i; \
 			for j in *; do \
-				[ -f $$j ] && $(INSTALL) -m 644 $$j $(DESTDIR)$(DOCDIR)/$$i; \
+				[ -f $$j ] && ${INSTALL} -m 644 $$j ${DESTDIR}${DOCDIR}/$$i; \
 			done; \
 			cd ..; \
 		fi; \
-	done; install -m 644 ../NEWS.md $(DESTDIR)$(DOCDIR)/RELEASE)
+	done)
 	(cd ../../help/default; for i in *; do \
-		[ -f $$i ] && $(INSTALL) -m 644 $$i $(DESTDIR)$(SHAREDIR)/help; \
+		[ -f $$i ] && ${INSTALL} -m 644 $$i ${DESTDIR}${SHAREDIR}/help; \
 		if [ -d $$i ]; then \
 			cd $$i; \
-			$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/help/$$i; \
+			${INSTALL} -m 755 -d ${DESTDIR}${SHAREDIR}/help/$$i; \
 			for j in *; do \
-				[ -f $$j ] && $(INSTALL) -m 644 $$j $(DESTDIR)$(SHAREDIR)/help/$$i; \
+				[ -f $$j ] && ${INSTALL} -m 644 $$j ${DESTDIR}${SHAREDIR}/help/$$i; \
 			done; \
 			cd ..; \
 		fi; \
 	done)
 	(cd ../../email/default; for i in *; do \
-		[ -f $$i ] && $(INSTALL) -m 644 $$i $(DESTDIR)$(SHAREDIR)/email; \
+		[ -f $$i ] && ${INSTALL} -m 644 $$i ${DESTDIR}${SHAREDIR}/email; \
 		if [ -d $$i ]; then \
 			cd $$i; \
-			$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/email/$$i; \
+			${INSTALL} -m 755 -d ${DESTDIR}${SHAREDIR}/email/$$i; \
 			for j in *; do \
-				[ -f $$j ] && $(INSTALL) -m 644 $$j $(DESTDIR)$(SHAREDIR)/email/$$i; \
+				[ -f $$j ] && ${INSTALL} -m 644 $$j ${DESTDIR}${SHAREDIR}/email/$$i; \
 			done; \
 			cd ..; \
 		fi; \
 	done)
-	-${RM} -f $(DESTDIR)$(SHAREDIR)/help/hostserv/vhostall
-	if [ $(USE_NLS) = yes ]; then \
-		for lingua in $(HELP_LINGUAS); do \
-			$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/help/$$lingua; \
+	if [ ${USE_NLS} = yes ]; then \
+		for lingua in ${HELP_LINGUAS}; do \
+			${INSTALL} -m 755 -d ${DESTDIR}${SHAREDIR}/help/$$lingua; \
 			(cd ../../help/$$lingua; for i in *; do \
-				[ -f $$i ] && $(INSTALL) -m 644 $$i $(DESTDIR)$(SHAREDIR)/help/$$lingua; \
+				[ -f $$i ] && ${INSTALL} -m 644 $$i ${DESTDIR}${SHAREDIR}/help/$$lingua; \
 				if [ -d $$i ]; then \
 					cd $$i; \
-					$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/help/$$lingua/$$i; \
+					${INSTALL} -m 755 -d ${DESTDIR}${SHAREDIR}/help/$$lingua/$$i; \
 					for j in *; do \
-						[ -f $$j ] && $(INSTALL) -m 644 $$j $(DESTDIR)$(SHAREDIR)/help/$$lingua/$$i; \
+						[ -f $$j ] && ${INSTALL} -m 644 $$j ${DESTDIR}${SHAREDIR}/help/$$lingua/$$i; \
 					done; \
 					cd ..; \
 				fi; \
 			done); \
 		done; \
 	fi
+	@echo " "
+	@echo "----------------------------------------------------------------------"
+	@echo ">>> Remember to cd to ${prefix} and edit your config file.";
+	@echo "----------------------------------------------------------------------"
+	@echo " "

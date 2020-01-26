@@ -8,6 +8,9 @@
 
 AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
+
     LIBSODIUM="No"
     LIBSODIUM_PATH=""
     LIBSODIUM_USABLE="No"
@@ -30,9 +33,6 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
             AC_MSG_ERROR([invalid option for --with-sodium])
             ;;
     esac
-
-    CFLAGS_SAVED="${CFLAGS}"
-    LIBS_SAVED="${LIBS}"
 
     AS_IF([test "${with_sodium}" != "no"], [
         AS_IF([test -n "${LIBSODIUM_PATH}"], [
@@ -219,9 +219,6 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
         ])
     ])
 
-    CFLAGS="${CFLAGS_SAVED}"
-    LIBS="${LIBS_SAVED}"
-
     AS_IF([test "${LIBSODIUM}" = "No"], [
         LIBSODIUM_CFLAGS=""
         LIBSODIUM_LIBS=""
@@ -229,4 +226,7 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
 
     AC_SUBST([LIBSODIUM_CFLAGS])
     AC_SUBST([LIBSODIUM_LIBS])
+
+    CFLAGS="${CFLAGS_SAVED}"
+    LIBS="${LIBS_SAVED}"
 ])

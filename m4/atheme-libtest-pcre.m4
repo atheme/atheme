@@ -9,6 +9,9 @@
 
 AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
+
     LIBPCRE="No"
     LIBPCRE_PATH=""
 
@@ -27,9 +30,6 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
             AC_MSG_ERROR([invalid option for --with-pcre])
             ;;
     esac
-
-    CFLAGS_SAVED="${CFLAGS}"
-    LIBS_SAVED="${LIBS}"
 
     AS_IF([test "${with_pcre}" != "no"], [
         AS_IF([test -n "${LIBPCRE_PATH}"], [
@@ -84,9 +84,6 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
         ])
     ])
 
-    CFLAGS="${CFLAGS_SAVED}"
-    LIBS="${LIBS_SAVED}"
-
     AS_IF([test "${LIBPCRE}" = "No"], [
         LIBPCRE_CFLAGS=""
         LIBPCRE_LIBS=""
@@ -94,4 +91,7 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 
     AC_SUBST([LIBPCRE_CFLAGS])
     AC_SUBST([LIBPCRE_LIBS])
+
+    CFLAGS="${CFLAGS_SAVED}"
+    LIBS="${LIBS_SAVED}"
 ])

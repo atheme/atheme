@@ -9,6 +9,9 @@
 
 AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
 
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
+
     LIBQRENCODE="No"
     LIBQRENCODE_PATH=""
 
@@ -27,9 +30,6 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
             AC_MSG_ERROR([invalid option for --with-qrencode])
             ;;
     esac
-
-    CFLAGS_SAVED="${CFLAGS}"
-    LIBS_SAVED="${LIBS}"
 
     AS_IF([test "${with_qrencode}" != "no"], [
         AS_IF([test -n "${LIBQRENCODE_PATH}"], [
@@ -84,9 +84,6 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
         ])
     ])
 
-    CFLAGS="${CFLAGS_SAVED}"
-    LIBS="${LIBS_SAVED}"
-
     AS_IF([test "${LIBQRENCODE}" = "No"], [
         LIBQRENCODE_CFLAGS=""
         LIBQRENCODE_LIBS=""
@@ -94,4 +91,7 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
 
     AC_SUBST([LIBQRENCODE_CFLAGS])
     AC_SUBST([LIBQRENCODE_LIBS])
+
+    CFLAGS="${CFLAGS_SAVED}"
+    LIBS="${LIBS_SAVED}"
 ])

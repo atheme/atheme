@@ -2,25 +2,29 @@
 # SPDX-URL: https://spdx.org/licenses/ISC.html
 #
 # Copyright (C) 2003-2004 E. Will, et al.
-# Copyright (C) 2015-2016 Atheme Development Group <http://atheme.github.io>
-
-MODULE		= hostserv
-
-SRCS = 			\
-	drop.c		\
-	group.c		\
-	help.c		\
-	main.c		\
-	offer.c		\
-	onoff.c		\
-	request.c	\
-	vhost.c		\
-	vhostnick.c
+# Copyright (C) 2010 William Pitcock <nenolod@dereferenced.org>
+# Copyright (C) 2010 Jilles Tjoelker <jilles@stack.nl>
+# Copyright (C) 2011 Stephen Bennett <spb@exherbo.org>
+# Copyright (C) 2016 Austin Ellis <siniStar@IRC4Fun.net>
+# Copyright (C) 2018-2020 Aaron M. D. Jones <aaronmdjones@gmail.com>
 
 include ../../extra.mk
+
+MODULE = hostserv
+SRCS   =            \
+    drop.c          \
+    group.c         \
+    help.c          \
+    main.c          \
+    offer.c         \
+    onoff.c         \
+    request.c       \
+    vhost.c         \
+    vhostnick.c
+
 include ../../buildsys.mk
 include ../../buildsys.module.mk
 
-CPPFLAGS	+= -I../../include
-LDFLAGS		+= -L../../libathemecore
-LIBS		+= -lathemecore
+CPPFLAGS += -I../../include
+LDFLAGS  += -L../../libathemecore
+LIBS     += -lathemecore

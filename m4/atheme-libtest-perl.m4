@@ -10,6 +10,7 @@
 AC_DEFUN([ATHEME_LIBTEST_PERL], [
 
     LIBPERL="No"
+
     LIBPERL_CFLAGS=""
     LIBPERL_LIBS=""
 
@@ -53,6 +54,11 @@ AC_DEFUN([ATHEME_LIBTEST_PERL], [
         fi
     ], [
         LIBPERL="No"
+    ])
+
+    AS_IF([test "${LIBPERL}" = "No"], [
+        LIBPERL_CFLAGS=""
+        LIBPERL_LIBS=""
     ])
 
     AC_SUBST([LIBPERL_CFLAGS])

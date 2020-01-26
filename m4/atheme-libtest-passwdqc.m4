@@ -8,7 +8,12 @@
 
 AC_DEFUN([ATHEME_LIBTEST_PASSWDQC], [
 
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
+
     LIBPASSWDQC="No"
+
+    LIBPASSWDQC_CFLAGS=""
     LIBPASSWDQC_LIBS=""
 
     AC_ARG_WITH([passwdqc],
@@ -22,9 +27,6 @@ AC_DEFUN([ATHEME_LIBTEST_PASSWDQC], [
             AC_MSG_ERROR([invalid option for --with-passwdqc])
             ;;
     esac
-
-    CFLAGS_SAVED="${CFLAGS}"
-    LIBS_SAVED="${LIBS}"
 
     AS_IF([test "${with_passwdqc}" != "no"], [
         # If this library ever starts shipping a pkg-config file, change to PKG_CHECK_MODULES ?
@@ -52,7 +54,6 @@ AC_DEFUN([ATHEME_LIBTEST_PASSWDQC], [
                 AC_DEFINE([HAVE_ANY_PASSWORD_QUALITY_LIBRARY], [1], [Define to 1 if any password quality library appears to be usable])
                 AS_IF([test "x${ac_cv_search_passwdqc_check}" != "xnone required"], [
                     LIBPASSWDQC_LIBS="${ac_cv_search_passwdqc_check}"
-                    AC_SUBST([LIBPASSWDQC_LIBS])
                 ])
             ], [
                 AC_MSG_RESULT([no])
@@ -70,6 +71,14 @@ AC_DEFUN([ATHEME_LIBTEST_PASSWDQC], [
     ], [
         LIBPASSWDQC="No"
     ])
+
+    AS_IF([test "${LIBPASSWDQC}" = "No"], [
+        LIBPASSWDQC_CFLAGS=""
+        LIBPASSWDQC_LIBS=""
+    ])
+
+    AC_SUBST([LIBPASSWDQC_CFLAGS])
+    AC_SUBST([LIBPASSWDQC_LIBS])
 
     CFLAGS="${CFLAGS_SAVED}"
     LIBS="${LIBS_SAVED}"

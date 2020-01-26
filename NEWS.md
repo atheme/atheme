@@ -192,6 +192,7 @@ Build System
 - Makefiles: remove PCRE `CFLAGS` and `LIBS` from programs that don't use it
 - Makefiles: separate `LDFLAGS` from `LIBS`
 - Makefiles: build source files in alphabetical order
+- Makefiles: tidy up everything and document authorship
 - `configure`: conditionally compile `libathemecore/qrcode.c`
 - `configure`: add `--with(out)-qrencode` flag to allow controlling detection
 - `configure`: Make `--enable-ssl` now `--with-openssl` to match libmowgli

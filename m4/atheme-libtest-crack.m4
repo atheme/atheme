@@ -9,7 +9,12 @@
 
 AC_DEFUN([ATHEME_LIBTEST_CRACK], [
 
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
+
     LIBCRACK="No"
+
+    LIBCRACK_CFLAGS=""
     LIBCRACK_LIBS=""
 
     AC_ARG_WITH([cracklib],
@@ -23,9 +28,6 @@ AC_DEFUN([ATHEME_LIBTEST_CRACK], [
             AC_MSG_ERROR([invalid option for --with-cracklib])
             ;;
     esac
-
-    CFLAGS_SAVED="${CFLAGS}"
-    LIBS_SAVED="${LIBS}"
 
     AS_IF([test "${with_cracklib}" != "no"], [
         # If this library ever starts shipping a pkg-config file, change to PKG_CHECK_MODULES ?
@@ -47,7 +49,6 @@ AC_DEFUN([ATHEME_LIBTEST_CRACK], [
                 AC_DEFINE([HAVE_ANY_PASSWORD_QUALITY_LIBRARY], [1], [Define to 1 if any password quality library appears to be usable])
                 AS_IF([test "x${ac_cv_search_FascistCheck}" != "xnone required"], [
                     LIBCRACK_LIBS="${ac_cv_search_FascistCheck}"
-                    AC_SUBST([LIBCRACK_LIBS])
                 ])
             ], [
                 AC_MSG_RESULT([no])
@@ -65,6 +66,14 @@ AC_DEFUN([ATHEME_LIBTEST_CRACK], [
     ], [
         LIBCRACK="No"
     ])
+
+    AS_IF([test "${LIBCRACK}" = "No"], [
+        LIBCRACK_CFLAGS=""
+        LIBCRACK_LIBS=""
+    ])
+
+    AC_SUBST([LIBCRACK_CFLAGS])
+    AC_SUBST([LIBCRACK_LIBS])
 
     CFLAGS="${CFLAGS_SAVED}"
     LIBS="${LIBS_SAVED}"

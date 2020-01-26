@@ -8,6 +8,9 @@
 
 AC_DEFUN([ATHEME_LIBTEST_ARGON2], [
 
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
+
     LIBARGON2="No"
     LIBARGON2_PATH=""
 
@@ -26,9 +29,6 @@ AC_DEFUN([ATHEME_LIBTEST_ARGON2], [
             AC_MSG_ERROR([invalid option for --with-argon2])
             ;;
     esac
-
-    CFLAGS_SAVED="${CFLAGS}"
-    LIBS_SAVED="${LIBS}"
 
     AS_IF([test "${with_argon2}" != "no"], [
         AS_IF([test -n "${LIBARGON2_PATH}"], [
@@ -107,9 +107,6 @@ AC_DEFUN([ATHEME_LIBTEST_ARGON2], [
         ])
     ])
 
-    CFLAGS="${CFLAGS_SAVED}"
-    LIBS="${LIBS_SAVED}"
-
     AS_IF([test "${LIBARGON2}" = "No"], [
         LIBARGON2_CFLAGS=""
         LIBARGON2_LIBS=""
@@ -117,4 +114,7 @@ AC_DEFUN([ATHEME_LIBTEST_ARGON2], [
 
     AC_SUBST([LIBARGON2_CFLAGS])
     AC_SUBST([LIBARGON2_LIBS])
+
+    CFLAGS="${CFLAGS_SAVED}"
+    LIBS="${LIBS_SAVED}"
 ])

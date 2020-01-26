@@ -653,10 +653,13 @@ LIBQRENCODE_CFLAGS
 LIBPCRE_LIBS
 LIBPCRE_CFLAGS
 LIBPASSWDQC_LIBS
+LIBPASSWDQC_CFLAGS
 LIBNETTLE_LIBS
 LIBNETTLE_CFLAGS
 LIBMBEDCRYPTO_LIBS
+LIBMBEDCRYPTO_CFLAGS
 LDAP_LIBS
+LDAP_CFLAGS
 LIBIDN_LIBS
 LIBIDN_CFLAGS
 ECDSA_TOOLS_COND_D
@@ -664,12 +667,14 @@ ECDH_X25519_TOOL_COND_D
 LIBCRYPTO_LIBS
 LIBCRYPTO_CFLAGS
 LIBCRYPT_LIBS
+LIBCRYPT_CFLAGS
 LIBCRACK_LIBS
+LIBCRACK_CFLAGS
 LIBARGON2_LIBS
 LIBARGON2_CFLAGS
 LIBSOCKET_LIBS
-CRYPTO_BENCHMARK_COND_D
 LIBRT_LIBS
+CRYPTO_BENCHMARK_COND_D
 LIBMATH_LIBS
 LIBDL_LIBS
 PODIR_COND_D
@@ -695,7 +700,6 @@ VENDOR_STRING
 VERSION
 PACKAGE
 LIBOBJS
-CPP
 PROG_IMPLIB_LDFLAGS
 PROG_IMPLIB_NEEDED
 CLEAN_LIB
@@ -746,6 +750,7 @@ GREP
 CP
 AWK
 AR
+CPP
 OBJEXT
 EXEEXT
 ac_ct_CC
@@ -843,10 +848,10 @@ CFLAGS
 LDFLAGS
 LIBS
 CPPFLAGS
+CPP
 PKG_CONFIG
 PKG_CONFIG_PATH
 PKG_CONFIG_LIBDIR
-CPP
 LIBARGON2_CFLAGS
 LIBARGON2_LIBS
 LIBCRYPTO_CFLAGS
@@ -1581,12 +1586,12 @@ Some influential environment variables:
   LIBS        libraries to pass to the linker, e.g. -l<library>
   CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
               you have headers in a nonstandard directory <include dir>
+  CPP         C preprocessor
   PKG_CONFIG  path to pkg-config utility
   PKG_CONFIG_PATH
               directories to add to pkg-config's search path
   PKG_CONFIG_LIBDIR
               path overriding pkg-config's built-in search path
-  CPP         C preprocessor
   LIBARGON2_CFLAGS
               C compiler flags for LIBARGON2, overriding pkg-config
   LIBARGON2_LIBS
@@ -3673,6 +3678,143 @@ if test "x$ac_cv_prog_cc_c99" != xno; then :
 fi
 
 
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking how to run the C preprocessor" >&5
+$as_echo_n "checking how to run the C preprocessor... " >&6; }
+# On Suns, sometimes $CPP names a directory.
+if test -n "$CPP" && test -d "$CPP"; then
+  CPP=
+fi
+if test -z "$CPP"; then
+  if ${ac_cv_prog_CPP+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+      # Double quotes because CPP needs to be expanded
+    for CPP in "$CC -E" "$CC -E -traditional-cpp" "/lib/cpp"
+    do
+      ac_preproc_ok=false
+for ac_c_preproc_warn_flag in '' yes
+do
+  # Use a header file that comes with gcc, so configuring glibc
+  # with a fresh cross-compiler works.
+  # Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+  # <limits.h> exists even on freestanding compilers.
+  # On the NeXT, cc -E runs the code through the compiler's parser,
+  # not just through cpp. "Syntax error" is here to catch this case.
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef __STDC__
+# include <limits.h>
+#else
+# include <assert.h>
+#endif
+		     Syntax error
+_ACEOF
+if ac_fn_c_try_cpp "$LINENO"; then :
+
+else
+  # Broken: fails on valid input.
+continue
+fi
+rm -f conftest.err conftest.i conftest.$ac_ext
+
+  # OK, works on sane cases.  Now check whether nonexistent headers
+  # can be detected and how.
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <ac_nonexistent.h>
+_ACEOF
+if ac_fn_c_try_cpp "$LINENO"; then :
+  # Broken: success on invalid input.
+continue
+else
+  # Passes both tests.
+ac_preproc_ok=:
+break
+fi
+rm -f conftest.err conftest.i conftest.$ac_ext
+
+done
+# Because of `break', _AC_PREPROC_IFELSE's cleaning code was skipped.
+rm -f conftest.i conftest.err conftest.$ac_ext
+if $ac_preproc_ok; then :
+  break
+fi
+
+    done
+    ac_cv_prog_CPP=$CPP
+
+fi
+  CPP=$ac_cv_prog_CPP
+else
+  ac_cv_prog_CPP=$CPP
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $CPP" >&5
+$as_echo "$CPP" >&6; }
+ac_preproc_ok=false
+for ac_c_preproc_warn_flag in '' yes
+do
+  # Use a header file that comes with gcc, so configuring glibc
+  # with a fresh cross-compiler works.
+  # Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+  # <limits.h> exists even on freestanding compilers.
+  # On the NeXT, cc -E runs the code through the compiler's parser,
+  # not just through cpp. "Syntax error" is here to catch this case.
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef __STDC__
+# include <limits.h>
+#else
+# include <assert.h>
+#endif
+		     Syntax error
+_ACEOF
+if ac_fn_c_try_cpp "$LINENO"; then :
+
+else
+  # Broken: fails on valid input.
+continue
+fi
+rm -f conftest.err conftest.i conftest.$ac_ext
+
+  # OK, works on sane cases.  Now check whether nonexistent headers
+  # can be detected and how.
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <ac_nonexistent.h>
+_ACEOF
+if ac_fn_c_try_cpp "$LINENO"; then :
+  # Broken: success on invalid input.
+continue
+else
+  # Passes both tests.
+ac_preproc_ok=:
+break
+fi
+rm -f conftest.err conftest.i conftest.$ac_ext
+
+done
+# Because of `break', _AC_PREPROC_IFELSE's cleaning code was skipped.
+rm -f conftest.i conftest.err conftest.$ac_ext
+if $ac_preproc_ok; then :
+
+else
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "C preprocessor \"$CPP\" fails sanity check
+See \`config.log' for more details" "$LINENO" 5; }
+fi
+
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
 # Extract the first word of "ar", so it can be a program name with args.
 set dummy ar; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
@@ -4852,143 +4994,6 @@ LIBS_SAVED="${LIBS}"
 
 $as_echo "#define __STDC_WANT_LIB_EXT1__ 1" >>confdefs.h
 
-
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking how to run the C preprocessor" >&5
-$as_echo_n "checking how to run the C preprocessor... " >&6; }
-# On Suns, sometimes $CPP names a directory.
-if test -n "$CPP" && test -d "$CPP"; then
-  CPP=
-fi
-if test -z "$CPP"; then
-  if ${ac_cv_prog_CPP+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-      # Double quotes because CPP needs to be expanded
-    for CPP in "$CC -E" "$CC -E -traditional-cpp" "/lib/cpp"
-    do
-      ac_preproc_ok=false
-for ac_c_preproc_warn_flag in '' yes
-do
-  # Use a header file that comes with gcc, so configuring glibc
-  # with a fresh cross-compiler works.
-  # Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
-  # <limits.h> exists even on freestanding compilers.
-  # On the NeXT, cc -E runs the code through the compiler's parser,
-  # not just through cpp. "Syntax error" is here to catch this case.
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef __STDC__
-# include <limits.h>
-#else
-# include <assert.h>
-#endif
-		     Syntax error
-_ACEOF
-if ac_fn_c_try_cpp "$LINENO"; then :
-
-else
-  # Broken: fails on valid input.
-continue
-fi
-rm -f conftest.err conftest.i conftest.$ac_ext
-
-  # OK, works on sane cases.  Now check whether nonexistent headers
-  # can be detected and how.
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <ac_nonexistent.h>
-_ACEOF
-if ac_fn_c_try_cpp "$LINENO"; then :
-  # Broken: success on invalid input.
-continue
-else
-  # Passes both tests.
-ac_preproc_ok=:
-break
-fi
-rm -f conftest.err conftest.i conftest.$ac_ext
-
-done
-# Because of `break', _AC_PREPROC_IFELSE's cleaning code was skipped.
-rm -f conftest.i conftest.err conftest.$ac_ext
-if $ac_preproc_ok; then :
-  break
-fi
-
-    done
-    ac_cv_prog_CPP=$CPP
-
-fi
-  CPP=$ac_cv_prog_CPP
-else
-  ac_cv_prog_CPP=$CPP
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $CPP" >&5
-$as_echo "$CPP" >&6; }
-ac_preproc_ok=false
-for ac_c_preproc_warn_flag in '' yes
-do
-  # Use a header file that comes with gcc, so configuring glibc
-  # with a fresh cross-compiler works.
-  # Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
-  # <limits.h> exists even on freestanding compilers.
-  # On the NeXT, cc -E runs the code through the compiler's parser,
-  # not just through cpp. "Syntax error" is here to catch this case.
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef __STDC__
-# include <limits.h>
-#else
-# include <assert.h>
-#endif
-		     Syntax error
-_ACEOF
-if ac_fn_c_try_cpp "$LINENO"; then :
-
-else
-  # Broken: fails on valid input.
-continue
-fi
-rm -f conftest.err conftest.i conftest.$ac_ext
-
-  # OK, works on sane cases.  Now check whether nonexistent headers
-  # can be detected and how.
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <ac_nonexistent.h>
-_ACEOF
-if ac_fn_c_try_cpp "$LINENO"; then :
-  # Broken: success on invalid input.
-continue
-else
-  # Passes both tests.
-ac_preproc_ok=:
-break
-fi
-rm -f conftest.err conftest.i conftest.$ac_ext
-
-done
-# Because of `break', _AC_PREPROC_IFELSE's cleaning code was skipped.
-rm -f conftest.i conftest.err conftest.$ac_ext
-if $ac_preproc_ok; then :
-
-else
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "C preprocessor \"$CPP\" fails sanity check
-See \`config.log' for more details" "$LINENO" 5; }
-fi
-
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ANSI C header files" >&5
@@ -9218,9 +9223,10 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 # Conditional libraries for standard functions (no option to control detection)
 
 
-    LIBDL_LIBS=""
-
+    CFLAGS_SAVED="${CFLAGS}"
     LIBS_SAVED="${LIBS}"
+
+    LIBDL_LIBS=""
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing dlinfo" >&5
 $as_echo_n "checking for library containing dlinfo... " >&6; }
@@ -9344,13 +9350,14 @@ rm -f core conftest.err conftest.$ac_objext \
 fi
 
 
+    CFLAGS="${CFLAGS_SAVED}"
     LIBS="${LIBS_SAVED}"
 
 
 
-    LIBMATH_LIBS=""
-
     LIBS_SAVED="${LIBS}"
+
+    LIBMATH_LIBS=""
 
     for ac_header in math.h
 do :
@@ -9421,7 +9428,7 @@ if test "$ac_res" != no; then :
 
         if test "x${ac_cv_search_floor}" != "xnone required"; then :
 
-            LIBMATH_LIBS="${ac_cv_search_floor}"
+            LIBMATH_LIBS="${LIBMATH_LIBS:-} ${ac_cv_search_floor}"
 
 fi
 
@@ -9490,7 +9497,7 @@ if test "$ac_res" != no; then :
 
         if test "x${ac_cv_search_pow}" != "xnone required"; then :
 
-            LIBMATH_LIBS="${ac_cv_search_pow}"
+            LIBMATH_LIBS="${LIBMATH_LIBS:-} ${ac_cv_search_pow}"
 
 fi
 
@@ -9544,16 +9551,16 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
+
+
     LIBS="${LIBS_SAVED}"
 
 
 
-
+    LIBS_SAVED="${LIBS}"
 
     LIBRT="No"
     LIBRT_LIBS=""
-
-    LIBS_SAVED="${LIBS}"
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing clock_gettime" >&5
 $as_echo_n "checking for library containing clock_gettime... " >&6; }
@@ -9618,7 +9625,6 @@ fi
         LIBRT="Yes"
 
 
-
     CRYPTO_BENCHMARK_COND_D="crypto-benchmark"
 
 
@@ -9626,13 +9632,15 @@ fi
 fi
 
 
+
+
     LIBS="${LIBS_SAVED}"
 
 
 
-    LIBSOCKET_LIBS=""
-
     LIBS_SAVED="${LIBS}"
+
+    LIBSOCKET_LIBS=""
 
     for ac_header in netinet/in.h sys/socket.h sys/types.h
 do :
@@ -9767,13 +9775,16 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
+
+
     LIBS="${LIBS_SAVED}"
-
-
 
 
 # Libraries that are autodetected (alphabetical)
 
+
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
 
     LIBARGON2="No"
     LIBARGON2_PATH=""
@@ -9798,9 +9809,6 @@ fi
             as_fn_error $? "invalid option for --with-argon2" "$LINENO" 5
             ;;
     esac
-
-    CFLAGS_SAVED="${CFLAGS}"
-    LIBS_SAVED="${LIBS}"
 
     if test "${with_argon2}" != "no"; then :
 
@@ -10017,9 +10025,6 @@ rm -f core conftest.err conftest.$ac_objext \
 
 fi
 
-    CFLAGS="${CFLAGS_SAVED}"
-    LIBS="${LIBS_SAVED}"
-
     if test "${LIBARGON2}" = "No"; then :
 
         LIBARGON2_CFLAGS=""
@@ -10030,9 +10035,17 @@ fi
 
 
 
+    CFLAGS="${CFLAGS_SAVED}"
+    LIBS="${LIBS_SAVED}"
 
+
+
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
 
     LIBCRACK="No"
+
+    LIBCRACK_CFLAGS=""
     LIBCRACK_LIBS=""
 
 
@@ -10051,9 +10064,6 @@ fi
             as_fn_error $? "invalid option for --with-cracklib" "$LINENO" 5
             ;;
     esac
-
-    CFLAGS_SAVED="${CFLAGS}"
-    LIBS_SAVED="${LIBS}"
 
     if test "${with_cracklib}" != "no"; then :
 
@@ -10149,7 +10159,6 @@ $as_echo "#define HAVE_ANY_PASSWORD_QUALITY_LIBRARY 1" >>confdefs.h
 
                     LIBCRACK_LIBS="${ac_cv_search_FascistCheck}"
 
-
 fi
 
 else
@@ -10187,12 +10196,27 @@ else
 
 fi
 
+    if test "${LIBCRACK}" = "No"; then :
+
+        LIBCRACK_CFLAGS=""
+        LIBCRACK_LIBS=""
+
+fi
+
+
+
+
     CFLAGS="${CFLAGS_SAVED}"
     LIBS="${LIBS_SAVED}"
 
 
 
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
+
     LIBCRYPT="No"
+
+    LIBCRYPT_CFLAGS=""
     LIBCRYPT_LIBS=""
 
 
@@ -10211,8 +10235,6 @@ fi
             as_fn_error $? "invalid option for --with-crypt" "$LINENO" 5
             ;;
     esac
-
-    LIBS_SAVED="${LIBS}"
 
     if test "${with_crypt}" != "no"; then :
 
@@ -10321,7 +10343,6 @@ $as_echo "#define HAVE_CRYPT 1" >>confdefs.h
 
                     LIBCRYPT_LIBS="${ac_cv_search_crypt}"
 
-
 fi
 
 else
@@ -10359,9 +10380,23 @@ else
 
 fi
 
+    if test "${LIBCRYPT}" = "No"; then :
+
+        LIBCRYPT_CFLAGS=""
+        LIBCRYPT_LIBS=""
+
+fi
+
+
+
+
+    CFLAGS="${CFLAGS_SAVED}"
     LIBS="${LIBS_SAVED}"
 
 
+
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
 
     LIBCRYPTO="No"
     LIBCRYPTO_PATH=""
@@ -10390,9 +10425,6 @@ fi
             as_fn_error $? "invalid option for --with-openssl" "$LINENO" 5
             ;;
     esac
-
-    CFLAGS_SAVED="${CFLAGS}"
-    LIBS_SAVED="${LIBS}"
 
     if test "${with_openssl}" != "no"; then :
 
@@ -10872,9 +10904,6 @@ fi
 
 fi
 
-    CFLAGS="${CFLAGS_SAVED}"
-    LIBS="${LIBS_SAVED}"
-
     if test "${LIBCRYPTO}" = "No"; then :
 
         LIBCRYPTO_CFLAGS=""
@@ -10885,7 +10914,13 @@ fi
 
 
 
+    CFLAGS="${CFLAGS_SAVED}"
+    LIBS="${LIBS_SAVED}"
 
+
+
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
 
     LIBIDN="No"
     LIBIDN_PATH=""
@@ -10910,9 +10945,6 @@ fi
             as_fn_error $? "invalid option for --with-idn" "$LINENO" 5
             ;;
     esac
-
-    CFLAGS_SAVED="${CFLAGS}"
-    LIBS_SAVED="${LIBS}"
 
     if test "${with_idn}" != "no"; then :
 
@@ -11101,9 +11133,6 @@ rm -f core conftest.err conftest.$ac_objext \
 
 fi
 
-    CFLAGS="${CFLAGS_SAVED}"
-    LIBS="${LIBS_SAVED}"
-
     if test "${LIBIDN}" = "No"; then :
 
         LIBIDN_CFLAGS=""
@@ -11114,9 +11143,17 @@ fi
 
 
 
+    CFLAGS="${CFLAGS_SAVED}"
+    LIBS="${LIBS_SAVED}"
 
+
+
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
 
     LIBLDAP="No"
+
+    LDAP_CFLAGS=""
     LDAP_LIBS=""
 
 
@@ -11135,9 +11172,6 @@ fi
             as_fn_error $? "invalid option for --with-ldap" "$LINENO" 5
             ;;
     esac
-
-    CFLAGS_SAVED="${CFLAGS}"
-    LIBS_SAVED="${LIBS}"
 
     if test "${with_ldap}" != "no"; then :
 
@@ -11233,7 +11267,6 @@ $as_echo "#define HAVE_LIBLDAP 1" >>confdefs.h
 
                     LDAP_LIBS="${ac_cv_search_ldap_initialize}"
 
-
 fi
 
 else
@@ -11271,16 +11304,31 @@ else
 
 fi
 
+    if test "${LDAP}" = "No"; then :
+
+        LDAP_CFLAGS=""
+        LDAP_LIBS=""
+
+fi
+
+
+
+
     CFLAGS="${CFLAGS_SAVED}"
     LIBS="${LIBS_SAVED}"
 
 
 
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
+
     LIBMBEDCRYPTO="No"
-    LIBMBEDCRYPTO_LIBS=""
     LIBMBEDCRYPTO_USABLE="No"
     LIBMBEDCRYPTO_DIGEST="No"
     LIBMBEDCRYPTO_RANDOM="No"
+
+    LIBMBEDCRYPTO_CFLAGS=""
+    LIBMBEDCRYPTO_LIBS=""
 
 
 # Check whether --with-mbedtls was given.
@@ -11298,9 +11346,6 @@ fi
             as_fn_error $? "invalid option for --with-mbedtls" "$LINENO" 5
             ;;
     esac
-
-    CFLAGS_SAVED="${CFLAGS}"
-    LIBS_SAVED="${LIBS}"
 
     if test "${with_mbedtls}" != "no"; then :
 
@@ -11664,7 +11709,6 @@ $as_echo "#define HAVE_LIBMBEDCRYPTO 1" >>confdefs.h
 
             LIBMBEDCRYPTO_LIBS="${ac_cv_search_mbedtls_version_get_string}"
 
-
 fi
 
 else
@@ -11681,10 +11725,23 @@ fi
 
 fi
 
+    if test "${LIBMBEDCRYPTO}" = "No"; then :
+
+        LIBMBEDCRYPTO_CFLAGS=""
+        LIBMBEDCRYPTO_LIBS=""
+
+fi
+
+
+
+
     CFLAGS="${CFLAGS_SAVED}"
     LIBS="${LIBS_SAVED}"
 
 
+
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
 
     LIBNETTLE="No"
     LIBNETTLE_PATH=""
@@ -11711,9 +11768,6 @@ fi
             as_fn_error $? "invalid option for --with-nettle" "$LINENO" 5
             ;;
     esac
-
-    CFLAGS_SAVED="${CFLAGS}"
-    LIBS_SAVED="${LIBS}"
 
     if test "${with_nettle}" != "no"; then :
 
@@ -12036,9 +12090,6 @@ fi
 
 fi
 
-    CFLAGS="${CFLAGS_SAVED}"
-    LIBS="${LIBS_SAVED}"
-
     if test "${LIBNETTLE}" = "No"; then :
 
         LIBNETTLE_CFLAGS=""
@@ -12049,9 +12100,17 @@ fi
 
 
 
+    CFLAGS="${CFLAGS_SAVED}"
+    LIBS="${LIBS_SAVED}"
 
+
+
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
 
     LIBPASSWDQC="No"
+
+    LIBPASSWDQC_CFLAGS=""
     LIBPASSWDQC_LIBS=""
 
 
@@ -12070,9 +12129,6 @@ fi
             as_fn_error $? "invalid option for --with-passwdqc" "$LINENO" 5
             ;;
     esac
-
-    CFLAGS_SAVED="${CFLAGS}"
-    LIBS_SAVED="${LIBS}"
 
     if test "${with_passwdqc}" != "no"; then :
 
@@ -12174,7 +12230,6 @@ $as_echo "#define HAVE_ANY_PASSWORD_QUALITY_LIBRARY 1" >>confdefs.h
 
                     LIBPASSWDQC_LIBS="${ac_cv_search_passwdqc_check}"
 
-
 fi
 
 else
@@ -12212,10 +12267,23 @@ else
 
 fi
 
+    if test "${LIBPASSWDQC}" = "No"; then :
+
+        LIBPASSWDQC_CFLAGS=""
+        LIBPASSWDQC_LIBS=""
+
+fi
+
+
+
+
     CFLAGS="${CFLAGS_SAVED}"
     LIBS="${LIBS_SAVED}"
 
 
+
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
 
     LIBPCRE="No"
     LIBPCRE_PATH=""
@@ -12240,9 +12308,6 @@ fi
             as_fn_error $? "invalid option for --with-pcre" "$LINENO" 5
             ;;
     esac
-
-    CFLAGS_SAVED="${CFLAGS}"
-    LIBS_SAVED="${LIBS}"
 
     if test "${with_pcre}" != "no"; then :
 
@@ -12435,9 +12500,6 @@ rm -f core conftest.err conftest.$ac_objext \
 
 fi
 
-    CFLAGS="${CFLAGS_SAVED}"
-    LIBS="${LIBS_SAVED}"
-
     if test "${LIBPCRE}" = "No"; then :
 
         LIBPCRE_CFLAGS=""
@@ -12448,7 +12510,13 @@ fi
 
 
 
+    CFLAGS="${CFLAGS_SAVED}"
+    LIBS="${LIBS_SAVED}"
 
+
+
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
 
     LIBQRENCODE="No"
     LIBQRENCODE_PATH=""
@@ -12473,9 +12541,6 @@ fi
             as_fn_error $? "invalid option for --with-qrencode" "$LINENO" 5
             ;;
     esac
-
-    CFLAGS_SAVED="${CFLAGS}"
-    LIBS_SAVED="${LIBS}"
 
     if test "${with_qrencode}" != "no"; then :
 
@@ -12672,9 +12737,6 @@ rm -f core conftest.err conftest.$ac_objext \
 
 fi
 
-    CFLAGS="${CFLAGS_SAVED}"
-    LIBS="${LIBS_SAVED}"
-
     if test "${LIBQRENCODE}" = "No"; then :
 
         LIBQRENCODE_CFLAGS=""
@@ -12685,7 +12747,13 @@ fi
 
 
 
+    CFLAGS="${CFLAGS_SAVED}"
+    LIBS="${LIBS_SAVED}"
 
+
+
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
 
     LIBSODIUM="No"
     LIBSODIUM_PATH=""
@@ -12714,9 +12782,6 @@ fi
             as_fn_error $? "invalid option for --with-sodium" "$LINENO" 5
             ;;
     esac
-
-    CFLAGS_SAVED="${CFLAGS}"
-    LIBS_SAVED="${LIBS}"
 
     if test "${with_sodium}" != "no"; then :
 
@@ -13188,9 +13253,6 @@ fi
 
 fi
 
-    CFLAGS="${CFLAGS_SAVED}"
-    LIBS="${LIBS_SAVED}"
-
     if test "${LIBSODIUM}" = "No"; then :
 
         LIBSODIUM_CFLAGS=""
@@ -13201,11 +13263,15 @@ fi
 
 
 
+    CFLAGS="${CFLAGS_SAVED}"
+    LIBS="${LIBS_SAVED}"
+
 
 # Libraries that need to be explicitly enabled (alphabetical)
 
 
     LIBPERL="No"
+
     LIBPERL_CFLAGS=""
     LIBPERL_LIBS=""
 
@@ -13306,6 +13372,13 @@ fi
 else
 
         LIBPERL="No"
+
+fi
+
+    if test "${LIBPERL}" = "No"; then :
+
+        LIBPERL_CFLAGS=""
+        LIBPERL_LIBS=""
 
 fi
 
@@ -18557,6 +18630,47 @@ $as_echo_n "checking for C compiler flag(s) -Wno-format-pedantic ... " >&6; }
 
         CFLAGS_SAVED="${CFLAGS}"
         CFLAGS="${CFLAGS} -Wno-format-pedantic"
+
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+                ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+                ATHEME_CC_TEST_CFLAGS_RESULT='no'
+                CFLAGS="${CFLAGS_SAVED}"
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+        unset CFLAGS_SAVED
+
+
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wno-format-zero-length " >&5
+$as_echo_n "checking for C compiler flag(s) -Wno-format-zero-length ... " >&6; }
+
+        CFLAGS_SAVED="${CFLAGS}"
+        CFLAGS="${CFLAGS} -Wno-format-zero-length"
 
         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */

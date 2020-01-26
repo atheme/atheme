@@ -1,15 +1,24 @@
 # SPDX-License-Identifier: ISC
 # SPDX-URL: https://spdx.org/licenses/ISC.html
 #
-# Copyright (C) 2003-2004 E. Will, et al.
-
-MODULE		= rpgserv
-SRCS		= enable.c help.c info.c list.c main.c search.c set.c
+# Copyright (C) 2011 William Pitcock <nenolod@dereferenced.org>
+# Copyright (C) 2018-2020 Aaron M. D. Jones <aaronmdjones@gmail.com>
 
 include ../../extra.mk
+
+MODULE = rpgserv
+SRCS   =            \
+    enable.c        \
+    help.c          \
+    info.c          \
+    list.c          \
+    main.c          \
+    search.c        \
+    set.c
+
 include ../../buildsys.mk
 include ../../buildsys.module.mk
 
-CPPFLAGS	+= -I../../include
-LDFLAGS		+= -L../../libathemecore
-LIBS		+= -lathemecore
+CPPFLAGS += -I../../include
+LDFLAGS  += -L../../libathemecore
+LIBS     += -lathemecore
