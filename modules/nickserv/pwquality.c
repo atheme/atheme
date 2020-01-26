@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: ISC
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Copyright (C) 2010 William Pitcock <nenolod@atheme.org>
+ * Copyright (C) 2010 William Pitcock <nenolod@dereferenced.org>
  * Copyright (C) 2019 Atheme Development Group (https://atheme.github.io/)
  *
  * This file contains code for checking password security.

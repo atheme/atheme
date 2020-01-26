@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: ISC
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Copyright (C) 2010 William Pitcock <nenolod@atheme.org>
+ * Copyright (C) 2010 William Pitcock <nenolod@dereferenced.org>
  *
  * Management of tainted running configuration reasons and status.
  */

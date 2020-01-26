@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: ISC
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Copyright (C) 2008 William Pitcock <nenolod@atheme.org>
+ * Copyright (C) 2008 William Pitcock <nenolod@dereferenced.org>
  *
  * Allows extension of expiry times if user will be away from IRC for
  * a month or two.

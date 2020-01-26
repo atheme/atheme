@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: ISC
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Copyright (C) 2010 William Pitcock <nenolod@atheme.org>
+ * Copyright (C) 2010 William Pitcock <nenolod@dereferenced.org>
  *
  * Implements a named-successor ACL flag.
  */

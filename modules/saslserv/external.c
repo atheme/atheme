@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: ISC
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Copyright (C) 2006-2011 William Pitcock <nenolod@atheme.org>
+ * Copyright (C) 2006-2011 William Pitcock <nenolod@dereferenced.org>
  * Copyright (C) 2017-2019 Atheme Development Group (https://atheme.github.io/)
  *
  * EXTERNAL IRCv3.1 SASL draft mechanism implementation.

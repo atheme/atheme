@@ -3,7 +3,7 @@
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
  * Copyright (C) 2005-2007 Robin Burchell, et al.
- * Copyright (C) 2010 William Pitcock <nenolod@atheme.org>
+ * Copyright (C) 2010 William Pitcock <nenolod@dereferenced.org>
  *
  * This file contains code for the NickServ LIST function.
  * Based on Alex Lambert's LISTEMAIL.
