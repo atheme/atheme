@@ -1568,8 +1568,8 @@ Optional Packages:
                           library)
   --with-perl             Enable Perl (for modules/scripting/perl)
   --with-digest-api-frontend=[frontend]
-                          Digest API frontend to use (auto, mbedtls, nettle,
-                          openssl, libressl, internal). Default: auto
+                          Digest API frontend to use (auto, openssl, libressl,
+                          mbedtls, internal). Default: auto
   --with-rng-api-frontend=[frontend]
                           RNG API frontend to use (auto, openbsd, sodium,
                           openssl, libressl, mbedtls, internal). Default: auto
@@ -11746,7 +11746,6 @@ fi
     LIBNETTLE="No"
     LIBNETTLE_PATH=""
     LIBNETTLE_USABLE="No"
-    LIBNETTLE_DIGEST="No"
 
 
 # Check whether --with-nettle was given.
@@ -11906,62 +11905,6 @@ fi
 
         CFLAGS="${LIBNETTLE_CFLAGS} ${CFLAGS}"
         LIBS="${LIBNETTLE_LIBS} ${LIBS}"
-
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking if GNU Nettle has usable MD5/SHA1/SHA2 functions" >&5
-$as_echo_n "checking if GNU Nettle has usable MD5/SHA1/SHA2 functions... " >&6; }
-        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-                #ifdef HAVE_STDDEF_H
-                #  include <stddef.h>
-                #endif
-                #include <nettle/md5.h>
-                #include <nettle/sha1.h>
-                #include <nettle/sha2.h>
-                #include <nettle/nettle-meta.h>
-
-int
-main ()
-{
-
-                struct md5_ctx md5ctx;
-                struct sha1_ctx sha1ctx;
-                struct sha256_ctx sha256ctx;
-                struct sha512_ctx sha512ctx;
-                (void) nettle_md5_init(NULL);
-                (void) nettle_md5_update(NULL, 0, NULL);
-                (void) nettle_md5_digest(NULL, 0, NULL);
-                (void) nettle_sha1_init(NULL);
-                (void) nettle_sha1_update(NULL, 0, NULL);
-                (void) nettle_sha1_digest(NULL, 0, NULL);
-                (void) nettle_sha256_init(NULL);
-                (void) nettle_sha256_update(NULL, 0, NULL);
-                (void) nettle_sha256_digest(NULL, 0, NULL);
-                (void) nettle_sha512_init(NULL);
-                (void) nettle_sha512_update(NULL, 0, NULL);
-                (void) nettle_sha512_digest(NULL, 0, NULL);
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-
-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-            LIBNETTLE_USABLE="Yes"
-            LIBNETTLE_DIGEST="Yes"
-
-else
-
-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
 
         { $as_echo "$as_me:${as_lineno-$LINENO}: checking if GNU Nettle has a usable constant-time memory comparison function" >&5
 $as_echo_n "checking if GNU Nettle has a usable constant-time memory comparison function... " >&6; }
@@ -13885,16 +13828,6 @@ fi
                 { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&5
 $as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&6;}
 
-elif test "${LIBNETTLE}${LIBNETTLE_DIGEST}" = "YesYes"; then :
-
-
-
-    DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_NETTLE"
-    DIGEST_FRONTEND="Nettle"
-
-                { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&5
-$as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&6;}
-
 elif test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_DIGEST}" = "YesYes"; then :
 
 
@@ -13918,42 +13851,6 @@ $as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen automaticall
 fi
             ;;
 
-        xmbedtls)
-            if test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_DIGEST}" = "YesYes"; then :
-
-
-
-    DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_MBEDTLS"
-    DIGEST_FRONTEND="ARM mbedTLS"
-
-                { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&5
-$as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&6;}
-
-else
-
-                as_fn_error $? "--with-digest-api-frontend=mbedtls requires --with-mbedtls and usable MD5/SHA1/SHA2/HMAC/PBKDF2 functions" "$LINENO" 5
-
-fi
-            ;;
-
-        xnettle)
-            if test "${LIBNETTLE}${LIBNETTLE_DIGEST}" = "YesYes"; then :
-
-
-
-    DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_NETTLE"
-    DIGEST_FRONTEND="Nettle"
-
-                { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&5
-$as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&6;}
-
-else
-
-                as_fn_error $? "--with-digest-api-frontend=nettle requires --with-nettle and usable MD5/SHA1/SHA2 functions" "$LINENO" 5
-
-fi
-            ;;
-
         xopenssl | xlibressl)
             if test "${LIBCRYPTO}${LIBCRYPTO_DIGEST}" = "YesYes"; then :
 
@@ -13972,6 +13869,24 @@ else
 fi
             ;;
 
+        xmbedtls)
+            if test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_DIGEST}" = "YesYes"; then :
+
+
+
+    DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_MBEDTLS"
+    DIGEST_FRONTEND="ARM mbedTLS"
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&5
+$as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&6;}
+
+else
+
+                as_fn_error $? "--with-digest-api-frontend=mbedtls requires --with-mbedtls and usable MD5/SHA1/SHA2/HMAC/PBKDF2 functions" "$LINENO" 5
+
+fi
+            ;;
+
         xinternal)
 
 
@@ -13983,7 +13898,7 @@ $as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&
             ;;
 
         *)
-            as_fn_error $? "invalid option for --with-digest-api-frontend (auto, mbedtls, nettle, openssl, libressl, internal)" "$LINENO" 5
+            as_fn_error $? "invalid option for --with-digest-api-frontend (auto, openssl, libressl, mbedtls, internal)" "$LINENO" 5
             ;;
     esac
 

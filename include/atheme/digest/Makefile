@@ -11,7 +11,6 @@ INCLUDES =                  \
     constants.h             \
     internal.h              \
     mbedtls.h               \
-    nettle.h                \
     openssl.h
 
 include ../../../buildsys.mk

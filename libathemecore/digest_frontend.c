@@ -16,25 +16,108 @@
 
 #define ATHEME_LAC_DIGEST_FRONTEND_C 1
 
-#if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_INTERNAL)
-#  include "digest_fe_internal.c"
+#if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_OPENSSL)
+#  include "digest_fe_openssl.c"
 #else
 #  if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_MBEDTLS)
 #    include "digest_fe_mbedtls.c"
 #  else
-#    if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_NETTLE)
-#      include "digest_fe_nettle.c"
+#    if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_INTERNAL)
+#      include "digest_fe_internal.c"
 #    else
-#      if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_OPENSSL)
-#        include "digest_fe_openssl.c"
-#      else
-#        error "No Digest API frontend was selected by the build system"
-#      endif
+#      error "No Digest API frontend was selected by the build system"
 #    endif
 #  endif
 #endif
 
-#include "digest_fe_shared.c"
+static bool ATHEME_FATTR_WUR
+_digest_update_vector(struct digest_context *const restrict ctx, const struct digest_vector *const restrict vec,
+                      const size_t vecLen)
+{
+	for (size_t i = 0; i < vecLen; i++)
+		if (! _digest_update(ctx, vec[i].ptr, vec[i].len))
+			return false;
+
+	return true;
+}
+
+static bool ATHEME_FATTR_WUR
+_digest_oneshot(const enum digest_algorithm alg, const void *const data, const size_t dataLen,
+                void *const out, size_t *const outLen)
+{
+	struct digest_context ctx;
+
+	if (! _digest_init(&ctx, alg))
+		return false;
+
+	if (! _digest_update(&ctx, data, dataLen))
+		return false;
+
+	if (! _digest_final(&ctx, out, outLen))
+		return false;
+
+	(void) smemzero(&ctx, sizeof ctx);
+	return true;
+}
+
+static bool ATHEME_FATTR_WUR
+_digest_oneshot_vector(const enum digest_algorithm alg, const struct digest_vector *const restrict vec,
+                       const size_t vecLen, void *const restrict out, size_t *const outLen)
+{
+	struct digest_context ctx;
+
+	if (! _digest_init(&ctx, alg))
+		return false;
+
+	if (! _digest_update_vector(&ctx, vec, vecLen))
+		return false;
+
+	if (! _digest_final(&ctx, out, outLen))
+		return false;
+
+	(void) smemzero(&ctx, sizeof ctx);
+	return true;
+}
+
+static bool ATHEME_FATTR_WUR
+_digest_oneshot_hmac(const enum digest_algorithm alg, const void *const key, const size_t keyLen,
+                     const void *const data, const size_t dataLen, void *const out,
+                     size_t *const outLen)
+{
+	struct digest_context ctx;
+
+	if (! _digest_init_hmac(&ctx, alg, key, keyLen))
+		return false;
+
+	if (! _digest_update(&ctx, data, dataLen))
+		return false;
+
+	if (! _digest_final(&ctx, out, outLen))
+		return false;
+
+	(void) smemzero(&ctx, sizeof ctx);
+	return true;
+}
+
+static bool ATHEME_FATTR_WUR
+_digest_oneshot_hmac_vector(const enum digest_algorithm alg, const void *const key, const size_t keyLen,
+                            const struct digest_vector *const restrict vec, const size_t vecLen,
+                            void *const out, size_t *const outLen)
+{
+	struct digest_context ctx;
+
+	if (! _digest_init_hmac(&ctx, alg, key, keyLen))
+		return false;
+
+	if (! _digest_update_vector(&ctx, vec, vecLen))
+		return false;
+
+	if (! _digest_final(&ctx, out, outLen))
+		return false;
+
+	(void) smemzero(&ctx, sizeof ctx);
+	return true;
+}
 
 size_t
 digest_size_alg(const enum digest_algorithm alg)
@@ -53,6 +136,8 @@ digest_size_alg(const enum digest_algorithm alg)
 		case DIGALG_SHA2_512:
 			return DIGEST_MDLEN_SHA2_512;
 	}
+
+	return 0;
 }
 
 size_t
@@ -150,6 +235,11 @@ digest_final(struct digest_context *const restrict ctx, void *const restrict out
 		(void) slog(LG_ERROR, "%s: called with NULL 'ctx' (BUG)", MOWGLI_FUNC_NAME);
 		return false;
 	}
+	if (! hLen)
+	{
+		(void) slog(LG_ERROR, "%s: called with malformed/uninitialised 'alg' (BUG)", MOWGLI_FUNC_NAME);
+		return false;
+	}
 	if (! out)
 	{
 		(void) slog(LG_ERROR, "%s: called with NULL 'out' (BUG)", MOWGLI_FUNC_NAME);
@@ -170,6 +260,11 @@ digest_oneshot(const enum digest_algorithm alg, const void *const data, const si
 {
 	const size_t hLen = digest_size_alg(alg);
 
+	if (! hLen)
+	{
+		(void) slog(LG_ERROR, "%s: called with malformed/uninitialised 'alg' (BUG)", MOWGLI_FUNC_NAME);
+		return false;
+	}
 	if ((! data && dataLen) || (data && ! dataLen))
 	{
 		(void) slog(LG_ERROR, "%s: called with mismatched data parameters (BUG)", MOWGLI_FUNC_NAME);
@@ -195,6 +290,11 @@ digest_oneshot_vector(const enum digest_algorithm alg, const struct digest_vecto
 {
 	const size_t hLen = digest_size_alg(alg);
 
+	if (! hLen)
+	{
+		(void) slog(LG_ERROR, "%s: called with malformed/uninitialised 'alg' (BUG)", MOWGLI_FUNC_NAME);
+		return false;
+	}
 	if ((! vec && vecLen) || (vec && ! vecLen))
 	{
 		(void) slog(LG_ERROR, "%s: called with mismatched data parameters (BUG)", MOWGLI_FUNC_NAME);
@@ -229,6 +329,11 @@ digest_oneshot_hmac(const enum digest_algorithm alg, const void *const key, cons
 {
 	const size_t hLen = digest_size_alg(alg);
 
+	if (! hLen)
+	{
+		(void) slog(LG_ERROR, "%s: called with malformed/uninitialised 'alg' (BUG)", MOWGLI_FUNC_NAME);
+		return false;
+	}
 	if ((! key && keyLen) || (key && ! keyLen))
 	{
 		(void) slog(LG_ERROR, "%s: called with mismatched key parameters (BUG)", MOWGLI_FUNC_NAME);
@@ -260,6 +365,11 @@ digest_oneshot_hmac_vector(const enum digest_algorithm alg, const void *const ke
 {
 	const size_t hLen = digest_size_alg(alg);
 
+	if (! hLen)
+	{
+		(void) slog(LG_ERROR, "%s: called with malformed/uninitialised 'alg' (BUG)", MOWGLI_FUNC_NAME);
+		return false;
+	}
 	if ((! key && keyLen) || (key && ! keyLen))
 	{
 		(void) slog(LG_ERROR, "%s: called with mismatched key parameters (BUG)", MOWGLI_FUNC_NAME);
@@ -298,6 +408,11 @@ digest_hkdf_extract(const enum digest_algorithm alg, const void *const ikm, cons
 {
 	const size_t hLen = digest_size_alg(alg);
 
+	if (! hLen)
+	{
+		(void) slog(LG_ERROR, "%s: called with malformed/uninitialised 'alg' (BUG)", MOWGLI_FUNC_NAME);
+		return false;
+	}
 	if (! ikm)
 	{
 		(void) slog(LG_ERROR, "%s: called with NULL 'ikm' (BUG)", MOWGLI_FUNC_NAME);
@@ -357,6 +472,11 @@ digest_hkdf_expand(const enum digest_algorithm alg, const void *const prk, const
 {
 	const size_t hLen = digest_size_alg(alg);
 
+	if (! hLen)
+	{
+		(void) slog(LG_ERROR, "%s: called with malformed/uninitialised 'alg' (BUG)", MOWGLI_FUNC_NAME);
+		return false;
+	}
 	if (! prk)
 	{
 		(void) slog(LG_ERROR, "%s: called with NULL 'prk' (BUG)", MOWGLI_FUNC_NAME);
@@ -438,6 +558,11 @@ digest_oneshot_hkdf(const enum digest_algorithm alg, const void *const ikm, cons
 
 	const size_t hLen = digest_size_alg(alg);
 
+	if (! hLen)
+	{
+		(void) slog(LG_ERROR, "%s: called with malformed/uninitialised 'alg' (BUG)", MOWGLI_FUNC_NAME);
+		return false;
+	}
 	if (! digest_hkdf_extract(alg, ikm, ikmLen, salt, saltLen, prk, hLen))
 	{
 		(void) smemzero(prk, sizeof prk);
@@ -460,6 +585,11 @@ digest_oneshot_pbkdf2(const enum digest_algorithm alg, const void *const restric
 {
 	const size_t hLen = digest_size_alg(alg);
 
+	if (! hLen)
+	{
+		(void) slog(LG_ERROR, "%s: called with malformed/uninitialised 'alg' (BUG)", MOWGLI_FUNC_NAME);
+		return false;
+	}
 	if ((! pass && passLen) || (pass && ! passLen))
 	{
 		(void) slog(LG_ERROR, "%s: called with mismatched pass parameters (BUG)", MOWGLI_FUNC_NAME);

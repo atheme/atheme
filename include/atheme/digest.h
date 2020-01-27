@@ -20,20 +20,16 @@ struct digest_vector
 	size_t          len;
 };
 
-#if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_INTERNAL)
-#  include <atheme/digest/internal.h>
+#if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_OPENSSL)
+#  include <atheme/digest/openssl.h>
 #else
 #  if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_MBEDTLS)
 #    include <atheme/digest/mbedtls.h>
 #  else
-#    if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_NETTLE)
-#      include <atheme/digest/nettle.h>
+#    if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_INTERNAL)
+#      include <atheme/digest/internal.h>
 #    else
-#      if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_OPENSSL)
-#        include <atheme/digest/openssl.h>
-#      else
-#        error "No Digest API frontend was selected by the build system"
-#      endif
+#      error "No Digest API frontend was selected by the build system"
 #    endif
 #  endif
 #endif

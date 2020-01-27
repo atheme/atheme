@@ -14,7 +14,6 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
     LIBNETTLE="No"
     LIBNETTLE_PATH=""
     LIBNETTLE_USABLE="No"
-    LIBNETTLE_DIGEST="No"
 
     AC_ARG_WITH([nettle],
         [AS_HELP_STRING([--without-nettle], [Do not attempt to detect nettle (cryptographic library)])],
@@ -59,42 +58,6 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
     AS_IF([test "${LIBNETTLE}" = "Yes"], [
         CFLAGS="${LIBNETTLE_CFLAGS} ${CFLAGS}"
         LIBS="${LIBNETTLE_LIBS} ${LIBS}"
-
-        AC_MSG_CHECKING([if GNU Nettle has usable MD5/SHA1/SHA2 functions])
-        AC_LINK_IFELSE([
-            AC_LANG_PROGRAM([[
-                #ifdef HAVE_STDDEF_H
-                #  include <stddef.h>
-                #endif
-                #include <nettle/md5.h>
-                #include <nettle/sha1.h>
-                #include <nettle/sha2.h>
-                #include <nettle/nettle-meta.h>
-            ]], [[
-                struct md5_ctx md5ctx;
-                struct sha1_ctx sha1ctx;
-                struct sha256_ctx sha256ctx;
-                struct sha512_ctx sha512ctx;
-                (void) nettle_md5_init(NULL);
-                (void) nettle_md5_update(NULL, 0, NULL);
-                (void) nettle_md5_digest(NULL, 0, NULL);
-                (void) nettle_sha1_init(NULL);
-                (void) nettle_sha1_update(NULL, 0, NULL);
-                (void) nettle_sha1_digest(NULL, 0, NULL);
-                (void) nettle_sha256_init(NULL);
-                (void) nettle_sha256_update(NULL, 0, NULL);
-                (void) nettle_sha256_digest(NULL, 0, NULL);
-                (void) nettle_sha512_init(NULL);
-                (void) nettle_sha512_update(NULL, 0, NULL);
-                (void) nettle_sha512_digest(NULL, 0, NULL);
-            ]])
-        ], [
-            AC_MSG_RESULT([yes])
-            LIBNETTLE_USABLE="Yes"
-            LIBNETTLE_DIGEST="Yes"
-        ], [
-            AC_MSG_RESULT([no])
-        ])
 
         AC_MSG_CHECKING([if GNU Nettle has a usable constant-time memory comparison function])
         AC_LINK_IFELSE([
