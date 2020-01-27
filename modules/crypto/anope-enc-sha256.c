@@ -33,18 +33,7 @@
  * these adaptations.
  */
 
-// Since we need to avoid the Digest API, we can't include <atheme.h>
-#include <atheme/attributes.h>  // ATHEME_FATTR_WUR, ATHEME_VATTR_UNUSED
-#include <atheme/base64.h>      // base64_decode()
-#include <atheme/crypto.h>      // crypt_register(), crypt_unregister(), struct crypt_impl
-#include <atheme/memory.h>      // smemcmp(), smemzero()
-#include <atheme/module.h>      // MODFLAG_*, MODULE_*, *DECLARE_MODULE_*(), struct module, ...
-#include <atheme/stdheaders.h>  // Everything else
-#include <atheme/tools.h>       // LG_ERROR, slog()
-
-// Yes, this is a hack ...
-#include <atheme/digest/internal.h>
-#include "../../libathemecore/digest_be_sha2.c"
+#include <atheme.h>
 
 #define CRYPTO_MODULE_NAME      "crypto/anope-enc-sha256"
 
@@ -67,28 +56,27 @@ anope_enc_sha256_verify(const char *const restrict password, const char *const r
 
 	if (base64_decode(iv64, iv, sizeof iv) != sizeof iv)
 	{
-		(void) slog(LG_ERROR, "%s: base64_decode() failed (BUG?)", MOWGLI_FUNC_NAME);
+		(void) slog(LG_ERROR, "%s: base64_decode(iv) failed (BUG?)", MOWGLI_FUNC_NAME);
 		return false;
 	}
 	if (base64_decode(md64, md, sizeof md) != sizeof md)
 	{
-		(void) slog(LG_ERROR, "%s: base64_decode() failed (BUG?)", MOWGLI_FUNC_NAME);
+		(void) slog(LG_ERROR, "%s: base64_decode(md) failed (BUG?)", MOWGLI_FUNC_NAME);
 		return false;
 	}
 
 	(void) smemzero(md64, sizeof md64);
 
-	if (! digest_is_big_endian_sha2())
-		for (size_t i = 0; i < DIGEST_IVLEN_SHA2_256; i++)
-			SHA2_REVERSE32(iv[i], iv[i]);
+	for (size_t i = 0; i < DIGEST_IVLEN_SHA2_256; i++)
+		iv[i] = htonl(iv[i]);
 
 	unsigned char out[DIGEST_MDLEN_SHA2_256];
-	union digest_state ctx;
+	union digest_direct_ctx ctx;
 
 	(void) memset(&ctx, 0x00, sizeof ctx);
-	(void) memcpy(ctx.sha2_256_ctx.state, iv, sizeof iv);
-	(void) digest_update_sha2_256(&ctx, password, strlen(password));
-	(void) digest_final_sha2_256(&ctx, out);
+	(void) memcpy(ctx.sha2_256.state, iv, sizeof iv);
+	(void) digest_direct_update_sha2_256(&ctx, password, strlen(password));
+	(void) digest_direct_final_sha2_256(&ctx, out);
 
 	const int ret = smemcmp(md, out, DIGEST_MDLEN_SHA2_256);
 
@@ -104,9 +92,54 @@ static const struct crypt_impl crypto_impl = {
 	.verify     = &anope_enc_sha256_verify,
 };
 
+static bool ATHEME_FATTR_WUR
+mod_selftest(void)
+{
+	static const struct {
+		const char *    password;
+		const char *    parameters;
+	} vectors[] = {
+		{
+			.password   = "jKOBBtCvr9CbulQyhyHy3lUEPoRp0WtX",
+			.parameters = "$anope$enc_sha256$J9b6Xi0sRclnvcffBi5Zg0HOactnhdcuHZUBVlAeUj4=$"
+			              "bp3WKwgM4WZW/44cq8jfMwO1UyezeLBlo+Hq9uyReEc=",
+		},
+		{
+			.password   = "NfA8mh6UBERSqqpAuw7FrzrWGVW7zMChvk26rf9PVLOEGePko0oAjWyhEkxTgpj"
+			              "LjG7YYpQHO8VivPUVmlasVGs04ysdEtsFHVXVWaXldKjcnaoiRefnNKU3ery62p"
+			              "05wE7klMQNTcWBLGXqixYxZDD2Ra3MVfVPvXr5XjMZIViVx0L4287X8PpdDAGgT"
+			              "iDe2GVn3fuCGxwJbg8dEdG9uMw6b3XSCeqqnNJ8odTeYa2BZj0a99quz6xo0tvx"
+			              "Em4Z8dew8E6eE1vAYrgvJ0iVyGRagdlDtQKT",
+			.parameters = "$anope$enc_sha256$UX4ZIVS4Det/iP3EZKcsDzD0fsAGKk3EeKuXghmYk8M=$"
+			              "pb/k1xaMgJQe9QGoNVuHQ+uTdRK7bL1bIudMy/Zaqhc=",
+		},
+	};
+
+	for (size_t vector = 0; vector < ((sizeof vectors) / (sizeof vectors[0])); vector++)
+	{
+		unsigned int flags = 0;
+
+		if (! anope_enc_sha256_verify(vectors[vector].password, vectors[vector].parameters, &flags))
+			return false;
+
+		if (! (flags & PWVERIFY_FLAG_MYMODULE))
+			return false;
+	}
+
+	return true;
+}
+
 static void
 mod_init(struct module *const restrict m)
 {
+	if (! mod_selftest())
+	{
+		(void) slog(LG_ERROR, "%s: self-test failed (BUG?); refusing to load.", m->name);
+
+		m->mflags |= MODFLAG_FAIL;
+		return;
+	}
+
 	(void) crypt_register(&crypto_impl);
 
 	m->mflags |= MODFLAG_DBCRYPTO;

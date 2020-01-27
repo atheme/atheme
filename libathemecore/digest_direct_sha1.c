@@ -31,6 +31,10 @@
  * SHA1 backend for Atheme IRC Services.
  */
 
+#include <atheme/digest/direct.h>       // self-declarations
+#include <atheme/memory.h>              // smemzero()
+#include <atheme/stdheaders.h>          // size_t, uint32_t, htonl(3), memcpy(3), memset(3)
+
 #define SHA1_ROL(value, bits) (((value) << (bits)) | ((value) >> (0x20U - (bits))))
 
 #define SHA1_BLK0_BE(i) block->l[i]
@@ -84,7 +88,8 @@ union SHA1_B64Q16
 };
 
 static void
-digest_transform_block_sha1(struct digest_context_sha1 *const restrict ctx, const unsigned char *const restrict in)
+digest_transform_block_sha1(union digest_direct_ctx *const restrict state,
+                            const unsigned char *const restrict in)
 {
 	const bool digest_is_big_endian = (htonl(UINT32_C(0x11223344)) == UINT32_C(0x11223344));
 
@@ -94,7 +99,7 @@ digest_transform_block_sha1(struct digest_context_sha1 *const restrict ctx, cons
 	uint32_t s[0x05U];
 
 	(void) memcpy(block, in, sizeof *block);
-	(void) memcpy(s, ctx->state, sizeof s);
+	(void) memcpy(s, state->sha1.state, sizeof s);
 
 	SHA1_ROUND0(0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x00U);
 	SHA1_ROUND0(0x04U, 0x00U, 0x01U, 0x02U, 0x03U, 0x01U);
@@ -182,89 +187,83 @@ digest_transform_block_sha1(struct digest_context_sha1 *const restrict ctx, cons
 	SHA1_ROUND4(0x01U, 0x02U, 0x03U, 0x04U, 0x00U, 0x4FU);
 
 	for (size_t i = 0x00U; i < 0x05U; i++)
-		ctx->state[i] += s[i];
+		state->sha1.state[i] += s[i];
 
 	(void) smemzero(block, sizeof *block);
 	(void) smemzero(s, sizeof s);
 }
 
-static void
-digest_init_sha1(union digest_state *const restrict state)
+void
+digest_direct_init_sha1(union digest_direct_ctx *const restrict state)
 {
-	struct digest_context_sha1 *const ctx = &state->sha1_ctx;
-
 	static const uint32_t iv[DIGEST_IVLEN_SHA1] = {
 
 		UINT32_C(0x67452301), UINT32_C(0xEFCDAB89), UINT32_C(0x98BADCFE), UINT32_C(0x10325476),
 		UINT32_C(0xC3D2E1F0),
 	};
 
-	(void) memset(ctx, 0x00U, sizeof *ctx);
-	(void) memcpy(ctx->state, iv, sizeof iv);
+	(void) memset(state, 0x00U, sizeof *state);
+	(void) memcpy(state->sha1.state, iv, sizeof iv);
 }
 
-static void
-digest_update_sha1(union digest_state *const restrict state, const void *const restrict data, size_t len)
+void
+digest_direct_update_sha1(union digest_direct_ctx *const restrict state, const void *const restrict data, size_t len)
 {
-	struct digest_context_sha1 *const ctx = &state->sha1_ctx;
-
 	if (! (data && len))
 		return;
 
 	const unsigned char *const ptr = data;
 
 	uint32_t i = 0x00U;
-	uint32_t j = (ctx->count[0x00U] >> 0x03U) & 0x3FU;
+	uint32_t j = (state->sha1.count[0x00U] >> 0x03U) & 0x3FU;
 
-	ctx->count[1] += (len >> 0x1DU);
+	state->sha1.count[1] += (len >> 0x1DU);
 
-	if ((ctx->count[0x00U] += (len << 0x03U)) < (len << 0x03U))
-		ctx->count[0x01U]++;
+	if ((state->sha1.count[0x00U] += (len << 0x03U)) < (len << 0x03U))
+		state->sha1.count[0x01U]++;
 
 	if ((j + len) >= 0x40U)
 	{
 		i = 0x40U - j;
 
-		(void) memcpy(ctx->buf + j, ptr, i);
-		(void) digest_transform_block_sha1(ctx, ctx->buf);
+		(void) memcpy(state->sha1.buf + j, ptr, i);
+		(void) digest_transform_block_sha1(state, state->sha1.buf);
 
 		for ( ; (i + 0x3FU) < len; i += 0x40U)
-			(void) digest_transform_block_sha1(ctx, ptr + i);
+			(void) digest_transform_block_sha1(state, ptr + i);
 
 		j = 0x00U;
 	}
 
-	(void) memcpy(ctx->buf + j, ptr + i, len - i);
+	(void) memcpy(state->sha1.buf + j, ptr + i, len - i);
 }
 
-static void
-digest_final_sha1(union digest_state *const restrict state, void *const restrict out)
+void
+digest_direct_final_sha1(union digest_direct_ctx *const restrict state, void *const restrict out)
 {
-	struct digest_context_sha1 *const ctx = &state->sha1_ctx;
-
 	static const unsigned char sep = 0x80U;
 	static const unsigned char pad = 0x00U;
 
 	unsigned char data[0x08U];
 
 	for (uint32_t i = 0x00U; i < 0x04U; i++)
-		data[i] = (unsigned char) ((ctx->count[0x01U] >> ((0x03U - (i & 0x03U)) * 0x08U)) & 0xFFU);
+		data[i] = (unsigned char) ((state->sha1.count[0x01U] >> ((0x03U - (i & 0x03U)) * 0x08U)) & 0xFFU);
 
 	for (uint32_t i = 0x04U; i < 0x08U; i++)
-		data[i] = (unsigned char) ((ctx->count[0x00U] >> ((0x03U - (i & 0x03U)) * 0x08U)) & 0xFFU);
+		data[i] = (unsigned char) ((state->sha1.count[0x00U] >> ((0x03U - (i & 0x03U)) * 0x08U)) & 0xFFU);
 
-	(void) digest_update_sha1(state, &sep, sizeof sep);
+	(void) digest_direct_update_sha1(state, &sep, sizeof sep);
 
-	while ((ctx->count[0] & 0x1F8U) != 0x1C0U)
-		(void) digest_update_sha1(state, &pad, sizeof pad);
+	while ((state->sha1.count[0] & 0x1F8U) != 0x1C0U)
+		(void) digest_direct_update_sha1(state, &pad, sizeof pad);
 
-	(void) digest_update_sha1(state, data, sizeof data);
+	(void) digest_direct_update_sha1(state, data, sizeof data);
 
 	unsigned char *const digest = out;
 
 	for (uint32_t i = 0x00U; i < DIGEST_MDLEN_SHA1; i++)
-		digest[i] = (unsigned char) ((ctx->state[i >> 0x02U] >> ((0x03U - (i & 0x03U)) * 0x08U)) & 0xFFU);
+		digest[i] = (unsigned char) ((state->sha1.state[i >> 0x02U] >> ((0x03U - (i & 0x03U)) * 0x08U)) & 0xFFU);
 
 	(void) smemzero(data, sizeof data);
-	(void) smemzero(ctx, sizeof *ctx);
+	(void) smemzero(state, sizeof *state);
 }

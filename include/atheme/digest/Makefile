@@ -8,9 +8,10 @@ include ../../../extra.mk
 includesubdir = atheme/digest
 
 INCLUDES =                  \
-    constants.h             \
+    direct.h                \
     internal.h              \
     mbedtls.h               \
-    openssl.h
+    openssl.h               \
+    types.h
 
 include ../../../buildsys.mk

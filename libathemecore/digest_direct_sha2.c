@@ -43,6 +43,10 @@
  * SHA2-256 & SHA2-512 backend for Atheme IRC Services.
  */
 
+#include <atheme/digest/direct.h>       // self-declarations
+#include <atheme/memory.h>              // smemzero()
+#include <atheme/stdheaders.h>          // size_t, uint32_t, uint64_t, htonl(3), memcpy(3), memset(3)
+
 #define DIGEST_SHORT_BKLEN_SHA2_256     (DIGEST_BKLEN_SHA2_256 - 0x08U)
 #define DIGEST_SHORT_BKLEN_SHA2_512     (DIGEST_BKLEN_SHA2_512 - 0x10U)
 
@@ -145,7 +149,7 @@ digest_is_big_endian_sha2(void)
 }
 
 static void
-digest_transform_block_sha2_256(struct digest_context_sha2_256 *const ctx, const uint32_t *data)
+digest_transform_block_sha2_256(union digest_direct_ctx *const state, const uint32_t *data)
 {
 	static const uint32_t K[] = {
 
@@ -167,12 +171,12 @@ digest_transform_block_sha2_256(struct digest_context_sha2_256 *const ctx, const
 		UINT32_C(0x90BEFFFA), UINT32_C(0xA4506CEB), UINT32_C(0xBEF9A3F7), UINT32_C(0xC67178F2),
 	};
 
-	uint32_t *const W = (uint32_t *) ctx->buf;
+	uint32_t *const W = (uint32_t *) state->sha2_256.buf;
 	uint32_t j = 0x00U;
 
-	uint32_t s[DIGEST_STLEN_SHA2];
+	uint32_t s[DIGEST_IVLEN_SHA2_256];
 
-	(void) memcpy(s, ctx->state, sizeof s);
+	(void) memcpy(s, state->sha2_256.state, sizeof s);
 
 	do {
 		SHA2_256_ROUND_0_TO_15(0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U);
@@ -198,14 +202,14 @@ digest_transform_block_sha2_256(struct digest_context_sha2_256 *const ctx, const
 
 	} while (j < 0x40U);
 
-	for (size_t x = 0x00U; x < DIGEST_STLEN_SHA2; x++)
-		ctx->state[x] += s[x];
+	for (size_t x = 0x00U; x < DIGEST_IVLEN_SHA2_256; x++)
+		state->sha2_256.state[x] += s[x];
 
 	(void) smemzero(s, sizeof s);
 }
 
 static void
-digest_transform_block_sha2_512(struct digest_context_sha2_512 *const ctx, const uint64_t *data)
+digest_transform_block_sha2_512(union digest_direct_ctx *const state, const uint64_t *data)
 {
 	static const uint64_t K[] = {
 
@@ -251,12 +255,12 @@ digest_transform_block_sha2_512(struct digest_context_sha2_512 *const ctx, const
 		UINT64_C(0x5FCB6FAB3AD6FAEC), UINT64_C(0x6C44198C4A475817),
 	};
 
-	uint64_t *const W = (uint64_t *) ctx->buf;
+	uint64_t *const W = (uint64_t *) state->sha2_512.buf;
 	uint64_t j = 0x00U;
 
-	uint64_t s[DIGEST_STLEN_SHA2];
+	uint64_t s[DIGEST_IVLEN_SHA2_512];
 
-	(void) memcpy(s, ctx->state, sizeof s);
+	(void) memcpy(s, state->sha2_512.state, sizeof s);
 
 	do {
 		SHA2_512_ROUND_0_TO_15(0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U);
@@ -282,32 +286,28 @@ digest_transform_block_sha2_512(struct digest_context_sha2_512 *const ctx, const
 
 	} while (j < 0x50U);
 
-	for (size_t x = 0x00U; x < DIGEST_STLEN_SHA2; x++)
-		ctx->state[x] += s[x];
+	for (size_t x = 0x00U; x < DIGEST_IVLEN_SHA2_512; x++)
+		state->sha2_512.state[x] += s[x];
 
 	(void) smemzero(s, sizeof s);
 }
 
-static void
-digest_init_sha2_256(union digest_state *const restrict state)
+void
+digest_direct_init_sha2_256(union digest_direct_ctx *const restrict state)
 {
-	struct digest_context_sha2_256 *const ctx = &state->sha2_256_ctx;
-
 	static const uint32_t iv[DIGEST_IVLEN_SHA2_256] = {
 
 		UINT32_C(0x6A09E667), UINT32_C(0xBB67AE85), UINT32_C(0x3C6EF372), UINT32_C(0xA54FF53A),
 		UINT32_C(0x510E527F), UINT32_C(0x9B05688C), UINT32_C(0x1F83D9AB), UINT32_C(0x5BE0CD19),
 	};
 
-	(void) memset(ctx, 0x00U, sizeof *ctx);
-	(void) memcpy(ctx->state, iv, sizeof iv);
+	(void) memset(state, 0x00U, sizeof *state);
+	(void) memcpy(state->sha2_256.state, iv, sizeof iv);
 }
 
-static void
-digest_init_sha2_512(union digest_state *const restrict state)
+void
+digest_direct_init_sha2_512(union digest_direct_ctx *const restrict state)
 {
-	struct digest_context_sha2_512 *const ctx = &state->sha2_512_ctx;
-
 	static const uint64_t iv[DIGEST_IVLEN_SHA2_512] = {
 
 		UINT64_C(0x6A09E667F3BCC908), UINT64_C(0xBB67AE8584CAA73B),
@@ -316,23 +316,21 @@ digest_init_sha2_512(union digest_state *const restrict state)
 		UINT64_C(0x1F83D9ABFB41BD6B), UINT64_C(0x5BE0CD19137E2179),
 	};
 
-	(void) memset(ctx, 0x00U, sizeof *ctx);
-	(void) memcpy(ctx->state, iv, sizeof iv);
+	(void) memset(state, 0x00U, sizeof *state);
+	(void) memcpy(state->sha2_512.state, iv, sizeof iv);
 }
 
-static void
-digest_update_sha2_256(union digest_state *const restrict state,
-                       const void *const restrict in, const size_t len)
+void
+digest_direct_update_sha2_256(union digest_direct_ctx *const restrict state,
+                              const void *const restrict in, const size_t len)
 {
-	struct digest_context_sha2_256 *const ctx = &state->sha2_256_ctx;
-
 	if (! (in && len))
 		return;
 
 	const unsigned char *ptr = in;
 	size_t rem = len;
 
-	const uint64_t usedspace = (uint64_t) ((ctx->count >> 0x03U) % DIGEST_BKLEN_SHA2_256);
+	const uint64_t usedspace = (uint64_t) ((state->sha2_256.count >> 0x03U) % DIGEST_BKLEN_SHA2_256);
 
 	if (usedspace)
 	{
@@ -340,19 +338,19 @@ digest_update_sha2_256(union digest_state *const restrict state,
 
 		if (rem >= freespace)
 		{
-			(void) memcpy(ctx->buf + usedspace, ptr, (size_t) freespace);
-			(void) digest_transform_block_sha2_256(ctx, (const void *) ctx->buf);
+			(void) memcpy(state->sha2_256.buf + usedspace, ptr, (size_t) freespace);
+			(void) digest_transform_block_sha2_256(state, (const void *) state->sha2_256.buf);
 
-			ctx->count += (freespace << 0x03U);
+			state->sha2_256.count += (freespace << 0x03U);
 
 			ptr += freespace;
 			rem -= freespace;
 		}
 		else
 		{
-			(void) memcpy(ctx->buf + usedspace, ptr, rem);
+			(void) memcpy(state->sha2_256.buf + usedspace, ptr, rem);
 
-			ctx->count += (rem << 0x03U);
+			state->sha2_256.count += (rem << 0x03U);
 
 			return;
 		}
@@ -360,9 +358,9 @@ digest_update_sha2_256(union digest_state *const restrict state,
 
 	while (rem >= DIGEST_BKLEN_SHA2_256)
 	{
-		(void) digest_transform_block_sha2_256(ctx, (const void *) ptr);
+		(void) digest_transform_block_sha2_256(state, (const void *) ptr);
 
-		ctx->count += (DIGEST_BKLEN_SHA2_256 << 0x03U);
+		state->sha2_256.count += (DIGEST_BKLEN_SHA2_256 << 0x03U);
 
 		ptr += DIGEST_BKLEN_SHA2_256;
 		rem -= DIGEST_BKLEN_SHA2_256;
@@ -370,25 +368,23 @@ digest_update_sha2_256(union digest_state *const restrict state,
 
 	if (rem)
 	{
-		(void) memcpy(ctx->buf, ptr, rem);
+		(void) memcpy(state->sha2_256.buf, ptr, rem);
 
-		ctx->count += (rem << 0x03U);
+		state->sha2_256.count += (rem << 0x03U);
 	}
 }
 
-static void
-digest_update_sha2_512(union digest_state *const restrict state,
-                       const void *const restrict in, const size_t len)
+void
+digest_direct_update_sha2_512(union digest_direct_ctx *const restrict state,
+                              const void *const restrict in, const size_t len)
 {
-	struct digest_context_sha2_512 *const ctx = &state->sha2_512_ctx;
-
 	if (! (in && len))
 		return;
 
 	const unsigned char *ptr = in;
 	size_t rem = len;
 
-	const uint64_t usedspace = (uint64_t) ((ctx->count[0] >> 0x03U) % DIGEST_BKLEN_SHA2_512);
+	const uint64_t usedspace = (uint64_t) ((state->sha2_512.count[0] >> 0x03U) % DIGEST_BKLEN_SHA2_512);
 
 	if (usedspace)
 	{
@@ -396,19 +392,19 @@ digest_update_sha2_512(union digest_state *const restrict state,
 
 		if (rem >= freespace)
 		{
-			(void) memcpy(ctx->buf + usedspace, ptr, (size_t) freespace);
-			(void) digest_transform_block_sha2_512(ctx, (const void *) ctx->buf);
+			(void) memcpy(state->sha2_512.buf + usedspace, ptr, (size_t) freespace);
+			(void) digest_transform_block_sha2_512(state, (const void *) state->sha2_512.buf);
 
-			SHA2_512_ADDINC128(ctx->count, (freespace << 0x03U));
+			SHA2_512_ADDINC128(state->sha2_512.count, (freespace << 0x03U));
 
 			ptr += freespace;
 			rem -= freespace;
 		}
 		else
 		{
-			(void) memcpy(ctx->buf + usedspace, ptr, rem);
+			(void) memcpy(state->sha2_512.buf + usedspace, ptr, rem);
 
-			SHA2_512_ADDINC128(ctx->count, (rem << 0x03U));
+			SHA2_512_ADDINC128(state->sha2_512.count, (rem << 0x03U));
 
 			return;
 		}
@@ -416,9 +412,9 @@ digest_update_sha2_512(union digest_state *const restrict state,
 
 	while (rem >= DIGEST_BKLEN_SHA2_512)
 	{
-		(void) digest_transform_block_sha2_512(ctx, (const void *) ptr);
+		(void) digest_transform_block_sha2_512(state, (const void *) ptr);
 
-		SHA2_512_ADDINC128(ctx->count, (DIGEST_BKLEN_SHA2_512 << 0x03U));
+		SHA2_512_ADDINC128(state->sha2_512.count, (DIGEST_BKLEN_SHA2_512 << 0x03U));
 
 		ptr += DIGEST_BKLEN_SHA2_512;
 		rem -= DIGEST_BKLEN_SHA2_512;
@@ -426,112 +422,108 @@ digest_update_sha2_512(union digest_state *const restrict state,
 
 	if (rem)
 	{
-		(void) memcpy(ctx->buf, ptr, rem);
+		(void) memcpy(state->sha2_512.buf, ptr, rem);
 
-		SHA2_512_ADDINC128(ctx->count, (rem << 0x03U));
+		SHA2_512_ADDINC128(state->sha2_512.count, (rem << 0x03U));
 	}
 }
 
-static void
-digest_final_sha2_256(union digest_state *const restrict state, void *const restrict out)
+void
+digest_direct_final_sha2_256(union digest_direct_ctx *const restrict state, void *const restrict out)
 {
-	struct digest_context_sha2_256 *const ctx = &state->sha2_256_ctx;
-
-	uint64_t usedspace = (ctx->count >> 0x03U) % DIGEST_BKLEN_SHA2_256;
+	uint64_t usedspace = (state->sha2_256.count >> 0x03U) % DIGEST_BKLEN_SHA2_256;
 
 	if (! digest_is_big_endian_sha2())
-		SHA2_REVERSE64(ctx->count, ctx->count);
+		SHA2_REVERSE64(state->sha2_256.count, state->sha2_256.count);
 
 	if (usedspace)
 	{
-		ctx->buf[usedspace++] = 0x80U;
+		state->sha2_256.buf[usedspace++] = 0x80U;
 
 		if (usedspace <= DIGEST_SHORT_BKLEN_SHA2_256)
 		{
-			(void) memset(ctx->buf + usedspace, 0x00U, (DIGEST_SHORT_BKLEN_SHA2_256 - usedspace));
+			(void) memset(state->sha2_256.buf + usedspace, 0x00U,
+			              (DIGEST_SHORT_BKLEN_SHA2_256 - usedspace));
 		}
 		else
 		{
 			if (usedspace < DIGEST_BKLEN_SHA2_256)
-			{
-				(void) memset(ctx->buf + usedspace, 0x00U, (DIGEST_BKLEN_SHA2_256 - usedspace));
-			}
+				(void) memset(state->sha2_256.buf + usedspace, 0x00U,
+				              (DIGEST_BKLEN_SHA2_256 - usedspace));
 
-			(void) digest_transform_block_sha2_256(ctx, (const void *) ctx->buf);
-			(void) memset(ctx->buf, 0x00U, DIGEST_SHORT_BKLEN_SHA2_256);
+			(void) digest_transform_block_sha2_256(state, (const void *) state->sha2_256.buf);
+			(void) memset(state->sha2_256.buf, 0x00U, DIGEST_SHORT_BKLEN_SHA2_256);
 		}
 	}
 	else
 	{
-		(void) memset(ctx->buf, 0x00U, DIGEST_SHORT_BKLEN_SHA2_256);
+		(void) memset(state->sha2_256.buf, 0x00U, DIGEST_SHORT_BKLEN_SHA2_256);
 
-		ctx->buf[0x00U] = 0x80U;
+		state->sha2_256.buf[0x00U] = 0x80U;
 	}
 
-	*((uint64_t *) &ctx->buf[DIGEST_SHORT_BKLEN_SHA2_256]) = ctx->count;
+	*((uint64_t *) &state->sha2_256.buf[DIGEST_SHORT_BKLEN_SHA2_256]) = state->sha2_256.count;
 
-	(void) digest_transform_block_sha2_256(ctx, (const void *) ctx->buf);
+	(void) digest_transform_block_sha2_256(state, (const void *) state->sha2_256.buf);
 
 	uint32_t *d = (uint32_t *) out;
 
 	if (digest_is_big_endian_sha2())
-		(void) memcpy(d, ctx->state, sizeof ctx->state);
-	else for (size_t i = 0x00U; i < DIGEST_STLEN_SHA2; i++)
-		SHA2_REVERSE32(ctx->state[i], *d++);
+		(void) memcpy(d, state->sha2_256.state, sizeof state->sha2_256.state);
+	else for (size_t i = 0x00U; i < DIGEST_IVLEN_SHA2_256; i++)
+		SHA2_REVERSE32(state->sha2_256.state[i], *d++);
 
-	(void) smemzero(ctx, sizeof *ctx);
+	(void) smemzero(state, sizeof *state);
 }
 
-static void
-digest_final_sha2_512(union digest_state *const restrict state, void *const restrict out)
+void
+digest_direct_final_sha2_512(union digest_direct_ctx *const restrict state, void *const restrict out)
 {
-	struct digest_context_sha2_512 *const ctx = &state->sha2_512_ctx;
-
-	uint64_t usedspace = ((ctx->count[0x00U] >> 0x03U) % DIGEST_BKLEN_SHA2_512);
+	uint64_t usedspace = ((state->sha2_512.count[0x00U] >> 0x03U) % DIGEST_BKLEN_SHA2_512);
 
 	if (! digest_is_big_endian_sha2())
 	{
-		SHA2_REVERSE64(ctx->count[0x00U], ctx->count[0x00U]);
-		SHA2_REVERSE64(ctx->count[0x01U], ctx->count[0x01U]);
+		SHA2_REVERSE64(state->sha2_512.count[0x00U], state->sha2_512.count[0x00U]);
+		SHA2_REVERSE64(state->sha2_512.count[0x01U], state->sha2_512.count[0x01U]);
 	}
 
 	if (usedspace)
 	{
-		ctx->buf[usedspace++] = 0x80U;
+		state->sha2_512.buf[usedspace++] = 0x80U;
 
 		if (usedspace <= DIGEST_SHORT_BKLEN_SHA2_512)
 		{
-			(void) memset(ctx->buf + usedspace, 0x00U, (DIGEST_SHORT_BKLEN_SHA2_512 - usedspace));
+			(void) memset(state->sha2_512.buf + usedspace, 0x00U,
+			              (DIGEST_SHORT_BKLEN_SHA2_512 - usedspace));
 		}
 		else
 		{
 			if (usedspace < DIGEST_BKLEN_SHA2_512)
-			{
-				(void) memset(ctx->buf + usedspace, 0x00U, (DIGEST_BKLEN_SHA2_512 - usedspace));
-			}
+				(void) memset(state->sha2_512.buf + usedspace, 0x00U,
+				              (DIGEST_BKLEN_SHA2_512 - usedspace));
 
-			(void) digest_transform_block_sha2_512(ctx, (const void *) ctx->buf);
-			(void) memset(ctx->buf, 0x00U, (DIGEST_BKLEN_SHA2_512 - 0x02U));
+			(void) digest_transform_block_sha2_512(state, (const void *) state->sha2_512.buf);
+			(void) memset(state->sha2_512.buf, 0x00U, (DIGEST_BKLEN_SHA2_512 - 0x02U));
 		}
 	}
 	else
 	{
-		(void) memset(ctx->buf, 0x00U, DIGEST_SHORT_BKLEN_SHA2_512);
+		(void) memset(state->sha2_512.buf, 0x00U, DIGEST_SHORT_BKLEN_SHA2_512);
 
-		ctx->buf[0x00U] = 0x80U;
+		state->sha2_512.buf[0x00U] = 0x80U;
 	}
 
-	*((uint64_t *) &ctx->buf[DIGEST_SHORT_BKLEN_SHA2_512]) = ctx->count[0x01U];
-	*((uint64_t *) &ctx->buf[DIGEST_SHORT_BKLEN_SHA2_512 + 0x08U]) = ctx->count[0x00U];
+	*((uint64_t *) &state->sha2_512.buf[DIGEST_SHORT_BKLEN_SHA2_512]) = state->sha2_512.count[0x01U];
+	*((uint64_t *) &state->sha2_512.buf[DIGEST_SHORT_BKLEN_SHA2_512 + 0x08U]) = state->sha2_512.count[0x00U];
 
-	(void) digest_transform_block_sha2_512(ctx, (const void *) ctx->buf);
+	(void) digest_transform_block_sha2_512(state, (const void *) state->sha2_512.buf);
 
 	uint64_t *d = (uint64_t *) out;
 
 	if (digest_is_big_endian_sha2())
-		(void) memcpy(d, ctx->state, sizeof ctx->state);
-	else for (size_t i = 0x00U; i < DIGEST_STLEN_SHA2; i++)
-		SHA2_REVERSE64(ctx->state[i], *d++);
+		(void) memcpy(d, state->sha2_512.state, sizeof state->sha2_512.state);
+	else for (size_t i = 0x00U; i < DIGEST_IVLEN_SHA2_512; i++)
+		SHA2_REVERSE64(state->sha2_512.state[i], *d++);
 
-	(void) smemzero(ctx, sizeof *ctx);
+	(void) smemzero(state, sizeof *state);
 }

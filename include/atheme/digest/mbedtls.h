@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: ISC
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Copyright (C) 2018 Aaron M. D. Jones <aaronmdjones@gmail.com>
+ * Copyright (C) 2018-2020 Aaron M. D. Jones <aaronmdjones@gmail.com>
  *
  * ARM mbedTLS frontend data structures for the digest interface.
  */
@@ -10,7 +10,7 @@
 #ifndef ATHEME_INC_DIGEST_IMPL_H
 #define ATHEME_INC_DIGEST_IMPL_H 1
 
-#include <atheme/digest/constants.h>
+#include <atheme/digest/types.h>
 #include <atheme/stdheaders.h>
 
 #include <mbedtls/md.h>

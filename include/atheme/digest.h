@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: ISC
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Copyright (C) 2018-2019 Aaron M. D. Jones <aaronmdjones@gmail.com>
+ * Copyright (C) 2018-2020 Aaron M. D. Jones <aaronmdjones@gmail.com>
  *
  * Atheme IRC Services digest interface.
  */
@@ -11,14 +11,9 @@
 #define ATHEME_INC_DIGEST_H 1
 
 #include <atheme/attributes.h>
+#include <atheme/digest/direct.h>
+#include <atheme/digest/types.h>
 #include <atheme/stdheaders.h>
-#include <atheme/structures.h>
-
-struct digest_vector
-{
-	const void *    ptr;
-	size_t          len;
-};
 
 #if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_OPENSSL)
 #  include <atheme/digest/openssl.h>

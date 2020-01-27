@@ -42,6 +42,10 @@
  * MD5 backend for Atheme IRC Services.
  */
 
+#include <atheme/digest/direct.h>   // self-declarations
+#include <atheme/memory.h>          // smemzero()
+#include <atheme/stdheaders.h>      // size_t, uint32_t, htonl(3), memcpy(3), memset(3)
+
 #define MD5_ROUND1(a, b, c, d, k, r, i)                                 \
     do {                                                                \
         t = s[a] + ((s[b] & s[c]) | (~(s[b]) & s[d])) + x[k] + T[i];    \
@@ -67,7 +71,7 @@
     } while (0)
 
 static void
-process_words_md5(struct digest_context_md5 *const ctx, const unsigned char *data)
+process_words_md5(union digest_direct_ctx *const state, const unsigned char *data)
 {
 	static const uint32_t T[] = {
 
@@ -100,7 +104,7 @@ process_words_md5(struct digest_context_md5 *const ctx, const unsigned char *dat
 	else for (size_t i = 0x00U; i < 0x10U; i++)
 		x[i] = data[i] + (data[i + 0x01U] << 0x08U) + (data[i + 0x02U] << 0x10U) + (data[i + 0x03U] << 0x18U);
 
-	(void) memcpy(s, ctx->state, sizeof s);
+	(void) memcpy(s, state->md5.state, sizeof s);
 
 	MD5_ROUND1(0x00U, 0x01U, 0x02U, 0x03U, 0x00U, 0x07U, 0x00U);
 	MD5_ROUND1(0x03U, 0x00U, 0x01U, 0x02U, 0x01U, 0x0CU, 0x01U);
@@ -171,56 +175,53 @@ process_words_md5(struct digest_context_md5 *const ctx, const unsigned char *dat
 	MD5_ROUND4(0x01U, 0x02U, 0x03U, 0x00U, 0x09U, 0x15U, 0x3FU);
 
 	for (size_t i = 0x00U; i < 0x04U; i++)
-		ctx->state[i] += s[i];
+		state->md5.state[i] += s[i];
 
 	(void) smemzero(x, sizeof x);
 	(void) smemzero(s, sizeof s);
 	(void) smemzero(&t, sizeof t);
 }
 
-static void
-digest_init_md5(union digest_state *const restrict state)
+void
+digest_direct_init_md5(union digest_direct_ctx *const restrict state)
 {
-	struct digest_context_md5 *const ctx = &state->md5_ctx;
-
 	static const uint32_t iv[DIGEST_IVLEN_MD5] = {
 
 		UINT32_C(0x67452301), UINT32_C(0xEFCDAB89), UINT32_C(0x98BADCFE), UINT32_C(0x10325476),
 	};
 
-	(void) memset(ctx, 0x00U, sizeof *ctx);
-	(void) memcpy(ctx->state, iv, sizeof iv);
+	(void) memset(state, 0x00U, sizeof *state);
+	(void) memcpy(state->md5.state, iv, sizeof iv);
 }
 
-static void
-digest_update_md5(union digest_state *const restrict state, const void *const restrict data, const size_t len)
+void
+digest_direct_update_md5(union digest_direct_ctx *const restrict state,
+                         const void *const restrict data, const size_t len)
 {
-	struct digest_context_md5 *const ctx = &state->md5_ctx;
-
 	if (! (data && len))
 		return;
 
-	const size_t off = (size_t) (ctx->count[0x00U] >> 0x03U) & (DIGEST_BKLEN_MD5 - 1);
+	const size_t off = (size_t) (state->md5.count[0x00U] >> 0x03U) & (DIGEST_BKLEN_MD5 - 1);
 	const uint32_t nbits = (uint32_t) (len << 0x03U);
 	const unsigned char *ptr = data;
 	size_t rem = len;
 
-	ctx->count[0x00U] += nbits;
-	ctx->count[0x01U] += (len >> 0x1DU);
+	state->md5.count[0x00U] += nbits;
+	state->md5.count[0x01U] += (len >> 0x1DU);
 
-	if (ctx->count[0x00U] < nbits)
-		ctx->count[0x01U]++;
+	if (state->md5.count[0x00U] < nbits)
+		state->md5.count[0x01U]++;
 
 	if (off)
 	{
 		const size_t amt = ((off + len) > DIGEST_BKLEN_MD5) ? (DIGEST_BKLEN_MD5 - off) : len;
 
-		(void) memcpy(ctx->buf + off, ptr, amt);
+		(void) memcpy(state->md5.buf + off, ptr, amt);
 
 		if ((off + amt) < DIGEST_BKLEN_MD5)
 			return;
 
-		(void) process_words_md5(ctx, ctx->buf);
+		(void) process_words_md5(state, state->md5.buf);
 
 		ptr += amt;
 		rem -= amt;
@@ -228,25 +229,23 @@ digest_update_md5(union digest_state *const restrict state, const void *const re
 
 	while (rem >= DIGEST_BKLEN_MD5)
 	{
-		(void) process_words_md5(ctx, ptr);
+		(void) process_words_md5(state, ptr);
 
 		ptr += DIGEST_BKLEN_MD5;
 		rem -= DIGEST_BKLEN_MD5;
 	}
 
 	if (rem)
-		(void) memcpy(ctx->buf, ptr, rem);
+		(void) memcpy(state->md5.buf, ptr, rem);
 }
 
-static void
-digest_final_md5(union digest_state *const restrict state, void *const restrict out)
+void
+digest_direct_final_md5(union digest_direct_ctx *const restrict state, void *const restrict out)
 {
-	struct digest_context_md5 *const ctx = &state->md5_ctx;
-
 	unsigned char data[0x08U];
 
 	for (size_t i = 0x00U; i < sizeof data; i++)
-		data[i] = (unsigned char) (ctx->count[i >> 0x02U] >> ((i & 0x03U) << 0x03U));
+		data[i] = (unsigned char) (state->md5.count[i >> 0x02U] >> ((i & 0x03U) << 0x03U));
 
 	static const unsigned char padding[] = {
 
@@ -260,16 +259,17 @@ digest_final_md5(union digest_state *const restrict state, void *const restrict 
 		0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U,
 	};
 
-	const size_t padsz = ((DIGEST_BKLEN_MD5 - 0x09U) - (ctx->count[0x00U] >> 0x03U)) & (DIGEST_BKLEN_MD5 - 0x01U);
+	const size_t padsz = ((DIGEST_BKLEN_MD5 - 0x09U) - (state->md5.count[0x00U] >> 0x03U)) &
+	                      (DIGEST_BKLEN_MD5 - 0x01U);
 
-	(void) digest_update_md5(state, padding, padsz + 0x01U);
-	(void) digest_update_md5(state, data, sizeof data);
+	(void) digest_direct_update_md5(state, padding, padsz + 0x01U);
+	(void) digest_direct_update_md5(state, data, sizeof data);
 
 	unsigned char *const digest = out;
 
 	for (size_t i = 0x00U; i < DIGEST_MDLEN_MD5; i++)
-		digest[i] = (unsigned char) (ctx->state[i >> 0x02U] >> ((i & 0x03U) << 0x03U));
+		digest[i] = (unsigned char) (state->md5.state[i >> 0x02U] >> ((i & 0x03U) << 0x03U));
 
 	(void) smemzero(data, sizeof data);
-	(void) smemzero(ctx, sizeof *ctx);
+	(void) smemzero(state, sizeof *state);
 }
