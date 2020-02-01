@@ -69,12 +69,6 @@
  * by the PKCS5_PBKDF2_HMAC() function in OpenSSL:
  *   <https://www.openssl.org/>
  *   <https://github.com/openssl/openssl/blob/8d049ed24b06ada5/crypto/evp/p5_crpt2.c#L25-L34>
- *
- * The PBKDF2 vectors cover the following 4 cases:
- * - PassLen = 0, SaltLen = 0, dkLen = hLen
- * - PassLen = 0, SaltLen > 0, dkLen = hLen
- * - PassLen > 0, SaltLen = 0, dkLen = hLen
- * - PassLen > 0, SaltLen > 0, dkLen > hLen
  */
 
 static bool
@@ -4669,69 +4663,6 @@ digest_testsuite_run_pbkdf2_md5(void)
 		 *****************/
 
 		static const unsigned char vector[] = {
-			0x79U, 0x41U, 0x2EU, 0xB8U, 0xE7U, 0x82U, 0x09U, 0x06U,
-			0x69U, 0x8DU, 0x9FU, 0x20U, 0x4FU, 0x17U, 0x93U, 0xCBU,
-		};
-
-		unsigned char result[sizeof vector];
-
-		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
-
-		if (! digest_oneshot_pbkdf2(DIGALG_MD5, NULL, 0, NULL, 0, iter, result, sizeof vector))
-			return false;
-
-		if (memcmp(result, vector, sizeof vector) != 0)
-			return false;
-	}
-
-	{
-		/*****************
-		 * TEST VECTOR 2 *
-		 *****************/
-
-		static const unsigned char vector[] = {
-			0x6AU, 0x81U, 0xF9U, 0x40U, 0x82U, 0x96U, 0x01U, 0x19U,
-			0xCCU, 0xDFU, 0x52U, 0x22U, 0x20U, 0x7CU, 0xDAU, 0xD7U,
-		};
-
-		unsigned char result[sizeof vector];
-
-		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
-
-		if (! digest_oneshot_pbkdf2(DIGALG_MD5, NULL, 0, salt, sizeof salt, iter, result, sizeof vector))
-			return false;
-
-		if (memcmp(result, vector, sizeof vector) != 0)
-			return false;
-	}
-
-	{
-		/*****************
-		 * TEST VECTOR 3 *
-		 *****************/
-
-		static const unsigned char vector[] = {
-			0xCCU, 0xCFU, 0x34U, 0x02U, 0xBDU, 0xB2U, 0x28U, 0x6DU,
-			0xF1U, 0x22U, 0x6AU, 0x76U, 0xEDU, 0x80U, 0x43U, 0xF0U,
-		};
-
-		unsigned char result[sizeof vector];
-
-		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
-
-		if (! digest_oneshot_pbkdf2(DIGALG_MD5, key, sizeof key, NULL, 0, iter, result, sizeof vector))
-			return false;
-
-		if (memcmp(result, vector, sizeof vector) != 0)
-			return false;
-	}
-
-	{
-		/*****************
-		 * TEST VECTOR 4 *
-		 *****************/
-
-		static const unsigned char vector[] = {
 			0x32U, 0xC9U, 0xF0U, 0xABU, 0xD3U, 0x16U, 0xBFU, 0x47U,
 			0xDDU, 0x93U, 0xEAU, 0x90U, 0x6DU, 0x8DU, 0xBDU, 0xA2U,
 			0x43U, 0x2CU, 0x86U, 0xDAU, 0xBBU, 0x98U, 0x11U, 0x83U,
@@ -4747,7 +4678,7 @@ digest_testsuite_run_pbkdf2_md5(void)
 
 		unsigned char result[sizeof vector];
 
-		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
+		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_pbkdf2(DIGALG_MD5, key, sizeof key, salt, sizeof salt, iter, result, sizeof vector))
 			return false;
@@ -4796,72 +4727,6 @@ digest_testsuite_run_pbkdf2_sha1(void)
 		 *****************/
 
 		static const unsigned char vector[] = {
-			0x16U, 0xA5U, 0x1FU, 0x7FU, 0x0EU, 0x43U, 0xEEU, 0xB9U,
-			0xBDU, 0xE0U, 0x5DU, 0xC3U, 0x2EU, 0xDAU, 0xDAU, 0x79U,
-			0x8DU, 0xA5U, 0xBAU, 0xC1U,
-		};
-
-		unsigned char result[sizeof vector];
-
-		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
-
-		if (! digest_oneshot_pbkdf2(DIGALG_SHA1, NULL, 0, NULL, 0, iter, result, sizeof vector))
-			return false;
-
-		if (memcmp(result, vector, sizeof vector) != 0)
-			return false;
-	}
-
-	{
-		/*****************
-		 * TEST VECTOR 2 *
-		 *****************/
-
-		static const unsigned char vector[] = {
-			0x2DU, 0x95U, 0xDEU, 0xCAU, 0xFBU, 0x09U, 0x8BU, 0x49U,
-			0x9CU, 0x35U, 0xCCU, 0x36U, 0x3CU, 0x28U, 0x1CU, 0xD2U,
-			0x3EU, 0xE7U, 0x32U, 0x65U,
-		};
-
-		unsigned char result[sizeof vector];
-
-		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
-
-		if (! digest_oneshot_pbkdf2(DIGALG_SHA1, NULL, 0, salt, sizeof salt, iter, result, sizeof vector))
-			return false;
-
-		if (memcmp(result, vector, sizeof vector) != 0)
-			return false;
-	}
-
-	{
-		/*****************
-		 * TEST VECTOR 3 *
-		 *****************/
-
-		static const unsigned char vector[] = {
-			0x46U, 0x72U, 0x51U, 0x24U, 0x4FU, 0x73U, 0x78U, 0x95U,
-			0xFEU, 0xE9U, 0x49U, 0xF1U, 0x8EU, 0x67U, 0x3CU, 0x8AU,
-			0x3EU, 0x48U, 0x88U, 0xB5U,
-		};
-
-		unsigned char result[sizeof vector];
-
-		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
-
-		if (! digest_oneshot_pbkdf2(DIGALG_SHA1, key, sizeof key, NULL, 0, iter, result, sizeof vector))
-			return false;
-
-		if (memcmp(result, vector, sizeof vector) != 0)
-			return false;
-	}
-
-	{
-		/*****************
-		 * TEST VECTOR 4 *
-		 *****************/
-
-		static const unsigned char vector[] = {
 			0x77U, 0x86U, 0xB9U, 0x70U, 0xAEU, 0x65U, 0xEEU, 0xF6U,
 			0xD0U, 0x21U, 0x3CU, 0x34U, 0xF8U, 0x01U, 0x6AU, 0x8CU,
 			0xBAU, 0x46U, 0xEAU, 0x6BU, 0x08U, 0x8EU, 0x93U, 0x78U,
@@ -4877,7 +4742,7 @@ digest_testsuite_run_pbkdf2_sha1(void)
 
 		unsigned char result[sizeof vector];
 
-		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
+		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_pbkdf2(DIGALG_SHA1, key, sizeof key, salt, sizeof salt, iter, result, sizeof vector))
 			return false;
@@ -4974,75 +4839,6 @@ digest_testsuite_run_pbkdf2_sha2_256(void)
 		 *****************/
 
 		static const unsigned char vector[] = {
-			0x21U, 0x4DU, 0xAEU, 0x20U, 0x93U, 0x91U, 0x73U, 0x4FU,
-			0x31U, 0x1EU, 0x19U, 0x3DU, 0xD1U, 0x22U, 0x38U, 0xB9U,
-			0xEEU, 0x13U, 0x48U, 0x97U, 0xFDU, 0x25U, 0x5FU, 0x36U,
-			0xBFU, 0x07U, 0x9CU, 0xB1U, 0xAFU, 0xD4U, 0x72U, 0x2BU,
-		};
-
-		unsigned char result[sizeof vector];
-
-		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
-
-		if (! digest_oneshot_pbkdf2(DIGALG_SHA2_256, NULL, 0, NULL, 0, iter, result, sizeof vector))
-			return false;
-
-		if (memcmp(result, vector, sizeof vector) != 0)
-			return false;
-	}
-
-	{
-		/*****************
-		 * TEST VECTOR 2 *
-		 *****************/
-
-		static const unsigned char vector[] = {
-			0x71U, 0xB3U, 0xA7U, 0xFAU, 0x6FU, 0xB1U, 0x54U, 0x26U,
-			0xFFU, 0x98U, 0x0EU, 0x29U, 0xF3U, 0x22U, 0x7BU, 0x52U,
-			0x42U, 0xB7U, 0x4BU, 0xF6U, 0x1BU, 0xD6U, 0x09U, 0x6AU,
-			0xCCU, 0xDAU, 0x49U, 0xCBU, 0x1EU, 0x0FU, 0x93U, 0x0DU,
-		};
-
-		unsigned char result[sizeof vector];
-
-		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
-
-		if (! digest_oneshot_pbkdf2(DIGALG_SHA2_256, NULL, 0, salt, sizeof salt, iter, result, sizeof vector))
-			return false;
-
-		if (memcmp(result, vector, sizeof vector) != 0)
-			return false;
-	}
-
-	{
-		/*****************
-		 * TEST VECTOR 3 *
-		 *****************/
-
-		static const unsigned char vector[] = {
-			0x5DU, 0xE1U, 0xBCU, 0x89U, 0x76U, 0x27U, 0xA1U, 0xC4U,
-			0x69U, 0x58U, 0xD3U, 0xFBU, 0x6BU, 0x3BU, 0xF2U, 0xA3U,
-			0x7FU, 0xF2U, 0xB0U, 0xD9U, 0x34U, 0x1FU, 0x1CU, 0xB8U,
-			0x97U, 0x89U, 0xA4U, 0x14U, 0x4EU, 0xCDU, 0x33U, 0x98U,
-		};
-
-		unsigned char result[sizeof vector];
-
-		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
-
-		if (! digest_oneshot_pbkdf2(DIGALG_SHA2_256, key, sizeof key, NULL, 0, iter, result, sizeof vector))
-			return false;
-
-		if (memcmp(result, vector, sizeof vector) != 0)
-			return false;
-	}
-
-	{
-		/*****************
-		 * TEST VECTOR 4 *
-		 *****************/
-
-		static const unsigned char vector[] = {
 			0x23U, 0x70U, 0xC3U, 0x07U, 0x7BU, 0xDBU, 0x70U, 0x23U,
 			0xD5U, 0x0DU, 0xC2U, 0x19U, 0xB4U, 0x4BU, 0xBCU, 0xC9U,
 			0x32U, 0x16U, 0xA3U, 0x16U, 0xC0U, 0x0DU, 0x93U, 0x80U,
@@ -5058,7 +4854,7 @@ digest_testsuite_run_pbkdf2_sha2_256(void)
 
 		unsigned char result[sizeof vector];
 
-		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
+		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_pbkdf2(DIGALG_SHA2_256, key, sizeof key, salt, sizeof salt, iter, result, sizeof vector))
 			return false;
@@ -5155,87 +4951,6 @@ digest_testsuite_run_pbkdf2_sha2_512(void)
 		 *****************/
 
 		static const unsigned char vector[] = {
-			0x26U, 0x64U, 0x22U, 0xC3U, 0x25U, 0x48U, 0x7BU, 0x65U,
-			0x1BU, 0xB6U, 0xDAU, 0xB7U, 0x1EU, 0x69U, 0xC3U, 0x55U,
-			0xEAU, 0x2BU, 0xF2U, 0x5EU, 0x72U, 0x73U, 0x12U, 0x79U,
-			0x9DU, 0x3EU, 0x8DU, 0x5FU, 0xB1U, 0x10U, 0xEBU, 0x59U,
-			0x3AU, 0xE7U, 0xD0U, 0x8AU, 0xB7U, 0x1FU, 0x4FU, 0xF8U,
-			0xDEU, 0x5BU, 0x72U, 0x0CU, 0x00U, 0x19U, 0x24U, 0x96U,
-			0x27U, 0x3BU, 0x77U, 0x98U, 0x2DU, 0x94U, 0xB4U, 0x57U,
-			0xD7U, 0xECU, 0x94U, 0x87U, 0xA2U, 0x06U, 0x7EU, 0x89U,
-		};
-
-		unsigned char result[sizeof vector];
-
-		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
-
-		if (! digest_oneshot_pbkdf2(DIGALG_SHA2_512, NULL, 0, NULL, 0, iter, result, sizeof vector))
-			return false;
-
-		if (memcmp(result, vector, sizeof vector) != 0)
-			return false;
-	}
-
-	{
-		/*****************
-		 * TEST VECTOR 2 *
-		 *****************/
-
-		static const unsigned char vector[] = {
-			0x19U, 0x23U, 0x36U, 0x42U, 0xFBU, 0x45U, 0xE6U, 0xC3U,
-			0x5BU, 0x73U, 0xBAU, 0xC5U, 0x67U, 0xD8U, 0x83U, 0x14U,
-			0x18U, 0xBBU, 0x7EU, 0xA3U, 0xFBU, 0x7AU, 0x8EU, 0xA2U,
-			0x30U, 0xE2U, 0x64U, 0xF0U, 0x70U, 0xFFU, 0xA9U, 0x78U,
-			0x57U, 0x04U, 0x6EU, 0x4BU, 0x4AU, 0xA9U, 0xACU, 0x04U,
-			0x02U, 0x31U, 0x80U, 0xCCU, 0x1AU, 0x7EU, 0x09U, 0xFEU,
-			0xB4U, 0xCCU, 0xC1U, 0x02U, 0xB6U, 0xABU, 0x0CU, 0x73U,
-			0xDDU, 0x2DU, 0x2EU, 0xBFU, 0x1FU, 0x5EU, 0x7CU, 0x9EU,
-		};
-
-		unsigned char result[sizeof vector];
-
-		(void) slog(LG_DEBUG, "%s: vector 2", MOWGLI_FUNC_NAME);
-
-		if (! digest_oneshot_pbkdf2(DIGALG_SHA2_512, NULL, 0, salt, sizeof salt, iter, result, sizeof vector))
-			return false;
-
-		if (memcmp(result, vector, sizeof vector) != 0)
-			return false;
-	}
-
-	{
-		/*****************
-		 * TEST VECTOR 3 *
-		 *****************/
-
-		static const unsigned char vector[] = {
-			0xF4U, 0x7BU, 0x32U, 0xC1U, 0xB9U, 0xFAU, 0x88U, 0xE6U,
-			0x81U, 0x6CU, 0xAAU, 0x46U, 0xC2U, 0x0CU, 0x61U, 0xCAU,
-			0x64U, 0x69U, 0xD2U, 0xABU, 0xAFU, 0x61U, 0x7EU, 0x45U,
-			0x83U, 0xE1U, 0x4FU, 0xBCU, 0x6FU, 0xE3U, 0x9AU, 0xBEU,
-			0x3EU, 0xEAU, 0xE7U, 0x23U, 0x62U, 0x83U, 0xB0U, 0x44U,
-			0x18U, 0x5BU, 0xF0U, 0xF3U, 0x48U, 0xBCU, 0xBDU, 0xA1U,
-			0x89U, 0xBBU, 0x19U, 0x9AU, 0x98U, 0xBFU, 0xBEU, 0x34U,
-			0x61U, 0x33U, 0x6DU, 0x7BU, 0xB1U, 0x62U, 0x9AU, 0xFEU,
-		};
-
-		unsigned char result[sizeof vector];
-
-		(void) slog(LG_DEBUG, "%s: vector 3", MOWGLI_FUNC_NAME);
-
-		if (! digest_oneshot_pbkdf2(DIGALG_SHA2_512, key, sizeof key, NULL, 0, iter, result, sizeof vector))
-			return false;
-
-		if (memcmp(result, vector, sizeof vector) != 0)
-			return false;
-	}
-
-	{
-		/*****************
-		 * TEST VECTOR 4 *
-		 *****************/
-
-		static const unsigned char vector[] = {
 			0x66U, 0xBBU, 0x29U, 0x88U, 0x44U, 0xB5U, 0x05U, 0x94U,
 			0xE9U, 0xAEU, 0x54U, 0x28U, 0x63U, 0xECU, 0x2FU, 0x2AU,
 			0xD1U, 0xDBU, 0x39U, 0x4BU, 0x01U, 0x74U, 0x97U, 0x86U,
@@ -5251,7 +4966,7 @@ digest_testsuite_run_pbkdf2_sha2_512(void)
 
 		unsigned char result[sizeof vector];
 
-		(void) slog(LG_DEBUG, "%s: vector 4", MOWGLI_FUNC_NAME);
+		(void) slog(LG_DEBUG, "%s: vector 1", MOWGLI_FUNC_NAME);
 
 		if (! digest_oneshot_pbkdf2(DIGALG_SHA2_512, key, sizeof key, salt, sizeof salt, iter, result, sizeof vector))
 			return false;

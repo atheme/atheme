@@ -590,14 +590,14 @@ digest_oneshot_pbkdf2(const enum digest_algorithm alg, const void *const restric
 		(void) slog(LG_ERROR, "%s: called with malformed/uninitialised 'alg' (BUG)", MOWGLI_FUNC_NAME);
 		return false;
 	}
-	if ((! pass && passLen) || (pass && ! passLen))
+	if (! (pass && passLen))
 	{
-		(void) slog(LG_ERROR, "%s: called with mismatched pass parameters (BUG)", MOWGLI_FUNC_NAME);
+		(void) slog(LG_ERROR, "%s: called with no password (BUG)", MOWGLI_FUNC_NAME);
 		return false;
 	}
-	if ((! salt && saltLen) || (salt && ! saltLen))
+	if (! (salt && saltLen))
 	{
-		(void) slog(LG_ERROR, "%s: called with mismatched salt parameters (BUG)", MOWGLI_FUNC_NAME);
+		(void) slog(LG_ERROR, "%s: called with no salt (BUG)", MOWGLI_FUNC_NAME);
 		return false;
 	}
 	if (! c)

@@ -195,8 +195,8 @@ _digest_final(struct digest_context *const restrict ctx, void *const restrict ou
 }
 
 static bool ATHEME_FATTR_WUR
-_digest_oneshot_pbkdf2(const enum digest_algorithm alg, const void *restrict pass, const size_t passLen,
-                       const void *restrict salt, const size_t saltLen, const size_t c,
+_digest_oneshot_pbkdf2(const enum digest_algorithm alg, const void *const restrict pass, const size_t passLen,
+                       const void *const restrict salt, const size_t saltLen, const size_t c,
                        void *const restrict dk, const size_t dkLen)
 {
 	const EVP_MD *const md = _digest_decide_md(alg);
@@ -206,16 +206,6 @@ _digest_oneshot_pbkdf2(const enum digest_algorithm alg, const void *restrict pas
 		(void) slog(LG_ERROR, "%s: _digest_decide_md() failed (BUG?)", MOWGLI_FUNC_NAME);
 		return false;
 	}
-
-	/*
-	 * PKCS5_PBKDF2_HMAC() fails if you give it a NULL argument for pass
-	 * or salt, even if the corresponding length argument is zero! This
-	 * is extremely counter-intuitive, and requires these ugly hacks.  -- amdj
-	 */
-	if (! pass)
-		pass = &passLen;
-	if (! salt)
-		salt = &saltLen;
 
 	return (PKCS5_PBKDF2_HMAC(pass, (int) passLen, salt, (int) saltLen, (int) c, md, (int) dkLen, dk) == 1);
 }
