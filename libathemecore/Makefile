@@ -79,6 +79,7 @@ CPPFLAGS += -I../include
 
 CFLAGS +=                           \
     ${LIBCRYPTO_CFLAGS}             \
+    ${LIBGCRYPT_CFLAGS}             \
     ${LIBMBEDCRYPTO_CFLAGS}         \
     ${LIBNETTLE_CFLAGS}             \
     ${LIBPCRE_CFLAGS}               \
@@ -88,6 +89,7 @@ CFLAGS +=                           \
 
 LIBS +=                             \
     ${LIBCRYPTO_LIBS}               \
+    ${LIBGCRYPT_LIBS}               \
     ${LIBMBEDCRYPTO_LIBS}           \
     ${LIBNETTLE_LIBS}               \
     ${LIBPCRE_LIBS}                 \

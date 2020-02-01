@@ -11,6 +11,7 @@ addons:
     packages:
       - libgettextpo-dev
       - libargon2-0-dev
+      - libgcrypt20-dev
       - libpasswdqc-dev
       - libqrencode-dev
       - libcrack2-dev

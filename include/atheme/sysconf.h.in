@@ -7,6 +7,7 @@
 #define ATHEME_API_DIGEST_FRONTEND_INTERNAL 0x00U
 #define ATHEME_API_DIGEST_FRONTEND_MBEDTLS  0x01U
 #define ATHEME_API_DIGEST_FRONTEND_OPENSSL  0x02U
+#define ATHEME_API_DIGEST_FRONTEND_GCRYPT   0x03U
 
 #define ATHEME_API_RANDOM_FRONTEND_INTERNAL 0x00U
 #define ATHEME_API_RANDOM_FRONTEND_MBEDTLS  0x01U
@@ -163,6 +164,9 @@
 /* Define to 1 if libcrypto has a usable constant-time memory comparison
    function */
 #undef HAVE_LIBCRYPTO_MEMCMP
+
+/* Define to 1 if GNU libgcrypt appears to be usable */
+#undef HAVE_LIBGCRYPT
 
 /* Define to 1 if GNU libidn appears to be usable */
 #undef HAVE_LIBIDN

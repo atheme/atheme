@@ -662,6 +662,8 @@ LDAP_LIBS
 LDAP_CFLAGS
 LIBIDN_LIBS
 LIBIDN_CFLAGS
+LIBGCRYPT_LIBS
+LIBGCRYPT_CFLAGS
 ECDSA_TOOLS_COND_D
 ECDH_X25519_TOOL_COND_D
 LIBCRYPTO_LIBS
@@ -809,6 +811,7 @@ with_argon2
 with_cracklib
 with_crypt
 with_openssl
+with_gcrypt
 with_idn
 with_ldap
 with_mbedtls
@@ -1549,6 +1552,8 @@ Optional Packages:
                           modules/crypto/crypt3-*)
   --without-openssl       Do not attempt to detect OpenSSL (cryptographic
                           library)
+  --without-gcrypt        Do not attempt to detect GNU libgcrypt
+                          (cryptographic library)
   --without-idn           Do not attempt to detect GNU libidn (for
                           modules/saslserv/scram-sha)
   --without-ldap          Do not attempt to detect libldap (for
@@ -1569,7 +1574,7 @@ Optional Packages:
   --with-perl             Enable Perl (for modules/scripting/perl)
   --with-digest-api-frontend=[frontend]
                           Digest API frontend to use (auto, openssl, libressl,
-                          mbedtls, internal). Default: auto
+                          gcrypt, mbedtls, internal). Default: auto
   --with-rng-api-frontend=[frontend]
                           RNG API frontend to use (auto, openbsd, sodium,
                           openssl, libressl, mbedtls, internal). Default: auto
@@ -10922,6 +10927,255 @@ fi
     CFLAGS_SAVED="${CFLAGS}"
     LIBS_SAVED="${LIBS}"
 
+    LIBGCRYPT="No"
+    LIBGCRYPT_USABLE="No"
+    LIBGCRYPT_DIGEST="No"
+
+    LIBGCRYPT_CFLAGS=""
+    LIBGCRYPT_LIBS=""
+
+
+# Check whether --with-gcrypt was given.
+if test "${with_gcrypt+set}" = set; then :
+  withval=$with_gcrypt;
+else
+  with_gcrypt="auto"
+fi
+
+
+    case "x${with_gcrypt}" in
+        xno | xyes | xauto)
+            ;;
+        *)
+            as_fn_error $? "invalid option for --with-gcrypt" "$LINENO" 5
+            ;;
+    esac
+
+    if test "${with_gcrypt}" != "no"; then :
+
+        # If this library ever starts shipping a pkg-config file, change to PKG_CHECK_MODULES ?
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing gcry_check_version" >&5
+$as_echo_n "checking for library containing gcry_check_version... " >&6; }
+if ${ac_cv_search_gcry_check_version+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS=$LIBS
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char gcry_check_version ();
+int
+main ()
+{
+return gcry_check_version ();
+  ;
+  return 0;
+}
+_ACEOF
+for ac_lib in '' gcrypt; do
+  if test -z "$ac_lib"; then
+    ac_res="none required"
+  else
+    ac_res=-l$ac_lib
+    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
+  fi
+  if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_gcry_check_version=$ac_res
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext
+  if ${ac_cv_search_gcry_check_version+:} false; then :
+  break
+fi
+done
+if ${ac_cv_search_gcry_check_version+:} false; then :
+
+else
+  ac_cv_search_gcry_check_version=no
+fi
+rm conftest.$ac_ext
+LIBS=$ac_func_search_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_gcry_check_version" >&5
+$as_echo "$ac_cv_search_gcry_check_version" >&6; }
+ac_res=$ac_cv_search_gcry_check_version
+if test "$ac_res" != no; then :
+  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+
+            { $as_echo "$as_me:${as_lineno-$LINENO}: checking if GNU libgcrypt appears to be usable" >&5
+$as_echo_n "checking if GNU libgcrypt appears to be usable... " >&6; }
+            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+                    #ifdef HAVE_STDDEF_H
+                    #  include <stddef.h>
+                    #endif
+                    #define GCRYPT_NO_DEPRECATED 1
+                    #define GCRYPT_NO_MPI_MACROS 1
+                    #include <gcrypt.h>
+
+int
+main ()
+{
+
+                    (void) gcry_check_version(GCRYPT_VERSION);
+                    (void) gcry_control(GCRYCTL_DISABLE_SECMEM_WARN, 0);
+                    (void) gcry_control(GCRYCTL_INIT_SECMEM, 0);
+                    (void) gcry_control(GCRYCTL_SET_VERBOSITY, 0);
+                    (void) gcry_control(GCRYCTL_INITIALIZATION_FINISHED, 0);
+                    (void) gcry_control(GCRYCTL_SELFTEST, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+                LIBGCRYPT="Yes"
+
+else
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+                LIBGCRYPT="No"
+                if test "${with_gcrypt}" = "yes"; then :
+
+                    { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--with-gcrypt was given but GNU libgcrypt appears to be unusable
+See \`config.log' for more details" "$LINENO" 5; }
+
+fi
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+else
+
+            LIBGCRYPT="No"
+            if test "${with_gcrypt}" = "yes"; then :
+
+                as_fn_error $? "--with-gcrypt was given but GNU libgcrypt could not be found" "$LINENO" 5
+
+fi
+
+fi
+
+
+else
+
+        LIBGCRYPT="No"
+
+fi
+
+    if test "${LIBGCRYPT}" = "Yes"; then :
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking if GNU libgcrypt has usable MD5/SHA1/SHA2/HMAC/PBKDF2 functions" >&5
+$as_echo_n "checking if GNU libgcrypt has usable MD5/SHA1/SHA2/HMAC/PBKDF2 functions... " >&6; }
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+                #ifdef HAVE_STDDEF_H
+                #  include <stddef.h>
+                #endif
+                #define GCRYPT_NO_DEPRECATED 1
+                #define GCRYPT_NO_MPI_MACROS 1
+                #include <gcrypt.h>
+
+int
+main ()
+{
+
+                gcry_md_hd_t ctx;
+                (void) gcry_md_test_algo(GCRY_MD_MD5);
+                (void) gcry_md_test_algo(GCRY_MD_SHA1);
+                (void) gcry_md_test_algo(GCRY_MD_SHA256);
+                (void) gcry_md_test_algo(GCRY_MD_SHA512);
+                (void) gcry_md_open(&ctx, GCRY_MD_NONE, GCRY_MD_FLAG_HMAC | GCRY_MD_FLAG_SECURE);
+                (void) gcry_md_setkey(ctx, NULL, 0);
+                (void) gcry_md_write(ctx, NULL, 0);
+                (void) gcry_md_read(ctx, GCRY_MD_NONE);
+                (void) gcry_md_close(ctx);
+                (void) gcry_kdf_derive(NULL, 0, GCRY_KDF_PBKDF2, GCRY_MD_NONE, NULL, 0, 0, 0, NULL);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+            LIBGCRYPT_USABLE="Yes"
+            LIBGCRYPT_DIGEST="Yes"
+
+else
+
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+
+    if test "${LIBGCRYPT_USABLE}" = "Yes"; then :
+
+
+$as_echo "#define HAVE_LIBGCRYPT 1" >>confdefs.h
+
+        if test "x${ac_cv_search_gcry_check_version}" != "xnone required"; then :
+
+            LIBGCRYPT_LIBS="${ac_cv_search_gcry_check_version}"
+
+fi
+
+else
+
+        LIBGCRYPT="No"
+        if test "${with_gcrypt}" = "yes"; then :
+
+            { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--with-gcrypt was given but GNU libgcrypt appears to be unusable
+See \`config.log' for more details" "$LINENO" 5; }
+
+fi
+
+fi
+
+    if test "${LIBGCRYPT}" = "No"; then :
+
+        LIBGCRYPT_CFLAGS=""
+        LIBGCRYPT_LIBS=""
+
+fi
+
+
+
+
+    CFLAGS="${CFLAGS_SAVED}"
+    LIBS="${LIBS_SAVED}"
+
+
+
+    CFLAGS_SAVED="${CFLAGS}"
+    LIBS_SAVED="${LIBS}"
+
     LIBIDN="No"
     LIBIDN_PATH=""
 
@@ -13828,6 +14082,16 @@ fi
                 { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&5
 $as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&6;}
 
+elif test "${LIBGCRYPT}${LIBGCRYPT_DIGEST}" = "YesYes"; then :
+
+
+
+    DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_GCRYPT"
+    DIGEST_FRONTEND="GNU libgcrypt"
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&5
+$as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&6;}
+
 elif test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_DIGEST}" = "YesYes"; then :
 
 
@@ -13869,6 +14133,24 @@ else
 fi
             ;;
 
+        xgcrypt)
+            if test "${LIBGCRYPT}${LIBGCRYPT_DIGEST}" = "YesYes"; then :
+
+
+
+    DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_GCRYPT"
+    DIGEST_FRONTEND="GNU libgcrypt"
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&5
+$as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&6;}
+
+else
+
+                as_fn_error $? "--with-digest-api-frontend=gcrypt requires --with-gcrypt and usable MD5/SHA1/SHA2/HMAC/PBKDF2 functions" "$LINENO" 5
+
+fi
+            ;;
+
         xmbedtls)
             if test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_DIGEST}" = "YesYes"; then :
 
@@ -13898,7 +14180,7 @@ $as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&
             ;;
 
         *)
-            as_fn_error $? "invalid option for --with-digest-api-frontend (auto, openssl, libressl, mbedtls, internal)" "$LINENO" 5
+            as_fn_error $? "invalid option for --with-digest-api-frontend (auto, openssl, libressl, gcrypt, mbedtls, internal)" "$LINENO" 5
             ;;
     esac
 
@@ -20913,9 +21195,10 @@ Configuration of ${PACKAGE_STRING}:
 
     CrackLib support ........: ${LIBCRACK}
     LDAP support ............: ${LIBLDAP}
+    GNU libgcrypt support ...: ${LIBGCRYPT}
     GNU libidn support ......: ${LIBIDN}
+    GNU Nettle support ......: ${LIBNETTLE}
     ARM mbedTLS support .....: ${LIBMBEDCRYPTO}
-    Nettle support ..........: ${LIBNETTLE}
     OpenSSL support .........: ${LIBCRYPTO}
     passwdqc support ........: ${LIBPASSWDQC}
     PCRE support ............: ${LIBPCRE}

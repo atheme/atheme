@@ -9,6 +9,7 @@ includesubdir = atheme/digest
 
 INCLUDES =                  \
     direct.h                \
+    gcrypt.h                \
     internal.h              \
     mbedtls.h               \
     openssl.h               \

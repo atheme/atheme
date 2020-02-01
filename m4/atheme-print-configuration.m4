@@ -54,9 +54,10 @@ Configuration of ${PACKAGE_STRING}:
 
     CrackLib support ........: ${LIBCRACK}
     LDAP support ............: ${LIBLDAP}
+    GNU libgcrypt support ...: ${LIBGCRYPT}
     GNU libidn support ......: ${LIBIDN}
+    GNU Nettle support ......: ${LIBNETTLE}
     ARM mbedTLS support .....: ${LIBMBEDCRYPTO}
-    Nettle support ..........: ${LIBNETTLE}
     OpenSSL support .........: ${LIBCRYPTO}
     passwdqc support ........: ${LIBPASSWDQC}
     PCRE support ............: ${LIBPCRE}

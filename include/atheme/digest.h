@@ -18,13 +18,17 @@
 #if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_OPENSSL)
 #  include <atheme/digest/openssl.h>
 #else
-#  if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_MBEDTLS)
-#    include <atheme/digest/mbedtls.h>
+#  if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_GCRYPT)
+#    include <atheme/digest/gcrypt.h>
 #  else
-#    if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_INTERNAL)
-#      include <atheme/digest/internal.h>
+#    if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_MBEDTLS)
+#      include <atheme/digest/mbedtls.h>
 #    else
-#      error "No Digest API frontend was selected by the build system"
+#      if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_INTERNAL)
+#        include <atheme/digest/internal.h>
+#      else
+#        error "No Digest API frontend was selected by the build system"
+#      endif
 #    endif
 #  endif
 #endif

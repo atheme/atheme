@@ -204,6 +204,27 @@ libathemecore_early_init(void)
 	}
 #endif /* ENABLE_NLS */
 
+#ifdef HAVE_LIBGCRYPT
+	if (! gcry_control(GCRYCTL_INITIALIZATION_FINISHED_P, 0))
+	{
+		if (! gcry_check_version(GCRYPT_VERSION))
+		{
+			(void) fprintf(stderr, "libgcrypt: version downgraded, or initialization failed!\n");
+			return false;
+		}
+
+		(void) gcry_control(GCRYCTL_DISABLE_SECMEM_WARN, 0);
+		(void) gcry_control(GCRYCTL_INIT_SECMEM, 1, 0);
+		(void) gcry_control(GCRYCTL_SET_VERBOSITY, 0);
+		(void) gcry_control(GCRYCTL_INITIALIZATION_FINISHED, 0);
+	}
+	if (gcry_control(GCRYCTL_SELFTEST, 0) != 0)
+	{
+		(void) fprintf(stderr, "libgcrypt: self-tests failed!\n");
+		return false;
+	}
+#endif /* HAVE_LIBGCRYPT */
+
 #ifdef HAVE_LIBSODIUM
 	if (sodium_init() == -1)
 	{
