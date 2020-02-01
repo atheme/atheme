@@ -18,6 +18,13 @@
 
 #include <ext/getopt_long.h>
 
+#ifndef GCRYPT_HEADER_INCL
+#  define GCRYPT_HEADER_INCL   1
+#  define GCRYPT_NO_DEPRECATED 1
+#  define GCRYPT_NO_MPI_MACROS 1
+#  include <gcrypt.h>
+#endif
+
 #ifdef HAVE_LIBSODIUM
 #  include <sodium/core.h>
 #endif /* HAVE_LIBSODIUM */
