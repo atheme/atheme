@@ -3,26 +3,32 @@ Atheme IRC Services version 7.3 and above supports SASL SCRAM logins.
 Some work needs to be performed by the prospective IRC network administrator
 to enable this. The 5 main steps to perform are:
 
-1) Build Atheme with GNU libidn support (./configure --with-idn)
 
-2) Load modules/crypto/pbkdf2v2 *before* any other crypto module
+1) Build Atheme with GNU libidn support. This is detected automatically at
+   configure-time, but you can force it (die on error) with the ./configure
+   argument '--with-idn'.
 
-   This ensures that it will become the primary crypto provider
+   It should say "GNU libidn support ....: Yes" at the bottom of ./configure.
 
-3) Decide which SCRAM mechanism you want to use:
+
+2) Decide which SCRAM mechanism you want to use:
+
+   - SCRAM-SHA-1 is provided exclusively for standard compliance.
+     You almost certainly don't want to use this mechanism!
 
    - SCRAM-SHA-256 is suitable for most cases. This is what you should use
-     unless you have a good reason to pick another mechanism.(*)
-   - SCRAM-SHA-512 is not supported by most clients, but may be suitable
-     for certain use cases.
-   - SCRAM-SHA-1 is provided exclusively for standard compliance.
-     You almost certainly don't want this mechanism.
+     unless you have a good reason to pick another mechanism. (*)
 
-4) Configure pbkdf2v2 to generate SCRAM-style hashes (atheme.conf):
+   - SCRAM-SHA-512 is not supported by most clients, but may be suitable
+     for certain use cases. (*)
+
+
+3) Configure pbkdf2v2 to generate SCRAM-style password hashes (atheme.conf):
 
    crypto {
        pbkdf2v2_digest = "SCRAM-SHA-256";
        /* or "SCRAM-SHA-512" or "SCRAM-SHA-1" */
+
        #pbkdf2v2_rounds = ...;          /* between 10000 and 65536 (**) */
    }
 
@@ -30,9 +36,18 @@ to enable this. The 5 main steps to perform are:
    until you do, because when you are storing regular PBKDF2 digests, a
    compromise of the services database allows the attacker to log in as any
    account whose password was hashed in this manner, without knowing the
-   account's passwords or having to brute-force them.
+   account's passwords or having to brute-force them. In other words, it
+   allows the attacker to impersonate anyone they can get PBKDF2 digests for.
+
+
+4) Load modules/crypto/pbkdf2v2 *before* any other crypto module
+
+   This ensures that it will become the primary crypto provider
+
 
 5) Load modules/saslserv/scram
+
+
 
  * It is highly recommended that you choose SCRAM-SHA-256. You cannot enable
    more than one.
@@ -54,6 +69,8 @@ to enable this. The 5 main steps to perform are:
    SHA2-512 digests, this might outweigh the compatibility issues for you,
    especially if you can reasonably expect your clients to support this
    mechanism as well (e.g. if you are also providing the client software).
+
+
 
 ** Inclusive. The popular Cyrus SASL client library will refuse to perform a
    PBKDF2 calculation with an iteration count greater than 65536, and the

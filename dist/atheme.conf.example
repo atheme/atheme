@@ -645,7 +645,7 @@ loadmodule "modules/saslserv/authcookie";
 #loadmodule "modules/saslserv/ecdsa-nist256p-challenge";
 #loadmodule "modules/saslserv/external";
 loadmodule "modules/saslserv/plain";
-#loadmodule "modules/saslserv/scram";
+#loadmodule "modules/saslserv/scram";   /* READ doc/SASL-SCRAM FIRST! */
 
 /* GameServ modules.
  *
