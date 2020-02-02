@@ -70,6 +70,9 @@
    the CoreFoundation framework. */
 #undef HAVE_CFPREFERENCESCOPYAPPVALUE
 
+/* Define to 1 if you have the `consttime_memequal' function. */
+#undef HAVE_CONSTTIME_MEMEQUAL
+
 /* Define to 1 if cracklib appears to be usable */
 #undef HAVE_CRACKLIB
 
@@ -109,6 +112,9 @@
 
 /* Define to 1 if you have the `explicit_bzero' function. */
 #undef HAVE_EXPLICIT_BZERO
+
+/* Define to 1 if you have the `explicit_memset' function. */
+#undef HAVE_EXPLICIT_MEMSET
 
 /* Define to 1 if you have the `fileno' function. */
 #undef HAVE_FILENO

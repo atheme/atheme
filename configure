@@ -7066,6 +7066,17 @@ _ACEOF
 fi
 done
 
+    for ac_func in consttime_memequal
+do :
+  ac_fn_c_check_func "$LINENO" "consttime_memequal" "ac_cv_func_consttime_memequal"
+if test "x$ac_cv_func_consttime_memequal" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_CONSTTIME_MEMEQUAL 1
+_ACEOF
+
+fi
+done
+
     for ac_func in dup2
 do :
   ac_fn_c_check_func "$LINENO" "dup2" "ac_cv_func_dup2"
@@ -7104,6 +7115,17 @@ do :
 if test "x$ac_cv_func_explicit_bzero" = xyes; then :
   cat >>confdefs.h <<_ACEOF
 #define HAVE_EXPLICIT_BZERO 1
+_ACEOF
+
+fi
+done
+
+    for ac_func in explicit_memset
+do :
+  ac_fn_c_check_func "$LINENO" "explicit_memset" "ac_cv_func_explicit_memset"
+if test "x$ac_cv_func_explicit_memset" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_EXPLICIT_MEMSET 1
 _ACEOF
 
 fi
