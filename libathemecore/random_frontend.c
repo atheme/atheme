@@ -20,24 +20,16 @@
 
 #if (ATHEME_API_RANDOM_FRONTEND == ATHEME_API_RANDOM_FRONTEND_INTERNAL)
 #  include "random_fe_internal.c"
+#elif (ATHEME_API_RANDOM_FRONTEND == ATHEME_API_RANDOM_FRONTEND_OPENBSD)
+#  include "random_fe_openbsd.c"
+#elif (ATHEME_API_RANDOM_FRONTEND == ATHEME_API_RANDOM_FRONTEND_SODIUM)
+#  include "random_fe_sodium.c"
+#elif (ATHEME_API_RANDOM_FRONTEND == ATHEME_API_RANDOM_FRONTEND_MBEDTLS)
+#  include "random_fe_mbedtls.c"
+#elif (ATHEME_API_RANDOM_FRONTEND == ATHEME_API_RANDOM_FRONTEND_OPENSSL)
+#  include "random_fe_openssl.c"
 #else
-#  if (ATHEME_API_RANDOM_FRONTEND == ATHEME_API_RANDOM_FRONTEND_OPENBSD)
-#    include "random_fe_openbsd.c"
-#  else
-#    if (ATHEME_API_RANDOM_FRONTEND == ATHEME_API_RANDOM_FRONTEND_SODIUM)
-#      include "random_fe_sodium.c"
-#    else
-#      if (ATHEME_API_RANDOM_FRONTEND == ATHEME_API_RANDOM_FRONTEND_MBEDTLS)
-#        include "random_fe_mbedtls.c"
-#      else
-#        if (ATHEME_API_RANDOM_FRONTEND == ATHEME_API_RANDOM_FRONTEND_OPENSSL)
-#          include "random_fe_openssl.c"
-#        else
-#          error "No RNG API frontend was selected by the build system"
-#        endif
-#      endif
-#    endif
-#  endif
+#  error "No RNG API frontend was selected by the build system"
 #endif
 
 /* Note that this function generates a random printable string of length "len", and so it

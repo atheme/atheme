@@ -120,7 +120,7 @@ _rs_log_error(const char *const restrict format, ...)
 static bool ATHEME_FATTR_WUR
 _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 {
-#ifdef HAVE_USABLE_GETENTROPY
+#if defined(HAVE_USABLE_GETENTROPY)
 
 	if (getentropy(buf, len) != 0)
 	{
@@ -128,8 +128,7 @@ _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 		return false;
 	}
 
-#else /* HAVE_USABLE_GETENTROPY */
-#  ifdef HAVE_USABLE_GETRANDOM
+#elif defined(HAVE_USABLE_GETRANDOM)
 
 	size_t out = 0;
 
@@ -154,7 +153,7 @@ _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 		out += (size_t) ret;
 	}
 
-#  else /* HAVE_USABLE_GETRANDOM */
+#else
 
 	static int fd = -1;
 	size_t out = 0;
@@ -186,8 +185,7 @@ _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 		out += (size_t) ret;
 	}
 
-#  endif /* !HAVE_USABLE_GETRANDOM */
-#endif /* !HAVE_USABLE_GETENTROPY */
+#endif
 
 	return true;
 }

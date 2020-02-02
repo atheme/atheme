@@ -13,23 +13,17 @@
 
 #include "ecdh-x25519-challenge.h"
 
-#ifdef HAVE_LIBSODIUM_ECDH_X25519
-#  define ECDH_X25519_USE_LIBSODIUM 1
-#else /* HAVE_LIBSODIUM_ECDH_X25519 */
-#  ifdef HAVE_LIBNETTLE_ECDH_X25519
-#    define ECDH_X25519_USE_LIBNETTLE 1
-#  else /* HAVE_LIBNETTLE_ECDH_X25519 */
-#    ifdef HAVE_LIBCRYPTO_ECDH_X25519
-#      define ECDH_X25519_USE_LIBCRYPTO 1
-#    else /* HAVE_LIBCRYPTO_ECDH_X25519 */
-#      ifdef HAVE_LIBMBEDCRYPTO_ECDH_X25519
-#        define ECDH_X25519_USE_LIBMBEDCRYPTO 1
-#      else /* HAVE_LIBMBEDCRYPTO_ECDH_X25519 */
-#        error "No ECDH X25519 cryptographic library implementation is available"
-#      endif /* !HAVE_LIBMBEDCRYPTO_ECDH_X25519 */
-#    endif /* !HAVE_LIBCRYPTO_ECDH_X25519 */
-#  endif /* !HAVE_LIBNETTLE_ECDH_X25519 */
-#endif /* !HAVE_LIBSODIUM_ECDH_X25519 */
+#if defined(HAVE_LIBSODIUM_ECDH_X25519)
+#  define ECDH_X25519_USE_LIBSODIUM     1
+#elif defined(HAVE_LIBCRYPTO_ECDH_X25519)
+#  define ECDH_X25519_USE_LIBNETTLE     1
+#elif defined(HAVE_LIBMBEDCRYPTO_ECDH_X25519)
+#  define ECDH_X25519_USE_LIBCRYPTO     1
+#elif defined(HAVE_LIBNETTLE_ECDH_X25519)
+#  define ECDH_X25519_USE_LIBMBEDCRYPTO 1
+#else
+#  error "No ECDH X25519 cryptographic library implementation is available"
+#endif
 
 static const unsigned char ecdh_x25519_zeroes[] = {
 	0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U,

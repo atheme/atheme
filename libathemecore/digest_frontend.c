@@ -18,20 +18,14 @@
 
 #if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_OPENSSL)
 #  include "digest_fe_openssl.c"
+#elif (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_GCRYPT)
+#  include "digest_fe_gcrypt.c"
+#elif (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_MBEDTLS)
+#  include "digest_fe_mbedtls.c"
+#elif (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_INTERNAL)
+#  include "digest_fe_internal.c"
 #else
-#  if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_GCRYPT)
-#    include "digest_fe_gcrypt.c"
-#  else
-#    if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_MBEDTLS)
-#      include "digest_fe_mbedtls.c"
-#    else
-#      if (ATHEME_API_DIGEST_FRONTEND == ATHEME_API_DIGEST_FRONTEND_INTERNAL)
-#        include "digest_fe_internal.c"
-#      else
-#        error "No Digest API frontend was selected by the build system"
-#      endif
-#    endif
-#  endif
+#  error "No Digest API frontend was selected by the build system"
 #endif
 
 static bool ATHEME_FATTR_WUR
