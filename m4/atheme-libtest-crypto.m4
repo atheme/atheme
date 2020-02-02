@@ -158,6 +158,25 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
             AC_MSG_RESULT([no])
         ])
 
+        AC_MSG_CHECKING([if libcrypto has a usable memory zeroing function])
+        AC_LINK_IFELSE([
+            AC_LANG_PROGRAM([[
+                #ifdef HAVE_STDDEF_H
+                #  include <stddef.h>
+                #endif
+                #include <openssl/crypto.h>
+                #include <openssl/opensslv.h>
+            ]], [[
+                (void) OPENSSL_cleanse(NULL, 0);
+            ]])
+        ], [
+            AC_MSG_RESULT([yes])
+            AC_DEFINE([HAVE_LIBCRYPTO_CLEANSE], [1], [Define to 1 if libcrypto has a usable memory zeroing function])
+            LIBCRYPTO_USABLE="Yes"
+        ], [
+            AC_MSG_RESULT([no])
+        ])
+
         AC_MSG_CHECKING([if libcrypto can provide SASL ECDH-X25519-CHALLENGE])
         AC_LINK_IFELSE([
             AC_LANG_PROGRAM([[

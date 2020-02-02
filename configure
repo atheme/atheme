@@ -11647,6 +11647,47 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking if libcrypto has a usable memory zeroing function" >&5
+$as_echo_n "checking if libcrypto has a usable memory zeroing function... " >&6; }
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+                #ifdef HAVE_STDDEF_H
+                #  include <stddef.h>
+                #endif
+                #include <openssl/crypto.h>
+                #include <openssl/opensslv.h>
+
+int
+main ()
+{
+
+                (void) OPENSSL_cleanse(NULL, 0);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBCRYPTO_CLEANSE 1" >>confdefs.h
+
+            LIBCRYPTO_USABLE="Yes"
+
+else
+
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
         { $as_echo "$as_me:${as_lineno-$LINENO}: checking if libcrypto can provide SASL ECDH-X25519-CHALLENGE" >&5
 $as_echo_n "checking if libcrypto can provide SASL ECDH-X25519-CHALLENGE... " >&6; }
         cat confdefs.h - <<_ACEOF >conftest.$ac_ext

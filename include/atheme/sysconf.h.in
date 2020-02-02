@@ -158,6 +158,9 @@
 /* Define to 1 if libcrypto appears to be usable */
 #undef HAVE_LIBCRYPTO
 
+/* Define to 1 if libcrypto has a usable memory zeroing function */
+#undef HAVE_LIBCRYPTO_CLEANSE
+
 /* Define to 1 if libcrypto can provide SASL ECDH-X25519-CHALLENGE */
 #undef HAVE_LIBCRYPTO_ECDH_X25519
 

@@ -35,9 +35,11 @@
 #endif /* !HAVE_TIMINGSAFE_BCMP && !HAVE_TIMINGSAFE_MEMCMP && !HAVE_CONSTTIME_MEMEQUAL */
 
 #if !defined(HAVE_MEMSET_S) && !defined(HAVE_EXPLICIT_BZERO) && !defined(HAVE_EXPLICIT_MEMSET)
-#  ifdef HAVE_LIBSODIUM_MEMZERO
+#  if defined(HAVE_LIBSODIUM_MEMZERO)
 #    include <sodium/utils.h>
-#  endif /* HAVE_LIBSODIUM_MEMZERO */
+#  elif defined(HAVE_LIBCRYPTO_CLEANSE)
+#    include <openssl/crypto.h>
+#  endif
 #endif /* !HAVE_MEMSET_S && !HAVE_EXPLICIT_BZERO && !HAVE_EXPLICIT_MEMSET */
 
 #ifdef ATHEME_ENABLE_SODIUM_MALLOC
@@ -139,6 +141,10 @@ smemzero(void *const restrict ptr, const size_t len)
 #elif defined(HAVE_LIBSODIUM_MEMZERO)
 
 	(void) sodium_memzero(ptr, len);
+
+#elif defined(HAVE_LIBCRYPTO_CLEANSE)
+
+	(void) OPENSSL_cleanse(ptr, len);
 
 #else
 
