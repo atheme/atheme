@@ -130,9 +130,9 @@ atheme_pbkdf2v2_determine_params(struct pbkdf2v2_dbentry *const restrict dbe)
 static bool
 atheme_pbkdf2v2_parse_dbentry(struct pbkdf2v2_dbentry *const restrict dbe, const char *const restrict parameters)
 {
-	char sdg64[0x1000];
-	char ssk64[0x1000];
-	char shk64[0x1000];
+	char sdg64[BUFSIZE];
+	char ssk64[BUFSIZE];
+	char shk64[BUFSIZE];
 
 	bool retval = true;
 
@@ -202,6 +202,7 @@ atheme_pbkdf2v2_parse_dbentry(struct pbkdf2v2_dbentry *const restrict dbe, const
 	(void) slog(LG_DEBUG, "%s: sscanf(3) was unsuccessful", MOWGLI_FUNC_NAME);
 
 err:
+	// No need to zero dbe, callers do that if this fails
 	retval = false;
 
 done:
