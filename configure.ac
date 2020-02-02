@@ -16,6 +16,14 @@ AC_CONFIG_SRCDIR([src/services/main.c])
 AC_PREFIX_DEFAULT([~/atheme])
 AS_IF([test "x${prefix}" = "xNONE"], [prefix="${ac_default_prefix}"])
 
+AC_MSG_CHECKING([if you read GIT-Access.txt])
+AS_IF([test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"], [
+    AC_MSG_RESULT([yes])
+], [
+    AC_MSG_RESULT([no])
+    AC_MSG_ERROR([please read GIT-Access.txt before trying to build from git])
+])
+
 AH_TOP([
 #ifndef ATHEME_INC_SYSCONF_H
 #define ATHEME_INC_SYSCONF_H 1
@@ -44,14 +52,6 @@ AH_BOTTOM([
 #endif /* !ATHEME_INC_SYSCONF_H */
 ])
 
-AC_MSG_CHECKING([if you read GIT-Access.txt])
-AS_IF([test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"], [
-    AC_MSG_RESULT([yes])
-], [
-    AC_MSG_RESULT([no])
-    AC_MSG_ERROR([please read GIT-Access.txt before trying to build from git])
-])
-
 # Programs required by the build system
 AC_PROG_CC
 AC_PROG_CC_C99
@@ -73,53 +73,9 @@ AC_PROG_SED
 AC_PATH_PROG([TAR], [tar])
 PKG_PROG_PKG_CONFIG
 
-# Initialise our build system
-BUILDSYS_INIT
-BUILDSYS_SHARED_LIB
-BUILDSYS_PROG_IMPLIB
-LIBS="${LIBS} ${DYNAMIC_LD_LIBS}"
-
-# Checks for headers, libraries, and library functions
-LIBS_SAVED="${LIBS}"
-AC_DEFINE([__STDC_WANT_LIB_EXT1__], [1], [We want ISO 9899:2011 Annex K memory functions if available])
-AC_USE_SYSTEM_EXTENSIONS
-AC_CHECK_HEADERS([ctype.h dirent.h errno.h inttypes.h libintl.h limits.h locale.h netdb.h netinet/in.h], [], [], [])
-AC_CHECK_HEADERS([regex.h signal.h stdarg.h stdbool.h stddef.h stdint.h stdio.h stdlib.h string.h], [], [], [])
-AC_CHECK_HEADERS([strings.h sys/file.h sys/resource.h sys/stat.h sys/time.h sys/types.h sys/wait.h], [], [], [])
-AC_CHECK_HEADERS([time.h unistd.h], [], [], [])
-AC_CHECK_FUNCS([crypt_checkpass crypt_newhash explicit_bzero fork getrlimit memset_s timingsafe_bcmp], [], [])
-AC_CHECK_FUNCS([timingsafe_memcmp], [], [])
-AC_CHECK_FUNCS([dup2 execve fileno flock fsync gethostbyname], [], [AC_MSG_ERROR([required function not available])])
-AC_CHECK_FUNCS([getpid gettimeofday localeconv memchr memmove], [], [AC_MSG_ERROR([required function not available])])
-AC_CHECK_FUNCS([memset regcomp regerror regexec regfree], [], [AC_MSG_ERROR([required function not available])])
-AC_CHECK_FUNCS([setenv setlocale strcasecmp strcasestr strchr], [], [AC_MSG_ERROR([required function not available])])
-AC_CHECK_FUNCS([strerror strlen strncasecmp strnlen strpbrk], [], [AC_MSG_ERROR([required function not available])])
-AC_CHECK_FUNCS([strrchr strstr strtod strtok strtok_r strtol], [], [AC_MSG_ERROR([required function not available])])
-AC_CHECK_FUNCS([strtold strtoul strtoull], [], [AC_MSG_ERROR([required function not available])])
-HW_FUNC_ASPRINTF
-HW_FUNC_SNPRINTF
-LIBS="${LIBS_SAVED}"
-
-# Checks for features required of our toolchain
-AC_C_BIGENDIAN
-AC_C_CONST
-AC_C_INLINE
-AC_C_RESTRICT
-AC_TYPE_INT8_T
-AC_TYPE_INT16_T
-AC_TYPE_INT32_T
-AC_TYPE_INT64_T
-AC_TYPE_LONG_LONG_INT
-AC_TYPE_OFF_T
-AC_TYPE_PID_T
-AC_CHECK_TYPES([ptrdiff_t])
-AC_TYPE_SIZE_T
-AC_TYPE_SSIZE_T
-AC_TYPE_UID_T
-AC_TYPE_UINT8_T
-AC_TYPE_UINT16_T
-AC_TYPE_UINT32_T
-AC_TYPE_UINT64_T
+# Does what its name implies. The above block can't be put into this function
+# because of autotools black magic voodoo crap that no-one understands ...
+ATHEME_CHECK_BUILD_REQUIREMENTS
 
 # Automake compatibility. --nenolod
 AC_SUBST([PACKAGE], [AC_PACKAGE_TARNAME])
@@ -128,31 +84,8 @@ AC_SUBST([VENDOR_STRING], ["Atheme Development Group <https://atheme.github.io/>
 AC_SUBST([PACKAGE_BUGREPORT_I18N], ["ircs://chat.freenode.net:6697/atheme-i18n"])
 AC_DEFINE_UNQUOTED([PACKAGE], ["${PACKAGE}"], [Name of package])
 AC_DEFINE_UNQUOTED([VERSION], ["${VERSION}"], [Version number of package])
-AC_DEFINE_UNQUOTED([VENDOR_STRING], ["${VENDOR_STRING}"], [Vendor string for module headers])
+AC_DEFINE_UNQUOTED([VENDOR_STRING], ["${VENDOR_STRING}"], [Vendor string for in-tree module headers])
 AC_DEFINE_UNQUOTED([PACKAGE_BUGREPORT_I18N], ["${PACKAGE_BUGREPORT_I18N}"], [Where to report translation bugs])
-
-
-
-# If we're building on Windows we need socket and regex libraries from mingw
-case "${host}" in
-    *-*-mingw32)
-        CPPFLAGS="-I/mingw/include ${CPPFLAGS}"
-        LIBS="-lwsock32 -lws2_32 -lregex ${LIBS}"
-        ;;
-esac
-
-
-
-# GNU gettext
-AM_GNU_GETTEXT([external])
-AM_GNU_GETTEXT_NEED([need-ngettext])
-AM_GNU_GETTEXT_NEED([need-formatstring-macros])
-AS_IF([test "x${USE_NLS}" = "xyes"], [
-    ATHEME_COND_NLS_ENABLE
-    LIBS="${LIBINTL} ${LIBS}"
-])
-
-
 
 # This should be before any library tests so that insufficient header
 # inclusions in those tests are caught before they become a runtime

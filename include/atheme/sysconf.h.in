@@ -495,7 +495,7 @@
 #endif
 
 
-/* Vendor string for module headers */
+/* Vendor string for in-tree module headers */
 #undef VENDOR_STRING
 
 /* Version number of package */
