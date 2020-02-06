@@ -193,6 +193,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
             AC_MSG_RESULT([yes])
             AC_DEFINE([HAVE_LIBCRYPTO_ECDH_X25519], [1], [Define to 1 if libcrypto can provide SASL ECDH-X25519-CHALLENGE])
             ATHEME_COND_ECDH_X25519_TOOL_ENABLE
+            FEATURE_SASL_ECDH_X25519_CHALLENGE="Yes"
             LIBCRYPTO_USABLE="Yes"
         ], [
             AC_MSG_RESULT([no])
@@ -218,6 +219,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
             AC_MSG_RESULT([yes])
             AC_DEFINE([HAVE_LIBCRYPTO_ECDSA], [1], [Define to 1 if libcrypto can provide SASL ECDSA-NIST256P-CHALLENGE])
             ATHEME_COND_ECDSA_TOOLS_ENABLE
+            FEATURE_SASL_ECDSA_NIST256P_CHALLENGE="Yes"
             LIBCRYPTO_USABLE="Yes"
         ], [
             AC_MSG_RESULT([no])

@@ -71,6 +71,7 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
             ]])
         ], [
             AC_MSG_RESULT([yes])
+            FEATURE_SASL_SCRAM="Yes"
             LIBIDN="Yes"
             AC_DEFINE([HAVE_LIBIDN], [1], [Define to 1 if GNU libidn appears to be usable])
         ], [

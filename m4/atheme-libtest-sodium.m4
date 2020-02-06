@@ -204,6 +204,7 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
             AC_MSG_RESULT([yes])
             AC_DEFINE([HAVE_LIBSODIUM_ECDH_X25519], [1], [Define to 1 if libsodium can provide SASL ECDH-X25519-CHALLENGE])
             ATHEME_COND_ECDH_X25519_TOOL_ENABLE
+            FEATURE_SASL_ECDH_X25519_CHALLENGE="Yes"
             LIBSODIUM_USABLE="Yes"
         ], [
             AC_MSG_RESULT([no])

@@ -16,6 +16,10 @@ AC_DEFUN([ATHEME_PRINT_CONFIGURATION], [
     AS_IF([test "${COMPILER_SANITIZERS}" = "Yes"], [COMPILER_SANITIZERS="Yes (NOT INTENDED FOR PRODUCTION USAGE)"])
     AS_IF([test "x${USE_NLS}" = "xyes"], [USE_NLS="Yes"], [USE_NLS="No"])
 
+    AS_IF([test "x${FEATURE_SASL_ECDH_X25519_CHALLENGE}" != "xYes"], [FEATURE_SASL_ECDH_X25519_CHALLENGE="No"])
+    AS_IF([test "x${FEATURE_SASL_ECDSA_NIST256P_CHALLENGE}" != "xYes"], [FEATURE_SASL_ECDSA_NIST256P_CHALLENGE="No"])
+    AS_IF([test "x${FEATURE_SASL_SCRAM}" != "xYes"], [FEATURE_SASL_SCRAM="No"])
+
     prefix="$(eval echo "${prefix}")"
     prefix="$(eval echo "${prefix}")"
 
@@ -40,6 +44,7 @@ AC_DEFUN([ATHEME_PRINT_CONFIGURATION], [
     echo "
 Configuration of ${PACKAGE_STRING}:
 
+  Directories:
     Installation Prefix .....: ${prefix}
     Binary Directory ........: ${bindir}
     Config Directory ........: ${sysconfdir}
@@ -48,16 +53,13 @@ Configuration of ${PACKAGE_STRING}:
     Module Directory ........: ${MODDIR}/modules
     PID Directory ...........: ${RUNDIR}
 
-    Argon2 support ..........: ${LIBARGON2}
-    crypt(3) support ........: ${LIBCRYPT}
-    scrypt support ..........: ${LIBSODIUM_SCRYPT}
-
+  Libraries:
+    ARM mbedTLS support .....: ${LIBMBEDCRYPTO}
     CrackLib support ........: ${LIBCRACK}
-    LDAP support ............: ${LIBLDAP}
     GNU libgcrypt support ...: ${LIBGCRYPT}
     GNU libidn support ......: ${LIBIDN}
     GNU Nettle support ......: ${LIBNETTLE}
-    ARM mbedTLS support .....: ${LIBMBEDCRYPTO}
+    LDAP support ............: ${LIBLDAP}
     OpenSSL support .........: ${LIBCRYPTO}
     passwdqc support ........: ${LIBPASSWDQC}
     PCRE support ............: ${LIBPCRE}
@@ -65,23 +67,37 @@ Configuration of ${PACKAGE_STRING}:
     QR Code support .........: ${LIBQRENCODE}
     Sodium support ..........: ${LIBSODIUM}
 
+  Password Cryptography:
+    Argon2 support ..........: ${LIBARGON2}
+    crypt(3) support ........: ${LIBCRYPT}
+    scrypt support ..........: ${LIBSODIUM_SCRYPT}
+
+  SASL Mechanisms:
+    AUTHCOOKIE ..............: Yes
+    ECDH-X25519-CHALLENGE ...: ${FEATURE_SASL_ECDH_X25519_CHALLENGE}
+    ECDSA-NIST256P-CHALLENGE : ${FEATURE_SASL_ECDSA_NIST256P_CHALLENGE}
+    EXTERNAL ................: Yes
+    PLAIN ...................: Yes
+    SCRAM ...................: ${FEATURE_SASL_SCRAM}
+
+  Program Features:
     Contrib Modules .........: ${CONTRIB_MODULES}
+    Crypto Benchmarking .....: ${HAVE_CLOCK_GETTIME}
+    Digest Frontend .........: ${DIGEST_FRONTEND}
     Heap Allocator ..........: ${HEAP_ALLOCATOR}
     Internationalization ....: ${USE_NLS}
     Large Network Support ...: ${LARGE_NET}
+    Legacy Crypto Modules ...: ${LEGACY_PWCRYPTO}
     Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}
+    RNG Frontend ............: ${RANDOM_FRONTEND}
     Sodium Memory Allocator .: ${SODIUM_MALLOC}
 
+  Build Features:
     Build Warnings ..........: ${BUILD_WARNINGS}
-    Compiler sanitizers .....: ${COMPILER_SANITIZERS}
-
-    Crypto Benchmarking .....: ${HAVE_CLOCK_GETTIME}
-    Digest Frontend .........: ${DIGEST_FRONTEND}
-    RNG Frontend ............: ${RANDOM_FRONTEND}
-
-    Legacy Crypto Modules ...: ${LEGACY_PWCRYPTO}
+    Compiler Sanitizers .....: ${COMPILER_SANITIZERS}
     Mowgli Installation .....: ${MOWGLI_SOURCE}
 
+  Build Variables:
     CC ......................: ${CC}
     CFLAGS ..................: ${CFLAGS}
     CPPFLAGS ................: ${CPPFLAGS}
