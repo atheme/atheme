@@ -178,7 +178,7 @@ atheme_pbkdf2v2_parse_dbentry(struct pbkdf2v2_dbentry *const restrict dbe, const
 
 	if (sscanf(parameters, PBKDF2_FN_LOADHASH, &dbe->a, &dbe->c, dbe->salt64, sdg64) == 4)
 	{
-		(void) slog(LG_DEBUG, "%s: matched PBKDF2_FN_LOADHASH (HMAC-SHA)", MOWGLI_FUNC_NAME);
+		(void) slog(LG_DEBUG, "%s: matched PBKDF2_FN_LOADHASH (Regular PBKDF2-HMAC)", MOWGLI_FUNC_NAME);
 
 		if (! atheme_pbkdf2v2_determine_params(dbe))
 			// This function logs messages on failure
