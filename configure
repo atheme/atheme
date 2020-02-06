@@ -639,6 +639,8 @@ LOGDIR
 LOCALEDIR
 DOCDIR
 DATADIR
+CLOCK_GETTIME_LIBS
+CRYPTO_BENCHMARK_COND_D
 CONTRIB_COND_D
 CONTRIB_LIBS
 LIBPERL_LIBS
@@ -677,8 +679,6 @@ LIBARGON2_CFLAGS
 LIBSOCKET_LIBS
 LIBMATH_LIBS
 LIBDL_LIBS
-CLOCK_GETTIME_LIBS
-CRYPTO_BENCHMARK_COND_D
 PACKAGE_BUGREPORT_I18N
 VENDOR_STRING
 VERSION
@@ -822,6 +822,7 @@ with_qrencode
 with_sodium
 with_perl
 enable_contrib
+enable_crypto_benchmarking
 enable_fhs_paths
 enable_heap_allocator
 enable_large_net
@@ -1498,6 +1499,8 @@ Optional Features:
   --disable-nls           do not use Native Language Support
   --disable-rpath         do not hardcode runtime library paths
   --enable-contrib        Enable contrib modules
+  --disable-crypto-benchmarking
+                          Don't build the crypto benchmarking utility
   --enable-fhs-paths      Use more FHS-like pathnames (for packagers)
   --disable-heap-allocator
                           Disable the heap allocator
@@ -10127,127 +10130,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 # Conditional libraries for standard functions (no option to control detection)
 
 
-    LIBS_SAVED="${LIBS}"
-
-    HAVE_CLOCK_GETTIME="No"
-    CLOCK_GETTIME_LIBS=""
-
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing clock_gettime" >&5
-$as_echo_n "checking for library containing clock_gettime... " >&6; }
-if ${ac_cv_search_clock_gettime+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_func_search_save_LIBS=$LIBS
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char clock_gettime ();
-int
-main ()
-{
-return clock_gettime ();
-  ;
-  return 0;
-}
-_ACEOF
-for ac_lib in '' rt; do
-  if test -z "$ac_lib"; then
-    ac_res="none required"
-  else
-    ac_res=-l$ac_lib
-    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
-  fi
-  if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_search_clock_gettime=$ac_res
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext
-  if ${ac_cv_search_clock_gettime+:} false; then :
-  break
-fi
-done
-if ${ac_cv_search_clock_gettime+:} false; then :
-
-else
-  ac_cv_search_clock_gettime=no
-fi
-rm conftest.$ac_ext
-LIBS=$ac_func_search_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_clock_gettime" >&5
-$as_echo "$ac_cv_search_clock_gettime" >&6; }
-ac_res=$ac_cv_search_clock_gettime
-if test "$ac_res" != no; then :
-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-
-        if test "x${ac_cv_search_clock_gettime}" != "xnone required"; then :
-
-            CLOCK_GETTIME_LIBS="${ac_cv_search_clock_gettime}"
-            LIBS="${CLOCK_GETTIME_LIBS} ${LIBS}"
-
-fi
-
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking if clock_gettime(2) appears to be usable" >&5
-$as_echo_n "checking if clock_gettime(2) appears to be usable... " >&6; }
-        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-                #ifdef HAVE_TIME_H
-                #  include <time.h>
-                #endif
-
-int
-main ()
-{
-
-                struct timespec begin;
-                (void) begin.tv_sec;
-                (void) begin.tv_nsec;
-                (void) clock_gettime(CLOCK_MONOTONIC, &begin);
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-
-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-            HAVE_CLOCK_GETTIME="Yes"
-
-
-    CRYPTO_BENCHMARK_COND_D="crypto-benchmark"
-
-
-
-else
-
-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-            HAVE_CLOCK_GETTIME="No"
-            CLOCK_GETTIME_LIBS=""
-
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-
-fi
-
-
-
-
-    LIBS="${LIBS_SAVED}"
-
-
-
     CFLAGS_SAVED="${CFLAGS}"
     LIBS_SAVED="${LIBS}"
 
@@ -14832,6 +14714,176 @@ $as_echo "#define ATHEME_ENABLE_CONTRIB 1" >>confdefs.h
             as_fn_error $? "invalid option for --enable-contrib" "$LINENO" 5
             ;;
     esac
+
+
+
+    LIBS_SAVED="${LIBS}"
+
+    CLOCK_GETTIME_LIBS=""
+    CRYPTO_BENCHMARKING="No"
+
+    # Check whether --enable-crypto-benchmarking was given.
+if test "${enable_crypto_benchmarking+set}" = set; then :
+  enableval=$enable_crypto_benchmarking;
+else
+  enable_crypto_benchmarking="auto"
+fi
+
+
+    case "x${enable_crypto_benchmarking}" in
+        xauto | xyes | xno)
+            ;;
+        *)
+            as_fn_error $? "invalid option for --enable-crypto-benchmarking" "$LINENO" 5
+            ;;
+    esac
+
+    if test "${enable_crypto_benchmarking}" != "no"; then :
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing clock_gettime" >&5
+$as_echo_n "checking for library containing clock_gettime... " >&6; }
+if ${ac_cv_search_clock_gettime+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS=$LIBS
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char clock_gettime ();
+int
+main ()
+{
+return clock_gettime ();
+  ;
+  return 0;
+}
+_ACEOF
+for ac_lib in '' rt; do
+  if test -z "$ac_lib"; then
+    ac_res="none required"
+  else
+    ac_res=-l$ac_lib
+    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
+  fi
+  if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_clock_gettime=$ac_res
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext
+  if ${ac_cv_search_clock_gettime+:} false; then :
+  break
+fi
+done
+if ${ac_cv_search_clock_gettime+:} false; then :
+
+else
+  ac_cv_search_clock_gettime=no
+fi
+rm conftest.$ac_ext
+LIBS=$ac_func_search_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_clock_gettime" >&5
+$as_echo "$ac_cv_search_clock_gettime" >&6; }
+ac_res=$ac_cv_search_clock_gettime
+if test "$ac_res" != no; then :
+  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+
+            if test "x${ac_cv_search_clock_gettime}" != "xnone required"; then :
+
+                CLOCK_GETTIME_LIBS="${ac_cv_search_clock_gettime}"
+                LIBS="${CLOCK_GETTIME_LIBS} ${LIBS}"
+
+fi
+
+            { $as_echo "$as_me:${as_lineno-$LINENO}: checking if clock_gettime(2) appears to be usable" >&5
+$as_echo_n "checking if clock_gettime(2) appears to be usable... " >&6; }
+            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+                    #ifdef HAVE_TIME_H
+                    #  include <time.h>
+                    #endif
+
+int
+main ()
+{
+
+                    struct timespec begin;
+                    (void) begin.tv_sec;
+                    (void) begin.tv_nsec;
+                    (void) clock_gettime(CLOCK_MONOTONIC, &begin);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+                CRYPTO_BENCHMARKING="Yes"
+
+
+    CRYPTO_BENCHMARK_COND_D="crypto-benchmark"
+
+
+
+else
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+                CLOCK_GETTIME_LIBS=""
+                if test "${enable_crypto_benchmarking}" = "yes"; then :
+
+                    { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--enable-crypto-benchmarking was given but clock_gettime(2) does not appear to be usable
+See \`config.log' for more details" "$LINENO" 5; }
+
+else
+
+                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: the crypto benchmarking utility will not be available" >&5
+$as_echo "$as_me: WARNING: the crypto benchmarking utility will not be available" >&2;}
+
+fi
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+else
+
+            CLOCK_GETTIME_LIBS=""
+            if test "${enable_crypto_benchmarking}" = "yes"; then :
+
+                { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "--enable-crypto-benchmarking was given but clock_gettime(2) is not available
+See \`config.log' for more details" "$LINENO" 5; }
+
+else
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: the crypto benchmarking utility will not be available" >&5
+$as_echo "$as_me: WARNING: the crypto benchmarking utility will not be available" >&2;}
+
+fi
+
+fi
+
+
+fi
+
+
+
+    LIBS="${LIBS_SAVED}"
 
 
 
@@ -22215,7 +22267,7 @@ Configuration of ${PACKAGE_STRING}:
 
   Program Features:
     Contrib Modules .........: ${CONTRIB_MODULES}
-    Crypto Benchmarking .....: ${HAVE_CLOCK_GETTIME}
+    Crypto Benchmarking .....: ${CRYPTO_BENCHMARKING}
     Digest Frontend .........: ${DIGEST_FRONTEND}
     Heap Allocator ..........: ${HEAP_ALLOCATOR}
     Internationalization ....: ${USE_NLS}

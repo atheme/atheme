@@ -82,7 +82,7 @@ Configuration of ${PACKAGE_STRING}:
 
   Program Features:
     Contrib Modules .........: ${CONTRIB_MODULES}
-    Crypto Benchmarking .....: ${HAVE_CLOCK_GETTIME}
+    Crypto Benchmarking .....: ${CRYPTO_BENCHMARKING}
     Digest Frontend .........: ${DIGEST_FRONTEND}
     Heap Allocator ..........: ${HEAP_ALLOCATOR}
     Internationalization ....: ${USE_NLS}

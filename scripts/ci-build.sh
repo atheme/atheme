@@ -33,6 +33,7 @@ esac
     --disable-heap-allocator                                \
     --disable-linker-defs                                   \
     --enable-compiler-sanitizers                            \
+    --enable-crypto-benchmarking                            \
     --enable-legacy-pwcrypto                                \
     --enable-nls                                            \
     --enable-reproducible-builds                            \
