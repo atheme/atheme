@@ -75,7 +75,7 @@ Configuration of ${PACKAGE_STRING}:
     Build Warnings ..........: ${BUILD_WARNINGS}
     Compiler sanitizers .....: ${COMPILER_SANITIZERS}
 
-    Crypto Benchmarking .....: ${LIBRT}
+    Crypto Benchmarking .....: ${HAVE_CLOCK_GETTIME}
     Digest Frontend .........: ${DIGEST_FRONTEND}
     RNG Frontend ............: ${RANDOM_FRONTEND}
 

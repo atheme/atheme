@@ -93,9 +93,9 @@ AC_DEFINE_UNQUOTED([PACKAGE_BUGREPORT_I18N], ["${PACKAGE_BUGREPORT_I18N}"], [Whe
 ATHEME_CC_TEST_CFLAGS([-Werror=implicit])
 
 # Conditional libraries for standard functions (no option to control detection)
+ATHEME_LIBTEST_CLOCK_GETTIME
 ATHEME_LIBTEST_DL
 ATHEME_LIBTEST_MATH
-ATHEME_LIBTEST_RT
 ATHEME_LIBTEST_SOCKET
 
 # Libraries that are autodetected (alphabetical)

@@ -20,7 +20,7 @@ CFLAGS +=                   \
 LIBS +=                     \
     ${LIBARGON2_LIBS}       \
     ${LIBSODIUM_LIBS}       \
-    ${LIBRT_LIBS}           \
+    ${CLOCK_GETTIME_LIBS}   \
     -lathemecore
 
 build: all

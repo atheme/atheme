@@ -6,23 +6,23 @@
 # -*- Atheme IRC Services -*-
 # Atheme Build System Component
 
-AC_DEFUN([ATHEME_LIBTEST_RT], [
+AC_DEFUN([ATHEME_LIBTEST_CLOCK_GETTIME], [
 
     LIBS_SAVED="${LIBS}"
 
-    LIBRT="No"
-    LIBRT_LIBS=""
+    HAVE_CLOCK_GETTIME="No"
+    CLOCK_GETTIME_LIBS=""
 
     AC_SEARCH_LIBS([clock_gettime], [rt], [
         AS_IF([test "x${ac_cv_search_clock_gettime}" != "xnone required"], [
-            LIBRT_LIBS="${ac_cv_search_clock_gettime}"
+            CLOCK_GETTIME_LIBS="${ac_cv_search_clock_gettime}"
         ])
 
-        LIBRT="Yes"
+        HAVE_CLOCK_GETTIME="Yes"
         ATHEME_COND_CRYPTO_BENCHMARK_ENABLE
     ], [], [])
 
-    AC_SUBST([LIBRT_LIBS])
+    AC_SUBST([CLOCK_GETTIME_LIBS])
 
     LIBS="${LIBS_SAVED}"
 ])
