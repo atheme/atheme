@@ -10189,15 +10189,55 @@ if test "$ac_res" != no; then :
         if test "x${ac_cv_search_clock_gettime}" != "xnone required"; then :
 
             CLOCK_GETTIME_LIBS="${ac_cv_search_clock_gettime}"
+            LIBS="${CLOCK_GETTIME_LIBS} ${LIBS}"
 
 fi
 
-        HAVE_CLOCK_GETTIME="Yes"
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking if clock_gettime(3) appears to be usable" >&5
+$as_echo_n "checking if clock_gettime(3) appears to be usable... " >&6; }
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+                #ifdef HAVE_TIME_H
+                #  include <time.h>
+                #endif
+
+int
+main ()
+{
+
+                struct timespec begin;
+                (void) begin.tv_sec;
+                (void) begin.tv_nsec;
+                (void) clock_gettime(CLOCK_MONOTONIC, &begin);
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+            HAVE_CLOCK_GETTIME="Yes"
 
 
     CRYPTO_BENCHMARK_COND_D="crypto-benchmark"
 
 
+
+else
+
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+            HAVE_CLOCK_GETTIME="No"
+            CLOCK_GETTIME_LIBS=""
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
 
 fi
 
