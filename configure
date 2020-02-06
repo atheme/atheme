@@ -639,6 +639,8 @@ LOGDIR
 LOCALEDIR
 DOCDIR
 DATADIR
+ECDSA_NIST256P_TOOLS_COND_D
+ECDH_X25519_TOOL_COND_D
 CLOCK_GETTIME_LIBS
 CRYPTO_BENCHMARK_COND_D
 CONTRIB_COND_D
@@ -666,8 +668,6 @@ LIBIDN_LIBS
 LIBIDN_CFLAGS
 LIBGCRYPT_LIBS
 LIBGCRYPT_CFLAGS
-ECDSA_TOOLS_COND_D
-ECDH_X25519_TOOL_COND_D
 LIBCRYPTO_LIBS
 LIBCRYPTO_CFLAGS
 LIBCRYPT_LIBS
@@ -823,6 +823,8 @@ with_sodium
 with_perl
 enable_contrib
 enable_crypto_benchmarking
+enable_ecdh_x25519_tool
+enable_ecdsa_nist256p_tools
 enable_fhs_paths
 enable_heap_allocator
 enable_large_net
@@ -1501,6 +1503,11 @@ Optional Features:
   --enable-contrib        Enable contrib modules
   --disable-crypto-benchmarking
                           Don't build the crypto benchmarking utility
+  --disable-ecdh-x25519-tool
+                          Don't build the SASL ECDH-X25519-CHALLENGE utility
+  --disable-ecdsa-nist256p-tools
+                          Don't build the SASL ECDSA-NIST256P-CHALLENGE
+                          utilities
   --enable-fhs-paths      Use more FHS-like pathnames (for packagers)
   --disable-heap-allocator
                           Disable the heap allocator
@@ -11641,15 +11648,6 @@ $as_echo "yes" >&6; }
 
 $as_echo "#define HAVE_LIBCRYPTO_ECDH_X25519 1" >>confdefs.h
 
-
-
-    ECDH_X25519_TOOL_COND_D="ecdh-x25519-tool"
-
-
-
-$as_echo "#define HAVE_ANYLIB_ECDH_X25519 1" >>confdefs.h
-
-
             FEATURE_SASL_ECDH_X25519_CHALLENGE="Yes"
             LIBCRYPTO_USABLE="Yes"
 
@@ -11696,11 +11694,6 @@ if ac_fn_c_try_link "$LINENO"; then :
 $as_echo "yes" >&6; }
 
 $as_echo "#define HAVE_LIBCRYPTO_ECDSA 1" >>confdefs.h
-
-
-
-    ECDSA_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
-
 
             FEATURE_SASL_ECDSA_NIST256P_CHALLENGE="Yes"
             LIBCRYPTO_USABLE="Yes"
@@ -12797,15 +12790,6 @@ $as_echo "yes" >&6; }
 
 $as_echo "#define HAVE_LIBMBEDCRYPTO_ECDH_X25519 1" >>confdefs.h
 
-
-
-    ECDH_X25519_TOOL_COND_D="ecdh-x25519-tool"
-
-
-
-$as_echo "#define HAVE_ANYLIB_ECDH_X25519 1" >>confdefs.h
-
-
             FEATURE_SASL_ECDH_X25519_CHALLENGE="Yes"
             LIBMBEDCRYPTO_USABLE="Yes"
 
@@ -13098,15 +13082,6 @@ if ac_fn_c_try_link "$LINENO"; then :
 $as_echo "yes" >&6; }
 
 $as_echo "#define HAVE_LIBNETTLE_ECDH_X25519 1" >>confdefs.h
-
-
-
-    ECDH_X25519_TOOL_COND_D="ecdh-x25519-tool"
-
-
-
-$as_echo "#define HAVE_ANYLIB_ECDH_X25519 1" >>confdefs.h
-
 
             FEATURE_SASL_ECDH_X25519_CHALLENGE="Yes"
             LIBNETTLE_USABLE="Yes"
@@ -14275,15 +14250,6 @@ $as_echo "yes" >&6; }
 
 $as_echo "#define HAVE_LIBSODIUM_ECDH_X25519 1" >>confdefs.h
 
-
-
-    ECDH_X25519_TOOL_COND_D="ecdh-x25519-tool"
-
-
-
-$as_echo "#define HAVE_ANYLIB_ECDH_X25519 1" >>confdefs.h
-
-
             FEATURE_SASL_ECDH_X25519_CHALLENGE="Yes"
             LIBSODIUM_USABLE="Yes"
 
@@ -14452,6 +14418,8 @@ fi
 
 
 # Optional features
+# These must be after library tests, because some of them depend on the
+# library detection logic in the tests to set appropriate variables
 
 
     CONTRIB_MODULES="No"
@@ -14884,6 +14852,96 @@ fi
 
 
     LIBS="${LIBS_SAVED}"
+
+
+
+    ECDH_X25519_TOOL="No"
+
+    # Check whether --enable-ecdh-x25519-tool was given.
+if test "${enable_ecdh_x25519_tool+set}" = set; then :
+  enableval=$enable_ecdh_x25519_tool;
+else
+  enable_ecdh_x25519_tool="auto"
+fi
+
+
+    case "x${enable_ecdh_x25519_tool}" in
+        xauto | xyes | xno)
+            ;;
+        *)
+            as_fn_error $? "invalid option for --enable-ecdh-x25519-tool" "$LINENO" 5
+            ;;
+    esac
+
+    if test "${enable_ecdh_x25519_tool}" != "no"; then :
+
+        if test "x${FEATURE_SASL_ECDH_X25519_CHALLENGE}" = "xYes"; then :
+
+            ECDH_X25519_TOOL="Yes"
+
+
+    ECDH_X25519_TOOL_COND_D="ecdh-x25519-tool"
+
+
+
+$as_echo "#define HAVE_ANYLIB_ECDH_X25519 1" >>confdefs.h
+
+
+
+else
+
+            if test "${enable_ecdh_x25519_tool}" = "yes"; then :
+
+                as_fn_error $? "--enable-ecdh-x25519-tool requires a crypto library capable of X25519 ECDH" "$LINENO" 5
+
+fi
+
+fi
+
+fi
+
+
+
+    ECDSA_NIST256P_TOOLS="No"
+
+    # Check whether --enable-ecdsa-nist256p-tools was given.
+if test "${enable_ecdsa_nist256p_tools+set}" = set; then :
+  enableval=$enable_ecdsa_nist256p_tools;
+else
+  enable_ecdsa_nist256p_tools="auto"
+fi
+
+
+    case "x${enable_ecdsa_nist256p_tools}" in
+        xauto | xyes | xno)
+            ;;
+        *)
+            as_fn_error $? "invalid option for --enable-ecdsa-nist256p-tools" "$LINENO" 5
+            ;;
+    esac
+
+    if test "${enable_ecdsa_nist256p_tools}" != "no"; then :
+
+        if test "x${FEATURE_SASL_ECDSA_NIST256P_CHALLENGE}" = "xYes"; then :
+
+            ECDSA_NIST256P_TOOLS="Yes"
+
+
+    ECDSA_NIST256P_TOOLS_COND_D="ecdsadecode ecdsakeygen ecdsasign"
+
+
+
+else
+
+            if test "${enable_ecdsa_nist256p_tools}" = "yes"; then :
+
+                as_fn_error $? "--enable-ecdsa-nist256p-tools requires a crypto library capable of ECDSA with NIST P-256" "$LINENO" 5
+
+fi
+
+fi
+
+fi
 
 
 
@@ -22269,6 +22327,8 @@ Configuration of ${PACKAGE_STRING}:
     Contrib Modules .........: ${CONTRIB_MODULES}
     Crypto Benchmarking .....: ${CRYPTO_BENCHMARKING}
     Digest Frontend .........: ${DIGEST_FRONTEND}
+    ECDH-X25519 Tool ........: ${ECDH_X25519_TOOL}
+    ECDSA-NIST256P Tools ....: ${ECDSA_NIST256P_TOOLS}
     Heap Allocator ..........: ${HEAP_ALLOCATOR}
     Internationalization ....: ${USE_NLS}
     Large Network Support ...: ${LARGE_NET}

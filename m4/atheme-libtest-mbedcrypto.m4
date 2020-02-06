@@ -217,7 +217,6 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDCRYPTO], [
         ], [
             AC_MSG_RESULT([yes])
             AC_DEFINE([HAVE_LIBMBEDCRYPTO_ECDH_X25519], [1], [Define to 1 if libmbedcrypto can provide SASL ECDH-X25519-CHALLENGE])
-            ATHEME_COND_ECDH_X25519_TOOL_ENABLE
             FEATURE_SASL_ECDH_X25519_CHALLENGE="Yes"
             LIBMBEDCRYPTO_USABLE="Yes"
         ], [

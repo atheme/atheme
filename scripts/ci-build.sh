@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: ISC
 # SPDX-URL: https://spdx.org/licenses/ISC.html
 #
-# Copyright (C) 2018 Atheme Development Group (https://atheme.github.io/)
+# Copyright (C) 2018-2020 Atheme Development Group (https://atheme.github.io/)
 #
 # Bash script to execute the build and test steps necessary for
 # builds on Continuous Integration services (e.g. Travis CI).
@@ -34,6 +34,8 @@ esac
     --disable-linker-defs                                   \
     --enable-compiler-sanitizers                            \
     --enable-crypto-benchmarking                            \
+    --enable-ecdh-x25519-tool                               \
+    --enable-ecdsa-nist256p-tools                           \
     --enable-legacy-pwcrypto                                \
     --enable-nls                                            \
     --enable-reproducible-builds                            \

@@ -12,7 +12,7 @@ include ../extra.mk
 SUBDIRS =                           \
     ${CRYPTO_BENCHMARK_COND_D}      \
     ${ECDH_X25519_TOOL_COND_D}      \
-    ${ECDSA_TOOLS_COND_D}           \
+    ${ECDSA_NIST256P_TOOLS_COND_D}  \
     dbverify                        \
     services
 

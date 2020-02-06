@@ -84,6 +84,8 @@ Configuration of ${PACKAGE_STRING}:
     Contrib Modules .........: ${CONTRIB_MODULES}
     Crypto Benchmarking .....: ${CRYPTO_BENCHMARKING}
     Digest Frontend .........: ${DIGEST_FRONTEND}
+    ECDH-X25519 Tool ........: ${ECDH_X25519_TOOL}
+    ECDSA-NIST256P Tools ....: ${ECDSA_NIST256P_TOOLS}
     Heap Allocator ..........: ${HEAP_ALLOCATOR}
     Internationalization ....: ${USE_NLS}
     Large Network Support ...: ${LARGE_NET}

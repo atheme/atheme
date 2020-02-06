@@ -94,7 +94,6 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
         ], [
             AC_MSG_RESULT([yes])
             AC_DEFINE([HAVE_LIBNETTLE_ECDH_X25519], [1], [Define to 1 if GNU Nettle can provide SASL ECDH-X25519-CHALLENGE])
-            ATHEME_COND_ECDH_X25519_TOOL_ENABLE
             FEATURE_SASL_ECDH_X25519_CHALLENGE="Yes"
             LIBNETTLE_USABLE="Yes"
         ], [
