@@ -19,7 +19,7 @@ AC_DEFUN([ATHEME_LIBTEST_CLOCK_GETTIME], [
             LIBS="${CLOCK_GETTIME_LIBS} ${LIBS}"
         ])
 
-        AC_MSG_CHECKING([if clock_gettime(3) appears to be usable])
+        AC_MSG_CHECKING([if clock_gettime(2) appears to be usable])
         AC_LINK_IFELSE([
             AC_LANG_PROGRAM([[
                 #ifdef HAVE_TIME_H
