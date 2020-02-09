@@ -122,15 +122,6 @@ AC_DEFUN([ATHEME_CHECK_BUILD_REQUIREMENTS], [
     BUILDSYS_PROG_IMPLIB
     LIBS="${DYNAMIC_LD_LIBS} ${LIBS}"
 
-    # GNU gettext
-    AM_GNU_GETTEXT([external])
-    AM_GNU_GETTEXT_NEED([need-ngettext])
-    AM_GNU_GETTEXT_NEED([need-formatstring-macros])
-    AS_IF([test "x${USE_NLS}" = "xyes"], [
-        ATHEME_COND_NLS_ENABLE
-        LIBS="${LIBINTL} ${LIBS}"
-    ])
-
     # If we're building on Windows we need socket and regex libraries from mingw
     case "${host}" in
         *-*-mingw32)
