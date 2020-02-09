@@ -1541,7 +1541,7 @@ Optional Features:
                           libraries at link time)
   --disable-rpath         Disable -Wl,-rpath= (builds installation path into
                           binaries)
-  --disable-nls           Enable localization/translation support
+  --enable-nls            Enable localization/translation support
   --disable-rpath         do not hardcode runtime library paths
   --enable-warnings       Enable compiler warnings
 

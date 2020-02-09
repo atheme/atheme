@@ -11,7 +11,7 @@ AC_DEFUN([ATHEME_FEATURETEST_NLS], [
     USE_NLS="no"
 
     AC_ARG_ENABLE([nls],
-        [AS_HELP_STRING([--disable-nls], [Enable localization/translation support])],
+        [AS_HELP_STRING([--enable-nls], [Enable localization/translation support])],
         [], [enable_nls="no"])
 
     case "x${enable_nls}" in
