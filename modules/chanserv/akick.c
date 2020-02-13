@@ -9,62 +9,425 @@
 
 #include <atheme.h>
 
-struct akick_timeout
+#define DB_TYPE "AK"
+#define PRIVDATA_NAME "akicks"
+
+struct akick
 {
-	time_t expiration;
+	struct myentity *       entity;
+	struct mychan *         mychan;
+	char *                  host;
+	char *                  reason;
+	unsigned int            number;
+	time_t                  tmodified;
+	time_t                  expires;
+	char                    setter_uid[IDLEN + 1];
 
-	struct myentity *entity;
-	struct mychan *chan;
-
-	char host[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + 4];
-
-	mowgli_node_t node;
+	mowgli_node_t list_node;
+	mowgli_node_t timeout_node;
 };
 
-static time_t akickdel_next;
-static mowgli_list_t akickdel_list;
 
-static mowgli_heap_t *akick_timeout_heap = NULL;
+static mowgli_heap_t *akick_heap = NULL;
 static mowgli_patricia_t *cs_akick_cmds = NULL;
+
+static time_t next_akick_timeout;
+static mowgli_list_t akick_timeout_list;
 static mowgli_eventloop_timer_t *akick_timeout_check_timer = NULL;
 
-static void
-clear_bans_matching_entity(struct mychan *mc, struct myentity *mt)
+// Retrieves the list of akicks set on a channel, optionally allocating one
+// if it does not yet exist.
+static mowgli_list_t *
+channel_get_akicks(struct mychan *mc, bool create)
 {
-	mowgli_node_t *n;
-	struct myuser *tmu;
+	mowgli_list_t *l;
 
+	l = privatedata_get(mc, PRIVDATA_NAME);
+	if (l)
+		return l;
+
+	if (create)
+	{
+		l = mowgli_list_create();
+		privatedata_set(mc, PRIVDATA_NAME, l);
+
+		return l;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+// Free memory allocated for an akick and remove references to it from containing lists.
+static void
+akick_destroy(struct akick *ak)
+{
+	sfree(ak->reason);
+	sfree(ak->host);
+
+	mowgli_list_t *list = channel_get_akicks(ak->mychan, false);
+	mowgli_node_delete(&ak->list_node, list);
+
+	if (ak->expires)
+		mowgli_node_delete(&ak->timeout_node, &akick_timeout_list);
+
+	mowgli_heap_free(akick_heap, ak);
+}
+
+// Given a channel, find an akick against the given entity.
+// If 'literal' is set, the akick must be set against the literal entity given;
+// otherwise, any akick matching the given entity is returned.
+static struct akick *
+akick_find_entity(struct mychan *mc, struct myentity *mt, bool literal)
+{
+	mowgli_list_t *akick_list = channel_get_akicks(mc, false);
+
+	if (akick_list)
+	{
+		mowgli_node_t *n;
+
+		MOWGLI_ITER_FOREACH(n, akick_list->head)
+		{
+			struct akick *ak = n->data;
+
+			if (!ak->entity)
+				continue;
+
+			if (literal)
+			{
+				if (ak->entity == mt)
+					return ak;
+			}
+			else
+			{
+				const struct entity_vtable *vt = myentity_get_vtable(ak->entity);
+				if (vt->match_entity(ak->entity, mt))
+					return ak;
+			}
+		}
+	}
+
+	return NULL;
+}
+
+// Given a channel, find an akick against the given hostmask.
+// If 'literal' is set, the akick must be set against the literal hostmask given;
+// otherwise, any akick matching the given hostmask is returned.
+static struct akick *
+akick_find_host(struct mychan *mc, const char *host, bool literal)
+{
+	mowgli_list_t *akick_list = channel_get_akicks(mc, false);
+
+	if (akick_list)
+	{
+		mowgli_node_t *n;
+
+		MOWGLI_ITER_FOREACH(n, akick_list->head)
+		{
+			struct akick *ak = n->data;
+
+			if (!ak->host)
+				continue;
+
+			if (literal)
+			{
+				if (!strcmp(ak->host, host))
+					return ak;
+			}
+			else
+			{
+				if (!match(ak->host, host))
+					return ak;
+			}
+		}
+	}
+
+	return NULL;
+}
+
+// Given a channel, find an akick against the given user. Tries to return
+// a hostmask-based akick if possible.
+static struct akick *
+akick_find_by_user(struct mychan *mc, struct user *u)
+{
+	mowgli_list_t *akick_list = channel_get_akicks(mc, false);
+
+	if (akick_list)
+	{
+		mowgli_node_t *n;
+		// We try our best to return a hostmask-based akick to respect the user-specified
+		// ban mask, especially since our auto-generated account ban masks are far from clever.
+		// This reflects pre-7.3 akick behaviour as well.
+		// Maybe entity vtables should include a way to indicate a preferred ban mask
+		// so we can use e.g. account extbans on ircds that support them instead
+		struct akick *best = NULL;
+
+		MOWGLI_ITER_FOREACH(n, akick_list->head)
+		{
+			struct akick *ak = n->data;
+
+			if (ak->host)
+			{
+				if (mask_matches_user(ak->host, u))
+					return ak;
+			}
+			else // ak->entity
+			{
+				const struct entity_vtable *vt = myentity_get_vtable(ak->entity);
+
+				if (vt->match_user && vt->match_user(ak->entity, u))
+					best = ak;
+				else if (u->myuser && vt->match_entity(ak->entity, entity(u->myuser)))
+					best = ak;
+			}
+		}
+
+		return best;
+	}
+
+	return NULL;
+}
+
+// Enforce an akick against a given chanuser, typically placing a ban
+// and trying to kick the chanuser.
+// Returns whether the user was actually kicked.
+// This is only responsible for handling the actual kick/ban. Whether
+// the user should be affected, including checking if the akick matches
+// and testing for CA_EXEMPT, is handled by the caller.
+static bool
+akick_enforce(struct akick *ak, struct chanuser *cu)
+{
+	struct channel *chan = cu->chan;
+	struct user    *u    = cu->user;
+
+	return_val_if_fail(chan->mychan != NULL, false);
+
+	// Stay on channel if this would empty it -- jilles
+	if (chan->nummembers - chan->numsvcmembers == 1)
+	{
+		chan->mychan->flags |= MC_INHABIT;
+		if (chan->numsvcmembers == 0)
+			join(chan->name, chansvs.nick);
+	}
+
+	if (ak->host)
+	{
+		if (chanban_find(chan, ak->host, 'b') == NULL)
+		{
+			chanban_add(chan, ak->host, 'b');
+			modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'b', ak->host);
+			modestack_flush_channel(chan);
+		}
+	}
+	else
+	{
+		ban(chansvs.me->me, chan, u);
+	}
+	remove_ban_exceptions(chansvs.me->me, chan, u);
+
+	char akickreason[120] = "User is banned from this channel";
+
+	// if reason starts with a | it only has the private reason;
+	// don't disclose its existence
+	if (ak->reason && ak->reason[0] != '|')
+	{
+		snprintf(akickreason, sizeof akickreason,
+				"Banned: %s", ak->reason);
+		char *p = strchr(akickreason, '|');
+		if (p != NULL)
+			*p = '\0';
+		else
+			p = akickreason + strlen(akickreason);
+		/* strip trailing spaces, so as not to
+		 * disclose the existence of an oper reason */
+		p--;
+		while (p > akickreason && *p == ' ')
+			p--;
+		p[1] = '\0';
+	}
+
+	return try_kick(chansvs.me->me, chan, u, akickreason);
+}
+
+// Hook function; given a chanuser and applicable flags, enforces a matching akick
+// (if any) unless CA_EXEMPT is held.
+static void
+chanuser_sync(struct hook_chanuser_sync *hdata)
+{
+	struct chanuser *cu    = hdata->cu;
+	unsigned int     flags = hdata->flags;
+
+	if (!cu)
+		return;
+
+	if (flags & CA_EXEMPT)
+		return;
+
+	struct channel *chan = cu->chan;
+	struct user    *u    = cu->user;
+	struct mychan  *mc   = chan->mychan;
+
+	return_if_fail(mc != NULL);
+
+	struct akick *ak = akick_find_by_user(mc, u);
+
+	if (ak)
+	{
+		if (akick_enforce(ak, cu))
+			hdata->cu = NULL;
+	}
+}
+
+// Given an akick, enforces it against any matching chanusers given
+// they don't hold CA_EXEMPT.
+static void
+akick_sync(struct akick *ak)
+{
+	struct mychan *mc = ak->mychan;
 	if (mc->chan == NULL)
 		return;
+
+	mowgli_node_t *n, *tn;
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chan->members.head)
+	{
+		struct chanuser *cu = (struct chanuser *)n->data;
+
+		if (chanacs_user_flags(cu->chan->mychan, cu->user) & CA_EXEMPT)
+			continue;
+
+		if (ak->host)
+		{
+			if (mask_matches_user(ak->host, cu->user))
+				akick_enforce(ak, cu);
+		}
+		else // ak->entity
+		{
+			const struct entity_vtable *vt = myentity_get_vtable(ak->entity);
+
+			if (vt->match_user && vt->match_user(ak->entity, cu->user))
+				akick_enforce(ak, cu);
+			else if (cu->user->myuser && vt->match_entity(ak->entity, entity(cu->user->myuser)))
+				akick_enforce(ak, cu);
+		}
+	}
+}
+
+// Utility function to remove bans set against an entity.
+// Works on a best-effort basis, removing bans matching any user logged in
+// and only processing account-type entities.
+static void
+clear_bans_matching_entity(struct channel *chan, struct myentity *mt)
+{
+	return_if_fail(chan != NULL);
 
 	if (!isuser(mt))
 		return;
 
-	tmu = user(mt);
+	struct myuser *tmu = user(mt);
+
+	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, tmu->logins.head)
 	{
-		struct user *tu;
-		mowgli_node_t *it, *itn;
+		struct user *tu = n->data;
 
 		char hostbuf2[BUFSIZE];
-
-		tu = n->data;
-
 		snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->vhost);
-		for (it = next_matching_ban(mc->chan, tu, 'b', mc->chan->bans.head); it != NULL; it = next_matching_ban(mc->chan, tu, 'b', itn))
+
+		mowgli_node_t *it, *itn;
+		for (it = next_matching_ban(chan, tu, 'b', chan->bans.head); it != NULL; it = next_matching_ban(chan, tu, 'b', itn))
 		{
-			struct chanban *cb;
-
 			itn = it->next;
-			cb = it->data;
+			struct chanban *cb = it->data;
 
-			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, cb->type, cb->mask);
+			modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, cb->type, cb->mask);
 			chanban_delete(cb);
 		}
 	}
 
-	modestack_flush_channel(mc->chan);
+	modestack_flush_channel(chan);
+}
+
+// Called by the akick timer to process expired akicks, if any,
+// and update the timer as necessary.
+static void
+akick_timeout_check(void *arg)
+{
+	next_akick_timeout = 0;
+
+	slog(LG_DEBUG, "akick_timeout_check(): processing expiries at instant %llu", (unsigned long long)CURRTIME);
+
+	mowgli_node_t *n, *tn;
+
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, akick_timeout_list.head)
+	{
+		struct akick *ak = n->data;
+
+		if (ak->expires > CURRTIME)
+		{
+			slog(LG_DEBUG, "akick_timeout_check(): next akick expires at instant %llu, updating timer", (unsigned long long)ak->expires);
+			next_akick_timeout = ak->expires;
+			akick_timeout_check_timer = mowgli_timer_add_once(base_eventloop, "akick_timeout_check", akick_timeout_check, NULL, next_akick_timeout - CURRTIME);
+			break;
+		}
+
+		slog(LG_DEBUG, "akick_timeout_check(): akick expired at instant %llu, removing", (unsigned long long)ak->expires);
+
+		struct channel *chan = ak->mychan->chan;
+
+		if (chan)
+		{
+			if (ak->host)
+			{
+				struct chanban *cb = chanban_find(chan, ak->host, 'b');
+				if (cb)
+				{
+					modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, cb->type, cb->mask);
+					chanban_delete(cb);
+				}
+			}
+			else
+			{
+				clear_bans_matching_entity(chan, ak->entity);
+			}
+		}
+
+		akick_destroy(ak);
+	}
+}
+
+// Given a timed akick, this function takes care of any necessary bookkeeping
+// with the expiry list and timer.
+static void
+akick_add_timeout(struct akick *ak)
+{
+	return_if_fail(ak->expires != 0);
+
+	mowgli_node_t *n;
+
+	MOWGLI_ITER_FOREACH_PREV(n, akick_timeout_list.tail)
+	{
+		struct akick *next = n->data;
+		if (next->expires <= ak->expires)
+			break;
+	}
+
+	if (n == NULL)
+		mowgli_node_add_head(ak, &ak->timeout_node, &akick_timeout_list);
+	else if (n->next == NULL)
+		mowgli_node_add(ak, &ak->timeout_node, &akick_timeout_list);
+	else
+		mowgli_node_add_before(ak, &ak->timeout_node, &akick_timeout_list, n->next);
+
+	if (next_akick_timeout == 0 || next_akick_timeout > ak->expires)
+	{
+		if (next_akick_timeout != 0)
+			mowgli_timer_destroy(base_eventloop, akick_timeout_check_timer);
+
+		next_akick_timeout = ak->expires;
+		akick_timeout_check_timer = mowgli_timer_add_once(base_eventloop, "akick_timeout_check", akick_timeout_check, NULL, next_akick_timeout - CURRTIME);
+	}
 }
 
 static void
@@ -103,112 +466,15 @@ cs_cmd_akick(struct sourceinfo *const restrict si, const int parc, char **const 
 	(void) subcommand_dispatch_simple(chansvs.me, si, parc, parv, cs_akick_cmds, "AKICK");
 }
 
-static struct akick_timeout *
-akick_add_timeout(struct mychan *mc, struct myentity *mt, const char *host, time_t expireson)
-{
-	mowgli_node_t *n;
-	struct akick_timeout *timeout, *timeout2;
-
-	timeout = mowgli_heap_alloc(akick_timeout_heap);
-
-	timeout->entity = mt;
-	timeout->chan = mc;
-	timeout->expiration = expireson;
-
-	mowgli_strlcpy(timeout->host, host, sizeof timeout->host);
-
-	MOWGLI_ITER_FOREACH_PREV(n, akickdel_list.tail)
-	{
-		timeout2 = n->data;
-		if (timeout2->expiration <= timeout->expiration)
-			break;
-	}
-	if (n == NULL)
-		mowgli_node_add_head(timeout, &timeout->node, &akickdel_list);
-	else if (n->next == NULL)
-		mowgli_node_add(timeout, &timeout->node, &akickdel_list);
-	else
-		mowgli_node_add_before(timeout, &timeout->node, &akickdel_list, n->next);
-
-	return timeout;
-}
-
-static void
-akick_timeout_check(void *arg)
-{
-	mowgli_node_t *n, *tn;
-	struct akick_timeout *timeout;
-	struct chanacs *ca;
-	struct mychan *mc;
-
-	struct chanban *cb;
-	akickdel_next = 0;
-
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, akickdel_list.head)
-	{
-		timeout = n->data;
-		mc = timeout->chan;
-
-		if (timeout->expiration > CURRTIME)
-		{
-			akickdel_next = timeout->expiration;
-			akick_timeout_check_timer = mowgli_timer_add_once(base_eventloop, "akick_timeout_check", akick_timeout_check, NULL, akickdel_next - CURRTIME);
-			break;
-		}
-
-		ca = NULL;
-
-		if (timeout->entity == NULL)
-		{
-			if ((ca = chanacs_find_host_literal(mc, timeout->host, CA_AKICK)) && mc->chan != NULL && (cb = chanban_find(mc->chan, ca->host, 'b')))
-			{
-				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, cb->type, cb->mask);
-				chanban_delete(cb);
-			}
-		}
-		else
-		{
-			ca = chanacs_find_literal(mc, timeout->entity, CA_AKICK);
-			if (ca == NULL)
-			{
-				mowgli_node_delete(&timeout->node, &akickdel_list);
-				mowgli_heap_free(akick_timeout_heap, timeout);
-
-				continue;
-			}
-
-			clear_bans_matching_entity(mc, timeout->entity);
-		}
-
-		if (ca)
-		{
-			chanacs_modify_simple(ca, 0, CA_AKICK, NULL);
-			chanacs_close(ca);
-		}
-
-		mowgli_node_delete(&timeout->node, &akickdel_list);
-		mowgli_heap_free(akick_timeout_heap, timeout);
-	}
-}
-
 static void
 cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 {
-	struct myentity *mt;
-	struct mychan *mc;
 	struct hook_channel_acl_req req;
 	struct chanacs *ca, *ca2;
-	char *chan = parv[0];
-	long duration;
-	char expiry[512];
-	char *s;
-	char *target;
-	char *uname;
-	char *token;
-	char *treason, reason[BUFSIZE];
 
-	target = parv[1];
-	token = strtok(parv[2], " ");
+	char *chan = parv[0];
+	char *target = parv[1];
+	char *token = strtok(parv[2], " ");
 
 	if (!target)
 	{
@@ -217,7 +483,7 @@ cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	mc = mychan_find(chan);
+	struct mychan *mc = mychan_find(chan);
 	if (!mc)
 	{
 		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, chan);
@@ -230,13 +496,16 @@ cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	long duration;
+	char reason[BUFSIZE];
+
 	// A duration, reason or duration and reason.
 	if (token)
 	{
 		if (!strcasecmp(token, "!P")) // A duration [permanent]
 		{
 			duration = 0;
-			treason = strtok(NULL, "");
+			const char *treason = strtok(NULL, "");
 
 			if (treason)
 				mowgli_strlcpy(reason, treason, BUFSIZE);
@@ -245,8 +514,8 @@ cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 		}
 		else if (!strcasecmp(token, "!T")) // A duration [temporary]
 		{
-			s = strtok(NULL, " ");
-			treason = strtok(NULL, "");
+			const char *s = strtok(NULL, " ");
+			const char *treason = strtok(NULL, "");
 
 			if (treason)
 				mowgli_strlcpy(reason, treason, BUFSIZE);
@@ -287,7 +556,7 @@ cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 		{
 			duration = chansvs.akick_time;
 			mowgli_strlcpy(reason, token, BUFSIZE);
-			treason = strtok(NULL, "");
+			const char *treason = strtok(NULL, "");
 
 			if (treason)
 			{
@@ -309,169 +578,107 @@ cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	mt = myentity_find_ext(target);
-	if (!mt)
+	// Check if we're adding an entity or a hostmask
+	struct myentity *mt = myentity_find_ext(target);
+	char *hostmask = NULL;
+	if (mt)
 	{
-		uname = pretty_mask(target);
-		if (uname == NULL)
-			uname = target;
-
-		// we might be adding a hostmask
-		if (!validhostmask(uname))
+		if (akick_find_entity(mc, mt, true))
 		{
-			command_fail(si, fault_badparams, _("\2%s\2 is neither a nickname nor a hostmask."), uname);
+			command_fail(si, fault_nochange, _("\2%s\2 is already on the AKICK list for \2%s\2"), mt->name, mc->name);
 			return;
 		}
-
-		uname = collapse(uname);
-
-		ca = chanacs_find_host_literal(mc, uname, 0);
-		if (ca != NULL)
-		{
-			if (ca->level & CA_AKICK)
-				command_fail(si, fault_nochange, _("\2%s\2 is already on the AKICK list for \2%s\2"), uname, mc->name);
-			else
-				command_fail(si, fault_alreadyexists, _("\2%s\2 already has flags \2%s\2 on \2%s\2"), uname, bitmask_to_flags(ca->level), mc->name);
-			return;
-		}
-
-		ca = chanacs_find_host(mc, uname, CA_AKICK);
-		if (ca != NULL)
-		{
-			command_fail(si, fault_nochange, _("The more general mask \2%s\2 is already on the AKICK list for \2%s\2"), ca->host, mc->name);
-			return;
-		}
-
-		// new entry
-		ca2 = chanacs_open(mc, NULL, uname, true, entity(si->smu));
-		if (chanacs_is_table_full(ca2))
-		{
-			command_fail(si, fault_toomany, _("Channel \2%s\2 access list is full."), mc->name);
-			chanacs_close(ca2);
-			return;
-		}
-
-		req.ca = ca2;
-		req.oldlevel = ca2->level;
-
-		chanacs_modify_simple(ca2, CA_AKICK, 0, si->smu);
-
-		req.newlevel = ca2->level;
-
-		if (reason[0])
-			metadata_add(ca2, "reason", reason);
-
-		if (duration > 0)
-		{
-			struct akick_timeout *timeout;
-			time_t expireson = ca2->tmodified+duration;
-
-			snprintf(expiry, sizeof expiry, "%ld", expireson);
-			metadata_add(ca2, "expires", expiry);
-
-			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list, expires in %s.", get_source_name(si), uname,timediff(duration));
-			logcommand(si, CMDLOG_SET, "AKICK:ADD: \2%s\2 on \2%s\2, expires in %s.", uname, mc->name,timediff(duration));
-			command_success_nodata(si, _("AKICK on \2%s\2 was successfully added for \2%s\2 and will expire in %s."), uname, mc->name,timediff(duration) );
-
-			timeout = akick_add_timeout(mc, NULL, uname, expireson);
-
-			if (akickdel_next == 0 || akickdel_next > timeout->expiration)
-			{
-				if (akickdel_next != 0)
-					mowgli_timer_destroy(base_eventloop, akick_timeout_check_timer);
-
-				akickdel_next = timeout->expiration;
-				akick_timeout_check_timer = mowgli_timer_add_once(base_eventloop, "akick_timeout_check", akick_timeout_check, NULL, akickdel_next - CURRTIME);
-			}
-		}
-		else
-		{
-			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", get_source_name(si), uname);
-			logcommand(si, CMDLOG_SET, "AKICK:ADD: \2%s\2 on \2%s\2", uname, mc->name);
-
-			command_success_nodata(si, _("AKICK on \2%s\2 was successfully added to the AKICK list for \2%s\2."), uname, mc->name);
-		}
-
-		hook_call_channel_acl_change(&req);
-		chanacs_close(ca2);
-
-		return;
 	}
 	else
 	{
-		if ((ca = chanacs_find_literal(mc, mt, 0x0)))
+		// The hostmask case is more complicated than it should be, unfortunately
+		hostmask = pretty_mask(target);
+		if (hostmask == NULL)
+			hostmask = target;
+
+		if (!validhostmask(hostmask))
 		{
-			if (ca->level & CA_AKICK)
-				command_fail(si, fault_nochange, _("\2%s\2 is already on the AKICK list for \2%s\2"), mt->name, mc->name);
-			else
-				command_fail(si, fault_alreadyexists, _("\2%s\2 already has flags \2%s\2 on \2%s\2"), mt->name, bitmask_to_flags(ca->level), mc->name);
+			command_fail(si, fault_badparams, _("\2%s\2 is neither a nickname nor a hostmask."), hostmask);
 			return;
 		}
 
-		// new entry
-		ca2 = chanacs_open(mc, mt, NULL, true, entity(si->smu));
-		if (chanacs_is_table_full(ca2))
+		hostmask = collapse(hostmask);
+
+		struct akick *existing = akick_find_host(mc, hostmask, true);
+
+		if (existing)
 		{
-			command_fail(si, fault_toomany, _("Channel \2%s\2 access list is full."), mc->name);
-			chanacs_close(ca2);
+			command_fail(si, fault_nochange, _("\2%s\2 is already on the AKICK list for \2%s\2"), hostmask, mc->name);
 			return;
 		}
 
-		req.ca = ca2;
-		req.oldlevel = ca2->level;
-
-		chanacs_modify_simple(ca2, CA_AKICK, 0, si->smu);
-
-		req.newlevel = ca2->level;
-
-		if (reason[0])
-			metadata_add(ca2, "reason", reason);
-
-		if (duration > 0)
+		existing = akick_find_host(mc, hostmask, false);
+		if (existing)
 		{
-			struct akick_timeout *timeout;
-			time_t expireson = ca2->tmodified+duration;
-
-			snprintf(expiry, sizeof expiry, "%ld", expireson);
-			metadata_add(ca2, "expires", expiry);
-
-			command_success_nodata(si, _("AKICK on \2%s\2 was successfully added for \2%s\2 and will expire in %s."), mt->name, mc->name, timediff(duration));
-			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list, expires in %s.", get_source_name(si), mt->name, timediff(duration));
-			logcommand(si, CMDLOG_SET, "AKICK:ADD: \2%s\2 on \2%s\2, expires in %s", mt->name, mc->name, timediff(duration));
-
-			timeout = akick_add_timeout(mc, mt, mt->name, expireson);
-
-			if (akickdel_next == 0 || akickdel_next > timeout->expiration)
-			{
-				if (akickdel_next != 0)
-					mowgli_timer_destroy(base_eventloop, akick_timeout_check_timer);
-
-				akickdel_next = timeout->expiration;
-				akick_timeout_check_timer = mowgli_timer_add_once(base_eventloop, "akick_timeout_check", akick_timeout_check, NULL, akickdel_next - CURRTIME);
-			}
+			command_fail(si, fault_nochange, _("The more general mask \2%s\2 is already on the AKICK list for \2%s\2"), existing->host, mc->name);
+			return;
 		}
-		else
-		{
-			command_success_nodata(si, _("AKICK on \2%s\2 was successfully added to the AKICK list for \2%s\2."), mt->name, mc->name);
-
-			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", get_source_name(si), mt->name);
-			logcommand(si, CMDLOG_SET, "AKICK:ADD: \2%s\2 on \2%s\2", mt->name, mc->name);
-		}
-
-		hook_call_channel_acl_change(&req);
-		chanacs_close(ca2);
-		return;
 	}
+
+	// Once we got here, we know we're all set to add an akick on either an entity or a hostmask
+	// TODO: check if list is full
+
+	mowgli_list_t *akick_list = channel_get_akicks(mc, true);
+
+	unsigned int next_number = 1;
+
+	// For assigning akick IDs, the following rules apply:
+	// - The first akick gets an ID of 1.
+	// - A given akick maintains its ID over its entire lifetime, until removed.
+	// - IDs reflect the order of akick creation.
+	//
+	// With the current scheme, we do not guarantee that an akick ID will not be reused;
+	// in fact, removing the highest-numbered akick will guarantee reuse of IDs.
+	if (akick_list && akick_list->tail)
+		next_number = ((struct akick*)akick_list->tail->data)->number + 1;
+
+	struct akick *ak = mowgli_heap_alloc(akick_heap);
+	ak->mychan    = mc;
+	ak->number    = next_number;
+	ak->tmodified = CURRTIME;
+	mowgli_strlcpy(ak->setter_uid, entity(si->smu)->id, sizeof ak->setter_uid);
+
+	if (mt)
+		ak->entity = mt;
+	else
+		ak->host   = sstrdup(hostmask);
+
+	if (duration > 0)
+		ak->expires = CURRTIME + duration;
+
+	if (*reason)
+		ak->reason = sstrdup(reason);
+
+	mowgli_node_add(ak, &ak->list_node, akick_list);
+
+	const char *display_target = mt ? mt->name : hostmask;
+
+	if (duration > 0)
+	{
+		command_success_nodata(si, _("AKICK on \2%s\2 was successfully added for \2%s\2 and will expire in %s."), display_target, mc->name, timediff(duration));
+		verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list, expires in %s.", get_source_name(si), display_target, timediff(duration));
+		logcommand(si, CMDLOG_SET, "AKICK:ADD: \2%s\2 on \2%s\2, expires in %s", display_target, mc->name, timediff(duration));
+
+		akick_add_timeout(ak);
+	}
+	else
+	{
+		command_success_nodata(si, _("AKICK on \2%s\2 was successfully added to the AKICK list for \2%s\2."), display_target, mc->name);
+		verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", get_source_name(si), display_target);
+		logcommand(si, CMDLOG_SET, "AKICK:ADD: \2%s\2 on \2%s\2", display_target, mc->name);
+	}
+
+	akick_sync(ak);
 }
 
 static void
 cs_cmd_akick_del(struct sourceinfo *si, int parc, char *parv[])
 {
-	struct myentity *mt;
-	struct mychan *mc;
-	struct hook_channel_acl_req req;
-	struct chanacs *ca;
-	mowgli_node_t *n, *tn;
 	char *chan = parv[0];
 	char *uname = parv[1];
 
@@ -482,7 +689,7 @@ cs_cmd_akick_del(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	mc = mychan_find(chan);
+	struct mychan *mc = mychan_find(chan);
 	if (!mc)
 	{
 		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, chan);
@@ -495,108 +702,56 @@ cs_cmd_akick_del(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	struct akick_timeout *timeout;
-	struct chanban *cb;
-
 	if ((chanacs_source_flags(mc, si) & (CA_FLAGS | CA_REMOVE)) != (CA_FLAGS | CA_REMOVE))
 	{
 		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 
-	mt = myentity_find_ext(uname);
-	if (!mt)
+	struct myentity *mt = myentity_find_ext(uname);
+
+	mowgli_list_t *akick_list = channel_get_akicks(mc, false);
+
+	const char *removed = mt ? mt->name : uname;
+
+	if (akick_list)
 	{
-		// we might be deleting a hostmask
-		ca = chanacs_find_host_literal(mc, uname, CA_AKICK);
-		if (ca == NULL)
+		struct akick *ak = NULL;
+
+		if (mt)
+			ak = akick_find_entity(mc, mt, true);
+		else
+			ak = akick_find_host(mc, uname, true);
+
+		if (ak)
 		{
-			ca = chanacs_find_host(mc, uname, CA_AKICK);
-			if (ca != NULL)
-				command_fail(si, fault_nosuch_key, _("\2%s\2 is not on the AKICK list for \2%s\2, however \2%s\2 is."), uname, mc->name, ca->host);
-			else
-				command_fail(si, fault_nosuch_key, _("\2%s\2 is not on the AKICK list for \2%s\2."), uname, mc->name);
+			command_success_nodata(si, _("\2%s\2 has been removed from the AKICK list for \2%s\2."), removed, mc->name);
+			logcommand(si, CMDLOG_SET, "AKICK:DEL: \2%s\2 on \2%s\2", removed, mc->name);
+			verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", get_source_name(si), removed);
+
+			struct chanban *cb;
+			if (ak->host && mc->chan != NULL && (cb = chanban_find(mc->chan, ak->host, 'b')))
+			{
+				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, cb->type, cb->mask);
+				chanban_delete(cb);
+			}
+			else if (ak->entity && mc->chan != NULL)
+			{
+				clear_bans_matching_entity(mc->chan, ak->entity);
+			}
+
+			akick_destroy(ak);
 			return;
 		}
-
-		req.ca = ca;
-		req.oldlevel = ca->level;
-
-		chanacs_modify_simple(ca, 0, CA_AKICK, si->smu);
-
-		req.newlevel = ca->level;
-
-		hook_call_channel_acl_change(&req);
-		chanacs_close(ca);
-
-		verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", get_source_name(si), uname);
-		logcommand(si, CMDLOG_SET, "AKICK:DEL: \2%s\2 on \2%s\2", uname, mc->name);
-		command_success_nodata(si, _("\2%s\2 has been removed from the AKICK list for \2%s\2."), uname, mc->name);
-
-		MOWGLI_ITER_FOREACH_SAFE(n, tn, akickdel_list.head)
-		{
-			timeout = n->data;
-			if (!match(timeout->host, uname) && timeout->chan == mc)
-			{
-				mowgli_node_delete(&timeout->node, &akickdel_list);
-				mowgli_heap_free(akick_timeout_heap, timeout);
-			}
-		}
-
-		if (mc->chan != NULL && (cb = chanban_find(mc->chan, uname, 'b')))
-		{
-			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, cb->type, cb->mask);
-			chanban_delete(cb);
-		}
-
-		return;
 	}
 
-	if (!(ca = chanacs_find_literal(mc, mt, CA_AKICK)))
-	{
-		command_fail(si, fault_nosuch_key, _("\2%s\2 is not on the AKICK list for \2%s\2."), mt->name, mc->name);
-		return;
-	}
-
-	clear_bans_matching_entity(mc, mt);
-
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, akickdel_list.head)
-	{
-		timeout = n->data;
-		if (timeout->entity == mt && timeout->chan == mc)
-		{
-			mowgli_node_delete(&timeout->node, &akickdel_list);
-			mowgli_heap_free(akick_timeout_heap, timeout);
-		}
-	}
-
-	req.ca = ca;
-	req.oldlevel = ca->level;
-
-	chanacs_modify_simple(ca, 0, CA_AKICK, si->smu);
-
-	req.newlevel = ca->level;
-
-	hook_call_channel_acl_change(&req);
-	chanacs_close(ca);
-
-	command_success_nodata(si, _("\2%s\2 has been removed from the AKICK list for \2%s\2."), mt->name, mc->name);
-	logcommand(si, CMDLOG_SET, "AKICK:DEL: \2%s\2 on \2%s\2", mt->name, mc->name);
-	verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", get_source_name(si), mt->name);
-
-	return;
+	command_fail(si, fault_nosuch_key, _("\2%s\2 is not on the AKICK list for \2%s\2."), removed, mc->name);
 }
 
 static void
 cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 {
-	struct mychan *mc;
-	struct chanacs *ca;
-	struct metadata *md, *md2;
-	mowgli_node_t *n, *tn;
-	bool operoverride = false;
 	char *chan = parv[0];
-	char expiry[512];
 
 	if (!chan)
 	{
@@ -619,7 +774,7 @@ cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 		}
 	}
 
-	mc = mychan_find(chan);
+	struct mychan *mc = mychan_find(chan);
 	if (!mc)
 	{
 		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, chan);
@@ -632,8 +787,7 @@ cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	unsigned int i = 0;
-
+	bool operoverride = false;
 	if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 	{
 		if (has_priv(si, PRIV_CHAN_AUSPEX))
@@ -646,52 +800,49 @@ cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 	}
 	command_success_nodata(si, _("AKICK list for \2%s\2:"), mc->name);
 
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chanacs.head)
+	unsigned int i = 0;
+
+	mowgli_list_t *akick_list = channel_get_akicks(mc, false);
+
+	if (akick_list)
 	{
-		time_t expires_on = 0;
-		char *ago;
-		long time_left = 0;
-
-		ca = (struct chanacs *)n->data;
-
-		if (ca->level == CA_AKICK)
+		mowgli_node_t *n;
+		MOWGLI_ITER_FOREACH(n, akick_list->head)
 		{
-			char buf[BUFSIZE], *buf_iter;
-			struct myentity *setter = NULL;
-
-			md = metadata_find(ca, "reason");
+			struct akick *ak = n->data;
 
 			// check if it's a temporary akick
-			if ((md2 = metadata_find(ca, "expires")))
-			{
-				snprintf(expiry, sizeof expiry, "%s", md2->value);
-				expires_on = (time_t)atol(expiry);
-				time_left = difftime(expires_on, CURRTIME);
-			}
-			ago = ca->tmodified ? time_ago(ca->tmodified) : "?";
+			long time_left = 0;
+			if (ak->expires)
+				time_left = difftime(ak->expires, CURRTIME);
 
-			buf_iter = buf;
+			char *ago = time_ago(ak->tmodified);
+
+			char buf[BUFSIZE];
+			char *buf_iter = buf;
 			buf_iter += snprintf(buf_iter, sizeof(buf) - (buf_iter - buf), "%u: \2%s\2 (\2%s\2) [",
-					     ++i, ca->entity != NULL ? ca->entity->name : ca->host,
-					     md != NULL ? md->value : _("no AKICK reason specified"));
+					ak->number, ak->entity != NULL ? ak->entity->name : ak->host,
+					ak->reason ? ak->reason : _("no AKICK reason specified"));
 
-			if (*ca->setter_uid != '\0' && (setter = myentity_find_uid(ca->setter_uid)))
+			struct myentity *setter = NULL;
+
+			if (*ak->setter_uid != '\0' && (setter = myentity_find_uid(ak->setter_uid)))
 				buf_iter += snprintf(buf_iter, sizeof(buf) - (buf_iter - buf), _("setter: %s"),
-						     setter->name);
+						setter->name);
 
-			if (expires_on > 0)
+			if (ak->expires > 0)
 				buf_iter += snprintf(buf_iter, sizeof(buf) - (buf_iter - buf), _("%sexpires: %s"),
-						     setter != NULL ? ", " : "", timediff(time_left));
+						setter != NULL ? ", " : "", timediff(time_left));
 
-			if (ca->tmodified)
-				buf_iter += snprintf(buf_iter, sizeof(buf) - (buf_iter - buf), _("%smodified: %s"),
-						     expires_on > 0 || setter != NULL ? ", " : "", ago);
+			buf_iter += snprintf(buf_iter, sizeof(buf) - (buf_iter - buf), _("%smodified: %s"),
+					ak->expires > 0 || setter != NULL ? ", " : "", ago);
 
 			mowgli_strlcat(buf, "]", sizeof buf);
 
 			command_success_nodata(si, "%s", buf);
-		}
 
+			i++;
+		}
 	}
 
 	command_success_nodata(si, _("Total of \2%u\2 entries in \2%s\2's AKICK list."), i, mc->name);
@@ -702,128 +853,10 @@ cs_cmd_akick_list(struct sourceinfo *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_GET, "AKICK:LIST: \2%s\2", mc->name);
 }
 
-static void
-akickdel_list_create(void *arg)
-{
-	struct mychan *mc;
-	mowgli_node_t *n, *tn;
-	struct chanacs *ca;
-	struct metadata *md;
-	time_t expireson;
-
-	mowgli_patricia_iteration_state_t state;
-
-	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
-	{
-		MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chanacs.head)
-		{
-			ca = (struct chanacs *)n->data;
-
-			if (!(ca->level & CA_AKICK))
-				continue;
-
-			md = metadata_find(ca, "expires");
-
-			if (!md)
-				continue;
-
-			expireson = atol(md->value);
-
-			if (CURRTIME > expireson)
-			{
-				chanacs_modify_simple(ca, 0, CA_AKICK, NULL);
-				chanacs_close(ca);
-			}
-			else
-			{
-				// overcomplicate the logic here a tiny bit
-				if (ca->host == NULL && ca->entity != NULL)
-					akick_add_timeout(mc, ca->entity, entity(ca->entity)->name, expireson);
-				else if (ca->host != NULL && ca->entity == NULL)
-					akick_add_timeout(mc, NULL, ca->host, expireson);
-			}
-		}
-	}
-}
-
-static void
-chanuser_sync(struct hook_chanuser_sync *hdata)
-{
-	struct chanuser *cu    = hdata->cu;
-	unsigned int     flags = hdata->flags;
-
-	if (!cu)
-		return;
-
-	struct channel *chan = cu->chan;
-	struct user    *u    = cu->user;
-	struct mychan  *mc   = chan->mychan;
-
-	return_if_fail(mc != NULL);
-
-	if (flags & CA_AKICK && !(flags & CA_EXEMPT))
-	{
-		// Stay on channel if this would empty it -- jilles
-		if (chan->nummembers - chan->numsvcmembers == 1)
-		{
-			mc->flags |= MC_INHABIT;
-			if (chan->numsvcmembers == 0)
-				join(chan->name, chansvs.nick);
-		}
-
-		// use a user-given ban mask if possible -- jilles
-		struct chanacs *ca = chanacs_find_host_by_user(mc, u, CA_AKICK);
-		if (ca != NULL)
-		{
-			if (chanban_find(chan, ca->host, 'b') == NULL)
-			{
-				chanban_add(chan, ca->host, 'b');
-				modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'b', ca->host);
-				modestack_flush_channel(chan);
-			}
-		}
-		else
-		{
-			// XXX this could be done more efficiently
-			ca = chanacs_find(mc, entity(u->myuser), CA_AKICK);
-			ban(chansvs.me->me, chan, u);
-		}
-		remove_ban_exceptions(chansvs.me->me, chan, u);
-
-		char akickreason[120] = "User is banned from this channel", *p;
-
-		if (ca != NULL)
-		{
-			struct metadata *md = metadata_find(ca, "reason");
-			if (md != NULL && *md->value != '|')
-			{
-				snprintf(akickreason, sizeof akickreason,
-						"Banned: %s", md->value);
-				p = strchr(akickreason, '|');
-				if (p != NULL)
-					*p = '\0';
-				else
-					p = akickreason + strlen(akickreason);
-				/* strip trailing spaces, so as not to
-				 * disclose the existence of an oper reason */
-				p--;
-				while (p > akickreason && *p == ' ')
-					p--;
-				p[1] = '\0';
-			}
-		}
-		if (try_kick(chansvs.me->me, chan, u, akickreason))
-		{
-			hdata->cu = NULL;
-			return;
-		}
-	}
-}
-
 static struct command cs_akick = {
 	.name           = "AKICK",
 	.desc           = N_("Manipulates a channel's AKICK list."),
-	.access         = AC_NONE,
+	.access         = AC_AUTHENTICATED,
 	.maxparc        = 4,
 	.cmd            = &cs_cmd_akick,
 	.help           = { .path = "cservice/akick" },
@@ -857,11 +890,103 @@ static struct command cs_akick_list = {
 };
 
 static void
+write_akicks_db(struct database_handle *db)
+{
+	mowgli_patricia_iteration_state_t state;
+	struct mychan *mc;
+
+	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
+	{
+		mowgli_list_t *akick_list = channel_get_akicks(mc, false);
+		mowgli_node_t *n;
+
+		if (!akick_list)
+			continue;
+
+		MOWGLI_ITER_FOREACH(n, akick_list->head)
+		{
+			struct akick *ak = n->data;
+
+			db_start_row(db, DB_TYPE);
+			db_write_word(db, ak->mychan->name);
+			db_write_uint(db, ak->number);
+			if (ak->entity)
+				db_write_word(db, ak->entity->name);
+			else
+				db_write_word(db, ak->host);
+			db_write_word(db, ak->setter_uid);
+			db_write_time(db, ak->tmodified);
+			db_write_time(db, ak->expires);
+			if (ak->reason)
+				db_write_str(db, ak->reason);
+			else
+				db_write_str(db, "");
+			db_commit_row(db);
+		}
+	}
+}
+
+static void
+db_h_ak(struct database_handle *db, const char *type)
+{
+	const char *chan_name  = db_sread_word(db);
+	unsigned int number    = db_sread_uint(db);
+	const char *target     = db_sread_word(db);
+	const char *setter_uid = db_sread_word(db);
+	time_t tmodified       = db_sread_time(db);
+	time_t expires         = db_sread_time(db);
+	const char *reason     = db_sread_str(db);
+
+	struct mychan *mc = mychan_find(chan_name);
+
+	if (!mc)
+	{
+		slog(LG_ERROR, "chanserv/akick: DB line %u: akick for nonexistent channel %s - exiting to avoid data loss", db->line, chan_name);
+		exit(EXIT_FAILURE);
+	}
+
+	struct akick *ak = mowgli_heap_alloc(akick_heap);
+	ak->mychan    = mc;
+	ak->number    = number;
+	ak->tmodified = tmodified;
+	ak->expires   = expires;
+
+	if (reason[0])
+		ak->reason = sstrdup(reason);
+	else
+		ak->reason = NULL;
+
+	mowgli_strlcpy(ak->setter_uid, setter_uid, sizeof ak->setter_uid);
+
+	struct myentity *mt = myentity_find(target);
+	if (mt)
+	{
+		ak->entity = mt;
+	}
+	else if (validhostmask(target))
+	{
+		ak->host = sstrdup(target);
+	}
+	else
+	{
+		slog(LG_ERROR, "chanserv/akick: DB line %u: akick for nonexistent target %s - exiting to avoid data loss", db->line, target);
+		exit(EXIT_FAILURE);
+	}
+
+	mowgli_list_t *mc_akick_list = channel_get_akicks(mc, true);
+	mowgli_node_add(ak, &ak->list_node, mc_akick_list);
+
+	if (ak->expires)
+		akick_add_timeout(ak);
+}
+
+static void
 mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/main")
 
-	if (! (akick_timeout_heap = mowgli_heap_create(sizeof(struct akick_timeout), 512, BH_NOW)))
+	//if (! (akick_heap = mowgli_heap_create(sizeof(struct akick_timeout), 512, BH_NOW)))
+	if (! (akick_heap = mowgli_heap_create(sizeof(struct akick), 512, BH_NOW)))
 	{
 		(void) slog(LG_ERROR, "%s: mowgli_heap_create() failed", m->name);
 
@@ -873,7 +998,7 @@ mod_init(struct module *const restrict m)
 	{
 		(void) slog(LG_ERROR, "%s: mowgli_patricia_create() failed", m->name);
 
-		(void) mowgli_heap_destroy(akick_timeout_heap);
+		(void) mowgli_heap_destroy(akick_heap);
 
 		m->mflags |= MODFLAG_FAIL;
 		return;
@@ -885,21 +1010,25 @@ mod_init(struct module *const restrict m)
 
 	(void) service_named_bind_command("chanserv", &cs_akick);
 
-	(void) mowgli_timer_add_once(base_eventloop, "akickdel_list_create", &akickdel_list_create, NULL, 0);
-
 	(void) hook_add_first_chanuser_sync(&chanuser_sync);
+	(void) hook_add_db_write(&write_akicks_db);
+
+	(void) db_register_type_handler(DB_TYPE, db_h_ak);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	(void) hook_del_chanuser_sync(&chanuser_sync);
+	(void) hook_del_db_write(&write_akicks_db);
+
+	(void) db_unregister_type_handler(DB_TYPE);
 
 	(void) service_named_unbind_command("chanserv", &cs_akick);
 
 	(void) mowgli_patricia_destroy(cs_akick_cmds, &command_delete_trie_cb, cs_akick_cmds);
 
-	(void) mowgli_heap_destroy(akick_timeout_heap);
+	(void) mowgli_heap_destroy(akick_heap);
 }
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/akick", MODULE_UNLOAD_CAPABILITY_OK)
+SIMPLE_DECLARE_MODULE_V1("chanserv/akick", MODULE_UNLOAD_CAPABILITY_NEVER)
