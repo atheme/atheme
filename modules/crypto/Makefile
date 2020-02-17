@@ -11,9 +11,9 @@
 
 include ../../extra.mk
 
-MODULE = crypto
-SRCS   =                            \
-    ${LEGACY_PWCRYPTO_COND_C}       \
+SUBDIRS = ${LEGACY_PWCRYPTO_COND_D}
+MODULE  = crypto
+SRCS    =                           \
     argon2.c                        \
     crypt3-openbsd.c                \
     crypt3-sha2-256.c               \
@@ -21,7 +21,6 @@ SRCS   =                            \
     main.c                          \
     pbkdf2.c                        \
     pbkdf2v2.c                      \
-    posix.c                         \
     scrypt.c                        \
 
 include ../../buildsys.mk
@@ -33,14 +32,12 @@ LDFLAGS  += -L../../libathemecore
 CFLAGS +=                           \
     ${LIBARGON2_CFLAGS}             \
     ${LIBCRYPT_CFLAGS}              \
-    ${LIBCRYPTO_CFLAGS}             \
     ${LIBIDN_CFLAGS}                \
     ${LIBSODIUM_CFLAGS}
 
 LIBS +=                             \
     ${LIBARGON2_LIBS}               \
     ${LIBCRYPT_LIBS}                \
-    ${LIBCRYPTO_LIBS}               \
     ${LIBIDN_LIBS}                  \
     ${LIBSODIUM_LIBS}               \
     -lathemecore

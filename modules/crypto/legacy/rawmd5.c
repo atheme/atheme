@@ -11,4 +11,4 @@
 #define RAWHASH_DIGEST_LEN      DIGEST_MDLEN_MD5
 #define RAWHASH_MODULE_NAME     "rawmd5"
 
-#include "rawhash.h"
+#include "rawhash.c"

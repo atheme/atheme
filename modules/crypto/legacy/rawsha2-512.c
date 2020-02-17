@@ -11,4 +11,4 @@
 #define RAWHASH_DIGEST_LEN      DIGEST_MDLEN_SHA2_512
 #define RAWHASH_MODULE_NAME     "rawsha512"
 
-#include "rawhash.h"
+#include "rawhash.c"

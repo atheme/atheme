@@ -13,7 +13,7 @@
 
 #ifdef HAVE_CRYPT
 
-#include "crypt3-wrapper.h"
+#include "../crypt3-wrapper.h"
 
 static bool ATHEME_FATTR_WUR
 atheme_crypt3_md5_verify(const char *const restrict password, const char *const restrict parameters,

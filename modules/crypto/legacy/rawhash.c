@@ -8,6 +8,10 @@
  * Code shared by all (verify-only) raw digest crypto modules.
  */
 
+#ifndef RAWHASH_MODULE_NAME
+#  error "Do not compile me directly; compile another raw*.c instead"
+#endif
+
 #include <atheme.h>
 
 #define RAWHASH_PREFIX_STR      "$" RAWHASH_MODULE_NAME "$"
