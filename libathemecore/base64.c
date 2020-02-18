@@ -223,7 +223,7 @@ base64_encode_run(const void *const restrict in, const size_t in_len, char *cons
 	{
 		if (dst != NULL)
 		{
-			if ((written + 4) >= dst_len)
+			if ((written + 4) > dst_len)
 				// Insufficient output buffer space remaining
 				return BASE64_FAIL;
 
@@ -243,7 +243,7 @@ base64_encode_run(const void *const restrict in, const size_t in_len, char *cons
 	{
 		if (dst != NULL)
 		{
-			if ((written + 3) >= dst_len)
+			if ((written + 3) > dst_len)
 				// Insufficient output buffer space remaining
 				return BASE64_FAIL;
 
@@ -253,7 +253,7 @@ base64_encode_run(const void *const restrict in, const size_t in_len, char *cons
 
 			if (alphabet[0x40] != 0x00)
 			{
-				if ((written + 1) >= dst_len)
+				if ((written + 1) > dst_len)
 					// Insufficient output buffer space remaining
 					return BASE64_FAIL;
 
@@ -273,7 +273,7 @@ base64_encode_run(const void *const restrict in, const size_t in_len, char *cons
 	{
 		if (dst != NULL)
 		{
-			if ((written + 2) >= dst_len)
+			if ((written + 2) > dst_len)
 				// Insufficient output buffer space remaining
 				return BASE64_FAIL;
 
@@ -282,7 +282,7 @@ base64_encode_run(const void *const restrict in, const size_t in_len, char *cons
 
 			if (alphabet[0x40] != 0x00)
 			{
-				if ((written + 2) >= dst_len)
+				if ((written + 2) > dst_len)
 					// Insufficient output buffer space remaining
 					return BASE64_FAIL;
 
