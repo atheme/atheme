@@ -23,6 +23,7 @@ INCLUDES =                  \
     auth.h                  \
     authcookie.h            \
     base64.h                \
+    bcrypt.h                \
     botserv.h               \
     channels.h              \
     commandhelp.h           \

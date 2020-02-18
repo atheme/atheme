@@ -10,6 +10,7 @@
  */
 
 #include <atheme/attributes.h>      // ATHEME_FATTR_WUR
+#include <atheme/bcrypt.h>          // atheme_eks_bf_testsuite_run()
 #include <atheme/digest.h>          // digest_testsuite_run()
 #include <atheme/i18n.h>            // _() (gettext)
 #include <atheme/stdheaders.h>      // (everything else)
@@ -29,6 +30,14 @@ do_crypto_selftests(void)
 	}
 	else
 		(void) bench_print(_("The Digest API testsuite passed."));
+
+	if (! atheme_eks_bf_testsuite_run())
+	{
+		(void) bench_print(_("The bcrypt testsuite FAILED!"));
+		retval = false;
+	}
+	else
+		(void) bench_print(_("The bcrypt testsuite passed."));
 
 	return retval;
 }

@@ -29,7 +29,8 @@
 #define BENCH_RUN_OPTIONS_OPTIMAL   0x0002U
 #define BENCH_RUN_OPTIONS_ARGON2    0x0004U
 #define BENCH_RUN_OPTIONS_SCRYPT    0x0008U
-#define BENCH_RUN_OPTIONS_PBKDF2    0x0010U
+#define BENCH_RUN_OPTIONS_BCRYPT    0x0010U
+#define BENCH_RUN_OPTIONS_PBKDF2    0x0020U
 
 #if defined(HAVE_LIBARGON2) || defined(HAVE_LIBSODIUM_SCRYPT)
 #  define HAVE_ANY_MEMORY_HARD_ALGORITHM 1
@@ -54,6 +55,10 @@ void scrypt_print_colheaders(void);
 void scrypt_print_rowstats(size_t, size_t, long double);
 bool benchmark_scrypt(size_t, size_t, long double *) ATHEME_FATTR_WUR;
 #endif
+
+void bcrypt_print_colheaders(void);
+void bcrypt_print_rowstats(unsigned int, long double);
+bool benchmark_bcrypt(unsigned int, long double *) ATHEME_FATTR_WUR;
 
 enum digest_algorithm md_name_to_digest(const char *);
 const char *md_digest_to_name(enum digest_algorithm, bool);

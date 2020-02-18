@@ -10,6 +10,7 @@
  */
 
 #include <atheme/argon2.h>          // ATHEME_ARGON2_*
+#include <atheme/bcrypt.h>          // ATHEME_BCRYPT_*
 #include <atheme/digest.h>          // DIGALG_*
 #include <atheme/i18n.h>            // _() (gettext)
 #include <atheme/memory.h>          // sreallocarray()
@@ -67,6 +68,10 @@ static size_t b_scrypt_opslimits_count = 0;
 
 #endif /* HAVE_LIBSODIUM_SCRYPT */
 
+static size_t b_bcrypt_costs_default[] = { ATHEME_BCRYPT_ROUNDS_MIN, ATHEME_BCRYPT_ROUNDS_DEF };
+static size_t *b_bcrypt_costs = NULL;
+static size_t b_bcrypt_costs_count = 0;
+
 static size_t b_pbkdf2_itercounts_default[] = { PBKDF2_ITERCNT_MIN, PBKDF2_ITERCNT_DEF, PBKDF2_ITERCNT_MAX };
 static size_t *b_pbkdf2_itercounts = NULL;
 static size_t b_pbkdf2_itercounts_count = 0;
@@ -108,6 +113,8 @@ static const mowgli_getopt_option_t bench_long_opts[] = {
 	{         "scrypt-memlimits", required_argument, NULL, 'e', 0 },
 	{         "scrypt-opslimits", required_argument, NULL, 'f', 0 },
 #endif
+	{    "run-bcrypt-benchmarks",       no_argument, NULL, 'b', 0 },
+	{             "bcrypt-costs", required_argument, NULL, 'r', 0 },
 	{    "run-pbkdf2-benchmarks",       no_argument, NULL, 'k', 0 },
 	{        "pbkdf2-iterations", required_argument, NULL, 'c', 0 },
 	{ "pbkdf2-digest-algorithms", required_argument, NULL, 'd', 0 },
@@ -149,6 +156,9 @@ print_usage(void)
 		"  -s/--run-scrypt-benchmarks   Benchmark the scrypt code with configurations:\n"
 		"  -e/--scrypt-memlimits          Comma-separated memlimits\n"
 		"  -f/--scrypt-opslimits          Comma-separated opslimits\n"
+		"\n"
+		"  -b/--run-bcrypt-benchmarks   Benchmark the bcrypt code with configurations:\n"
+		"  -r/--bcrypt-costs              Comma-separated bcrypt costs\n"
 		"\n"
 		"  -k/--run-pbkdf2-benchmarks   Benchmark the PBKDF2 code with configurations:\n"
 		"  -c/--pbkdf2-iterations         Comma-separated iteration counts\n"
@@ -388,6 +398,19 @@ process_options(int argc, char *argv[])
 				break;
 #endif /* HAVE_LIBSODIUM_SCRYPT */
 
+			case 'b':
+				run_options |= BENCH_RUN_OPTIONS_BCRYPT;
+				break;
+
+			case 'r':
+				if (! process_uint_option(c, mowgli_optarg, &b_bcrypt_costs,
+				                          &b_bcrypt_costs_count, ATHEME_BCRYPT_ROUNDS_MIN,
+				                          ATHEME_BCRYPT_ROUNDS_MAX))
+					// This function logs error messages on failure
+					return false;
+
+				break;
+
 			case 'k':
 				run_options |= BENCH_RUN_OPTIONS_PBKDF2;
 				break;
@@ -477,6 +500,12 @@ process_options(int argc, char *argv[])
 	}
 #endif /* HAVE_LIBSODIUM_SCRYPT */
 
+	if (! b_bcrypt_costs)
+	{
+		b_bcrypt_costs = b_bcrypt_costs_default;
+		b_bcrypt_costs_count = BENCH_ARRAY_SIZE(b_bcrypt_costs_default);
+	}
+
 	if (! b_pbkdf2_itercounts)
 	{
 		b_pbkdf2_itercounts = b_pbkdf2_itercounts_default;
@@ -537,6 +566,23 @@ do_scrypt_benchmarks(void)
 }
 
 #endif /* HAVE_LIBSODIUM_SCRYPT */
+
+static bool ATHEME_FATTR_WUR
+do_bcrypt_benchmarks(void)
+{
+	(void) bench_print("");
+	(void) bench_print("");
+	(void) bench_print(_("Beginning customizable bcrypt benchmark ..."));
+
+	(void) bcrypt_print_colheaders();
+
+	for (size_t b_bcrypt_cost = 0; b_bcrypt_cost < b_bcrypt_costs_count; b_bcrypt_cost++)
+	  if (! benchmark_bcrypt(b_bcrypt_costs[b_bcrypt_cost], NULL))
+	    // This function logs error messages on failure
+	    return false;
+
+	return true;
+}
 
 static bool ATHEME_FATTR_WUR
 do_pbkdf2_benchmarks(void)
@@ -613,6 +659,10 @@ main(int argc, char *argv[])
 		// This function logs error messages on failure
 		return EXIT_FAILURE;
 #endif /* HAVE_LIBSODIUM_SCRYPT */
+
+	if ((run_options & BENCH_RUN_OPTIONS_BCRYPT) && ! do_bcrypt_benchmarks())
+		// This function logs error messages on failure
+		return EXIT_FAILURE;
 
 	if ((run_options & BENCH_RUN_OPTIONS_PBKDF2) && ! do_pbkdf2_benchmarks())
 		// This function logs error messages on failure

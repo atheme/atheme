@@ -11,6 +11,7 @@
 
 #include <atheme/attributes.h>      // ATHEME_FATTR_WUR
 #include <atheme/argon2.h>          // ATHEME_ARGON2_*
+#include <atheme/bcrypt.h>          // ATHEME_BCRYPT_*
 #include <atheme/constants.h>       // BUFSIZE, PASSLEN
 #include <atheme/digest.h>          // digest_oneshot_pbkdf2()
 #include <atheme/i18n.h>            // _() (gettext)
@@ -34,8 +35,8 @@
 static const long double nsec_per_sec = 1000000000.0L;
 
 static unsigned char saltbuf[BUFSIZE];
-static char hashbuf[BUFSIZE];
-static char passbuf[BUFSIZE];
+static unsigned char hashbuf[BUFSIZE];
+static char passbuf[PASSLEN + 1];
 
 void ATHEME_FATTR_PRINTF(1, 2)
 bench_print(const char *const restrict format, ...)
@@ -128,7 +129,7 @@ benchmark_argon2(const argon2_type type, const size_t memcost, const size_t time
                  long double *const restrict elapsed)
 {
 	argon2_context ctx = {
-		.out            = (void *) hashbuf,
+		.out            = hashbuf,
 		.outlen         = ATHEME_ARGON2_HASHLEN_DEF,
 		.pwd            = (void *) passbuf,
 		.pwdlen         = PASSLEN,
@@ -211,7 +212,7 @@ benchmark_scrypt(const size_t memlimit, const size_t opslimit, long double *cons
 		(void) perror("clock_gettime(2)");
 		return false;
 	}
-	if (crypto_pwhash_scryptsalsa208sha256_str(hashbuf, passbuf, PASSLEN, opslimit, memlimit_real) != 0)
+	if (crypto_pwhash_scryptsalsa208sha256_str((void *) hashbuf, passbuf, PASSLEN, opslimit, memlimit_real) != 0)
 	{
 		(void) perror("crypto_pwhash_scryptsalsa208sha256_str(3)");
 		return false;
@@ -234,6 +235,58 @@ benchmark_scrypt(const size_t memlimit, const size_t opslimit, long double *cons
 }
 
 #endif /* HAVE_LIBSODIUM_SCRYPT */
+
+void
+bcrypt_print_colheaders(void)
+{
+	(void) bench_print(_(""
+		"\n"
+		"Rounds     Elapsed\n"
+		"---------- --------------"
+	));
+}
+
+void
+bcrypt_print_rowstats(const unsigned int rounds, const long double elapsed)
+{
+	(void) bench_print(_("%10u %13LFs"), rounds, elapsed);
+}
+
+bool ATHEME_FATTR_WUR
+benchmark_bcrypt(const unsigned int rounds, long double *const restrict elapsed)
+{
+	struct timespec begin;
+	struct timespec end;
+
+	(void) memset(&begin, 0x00, sizeof begin);
+	(void) memset(&end, 0x00, sizeof end);
+
+	if (clock_gettime(CLOCK_MONOTONIC, &begin) != 0)
+	{
+		(void) perror("clock_gettime(2)");
+		return false;
+	}
+	if (! atheme_eks_bf_compute(passbuf, ATHEME_BCRYPT_VERSION_MINOR, rounds, saltbuf, hashbuf))
+	{
+		(void) bench_print("atheme_bcrypt_compute() failed");
+		return false;
+	}
+	if (clock_gettime(CLOCK_MONOTONIC, &end) != 0)
+	{
+		(void) perror("clock_gettime(2)");
+		return false;
+	}
+
+	const long double begin_ld = ((long double) begin.tv_sec) + (((long double) begin.tv_nsec) / nsec_per_sec);
+	const long double end_ld = ((long double) end.tv_sec) + (((long double) end.tv_nsec) / nsec_per_sec);
+	const long double duration = (end_ld - begin_ld);
+
+	if (elapsed)
+		*elapsed = duration;
+
+	(void) bcrypt_print_rowstats(rounds, duration);
+	return true;
+}
 
 const char *
 md_digest_to_name(const enum digest_algorithm b_digest, const bool with_sasl_scram)

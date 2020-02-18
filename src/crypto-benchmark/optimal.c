@@ -10,8 +10,9 @@
  */
 
 #include <atheme/attributes.h>      // ATHEME_FATTR_WUR
+#include <atheme/bcrypt.h>          // ATHEME_BCRYPT_*
 #include <atheme/argon2.h>          // ATHEME_ARGON2_*
-#include <atheme/digest.h>          // DIGALG_*, digest_oneshot_pbkdf2()
+#include <atheme/digest.h>          // DIGALG_*
 #include <atheme/i18n.h>            // _() (gettext)
 #include <atheme/pbkdf2.h>          // PBKDF2_*
 #include <atheme/scrypt.h>          // ATHEME_SCRYPT_*
@@ -63,7 +64,7 @@ do_optimal_argon2_benchmark(const long double optimal_clocklimit, const size_t o
 		{
 			(void) bench_print("");
 			(void) bench_print(_("Reached minimum memory and time cost!"));
-			(void) bench_print(_("Algorithm is still too slow; giving up."));
+			(void) bench_print(_("Algorithm is too slow; giving up."));
 			return true;
 		}
 
@@ -149,7 +150,7 @@ do_optimal_scrypt_benchmark(const long double optimal_clocklimit, const size_t o
 		{
 			(void) bench_print("");
 			(void) bench_print(_("Reached minimum memory limit!"));
-			(void) bench_print(_("Algorithm is still too slow; giving up."));
+			(void) bench_print(_("Algorithm is too slow; giving up."));
 			return true;
 		}
 
@@ -195,6 +196,72 @@ do_optimal_scrypt_benchmark(const long double optimal_clocklimit, const size_t o
 }
 
 #endif /* HAVE_LIBSODIUM_SCRYPT */
+
+static bool ATHEME_FATTR_WUR
+do_optimal_bcrypt_benchmark(const long double optimal_clocklimit)
+{
+	(void) bench_print("");
+	(void) bench_print("");
+	(void) bench_print(_("Beginning automatic optimal bcrypt benchmark ..."));
+
+	(void) bcrypt_print_colheaders();
+
+	long double elapsed_prev = 0L;
+	long double elapsed = 0L;
+
+	unsigned int rounds_prev = 0U;
+	unsigned int rounds = ATHEME_BCRYPT_ROUNDS_MIN;
+
+	// First try at the minimum rounds
+	if (! benchmark_bcrypt(rounds, &elapsed))
+		// This function logs error messages on failure
+		return false;
+
+	if (elapsed > optimal_clocklimit)
+	{
+		(void) bench_print("");
+		(void) bench_print(_("Reached minimum rounds limit!"));
+		(void) bench_print(_("Algorithm is too slow; giving up."));
+		return true;
+	}
+
+	// If that's still too fast, raise the rounds until it isn't
+	while (elapsed < optimal_clocklimit)
+	{
+		elapsed_prev = elapsed;
+		rounds_prev = rounds;
+		rounds++;
+
+		if (! benchmark_bcrypt(rounds, &elapsed))
+			// This function logs error messages on failure
+			return false;
+
+		if (rounds == ATHEME_BCRYPT_ROUNDS_MAX)
+		{
+			rounds_prev = 0U;
+			break;
+		}
+	}
+
+	// If it was raised, go back to the previous loop's outputs (now that it's too slow)
+	if (rounds_prev)
+	{
+		elapsed = elapsed_prev;
+		rounds = rounds_prev;
+	}
+
+	(void) bench_print("");
+	(void) bench_print(_("Recommended parameters:"));
+	(void) bench_print("");
+
+	(void) fprintf(stdout, "crypto {\n");
+	(void) fprintf(stdout, _("\t/* Target: %LFs; Benchmarked: %LFs */\n"), optimal_clocklimit, elapsed);
+	(void) fprintf(stdout, "\tbcrypt_cost = %u;\n", rounds);
+	(void) fprintf(stdout, "};\n");
+	(void) fflush(stdout);
+
+	return true;
+}
 
 static bool ATHEME_FATTR_WUR
 do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit, const bool with_sasl_scram)
@@ -294,11 +361,12 @@ do_optimal_pbkdf2_benchmark(const long double optimal_clocklimit, const bool wit
 		{
 			(void) bench_print("");
 			(void) bench_print(_("Reached minimum iteration count!"));
-			(void) bench_print(_("Algorithm is still too slow; giving up."));
+			(void) bench_print(_("Algorithm is too slow; giving up."));
 			return true;
 		}
 
-		iterations -= (1000U - (iterations % 1000U));
+		// Shave digits after thousands off while reducing by a thousand too
+		iterations -= (1000U + (iterations % 1000U));
 
 		if (! benchmark_pbkdf2(md, iterations, with_sasl_scram, &elapsed))
 			// This function logs error messages on failure
@@ -346,6 +414,10 @@ do_optimal_benchmarks(const long double optimal_clocklimit, const size_t ATHEME_
 		// This function logs error messages on failure
 		return false;
 #endif
+
+	if (! do_optimal_bcrypt_benchmark(optimal_clocklimit))
+		// This function logs error messages on failure
+		return false;
 
 	if (! do_optimal_pbkdf2_benchmark(optimal_clocklimit, with_sasl_scram))
 		// This function logs error messages on failure

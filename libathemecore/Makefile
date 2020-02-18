@@ -37,6 +37,7 @@ SRCS =                              \
     digest_direct_sha2.c            \
     digest_frontend.c               \
     digest_testsuite.c              \
+    eksblowfish.c                   \
     entity.c                        \
     flags.c                         \
     function.c                      \
