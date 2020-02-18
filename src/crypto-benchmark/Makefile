@@ -6,7 +6,7 @@
 include ../../extra.mk
 
 PROG = ${PACKAGE_TARNAME}-crypto-benchmark${PROG_SUFFIX}
-SRCS = benchmark.c main.c optimal.c
+SRCS = benchmark.c main.c optimal.c selftests.c
 
 include ../../buildsys.mk
 

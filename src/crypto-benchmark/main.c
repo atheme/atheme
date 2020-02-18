@@ -23,6 +23,7 @@
 
 #include "benchmark.h"              // (everything else)
 #include "optimal.h"                // do_optimal_benchmarks()
+#include "selftests.h"              // do_crypto_selftests()
 
 #define BENCH_ARRAY_SIZE(x)         ((sizeof((x))) / (sizeof((x)[0])))
 
@@ -85,6 +86,7 @@ static const mowgli_getopt_option_t bench_long_opts[] = {
 
 	{                     "help",       no_argument, NULL, 'h', 0 },
 	{                  "version",       no_argument, NULL, 'v', 0 },
+	{       "run-selftests-only",       no_argument, NULL, 'T', 0 },
 
 	{   "run-optimal-benchmarks",       no_argument, NULL, 'o', 0 },
 	{      "optimal-clock-limit", required_argument, NULL, 'g', 0 },
@@ -127,6 +129,7 @@ print_usage(void)
 		"\n"
 		"  -h/--help                    Display this help information and exit\n"
 		"  -v/--version                 Display program version and exit\n"
+		"  -T/--run-selftests-only      Exit after testing all supported algorithms\n"
 		"\n"
 		"  -o/--run-optimal-benchmarks  Perform an automatic parameter tuning benchmark:\n"
 		"  -g/--optimal-clock-limit       Wall clock time limit for optimal benchmarks\n"
@@ -233,6 +236,10 @@ process_options(int argc, char *argv[])
 			case 'v':
 				// Version string was already printed at program startup
 				exit(EXIT_SUCCESS);
+
+			case 'T':
+				run_options |= BENCH_RUN_OPTIONS_TESTONLY;
+				break;
 
 			case 'o':
 				run_options |= BENCH_RUN_OPTIONS_OPTIMAL;
@@ -492,6 +499,7 @@ do_argon2_benchmarks(void)
 	(void) bench_print("");
 	(void) bench_print("");
 	(void) bench_print(_("Beginning customizable Argon2 benchmark ..."));
+
 	(void) argon2_print_colheaders();
 
 	for (size_t b_argon2_type = 0; b_argon2_type < b_argon2_types_count; b_argon2_type++)
@@ -516,6 +524,7 @@ do_scrypt_benchmarks(void)
 	(void) bench_print("");
 	(void) bench_print("");
 	(void) bench_print(_("Beginning customizable scrypt benchmark ..."));
+
 	(void) scrypt_print_colheaders();
 
 	for (size_t b_scrypt_memlimit = 0; b_scrypt_memlimit < b_scrypt_memlimits_count; b_scrypt_memlimit++)
@@ -577,6 +586,16 @@ main(int argc, char *argv[])
 
 	(void) bench_print("");
 	(void) bench_print(_("Using digest frontend: %s"), digest_get_frontend_info());
+
+	if (! do_crypto_selftests())
+	{
+		(void) bench_print("");
+		(void) bench_print(_("One or more self-tests FAILED (BUG!). Exiting now..."));
+		return EXIT_FAILURE;
+	}
+
+	if ((run_options & BENCH_RUN_OPTIONS_TESTONLY))
+		return EXIT_SUCCESS;
 
 	if ((run_options & BENCH_RUN_OPTIONS_OPTIMAL) &&
 	    ! do_optimal_benchmarks(optimal_clocklimit, optimal_memlimit, optimal_memlimit_given, with_sasl_scram))

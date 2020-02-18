@@ -50,6 +50,5 @@ esac
 "${MAKE}"
 "${MAKE}" install
 
-"${ATHEME_PREFIX}"/bin/atheme-services -dnT
-"${ATHEME_PREFIX}"/bin/atheme-crypto-benchmark -io
+"${ATHEME_PREFIX}"/bin/atheme-crypto-benchmark -T
 "${ATHEME_PREFIX}"/bin/atheme-ecdh-x25519-tool -T
