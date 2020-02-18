@@ -6057,28 +6057,6 @@ fi
 done
 
 
-    for ac_func in crypt_checkpass
-do :
-  ac_fn_c_check_func "$LINENO" "crypt_checkpass" "ac_cv_func_crypt_checkpass"
-if test "x$ac_cv_func_crypt_checkpass" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_CRYPT_CHECKPASS 1
-_ACEOF
-
-fi
-done
-
-    for ac_func in crypt_newhash
-do :
-  ac_fn_c_check_func "$LINENO" "crypt_newhash" "ac_cv_func_crypt_newhash"
-if test "x$ac_cv_func_crypt_newhash" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_CRYPT_NEWHASH 1
-_ACEOF
-
-fi
-done
-
     for ac_func in consttime_memequal
 do :
   ac_fn_c_check_func "$LINENO" "consttime_memequal" "ac_cv_func_consttime_memequal"

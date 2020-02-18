@@ -70,7 +70,7 @@ POTENTIAL COMPATIBILITY BREAKAGE
   and Argon2id) too. If you were using this module on version 7.2, please see
   the `dist/atheme.conf.example` file for migration instructions. The names of
   the configuration options have changed! You will need libargon2 available at
-  configure-time.
+  configure-time (`--with-argon2`).
 
 Security
 --------
@@ -91,9 +91,6 @@ Security
   `SETPASS` and `SET PASSWORD`. This allows IRC client password redaction
   (where supported, e.g. in WeeChat) to achieve its purpose of preventing the
   user's account password from persisting in on-disk log files.
-
-- Services is now capable of using OpenBSD `crypt_newhash(3)` to encrypt
-  and verify passwords.
 
 - Services now has a much more rigorous random number generation interface
   and will e.g. refuse to use `arc4random(3)` unless we are actually on
@@ -214,7 +211,8 @@ Password Cryptography
 ---------------------
 - The existing crypto modules no longer need OpenSSL (or any crypto library)
 - Add support for scrypt password encryption with `modules/crypto/scrypt`.
-  This requires libsodium.
+  The scrypt module requires libsodium (`--with-sodium`).
+- Add support for bcrypt password encryption with `modules/crypto/bcrypt`.
 - `libathemecore/crypto.c`: log current crypto provider on mod(un/re)load
 - `libathemecore/crypto.c`: rip out plaintext fallback implementation
 - Make old modules (`ircservices`, `pbkdf2`, `rawmd5`, `rawsha1`) verify-only

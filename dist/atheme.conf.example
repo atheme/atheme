@@ -108,7 +108,7 @@ loadmodule "modules/backend/opensex";
  *   Argon2 (Password Hashing Competition 2015)    modules/crypto/argon2
  *   scrypt (Tarsnap Online Backup Service)        modules/crypto/scrypt
  *   PBKDF2 (Including support for SASL SCRAM-SHA) modules/crypto/pbkdf2v2
- *   OpenBSD crypt_newhash(3) a la '$2b$...$...'   modules/crypto/crypt3-openbsd
+ *   bcrypt (EksBlowfish; from Niels Provos etc.)  modules/crypto/bcrypt
  *   SHA2-512 crypt(3) a la '$6$...'               modules/crypto/crypt3-sha2-512
  *   SHA2-256 crypt(3) a la '$5$...'               modules/crypto/crypt3-sha2-256
  *
@@ -163,6 +163,14 @@ loadmodule "modules/backend/opensex";
  * hashes. However, you should also load PBKDF2 v2 (if you don't decide to use
  * anything else), because the PBKDF2 v1 module is now verify-only.
  *
+ * The bcrypt module will truncate passwords greater than 72 characters. It is
+ * also capable of verifying the older $2a$ digests that contain an integer
+ * wrap-around bug, as used on e.g. Anope. It is not capable of verifying the
+ * PHP-bcrypt $2x$ and $2y$ digests; but $2y$ can simply be changed to $2b$.
+ * All successfully-verified passwords not using $2b$ will be converted to it.
+ * This is an encryption-capable module, but its use is discouraged unless you
+ * need to use it for interoperability with some other piece of software.
+ *
  * The crypt3-* modules depend on your platform crypt(3) supporting the
  * respective algorithms. This is not guaranteed to be the case. If you used
  * modules/crypto/posix on Linux, you need crypt3-md5. If you used
@@ -186,8 +194,8 @@ loadmodule "modules/backend/opensex";
  */
 #loadmodule "modules/crypto/argon2";            /* --with-argon2 */
 #loadmodule "modules/crypto/scrypt";            /* --with-sodium */
-#loadmodule "modules/crypto/crypt3-openbsd";    /* Needs OpenBSD */
 loadmodule "modules/crypto/pbkdf2v2";
+#loadmodule "modules/crypto/bcrypt";            /* See notes above */
 loadmodule "modules/crypto/pbkdf2";             /* Verify-only, see prev. */
 #loadmodule "modules/crypto/crypt3-sha2-512";   /* Needs crypt(3) support */
 #loadmodule "modules/crypto/crypt3-sha2-256";   /* Needs crypt(3) support */
@@ -1191,13 +1199,17 @@ crypto {
 	 */
 	#pbkdf2v2_saltlen = 32;
 
-	/* (*) crypt3_openbsd_newhash_pref
+	/* (*) bcrypt_cost
 	 *
-	 * The "pref" parameter for OpenBSD crypt_newhash(3).
-	 * Please see <https://man.openbsd.org/crypt_checkpass.3>
-	 * The default is "bcrypt,a"
+	 * Amount of rounds to perform for new passwords (as a power of 2).
+	 * You should raise this as high as is reasonable. A benchmark
+	 * program is available alongside this software to aid in this
+	 * process.
+	 *
+	 * Valid values are 4 to 31 (inclusive)
+	 * The default is 7
 	 */
-	#crypt3_openbsd_newhash_pref = "bcrypt,a";
+	#bcrypt_cost = 7;
 
 	/* (*) crypt3_sha2_256_rounds
 	 * (*) crypt3_sha2_512_rounds

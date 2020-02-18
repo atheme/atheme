@@ -15,7 +15,7 @@ SUBDIRS = ${LEGACY_PWCRYPTO_COND_D}
 MODULE  = crypto
 SRCS    =                           \
     argon2.c                        \
-    crypt3-openbsd.c                \
+    bcrypt.c                        \
     crypt3-sha2-256.c               \
     crypt3-sha2-512.c               \
     main.c                          \

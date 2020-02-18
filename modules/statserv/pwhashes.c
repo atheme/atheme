@@ -15,6 +15,7 @@
 #define SCANFMT_ANOPE_ENC_SHA256    "$anope$enc_sha256$" SCANFMT_BASE64_RFC4648 "$" SCANFMT_BASE64_RFC4648
 #define SCANFMT_ARGON2              "$%[A-Za-z0-9]$v=%u$m=%u,t=%u,p=%u$" SCANFMT_BASE64_RFC4648 "$" SCANFMT_BASE64_RFC4648
 #define SCANFMT_BASE64              "$base64$" SCANFMT_BASE64_RFC4648
+#define SCANFMT_BCRYPT              "$2%1[ab]$%2u$%22[" BASE64_ALPHABET_CRYPT3 "]%31[" BASE64_ALPHABET_CRYPT3 "]"
 #define SCANFMT_CRYPT3_DES          SCANFMT_BASE64_CRYPT3
 #define SCANFMT_CRYPT3_MD5          "$1$" SCANFMT_BASE64_CRYPT3 "$" SCANFMT_BASE64_CRYPT3
 #define SCANFMT_CRYPT3_SHA2_256     "$5$" SCANFMT_BASE64_CRYPT3 "$" SCANFMT_BASE64_CRYPT3
@@ -40,6 +41,7 @@ enum crypto_type
 	TYPE_ARGON2I,
 	TYPE_ARGON2ID,
 	TYPE_BASE64,
+	TYPE_BCRYPT,
 	TYPE_CRYPT3_DES,
 	TYPE_CRYPT3_MD5,
 	TYPE_CRYPT3_SHA2_256,
@@ -81,6 +83,8 @@ crypto_type_to_name(const enum crypto_type type)
 			return "crypto/argon2 (Argon2id)";
 		case TYPE_BASE64:
 			return "crypto/base64 (\00304PLAIN-TEXT!\003)";
+		case TYPE_BCRYPT:
+			return "crypto/bcrypt (EksBlowfish)";
 		case TYPE_CRYPT3_DES:
 			return "crypto/crypt3-des (DES)";
 		case TYPE_CRYPT3_MD5:
@@ -156,6 +160,7 @@ ss_cmd_pwhashes_func(struct sourceinfo *const restrict si, const int ATHEME_VATT
 		continue_if_fail(mu != NULL);
 
 		const char *const pw = mu->pass;
+		const size_t pwlen = strlen(pw);
 
 		if (! (mu->flags & MU_CRYPTPASS))
 		{
@@ -180,7 +185,11 @@ ss_cmd_pwhashes_func(struct sourceinfo *const restrict si, const int ATHEME_VATT
 		{
 			pwhashes[TYPE_BASE64]++;
 		}
-		else if (sscanf(pw, SCANFMT_CRYPT3_DES, s1) == 1 && strlen(s1) == 13U && strcmp(s1, pw) == 0)
+		else if (pwlen >= 60U && sscanf(pw, SCANFMT_BCRYPT, s1, &i1, s2, s3) == 4)
+		{
+			pwhashes[TYPE_BCRYPT]++;
+		}
+		else if (pwlen == 13U && sscanf(pw, SCANFMT_CRYPT3_DES, s1) == 1 && strcmp(s1, pw) == 0)
 		{
 			// Fuzzy (no rigid format)
 			pwhashes[TYPE_CRYPT3_DES]++;
@@ -209,7 +218,7 @@ ss_cmd_pwhashes_func(struct sourceinfo *const restrict si, const int ATHEME_VATT
 		{
 			pwhashes[TYPE_IRCSERVICES]++;
 		}
-		else if (sscanf(pw, SCANFMT_PBKDF2, s1) == 1 && strlen(s1) == 140U && strcmp(s1, pw) == 0)
+		else if (pwlen == 140U && sscanf(pw, SCANFMT_PBKDF2, s1) == 1 && strcmp(s1, pw) == 0)
 		{
 			// Fuzzy (no rigid format)
 			pwhashes[TYPE_PBKDF2]++;
