@@ -930,6 +930,12 @@ sasl_delete_stale(void ATHEME_VATTR_UNUSED *const restrict vptr)
 static void
 sasl_mech_register(const struct sasl_mechanism *const restrict mech)
 {
+	if (sasl_mechanism_find(mech->name))
+	{
+		(void) slog(LG_DEBUG, "%s: ignoring attempt to register %s again", MOWGLI_FUNC_NAME, mech->name);
+		return;
+	}
+
 	(void) slog(LG_DEBUG, "%s: registering %s", MOWGLI_FUNC_NAME, mech->name);
 
 	mowgli_node_t *const node = mowgli_node_create();
