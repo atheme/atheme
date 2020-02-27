@@ -164,37 +164,60 @@ sasl_server_eob(struct server ATHEME_VATTR_UNUSED *const restrict s)
 }
 
 static void
-sasl_mechlist_string_build(void)
+sasl_mechlist_string_build(const struct sasl_session *const restrict p, const struct myuser *const restrict mu,
+                           const char **const restrict avoid)
 {
-	char *buf = sasl_mechlist_string;
-	size_t tmplen = 0;
+	char buf[sizeof sasl_mechlist_string];
+	char *bufptr = buf;
+	size_t written = 0;
 	mowgli_node_t *n;
+
+	(void) memset(buf, 0x00, sizeof buf);
 
 	MOWGLI_ITER_FOREACH(n, sasl_mechanisms.head)
 	{
 		const struct sasl_mechanism *const mptr = n->data;
+		bool in_avoid_list = false;
+
+		continue_if_fail(mptr != NULL);
+
+		for (size_t i = 0; avoid != NULL && avoid[i] != NULL; i++)
+		{
+			if (strcmp(mptr->name, avoid[i]) == 0)
+			{
+				in_avoid_list = true;
+				break;
+			}
+		}
+
+		if (in_avoid_list || (mptr->password_based && mu != NULL && (mu->flags & MU_NOPASSWORD)))
+			continue;
+
 		const size_t namelen = strlen(mptr->name);
 
-		if (tmplen + namelen >= sizeof sasl_mechlist_string)
+		if (written + namelen >= sizeof buf)
 			break;
 
-		(void) memcpy(buf, mptr->name, namelen);
+		(void) memcpy(bufptr, mptr->name, namelen);
 
-		buf += namelen;
-		*buf++ = ',';
-		tmplen += namelen + 1;
+		bufptr += namelen;
+		*bufptr++ = ',';
+		written += namelen + 1;
 	}
 
-	if (tmplen)
-		buf--;
+	if (written)
+		*(--bufptr) = 0x00;
 
-	*buf = 0x00;
+	if (p)
+		(void) sasl_sts(p->uid, 'M', buf);
+	else
+		(void) memcpy(sasl_mechlist_string, buf, sizeof buf);
 }
 
 static void
 sasl_mechlist_do_rebuild(void)
 {
-	(void) sasl_mechlist_string_build();
+	(void) sasl_mechlist_string_build(NULL, NULL, NULL);
 
 	if (me.connected)
 		(void) sasl_mechlist_sts(sasl_mechlist_string);
@@ -1030,6 +1053,7 @@ const struct sasl_core_functions sasl_core_functions = {
 	.mech_unregister    = &sasl_mech_unregister,
 	.authcid_can_login  = &sasl_authcid_can_login,
 	.authzid_can_login  = &sasl_authzid_can_login,
+	.recalc_mechlist    = &sasl_mechlist_string_build,
 };
 
 static void

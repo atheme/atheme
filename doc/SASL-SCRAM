@@ -1,5 +1,19 @@
 Atheme IRC Services version 7.3 and above supports SASL SCRAM logins.
 
+It is not recommended to deploy this feature unless you are running an
+IRCv3.2 network. The main reason for this is that SCRAM digest algorithm
+negotiation happens out-of-band; the server does not tell the client which
+digest algorithm was used to calculate its database credentials, so the
+client has to try each mechanism in turn until one of them succeeds. It
+can only do this if it knows which mechanisms are available, which it can
+only know based on the value of the 'sasl' capability during capability
+negotiation, and capabilities only have values in IRCv3.2 servers. This
+software does tell the client which SCRAM mechanism to use after its
+chosen mechanism fails due to a digest algorithm mismatch, but that is
+somewhat sub-optimal. Likewise, a client may not even attempt a SCRAM
+login in the first place if it does not know in advance that there are
+SCRAM mechanisms available. Please consider this.
+
 Some work needs to be performed by the prospective IRC network administrator
 to enable this. The 5 main steps to perform are:
 

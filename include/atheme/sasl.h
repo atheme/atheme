@@ -129,6 +129,7 @@ struct sasl_core_functions
 	void                      (*mech_unregister)(const struct sasl_mechanism *);
 	sasl_authxid_can_login_fn   authcid_can_login;
 	sasl_authxid_can_login_fn   authzid_can_login;
+	void                      (*recalc_mechlist)(const struct sasl_session *, const struct myuser *, const char **);
 };
 
 #endif /* !ATHEME_INC_SASL_H */

@@ -169,6 +169,36 @@ scram_attrlist_free(scram_attr_list *const restrict attributes)
 	}
 }
 
+static const char **
+scram_get_avoidance_mechlist(const unsigned int db_prf)
+{
+	switch (db_prf)
+	{
+		case PBKDF2_PRF_SCRAM_SHA1_S64:
+		{
+			static const char *avoid[] = { "SCRAM-SHA-256", "SCRAM-SHA-512", NULL };
+			return avoid;
+		}
+
+		case PBKDF2_PRF_SCRAM_SHA2_256_S64:
+		{
+			static const char *avoid[] = { "SCRAM-SHA-1", "SCRAM-SHA-512", NULL };
+			return avoid;
+		}
+
+		case PBKDF2_PRF_SCRAM_SHA2_512_S64:
+		{
+			static const char *avoid[] = { "SCRAM-SHA-1", "SCRAM-SHA-256", NULL };
+			return avoid;
+		}
+
+		default:
+			break;
+	}
+
+	return NULL;
+}
+
 static void
 scram_error(const char *const restrict errtext, struct sasl_output_buf *const restrict out)
 {
@@ -382,6 +412,7 @@ scram_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_
 	if (db.a != prf)
 	{
 		(void) slog(LG_DEBUG, "%s: PRF ID mismatch: server(%u) != client(%u)", MOWGLI_FUNC_NAME, db.a, prf);
+		(void) sasl_core_functions->recalc_mechlist(p, mu, scram_get_avoidance_mechlist(db.a));
 		(void) scram_error("digest-algorithm-mismatch", out);
 		goto error;
 	}
