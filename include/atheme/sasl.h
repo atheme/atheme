@@ -117,6 +117,7 @@ struct sasl_mechanism
 	sasl_mech_start_fn  mech_start;
 	sasl_mech_step_fn   mech_step;
 	sasl_mech_finish_fn mech_finish;
+	bool                password_based;
 };
 
 typedef bool (*sasl_authxid_can_login_fn)(struct sasl_session *restrict, const char *restrict,

@@ -70,6 +70,7 @@ static const struct sasl_mechanism sasl_mech_authcookie = {
 	.mech_start     = NULL,
 	.mech_step      = &sasl_mech_authcookie_step,
 	.mech_finish    = NULL,
+	.password_based = false,
 };
 
 static void

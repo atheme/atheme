@@ -964,6 +964,10 @@ sasl_authxid_can_login(struct sasl_session *const restrict p, const char *const 
                        struct myuser **const restrict muo, char *const restrict val_name,
                        char *const restrict val_eid, const char *const restrict other_val_eid)
 {
+	return_val_if_fail(p != NULL, false);
+	return_val_if_fail(p->si != NULL, false);
+	return_val_if_fail(p->mechptr != NULL, false);
+
 	struct myuser *const mu = myuser_find_by_nick(authxid);
 
 	if (! mu)
@@ -977,6 +981,14 @@ sasl_authxid_can_login(struct sasl_session *const restrict p, const char *const 
 
 	(void) mowgli_strlcpy(val_name, entity(mu)->name, NICKLEN + 1);
 	(void) mowgli_strlcpy(val_eid, entity(mu)->id, IDLEN + 1);
+
+	if (p->mechptr->password_based && (mu->flags & MU_NOPASSWORD))
+	{
+		(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN %s to \2%s\2 (password authentication disabled)",
+		                  p->mechptr->name, entity(mu)->name);
+
+		return false;
+	}
 
 	if (strcmp(val_eid, other_val_eid) == 0)
 		// We have already executed the user_can_login hook for this user

@@ -373,15 +373,6 @@ scram_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_
 		(void) scram_error("other-error", out);
 		goto error;
 	}
-	if (mu->flags & MU_NOPASSWORD)
-	{
-		(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN %s to \2%s\2 (password authentication disabled)",
-		                  p->mechptr->name, entity(mu)->name);
-
-		(void) slog(LG_DEBUG, "%s: user has NOPASSWORD flag set", MOWGLI_FUNC_NAME);
-		(void) scram_error("password-authentication-disabled", out);
-		goto error;
-	}
 	if (! pbkdf2v2_scram_functions->dbextract(mu->pass, &db))
 	{
 		// User's password hash is not in a compatible (PBKDF2 v2) format
@@ -749,6 +740,7 @@ static const struct sasl_mechanism sasl_mech_scram_sha1 = {
 	.mech_start     = NULL,
 	.mech_step      = &sasl_mech_scram_sha1_step,
 	.mech_finish    = &sasl_mech_scram_finish,
+	.password_based = true,
 };
 
 static const struct sasl_mechanism sasl_mech_scram_sha2_256 = {
@@ -756,6 +748,7 @@ static const struct sasl_mechanism sasl_mech_scram_sha2_256 = {
 	.mech_start     = NULL,
 	.mech_step      = &sasl_mech_scram_sha2_256_step,
 	.mech_finish    = &sasl_mech_scram_finish,
+	.password_based = true,
 };
 
 static const struct sasl_mechanism sasl_mech_scram_sha2_512 = {
@@ -763,6 +756,7 @@ static const struct sasl_mechanism sasl_mech_scram_sha2_512 = {
 	.mech_start     = NULL,
 	.mech_step      = &sasl_mech_scram_sha2_512_step,
 	.mech_finish    = &sasl_mech_scram_finish,
+	.password_based = true,
 };
 
 static inline void

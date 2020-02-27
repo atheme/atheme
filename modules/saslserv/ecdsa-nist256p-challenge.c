@@ -197,6 +197,7 @@ static const struct sasl_mechanism sasl_mech_ecdsa = {
 	.mech_start     = NULL,
 	.mech_step      = &sasl_mech_ecdsa_step,
 	.mech_finish    = &sasl_mech_ecdsa_finish,
+	.password_based = false,
 };
 
 static void

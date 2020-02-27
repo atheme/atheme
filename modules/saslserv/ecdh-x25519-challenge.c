@@ -368,6 +368,7 @@ static const struct sasl_mechanism sasl_mech_ecdh_x25519_challenge = {
 	.mech_start     = NULL,
 	.mech_step      = &ecdh_x25519_sasl_step,
 	.mech_finish    = &ecdh_x25519_sasl_finish,
+	.password_based = false,
 };
 
 static struct command ns_cmd_set_x25519_pubkey = {
