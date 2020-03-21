@@ -312,7 +312,7 @@ ss_cmd_pwhashes_func(struct sourceinfo *const restrict si, const int ATHEME_VATT
 static struct command ss_cmd_pwhashes = {
 	.name           = "PWHASHES",
 	.desc           = N_("Shows database password hash statistics."),
-	.access         = PRIV_ADMIN,
+	.access         = PRIV_SERVER_AUSPEX,
 	.maxparc        = 1,
 	.cmd            = &ss_cmd_pwhashes_func,
 	.help           = { .path = "statserv/pwhashes" },
