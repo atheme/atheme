@@ -11,6 +11,18 @@
 
 static bool show_custom_metadata = true;
 
+static const char *
+ns_obfuscate_time_ago(time_t time)
+{
+	time_t diff = CURRTIME / SECONDS_PER_WEEK - time / SECONDS_PER_WEEK;
+	static char buf[BUFSIZE];
+
+	if (diff <= 1)
+		return _("(less than two weeks ago)");
+	snprintf(buf, ARRAY_SIZE(buf), _("(about %lu weeks ago)"), (unsigned long)diff);
+	return buf;
+}
+
 static void
 ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -198,40 +210,42 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 			command_success_nodata(si, _("Real addr  : %s"), md->value);
 	}
 
-	if (recognized)
+	if (!hide_info && recognized)
 		command_success_nodata(si, _("Recognized : now (matches access list)"));
 
 	// show nick's lastseen/online, if we have a nick
-	if (u != NULL)
+	if (!hide_info && u != NULL)
 		command_success_nodata(si, _("Last seen  : now"));
 	else if (mn != NULL)
 	{
 		tm2 = localtime(&mn->lastseen);
 		strftime(lastlogin, sizeof lastlogin, TIME_FORMAT, tm2);
 		if (hide_info)
-			command_success_nodata(si, _("Last seen  : (about %u week(s) ago)"), (unsigned int)((CURRTIME - mn->lastseen) / SECONDS_PER_WEEK));
+			command_success_nodata(si, _("Last seen  : %s"), ns_obfuscate_time_ago(mn->lastseen));
 		else
 			command_success_nodata(si, _("Last seen  : %s (%s ago)"), lastlogin, time_ago(mn->lastseen));
 	}
 
 	/* if noone is logged in to this account, show account's lastseen,
 	 * unless we have a nick and it quit at the same time as the account
+	 * if the account is private, act as though it's not logged in all
+	 * the time rather than reveal its logged-in status to others
 	 */
-	if (MOWGLI_LIST_LENGTH(&mu->logins) == 0)
+	if (hide_info || MOWGLI_LIST_LENGTH(&mu->logins) == 0)
 	{
 		tm2 = localtime(&mu->lastlogin);
 		strftime(lastlogin, sizeof lastlogin, TIME_FORMAT, tm2);
 		if (mn == NULL)
 		{
 			if (hide_info)
-				command_success_nodata(si, _("Last seen  : (about %u week(s) ago)"), (unsigned int)((CURRTIME - mu->lastlogin) / SECONDS_PER_WEEK));
+				command_success_nodata(si, _("Last seen  : %s"), ns_obfuscate_time_ago(mu->lastlogin));
 			else
 				command_success_nodata(si, _("Last seen  : %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
 		}
 		else if (mn->lastseen != mu->lastlogin)
 		{
 			if (hide_info)
-				command_success_nodata(si, _("User seen  : (about %u week(s) ago)"), (unsigned int)((CURRTIME - mu->lastlogin) / SECONDS_PER_WEEK));
+				command_success_nodata(si, _("User seen  : %s"), ns_obfuscate_time_ago(mu->lastlogin));
 			else
 				command_success_nodata(si, _("User seen  : %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
 		}
