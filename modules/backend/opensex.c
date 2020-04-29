@@ -274,7 +274,7 @@ opensex_db_open_read(const char *filename)
 		{
 			if (database_create)
 			{
-				slog(LG_ERROR, "db-open-read: database '%s' does not yet exist; a new one will be created.", path);
+				slog(LG_INFO, "db-open-read: database '%s' does not yet exist; a new one will be created.", path);
 				return NULL;
 			}
 			else

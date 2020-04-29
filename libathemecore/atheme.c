@@ -492,6 +492,7 @@ atheme_main(int argc, char *argv[])
 	if (db_save && database_create)
 	{
 		db_save(NULL, DB_SAVE_BLOCKING);
+		slog(LG_INFO, "atheme: a new database was created; please restart services without the -b option.");
 		return 0;
 	}
 
