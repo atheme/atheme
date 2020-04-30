@@ -1016,8 +1016,12 @@ crypto {
 	 * All algorithm types perform about equally as well as each other;
 	 * changing this will not significantly affect the computation time.
 	 *
+	 * The "argon2id" type requires a more recent libargon2 library. This
+	 * is indicated in your ./configure output ("checking if libargon2
+	 * algorithm type Argon2id appears to be usable...").
+	 *
 	 * Valid values are "argon2d", "argon2i", and "argon2id"
-	 * The default is "argon2id"
+	 * The default is "argon2id"; unless unsupported, then "argon2d".
 	 */
 	#argon2_type = "argon2id";
 

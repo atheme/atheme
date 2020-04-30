@@ -12,6 +12,7 @@ AC_DEFUN([ATHEME_LIBTEST_ARGON2], [
     LIBS_SAVED="${LIBS}"
 
     LIBARGON2="No"
+    LIBARGON2_TYPE_ID="No"
     LIBARGON2_PATH=""
 
     AC_ARG_WITH([argon2],
@@ -90,14 +91,32 @@ AC_DEFUN([ATHEME_LIBTEST_ARGON2], [
                 };
                 (void) argon2_ctx(&ctx, Argon2_d);
                 (void) argon2_ctx(&ctx, Argon2_i);
-                (void) argon2_ctx(&ctx, Argon2_id);
                 (void) argon2_error_message(0);
-                (void) argon2_type2string(0, 0);
             ]])
         ], [
             AC_MSG_RESULT([yes])
             LIBARGON2="Yes"
             AC_DEFINE([HAVE_LIBARGON2], [1], [Define to 1 if libargon2 appears to be usable])
+
+            AC_MSG_CHECKING([if libargon2 algorithm type Argon2id appears to be usable])
+            AC_LINK_IFELSE([
+                AC_LANG_PROGRAM([[
+                    #ifdef HAVE_STDDEF_H
+                    #  include <stddef.h>
+                    #endif
+                    #include <argon2.h>
+                ]], [[
+                    (void) argon2_ctx(NULL, Argon2_id);
+                ]])
+            ], [
+                AC_MSG_RESULT([yes])
+                LIBARGON2_TYPE_ID="Yes"
+                AC_DEFINE([HAVE_LIBARGON2_TYPE_ID], [1], [Define to 1 if libargon2 algorithm type Argon2id appears to be usable])
+            ], [
+                AC_MSG_RESULT([no])
+                LIBARGON2_TYPE_ID="No"
+                AC_MSG_WARN([your libargon2 is very old -- you will not be able to use Argon2id])
+            ])
         ], [
             AC_MSG_RESULT([no])
             LIBARGON2="No"

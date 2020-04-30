@@ -149,6 +149,9 @@
 /* Define to 1 if libargon2 appears to be usable */
 #undef HAVE_LIBARGON2
 
+/* Define to 1 if libargon2 algorithm type Argon2id appears to be usable */
+#undef HAVE_LIBARGON2_TYPE_ID
+
 /* Define to 1 if libcrypto appears to be usable */
 #undef HAVE_LIBCRYPTO
 

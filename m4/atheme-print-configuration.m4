@@ -20,6 +20,10 @@ AC_DEFUN([ATHEME_PRINT_CONFIGURATION], [
     AS_IF([test "x${FEATURE_SASL_ECDSA_NIST256P_CHALLENGE}" != "xYes"], [FEATURE_SASL_ECDSA_NIST256P_CHALLENGE="No"])
     AS_IF([test "x${FEATURE_SASL_SCRAM}" != "xYes"], [FEATURE_SASL_SCRAM="No"])
 
+    AS_IF([test "${LIBARGON2}${LIBARGON2_TYPE_ID}" = "YesNo"], [
+        LIBARGON2="Partial (Please consider upgrading your Argon2 library)"
+    ])
+
     prefix="$(eval echo "${prefix}")"
     prefix="$(eval echo "${prefix}")"
 

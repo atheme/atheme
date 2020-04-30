@@ -25,9 +25,22 @@
 #define argon2_base64_encode(src, srclen, dst, dstlen) \
         base64_encode_table((src), (srclen), (dst), (dstlen), BASE64_ALPHABET_RFC4648_NOPAD)
 
+enum atheme_argon2_type
+{
+	ATHEME_ARGON2_TYPE_D    = 0,
+	ATHEME_ARGON2_TYPE_I    = 1,
+	ATHEME_ARGON2_TYPE_ID   = 2,
+};
+
+#ifdef HAVE_LIBARGON2_TYPE_ID
+#  define ATHEME_ARGON2_TYPE_DEFAULT    ATHEME_ARGON2_TYPE_ID
+#else  /* HAVE_LIBARGON2_TYPE_ID */
+#  define ATHEME_ARGON2_TYPE_DEFAULT    ATHEME_ARGON2_TYPE_D
+#endif /* !HAVE_LIBARGON2_TYPE_ID */
+
 static mowgli_list_t **crypto_conf_table = NULL;
 
-static argon2_type atheme_argon2_type = Argon2_id;
+static enum atheme_argon2_type atheme_argon2_type = ATHEME_ARGON2_TYPE_DEFAULT;
 static unsigned int atheme_argon2_memcost = ATHEME_ARGON2_MEMCOST_DEF;
 static unsigned int atheme_argon2_timecost = ATHEME_ARGON2_TIMECOST_DEF;
 static unsigned int atheme_argon2_threads = ATHEME_ARGON2_THREADS_DEF;
@@ -37,29 +50,87 @@ static unsigned int atheme_argon2_hashlen = ATHEME_ARGON2_HASHLEN_DEF;
 static int
 c_ci_argon2_type(mowgli_config_file_entry_t *const restrict ce)
 {
-	atheme_argon2_type = Argon2_id;
-
 	if (! ce->vardata)
 	{
 		(void) conf_report_warning(ce, "no parameter for configuration option -- using default");
+
+		atheme_argon2_type = ATHEME_ARGON2_TYPE_DEFAULT;
 		return 0;
 	}
 
 	if (strcasecmp(ce->vardata, "argon2d") == 0)
-		atheme_argon2_type = Argon2_d;
+	{
+		atheme_argon2_type = ATHEME_ARGON2_TYPE_D;
+	}
 	else if (strcasecmp(ce->vardata, "argon2i") == 0)
-		atheme_argon2_type = Argon2_i;
+	{
+		atheme_argon2_type = ATHEME_ARGON2_TYPE_I;
+	}
 	else if (strcasecmp(ce->vardata, "argon2id") == 0)
-		atheme_argon2_type = Argon2_id;
-	else
+	{
+#ifdef HAVE_LIBARGON2_TYPE_ID
+		atheme_argon2_type = ATHEME_ARGON2_TYPE_ID;
+#else /* HAVE_LIBARGON2_TYPE_ID */
+		(void) conf_report_warning(ce, "your libargon2 does not support the argon2id type");
 		(void) conf_report_warning(ce, "invalid parameter for configuration option -- using default");
+
+		atheme_argon2_type = ATHEME_ARGON2_TYPE_DEFAULT;
+#endif /* !HAVE_LIBARGON2_TYPE_ID */
+	}
+	else
+	{
+		(void) conf_report_warning(ce, "invalid parameter for configuration option -- using default");
+
+		atheme_argon2_type = ATHEME_ARGON2_TYPE_DEFAULT;
+	}
 
 	return 0;
 }
 
+static inline bool ATHEME_FATTR_WUR
+atheme_argon2_type2int(const enum atheme_argon2_type type, argon2_type *const restrict inttype)
+{
+	switch (type)
+	{
+		case ATHEME_ARGON2_TYPE_D:
+			*inttype = Argon2_d;
+			return true;
+		case ATHEME_ARGON2_TYPE_I:
+			*inttype = Argon2_i;
+			return true;
+		case ATHEME_ARGON2_TYPE_ID:
+#ifdef HAVE_LIBARGON2_TYPE_ID
+			*inttype = Argon2_id;
+			return true;
+#else /* HAVE_LIBARGON2_TYPE_ID */
+			return false;
+#endif /* !HAVE_LIBARGON2_TYPE_ID */
+	}
+
+	// To keep gcc happy ...   -- amdj
+	return false;
+}
+
+static inline const char *
+atheme_argon2_type2string(const enum atheme_argon2_type type)
+{
+	switch (type)
+	{
+		case ATHEME_ARGON2_TYPE_D:
+			return "argon2d";
+		case ATHEME_ARGON2_TYPE_I:
+			return "argon2i";
+		case ATHEME_ARGON2_TYPE_ID:
+			return "argon2id";
+	}
+
+	// To keep gcc happy ...   -- amdj
+	return NULL;
+}
+
 static inline bool
-atheme_argon2_needs_rehash(const uint32_t ver, const argon2_type type, const uint32_t m_cost, const uint32_t t_cost,
-                           const uint32_t threads, const size_t saltlen, const size_t hashlen)
+atheme_argon2_needs_rehash(const uint32_t ver, const enum atheme_argon2_type type, const uint32_t m_cost,
+                           const uint32_t t_cost, const uint32_t threads, const size_t saltlen, const size_t hashlen)
 {
 	if (ver != ARGON2_VERSION_NUMBER)
 	{
@@ -70,7 +141,7 @@ atheme_argon2_needs_rehash(const uint32_t ver, const argon2_type type, const uin
 	if (type != atheme_argon2_type)
 	{
 		(void) slog(LG_DEBUG, "%s: type (%s) is not the configured type (%s)", MOWGLI_FUNC_NAME,
-		                      argon2_type2string(type, 0), argon2_type2string(atheme_argon2_type, 0));
+		                      atheme_argon2_type2string(type), atheme_argon2_type2string(atheme_argon2_type));
 		return true;
 	}
 	if (m_cost != (1U << atheme_argon2_memcost))
@@ -108,11 +179,20 @@ atheme_argon2_needs_rehash(const uint32_t ver, const argon2_type type, const uin
 }
 
 static bool
-atheme_argon2_compute(argon2_context *const restrict ctx, const argon2_type type, const char *const restrict password)
+atheme_argon2_compute(argon2_context *const restrict ctx, const enum atheme_argon2_type type,
+                      const char *const restrict password)
 {
 	unsigned char pass[PASSLEN + 1];
+	argon2_type inttype;
 	sigset_t oldset;
 	sigset_t newset;
+
+	if (! atheme_argon2_type2int(type, &inttype))
+	{
+		(void) slog(LG_ERROR, "%s: encountered unknown type '%u' (%s) (BUG?)", MOWGLI_FUNC_NAME,
+		                      (unsigned int) type, atheme_argon2_type2string(type));
+		return false;
+	}
 
 	/* The Argon2 library may spawn threads to handle this computation
 	 * (even with ctx.threads == 1), and this code-base has not been
@@ -141,13 +221,14 @@ atheme_argon2_compute(argon2_context *const restrict ctx, const argon2_type type
 	bool result = false;
 	int ret;
 
+	// The argon2 library needs a non-const buffer for the password
 	(void) memcpy(pass, password, passlen);
 
 	ctx->pwd = pass;
 	ctx->pwdlen = passlen;
 	ctx->lanes = ctx->threads;
 
-	if ((ret = argon2_ctx(ctx, type)) != (int) ARGON2_OK)
+	if ((ret = argon2_ctx(ctx, inttype)) != (int) ARGON2_OK)
 		(void) slog(LG_ERROR, "%s: argon2_ctx() failed: %s", MOWGLI_FUNC_NAME, argon2_error_message(ret));
 	else
 		result = true;
@@ -170,7 +251,7 @@ atheme_argon2_crypt(const char *const restrict password,
 	char salt64[BASE64_SIZE_STR(sizeof salt)];
 	const char *result = NULL;
 
-	const char *const typestr = argon2_type2string(atheme_argon2_type, 0);
+	const char *const typestr = atheme_argon2_type2string(atheme_argon2_type);
 
 	(void) atheme_random_buf(salt, atheme_argon2_saltlen);
 
@@ -200,8 +281,8 @@ atheme_argon2_crypt(const char *const restrict password,
 		goto cleanup;
 	}
 
-	if (snprintf(resultbuf, sizeof resultbuf, MODULE_SAVEHASH_FORMAT, argon2_type2string(atheme_argon2_type, 0),
-	               (unsigned int) ARGON2_VERSION_NUMBER, (1U << atheme_argon2_memcost), atheme_argon2_timecost,
+	if (snprintf(resultbuf, sizeof resultbuf, MODULE_SAVEHASH_FORMAT, typestr,
+                       (unsigned int) ARGON2_VERSION_NUMBER, (1U << atheme_argon2_memcost), atheme_argon2_timecost,
 	               atheme_argon2_threads, salt64, hash64) >= (int) PASSLEN)
 	{
 		(void) slog(LG_ERROR, "%s: snprintf(3) would have overflowed result buffer (BUG)", MOWGLI_FUNC_NAME);
@@ -223,7 +304,7 @@ atheme_argon2_verify(const char *const restrict password, const char *const rest
 {
 	bool result = false;
 
-	argon2_type type;
+	enum atheme_argon2_type type;
 	uint32_t ver;
 	uint32_t m_cost;
 	uint32_t t_cost;
@@ -237,11 +318,11 @@ atheme_argon2_verify(const char *const restrict password, const char *const rest
 	size_t hashlen;
 
 	if (strncasecmp(parameters, "$argon2d$", 9U) == 0)
-		type = Argon2_d;
+		type = ATHEME_ARGON2_TYPE_D;
 	else if (strncasecmp(parameters, "$argon2i$", 9U) == 0)
-		type = Argon2_i;
+		type = ATHEME_ARGON2_TYPE_I;
 	else if (strncasecmp(parameters, "$argon2id$", 10U) == 0)
-		type = Argon2_id;
+		type = ATHEME_ARGON2_TYPE_ID;
 	else
 	{
 		(void) slog(LG_DEBUG, "%s: prefix does not match", MOWGLI_FUNC_NAME);
@@ -265,6 +346,15 @@ atheme_argon2_verify(const char *const restrict password, const char *const rest
 	}
 
 	*flags |= PWVERIFY_FLAG_MYMODULE;
+
+#ifndef HAVE_LIBARGON2_TYPE_ID
+	if (type == ATHEME_ARGON2_TYPE_ID)
+	{
+		(void) slog(LG_ERROR, "%s: encountered argon2id-type hash but your libargon2 does not support it",
+		                      MOWGLI_FUNC_NAME);
+		goto cleanup;
+	}
+#endif /* !HAVE_LIBARGON2_TYPE_ID */
 
 	argon2_context ctx = {
 		.version        = ver,
@@ -328,6 +418,11 @@ mod_init(struct module *const restrict m)
 	                          ATHEME_ARGON2_HASHLEN_MIN, ATHEME_ARGON2_HASHLEN_MAX, ATHEME_ARGON2_HASHLEN_DEF);
 
 	(void) crypt_register(&crypto_argon2_impl);
+
+#ifndef HAVE_LIBARGON2_TYPE_ID
+	(void) slog(LG_INFO, "%s: WARNING: your libargon2 does not support the Argon2id algorithm type; please "
+	                     "consider upgrading!", m->name);
+#endif /* !HAVE_LIBARGON2_TYPE_ID */
 
 	m->mflags |= MODFLAG_DBCRYPTO;
 }
