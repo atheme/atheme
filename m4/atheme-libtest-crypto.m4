@@ -46,7 +46,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
             ])
         ], [test -n "${PKG_CONFIG}"], [
             # Allow for the user to "override" pkg-config without it being installed
-            PKG_CHECK_MODULES([LIBCRYPTO], [libcrypto], [], [])
+            PKG_CHECK_MODULES([LIBCRYPTO], [libcrypto], [], [LIBCRYPTO="No"])
         ])
         AS_IF([test -n "${LIBCRYPTO_CFLAGS+set}" -a -n "${LIBCRYPTO_LIBS+set}"], [
             # Only proceed with library tests if custom paths were given or pkg-config succeeded

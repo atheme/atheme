@@ -8592,31 +8592,11 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$LIBARGON2_PKG_ERRORS" >&5
 
-	as_fn_error $? "Package requirements (libargon2) were not met:
-
-$LIBARGON2_PKG_ERRORS
-
-Consider adjusting the PKG_CONFIG_PATH environment variable if you
-installed software in a non-standard prefix.
-
-Alternatively, you may set the environment variables LIBARGON2_CFLAGS
-and LIBARGON2_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details." "$LINENO" 5
+	LIBARGON2="No"
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
-is in your PATH or set the PKG_CONFIG environment variable to the full
-path to pkg-config.
-
-Alternatively, you may set the environment variables LIBARGON2_CFLAGS
-and LIBARGON2_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-
-To get pkg-config, see <http://pkg-config.freedesktop.org/>.
-See \`config.log' for more details" "$LINENO" 5; }
+	LIBARGON2="No"
 else
 	LIBARGON2_CFLAGS=$pkg_cv_LIBARGON2_CFLAGS
 	LIBARGON2_LIBS=$pkg_cv_LIBARGON2_LIBS
@@ -9208,31 +9188,11 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$LIBCRYPTO_PKG_ERRORS" >&5
 
-	as_fn_error $? "Package requirements (libcrypto) were not met:
-
-$LIBCRYPTO_PKG_ERRORS
-
-Consider adjusting the PKG_CONFIG_PATH environment variable if you
-installed software in a non-standard prefix.
-
-Alternatively, you may set the environment variables LIBCRYPTO_CFLAGS
-and LIBCRYPTO_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details." "$LINENO" 5
+	LIBCRYPTO="No"
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
-is in your PATH or set the PKG_CONFIG environment variable to the full
-path to pkg-config.
-
-Alternatively, you may set the environment variables LIBCRYPTO_CFLAGS
-and LIBCRYPTO_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-
-To get pkg-config, see <http://pkg-config.freedesktop.org/>.
-See \`config.log' for more details" "$LINENO" 5; }
+	LIBCRYPTO="No"
 else
 	LIBCRYPTO_CFLAGS=$pkg_cv_LIBCRYPTO_CFLAGS
 	LIBCRYPTO_LIBS=$pkg_cv_LIBCRYPTO_LIBS
@@ -10006,31 +9966,11 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$LIBIDN_PKG_ERRORS" >&5
 
-	as_fn_error $? "Package requirements (libidn) were not met:
-
-$LIBIDN_PKG_ERRORS
-
-Consider adjusting the PKG_CONFIG_PATH environment variable if you
-installed software in a non-standard prefix.
-
-Alternatively, you may set the environment variables LIBIDN_CFLAGS
-and LIBIDN_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details." "$LINENO" 5
+	LIBIDN="No"
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
-is in your PATH or set the PKG_CONFIG environment variable to the full
-path to pkg-config.
-
-Alternatively, you may set the environment variables LIBIDN_CFLAGS
-and LIBIDN_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-
-To get pkg-config, see <http://pkg-config.freedesktop.org/>.
-See \`config.log' for more details" "$LINENO" 5; }
+	LIBIDN="No"
 else
 	LIBIDN_CFLAGS=$pkg_cv_LIBIDN_CFLAGS
 	LIBIDN_LIBS=$pkg_cv_LIBIDN_LIBS
@@ -10821,31 +10761,11 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$LIBNETTLE_PKG_ERRORS" >&5
 
-	as_fn_error $? "Package requirements (nettle) were not met:
-
-$LIBNETTLE_PKG_ERRORS
-
-Consider adjusting the PKG_CONFIG_PATH environment variable if you
-installed software in a non-standard prefix.
-
-Alternatively, you may set the environment variables LIBNETTLE_CFLAGS
-and LIBNETTLE_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details." "$LINENO" 5
+	LIBNETTLE="No"
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
-is in your PATH or set the PKG_CONFIG environment variable to the full
-path to pkg-config.
-
-Alternatively, you may set the environment variables LIBNETTLE_CFLAGS
-and LIBNETTLE_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-
-To get pkg-config, see <http://pkg-config.freedesktop.org/>.
-See \`config.log' for more details" "$LINENO" 5; }
+	LIBNETTLE="No"
 else
 	LIBNETTLE_CFLAGS=$pkg_cv_LIBNETTLE_CFLAGS
 	LIBNETTLE_LIBS=$pkg_cv_LIBNETTLE_LIBS
@@ -11297,31 +11217,11 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$LIBPCRE_PKG_ERRORS" >&5
 
-	as_fn_error $? "Package requirements (libpcre) were not met:
-
-$LIBPCRE_PKG_ERRORS
-
-Consider adjusting the PKG_CONFIG_PATH environment variable if you
-installed software in a non-standard prefix.
-
-Alternatively, you may set the environment variables LIBPCRE_CFLAGS
-and LIBPCRE_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details." "$LINENO" 5
+	LIBPCRE="No"
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
-is in your PATH or set the PKG_CONFIG environment variable to the full
-path to pkg-config.
-
-Alternatively, you may set the environment variables LIBPCRE_CFLAGS
-and LIBPCRE_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-
-To get pkg-config, see <http://pkg-config.freedesktop.org/>.
-See \`config.log' for more details" "$LINENO" 5; }
+	LIBPCRE="No"
 else
 	LIBPCRE_CFLAGS=$pkg_cv_LIBPCRE_CFLAGS
 	LIBPCRE_LIBS=$pkg_cv_LIBPCRE_LIBS
@@ -11530,31 +11430,11 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$LIBQRENCODE_PKG_ERRORS" >&5
 
-	as_fn_error $? "Package requirements (libqrencode) were not met:
-
-$LIBQRENCODE_PKG_ERRORS
-
-Consider adjusting the PKG_CONFIG_PATH environment variable if you
-installed software in a non-standard prefix.
-
-Alternatively, you may set the environment variables LIBQRENCODE_CFLAGS
-and LIBQRENCODE_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details." "$LINENO" 5
+	LIBQRENCODE="No"
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
-is in your PATH or set the PKG_CONFIG environment variable to the full
-path to pkg-config.
-
-Alternatively, you may set the environment variables LIBQRENCODE_CFLAGS
-and LIBQRENCODE_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-
-To get pkg-config, see <http://pkg-config.freedesktop.org/>.
-See \`config.log' for more details" "$LINENO" 5; }
+	LIBQRENCODE="No"
 else
 	LIBQRENCODE_CFLAGS=$pkg_cv_LIBQRENCODE_CFLAGS
 	LIBQRENCODE_LIBS=$pkg_cv_LIBQRENCODE_LIBS
@@ -11771,31 +11651,11 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$LIBSODIUM_PKG_ERRORS" >&5
 
-	as_fn_error $? "Package requirements (libsodium) were not met:
-
-$LIBSODIUM_PKG_ERRORS
-
-Consider adjusting the PKG_CONFIG_PATH environment variable if you
-installed software in a non-standard prefix.
-
-Alternatively, you may set the environment variables LIBSODIUM_CFLAGS
-and LIBSODIUM_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details." "$LINENO" 5
+	LIBSODIUM="No"
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
-is in your PATH or set the PKG_CONFIG environment variable to the full
-path to pkg-config.
-
-Alternatively, you may set the environment variables LIBSODIUM_CFLAGS
-and LIBSODIUM_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-
-To get pkg-config, see <http://pkg-config.freedesktop.org/>.
-See \`config.log' for more details" "$LINENO" 5; }
+	LIBSODIUM="No"
 else
 	LIBSODIUM_CFLAGS=$pkg_cv_LIBSODIUM_CFLAGS
 	LIBSODIUM_LIBS=$pkg_cv_LIBSODIUM_LIBS
@@ -22346,3 +22206,10 @@ Type 'make' to build ${PACKAGE_TARNAME}, and 'make install' to install it.
 "
 
 
+
+if test -z "${PKG_CONFIG}"; then :
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: please consider installing pkg-config -- many of this script's library and feature detection tests rely upon it being available. if you choose to do so, please re-run this script after." >&5
+$as_echo "$as_me: WARNING: please consider installing pkg-config -- many of this script's library and feature detection tests rely upon it being available. if you choose to do so, please re-run this script after." >&2;}
+
+fi

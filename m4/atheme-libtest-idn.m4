@@ -41,7 +41,7 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
             ])
         ], [test -n "${PKG_CONFIG}"], [
             # Allow for the user to "override" pkg-config without it being installed
-            PKG_CHECK_MODULES([LIBIDN], [libidn], [], [])
+            PKG_CHECK_MODULES([LIBIDN], [libidn], [], [LIBIDN="No"])
         ])
         AS_IF([test -n "${LIBIDN_CFLAGS+set}" -a -n "${LIBIDN_LIBS+set}"], [
             # Only proceed with library tests if custom paths were given or pkg-config succeeded

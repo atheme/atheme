@@ -42,7 +42,7 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
             ])
         ], [test -n "${PKG_CONFIG}"], [
             # Allow for the user to "override" pkg-config without it being installed
-            PKG_CHECK_MODULES([LIBNETTLE], [nettle], [], [])
+            PKG_CHECK_MODULES([LIBNETTLE], [nettle], [], [LIBNETTLE="No"])
         ])
         AS_IF([test -n "${LIBNETTLE_CFLAGS+set}" -a -n "${LIBNETTLE_LIBS+set}"], [
             # Only proceed with library tests if custom paths were given or pkg-config succeeded

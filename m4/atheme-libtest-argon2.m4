@@ -41,7 +41,7 @@ AC_DEFUN([ATHEME_LIBTEST_ARGON2], [
             ])
         ], [test -n "${PKG_CONFIG}"], [
             # Allow for the user to "override" pkg-config without it being installed
-            PKG_CHECK_MODULES([LIBARGON2], [libargon2], [], [])
+            PKG_CHECK_MODULES([LIBARGON2], [libargon2], [], [LIBARGON2="No"])
         ])
         AS_IF([test -n "${LIBARGON2_CFLAGS+set}" -a -n "${LIBARGON2_LIBS+set}"], [
             # Only proceed with library tests if custom paths were given or pkg-config succeeded

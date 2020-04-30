@@ -191,3 +191,7 @@ AC_CONFIG_FILES([
 AC_OUTPUT
 
 ATHEME_PRINT_CONFIGURATION
+
+AS_IF([test -z "${PKG_CONFIG}"], [
+    AC_MSG_WARN([please consider installing pkg-config -- many of this script's library and feature detection tests rely upon it being available. if you choose to do so, please re-run this script after.])
+])

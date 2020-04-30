@@ -42,7 +42,7 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
             ])
         ], [test -n "${PKG_CONFIG}"], [
             # Allow for the user to "override" pkg-config without it being installed
-            PKG_CHECK_MODULES([LIBQRENCODE], [libqrencode], [], [])
+            PKG_CHECK_MODULES([LIBQRENCODE], [libqrencode], [], [LIBQRENCODE="No"])
         ])
         AS_IF([test -n "${LIBQRENCODE_CFLAGS+set}" -a -n "${LIBQRENCODE_LIBS+set}"], [
             # Only proceed with library tests if custom paths were given or pkg-config succeeded

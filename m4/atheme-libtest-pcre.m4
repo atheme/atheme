@@ -42,7 +42,7 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
             ])
         ], [test -n "${PKG_CONFIG}"], [
             # Allow for the user to "override" pkg-config without it being installed
-            PKG_CHECK_MODULES([LIBPCRE], [libpcre], [], [])
+            PKG_CHECK_MODULES([LIBPCRE], [libpcre], [], [LIBPCRE="No"])
         ])
         AS_IF([test -n "${LIBPCRE_CFLAGS+set}" -a -n "${LIBPCRE_LIBS+set}"], [
             # Only proceed with library tests if custom paths were given or pkg-config succeeded

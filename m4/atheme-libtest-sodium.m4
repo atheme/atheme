@@ -45,7 +45,7 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
             ])
         ], [test -n "${PKG_CONFIG}"], [
             # Allow for the user to "override" pkg-config without it being installed
-            PKG_CHECK_MODULES([LIBSODIUM], [libsodium], [], [])
+            PKG_CHECK_MODULES([LIBSODIUM], [libsodium], [], [LIBSODIUM="No"])
         ])
         AS_IF([test -n "${LIBSODIUM_CFLAGS+set}" -a -n "${LIBSODIUM_LIBS+set}"], [
             # Only proceed with library tests if custom paths were given or pkg-config succeeded
