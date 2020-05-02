@@ -178,7 +178,7 @@ ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 
 	if (me.auth == AUTH_EMAIL)
 	{
-		char *key = random_string(12);
+		char *key = random_string(16);
 		mu->flags |= MU_WAITAUTH;
 
 		metadata_add(mu, "private:verify:register:key", key);

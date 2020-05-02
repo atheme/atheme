@@ -58,7 +58,7 @@ ns_cmd_resetpass(struct sourceinfo *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_ADMIN, "RESETPASS: \2%s\2", entity(mu)->name);
 	}
 
-	newpass = random_string(12);
+	newpass = random_string(16);
 	metadata_delete(mu, "private:setpass:key");
 	metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
 	metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));

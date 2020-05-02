@@ -165,7 +165,7 @@ ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 		}
 		logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2 (change key)", name);
 
-		key = random_string(12);
+		key = random_string(16);
 
 		const char *const hash = crypt_password(key);
 
@@ -200,7 +200,7 @@ ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 		}
 		logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2", name);
 
-		newpass = random_string(12);
+		newpass = random_string(16);
 		metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
 		metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));
 

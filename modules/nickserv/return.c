@@ -46,7 +46,7 @@ ns_cmd_return(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	newpass = random_string(12);
+	newpass = random_string(16);
 	mowgli_strlcpy(oldmail, mu->email, sizeof oldmail);
 	myuser_set_email(mu, newmail);
 
