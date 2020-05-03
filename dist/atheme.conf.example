@@ -149,7 +149,7 @@ loadmodule "modules/backend/opensex";
  * loadmodule "modules/crypto/crypt3-md5";
  *
  * The Argon2 module requires the argon2 reference library (./configure
- * --with-libargon2) and is *NOT* available in Atheme v7.2 or earlier. If you
+ * --with-argon2) and is *NOT* available in Atheme v7.2 or earlier. If you
  * wish to use this module while retaining the possibility to downgrade to
  * v7.2, please see the crypto {} documentation below.
  *
