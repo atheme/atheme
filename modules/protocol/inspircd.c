@@ -89,7 +89,6 @@ static const struct cmode inspircd_prefix_mode_list[] = {
 static const struct cmode inspircd_user_mode_list[] = {
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },
-  { 'd', UF_DEAF     },
   { 'k', UF_IMMUNE   },
   { '\0', 0 }
 };
