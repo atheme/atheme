@@ -337,14 +337,6 @@ sasl_user_can_login(struct sasl_session *const restrict p)
 static void
 sasl_session_destroy(struct sasl_session *const restrict p)
 {
-	if (p->flags & ASASL_SFLAG_NEED_LOG && *p->authceid)
-	{
-		const struct myuser *const mu = myuser_find_uid(p->authceid);
-
-		if (mu && ! (ircd->flags & IRCD_SASL_USE_PUID))
-			(void) logcommand(p->si, CMDLOG_LOGIN, "LOGIN (session timed out)");
-	}
-
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, sasl_sessions.head)
