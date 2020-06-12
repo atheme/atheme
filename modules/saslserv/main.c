@@ -312,9 +312,6 @@ sasl_user_can_login(struct sasl_session *const restrict p)
 		return NULL;
 	}
 
-	// Log it with the full n!u@h later
-	p->flags |= ASASL_SFLAG_NEED_LOG;
-
 	/* We just did SASL authentication for a user.  With IRCds which do not
 	 * have unique UIDs for users, we will likely be expecting the login
 	 * data to be bursted.  As a result, we should give the core a heads'
@@ -337,14 +334,6 @@ sasl_user_can_login(struct sasl_session *const restrict p)
 static void
 sasl_session_destroy(struct sasl_session *const restrict p)
 {
-	if (p->flags & ASASL_SFLAG_NEED_LOG && *p->authceid)
-	{
-		const struct myuser *const mu = myuser_find_uid(p->authceid);
-
-		if (mu && ! (ircd->flags & IRCD_SASL_USE_PUID))
-			(void) logcommand(p->si, CMDLOG_LOGIN, "LOGIN (session timed out)");
-	}
-
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, sasl_sessions.head)
@@ -407,9 +396,6 @@ static bool
 sasl_handle_login(struct sasl_session *const restrict p, struct user *const u, struct myuser *mu)
 {
 	bool was_killed = false;
-
-	// We will log messages now ourselves, if needed
-	p->flags &= ~ASASL_SFLAG_NEED_LOG;
 
 	// Find the account if necessary
 	if (! mu)
