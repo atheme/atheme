@@ -287,7 +287,8 @@ dnsbl_hit(struct user *u, struct Blacklist *blptr)
 
 		case DNSBL_ACT_NOTIFY:
 			notice(svs->nick, u->nick, "Your IP address %s is listed in DNS Blacklist %s", u->ip, blptr->host);
-			// FALLTHROUGH
+			ATHEME_FALLTHROUGH;
+
 		case DNSBL_ACT_SNOOP:
 			slog(LG_INFO, "DNSBL: \2%s\2!%s@%s [%s] is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
 			break;

@@ -610,9 +610,14 @@ bs_cmd_change(struct sourceinfo *si, int parc, char *parv[])
 			}
 			else
 				command_fail(si, fault_badparams, _("\2%s\2 is an invalid realname, not changing it."), parv[4]);
+
+			ATHEME_FALLTHROUGH;
+
 		case 4:
 			sfree(bot->host);
 			bot->host = sstrdup(parv[3]);
+			ATHEME_FALLTHROUGH;
+
 		case 3:
 			// XXX: we really need an is_valid_user(), but this is close enough. --nenolod
 			if (is_valid_username(parv[2])) {
@@ -620,10 +625,14 @@ bs_cmd_change(struct sourceinfo *si, int parc, char *parv[])
 				bot->user = sstrndup(parv[2], USERLEN);
 			} else
 				command_fail(si, fault_badparams, _("\2%s\2 is an invalid username, not changing it."), parv[2]);
+
+			ATHEME_FALLTHROUGH;
+
 		case 2:
 			sfree(bot->nick);
 			bot->nick = sstrdup(parv[1]);
 			break;
+
 		default:
 			command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "BOT CHANGE");
 			command_fail(si, fault_needmoreparams, _("Syntax: BOT CHANGE <oldnick> <newnick> [<user> [<host> [<real>]]]"));

@@ -38,6 +38,9 @@
 #  if __has_attribute(__diagnose_if__)
 #    define ATHEME_ATTR_HAS_DIAGNOSE_IF                 1
 #  endif
+#  if __has_attribute(__fallthrough__)
+#    define ATHEME_ATTR_HAS_FALLTHROUGH                 1
+#  endif
 #  if __has_attribute(__format__)
 #    define ATHEME_ATTR_HAS_FORMAT                      1
 #  endif
@@ -118,6 +121,17 @@
 #  define ATHEME_FATTR_DIAGNOSE_IF(cond, msg, type)     __attribute__((__diagnose_if__((cond), (msg), (type))))
 #else
 #  define ATHEME_FATTR_DIAGNOSE_IF(cond, msg, type)     /* No 'diagnose_if' function attribute support */
+#endif
+
+/* Prevent the compiler from warning about fall-through in switch() case statements. This one is a little bit
+ * unique, in that its name is shorter because it is intended to be used within a block of code multiple times,
+ * and so saves a lot of typing and eyesore. Its name is still prefixed with ATHEME_ however, to prevent any
+ * unintended collision with a FALLTHROUGH macro declared in the header files of any library we end up using.
+ */
+#ifdef ATHEME_ATTR_HAS_FALLTHROUGH
+#  define ATHEME_FALLTHROUGH                            __attribute__((__fallthrough__))
+#else
+#  define ATHEME_FALLTHROUGH                            /* No 'fallthrough' statement attribute support */
 #endif
 
 /* Have the compiler verify printf(3) or scanf(3) format tokens in the parameter position given by 'fmt' against the

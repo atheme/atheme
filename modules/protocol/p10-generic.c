@@ -729,13 +729,26 @@ m_mode(struct sourceinfo *si, int parc, char *parv[])
 		{
 			switch (*p)
 			{
-				case '+': dir = MTYPE_ADD; break;
-				case '-': dir = MTYPE_DEL; break;
+				case '+':
+					dir = MTYPE_ADD;
+					break;
+
+				case '-':
+					dir = MTYPE_DEL;
+					break;
+
 				case 'l':
-					  if (dir == MTYPE_DEL)
-						  break;
-					  /* FALLTHROUGH */
-				case 'b': case 'k': case 'o': case 'v':
+					if (dir == MTYPE_DEL)
+						break;
+
+					ATHEME_FALLTHROUGH;
+				case 'b':
+					ATHEME_FALLTHROUGH;
+				case 'k':
+					ATHEME_FALLTHROUGH;
+				case 'o':
+					ATHEME_FALLTHROUGH;
+				case 'v':
 					  i++;
 			}
 		}
