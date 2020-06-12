@@ -14,7 +14,7 @@
 
 SERNO_FILE="serno.h"
 
-REVH_NEW="$(git log -n1 --abbrev=20 --format='%h')"
+REVH_NEW="$(git rev-parse --short=20 HEAD)"
 
 if [ "x${REVH_NEW}" = "x" ]
 then
