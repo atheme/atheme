@@ -72,13 +72,14 @@ nickserv_handle_nickchange(struct user *u)
 	// OpenServices: is user on access list? -nenolod
 	if (myuser_access_verify(u, mn->owner))
 	{
-		notice(nicksvs.nick, u->nick, "Please identify via \2/msg %s IDENTIFY <password>\2",
-		                              nicksvs.me->disp);
+		notice(nicksvs.nick, u->nick, "Please identify via \2/msg %s IDENTIFY %s <password>\2",
+		                              nicksvs.me->disp, entity(mn->owner)->name);
 		return;
 	}
 
 	notice(nicksvs.nick, u->nick, "This nickname is registered. Please choose a different nickname, or "
-	                              "identify via \2/msg %s IDENTIFY <password>\2", nicksvs.me->disp);
+	                              "identify via \2/msg %s IDENTIFY %s <password>\2",
+	                              nicksvs.me->disp, entity(mn->owner)->name);
 
 	hdata.u = u;
 	hdata.mn = mn;
