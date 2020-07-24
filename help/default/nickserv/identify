@@ -4,13 +4,12 @@ IDENTIFY identifies you with services so that you
 can perform general maintenance and commands that
 require you to be logged in.
 
-Syntax: IDENTIFY <password>
-
-You can also identify for another nick than you
-are currently using.
-
 Syntax: IDENTIFY <nick> <password>
 
-Examples:
-    /msg &nick& IDENTIFY foo
+You can also omit <nick> to identify to the nick
+you are currently using.
+
+Syntax: IDENTIFY <password>
+
+Example:
     /msg &nick& IDENTIFY jilles foo
