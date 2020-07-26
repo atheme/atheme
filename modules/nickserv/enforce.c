@@ -445,6 +445,49 @@ ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 	}
 	if ((si->smu == mn->owner) || verify_password(mn->owner, password))
 	{
+		if (MOWGLI_LIST_LENGTH(&mn->owner->logins) >= me.maxlogins)
+		{
+			command_fail(si, fault_toomany, _("You were not logged in."));
+			command_fail(si, fault_toomany, _("There are already \2%zu\2 sessions logged in to \2%s\2 (maximum allowed: %u)."), MOWGLI_LIST_LENGTH(&mn->owner->logins), entity(mn->owner)->name, me.maxlogins);
+
+			lau[0] = '\0';
+			MOWGLI_ITER_FOREACH(n, mn->owner->logins.head)
+			{
+				if (lau[0] != '\0')
+					mowgli_strlcat(lau, ", ", sizeof lau);
+				mowgli_strlcat(lau, ((struct user *)n->data)->nick, sizeof lau);
+			}
+			command_fail(si, fault_toomany, _("Logged in nicks are: %s"), lau);
+
+			return;
+		}
+		// identify them to the target nick's account if they aren't yet
+		if (si->smu != mn->owner)
+		{
+			// if they are identified to another account, nuke their session first
+			if (si->smu != NULL)
+			{
+				command_success_nodata(si, _("You have been logged out of \2%s\2."), entity(si->smu)->name);
+
+				if (ircd_logout_or_kill(si->su, entity(si->smu)->name))
+					// logout killed the user...
+					return;
+				si->smu->lastlogin = CURRTIME;
+				MOWGLI_ITER_FOREACH_SAFE(n, tn, si->smu->logins.head)
+				{
+					if (n->data == si->su)
+					{
+						mowgli_node_delete(n, &si->smu->logins);
+						mowgli_node_free(n);
+						break;
+					}
+				}
+				si->su->myuser = NULL;
+			}
+
+			myuser_login(si->service, si->su, mn->owner, true);
+		}
+
 		struct chanuser *cu = NULL;
 		if (si->su != NULL && ((cu = find_user_banned_channel(si->su, 'b')) || (cu = find_user_banned_channel(si->su, 'q'))))
 		{
@@ -500,50 +543,6 @@ ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 				command_success_nodata(si, _("\2%s\2 has been regained."), target);
 			}
 			fnc_sts(nicksvs.me->me, si->su, target, FNC_FORCE);
-		}
-
-		if (MOWGLI_LIST_LENGTH(&mn->owner->logins) >= me.maxlogins)
-		{
-			command_fail(si, fault_toomany, _("You were not logged in."));
-			command_fail(si, fault_toomany, _("There are already \2%zu\2 sessions logged in to \2%s\2 (maximum allowed: %u)."), MOWGLI_LIST_LENGTH(&mn->owner->logins), entity(mn->owner)->name, me.maxlogins);
-
-			lau[0] = '\0';
-			MOWGLI_ITER_FOREACH(n, mn->owner->logins.head)
-			{
-				if (lau[0] != '\0')
-					mowgli_strlcat(lau, ", ", sizeof lau);
-				mowgli_strlcat(lau, ((struct user *)n->data)->nick, sizeof lau);
-			}
-			command_fail(si, fault_toomany, _("Logged in nicks are: %s"), lau);
-
-			return;
-		}
-
-		// identify them to the target nick's account if they aren't yet
-		if (si->smu != mn->owner)
-		{
-			// if they are identified to another account, nuke their session first
-			if (si->smu != NULL)
-			{
-				command_success_nodata(si, _("You have been logged out of \2%s\2."), entity(si->smu)->name);
-
-				if (ircd_logout_or_kill(si->su, entity(si->smu)->name))
-					// logout killed the user...
-					return;
-				si->smu->lastlogin = CURRTIME;
-				MOWGLI_ITER_FOREACH_SAFE(n, tn, si->smu->logins.head)
-				{
-					if (n->data == si->su)
-					{
-						mowgli_node_delete(n, &si->smu->logins);
-						mowgli_node_free(n);
-						break;
-					}
-				}
-				si->su->myuser = NULL;
-			}
-
-			myuser_login(si->service, si->su, mn->owner, true);
 		}
 
 		return;
