@@ -445,13 +445,6 @@ ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 	}
 	if ((si->smu == mn->owner) || verify_password(mn->owner, password))
 	{
-		struct chanuser *cu = NULL;
-		if (si->su != NULL && ((cu = find_user_banned_channel(si->su, 'b')) || (cu = find_user_banned_channel(si->su, 'q'))))
-		{
-			command_fail(si, fault_noprivs, _("You can not regain your nickname while banned or quieted on a channel: \2%s\2"), cu->chan->name);
-			return;
-		}
-
 		if (qline_find_match(target) && !has_priv(si, PRIV_MASS_AKILL))
 		{
 			command_fail(si, fault_noprivs, _("You can not regain a reserved nickname."));
