@@ -80,6 +80,7 @@ install-extra: ../../dist/atheme.conf.userserv-example ../../dist/atheme.conf.op
 	[ -r ${DESTDIR}${sysconfdir}/atheme.motd ] || ${INSTALL} -m 644 -c ../../dist/atheme.motd.example ${DESTDIR}${sysconfdir}/atheme.motd || :
 	${INSTALL} -m 600 -c ../../dist/atheme.conf.userserv-example ${DESTDIR}${sysconfdir}
 	${INSTALL} -m 600 -c ../../dist/atheme.conf.operserv-example ${DESTDIR}${sysconfdir}
+	${INSTALL} -m 600 -c ../../dist/atheme.conf.ophion-identity-example ${DESTDIR}${sysconfdir}
 	${INSTALL} -m 644 -c ../../dist/atheme.cron.example ${DESTDIR}${sysconfdir}
 	${INSTALL} -m 644 ../../NEWS.md ${DESTDIR}${DOCDIR}/RELEASE
 	(cd ../../doc; for i in *; do \
