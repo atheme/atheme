@@ -90,7 +90,8 @@ ts6_server_login(void)
 
 	me.bursting = true;
 
-	sts("CAPAB :QS EX IE KLN UNKLN ENCAP TB SERVICES EUID EOPMOD MLOCK");
+	sts("CAPAB :QS EX IE KLN UNKLN ENCAP TB SERVICES EUID EOPMOD MLOCK %s",
+	    ircd->capab_tokens != NULL ? ircd->capab_tokens : "");
 	sts("SERVER %s 1 :%s%s", me.name, me.hidden ? "(H) " : "", me.desc);
 	sts("SVINFO %d 3 0 :%lu", ircd->uses_uid ? 6 : 5,
 			(unsigned long)CURRTIME);

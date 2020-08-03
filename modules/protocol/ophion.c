@@ -39,6 +39,7 @@ static struct ircd Ophion = {
 	.except_mchar = 'e',
 	.invex_mchar = 'I',
 	.flags = IRCD_CIDR_BANS | IRCD_HOLDNICK | IRCD_TOPIC_NOCOLOUR,
+	.capab_tokens = "IRCX",
 };
 
 static const struct cmode ophion_mode_list[] = {

@@ -39,6 +39,7 @@ struct ircd
 	char            except_mchar;
 	char            invex_mchar;
 	int             flags;
+	const char *	capab_tokens;	// additional capab tokens for ts6-generic
 };
 
 /* values for type */
