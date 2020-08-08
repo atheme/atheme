@@ -137,6 +137,17 @@ burst_myuser_membership(struct myuser *mu)
 }
 
 static void
+burst_groupacs_change(struct groupacs *ga)
+{
+	return_if_fail(ga != NULL);
+
+	if (!isuser(ga->mt))
+		return;
+
+	burst_myuser_membership(user(ga->mt));
+}
+
+static void
 mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/charybdis")
@@ -148,6 +159,8 @@ mod_init(struct module *const restrict m)
 
 	hook_add_user_identify(burst_user_membership);
 	hook_add_user_register(burst_myuser_membership);
+	hook_add_groupacs_add(burst_groupacs_change);
+	hook_add_groupacs_delete(burst_groupacs_change);
 }
 
 static void
@@ -155,6 +168,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	hook_del_user_identify(burst_user_membership);
 	hook_del_user_register(burst_myuser_membership);
+	hook_del_groupacs_add(burst_groupacs_change);
+	hook_del_groupacs_delete(burst_groupacs_change);
 }
 
 SIMPLE_DECLARE_MODULE_V1("protocol/ophion", MODULE_UNLOAD_CAPABILITY_NEVER)
