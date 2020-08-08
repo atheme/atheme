@@ -152,19 +152,119 @@ burst_metadata_change(struct hook_metadata_change *mdchange)
 	if (!strcasecmp(mdchange->name, "member-of"))
 		return;
 
-	struct service *svs = service_find("nickserv");
-	if (svs == NULL)
-		return;
-
 	mowgli_node_t *n;
 	MOWGLI_LIST_FOREACH(n, mdchange->target->logins.head)
 	{
 		struct user *u = n->data;
 
 		sts(":%s TPROP %s %ld %ld %s :%s",
-			CLIENT_NAME(svs->me), CLIENT_NAME(u), u->ts, CURRTIME,
+			ME, CLIENT_NAME(u), u->ts, CURRTIME,
 			mdchange->name, mdchange->value);
 	}
+}
+
+static void
+persist_user_tprop(struct user *u, time_t target_ts, const char *key, const char *value)
+{
+	if (u->myuser == NULL)
+	{
+		slog(LG_DEBUG, "persist_user_tprop(): not persisting TPROP for anonymous user %s", u->nick);
+		return;
+	}
+
+	if (target_ts != u->ts)
+	{
+		slog(LG_DEBUG, "persist_user_tprop(): invalid TPROP for %s", u->nick);
+		return;
+	}
+
+	metadata_delete(u->myuser, key);
+	metadata_add(u->myuser, key, value);
+}
+
+static void
+persist_channel_tprop(struct mychan *mc, time_t target_ts, const char *key, const char *value)
+{
+	if (target_ts != mc->registered)
+	{
+		slog(LG_DEBUG, "persist_user_tprop(): invalid TPROP for %s", mc->name);
+		return;
+	}
+
+	metadata_delete(mc, key);
+	metadata_add(mc, key, value);
+}
+
+/*
+ * :source PROP target key value
+ *
+ * parv[0] = target
+ * parv[1] = key
+ * parv[2] = value
+ */
+static void
+m_prop(struct sourceinfo *si, int parc, char *parv[])
+{
+	if (*parv[0] == '#')
+	{
+		struct mychan *mc = mychan_find(parv[0]);
+
+		if (mc == NULL)
+		{
+			slog(LG_DEBUG, "m_prop(): not tracking channel %s", parv[0]);
+			return;
+		}
+
+		persist_channel_tprop(mc, mc->registered, parv[1], parv[2]);
+
+		return;
+	}
+
+	struct user *u = user_find(parv[0]);
+	if (u == NULL)
+	{
+		slog(LG_DEBUG, "m_prop(): unknown user %s", parv[0]);
+		return;
+	}
+
+	persist_user_tprop(u, u->ts, parv[1], parv[2]);
+}
+
+/*
+ * :source TPROP target targetTS propTS key :value
+ *
+ * parv[0] = target
+ * parv[1] = targetTS
+ * parv[2] = propTS
+ * parv[3] = key
+ * parv[4] = value
+ */
+static void
+m_tprop(struct sourceinfo *si, int parc, char *parv[])
+{
+	if (*parv[0] == '#')
+	{
+		struct mychan *mc = mychan_find(parv[0]);
+
+		if (mc == NULL)
+		{
+			slog(LG_DEBUG, "m_tprop(): not tracking channel %s", parv[0]);
+			return;
+		}
+
+		persist_channel_tprop(mc, atol(parv[1]), parv[3], parv[4]);
+
+		return;
+	}
+
+	struct user *u = user_find(parv[0]);
+	if (u == NULL)
+	{
+		slog(LG_DEBUG, "m_tprop(): unknown user %s", parv[0]);
+		return;
+	}
+
+	persist_user_tprop(u, atol(parv[1]), parv[3], parv[4]);
 }
 
 static void
