@@ -148,6 +148,30 @@ burst_groupacs_change(struct groupacs *ga)
 }
 
 static void
+burst_metadata_change(struct hook_metadata_change *mdchange)
+{
+	return_if_fail(mdchange != NULL);
+
+	/* don't let someone try to overwrite member-of property */
+	if (!strcasecmp(mdchange->name, "member-of"))
+		return;
+
+	struct service *svs = service_find("nickserv");
+	if (svs == NULL)
+		return;
+
+	mowgli_node_t *n;
+	MOWGLI_LIST_FOREACH(n, mdchange->target->logins.head)
+	{
+		struct user *u = n->data;
+
+		sts(":%s TPROP %s %ld %ld %s :%s",
+			CLIENT_NAME(svs->me), CLIENT_NAME(u), u->ts, CURRTIME,
+			mdchange->name, mdchange->value);
+	}
+}
+
+static void
 mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/charybdis")
@@ -161,6 +185,7 @@ mod_init(struct module *const restrict m)
 	hook_add_user_register(burst_myuser_membership);
 	hook_add_groupacs_add(burst_groupacs_change);
 	hook_add_groupacs_delete(burst_groupacs_change);
+	hook_add_metadata_change(burst_metadata_change);
 }
 
 static void
@@ -170,6 +195,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	hook_del_user_register(burst_myuser_membership);
 	hook_del_groupacs_add(burst_groupacs_change);
 	hook_del_groupacs_delete(burst_groupacs_change);
+	hook_del_metadata_change(burst_metadata_change);
 }
 
 SIMPLE_DECLARE_MODULE_V1("protocol/ophion", MODULE_UNLOAD_CAPABILITY_NEVER)
