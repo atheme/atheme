@@ -228,6 +228,30 @@ persist_channel_tprop(struct mychan *mc, time_t target_ts, const char *key, cons
 		metadata_add(mc, key, value);
 }
 
+static void
+restore_user_tprop(struct user *u)
+{
+	if (u->myuser == NULL)
+		return;
+
+	mowgli_patricia_iteration_state_t state;
+	struct myuser *mu = u->myuser;
+	struct metadata *md;
+
+	MOWGLI_PATRICIA_FOREACH(md, &state, atheme_object(mu)->metadata)
+	{
+		if (strchr(md->name, ':'))
+			continue;
+
+		if (!strcasecmp(md->name, "member-of"))
+			continue;
+
+		sts(":%s TPROP %s %ld %ld %s :%s",
+			ME, CLIENT_NAME(u), u->ts, CURRTIME,
+			md->name, md->value);
+	}
+}
+
 /*
  * :source PROP target key value
  *
@@ -313,22 +337,33 @@ mod_init(struct module *const restrict m)
 	ircd = &Ophion;
 
 	hook_add_user_identify(burst_user_membership);
+	hook_add_user_identify(restore_user_tprop);
 	hook_add_user_register(burst_myuser_membership);
 	hook_add_groupacs_add(burst_groupacs_change);
 	hook_add_groupacs_delete(burst_groupacs_change);
 	hook_add_metadata_change(burst_metadata_change);
 	hook_add_server_eob(burst_server_memberships);
+
+	pcommand_delete("PROP");
+	pcommand_add("PROP", m_prop, 3, MSRC_USER | MSRC_SERVER);
+
+	pcommand_delete("TPROP");
+	pcommand_add("TPROP", m_tprop, 5, MSRC_SERVER);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	hook_del_user_identify(burst_user_membership);
+	hook_del_user_identify(restore_user_tprop);
 	hook_del_user_register(burst_myuser_membership);
 	hook_del_groupacs_add(burst_groupacs_change);
 	hook_del_groupacs_delete(burst_groupacs_change);
 	hook_del_metadata_change(burst_metadata_change);
 	hook_del_server_eob(burst_server_memberships);
+
+	pcommand_delete("PROP");
+	pcommand_delete("TPROP");
 }
 
 SIMPLE_DECLARE_MODULE_V1("protocol/ophion", MODULE_UNLOAD_CAPABILITY_NEVER)
