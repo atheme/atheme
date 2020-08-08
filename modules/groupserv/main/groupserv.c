@@ -124,6 +124,8 @@ groupacs_add(struct mygroup *mg, struct myentity *mt, unsigned int flags)
 	mowgli_node_add(ga, &ga->gnode, &mg->acs);
 	mowgli_node_add(ga, &ga->unode, myentity_get_membership_list(mt));
 
+	hook_call_groupacs_add(ga);
+
 	return ga;
 }
 
@@ -181,6 +183,9 @@ groupacs_delete(struct mygroup *mg, struct myentity *mt)
 	{
 		mowgli_node_delete(&ga->gnode, &mg->acs);
 		mowgli_node_delete(&ga->unode, myentity_get_membership_list(mt));
+
+		hook_call_groupacs_delete(ga);
+
 		atheme_object_unref(ga);
 	}
 }

@@ -65,6 +65,8 @@ channel_succession              struct hook_channel_succession_req *
 chanuser_sync                   struct hook_chanuser_sync *
 group_drop                      struct mygroup *
 group_register                  struct mygroup *
+groupacs_add                    struct groupacs *
+groupacs_delete                 struct groupacs *
 host_request                    struct hook_host_request *
 metadata_change                 struct hook_metadata_change *
 module_load                     struct hook_module_load *
