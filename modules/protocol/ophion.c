@@ -70,6 +70,20 @@ static const struct cmode ophion_mode_list[] = {
   { '\0', 0 }
 };
 
+static const struct cmode ophion_status_mode_list[] = {
+  { 'a', CSTATUS_OWNER   },
+  { 'o', CSTATUS_OP	 },
+  { 'v', CSTATUS_VOICE	 },
+  { '\0', 0 }
+};
+
+static const struct cmode ophion_prefix_mode_list[] = {
+  { '.', CSTATUS_OWNER	 },
+  { '@', CSTATUS_OP	 },
+  { '+', CSTATUS_VOICE	 },
+  { '\0', 0 }
+};
+
 static const struct cmode ophion_user_mode_list[] = {
   { 'p', UF_IMMUNE   },
   { 'a', UF_ADMIN    },
@@ -273,6 +287,8 @@ mod_init(struct module *const restrict m)
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/charybdis")
 
 	mode_list = ophion_mode_list;
+	status_mode_list = ophion_status_mode_list;
+	prefix_mode_list = ophion_prefix_mode_list;
 	user_mode_list = ophion_user_mode_list;
 
 	ircd = &Ophion;
