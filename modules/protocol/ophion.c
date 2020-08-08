@@ -81,6 +81,62 @@ static const struct cmode ophion_user_mode_list[] = {
 };
 
 static void
+send_delete_user_memberships(struct service *svs, struct user *u)
+{
+	sts(":%s TPROP %s %ld %ld member-of :",
+		CLIENT_NAME(svs->me), CLIENT_NAME(u), u->ts, CURRTIME);
+}
+
+static void
+burst_user_membership(struct user *u)
+{
+	struct service *svs = service_find("groupserv");
+	if (svs == NULL)
+		return;
+
+	/* if user is not logged in, then this is easy, just send a delete */
+	if (u->myuser == NULL)
+	{
+		send_delete_user_memberships(svs, u);
+		return;
+	}
+
+	mowgli_list_t *memberships = privatedata_get(entity(u->myuser), "groupserv:memberships");
+	if (memberships == NULL)
+	{
+		send_delete_user_memberships(svs, u);
+		return;
+	}
+
+	char membership_buf[BUFSIZE] = "";
+	mowgli_node_t *n;
+
+	MOWGLI_LIST_FOREACH(n, memberships->head)
+	{
+		struct groupacs *ga = n->data;
+
+		mowgli_strlcat(membership_buf, entity(ga->mg)->name, sizeof membership_buf);
+		mowgli_strlcat(membership_buf, " ", sizeof membership_buf);
+	}
+
+	sts(":%s TPROP %s %ld %ld member-of :%s",
+		CLIENT_NAME(svs->me), CLIENT_NAME(u), u->ts, CURRTIME,
+		membership_buf);
+}
+
+static void
+burst_myuser_membership(struct myuser *mu)
+{
+	return_if_fail(mu != NULL);
+
+	mowgli_node_t *n;
+	MOWGLI_LIST_FOREACH(n, mu->logins.head)
+	{
+		burst_user_membership(n->data);
+	}
+}
+
+static void
 mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/charybdis")
@@ -89,12 +145,16 @@ mod_init(struct module *const restrict m)
 	user_mode_list = ophion_user_mode_list;
 
 	ircd = &Ophion;
+
+	hook_add_user_identify(burst_user_membership);
+	hook_add_user_register(burst_myuser_membership);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-
+	hook_del_user_identify(burst_user_membership);
+	hook_del_user_register(burst_myuser_membership);
 }
 
 SIMPLE_DECLARE_MODULE_V1("protocol/ophion", MODULE_UNLOAD_CAPABILITY_NEVER)
