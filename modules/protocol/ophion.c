@@ -193,7 +193,9 @@ persist_user_tprop(struct user *u, time_t target_ts, const char *key, const char
 	}
 
 	metadata_delete(u->myuser, key);
-	metadata_add(u->myuser, key, value);
+
+	if (*value)
+		metadata_add(u->myuser, key, value);
 }
 
 static void
@@ -206,7 +208,9 @@ persist_channel_tprop(struct mychan *mc, time_t target_ts, const char *key, cons
 	}
 
 	metadata_delete(mc, key);
-	metadata_add(mc, key, value);
+
+	if (*value)
+		metadata_add(mc, key, value);
 }
 
 /*
