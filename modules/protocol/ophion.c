@@ -81,30 +81,26 @@ static const struct cmode ophion_user_mode_list[] = {
 };
 
 static void
-send_delete_user_memberships(struct service *svs, struct user *u)
+send_delete_user_memberships(struct user *u)
 {
 	sts(":%s TPROP %s %ld %ld member-of :",
-		CLIENT_NAME(svs->me), CLIENT_NAME(u), u->ts, CURRTIME);
+		ME, CLIENT_NAME(u), u->ts, CURRTIME);
 }
 
 static void
 burst_user_membership(struct user *u)
 {
-	struct service *svs = service_find("groupserv");
-	if (svs == NULL)
-		return;
-
 	/* if user is not logged in, then this is easy, just send a delete */
 	if (u->myuser == NULL)
 	{
-		send_delete_user_memberships(svs, u);
+		send_delete_user_memberships(u);
 		return;
 	}
 
 	mowgli_list_t *memberships = privatedata_get(entity(u->myuser), "groupserv:memberships");
 	if (memberships == NULL)
 	{
-		send_delete_user_memberships(svs, u);
+		send_delete_user_memberships(u);
 		return;
 	}
 
@@ -120,7 +116,7 @@ burst_user_membership(struct user *u)
 	}
 
 	sts(":%s TPROP %s %ld %ld member-of :%s",
-		CLIENT_NAME(svs->me), CLIENT_NAME(u), u->ts, CURRTIME,
+		ME, CLIENT_NAME(u), u->ts, CURRTIME,
 		membership_buf);
 }
 
