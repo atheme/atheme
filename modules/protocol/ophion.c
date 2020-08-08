@@ -158,6 +158,21 @@ burst_groupacs_change(struct groupacs *ga)
 }
 
 static void
+burst_server_memberships(struct server *s)
+{
+	return_if_fail(s != NULL);
+
+	mowgli_node_t *n;
+	MOWGLI_LIST_FOREACH(n, s->userlist.head)
+	{
+		struct user *u = n->data;
+
+		if (u->myuser != NULL)
+			burst_user_membership(u);
+	}
+}
+
+static void
 burst_metadata_change(struct hook_metadata_change *mdchange)
 {
 	return_if_fail(mdchange != NULL);
@@ -302,6 +317,7 @@ mod_init(struct module *const restrict m)
 	hook_add_groupacs_add(burst_groupacs_change);
 	hook_add_groupacs_delete(burst_groupacs_change);
 	hook_add_metadata_change(burst_metadata_change);
+	hook_add_server_eob(burst_server_memberships);
 }
 
 static void
@@ -312,6 +328,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	hook_del_groupacs_add(burst_groupacs_change);
 	hook_del_groupacs_delete(burst_groupacs_change);
 	hook_del_metadata_change(burst_metadata_change);
+	hook_del_server_eob(burst_server_memberships);
 }
 
 SIMPLE_DECLARE_MODULE_V1("protocol/ophion", MODULE_UNLOAD_CAPABILITY_NEVER)
