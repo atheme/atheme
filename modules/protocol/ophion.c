@@ -111,7 +111,7 @@ burst_user_membership(struct user *u)
 		return;
 	}
 
-	mowgli_list_t *memberships = privatedata_get(entity(u->myuser), "groupserv:memberships");
+	mowgli_list_t *memberships = privatedata_get(entity(u->myuser), "groupserv:membership");
 	if (memberships == NULL)
 	{
 		send_delete_user_memberships(u);
