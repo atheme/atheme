@@ -31,7 +31,11 @@ atheme_pbkdf2_verify(const char *const restrict password, const char *const rest
 	if (strlen(parameters) != PBKDF2_LEGACY_PARAMLEN)
 		return false;
 
-	for (size_t i = 0; i < PBKDF2_LEGACY_PARAMLEN; i++)
+	for (size_t i = 0; i < PBKDF2_LEGACY_SALTLEN; i++)
+		if (! isalnum(parameters[i]))
+			return false;
+
+	for (size_t i = PBKDF2_LEGACY_SALTLEN; i < PBKDF2_LEGACY_PARAMLEN; i++)
 		if (! isxdigit(parameters[i]))
 			return false;
 
