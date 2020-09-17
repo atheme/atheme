@@ -23,7 +23,7 @@
 #define SCANFMT_CRYPT3_SHA2_512     "$6$" SCANFMT_BASE64_CRYPT3 "$" SCANFMT_BASE64_CRYPT3
 #define SCANFMT_CRYPT3_SHA2_512_EXT "$6$rounds=%u$" SCANFMT_BASE64_CRYPT3 "$" SCANFMT_BASE64_CRYPT3
 #define SCANFMT_IRCSERVICES         "$ircservices$" SCANFMT_HEXADECIMAL
-#define SCANFMT_PBKDF2              SCANFMT_HEXADECIMAL
+#define SCANFMT_PBKDF2              "%16[A-Za-z0-9]%128[A-Fa-f0-9]"
 #define SCANFMT_PBKDF2V2_SCRAM      "$z$%u$%u$" SCANFMT_BASE64_RFC4648 "$" SCANFMT_BASE64_RFC4648 "$" SCANFMT_BASE64_RFC4648
 #define SCANFMT_PBKDF2V2_HMAC       "$z$%u$%u$" SCANFMT_BASE64_RFC4648 "$" SCANFMT_BASE64_RFC4648
 #define SCANFMT_RAWMD5              "$rawmd5$" SCANFMT_HEXADECIMAL
@@ -218,7 +218,8 @@ ss_cmd_pwhashes_func(struct sourceinfo *const restrict si, const int ATHEME_VATT
 		{
 			pwhashes[TYPE_IRCSERVICES]++;
 		}
-		else if (pwlen == 140U && sscanf(pw, SCANFMT_PBKDF2, s1) == 1 && strcmp(s1, pw) == 0)
+		else if (pwlen == 144U && sscanf(pw, SCANFMT_PBKDF2, s1, s2) == 2 &&
+		         strlen(s1) == 16U && strlen(s2) == 128U)
 		{
 			// Fuzzy (no rigid format)
 			pwhashes[TYPE_PBKDF2]++;
