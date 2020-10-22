@@ -256,5 +256,6 @@ modules/statserv/server.c
 src/crypto-benchmark/benchmark.c
 src/crypto-benchmark/main.c
 src/crypto-benchmark/optimal.c
+src/crypto-benchmark/selftests.c
 src/ecdh-x25519-tool/main.c
 src/ecdh-x25519-tool/qrcode.c

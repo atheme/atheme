@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <ircs://chat.freenode.net:6697/atheme-i18n>\n"
-"POT-Creation-Date: 2020-01-23 03:45+0000\n"
+"POT-Creation-Date: 2020-10-22 13:56+0000\n"
 "PO-Revision-Date: 2011-10-30 19:12+0000\n"
 "Last-Translator: nenolod <nenolod@dereferenced.org>\n"
 "Language-Team: \n"
@@ -235,7 +235,7 @@ msgid "%s does not exist."
 msgstr "Nid %s Rôl yn bodoli."
 
 #: modules/botserv/bottalk.c:63 modules/botserv/bottalk.c:130
-#: modules/botserv/main.c:884
+#: modules/botserv/main.c:893
 #, c-format
 msgid "%s does not have a bot assigned."
 msgstr "Nid %s oes gan bot neilltuo."
@@ -543,12 +543,12 @@ msgstr "%s eisoes yn bot neu wasanaeth."
 msgid "%s is already a member of %s."
 msgstr "%s eisoes yn sylfaenydd %s."
 
-#: modules/botserv/main.c:835
+#: modules/botserv/main.c:844
 #, c-format
 msgid "%s is already assigned to %s."
 msgstr "%s eisoes yn cael ei neilltuo i %s."
 
-#: modules/hostserv/request.c:266 modules/hostserv/request.c:278
+#: modules/hostserv/request.c:263 modules/hostserv/request.c:275
 #, c-format
 msgid ""
 "%s is already assigned to another user.  You will need to request a "
@@ -627,12 +627,12 @@ msgstr ""
 msgid "%s is already set to %s for %s."
 msgstr "%s yn cael ei osod yn barod i %s am %s."
 
-#: modules/hostserv/request.c:252
+#: modules/hostserv/request.c:249
 #, fuzzy, c-format
 msgid "%s is already the active vhost for your account."
 msgstr "%s eisoes yn bot neu wasanaeth."
 
-#: modules/hostserv/request.c:241
+#: modules/hostserv/request.c:238
 #, fuzzy, c-format
 msgid "%s is already the active vhost for your nick."
 msgstr "%s eisoes yn bot neu wasanaeth."
@@ -662,7 +662,7 @@ msgstr "%s yn iawn annilys, nid ei newid"
 msgid "%s is an invalid realname."
 msgstr "%s yn realname annilys."
 
-#: modules/botserv/main.c:622
+#: modules/botserv/main.c:627
 #, c-format
 msgid "%s is an invalid username, not changing it."
 msgstr "%s yn defnyddiwr annilys, nid ei newid."
@@ -751,8 +751,8 @@ msgstr ""
 msgid "%s is no longer set to NOFIX."
 msgstr "%s yn cael ei gynnal bellach."
 
-#: modules/botserv/main.c:572 modules/botserv/main.c:673
-#: modules/botserv/main.c:823 modules/botserv/set_private.c:33
+#: modules/botserv/main.c:572 modules/botserv/main.c:682
+#: modules/botserv/main.c:832 modules/botserv/set_private.c:33
 #, c-format
 msgid "%s is not a bot."
 msgstr "Nid %s yn bot."
@@ -938,7 +938,7 @@ msgstr "Nid %s yn sianel cofrestredig."
 msgid "%s is not registered anymore, but was marked by %s on %s: %s"
 msgstr "Nid %s yn sianel cofrestredig."
 
-#: modules/nickserv/info.c:78
+#: modules/nickserv/info.c:90
 #, c-format
 msgid "%s is not registered anymore, but was marked by %s on %s (%s)."
 msgstr ""
@@ -1151,12 +1151,12 @@ msgstr ""
 msgid "%u bans found."
 msgstr ""
 
-#: modules/botserv/main.c:758
+#: modules/botserv/main.c:767
 #, fuzzy, c-format
 msgid "%u bot available."
 msgstr "%d botiau sydd ar gael."
 
-#: modules/botserv/main.c:758
+#: modules/botserv/main.c:767
 #, fuzzy, c-format
 msgid "%u bots available."
 msgstr "%d botiau sydd ar gael."
@@ -1278,7 +1278,7 @@ msgstr "Gemau %d ar gyfer meini prawf %s"
 msgid "%u modules loaded."
 msgstr ""
 
-#: modules/botserv/main.c:771
+#: modules/botserv/main.c:780
 #, fuzzy, c-format
 msgid "%u private bots available."
 msgstr "%d botiau preifat ar gael."
@@ -1377,17 +1377,18 @@ msgid ""
 "the future instead."
 msgstr ""
 
-#: src/crypto-benchmark/optimal.c:101 src/crypto-benchmark/optimal.c:188
-#: src/crypto-benchmark/optimal.c:313
+#: src/crypto-benchmark/optimal.c:102 src/crypto-benchmark/optimal.c:189
+#: src/crypto-benchmark/optimal.c:258 src/crypto-benchmark/optimal.c:381
 #, c-format
 msgid "\t/* Target: %LFs; Benchmarked: %LFs */\n"
 msgstr ""
 
-#: src/crypto-benchmark/main.c:126
+#: src/crypto-benchmark/main.c:135
 msgid ""
 "\n"
 "  -h/--help                    Display this help information and exit\n"
 "  -v/--version                 Display program version and exit\n"
+"  -T/--run-selftests-only      Exit after testing all supported algorithms\n"
 "\n"
 "  -o/--run-optimal-benchmarks  Perform an automatic parameter tuning "
 "benchmark:\n"
@@ -1415,6 +1416,10 @@ msgid ""
 "  -e/--scrypt-memlimits          Comma-separated memlimits\n"
 "  -f/--scrypt-opslimits          Comma-separated opslimits\n"
 "\n"
+"  -b/--run-bcrypt-benchmarks   Benchmark the bcrypt code with "
+"configurations:\n"
+"  -r/--bcrypt-costs              Comma-separated bcrypt costs\n"
+"\n"
 "  -k/--run-pbkdf2-benchmarks   Benchmark the PBKDF2 code with "
 "configurations:\n"
 "  -c/--pbkdf2-iterations         Comma-separated iteration counts\n"
@@ -1429,21 +1434,28 @@ msgid ""
 "  One of -h/-v/-o/-a/-s/-k MUST be given. They are all mutually-exclusive.\n"
 msgstr ""
 
-#: src/crypto-benchmark/benchmark.c:298
+#: src/crypto-benchmark/benchmark.c:351
 msgid ""
 "\n"
 "Digest           Iterations     Elapsed\n"
 "---------------- -------------- --------------"
 msgstr ""
 
-#: src/crypto-benchmark/benchmark.c:185
+#: src/crypto-benchmark/benchmark.c:186
 msgid ""
 "\n"
 "MemLimit   OpsLimit       Elapsed\n"
 "---------- -------------- --------------"
 msgstr ""
 
-#: src/crypto-benchmark/benchmark.c:111
+#: src/crypto-benchmark/benchmark.c:242
+msgid ""
+"\n"
+"Rounds     Elapsed\n"
+"---------- --------------"
+msgstr ""
+
+#: src/crypto-benchmark/benchmark.c:112
 msgid ""
 "\n"
 "Type       MemCost    TimeCost   Threads    Elapsed\n"
@@ -1524,12 +1536,12 @@ msgstr ""
 msgid " assigned"
 msgstr ""
 
-#: modules/hostserv/vhost.c:99 modules/nickserv/info.c:165
+#: modules/hostserv/vhost.c:99 modules/nickserv/info.c:177
 #, c-format
 msgid " by %s"
 msgstr ""
 
-#: modules/hostserv/vhost.c:95 modules/nickserv/info.c:161
+#: modules/hostserv/vhost.c:95 modules/nickserv/info.c:173
 #, fuzzy, c-format
 msgid " on %s (%s ago)"
 msgstr "Creu: %s (%s yn ôl)"
@@ -1631,17 +1643,22 @@ msgstr "%-5d %-22s %s"
 msgid "%-8u %-50s %u"
 msgstr ""
 
-#: src/crypto-benchmark/benchmark.c:122
+#: src/crypto-benchmark/benchmark.c:123
 #, fuzzy, c-format
 msgid "%10s %10s %10zu %10zu %13LFs"
 msgstr "%-5d %-22s %s"
 
-#: src/crypto-benchmark/benchmark.c:195
+#: src/crypto-benchmark/benchmark.c:196
 #, fuzzy, c-format
 msgid "%10s %14zu %13LFs"
 msgstr "%-5d %-22s %s"
 
-#: src/crypto-benchmark/benchmark.c:309
+#: src/crypto-benchmark/benchmark.c:252
+#, fuzzy, c-format
+msgid "%10u %13LFs"
+msgstr "%-5d %-22s %s"
+
+#: src/crypto-benchmark/benchmark.c:362
 #, fuzzy, c-format
 msgid "%16s %14zu %13LFs"
 msgstr "%-5d %-22s %s"
@@ -1666,7 +1683,7 @@ msgstr ""
 msgid "%lu: %s@%s - by %s on %s - expires in %s - (%s)"
 msgstr ""
 
-#: src/crypto-benchmark/main.c:120
+#: src/crypto-benchmark/main.c:129
 #, c-format
 msgid "%s (Cryptographic Benchmarking Utility)"
 msgstr ""
@@ -1691,7 +1708,7 @@ msgstr ""
 msgid "%s had NOFIX set by %s on %s (%s)"
 msgstr "%s oedd CLOSED gan %s am %s (%s)"
 
-#: modules/nickserv/info.c:462
+#: modules/nickserv/info.c:476
 #, c-format
 msgid "%s has NOT COMPLETED registration verification."
 msgstr ""
@@ -1701,13 +1718,13 @@ msgstr ""
 msgid "%s has an active password reset key"
 msgstr ""
 
-#: modules/nickserv/info.c:441 modules/nickserv/sendpass.c:145
+#: modules/nickserv/info.c:455 modules/nickserv/sendpass.c:145
 #: modules/nickserv/sendpass_user.c:98
 #, c-format
 msgid "%s has been frozen by the %s administration."
 msgstr ""
 
-#: modules/proxyscan/dnsbl.c:408
+#: modules/proxyscan/dnsbl.c:409
 #, fuzzy, c-format
 msgid "%s has been scanned."
 msgstr "%s wedi cael ei akilled."
@@ -1717,7 +1734,7 @@ msgstr "%s wedi cael ei akilled."
 msgid "%s has enabled nick protection"
 msgstr ""
 
-#: modules/nickserv/info.c:475
+#: modules/nickserv/info.c:489
 #, fuzzy, c-format
 msgid "%s has requested an email address change to %s on %s."
 msgstr "%s eisoes wedi baneri %s ar %s"
@@ -1779,13 +1796,13 @@ msgstr ""
 msgid "%s was CLOSED by %s on %s (%s)"
 msgstr "%s oedd CLOSED gan %s am %s (%s)"
 
-#: modules/nickserv/info.c:438
+#: modules/nickserv/info.c:452
 #, fuzzy, c-format
 msgid "%s was FROZEN by %s on %s (%s)."
 msgstr "%s oedd CLOSED gan %s am %s (%s)"
 
 #: modules/chanfix/fix.c:627 modules/chanserv/info.c:292
-#: modules/nickserv/info.c:458
+#: modules/nickserv/info.c:472
 #, fuzzy, c-format
 msgid "%s was MARKED by %s on %s (%s)."
 msgstr "%s oedd MARKED gan %s am %s (%s)"
@@ -1815,7 +1832,7 @@ msgstr ""
 msgid "%s's inbox is full"
 msgstr ""
 
-#: src/crypto-benchmark/benchmark.c:286
+#: src/crypto-benchmark/benchmark.c:339
 #, c-format
 msgid ""
 "%s: '%s' is not a valid algorithm name\n"
@@ -1823,7 +1840,7 @@ msgid ""
 "    please see --help\n"
 msgstr ""
 
-#: src/crypto-benchmark/benchmark.c:99
+#: src/crypto-benchmark/benchmark.c:100
 #, c-format
 msgid ""
 "%s: '%s' is not a valid type name\n"
@@ -1871,23 +1888,23 @@ msgstr ""
 msgid "%u badmail patterns disallowing %s found."
 msgstr ""
 
-#: modules/chanserv/info.c:139 modules/nickserv/info.c:314
+#: modules/chanserv/info.c:139 modules/nickserv/info.c:328
 #, c-format
 msgid "%u custom metadata entries not shown."
 msgstr ""
 
-#: modules/nickserv/info.c:312
+#: modules/nickserv/info.c:326
 #, c-format
 msgid ""
 "%u custom metadata entries not shown; use /msg %s TAXONOMY %s to view them."
 msgstr ""
 
-#: modules/chanserv/info.c:138 modules/nickserv/info.c:314
+#: modules/chanserv/info.c:138 modules/nickserv/info.c:328
 #, c-format
 msgid "%u custom metadata entry not shown."
 msgstr ""
 
-#: modules/nickserv/info.c:312
+#: modules/nickserv/info.c:326
 #, c-format
 msgid "%u custom metadata entry not shown; use /msg %s TAXONOMY %s to view it."
 msgstr ""
@@ -1962,26 +1979,35 @@ msgstr "%s oedd CLOSED gan %s am %s (%s)"
 msgid "%u: [%s] by %s at %s: %s"
 msgstr "Roedd %s osod baneri ar %s yn %s."
 
-#: src/crypto-benchmark/main.c:250 src/crypto-benchmark/main.c:259
+#: src/crypto-benchmark/main.c:267 src/crypto-benchmark/main.c:276
 #, fuzzy, c-format
 msgid ""
 "'%s' is not a valid value for decimal option '%c'\n"
 "range of valid values: %LF to %LF (inclusive)\n"
 msgstr "Nid %s yn ddilys cyfeiriad e-bost."
 
-#: src/crypto-benchmark/main.c:180 src/crypto-benchmark/main.c:281
-#: src/crypto-benchmark/main.c:290
+#: src/crypto-benchmark/main.c:193 src/crypto-benchmark/main.c:298
+#: src/crypto-benchmark/main.c:307
 #, fuzzy, c-format
 msgid ""
 "'%s' is not a valid value for integer option '%c'\n"
 "range of valid values: %u to %u (inclusive)\n"
 msgstr "Nid %s yn ddilys cyfeiriad e-bost."
 
+#: modules/nickserv/info.c:22
+#, fuzzy, c-format
+msgid "(about %lu weeks ago)"
+msgstr "Diwethaf a ddefnyddir: (tua %d wythnos yn ôl)"
+
+#: modules/nickserv/info.c:21
+msgid "(less than two weeks ago)"
+msgstr ""
+
 #: modules/operserv/specs.c:180
 msgid "(no privileges held)"
 msgstr ""
 
-#: modules/chanserv/access.c:624 modules/nickserv/info.c:483
+#: modules/chanserv/access.c:624 modules/nickserv/info.c:497
 #: modules/operserv/modinspect.c:52
 msgid "*** End of Info ***"
 msgstr "*** Diwedd Gwybodaeth ***"
@@ -2132,12 +2158,12 @@ msgstr "Cyfrif / Hostmask"
 msgid "Accounts matching e-mail address %s:"
 msgstr "Nid oes gennych unrhyw fynediad arbennig i %s."
 
-#: modules/proxyscan/dnsbl.c:551
+#: modules/proxyscan/dnsbl.c:552
 #, fuzzy, c-format
 msgid "Action taken when a user is on a DNSBL: %s"
 msgstr "Sgan llaw os yw defnyddiwr mewn DNSBL."
 
-#: modules/hostserv/request.c:577
+#: modules/hostserv/request.c:565
 msgid "Activate the requested vhost for a given nick."
 msgstr ""
 
@@ -2267,9 +2293,9 @@ msgstr ""
 msgid "Adds an entry to the regex watch list."
 msgstr ""
 
-#: src/crypto-benchmark/optimal.c:66 src/crypto-benchmark/optimal.c:152
-#: src/crypto-benchmark/optimal.c:297
-msgid "Algorithm is still too slow; giving up."
+#: src/crypto-benchmark/optimal.c:67 src/crypto-benchmark/optimal.c:153
+#: src/crypto-benchmark/optimal.c:224 src/crypto-benchmark/optimal.c:364
+msgid "Algorithm is too slow; giving up."
 msgstr ""
 
 #: modules/memoserv/delete.c:111
@@ -2390,7 +2416,7 @@ msgstr ""
 msgid "Ask the 8-Ball a question."
 msgstr ""
 
-#: modules/botserv/main.c:853
+#: modules/botserv/main.c:862
 #, c-format
 msgid "Assigned the bot %s to %s."
 msgstr "Priodoli y bot %s at %s."
@@ -2405,7 +2431,7 @@ msgstr ""
 msgid "Assigned vhost %s to all nicks in account %s."
 msgstr ""
 
-#: modules/botserv/main.c:1019
+#: modules/botserv/main.c:1028
 #, fuzzy
 msgid "Assigns a bot to a channel."
 msgstr "Yn ychwanegu nodyn i sianel."
@@ -2447,31 +2473,39 @@ msgstr "Banio %s ar %s."
 msgid "Bans matching %s in %s:"
 msgstr "Dim gwaharddiadau o hyd cyfateb %s ar %s."
 
-#: src/crypto-benchmark/optimal.c:35
+#: src/crypto-benchmark/optimal.c:36
 msgid "Beginning automatic optimal Argon2 benchmark ..."
 msgstr ""
 
-#: src/crypto-benchmark/optimal.c:204
+#: src/crypto-benchmark/optimal.c:271
 msgid "Beginning automatic optimal PBKDF2 benchmark ..."
 msgstr ""
 
-#: src/crypto-benchmark/optimal.c:121
+#: src/crypto-benchmark/optimal.c:205
+msgid "Beginning automatic optimal bcrypt benchmark ..."
+msgstr ""
+
+#: src/crypto-benchmark/optimal.c:122
 msgid "Beginning automatic optimal scrypt benchmark ..."
 msgstr ""
 
-#: src/crypto-benchmark/main.c:494
+#: src/crypto-benchmark/main.c:530
 msgid "Beginning customizable Argon2 benchmark ..."
 msgstr ""
 
-#: src/crypto-benchmark/main.c:537
+#: src/crypto-benchmark/main.c:592
 msgid "Beginning customizable PBKDF2 benchmark ..."
 msgstr ""
 
-#: src/crypto-benchmark/main.c:518
+#: src/crypto-benchmark/main.c:575
+msgid "Beginning customizable bcrypt benchmark ..."
+msgstr ""
+
+#: src/crypto-benchmark/main.c:555
 msgid "Beginning customizable scrypt benchmark ..."
 msgstr ""
 
-#: modules/botserv/main.c:652
+#: modules/botserv/main.c:661
 #, fuzzy, c-format
 msgid "Bot %s (%s@%s) [%s] changed."
 msgstr "Templed %s ar %s y newid."
@@ -2481,7 +2515,7 @@ msgstr "Templed %s ar %s y newid."
 msgid "Bot %s (%s@%s) [%s] created."
 msgstr ""
 
-#: modules/botserv/main.c:704
+#: modules/botserv/main.c:713
 #, fuzzy, c-format
 msgid "Bot %s deleted."
 msgstr "%s rôl wedi cael ei ddileu."
@@ -2635,7 +2669,7 @@ msgstr ""
 msgid "Changes the state of read-only mode for services."
 msgstr ""
 
-#: modules/proxyscan/dnsbl.c:598
+#: modules/proxyscan/dnsbl.c:599
 msgid "Changes what happens to a user when they hit a DNSBL."
 msgstr "Newidiadau beth sy'n digwydd i ddefnyddiwr pan fyddant yn daro DNSBL."
 
@@ -2643,7 +2677,7 @@ msgstr "Newidiadau beth sy'n digwydd i ddefnyddiwr pan fyddant yn daro DNSBL."
 msgid "Changes whether service spams unregistered users on connect."
 msgstr ""
 
-#: modules/saslserv/ecdh-x25519-challenge.c:375
+#: modules/saslserv/ecdh-x25519-challenge.c:376
 msgid "Changes your ECDH-X25519-CHALLENGE public key."
 msgstr ""
 
@@ -2734,7 +2768,7 @@ msgstr "Pecyn cymorth symud Sianel."
 msgid "Channels"
 msgstr ""
 
-#: modules/nickserv/info.c:420
+#: modules/nickserv/info.c:434
 #, c-format
 msgid "Channels   : %u founder, %u other"
 msgstr ""
@@ -3184,7 +3218,7 @@ msgstr ""
 msgid "Displays information about registered groups."
 msgstr ""
 
-#: modules/chanserv/info.c:326 modules/nickserv/info.c:490
+#: modules/chanserv/info.c:326 modules/nickserv/info.c:504
 msgid "Displays information on registrations."
 msgstr "Arddangosfeydd gwybodaeth am gofrestriadau."
 
@@ -3240,7 +3274,7 @@ msgstr ""
 msgid "Email       : %s"
 msgstr ""
 
-#: modules/nickserv/info.c:294
+#: modules/nickserv/info.c:308
 #, c-format
 msgid "Email      : %s%s"
 msgstr ""
@@ -3368,7 +3402,7 @@ msgstr ""
 
 #: modules/chanserv/moderate.c:329 modules/global/main.c:157
 #: modules/helpserv/ticket.c:271 modules/hostserv/offer.c:348
-#: modules/hostserv/request.c:544 modules/infoserv/main.c:450
+#: modules/hostserv/request.c:532 modules/infoserv/main.c:450
 #: modules/infoserv/main.c:479 modules/nickserv/badmail.c:191
 #: modules/nickserv/multimark.c:964 modules/proxyscan/dnsbl.c:241
 msgid "End of list."
@@ -3413,7 +3447,7 @@ msgstr "Rydych yn weithredwr gwasanaethau dosbarth %s."
 msgid "Entity ID   : %s"
 msgstr ""
 
-#: modules/nickserv/info.c:125
+#: modules/nickserv/info.c:137
 #, c-format
 msgid "Entity ID  : %s"
 msgstr ""
@@ -3443,7 +3477,7 @@ msgstr ""
 msgid "Error: Cannot perform modulus or division by zero."
 msgstr "Gwall: Does dim modd perfformio modwlws neu is-adran gan sero."
 
-#: src/crypto-benchmark/main.c:432
+#: src/crypto-benchmark/main.c:462
 msgid "Error: Conflicting options (or no options) given. Exiting."
 msgstr ""
 
@@ -3572,7 +3606,7 @@ msgstr "Roedd %s osod baneri ar %s yn %s."
 msgid "Flags       : %s"
 msgstr ""
 
-#: modules/chanserv/info.c:258 modules/nickserv/info.c:394
+#: modules/chanserv/info.c:258 modules/nickserv/info.c:408
 #, c-format
 msgid "Flags      : %s"
 msgstr "Baneri: %s"
@@ -4016,13 +4050,13 @@ msgstr "Gwybodaeth ar gyfer sianel %s:"
 msgid "Information for server %s:"
 msgstr "Gwybodaeth i bot %s:"
 
-#: modules/nickserv/info.c:107
+#: modules/nickserv/info.c:119
 #, c-format
 msgid "Information on %s (account %s):"
 msgstr ""
 
 #: modules/chanfix/fix.c:586 modules/chanserv/info.c:63
-#: modules/nickserv/info.c:109 modules/operserv/modinspect.c:42
+#: modules/nickserv/info.c:121 modules/operserv/modinspect.c:42
 #: modules/rpgserv/info.c:40
 #, c-format
 msgid "Information on %s:"
@@ -4242,12 +4276,12 @@ msgstr "%s Rôl eisoes yn bodoli."
 msgid "Kicks all users from a channel."
 msgstr "Cic holl ddefnyddwyr o sianel."
 
-#: modules/nickserv/info.c:398
+#: modules/nickserv/info.c:412
 #, c-format
 msgid "Language   : %s"
 msgstr ""
 
-#: modules/nickserv/info.c:148
+#: modules/nickserv/info.c:160
 #, c-format
 msgid "Last addr  : %s"
 msgstr ""
@@ -4257,17 +4291,17 @@ msgstr ""
 msgid "Last quit  : %s"
 msgstr "Diwethaf a ddefnyddir: %s (%s yn ôl)"
 
-#: modules/nickserv/info.c:214 modules/nickserv/info.c:229
+#: modules/nickserv/info.c:224 modules/nickserv/info.c:241
+#, fuzzy, c-format
+msgid "Last seen  : %s"
+msgstr "Diwethaf a ddefnyddir: %s (%s yn ôl)"
+
+#: modules/nickserv/info.c:226 modules/nickserv/info.c:243
 #, c-format
 msgid "Last seen  : %s (%s ago)"
 msgstr ""
 
-#: modules/nickserv/info.c:212 modules/nickserv/info.c:227
-#, fuzzy, c-format
-msgid "Last seen  : (about %u week(s) ago)"
-msgstr "Diwethaf a ddefnyddir: (tua %d wythnos yn ôl)"
-
-#: modules/nickserv/info.c:206 modules/nickserv/info.c:267
+#: modules/nickserv/info.c:218 modules/nickserv/info.c:281
 msgid "Last seen  : now"
 msgstr ""
 
@@ -4347,12 +4381,12 @@ msgstr ""
 msgid "Listed %u channels."
 msgstr "Rhestr sgoriau sianel."
 
-#: modules/botserv/main.c:748
+#: modules/botserv/main.c:757
 #, c-format
 msgid "Listing of bots available on %s:"
 msgstr "Rhestr o botiau sydd ar gael ar %s:"
 
-#: modules/botserv/main.c:763
+#: modules/botserv/main.c:772
 #, c-format
 msgid "Listing of private bots available on %s:"
 msgstr "Rhestr o botiau preifat sydd ar gael ar %s:"
@@ -4391,7 +4425,7 @@ msgstr ""
 msgid "Lists all of your memos."
 msgstr ""
 
-#: modules/botserv/main.c:1037
+#: modules/botserv/main.c:1046
 #, fuzzy
 msgid "Lists available bots."
 msgstr "Rhestr swyddi sydd ar gael."
@@ -4461,7 +4495,7 @@ msgstr ""
 msgid "Lists users waiting for help."
 msgstr ""
 
-#: modules/hostserv/request.c:559
+#: modules/hostserv/request.c:547
 msgid "Lists vhosts currently waiting for activation."
 msgstr ""
 
@@ -4483,7 +4517,7 @@ msgstr ""
 msgid "Logged in nicks are: %s"
 msgstr ""
 
-#: modules/nickserv/info.c:249 modules/nickserv/info.c:257
+#: modules/nickserv/info.c:263 modules/nickserv/info.c:271
 #, c-format
 msgid "Logins from: %s"
 msgstr ""
@@ -4501,7 +4535,7 @@ msgstr "MLOCK allweddol yn cynnwys nodau annilys."
 msgid "MLOCK key is too long (%zu > %u)."
 msgstr "MLOCK allweddol yn rhy hir (%d > %d)."
 
-#: modules/botserv/main.c:1010
+#: modules/botserv/main.c:1019
 msgid "Maintains network bot list."
 msgstr ""
 
@@ -4521,7 +4555,7 @@ msgstr "Rheoli mynediad sianel."
 msgid "Manage channel roles."
 msgstr "Rheoli rolau sianel."
 
-#: modules/proxyscan/dnsbl.c:607
+#: modules/proxyscan/dnsbl.c:608
 msgid "Manage the list of IP's exempt from DNSBL checking."
 msgstr "Rheoli y rhestr o ED heithrio rhag wirio DNSBL."
 
@@ -4593,7 +4627,7 @@ msgstr "Yn trin ganiatâd penodol ar sianel."
 msgid "Manually chanfix a channel."
 msgstr "Manually chanfix sianel."
 
-#: modules/proxyscan/dnsbl.c:616
+#: modules/proxyscan/dnsbl.c:617
 msgid "Manually scan if a user is in a DNSBL."
 msgstr "Sgan llaw os yw defnyddiwr mewn DNSBL."
 
@@ -4677,7 +4711,7 @@ msgstr ""
 msgid "Maybe."
 msgstr ""
 
-#: modules/chanserv/info.c:130 modules/nickserv/info.c:303
+#: modules/chanserv/info.c:130 modules/nickserv/info.c:317
 #, c-format
 msgid "Metadata   : %s = %s"
 msgstr "Metadata: %s = %s"
@@ -4701,7 +4735,7 @@ msgstr "Nid yw Metadata cofnod %s osodwyd."
 msgid "Migrating mark data..."
 msgstr ""
 
-#: modules/botserv/main.c:904
+#: modules/botserv/main.c:913
 #, c-format
 msgid ""
 "Minimum number of users that must be in a channel for a bot to be assigned: "
@@ -4776,19 +4810,19 @@ msgstr ""
 msgid "NOOP access"
 msgstr ""
 
-#: src/crypto-benchmark/optimal.c:331
+#: src/crypto-benchmark/optimal.c:399
 msgid ""
 "NOTICE: Please be sure to specify -l/--optimal-memory-limit\n"
 "        appropriately for this machine!"
 msgstr ""
 
-#: src/crypto-benchmark/optimal.c:38
+#: src/crypto-benchmark/optimal.c:39
 msgid ""
 "NOTICE: This does not test multithreading.\n"
 "Use '-a -p' for thread testing."
 msgstr ""
 
-#: src/crypto-benchmark/optimal.c:208
+#: src/crypto-benchmark/optimal.c:275
 msgid ""
 "NOTICE: This program may perform significantly better if you build it\n"
 "        against a supported third-party cryptographic digest library!"
@@ -4875,7 +4909,7 @@ msgid "Nick %s is not registered to %s."
 msgstr ""
 
 #: modules/hostserv/drop.c:36 modules/hostserv/group.c:35
-#: modules/hostserv/request.c:233 modules/nickserv/group.c:100
+#: modules/hostserv/request.c:230 modules/nickserv/group.c:100
 #: modules/nickserv/set_accountname.c:50
 #, c-format
 msgid "Nick %s is not registered to your account."
@@ -4896,12 +4930,12 @@ msgstr ""
 msgid "Nick %s not found in help request database."
 msgstr ""
 
-#: modules/hostserv/request.c:424 modules/hostserv/request.c:523
+#: modules/hostserv/request.c:416 modules/hostserv/request.c:511
 #, c-format
 msgid "Nick %s not found in vhost request database."
 msgstr ""
 
-#: modules/hostserv/request.c:541
+#: modules/hostserv/request.c:529
 #, c-format
 msgid "Nick: %s, vHost: %s (%s - %s)"
 msgstr ""
@@ -4933,14 +4967,14 @@ msgstr ""
 msgid "Nicknames/Accounts"
 msgstr ""
 
-#: modules/nickserv/info.c:280 modules/nickserv/info.c:288
+#: modules/nickserv/info.c:294 modules/nickserv/info.c:302
 #, c-format
 msgid "Nicks      : %s"
 msgstr ""
 
 #: modules/chanfix/fix.c:609 modules/chanfix/fix.c:610
 #: modules/chanserv/moderate.c:222 modules/groupserv/main/hooks.c:119
-#: modules/hostserv/request.c:146 modules/nickserv/pwquality.c:195
+#: modules/hostserv/request.c:143 modules/nickserv/pwquality.c:195
 #: modules/operserv/info.c:22 modules/operserv/info.c:28
 #: modules/operserv/info.c:44 modules/operserv/modinspect.c:51
 #, fuzzy
@@ -5232,6 +5266,10 @@ msgstr "Cuddio gwybodaeth am sianel."
 msgid "Of course!"
 msgstr ""
 
+#: src/crypto-benchmark/main.c:639
+msgid "One or more self-tests FAILED (BUG!). Exiting now..."
+msgstr ""
+
 #: modules/statserv/server.c:77
 #, c-format
 msgid "Online operators: %u"
@@ -5267,7 +5305,7 @@ msgstr ""
 msgid "Oper class %s has more privileges than you."
 msgstr ""
 
-#: modules/nickserv/info.c:404
+#: modules/nickserv/info.c:418
 #, c-format
 msgid "Oper class : %s"
 msgstr ""
@@ -5575,16 +5613,20 @@ msgstr ""
 msgid "Rating: %s"
 msgstr ""
 
-#: src/crypto-benchmark/optimal.c:296
+#: src/crypto-benchmark/optimal.c:363
 msgid "Reached minimum iteration count!"
 msgstr ""
 
-#: src/crypto-benchmark/optimal.c:65
+#: src/crypto-benchmark/optimal.c:66
 msgid "Reached minimum memory and time cost!"
 msgstr ""
 
-#: src/crypto-benchmark/optimal.c:151
+#: src/crypto-benchmark/optimal.c:152
 msgid "Reached minimum memory limit!"
+msgstr ""
+
+#: src/crypto-benchmark/optimal.c:223
+msgid "Reached minimum rounds limit!"
 msgstr ""
 
 #: modules/memoserv/read.c:118
@@ -5617,7 +5659,7 @@ msgstr ""
 msgid "Reads a memo."
 msgstr ""
 
-#: modules/nickserv/info.c:198
+#: modules/nickserv/info.c:210
 #, c-format
 msgid "Real addr  : %s"
 msgstr ""
@@ -5631,7 +5673,7 @@ msgstr "Enw go iawn: %s"
 msgid "Reason"
 msgstr ""
 
-#: modules/hostserv/request.c:447
+#: modules/hostserv/request.c:440
 msgid "Reason too long. It must be 150 characters or less."
 msgstr ""
 
@@ -5639,12 +5681,12 @@ msgstr ""
 msgid "Reclaims use of a nickname."
 msgstr ""
 
-#: modules/nickserv/info.c:202
+#: modules/nickserv/info.c:214
 msgid "Recognized : now (matches access list)"
 msgstr ""
 
-#: src/crypto-benchmark/optimal.c:97 src/crypto-benchmark/optimal.c:184
-#: src/crypto-benchmark/optimal.c:309
+#: src/crypto-benchmark/optimal.c:98 src/crypto-benchmark/optimal.c:185
+#: src/crypto-benchmark/optimal.c:254 src/crypto-benchmark/optimal.c:377
 msgid "Recommended parameters:"
 msgstr ""
 
@@ -5692,7 +5734,7 @@ msgstr ""
 msgid "Registered  : %s (%s ago)"
 msgstr ""
 
-#: modules/chanserv/info.c:77 modules/nickserv/info.c:114
+#: modules/chanserv/info.c:77 modules/nickserv/info.c:126
 #, c-format
 msgid "Registered : %s (%s ago)"
 msgstr "Cofrestredig: %s (%s yn ôl)"
@@ -5750,7 +5792,7 @@ msgstr ""
 msgid "Registrations will fail with bad passwords: %s"
 msgstr ""
 
-#: modules/hostserv/request.c:568
+#: modules/hostserv/request.c:556
 msgid "Reject the requested vhost for the given nick."
 msgstr ""
 
@@ -5865,12 +5907,12 @@ msgstr ""
 msgid "Request help from network staff."
 msgstr ""
 
-#: modules/hostserv/request.c:146
+#: modules/hostserv/request.c:143
 #, c-format
 msgid "Requested vHosts will be per-nick: %s"
 msgstr ""
 
-#: modules/hostserv/request.c:550
+#: modules/hostserv/request.c:538
 msgid "Requests new virtual hostname for current nick."
 msgstr ""
 
@@ -6140,12 +6182,12 @@ msgstr ""
 msgid "Searches through the logs."
 msgstr ""
 
-#: src/crypto-benchmark/optimal.c:229
+#: src/crypto-benchmark/optimal.c:296
 #, c-format
 msgid "Selecting iterations starting point: %zu"
 msgstr ""
 
-#: src/crypto-benchmark/optimal.c:282
+#: src/crypto-benchmark/optimal.c:349
 #, c-format
 msgid "Selecting optimal algorithm: %s"
 msgstr ""
@@ -6427,7 +6469,7 @@ msgstr ""
 msgid "Shows and changes services operator privileges."
 msgstr ""
 
-#: modules/statserv/pwhashes.c:305
+#: modules/statserv/pwhashes.c:315
 msgid "Shows database password hash statistics."
 msgstr ""
 
@@ -6626,7 +6668,7 @@ msgstr "Cystrawen: ACT <#sianel> <neges>"
 msgid "Syntax: ACTIVATE <#channel>"
 msgstr "Cystrawen: INVITE <#sianel>"
 
-#: modules/hostserv/request.c:372
+#: modules/hostserv/request.c:376
 msgid "Syntax: ACTIVATE <nick>"
 msgstr ""
 
@@ -6672,7 +6714,7 @@ msgstr ""
 msgid "Syntax: AKILL DEL <hostmask>"
 msgstr ""
 
-#: modules/botserv/main.c:790
+#: modules/botserv/main.c:799
 msgid "Syntax: ASSIGN <#channel> <nick>"
 msgstr "Cystrawen: ASSIGN <#sianel> <llysenw>"
 
@@ -6703,20 +6745,20 @@ msgstr "Cystrawen: BAN <#sianel> <llysenw|mwgwdcynnal>"
 msgid "Syntax: BANSEARCH <#channel>"
 msgstr "Cystrawen: UNBAN <#sianel>"
 
-#: modules/botserv/main.c:495 modules/botserv/main.c:714
-#: modules/botserv/main.c:735
+#: modules/botserv/main.c:495 modules/botserv/main.c:723
+#: modules/botserv/main.c:744
 msgid "Syntax: BOT ADD <nick> <user> <host> <real>"
 msgstr "Cystrawen: BOT ADD <llysenw> <defnyddiwr> <gwesteiwr> <iawn>"
 
-#: modules/botserv/main.c:565 modules/botserv/main.c:629
-#: modules/botserv/main.c:715 modules/botserv/main.c:736
+#: modules/botserv/main.c:565 modules/botserv/main.c:638
+#: modules/botserv/main.c:724 modules/botserv/main.c:745
 msgid "Syntax: BOT CHANGE <oldnick> <newnick> [<user> [<host> [<real>]]]"
 msgstr ""
 "Cystrawen: BOT CHANGE <hen-llysenw> <llysenw-newydd> [<defnyddiwr> "
 "[<gwesteiwr> [<iawn>]]]"
 
-#: modules/botserv/main.c:667 modules/botserv/main.c:716
-#: modules/botserv/main.c:737
+#: modules/botserv/main.c:676 modules/botserv/main.c:725
+#: modules/botserv/main.c:746
 msgid "Syntax: BOT DEL <nick>"
 msgstr "Cystrawen: BOT DEL <llysenw>"
 
@@ -6872,7 +6914,7 @@ msgstr ""
 msgid "Syntax: DNSBLEXEMPT DEL <ip>"
 msgstr ""
 
-#: modules/proxyscan/dnsbl.c:400
+#: modules/proxyscan/dnsbl.c:401
 msgid "Syntax: DNSBLSCAN <user>"
 msgstr ""
 
@@ -7019,7 +7061,7 @@ msgstr "Cystrawen: INFO <llysenw>"
 msgid "Syntax: INFO <channel>"
 msgstr ""
 
-#: modules/nickserv/info.c:51
+#: modules/nickserv/info.c:63
 msgid "Syntax: INFO <nickname>"
 msgstr ""
 
@@ -7184,7 +7226,7 @@ msgstr ""
 msgid "Syntax: REJECT <#channel>"
 msgstr "Cystrawen: RECOVER <#sianel>"
 
-#: modules/hostserv/request.c:441
+#: modules/hostserv/request.c:434
 #, fuzzy
 msgid "Syntax: REJECT <nick> [reason]"
 msgstr "Cystrawen: KICK <#sianel> <llysenw> [rheswm]"
@@ -7201,7 +7243,7 @@ msgstr ""
 msgid "Syntax: REQUEST <topic>"
 msgstr ""
 
-#: modules/hostserv/request.c:197
+#: modules/hostserv/request.c:194
 msgid "Syntax: REQUEST <vhost>"
 msgstr ""
 
@@ -7521,7 +7563,7 @@ msgstr "Cystrawen: TOPICPREPEND <#sianel> <bwnc>"
 msgid "Syntax: TOPICSWAP <#channel> <search>:[<replace>]"
 msgstr "Cystrawen: TOPIC <#sianel> <bwnc>"
 
-#: modules/botserv/main.c:866
+#: modules/botserv/main.c:875
 msgid "Syntax: UNASSIGN <#channel>"
 msgstr "Cystrawen: UNASSIGN <#sianel>"
 
@@ -7775,6 +7817,14 @@ msgstr ""
 msgid "The %s for account %s has been set to %u seconds."
 msgstr "Mae'r MLOCK am %s wedi ei osod i %s."
 
+#: src/crypto-benchmark/selftests.c:28
+msgid "The Digest API testsuite FAILED!"
+msgstr ""
+
+#: src/crypto-benchmark/selftests.c:32
+msgid "The Digest API testsuite passed."
+msgstr ""
+
 #: modules/chanserv/owner.c:29 modules/chanserv/protect.c:29
 msgid "The IRCd software you are running does not support this feature."
 msgstr "Nid yw'r feddalwedd IRCd ydych yn rhedeg yn cefnogi'r nodwedd hon."
@@ -7843,6 +7893,14 @@ msgstr ""
 #: modules/nickserv/register.c:84 modules/nickserv/register.c:91
 #, c-format
 msgid "The account name %s is invalid."
+msgstr ""
+
+#: src/crypto-benchmark/selftests.c:36
+msgid "The bcrypt testsuite FAILED!"
+msgstr ""
+
+#: src/crypto-benchmark/selftests.c:40
+msgid "The bcrypt testsuite passed."
 msgstr ""
 
 #: modules/statserv/channel.c:42
@@ -8234,7 +8292,7 @@ msgstr ""
 "Mae'r system ar hyn o bryd yn rhy brysur i brosesu eich cofrestriad, rhowch "
 "gynnig arni nes ymlaen."
 
-#: modules/hostserv/request.c:312 modules/hostserv/request.c:334
+#: modules/hostserv/request.c:316 modules/hostserv/request.c:338
 msgid ""
 "The system is currently too busy to process your vHost request, please try "
 "again later."
@@ -8278,7 +8336,7 @@ msgstr ""
 msgid "There are no scores in the CHANFIX database for %s."
 msgstr "Nid oes unrhyw sgoriau yn y gronfa ddata CHANFIX ar gyfer %s."
 
-#: modules/botserv/main.c:802
+#: modules/botserv/main.c:811
 #, c-format
 msgid "There are not enough users in %s to be able to assign a bot."
 msgstr "Nid oes digon o ddefnyddwyr mewn %s i allu neilltuo bot."
@@ -8372,7 +8430,7 @@ msgstr ""
 msgid "This program was not built with QR-Code support!"
 msgstr ""
 
-#: modules/saslserv/main.c:1050
+#: modules/saslserv/main.c:1078
 msgid ""
 "This service exists to identify connecting clients to the network. It has no "
 "public interface."
@@ -8571,12 +8629,12 @@ msgstr ""
 msgid "Unable to encode keypair: %s"
 msgstr ""
 
-#: modules/botserv/main.c:896
+#: modules/botserv/main.c:905
 #, c-format
 msgid "Unassigned the bot from %s."
 msgstr "Ddadneilltuo y bot o %s."
 
-#: modules/botserv/main.c:1028
+#: modules/botserv/main.c:1037
 #, fuzzy
 msgid "Unassigns a bot from a channel."
 msgstr " Cael gwared gwahardd yn erbyn chi ar sianel."
@@ -8747,7 +8805,7 @@ msgstr ""
 msgid "Usage: TEMPLATE %s [target flags]"
 msgstr "Defnydd: TEMPLATE %s [targed baneri]"
 
-#: modules/botserv/main.c:774
+#: modules/botserv/main.c:783
 #, c-format
 msgid "Use /msg %s ASSIGN #chan botnick to assign one to your channel."
 msgstr ""
@@ -8788,27 +8846,27 @@ msgstr ""
 msgid "Use SENDPASS %s CLEAR to clear it so that a new one can be sent."
 msgstr ""
 
-#: modules/proxyscan/dnsbl.c:413
+#: modules/proxyscan/dnsbl.c:414
 #, fuzzy, c-format
 msgid "User %s is not on the network, you can not scan them."
 msgstr "%s yn cael ei ddiogelu rhag cychwyn; nad ydych yn gallu eu cicio."
 
-#: modules/nickserv/info.c:121
+#: modules/nickserv/info.c:133
 #, c-format
 msgid "User reg.  : %s (%s ago)"
 msgstr ""
 
-#: modules/nickserv/info.c:236
+#: modules/nickserv/info.c:248
+#, fuzzy, c-format
+msgid "User seen  : %s"
+msgstr "Diwethaf a ddefnyddir: (tua %d wythnos yn ôl)"
+
+#: modules/nickserv/info.c:250
 #, c-format
 msgid "User seen  : %s (%s ago)"
 msgstr ""
 
-#: modules/nickserv/info.c:234
-#, fuzzy, c-format
-msgid "User seen  : (about %u week(s) ago)"
-msgstr "Diwethaf a ddefnyddir: (tua %d wythnos yn ôl)"
-
-#: modules/nickserv/info.c:265
+#: modules/nickserv/info.c:279
 msgid "User seen  : now"
 msgstr ""
 
@@ -8826,7 +8884,7 @@ msgstr ""
 msgid "Uses private messages instead of notices if enabled."
 msgstr ""
 
-#: modules/proxyscan/dnsbl.c:557
+#: modules/proxyscan/dnsbl.c:558
 #, c-format
 msgid "Using DNSBL: %s"
 msgstr ""
@@ -8836,7 +8894,7 @@ msgstr ""
 msgid "Using crypto provider %s:"
 msgstr ""
 
-#: src/crypto-benchmark/main.c:579
+#: src/crypto-benchmark/main.c:634
 #, c-format
 msgid "Using digest frontend: %s"
 msgstr ""
@@ -8878,14 +8936,14 @@ msgstr ""
 msgid "View pending registrations"
 msgstr ""
 
-#: src/crypto-benchmark/main.c:544
+#: src/crypto-benchmark/main.c:599
 #, c-format
 msgid ""
 "WARNING: Cyrus SASL clients will not perform more than %u\n"
 "         iterations! This may break SASL SCRAM compatibility."
 msgstr ""
 
-#: src/crypto-benchmark/optimal.c:217
+#: src/crypto-benchmark/optimal.c:284
 msgid ""
 "WARNING: If you wish to support SASL SCRAM (RFC 5802) logins, please see\n"
 "         the 'doc/SASL-SCRAM' file in the source code repository, whose\n"
@@ -8932,7 +8990,7 @@ msgstr ""
 
 #: modules/chanfix/fix.c:609 modules/chanfix/fix.c:610
 #: modules/chanserv/moderate.c:222 modules/groupserv/main/hooks.c:119
-#: modules/hostserv/request.c:146 modules/nickserv/pwquality.c:195
+#: modules/hostserv/request.c:143 modules/nickserv/pwquality.c:195
 #: modules/operserv/info.c:22 modules/operserv/info.c:28
 #: modules/operserv/info.c:44 modules/operserv/modinspect.c:50
 msgid "Yes"
@@ -8944,6 +9002,12 @@ msgstr ""
 
 #: modules/gameserv/eightball.c:28
 msgid "Yes."
+msgstr ""
+
+#: modules/hostserv/request.c:304
+msgid ""
+"You already have an outstanding vhost request. Please wait for network staff "
+"to approve or reject it."
 msgstr ""
 
 #: modules/chanserv/status.c:81 modules/nickserv/status.c:100
@@ -9102,7 +9166,7 @@ msgstr ""
 msgid "You cannot RELEASE yourself."
 msgstr ""
 
-#: modules/botserv/main.c:808
+#: modules/botserv/main.c:817
 #, c-format
 msgid "You cannot assign bots to %s."
 msgstr "Ni allwch aseinio botiau i %s."
@@ -9261,7 +9325,7 @@ msgstr ""
 msgid "You have already requested help about %s."
 msgstr ""
 
-#: modules/hostserv/request.c:307
+#: modules/hostserv/request.c:311
 #, c-format
 msgid "You have already requested vhost %s."
 msgstr ""
@@ -9309,7 +9373,7 @@ msgstr ""
 msgid "You have been restricted from requesting help by network staff."
 msgstr ""
 
-#: modules/hostserv/request.c:209
+#: modules/hostserv/request.c:206
 msgid "You have been restricted from requesting vhosts by network staff."
 msgstr ""
 
@@ -9353,7 +9417,7 @@ msgstr ""
 msgid "You have requested help about %s."
 msgstr ""
 
-#: modules/hostserv/request.c:320 modules/hostserv/request.c:348
+#: modules/hostserv/request.c:324 modules/hostserv/request.c:352
 #, c-format
 msgid "You have requested vhost %s."
 msgstr ""
@@ -9543,7 +9607,7 @@ msgstr ""
 "Mae'n rhaid i chi gadarnhau eich cyfeiriad e-bost cyn y gallwch wneud y "
 "llawdriniaeth hon."
 
-#: modules/hostserv/offer.c:289 modules/hostserv/request.c:217
+#: modules/hostserv/offer.c:289 modules/hostserv/request.c:214
 #, c-format
 msgid "You must wait at least %u days between changes to your vHost."
 msgstr ""
@@ -9792,17 +9856,17 @@ msgstr ""
 msgid "user@host mask(s) that are autokline exempt: %s"
 msgstr ""
 
-#: modules/nickserv/info.c:168
+#: modules/nickserv/info.c:180
 #, c-format
 msgid "vHost      : %s"
 msgstr ""
 
-#: modules/nickserv/info.c:170
+#: modules/nickserv/info.c:182
 #, fuzzy, c-format
 msgid "vHost      : %s (assigned%s)"
 msgstr "Baneri: %s (%s)"
 
-#: modules/nickserv/info.c:172
+#: modules/nickserv/info.c:184
 #, c-format
 msgid "vHost      : unassigned%s"
 msgstr ""
@@ -9817,7 +9881,7 @@ msgstr ""
 msgid "vHost: %s, Group: %s, Creator: %s (%s)"
 msgstr ""
 
-#: modules/nickserv/info.c:187
+#: modules/nickserv/info.c:199
 #, fuzzy, c-format
 msgid "vHostNick  : %s (on %s)"
 msgstr "Baneri: %s (%s)"
