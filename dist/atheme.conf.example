@@ -2208,6 +2208,13 @@ hostserv {
 	 */
 	#reggroup = "!Services-Team";
 
+	/* (*)no_subsequent_requests
+	 * Prevent a user from making another vhost request while they
+	 * already have an outstanding request that has not been accepted
+	 * or rejected.
+	 */
+	#no_subsequent_requests;
+
 	/* (*)request_per_nick
 	 * Whether the request system should work per nick or per account.
 	 * The recommended setting is to leave this disabled, so that

@@ -147,6 +147,10 @@ SASL
 MemoServ
 --------
 - MemoServ: let user know when their inbox is full
+- Request: Add silent rejection feature and no subsequent requests feature
+  - This will be useful on networks that have a bot to handle vhost requests
+    automatically. Please see the `HELP` output for `REJECT`, and the comments
+    on the `no_subsequent_requests` option in `dist/atheme.conf.example`.
 
 ChanServ
 --------

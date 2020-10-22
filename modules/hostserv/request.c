@@ -19,6 +19,7 @@ struct hsrequest
 	char *creator;
 };
 
+static bool no_subsequent_requests;
 static bool request_per_nick;
 static struct service *hostsvs;
 
@@ -63,25 +64,33 @@ db_h_hr(struct database_handle *db, const char *type)
 }
 
 static void
+remove_request_from_list(mowgli_node_t *const restrict n)
+{
+	struct hsrequest *const l = n->data;
+
+	sfree(l->nick);
+	sfree(l->vhost);
+	sfree(l->creator);
+	sfree(l);
+
+	mowgli_node_delete(n, &hs_reqlist);
+	mowgli_node_free(n);
+}
+
+static void
 nick_drop_request(struct hook_user_req *hdata)
 {
-	mowgli_node_t *m;
+	mowgli_node_t *n;
 	struct hsrequest *l;
 
-	MOWGLI_ITER_FOREACH(m, hs_reqlist.head)
+	MOWGLI_ITER_FOREACH(n, hs_reqlist.head)
 	{
-		l = m->data;
+		l = n->data;
 		if (!irccasecmp(l->nick, hdata->mn->nick))
 		{
 			slog(LG_REGISTER, "VHOSTREQ:DROPNICK: \2%s\2 \2%s\2", l->nick, l->vhost);
 
-			mowgli_node_delete(m, &hs_reqlist);
-
-			sfree(l->nick);
-			sfree(l->vhost);
-			sfree(l->creator);
-			sfree(l);
-
+			remove_request_from_list(n);
 			return;
 		}
 	}
@@ -100,13 +109,7 @@ account_drop_request(struct myuser *mu)
 		{
 			slog(LG_REGISTER, "VHOSTREQ:DROPACCOUNT: \2%s\2 \2%s\2", l->nick, l->vhost);
 
-			mowgli_node_delete(n, &hs_reqlist);
-
-			sfree(l->nick);
-			sfree(l->vhost);
-			sfree(l->creator);
-			sfree(l);
-
+			remove_request_from_list(n);
 			return;
 		}
 	}
@@ -125,13 +128,7 @@ account_delete_request(struct myuser *mu)
 		{
 			slog(LG_REGISTER, "VHOSTREQ:EXPIRE: \2%s\2 \2%s\2", l->nick, l->vhost);
 
-			mowgli_node_delete(n, &hs_reqlist);
-
-			sfree(l->nick);
-			sfree(l->vhost);
-			sfree(l->creator);
-			sfree(l);
-
+			remove_request_from_list(n);
 			return;
 		}
 	}
@@ -302,6 +299,13 @@ hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 
 		if (!irccasecmp(l->nick, target))
 		{
+			if (no_subsequent_requests)
+			{
+				command_fail(si, fault_badparams, _("You already have an outstanding vhost request. "
+				                                    "Please wait for network staff to approve or "
+				                                    "reject it."));
+				return;
+			}
 			if (!strcmp(host, l->vhost))
 			{
 				command_success_nodata(si, _("You have already requested vhost \2%s\2."), host);
@@ -315,7 +319,7 @@ hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 			}
 			sfree(l->vhost);
 			l->vhost = sstrdup(host);
-			l->vhost_ts = CURRTIME;;
+			l->vhost_ts = CURRTIME;
 
 			command_success_nodata(si, _("You have requested vhost \2%s\2."), host);
 
@@ -373,7 +377,6 @@ hs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, hs_reqlist.head)
 	{
 		l = n->data;
@@ -386,13 +389,7 @@ hs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 			// VHOSTNICK command below will generate snoop
 			logcommand(si, CMDLOG_REQUEST, "ACTIVATE: \2%s\2 for \2%s\2", l->vhost, nick);
 			snprintf(buf, BUFSIZE, "%s %s", l->nick, l->vhost);
-
-			mowgli_node_delete(n, &hs_reqlist);
-
-			sfree(l->nick);
-			sfree(l->vhost);
-			sfree(l->creator);
-			sfree(l);
+			remove_request_from_list(n);
 
 			command_exec_split(si->service, si, request_per_nick ? "VHOSTNICK" : "VHOST", buf, si->service->commands);
 			return;
@@ -406,13 +403,7 @@ hs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 			// VHOSTNICK command below will generate snoop
 			logcommand(si, CMDLOG_REQUEST, "ACTIVATE: \2%s\2 for \2%s\2", l->vhost, l->nick);
 			snprintf(buf, BUFSIZE, "%s %s", l->nick, l->vhost);
-
-			mowgli_node_delete(n, &hs_reqlist);
-
-			sfree(l->nick);
-			sfree(l->vhost);
-			sfree(l->creator);
-			sfree(l);
+			remove_request_from_list(n);
 
 			command_exec_split(si->service, si, request_per_nick ? "VHOSTNICK" : "VHOST", buf, si->service->commands);
 
@@ -421,6 +412,7 @@ hs_cmd_activate(struct sourceinfo *si, int parc, char *parv[])
 		}
 
 	}
+
 	command_success_nodata(si, _("Nick \2%s\2 not found in vhost request database."), nick);
 }
 
@@ -434,6 +426,7 @@ hs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
 	char buf[BUFSIZE];
 	struct hsrequest *l;
 	mowgli_node_t *n, *tn;
+	bool silent = false;
 
 	if (!nick)
 	{
@@ -448,6 +441,9 @@ hs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	if (reason && strcasecmp(reason, "SILENT") == 0)
+		silent = true;
+
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, hs_reqlist.head)
 	{
 		struct service *svs;
@@ -455,7 +451,7 @@ hs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
 		l = n->data;
 		if (!irccasecmp(l->nick, nick))
 		{
-			if ((svs = service_find("memoserv")) != NULL)
+			if (! silent && (svs = service_find("memoserv")) != NULL)
 			{
 				if (reason)
 					snprintf(buf, BUFSIZE, "%s [auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected due to: %s", nick, l->vhost, nick, reason);
@@ -464,7 +460,7 @@ hs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
 
 				command_exec_split(svs, si, "SEND", buf, svs->commands);
 			}
-			else if ((u = user_find_named(nick)) != NULL)
+			else if (! silent && (u = user_find_named(nick)) != NULL)
 			{
 				if (reason)
 					notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected due to: %s", l->vhost, nick, reason);
@@ -472,22 +468,18 @@ hs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
 					notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", l->vhost, nick);
 			}
 
-			if (reason)
+			if (reason && ! silent)
 				logcommand(si, CMDLOG_REQUEST, "REJECT: \2%s\2 for \2%s\2, Reason: \2%s\2", l->vhost, nick, reason);
 			else
 				logcommand(si, CMDLOG_REQUEST, "REJECT: \2%s\2 for \2%s\2", l->vhost, nick);
 
-			mowgli_node_delete(n, &hs_reqlist);
-			sfree(l->nick);
-			sfree(l->vhost);
-			sfree(l->creator);
-			sfree(l);
+			remove_request_from_list(n);
 			return;
 		}
 
 		if (!irccasecmp("*", nick))
 		{
-			if ((svs = service_find("memoserv")) != NULL)
+			if (! silent && (svs = service_find("memoserv")) != NULL)
 			{
 				if (reason)
 					snprintf(buf, BUFSIZE, "%s [auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected due to: %s", nick, l->vhost, nick, reason);
@@ -496,7 +488,7 @@ hs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
 
 				command_exec_split(svs, si, "SEND", buf, svs->commands);
 			}
-			else if ((u = user_find_named(l->nick)) != NULL)
+			else if (! silent && (u = user_find_named(l->nick)) != NULL)
 			{
 				if (reason)
 					notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected due to: %s", l->vhost, nick, reason);
@@ -504,22 +496,18 @@ hs_cmd_reject(struct sourceinfo *si, int parc, char *parv[])
 					notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", l->vhost, nick);
 			}
 
-			if (reason)
+			if (reason && ! silent)
 				logcommand(si, CMDLOG_REQUEST, "REJECT: \2%s\2 for \2%s\2, Reason: \2%s\2", l->vhost, l->nick, reason);
 			else
 				logcommand(si, CMDLOG_REQUEST, "REJECT: \2%s\2 for \2%s\2", l->vhost, l->nick);
 
-			mowgli_node_delete(n, &hs_reqlist);
-
-			sfree(l->nick);
-			sfree(l->vhost);
-			sfree(l->creator);
-			sfree(l);
+			remove_request_from_list(n);
 
 			if (hs_reqlist.count == 0)
 				return;
 		}
 	}
+
 	command_success_nodata(si, _("Nick \2%s\2 not found in vhost request database."), nick);
 }
 
@@ -609,6 +597,8 @@ mod_init(struct module *const restrict m)
 	service_named_bind_command("hostserv", &hs_waiting);
 	service_named_bind_command("hostserv", &hs_reject);
 	service_named_bind_command("hostserv", &hs_activate);
+
+	add_bool_conf_item("NO_SUBSEQUENT_REQUESTS", &hostsvs->conf_table, 0, &no_subsequent_requests, false);
 	add_bool_conf_item("REQUEST_PER_NICK", &hostsvs->conf_table, 0, &request_per_nick, false);
 
 	m->mflags |= MODFLAG_DBHANDLER;
