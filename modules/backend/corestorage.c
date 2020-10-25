@@ -654,7 +654,12 @@ corestorage_h_so(struct database_handle *db, const char *type)
 
 	if (!(mu = myuser_find(user)))
 	{
-		slog(LG_INFO, "db-h-so: soper for nonexistent account %s", user);
+		slog(LG_ERROR, "db-h-so: soper for nonexistent account %s", user);
+		return;
+	}
+	if (!operclass_find(class))
+	{
+		slog(LG_ERROR, "db-h-so: soper for nonexistent class %s", class);
 		return;
 	}
 
