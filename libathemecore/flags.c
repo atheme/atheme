@@ -63,6 +63,7 @@ const struct gflags mu_flags[] = {
 	{ 'r', MU_REGNOLIMIT },
 	{ 'N', MU_NEVERGROUP },
 	{ 'S', MU_NOPASSWORD },
+	{ 'l', MU_LOGINNOLIMIT },
 	{ 0, 0 },
 };
 

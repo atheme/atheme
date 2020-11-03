@@ -403,6 +403,14 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 
 		strcat(buf, "NoPassword");
 	}
+	if (MU_LOGINNOLIMIT & mu->flags)
+	{
+		if (*buf)
+			strcat(buf, ", ");
+
+		strcat(buf, "LoginNoLimit");
+	}
+
 
 	if (*buf)
 		command_success_nodata(si, _("Flags      : %s"), buf);
