@@ -351,7 +351,7 @@ handle_whois(struct user *u, const char *target)
 	if (floodcheck(u, NULL))
 		return;
 
-	if (t != NULL)
+	if (t != NULL && t->server == me.me)
 	{
 		numeric_sts(me.me, 311, u, "%s %s %s * :%s", t->nick, t->user, t->vhost, t->gecos);
 		/* channels purposely omitted */
