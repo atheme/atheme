@@ -371,7 +371,7 @@ myuser_rename(struct myuser *mu, const char *name)
 	entity(mu)->name = newname;
 
 	myentity_put(entity(mu));
-	if (authservice_loaded)
+	if (authservice_loaded && !(mu->flags & MU_WAITAUTH))
 	{
 		MOWGLI_ITER_FOREACH(n, mu->logins.head)
 		{
