@@ -67,7 +67,7 @@ ctcp_about_handler(struct sourceinfo *si, char *cmd, char *args)
 void
 common_ctcp_init(void)
 {
-	ctcptree = mowgli_patricia_create(noopcanon);
+	ctcptree = mowgli_patricia_create(strcasecanon);
 
 	mowgli_patricia_add(ctcptree, "\001PING", ctcp_ping_handler);
 	mowgli_patricia_add(ctcptree, "\001VERSION\001", ctcp_version_handler);
