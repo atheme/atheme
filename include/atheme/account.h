@@ -105,6 +105,7 @@ struct myuser
 #define MU_NEVERGROUP   0x00020000U
 #define MU_PENDINGLOGIN 0x00040000U
 #define MU_NOPASSWORD   0x00080000U
+#define MU_LOGINNOLIMIT 0x00100000U
 
 /* memoserv rate limiting parameters */
 #define MEMO_MAX_NUM   5

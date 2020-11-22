@@ -120,7 +120,9 @@ ns_cmd_login(struct sourceinfo *si, int parc, char *parv[])
 
 	if (verify_password(mu, password))
 	{
-		if (MOWGLI_LIST_LENGTH(&mu->logins) >= me.maxlogins)
+		if (mu->flags & MU_LOGINNOLIMIT == 0
+			&& !has_priv_myuser(mu, PRIV_LOGIN_NOLIMIT)
+			&& MOWGLI_LIST_LENGTH(&mu->logins) >= me.maxlogins)
 		{
 			command_fail(si, fault_toomany, _("There are already \2%zu\2 sessions logged in to \2%s\2 (maximum allowed: %u)."), MOWGLI_LIST_LENGTH(&mu->logins), entity(mu)->name, me.maxlogins);
 			lau[0] = '\0';

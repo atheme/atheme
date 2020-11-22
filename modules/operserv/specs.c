@@ -37,6 +37,7 @@ os_cmd_specs(struct sourceinfo *si, int parc, char *parv[])
 			{ PRIV_USER_FREGISTER, N_("register accounts on behalf of another user") },
 			{ PRIV_MARK, N_("mark accounts") },
 			{ PRIV_HOLD, N_("hold accounts") },
+			{ PRIV_LOGIN_NOLIMIT, N_("bypass login limits") },
 			{ NULL, NULL },
 		}
 	};
