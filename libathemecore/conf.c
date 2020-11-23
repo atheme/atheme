@@ -141,6 +141,9 @@ get_conf_opts(void)
 	optstr[optidx++] = 'M';
 #endif /* ATHEME_ENABLE_SODIUM_MALLOC */
 
+	if (config_options.hide_opers)
+		optstr[optidx++] = 'O';
+
 	if (! match_mapping)
 		optstr[optidx++] = 'R';
 
@@ -294,6 +297,7 @@ init_newconf(void)
 	add_duration_conf_item("COMMIT_INTERVAL", &conf_gi_table, 0, &config_options.commit_interval, "m", 300);
 	add_dupstr_conf_item("OPERSTRING", &conf_gi_table, 0, &config_options.operstring, "is an IRC Operator");
 	add_dupstr_conf_item("SERVICESTRING", &conf_gi_table, 0, &config_options.servicestring, "is a Network Service");
+	add_bool_conf_item("HIDE_OPERS", &conf_gi_table, 0, &config_options.hide_opers, false);
 
 	/* XXX: These options should probably move into operserv/clones eventually */
 	add_uint_conf_item("DEFAULT_CLONE_WARN", &conf_gi_table, 0, &config_options.default_clone_warn, 1, INT_MAX, 5);

@@ -360,7 +360,7 @@ handle_whois(struct user *u, const char *target)
 			numeric_sts(me.me, 301, u, "%s :Gone", t->nick);
 		if (is_service(t))
 			numeric_sts(me.me, 313, u, "%s :%s", t->nick, config_options.servicestring);
-		else if (is_ircop(t))
+		else if (is_ircop(t) && !config_options.hide_opers)
 			numeric_sts(me.me, 313, u, "%s :%s", t->nick, config_options.operstring);
 		if (t->myuser && !(t->myuser->flags & MU_WAITAUTH))
 			numeric_sts(me.me, 330, u, "%s %s :is logged in as", t->nick, entity(t->myuser)->name);
