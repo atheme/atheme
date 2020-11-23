@@ -2697,6 +2697,12 @@ general {
 	 * can fix your configuration file.
 	 */
 	load_database_mdeps;
+
+	/* hide_opers
+	 *
+	 * whether or not to hide oper status in remote whois
+	 */
+	#hide_opers;
 };
 
 proxyscan {

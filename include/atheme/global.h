@@ -96,6 +96,7 @@ struct ConfOption
 	unsigned int    immune_level;           // what flag is required for kick immunity
 	bool            show_entity_id;         // do not require user:auspex to see entity IDs
 	bool            load_database_mdeps;    // for core module deps listed in DB, whether to load them or abort
+	bool            hide_opers;             // whether or not to hide RPL_WHOISOPERATOR from remote whois
 };
 
 extern struct ConfOption config_options;
