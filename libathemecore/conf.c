@@ -253,63 +253,62 @@ init_newconf(void)
 	add_dupstr_conf_item("NAME", &conf_si_table, CONF_NO_REHASH, &me.name, NULL);
 	add_dupstr_conf_item("DESC", &conf_si_table, CONF_NO_REHASH, &me.desc, NULL);
 	add_dupstr_conf_item("NUMERIC", &conf_si_table, CONF_NO_REHASH, &me.numeric, NULL);
-	add_dupstr_conf_item("VHOST", &conf_si_table, CONF_NO_REHASH, &me.vhost, NULL);
 	add_duration_conf_item("RECONTIME", &conf_si_table, 0, &me.recontime, "s", 10);
-	add_duration_conf_item("RESTARTTIME", &conf_si_table, 0, &me.restarttime, "s", 0);
 	add_dupstr_conf_item("NETNAME", &conf_si_table, 0, &me.netname, NULL);
 	add_dupstr_conf_item("HIDEHOSTSUFFIX", &conf_si_table, 0, &me.hidehostsuffix, NULL);
 	add_dupstr_conf_item("ADMINNAME", &conf_si_table, 0, &me.adminname, NULL);
 	add_dupstr_conf_item("ADMINEMAIL", &conf_si_table, 0, &me.adminemail, NULL);
 	add_dupstr_conf_item("REGISTEREMAIL", &conf_si_table, 0, &me.register_email, NULL);
+	add_bool_conf_item("HIDDEN", &conf_si_table, 0, &me.hidden, false);
 	add_dupstr_conf_item("MTA", &conf_si_table, 0, &me.mta, NULL);
 	add_conf_item("LOGLEVEL", &conf_si_table, c_si_loglevel);
 	add_uint_conf_item("MAXLOGINS", &conf_si_table, 0, &me.maxlogins, 3, INT_MAX, 5);
 	add_uint_conf_item("MAXUSERS", &conf_si_table, 0, &me.maxusers, 0, INT_MAX, 0);
+	add_uint_conf_item("MDLIMIT", &conf_si_table, 0, &me.mdlimit, 0, INT_MAX, 30);
 	add_uint_conf_item("EMAILLIMIT", &conf_si_table, 0, &me.emaillimit, 1, INT_MAX, 10);
 	add_duration_conf_item("EMAILTIME", &conf_si_table, 0, &me.emailtime, "s", 300);
 	add_conf_item("AUTH", &conf_si_table, c_si_auth);
-	add_uint_conf_item("MDLIMIT", &conf_si_table, 0, &me.mdlimit, 0, INT_MAX, 30);
 	add_conf_item("CASEMAPPING", &conf_si_table, c_si_casemapping);
-	add_bool_conf_item("HIDDEN", &conf_si_table, 0, &me.hidden, false);
+	add_dupstr_conf_item("VHOST", &conf_si_table, CONF_NO_REHASH, &me.vhost, NULL);
 
 	/* general{} block */
+	add_bool_conf_item("PERMISSIVE_MODE", &conf_gi_table, 0, &permissive_mode, false);
 	add_dupstr_conf_item("HELPCHAN", &conf_gi_table, 0, &config_options.helpchan, NULL);
 	add_dupstr_conf_item("HELPURL", &conf_gi_table, 0, &config_options.helpurl, NULL);
-	add_bool_conf_item("PERMISSIVE_MODE", &conf_gi_table, 0, &permissive_mode, false);
-	add_bool_conf_item("VERBOSE_WALLOPS", &conf_gi_table, 0, &config_options.verbose_wallops, false);
-	add_bool_conf_item("ALLOW_TAINT", &conf_gi_table, 0, &config_options.allow_taint, false);
 	add_bool_conf_item("SILENT", &conf_gi_table, 0, &config_options.silent, false);
+	add_bool_conf_item("VERBOSE_WALLOPS", &conf_gi_table, 0, &config_options.verbose_wallops, false);
 	add_bool_conf_item("JOIN_CHANS", &conf_gi_table, 0, &config_options.join_chans, false);
 	add_bool_conf_item("LEAVE_CHANS", &conf_gi_table, 0, &config_options.leave_chans, false);
-	add_bool_conf_item("KLINE_WITH_IDENT", &conf_gi_table, 0, &config_options.kline_with_ident, false);
-	add_bool_conf_item("KLINE_VERIFIED_IDENT", &conf_gi_table, 0, &config_options.kline_verified_ident, false);
+	add_bool_conf_item("SECURE", &conf_gi_table, 0, &config_options.secure, false);
 	add_conf_item("UFLAGS", &conf_gi_table, c_gi_uflags);
 	add_conf_item("CFLAGS", &conf_gi_table, c_gi_cflags);
 	add_bool_conf_item("RAW", &conf_gi_table, 0, &config_options.raw, false);
-	add_bool_conf_item("SECURE", &conf_gi_table, 0, &config_options.secure, false);
 	add_uint_conf_item("FLOOD_MSGS", &conf_gi_table, 0, &config_options.flood_msgs, 0, INT_MAX, 0);
 	add_duration_conf_item("FLOOD_TIME", &conf_gi_table, 0, &config_options.flood_time, "s", 10);
 	add_uint_conf_item("RATELIMIT_USES", &conf_gi_table, 0, &config_options.ratelimit_uses, 0, INT_MAX, 0);
 	add_duration_conf_item("RATELIMIT_PERIOD", &conf_gi_table, 0, &config_options.ratelimit_period, "s", 0);
-	add_duration_conf_item("KLINE_TIME", &conf_gi_table, 0, &config_options.kline_time, "d", 0);
 	add_duration_conf_item("VHOST_CHANGE", &conf_gi_table, 0, &config_options.vhost_change, "d", 0);
+	add_duration_conf_item("KLINE_TIME", &conf_gi_table, 0, &config_options.kline_time, "d", 0);
+	add_bool_conf_item("KLINE_WITH_IDENT", &conf_gi_table, 0, &config_options.kline_with_ident, false);
+	add_bool_conf_item("KLINE_VERIFIED_IDENT", &conf_gi_table, 0, &config_options.kline_verified_ident, false);
 	add_duration_conf_item("CLONE_TIME", &conf_gi_table, 0, &config_options.clone_time, "m", 0);
 	add_duration_conf_item("COMMIT_INTERVAL", &conf_gi_table, 0, &config_options.commit_interval, "m", 300);
 	add_dupstr_conf_item("OPERSTRING", &conf_gi_table, 0, &config_options.operstring, "is an IRC Operator");
 	add_dupstr_conf_item("SERVICESTRING", &conf_gi_table, 0, &config_options.servicestring, "is a Network Service");
-	add_bool_conf_item("HIDE_OPERS", &conf_gi_table, 0, &config_options.hide_opers, false);
 
-	/* XXX: These options should probably move into operserv/clones eventually */
-	add_uint_conf_item("DEFAULT_CLONE_WARN", &conf_gi_table, 0, &config_options.default_clone_warn, 1, INT_MAX, 5);
+	/* XXX: These 3 options should probably move into operserv/clones eventually */
 	add_uint_conf_item("DEFAULT_CLONE_ALLOWED", &conf_gi_table, 0, &config_options.default_clone_allowed, 1, INT_MAX, 5);
+	add_uint_conf_item("DEFAULT_CLONE_WARN", &conf_gi_table, 0, &config_options.default_clone_warn, 1, INT_MAX, 5);
 	add_bool_conf_item("CLONE_IDENTIFIED_INCREASE_LIMIT", &conf_gi_table, 0, &config_options.clone_increase, false);
 
 	add_uint_conf_item("UPLINK_SENDQ_LIMIT", &conf_gi_table, 0, &config_options.uplink_sendq_limit, 10240, INT_MAX, 1048576);
 	add_dupstr_conf_item("LANGUAGE", &conf_gi_table, 0, &config_options.language, "en");
 	add_conf_item("EXEMPTS", &conf_gi_table, c_gi_exempts);
+	add_bool_conf_item("ALLOW_TAINT", &conf_gi_table, 0, &config_options.allow_taint, false);
 	add_conf_item("IMMUNE_LEVEL", &conf_gi_table, c_gi_immune_level);
 	add_bool_conf_item("SHOW_ENTITY_ID", &conf_gi_table, 0, &config_options.show_entity_id, false);
 	add_bool_conf_item("LOAD_DATABASE_MDEPS", &conf_gi_table, 0, &config_options.load_database_mdeps, false);
+	add_bool_conf_item("HIDE_OPERS", &conf_gi_table, 0, &config_options.hide_opers, false);
 
 	/* language:: stuff */
 	add_dupstr_conf_item("NAME", &conf_la_table, 0, &me.language_name, NULL);
@@ -874,7 +873,6 @@ static void
 copy_me(struct me *src, struct me *dst)
 {
 	dst->recontime = src->recontime;
-	dst->restarttime = src->restarttime;
 	dst->netname = sstrdup(src->netname);
 	dst->hidehostsuffix = sstrdup(src->hidehostsuffix);
 	dst->adminname = sstrdup(src->adminname);

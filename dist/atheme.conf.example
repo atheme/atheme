@@ -2683,7 +2683,7 @@ general {
 	 */
 	show_entity_id;
 
-	/* load_database_mdeps
+	/* (*)load_database_mdeps
 	 *
 	 * For module dependencies listed in the services database (if any),
 	 * whether to load those modules on startup (if they are not already
@@ -2698,7 +2698,7 @@ general {
 	 */
 	load_database_mdeps;
 
-	/* hide_opers
+	/* (*)hide_opers
 	 *
 	 * whether or not to hide oper status in remote whois
 	 */

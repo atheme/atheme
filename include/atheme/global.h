@@ -22,7 +22,6 @@ struct me
 	char *          actual;                 // the reported name of the uplink
 	char *          vhost;                  // IP we bind outgoing stuff to
 	unsigned int    recontime;              // time between reconnection attempts
-	unsigned int    restarttime;            // time before restarting
 	char *          netname;                // IRC network name
 	char *          hidehostsuffix;         // host suffix for P10 +x etc
 	char *          adminname;              // SRA's name (for ADMIN)
