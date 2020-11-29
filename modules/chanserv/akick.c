@@ -76,6 +76,9 @@ void _modinit(module_t *m)
 
 void _moddeinit(module_unload_intent_t intent)
 {
+	if (akick_timeout_check_timer)
+		mowgli_timer_destroy(base_eventloop, akick_timeout_check_timer);
+
 	service_named_unbind_command("chanserv", &cs_akick);
 
 	/* Delete sub-commands */
