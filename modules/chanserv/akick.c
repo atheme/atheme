@@ -893,6 +893,9 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
+	if (akick_timeout_check_timer)
+		(void) mowgli_timer_destroy(base_eventloop, akick_timeout_check_timer);
+
 	(void) hook_del_chanuser_sync(&chanuser_sync);
 
 	(void) service_named_unbind_command("chanserv", &cs_akick);
