@@ -157,15 +157,29 @@ command_exec(struct service *svs, struct sourceinfo *si, struct command *c, int 
 
 		*accessbuf = '\0';
 
+		// list default priv if the one in access{} is different
 		if (c->access && (!cmdaccess || strcmp(c->access, cmdaccess)))
 		{
 			mowgli_strlcat(accessbuf, c->access, BUFSIZE);
 			mowgli_strlcat(accessbuf, " ", BUFSIZE);
 		}
 
-		mowgli_strlcat(accessbuf, cmdaccess, BUFSIZE);
+		// list the priv from access{} (or the default priv if it's the same)
+		if (cmdaccess)
+		{
+			mowgli_strlcat(accessbuf, cmdaccess, BUFSIZE);
+		}
 
-		command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, accessbuf);
+		if (*accessbuf)
+		{
+			command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, accessbuf);
+		}
+		else
+		{
+			// there's no priv in either the command definition or access{}
+			// this can happen with modules defining a custom command_authorize
+			command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
+		}
 	}
 	else
 		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
