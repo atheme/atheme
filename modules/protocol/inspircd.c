@@ -10,7 +10,7 @@
 #include <atheme.h>
 #include <atheme/protocol/inspircd.h>
 
-// TODO: protocol 1204
+// TODO: protocol 1205
 #define PROTOCOL_MINIMUM 1202 // we do not support anything older than this
 #define PROTOCOL_PREFERRED_STR "1202"
 
