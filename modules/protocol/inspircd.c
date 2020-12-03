@@ -153,20 +153,10 @@ split_modeparam(const char *str, const char *argp[], int argl[], int maxsize)
 static mowgli_node_t *
 inspircd_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_node_t *first)
 {
-	struct chanban *cb;
-	char *mask = cb->mask;
-	bool invert = false;	// m_bannegate contrib module
 	mowgli_node_t *n;
 	char hostbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
 	char realbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
 	char ipbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
-	char *p;
-
-	if(has_bannegate && mask[0] == '~')
-	{
-		mask++;
-		invert = true;
-	}
 
 	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
 	snprintf(realbuf, sizeof realbuf, "%s!%s@%s", u->nick, u->user, u->host);
@@ -177,8 +167,19 @@ inspircd_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_n
 	MOWGLI_ITER_FOREACH(n, first)
 	{
 		struct channel *target_c;
+		struct chanban *cb;
+		char *mask;
+		char *p;
+		bool invert = false;	// m_bannegate contrib module
 
 		cb = n->data;
+		mask = cb->mask;
+	
+		if(has_bannegate && mask[0] == '~')
+		{
+			mask++;
+			invert = true;
+		}
 
 		if (cb->type != type)
 			continue;
