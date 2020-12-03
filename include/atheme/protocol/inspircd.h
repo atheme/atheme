@@ -25,5 +25,6 @@
 #define CMODE_NOCAPS            0x04000000U
 #define CMODE_PERM              0x08000000U
 #define CMODE_DELAYJOIN         0x20000000U
+#define CMODE_ROLEPLAY		0x40000000U
 
 #endif /* !ATHEME_INC_PROTOCOL_INSPIRCD_H */

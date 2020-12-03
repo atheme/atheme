@@ -10,6 +10,7 @@
 #include <atheme.h>
 #include <atheme/protocol/inspircd.h>
 
+// TODO: protocol 1204
 #define PROTOCOL_MINIMUM 1202 // we do not support anything older than this
 #define PROTOCOL_PREFERRED_STR "1202"
 
@@ -40,29 +41,33 @@ static struct ircd InspIRCd = {
 };
 
 static const struct cmode inspircd_mode_list[] = {
+  { 'A', CMODE_NOINVITE },
+  { 'B', CMODE_NOCAPS	},
+  { 'C', CMODE_NOCTCP	},
+  { 'D', CMODE_DELAYJOIN },
+  { 'G', CMODE_CENSOR	},
+  { 'K', CMODE_NOKNOCK	},
+  { 'N', CMODE_STICKY	},
+  { 'M', CMODE_MODREG	},
+  { 'O', CMODE_OPERONLY },
+  { 'P', CMODE_PERM	},
+  { 'Q', CMODE_PEACE	},
+  { 'R', CMODE_REGONLY	},
+  { 'S', CMODE_STRIP	},
+  { 'T', CMODE_NONOTICE },
+  { 'U', CMODE_ROLEPLAY	},	// contrib module. --Elizafox
+  { 'c', CMODE_NOCOLOR	},
   { 'i', CMODE_INVITE	},
+  { 'k', CMODE_KEY	},
+  { 'l', CMODE_LIMIT	},
   { 'm', CMODE_MOD	},
   { 'n', CMODE_NOEXT	},
   { 'p', CMODE_PRIV	},
+  { 'r', CMODE_CHANREG	},
   { 's', CMODE_SEC	},
   { 't', CMODE_TOPIC	},
-  { 'c', CMODE_NOCOLOR	},
-  { 'M', CMODE_MODREG	},
-  { 'R', CMODE_REGONLY	},
-  { 'O', CMODE_OPERONLY },
-  { 'S', CMODE_STRIP	},
-  { 'K', CMODE_NOKNOCK	},
-  { 'A', CMODE_NOINVITE },
-  { 'C', CMODE_NOCTCP	},
-  { 'N', CMODE_STICKY	},
-  { 'G', CMODE_CENSOR	},
-  { 'P', CMODE_PERM	},
-  { 'B', CMODE_NOCAPS	},
-  { 'z', CMODE_SSLONLY	},
-  { 'T', CMODE_NONOTICE },
   { 'u', CMODE_HIDING	},
-  { 'Q', CMODE_PEACE	},
-  { 'D', CMODE_DELAYJOIN },
+  { 'z', CMODE_SSLONLY	},
   { '\0', 0 }
 };
 
@@ -107,17 +112,61 @@ static bool has_svshold = false;
 static bool has_cloakingmod = false;
 static bool has_shun = false;
 static bool has_svstopic_topiclock = false;
+static bool has_bannegate = false;	// Contrib module. --Elizafox
 static int has_protocol = 0;
+
+/* NOTE: modifies argp and argl, but not str
+ * You must have allocated at least maxsize space in argp and argl!
+ */
+static inline int
+split_modeparam(const char *str, const char *argp[], int argl[], int maxsize)
+{
+	const char *p = str;
+	int argc = 0;
+
+	if(*p == '\0')
+		// Nothing to do
+		return 0;
+
+	argp[argc] = p;
+	while(*p != '\0')
+	{
+		if(*p == ':')
+		{
+			if(argc == (maxsize - 1))
+				return -1;
+
+			if(argl)
+				argl[argc] = p - argp[argc];
+
+			argp[++argc] = p + 1;
+		}
+		p++;
+	}
+
+	if(argl)
+		argl[argc] = p - argp[argc];
+
+	return argc + 1;
+}
 
 static mowgli_node_t *
 inspircd_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_node_t *first)
 {
 	struct chanban *cb;
+	char *mask = cb->mask;
+	bool invert = false;	// m_bannegate contrib module
 	mowgli_node_t *n;
 	char hostbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
 	char realbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
 	char ipbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
 	char *p;
+
+	if(has_bannegate && mask[0] == '~')
+	{
+		mask++;
+		invert = true;
+	}
 
 	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
 	snprintf(realbuf, sizeof realbuf, "%s!%s@%s", u->nick, u->user, u->host);
@@ -134,18 +183,21 @@ inspircd_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_n
 		if (cb->type != type)
 			continue;
 
-		if ((!match(cb->mask, hostbuf) || !match(cb->mask, realbuf) || !match(cb->mask, ipbuf)) || !match_cidr(cb->mask, ipbuf))
-			return n;
+		if ((!match(mask, hostbuf) || !match(mask, realbuf) || !match(mask, ipbuf)) || !match_cidr(mask, ipbuf))
+			return invert ? NULL : n;
 
-		if (cb->mask[1] == ':' && strchr("MRUjrm", cb->mask[0]))
+		/* There are other extban types, but they're not worth the
+		 * trouble of supporting. --Elizafox
+		 */
+		if (mask[1] == ':' && strchr("MRUajmprsz", mask[0]))
 		{
 			bool matched = false;
 
-			p = cb->mask + 2;
+			p = mask + 2;
 			if (*(p - 1) != ':')
 				p = NULL;
 
-			switch (cb->mask[0])
+			switch (mask[0])
 			{
 			case 'M':
 			case 'R':
@@ -154,6 +206,23 @@ inspircd_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_n
 			case 'U':
 				matched = u->myuser == NULL;
 				break;
+			case 'a':
+			{
+				char *gp = strchr(p, '+');
+
+				if(gp == NULL)
+					matched = (!match(p, hostbuf) || !match(p, realbuf) || !match(p, ipbuf)) || !match_cidr(p, ipbuf);
+				else
+				{
+					// The realname begins at +, so duplicate the mask
+					char np[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
+					mowgli_strlcpy(np, p, gp - p);
+					matched = (!match(np, hostbuf) || !match(np, realbuf) || !match(np, ipbuf)) || !match_cidr(np, ipbuf);
+					if(matched && !match(gp + 1, u->gecos))
+						matched = true;
+				}
+				break;
+			}
 			case 'j':
 				if (p == NULL)
 					continue;
@@ -162,20 +231,27 @@ inspircd_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_n
 					continue;
 				matched = chanuser_find(target_c, u) != NULL;
 				break;
+			case 'm':
+			case 'p':
+				matched = (!match(p, hostbuf) || !match(p, realbuf) || !match(p, ipbuf)) || !match_cidr(p, ipbuf);
+				break;
 			case 'r':
 				if (p == NULL)
 					continue;
 				matched = !match(p, u->gecos);
 				break;
-			case 'm':
-				matched = (!match(p, hostbuf) || !match(p, realbuf) || !match(p, ipbuf)) || !match_cidr(p, ipbuf);
+			case 's':
+				matched = !match(p, u->server->name);
+				break;
+			case 'z':
+				matched = !match(p, u->certfp);
 				break;
 			default:
 				continue;
 			}
 
 			if (matched)
-				return n;
+				return invert ? NULL : n;
 		}
 	}
 
@@ -208,30 +284,46 @@ channel_metadata_sts(struct channel *c, const char *key, const char *value)
 	sts(":%s METADATA %s %s :%s", ME, c->name, key, value);
 }
 
+/* Checks for an invalid integer parameter
+ * Returns -1 on overflow or error
+ */
+static int
+param_int(const char *value, int len)
+{
+	const char *p = value;
+	long long ret;
+
+	if(len < 0 || len > 10)
+		return -1;
+
+	for( ; *p != '\0' || (len && (value - p) > len); p++)
+	{
+		if(!isdigit(*p))
+			return -1;
+	}
+
+	if((ret = atoll(value)) > INT_MAX)
+		// Too big!
+		return -1;
+
+	return (int)ret;
+}
+
 static bool
 check_jointhrottle(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
-	const char *p, *arg2;
+	const char *argp[2] = { NULL, NULL };
+	int argl[2] = { 0, 0 };
 
-	p = value;
-	arg2 = NULL;
+	if(split_modeparam(value, argp, argl, 2) < 2)
+		return false;
 
-	while (*p != '\0')
-	{
-		if (*p == ':')
-		{
-			if (arg2 != NULL)
-				return false;
-			arg2 = p + 1;
-		}
-		else if (!isdigit((unsigned char)*p))
-			return false;
-		p++;
-	}
-	if (arg2 == NULL)
+	if(argl[0] == 0 || argl[0] > 10 || argl[1] == 0 || argl[1] > 10)
 		return false;
-	if (p - arg2 > 10 || arg2 - value - 1 > 10 || !atoi(value) || !atoi(arg2))
+
+	if(param_int(argp[0], argl[0]) <= 0 || param_int(argp[1], argl[1]) <= 0)
 		return false;
+
 	return true;
 }
 
@@ -250,7 +342,32 @@ check_nickflood(const char *value, struct channel *c, struct mychan *mc, struct 
 static bool
 check_history(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
-	return check_jointhrottle(value, c, mc, u, mu);
+	const char *argp[2] = { NULL, NULL };
+	const char *p;
+	int argl[2] = { 0, 0 };
+
+	if(split_modeparam(value, argp, argl, 2) < 2)
+		return false;
+
+	if(argl[0] == 0 || argl[0] > 10 || argl[1] == 0 || argl[1] > 10)
+		return false;
+
+	if(param_int(argp[0], argl[1]) <= 0)
+		return false;
+
+	/* History can be a duration or integer
+	 * XXX - find out maximum history duration and check it
+	 */
+	for(p = argp[1] ; *p != '\0'; p++)
+	{
+		if(*p >= '0' && *p <= '9')
+			continue;
+
+		if(strchr("smhdwy", tolower(*p)) == NULL)
+			return false;
+	}
+
+	return true;
 }
 
 static bool
@@ -273,55 +390,90 @@ check_forward(const char *value, struct channel *c, struct mychan *mc, struct us
 static bool
 check_rejoindelay(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
-	const char *ch = value;
+	int delay;
 
-	while (*ch)
-	{
-		if (!isdigit((unsigned char)*ch))
-			return false;
-		ch++;
-	}
-
-	if (atoi(value) <= 0 || atoi(value) > (int) max_rejoindelay)
-	{
+	if(param_int(value, 0) <= 0)
 		return false;
-	}
-	else
-	{
-		return true;
-	}
+
+	delay = atoi(value);
+	if(delay <= 0 || delay > (int)max_rejoindelay)
+		return false;
+
+	return true;
 }
 
 static bool
 check_delaymsg(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
-	const char *ch = value;
+	if(param_int(value, 0) <= 0)
+		return false;
 
-	while (*ch)
-	{
-		if (!isdigit((unsigned char)*ch))
-			return false;
-		ch++;
-	}
+	return true;
+}
 
-	if (atoi(value) <= 0)
+static bool
+check_joinpartspam(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
+{
+	const char *argp[4] = { NULL, NULL, NULL, NULL };
+	int argl[4] = { 0, 0, 0, 0 };
+
+	if(split_modeparam(value, argp, argl, 4) < 3)
+		return false;
+
+	if(param_int(argp[0], argl[0]) <= 0
+		|| param_int(argp[1], argl[1]) <= 0
+		|| param_int(argp[2], argl[2]) <= 0)
 	{
 		return false;
 	}
-	else
+
+	// This checks the channel stuff, etc.
+	if(argp[3] && !check_forward(argp[3], c, mc, u, mu))
+		return false;
+
+	return true;
+}
+
+static bool
+check_blocksimilar(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
+{
+	const char *argp[4] = { NULL, NULL, NULL, NULL };
+	int argl[4] = { 0, 0, 0, 0 };
+
+	if(!isdigit(*value))
 	{
-		return true;
+		if(*value != '~' || *value != '*')
+			return false;
+
+		value++;
 	}
+
+	if(split_modeparam(value, argp, argl, 4) < 2)
+		return false;
+
+	if(argl[1] > 10)
+		return false;
+
+	if(param_int(argp[0], argl[0]) <= 0 || param_int(argp[1], argl[1]) <= 0)
+		return false;
+
+	if((argp[2] && param_int(argp[2], argl[2]) <= 0)
+		|| (argp[3] && param_int(argp[3], argl[3]) <= 0))
+		return false;
+
+	return true;
 }
 
 static struct extmode inspircd_ignore_mode_list[] = {
-  { 'f', check_flood },
-  { 'F', check_nickflood },
-  { 'j', check_jointhrottle },
-  { 'L', check_forward },
-  { 'J', check_rejoindelay },
   { 'd', check_delaymsg },
+  { 'f', check_flood },
+  { 'j', check_jointhrottle },
+  { 'x', check_joinpartspam },
+  { 'E', check_blocksimilar },
+  { 'F', check_nickflood },
   { 'H', check_history },
+  { 'J', check_rejoindelay },
+  { 'L', check_forward },
   { '\0', 0 }
 };
 
@@ -1646,6 +1798,11 @@ m_capab(struct sourceinfo *si, int parc, char *parv[])
 		if (strstr(parv[1], "m_topiclock.so"))
 		{
 			has_svstopic_topiclock = true;
+		}
+		if (strstr(parv[1], "m_bannegate.so"))
+		{
+			// Contrib module
+			has_bannegate = true;
 		}
 		if ((it = strstr(parv[1], "m_kicknorejoin.so")) != NULL)
 		{
