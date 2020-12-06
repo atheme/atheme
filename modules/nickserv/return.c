@@ -59,6 +59,11 @@ ns_cmd_return(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+    if (!(mu->flags & MU_HIDEMAIL)                // doesn't have HIDEMAIL
+        && config_options.defuflags & MU_HIDEMAIL // HIDEMAIL is in default uflags
+        && strcmp(oldmail, newmail))              // new email is different
+        mu->flags |= MU_HIDEMAIL;
+
 	set_password(mu, newpass);
 
 	sfree(newpass);
