@@ -85,6 +85,7 @@ user_can_rename                 struct hook_user_rename_check *
 user_check_expire               struct hook_expiry_req *
 user_drop                       struct myuser *
 user_identify                   struct user *
+user_identify_fail              struct hook_user_identify_fail *
 user_info                       struct hook_user_req *
 user_info_noexist               struct hook_info_noexist_req *
 user_needforce                  struct hook_user_needforce *
