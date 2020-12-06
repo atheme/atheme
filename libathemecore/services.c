@@ -887,6 +887,13 @@ bad_password(struct sourceinfo *si, struct myuser *mu)
 		wallops("Warning: \2%d\2 failed login attempts to \2%s\2. Last attempt received from \2%s\2 on %s.", count, entity(mu)->name, mask, strfbuf);
 	}
 
+	struct hook_user_identify_fail req = {
+		.si = si,
+		.mu = mu,
+	};
+
+	hook_call_user_identify_fail(&req);
+
 	return false;
 }
 
