@@ -18,7 +18,7 @@ static void
 atheme_pbkdf2_config_ready(void ATHEME_VATTR_UNUSED *const restrict unused)
 {
 	if (! module_find_published(PBKDF2V2_CRYPTO_MODULE_NAME))
-		(void) slog(LG_INFO, "%s: this module has been superceded by %s; please arrange to have that module "
+		(void) slog(LG_INFO, "%s: this module has been superseded by %s; please arrange to have that module "
 		                     "loaded before this one, and see the comments in dist/atheme.conf.example for "
 		                     "the crypto {} section to configure it.", CRYPTO_MODULE_NAME,
 		                     PBKDF2V2_CRYPTO_MODULE_NAME);

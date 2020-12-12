@@ -58,7 +58,7 @@ POTENTIAL COMPATIBILITY BREAKAGE
   to adapt your current crypto module configuration, if any.
 
 - The `crypto/pbkdf2` module has been made verify-only, as it has been
-  superceded by `crypto/pbkdf2v2`. Migration instructions are located in the
+  superseded by `crypto/pbkdf2v2`. Migration instructions are located in the
   `crypto {}` section comments in `dist/atheme.conf.example`. This module *is*
   still compiled and installed by default; it is *not* considered a legacy
   module for the purposes of `./configure --enable-legacy-pwcrypto` (above)
