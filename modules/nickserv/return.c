@@ -103,7 +103,7 @@ ns_cmd_return(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("A random password has been set; it has been sent to \2%s\2."),
 						newmail);
 	if (force_hidemail)
-		command_success_nodata(si, _("Forced HIDEMAIL on to \2%s\2 due to email change"),
+		command_success_nodata(si, _("The HIDEMAIL flag has been set for \2%s\2 due to the email change."),
 						target);
 }
 
