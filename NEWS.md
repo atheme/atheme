@@ -156,6 +156,14 @@ ChanServ
 --------
 - Save `PUBACL` flag to database so it isn't lost when services restarts
 
+NickServ
+--------
+- Port `contrib/ns_waitreg` to `modules/nickserv/waitreg`
+- Port `contrib/ns_listlogins` to `modules/nickserv/listlogins`
+- Blame a specific channel when a NickServ `REGAIN` fails due to a channel ban
+- NickServ `RETURN` now enables the `HIDEMAIL` flag if the email was changed
+  (unless the flag is unset by default)
+
 IRCds
 -----
 - Support `chm_nonotice.so` (Block channel notices) extension in charybdis IRCd
@@ -170,9 +178,6 @@ Misc
 - Replace Base-64 codec to fix erroneous failures and add a raw encoder
 - `dist/atheme.conf.example`: document `SET NOPASSWORD` module
 - Services will no longer begin a new database unless passed the `-b` option
-- Port `contrib/ns_waitreg` to `modules/nickserv/waitreg`
-- Port `contrib/ns_listlogins` to `modules/nickserv/listlogins`
-- Blame a specific channel when a NickServ `REGAIN` fails due to a channel ban
 - Make the OperServ `MODLIST` command available to everyone
 - Document the `special:authenticated` privilege
 - Add a Turkish translation
