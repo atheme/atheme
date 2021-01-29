@@ -9,7 +9,7 @@
 
 #include <atheme.h>
 
-static bool listownmail_dont_canon = false;
+static bool listownmail_canon = false;
 
 static void
 ns_cmd_listownmail(struct sourceinfo *si, int parc, char *parv[])
@@ -43,8 +43,8 @@ ns_cmd_listownmail(struct sourceinfo *si, int parc, char *parv[])
 
 		continue_if_fail(mu != NULL);
 
-		if ((!listownmail_dont_canon && !strcasecmp(si->smu->email_canonical, mu->email_canonical))
-		 || (listownmail_dont_canon && !strcasecmp(si->smu->email, mu->email)))
+		if ((listownmail_canon && !strcasecmp(si->smu->email_canonical, mu->email_canonical))
+		 || (!listownmail_canon && !strcasecmp(si->smu->email, mu->email)))
 		{
 			// in the future we could add a LIMIT parameter
 			if (matches == 0)
@@ -75,7 +75,7 @@ mod_init(struct module *const restrict m)
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/main")
 
 	service_named_bind_command("nickserv", &ns_listownmail);
-	add_bool_conf_item("LISTOWNMAIL_DONT_CANON", &nicksvs.me->conf_table, 0, &listownmail_dont_canon, false);
+	add_bool_conf_item("LISTOWNMAIL_DONT_CANON", &nicksvs.me->conf_table, 0, &listownmail_canon, true);
 }
 
 static void
