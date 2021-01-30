@@ -92,6 +92,18 @@ ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	if (!validemail(email))
+	{
+		command_fail(si, fault_badparams, _("\2%s\2 is not a valid e-mail address."), email);
+		return;
+	}
+
+	if (!email_within_limits(email))
+	{
+		command_fail(si, fault_toomany, _("\2%s\2 has too many accounts registered."), email);
+		return;
+	}
+
 	if ((si->su != NULL && !strcasecmp(pass, si->su->nick)) || !strcasecmp(pass, account))
 	{
 		command_fail(si, fault_badparams, _("You cannot use your nickname as a password."));
@@ -136,18 +148,6 @@ ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 		hook_call_nick_can_register(&hdata);
 		if (hdata.approved != 0)
 			return;
-	}
-
-	if (!validemail(email))
-	{
-		command_fail(si, fault_badparams, _("\2%s\2 is not a valid e-mail address."), email);
-		return;
-	}
-
-	if (!email_within_limits(email))
-	{
-		command_fail(si, fault_toomany, _("\2%s\2 has too many accounts registered."), email);
-		return;
 	}
 
 	if (si->su && !auth_module_loaded && !crypt_get_default_provider())
