@@ -103,6 +103,18 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (!validemail(email))
+	{
+		command_fail(si, fault_badparams, _("\2%s\2 is not a valid email address."), email);
+		return;
+	}
+
+	if (!email_within_limits(email))
+	{
+		command_fail(si, fault_toomany, _("\2%s\2 has too many accounts registered."), email);
+		return;
+	}
+
 	if ((si->su != NULL && !strcasecmp(pass, si->su->nick)) || !strcasecmp(pass, account))
 	{
 		command_fail(si, fault_badparams, _("You cannot use your nickname as a password."));
@@ -144,18 +156,6 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		hook_call_nick_can_register(&hdata);
 		if (hdata.approved != 0)
 			return;
-	}
-
-	if (!validemail(email))
-	{
-		command_fail(si, fault_badparams, _("\2%s\2 is not a valid email address."), email);
-		return;
-	}
-
-	if (!email_within_limits(email))
-	{
-		command_fail(si, fault_toomany, _("\2%s\2 has too many accounts registered."), email);
-		return;
 	}
 
 	mu = myuser_add(account, auth_module_loaded ? "*" : pass, email, config_options.defuflags | MU_NOBURSTLOGIN | (auth_module_loaded ? MU_CRYPTPASS : 0));
