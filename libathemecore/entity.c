@@ -193,6 +193,13 @@ linear_match_entity(struct myentity *self, struct myentity *mt)
 }
 
 static bool
+linear_match_user(struct myentity *self, struct user *u)
+{
+	return_val_if_fail(u != NULL, false);
+	return linear_match_entity(self, entity(u->myuser));
+}
+
+static bool
 linear_can_register_channel(struct myentity *mt)
 {
 	struct myuser *mu;
@@ -225,6 +232,7 @@ linear_allow_foundership(struct myentity *mt)
 }
 
 static const struct entity_vtable linear_validate = {
+	.match_user = linear_match_user,
 	.match_entity = linear_match_entity,
 	.can_register_channel = linear_can_register_channel,
 	.allow_foundership = linear_allow_foundership,

@@ -26,6 +26,13 @@ mygroup_match_entity(struct myentity *self, struct myentity *mt)
 }
 
 static bool
+mygroup_match_user(struct myentity *self, struct user *u)
+{
+	return_val_if_fail(u != NULL, false);
+	return mygroup_match_entity(self, entity(u->myuser));
+}
+
+static bool
 mygroup_can_register_channel(struct myentity *mt)
 {
 	struct mygroup *mg;
@@ -50,6 +57,7 @@ void
 mygroup_set_entity_vtable(struct myentity *mt)
 {
 	static const struct entity_vtable mygroup_vtable = {
+		.match_user = mygroup_match_user,
 		.match_entity = mygroup_match_entity,
 		.can_register_channel = mygroup_can_register_channel,
 		.allow_foundership = mygroup_allow_foundership,
