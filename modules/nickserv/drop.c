@@ -154,7 +154,7 @@ cmd_ns_fdrop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_U
 		return;
 	}
 
-	(void) wallops("%s dropped the account \2%s\2", get_oper_name(si), entity(mu)->name);
+	(void) wallops("\2%s\2 dropped the account \2%s\2", get_oper_name(si), entity(mu)->name);
 	(void) logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FDROP: \2%s\2", entity(mu)->name);
 
 	(void) hook_call_user_drop(mu);

@@ -99,7 +99,7 @@ ns_cmd_freeze(struct sourceinfo *si, int parc, char *parv[])
 		mu->flags |= MU_NOBURSTLOGIN;
 		authcookie_destroy_all(mu);
 
-		wallops("%s froze the account \2%s\2 (%s).", get_oper_name(si), target, reason);
+		wallops("\2%s\2 froze the account \2%s\2 (%s).", get_oper_name(si), target, reason);
 		logcommand(si, CMDLOG_ADMIN, "FREEZE:ON: \2%s\2 (reason: \2%s\2)", target, reason);
 		command_success_nodata(si, _("\2%s\2 is now frozen."), target);
 	}
@@ -115,7 +115,7 @@ ns_cmd_freeze(struct sourceinfo *si, int parc, char *parv[])
 		metadata_delete(mu, "private:freeze:reason");
 		metadata_delete(mu, "private:freeze:timestamp");
 
-		wallops("%s thawed the account \2%s\2.", get_oper_name(si), target);
+		wallops("\2%s\2 thawed the account \2%s\2.", get_oper_name(si), target);
 		logcommand(si, CMDLOG_ADMIN, "FREEZE:OFF: \2%s\2", target);
 		command_success_nodata(si, _("\2%s\2 has been thawed"), target);
 	}

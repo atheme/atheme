@@ -106,7 +106,7 @@ gs_cmd_fdrop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_U
 		return;
 	}
 
-	(void) wallops("%s dropped the group \2%s\2", get_oper_name(si), entity(mg)->name);
+	(void) wallops("\2%s\2 dropped the group \2%s\2", get_oper_name(si), entity(mg)->name);
 	(void) logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FDROP: \2%s\2", entity(mg)->name);
 	(void) command_success_nodata(si, _("The group \2%s\2 has been dropped."), entity(mg)->name);
 

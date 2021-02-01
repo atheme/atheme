@@ -219,7 +219,7 @@ ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 
 	if (is_soper(mu))
 	{
-		wallops("%s registered the nick \2%s\2 and gained services operator privileges.", get_oper_name(si), entity(mu)->name);
+		wallops("\2%s\2 registered the nick \2%s\2 and gained services operator privileges.", get_oper_name(si), entity(mu)->name);
 		logcommand(si, CMDLOG_ADMIN, "SOPER: \2%s\2 as \2%s\2", get_oper_name(si), entity(mu)->name);
 	}
 

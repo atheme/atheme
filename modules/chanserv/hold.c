@@ -45,7 +45,7 @@ cs_cmd_hold(struct sourceinfo *si, int parc, char *parv[])
 
 		mc->flags |= MC_HOLD;
 
-		wallops("%s set the HOLD option for the channel \2%s\2.", get_oper_name(si), target);
+		wallops("\2%s\2 set the HOLD option for the channel \2%s\2.", get_oper_name(si), target);
 		logcommand(si, CMDLOG_ADMIN, "HOLD:ON: \2%s\2", mc->name);
 		command_success_nodata(si, _("\2%s\2 is now held."), target);
 	}
@@ -59,7 +59,7 @@ cs_cmd_hold(struct sourceinfo *si, int parc, char *parv[])
 
 		mc->flags &= ~MC_HOLD;
 
-		wallops("%s removed the HOLD option on the channel \2%s\2.", get_oper_name(si), target);
+		wallops("\2%s\2 removed the HOLD option on the channel \2%s\2.", get_oper_name(si), target);
 		logcommand(si, CMDLOG_ADMIN, "HOLD:OFF: \2%s\2", mc->name);
 		command_success_nodata(si, _("\2%s\2 is no longer held."), target);
 	}

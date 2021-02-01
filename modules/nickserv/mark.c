@@ -59,7 +59,7 @@ ns_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 		if (mun != NULL && !strcasecmp(action, "OFF"))
 		{
 			atheme_object_unref(mun);
-			wallops("%s unmarked the name \2%s\2.", get_oper_name(si), target);
+			wallops("\2%s\2 unmarked the name \2%s\2.", get_oper_name(si), target);
 			logcommand(si, CMDLOG_ADMIN, "MARK:OFF: \2%s\2", target);
 			command_success_nodata(si, _("\2%s\2 is now unmarked."), target);
 			return;
@@ -87,7 +87,7 @@ ns_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 		metadata_add(mu, "private:mark:reason", info);
 		metadata_add(mu, "private:mark:timestamp", number_to_string(time(NULL)));
 
-		wallops("%s marked the account \2%s\2.", get_oper_name(si), entity(mu)->name);
+		wallops("\2%s\2 marked the account \2%s\2.", get_oper_name(si), entity(mu)->name);
 		logcommand(si, CMDLOG_ADMIN, "MARK:ON: \2%s\2 (reason: \2%s\2)", entity(mu)->name, info);
 		command_success_nodata(si, _("\2%s\2 is now marked."), entity(mu)->name);
 	}
@@ -103,7 +103,7 @@ ns_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 		metadata_delete(mu, "private:mark:reason");
 		metadata_delete(mu, "private:mark:timestamp");
 
-		wallops("%s unmarked the account \2%s\2.", get_oper_name(si), entity(mu)->name);
+		wallops("\2%s\2 unmarked the account \2%s\2.", get_oper_name(si), entity(mu)->name);
 		logcommand(si, CMDLOG_ADMIN, "MARK:OFF: \2%s\2", entity(mu)->name);
 		command_success_nodata(si, _("\2%s\2 is now unmarked."), entity(mu)->name);
 	}

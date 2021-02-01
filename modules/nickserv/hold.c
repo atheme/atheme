@@ -49,7 +49,7 @@ ns_cmd_hold(struct sourceinfo *si, int parc, char *parv[])
 
 		mu->flags |= MU_HOLD;
 
-		wallops("%s set the HOLD option for the account \2%s\2.", get_oper_name(si), entity(mu)->name);
+		wallops("\2%s\2 set the HOLD option for the account \2%s\2.", get_oper_name(si), entity(mu)->name);
 		logcommand(si, CMDLOG_ADMIN, "HOLD:ON: \2%s\2", entity(mu)->name);
 		command_success_nodata(si, _("\2%s\2 is now held."), entity(mu)->name);
 	}
@@ -63,7 +63,7 @@ ns_cmd_hold(struct sourceinfo *si, int parc, char *parv[])
 
 		mu->flags &= ~MU_HOLD;
 
-		wallops("%s removed the HOLD option on the account \2%s\2.", get_oper_name(si), entity(mu)->name);
+		wallops("\2%s\2 removed the HOLD option on the account \2%s\2.", get_oper_name(si), entity(mu)->name);
 		logcommand(si, CMDLOG_ADMIN, "HOLD:OFF: \2%s\2", entity(mu)->name);
 		command_success_nodata(si, _("\2%s\2 is no longer held."), entity(mu)->name);
 	}

@@ -43,7 +43,7 @@ os_cmd_jupe(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	logcommand(si, CMDLOG_ADMIN, "JUPE: \2%s\2 (reason: \2%s\2)", server, reason);
-	wallops("%s jupitered server \2%s\2 (%s).", get_oper_name(si), server, reason);
+	wallops("\2%s\2 jupitered server \2%s\2 (%s).", get_oper_name(si), server, reason);
 
 	snprintf(reasonbuf, BUFSIZE, "[%s] %s", get_oper_name(si), reason);
 	jupe(server, reasonbuf);

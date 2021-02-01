@@ -120,7 +120,7 @@ ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 	if (sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SETPASS, mu->email, key))
 	{
 		if (ismarked)
-			wallops("%s sent the password for the \2MARKED\2 account %s.", get_oper_name(si), entity(mu)->name);
+			wallops("\2%s\2 sent the password for the \2MARKED\2 account %s.", get_oper_name(si), entity(mu)->name);
 		logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2 (change key)", name);
 		metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
 		metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));

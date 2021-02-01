@@ -55,7 +55,7 @@ cs_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 		metadata_add(mc, "private:mark:reason", info);
 		metadata_add(mc, "private:mark:timestamp", number_to_string(CURRTIME));
 
-		wallops("%s marked the channel \2%s\2.", get_oper_name(si), target);
+		wallops("\2%s\2 marked the channel \2%s\2.", get_oper_name(si), target);
 		logcommand(si, CMDLOG_ADMIN, "MARK:ON: \2%s\2 (reason: \2%s\2)", mc->name, info);
 		command_success_nodata(si, _("\2%s\2 is now marked."), target);
 	}
@@ -71,7 +71,7 @@ cs_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 		metadata_delete(mc, "private:mark:reason");
 		metadata_delete(mc, "private:mark:timestamp");
 
-		wallops("%s unmarked the channel \2%s\2.", get_oper_name(si), target);
+		wallops("\2%s\2 unmarked the channel \2%s\2.", get_oper_name(si), target);
 		logcommand(si, CMDLOG_ADMIN, "MARK:OFF: \2%s\2", mc->name);
 		command_success_nodata(si, _("\2%s\2 is now unmarked."), target);
 	}

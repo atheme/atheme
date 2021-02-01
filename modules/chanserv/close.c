@@ -110,7 +110,7 @@ cs_cmd_close(struct sourceinfo *si, int parc, char *parv[])
 			}
 		}
 
-		wallops("%s closed the channel \2%s\2 (%s).", get_oper_name(si), target, reason);
+		wallops("\2%s\2 closed the channel \2%s\2 (%s).", get_oper_name(si), target, reason);
 		logcommand(si, CMDLOG_ADMIN, "CLOSE:ON: \2%s\2 (reason: \2%s\2)", target, reason);
 		command_success_nodata(si, _("\2%s\2 is now closed."), target);
 	}
@@ -138,7 +138,7 @@ cs_cmd_close(struct sourceinfo *si, int parc, char *parv[])
 			check_modes(mc, true);
 		}
 
-		wallops("%s reopened the channel \2%s\2.", get_oper_name(si), target);
+		wallops("\2%s\2 reopened the channel \2%s\2.", get_oper_name(si), target);
 		logcommand(si, CMDLOG_ADMIN, "CLOSE:OFF: \2%s\2", target);
 		command_success_nodata(si, _("\2%s\2 has been reopened."), target);
 	}

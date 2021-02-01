@@ -49,7 +49,7 @@ ns_cmd_regnolimit(struct sourceinfo *si, int parc, char *parv[])
 
 		mu->flags |= MU_REGNOLIMIT;
 
-		wallops("%s set the REGNOLIMIT option for the account \2%s\2.", get_oper_name(si), entity(mu)->name);
+		wallops("\2%s\2 set the REGNOLIMIT option for the account \2%s\2.", get_oper_name(si), entity(mu)->name);
 		logcommand(si, CMDLOG_ADMIN, "REGNOLIMIT:ON: \2%s\2", entity(mu)->name);
 		command_success_nodata(si, _("\2%s\2 can now bypass registration limits."), entity(mu)->name);
 	}
@@ -63,7 +63,7 @@ ns_cmd_regnolimit(struct sourceinfo *si, int parc, char *parv[])
 
 		mu->flags &= ~MU_REGNOLIMIT;
 
-		wallops("%s removed the REGNOLIMIT option on the account \2%s\2.", get_oper_name(si), entity(mu)->name);
+		wallops("\2%s\2 removed the REGNOLIMIT option on the account \2%s\2.", get_oper_name(si), entity(mu)->name);
 		logcommand(si, CMDLOG_ADMIN, "REGNOLIMIT:OFF: \2%s\2", entity(mu)->name);
 		command_success_nodata(si, _("\2%s\2 cannot bypass registration limits anymore."), entity(mu)->name);
 	}
