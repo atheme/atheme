@@ -502,7 +502,6 @@ os_cmd_akill_sync(struct sourceinfo *si, int parc, char *parv[])
 static struct command os_akill = {
 	.name           = "AKILL",
 	.desc           = N_("Manages network host bans."),
-	.access         = PRIV_AKILL,
 	.maxparc        = 3,
 	.cmd            = &os_cmd_akill,
 	.help           = { .path = "oservice/akill" },
@@ -511,7 +510,6 @@ static struct command os_akill = {
 static struct command os_akill_add = {
 	.name           = "ADD",
 	.desc           = N_("Adds a network host ban."),
-	.access         = AC_NONE,
 	.maxparc        = 2,
 	.cmd            = &os_cmd_akill_add,
 	.help           = { .path = "" },
@@ -520,7 +518,6 @@ static struct command os_akill_add = {
 static struct command os_akill_del = {
 	.name           = "DEL",
 	.desc           = N_("Deletes a network host ban."),
-	.access         = AC_NONE,
 	.maxparc        = 1,
 	.cmd            = &os_cmd_akill_del,
 	.help           = { .path = "" },
@@ -529,7 +526,6 @@ static struct command os_akill_del = {
 static struct command os_akill_list = {
 	.name           = "LIST",
 	.desc           = N_("Lists all network host bans."),
-	.access         = AC_NONE,
 	.maxparc        = 1,
 	.cmd            = &os_cmd_akill_list,
 	.help           = { .path = "" },
@@ -538,7 +534,6 @@ static struct command os_akill_list = {
 static struct command os_akill_sync = {
 	.name           = "SYNC",
 	.desc           = N_("Synchronises network host bans to all servers."),
-	.access         = AC_NONE,
 	.maxparc        = 0,
 	.cmd            = &os_cmd_akill_sync,
 	.help           = { .path = "" },
