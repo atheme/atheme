@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - 'master'
+    paths-ignore:
+      - 'ABOUT-NLS'
+      - 'contrib/**'
+      - 'dist/**'
+      - 'doc/**'
+      - 'email/**'
+      - 'help/**'
+  push:
+    branches:
+      - 'master'
+      - 'release/**'
+    paths-ignore:
+      - 'ABOUT-NLS'
+      - 'contrib/**'
+      - 'dist/**'
+      - 'doc/**'
+      - 'email/**'
+      - 'help/**'
+  schedule:
+    - cron: '0 12 1 * *'
+
+jobs:
+  linux:
+    name: Linux
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: true
+      matrix:
+        os:
+          - ubuntu-20.04
+        compiler:
+          - clang-10
+          - gcc-10
+
+    env:
+      CC: ${{ matrix.compiler }}
+
+    steps:
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends \
+          ${CC}                                         \
+          gettext                                       \
+          git                                           \
+          libargon2-0-dev                               \
+          libcrack2-dev                                 \
+          libgcrypt20-dev                               \
+          libgettextpo-dev                              \
+          libidn11-dev                                  \
+          libldap2-dev                                  \
+          libpasswdqc-dev                               \
+          libpcre3-dev                                  \
+          libperl-dev                                   \
+          libqrencode-dev                               \
+          libsodium-dev                                 \
+          libssl-dev                                    \
+          lld-10                                        \
+          # EOF
+    - uses: actions/checkout@v1
+      with:
+        submodules: true
+    - name: Run CI build script
+      run: scripts/ci-build.sh
