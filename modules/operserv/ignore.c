@@ -67,7 +67,7 @@ os_cmd_ignore_add(struct sourceinfo *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%s\2 has been added to the services ignore list."), target);
 
 	logcommand(si, CMDLOG_ADMIN, "IGNORE:ADD: \2%s\2 (reason: \2%s\2)", target, reason);
-	wallops("%s added a services ignore for \2%s\2 (%s).", get_oper_name(si), target, reason);
+	wallops("\2%s\2 added a services ignore for \2%s\2 (%s).", get_oper_name(si), target, reason);
 
 	return;
 }
@@ -96,7 +96,7 @@ os_cmd_ignore_del(struct sourceinfo *si, int parc, char *parv[])
 
 			svsignore_delete(svsignore);
 
-			wallops("%s removed \2%s\2 from the services ignore list.", get_oper_name(si), target);
+			wallops("\2%s\2 removed \2%s\2 from the services ignore list.", get_oper_name(si), target);
 			logcommand(si, CMDLOG_ADMIN, "IGNORE:DEL: \2%s\2", target);
 
 			return;

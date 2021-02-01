@@ -38,7 +38,7 @@ gs_cmd_acsnolimit(struct sourceinfo *si, int parc, char *parv[])
 
 		mg->flags |= MG_ACSNOLIMIT;
 
-		wallops("%s set the ACSNOLIMIT option on the group \2%s\2.", get_oper_name(si), entity(mg)->name);
+		wallops("\2%s\2 set the ACSNOLIMIT option on the group \2%s\2.", get_oper_name(si), entity(mg)->name);
 		logcommand(si, CMDLOG_ADMIN, "ACSNOLIMIT:ON: \2%s\2", entity(mg)->name);
 		command_success_nodata(si, _("\2%s\2 can now bypass access list limits."), entity(mg)->name);
 	}
@@ -52,7 +52,7 @@ gs_cmd_acsnolimit(struct sourceinfo *si, int parc, char *parv[])
 
 		mg->flags &= ~MG_ACSNOLIMIT;
 
-		wallops("%s removed the ACSNOLIMIT option from the group \2%s\2.", get_oper_name(si), entity(mg)->name);
+		wallops("\2%s\2 removed the ACSNOLIMIT option from the group \2%s\2.", get_oper_name(si), entity(mg)->name);
 		logcommand(si, CMDLOG_ADMIN, "ACSNOLIMIT:OFF: \2%s\2", entity(mg)->name);
 		command_success_nodata(si, _("\2%s\2 cannot bypass access list limits anymore."), entity(mg)->name);
 	}

@@ -145,7 +145,7 @@ cmd_cs_fdrop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_U
 	}
 
 	(void) logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FDROP: \2%s\2", mc->name);
-	(void) wallops("%s dropped the channel \2%s\2", get_oper_name(si), mc->name);
+	(void) wallops("\2%s\2 dropped the channel \2%s\2", get_oper_name(si), mc->name);
 
 	(void) hook_call_channel_drop(mc);
 

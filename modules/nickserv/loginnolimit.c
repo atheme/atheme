@@ -49,7 +49,7 @@ ns_cmd_loginnolimit(struct sourceinfo *si, int parc, char *parv[])
 
 		mu->flags |= MU_LOGINNOLIMIT;
 
-		wallops("%s set the LOGINNOLIMIT option for the account \2%s\2.", get_oper_name(si), entity(mu)->name);
+		wallops("\2%s\2 set the LOGINNOLIMIT option for the account \2%s\2.", get_oper_name(si), entity(mu)->name);
 		logcommand(si, CMDLOG_ADMIN, "LOGINNOLIMIT:ON: \2%s\2", entity(mu)->name);
 		command_success_nodata(si, _("\2%s\2 can now bypass login limits."), entity(mu)->name);
 	}
@@ -63,7 +63,7 @@ ns_cmd_loginnolimit(struct sourceinfo *si, int parc, char *parv[])
 
 		mu->flags &= ~MU_LOGINNOLIMIT;
 
-		wallops("%s removed the LOGINNOLIMIT option on the account \2%s\2.", get_oper_name(si), entity(mu)->name);
+		wallops("\2%s\2 removed the LOGINNOLIMIT option on the account \2%s\2.", get_oper_name(si), entity(mu)->name);
 		logcommand(si, CMDLOG_ADMIN, "LOGINNOLIMIT:OFF: \2%s\2", entity(mu)->name);
 		command_success_nodata(si, _("\2%s\2 cannot bypass login limits anymore."), entity(mu)->name);
 	}

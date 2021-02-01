@@ -36,7 +36,7 @@ os_cmd_readonly(struct sourceinfo *si, int parc, char *parv[])
 
 		notice_global_sts(svs->me, "*", "Services are now running in readonly mode.  Any changes you make will not be saved.");
 
-		wallops("%s set the READONLY option.", get_oper_name(si));
+		wallops("\2%s\2 set the READONLY option.", get_oper_name(si));
 		logcommand(si, CMDLOG_ADMIN, "READONLY:ON");
 		command_success_nodata(si, _("Read-only mode is now enabled."));
 	}
@@ -52,7 +52,7 @@ os_cmd_readonly(struct sourceinfo *si, int parc, char *parv[])
 
 		notice_global_sts(svs->me, "*", "Services are no longer running in readonly mode.  Any changes you make will now be saved.");
 
-		wallops("%s unset the READONLY option.", get_oper_name(si));
+		wallops("\2%s\2 unset the READONLY option.", get_oper_name(si));
 		logcommand(si, CMDLOG_ADMIN, "READONLY:OFF");
 		command_success_nodata(si, _("Read-only mode is now disabled."));
 	}

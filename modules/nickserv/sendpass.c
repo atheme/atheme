@@ -157,7 +157,7 @@ ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 
 		if (ismarked)
 		{
-			wallops("%s sent the password for the \2MARKED\2 account %s.", get_oper_name(si), entity(mu)->name);
+			wallops("\2%s\2 sent the password for the \2MARKED\2 account %s.", get_oper_name(si), entity(mu)->name);
 			if (md)
 				command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), md->value, entity(mu)->name);
 			else
@@ -192,7 +192,7 @@ ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 	else {
 		if (ismarked)
 		{
-			wallops("%s sent the password for the \2MARKED\2 account %s.", get_oper_name(si), entity(mu)->name);
+			wallops("\2%s\2 sent the password for the \2MARKED\2 account %s.", get_oper_name(si), entity(mu)->name);
 			if (md)
 				command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), md->value, entity(mu)->name);
 			else

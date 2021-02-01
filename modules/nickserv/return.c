@@ -94,7 +94,7 @@ ns_cmd_return(struct sourceinfo *si, int parc, char *parv[])
 	mu->flags |= MU_NOBURSTLOGIN;
 	authcookie_destroy_all(mu);
 
-	wallops("%s returned the account \2%s\2 to \2%s\2%s", get_oper_name(si), target, newmail,
+	wallops("\2%s\2 returned the account \2%s\2 to \2%s\2%s", get_oper_name(si), target, newmail,
 						force_hidemail ? " (and set HIDEMAIL)" : "");
 	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "RETURN: \2%s\2 to \2%s\2%s", target, newmail,
 						force_hidemail ? " (HIDEMAIL)" : "");
