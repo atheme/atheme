@@ -18,9 +18,9 @@
  * Items marked with "(B)" are boolean options that default to true.
  */
 
-/******************************************************************************
- * MODULES SECTION.                                                           *
- ******************************************************************************/
+/****************************************************************************
+ * MODULES SECTION.                                                         *
+ ****************************************************************************/
 
 /*
  * These are the modules included with the core distribution of Services.
@@ -39,15 +39,16 @@
 
 /* Dynamic security modules.
  *
- * WARNING: If you select one of these modules, the default security policy included
- * with Atheme may break.  These modules are intended for people who know what they
- * are doing and understand the implications of what they do.  Security modules which
- * are likely to break the default policy are prefixed with [!], if you are new to
- * Atheme, you should avoid enabling them.
+ * WARNING: If you select one of these modules, the default security policy
+ * included with Atheme may break. These modules are intended for people who
+ * know what they are doing and understand the implications of what they do.
  *
- * If you find your security policy is broken, you may debug it while allowing normal
- * operation of your IRC network by putting Atheme into "permissive mode".  To do this,
- * enable general::permissive_mode.
+ * Security modules which are likely to break the default policy are prefixed
+ * with "[!]"; if you are new to Atheme, you should avoid enabling them.
+ *
+ * If you find your security policy is broken, you may debug it while allowing
+ * normal operation of your IRC network by putting Atheme into "permissive
+ * mode". To do this, enable general::permissive_mode.
  *
  * [!] Infer "command:" namespace permissions   modules/security/cmdperm
  */
@@ -56,8 +57,8 @@
 /* Protocol module.
  *
  * Please select a protocol module. Different servers use different protocols.
- * Below is a listing of ircd's known to work with the various protocol modules
- * available.
+ * Below is a listing of ircd's known to work with the various protocol
+ * modules available.
  *
  * Asuka 1.2.1 or later                         modules/protocol/asuka
  * Bahamut 2.1.x                                modules/protocol/bahamut
@@ -84,10 +85,10 @@
  * network that your ircd normally has. If you do not know what this means,
  * you do not need any of them.
  *
- * Disable halfops                              modules/protocol/mixin_nohalfops
- * Disable holdnick (use enforcer clients)      modules/protocol/mixin_noholdnick
- * Disable "protect" mode on channels           modules/protocol/mixin_noprotect
- * Disable "owner" mode on channels             modules/protocol/mixin_noowner
+ * Disable halfops                          modules/protocol/mixin_nohalfops
+ * Disable holdnick (use enforcer clients)  modules/protocol/mixin_noholdnick
+ * Disable "protect" mode on channels       modules/protocol/mixin_noprotect
+ * Disable "owner" mode on channels         modules/protocol/mixin_noowner
  */
 #loadmodule "modules/protocol/mixin_nohalfops";
 #loadmodule "modules/protocol/mixin_noholdnick";
@@ -775,7 +776,9 @@ loadmodule "modules/saslserv/plain";
 #loadmodule "modules/hostserv/drop";
 
 /* HelpServ modules.
- * HelpServ allows users to request help from network staff in a few different ways.
+ *
+ * HelpServ allows users to request help from network staff in a few different
+ * ways.
  *
  * Core components                              modules/helpserv/main
  * HELPME command                               modules/helpserv/helpme
@@ -783,7 +786,8 @@ loadmodule "modules/saslserv/plain";
  * Service List                                 modules/helpserv/services
  *
  * The ticket system works like a bugtracker ot helpdesk ticket system, HELPME
- * works like a one-time alert. You should probably only load one of the two systems.
+ * works like a one-time alert. You should probably only load one of the two
+ * systems.
  */
 #loadmodule "modules/helpserv/main";
 #loadmodule "modules/helpserv/helpme";
@@ -886,7 +890,7 @@ loadmodule "modules/groupserv/set_url";
 /* Extended target entity types. [EXPERIMENTAL]
  *
  * Atheme can set up special target mapping entities which match multiple
- * users in channel access entries.  These target mapping entity types are
+ * users in channel access entries. These target mapping entity types are
  * defined through the 'exttarget' modules listed below.
  *
  * Exttarget handling core                      modules/exttarget/main
@@ -906,7 +910,7 @@ loadmodule "modules/groupserv/set_url";
 /* Proxyscan (DNSBL) modules.
  *
  * Atheme can also check set DNS Blacklists for matches and respond 
- * as set.  Activate modules here and customize further down under Proxyscan
+ * as set. Activate modules here and customize further down under Proxyscan
  * section.
  */
 #loadmodule "modules/proxyscan/main";
@@ -920,9 +924,9 @@ loadmodule "modules/groupserv/set_url";
  */
 #loadmodule "modules/contrib/backtrace";
 
-/******************************************************************************
- * SERVICES RUNTIME CONFIGURATION SECTION.                                    *
- ******************************************************************************/
+/****************************************************************************
+ * SERVICES RUNTIME CONFIGURATION SECTION.                                  *
+ ****************************************************************************/
 
 /*
  * This block controls the configuration options for crypto modules.
@@ -1308,7 +1312,7 @@ serverinfo {
 	/* (*) hidden
 	 *
 	 * If this is enabled, Atheme will indicate to the uplink IRCd
-	 * that it should not be included in /links output.  This only works
+	 * that it should not be included in /links output. This only works
 	 * on the following IRCds at present: charybdis, ircd-seven, ratbox.
 	 */
 	#hidden;
@@ -1331,12 +1335,14 @@ serverinfo {
 	 * Options include:
 	 *      debug, all      - meta-keyword for all possible categories
 	 *      trace           - meta-keyword for a little bit of info
-	 *      misc            - like trace, but with some more miscellaneous info
+	 *      misc            - like trace, but with some more miscellaneous
+	 *                        info
 	 *      notice          - meta-keyword for notice-like information
-	 * ------------------------------------------------------------------------------
+	 * -------------------------------------------------------------------
 	 *      error           - critical errors
 	 *      info            - miscillaneous log notices
-	 *      verbose         - A bit more verbose than info, not quite as spammy as debug
+	 *      verbose         - A bit more verbose than info, not quite as
+	 *                        spammy as debug
 	 *      commands        - all command use
 	 *      admin           - administrative command use
 	 *      register        - account and channel registrations
@@ -1385,15 +1391,18 @@ serverinfo {
 	 * ensure it's valid. If registration is not completed within one day,
 	 * the username will expire. If "none", no message will be sent and
 	 * the username will be fully registered.
+	 *
 	 * Valid values are: email, none.
 	 */
 	auth = none;
 
 	/* casemapping
 	 *
-	 * Specify the casemapping to use. Almost all TSora (and any that follow
-	 * the RFC correctly) ircds will use rfc1459 casemapping. Bahamut, Unreal,
-	 * and other ``Dalnet'' ircds will use ascii casemapping.
+	 * Specify the casemapping to use. Almost all TSora (and any that
+	 * follow the RFC correctly) ircds will use rfc1459 casemapping.
+	 * Bahamut, Unreal, and other ``Dalnet'' ircds will use ascii
+	 * casemapping.
+	 *
 	 * Valid values are: rfc1459, ascii.
 	 */
 	casemapping = rfc1459;
@@ -1598,44 +1607,48 @@ nickserv {
 
 	/* (*) pwquality_warn_only
 	 *
-	 * If this option is set and nickserv/pwquality is loaded, nickserv will just 
-	 * warn users that their password is insecure, recommend they change it and 
-	 * still register the nick. If this option is unset, it will refuse to
-	 * register the nick at all until the user chooses a better password.
+	 * If this option is set and nickserv/pwquality is loaded, nickserv
+	 * will just warn users that their password is insecure, recommend
+	 * they change it and still register the nick. If this option is
+	 * unset, it will refuse to register the nick at all until the user
+	 * chooses a better password.
 	 */
 	#pwquality_warn_only;
 
 	/* (*)(B) show_custom_metadata
 	 *
-	 * Setting this option to false will prevent user-set metadata (via SET PROPERTY)
-	 * from showing up in the INFO output. The TAXONOMY command will still function
-	 * as usual, and INFO will point this out if users have metadata set.
+	 * Setting this option to false will prevent user-set metadata (via
+	 * SET PROPERTY) from showing up in the INFO output. The TAXONOMY
+	 * command will still function as usual, and INFO will point this out
+	 * if users have metadata set.
 	 */
 	show_custom_metadata;
 
 	/* (*) emailexempts
 	 *
-	 * A list of email addresses that will be exempt from the check of how many
-	 * accounts one user may have. Any email address in this block may register
-	 * an unlimited number of accounts/usernames.
+	 * A list of email addresses that will be exempt from the check of how
+	 * many accounts one user may have. Any email address in this block
+	 * may register an unlimited number of accounts/usernames.
 	 */
 	emailexempts {
 	};
 
 	/* (*) shorthelp
 	 *
-	 * A list of commands that are displayed (with their full description) in the
-	 * output of `/msg NickServ HELP'. Commands not in this list will be listed, but
-	 * not with their descriptions. All commands with descriptions are still listed
-	 * in `/msg NickServ HELP COMMANDS' regardless of the value set here.
+	 * A list of commands that are displayed (with their full description)
+	 * in the output of `/msg NickServ HELP'. Commands not in this list
+	 * will be listed, but not with their descriptions. All commands with
+	 * descriptions are still listed in `/msg NickServ HELP COMMANDS'
+	 * regardless of the value set here.
 	 *
-	 * Optional; defaults to "ACCESS CERT DROP GHOST GROUP IDENTIFY INFO LISTCHANS
-	 * LISTGROUPS LISTLOGINS LISTOWNMAIL LOGOUT REGAIN REGISTER RELEASE SENDPASS SET
-	 * UNGROUP".
+	 * Optional; defaults to "ACCESS CERT DROP GHOST GROUP IDENTIFY INFO
+	 * LISTCHANS LISTGROUPS LISTLOGINS LISTOWNMAIL LOGOUT REGAIN REGISTER
+	 * RELEASE SENDPASS SET UNGROUP".
 	 *
-	 * A command in this list will only be printed if the corresponding module is
-	 * loaded and the user has permission to use it. Set to an empty string to
-	 * disable listing command descriptions in `/msg NickServ HELP'.
+	 * A command in this list will only be printed if the corresponding
+	 * module is loaded and the user has permission to use it. Set to an
+	 * empty string to disable listing command descriptions in
+	 * `/msg NickServ HELP'.
 	 */
 	#shorthelp = "";
 };
@@ -1710,7 +1723,7 @@ chanserv {
 
 	/* (*) hide_xop
 	 *
-	 * Hide the XOP templates from sight.  This is useful if you
+	 * Hide the XOP templates from sight. This is useful if you
 	 * want to use templates and not have the XOP templates displayed.
 	 */
 	#hide_xop;
@@ -1780,9 +1793,9 @@ chanserv {
 
 	/* (*) trigger
 	 *
-	 * This setting allows you to change the trigger prefix for
-	 * ChanServ's in-channel command feature (disableable via chanserv::fantasy).
-	 * If no setting is provided, the default is used, which is "!".
+	 * This setting allows you to change the trigger prefix for ChanServ's
+	 * in-channel command feature (disableable via chanserv::fantasy). If
+	 * no setting is provided, the default is used, which is "!".
 	 *
 	 * Other settings you could consider trying: ".", "~", "?", "`", "'".
 	 */
@@ -1835,25 +1848,29 @@ chanserv {
 
 	/* (*)(B) show_custom_metadata
 	 *
-	 * Setting this option to false will prevent user-set metadata (via SET PROPERTY)
-	 * from showing up in the INFO output. The TAXONOMY command will still function
-	 * as usual, and INFO will point this out if channels have metadata set.
+	 * Setting this option to false will prevent user-set metadata (via
+	 * SET PROPERTY) from showing up in the INFO output. The TAXONOMY
+	 * command will still function as usual, and INFO will point this out
+	 * if channels have metadata set.
 	 */
 	show_custom_metadata;
 
 	/* (*) shorthelp
 	 *
-	 * A list of commands that are displayed (with their full description) in the
-	 * output of `/msg ChanServ HELP'. Commands not in this list will be listed, but
-	 * not with their descriptions. All commands with descriptions are still listed
-	 * in `/msg ChanServ HELP COMMANDS' regardless of the value set here.
+	 * A list of commands that are displayed (with their full description)
+	 * in the output of `/msg ChanServ HELP'. Commands not in this list
+	 * will be listed, but not with their descriptions. All commands with
+	 * descriptions are still listed in `/msg ChanServ HELP COMMANDS'
+	 * regardless of the value set here.
 	 *
-	 * Optional; defaults to "AKICK BAN CLEAR DEOP DEVOICE DROP FLAGS GETKEY INFO
-	 * INVITE KICK KICKBAN OP QUIET REGISTER SET TOPIC UNBAN UNQUIET VOICE WHY".
+	 * Optional; defaults to "AKICK BAN CLEAR DEOP DEVOICE DROP FLAGS
+	 * GETKEY INFO INVITE KICK KICKBAN OP QUIET REGISTER SET TOPIC UNBAN
+	 * UNQUIET VOICE WHY".
 	 *
-	 * A command in this list will only be printed if the corresponding module is
-	 * loaded and the user has permission to use it. Set to an empty string to
-	 * disable listing command descriptions in `/msg ChanServ HELP'.
+	 * A command in this list will only be printed if the corresponding
+	 * module is loaded and the user has permission to use it. Set to an
+	 * empty string to disable listing command descriptions in
+	 * `/msg ChanServ HELP'.
 	 */
 	#shorthelp = "";
 };
@@ -1941,7 +1958,8 @@ global {
 infoserv {
 	/* (*) nick
 	 *
-	 * Sets the nick used for InfoServ and sending out informational messages.
+	 * Sets the nick used for InfoServ and sending out informational
+	 * messages.
 	 */
 	nick = "InfoServ";
 
@@ -2393,7 +2411,8 @@ hostserv {
  *
  * The helpserv {} block contains settings specific to the HelpServ modules.
  *
- * HelpServ adds a few different ways for users to request help from network staff.
+ * HelpServ adds a few different ways for users to request help from network
+ * staff.
  */
 helpserv {
 	/* (*) nick
@@ -2515,7 +2534,8 @@ httpd {
 
 	/* www_root
 	 *
-	 * The directory that contains the files that should be served by the httpd.
+	 * The directory that contains the files that should be served by the
+	 * httpd.
 	 */
 	www_root = "/var/www";
 
@@ -2549,9 +2569,9 @@ ldap {
 	dnformat = "cn=%s,dc=jillestest,dc=com";
 };
 
-/******************************************************************************
- * LOGGING SECTION.                                                           *
- ******************************************************************************/
+/****************************************************************************
+ * LOGGING SECTION.                                                         *
+ ****************************************************************************/
 
 /*
  * logfile{} blocks can be used to set up log files other than the master
@@ -2562,10 +2582,11 @@ ldap {
  *      trace           - meta-keyword for a little bit of info
  *      misc            - like trace, but with some more miscillaneous info
  *      notice          - meta-keyword for notice-like information
- * ------------------------------------------------------------------------------
+ * ---------------------------------------------------------------------------
  *      error           - critical errors
  *      info            - miscillaneous log notices
- *      verbose         - A bit more verbose than info, not quite as spammy as debug
+ *      verbose         - A bit more verbose than info, not quite as spammy as
+ *                        debug
  *      commands        - all command use
  *      admin           - administrative command use
  *      register        - account and channel registrations
@@ -2605,16 +2626,16 @@ logfile "#services" { error; info; admin; request; register; denycmd; };
  */
 logfile "!snotices" { error; info; request; denycmd; };
 
-/******************************************************************************
- * GENERAL PARAMETERS CONFIGURATION SECTION.                                  *
- ******************************************************************************/
+/****************************************************************************
+ * GENERAL PARAMETERS CONFIGURATION SECTION.                                *
+ ****************************************************************************/
 
 /* The general {} block defines general configuration options. */
 general {
 	/* (*) permissive_mode
 	 *
 	 * Whether or not security denials should be soft denials instead of
-	 * hard denials.  If security denials are soft denials, then they will
+	 * hard denials. If security denials are soft denials, then they will
 	 * only be logged to the denial log.
 	 */
 	#permissive_mode;
@@ -2856,7 +2877,7 @@ general {
 	/* allow_taint
 	 *
 	 * By enabling this option, Atheme will run in configurations where
-	 * the upstream will not provide support.  By enabling this feature,
+	 * the upstream will not provide support. By enabling this feature,
 	 * you void any perceived rights to support.
 	 */
 	#allow_taint;
@@ -2870,7 +2891,8 @@ general {
 	 *    immune - require whatever ircd usermode is needed for kick
 	 *             immunity (this is the default);
 	 *    admin  - require admin privileges for kick immunity
-	 *    ircop  - require any ircop privileges for kick immunity (umode +o) 
+	 *    ircop  - require any ircop privileges for kick immunity
+	 *             (generally umode +o)
 	 */
 	immune_level = immune;
 
@@ -2904,7 +2926,7 @@ general {
 
 proxyscan {
 	/* Here you can configure the details of your Proxyscan (DNS Blacklist)
-	 * scanner service.  
+	 * scanner service.
 	 */
 
 	/* (*) Pseudoclient details
@@ -2933,25 +2955,31 @@ proxyscan {
 	dnsbl_action = kline;
 };
 
-/******************************************************************************
- * OPERATOR AND PRIVILEGES CONFIGURATION SECTION.                             *
- ******************************************************************************/
+/****************************************************************************
+ * OPERATOR AND PRIVILEGES CONFIGURATION SECTION.                           *
+ ****************************************************************************/
 
 /* Operator configuration
+ *
  * See the PRIVILEGES document for more information.
- * NOTE: All changes apply immediately upon rehash. You may need
- * to send a signal (killall -HUP atheme-services) to regain control.
+ *
+ * NOTE: ALL changes apply immediately upon rehash. You may need to send a
+ * signal (`pkill -HUP atheme-services') to regain control.
  */
-/* (*) Operclasses specify groups of services operator privileges */
-/* The "user" operclass specifies privileges all users get.
- * This may be empty (default) in which case users get no special privileges.
- * If you use the security/cmdperm module, you will need to grant command: privileges
- * to every command that you want users to be able to use.
+
+/* Operclasses specify groups of services operator privileges.
+ *
+ * The "user" operclass specifies privileges all users get. This may be empty
+ * (default) in which case users get no special privileges.
+ *
+ * If you use the "security/cmdperm" module, you will need to grant command:
+ * privileges to every command that you want users to be able to use.
  */
 operclass "user" { };
 
-/* The "ircop" operclass specifies privileges all IRCops get.
- * This may be empty in which case IRCops get no privs.
+/* The "ircop" operclass specifies privileges all IRCops get. This may be
+ * empty in which case IRCops get no privs.
+ *
  * At least chan:cmodes, chan:joinstaffonly and general:auspex are suggested.
  */
 operclass "ircop" {
@@ -3054,9 +3082,9 @@ operator "jilles" {
 	#password = "$1$3gJMO9by$0G60YE6GqmuHVH3AnFPor1";
 };
 
-/******************************************************************************
- * INCLUDE CONFIGURATION SECTION.                                             *
- ******************************************************************************/
+/****************************************************************************
+ * INCLUDE CONFIGURATION SECTION.                                           *
+ ****************************************************************************/
 
 /* You may also specify other files for inclusion.
  * For example:
