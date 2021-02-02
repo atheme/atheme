@@ -106,7 +106,7 @@ cs_cmd_close(struct sourceinfo *si, int parc, char *parv[])
 				cu = (struct chanuser *)n->data;
 
 				if (!is_internal_client(cu->user))
-					kick(chansvs.me->me, c, cu->user, "This channel has been closed");
+					try_kick(chansvs.me->me, c, cu->user, "This channel has been closed");
 			}
 		}
 
