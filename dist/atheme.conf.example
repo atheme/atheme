@@ -4,6 +4,18 @@
  * Shell style, C style, and C++ style comments may be used.
  *
  * Items marked with "(*)" are reconfigurable at runtime via REHASH.
+ *
+ * Boolean options that default to false can be disabled by removing
+ * them or commenting them out. Boolean options that default to true
+ * can be disabled by setting their value to "no". For example:
+ *
+ * nickserv {
+ *     spam;        # <-- enabled
+ *     spam = no;   # <-- disabled
+ *     #spam;       # <-- disabled if it defaults to false
+ * };
+ *
+ * Items marked with "(B)" are boolean options that default to true.
  */
 
 /******************************************************************************
@@ -1542,7 +1554,7 @@ nickserv {
 	 */
 	#pwquality_warn_only;
 
-	/* (*)show_custom_metadata
+	/* (*)(B)show_custom_metadata
 	 * Setting this option to false will prevent user-set metadata (via SET PROPERTY)
 	 * from showing up in the INFO output. The TAXONOMY command will still function
 	 * as usual, and INFO will point this out if users have metadata set.
@@ -1749,7 +1761,7 @@ chanserv {
 	 */
 	antiflood_enforce_method = quiet;
 
-	/* (*)show_custom_metadata
+	/* (*)(B)show_custom_metadata
 	 * Setting this option to false will prevent user-set metadata (via SET PROPERTY)
 	 * from showing up in the INFO output. The TAXONOMY command will still function
 	 * as usual, and INFO will point this out if channels have metadata set.
