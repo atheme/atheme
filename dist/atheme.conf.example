@@ -509,7 +509,6 @@ loadmodule "modules/chanserv/antiflood";
  * Here you can disable or enable certain features of OperServ, by
  * defining which modules are loaded.
  *
- * Core components                              modules/operserv/main
  * AKILL system                                 modules/operserv/akill
  * CLEARCHAN command                            modules/operserv/clearchan
  * CLONES system                                modules/operserv/clones
@@ -565,7 +564,6 @@ loadmodule "modules/chanserv/antiflood";
  * UPDATE command                               modules/operserv/update
  * UPTIME command                               modules/operserv/uptime
  */
-loadmodule "modules/operserv/main";
 loadmodule "modules/operserv/akill";
 #loadmodule "modules/operserv/clearchan";
 #loadmodule "modules/operserv/clones";
@@ -606,7 +604,6 @@ loadmodule "modules/operserv/uptime";
  * defining which modules are loaded. You can even disable MemoServ
  * entirely.
  *
- * Core components                              modules/memoserv/main
  * HELP command                                 modules/memoserv/help
  * SEND command                                 modules/memoserv/send
  * Channel memos (SENDOPS command)              modules/memoserv/sendops
@@ -617,7 +614,6 @@ loadmodule "modules/operserv/uptime";
  * DELETE command                               modules/memoserv/delete
  * IGNORE command                               modules/memoserv/ignore
  */
-loadmodule "modules/memoserv/main";
 loadmodule "modules/memoserv/help";
 loadmodule "modules/memoserv/send";
 loadmodule "modules/memoserv/sendops";
@@ -648,7 +644,6 @@ loadmodule "modules/infoserv/main";
  * Allows clients to authenticate to services via SASL with an appropriate
  * ircd. You need the core components and at least one mechanism.
  *
- * Core components                      modules/saslserv/main
  * AUTHCOOKIE mechanism (for IRIS)      modules/saslserv/authcookie
  * ECDH-X25519-CHALLENGE mechanism      modules/saslserv/ecdh-x25519-challenge
  * ECDSA-NIST256P-CHALLENGE mechanism   modules/saslserv/ecdsa-nist256p-challenge
@@ -667,7 +662,6 @@ loadmodule "modules/infoserv/main";
  *
  * You MUST read doc/SASL-SCRAM before loading modules/saslserv/scram!
  */
-loadmodule "modules/saslserv/main";
 loadmodule "modules/saslserv/authcookie";
 #loadmodule "modules/saslserv/ecdh-x25519-challenge";
 #loadmodule "modules/saslserv/ecdsa-nist256p-challenge";
@@ -681,7 +675,6 @@ loadmodule "modules/saslserv/plain";
  * defining which modules are loaded. You can even disable GameServ
  * entirely.
  *
- * Core components                              modules/gameserv/main
  * DICE/WOD commands                            modules/gameserv/dice
  * EIGHTBALL command                            modules/gameserv/eightball
  * Game-specific dice calculators               modules/gameserv/gamecalc
@@ -690,7 +683,6 @@ loadmodule "modules/saslserv/plain";
  * NAMEGEN command                              modules/gameserv/namegen
  * RPS command                                  modules/gameserv/rps
  */
-#loadmodule "modules/gameserv/main";
 #loadmodule "modules/gameserv/dice";
 #loadmodule "modules/gameserv/eightball";
 #loadmodule "modules/gameserv/gamecalc";
@@ -705,7 +697,6 @@ loadmodule "modules/saslserv/plain";
  * defining which modules are loaded. You can even disable RPGServ
  * entirely.
  *
- * Core components                              modules/rpgserv/main
  * ENABLE/DISABLE commands                      modules/rpgserv/enable
  * HELP command                                 modules/rpgserv/help
  * INFO command                                 modules/rpgserv/info
@@ -713,7 +704,6 @@ loadmodule "modules/saslserv/plain";
  * SEARCH command                               modules/rpgserv/search
  * SET commands                                 modules/rpgserv/set
  */
-#loadmodule "modules/rpgserv/main";
 #loadmodule "modules/rpgserv/enable";
 #loadmodule "modules/rpgserv/help";
 #loadmodule "modules/rpgserv/info";
@@ -755,7 +745,6 @@ loadmodule "modules/saslserv/plain";
  * Users wishing only to set vhosts need not use it (they can use the builtin
  * vhost management of NickServ instead).
  *
- * Core components                              modules/hostserv/main
  * HELP command                                 modules/hostserv/help
  * OFFER system                                 modules/hostserv/offer
  * ON and OFF commands                          modules/hostserv/onoff
@@ -765,7 +754,6 @@ loadmodule "modules/saslserv/plain";
  * GROUP command                                modules/hostserv/group
  * DROP command                                 modules/hostserv/drop
  */
-#loadmodule "modules/hostserv/main";
 #loadmodule "modules/hostserv/help";
 #loadmodule "modules/hostserv/onoff";
 #loadmodule "modules/hostserv/offer";
@@ -780,7 +768,6 @@ loadmodule "modules/saslserv/plain";
  * HelpServ allows users to request help from network staff in a few different
  * ways.
  *
- * Core components                              modules/helpserv/main
  * HELPME command                               modules/helpserv/helpme
  * Help Ticket system                           modules/helpserv/ticket
  * Service List                                 modules/helpserv/services
@@ -789,7 +776,6 @@ loadmodule "modules/saslserv/plain";
  * works like a one-time alert. You should probably only load one of the two
  * systems.
  */
-#loadmodule "modules/helpserv/main";
 #loadmodule "modules/helpserv/helpme";
 #loadmodule "modules/helpserv/ticket";
 #loadmodule "modules/helpserv/services";
@@ -806,12 +792,10 @@ loadmodule "modules/saslserv/plain";
 /* StatServ module.
  * StatServ provides basic statistics and split tracking.
  *
- * Core components                              modules/statserv/main
  * CHANNEL command                              modules/statserv/channel
  * NETSPLIT command                             modules/statserv/netsplit
  * SERVER command                               modules/statserv/server
  */
-loadmodule "modules/statserv/main";
 #loadmodule "modules/statserv/channel";
 loadmodule "modules/statserv/netsplit";
 loadmodule "modules/statserv/server";
@@ -893,14 +877,12 @@ loadmodule "modules/groupserv/set_url";
  * users in channel access entries. These target mapping entity types are
  * defined through the 'exttarget' modules listed below.
  *
- * Exttarget handling core                      modules/exttarget/main
  * $oper exttarget match type                   modules/exttarget/oper
  * $registered exttarget match type             modules/exttarget/registered
  * $channel exttarget match type                modules/exttarget/channel
  * $chanacs exttarget match type                modules/exttarget/chanacs
  * $server exttarget match type                 modules/exttarget/server
  */
-#loadmodule "modules/exttarget/main";
 #loadmodule "modules/exttarget/oper";
 #loadmodule "modules/exttarget/registered";
 #loadmodule "modules/exttarget/channel";
@@ -913,7 +895,6 @@ loadmodule "modules/groupserv/set_url";
  * as set. Activate modules here and customize further down under Proxyscan
  * section.
  */
-#loadmodule "modules/proxyscan/main";
 #loadmodule "modules/proxyscan/dnsbl";
 
 /* Other modules.
