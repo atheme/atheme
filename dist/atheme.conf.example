@@ -1266,9 +1266,9 @@ serverinfo {
 	 */
 	numeric = "00A";
 
-	/* (*) recontime
+	/* (*) recontime (seconds)
 	 *
-	 * The number of seconds before we reconnect to the uplink.
+	 * How long before we reconnect to the uplink.
 	 */
 	recontime = 10;
 
@@ -1368,11 +1368,12 @@ serverinfo {
 	 */
 	mdlimit = 30;
 
-	/* (*) emaillimit, emailtime
+	/* (*) emaillimit
+	 * (*) emailtime (seconds)
 	 *
-	 * The maximum number of emails allowed to be sent in
-	 * that amount of time (seconds). If this is exceeded,
-	 * wallops will be sent, at most one per minute.
+	 * The maximum number of emails allowed to be sent in the specified
+	 * interval. If this is exceeded, wallops will be sent, at most one
+	 * per minute.
 	 */
 	emaillimit = 10;
 	emailtime = 300;
@@ -1535,23 +1536,25 @@ nickserv {
 	 */
 	maxnicks = 5;
 
-	/* (*) expire
+	/* (*) expire (days)
 	 *
-	 * The number of days before inactive registrations are expired.
+	 * How long registrations have to be inactive before being dropped.
+	 * Set this to zero to disable expiry.
 	 */
 	expire = 30;
 
-	/* (*) enforce_expire
+	/* (*) enforce_expire (days)
 	 *
-	 * The number of days of no use after which to ignore enforcement
-	 * settings on nicks.
+	 * How long registrations have to be inactive before ignoring
+	 * enforcement settings on their nicks.
 	 */
 	#enforce_expire = 14;
 
-	/* (*) enforce_delay
+	/* (*) enforce_delay (seconds)
 	 *
-	 * The number of seconds to delay nickchange enforcement settings
-	 * on nicks.
+	 * The default delay before taking enforcement action on nicks. This
+	 * can be changed on an individual account basis if the
+	 * "nickserv/set_enforcetime" module is loaded.
 	 */
 	#enforce_delay = 30;
 	
@@ -1561,13 +1564,13 @@ nickserv {
 	 */
 	#enforce_prefix = "Guest";
 
-	/* (*) waitreg_time
+	/* (*) waitreg_time (seconds)
 	 *
-	 * The amount of time (in seconds) users have to wait between
-	 * connecting to the network, and being able to register a services
-	 * account. Minimum value 0 (disables the enforced delay), default
-	 * value 0, maximum value 43200 (12 hours). Requires the
-	 * "modules/nickserv/waitreg" module to be loaded to do anything.
+	 * How long users have to wait between connecting to the network, and
+	 * being able to register a services account. Minimum value 0
+	 * (disables the enforced delay), default value 0, maximum value 43200
+	 * (12 hours). Requires the "nickserv/waitreg" module to be loaded to
+	 * do anything.
 	 */
 	#waitreg_time = 0;
 
@@ -1785,9 +1788,10 @@ chanserv {
 	 */
 	trigger = "!";
 
-	/* (*) expire
+	/* (*) expire (days)
 	 *
-	 * The number of days before inactive registrations are expired.
+	 * How long registrations have to be inactive before being dropped.
+	 * Set this to zero to disable expiry.
 	 */
 	expire = 30;
 
@@ -1814,11 +1818,10 @@ chanserv {
 	 */
 	#founder_flags = "AFORefiorstv";
 
-	/* (*) akick_time
+	/* (*) akick_time (minutes)
 	 *
-	 * The default expiration time (in minutes) for AKICKs.
-	 * Comment this option out or set to zero for permanent AKICKs
-	 * by default (the old behaviour).
+	 * The default expiration time for AKICKs. Comment this option out or
+	 * set to zero for permanent AKICKs by default (the old behaviour).
 	 */
 	#akick_time = 10;
 
@@ -2713,59 +2716,54 @@ general {
 	#raw;
 
 	/* (*) flood_msgs
+	 * (*) flood_time (seconds)
 	 *
 	 * Do you want services to detect floods?
-	 * Set to how many messages before a flood is triggered.
-	 * Note that some messages that need a lot of processing count
-	 * as two or four messages.
+	 *
 	 * If services receives `flood_msgs' within `flood_time' the user will
 	 * trigger the flood protection.
-	 * Setting this to zero disables flood protection.
+	 *
+	 * Setting flood_msgs to zero disables flood protection.
+	 *
+	 * Note that some messages that need a lot of processing are counted
+	 * as two or even four messages.
 	 */
 	flood_msgs = 7;
-
-	/* (*) flood_time
-	 *
-	 * Do you want services to detect floods?
-	 * Set to how long (in seconds) before the counter resets.
-	 * If services receives `flood_msgs' within `flood_time' the user will
-	 * trigger the flood protection.
-	 */
 	flood_time = 10;
 
 	/* (*) ratelimit_uses
+	 * (*) ratelimit_period (seconds)
 	 *
-	 * After how many uses of a command will users be throttled.
-	 * After `ratelimit_uses' of a command within `ratelimit_period', users
-	 * will not be able to run that ratelimited command until the period is up.
-	 * Comment this, ratelimit_period below or both options out to disable rate limiting.
-	 * Currently used in helpserv/helpme, helpserv/ticket, hostserv/request, 
-	 * nickserv/register and chanserv/register.
+	 * This configures denied command throttling.
+	 *
+	 * After `ratelimit_uses' of a command within `ratelimit_period',
+	 * users will not be able to run that ratelimited command until the
+	 * period is up. Comment one or both options to disable limiting.
+	 *
+	 * Currently used in the following modules:
+	 *
+	 *     chanserv/register
+	 *     helpserv/helpme
+	 *     helpserv/ticket
+	 *     hostserv/request
+	 *     nickserv/register
 	 */
 	ratelimit_uses = 5;
-
-	/* (*) ratelimit_period
-	 *
-	 * After how much time (in seconds) will the ratelimit_uses counter reset.
-	 * After `ratelimit_uses' of a command within `ratelimit_period', users
-	 * will not be able to run that ratelimited command until the period is up.
-	 * Comment this, ratelimit_uses above or both options out to disable rate limiting.
-	 * Currently used in helpserv/helpme, helpserv/ticket, hostserv/request, 
-	 * nickserv/register and chanserv/register.
-	 */
 	ratelimit_period = 60;
 
-	/* (*) vhost_change
+	/* (*) vhost_change (days)
 	 *
-	 * The default number of days between vHost changes once a user has used HostServ
-	 * TAKE or REQUEST.  (Helps to deter rabid host-swappers and ban evaders.)
+	 * The minimum interval between vHost changes once a user has used
+	 * HostServ TAKE or REQUEST.
+	 *
+	 * Helps to deter rabid host-swappers and ban evaders.
 	 */
 	#vhost_change = 30;
 
-	/* (*) kline_time
+	/* (*) kline_time (days)
 	 *
-	 * The default expire time for KLINE's in days.
-	 * Setting this to 0 makes all KLINE's permanent.
+	 * The default expiry time for KLINEs.
+	 * Setting this to 0 makes all KLINEs permanent.
 	 */
 	kline_time = 7;
 
@@ -2783,16 +2781,16 @@ general {
 	 */
 	#kline_verified_ident;
 
-	/* (*) clone_time
+	/* (*) clone_time (minutes)
 	 *
-	 * This is the default expiry time for CLONE exemptions in minutes.
+	 * This is the default expiry time for CLONE exemptions.
 	 * Setting this to 0 makes all CLONE exemptions permanent.
 	 */
 	clone_time = 0;
 
-	/* commit_interval
+	/* commit_interval (minutes)
 	 *
-	 * The time between database writes in minutes.
+	 * The time between database writes.
 	 */
 	commit_interval = 5;
 
