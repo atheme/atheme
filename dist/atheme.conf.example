@@ -1266,19 +1266,19 @@ serverinfo {
 	 */
 	numeric = "00A";
 
-	/* (*)recontime
+	/* (*) recontime
 	 *
 	 * The number of seconds before we reconnect to the uplink.
 	 */
 	recontime = 10;
 
-	/* (*)netname
+	/* (*) netname
 	 *
 	 * The name of your network.
 	 */
 	netname = "misconfigured network";
 
-	/* (*)hidehostsuffix
+	/* (*) hidehostsuffix
 	 *
 	 * P10 +x host hiding gives <account>.<hidehostsuffix>.
 	 * If using +x on asuka, this must agree
@@ -1286,26 +1286,26 @@ serverinfo {
 	 */
 	hidehostsuffix = "users.misconfigured";
 
-	/* (*)adminname
+	/* (*) adminname
 	 *
 	 * The name of the person running this service.
 	 */
 	adminname = "misconfigured admin";
 
-	/* (*)adminemail
+	/* (*) adminemail
 	 *
 	 * The email address of the person running this service.
 	 */
 	adminemail = "misconfigured@admin.tld";
 
-	/* (*)registeremail
+	/* (*) registeremail
 	 *
 	 * The email address that messages should be originated from.
 	 * If this is not set, then "noreply.$adminemail" will be used.
 	 */
 	registeremail = "noreply@admin.tld";
 
-	/* (*)hidden
+	/* (*) hidden
 	 *
 	 * If this is enabled, Atheme will indicate to the uplink IRCd
 	 * that it should not be included in /links output.  This only works
@@ -1313,7 +1313,7 @@ serverinfo {
 	 */
 	#hidden;
 
-	/* (*)mta
+	/* (*) mta
 	 *
 	 * The full path to your mail transfer agent.
 	 * This is used for email authorization and password retrieval.
@@ -1323,7 +1323,7 @@ serverinfo {
 	 */
 	mta = "/usr/sbin/sendmail";
 
-	/* (*)loglevel
+	/* (*) loglevel
 	 *
 	 * Specify the default categories of logging information to record
 	 * in the master Atheme logfile, usually var/atheme.log.
@@ -1348,27 +1348,27 @@ serverinfo {
 	 */
 	loglevel = { error; info; admin; network; wallops; };
 
-	/* (*)maxlogins
+	/* (*) maxlogins
 	 *
 	 * What is the maximum number of sessions allowed to login to one
 	 * username? This reduces potential abuse. It is only checked on login.
 	 */
 	maxlogins = 5;
 
-	/* (*)maxusers
+	/* (*) maxusers
 	 *
 	 * What are the maximum usernames that one email address can register?
 	 * Set to 0 to disable this check (it can be slow currently).
 	 */
 	maxusers = 5;
 
-	/* (*)mdlimit
+	/* (*) mdlimit
 	 *
 	 * How many metadata entries can be added to an object?
 	 */
 	mdlimit = 30;
 
-	/* (*)emaillimit, emailtime
+	/* (*) emaillimit, emailtime
 	 *
 	 * The maximum number of emails allowed to be sent in
 	 * that amount of time (seconds). If this is exceeded,
@@ -1377,7 +1377,7 @@ serverinfo {
 	emaillimit = 10;
 	emailtime = 300;
 
-	/* (*)auth
+	/* (*) auth
 	 *
 	 * What type of username registration authorization do you want?
 	 * If "email", Atheme will send a confirmation email to the address to
@@ -1469,7 +1469,7 @@ uplink "irc6.example.net" {
  * are properly configured for your network.
  */
 nickserv {
-	/* (*)spam
+	/* (*) spam
 	 *
 	 * Have NickServ tell people about how great it and ChanServ are.
 	 */
@@ -1485,31 +1485,31 @@ nickserv {
 	 */
 	#no_nick_ownership;
 
-	/* (*)nick
+	/* (*) nick
 	 *
 	 * The nickname we want NickServ to have. 
 	 */
 	nick = "NickServ";
 
-	/* (*)user
+	/* (*) user
 	 *
 	 * The username we want NickServ to have.
 	 */
 	user = "NickServ";
 
-	/* (*)host
+	/* (*) host
 	 *
 	 * The hostname we want NickServ to have.
 	 */
 	host = "services.int";
 
-	/* (*)real
+	/* (*) real
 	 *
 	 * The realname (gecos) information we want NickServ to have.
 	 */
 	real = "Nickname Services";
 
-	/* (*)aliases
+	/* (*) aliases
 	 *
 	 * Command aliases for NickServ.
 	 */
@@ -1518,7 +1518,7 @@ nickserv {
 		"MYACCESS" = "LISTCHANS";
 	};
 
-	/* (*)access
+	/* (*) access
 	 *
 	 * This block allows you to modify the access level required to run
 	 * commands. The list of possible accesses are listed in the operclass
@@ -1528,40 +1528,40 @@ nickserv {
 	access {
 	};
 
-	/* (*)maxnicks
+	/* (*) maxnicks
 	 *
 	 * If GROUP is loaded, what are the maximum nicknames that one
 	 * username can register?
 	 */
 	maxnicks = 5;
 
-	/* (*)expire
+	/* (*) expire
 	 *
 	 * The number of days before inactive registrations are expired.
 	 */
 	expire = 30;
 
-	/* (*)enforce_expire
+	/* (*) enforce_expire
 	 *
 	 * The number of days of no use after which to ignore enforcement
 	 * settings on nicks.
 	 */
 	#enforce_expire = 14;
 
-	/* (*)enforce_delay
+	/* (*) enforce_delay
 	 *
 	 * The number of seconds to delay nickchange enforcement settings
 	 * on nicks.
 	 */
 	#enforce_delay = 30;
 	
-	/* (*)enforce_prefix
+	/* (*) enforce_prefix
 	 *
 	 * The prefix to use when changing the user's nick on enforcement
 	 */
 	#enforce_prefix = "Guest";
 
-	/* (*)waitreg_time
+	/* (*) waitreg_time
 	 *
 	 * The amount of time (in seconds) users have to wait between
 	 * connecting to the network, and being able to register a services
@@ -1571,7 +1571,7 @@ nickserv {
 	 */
 	#waitreg_time = 0;
 
-	/* (*)cracklib_dict
+	/* (*) cracklib_dict
 	 *
 	 * The location and filename prefix of the cracklib dictionaries
 	 * for use with nickserv/pwquality. This must be provided if you are
@@ -1579,7 +1579,7 @@ nickserv {
 	 */
 	#cracklib_dict = "/var/cache/cracklib/cracklib_dict";
 
-	/* (*)passwdqc_*
+	/* (*) passwdqc_*
 	 *
 	 * Please see the passwdqc.conf(5) documentation for an explanation
 	 * of these values. Affects modules/nickserv/pwquality if passwdqc
@@ -1593,7 +1593,7 @@ nickserv {
 	#passwdqc_min_n4 = 8;    /* (0 <= value <= passwdqc_min_n3) */
 	#passwdqc_words = 4;     /* (2 <= value <= 8) */
 
-	/* (*)pwquality_warn_only
+	/* (*) pwquality_warn_only
 	 *
 	 * If this option is set and nickserv/pwquality is loaded, nickserv will just 
 	 * warn users that their password is insecure, recommend they change it and 
@@ -1602,7 +1602,7 @@ nickserv {
 	 */
 	#pwquality_warn_only;
 
-	/* (*)(B)show_custom_metadata
+	/* (*)(B) show_custom_metadata
 	 *
 	 * Setting this option to false will prevent user-set metadata (via SET PROPERTY)
 	 * from showing up in the INFO output. The TAXONOMY command will still function
@@ -1610,7 +1610,7 @@ nickserv {
 	 */
 	show_custom_metadata;
 
-	/* (*)emailexempts
+	/* (*) emailexempts
 	 *
 	 * A list of email addresses that will be exempt from the check of how many
 	 * accounts one user may have. Any email address in this block may register
@@ -1619,7 +1619,7 @@ nickserv {
 	emailexempts {
 	};
 
-	/* (*)shorthelp
+	/* (*) shorthelp
 	 *
 	 * A list of commands that are displayed (with their full description) in the
 	 * output of `/msg NickServ HELP'. Commands not in this list will be listed, but
@@ -1645,25 +1645,25 @@ nickserv {
  * channels. It is not required, but is strongly recommended.
  */
 chanserv {
-	/* (*)nick
+	/* (*) nick
 	 *
 	 * The nickname we want the client to have.
 	 */
 	nick = "ChanServ";
 
-	/* (*)user
+	/* (*) user
 	 *
 	 * The username we want the client to have.
 	 */
 	user = "ChanServ";
 
-	/* (*)host
+	/* (*) host
 	 *
 	 * The hostname we want the client to have.
 	 */
 	host = "services.int";
 
-	/* (*)real
+	/* (*) real
 	 *
 	 * The GECOS of the client.
 	 */
@@ -1677,21 +1677,21 @@ chanserv {
 	 */
 	#reggroup = "!Services-Team";
 
-	/* (*)aliases
+	/* (*) aliases
 	 *
 	 * Command aliases for ChanServ.
 	 */
 	aliases {
 	};
 	
-	/* (*)access
+	/* (*) access
 	 *
 	 * Command access changes for ChanServ.
 	 */
 	access {
 	};
 
-	/* (*)maxchans
+	/* (*) maxchans
 	 *
 	 * What are the maximum channels that one username can register?
 	 */
@@ -1785,20 +1785,20 @@ chanserv {
 	 */
 	trigger = "!";
 
-	/* (*)expire
+	/* (*) expire
 	 *
 	 * The number of days before inactive registrations are expired.
 	 */
 	expire = 30;
 
-	/* (*)maxchanacs
+	/* (*) maxchanacs
 	 *
 	 * The maximum number of entries allowed in a channel's access list
 	 * (both channel ops and akicks), 0 for unlimited.
 	 */
 	maxchanacs = 0;
 
-	/* (*)maxfounders
+	/* (*) maxfounders
 	 *
 	 * The maximum number of founders allowed in a channel.
 	 * Note that all founders have the exact same privileges and
@@ -1806,7 +1806,7 @@ chanserv {
 	 */
 	maxfounders = 4;
 
-	/* (*)founder_flags
+	/* (*) founder_flags
 	 *
 	 * The flags a user will get when they register a new channel.
 	 * This MUST include at least 'F' or it will be ignored.
@@ -1814,7 +1814,7 @@ chanserv {
 	 */
 	#founder_flags = "AFORefiorstv";
 
-	/* (*)akick_time
+	/* (*) akick_time
 	 *
 	 * The default expiration time (in minutes) for AKICKs.
 	 * Comment this option out or set to zero for permanent AKICKs
@@ -1822,7 +1822,7 @@ chanserv {
 	 */
 	#akick_time = 10;
 
-	/* (*)antiflood_enforce_method
+	/* (*) antiflood_enforce_method
 	 *
 	 * The enforcement method to use for flood protection by default.
 	 * This may be overridden by channel staff.
@@ -1830,7 +1830,7 @@ chanserv {
 	 */
 	antiflood_enforce_method = quiet;
 
-	/* (*)(B)show_custom_metadata
+	/* (*)(B) show_custom_metadata
 	 *
 	 * Setting this option to false will prevent user-set metadata (via SET PROPERTY)
 	 * from showing up in the INFO output. The TAXONOMY command will still function
@@ -1838,7 +1838,7 @@ chanserv {
 	 */
 	show_custom_metadata;
 
-	/* (*)shorthelp
+	/* (*) shorthelp
 	 *
 	 * A list of commands that are displayed (with their full description) in the
 	 * output of `/msg ChanServ HELP'. Commands not in this list will be listed, but
@@ -1864,31 +1864,31 @@ chanserv {
  * to register them.
  */
 chanfix {
-	/* (*)nick
+	/* (*) nick
 	 *
 	 * The nickname we want the client to have.
 	 */
 	nick = "ChanFix";
 
-	/* (*)user
+	/* (*) user
 	 *
 	 * The username we want the client to have.
 	 */
 	user = "ChanFix";
 
-	/* (*)host
+	/* (*) host
 	 *
 	 * The hostname we want the client to have.
 	 */
 	host = "services.int";
 
-	/* (*)real
+	/* (*) real
 	 *
 	 * The GECOS of the client.
 	 */
 	real = "Channel Fixing Service";
 
-	/* (*)autofix
+	/* (*) autofix
 	 *
 	 * Automatically fix channels if they become opless and meet fixing
 	 * criteria.
@@ -1903,25 +1903,25 @@ chanfix {
  * The Global notice module provides the ability to mass-notify a network.
  */
 global {
-	/* (*)nick
+	/* (*) nick
 	 *
 	 * Sets the nick used for sending out a global notice.
 	 */
 	nick = "Global";
 
-	/* (*)user
+	/* (*) user
 	 *
 	 * Sets the username used for this client.
 	 */
 	user = "Global";
 
-	/* (*)host
+	/* (*) host
 	 *
 	 * The hostname used for this client.
 	 */
 	host = "services.int";
 
-	/* (*)real
+	/* (*) real
 	 *
 	 * The GECOS (real name) of the client.
 	 */
@@ -1936,31 +1936,31 @@ global {
  * news to users when they connect to the network.
  */
 infoserv {
-	/* (*)nick
+	/* (*) nick
 	 *
 	 * Sets the nick used for InfoServ and sending out informational messages.
 	 */
 	nick = "InfoServ";
 
-	/* (*)user
+	/* (*) user
 	 *
 	 * Sets the username used for this client.
 	 */
 	user = "InfoServ";
 
-	/* (*)host
+	/* (*) host
 	 *
 	 * The hostname used for this client,
 	 */
 	host = "services.int";
 
-	/* (*)real
+	/* (*) real
 	 *
 	 * The GECOS (real name) of the client.
 	 */
 	real = "Information Service";
 
-	/* (*)logoninfo_count
+	/* (*) logoninfo_count
 	 *
 	 * The number of InfoServ messages a user will see upon connect.
 	 * If there are more than this number, the user will be able to
@@ -1977,38 +1977,38 @@ infoserv {
  * on the IRC network.
  */
 operserv {
-	/* (*)nick
+	/* (*) nick
 	 *
 	 * The nickname we want the Operator Service to have.
 	 */
 	nick = "OperServ";
 
-	/* (*)user
+	/* (*) user
 	 *
 	 * Sets the username used for this client.
 	 */
 	user = "OperServ";
 
-	/* (*)host
+	/* (*) host
 	 *
 	 * The hostname used for this client.
 	 */
 	host = "services.int";
 
-	/* (*)real
+	/* (*) real
 	 *
 	 * The GECOS (real name) of the client.
 	 */
 	real = "Operator Services";
 
-	/* (*)aliases
+	/* (*) aliases
 	 *
 	 * Command aliases for OperServ.
 	 */
 	aliases {
 	};
 	
-	/* (*)access
+	/* (*) access
 	 *
 	 * Command access changes for OperServ.
 	 */
@@ -2024,31 +2024,31 @@ operserv {
  * SASL over IRC (SASL/IRC) protocol extension.
  */
 saslserv {
-	/* (*)nick
+	/* (*) nick
 	 *
 	 * The nickname we want SaslServ to have.
 	 */
 	nick = "SaslServ";
 
-	/* (*)user
+	/* (*) user
 	 *
 	 * The username we want SaslServ to have.
 	 */
 	user = "SaslServ";
 
-	/* (*)host
+	/* (*) host
 	 *
 	 * The hostname we want SaslServ to have.
 	 */
 	host = "services.int";
 
-	/* (*)real
+	/* (*) real
 	 *
 	 * The realname (gecos) information we want SaslServ to have.
 	 */
 	real = "SASL Authentication Agent";
 
-	/* (*)hide_server_names
+	/* (*) hide_server_names
 	 *
 	 * Hide server names in the bad_password message.
 	 */
@@ -2063,45 +2063,45 @@ saslserv {
  * to offline users (provided they are registered with Services).
  */
 memoserv {
-	/* (*)nick
+	/* (*) nick
 	 *
 	 * The nickname we want MemoServ to have.
 	 */
 	nick = "MemoServ";
 
-	/* (*)user
+	/* (*) user
 	 *
 	 * The username we want MemoServ to have.
 	 */
 	user = "MemoServ";
 
-	/* (*)host
+	/* (*) host
 	 *
 	 * The hostname we want MemoServ to have.
 	 */
 	host = "services.int";
 
-	/* (*)real
+	/* (*) real
 	 *
 	 * The realname (gecos) information we want MemoServ to have.
 	 */
 	real = "Memo Services";
 
-	/* (*)aliases
+	/* (*) aliases
 	 *
 	 * Command aliases for MemoServ.
 	 */
 	aliases {
 	};
 	
-	/* (*)access
+	/* (*) access
 	 *
 	 * Command access changes for MemoServ.
 	 */
 	access {
 	};
 
-	/* (*)maxmemos
+	/* (*) maxmemos
 	 *
 	 * What is the maximum amount of memos a user can have in their inbox?
 	 */
@@ -2115,38 +2115,38 @@ memoserv {
  * GameServ provides various in-channel commands for games.
  */
 gameserv {
-	/* (*)nick
+	/* (*) nick
 	 *
 	 * The nickname we want GameServ to have.
 	 */
 	nick = "GameServ";
 
-	/* (*)user
+	/* (*) user
 	 *
 	 * Sets the username used for this client.
 	 */
 	user = "GameServ";
 
-	/* (*)host
+	/* (*) host
 	 *
 	 * The hostname used for this client.
 	 */
 	host = "services.int";
 
-	/* (*)real
+	/* (*) real
 	 *
 	 * The GECOS (real name) of the client.
 	 */
 	real = "Game Services";
 
-	/* (*)aliases
+	/* (*) aliases
 	 *
 	 * Command aliases for GameServ.
 	 */
 	aliases {
 	};
 	
-	/* (*)access
+	/* (*) access
 	 *
 	 * Command access changes for GameServ.
 	 */
@@ -2161,38 +2161,38 @@ gameserv {
  * RPGServ provides a facility for finding roleplaying channels.
  */
 rpgserv {
-	/* (*)nick
+	/* (*) nick
 	 *
 	 * The nickname we want RPGServ to have.
 	 */
 	nick = "RPGServ";
 
-	/* (*)user
+	/* (*) user
 	 *
 	 * Sets the username used for this client.
 	 */
 	user = "RPGServ";
 
-	/* (*)host
+	/* (*) host
 	 *
 	 * The hostname used for this client.
 	 */
 	host = "services.int";
 
-	/* (*)real
+	/* (*) real
 	 *
 	 * The GECOS (real name) of the client.
 	 */
 	real = "RPG Finding Services";
 
-	/* (*)aliases
+	/* (*) aliases
 	 *
 	 * Command aliases for RPGServ.
 	 */
 	aliases {
 	};
 	
-	/* (*)access
+	/* (*) access
 	 *
 	 * Command access changes for RPGServ.
 	 */
@@ -2207,31 +2207,31 @@ rpgserv {
  * BotServ provides virtual channel bots.
  */
 botserv {
-	/* (*)nick
+	/* (*) nick
 	 *
 	 * The nickname we want BotServ to have.
 	 */
 	nick = "BotServ";
 
-	/* (*)user
+	/* (*) user
 	 *
 	 * Sets the username used for this client.
 	 */
 	user = "BotServ";
 
-	/* (*)host
+	/* (*) host
 	 *
 	 * The hostname used for this client.
 	 */
 	host = "services.int";
 
-	/* (*)real
+	/* (*) real
 	 *
 	 * The GECOS (real name) of the client.
 	 */
 	real = "Bot Services";
 
-	/* (*)min_users
+	/* (*) min_users
 	 *
 	 * Minimum number of users a channel must have before a Bot is allowed
 	 * to be assigned to that channel.
@@ -2247,64 +2247,64 @@ botserv {
  *
  */
 groupserv {
-	/* (*)nick
+	/* (*) nick
 	 *
 	 * The nickname we want GroupServ to have.
 	 */
 	nick = "GroupServ";
 
-	/* (*)user
+	/* (*) user
 	 *
 	 * The username we want GroupServ to have.
 	 */
 	user = "GroupServ";
 
-	/* (*)host
+	/* (*) host
 	 *
 	 * The hostname we want GroupServ to have.
 	 */
 	host = "services.int";
 
-	/* (*)real
+	/* (*) real
 	 *
 	 * The realname (gecos) information we want GroupServ to have.
 	 */
 	real = "Group Management Services";
 
-	/* (*)aliases
+	/* (*) aliases
 	 *
 	 * Command aliases for GroupServ.
 	 */
 	aliases {
 	};
 	
-	/* (*)access
+	/* (*) access
 	 *
 	 * Command access changes for GroupServ.
 	 */
 	access {
 	};
 
-	/* (*)maxgroups
+	/* (*) maxgroups
 	 *
 	 * Maximum number of groups one username can be founder of.
 	 */
 	maxgroups = 5;
 
-	/* (*)maxgroupacs
+	/* (*) maxgroupacs
 	 *
 	 * Maximum number of access entries you may have in a group.
 	 */
 	maxgroupacs = 100;
 
-	/* (*)enable_open_groups
+	/* (*) enable_open_groups
 	 *
 	 * Setting this option will allow any group founder to mark
 	 * their group as "anyone can join".
 	 */
 	enable_open_groups;
 
-	/* (*)join_flags
+	/* (*) join_flags
 	 *
 	 * This is the GroupServ flagset that users who JOIN a open
 	 * group will get upon join. Please check the groupserv/flags
@@ -2322,25 +2322,25 @@ groupserv {
  * HostServ provides advanced virtual host management.
  */
 hostserv {
-	/* (*)nick
+	/* (*) nick
 	 *
 	 * The nickname we want HostServ to have.
 	 */
 	nick = "HostServ";
 
-	/* (*)user
+	/* (*) user
 	 *
 	 * Sets the username used for this client.
 	 */
 	user = "HostServ";
 
-	/* (*)host
+	/* (*) host
 	 *
 	 * The hostname used for this client.
 	 */
 	host = "services.int";
 
-	/* (*)real
+	/* (*) real
 	 *
 	 * The GECOS (real name) of the client.
 	 */
@@ -2353,7 +2353,7 @@ hostserv {
 	 */
 	#reggroup = "!Services-Team";
 
-	/* (*)no_subsequent_requests
+	/* (*) no_subsequent_requests
 	 *
 	 * Prevent a user from making another vhost request while they
 	 * already have an outstanding request that has not been accepted
@@ -2361,7 +2361,7 @@ hostserv {
 	 */
 	#no_subsequent_requests;
 
-	/* (*)request_per_nick
+	/* (*) request_per_nick
 	 *
 	 * Whether the request system should work per nick or per account.
 	 * The recommended setting is to leave this disabled, so that
@@ -2369,7 +2369,7 @@ hostserv {
 	 */
 	#request_per_nick;
 
-	/* (*)aliases
+	/* (*) aliases
 	 *
 	 * Command aliases for HostServ.
 	 */
@@ -2378,7 +2378,7 @@ hostserv {
 		"DENY" = "REJECT";
 	};
 	
-	/* (*)access
+	/* (*) access
 	 *
 	 * Command access changes for HostServ.
 	 */
@@ -2393,25 +2393,25 @@ hostserv {
  * HelpServ adds a few different ways for users to request help from network staff.
  */
 helpserv {
-	/* (*)nick
+	/* (*) nick
 	 *
 	 * The nickname we want HelpServ to have.
 	 */
 	nick = "HelpServ";
 
-	/* (*)user
+	/* (*) user
 	 *
 	 * The username we want HelpServ to have.
 	 */
 	user = "HelpServ";
 
-	/* (*)host
+	/* (*) host
 	 *
 	 * The hostname we want HelpServ to have.
 	 */
 	host = "services.int";
 
-	/* (*)real
+	/* (*) real
 	 *
 	 * The realname (gecos) information we want HelpServ to have.
 	 */
@@ -2425,25 +2425,25 @@ helpserv {
  * StatServ adds basic stats and split tracking.
  */
 statserv {
-	/* (*)nick
+	/* (*) nick
 	 *
 	 * The nickname we want StatServ to have.
 	 */
 	nick = "StatServ";
 
-	/* (*)user
+	/* (*) user
 	 *
 	 * The username we want StatServ to have.
 	 */
 	user = "StatServ";
 
-	/* (*)host
+	/* (*) host
 	 *
 	 * The hostname we want StatServ to have.
 	 */
 	host = "services.int";
 
-	/* (*)real
+	/* (*) real
 	 *
 	 * The realname (gecos) information we want StatServ to have.
 	 */
@@ -2455,31 +2455,31 @@ statserv {
  * The alis {} block contains settings specific to the ALIS modules.
  */
 alis {
-	/* (*)nick
+	/* (*) nick
 	 *
 	 * The nickname we want ALIS to have.
 	 */
 	nick = "ALIS";
 
-	/* (*)user
+	/* (*) user
 	 *
 	 * The username we want ALIS to have.
 	 */
 	user = "alis";
 
-	/* (*)host
+	/* (*) host
 	 *
 	 * The hostname we want ALIS to have.
 	 */
 	host = "services.int";
 
-	/* (*)real
+	/* (*) real
 	 *
 	 * The realname (gecos) information we want ALIS to have.
 	 */
 	real = "Channel Directory";
 
-	/* (*)maxmatches
+	/* (*) maxmatches
 	 *
 	 * The default maximum number of channels returned in a query.
 	 * Privilege (chan:auspex) is required to ask for more.
@@ -2529,13 +2529,13 @@ httpd {
  * module.
  */
 ldap {
-	/* (*)url
+	/* (*) url
 	 *
 	 * LDAP URL of the server to use.
 	 */
 	url = "ldap://127.0.0.1";
 
-	/* (*)dnformat
+	/* (*) dnformat
 	 *
 	 * Format string to convert an account name to an LDAP DN.
 	 * Must contain exactly one %s which will be replaced by the account
@@ -2608,7 +2608,7 @@ logfile "!snotices" { error; info; request; denycmd; };
 
 /* The general {} block defines general configuration options. */
 general {
-	/* (*)permissive_mode
+	/* (*) permissive_mode
 	 *
 	 * Whether or not security denials should be soft denials instead of
 	 * hard denials.  If security denials are soft denials, then they will
@@ -2616,21 +2616,21 @@ general {
 	 */
 	#permissive_mode;
 
-	/* (*)helpchan
+	/* (*) helpchan
 	 *
 	 * Network help channel. Shown to users when they request
 	 * help for a command that doesn't exist.
 	 */
 	#helpchan = "#help";
 
-	/* (*)helpurl
+	/* (*) helpurl
 	 *
 	 * Network webpage for services help. Shown to users when they
 	 * request help for a command that doesn't exist.
 	 */
 	#helpurl = "http://www.stack.nl/~jilles/irc/atheme-help/";
 
-	/* (*)silent
+	/* (*) silent
 	 *
 	 * If you want to prevent services from sending
 	 * WALLOPS/GLOBOPS about things uncomment this.
@@ -2638,7 +2638,7 @@ general {
 	 */
 	#silent;
 
-	/* (*)verbose_wallops
+	/* (*) verbose_wallops
 	 *
 	 * If you want services to send you more information about
 	 * events that are occuring (in particular AKILLs), uncomment the
@@ -2649,7 +2649,7 @@ general {
 	 */
 	#verbose_wallops;
 
-	/* (*)join_chans
+	/* (*) join_chans
 	 *
 	 * Should ChanServ be allowed to join registered channels?
 	 * This option is useful for the fantasy command set.
@@ -2671,7 +2671,7 @@ general {
 	 */
 	join_chans;
 
-	/* (*)leave_chans
+	/* (*) leave_chans
 	 *
 	 * Do we leave registered channels after everyone else has left?
 	 * Turning this off serves little purpose, except to mark "official"
@@ -2688,7 +2688,7 @@ general {
 	 */
 	#secure;
 
-	/* (*)uflags
+	/* (*) uflags
 	 *
 	 * The default flags to set for usernames upon registration.
 	 * Valid values are: hold, neverop, noop, hidemail, nomemo, emailmemos,
@@ -2696,7 +2696,7 @@ general {
 	 */
 	uflags = { hidemail; };
 
-	/* (*)cflags
+	/* (*) cflags
 	 *
 	 * The default flags to set for channels upon registration.
 	 * Valid values are: hold, secure, verbose, verbose_ops, keeptopic,
@@ -2704,7 +2704,7 @@ general {
 	 */
 	cflags = { verbose; guard; };
 
-	/* (*)raw
+	/* (*) raw
 	 *
 	 * Do you want to allow SRAs to use the RAW and INJECT commands?
 	 * These commands are for debugging. If you don't know how to use them
@@ -2712,7 +2712,7 @@ general {
 	 */
 	#raw;
 
-	/* (*)flood_msgs
+	/* (*) flood_msgs
 	 *
 	 * Do you want services to detect floods?
 	 * Set to how many messages before a flood is triggered.
@@ -2724,7 +2724,7 @@ general {
 	 */
 	flood_msgs = 7;
 
-	/* (*)flood_time
+	/* (*) flood_time
 	 *
 	 * Do you want services to detect floods?
 	 * Set to how long (in seconds) before the counter resets.
@@ -2733,7 +2733,7 @@ general {
 	 */
 	flood_time = 10;
 
-	/* (*)ratelimit_uses
+	/* (*) ratelimit_uses
 	 *
 	 * After how many uses of a command will users be throttled.
 	 * After `ratelimit_uses' of a command within `ratelimit_period', users
@@ -2744,7 +2744,7 @@ general {
 	 */
 	ratelimit_uses = 5;
 
-	/* (*)ratelimit_period
+	/* (*) ratelimit_period
 	 *
 	 * After how much time (in seconds) will the ratelimit_uses counter reset.
 	 * After `ratelimit_uses' of a command within `ratelimit_period', users
@@ -2755,35 +2755,35 @@ general {
 	 */
 	ratelimit_period = 60;
 
-	/* (*)vhost_change
+	/* (*) vhost_change
 	 *
 	 * The default number of days between vHost changes once a user has used HostServ
 	 * TAKE or REQUEST.  (Helps to deter rabid host-swappers and ban evaders.)
 	 */
 	#vhost_change = 30;
 
-	/* (*)kline_time
+	/* (*) kline_time
 	 *
 	 * The default expire time for KLINE's in days.
 	 * Setting this to 0 makes all KLINE's permanent.
 	 */
 	kline_time = 7;
 
-	/* (*)kline_with_ident
+	/* (*) kline_with_ident
 	 *
 	 * KLINE user@host instead of *@host.
 	 * Applies to all automatic KLINE's set by services.
 	 */
 	#kline_with_ident;
 
-	/* (*)kline_verified_ident
+	/* (*) kline_verified_ident
 	 *
 	 * KLINE *@host if the first character of the ident is ~,
 	 * irrespective of the value of kline_with_ident.
 	 */
 	#kline_verified_ident;
 
-	/* (*)clone_time
+	/* (*) clone_time
 	 *
 	 * This is the default expiry time for CLONE exemptions in minutes.
 	 * Setting this to 0 makes all CLONE exemptions permanent.
@@ -2796,26 +2796,26 @@ general {
 	 */
 	commit_interval = 5;
 
-	/* (*)operstring
+	/* (*) operstring
 	 *
 	 * The string returned in WHOIS (against services) for IRC operators.
 	 */
 	#operstring = "is an IRC Operator";
 
-	/* (*)servicestring
+	/* (*) servicestring
 	 *
 	 * The string returned in WHOIS (against services) for services.
 	 */
 	#servicestring = "is a Network Service";
 
-	/* (*)default_clone_allowed
+	/* (*) default_clone_allowed
 	 *
 	 * The limit after which clones will be KILLed or TKLINEd.
 	 * Used by operserv/clones.
 	 */
 	default_clone_allowed = 5;
 
-	/* (*)default_clone_warn
+	/* (*) default_clone_warn
 	 *
 	 * The limit after which clones will be warned that they may not
 	 * have any more concurrent connections. Should be lower than
@@ -2823,7 +2823,7 @@ general {
 	 */
 	default_clone_warn = 4;
 
-	/* (*)clone_identified_increase_limit
+	/* (*) clone_identified_increase_limit
 	 *
 	 * If this option is enabled, the clone limit for a IP/host will
 	 * be increased by 1 per clone that's identified to services.
@@ -2831,7 +2831,7 @@ general {
 	 */
 	clone_identified_increase_limit;
 
-	/* (*)uplink_sendq_limit
+	/* (*) uplink_sendq_limit
 	 *
 	 * The maximum amount of data that may be queued to be sent
 	 * to the uplink, in bytes. This should be enough to contain
@@ -2840,7 +2840,7 @@ general {
 	 */
 	uplink_sendq_limit = 1048576;
 
-	/* (*)language
+	/* (*) language
 	 *
 	 * Language to use for channel and oper messages and as default
 	 * for users.
@@ -2863,7 +2863,7 @@ general {
 	 */
 	#allow_taint;
 
-	/* (*)immune_level
+	/* (*) immune_level
 	 *
 	 * This option allows you to customize the operlevel which gets kick
 	 * immunity privileges.
@@ -2882,7 +2882,7 @@ general {
 	 */
 	show_entity_id;
 
-	/* (*)load_database_mdeps
+	/* (*) load_database_mdeps
 	 *
 	 * For module dependencies listed in the services database (if any),
 	 * whether to load those modules on startup (if they are not already
@@ -2897,7 +2897,7 @@ general {
 	 */
 	load_database_mdeps;
 
-	/* (*)hide_opers
+	/* (*) hide_opers
 	 *
 	 * whether or not to hide oper status in remote whois
 	 */
@@ -2924,7 +2924,7 @@ proxyscan {
 		"tor.efnet.org";
 	};
 	
-	/* (*)dnsbl_action
+	/* (*) dnsbl_action
 	 *
 	 * Available dnsbl_action's:
 	 * NONE - Do nothing
@@ -3017,7 +3017,7 @@ operclass "sra" {
 		operserv:grant;
 	};
 
-	/* (*)needoper
+	/* (*) needoper
 	 *
 	 * Only grant privileges to IRC users in this oper class if they
 	 * are opered; other use of privilege (channel succession, XMLRPC,
@@ -3037,7 +3037,7 @@ operator "jilles" {
 	/* operclass */
 	operclass = "sra";
 
-	/* (*)password
+	/* (*) password
 	 *
 	 * Normally, the user needs to identify/log in using the account's
 	 * password, and may need to be an IRCop (see operclass::needoper
