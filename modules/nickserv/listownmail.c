@@ -75,7 +75,7 @@ mod_init(struct module *const restrict m)
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/main")
 
 	service_named_bind_command("nickserv", &ns_listownmail);
-	add_bool_conf_item("LISTOWNMAIL_DONT_CANON", &nicksvs.me->conf_table, 0, &listownmail_canon, true);
+	add_bool_conf_item("LISTOWNMAIL_CANON", &nicksvs.me->conf_table, 0, &listownmail_canon, true);
 }
 
 static void
