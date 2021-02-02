@@ -631,6 +631,7 @@ mod_init(struct module *const restrict m)
 		return;
 	}
 
+	MODULE_CONFLICT(m, "contrib/dnsbl")
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "proxyscan/main")
 	MODULE_TRY_REQUEST_SYMBOL(m, os_set_cmdtree, "operserv/set_core", "os_set_cmdtree")
 
