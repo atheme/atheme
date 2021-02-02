@@ -2546,7 +2546,7 @@ general {
 
 	/* (*)flood_time
 	 * Do you want services to detect floods?
-	 * Set to how long before the counter resets.
+	 * Set to how long (in seconds) before the counter resets.
 	 * If services receives `flood_msgs' within `flood_time' the user will
 	 * trigger the flood protection.
 	 */
