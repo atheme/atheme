@@ -305,7 +305,7 @@ sasl_user_can_login(struct sasl_session *const restrict p)
 		}
 	}
 
-	if (target_mu->flags & MU_LOGINNOLIMIT == 0
+	if (! (target_mu->flags & MU_LOGINNOLIMIT)
 		&& !has_priv_myuser(target_mu, PRIV_LOGIN_NOLIMIT)
 		&& MOWGLI_LIST_LENGTH(&target_mu->logins) >= me.maxlogins)
 	{

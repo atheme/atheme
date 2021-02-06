@@ -120,7 +120,7 @@ ns_cmd_login(struct sourceinfo *si, int parc, char *parv[])
 
 	if (verify_password(mu, password))
 	{
-		if (mu->flags & MU_LOGINNOLIMIT == 0
+		if (! (mu->flags & MU_LOGINNOLIMIT)
 			&& !has_priv_myuser(mu, PRIV_LOGIN_NOLIMIT)
 			&& MOWGLI_LIST_LENGTH(&mu->logins) >= me.maxlogins)
 		{
