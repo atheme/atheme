@@ -122,7 +122,7 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	restored_marks = mowgli_patricia_create(strcasecanon);
+	restored_marks = mowgli_patricia_create(irccasecanon);
 
 	hook_add_db_write(write_multimark_db);
 	db_register_type_handler("MM", db_h_mm);
