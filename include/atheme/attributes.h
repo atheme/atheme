@@ -53,6 +53,9 @@
 #  if __has_attribute(__noreturn__)
 #    define ATHEME_ATTR_HAS_NORETURN                    1
 #  endif
+#  if __has_attribute(__ownership_returns__) && __has_attribute(__ownership_takes__)
+#    define ATHEME_ATTR_HAS_OWNERSHIP                   1
+#  endif
 #  if __has_attribute(__packed__)
 #    define ATHEME_ATTR_HAS_PACKED                      1
 #  endif
@@ -132,6 +135,27 @@
 #  define ATHEME_FALLTHROUGH                            __attribute__((__fallthrough__))
 #else
 #  define ATHEME_FALLTHROUGH                            /* No 'fallthrough' statement attribute support */
+#endif
+
+/* Informs compilers and static analyzers that these functions return or take ownership of a specific type of object,
+ * and thus e.g. when passed to a function with attribute "takes", the object is no longer considered valid for other
+ * code to use or reference after the function returns. The index parameter denotes which function parameter the
+ * pointer to the object is passed to (starting at 1). The "returns" attribute can only appear once per function, but
+ * the "takes" attribute can be repeated for multiple parameters, so that ownership of multiple objects can be taken
+ * by a single function. The object identifier must be bare, not a quoted string, but can otherwise be any valid
+ * token. Currently, only the "malloc" token has any effect; others are silently ignored.
+ *
+ * Example:
+ *   void *scalloc(size_t, size_t) __attribute__((ownership_returns(malloc)));
+ *   void *smalloc(size_t)         __attribute__((ownership_returns(malloc)));
+ *   void sfree(void *)            __attribute__((ownership_takes(malloc, 1)));
+ */
+#ifdef ATHEME_ATTR_HAS_OWNERSHIP
+#  define ATHEME_FATTR_OWNERSHIP_RETURNS(token)         __attribute__((__ownership_returns__(token)))
+#  define ATHEME_FATTR_OWNERSHIP_TAKES(token, index)    __attribute__((__ownership_takes__(token, index)))
+#else
+#  define ATHEME_FATTR_OWNERSHIP_RETURNS(token)         /* No 'ownership_returns' function attribute support */
+#  define ATHEME_FATTR_OWNERSHIP_TAKES(token, index)    /* No 'ownership_takes' function attribute support */
 #endif
 
 /* Have the compiler verify printf(3) or scanf(3) format tokens in the parameter position given by 'fmt' against the
