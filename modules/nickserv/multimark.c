@@ -1040,7 +1040,7 @@ mod_init(struct module *const restrict m)
 	use_nslist_main_symbols(m);
 
 	if (! (restored_marks = mowgli_global_storage_get(MULTIMARK_PERSIST_MDNAME)))
-		restored_marks = mowgli_patricia_create(&strcasecanon);
+		restored_marks = mowgli_patricia_create(&irccasecanon);
 	else
 		mowgli_global_storage_free(MULTIMARK_PERSIST_MDNAME);
 
