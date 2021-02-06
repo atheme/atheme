@@ -12,7 +12,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/multimark", false, _modinit, _moddeinit,
+	"nickserv/multimark", true, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );
