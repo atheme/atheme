@@ -9,14 +9,17 @@ configuration file. Almost all behavior can be changed at deployment time
 just by editing the configuration.
 
 
+
 ## Obtaining Atheme
-You can either git clone https://github.com/atheme/atheme.git or download a
-package via our website at https://atheme.github.io/ -- Please do not click
-the Download buttons on GitHub as they lack needed submodules, etc.
+
+You can either git clone `https://github.com/atheme/atheme.git` or download a
+package via our website at `https://atheme.github.io/` -- Please do not click
+the "Download" buttons on GitHub as they lack needed submodules, etc.
 
 If you are running this code from Git, you should read GIT-Access.txt for
 instructions on how to fully check out the atheme tree, as it is spread
 across many repositories.
+
 
 
 ## Basic build instructions for the impatient
@@ -39,6 +42,10 @@ slightly differently:
     $ gmake
     $ gmake install
 
+
+
+## Library Detection
+
 If your user-installed libraries that you want Atheme to use are installed by
 your package manager to a directory such as /usr/local/, you may need to
 supplement the default compiler and linker search paths so that Atheme can
@@ -58,9 +65,9 @@ The following libraries generally require pkg-config to be installed:
 
 If you do not have pkg-config installed and want to use one or more of these
 libraries, please see `./configure --help` for the options to set to override
-pkg-config discovery for those libraries. For example, if you wish to use
-GNU libidn, and it is installed into a default search path for your compiler
-and linker, and you do not have pkg-config installed, execute:
+pkg-config discovery for those libraries. For example, if you wish to use GNU
+libidn, and it is installed into a default search path for your compiler and
+linker, and you do not have pkg-config installed, execute:
 
     $ ./configure LIBIDN_CFLAGS="" LIBIDN_LIBS="-lidn"
 
@@ -68,11 +75,36 @@ If a library relies on populating `LIBFOO_CFLAGS` with some preprocessor
 definitions, or populating `LIBFOO_LIBS` with some library linking flags,
 this will generally fail. Install pkg-config for the best results.
 
+
+
+## Choice of compiler and its features
+
+If you wish to compile Atheme with the LLVM project's C compiler (`clang`),
+you may also wish to use LLVM's linker (`lld`).
+
+If you wish to use compiler sanitizers (by passing the `./configure` options
+`--disable-linker-defs --enable-compiler-sanitizers`), and you want to build
+with Clang, you MUST also use LLD, as most of the sanitizers in Clang require
+LTO to function properly, and Clang in LTO mode emits LLVM bitcode, not
+machine code. The linker is ultimately responsible for performing most of the
+LTO heavy lifting, and translating the result into machine code.
+
+You can accomplish this as follows (with or without sanitizers):
+
+    $ ./configure CC="clang" LDFLAGS="-fuse-ld=lld"
+
+    $ ./configure --disable-linker-defs --enable-compiler-sanitizers \
+        CC="clang" LDFLAGS="-fuse-ld=lld"
+
+
+
+## Getting More Help
+
 If you're still lost, read the [INSTALL](INSTALL) or
 [GIT-Access.txt](GIT-Access.txt) files or check out our wiki
 (http://github.com/atheme/atheme/wiki) for more hints.
 
-## links / contact
+See also:
 
  * [GitHub](https://github.com/atheme/atheme)
  * [Website](http://atheme.github.io/)
