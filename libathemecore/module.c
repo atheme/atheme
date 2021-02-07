@@ -428,8 +428,7 @@ module_find_published(const char *const restrict name)
 	return NULL;
 }
 
-/*
- * module_request()
+/* module_request()
  *
  * inputs:
  *       a published name of a module to load.
@@ -457,8 +456,8 @@ module_request(const char *const restrict name)
 
 		if (!strcasecmp(m->name, name))
 		{
-			slog(LG_ERROR, "module_request(): circular dependency between modules %s and %s",
-					current_module->name, m->name);
+			(void) slog(LG_ERROR, "%s: circular dependency between modules \2%s\2 and \2%s\2",
+			                      MOWGLI_FUNC_NAME, current_module->name, m->name);
 			return false;
 		}
 	}
