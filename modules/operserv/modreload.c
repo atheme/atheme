@@ -9,6 +9,12 @@
 
 #include <atheme.h>
 
+struct module_dependency
+{
+	char *                          name;
+	enum module_unload_capability   can_unload;
+};
+
 static void
 recurse_module_deplist(struct module *m, mowgli_list_t *deplist)
 {

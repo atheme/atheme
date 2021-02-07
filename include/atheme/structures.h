@@ -71,7 +71,6 @@ struct atheme_regex;
 
 // Defined in atheme/module.h
 struct module;
-struct module_dependency;
 struct v4_moduleheader;
 
 // Defined in atheme/object.h

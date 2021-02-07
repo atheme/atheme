@@ -68,12 +68,6 @@ struct v4_moduleheader
 	const char *                    version;
 };
 
-struct module_dependency
-{
-	char *                          name;
-	enum module_unload_capability   can_unload;
-};
-
 void modules_init(void);
 struct module *module_load(const char *filespec);
 void *module_locate_symbol(const char *modname, const char *sym);
