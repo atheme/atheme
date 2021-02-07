@@ -23,7 +23,7 @@
 
 static mowgli_list_t modules_being_loaded;
 static mowgli_heap_t *module_heap = NULL;
-static struct module *modtarget = NULL;
+static struct module *current_module = NULL;
 
 mowgli_list_t modules;
 
@@ -47,7 +47,7 @@ static struct module *
 module_load_internal(const char *pathname, char *errbuf, int errlen)
 {
 	mowgli_node_t *n;
-	struct module *m, *old_modtarget;
+	struct module *m, *old_current_module;
 	const struct v4_moduleheader *h;
 	mowgli_module_t *handle = NULL;
 #ifdef HAVE_USABLE_DLINFO
@@ -120,14 +120,14 @@ module_load_internal(const char *pathname, char *errbuf, int errlen)
 	mowgli_node_add(m, &m->mbl_node, &modules_being_loaded);
 
 	/* set the module target for module dependencies */
-	old_modtarget = modtarget;
-	modtarget = m;
+	old_current_module = current_module;
+	current_module = m;
 
 	if (h->modinit)
 		h->modinit(m);
 
 	/* we won't be loading symbols outside the init code */
-	modtarget = old_modtarget;
+	current_module = old_current_module;
 
 	mowgli_node_delete(&m->mbl_node, &modules_being_loaded);
 
@@ -307,12 +307,12 @@ module_locate_symbol(const char *modname, const char *sym)
 	if (!m->handle)
 		return NULL;
 
-	if (modtarget != NULL && !mowgli_node_find(m, &modtarget->deplist))
+	if (current_module != NULL && !mowgli_node_find(m, &current_module->deplist))
 	{
 		slog(LG_DEBUG, "module_locate_symbol(): %s added as a dependency for %s (symbol: %s)",
-			m->name, modtarget->name, sym);
-		mowgli_node_add(m, mowgli_node_create(), &modtarget->deplist);
-		mowgli_node_add(modtarget, mowgli_node_create(), &m->dephost);
+			m->name, current_module->name, sym);
+		mowgli_node_add(m, mowgli_node_create(), &current_module->deplist);
+		mowgli_node_add(current_module, mowgli_node_create(), &m->dephost);
 	}
 
 	symptr = mowgli_module_symbol(m->handle, sym);
@@ -406,7 +406,7 @@ module_request(const char *name)
 		if (!strcasecmp(m->name, name))
 		{
 			slog(LG_ERROR, "module_request(): circular dependency between modules %s and %s",
-					modtarget != NULL ? modtarget->name : "?",
+					current_module != NULL ? current_module->name : "?",
 					m->name);
 			return false;
 		}
