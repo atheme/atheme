@@ -42,10 +42,10 @@ modules_init(void)
 static inline void
 module_add_dependency(struct module *const restrict m)
 {
-	if (m && current_module && ! mowgli_node_find(m, &current_module->deplist))
+	if (m && current_module && ! mowgli_node_find(m, &current_module->requires))
 	{
-		(void) mowgli_node_add(m, mowgli_node_create(), &current_module->deplist);
-		(void) mowgli_node_add(current_module, mowgli_node_create(), &m->dephost);
+		(void) mowgli_node_add(m, mowgli_node_create(), &current_module->requires);
+		(void) mowgli_node_add(current_module, mowgli_node_create(), &m->required_by);
 
 		(void) slog(LG_DEBUG, "%s: \2%s\2 added as a dependency of \2%s\2",
 		                      MOWGLI_FUNC_NAME, m->name, current_module->name);
@@ -276,18 +276,24 @@ module_unload(struct module *m, const enum module_unload_intent intent)
 		return;
 
 	/* unload modules which depend on us */
-	while (m->dephost.head != NULL)
-		module_unload((struct module *) m->dephost.head->data, intent);
-
-	/* let modules that we depend on know that we no longer exist */
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, m->deplist.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, m->required_by.head)
 	{
 		struct module *hm = (struct module *) n->data;
-		mowgli_node_t *hn = mowgli_node_find(m, &hm->dephost);
 
-		mowgli_node_delete(hn, &hm->dephost);
+		module_unload(hm, intent);
+	}
+
+	/* let modules that we depend on know that we no longer exist */
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, m->requires.head)
+	{
+		struct module *hm = (struct module *) n->data;
+		mowgli_node_t *hn = mowgli_node_find(m, &hm->required_by);
+
+		continue_if_fail(hn != NULL);
+
+		mowgli_node_delete(hn, &hm->required_by);
 		mowgli_node_free(hn);
-		mowgli_node_delete(n, &m->deplist);
+		mowgli_node_delete(n, &m->requires);
 		mowgli_node_free(n);
 	}
 

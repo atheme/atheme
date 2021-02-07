@@ -48,8 +48,8 @@ struct module
 	void *                          address;
 	mowgli_module_t *               handle;
 	void                          (*unload_handler)(struct module *, enum module_unload_intent);
-	mowgli_list_t                   dephost;
-	mowgli_list_t                   deplist;
+	mowgli_list_t                   required_by;
+	mowgli_list_t                   requires;
 	mowgli_node_t                   mbl_node;
 };
 

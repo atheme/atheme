@@ -13,7 +13,7 @@ static void
 recurse_module_deplist(struct module *m, mowgli_list_t *deplist)
 {
 	mowgli_node_t *n;
-	MOWGLI_LIST_FOREACH(n, m->dephost.head)
+	MOWGLI_LIST_FOREACH(n, m->required_by.head)
 	{
 		struct module *dm = (struct module *) n->data;
 
