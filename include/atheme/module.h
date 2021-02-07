@@ -50,7 +50,6 @@ struct module
 	void                          (*unload_handler)(struct module *, enum module_unload_intent);
 	mowgli_list_t                   dephost;
 	mowgli_list_t                   deplist;
-	mowgli_list_t                   symlist;
 };
 
 struct v4_moduleheader
