@@ -58,6 +58,11 @@ cs_cmd_count(struct sourceinfo *si, int parc, char *parv[])
 	ca_hop = get_template_flags(mc, "HOP");
 	ca_vop = get_template_flags(mc, "VOP");
 
+	bool show_akicks = true;
+
+	if (chansvs.hide_pubacl_akicks)
+		show_akicks = ( chanacs_source_has_flag(mc, si, CA_ACLVIEW) || has_priv(si, PRIV_CHAN_AUSPEX) );
+
 	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
 		ca = (struct chanacs *)n->data;
@@ -75,16 +80,30 @@ cs_cmd_count(struct sourceinfo *si, int parc, char *parv[])
 		else
 			othercnt++;
 	}
-	if (ca_hop == ca_vop)
-		command_success_nodata(si, _("%s: VOP: %u, AOP: %u, SOP: %u, AKICK: %u, Other: %u"),
-				chan, vopcnt, aopcnt, sopcnt, akickcnt, othercnt);
+	if (show_akicks)
+	{
+		if (ca_hop == ca_vop)
+			command_success_nodata(si, _("%s: VOP: %u, AOP: %u, SOP: %u, AKICK: %u, Other: %u"),
+					chan, vopcnt, aopcnt, sopcnt, akickcnt, othercnt);
+		else
+			command_success_nodata(si, _("%s: VOP: %u, HOP: %u, AOP: %u, SOP: %u, AKICK: %u, Other: %u"),
+					chan, vopcnt, hopcnt, aopcnt, sopcnt, akickcnt, othercnt);
+	}
 	else
-		command_success_nodata(si, _("%s: VOP: %u, HOP: %u, AOP: %u, SOP: %u, AKICK: %u, Other: %u"),
-				chan, vopcnt, hopcnt, aopcnt, sopcnt, akickcnt, othercnt);
+	{
+		if (ca_hop == ca_vop)
+			command_success_nodata(si, _("%s: VOP: %u, AOP: %u, SOP: %u, Other: %u"),
+					chan, vopcnt, aopcnt, sopcnt, othercnt);
+		else
+			command_success_nodata(si, _("%s: VOP: %u, HOP: %u, AOP: %u, SOP: %u, Other: %u"),
+					chan, vopcnt, hopcnt, aopcnt, sopcnt, othercnt);
+	}
 	snprintf(str, sizeof str, "%s: ", chan);
 	for (i = 0; i < ARRAY_SIZE(chanacs_flags); i++)
 	{
 		if (!(ca_all & chanacs_flags[i].value))
+			continue;
+		if (chanacs_flags[i].value == CA_AKICK && !show_akicks)
 			continue;
 		othercnt = 0;
 		MOWGLI_ITER_FOREACH(n, mc->chanacs.head)

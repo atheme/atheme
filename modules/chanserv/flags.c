@@ -96,6 +96,11 @@ do_list(struct sourceinfo *si, struct mychan *mc, unsigned int flags)
 		}
 	}
 
+	bool show_akicks = true;
+
+	if (chansvs.hide_pubacl_akicks)
+		show_akicks = ( chanacs_source_has_flag(mc, si, CA_ACLVIEW) || has_priv(si, PRIV_CHAN_AUSPEX) );
+
 	/* TRANSLATORS: Adjust these numbers only if the translated column
 	 * headers would exceed that length. Pay particular attention to
 	 * also changing the numbers in the format string inside the loop
@@ -114,6 +119,9 @@ do_list(struct sourceinfo *si, struct mychan *mc, unsigned int flags)
 		const char *setter_name;
 
 		ca = n->data;
+
+		if (ca->level == CA_AKICK && !show_akicks)
+			continue;
 
 		if (flags && !(ca->level & flags))
 			continue;
@@ -303,6 +311,12 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 				sfree(target);
 				return;
 			}
+
+			bool show_akicks = true;
+
+			if (chansvs.hide_pubacl_akicks)
+				show_akicks = chanacs_source_has_flag(mc, si, CA_ACLVIEW);
+
 			if (validhostmask(target))
 				ca = chanacs_find_host_literal(mc, target, 0);
 			else
@@ -317,7 +331,7 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 				target = sstrdup(mt->name);
 				ca = chanacs_find_literal(mc, mt, 0);
 			}
-			if (ca != NULL)
+			if (ca != NULL && (ca->level != CA_AKICK || show_akicks))
 			{
 				str1 = bitmask_to_flags2(ca->level, 0);
 				command_success_string(si, str1, _("Flags for \2%s\2 in \2%s\2 are \2%s\2."),

@@ -1750,6 +1750,20 @@ chanserv {
 	 */
 	#hide_xop;
 
+	/* (*) hide_pubacl_akicks
+	 *
+	 * Hide AKICKs (ACL entries with only the +b flag) from the public
+	 * access lists of channels. Users with the +A flag or chan:auspex
+	 * will see these entries listed as normal.
+	 *
+	 * AKICK expiries and reasons will not be disclosed to unauthorized
+	 * users in any case.
+	 *
+	 * This option is only meaningful if you are using the PUBACL flag
+	 * to allow channel access lists to be public.
+	 */
+	#hide_pubacl_akicks;
+
 	/* (*) templates
 	 *
 	 * Defines what flags the global templates comprise.
