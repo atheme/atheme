@@ -58,7 +58,7 @@ static struct module *
 module_load_internal(const char *const restrict pathname, char *const restrict errbuf, const size_t errlen)
 {
 	char linker_errbuf[BUFSIZE];
-	mowgli_module_t *const handle = linker_open_ext(pathname, linker_errbuf, BUFSIZE);
+	mowgli_module_t *const handle = linker_open_ext(pathname, linker_errbuf, sizeof linker_errbuf);
 
 	if (!handle)
 	{
@@ -99,8 +99,8 @@ module_load_internal(const char *const restrict pathname, char *const restrict e
 
 	struct module *const m = mowgli_heap_alloc(module_heap);
 
-	mowgli_strlcpy(m->modpath, pathname, BUFSIZE);
-	mowgli_strlcpy(m->name, h->name, BUFSIZE);
+	mowgli_strlcpy(m->modpath, pathname, sizeof m->modpath);
+	mowgli_strlcpy(m->name, h->name, sizeof m->name);
 
 	m->can_unload   = h->can_unload;
 	m->handle       = handle;
@@ -196,7 +196,7 @@ module_load(const char *const restrict filespec)
 	/* / or C:\... */
 	if (! (*filespec == '/' || *(filespec + 1) == ':'))
 	{
-		snprintf(pathbuf, BUFSIZE, "%s/%s", MODDIR "/modules", filespec);
+		snprintf(pathbuf, sizeof pathbuf, "%s/%s", MODDIR "/modules", filespec);
 		slog(LG_DEBUG, "module_load(): translated %s to %s", filespec, pathbuf);
 		pathname = pathbuf;
 	}
