@@ -10,7 +10,12 @@ on:
       - 'dist/**'
       - 'doc/**'
       - 'email/**'
+      - 'GIT-Access.txt'
       - 'help/**'
+      - 'NEWS.md'
+      - 'README.md'
+      - 'SECURITY.md'
+      - 'TODO'
   push:
     branches:
       - 'master'
@@ -21,7 +26,12 @@ on:
       - 'dist/**'
       - 'doc/**'
       - 'email/**'
+      - 'GIT-Access.txt'
       - 'help/**'
+      - 'NEWS.md'
+      - 'README.md'
+      - 'SECURITY.md'
+      - 'TODO'
   schedule:
     - cron: '0 12 1 * *'
 
