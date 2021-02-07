@@ -75,8 +75,6 @@ struct module_dependency
 
 void modules_init(void);
 struct module *module_load(const char *filespec);
-void module_load_dir(const char *dirspec);
-void module_load_dir_match(const char *dirspec, const char *pattern);
 void *module_locate_symbol(const char *modname, const char *sym);
 void module_unload(struct module *m, enum module_unload_intent intent);
 struct module *module_find(const char *name);
