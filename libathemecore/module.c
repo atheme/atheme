@@ -169,7 +169,7 @@ module_load_internal(const char *const restrict pathname, char *const restrict e
 		return NULL;
 	}
 
-	slog(LG_DEBUG, "module_load(): loaded %s [at %p; MAPI version %u]", h->name, m->address, h->abi_ver);
+	slog(LG_DEBUG, "module_load(): loaded %s [at %p]", h->name, m->address);
 
 	return m;
 }
