@@ -21,7 +21,9 @@ init_entities(void)
 {
 	entities = mowgli_patricia_create(irccasecanon);
 	entities_by_id = mowgli_patricia_create(noopcanon);
-	memset(last_entity_uid, 'A', sizeof last_entity_uid);
+
+	memset(last_entity_uid, 0x00, sizeof last_entity_uid);
+	memset(last_entity_uid, 'A', IDLEN);
 }
 
 void
