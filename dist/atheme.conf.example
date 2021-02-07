@@ -5,9 +5,9 @@
  *
  * Items marked with "(*)" are reconfigurable at runtime via REHASH.
  *
- * Boolean options that default to false can be disabled by removing
- * them or commenting them out. Boolean options that default to true
- * can be disabled by setting their value to "no". For example:
+ * Boolean options that default to false can be disabled by removing them or
+ * commenting them out. Boolean options that default to true can be disabled
+ * by setting their value to "no". For example:
  *
  * nickserv {
  *     spam;        # <-- enabled
@@ -18,6 +18,8 @@
  * Items marked with "(B)" are boolean options that default to true.
  */
 
+
+
 /****************************************************************************
  * MODULES SECTION.                                                         *
  ****************************************************************************/
@@ -25,17 +27,19 @@
 /*
  * These are the modules included with the core distribution of Services.
  *
- * You may be interested in the atheme community modules distribution as
- * well, which adds additional features that may or may not be compatible
- * with the project paradigms intended for maintainance of the core of
- * atheme-services.
+ * You may be interested in the atheme community modules distribution as well,
+ * which adds additional features that may or may not be compatible with the
+ * project paradigms intended for maintainance of the core of atheme-services.
  *
- * Visit the atheme-services website for more information and to download them.
+ * Visit the atheme-services website for more information and to download
+ * them.
  *
  * Modules marked [experimental] will taint your atheme-services instance. Do
  * not file any bug reports with us about using Services with those modules;
  * they will be ignored.
  */
+
+
 
 /* Dynamic security modules.
  *
@@ -54,10 +58,12 @@
  */
 #loadmodule "modules/security/cmdperm";
 
+
+
 /* Protocol module.
  *
  * Please select a protocol module. Different servers use different protocols.
- * Below is a listing of ircd's known to work with the various protocol
+ * Below is a listing of IRCds known to work with the various protocol
  * modules available.
  *
  * Asuka 1.2.1 or later                         modules/protocol/asuka
@@ -82,7 +88,7 @@
 /* Protocol mixins.
  *
  * These should be used if you do not have/want certain features on your
- * network that your ircd normally has. If you do not know what this means,
+ * network that your IRCd normally has. If you do not know what this means,
  * you do not need any of them.
  *
  * Disable halfops                          modules/protocol/mixin_nohalfops
@@ -95,11 +101,13 @@
 #loadmodule "modules/protocol/mixin_noprotect";
 #loadmodule "modules/protocol/mixin_noowner";
 
+
+
 /* Database backend module.
  *
  * Please select a database backend module. Different backends allow for
- * different ways in which the services data can be manipulated. YOU MAY
- * ONLY HAVE ONE OF THESE BACKENDS LOADED.
+ * different ways in which the services data can be manipulated. YOU MAY ONLY
+ * HAVE ONE OF THESE BACKENDS LOADED.
  *
  * The following backends are available:
  *
@@ -109,6 +117,8 @@
  * Most networks will want opensex.
  */
 loadmodule "modules/backend/opensex";
+
+
 
 /* Password hashing modules.
  *
@@ -186,21 +196,20 @@ loadmodule "modules/backend/opensex";
  *
  * The crypt3-* modules depend on your platform crypt(3) supporting the
  * respective algorithms. This is not guaranteed to be the case. If you used
- * modules/crypto/posix on Linux, you need crypt3-md5. If you used
- * modules/crypto/posix on OS X, you need crypt3-des. These modules issue
+ * "crypto/posix" on Linux, you need "crypto/crypt3-md5". If you used
+ * "crypto/posix" on OS X, you need "crypto/crypt3-des". These modules issue
  * informational messages when loaded to the effect that they might break in
  * the future. They also run selftests on load to verify that they will work.
  *
  * All available modules are listed below, in the preferred load order. The
- * modules that are commented out are not available by default (please see
- * the v7.3 release notes in NEWS.md) or may require a third-party library to
- * use. If you know that you do not need a specific module, it is better to
- * not load it, so comment it out. Do not change the order of the modules
- * below unless you need to migrate from one to the other (as described
- * above); in particular, putting verify-only modules above encryption-
- * capable modules would be a waste of CPU time every time password
- * verification for a user whose password was not encrypted by them is
- * attempted.
+ * modules that are commented out are not available by default (please see the
+ * v7.3 release notes in NEWS.md) or may require a third-party library to use.
+ * If you know that you do not need a specific module, it is better to not
+ * load it, so comment it out. Do not change the order of the modules below
+ * unless you need to migrate from one to the other (as described above); in
+ * particular, putting verify-only modules above encryption-capable modules
+ * would be a waste of CPU time every time password verification for a user
+ * whose password was not encrypted by them is attempted.
  *
  * Comments that start with -- describe the ./configure option necessary to
  * have this module built.
@@ -222,6 +231,8 @@ loadmodule "modules/crypto/pbkdf2";             /* Verify-only, see prev. */
 #loadmodule "modules/crypto/crypt3-des";        /* --enable-legacy-pwcrypto */
 #loadmodule "modules/crypto/base64";            /* --enable-legacy-pwcrypto */
 
+
+
 /* Authentication module.
  *
  * These allow using passwords from an external system. The password given
@@ -238,16 +249,18 @@ loadmodule "modules/crypto/pbkdf2";             /* Verify-only, see prev. */
  */
 #loadmodule "modules/auth/ldap";
 
+
+
 /* NickServ modules.
  *
- * Here you can disable or enable certain features of NickServ, by
- * defining which modules are loaded. You can even disable NickServ
- * entirely. Please note however, that an authentication service
- * (either NickServ, or UserServ) is required for proper functionality.
+ * Here you can disable or enable certain features of NickServ, by defining
+ * which modules are loaded. You can even disable NickServ entirely. Please
+ * note, however, that an authentication service (either NickServ, UserServ,
+ * or SASLServ) is required for proper functionality.
  *
  * Core components                              modules/nickserv/main
  * Nickname access lists                        modules/nickserv/access
- * Bad email address blocking                   modules/nickserv/badmail
+ * Bad e-mail address blocking                  modules/nickserv/badmail
  * CertFP fingerprint managment                 modules/nickserv/cert
  * DROP command                                 modules/nickserv/drop
  * Nickname enforcement                         modules/nickserv/enforce
@@ -359,12 +372,14 @@ loadmodule "modules/nickserv/verify";
 loadmodule "modules/nickserv/vhost";
 #loadmodule "modules/nickserv/waitreg";
 
+
+
 /* ChanServ modules.
  *
- * Here you can disable or enable certain features of ChanServ, by
- * defining which modules are loaded. You can even disable ChanServ
- * entirely. Please note that ChanServ requires an authentication
- * service, either NickServ or UserServ will do.
+ * Here you can disable or enable certain features of ChanServ, by defining
+ * which modules are loaded. You can even disable ChanServ entirely. Please
+ * note, however, that an authentication service (either NickServ, UserServ,
+ * or SASLServ) is required for proper functionality of ChanServ.
  *
  * Core components                              modules/chanserv/main
  * ACCESS command (simplified ACL editing)      modules/chanserv/access
@@ -425,12 +440,16 @@ loadmodule "modules/nickserv/vhost";
  * TOPIC/TOPICAPPEND commands                   modules/chanserv/topic
  * VOICE/DEVOICE commands                       modules/chanserv/voice
  * WHY command                                  modules/chanserv/why
+ *
  * VOP/HOP/AOP/SOP commands                     modules/chanserv/xop
+ *
  *  This module provides emulation of the ircservices XOP scheme ONLY.
  *  Do not report discrepencies when using native commands to edit channel
  *  ACLs. This is intentional.
+ *
  * Flood protection                             modules/chanserv/antiflood
- *  This module should be loaded after at least chanserv/quiet if you want
+ *
+ *  This module should be loaded after at least "chanserv/quiet" if you want
  *  the autoquiet feature to work.
  */
 loadmodule "modules/chanserv/main";
@@ -495,19 +514,23 @@ loadmodule "modules/chanserv/why";
 #loadmodule "modules/chanserv/xop";
 loadmodule "modules/chanserv/antiflood";
 
-/* CHANFIX module.
+
+
+/* ChanFix module.
  *
- * Here you can disable or enable certain features of CHANFIX, by
- * defining which modules are loaded.
+ * Here you can disable or enable certain features of ChanFix, by defining
+ * which modules are loaded.
  *
  * Core components                              modules/chanfix/main
  */
 #loadmodule "modules/chanfix/main";
 
+
+
 /* OperServ modules.
  *
- * Here you can disable or enable certain features of OperServ, by
- * defining which modules are loaded.
+ * Here you can disable or enable certain features of OperServ, by defining
+ * which modules are loaded.
  *
  * AKILL system                                 modules/operserv/akill
  * CLEARCHAN command                            modules/operserv/clearchan
@@ -537,7 +560,7 @@ loadmodule "modules/chanserv/antiflood";
  * Most common realnames (RNC command)          modules/operserv/rnc
  * RWATCH system                                modules/operserv/rwatch
  *
- * Note that ALL of these SET commands only apply until the next rehash!
+ * Note that ALL of these SET commands only apply until the next rehash:
  *
  * ALL of the below SET commands (deprecated)   modules/operserv/set
  * SET AKICKTIME subcommand (temporarily)       modules/operserv/set_akicktime
@@ -598,11 +621,12 @@ loadmodule "modules/operserv/sqline";
 loadmodule "modules/operserv/update";
 loadmodule "modules/operserv/uptime";
 
+
+
 /* MemoServ modules.
  *
- * Here you can disable or enable certain features of MemoServ, by
- * defining which modules are loaded. You can even disable MemoServ
- * entirely.
+ * Here you can disable or enable certain features of MemoServ, by defining
+ * which modules are loaded. You can even disable MemoServ entirely.
  *
  * HELP command                                 modules/memoserv/help
  * SEND command                                 modules/memoserv/send
@@ -624,25 +648,31 @@ loadmodule "modules/memoserv/forward";
 loadmodule "modules/memoserv/delete";
 loadmodule "modules/memoserv/ignore";
 
+
+
 /* Global module.
  *
- * Like the other services, the Global noticer is a module. You can
- * disable or enable it to your liking below. Please note that the
- * Global noticer is dependent on OperServ for full functionality.
+ * Like the other services, the Global noticer is a module. You can disable or
+ * enable it to your liking below. Please note that the Global noticer is
+ * dependent on OperServ for full functionality.
  */
 loadmodule "modules/global/main";
 
+
+
 /* InfoServ module.
  *
- * Like the other services, InfoServ is a module. You can disable or
- * enable it to your liking below.
+ * Like the other services, InfoServ is a module. You can disable or enable it
+ * to your liking below.
  */
 loadmodule "modules/infoserv/main";
+
+
 
 /* SASL agent module.
  *
  * Allows clients to authenticate to services via SASL with an appropriate
- * ircd. You need the core components and at least one mechanism.
+ * IRCd. If you want this, you need to enable at least one mechanism.
  *
  * AUTHCOOKIE mechanism (for IRIS)      modules/saslserv/authcookie
  * ECDH-X25519-CHALLENGE mechanism      modules/saslserv/ecdh-x25519-challenge
@@ -660,7 +690,7 @@ loadmodule "modules/infoserv/main";
  * an OpenSSL with ECDSA support (not RHEL etc. unless you compile your own).
  * This will be checked while running ./configure.
  *
- * You MUST read doc/SASL-SCRAM before loading modules/saslserv/scram!
+ * You MUST read doc/SASL-SCRAM before loading "saslserv/scram"!
  */
 loadmodule "modules/saslserv/authcookie";
 #loadmodule "modules/saslserv/ecdh-x25519-challenge";
@@ -669,11 +699,12 @@ loadmodule "modules/saslserv/authcookie";
 loadmodule "modules/saslserv/plain";
 #loadmodule "modules/saslserv/scram";   /* READ doc/SASL-SCRAM FIRST! */
 
+
+
 /* GameServ modules.
  *
- * Here you can disable or enable certain features of GameServ, by
- * defining which modules are loaded. You can even disable GameServ
- * entirely.
+ * Here you can disable or enable certain features of GameServ, by defining
+ * which modules are loaded. You can even disable GameServ entirely.
  *
  * DICE/WOD commands                            modules/gameserv/dice
  * EIGHTBALL command                            modules/gameserv/eightball
@@ -691,11 +722,12 @@ loadmodule "modules/saslserv/plain";
 #loadmodule "modules/gameserv/namegen";
 #loadmodule "modules/gameserv/rps";
 
+
+
 /* RPGServ modules.
  *
- * Here you can disable or enable certain features of RPGServ, by
- * defining which modules are loaded. You can even disable RPGServ
- * entirely.
+ * Here you can disable or enable certain features of RPGServ, by defining
+ * which modules are loaded. You can even disable RPGServ entirely.
  *
  * ENABLE/DISABLE commands                      modules/rpgserv/enable
  * HELP command                                 modules/rpgserv/help
@@ -711,11 +743,12 @@ loadmodule "modules/saslserv/plain";
 #loadmodule "modules/rpgserv/search";
 #loadmodule "modules/rpgserv/set";
 
+
+
 /* BotServ modules.
  *
- * Here you can disable or enable certain features of BotServ, by
- * defining which modules are loaded. You can even disable BotServ
- * entirely.
+ * Here you can disable or enable certain features of BotServ, by defining
+ * which modules are loaded. You can even disable BotServ entirely.
  *
  * Core components                              modules/botserv/main
  * HELP command                                 modules/botserv/help
@@ -735,11 +768,12 @@ loadmodule "modules/saslserv/plain";
 #loadmodule "modules/botserv/set_private";
 #loadmodule "modules/botserv/set_saycaller";
 
+
+
 /* HostServ modules.
  *
- * Here you can disable or enable certain features of HostServ, by
- * defining which modules are loaded. You can even disable HostServ
- * entirely.
+ * Here you can disable or enable certain features of HostServ, by defining
+ * which modules are loaded. You can even disable HostServ entirely.
  *
  * HostServ is a more complex, and optional virtual host management service.
  * Users wishing only to set vhosts need not use it (they can use the builtin
@@ -763,6 +797,8 @@ loadmodule "modules/saslserv/plain";
 #loadmodule "modules/hostserv/group";
 #loadmodule "modules/hostserv/drop";
 
+
+
 /* HelpServ modules.
  *
  * HelpServ allows users to request help from network staff in a few different
@@ -772,7 +808,7 @@ loadmodule "modules/saslserv/plain";
  * Help Ticket system                           modules/helpserv/ticket
  * Service List                                 modules/helpserv/services
  *
- * The ticket system works like a bugtracker ot helpdesk ticket system, HELPME
+ * The ticket system works like a bugtracker or helpdesk ticket system, HELPME
  * works like a one-time alert. You should probably only load one of the two
  * systems.
  */
@@ -780,16 +816,21 @@ loadmodule "modules/saslserv/plain";
 #loadmodule "modules/helpserv/ticket";
 #loadmodule "modules/helpserv/services";
 
+
+
 /* Channel listing service.
  *
- * Allows users to list channels with more flexibility than the /list
+ * Allows users to list channels with more flexibility than the IRC /LIST
  * command.
  *
  * Core components                              modules/alis/main
  */
 #loadmodule "modules/alis/main";
 
+
+
 /* StatServ module.
+ *
  * StatServ provides basic statistics and split tracking.
  *
  * CHANNEL command                              modules/statserv/channel
@@ -797,10 +838,13 @@ loadmodule "modules/saslserv/plain";
  * SERVER command                               modules/statserv/server
  */
 #loadmodule "modules/statserv/channel";
-loadmodule "modules/statserv/netsplit";
-loadmodule "modules/statserv/server";
+#loadmodule "modules/statserv/netsplit";
+#loadmodule "modules/statserv/server";
+
+
 
 /* GroupServ module.
+ *
  * GroupServ allows users to create groups to easily mass-manage channel
  * access and more.
  *
@@ -826,7 +870,6 @@ loadmodule "modules/statserv/server";
  * SET OPEN command                             modules/groupserv/set_open
  * SET PUBLIC command                           modules/groupserv/set_public
  * SET URL command                              modules/groupserv/set_url
- *
  */
 loadmodule "modules/groupserv/main";
 loadmodule "modules/groupserv/acsnolimit";
@@ -851,6 +894,8 @@ loadmodule "modules/groupserv/set_open";
 loadmodule "modules/groupserv/set_public";
 loadmodule "modules/groupserv/set_url";
 
+
+
 /*
  * Various modules.
  *
@@ -862,16 +907,20 @@ loadmodule "modules/groupserv/set_url";
  */
 #loadmodule "modules/misc/httpd";
 
+
+
 /* XMLRPC server module.
  *
- * The XML-RPC handler requires modules/misc/httpd to be loaded as it merely
+ * The XML-RPC handler requires "misc/httpd" to be loaded as it merely
  * registers a path handler for XML-RPC. The path used for XML-RPC is /xmlrpc.
  *
  * XMLRPC handler for the httpd                 modules/transport/xmlrpc
  */
 #loadmodule "modules/transport/xmlrpc";
 
-/* Extended target entity types. [EXPERIMENTAL]
+
+
+/* Extended target entity types.
  *
  * Atheme can set up special target mapping entities which match multiple
  * users in channel access entries. These target mapping entity types are
@@ -889,21 +938,26 @@ loadmodule "modules/groupserv/set_url";
 #loadmodule "modules/exttarget/chanacs";
 #loadmodule "modules/exttarget/server";
 
+
+
 /* Proxyscan (DNSBL) modules.
  *
- * Atheme can also check set DNS Blacklists for matches and respond
- * as set. Activate modules here and customize further down under Proxyscan
- * section.
+ * Atheme can also check set DNS Blacklists for matches and respond as set.
+ * Activate modules here and customize further down under Proxyscan section.
  */
 #loadmodule "modules/proxyscan/dnsbl";
 
+
+
 /* Other modules.
  *
- * Put any other modules you want to load on startup here. The path
- * is relative to PREFIX or PREFIX/lib/atheme, depending on how Atheme
- * was compiled.
+ * Put any other modules you want to load on startup here. The path is
+ * relative to PREFIX or PREFIX/lib/atheme, depending on how Atheme was
+ * compiled.
  */
 #loadmodule "modules/contrib/backtrace";
+
+
 
 /****************************************************************************
  * SERVICES RUNTIME CONFIGURATION SECTION.                                  *
@@ -913,10 +967,10 @@ loadmodule "modules/groupserv/set_url";
  * This block controls the configuration options for crypto modules.
  *
  * It is recommended to either leave the values at their defaults, or
- * experiment with them so that it takes approximately 0.2-0.4 seconds
- * for users to identify. Services blocks while the password is being
- * encrypted or verified, so don't set these too large, or people can
- * hang services by trying many password attempts at once.
+ * experiment with them so that it takes approximately 0.2-0.4 seconds for
+ * users to identify. Services blocks while the password is being encrypted or
+ * verified, so don't set these too large, or people can hang services by
+ * trying many password attempts at once.
  *
  * A benchmark program for the Argon2, scrypt & PBKDF2 crypto code is
  * available to assist with tuning these parameters:
@@ -946,9 +1000,9 @@ loadmodule "modules/groupserv/set_url";
  *
  *
  *
- * If you are migrating from crypto/argon2d (v7.2) to crypto/argon2, and you
- * wish to use the same parameters as the older module's defaults, configure
- * it like so:
+ * If you are migrating from "crypto/argon2d" (v7.2) to "crypto/argon2", and
+ * you wish to use the same parameters as the older module's defaults, to
+ * retain the ability to downgrade services, configure it like so:
  *
  *     crypto {
  *         argon2_type = "argon2d";
@@ -961,8 +1015,9 @@ loadmodule "modules/groupserv/set_url";
  *
  *
  *
- * If you are migrating from crypto/pbkdf2 (v7.2) to crypto/pbkdf2v2, and you
- * wish to use the same parameters as the older module, configure it like so:
+ * If you are migrating from "crypto/pbkdf2" (v7.2) to "crypto/pbkdf2v2", and
+ * you wish to use the same parameters as the older module, configure it like
+ * so:
  *
  *     crypto {
  *         pbkdf2v2_digest = "SHA512";
@@ -1000,10 +1055,10 @@ crypto {
 	 * channel that can reveal any information about the password is
 	 * created. However, this means that it is easier to bruteforce by a
 	 * password cracker, which does not have to account for execution
-	 * differences in its implementation. This is the most suitable
-	 * choice for running on a virtual machine that is co-located with
-	 * other, untrusted, virtual machines, or on a dedicated machine that
-	 * runs other, untrusted, software, or has untrusted user access.
+	 * differences in its implementation. This is the most suitable choice
+	 * for running on a virtual machine that is co-located with other,
+	 * untrusted, virtual machines, or on a dedicated machine that runs
+	 * other, untrusted, software, or has untrusted user access.
 	 *
 	 * Argon2id is a blend of both, limiting the exploitability of any
 	 * side-channels while retaining excellent resistance to GPU and ASIC
@@ -1018,7 +1073,7 @@ crypto {
 	 * algorithm type Argon2id appears to be usable...").
 	 *
 	 * Valid values are "argon2d", "argon2i", and "argon2id"
-	 * The default is "argon2id"; unless unsupported, then "argon2d".
+	 * The default is "argon2id"; unless unsupported, then "argon2d"
 	 */
 	#argon2_type = "argon2id";
 
@@ -1035,8 +1090,9 @@ crypto {
 	 * time cost below until it is not. A benchmark program is available
 	 * alongside this software to aid in this process.
 	 *
-	 * WARNING: Do *NOT* set this to more than 20 (1 GiB RAM) on a 32-bit
-	 *          machine or a 32-bit Operating System!
+	 * WARNING:
+	 *   Do *NOT* set this to more than 20 (1 GiB RAM) on a 32-bit
+	 *   Operating System!
 	 *
 	 * Valid values are 3 (8 KiB RAM) to 30 (1 TiB RAM) (inclusive)
 	 * The default is 16 (64 MiB RAM)
@@ -1066,27 +1122,31 @@ crypto {
 	 * the expected maximum number of simultaneous logins.
 	 *
 	 * It is pointless to set this higher than the number of hardware
-	 * processing threads you have; increase the time cost above instead
-	 * if you want to make it arbitrarily slower. Diminishing returns are
-	 * to be expected once you exceed the number of hardware processing
-	 * /cores/ you have; hyperthreading does NOT provide much (if any) of
-	 * a boost for this workload.
+	 * processing threads you have; increase the time cost above if you
+	 * want to make it arbitrarily slower. Diminishing returns are to be
+	 * expected once you exceed the number of hardware processing /cores/
+	 * you have; hyperthreading does NOT provide much (if any) of a boost
+	 * for this workload.
 	 *
-	 * Increasing this value will *decrease* the real time required, so
-	 * you may have to subsequently increase the time cost above again to
-	 * make it "just slow enough" once more. A benchmark program is
-	 * available alongside this software to aid in this process.
+	 * Increasing this value will *decrease* the real ("wall clock") time
+	 * required, so you may have to subsequently increase the time cost
+	 * above again to make it "just slow enough" once more. A benchmark
+	 * program is available alongside this software to aid in this
+	 * process.
 	 *
-	 * WARNING: The (size of the) memory pool configured above is split
-	 * between the threads, which can result in too small a memory area
-	 * per-thread if many threads are used. If you set this value, it is
-	 * HIGHLY RECOMMENDED that you run the included benchmarking program
-	 * with the same configuration options, to confirm that it works!
+	 * WARNING:
+	 *   The (size of the) memory pool configured above is split between
+	 *   the threads, which can result in too small a memory area per-
+	 *   thread if many threads are used. If you set this value, it is
+	 *   HIGHLY RECOMMENDED that you run the included benchmarking
+	 *   program with the same configuration options, to confirm that it
+	 *   works!
 	 *
-	 * WARNING: This feature is experimental. Some of the code in this
-	 * software is not thread-safe, and although every effort has been
-	 * made to ensure that this feature will not interfere with the
-	 * operation of this software, this cannot be guaranteed.
+	 * WARNING:
+	 *   This feature is experimental. Some of the code in this software
+	 *   is not thread-safe, and although every effort has been made to
+	 *   ensure that this feature will not interfere with the operation of
+	 *   this software, this cannot be guaranteed.
 	 *
 	 * Valid values are 1 to 255 (inclusive)
 	 * The default is 1 (do not use any computation parallelism)
@@ -1130,8 +1190,9 @@ crypto {
 	 * opslimit below until it is not. A benchmark program is available
 	 * alongside this software to aid in this process.
 	 *
-	 * WARNING: Do *NOT* set this to more than 20 (1 GiB RAM) on a 32-bit
-	 *          machine or a 32-bit Operating System!
+	 * WARNING:
+	 *   Do *NOT* set this to more than 20 (1 GiB RAM) on a 32-bit
+	 *   Operating System!
 	 *
 	 * Valid values are 14 (16 MiB RAM) to 26 (64 GiB RAM) (inclusive)
 	 * The default is 14 (16 MiB RAM)
@@ -1163,8 +1224,8 @@ crypto {
 	 *   "SHA-256" -> SHA2-256
 	 *   "SHA-512" -> SHA2-512
 	 *
-	 * Finally, you can prefix this value with "SCRAM-" to enable the
-	 * computation and storage of an RFC5802/SCRAM ServerKey & StoredKey,
+	 * Finally, you can prefix any of these values with "SCRAM-" to enable
+	 * the computation and storage of an RFC5802 ServerKey and StoredKey,
 	 * instead of a raw PBKDF2 digest (SaltedPassword). Verification of
 	 * plaintext passwords against these digests can still be performed
 	 * (for e.g. NickServ IDENTIFY or SASL PLAIN), by computing a new
@@ -1185,8 +1246,8 @@ crypto {
 	 * login, so keep in mind that many mobile clients will not perform as
 	 * well as a server, and reduce the iteration count accordingly. Also,
 	 * some clients will refuse to perform a login at all if this is set
-	 * too high. A benchmark program is included alongside this software to
-	 * aid in tuning this parameter.
+	 * too high. A benchmark program is included alongside this software
+	 * to aid in tuning this parameter.
 	 *
 	 * Valid values are 10,000 to 5,000,000 (inclusive)
 	 * The default is 64,000
@@ -1195,7 +1256,11 @@ crypto {
 
 	/* (*) pbkdf2v2_saltlen
 	 *
-	 * You should only change this if you *really* know what you're doing
+	 * Salt length (in bytes) to use for new passwords. You should only
+	 * change this if absolutely necessary; for example, to interoperate
+	 * with other software. Its value doesn't significantly affect the
+	 * computation time.
+	 *
 	 * Valid values are 8 to 64 (inclusive)
 	 * The default is 32
 	 */
@@ -1226,14 +1291,17 @@ crypto {
 	#crypt3_sha2_512_rounds = 5000;
 };
 
-/* The serverinfo{} block defines how we appear on the IRC network. */
+
+
+// The serverinfo{} block defines how we appear on the IRC network.
 serverinfo {
+
 	/* name
 	 *
-	 * The server name that this program uses on the IRC network.
-	 * This is the name you'll have to use in C:/N:Lines. It must be
-	 * unique on the IRC network and contain at least one dot, but does
-	 * not have to be equal to any DNS name.
+	 * The server name that this program uses on the IRC network. This is
+	 * the name you'll have to use in C:/N:Lines ("connect blocks"). It
+	 * must be unique on the IRC network and contain at least one dot, but
+	 * does not have to be equal to any DNS name.
 	 */
 	name = "services.int";
 
@@ -1245,9 +1313,9 @@ serverinfo {
 
 	/* numeric
 	 *
-	 * Some protocol drivers (Charybdis, Ratbox2, P10, IRCNet)
-	 * require a server id, also known as a numeric. Please consult your
-	 * ircd's documentation when providing this value.
+	 * Some protocol drivers (Charybdis, Ratbox2, P10, IRCNet) require a
+	 * server ID, also known as a numeric. Please consult your IRCd
+	 * documentation when providing this value.
 	 */
 	numeric = "00A";
 
@@ -1266,8 +1334,7 @@ serverinfo {
 	/* (*) hidehostsuffix
 	 *
 	 * P10 +x host hiding gives <account>.<hidehostsuffix>.
-	 * If using +x on asuka, this must agree
-	 * with F:HIDDEN_HOST.
+	 * If using +x on asuka, this must agree with F:HIDDEN_HOST.
 	 */
 	hidehostsuffix = "users.misconfigured";
 
@@ -1279,73 +1346,80 @@ serverinfo {
 
 	/* (*) adminemail
 	 *
-	 * The email address of the person running this service.
+	 * The e-mail address of the person running this service.
 	 */
-	adminemail = "misconfigured@admin.tld";
+	adminemail = "misconfigured@admin.invalid";
 
 	/* (*) registeremail
 	 *
-	 * The email address that messages should be originated from.
-	 * If this is not set, then "noreply.$adminemail" will be used.
+	 * The e-mail address that messages should be originated from.
+	 *
+	 * If this is not set, then "noreply." will be prefixed to the
+	 * adminemail setting above, and that will be used instead.
 	 */
-	registeremail = "noreply@admin.tld";
+	registeremail = "noreply@admin.invalid";
 
 	/* (*) hidden
 	 *
-	 * If this is enabled, Atheme will indicate to the uplink IRCd
-	 * that it should not be included in /links output. This only works
-	 * on the following IRCds at present: charybdis, ircd-seven, ratbox.
+	 * If this is enabled, Atheme will indicate to the uplink IRCd that it
+	 * should not be included in /LINKS output. This only works on the
+	 * following IRCds at present: ratbox, charybdis, ircd-seven.
 	 */
 	#hidden;
 
 	/* (*) mta
 	 *
-	 * The full path to your mail transfer agent.
-	 * This is used for email authorization and password retrieval.
-	 * Comment this out to disable sending email.
-	 * Warning: sending email can disclose the IP of your services
-	 * unless you take precautions (not discussed here further).
+	 * The full path to your mail transfer agent. This is used for e-mail
+	 * authorization and password retrieval. Comment this out to disable
+	 * sending e-mail.
+	 *
+	 * WARNING:
+	 *   Sending e-mail can disclose the IP address of your services box
+	 *   unless you take appropriate precautions (not discussed here).
 	 */
 	mta = "/usr/sbin/sendmail";
 
 	/* (*) loglevel
 	 *
-	 * Specify the default categories of logging information to record
-	 * in the master Atheme logfile, usually var/atheme.log.
+	 * Specify the default categories of logging information to record in
+	 * the master Atheme log file, usually var/atheme.log.
 	 *
 	 * Options include:
-	 *      debug, all      - meta-keyword for all possible categories
-	 *      trace           - meta-keyword for a little bit of info
-	 *      misc            - like trace, but with some more miscellaneous
-	 *                        info
-	 *      notice          - meta-keyword for notice-like information
+	 *      debug, all      - Meta-keyword for all possible categories
+	 *      trace           - Meta-keyword for a little bit of info
+	 *      misc            - Like trace, but with more miscellaneous info
+	 *      notice          - Meta-keyword for notice-like information
 	 * -------------------------------------------------------------------
-	 *      error           - critical errors
-	 *      info            - miscillaneous log notices
+	 *      error           - Critical errors
+	 *      info            - Miscillaneous log notices
 	 *      verbose         - A bit more verbose than info, not quite as
 	 *                        spammy as debug
-	 *      commands        - all command use
-	 *      admin           - administrative command use
-	 *      register        - account and channel registrations
-	 *      set             - changes of account or channel settings
-	 *      request         - user requests (currently only vhosts)
-	 *      network         - log notices related to network status
-	 *      rawdata         - log raw data sent and received by services
+	 *      commands        - All command use
+	 *      admin           - Administrative command use
+	 *      register        - Account and channel registrations
+	 *      set             - Changes of account or channel settings
+	 *      request         - User requests (currently only vhosts)
+	 *      network         - Log notices related to network status
+	 *      rawdata         - Log raw data sent and received by services
+	 *      denycmd         - Security model denials (commands,
+	 *                        permissions)
 	 *      wallops         - <not yet used>
 	 */
-	loglevel = { error; info; admin; network; wallops; };
+	loglevel = { admin; error; info; network; wallops; };
 
 	/* (*) maxlogins
 	 *
 	 * What is the maximum number of sessions allowed to login to one
-	 * username? This reduces potential abuse. It is only checked on login.
+	 * username? This reduces potential abuse. It is only checked on
+	 * login.
 	 */
 	maxlogins = 5;
 
 	/* (*) maxusers
 	 *
-	 * What are the maximum usernames that one email address can register?
-	 * Set to 0 to disable this check (it can be slow currently).
+	 * What are the maximum usernames that one e-mail address can
+	 * register? Set to 0 to disable this check (it can be slow
+	 * currently).
 	 */
 	maxusers = 5;
 
@@ -1358,7 +1432,7 @@ serverinfo {
 	/* (*) emaillimit
 	 * (*) emailtime (seconds)
 	 *
-	 * The maximum number of emails allowed to be sent in the specified
+	 * The maximum number of e-mails allowed to be sent in the specified
 	 * interval. If this is exceeded, wallops will be sent, at most one
 	 * per minute.
 	 */
@@ -1367,8 +1441,8 @@ serverinfo {
 
 	/* (*) auth
 	 *
-	 * What type of username registration authorization do you want?
-	 * If "email", Atheme will send a confirmation email to the address to
+	 * What type of username registration authorization do you want? If
+	 * "email", Atheme will send a confirmation e-mail to the address to
 	 * ensure it's valid. If registration is not completed within one day,
 	 * the username will expire. If "none", no message will be sent and
 	 * the username will be fully registered.
@@ -1379,24 +1453,28 @@ serverinfo {
 
 	/* casemapping
 	 *
-	 * Specify the casemapping to use. Almost all TSora (and any that
-	 * follow the RFC correctly) ircds will use rfc1459 casemapping.
-	 * Bahamut, Unreal, and other ``Dalnet'' ircds will use ascii
-	 * casemapping.
+	 * Specify the case mapping to use. Almost all TSora (and any that
+	 * follow the RFC correctly) IRCds will use RFC1459 case mapping.
+	 * Bahamut, Unreal, and other "DALnet"-style IRCds will use ASCII
+	 * case mapping.
 	 *
 	 * Valid values are: rfc1459, ascii.
 	 */
 	casemapping = rfc1459;
 };
 
+
+
 /* uplink{} blocks define connections to IRC servers.
- * Multiple may be defined but only one will be used at a time (IRC
- * being a tree shaped network). Atheme does not currently link over SSL.
- * To link Atheme over ssl, please connect Atheme to a local ircd and have that
- * connect to your network over SSL.
+ *
+ * Multiple may be defined but only one will be used at a time (IRC being a
+ * tree-shaped network). Atheme does not currently link over TLS. To link
+ * Atheme over TLS, please connect Atheme to a local IRCd and then have that
+ * connect to your network over TLS.
  */
 uplink "irc.example.net" {
-	// The server name of the ircd you're linking to goes above.
+
+	// The server name of the IRCd you're linking to goes above.
 
 	/* host
 	 *
@@ -1430,7 +1508,7 @@ uplink "irc.example.net" {
 	receive_password = "theirpassword";
 };
 
-/* this is an example for using an IPv6 address as an uplink */
+// This is an example for using an IPv6 address as an uplink
 uplink "irc6.example.net" {
 
 	host = "::1";
@@ -1444,15 +1522,33 @@ uplink "irc6.example.net" {
 	password = "linkage";
 };
 
+
+
 /* Services configuration.
  *
- * Each of these blocks can contain a nick, user, host, real and aliases.
+ * Each of these blocks can contain the following entries:
+ *
+ *   nick       The nickname you want the service to have.
+ *   user       The username you want the service to have.
+ *   host       The hostname you want the service to have.
+ *   real       The realname (GECOS) you want the service to have.
+ *
+ *   aliases    Command aliases; to map new commands onto existing ones.
+ *
+ *   access     Command restrictions; to require certain privileges for
+ *              certain commands. Restrictions only apply to proper commands,
+ *              not aliases. A non-exhaustive list of permissions is located
+ *              near the bottom of this file, in the operclass section. See
+ *              also the file "doc/PRIVILEGES" in the source distribution.
+ *              You may also add completely custom privileges; they are just
+ *              strings.
+ *
  * Several of them also have options specific to the service.
  */
 
+
+
 /* NickServ configuration.
- *
- * The nickserv {} block contains settings specific to the NickServ modules.
  *
  * NickServ provides nickname or username registration and authentication
  * services. It provides necessary authentication features required for
@@ -1460,6 +1556,20 @@ uplink "irc6.example.net" {
  * are properly configured for your network.
  */
 nickserv {
+
+	nick = "NickServ";
+	user = "NickServ";
+	host = "services.int";
+	real = "Nickname Services";
+
+	aliases {
+		"ID" = "IDENTIFY";
+		"MYACCESS" = "LISTCHANS";
+	};
+
+	access {
+	};
+
 	/* (*) spam
 	 *
 	 * Have NickServ tell people about how great it and ChanServ are.
@@ -1467,62 +1577,22 @@ nickserv {
 	spam;
 
 	/* no_nick_ownership
-	 * Enable this to disable nickname ownership (old userserv{}).
-	 * This changes changes "nickname" to "account" in most messages,
-	 * disables GHOST on users not logged in to the same account and
-	 * makes the spam directive ineffective.
-	 * It is suggested that the nick be set to UserServ, login.so
-	 * be loaded instead of identify.so and ghost.so not be loaded.
+	 *
+	 * Enable this to disable nickname ownership (old userserv{}). This
+	 * changes changes "nickname" to "account" in most messages, disables
+	 * GHOST on users not logged in to the same account, and makes the
+	 * spam directive ineffective.
+	 *
+	 * It is suggested that the nick be set to "UserServ", the
+	 * "nickserv/login" module be loaded instead of "nickserv/identify",
+	 * and the "nickserv/ghost" module not be loaded.
 	 */
 	#no_nick_ownership;
-
-	/* (*) nick
-	 *
-	 * The nickname we want NickServ to have.
-	 */
-	nick = "NickServ";
-
-	/* (*) user
-	 *
-	 * The username we want NickServ to have.
-	 */
-	user = "NickServ";
-
-	/* (*) host
-	 *
-	 * The hostname we want NickServ to have.
-	 */
-	host = "services.int";
-
-	/* (*) real
-	 *
-	 * The realname (gecos) information we want NickServ to have.
-	 */
-	real = "Nickname Services";
-
-	/* (*) aliases
-	 *
-	 * Command aliases for NickServ.
-	 */
-	aliases {
-		"ID" = "IDENTIFY";
-		"MYACCESS" = "LISTCHANS";
-	};
-
-	/* (*) access
-	 *
-	 * This block allows you to modify the access level required to run
-	 * commands. The list of possible accesses are listed in the operclass
-	 * section later in this .conf . Note that you can only set the access
-	 * on an actual command, not an alias.
-	 */
-	access {
-	};
 
 	/* (*) maxnicks
 	 *
 	 * If GROUP is loaded, what are the maximum nicknames that one
-	 * username can register?
+	 * account can register?
 	 */
 	maxnicks = 5;
 
@@ -1550,7 +1620,7 @@ nickserv {
 
 	/* (*) enforce_prefix
 	 *
-	 * The prefix to use when changing the user's nick on enforcement
+	 * The prefix to use when changing the user's nick on enforcement.
 	 */
 	#enforce_prefix = "Guest";
 
@@ -1566,17 +1636,18 @@ nickserv {
 
 	/* (*) cracklib_dict
 	 *
-	 * The location and filename prefix of the cracklib dictionaries
-	 * for use with nickserv/pwquality. This must be provided if you are
-	 * going to be using nickserv/pwquality with cracklib support enabled.
+	 * The location and filename prefix of the cracklib dictionaries for
+	 * use with "nickserv/pwquality". This must be provided if you are
+	 * going to be using "nickserv/pwquality" with cracklib support
+	 * enabled.
 	 */
 	#cracklib_dict = "/var/cache/cracklib/cracklib_dict";
 
 	/* (*) passwdqc_*
 	 *
-	 * Please see the passwdqc.conf(5) documentation for an explanation
-	 * of these values. Affects modules/nickserv/pwquality if passwdqc
-	 * support is enabled. Default values given below.
+	 * Please see the passwdqc.conf(5) documentation for an explanation of
+	 * these values. Affects "nickserv/pwquality" if passwdqc support is
+	 * enabled. Default values given below.
 	 */
 	#passwdqc_max = 288;     /* (8 <= value <= 288) */
 	#passwdqc_min_n0 = 20;   /* (0 <= value <= passwdqc_max) */
@@ -1588,7 +1659,7 @@ nickserv {
 
 	/* (*) pwquality_warn_only
 	 *
-	 * If this option is set and nickserv/pwquality is loaded, nickserv
+	 * If this option is set and "nickserv/pwquality" is loaded, nickserv
 	 * will just warn users that their password is insecure, recommend
 	 * they change it and still register the nick. If this option is
 	 * unset, it will refuse to register the nick at all until the user
@@ -1607,9 +1678,9 @@ nickserv {
 
 	/* (*) emailexempts
 	 *
-	 * A list of email addresses that will be exempt from the check of how
-	 * many accounts one user may have. Any email address in this block
-	 * may register an unlimited number of accounts/usernames.
+	 * A list of e-mail addresses that will be exempt from the check of
+	 * how many accounts one user may have. Any e-mail address in this
+	 * block may register an unlimited number of accounts/usernames.
 	 */
 	emailexempts {
 	};
@@ -1636,57 +1707,28 @@ nickserv {
 
 /* ChanServ configuration.
  *
- * The chanserv {} block contains settings specific to the ChanServ modules.
- *
  * ChanServ provides channel registration services, which allows users to own
  * channels. It is not required, but is strongly recommended.
  */
 chanserv {
-	/* (*) nick
-	 *
-	 * The nickname we want the client to have.
-	 */
+
 	nick = "ChanServ";
-
-	/* (*) user
-	 *
-	 * The username we want the client to have.
-	 */
 	user = "ChanServ";
-
-	/* (*) host
-	 *
-	 * The hostname we want the client to have.
-	 */
 	host = "services.int";
-
-	/* (*) real
-	 *
-	 * The GECOS of the client.
-	 */
 	real = "Channel Services";
 
-	/* reggroup
-	 *
-	 * The group that will receive Memos about
-	 * channel Registration requests when
-	 * chanserv/moderate is loaded.
-	 */
-	#reggroup = "!Services-Team";
-
-	/* (*) aliases
-	 *
-	 * Command aliases for ChanServ.
-	 */
 	aliases {
 	};
 
-	/* (*) access
-	 *
-	 * Command access changes for ChanServ.
-	 */
 	access {
 	};
+
+	/* reggroup
+	 *
+	 * The group that will receive memos about channel registration
+	 * requests when "chanserv/moderate" is loaded.
+	 */
+	#reggroup = "!Services-Team";
 
 	/* (*) maxchans
 	 *
@@ -1696,16 +1738,15 @@ chanserv {
 
 	/* fantasy
 	 *
-	 * Do you want to enable fantasy commands? This can
-	 * use a lot of CPU up, and will only work if you have
-	 * join_chans (in general) enabled as well.
+	 * Do you want to enable fantasy commands? This can use a lot of CPU,
+	 * and will only work if you have general::join_chans enabled as well.
 	 */
 	fantasy;
 
 	/* (*) hide_xop
 	 *
-	 * Hide the XOP templates from sight. This is useful if you
-	 * want to use templates and not have the XOP templates displayed.
+	 * Hide the XOP templates from sight. This is useful if you want to
+	 * use templates and not have the XOP templates displayed.
 	 */
 	#hide_xop;
 
@@ -1714,23 +1755,26 @@ chanserv {
 	 * Defines what flags the global templates comprise.
 	 *
 	 * For the special XOP templates:
-	 * These should all be different and not equal to the empty set,
-	 * except that hop may be equal to vop to disable hop.
-	 * Each subsequent level should have more flags (except +VHO).
-	 * For optimal functioning of /cs forcexop, aop should not have
-	 * any of +sRf, hop should not have any of +sRfoOr and vop should
-	 * not have any of +sRfoOrhHt.
-	 * If this is not specified, the values of Atheme 0.3 are used,
-	 * which are generally less intuitive than these.
-	 * Note: changing these leaves the flags of existing channel access
-	 * entries unchanged, thus removing them of the view of /cs xop list.
-	 * Usually the channel founder can use /cs forcexop to update the
-	 * entries to the new levels.
+	 *   These should all be different and not equal to the empty set,
+	 *   except that "hop" may be equal to "vop" to disable "hop". Each
+	 *   subsequent level should have more flags (except "+VHO"). For
+	 *   optimal functioning of "/CS FORCEXOP", "aop" should not have any
+	 *   of "+sRf", "hop" should not have any of "+sRfoOr", and "vop"
+	 *   should not have any of "+sRfoOrhHt".
+	 *
+	 * If this is not specified, the values of Atheme 0.3 are used, which
+	 * are generally less intuitive than these.
+	 *
+	 * NOTE:
+	 *   Changing these leaves the flags of existing channel access
+	 *   entries unchanged, thus removing them of the view of "/CS XOP"
+	 *   list. Usually, the channel founder can use "/CS FORCEXOP" to
+	 *   update the entries to the new levels.
 	 *
 	 * Advice:
-	 * If you want to add a co-founder role, remove the flags permission
-	 * from the SOP role, and define a co-founder role with flags
-	 * permissions.
+	 *   If you want to add a co-founder role, remove the flags permission
+	 *   ("+f") from the "sop" role, and define a co-founder role with
+	 *   flags permission.
 	 */
 	templates {
 		vop = "+AV";
@@ -1747,27 +1791,30 @@ chanserv {
 
 	/* (*) deftemplates
 	 *
-	 * Defines default templates to set on new channels, as a
-	 * space-separated list of name=+flags pairs.
-	 * Note: at this time no syntax checking is done on this; it
-	 * is your own responsibility to make sure it is correct.
+	 * Defines default templates to set on new channels, as a space-
+	 * separated list of name=+flags pairs.
+	 *
+	 * WARNING:
+	 *   At this time, no syntax checking is done on this; it is your own
+	 *   responsibility to make sure that it is correct.
 	 */
 	#deftemplates = "MEMBER=+Ai OP=+AOiortv";
 
 	/* (*) changets
 	 *
-	 * Change the channel TS to the registration time when someone
-	 * recreates a registered channel, ensuring that they are deopped
-	 * and all their modes are undone. Note that this involves ChanServ
-	 * joining. When the channel was not recreated no deops will be done
-	 * (apart from the SECURE option).
-	 * This also solves the "join-mode" problem where someone recreates
-	 * a registered channel and then sets some modes before they are
-	 * deopped.
-	 * This is currently supported for charybdis, ratbox, bahamut,
-	 * and inspircd 1.1+. For charybdis and ratbox it only fully
-	 * works with TS6, with TS5 bans and last-moment modes will
-	 * still apply.
+	 * Change the channel TS to the channel registration timestamp when
+	 * someone re-creates a registered channel, ensuring that they are de-
+	 * opped and all of their mode changes are undone. Note that this
+	 * involves ChanServ joining. When the channel was not re-created, no
+	 * de-ops will be done (apart from the SECURE option). This also
+	 * solves the "join-mode" problem where someone re-creates a
+	 * registered channel and then sets some modes before they are de-
+	 * opped.
+	 *
+	 * This is currently supported for ratbox, charybdis, bahamut, and
+	 * inspircd 1.1+. For ratbox and charybdis, it only fully works with
+	 * TS6; with TS5, bans and last-moment modes will still apply.
+	 *
 	 * (That can also be used to advantage, when first enabling this.)
 	 */
 	#changets;
@@ -1775,7 +1822,7 @@ chanserv {
 	/* (*) trigger
 	 *
 	 * This setting allows you to change the trigger prefix for ChanServ's
-	 * in-channel command feature (disableable via chanserv::fantasy). If
+	 * in-channel command feature (configurable via chanserv::fantasy). If
 	 * no setting is provided, the default is used, which is "!".
 	 *
 	 * Other settings you could consider trying: ".", "~", "?", "`", "'".
@@ -1798,17 +1845,17 @@ chanserv {
 
 	/* (*) maxfounders
 	 *
-	 * The maximum number of founders allowed in a channel.
-	 * Note that all founders have the exact same privileges and
-	 * the list of founders is shown in various places.
+	 * The maximum number of founders ("+F") allowed in a channel. Note
+	 * that all founders have the exact same privileges and the list of
+	 * founders is shown in various places.
 	 */
 	maxfounders = 4;
 
 	/* (*) founder_flags
 	 *
-	 * The flags a user will get when they register a new channel.
-	 * This MUST include at least 'F' or it will be ignored.
-	 * If it is not set, Atheme will give the user all channel flags.
+	 * The flags a user will get when they register a new channel. This
+	 * MUST include at least "F" or it will be ignored. If it is not set,
+	 * Atheme will give the user all channel flags.
 	 */
 	#founder_flags = "AFORefiorstv";
 
@@ -1822,8 +1869,10 @@ chanserv {
 	/* (*) antiflood_enforce_method
 	 *
 	 * The enforcement method to use for flood protection by default.
-	 * This may be overridden by channel staff.
-	 * Available options are: quiet, kickban and akill.
+	 * This may also be configured with ChanServ's SET ANTIFLOOD command.
+	 * Requires "chanserv/antiflood" to be loaded to do anything.
+	 *
+	 * Available options are: quiet, kickban, and akill.
 	 */
 	antiflood_enforce_method = quiet;
 
@@ -1856,38 +1905,24 @@ chanserv {
 	#shorthelp = "";
 };
 
-/* CHANFIX configuration.
+/* ChanFix configuration.
  *
- * The chanfix {} block contains settings specific to the CHANFIX modules.
- *
- * CHANFIX provides channel recovery services without registration, which
+ * ChanFix provides channel recovery services without registration, which
  * allows users to maintain control of channels even if ChanServ is not used
  * to register them.
  */
 chanfix {
-	/* (*) nick
-	 *
-	 * The nickname we want the client to have.
-	 */
+
 	nick = "ChanFix";
-
-	/* (*) user
-	 *
-	 * The username we want the client to have.
-	 */
 	user = "ChanFix";
-
-	/* (*) host
-	 *
-	 * The hostname we want the client to have.
-	 */
 	host = "services.int";
-
-	/* (*) real
-	 *
-	 * The GECOS of the client.
-	 */
 	real = "Channel Fixing Service";
+
+	aliases {
+	};
+
+	access {
+	};
 
 	/* (*) autofix
 	 *
@@ -1899,155 +1934,80 @@ chanfix {
 
 /* Global noticing configuration.
  *
- * The global {} block contains settings specific to the Global notice module.
- *
  * The Global notice module provides the ability to mass-notify a network.
  */
 global {
-	/* (*) nick
-	 *
-	 * Sets the nick used for sending out a global notice.
-	 */
+
 	nick = "Global";
-
-	/* (*) user
-	 *
-	 * Sets the username used for this client.
-	 */
 	user = "Global";
-
-	/* (*) host
-	 *
-	 * The hostname used for this client.
-	 */
 	host = "services.int";
-
-	/* (*) real
-	 *
-	 * The GECOS (real name) of the client.
-	 */
 	real = "Network Announcements";
+
+	aliases {
+	};
+
+	access {
+	};
 };
 
 /* InfoServ configuration
  *
- * The infoserv {} block contains settings specific to the InfoServ module.
- *
- * The InfoServ modules provides the ability to mass-notify a network and send
+ * The InfoServ modules provide the ability to mass-notify a network and send
  * news to users when they connect to the network.
  */
 infoserv {
-	/* (*) nick
-	 *
-	 * Sets the nick used for InfoServ and sending out informational
-	 * messages.
-	 */
+
 	nick = "InfoServ";
-
-	/* (*) user
-	 *
-	 * Sets the username used for this client.
-	 */
 	user = "InfoServ";
-
-	/* (*) host
-	 *
-	 * The hostname used for this client,
-	 */
 	host = "services.int";
-
-	/* (*) real
-	 *
-	 * The GECOS (real name) of the client.
-	 */
 	real = "Information Service";
+
+	aliases {
+	};
+
+	access {
+	};
 
 	/* (*) logoninfo_count
 	 *
-	 * The number of InfoServ messages a user will see upon connect.
-	 * If there are more than this number, the user will be able to
-	 * see the rest with /msg infoserv list .
+	 * The number of InfoServ messages a user will see upon connect. If
+	 * there are more than this number, the user will be able to see the
+	 * rest of them with the InfoServ LIST command.
 	 */
 	logoninfo_count = 3;
 };
 
 /* OperServ configuration.
  *
- * The operserv {} block contains settings specific to the OperServ modules.
- *
- * OperServ provides essential network management tools for IRC operators
- * on the IRC network.
+ * OperServ provides essential network management tools for IRC operators on
+ * the IRC network.
  */
 operserv {
-	/* (*) nick
-	 *
-	 * The nickname we want the Operator Service to have.
-	 */
+
 	nick = "OperServ";
-
-	/* (*) user
-	 *
-	 * Sets the username used for this client.
-	 */
 	user = "OperServ";
-
-	/* (*) host
-	 *
-	 * The hostname used for this client.
-	 */
 	host = "services.int";
-
-	/* (*) real
-	 *
-	 * The GECOS (real name) of the client.
-	 */
 	real = "Operator Services";
 
-	/* (*) aliases
-	 *
-	 * Command aliases for OperServ.
-	 */
 	aliases {
 	};
 
-	/* (*) access
-	 *
-	 * Command access changes for OperServ.
-	 */
 	access {
 	};
 };
 
 /* SaslServ configuration.
  *
- * The saslserv {} block contains settings specific to the SaslServ modules.
- *
- * SaslServ provides an authentication agent which is compatible with the
- * SASL over IRC (SASL/IRC) protocol extension.
+ * SaslServ provides an authentication agent which is compatible with the SASL
+ * over IRC (SASL/IRC) protocol extension. It does not provide any commands,
+ * so there is no point in configuring any aliases{} or access{} blocks; they
+ * will be ignored.
  */
 saslserv {
-	/* (*) nick
-	 *
-	 * The nickname we want SaslServ to have.
-	 */
+
 	nick = "SaslServ";
-
-	/* (*) user
-	 *
-	 * The username we want SaslServ to have.
-	 */
 	user = "SaslServ";
-
-	/* (*) host
-	 *
-	 * The hostname we want SaslServ to have.
-	 */
 	host = "services.int";
-
-	/* (*) real
-	 *
-	 * The realname (gecos) information we want SaslServ to have.
-	 */
 	real = "SASL Authentication Agent";
 
 	/* (*) hide_server_names
@@ -2059,47 +2019,19 @@ saslserv {
 
 /* MemoServ configuration.
  *
- * The memoserv {} block contains settings specific to the MemoServ modules.
- *
- * MemoServ provides a note-taking service that you can use to send notes
- * to offline users (provided they are registered with Services).
+ * MemoServ provides a note-taking service that you can use to send notes to
+ * offline users (provided they are registered with Services).
  */
 memoserv {
-	/* (*) nick
-	 *
-	 * The nickname we want MemoServ to have.
-	 */
+
 	nick = "MemoServ";
-
-	/* (*) user
-	 *
-	 * The username we want MemoServ to have.
-	 */
 	user = "MemoServ";
-
-	/* (*) host
-	 *
-	 * The hostname we want MemoServ to have.
-	 */
 	host = "services.int";
-
-	/* (*) real
-	 *
-	 * The realname (gecos) information we want MemoServ to have.
-	 */
 	real = "Memo Services";
 
-	/* (*) aliases
-	 *
-	 * Command aliases for MemoServ.
-	 */
 	aliases {
 	};
 
-	/* (*) access
-	 *
-	 * Command access changes for MemoServ.
-	 */
 	access {
 	};
 
@@ -2112,126 +2044,56 @@ memoserv {
 
 /* GameServ configuration.
  *
- * The gameserv {} block contains settings specific to the GameServ modules.
- *
  * GameServ provides various in-channel commands for games.
  */
 gameserv {
-	/* (*) nick
-	 *
-	 * The nickname we want GameServ to have.
-	 */
+
 	nick = "GameServ";
-
-	/* (*) user
-	 *
-	 * Sets the username used for this client.
-	 */
 	user = "GameServ";
-
-	/* (*) host
-	 *
-	 * The hostname used for this client.
-	 */
 	host = "services.int";
-
-	/* (*) real
-	 *
-	 * The GECOS (real name) of the client.
-	 */
 	real = "Game Services";
 
-	/* (*) aliases
-	 *
-	 * Command aliases for GameServ.
-	 */
 	aliases {
 	};
 
-	/* (*) access
-	 *
-	 * Command access changes for GameServ.
-	 */
 	access {
 	};
 };
 
 /* RPGServ configuration.
  *
- * The rpgserv {} block contains settings specific to the RPGServ modules.
- *
  * RPGServ provides a facility for finding roleplaying channels.
  */
 rpgserv {
-	/* (*) nick
-	 *
-	 * The nickname we want RPGServ to have.
-	 */
+
 	nick = "RPGServ";
-
-	/* (*) user
-	 *
-	 * Sets the username used for this client.
-	 */
 	user = "RPGServ";
-
-	/* (*) host
-	 *
-	 * The hostname used for this client.
-	 */
 	host = "services.int";
-
-	/* (*) real
-	 *
-	 * The GECOS (real name) of the client.
-	 */
 	real = "RPG Finding Services";
 
-	/* (*) aliases
-	 *
-	 * Command aliases for RPGServ.
-	 */
 	aliases {
 	};
 
-	/* (*) access
-	 *
-	 * Command access changes for RPGServ.
-	 */
 	access {
 	};
 };
 
 /* BotServ configuration.
  *
- * The botserv {} block contains settings specific to the BotServ modules.
- *
  * BotServ provides virtual channel bots.
  */
 botserv {
-	/* (*) nick
-	 *
-	 * The nickname we want BotServ to have.
-	 */
+
 	nick = "BotServ";
-
-	/* (*) user
-	 *
-	 * Sets the username used for this client.
-	 */
 	user = "BotServ";
-
-	/* (*) host
-	 *
-	 * The hostname used for this client.
-	 */
 	host = "services.int";
-
-	/* (*) real
-	 *
-	 * The GECOS (real name) of the client.
-	 */
 	real = "Bot Services";
+
+	aliases {
+	};
+
+	access {
+	};
 
 	/* (*) min_users
 	 *
@@ -2243,47 +2105,18 @@ botserv {
 
 /* GroupServ configuration.
  *
- * The groupserv {} block contains settings specific to the GroupServ modules.
- *
  * GroupServ provides features for managing a collection of channels at once.
- *
  */
 groupserv {
-	/* (*) nick
-	 *
-	 * The nickname we want GroupServ to have.
-	 */
+
 	nick = "GroupServ";
-
-	/* (*) user
-	 *
-	 * The username we want GroupServ to have.
-	 */
 	user = "GroupServ";
-
-	/* (*) host
-	 *
-	 * The hostname we want GroupServ to have.
-	 */
 	host = "services.int";
-
-	/* (*) real
-	 *
-	 * The realname (gecos) information we want GroupServ to have.
-	 */
 	real = "Group Management Services";
 
-	/* (*) aliases
-	 *
-	 * Command aliases for GroupServ.
-	 */
 	aliases {
 	};
 
-	/* (*) access
-	 *
-	 * Command access changes for GroupServ.
-	 */
 	access {
 	};
 
@@ -2301,52 +2134,41 @@ groupserv {
 
 	/* (*) enable_open_groups
 	 *
-	 * Setting this option will allow any group founder to mark
-	 * their group as "anyone can join".
+	 * Setting this option will allow any group founder to mark their
+	 * group as "anyone can join".
 	 */
 	enable_open_groups;
 
 	/* (*) join_flags
 	 *
-	 * This is the GroupServ flagset that users who JOIN a open
-	 * group will get upon join. Please check the groupserv/flags
-	 * helpfile before changing this option. Valid flagsets (for
-	 * example) would be: "+v" or "+cv". It is not valid to use
-	 * minus flags (such as "-v") here.
+	 * This is the GroupServ flagset that users who JOIN an open group
+	 * will get upon join. Please check the "groupserv/flags" help file
+	 * before changing this option. Valid flagsets (for example) would
+	 * be: "+v" or "+cv".
+	 *
+	 * It is NOT valid to use minus flags (such as "-v") here.
 	 */
 	join_flags = "+";
 };
 
 /* HostServ configuration.
  *
- * The hostserv {} block contains settings specific to the HostServ modules.
- *
  * HostServ provides advanced virtual host management.
  */
 hostserv {
-	/* (*) nick
-	 *
-	 * The nickname we want HostServ to have.
-	 */
+
 	nick = "HostServ";
-
-	/* (*) user
-	 *
-	 * Sets the username used for this client.
-	 */
 	user = "HostServ";
-
-	/* (*) host
-	 *
-	 * The hostname used for this client.
-	 */
 	host = "services.int";
-
-	/* (*) real
-	 *
-	 * The GECOS (real name) of the client.
-	 */
 	real = "Host Management Services";
+
+	aliases {
+		"APPROVE" = "ACTIVATE";
+		"DENY" = "REJECT";
+	};
+
+	access {
+	};
 
 	/* reggroup
 	 *
@@ -2370,117 +2192,61 @@ hostserv {
 	 * vhosts work as consistently as possible.
 	 */
 	#request_per_nick;
-
-	/* (*) aliases
-	 *
-	 * Command aliases for HostServ.
-	 */
-	aliases {
-		"APPROVE" = "ACTIVATE";
-		"DENY" = "REJECT";
-	};
-
-	/* (*) access
-	 *
-	 * Command access changes for HostServ.
-	 */
-	access {
-	};
 };
 
 /* HelpServ configuration
- *
- * The helpserv {} block contains settings specific to the HelpServ modules.
  *
  * HelpServ adds a few different ways for users to request help from network
  * staff.
  */
 helpserv {
-	/* (*) nick
-	 *
-	 * The nickname we want HelpServ to have.
-	 */
+
 	nick = "HelpServ";
-
-	/* (*) user
-	 *
-	 * The username we want HelpServ to have.
-	 */
 	user = "HelpServ";
-
-	/* (*) host
-	 *
-	 * The hostname we want HelpServ to have.
-	 */
 	host = "services.int";
-
-	/* (*) real
-	 *
-	 * The realname (gecos) information we want HelpServ to have.
-	 */
 	real = "Help Services";
+
+	aliases {
+	};
+
+	access {
+	};
 };
 
 /* StatServ configuration
  *
- * The statserv {} block contains settings specific to the StatServ modules.
- *
  * StatServ adds basic stats and split tracking.
  */
 statserv {
-	/* (*) nick
-	 *
-	 * The nickname we want StatServ to have.
-	 */
+
 	nick = "StatServ";
-
-	/* (*) user
-	 *
-	 * The username we want StatServ to have.
-	 */
 	user = "StatServ";
-
-	/* (*) host
-	 *
-	 * The hostname we want StatServ to have.
-	 */
 	host = "services.int";
-
-	/* (*) real
-	 *
-	 * The realname (gecos) information we want StatServ to have.
-	 */
 	real = "Statistics Services";
+
+	aliases {
+	};
+
+	access {
+	};
 };
 
 /* ALIS configuration.
  *
- * The alis {} block contains settings specific to the ALIS modules.
+ * ALIS provides a more flexible way to list channels.
  */
 alis {
-	/* (*) nick
-	 *
-	 * The nickname we want ALIS to have.
-	 */
+
 	nick = "ALIS";
-
-	/* (*) user
-	 *
-	 * The username we want ALIS to have.
-	 */
 	user = "alis";
-
-	/* (*) host
-	 *
-	 * The hostname we want ALIS to have.
-	 */
 	host = "services.int";
-
-	/* (*) real
-	 *
-	 * The realname (gecos) information we want ALIS to have.
-	 */
 	real = "Channel Directory";
+
+	aliases {
+	};
+
+	access {
+	};
 
 	/* (*) maxmatches
 	 *
@@ -2491,14 +2257,53 @@ alis {
 	#maxmatches = 64;
 };
 
-/* HTTP server configuration.
+/* ProxyScan configuration.
  *
- * The httpd {} block contains settings specific to the HTTP server module.
+ * Here you can configure the details of your proxyscan (DNS Blacklist)
+ * scanner service.
+ */
+proxyscan {
+
+	nick = "Proxyscan";
+	user = "dnsbl";
+	host = "services.int";
+	real = "Proxyscan Service";
+
+	aliases {
+	};
+
+	access {
+	};
+
+	// (*) List of DNSBLs
+	blacklists {
+		"dnsbl.dronebl.org";
+		"rbl.efnetrbl.org";
+		"tor.efnet.org";
+	};
+
+	/* (*) dnsbl_action
+	 *
+	 * Available values:
+	 *
+	 *   none       Do nothing
+	 *   notify     Notify user that they are listed in a DNSBL
+	 *   snoop      Report the user to the services log channel
+	 *   kline      AKILL the user from the network
+	 *              (default AKILL is 24 hours)
+	 */
+	dnsbl_action = kline;
+};
+
+
+
+/* HTTP server configuration.
  *
  * The HTTP server in Services is used for serving XMLRPC requests. It can
  * also serve static documents and statistics pages.
  */
 httpd {
+
 	/* host
 	 *
 	 * The host that the HTTP server will listen on.
@@ -2527,12 +2332,11 @@ httpd {
 	port = 8080;
 };
 
-/* LDAP configuration.
- *
- * The ldap {} block contains settings specific to the LDAP authentication
- * module.
- */
+
+
+// LDAP configuration.
 ldap {
+
 	/* (*) url
 	 *
 	 * LDAP URL of the server to use.
@@ -2544,11 +2348,14 @@ ldap {
 	 * Format string to convert an account name to an LDAP DN.
 	 * Must contain exactly one %s which will be replaced by the account
 	 * name.
+	 *
 	 * Services will attempt a simple bind with this DN and the given
 	 * password; if this is successful the password is considered correct.
 	 */
 	dnformat = "cn=%s,dc=jillestest,dc=com";
 };
+
+
 
 /****************************************************************************
  * LOGGING SECTION.                                                         *
@@ -2556,63 +2363,64 @@ ldap {
 
 /*
  * logfile{} blocks can be used to set up log files other than the master
- * logfile used by services, which is controlled by serverinfo::loglevel.
+ * log file used by services, which is controlled by serverinfo::loglevel.
  *
- * The various logging categories are:
- *      debug, all      - meta-keyword for all possible categories
- *      trace           - meta-keyword for a little bit of info
- *      misc            - like trace, but with some more miscillaneous info
- *      notice          - meta-keyword for notice-like information
+ * Options include:
+ *      debug, all      - Meta-keyword for all possible categories
+ *      trace           - Meta-keyword for a little bit of info
+ *      misc            - Like trace, but with some more miscellaneous info
+ *      notice          - Meta-keyword for notice-like information
  * ---------------------------------------------------------------------------
- *      error           - critical errors
- *      info            - miscillaneous log notices
- *      verbose         - A bit more verbose than info, not quite as spammy as
- *                        debug
- *      commands        - all command use
- *      admin           - administrative command use
- *      register        - account and channel registrations
- *      set             - changes of account or channel settings
- *      request         - user requests (currently only vhosts)
- *      network         - log notices related to network status
- *      rawdata         - log raw data sent and received by services
+ *      error           - Critical errors
+ *      info            - Miscillaneous log notices
+ *      verbose         - A bit more verbose than info, not quite as
+ *                        spammy as debug
+ *      commands        - All command use
+ *      admin           - Administrative command use
+ *      register        - Account and channel registrations
+ *      set             - Changes of account or channel settings
+ *      request         - User requests (currently only vhosts)
+ *      network         - Log notices related to network status
+ *      rawdata         - Log raw data sent and received by services
+ *      denycmd         - Security model denials (commands, permissions)
  *      wallops         - <not yet used>
- *      denycmd         - security model denials (commands, permissions)
  */
 
 /*
- * This block logs all account and channel registrations and drops,
- * and account and channel setting changes to var/account.log.
+ * This block logs all account and channel registrations and drops, and
+ * account and channel setting changes to var/account.log.
  */
-logfile "var/account.log" { register; set; };
+#logfile "var/account.log" { register; set; };
 
 /*
  * This block logs all command use to var/commands.log.
  */
-logfile "var/commands.log" { commands; };
+#logfile "var/commands.log" { commands; };
 
 /*
  * This block logs all security auditing information.
  */
-logfile "var/audit.log" { denycmd; };
+#logfile "var/audit.log" { denycmd; };
 
 /*
- * You can log to IRC channels, and even split it by category, too.
- * This entry provides roughly the same functionality as the old snoop
- * feature.
+ * You can log to IRC channels, and even split it by category, too. This entry
+ * provides roughly the same functionality as the old snoop feature.
  */
-logfile "#services" { error; info; admin; request; register; denycmd; };
+#logfile "#services" { admin; denycmd; error; info; register; request; };
 
 /*
  * This block logs to server notices.
  */
-logfile "!snotices" { error; info; request; denycmd; };
+#logfile "!snotices" { denycmd; error; info; request; };
+
+
 
 /****************************************************************************
  * GENERAL PARAMETERS CONFIGURATION SECTION.                                *
  ****************************************************************************/
 
-/* The general {} block defines general configuration options. */
 general {
+
 	/* (*) permissive_mode
 	 *
 	 * Whether or not security denials should be soft denials instead of
@@ -2623,34 +2431,32 @@ general {
 
 	/* (*) helpchan
 	 *
-	 * Network help channel. Shown to users when they request
-	 * help for a command that doesn't exist.
+	 * Network help channel. Shown to users when they request help for a
+	 * command that doesn't exist.
 	 */
 	#helpchan = "#help";
 
 	/* (*) helpurl
 	 *
-	 * Network webpage for services help. Shown to users when they
-	 * request help for a command that doesn't exist.
+	 * Network webpage for services help. Shown to users when they request
+	 * help for a command that doesn't exist.
 	 */
 	#helpurl = "http://www.stack.nl/~jilles/irc/atheme-help/";
 
 	/* (*) silent
 	 *
-	 * If you want to prevent services from sending
-	 * WALLOPS/GLOBOPS about things uncomment this.
-	 * Not recommended.
+	 * If you want to prevent services from sending WALLOPS/GLOBOPS about
+	 * things uncomment this. Not recommended.
 	 */
 	#silent;
 
 	/* (*) verbose_wallops
 	 *
-	 * If you want services to send you more information about
-	 * events that are occuring (in particular AKILLs), uncomment the
-	 * directive below.
+	 * If you want services to send you more information about events that
+	 * are occuring (in particular AKILLs), uncomment the directive below.
 	 *
-	 * WARNING! This may result in large amounts of wallops/globops
-	 * floods.
+	 * WARNING:
+	 *   This may result in large amounts of wallops/globops floods.
 	 */
 	#verbose_wallops;
 
@@ -2661,16 +2467,16 @@ general {
 	 *
 	 * If enabled, you can tell ChanServ to join via SET GUARD ON.
 	 *
-	 * If you use ircu-like ircd (asuka), you must
-	 * leave this enabled, and put guard in default cflags.
+	 * If you use ircu-like IRCd (asuka), you must leave this enabled, and
+	 * put guard in default cflags.
 	 *
-	 * For ratbox it is recommended to leave it on and put guard in
+	 * For ratbox it is recommended to leave it on and put guard in the
 	 * default cflags, in order that ChanServ does not have to join/part
 	 * to do certain things. On the other hand, enabling this increases
 	 * potential for bots fighting with ChanServ.
 	 *
-	 * Regardless of this option, ChanServ will temporarily join
-	 * channels which would otherwise be empty if necessary to enforce
+	 * Regardless of this option, ChanServ will temporarily join channels
+	 * which would otherwise be empty if necessary in order to enforce
 	 * akick/restricted/close, and to change the TS if changets is
 	 * enabled.
 	 */
@@ -2680,40 +2486,43 @@ general {
 	 *
 	 * Do we leave registered channels after everyone else has left?
 	 * Turning this off serves little purpose, except to mark "official"
-	 * network channels by keeping them open, and to preserve the
-	 * topic and +beI lists.
+	 * network channels by keeping them open, and to preserve the topic
+	 * and +beI lists.
 	 */
 	leave_chans;
 
 	/* secure
 	 *
 	 * Do you want to require the use of /msg <service>@<services host>?
-	 * Turning this on helps protect against spoofers, but is disabled
-	 * as most networks do not presently use it.
+	 * Turning this on helps protect against spoofers, but is disabled as
+	 * most networks do not presently use it.
 	 */
 	#secure;
 
 	/* (*) uflags
 	 *
-	 * The default flags to set for usernames upon registration.
-	 * Valid values are: hold, neverop, noop, hidemail, nomemo, emailmemos,
-	 * enforce, privmsg, private, quietchg and none.
+	 * The default flags to set for users upon registration.
+	 *
+	 * Valid values are: emailmemos, enforce, hidemail, hold, neverop,
+	 *                   nomemo, noop, private, privmsg, quietchg, none.
 	 */
 	uflags = { hidemail; };
 
 	/* (*) cflags
 	 *
 	 * The default flags to set for channels upon registration.
-	 * Valid values are: hold, secure, verbose, verbose_ops, keeptopic,
-	 * topiclock, guard, private, nosync, limitflags, pubacl and none.
+	 *
+	 * Valid values are: guard, hold, keeptopic, limitflags, nosync,
+	 *                   private, pubacl, secure, topiclock, verbose,
+	 *                   verbose_ops, none.
 	 */
-	cflags = { verbose; guard; };
+	cflags = { guard; verbose; };
 
 	/* (*) raw
 	 *
-	 * Do you want to allow SRAs to use the RAW and INJECT commands?
-	 * These commands are for debugging. If you don't know how to use them
-	 * then don't enable them. They are not supported.
+	 * Do you want to allow SRAs to use the RAW and INJECT commands? These
+	 * commands are for debugging. If you don't know how to use them then
+	 * don't enable them. They are not supported.
 	 */
 	#raw;
 
@@ -2738,9 +2547,10 @@ general {
 	 *
 	 * This configures denied command throttling.
 	 *
-	 * After `ratelimit_uses' of a command within `ratelimit_period',
-	 * users will not be able to run that ratelimited command until the
-	 * period is up. Comment one or both options to disable limiting.
+	 * After `ratelimit_uses' of a rate-limited command within
+	 * `ratelimit_period', users will not be able to run rate-limited
+	 * commands until the period is up. Comment one or both options to
+	 * disable limiting.
 	 *
 	 * Currently used in the following modules:
 	 *
@@ -2817,33 +2627,34 @@ general {
 
 	/* (*) default_clone_warn
 	 *
-	 * The limit after which clones will be warned that they may not
-	 * have any more concurrent connections. Should be lower than
-	 * default_clone_allowed . Used by operserv/clones.
+	 * The limit after which clones will be warned that they may not have
+	 * any more concurrent connections. Should be lower than
+	 * default_clone_allowed. Requires "operserv/clones" to be loaded to
+	 * do anything.
 	 */
 	default_clone_warn = 4;
 
 	/* (*) clone_identified_increase_limit
 	 *
-	 * If this option is enabled, the clone limit for a IP/host will
-	 * be increased by 1 per clone that's identified to services.
-	 * This has a limit of double the clone limits above.
+	 * If this option is enabled, the clone limit for a IP/host will be
+	 * increased by 1 per clone that's identified to services. This effect
+	 * has an upper limit of double the clone limits above.
 	 */
 	clone_identified_increase_limit;
 
 	/* (*) uplink_sendq_limit
 	 *
-	 * The maximum amount of data that may be queued to be sent
-	 * to the uplink, in bytes. This should be enough to contain
-	 * Atheme's response to the netburst, but smaller than the
-	 * IRCd's sendq limit for servers.
+	 * The maximum amount of data that may be queued to be sent to the
+	 * uplink, in bytes. This should be enough to contain Atheme's
+	 * response to the netburst, but smaller than the IRCd's sendq limit
+	 * for servers.
 	 */
 	uplink_sendq_limit = 1048576;
 
 	/* (*) language
 	 *
-	 * Language to use for channel and oper messages and as default
-	 * for users.
+	 * Language to use for channel and oper messages and as default for
+	 * users.
 	 */
 	language = "en";
 
@@ -2869,15 +2680,16 @@ general {
 	 * immunity privileges.
 	 *
 	 * The following flags are available:
-	 *    immune - require whatever ircd usermode is needed for kick
+	 *    immune - require whatever IRCd usermode is needed for kick
 	 *             immunity (this is the default);
 	 *    admin  - require admin privileges for kick immunity
-	 *    ircop  - require any ircop privileges for kick immunity
+	 *    ircop  - require any IRCop privileges for kick immunity
 	 *             (generally umode +o)
 	 */
 	immune_level = immune;
 
-	/* show_entity_id
+	/* (*) show_entity_id
+	 *
 	 * This makes nick/user & group entity IDs visible to everyone, rather
 	 * than just opers with user:auspex or group:auspex privileges.
 	 */
@@ -2888,8 +2700,10 @@ general {
 	 * For module dependencies listed in the services database (if any),
 	 * whether to load those modules on startup (if they are not already
 	 * loaded) or abort startup with a more helpful error message than
-	 * e.g. "db services.db:123: unknown directive 'BE'" --> "corestorage:
-	 * exiting to avoid data loss".
+	 * e.g.:
+	 *
+	 *     db services.db:123: unknown directive 'BE'
+	 *     corestorage: exiting to avoid data loss
 	 *
 	 * Comment this out to abort startup instead of silently loading the
 	 * modules you need to process the database successfully. The abort
@@ -2905,36 +2719,7 @@ general {
 	#hide_opers;
 };
 
-proxyscan {
-	/* Here you can configure the details of your Proxyscan (DNS Blacklist)
-	 * scanner service.
-	 */
 
-	/* (*) Pseudoclient details
-	 */
-	nick = "Proxyscan";
-	user = "dnsbl";
-	host = "services.int";
-	real = "Proxyscan Service";
-
-	/* (*) List of DNSBLs
-	 */
-	blacklists {
-		"dnsbl.dronebl.org";
-		"rbl.efnetrbl.org";
-		"tor.efnet.org";
-	};
-
-	/* (*) dnsbl_action
-	 *
-	 * Available dnsbl_action's:
-	 * NONE - Do nothing
-	 * NOTIFY - Notify user that they are listed in a DNSBL and which one
-	 * SNOOP - Report the user to the logchannel or services channel
-	 * KLINE - AKILL the user from the network (default AKILL is 24 hours)
-	 */
-	dnsbl_action = kline;
-};
 
 /****************************************************************************
  * OPERATOR AND PRIVILEGES CONFIGURATION SECTION.                           *
@@ -2942,10 +2727,12 @@ proxyscan {
 
 /* Operator configuration
  *
- * See the PRIVILEGES document for more information.
+ * See the doc/PRIVILEGES file in the source distribution for more
+ * information.
  *
- * NOTE: ALL changes apply immediately upon rehash. You may need to send a
- * signal (`pkill -HUP atheme-services') to regain control.
+ * WARNING:
+ *   ALL changes to the below blocks apply immediately upon rehash. You may
+ *   need to send a signal (`pkill -HUP atheme-services') to regain control.
  */
 
 /* Operclasses specify groups of services operator privileges.
@@ -2964,6 +2751,7 @@ operclass "user" { };
  * At least chan:cmodes, chan:joinstaffonly and general:auspex are suggested.
  */
 operclass "ircop" {
+
 	privs {
 		special:ircop;
 	};
@@ -3004,6 +2792,7 @@ operclass "ircop" {
 };
 
 operclass "sra" {
+
 	/* You can inherit privileges from a lower operclass. */
 	extends "ircop";
 
@@ -3037,6 +2826,7 @@ operclass "sra" {
 };
 
 
+
 /* (*) Operator blocks specify accounts with certain privileges
  * Oper classes must be defined before they are used in operator blocks.
  */
@@ -3062,6 +2852,8 @@ operator "jilles" {
 	 */
 	#password = "$1$3gJMO9by$0G60YE6GqmuHVH3AnFPor1";
 };
+
+
 
 /****************************************************************************
  * INCLUDE CONFIGURATION SECTION.                                           *
