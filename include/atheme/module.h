@@ -55,7 +55,7 @@ struct module
 
 struct v4_moduleheader
 {
-	unsigned int                    atheme_mod;
+	unsigned int                    magic;
 	unsigned int                    abi_ver;
 	unsigned int                    abi_rev;
 	const char *                    serial;
@@ -87,7 +87,7 @@ extern mowgli_list_t modules;
 #define DECLARE_MODULE_V1(_name, _unloadcap, _modinit, _moddeinit, _ver, _ven)  \
         extern const struct v4_moduleheader _header;                            \
         const struct v4_moduleheader _header = {                                \
-                .atheme_mod = MAPI_ATHEME_MAGIC,                                \
+                .magic      = MAPI_ATHEME_MAGIC,                                \
                 .abi_ver    = MAPI_ATHEME_V4,                                   \
                 .abi_rev    = CURRENT_ABI_REVISION,                             \
                 .serial     = SERNO,                                            \

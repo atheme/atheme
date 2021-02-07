@@ -78,7 +78,7 @@ module_load_internal(const char *pathname, char *errbuf, int errlen)
 
 	h = (const struct v4_moduleheader *) mowgli_module_symbol(handle, "_header");
 
-	if (h == NULL || h->atheme_mod != MAPI_ATHEME_MAGIC)
+	if (h == NULL || h->magic != MAPI_ATHEME_MAGIC)
 	{
 		snprintf(errbuf, errlen, "module_load(): \2%s\2: Attempted to load an incompatible module. Aborting.", pathname);
 
