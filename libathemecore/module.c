@@ -55,7 +55,7 @@ module_add_dependency(struct module *const restrict m)
  * object modules.
  */
 static struct module *
-module_load_internal(const char *pathname, char *errbuf, int errlen)
+module_load_internal(const char *const restrict pathname, char *const restrict errbuf, const size_t errlen)
 {
 	char linker_errbuf[BUFSIZE];
 	mowgli_module_t *const handle = linker_open_ext(pathname, linker_errbuf, BUFSIZE);
@@ -111,7 +111,7 @@ module_load_internal(const char *pathname, char *errbuf, int errlen)
 	struct link_map *map = NULL;
 	dlinfo(handle, RTLD_DI_LINKMAP, &map);
 	if (map && map->l_addr)
-		m->address = (void *) map->l_addr;
+		m->address = (const void *) map->l_addr;
 	else
 		m->address = handle;
 #else
@@ -189,7 +189,7 @@ module_load_internal(const char *pathname, char *errbuf, int errlen)
  *       code is run.
  */
 struct module *
-module_load(const char *filespec)
+module_load(const char *const restrict filespec)
 {
 	char pathbuf[BUFSIZE];
 	const char *pathname = filespec;
@@ -256,7 +256,7 @@ module_load(const char *filespec)
  *       a module is unloaded and neccessary deinitalization code is run.
  */
 void
-module_unload(struct module *m, const enum module_unload_intent intent)
+module_unload(struct module *const restrict m, const enum module_unload_intent intent)
 {
 	mowgli_node_t *n, *tn;
 
@@ -266,7 +266,7 @@ module_unload(struct module *m, const enum module_unload_intent intent)
 	/* unload modules which depend on us */
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, m->required_by.head)
 	{
-		struct module *hm = (struct module *) n->data;
+		struct module *const hm = (struct module *) n->data;
 
 		module_unload(hm, intent);
 	}
@@ -274,8 +274,8 @@ module_unload(struct module *m, const enum module_unload_intent intent)
 	/* let modules that we depend on know that we no longer exist */
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, m->requires.head)
 	{
-		struct module *hm = (struct module *) n->data;
-		mowgli_node_t *hn = mowgli_node_find(m, &hm->required_by);
+		struct module *const hm = (struct module *) n->data;
+		mowgli_node_t *const hn = mowgli_node_find(m, &hm->required_by);
 
 		continue_if_fail(hn != NULL);
 
@@ -328,7 +328,7 @@ module_unload(struct module *m, const enum module_unload_intent intent)
  *       none
  */
 void *
-module_locate_symbol(const char *modname, const char *sym)
+module_locate_symbol(const char *const restrict modname, const char *const restrict sym)
 {
 	struct module *m;
 	if (!(m = module_find_published(modname)))
@@ -373,13 +373,13 @@ module_locate_symbol(const char *modname, const char *sym)
  *       none
  */
 struct module *
-module_find(const char *name)
+module_find(const char *const restrict name)
 {
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, modules.head)
 	{
-		struct module *m = n->data;
+		struct module *const m = n->data;
 
 		if (!strcasecmp(m->modpath, name))
 			return m;
@@ -401,13 +401,13 @@ module_find(const char *name)
  *       none
  */
 struct module *
-module_find_published(const char *name)
+module_find_published(const char *const restrict name)
 {
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, modules.head)
 	{
-		struct module *m = n->data;
+		struct module *const m = n->data;
 
 		if (!strcasecmp(m->name, name))
 			return m;
@@ -429,7 +429,7 @@ module_find_published(const char *name)
  *       a module might be loaded.
  */
 bool
-module_request(const char *name)
+module_request(const char *const restrict name)
 {
 	struct module *m;
 	mowgli_node_t *n;

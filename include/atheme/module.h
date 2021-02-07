@@ -45,7 +45,7 @@ struct module
 	enum module_unload_capability   can_unload;
 	unsigned int                    mflags;
 	const struct v4_moduleheader *  header;
-	void *                          address;
+	const void *                    address;
 	mowgli_module_t *               handle;
 	void                          (*unload_handler)(struct module *, enum module_unload_intent);
 	mowgli_list_t                   required_by;
