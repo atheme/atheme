@@ -75,6 +75,8 @@ cs_cmd_why(struct sourceinfo *si, int parc, char *parv[])
 	else
 		logcommand(si, CMDLOG_GET, "WHY: \2%s!%s@%s\2 on \2%s\2", u->nick, u->user, u->vhost, mc->name);
 
+	bool show_akicks = ( chanacs_source_has_flag(mc, si, CA_ACLVIEW) || has_priv(si, PRIV_CHAN_AUSPEX) );
+
 	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
 		ca = (struct chanacs *)n->data;
@@ -101,7 +103,7 @@ cs_cmd_why(struct sourceinfo *si, int parc, char *parv[])
 				command_success_nodata(si,
 					_("\2%s\2 has flags \2%s\2 in \2%s\2 because they match \2%s\2."),
 					u->nick, bitmask_to_flags2(ca->level, 0), mc->name, ca->entity->name);
-			if (ca->level & CA_AKICK)
+			if (ca->level & CA_AKICK && show_akicks)
 			{
 				md = metadata_find(ca, "reason");
 				if (md != NULL)
@@ -116,7 +118,7 @@ cs_cmd_why(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si,
 				_("\2%s\2 has flags \2%s\2 in \2%s\2 because they match the mask \2%s\2."),
 				u->nick, bitmask_to_flags2(ca->level, 0), mc->name, ca->host);
-		if (ca->level & CA_AKICK)
+		if (ca->level & CA_AKICK && show_akicks)
 		{
 			md = metadata_find(ca, "reason");
 			if (md != NULL)
