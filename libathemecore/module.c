@@ -189,8 +189,7 @@ module_load_internal(const char *const restrict pathname, char *const restrict e
 	return m;
 }
 
-/*
- * module_load()
+/* module_load()
  *
  * inputs:
  *       a literal filename for a module to load.
@@ -208,17 +207,20 @@ module_load(const char *const restrict filespec)
 	char pathbuf[BUFSIZE];
 	const char *pathname = filespec;
 
+	if (! (filespec && *filespec))
+		return NULL;
+
 	if (current_module)
-		(void) slog(LG_VERBOSE, "%s: loading '%s' as a dependency of '%s'",
+		(void) slog(LG_VERBOSE, "%s: loading \2%s\2 as a dependency of \2%s\2",
 		                        MOWGLI_FUNC_NAME, filespec, current_module->name);
 	else
-		(void) slog(LG_VERBOSE, "%s: loading '%s'", MOWGLI_FUNC_NAME, filespec);
+		(void) slog(LG_VERBOSE, "%s: loading \2%s\2", MOWGLI_FUNC_NAME, filespec);
 
 	// Does not begin with / or e.g. C:\...
 	if (! (filespec[0] == '/' || (strlen(filespec) > 3 && filespec[1] == ':' && filespec[2] == '\\')))
 	{
-		snprintf(pathbuf, sizeof pathbuf, "%s/%s", MODDIR "/modules", filespec);
-		slog(LG_DEBUG, "module_load(): translated %s to %s", filespec, pathbuf);
+		(void) snprintf(pathbuf, sizeof pathbuf, "%s/modules/%s", MODDIR, filespec);
+		(void) slog(LG_DEBUG, "%s: translated \2%s\2 to \2%s\2", MOWGLI_FUNC_NAME, filespec, pathbuf);
 
 		pathname = pathbuf;
 	}
@@ -226,7 +228,8 @@ module_load(const char *const restrict filespec)
 	struct module *m;
 	if ((m = module_find(pathname)))
 	{
-		slog(LG_VERBOSE, "module_load(): module \2%s\2 is already loaded [at %p]", pathname, m->address);
+		(void) slog(LG_DEBUG, "%s: module \2%s\2 is already loaded [at %p]",
+		                      MOWGLI_FUNC_NAME, pathname, m->address);
 		return NULL;
 	}
 
@@ -240,12 +243,12 @@ module_load(const char *const restrict filespec)
 			.handled    = 0,
 		};
 
-		hook_call_module_load(&hdata);
+		(void) hook_call_module_load(&hdata);
 
 		if (! hdata.module)
 		{
-			if (!hdata.handled)
-				slog(LG_ERROR, "%s", errbuf);
+			if (! hdata.handled)
+				(void) slog(LG_ERROR, "%s", errbuf);
 
 			return NULL;
 		}
@@ -253,12 +256,12 @@ module_load(const char *const restrict filespec)
 		m = hdata.module;
 	}
 
-	mowgli_node_add(m, &m->mod_node, &modules);
+	(void) mowgli_node_add(m, &m->mod_node, &modules);
 
 	if (me.connected && !cold_start)
 	{
-		wallops("Module %s loaded at %p", m->name, m->address);
-		slog(LG_INFO, "MODLOAD: \2%s\2 at %p", m->name, m->address);
+		(void) wallops("Module \2%s\2 loaded at %p", m->name, m->address);
+		(void) slog(LG_INFO, "MODLOAD: \2%s\2 at %p", m->name, m->address);
 	}
 
 	return m;
