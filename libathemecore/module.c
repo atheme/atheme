@@ -330,8 +330,7 @@ module_unload(struct module *const restrict m, const enum module_unload_intent i
 		(void) m->unload_handler(m, intent);
 }
 
-/*
- * module_locate_symbol()
+/* module_locate_symbol()
  *
  * inputs:
  *       a name of a module and a symbol to look for inside it.
@@ -345,22 +344,22 @@ module_unload(struct module *const restrict m, const enum module_unload_intent i
 void *
 module_locate_symbol(const char *const restrict modname, const char *const restrict sym)
 {
-	struct module *m;
-	if (!(m = module_find_published(modname)))
+	struct module *const m = module_find_published(modname);
+	if (! m)
 	{
-		slog(LG_ERROR, "module_locate_symbol(): %s is not loaded.", modname);
+		(void) slog(LG_ERROR, "%s: \2%s\2 is not loaded", MOWGLI_FUNC_NAME, modname);
 		return NULL;
 	}
 
-	/* If this isn't a loaded .so module, we can't search for symbols in it
-	 */
-	if (!m->handle)
+	// If this isn't a loaded .so module, we can't search for symbols in it
+	if (! m->handle)
 		return NULL;
 
 	void *const symptr = mowgli_module_symbol(m->handle, sym);
-	if (symptr == NULL)
+	if (! symptr)
 	{
-		slog(LG_ERROR, "module_locate_symbol(): could not find symbol %s in module %s.", sym, modname);
+		(void) slog(LG_ERROR, "%s: could not find symbol \2%s\2 in module \2%s\2",
+		                      MOWGLI_FUNC_NAME, sym, modname);
 		return NULL;
 	}
 
