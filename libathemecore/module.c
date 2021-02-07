@@ -32,7 +32,8 @@ modules_init(void)
 {
 	if (! (module_heap = sharedheap_get(sizeof(struct module))))
 	{
-		slog(LG_ERROR, "modules_init(): block allocator failed.");
+		(void) slog(LG_ERROR, "%s: block allocator failed", MOWGLI_FUNC_NAME);
+
 		exit(EXIT_FAILURE);
 	}
 }
