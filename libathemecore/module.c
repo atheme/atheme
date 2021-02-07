@@ -109,8 +109,7 @@ module_load_internal(const char *const restrict pathname, char *const restrict e
 
 #ifdef HAVE_USABLE_DLINFO
 	struct link_map *map = NULL;
-	dlinfo(handle, RTLD_DI_LINKMAP, &map);
-	if (map && map->l_addr)
+	if (dlinfo(handle, RTLD_DI_LINKMAP, &map) == 0 && map && map->l_addr)
 		m->address = (const void *) map->l_addr;
 	else
 		m->address = handle;
