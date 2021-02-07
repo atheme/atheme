@@ -374,8 +374,7 @@ module_locate_symbol(const char *const restrict modname, const char *const restr
 	return symptr;
 }
 
-/*
- * module_find()
+/* module_find()
  *
  * inputs:
  *       a name of a module to locate the object for.
@@ -395,7 +394,7 @@ module_find(const char *const restrict name)
 	{
 		struct module *const m = n->data;
 
-		if (!strcasecmp(m->modpath, name))
+		if (strcasecmp(m->modpath, name) == 0)
 			return m;
 	}
 
