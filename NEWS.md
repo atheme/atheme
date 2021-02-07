@@ -4,8 +4,27 @@ Atheme Services 7.3 Development Notes
 There have been various changes since the last non-point release, most of which
 are not documented here yet.
 
+GUARANTEED COMPATIBILITY BREAKAGE
+---------------------------------
+
+- The `loadmodule` lines in the configuration file no longer take the
+  "modules/" prefix. The example configuration file at
+  `dist/atheme.conf.example` has been updated accordingly.
+
+  So, if you currently have: `loadmodule "modules/nickserv/cert";`
+  Then you will need to change this to: `loadmodule "nickserv/cert";`
+
+  This can be done en masse with a `sed(1)` invocation on your configuration
+  file. Please take a backup first:
+
+  ```
+  $ cp atheme.conf atheme.conf.bak
+  $ sed -r -i -e 's|^loadmodule "modules/|loadmodule "|g' atheme.conf
+  ```
+
 POTENTIAL COMPATIBILITY BREAKAGE
 --------------------------------
+
 - Services now accepts nicknames up to 50 characters in length, because some
   IRCds like Charybdis do (if so configured). However, if you actually *use*
   nicknames on your network greater than *31* characters, your database WILL

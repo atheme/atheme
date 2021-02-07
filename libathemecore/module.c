@@ -225,6 +225,19 @@ module_load(const char *const restrict filespec)
 		pathname = pathbuf;
 	}
 
+	mowgli_node_t *n;
+	MOWGLI_ITER_FOREACH(n, modules_being_loaded.head)
+	{
+		const struct module *const tm = n->data;
+
+		if (strcasecmp(tm->modpath, pathname) != 0)
+			continue;
+
+		(void) slog(LG_ERROR, "%s: circular dependency between modules \2%s\2 and \2%s\2",
+		                      MOWGLI_FUNC_NAME, current_module->name, tm->name);
+		return NULL;
+	}
+
 	struct module *m;
 	if ((m = module_find(pathname)))
 	{
@@ -443,23 +456,11 @@ bool
 module_request(const char *const restrict name)
 {
 	struct module *m;
-	mowgli_node_t *n;
 
 	if ((m = module_find_published(name)))
 	{
 		(void) module_add_dependency(m);
 		return true;
-	}
-	MOWGLI_ITER_FOREACH(n, modules_being_loaded.head)
-	{
-		m = n->data;
-
-		if (!strcasecmp(m->name, name))
-		{
-			(void) slog(LG_ERROR, "%s: circular dependency between modules \2%s\2 and \2%s\2",
-			                      MOWGLI_FUNC_NAME, current_module->name, m->name);
-			return false;
-		}
 	}
 	if ((m = module_load(name)))
 	{

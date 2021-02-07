@@ -319,9 +319,6 @@ init_newconf(void)
 static int
 c_loadmodule(mowgli_config_file_entry_t *ce)
 {
-	char pathbuf[4096];
-	char *name;
-
 	if (!cold_start)
 		return 0;
 
@@ -331,19 +328,8 @@ c_loadmodule(mowgli_config_file_entry_t *ce)
 		return 0;
 	}
 
-	name = ce->vardata;
-
-	if (*name == '/')
-	{
-		module_load(name);
-		return 0;
-	}
-	else
-	{
-		snprintf(pathbuf, 4096, "%s/%s", MODDIR, name);
-		module_load(pathbuf);
-		return 0;
-	}
+	module_load(ce->vardata);
+	return 0;
 }
 
 static int
