@@ -30,9 +30,7 @@ mowgli_list_t modules;
 void
 modules_init(void)
 {
-	module_heap = sharedheap_get(sizeof(struct module));
-
-	if (!module_heap)
+	if (! (module_heap = sharedheap_get(sizeof(struct module))))
 	{
 		slog(LG_ERROR, "modules_init(): block allocator failed.");
 		exit(EXIT_FAILURE);
@@ -59,16 +57,8 @@ module_add_dependency(struct module *const restrict m)
 static struct module *
 module_load_internal(const char *pathname, char *errbuf, int errlen)
 {
-	mowgli_node_t *n;
-	struct module *m;
-	const struct v4_moduleheader *h;
-	mowgli_module_t *handle = NULL;
-#ifdef HAVE_USABLE_DLINFO
-	struct link_map *map;
-#endif
 	char linker_errbuf[BUFSIZE];
-
-	handle = linker_open_ext(pathname, linker_errbuf, BUFSIZE);
+	mowgli_module_t *const handle = linker_open_ext(pathname, linker_errbuf, BUFSIZE);
 
 	if (!handle)
 	{
@@ -76,7 +66,7 @@ module_load_internal(const char *pathname, char *errbuf, int errlen)
 		return NULL;
 	}
 
-	h = (const struct v4_moduleheader *) mowgli_module_symbol(handle, "_header");
+	const struct v4_moduleheader *const h = mowgli_module_symbol(handle, "_header");
 
 	if (h == NULL || h->magic != MAPI_ATHEME_MAGIC)
 	{
@@ -85,7 +75,6 @@ module_load_internal(const char *pathname, char *errbuf, int errlen)
 		mowgli_module_close(handle);
 		return NULL;
 	}
-
 	if (h->abi_ver != MAPI_ATHEME_V4)
 	{
 		snprintf(errbuf, errlen, "module_load(): \2%s\2: MAPI version mismatch (%u != %u), please recompile.", pathname, h->abi_ver, MAPI_ATHEME_V4);
@@ -93,7 +82,6 @@ module_load_internal(const char *pathname, char *errbuf, int errlen)
 		mowgli_module_close(handle);
 		return NULL;
 	}
-
 	if (h->abi_rev != CURRENT_ABI_REVISION)
 	{
 		snprintf(errbuf, errlen, "module_load(): \2%s\2: ABI revision mismatch (%u != %u), please recompile.", pathname, h->abi_rev, CURRENT_ABI_REVISION);
@@ -101,7 +89,6 @@ module_load_internal(const char *pathname, char *errbuf, int errlen)
 		mowgli_module_close(handle);
 		return NULL;
 	}
-
 	if (module_find_published(h->name))
 	{
 		snprintf(errbuf, errlen, "module_load(): \2%s\2: Published name \2%s\2 already exists.", pathname, h->name);
@@ -110,16 +97,18 @@ module_load_internal(const char *pathname, char *errbuf, int errlen)
 		return NULL;
 	}
 
-	m = mowgli_heap_alloc(module_heap);
+	struct module *const m = mowgli_heap_alloc(module_heap);
 
 	mowgli_strlcpy(m->modpath, pathname, BUFSIZE);
 	mowgli_strlcpy(m->name, h->name, BUFSIZE);
-	m->can_unload = h->can_unload;
-	m->handle = handle;
-	m->mflags = 0;
-	m->header = h;
+
+	m->can_unload   = h->can_unload;
+	m->handle       = handle;
+	m->mflags       = 0;
+	m->header       = h;
 
 #ifdef HAVE_USABLE_DLINFO
+	struct link_map *map = NULL;
 	dlinfo(handle, RTLD_DI_LINKMAP, &map);
 	if (map && map->l_addr)
 		m->address = (void *) map->l_addr;
@@ -202,35 +191,34 @@ module_load_internal(const char *pathname, char *errbuf, int errlen)
 struct module *
 module_load(const char *filespec)
 {
-	struct module *m;
-	char pathbuf[BUFSIZE], errbuf[BUFSIZE];
-	const char *pathname;
-	struct hook_module_load hdata;
+	char pathbuf[BUFSIZE];
+	const char *pathname = filespec;
 
 	/* / or C:\... */
-	if (*filespec == '/' || *(filespec + 1) == ':')
-		pathname = filespec;
-	else
+	if (! (*filespec == '/' || *(filespec + 1) == ':'))
 	{
 		snprintf(pathbuf, BUFSIZE, "%s/%s", MODDIR "/modules", filespec);
 		slog(LG_DEBUG, "module_load(): translated %s to %s", filespec, pathbuf);
 		pathname = pathbuf;
 	}
 
+	struct module *m;
 	if ((m = module_find(pathname)))
 	{
 		slog(LG_VERBOSE, "module_load(): module \2%s\2 is already loaded [at %p]", pathname, m->address);
 		return NULL;
 	}
 
-	m = module_load_internal(pathname, errbuf, sizeof errbuf);
-
-	if (!m)
+	char errbuf[BUFSIZE];
+	if (! (m = module_load_internal(pathname, errbuf, sizeof errbuf)))
 	{
-		hdata.name = filespec;
-		hdata.path = pathname;
-		hdata.module = NULL;
-		hdata.handled = 0;
+		struct hook_module_load hdata = {
+			.name       = filespec,
+			.path       = pathname,
+			.module     = NULL,
+			.handled    = 0,
+		};
+
 		hook_call_module_load(&hdata);
 
 		if (! hdata.module)
@@ -343,8 +331,6 @@ void *
 module_locate_symbol(const char *modname, const char *sym)
 {
 	struct module *m;
-	void *symptr;
-
 	if (!(m = module_find_published(modname)))
 	{
 		slog(LG_ERROR, "module_locate_symbol(): %s is not loaded.", modname);
@@ -356,8 +342,7 @@ module_locate_symbol(const char *modname, const char *sym)
 	if (!m->handle)
 		return NULL;
 
-	symptr = mowgli_module_symbol(m->handle, sym);
-
+	void *const symptr = mowgli_module_symbol(m->handle, sym);
 	if (symptr == NULL)
 	{
 		slog(LG_ERROR, "module_locate_symbol(): could not find symbol %s in module %s.", sym, modname);
