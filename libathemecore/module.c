@@ -193,6 +193,12 @@ module_load(const char *const restrict filespec)
 	char pathbuf[BUFSIZE];
 	const char *pathname = filespec;
 
+	if (current_module)
+		(void) slog(LG_VERBOSE, "%s: loading '%s' as a dependency of '%s'",
+		                        MOWGLI_FUNC_NAME, filespec, current_module->name);
+	else
+		(void) slog(LG_VERBOSE, "%s: loading '%s'", MOWGLI_FUNC_NAME, filespec);
+
 	/* / or C:\... */
 	if (! (*filespec == '/' || *(filespec + 1) == ':'))
 	{
