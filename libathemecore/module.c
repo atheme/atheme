@@ -199,11 +199,12 @@ module_load(const char *const restrict filespec)
 	else
 		(void) slog(LG_VERBOSE, "%s: loading '%s'", MOWGLI_FUNC_NAME, filespec);
 
-	/* / or C:\... */
-	if (! (*filespec == '/' || *(filespec + 1) == ':'))
+	// Does not begin with / or e.g. C:\...
+	if (! (filespec[0] == '/' || (strlen(filespec) > 3 && filespec[1] == ':' && filespec[2] == '\\')))
 	{
 		snprintf(pathbuf, sizeof pathbuf, "%s/%s", MODDIR "/modules", filespec);
 		slog(LG_DEBUG, "module_load(): translated %s to %s", filespec, pathbuf);
+
 		pathname = pathbuf;
 	}
 
