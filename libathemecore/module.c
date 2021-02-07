@@ -401,8 +401,7 @@ module_find(const char *const restrict name)
 	return NULL;
 }
 
-/*
- * module_find_published()
+/* module_find_published()
  *
  * inputs:
  *       a published (in _header) name of a module to locate the object for.
@@ -422,7 +421,7 @@ module_find_published(const char *const restrict name)
 	{
 		struct module *const m = n->data;
 
-		if (!strcasecmp(m->name, name))
+		if (strcasecmp(m->name, name) == 0)
 			return m;
 	}
 
