@@ -51,57 +51,70 @@ module_add_dependency(struct module *const restrict m)
 	}
 }
 
-/*
- * module_load_internal: the part of module_load that deals with 'real' shared
- * object modules.
- */
+// module_load_internal: the part of module_load that deals with 'real' shared object modules.
 static struct module *
 module_load_internal(const char *const restrict pathname, char *const restrict errbuf, const size_t errlen)
 {
 	char linker_errbuf[BUFSIZE];
 	mowgli_module_t *const handle = linker_open_ext(pathname, linker_errbuf, sizeof linker_errbuf);
 
-	if (!handle)
+	if (! handle)
 	{
-		snprintf(errbuf, errlen, "module_load(): error while loading %s: \2%s\2", pathname, linker_errbuf);
+		(void) snprintf(errbuf, errlen, "%s: error while loading \2%s\2: %s",
+		                                MOWGLI_FUNC_NAME, pathname, linker_errbuf);
 		return NULL;
 	}
 
 	const struct v4_moduleheader *const h = mowgli_module_symbol(handle, "_header");
 
-	if (h == NULL || h->magic != MAPI_ATHEME_MAGIC)
+	if (! h)
 	{
-		snprintf(errbuf, errlen, "module_load(): \2%s\2: Attempted to load an incompatible module. Aborting.", pathname);
+		(void) snprintf(errbuf, errlen, "%s: error while loading \2%s\2: module has no header; are you sure "
+		                                "this is a services module?", MOWGLI_FUNC_NAME, pathname);
 
-		mowgli_module_close(handle);
+		(void) mowgli_module_close(handle);
+		return NULL;
+	}
+	if (h->magic != MAPI_ATHEME_MAGIC)
+	{
+		(void) snprintf(errbuf, errlen, "%s: error while loading \2%s\2: header magic mismatch "
+		                                "(%08X != %08X); are you sure this is a services module?",
+		                                MOWGLI_FUNC_NAME, pathname, h->magic, MAPI_ATHEME_MAGIC);
+
+		(void) mowgli_module_close(handle);
 		return NULL;
 	}
 	if (h->abi_ver != MAPI_ATHEME_V4)
 	{
-		snprintf(errbuf, errlen, "module_load(): \2%s\2: MAPI version mismatch (%u != %u), please recompile.", pathname, h->abi_ver, MAPI_ATHEME_V4);
+		(void) snprintf(errbuf, errlen, "%s: error while loading \2%s\2: MAPI version mismatch (%u != %u); "
+		                                "please recompile", MOWGLI_FUNC_NAME, pathname, h->abi_ver,
+		                                MAPI_ATHEME_V4);
 
-		mowgli_module_close(handle);
+		(void) mowgli_module_close(handle);
 		return NULL;
 	}
 	if (h->abi_rev != CURRENT_ABI_REVISION)
 	{
-		snprintf(errbuf, errlen, "module_load(): \2%s\2: ABI revision mismatch (%u != %u), please recompile.", pathname, h->abi_rev, CURRENT_ABI_REVISION);
+		(void) snprintf(errbuf, errlen, "%s: error while loading \2%s\2: ABI revision mismatch (%u != %u); "
+		                                "please recompile", MOWGLI_FUNC_NAME, pathname, h->abi_rev,
+		                                CURRENT_ABI_REVISION);
 
-		mowgli_module_close(handle);
+		(void) mowgli_module_close(handle);
 		return NULL;
 	}
 	if (module_find_published(h->name))
 	{
-		snprintf(errbuf, errlen, "module_load(): \2%s\2: Published name \2%s\2 already exists.", pathname, h->name);
+		(void) snprintf(errbuf, errlen, "%s: error while loading \2%s\2: published name \2%s\2 already exists; "
+		                                "duplicated module name?", MOWGLI_FUNC_NAME, pathname, h->name);
 
-		mowgli_module_close(handle);
+		(void) mowgli_module_close(handle);
 		return NULL;
 	}
 
 	struct module *const m = mowgli_heap_alloc(module_heap);
 
-	mowgli_strlcpy(m->modpath, pathname, sizeof m->modpath);
-	mowgli_strlcpy(m->name, h->name, sizeof m->name);
+	(void) mowgli_strlcpy(m->modpath, pathname, sizeof m->modpath);
+	(void) mowgli_strlcpy(m->name, h->name, sizeof m->name);
 
 	m->can_unload   = h->can_unload;
 	m->handle       = handle;
@@ -165,13 +178,14 @@ module_load_internal(const char *const restrict pathname, char *const restrict e
 
 	if (m->mflags & MODFLAG_FAIL)
 	{
-		snprintf(errbuf, errlen, "module_load(): module \2%s\2 init failed", pathname);
-		module_unload(m, MODULE_UNLOAD_INTENT_PERM);
+		(void) snprintf(errbuf, errlen, "%s: error while loading \2%s\2: modinit failed",
+		                                MOWGLI_FUNC_NAME, pathname);
+
+		(void) module_unload(m, MODULE_UNLOAD_INTENT_PERM);
 		return NULL;
 	}
 
-	slog(LG_DEBUG, "module_load(): loaded %s [at %p]", h->name, m->address);
-
+	(void) slog(LG_DEBUG, "%s: loaded \2%s\2 [at %p]", MOWGLI_FUNC_NAME, h->name, m->address);
 	return m;
 }
 
