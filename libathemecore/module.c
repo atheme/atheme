@@ -39,6 +39,19 @@ modules_init(void)
 	}
 }
 
+static inline void
+module_add_dependency(struct module *const restrict m)
+{
+	if (m && current_module && ! mowgli_node_find(m, &current_module->deplist))
+	{
+		(void) mowgli_node_add(m, mowgli_node_create(), &current_module->deplist);
+		(void) mowgli_node_add(current_module, mowgli_node_create(), &m->dephost);
+
+		(void) slog(LG_DEBUG, "%s: \2%s\2 added as a dependency of \2%s\2",
+		                      MOWGLI_FUNC_NAME, m->name, current_module->name);
+	}
+}
+
 /*
  * module_load_internal: the part of module_load that deals with 'real' shared
  * object modules.
@@ -47,7 +60,7 @@ static struct module *
 module_load_internal(const char *pathname, char *errbuf, int errlen)
 {
 	mowgli_node_t *n;
-	struct module *m, *old_current_module;
+	struct module *m;
 	const struct v4_moduleheader *h;
 	mowgli_module_t *handle = NULL;
 #ifdef HAVE_USABLE_DLINFO
@@ -117,19 +130,49 @@ module_load_internal(const char *pathname, char *errbuf, int errlen)
 	m->address = handle;
 #endif
 
-	mowgli_node_add(m, &m->mbl_node, &modules_being_loaded);
-
-	/* set the module target for module dependencies */
-	old_current_module = current_module;
-	current_module = m;
-
 	if (h->modinit)
-		h->modinit(m);
+	{
+		/* The only permitted mechanism of importing a module as a
+		 * dependency is within the modinit function of a real shared
+		 * module, so all of this logic can be contained within this
+		 * block:
+		 *
+		 *   1) Save a copy of the pointer to the module that is
+		 *      currently being initialised (if any).
+		 *
+		 *   2) Set that pointer to this module. This is necessary to
+		 *      know which module is depending on another in step 4.
+		 *
+		 *   3) Add this module to the list of modules being loaded.
+		 *      This is necessary to detect circular dependencies in
+		 *      step 4.
+		 *
+		 *   4) Call this module's modinit function. This may end up
+		 *      recursing into this logic again, if it requests any
+		 *      other modules as dependencies.
+		 *
+		 *   5) Remove this module from the list of modules being
+		 *      loaded.
+		 *
+		 *   6) Restore the old value of the pointer to the module
+		 *      currently being initialised. This is necessary to
+		 *      allow for the previous module to import yet more
+		 *      modules as extra dependencies, and to finally clear
+		 *      the variable when there is no previous module to go
+		 *      back to (end of recursion in step 4).
+		 *
+		 *   -- amdj
+		 */
+		struct module *const cmt = current_module;
 
-	/* we won't be loading symbols outside the init code */
-	current_module = old_current_module;
+		current_module = m;
 
-	mowgli_node_delete(&m->mbl_node, &modules_being_loaded);
+		(void) mowgli_node_add(m, &m->mbl_node, &modules_being_loaded);
+		(void) h->modinit(m);
+		(void) mowgli_node_delete(&m->mbl_node, &modules_being_loaded);
+
+		current_module = cmt;
+	}
 
 	if (m->mflags & MODFLAG_FAIL)
 	{
@@ -307,18 +350,22 @@ module_locate_symbol(const char *modname, const char *sym)
 	if (!m->handle)
 		return NULL;
 
-	if (current_module != NULL && !mowgli_node_find(m, &current_module->deplist))
-	{
-		slog(LG_DEBUG, "module_locate_symbol(): %s added as a dependency for %s (symbol: %s)",
-			m->name, current_module->name, sym);
-		mowgli_node_add(m, mowgli_node_create(), &current_module->deplist);
-		mowgli_node_add(current_module, mowgli_node_create(), &m->dephost);
-	}
-
 	symptr = mowgli_module_symbol(m->handle, sym);
 
 	if (symptr == NULL)
+	{
 		slog(LG_ERROR, "module_locate_symbol(): could not find symbol %s in module %s.", sym, modname);
+		return NULL;
+	}
+
+	/* This shouldn't be necessary, because the recommended way to import symbols is with
+	 * MODULE_TRY_REQUEST_SYMBOL, which first does MODULE_TRY_REQUEST_DEPENDENCY, which does
+	 * module_request(), which will add it as a dependency. Still, best to be thorough.
+	 *
+	 *   -- amdj
+	 */
+	(void) module_add_dependency(m);
+
 	return symptr;
 }
 
@@ -396,9 +443,11 @@ module_request(const char *name)
 	struct module *m;
 	mowgli_node_t *n;
 
-	if (module_find_published(name))
+	if ((m = module_find_published(name)))
+	{
+		(void) module_add_dependency(m);
 		return true;
-
+	}
 	MOWGLI_ITER_FOREACH(n, modules_being_loaded.head)
 	{
 		m = n->data;
@@ -406,16 +455,17 @@ module_request(const char *name)
 		if (!strcasecmp(m->name, name))
 		{
 			slog(LG_ERROR, "module_request(): circular dependency between modules %s and %s",
-					current_module != NULL ? current_module->name : "?",
-					m->name);
+					current_module->name, m->name);
 			return false;
 		}
 	}
+	if ((m = module_load(name)))
+	{
+		(void) module_add_dependency(m);
+		return true;
+	}
 
-	if (module_load(name) == NULL)
-		return false;
-
-	return true;
+	return false;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
