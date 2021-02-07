@@ -51,6 +51,7 @@ struct module
 	mowgli_list_t                   required_by;
 	mowgli_list_t                   requires;
 	mowgli_node_t                   mbl_node;
+	mowgli_node_t                   mod_node;
 };
 
 struct v4_moduleheader

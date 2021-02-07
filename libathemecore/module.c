@@ -231,7 +231,7 @@ module_load(const char *const restrict filespec)
 		m = hdata.module;
 	}
 
-	mowgli_node_add(m, mowgli_node_create(), &modules);
+	mowgli_node_add(m, &m->mod_node, &modules);
 
 	if (me.connected && !cold_start)
 	{
@@ -284,14 +284,12 @@ module_unload(struct module *const restrict m, const enum module_unload_intent i
 		mowgli_node_free(n);
 	}
 
-	n = mowgli_node_find(m, &modules);
-	if (n != NULL)
+	if (mowgli_node_find(m, &modules))
 	{
 		if (m->header && m->header->deinit)
 			m->header->deinit(intent);
 
-		mowgli_node_delete(n, &modules);
-		mowgli_node_free(n);
+		mowgli_node_delete(&m->mod_node, &modules);
 
 		(void) slog(LG_INFO, "%s: unloaded \2%s\2", MOWGLI_FUNC_NAME, m->name);
 
