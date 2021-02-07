@@ -267,8 +267,7 @@ module_load(const char *const restrict filespec)
 	return m;
 }
 
-/*
- * module_unload()
+/* module_unload()
  *
  * inputs:
  *       a module object to unload.
@@ -284,57 +283,51 @@ module_unload(struct module *const restrict m, const enum module_unload_intent i
 {
 	mowgli_node_t *n, *tn;
 
-	if (!m)
+	if (! m)
 		return;
 
-	/* unload modules which depend on us */
+	// Unload modules which depend on us
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, m->required_by.head)
 	{
-		struct module *const hm = (struct module *) n->data;
+		struct module *const hm = n->data;
 
-		module_unload(hm, intent);
+		(void) module_unload(hm, intent);
 	}
 
-	/* let modules that we depend on know that we no longer exist */
+	// Let modules that we depend on know that we no longer exist
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, m->requires.head)
 	{
-		struct module *const hm = (struct module *) n->data;
+		struct module *const hm = n->data;
 		mowgli_node_t *const hn = mowgli_node_find(m, &hm->required_by);
 
 		continue_if_fail(hn != NULL);
 
-		mowgli_node_delete(hn, &hm->required_by);
-		mowgli_node_free(hn);
-		mowgli_node_delete(n, &m->requires);
-		mowgli_node_free(n);
+		(void) mowgli_node_delete(hn, &hm->required_by);
+		(void) mowgli_node_free(hn);
+		(void) mowgli_node_delete(n, &m->requires);
+		(void) mowgli_node_free(n);
 	}
 
 	if (mowgli_node_find(m, &modules))
 	{
 		if (m->header && m->header->deinit)
-			m->header->deinit(intent);
+			(void) m->header->deinit(intent);
 
-		mowgli_node_delete(&m->mod_node, &modules);
+		(void) mowgli_node_delete(&m->mod_node, &modules);
 
 		(void) slog(LG_INFO, "%s: unloaded \2%s\2", MOWGLI_FUNC_NAME, m->name);
 
 		if (me.connected)
-			(void) wallops("Module %s unloaded.", m->name);
+			(void) wallops("Module \2%s\2 unloaded", m->name);
 	}
 
-	/* else unloaded in embryonic state */
 	if (m->handle)
 	{
-		mowgli_module_close(m->handle);
-		mowgli_heap_free(module_heap, m);
+		(void) mowgli_module_close(m->handle);
+		(void) mowgli_heap_free(module_heap, m);
 	}
-	else
-	{
-		/* If handle is null, unload_handler is required to be valid
-		 * and we can't do anything meaningful if it isn't.
-		 */
-		m->unload_handler(m, intent);
-	}
+	else if (m->unload_handler)
+		(void) m->unload_handler(m, intent);
 }
 
 /*
