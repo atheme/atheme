@@ -79,19 +79,19 @@ bool module_request(const char *name);
 // Located in libathemecore/module.c
 extern mowgli_list_t modules;
 
-#define DECLARE_MODULE_V1(_name, _unloadcap, _modinit, _moddeinit, _ver, _ven)  \
-        extern const struct v4_moduleheader _header;                            \
-        const struct v4_moduleheader _header = {                                \
-                .magic      = MAPI_ATHEME_MAGIC,                                \
-                .abi_ver    = MAPI_ATHEME_V4,                                   \
-                .abi_rev    = CURRENT_ABI_REVISION,                             \
-                .serial     = SERNO,                                            \
-                .name       = _name,                                            \
-                .can_unload = _unloadcap,                                       \
-                .modinit    = _modinit,                                         \
-                .deinit     = _moddeinit,                                       \
-                .vendor     = _ven,                                             \
-                .version    = _ver,                                             \
+#define DECLARE_MODULE_V1(_name, _ucap, _modinit, _moddeinit, _ver, _ven)  \
+        extern const struct v4_moduleheader _header;                       \
+        const struct v4_moduleheader _header = {                           \
+                .magic      = MAPI_ATHEME_MAGIC,                           \
+                .abi_ver    = MAPI_ATHEME_V4,                              \
+                .abi_rev    = CURRENT_ABI_REVISION,                        \
+                .serial     = SERNO,                                       \
+                .name       = _name,                                       \
+                .can_unload = _ucap,                                       \
+                .modinit    = _modinit,                                    \
+                .deinit     = _moddeinit,                                  \
+                .vendor     = _ven,                                        \
+                .version    = _ver,                                        \
         }
 
 #define VENDOR_DECLARE_MODULE_V1(name, unloadcap, ven)                     \
