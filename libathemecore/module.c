@@ -21,7 +21,7 @@
 #  include <link.h>
 #endif
 
-static mowgli_list_t modules_inprogress;
+static mowgli_list_t modules_being_loaded;
 static mowgli_heap_t *module_heap = NULL;
 static struct module *modtarget = NULL;
 
@@ -117,8 +117,7 @@ module_load_internal(const char *pathname, char *errbuf, int errlen)
 	m->address = handle;
 #endif
 
-	n = mowgli_node_create();
-	mowgli_node_add(m, n, &modules_inprogress);
+	mowgli_node_add(m, &m->mbl_node, &modules_being_loaded);
 
 	/* set the module target for module dependencies */
 	old_modtarget = modtarget;
@@ -130,8 +129,7 @@ module_load_internal(const char *pathname, char *errbuf, int errlen)
 	/* we won't be loading symbols outside the init code */
 	modtarget = old_modtarget;
 
-	mowgli_node_delete(n, &modules_inprogress);
-	mowgli_node_free(n);
+	mowgli_node_delete(&m->mbl_node, &modules_being_loaded);
 
 	if (m->mflags & MODFLAG_FAIL)
 	{
@@ -401,7 +399,7 @@ module_request(const char *name)
 	if (module_find_published(name))
 		return true;
 
-	MOWGLI_ITER_FOREACH(n, modules_inprogress.head)
+	MOWGLI_ITER_FOREACH(n, modules_being_loaded.head)
 	{
 		m = n->data;
 
