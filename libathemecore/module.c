@@ -21,8 +21,6 @@
 #  include <link.h>
 #endif
 
-static struct module *module_load_internal(const char *pathname, char *errbuf, int errlen);
-
 static mowgli_list_t modules_inprogress;
 static mowgli_heap_t *module_heap = NULL;
 static struct module *modtarget = NULL;
@@ -39,75 +37,6 @@ modules_init(void)
 		slog(LG_ERROR, "modules_init(): block allocator failed.");
 		exit(EXIT_FAILURE);
 	}
-}
-
-/*
- * module_load()
- *
- * inputs:
- *       a literal filename for a module to load.
- *
- * outputs:
- *       the respective struct module object of the module.
- *
- * side effects:
- *       a module, or module-like object, is loaded and necessary initialization
- *       code is run.
- */
-struct module *
-module_load(const char *filespec)
-{
-	struct module *m;
-	char pathbuf[BUFSIZE], errbuf[BUFSIZE];
-	const char *pathname;
-	struct hook_module_load hdata;
-
-	/* / or C:\... */
-	if (*filespec == '/' || *(filespec + 1) == ':')
-		pathname = filespec;
-	else
-	{
-		snprintf(pathbuf, BUFSIZE, "%s/%s", MODDIR "/modules", filespec);
-		slog(LG_DEBUG, "module_load(): translated %s to %s", filespec, pathbuf);
-		pathname = pathbuf;
-	}
-
-	if ((m = module_find(pathname)))
-	{
-		slog(LG_VERBOSE, "module_load(): module \2%s\2 is already loaded [at %p]", pathname, m->address);
-		return NULL;
-	}
-
-	m = module_load_internal(pathname, errbuf, sizeof errbuf);
-
-	if (!m)
-	{
-		hdata.name = filespec;
-		hdata.path = pathname;
-		hdata.module = NULL;
-		hdata.handled = 0;
-		hook_call_module_load(&hdata);
-
-		if (! hdata.module)
-		{
-			if (!hdata.handled)
-				slog(LG_ERROR, "%s", errbuf);
-
-			return NULL;
-		}
-
-		m = hdata.module;
-	}
-
-	mowgli_node_add(m, mowgli_node_create(), &modules);
-
-	if (me.connected && !cold_start)
-	{
-		wallops("Module %s loaded at %p", m->name, m->address);
-		slog(LG_INFO, "MODLOAD: \2%s\2 at %p", m->name, m->address);
-	}
-
-	return m;
 }
 
 /*
@@ -212,6 +141,75 @@ module_load_internal(const char *pathname, char *errbuf, int errlen)
 	}
 
 	slog(LG_DEBUG, "module_load(): loaded %s [at %p; MAPI version %u]", h->name, m->address, h->abi_ver);
+
+	return m;
+}
+
+/*
+ * module_load()
+ *
+ * inputs:
+ *       a literal filename for a module to load.
+ *
+ * outputs:
+ *       the respective struct module object of the module.
+ *
+ * side effects:
+ *       a module, or module-like object, is loaded and necessary initialization
+ *       code is run.
+ */
+struct module *
+module_load(const char *filespec)
+{
+	struct module *m;
+	char pathbuf[BUFSIZE], errbuf[BUFSIZE];
+	const char *pathname;
+	struct hook_module_load hdata;
+
+	/* / or C:\... */
+	if (*filespec == '/' || *(filespec + 1) == ':')
+		pathname = filespec;
+	else
+	{
+		snprintf(pathbuf, BUFSIZE, "%s/%s", MODDIR "/modules", filespec);
+		slog(LG_DEBUG, "module_load(): translated %s to %s", filespec, pathbuf);
+		pathname = pathbuf;
+	}
+
+	if ((m = module_find(pathname)))
+	{
+		slog(LG_VERBOSE, "module_load(): module \2%s\2 is already loaded [at %p]", pathname, m->address);
+		return NULL;
+	}
+
+	m = module_load_internal(pathname, errbuf, sizeof errbuf);
+
+	if (!m)
+	{
+		hdata.name = filespec;
+		hdata.path = pathname;
+		hdata.module = NULL;
+		hdata.handled = 0;
+		hook_call_module_load(&hdata);
+
+		if (! hdata.module)
+		{
+			if (!hdata.handled)
+				slog(LG_ERROR, "%s", errbuf);
+
+			return NULL;
+		}
+
+		m = hdata.module;
+	}
+
+	mowgli_node_add(m, mowgli_node_create(), &modules);
+
+	if (me.connected && !cold_start)
+	{
+		wallops("Module %s loaded at %p", m->name, m->address);
+		slog(LG_INFO, "MODLOAD: \2%s\2 at %p", m->name, m->address);
+	}
 
 	return m;
 }
