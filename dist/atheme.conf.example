@@ -2602,9 +2602,23 @@ general {
 
 	/* commit_interval (minutes)
 	 *
-	 * The time between database writes.
+	 * The time between periodic database writes.
 	 */
 	commit_interval = 5;
+
+	/* (*) db_save_blocking
+	 *
+	 * Whether to always use a blocking database save (even in the
+	 * periodic db save timer; see commit_interval above).
+	 *
+	 * Useful if you are running services with LeakSanitizer enabled, as
+	 * services does not free its resources before exiting. A regular db
+	 * save forks to the background, writes the database, and exits, which
+	 * will pollute the console with pointless memory leak messages.
+	 *
+	 * Not recommended if you are not running services in the console.
+	 */
+	#db_save_blocking;
 
 	/* (*) operstring
 	 *

@@ -96,6 +96,10 @@ You can accomplish this as follows (with or without sanitizers):
     $ ./configure --disable-linker-defs --enable-compiler-sanitizers \
         CC="clang" LDFLAGS="-fuse-ld=lld"
 
+If you do enable the sanitizers, it is recommended to enable the configuration
+option `general::db_save_blocking`; see the example configuration file for
+more details.
+
 
 
 ## Getting More Help

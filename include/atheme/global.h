@@ -71,6 +71,7 @@ struct ConfOption
 	unsigned int    vhost_change;           // days in which a user must wait between vhost changes
 	unsigned int    clone_time;             // default expire for clone exemptions
 	unsigned int    commit_interval;        // interval between commits
+	bool            db_save_blocking;       // whether to always use a blocking database commit
 	bool            silent;                 // stop sending WALLOPS?
 	bool            join_chans;             // join registered channels?
 	bool            leave_chans;            // leave channels when empty?
