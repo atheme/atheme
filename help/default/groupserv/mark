@@ -1,0 +1,13 @@
+Help for MARK:
+
+MARK allows operators to attach a note to a group.
+For example, an operator could mark the group of a
+spammer so that others know it has previously been
+warned.
+
+MARK information will be displayed in INFO output.
+
+Syntax: MARK <!group> ON|OFF <reason>
+
+Example:
+    /msg &nick& MARK !trolls ON Lots of bad trolls
