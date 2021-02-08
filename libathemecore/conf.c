@@ -322,13 +322,58 @@ c_loadmodule(mowgli_config_file_entry_t *ce)
 	if (!cold_start)
 		return 0;
 
-	if (ce->vardata == NULL)
+	// loadmodule "foo/bar";
+	if (strcmp(ce->varname, "loadmodule") == 0 && ! ce->entries && ! ce->prevlevel)
 	{
-		conf_report_warning(ce, "no parameter for configuration option");
+		if (ce->vardata)
+			(void) module_load(ce->vardata);
+		else
+			(void) conf_report_warning(ce, "no parameter for configuration option");
+
 		return 0;
 	}
 
-	module_load(ce->vardata);
+	/* loadmodule {
+	 *   foo {
+	 *     bar;
+	 *   };
+	 * };
+	 */
+	if (ce->entries)
+	{
+		MOWGLI_ITER_FOREACH(ce, ce->entries)
+			(void) c_loadmodule(ce);
+
+		return 0;
+	}
+
+	char path[PATH_MAX] = { 0 };
+	char ptmp[PATH_MAX] = { 0 };
+
+	while (ce->prevlevel)
+	{
+		if (ce->vardata || ! ce->varname)
+		{
+			(void) conf_report_warning(ce, "invalid parameter for configuration option");
+			return 0;
+		}
+
+		(void) mowgli_strlcpy(ptmp, ce->varname, sizeof ptmp);
+
+		if (*path)
+		{
+			(void) mowgli_strlcat(ptmp, "/", sizeof ptmp);
+			(void) mowgli_strlcat(ptmp, path, sizeof ptmp);
+		}
+
+		(void) mowgli_strlcpy(path, ptmp, sizeof path);
+
+		ce = ce->prevlevel;
+	}
+
+	if (*path)
+		(void) module_load(path);
+
 	return 0;
 }
 

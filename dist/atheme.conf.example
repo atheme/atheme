@@ -37,6 +37,48 @@
  * Modules marked [experimental] will taint your atheme-services instance. Do
  * not file any bug reports with us about using Services with those modules;
  * they will be ignored.
+ *
+ *
+ *
+ * Modules can be loaded in one of two ways. You can either pass the module
+ * path as a string:
+ *
+ *   loadmodule "foo/bar";
+ *   loadmodule "foo/baz";
+ *
+ * ... which is how it used to be done in previous versions of this software,
+ * and how all of the loadmodule lines are listed in this file (for backward
+ * compatibility). This is also the only way to load a module by absolute,
+ * rather than relative, path.
+ *
+ * New in v7.3 is that you can use the module path to construct a series of
+ * configuration blocks:
+ *
+ *   loadmodule {
+ *     foo {
+ *       bar;
+ *       baz;
+ *     };
+ *   };
+ *
+ * ... which is equivalent to the individual two lines using strings above.
+ * You can mix and match both styles in the same configuration file, but not
+ * in the same directive. For example, this is valid:
+ *
+ *   loadmodule "foo/bar";
+ *   loadmodule {
+ *     baz {
+ *       quux;
+ *     };
+ *   };
+ *
+ * ... while this is not valid:
+ *
+ *   loadmodule "foo/bar" {
+ *     baz {
+ *       quux;
+ *     };
+ *   };
  */
 
 
