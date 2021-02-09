@@ -587,11 +587,8 @@ loadmodule "chanserv/antiflood";
  * INJECT command                               operserv/inject
  * JUPE command                                 operserv/jupe
  * MODE command                                 operserv/mode
- * MODINSPECT command                           operserv/modinspect
  * MODLIST command                              operserv/modlist
- * MODLOAD command                              operserv/modload
- * MODRELOAD command                            operserv/modreload
- * MODUNLOAD command                            operserv/modunload
+ * Module inspect/load/reload/unload commands   operserv/modmanager
  * NOOP system                                  operserv/noop
  * Regex mass akill (RAKILL command)            operserv/rakill
  * RAW command                                  operserv/raw
@@ -641,11 +638,8 @@ loadmodule "operserv/ignore";
 loadmodule "operserv/info";
 loadmodule "operserv/jupe";
 loadmodule "operserv/mode";
-loadmodule "operserv/modinspect";
 loadmodule "operserv/modlist";
-loadmodule "operserv/modload";
-loadmodule "operserv/modunload";
-loadmodule "operserv/modreload";
+loadmodule "operserv/modmanager";
 loadmodule "operserv/noop";
 #loadmodule "operserv/rakill";
 loadmodule "operserv/readonly";
@@ -2050,6 +2044,15 @@ operserv {
 
 	access {
 	};
+
+	/* (*) modinspect_use_colors
+	 *
+	 * Whether to use colors (green for unloadable modules, yellow for
+	 * reload-only modules, red for permanent modules) when printing
+	 * whether a module is unloadable in the MODINSPECT command
+	 * (provided by the "operserv/modmanager" module).
+	 */
+	#modinspect_use_colors;
 };
 
 /* SaslServ configuration.

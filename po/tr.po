@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <ircs://chat.freenode.net:6697/atheme-i18n>\n"
-"POT-Creation-Date: 2021-02-11 01:06+0000\n"
+"POT-Creation-Date: 2021-02-11 01:09+0000\n"
 "PO-Revision-Date: 2018-12-25 10:09+0300\n"
 "Last-Translator: Monkey D. Luffy <luffy@crypthon.org>\n"
 "Language-Team: \n"
@@ -213,11 +213,6 @@ msgstr "%s sadece IRC tarafindan uygulanabilir."
 #, c-format
 msgid "%s cannot be closed."
 msgstr "%s kanali kapatilamaz."
-
-#: modules/operserv/modinspect.c:38
-#, c-format
-msgid "%s cannot be inspected."
-msgstr "%s modulu izlenemez."
 
 #: modules/groupserv/acsnolimit.c:57
 #, c-format
@@ -548,12 +543,12 @@ msgstr "%1$s nicki bir gruba ait, cikarmak icin %2$s kullanin."
 msgid "%s is a network service; you cannot kick or deop them."
 msgstr "%s kicklerden korunuyor, atamazsiniz."
 
-#: modules/operserv/modreload.c:74
+#: modules/operserv/modmanager.c:419
 #, c-format
 msgid "%s is a permanent module; it cannot be reloaded."
 msgstr "%s kalici bir modul; tekrar yuklenemez."
 
-#: modules/operserv/modunload.c:41
+#: modules/operserv/modmanager.c:527
 #, c-format
 msgid "%s is a permanent module; it cannot be unloaded."
 msgstr "%s kalici bir modul; kaldirilamaz."
@@ -600,7 +595,7 @@ msgstr "%s zaten dondurulmus."
 msgid "%s is already held."
 msgstr "%s zaten bekletilmekte."
 
-#: modules/operserv/modload.c:31
+#: modules/operserv/modmanager.c:379
 #, c-format
 msgid "%s is already loaded."
 msgstr "%s modulu zaten yuklenmis."
@@ -718,11 +713,19 @@ msgstr "%s kanali kapali."
 msgid "%s is currently empty."
 msgstr "%s kanali su an bos."
 
-#: modules/operserv/modreload.c:91
+#: modules/operserv/modmanager.c:428
 #, c-format
 msgid ""
 "%s is depended upon by %s, which is a permanent module and cannot be "
 "reloaded."
+msgstr ""
+"%1$s modulu kalici bir modul olan %2$s modulune bagli, tekrar yuklenemez."
+
+#: modules/operserv/modmanager.c:543
+#, fuzzy, c-format
+msgid ""
+"%s is depended upon by %s, which is a permanent module and cannot be "
+"unloaded."
 msgstr ""
 "%1$s modulu kalici bir modul olan %2$s modulune bagli, tekrar yuklenemez."
 
@@ -898,8 +901,8 @@ msgstr "%s sifrelenmemis."
 msgid "%s is not listed in the badmail database."
 msgstr "Email kalibi %s badmail veritabaninda bulunamadi."
 
-#: modules/operserv/modinspect.c:31 modules/operserv/modreload.c:58
-#: modules/operserv/modunload.c:33
+#: modules/operserv/modmanager.c:316 modules/operserv/modmanager.c:414
+#: modules/operserv/modmanager.c:522
 #, c-format
 msgid "%s is not loaded."
 msgstr "%s modulu yuklu degil."
@@ -2061,7 +2064,7 @@ msgid "(no privileges held)"
 msgstr "Yetkiler sonu"
 
 #: modules/chanserv/access.c:624 modules/nickserv/info.c:505
-#: modules/operserv/modinspect.c:52
+#: modules/operserv/modmanager.c:362
 msgid "*** End of Info ***"
 msgstr "*** Bilgi Sonu ***"
 
@@ -2296,9 +2299,9 @@ msgstr "%1$s sablonu %2$s kipleriyle %3$s kanalina eklendi."
 msgid "Adding or removing founder status from a role is not implemented."
 msgstr ""
 
-#: modules/operserv/modinspect.c:44
-#, c-format
-msgid "Address    : %p"
+#: modules/operserv/modmanager.c:324
+#, fuzzy, c-format
+msgid "Address        : %p"
 msgstr "Adres    : %p"
 
 #: modules/chanfix/fix.c:909
@@ -2633,11 +2636,6 @@ msgstr "CLONES kline anlik olarak aktif."
 #: modules/gameserv/dice.c:608
 msgid "Calculate stuff."
 msgstr "Hesap yapar."
-
-#: modules/operserv/modinspect.c:50
-#, c-format
-msgid "Can unload : %s"
-msgstr "Kaldirabilir : %s"
 
 #: modules/gameserv/dice.c:476
 msgid "Can't divide by zero."
@@ -3225,6 +3223,11 @@ msgstr "Ag realname bani kaldirir"
 msgid "Deletes memos."
 msgstr "Kisa notlarinizi siler."
 
+#: modules/operserv/modmanager.c:346
+#, c-format
+msgid "Dependencies (%zu):"
+msgstr ""
+
 #: modules/groupserv/info.c:47
 #, c-format
 msgid "Description : %s"
@@ -3282,7 +3285,7 @@ msgstr "Iceriksel yardim bilgisi goruntuler."
 msgid "Displays info for a particular game."
 msgstr "Belli bir oyun hakkinda bilgi goruntuler."
 
-#: modules/operserv/modinspect.c:57
+#: modules/operserv/modmanager.c:560
 msgid "Displays information about loaded modules."
 msgstr "Yuklu moduller hakkinda bilgileri gosterir."
 
@@ -3542,9 +3545,9 @@ msgstr "%d girdisi oper logon bilgisinde bulunamadi."
 msgid "Entry %u not found in oper logon info."
 msgstr "%d girdisi oper logon bilgisinde bulunamadi."
 
-#: modules/operserv/modinspect.c:45
-#, c-format
-msgid "Entry point: %p"
+#: modules/operserv/modmanager.c:328
+#, fuzzy, c-format
+msgid "Entry Point    : %p"
 msgstr "Girdi noktasi: %p"
 
 #: modules/gameserv/dice.c:97
@@ -3582,9 +3585,9 @@ msgstr "Hata: Bilinmeyen matematiksel islem: %c."
 msgid "Error: You typed an invalid expression."
 msgstr "Hata: Gecersiz tanimlama girdiniz."
 
-#: modules/operserv/modinspect.c:46
-#, c-format
-msgid "Exit point : %p"
+#: modules/operserv/modmanager.c:329
+#, fuzzy, c-format
+msgid "Exit Point     : %p"
 msgstr "Cikti noktasi : %p"
 
 #: modules/chanserv/why.c:149
@@ -4139,7 +4142,7 @@ msgid "Information on %s (account %s):"
 msgstr "%1$s bilgileri (hesap %2$s):"
 
 #: modules/chanfix/fix.c:586 modules/chanserv/info.c:63
-#: modules/nickserv/info.c:121 modules/operserv/modinspect.c:42
+#: modules/nickserv/info.c:121 modules/operserv/modmanager.c:322
 #: modules/rpgserv/info.c:40
 #, c-format
 msgid "Information on %s:"
@@ -4588,8 +4591,9 @@ msgstr "Onay bekleyen vhost taleplerini listeler."
 msgid "Loaded modules:"
 msgstr "Yuklu moduller:"
 
-#: modules/operserv/modload.c:55
-msgid "Loads a module."
+#: modules/operserv/modmanager.c:569
+#, fuzzy
+msgid "Loads modules."
 msgstr "Modul yukler."
 
 #: modules/operserv/greplog.c:176
@@ -4846,12 +4850,12 @@ msgstr "Mod kilidi cok uzun, tamami gosterilmiyor"
 msgid "Modified   : %s (%s ago) by %s"
 msgstr "Duzenlendi   : %s (%s once)"
 
-#: modules/operserv/modload.c:41
+#: modules/operserv/modmanager.c:388
 #, c-format
 msgid "Module %s failed to load."
 msgstr "%s modulunun yuklenmesi basarisiz."
 
-#: modules/operserv/modreload.c:145
+#: modules/operserv/modmanager.c:489
 #, c-format
 msgid ""
 "Module %s failed to reload, and does not allow unloading. Shutting down to "
@@ -4860,22 +4864,22 @@ msgstr ""
 "%s modulunu tekrar yukleme basarisiz, ve kaldirilmaya izin verilmiyor. Veri "
 "kaybini onlemek icin sistem kapatiliyor."
 
-#: modules/operserv/modreload.c:154
+#: modules/operserv/modmanager.c:482
 #, c-format
 msgid "Module %s failed to reload."
 msgstr "%s modulunu tekrar yukleme basarisiz."
 
-#: modules/operserv/modload.c:39
+#: modules/operserv/modmanager.c:386
 #, c-format
 msgid "Module %s loaded."
 msgstr "%s modulu yuklendi."
 
-#: modules/operserv/modreload.c:137
-#, c-format
-msgid "Module %s reloaded (from %s)."
-msgstr "%1$s modulu %2$s tarafindan tekrar yuklendi."
+#: modules/operserv/modmanager.c:476
+#, fuzzy, c-format
+msgid "Module %s reloaded."
+msgstr "%s modulu yuklendi."
 
-#: modules/operserv/modunload.c:56
+#: modules/operserv/modmanager.c:554
 #, c-format
 msgid "Module %s unloaded."
 msgstr "%s modulu kaldirildi."
@@ -4924,11 +4928,6 @@ msgstr ""
 #: modules/chanserv/template.c:36 modules/chanserv/template.c:105
 msgid "Name"
 msgstr "Isim"
-
-#: modules/operserv/modinspect.c:43
-#, c-format
-msgid "Name       : %s"
-msgstr "Isim       : %s"
 
 #: modules/chanfix/fix.c:609
 #, c-format
@@ -5070,7 +5069,7 @@ msgstr "Nickler      : %s"
 #: modules/chanserv/moderate.c:222 modules/groupserv/main/hooks.c:119
 #: modules/hostserv/request.c:143 modules/nickserv/pwquality.c:195
 #: modules/operserv/info.c:22 modules/operserv/info.c:28
-#: modules/operserv/info.c:44 modules/operserv/modinspect.c:51
+#: modules/operserv/info.c:44
 #, fuzzy
 msgid "No"
 msgstr ""
@@ -5520,6 +5519,10 @@ msgstr "Zaman araligi: %s"
 msgid "Perl help commands not yet implemented"
 msgstr "Perl yardim komutlari henuz uygulanmadi"
 
+#: modules/operserv/modmanager.c:71
+msgid "Permanent"
+msgstr ""
+
 #: modules/nickserv/register.c:76
 msgid "Please change to a real nickname, and try again."
 msgstr "Lutfen gercek bir nickname secip tekrar deneyin."
@@ -5679,8 +5682,7 @@ msgstr "REGAIN deaktif edildi."
 msgid "REHASH completed."
 msgstr "REHASH tamamlandi."
 
-#: modules/operserv/modload.c:49 modules/operserv/modreload.c:169
-#: modules/operserv/rehash.c:27
+#: modules/operserv/modmanager.c:294 modules/operserv/rehash.c:27
 #, c-format
 msgid ""
 "REHASH of %s failed. Please correct any errors in the file and try again."
@@ -5807,22 +5809,12 @@ msgstr "%s icin recover tamamlandi."
 msgid "Redefining built-in template %s."
 msgstr "%s yerlesik sablonu yeniden tanimlaniyor."
 
-#: modules/operserv/modreload.c:68
-#, c-format
-msgid "Refusing to reload %s."
-msgstr "%s modulunun tekrar yuklenmesi reddediliyor."
-
 #: modules/operserv/soper.c:248
 #, c-format
 msgid ""
 "Refusing to set a services operator password if %s IDENTIFY is not loaded."
 msgstr ""
 "%s IDENTIFY yuklenmemisse servis operator sifresi ayarlama reddediliyor."
-
-#: modules/operserv/modunload.c:47
-#, c-format
-msgid "Refusing to unload %s."
-msgstr "%s modulu yuklenmiyor."
 
 #: modules/chanserv/recover.c:186
 msgid "Regain control of your channel."
@@ -5907,16 +5899,17 @@ msgstr "Bekleyen bir kaydi reddeder"
 msgid "Releases a services enforcer."
 msgstr "Servisler enforce'sini kaldirir."
 
+#: modules/operserv/modmanager.c:73
+msgid "Reload Only"
+msgstr ""
+
 #: modules/operserv/rehash.c:32
 msgid "Reload the configuration data."
 msgstr "Konfigurasyon bilgisini tekrar yukler."
 
-#: modules/operserv/modinspect.c:51
-msgid "Reload-only"
-msgstr ""
-
-#: modules/operserv/modreload.c:175
-msgid "Reloads a module."
+#: modules/operserv/modmanager.c:578
+#, fuzzy
+msgid "Reloads modules."
 msgstr "Bir modulu tekrar yukler."
 
 #: modules/statserv/netsplit.c:126
@@ -6062,6 +6055,11 @@ msgstr "Bir hesabi sahibine geri verir."
 msgid "Returns the key (+k) of a channel."
 msgstr "Bir kanalin sifresini geri getirir."
 
+#: modules/operserv/modmanager.c:352
+#, c-format
+msgid "Reverse Dependencies (%zu):"
+msgstr ""
+
 #: modules/gameserv/rps.c:18
 msgid "Rock"
 msgstr "Tas"
@@ -6119,9 +6117,9 @@ msgstr "%1$s icin kurallar %2$s olarak belirlendi."
 msgid "Ruleset: %s"
 msgstr "Kurallar: %s"
 
-#: modules/operserv/modinspect.c:47
-#, c-format
-msgid "SDK Serial : %s"
+#: modules/operserv/modmanager.c:330
+#, fuzzy, c-format
+msgid "SDK Serial     : %s"
 msgstr "SDK Serial : %s"
 
 #: modules/nickserv/set_core.c:31
@@ -7211,20 +7209,24 @@ msgstr "Sentaks: LOGOUT <hedef> <sifre>"
 msgid "Syntax: MODE <channel> <parameters>"
 msgstr "Sentaks: MODE <kanal> <parametreler>"
 
-#: modules/operserv/modinspect.c:21
-msgid "Syntax: MODINSPECT <module>"
+#: modules/operserv/modmanager.c:304
+#, fuzzy
+msgid "Syntax: MODINSPECT <module> [module [...]]"
 msgstr "Sentaks: MODINSPECT <modul>"
 
-#: modules/operserv/modload.c:22
-msgid "Syntax: MODLOAD <module...>"
+#: modules/operserv/modmanager.c:371
+#, fuzzy
+msgid "Syntax: MODLOAD <module> [module [...]]"
 msgstr "Sentaks: MODLOAD <modul...>"
 
-#: modules/operserv/modreload.c:52
-msgid "Syntax: MODRELOAD <module...>"
+#: modules/operserv/modmanager.c:400
+#, fuzzy
+msgid "Syntax: MODRELOAD <module> [module [...]]"
 msgstr "Sentaks: MODRELOAD <modul...>"
 
-#: modules/operserv/modunload.c:22
-msgid "Syntax: MODUNLOAD <module...>"
+#: modules/operserv/modmanager.c:512
+#, fuzzy
+msgid "Syntax: MODUNLOAD <module> [module [...]]"
 msgstr "Sentaks: MODUNLOAD <modul...>"
 
 #: modules/statserv/netsplit.c:90
@@ -8786,8 +8788,24 @@ msgstr "Kanaldan baninizi kaldirir."
 msgid "Unexpected error occurred: %s"
 msgstr "Beklenmedik bir hata olustu: %s"
 
-#: modules/operserv/modunload.c:62
-msgid "Unloads a module."
+#: modules/operserv/modmanager.c:338
+#, c-format
+msgid "Unloadability  : %s"
+msgstr ""
+
+#: modules/operserv/modmanager.c:340
+#, c-format
+msgid "Unloadability  : %s (see reverse dependencies below)"
+msgstr ""
+
+#: modules/operserv/modmanager.c:69
+#, fuzzy
+msgid "Unloadable"
+msgstr "Bir modul kaldirir."
+
+#: modules/operserv/modmanager.c:587
+#, fuzzy
+msgid "Unloads modules."
 msgstr "Bir modul kaldirir."
 
 #: modules/chanserv/quiet.c:434
@@ -9044,9 +9062,9 @@ msgstr "Gecerli islemler: REGISTER ve EMAILCHG."
 msgid "Valid target types: USER, OPERCLASS."
 msgstr "Gecerli hedef turleri: USER, OPERCLASS."
 
-#: modules/operserv/modinspect.c:49
-#, c-format
-msgid "Vendor     : %s"
+#: modules/operserv/modmanager.c:331
+#, fuzzy, c-format
+msgid "Vendor         : %s"
 msgstr "Vendor     : %s"
 
 #: modules/nickserv/setpass.c:66 modules/nickserv/verify.c:71
@@ -9059,9 +9077,9 @@ msgstr "Onaylama basarisiz. %s icin gecersiz anahtar."
 msgid "Verifies an account registration."
 msgstr "Bir hesap kaydini onaylar."
 
-#: modules/operserv/modinspect.c:48
-#, c-format
-msgid "Version    : %s"
+#: modules/operserv/modmanager.c:332
+#, fuzzy, c-format
+msgid "Version        : %s"
 msgstr "Versiyon    : %s"
 
 #: modules/chanserv/moderate.c:353
@@ -9124,7 +9142,7 @@ msgstr "Hic suphesiz."
 #: modules/chanserv/moderate.c:222 modules/groupserv/main/hooks.c:119
 #: modules/hostserv/request.c:143 modules/nickserv/pwquality.c:195
 #: modules/operserv/info.c:22 modules/operserv/info.c:28
-#: modules/operserv/info.c:44 modules/operserv/modinspect.c:50
+#: modules/operserv/info.c:44
 #, fuzzy
 msgid "Yes"
 msgstr "Evet."
@@ -10113,6 +10131,9 @@ msgstr "diger kullanicilarin yetkilerini gosterir"
 #~ msgid "%s can now take ownership of %s."
 #~ msgstr "%1$s nicki simdi %2$s kanalinin sahipligini alabilir."
 
+#~ msgid "%s cannot be inspected."
+#~ msgstr "%s modulu izlenemez."
+
 #~ msgid "%s cannot be used as an override service."
 #~ msgstr "%s override servisi olarak kullanilamaz."
 
@@ -10421,6 +10442,9 @@ msgstr "diger kullanicilarin yetkilerini gosterir"
 #~ msgid "COMMITINTERVAL must be a positive integer, %s is invalid"
 #~ msgstr "COMMITINTERVAL pozitif bir deger olmalidir, %s gecersiz"
 
+#~ msgid "Can unload : %s"
+#~ msgstr "Kaldirabilir : %s"
+
 #~ msgid "Cancels your requested announcement."
 #~ msgstr "Anons talebinizi iptal eder."
 
@@ -10631,6 +10655,9 @@ msgstr "diger kullanicilarin yetkilerini gosterir"
 #~ msgid "Manipulates channel access lists."
 #~ msgstr "Kanal SOP listesini duzenler."
 
+#~ msgid "Module %s reloaded (from %s)."
+#~ msgstr "%1$s modulu %2$s tarafindan tekrar yuklendi."
+
 #, fuzzy
 #~ msgid "Module %s loaded at 0x%lx"
 #~ msgstr "%2d: %-20s [yuklendi 0x%lx]"
@@ -10644,6 +10671,9 @@ msgstr "diger kullanicilarin yetkilerini gosterir"
 
 #~ msgid "NICKEXPIRE must be a positive integer, %s is invalid"
 #~ msgstr "NICKEXPIRE positif bir rakam olmali, %s gecersiz"
+
+#~ msgid "Name       : %s"
+#~ msgstr "Isim       : %s"
 
 #~ msgid "Nick %s is not registered."
 #~ msgstr "%s kayitli bir nick degil."
@@ -10721,6 +10751,12 @@ msgstr "diger kullanicilarin yetkilerini gosterir"
 
 #~ msgid "RECONTIME must be a positive integer, %s is invalid"
 #~ msgstr "RECONTIME pozitif bir sayi olmali, %s gecersiz"
+
+#~ msgid "Refusing to reload %s."
+#~ msgstr "%s modulunun tekrar yuklenmesi reddediliyor."
+
+#~ msgid "Refusing to unload %s."
+#~ msgstr "%s modulu yuklenmiyor."
 
 #~ msgid "Registering of guest nicknames is disallowed."
 #~ msgstr "Misafir nicklerin kaydedilmesine izin verilmiyor."
