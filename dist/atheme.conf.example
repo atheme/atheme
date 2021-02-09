@@ -2794,6 +2794,7 @@ operclass "ircop" {
 
 	privs {
 		operserv:omode;
+		operserv:otopic;
 		operserv:akill;
 		operserv:jupe;
 		operserv:global;
