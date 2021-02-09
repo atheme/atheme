@@ -63,6 +63,7 @@ SRCS   =                    \
     soper.c                 \
     specs.c                 \
     sqline.c                \
+    topic.c                 \
     update.c                \
     uptime.c
 
