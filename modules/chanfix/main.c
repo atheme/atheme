@@ -11,6 +11,9 @@
 #include <atheme.h>
 #include "chanfix.h"
 
+#define CHANFIX_PERSIST_STORAGE_NAME "atheme.chanfix.main.persist"
+#define CHANFIX_PERSIST_VERSION      2
+
 static mowgli_eventloop_timer_t *chanfix_autofix_timer = NULL;
 
 struct service *chanfix;
@@ -18,17 +21,29 @@ struct service *chanfix;
 static void
 mod_init(struct module *const restrict m)
 {
-	struct chanfix_persist_record *rec = mowgli_global_storage_get("atheme.chanfix.main.persist");
+	struct chanfix_persist_record *rec = mowgli_global_storage_get(CHANFIX_PERSIST_STORAGE_NAME);
+
+	if (rec && rec->version > CHANFIX_PERSIST_VERSION)
+	{
+		slog(LG_ERROR, "chanfix/main: attempted downgrade is not supported (from %d to %d)", rec->version, CHANFIX_PERSIST_VERSION);
+		m->mflags = MODFLAG_FAIL;
+
+		sfree(rec);
+		mowgli_global_storage_free(CHANFIX_PERSIST_STORAGE_NAME);
+
+		return;
+	}
 
 	chanfix_gather_init(rec);
 
 	if (rec != NULL)
 	{
 		sfree(rec);
-		return;
+		mowgli_global_storage_free(CHANFIX_PERSIST_STORAGE_NAME);
 	}
 
 	chanfix = service_add("chanfix", NULL);
+
 	service_bind_command(chanfix, &cmd_list);
 	service_bind_command(chanfix, &cmd_chanfix);
 	service_bind_command(chanfix, &cmd_scores);
@@ -49,31 +64,30 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent intent)
 {
-	struct chanfix_persist_record *rec = NULL;
-
 	hook_del_channel_can_register(chanfix_can_register);
 
 	mowgli_timer_destroy(base_eventloop, chanfix_autofix_timer);
 
-	if (chanfix)
-		service_delete(chanfix);
+	service_unbind_command(chanfix, &cmd_list);
+	service_unbind_command(chanfix, &cmd_chanfix);
+	service_unbind_command(chanfix, &cmd_scores);
+	service_unbind_command(chanfix, &cmd_info);
+	service_unbind_command(chanfix, &cmd_help);
+	service_unbind_command(chanfix, &cmd_mark);
+	service_unbind_command(chanfix, &cmd_nofix);
 
-	switch (intent)
-	{
-		case MODULE_UNLOAD_INTENT_RELOAD:
-		{
-			rec = smalloc(sizeof *rec);
-			rec->version = 1;
+	hook_del_channel_can_register(chanfix_can_register);
 
-			mowgli_global_storage_put("atheme.chanfix.main.persist", rec);
-			break;
-		}
+	del_conf_item("AUTOFIX", &chanfix->conf_table);
 
-		case MODULE_UNLOAD_INTENT_PERM:
-			break;
-	}
+	service_delete(chanfix);
 
-	chanfix_gather_deinit(intent, rec);
+	struct chanfix_persist_record *rec = smalloc(sizeof *rec);
+	rec->version = CHANFIX_PERSIST_VERSION;
+
+	chanfix_gather_deinit(rec);
+
+	mowgli_global_storage_put(CHANFIX_PERSIST_STORAGE_NAME, rec);
 }
 
-SIMPLE_DECLARE_MODULE_V1("chanfix/main", MODULE_UNLOAD_CAPABILITY_OK)
+SIMPLE_DECLARE_MODULE_V1("chanfix/main", MODULE_UNLOAD_CAPABILITY_RELOAD_ONLY)

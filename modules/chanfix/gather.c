@@ -412,6 +412,9 @@ chanfix_gather_init(struct chanfix_persist_record *rec)
 	db_register_type_handler("CFOP", db_h_cfop);
 	db_register_type_handler("CFMD", db_h_cfmd);
 
+	chanfix_expire_timer = mowgli_timer_add(base_eventloop, "chanfix_expire", chanfix_expire, NULL, CHANFIX_EXPIRE_INTERVAL);
+	chanfix_gather_timer = mowgli_timer_add(base_eventloop, "chanfix_gather", chanfix_gather, NULL, CHANFIX_GATHER_INTERVAL);
+
 	if (rec != NULL)
 	{
 		chanfix_channel_heap = rec->chanfix_channel_heap;
@@ -425,13 +428,10 @@ chanfix_gather_init(struct chanfix_persist_record *rec)
 	chanfix_oprecord_heap = mowgli_heap_create(sizeof(struct chanfix_oprecord), 32, BH_LAZY);
 
 	chanfix_channels = mowgli_patricia_create(strcasecanon);
-
-	chanfix_expire_timer = mowgli_timer_add(base_eventloop, "chanfix_expire", chanfix_expire, NULL, CHANFIX_EXPIRE_INTERVAL);
-	chanfix_gather_timer = mowgli_timer_add(base_eventloop, "chanfix_gather", chanfix_gather, NULL, CHANFIX_GATHER_INTERVAL);
 }
 
 void
-chanfix_gather_deinit(const enum module_unload_intent intent, struct chanfix_persist_record *rec)
+chanfix_gather_deinit(struct chanfix_persist_record *rec)
 {
 	hook_del_db_write(write_chanfixdb);
 	hook_del_channel_add(chanfix_channel_add_ev);
@@ -440,24 +440,12 @@ chanfix_gather_deinit(const enum module_unload_intent intent, struct chanfix_per
 	db_unregister_type_handler("CFDBV");
 	db_unregister_type_handler("CFCHAN");
 	db_unregister_type_handler("CFOP");
+	db_unregister_type_handler("CFMD");
 
 	mowgli_timer_destroy(base_eventloop, chanfix_expire_timer);
 	mowgli_timer_destroy(base_eventloop, chanfix_gather_timer);
 
-	switch (intent)
-	{
-		case MODULE_UNLOAD_INTENT_RELOAD:
-			rec->chanfix_channel_heap = chanfix_channel_heap;
-			rec->chanfix_oprecord_heap = chanfix_oprecord_heap;
-
-			rec->chanfix_channels = chanfix_channels;
-			break;
-
-		case MODULE_UNLOAD_INTENT_PERM:
-			mowgli_patricia_destroy(chanfix_channels, NULL, NULL);
-
-			mowgli_heap_destroy(chanfix_channel_heap);
-			mowgli_heap_destroy(chanfix_oprecord_heap);
-			break;
-	}
+	rec->chanfix_channel_heap  = chanfix_channel_heap;
+	rec->chanfix_oprecord_heap = chanfix_oprecord_heap;
+	rec->chanfix_channels      = chanfix_channels;
 }

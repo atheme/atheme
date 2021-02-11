@@ -76,7 +76,7 @@ extern struct service *chanfix;
 extern mowgli_patricia_t *chanfix_channels;
 
 void chanfix_gather_init(struct chanfix_persist_record *);
-void chanfix_gather_deinit(enum module_unload_intent, struct chanfix_persist_record *);
+void chanfix_gather_deinit(struct chanfix_persist_record *);
 
 void chanfix_oprecord_update(struct chanfix_channel *chan, struct user *u);
 void chanfix_oprecord_delete(struct chanfix_oprecord *orec);
