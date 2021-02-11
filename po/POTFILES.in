@@ -148,6 +148,7 @@ modules/nickserv/listgroups.c
 modules/nickserv/listlogins.c
 modules/nickserv/listmail.c
 modules/nickserv/listownmail.c
+modules/nickserv/loginnolimit.c
 modules/nickserv/logout.c
 modules/nickserv/main.c
 modules/nickserv/mark.c
