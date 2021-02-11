@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <ircs://chat.freenode.net:6697/atheme-i18n>\n"
-"POT-Creation-Date: 2020-10-22 13:56+0000\n"
+"POT-Creation-Date: 2021-02-11 01:06+0000\n"
 "PO-Revision-Date: 2013-02-21 22:00+0200\n"
 "Last-Translator: Jessy AMYOT <harakiri@overstack.fr>\n"
 "Language-Team: \n"
@@ -142,7 +142,7 @@ msgstr "%s a déjà le role %s dans %s."
 msgid "%s already has the given vhost set."
 msgstr "%s a déjà défini le vHost donné."
 
-#: modules/nickserv/return.c:39
+#: modules/nickserv/return.c:40
 #, c-format
 msgid "%s belongs to a services operator; it cannot be returned."
 msgstr "%s appartient à un opérateur des services, il ne peut pas être RETURN."
@@ -170,6 +170,11 @@ msgstr ""
 msgid "%s can already bypass access list limits."
 msgstr "%s peut déjà outrepasser les limites."
 
+#: modules/nickserv/loginnolimit.c:46
+#, fuzzy, c-format
+msgid "%s can already bypass login limits."
+msgstr "%s peut déjà outrepasser les limites d'enregistrement."
+
 #: modules/groupserv/regnolimit.c:35 modules/nickserv/regnolimit.c:46
 #, c-format
 msgid "%s can already bypass registration limits."
@@ -186,6 +191,11 @@ msgstr ""
 #, c-format
 msgid "%s can now bypass access list limits."
 msgstr "%s peut désormais outrepasser les limites de la liste d'accès."
+
+#: modules/nickserv/loginnolimit.c:54
+#, fuzzy, c-format
+msgid "%s can now bypass login limits."
+msgstr "%s peut désormais outrepasser les limites d'enregistrement."
 
 #: modules/groupserv/regnolimit.c:43 modules/nickserv/regnolimit.c:54
 #, c-format
@@ -217,6 +227,16 @@ msgstr "%s ne peut désormais plus outrepasser les limites de la liste d'accè
 msgid "%s cannot bypass access list limits."
 msgstr "%s ne peut pas outrepasser les limites de la liste d'accès."
 
+#: modules/nickserv/loginnolimit.c:68
+#, fuzzy, c-format
+msgid "%s cannot bypass login limits anymore."
+msgstr "%s ne peut désormais plus outrepasser les limites d'enregistrement."
+
+#: modules/nickserv/loginnolimit.c:60
+#, fuzzy, c-format
+msgid "%s cannot bypass login limits."
+msgstr "%s ne peut pas outrepasser les limites d'enregistrement."
+
 #: modules/groupserv/regnolimit.c:57 modules/nickserv/regnolimit.c:68
 #, c-format
 msgid "%s cannot bypass registration limits anymore."
@@ -228,7 +248,7 @@ msgid "%s cannot bypass registration limits."
 msgstr "%s ne peut pas outrepasser les limites d'enregistrement."
 
 #: modules/chanserv/access.c:859 modules/chanserv/fflags.c:87
-#: modules/chanserv/flags.c:420 modules/chanserv/ftransfer.c:38
+#: modules/chanserv/flags.c:435 modules/chanserv/ftransfer.c:38
 #, fuzzy, c-format
 msgid "%s cannot take foundership of a channel."
 msgstr "Transfert la propriété d'un salon."
@@ -260,7 +280,7 @@ msgstr "%s n'a aucun vHost défini."
 msgid "%s does not have an operclass set."
 msgstr "%s n'a pas de classe oper définie."
 
-#: modules/chanserv/flags.c:438 modules/chanserv/xop.c:98
+#: modules/chanserv/flags.c:454 modules/chanserv/xop.c:98
 #: modules/groupserv/flags.c:121
 #, c-format
 msgid "%s does not wish to be added to channel access lists (NEVEROP set)."
@@ -366,7 +386,7 @@ msgstr "%s a été déconnecté des services."
 msgid "%s has been marked."
 msgstr "%s a été akill."
 
-#: modules/nickserv/enforce.c:489 modules/nickserv/enforce.c:500
+#: modules/nickserv/enforce.c:532 modules/nickserv/enforce.c:543
 #, c-format
 msgid "%s has been regained."
 msgstr "%s a été retrouvé."
@@ -411,22 +431,22 @@ msgstr "%s a été défini à %s pour %s."
 msgid "%s has been thawed"
 msgstr "%s a été dégelé."
 
-#: modules/chanserv/why.c:98
+#: modules/chanserv/why.c:100
 #, fuzzy, c-format
 msgid "%s has flags %s in %s because they are a member of %s."
 msgstr "%s est déjà fondateur de %s."
 
-#: modules/chanserv/why.c:94
+#: modules/chanserv/why.c:96
 #, fuzzy, c-format
 msgid "%s has flags %s in %s because they are logged in as %s."
 msgstr "L'accès de %s sur %s a été changé en %s."
 
-#: modules/chanserv/why.c:102
+#: modules/chanserv/why.c:104
 #, fuzzy, c-format
 msgid "%s has flags %s in %s because they match %s."
 msgstr "%s a désormais les flags %s sur %s."
 
-#: modules/chanserv/why.c:117
+#: modules/chanserv/why.c:119
 #, c-format
 msgid "%s has flags %s in %s because they match the mask %s."
 msgstr ""
@@ -486,7 +506,7 @@ msgstr ""
 msgid "%s has no %s."
 msgstr "%s n'a pas de %s."
 
-#: modules/chanserv/why.c:141
+#: modules/chanserv/why.c:143
 #, c-format
 msgid "%s has no special access to %s."
 msgstr "%s n'a pas d'accès spécial à %s."
@@ -504,14 +524,14 @@ msgid ""
 "%s has the SECURE option enabled, and %s does not have appropriate access."
 msgstr "%s a l'option SECURE activée, et %s n'a pas l'accès approprié."
 
-#: modules/nickserv/register.c:149 modules/nickserv/set_email.c:52
+#: modules/nickserv/register.c:103 modules/nickserv/set_email.c:52
 #: modules/nickserv/verify.c:101
 #, c-format
 msgid "%s has too many accounts registered."
 msgstr "%s a déjà trop de comptes enregistrés."
 
 #: modules/chanserv/access.c:853 modules/chanserv/access.c:1002
-#: modules/chanserv/flags.c:414
+#: modules/chanserv/flags.c:428
 #, c-format
 msgid "%s has too many channels registered."
 msgstr "%s a trop de salons enregistrés."
@@ -621,7 +641,7 @@ msgid "%s is already registered to %s."
 msgstr "%s est déjà enregistré à %s."
 
 #: modules/chanfix/fix.c:461 modules/chanserv/register.c:61
-#: modules/nickserv/register.c:108
+#: modules/nickserv/register.c:120
 #, c-format
 msgid "%s is already registered."
 msgstr "%s est déjà enregistré."
@@ -651,7 +671,7 @@ msgstr "%s est déjà un bot ou un service."
 msgid "%s is already the founder of %s."
 msgstr "%s est déjà fondateur de %s."
 
-#: modules/operserv/specs.c:135
+#: modules/operserv/specs.c:136
 #, c-format
 msgid "%s is an internal client."
 msgstr "%s est un client interne."
@@ -795,7 +815,7 @@ msgid "%s is not a valid action."
 msgstr "%s n'est pas une action valide."
 
 #: modules/chanserv/set_email.c:49 modules/groupserv/set_email.c:47
-#: modules/nickserv/register.c:143 modules/nickserv/return.c:45
+#: modules/nickserv/register.c:97 modules/nickserv/return.c:46
 #: modules/nickserv/set_email.c:46
 #, c-format
 msgid "%s is not a valid e-mail address."
@@ -925,7 +945,7 @@ msgstr "%s n'est pas dans la liste des AKICK pour %s."
 #: modules/chanserv/protect.c:65 modules/chanserv/voice.c:53
 #: modules/chanserv/why.c:42 modules/nickserv/ghost.c:42
 #: modules/nickserv/logout.c:33 modules/operserv/akill.c:146
-#: modules/operserv/specs.c:125
+#: modules/operserv/specs.c:126
 #, c-format
 msgid "%s is not online."
 msgstr "%s n'est pas en ligne."
@@ -1064,7 +1084,7 @@ msgstr ""
 msgid "%s is the services server; it cannot be jupitered!"
 msgstr "%s est le serveur des services, il ne peut pas être jupe !"
 
-#: modules/operserv/specs.c:130
+#: modules/operserv/specs.c:131
 #, c-format
 msgid "%s is unprivileged."
 msgstr "%s ne bénéficie pas de privilèges."
@@ -1345,7 +1365,7 @@ msgstr "Les flats %s ont été définis sur %s dans %s."
 msgid "*** End of Info ***"
 msgstr "*** Fin des Infos ***"
 
-#: modules/chanserv/why.c:139
+#: modules/chanserv/why.c:141
 #, fuzzy
 msgid "+e exempts from +b."
 msgstr "+r exempte de +b."
@@ -1731,7 +1751,7 @@ msgstr ""
 msgid "%s had NOFIX set by %s on %s (%s)"
 msgstr "%s a été  CLOSED par %s le %s (%s)"
 
-#: modules/nickserv/info.c:476
+#: modules/nickserv/info.c:484
 #, fuzzy, c-format
 msgid "%s has NOT COMPLETED registration verification."
 msgstr "%s n'a pas complété la vérification de son enregistrement."
@@ -1741,7 +1761,7 @@ msgstr "%s n'a pas complété la vérification de son enregistrement."
 msgid "%s has an active password reset key"
 msgstr ""
 
-#: modules/nickserv/info.c:455 modules/nickserv/sendpass.c:145
+#: modules/nickserv/info.c:463 modules/nickserv/sendpass.c:145
 #: modules/nickserv/sendpass_user.c:98
 #, c-format
 msgid "%s has been frozen by the %s administration."
@@ -1752,12 +1772,12 @@ msgstr "%s a été gelé par l'administration %s."
 msgid "%s has been scanned."
 msgstr "%s a été retrouvé."
 
-#: modules/nickserv/enforce.c:586
+#: modules/nickserv/enforce.c:585
 #, c-format
 msgid "%s has enabled nick protection"
 msgstr ""
 
-#: modules/nickserv/info.c:489
+#: modules/nickserv/info.c:497
 #, fuzzy, c-format
 msgid "%s has requested an email address change to %s on %s."
 msgstr "%s a requis un changement d'adresse email en %s le %s."
@@ -1823,13 +1843,13 @@ msgstr "%s a %d chances de mourir"
 msgid "%s was CLOSED by %s on %s (%s)"
 msgstr "%s a été  CLOSED par %s le %s (%s)"
 
-#: modules/nickserv/info.c:452
+#: modules/nickserv/info.c:460
 #, fuzzy, c-format
 msgid "%s was FROZEN by %s on %s (%s)."
 msgstr "%s a été gelé par %s sur %s (%s)"
 
 #: modules/chanfix/fix.c:627 modules/chanserv/info.c:292
-#: modules/nickserv/info.c:472
+#: modules/nickserv/info.c:480
 #, fuzzy, c-format
 msgid "%s was MARKED by %s on %s (%s)."
 msgstr "%s a été annoté (MARK) par %s le %s (%s)"
@@ -2030,12 +2050,12 @@ msgstr "Vu dernièrement : (Il y a environ %d semaines)"
 msgid "(less than two weeks ago)"
 msgstr ""
 
-#: modules/operserv/specs.c:180
+#: modules/operserv/specs.c:181
 #, fuzzy
 msgid "(no privileges held)"
 msgstr "Fin des privilèges"
 
-#: modules/chanserv/access.c:624 modules/nickserv/info.c:497
+#: modules/chanserv/access.c:624 modules/nickserv/info.c:505
 #: modules/operserv/modinspect.c:52
 msgid "*** End of Info ***"
 msgstr "*** Fin des Infos ***"
@@ -2073,7 +2093,7 @@ msgstr "Aucune description définie pour %s."
 msgid "A official channel for %s was not set."
 msgstr "Un salon officiel pour %s n'a pas été défini."
 
-#: modules/nickserv/return.c:92
+#: modules/nickserv/return.c:103
 #, c-format
 msgid "A random password has been set; it has been sent to %s."
 msgstr "Un mot de passe aléatoire a été défini, il a été envoyé à %s."
@@ -2353,6 +2373,11 @@ msgstr "Autorise un groupe a outrepasser les limites de la liste d'accès"
 msgid "Allow a group to bypass registration limits."
 msgstr "Autorise un groupe a outrepasser les limites d'enregistrement."
 
+#: modules/nickserv/loginnolimit.c:79
+#, fuzzy
+msgid "Allow a user to bypass login limits."
+msgstr "Autorise un utilisateur à outrepasser les limites d'enregistrement."
+
 #: modules/nickserv/regnolimit.c:79
 msgid "Allow a user to bypass registration limits."
 msgstr "Autorise un utilisateur à outrepasser les limites d'enregistrement."
@@ -2492,7 +2517,7 @@ msgstr ""
 msgid "Ban reason : %s"
 msgstr "Motif de ban : %s"
 
-#: modules/chanserv/why.c:108 modules/chanserv/why.c:123
+#: modules/chanserv/why.c:110 modules/chanserv/why.c:125
 #, fuzzy, c-format
 msgid "Ban reason: %s"
 msgstr "Motif de ban : %s"
@@ -2739,7 +2764,7 @@ msgstr "Change votre adresse email."
 
 #: modules/chanserv/access.c:796 modules/chanserv/access.c:945
 #: modules/chanserv/akick.c:349 modules/chanserv/akick.c:415
-#: modules/chanserv/flags.c:445 modules/chanserv/flags.c:476
+#: modules/chanserv/flags.c:462 modules/chanserv/flags.c:496
 #: modules/chanserv/xop.c:41 modules/chanserv/xop.c:114
 #, c-format
 msgid "Channel %s access list is full."
@@ -2789,7 +2814,7 @@ msgstr "Salon %s :"
 msgid "Channel     : %s"
 msgstr "Salon         : %s"
 
-#: modules/chanserv/fflags.c:147 modules/chanserv/flags.c:499
+#: modules/chanserv/fflags.c:147 modules/chanserv/flags.c:521
 #, c-format
 msgid "Channel access to %s for %s unchanged."
 msgstr "L'accès au salon %s pour %s reste inchangé."
@@ -2807,11 +2832,11 @@ msgstr "Les mémos de salon sont désactivés par l'administration."
 msgid "Channel removal toolkit."
 msgstr "Outil de \"nettoyage\" de salon."
 
-#: modules/operserv/specs.c:45
+#: modules/operserv/specs.c:46
 msgid "Channels"
 msgstr "Salons"
 
-#: modules/nickserv/info.c:434
+#: modules/nickserv/info.c:442
 #, fuzzy, c-format
 msgid "Channels   : %u founder, %u other"
 msgstr "Salons : %d fondateurs, %d autre"
@@ -2854,7 +2879,7 @@ msgstr "Suppression des flags dans %s."
 msgid "Cleared AKICK entries in %s."
 msgstr "Suppression des flags dans %s."
 
-#: modules/chanserv/flags.c:264
+#: modules/chanserv/flags.c:267
 #, c-format
 msgid "Cleared flags in %s."
 msgstr "Suppression des flags dans %s."
@@ -3266,7 +3291,7 @@ msgstr "Affiche des informations sur les modules chargés."
 msgid "Displays information about registered groups."
 msgstr "Affiche des informations à propos des groupes enregistrés."
 
-#: modules/chanserv/info.c:326 modules/nickserv/info.c:504
+#: modules/chanserv/info.c:326 modules/nickserv/info.c:512
 msgid "Displays information on registrations."
 msgstr "Affiche des informations sur les enregistrements."
 
@@ -3382,7 +3407,7 @@ msgstr "Active les klines CLONES"
 msgid "Enabled CLONES klines."
 msgstr "Active les klines CLONES"
 
-#: modules/nickserv/enforce.c:623
+#: modules/nickserv/enforce.c:622
 msgid "Enables or disables automatic protection of a nickname."
 msgstr "Active ou désactive la protection automatique d'un pseudonyme."
 
@@ -3478,7 +3503,7 @@ msgstr "Fin de la liste des classes oper"
 msgid "End of output."
 msgstr "Fin de liste."
 
-#: modules/operserv/specs.c:183
+#: modules/operserv/specs.c:184
 #, fuzzy
 msgid "End of privileges."
 msgstr "Fin des privilèges"
@@ -3568,7 +3593,7 @@ msgstr "Erreur : Vous avez tapé une expression invalide."
 msgid "Exit point : %p"
 msgstr "Exit point : %p"
 
-#: modules/chanserv/why.c:147
+#: modules/chanserv/why.c:149
 msgid "Explains channel access logic."
 msgstr "Explique la logique d'accès au salon."
 
@@ -3652,7 +3677,7 @@ msgstr "Une demande de réparation à été prise en compte pour %s."
 msgid "Flags"
 msgstr "Flags"
 
-#: modules/chanserv/fflags.c:152 modules/chanserv/flags.c:503
+#: modules/chanserv/fflags.c:152 modules/chanserv/flags.c:527
 #, c-format
 msgid "Flags %s were set on %s in %s."
 msgstr "Les flats %s ont été définis sur %s dans %s."
@@ -3662,7 +3687,7 @@ msgstr "Les flats %s ont été définis sur %s dans %s."
 msgid "Flags       : %s"
 msgstr "Flags       : %s"
 
-#: modules/chanserv/info.c:258 modules/nickserv/info.c:408
+#: modules/chanserv/info.c:258 modules/nickserv/info.c:416
 #, c-format
 msgid "Flags      : %s"
 msgstr "Flags      : %s"
@@ -3672,7 +3697,7 @@ msgstr "Flags      : %s"
 msgid "Flags      : %s (%s)"
 msgstr "Flags      : %s (%s)"
 
-#: modules/chanserv/flags.c:317
+#: modules/chanserv/flags.c:323
 #, c-format
 msgid "Flags for %s in %s are %s."
 msgstr "Les flags pour %s dans %s sont %s."
@@ -3814,7 +3839,7 @@ msgstr "Gèle un compte."
 msgid "Fudge-style dice generation."
 msgstr "Génération de dés style Fudge."
 
-#: modules/operserv/specs.c:59
+#: modules/operserv/specs.c:60
 msgid "General"
 msgstr "Général"
 
@@ -3895,7 +3920,7 @@ msgstr "Le groupe %s n'est pas ouvert."
 msgid "Group memos are administratively disabled."
 msgstr "Les mémos de groupe sont désactivés par l'administration."
 
-#: modules/operserv/specs.c:85
+#: modules/operserv/specs.c:86
 msgid "GroupServ"
 msgstr "GroupServ"
 
@@ -4251,8 +4276,8 @@ msgstr "Mot de passe invalide pour %s."
 msgid "Invalid parameters for %s."
 msgstr "Mot de passe invalide pour %s."
 
-#: modules/nickserv/enforce.c:382 modules/nickserv/enforce.c:560
-#: modules/nickserv/ghost.c:105 modules/nickserv/identify.c:172
+#: modules/nickserv/enforce.c:382 modules/nickserv/enforce.c:559
+#: modules/nickserv/ghost.c:105 modules/nickserv/identify.c:174
 #: modules/nickserv/register.c:172
 #, c-format
 msgid "Invalid password for %s."
@@ -4288,7 +4313,7 @@ msgstr "Cible invalide : %s. Vous ne pouvez pas SQLINE des UID."
 msgid "Invalid template name %s."
 msgstr "Nom de template invalide %s."
 
-#: modules/chanserv/flags.c:372
+#: modules/chanserv/flags.c:381
 #, fuzzy, c-format
 msgid "Invalid template name given, use /msg %s TEMPLATE %s for a list"
 msgstr ""
@@ -4358,7 +4383,7 @@ msgstr "Le rôle %s existe déjà."
 msgid "Kicks all users from a channel."
 msgstr "Kicke tous les utilisateurs d'un salon."
 
-#: modules/nickserv/info.c:412
+#: modules/nickserv/info.c:420
 #, c-format
 msgid "Language   : %s"
 msgstr "Langue     : %s"
@@ -4596,7 +4621,7 @@ msgstr "Charge un module."
 msgid "Log file may be corrupted, %u/%u unexpected lines"
 msgstr ""
 
-#: modules/nickserv/enforce.c:517 modules/nickserv/identify.c:133
+#: modules/nickserv/enforce.c:460 modules/nickserv/identify.c:135
 #, c-format
 msgid "Logged in nicks are: %s"
 msgstr "Les pseudos connectés sont : %s"
@@ -4706,7 +4731,7 @@ msgstr "Manipule les métadonnées associées à un compte."
 msgid "Manipulates predefined sets of flags."
 msgstr "Manipule une suite de flags prédéfinis."
 
-#: modules/chanserv/flags.c:513
+#: modules/chanserv/flags.c:537
 msgid "Manipulates specific permissions on a channel."
 msgstr "Manipule des permissions spécifiques sur un salon."
 
@@ -4900,7 +4925,7 @@ msgstr "Vraisemblablement."
 msgid "NO!"
 msgstr "NON !"
 
-#: modules/operserv/specs.c:77
+#: modules/operserv/specs.c:78
 msgid "NOOP access"
 msgstr "accède à NOOP"
 
@@ -5152,7 +5177,7 @@ msgstr ""
 "Le pattern d'email %s n'est pas dans la base de données des adresses email "
 "interdites."
 
-#: modules/chanserv/flags.c:322
+#: modules/chanserv/flags.c:328
 #, c-format
 msgid "No flags for %s in %s."
 msgstr "Pas de flags pour %s dans %s."
@@ -5246,7 +5271,7 @@ msgstr "Aucun ban %s sur %s."
 msgid "No such command %s."
 msgstr "Le paramètre %s n'existe pas : "
 
-#: modules/operserv/soper.c:118 modules/operserv/specs.c:144
+#: modules/operserv/soper.c:118 modules/operserv/specs.c:145
 #, c-format
 msgid "No such oper class %s."
 msgstr "Aucune classe oper %s."
@@ -5276,7 +5301,7 @@ msgstr "Aucun template défini sur le salon %s."
 msgid "No topic set for %s"
 msgstr "Pas de topic défini pour %s"
 
-#: modules/chanserv/flags.c:358
+#: modules/chanserv/flags.c:366
 #, fuzzy, c-format
 msgid "No valid flags given, use /msg %s HELP FLAGS for a list"
 msgstr ""
@@ -5381,13 +5406,13 @@ msgid "Online operators: %u"
 msgstr ""
 
 #: modules/chanserv/access.c:839 modules/chanserv/access.c:988
-#: modules/chanserv/flags.c:406
+#: modules/chanserv/flags.c:419
 #, fuzzy, c-format
 msgid "Only %u founder allowed per channel."
 msgstr "Seulement %d fondateurs autorisés par salon."
 
 #: modules/chanserv/access.c:840 modules/chanserv/access.c:989
-#: modules/chanserv/flags.c:407
+#: modules/chanserv/flags.c:420
 #, fuzzy, c-format
 msgid "Only %u founders allowed per channel."
 msgstr "Seulement %d fondateurs autorisés par salon."
@@ -5410,7 +5435,7 @@ msgstr "Seuls 1-30 dés peuvent être lancés à la fois."
 msgid "Oper class %s has more privileges than you."
 msgstr "La classe op[er %s a plus de privilèges que vous."
 
-#: modules/nickserv/info.c:418
+#: modules/nickserv/info.c:426
 #, c-format
 msgid "Oper class : %s"
 msgstr "Oper class : %s"
@@ -5432,7 +5457,7 @@ msgstr ""
 msgid "Oper class list:"
 msgstr "Liste des classes oper"
 
-#: modules/operserv/specs.c:71
+#: modules/operserv/specs.c:72
 msgid "OperServ"
 msgstr "OperServ"
 
@@ -5655,12 +5680,12 @@ msgstr "Le mode privé du bot %s est maintenant inactif."
 msgid "Private mode of bot %s is now ON."
 msgstr "Le mode privé du bot %s est maintenant actif."
 
-#: modules/operserv/specs.c:158 modules/operserv/specs.c:160
+#: modules/operserv/specs.c:159 modules/operserv/specs.c:161
 #, c-format
 msgid "Privileges for %s:"
 msgstr "Privilèges pour %s :"
 
-#: modules/operserv/specs.c:162
+#: modules/operserv/specs.c:163
 #, c-format
 msgid "Privileges for oper class %s:"
 msgstr "Privilèges pour la classe oper %s :"
@@ -5844,7 +5869,7 @@ msgstr "Impossible de décharger %s."
 msgid "Regain control of your channel."
 msgstr "Reprendre le contrôle de votre salon."
 
-#: modules/nickserv/enforce.c:641
+#: modules/nickserv/enforce.c:640
 msgid "Regain usage of a nickname."
 msgstr "Retrouver l'usage de votre pseudonyme."
 
@@ -5922,7 +5947,7 @@ msgstr "Rejete le vHost requis par le pseudo donné."
 msgid "Rejects a pending registration"
 msgstr "Efface un salon enregistré."
 
-#: modules/nickserv/enforce.c:632
+#: modules/nickserv/enforce.c:631
 msgid "Releases a services enforcer."
 msgstr "Relâche l'enforcer des services."
 
@@ -6075,7 +6100,7 @@ msgstr "Résultat : %s"
 msgid "Returning maximum of %u channel names matching '%s'"
 msgstr ""
 
-#: modules/nickserv/return.c:98
+#: modules/nickserv/return.c:112
 msgid "Returns an account to its owner."
 msgstr "Redonne un compte à son propriétaire."
 
@@ -6309,7 +6334,7 @@ msgstr ""
 msgid "Selecting optimal algorithm: %s"
 msgstr ""
 
-#: modules/nickserv/return.c:56
+#: modules/nickserv/return.c:57
 #, c-format
 msgid "Sending email failed, account %s remains with %s."
 msgstr "Echec de l'envoi de l'email, le compte %s demeure avec %s."
@@ -6604,7 +6629,7 @@ msgstr ""
 msgid "Shows number of entries in access lists."
 msgstr "Affiche le nombre d'entrées de la liste d'accès."
 
-#: modules/operserv/specs.c:195
+#: modules/operserv/specs.c:196
 msgid "Shows oper flags."
 msgstr "Montre les flags oper."
 
@@ -7098,7 +7123,7 @@ msgstr "Syntaxe : FLAGS <!groupe> <utilisateur> <changements>"
 msgid "Syntax: FLAGS <!group> [user] [changes]"
 msgstr "Syntaxe : FLAGS <!groupe> [utilisateur] [changements]"
 
-#: modules/chanserv/flags.c:274
+#: modules/chanserv/flags.c:277
 #, fuzzy
 msgid "Syntax: FLAGS <#channel> MODIFY [target] <flags>"
 msgstr "Syntaxe : FLAGS <salon> [cible] [flags]"
@@ -7339,7 +7364,7 @@ msgstr "Syntaxe : RECOVER <#salon>"
 msgid "Syntax: REGAIN <nick> [password]"
 msgstr "Syntaxe : REGAIN <pseudo> [mot de passe]"
 
-#: modules/nickserv/enforce.c:554
+#: modules/nickserv/enforce.c:553
 msgid "Syntax: REGAIN <nickname> [password]"
 msgstr "Syntaxe : REGAIN <pseudonyme> [mot de passe]"
 
@@ -7347,11 +7372,11 @@ msgstr "Syntaxe : REGAIN <pseudonyme> [mot de passe]"
 msgid "Syntax: REGISTER <#channel>"
 msgstr "Syntax: REGISTER <#salon>"
 
-#: modules/nickserv/register.c:54 modules/nickserv/register.c:99
+#: modules/nickserv/register.c:54 modules/nickserv/register.c:111
 msgid "Syntax: REGISTER <account> <password> <email>"
 msgstr "Syntaxe : REGISTER <compte> <mot de passe> <email>"
 
-#: modules/nickserv/register.c:56 modules/nickserv/register.c:101
+#: modules/nickserv/register.c:56 modules/nickserv/register.c:113
 msgid "Syntax: REGISTER <password> <email>"
 msgstr "Syntaxe : REGISTER <mot de passe> <email>"
 
@@ -7943,7 +7968,7 @@ msgstr "Le flag %s n'est pas défini pour le compte %s."
 msgid "The %s flag is not set for channel %s."
 msgstr "Le flag %s n'est pas défini sur le salon %s."
 
-#: modules/chanserv/why.c:130 modules/chanserv/why.c:134
+#: modules/chanserv/why.c:132 modules/chanserv/why.c:136
 #, c-format
 msgid "The %s flag is set for %s, therefore no status will be given."
 msgstr ""
@@ -7966,6 +7991,11 @@ msgstr ""
 #: src/crypto-benchmark/selftests.c:32
 msgid "The Digest API testsuite passed."
 msgstr ""
+
+#: modules/nickserv/return.c:106
+#, fuzzy, c-format
+msgid "The HIDEMAIL flag has been set for %s due to the email change."
+msgstr "Le flag %s a été défini pour %s."
 
 #: modules/chanserv/owner.c:29 modules/chanserv/protect.c:29
 msgid "The IRCd software you are running does not support this feature."
@@ -8095,7 +8125,7 @@ msgstr "La description pour %s a été supprimée."
 msgid "The description of %s has been set to %s."
 msgstr "La description de %s a été définie à %s."
 
-#: modules/nickserv/return.c:90
+#: modules/nickserv/return.c:101
 #, c-format
 msgid "The e-mail address for %s has been set to %s"
 msgstr "L'adresse email pour %s a été définie à %s."
@@ -8329,7 +8359,7 @@ msgstr ""
 "Le pseudo %s appartient à un opérateur des services, il ne peut pas être "
 "effacé."
 
-#: modules/chanserv/flags.c:160 modules/nickserv/enforce.c:603
+#: modules/chanserv/flags.c:160 modules/nickserv/enforce.c:602
 #, fuzzy, c-format
 msgid "The nickname %s is reserved and cannot be registered."
 msgstr "Le pseudo %s n'est pas enregistré."
@@ -8439,7 +8469,7 @@ msgstr ""
 "Le système est actuellement trop occupé pour effectuer votre demande d'aide, "
 "merci d'essayer plus tard."
 
-#: modules/chanserv/register.c:100 modules/nickserv/register.c:121
+#: modules/chanserv/register.c:100 modules/nickserv/register.c:133
 msgid ""
 "The system is currently too busy to process your registration, please try "
 "again later."
@@ -8484,7 +8514,7 @@ msgstr ""
 msgid "There are %u channels on the network."
 msgstr "Compte le nombre de salons sur le réseau."
 
-#: modules/nickserv/enforce.c:508 modules/nickserv/identify.c:125
+#: modules/nickserv/enforce.c:451 modules/nickserv/identify.c:127
 #, c-format
 msgid "There are already %zu sessions logged in to %s (maximum allowed: %u)."
 msgstr "Il y a déjà %zu sessions connectées pour %s (maximum autorisé : %u)."
@@ -8599,7 +8629,7 @@ msgstr ""
 msgid "This program was not built with QR-Code support!"
 msgstr ""
 
-#: modules/saslserv/main.c:1078
+#: modules/saslserv/main.c:1080
 msgid ""
 "This service exists to identify connecting clients to the network. It has no "
 "public interface."
@@ -8880,7 +8910,7 @@ msgstr "Usage : CLOSE <#salon> ON <motif>"
 msgid "Usage: FFLAGS %s <target> <flags>"
 msgstr "Usage : FFLAGS %s <cible> <flags>"
 
-#: modules/chanserv/flags.c:370
+#: modules/chanserv/flags.c:379
 #, c-format
 msgid "Usage: FLAGS %s [target] [flags]"
 msgstr "Usage : FLAGS %s [cible] [flags]"
@@ -8904,6 +8934,11 @@ msgstr "Usage : HOLD <compte> <ON|OFF>"
 #: modules/operserv/jupe.c:22
 msgid "Usage: JUPE <server> <reason>"
 msgstr "Syntaxe : JUPE <serveur> <motif>"
+
+#: modules/nickserv/loginnolimit.c:32 modules/nickserv/loginnolimit.c:73
+#, fuzzy
+msgid "Usage: LOGINNOLIMIT <account> <ON|OFF>"
+msgstr "Usage : REGNOLIMIT <compte> <ON|OFF>"
 
 #: modules/chanfix/fix.c:663 modules/chanfix/fix.c:720
 #: modules/chanserv/mark.c:23 modules/chanserv/mark.c:81
@@ -8968,7 +9003,7 @@ msgstr "Usage : RESTRICT <cible> <ON|OFF> [note]"
 msgid "Usage: RESTRICT <target> ON <note>"
 msgstr "Usage : RESTRICT <cible> ON <note>"
 
-#: modules/nickserv/return.c:26
+#: modules/nickserv/return.c:27
 msgid "Usage: RETURN <account> <e-mail address>"
 msgstr "Usage : RETURN <compte> <adresse email>"
 
@@ -9084,7 +9119,7 @@ msgstr "Les langues valides sont : %s"
 msgid "Valid operations are REGISTER and EMAILCHG."
 msgstr "Les opération valides sont REGISTER et EMAILCHG."
 
-#: modules/operserv/specs.c:150
+#: modules/operserv/specs.c:151
 msgid "Valid target types: USER, OPERCLASS."
 msgstr "Types de cibles valides : USER, OPERCLASS."
 
@@ -9146,7 +9181,7 @@ msgstr ""
 "La limite d'avertissement des clones doit être inférieure à celle des clones "
 "autorisés (%d)"
 
-#: modules/nickserv/identify.c:162
+#: modules/nickserv/identify.c:164
 msgid "Warning: Your password is not encrypted."
 msgstr ""
 
@@ -9242,7 +9277,7 @@ msgid "You are logged in as %s."
 msgstr "Vous êtes loggué en tant que %s."
 
 #: modules/chanserv/fflags.c:108 modules/chanserv/fflags.c:134
-#: modules/chanserv/flags.c:455 modules/chanserv/flags.c:486
+#: modules/chanserv/flags.c:473 modules/chanserv/flags.c:507
 #, c-format
 msgid "You are not allowed to set %s on %s in %s."
 msgstr "Vous n'êtes pas autorisé à définir %s sur %s dans %s."
@@ -9256,7 +9291,7 @@ msgstr "Vous n'êtes pas autorisé à définir %s sur le template %s sur %s
 msgid "You are not authorized to perform this operation."
 msgstr "Vous n'êtes pas autorisé à exécuter cette action."
 
-#: modules/operserv/help.c:19 modules/operserv/specs.c:107
+#: modules/operserv/help.c:19 modules/operserv/specs.c:108
 #, c-format
 msgid "You are not authorized to use %s."
 msgstr "Vous n'êtes pas autorisé à utiliser %s."
@@ -9291,7 +9326,7 @@ msgstr "Vous n'êtes pas reconnu comme %s."
 msgid "You are now a member of %s."
 msgstr "Vous êtes désormais un membre de %s."
 
-#: modules/nickserv/identify.c:159
+#: modules/nickserv/identify.c:161
 #, c-format
 msgid "You are now identified for %s."
 msgstr "Vous êtes maintenant identifié pour %s."
@@ -9301,7 +9336,7 @@ msgstr "Vous êtes maintenant identifié pour %s."
 msgid "You are now identified to %s."
 msgstr "Vous êtes maintenant identifié à %s."
 
-#: modules/nickserv/identify.c:159
+#: modules/nickserv/identify.c:161
 #, c-format
 msgid "You are now logged in as %s."
 msgstr "Vous êtes maintenant connecté en tant que %s."
@@ -9321,12 +9356,12 @@ msgid ""
 "without a password."
 msgstr ""
 
-#: modules/nickserv/enforce.c:457
+#: modules/nickserv/enforce.c:500
 #, fuzzy
 msgid "You can not regain a reserved nickname."
 msgstr "%s n'est pas un pseudonyme enregistré."
 
-#: modules/nickserv/enforce.c:451
+#: modules/nickserv/enforce.c:494
 #, fuzzy, c-format
 msgid ""
 "You can not regain your nickname while banned or quieted on a channel: %s"
@@ -9428,7 +9463,7 @@ msgstr ""
 "Cette opération ne peut être effectuée sur %s, parce que le compte a été "
 "marqué par %s."
 
-#: modules/nickserv/enforce.c:476
+#: modules/nickserv/enforce.c:519
 #, fuzzy
 msgid "You cannot regain a network service."
 msgstr "%s n'est pas un pseudonyme enregistré."
@@ -9462,7 +9497,7 @@ msgstr "Vous ne pouvez pas vous envoyer de mémos."
 msgid "You cannot use your account name as a password."
 msgstr "Vous ne pouvez pas utiliser votre nom de compte comme mot de passe."
 
-#: modules/nickserv/register.c:97 modules/nickserv/setpass.c:56
+#: modules/nickserv/register.c:109 modules/nickserv/setpass.c:56
 #: modules/nickserv/set_password.c:42
 msgid "You cannot use your nickname as a password."
 msgstr "Vous ne pouvez pas utiliser votre pseudonyme comme mot de passe."
@@ -9540,7 +9575,7 @@ msgstr "Vous avez banni l'adresse email %s."
 msgid "You have been invited to %s."
 msgstr "Vous avez été invité sur %s."
 
-#: modules/nickserv/enforce.c:528 modules/nickserv/identify.c:141
+#: modules/nickserv/enforce.c:470 modules/nickserv/identify.c:143
 #, c-format
 msgid "You have been logged out of %s."
 msgstr "Vous avez été déconnecté de %s."
@@ -9745,18 +9780,18 @@ msgstr "Vous ne pouvez pas supprimer tous les flags pour le rôle %s."
 msgid "You may not remove a founder's +F access."
 msgstr "Vous ne voulez probablement pas supprimer un accès +f à un fondateur."
 
-#: modules/chanserv/flags.c:394
+#: modules/chanserv/flags.c:405
 msgid "You may not remove a founder's +f access."
 msgstr "Vous ne voulez probablement pas supprimer un accès +f à un fondateur."
 
 #: modules/chanserv/access.c:698 modules/chanserv/access.c:960
-#: modules/chanserv/fflags.c:98 modules/chanserv/flags.c:399
+#: modules/chanserv/fflags.c:98 modules/chanserv/flags.c:411
 #: modules/groupserv/fflags.c:57 modules/groupserv/flags.c:146
 msgid "You may not remove the last founder."
 msgstr "Vous ne voulez probablement pas supprimer le dernier fondateur."
 
 #: modules/chanserv/access.c:847 modules/chanserv/access.c:996
-#: modules/chanserv/fflags.c:122 modules/chanserv/flags.c:469
+#: modules/chanserv/fflags.c:122 modules/chanserv/flags.c:488
 msgid "You may not set founder status on a hostmask."
 msgstr ""
 "Vous ne voulez probablement pas définir un statut de fondateur par un "
@@ -9836,7 +9871,7 @@ msgstr "Vous n'êtes pas autorisé à exécuter cette action."
 msgid "You need to specify a value for mode +%c."
 msgstr "Vous devez spécifier une valeur pour le mode +%c."
 
-#: modules/nickserv/enforce.c:507
+#: modules/nickserv/enforce.c:450
 #, fuzzy
 msgid "You were not logged in."
 msgstr "Vous n'êtes pas authentifié."
@@ -9957,15 +9992,15 @@ msgstr "Votre vHost de %s est maintenant desactivé."
 msgid "[unread]"
 msgstr "[non lu]"
 
-#: modules/operserv/specs.c:74
+#: modules/operserv/specs.c:75
 msgid "add and remove autokills"
 msgstr "ajoute et retire des autokills"
 
-#: modules/operserv/specs.c:88
+#: modules/operserv/specs.c:89
 msgid "administer groups"
 msgstr "administre les groupes"
 
-#: modules/operserv/specs.c:64
+#: modules/operserv/specs.c:65
 msgid "administer services"
 msgstr "administre les services"
 
@@ -9975,31 +10010,36 @@ msgstr "administre les services"
 msgid "base64_encode() failed (BUG?)"
 msgstr ""
 
-#: modules/operserv/specs.c:53
+#: modules/operserv/specs.c:54
 msgid "bypass channel registration limits"
 msgstr "contourne les restrictions d'enregistrement des salons"
 
-#: modules/operserv/specs.c:89
+#: modules/operserv/specs.c:90
 msgid "bypass group registration limits"
+msgstr "contourne les limitations d'enregistrement de groupe."
+
+#: modules/operserv/specs.c:40
+#, fuzzy
+msgid "bypass login limits"
 msgstr "contourne les limitations d'enregistrement de groupe."
 
 #: modules/operserv/specs.c:34
 msgid "drop accounts, freeze accounts, reset passwords"
 msgstr "supprime les comptes, gèle les comptes, réinitialise les mots de passe"
 
-#: modules/operserv/specs.c:48
+#: modules/operserv/specs.c:49
 msgid "drop channels, close channels, transfer ownership"
 msgstr "supprime les salons, ferme les salons, transfert la propriété"
 
-#: modules/operserv/specs.c:79
+#: modules/operserv/specs.c:80
 msgid "edit oper privileges"
 msgstr "édite les privilèges oper"
 
-#: modules/operserv/specs.c:65
+#: modules/operserv/specs.c:66
 msgid "edit private and internal metadata"
 msgstr "édite les metadonnées internes et privées"
 
-#: modules/operserv/specs.c:63
+#: modules/operserv/specs.c:64
 msgid "exempt from flood control"
 msgstr "n'est pas concerné par le contrôle du flood"
 
@@ -10007,16 +10047,16 @@ msgstr "n'est pas concerné par le contrôle du flood"
 msgid "hold accounts"
 msgstr "retient des comptes"
 
-#: modules/operserv/specs.c:52
+#: modules/operserv/specs.c:53
 #, fuzzy
 msgid "hold channels"
 msgstr "Salons"
 
-#: modules/operserv/specs.c:50
+#: modules/operserv/specs.c:51
 msgid "join staff channels"
 msgstr "joint les salons du staff"
 
-#: modules/operserv/specs.c:76
+#: modules/operserv/specs.c:77
 msgid "jupe servers"
 msgstr "bloque des serveurs"
 
@@ -10024,16 +10064,16 @@ msgstr "bloque des serveurs"
 msgid "mark accounts"
 msgstr "marque des comptes"
 
-#: modules/operserv/specs.c:51
+#: modules/operserv/specs.c:52
 #, fuzzy
 msgid "mark channels"
 msgstr "Salons"
 
-#: modules/operserv/specs.c:75
+#: modules/operserv/specs.c:76
 msgid "masskill channels or regexes"
 msgstr "masskill des salons ou des regexes"
 
-#: modules/operserv/specs.c:49
+#: modules/operserv/specs.c:50
 msgid "mlock operator modes"
 msgstr "mlock les modes opérateurs"
 
@@ -10045,7 +10085,7 @@ msgstr "Pas de motif de AKICK spécifié"
 msgid "register accounts on behalf of another user"
 msgstr "comptes enregistrés au nom d'un autre utilisateur"
 
-#: modules/operserv/specs.c:78
+#: modules/operserv/specs.c:79
 msgid "send global notices"
 msgstr "envoie des notices globales"
 
@@ -10053,7 +10093,7 @@ msgstr "envoie des notices globales"
 msgid "send passwords"
 msgstr "envoie les mots de passe"
 
-#: modules/operserv/specs.c:73
+#: modules/operserv/specs.c:74
 msgid "set channel modes"
 msgstr "applique des modes sur salons"
 
@@ -10115,19 +10155,19 @@ msgstr "Le vHost %s n'est pas dans la base de données de vHost offerts."
 msgid "view concealed information about accounts"
 msgstr "voit les informations sur les comptes dissimulées"
 
-#: modules/operserv/specs.c:47
+#: modules/operserv/specs.c:48
 msgid "view concealed information about channels"
 msgstr "voit les informations sur les salons dissimulées"
 
-#: modules/operserv/specs.c:87
+#: modules/operserv/specs.c:88
 msgid "view concealed information about groups"
 msgstr "voir les informations dissimulées sur les groupes."
 
-#: modules/operserv/specs.c:61
+#: modules/operserv/specs.c:62
 msgid "view concealed information about servers"
 msgstr "voit les informations sur les serveurs dissimulées "
 
-#: modules/operserv/specs.c:62
+#: modules/operserv/specs.c:63
 msgid "view privileges of other users"
 msgstr "voit les privilèges des autres utilisateurs"
 
