@@ -34,8 +34,8 @@ close_check_join(struct hook_channel_joinpart *data)
 		channel_mode_va(chansvs.me->me, cu->chan, 3, "+isbl", "*!*@*", "1");
 
 		// clear the channel
-		kick(chansvs.me->me, cu->chan, cu->user, "This channel has been closed");
-		data->cu = NULL;
+		if (try_kick(chansvs.me->me, cu->chan, cu->user, "This channel has been closed"))
+			data->cu = NULL;
 	}
 }
 
@@ -106,7 +106,7 @@ cs_cmd_close(struct sourceinfo *si, int parc, char *parv[])
 				cu = (struct chanuser *)n->data;
 
 				if (!is_internal_client(cu->user))
-					kick(chansvs.me->me, c, cu->user, "This channel has been closed");
+					try_kick(chansvs.me->me, c, cu->user, "This channel has been closed");
 			}
 		}
 
