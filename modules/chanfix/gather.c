@@ -427,7 +427,7 @@ chanfix_gather_init(struct chanfix_persist_record *rec)
 	chanfix_channel_heap = mowgli_heap_create(sizeof(struct chanfix_channel), 32, BH_LAZY);
 	chanfix_oprecord_heap = mowgli_heap_create(sizeof(struct chanfix_oprecord), 32, BH_LAZY);
 
-	chanfix_channels = mowgli_patricia_create(strcasecanon);
+	chanfix_channels = mowgli_patricia_create(irccasecanon);
 }
 
 void
