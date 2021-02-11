@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: ISC
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Copyright (C) 2005 William Pitcock, et al.
+ * Copyright (C) 2021 Atheme Project (http://atheme.org/)
  *
  * This file contains functionality which implements the OService TOPIC command.
  */
@@ -12,22 +12,22 @@
 static void
 os_cmd_topic(struct sourceinfo *si, int parc, char *parv[])
 {
-        char *channel = parv[0];
+	char *channel = parv[0];
 	char *topic = parv[1];
 	struct channel *c;
 	time_t prevtopicts;
 
-        if (!channel || !topic)
-        {
-                command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "TOPIC");
-                command_fail(si, fault_needmoreparams, _("Syntax: TOPIC <#channel> <topic>"));
-                return;
-        }
+	if (!channel || !topic)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "TOPIC");
+		command_fail(si, fault_needmoreparams, _("Syntax: TOPIC <#channel> <topic>"));
+		return;
+	}
 
 	if (!(c = channel_find(channel)))
 	{
-                command_fail(si, fault_nosuch_target, _("Channel \2%s\2 does not exist."), channel);
-                return;
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 does not exist."), channel);
+		return;
 	}
 
 	if (!validtopic(topic))
@@ -58,7 +58,7 @@ mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "operserv/main")
 
-        service_named_bind_command("operserv", &os_topic);
+	service_named_bind_command("operserv", &os_topic);
 }
 
 static void

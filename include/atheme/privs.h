@@ -42,8 +42,8 @@
 #define PRIV_METADATA        "general:metadata"
 #define PRIV_ADMIN           "general:admin"
 /* operserv */
-#define PRIV_OTOPIC           "operserv:omode"
-#define PRIV_OMODE           "operserv:otopic"
+#define PRIV_OTOPIC          "operserv:otopic"
+#define PRIV_OMODE           "operserv:omode"
 #define PRIV_AKILL           "operserv:akill"
 #define PRIV_MASS_AKILL      "operserv:massakill"
 #define PRIV_AKILL_ANYMASK   "operserv:akill-anymask"
