@@ -246,8 +246,8 @@ do_script_load(const char *filename)
 				goto fail;
 			}
 			struct module *dep_mod = module_find_published(dep_name);
-			mowgli_node_add(dep_mod, mowgli_node_create(), &m->mod.deplist);
-			mowgli_node_add(m, mowgli_node_create(), &dep_mod->dephost);
+			mowgli_node_add(dep_mod, mowgli_node_create(), &m->mod.requires);
+			mowgli_node_add(m, mowgli_node_create(), &dep_mod->required_by);
 		}
 	}
 
