@@ -488,7 +488,7 @@ xmlrpcmethod_ison(void *conn, int parc, char *parv[])
 /* atheme.metadata
  *
  * XML inputs:
- *	 authcookie
+ *       authcookie
  *       account name
  *       entity name, UID or channel name
  *       metadata key
@@ -520,22 +520,17 @@ xmlrpcmethod_metadata(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (*parv[1] != '\0' && strlen(parv[0]) > 1)
+	if ((mu = myuser_find(parv[1])) == NULL)
 	{
-		if ((mu = myuser_find(parv[1])) == NULL)
-		{
-			xmlrpc_generic_error(fault_nosuch_source, "Unknown user.");
-			return 0;
-		}
-
-		if (authcookie_validate(parv[0], mu) == false)
-		{
-			xmlrpc_generic_error(fault_badauthcookie, "Invalid authcookie for this account.");
-			return 0;
-		}
+		xmlrpc_generic_error(fault_nosuch_source, "Unknown user.");
+		return 0;
 	}
-	else
-		mu = NULL;
+
+	if (authcookie_validate(parv[0], mu) == false)
+	{
+		xmlrpc_generic_error(fault_badauthcookie, "Invalid authcookie for this account.");
+		return 0;
+	}
 
 	if (*parv[2] == '#')
 	{
