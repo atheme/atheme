@@ -543,7 +543,7 @@ xmlrpcmethod_metadata(void *conn, int parc, char *parv[])
 			return 0;
 		}
 
-		md = metadata_find(mc, parv[2]);
+		md = metadata_find(mc, parv[3]);
 	}
 	else
 	{
