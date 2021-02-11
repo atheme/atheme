@@ -4,7 +4,7 @@
  *
  * Copyright (C) 2021 Atheme Project (http://atheme.org/)
  *
- * Marking for channels.
+ * Marking for groups.
  */
 
 #include <atheme.h>
