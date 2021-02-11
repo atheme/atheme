@@ -25,12 +25,22 @@ struct enforce_timeout
 	mowgli_node_t node;
 };
 
+struct pending_regain
+{
+	char nick[NICKLEN + 1];
+	stringref client;
+	time_t client_ts;
+};
+
+static mowgli_heap_t *pending_regain_heap = NULL;
 static mowgli_heap_t *enforce_timeout_heap = NULL;
 static mowgli_eventloop_timer_t *enforce_timeout_check_timer = NULL;
 static mowgli_eventloop_timer_t *enforce_remove_enforcers_timer = NULL;
 
 static mowgli_list_t enforce_list;
 static time_t enforce_next;
+
+static mowgli_patricia_t *pending_regains;
 
 static mowgli_patricia_t **ns_set_cmdtree;
 
@@ -227,6 +237,65 @@ check_enforce_all(struct myuser *mu)
 				!myuser_access_verify(u, mn->owner))
 			check_enforce(&(struct hook_nick_enforce){ .u = u, .mn = mn });
 	}
+}
+
+static void
+destroy_pending_regain(const char ATHEME_VATTR_UNUSED *key, void *data, void ATHEME_VATTR_UNUSED *privdata)
+{
+	struct pending_regain *regain = data;
+
+	strshare_unref(regain->client);
+	mowgli_heap_free(pending_regain_heap, regain);
+}
+
+static void
+check_pending_regain(const char *nick)
+{
+	struct pending_regain *data = mowgli_patricia_delete(pending_regains, nick);
+	if (!data)
+		return;
+
+	slog(LG_DEBUG, "%s: found %s -> %s", MOWGLI_FUNC_NAME, data->client, data->nick);
+
+	struct user   *u  = user_find(data->client);
+	struct mynick *mn = mynick_find(data->nick);
+
+	if (!mn)
+	{
+		slog(LG_DEBUG, "%s: dropping regain attempt (nick dropped)", MOWGLI_FUNC_NAME);
+	}
+	// Make sure they haven't changed nick themselves (or if the protocol
+	// doesn't support UIDs, someone else might now be using their nick)
+	else if (!u)
+	{
+		slog(LG_DEBUG, "%s: dropping regain attempt (source user gone)", MOWGLI_FUNC_NAME);
+	}
+	else if (u->ts != data->client_ts)
+	{
+		slog(LG_DEBUG, "%s: dropping regain attempt (source user nickTS mismatch)", MOWGLI_FUNC_NAME);
+	}
+	else
+	{
+		notice(nicksvs.nick, u->nick, _("\2%s\2 has been regained."), data->nick);
+		fnc_sts(nicksvs.me->me, u, data->nick, FNC_FORCE);
+		// Clear ircd-side nick enforcement; this avoids users being unable
+		// to change the casing of their nick post-REGAIN while on the regained nick
+		holdnick_sts(nicksvs.me->me, 0, data->nick, mn->owner);
+	}
+
+	destroy_pending_regain(nick, data, NULL);
+}
+
+static void
+pending_regain_nickchange(struct hook_user_nick *data)
+{
+	check_pending_regain(data->oldnick);
+}
+
+static void
+pending_regain_delete(struct user *u)
+{
+	check_pending_regain(u->nick);
 }
 
 static void
@@ -539,10 +608,33 @@ ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 			{
 				if (ircd->flags & IRCD_HOLDNICK)
 					holdnick_sts(nicksvs.me->me, SECONDS_PER_MINUTE + atheme_random_uniform(SECONDS_PER_MINUTE), u->nick, mn->owner);
+
+				struct pending_regain *old = mowgli_patricia_delete(pending_regains, u->nick);
+
+				if (old)
+				{
+					// We might want to avoid re-FNCing the target, too;
+					// this just avoids leaking memory
+					slog(LG_DEBUG, "%s: overwriting existing pending regain %s -> %s", MOWGLI_FUNC_NAME, old->client, old->nick);
+					destroy_pending_regain(old->nick, old, NULL);
+				}
+
+				struct pending_regain *data = mowgli_heap_alloc(pending_regain_heap);
+				mowgli_strlcpy(data->nick, target, sizeof data->nick);
+				data->client    = strshare_ref(CLIENT_NAME(si->su));
+				data->client_ts = si->su->ts;
+
+				mowgli_patricia_add(pending_regains, u->nick, data);
+				slog(LG_DEBUG, "%s: added pending regain %s -> %s", MOWGLI_FUNC_NAME, data->client, data->nick);
+
 				guest_nickname(u);
+			}
+			else
+			{
+				holdnick_sts(si->service->me, 0, target, mn->owner);
+				fnc_sts(nicksvs.me->me, si->su, target, FNC_FORCE);
 				command_success_nodata(si, _("\2%s\2 has been regained."), target);
 			}
-			fnc_sts(nicksvs.me->me, si->su, target, FNC_FORCE);
 		}
 
 		return;
@@ -670,6 +762,16 @@ mod_init(struct module *const restrict m)
 		return;
 	}
 
+	pending_regain_heap = mowgli_heap_create(sizeof(struct pending_regain), 32, BH_NOW);
+	if (pending_regain_heap == NULL)
+	{
+		mowgli_heap_destroy(enforce_timeout_heap);
+		m->mflags |= MODFLAG_FAIL;
+		return;
+	}
+
+	pending_regains = mowgli_patricia_create(&irccasecanon);
+
 	enforce_remove_enforcers_timer = mowgli_timer_add(base_eventloop, "enforce_remove_enforcers", enforce_remove_enforcers, NULL, 5 * SECONDS_PER_MINUTE);
 
 	service_named_bind_command("nickserv", &ns_release);
@@ -678,6 +780,8 @@ mod_init(struct module *const restrict m)
 	hook_add_user_info(show_enforce);
 	hook_add_nick_can_register(check_registration);
 	hook_add_nick_enforce(check_enforce);
+	hook_add_user_nickchange(pending_regain_nickchange);
+	hook_add_user_delete(pending_regain_delete);
 }
 
 static void
@@ -696,7 +800,11 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	hook_del_user_info(show_enforce);
 	hook_del_nick_can_register(check_registration);
 	hook_del_nick_enforce(check_enforce);
+	hook_del_user_nickchange(pending_regain_nickchange);
+	hook_del_user_delete(pending_regain_delete);
+	mowgli_patricia_destroy(pending_regains, &destroy_pending_regain, NULL);
 	mowgli_heap_destroy(enforce_timeout_heap);
+	mowgli_heap_destroy(pending_regain_heap);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/enforce", MODULE_UNLOAD_CAPABILITY_OK)
