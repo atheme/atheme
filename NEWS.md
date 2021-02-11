@@ -35,12 +35,12 @@ POTENTIAL COMPATIBILITY BREAKAGE
   Atheme <= 7.2, this module has been replaced with 4 other modules (2 of which
   provide compatibility for the removed module). The module you need to load
   depends upon the operating system Atheme was being used on; if it was Mac OS
-  then you need to load `modules/crypto/crypt3-des` instead. If it was any
-  other operating system, then you need to load `modules/crypto/crypt3-md5`
-  instead. Note that these 2 modules are compatibility modules; they can only
-  verify existing encrypted passwords, they cannot encrypt new ones. You must
-  load an encryption-capable crypto module. Please see the Password Hashing
-  Modules section of `dist/atheme.conf.example`.
+  then you need to load `crypto/crypt3-des` instead. If it was any other
+  operating system, then you need to load `crypto/crypt3-md5` instead. Note
+  that these 2 modules are compatibility modules; they can only verify existing
+  encrypted passwords, they cannot encrypt new ones. You must load an
+  encryption-capable crypto module. Please see the Password Hashing Modules
+  section of `dist/atheme.conf.example`.
 
 - If you (still) use legacy password crypto (verify-only) modules (`anope-*`,
   `base64`, `crypt3-des`, `crypt3-md5`, `ircservices`, `raw*`), then you MUST
@@ -48,23 +48,23 @@ POTENTIAL COMPATIBILITY BREAKAGE
   will NOT be compiled or installed. The presence of this flag can be confirmed
   at the bottom of the `configure` output; "Legacy Crypto Modules".
 
-- The `modules/nickserv/cracklib` module has been renamed to
-  `modules/nickserv/pwquality` because it is now capable of using `libpasswdqc`
-  as well. The corresponding configuration item `nickserv::cracklib_warn` has
-  been renamed to `nickserv::pwquality_warn_only` too.
+- The `nickserv/cracklib` module has been renamed to `nickserv/pwquality`
+  because it is now capable of using `libpasswdqc` as well. The corresponding
+  configuration item `nickserv::cracklib_warn` has been renamed to
+  `nickserv::pwquality_warn_only` too.
 
-- The `modules/gameserv/happyfarm` module has been removed, as it was never
-  completely finished and never worked anyway. Please remove this module from
-  your configuration file, regardless of the version of services you are using.
+- The `gameserv/happyfarm` module has been removed, as it was never completely
+  finished and never worked anyway. Please remove this module from your
+  configuration file, regardless of the version of services you are using.
 
-- The `modules/operserv/override` module has been removed. It did not provide
+- The `operserv/override` module has been removed. It did not provide
   sufficient transparency to users while providing a great potential for abuse.
   Additionally, it caused crashes if used with certain commands. Any legitimate
   use of this module should be possible to replace with a more specific command
-  (such as `modules/chanserv/fflags`). If you encounter a use case that cannot
-  be replaced, please report a bug to let us know.
+  (such as `chanserv/fflags`). If you encounter a use case that cannot be
+  replaced, please report a bug to let us know.
 
-- The `modules/operserv/set` module has been broken up into individual modules.
+- The `operserv/set` module has been broken up into individual modules.
   Existing loadmodule configurations will continue to work, but you will
   receive a module deprecation warning if you load it. Please see the
   `dist/atheme.conf.example` file for the new submodule names.
@@ -177,8 +177,8 @@ ChanServ
 
 NickServ
 --------
-- Port `contrib/ns_waitreg` to `modules/nickserv/waitreg`
-- Port `contrib/ns_listlogins` to `modules/nickserv/listlogins`
+- Port `contrib/ns_waitreg` to `nickserv/waitreg`
+- Port `contrib/ns_listlogins` to `nickserv/listlogins`
 - Blame a specific channel when a NickServ `REGAIN` fails due to a channel ban
 - NickServ `RETURN` now enables the `HIDEMAIL` flag if the email was changed
   (unless the flag is unset by default)
@@ -238,9 +238,9 @@ Build System
 Password Cryptography
 ---------------------
 - The existing crypto modules no longer need OpenSSL (or any crypto library)
-- Add support for scrypt password encryption with `modules/crypto/scrypt`.
+- Add support for scrypt password encryption with `crypto/scrypt`.
   The scrypt module requires libsodium (`--with-sodium`).
-- Add support for bcrypt password encryption with `modules/crypto/bcrypt`.
+- Add support for bcrypt password encryption with `crypto/bcrypt`.
 - `libathemecore/crypto.c`: log current crypto provider on mod(un/re)load
 - `libathemecore/crypto.c`: rip out plaintext fallback implementation
 - Make old modules (`ircservices`, `pbkdf2`, `rawmd5`, `rawsha1`) verify-only
