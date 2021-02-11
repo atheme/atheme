@@ -82,6 +82,7 @@ static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	service_named_unbind_command("nickserv", &ns_listownmail);
+	del_conf_item("LISTOWNMAIL_CANON", &nicksvs.me->conf_table);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/listownmail", MODULE_UNLOAD_CAPABILITY_OK)
