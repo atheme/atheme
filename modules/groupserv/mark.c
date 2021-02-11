@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: ISC
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Copyright (C) 2005 William Pitcock
+ * Copyright (C) 2021 Atheme Project (http://atheme.org/)
  *
  * Marking for channels.
  */
