@@ -118,12 +118,43 @@ build_criteriastr(char *buf, int parc, char *parv[])
 	}
 }
 
+static bool
+check_extmlock(struct metadata *md, bool *modes, bool on)
+{
+	for (size_t i = 0; i < ignore_mode_list_size; i++)
+	{
+		if (!modes[i])
+			continue;
+
+		if (!md)
+			return false;
+
+		char *p = md->value;
+		while (*p != '\0')
+		{
+			if (*p == ignore_mode_list[i].mode)
+			{
+				if (on && (p[1] == ' ' || p[1] == '\0'))
+					return false;
+				else if (!on && (p[1] != ' ' && p[1] != '\0'))
+					return false;
+			}
+
+			while (*p != ' ' && *p != '\0')
+				p++;
+			while (*p == ' ')
+				p++;
+		}
+	}
+	return true;
+}
+
 static void
 cs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
 	struct metadata *md, *mdclosed;
-	char *chanpattern = NULL, *markpattern = NULL, *closedpattern = NULL;
+	char *chanpattern = NULL, *markpattern = NULL, *closedpattern = NULL, *mlock = NULL;
 	char buf[BUFSIZE];
 	char criteriastr[BUFSIZE];
 	unsigned int matches = 0;
@@ -151,6 +182,7 @@ cs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 		{"guard",	OPT_FLAG,	{.flagval = &flagset}, MC_GUARD},
 		{"private",	OPT_FLAG,	{.flagval = &flagset}, MC_PRIVATE},
 		{"pubacl",	OPT_FLAG,	{.flagval = &flagset}, MC_PUBACL},
+		{"mlock",	OPT_STRING,	{.strval = &mlock}, 0},
 		{"closed",	OPT_BOOL,	{.boolval = &closed}, 0},
 		{"marked",	OPT_BOOL,	{.boolval = &marked}, 0},
 		{"aclsize",	OPT_INT,	{.intval = &aclsize}, 0},
@@ -166,6 +198,75 @@ cs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 
 	process_parvarray(optstable, ARRAY_SIZE(optstable), parc, parv);
 	build_criteriastr(criteriastr, parc, parv);
+
+	unsigned int mlock_on = 0, mlock_off = 0;
+	bool mlock_key = false, mlock_limit = false;
+	bool extmlock_on[ignore_mode_list_size];
+	bool extmlock_off[ignore_mode_list_size];
+	memset(extmlock_on, 0, sizeof extmlock_on);
+	memset(extmlock_off, 0, sizeof extmlock_off);
+
+	if (mlock)
+	{
+		int dir = MTYPE_NUL;
+
+		for (const char *c = mlock; *c; c++)
+		{
+			int flag;
+			switch (*c)
+			{
+				case '+':
+					dir = MTYPE_ADD;
+					break;
+
+				case '-':
+					dir = MTYPE_DEL;
+					break;
+
+				case 'l':
+					if (dir == MTYPE_DEL)
+						mlock_off |= CMODE_LIMIT;
+					else
+						mlock_limit = true;
+					break;
+
+				case 'k':
+					if (dir == MTYPE_DEL)
+						mlock_off |= CMODE_KEY;
+					else
+						mlock_key = true;
+					break;
+
+				default:
+					flag = mode_to_flag(*c);
+					if (flag)
+					{
+						if (dir == MTYPE_DEL)
+							mlock_off |= flag;
+						else
+							mlock_on |= flag;
+					}
+					else
+					{
+						size_t i;
+						for (i = 0; ignore_mode_list[i].mode != '\0'; i++)
+						{
+							if (*c == ignore_mode_list[i].mode)
+								break;
+						}
+
+						if (ignore_mode_list[i].mode == '\0')
+							continue;
+
+						if (dir == MTYPE_DEL)
+							extmlock_off[i] = true;
+						else
+							extmlock_on[i] = true;
+					}
+					break;
+			}
+		}
+	}
 
 	command_success_nodata(si, _("Channels matching \2%s\2:"), criteriastr);
 
@@ -212,6 +313,26 @@ cs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 			continue;
 
 		if (lastused && (CURRTIME - mc->used) < lastused)
+			continue;
+
+		if ((mlock_on & mc->mlock_on) != mlock_on)
+			continue;
+
+		if ((mlock_off & mc->mlock_off) != mlock_off)
+			continue;
+
+		if (mlock_key && !mc->mlock_key)
+			continue;
+
+		if (mlock_limit && !mc->mlock_limit)
+			continue;
+
+		struct metadata *extmlock_md = metadata_find(mc, "private:mlockext");
+
+		if (!check_extmlock(extmlock_md, extmlock_on, true))
+			continue;
+
+		if (!check_extmlock(extmlock_md, extmlock_off, false))
 			continue;
 
 		// in the future we could add a LIMIT parameter

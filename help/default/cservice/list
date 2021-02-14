@@ -9,6 +9,8 @@ MARK-REASON  - All channels whose mark reason matches
                a given pattern.
 CLOSE-REASON - All channels which are closed whose close
                reason matches a given pattern.
+MLOCK        - All channels with an MLOCK that includes
+               the specified modes (ignoring parameters).
 HOLD         - All channels with the HOLD flag set.
 NOOP         - All channels with the NOOP flag set.
 LIMITFLAGS   - All channels with the LIMITFLAGS flag set.
@@ -35,6 +37,7 @@ Examples:
     /msg &nick& LIST hold
     /msg &nick& LIST closed pattern #x*
     /msg &nick& LIST aclsize 10
+    /msg &nick& LIST mlock +i-s
     /msg &nick& LIST registered 30d
     /msg &nick& LIST aclsize 20 registered 7d pattern #bar*
     /msg &nick& LIST mark-reason lamers?here
