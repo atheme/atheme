@@ -1812,7 +1812,7 @@ chanserv {
 	 *   At this time, no syntax checking is done on this; it is your own
 	 *   responsibility to make sure that it is correct.
 	 */
-	#deftemplates = "MEMBER=+Ai OP=+AOiortv";
+	#deftemplates = "MEMBER=+Ai OP=+AOeiortv";
 
 	/* (*) changets
 	 *
