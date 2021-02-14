@@ -732,7 +732,7 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 	struct myuser_name *mun;
 	mowgli_list_t *l;
 
-	mowgli_node_t *n;
+	mowgli_node_t *n, *tn;
 	struct multimark *mm;
 	struct tm *tm;
 	char time[BUFSIZE];
@@ -967,45 +967,107 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 	{
 		unsigned int num;
 
-		if (! info || ! string_to_uint(info, &num))
+		enum {
+			DELETE_ONE_MARK,
+			DELETE_RESTORED_MARKS,
+			DELETE_ALL_MARKS,
+		} mode = DELETE_ONE_MARK;
+
+		if (! info )
 		{
 			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "MARK");
-			command_fail(si, fault_needmoreparams, _("Usage: MARK <target> DEL <number>"));
+			command_fail(si, fault_needmoreparams, _("Usage: MARK <target> DEL <number>|RESTORED|ALL"));
 			return;
 		}
 
-		bool found = false;
+		if (! strcasecmp(info, "RESTORED") )
+			mode = DELETE_RESTORED_MARKS;
+		else if (! strcasecmp(info, "ALL") )
+			mode = DELETE_ALL_MARKS;
+		else if (string_to_uint(info, &num))
+			mode = DELETE_ONE_MARK;
+		else
+		{
+			command_fail(si, fault_badparams, STR_INVALID_PARAMS, "MARK");
+			command_fail(si, fault_badparams, _("Usage: MARK <target> DEL <number>|RESTORED|ALL"));
+			return;
+		}
+
+		unsigned int found = 0;
 
 		l = multimark_list(mu);
 
-		MOWGLI_ITER_FOREACH(n, l->head)
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, l->head)
 		{
 			mm = n->data;
 
-			if (mm->number == num)
+			switch (mode)
 			{
-				mowgli_node_delete(&mm->node, l);
+				case DELETE_ONE_MARK:
+					if (mm->number != num)
+						continue;
+					break;
 
-				sfree(mm->setter_uid);
-				sfree(mm->setter_name);
-				sfree(mm->restored_from_uid);
-				sfree(mm->restored_from_account);
-				sfree(mm->mark);
-				sfree(mm);
+				case DELETE_ALL_MARKS:
+					break;
 
-				found = true;
-				break;
+				case DELETE_RESTORED_MARKS:
+					if (mm->restored_from_uid == NULL)
+						continue;
+					break;
 			}
+
+			mowgli_node_delete(&mm->node, l);
+
+			sfree(mm->setter_uid);
+			sfree(mm->setter_name);
+			sfree(mm->restored_from_uid);
+			sfree(mm->restored_from_account);
+			sfree(mm->mark);
+			sfree(mm);
+
+			found++;
+
+			if (mode == DELETE_ONE_MARK)
+				break;
 		}
 
 		if (found)
 		{
-			command_success_nodata(si, _("The mark has been deleted."));
-			logcommand(si, CMDLOG_ADMIN, "MARK:DEL: \2%s\2 \2%s\2", target, info);
+			switch (mode)
+			{
+				case DELETE_ONE_MARK:
+					command_success_nodata(si, _("The mark has been deleted."));
+					logcommand(si, CMDLOG_ADMIN, "MARK:DEL: \2%s\2 \2%s\2", target, info);
+					break;
+
+				case DELETE_ALL_MARKS:
+					command_success_nodata(si, _("All marks have been deleted."));
+					logcommand(si, CMDLOG_ADMIN, "MARK:DEL:ALL: \2%s\2 (%u matches)", target, found);
+					break;
+
+				case DELETE_RESTORED_MARKS:
+					command_success_nodata(si, _("All restored marks have been deleted."));
+					logcommand(si, CMDLOG_ADMIN, "MARK:DEL:RESTORED: \2%s\2 (%u matches)", target, found);
+					break;
+			}
 		}
 		else
 		{
-			command_fail(si, fault_nosuch_key, _("This mark does not exist."));
+			switch (mode)
+			{
+				case DELETE_ONE_MARK:
+					command_fail(si, fault_nosuch_key, _("This mark does not exist."));
+					break;
+
+				case DELETE_ALL_MARKS:
+					command_fail(si, fault_nosuch_key, _("This account has no marks."));
+					break;
+
+				case DELETE_RESTORED_MARKS:
+					command_fail(si, fault_nosuch_key, _("This account has no restored marks."));
+					break;
+			}
 		}
 	}
 	else
