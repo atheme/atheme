@@ -19,6 +19,7 @@ MODULE = nickserv
 SRCS   =                    \
     access.c                \
     badmail.c               \
+    canonmail.c             \
     cert.c                  \
     drop.c                  \
     enforce.c               \
