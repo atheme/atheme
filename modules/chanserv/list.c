@@ -158,6 +158,12 @@ cs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 		{"lastused",	OPT_AGE,	{.ageval = &lastused}, 0},
 	};
 
+	// This isn't a channel-specific command. Exclude it from fantasy;
+	// this also allows bots to react to it without us interfering,
+	// cf chanserv/register for precedent
+	if (si->c != NULL)
+		return;
+
 	process_parvarray(optstable, ARRAY_SIZE(optstable), parc, parv);
 	build_criteriastr(criteriastr, parc, parv);
 
