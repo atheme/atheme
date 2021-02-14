@@ -124,12 +124,42 @@ cs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 	mc = mychan_add(name);
 	mc->registered = CURRTIME;
 	mc->used = CURRTIME;
-	mc->mlock_on |= (CMODE_NOEXT | CMODE_TOPIC);
+	mc->flags |= config_options.defcflags;
+
+	if (chansvs.default_mlock)
+	{
+		unsigned int dir = MTYPE_ADD;
+
+		for (const char *mchar = chansvs.default_mlock; *mchar; mchar++)
+		{
+			switch (*mchar)
+			{
+				case '+':
+					dir = MTYPE_ADD;
+					break;
+				case '-':
+					dir = MTYPE_DEL;
+					break;
+				default:
+					if (dir == MTYPE_ADD)
+						mc->mlock_on |= mode_to_flag(*mchar);
+					else
+						mc->mlock_off |= mode_to_flag(*mchar);
+					break;
+			}
+		}
+	}
+	else
+	{
+		mc->mlock_on |= (CMODE_NOEXT | CMODE_TOPIC);
+	}
+
 	if (c->limit == 0)
 		mc->mlock_off |= CMODE_LIMIT;
 	if (c->key == NULL)
 		mc->mlock_off |= CMODE_KEY;
-	mc->flags |= config_options.defcflags;
+
+	mc->mlock_off &= ~mc->mlock_on;
 
 	chanacs_add(mc, entity(si->smu), custom_founder_check(), CURRTIME, entity(si->smu));
 

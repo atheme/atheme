@@ -858,6 +858,7 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 	add_dupstr_conf_item("FOUNDER_FLAGS", &chansvs.me->conf_table, 0, &chansvs.founder_flags, NULL);
 	add_dupstr_conf_item("DEFTEMPLATES", &chansvs.me->conf_table, 0, &chansvs.deftemplates, NULL);
 	add_duration_conf_item("AKICK_TIME", &chansvs.me->conf_table, 0, &chansvs.akick_time, "m", 0);
+	add_dupstr_conf_item("DEFAULT_MLOCK", &chansvs.me->conf_table, 0, &chansvs.default_mlock, NULL);
 }
 
 static void

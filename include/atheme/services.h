@@ -38,6 +38,7 @@ struct chansvs
 	unsigned int    maxfounders;        // max founders per channel
 	char *          founder_flags;      // default founder flags for new channels
 	char *          deftemplates;       // default templates
+	char *          default_mlock;      // default mlock
 	bool            hide_xop;           // hide XOP templates
 	bool            hide_pubacl_akicks; // hide AKICKs only visible via PUBACL
 };

@@ -1873,6 +1873,17 @@ chanserv {
 	 */
 	#founder_flags = "AFORefiorstv";
 
+	/* (*) default_mlock
+	 *
+	 * The default MLOCK setting to apply on newly registered channels.
+	 * This currently only supports simple modes (without parameters).
+	 *
+	 * Services will automatically lock -l and -k unless the channel
+	 * to be registered already has a limit or key, respectively.
+	 * This behaviour cannot currently be modified.
+	 */
+	#default_mlock = "+nt";
+
 	/* (*) akick_time (minutes)
 	 *
 	 * The default expiration time for AKICKs. Comment this option out or

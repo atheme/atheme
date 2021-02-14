@@ -155,6 +155,8 @@ MemoServ
 ChanServ
 --------
 - Save `PUBACL` flag to database so it isn't lost when services restarts
+- Add `default_mlock` option to adjust the default MLOCK value, similar
+  to the existing `contrib/mlocktweaker` module
 
 NickServ
 --------
