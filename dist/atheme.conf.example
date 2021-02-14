@@ -1251,7 +1251,7 @@ chanserv {
 	 * Note: at this time no syntax checking is done on this; it
 	 * is your own responsibility to make sure it is correct.
 	 */
-	#deftemplates = "MEMBER=+Ai OP=+AOiortv";
+	#deftemplates = "MEMBER=+Ai OP=+AOeiortv";
 
 	/* (*) changets
 	 * Change the channel TS to the registration time when someone
