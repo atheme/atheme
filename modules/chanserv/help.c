@@ -19,15 +19,18 @@ static char *shorthelp_cmds = NULL;
 static void
 cs_cmd_help(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UNUSED parc, char **const restrict parv)
 {
-	if (parv[0])
+	const char *command = parv[0];
+
+	if (si->c && command)
 	{
-		const char *command = parv[0];
-		const char *tmp;
-
 		// Advance past the prefix and HELP command text, & channel name, for fantasy commands
-		if (si->c && (tmp = strchr(command, ' ')))
-			command = ++tmp;
+		command = strchr(command, ' ');
+		if (command)
+			command++;
+	}
 
+	if (command)
+	{
 		if (strcasecmp(command, "COMMANDS") == 0)
 		{
 			(void) help_display_prefix(si, chansvs.me);
