@@ -69,6 +69,13 @@ POTENTIAL COMPATIBILITY BREAKAGE
   receive a module deprecation warning if you load it. Please see the
   `dist/atheme.conf.example` file for the new submodule names.
 
+- The `operserv/modinspect`, `operserv/modload`, `operserv/modreload` and
+  `operserv/modunload` modules have been removed, and replaced with a single
+  module `operserv/modmanager`. Please migrate your configuration if you were
+  previously using any of these 4 modules, and rely upon the `operserv::access`
+  configuration block to restrict usage of commands if you were e.g. previously
+  running without `operserv/modload` loaded.
+
 - The NickServ DROP command no longer requires the user's account password as
   an argument.
 
