@@ -463,7 +463,7 @@ os_cmd_modreload_func(struct sourceinfo *const restrict si, const int parc, char
 	const mowgli_node_t *n;
 	MOWGLI_LIST_FOREACH(n, deplist->head)
 	{
-		struct module_dependency *const dep = n->data;
+		const struct module_dependency *const dep = n->data;
 
 		if (module_find_published(dep->name))
 			// Possible it was reloaded already if we're reloading multiple given modules in one command
