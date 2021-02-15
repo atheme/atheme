@@ -145,22 +145,39 @@ static const char *
 logfile_strip_control_codes(const char *buf)
 {
 	static char outbuf[BUFSIZE];
-	const char *in = buf;
 	char *out = outbuf;
 
-	for (; *in != '\0'; in++)
+	for (const char *in = buf; *in != '\0'; /* No action */)
 	{
 		if (*in > 31)
 		{
-			*out++ = *in;
-			continue;
+			*out++ = *in++;
 		}
 		else if (*in == 3)
 		{
+			/* mIRC colour codes have to be treated a bit specially.
+			 *
+			 * They are the character 0x03 followed by up to 2 decimal foreground digits.
+			 * This can optionally be followed by a comma and up to 2 more decimal background digits.
+			 *
+			 * We also have to gracefully handle the pathological cases where the input may be e.g.
+			 * "\003,\003data" or "\003,12data", without skipping over the start of data, but without
+			 * printing the 0x03 bytes or the comma, or background colour in the latter case.
+			 */
+
 			in++;
-			while (isdigit((unsigned char)*in))
+
+			for (size_t i = 0; i < 2 && isdigit((unsigned char) *in); i++, in++);
+
+			if (*in == ',')
+			{
 				in++;
+
+				for (size_t i = 0; i < 2 && isdigit((unsigned char) *in); i++, in++);
+			}
 		}
+		else
+			in++;
 	}
 
 	*out = '\0';
