@@ -244,15 +244,12 @@ static void
 os_mi_print_deps(struct sourceinfo *const restrict si, const struct module *const restrict m, const off_t list_offset,
                  const size_t depth, size_t max_name_width)
 {
-	char depth_buf[BUFSIZE];
-	(void) memset(depth_buf, 0x00, sizeof depth_buf);
-	(void) memset(depth_buf, ' ', (depth * 2U));
-
 	if (! max_name_width)
 		max_name_width = os_mi_namew_deps(m, list_offset, 0U, 0U);
 
 	// printf(3) and co. require an 'int' for a field width specifier parameter
-	const int field_width = (int) (max_name_width - (depth * 2U) - 2U);
+	const int field_width_depth = (int) (depth * 2U);
+	const int field_width_names = (int) (max_name_width - (depth * 2U) - 2U);
 
 	const mowgli_node_t *n;
 	const mowgli_list_t *const modlist = (const mowgli_list_t *) (((const char *) m) + list_offset);
@@ -261,8 +258,8 @@ os_mi_print_deps(struct sourceinfo *const restrict si, const struct module *cons
 		const struct module *const dm = n->data;
 		const enum module_unload_capability ucap = mod_recurse_revdeps(dm, NULL, NULL, NULL);
 
-		(void) command_success_nodata(si, "%s- %-*s [%p] (%s)", depth_buf, field_width, dm->name, dm->address,
-		                                                        os_mi_unloadability_str(ucap));
+		(void) command_success_nodata(si, "%-*s- %-*s [%p] (%s)", field_width_depth, "", field_width_names,
+		                                  dm->name, dm->address, os_mi_unloadability_str(ucap));
 
 		(void) os_mi_print_deps(si, dm, list_offset, (depth + 1U), max_name_width);
 	}
