@@ -13593,6 +13593,11 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
                 as_fn_error $? "To use --enable-compiler-sanitizers you must pass --disable-heap-allocator" "$LINENO" 5
 
 fi
+            if test "${SODIUM_MALLOC}" = "Yes"; then :
+
+                as_fn_error $? "To use --enable-compiler-sanitizers you must pass --disable-sodium-malloc" "$LINENO" 5
+
+fi
 
             # -fsanitize= benefits from these, but they're not strictly necessary
 
