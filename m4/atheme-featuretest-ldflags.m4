@@ -97,10 +97,9 @@ AC_DEFUN([ATHEME_FEATURETEST_LDFLAGS], [
     case "x${enable_linker_defs}" in
         xyes)
             AS_IF([test "${COMPILER_SANITIZERS}" = "Yes"], [
-                AC_MSG_ERROR([--enable-linker-defs is incompatible with --enable-compiler-sanitizers])
-            ], [
-                ATHEME_LD_TEST_LDFLAGS([-Wl,-z,defs])
+                AC_MSG_ERROR([To use --enable-compiler-sanitizers you must pass --disable-linker-defs])
             ])
+            ATHEME_LD_TEST_LDFLAGS([-Wl,-z,defs])
             ;;
         xno)
             ;;

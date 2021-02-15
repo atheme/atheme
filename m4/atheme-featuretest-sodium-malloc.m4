@@ -18,7 +18,7 @@ AC_DEFUN([ATHEME_FEATURETEST_SODIUM_MALLOC], [
     case "x${enable_sodium_malloc}" in
         xyes)
             AS_IF([test "${HEAP_ALLOCATOR}" = "Yes"], [
-                AC_MSG_ERROR([--enable-sodium-malloc requires --disable-heap-allocator])
+                AC_MSG_ERROR([To use --enable-sodium-malloc you must pass --disable-heap-allocator])
             ])
             AS_IF([test "${LIBSODIUM_MEMORY}" = "No"], [
                 AC_MSG_ERROR([--enable-sodium-malloc requires usable libsodium memory allocation and manipulation functions])

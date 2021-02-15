@@ -80,25 +80,35 @@ this will generally fail. Install pkg-config for the best results.
 ## Choice of compiler and its features
 
 If you wish to compile Atheme with the LLVM project's C compiler (`clang`),
-you may also wish to use LLVM's linker (`lld`).
-
-If you wish to use compiler sanitizers (by passing the `./configure` options
-`--disable-linker-defs --enable-compiler-sanitizers`), and you want to build
-with Clang, you MUST also use LLD, as most of the sanitizers in Clang require
-LTO to function properly, and Clang in LTO mode emits LLVM bitcode, not
-machine code. The linker is ultimately responsible for performing most of the
-LTO heavy lifting, and translating the result into machine code.
-
-You can accomplish this as follows (with or without sanitizers):
+you may also wish to use LLVM's linker (`lld`). You can accomplish this as
+follows:
 
     $ ./configure CC="clang" LDFLAGS="-fuse-ld=lld"
 
-    $ ./configure --disable-linker-defs --enable-compiler-sanitizers \
-        CC="clang" LDFLAGS="-fuse-ld=lld"
+If you want to use compiler sanitizers, and you want to build with Clang, you
+MUST also use LLD, as most of the sanitizers in Clang require LTO to function
+properly, and Clang in LTO mode emits LLVM bitcode, not machine code. The
+linker is ultimately responsible for performing most of the LTO heavy lifting,
+and translating the result into machine code, and most other linkers do not
+know how to do this.
+
+To use compiler sanitizers with GCC (supported):
+
+    $ ./configure --disable-heap-allocator --disable-linker-defs \
+        --enable-compiler-sanitizers CC="gcc"
+
+To use compiler sanitizers with Clang (recommended):
+
+    $ ./configure --disable-heap-allocator --disable-linker-defs \
+        --enable-compiler-sanitizers CC="clang" LDFLAGS="-fuse-ld=lld"
 
 If you do enable the sanitizers, it is recommended to enable the configuration
 option `general::db_save_blocking`; see the example configuration file for
 more details.
+
+The sanitizers are not recommended for production usage, but they are
+recommended for developers, including third parties writing new features
+and/or modifying the source code.
 
 
 

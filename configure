@@ -12948,7 +12948,7 @@ fi
         xyes)
             if test "${HEAP_ALLOCATOR}" = "Yes"; then :
 
-                as_fn_error $? "--enable-sodium-malloc requires --disable-heap-allocator" "$LINENO" 5
+                as_fn_error $? "To use --enable-sodium-malloc you must pass --disable-heap-allocator" "$LINENO" 5
 
 fi
             if test "${LIBSODIUM_MEMORY}" = "No"; then :
@@ -13588,6 +13588,12 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
     case "x${enable_compiler_sanitizers}" in
         xyes)
+            if test "${HEAP_ALLOCATOR}" = "Yes"; then :
+
+                as_fn_error $? "To use --enable-compiler-sanitizers you must pass --disable-heap-allocator" "$LINENO" 5
+
+fi
+
             # -fsanitize= benefits from these, but they're not strictly necessary
 
         { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fno-omit-frame-pointer " >&5
@@ -14837,10 +14843,9 @@ rm -f core conftest.err conftest.$ac_objext \
         xyes)
             if test "${COMPILER_SANITIZERS}" = "Yes"; then :
 
-                as_fn_error $? "--enable-linker-defs is incompatible with --enable-compiler-sanitizers" "$LINENO" 5
+                as_fn_error $? "To use --enable-compiler-sanitizers you must pass --disable-linker-defs" "$LINENO" 5
 
-else
-
+fi
 
         { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,-z,defs " >&5
 $as_echo_n "checking for C linker flag(s) -Wl,-z,defs ... " >&6; }
@@ -14884,8 +14889,6 @@ rm -f core conftest.err conftest.$ac_objext \
         unset LDFLAGS_SAVED
 
 
-
-fi
             ;;
         xno)
             ;;
