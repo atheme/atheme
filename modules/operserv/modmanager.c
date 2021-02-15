@@ -210,7 +210,8 @@ sort_revdep_list_cb(mowgli_node_t *const restrict ln, mowgli_node_t *const restr
  *   The maximum width of a module name for use in spacing parameters in os_mi_print_deps().
  */
 static size_t
-os_mi_namew_deps(const struct module *const restrict m, const off_t list_offset, const size_t depth, size_t max_so_far)
+os_mi_namew_deps(const struct module *const restrict m, const size_t list_offset, const size_t depth,
+                 size_t max_so_far)
 {
 	// Don't consider the name of the module we're printing dependencies for
 	if (depth)
@@ -241,8 +242,8 @@ os_mi_namew_deps(const struct module *const restrict m, const off_t list_offset,
  *   Iterate over the module given and all of its dependencies (either forward or reverse), printing each one
  */
 static void
-os_mi_print_deps(struct sourceinfo *const restrict si, const struct module *const restrict m, const off_t list_offset,
-                 const size_t depth, size_t max_name_width)
+os_mi_print_deps(struct sourceinfo *const restrict si, const struct module *const restrict m,
+                 const size_t list_offset, const size_t depth, size_t max_name_width)
 {
 	if (! max_name_width)
 		max_name_width = os_mi_namew_deps(m, list_offset, 0U, 0U);
