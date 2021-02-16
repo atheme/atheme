@@ -578,47 +578,49 @@ logfile_find_mask(unsigned int log_mask)
 static void ATHEME_FATTR_PRINTF(3, 0)
 vslog_ext(enum log_type type, unsigned int level, const char *fmt, va_list args)
 {
-	static bool in_slog = false;
-	char buf[BUFSIZE];
-	mowgli_node_t *n;
-	char datetime[BUFSIZE];
-	time_t t;
-	struct tm *tm;
+	static bool in_vslog_ext = false;
 
-	if (in_slog)
+	// Detect infinite logging recursion
+	if (in_vslog_ext)
 		return;
-	in_slog = true;
 
-	vsnprintf(buf, BUFSIZE, fmt, args);
+	in_vslog_ext = true;
 
-	time(&t);
-	tm = localtime(&t);
-	strftime(datetime, sizeof datetime, "[%Y-%m-%d %H:%M:%S]", tm);
+	char buf[BUFSIZE];
+	(void) vsnprintf(buf, sizeof buf, fmt, args);
 
+	const mowgli_node_t *n;
 	MOWGLI_ITER_FOREACH(n, log_files.head)
 	{
-		struct logfile *lf = (struct logfile *) n->data;
+		struct logfile *const lf = n->data;
+
+		continue_if_fail(lf != NULL);
+		continue_if_fail(lf->write_func != NULL);
 
 		if (type != LOG_ANY && type != lf->log_type)
 			continue;
 		if ((lf != log_file || !log_force) && !(level & lf->log_mask))
 			continue;
 
-		return_if_fail(lf->write_func != NULL);
-
-		lf->write_func(lf, buf);
+		(void) lf->write_func(lf, buf);
 	}
 
-	/*
-	 * if the event is in the default loglevel, and we are starting, then
+	/* If the event is in the default loglevel, and we are starting, then
 	 * display it in the controlling terminal.
 	 */
 	if (type != LOG_INTERACTIVE && ((runflags & (RF_LIVE | RF_STARTING) &&
 		(log_file != NULL ? log_file->log_mask : LG_ERROR | LG_INFO) & level) ||
 		(runflags & RF_LIVE && log_force)))
-		fprintf(stderr, "%s %s\n", datetime, logfile_strip_control_codes(buf));
+	{
+		char datetime[BUFSIZE];
+		const time_t ts = time(NULL);
+		const struct tm *const tm = localtime(&ts);
 
-	in_slog = false;
+		(void) strftime(datetime, sizeof datetime, "[%Y-%m-%d %H:%M:%S]", tm);
+		(void) fprintf(stderr, "%s %s\n", datetime, logfile_strip_control_codes(buf));
+	}
+
+	in_vslog_ext = false;
 }
 
 static void ATHEME_FATTR_PRINTF(3, 4)
