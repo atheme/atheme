@@ -21,12 +21,12 @@ enum list_opttype
 
 struct list_option
 {
-	char *option;
+	const char *option;
 	enum list_opttype opttype;
 	union {
 		bool *boolval;
 		int *intval;
-		char **strval;
+		const char **strval;
 		unsigned int *flagval;
 		time_t *ageval;
 	} optval;
@@ -34,7 +34,7 @@ struct list_option
 };
 
 static time_t
-parse_age(char *s)
+parse_age(const char *s)
 {
 	time_t duration;
 
@@ -57,7 +57,7 @@ parse_age(char *s)
 }
 
 static void
-process_parvarray(struct list_option *opts, size_t optsize, int parc, char *parv[])
+process_parvarray(const struct list_option *opts, size_t optsize, int parc, char *parv[])
 {
 	int i;
 	size_t j;
@@ -119,7 +119,7 @@ build_criteriastr(char *buf, int parc, char *parv[])
 }
 
 static bool
-check_extmlock(struct metadata *md, bool *modes, bool on)
+check_extmlock(const struct metadata *md, const bool *modes, bool on)
 {
 	for (size_t i = 0; i < ignore_mode_list_size; i++)
 	{
@@ -129,7 +129,7 @@ check_extmlock(struct metadata *md, bool *modes, bool on)
 		if (!md)
 			return false;
 
-		char *p = md->value;
+		const char *p = md->value;
 		while (*p != '\0')
 		{
 			if (*p == ignore_mode_list[i].mode)
@@ -152,42 +152,36 @@ check_extmlock(struct metadata *md, bool *modes, bool on)
 static void
 cs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 {
-	struct mychan *mc;
-	struct metadata *md, *mdclosed;
-	char *chanpattern = NULL, *markpattern = NULL, *closedpattern = NULL, *mlock = NULL;
-	char buf[BUFSIZE];
-	char criteriastr[BUFSIZE];
-	unsigned int matches = 0;
+	const char *chanpattern = NULL, *markpattern = NULL, *closedpattern = NULL, *mlock = NULL;
 	unsigned int flagset = 0;
 	int aclsize = 0;
 	time_t age = 0, lastused = 0;
-	bool closed = false, marked = false, markmatch, closedmatch;
-	mowgli_patricia_iteration_state_t state;
+	bool closed = false, marked = false;
 	struct list_option optstable[] = {
-		{"pattern",	OPT_STRING,	{.strval = &chanpattern}, 0},
-		{"mark-reason", OPT_STRING,	{.strval = &markpattern}, 0},
+		{"pattern",      OPT_STRING,    {.strval = &chanpattern}, 0},
+		{"mark-reason",  OPT_STRING,    {.strval = &markpattern}, 0},
 		{"close-reason", OPT_STRING,    {.strval = &closedpattern}, 0},
-		{"noexpire",	OPT_FLAG,	{.flagval = &flagset}, MC_HOLD},
-		{"held",	OPT_FLAG,	{.flagval = &flagset}, MC_HOLD},
-		{"hold",	OPT_FLAG,	{.flagval = &flagset}, MC_HOLD},
-		{"noop",	OPT_FLAG,	{.flagval = &flagset}, MC_NOOP},
-		{"limitflags",	OPT_FLAG,	{.flagval = &flagset}, MC_LIMITFLAGS},
-		{"secure",	OPT_FLAG,	{.flagval = &flagset}, MC_SECURE},
-		{"nosync",	OPT_FLAG,	{.flagval = &flagset}, MC_NOSYNC},
-		{"verbose",	OPT_FLAG,	{.flagval = &flagset}, MC_VERBOSE},
-		{"restricted",	OPT_FLAG,	{.flagval = &flagset}, MC_RESTRICTED},
-		{"keeptopic",	OPT_FLAG,	{.flagval = &flagset}, MC_KEEPTOPIC},
-		{"verbose-ops",	OPT_FLAG,	{.flagval = &flagset}, MC_VERBOSE_OPS},
-		{"topiclock",	OPT_FLAG,	{.flagval = &flagset}, MC_TOPICLOCK},
-		{"guard",	OPT_FLAG,	{.flagval = &flagset}, MC_GUARD},
-		{"private",	OPT_FLAG,	{.flagval = &flagset}, MC_PRIVATE},
-		{"pubacl",	OPT_FLAG,	{.flagval = &flagset}, MC_PUBACL},
-		{"mlock",	OPT_STRING,	{.strval = &mlock}, 0},
-		{"closed",	OPT_BOOL,	{.boolval = &closed}, 0},
-		{"marked",	OPT_BOOL,	{.boolval = &marked}, 0},
-		{"aclsize",	OPT_INT,	{.intval = &aclsize}, 0},
-		{"registered",	OPT_AGE,	{.ageval = &age}, 0},
-		{"lastused",	OPT_AGE,	{.ageval = &lastused}, 0},
+		{"noexpire",     OPT_FLAG,      {.flagval = &flagset}, MC_HOLD},
+		{"held",         OPT_FLAG,      {.flagval = &flagset}, MC_HOLD},
+		{"hold",         OPT_FLAG,      {.flagval = &flagset}, MC_HOLD},
+		{"noop",         OPT_FLAG,      {.flagval = &flagset}, MC_NOOP},
+		{"limitflags",   OPT_FLAG,      {.flagval = &flagset}, MC_LIMITFLAGS},
+		{"secure",       OPT_FLAG,      {.flagval = &flagset}, MC_SECURE},
+		{"nosync",       OPT_FLAG,      {.flagval = &flagset}, MC_NOSYNC},
+		{"verbose",      OPT_FLAG,      {.flagval = &flagset}, MC_VERBOSE},
+		{"restricted",   OPT_FLAG,      {.flagval = &flagset}, MC_RESTRICTED},
+		{"keeptopic",    OPT_FLAG,      {.flagval = &flagset}, MC_KEEPTOPIC},
+		{"verbose-ops",  OPT_FLAG,      {.flagval = &flagset}, MC_VERBOSE_OPS},
+		{"topiclock",    OPT_FLAG,      {.flagval = &flagset}, MC_TOPICLOCK},
+		{"guard",        OPT_FLAG,      {.flagval = &flagset}, MC_GUARD},
+		{"private",      OPT_FLAG,      {.flagval = &flagset}, MC_PRIVATE},
+		{"pubacl",       OPT_FLAG,      {.flagval = &flagset}, MC_PUBACL},
+		{"mlock",        OPT_STRING,    {.strval = &mlock}, 0},
+		{"closed",       OPT_BOOL,      {.boolval = &closed}, 0},
+		{"marked",       OPT_BOOL,      {.boolval = &marked}, 0},
+		{"aclsize",      OPT_INT,       {.intval = &aclsize}, 0},
+		{"registered",   OPT_AGE,       {.ageval = &age}, 0},
+		{"lastused",     OPT_AGE,       {.ageval = &lastused}, 0},
 	};
 
 	// This isn't a channel-specific command. Exclude it from fantasy;
@@ -197,6 +191,8 @@ cs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 		return;
 
 	process_parvarray(optstable, ARRAY_SIZE(optstable), parc, parv);
+
+	char criteriastr[BUFSIZE];
 	build_criteriastr(criteriastr, parc, parv);
 
 	unsigned int mlock_on = 0, mlock_off = 0;
@@ -270,6 +266,11 @@ cs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("Channels matching \2%s\2:"), criteriastr);
 
+	unsigned int matches = 0;
+
+	struct mychan *mc;
+	mowgli_patricia_iteration_state_t state;
+
 	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
 		if (chanpattern != NULL && match(chanpattern, mc->name))
@@ -277,23 +278,15 @@ cs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 
 		if (markpattern)
 		{
-			markmatch = false;
-			md = metadata_find(mc, "private:mark:reason");
-			if (md != NULL && !match(markpattern, md->value))
-				markmatch = true;
-
-			if (!markmatch)
+			const struct metadata *md = metadata_find(mc, "private:mark:reason");
+			if (md == NULL || match(markpattern, md->value) != 0)
 				continue;
 		}
 
 		if (closedpattern)
 		{
-			closedmatch = false;
-			mdclosed = metadata_find(mc, "private:close:reason");
-			if (mdclosed != NULL && !match(closedpattern, mdclosed->value))
-				closedmatch = true;
-
-			if (!closedmatch)
+			const struct metadata *md = metadata_find(mc, "private:close:reason");
+			if (md == NULL || match(closedpattern, md->value) != 0)
 				continue;
 		}
 
@@ -327,7 +320,7 @@ cs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 		if (mlock_limit && !mc->mlock_limit)
 			continue;
 
-		struct metadata *extmlock_md = metadata_find(mc, "private:mlockext");
+		const struct metadata *extmlock_md = metadata_find(mc, "private:mlockext");
 
 		if (!check_extmlock(extmlock_md, extmlock_on, true))
 			continue;
@@ -336,7 +329,7 @@ cs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 			continue;
 
 		// in the future we could add a LIMIT parameter
-		*buf = '\0';
+		char buf[BUFSIZE] = { 0 };
 
 		if (metadata_find(mc, "private:mark:setter")) {
 			mowgli_strlcat(buf, "\2[marked]\2", BUFSIZE);
