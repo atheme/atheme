@@ -45,17 +45,18 @@ struct module
 	enum module_unload_capability   can_unload;
 	unsigned int                    mflags;
 	const struct v4_moduleheader *  header;
-	void *                          address;
+	const void *                    address;
 	mowgli_module_t *               handle;
 	void                          (*unload_handler)(struct module *, enum module_unload_intent);
-	mowgli_list_t                   dephost;
-	mowgli_list_t                   deplist;
-	mowgli_list_t                   symlist;
+	mowgli_list_t                   required_by;
+	mowgli_list_t                   requires;
+	mowgli_node_t                   mbl_node;
+	mowgli_node_t                   mod_node;
 };
 
 struct v4_moduleheader
 {
-	unsigned int                    atheme_mod;
+	unsigned int                    magic;
 	unsigned int                    abi_ver;
 	unsigned int                    abi_rev;
 	const char *                    serial;
@@ -67,16 +68,8 @@ struct v4_moduleheader
 	const char *                    version;
 };
 
-struct module_dependency
-{
-	char *                          name;
-	enum module_unload_capability   can_unload;
-};
-
 void modules_init(void);
 struct module *module_load(const char *filespec);
-void module_load_dir(const char *dirspec);
-void module_load_dir_match(const char *dirspec, const char *pattern);
 void *module_locate_symbol(const char *modname, const char *sym);
 void module_unload(struct module *m, enum module_unload_intent intent);
 struct module *module_find(const char *name);
@@ -86,19 +79,19 @@ bool module_request(const char *name);
 // Located in libathemecore/module.c
 extern mowgli_list_t modules;
 
-#define DECLARE_MODULE_V1(_name, _unloadcap, _modinit, _moddeinit, _ver, _ven)  \
-        extern const struct v4_moduleheader _header;                            \
-        const struct v4_moduleheader _header = {                                \
-                .atheme_mod = MAPI_ATHEME_MAGIC,                                \
-                .abi_ver    = MAPI_ATHEME_V4,                                   \
-                .abi_rev    = CURRENT_ABI_REVISION,                             \
-                .serial     = SERNO,                                            \
-                .name       = _name,                                            \
-                .can_unload = _unloadcap,                                       \
-                .modinit    = _modinit,                                         \
-                .deinit     = _moddeinit,                                       \
-                .vendor     = _ven,                                             \
-                .version    = _ver,                                             \
+#define DECLARE_MODULE_V1(_name, _ucap, _modinit, _moddeinit, _ver, _ven)  \
+        extern const struct v4_moduleheader _header;                       \
+        const struct v4_moduleheader _header = {                           \
+                .magic      = MAPI_ATHEME_MAGIC,                           \
+                .abi_ver    = MAPI_ATHEME_V4,                              \
+                .abi_rev    = CURRENT_ABI_REVISION,                        \
+                .serial     = SERNO,                                       \
+                .name       = _name,                                       \
+                .can_unload = _ucap,                                       \
+                .modinit    = _modinit,                                    \
+                .deinit     = _moddeinit,                                  \
+                .vendor     = _ven,                                        \
+                .version    = _ver,                                        \
         }
 
 #define VENDOR_DECLARE_MODULE_V1(name, unloadcap, ven)                     \

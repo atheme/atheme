@@ -37,7 +37,7 @@
  *       a shared module is loaded into the application's memory space
  */
 mowgli_module_t *
-linker_open_ext(const char *path, char *errbuf, int errlen)
+linker_open_ext(const char *path, char *errbuf, size_t errlen)
 {
 	size_t len = strlen(path) + 20;
 	char *buf = smalloc(len);

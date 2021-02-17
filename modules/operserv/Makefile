@@ -27,11 +27,8 @@ SRCS   =                    \
     jupe.c                  \
     main.c                  \
     mode.c                  \
-    modinspect.c            \
     modlist.c               \
-    modload.c               \
-    modreload.c             \
-    modunload.c             \
+    modmanager.c            \
     noop.c                  \
     rakill.c                \
     raw.c                   \

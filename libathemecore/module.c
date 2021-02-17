@@ -21,28 +21,175 @@
 #  include <link.h>
 #endif
 
-static struct module *module_load_internal(const char *pathname, char *errbuf, int errlen);
-
-static mowgli_list_t modules_inprogress;
+static mowgli_list_t modules_being_loaded;
 static mowgli_heap_t *module_heap = NULL;
-static struct module *modtarget = NULL;
+static struct module *current_module = NULL;
 
 mowgli_list_t modules;
 
 void
 modules_init(void)
 {
-	module_heap = sharedheap_get(sizeof(struct module));
-
-	if (!module_heap)
+	if (! (module_heap = sharedheap_get(sizeof(struct module))))
 	{
-		slog(LG_ERROR, "modules_init(): block allocator failed.");
+		(void) slog(LG_ERROR, "%s: block allocator failed", MOWGLI_FUNC_NAME);
+
 		exit(EXIT_FAILURE);
 	}
 }
 
-/*
- * module_load()
+static inline void
+module_add_dependency(struct module *const restrict m)
+{
+	if (m && current_module && ! mowgli_node_find(m, &current_module->requires))
+	{
+		(void) mowgli_node_add(m, mowgli_node_create(), &current_module->requires);
+		(void) mowgli_node_add(current_module, mowgli_node_create(), &m->required_by);
+
+		(void) slog(LG_DEBUG, "%s: \2%s\2 added as a dependency of \2%s\2",
+		                      MOWGLI_FUNC_NAME, m->name, current_module->name);
+	}
+}
+
+// module_load_internal: the part of module_load that deals with 'real' shared object modules.
+static struct module *
+module_load_internal(const char *const restrict pathname, char *const restrict errbuf, const size_t errlen)
+{
+	char linker_errbuf[BUFSIZE];
+	mowgli_module_t *const handle = linker_open_ext(pathname, linker_errbuf, sizeof linker_errbuf);
+
+	if (! handle)
+	{
+		(void) snprintf(errbuf, errlen, "%s: error while loading \2%s\2: %s",
+		                                MOWGLI_FUNC_NAME, pathname, linker_errbuf);
+		return NULL;
+	}
+
+	const struct v4_moduleheader *const h = mowgli_module_symbol(handle, "_header");
+
+	if (! h)
+	{
+		(void) snprintf(errbuf, errlen, "%s: error while loading \2%s\2: module has no header; are you sure "
+		                                "this is a services module?", MOWGLI_FUNC_NAME, pathname);
+
+		(void) mowgli_module_close(handle);
+		return NULL;
+	}
+	if (h->magic != MAPI_ATHEME_MAGIC)
+	{
+		(void) snprintf(errbuf, errlen, "%s: error while loading \2%s\2: header magic mismatch "
+		                                "(%08X != %08X); are you sure this is a services module?",
+		                                MOWGLI_FUNC_NAME, pathname, h->magic, MAPI_ATHEME_MAGIC);
+
+		(void) mowgli_module_close(handle);
+		return NULL;
+	}
+	if (h->abi_ver != MAPI_ATHEME_V4)
+	{
+		(void) snprintf(errbuf, errlen, "%s: error while loading \2%s\2: MAPI version mismatch (%u != %u); "
+		                                "please recompile", MOWGLI_FUNC_NAME, pathname, h->abi_ver,
+		                                MAPI_ATHEME_V4);
+
+		(void) mowgli_module_close(handle);
+		return NULL;
+	}
+	if (h->abi_rev != CURRENT_ABI_REVISION)
+	{
+		(void) snprintf(errbuf, errlen, "%s: error while loading \2%s\2: ABI revision mismatch (%u != %u); "
+		                                "please recompile", MOWGLI_FUNC_NAME, pathname, h->abi_rev,
+		                                CURRENT_ABI_REVISION);
+
+		(void) mowgli_module_close(handle);
+		return NULL;
+	}
+	if (module_find_published(h->name))
+	{
+		(void) snprintf(errbuf, errlen, "%s: error while loading \2%s\2: published name \2%s\2 already exists; "
+		                                "duplicated module name?", MOWGLI_FUNC_NAME, pathname, h->name);
+
+		(void) mowgli_module_close(handle);
+		return NULL;
+	}
+
+	struct module *const m = mowgli_heap_alloc(module_heap);
+
+	(void) mowgli_strlcpy(m->modpath, pathname, sizeof m->modpath);
+	(void) mowgli_strlcpy(m->name, h->name, sizeof m->name);
+
+	m->can_unload   = h->can_unload;
+	m->handle       = handle;
+	m->mflags       = 0;
+	m->header       = h;
+
+#ifdef HAVE_USABLE_DLINFO
+	struct link_map *map = NULL;
+	if (dlinfo(handle, RTLD_DI_LINKMAP, &map) == 0 && map && map->l_addr)
+		m->address = (const void *) map->l_addr;
+	else
+		m->address = handle;
+#else
+	/* best we can do here without dlinfo() --nenolod */
+	m->address = handle;
+#endif
+
+	if (h->modinit)
+	{
+		/* The only permitted mechanism of importing a module as a
+		 * dependency is within the modinit function of a real shared
+		 * module, so all of this logic can be contained within this
+		 * block:
+		 *
+		 *   1) Save a copy of the pointer to the module that is
+		 *      currently being initialised (if any).
+		 *
+		 *   2) Set that pointer to this module. This is necessary to
+		 *      know which module is depending on another in step 4.
+		 *
+		 *   3) Add this module to the list of modules being loaded.
+		 *      This is necessary to detect circular dependencies in
+		 *      step 4.
+		 *
+		 *   4) Call this module's modinit function. This may end up
+		 *      recursing into this logic again, if it requests any
+		 *      other modules as dependencies.
+		 *
+		 *   5) Remove this module from the list of modules being
+		 *      loaded.
+		 *
+		 *   6) Restore the old value of the pointer to the module
+		 *      currently being initialised. This is necessary to
+		 *      allow for the previous module to import yet more
+		 *      modules as extra dependencies, and to finally clear
+		 *      the variable when there is no previous module to go
+		 *      back to (end of recursion in step 4).
+		 *
+		 *   -- amdj
+		 */
+		struct module *const cmt = current_module;
+
+		current_module = m;
+
+		(void) mowgli_node_add(m, &m->mbl_node, &modules_being_loaded);
+		(void) h->modinit(m);
+		(void) mowgli_node_delete(&m->mbl_node, &modules_being_loaded);
+
+		current_module = cmt;
+	}
+
+	if (m->mflags & MODFLAG_FAIL)
+	{
+		(void) snprintf(errbuf, errlen, "%s: error while loading \2%s\2: modinit failed",
+		                                MOWGLI_FUNC_NAME, pathname);
+
+		(void) module_unload(m, MODULE_UNLOAD_INTENT_PERM);
+		return NULL;
+	}
+
+	(void) slog(LG_DEBUG, "%s: loaded \2%s\2 [at %p]", MOWGLI_FUNC_NAME, h->name, m->address);
+	return m;
+}
+
+/* module_load()
  *
  * inputs:
  *       a literal filename for a module to load.
@@ -55,43 +202,66 @@ modules_init(void)
  *       code is run.
  */
 struct module *
-module_load(const char *filespec)
+module_load(const char *const restrict filespec)
 {
-	struct module *m;
-	char pathbuf[BUFSIZE], errbuf[BUFSIZE];
-	const char *pathname;
-	struct hook_module_load hdata;
+	char pathbuf[BUFSIZE];
+	const char *pathname = filespec;
 
-	/* / or C:\... */
-	if (*filespec == '/' || *(filespec + 1) == ':')
-		pathname = filespec;
+	if (! (filespec && *filespec))
+		return NULL;
+
+	if (current_module)
+		(void) slog(LG_VERBOSE, "%s: loading \2%s\2 as a dependency of \2%s\2",
+		                        MOWGLI_FUNC_NAME, filespec, current_module->name);
 	else
+		(void) slog(LG_VERBOSE, "%s: loading \2%s\2", MOWGLI_FUNC_NAME, filespec);
+
+	// Does not begin with / or e.g. C:\...
+	if (! (filespec[0] == '/' || (strlen(filespec) > 3 && filespec[1] == ':' && filespec[2] == '\\')))
 	{
-		snprintf(pathbuf, BUFSIZE, "%s/%s", MODDIR "/modules", filespec);
-		slog(LG_DEBUG, "module_load(): translated %s to %s", filespec, pathbuf);
+		(void) snprintf(pathbuf, sizeof pathbuf, "%s/modules/%s", MODDIR, filespec);
+		(void) slog(LG_DEBUG, "%s: translated \2%s\2 to \2%s\2", MOWGLI_FUNC_NAME, filespec, pathbuf);
+
 		pathname = pathbuf;
 	}
 
-	if ((m = module_find(pathname)))
+	mowgli_node_t *n;
+	MOWGLI_ITER_FOREACH(n, modules_being_loaded.head)
 	{
-		slog(LG_VERBOSE, "module_load(): module \2%s\2 is already loaded [at %p]", pathname, m->address);
+		const struct module *const tm = n->data;
+
+		if (strcasecmp(tm->modpath, pathname) != 0)
+			continue;
+
+		(void) slog(LG_ERROR, "%s: circular dependency between modules \2%s\2 and \2%s\2",
+		                      MOWGLI_FUNC_NAME, current_module->name, tm->name);
 		return NULL;
 	}
 
-	m = module_load_internal(pathname, errbuf, sizeof errbuf);
-
-	if (!m)
+	struct module *m;
+	if ((m = module_find(pathname)))
 	{
-		hdata.name = filespec;
-		hdata.path = pathname;
-		hdata.module = NULL;
-		hdata.handled = 0;
-		hook_call_module_load(&hdata);
+		(void) slog(LG_DEBUG, "%s: module \2%s\2 is already loaded [at %p]",
+		                      MOWGLI_FUNC_NAME, pathname, m->address);
+		return NULL;
+	}
+
+	char errbuf[BUFSIZE];
+	if (! (m = module_load_internal(pathname, errbuf, sizeof errbuf)))
+	{
+		struct hook_module_load hdata = {
+			.name       = filespec,
+			.path       = pathname,
+			.module     = NULL,
+			.handled    = 0,
+		};
+
+		(void) hook_call_module_load(&hdata);
 
 		if (! hdata.module)
 		{
-			if (!hdata.handled)
-				slog(LG_ERROR, "%s", errbuf);
+			if (! hdata.handled)
+				(void) slog(LG_ERROR, "%s", errbuf);
 
 			return NULL;
 		}
@@ -99,204 +269,18 @@ module_load(const char *filespec)
 		m = hdata.module;
 	}
 
-	mowgli_node_add(m, mowgli_node_create(), &modules);
+	(void) mowgli_node_add(m, &m->mod_node, &modules);
 
 	if (me.connected && !cold_start)
 	{
-		wallops("Module %s loaded at %p", m->name, m->address);
-		slog(LG_INFO, "MODLOAD: \2%s\2 at %p", m->name, m->address);
+		(void) wallops("Module \2%s\2 loaded at %p", m->name, m->address);
+		(void) slog(LG_INFO, "MODLOAD: \2%s\2 at %p", m->name, m->address);
 	}
 
 	return m;
 }
 
-/*
- * module_load_internal: the part of module_load that deals with 'real' shared
- * object modules.
- */
-static struct module *
-module_load_internal(const char *pathname, char *errbuf, int errlen)
-{
-	mowgli_node_t *n;
-	struct module *m, *old_modtarget;
-	const struct v4_moduleheader *h;
-	mowgli_module_t *handle = NULL;
-#ifdef HAVE_USABLE_DLINFO
-	struct link_map *map;
-#endif
-	char linker_errbuf[BUFSIZE];
-
-	handle = linker_open_ext(pathname, linker_errbuf, BUFSIZE);
-
-	if (!handle)
-	{
-		snprintf(errbuf, errlen, "module_load(): error while loading %s: \2%s\2", pathname, linker_errbuf);
-		return NULL;
-	}
-
-	h = (const struct v4_moduleheader *) mowgli_module_symbol(handle, "_header");
-
-	if (h == NULL || h->atheme_mod != MAPI_ATHEME_MAGIC)
-	{
-		snprintf(errbuf, errlen, "module_load(): \2%s\2: Attempted to load an incompatible module. Aborting.", pathname);
-
-		mowgli_module_close(handle);
-		return NULL;
-	}
-
-	if (h->abi_ver != MAPI_ATHEME_V4)
-	{
-		snprintf(errbuf, errlen, "module_load(): \2%s\2: MAPI version mismatch (%u != %u), please recompile.", pathname, h->abi_ver, MAPI_ATHEME_V4);
-
-		mowgli_module_close(handle);
-		return NULL;
-	}
-
-	if (h->abi_rev != CURRENT_ABI_REVISION)
-	{
-		snprintf(errbuf, errlen, "module_load(): \2%s\2: ABI revision mismatch (%u != %u), please recompile.", pathname, h->abi_rev, CURRENT_ABI_REVISION);
-
-		mowgli_module_close(handle);
-		return NULL;
-	}
-
-	if (module_find_published(h->name))
-	{
-		snprintf(errbuf, errlen, "module_load(): \2%s\2: Published name \2%s\2 already exists.", pathname, h->name);
-
-		mowgli_module_close(handle);
-		return NULL;
-	}
-
-	m = mowgli_heap_alloc(module_heap);
-
-	mowgli_strlcpy(m->modpath, pathname, BUFSIZE);
-	mowgli_strlcpy(m->name, h->name, BUFSIZE);
-	m->can_unload = h->can_unload;
-	m->handle = handle;
-	m->mflags = 0;
-	m->header = h;
-
-#ifdef HAVE_USABLE_DLINFO
-	dlinfo(handle, RTLD_DI_LINKMAP, &map);
-	if (map && map->l_addr)
-		m->address = (void *) map->l_addr;
-	else
-		m->address = handle;
-#else
-	/* best we can do here without dlinfo() --nenolod */
-	m->address = handle;
-#endif
-
-	n = mowgli_node_create();
-	mowgli_node_add(m, n, &modules_inprogress);
-
-	/* set the module target for module dependencies */
-	old_modtarget = modtarget;
-	modtarget = m;
-
-	if (h->modinit)
-		h->modinit(m);
-
-	/* we won't be loading symbols outside the init code */
-	modtarget = old_modtarget;
-
-	mowgli_node_delete(n, &modules_inprogress);
-	mowgli_node_free(n);
-
-	if (m->mflags & MODFLAG_FAIL)
-	{
-		snprintf(errbuf, errlen, "module_load(): module \2%s\2 init failed", pathname);
-		module_unload(m, MODULE_UNLOAD_INTENT_PERM);
-		return NULL;
-	}
-
-	slog(LG_DEBUG, "module_load(): loaded %s [at %p; MAPI version %u]", h->name, m->address, h->abi_ver);
-
-	return m;
-}
-
-/*
- * module_load_dir()
- *
- * inputs:
- *       a directory containing modules to load.
- *
- * outputs:
- *       none
- *
- * side effects:
- *       qualifying modules are passed to module_load().
- */
-void
-module_load_dir(const char *dirspec)
-{
-	DIR *module_dir = NULL;
-	struct dirent *ldirent = NULL;
-	char module_filename[4096];
-
-	module_dir = opendir(dirspec);
-
-	if (!module_dir)
-	{
-		slog(LG_ERROR, "module_load_dir(): %s: %s", dirspec, strerror(errno));
-		return;
-	}
-
-	while ((ldirent = readdir(module_dir)) != NULL)
-	{
-		if (!strstr(ldirent->d_name, ".so"))
-			continue;
-
-		snprintf(module_filename, sizeof(module_filename), "%s/%s", dirspec, ldirent->d_name);
-		module_load(module_filename);
-	}
-
-	closedir(module_dir);
-}
-
-/*
- * module_load_dir_match()
- *
- * inputs:
- *       a directory containing modules to load, and a pattern to match against
- *       to determine whether or not a module qualifies for loading.
- *
- * outputs:
- *       none
- *
- * side effects:
- *       qualifying modules are passed to module_load().
- */
-void
-module_load_dir_match(const char *dirspec, const char *pattern)
-{
-	DIR *module_dir = NULL;
-	struct dirent *ldirent = NULL;
-	char module_filename[4096];
-
-	module_dir = opendir(dirspec);
-
-	if (!module_dir)
-	{
-		slog(LG_ERROR, "module_load_dir(): %s: %s", dirspec, strerror(errno));
-		return;
-	}
-
-	while ((ldirent = readdir(module_dir)) != NULL)
-	{
-		if (!strstr(ldirent->d_name, ".so") && match(pattern, ldirent->d_name))
-			continue;
-
-		snprintf(module_filename, sizeof(module_filename), "%s/%s", dirspec, ldirent->d_name);
-		module_load(module_filename);
-	}
-
-	closedir(module_dir);
-}
-
-/*
- * module_unload()
+/* module_unload()
  *
  * inputs:
  *       a module object to unload.
@@ -308,61 +292,58 @@ module_load_dir_match(const char *dirspec, const char *pattern)
  *       a module is unloaded and neccessary deinitalization code is run.
  */
 void
-module_unload(struct module *m, const enum module_unload_intent intent)
+module_unload(struct module *const restrict m, const enum module_unload_intent intent)
 {
 	mowgli_node_t *n, *tn;
 
-	if (!m)
+	if (! m)
 		return;
 
-	/* unload modules which depend on us */
-	while (m->dephost.head != NULL)
-		module_unload((struct module *) m->dephost.head->data, intent);
-
-	/* let modules that we depend on know that we no longer exist */
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, m->deplist.head)
+	// Unload modules which depend on us
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, m->required_by.head)
 	{
-		struct module *hm = (struct module *) n->data;
-		mowgli_node_t *hn = mowgli_node_find(m, &hm->dephost);
+		struct module *const hm = n->data;
 
-		mowgli_node_delete(hn, &hm->dephost);
-		mowgli_node_free(hn);
-		mowgli_node_delete(n, &m->deplist);
-		mowgli_node_free(n);
+		(void) module_unload(hm, intent);
 	}
 
-	n = mowgli_node_find(m, &modules);
-	if (n != NULL)
+	// Let modules that we depend on know that we no longer exist
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, m->requires.head)
+	{
+		struct module *const hm = n->data;
+		mowgli_node_t *const hn = mowgli_node_find(m, &hm->required_by);
+
+		continue_if_fail(hn != NULL);
+
+		(void) mowgli_node_delete(hn, &hm->required_by);
+		(void) mowgli_node_free(hn);
+		(void) mowgli_node_delete(n, &m->requires);
+		(void) mowgli_node_free(n);
+	}
+
+	if (mowgli_node_find(m, &modules))
 	{
 		if (m->header && m->header->deinit)
-			m->header->deinit(intent);
+			(void) m->header->deinit(intent);
 
-		mowgli_node_delete(n, &modules);
-		mowgli_node_free(n);
+		(void) mowgli_node_delete(&m->mod_node, &modules);
 
 		(void) slog(LG_INFO, "%s: unloaded \2%s\2", MOWGLI_FUNC_NAME, m->name);
 
 		if (me.connected)
-			(void) wallops("Module %s unloaded.", m->name);
+			(void) wallops("Module \2%s\2 unloaded", m->name);
 	}
 
-	/* else unloaded in embryonic state */
 	if (m->handle)
 	{
-		mowgli_module_close(m->handle);
-		mowgli_heap_free(module_heap, m);
+		(void) mowgli_module_close(m->handle);
+		(void) mowgli_heap_free(module_heap, m);
 	}
-	else
-	{
-		/* If handle is null, unload_handler is required to be valid
-		 * and we can't do anything meaningful if it isn't.
-		 */
-		m->unload_handler(m, intent);
-	}
+	else if (m->unload_handler)
+		(void) m->unload_handler(m, intent);
 }
 
-/*
- * module_locate_symbol()
+/* module_locate_symbol()
  *
  * inputs:
  *       a name of a module and a symbol to look for inside it.
@@ -374,39 +355,39 @@ module_unload(struct module *m, const enum module_unload_intent intent)
  *       none
  */
 void *
-module_locate_symbol(const char *modname, const char *sym)
+module_locate_symbol(const char *const restrict modname, const char *const restrict sym)
 {
-	struct module *m;
-	void *symptr;
-
-	if (!(m = module_find_published(modname)))
+	struct module *const m = module_find_published(modname);
+	if (! m)
 	{
-		slog(LG_ERROR, "module_locate_symbol(): %s is not loaded.", modname);
+		(void) slog(LG_ERROR, "%s: \2%s\2 is not loaded", MOWGLI_FUNC_NAME, modname);
 		return NULL;
 	}
 
-	/* If this isn't a loaded .so module, we can't search for symbols in it
+	// If this isn't a loaded .so module, we can't search for symbols in it
+	if (! m->handle)
+		return NULL;
+
+	void *const symptr = mowgli_module_symbol(m->handle, sym);
+	if (! symptr)
+	{
+		(void) slog(LG_ERROR, "%s: could not find symbol \2%s\2 in module \2%s\2",
+		                      MOWGLI_FUNC_NAME, sym, modname);
+		return NULL;
+	}
+
+	/* This shouldn't be necessary, because the recommended way to import symbols is with
+	 * MODULE_TRY_REQUEST_SYMBOL, which first does MODULE_TRY_REQUEST_DEPENDENCY, which does
+	 * module_request(), which will add it as a dependency. Still, best to be thorough.
+	 *
+	 *   -- amdj
 	 */
-	if (!m->handle)
-		return NULL;
+	(void) module_add_dependency(m);
 
-	if (modtarget != NULL && !mowgli_node_find(m, &modtarget->deplist))
-	{
-		slog(LG_DEBUG, "module_locate_symbol(): %s added as a dependency for %s (symbol: %s)",
-			m->name, modtarget->name, sym);
-		mowgli_node_add(m, mowgli_node_create(), &modtarget->deplist);
-		mowgli_node_add(modtarget, mowgli_node_create(), &m->dephost);
-	}
-
-	symptr = mowgli_module_symbol(m->handle, sym);
-
-	if (symptr == NULL)
-		slog(LG_ERROR, "module_locate_symbol(): could not find symbol %s in module %s.", sym, modname);
 	return symptr;
 }
 
-/*
- * module_find()
+/* module_find()
  *
  * inputs:
  *       a name of a module to locate the object for.
@@ -418,23 +399,22 @@ module_locate_symbol(const char *modname, const char *sym)
  *       none
  */
 struct module *
-module_find(const char *name)
+module_find(const char *const restrict name)
 {
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, modules.head)
 	{
-		struct module *m = n->data;
+		struct module *const m = n->data;
 
-		if (!strcasecmp(m->modpath, name))
+		if (strcasecmp(m->modpath, name) == 0)
 			return m;
 	}
 
 	return NULL;
 }
 
-/*
- * module_find_published()
+/* module_find_published()
  *
  * inputs:
  *       a published (in _header) name of a module to locate the object for.
@@ -446,23 +426,22 @@ module_find(const char *name)
  *       none
  */
 struct module *
-module_find_published(const char *name)
+module_find_published(const char *const restrict name)
 {
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, modules.head)
 	{
-		struct module *m = n->data;
+		struct module *const m = n->data;
 
-		if (!strcasecmp(m->name, name))
+		if (strcasecmp(m->name, name) == 0)
 			return m;
 	}
 
 	return NULL;
 }
 
-/*
- * module_request()
+/* module_request()
  *
  * inputs:
  *       a published name of a module to load.
@@ -474,31 +453,22 @@ module_find_published(const char *name)
  *       a module might be loaded.
  */
 bool
-module_request(const char *name)
+module_request(const char *const restrict name)
 {
 	struct module *m;
-	mowgli_node_t *n;
 
-	if (module_find_published(name))
-		return true;
-
-	MOWGLI_ITER_FOREACH(n, modules_inprogress.head)
+	if ((m = module_find_published(name)))
 	{
-		m = n->data;
-
-		if (!strcasecmp(m->name, name))
-		{
-			slog(LG_ERROR, "module_request(): circular dependency between modules %s and %s",
-					modtarget != NULL ? modtarget->name : "?",
-					m->name);
-			return false;
-		}
+		(void) module_add_dependency(m);
+		return true;
+	}
+	if ((m = module_load(name)))
+	{
+		(void) module_add_dependency(m);
+		return true;
 	}
 
-	if (module_load(name) == NULL)
-		return false;
-
-	return true;
+	return false;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

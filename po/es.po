@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
 "Report-Msgid-Bugs-To: <ircs://chat.freenode.net:6697/atheme-i18n>\n"
-"POT-Creation-Date: 2021-02-11 01:06+0000\n"
+"POT-Creation-Date: 2021-02-11 01:09+0000\n"
 "PO-Revision-Date: 2014-07-05 16:20-0500\n"
 "Last-Translator: Miguel Pelaez <miguel2706@outlook.com>\n"
 "Language-Team: \n"
@@ -214,11 +214,6 @@ msgstr "%s sólo puede ejecutarse a través de IRC."
 #, c-format
 msgid "%s cannot be closed."
 msgstr "%s no puede ser cerrado."
-
-#: modules/operserv/modinspect.c:38
-#, c-format
-msgid "%s cannot be inspected."
-msgstr "%s no puede ser inspeccionado."
 
 #: modules/groupserv/acsnolimit.c:57
 #, c-format
@@ -550,12 +545,12 @@ msgstr "%s es un nick agrupado, use %s para quitarlo."
 msgid "%s is a network service; you cannot kick or deop them."
 msgstr "%s está protegido de expulsiones; Tu no puedes expulsarlo."
 
-#: modules/operserv/modreload.c:74
+#: modules/operserv/modmanager.c:419
 #, c-format
 msgid "%s is a permanent module; it cannot be reloaded."
 msgstr "%s es un módulo permanente; no puede ser recargado."
 
-#: modules/operserv/modunload.c:41
+#: modules/operserv/modmanager.c:527
 #, c-format
 msgid "%s is a permanent module; it cannot be unloaded."
 msgstr "%s es un módulo permanente; no puede ser descargado."
@@ -602,7 +597,7 @@ msgstr "%s ya se encuentra congelada."
 msgid "%s is already held."
 msgstr "%s ya está reservado."
 
-#: modules/operserv/modload.c:31
+#: modules/operserv/modmanager.c:379
 #, c-format
 msgid "%s is already loaded."
 msgstr "%s ya está cargado."
@@ -720,11 +715,20 @@ msgstr "%s está cerrado."
 msgid "%s is currently empty."
 msgstr "%s se encuentra actualmente vacío."
 
-#: modules/operserv/modreload.c:91
+#: modules/operserv/modmanager.c:428
 #, c-format
 msgid ""
 "%s is depended upon by %s, which is a permanent module and cannot be "
 "reloaded."
+msgstr ""
+"%s es una dependencia de %s, el cual es un módulo permanente y no puede ser "
+"recargado."
+
+#: modules/operserv/modmanager.c:543
+#, fuzzy, c-format
+msgid ""
+"%s is depended upon by %s, which is a permanent module and cannot be "
+"unloaded."
 msgstr ""
 "%s es una dependencia de %s, el cual es un módulo permanente y no puede ser "
 "recargado."
@@ -903,8 +907,8 @@ msgstr ""
 "No se encontró el patrón de direcciones de email %s en la lista de "
 "denegación de registro."
 
-#: modules/operserv/modinspect.c:31 modules/operserv/modreload.c:58
-#: modules/operserv/modunload.c:33
+#: modules/operserv/modmanager.c:316 modules/operserv/modmanager.c:414
+#: modules/operserv/modmanager.c:522
 #, c-format
 msgid "%s is not loaded."
 msgstr "%s no está cargado."
@@ -2061,7 +2065,7 @@ msgid "(no privileges held)"
 msgstr "Fin de privilegios"
 
 #: modules/chanserv/access.c:624 modules/nickserv/info.c:505
-#: modules/operserv/modinspect.c:52
+#: modules/operserv/modmanager.c:362
 msgid "*** End of Info ***"
 msgstr "*** Fin de Información ***"
 
@@ -2295,9 +2299,9 @@ msgstr "Se ha agregado la plantilla %s con permisos %s en %s."
 msgid "Adding or removing founder status from a role is not implemented."
 msgstr ""
 
-#: modules/operserv/modinspect.c:44
-#, c-format
-msgid "Address    : %p"
+#: modules/operserv/modmanager.c:324
+#, fuzzy, c-format
+msgid "Address        : %p"
 msgstr "Dirección       : %p"
 
 #: modules/chanfix/fix.c:909
@@ -2630,11 +2634,6 @@ msgstr "Klines de CLONES actualmente activadas."
 #: modules/gameserv/dice.c:608
 msgid "Calculate stuff."
 msgstr "Calcular valores."
-
-#: modules/operserv/modinspect.c:50
-#, c-format
-msgid "Can unload : %s"
-msgstr "Descargable     : %s"
 
 #: modules/gameserv/dice.c:476
 msgid "Can't divide by zero."
@@ -3241,6 +3240,11 @@ msgstr "Quita un veto de red sobre nombres reales"
 msgid "Deletes memos."
 msgstr "Elimina memos."
 
+#: modules/operserv/modmanager.c:346
+#, c-format
+msgid "Dependencies (%zu):"
+msgstr ""
+
 #: modules/groupserv/info.c:47
 #, c-format
 msgid "Description : %s"
@@ -3299,7 +3303,7 @@ msgstr "Muestra información de ayuda contextual."
 msgid "Displays info for a particular game."
 msgstr ""
 
-#: modules/operserv/modinspect.c:57
+#: modules/operserv/modmanager.c:560
 msgid "Displays information about loaded modules."
 msgstr "Muestra información acerca de los módulos actualmente cargados."
 
@@ -3563,9 +3567,9 @@ msgid "Entry %u not found in oper logon info."
 msgstr ""
 "No se encontró la entrada %d entre los mensajes informativos de operadores."
 
-#: modules/operserv/modinspect.c:45
-#, c-format
-msgid "Entry point: %p"
+#: modules/operserv/modmanager.c:328
+#, fuzzy, c-format
+msgid "Entry Point    : %p"
 msgstr "Punto de entrada: %p"
 
 #: modules/gameserv/dice.c:97
@@ -3603,9 +3607,9 @@ msgstr "Error: Operador matemático desconocido %c."
 msgid "Error: You typed an invalid expression."
 msgstr "Error: Ha ingresado una expresión inválida."
 
-#: modules/operserv/modinspect.c:46
-#, c-format
-msgid "Exit point : %p"
+#: modules/operserv/modmanager.c:329
+#, fuzzy, c-format
+msgid "Exit Point     : %p"
 msgstr "Punto de salida : %p"
 
 #: modules/chanserv/why.c:149
@@ -4163,7 +4167,7 @@ msgid "Information on %s (account %s):"
 msgstr "Información sobre %s (cuenta %s):"
 
 #: modules/chanfix/fix.c:586 modules/chanserv/info.c:63
-#: modules/nickserv/info.c:121 modules/operserv/modinspect.c:42
+#: modules/nickserv/info.c:121 modules/operserv/modmanager.c:322
 #: modules/rpgserv/info.c:40
 #, c-format
 msgid "Information on %s:"
@@ -4625,8 +4629,9 @@ msgstr "Muestra la lista de vhosts actualmente en espera de activación."
 msgid "Loaded modules:"
 msgstr "Módulos cargados:"
 
-#: modules/operserv/modload.c:55
-msgid "Loads a module."
+#: modules/operserv/modmanager.c:569
+#, fuzzy
+msgid "Loads modules."
 msgstr "Carga un módulo."
 
 #: modules/operserv/greplog.c:176
@@ -4887,12 +4892,12 @@ msgstr "Bloqueo de modos demasiado largo, no mostrado completamente"
 msgid "Modified   : %s (%s ago) by %s"
 msgstr "Modificado    : %s (hace %s)"
 
-#: modules/operserv/modload.c:41
+#: modules/operserv/modmanager.c:388
 #, c-format
 msgid "Module %s failed to load."
 msgstr "No se pudo cargar el módulo %s."
 
-#: modules/operserv/modreload.c:145
+#: modules/operserv/modmanager.c:489
 #, c-format
 msgid ""
 "Module %s failed to reload, and does not allow unloading. Shutting down to "
@@ -4901,22 +4906,22 @@ msgstr ""
 "El módulo %s no pudo ser recargado, y no permite ser descargado. Terminando "
 "ejecución para evitar la pérdida de datos."
 
-#: modules/operserv/modreload.c:154
+#: modules/operserv/modmanager.c:482
 #, c-format
 msgid "Module %s failed to reload."
 msgstr "No se pudo recargar el módulo %s."
 
-#: modules/operserv/modload.c:39
+#: modules/operserv/modmanager.c:386
 #, c-format
 msgid "Module %s loaded."
 msgstr "Módulo %s cargado."
 
-#: modules/operserv/modreload.c:137
-#, c-format
-msgid "Module %s reloaded (from %s)."
-msgstr "Módulo %s recargado (de %s)."
+#: modules/operserv/modmanager.c:476
+#, fuzzy, c-format
+msgid "Module %s reloaded."
+msgstr "Módulo %s cargado."
 
-#: modules/operserv/modunload.c:56
+#: modules/operserv/modmanager.c:554
 #, c-format
 msgid "Module %s unloaded."
 msgstr "Módulo %s descargado."
@@ -4966,11 +4971,6 @@ msgstr ""
 #: modules/chanserv/template.c:36 modules/chanserv/template.c:105
 msgid "Name"
 msgstr "Nombre"
-
-#: modules/operserv/modinspect.c:43
-#, c-format
-msgid "Name       : %s"
-msgstr "Nombre          : %s"
 
 #: modules/chanfix/fix.c:609
 #, c-format
@@ -5114,7 +5114,7 @@ msgstr "Nicks           : %s"
 #: modules/chanserv/moderate.c:222 modules/groupserv/main/hooks.c:119
 #: modules/hostserv/request.c:143 modules/nickserv/pwquality.c:195
 #: modules/operserv/info.c:22 modules/operserv/info.c:28
-#: modules/operserv/info.c:44 modules/operserv/modinspect.c:51
+#: modules/operserv/info.c:44
 #, fuzzy
 msgid "No"
 msgstr "No."
@@ -5569,6 +5569,10 @@ msgstr ""
 msgid "Perl help commands not yet implemented"
 msgstr "Comandos de ayuda Perl no implementados aún"
 
+#: modules/operserv/modmanager.c:71
+msgid "Permanent"
+msgstr ""
+
 #: modules/nickserv/register.c:76
 msgid "Please change to a real nickname, and try again."
 msgstr "Por favor cambie a un nick real e inténtelo nuevamente."
@@ -5730,8 +5734,7 @@ msgstr "REGAIN está desactivado."
 msgid "REHASH completed."
 msgstr "REHASH completado."
 
-#: modules/operserv/modload.c:49 modules/operserv/modreload.c:169
-#: modules/operserv/rehash.c:27
+#: modules/operserv/modmanager.c:294 modules/operserv/rehash.c:27
 #, c-format
 msgid ""
 "REHASH of %s failed. Please correct any errors in the file and try again."
@@ -5860,11 +5863,6 @@ msgstr "Recuperación de %s completada."
 msgid "Redefining built-in template %s."
 msgstr "Redefiniendo plantilla global %s."
 
-#: modules/operserv/modreload.c:68
-#, c-format
-msgid "Refusing to reload %s."
-msgstr "Rehusando a recargar %s."
-
 #: modules/operserv/soper.c:248
 #, c-format
 msgid ""
@@ -5872,11 +5870,6 @@ msgid ""
 msgstr ""
 "Rehusando establecer contraseñas de operadores de servicios si %s IDENTIFY "
 "no está cargado."
-
-#: modules/operserv/modunload.c:47
-#, c-format
-msgid "Refusing to unload %s."
-msgstr "Rehusando a descargar %s."
 
 #: modules/chanserv/recover.c:186
 msgid "Regain control of your channel."
@@ -5961,16 +5954,17 @@ msgstr "Cancela una registración pendiente."
 msgid "Releases a services enforcer."
 msgstr "Libera una reservación de servicios."
 
+#: modules/operserv/modmanager.c:73
+msgid "Reload Only"
+msgstr ""
+
 #: modules/operserv/rehash.c:32
 msgid "Reload the configuration data."
 msgstr "Recarga los datos de configuración."
 
-#: modules/operserv/modinspect.c:51
-msgid "Reload-only"
-msgstr ""
-
-#: modules/operserv/modreload.c:175
-msgid "Reloads a module."
+#: modules/operserv/modmanager.c:578
+#, fuzzy
+msgid "Reloads modules."
 msgstr "Recarga un módulo."
 
 #: modules/statserv/netsplit.c:126
@@ -6118,6 +6112,11 @@ msgstr "Devuelve una cuenta a su dueño."
 msgid "Returns the key (+k) of a channel."
 msgstr "Entrega la clave de acceso (+k) de un canal."
 
+#: modules/operserv/modmanager.c:352
+#, c-format
+msgid "Reverse Dependencies (%zu):"
+msgstr ""
+
 #: modules/gameserv/rps.c:18
 msgid "Rock"
 msgstr "Piedra"
@@ -6175,9 +6174,9 @@ msgstr ""
 msgid "Ruleset: %s"
 msgstr ""
 
-#: modules/operserv/modinspect.c:47
-#, c-format
-msgid "SDK Serial : %s"
+#: modules/operserv/modmanager.c:330
+#, fuzzy, c-format
+msgid "SDK Serial     : %s"
 msgstr "Serie SDK  : %s"
 
 #: modules/nickserv/set_core.c:31
@@ -7281,20 +7280,24 @@ msgstr "Sintaxis: LOGOUT <objeto> <contraseña>"
 msgid "Syntax: MODE <channel> <parameters>"
 msgstr "Sintaxis: MODE <canal> <parámetros>"
 
-#: modules/operserv/modinspect.c:21
-msgid "Syntax: MODINSPECT <module>"
+#: modules/operserv/modmanager.c:304
+#, fuzzy
+msgid "Syntax: MODINSPECT <module> [module [...]]"
 msgstr "Sintaxis: MODINSPECT <módulo>"
 
-#: modules/operserv/modload.c:22
-msgid "Syntax: MODLOAD <module...>"
+#: modules/operserv/modmanager.c:371
+#, fuzzy
+msgid "Syntax: MODLOAD <module> [module [...]]"
 msgstr "Sintaxis: MODLOAD <módulo...>"
 
-#: modules/operserv/modreload.c:52
-msgid "Syntax: MODRELOAD <module...>"
+#: modules/operserv/modmanager.c:400
+#, fuzzy
+msgid "Syntax: MODRELOAD <module> [module [...]]"
 msgstr "Sintaxis: MODRELOAD <módulo...>"
 
-#: modules/operserv/modunload.c:22
-msgid "Syntax: MODUNLOAD <module...>"
+#: modules/operserv/modmanager.c:512
+#, fuzzy
+msgid "Syntax: MODUNLOAD <module> [module [...]]"
 msgstr "Sintaxis: MODUNLOAD <módulo...>"
 
 #: modules/statserv/netsplit.c:90
@@ -8863,8 +8866,24 @@ msgstr "Le quita un veto a sí mismo de un canal."
 msgid "Unexpected error occurred: %s"
 msgstr "Error inesperado: %s"
 
-#: modules/operserv/modunload.c:62
-msgid "Unloads a module."
+#: modules/operserv/modmanager.c:338
+#, c-format
+msgid "Unloadability  : %s"
+msgstr ""
+
+#: modules/operserv/modmanager.c:340
+#, c-format
+msgid "Unloadability  : %s (see reverse dependencies below)"
+msgstr ""
+
+#: modules/operserv/modmanager.c:69
+#, fuzzy
+msgid "Unloadable"
+msgstr "Descarga un módulo."
+
+#: modules/operserv/modmanager.c:587
+#, fuzzy
+msgid "Unloads modules."
 msgstr "Descarga un módulo."
 
 #: modules/chanserv/quiet.c:434
@@ -9120,9 +9139,9 @@ msgstr "Operaciones válidas son REGISTER y EMAILCHG."
 msgid "Valid target types: USER, OPERCLASS."
 msgstr "Tipos de objeto válidos: USER, OPERCLASS."
 
-#: modules/operserv/modinspect.c:49
-#, c-format
-msgid "Vendor     : %s"
+#: modules/operserv/modmanager.c:331
+#, fuzzy, c-format
+msgid "Vendor         : %s"
 msgstr "Proveedor       : %s"
 
 #: modules/nickserv/setpass.c:66 modules/nickserv/verify.c:71
@@ -9135,9 +9154,9 @@ msgstr "Falló la verificación. Clave no válida para %s."
 msgid "Verifies an account registration."
 msgstr "Verifica el registro de una cuenta."
 
-#: modules/operserv/modinspect.c:48
-#, c-format
-msgid "Version    : %s"
+#: modules/operserv/modmanager.c:332
+#, fuzzy, c-format
+msgid "Version        : %s"
 msgstr "Versión         : %s"
 
 #: modules/chanserv/moderate.c:353
@@ -9201,7 +9220,7 @@ msgstr "Sin duda."
 #: modules/chanserv/moderate.c:222 modules/groupserv/main/hooks.c:119
 #: modules/hostserv/request.c:143 modules/nickserv/pwquality.c:195
 #: modules/operserv/info.c:22 modules/operserv/info.c:28
-#: modules/operserv/info.c:44 modules/operserv/modinspect.c:50
+#: modules/operserv/info.c:44
 #, fuzzy
 msgid "Yes"
 msgstr "Sí."
@@ -10205,6 +10224,9 @@ msgstr ""
 #~ msgid "%s can now take ownership of %s."
 #~ msgstr "%s ahora puede tomar posesión de %s."
 
+#~ msgid "%s cannot be inspected."
+#~ msgstr "%s no puede ser inspeccionado."
+
 #~ msgid "%s cannot be used as an override service."
 #~ msgstr "%s no puede ser utilizado como servicio con OVERRIDE"
 
@@ -10513,6 +10535,9 @@ msgstr ""
 #~ msgid "COMMITINTERVAL must be a positive integer, %s is invalid"
 #~ msgstr "COMMITINTERVAL debe ser un entero positivo, %s es inválido"
 
+#~ msgid "Can unload : %s"
+#~ msgstr "Descargable     : %s"
+
 #~ msgid "Cancels your requested announcement."
 #~ msgstr "Cancela su solicitud de anuncio."
 
@@ -10727,6 +10752,9 @@ msgstr ""
 #~ msgid "Manipulates channel access lists."
 #~ msgstr "Manipula la lista SOP de un canal."
 
+#~ msgid "Module %s reloaded (from %s)."
+#~ msgstr "Módulo %s recargado (de %s)."
+
 #, fuzzy
 #~ msgid "Module %s loaded at 0x%lx"
 #~ msgstr "%2d: %-20s [cargado en 0x%lx]"
@@ -10740,6 +10768,9 @@ msgstr ""
 
 #~ msgid "NICKEXPIRE must be a positive integer, %s is invalid"
 #~ msgstr "NICKEXPIRE debe ser un entero positivo, %s es inválido"
+
+#~ msgid "Name       : %s"
+#~ msgstr "Nombre          : %s"
 
 #~ msgid "Nick %s is not registered."
 #~ msgstr "El nick %s no está registrado."
@@ -10812,6 +10843,12 @@ msgstr ""
 
 #~ msgid "RECONTIME must be a positive integer, %s is invalid"
 #~ msgstr "RECONTIME debe ser un entero positivo, %s es inválido"
+
+#~ msgid "Refusing to reload %s."
+#~ msgstr "Rehusando a recargar %s."
+
+#~ msgid "Refusing to unload %s."
+#~ msgstr "Rehusando a descargar %s."
 
 #~ msgid "Registering of guest nicknames is disallowed."
 #~ msgstr "El registro de nicks de invitados no está permitido."
