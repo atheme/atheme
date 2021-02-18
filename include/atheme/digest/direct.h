@@ -11,6 +11,7 @@
 #define ATHEME_INC_DIGEST_DIRECT_H 1
 
 #include <atheme/stdheaders.h>
+#include <atheme/attributes.h>
 
 #define DIGEST_BKLEN_MD5        0x40U
 #define DIGEST_IVLEN_MD5        0x04U
@@ -49,14 +50,14 @@ struct digest_direct_ctx_sha2_256
 {
 	uint64_t        count;
 	uint32_t        state[DIGEST_IVLEN_SHA2_256];
-	unsigned char   buf[DIGEST_BKLEN_SHA2_256];
+	unsigned char   buf[DIGEST_BKLEN_SHA2_256] ATHEME_VATTR_ALIGNED(8);
 };
 
 struct digest_direct_ctx_sha2_512
 {
 	uint64_t        count[0x02U];
 	uint64_t        state[DIGEST_IVLEN_SHA2_512];
-	unsigned char   buf[DIGEST_BKLEN_SHA2_512];
+	unsigned char   buf[DIGEST_BKLEN_SHA2_512] ATHEME_VATTR_ALIGNED(8);
 };
 
 union digest_direct_ctx

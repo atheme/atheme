@@ -462,7 +462,7 @@ digest_direct_final_sha2_256(union digest_direct_ctx *const restrict state, void
 		state->sha2_256.buf[0x00U] = 0x80U;
 	}
 
-	*((uint64_t *) &state->sha2_256.buf[DIGEST_SHORT_BKLEN_SHA2_256]) = state->sha2_256.count;
+	*((uint64_t *) ((void *) &state->sha2_256.buf[DIGEST_SHORT_BKLEN_SHA2_256])) = state->sha2_256.count;
 
 	(void) digest_transform_block_sha2_256(state, (const void *) state->sha2_256.buf);
 
@@ -513,8 +513,8 @@ digest_direct_final_sha2_512(union digest_direct_ctx *const restrict state, void
 		state->sha2_512.buf[0x00U] = 0x80U;
 	}
 
-	*((uint64_t *) &state->sha2_512.buf[DIGEST_SHORT_BKLEN_SHA2_512]) = state->sha2_512.count[0x01U];
-	*((uint64_t *) &state->sha2_512.buf[DIGEST_SHORT_BKLEN_SHA2_512 + 0x08U]) = state->sha2_512.count[0x00U];
+	*((uint64_t *) ((void *) &state->sha2_512.buf[DIGEST_SHORT_BKLEN_SHA2_512])) = state->sha2_512.count[0x01U];
+	*((uint64_t *) ((void *) &state->sha2_512.buf[DIGEST_SHORT_BKLEN_SHA2_512 + 0x08U])) = state->sha2_512.count[0x00U];
 
 	(void) digest_transform_block_sha2_512(state, (const void *) state->sha2_512.buf);
 
