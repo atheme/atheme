@@ -40,7 +40,7 @@ static struct service *opersvs = NULL;
 static bool os_mi_use_colors = false;
 
 // Wraps the given input in IRC color codes if they are enabled
-static const char *
+static const char * ATHEME_FATTR_PRINTF(2, 3)
 os_mi_colorize(const unsigned int code, const char *const restrict format, ...)
 {
 	static char result[BUFSIZE];
