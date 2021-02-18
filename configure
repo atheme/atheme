@@ -14629,6 +14629,7 @@ fi
 
 
 
+    # This must be lowercase; gettext.m4 requires it so
     USE_NLS="no"
 
     # Check whether --enable-nls was given.

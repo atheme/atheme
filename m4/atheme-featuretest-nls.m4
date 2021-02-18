@@ -8,6 +8,7 @@
 
 AC_DEFUN([ATHEME_FEATURETEST_NLS], [
 
+    # This must be lowercase; gettext.m4 requires it so
     USE_NLS="no"
 
     AC_ARG_ENABLE([nls],
