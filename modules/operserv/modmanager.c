@@ -222,7 +222,7 @@ os_mi_namew_deps(const struct module *const restrict m, const size_t list_offset
 	}
 
 	const mowgli_node_t *n;
-	const mowgli_list_t *const modlist = (const mowgli_list_t *) (((const char *) m) + list_offset);
+	const mowgli_list_t *const modlist = (const void *) (((const char *) m) + list_offset);
 	MOWGLI_LIST_FOREACH(n, modlist->head)
 		max_so_far = os_mi_namew_deps(n->data, list_offset, (depth + 1U), max_so_far);
 
@@ -253,7 +253,7 @@ os_mi_print_deps(struct sourceinfo *const restrict si, const struct module *cons
 	const int field_width_names = (int) (max_name_width - (depth * 2U) - 2U);
 
 	const mowgli_node_t *n;
-	const mowgli_list_t *const modlist = (const mowgli_list_t *) (((const char *) m) + list_offset);
+	const mowgli_list_t *const modlist = (const void *) (((const char *) m) + list_offset);
 	MOWGLI_LIST_FOREACH(n, modlist->head)
 	{
 		const struct module *const dm = n->data;
