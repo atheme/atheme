@@ -191,6 +191,8 @@ NickServ
 - Blame a specific channel when a NickServ `REGAIN` fails due to a channel ban
 - NickServ `RETURN` now enables the `HIDEMAIL` flag if the email was changed
   (unless the flag is unset by default)
+- New module `nickserv/canonmail` to allow services administrators to test
+  the configuration of their email canonicalization setup
 
 IRCds
 -----
@@ -209,6 +211,8 @@ Misc
 - Make the OperServ `MODLIST` command available to everyone
 - Document the `special:authenticated` privilege
 - Add a Turkish translation
+- New module `misc/canon_domains` to canonicalize various domains associated
+  with a given email service provider; see the example configuration for details
 
 Build System
 ------------
