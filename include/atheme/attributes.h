@@ -29,6 +29,9 @@
  */
 
 #ifdef __has_attribute
+#  if __has_attribute(__aligned__)
+#    define ATHEME_ATTR_HAS_ALIGNED                     1
+#  endif
 #  if __has_attribute(__alloc_size__)
 #    define ATHEME_ATTR_HAS_ALLOC_SIZE                  1
 #  endif
@@ -71,6 +74,7 @@
 #else
 #  if !defined(__clang__) && defined(__GNUC__) && defined(__GNUC_MINOR__) && defined(__GNUC_PATCHLEVEL__)
 #    if ((__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 4)))
+#      define ATHEME_ATTR_HAS_ALIGNED                   1
 #      define ATHEME_ATTR_HAS_DEPRECATED                1
 #      define ATHEME_ATTR_HAS_FORMAT                    1
 #      define ATHEME_ATTR_HAS_MALLOC                    1
@@ -89,6 +93,31 @@
 #endif
 
 
+
+/* Tells the compiler to increase the alignment for the given variable to x bytes. Cannot be used to decrease a
+ * variable's alignment below its minimum unless used in conjunction with the "packed" attribute (below). If used
+ * without a specified size, increase the variable to the maximum alignment required for any scalar data type.
+ *
+ * Examples:
+ *
+ *   struct foo {
+ *     int a;                                       // Assuming alignof(int) == 4 ...
+ *     int b __attribute__((__aligned__(8)));       // ... then insert 4 bytes of padding before this ...
+ *   };                                             // ... and raise the alignment for this struct to 8 bytes
+ *
+ *   void bar(void)
+ *   {
+ *     int a[4] __attribute__((__aligned__(32)));   // Ensures that this stack-based array starts at an
+ *                                                  // address which is an integer multiple of 32 bytes
+ *   }
+ */
+#ifdef ATHEME_ATTR_HAS_ALIGNED
+#  define ATHEME_VATTR_ALIGNED(x)                       __attribute__((__aligned__((x))))
+#  define ATHEME_VATTR_ALIGNED_MAX                      __attribute__((__aligned__))
+#else
+#  define ATHEME_VATTR_ALIGNED(x)                       /* No 'aligned' variable attribute support */
+#  define ATHEME_VATTR_ALIGNED_MAX                      /* No 'aligned' variable attribute support */
+#endif
 
 /* Informs the compiler that the size of memory reachable by the pointer returned from this function is x (or x * y)
  * bytes, where x and y are positional function arguments (starting at 1). This aids static analysis and makes e.g.
