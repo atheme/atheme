@@ -40,4 +40,7 @@ const char *language_get_real_name(const struct language *lang);
 bool language_is_valid(const struct language *lang);
 void language_set_active(struct language *lang);
 
+bool languages_get_available(void);
+void languages_set_available(bool);
+
 #endif /* !ATHEME_INC_CULTURE_H */

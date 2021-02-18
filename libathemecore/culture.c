@@ -19,6 +19,8 @@
 static mowgli_patricia_t *itranslation_tree; /* internal translations, userserv/nickserv etc */
 static mowgli_patricia_t *translation_tree; /* language translations */
 
+static bool languages_available = false;
+
 /*
  * translation_init()
  *
@@ -293,6 +295,9 @@ void
 language_set_active(struct language *lang)
 {
 #ifdef ENABLE_NLS
+	if (! languages_available)
+		return;
+
 	static struct language *currlang;
 
 	if (lang == NULL)
@@ -312,6 +317,18 @@ language_set_active(struct language *lang)
 	currlang = lang;
 	setenv("LANGUAGE", currlang->name, 1);
 #endif
+}
+
+bool
+languages_get_available(void)
+{
+	return languages_available;
+}
+
+void
+languages_set_available(const bool avail)
+{
+	languages_available = avail;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

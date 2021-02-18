@@ -59,6 +59,15 @@ static struct command ns_set_language = {
 static void
 mod_init(struct module *const restrict m)
 {
+	if (! languages_get_available())
+	{
+		(void) slog(LG_ERROR, "%s: language support is not available in this installation", m->name);
+		(void) slog(LG_ERROR, "%s: please check the log file for startup error messages", m->name);
+
+		m->mflags |= MODFLAG_FAIL;
+		return;
+	}
+
 	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree")
 
 	command_add(&ns_set_language, *ns_set_cmdtree);
