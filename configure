@@ -825,7 +825,6 @@ enable_heap_allocator
 enable_large_net
 enable_legacy_pwcrypto
 enable_reproducible_builds
-enable_sodium_malloc
 with_digest_api_frontend
 with_rng_api_frontend
 enable_compiler_sanitizers
@@ -1514,7 +1513,6 @@ Optional Features:
                           Enable legacy password crypto modules
   --enable-reproducible-builds
                           Enable reproducible builds
-  --enable-sodium-malloc  Enable libsodium hardened memory allocator
   --enable-compiler-sanitizers
                           Enable various compiler run-time-instrumented
                           sanitizers
@@ -11650,7 +11648,6 @@ fi
     LIBSODIUM="No"
     LIBSODIUM_PATH=""
     LIBSODIUM_USABLE="No"
-    LIBSODIUM_MEMORY="No"
     LIBSODIUM_RANDOM="No"
     LIBSODIUM_SCRYPT="No"
 
@@ -11842,49 +11839,6 @@ fi
 
     if test "${LIBSODIUM}" = "Yes"; then :
 
-
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking if libsodium has usable memory allocation and manipulation functions" >&5
-$as_echo_n "checking if libsodium has usable memory allocation and manipulation functions... " >&6; }
-        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-                #ifdef HAVE_STDDEF_H
-                #  include <stddef.h>
-                #endif
-                #include <sodium/core.h>
-                #include <sodium/utils.h>
-
-int
-main ()
-{
-
-                (void) sodium_malloc(0);
-                (void) sodium_allocarray(0, 0);
-                (void) sodium_mprotect_readonly(NULL);
-                (void) sodium_mprotect_readwrite(NULL);
-                (void) sodium_free(NULL);
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-
-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-            LIBSODIUM_USABLE="Yes"
-            LIBSODIUM_MEMORY="Yes"
-
-else
-
-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
 
         { $as_echo "$as_me:${as_lineno-$LINENO}: checking if libsodium has a usable constant-time memory comparison function" >&5
 $as_echo_n "checking if libsodium has a usable constant-time memory comparison function... " >&6; }
@@ -12941,46 +12895,6 @@ fi
     esac
 
 
-
-    SODIUM_MALLOC="No"
-
-    # Check whether --enable-sodium-malloc was given.
-if test "${enable_sodium_malloc+set}" = set; then :
-  enableval=$enable_sodium_malloc;
-else
-  enable_sodium_malloc="no"
-fi
-
-
-    case "x${enable_sodium_malloc}" in
-        xyes)
-            if test "${HEAP_ALLOCATOR}" = "Yes"; then :
-
-                as_fn_error $? "To use --enable-sodium-malloc you must pass --disable-heap-allocator" "$LINENO" 5
-
-fi
-            if test "${LIBSODIUM_MEMORY}" = "No"; then :
-
-                as_fn_error $? "--enable-sodium-malloc requires usable libsodium memory allocation and manipulation functions" "$LINENO" 5
-
-fi
-
-            SODIUM_MALLOC="Yes"
-
-$as_echo "#define ATHEME_ENABLE_SODIUM_MALLOC 1" >>confdefs.h
-
-            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: The sodium hardened memory allocator is not intended for production usage" >&5
-$as_echo "$as_me: WARNING: The sodium hardened memory allocator is not intended for production usage" >&2;}
-            ;;
-        xno)
-            SODIUM_MALLOC="No"
-            ;;
-        *)
-            as_fn_error $? "invalid option for --enable-sodium-malloc" "$LINENO" 5
-            ;;
-    esac
-
-
 # Digest and RNG frontend to use in libathemecore
 
 
@@ -13599,11 +13513,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
             if test "${HEAP_ALLOCATOR}" = "Yes"; then :
 
                 as_fn_error $? "To use --enable-compiler-sanitizers you must pass --disable-heap-allocator" "$LINENO" 5
-
-fi
-            if test "${SODIUM_MALLOC}" = "Yes"; then :
-
-                as_fn_error $? "To use --enable-compiler-sanitizers you must pass --disable-sodium-malloc" "$LINENO" 5
 
 fi
 
@@ -22078,9 +21987,6 @@ fi
     if test "${RANDOM_FRONTEND}" = "Internal"; then :
   RANDOM_FRONTEND="None (Internal ChaCha20-based Fallback RNG)"
 fi
-    if test "${SODIUM_MALLOC}" = "Yes"; then :
-  SODIUM_MALLOC="Yes (NOT INTENDED FOR PRODUCTION USAGE)"
-fi
     if test "${BUILD_WARNINGS}" = "Yes"; then :
   BUILD_WARNINGS="Yes (NOT INTENDED FOR PRODUCTION USAGE)"
 fi
@@ -22181,7 +22087,6 @@ Configuration of ${PACKAGE_STRING}:
     Legacy Crypto Modules ...: ${LEGACY_PWCRYPTO}
     Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}
     RNG Frontend ............: ${RANDOM_FRONTEND}
-    Sodium Memory Allocator .: ${SODIUM_MALLOC}
 
   Build Features:
     Build Warnings ..........: ${BUILD_WARNINGS}

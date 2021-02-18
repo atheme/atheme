@@ -137,10 +137,6 @@ get_conf_opts(void)
 	optstr[optidx++] = 'L';
 #endif /* ATHEME_ENABLE_LARGE_NET */
 
-#ifdef ATHEME_ENABLE_SODIUM_MALLOC
-	optstr[optidx++] = 'M';
-#endif /* ATHEME_ENABLE_SODIUM_MALLOC */
-
 	if (config_options.hide_opers)
 		optstr[optidx++] = 'O';
 

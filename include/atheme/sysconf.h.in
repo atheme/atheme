@@ -43,9 +43,6 @@
 /* Define to 1 if --enable-reproducible-builds was given to ./configure */
 #undef ATHEME_ENABLE_REPRODUCIBLE_BUILDS
 
-/* Define to 1 if --enable-sodium-malloc was given to ./configure */
-#undef ATHEME_ENABLE_SODIUM_MALLOC
-
 /* Define to 1 if translation of program messages to the user's native
    language is requested. */
 #undef ENABLE_NLS

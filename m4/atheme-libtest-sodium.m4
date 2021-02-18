@@ -14,7 +14,6 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
     LIBSODIUM="No"
     LIBSODIUM_PATH=""
     LIBSODIUM_USABLE="No"
-    LIBSODIUM_MEMORY="No"
     LIBSODIUM_RANDOM="No"
     LIBSODIUM_SCRYPT="No"
 
@@ -84,29 +83,6 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
     ])
 
     AS_IF([test "${LIBSODIUM}" = "Yes"], [
-
-        AC_MSG_CHECKING([if libsodium has usable memory allocation and manipulation functions])
-        AC_LINK_IFELSE([
-            AC_LANG_PROGRAM([[
-                #ifdef HAVE_STDDEF_H
-                #  include <stddef.h>
-                #endif
-                #include <sodium/core.h>
-                #include <sodium/utils.h>
-            ]], [[
-                (void) sodium_malloc(0);
-                (void) sodium_allocarray(0, 0);
-                (void) sodium_mprotect_readonly(NULL);
-                (void) sodium_mprotect_readwrite(NULL);
-                (void) sodium_free(NULL);
-            ]])
-        ], [
-            AC_MSG_RESULT([yes])
-            LIBSODIUM_USABLE="Yes"
-            LIBSODIUM_MEMORY="Yes"
-        ], [
-            AC_MSG_RESULT([no])
-        ])
 
         AC_MSG_CHECKING([if libsodium has a usable constant-time memory comparison function])
         AC_LINK_IFELSE([

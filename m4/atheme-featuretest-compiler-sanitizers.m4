@@ -59,9 +59,6 @@ AC_DEFUN([ATHEME_FEATURETEST_COMPILER_SANITIZERS], [
             AS_IF([test "${HEAP_ALLOCATOR}" = "Yes"], [
                 AC_MSG_ERROR([To use --enable-compiler-sanitizers you must pass --disable-heap-allocator])
             ])
-            AS_IF([test "${SODIUM_MALLOC}" = "Yes"], [
-                AC_MSG_ERROR([To use --enable-compiler-sanitizers you must pass --disable-sodium-malloc])
-            ])
 
             # -fsanitize= benefits from these, but they're not strictly necessary
             ATHEME_CC_TEST_CFLAGS([-fno-omit-frame-pointer])
