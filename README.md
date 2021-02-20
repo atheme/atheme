@@ -29,6 +29,7 @@ as the source. Atheme will default to installing in `$HOME/atheme`, so make
 sure you plan accordingly for this.
 
     $ git submodule update --init
+    # Or clone the repo with 'git clone --recursive https://github.com/atheme/atheme.git' instead
     $ ./configure
     $ make
     $ make install
@@ -38,6 +39,7 @@ slightly differently:
 
     # pkg_add gmake
     $ git submodule update --init
+    # Or clone the repo with 'git clone --recursive https://github.com/atheme/atheme.git' instead
     $ ./configure --disable-linker-defs
     $ gmake
     $ gmake install
