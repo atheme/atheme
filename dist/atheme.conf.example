@@ -2038,6 +2038,18 @@ infoserv {
 	 * Set this to 0 for unlimited.
 	 */
 	logoninfo_count = 3;
+
+	/* (*)(B) logoninfo_reverse
+	 *
+	 * Whether to display the InfoServ on-connect messages in reverse
+	 * chronological order, i.e. newest message first, oldest last.
+	 *
+	 * Note that if this option is disabled, messages added after
+	 * the logoninfo_count limit will not be shown at connection time
+	 * as only the oldest N messages will be shown, rather than
+	 * the most recent N messages (as configured by default).
+	 */
+	logoninfo_reverse;
 };
 
 /* OperServ configuration.

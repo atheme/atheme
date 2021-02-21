@@ -39,6 +39,7 @@ static mowgli_list_t logon_info;
 static mowgli_list_t operlogon_info;
 
 static unsigned int logoninfo_count = 0;
+static bool logoninfo_reverse = true;
 
 static struct service *infoserv = NULL;
 
@@ -137,9 +138,11 @@ display_info(struct user *u, bool oper)
 		else
 			notice(infoserv->nick, u->nick, "*** \2Message(s) of the Day\2 ***");
 
-		mowgli_node_t *n;
+		mowgli_node_t *n = (logoninfo_reverse ? list->tail : list->head);
 		unsigned int count = 0;
-		MOWGLI_ITER_FOREACH_PREV(n, list->tail)
+
+		// can't use MOWGLI_ITER_FOREACH as we need to be able to adjust the direction
+		while (n)
 		{
 			struct logoninfo *l = n->data;
 
@@ -161,6 +164,8 @@ display_info(struct user *u, bool oper)
 			// only display up to the configured number of entries
 			if (logoninfo_count != 0 && count == logoninfo_count)
 				break;
+
+			n = (logoninfo_reverse ? n->prev : n->next);
 		}
 
 		if (oper)
@@ -250,10 +255,16 @@ is_cmd_post(struct sourceinfo *si, int parc, char *parv[])
 	l->story = sstrdup(story);
 	l->subject = sstrdup(subject);
 
+	mowgli_list_t *list = (imp == 0) ? &operlogon_info : &logon_info;
 	mowgli_node_t *n = mowgli_node_create();
-	mowgli_node_add(l, n, (imp == 0) ? &operlogon_info : &logon_info);
+	mowgli_node_add(l, n, list);
 
 	command_success_nodata(si, _("Added entry to logon info"));
+	if (logoninfo_count != 0 && !logoninfo_reverse && list->count > logoninfo_count)
+		command_success_nodata(si, ngettext("Warning: There is more than %u entry, so your message will not be displayed by default.",
+		                                    "Warning: There are more than %u entries, so your message will not be displayed by default.",
+		                                    logoninfo_count), logoninfo_count);
+
 	logcommand(si, CMDLOG_ADMIN, "INFO:POST: Importance: \2%s\2, Subject: \2%s\2, Message: \2%s\2", importance, y, story);
 
 	if (imp == 3)
@@ -605,6 +616,7 @@ mod_init(struct module *const restrict m)
 
 	infoserv = service_add("infoserv", NULL);
 	add_uint_conf_item("LOGONINFO_COUNT", &infoserv->conf_table, 0, &logoninfo_count, 0, INT_MAX, 3);
+	add_bool_conf_item("LOGONINFO_REVERSE", &infoserv->conf_table, 0, &logoninfo_reverse, true);
 
 	hook_add_user_add(hook_user_add);
 	hook_add_user_oper(hook_user_oper);
@@ -637,6 +649,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	mowgli_global_storage_put(INFOSERV_PERSIST_STORAGE_NAME, rec);
 
 	del_conf_item("LOGONINFO_COUNT", &infoserv->conf_table);
+	del_conf_item("LOGONINFO_REVERSE", &infoserv->conf_table);
 
 	hook_del_user_add(hook_user_add);
 	hook_del_user_oper(hook_user_oper);
