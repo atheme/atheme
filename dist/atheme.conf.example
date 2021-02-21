@@ -2034,6 +2034,8 @@ infoserv {
 	 * The number of InfoServ messages a user will see upon connect. If
 	 * there are more than this number, the user will be able to see the
 	 * rest of them with the InfoServ LIST command.
+	 *
+	 * Set this to 0 for unlimited.
 	 */
 	logoninfo_count = 3;
 };

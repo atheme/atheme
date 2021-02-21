@@ -158,8 +158,8 @@ display_info(struct user *u, bool oper)
 			sfree(y);
 			count++;
 
-			// only display three latest entries, max.
-			if (count == logoninfo_count)
+			// only display up to the configured number of entries
+			if (logoninfo_count != 0 && count == logoninfo_count)
 				break;
 		}
 
