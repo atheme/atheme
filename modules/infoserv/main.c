@@ -18,12 +18,21 @@
 #define DB_TYPE_LOGONINFO "LI"
 #define DB_TYPE_LOGONINFO_OPER "LIO"
 
+#define INFOSERV_PERSIST_STORAGE_NAME "atheme.infoserv.main.persist"
+#define INFOSERV_PERSIST_VERSION      1
+
 struct logoninfo
 {
 	stringref nick;
 	char *subject;
 	time_t info_ts;
 	char *story;
+};
+
+struct infoserv_persist_record
+{
+	unsigned int version;
+	mowgli_list_t logon_info, operlogon_info;
 };
 
 static mowgli_list_t logon_info;
@@ -573,6 +582,27 @@ mod_init(struct module *const restrict m)
 		return;
 	}
 
+	struct infoserv_persist_record *rec = mowgli_global_storage_get(INFOSERV_PERSIST_STORAGE_NAME);
+
+	if (rec)
+	{
+		mowgli_global_storage_free(INFOSERV_PERSIST_STORAGE_NAME);
+
+		if (rec->version > INFOSERV_PERSIST_VERSION)
+		{
+			slog(LG_ERROR, "infoserv/main: attempted downgrade is not supported (from %d to %d)", rec->version, INFOSERV_PERSIST_VERSION);
+			m->mflags = MODFLAG_FAIL;
+
+			sfree(rec);
+			return;
+		}
+
+		logon_info     = rec->logon_info;
+		operlogon_info = rec->operlogon_info;
+
+		sfree(rec);
+	}
+
 	infoserv = service_add("infoserv", NULL);
 	add_uint_conf_item("LOGONINFO_COUNT", &infoserv->conf_table, 0, &logoninfo_count, 0, INT_MAX, 3);
 
@@ -599,7 +629,33 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
+	struct infoserv_persist_record *rec = smalloc(sizeof *rec);
+	rec->version        = INFOSERV_PERSIST_VERSION;
+	rec->logon_info     = logon_info;
+	rec->operlogon_info = operlogon_info;
 
+	mowgli_global_storage_put(INFOSERV_PERSIST_STORAGE_NAME, rec);
+
+	del_conf_item("LOGONINFO_COUNT", &infoserv->conf_table);
+
+	hook_del_user_add(hook_user_add);
+	hook_del_user_oper(hook_user_oper);
+	hook_del_operserv_info(osinfo_hook);
+	hook_del_db_write(write_infodb);
+
+	db_unregister_type_handler(DB_TYPE_LOGONINFO);
+	db_unregister_type_handler(DB_TYPE_LOGONINFO_OPER);
+
+	service_unbind_command(infoserv, &is_help);
+	service_unbind_command(infoserv, &is_post);
+	service_unbind_command(infoserv, &is_del);
+	service_unbind_command(infoserv, &is_odel);
+	service_unbind_command(infoserv, &is_move);
+	service_unbind_command(infoserv, &is_omove);
+	service_unbind_command(infoserv, &is_list);
+	service_unbind_command(infoserv, &is_olist);
+
+	service_delete(infoserv);
 }
 
-SIMPLE_DECLARE_MODULE_V1("infoserv/main", MODULE_UNLOAD_CAPABILITY_NEVER)
+SIMPLE_DECLARE_MODULE_V1("infoserv/main", MODULE_UNLOAD_CAPABILITY_RELOAD_ONLY)
