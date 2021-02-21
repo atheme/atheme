@@ -39,6 +39,7 @@ slightly differently:
 
     # pkg_add gmake
     $ git clone --recursive 'https://github.com/atheme/atheme.git' atheme-devel
+    $ cd atheme-devel
     $ ./configure --disable-linker-defs
     $ gmake
     $ gmake install
