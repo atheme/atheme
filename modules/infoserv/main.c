@@ -472,8 +472,9 @@ is_list_impl(struct sourceinfo *si, int parc, char *parv[], bool oper)
 {
 	mowgli_node_t *n;
 	unsigned int x = 0;
+	mowgli_list_t list = oper ? operlogon_info : logon_info;
 
-	MOWGLI_ITER_FOREACH(n, (oper ? operlogon_info : logon_info).head)
+	MOWGLI_ITER_FOREACH(n, list.head)
 	{
 		struct logoninfo *l = n->data;
 		x++;
@@ -486,6 +487,14 @@ is_list_impl(struct sourceinfo *si, int parc, char *parv[], bool oper)
 
 		char dBuf[BUFSIZE];
 		strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", tm);
+
+		if (logoninfo_count != 0 && has_priv(si, PRIV_GLOBAL) && list.count > logoninfo_count)
+		{
+			if (!logoninfo_reverse && x == logoninfo_count + 1)
+				command_success_nodata(si, _("(Messages below this line are not shown by default)"));
+			else if (logoninfo_reverse && x == list.count - logoninfo_count + 1)
+				command_success_nodata(si, _("(Messages above this line are no longer shown by default)"));
+		}
 
 		command_success_nodata(si, _("%u: [\2%s\2] by \2%s\2 at \2%s\2: \2%s\2"),
 			x, y, l->nick, dBuf, l->story);
