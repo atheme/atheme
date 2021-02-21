@@ -2050,6 +2050,18 @@ infoserv {
 	 * the most recent N messages (as configured by default).
 	 */
 	logoninfo_reverse;
+
+	/* (*)(B) logoninfo_show_metadata
+	 *
+	 * By default, the InfoServ on-connect messages and the output
+	 * of the LIST command include information about the author
+	 * of the message as well as the time it was added.
+	 *
+	 * Disabling this option will remove that information for normal users.
+	 * Privileged users will still be able to see the information
+	 * in the output of the LIST (or OLIST) command.
+	 */
+	logoninfo_show_metadata;
 };
 
 /* OperServ configuration.

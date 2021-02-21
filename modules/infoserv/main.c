@@ -40,6 +40,7 @@ static mowgli_list_t operlogon_info;
 
 static unsigned int logoninfo_count = 0;
 static bool logoninfo_reverse = true;
+static bool logoninfo_show_metadata = true;
 
 static struct service *infoserv = NULL;
 
@@ -149,15 +150,23 @@ display_info(struct user *u, bool oper)
 			char *y = sstrdup(l->subject);
 			underscores_to_spaces(y);
 
-			struct tm *tm;
-			tm = localtime(&l->info_ts);
+			if (logoninfo_show_metadata)
+			{
+				struct tm *tm;
+				tm = localtime(&l->info_ts);
 
-			char dBuf[BUFSIZE];
-			strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", tm);
+				char dBuf[BUFSIZE];
+				strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", tm);
 
-			notice(infoserv->nick, u->nick, "[\2%s\2] Notice from %s, posted %s:",
-				y, l->nick, dBuf);
-			notice(infoserv->nick, u->nick, "%s", l->story);
+				notice(infoserv->nick, u->nick, "[\2%s\2] Notice from %s, posted %s:",
+						y, l->nick, dBuf);
+				notice(infoserv->nick, u->nick, "%s", l->story);
+			}
+			else
+			{
+				notice(infoserv->nick, u->nick, "[\2%s\2] %s", y, l->story);
+			}
+
 			sfree(y);
 			count++;
 
@@ -482,12 +491,6 @@ is_list_impl(struct sourceinfo *si, int parc, char *parv[], bool oper)
 		char *y = sstrdup(l->subject);
 		underscores_to_spaces(y);
 
-		struct tm *tm;
-		tm = localtime(&l->info_ts);
-
-		char dBuf[BUFSIZE];
-		strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", tm);
-
 		if (logoninfo_count != 0 && has_priv(si, PRIV_GLOBAL) && list.count > logoninfo_count)
 		{
 			if (!logoninfo_reverse && x == logoninfo_count + 1)
@@ -496,8 +499,21 @@ is_list_impl(struct sourceinfo *si, int parc, char *parv[], bool oper)
 				command_success_nodata(si, _("(Messages above this line are no longer shown by default)"));
 		}
 
-		command_success_nodata(si, _("%u: [\2%s\2] by \2%s\2 at \2%s\2: \2%s\2"),
-			x, y, l->nick, dBuf, l->story);
+		if (logoninfo_show_metadata || has_priv(si, PRIV_GLOBAL))
+		{
+			struct tm *tm;
+			tm = localtime(&l->info_ts);
+
+			char dBuf[BUFSIZE];
+			strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", tm);
+
+			command_success_nodata(si, _("%u: [\2%s\2] by \2%s\2 at \2%s\2: %s"),
+				x, y, l->nick, dBuf, l->story);
+		}
+		else
+		{
+			command_success_nodata(si, _("[\2%s\2] %s"), y, l->story);
+		}
 
 		sfree(y);
 	}
@@ -626,6 +642,7 @@ mod_init(struct module *const restrict m)
 	infoserv = service_add("infoserv", NULL);
 	add_uint_conf_item("LOGONINFO_COUNT", &infoserv->conf_table, 0, &logoninfo_count, 0, INT_MAX, 3);
 	add_bool_conf_item("LOGONINFO_REVERSE", &infoserv->conf_table, 0, &logoninfo_reverse, true);
+	add_bool_conf_item("LOGONINFO_SHOW_METADATA", &infoserv->conf_table, 0, &logoninfo_show_metadata, true);
 
 	hook_add_user_add(hook_user_add);
 	hook_add_user_oper(hook_user_oper);
@@ -659,6 +676,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 	del_conf_item("LOGONINFO_COUNT", &infoserv->conf_table);
 	del_conf_item("LOGONINFO_REVERSE", &infoserv->conf_table);
+	del_conf_item("LOGONINFO_SHOW_METADATA", &infoserv->conf_table);
 
 	hook_del_user_add(hook_user_add);
 	hook_del_user_oper(hook_user_oper);
