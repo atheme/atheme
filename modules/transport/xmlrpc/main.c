@@ -503,6 +503,7 @@ xmlrpcmethod_metadata(void *conn, int parc, char *parv[])
 	struct metadata *md;
 	struct myuser *mu;
 	int i;
+	bool showprivate = false;
 	char buf[XMLRPC_BUFSIZE];
 
 	for (i = 0; i < parc; i++)
@@ -572,11 +573,18 @@ xmlrpcmethod_metadata(void *conn, int parc, char *parv[])
 		xmlrpc_generic_error(fault_nosuch_source, "No metadata found matching this account/channel and key.");
 		return 0;
 	}
-	if (!strncmp(md->name, "private:", 8) && is_soper(mu))
+
+	if (*parv[2] == '#' && has_priv_myuser(mu, PRIV_CHAN_AUSPEX))
+		showprivate = true;
+	else if (*parv[2] == '!' && has_priv_myuser(mu, PRIV_GROUP_AUSPEX))
+		showprivate = true;
+	else if (*parv[2] != '#' && *parv[2] != '!' && has_priv_myuser(mu, PRIV_USER_AUSPEX))
+		showprivate = true;
+
+	if (strncmp(md->name, "private:", 8) != 0 || showprivate)
 		xmlrpc_string(buf, md->value);
 	else
 		xmlrpc_string(buf, "");
-	xmlrpc_send(1, buf);
 
 	return 0;
 }
