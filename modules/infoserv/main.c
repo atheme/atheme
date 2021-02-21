@@ -302,6 +302,7 @@ is_del_impl(struct sourceinfo *si, int parc, char *parv[], bool oper)
 			logcommand(si, CMDLOG_ADMIN, "INFO:%s: \2%s\2, \2%s\2", oper ? "ODEL" : "DEL", l->subject, l->story);
 
 			mowgli_node_delete(n, list);
+			mowgli_node_free(n);
 
 			strshare_unref(l->nick);
 			sfree(l->subject);
