@@ -1,0 +1,14 @@
+Help for MOVE:
+
+MOVE allows you to move informational messages, changing the order
+they are displayed to users on connect.
+
+The specified message will be inserted at the target position,
+shifting the surrounding entries as needed.
+
+To move messages displayed to opers, use the OMOVE command instead.
+
+Syntax: MOVE <old> <new>
+
+Example:
+    /msg &nick& MOVE 3 1

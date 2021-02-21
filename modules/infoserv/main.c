@@ -337,6 +337,117 @@ is_cmd_odel(struct sourceinfo *si, int parc, char *parv[])
 }
 
 static void
+is_move_impl(struct sourceinfo *si, int parc, char *parv[], bool oper)
+{
+	char *from = parv[0];
+	char *to   = parv[1];
+
+	if (!to)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, (oper ? "OMOVE" : "MOVE"));
+		if (oper)
+			command_fail(si, fault_needmoreparams, _("Syntax: OMOVE <from> <to>"));
+		else
+			command_fail(si, fault_needmoreparams, _("Syntax: MOVE <from> <to>"));
+		return;
+	}
+
+	unsigned int from_id, to_id;
+	if (! string_to_uint(from, &from_id) || ! string_to_uint(to, &to_id))
+	{
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, (oper ? "OMOVE" : "MOVE"));
+		if (oper)
+			command_fail(si, fault_badparams, _("Syntax: OMOVE <from> <to>"));
+		else
+			command_fail(si, fault_badparams, _("Syntax: MOVE <from> <to>"));
+		return;
+	}
+
+	mowgli_list_t *list = (oper ? &operlogon_info : &logon_info);
+
+	if (!from_id || from_id > list->count)
+	{
+		command_fail(si, fault_nosuch_target, _("The specified entry does not exist."));
+		return;
+	}
+
+	if (!to_id || to_id > list->count)
+	{
+		command_fail(si, fault_nosuch_target, _("The target position does not exist."));
+		return;
+	}
+
+	if (from_id == to_id)
+	{
+		command_fail(si, fault_nochange, _("You must specify two different positions."));
+		return;
+	}
+
+	mowgli_node_t *from_node = NULL, *to_node = NULL, *n;
+	struct logoninfo *entry = NULL;
+
+	unsigned int pos = 0;
+	MOWGLI_ITER_FOREACH(n, list->head)
+	{
+		// 1-based indexing, reflecting what we display in LIST output
+		pos++;
+
+		if (!from_node && pos == from_id)
+		{
+			// We'll be removing this node from the list and adding it before the
+			// item currently at the target position. We need to skip this node
+			// in the count in case the target position is after it, however, as
+			// we're going to be removing it.
+			pos--;
+			from_node = n;
+			entry = n->data;
+		}
+
+		if (!to_node && pos == to_id)
+			to_node = n;
+
+		if (from_node && to_node)
+			break;
+	}
+
+	// this should never happen
+	// note that to_node can be NULL if we're asked to move an item to the end of the list;
+	// mowgli_node_insert_before will do the right thing in that case
+	if (!from_node || from_node == to_node)
+	{
+		if (!from_node)
+			slog(LG_ERROR, "%s: failed to find node %u in list (BUG)", MOWGLI_FUNC_NAME, from_id);
+		else
+			slog(LG_ERROR, "%s: trying to move node %u to position %u but found the same node (BUG)", MOWGLI_FUNC_NAME, from_id, to_id);
+
+		command_fail(si, fault_internalerror, _("There was an error modifying the list. This is a bug in services."));
+		return;
+	}
+
+	mowgli_node_delete(from_node, list);
+	mowgli_node_add_before(entry, from_node, list, to_node);
+
+	if (oper)
+		command_success_nodata(si, _("Oper logon info entry \2%u\2 moved to position \2%u\2."), from_id, to_id);
+	else
+		command_success_nodata(si, _("Logon info entry \2%u\2 moved to position \2%u\2."), from_id, to_id);
+	logcommand(si, CMDLOG_ADMIN, "INFO:%s: \2%u\2 -> \2%u\2: \2%s\2, \2%s\2", oper ? "OMOVE" : "MOVE", from_id, to_id, entry->subject, entry->story);
+	return;
+}
+
+static void
+is_cmd_move(struct sourceinfo *si, int parc, char *parv[])
+{
+	is_move_impl(si, parc, parv, false);
+}
+
+static void
+is_cmd_omove(struct sourceinfo *si, int parc, char *parv[])
+{
+	is_move_impl(si, parc, parv, true);
+}
+
+static void
 is_list_impl(struct sourceinfo *si, int parc, char *parv[], bool oper)
 {
 	mowgli_node_t *n;
@@ -415,6 +526,24 @@ static struct command is_odel = {
 	.help           = { .path = "infoserv/odel" },
 };
 
+static struct command is_move = {
+	.name           = "MOVE",
+	.desc           = N_("Move news items."),
+	.access         = PRIV_GLOBAL,
+	.maxparc        = 2,
+	.cmd            = &is_cmd_move,
+	.help           = { .path = "infoserv/move" },
+};
+
+static struct command is_omove = {
+	.name           = "OMOVE",
+	.desc           = N_("Move oper news items."),
+	.access         = PRIV_GLOBAL,
+	.maxparc        = 2,
+	.cmd            = &is_cmd_omove,
+	.help           = { .path = "infoserv/omove" },
+};
+
 static struct command is_list = {
 	.name           = "LIST",
 	.desc           = N_("List previously posted news items."),
@@ -459,6 +588,8 @@ mod_init(struct module *const restrict m)
 	service_bind_command(infoserv, &is_post);
 	service_bind_command(infoserv, &is_del);
 	service_bind_command(infoserv, &is_odel);
+	service_bind_command(infoserv, &is_move);
+	service_bind_command(infoserv, &is_omove);
 	service_bind_command(infoserv, &is_list);
 	service_bind_command(infoserv, &is_olist);
 
