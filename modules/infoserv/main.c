@@ -27,6 +27,7 @@ struct logoninfo
 	char *subject;
 	time_t info_ts;
 	char *story;
+	mowgli_node_t node;
 };
 
 struct infoserv_persist_record
@@ -114,9 +115,9 @@ db_h_li(struct database_handle *db, const char *type)
 	l->story = sstrdup(story);
 
 	if (strcasecmp(type, DB_TYPE_LOGONINFO_OPER) == 0)
-		mowgli_node_add(l, mowgli_node_create(), &operlogon_info);
+		mowgli_node_add(l, &l->node, &operlogon_info);
 	else
-		mowgli_node_add(l, mowgli_node_create(), &logon_info);
+		mowgli_node_add(l, &l->node, &logon_info);
 }
 
 static void
@@ -265,8 +266,7 @@ is_cmd_post(struct sourceinfo *si, int parc, char *parv[])
 	l->subject = sstrdup(subject);
 
 	mowgli_list_t *list = (imp == 0) ? &operlogon_info : &logon_info;
-	mowgli_node_t *n = mowgli_node_create();
-	mowgli_node_add(l, n, list);
+	mowgli_node_add(l, &l->node, list);
 
 	command_success_nodata(si, _("Added entry to logon info"));
 	if (logoninfo_count != 0 && !logoninfo_reverse && list->count > logoninfo_count)
@@ -331,7 +331,6 @@ is_del_impl(struct sourceinfo *si, int parc, char *parv[], bool oper)
 			logcommand(si, CMDLOG_ADMIN, "INFO:%s: \2%s\2, \2%s\2", oper ? "ODEL" : "DEL", l->subject, l->story);
 
 			mowgli_node_delete(n, list);
-			mowgli_node_free(n);
 
 			strshare_unref(l->nick);
 			sfree(l->subject);
