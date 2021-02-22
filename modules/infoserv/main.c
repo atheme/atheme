@@ -308,9 +308,9 @@ is_del_impl(struct sourceinfo *si, int parc, char *parv[], bool oper)
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, oper ? "ODEL" : "DEL");
 		if (oper)
-			command_fail(si, fault_needmoreparams, _("Syntax: ODEL <id>"));
+			command_fail(si, fault_badparams, _("Syntax: ODEL <id>"));
 		else
-			command_fail(si, fault_needmoreparams, _("Syntax: DEL <id>"));
+			command_fail(si, fault_badparams, _("Syntax: DEL <id>"));
 		return;
 	}
 
@@ -423,10 +423,11 @@ is_move_impl(struct sourceinfo *si, int parc, char *parv[], bool oper)
 
 		if (!from_node && pos == from_id)
 		{
-			// We'll be removing this node from the list and adding it before the
-			// item currently at the target position. We need to skip this node
-			// in the count in case the target position is after it, however, as
-			// we're going to be removing it.
+			/* We'll be removing this node from the list and adding it before the
+			 * item currently at the target position. We need to skip this node
+			 * in the count in case the target position is after it, however, as
+			 * we're going to be removing it.
+			 */
 			pos--;
 			from_node = n;
 			entry = n->data;
@@ -439,9 +440,10 @@ is_move_impl(struct sourceinfo *si, int parc, char *parv[], bool oper)
 			break;
 	}
 
-	// this should never happen
-	// note that to_node can be NULL if we're asked to move an item to the end of the list;
-	// mowgli_node_insert_before will do the right thing in that case
+	/* this should never happen
+	 * note that to_node can be NULL if we're asked to move an item to the end of the list;
+	 * mowgli_node_insert_before will do the right thing in that case
+	 */
 	if (!from_node || from_node == to_node)
 	{
 		if (!from_node)
@@ -481,9 +483,9 @@ is_list_impl(struct sourceinfo *si, int parc, char *parv[], bool oper)
 {
 	mowgli_node_t *n;
 	unsigned int x = 0;
-	mowgli_list_t list = oper ? operlogon_info : logon_info;
+	mowgli_list_t *list = oper ? &operlogon_info : &logon_info;
 
-	MOWGLI_ITER_FOREACH(n, list.head)
+	MOWGLI_ITER_FOREACH(n, list->head)
 	{
 		struct logoninfo *l = n->data;
 		x++;
@@ -491,11 +493,11 @@ is_list_impl(struct sourceinfo *si, int parc, char *parv[], bool oper)
 		char *y = sstrdup(l->subject);
 		underscores_to_spaces(y);
 
-		if (logoninfo_count != 0 && has_priv(si, PRIV_GLOBAL) && list.count > logoninfo_count)
+		if (logoninfo_count != 0 && has_priv(si, PRIV_GLOBAL) && list->count > logoninfo_count)
 		{
 			if (!logoninfo_reverse && x == logoninfo_count + 1)
 				command_success_nodata(si, _("(Messages below this line are not shown by default)"));
-			else if (logoninfo_reverse && x == list.count - logoninfo_count + 1)
+			else if (logoninfo_reverse && x == list->count - logoninfo_count + 1)
 				command_success_nodata(si, _("(Messages above this line are no longer shown by default)"));
 		}
 
@@ -626,8 +628,8 @@ mod_init(struct module *const restrict m)
 
 		if (rec->version > INFOSERV_PERSIST_VERSION)
 		{
-			slog(LG_ERROR, "infoserv/main: attempted downgrade is not supported (from %d to %d)", rec->version, INFOSERV_PERSIST_VERSION);
-			m->mflags = MODFLAG_FAIL;
+			slog(LG_ERROR, "%s: attempted downgrade is not supported (from %d to %d)", m->name, rec->version, INFOSERV_PERSIST_VERSION);
+			m->mflags |= MODFLAG_FAIL;
 
 			sfree(rec);
 			return;
@@ -685,15 +687,6 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 	db_unregister_type_handler(DB_TYPE_LOGONINFO);
 	db_unregister_type_handler(DB_TYPE_LOGONINFO_OPER);
-
-	service_unbind_command(infoserv, &is_help);
-	service_unbind_command(infoserv, &is_post);
-	service_unbind_command(infoserv, &is_del);
-	service_unbind_command(infoserv, &is_odel);
-	service_unbind_command(infoserv, &is_move);
-	service_unbind_command(infoserv, &is_omove);
-	service_unbind_command(infoserv, &is_list);
-	service_unbind_command(infoserv, &is_olist);
 
 	service_delete(infoserv);
 }
