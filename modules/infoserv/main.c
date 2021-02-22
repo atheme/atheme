@@ -19,7 +19,7 @@
 #define DB_TYPE_LOGONINFO_OPER "LIO"
 
 #define INFOSERV_PERSIST_STORAGE_NAME "atheme.infoserv.main.persist"
-#define INFOSERV_PERSIST_VERSION      1
+#define INFOSERV_PERSIST_VERSION      1U
 
 struct logoninfo
 {
@@ -627,7 +627,7 @@ mod_init(struct module *const restrict m)
 
 		if (rec->version > INFOSERV_PERSIST_VERSION)
 		{
-			slog(LG_ERROR, "%s: attempted downgrade is not supported (from %d to %d)", m->name, rec->version, INFOSERV_PERSIST_VERSION);
+			slog(LG_ERROR, "%s: attempted downgrade is not supported (from %u to %u)", m->name, rec->version, INFOSERV_PERSIST_VERSION);
 			m->mflags |= MODFLAG_FAIL;
 
 			sfree(rec);
