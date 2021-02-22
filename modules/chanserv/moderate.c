@@ -3,7 +3,7 @@
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
  * Copyright (C) 2012 William Pitcock <nenolod@dereferenced.org>
- * Copyright (C) 2016 Atheme Development Group (https://atheme.github.io/)
+ * Copyright (C) 2016-2021 Atheme Development Group (https://atheme.github.io/)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -12,6 +12,8 @@
 
 #include <atheme.h>
 #include "chanserv.h"
+
+#define CSREQ_LIST_PERSIST_MDNAME "atheme.chanserv.moderate.csreq_list"
 
 struct reg_request
 {
@@ -362,7 +364,10 @@ mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/main")
 
-	csreq_list = mowgli_patricia_create(strcasecanon);
+	if (! (csreq_list = mowgli_global_storage_get(CSREQ_LIST_PERSIST_MDNAME)))
+		csreq_list = mowgli_patricia_create(strcasecanon);
+	else
+		mowgli_global_storage_free(CSREQ_LIST_PERSIST_MDNAME);
 
 	service_named_bind_command("chanserv", &cs_activate);
 	service_named_bind_command("chanserv", &cs_reject);
@@ -381,7 +386,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	mowgli_patricia_destroy(csreq_list, NULL, NULL);
+	mowgli_global_storage_put(CSREQ_LIST_PERSIST_MDNAME, csreq_list);
 
 	service_named_unbind_command("chanserv", &cs_activate);
 	service_named_unbind_command("chanserv", &cs_reject);
@@ -395,4 +400,4 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	db_unregister_type_handler("CSREQ");
 }
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/moderate", MODULE_UNLOAD_CAPABILITY_OK)
+SIMPLE_DECLARE_MODULE_V1("chanserv/moderate", MODULE_UNLOAD_CAPABILITY_RELOAD_ONLY)
