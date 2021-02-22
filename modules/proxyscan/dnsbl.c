@@ -47,6 +47,7 @@
 
 #include <atheme.h>
 
+#define DNSBL_ELIST_PERSIST_MDNAME "atheme.proxyscan.dnsbl.elist"
 #define IRCD_RES_HOSTLEN 255
 
 // A configured DNSBL
@@ -99,8 +100,8 @@ static const char *action_names[] = {
 static mowgli_list_t blacklist_list = { NULL, NULL, 0 };
 static mowgli_patricia_t **os_set_cmdtree = NULL;
 
-static mowgli_list_t dnsbl_elist;
-
+static struct service *proxyscan = NULL;
+static mowgli_list_t *dnsbl_elist = NULL;
 static mowgli_dns_t *dns_base = NULL;
 
 static inline mowgli_list_t *
@@ -172,7 +173,7 @@ ps_cmd_dnsblexempt(struct sourceinfo *si, int parc, char *parv[])
 			return;
 		}
 
-		MOWGLI_ITER_FOREACH(n, dnsbl_elist.head)
+		MOWGLI_ITER_FOREACH(n, dnsbl_elist->head)
 		{
 			de = n->data;
 
@@ -188,7 +189,7 @@ ps_cmd_dnsblexempt(struct sourceinfo *si, int parc, char *parv[])
 		de->creator = sstrdup(get_source_name(si));
 		de->reason = sstrdup(reason);
 		de->ip = sstrdup(ip);
-		mowgli_node_add(de, &de->node, &dnsbl_elist);
+		mowgli_node_add(de, &de->node, dnsbl_elist);
 
 		command_success_nodata(si, _("You have added \2%s\2 to the DNSBL exempts list."), ip);
 		logcommand(si, CMDLOG_ADMIN, "DNSBL:EXEMPT:ADD: \2%s\2 \2%s\2", ip, reason);
@@ -203,7 +204,7 @@ ps_cmd_dnsblexempt(struct sourceinfo *si, int parc, char *parv[])
 			return;
 		}
 
-		MOWGLI_ITER_FOREACH_SAFE(n, tn, dnsbl_elist.head)
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, dnsbl_elist->head)
 		{
 			de = n->data;
 
@@ -212,7 +213,7 @@ ps_cmd_dnsblexempt(struct sourceinfo *si, int parc, char *parv[])
 				logcommand(si, CMDLOG_SET, "DNSBL:EXEMPT:DEL: \2%s\2", de->ip);
 				command_success_nodata(si, _("DNSBL Exempt IP \2%s\2 has been deleted."), de->ip);
 
-				mowgli_node_delete(n, &dnsbl_elist);
+				mowgli_node_delete(n, dnsbl_elist);
 
 				sfree(de->creator);
 				sfree(de->reason);
@@ -229,7 +230,7 @@ ps_cmd_dnsblexempt(struct sourceinfo *si, int parc, char *parv[])
 		char buf[BUFSIZE];
 		struct tm *tm;
 
-		MOWGLI_ITER_FOREACH(n, dnsbl_elist.head)
+		MOWGLI_ITER_FOREACH(n, dnsbl_elist->head)
 		{
 			de = n->data;
 
@@ -530,7 +531,7 @@ check_dnsbls(struct hook_user_nick *data)
 	if (action == DNSBL_ACT_NONE)
 		return;
 
-	MOWGLI_ITER_FOREACH(n, dnsbl_elist.head)
+	MOWGLI_ITER_FOREACH(n, dnsbl_elist->head)
 	{
 		struct dnsbl_exemption *de = n->data;
 
@@ -564,7 +565,7 @@ write_dnsbl_exempt_db(struct database_handle *db)
 {
 	mowgli_node_t *n;
 
-	MOWGLI_ITER_FOREACH(n, dnsbl_elist.head)
+	MOWGLI_ITER_FOREACH(n, dnsbl_elist->head)
 	{
 		struct dnsbl_exemption *de = n->data;
 
@@ -591,7 +592,7 @@ db_h_ble(struct database_handle *db, const char *type)
 	de->creator = sstrdup(creator);
 	de->reason = sstrdup(reason);
 
-	mowgli_node_add(de, &de->node, &dnsbl_elist);
+	mowgli_node_add(de, &de->node, dnsbl_elist);
 }
 
 static struct command os_set_dnsblaction = {
@@ -635,31 +636,47 @@ mod_init(struct module *const restrict m)
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "proxyscan/main")
 	MODULE_TRY_REQUEST_SYMBOL(m, os_set_cmdtree, "operserv/set_core", "os_set_cmdtree")
 
-	if (! (dns_base = mowgli_dns_create(base_eventloop, MOWGLI_DNS_TYPE_ASYNC)))
+	if (! (proxyscan = service_find("proxyscan")))
 	{
-		(void) slog(LG_ERROR, "%s: failed to create Mowgli DNS resolver object", m->name);
+		(void) slog(LG_ERROR, "%s: service_find() for ProxyScan failed! (BUG)", m->name);
 		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
 
-	struct service *proxyscan = service_find("proxyscan");
+	if (! (dnsbl_elist = mowgli_global_storage_get(DNSBL_ELIST_PERSIST_MDNAME)))
+		dnsbl_elist = mowgli_list_create();
+	else
+		mowgli_global_storage_free(DNSBL_ELIST_PERSIST_MDNAME);
 
+	if (! dnsbl_elist)
+	{
+		(void) slog(LG_ERROR, "%s: failed to create Mowgli list for exemptions", m->name);
+		m->mflags |= MODFLAG_FAIL;
+		return;
+	}
+	if (! (dns_base = mowgli_dns_create(base_eventloop, MOWGLI_DNS_TYPE_ASYNC)))
+	{
+		(void) slog(LG_ERROR, "%s: failed to create Mowgli DNS resolver object", m->name);
+		(void) mowgli_list_free(dnsbl_elist);
+		m->mflags |= MODFLAG_FAIL;
+		return;
+	}
+
+	hook_add_config_purge(dnsbl_config_purge);
 	hook_add_db_write(write_dnsbl_exempt_db);
+	hook_add_operserv_info(osinfo_hook);
+	hook_add_user_add(check_dnsbls);
+	hook_add_user_delete(abort_blacklist_queries);
 
 	db_register_type_handler("BLE", db_h_ble);
+
+	command_add(&os_set_dnsblaction, *os_set_cmdtree);
 
 	service_bind_command(proxyscan, &ps_dnsblexempt);
 	service_bind_command(proxyscan, &ps_dnsblscan);
 
-	hook_add_config_purge(dnsbl_config_purge);
-	hook_add_user_add(check_dnsbls);
-	hook_add_user_delete(abort_blacklist_queries);
-	hook_add_operserv_info(osinfo_hook);
-
 	add_conf_item("DNSBL_ACTION", &proxyscan->conf_table, dnsbl_action_config_handler);
 	add_conf_item("BLACKLISTS", &proxyscan->conf_table, dnsbl_config_handler);
-
-	command_add(&os_set_dnsblaction, *os_set_cmdtree);
 
 	m->mflags |= MODFLAG_DBHANDLER;
 }
@@ -667,27 +684,24 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
+	mowgli_global_storage_put(DNSBL_ELIST_PERSIST_MDNAME, dnsbl_elist);
 	mowgli_dns_destroy(dns_base);
 
-	struct service *proxyscan;
-
+	hook_del_config_purge(dnsbl_config_purge);
 	hook_del_db_write(write_dnsbl_exempt_db);
+	hook_del_operserv_info(osinfo_hook);
 	hook_del_user_add(check_dnsbls);
 	hook_del_user_delete(abort_blacklist_queries);
-	hook_del_config_purge(dnsbl_config_purge);
-	hook_del_operserv_info(osinfo_hook);
 
 	db_unregister_type_handler("BLE");
-
-	proxyscan = service_find("proxyscan");
-
-	del_conf_item("DNSBL_ACTION", &proxyscan->conf_table);
-	del_conf_item("BLACKLISTS", &proxyscan->conf_table);
 
 	command_delete(&os_set_dnsblaction, *os_set_cmdtree);
 
 	service_unbind_command(proxyscan, &ps_dnsblexempt);
 	service_unbind_command(proxyscan, &ps_dnsblscan);
+
+	del_conf_item("DNSBL_ACTION", &proxyscan->conf_table);
+	del_conf_item("BLACKLISTS", &proxyscan->conf_table);
 }
 
-SIMPLE_DECLARE_MODULE_V1("proxyscan/dnsbl", MODULE_UNLOAD_CAPABILITY_OK)
+SIMPLE_DECLARE_MODULE_V1("proxyscan/dnsbl", MODULE_UNLOAD_CAPABILITY_RELOAD_ONLY)
