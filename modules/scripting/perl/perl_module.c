@@ -27,7 +27,6 @@ struct perl_script_module
 
 // Required static variables:
 static PerlInterpreter *my_perl = NULL;
-static void *libperl_handle = NULL;
 static char *_perl_argv[3] = { "", PERL_INIT_FILE, NULL };
 static char **perl_argv = &_perl_argv[0];
 static char perl_error[512];
@@ -38,8 +37,8 @@ static mowgli_heap_t *perl_script_module_heap;
  */
 extern void xs_init(pTHX);
 
-/* Startup and shutdown routines.
- * These deal with starting and stopping the perl interpreter.
+/* Startup routine.
+ * This deals with starting the perl interpreter.
  */
 static bool
 startup_perl(void)
@@ -52,9 +51,9 @@ startup_perl(void)
 	 * Secondary hack: some linkers do not respect rpath in dlopen(), so we fall back
 	 * to some secondary paths where libperl.so may be living.  --nenolod
 	 */
-	if (!(libperl_handle = dlopen("libperl.so", RTLD_NOW | RTLD_GLOBAL)) &&
-	    !(libperl_handle = dlopen("/usr/lib/perl5/core_perl/CORE/libperl.so", RTLD_NOW | RTLD_GLOBAL)) &&
-	    !(libperl_handle = dlopen("/usr/lib64/perl5/core_perl/CORE/libperl.so", RTLD_NOW | RTLD_GLOBAL)))
+	if (!dlopen("libperl.so", RTLD_NOW | RTLD_GLOBAL) &&
+	    !dlopen("/usr/lib/perl5/core_perl/CORE/libperl.so", RTLD_NOW | RTLD_GLOBAL) &&
+	    !dlopen("/usr/lib64/perl5/core_perl/CORE/libperl.so", RTLD_NOW | RTLD_GLOBAL))
 	{
 		slog(LG_INFO, "Couldn't dlopen libperl.so");
 		return false;
@@ -94,24 +93,6 @@ startup_perl(void)
 	invalidate_object_references();
 
 	return true;
-}
-
-static void
-shutdown_perl(void)
-{
-	PL_perl_destruct_level = 1;
-	perl_destruct(my_perl);
-	perl_free(my_perl);
-	my_perl = 0;
-	PERL_SYS_TERM();
-
-	if (libperl_handle)
-	{
-		dlclose(libperl_handle);
-		libperl_handle = NULL;
-	}
-
-	free_object_list();
 }
 
 static bool
@@ -453,14 +434,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	service_named_unbind_command("operserv", &os_perl);
-
-	shutdown_perl();
-
-	/* Since all our perl pseudo-modules depend on us, we know they'll
-	 * all be deallocated before this. No need to clean them up.
-	 */
-	mowgli_heap_destroy(perl_script_module_heap);
+	// Nothing to do
 }
 
-SIMPLE_DECLARE_MODULE_V1("scripting/perl", MODULE_UNLOAD_CAPABILITY_OK)
+SIMPLE_DECLARE_MODULE_V1("scripting/perl", MODULE_UNLOAD_CAPABILITY_NEVER)
