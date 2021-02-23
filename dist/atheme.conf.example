@@ -2034,8 +2034,34 @@ infoserv {
 	 * The number of InfoServ messages a user will see upon connect. If
 	 * there are more than this number, the user will be able to see the
 	 * rest of them with the InfoServ LIST command.
+	 *
+	 * Set this to 0 for unlimited.
 	 */
 	logoninfo_count = 3;
+
+	/* (*)(B) logoninfo_reverse
+	 *
+	 * Whether to display the InfoServ on-connect messages in reverse
+	 * chronological order, i.e. newest message first, oldest last.
+	 *
+	 * Note that if this option is disabled, messages added after
+	 * the logoninfo_count limit will not be shown at connection time
+	 * as only the oldest N messages will be shown, rather than
+	 * the most recent N messages (as configured by default).
+	 */
+	logoninfo_reverse;
+
+	/* (*)(B) logoninfo_show_metadata
+	 *
+	 * By default, the InfoServ on-connect messages and the output
+	 * of the LIST command include information about the author
+	 * of the message as well as the time it was added.
+	 *
+	 * Disabling this option will remove that information for normal users.
+	 * Privileged users will still be able to see the information
+	 * in the output of the LIST (or OLIST) command.
+	 */
+	logoninfo_show_metadata;
 };
 
 /* OperServ configuration.

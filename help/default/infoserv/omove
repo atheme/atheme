@@ -1,0 +1,14 @@
+Help for OMOVE:
+
+OMOVE allows you to move oper logon messages, changing the order
+they are displayed to opers as they oper up.
+
+The specified message will be inserted at the target position,
+shifting the surrounding entries as needed.
+
+To move messages displayed to users, use the MOVE command instead.
+
+Syntax: OMOVE <old> <new>
+
+Example:
+    /msg &nick& OMOVE 3 1
