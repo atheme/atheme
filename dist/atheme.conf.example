@@ -1739,6 +1739,16 @@ nickserv {
 	 * `/msg NickServ HELP'.
 	 */
 	#shorthelp = "";
+
+	/*
+	 * (*)listownmail_canon
+	 *
+	 * Whether to canonicalize emails when doing LISTOWNMAIL. Depending on what
+	 * custom canonicalizers you have loaded, LISTOWNMAIL can expose user:email
+	 * mappings via LISTOWNMAIL when it might not be safe to do so (e.g. if you
+	 * unconditionally strip +subaddress from emails.)
+	 */
+	listownmail_canon;
 };
 
 /* ChanServ configuration.

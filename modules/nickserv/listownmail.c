@@ -9,6 +9,8 @@
 
 #include <atheme.h>
 
+static bool listownmail_canon = false;
+
 static void
 ns_cmd_listownmail(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -41,7 +43,8 @@ ns_cmd_listownmail(struct sourceinfo *si, int parc, char *parv[])
 
 		continue_if_fail(mu != NULL);
 
-		if (!strcasecmp(si->smu->email_canonical, mu->email_canonical))
+		if ((listownmail_canon && !strcasecmp(si->smu->email_canonical, mu->email_canonical))
+		 || (!listownmail_canon && !strcasecmp(si->smu->email, mu->email)))
 		{
 			// in the future we could add a LIMIT parameter
 			if (matches == 0)
@@ -72,12 +75,14 @@ mod_init(struct module *const restrict m)
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/main")
 
 	service_named_bind_command("nickserv", &ns_listownmail);
+	add_bool_conf_item("LISTOWNMAIL_CANON", &nicksvs.me->conf_table, 0, &listownmail_canon, true);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	service_named_unbind_command("nickserv", &ns_listownmail);
+	del_conf_item("LISTOWNMAIL_CANON", &nicksvs.me->conf_table);
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/listownmail", MODULE_UNLOAD_CAPABILITY_OK)
