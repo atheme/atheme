@@ -59,24 +59,24 @@ jobs:
       working-directory: /tmp
       run: |
         sudo apt-get update
-        sudo apt-get install -y --no-install-recommends \
-          ${CC}                                         \
-          build-essential                               \
-          gettext                                       \
-          git                                           \
-          libargon2-0-dev                               \
-          libcrack2-dev                                 \
-          libgcrypt20-dev                               \
-          libgettextpo-dev                              \
-          libidn11-dev                                  \
-          libldap2-dev                                  \
-          libpasswdqc-dev                               \
-          libpcre3-dev                                  \
-          libperl-dev                                   \
-          libqrencode-dev                               \
-          libsodium-dev                                 \
-          libssl-dev                                    \
-          lld-10                                        \
+        sudo apt-get install -y --no-install-recommends                 \
+          ${CC}                                                         \
+          build-essential                                               \
+          gettext                                                       \
+          git                                                           \
+          libargon2-0-dev                                               \
+          libcrack2-dev                                                 \
+          libgcrypt20-dev                                               \
+          libgettextpo-dev                                              \
+          libidn11-dev                                                  \
+          libldap2-dev                                                  \
+          libpasswdqc-dev                                               \
+          libpcre3-dev                                                  \
+          libperl-dev                                                   \
+          libqrencode-dev                                               \
+          libsodium-dev                                                 \
+          libssl-dev                                                    \
+          lld-10                                                        \
           # EOF
 
     - name: Clone source code repository
