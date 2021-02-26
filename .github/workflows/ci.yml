@@ -79,9 +79,10 @@ jobs:
           lld-10                                        \
           # EOF
 
-    - uses: actions/checkout@v1
+    - name: Clone source code repository
+      uses: actions/checkout@v2
       with:
-        submodules: true
+        submodules: recursive
 
     - name: Run CI build script
       run: scripts/ci-build.sh
