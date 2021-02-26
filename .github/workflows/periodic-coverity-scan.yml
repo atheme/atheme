@@ -1,0 +1,86 @@
+name: Coverity Scan
+
+on:
+  schedule:
+    - cron: '0 14 * * 1'
+
+jobs:
+  scan:
+    environment: CoverityScan
+    name: Coverity Scan
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Install dependencies
+      working-directory: /tmp
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends                 \
+          build-essential                                               \
+          curl                                                          \
+          gcc                                                           \
+          git                                                           \
+          libargon2-0-dev                                               \
+          libcrack2-dev                                                 \
+          libgcrypt20-dev                                               \
+          libidn11-dev                                                  \
+          libldap2-dev                                                  \
+          libpasswdqc-dev                                               \
+          libpcre3-dev                                                  \
+          libqrencode-dev                                               \
+          libsodium-dev                                                 \
+          libssl-dev                                                    \
+          # EOF
+
+    - name: Download Coverity Scan
+      working-directory: ${HOME}
+      env:
+        COVERITY_SCAN_PROJECT: ${{ secrets.COVERITY_SCAN_PROJECT }}
+        COVERITY_SCAN_TOKEN: ${{ secrets.COVERITY_SCAN_TOKEN }}
+      shell: bash
+      run: |
+        mkdir -p "${HOME}/utils"
+        pushd "${HOME}/utils/"
+        curl                                                            \
+            --form "project=${COVERITY_SCAN_PROJECT}"                   \
+            --form "token=${COVERITY_SCAN_TOKEN}"                       \
+            'https://scan.coverity.com/download/cxx/linux64' | tar xz
+        popd
+
+    - name: Clone source code repository
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Run Coverity Scan
+      shell: bash
+      run: |
+        export PATH="${PATH}:$(find "${HOME}/utils/" -mindepth 1 -maxdepth 1 -type d -name 'cov-analysis-*')/bin"
+        hash -r
+        which cov-build
+        git rev-parse HEAD > /tmp/version.txt
+        ./configure                                                     \
+            --prefix="${HOME}/atheme-build"                             \
+            --disable-heap-allocator                                    \
+            --enable-legacy-pwcrypto                                    \
+            --without-libmowgli                                         \
+            --with-digest-api-frontend=internal                         \
+            --with-rng-api-frontend=internal
+        cov-build --dir cov-int make
+        tar czf /tmp/cov-int.tgz cov-int/
+
+    - name: Submit scan results
+      working-directory: /tmp
+      env:
+        COVERITY_SCAN_PROJECT: ${{ secrets.COVERITY_SCAN_PROJECT }}
+        COVERITY_SCAN_TOKEN: ${{ secrets.COVERITY_SCAN_TOKEN }}
+      shell: bash
+      run: |
+        curl                                                            \
+            --form 'description=GitHub Actions Job (Master Branch)'     \
+            --form 'email=coverity-scan@atheme.org'                     \
+            --form 'file=@/tmp/cov-int.tgz'                             \
+            --form "project=${COVERITY_SCAN_PROJECT}"                   \
+            --form "token=${COVERITY_SCAN_TOKEN}"                       \
+            --form 'version=</tmp/version.txt'                          \
+            'https://scan.coverity.com/builds'
