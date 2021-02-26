@@ -56,6 +56,7 @@ jobs:
 
     steps:
     - name: Install dependencies
+      working-directory: /tmp
       run: |
         sudo apt-get update
         sudo apt-get install -y --no-install-recommends \
