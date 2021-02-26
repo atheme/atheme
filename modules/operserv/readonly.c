@@ -39,6 +39,13 @@ os_cmd_readonly(struct sourceinfo *si, int parc, char *parv[])
 		wallops("\2%s\2 set the READONLY option.", get_oper_name(si));
 		logcommand(si, CMDLOG_ADMIN, "READONLY:ON");
 		command_success_nodata(si, _("Read-only mode is now enabled."));
+
+		if (commit_interval_timer)
+		{
+			(void) mowgli_timer_destroy(base_eventloop, commit_interval_timer);
+
+			commit_interval_timer = NULL;
+		}
 	}
 	else if (!strcasecmp(action, "OFF"))
 	{
@@ -55,6 +62,12 @@ os_cmd_readonly(struct sourceinfo *si, int parc, char *parv[])
 		wallops("\2%s\2 unset the READONLY option.", get_oper_name(si));
 		logcommand(si, CMDLOG_ADMIN, "READONLY:OFF");
 		command_success_nodata(si, _("Read-only mode is now disabled."));
+
+		if (commit_interval_timer)
+			(void) mowgli_timer_destroy(base_eventloop, commit_interval_timer);
+
+		commit_interval_timer = mowgli_timer_add(base_eventloop, "db_save_periodic", &db_save_periodic, NULL,
+		                                         config_options.commit_interval);
 	}
 	else
 	{
