@@ -37,6 +37,12 @@ cmd_voice(struct sourceinfo *si, bool voicing, int parc, char *parv[])
 		return;
 	}
 
+	if (!mc->chan)
+	{
+		command_fail(si, fault_nosuch_target, STR_CHANNEL_IS_EMPTY, chan);
+		return;
+	}
+
 	nicks = (!nick ? sstrdup(si->su->nick) : sstrdup(nick));
 	prefix_action_set_all(&voice_actions, voicing, nicks);
 	sfree(nicks);

@@ -37,6 +37,12 @@ cmd_op(struct sourceinfo *si, bool opping, int parc, char *parv[])
 		return;
 	}
 
+	if (!mc->chan)
+	{
+		command_fail(si, fault_nosuch_target, STR_CHANNEL_IS_EMPTY, chan);
+		return;
+	}
+
 	nicks = (!nick ? sstrdup(si->su->nick) : sstrdup(nick));
 	prefix_action_set_all(&op_actions, opping, nicks);
 	sfree(nicks);

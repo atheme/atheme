@@ -46,6 +46,12 @@ cs_cmd_kick(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	if (!mc->chan)
+	{
+		command_fail(si, fault_nosuch_target, STR_CHANNEL_IS_EMPTY, chan);
+		return;
+	}
+
 	// figure out who we're going to kick
 	if ((tu = user_find_named(nick)) == NULL)
 	{
