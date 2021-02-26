@@ -58,6 +58,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y --no-install-recommends \
           ${CC}                                         \
+          build-essential                               \
           gettext                                       \
           git                                           \
           libargon2-0-dev                               \
@@ -74,8 +75,10 @@ jobs:
           libssl-dev                                    \
           lld-10                                        \
           # EOF
+
     - uses: actions/checkout@v1
       with:
         submodules: true
+
     - name: Run CI build script
       run: scripts/ci-build.sh
