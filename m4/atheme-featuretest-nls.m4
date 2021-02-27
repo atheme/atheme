@@ -16,8 +16,10 @@ AC_DEFUN([ATHEME_FEATURETEST_NLS], [
         [], [enable_nls="no"])
 
     case "x${enable_nls}" in
+
         xyes | xno)
             ;;
+
         *)
             AC_MSG_ERROR([invalid option for --enable-nls])
             ;;

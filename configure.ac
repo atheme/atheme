@@ -52,6 +52,12 @@ AH_BOTTOM([
 #endif /* !ATHEME_INC_SYSCONF_H */
 ])
 
+# If CFLAGS is empty or unset, explicitly set it to the empty string, so that
+# AC_PROG_CC (below) does not add "-O2 -g", as this will conflict with the
+# optimisation flags that the compiler sanitizers feature uses, and the
+# more advanced debugging flags detection that the CFLAGS feature test uses
+AS_IF([test "x${CFLAGS:-}" = "x"], [CFLAGS=""])
+
 # Programs required by the build system
 AC_PROG_CC
 AC_PROG_CC_C99
@@ -93,7 +99,7 @@ AC_DEFINE_UNQUOTED([PACKAGE_BUGREPORT_I18N], ["${PACKAGE_BUGREPORT_I18N}"], [Whe
 # This should be before any library tests so that insufficient header
 # inclusions in those tests are caught before they become a runtime
 # problem
-ATHEME_CC_TEST_CFLAGS([-Werror=implicit])
+ATHEME_TEST_CC_FLAGS([-Werror=implicit])
 
 # Conditional libraries for standard functions (no option to control detection)
 ATHEME_LIBTEST_DL
@@ -145,6 +151,24 @@ ATHEME_FEATURETEST_CFLAGS
 ATHEME_FEATURETEST_LDFLAGS
 ATHEME_FEATURETEST_NLS
 ATHEME_FEATURETEST_WARNINGS
+
+# This one is a bit special because it needs to go into CFLAGS and LDFLAGS so it doesn't
+# make sense to put it in one of the m4/ files that handle either of those and it can't
+# be repeated
+AC_ARG_ENABLE([noexecstack],
+    [AS_HELP_STRING([--disable-noexecstack], [Disable -Wa,--noexecstack (Marks the stack non-executable)])],
+    [], [enable_noexecstack="yes"])
+
+case "x${enable_noexecstack}" in
+    xyes)
+        ATHEME_TEST_CCLD_FLAGS([-Wa,--noexecstack])
+        ;;
+    xno)
+        ;;
+    *)
+        AC_MSG_ERROR([invalid option for --enable-noexecstack])
+        ;;
+esac
 
 # Save toolchain variables in case we will be configuring submodules
 SUBCONF_CC="${CC}"

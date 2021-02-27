@@ -70,7 +70,6 @@ LIBSODIUM_LIBS ?= @LIBSODIUM_LIBS@
 # perpetually empty, but they're here to prepare for when pkg-config starts
 # working for the library in question, so that our Makefiles can reference
 # them unconditionally and benefit automatically in future.
-CONTRIB_CFLAGS ?= @CONTRIB_CFLAGS@
 LDAP_CFLAGS ?= @LDAP_CFLAGS@
 LIBARGON2_CFLAGS ?= @LIBARGON2_CFLAGS@
 LIBCRACK_CFLAGS ?= @LIBCRACK_CFLAGS@
@@ -84,7 +83,6 @@ LIBPASSWDQC_CFLAGS ?= @LIBPASSWDQC_CFLAGS@
 LIBPCRE_CFLAGS ?= @LIBPCRE_CFLAGS@
 LIBPERL_CFLAGS ?= @LIBPERL_CFLAGS@
 LIBQRENCODE_CFLAGS ?= @LIBQRENCODE_CFLAGS@
-LIBSOCKET_CFLAGS ?= @LIBSOCKET_CFLAGS@
 LIBSODIUM_CFLAGS ?= @LIBSODIUM_CFLAGS@
 
 # Conditionally-Compiled Files

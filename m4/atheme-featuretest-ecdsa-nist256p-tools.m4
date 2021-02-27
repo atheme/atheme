@@ -15,8 +15,10 @@ AC_DEFUN([ATHEME_FEATURETEST_ECDSA_NIST256P_TOOLS], [
         [], [enable_ecdsa_nist256p_tools="auto"])
 
     case "x${enable_ecdsa_nist256p_tools}" in
+
         xauto | xyes | xno)
             ;;
+
         *)
             AC_MSG_ERROR([invalid option for --enable-ecdsa-nist256p-tools])
             ;;

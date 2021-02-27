@@ -18,8 +18,10 @@ AC_DEFUN([ATHEME_FEATURETEST_CRYPTO_BENCHMARKING], [
         [], [enable_crypto_benchmarking="auto"])
 
     case "x${enable_crypto_benchmarking}" in
+
         xauto | xyes | xno)
             ;;
+
         *)
             AC_MSG_ERROR([invalid option for --enable-crypto-benchmarking])
             ;;
@@ -70,4 +72,6 @@ AC_DEFUN([ATHEME_FEATURETEST_CRYPTO_BENCHMARKING], [
     AC_SUBST([CLOCK_GETTIME_LIBS])
 
     LIBS="${LIBS_SAVED}"
+
+    unset LIBS_SAVED
 ])

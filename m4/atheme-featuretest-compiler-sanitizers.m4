@@ -1,42 +1,15 @@
 # SPDX-License-Identifier: ISC
 # SPDX-URL: https://spdx.org/licenses/ISC.html
 #
-# Copyright (C) 2020 Atheme Development Group (https://atheme.github.io/)
+# Copyright (C) 2020-2021 Atheme Development Group (https://atheme.github.io/)
 #
 # -*- Atheme IRC Services -*-
 # Atheme Build System Component
 
 AC_DEFUN([ATHEME_FEATURETEST_COMPILER_SANITIZERS_DRIVER], [
 
-    AC_MSG_CHECKING([for C compiler *and* linker flag(s) $1 ])
-
-    CFLAGS_SAVED="${CFLAGS}"
-    CFLAGS="${CFLAGS} $1"
-
-    LDFLAGS_SAVED="${LDFLAGS}"
-    LDFLAGS="${LDFLAGS} $1"
-
-    AC_LINK_IFELSE([
-        AC_LANG_PROGRAM([[
-            #ifdef HAVE_STDDEF_H
-            #  include <stddef.h>
-            #endif
-            static int
-            retfoo(void)
-            {
-                return 0;
-            }
-        ]], [[
-            return retfoo();
-        ]])
-    ], [
-        AC_MSG_RESULT([yes])
-        COMPILER_SANITIZERS="Yes"
-    ], [
-        AC_MSG_RESULT([no])
-        CFLAGS="${CFLAGS_SAVED}"
-        LDFLAGS="${LDFLAGS_SAVED}"
-    ])
+    ATHEME_TEST_CCLD_FLAGS([$1])
+    AS_IF([test "${ATHEME_TEST_CCLD_FLAGS_RESULT}" = "yes"], [COMPILER_SANITIZERS="Yes"])
 ])
 
 AC_DEFUN([ATHEME_FEATURETEST_COMPILER_SANITIZERS], [
@@ -47,35 +20,30 @@ AC_DEFUN([ATHEME_FEATURETEST_COMPILER_SANITIZERS], [
         [AS_HELP_STRING([--enable-compiler-sanitizers], [Enable various compiler run-time-instrumented sanitizers])],
         [], [enable_compiler_sanitizers="no"])
 
-    # Test for this whether this option was given or not
-    # This option is required for meaningful sanitizer output, but it is also useful without any sanitizers
-    ATHEME_CC_TEST_CFLAGS([-g])
-
-    CFLAGS_SAVED_FT="${CFLAGS}"
-    LDFLAGS_SAVED_FT="${LDFLAGS}"
-
     case "x${enable_compiler_sanitizers}" in
+
         xyes)
             AS_IF([test "${HEAP_ALLOCATOR}" = "Yes"], [
                 AC_MSG_ERROR([To use --enable-compiler-sanitizers you must pass --disable-heap-allocator])
             ])
 
-            # -fsanitize= benefits from these, but they're not strictly necessary
-            ATHEME_CC_TEST_CFLAGS([-fno-omit-frame-pointer])
-            ATHEME_CC_TEST_CFLAGS([-fno-optimize-sibling-calls])
+            # Disable compiler optimisations for more accurate stack-traces
+            ATHEME_TEST_CC_FLAGS([-O0])
 
-            # This, however, is necessary. This test will fail if you are using Clang and not using an LLVM
-            # bitcode-parsing-capable linker. Clang in LTO mode compiles to LLVM bitcode, not machine code.
+            # -fsanitize= benefits from these, but they're not strictly necessary
+            ATHEME_TEST_CC_FLAGS([-fno-omit-frame-pointer])
+            ATHEME_TEST_CC_FLAGS([-fno-optimize-sibling-calls])
+
+            # Some compilers (like Clang) require LTO to be enabled for their sanitizers to function. This
+            # test will fail if you are using Clang and not using an LLVM bitcode-parsing-capable linker.
+            # Clang in LTO mode compiles to LLVM bitcode, not machine code.
             #
             # The linker is responsible for translating that to machine code. If you want to use Clang, you
             # must set LDFLAGS="-fuse-ld=lld", to use the LLVM linker, or you can use the Gold linker with
-            # the LLVM linker plugin.
-            ATHEME_FEATURETEST_COMPILER_SANITIZERS_DRIVER([-fvisibility=default -flto])
+            # the LLVM linker plugin (an exercise for the reader).
+            ATHEME_TEST_CCLD_FLAGS([-fvisibility=default -flto])
 
-            AS_IF([test "${COMPILER_SANITIZERS}" = "Yes"], [
-
-                # However, just because that succeeded, don't enable this feature. We need at least one of the below.
-                COMPILER_SANITIZERS="No"
+            AS_IF([test "${ATHEME_TEST_CCLD_FLAGS_RESULT}" = "yes"], [
 
                 # Now on to the good stuff ...
                 ATHEME_FEATURETEST_COMPILER_SANITIZERS_DRIVER([-fsanitize=address])
@@ -87,26 +55,28 @@ AC_DEFUN([ATHEME_FEATURETEST_COMPILER_SANITIZERS], [
                 ATHEME_FEATURETEST_COMPILER_SANITIZERS_DRIVER([-fsanitize=nullability])
                 ATHEME_FEATURETEST_COMPILER_SANITIZERS_DRIVER([-fsanitize=shift])
                 ATHEME_FEATURETEST_COMPILER_SANITIZERS_DRIVER([-fsanitize=undefined])
-            ])
 
-            AS_IF([test "${COMPILER_SANITIZERS}" = "Yes"], [
-                # This causes pointless noise, turn it off.
-                ATHEME_FEATURETEST_COMPILER_SANITIZERS_DRIVER([-fno-sanitize=unsigned-integer-overflow])
-            ])
+                AS_IF([test "${COMPILER_SANITIZERS}" = "Yes"], [
 
+                    AC_DEFINE([ATHEME_ENABLE_COMPILER_SANITIZERS], [1], [Define to 1 if compiler sanitizers are enabled])
+
+                    # This causes pointless noise, turn it off.
+                    ATHEME_TEST_CCLD_FLAGS([-fno-sanitize=unsigned-integer-overflow])
+                ], [
+                    AC_MSG_FAILURE([--enable-compiler-sanitizers was given, but no sanitizers could be enabled])
+                ])
+            ], [
+                AC_MSG_FAILURE([--enable-compiler-sanitizers was given, but LTO (a common pre-requisite) could not be enabled])
+            ])
             ;;
+
         xno)
+            # Enable compiler optimisations (what autoconf would have done if we didn't explicitly overrule it)
+            ATHEME_TEST_CC_FLAGS([-O2])
             ;;
+
         *)
             AC_MSG_ERROR([invalid option for --enable-compiler-sanitizers])
             ;;
     esac
-
-    AS_IF([test "${COMPILER_SANITIZERS}" = "Yes"], [
-        AC_DEFINE([ATHEME_ENABLE_COMPILER_SANITIZERS], [1], [Define to 1 if --enable-compiler-sanitizers was given to ./configure])
-    ], [
-        # None of the sanitizers are available, give up ...
-        CFLAGS="${CFLAGS_SAVED_FT}"
-        LDFLAGS="${LDFLAGS_SAVED_FT}"
-    ])
 ])

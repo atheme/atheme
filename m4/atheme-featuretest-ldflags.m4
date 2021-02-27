@@ -7,34 +7,6 @@
 # -*- Atheme IRC Services -*-
 # Atheme Build System Component
 
-ATHEME_LD_TEST_LDFLAGS_RESULT="no"
-
-AC_DEFUN([ATHEME_LD_TEST_LDFLAGS],
-    [
-        AC_MSG_CHECKING([for C linker flag(s) $1 ])
-
-        LDFLAGS_SAVED="${LDFLAGS}"
-        LDFLAGS="${LDFLAGS} $1"
-
-        AC_LINK_IFELSE(
-            [
-                AC_LANG_PROGRAM([[]], [[]])
-            ], [
-                ATHEME_LD_TEST_LDFLAGS_RESULT='yes'
-
-                AC_MSG_RESULT([yes])
-            ], [
-                ATHEME_LD_TEST_LDFLAGS_RESULT='no'
-                LDFLAGS="${LDFLAGS_SAVED}"
-
-                AC_MSG_RESULT([no])
-            ]
-        )
-
-        unset LDFLAGS_SAVED
-    ]
-)
-
 AC_DEFUN([ATHEME_FEATURETEST_LDFLAGS], [
 
     AC_ARG_ENABLE([profile],
@@ -61,70 +33,90 @@ AC_DEFUN([ATHEME_FEATURETEST_LDFLAGS], [
         [AS_HELP_STRING([--disable-rpath], [Disable -Wl,-rpath= (builds installation path into binaries)])],
         [], [enable_rpath="yes"])
 
+
+
     case "x${enable_profile}" in
+
         xyes)
-            ATHEME_LD_TEST_LDFLAGS([-pg])
+            ATHEME_TEST_LD_FLAGS([-pg])
             ;;
+
         xno)
             ;;
+
         *)
             AC_MSG_ERROR([invalid option for --enable-profile])
             ;;
     esac
 
     case "x${enable_relro}" in
+
         xyes)
-            ATHEME_LD_TEST_LDFLAGS([-Wl,-z,relro])
+            ATHEME_TEST_LD_FLAGS([-Wl,-z,relro])
             ;;
+
         xno)
             ;;
+
         *)
             AC_MSG_ERROR([invalid option for --enable-relro])
             ;;
     esac
 
     case "x${enable_nonlazy_bind}" in
+
         xyes)
-            ATHEME_LD_TEST_LDFLAGS([-Wl,-z,now])
+            ATHEME_TEST_LD_FLAGS([-Wl,-z,now])
             ;;
+
         xno)
             ;;
+
         *)
             AC_MSG_ERROR([invalid option for --enable-nonlazy-bind])
             ;;
     esac
 
     case "x${enable_linker_defs}" in
+
         xyes)
             AS_IF([test "${COMPILER_SANITIZERS}" = "Yes"], [
                 AC_MSG_ERROR([To use --enable-compiler-sanitizers you must pass --disable-linker-defs])
             ])
-            ATHEME_LD_TEST_LDFLAGS([-Wl,-z,defs])
+            ATHEME_TEST_LD_FLAGS([-Wl,-z,defs])
             ;;
+
         xno)
             ;;
+
         *)
             AC_MSG_ERROR([invalid option for --enable-linker-defs])
             ;;
     esac
 
     case "x${enable_as_needed}" in
+
         xyes)
-            ATHEME_LD_TEST_LDFLAGS([-Wl,--as-needed])
+            ATHEME_TEST_LD_FLAGS([-Wl,--as-needed])
             ;;
+
         xno)
             ;;
+
         *)
             AC_MSG_ERROR([invalid option for --enable-as-needed])
             ;;
     esac
 
     case "x${enable_rpath}" in
+
         xyes)
-            ATHEME_LD_TEST_LDFLAGS(${LDFLAGS_RPATH})
+            ATHEME_TEST_LD_FLAGS(${LDFLAGS_RPATH})
             ;;
+
         xno)
             ;;
+
         *)
             AC_MSG_ERROR([invalid option for --enable-rpath])
             ;;

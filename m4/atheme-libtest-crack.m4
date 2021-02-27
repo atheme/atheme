@@ -77,4 +77,7 @@ AC_DEFUN([ATHEME_LIBTEST_CRACK], [
 
     CFLAGS="${CFLAGS_SAVED}"
     LIBS="${LIBS_SAVED}"
+
+    unset CFLAGS_SAVED
+    unset LIBSS_SAVED
 ])

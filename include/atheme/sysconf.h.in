@@ -25,7 +25,7 @@
 /* Atheme RNG API Frontend */
 #undef ATHEME_API_RANDOM_FRONTEND
 
-/* Define to 1 if --enable-compiler-sanitizers was given to ./configure */
+/* Define to 1 if compiler sanitizers are enabled */
 #undef ATHEME_ENABLE_COMPILER_SANITIZERS
 
 /* Define to 1 if --enable-contrib was given to ./configure */

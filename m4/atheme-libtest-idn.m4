@@ -93,4 +93,7 @@ AC_DEFUN([ATHEME_LIBTEST_IDN], [
 
     CFLAGS="${CFLAGS_SAVED}"
     LIBS="${LIBS_SAVED}"
+
+    unset CFLAGS_SAVED
+    unset LIBSS_SAVED
 ])

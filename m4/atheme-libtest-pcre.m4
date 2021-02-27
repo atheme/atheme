@@ -94,4 +94,7 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
 
     CFLAGS="${CFLAGS_SAVED}"
     LIBS="${LIBS_SAVED}"
+
+    unset CFLAGS_SAVED
+    unset LIBS_SAVED
 ])

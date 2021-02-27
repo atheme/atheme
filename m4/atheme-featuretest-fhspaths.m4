@@ -22,6 +22,7 @@ AC_DEFUN([ATHEME_FEATURETEST_FHSPATHS], [
         [], [enable_fhs_paths="no"])
 
     case "x${enable_fhs_paths}" in
+
         xyes)
             DATADIR='${localstatedir}/lib/atheme'
             DOCDIR='${datadir}/doc/atheme'
@@ -30,8 +31,10 @@ AC_DEFUN([ATHEME_FEATURETEST_FHSPATHS], [
             RUNDIR='${localstatedir}/run/atheme'
             SHAREDIR='${datadir}/atheme'
             ;;
+
         xno)
             ;;
+
         *)
             AC_MSG_ERROR([invalid option for --enable-fhs-paths])
             ;;

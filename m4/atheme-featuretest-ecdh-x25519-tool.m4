@@ -15,8 +15,10 @@ AC_DEFUN([ATHEME_FEATURETEST_ECDH_X25519_TOOL], [
         [], [enable_ecdh_x25519_tool="auto"])
 
     case "x${enable_ecdh_x25519_tool}" in
+
         xauto | xyes | xno)
             ;;
+
         *)
             AC_MSG_ERROR([invalid option for --enable-ecdh-x25519-tool])
             ;;
