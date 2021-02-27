@@ -1062,17 +1062,16 @@ get_source_mask(struct sourceinfo *si)
 		return si->v->get_source_mask(si);
 
 	if (si->su != NULL)
-	{
 		snprintf(result, sizeof result, "%s!%s@%s", si->su->nick,
 				si->su->user, si->su->vhost);
-	}
 	else if (si->s != NULL)
 		snprintf(result, sizeof result, "%s", si->s->name);
-	else
-	{
+	else if (si->v != NULL)
 		snprintf(result, sizeof result, "<%s>%s", si->v->description,
 				si->smu ? entity(si->smu)->name : "");
-	}
+	else
+		mowgli_strlcpy(result, "???", sizeof result);
+
 	return result;
 }
 
