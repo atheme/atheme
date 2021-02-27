@@ -37,7 +37,7 @@ const char *infotext[] =
 	"OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.",
 	" ",
 
-	"Portions of Atheme's code were derived from Shrike, which was mostly"
+	"Portions of Atheme's code were derived from Shrike, which was mostly",
 	"developed by the following developers in nick-alphabetical order:",
 	" ",
 	"  madragoran, Mike Campbell <madragoran@avendesora.net>",
