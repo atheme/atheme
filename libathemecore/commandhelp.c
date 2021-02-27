@@ -34,11 +34,11 @@ static void
 help_not_available(struct sourceinfo *const restrict si, const char *const restrict cmd,
                    const char *const restrict subcmd, const bool cmd_exists)
 {
+	char buf[BUFSIZE];
 	const char *text = cmd;
 
 	if (subcmd)
 	{
-		char buf[BUFSIZE];
 		(void) snprintf(buf, sizeof buf, "%s %s", subcmd, cmd);
 		text = buf;
 	}
