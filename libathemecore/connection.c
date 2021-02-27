@@ -570,7 +570,13 @@ connection_open_listener_tcp(char *host, unsigned int port,
 	snprintf(buf, BUFSIZE, "listener: %s[%u]", host, port);
 
 	optval = 1;
-	setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char *)&optval, sizeof(optval));
+	if (setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) < 0)
+	{
+		slog(LG_ERROR, "connection_open_listener_tcp(): error: %s", strerror(ioerrno()));
+		freeaddrinfo(addr);
+		close(s);
+		return NULL;
+	}
 
 	switch(addr->ai_family)
 	{
