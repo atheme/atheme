@@ -20,17 +20,6 @@
 # define ioerrno()	WSAGetLastError()
 #endif
 
-union sockaddr_any
-{
-	struct sockaddr         sa;
-	struct sockaddr_in      sin;
-	struct sockaddr_in6     sin6;
-};
-
-#define SOCKADDR(foo) 		(struct sockaddr 	*) &(foo)
-#define SOCKADDR_IN(foo) 	(struct sockaddr_in	*) &(foo)
-#define SOCKADDR_IN6(foo) 	(struct sockaddr_in6	*) &(foo)
-
 struct connection
 {
 	char                            name[HOSTLEN + 1];
@@ -42,8 +31,6 @@ struct connection
 	time_t                          first_recv;
 	time_t                          last_recv;
 	size_t                          sendq_limit;
-	union sockaddr_any              saddr;
-	socklen_t                       saddr_size;
 	void                          (*read_handler)(struct connection *);
 	void                          (*write_handler)(struct connection *);
 	unsigned int                    flags;

@@ -107,6 +107,53 @@ connection_add(const char *name, int fd, unsigned int flags,
 
 	cptr = smalloc(sizeof *cptr);
 	cptr->fd = fd;
+
+	if (cptr->fd > -1)
+	{
+#ifndef MOWGLI_OS_WIN
+		struct sockaddr_storage saddr;
+		socklen_t saddrlen = sizeof saddr;
+		memset(&saddr, 0x00, sizeof saddr);
+
+		if (getpeername(cptr->fd, (struct sockaddr *) &saddr, &saddrlen) < 0)
+		{
+			slog(LG_ERROR, "connection_add(): %s: getpeername(2): %s", name, strerror(ioerrno()));
+			sfree(cptr);
+			return NULL;
+		}
+
+		if (saddrlen == sizeof(struct sockaddr_in) && saddr.ss_family == AF_INET)
+		{
+			struct sockaddr_in *const sa = (struct sockaddr_in *) &saddr;
+
+			if (! inet_ntop(AF_INET, &sa->sin_addr, cptr->hbuf, sizeof cptr->hbuf))
+			{
+				slog(LG_ERROR, "connection_add(): %s: inet_ntop(3): %s", name, strerror(ioerrno()));
+				sfree(cptr);
+				return NULL;
+			}
+		}
+		else if (saddrlen == sizeof(struct sockaddr_in6) && saddr.ss_family == AF_INET6)
+		{
+			struct sockaddr_in6 *const sa = (struct sockaddr_in6 *) &saddr;
+
+			if (! inet_ntop(AF_INET6, &sa->sin6_addr, cptr->hbuf, sizeof cptr->hbuf))
+			{
+				slog(LG_ERROR, "connection_add(): %s: inet_ntop(3): %s", name, strerror(ioerrno()));
+				sfree(cptr);
+				return NULL;
+			}
+		}
+		else
+		{
+			slog(LG_ERROR, "connection_add(): %s: unknown address family", name);
+			sfree(cptr);
+			return NULL;
+		}
+#endif
+		socket_setnonblocking(cptr->fd);
+	}
+
 	cptr->pollslot = -1;
 	cptr->flags = flags;
 	cptr->first_recv = CURRTIME;
@@ -118,20 +165,6 @@ connection_add(const char *name, int fd, unsigned int flags,
 
 	/* set connection name */
 	mowgli_strlcpy(cptr->name, name, sizeof cptr->name);
-
-	if (cptr->fd > -1)
-	{
-#ifndef MOWGLI_OS_WIN
-		cptr->saddr_size = sizeof(cptr->saddr);
-		getpeername(cptr->fd, &cptr->saddr.sa, &cptr->saddr_size);
-
-		inet_ntop(cptr->saddr.sa.sa_family,
-			  &cptr->saddr.sin6.sin6_addr,
-			  cptr->hbuf, BUFSIZE);
-#endif
-
-		socket_setnonblocking(cptr->fd);
-	}
 
 	mowgli_node_add(cptr, mowgli_node_create(), &connection_list);
 
@@ -493,8 +526,6 @@ connection_open_tcp(char *host, char *vhost, unsigned int port,
 
 		freeaddrinfo(bind_addr);
 	}
-
-	socket_setnonblocking(s);
 
 	switch(addr->ai_family)
 	{
