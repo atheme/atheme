@@ -385,22 +385,49 @@ logfile_new(const char *path, unsigned int log_mask)
 	}
 	else if (!VALID_GLOBAL_CHANNEL_PFX(path))
 	{
-		atheme_object_init(atheme_object(lf), path, logfile_delete_file);
-		if ((lf->log_file = fopen(path, "a")) == NULL)
-		{
-			sfree(lf);
+		errno = 0;
 
+#ifndef O_CLOEXEC
+		const bool cloexec = true;
+		const int fd = open(path, O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR | S_IRGRP);
+#else
+		bool cloexec = false;
+		int fd = open(path, O_WRONLY | O_CREAT | O_APPEND | O_CLOEXEC, S_IRUSR | S_IWUSR | S_IRGRP);
+
+		if (fd == -1)
+		{
+			cloexec = true;
+			fd = open(path, O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR | S_IRGRP);
+		}
+#endif
+
+		if (fd == -1 || ! (lf->log_file = fdopen(fd, "a")))
+		{
 			if (me.connected && lastfail + SECONDS_PER_HOUR < CURRTIME)
 			{
 				lastfail = CURRTIME;
-				wallops("Could not open log file (%s), log entries will be missing!", strerror(errno));
+				wallops("Could not open log file '%s' (%s), log entries will be missing!",
+				        path, strerror(errno));
 			}
 
+			sfree(lf);
 			return NULL;
 		}
+
 #ifdef FD_CLOEXEC
-		fcntl(fileno((FILE *)lf->log_file), F_SETFD, FD_CLOEXEC);
+		if (cloexec)
+		{
+			const int res = fcntl(fd, F_GETFD, NULL);
+
+			if (res == -1 || fcntl(fd, F_SETFD, res | FD_CLOEXEC) == -1)
+				wallops("Could not mark log file '%s' close-on-exec!", path);
+		}
+#else
+		(void) cloexec;
 #endif
+
+		atheme_object_init(atheme_object(lf), path, logfile_delete_file);
+
 		lf->log_path = sstrdup(path);
 		lf->log_type = LOG_NONINTERACTIVE;
 		lf->write_func = logfile_write;
