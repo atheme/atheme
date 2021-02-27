@@ -1117,15 +1117,16 @@ get_storage_oper_name(struct sourceinfo *si)
 	if (si->smu != NULL)
 		snprintf(result, sizeof result, "%s", entity(si->smu)->name);
 	else if (si->su != NULL)
-	{
 		snprintf(result, sizeof result, "%s!%s@%s{%s}", si->su->nick,
 				si->su->user, si->su->vhost,
 				si->su->server->name);
-	}
 	else if (si->s != NULL)
 		snprintf(result, sizeof result, "%s", si->s->name);
-	else
+	else if (si->v != NULL)
 		snprintf(result, sizeof result, "<%s>", si->v->description);
+	else
+		mowgli_strlcpy(result, "???", sizeof result);
+
 	return result;
 }
 
