@@ -473,7 +473,14 @@ connection_open_tcp(char *host, char *vhost, unsigned int port,
 		}
 
 		optval = 1;
-		setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char *)&optval, sizeof(optval));
+		if (setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) < 0)
+		{
+			slog(LG_ERROR, "connection_open_tcp(): unable to bind to vhost %s: %s", vhost, strerror(ioerrno()));
+			close(s);
+			freeaddrinfo(addr);
+			freeaddrinfo(bind_addr);
+			return NULL;
+		}
 
 		if (bind(s, bind_addr->ai_addr, bind_addr->ai_addrlen) < 0)
 		{
