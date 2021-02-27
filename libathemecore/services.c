@@ -1097,11 +1097,12 @@ get_oper_name(struct sourceinfo *si)
 	}
 	else if (si->s != NULL)
 		snprintf(result, sizeof result, "%s", si->s->name);
-	else
-	{
+	else if (si->v != NULL)
 		snprintf(result, sizeof result, "<%s>%s", si->v->description,
 				si->smu ? entity(si->smu)->name : "");
-	}
+	else
+		mowgli_strlcpy(result, "???", sizeof result);
+
 	return result;
 }
 
