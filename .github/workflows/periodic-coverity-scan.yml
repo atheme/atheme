@@ -58,7 +58,7 @@ jobs:
         export PATH="${PATH}:$(find "${HOME}/utils/" -mindepth 1 -maxdepth 1 -type d -name 'cov-analysis-*')/bin"
         hash -r
         which cov-build
-        git rev-parse HEAD > /tmp/version.txt
+        echo -n $(git rev-parse HEAD) > /tmp/version.txt
         ./configure                                                     \
             --prefix="${HOME}/atheme-build"                             \
             --disable-heap-allocator                                    \
