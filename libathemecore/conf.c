@@ -948,10 +948,10 @@ bool conf_check(void)
 
 	if (chansvs.hide_xop)
 	{
-		sfree(mowgli_patricia_delete(global_template_dict,"VOP"));
-		sfree(mowgli_patricia_delete(global_template_dict,"HOP"));
-		sfree(mowgli_patricia_delete(global_template_dict,"AOP"));
-		sfree(mowgli_patricia_delete(global_template_dict,"SOP"));
+		free(mowgli_patricia_delete(global_template_dict,"VOP"));
+		free(mowgli_patricia_delete(global_template_dict,"HOP"));
+		free(mowgli_patricia_delete(global_template_dict,"AOP"));
+		free(mowgli_patricia_delete(global_template_dict,"SOP"));
 	}
 	else
 	{
