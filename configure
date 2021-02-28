@@ -2741,15 +2741,27 @@ $as_echo "no" >&6; }
 
 LIBS="${LIBS} ${DYNAMIC_LD_LIBS}"
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if you read GIT-Access" >&5
-$as_echo_n "checking if you read GIT-Access... " >&6; }
-if ! test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+if test -d ".git"; then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if you read GIT-Access.txt" >&5
+$as_echo_n "checking if you read GIT-Access.txt... " >&6; }
+	if ! test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"; then
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	as_fn_error $? "please read GIT-Access before trying to build from git" "$LINENO" 5
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+		as_fn_error $? "please read GIT-Access.txt before trying to build from git" "$LINENO" 5
+	fi
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+else
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if you downloaded the correct source code tarball" >&5
+$as_echo_n "checking if you downloaded the correct source code tarball... " >&6; }
+	if ! test -f "include/serno.h"; then
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+		as_fn_error $? "please read the Obtaining Atheme section of README.md" "$LINENO" 5
+	fi
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+fi
 
 # Extract the first word of "rm", so it can be a program name with args.
 set dummy rm; ac_word=$2

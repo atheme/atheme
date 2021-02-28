@@ -66,8 +66,6 @@ hooktypes.h: hooktypes.in mkhooktypes.sh
 	@sh mkhooktypes.sh hooktypes.in >hooktypes.h
 
 serno.h:
-	$(info Generate: $@)
-	@revh=`git log -1 --pretty=oneline | cut -d' ' -f1 2>/dev/null` || :; \
-	[ -z "$$revh" ] || echo "#define SERNO \"$$revh\"" >serno.h
+	@sh mkserno.sh
 
 include ../buildsys.mk

@@ -20,12 +20,21 @@ BUILDSYS_SHARED_LIB
 BUILDSYS_PROG_IMPLIB
 LIBS="${LIBS} ${DYNAMIC_LD_LIBS}"
 
-AC_MSG_CHECKING([if you read GIT-Access])
-if ! test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"; then
-	AC_MSG_RESULT([no])
-	AC_MSG_ERROR([please read GIT-Access before trying to build from git])
+if test -d ".git"; then
+	AC_MSG_CHECKING([if you read GIT-Access.txt])
+	if ! test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"; then
+		AC_MSG_RESULT([no])
+		AC_MSG_ERROR([please read GIT-Access.txt before trying to build from git])
+	fi
+	AC_MSG_RESULT([yes])
+else
+	AC_MSG_CHECKING([if you downloaded the correct source code tarball])
+	if ! test -f "include/serno.h"; then
+		AC_MSG_RESULT([no])
+		AC_MSG_ERROR([please read the Obtaining Atheme section of README.md])
+	fi
+	AC_MSG_RESULT([yes])
 fi
-AC_MSG_RESULT([yes])
 
 AC_PATH_PROG([RM], [rm])
 AC_PATH_PROG([MV], [mv])
