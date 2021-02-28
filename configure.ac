@@ -7,7 +7,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
 
-AC_INIT([atheme], [7.2.10-r2], [https://github.com/atheme/atheme/issues/])
+AC_INIT([atheme], [7.2.11], [https://github.com/atheme/atheme/issues/])
 
 AC_CONFIG_AUX_DIR([autoconf])
 AC_CONFIG_MACRO_DIR([m4])
