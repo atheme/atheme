@@ -22,6 +22,12 @@ os_cmd_readonly(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	if (! db_save)
+	{
+		(void) command_fail(si, fault_badparams, _("You have no write-capable database backend loaded."));
+		return;
+	}
+
 	svs = service_find("operserv");
 
 	if (!strcasecmp(action, "ON"))
