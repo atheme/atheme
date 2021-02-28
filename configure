@@ -2649,18 +2649,39 @@ if test "x${prefix}" = "xNONE"; then :
   prefix="${ac_default_prefix}"
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if you read GIT-Access.txt" >&5
-$as_echo_n "checking if you read GIT-Access.txt... " >&6; }
-if test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"; then :
+if test -d ".git"; then :
 
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking if you read GIT-Access.txt" >&5
+$as_echo_n "checking if you read GIT-Access.txt... " >&6; }
+    if test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"; then :
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
 else
 
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-    as_fn_error $? "please read GIT-Access.txt before trying to build from git" "$LINENO" 5
+        as_fn_error $? "please read GIT-Access.txt before trying to build from git" "$LINENO" 5
+
+fi
+
+else
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking if you downloaded the correct source code tarball" >&5
+$as_echo_n "checking if you downloaded the correct source code tarball... " >&6; }
+    if test -f "include/atheme/serno.h"; then :
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        as_fn_error $? "please read the Obtaining Atheme section of README.md" "$LINENO" 5
+
+fi
 
 fi
 

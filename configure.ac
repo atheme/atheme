@@ -16,12 +16,22 @@ AC_CONFIG_SRCDIR([src/services/main.c])
 AC_PREFIX_DEFAULT([~/atheme])
 AS_IF([test "x${prefix}" = "xNONE"], [prefix="${ac_default_prefix}"])
 
-AC_MSG_CHECKING([if you read GIT-Access.txt])
-AS_IF([test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"], [
-    AC_MSG_RESULT([yes])
+AS_IF([test -d ".git"], [
+    AC_MSG_CHECKING([if you read GIT-Access.txt])
+    AS_IF([test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"], [
+        AC_MSG_RESULT([yes])
+    ], [
+        AC_MSG_RESULT([no])
+        AC_MSG_ERROR([please read GIT-Access.txt before trying to build from git])
+    ])
 ], [
-    AC_MSG_RESULT([no])
-    AC_MSG_ERROR([please read GIT-Access.txt before trying to build from git])
+    AC_MSG_CHECKING([if you downloaded the correct source code tarball])
+    AS_IF([test -f "include/atheme/serno.h"], [
+        AC_MSG_RESULT([yes])
+    ], [
+        AC_MSG_RESULT([no])
+        AC_MSG_ERROR([please read the Obtaining Atheme section of README.md])
+    ])
 ])
 
 AH_TOP([
