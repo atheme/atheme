@@ -15,7 +15,7 @@
 
 SERNO_FILE="serno.h"
 
-REVH_NEW="$(git describe --abbrev=20 --always --broken --dirty --long --tags)"
+REVH_NEW="$(git describe --abbrev=20 --always --dirty --long --tags)"
 
 if [ "x${REVH_NEW}" = "x" ]
 then
