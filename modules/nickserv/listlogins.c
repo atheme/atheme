@@ -45,7 +45,7 @@ static struct command ns_cmd_listlogins = {
 	.access         = AC_AUTHENTICATED,
 	.maxparc        = 1,
 	.cmd            = &ns_cmd_listlogins_func,
-	.help           = { .path = "contrib/listlogins" },
+	.help           = { .path = "nickserv/listlogins" },
 };
 
 static void
@@ -63,4 +63,4 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	(void) service_named_unbind_command("nickserv", &ns_cmd_listlogins);
 }
 
-SIMPLE_DECLARE_MODULE_V1("contrib/ns_listlogins", MODULE_UNLOAD_CAPABILITY_OK)
+SIMPLE_DECLARE_MODULE_V1("nickserv/listlogins", MODULE_UNLOAD_CAPABILITY_OK)
