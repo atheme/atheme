@@ -11,6 +11,12 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
+    - name: Clone source code repository
+      uses: actions/checkout@v2
+      with:
+        ref: master
+        submodules: recursive
+
     - name: Install dependencies
       working-directory: /tmp
       run: |
@@ -46,11 +52,6 @@ jobs:
             --form "token=${COVERITY_SCAN_TOKEN}"                       \
             'https://scan.coverity.com/download/cxx/linux64' | tar xz
         popd
-
-    - name: Clone source code repository
-      uses: actions/checkout@v2
-      with:
-        submodules: recursive
 
     - name: Run Coverity Scan
       shell: bash
