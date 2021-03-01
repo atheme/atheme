@@ -1,6 +1,7 @@
 name: Coverity Scan
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 14 * * 1'
 
@@ -39,22 +40,17 @@ jobs:
           # EOF
 
     - name: Download Coverity Scan
-      working-directory: ${HOME}
       env:
         COVERITY_SCAN_PROJECT: ${{ secrets.COVERITY_SCAN_PROJECT }}
         COVERITY_SCAN_TOKEN: ${{ secrets.COVERITY_SCAN_TOKEN }}
-      shell: bash
       run: |
         mkdir -p "${HOME}/utils"
-        pushd "${HOME}/utils/"
         curl                                                            \
             --form "project=${COVERITY_SCAN_PROJECT}"                   \
             --form "token=${COVERITY_SCAN_TOKEN}"                       \
-            'https://scan.coverity.com/download/cxx/linux64' | tar xz
-        popd
+            'https://scan.coverity.com/download/cxx/linux64' | tar -C "${HOME}/utils/" -xz
 
     - name: Run Coverity Scan
-      shell: bash
       run: |
         export PATH="${PATH}:$(find "${HOME}/utils/" -mindepth 1 -maxdepth 1 -type d -name 'cov-analysis-*')/bin"
         hash -r
@@ -71,11 +67,9 @@ jobs:
         tar czf /tmp/cov-int.tgz cov-int/
 
     - name: Submit scan results
-      working-directory: /tmp
       env:
         COVERITY_SCAN_PROJECT: ${{ secrets.COVERITY_SCAN_PROJECT }}
         COVERITY_SCAN_TOKEN: ${{ secrets.COVERITY_SCAN_TOKEN }}
-      shell: bash
       run: |
         curl                                                            \
             --form 'description=GitHub Actions Job (Master Branch)'     \
