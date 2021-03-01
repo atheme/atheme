@@ -40,13 +40,11 @@ on:
 jobs:
   linux:
     name: Linux
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-20.04
 
     strategy:
       fail-fast: true
       matrix:
-        os:
-          - ubuntu-20.04
         compiler:
           - clang-10
           - gcc-10
@@ -55,6 +53,11 @@ jobs:
       CC: ${{ matrix.compiler }}
 
     steps:
+    - name: Clone source code repository
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
     - name: Install dependencies
       working-directory: /tmp
       run: |
@@ -78,11 +81,6 @@ jobs:
           libssl-dev                                                    \
           lld-10                                                        \
           # EOF
-
-    - name: Clone source code repository
-      uses: actions/checkout@v2
-      with:
-        submodules: recursive
 
     - name: Run CI build script
       run: scripts/ci-build.sh
