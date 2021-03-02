@@ -13,6 +13,11 @@
 # purpose with or without fee is hereby granted, provided that the above
 # copyright notice and this permission notice appear in all copies.
 
+if [ "x${SKIP_SERNO_H_GENERATION:-}" = "xyes" ]
+then
+	exit 0
+fi
+
 SERNO_FILE="serno.h"
 
 REVH_NEW="$(git describe --abbrev=20 --always --dirty --long --tags)"
