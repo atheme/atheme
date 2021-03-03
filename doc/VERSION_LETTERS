@@ -11,7 +11,8 @@ D - debugging support was enabled at compile-time
 F - flood checking is enabled
 H - the shared heap allocator is enabled
 L - large network support was enabled at compile-time
-M - the libsodium memory allocator was enabled at compile-time
+O - oper hiding is enabled
+P - FHS compliant install paths were enabled
 R - RFC1459 casemapping is used
 T - services is tainted (running an unsupported configuration)
 W - legacy crypto modules were enabled at compile-time
