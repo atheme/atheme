@@ -24,6 +24,7 @@ AC_DEFUN([ATHEME_FEATURETEST_FHSPATHS], [
     case "x${enable_fhs_paths}" in
 
         xyes)
+            AC_DEFINE([ATHEME_ENABLE_FHS_PATHS], [1], [Define to 1 if --enable-fhs-paths was given to ./configure])
             DATADIR='${localstatedir}/lib/atheme'
             DOCDIR='${datadir}/doc/atheme'
             LOGDIR='${localstatedir}/log/atheme'

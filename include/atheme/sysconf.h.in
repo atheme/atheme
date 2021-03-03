@@ -31,6 +31,9 @@
 /* Define to 1 if --enable-contrib was given to ./configure */
 #undef ATHEME_ENABLE_CONTRIB
 
+/* Define to 1 if --enable-fhs-paths was given to ./configure */
+#undef ATHEME_ENABLE_FHS_PATHS
+
 /* Define to 1 if --disable-heap-allocator was NOT given to ./configure */
 #undef ATHEME_ENABLE_HEAP_ALLOCATOR
 

@@ -11852,6 +11852,9 @@ fi
     case "x${enable_fhs_paths}" in
 
         xyes)
+
+$as_echo "#define ATHEME_ENABLE_FHS_PATHS 1" >>confdefs.h
+
             DATADIR='${localstatedir}/lib/atheme'
             DOCDIR='${datadir}/doc/atheme'
             LOGDIR='${localstatedir}/log/atheme'

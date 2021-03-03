@@ -140,6 +140,10 @@ get_conf_opts(void)
 	if (config_options.hide_opers)
 		optstr[optidx++] = 'O';
 
+#ifdef ATHEME_ENABLE_FHS_PATHS
+	optstr[optidx++] = 'P';
+#endif /* ATHEME_ENABLE_FHS_PATHS */
+
 	if (! match_mapping)
 		optstr[optidx++] = 'R';
 
