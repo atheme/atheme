@@ -194,6 +194,10 @@ ATHEME_LIBTEST_MOWGLI
 
 
 
+# Now add PCRE CFLAGS and LIBS because libathemecore and the headers need it if it is available
+AS_IF([test "x${LIBPCRE_CFLAGS}" != "x"], [CFLAGS="${LIBPCRE_CFLAGS} ${CFLAGS}"])
+AS_IF([test "x${LIBPCRE_LIBS}" != "x"], [LIBS="${LIBPCRE_LIBS} ${LIBS}"])
+
 # Paths that source code files might want to reference
 CPPFLAGS="${CPPFLAGS} -DPREFIX=\\\"\${prefix}\\\" -DBINDIR=\\\"\${bindir}\\\" -DDATADIR=\\\"\${DATADIR}\\\""
 CPPFLAGS="${CPPFLAGS} -DLOCALEDIR=\\\"\${LOCALEDIR}\\\" -DLOGDIR=\\\"\${LOGDIR}\\\" -DMODDIR=\\\"\${MODDIR}\\\""

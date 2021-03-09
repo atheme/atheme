@@ -82,7 +82,6 @@ CFLAGS +=                           \
     ${LIBGCRYPT_CFLAGS}             \
     ${LIBMBEDCRYPTO_CFLAGS}         \
     ${LIBNETTLE_CFLAGS}             \
-    ${LIBPCRE_CFLAGS}               \
     ${LIBQRENCODE_CFLAGS}           \
     ${LIBSODIUM_CFLAGS}             \
     ${LIB_CFLAGS}
@@ -92,7 +91,6 @@ LIBS +=                             \
     ${LIBGCRYPT_LIBS}               \
     ${LIBMBEDCRYPTO_LIBS}           \
     ${LIBNETTLE_LIBS}               \
-    ${LIBPCRE_LIBS}                 \
     ${LIBQRENCODE_LIBS}             \
     ${LIBSODIUM_LIBS}               \
     ${LIBDL_LIBS}                   \

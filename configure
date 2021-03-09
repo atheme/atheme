@@ -22453,6 +22453,14 @@ fi
 
 
 
+# Now add PCRE CFLAGS and LIBS because libathemecore and the headers need it if it is available
+if test "x${LIBPCRE_CFLAGS}" != "x"; then :
+  CFLAGS="${LIBPCRE_CFLAGS} ${CFLAGS}"
+fi
+if test "x${LIBPCRE_LIBS}" != "x"; then :
+  LIBS="${LIBPCRE_LIBS} ${LIBS}"
+fi
+
 # Paths that source code files might want to reference
 CPPFLAGS="${CPPFLAGS} -DPREFIX=\\\"\${prefix}\\\" -DBINDIR=\\\"\${bindir}\\\" -DDATADIR=\\\"\${DATADIR}\\\""
 CPPFLAGS="${CPPFLAGS} -DLOCALEDIR=\\\"\${LOCALEDIR}\\\" -DLOGDIR=\\\"\${LOGDIR}\\\" -DMODDIR=\\\"\${MODDIR}\\\""
