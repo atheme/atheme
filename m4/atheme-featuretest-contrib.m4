@@ -42,8 +42,14 @@ AC_DEFUN([ATHEME_LIBTEST_CONTRIB_RES_QUERY_DRIVER], [
             #ifdef HAVE_RESOLV_H
             #  include <resolv.h>
             #endif
+            #ifndef C_ANY
+            #  define C_ANY ns_c_any
+            #endif
+            #ifndef T_MX
+            #  define T_MX ns_t_mx
+            #endif
         ]], [[
-            const int ret = res_query(NULL, ns_c_any, ns_t_mx, NULL, 0);
+            const int ret = res_query(NULL, C_ANY, T_MX, NULL, 0);
         ]])
     ], [
         ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT="yes"

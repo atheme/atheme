@@ -11441,12 +11441,18 @@ $as_echo_n "checking whether compiling and linking a program using res_query(3) 
             #ifdef HAVE_RESOLV_H
             #  include <resolv.h>
             #endif
+            #ifndef C_ANY
+            #  define C_ANY ns_c_any
+            #endif
+            #ifndef T_MX
+            #  define T_MX ns_t_mx
+            #endif
 
 int
 main ()
 {
 
-            const int ret = res_query(NULL, ns_c_any, ns_t_mx, NULL, 0);
+            const int ret = res_query(NULL, C_ANY, T_MX, NULL, 0);
 
   ;
   return 0;
@@ -11499,12 +11505,18 @@ else
             #ifdef HAVE_RESOLV_H
             #  include <resolv.h>
             #endif
+            #ifndef C_ANY
+            #  define C_ANY ns_c_any
+            #endif
+            #ifndef T_MX
+            #  define T_MX ns_t_mx
+            #endif
 
 int
 main ()
 {
 
-            const int ret = res_query(NULL, ns_c_any, ns_t_mx, NULL, 0);
+            const int ret = res_query(NULL, C_ANY, T_MX, NULL, 0);
 
   ;
   return 0;
