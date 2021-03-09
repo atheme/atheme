@@ -25,6 +25,10 @@ AC_DEFUN([ATHEME_FEATURETEST_LDFLAGS], [
         [AS_HELP_STRING([--disable-linker-defs], [Disable -Wl,-z,defs (detects and rejects underlinking)])],
         [], [enable_linker_defs="yes"])
 
+    AC_ARG_ENABLE([noexecstack],
+        [AS_HELP_STRING([--disable-noexecstack], [Disable -Wl,-z,noexecstack (Marks the stack non-executable)])],
+        [], [enable_noexecstack="yes"])
+
     AC_ARG_ENABLE([as-needed],
         [AS_HELP_STRING([--disable-as-needed], [Disable -Wl,--as-needed (strips unnecessary libraries at link time)])],
         [], [enable_as_needed="yes"])
@@ -91,6 +95,20 @@ AC_DEFUN([ATHEME_FEATURETEST_LDFLAGS], [
 
         *)
             AC_MSG_ERROR([invalid option for --enable-linker-defs])
+            ;;
+    esac
+
+    case "x${enable_noexecstack}" in
+
+        xyes)
+            ATHEME_TEST_LD_FLAGS([-Wl,-z,noexecstack])
+            ;;
+
+        xno)
+            ;;
+
+        *)
+            AC_MSG_ERROR([invalid option for --enable-noexecstack])
             ;;
     esac
 

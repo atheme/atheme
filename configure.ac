@@ -162,24 +162,6 @@ ATHEME_FEATURETEST_LDFLAGS
 ATHEME_FEATURETEST_NLS
 ATHEME_FEATURETEST_WARNINGS
 
-# This one is a bit special because it needs to go into CFLAGS and LDFLAGS so it doesn't
-# make sense to put it in one of the m4/ files that handle either of those and it can't
-# be repeated
-AC_ARG_ENABLE([noexecstack],
-    [AS_HELP_STRING([--disable-noexecstack], [Disable -Wa,--noexecstack (Marks the stack non-executable)])],
-    [], [enable_noexecstack="yes"])
-
-case "x${enable_noexecstack}" in
-    xyes)
-        ATHEME_TEST_CCLD_FLAGS([-Wa,--noexecstack])
-        ;;
-    xno)
-        ;;
-    *)
-        AC_MSG_ERROR([invalid option for --enable-noexecstack])
-        ;;
-esac
-
 # Save toolchain variables in case we will be configuring submodules
 SUBCONF_CC="${CC}"
 SUBCONF_LD="${LD}"
