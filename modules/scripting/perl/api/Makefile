@@ -18,9 +18,6 @@ include ../../../../buildsys.mk
 # Disable warnings on the Perl code; Perl's system headers are *garbage*
 CFLAGS   += -w
 
-LDFLAGS  += ${PLUGIN_LDFLAGS}
-CFLAGS   += ${PLUGIN_CFLAGS}
-
 CPPFLAGS += -I../../../../include -I.
 LDFLAGS  += -L../../../../libathemecore
 CFLAGS   += ${LIBPERL_CFLAGS}

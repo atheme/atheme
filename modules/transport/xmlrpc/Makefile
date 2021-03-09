@@ -12,9 +12,6 @@ SRCS      = main.c xmlrpclib.c
 
 include ../../../buildsys.mk
 
-CFLAGS   += ${PLUGIN_CFLAGS}
-LDFLAGS  += ${PLUGIN_LDFLAGS}
-
 CPPFLAGS += -I../../../include
 LDFLAGS  += -L../../../libathemecore
 LIBS     += -lathemecore

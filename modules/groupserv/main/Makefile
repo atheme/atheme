@@ -17,9 +17,6 @@ SRCS      =         \
 
 include ../../../buildsys.mk
 
-CFLAGS   += ${PLUGIN_CFLAGS}
-LDFLAGS  += ${PLUGIN_LDFLAGS}
-
 CPPFLAGS += -I../../../include -I..
 LDFLAGS  += -L../../../libathemecore
 LIBS     += -lathemecore
