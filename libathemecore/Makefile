@@ -83,8 +83,7 @@ CFLAGS +=                           \
     ${LIBMBEDCRYPTO_CFLAGS}         \
     ${LIBNETTLE_CFLAGS}             \
     ${LIBQRENCODE_CFLAGS}           \
-    ${LIBSODIUM_CFLAGS}             \
-    ${LIB_CFLAGS}
+    ${LIBSODIUM_CFLAGS}
 
 LIBS +=                             \
     ${LIBCRYPTO_LIBS}               \
