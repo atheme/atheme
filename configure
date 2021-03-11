@@ -1583,7 +1583,7 @@ Optional Packages:
                           Digest API frontend to use (auto, openssl, libressl,
                           gcrypt, mbedtls, internal). Default: auto
   --with-rng-api-frontend=[frontend]
-                          RNG API frontend to use (auto, openbsd, sodium,
+                          RNG API frontend to use (auto, arc4random, sodium,
                           openssl, libressl, mbedtls, internal). Default: auto
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-libiconv-prefix[=DIR]  search for libiconv in DIR/include and DIR/lib
@@ -5252,6 +5252,18 @@ do :
 if test "x$ac_cv_header_sys_file_h" = xyes; then :
   cat >>confdefs.h <<_ACEOF
 #define HAVE_SYS_FILE_H 1
+_ACEOF
+
+fi
+
+done
+
+    for ac_header in sys/random.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "sys/random.h" "ac_cv_header_sys_random_h" "$ac_includes_default"
+if test "x$ac_cv_header_sys_random_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_SYS_RANDOM_H 1
 _ACEOF
 
 fi
@@ -12121,8 +12133,7 @@ _ACEOF
 
 
 
-    OPENBSD="No"
-    OPENBSD_ARC4RANDOM="No"
+    HAVE_SECURE_ARC4RANDOM="No"
 
     RANDOM_FRONTEND_VAL=""
     RANDOM_FRONTEND=""
@@ -12136,8 +12147,9 @@ else
 fi
 
 
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking if we are building for OpenBSD" >&5
-$as_echo_n "checking if we are building for OpenBSD... " >&6; }
+    # OpenBSD is the only supported platform whose arc4random(3) is backed by a secure algorithm
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking if a secure arc4random(3) is available" >&5
+$as_echo_n "checking if a secure arc4random(3) is available... " >&6; }
     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -12145,44 +12157,20 @@ $as_echo_n "checking if we are building for OpenBSD... " >&6; }
             #ifndef __OpenBSD__
             #  error "Not building on OpenBSD"
             #endif
+            #ifdef HAVE_STDDEF_H
+            #  include <stddef.h>
+            #endif
+            #ifdef HAVE_STDLIB_H
+            #  include <stdlib.h>
+            #endif
 
 int
 main ()
 {
 
-            return 0;
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-        OPENBSD="Yes"
-
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking if arc4random(3) appears to be usable" >&5
-$as_echo_n "checking if arc4random(3) appears to be usable... " >&6; }
-        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-                #ifdef HAVE_STDDEF_H
-                #  include <stddef.h>
-                #endif
-                #ifdef HAVE_STDLIB_H
-                #  include <stdlib.h>
-                #endif
-
-int
-main ()
-{
-
-                (void) arc4random();
-                (void) arc4random_uniform(0);
-                (void) arc4random_buf(NULL, 0);
+            (void) arc4random();
+            (void) arc4random_uniform(0);
+            (void) arc4random_buf(NULL, 0);
 
   ;
   return 0;
@@ -12191,39 +12179,29 @@ main ()
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
 
-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-            OPENBSD_ARC4RANDOM="Yes"
-
-else
-
-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-            OPENBSD_ARC4RANDOM="No"
-
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
+        HAVE_SECURE_ARC4RANDOM="Yes"
 
 else
 
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-        OPENBSD="No"
-        OPENBSD_ARC4RANDOM="No"
+        HAVE_SECURE_ARC4RANDOM="No"
 
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
 
     case "x${with_rng_api_frontend}" in
 
         xauto)
-            if test "${OPENBSD}${OPENBSD_ARC4RANDOM}" = "YesYes"; then :
+            if test "${HAVE_SECURE_ARC4RANDOM}" = "Yes"; then :
 
 
 
-    RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_OPENBSD"
-    RANDOM_FRONTEND="OpenBSD arc4random(3)"
+    RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_ARC4RANDOM"
+    RANDOM_FRONTEND="Secure arc4random(3)"
 
                 { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
 $as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&6;}
@@ -12277,6 +12255,9 @@ $as_echo_n "checking if getentropy(3) is available... " >&6; }
             #ifdef HAVE_UNISTD_H
             #  include <unistd.h>
             #endif
+            #ifdef HAVE_SYS_RANDOM_H
+            #  include <sys/random.h>
+            #endif
 
 int
 main ()
@@ -12310,7 +12291,15 @@ $as_echo_n "checking if getrandom(2) is available... " >&6; }
                 #ifdef HAVE_STDDEF_H
                 #  include <stddef.h>
                 #endif
-                #include <sys/random.h>
+                #ifdef HAVE_STDLIB_H
+                #  include <stdlib.h>
+                #endif
+                #ifdef HAVE_UNISTD_H
+                #  include <unistd.h>
+                #endif
+                #ifdef HAVE_SYS_RANDOM_H
+                #  include <sys/random.h>
+                #endif
 
 int
 main ()
@@ -12355,20 +12344,20 @@ $as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)"
 fi
             ;;
 
-        xopenbsd)
-            if test "${OPENBSD}${OPENBSD_ARC4RANDOM}" = "YesYes"; then :
+        xarc4random)
+            if test "${HAVE_SECURE_ARC4RANDOM}" = "Yes"; then :
 
 
 
-    RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_OPENBSD"
-    RANDOM_FRONTEND="OpenBSD arc4random(3)"
+    RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_ARC4RANDOM"
+    RANDOM_FRONTEND="Secure arc4random(3)"
 
                 { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
 $as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&6;}
 
 else
 
-                as_fn_error $? "--with-rng-api-frontend=openbsd requires OpenBSD and a usable OpenBSD arc4random(3)" "$LINENO" 5
+                as_fn_error $? "--with-rng-api-frontend=arc4random requires a secure arc4random(3)" "$LINENO" 5
 
 fi
             ;;
@@ -12445,6 +12434,9 @@ $as_echo_n "checking if getentropy(3) is available... " >&6; }
             #ifdef HAVE_UNISTD_H
             #  include <unistd.h>
             #endif
+            #ifdef HAVE_SYS_RANDOM_H
+            #  include <sys/random.h>
+            #endif
 
 int
 main ()
@@ -12478,7 +12470,15 @@ $as_echo_n "checking if getrandom(2) is available... " >&6; }
                 #ifdef HAVE_STDDEF_H
                 #  include <stddef.h>
                 #endif
-                #include <sys/random.h>
+                #ifdef HAVE_STDLIB_H
+                #  include <stdlib.h>
+                #endif
+                #ifdef HAVE_UNISTD_H
+                #  include <unistd.h>
+                #endif
+                #ifdef HAVE_SYS_RANDOM_H
+                #  include <sys/random.h>
+                #endif
 
 int
 main ()
@@ -12522,7 +12522,7 @@ $as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&6;}
             ;;
 
         *)
-            as_fn_error $? "invalid option for --with-rng-api-frontend (auto, openbsd, sodium, openssl, libressl, mbedtls, internal)" "$LINENO" 5
+            as_fn_error $? "invalid option for --with-rng-api-frontend (auto, arc4random, sodium, openssl, libressl, mbedtls, internal)" "$LINENO" 5
             ;;
     esac
 

@@ -37,6 +37,7 @@ AC_DEFUN([ATHEME_CHECK_BUILD_REQUIREMENTS], [
     AC_CHECK_HEADERS([string.h], [], [], [])
     AC_CHECK_HEADERS([strings.h], [], [], [])
     AC_CHECK_HEADERS([sys/file.h], [], [], [])
+    AC_CHECK_HEADERS([sys/random.h], [], [], [])
     AC_CHECK_HEADERS([sys/resource.h], [], [], [])
     AC_CHECK_HEADERS([sys/stat.h], [], [], [])
     AC_CHECK_HEADERS([sys/time.h], [], [], [])

@@ -38,7 +38,7 @@
 #  error "Do not compile me directly; compile random_frontend.c instead"
 #endif /* !ATHEME_LAC_RANDOM_FRONTEND_C */
 
-#ifdef HAVE_USABLE_GETRANDOM
+#ifdef HAVE_SYS_RANDOM_H
 #  include <sys/random.h>
 #endif
 

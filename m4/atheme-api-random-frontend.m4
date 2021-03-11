@@ -6,10 +6,10 @@
 # -*- Atheme IRC Services -*-
 # Atheme Build System Component
 
-AC_DEFUN([ATHEME_RANDOM_FRONTEND_USE_OPENBSD], [
+AC_DEFUN([ATHEME_RANDOM_FRONTEND_USE_ARC4RANDOM], [
 
-    RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_OPENBSD"
-    RANDOM_FRONTEND="OpenBSD arc4random(3)"
+    RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_ARC4RANDOM"
+    RANDOM_FRONTEND="Secure arc4random(3)"
 ])
 
 AC_DEFUN([ATHEME_RANDOM_FRONTEND_USE_SODIUM], [
@@ -44,6 +44,9 @@ AC_DEFUN([ATHEME_RANDOM_FRONTEND_USE_INTERNAL], [
             #ifdef HAVE_UNISTD_H
             #  include <unistd.h>
             #endif
+            #ifdef HAVE_SYS_RANDOM_H
+            #  include <sys/random.h>
+            #endif
         ]], [[
             (void) getentropy(NULL, 0);
         ]])
@@ -58,7 +61,15 @@ AC_DEFUN([ATHEME_RANDOM_FRONTEND_USE_INTERNAL], [
                 #ifdef HAVE_STDDEF_H
                 #  include <stddef.h>
                 #endif
-                #include <sys/random.h>
+                #ifdef HAVE_STDLIB_H
+                #  include <stdlib.h>
+                #endif
+                #ifdef HAVE_UNISTD_H
+                #  include <unistd.h>
+                #endif
+                #ifdef HAVE_SYS_RANDOM_H
+                #  include <sys/random.h>
+                #endif
             ]], [[
                 (void) getrandom(NULL, 0, 0);
             ]])
@@ -77,61 +88,46 @@ AC_DEFUN([ATHEME_RANDOM_FRONTEND_USE_INTERNAL], [
 
 AC_DEFUN([ATHEME_DECIDE_RANDOM_FRONTEND], [
 
-    OPENBSD="No"
-    OPENBSD_ARC4RANDOM="No"
+    HAVE_SECURE_ARC4RANDOM="No"
 
     RANDOM_FRONTEND_VAL=""
     RANDOM_FRONTEND=""
 
     AC_ARG_WITH([rng-api-frontend],
-        [AS_HELP_STRING([--with-rng-api-frontend=@<:@frontend@:>@], [RNG API frontend to use (auto, openbsd, sodium, openssl, libressl, mbedtls, internal). Default: auto])],
+        [AS_HELP_STRING([--with-rng-api-frontend=@<:@frontend@:>@], [RNG API frontend to use (auto, arc4random, sodium, openssl, libressl, mbedtls, internal). Default: auto])],
         [], [with_rng_api_frontend="auto"])
 
-    AC_MSG_CHECKING([if we are building for OpenBSD])
-    AC_COMPILE_IFELSE([
+    # OpenBSD is the only supported platform whose arc4random(3) is backed by a secure algorithm
+    AC_MSG_CHECKING([if a secure arc4random(3) is available])
+    AC_LINK_IFELSE([
         AC_LANG_PROGRAM([[
             #ifndef __OpenBSD__
             #  error "Not building on OpenBSD"
             #endif
+            #ifdef HAVE_STDDEF_H
+            #  include <stddef.h>
+            #endif
+            #ifdef HAVE_STDLIB_H
+            #  include <stdlib.h>
+            #endif
         ]], [[
-            return 0;
+            (void) arc4random();
+            (void) arc4random_uniform(0);
+            (void) arc4random_buf(NULL, 0);
         ]])
     ], [
         AC_MSG_RESULT([yes])
-        OPENBSD="Yes"
-
-        AC_MSG_CHECKING([if arc4random(3) appears to be usable])
-        AC_LINK_IFELSE([
-            AC_LANG_PROGRAM([[
-                #ifdef HAVE_STDDEF_H
-                #  include <stddef.h>
-                #endif
-                #ifdef HAVE_STDLIB_H
-                #  include <stdlib.h>
-                #endif
-            ]], [[
-                (void) arc4random();
-                (void) arc4random_uniform(0);
-                (void) arc4random_buf(NULL, 0);
-            ]])
-        ], [
-            AC_MSG_RESULT([yes])
-            OPENBSD_ARC4RANDOM="Yes"
-        ], [
-            AC_MSG_RESULT([no])
-            OPENBSD_ARC4RANDOM="No"
-        ])
+        HAVE_SECURE_ARC4RANDOM="Yes"
     ], [
         AC_MSG_RESULT([no])
-        OPENBSD="No"
-        OPENBSD_ARC4RANDOM="No"
+        HAVE_SECURE_ARC4RANDOM="No"
     ])
 
     case "x${with_rng_api_frontend}" in
 
         xauto)
-            AS_IF([test "${OPENBSD}${OPENBSD_ARC4RANDOM}" = "YesYes"], [
-                ATHEME_RANDOM_FRONTEND_USE_OPENBSD
+            AS_IF([test "${HAVE_SECURE_ARC4RANDOM}" = "Yes"], [
+                ATHEME_RANDOM_FRONTEND_USE_ARC4RANDOM
                 AC_MSG_NOTICE([using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)])
             ], [test "${LIBSODIUM}${LIBSODIUM_RANDOM}" = "YesYes"], [
                 ATHEME_RANDOM_FRONTEND_USE_SODIUM
@@ -148,12 +144,12 @@ AC_DEFUN([ATHEME_DECIDE_RANDOM_FRONTEND], [
             ])
             ;;
 
-        xopenbsd)
-            AS_IF([test "${OPENBSD}${OPENBSD_ARC4RANDOM}" = "YesYes"], [
-                ATHEME_RANDOM_FRONTEND_USE_OPENBSD
+        xarc4random)
+            AS_IF([test "${HAVE_SECURE_ARC4RANDOM}" = "Yes"], [
+                ATHEME_RANDOM_FRONTEND_USE_ARC4RANDOM
                 AC_MSG_NOTICE([using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)])
             ], [
-                AC_MSG_ERROR([--with-rng-api-frontend=openbsd requires OpenBSD and a usable OpenBSD arc4random(3)])
+                AC_MSG_ERROR([--with-rng-api-frontend=arc4random requires a secure arc4random(3)])
             ])
             ;;
 
@@ -190,7 +186,7 @@ AC_DEFUN([ATHEME_DECIDE_RANDOM_FRONTEND], [
             ;;
 
         *)
-            AC_MSG_ERROR([invalid option for --with-rng-api-frontend (auto, openbsd, sodium, openssl, libressl, mbedtls, internal)])
+            AC_MSG_ERROR([invalid option for --with-rng-api-frontend (auto, arc4random, sodium, openssl, libressl, mbedtls, internal)])
             ;;
     esac
 
