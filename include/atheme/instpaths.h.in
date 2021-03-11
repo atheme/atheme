@@ -1,0 +1,21 @@
+#ifndef ATHEME_INC_INSTPATHS_H
+#define ATHEME_INC_INSTPATHS_H 1
+
+/* These don't need to be in any particular order; use alphabetical.
+ *
+ * If you modify this file, don't forget to modify the sed script in
+ * include/atheme/Makefile.
+ */
+
+#define BINDIR          "@BINDIR@"
+#define DATADIR         "@DATADIR@"
+#define DOCDIR          "@DOCDIR@"
+#define LOCALEDIR       "@LOCALEDIR@"
+#define LOGDIR          "@LOGDIR@"
+#define MODDIR          "@MODDIR@"
+#define PREFIX          "@PREFIX@"
+#define RUNDIR          "@RUNDIR@"
+#define SHAREDIR        "@SHAREDIR@"
+#define SYSCONFDIR      "@SYSCONFDIR@"
+
+#endif /* !ATHEME_INC_INSTPATHS_H */

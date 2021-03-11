@@ -41,6 +41,7 @@
 #include <atheme/httpd.h>
 #include <atheme/i18n.h>
 #include <atheme/inline.h>
+#include <atheme/instpaths.h>
 #include <atheme/linker.h>
 #include <atheme/match.h>
 #include <atheme/memory.h>

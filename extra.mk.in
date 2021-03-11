@@ -14,6 +14,9 @@
 #
 #   -- amdj
 
+# Programs used by the build system
+SED ?= @SED@
+
 # Autoconf Directories
 prefix ?= @prefix@
 exec_prefix ?= @exec_prefix@

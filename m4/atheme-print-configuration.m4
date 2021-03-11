@@ -23,38 +23,17 @@ AC_DEFUN([ATHEME_PRINT_CONFIGURATION], [
         LIBARGON2="Partial (Please consider upgrading your Argon2 library)"
     ])
 
-    prefix="$(eval echo "${prefix}")"
-    prefix="$(eval echo "${prefix}")"
-
-    bindir="$(eval echo "${bindir}")"
-    bindir="$(eval echo "${bindir}")"
-
-    MODDIR="$(eval echo "${MODDIR}")"
-    MODDIR="$(eval echo "${MODDIR}")"
-
-    sysconfdir="$(eval echo "${sysconfdir}")"
-    sysconfdir="$(eval echo "${sysconfdir}")"
-
-    LOGDIR="$(eval echo "${LOGDIR}")"
-    LOGDIR="$(eval echo "${LOGDIR}")"
-
-    DATADIR="$(eval echo "${DATADIR}")"
-    DATADIR="$(eval echo "${DATADIR}")"
-
-    RUNDIR="$(eval echo "${RUNDIR}")"
-    RUNDIR="$(eval echo "${RUNDIR}")"
-
     echo "
 Configuration of ${PACKAGE_STRING}:
 
   Directories:
     Installation Prefix .....: ${prefix}
     Binary Directory ........: ${bindir}
+    Module Directory ........: ${MODDIR}/modules
     Config Directory ........: ${sysconfdir}
     Data Directory ..........: ${DATADIR}
     Logfile Directory .......: ${LOGDIR}
-    Module Directory ........: ${MODDIR}/modules
-    PID Directory ...........: ${RUNDIR}
+    PID File Directory ......: ${RUNDIR}
 
   Libraries:
     ARM mbedTLS support .....: ${LIBMBEDCRYPTO}

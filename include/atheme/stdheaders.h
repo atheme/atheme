@@ -8,8 +8,8 @@
  * Each inclusion is commented with examples of the things they provide.
  */
 
-#ifndef ATHEME_INC_STDINC_H
-#define ATHEME_INC_STDINC_H 1
+#ifndef ATHEME_INC_STDHEADERS_H
+#define ATHEME_INC_STDHEADERS_H 1
 
 #include <atheme/sysconf.h>
 
@@ -151,4 +151,4 @@
 // MOWGLI_*, mowgli_*_t, mowgli_*()
 #include <mowgli.h>
 
-#endif /* !ATHEME_INC_STDINC_H */
+#endif /* !ATHEME_INC_STDHEADERS_H */
