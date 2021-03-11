@@ -44,6 +44,7 @@ AC_PROG_LN_S
 AC_PATH_PROG([TAR], [tar])
 AC_PATH_PROG([AR], [ar])
 AC_PATH_PROG([RANLIB], [ranlib])
+AC_PROG_SED
 
 AC_PROG_CC_C99
 AC_USE_SYSTEM_EXTENSIONS
@@ -409,11 +410,6 @@ AS_IF([test "x${enable_profile}" = "xyes"],
 	]
 )
 
-ac_save_CPPFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS} -DPREFIX=\\\"\${prefix}\\\" -DLOCALEDIR=\\\"\${LOCALEDIR}\\\" -DMODDIR=\\\"\${MODDIR}\\\" -DSHAREDIR=\\\"${SHAREDIR}\\\" -DSYSCONFDIR=\\\"${sysconfdir}\\\" -DLOGDIR=\\\"${LOGDIR}\\\" -DRUNDIR=\\\"${RUNDIR}\\\" -DDATADIR=\\\"${DATADIR}\\\""
-CPPFLAGS=${ac_save_CPPFLAGS}
-AC_SUBST(CPPFLAGS)
-dnl export CFLAGS
-
 enablerpath="yes"
 AC_ARG_ENABLE([rpath],
 AS_HELP_STRING([--disable-rpath],[Disable use of -Wl,-rpath= during linking]),
@@ -488,16 +484,11 @@ AC_CONFIG_FILES([
 ])
 AC_OUTPUT
 
-d=`eval echo ${MODDIR}`
-d=`eval echo $d`
-d=`eval echo $d`
-d=`eval echo $d`
-
 echo "
 Configuration:
 	Atheme version       : ${PACKAGE_VERSION}
 	Installation prefix  : ${prefix}
-	Module root directory: ${d}
+	Module root directory: ${MODDIR}/modules
 	Config directory     : ${sysconfdir}
 	Logfile directory    : ${LOGDIR}
 	Data directory       : ${DATADIR}
@@ -514,4 +505,5 @@ Configuration:
 	CFLAGS               : ${CFLAGS}
 	Internationalization : ${USE_NLS}
 
-Type make to build Atheme, and make install to install it."
+Type make to build Atheme, and make install to install it.
+"

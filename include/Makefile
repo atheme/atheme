@@ -4,7 +4,7 @@ include ../extra.mk
 
 SUBDIRS = inline protocol
 
-DISTCLEAN = hooktypes.h serno.h
+DISTCLEAN = hooktypes.h instpaths.h serno.h
 pre-depend: ${DISTCLEAN}
 
 INCLUDES = \
@@ -34,6 +34,7 @@ INCLUDES = \
 	hooktypes.h		\
 	httpd.h			\
 	i18n.h			\
+	instpaths.h		\
 	libathemecore.h		\
 	linker.h		\
 	match.h			\
@@ -64,6 +65,21 @@ INCLUDES = \
 hooktypes.h: hooktypes.in mkhooktypes.sh
 	$(info Generate: $@)
 	@sh mkhooktypes.sh hooktypes.in >hooktypes.h
+
+instpaths.h: ../extra.mk instpaths.h.in
+	$(info Generate: $@)
+	@$(SED)                                         \
+		-e 's|@BINDIR[@]|$(bindir)|g'           \
+		-e 's|@DATADIR[@]|$(DATADIR)|g'         \
+		-e 's|@DOCDIR[@]|$(DOCDIR)|g'           \
+		-e 's|@LOCALEDIR[@]|$(LOCALEDIR)|g'     \
+		-e 's|@LOGDIR[@]|$(LOGDIR)|g'           \
+		-e 's|@MODDIR[@]|$(MODDIR)|g'           \
+		-e 's|@PREFIX[@]|$(prefix)|g'           \
+		-e 's|@RUNDIR[@]|$(RUNDIR)|g'           \
+		-e 's|@SHAREDIR[@]|$(SHAREDIR)|g'       \
+		-e 's|@SYSCONFDIR[@]|$(sysconfdir)|g'   \
+	< "$@.in" > "$@"
 
 serno.h:
 	@sh mkserno.sh

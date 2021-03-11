@@ -14,6 +14,7 @@
 #define E extern
 #define DLE
 
+#include "instpaths.h"
 #include "sysconf.h"
 #include "stdinc.h"
 #include "i18n.h"

@@ -29,6 +29,7 @@ ECHO_C ?= @ECHO_C@
 subdirs ?= @subdirs@
 psdir ?= @psdir@
 PCRE_CFLAGS ?= @PCRE_CFLAGS@
+SED ?= @SED@
 POSUB ?= @POSUB@
 MSGFMT ?= @MSGFMT@
 CPP ?= @CPP@
