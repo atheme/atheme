@@ -22474,6 +22474,8 @@ fi
 
 else
 
+            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: --with-libmowgli=yes cannot be used while pkg-config is unavailable -- falling back to internal libmowgli submodule" >&5
+$as_echo "$as_me: WARNING: --with-libmowgli=yes cannot be used while pkg-config is unavailable -- falling back to internal libmowgli submodule" >&2;}
             with_libmowgli="no"
 
 fi

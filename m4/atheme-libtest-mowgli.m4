@@ -23,6 +23,7 @@ AC_DEFUN([ATHEME_LIBTEST_MOWGLI], [
         AS_IF([test -n "${PKG_CONFIG}"], [
             PKG_CHECK_MODULES([MOWGLI], [libmowgli-2 >= 2.0.0], [], [with_libmowgli="no"])
         ], [
+            AC_MSG_WARN([--with-libmowgli=yes cannot be used while pkg-config is unavailable -- falling back to internal libmowgli submodule])
             with_libmowgli="no"
         ])
     ])
