@@ -17,6 +17,7 @@ AC_DEFUN([ATHEME_CHECK_BUILD_REQUIREMENTS], [
     AC_DEFINE([__STDC_WANT_LIB_EXT1__], [1], [We want ISO 9899:2011 Annex K memory functions if available])
     AC_USE_SYSTEM_EXTENSIONS
 
+    AC_CHECK_HEADERS([Availability.h], [], [], [])
     AC_CHECK_HEADERS([ctype.h], [], [], [])
     AC_CHECK_HEADERS([dirent.h], [], [], [])
     AC_CHECK_HEADERS([errno.h], [], [], [])
@@ -37,6 +38,7 @@ AC_DEFUN([ATHEME_CHECK_BUILD_REQUIREMENTS], [
     AC_CHECK_HEADERS([string.h], [], [], [])
     AC_CHECK_HEADERS([strings.h], [], [], [])
     AC_CHECK_HEADERS([sys/file.h], [], [], [])
+    AC_CHECK_HEADERS([sys/param.h], [], [], [])
     AC_CHECK_HEADERS([sys/random.h], [], [], [])
     AC_CHECK_HEADERS([sys/resource.h], [], [], [])
     AC_CHECK_HEADERS([sys/stat.h], [], [], [])

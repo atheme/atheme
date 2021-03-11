@@ -97,18 +97,38 @@ AC_DEFUN([ATHEME_DECIDE_RANDOM_FRONTEND], [
         [AS_HELP_STRING([--with-rng-api-frontend=@<:@frontend@:>@], [RNG API frontend to use (auto, arc4random, sodium, openssl, libressl, mbedtls, internal). Default: auto])],
         [], [with_rng_api_frontend="auto"])
 
-    # OpenBSD is the only supported platform whose arc4random(3) is backed by a secure algorithm
     AC_MSG_CHECKING([if a secure arc4random(3) is available])
     AC_LINK_IFELSE([
         AC_LANG_PROGRAM([[
-            #ifndef __OpenBSD__
-            #  error "Not building on OpenBSD"
-            #endif
             #ifdef HAVE_STDDEF_H
             #  include <stddef.h>
             #endif
             #ifdef HAVE_STDLIB_H
             #  include <stdlib.h>
+            #endif
+            #if defined(HAVE_AVAILABILITY_H)
+            #  include <Availability.h>
+            #elif defined(HAVE_SYS_PARAM_H)
+            #  include <sys/param.h>
+            #endif
+            #undef HAVE_SECURE_ARCRANDOM
+            #if defined(__MAC_10_12)
+            #  define HAVE_SECURE_ARCRANDOM 1
+            #elif defined(__FreeBSD__)
+            #  if (__FreeBSD__ >= 12)
+            #    define HAVE_SECURE_ARCRANDOM 1
+            #  endif
+            #elif defined(__NetBSD__) && defined(__NetBSD_Version__)
+            #  if (__NetBSD_Version__ >= 700000001)
+            #    define HAVE_SECURE_ARCRANDOM 1
+            #  endif
+            #elif defined(__OpenBSD__) && defined(OpenBSD)
+            #  if (OpenBSD >= 201405)
+            #    define HAVE_SECURE_ARCRANDOM 1
+            #  endif
+            #endif
+            #ifndef HAVE_SECURE_ARCRANDOM
+            #  error "No secure arc4random(3) is available"
             #endif
         ]], [[
             (void) arc4random();
