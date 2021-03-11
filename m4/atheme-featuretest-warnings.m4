@@ -106,19 +106,10 @@ AC_DEFUN([ATHEME_FEATURETEST_WARNINGS], [
         [AS_HELP_STRING([--enable-warnings], [Enable compiler warnings])],
         [], [enable_warnings="no"])
 
-    case "x${enable_warnings}" in
-
-        xyes)
-            BUILD_WARNINGS="Yes"
-            ATHEME_CC_ENABLE_WARNINGS
-            ;;
-
-        xno)
-            BUILD_WARNINGS="No"
-            ;;
-
-        *)
-            AC_MSG_ERROR([invalid option for --enable-warnings])
-            ;;
-    esac
+    AS_CASE(["x${enable_warnings}"], [xno], [], [xyes], [
+        BUILD_WARNINGS="Yes"
+        ATHEME_CC_ENABLE_WARNINGS
+    ], [
+        AC_MSG_ERROR([invalid option for --enable-warnings])
+    ])
 ])

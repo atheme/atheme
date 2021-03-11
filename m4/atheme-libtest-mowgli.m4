@@ -15,15 +15,9 @@ AC_DEFUN([ATHEME_LIBTEST_MOWGLI], [
         [AS_HELP_STRING([--with-libmowgli@<:@=prefix@:>@], [Specify location of system libmowgli install, "yes" to ask pkg-config, or "no" to force use of internal libmowgli submodule (default)])],
         [], [with_libmowgli="no"])
 
-    case "x${with_libmowgli}" in
-        xno | xyes)
-            ;;
-        x/*)
-            ;;
-        *)
-            AC_MSG_ERROR([invalid option for --with-libmowgli])
-            ;;
-    esac
+    AS_CASE(["x${with_libmowgli}"], [xno], [], [xyes], [], [x/*], [], [
+        AC_MSG_ERROR([invalid option for --with-libmowgli])
+    ])
 
     AS_IF([test "x${with_libmowgli}" = "xyes"], [
         AS_IF([test -n "${PKG_CONFIG}"], [

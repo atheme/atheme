@@ -20,13 +20,9 @@ AC_DEFUN([ATHEME_LIBTEST_PASSWDQC], [
         [AS_HELP_STRING([--without-passwdqc], [Do not attempt to detect libpasswdqc (for modules/nickserv/pwquality -- checking password strength)])],
         [], [with_passwdqc="auto"])
 
-    case "x${with_passwdqc}" in
-        xno | xyes | xauto)
-            ;;
-        *)
-            AC_MSG_ERROR([invalid option for --with-passwdqc])
-            ;;
-    esac
+    AS_CASE(["x${with_passwdqc}"], [xno], [], [xyes], [], [xauto], [], [
+        AC_MSG_ERROR([invalid option for --with-passwdqc])
+    ])
 
     AS_IF([test "${with_passwdqc}" != "no"], [
         # If this library ever starts shipping a pkg-config file, change to PKG_CHECK_MODULES ?

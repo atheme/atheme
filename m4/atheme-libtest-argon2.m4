@@ -19,17 +19,12 @@ AC_DEFUN([ATHEME_LIBTEST_ARGON2], [
         [AS_HELP_STRING([--without-argon2], [Do not attempt to detect libargon2 (for modules/crypto/argon2)])],
         [], [with_argon2="auto"])
 
-    case "x${with_argon2}" in
-        xno | xyes | xauto)
-            ;;
-        x/*)
-            LIBARGON2_PATH="${with_argon2}"
-            with_argon2="yes"
-            ;;
-        *)
-            AC_MSG_ERROR([invalid option for --with-argon2])
-            ;;
-    esac
+    AS_CASE(["x${with_argon2}"], [xno], [], [xyes], [], [xauto], [], [x/*], [
+        LIBARGON2_PATH="${with_argon2}"
+        with_argon2="yes"
+    ], [
+        AC_MSG_ERROR([invalid option for --with-argon2])
+    ])
 
     AS_IF([test "${with_argon2}" != "no"], [
         AS_IF([test -n "${LIBARGON2_PATH}"], [

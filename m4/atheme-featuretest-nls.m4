@@ -15,18 +15,7 @@ AC_DEFUN([ATHEME_FEATURETEST_NLS], [
         [AS_HELP_STRING([--enable-nls], [Enable localization/translation support])],
         [], [enable_nls="no"])
 
-    case "x${enable_nls}" in
-
-        xyes | xno)
-            ;;
-
-        *)
-            AC_MSG_ERROR([invalid option for --enable-nls])
-            ;;
-    esac
-
-    AS_IF([test "${enable_nls}" = "yes"], [
-        USE_NLS="yes"
+    AS_CASE(["x${enable_nls}"], [xno], [], [xyes], [
         AM_PO_SUBDIRS
         AM_GNU_GETTEXT([external], [need-formatstring-macros])
         AS_IF([test "x${USE_NLS}" = "xyes"], [
@@ -37,6 +26,8 @@ AC_DEFUN([ATHEME_FEATURETEST_NLS], [
         ], [
             AC_MSG_WARN([NLS was requested but is unavailable])
         ])
+    ], [
+        AC_MSG_ERROR([invalid option for --enable-nls])
     ])
 
     AC_SUBST([USE_NLS])

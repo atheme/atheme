@@ -19,17 +19,12 @@ AC_DEFUN([ATHEME_LIBTEST_NETTLE], [
         [AS_HELP_STRING([--without-nettle], [Do not attempt to detect nettle (cryptographic library)])],
         [], [with_nettle="auto"])
 
-    case "x${with_nettle}" in
-        xno | xyes | xauto)
-            ;;
-        x/*)
-            LIBNETTLE_PATH="${with_nettle}"
-            with_nettle="yes"
-            ;;
-        *)
-            AC_MSG_ERROR([invalid option for --with-nettle])
-            ;;
-    esac
+    AS_CASE(["x${with_nettle}"], [xno], [], [xyes], [], [xauto], [], [x/*], [
+        LIBNETTLE_PATH="${with_nettle}"
+        with_nettle="yes"
+    ], [
+        AC_MSG_ERROR([invalid option for --with-nettle])
+    ])
 
     AS_IF([test "${with_nettle}" != "no"], [
         AS_IF([test -n "${LIBNETTLE_PATH}"], [

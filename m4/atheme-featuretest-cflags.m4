@@ -27,74 +27,42 @@ AC_DEFUN([ATHEME_FEATURETEST_CFLAGS], [
 
 
 
-    case "x${enable_async_unwind_tables}" in
+    AS_CASE(["x${enable_async_unwind_tables}"], [xno], [], [xyes], [
+        ATHEME_TEST_CC_FLAGS([-fasynchronous-unwind-tables])
+    ], [
+        AC_MSG_ERROR([invalid option for --enable-async-unwind-tables])
+    ])
 
-        xyes)
-            ATHEME_TEST_CC_FLAGS([-fasynchronous-unwind-tables])
-            ;;
-
-        xno)
-            ;;
-
-        *)
-            AC_MSG_ERROR([invalid option for --enable-async-unwind-tables])
-            ;;
-    esac
-
-    case "x${enable_debugging_symbols}" in
-
-        xyes)
-            ATHEME_TEST_CC_FLAGS([-gdwarf-4])
+    AS_CASE(["x${enable_debugging_symbols}"], [xno], [], [xyes], [
+        ATHEME_TEST_CC_FLAGS([-gdwarf-4])
+        AS_IF([test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"], [
+            ATHEME_TEST_CC_FLAGS([-ggdb3])
             AS_IF([test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"], [
-                ATHEME_TEST_CC_FLAGS([-ggdb3])
+                ATHEME_TEST_CC_FLAGS([-g])
                 AS_IF([test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"], [
-                    ATHEME_TEST_CC_FLAGS([-g])
-                    AS_IF([test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"], [
-                        AC_MSG_WARN([--enable-debugging-symbols was given, but they could not be enabled])
-                    ])
+                    AC_MSG_WARN([--enable-debugging-symbols was given, but they could not be enabled])
                 ])
             ])
-            ;;
+        ])
+    ], [
+        AC_MSG_ERROR([invalid option for --enable-debugging-symbols])
+    ])
 
-        xno)
-            ;;
+    AS_CASE(["x${enable_stack_clash_protection}"], [xno], [], [xyes], [
+        ATHEME_TEST_CC_FLAGS([-fstack-clash-protection])
+    ], [
+        AC_MSG_ERROR([invalid option for --enable-stack-clash-protection])
+    ])
 
-        *)
-            AC_MSG_ERROR([invalid option for --enable-debugging-symbols])
-            ;;
-    esac
-
-    case "x${enable_stack_clash_protection}" in
-
-        xyes)
-            ATHEME_TEST_CC_FLAGS([-fstack-clash-protection])
-            ;;
-
-        xno)
-            ;;
-
-        *)
-            AC_MSG_ERROR([invalid option for --enable-stack-clash-protection])
-            ;;
-    esac
-
-    case "x${enable_stack_protector}" in
-
-        xyes)
-            ATHEME_TEST_CC_FLAGS([-fstack-protector-all])
+    AS_CASE(["x${enable_stack_protector}"], [xno], [], [xyes], [
+        ATHEME_TEST_CC_FLAGS([-fstack-protector-all])
+        AS_IF([test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"], [
+            ATHEME_TEST_CC_FLAGS([-fstack-protector-strong])
             AS_IF([test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"], [
-                ATHEME_TEST_CC_FLAGS([-fstack-protector-strong])
-                AS_IF([test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"], [
-                    ATHEME_TEST_CC_FLAGS([-fstack-protector])
-                ])
+                ATHEME_TEST_CC_FLAGS([-fstack-protector])
             ])
-            ;;
-
-        xno)
-            ;;
-
-        *)
-            AC_MSG_ERROR([invalid option for --enable-stack-protector])
-            ;;
-    esac
+        ])
+    ], [
+        AC_MSG_ERROR([invalid option for --enable-stack-protector])
+    ])
 ])

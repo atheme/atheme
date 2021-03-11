@@ -101,21 +101,12 @@ AC_DEFUN([ATHEME_FEATURETEST_CONTRIB], [
         [AS_HELP_STRING([--enable-contrib], [Enable contrib modules])],
         [], [enable_contrib="no"])
 
-    case "x${enable_contrib}" in
-
-        xyes)
-            ATHEME_LIBTEST_CONTRIB
-            CONTRIB_MODULES="Yes"
-            AC_DEFINE([ATHEME_ENABLE_CONTRIB], [1], [Define to 1 if --enable-contrib was given to ./configure])
-            ATHEME_COND_CONTRIB_SUBMODULE_ENABLE
-            ;;
-
-        xno)
-            CONTRIB_MODULES="No"
-            ;;
-
-        *)
-            AC_MSG_ERROR([invalid option for --enable-contrib])
-            ;;
-    esac
+    AS_CASE(["x${enable_contrib}"], [xno], [], [xyes], [
+        ATHEME_LIBTEST_CONTRIB
+        CONTRIB_MODULES="Yes"
+        AC_DEFINE([ATHEME_ENABLE_CONTRIB], [1], [Define to 1 if --enable-contrib was given to ./configure])
+        ATHEME_COND_CONTRIB_SUBMODULE_ENABLE
+    ], [
+        AC_MSG_ERROR([invalid option for --enable-contrib])
+    ])
 ])

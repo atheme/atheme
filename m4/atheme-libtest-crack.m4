@@ -21,13 +21,9 @@ AC_DEFUN([ATHEME_LIBTEST_CRACK], [
         [AS_HELP_STRING([--without-cracklib], [Do not attempt to detect cracklib (for modules/nickserv/pwquality -- checking password strength)])],
         [], [with_cracklib="auto"])
 
-    case "x${with_cracklib}" in
-        xno | xyes | xauto)
-            ;;
-        *)
-            AC_MSG_ERROR([invalid option for --with-cracklib])
-            ;;
-    esac
+    AS_CASE(["x${with_cracklib}"], [xno], [], [xyes], [], [xauto], [], [
+        AC_MSG_ERROR([invalid option for --with-cracklib])
+    ])
 
     AS_IF([test "${with_cracklib}" != "no"], [
         # If this library ever starts shipping a pkg-config file, change to PKG_CHECK_MODULES ?

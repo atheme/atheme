@@ -22,13 +22,9 @@ AC_DEFUN([ATHEME_LIBTEST_GCRYPT], [
         [AS_HELP_STRING([--without-gcrypt], [Do not attempt to detect GNU libgcrypt (cryptographic library)])],
         [], [with_gcrypt="auto"])
 
-    case "x${with_gcrypt}" in
-        xno | xyes | xauto)
-            ;;
-        *)
-            AC_MSG_ERROR([invalid option for --with-gcrypt])
-            ;;
-    esac
+    AS_CASE(["x${with_gcrypt}"], [xno], [], [xyes], [], [xauto], [], [
+        AC_MSG_ERROR([invalid option for --with-gcrypt])
+    ])
 
     AS_IF([test "${with_gcrypt}" != "no"], [
         # If this library ever starts shipping a pkg-config file, change to PKG_CHECK_MODULES ?

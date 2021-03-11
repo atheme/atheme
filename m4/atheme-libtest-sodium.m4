@@ -21,17 +21,12 @@ AC_DEFUN([ATHEME_LIBTEST_SODIUM], [
         [AS_HELP_STRING([--without-sodium], [Do not attempt to detect libsodium (cryptographic library)])],
         [], [with_sodium="auto"])
 
-    case "x${with_sodium}" in
-        xno | xyes | xauto)
-            ;;
-        x/*)
-            LIBSODIUM_PATH="${with_sodium}"
-            with_sodium="yes"
-            ;;
-        *)
-            AC_MSG_ERROR([invalid option for --with-sodium])
-            ;;
-    esac
+    AS_CASE(["x${with_sodium}"], [xno], [], [xyes], [], [xauto], [], [x/*], [
+        LIBSODIUM_PATH="${with_sodium}"
+        with_sodium="yes"
+    ], [
+        AC_MSG_ERROR([invalid option for --with-sodium])
+    ])
 
     AS_IF([test "${with_sodium}" != "no"], [
         AS_IF([test -n "${LIBSODIUM_PATH}"], [

@@ -23,17 +23,12 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
         [AS_HELP_STRING([--without-openssl], [Do not attempt to detect OpenSSL (cryptographic library)])],
         [], [with_openssl="auto"])
 
-    case "x${with_openssl}" in
-        xno | xyes | xauto)
-            ;;
-        x/*)
-            LIBCRYPTO_PATH="${with_openssl}"
-            with_openssl="yes"
-            ;;
-        *)
-            AC_MSG_ERROR([invalid option for --with-openssl])
-            ;;
-    esac
+    AS_CASE(["x${with_openssl}"], [xno], [], [xyes], [], [xauto], [], [x/*], [
+        LIBCRYPTO_PATH="${with_openssl}"
+        with_openssl="yes"
+    ], [
+        AC_MSG_ERROR([invalid option for --with-openssl])
+    ])
 
     AS_IF([test "${with_openssl}" != "no"], [
         AS_IF([test -n "${LIBCRYPTO_PATH}"], [

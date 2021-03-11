@@ -14,15 +14,9 @@ AC_DEFUN([ATHEME_FEATURETEST_ECDH_X25519_TOOL], [
         [AS_HELP_STRING([--disable-ecdh-x25519-tool], [Don't build the SASL ECDH-X25519-CHALLENGE utility])],
         [], [enable_ecdh_x25519_tool="auto"])
 
-    case "x${enable_ecdh_x25519_tool}" in
-
-        xauto | xyes | xno)
-            ;;
-
-        *)
-            AC_MSG_ERROR([invalid option for --enable-ecdh-x25519-tool])
-            ;;
-    esac
+    AS_CASE(["x${enable_ecdh_x25519_tool}"], [xno], [], [xyes], [], [xauto], [], [
+        AC_MSG_ERROR([invalid option for --enable-ecdh-x25519-tool])
+    ])
 
     AS_IF([test "${enable_ecdh_x25519_tool}" != "no"], [
         AS_IF([test "x${FEATURE_SASL_ECDH_X25519_CHALLENGE}" = "xYes"], [

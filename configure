@@ -6984,12 +6984,15 @@ $as_echo "no" >&6; }
     LIBS="${DYNAMIC_LD_LIBS} ${LIBS}"
 
     # If we're building on Windows we need socket and regex libraries from mingw
-    case "${host}" in
-        *-*-mingw32)
-            CPPFLAGS="-I/mingw/include ${CPPFLAGS}"
-            LIBS="-lwsock32 -lws2_32 -lregex ${LIBS}"
-            ;;
-    esac
+    case "${host}" in #(
+  *-*-mingw32) :
+
+        CPPFLAGS="-I/mingw/include ${CPPFLAGS}"
+        LIBS="-lwsock32 -lws2_32 -lregex ${LIBS}"
+     ;; #(
+  *) :
+     ;;
+esac
 
 
 # Automake compatibility. --nenolod
@@ -7581,17 +7584,23 @@ else
 fi
 
 
-    case "x${with_argon2}" in
-        xno | xyes | xauto)
-            ;;
-        x/*)
-            LIBARGON2_PATH="${with_argon2}"
-            with_argon2="yes"
-            ;;
-        *)
-            as_fn_error $? "invalid option for --with-argon2" "$LINENO" 5
-            ;;
-    esac
+    case "x${with_argon2}" in #(
+  xno) :
+     ;; #(
+  xyes) :
+     ;; #(
+  xauto) :
+     ;; #(
+  x/*) :
+
+        LIBARGON2_PATH="${with_argon2}"
+        with_argon2="yes"
+     ;; #(
+  *) :
+
+        as_fn_error $? "invalid option for --with-argon2" "$LINENO" 5
+     ;;
+esac
 
     if test "${with_argon2}" != "no"; then :
 
@@ -7864,13 +7873,18 @@ else
 fi
 
 
-    case "x${with_cracklib}" in
-        xno | xyes | xauto)
-            ;;
-        *)
-            as_fn_error $? "invalid option for --with-cracklib" "$LINENO" 5
-            ;;
-    esac
+    case "x${with_cracklib}" in #(
+  xno) :
+     ;; #(
+  xyes) :
+     ;; #(
+  xauto) :
+     ;; #(
+  *) :
+
+        as_fn_error $? "invalid option for --with-cracklib" "$LINENO" 5
+     ;;
+esac
 
     if test "${with_cracklib}" != "no"; then :
 
@@ -8038,13 +8052,18 @@ else
 fi
 
 
-    case "x${with_crypt}" in
-        xno | xyes | xauto)
-            ;;
-        *)
-            as_fn_error $? "invalid option for --with-crypt" "$LINENO" 5
-            ;;
-    esac
+    case "x${with_crypt}" in #(
+  xno) :
+     ;; #(
+  xyes) :
+     ;; #(
+  xauto) :
+     ;; #(
+  *) :
+
+        as_fn_error $? "invalid option for --with-crypt" "$LINENO" 5
+     ;;
+esac
 
     if test "${with_crypt}" != "no"; then :
 
@@ -8227,17 +8246,23 @@ else
 fi
 
 
-    case "x${with_openssl}" in
-        xno | xyes | xauto)
-            ;;
-        x/*)
-            LIBCRYPTO_PATH="${with_openssl}"
-            with_openssl="yes"
-            ;;
-        *)
-            as_fn_error $? "invalid option for --with-openssl" "$LINENO" 5
-            ;;
-    esac
+    case "x${with_openssl}" in #(
+  xno) :
+     ;; #(
+  xyes) :
+     ;; #(
+  xauto) :
+     ;; #(
+  x/*) :
+
+        LIBCRYPTO_PATH="${with_openssl}"
+        with_openssl="yes"
+     ;; #(
+  *) :
+
+        as_fn_error $? "invalid option for --with-openssl" "$LINENO" 5
+     ;;
+esac
 
     if test "${with_openssl}" != "no"; then :
 
@@ -8763,13 +8788,18 @@ else
 fi
 
 
-    case "x${with_gcrypt}" in
-        xno | xyes | xauto)
-            ;;
-        *)
-            as_fn_error $? "invalid option for --with-gcrypt" "$LINENO" 5
-            ;;
-    esac
+    case "x${with_gcrypt}" in #(
+  xno) :
+     ;; #(
+  xyes) :
+     ;; #(
+  xauto) :
+     ;; #(
+  *) :
+
+        as_fn_error $? "invalid option for --with-gcrypt" "$LINENO" 5
+     ;;
+esac
 
     if test "${with_gcrypt}" != "no"; then :
 
@@ -9011,17 +9041,23 @@ else
 fi
 
 
-    case "x${with_idn}" in
-        xno | xyes | xauto)
-            ;;
-        x/*)
-            LIBIDN_PATH="${with_idn}"
-            with_idn="yes"
-            ;;
-        *)
-            as_fn_error $? "invalid option for --with-idn" "$LINENO" 5
-            ;;
-    esac
+    case "x${with_idn}" in #(
+  xno) :
+     ;; #(
+  xyes) :
+     ;; #(
+  xauto) :
+     ;; #(
+  x/*) :
+
+        LIBIDN_PATH="${with_idn}"
+        with_idn="yes"
+     ;; #(
+  *) :
+
+        as_fn_error $? "invalid option for --with-idn" "$LINENO" 5
+     ;;
+esac
 
     if test "${with_idn}" != "no"; then :
 
@@ -9226,13 +9262,18 @@ else
 fi
 
 
-    case "x${with_ldap}" in
-        xno | xyes | xauto)
-            ;;
-        *)
-            as_fn_error $? "invalid option for --with-ldap" "$LINENO" 5
-            ;;
-    esac
+    case "x${with_ldap}" in #(
+  xno) :
+     ;; #(
+  xyes) :
+     ;; #(
+  xauto) :
+     ;; #(
+  *) :
+
+        as_fn_error $? "invalid option for --with-ldap" "$LINENO" 5
+     ;;
+esac
 
     if test "${with_ldap}" != "no"; then :
 
@@ -9403,13 +9444,18 @@ else
 fi
 
 
-    case "x${with_mbedtls}" in
-        xno | xyes | xauto)
-            ;;
-        *)
-            as_fn_error $? "invalid option for --with-mbedtls" "$LINENO" 5
-            ;;
-    esac
+    case "x${with_mbedtls}" in #(
+  xno) :
+     ;; #(
+  xyes) :
+     ;; #(
+  xauto) :
+     ;; #(
+  *) :
+
+        as_fn_error $? "invalid option for --with-mbedtls" "$LINENO" 5
+     ;;
+esac
 
     if test "${with_mbedtls}" != "no"; then :
 
@@ -9815,17 +9861,23 @@ else
 fi
 
 
-    case "x${with_nettle}" in
-        xno | xyes | xauto)
-            ;;
-        x/*)
-            LIBNETTLE_PATH="${with_nettle}"
-            with_nettle="yes"
-            ;;
-        *)
-            as_fn_error $? "invalid option for --with-nettle" "$LINENO" 5
-            ;;
-    esac
+    case "x${with_nettle}" in #(
+  xno) :
+     ;; #(
+  xyes) :
+     ;; #(
+  xauto) :
+     ;; #(
+  x/*) :
+
+        LIBNETTLE_PATH="${with_nettle}"
+        with_nettle="yes"
+     ;; #(
+  *) :
+
+        as_fn_error $? "invalid option for --with-nettle" "$LINENO" 5
+     ;;
+esac
 
     if test "${with_nettle}" != "no"; then :
 
@@ -10099,13 +10151,18 @@ else
 fi
 
 
-    case "x${with_passwdqc}" in
-        xno | xyes | xauto)
-            ;;
-        *)
-            as_fn_error $? "invalid option for --with-passwdqc" "$LINENO" 5
-            ;;
-    esac
+    case "x${with_passwdqc}" in #(
+  xno) :
+     ;; #(
+  xyes) :
+     ;; #(
+  xauto) :
+     ;; #(
+  *) :
+
+        as_fn_error $? "invalid option for --with-passwdqc" "$LINENO" 5
+     ;;
+esac
 
     if test "${with_passwdqc}" != "no"; then :
 
@@ -10277,17 +10334,23 @@ else
 fi
 
 
-    case "x${with_pcre}" in
-        xno | xyes | xauto)
-            ;;
-        x/*)
-            LIBPCRE_PATH="${with_pcre}"
-            with_pcre="yes"
-            ;;
-        *)
-            as_fn_error $? "invalid option for --with-pcre" "$LINENO" 5
-            ;;
-    esac
+    case "x${with_pcre}" in #(
+  xno) :
+     ;; #(
+  xyes) :
+     ;; #(
+  xauto) :
+     ;; #(
+  x/*) :
+
+        LIBPCRE_PATH="${with_pcre}"
+        with_pcre="yes"
+     ;; #(
+  *) :
+
+        as_fn_error $? "invalid option for --with-pcre" "$LINENO" 5
+     ;;
+esac
 
     if test "${with_pcre}" != "no"; then :
 
@@ -10493,17 +10556,23 @@ else
 fi
 
 
-    case "x${with_qrencode}" in
-        xno | xyes | xauto)
-            ;;
-        x/*)
-            LIBQRENCODE_PATH="${with_qrencode}"
-            with_qrencode="yes"
-            ;;
-        *)
-            as_fn_error $? "invalid option for --with-qrencode" "$LINENO" 5
-            ;;
-    esac
+    case "x${with_qrencode}" in #(
+  xno) :
+     ;; #(
+  xyes) :
+     ;; #(
+  xauto) :
+     ;; #(
+  x/*) :
+
+        LIBQRENCODE_PATH="${with_qrencode}"
+        with_qrencode="yes"
+     ;; #(
+  *) :
+
+        as_fn_error $? "invalid option for --with-qrencode" "$LINENO" 5
+     ;;
+esac
 
     if test "${with_qrencode}" != "no"; then :
 
@@ -10716,17 +10785,23 @@ else
 fi
 
 
-    case "x${with_sodium}" in
-        xno | xyes | xauto)
-            ;;
-        x/*)
-            LIBSODIUM_PATH="${with_sodium}"
-            with_sodium="yes"
-            ;;
-        *)
-            as_fn_error $? "invalid option for --with-sodium" "$LINENO" 5
-            ;;
-    esac
+    case "x${with_sodium}" in #(
+  xno) :
+     ;; #(
+  xyes) :
+     ;; #(
+  xauto) :
+     ;; #(
+  x/*) :
+
+        LIBSODIUM_PATH="${with_sodium}"
+        with_sodium="yes"
+     ;; #(
+  *) :
+
+        as_fn_error $? "invalid option for --with-sodium" "$LINENO" 5
+     ;;
+esac
 
     if test "${with_sodium}" != "no"; then :
 
@@ -11161,13 +11236,18 @@ else
 fi
 
 
-    case "x${with_perl}" in
-        xno | xyes | xauto)
-            ;;
-        *)
-            as_fn_error $? "invalid option for --with-perl" "$LINENO" 5
-            ;;
-    esac
+    case "x${with_perl}" in #(
+  xno) :
+     ;; #(
+  xyes) :
+     ;; #(
+  xauto) :
+     ;; #(
+  *) :
+
+        as_fn_error $? "invalid option for --with-perl" "$LINENO" 5
+     ;;
+esac
 
     if test "${with_perl}" != "no"; then :
 
@@ -11213,18 +11293,19 @@ fi
 
 
 
-        if test -n "${perlpath}"
-        then
+        if test -n "${perlpath}"; then :
+
             LIBPERL="Yes"
             LIBPERL_CFLAGS="$(perl -MExtUtils::Embed -e ccopts)"
             LIBPERL_LIBS="$(perl -MExtUtils::Embed -e ldopts)"
 
             # if Perl is built with threading support, we need to link atheme against libpthread
-            if echo "${LIBPERL_LIBS}" | grep -q pthread; then :
-
-                LIBS="-lpthread ${LIBS}"
-
-fi
+            case "x${LIBPERL_LIBS}" in #(
+  *-lpthread*) :
+    LIBS="-lpthread ${LIBS}" ;; #(
+  *) :
+     ;;
+esac
 
             if test "${with_perl}${LIBPERL_CFLAGS}" = "yes"; then :
 
@@ -11237,14 +11318,17 @@ fi
     PERL_COND_D="perl"
 
 
-        else
+
+else
+
             LIBPERL="No"
             if test "${with_perl}" = "yes"; then :
 
                 as_fn_error $? "--with-perl was given but Perl could not be found" "$LINENO" 5
 
 fi
-        fi
+
+fi
 
 else
 
@@ -11278,9 +11362,11 @@ else
 fi
 
 
-    case "x${enable_contrib}" in
+    case "x${enable_contrib}" in #(
+  xno) :
+     ;; #(
+  xyes) :
 
-        xyes)
 
 
     CONTRIB_LIBS="${LIBMATH_LIBS} ${LIBSOCKET_LIBS}"
@@ -11524,7 +11610,7 @@ fi
     LIBS="${LIBS_SAVED}"
 
 
-            CONTRIB_MODULES="Yes"
+        CONTRIB_MODULES="Yes"
 
 $as_echo "#define ATHEME_ENABLE_CONTRIB 1" >>confdefs.h
 
@@ -11533,16 +11619,12 @@ $as_echo "#define ATHEME_ENABLE_CONTRIB 1" >>confdefs.h
     CONTRIB_COND_D="contrib"
 
 
-            ;;
+     ;; #(
+  *) :
 
-        xno)
-            CONTRIB_MODULES="No"
-            ;;
-
-        *)
-            as_fn_error $? "invalid option for --enable-contrib" "$LINENO" 5
-            ;;
-    esac
+        as_fn_error $? "invalid option for --enable-contrib" "$LINENO" 5
+     ;;
+esac
 
 
 
@@ -11559,15 +11641,18 @@ else
 fi
 
 
-    case "x${enable_crypto_benchmarking}" in
+    case "x${enable_crypto_benchmarking}" in #(
+  xno) :
+     ;; #(
+  xyes) :
+     ;; #(
+  xauto) :
+     ;; #(
+  *) :
 
-        xauto | xyes | xno)
-            ;;
-
-        *)
-            as_fn_error $? "invalid option for --enable-crypto-benchmarking" "$LINENO" 5
-            ;;
-    esac
+        as_fn_error $? "invalid option for --enable-crypto-benchmarking" "$LINENO" 5
+     ;;
+esac
 
     if test "${enable_crypto_benchmarking}" != "no"; then :
 
@@ -11638,6 +11723,12 @@ $as_echo_n "checking if clock_gettime(2) appears to be usable... " >&6; }
 /* end confdefs.h.  */
 
 
+                    #ifdef HAVE_STDLIB_H
+                    #  include <stdlib.h>
+                    #endif
+                    #ifdef HAVE_SYS_TIME_H
+                    #  include <sys/time.h>
+                    #endif
                     #ifdef HAVE_TIME_H
                     #  include <time.h>
                     #endif
@@ -11730,15 +11821,18 @@ else
 fi
 
 
-    case "x${enable_ecdh_x25519_tool}" in
+    case "x${enable_ecdh_x25519_tool}" in #(
+  xno) :
+     ;; #(
+  xyes) :
+     ;; #(
+  xauto) :
+     ;; #(
+  *) :
 
-        xauto | xyes | xno)
-            ;;
-
-        *)
-            as_fn_error $? "invalid option for --enable-ecdh-x25519-tool" "$LINENO" 5
-            ;;
-    esac
+        as_fn_error $? "invalid option for --enable-ecdh-x25519-tool" "$LINENO" 5
+     ;;
+esac
 
     if test "${enable_ecdh_x25519_tool}" != "no"; then :
 
@@ -11779,15 +11873,18 @@ else
 fi
 
 
-    case "x${enable_ecdsa_nist256p_tools}" in
+    case "x${enable_ecdsa_nist256p_tools}" in #(
+  xno) :
+     ;; #(
+  xyes) :
+     ;; #(
+  xauto) :
+     ;; #(
+  *) :
 
-        xauto | xyes | xno)
-            ;;
-
-        *)
-            as_fn_error $? "invalid option for --enable-ecdsa-nist256p-tools" "$LINENO" 5
-            ;;
-    esac
+        as_fn_error $? "invalid option for --enable-ecdsa-nist256p-tools" "$LINENO" 5
+     ;;
+esac
 
     if test "${enable_ecdsa_nist256p_tools}" != "no"; then :
 
@@ -11830,27 +11927,26 @@ else
 fi
 
 
-    case "x${enable_fhs_paths}" in
+    case "x${enable_fhs_paths}" in #(
+  xno) :
+     ;; #(
+  xyes) :
 
-        xyes)
 
 $as_echo "#define ATHEME_ENABLE_FHS_PATHS 1" >>confdefs.h
 
-            DATADIR='${localstatedir}/lib/atheme'
-            DOCDIR='${datadir}/doc/atheme'
-            LOGDIR='${localstatedir}/log/atheme'
-            MODDIR='${libdir}/atheme'
-            RUNDIR='${localstatedir}/run/atheme'
-            SHAREDIR='${datadir}/atheme'
-            ;;
+        DATADIR='${localstatedir}/lib/atheme'
+        DOCDIR='${datadir}/doc/atheme'
+        LOGDIR='${localstatedir}/log/atheme'
+        MODDIR='${libdir}/atheme'
+        RUNDIR='${localstatedir}/run/atheme'
+        SHAREDIR='${datadir}/atheme'
+     ;; #(
+  *) :
 
-        xno)
-            ;;
-
-        *)
-            as_fn_error $? "invalid option for --enable-fhs-paths" "$LINENO" 5
-            ;;
-    esac
+        as_fn_error $? "invalid option for --enable-fhs-paths" "$LINENO" 5
+     ;;
+esac
 
 
 
@@ -11862,7 +11958,7 @@ $as_echo "#define ATHEME_ENABLE_FHS_PATHS 1" >>confdefs.h
 
 
 
-    HEAP_ALLOCATOR="Yes"
+    HEAP_ALLOCATOR="No"
 
     # Check whether --enable-heap-allocator was given.
 if test "${enable_heap_allocator+set}" = set; then :
@@ -11872,23 +11968,21 @@ else
 fi
 
 
-    case "x${enable_heap_allocator}" in
+    case "x${enable_heap_allocator}" in #(
+  xno) :
+     ;; #(
+  xyes) :
 
-        xyes)
-            HEAP_ALLOCATOR="Yes"
+        HEAP_ALLOCATOR="Yes"
 
 $as_echo "#define ATHEME_ENABLE_HEAP_ALLOCATOR 1" >>confdefs.h
 
-            ;;
+     ;; #(
+  *) :
 
-        xno)
-            HEAP_ALLOCATOR="No"
-            ;;
-
-        *)
-            as_fn_error $? "invalid option for --enable-heap-allocator" "$LINENO" 5
-            ;;
-    esac
+        as_fn_error $? "invalid option for --enable-heap-allocator" "$LINENO" 5
+     ;;
+esac
 
 
 
@@ -11902,23 +11996,21 @@ else
 fi
 
 
-    case "x${enable_large_net}" in
+    case "x${enable_large_net}" in #(
+  xno) :
+     ;; #(
+  xyes) :
 
-        xyes)
-            LARGE_NET="Yes"
+        LARGE_NET="Yes"
 
 $as_echo "#define ATHEME_ENABLE_LARGE_NET 1" >>confdefs.h
 
-            ;;
+     ;; #(
+  *) :
 
-        xno)
-            LARGE_NET="No"
-            ;;
-
-        *)
-            as_fn_error $? "invalid option for --enable-large-net" "$LINENO" 5
-            ;;
-    esac
+        as_fn_error $? "invalid option for --enable-large-net" "$LINENO" 5
+     ;;
+esac
 
 
 
@@ -11932,10 +12024,12 @@ else
 fi
 
 
-    case "x${enable_legacy_pwcrypto}" in
+    case "x${enable_legacy_pwcrypto}" in #(
+  xno) :
+     ;; #(
+  xyes) :
 
-        xyes)
-            LEGACY_PWCRYPTO="Yes"
+        LEGACY_PWCRYPTO="Yes"
 
 $as_echo "#define ATHEME_ENABLE_LEGACY_PWCRYPTO 1" >>confdefs.h
 
@@ -11944,16 +12038,12 @@ $as_echo "#define ATHEME_ENABLE_LEGACY_PWCRYPTO 1" >>confdefs.h
     LEGACY_PWCRYPTO_COND_D="legacy"
 
 
-            ;;
+     ;; #(
+  *) :
 
-        xno)
-            LEGACY_PWCRYPTO="No"
-            ;;
-
-        *)
-            as_fn_error $? "invalid option for --enable-legacy-pwcrypto" "$LINENO" 5
-            ;;
-    esac
+        as_fn_error $? "invalid option for --enable-legacy-pwcrypto" "$LINENO" 5
+     ;;
+esac
 
 
 
@@ -11967,14 +12057,16 @@ else
 fi
 
 
-    case "x${enable_reproducible_builds}" in
+    case "x${enable_reproducible_builds}" in #(
+  xno) :
+     ;; #(
+  xyes) :
 
-        xyes)
-            REPRODUCIBLE_BUILDS="Yes"
+        REPRODUCIBLE_BUILDS="Yes"
 
 $as_echo "#define ATHEME_ENABLE_REPRODUCIBLE_BUILDS 1" >>confdefs.h
 
-            if test "x${SOURCE_DATE_EPOCH}" != "x"; then :
+        if test "x${SOURCE_DATE_EPOCH}" != "x"; then :
 
 
 cat >>confdefs.h <<_ACEOF
@@ -11983,16 +12075,12 @@ _ACEOF
 
 
 fi
-            ;;
+     ;; #(
+  *) :
 
-        xno)
-            REPRODUCIBLE_BUILDS="No"
-            ;;
-
-        *)
-            as_fn_error $? "invalid option for --enable-reproducible-builds" "$LINENO" 5
-            ;;
-    esac
+        as_fn_error $? "invalid option for --enable-reproducible-builds" "$LINENO" 5
+     ;;
+esac
 
 
 # Digest and RNG frontend to use in libathemecore
@@ -12010,17 +12098,17 @@ else
 fi
 
 
-    case "x${with_digest_api_frontend}" in
+    case "x${with_digest_api_frontend}" in #(
+  xauto) :
 
-        xauto)
-            if test "${LIBCRYPTO}${LIBCRYPTO_DIGEST}" = "YesYes"; then :
+        if test "${LIBCRYPTO}${LIBCRYPTO_DIGEST}" = "YesYes"; then :
 
 
 
     DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_OPENSSL"
     DIGEST_FRONTEND="${LIBCRYPTO_NAME}"
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&5
+            { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&5
 $as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&6;}
 
 elif test "${LIBGCRYPT}${LIBGCRYPT_DIGEST}" = "YesYes"; then :
@@ -12030,7 +12118,7 @@ elif test "${LIBGCRYPT}${LIBGCRYPT_DIGEST}" = "YesYes"; then :
     DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_GCRYPT"
     DIGEST_FRONTEND="GNU libgcrypt"
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&5
+            { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&5
 $as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&6;}
 
 elif test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_DIGEST}" = "YesYes"; then :
@@ -12040,7 +12128,7 @@ elif test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_DIGEST}" = "YesYes"; then :
     DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_MBEDTLS"
     DIGEST_FRONTEND="ARM mbedTLS"
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&5
+            { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&5
 $as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&6;}
 
 else
@@ -12050,80 +12138,98 @@ else
     DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_INTERNAL"
     DIGEST_FRONTEND="Internal"
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&5
+            { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&5
 $as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen automatically)" >&6;}
 
 fi
-            ;;
+     ;; #(
+  xopenssl) :
 
-        xopenssl | xlibressl)
-            if test "${LIBCRYPTO}${LIBCRYPTO_DIGEST}" = "YesYes"; then :
+        if test "${LIBCRYPTO}${LIBCRYPTO_DIGEST}" = "YesYes"; then :
 
 
 
     DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_OPENSSL"
     DIGEST_FRONTEND="${LIBCRYPTO_NAME}"
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&5
+            { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&5
 $as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&6;}
 
 else
 
-                as_fn_error $? "--with-digest-api-frontend=openssl/libressl requires --with-openssl and usable MD5/SHA1/SHA2/HMAC/PBKDF2 functions" "$LINENO" 5
+            as_fn_error $? "--with-digest-api-frontend=openssl requires --with-openssl and usable MD5/SHA1/SHA2/HMAC/PBKDF2 functions" "$LINENO" 5
 
 fi
-            ;;
+     ;; #(
+  xlibressl) :
 
-        xgcrypt)
-            if test "${LIBGCRYPT}${LIBGCRYPT_DIGEST}" = "YesYes"; then :
+        if test "${LIBCRYPTO}${LIBCRYPTO_DIGEST}" = "YesYes"; then :
+
+
+
+    DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_OPENSSL"
+    DIGEST_FRONTEND="${LIBCRYPTO_NAME}"
+
+            { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&5
+$as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&6;}
+
+else
+
+            as_fn_error $? "--with-digest-api-frontend=libressl requires --with-openssl and usable MD5/SHA1/SHA2/HMAC/PBKDF2 functions" "$LINENO" 5
+
+fi
+     ;; #(
+  xgcrypt) :
+
+        if test "${LIBGCRYPT}${LIBGCRYPT_DIGEST}" = "YesYes"; then :
 
 
 
     DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_GCRYPT"
     DIGEST_FRONTEND="GNU libgcrypt"
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&5
+            { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&5
 $as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&6;}
 
 else
 
-                as_fn_error $? "--with-digest-api-frontend=gcrypt requires --with-gcrypt and usable MD5/SHA1/SHA2/HMAC/PBKDF2 functions" "$LINENO" 5
+            as_fn_error $? "--with-digest-api-frontend=gcrypt requires --with-gcrypt and usable MD5/SHA1/SHA2/HMAC/PBKDF2 functions" "$LINENO" 5
 
 fi
-            ;;
+     ;; #(
+  xmbedtls) :
 
-        xmbedtls)
-            if test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_DIGEST}" = "YesYes"; then :
+        if test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_DIGEST}" = "YesYes"; then :
 
 
 
     DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_MBEDTLS"
     DIGEST_FRONTEND="ARM mbedTLS"
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&5
+            { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&5
 $as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&6;}
 
 else
 
-                as_fn_error $? "--with-digest-api-frontend=mbedtls requires --with-mbedtls and usable MD5/SHA1/SHA2/HMAC/PBKDF2 functions" "$LINENO" 5
+            as_fn_error $? "--with-digest-api-frontend=mbedtls requires --with-mbedtls and usable MD5/SHA1/SHA2/HMAC/PBKDF2 functions" "$LINENO" 5
 
 fi
-            ;;
+     ;; #(
+  xinternal) :
 
-        xinternal)
 
 
     DIGEST_FRONTEND_VAL="ATHEME_API_DIGEST_FRONTEND_INTERNAL"
     DIGEST_FRONTEND="Internal"
 
-            { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&5
 $as_echo "$as_me: using digest frontend: ${DIGEST_FRONTEND} (chosen by user)" >&6;}
-            ;;
+     ;; #(
+  *) :
 
-        *)
-            as_fn_error $? "invalid option for --with-digest-api-frontend (auto, openssl, libressl, gcrypt, mbedtls, internal)" "$LINENO" 5
-            ;;
-    esac
+        as_fn_error $? "invalid option for --with-digest-api-frontend (auto, openssl, libressl, gcrypt, mbedtls, internal)" "$LINENO" 5
+     ;;
+esac
 
 
 cat >>confdefs.h <<_ACEOF
@@ -12193,17 +12299,17 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
-    case "x${with_rng_api_frontend}" in
+    case "x${with_rng_api_frontend}" in #(
+  xauto) :
 
-        xauto)
-            if test "${HAVE_SECURE_ARC4RANDOM}" = "Yes"; then :
+        if test "${HAVE_SECURE_ARC4RANDOM}" = "Yes"; then :
 
 
 
     RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_ARC4RANDOM"
     RANDOM_FRONTEND="Secure arc4random(3)"
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
+            { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
 $as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&6;}
 
 elif test "${LIBSODIUM}${LIBSODIUM_RANDOM}" = "YesYes"; then :
@@ -12213,7 +12319,7 @@ elif test "${LIBSODIUM}${LIBSODIUM_RANDOM}" = "YesYes"; then :
     RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_SODIUM"
     RANDOM_FRONTEND="Sodium"
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
+            { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
 $as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&6;}
 
 elif test "${LIBCRYPTO}${LIBCRYPTO_RANDOM}" = "YesYes"; then :
@@ -12223,7 +12329,7 @@ elif test "${LIBCRYPTO}${LIBCRYPTO_RANDOM}" = "YesYes"; then :
     RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_OPENSSL"
     RANDOM_FRONTEND="${LIBCRYPTO_NAME}"
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
+            { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
 $as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&6;}
 
 elif test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_RANDOM}" = "YesYes"; then :
@@ -12233,7 +12339,7 @@ elif test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_RANDOM}" = "YesYes"; then :
     RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_MBEDTLS"
     RANDOM_FRONTEND="ARM mbedTLS"
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
+            { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
 $as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&6;}
 
 else
@@ -12338,85 +12444,103 @@ rm -f core conftest.err conftest.$ac_objext \
     RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_INTERNAL"
     RANDOM_FRONTEND="Internal"
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
+            { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&5
 $as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen automatically)" >&6;}
 
 fi
-            ;;
+     ;; #(
+  xarc4random) :
 
-        xarc4random)
-            if test "${HAVE_SECURE_ARC4RANDOM}" = "Yes"; then :
+        if test "${HAVE_SECURE_ARC4RANDOM}" = "Yes"; then :
 
 
 
     RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_ARC4RANDOM"
     RANDOM_FRONTEND="Secure arc4random(3)"
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
+            { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
 $as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&6;}
 
 else
 
-                as_fn_error $? "--with-rng-api-frontend=arc4random requires a secure arc4random(3)" "$LINENO" 5
+            as_fn_error $? "--with-rng-api-frontend=arc4random requires a secure arc4random(3)" "$LINENO" 5
 
 fi
-            ;;
+     ;; #(
+  xsodium) :
 
-        xsodium)
-            if test "${LIBSODIUM}${LIBSODIUM_RANDOM}" = "YesYes"; then :
+        if test "${LIBSODIUM}${LIBSODIUM_RANDOM}" = "YesYes"; then :
 
 
 
     RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_SODIUM"
     RANDOM_FRONTEND="Sodium"
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
+            { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
 $as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&6;}
 
 else
 
-                as_fn_error $? "--with-rng-api-frontend=sodium requires --with-sodium and a usable random number generator" "$LINENO" 5
+            as_fn_error $? "--with-rng-api-frontend=sodium requires --with-sodium and a usable random number generator" "$LINENO" 5
 
 fi
-            ;;
+     ;; #(
+  xopenssl) :
 
-        xopenssl | xlibressl)
-            if test "${LIBCRYPTO}${LIBCRYPTO_RANDOM}" = "YesYes"; then :
+        if test "${LIBCRYPTO}${LIBCRYPTO_RANDOM}" = "YesYes"; then :
 
 
 
     RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_OPENSSL"
     RANDOM_FRONTEND="${LIBCRYPTO_NAME}"
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
+            { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
 $as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&6;}
 
 else
 
-                as_fn_error $? "--with-rng-api-frontend=openssl/libressl requires --with-openssl and a usable random number generator" "$LINENO" 5
+            as_fn_error $? "--with-rng-api-frontend=openssl requires --with-openssl and a usable random number generator" "$LINENO" 5
 
 fi
-            ;;
+     ;; #(
+  xlibressl) :
 
-        xmbedtls)
-            if test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_RANDOM}" = "YesYes"; then :
+        if test "${LIBCRYPTO}${LIBCRYPTO_RANDOM}" = "YesYes"; then :
+
+
+
+    RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_OPENSSL"
+    RANDOM_FRONTEND="${LIBCRYPTO_NAME}"
+
+            { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
+$as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&6;}
+
+else
+
+            as_fn_error $? "--with-rng-api-frontend=libressl requires --with-openssl and a usable random number generator" "$LINENO" 5
+
+fi
+     ;; #(
+  xmbedtls) :
+
+        if test "${LIBMBEDCRYPTO}${LIBMBEDCRYPTO_RANDOM}" = "YesYes"; then :
 
 
 
     RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_MBEDTLS"
     RANDOM_FRONTEND="ARM mbedTLS"
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
+            { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
 $as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&6;}
 
 else
 
-                as_fn_error $? "--with-rng-api-frontend=mbedtls requires --with-mbedtls and a usable random number generator" "$LINENO" 5
+            as_fn_error $? "--with-rng-api-frontend=mbedtls requires --with-mbedtls and a usable random number generator" "$LINENO" 5
 
 fi
-            ;;
+     ;; #(
+  xinternal) :
 
-        xinternal)
 
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking if getentropy(3) is available" >&5
@@ -12517,14 +12641,14 @@ rm -f core conftest.err conftest.$ac_objext \
     RANDOM_FRONTEND_VAL="ATHEME_API_RANDOM_FRONTEND_INTERNAL"
     RANDOM_FRONTEND="Internal"
 
-            { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&5
 $as_echo "$as_me: using RNG frontend: ${RANDOM_FRONTEND} (chosen by user)" >&6;}
-            ;;
+     ;; #(
+  *) :
 
-        *)
-            as_fn_error $? "invalid option for --with-rng-api-frontend (auto, arc4random, sodium, openssl, libressl, mbedtls, internal)" "$LINENO" 5
-            ;;
-    esac
+        as_fn_error $? "invalid option for --with-rng-api-frontend (auto, arc4random, sodium, openssl, libressl, mbedtls, internal)" "$LINENO" 5
+     ;;
+esac
 
 
 cat >>confdefs.h <<_ACEOF
@@ -12550,16 +12674,70 @@ else
 fi
 
 
-    case "x${enable_compiler_sanitizers}" in
+    case "x${enable_compiler_sanitizers}" in #(
+  xno) :
 
-        xyes)
-            if test "${HEAP_ALLOCATOR}" = "Yes"; then :
+        # Enable compiler optimisations (what autoconf would have done if we didn't explicitly overrule it)
 
-                as_fn_error $? "To use --enable-compiler-sanitizers you must pass --disable-heap-allocator" "$LINENO" 5
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -O2 " >&5
+$as_echo_n "checking for C compiler flag(s) -O2 ... " >&6; }
+
+    CFLAGS_SAVED="${CFLAGS:-}"
+    CFLAGS="${CFLAGS:-}${CFLAGS:+ }-O2"
+
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+            #ifdef HAVE_STDDEF_H
+            #  include <stddef.h>
+            #endif
+            static int
+            return_zero(void)
+            {
+                return 0;
+            }
+
+int
+main ()
+{
+
+            int zero = return_zero();
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        ATHEME_TEST_CC_FLAGS_RESULT="yes"
+
+else
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        ATHEME_TEST_CC_FLAGS_RESULT="no"
+        CFLAGS="${CFLAGS_SAVED}"
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+    unset CFLAGS_SAVED
+
+     ;; #(
+  xyes) :
+
+        if test "${HEAP_ALLOCATOR}" = "Yes"; then :
+
+            as_fn_error $? "To use --enable-compiler-sanitizers you must pass --disable-heap-allocator" "$LINENO" 5
 
 fi
 
-            # Disable compiler optimisations for more accurate stack-traces
+        # Disable compiler optimisations for more accurate stack-traces
 
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -O0 " >&5
@@ -12611,7 +12789,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
     unset CFLAGS_SAVED
 
 
-            # -fsanitize= benefits from these, but they're not strictly necessary
+        # -fsanitize= benefits from these, but they're not strictly necessary
 
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fno-omit-frame-pointer " >&5
@@ -12713,13 +12891,13 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
     unset CFLAGS_SAVED
 
 
-            # Some compilers (like Clang) require LTO to be enabled for some of their sanitizers to function.
-            # This test will fail if you are using Clang and not using an LLVM bitcode-parsing-capable linker.
-            # Clang in LTO mode compiles to LLVM bitcode, not machine code.
-            #
-            # The linker is responsible for translating that to machine code. If you want to use Clang, you
-            # must set LDFLAGS="-fuse-ld=lld", to use the LLVM linker, or you can use the Gold linker with
-            # the LLVM linker plugin (an exercise for the reader).
+        # Some compilers (like Clang) require LTO to be enabled for some of their sanitizers to function.
+        # This test will fail if you are using Clang and not using an LLVM bitcode-parsing-capable linker.
+        # Clang in LTO mode compiles to LLVM bitcode, not machine code.
+        #
+        # The linker is responsible for translating that to machine code. If you want to use Clang, you
+        # must set LDFLAGS="-fuse-ld=lld", to use the LLVM linker, or you can use the Gold linker with
+        # the LLVM linker plugin (an exercise for the reader).
 
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler *and* linker flag(s) -fvisibility=default -flto " >&5
@@ -12777,16 +12955,16 @@ rm -f core conftest.err conftest.$ac_objext \
     unset LDFLAGS_SAVED
 
 
-            if test "${ATHEME_TEST_CCLD_FLAGS_RESULT}" = "no"; then :
+        if test "${ATHEME_TEST_CCLD_FLAGS_RESULT}" = "no"; then :
 
-                { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+            { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "--enable-compiler-sanitizers was given, but LTO (a common pre-requisite) could not be enabled
 See \`config.log' for more details" "$LINENO" 5; }
 
 fi
 
-            # Now on to the good stuff ...
+        # Now on to the good stuff ...
 
 
 
@@ -12917,7 +13095,7 @@ rm -f core conftest.err conftest.$ac_objext \
 
 fi
 
-            if test "${ATHEME_TEST_CCLD_FLAGS_RESULT}" = "no"; then :
+        if test "${ATHEME_TEST_CCLD_FLAGS_RESULT}" = "no"; then :
 
 
 
@@ -13246,7 +13424,7 @@ rm -f core conftest.err conftest.$ac_objext \
 
 fi
 
-            if test "${ATHEME_TEST_CCLD_FLAGS_RESULT}" = "no"; then :
+        if test "${ATHEME_TEST_CCLD_FLAGS_RESULT}" = "no"; then :
 
 
 
@@ -13703,7 +13881,7 @@ rm -f core conftest.err conftest.$ac_objext \
 
 fi
 
-                if test "${ATHEME_TEST_CCLD_FLAGS_RESULT}" = "no"; then :
+            if test "${ATHEME_TEST_CCLD_FLAGS_RESULT}" = "no"; then :
 
 
 
@@ -13770,7 +13948,7 @@ rm -f core conftest.err conftest.$ac_objext \
 
 fi
 
-                    if test "${ATHEME_TEST_CCLD_FLAGS_RESULT}" = "no"; then :
+                if test "${ATHEME_TEST_CCLD_FLAGS_RESULT}" = "no"; then :
 
 
 
@@ -14099,7 +14277,7 @@ rm -f core conftest.err conftest.$ac_objext \
 
 fi
 
-                    if test "${ATHEME_TEST_CCLD_FLAGS_RESULT}" = "no"; then :
+                if test "${ATHEME_TEST_CCLD_FLAGS_RESULT}" = "no"; then :
 
 
 
@@ -14495,7 +14673,7 @@ rm -f core conftest.err conftest.$ac_objext \
 
 fi
 
-                if test "${ATHEME_TEST_CCLD_FLAGS_RESULT}" = "no"; then :
+            if test "${ATHEME_TEST_CCLD_FLAGS_RESULT}" = "no"; then :
 
 
 
@@ -15152,16 +15330,16 @@ fi
 
 fi
 
-            if test "${COMPILER_SANITIZERS}" = "No"; then :
+        if test "${COMPILER_SANITIZERS}" = "No"; then :
 
-                { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+            { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "--enable-compiler-sanitizers was given, but no sanitizers could be enabled
 See \`config.log' for more details" "$LINENO" 5; }
 
 fi
 
-            # This causes pointless noise, turn it off.
+        # This causes pointless noise, turn it off.
 
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler *and* linker flag(s) -fno-sanitize=unsigned-integer-overflow " >&5
@@ -15222,66 +15400,12 @@ rm -f core conftest.err conftest.$ac_objext \
 
 $as_echo "#define ATHEME_ENABLE_COMPILER_SANITIZERS 1" >>confdefs.h
 
-            ;;
+     ;; #(
+  *) :
 
-        xno)
-            # Enable compiler optimisations (what autoconf would have done if we didn't explicitly overrule it)
-
-
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -O2 " >&5
-$as_echo_n "checking for C compiler flag(s) -O2 ... " >&6; }
-
-    CFLAGS_SAVED="${CFLAGS:-}"
-    CFLAGS="${CFLAGS:-}${CFLAGS:+ }-O2"
-
-    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-            #ifdef HAVE_STDDEF_H
-            #  include <stddef.h>
-            #endif
-            static int
-            return_zero(void)
-            {
-                return 0;
-            }
-
-int
-main ()
-{
-
-            int zero = return_zero();
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-        ATHEME_TEST_CC_FLAGS_RESULT="yes"
-
-else
-
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-        ATHEME_TEST_CC_FLAGS_RESULT="no"
-        CFLAGS="${CFLAGS_SAVED}"
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-    unset CFLAGS_SAVED
-
-            ;;
-
-        *)
-            as_fn_error $? "invalid option for --enable-compiler-sanitizers" "$LINENO" 5
-            ;;
-    esac
+        as_fn_error $? "invalid option for --enable-compiler-sanitizers" "$LINENO" 5
+     ;;
+esac
 
 
 
@@ -15293,9 +15417,11 @@ else
 fi
 
 
-    case "x${enable_fortify_source}" in
+    case "x${enable_fortify_source}" in #(
+  xno) :
+     ;; #(
+  xyes) :
 
-        xyes)
 
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C preprocessor flag(s) -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 " >&5
@@ -15346,15 +15472,12 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
     unset CPPFLAGS_SAVED
 
-            ;;
+     ;; #(
+  *) :
 
-        xno)
-            ;;
-
-        *)
-            as_fn_error $? "invalid option for --enable-fortify-source" "$LINENO" 5
-            ;;
-    esac
+        as_fn_error $? "invalid option for --enable-fortify-source" "$LINENO" 5
+     ;;
+esac
 
 
 
@@ -15392,9 +15515,11 @@ fi
 
 
 
-    case "x${enable_async_unwind_tables}" in
+    case "x${enable_async_unwind_tables}" in #(
+  xno) :
+     ;; #(
+  xyes) :
 
-        xyes)
 
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fasynchronous-unwind-tables " >&5
@@ -15445,19 +15570,18 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
     unset CFLAGS_SAVED
 
-            ;;
+     ;; #(
+  *) :
 
-        xno)
-            ;;
+        as_fn_error $? "invalid option for --enable-async-unwind-tables" "$LINENO" 5
+     ;;
+esac
 
-        *)
-            as_fn_error $? "invalid option for --enable-async-unwind-tables" "$LINENO" 5
-            ;;
-    esac
+    case "x${enable_debugging_symbols}" in #(
+  xno) :
+     ;; #(
+  xyes) :
 
-    case "x${enable_debugging_symbols}" in
-
-        xyes)
 
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -gdwarf-4 " >&5
@@ -15508,7 +15632,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
     unset CFLAGS_SAVED
 
-            if test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"; then :
+        if test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"; then :
 
 
 
@@ -15560,7 +15684,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
     unset CFLAGS_SAVED
 
-                if test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"; then :
+            if test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"; then :
 
 
 
@@ -15612,9 +15736,9 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
     unset CFLAGS_SAVED
 
-                    if test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"; then :
+                if test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"; then :
 
-                        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: --enable-debugging-symbols was given, but they could not be enabled" >&5
+                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: --enable-debugging-symbols was given, but they could not be enabled" >&5
 $as_echo "$as_me: WARNING: --enable-debugging-symbols was given, but they could not be enabled" >&2;}
 
 fi
@@ -15622,19 +15746,18 @@ fi
 fi
 
 fi
-            ;;
+     ;; #(
+  *) :
 
-        xno)
-            ;;
+        as_fn_error $? "invalid option for --enable-debugging-symbols" "$LINENO" 5
+     ;;
+esac
 
-        *)
-            as_fn_error $? "invalid option for --enable-debugging-symbols" "$LINENO" 5
-            ;;
-    esac
+    case "x${enable_stack_clash_protection}" in #(
+  xno) :
+     ;; #(
+  xyes) :
 
-    case "x${enable_stack_clash_protection}" in
-
-        xyes)
 
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-clash-protection " >&5
@@ -15685,19 +15808,18 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
     unset CFLAGS_SAVED
 
-            ;;
+     ;; #(
+  *) :
 
-        xno)
-            ;;
+        as_fn_error $? "invalid option for --enable-stack-clash-protection" "$LINENO" 5
+     ;;
+esac
 
-        *)
-            as_fn_error $? "invalid option for --enable-stack-clash-protection" "$LINENO" 5
-            ;;
-    esac
+    case "x${enable_stack_protector}" in #(
+  xno) :
+     ;; #(
+  xyes) :
 
-    case "x${enable_stack_protector}" in
-
-        xyes)
 
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fstack-protector-all " >&5
@@ -15748,7 +15870,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
     unset CFLAGS_SAVED
 
-            if test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"; then :
+        if test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"; then :
 
 
 
@@ -15800,7 +15922,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
     unset CFLAGS_SAVED
 
-                if test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"; then :
+            if test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"; then :
 
 
 
@@ -15856,15 +15978,12 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 
 fi
-            ;;
+     ;; #(
+  *) :
 
-        xno)
-            ;;
-
-        *)
-            as_fn_error $? "invalid option for --enable-stack-protector" "$LINENO" 5
-            ;;
-    esac
+        as_fn_error $? "invalid option for --enable-stack-protector" "$LINENO" 5
+     ;;
+esac
 
 
 
@@ -15926,9 +16045,11 @@ fi
 
 
 
-    case "x${enable_profile}" in
+    case "x${enable_profile}" in #(
+  xno) :
+     ;; #(
+  xyes) :
 
-        xyes)
 
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -pg " >&5
@@ -15980,19 +16101,18 @@ rm -f core conftest.err conftest.$ac_objext \
 
     unset LDFLAGS_SAVED
 
-            ;;
+     ;; #(
+  *) :
 
-        xno)
-            ;;
+        as_fn_error $? "invalid option for --enable-profile" "$LINENO" 5
+     ;;
+esac
 
-        *)
-            as_fn_error $? "invalid option for --enable-profile" "$LINENO" 5
-            ;;
-    esac
+    case "x${enable_relro}" in #(
+  xno) :
+     ;; #(
+  xyes) :
 
-    case "x${enable_relro}" in
-
-        xyes)
 
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,-z,relro " >&5
@@ -16044,19 +16164,18 @@ rm -f core conftest.err conftest.$ac_objext \
 
     unset LDFLAGS_SAVED
 
-            ;;
+     ;; #(
+  *) :
 
-        xno)
-            ;;
+        as_fn_error $? "invalid option for --enable-relro" "$LINENO" 5
+     ;;
+esac
 
-        *)
-            as_fn_error $? "invalid option for --enable-relro" "$LINENO" 5
-            ;;
-    esac
+    case "x${enable_nonlazy_bind}" in #(
+  xno) :
+     ;; #(
+  xyes) :
 
-    case "x${enable_nonlazy_bind}" in
-
-        xyes)
 
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,-z,now " >&5
@@ -16108,22 +16227,21 @@ rm -f core conftest.err conftest.$ac_objext \
 
     unset LDFLAGS_SAVED
 
-            ;;
+     ;; #(
+  *) :
 
-        xno)
-            ;;
+        as_fn_error $? "invalid option for --enable-nonlazy-bind" "$LINENO" 5
+     ;;
+esac
 
-        *)
-            as_fn_error $? "invalid option for --enable-nonlazy-bind" "$LINENO" 5
-            ;;
-    esac
+    case "x${enable_linker_defs}" in #(
+  xno) :
+     ;; #(
+  xyes) :
 
-    case "x${enable_linker_defs}" in
+        if test "${COMPILER_SANITIZERS}" = "Yes"; then :
 
-        xyes)
-            if test "${COMPILER_SANITIZERS}" = "Yes"; then :
-
-                as_fn_error $? "To use --enable-compiler-sanitizers you must pass --disable-linker-defs" "$LINENO" 5
+            as_fn_error $? "To use --enable-compiler-sanitizers you must pass --disable-linker-defs" "$LINENO" 5
 
 fi
 
@@ -16177,19 +16295,18 @@ rm -f core conftest.err conftest.$ac_objext \
 
     unset LDFLAGS_SAVED
 
-            ;;
+     ;; #(
+  *) :
 
-        xno)
-            ;;
+        as_fn_error $? "invalid option for --enable-linker-defs" "$LINENO" 5
+     ;;
+esac
 
-        *)
-            as_fn_error $? "invalid option for --enable-linker-defs" "$LINENO" 5
-            ;;
-    esac
+    case "x${enable_noexecstack}" in #(
+  xno) :
+     ;; #(
+  xyes) :
 
-    case "x${enable_noexecstack}" in
-
-        xyes)
 
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,-z,noexecstack " >&5
@@ -16241,19 +16358,18 @@ rm -f core conftest.err conftest.$ac_objext \
 
     unset LDFLAGS_SAVED
 
-            ;;
+     ;; #(
+  *) :
 
-        xno)
-            ;;
+        as_fn_error $? "invalid option for --enable-noexecstack" "$LINENO" 5
+     ;;
+esac
 
-        *)
-            as_fn_error $? "invalid option for --enable-noexecstack" "$LINENO" 5
-            ;;
-    esac
+    case "x${enable_as_needed}" in #(
+  xno) :
+     ;; #(
+  xyes) :
 
-    case "x${enable_as_needed}" in
-
-        xyes)
 
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) -Wl,--as-needed " >&5
@@ -16305,19 +16421,18 @@ rm -f core conftest.err conftest.$ac_objext \
 
     unset LDFLAGS_SAVED
 
-            ;;
+     ;; #(
+  *) :
 
-        xno)
-            ;;
+        as_fn_error $? "invalid option for --enable-as-needed" "$LINENO" 5
+     ;;
+esac
 
-        *)
-            as_fn_error $? "invalid option for --enable-as-needed" "$LINENO" 5
-            ;;
-    esac
+    case "x${enable_rpath}" in #(
+  xno) :
+     ;; #(
+  xyes) :
 
-    case "x${enable_rpath}" in
-
-        xyes)
 
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for C linker flag(s) ${LDFLAGS_RPATH} " >&5
@@ -16369,15 +16484,12 @@ rm -f core conftest.err conftest.$ac_objext \
 
     unset LDFLAGS_SAVED
 
-            ;;
+     ;; #(
+  *) :
 
-        xno)
-            ;;
-
-        *)
-            as_fn_error $? "invalid option for --enable-rpath" "$LINENO" 5
-            ;;
-    esac
+        as_fn_error $? "invalid option for --enable-rpath" "$LINENO" 5
+     ;;
+esac
 
 
 
@@ -17094,19 +17206,11 @@ else
 fi
 
 
-    case "x${enable_nls}" in
+    case "x${enable_nls}" in #(
+  xno) :
+     ;; #(
+  xyes) :
 
-        xyes | xno)
-            ;;
-
-        *)
-            as_fn_error $? "invalid option for --enable-nls" "$LINENO" 5
-            ;;
-    esac
-
-    if test "${enable_nls}" = "yes"; then :
-
-        USE_NLS="yes"
 
 
       GETTEXT_MACRO_VERSION=0.19
@@ -18501,8 +18605,12 @@ else
 $as_echo "$as_me: WARNING: NLS was requested but is unavailable" >&2;}
 
 fi
+     ;; #(
+  *) :
 
-fi
+        as_fn_error $? "invalid option for --enable-nls" "$LINENO" 5
+     ;;
+esac
 
 
 
@@ -18518,10 +18626,12 @@ else
 fi
 
 
-    case "x${enable_warnings}" in
+    case "x${enable_warnings}" in #(
+  xno) :
+     ;; #(
+  xyes) :
 
-        xyes)
-            BUILD_WARNINGS="Yes"
+        BUILD_WARNINGS="Yes"
 
 
 
@@ -22242,16 +22352,12 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
     unset CFLAGS_SAVED
 
 
-            ;;
+     ;; #(
+  *) :
 
-        xno)
-            BUILD_WARNINGS="No"
-            ;;
-
-        *)
-            as_fn_error $? "invalid option for --enable-warnings" "$LINENO" 5
-            ;;
-    esac
+        as_fn_error $? "invalid option for --enable-warnings" "$LINENO" 5
+     ;;
+esac
 
 
 # Save toolchain variables in case we will be configuring submodules
@@ -22277,15 +22383,18 @@ else
 fi
 
 
-    case "x${with_libmowgli}" in
-        xno | xyes)
-            ;;
-        x/*)
-            ;;
-        *)
-            as_fn_error $? "invalid option for --with-libmowgli" "$LINENO" 5
-            ;;
-    esac
+    case "x${with_libmowgli}" in #(
+  xno) :
+     ;; #(
+  xyes) :
+     ;; #(
+  x/*) :
+     ;; #(
+  *) :
+
+        as_fn_error $? "invalid option for --with-libmowgli" "$LINENO" 5
+     ;;
+esac
 
     if test "x${with_libmowgli}" = "xyes"; then :
 

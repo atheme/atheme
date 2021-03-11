@@ -19,17 +19,12 @@ AC_DEFUN([ATHEME_LIBTEST_QRENCODE], [
         [AS_HELP_STRING([--without-qrencode], [Do not attempt to detect libqrencode (for generating QR codes)])],
         [], [with_qrencode="auto"])
 
-    case "x${with_qrencode}" in
-        xno | xyes | xauto)
-            ;;
-        x/*)
-            LIBQRENCODE_PATH="${with_qrencode}"
-            with_qrencode="yes"
-            ;;
-        *)
-            AC_MSG_ERROR([invalid option for --with-qrencode])
-            ;;
-    esac
+    AS_CASE(["x${with_qrencode}"], [xno], [], [xyes], [], [xauto], [], [x/*], [
+        LIBQRENCODE_PATH="${with_qrencode}"
+        with_qrencode="yes"
+    ], [
+        AC_MSG_ERROR([invalid option for --with-qrencode])
+    ])
 
     AS_IF([test "${with_qrencode}" != "no"], [
         AS_IF([test -n "${LIBQRENCODE_PATH}"], [

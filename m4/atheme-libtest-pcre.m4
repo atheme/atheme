@@ -19,17 +19,12 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
         [AS_HELP_STRING([--without-pcre], [Do not attempt to detect libpcre (Perl-Compatible Regular Expressions)])],
         [], [with_pcre="auto"])
 
-    case "x${with_pcre}" in
-        xno | xyes | xauto)
-            ;;
-        x/*)
-            LIBPCRE_PATH="${with_pcre}"
-            with_pcre="yes"
-            ;;
-        *)
-            AC_MSG_ERROR([invalid option for --with-pcre])
-            ;;
-    esac
+    AS_CASE(["x${with_pcre}"], [xno], [], [xyes], [], [xauto], [], [x/*], [
+        LIBPCRE_PATH="${with_pcre}"
+        with_pcre="yes"
+    ], [
+        AC_MSG_ERROR([invalid option for --with-pcre])
+    ])
 
     AS_IF([test "${with_pcre}" != "no"], [
         AS_IF([test -n "${LIBPCRE_PATH}"], [

@@ -23,13 +23,9 @@ AC_DEFUN([ATHEME_LIBTEST_MBEDCRYPTO], [
         [AS_HELP_STRING([--without-mbedtls], [Do not attempt to detect ARM mbedTLS (cryptographic library)])],
         [], [with_mbedtls="auto"])
 
-    case "x${with_mbedtls}" in
-        xno | xyes | xauto)
-            ;;
-        *)
-            AC_MSG_ERROR([invalid option for --with-mbedtls])
-            ;;
-    esac
+    AS_CASE(["x${with_mbedtls}"], [xno], [], [xyes], [], [xauto], [], [
+        AC_MSG_ERROR([invalid option for --with-mbedtls])
+    ])
 
     AS_IF([test "${with_mbedtls}" != "no"], [
         # If this library ever starts shipping a pkg-config file, change to PKG_CHECK_MODULES ?

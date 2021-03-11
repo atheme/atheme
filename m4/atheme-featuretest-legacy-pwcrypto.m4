@@ -15,20 +15,11 @@ AC_DEFUN([ATHEME_FEATURETEST_LEGACY_PWCRYPTO], [
         [AS_HELP_STRING([--enable-legacy-pwcrypto], [Enable legacy password crypto modules])],
         [], [enable_legacy_pwcrypto="no"])
 
-    case "x${enable_legacy_pwcrypto}" in
-
-        xyes)
-            LEGACY_PWCRYPTO="Yes"
-            AC_DEFINE([ATHEME_ENABLE_LEGACY_PWCRYPTO], [1], [Define to 1 if --enable-legacy-pwcrypto was given to ./configure])
-            ATHEME_COND_LEGACY_PWCRYPTO_ENABLE
-            ;;
-
-        xno)
-            LEGACY_PWCRYPTO="No"
-            ;;
-
-        *)
-            AC_MSG_ERROR([invalid option for --enable-legacy-pwcrypto])
-            ;;
-    esac
+    AS_CASE(["x${enable_legacy_pwcrypto}"], [xno], [], [xyes], [
+        LEGACY_PWCRYPTO="Yes"
+        AC_DEFINE([ATHEME_ENABLE_LEGACY_PWCRYPTO], [1], [Define to 1 if --enable-legacy-pwcrypto was given to ./configure])
+        ATHEME_COND_LEGACY_PWCRYPTO_ENABLE
+    ], [
+        AC_MSG_ERROR([invalid option for --enable-legacy-pwcrypto])
+    ])
 ])

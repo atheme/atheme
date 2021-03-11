@@ -14,15 +14,9 @@ AC_DEFUN([ATHEME_FEATURETEST_ECDSA_NIST256P_TOOLS], [
         [AS_HELP_STRING([--disable-ecdsa-nist256p-tools], [Don't build the SASL ECDSA-NIST256P-CHALLENGE utilities])],
         [], [enable_ecdsa_nist256p_tools="auto"])
 
-    case "x${enable_ecdsa_nist256p_tools}" in
-
-        xauto | xyes | xno)
-            ;;
-
-        *)
-            AC_MSG_ERROR([invalid option for --enable-ecdsa-nist256p-tools])
-            ;;
-    esac
+    AS_CASE(["x${enable_ecdsa_nist256p_tools}"], [xno], [], [xyes], [], [xauto], [], [
+        AC_MSG_ERROR([invalid option for --enable-ecdsa-nist256p-tools])
+    ])
 
     AS_IF([test "${enable_ecdsa_nist256p_tools}" != "no"], [
         AS_IF([test "x${FEATURE_SASL_ECDSA_NIST256P_CHALLENGE}" = "xYes"], [

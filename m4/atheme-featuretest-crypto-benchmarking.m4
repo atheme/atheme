@@ -17,15 +17,9 @@ AC_DEFUN([ATHEME_FEATURETEST_CRYPTO_BENCHMARKING], [
         [AS_HELP_STRING([--disable-crypto-benchmarking], [Don't build the crypto benchmarking utility])],
         [], [enable_crypto_benchmarking="auto"])
 
-    case "x${enable_crypto_benchmarking}" in
-
-        xauto | xyes | xno)
-            ;;
-
-        *)
-            AC_MSG_ERROR([invalid option for --enable-crypto-benchmarking])
-            ;;
-    esac
+    AS_CASE(["x${enable_crypto_benchmarking}"], [xno], [], [xyes], [], [xauto], [], [
+        AC_MSG_ERROR([invalid option for --enable-crypto-benchmarking])
+    ])
 
     AS_IF([test "${enable_crypto_benchmarking}" != "no"], [
         AC_SEARCH_LIBS([clock_gettime], [rt], [
@@ -37,6 +31,12 @@ AC_DEFUN([ATHEME_FEATURETEST_CRYPTO_BENCHMARKING], [
             AC_MSG_CHECKING([if clock_gettime(2) appears to be usable])
             AC_LINK_IFELSE([
                 AC_LANG_PROGRAM([[
+                    #ifdef HAVE_STDLIB_H
+                    #  include <stdlib.h>
+                    #endif
+                    #ifdef HAVE_SYS_TIME_H
+                    #  include <sys/time.h>
+                    #endif
                     #ifdef HAVE_TIME_H
                     #  include <time.h>
                     #endif

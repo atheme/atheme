@@ -121,10 +121,8 @@ AC_DEFUN([ATHEME_CHECK_BUILD_REQUIREMENTS], [
     LIBS="${DYNAMIC_LD_LIBS} ${LIBS}"
 
     # If we're building on Windows we need socket and regex libraries from mingw
-    case "${host}" in
-        *-*-mingw32)
-            CPPFLAGS="-I/mingw/include ${CPPFLAGS}"
-            LIBS="-lwsock32 -lws2_32 -lregex ${LIBS}"
-            ;;
-    esac
+    AS_CASE(["${host}"], [*-*-mingw32], [
+        CPPFLAGS="-I/mingw/include ${CPPFLAGS}"
+        LIBS="-lwsock32 -lws2_32 -lregex ${LIBS}"
+    ])
 ])

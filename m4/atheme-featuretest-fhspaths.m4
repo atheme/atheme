@@ -21,25 +21,17 @@ AC_DEFUN([ATHEME_FEATURETEST_FHSPATHS], [
         [AS_HELP_STRING([--enable-fhs-paths], [Use more FHS-like pathnames (for packagers)])],
         [], [enable_fhs_paths="no"])
 
-    case "x${enable_fhs_paths}" in
-
-        xyes)
-            AC_DEFINE([ATHEME_ENABLE_FHS_PATHS], [1], [Define to 1 if --enable-fhs-paths was given to ./configure])
-            DATADIR='${localstatedir}/lib/atheme'
-            DOCDIR='${datadir}/doc/atheme'
-            LOGDIR='${localstatedir}/log/atheme'
-            MODDIR='${libdir}/atheme'
-            RUNDIR='${localstatedir}/run/atheme'
-            SHAREDIR='${datadir}/atheme'
-            ;;
-
-        xno)
-            ;;
-
-        *)
-            AC_MSG_ERROR([invalid option for --enable-fhs-paths])
-            ;;
-    esac
+    AS_CASE(["x${enable_fhs_paths}"], [xno], [], [xyes], [
+        AC_DEFINE([ATHEME_ENABLE_FHS_PATHS], [1], [Define to 1 if --enable-fhs-paths was given to ./configure])
+        DATADIR='${localstatedir}/lib/atheme'
+        DOCDIR='${datadir}/doc/atheme'
+        LOGDIR='${localstatedir}/log/atheme'
+        MODDIR='${libdir}/atheme'
+        RUNDIR='${localstatedir}/run/atheme'
+        SHAREDIR='${datadir}/atheme'
+    ], [
+        AC_MSG_ERROR([invalid option for --enable-fhs-paths])
+    ])
 
     AC_SUBST([DATADIR])
     AC_SUBST([DOCDIR])
