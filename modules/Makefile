@@ -18,7 +18,7 @@ SUBDIRS =                   \
     botserv                 \
     chanfix                 \
     chanserv                \
-    ${CONTRIB_COND_D}       \
+    ${SUBMODULE_CONTRIB}    \
     crypto                  \
     exttarget               \
     gameserv                \

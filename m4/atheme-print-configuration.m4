@@ -78,7 +78,7 @@ Configuration of ${PACKAGE_STRING}:
   Build Features:
     Build Warnings ..........: ${BUILD_WARNINGS}
     Compiler Sanitizers .....: ${COMPILER_SANITIZERS}
-    Mowgli Installation .....: ${MOWGLI_SOURCE}
+    Mowgli Installation .....: ${LIBMOWGLI_SOURCE}
 
   Build Variables:
     CC ......................: ${CC}

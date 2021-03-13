@@ -10,7 +10,7 @@
 -include extra.mk
 
 SUBDIRS =                   \
-    ${LIBMOWGLI_COND_D}     \
+    ${SUBMODULE_LIBMOWGLI}  \
     ${PODIR_COND_D}         \
     include                 \
     libathemecore           \
@@ -28,6 +28,6 @@ buildsys.mk:
 	@exit 1
 
 # Explicit dependencies need to be expressed to ensure parallel builds don't die
-libathemecore: ${LIBMOWGLI_COND_D} include
+libathemecore: ${SUBMODULE_LIBMOWGLI} include
 modules: libathemecore
 src: libathemecore

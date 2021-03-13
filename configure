@@ -628,9 +628,8 @@ enable_option_checking=no
 ac_subst_vars='subdirs_extra
 LTLIBOBJS
 LIBOBJS
-LIBMOWGLI_COND_D
-MOWGLI_LIBS
-MOWGLI_CFLAGS
+SUBMODULE_CONTRIB
+SUBMODULE_LIBMOWGLI
 USE_NLS
 PODIR_COND_D
 POSUB
@@ -661,7 +660,6 @@ ECDSA_NIST256P_TOOLS_COND_D
 ECDH_X25519_TOOL_COND_D
 CLOCK_GETTIME_LIBS
 CRYPTO_BENCHMARK_COND_D
-CONTRIB_COND_D
 CONTRIB_LIBS
 LIBPERL_LIBS
 LIBPERL_CFLAGS
@@ -678,6 +676,8 @@ LIBPASSWDQC_LIBS
 LIBPASSWDQC_CFLAGS
 LIBNETTLE_LIBS
 LIBNETTLE_CFLAGS
+LIBMOWGLI_LIBS
+LIBMOWGLI_CFLAGS
 LIBMBEDCRYPTO_LIBS
 LIBMBEDCRYPTO_CFLAGS
 LIBLDAP_LIBS
@@ -808,6 +808,7 @@ with_gcrypt
 with_idn
 with_ldap
 with_mbedtls
+with_libmowgli
 with_nettle
 with_passwdqc
 with_pcre
@@ -843,7 +844,6 @@ with_gnu_ld
 with_libiconv_prefix
 with_libintl_prefix
 enable_warnings
-with_libmowgli
 '
       ac_precious_vars='build_alias
 host_alias
@@ -863,6 +863,8 @@ LIBCRYPTO_CFLAGS
 LIBCRYPTO_LIBS
 LIBIDN_CFLAGS
 LIBIDN_LIBS
+LIBMOWGLI_CFLAGS
+LIBMOWGLI_LIBS
 LIBNETTLE_CFLAGS
 LIBNETTLE_LIBS
 LIBPCRE_CFLAGS
@@ -870,9 +872,7 @@ LIBPCRE_LIBS
 LIBQRENCODE_CFLAGS
 LIBQRENCODE_LIBS
 LIBSODIUM_CFLAGS
-LIBSODIUM_LIBS
-MOWGLI_CFLAGS
-MOWGLI_LIBS'
+LIBSODIUM_LIBS'
 
 
 # Initialize some variables set by options.
@@ -1567,6 +1567,10 @@ Optional Packages:
                           modules/auth/ldap)
   --without-mbedtls       Do not attempt to detect ARM mbedTLS (cryptographic
                           library)
+  --with-libmowgli[=prefix]
+                          Specify location of system libmowgli install, "yes"
+                          to ask pkg-config, or "no" to force use of internal
+                          libmowgli submodule (default)
   --without-nettle        Do not attempt to detect nettle (cryptographic
                           library)
   --without-passwdqc      Do not attempt to detect libpasswdqc (for
@@ -1590,10 +1594,6 @@ Optional Packages:
   --without-libiconv-prefix     don't search for libiconv in includedir and libdir
   --with-libintl-prefix[=DIR]  search for libintl in DIR/include and DIR/lib
   --without-libintl-prefix     don't search for libintl in includedir and libdir
-  --with-libmowgli[=prefix]
-                          Specify location of system libmowgli install, "yes"
-                          to ask pkg-config, or "no" to force use of internal
-                          libmowgli submodule (default)
 
 Some influential environment variables:
   CC          C compiler command
@@ -1620,6 +1620,10 @@ Some influential environment variables:
   LIBIDN_CFLAGS
               C compiler flags for LIBIDN, overriding pkg-config
   LIBIDN_LIBS linker flags for LIBIDN, overriding pkg-config
+  LIBMOWGLI_CFLAGS
+              C compiler flags for LIBMOWGLI, overriding pkg-config
+  LIBMOWGLI_LIBS
+              linker flags for LIBMOWGLI, overriding pkg-config
   LIBNETTLE_CFLAGS
               C compiler flags for LIBNETTLE, overriding pkg-config
   LIBNETTLE_LIBS
@@ -1636,9 +1640,6 @@ Some influential environment variables:
               C compiler flags for LIBSODIUM, overriding pkg-config
   LIBSODIUM_LIBS
               linker flags for LIBSODIUM, overriding pkg-config
-  MOWGLI_CFLAGS
-              C compiler flags for MOWGLI, overriding pkg-config
-  MOWGLI_LIBS linker flags for MOWGLI, overriding pkg-config
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -9880,6 +9881,134 @@ fi
 
 
 
+    LIBMOWGLI_SOURCE=""
+    LIBMOWGLI_CFLAGS=""
+    LIBMOWGLI_LIBS=""
+
+
+# Check whether --with-libmowgli was given.
+if test "${with_libmowgli+set}" = set; then :
+  withval=$with_libmowgli;
+else
+  with_libmowgli="no"
+fi
+
+
+    case "x${with_libmowgli}" in #(
+  xno) :
+
+        LIBMOWGLI_SOURCE="Internal"
+        LIBMOWGLI_CFLAGS="-I$(pwd)/libmowgli-2/src/libmowgli"
+        LIBMOWGLI_LIBS="-L$(pwd)/libmowgli-2/src/libmowgli -lmowgli-2"
+     ;; #(
+  xyes) :
+
+        if test -z "${PKG_CONFIG}"; then :
+
+            as_fn_error $? "--with-libmowgli=yes was given, but pkg-config is required and is not available" "$LINENO" 5
+
+fi
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBMOWGLI" >&5
+$as_echo_n "checking for LIBMOWGLI... " >&6; }
+
+if test -n "$LIBMOWGLI_CFLAGS"; then
+    pkg_cv_LIBMOWGLI_CFLAGS="$LIBMOWGLI_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmowgli-2 >= 2.0.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libmowgli-2 >= 2.0.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBMOWGLI_CFLAGS=`$PKG_CONFIG --cflags "libmowgli-2 >= 2.0.0" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$LIBMOWGLI_LIBS"; then
+    pkg_cv_LIBMOWGLI_LIBS="$LIBMOWGLI_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmowgli-2 >= 2.0.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libmowgli-2 >= 2.0.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBMOWGLI_LIBS=`$PKG_CONFIG --libs "libmowgli-2 >= 2.0.0" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        LIBMOWGLI_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libmowgli-2 >= 2.0.0" 2>&1`
+        else
+	        LIBMOWGLI_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libmowgli-2 >= 2.0.0" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$LIBMOWGLI_PKG_ERRORS" >&5
+
+
+            as_fn_error $? "--with-libmowgli=yes was given, but pkg-config could not locate libmowgli" "$LINENO" 5
+
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+            as_fn_error $? "--with-libmowgli=yes was given, but pkg-config could not locate libmowgli" "$LINENO" 5
+
+else
+	LIBMOWGLI_CFLAGS=$pkg_cv_LIBMOWGLI_CFLAGS
+	LIBMOWGLI_LIBS=$pkg_cv_LIBMOWGLI_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+fi
+        LIBMOWGLI_SOURCE="System (pkg-config)"
+     ;; #(
+  x/*) :
+
+        if test -d "${with_libmowgli}/include/libmowgli-2" -a -d "${with_libmowgli}/lib"; then :
+
+else
+
+            as_fn_error $? "${with_libmowgli} is not a suitable directory for libmowgli" "$LINENO" 5
+
+fi
+        LIBMOWGLI_SOURCE="System (${with_libmowgli})"
+        LIBMOWGLI_CFLAGS="-I${with_libmowgli}/include/libmowgli-2"
+        LIBMOWGLI_LIBS="-L${with_libmowgli}/lib -lmowgli-2"
+     ;; #(
+  *) :
+
+        as_fn_error $? "invalid option for --with-libmowgli" "$LINENO" 5
+     ;;
+esac
+
+
+
+
+
+
     CFLAGS_SAVED="${CFLAGS}"
     LIBS_SAVED="${LIBS}"
 
@@ -12242,11 +12371,6 @@ fi
         CONTRIB_MODULES="Yes"
 
 $as_echo "#define ATHEME_ENABLE_CONTRIB 1" >>confdefs.h
-
-
-
-    CONTRIB_COND_D="contrib"
-
 
      ;; #(
   *) :
@@ -22415,188 +22539,20 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 esac
 
 
-# Save toolchain variables in case we will be configuring submodules
-SUBCONF_CC="${CC}"
-SUBCONF_LD="${LD}"
-SUBCONF_CFLAGS="${CFLAGS}"
-SUBCONF_CPPFLAGS="${CPPFLAGS}"
-SUBCONF_LDFLAGS="${LDFLAGS}"
-SUBCONF_LIBS="${LIBS}"
-
-# Mowgli test must be last or it will interfere with linker tests (the library may not yet exist)
-# It would also pollute CPPFLAGS, LDFLAGS and/or LIBS above
-
-
-    MOWGLI_SOURCE=""
-
-
-# Check whether --with-libmowgli was given.
-if test "${with_libmowgli+set}" = set; then :
-  withval=$with_libmowgli;
-else
-  with_libmowgli="no"
-fi
-
-
-    case "x${with_libmowgli}" in #(
-  xno) :
-     ;; #(
-  xyes) :
-     ;; #(
-  x/*) :
-     ;; #(
-  *) :
-
-        as_fn_error $? "invalid option for --with-libmowgli" "$LINENO" 5
-     ;;
-esac
-
-    if test "x${with_libmowgli}" = "xyes"; then :
-
-        if test -n "${PKG_CONFIG}"; then :
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for MOWGLI" >&5
-$as_echo_n "checking for MOWGLI... " >&6; }
-
-if test -n "$MOWGLI_CFLAGS"; then
-    pkg_cv_MOWGLI_CFLAGS="$MOWGLI_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmowgli-2 >= 2.0.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libmowgli-2 >= 2.0.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_MOWGLI_CFLAGS=`$PKG_CONFIG --cflags "libmowgli-2 >= 2.0.0" 2>/dev/null`
-		      test "x$?" != "x0" && pkg_failed=yes
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$MOWGLI_LIBS"; then
-    pkg_cv_MOWGLI_LIBS="$MOWGLI_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmowgli-2 >= 2.0.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libmowgli-2 >= 2.0.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_MOWGLI_LIBS=`$PKG_CONFIG --libs "libmowgli-2 >= 2.0.0" 2>/dev/null`
-		      test "x$?" != "x0" && pkg_failed=yes
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libmowgli-2 >= 2.0.0" 2>&1`
-        else
-	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libmowgli-2 >= 2.0.0" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$MOWGLI_PKG_ERRORS" >&5
-
-	with_libmowgli="no"
-elif test $pkg_failed = untried; then
-     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-	with_libmowgli="no"
-else
-	MOWGLI_CFLAGS=$pkg_cv_MOWGLI_CFLAGS
-	MOWGLI_LIBS=$pkg_cv_MOWGLI_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-fi
-
-else
-
-            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: --with-libmowgli=yes cannot be used while pkg-config is unavailable -- falling back to internal libmowgli submodule" >&5
-$as_echo "$as_me: WARNING: --with-libmowgli=yes cannot be used while pkg-config is unavailable -- falling back to internal libmowgli submodule" >&2;}
-            with_libmowgli="no"
-
-fi
-
-fi
-
-    if test "x${with_libmowgli}" = "xyes"; then :
-
-        MOWGLI_SOURCE="System"
-        CFLAGS="${CFLAGS} ${MOWGLI_CFLAGS}"
-        LIBS="${LIBS} ${MOWGLI_LIBS}"
-
-elif test "x${with_libmowgli}" = "xno"; then :
-
-        MOWGLI_SOURCE="Internal"
-        CPPFLAGS="${CPPFLAGS} -I$(pwd)/libmowgli-2/src/libmowgli"
-        LDFLAGS="${LDFLAGS} -L$(pwd)/libmowgli-2/src/libmowgli"
-        LIBS="${LIBS} -lmowgli-2"
-
-
-    LIBMOWGLI_COND_D="libmowgli-2"
-
-
-
-elif test -d "${with_libmowgli}/include/libmowgli-2" -a -d "${with_libmowgli}/lib"; then :
-
-        MOWGLI_SOURCE="System"
-        CPPFLAGS="${CPPFLAGS} -I${with_libmowgli}/include/libmowgli-2"
-        LDFLAGS="${LDFLAGS} -L${with_libmowgli}/lib"
-        LIBS="${LIBS} -lmowgli-2"
-
-else
-
-        as_fn_error $? "${with_libmowgli} is not a suitable directory for libmowgli" "$LINENO" 5
-
-fi
+# Handle enabling and configuration of submodules
 
 
 
 
-# Now add PCRE CFLAGS and LIBS because libathemecore and the headers need it if it is available
-if test "x${LIBPCRE_CFLAGS}" != "x"; then :
-  CFLAGS="${LIBPCRE_CFLAGS} ${CFLAGS}"
-fi
-if test "x${LIBPCRE_LIBS}" != "x"; then :
-  LIBS="${LIBPCRE_LIBS} ${LIBS}"
-fi
+    if test "${LIBMOWGLI_SOURCE}" = "Internal"; then :
 
 
+        SUBMODULE_LIBMOWGLI=libmowgli-2
 
 
-	${as_echo:="echo"} ${as_me:="configure"}": touching .deps files"
-	for i in $(find . -name Makefile); do
-		DEPSFILE="$(dirname $i)/.deps"
-		test -f "$DEPSFILE" && rm "$DEPSFILE"
-		touch -t 0001010000 "$DEPSFILE"
-	done
-
-
-
-
-if test "x${MOWGLI_SOURCE}" = "xInternal"; then :
-
-
-    # Run ./configure in the libmowgli submodule directory but without OpenSSL support
-    # Atheme does not use the OpenSSL VIO interface in Mowgli and this avoids an unnecessary -lssl
+        # Run ./configure in the libmowgli submodule directory but without OpenSSL support
+        # Atheme does not use the OpenSSL VIO interface in Mowgli and this avoids an unnecessary -lssl
+        # The arguments to remove (last macro argument) must be on one line
 
 
 
@@ -22688,13 +22644,13 @@ ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
       ax_args="--disable-option-checking $ax_args"
       # Options that must be added as they are provided.
       as_fn_append ax_args " '--without-openssl'"
-      as_fn_append ax_args " 'CC="\${SUBCONF_CC}"'"
-      as_fn_append ax_args " 'LD="\${SUBCONF_LD}"'"
-      as_fn_append ax_args " 'CFLAGS="\${SUBCONF_CFLAGS}"'"
-      as_fn_append ax_args " 'CPPFLAGS="\${SUBCONF_CPPFLAGS}"'"
-      as_fn_append ax_args " 'LDFLAGS="\${SUBCONF_LDFLAGS}"'"
-      as_fn_append ax_args " 'LIBS="\${SUBCONF_LIBS}"
-    '"
+      as_fn_append ax_args " 'CC="\${CC}"'"
+      as_fn_append ax_args " 'LD="\${LD}"'"
+      as_fn_append ax_args " 'CFLAGS="\${CFLAGS}"'"
+      as_fn_append ax_args " 'CPPFLAGS="\${CPPFLAGS}"'"
+      as_fn_append ax_args " 'LDFLAGS="\${LDFLAGS}"'"
+      as_fn_append ax_args " 'LIBS="\${LIBS}"
+        '"
 
       # New options that may need to be merged with existing options.
       ax_candidate=""
@@ -22743,6 +22699,31 @@ $as_echo "$as_me: WARNING: could not find source tree for $ax_dir" >&2;}
 
 
 fi
+
+    if test "${CONTRIB_MODULES}" = "Yes"; then :
+
+
+        SUBMODULE_CONTRIB=contrib
+
+
+fi
+
+
+# Now add libmowgli and libpcre to CFLAGS and LIBS because the whole codebase uses them
+if test "x${LIBMOWGLI_CFLAGS}" != "x"; then :
+  CFLAGS="${LIBMOWGLI_CFLAGS} ${CFLAGS}"
+fi
+if test "x${LIBMOWGLI_LIBS}" != "x"; then :
+  LIBS="${LIBMOWGLI_LIBS} ${LIBS}"
+fi
+if test "x${LIBPCRE_CFLAGS}" != "x"; then :
+  CFLAGS="${LIBPCRE_CFLAGS} ${CFLAGS}"
+fi
+if test "x${LIBPCRE_LIBS}" != "x"; then :
+  LIBS="${LIBPCRE_LIBS} ${LIBS}"
+fi
+
+
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -24265,6 +24246,13 @@ $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
 
 
+	${as_echo:="echo"} ${as_me:="configure"}": touching .deps files"
+	for i in $(find . -name Makefile); do
+		DEPSFILE="$(dirname $i)/.deps"
+		test -f "$DEPSFILE" && rm "$DEPSFILE"
+		touch -t 0001010000 "$DEPSFILE"
+	done
+
 
 
     if test "${DIGEST_FRONTEND}" = "Internal"; then :
@@ -24356,7 +24344,7 @@ Configuration of ${PACKAGE_STRING}:
   Build Features:
     Build Warnings ..........: ${BUILD_WARNINGS}
     Compiler Sanitizers .....: ${COMPILER_SANITIZERS}
-    Mowgli Installation .....: ${MOWGLI_SOURCE}
+    Mowgli Installation .....: ${LIBMOWGLI_SOURCE}
 
   Build Variables:
     CC ......................: ${CC}

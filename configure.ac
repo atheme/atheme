@@ -127,6 +127,7 @@ ATHEME_LIBTEST_GCRYPT
 ATHEME_LIBTEST_IDN
 ATHEME_LIBTEST_LDAP
 ATHEME_LIBTEST_MBEDCRYPTO
+ATHEME_LIBTEST_MOWGLI
 ATHEME_LIBTEST_NETTLE
 ATHEME_LIBTEST_PASSWDQC
 ATHEME_LIBTEST_PCRE
@@ -164,39 +165,17 @@ ATHEME_FEATURETEST_LDFLAGS
 ATHEME_FEATURETEST_NLS
 ATHEME_FEATURETEST_WARNINGS
 
-# Save toolchain variables in case we will be configuring submodules
-SUBCONF_CC="${CC}"
-SUBCONF_LD="${LD}"
-SUBCONF_CFLAGS="${CFLAGS}"
-SUBCONF_CPPFLAGS="${CPPFLAGS}"
-SUBCONF_LDFLAGS="${LDFLAGS}"
-SUBCONF_LIBS="${LIBS}"
+# Handle enabling and configuration of submodules
+ATHEME_HANDLE_SUBMODULES
 
-# Mowgli test must be last or it will interfere with linker tests (the library may not yet exist)
-# It would also pollute CPPFLAGS, LDFLAGS and/or LIBS above
-ATHEME_LIBTEST_MOWGLI
-
-
-
-# Now add PCRE CFLAGS and LIBS because libathemecore and the headers need it if it is available
+# Now add libmowgli and libpcre to CFLAGS and LIBS because the whole codebase uses them
+AS_IF([test "x${LIBMOWGLI_CFLAGS}" != "x"], [CFLAGS="${LIBMOWGLI_CFLAGS} ${CFLAGS}"])
+AS_IF([test "x${LIBMOWGLI_LIBS}" != "x"], [LIBS="${LIBMOWGLI_LIBS} ${LIBS}"])
 AS_IF([test "x${LIBPCRE_CFLAGS}" != "x"], [CFLAGS="${LIBPCRE_CFLAGS} ${CFLAGS}"])
 AS_IF([test "x${LIBPCRE_LIBS}" != "x"], [LIBS="${LIBPCRE_LIBS} ${LIBS}"])
 
 
 
-BUILDSYS_TOUCH_DEPS
-
-AS_IF([test "x${MOWGLI_SOURCE}" = "xInternal"], [
-
-    # Run ./configure in the libmowgli submodule directory but without OpenSSL support
-    # Atheme does not use the OpenSSL VIO interface in Mowgli and this avoids an unnecessary -lssl
-
-    AX_SUBDIRS_CONFIGURE([libmowgli-2], [
-        [--without-openssl], [CC="\${SUBCONF_CC}"], [LD="\${SUBCONF_LD}"], [CFLAGS="\${SUBCONF_CFLAGS}"],
-        [CPPFLAGS="\${SUBCONF_CPPFLAGS}"], [LDFLAGS="\${SUBCONF_LDFLAGS}"], [LIBS="\${SUBCONF_LIBS}"]
-    ], [[]], [[]], [[--with-openssl], [--with-openssl=auto], [--with-openssl=yes]])
-])
-
 AC_OUTPUT
-
+BUILDSYS_TOUCH_DEPS
 ATHEME_PRINT_CONFIGURATION
