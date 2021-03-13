@@ -5,6 +5,7 @@ on:
     branches:
       - 'master'
     paths-ignore:
+      - '.gitattributes'
       - '.github/workflows/periodic-*'
       - 'ABOUT-NLS'
       - 'contrib/**'
@@ -22,6 +23,7 @@ on:
       - 'master'
       - 'release/**'
     paths-ignore:
+      - '.gitattributes'
       - '.github/workflows/periodic-*'
       - 'ABOUT-NLS'
       - 'contrib/**'
