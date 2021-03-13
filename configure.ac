@@ -136,6 +136,10 @@ ATHEME_LIBTEST_SODIUM
 # Libraries that need to be explicitly enabled (alphabetical)
 ATHEME_LIBTEST_PERL
 
+# Digest and RNG frontend to use in libathemecore
+ATHEME_DECIDE_DIGEST_FRONTEND
+ATHEME_DECIDE_RANDOM_FRONTEND
+
 # Optional features
 # These must be after library tests, because some of them depend on the
 # library detection logic in the tests to set appropriate variables
@@ -148,10 +152,6 @@ ATHEME_FEATURETEST_HEAP_ALLOCATOR
 ATHEME_FEATURETEST_LARGENET
 ATHEME_FEATURETEST_LEGACY_PWCRYPTO
 ATHEME_FEATURETEST_REPROBUILDS
-
-# Digest and RNG frontend to use in libathemecore
-ATHEME_DECIDE_DIGEST_FRONTEND
-ATHEME_DECIDE_RANDOM_FRONTEND
 
 # These must be here, not above, or they might interfere with library and feature tests
 # Explanation is that these modify one or more of CFLAGS, CPPFLAGS, LDFLAGS, and LIBS
