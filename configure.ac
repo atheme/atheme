@@ -88,6 +88,11 @@ AC_PATH_PROG([RM], [rm])
 AC_PROG_SED
 AC_PATH_PROG([TAR], [tar])
 PKG_PROG_PKG_CONFIG
+AS_IF([test -z "${PKG_CONFIG}"], [
+    AC_MSG_WARN([please consider installing pkg-config])
+    AC_MSG_WARN([many of this script's library and feature detection tests rely upon it being available])
+    AC_MSG_WARN([if you choose to do so, please re-run this script again])
+])
 
 # Does what its name implies. The above block can't be put into this function
 # because of autotools black magic voodoo crap that no-one understands ...
@@ -195,7 +200,3 @@ AS_IF([test "x${MOWGLI_SOURCE}" = "xInternal"], [
 AC_OUTPUT
 
 ATHEME_PRINT_CONFIGURATION
-
-AS_IF([test -z "${PKG_CONFIG}"], [
-    AC_MSG_WARN([please consider installing pkg-config -- many of this script's library and feature detection tests rely upon it being available. if you choose to do so, please re-run this script after.])
-])

@@ -4423,6 +4423,16 @@ $as_echo "no" >&6; }
 		PKG_CONFIG=""
 	fi
 fi
+if test -z "${PKG_CONFIG}"; then :
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: please consider installing pkg-config" >&5
+$as_echo "$as_me: WARNING: please consider installing pkg-config" >&2;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: many of this script's library and feature detection tests rely upon it being available" >&5
+$as_echo "$as_me: WARNING: many of this script's library and feature detection tests rely upon it being available" >&2;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: if you choose to do so, please re-run this script again" >&5
+$as_echo "$as_me: WARNING: if you choose to do so, please re-run this script again" >&2;}
+
+fi
 
 # Does what its name implies. The above block can't be put into this function
 # because of autotools black magic voodoo crap that no-one understands ...
@@ -24360,10 +24370,3 @@ Type 'make' to build ${PACKAGE_TARNAME}, and 'make install' to install it.
 "
 
 
-
-if test -z "${PKG_CONFIG}"; then :
-
-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: please consider installing pkg-config -- many of this script's library and feature detection tests rely upon it being available. if you choose to do so, please re-run this script after." >&5
-$as_echo "$as_me: WARNING: please consider installing pkg-config -- many of this script's library and feature detection tests rely upon it being available. if you choose to do so, please re-run this script after." >&2;}
-
-fi
