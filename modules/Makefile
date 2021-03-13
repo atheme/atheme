@@ -12,13 +12,13 @@
 include ../extra.mk
 
 SUBDIRS =                   \
-    ${CONTRIB_COND_D}       \
     alis                    \
     auth                    \
     backend                 \
     botserv                 \
     chanfix                 \
     chanserv                \
+    ${CONTRIB_COND_D}       \
     crypto                  \
     exttarget               \
     gameserv                \
