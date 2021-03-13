@@ -2639,8 +2639,10 @@ ac_config_sub="$SHELL $ac_aux_dir/config.sub"  # Please don't use this var.
 ac_configure="$SHELL $ac_aux_dir/configure"  # Please don't use this var.
 
 
+ac_config_files="$ac_config_files buildsys.mk extra.mk"
 
 ac_config_headers="$ac_config_headers include/atheme/sysconf.h"
+
 
 
 
@@ -22733,9 +22735,6 @@ $as_echo "$as_me: WARNING: could not find source tree for $ax_dir" >&2;}
 
 fi
 
-ac_config_files="$ac_config_files buildsys.mk extra.mk"
-
-
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -23539,10 +23538,10 @@ cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
-    "include/atheme/sysconf.h") CONFIG_HEADERS="$CONFIG_HEADERS include/atheme/sysconf.h" ;;
-    "po-directories") CONFIG_COMMANDS="$CONFIG_COMMANDS po-directories" ;;
     "buildsys.mk") CONFIG_FILES="$CONFIG_FILES buildsys.mk" ;;
     "extra.mk") CONFIG_FILES="$CONFIG_FILES extra.mk" ;;
+    "include/atheme/sysconf.h") CONFIG_HEADERS="$CONFIG_HEADERS include/atheme/sysconf.h" ;;
+    "po-directories") CONFIG_COMMANDS="$CONFIG_COMMANDS po-directories" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
