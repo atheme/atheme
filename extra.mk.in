@@ -5,7 +5,7 @@
 # Copyright (C) 2010 Stephen Bennett <spb@exherbo.org>
 # Copyright (C) 2012 Nathan Phillip Brink <binki@gentoo.org>
 # Copyright (C) 2017 Wade Cline <wadecline@hotmail.com>
-# Copyright (C) 2017-2020 Aaron M. D. Jones <aaronmdjones@gmail.com>
+# Copyright (C) 2017-2021 Aaron M. D. Jones <me@aaronmdjones.net>
 #
 # This file should only contain variables that are *not* in buildsys.mk.in,
 # *and* that are needed by one (or more) of the codebase Makefiles, *OR*
@@ -15,104 +15,124 @@
 #   -- amdj
 
 # Programs used by the build system
-SED ?= @SED@
-
-# Autoconf Directories
-prefix ?= @prefix@
-exec_prefix ?= @exec_prefix@
-datarootdir ?= @datarootdir@
-datadir ?= @datadir@
-bindir ?= @bindir@
-docdir ?= @docdir@
-dvidir ?= @dvidir@
-htmldir ?= @htmldir@
-includedir ?= @includedir@
-infodir ?= @infodir@
-libdir ?= @libdir@
-libexecdir ?= @libexecdir@
-localedir ?= @localedir@
-localstatedir ?= @localstatedir@
-mandir ?= @mandir@
-pdfdir ?= @pdfdir@
-psdir ?= @psdir@
-sbindir ?= @sbindir@
-sharedstatedir ?= @sharedstatedir@
-sysconfdir ?= @sysconfdir@
-
-# Our Directories
-DATADIR ?= @DATADIR@
-DOCDIR ?= @docdir@
-LOCALEDIR ?= @LOCALEDIR@
-LOGDIR ?= @LOGDIR@
-MODDIR ?= @MODDIR@
-RUNDIR ?= @RUNDIR@
-SHAREDIR ?= @SHAREDIR@
-
-# Detected Libraries
-CLOCK_GETTIME_LIBS ?= @CLOCK_GETTIME_LIBS@
-CONTRIB_LIBS ?= @CONTRIB_LIBS@
-LIBARGON2_LIBS ?= @LIBARGON2_LIBS@
-LIBCRACK_LIBS ?= @LIBCRACK_LIBS@
-LIBCRYPT_LIBS ?= @LIBCRYPT_LIBS@
-LIBCRYPTO_LIBS ?= @LIBCRYPTO_LIBS@
-LIBDL_LIBS ?= @LIBDL_LIBS@
-LIBGCRYPT_LIBS ?= @LIBGCRYPT_LIBS@
-LIBIDN_LIBS ?= @LIBIDN_LIBS@
-LIBLDAP_LIBS ?= @LIBLDAP_LIBS@
-LIBMATH_LIBS ?= @LIBMATH_LIBS@
-LIBMBEDCRYPTO_LIBS ?= @LIBMBEDCRYPTO_LIBS@
-LIBNETTLE_LIBS ?= @LIBNETTLE_LIBS@
-LIBPASSWDQC_LIBS ?= @LIBPASSWDQC_LIBS@
-LIBPCRE_LIBS ?= @LIBPCRE_LIBS@
-LIBPERL_LIBS ?= @LIBPERL_LIBS@
-LIBQRENCODE_LIBS ?= @LIBQRENCODE_LIBS@
-LIBSOCKET_LIBS ?= @LIBSOCKET_LIBS@
-LIBSODIUM_LIBS ?= @LIBSODIUM_LIBS@
-
-# Detected Libraries (CFLAGS provided by pkg-config). Some of these will be
-# perpetually empty, but they're here to prepare for when pkg-config starts
-# working for the library in question, so that our Makefiles can reference
-# them unconditionally and benefit automatically in future.
-LIBARGON2_CFLAGS ?= @LIBARGON2_CFLAGS@
-LIBCRACK_CFLAGS ?= @LIBCRACK_CFLAGS@
-LIBCRYPT_CFLAGS ?= @LIBCRYPT_CFLAGS@
-LIBCRYPTO_CFLAGS ?= @LIBCRYPTO_CFLAGS@
-LIBGCRYPT_CFLAGS ?= @LIBGCRYPT_CFLAGS@
-LIBIDN_CFLAGS ?= @LIBIDN_CFLAGS@
-LIBLDAP_CFLAGS ?= @LIBLDAP_CFLAGS@
-LIBMBEDCRYPTO_CFLAGS ?= @LIBMBEDCRYPTO_CFLAGS@
-LIBNETTLE_CFLAGS ?= @LIBNETTLE_CFLAGS@
-LIBPASSWDQC_CFLAGS ?= @LIBPASSWDQC_CFLAGS@
-LIBPCRE_CFLAGS ?= @LIBPCRE_CFLAGS@
-LIBPERL_CFLAGS ?= @LIBPERL_CFLAGS@
-LIBQRENCODE_CFLAGS ?= @LIBQRENCODE_CFLAGS@
-LIBSODIUM_CFLAGS ?= @LIBSODIUM_CFLAGS@
-
-# Conditionally-Compiled Files
-LEGACY_PWCRYPTO_COND_D ?= @LEGACY_PWCRYPTO_COND_D@
-QRCODE_COND_C ?= @QRCODE_COND_C@
-
-# Conditionally-Compiled Directories
-CONTRIB_COND_D ?= @CONTRIB_COND_D@
-CRYPTO_BENCHMARK_COND_D ?= @CRYPTO_BENCHMARK_COND_D@
-ECDH_X25519_TOOL_COND_D ?= @ECDH_X25519_TOOL_COND_D@
-ECDSA_NIST256P_TOOLS_COND_D ?= @ECDSA_NIST256P_TOOLS_COND_D@
-LIBMOWGLI_COND_D ?= @LIBMOWGLI_COND_D@
-PERL_COND_D ?= @PERL_COND_D@
-PODIR_COND_D ?= @PODIR_COND_D@
+#
+SED                             ?= @SED@
 
 # Misc
-LIB_CFLAGS = @LIB_CFLAGS@
-LIB_LDFLAGS = @LIB_LDFLAGS@
-LIB_PREFIX = @LIB_PREFIX@
-LIB_SUFFIX = @LIB_SUFFIX@
-PACKAGE_BUGREPORT ?= @PACKAGE_BUGREPORT@
-PACKAGE_BUGREPORT_I18N ?= @PACKAGE_BUGREPORT_I18N@
-PACKAGE_NAME = @PACKAGE_NAME@
-PACKAGE_STRING = @PACKAGE_STRING@
-PACKAGE_TARNAME = @PACKAGE_TARNAME@
-PACKAGE_URL ?= @PACKAGE_URL@
-PACKAGE_VERSION = @PACKAGE_VERSION@
-PROG_SUFFIX = @EXEEXT@
-USE_NLS ?= @USE_NLS@
-VENDOR_STRING ?= @VENDOR_STRING@
+#
+LIB_PREFIX                      ?= @LIB_PREFIX@
+LIB_SUFFIX                      ?= @LIB_SUFFIX@
+PACKAGE_BUGREPORT               ?= @PACKAGE_BUGREPORT@
+PACKAGE_BUGREPORT_I18N          ?= @PACKAGE_BUGREPORT_I18N@
+PACKAGE_NAME                    ?= @PACKAGE_NAME@
+PACKAGE_STRING                  ?= @PACKAGE_STRING@
+PACKAGE_TARNAME                 ?= @PACKAGE_TARNAME@
+PACKAGE_URL                     ?= @PACKAGE_URL@
+PACKAGE_VERSION                 ?= @PACKAGE_VERSION@
+PROG_SUFFIX                     ?= @EXEEXT@
+USE_NLS                         ?= @USE_NLS@
+VENDOR_STRING                   ?= @VENDOR_STRING@
+
+# Autoconf Directories
+#
+prefix                          ?= @prefix@
+exec_prefix                     ?= @exec_prefix@
+datarootdir                     ?= @datarootdir@
+datadir                         ?= @datadir@
+bindir                          ?= @bindir@
+docdir                          ?= @docdir@
+dvidir                          ?= @dvidir@
+htmldir                         ?= @htmldir@
+includedir                      ?= @includedir@
+infodir                         ?= @infodir@
+libdir                          ?= @libdir@
+libexecdir                      ?= @libexecdir@
+localedir                       ?= @localedir@
+localstatedir                   ?= @localstatedir@
+mandir                          ?= @mandir@
+pdfdir                          ?= @pdfdir@
+psdir                           ?= @psdir@
+sbindir                         ?= @sbindir@
+sharedstatedir                  ?= @sharedstatedir@
+sysconfdir                      ?= @sysconfdir@
+
+# Our Directories
+#
+DATADIR                         ?= @DATADIR@
+DOCDIR                          ?= @docdir@
+LOCALEDIR                       ?= @LOCALEDIR@
+LOGDIR                          ?= @LOGDIR@
+MODDIR                          ?= @MODDIR@
+RUNDIR                          ?= @RUNDIR@
+SHAREDIR                        ?= @SHAREDIR@
+
+# Special Libraries
+#
+# These are the ones required by various parts of the core codebase. Their
+# detection is not optional; there is no --without-libfoo option provided.
+#
+CLOCK_GETTIME_LIBS              ?= @CLOCK_GETTIME_LIBS@
+CONTRIB_LIBS                    ?= @CONTRIB_LIBS@
+LIBDL_LIBS                      ?= @LIBDL_LIBS@
+LIBMATH_LIBS                    ?= @LIBMATH_LIBS@
+LIBSOCKET_LIBS                  ?= @LIBSOCKET_LIBS@
+
+# Detected Libraries
+#
+# Some of these variables, in particular the _CFLAGS variables, will always
+# be empty, for one or more of the following reasons:
+#
+# 1) The library tests use pkg-config, but the upstream pkg-config files
+#    distributed by those libraries never export a value for CFLAGS.
+#
+# 2) The library tests don't use pkg-config, usually because the libraries
+#    don't distribute a pkg-config file, but we've replicated the names of
+#    the variables in case they start doing so in the future, so that it is
+#    easier to switch to using pkg-config for detection when they do.
+#
+# 3) The library is not available for your machine architecture, and so can
+#    never be detected by the configure script.
+#
+LIBARGON2_CFLAGS                ?= @LIBARGON2_CFLAGS@
+LIBARGON2_LIBS                  ?= @LIBARGON2_LIBS@
+LIBCRACK_CFLAGS                 ?= @LIBCRACK_CFLAGS@
+LIBCRACK_LIBS                   ?= @LIBCRACK_LIBS@
+LIBCRYPT_CFLAGS                 ?= @LIBCRYPT_CFLAGS@
+LIBCRYPT_LIBS                   ?= @LIBCRYPT_LIBS@
+LIBCRYPTO_CFLAGS                ?= @LIBCRYPTO_CFLAGS@
+LIBCRYPTO_LIBS                  ?= @LIBCRYPTO_LIBS@
+LIBGCRYPT_CFLAGS                ?= @LIBGCRYPT_CFLAGS@
+LIBGCRYPT_LIBS                  ?= @LIBGCRYPT_LIBS@
+LIBIDN_CFLAGS                   ?= @LIBIDN_CFLAGS@
+LIBIDN_LIBS                     ?= @LIBIDN_LIBS@
+LIBLDAP_CFLAGS                  ?= @LIBLDAP_CFLAGS@
+LIBLDAP_LIBS                    ?= @LIBLDAP_LIBS@
+LIBMBEDCRYPTO_CFLAGS            ?= @LIBMBEDCRYPTO_CFLAGS@
+LIBMBEDCRYPTO_LIBS              ?= @LIBMBEDCRYPTO_LIBS@
+LIBNETTLE_CFLAGS                ?= @LIBNETTLE_CFLAGS@
+LIBNETTLE_LIBS                  ?= @LIBNETTLE_LIBS@
+LIBPASSWDQC_CFLAGS              ?= @LIBPASSWDQC_CFLAGS@
+LIBPASSWDQC_LIBS                ?= @LIBPASSWDQC_LIBS@
+LIBPCRE_CFLAGS                  ?= @LIBPCRE_CFLAGS@
+LIBPCRE_LIBS                    ?= @LIBPCRE_LIBS@
+LIBPERL_CFLAGS                  ?= @LIBPERL_CFLAGS@
+LIBPERL_LIBS                    ?= @LIBPERL_LIBS@
+LIBQRENCODE_CFLAGS              ?= @LIBQRENCODE_CFLAGS@
+LIBQRENCODE_LIBS                ?= @LIBQRENCODE_LIBS@
+LIBSODIUM_CFLAGS                ?= @LIBSODIUM_CFLAGS@
+LIBSODIUM_LIBS                  ?= @LIBSODIUM_LIBS@
+
+# Conditionally-Compiled Files
+#
+QRCODE_COND_C                   ?= @QRCODE_COND_C@
+
+# Conditionally-Compiled Directories
+#
+CONTRIB_COND_D                  ?= @CONTRIB_COND_D@
+CRYPTO_BENCHMARK_COND_D         ?= @CRYPTO_BENCHMARK_COND_D@
+ECDH_X25519_TOOL_COND_D         ?= @ECDH_X25519_TOOL_COND_D@
+ECDSA_NIST256P_TOOLS_COND_D     ?= @ECDSA_NIST256P_TOOLS_COND_D@
+LEGACY_PWCRYPTO_COND_D          ?= @LEGACY_PWCRYPTO_COND_D@
+LIBMOWGLI_COND_D                ?= @LIBMOWGLI_COND_D@
+PERL_COND_D                     ?= @PERL_COND_D@
+PODIR_COND_D                    ?= @PODIR_COND_D@
