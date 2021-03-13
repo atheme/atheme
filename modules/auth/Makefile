@@ -17,4 +17,6 @@ include ../../buildsys.module.mk
 
 CPPFLAGS += -I../../include
 LDFLAGS  += -L../../libathemecore
-LIBS     += ${LDAP_LIBS} -lathemecore
+
+CFLAGS   += ${LIBLDAP_CFLAGS}
+LIBS     += ${LIBLDAP_LIBS} -lathemecore

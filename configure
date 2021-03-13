@@ -680,8 +680,8 @@ LIBNETTLE_LIBS
 LIBNETTLE_CFLAGS
 LIBMBEDCRYPTO_LIBS
 LIBMBEDCRYPTO_CFLAGS
-LDAP_LIBS
-LDAP_CFLAGS
+LIBLDAP_LIBS
+LIBLDAP_CFLAGS
 LIBIDN_LIBS
 LIBIDN_CFLAGS
 LIBGCRYPT_LIBS
@@ -9285,9 +9285,8 @@ fi
     LIBS_SAVED="${LIBS}"
 
     LIBLDAP="No"
-
-    LDAP_CFLAGS=""
-    LDAP_LIBS=""
+    LIBLDAP_CFLAGS=""
+    LIBLDAP_LIBS=""
 
 
 # Check whether --with-ldap was given.
@@ -9403,7 +9402,7 @@ $as_echo "#define HAVE_LIBLDAP 1" >>confdefs.h
 
                 if test "x${ac_cv_search_ldap_initialize}" != "xnone required"; then :
 
-                    LDAP_LIBS="${ac_cv_search_ldap_initialize}"
+                    LIBLDAP_LIBS="${ac_cv_search_ldap_initialize}"
 
 fi
 
@@ -9444,8 +9443,8 @@ fi
 
     if test "${LDAP}" = "No"; then :
 
-        LDAP_CFLAGS=""
-        LDAP_LIBS=""
+        LIBLDAP_CFLAGS=""
+        LIBLDAP_LIBS=""
 
 fi
 
