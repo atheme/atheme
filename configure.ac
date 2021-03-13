@@ -9,7 +9,7 @@ AC_PREREQ([2.69])
 AC_LANG([C])
 AC_INIT([Atheme IRC Services], [7.3.0-rc2], [https://github.com/atheme/atheme/issues/], [atheme], [https://atheme.github.io/])
 
-AC_CONFIG_AUX_DIR([autoconf])
+AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADER([include/atheme/sysconf.h])
 AC_CONFIG_SRCDIR([src/services/main.c])
