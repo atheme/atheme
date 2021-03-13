@@ -24,7 +24,7 @@ os_cmd_set_commitinterval_func(struct sourceinfo *const restrict si, const int p
 
 	if (! db_save)
 	{
-		(void) command_fail(si, fault_badparams, _("You have no write-capable database backend loaded."));
+		(void) command_fail(si, fault_unimplemented, _("You have no write-capable database backend loaded."));
 		return;
 	}
 

@@ -24,7 +24,7 @@ os_cmd_readonly(struct sourceinfo *si, int parc, char *parv[])
 
 	if (! db_save)
 	{
-		(void) command_fail(si, fault_badparams, _("You have no write-capable database backend loaded."));
+		(void) command_fail(si, fault_unimplemented, _("You have no write-capable database backend loaded."));
 		return;
 	}
 
