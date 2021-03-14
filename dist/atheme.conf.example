@@ -2546,7 +2546,7 @@ general {
 	 * Network webpage for services help. Shown to users when they request
 	 * help for a command that doesn't exist.
 	 */
-	#helpurl = "http://www.stack.nl/~jilles/irc/atheme-help/";
+	#helpurl = "https://www.stack.nl/~jilles/irc/atheme-help/";
 
 	/* (*) silent
 	 *
