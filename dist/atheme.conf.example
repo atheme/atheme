@@ -1579,6 +1579,10 @@ uplink "irc6.example.net" {
  *              You may also add completely custom privileges; they are just
  *              strings.
  *
+ *              For an example of the syntax to use for restricting access to
+ *              commands using this configuration item, see the bottom of
+ *              doc/PRIVILEGES.
+ *
  * Several of them also have options specific to the service.
  */
 
