@@ -30,5 +30,14 @@ AC_DEFUN([ATHEME_HANDLE_SUBMODULES], [
     AS_IF([test "${CONTRIB_MODULES}" = "Yes"], [
 
         AC_SUBST([SUBMODULE_CONTRIB], [contrib])
+
+        AX_SUBDIRS_CONFIGURE([modules/contrib], [
+            [CC="\${CC}"],
+            [LD="\${LD}"],
+            [CFLAGS="\${CFLAGS}"],
+            [CPPFLAGS="\${CPPFLAGS}"],
+            [LDFLAGS="\${LDFLAGS}"],
+            [LIBS="\${LIBS}"]
+        ], [[]], [[]], [[]])
     ])
 ])

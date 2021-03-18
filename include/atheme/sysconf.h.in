@@ -56,9 +56,6 @@
 /* Define to 1 if any password quality library appears to be usable */
 #undef HAVE_ANY_PASSWORD_QUALITY_LIBRARY
 
-/* Define to 1 if you have the <arpa/nameser.h> header file. */
-#undef HAVE_ARPA_NAMESER_H
-
 /* Define to 1 if you have the <Availability.h> header file. */
 #undef HAVE_AVAILABILITY_H
 
@@ -283,9 +280,6 @@
 
 /* Define to 1 if you have the `regfree' function. */
 #undef HAVE_REGFREE
-
-/* Define to 1 if you have the <resolv.h> header file. */
-#undef HAVE_RESOLV_H
 
 /* Define to 1 if you have the `setenv' function. */
 #undef HAVE_SETENV

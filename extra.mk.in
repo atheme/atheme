@@ -72,7 +72,6 @@ SHAREDIR                        ?= @SHAREDIR@
 # detection is not optional; there is no --without-libfoo option provided.
 #
 CLOCK_GETTIME_LIBS              ?= @CLOCK_GETTIME_LIBS@
-CONTRIB_LIBS                    ?= @CONTRIB_LIBS@
 LIBDL_LIBS                      ?= @LIBDL_LIBS@
 LIBMATH_LIBS                    ?= @LIBMATH_LIBS@
 LIBSOCKET_LIBS                  ?= @LIBSOCKET_LIBS@
