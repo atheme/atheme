@@ -67,9 +67,9 @@ SRCS = ${BASE_SRCS} version.c
 include ../buildsys.mk
 include ../extra.mk
 
-CPPFLAGS	+= $(MOWGLI_CFLAGS) $(PCRE_CFLAGS) $(LIBQRENCODE_CFLAGS) -I../include -DBINDIR=\"$(bindir)\"
+CPPFLAGS	+= $(LIBQRENCODE_CFLAGS) -I../include
 CFLAGS		+= $(LIB_CFLAGS)
-LIBS		+= $(MOWGLI_LIBS) $(PCRE_LIBS) $(LIBINTL) $(LIBQRENCODE_LIBS)
+LIBS		+= $(LIBQRENCODE_LIBS) $(LIBINTL)
 LDFLAGS         += $(LDFLAGS_RPATH)
 
 build: depend all

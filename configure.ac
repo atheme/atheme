@@ -286,67 +286,6 @@ AS_HELP_STRING([--enable-contrib],[ Enable contrib modules.]),
 ])
 AC_MSG_RESULT([$CONTRIB])
 
-ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT=""
-
-AC_DEFUN([ATHEME_LIBTEST_CONTRIB_RES_QUERY_DRIVER], [
-
-	AC_LINK_IFELSE([
-		AC_LANG_PROGRAM([[
-
-			#include <resolv.h>
-		]], [[
-
-			unsigned char nsbuf[4096];
-			const int ret = res_query("", ns_c_any, ns_t_mx, nsbuf, sizeof nsbuf);
-		]])
-	], [
-		ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT="yes"
-	], [
-		ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT="no"
-	])
-])
-
-AC_DEFUN([ATHEME_LIBTEST_CONTRIB_RES_QUERY], [
-
-	AC_MSG_CHECKING([whether compiling and linking a program using res_query(3) works])
-
-	LIBS_SAVED="${LIBS}"
-
-	ATHEME_LIBTEST_CONTRIB_RES_QUERY_DRIVER
-
-	AS_IF([test "x${ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT}" = "xno"], [
-
-		LIBS="-lresolv ${LIBS}"
-
-		ATHEME_LIBTEST_CONTRIB_RES_QUERY_DRIVER
-
-		AS_IF([test "x${ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT}" = "xno"], [
-
-			AC_MSG_RESULT([no])
-			AC_MSG_ERROR([--enable-contrib needs a functioning res_query(3)])
-		])
-
-		AS_IF([test "x${ATHEME_LIBTEST_CONTRIB_RES_QUERY_RESULT}" = "xyes"], [
-
-			CONTRIB_LIBS="-lresolv"
-			AC_SUBST([CONTRIB_LIBS])
-		])
-	])
-
-	LIBS="${LIBS_SAVED}"
-
-	AC_MSG_RESULT([yes])
-])
-
-if test "x${CONTRIB}" = "xyes"; then
-	ATHEME_LIBTEST_CONTRIB_RES_QUERY
-	CONTRIB_ENABLE="contrib"
-else
-	CONTRIB_ENABLE=""
-fi
-
-AC_SUBST([CONTRIB_ENABLE])
-
 AC_ARG_ENABLE([ssl],
 	AS_HELP_STRING([--disable-ssl],[don't use OpenSSL to provide more SASL mechanisms]),
 	[], [enable_ssl=yes])
@@ -426,33 +365,36 @@ if test "x${LIBQRENCODE}" = "xyes"; then
 fi
 
 AC_ARG_WITH([libmowgli],
-  AS_HELP_STRING([--with-libmowgli@<:@=prefix@:>@],[ Specify location of system libmowgli install, or "no" to force use of internal libmowgli]),
-  [], [with_libmowgli=yes])
+    AS_HELP_STRING([--with-libmowgli@<:@=prefix@:>@], [Specify location of system libmowgli install, "yes" to ask pkg-config (default), or "no" to force use of internal libmowgli submodule]),
+    [], [with_libmowgli=yes])
 
-if test "x${with_libmowgli}" = "xyes"; then
-  PKG_CHECK_MODULES([MOWGLI], [libmowgli-2 >= 2.0.0],
-    [MOWGLI_SOURCE="system"],
-    [with_libmowgli=no])
-fi
+AS_IF([test "x${with_libmowgli}" = "xyes"], [
+    AS_IF([test -n "${PKG_CONFIG}"], [
+        PKG_CHECK_MODULES([LIBMOWGLI], [libmowgli-2 >= 2.0.0], [], [with_libmowgli="no"])
+    ], [
+        AC_MSG_WARN([pkg-config is not available, falling back to internal libmowgli submodule])
+        with_libmowgli="no"
+    ])
+])
 
-AS_IF(
-  [test "x${with_libmowgli}" = "xyes"], [ ],
-  [test "x${with_libmowgli}" = "xno"], [
-    MOWGLI_CFLAGS="-I../libmowgli-2/src/libmowgli -I../../libmowgli-2/src/libmowgli -I../../../libmowgli-2/src/libmowgli"
-    MOWGLI_LIBS="-L../libmowgli-2/src/libmowgli -L../../libmowgli-2/src/libmowgli -L../../../libmowgli-2/src/libmowgli -lmowgli-2"
-    LIBMOWGLI="libmowgli-2"
-    MOWGLI_SOURCE="internal"
-    AC_CONFIG_SUBDIRS([libmowgli-2])],
-  [ MOWGLI_SOURCE="system"
-    MOWGLI_CFLAGS="-I$with_libmowgli/include/libmowgli-2"
-    MOWGLI_LIBS="-L$with_libmowgli/lib -lmowgli-2" ])
+AS_IF([test "x${with_libmowgli}" = "xyes"], [
+    MOWGLI_SOURCE="System (pkg-config)"
+], [test "x${with_libmowgli}" = "xno"], [
+    MOWGLI_SOURCE="Internal"
+    LIBMOWGLI_CFLAGS="-I$(pwd)/libmowgli-2/src/libmowgli"
+    LIBMOWGLI_LIBS="-L$(pwd)/libmowgli-2/src/libmowgli -lmowgli-2"
+], [test -d "${with_libmowgli}/include/libmowgli-2" -a -d "${with_libmowgli}/lib"], [
+    MOWGLI_SOURCE="System (${with_libmowgli})"
+    LIBMOWGLI_CFLAGS="-I${with_libmowgli}/include/libmowgli-2"
+    LIBMOWGLI_LIBS="-L${with_libmowgli}/lib -lmowgli-2"
+], [
+    AC_MSG_ERROR([${with_libmowgli} is not a suitable directory for libmowgli])
+])
 
-CPPFLAGS="${CPPFLAGS} ${MOWGLI_CFLAGS}"
-LIBS="${LIBS} ${MOWGLI_LIBS}"
+AC_SUBST([LIBMOWGLI_CFLAGS])
+AC_SUBST([LIBMOWGLI_LIBS])
 
-AC_SUBST([MOWGLI_CFLAGS])
-AC_SUBST([MOWGLI_LIBS])
-AC_SUBST([LIBMOWGLI])
+
 
 AC_ARG_WITH([pcre],
 AS_HELP_STRING([--with-pcre],[ Enable PCRE regular expression support]),
@@ -460,14 +402,55 @@ AS_HELP_STRING([--with-pcre],[ Enable PCRE regular expression support]),
 [with_pcre=no])
 
 if test "x${with_pcre}" != "xno"; then
-	PKG_CHECK_MODULES([PCRE], [libpcre], [], [AC_MSG_ERROR(PCRE requested, but not found)])
-	AC_SUBST([PCRE_CFLAGS])
-	AC_SUBST([PCRE_LIBS])
+	PKG_CHECK_MODULES([LIBPCRE], [libpcre], [], [AC_MSG_ERROR(PCRE requested, but not found)])
+	AC_SUBST([LIBPCRE_CFLAGS])
+	AC_SUBST([LIBPCRE_LIBS])
 	AC_DEFINE([HAVE_PCRE], [1], [Define if you want to use PCRE])
 fi
 
-BUILDROOT=`pwd`
-AC_SUBST([BUILDROOT])
+
+
+AS_IF([test "${MOWGLI_SOURCE}" = "Internal"], [
+
+    AC_SUBST([SUBMODULE_LIBMOWGLI], [libmowgli-2])
+
+    # Run ./configure in the libmowgli submodule directory but without OpenSSL support
+    # Atheme does not use the OpenSSL VIO interface in Mowgli and this avoids an unnecessary -lssl
+
+    AX_SUBDIRS_CONFIGURE([libmowgli-2], [
+        [--without-openssl],
+        [CC="\${CC}"],
+        [LD="\${LD}"],
+        [CFLAGS="\${CFLAGS}"],
+        [CPPFLAGS="\${CPPFLAGS}"],
+        [LDFLAGS="\${LDFLAGS}"],
+        [LIBS="\${LIBS}"]
+    ], [[]], [[]], [[--with-openssl], [--with-openssl=auto], [--with-openssl=yes]])
+])
+
+AS_IF([test "x${CONTRIB}" = "xyes"], [
+
+    AC_SUBST([SUBMODULE_CONTRIB], [contrib])
+
+    AX_SUBDIRS_CONFIGURE([modules/contrib], [
+        [CC="\${CC}"],
+        [LD="\${LD}"],
+        [CFLAGS="\${CFLAGS}"],
+        [CPPFLAGS="\${CPPFLAGS}"],
+        [LDFLAGS="\${LDFLAGS}"],
+        [LIBS="\${LIBS}"]
+    ], [[]], [[]], [[]])
+])
+
+
+
+# Now add libmowgli and libpcre to CFLAGS and LIBS because the entire codebase uses them
+AS_IF([test "x${LIBMOWGLI_CFLAGS}" != "x"], [CFLAGS="${LIBMOWGLI_CFLAGS} ${CFLAGS}"])
+AS_IF([test "x${LIBMOWGLI_LIBS}" != "x"], [LIBS="${LIBMOWGLI_LIBS} ${LIBS}"])
+AS_IF([test "x${LIBPCRE_CFLAGS}" != "x"], [CFLAGS="${LIBPCRE_CFLAGS} ${CFLAGS}"])
+AS_IF([test "x${LIBPCRE_LIBS}" != "x"], [LIBS="${LIBPCRE_LIBS} ${LIBS}"])
+
+
 
 PODIR=""
 if test "x${USE_NLS}" = "xyes"; then

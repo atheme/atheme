@@ -5,6 +5,7 @@ SUBDIRS = \
 	botserv \
 	chanfix \
 	chanserv \
+	$(SUBMODULE_CONTRIB) \
 	crypto \
 	exttarget \
 	gameserv \
@@ -24,8 +25,7 @@ SUBDIRS = \
 	security \
 	statserv \
 	scripting \
-	transport \
-	$(CONTRIB_ENABLE)
+	transport
 
 include ../extra.mk
 include ../buildsys.mk
