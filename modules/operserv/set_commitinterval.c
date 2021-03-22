@@ -22,13 +22,24 @@ os_cmd_set_commitinterval_func(struct sourceinfo *const restrict si, const int p
 		return;
 	}
 
+	if (! db_save)
+	{
+		(void) command_fail(si, fault_unimplemented, _("You have no write-capable database backend loaded."));
+		return;
+	}
+
 	const char *const param = parv[0];
 	unsigned int value;
 
-	if (! string_to_uint(param, &value) || ! value)
+	if (! string_to_uint(param, &value))
 	{
 		(void) command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET COMMITINTERVAL");
 		(void) command_fail(si, fault_badparams, _("Syntax: SET COMMITINTERVAL <minutes>"));
+		return;
+	}
+	if (value < 1U || value > 60U)
+	{
+		(void) command_fail(si, fault_badparams, _("The commit interval must be between 1 and 60 minutes."));
 		return;
 	}
 
@@ -36,6 +47,18 @@ os_cmd_set_commitinterval_func(struct sourceinfo *const restrict si, const int p
 
 	(void) command_success_nodata(si, _("You have successfully set \2%s\2 to \2%u\2 minutes."), "COMMITINTERVAL", value);
 	(void) logcommand(si, CMDLOG_ADMIN, "SET:COMMITINTERVAL: \2%u\2", value);
+
+	if (readonly)
+	{
+		(void) command_success_nodata(si, _("Services is running read-only; this will have no effect."));
+		return;
+	}
+
+	if (commit_interval_timer)
+		(void) mowgli_timer_destroy(base_eventloop, commit_interval_timer);
+
+	commit_interval_timer = mowgli_timer_add(base_eventloop, "db_save_periodic", &db_save_periodic, NULL,
+	                                         config_options.commit_interval);
 }
 
 static struct command os_cmd_set_commitinterval = {

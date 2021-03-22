@@ -2709,11 +2709,12 @@ general {
 	 */
 	clone_time = 0;
 
-	/* commit_interval (minutes)
+	/* (*) commit_interval (minutes)
 	 *
-	 * The time between periodic database writes.
+	 * The time between periodic database writes; between 1 and 60
+	 * (inclusive). Default is 5 minutes.
 	 */
-	commit_interval = 5;
+	#commit_interval = 5;
 
 	/* (*) db_save_blocking
 	 *
