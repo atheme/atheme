@@ -253,6 +253,8 @@ Password Cryptography
 - `libathemecore/crypto.c`: log current crypto provider on mod(un/re)load
 - `libathemecore/crypto.c`: rip out plaintext fallback implementation
 - Make old modules (`ircservices`, `pbkdf2`, `rawmd5`, `rawsha1`) verify-only
+  - If you are still using pbkdf2, it is recommended to migrate to pbkdf2v2.
+  - A migration script is included in the contrib/ directory.
 - Add verify-only `rawsha2-256` and `rawsha2-512` modules to verify more
   password hashes from other sources.
 - Warn admin if no encryption-capable crypto modules are loaded
