@@ -32,6 +32,21 @@ connection_empty_handler(struct connection *ATHEME_VATTR_UNUSED cptr)
 	 */
 }
 
+static inline bool
+connection_ignore_errno(const int error)
+{
+	if (error == EINTR)
+		return true;
+
+	if (error == EINPROGRESS)
+		return true;
+
+	if (error == EWOULDBLOCK)
+		return true;
+
+	return false;
+}
+
 static int
 socket_setnonblocking(mowgli_descriptor_t sck)
 {
@@ -536,7 +551,7 @@ connection_open_tcp(char *host, char *vhost, unsigned int port,
 		break;
 	}
 
-	if ((connect(s, addr->ai_addr, addr->ai_addrlen) == -1) && ioerrno() != EINPROGRESS && ioerrno() != EINTR && ioerrno() != EWOULDBLOCK)
+	if (connect(s, addr->ai_addr, addr->ai_addrlen) == -1 && ! connection_ignore_errno(ioerrno()))
 	{
 		if (vhost)
 			slog(LG_ERROR, "connection_open_tcp(): failed to connect to %s using vhost %s: %d (%s)", host, vhost, ioerrno(), strerror(ioerrno()));
