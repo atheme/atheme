@@ -42,7 +42,7 @@ sendq_add(struct connection * cptr, char *buf, size_t len)
 
 	return_if_fail(cptr != NULL);
 
-	if (cptr->flags & (CF_DEAD | CF_SEND_EOF))
+	if (CF_IS_DEAD(cptr) || CF_IS_SEND_EOF(cptr))
 	{
 		slog(LG_DEBUG, "sendq_add(): attempted to send to fd %d which is already dead", cptr->fd);
 		return;
@@ -95,7 +95,7 @@ sendq_add_eof(struct connection * cptr)
 {
 	return_if_fail(cptr != NULL);
 
-	if (cptr->flags & (CF_DEAD | CF_SEND_EOF))
+	if (CF_IS_DEAD(cptr) || CF_IS_SEND_EOF(cptr))
 	{
 		slog(LG_DEBUG, "sendq_add(): attempted to send to fd %d which is already dead", cptr->fd);
 		return;
@@ -151,7 +151,7 @@ sendq_flush(struct connection * cptr)
                 else
                         return;
         }
-	if (cptr->flags & CF_SEND_EOF)
+	if (CF_IS_SEND_EOF(cptr))
 	{
 		/* shut down write end, kill entire connection
 		 * only when the other side acknowledges -- jilles */
@@ -171,9 +171,9 @@ sendq_nonempty(struct connection *cptr)
 	mowgli_node_t *n;
 	struct sendq *sq;
 
-	if (cptr->flags & CF_SEND_DEAD)
+	if (CF_IS_SEND_DEAD(cptr))
 		return false;
-	if (cptr->flags & CF_SEND_EOF)
+	if (CF_IS_SEND_EOF(cptr))
 		return true;
 	n = cptr->sendq.head;
 	if (n == NULL)
@@ -212,7 +212,7 @@ recvq_put(struct connection *cptr)
 
 	return_if_fail(cptr != NULL);
 
-	if (cptr->flags & (CF_DEAD | CF_SEND_DEAD))
+	if (CF_IS_DEAD(cptr) || CF_IS_SEND_DEAD(cptr))
 	{
 		/* If CF_SEND_DEAD:
 		 * The client closed the connection or sent some

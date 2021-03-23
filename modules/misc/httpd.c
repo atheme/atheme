@@ -216,7 +216,7 @@ httpd_recvqhandler(struct connection *cptr)
 	count = recvq_getline(cptr, buf, sizeof buf - 1);
 	if (count <= 0)
 		return;
-	if (cptr->flags & CF_NONEWLINE)
+	if (CF_IS_NONEWLINE(cptr))
 	{
 		slog(LG_INFO, "httpd_recvqhandler(): throwing out fd %d (%s) for excessive line length", cptr->fd, cptr->hbuf);
 		send_error(cptr, 400, "Bad request", true);

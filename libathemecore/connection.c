@@ -245,7 +245,7 @@ connection_close(struct connection *cptr)
 #endif
 
 	if (errno1)
-		slog(cptr->flags & CF_UPLINK ? LG_ERROR : LG_DEBUG,
+		slog(CF_IS_UPLINK(cptr) ? LG_ERROR : LG_DEBUG,
 				"connection_close(): connection %s[%d] closed due to error %d (%s)",
 				cptr->name, cptr->fd, errno1, strerror(errno1));
 
@@ -766,15 +766,19 @@ connection_stats(void (*stats_cb)(const char *, void *), void *privdata)
 		if (c->flags & (CF_CONNECTING | CF_DEAD | CF_NONEWLINE | CF_SEND_EOF | CF_SEND_DEAD))
 		{
 			mowgli_strlcat(buf, " status", sizeof buf);
-			if (c->flags & CF_CONNECTING)
+
+			if (CF_IS_CONNECTING(c))
 				mowgli_strlcat(buf, " connecting", sizeof buf);
-			if (c->flags & CF_DEAD)
+
+			if (CF_IS_DEAD(c))
 				mowgli_strlcat(buf, " dead", sizeof buf);
-			if (c->flags & CF_NONEWLINE)
+
+			if (CF_IS_NONEWLINE(c))
 				mowgli_strlcat(buf, " nonewline", sizeof buf);
-			if (c->flags & CF_SEND_DEAD)
+
+			if (CF_IS_SEND_DEAD(c))
 				mowgli_strlcat(buf, " send_dead", sizeof buf);
-			else if (c->flags & CF_SEND_EOF)
+			else if (CF_IS_SEND_EOF(c))
 				mowgli_strlcat(buf, " send_eof", sizeof buf);
 		}
 		stats_cb(buf, privdata);

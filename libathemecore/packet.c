@@ -29,7 +29,7 @@ irc_recvq_handler(struct connection *cptr)
 	char parsebuf[BUFSIZE + 1];
 	int count;
 
-	wasnonl = cptr->flags & CF_NONEWLINE ? true : false;
+	wasnonl = CF_IS_NONEWLINE(cptr) ? true : false;
 	count = recvq_getline(cptr, parsebuf, sizeof parsebuf - 1);
 	if (count <= 0)
 		return;
