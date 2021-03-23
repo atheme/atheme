@@ -17,9 +17,9 @@
 #include "internal.h"
 
 #ifdef MOWGLI_OS_WIN
-# define EWOULDBLOCK WSAEWOULDBLOCK
-# define EINPROGRESS WSAEINPROGRESS
-# define SHUT_RDWR   SD_BOTH
+#  define EINPROGRESS   WSAEINPROGRESS
+#  define EWOULDBLOCK   WSAEWOULDBLOCK
+#  define SHUT_RDWR     SD_BOTH
 #endif
 
 mowgli_list_t connection_list;
