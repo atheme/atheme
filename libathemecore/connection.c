@@ -24,6 +24,14 @@
 
 mowgli_list_t connection_list;
 
+static void
+connection_empty_handler(struct connection *ATHEME_VATTR_UNUSED cptr)
+{
+	/* This handler is only safe for use by connection_close_soon();
+	 * it will cause infinite loops otherwise.
+	 */
+}
+
 static int
 socket_setnonblocking(mowgli_descriptor_t sck)
 {
@@ -300,15 +308,6 @@ connection_close_children(struct connection *cptr)
 	connection_close(cptr);
 }
 
-/* This one is only safe for use by connection_close_soon(),
- * it will cause infinite loops otherwise
- */
-static void
-empty_handler(struct connection *cptr)
-{
-
-}
-
 /*
  * connection_close_soon()
  *
@@ -330,8 +329,8 @@ connection_close_soon(struct connection *cptr)
 		return;
 	cptr->flags |= CF_DEAD;
 	/* these two cannot be NULL */
-	cptr->read_handler = empty_handler;
-	cptr->write_handler = empty_handler;
+	cptr->read_handler = &connection_empty_handler;
+	cptr->write_handler = &connection_empty_handler;
 	cptr->recvq_handler = NULL;
 	if (cptr->close_handler)
 		cptr->close_handler(cptr);
