@@ -88,8 +88,22 @@ static const struct cmode charybdis_user_mode_list[] = {
   { '\0', 0 }
 };
 
-/* ircd allows forwards to existing channels; the target channel must be
- * +F or the setter must have ops in it */
+/* IRCd allows forwards to existing channels; and only allows such forwards
+ * to be set under 2 circumstances:
+ *
+ * 1) If the setter is opped on the target channel, allow the operation.
+ * 2) If the target channel is +F, allow the operation.
+ *
+ * Map this to services checks like so:
+ *
+ * 1) If the setter is opped on the target channel, or has the CA_OP or
+ *    CA_AUTOOP flags on the target channel (so they could be opped if they
+ *    so choose), allow the operation.
+ *
+ * 2) If the target channel is +F, or the setter has the CA_SET flag on the
+ *    target channel (so they could add +F to its MLOCK if they so choose),
+ *    allow the operation.
+ */
 static bool
 check_forward(const char *value, struct channel *c, struct mychan *mc, struct user *u, struct myuser *mu)
 {
@@ -114,11 +128,11 @@ check_forward(const char *value, struct channel *c, struct mychan *mc, struct us
 		target_cu = chanuser_find(target_c, u);
 		if (target_cu != NULL && target_cu->modes & CSTATUS_OP)
 			return true;
-		if (chanacs_user_flags(target_mc, u) & CA_SET)
+		if (chanacs_user_has_flag(target_mc, u, (CA_OP | CA_AUTOOP | CA_SET)))
 			return true;
 	}
-	else if (mu != NULL)
-		if (chanacs_entity_has_flag(target_mc, entity(mu), CA_SET))
+	if (mu != NULL)
+		if (chanacs_entity_has_flag(target_mc, entity(mu), (CA_OP | CA_AUTOOP | CA_SET)))
 			return true;
 	return false;
 }
