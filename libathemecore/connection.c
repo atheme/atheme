@@ -114,8 +114,8 @@ connection_trampoline(mowgli_eventloop_t *eventloop, mowgli_eventloop_io_t *io,
  */
 struct connection * ATHEME_FATTR_MALLOC
 connection_add(const char *name, int fd, unsigned int flags,
-	void (*read_handler)(struct connection *),
-	void (*write_handler)(struct connection *))
+	connection_evhandler read_handler,
+	connection_evhandler write_handler)
 {
 	struct connection *cptr;
 
@@ -456,8 +456,8 @@ connection_close_all_fds(void)
  */
 struct connection *
 connection_open_tcp(char *host, char *vhost, unsigned int port,
-	void (*read_handler)(struct connection *),
-	void (*write_handler)(struct connection *))
+	connection_evhandler read_handler,
+	connection_evhandler write_handler)
 {
 	struct connection *cptr;
 	char buf[BUFSIZE];
@@ -577,7 +577,7 @@ connection_open_tcp(char *host, char *vhost, unsigned int port,
  */
 struct connection *
 connection_open_listener_tcp(char *host, unsigned int port,
-	void (*read_handler)(struct connection *))
+	connection_evhandler read_handler)
 {
 	struct connection *cptr;
 	char buf[BUFSIZE];
@@ -664,8 +664,8 @@ connection_open_listener_tcp(char *host, unsigned int port,
  */
 struct connection *
 connection_accept_tcp(struct connection *cptr,
-	void (*read_handler)(struct connection *),
-	void (*write_handler)(struct connection *))
+	connection_evhandler read_handler,
+	connection_evhandler write_handler)
 {
 	char buf[BUFSIZE];
 	struct connection *newptr;
@@ -704,7 +704,7 @@ connection_accept_tcp(struct connection *cptr,
  */
 void
 connection_setselect_read(struct connection *cptr,
-	void (*read_handler)(struct connection *))
+	connection_evhandler read_handler)
 {
 	cptr->read_handler = read_handler;
 	mowgli_pollable_setselect(base_eventloop, cptr->pollable, MOWGLI_EVENTLOOP_IO_READ, cptr->read_handler != NULL ? connection_trampoline : NULL);
@@ -725,7 +725,7 @@ connection_setselect_read(struct connection *cptr,
  */
 void
 connection_setselect_write(struct connection *cptr,
-	void (*write_handler)(struct connection *))
+	connection_evhandler write_handler)
 {
 	cptr->write_handler = write_handler;
 	mowgli_pollable_setselect(base_eventloop, cptr->pollable, MOWGLI_EVENTLOOP_IO_WRITE, cptr->write_handler != NULL ? connection_trampoline : NULL);

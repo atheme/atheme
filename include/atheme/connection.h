@@ -13,6 +13,7 @@
 #include <atheme/attributes.h>
 #include <atheme/constants.h>
 #include <atheme/stdheaders.h>
+#include <atheme/structures.h>
 
 #ifndef _WIN32
 #  define ioerrno()             errno
@@ -43,6 +44,8 @@
 #define CF_IS_SEND_EOF(cptr)    ((cptr)->flags & CF_SEND_EOF)
 #define CF_IS_SEND_DEAD(cptr)   ((cptr)->flags & CF_SEND_DEAD)
 
+typedef void (*connection_evhandler)(struct connection *);
+
 struct connection
 {
 	char                            name[HOSTLEN + 1];
@@ -54,29 +57,28 @@ struct connection
 	time_t                          first_recv;
 	time_t                          last_recv;
 	size_t                          sendq_limit;
-	void                          (*read_handler)(struct connection *);
-	void                          (*write_handler)(struct connection *);
+	connection_evhandler            read_handler;
+	connection_evhandler            write_handler;
 	unsigned int                    flags;
-	void                          (*recvq_handler)(struct connection *);
-	void                          (*close_handler)(struct connection *);
+	connection_evhandler            recvq_handler;
+	connection_evhandler            close_handler;
 	struct connection *             listener;
 	void *                          userdata;
 	mowgli_eventloop_pollable_t *   pollable;
 };
 
-struct connection *connection_add(const char *, int, unsigned int,
-	void(*)(struct connection *),
-	void(*)(struct connection *)) ATHEME_FATTR_MALLOC;
-struct connection *connection_open_tcp(char *, char *, unsigned int,
-	void(*)(struct connection *),
-	void(*)(struct connection *));
-struct connection *connection_open_listener_tcp(char *, unsigned int,
-	void(*)(struct connection *));
-struct connection *connection_accept_tcp(struct connection *,
-	void(*)(struct connection *),
-	void(*)(struct connection *));
-void connection_setselect_read(struct connection *, void(*)(struct connection *));
-void connection_setselect_write(struct connection *, void(*)(struct connection *));
+struct connection *connection_add(const char *, int, unsigned int, connection_evhandler, connection_evhandler)
+    ATHEME_FATTR_MALLOC;
+
+struct connection *connection_open_tcp(char *, char *, unsigned int, connection_evhandler,
+    connection_evhandler);
+
+struct connection *connection_open_listener_tcp(char *, unsigned int, connection_evhandler);
+struct connection *connection_accept_tcp(struct connection *, connection_evhandler, connection_evhandler);
+struct connection *connection_find(int);
+
+void connection_setselect_read(struct connection *, connection_evhandler);
+void connection_setselect_write(struct connection *, connection_evhandler);
 void connection_close(struct connection *);
 void connection_close_children(struct connection *);
 void connection_close_soon(struct connection *);
@@ -84,8 +86,6 @@ void connection_close_soon_children(struct connection *);
 void connection_close_all(void);
 void connection_close_all_fds(void);
 void connection_stats(void (*)(const char *, void *), void *);
-struct connection *connection_find(int);
-//inline int connection_count(void);
 
 extern mowgli_list_t connection_list;
 
