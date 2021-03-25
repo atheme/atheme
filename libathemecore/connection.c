@@ -461,14 +461,16 @@ connection_open_tcp(char *host, char *vhost, unsigned int port,
 {
 	struct connection *cptr;
 	char buf[BUFSIZE];
+	char sport[16];
 	struct addrinfo *addr = NULL;
 	int s, error;
 	unsigned int optval;
 
 	snprintf(buf, BUFSIZE, "tcp connection: %s", host);
+	snprintf(sport, sizeof sport, "%u", port);
 
 	/* resolve it */
-	if ((error = getaddrinfo(host, NULL, NULL, &addr)))
+	if ((error = getaddrinfo(host, sport, NULL, &addr)))
 	{
 		slog(LG_ERROR, "connection_open_tcp(): unable to resolve %s: %s", host, gai_strerror(error));
 		return NULL;
@@ -541,16 +543,6 @@ connection_open_tcp(char *host, char *vhost, unsigned int port,
 		freeaddrinfo(bind_addr);
 	}
 
-	switch(addr->ai_family)
-	{
-	case AF_INET:
-		((struct sockaddr_in *) addr->ai_addr)->sin_port = htons(port);
-		break;
-	case AF_INET6:
-		((struct sockaddr_in6 *) addr->ai_addr)->sin6_port = htons(port);
-		break;
-	}
-
 	if (connect(s, addr->ai_addr, addr->ai_addrlen) == -1 && ! connection_ignore_errno(ioerrno()))
 	{
 		if (vhost)
@@ -589,12 +581,16 @@ connection_open_listener_tcp(char *host, unsigned int port,
 {
 	struct connection *cptr;
 	char buf[BUFSIZE];
+	char sport[16];
 	struct addrinfo *addr;
 	int s, error;
 	unsigned int optval;
 
+	snprintf(buf, BUFSIZE, "listener: %s[%u]", host, port);
+	snprintf(sport, sizeof sport, "%u", port);
+
 	/* resolve it */
-	if ((error = getaddrinfo(host, NULL, NULL, &addr)))
+	if ((error = getaddrinfo(host, sport, NULL, &addr)))
 	{
 		slog(LG_ERROR, "connection_open_listener_tcp(): unable to resolve %s: %s", host, gai_strerror(error));
 		return NULL;
@@ -619,8 +615,6 @@ connection_open_listener_tcp(char *host, unsigned int port,
 	if (s > claro_state.maxfd)
 		claro_state.maxfd = s;
 
-	snprintf(buf, BUFSIZE, "listener: %s[%u]", host, port);
-
 	optval = 1;
 	if (setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) < 0)
 	{
@@ -629,17 +623,6 @@ connection_open_listener_tcp(char *host, unsigned int port,
 		close(s);
 		return NULL;
 	}
-
-	switch(addr->ai_family)
-	{
-	case AF_INET:
-		((struct sockaddr_in *) addr->ai_addr)->sin_port = htons(port);
-		break;
-	case AF_INET6:
-		((struct sockaddr_in6 *) addr->ai_addr)->sin6_port = htons(port);
-		break;
-	}
-
 	if (bind(s, addr->ai_addr, addr->ai_addrlen) < 0)
 	{
 		close(s);
