@@ -22,6 +22,8 @@
 #  define SHUT_RDWR     SD_BOTH
 #endif
 
+#define CONNECTION_STATUS_FLAGS (CF_CONNECTING | CF_LISTENING | CF_DEAD | CF_NONEWLINE | CF_SEND_EOF | CF_SEND_DEAD)
+
 mowgli_list_t connection_list;
 
 static bool
@@ -651,12 +653,15 @@ connection_stats(void (*const stats_cb)(const char *, void *), void *const restr
 			(void) snprintf(listenbuf, sizeof listenbuf, " listener %-3d", cptr->listener->fd);
 			(void) mowgli_strlcat(buf, listenbuf, sizeof buf);
 		}
-		if (cptr->flags & (CF_CONNECTING | CF_DEAD | CF_NONEWLINE | CF_SEND_EOF | CF_SEND_DEAD))
+		if (cptr->flags & CONNECTION_STATUS_FLAGS)
 		{
 			(void) mowgli_strlcat(buf, " status", sizeof buf);
 
 			if (CF_IS_CONNECTING(cptr))
 				(void) mowgli_strlcat(buf, " connecting", sizeof buf);
+
+			if (CF_IS_LISTENING(cptr))
+				(void) mowgli_strlcat(buf, " listening", sizeof buf);
 
 			if (CF_IS_DEAD(cptr))
 				(void) mowgli_strlcat(buf, " dead", sizeof buf);
