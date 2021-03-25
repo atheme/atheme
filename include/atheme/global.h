@@ -28,7 +28,6 @@ struct me
 	char *          adminemail;             // SRA's email (for ADMIN)
 	char *          mta;                    // path to mta program
 	char *          numeric;                // server numeric
-	int             maxfd;                  // how many fds do we have?
 	unsigned int    mdlimit;                // metadata entry limit
 	time_t          start;                  // starting time
 	struct server * me;                     // pointer to our server struct
@@ -135,7 +134,6 @@ struct claro_state
 	unsigned int    node;
 	unsigned int    event;
 	time_t          currtime;
-	int             maxfd;
 };
 
 extern struct claro_state claro_state;

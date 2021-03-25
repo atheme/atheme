@@ -576,9 +576,6 @@ atheme_main(int argc, char *argv[])
 	/* no longer starting */
 	runflags &= ~RF_STARTING;
 
-	/* we probably have a few open already... */
-	me.maxfd = 3;
-
 	/* DB commit interval is configurable */
 	if (db_save && !readonly)
 		mowgli_timer_add(base_eventloop, "db_save", db_save_periodic, NULL, config_options.commit_interval);

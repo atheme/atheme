@@ -344,10 +344,6 @@ connection_open_tcp(const char *const restrict host, const char *const restrict 
 		return NULL;
 	}
 
-	/* Has the highest fd gotten any higher yet? */
-	if (fd > claro_state.maxfd)
-		claro_state.maxfd = fd;
-
 	if (! socket_setnonblocking(fd))
 	{
 		(void) freeaddrinfo(host_addr);
@@ -510,10 +506,6 @@ connection_open_listener_tcp(const char *const restrict host, const unsigned int
 		return NULL;
 	}
 
-	/* Has the highest fd gotten any higher yet? */
-	if (fd > claro_state.maxfd)
-		claro_state.maxfd = fd;
-
 	char hbuf[CONNECTION_ADDRSTRLEN];
 
 	if (! connection_addr_satostr(MOWGLI_FUNC_NAME, addr->ai_addr, hbuf))
@@ -575,10 +567,6 @@ connection_accept_tcp(struct connection *const restrict cptr, const connection_e
 		(void) slog(LG_ERROR, "%s: accept(2): %s", MOWGLI_FUNC_NAME, strerror(ioerrno()));
 		return NULL;
 	}
-
-	/* Has the highest fd gotten any higher yet? */
-	if (fd > claro_state.maxfd)
-		claro_state.maxfd = fd;
 
 	struct sockaddr_storage sock_ss;
 	socklen_t sock_ss_len = sizeof sock_ss;
