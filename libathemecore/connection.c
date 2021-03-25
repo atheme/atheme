@@ -641,6 +641,9 @@ connection_stats(void (*const stats_cb)(const char *, void *), void *const restr
 
 		(void) snprintf(buf, sizeof buf, "fd %-3d desc '%s'", cptr->fd, cptr->name);
 
+		if (CF_IS_UPLINK(cptr))
+			(void) mowgli_strlcat(buf, " (uplink)", sizeof buf);
+
 		if (cptr->listener)
 		{
 			char listenbuf[BUFSIZE];
