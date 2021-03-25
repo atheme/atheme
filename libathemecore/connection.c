@@ -426,7 +426,7 @@ connection_open_tcp(const char *const restrict host, const char *const restrict 
 
 		(void) freeaddrinfo(vhost_addr);
 
-		if (! connection_addr_satostr(MOWGLI_FUNC_NAME, host_addr->ai_addr, host_hbuf))
+		if (! connection_addr_satostr(MOWGLI_FUNC_NAME, vhost_addr->ai_addr, vhost_hbuf))
 		{
 			(void) freeaddrinfo(host_addr);
 			(void) close(fd);
