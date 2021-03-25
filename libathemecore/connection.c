@@ -641,7 +641,7 @@ connection_stats(void (*const stats_cb)(const char *, void *), void *const restr
 
 		char buf[BUFSIZE];
 
-		(void) snprintf(buf, sizeof buf, "fd %-3d desc '%s'", cptr->fd, cptr->name);
+		(void) snprintf(buf, sizeof buf, "fd %d desc '%s'", cptr->fd, cptr->name);
 
 		if (CF_IS_UPLINK(cptr))
 			(void) mowgli_strlcat(buf, " (uplink)", sizeof buf);
@@ -650,7 +650,7 @@ connection_stats(void (*const stats_cb)(const char *, void *), void *const restr
 		{
 			char listenbuf[BUFSIZE];
 
-			(void) snprintf(listenbuf, sizeof listenbuf, " listener %-3d", cptr->listener->fd);
+			(void) snprintf(listenbuf, sizeof listenbuf, " listener %d", cptr->listener->fd);
 			(void) mowgli_strlcat(buf, listenbuf, sizeof buf);
 		}
 		if (cptr->flags & CONNECTION_STATUS_FLAGS)
