@@ -53,7 +53,6 @@ struct connection
 	mowgli_list_t                   recvq;
 	mowgli_list_t                   sendq;
 	int                             fd;
-	int                             pollslot;
 	time_t                          first_recv;
 	time_t                          last_recv;
 	size_t                          sendq_limit;

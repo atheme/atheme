@@ -157,7 +157,6 @@ connection_add(const char *const restrict name, const int fd, const unsigned int
 
 	cptr                = smalloc(sizeof *cptr);
 	cptr->fd            = fd;
-	cptr->pollslot      = -1;
 	cptr->flags         = flags;
 	cptr->first_recv    = CURRTIME;
 	cptr->last_recv     = CURRTIME;
