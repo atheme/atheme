@@ -724,7 +724,7 @@ format_external(const char *type, struct connection *source, const char *sourced
 		snprintf(buf, sizeof buf, "%s:%s(%s)[%s]",
 			mu != NULL ? entity(mu)->name : "",
 			type,
-			source != NULL ? source->hbuf : "<noconn>",
+			source != NULL ? source->name : "<noconn>",
 			sourcedesc != NULL ? sourcedesc : "<unknown>");
 	else
 		snprintf(buf, sizeof buf, "<%s>%s",

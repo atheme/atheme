@@ -21,6 +21,9 @@
 #  define ioerrno()             WSAGetLastError()
 #endif
 
+// Enough space for brackets and a port; [INET6_ADDRSTRLEN]:12345
+#define CONNECTION_ADDRSTRLEN   (INET6_ADDRSTRLEN + 8)
+
 #define CF_UPLINK               0x00000001U
 #define CF_DCCOUT               0x00000002U
 #define CF_DCCIN                0x00000004U
@@ -63,8 +66,7 @@ struct connection
 	time_t                          last_recv;
 	unsigned int                    flags;
 	int                             fd;
-	char                            hbuf[BUFSIZE + 1];
-	char                            name[HOSTLEN + 1];
+	char                            name[BUFSIZE];
 };
 
 struct connection *connection_add(const char *, int, unsigned int, connection_evhandler, connection_evhandler)

@@ -26,17 +26,21 @@ mowgli_list_t connection_list;
 
 static bool
 connection_addr_satostr(const char *const restrict func, const struct sockaddr *const restrict sa,
-                        char dst[const restrict static INET6_ADDRSTRLEN])
+                        char dst[const restrict static CONNECTION_ADDRSTRLEN])
 {
+	char addr[INET6_ADDRSTRLEN];
+	unsigned int port;
 	const void *src;
 
 	switch (sa->sa_family)
 	{
 		case AF_INET:
+			port = (unsigned int) ntohs(((struct sockaddr_in *) sa)->sin_port);
 			src = &((struct sockaddr_in *) sa)->sin_addr;
 			break;
 
 		case AF_INET6:
+			port = (unsigned int) ntohs(((struct sockaddr_in6 *) sa)->sin6_port);
 			src = &((struct sockaddr_in6 *) sa)->sin6_addr;
 			break;
 
@@ -44,15 +48,14 @@ connection_addr_satostr(const char *const restrict func, const struct sockaddr *
 			(void) slog(LG_ERROR, "%s: unknown address family", func);
 			return false;
 	}
-
-	(void) memset(dst, 0x00, INET6_ADDRSTRLEN);
-
-	if (! inet_ntop(sa->sa_family, src, dst, INET6_ADDRSTRLEN))
+	if (! inet_ntop(sa->sa_family, src, addr, sizeof addr))
 	{
 		(void) slog(LG_ERROR, "%s: inet_ntop(3): %s", func, strerror(ioerrno()));
 		return false;
 	}
 
+	(void) memset(dst, 0x00, CONNECTION_ADDRSTRLEN);
+	(void) snprintf(dst, CONNECTION_ADDRSTRLEN, "[%s]:%u", addr, port);
 	return true;
 }
 
@@ -124,6 +127,10 @@ struct connection * ATHEME_FATTR_MALLOC
 connection_add(const char *const restrict name, const int fd, const unsigned int flags,
                const connection_evhandler read_handler, const connection_evhandler write_handler)
 {
+	return_null_if_fail(fd >= 0);
+	return_null_if_fail(name != NULL);
+	return_null_if_fail(read_handler != NULL || write_handler != NULL);
+
 	struct connection *cptr;
 
 	if ((cptr = connection_find(fd)))
@@ -135,25 +142,8 @@ connection_add(const char *const restrict name, const int fd, const unsigned int
 
 	(void) slog(LG_DEBUG, "%s: adding connection %d ('%s')", MOWGLI_FUNC_NAME, fd, name);
 
-	if (fd > -1)
-	{
-		struct sockaddr_storage saddr;
-		socklen_t saddrlen = sizeof saddr;
-		(void) memset(&saddr, 0x00, sizeof saddr);
-
-		if (getpeername(fd, (struct sockaddr *) &saddr, &saddrlen) < 0)
-		{
-			(void) slog(LG_ERROR, "%s: '%s': getpeername(2): %s",
-			                      MOWGLI_FUNC_NAME, name, strerror(ioerrno()));
-			return NULL;
-		}
-
-		if (! connection_addr_satostr(MOWGLI_FUNC_NAME, (struct sockaddr *) &saddr, cptr->hbuf))
-			return NULL;
-
-		if (! socket_setnonblocking(fd))
-			return NULL;
-	}
+	if (! socket_setnonblocking(fd))
+		return NULL;
 
 	cptr                = smalloc(sizeof *cptr);
 	cptr->fd            = fd;
@@ -356,7 +346,23 @@ connection_open_tcp(const char *const restrict host, const char *const restrict 
 	if (fd > claro_state.maxfd)
 		claro_state.maxfd = fd;
 
+	if (! socket_setnonblocking(fd))
+	{
+		(void) freeaddrinfo(host_addr);
+		(void) close(fd);
+		return NULL;
+	}
+
+	char vhost_hbuf[CONNECTION_ADDRSTRLEN];
+	char host_hbuf[CONNECTION_ADDRSTRLEN];
 	char name[BUFSIZE];
+
+	if (! connection_addr_satostr(MOWGLI_FUNC_NAME, host_addr->ai_addr, host_hbuf))
+	{
+		(void) freeaddrinfo(host_addr);
+		(void) close(fd);
+		return NULL;
+	}
 
 	if (vhost)
 	{
@@ -421,19 +427,28 @@ connection_open_tcp(const char *const restrict host, const char *const restrict 
 		}
 
 		(void) freeaddrinfo(vhost_addr);
-		(void) snprintf(name, sizeof name, "TCP: '%s' -> '%s'", vhost, host);
+
+		if (! connection_addr_satostr(MOWGLI_FUNC_NAME, host_addr->ai_addr, host_hbuf))
+		{
+			(void) freeaddrinfo(host_addr);
+			(void) close(fd);
+			return NULL;
+		}
+
+		(void) snprintf(name, sizeof name, "%s -> %s", vhost_hbuf, host_hbuf);
 	}
 	else
-		(void) snprintf(name, sizeof name, "TCP: * -> '%s'", host);
+		(void) snprintf(name, sizeof name, "[::]:0 -> %s", host_hbuf);
 
 	if (connect(fd, host_addr->ai_addr, host_addr->ai_addrlen) == -1 && ! connection_ignore_errno(ioerrno()))
 	{
 		if (vhost)
-			(void) slog(LG_ERROR, "%s: unable to connect from '%s' to '%s': connect(2): %s",
-			                      MOWGLI_FUNC_NAME, vhost, host, strerror(ioerrno()));
+			(void) slog(LG_ERROR, "%s: unable to connect from '%s' (%s) to '%s' (%s): connect(2): %s",
+			                      MOWGLI_FUNC_NAME, vhost, vhost_hbuf, host, host_hbuf,
+			                      strerror(ioerrno()));
 		else
-			(void) slog(LG_ERROR, "%s: unable to connect to '%s': connect(2): %s",
-			                      MOWGLI_FUNC_NAME, host, strerror(ioerrno()));
+			(void) slog(LG_ERROR, "%s: unable to connect to '%s' (%s): connect(2): %s",
+			                      MOWGLI_FUNC_NAME, host, host_hbuf, strerror(ioerrno()));
 
 		(void) freeaddrinfo(host_addr);
 		(void) close(fd);
@@ -497,6 +512,15 @@ connection_open_listener_tcp(const char *const restrict host, const unsigned int
 	if (fd > claro_state.maxfd)
 		claro_state.maxfd = fd;
 
+	char hbuf[CONNECTION_ADDRSTRLEN];
+
+	if (! connection_addr_satostr(MOWGLI_FUNC_NAME, addr->ai_addr, hbuf))
+	{
+		(void) freeaddrinfo(addr);
+		(void) close(fd);
+		return NULL;
+	}
+
 #if defined(SOL_SOCKET) && defined(SO_REUSEADDR)
 	const unsigned int optval = 1;
 	if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof optval) == -1)
@@ -532,8 +556,7 @@ connection_open_listener_tcp(const char *const restrict host, const unsigned int
 	}
 
 	char name[BUFSIZE];
-
-	(void) snprintf(name, sizeof name, "TCP: listening on [%s]:%u", host, port);
+	(void) snprintf(name, sizeof name, "%s", hbuf);
 
 	return connection_add(name, fd, CF_LISTENING, read_handler, NULL);
 }
@@ -542,8 +565,9 @@ struct connection *
 connection_accept_tcp(struct connection *const restrict cptr, const connection_evhandler read_handler,
                       const connection_evhandler write_handler)
 {
-	const int fd = accept(cptr->fd, NULL, NULL);
-
+	struct sockaddr_storage peer_ss;
+	socklen_t peer_ss_len = sizeof peer_ss;
+	const int fd = accept(cptr->fd, (struct sockaddr *) &peer_ss, &peer_ss_len);
 	if (fd == -1)
 	{
 		(void) slog(LG_ERROR, "%s: accept(2): %s", MOWGLI_FUNC_NAME, strerror(ioerrno()));
@@ -554,8 +578,30 @@ connection_accept_tcp(struct connection *const restrict cptr, const connection_e
 	if (fd > claro_state.maxfd)
 		claro_state.maxfd = fd;
 
+	struct sockaddr_storage sock_ss;
+	socklen_t sock_ss_len = sizeof sock_ss;
+	if (getsockname(fd, (struct sockaddr *) &sock_ss, &sock_ss_len) == -1)
+	{
+		(void) slog(LG_ERROR, "%s: getsockname(2): %s", MOWGLI_FUNC_NAME, strerror(ioerrno()));
+		(void) close(fd);
+		return NULL;
+	}
+
+	char peer_hbuf[CONNECTION_ADDRSTRLEN];
+	char sock_hbuf[CONNECTION_ADDRSTRLEN];
+	if (! connection_addr_satostr(MOWGLI_FUNC_NAME, (struct sockaddr *) &peer_ss, peer_hbuf))
+	{
+		(void) close(fd);
+		return NULL;
+	}
+	if (! connection_addr_satostr(MOWGLI_FUNC_NAME, (struct sockaddr *) &sock_ss, sock_hbuf))
+	{
+		(void) close(fd);
+		return NULL;
+	}
+
 	char name[BUFSIZE];
-	(void) mowgli_strlcpy(name, "incoming connection", sizeof name);
+	(void) snprintf(name, sizeof name, "%s <- %s", sock_hbuf, peer_hbuf);
 
 	struct connection *const newptr = connection_add(name, fd, CF_CONNECTED, read_handler, write_handler);
 

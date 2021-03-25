@@ -218,7 +218,7 @@ httpd_recvqhandler(struct connection *cptr)
 		return;
 	if (CF_IS_NONEWLINE(cptr))
 	{
-		slog(LG_INFO, "httpd_recvqhandler(): throwing out fd %d (%s) for excessive line length", cptr->fd, cptr->hbuf);
+		slog(LG_INFO, "httpd_recvqhandler(): throwing out fd %d (%s) for excessive line length", cptr->fd, cptr->name);
 		send_error(cptr, 400, "Bad request", true);
 		sendq_add_eof(cptr);
 		return;
@@ -304,7 +304,7 @@ httpd_recvqhandler(struct connection *cptr)
 			close(in);
 			if (count1 > 0)
 			{
-				slog(LG_INFO, "httpd_recvqhandler(): disconnecting fd %d (%s), read failed on %s", cptr->fd, cptr->hbuf, hd->filename);
+				slog(LG_INFO, "httpd_recvqhandler(): disconnecting fd %d (%s), read failed on %s", cptr->fd, cptr->name, hd->filename);
 				cptr->flags |= CF_DEAD;
 			}
 			else
@@ -352,7 +352,7 @@ httpd_closehandler(struct connection *cptr)
 {
 	struct httpddata *hd;
 
-	slog(LG_DEBUG, "httpd_closehandler(): fd %d (%s) closed", cptr->fd, cptr->hbuf);
+	slog(LG_DEBUG, "httpd_closehandler(): fd %d (%s) closed", cptr->fd, cptr->name);
 	hd = cptr->userdata;
 	if (hd != NULL)
 	{
@@ -368,7 +368,7 @@ do_listen(struct connection *cptr)
 	struct connection *newptr;
 
 	newptr = connection_accept_tcp(cptr, recvq_put, NULL);
-	slog(LG_DEBUG, "do_listen(): accepted httpd from %s fd %d", newptr->hbuf, newptr->fd);
+	slog(LG_DEBUG, "do_listen(): accepted fd %d (%s)", newptr->fd, newptr->name);
 
 	struct httpddata *const hd = smalloc(sizeof *hd);
 	hd->connection_close = false;
