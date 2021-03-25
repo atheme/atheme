@@ -48,22 +48,22 @@ typedef void (*connection_evhandler)(struct connection *);
 
 struct connection
 {
-	char                            name[HOSTLEN + 1];
-	char                            hbuf[BUFSIZE + 1];
 	mowgli_list_t                   recvq;
 	mowgli_list_t                   sendq;
-	int                             fd;
-	time_t                          first_recv;
-	time_t                          last_recv;
-	size_t                          sendq_limit;
+	struct connection *             listener;
+	mowgli_eventloop_pollable_t *   pollable;
+	void *                          userdata;
 	connection_evhandler            read_handler;
 	connection_evhandler            write_handler;
-	unsigned int                    flags;
-	connection_evhandler            recvq_handler;
 	connection_evhandler            close_handler;
-	struct connection *             listener;
-	void *                          userdata;
-	mowgli_eventloop_pollable_t *   pollable;
+	connection_evhandler            recvq_handler;
+	size_t                          sendq_limit;
+	time_t                          first_recv;
+	time_t                          last_recv;
+	unsigned int                    flags;
+	int                             fd;
+	char                            hbuf[BUFSIZE + 1];
+	char                            name[HOSTLEN + 1];
 };
 
 struct connection *connection_add(const char *, int, unsigned int, connection_evhandler, connection_evhandler)
