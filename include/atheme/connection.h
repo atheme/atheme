@@ -70,10 +70,10 @@ struct connection
 struct connection *connection_add(const char *, int, unsigned int, connection_evhandler, connection_evhandler)
     ATHEME_FATTR_MALLOC;
 
-struct connection *connection_open_tcp(char *, char *, unsigned int, connection_evhandler,
+struct connection *connection_open_tcp(const char *, const char *, unsigned int, connection_evhandler,
     connection_evhandler);
 
-struct connection *connection_open_listener_tcp(char *, unsigned int, connection_evhandler);
+struct connection *connection_open_listener_tcp(const char *, unsigned int, connection_evhandler);
 struct connection *connection_accept_tcp(struct connection *, connection_evhandler, connection_evhandler);
 struct connection *connection_find(int);
 

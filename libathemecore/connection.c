@@ -24,6 +24,38 @@
 
 mowgli_list_t connection_list;
 
+static bool
+connection_addr_satostr(const char *const restrict func, const struct sockaddr *const restrict sa,
+                        char dst[const restrict static INET6_ADDRSTRLEN])
+{
+	const void *src;
+
+	switch (sa->sa_family)
+	{
+		case AF_INET:
+			src = &((struct sockaddr_in *) sa)->sin_addr;
+			break;
+
+		case AF_INET6:
+			src = &((struct sockaddr_in6 *) sa)->sin6_addr;
+			break;
+
+		default:
+			(void) slog(LG_ERROR, "%s: unknown address family", func);
+			return false;
+	}
+
+	(void) memset(dst, 0x00, INET6_ADDRSTRLEN);
+
+	if (! inet_ntop(sa->sa_family, src, dst, INET6_ADDRSTRLEN))
+	{
+		(void) slog(LG_ERROR, "%s: inet_ntop(3): %s", func, strerror(ioerrno()));
+		return false;
+	}
+
+	return true;
+}
+
 static void
 connection_empty_handler(struct connection *ATHEME_VATTR_UNUSED cptr)
 {
@@ -47,174 +79,105 @@ connection_ignore_errno(const int error)
 	return false;
 }
 
-static int
+static bool
 socket_setnonblocking(mowgli_descriptor_t sck)
 {
-#ifndef MOWGLI_OS_WIN
-	int flags;
+	(void) slog(LG_DEBUG, "%s: setting file descriptor %d as non-blocking", MOWGLI_FUNC_NAME, sck);
 
-	slog(LG_DEBUG, "socket_setnonblocking(): setting file descriptor %d as non-blocking", sck);
+#ifdef MOWGLI_OS_WIN
+	const unsigned long yes = 1;
 
-	flags = fcntl(sck, F_GETFL, 0);
-	flags |= O_NONBLOCK;
-
-	if (fcntl(sck, F_SETFL, flags))
-		return -1;
-
-	return 0;
+	(void) ioctlsocket(sck, FIONBIO, &yes);
 #else
-	u_long yes = 1;
+	const int flags = fcntl(sck, F_GETFL, 0);
 
-	ioctlsocket(sck, FIONBIO, &yes);
+	if (flags == -1 || fcntl(sck, F_SETFL, flags | O_NONBLOCK) == -1)
+	{
+		(void) slog(LG_ERROR, "%s: fcntl(2): %s", MOWGLI_FUNC_NAME, strerror(errno));
+		return false;
+	}
 #endif
+
+	return true;
 }
 
-/*
- * connection_trampoline()
- *
- * inputs:
- *       mowgli.eventloop object
- *       mowgli.eventloop.pollable object
- *       poll direction
- *       user-specified data
- *
- * outputs:
- *       none
- *
- * side effects:
- *       whatever happens from the struct connection i/o handlers
- */
 static void
-connection_trampoline(mowgli_eventloop_t *eventloop, mowgli_eventloop_io_t *io,
-	mowgli_eventloop_io_dir_t dir, void *userdata)
+connection_trampoline(mowgli_eventloop_t *const restrict eventloop, mowgli_eventloop_io_t *const restrict io,
+                      const mowgli_eventloop_io_dir_t dir, void *const restrict userdata)
 {
-	struct connection *cptr = userdata;
+	struct connection *const cptr = userdata;
 
-	switch (dir) {
-	case MOWGLI_EVENTLOOP_IO_READ:
-		return cptr->read_handler(cptr);
-	case MOWGLI_EVENTLOOP_IO_WRITE:
-	case MOWGLI_EVENTLOOP_IO_ERROR:
-		return cptr->write_handler(cptr);
+	switch (dir)
+	{
+		case MOWGLI_EVENTLOOP_IO_READ:
+			(void) cptr->read_handler(cptr);
+			return;
+
+		case MOWGLI_EVENTLOOP_IO_WRITE:
+		case MOWGLI_EVENTLOOP_IO_ERROR:
+			(void) cptr->write_handler(cptr);
+			return;
 	}
 }
 
-/*
- * connection_add()
- *
- * inputs:
- *       connection name, file descriptor, flag bitmask,
- *       read handler, write handler.
- *
- * outputs:
- *       a connection object for the connection information given.
- *
- * side effects:
- *       a connection is added to the socket queue.
- */
 struct connection * ATHEME_FATTR_MALLOC
-connection_add(const char *name, int fd, unsigned int flags,
-	connection_evhandler read_handler,
-	connection_evhandler write_handler)
+connection_add(const char *const restrict name, const int fd, const unsigned int flags,
+               const connection_evhandler read_handler, const connection_evhandler write_handler)
 {
 	struct connection *cptr;
 
 	if ((cptr = connection_find(fd)))
 	{
-		slog(LG_DEBUG, "connection_add(): connection %d is already registered as %s",
-				fd, cptr->name);
+		(void) slog(LG_DEBUG, "%s: connection %d is already registered (as '%s')",
+		                      MOWGLI_FUNC_NAME, fd, cptr->name);
 		return NULL;
 	}
 
-	slog(LG_DEBUG, "connection_add(): adding connection '%s', fd=%d", name, fd);
+	(void) slog(LG_DEBUG, "%s: adding connection %d ('%s')", MOWGLI_FUNC_NAME, fd, name);
 
-	cptr = smalloc(sizeof *cptr);
-	cptr->fd = fd;
-
-	if (cptr->fd > -1)
+	if (fd > -1)
 	{
-#ifndef MOWGLI_OS_WIN
 		struct sockaddr_storage saddr;
 		socklen_t saddrlen = sizeof saddr;
-		memset(&saddr, 0x00, sizeof saddr);
+		(void) memset(&saddr, 0x00, sizeof saddr);
 
-		if (getpeername(cptr->fd, (struct sockaddr *) &saddr, &saddrlen) < 0)
+		if (getpeername(fd, (struct sockaddr *) &saddr, &saddrlen) < 0)
 		{
-			slog(LG_ERROR, "connection_add(): %s: getpeername(2): %s", name, strerror(ioerrno()));
-			sfree(cptr);
+			(void) slog(LG_ERROR, "%s: '%s': getpeername(2): %s",
+			                      MOWGLI_FUNC_NAME, name, strerror(ioerrno()));
 			return NULL;
 		}
 
-		if (saddrlen == sizeof(struct sockaddr_in) && saddr.ss_family == AF_INET)
-		{
-			struct sockaddr_in *const sa = (struct sockaddr_in *) &saddr;
-
-			if (! inet_ntop(AF_INET, &sa->sin_addr, cptr->hbuf, sizeof cptr->hbuf))
-			{
-				slog(LG_ERROR, "connection_add(): %s: inet_ntop(3): %s", name, strerror(ioerrno()));
-				sfree(cptr);
-				return NULL;
-			}
-		}
-		else if (saddrlen == sizeof(struct sockaddr_in6) && saddr.ss_family == AF_INET6)
-		{
-			struct sockaddr_in6 *const sa = (struct sockaddr_in6 *) &saddr;
-
-			if (! inet_ntop(AF_INET6, &sa->sin6_addr, cptr->hbuf, sizeof cptr->hbuf))
-			{
-				slog(LG_ERROR, "connection_add(): %s: inet_ntop(3): %s", name, strerror(ioerrno()));
-				sfree(cptr);
-				return NULL;
-			}
-		}
-		else
-		{
-			slog(LG_ERROR, "connection_add(): %s: unknown address family", name);
-			sfree(cptr);
+		if (! connection_addr_satostr(MOWGLI_FUNC_NAME, (struct sockaddr *) &saddr, cptr->hbuf))
 			return NULL;
-		}
-#endif
-		socket_setnonblocking(cptr->fd);
+
+		if (! socket_setnonblocking(fd))
+			return NULL;
 	}
 
-	cptr->pollslot = -1;
-	cptr->flags = flags;
-	cptr->first_recv = CURRTIME;
-	cptr->last_recv = CURRTIME;
-	cptr->pollable = mowgli_pollable_create(base_eventloop, fd, cptr);
+	cptr                = smalloc(sizeof *cptr);
+	cptr->fd            = fd;
+	cptr->pollslot      = -1;
+	cptr->flags         = flags;
+	cptr->first_recv    = CURRTIME;
+	cptr->last_recv     = CURRTIME;
+	cptr->pollable      = mowgli_pollable_create(base_eventloop, fd, cptr);
 
-	connection_setselect_read(cptr, read_handler);
-	connection_setselect_write(cptr, write_handler);
-
-	/* set connection name */
-	mowgli_strlcpy(cptr->name, name, sizeof cptr->name);
-
-	mowgli_node_add(cptr, mowgli_node_create(), &connection_list);
+	(void) connection_setselect_read(cptr, read_handler);
+	(void) connection_setselect_write(cptr, write_handler);
+	(void) mowgli_strlcpy(cptr->name, name, sizeof cptr->name);
+	(void) mowgli_node_add(cptr, mowgli_node_create(), &connection_list);
 
 	return cptr;
 }
 
-/*
- * connection_find()
- *
- * inputs:
- *       the file descriptor to search by
- *
- * outputs:
- *       the struct connection object associated with that fd
- *
- * side effects:
- *       none
- */
 struct connection *
-connection_find(int fd)
+connection_find(const int fd)
 {
-	struct connection *cptr;
-	mowgli_node_t *nptr;
-
-	MOWGLI_ITER_FOREACH(nptr, connection_list.head)
+	mowgli_node_t *n;
+	MOWGLI_ITER_FOREACH(n, connection_list.head)
 	{
-		cptr = nptr->data;
+		struct connection *const cptr = n->data;
 
 		if (cptr->fd == fd)
 			return cptr;
@@ -223,567 +186,443 @@ connection_find(int fd)
 	return NULL;
 }
 
-/*
- * connection_close()
- *
- * inputs:
- *       the connection being closed.
- *
- * outputs:
- *       none
- *
- * side effects:
- *       the connection is closed.
- */
 void
-connection_close(struct connection *cptr)
+connection_close(struct connection *const restrict cptr)
 {
-	mowgli_node_t *nptr;
-	int errno1, errno2;
-#ifdef SO_ERROR
-	socklen_t len = sizeof(errno2);
-#endif
-
-	if (!cptr)
+	if (! cptr)
 	{
-		slog(LG_DEBUG, "connection_close(): no connection to close!");
+		(void) slog(LG_DEBUG, "%s: no connection to close!", MOWGLI_FUNC_NAME);
 		return;
 	}
 
-	nptr = mowgli_node_find(cptr, &connection_list);
-	if (!nptr)
+	mowgli_node_t *const n = mowgli_node_find(cptr, &connection_list);
+	if (! n)
 	{
-		slog(LG_ERROR, "connection_close(): connection %p is not registered!",
-			cptr);
+		(void) slog(LG_ERROR, "%s: fd %d is not registered!", MOWGLI_FUNC_NAME, cptr->fd);
 		return;
 	}
 
-	errno1 = ioerrno();
-#ifdef SO_ERROR
-	if (!getsockopt(cptr->fd, SOL_SOCKET, SO_ERROR, (char *) &errno2, (socklen_t *) &len))
-	{
-		if (errno2 != 0)
-			errno1 = errno2;
-	}
+	int errsv = ioerrno();
+
+#if defined(SOL_SOCKET) && defined(SO_ERROR)
+	int errsck = 0;
+	socklen_t errlen = sizeof errsck;
+	if (getsockopt(cptr->fd, SOL_SOCKET, SO_ERROR, &errsck, &errlen) == 0 && errsck != 0)
+		errsv = errsck;
 #endif
 
-	if (errno1)
-		slog(CF_IS_UPLINK(cptr) ? LG_ERROR : LG_DEBUG,
-				"connection_close(): connection %s[%d] closed due to error %d (%s)",
-				cptr->name, cptr->fd, errno1, strerror(errno1));
+	if (errsv)
+		(void) slog(CF_IS_UPLINK(cptr) ? LG_ERROR : LG_DEBUG, "%s: fd %d ('%s') closed due to error %d (%s)",
+		            MOWGLI_FUNC_NAME, cptr->fd, cptr->name, errsv, strerror(errsv));
 
 	if (cptr->close_handler)
-		cptr->close_handler(cptr);
+		(void) cptr->close_handler(cptr);
 
-	/* close the fd */
-	mowgli_pollable_destroy(base_eventloop, cptr->pollable);
-
-	shutdown(cptr->fd, SHUT_RDWR);
-	close(cptr->fd);
-
-	mowgli_node_delete(nptr, &connection_list);
-	mowgli_node_free(nptr);
-
-	sendqrecvq_free(cptr);
-
-	sfree(cptr);
+	(void) mowgli_pollable_destroy(base_eventloop, cptr->pollable);
+	(void) mowgli_node_delete(n, &connection_list);
+	(void) mowgli_node_free(n);
+	(void) sendqrecvq_free(cptr);
+	(void) shutdown(cptr->fd, SHUT_RDWR);
+	(void) close(cptr->fd);
+	(void) sfree(cptr);
 }
 
-/*
- * connection_close_children()
- *
- * inputs:
- *       a listener.
- *
- * outputs:
- *       none
- *
- * side effects:
- *       connection_close() called on the connection itself and
- *       for all connections accepted on this listener
- */
 void
-connection_close_children(struct connection *cptr)
+connection_close_children(struct connection *const restrict cptr)
 {
-	mowgli_node_t *n;
-	struct connection *cptr2;
-
-	if (cptr == NULL)
+	if (! cptr)
 		return;
 
 	if (CF_IS_LISTENING(cptr))
 	{
-		MOWGLI_ITER_FOREACH(n, connection_list.head)
+		mowgli_node_t *n, *tn;
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, connection_list.head)
 		{
-			cptr2 = n->data;
-			if (cptr2->listener == cptr)
-				connection_close(cptr2);
+			struct connection *const child = n->data;
+
+			if (child->listener == cptr)
+				(void) connection_close(child);
 		}
 	}
-	connection_close(cptr);
+
+	(void) connection_close(cptr);
 }
 
-/*
- * connection_close_soon()
- *
- * inputs:
- *       the connection being closed.
- *
- * outputs:
- *       none
- *
- * side effects:
- *       the connection is marked to be closed soon
- *       handlers reset
- *       close_handler called
- */
 void
-connection_close_soon(struct connection *cptr)
+connection_close_soon(struct connection *const restrict cptr)
 {
-	if (cptr == NULL)
+	if (! cptr)
 		return;
-	cptr->flags |= CF_DEAD;
-	/* these two cannot be NULL */
-	cptr->read_handler = &connection_empty_handler;
-	cptr->write_handler = &connection_empty_handler;
-	cptr->recvq_handler = NULL;
+
 	if (cptr->close_handler)
-		cptr->close_handler(cptr);
-	cptr->close_handler = NULL;
-	cptr->listener = NULL;
+		(void) cptr->close_handler(cptr);
+
+	cptr->read_handler      = &connection_empty_handler;
+	cptr->write_handler     = &connection_empty_handler;
+	cptr->recvq_handler     = NULL;
+	cptr->close_handler     = NULL;
+	cptr->listener          = NULL;
+	cptr->flags            |= CF_DEAD;
 }
 
-/*
- * connection_close_soon_children()
- *
- * inputs:
- *       a listener.
- *
- * outputs:
- *       none
- *
- * side effects:
- *       connection_close_soon() called on the connection itself and
- *       for all connections accepted on this listener
- */
 void
-connection_close_soon_children(struct connection *cptr)
+connection_close_soon_children(struct connection *const restrict cptr)
 {
-	mowgli_node_t *n;
-	struct connection *cptr2;
-
-	if (cptr == NULL)
+	if (! cptr)
 		return;
 
 	if (CF_IS_LISTENING(cptr))
 	{
-		MOWGLI_ITER_FOREACH(n, connection_list.head)
+		mowgli_node_t *n, *tn;
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, connection_list.head)
 		{
-			cptr2 = n->data;
-			if (cptr2->listener == cptr)
-				connection_close_soon(cptr2);
+			struct connection *const child = n->data;
+
+			if (child->listener == cptr)
+				(void) connection_close_soon(child);
 		}
 	}
-	connection_close_soon(cptr);
+
+	(void) connection_close_soon(cptr);
 }
 
-/*
- * connection_close_all()
- *
- * inputs:
- *       none
- *
- * outputs:
- *       none
- *
- * side effects:
- *       connection_close() called on all registered connections
- */
 void
 connection_close_all(void)
 {
 	mowgli_node_t *n, *tn;
-	struct connection *cptr;
-
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, connection_list.head)
-	{
-		cptr = n->data;
-		connection_close(cptr);
-	}
+		(void) connection_close(n->data);
 }
 
-/*
- * connection_close_all_fds()
- *
- * Close all file descriptors of the connection subsystem in a child process.
- *
- * inputs:
- *       none
- *
- * outputs:
- *       none
- *
- * side effects:
- *       file descriptors belonging to all connections are closed
- *       no handlers called
- */
 void
 connection_close_all_fds(void)
 {
-	mowgli_node_t *n, *tn;
-	struct connection *cptr;
-
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, connection_list.head)
+	mowgli_node_t *n;
+	MOWGLI_ITER_FOREACH(n, connection_list.head)
 	{
-		cptr = n->data;
-		close(cptr->fd);
+		const struct connection *const cptr = n->data;
+
+		(void) close(cptr->fd);
 	}
 }
 
-/*
- * connection_open_tcp()
- *
- * inputs:
- *       hostname to connect to, vhost to use, port,
- *       read handler, write handler
- *
- * outputs:
- *       the struct connection on success, NULL on failure.
- *
- * side effects:
- *       a TCP/IP connection is opened to the host,
- *       and interest is registered in read/write events.
- */
 struct connection *
-connection_open_tcp(char *host, char *vhost, unsigned int port,
-	connection_evhandler read_handler,
-	connection_evhandler write_handler)
+connection_open_tcp(const char *const restrict host, const char *const restrict vhost, const unsigned int port,
+                    const connection_evhandler read_handler, const connection_evhandler write_handler)
 {
-	struct connection *cptr;
-	char buf[BUFSIZE];
+	return_null_if_fail(host != NULL);
+	return_null_if_fail(port > 0 && port < 65536);
+	return_null_if_fail(read_handler != NULL || write_handler != NULL);
+
 	char sport[16];
-	struct addrinfo *addr = NULL;
-	int s, error;
-	unsigned int optval;
+	(void) snprintf(sport, sizeof sport, "%u", port);
 
-	snprintf(buf, BUFSIZE, "tcp connection: %s", host);
-	snprintf(sport, sizeof sport, "%u", port);
+	struct addrinfo *host_addr = NULL;
+	const struct addrinfo host_hints = {
+		.ai_flags       = AI_NUMERICSERV,
+		.ai_family      = AF_UNSPEC,
+		.ai_socktype    = SOCK_STREAM,
+		.ai_protocol    = IPPROTO_TCP,
+	};
 
-	/* resolve it */
-	if ((error = getaddrinfo(host, sport, NULL, &addr)))
+	const int gai_host_errno = getaddrinfo(host, sport, &host_hints, &host_addr);
+
+	if (gai_host_errno)
 	{
-		slog(LG_ERROR, "connection_open_tcp(): unable to resolve %s: %s", host, gai_strerror(error));
+		(void) slog(LG_ERROR, "%s: unable to resolve '%s': getaddrinfo(3): %s",
+		                      MOWGLI_FUNC_NAME, host, gai_strerror(gai_host_errno));
+		return NULL;
+	}
+	if (! (host_addr && host_addr->ai_addr))
+	{
+		(void) slog(LG_ERROR, "%s: unable to resolve '%s' (unknown error)", MOWGLI_FUNC_NAME, host);
+
+		if (host_addr)
+			(void) freeaddrinfo(host_addr);
+
 		return NULL;
 	}
 
-	/* some getaddrinfo() do this... */
-	if (addr->ai_addr == NULL)
-	{
-		slog(LG_ERROR, "connection_open_tcp(): host %s is not resolveable.", vhost);
-		freeaddrinfo(addr);
-		return NULL;
-	}
+	const int fd = socket(host_addr->ai_family, host_addr->ai_socktype, host_addr->ai_protocol);
 
-	if ((s = socket(addr->ai_family, SOCK_STREAM, 0)) < 0)
+	if (fd == -1)
 	{
-		slog(LG_ERROR, "connection_open_tcp(): unable to create socket.");
-		freeaddrinfo(addr);
+		(void) slog(LG_ERROR, "%s: unable to connect to '%s': socket(2): %s",
+		                      MOWGLI_FUNC_NAME, host, strerror(ioerrno()));
+
+		(void) freeaddrinfo(host_addr);
 		return NULL;
 	}
 
 	/* Has the highest fd gotten any higher yet? */
-	if (s > claro_state.maxfd)
-		claro_state.maxfd = s;
+	if (fd > claro_state.maxfd)
+		claro_state.maxfd = fd;
 
-	if (vhost != NULL)
+	char name[BUFSIZE];
+
+	if (vhost)
 	{
-		struct addrinfo hints, *bind_addr = NULL;
+		struct addrinfo *vhost_addr = NULL;
+		const struct addrinfo vhost_hints = {
+			.ai_flags       = AI_PASSIVE,
+			.ai_family      = host_addr->ai_family,
+			.ai_socktype    = host_addr->ai_socktype,
+			.ai_protocol    = host_addr->ai_protocol,
+		};
 
-		memset(&hints, 0, sizeof hints);
-		hints.ai_family = addr->ai_family;
-		hints.ai_socktype = SOCK_STREAM;
-		hints.ai_flags = AI_PASSIVE;
-		if ((error = getaddrinfo(vhost, NULL, &hints, &bind_addr)))
+		const int gai_vhost_errno = getaddrinfo(vhost, NULL, &vhost_hints, &vhost_addr);
+
+		if (gai_vhost_errno)
 		{
-			slog(LG_ERROR, "connection_open_tcp(): cant resolve vhost %s: %s", vhost, gai_strerror(error));
-			close(s);
-			freeaddrinfo(addr);
+			(void) slog(LG_ERROR, "%s: unable to connect to '%s': unable to resolve '%s': "
+			                      "getaddrinfo(3): %s", MOWGLI_FUNC_NAME, host, vhost,
+			                      gai_strerror(gai_vhost_errno));
+
+			(void) freeaddrinfo(host_addr);
+			(void) close(fd);
+			return NULL;
+		}
+		if (! (vhost_addr && vhost_addr->ai_addr))
+		{
+			(void) slog(LG_ERROR, "%s: unable to connect to '%s': unable to resolve '%s' "
+			                      "(unknown error)", MOWGLI_FUNC_NAME, host, vhost);
+
+			if (vhost_addr)
+				(void) freeaddrinfo(vhost_addr);
+
+			(void) freeaddrinfo(host_addr);
+			(void) close(fd);
 			return NULL;
 		}
 
-		/* some getaddrinfo() do this... */
-		if (bind_addr->ai_addr == NULL)
+#if defined(SOL_SOCKET) && defined(SO_REUSEADDR)
+		const unsigned int optval = 1;
+		if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof optval) == -1)
 		{
-			slog(LG_ERROR, "connection_open_tcp(): vhost %s is not resolveable.", vhost);
-			close(s);
-			freeaddrinfo(addr);
-			freeaddrinfo(bind_addr);
+			(void) slog(LG_ERROR, "%s: unable to connect to '%s': unable to bind to '%s': "
+			                      "setsockopt(2): %s", MOWGLI_FUNC_NAME, host, vhost,
+			                      strerror(ioerrno()));
+
+			(void) freeaddrinfo(vhost_addr);
+			(void) freeaddrinfo(host_addr);
+			(void) close(fd);
+			return NULL;
+		}
+#endif /* SOL_SOCKET && SO_REUSEADDR */
+
+		if (bind(fd, vhost_addr->ai_addr, vhost_addr->ai_addrlen) == -1)
+		{
+			(void) slog(LG_ERROR, "%s: unable to connect to '%s': unable to bind to '%s': "
+			                      "bind(2): %s", MOWGLI_FUNC_NAME, host, vhost,
+			                      strerror(ioerrno()));
+
+			(void) freeaddrinfo(vhost_addr);
+			(void) freeaddrinfo(host_addr);
+			(void) close(fd);
 			return NULL;
 		}
 
-		optval = 1;
-		if (setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) < 0)
-		{
-			slog(LG_ERROR, "connection_open_tcp(): unable to bind to vhost %s: %s", vhost, strerror(ioerrno()));
-			close(s);
-			freeaddrinfo(addr);
-			freeaddrinfo(bind_addr);
-			return NULL;
-		}
-
-		if (bind(s, bind_addr->ai_addr, bind_addr->ai_addrlen) < 0)
-		{
-			slog(LG_ERROR, "connection_open_tcp(): unable to bind to vhost %s: %s", vhost, strerror(ioerrno()));
-			close(s);
-			freeaddrinfo(addr);
-			freeaddrinfo(bind_addr);
-			return NULL;
-		}
-
-		freeaddrinfo(bind_addr);
+		(void) freeaddrinfo(vhost_addr);
+		(void) snprintf(name, sizeof name, "TCP: '%s' -> '%s'", vhost, host);
 	}
+	else
+		(void) snprintf(name, sizeof name, "TCP: * -> '%s'", host);
 
-	if (connect(s, addr->ai_addr, addr->ai_addrlen) == -1 && ! connection_ignore_errno(ioerrno()))
+	if (connect(fd, host_addr->ai_addr, host_addr->ai_addrlen) == -1 && ! connection_ignore_errno(ioerrno()))
 	{
 		if (vhost)
-			slog(LG_ERROR, "connection_open_tcp(): failed to connect to %s using vhost %s: %d (%s)", host, vhost, ioerrno(), strerror(ioerrno()));
+			(void) slog(LG_ERROR, "%s: unable to connect from '%s' to '%s': connect(2): %s",
+			                      MOWGLI_FUNC_NAME, vhost, host, strerror(ioerrno()));
 		else
-			slog(LG_ERROR, "connection_open_tcp(): failed to connect to %s: %d (%s)", host, ioerrno(), strerror(ioerrno()));
-		close(s);
-		freeaddrinfo(addr);
+			(void) slog(LG_ERROR, "%s: unable to connect to '%s': connect(2): %s",
+			                      MOWGLI_FUNC_NAME, host, strerror(ioerrno()));
+
+		(void) freeaddrinfo(host_addr);
+		(void) close(fd);
 		return NULL;
 	}
 
-	freeaddrinfo(addr);
+	(void) freeaddrinfo(host_addr);
 
-	cptr = connection_add(buf, s, CF_CONNECTING, read_handler, write_handler);
-
-	return cptr;
+	return connection_add(name, fd, CF_CONNECTING, read_handler, write_handler);
 }
 
-/*
- * connection_open_listener_tcp()
- *
- * inputs:
- *       host and port to listen on,
- *       accept handler
- *
- * outputs:
- *       the struct connection on success, NULL on failure.
- *
- * side effects:
- *       a TCP/IP connection is opened to the host,
- *       and interest is registered in read/write events.
- */
 struct connection *
-connection_open_listener_tcp(char *host, unsigned int port,
-	connection_evhandler read_handler)
+connection_open_listener_tcp(const char *const restrict host, const unsigned int port,
+                             const connection_evhandler read_handler)
 {
-	struct connection *cptr;
-	char buf[BUFSIZE];
+	return_null_if_fail(host != NULL);
+	return_null_if_fail(port > 0 && port < 65536);
+	return_null_if_fail(read_handler != NULL);
+
 	char sport[16];
-	struct addrinfo *addr;
-	int s, error;
-	unsigned int optval;
+	(void) snprintf(sport, sizeof sport, "%u", port);
 
-	snprintf(buf, BUFSIZE, "listener: %s[%u]", host, port);
-	snprintf(sport, sizeof sport, "%u", port);
+	struct addrinfo *addr = NULL;
+	const struct addrinfo hints = {
+		.ai_flags       = AI_PASSIVE | AI_NUMERICSERV,
+		.ai_family      = AF_UNSPEC,
+		.ai_socktype    = SOCK_STREAM,
+		.ai_protocol    = IPPROTO_TCP,
+	};
 
-	/* resolve it */
-	if ((error = getaddrinfo(host, sport, NULL, &addr)))
+	const int gai_errno = getaddrinfo(host, sport, &hints, &addr);
+
+	if (gai_errno)
 	{
-		slog(LG_ERROR, "connection_open_listener_tcp(): unable to resolve %s: %s", host, gai_strerror(error));
+		(void) slog(LG_ERROR, "%s: unable to resolve '%s': getaddrinfo(3): %s",
+		                      MOWGLI_FUNC_NAME, host, gai_strerror(gai_errno));
+		return NULL;
+	}
+	if (! (addr && addr->ai_addr))
+	{
+		(void) slog(LG_ERROR, "%s: unable to resolve '%s' (unknown error)", MOWGLI_FUNC_NAME, host);
+
+		if (addr)
+			(void) freeaddrinfo(addr);
+
 		return NULL;
 	}
 
-	/* some getaddrinfo() do this... */
-	if (addr->ai_addr == NULL)
-	{
-		slog(LG_ERROR, "connection_open_listener_tcp(): host %s is not resolveable.", host);
-		freeaddrinfo(addr);
-		return NULL;
-	}
+	const int fd = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
 
-	if ((s = socket(addr->ai_family, SOCK_STREAM, 0)) < 0)
+	if (fd == -1)
 	{
-		slog(LG_ERROR, "connection_open_listener_tcp(): unable to create socket.");
-		freeaddrinfo(addr);
+		(void) slog(LG_ERROR, "%s: unable to listen on '%s': socket(2): %s",
+		                      MOWGLI_FUNC_NAME, host, strerror(ioerrno()));
+
+		(void) freeaddrinfo(addr);
 		return NULL;
 	}
 
 	/* Has the highest fd gotten any higher yet? */
-	if (s > claro_state.maxfd)
-		claro_state.maxfd = s;
+	if (fd > claro_state.maxfd)
+		claro_state.maxfd = fd;
 
-	optval = 1;
-	if (setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) < 0)
+#if defined(SOL_SOCKET) && defined(SO_REUSEADDR)
+	const unsigned int optval = 1;
+	if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof optval) == -1)
 	{
-		slog(LG_ERROR, "connection_open_listener_tcp(): error: %s", strerror(ioerrno()));
-		freeaddrinfo(addr);
-		close(s);
+		(void) slog(LG_ERROR, "%s: unable to listen on '%s': setsockopt(2): %s",
+		                      MOWGLI_FUNC_NAME, host, strerror(ioerrno()));
+
+		(void) freeaddrinfo(addr);
+		(void) close(fd);
 		return NULL;
 	}
-	if (bind(s, addr->ai_addr, addr->ai_addrlen) < 0)
+#endif /* SOL_SOCKET && SO_REUSEADDR */
+
+	if (bind(fd, addr->ai_addr, addr->ai_addrlen) == -1)
 	{
-		close(s);
-		slog(LG_ERROR, "connection_open_listener_tcp(): unable to bind listener %s[%u], errno [%d]", host, port,
-			ioerrno());
-		freeaddrinfo(addr);
-		return NULL;
-	}
+		(void) slog(LG_ERROR, "%s: unable to listen on '%s': bind(2): %s",
+		                      MOWGLI_FUNC_NAME, host, strerror(ioerrno()));
 
-	freeaddrinfo(addr);
-
-	socket_setnonblocking(s);
-
-	/* XXX we need to have some sort of handling for SOMAXCONN */
-	if (listen(s, 5) < 0)
-	{
-		close(s);
-		slog(LG_ERROR, "connection_open_listener_tcp(): error: %s", strerror(ioerrno()));
+		(void) freeaddrinfo(addr);
+		(void) close(fd);
 		return NULL;
 	}
 
-	cptr = connection_add(buf, s, CF_LISTENING, read_handler, NULL);
+	(void) freeaddrinfo(addr);
 
-	return cptr;
+	if (listen(fd, 5) == -1)
+	{
+		(void) slog(LG_ERROR, "%s: unable to listen on '%s': listen(2): %s",
+		                      MOWGLI_FUNC_NAME, host, strerror(ioerrno()));
+
+		(void) close(fd);
+		return NULL;
+	}
+
+	char name[BUFSIZE];
+
+	(void) snprintf(name, sizeof name, "TCP: listening on [%s]:%u", host, port);
+
+	return connection_add(name, fd, CF_LISTENING, read_handler, NULL);
 }
 
-/*
- * connection_accept_tcp()
- *
- * inputs:
- *       listener to accept from, read handler, write handler
- *
- * outputs:
- *       the struct connection on success, NULL on failure.
- *
- * side effects:
- *       a TCP/IP connection is accepted from the host,
- *       and interest is registered in read/write events.
- */
 struct connection *
-connection_accept_tcp(struct connection *cptr,
-	connection_evhandler read_handler,
-	connection_evhandler write_handler)
+connection_accept_tcp(struct connection *const restrict cptr, const connection_evhandler read_handler,
+                      const connection_evhandler write_handler)
 {
-	char buf[BUFSIZE];
-	struct connection *newptr;
-	int s;
+	const int fd = accept(cptr->fd, NULL, NULL);
 
-	if (!(s = accept(cptr->fd, NULL, NULL)))
+	if (fd == -1)
 	{
-		slog(LG_INFO, "connection_accept_tcp(): accept failed");
+		(void) slog(LG_ERROR, "%s: accept(2): %s", MOWGLI_FUNC_NAME, strerror(ioerrno()));
 		return NULL;
 	}
 
 	/* Has the highest fd gotten any higher yet? */
-	if (s > claro_state.maxfd)
-		claro_state.maxfd = s;
+	if (fd > claro_state.maxfd)
+		claro_state.maxfd = fd;
 
-	socket_setnonblocking(s);
+	char name[BUFSIZE];
+	(void) mowgli_strlcpy(name, "incoming connection", sizeof name);
 
-	mowgli_strlcpy(buf, "incoming connection", BUFSIZE);
-	newptr = connection_add(buf, s, 0, read_handler, write_handler);
-	newptr->listener = cptr;
+	struct connection *const newptr = connection_add(name, fd, CF_CONNECTED, read_handler, write_handler);
+
+	if (newptr)
+		newptr->listener = cptr;
+
 	return newptr;
 }
 
-/*
- * connection_setselect_read()
- *
- * inputs:
- *       struct connection to register/deregister interest on,
- *       replacement handler (NULL = no interest)
- *
- * outputs:
- *       none
- *
- * side effects:
- *       the read handler is changed for the struct connection.
- */
 void
-connection_setselect_read(struct connection *cptr,
-	connection_evhandler read_handler)
+connection_setselect_read(struct connection *const restrict cptr, const connection_evhandler read_handler)
 {
 	cptr->read_handler = read_handler;
-	mowgli_pollable_setselect(base_eventloop, cptr->pollable, MOWGLI_EVENTLOOP_IO_READ, cptr->read_handler != NULL ? connection_trampoline : NULL);
+
+	(void) mowgli_pollable_setselect(base_eventloop, cptr->pollable, MOWGLI_EVENTLOOP_IO_READ,
+	                                 read_handler ? &connection_trampoline : NULL);
 }
 
-/*
- * connection_setselect_write()
- *
- * inputs:
- *       struct connection to register/deregister interest on,
- *       replacement handler (NULL = no interest)
- *
- * outputs:
- *       none
- *
- * side effects:
- *       the write handler is changed for the struct connection.
- */
 void
-connection_setselect_write(struct connection *cptr,
-	connection_evhandler write_handler)
+connection_setselect_write(struct connection *const restrict cptr, const connection_evhandler write_handler)
 {
 	cptr->write_handler = write_handler;
-	mowgli_pollable_setselect(base_eventloop, cptr->pollable, MOWGLI_EVENTLOOP_IO_WRITE, cptr->write_handler != NULL ? connection_trampoline : NULL);
+
+	(void) mowgli_pollable_setselect(base_eventloop, cptr->pollable, MOWGLI_EVENTLOOP_IO_WRITE,
+	                                 write_handler ? &connection_trampoline : NULL);
 }
 
-/*
- * connection_stats()
- *
- * inputs:
- *       callback function, data for callback function
- *
- * outputs:
- *       none
- *
- * side effects:
- *       callback function is called with a series of lines
- */
 void
-connection_stats(void (*stats_cb)(const char *, void *), void *privdata)
+connection_stats(void (*const stats_cb)(const char *, void *), void *const restrict privdata)
 {
 	mowgli_node_t *n;
-	char buf[160];
-	char buf2[20];
-
 	MOWGLI_ITER_FOREACH(n, connection_list.head)
 	{
-		struct connection *c = (struct connection *) n->data;
+		const struct connection *const cptr = n->data;
 
-		snprintf(buf, sizeof buf, "fd %-3d desc '%s'", c->fd, c->name);
-		if (c->listener != NULL)
+		char buf[BUFSIZE];
+
+		(void) snprintf(buf, sizeof buf, "fd %-3d desc '%s'", cptr->fd, cptr->name);
+
+		if (cptr->listener)
 		{
-			snprintf(buf2, sizeof buf2, " listener %d", c->listener->fd);
-			mowgli_strlcat(buf, buf2, sizeof buf);
+			char listenbuf[BUFSIZE];
+
+			(void) snprintf(listenbuf, sizeof listenbuf, " listener %-3d", cptr->listener->fd);
+			(void) mowgli_strlcat(buf, listenbuf, sizeof buf);
 		}
-		if (c->flags & (CF_CONNECTING | CF_DEAD | CF_NONEWLINE | CF_SEND_EOF | CF_SEND_DEAD))
+		if (cptr->flags & (CF_CONNECTING | CF_DEAD | CF_NONEWLINE | CF_SEND_EOF | CF_SEND_DEAD))
 		{
-			mowgli_strlcat(buf, " status", sizeof buf);
+			(void) mowgli_strlcat(buf, " status", sizeof buf);
 
-			if (CF_IS_CONNECTING(c))
-				mowgli_strlcat(buf, " connecting", sizeof buf);
+			if (CF_IS_CONNECTING(cptr))
+				(void) mowgli_strlcat(buf, " connecting", sizeof buf);
 
-			if (CF_IS_DEAD(c))
-				mowgli_strlcat(buf, " dead", sizeof buf);
+			if (CF_IS_DEAD(cptr))
+				(void) mowgli_strlcat(buf, " dead", sizeof buf);
 
-			if (CF_IS_NONEWLINE(c))
-				mowgli_strlcat(buf, " nonewline", sizeof buf);
+			if (CF_IS_NONEWLINE(cptr))
+				(void) mowgli_strlcat(buf, " nonewline", sizeof buf);
 
-			if (CF_IS_SEND_DEAD(c))
-				mowgli_strlcat(buf, " send_dead", sizeof buf);
-			else if (CF_IS_SEND_EOF(c))
-				mowgli_strlcat(buf, " send_eof", sizeof buf);
+			if (CF_IS_SEND_DEAD(cptr))
+				(void) mowgli_strlcat(buf, " send_dead", sizeof buf);
+			else if (CF_IS_SEND_EOF(cptr))
+				(void) mowgli_strlcat(buf, " send_eof", sizeof buf);
 		}
-		stats_cb(buf, privdata);
+
+		(void) stats_cb(buf, privdata);
 	}
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
