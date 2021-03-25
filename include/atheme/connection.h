@@ -48,6 +48,7 @@ typedef void (*connection_evhandler)(struct connection *);
 
 struct connection
 {
+	mowgli_node_t                   node;
 	mowgli_list_t                   recvq;
 	mowgli_list_t                   sendq;
 	struct connection *             listener;

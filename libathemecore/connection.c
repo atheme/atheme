@@ -165,7 +165,7 @@ connection_add(const char *const restrict name, const int fd, const unsigned int
 	(void) connection_setselect_read(cptr, read_handler);
 	(void) connection_setselect_write(cptr, write_handler);
 	(void) mowgli_strlcpy(cptr->name, name, sizeof cptr->name);
-	(void) mowgli_node_add(cptr, mowgli_node_create(), &connection_list);
+	(void) mowgli_node_add(cptr, &cptr->node, &connection_list);
 
 	return cptr;
 }
@@ -218,8 +218,7 @@ connection_close(struct connection *const restrict cptr)
 		(void) cptr->close_handler(cptr);
 
 	(void) mowgli_pollable_destroy(base_eventloop, cptr->pollable);
-	(void) mowgli_node_delete(n, &connection_list);
-	(void) mowgli_node_free(n);
+	(void) mowgli_node_delete(&cptr->node, &connection_list);
 	(void) sendqrecvq_free(cptr);
 	(void) shutdown(cptr->fd, SHUT_RDWR);
 	(void) close(cptr->fd);
