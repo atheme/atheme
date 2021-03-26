@@ -424,15 +424,15 @@ connection_open_tcp(const char *const restrict host, const char *const restrict 
 			return NULL;
 		}
 
-		(void) freeaddrinfo(vhost_addr);
-
 		if (! connection_addr_satostr(MOWGLI_FUNC_NAME, vhost_addr->ai_addr, vhost_hbuf))
 		{
+			(void) freeaddrinfo(vhost_addr);
 			(void) freeaddrinfo(host_addr);
 			(void) close(fd);
 			return NULL;
 		}
 
+		(void) freeaddrinfo(vhost_addr);
 		(void) snprintf(name, sizeof name, "%s -> %s", vhost_hbuf, host_hbuf);
 	}
 	else
