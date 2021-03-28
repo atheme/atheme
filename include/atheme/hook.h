@@ -166,6 +166,14 @@ struct hook_server_delete
 	/* space for reason etc here */
 };
 
+struct hook_user_change_password_check
+{
+	struct sourceinfo * si;
+	struct myuser *     mu;
+	const char *        password;
+	bool                allowed;
+};
+
 struct hook_user_delete_info
 {
 	struct user * const u;

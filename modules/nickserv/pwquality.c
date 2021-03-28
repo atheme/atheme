@@ -124,6 +124,57 @@ pwquality_config_check(void)
 	return true;
 }
 
+static bool
+pwquality_password_okay(struct sourceinfo *const restrict si, const char *const restrict password)
+{
+	bool ret = true;
+
+#ifdef HAVE_CRACKLIB
+	const char *cl_reason = NULL;
+	if ((cl_reason = FascistCheck(password, cracklib_dict)))
+	{
+		(void) command_fail(si, fault_badparams, _("Password is insecure [cracklib]: %s"), cl_reason);
+		ret = false;
+	}
+#endif /* HAVE_CRACKLIB */
+
+#ifdef HAVE_LIBPASSWDQC
+	const char *qc_reason = NULL;
+	if ((qc_reason = passwdqc_check(&qc_config, password, NULL, NULL)))
+	{
+		(void) command_fail(si, fault_badparams, _("Password is insecure [passwdqc]: %s"), qc_reason);
+		ret = false;
+	}
+#endif /* HAVE_LIBPASSWDQC */
+
+	return ret;
+}
+
+static void
+pwquality_change_hook(struct hook_user_change_password_check *const restrict hdata)
+{
+	return_if_fail(hdata != NULL);
+	return_if_fail(hdata->si != NULL);
+	return_if_fail(hdata->password != NULL);
+
+	if (! pwquality_config_check())
+		return;
+
+	if (pwquality_password_okay(hdata->si, hdata->password))
+		return;
+
+	if (pwquality_warn_only)
+	{
+		(void) command_fail(hdata->si, fault_badparams, _("You may want to set a different password with: "
+		                                                  "\2/msg %s SET PASSWORD <newpassword>\2"),
+		                                                  nicksvs.me->disp);
+		return;
+	}
+
+	(void) command_fail(hdata->si, fault_badparams, _("Password change denied due to insecure password"));
+	hdata->allowed = false;
+}
+
 static void
 pwquality_register_hook(struct hook_user_register_check *const restrict hdata)
 {
@@ -131,35 +182,11 @@ pwquality_register_hook(struct hook_user_register_check *const restrict hdata)
 	return_if_fail(hdata->si != NULL);
 	return_if_fail(hdata->password != NULL);
 
-	bool good_password = true;
-
 	if (! pwquality_config_check())
 		return;
 
-#ifdef HAVE_CRACKLIB
-	const char *cl_reason = NULL;
-	if ((cl_reason = FascistCheck(hdata->password, cracklib_dict)))
-		good_password = false;
-#endif /* HAVE_CRACKLIB */
-
-#ifdef HAVE_LIBPASSWDQC
-	const char *qc_reason = NULL;
-	if ((qc_reason = passwdqc_check(&qc_config, hdata->password, NULL, NULL)))
-		good_password = false;
-#endif /* HAVE_LIBPASSWDQC */
-
-	if (good_password)
+	if (pwquality_password_okay(hdata->si, hdata->password))
 		return;
-
-#ifdef HAVE_CRACKLIB
-	if (cl_reason)
-		(void) command_fail(hdata->si, fault_badparams, _("Password is insecure [cracklib]: %s"), cl_reason);
-#endif /* HAVE_CRACKLIB */
-
-#ifdef HAVE_LIBPASSWDQC
-	if (qc_reason)
-		(void) command_fail(hdata->si, fault_badparams, _("Password is insecure [passwdqc]: %s"), qc_reason);
-#endif /* HAVE_LIBPASSWDQC */
 
 	if (pwquality_warn_only)
 	{
@@ -198,6 +225,7 @@ pwquality_osinfo_hook(struct sourceinfo *const restrict si)
 static void
 mod_init(struct module *const restrict m)
 {
+	(void) hook_add_user_can_change_password(&pwquality_change_hook);
 	(void) hook_add_user_can_register(&pwquality_register_hook);
 	(void) hook_add_operserv_info(&pwquality_osinfo_hook);
 
@@ -228,6 +256,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
+	(void) hook_del_user_can_change_password(&pwquality_change_hook);
 	(void) hook_del_user_can_register(&pwquality_register_hook);
 	(void) hook_del_operserv_info(&pwquality_osinfo_hook);
 

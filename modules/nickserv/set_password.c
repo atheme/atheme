@@ -44,6 +44,18 @@ ns_cmd_set_password(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	struct hook_user_change_password_check hdata = {
+		.si         = si,
+		.mu         = si->smu,
+		.password   = password,
+		.allowed    = true,
+	};
+
+	(void) hook_call_user_can_change_password(&hdata);
+
+	if (! hdata.allowed)
+		return;
+
 	logcommand(si, CMDLOG_SET, "SET:PASSWORD");
 
 	set_password(si->smu, password);
