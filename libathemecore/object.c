@@ -320,9 +320,20 @@ privatedata_set(void *target, const char *key, void *data)
 	mowgli_patricia_add(obj->privatedata, key, data);
 }
 
+void *
+privatedata_delete(void *target, const char *key)
+{
+	struct atheme_object *obj;
+
+	obj = atheme_object(target);
+	if (obj->privatedata == NULL)
+		return NULL;
+
+	return mowgli_patricia_delete(obj->privatedata, key);
+}
+
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8
  * vim:sw=8
  * vim:noexpandtab
  */
-

@@ -47,6 +47,7 @@ void metadata_delete_all(void *target);
 
 void *privatedata_get(void *target, const char *key);
 void privatedata_set(void *target, const char *key, void *data);
+void *privatedata_delete(void *target, const char *key);
 
 #ifdef OBJECT_DEBUG
 extern mowgli_list_t object_list;
