@@ -43,6 +43,8 @@ set_password(struct myuser *const restrict mu, const char *const restrict passwo
 		(void) slog(LG_ERROR, "%s: failed to encrypt password for account '%s'",
 		                      MOWGLI_FUNC_NAME, entity(mu)->name);
 	}
+
+	(void) hook_call_myuser_changed_password_or_hash(mu);
 }
 
 bool ATHEME_FATTR_WUR
@@ -92,6 +94,7 @@ verify_password(struct myuser *const restrict mu, const char *const restrict pas
 	{
 		(void) smemzero(mu->pass, sizeof mu->pass);
 		(void) mowgli_strlcpy(mu->pass, new_hash, sizeof mu->pass);
+		(void) hook_call_myuser_changed_password_or_hash(mu);
 	}
 
 	// Verification succeeded and user's password (possibly) re-encrypted

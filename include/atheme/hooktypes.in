@@ -69,6 +69,7 @@ host_request                    struct hook_host_request *
 metadata_change                 struct hook_metadata_change *
 module_load                     struct hook_module_load *
 myentity_find                   struct hook_myentity_req *
+myuser_changed_password_or_hash struct myuser *
 myuser_delete                   struct myuser *
 nick_can_register               struct hook_user_register_check *
 nick_check                      struct user *

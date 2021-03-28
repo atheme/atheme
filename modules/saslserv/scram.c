@@ -706,6 +706,7 @@ scram_step_success(struct sasl_session *const restrict p)
 	(void) smemzero(s->mu->pass, sizeof s->mu->pass);
 	(void) memcpy(s->mu->pass, buf, (size_t) ret);
 	(void) smemzero(buf, sizeof buf);
+	(void) hook_call_myuser_changed_password_or_hash(s->mu);
 
 end:
 	(void) smemzero(csk64, sizeof csk64);
