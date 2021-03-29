@@ -2405,6 +2405,39 @@ graphite {
 	 * This module does not support UDP.
 	 */
 	#port = 2003;
+
+	/* (*) collect_pwhashes
+	 *
+	 * This module can collect and export the various types of, and
+	 * amount of, password hashes for registered accounts. For example,
+	 * it can tell you how many users have PBKDF2-HMAC-SHA2-512 password
+	 * hashes, how many have Argon2i hashes, how many accounts have MD5
+	 * hashes, and so on.
+	 *
+	 * This functionality is only of benefit if you are planning to, or
+	 * are currently in the middle of, performing a migration from one
+	 * password crypto module to another, or migrating parameters for a
+	 * module; for example, by changing the digest algorithm used by the
+	 * pbkdf2v2 module, or by changing the algorithm type used by the
+	 * argon2 module. This would allow you to graph the migration over
+	 * time, as users login with their password and services re-encrypts
+	 * it.
+	 *
+	 * It does not get any more specific than that; for example, if you
+	 * change the amount of iterations in the pbkdf2v2 module, or if you
+	 * change the amount of memory required by the argon2 module, those
+	 * changes will not be reflected here; they will still be counted as
+	 * the same *type* of password hash.
+	 *
+	 * Enabling this if you only have one type of password hash in the
+	 * database is pointless; its only non-zero metric would match the
+	 * reported metric for number of registered accounts.
+	 *
+	 * This parameter is optional; if you do not specify it, it defaults
+	 * to false, and no statistics on password hashes will be collected
+	 * and exported.
+	 */
+	#collect_pwhashes;
 };
 
 /* ALIS configuration.

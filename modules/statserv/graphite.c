@@ -9,6 +9,8 @@
 
 #include <atheme.h>
 
+#include "pwhashes.h"
+
 #define GRAPHITE_INTERVAL_MIN           1U
 #define GRAPHITE_INTERVAL_DEF           0U
 #define GRAPHITE_INTERVAL_MAX           300U
@@ -34,6 +36,7 @@ static char *graphite_vhost = NULL;
 static char *graphite_host = NULL;
 
 // Miscellaneous parameters
+static bool graphite_collect_pwhashes = false;
 static unsigned int graphite_interval = 0;
 static char *graphite_prefix = NULL;
 
@@ -76,6 +79,10 @@ graphite_write_metrics(void)
 	unsigned int cnt_srv_accounts = 0;
 	unsigned int cnt_srv_groups   = 0;
 
+	unsigned int pwhashtypes[PWHASH_TYPE_TOTAL_COUNT];
+
+	(void) memset(&pwhashtypes, 0x00, sizeof pwhashtypes);
+
 	struct myentity *mt;
 	struct myentity_iteration_state state;
 
@@ -89,6 +96,8 @@ graphite_write_metrics(void)
 				break;
 			case ENT_USER:
 				cnt_srv_accounts++;
+				if (graphite_collect_pwhashes)
+					pwhashtypes[pwhash_get_type(user(mt))]++;
 				break;
 			case ENT_GROUP:
 				cnt_srv_groups++;
@@ -102,6 +111,14 @@ graphite_write_metrics(void)
 	(void) graphite_write_metric("services.accounts", cnt_srv_accounts);
 	(void) graphite_write_metric("services.channels", cnt_srv_channels);
 	(void) graphite_write_metric("services.groups",   cnt_srv_groups);
+
+	for (enum pwhash_type i = PWHASH_TYPE_NONE; graphite_collect_pwhashes && i < PWHASH_TYPE_TOTAL_COUNT; i++)
+	{
+		char metric_name[BUFSIZE];
+
+		(void) snprintf(metric_name, sizeof metric_name, "pwhashes.%s", pwhash_type_to_token[i]);
+		(void) graphite_write_metric(metric_name, pwhashtypes[i]);
+	}
 }
 
 static void
@@ -285,14 +302,19 @@ static void
 mod_init(struct module *const restrict ATHEME_VATTR_UNUSED m)
 {
 	(void) hook_add_config_ready(&graphite_config_ready);
+	(void) hook_add_myuser_changed_password_or_hash(&pwhash_invalidate_user_token);
 
 	(void) add_subblock_top_conf("GRAPHITE", &graphite_conf_table);
+	(void) add_bool_conf_item("COLLECT_PWHASHES", &graphite_conf_table, 0, &graphite_collect_pwhashes, false);
 	(void) add_dupstr_conf_item("PREFIX", &graphite_conf_table, 0, &graphite_prefix, NULL);
 	(void) add_dupstr_conf_item("VHOST", &graphite_conf_table, 0, &graphite_vhost, NULL);
 	(void) add_dupstr_conf_item("HOST", &graphite_conf_table, 0, &graphite_host, NULL);
 	(void) add_uint_conf_item("PORT", &graphite_conf_table, 0, &graphite_port, 1U, 65535U, 0U);
 	(void) add_uint_conf_item("INTERVAL", &graphite_conf_table, 0, &graphite_interval,
 	                          GRAPHITE_INTERVAL_MIN, GRAPHITE_INTERVAL_MAX, GRAPHITE_INTERVAL_DEF);
+
+	// If this module was unloaded instead of reloaded, the cache could be stale
+	(void) pwhash_invalidate_token_cache();
 }
 
 static void
@@ -307,7 +329,9 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	(void) graphite_disconnect(true);
 
 	(void) hook_del_config_ready(&graphite_config_ready);
+	(void) hook_del_myuser_changed_password_or_hash(&pwhash_invalidate_user_token);
 
+	(void) del_conf_item("COLLECT_PWHASHES", &graphite_conf_table);
 	(void) del_conf_item("PREFIX", &graphite_conf_table);
 	(void) del_conf_item("VHOST", &graphite_conf_table);
 	(void) del_conf_item("HOST", &graphite_conf_table);
