@@ -8,7 +8,7 @@ https://github.com/atheme/atheme/blob/master/SECURITY.md
 
 Currently, the latest minor release will receive security and bugfix
 updates as new point releases. This is currently the 7.2 release series,
-with 7.2.10-r2 being the currently supported stable release.
+with 7.2.11 being the currently supported stable release.
 
 For the lifetime of the upcoming 7.3 release series, we are planning to keep
 supporting the 7.2 series with security updates as needed.
