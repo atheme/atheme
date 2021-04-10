@@ -1,0 +1,14 @@
+Help for CANONMAIL:
+
+CANONMAIL takes an email address and looks up the
+canonicalized form.
+
+This is an internal representation of the email address
+used in registration limit checks; two addresses that
+canonicalize to the same string will be considered the
+same address for purposes of such limits.
+
+Syntax: CANONMAIL <email>
+
+Example:
+    /msg &nick& CANONMAIL ilbelkyr@atheme.org

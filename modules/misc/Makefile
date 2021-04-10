@@ -12,6 +12,7 @@ include ../../extra.mk
 
 MODULE = misc
 SRCS   =            \
+    canon_domains.c \
     canon_gmail.c   \
     httpd.c
 
