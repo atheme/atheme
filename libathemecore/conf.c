@@ -296,6 +296,7 @@ init_newconf(void)
 	add_bool_conf_item("DB_SAVE_BLOCKING", &conf_gi_table, 0, &config_options.db_save_blocking, false);
 	add_dupstr_conf_item("OPERSTRING", &conf_gi_table, 0, &config_options.operstring, "is an IRC Operator");
 	add_dupstr_conf_item("SERVICESTRING", &conf_gi_table, 0, &config_options.servicestring, "is a Network Service");
+	add_bool_conf_item("MATCH_MASKS_THROUGH_VHOST", &conf_gi_table, 0, &config_options.masks_through_vhost, true);
 
 	/* XXX: These 3 options should probably move into operserv/clones eventually */
 	add_uint_conf_item("DEFAULT_CLONE_ALLOWED", &conf_gi_table, 0, &config_options.default_clone_allowed, 1, INT_MAX, 5);

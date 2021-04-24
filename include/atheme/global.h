@@ -96,6 +96,7 @@ struct ConfOption
 	bool            show_entity_id;         // do not require user:auspex to see entity IDs
 	bool            load_database_mdeps;    // for core module deps listed in DB, whether to load them or abort
 	bool            hide_opers;             // whether or not to hide RPL_WHOISOPERATOR from remote whois
+	bool            masks_through_vhost;    // whether masks match the host/IP behind a vhost
 };
 
 extern struct ConfOption config_options;

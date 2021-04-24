@@ -344,11 +344,19 @@ generic_mask_matches_user(const char *mask, struct user *u)
 
 	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
 	snprintf(cloakbuf, sizeof cloakbuf, "%s!%s@%s", u->nick, u->user, u->chost);
+
+	bool result = !match(mask, hostbuf) || !match(mask, cloakbuf);
+
+	// return if configured not to check further, or if we already have a match
+	if ((!config_options.masks_through_vhost && u->host != u->vhost) || result)
+		return result;
+
 	snprintf(realbuf, sizeof realbuf, "%s!%s@%s", u->nick, u->user, u->host);
 	/* will be nick!user@ if ip unknown, doesn't matter */
 	snprintf(ipbuf, sizeof ipbuf, "%s!%s@%s", u->nick, u->user, u->ip);
 
-	return !match(mask, hostbuf) || !match(mask, cloakbuf) || !match(mask, realbuf) || !match(mask, ipbuf) || (ircd->flags & IRCD_CIDR_BANS && !match_cidr(mask, ipbuf));
+	return !match(mask, realbuf) || !match(mask, ipbuf) || (ircd->flags & IRCD_CIDR_BANS && !match_cidr(mask, ipbuf));
+
 }
 
 mowgli_node_t *

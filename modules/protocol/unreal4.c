@@ -233,6 +233,8 @@ unreal_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_nod
 	// will be nick!user@ if ip unknown, doesn't matter
 	snprintf(ipbuf, sizeof ipbuf, "%s!%s@%s", u->nick, u->user, u->ip);
 
+	bool check_realhost = (config_options.masks_through_vhost || u->host == u->vhost);
+
 	MOWGLI_ITER_FOREACH(n, first)
 	{
 		cb = n->data;
@@ -240,8 +242,11 @@ unreal_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_nod
 		if (cb->type != type)
 			continue;
 
-		if ((!match(cb->mask, hostbuf) || !match(cb->mask, realbuf) || !match(cb->mask, ipbuf)))
+		if (!match(cb->mask, hostbuf))
 			return n;
+		if (check_realhost && (!match(cb->mask, realbuf) || !match(cb->mask, ipbuf)))
+			return n;
+
 		if (cb->mask[0] == '~')
 		{
 			p = cb->mask + 1;
@@ -276,7 +281,9 @@ unreal_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_nod
 					matched = should_reg_umode(u);
 					break;
 				case 'q':
-					matched = !match(p, hostbuf) || !match(p, ipbuf);
+					matched = !match(p, hostbuf);
+					if (check_realhost && !matched)
+						matched = !match(p, ipbuf);
 					break;
 				default:
 					continue;

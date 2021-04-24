@@ -2840,6 +2840,17 @@ general {
 	 * whether or not to hide oper status in remote whois
 	 */
 	#hide_opers;
+
+	/* (*)(B) match_masks_through_vhost
+	 *
+	 * This enables matching of bans as well as channel access entries
+	 * based on the real host/IP behind a vhost.
+	 *
+	 * You should only disable this if your ircd has been configured
+	 * to not match bans through vhosts either; otherwise, services
+	 * will be inconsistent with ircd behaviour.
+	 */
+	match_masks_through_vhost;
 };
 
 

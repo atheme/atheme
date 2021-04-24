@@ -125,6 +125,8 @@ inspircd_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_n
 	// will be nick!user@ if ip unknown, doesn't matter
 	snprintf(ipbuf, sizeof ipbuf, "%s!%s@%s", u->nick, u->user, u->ip);
 
+	bool check_realhost = (config_options.masks_through_vhost || u->host == u->vhost);
+
 	MOWGLI_ITER_FOREACH(n, first)
 	{
 		struct channel *target_c;
@@ -134,7 +136,9 @@ inspircd_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_n
 		if (cb->type != type)
 			continue;
 
-		if ((!match(cb->mask, hostbuf) || !match(cb->mask, realbuf) || !match(cb->mask, ipbuf)) || !match_cidr(cb->mask, ipbuf))
+		if (!match(cb->mask, hostbuf))
+			return n;
+		if (check_realhost && (!match(cb->mask, realbuf) || !match(cb->mask, ipbuf) || !match_cidr(cb->mask, ipbuf)))
 			return n;
 
 		if (cb->mask[1] == ':' && strchr("MRUjrm", cb->mask[0]))
@@ -168,7 +172,9 @@ inspircd_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_n
 				matched = !match(p, u->gecos);
 				break;
 			case 'm':
-				matched = (!match(p, hostbuf) || !match(p, realbuf) || !match(p, ipbuf)) || !match_cidr(p, ipbuf);
+				matched = !match(p, hostbuf);
+				if (check_realhost && !matched)
+					matched = !match(p, realbuf) || !match(p, ipbuf) || !match_cidr(p, ipbuf);
 				break;
 			default:
 				continue;

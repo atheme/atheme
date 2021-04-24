@@ -93,9 +93,11 @@ extgecos_match(const char *mask, struct user *u)
 	char hostgbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + GECOSLEN + 1];
 	char realgbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1 + GECOSLEN + 1];
 
+	bool check_realhost = (config_options.masks_through_vhost || u->host == u->vhost);
+
 	snprintf(hostgbuf, sizeof hostgbuf, "%s!%s@%s#%s", u->nick, u->user, u->vhost, u->gecos);
 	snprintf(realgbuf, sizeof realgbuf, "%s!%s@%s#%s", u->nick, u->user, u->host, u->gecos);
-	return !match(mask, hostgbuf) || !match(mask, realgbuf);
+	return !match(mask, hostgbuf) || (check_realhost && !match(mask, realgbuf));
 }
 
 /* Check if the user is both *NOT* identified to services, and
@@ -143,6 +145,8 @@ chatircd_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_n
 	// will be nick!user@ if ip unknown, doesn't matter
 	snprintf(ipbuf, sizeof ipbuf, "%s!%s@%s", u->nick, u->user, u->ip);
 
+	bool check_realhost = (config_options.masks_through_vhost || u->host == u->vhost);
+
 	MOWGLI_ITER_FOREACH(n, first)
 	{
 		cb = n->data;
@@ -161,8 +165,11 @@ chatircd_next_matching_ban(struct channel *c, struct user *u, int type, mowgli_n
 		if (p != NULL && p != strippedmask)
 			*p = 0;
 
-		if ((!match(strippedmask, hostbuf) || !match(strippedmask, realbuf) || !match(strippedmask, ipbuf) || !match_cidr(strippedmask, ipbuf)))
+		if (!match(strippedmask, hostbuf))
 			return n;
+		if (check_realhost && (!match(strippedmask, realbuf) || !match(strippedmask, ipbuf) || !match_cidr(strippedmask, ipbuf)))
+			return n;
+
 		if (strippedmask[0] == '$')
 		{
 			p = strippedmask + 1;
