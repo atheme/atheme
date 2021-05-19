@@ -9,7 +9,7 @@ When dropping and re-registering an account during a
 netsplit, users on the other side of the split may later
 be recognized as the new account.
 
-Syntax: DROP <nickname> <password>
+Syntax: DROP <nickname>
 
 Example:
-    /msg &nick& DROP foo bar
+    /msg &nick& DROP foo
