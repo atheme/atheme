@@ -7038,7 +7038,7 @@ VERSION=7.3.0-rc2
 
 VENDOR_STRING="Atheme Development Group <https://atheme.github.io/>"
 
-PACKAGE_BUGREPORT_I18N="ircs://chat.freenode.net:6697/atheme-i18n"
+PACKAGE_BUGREPORT_I18N="ircs://irc.libera.chat:6697/atheme-i18n"
 
 
 cat >>confdefs.h <<_ACEOF

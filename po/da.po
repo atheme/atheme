@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services 7.3.0-rc2\n"
-"Report-Msgid-Bugs-To: <ircs://chat.freenode.net:6697/atheme-i18n>\n"
+"Report-Msgid-Bugs-To: <ircs://irc.libera.chat:6697/atheme-i18n>\n"
 "POT-Creation-Date: 2021-02-11 01:09+0000\n"
 "PO-Revision-Date: 2011-11-17 23:38+0000\n"
 "Last-Translator: mickeyunagee <m@sr.dk>\n"

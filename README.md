@@ -136,4 +136,4 @@ for more hints.
 - [Our Website](https://atheme.github.io/)
 - [Our GitHub Repository](https://github.com/atheme/atheme/)
 - [The Atheme Wiki](https://github.com/atheme/atheme/wiki/)
-- [The #atheme channel on freenode](ircs://chat.freenode.net:6697/#atheme)
+- [The #atheme channel on Libera Chat](ircs://irc.libera.chat:6697/#atheme)

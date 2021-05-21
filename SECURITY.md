@@ -27,13 +27,13 @@ policy for details.
 
 Our security contacts are, in alphabetical order:
 
-| GitHub username | freenode account name |
-| --------------- | --------------------- |
-| @aaronmdjones   | `amdj`                |
-| @ilbelkyr       | `ilbelkyr`            |
+| GitHub username | Libera Chat account name |
+| --------------- | ------------------------ |
+| @aaronmdjones   | `amdj`                   |
+| @ilbelkyr       | `ilbelkyr`               |
 
 If circumstances permit, you can contact us via IRC by sending us a private
-message on the freenode IRC network. Please double-check you are actually
+message on the Libera Chat IRC network. Please double-check you are actually
 talking to the right people; we are generally opped in the `#atheme` channel.
 
 Otherwise, you may prefer to contact us via email at `security@atheme.org`
