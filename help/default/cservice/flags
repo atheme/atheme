@@ -2,7 +2,11 @@ Help for FLAGS:
 
 The FLAGS command allows for the granting/removal of channel
 privileges on a more specific, non-generalized level. It
+#if module groupserv/main
 supports nicknames, groups and hostmasks as targets.
+#else
+supports nicknames and hostmasks as targets.
+#endif
 
 When only the channel argument is given, a listing of
 permissions granted to users will be displayed.
@@ -37,7 +41,11 @@ restricted further, see help for SET LIMITFLAGS.
 #if module exttarget/main
 As of Atheme 7.0, there are now extended entity targets
 which allow you to match chanacs against a situation instead
+#if module groupserv/main
 of against a nickname, hostmask or group.
+#else
+of against a nickname or hostmask.
+#endif
 
 Available exttargets are:
 #endif
@@ -62,8 +70,13 @@ $chanacs:#channel - Any user with channel access in the given channel
 If you do not have +f you may still remove your own access
 with -*.
 
+#if module groupserv/main
 Syntax: FLAGS <#channel> [nickname|hostmask|group template]
 Syntax: FLAGS <#channel> [nickname|hostmask|group flag_changes]
+#else
+Syntax: FLAGS <#channel> [nickname|hostmask template]
+Syntax: FLAGS <#channel> [nickname|hostmask flag_changes]
+#endif
 
 Permissions:
     +v - Enables use of the voice/devoice commands.
@@ -116,4 +129,6 @@ Examples:
     /msg &nick& FLAGS #foo foo!*@bar.com -*
     /msg &nick& FLAGS #foo foo +oOtsi
     /msg &nick& FLAGS #foo TroubleUser!*@*.troubleisp.net +b
+#if module groupserv/main
     /msg &nick& FLAGS #foo !baz +*
+#endif
