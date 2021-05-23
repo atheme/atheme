@@ -6,3 +6,6 @@ Your account name is used in various places as
 a name for you.
 
 Syntax: SET ACCOUNTNAME <nick>
+
+Example:
+    /msg &nick& SET ACCOUNTNAME amdj
