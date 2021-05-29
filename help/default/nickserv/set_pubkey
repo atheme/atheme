@@ -7,3 +7,6 @@ If no pubkey is given, your public key will
 be removed from the services database.
 
 Syntax: SET PUBKEY [<pubkey>]
+
+Example:
+    /msg &nick& SET PUBKEY Ao8he4hEXkOo8xW1Yot4gKzQAxudXRng57zoPZV9fsjm

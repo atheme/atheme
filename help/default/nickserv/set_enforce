@@ -9,3 +9,6 @@ and temporarily block its use, which can be
 removed at your discretion. See help on RELEASE.
 
 Syntax: SET ENFORCE ON|OFF
+
+Example:
+    /msg &nick& SET ENFORCE ON
