@@ -245,6 +245,16 @@ handle_stats(struct user *u, char req)
 
 	  case 'T':
 	  case 't':
+		  // These 3 are not sensitive; and can already be obtained with /LUSERS on IRC
+		  numeric_sts(me.me, 249, u, "T :server     %7u", cnt.server);
+		  numeric_sts(me.me, 249, u, "T :user       %7u", cnt.user);
+		  numeric_sts(me.me, 249, u, "T :chan       %7u", cnt.chan);
+
+		  // These 3 are not sensitive
+		  numeric_sts(me.me, 249, u, "T :myuser     %7u", cnt.myuser);
+		  numeric_sts(me.me, 249, u, "T :mynick     %7u", cnt.mynick);
+		  numeric_sts(me.me, 249, u, "T :mychan     %7u", cnt.mychan);
+
 		  if (!has_priv_user(u, PRIV_SERVER_AUSPEX))
 			  break;
 
@@ -256,15 +266,9 @@ handle_stats(struct user *u, char req)
 		  numeric_sts(me.me, 249, u, "T :tld        %7u", cnt.tld);
 		  numeric_sts(me.me, 249, u, "T :kline      %7u", cnt.kline);
 		  numeric_sts(me.me, 249, u, "T :xline      %7u", cnt.xline);
-		  numeric_sts(me.me, 249, u, "T :server     %7u", cnt.server);
-		  numeric_sts(me.me, 249, u, "T :user       %7u", cnt.user);
-		  numeric_sts(me.me, 249, u, "T :chan       %7u", cnt.chan);
 		  numeric_sts(me.me, 249, u, "T :chanuser   %7u", cnt.chanuser);
-		  numeric_sts(me.me, 249, u, "T :myuser     %7u", cnt.myuser);
 		  numeric_sts(me.me, 249, u, "T :myuser_acc %7u", cnt.myuser_access);
-		  numeric_sts(me.me, 249, u, "T :mynick     %7u", cnt.mynick);
 		  numeric_sts(me.me, 249, u, "T :myuser_nam %7u", cnt.myuser_name);
-		  numeric_sts(me.me, 249, u, "T :mychan     %7u", cnt.mychan);
 		  numeric_sts(me.me, 249, u, "T :chanacs    %7u", cnt.chanacs);
 
 #ifdef OBJECT_DEBUG
