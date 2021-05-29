@@ -64,6 +64,7 @@ ns_cmd_set_accountname(struct sourceinfo *si, int parc, char *parv[])
 	hook_call_user_can_rename(&req);
 	if (!req.allowed)
 	{
+		logcommand(si, CMDLOG_REGISTER, "failed SET:ACCOUNTNAME \2%s\2 -> \2%s\2 (denied by hook)", entity(si->smu)->name, newname);
 		command_fail(si, fault_authfail, _("You cannot change account name because the server configuration disallows it."));
 		return;
 	}
