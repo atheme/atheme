@@ -610,7 +610,7 @@ sasl_process_packet(struct sasl_session *const restrict p, char *const restrict 
 	}
 	else if (! p->mechptr)
 	{
-		(void) slog(LG_ERROR, "%s: session has no mechanism (BUG!)", MOWGLI_FUNC_NAME);
+		(void) slog(LG_DEBUG, "%s: session has no mechanism?", MOWGLI_FUNC_NAME);
 		return false;
 	}
 	else
