@@ -47,6 +47,12 @@ cs_cmd_set_property(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	if (metadata_find(mc, "private:close:closer"))
+	{
+		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, parv[0]);
+		return;
+	}
+
 	if (strchr(property, ':'))
 		logcommand(si, CMDLOG_SET, "SET:PROPERTY: \2%s\2: \2%s\2/\2%s\2", mc->name, property, value);
 

@@ -405,6 +405,12 @@ cs_cmd_unquiet(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	if (metadata_find(mc, "private:close:closer"))
+	{
+		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, channel);
+		return;
+	}
+
 	targetlist = sstrdup(target);
 	target = strtok_r(targetlist, " ", &strtokctx);
 	do

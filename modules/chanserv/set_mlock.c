@@ -57,6 +57,12 @@ cs_cmd_set_mlock(struct sourceinfo *si, int parc, char *parv[])
 
 	}
 
+	if (metadata_find(mc, "private:close:closer"))
+	{
+		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, parv[0]);
+		return;
+	}
+
 	for (i = 0; i < ignore_mode_list_size; i++)
 	{
 		newlock_ext[i][0] = '\0';

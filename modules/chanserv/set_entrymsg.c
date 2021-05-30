@@ -31,6 +31,12 @@ cs_cmd_set_entrymsg(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	if (metadata_find(mc, "private:close:closer"))
+	{
+		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, parv[0]);
+		return;
+	}
+
 	if (!parv[1] || !strcasecmp("OFF", parv[1]) || !strcasecmp("NONE", parv[1]))
 	{
 		/* entrymsg is private because users won't see it if they're AKICKED,
