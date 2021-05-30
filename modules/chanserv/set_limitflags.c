@@ -35,6 +35,12 @@ cs_cmd_set_limitflags(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	if (metadata_find(mc, "private:close:closer"))
+	{
+		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, parv[0]);
+		return;
+	}
+
 	if (!strcasecmp("ON", parv[1]))
 	{
 		if (MC_LIMITFLAGS & mc->flags)

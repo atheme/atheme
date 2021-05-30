@@ -44,18 +44,18 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!has_priv(si, PRIV_CHAN_AUSPEX) && metadata_find(mc, "private:close:closer"))
-	{
-		command_fail(si, fault_noprivs, _("\2%s\2 has been closed down by the %s administration."), mc->name, me.netname);
-		return;
-	}
-
 	hide_info = (mc->flags & MC_PRIVATE) && !chanacs_source_has_flag(mc, si, CA_ACLVIEW) &&
 		!has_priv(si, PRIV_CHAN_AUSPEX);
 
 	hide_acl = !chanacs_source_has_flag(mc, si, CA_ACLVIEW) &&
 		!has_priv(si, PRIV_CHAN_AUSPEX) &&
 		!(mc->flags & MC_PUBACL);
+
+	if (!has_priv(si, PRIV_CHAN_AUSPEX) && metadata_find(mc, "private:close:closer"))
+	{
+		command_fail(si, fault_noprivs, _("\2%s\2 has been closed down by the %s administration."), mc->name, me.netname);
+		return;
+	}
 
 	tm = localtime(&mc->registered);
 	strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);

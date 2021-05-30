@@ -37,6 +37,12 @@ cs_cmd_set_gameserv(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	if (metadata_find(mc, "private:close:closer"))
+	{
+		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, parv[0]);
+		return;
+	}
+
 	if (!strcasecmp("ALL", parv[1]))
 		val = "ALL";
 	else if (!strcasecmp("VOICE", parv[1]) || !strcasecmp("VOICES", parv[1]))

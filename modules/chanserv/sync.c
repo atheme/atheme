@@ -143,6 +143,12 @@ cs_cmd_sync(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	if (!chanacs_source_has_flag(mc, si, CA_RECOVER))
+	{
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
+		return;
+	}
+
 	if (metadata_find(mc, "private:close:closer"))
 	{
 		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, name);
@@ -152,12 +158,6 @@ cs_cmd_sync(struct sourceinfo *si, int parc, char *parv[])
 	if (!mc->chan)
 	{
 		command_fail(si, fault_nosuch_target, STR_CHANNEL_IS_EMPTY, name);
-		return;
-	}
-
-	if (!chanacs_source_has_flag(mc, si, CA_RECOVER))
-	{
-		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 
@@ -189,6 +189,12 @@ cs_cmd_set_nosync(struct sourceinfo *si, int parc, char *parv[])
 	if (!chanacs_source_has_flag(mc, si, CA_SET))
 	{
 		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
+		return;
+	}
+
+	if (metadata_find(mc, "private:close:closer"))
+	{
+		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, parv[0]);
 		return;
 	}
 

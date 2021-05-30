@@ -132,6 +132,12 @@ cs_cmd_unban(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	if (metadata_find(mc, "private:close:closer"))
+	{
+		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, channel);
+		return;
+	}
+
 	if ((tu = user_find_named(target)))
 	{
 		mowgli_node_t *n, *tn;

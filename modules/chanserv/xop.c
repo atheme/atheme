@@ -422,15 +422,15 @@ cs_cmd_forcexop(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	if (metadata_find(mc, "private:close:closer"))
-	{
-		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, chan);
-		return;
-	}
-
 	if (!is_founder(mc, entity(si->smu)))
 	{
 		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
+		return;
+	}
+
+	if (metadata_find(mc, "private:close:closer"))
+	{
+		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, chan);
 		return;
 	}
 

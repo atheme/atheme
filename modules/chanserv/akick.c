@@ -489,18 +489,18 @@ cs_cmd_akick_del(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	if (metadata_find(mc, "private:close:closer"))
-	{
-		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, chan);
-		return;
-	}
-
 	struct akick_timeout *timeout;
 	struct chanban *cb;
 
 	if ((chanacs_source_flags(mc, si) & (CA_FLAGS | CA_REMOVE)) != (CA_FLAGS | CA_REMOVE))
 	{
 		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
+		return;
+	}
+
+	if (metadata_find(mc, "private:close:closer"))
+	{
+		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, chan);
 		return;
 	}
 

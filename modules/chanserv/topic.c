@@ -33,12 +33,11 @@ cs_cmd_topic(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	c = channel_find(chan);
-	if (!c)
+	if (!chanacs_source_has_flag(mc, si, CA_TOPIC))
 	{
-                command_fail(si, fault_nosuch_target, STR_CHANNEL_IS_EMPTY, chan);
-                return;
-        }
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
+		return;
+	}
 
 	if (metadata_find(mc, "private:close:closer"))
 	{
@@ -46,11 +45,12 @@ cs_cmd_topic(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!chanacs_source_has_flag(mc, si, CA_TOPIC))
+	c = channel_find(chan);
+	if (!c)
 	{
-		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
-		return;
-	}
+                command_fail(si, fault_nosuch_target, STR_CHANNEL_IS_EMPTY, chan);
+                return;
+        }
 
 	if (!validtopic(topic))
 	{

@@ -119,6 +119,12 @@ cs_cmd_kickban(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	if (metadata_find(mc, "private:close:closer"))
+	{
+		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, chan);
+		return;
+	}
+
 	// figure out who we're going to kick
 	if ((tu = user_find_named(nick)) == NULL)
 	{
