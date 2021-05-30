@@ -33,12 +33,6 @@ cs_cmd_clear_akicks(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	if (metadata_find(mc, "private:close:closer"))
-	{
-		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, name);
-		return;
-	}
-
 	if (!mc->chan)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 does not exist."), name);
@@ -48,6 +42,12 @@ cs_cmd_clear_akicks(struct sourceinfo *si, int parc, char *parv[])
 	if (!(chanacs_source_has_flag(mc, si, CA_RECOVER) && chanacs_source_has_flag(mc, si, CA_FLAGS)))
 	{
 		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
+		return;
+	}
+
+	if (metadata_find(mc, "private:close:closer"))
+	{
+		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, name);
 		return;
 	}
 

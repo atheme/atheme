@@ -49,12 +49,6 @@ cs_cmd_unban(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!c)
-	{
-		command_fail(si, fault_nosuch_target, STR_CHANNEL_IS_EMPTY, channel);
-		return;
-	}
-
 	if (!si->smu)
 	{
 		command_fail(si, fault_noprivs, STR_NOT_LOGGED_IN);
@@ -71,6 +65,12 @@ cs_cmd_unban(struct sourceinfo *si, int parc, char *parv[])
 	if (metadata_find(mc, "private:close:closer"))
 	{
 		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, channel);
+		return;
+	}
+
+	if (!c)
+	{
+		command_fail(si, fault_nosuch_target, STR_CHANNEL_IS_EMPTY, channel);
 		return;
 	}
 

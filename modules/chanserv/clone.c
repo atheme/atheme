@@ -45,6 +45,18 @@ cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	if (!(mc->flags & MC_PUBACL) && !chanacs_source_has_flag(mc, si, CA_ACLVIEW))
+	{
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
+		return;
+	}
+
+	if (!chanacs_source_has_flag(mc2, si, CA_FOUNDER))
+	{
+		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
+		return;
+	}
+
 	if (metadata_find(mc, "private:close:closer"))
 	{
 		command_fail(si, fault_noprivs, STR_CHANNEL_IS_CLOSED, source);
@@ -66,18 +78,6 @@ cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[])
 	if (!mc2->chan)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 does not exist."), target);
-		return;
-	}
-
-	if (!(mc->flags & MC_PUBACL) && !chanacs_source_has_flag(mc, si, CA_ACLVIEW))
-	{
-		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
-		return;
-	}
-
-	if (!chanacs_source_has_flag(mc2, si, CA_FOUNDER))
-	{
-		command_fail(si, fault_noprivs, STR_NOT_AUTHORIZED);
 		return;
 	}
 
