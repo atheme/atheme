@@ -71,13 +71,13 @@ cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[])
 
 	if (!mc->chan)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 does not exist."), source);
+		command_fail(si, fault_nosuch_target, STR_CHANNEL_IS_EMPTY, source);
 		return;
 	}
 
 	if (!mc2->chan)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 does not exist."), target);
+		command_fail(si, fault_nosuch_target, STR_CHANNEL_IS_EMPTY, target);
 		return;
 	}
 
