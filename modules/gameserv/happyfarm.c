@@ -166,7 +166,7 @@ typedef struct {
 	mowgli_node_t farmer_node;
 
 	/*
-	 * A nore for storage in the global plot list.
+	 * A node for storage in the global plot list.
 	 */
 	mowgli_node_t global_node;
 } happy_plot_t;
