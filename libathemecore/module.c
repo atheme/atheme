@@ -299,8 +299,20 @@ module_unload(struct module *const restrict m, const enum module_unload_intent i
 	if (! m)
 		return;
 
-	// Unload modules which depend on us
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, m->required_by.head)
+	/* Unload modules which depend on us
+	 *
+	 * Note we cannot use a normal list iteration loop here;
+	 * it's possible for us to recursively unload another module
+	 * that also depends on us directly. If that module is the next
+	 * entry in the required_by list, both n and tn will have been
+	 * freed already.
+	 *
+	 * However, as the module_unload call will always remove the
+	 * specified module from the list, we can simply keep removing
+	 * the first module on the list until there are no modules
+	 * remaining.
+	 */
+	while ((n = m->required_by.head) != NULL)
 	{
 		struct module *const hm = n->data;
 
