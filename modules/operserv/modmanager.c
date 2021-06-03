@@ -401,18 +401,19 @@ os_cmd_modreload_func(struct sourceinfo *const restrict si, const int parc, char
 
 	const char *n_dep = NULL;
 	const char *r_dep = NULL;
-	struct module *mptr[parc];
 	enum module_unload_capability ucap[parc];
 	mowgli_list_t *const deplist = mowgli_list_create();
 
 	for (int i = 0; i < parc; i++)
 	{
-		if (! (mptr[i] = module_find_published(parv[i])))
+		struct module *const mptr = module_find_published(parv[i]);
+
+		if (! mptr)
 		{
 			(void) command_fail(si, fault_nochange, _("\2%s\2 is not loaded."), parv[i]);
 			continue;
 		}
-		if ((ucap[i] = mptr[i]->can_unload) == MODULE_UNLOAD_CAPABILITY_NEVER)
+		if ((ucap[i] = mptr->can_unload) == MODULE_UNLOAD_CAPABILITY_NEVER)
 		{
 			(void) command_fail(si, fault_badparams, _("\2%s\2 is a permanent module; it cannot be "
 			                                           "reloaded."), parv[i]);
@@ -421,7 +422,7 @@ os_cmd_modreload_func(struct sourceinfo *const restrict si, const int parc, char
 			                      "module", get_oper_name(si), parv[i]);
 			continue;
 		}
-		if ((ucap[i] = mod_recurse_revdeps(mptr[i], NULL, &n_dep, &r_dep)) == MODULE_UNLOAD_CAPABILITY_NEVER)
+		if ((ucap[i] = mod_recurse_revdeps(mptr, NULL, &n_dep, &r_dep)) == MODULE_UNLOAD_CAPABILITY_NEVER)
 		{
 			(void) command_fail(si, fault_badparams, _("\2%s\2 is depended upon by \2%s\2, which is a "
 			                                           "permanent module and cannot be reloaded."),
@@ -435,7 +436,7 @@ os_cmd_modreload_func(struct sourceinfo *const restrict si, const int parc, char
 		/* We don't want to put them into the list of modules to reload until now, in case
 		 * one of the reverse dependencies of the module given above is not reloadable.
 		 */
-		(void) mod_recurse_revdeps(mptr[i], deplist, NULL, NULL);
+		(void) mod_recurse_revdeps(mptr, deplist, NULL, NULL);
 
 		(void) logcommand(si, CMDLOG_ADMIN, "MODRELOAD: \2%s\2", parv[i]);
 	}
@@ -457,8 +458,13 @@ os_cmd_modreload_func(struct sourceinfo *const restrict si, const int parc, char
 
 	// Now onto the actual unloading and reloading
 	for (int i = 0; i < parc; i++)
-		if (mptr[i] && ucap[i] != MODULE_UNLOAD_CAPABILITY_NEVER)
-			(void) module_unload(mptr[i], MODULE_UNLOAD_INTENT_RELOAD);
+	{
+		// We need to look up the module again in case it was already unloaded as a reverse dependency
+		struct module *const mptr = module_find_published(parv[i]);
+
+		if (mptr && ucap[i] != MODULE_UNLOAD_CAPABILITY_NEVER)
+			(void) module_unload(mptr, MODULE_UNLOAD_INTENT_RELOAD);
+	}
 
 	const mowgli_node_t *n;
 	MOWGLI_LIST_FOREACH(n, deplist->head)
