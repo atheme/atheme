@@ -724,7 +724,7 @@ sasl_input_hostinfo(const struct sasl_message *const restrict smsg, struct sasl_
 	p->ip   = sstrdup(smsg->parv[1]);
 
 	if (smsg->parc >= 3 && strcmp(smsg->parv[2], "P") != 0)
-		p->flags |= ASASL_SFLAG_CLIENT_USING_TLS;
+		p->flags |= ASASL_SFLAG_CLIENT_SECURE;
 }
 
 static bool ATHEME_FATTR_WUR
@@ -742,7 +742,7 @@ sasl_input_startauth(const struct sasl_message *const restrict smsg, struct sasl
 		(void) sfree(p->certfp);
 
 		p->certfp = sstrdup(smsg->parv[1]);
-		p->flags |= ASASL_SFLAG_CLIENT_USING_TLS;
+		p->flags |= ASASL_SFLAG_CLIENT_SECURE;
 	}
 
 	struct user *const u = user_find(p->uid);
