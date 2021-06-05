@@ -211,7 +211,7 @@ sid_find(const char *name)
 static inline void
 channel_metadata_sts(struct channel *c, const char *key, const char *value)
 {
-	sts(":%s METADATA %s %s :%s", ME, c->name, key, value);
+	sts(":%s METADATA %s %lu %s :%s", ME, c->name, (unsigned long)c->ts, key, value);
 }
 
 static bool
