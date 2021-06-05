@@ -467,7 +467,7 @@ inspircd_numeric_sts(struct server *from, int numeric, struct user *target, cons
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s PUSH %s ::%s %d %s %s", from->sid, target->uid, from->name, numeric, target->nick, buf);
+	sts(":%s NUM %s %s %d %s", from->sid, from->sid, target->uid, numeric, buf);
 }
 
 static void
