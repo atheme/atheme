@@ -1038,6 +1038,31 @@ m_fjoin(struct sourceinfo *si, int parc, char *parv[])
 }
 
 static void
+m_ijoin(struct sourceinfo *si, int parc, char *parv[])
+{
+	// :<uid> IJOIN <chan> <membid> [<ts> [<flags>]]
+	struct channel *c;
+	char prefixandnick[51];
+
+	c = channel_find(parv[0]);
+	if (c == NULL)
+	{
+		sts(":%s RESYNC :%s", me.numeric, parv[0]);
+		return;
+	}
+
+	if (parc < 4)
+	{
+		chanuser_add(c, si->su->nick);
+		return;
+	}
+
+	mowgli_strlcpy(prefixandnick, parv[3], sizeof(prefixandnick));
+	mowgli_strlcpy(prefixandnick + strlen(parv[3]), si->su->nick, sizeof(prefixandnick) - strlen(parv[3]));
+	chanuser_add(c, prefixandnick);
+}
+
+static void
 m_part(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_part(): user left channel: %s -> %s", si->su->nick, parv[0]);
@@ -1754,6 +1779,7 @@ mod_init(struct module *const restrict m)
 	pcommand_add("PRIVMSG", m_privmsg, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("NOTICE", m_notice, 2, MSRC_USER | MSRC_SERVER | MSRC_UNREG);
 	pcommand_add("FJOIN", m_fjoin, 3, MSRC_SERVER);
+	pcommand_add("IJOIN", m_ijoin, 2, MSRC_USER);
 	pcommand_add("PART", m_part, 1, MSRC_USER);
 	pcommand_add("NICK", m_nick, 2, MSRC_USER);
 	pcommand_add("UID", m_uid, 10, MSRC_SERVER);
