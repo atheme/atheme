@@ -1295,22 +1295,6 @@ m_away(struct sourceinfo *si, int parc, char *parv[])
 }
 
 static void
-m_join(struct sourceinfo *si, int parc, char *parv[])
-{
-	struct channel *c;
-
-	c = channel_find(parv[0]);
-	if (!c)
-	{
-		slog(LG_DEBUG, "m_join(): new channel: %s (modes lost)", parv[0]);
-		c = channel_add(parv[0], parc > 1 ? atol(parv[1]) : CURRTIME, si->su->server);
-		return_if_fail(c != NULL);
-		channel_mode_va(NULL, c, 1, "+");
-	}
-	chanuser_add(c, si->su->nick);
-}
-
-static void
 m_save(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u = user_find(parv[0]);
@@ -1788,7 +1772,6 @@ mod_init(struct module *const restrict m)
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
 	pcommand_add("ADMIN", m_admin, 1, MSRC_USER);
 	pcommand_add("FTOPIC", m_ftopic, 4, MSRC_SERVER);
-	pcommand_add("JOIN", m_join, 1, MSRC_USER);
 	pcommand_add("ERROR", m_error, 1, MSRC_UNREG | MSRC_SERVER);
 	pcommand_add("TOPIC", m_topic, 2, MSRC_USER);
 	pcommand_add("FIDENT", m_fident, 1, MSRC_USER);
