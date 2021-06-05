@@ -794,17 +794,6 @@ inspircd_topiclock_sts(struct channel *c)
 }
 
 static void
-m_topic(struct sourceinfo *si, int parc, char *parv[])
-{
-	struct channel *c = channel_find(parv[0]);
-
-	if (!c)
-		return;
-
-	handle_topic_from(si, c, si->su->nick, time(NULL), parv[1]);
-}
-
-static void
 m_ftopic(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c = channel_find(parv[0]);
@@ -1773,7 +1762,6 @@ mod_init(struct module *const restrict m)
 	pcommand_add("ADMIN", m_admin, 1, MSRC_USER);
 	pcommand_add("FTOPIC", m_ftopic, 4, MSRC_SERVER);
 	pcommand_add("ERROR", m_error, 1, MSRC_UNREG | MSRC_SERVER);
-	pcommand_add("TOPIC", m_topic, 2, MSRC_USER);
 	pcommand_add("FIDENT", m_fident, 1, MSRC_USER);
 	pcommand_add("FHOST", m_fhost, 1, MSRC_USER);
 	pcommand_add("IDLE", m_idle, 1, MSRC_USER);
