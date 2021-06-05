@@ -1243,7 +1243,9 @@ m_server(struct sourceinfo *si, int parc, char *parv[])
 	{
 		sts(":%s BURST", me.numeric);
 		get_version_string(ver, sizeof(ver));
-		sts(":%s VERSION :%s", me.numeric, ver);
+		sts(":%s SINFO version :%s", me.numeric, ver);
+		sts(":%s SINFO fullversion :[%s] %s", me.numeric, me.numeric, ver);
+		sts(":%s SINFO rawversion :%s-%s", me.numeric, PACKAGE_TARNAME, PACKAGE_VERSION);
 		services_init();
 		sts(":%s ENDBURST", me.numeric);
 	}
