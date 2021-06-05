@@ -680,7 +680,7 @@ inspircd_jupe(const char *server, const char *reason)
 		}
 	} while (server_find(sid));
 
-	sts(":%s SERVER %s * 1 %s :%s", me.numeric, server, sid, reason);
+	sts(":%s SERVER %s %s :%s", me.numeric, server, sid, reason);
 }
 
 static void
@@ -1239,7 +1239,16 @@ m_server(struct sourceinfo *si, int parc, char *parv[])
 		sts(":%s ENDBURST", me.numeric);
 	}
 
-	handle_server(si, parv[0], parv[3], atoi(parv[2]), parv[4]);
+	if (parc == 5)
+	{
+		// SERVER <name> <password> <hops> <sid> :<description>
+		handle_server(si, parv[0], parv[3], atoi(parv[2]), parv[4]);
+	}
+	else if (parc == 3)
+	{
+		// SERVER <name> <sid> :<description>
+		handle_server(si, parv[0], parv[1], 0, parv[2]);
+	}
 }
 
 static inline void
@@ -1756,7 +1765,7 @@ mod_init(struct module *const restrict m)
 	pcommand_add("SAVE", m_save, 2, MSRC_SERVER);
 	pcommand_add("SQUIT", m_squit, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("RSQUIT", m_rsquit, 1, MSRC_USER);
-	pcommand_add("SERVER", m_server, 4, MSRC_UNREG | MSRC_SERVER);
+	pcommand_add("SERVER", m_server, 3, MSRC_UNREG | MSRC_SERVER);
 	pcommand_add("STATS", m_stats, 2, MSRC_USER);
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
 	pcommand_add("ADMIN", m_admin, 1, MSRC_USER);
