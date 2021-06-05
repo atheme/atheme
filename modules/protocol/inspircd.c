@@ -10,8 +10,8 @@
 #include <atheme.h>
 #include <atheme/protocol/inspircd.h>
 
-#define PROTOCOL_MINIMUM 1202 // we do not support anything older than this
-#define PROTOCOL_PREFERRED_STR "1202"
+#define PROTOCOL_MINIMUM 1205 // we do not support anything older than this
+#define PROTOCOL_PREFERRED_STR "1205"
 
 static struct ircd InspIRCd = {
 	.ircdname = "InspIRCd",
