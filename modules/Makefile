@@ -7,7 +7,7 @@
 # Copyright (C) 2010 Stephen Bennett <spb@exherbo.org>
 # Copyright (C) 2011 Alyx <alyx@sporksmoo.net>
 # Copyright (C) 2013 Alyx <alyx@d1stkfactory>
-# Copyright (C) 2018-2020 Aaron M. D. Jones <aaronmdjones@gmail.com>
+# Copyright (C) 2018-2020 Aaron M. D. Jones <me@aaronmdjones.net>
 
 include ../extra.mk
 

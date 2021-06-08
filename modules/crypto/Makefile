@@ -7,7 +7,7 @@
 # Copyright (C) 2011 Stephen Bennett <spb@exherbo.org>
 # Copyright (C) 2012 Elly Fong-Jones <elly@leptoquark.net>
 # Copyright (C) 2014 Mantas Mikulėnas <grawity@gmail.com>
-# Copyright (C) 2015-2020 Aaron M. D. Jones <aaronmdjones@gmail.com>
+# Copyright (C) 2015-2020 Aaron M. D. Jones <me@aaronmdjones.net>
 
 include ../../extra.mk
 

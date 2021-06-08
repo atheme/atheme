@@ -5,7 +5,7 @@
 # Copyright (C) 2010-2013 Jilles Tjoelker <jilles@stack.nl>
 # Copyright (C) 2010 Nathan Phillip Brink <binki@gentoo.org>
 # Copyright (C) 2011 Stephen Bennett <spb@exherbo.org>
-# Copyright (C) 2020 Aaron M. D. Jones <aaronmdjones@gmail.com>
+# Copyright (C) 2020 Aaron M. D. Jones <me@aaronmdjones.net>
 #
 # Additional extensions for building single-file modules.
 

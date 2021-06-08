@@ -50,7 +50,7 @@ const char *infotext[] =
 	"Currently Atheme's core group consists of the following developers, in",
 	"nick-alphabetical order:",
 	" ",
-	"  amdj, Aaron M. D. Jones <aaronmdjones@gmail.com>",
+	"  amdj, Aaron M. D. Jones <me@aaronmdjones.net>",
 	"  ilbelkyr, Janik Kleinhoff <ilbelkyr@shalture.org>",
 	"  mt, Max Teufel <max@teufelsnetz.com>",
 	"  siniStar, Austin Ellis <siniStar@IRC4Fun.net>",

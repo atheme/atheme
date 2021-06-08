@@ -3,7 +3,7 @@
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
  * Copyright (C) 2012-2015 William Pitcock <nenolod@dereferenced.org>
- * Copyright (C) 2015-2018 Aaron M. D. Jones <aaronmdjones@gmail.com>
+ * Copyright (C) 2015-2018 Aaron M. D. Jones <me@aaronmdjones.net>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above

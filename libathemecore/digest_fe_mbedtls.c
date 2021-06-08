@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: ISC
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
- * Copyright (C) 2018-2019 Aaron M. D. Jones <aaronmdjones@gmail.com>
+ * Copyright (C) 2018-2019 Aaron M. D. Jones <me@aaronmdjones.net>
  *
  * ARM mbedTLS frontend for the digest interface.
  */

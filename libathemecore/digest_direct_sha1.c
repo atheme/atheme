@@ -24,7 +24,7 @@
  * SUCH DAMAGE.
  */
 
-/* Heavily modified by Aaron M. D. Jones <aaronmdjones@gmail.com> (2018)
+/* Heavily modified by Aaron M. D. Jones <me@aaronmdjones.net> (2018)
  * for general code cleanup and conformance to new algorithm-agnostic
  * digest API for Atheme IRC Services <https://github.com/atheme/atheme/>.
  *

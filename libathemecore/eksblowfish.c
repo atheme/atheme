@@ -9,7 +9,7 @@
  *
  * Copyright (C) 1997 Niels Provos <provos@umich.edu>
  * Copyright (C) 2014 Ted Unangst <tedu@openbsd.org>
- * Copyright (C) 2020 Aaron M. D. Jones <aaronmdjones@gmail.com>
+ * Copyright (C) 2020 Aaron M. D. Jones <me@aaronmdjones.net>
  */
 
 #include <atheme.h>

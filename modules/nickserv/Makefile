@@ -11,7 +11,7 @@
 # Copyright (C) 2014 Errietta Kostala <errietta@errietta.me>
 # Copyright (C) 2014-2015 Max Teufel <max@teufelsnetz.com>
 # Copyright (C) 2016 Austin Ellis <siniStar@IRC4Fun.net>
-# Copyright (C) 2018-2020 Aaron M. D. Jones <aaronmdjones@gmail.com>
+# Copyright (C) 2018-2020 Aaron M. D. Jones <me@aaronmdjones.net>
 
 include ../../extra.mk
 

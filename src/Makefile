@@ -5,7 +5,7 @@
 # Copyright (C) 2010 Jilles Tjoelker <jilles@stack.nl>
 # Copyright (C) 2010 Elly <elly@leptoquark.net>
 # Copyright (C) 2010 JD Horelick <jdhore1@gmail.com>
-# Copyright (C) 2017-2020 Aaron M. D. Jones <aaronmdjones@gmail.com>
+# Copyright (C) 2017-2020 Aaron M. D. Jones <me@aaronmdjones.net>
 
 include ../extra.mk
 

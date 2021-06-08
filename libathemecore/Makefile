@@ -4,7 +4,7 @@
 # Copyright (C) 2010-2014 William Pitcock <nenolod@dereferenced.org>
 # Copyright (C) 2012 Bryan Drewery <bryan@shatow.net>
 # Copyright (C) 2015 Mantas Mikulėnas <grawity@gmail.com>
-# Copyright (C) 2017-2020 Aaron M. D. Jones <aaronmdjones@gmail.com>
+# Copyright (C) 2017-2020 Aaron M. D. Jones <me@aaronmdjones.net>
 
 include ../extra.mk
 

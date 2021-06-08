@@ -6,7 +6,7 @@
 # Copyright (C) 2010 Jilles Tjoelker <jilles@stack.nl>
 # Copyright (C) 2011 Stephen Bennett <spb@exherbo.org>
 # Copyright (C) 2013 Elizabeth Myers <elizabeth@interlinked.me>
-# Copyright (C) 2017-2020 Aaron M. D. Jones <aaronmdjones@gmail.com>
+# Copyright (C) 2017-2020 Aaron M. D. Jones <me@aaronmdjones.net>
 
 include ../../extra.mk
 

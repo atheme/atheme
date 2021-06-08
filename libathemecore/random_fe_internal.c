@@ -5,7 +5,7 @@
  * Copyright (C) 1996 David Mazieres <dm@uun.org>
  * Copyright (C) 2008 Damien Miller <djm@openbsd.org>
  * Copyright (C) 2013 Markus Friedl <markus@openbsd.org>
- * Copyright (C) 2017-2019 Aaron M. D. Jones <aaronmdjones@gmail.com>
+ * Copyright (C) 2017-2019 Aaron M. D. Jones <me@aaronmdjones.net>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are

@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: CC0-1.0
 # SPDX-URL: https://spdx.org/licenses/CC0-1.0.html
 #
-# Copyright (C) 2019-2020 Aaron M. D. Jones <aaronmdjones@gmail.com>
+# Copyright (C) 2019-2020 Aaron M. D. Jones <me@aaronmdjones.net>
 
 include ../../../extra.mk
 
