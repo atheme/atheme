@@ -401,6 +401,7 @@ os_cmd_modreload_func(struct sourceinfo *const restrict si, const int parc, char
 
 	const char *n_dep = NULL;
 	const char *r_dep = NULL;
+	bool can_reload_any = false;
 	enum module_unload_capability ucap[parc];
 	mowgli_list_t *const deplist = mowgli_list_create();
 
@@ -439,7 +440,13 @@ os_cmd_modreload_func(struct sourceinfo *const restrict si, const int parc, char
 		(void) mod_recurse_revdeps(mptr, deplist, NULL, NULL);
 
 		(void) logcommand(si, CMDLOG_ADMIN, "MODRELOAD: \2%s\2", parv[i]);
+
+		can_reload_any = true;
 	}
+
+	// If we are not able to perform any reloads, just give up now
+	if (! can_reload_any)
+		return;
 
 	/* Sort the list of dependencies so that we reload them in the order they're needed. We can't do this below
 	 * because the modules will be unloaded at that point, which is also why we need to iterate parv[] twice...
