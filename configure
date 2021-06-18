@@ -7249,7 +7249,7 @@ fi
     LIBS="${LIBS_SAVED}"
 
     unset CFLAGS_SAVED
-    unset LIBSS_SAVED
+    unset LIBS_SAVED
 
 
 
@@ -7453,7 +7453,7 @@ rm -f core conftest.err conftest.$ac_objext \
 
     LIBS="${LIBS_SAVED}"
 
-    unset LIBSS_SAVED
+    unset LIBS_SAVED
 
 
 
@@ -8067,7 +8067,7 @@ fi
     LIBS="${LIBS_SAVED}"
 
     unset CFLAGS_SAVED
-    unset LIBSS_SAVED
+    unset LIBS_SAVED
 
 
 
@@ -8259,7 +8259,7 @@ fi
     LIBS="${LIBS_SAVED}"
 
     unset CFLAGS_SAVED
-    unset LIBSS_SAVED
+    unset LIBS_SAVED
 
 
 
@@ -8801,7 +8801,7 @@ fi
     LIBS="${LIBS_SAVED}"
 
     unset CFLAGS_SAVED
-    unset LIBSS_SAVED
+    unset LIBS_SAVED
 
 
 
@@ -9058,7 +9058,7 @@ fi
     LIBS="${LIBS_SAVED}"
 
     unset CFLAGS_SAVED
-    unset LIBSS_SAVED
+    unset LIBS_SAVED
 
 
 
@@ -9277,7 +9277,7 @@ fi
     LIBS="${LIBS_SAVED}"
 
     unset CFLAGS_SAVED
-    unset LIBSS_SAVED
+    unset LIBS_SAVED
 
 
 
@@ -9455,7 +9455,7 @@ fi
     LIBS="${LIBS_SAVED}"
 
     unset CFLAGS_SAVED
-    unset LIBSS_SAVED
+    unset LIBS_SAVED
 
 
 

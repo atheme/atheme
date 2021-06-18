@@ -57,5 +57,5 @@ AC_DEFUN([ATHEME_LIBTEST_MATH], [
 
     LIBS="${LIBS_SAVED}"
 
-    unset LIBSS_SAVED
+    unset LIBS_SAVED
 ])
