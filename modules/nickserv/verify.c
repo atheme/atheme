@@ -66,12 +66,12 @@ ns_cmd_verify(struct sourceinfo *si, int parc, char *parv[])
 
 		if (!strcasecmp(key, md->value))
 		{
-			logcommand(si, CMDLOG_SET, "VERIFY:REGISTER: \2%s\2 (email: \2%s\2)", get_source_name(si), mu->email);
+			logcommand(si, CMDLOG_SET, "VERIFY:REGISTER: \2%s\2 (email: \2%s\2)", entity(mu)->name, mu->email);
 			ns_verify_activate_account(si, mu);
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "failed VERIFY REGISTER \2%s\2, \2%s\2 (invalid key)", get_source_name(si), mu->email);
+		logcommand(si, CMDLOG_SET, "failed VERIFY REGISTER \2%s\2, \2%s\2 (invalid key)", entity(mu)->name, mu->email);
 		command_fail(si, fault_badparams, _("Verification failed. Invalid key for \2%s\2."),
 			entity(mu)->name);
 
@@ -108,7 +108,7 @@ ns_cmd_verify(struct sourceinfo *si, int parc, char *parv[])
 
 			myuser_set_email(mu, md->value);
 
-			logcommand(si, CMDLOG_SET, "VERIFY:EMAILCHG: \2%s\2 (email: \2%s\2)", get_source_name(si), mu->email);
+			logcommand(si, CMDLOG_SET, "VERIFY:EMAILCHG: \2%s\2 (email: \2%s\2)", entity(mu)->name, mu->email);
 
 			metadata_delete(mu, "private:verify:emailchg:key");
 			metadata_delete(mu, "private:verify:emailchg:newemail");
@@ -124,7 +124,7 @@ ns_cmd_verify(struct sourceinfo *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "failed VERIFY EMAILCHG \2%s\2, \2%s\2 (invalid key)", get_source_name(si), mu->email);
+		logcommand(si, CMDLOG_SET, "failed VERIFY EMAILCHG \2%s\2, \2%s\2 (invalid key)", entity(mu)->name, mu->email);
 		command_fail(si, fault_badparams, _("Verification failed. Invalid key for \2%s\2."),
 			entity(mu)->name);
 
