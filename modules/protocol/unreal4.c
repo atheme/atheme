@@ -1684,4 +1684,4 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 }
 
-SIMPLE_DECLARE_MODULE_V1("protocol/unreal", MODULE_UNLOAD_CAPABILITY_NEVER)
+SIMPLE_DECLARE_MODULE_V1("protocol/unreal4", MODULE_UNLOAD_CAPABILITY_NEVER)
