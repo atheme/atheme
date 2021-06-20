@@ -802,7 +802,9 @@ handle_kill(struct sourceinfo *si, const char *victim, const char *reason)
 	}
 	else if (u->server == me.me)
 	{
-		slog(LG_INFO, "handle_kill(): %s killed service %s (%s)", source, u->nick, reason);
+		// Can't reliably use slog() here, in case it's OperServ (source of message) that got killed!
+
+		wallops("%s killed service %s (%s)", source, u->nick, reason);
 		if (lastkill != CURRTIME && killcount < 5 + me.me->users)
 		{
 			killcount = 0;
@@ -813,7 +815,6 @@ handle_kill(struct sourceinfo *si, const char *victim, const char *reason)
 			reintroduce_user(u);
 		else
 		{
-			slog(LG_ERROR, "handle_kill(): services kill fight (\2%s\2 -> \2%s\2), shutting down", source, u->nick);
 			wallops("Services kill fight (%s -> %s), shutting down!", source, u->nick);
 			runflags |= RF_SHUTDOWN;
 		}
