@@ -736,6 +736,18 @@ myuser_login(struct service *svs, struct user *u, struct myuser *mu, bool sendac
 		notice(svs->me->nick, u->nick, "If you do not complete registration within one day, your nickname will expire.");
 	}
 
+	if (metadata_find(mu, "private:setpass:key"))
+	{
+		slog(LG_INFO, "Invalidating password reset token for %s due to successful login", entity(mu)->name);
+
+		myuser_notice(svs->me->nick, mu, "An outstanding password reset request for your account has now "
+		                                 "been invalidated.");
+
+		metadata_delete(mu, "private:setpass:key");
+		metadata_delete(mu, "private:sendpass:sender");
+		metadata_delete(mu, "private:sendpass:timestamp");
+	}
+
 	mu->lastlogin = CURRTIME;
 	mn = mynick_find(u->nick);
 	if (mn != NULL && mn->owner == mu)

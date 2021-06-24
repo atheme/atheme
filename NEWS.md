@@ -118,6 +118,9 @@ Security
   (where supported, e.g. in WeeChat) to achieve its purpose of preventing the
   user's account password from persisting in on-disk log files.
 
+- Services will now automatically invalidate SETPASS tokens after a successful
+  login.
+
 - Services now has a much more rigorous random number generation interface
   and will e.g. refuse to use `arc4random(3)` unless we are actually on
   OpenBSD (which is the only platform that uses a secure algorithm for it).
