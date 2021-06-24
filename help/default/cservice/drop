@@ -6,8 +6,8 @@ Once you DROP a channel all of the data associated
 with it (access lists, etc) are removed and cannot
 be restored.
 
-See help on SET FOUNDER and FLAGS for transferring
-a channel to another user.
+See help on FLAGS for transferring a channel to 
+another user.
 
 Syntax: DROP <#channel>
 
