@@ -6,16 +6,15 @@ Date: &date&
 
 &accountname&,
 
-Someone has requested that the password on your account be recovered,
-and sent to the e-mail address on file.  If you did not request this
-change, please let us know immediately, as it may be an attempt to
-compromise your account.
+Someone has requested that the password on your account be reset, with a
+token sent to the e-mail address on file for your account.
 
-In order to set a new password, you must send the following command
-on IRC, where <password> is the new password you wish to set.
+If you did not request this, please feel free to ignore this message, as
+no action can be taken on your account without the token in this e-mail.
+This token will also be automatically invalidated the next time you log
+into your account.
+
+In order to set a new password, you must send the following command on
+IRC, where <password> is the new password you wish to set:
 
 /msg &nicksvs& SETPASS &accountname& &param& <password>
-
---
-If this message is unsolicited, please contact &replyto&
-with a full copy.
