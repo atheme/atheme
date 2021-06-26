@@ -160,9 +160,6 @@ need to allow services to introduce other servers (e.g. "hub_mask" or H:line),
 otherwise it will probably be disconnected when the OperServ JUPE command is
 used.
 
-To be perfectly honest, if you can't figure this out you should be running
-neither IRCd nor services.
-
 Additionally, you need to do some configuration on all servers on the network.
 You need to reserve ("resv{}", "/resv", "Q line", etc) all nicks services uses
 to avoid normal users taking those nicks and causing trouble. Also, many IRCds
