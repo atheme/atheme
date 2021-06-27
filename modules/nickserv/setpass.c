@@ -47,7 +47,7 @@ ns_cmd_setpass(struct sourceinfo *si, int parc, char *parv[])
 	if (strlen(password) > PASSLEN)
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SETPASS");
-		command_fail(si, fault_badparams, _("Registration passwords may not be longer than \2%u\2 characters."), PASSLEN);
+		command_fail(si, fault_badparams, _("Registration passwords may not be longer than \2%u\2 bytes."), PASSLEN);
 		return;
 	}
 
