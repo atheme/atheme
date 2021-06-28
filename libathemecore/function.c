@@ -651,6 +651,7 @@ validtopic_ctrl_chars(const char *topic)
 				case 22:
 				case 23:
 				case 27:
+				case 29: //italics
 				case 31:
 					return false;
 			}
