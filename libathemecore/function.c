@@ -634,6 +634,7 @@ validtopic(const char *topic)
 	}
 	return true;
 }
+bool
 validtopic_ctrl_chars(const char *topic)
 {
 	int i;
