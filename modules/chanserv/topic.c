@@ -59,7 +59,7 @@ cs_cmd_topic(struct sourceinfo *si, int parc, char *parv[])
 	}
 	if (!validtopic_ctrl_chars(topic))
 	{
-		command_fail(si, fault_badparams, _("The new topic may not contain control chars, including colour, bold, italic and reverse."));
+		command_fail(si, fault_badparams, _("The topic may not contain specific control chars, these include color, bold, italic and reverse."));
 		return;
 	}
 
