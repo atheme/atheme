@@ -57,6 +57,11 @@ cs_cmd_topic(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("The new topic is invalid or too long."));
 		return;
 	}
+	if (!validtopic_ctrl_chars(topic))
+	{
+		command_fail(si, fault_badparams, _("The new topic may not contain control chars including colour or bold."));
+		return;
+	}
 
 	if (si->su != NULL)
 		topicsetter = si->su->nick;

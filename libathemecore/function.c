@@ -632,6 +632,11 @@ validtopic(const char *topic)
 				return false;
 		}
 	}
+	return true;
+}
+validtopic_ctrl_chars(const char *topic)
+{
+	int i;
 	if (ircd->flags & IRCD_TOPIC_NOCOLOUR)
 	{
 		for (i = 0; topic[i] != '\0'; i++)

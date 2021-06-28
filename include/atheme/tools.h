@@ -134,6 +134,7 @@ bool email_within_limits(const char *email);
 bool validhostmask(const char *host);
 char *pretty_mask(char *mask);
 bool validtopic(const char *topic);
+bool validtopic_ctrl_chars(const char *topic);
 bool has_ctrl_chars(const char *text);
 char *sbytes(float x);
 float bytes(float x);
