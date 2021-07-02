@@ -255,8 +255,13 @@ myuser_is_in_group(struct myuser *mu, struct myentity *mt)
 static void
 take_vhost(struct sourceinfo *si, const char *host)
 {
+	char local_host[HOSTLEN+1];
 	if (strstr(host, "$account"))
-		replace(host, BUFSIZE, "$account", entity(si->smu)->name);
+	{
+		strncpy(local_host, host, HOSTLEN);
+		replace(local_host, BUFSIZE, "$account", entity(si->smu)->name);
+		host = local_host;
+	}
 
 	if (!check_vhost_validity(si, host))
 		return;
