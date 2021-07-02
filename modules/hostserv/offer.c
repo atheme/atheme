@@ -262,7 +262,7 @@ hs_cmd_take(struct sourceinfo *si, int parc, char *parv[])
 	struct metadata *md;
 	time_t vhost_time = 0;
 
-	if (!host)
+	if (!host && MOWGLI_LIST_LENGTH(&hs_offeredlist) > 1)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "TAKE");
 		command_fail(si, fault_needmoreparams, _("Syntax: TAKE <vhost>"));
@@ -298,7 +298,7 @@ hs_cmd_take(struct sourceinfo *si, int parc, char *parv[])
 		if (l->group != NULL && !myuser_is_in_group(si->smu, l->group))
 			continue;
 
-		if (!irccasecmp(l->vhost, host))
+		if (!host || !irccasecmp(l->vhost, host))
 		{
 			if (strstr(host, "$account"))
 				replace(host, BUFSIZE, "$account", entity(si->smu)->name);
