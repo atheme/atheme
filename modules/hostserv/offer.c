@@ -255,10 +255,10 @@ myuser_is_in_group(struct myuser *mu, struct myentity *mt)
 static void
 take_vhost(struct sourceinfo *si, const char *host)
 {
-	char local_host[HOSTLEN+1];
+	char local_host[BUFSIZE];
 	if (strstr(host, "$account"))
 	{
-		strncpy(local_host, host, HOSTLEN);
+		mowgli_strlcpy(local_host, host, BUFSIZE);
 		replace(local_host, BUFSIZE, "$account", entity(si->smu)->name);
 		host = local_host;
 	}
