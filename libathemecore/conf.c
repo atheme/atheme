@@ -297,6 +297,7 @@ init_newconf(void)
 	add_dupstr_conf_item("OPERSTRING", &conf_gi_table, 0, &config_options.operstring, "is an IRC Operator");
 	add_dupstr_conf_item("SERVICESTRING", &conf_gi_table, 0, &config_options.servicestring, "is a Network Service");
 	add_bool_conf_item("MATCH_MASKS_THROUGH_VHOST", &conf_gi_table, 0, &config_options.masks_through_vhost, true);
+	add_uint_conf_item("DEFAULT_PASSWORD_LENGTH", &conf_gi_table, 0, &config_options.default_pass_length, 16, 64, 16);
 
 	/* XXX: These 3 options should probably move into operserv/clones eventually */
 	add_uint_conf_item("DEFAULT_CLONE_ALLOWED", &conf_gi_table, 0, &config_options.default_clone_allowed, 1, INT_MAX, 5);

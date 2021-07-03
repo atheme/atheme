@@ -2851,6 +2851,16 @@ general {
 	 * will be inconsistent with ircd behaviour.
 	 */
 	match_masks_through_vhost;
+
+	/* (*) default_password_length
+	 *
+	 * The password length used for services commands that generate
+	 * passwords on behalf of users; including NickServ's RESETPASS,
+	 * SENDPASS, and RETURN commands.
+	 *
+	 * Default 16, minimum 16, maximum 64.
+	 */
+	#default_password_length = 16;
 };
 
 

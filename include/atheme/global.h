@@ -97,6 +97,8 @@ struct ConfOption
 	bool            load_database_mdeps;    // for core module deps listed in DB, whether to load them or abort
 	bool            hide_opers;             // whether or not to hide RPL_WHOISOPERATOR from remote whois
 	bool            masks_through_vhost;    // whether masks match the host/IP behind a vhost
+	unsigned int    default_pass_length;    // the default length for services-generated passwords (resetpass,
+	                                        // sendpass, return)
 };
 
 extern struct ConfOption config_options;

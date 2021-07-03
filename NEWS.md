@@ -111,6 +111,9 @@ Security
   Please see `dist/atheme.conf.example` and the Password Cryptography section
   below for more information.
 
+- When generating passwords on behalf of users (e.g. NickServ RESETPASS),
+  services now allows you to configure the password's length.
+
 - Services will now refuse to run as root.
 
 - Services no longer prints plaintext passwords back to you for NickServ

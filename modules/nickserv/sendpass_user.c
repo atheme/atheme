@@ -107,7 +107,7 @@ ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	key = random_string(16);
+	key = random_string(config_options.default_pass_length);
 
 	const char *const hash = crypt_password(key);
 
