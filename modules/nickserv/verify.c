@@ -10,15 +10,38 @@
 #include <atheme.h>
 
 static void
+ns_verify_activate_account(struct sourceinfo *si, struct myuser *mu)
+{
+	mowgli_node_t *n;
+	struct hook_user_req req;
+	mu->flags &= ~MU_WAITAUTH;
+
+	metadata_delete(mu, "private:verify:register:key");
+	metadata_delete(mu, "private:verify:register:timestamp");
+
+	command_success_nodata(si, _("\2%s\2 has now been verified."), entity(mu)->name);
+	command_success_nodata(si, _("Thank you for verifying your e-mail address! You have taken steps in ensuring that your registrations are not exploited."));
+	MOWGLI_ITER_FOREACH(n, mu->logins.head)
+	{
+		struct user *u = n->data;
+		ircd_on_login(u, mu, NULL);
+	}
+
+	// XXX should this indeed be after ircd_on_login?
+	req.si = si;
+	req.mu = mu;
+	req.mn = mynick_find(entity(mu)->name);
+	hook_call_user_verify_register(&req);
+}
+
+static void
 ns_cmd_verify(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
 	struct metadata *md;
-	mowgli_node_t *n;
 	char *op = parv[0];
 	char *nick = parv[1];
 	char *key = parv[2];
-	struct hook_user_req req;
 
 	if (!op || !nick || !key)
 	{
@@ -43,31 +66,12 @@ ns_cmd_verify(struct sourceinfo *si, int parc, char *parv[])
 
 		if (!strcasecmp(key, md->value))
 		{
-			mu->flags &= ~MU_WAITAUTH;
-
-			logcommand(si, CMDLOG_SET, "VERIFY:REGISTER: \2%s\2 (email: \2%s\2)", get_source_name(si), mu->email);
-
-			metadata_delete(mu, "private:verify:register:key");
-			metadata_delete(mu, "private:verify:register:timestamp");
-
-			command_success_nodata(si, _("\2%s\2 has now been verified."), entity(mu)->name);
-			command_success_nodata(si, _("Thank you for verifying your e-mail address! You have taken steps in ensuring that your registrations are not exploited."));
-			MOWGLI_ITER_FOREACH(n, mu->logins.head)
-			{
-				struct user *u = n->data;
-				ircd_on_login(u, mu, NULL);
-			}
-
-			// XXX should this indeed be after ircd_on_login?
-			req.si = si;
-			req.mu = mu;
-			req.mn = mynick_find(entity(mu)->name);
-			hook_call_user_verify_register(&req);
-
+			logcommand(si, CMDLOG_SET, "VERIFY:REGISTER: \2%s\2 (email: \2%s\2)", entity(mu)->name, mu->email);
+			ns_verify_activate_account(si, mu);
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "failed VERIFY REGISTER \2%s\2, \2%s\2 (invalid key)", get_source_name(si), mu->email);
+		logcommand(si, CMDLOG_SET, "failed VERIFY REGISTER \2%s\2, \2%s\2 (invalid key)", entity(mu)->name, mu->email);
 		command_fail(si, fault_badparams, _("Verification failed. Invalid key for \2%s\2."),
 			entity(mu)->name);
 
@@ -104,7 +108,7 @@ ns_cmd_verify(struct sourceinfo *si, int parc, char *parv[])
 
 			myuser_set_email(mu, md->value);
 
-			logcommand(si, CMDLOG_SET, "VERIFY:EMAILCHG: \2%s\2 (email: \2%s\2)", get_source_name(si), mu->email);
+			logcommand(si, CMDLOG_SET, "VERIFY:EMAILCHG: \2%s\2 (email: \2%s\2)", entity(mu)->name, mu->email);
 
 			metadata_delete(mu, "private:verify:emailchg:key");
 			metadata_delete(mu, "private:verify:emailchg:newemail");
@@ -112,10 +116,15 @@ ns_cmd_verify(struct sourceinfo *si, int parc, char *parv[])
 
 			command_success_nodata(si, _("\2%s\2 has now been verified."), mu->email);
 
+			if (metadata_find(mu, "private:verify:register:key"))
+			{
+				ns_verify_activate_account(si, mu);
+			}
+
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "failed VERIFY EMAILCHG \2%s\2, \2%s\2 (invalid key)", get_source_name(si), mu->email);
+		logcommand(si, CMDLOG_SET, "failed VERIFY EMAILCHG \2%s\2, \2%s\2 (invalid key)", entity(mu)->name, mu->email);
 		command_fail(si, fault_badparams, _("Verification failed. Invalid key for \2%s\2."),
 			entity(mu)->name);
 
@@ -134,10 +143,8 @@ ns_cmd_fverify(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
 	struct metadata *md;
-	mowgli_node_t *n;
 	char *op = parv[0];
 	char *nick = parv[1];
-	struct hook_user_req req;
 
 	if (!op || !nick)
 	{
@@ -160,25 +167,8 @@ ns_cmd_fverify(struct sourceinfo *si, int parc, char *parv[])
 			return;
 		}
 
-		mu->flags &= ~MU_WAITAUTH;
-
-		logcommand(si, CMDLOG_REGISTER, "FVERIFY:REGISTER: \2%s\2 (email: \2%s\2)", entity(mu)->name, mu->email);
-
-		metadata_delete(mu, "private:verify:register:key");
-		metadata_delete(mu, "private:verify:register:timestamp");
-
-		command_success_nodata(si, _("\2%s\2 has now been verified."), entity(mu)->name);
-		MOWGLI_ITER_FOREACH(n, mu->logins.head)
-		{
-			struct user *u = n->data;
-			ircd_on_login(u, mu, NULL);
-		}
-
-		// XXX should this indeed be after ircd_on_login?
-		req.si = si;
-		req.mu = mu;
-		req.mn = mynick_find(entity(mu)->name);
-		hook_call_user_verify_register(&req);
+		logcommand(si, CMDLOG_SET, "FVERIFY:REGISTER: \2%s\2 (email: \2%s\2)", entity(mu)->name, mu->email);
+		ns_verify_activate_account(si, mu);
 
 		return;
 	}
@@ -201,6 +191,11 @@ ns_cmd_fverify(struct sourceinfo *si, int parc, char *parv[])
 		metadata_delete(mu, "private:verify:emailchg:timestamp");
 
 		command_success_nodata(si, _("\2%s\2 has now been verified."), mu->email);
+
+		if (metadata_find(mu, "private:verify:register:key"))
+		{
+			ns_verify_activate_account(si, mu);
+		}
 
 		return;
 	}
