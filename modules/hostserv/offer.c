@@ -252,6 +252,27 @@ myuser_is_in_group(struct myuser *mu, struct myentity *mt)
 	return false;
 }
 
+static void
+take_vhost(struct sourceinfo *si, const char *host)
+{
+	char local_host[BUFSIZE];
+	if (strstr(host, "$account"))
+	{
+		mowgli_strlcpy(local_host, host, BUFSIZE);
+		replace(local_host, BUFSIZE, "$account", entity(si->smu)->name);
+		host = local_host;
+	}
+
+	if (!check_vhost_validity(si, host))
+		return;
+
+	logcommand(si, CMDLOG_GET, "TAKE: \2%s\2 for \2%s\2", host, entity(si->smu)->name);
+
+	command_success_nodata(si, _("You have taken vhost \2%s\2."), host);
+	hs_sethost_all(si->smu, host, get_source_name(si));
+	do_sethost_all(si->smu, host);
+}
+
 // TAKE <vhost>
 static void
 hs_cmd_take(struct sourceinfo *si, int parc, char *parv[])
@@ -261,13 +282,8 @@ hs_cmd_take(struct sourceinfo *si, int parc, char *parv[])
 	mowgli_node_t *n;
 	struct metadata *md;
 	time_t vhost_time = 0;
-
-	if (!host)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "TAKE");
-		command_fail(si, fault_needmoreparams, _("Syntax: TAKE <vhost>"));
-		return;
-	}
+	int vhosts_available = 0;
+	const char *offered_vhost = NULL; // For the case where there's only one available
 
 	if (si->smu == NULL)
 	{
@@ -291,6 +307,31 @@ hs_cmd_take(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	// Now we know there's a valid account and the other checks passed, we can check how many offers are available
+	MOWGLI_ITER_FOREACH(n, hs_offeredlist.head)
+	{
+		l = n->data;
+		if (l->group != NULL && !myuser_is_in_group(si->smu, l->group))
+			continue;
+		offered_vhost = l->vhost;
+		vhosts_available++;
+	}
+
+	// If there's only one vhost offered, and no host argument was provided, then take the one that's available
+	if (!host && vhosts_available == 1)
+	{
+		take_vhost(si, offered_vhost);
+		return;
+	}
+
+	// If we get here, either there are multiple vhosts offered, or a host was explicitly specified to take
+	if (!host)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "TAKE");
+		command_fail(si, fault_needmoreparams, _("Syntax: TAKE <vhost>"));
+		return;
+	}
+
 	MOWGLI_ITER_FOREACH(n, hs_offeredlist.head)
 	{
 		l = n->data;
@@ -300,17 +341,7 @@ hs_cmd_take(struct sourceinfo *si, int parc, char *parv[])
 
 		if (!irccasecmp(l->vhost, host))
 		{
-			if (strstr(host, "$account"))
-				replace(host, BUFSIZE, "$account", entity(si->smu)->name);
-
-			if (!check_vhost_validity(si, host))
-				return;
-
-			logcommand(si, CMDLOG_GET, "TAKE: \2%s\2 for \2%s\2", host, entity(si->smu)->name);
-
-			command_success_nodata(si, _("You have taken vhost \2%s\2."), host);
-			hs_sethost_all(si->smu, host, get_source_name(si));
-			do_sethost_all(si->smu, host);
+			take_vhost(si, host);
 
 			return;
 		}
