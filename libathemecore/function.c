@@ -632,6 +632,12 @@ validtopic(const char *topic)
 				return false;
 		}
 	}
+	return true;
+}
+bool
+validtopic_ctrl_chars(const char *topic)
+{
+	int i;
 	if (ircd->flags & IRCD_TOPIC_NOCOLOUR)
 	{
 		for (i = 0; topic[i] != '\0'; i++)
@@ -645,6 +651,7 @@ validtopic(const char *topic)
 				case 22:
 				case 23:
 				case 27:
+				case 29: //italics
 				case 31:
 					return false;
 			}
