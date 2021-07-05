@@ -103,10 +103,6 @@ After compilation, install services using:
 
     $ make install
 
-Next, you'll want to go to the directory you specified in "configure" and edit
-etc/atheme.conf. You'll need to change every setting or services will
-not work.
-
 1.2 Errors
 ----------
 
@@ -128,6 +124,17 @@ not work.
 
        $ ./configure --prefix=... --disable-nls
        $ make
+
+1.3 Configuration
+-----------------
+
+Next, you'll want to go to the directory you specified in "configure" and edit
+etc/atheme.conf. You'll need to change every setting or services will
+not work.
+
+If you did not compile atheme yourself with the instructions above
+(eg. installing from a package manager), you can find example configuration
+files in the `dist/` directory of the Services' source code repository.
 
 2. UPGRADING
 ------------
