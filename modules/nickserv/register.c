@@ -60,7 +60,7 @@ ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 	if (strlen(pass) > PASSLEN)
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "REGISTER");
-		command_fail(si, fault_badparams, _("Registration passwords may not be longer than \2%u\2 characters."), PASSLEN);
+		command_fail(si, fault_badparams, _("Registration passwords may not be longer than \2%u\2 bytes."), PASSLEN);
 		return;
 	}
 
