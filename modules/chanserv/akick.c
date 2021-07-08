@@ -213,7 +213,7 @@ cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 	if (!target)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKICK");
-		command_fail(si, fault_needmoreparams, _("Syntax: AKICK <#channel> ADD <nickname|hostmask> [!P|!T <minutes>] [reason]"));
+		command_fail(si, fault_needmoreparams, _("Syntax: AKICK <#channel> ADD <nickname|hostmask> [!T <minutes>] [reason]"));
 		return;
 	}
 
@@ -272,14 +272,14 @@ cs_cmd_akick_add(struct sourceinfo *si, int parc, char *parv[])
 				if (duration == 0)
 				{
 					command_fail(si, fault_badparams, _("Invalid duration given."));
-					command_fail(si, fault_badparams, _("Syntax: AKICK <#channel> ADD <nick|hostmask> [!P|!T <minutes>] [reason]"));
+					command_fail(si, fault_badparams, _("Syntax: AKICK <#channel> ADD <nick|hostmask> [!T <minutes>] [reason]"));
 					return;
 				}
 			}
 			else
 			{
 				command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKICK ADD");
-				command_fail(si, fault_needmoreparams, _("Syntax: AKICK <#channel> ADD <nick|hostmask> [!P|!T <minutes>] [reason]"));
+				command_fail(si, fault_needmoreparams, _("Syntax: AKICK <#channel> ADD <nick|hostmask> [!T <minutes>] [reason]"));
 				return;
 			}
 		}
