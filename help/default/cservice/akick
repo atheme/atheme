@@ -6,7 +6,7 @@ automatically kickbanned when they join the channel,
 removing any matching ban exceptions first. Users
 with the +r flag are exempt.
 
-Syntax: AKICK <#channel> ADD <nickname|hostmask> [!P|!T <minutes>] [reason]
+Syntax: AKICK <#channel> ADD <nickname|hostmask> [!T <minutes>] [reason]
 
 You may also specify a hostmask (nick!user@host)
 for the AKICK list.
@@ -16,10 +16,10 @@ AKICK LIST. If the reason contains a '|' character,
 everything after it does not appear in kick reasons
 but does appear in AKICK LIST.
 
-If the !P token is specified, the AKICK will never
-expire (permanent). If the !T token is specified, expire
-time must follow, in minutes, hours ("h"), days ("d")
-or weeks ("w").
+If the !T token is specified, expire time must follow,
+in minutes, hours ("h"), days ("d") or weeks ("w"). If
+the !T is ommited, the ban is considered permanent and
+will remain until you remove it via AKICK DEL.
 
 Syntax: AKICK <#channel> DEL <nickname|hostmask>
 
@@ -33,7 +33,7 @@ This will list all entries in the AKICK list, including
 the reason and time left until expiration.
 
 Examples:
-    /msg &nick& AKICK #foo ADD bar you are annoying | private op info
+    /msg &nick& AKICK #foo ADD bar perma banned | private op info
     /msg &nick& AKICK #foo ADD *!*foo@bar.com !T 5d
     /msg &nick& AKICK #foo DEL bar
     /msg &nick& AKICK #foo LIST
