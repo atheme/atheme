@@ -6,7 +6,7 @@
 # Copyright (C) 2010 Jilles Tjoelker <jilles@stack.nl>
 # Copyright (C) 2011 Stephen Bennett <spb@exherbo.org>
 # Copyright (C) 2012 JD Horelick <jdhore1@gmail.com>
-# Copyright (C) 2013 Sam Dodrill <shadow.h511@gmail.com>
+# Copyright (C) 2013 Christine Dodrill <me@christine.website>
 # Copyright (C) 2014 Lee Starnes <starnelt@dukes.jmu.edu>
 # Copyright (C) 2015-2016 Max Teufel <max@teufelsnetz.com>
 # Copyright (C) 2016 Austin Ellis <siniStar@IRC4Fun.net>
@@ -22,7 +22,6 @@ SRCS   =                    \
     base36uid.c             \
     charybdis.c             \
     chatircd1.1.c           \
-    elemental-ircd.c        \
     inspircd.c              \
     ircd-seven.c            \
     ircnet.c                \
