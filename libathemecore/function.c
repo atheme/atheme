@@ -683,7 +683,7 @@ sendemail_urlencode(const char *const restrict src)
 
 	for (size_t i = 0; i < srclen; i++)
 	{
-		if (! isalnum(src[i]))
+		if (! isalnum((unsigned char) src[i]))
 		{
 			char tmpbuf[8];
 
