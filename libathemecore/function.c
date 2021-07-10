@@ -673,6 +673,35 @@ has_ctrl_chars(const char *text)
 	return false;
 }
 
+static const char *
+sendemail_urlencode(const char *const restrict src)
+{
+	static char result[BUFSIZE];
+
+	const size_t srclen = strlen(src);
+	size_t offset = 0;
+
+	for (size_t i = 0; i < srclen; i++)
+	{
+		if (! isalnum(src[i]))
+		{
+			char tmpbuf[8];
+
+			(void) snprintf(tmpbuf, sizeof tmpbuf, "%02X", (unsigned int) src[i]);
+
+			result[offset++] = '%';
+			result[offset++] = tmpbuf[0];
+			result[offset++] = tmpbuf[1];
+		}
+		else
+			result[offset++] = src[i];
+	}
+
+	result[offset] = 0x00;
+
+	return result;
+}
+
 #ifndef MOWGLI_OS_WIN
 static void
 sendemail_waited(pid_t pid, int status, void *data)
@@ -812,6 +841,7 @@ sendemail(struct user *u, struct myuser *mu, const char *type, const char *email
 		replace(buf, sizeof buf, "&replyto&", me.adminemail);
 		replace(buf, sizeof buf, "&date&", date);
 		replace(buf, sizeof buf, "&accountname&", entity(mu)->name);
+		replace(buf, sizeof buf, "&urlaccountname&", sendemail_urlencode(entity(mu)->name));
 		replace(buf, sizeof buf, "&entityname&", u->myuser ? entity(u->myuser)->name : u->nick);
 		replace(buf, sizeof buf, "&netname&", me.netname);
 		replace(buf, sizeof buf, "&param&", param);
