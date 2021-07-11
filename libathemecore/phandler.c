@@ -394,15 +394,18 @@ generic_next_matching_host_chanacs(struct mychan *mc, struct user *u, mowgli_nod
 bool
 generic_is_valid_nick(const char *nick)
 {
-	const char *iter = nick;
-
-	/* nicknames may not normally begin with a number, due to UID collision */
-	if (IsDigit(*iter))
+	/* nicknames may not begin with a digit or a hyphen; the former because they are usually
+	 * reserved for UIDs and thus may collide, and both because it is specified as such in
+	 * <https://datatracker.ietf.org/doc/html/rfc2812#section-2.3.1>
+	 */
+	if (IsDigit(*nick) || *nick == '-')
 		return false;
-	if (*iter == '-')
+
+	// nicknames cannot be longer than we support
+	if (strlen(nick) > NICKLEN)
 		return false;
 
-	for (; *iter != '\0'; iter++)
+	for (const char *iter = nick; *iter != '\0'; iter++)
 	{
 		if (!IsNickChar(*iter))
 			return false;
