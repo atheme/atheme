@@ -77,16 +77,7 @@ ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	if (nicksvs.no_nick_ownership || si->su == NULL)
-	{
-		if (strchr(account, ' ') || strchr(account, '\n') || strchr(account, '\r') || account[0] == '=' || account[0] == '#' || account[0] == '@' || account[0] == '+' || account[0] == '%' || account[0] == '!' || strchr(account, ','))
-		{
-			command_fail(si, fault_badparams, _("The account name \2%s\2 is invalid."), account);
-			return;
-		}
-	}
-
-	if (strlen(account) > NICKLEN)
+	if (! is_valid_nick(account))
 	{
 		command_fail(si, fault_badparams, _("The account name \2%s\2 is invalid."), account);
 		return;
