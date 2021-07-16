@@ -282,25 +282,12 @@ sasl_user_can_login(struct sasl_session *const restrict p)
 	else if (! (target_mu = myuser_find_uid(p->authzeid)))
 		return NULL;
 
-	if (metadata_find(source_mu, "private:freeze:freezer"))
-	{
-		(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", entity(source_mu)->name);
-		return NULL;
-	}
-
 	if (target_mu != source_mu)
 	{
 		if (! sasl_may_impersonate(source_mu, target_mu))
 		{
 			(void) logcommand(p->si, CMDLOG_LOGIN, "denied IMPERSONATE by \2%s\2 to \2%s\2",
 			                                       entity(source_mu)->name, entity(target_mu)->name);
-			return NULL;
-		}
-
-		if (metadata_find(target_mu, "private:freeze:freezer"))
-		{
-			(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)",
-			                                       entity(target_mu)->name);
 			return NULL;
 		}
 	}
@@ -990,6 +977,11 @@ sasl_authxid_can_login(struct sasl_session *const restrict p, const char *const 
 	if (! mu)
 	{
 		(void) slog(LG_DEBUG, "%s: myuser_find_by_nick: does not exist", MOWGLI_FUNC_NAME);
+		return false;
+	}
+	if (metadata_find(mu, "private:freeze:freezer"))
+	{
+		(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", entity(mu)->name);
 		return false;
 	}
 
