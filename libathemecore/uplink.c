@@ -59,7 +59,7 @@ uplink_add(const char *name, const char *host, const char *send_password, const 
 		}
 		else
 		{
-			slog(LG_INFO, "Duplicate uplink %s.", name);
+			slog(LG_ERROR, "Ignoring duplicate uplink %s.", name);
 			return NULL;
 		}
 	}
