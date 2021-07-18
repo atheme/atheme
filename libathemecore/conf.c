@@ -391,13 +391,21 @@ c_uplink(mowgli_config_file_entry_t *ce)
 		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
-
 	if (me.name != NULL && !irccasecmp(ce->vardata, me.name))
-		conf_report_warning(ce, "uplink's server name %s should not be the same as our server name, continuing anyway", ce->vardata);
-	else if (!strchr(ce->vardata, '.'))
-		conf_report_warning(ce, "uplink's server name %s is invalid, continuing anyway", ce->vardata);
-	else if (isdigit((unsigned char)ce->vardata[0]))
-		conf_report_warning(ce, "uplink's server name %s starts with a digit, probably invalid (continuing anyway)", ce->vardata);
+	{
+		conf_report_warning(ce, "uplink's server name %s should not be the same as our server name; "
+		                        "ignoring uplink", ce->vardata);
+		return 0;
+	}
+	if (!strchr(ce->vardata, '.'))
+	{
+		conf_report_warning(ce, "uplink's server name %s is invalid; ignoring uplink", ce->vardata);
+		return 0;
+	}
+
+	if (isdigit((unsigned char)ce->vardata[0]))
+		conf_report_warning(ce, "uplink's server name %s starts with a digit, probably invalid "
+		                        "(continuing anyway)", ce->vardata);
 
 	name = ce->vardata;
 
