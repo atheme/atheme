@@ -526,7 +526,20 @@ atheme_main(int argc, char *argv[])
 
 	if (!backend_loaded && authservice_loaded)
 	{
-		slog(LG_ERROR, "atheme: no backend modules loaded, see your configuration file.");
+		slog(LG_ERROR, "atheme: no backend modules loaded; check your configuration file.");
+		exit(EXIT_FAILURE);
+	}
+	if (! me.name)
+	{
+		slog(LG_ERROR, "atheme: we have not been configured with a server name; check your "
+		               "configuration file.");
+		exit(EXIT_FAILURE);
+	}
+	if (uplink_find(me.name))
+	{
+		// Necessary if serverinfo{} comes after uplink{} in the config file
+		slog(LG_ERROR, "atheme: you have duplicated an uplink server name and our server name; "
+		               "check your configuration file.");
 		exit(EXIT_FAILURE);
 	}
 
