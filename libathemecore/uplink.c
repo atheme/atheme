@@ -28,6 +28,8 @@ void (*parse)(char *line) = NULL;
 void
 init_uplinks(void)
 {
+	(void) memset(&uplinks, 0x00, sizeof uplinks);
+
 	uplink_heap = sharedheap_get(sizeof(struct uplink));
 	if (!uplink_heap)
 	{
