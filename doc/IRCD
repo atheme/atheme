@@ -48,7 +48,7 @@ on the network.
 inspircd
 --------
 
-You should use the "inspircd" protocol module for InspIRCd 2.0.
+You should use the "inspircd" protocol module for InspIRCd 2.x and 3.x.
 InspIRCd 1.2 support was deprecated in atheme 7.1 and has been dropped
 in atheme 7.2.
 
