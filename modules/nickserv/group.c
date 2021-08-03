@@ -183,7 +183,7 @@ ns_cmd_fungroup(struct sourceinfo *si, int parc, char *parv[])
 	if (mn2 != NULL)
 	{
 		logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FUNGROUP: \2%s\2 from \2%s\2 (new account name: \2%s\2)", mn->nick, entity(mu)->name, mn2->nick);
-		wallops("%s dropped the nick \2%s\2 from %s, changing account name to \2%s\2",
+		wallops("\2%s\2 dropped the nick \2%s\2 from %s, changing account name to \2%s\2",
 				get_oper_name(si), mn->nick, entity(mu)->name,
 				mn2->nick);
 		myuser_rename(mu, mn2->nick);
@@ -191,7 +191,7 @@ ns_cmd_fungroup(struct sourceinfo *si, int parc, char *parv[])
 	else
 	{
 		logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FUNGROUP: \2%s\2 from \2%s\2", mn->nick, entity(mu)->name);
-		wallops("%s dropped the nick \2%s\2 from %s",
+		wallops("\2%s\2 dropped the nick \2%s\2 from %s",
 				get_oper_name(si), mn->nick, entity(mu)->name);
 	}
 	hdata.si = si;
