@@ -85,6 +85,23 @@ connection_ignore_errno(const int error)
 }
 
 static bool
+socket_setcloexec(mowgli_descriptor_t sck)
+{
+	(void) slog(LG_DEBUG, "%s: setting file descriptor %d as close-on-exec", MOWGLI_FUNC_NAME, sck);
+
+#ifdef MOWGLI_OS_WIN
+	(void) SetHandleInformation((HANDLE) sck, HANDLE_FLAG_INHERIT, 0);
+#else
+	const int flags = fcntl(sck, F_GETFD, NULL);
+
+	if (flags == -1 || fcntl(sck, F_SETFD, (flags | FD_CLOEXEC)) == -1)
+		return false;
+#endif
+
+	return true;
+}
+
+static bool
 socket_setnonblocking(mowgli_descriptor_t sck)
 {
 	(void) slog(LG_DEBUG, "%s: setting file descriptor %d as non-blocking", MOWGLI_FUNC_NAME, sck);
@@ -143,6 +160,9 @@ connection_add(const char *const restrict name, const int fd, const unsigned int
 	}
 
 	(void) slog(LG_DEBUG, "%s: adding connection %d ('%s')", MOWGLI_FUNC_NAME, fd, name);
+
+	if (! socket_setcloexec(fd))
+		return NULL;
 
 	if (! socket_setnonblocking(fd))
 		return NULL;

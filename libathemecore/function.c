@@ -822,7 +822,6 @@ sendemail(struct user *u, struct myuser *mu, const char *type, const char *email
 			fclose(in);
 			return 0;
 		case 0:
-			connection_close_all_fds();
 			close(pipfds[1]);
 			dup2(pipfds[0], 0);
 			execl(me.mta, me.mta, "-t", "-f", me.register_email, NULL);
