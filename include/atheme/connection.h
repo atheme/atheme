@@ -86,7 +86,6 @@ void connection_close_children(struct connection *);
 void connection_close_soon(struct connection *);
 void connection_close_soon_children(struct connection *);
 void connection_close_all(void);
-void connection_close_all_fds(void);
 void connection_stats(void (*)(const char *, void *), void *);
 
 extern mowgli_list_t connection_list;

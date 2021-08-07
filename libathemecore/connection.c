@@ -304,18 +304,6 @@ connection_close_all(void)
 		(void) connection_close(n->data);
 }
 
-void
-connection_close_all_fds(void)
-{
-	mowgli_node_t *n;
-	MOWGLI_ITER_FOREACH(n, connection_list.head)
-	{
-		const struct connection *const cptr = n->data;
-
-		(void) close(cptr->fd);
-	}
-}
-
 struct connection *
 connection_open_tcp(const char *const restrict host, const char *const restrict vhost, const unsigned int port,
                     const connection_evhandler read_handler, const connection_evhandler write_handler)
