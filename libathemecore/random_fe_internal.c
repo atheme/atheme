@@ -158,10 +158,26 @@ _rs_get_seed_material(uint8_t *const restrict buf, const size_t len)
 	static int fd = -1;
 	size_t out = 0;
 
-	if (fd == -1 && (fd = open(RANDOM_DEV_PATH, O_RDONLY)) == -1)
+	if (fd == -1)
 	{
-		(void) _rs_log_error("%s: open('%s'): %s", MOWGLI_FUNC_NAME, RANDOM_DEV_PATH, strerror(errno));
-		return false;
+		const int tmpfd = open(RANDOM_DEV_PATH, O_RDONLY);
+
+		if (tmpfd == -1)
+		{
+			(void) _rs_log_error("%s: open('%s'): %s", MOWGLI_FUNC_NAME, RANDOM_DEV_PATH, strerror(errno));
+			return false;
+		}
+
+		const int flags = fcntl(tmpfd, F_GETFD, NULL);
+
+		if (flags == -1 || fcntl(tmpfd, F_SETFD, (flags | FD_CLOEXEC)) == -1)
+		{
+			(void) _rs_log_error("%s: fcntl(2): %s", MOWGLI_FUNC_NAME, strerror(errno));
+			(void) close(tmpfd);
+			return false;
+		}
+
+		fd = tmpfd;
 	}
 
 	while (out < len)
