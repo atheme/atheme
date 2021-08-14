@@ -56,7 +56,7 @@ parse_age(const char *s)
 	return duration;
 }
 
-static unsigned short
+static unsigned int
 process_parvarray(const struct list_option *opts, size_t optsize, int parc, char *parv[], char **opt_last)
 {
 	int i;
@@ -203,7 +203,7 @@ cs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 		return;
 
 	char *opt_last;
-	unsigned short parv_err = process_parvarray(optstable, ARRAY_SIZE(optstable), parc, parv, &opt_last);
+	unsigned int parv_err = process_parvarray(optstable, ARRAY_SIZE(optstable), parc, parv, &opt_last);
 	if (parv_err == 1) {
 		command_fail(si, fault_badparams, _("Error: \2%s\2 is not a valid LIST option"), opt_last);
 		return;
