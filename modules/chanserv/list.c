@@ -61,10 +61,11 @@ process_parvarray(const struct list_option *opts, size_t optsize, int parc, char
 {
 	int i;
 	size_t j;
-	bool found = 0;
+	bool found;
 
 	for (i = 0; i < parc; i++)
 	{
+		found = 0;
 		*opt_last = parv[i];
 		for (j = 0; j < optsize; j++)
 		{
