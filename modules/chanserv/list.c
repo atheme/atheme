@@ -19,6 +19,12 @@ enum list_opttype
 	OPT_AGE,
 };
 
+enum list_opterr
+{
+	OPTERR_UNKNOWN_OPT,
+	OPTERR_BAD_ARG,
+};
+
 struct list_option
 {
 	const char *option;
@@ -84,7 +90,7 @@ process_parvarray(const struct list_option *opts, size_t optsize, int parc, char
 						i++;
 					}
 					else
-						return 2;
+						return OPTERR_BAD_ARG;
 					break;
 				case OPT_STRING:
 					if (i + 1 < parc)
@@ -93,7 +99,7 @@ process_parvarray(const struct list_option *opts, size_t optsize, int parc, char
 						i++;
 					}
 					else
-						return 2;
+						return OPTERR_BAD_ARG;
 					break;
 				case OPT_FLAG:
 					*opts[j].optval.flagval |= opts[j].flag;
@@ -105,13 +111,13 @@ process_parvarray(const struct list_option *opts, size_t optsize, int parc, char
 						i++;
 					}
 					else
-						return 2;
+						return OPTERR_BAD_ARG;
 					break;
 				}
 			}
 		}
 		if (!found)
-			return 1;
+			return OPTERR_UNKNOWN_OPT;
 	}
 	return 0;
 }
@@ -205,11 +211,11 @@ cs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 
 	char *opt_last;
 	unsigned int parv_err = process_parvarray(optstable, ARRAY_SIZE(optstable), parc, parv, &opt_last);
-	if (parv_err == 1) {
+	if (parv_err == OPTERR_UNKNOWN_OPT) {
 		command_fail(si, fault_badparams, _("Error: \2%s\2 is not a valid LIST option"), opt_last);
 		return;
 	}
-	else if (parv_err == 2) {
+	else if (parv_err == OPTERR_BAD_ARG) {
 		command_fail(si, fault_badparams, _("Error: Invalid argument for option \2%s\2"), opt_last);
 		return;
 	}
