@@ -56,18 +56,21 @@ parse_age(const char *s)
 	return duration;
 }
 
-static void
-process_parvarray(const struct list_option *opts, size_t optsize, int parc, char *parv[])
+static unsigned short
+process_parvarray(const struct list_option *opts, size_t optsize, int parc, char *parv[], char **opt_last)
 {
 	int i;
 	size_t j;
+	bool found = 0;
 
 	for (i = 0; i < parc; i++)
 	{
+		*opt_last = parv[i];
 		for (j = 0; j < optsize; j++)
 		{
 			if (!strcasecmp(opts[j].option, parv[i]))
 			{
+				found = 1;
 				switch(opts[j].opttype)
 				{
 				case OPT_BOOL:
@@ -79,6 +82,8 @@ process_parvarray(const struct list_option *opts, size_t optsize, int parc, char
 						*opts[j].optval.intval = atoi(parv[i + 1]);
 						i++;
 					}
+					else
+						return 2;
 					break;
 				case OPT_STRING:
 					if (i + 1 < parc)
@@ -86,6 +91,8 @@ process_parvarray(const struct list_option *opts, size_t optsize, int parc, char
 						*opts[j].optval.strval = parv[i + 1];
 						i++;
 					}
+					else
+						return 2;
 					break;
 				case OPT_FLAG:
 					*opts[j].optval.flagval |= opts[j].flag;
@@ -96,11 +103,16 @@ process_parvarray(const struct list_option *opts, size_t optsize, int parc, char
 						*opts[j].optval.ageval = parse_age(parv[i + 1]);
 						i++;
 					}
+					else
+						return 2;
 					break;
 				}
 			}
 		}
+		if (!found)
+			return 1;
 	}
+	return 0;
 }
 
 static void
@@ -190,7 +202,16 @@ cs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 	if (si->c != NULL)
 		return;
 
-	process_parvarray(optstable, ARRAY_SIZE(optstable), parc, parv);
+	char *opt_last;
+	unsigned short parv_err = process_parvarray(optstable, ARRAY_SIZE(optstable), parc, parv, &opt_last);
+	if (parv_err == 1) {
+		command_fail(si, fault_badparams, _("Error: \2%s\2 is not a valid LIST option"), opt_last);
+		return;
+	}
+	else if (parv_err == 2) {
+		command_fail(si, fault_badparams, _("Error: Invalid argument for option \2%s\2"), opt_last);
+		return;
+	}
 
 	char criteriastr[BUFSIZE];
 	build_criteriastr(criteriastr, parc, parv);
