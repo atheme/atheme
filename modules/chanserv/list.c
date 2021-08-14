@@ -65,13 +65,13 @@ process_parvarray(const struct list_option *opts, size_t optsize, int parc, char
 
 	for (i = 0; i < parc; i++)
 	{
-		found = 0;
+		found = false;
 		*opt_last = parv[i];
 		for (j = 0; j < optsize; j++)
 		{
 			if (!strcasecmp(opts[j].option, parv[i]))
 			{
-				found = 1;
+				found = true;
 				switch(opts[j].opttype)
 				{
 				case OPT_BOOL:
