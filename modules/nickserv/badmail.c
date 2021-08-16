@@ -75,9 +75,11 @@ check_registration(struct hook_user_register_check *hdata)
 			slog(LG_INFO, "REGISTER:BADEMAIL: %s to \2%s\2 by \2%s\2",
 					hdata->account, hdata->email,
 					hdata->si->su != NULL ? hdata->si->su->nick : get_source_name(hdata->si));
-			return;
+			break;
 		}
 	}
+
+	strshare_unref(email_canonical);
 }
 
 static void
