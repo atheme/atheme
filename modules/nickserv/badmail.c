@@ -62,11 +62,13 @@ check_registration(struct hook_user_register_check *hdata)
 	if (hdata->approved)
 		return;
 
+	stringref email_canonical = canonicalize_email(hdata->email);
+
 	MOWGLI_ITER_FOREACH(n, ns_maillist.head)
 	{
 		l = n->data;
 
-		if (!match(l->mail, hdata->email))
+		if (!match(l->mail, email_canonical))
 		{
 			command_fail(hdata->si, fault_noprivs, _("Sorry, we do not accept registrations with email addresses from that domain. Use another address."));
 			hdata->approved = 1;
