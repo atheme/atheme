@@ -413,7 +413,8 @@ bool ircd_logout_or_kill(struct user *u, const char *login)
 	hook_call_user_can_logout(&req);
 
 	if (req.allowed)
-		return ircd_on_logout(u, login);
+		if (!(u->myuser->flags & MU_WAITAUTH))
+			return ircd_on_logout(u, login);
 
 	kill_user(nicksvs.me ? nicksvs.me->me : NULL, u, "Forcing logout %s -> %s", u->nick, login);
 	return true;

@@ -142,7 +142,7 @@ ns_cmd_login(struct sourceinfo *si, int parc, char *parv[])
 		{
 			command_success_nodata(si, _("You have been logged out of \2%s\2."), entity(u->myuser)->name);
 
-			if (ircd_on_logout(u, entity(u->myuser)->name))
+			if (!(u->myuser->flags & MU_WAITAUTH) && ircd_on_logout(u, entity(u->myuser)->name))
 				// logout killed the user...
 				return;
 		        u->myuser->lastlogin = CURRTIME;
