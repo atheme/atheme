@@ -38,6 +38,7 @@ SRCS =                              \
     digest_frontend.c               \
     digest_testsuite.c              \
     eksblowfish.c                   \
+    email.c                         \
     entity.c                        \
     flags.c                         \
     function.c                      \

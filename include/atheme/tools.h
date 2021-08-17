@@ -18,16 +18,6 @@
 #include <atheme/stdheaders.h>
 #include <atheme/structures.h>
 
-/* email stuff */
-int sendemail(struct user *u, struct myuser *mu, const char *type, const char *email, const char *param);
-
-/* email types (meaning of param argument) */
-#define EMAIL_REGISTER	"register"	/* register an account/nick (verification code) */
-#define EMAIL_SENDPASS	"sendpass"	/* send a password to a user (password) */
-#define EMAIL_SETEMAIL	"setemail"	/* change email address (verification code) */
-#define EMAIL_MEMO	"memo"		/* emailed memos (memo text) */
-#define EMAIL_SETPASS	"setpass"	/* send a password change key (verification code) */
-
 /* cidr.c */
 int valid_ip_or_mask(const char *src);
 
@@ -108,15 +98,6 @@ void logcommand_external(struct service *svs, const char *type, struct connectio
 
 /* function.c */
 
-typedef void (*email_canonicalizer_fn)(char email[static (EMAILLEN + 1)], void *user_data);
-
-struct email_canonicalizer_item
-{
-	email_canonicalizer_fn  func;
-	void *                  user_data;
-	mowgli_node_t           node;
-};
-
 /* misc string stuff */
 bool string_in_list(const char *str, const char *list);
 char *random_string(size_t sz) ATHEME_FATTR_MALLOC ATHEME_FATTR_RETURNS_NONNULL;
@@ -125,12 +106,6 @@ void tb2sp(char *line);
 char *replace(char *s, int size, const char *old, const char *new);
 const char *number_to_string(int num);
 bool string_to_uint(const char *, unsigned int *) ATHEME_FATTR_WUR;
-int validemail(const char *email);
-stringref canonicalize_email(const char *email);
-void canonicalize_email_case(char email[static (EMAILLEN + 1)], void *user_data);
-void register_email_canonicalizer(email_canonicalizer_fn func, void *user_data);
-void unregister_email_canonicalizer(email_canonicalizer_fn func, void *user_data);
-bool email_within_limits(const char *email);
 bool validhostmask(const char *host);
 char *pretty_mask(char *mask);
 bool validtopic(const char *topic);

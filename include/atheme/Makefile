@@ -38,6 +38,7 @@ INCLUDES =                  \
     database_backend.h      \
     datastream.h            \
     digest.h                \
+    email.h                 \
     entity-validation.h     \
     entity.h                \
     flags.h                 \
