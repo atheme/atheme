@@ -341,6 +341,8 @@ sendemail(struct user *u, struct myuser *mu, const char *type, const char *email
 	{
 		case -1:
 			fclose(in);
+			close(pipfds[0]);
+			close(pipfds[1]);
 			return 0;
 		case 0:
 			close(pipfds[1]);
