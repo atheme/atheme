@@ -93,6 +93,8 @@ user_needforce                  struct hook_user_needforce *
 user_register                   struct myuser *
 user_rename                     struct hook_user_rename *
 user_sethost                    struct user *
+user_certfp_add                 struct hook_user_certfp *
+user_certfp_del                 struct hook_user_certfp *
 user_verify_register            struct hook_user_req *
 
 # (sasl)

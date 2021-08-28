@@ -147,6 +147,13 @@ ns_cmd_cert(struct sourceinfo *si, int parc, char *parv[])
 		}
 		if (mycertfp_add(mu, mcfp, false))
 		{
+			struct hook_user_certfp hdata = {
+				.si     = si,
+				.mu     = mu,
+				.certfp = mcfp
+			};
+			hook_call_user_certfp_add(&hdata);
+
 			command_success_nodata(si, _("Added fingerprint \2%s\2 to your fingerprint list."), mcfp);
 			logcommand(si, CMDLOG_SET, "CERT:ADD: \2%s\2", mcfp);
 		}
@@ -173,6 +180,14 @@ ns_cmd_cert(struct sourceinfo *si, int parc, char *parv[])
 			command_fail(si, fault_nochange, _("Fingerprint \2%s\2 is not on your fingerprint list."), parv[1]);
 			return;
 		}
+
+		struct hook_user_certfp hdata = {
+			.si     = si,
+			.mu     = mu,
+			.certfp = mcfp
+		};
+		hook_call_user_certfp_del(&hdata);
+
 		command_success_nodata(si, _("Deleted fingerprint \2%s\2 from your fingerprint list."), parv[1]);
 		logcommand(si, CMDLOG_SET, "CERT:DEL: \2%s\2", parv[1]);
 		mycertfp_delete(cert);
