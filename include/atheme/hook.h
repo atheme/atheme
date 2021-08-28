@@ -242,7 +242,7 @@ struct hook_user_certfp
 {
 	struct sourceinfo * si;
 	struct myuser *     mu;
-	const char *        certfp;
+	char                certfp[512];
 };
 
 void hook_del_hook(const char *, hook_fn);
