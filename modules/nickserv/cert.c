@@ -181,7 +181,7 @@ ns_cmd_cert(struct sourceinfo *si, int parc, char *parv[])
 			.mu = mu
 		};
 		mowgli_strlcpy(hdata.certfp, parv[1], sizeof hdata.certfp);
-		hook_call_user_certfp_add(&hdata);
+		hook_call_user_certfp_del(&hdata);
 
 		cert = mycertfp_find(hdata.certfp);
 		if (cert == NULL || cert->mu != mu)
