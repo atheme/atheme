@@ -567,17 +567,34 @@ handle_message(struct sourceinfo *si, char *target, bool is_notice, char *messag
 	if (si->su == NULL)
 		return;
 
-	/* if this is a channel, handle it differently. */
-	if (*target == '#')
+	// If the target is a channel, handle it differently
+	if ((p = strchr(target, '#')) != NULL)
 	{
-		handle_channel_message(si, target, is_notice, message);
-		return;
+		/* Account for the fact that the message may have a status prefix on it; for example, a message
+		 * to @#channel should still be treated as a message to #channel rather than ignored.   -- amdj
+		 */
+		bool is_status_prefixed = false;
+
+		for (unsigned int i = 0; p == (target + 1) && prefix_mode_list && prefix_mode_list[i].mode; i++)
+		{
+			if (target[0] == prefix_mode_list[i].mode)
+			{
+				is_status_prefixed = true;
+				break;
+			}
+		}
+
+		if (p == target || is_status_prefixed)
+		{
+			(void) handle_channel_message(si, p, is_notice, message);
+			return;
+		}
 	}
 
 	target_u = NULL;
 	si->service = NULL;
-	p = strchr(target, '@');
-	if (p != NULL)
+
+	if ((p = strchr(target, '@')) != NULL)
 	{
 		/* Make sure it's for us, not for a jupe -- jilles */
 		if (!irccasecmp(p + 1, me.name))
