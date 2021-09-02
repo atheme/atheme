@@ -445,7 +445,7 @@ ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 	}
 	if ((si->smu == mn->owner) || verify_password(mn->owner, password))
 	{
-		if (MOWGLI_LIST_LENGTH(&mn->owner->logins) >= me.maxlogins)
+		if (user_loginmaxed(mn->owner))
 		{
 			command_fail(si, fault_toomany, _("You were not logged in."));
 			command_fail(si, fault_toomany, _("There are already \2%zu\2 sessions logged in to \2%s\2 (maximum allowed: %u)."), MOWGLI_LIST_LENGTH(&mn->owner->logins), entity(mn->owner)->name, me.maxlogins);

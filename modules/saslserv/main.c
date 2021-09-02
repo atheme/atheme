@@ -288,9 +288,7 @@ sasl_user_can_login(struct sasl_session *const restrict p)
 		return NULL;
 	}
 
-	if (! (target_mu->flags & MU_LOGINNOLIMIT)
-		&& !has_priv_myuser(target_mu, PRIV_LOGIN_NOLIMIT)
-		&& MOWGLI_LIST_LENGTH(&target_mu->logins) >= me.maxlogins)
+	if (user_loginmaxed(target_mu))
 	{
 		(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (too many logins)",
 		                                       entity(target_mu)->name);
