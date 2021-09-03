@@ -617,6 +617,15 @@ handle_certfp(struct sourceinfo *si, struct user *u, const char *certfp)
 	if (u->myuser != NULL)
 		return;
 
+	req.si = si;
+	req.mu = mu;
+	req.allowed = true;
+	hook_call_user_can_login(&req);
+	if (!req.allowed)
+	{
+		return;
+	}
+
 	if ((mcfp = mycertfp_find(certfp)) == NULL)
 		return;
 
@@ -635,15 +644,6 @@ handle_certfp(struct sourceinfo *si, struct user *u, const char *certfp)
 	if (user_loginmaxed(mu))
 	{
 		notice(svs->me->nick, u->nick, "There are already \2%zu\2 sessions logged in to \2%s\2 (maximum allowed: %u).", MOWGLI_LIST_LENGTH(&mu->logins), entity(mu)->name, me.maxlogins);
-		return;
-	}
-
-	req.si = si;
-	req.mu = mu;
-	req.allowed = true;
-	hook_call_user_can_login(&req);
-	if (!req.allowed)
-	{
 		return;
 	}
 
