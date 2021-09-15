@@ -213,9 +213,10 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	if (!hide_info && recognized)
 		command_success_nodata(si, _("Recognized : now (matches access list)"));
 
+	const char *hidden_warning = mu->flags & MU_PRIVATE ? "[hidden]" : "";
 	// show nick's lastseen/online, if we have a nick
 	if (!hide_info && u != NULL)
-		command_success_nodata(si, _("Last seen  : now"));
+		command_success_nodata(si, _("Last seen  : now %s"), hidden_warning);
 	else if (mn != NULL)
 	{
 		tm2 = localtime(&mn->lastseen);
@@ -223,7 +224,9 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		if (hide_info)
 			command_success_nodata(si, _("Last seen  : %s"), ns_obfuscate_time_ago(mn->lastseen));
 		else
-			command_success_nodata(si, _("Last seen  : %s (%s ago)"), lastlogin, time_ago(mn->lastseen));
+		{
+			command_success_nodata(si, _("Last seen  : %s (%s ago) %s"), lastlogin, time_ago(mn->lastseen), hidden_warning);
+		}
 	}
 
 	/* if noone is logged in to this account, show account's lastseen,
@@ -240,14 +243,14 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 			if (hide_info)
 				command_success_nodata(si, _("Last seen  : %s"), ns_obfuscate_time_ago(mu->lastlogin));
 			else
-				command_success_nodata(si, _("Last seen  : %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
+				command_success_nodata(si, _("Last seen  : %s (%s ago) %s"), lastlogin, time_ago(mu->lastlogin), hidden_warning);
 		}
 		else if (mn->lastseen != mu->lastlogin)
 		{
 			if (hide_info)
 				command_success_nodata(si, _("User seen  : %s"), ns_obfuscate_time_ago(mu->lastlogin));
 			else
-				command_success_nodata(si, _("User seen  : %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
+				command_success_nodata(si, _("User seen  : %s (%s ago) %s"), lastlogin, time_ago(mu->lastlogin), hidden_warning);
 		}
 	}
 	/* someone is logged in to this account
