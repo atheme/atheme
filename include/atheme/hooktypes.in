@@ -30,6 +30,7 @@ db_write                        struct database_handle *
 # XXX: for groupserv.  remove when we have proper dependency resolution in opensex.
 db_write_pre_ca                 struct database_handle *
 shutdown                        void
+sendemail                       struct hook_sendemail_req *
 
 # (ircd)
 channel_add                     struct channel *

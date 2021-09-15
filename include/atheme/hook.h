@@ -238,6 +238,16 @@ struct hook_user_req
 	struct mynick *     mn;
 };
 
+struct hook_sendemail_req
+{
+	struct user *   u;
+	struct myuser * mu;
+	const char *    type;
+	const char *    email;
+	const char *    param;
+	bool            handled;
+};
+
 void hook_del_hook(const char *, hook_fn);
 void hook_add_hook(const char *, hook_fn);
 void hook_add_hook_first(const char *, hook_fn);

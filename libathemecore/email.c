@@ -317,6 +317,17 @@ sendemail(struct user *u, struct myuser *mu, const char *type, const char *email
 			u->nick, u->user, u->vhost, u->ip ? u->ip : u->host,
 			type, entity(mu)->name, email);
 
+	struct hook_sendemail_req hdata = {
+		.u     = u,
+		.mu    = mu,
+		.type  = type,
+		.email = email,
+		.param = param
+	};
+	hook_call_sendemail(&hdata);
+	if (hdata.handled)
+		return -1;
+
 	/* set up the email headers */
 	time(&t);
 	tm = localtime(&t);
