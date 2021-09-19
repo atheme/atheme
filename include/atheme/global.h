@@ -160,7 +160,9 @@ void unmark_all_illegal(void);
 void remove_illegals(void);
 
 /* atheme.c */
+void db_save_periodic(void *);
 extern mowgli_eventloop_t *base_eventloop;
+extern mowgli_eventloop_timer_t *commit_interval_timer;
 extern bool cold_start;
 extern bool readonly;
 extern bool offline_mode;

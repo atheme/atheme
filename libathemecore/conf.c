@@ -1087,6 +1087,17 @@ conf_check(void)
 		config_options.commit_interval = 5 * SECONDS_PER_MINUTE;
 	}
 
+	if (commit_interval_timer)
+	{
+		(void) mowgli_timer_destroy(base_eventloop, commit_interval_timer);
+
+		commit_interval_timer = NULL;
+	}
+
+	if (db_save && ! database_create && ! readonly)
+		commit_interval_timer = mowgli_timer_add(base_eventloop, "db_save_periodic", &db_save_periodic, NULL,
+		                                         config_options.commit_interval);
+
 	return true;
 }
 

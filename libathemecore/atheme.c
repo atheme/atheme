@@ -40,6 +40,7 @@ struct nicksvs nicksvs;
 mowgli_list_t taint_list = { NULL, NULL, 0 };
 
 mowgli_eventloop_t *base_eventloop = NULL;
+mowgli_eventloop_timer_t *commit_interval_timer = NULL;
 
 struct me me;
 struct cnt cnt;
@@ -375,7 +376,7 @@ atheme_setup(void)
 	common_ctcp_init();
 }
 
-static void
+void
 db_save_periodic(void *unused)
 {
 	slog(LG_DEBUG, "db_save_periodic(): initiating periodic database write");
@@ -588,10 +589,6 @@ atheme_main(int argc, char *argv[])
 
 	/* no longer starting */
 	runflags &= ~RF_STARTING;
-
-	/* DB commit interval is configurable */
-	if (db_save && !readonly)
-		mowgli_timer_add(base_eventloop, "db_save", db_save_periodic, NULL, config_options.commit_interval);
 
 	/* check expires every hour */
 	mowgli_timer_add(base_eventloop, "expire_check", expire_check, NULL, SECONDS_PER_HOUR);
