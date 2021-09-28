@@ -564,6 +564,9 @@ atheme_main(int argc, char *argv[])
 		return 0;
 	}
 
+	if (conf_need_rehash)
+		conf_rehash();
+
 #ifdef HAVE_GETPID
 	/* write pid */
 	if ((pid_file = fopen(pidfilename, "w")))
