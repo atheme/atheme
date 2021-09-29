@@ -57,7 +57,7 @@ cs_cmd_clear_flags(struct sourceinfo *si, int parc, char *parv[])
 		atheme_object_unref(ca);
 	}
 
-	logcommand(si, CMDLOG_DO, "CLEAR:FLAGS: \2%s\2", mc->name);
+	logcommand(si, CMDLOG_SET, "CLEAR:FLAGS: \2%s\2", mc->name);
 	command_success_nodata(si, ngettext(N_("Cleared \2%u\2 access entry in \2%s\2."),
 	                                    N_("Cleared \2%u\2 access entries in \2%s\2."),
 	                                    changes), changes, name);

@@ -271,7 +271,7 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 			atheme_object_unref(ca);
 		}
 
-		logcommand(si, CMDLOG_DO, "CLEAR:FLAGS: \2%s\2", mc->name);
+		logcommand(si, CMDLOG_SET, "CLEAR:FLAGS: \2%s\2", mc->name);
 		command_success_nodata(si, _("Cleared flags in \2%s\2."), mc->name);
 		return;
 	}

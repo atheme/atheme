@@ -130,8 +130,7 @@ cs_cmd_clone(struct sourceinfo *si, int parc, char *parv[])
 
 	command_add_flood(si, FLOOD_MODERATE);
 
-	// I feel like this should log at a higher level...
-	logcommand(si, CMDLOG_DO, "CLONE: \2%s\2 to \2%s\2", mc->name, mc2->name);
+	logcommand(si, CMDLOG_SET, "CLONE: \2%s\2 to \2%s\2", mc->name, mc2->name);
 	command_success_nodata(si, _("Cloned \2%s\2 to \2%s\2."), source, target);
 }
 
