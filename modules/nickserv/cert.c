@@ -53,7 +53,7 @@ ns_cmd_cert(struct sourceinfo *si, int parc, char *parv[])
 		if (mu != si->smu)
 			logcommand(si, CMDLOG_ADMIN, "CERT:CLEAR: \2%s\2", entity(mu)->name);
 		else
-			logcommand(si, CMDLOG_GET, "CERT:CLEAR");
+			logcommand(si, CMDLOG_SET, "CERT:CLEAR");
 
 		command_success_nodata(si, _("Clearing all fingerprints for \2%s\2:"), entity(mu)->name);
 
