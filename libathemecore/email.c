@@ -318,11 +318,12 @@ sendemail(struct user *u, struct myuser *mu, const char *type, const char *email
 			type, entity(mu)->name, email);
 
 	struct hook_sendemail_req hdata = {
-		.u     = u,
-		.mu    = mu,
-		.type  = type,
-		.email = email,
-		.param = param
+		.u       = u,
+		.mu      = mu,
+		.type    = type,
+		.email   = email,
+		.param   = param,
+		.handled = false
 	};
 	hook_call_sendemail(&hdata);
 	if (hdata.handled)
