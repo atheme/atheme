@@ -21,6 +21,7 @@ enum list_opttype
 
 enum list_opterr
 {
+	OPTERR_NONE,
 	OPTERR_UNKNOWN_OPT,
 	OPTERR_BAD_ARG,
 };
@@ -119,7 +120,7 @@ process_parvarray(const struct list_option *opts, size_t optsize, int parc, char
 		if (!found)
 			return OPTERR_UNKNOWN_OPT;
 	}
-	return 0;
+	return OPTERR_NONE;
 }
 
 static void
