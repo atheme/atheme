@@ -183,15 +183,18 @@ ns_cmd_cert(struct sourceinfo *si, int parc, char *parv[])
 		mowgli_strlcpy(hdata.certfp, parv[1], sizeof hdata.certfp);
 		hook_call_user_certfp_del(&hdata);
 
-		cert = mycertfp_find(hdata.certfp);
+		cert = mycertfp_find(parv[1]);
+		if (cert == NULL && strcasecmp(parv[1], hdata.certfp))
+			cert = mycertfp_find(hdata.certfp);
+
 		if (cert == NULL || cert->mu != mu)
 		{
-			command_fail(si, fault_nochange, _("Fingerprint \2%s\2 is not on your fingerprint list."), hdata.certfp);
+			command_fail(si, fault_nochange, _("Fingerprint \2%s\2 is not on your fingerprint list."), parv[1]);
 			return;
 		}
 
-		command_success_nodata(si, _("Deleted fingerprint \2%s\2 from your fingerprint list."), hdata.certfp);
-		logcommand(si, CMDLOG_SET, "CERT:DEL: \2%s\2", hdata.certfp);
+		command_success_nodata(si, _("Deleted fingerprint \2%s\2 from your fingerprint list."), cert->certfp);
+		logcommand(si, CMDLOG_SET, "CERT:DEL: \2%s\2", cert->certfp);
 		mycertfp_delete(cert);
 	}
 	else
