@@ -362,7 +362,8 @@ myuser_rename(struct myuser *mu, const char *name)
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->logins.head)
 		{
 			u = n->data;
-			ircd_on_logout(u, entity(mu)->name);
+			if (!(u->myuser->flags & MU_WAITAUTH))
+				ircd_on_logout(u, entity(mu)->name);
 		}
 	}
 	myentity_del(entity(mu));
