@@ -317,9 +317,24 @@ sasl_user_can_login(struct sasl_session *const restrict p)
 }
 
 static void
+sasl_session_reset(struct sasl_session *const restrict p)
+{
+	if (p->mechptr && p->mechptr->mech_finish)
+		(void) p->mechptr->mech_finish(p);
+	p->mechptr = NULL;
+
+	struct user *const u = user_find(p->uid);
+	if (u)
+		// If the user is still on the network, allow them to use NickServ IDENTIFY/LOGIN again
+		u->flags &= ~UF_DOING_SASL;
+}
+
+static void
 sasl_session_destroy(struct sasl_session *const restrict p)
 {
 	mowgli_node_t *n;
+
+	sasl_session_reset(p);
 
 	MOWGLI_ITER_FOREACH(n, sasl_sessions.head)
 	{
@@ -330,16 +345,8 @@ sasl_session_destroy(struct sasl_session *const restrict p)
 		}
 	}
 
-	if (p->mechptr && p->mechptr->mech_finish)
-		(void) p->mechptr->mech_finish(p);
-
 	if (p->si)
 		(void) atheme_object_unref(p->si);
-
-	struct user *const u = user_find(p->uid);
-	if (u)
-		// If the user is still on the network, allow them to use NickServ IDENTIFY/LOGIN again
-		u->flags &= ~UF_DOING_SASL;
 
 	(void) sfree(p->certfp);
 	(void) sfree(p->host);
@@ -348,11 +355,20 @@ sasl_session_destroy(struct sasl_session *const restrict p)
 	(void) sfree(p);
 }
 
+static void
+sasl_session_reset_or_destroy(struct sasl_session *const restrict p)
+{
+	if (p->pendingeid[0] == '\0')
+		sasl_session_destroy(p);
+	else
+		sasl_session_reset(p);
+}
+
 static inline void
 sasl_session_abort(struct sasl_session *const restrict p)
 {
 	(void) sasl_sts(p->uid, 'D', "F");
-	(void) sasl_session_destroy(p);
+	(void) sasl_session_reset_or_destroy(p);
 }
 
 static bool
@@ -381,19 +397,23 @@ static bool
 sasl_handle_login(struct sasl_session *const restrict p, struct user *const u, struct myuser *mu)
 {
 	bool was_killed = false;
+	char pendingeid[sizeof p->pendingeid];
+
+	mowgli_strlcpy(pendingeid, p->pendingeid, sizeof pendingeid);
+	p->pendingeid[0] = '\0';
 
 	// Find the account if necessary
 	if (! mu)
 	{
-		if (! *p->authzeid)
+		if (! *pendingeid)
 		{
-			(void) slog(LG_INFO, "%s: session for '%s' without an authzeid (BUG)",
+			(void) slog(LG_INFO, "%s: session for '%s' without a pendingeid (BUG)",
 			                     MOWGLI_FUNC_NAME, u->nick);
 			(void) notice(saslsvs->nick, u->nick, LOGIN_CANCELLED_STR);
 			return false;
 		}
 
-		if (! (mu = myuser_find_uid(p->authzeid)))
+		if (! (mu = myuser_find_uid(pendingeid)))
 		{
 			if (*p->authzid)
 				(void) notice(saslsvs->nick, u->nick, "Account %s dropped; login cancelled",
@@ -638,6 +658,8 @@ sasl_process_packet(struct sasl_session *const restrict p, char *const restrict 
 				return false;
 			}
 
+			(void) mowgli_strlcpy(p->pendingeid, p->authzeid, sizeof p->pendingeid);
+
 			/* If the user is already on the network, attempt to log them in immediately.
 			 * Otherwise, we will log them in on introduction of user to network
 			 */
@@ -857,7 +879,7 @@ sasl_input(struct sasl_message *const restrict smsg)
 
 		case 'D':
 			// (D)one -- when we receive it, means client abort
-			(void) sasl_session_destroy(p);
+			(void) sasl_session_reset_or_destroy(p);
 			break;
 	}
 
