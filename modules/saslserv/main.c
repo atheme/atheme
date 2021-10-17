@@ -385,15 +385,15 @@ sasl_handle_login(struct sasl_session *const restrict p, struct user *const u, s
 	// Find the account if necessary
 	if (! mu)
 	{
-		if (! *p->authzeid)
+		if (! *p->pendingeid)
 		{
-			(void) slog(LG_INFO, "%s: session for '%s' without an authzeid (BUG)",
+			(void) slog(LG_INFO, "%s: session for '%s' without an pendingeid (BUG)",
 			                     MOWGLI_FUNC_NAME, u->nick);
 			(void) notice(saslsvs->nick, u->nick, LOGIN_CANCELLED_STR);
 			return false;
 		}
 
-		if (! (mu = myuser_find_uid(p->authzeid)))
+		if (! (mu = myuser_find_uid(p->pendingeid)))
 		{
 			if (*p->authzid)
 				(void) notice(saslsvs->nick, u->nick, "Account %s dropped; login cancelled",
@@ -637,6 +637,8 @@ sasl_process_packet(struct sasl_session *const restrict p, char *const restrict 
 
 				return false;
 			}
+
+			(void) mowgli_strlcpy(p->pendingeid, p->authzeid, sizeof p->pendingeid);
 
 			/* If the user is already on the network, attempt to log them in immediately.
 			 * Otherwise, we will log them in on introduction of user to network

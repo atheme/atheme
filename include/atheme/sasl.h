@@ -62,6 +62,7 @@ struct sasl_session
 	char                            authzid[NICKLEN + 1];   // Authorization identity (user being logged in)
 	char                            authceid[IDLEN + 1];    // Entity ID for authcid
 	char                            authzeid[IDLEN + 1];    // Entity ID for authzid
+	char                            pendingeid[IDLEN + 1];  // Entity ID for pending login (for pre-reg clients)
 	char                            uid[UIDLEN + 1];        // Network UID
 };
 
