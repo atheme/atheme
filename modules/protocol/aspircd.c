@@ -4,6 +4,8 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains protocol support for AspIRCd 3 and AspIRCd 4.
+ * AspIRCd - A Modern, Scalable, and Advanced IRC Daemon.
+ * Copyright (C) - 2018-2021 Flox <flox -at- aspircd.com>
  * 
  */
 
