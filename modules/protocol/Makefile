@@ -17,6 +17,7 @@ include ../../extra.mk
 
 MODULE = protocol
 SRCS   =                    \
+    aspircd.c               \
     asuka.c                 \
     bahamut.c               \
     base36uid.c             \
