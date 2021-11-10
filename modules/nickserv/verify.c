@@ -19,7 +19,9 @@ ns_verify_activate_account(struct sourceinfo *si, struct myuser *mu)
 	metadata_delete(mu, "private:verify:register:key");
 	metadata_delete(mu, "private:verify:register:timestamp");
 
-	command_success_nodata(si, _("\2%s\2 has now been verified."), entity(mu)->name);
+	myuser_notice(nicksvs.nick, mu, _("\2%s\2 has now been verified."), entity(mu)->name);
+	if (si->smu != mu)
+		command_success_nodata(si, _("\2%s\2 has now been verified."), entity(mu)->name);
 	command_success_nodata(si, _("Thank you for verifying your e-mail address! You have taken steps in ensuring that your registrations are not exploited."));
 	MOWGLI_ITER_FOREACH(n, mu->logins.head)
 	{
