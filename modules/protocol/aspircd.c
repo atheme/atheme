@@ -12,9 +12,7 @@
 #include "atheme.h"
 #include "protocol/elemental-ircd.h"
 
-SIMPLE_DECLARE_MODULE_V1("protocol/aspircd", MODULE_UNLOAD_CAPABILITY_NEVER)
-
-ircd_t aspircd = {
+static struct ircd aspircd = {
 	.ircdname = "aspircd",
 	.tldprefix = "$$",
 	.uses_uid = true,
@@ -37,10 +35,10 @@ ircd_t aspircd = {
 	.ban_like_modes = "beIM",
 	.except_mchar = 'e',
 	.invex_mchar = 'I',
-	.flags = IRCD_CIDR_BANS | IRCD_HOLDNICK | IRCD_TOPIC_NOCOLOUR,
+	.flags = IRCD_CIDR_BANS | IRCD_HOLDNICK,
 };
 
-struct cmode_ aspircd_mode_list[] = {
+static const struct cmode aspircd_mode_list[] = {
   { 'i', CMODE_INVITE },
   { 'm', CMODE_MOD    },
   { 'n', CMODE_NOEXT  },
@@ -68,7 +66,7 @@ struct cmode_ aspircd_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ aspircd_status_mode_list[] = {
+static const struct cmode aspircd_status_mode_list[] = {
   { 'y', CSTATUS_IMMUNE	 },
   { 'q', CSTATUS_OWNER	 },
   { 'a', CSTATUS_PROTECT },
@@ -78,7 +76,7 @@ struct cmode_ aspircd_status_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ aspircd_prefix_mode_list[] = {
+static const struct cmode aspircd_prefix_mode_list[] = {
   { '*', CSTATUS_IMMUNE	 },
   { '~', CSTATUS_OWNER	 },
   { '&', CSTATUS_PROTECT },
@@ -89,7 +87,7 @@ struct cmode_ aspircd_prefix_mode_list[] = {
 };
 
 
-struct cmode_ aspircd_user_mode_list[] = {
+static const struct cmode aspircd_user_mode_list[] = {
   { 'p', UF_IMMUNE   },
   { 'a', UF_ADMIN    },
   { 'i', UF_INVIS    },
@@ -117,3 +115,5 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 
 }
+
+SIMPLE_DECLARE_MODULE_V1("protocol/aspircd", MODULE_UNLOAD_CAPABILITY_NEVER)
