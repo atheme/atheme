@@ -109,6 +109,7 @@
  * modules available.
  *
  * AspIRCd 3.0.1 or later                       protocol/aspircd
+ * AspIRCd 4.0.1 or later                       protocol/aspircd
  * Asuka 1.2.1 or later                         protocol/asuka
  * Bahamut 2.1.x                                protocol/bahamut
  * Charybdis IRCd                               protocol/charybdis
@@ -126,7 +127,7 @@
  * If your IRCd vendor has supplied a module file, build it and load it here
  * instead of one above.
  */
-#loadmodule "protocol/charybdis";
+#loadmodule "protocol/aspircd";
 
 /* Protocol mixins.
  *
@@ -290,7 +291,7 @@ loadmodule "crypto/pbkdf2";             /* Verify-only, see prev. */
  * synchronous manner, which means that an unresponsive LDAP server can
  * freeze services.
  */
-#loadmodule "auth/ldap";
+loadmodule "auth/ldap";
 
 
 
