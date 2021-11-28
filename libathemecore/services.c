@@ -617,8 +617,11 @@ handle_certfp(struct sourceinfo *si, struct user *u, const char *certfp)
 	if (u->myuser != NULL)
 		return;
 
+
+	if ((mcfp = mycertfp_find(certfp)) != NULL)
+		mu = req.mu = mcfp->mu;
+
 	req.si = si;
-	req.mu = mu;
 	req.allowed = true;
 	hook_call_user_can_login(&req);
 	if (!req.allowed)
@@ -626,10 +629,9 @@ handle_certfp(struct sourceinfo *si, struct user *u, const char *certfp)
 		return;
 	}
 
-	if ((mcfp = mycertfp_find(certfp)) == NULL)
+	if (mu == NULL)
 		return;
 
-	mu = mcfp->mu;
 	svs = service_find("nickserv");
 	if (svs == NULL)
 		return;
