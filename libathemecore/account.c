@@ -2018,49 +2018,58 @@ chanacs_change_simple(struct mychan *mychan, struct myentity *mt, const char *ho
 }
 
 static int
-expire_myuser_cb(struct myentity *mt, void *unused)
+expire_myuser_cb(struct myentity *const restrict mt, void ATHEME_VATTR_UNUSED *const restrict unused)
 {
-	struct hook_expiry_req req;
-	struct myuser *mu = user(mt);
-
 	return_val_if_fail(isuser(mt), 0);
 
-	/* If they're logged in, update lastlogin time.
-	 * To decrease db traffic, may want to only do
-	 * this if the account would otherwise be
-	 * deleted. -- jilles
+	struct myuser *const mu = user(mt);
+
+	if (mu->flags & MU_HOLD)
+		return 0;
+
+	/* Don't expire accounts with privs on them in atheme.conf,
+	 * otherwise someone can reregister them and take the privs.
+	 *   -- jilles
 	 */
-	if (MOWGLI_LIST_LENGTH(&mu->logins) > 0)
-	{
+	if (is_conf_soper(mu))
+		return 0;
+
+	// If they're logged in, update lastlogin time.  -- jilles
+	if (MOWGLI_LIST_LENGTH(&mu->logins))
 		mu->lastlogin = CURRTIME;
-		return 0;
-	}
 
-	if (MU_HOLD & mu->flags)
-		return 0;
+	/* If they're unverified, expire them after a day. Otherwise, expire them
+	 * if expiration is enabled, and they have not logged in for that long.
+	 *   -- amdj
+	 */
+	const bool uexpired = ((mu->flags & MU_WAITAUTH) && ((CURRTIME - mu->registered) >= SECONDS_PER_DAY));
+	const bool vexpired = ((nicksvs.expiry > 0) && ((unsigned int)(CURRTIME - mu->lastlogin) >= nicksvs.expiry));
+	const bool expired = uexpired || vexpired;
 
-	req.data.mu = mu;
-	req.do_expire = 1;
-	hook_call_user_check_expire(&req);
+	struct hook_expiry_req req = {
+		.data.mu    = mu,
+		.do_expire  = expired,
+	};
 
-	if (!req.do_expire)
-		return 0;
+	(void) hook_call_user_check_expire(&req);
 
-	if ((nicksvs.expiry > 0 && mu->lastlogin < CURRTIME && (unsigned int)(CURRTIME - mu->lastlogin) >= nicksvs.expiry) ||
-			(mu->flags & MU_WAITAUTH && (CURRTIME - mu->registered) >= SECONDS_PER_DAY))
+	// Don't let a hook prevent expiry of unverified accounts
+	if (uexpired || req.do_expire)
 	{
-		/* Don't expire accounts with privs on them in atheme.conf,
-		 * otherwise someone can reregister
-		 * them and take the privs -- jilles */
-		if (is_conf_soper(mu))
-			return 0;
+		(void) slog(LG_REGISTER, "EXPIRE:%s: \2%s\2 from \2%s\2",
+		                         expired ? "CORE" : "HOOK", entity(mu)->name, mu->email);
 
-		slog(LG_REGISTER, "EXPIRE: \2%s\2 from \2%s\2 ", entity(mu)->name, mu->email);
-		slog(LG_VERBOSE, "expire_check(): expiring account %s (unused %ds, email %s, nicks %zu, chanacs %zu)",
-				entity(mu)->name, (int)(CURRTIME - mu->lastlogin),
-				mu->email, MOWGLI_LIST_LENGTH(&mu->nicks),
-				MOWGLI_LIST_LENGTH(&entity(mu)->chanacs));
-		atheme_object_dispose(mu);
+		(void) slog(LG_VERBOSE, "expire_check(): %s expiring account %s (unused %us, email %s, logins %zu, "
+		                        "nicks %zu, chanacs %zu)", expired ? "core" : "hook", entity(mu)->name,
+		                        (unsigned int)(CURRTIME - mu->lastlogin), mu->email,
+		                        MOWGLI_LIST_LENGTH(&mu->logins), MOWGLI_LIST_LENGTH(&mu->nicks),
+		                        MOWGLI_LIST_LENGTH(&entity(mu)->chanacs));
+
+		/* If they are logged in during expiration, the destructor
+		 * for this object will take care of logging them out.
+		 *   -- amdj
+		 */
+		(void) atheme_object_dispose(mu);
 	}
 
 	return 0;
@@ -2080,7 +2089,7 @@ expire_check(void *arg)
 	if (curr_uplink != NULL && curr_uplink->conn != NULL)
 		sendq_flush(curr_uplink->conn);
 
-	myentity_foreach_t(ENT_USER, expire_myuser_cb, NULL);
+	myentity_foreach_t(ENT_USER, &expire_myuser_cb, NULL);
 
 	MOWGLI_PATRICIA_FOREACH(mn, &state, nicklist)
 	{
