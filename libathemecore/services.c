@@ -617,7 +617,6 @@ handle_certfp(struct sourceinfo *si, struct user *u, const char *certfp)
 	if (u->myuser != NULL)
 		return;
 
-
 	if ((mcfp = mycertfp_find(certfp)) != NULL)
 		mu = req.mu = mcfp->mu;
 
