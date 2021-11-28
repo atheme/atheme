@@ -2023,38 +2023,38 @@ expire_myuser_cb(struct myentity *mt, void *unused)
 
 	return_val_if_fail(isuser(mt), 0);
 
+	if (MU_HOLD & mu->flags)
+		return 0;
+	/* Don't expire accounts with privs on them in atheme.conf,
+	 * otherwise someone can reregister
+	 * them and take the privs -- jilles */
+	if (is_conf_soper(mu))
+		return 0;
+
 	/* If they're logged in, update lastlogin time.
 	 * To decrease db traffic, may want to only do
 	 * this if the account would otherwise be
 	 * deleted. -- jilles
 	 */
 	if (MOWGLI_LIST_LENGTH(&mu->logins) > 0)
-	{
 		mu->lastlogin = CURRTIME;
-		return 0;
-	}
 
-	if (MU_HOLD & mu->flags)
-		return 0;
+
+	bool registered_expired = nicksvs.expiry > 0 && mu->lastlogin < CURRTIME && (unsigned int)(CURRTIME - mu->lastlogin) >= nicksvs.expiry;
+	bool unregistered_expired = mu->flags & MU_WAITAUTH && (CURRTIME - mu->registered) >= SECONDS_PER_DAY;
+	bool core_expired = registered_expired || unregistered_expired;
 
 	req.data.mu = mu;
-	req.do_expire = 1;
+	req.do_expire = core_expired;
 	hook_call_user_check_expire(&req);
 
-	if (!req.do_expire)
-		return 0;
-
-	if ((nicksvs.expiry > 0 && mu->lastlogin < CURRTIME && (unsigned int)(CURRTIME - mu->lastlogin) >= nicksvs.expiry) ||
-			(mu->flags & MU_WAITAUTH && (CURRTIME - mu->registered) >= SECONDS_PER_DAY))
+	if (req.do_expire)
 	{
-		/* Don't expire accounts with privs on them in atheme.conf,
-		 * otherwise someone can reregister
-		 * them and take the privs -- jilles */
-		if (is_conf_soper(mu))
-			return 0;
 
-		slog(LG_REGISTER, "EXPIRE: \2%s\2 from \2%s\2 ", entity(mu)->name, mu->email);
-		slog(LG_VERBOSE, "expire_check(): expiring account %s (unused %ds, email %s, nicks %zu, chanacs %zu)",
+		slog(LG_REGISTER, "EXPIRE:%s: \2%s\2 from \2%s\2 ",
+				core_expired ? "CORE" : "MODULE", entity(mu)->name, mu->email);
+		slog(LG_VERBOSE, "expire_check(): %s expiring account %s (unused %ds, email %s, nicks %zu, chanacs %zu)",
+				core_expired ? "core" : "module",
 				entity(mu)->name, (int)(CURRTIME - mu->lastlogin),
 				mu->email, MOWGLI_LIST_LENGTH(&mu->nicks),
 				MOWGLI_LIST_LENGTH(&entity(mu)->chanacs));
