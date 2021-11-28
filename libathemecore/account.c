@@ -2052,9 +2052,9 @@ expire_myuser_cb(struct myentity *mt, void *unused)
 	{
 
 		slog(LG_REGISTER, "EXPIRE:%s: \2%s\2 from \2%s\2 ",
-				core_expired ? "CORE" : "MODULE", entity(mu)->name, mu->email);
+				core_expired ? "CORE" : "HOOK", entity(mu)->name, mu->email);
 		slog(LG_VERBOSE, "expire_check(): %s expiring account %s (unused %ds, email %s, nicks %zu, chanacs %zu)",
-				core_expired ? "core" : "module",
+				core_expired ? "core" : "hook",
 				entity(mu)->name, (int)(CURRTIME - mu->lastlogin),
 				mu->email, MOWGLI_LIST_LENGTH(&mu->nicks),
 				MOWGLI_LIST_LENGTH(&entity(mu)->chanacs));
