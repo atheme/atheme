@@ -2205,6 +2205,19 @@ check_myuser_cb(struct myentity *mt, void *unused)
 	return 0;
 }
 
+bool
+user_loginmaxed(struct myuser *mu)
+{
+	if (mu->flags & MU_LOGINNOLIMIT)
+		return false;
+	else if (has_priv_myuser(mu, PRIV_LOGIN_NOLIMIT))
+		return false;
+	else if (MOWGLI_LIST_LENGTH(&mu->logins) < me.maxlogins)
+		return false;
+	else
+		return true;
+}
+
 void
 db_check(void)
 {

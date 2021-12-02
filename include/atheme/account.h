@@ -425,4 +425,7 @@ struct svsignore *svsignore_find(struct user *user);
 struct svsignore *svsignore_add(const char *mask, const char *reason) ATHEME_FATTR_MALLOC ATHEME_FATTR_RETURNS_NONNULL;
 void svsignore_delete(struct svsignore *svsignore);
 
+/* check if user is at the login limit or if they are exempt */
+bool user_loginmaxed(struct myuser *mu);
+
 #endif /* !ATHEME_INC_ACCOUNT_H */
