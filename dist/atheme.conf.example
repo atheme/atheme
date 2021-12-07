@@ -1443,6 +1443,15 @@ serverinfo {
 	 */
 	loglevel = { admin; error; info; network; wallops; };
 
+	/* (*) maxcertfp
+	 *
+	 * What is the maximum number of certificate fingerprints allowed to
+	 * be associated with one account?
+	 *
+	 * Set to 0 for no limit.
+	 */
+	maxcertfp = 0;
+
 	/* (*) maxlogins
 	 *
 	 * What is the maximum number of sessions allowed to login to one

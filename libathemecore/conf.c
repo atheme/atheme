@@ -262,6 +262,7 @@ init_newconf(void)
 	add_bool_conf_item("HIDDEN", &conf_si_table, 0, &me.hidden, false);
 	add_dupstr_conf_item("MTA", &conf_si_table, 0, &me.mta, NULL);
 	add_conf_item("LOGLEVEL", &conf_si_table, c_si_loglevel);
+	add_uint_conf_item("MAXCERTFP", &conf_si_table, 0, &me.maxcertfp, 0, INT_MAX, 0);
 	add_uint_conf_item("MAXLOGINS", &conf_si_table, 0, &me.maxlogins, 3, INT_MAX, 5);
 	add_uint_conf_item("MAXUSERS", &conf_si_table, 0, &me.maxusers, 0, INT_MAX, 0);
 	add_uint_conf_item("MDLIMIT", &conf_si_table, 0, &me.mdlimit, 0, INT_MAX, 30);

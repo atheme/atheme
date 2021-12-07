@@ -374,7 +374,7 @@ struct myuser_name *myuser_name_add(const char *name);
 void myuser_name_remember(const char *name, struct myuser *mu);
 void myuser_name_restore(const char *name, struct myuser *mu);
 
-struct mycertfp *mycertfp_add(struct myuser *mu, const char *certfp);
+struct mycertfp *mycertfp_add(struct myuser *mu, const char *certfp, bool force);
 void mycertfp_delete(struct mycertfp *mcfp);
 struct mycertfp *mycertfp_find(const char *certfp);
 

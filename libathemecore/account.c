@@ -921,19 +921,21 @@ myuser_name_restore(const char *name, struct myuser *mu)
  *******************/
 
 struct mycertfp *
-mycertfp_add(struct myuser *mu, const char *certfp)
+mycertfp_add(struct myuser *mu, const char *certfp, const bool force)
 {
-	struct mycertfp *mcfp;
-
 	return_val_if_fail(mu != NULL, NULL);
 	return_val_if_fail(certfp != NULL, NULL);
 
-	mcfp = mowgli_heap_alloc(mycertfp_heap);
+	if (me.maxcertfp && MOWGLI_LIST_LENGTH(&mu->cert_fingerprints) >= me.maxcertfp && ! force)
+		return NULL;
+
+	struct mycertfp *const mcfp = mowgli_heap_alloc(mycertfp_heap);
+
 	mcfp->mu = mu;
 	mcfp->certfp = sstrdup(certfp);
 
-	mowgli_node_add(mcfp, &mcfp->node, &mu->cert_fingerprints);
-	mowgli_patricia_add(certfplist, mcfp->certfp, mcfp);
+	(void) mowgli_node_add(mcfp, &mcfp->node, &mu->cert_fingerprints);
+	(void) mowgli_patricia_add(certfplist, mcfp->certfp, mcfp);
 
 	return mcfp;
 }

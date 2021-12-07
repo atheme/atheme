@@ -613,7 +613,7 @@ corestorage_h_mcfp(struct database_handle *db, const char *type)
 		return;
 	}
 
-	mycertfp_add(mu, certfp);
+	mycertfp_add(mu, certfp, true);
 }
 
 static void
