@@ -303,7 +303,7 @@ flatfile_db_load(const char *filename)
 				continue;
 			}
 
-			mcfp = mycertfp_add(mu, certfp);
+			mcfp = mycertfp_add(mu, certfp, true);
 		}
 		else if (!strcmp("NAM", item))
 		{
