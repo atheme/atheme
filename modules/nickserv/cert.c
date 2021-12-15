@@ -145,7 +145,7 @@ ns_cmd_cert(struct sourceinfo *si, int parc, char *parv[])
 			command_fail(si, fault_nochange, _("Fingerprint \2%s\2 is already on another user's fingerprint list."), mcfp);
 			return;
 		}
-		if (mycertfp_add(mu, mcfp))
+		if (mycertfp_add(mu, mcfp, false))
 		{
 			command_success_nodata(si, _("Added fingerprint \2%s\2 to your fingerprint list."), mcfp);
 			logcommand(si, CMDLOG_SET, "CERT:ADD: \2%s\2", mcfp);

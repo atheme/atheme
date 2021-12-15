@@ -34,6 +34,7 @@ struct me
 	bool            connected;              // are we connected?
 	bool            bursting;               // are we bursting?
 	bool            recvsvr;                // received server peer
+	unsigned int    maxcertfp;              // maximum fingerprints in certfp list
 	unsigned int    maxlogins;              // maximum logins per username
 	unsigned int    maxusers;               // maximum usernames from one email
 	unsigned int    maxmemos;
