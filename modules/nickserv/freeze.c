@@ -40,8 +40,8 @@ ns_cmd_freeze(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
 	const char *target = parv[0];
-	char *action = parv[1];
-	char *reason = parv[2];
+	const char *action = parv[1];
+	const char *reason = parv[2];
 	struct user *u;
 	mowgli_node_t *n, *tn;
 
