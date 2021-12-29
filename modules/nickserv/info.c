@@ -97,7 +97,7 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	hide_info = (mu->flags & MU_PRIVATE) && (mu != si->smu) && !has_user_auspex;
+	hide_info = (mu->flags & MU_PRIVATE) && (mu != si->smu);
 
 	if (!nicksvs.no_nick_ownership)
 	{
@@ -145,7 +145,7 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	md = metadata_find(mu, "private:usercloak-assigner");
 	vhost_assigner = md ? md->value : NULL;
 
-	if (!hide_info && (md = metadata_find(mu, "private:host:vhost")))
+	if ((!hide_info || has_user_auspex) && (md = metadata_find(mu, "private:host:vhost")))
 	{
 		mowgli_strlcpy(buf, md->value, sizeof buf);
 		if (vhost != NULL)
@@ -210,50 +210,64 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 			command_success_nodata(si, _("Real addr  : %s"), md->value);
 	}
 
-	if (!hide_info && recognized)
+	if ((!hide_info || has_user_auspex) && recognized)
 		command_success_nodata(si, _("Recognized : now (matches access list)"));
 
-	// show nick's lastseen/online, if we have a nick
-	if (!hide_info && u != NULL)
-		command_success_nodata(si, _("Last seen  : now"));
-	else if (mn != NULL)
+
+	// we have a registered nickname
+	if (mn != NULL)
 	{
-		tm2 = localtime(&mn->lastseen);
-		strftime(lastlogin, sizeof lastlogin, TIME_FORMAT, tm2);
 		if (hide_info)
 			command_success_nodata(si, _("Last seen  : %s"), ns_obfuscate_time_ago(mn->lastseen));
+
+		// registered nickname is online
+		if (u != NULL)
+		{
+			// it's our nickname or the account isn't Private
+			if (!hide_info)
+				command_success_nodata(si, _("Last seen  : now"));
+			// it's not our nickname and the account is private but we're a soper
+			else if (has_user_auspex)
+				command_success_nodata(si, _("Last seen  : (hidden) now"));
+		}
+		// registered nickname is offline
 		else
-			command_success_nodata(si, _("Last seen  : %s (%s ago)"), lastlogin, time_ago(mn->lastseen));
+		{
+			strftime(lastlogin, sizeof lastlogin, TIME_FORMAT, localtime(&mn->lastseen));
+			// it's our nickname or the account isn't private
+			if (!hide_info)
+				command_success_nodata(si, _("Last seen  : %s (%s ago)"), lastlogin, time_ago(mn->lastseen));
+			// it's not our nickname and the account is private but we're a soper
+			else if (has_user_auspex)
+				command_success_nodata(si, _("Last seen  : (hidden) %s (%s ago)"), lastlogin, time_ago(mn->lastseen));
+		}
 	}
 
-	/* if noone is logged in to this account, show account's lastseen,
-	 * unless we have a nick and it quit at the same time as the account
-	 * if the account is private, act as though it's not logged in all
-	 * the time rather than reveal its logged-in status to others
-	 */
-	if (hide_info || MOWGLI_LIST_LENGTH(&mu->logins) == 0)
+	if (hide_info)
+		command_success_nodata(si, _("User seen  : %s"), ns_obfuscate_time_ago(mu->lastlogin));
+	// account is logged in
+	if (MOWGLI_LIST_LENGTH(&mu->logins) > 0)
 	{
-		tm2 = localtime(&mu->lastlogin);
-		strftime(lastlogin, sizeof lastlogin, TIME_FORMAT, tm2);
-		if (mn == NULL)
-		{
-			if (hide_info)
-				command_success_nodata(si, _("Last seen  : %s"), ns_obfuscate_time_ago(mu->lastlogin));
-			else
-				command_success_nodata(si, _("Last seen  : %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
-		}
-		else if (mn->lastseen != mu->lastlogin)
-		{
-			if (hide_info)
-				command_success_nodata(si, _("User seen  : %s"), ns_obfuscate_time_ago(mu->lastlogin));
-			else
-				command_success_nodata(si, _("User seen  : %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
-		}
+		// it's our account or the account isn't private
+		if (!hide_info)
+			command_success_nodata(si, _("User seen  : now"));
+		// it's not our account and the account is private but we're a soper
+		else if (has_user_auspex)
+			command_success_nodata(si, _("User seen  : (hidden) now"));
 	}
-	/* someone is logged in to this account
-	 * if they're privileged, show them the sessions
-	 */
-	else if (mu == si->smu || has_user_auspex)
+	else
+	{
+		strftime(lastlogin, sizeof lastlogin, TIME_FORMAT, localtime(&mu->lastlogin));
+		// it's our account or the account isn't private
+		if (!hide_info)
+			command_success_nodata(si, _("User seen  : %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
+		// it's not our account and the account is private but we're a soper
+		else if (has_user_auspex)
+			command_success_nodata(si, _("User seen  : (hidden) %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
+	}
+
+	// if this is our account or we're a soper, show sessions
+	if (mu == si->smu || has_user_auspex)
 	{
 		buf[0] = '\0';
 		MOWGLI_ITER_FOREACH(n, mu->logins.head)
@@ -270,20 +284,10 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		if (buf[0])
 			command_success_nodata(si, _("Logins from: %s"), buf);
 	}
-	/* tell them this account is online, but not which nick
-	 * unless we have already told them above
-	 */
-	else if (u == NULL)
-	{
-		if (mn != NULL)
-			command_success_nodata(si, _("User seen  : now"));
-		else
-			command_success_nodata(si, _("Last seen  : now"));
-	}
 
 	if (!nicksvs.no_nick_ownership)
 	{
-		// list registered nicks if privileged
+		// if this is our account or we're a soper, list registered nicks
 		if (mu == si->smu || has_user_auspex)
 		{
 			buf[0] = '\0';
