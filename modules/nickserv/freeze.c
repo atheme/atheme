@@ -39,9 +39,9 @@ static void
 ns_cmd_freeze(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct myuser *mu;
-	char *target = parv[0];
-	char *action = parv[1];
-	char *reason = parv[2];
+	const char *target = parv[0];
+	const char *action = parv[1];
+	const char *reason = parv[2];
 	struct user *u;
 	mowgli_node_t *n, *tn;
 
@@ -59,6 +59,8 @@ ns_cmd_freeze(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
 		return;
 	}
+
+	target = entity(mu)->name;
 
 	if (!strcasecmp(action, "ON"))
 	{
@@ -89,7 +91,7 @@ ns_cmd_freeze(struct sourceinfo *si, int parc, char *parv[])
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->logins.head)
 		{
 			u = (struct user *)n->data;
-			if (!ircd_logout_or_kill(u, entity(mu)->name))
+			if (!ircd_logout_or_kill(u, target))
 			{
 				u->myuser = NULL;
 				mowgli_node_delete(n, &mu->logins);
