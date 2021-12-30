@@ -41,7 +41,7 @@ mod_init(struct module *const restrict m)
 		return;
 	}
 
-	(void) hook_add_user_identify(&on_user_identify);
+	(void) hook_add_first_user_identify(&on_user_identify);
 }
 
 static void
