@@ -446,7 +446,10 @@ os_cmd_modreload_func(struct sourceinfo *const restrict si, const int parc, char
 
 	// If we are not able to perform any reloads, just give up now
 	if (! can_reload_any)
+	{
+		(void) free_revdep_list(deplist);
 		return;
+	}
 
 	/* Sort the list of dependencies so that we reload them in the order they're needed. We can't do this below
 	 * because the modules will be unloaded at that point, which is also why we need to iterate parv[] twice...
