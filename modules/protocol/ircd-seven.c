@@ -64,6 +64,7 @@ static const struct cmode seven_mode_list[] = {
   { 'O', CMODE_OPERONLY  },
   { 'A', CMODE_ADMINONLY },
   { 'u', CMODE_NOFILTER  },
+  { 'T', CMODE_NONOTICE  },
 
   { '\0', 0 }
 };
