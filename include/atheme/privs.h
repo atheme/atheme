@@ -13,79 +13,88 @@
 #include <atheme/sourceinfo.h>
 #include <atheme/stdheaders.h>
 
-#define PRIV_NONE            NULL
+// NickServ/UserServ
+#define PRIV_USER_ADMIN                 "user:admin"
+#define PRIV_USER_AUSPEX                "user:auspex"
+#define PRIV_USER_FREGISTER             "user:fregister"
+#define PRIV_USER_SENDPASS              "user:sendpass"
+#define PRIV_USER_VHOST                 "user:vhost"
 
-/* nickserv/userserv */
-#define PRIV_USER_AUSPEX     "user:auspex"
-#define PRIV_USER_ADMIN      "user:admin"
-#define PRIV_USER_SENDPASS   "user:sendpass"
-#define PRIV_USER_VHOST      "user:vhost"
-#define PRIV_USER_FREGISTER  "user:fregister"
-/* chanserv */
-#define PRIV_CHAN_AUSPEX     "chan:auspex"
-#define PRIV_CHAN_ADMIN      "chan:admin"
-#define PRIV_CHAN_CMODES     "chan:cmodes"
-#define PRIV_JOIN_STAFFONLY  "chan:joinstaffonly"
-/* nickserv/userserv+chanserv */
-#define PRIV_MARK            "user:mark"
-#define PRIV_HOLD            "user:hold"
-#define PRIV_REG_NOLIMIT     "user:regnolimit"
-#define PRIV_LOGIN_NOLIMIT   "user:loginnolimit"
-/* groupserv */
-#define PRIV_GROUP_ADMIN     "group:admin"
-#define PRIV_GROUP_AUSPEX    "group:auspex"
-/* generic */
-#define PRIV_SERVER_AUSPEX   "general:auspex"
-#define PRIV_VIEWPRIVS       "general:viewprivs"
-#define PRIV_FLOOD           "general:flood"
-#define PRIV_HELPER	     "general:helper"
-#define PRIV_METADATA        "general:metadata"
-#define PRIV_ADMIN           "general:admin"
-/* operserv */
-#define PRIV_OMODE           "operserv:omode"
-#define PRIV_AKILL           "operserv:akill"
-#define PRIV_MASS_AKILL      "operserv:massakill"
-#define PRIV_AKILL_ANYMASK   "operserv:akill-anymask"
-#define PRIV_JUPE            "operserv:jupe"
-#define PRIV_NOOP            "operserv:noop"
-#define PRIV_GLOBAL          "operserv:global"
-#define PRIV_GRANT           "operserv:grant"
-/* saslserv */
-#define PRIV_IMPERSONATE_CLASS_FMT	"impersonate:class:%s"
-#define PRIV_IMPERSONATE_ENTITY_FMT	"impersonate:entity:%s"
-#define PRIV_IMPERSONATE_ANY		"impersonate:any"
+// ChanServ
+#define PRIV_CHAN_ADMIN                 "chan:admin"
+#define PRIV_CHAN_AUSPEX                "chan:auspex"
+#define PRIV_CHAN_CMODES                "chan:cmodes"
+#define PRIV_JOIN_STAFFONLY             "chan:joinstaffonly"
 
-/* other access levels */
-#define AC_NONE NULL /* anyone */
-#define AC_DISABLED "special:disabled" /* noone */
-#define AC_AUTHENTICATED "special:authenticated"
-/* please do not use the following anymore */
-#define AC_IRCOP "special:ircop"
-#define AC_SRA "general:admin"
+// NickServ/UserServ & ChanServ
+#define PRIV_HOLD                       "user:hold"
+#define PRIV_LOGIN_NOLIMIT              "user:loginnolimit"
+#define PRIV_MARK                       "user:mark"
+#define PRIV_REG_NOLIMIT                "user:regnolimit"
+
+// GroupServ
+#define PRIV_GROUP_ADMIN                "group:admin"
+#define PRIV_GROUP_AUSPEX               "group:auspex"
+
+// OperServ
+#define PRIV_AKILL                      "operserv:akill"
+#define PRIV_AKILL_ANYMASK              "operserv:akill-anymask"
+#define PRIV_GLOBAL                     "operserv:global"
+#define PRIV_GRANT                      "operserv:grant"
+#define PRIV_JUPE                       "operserv:jupe"
+#define PRIV_MASS_AKILL                 "operserv:massakill"
+#define PRIV_NOOP                       "operserv:noop"
+#define PRIV_OMODE                      "operserv:omode"
+
+// SASLServ
+#define PRIV_IMPERSONATE_ANY            "impersonate:any"
+#define PRIV_IMPERSONATE_CLASS_FMT      "impersonate:class:%s"
+#define PRIV_IMPERSONATE_ENTITY_FMT     "impersonate:entity:%s"
+
+// Generic
+#define PRIV_ADMIN                      "general:admin"
+#define PRIV_SERVER_AUSPEX              "general:auspex"
+#define PRIV_FLOOD                      "general:flood"
+#define PRIV_HELPER                     "general:helper"
+#define PRIV_METADATA                   "general:metadata"
+#define PRIV_VIEWPRIVS                  "general:viewprivs"
+
+// Other privileges
+#define AC_AUTHENTICATED                "special:authenticated"
+#define AC_DISABLED                     "special:disabled"
+
+// This is used to denote that no privilege is required for a command
+#define AC_NONE                         NULL
+
+// These are only retained for compatibility. Do not use.
+#define PRIV_NONE                       NULL
+#define AC_SRA                          "general:admin"
+#define AC_IRCOP                        "special:ircop"
+
+// Flags for (struct operclass).flags
+#define OPERCLASS_NEEDOPER              0x1U // Only give privs to IRCOps
+#define OPERCLASS_BUILTIN               0x2U // Regardless of atheme.conf
+
+// Flags for (struct soper).flags
+#define SOPER_CONF                      0x1U // Oper is listed in atheme.conf
 
 struct operclass
 {
-	char *          name;
-	char *          privs;  // priv1 priv2 priv3...
-	int             flags;
-	mowgli_node_t   node;
+	char *              name;
+	char *              privs;      // Space-separated list of privileges
+	int                 flags;
+	mowgli_node_t       node;
 };
 
-#define OPERCLASS_NEEDOPER	0x1U /* only give privs to IRCops */
-#define OPERCLASS_BUILTIN	0x2U /* builtin */
-
-/* soper list struct */
 struct soper
 {
-	struct myuser *         myuser;
-	char *                  name;
-	struct operclass *      operclass;
-	char *                  classname;
-	int                     flags;
-	char *                  password;
+	struct myuser *     myuser;
+	char *              name;
+	struct operclass *  operclass;
+	char *              classname;
+	int                 flags;
+	char *              password;
 };
-
-#define SOPER_CONF	0x1U /* oper is listed in atheme.conf */
 
 /* privs.c */
 extern mowgli_list_t operclasslist;
