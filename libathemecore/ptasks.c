@@ -121,6 +121,7 @@ handle_stats(struct user *u, char req)
 
 	if (floodcheck(u, NULL))
 		return;
+
 	logcommand_user(NULL, u, CMDLOG_GET, "STATS: \2%c\2", req);
 
 	switch (req)
@@ -167,8 +168,8 @@ handle_stats(struct user *u, char req)
 
 		  break;
 
-	  case 'f':
 	  case 'F':
+	  case 'f':
 		  if (!has_priv_user(u, PRIV_SERVER_AUSPEX))
 			  break;
 
@@ -193,8 +194,8 @@ handle_stats(struct user *u, char req)
 		  break;
 
 #ifdef OBJECT_DEBUG
-	  case 'j':
 	  case 'J':
+	  case 'j':
 		  MOWGLI_ITER_FOREACH(n, object_list.head)
 		  {
 			  struct atheme_object *obj = n->data;
@@ -220,8 +221,8 @@ handle_stats(struct user *u, char req)
 
 		  break;
 
-	  case 'o':
 	  case 'O':
+	  case 'o':
 		  if (!has_priv_user(u, PRIV_VIEWPRIVS))
 			  break;
 
@@ -295,8 +296,8 @@ handle_stats(struct user *u, char req)
 				  timediff(CURRTIME - curr_uplink->conn->first_recv));
 		  break;
 
-	  case 'q':
 	  case 'Q':
+	  case 'q':
 		  if (!has_priv_user(u, PRIV_MASS_AKILL))
 			  break;
 
@@ -312,8 +313,8 @@ handle_stats(struct user *u, char req)
 
 		  break;
 
-	  case 'x':
 	  case 'X':
+	  case 'x':
 		  if (!has_priv_user(u, PRIV_MASS_AKILL))
 			  break;
 
@@ -329,8 +330,8 @@ handle_stats(struct user *u, char req)
 
 		  break;
 
-	  case 'y':
 	  case 'Y':
+	  case 'y':
 		  if (!has_priv_user(u, PRIV_SERVER_AUSPEX))
 			  break;
 
