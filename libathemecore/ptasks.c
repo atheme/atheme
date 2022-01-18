@@ -146,7 +146,7 @@ handle_stats(struct user *u, char req)
 		  MOWGLI_ITER_FOREACH(n, uplinks.head)
 		  {
 			  uplink = (struct uplink *)n->data;
-			  numeric_sts(me.me, 213, u, "C *@127.0.0.1 A %s %u uplink", uplink->name, uplink->port);
+			  numeric_sts(me.me, 213, u, "C *@%s A %s %u uplink", uplink->host, uplink->name, uplink->port);
 		  }
 		  break;
 
