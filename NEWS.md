@@ -98,6 +98,18 @@ POTENTIAL COMPATIBILITY BREAKAGE
   the configuration options have changed! You will need libargon2 available at
   configure-time (`--with-argon2`).
 
+- Services' `MU` & `MN` lines in the database (registered accounts & grouped
+  nicknames) last seen times are now written as 0 if they are currently logged
+  in, rather than using the current timestamp. The commit timestamp is written
+  to the database as well, to allow services to reconstruct the last seen
+  timestamps when it is restarted. This is to put less load on incremental
+  backup systems, as the overwhelming majority of changes to each such line
+  were always just the last seen timestamps. These changes break compatibility
+  with previous versions of this software; so if you wish to downgrade your
+  version of services after using this version, you will need to edit the
+  database before it will start successfully. A migration script is located in
+  this repository; please see the comment block in `contrib/database-ts.pl`.
+
 Security
 --------
 - Services now accepts email addresses that may contain shell metacharacters.
