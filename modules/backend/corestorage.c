@@ -26,6 +26,8 @@
 static unsigned int dbv;
 static unsigned int their_ca_all;
 
+static time_t db_time;
+
 static bool mdep_load_mdeps = true;
 
 #ifdef HAVE_FORK
@@ -78,6 +80,10 @@ corestorage_db_save(struct database_handle *db)
 	db_write_word(db, bitmask_to_flags(ca_all));
 	db_commit_row(db);
 
+	db_start_row(db, "TS");
+	db_write_time(db, CURRTIME);
+	db_commit_row(db);
+
 	slog(LG_DEBUG, "db_save(): saving myusers");
 
 	MYENTITY_FOREACH_T(ment, &mestate, ENT_USER)
@@ -95,7 +101,12 @@ corestorage_db_save(struct database_handle *db)
 		db_write_word(db, mu->pass);
 		db_write_word(db, mu->email);
 		db_write_time(db, mu->registered);
-		db_write_time(db, mu->lastlogin);
+
+		if (MOWGLI_LIST_LENGTH(&mu->logins))
+			db_write_time(db, 0);
+		else
+			db_write_time(db, mu->lastlogin);
+
 		db_write_word(db, flags);
 		db_write_word(db, language_get_name(mu->language));
 		db_commit_row(db);
@@ -149,7 +160,13 @@ corestorage_db_save(struct database_handle *db)
 			db_write_word(db, entity(mu)->name);
 			db_write_word(db, mn->nick);
 			db_write_time(db, mn->registered);
-			db_write_time(db, mn->lastseen);
+
+			struct user *u = user_find_named(mn->nick);
+			if (u != NULL && u->myuser == mn->owner)
+				db_write_time(db, 0);
+			else
+				db_write_time(db, mn->lastseen);
+
 			db_commit_row(db);
 		}
 
@@ -447,6 +464,12 @@ corestorage_h_cf(struct database_handle *db, const char *type)
 }
 
 static void
+corestorage_h_ts(struct database_handle *db, const char *type)
+{
+	db_time = db_sread_time(db);
+}
+
+static void
 corestorage_h_mu(struct database_handle *db, const char *type)
 {
 	const char *uid = NULL;
@@ -490,7 +513,15 @@ corestorage_h_mu(struct database_handle *db, const char *type)
 
 	mu = myuser_add_id(uid, name, pass, email, flags);
 	mu->registered = reg;
-	mu->lastlogin = login;
+
+	if (login != 0)
+		mu->lastlogin = login;
+	else if (db_time != 0)
+		mu->lastlogin = db_time;
+	else
+		/* we'll only get here if someone manually corrupted a DB */
+		mu->lastlogin = CURRTIME;
+
 	if (language)
 		mu->language = language_add(language);
 }
@@ -594,7 +625,13 @@ corestorage_h_mn(struct database_handle *db, const char *type)
 
 	mn = mynick_add(mu, nick);
 	mn->registered = reg;
-	mn->lastseen = seen;
+
+	if (seen != 0)
+		mn->lastseen = seen;
+	else if (db_time != 0)
+		mn->lastseen = db_time;
+	else
+		mn->lastseen = CURRTIME;
 }
 
 static void
@@ -1005,6 +1042,8 @@ corestorage_db_load(const char *filename)
 	if (db == NULL)
 		return;
 
+	db_time = 0;
+
 	db_parse(db);
 	db_close(db);
 }
@@ -1101,6 +1140,7 @@ mod_init(struct module *const restrict m)
 	db_register_type_handler("MDEP", corestorage_h_mdep);
 	db_register_type_handler("LUID", corestorage_h_luid);
 	db_register_type_handler("CF", corestorage_h_cf);
+	db_register_type_handler("TS", corestorage_h_ts);
 	db_register_type_handler("MU", corestorage_h_mu);
 	db_register_type_handler("ME", corestorage_h_me);
 	db_register_type_handler("MI", corestorage_h_mi);
