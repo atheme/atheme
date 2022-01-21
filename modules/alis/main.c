@@ -115,13 +115,23 @@ alis_parse_mode(struct sourceinfo *const restrict si, const char *restrict arg,
 				break;
 
 			default:
-				query->mode |= mode_to_flag(*arg);
+			{
+				const unsigned int mf = mode_to_flag(*arg);
+
+				if ((! mf) || ((ircd->oper_only_modes & mf) && (! has_priv(si, PRIV_CHAN_AUSPEX))))
+				{
+					(void) command_fail(si, fault_badparams, _("Invalid option for \2%s\2"), opt);
+					return false;
+				}
+
+				query->mode |= mf;
 
 				for (size_t i = 0; ignore_mode_list[i].mode; i++)
 					if (*arg == ignore_mode_list[i].mode)
 						query->mode_ext[i] = true;
 
 				break;
+			}
 		}
 
 		arg++;
