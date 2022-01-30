@@ -21,9 +21,11 @@ static mowgli_list_t sasl_mechanisms;
 static char mechlist_string[400];
 static bool hide_server_names;
 
-sasl_session_t *find_session(const char *uid);
-sasl_session_t *make_session(const char *uid, server_t *server);
-void destroy_session(sasl_session_t *p);
+static sasl_session_t *find_session(const char *uid);
+static sasl_session_t *make_session(const char *uid, server_t *server);
+static void reset_session(sasl_session_t *p);
+static void destroy_session(sasl_session_t *p);
+static void reset_or_destroy_session(sasl_session_t *p);
 static void sasl_logcommand(sasl_session_t *p, myuser_t *login, int level, const char *fmt, ...);
 static void sasl_input(sasl_message_t *smsg);
 static void sasl_packet(sasl_session_t *p, char *buf, int len);
@@ -169,7 +171,7 @@ void _moddeinit(module_unload_intent_t intent)
  */
 
 /* find an existing session by uid */
-sasl_session_t *find_session(const char *uid)
+static sasl_session_t *find_session(const char *uid)
 {
 	sasl_session_t *p;
 	mowgli_node_t *n;
@@ -188,7 +190,7 @@ sasl_session_t *find_session(const char *uid)
 }
 
 /* create a new session if it does not already exist */
-sasl_session_t *make_session(const char *uid, server_t *server)
+static sasl_session_t *make_session(const char *uid, server_t *server)
 {
 	sasl_session_t *p = find_session(uid);
 	mowgli_node_t *n;
@@ -206,8 +208,17 @@ sasl_session_t *make_session(const char *uid, server_t *server)
 	return p;
 }
 
+/* reset a session */
+static void reset_session(sasl_session_t *p)
+{
+	if (p->mechptr && p->mechptr->mech_finish)
+		p->mechptr->mech_finish(p);
+
+	p->mechptr = NULL;
+}
+
 /* free a session and all its contents */
-void destroy_session(sasl_session_t *p)
+static void destroy_session(sasl_session_t *p)
 {
 	mowgli_node_t *n, *tn;
 	myuser_t *mu;
@@ -228,19 +239,25 @@ void destroy_session(sasl_session_t *p)
 		}
 	}
 
+	reset_session(p);
 	free(p->uid);
 	free(p->buf);
-	p->buf = p->p = NULL;
-	if(p->mechptr)
-		p->mechptr->mech_finish(p); /* Free up any mechanism data */
-	p->mechptr = NULL; /* We're not freeing the mechanism, just "dereferencing" it */
 	free(p->username);
 	free(p->certfp);
 	free(p->authzid);
+	free(p->pendingeid);
 	free(p->host);
 	free(p->ip);
-
 	free(p);
+}
+
+/* reset or destroy a session */
+static void reset_or_destroy_session(sasl_session_t *p)
+{
+	if (p->pendingeid)
+		reset_session(p);
+	else
+		destroy_session(p);
 }
 
 typedef struct {
@@ -318,7 +335,7 @@ static void sasl_input(sasl_message_t *smsg)
 			if(p->len + len + 1 > 8192) /* This is a little much... */
 			{
 				sasl_sts(p->uid, 'D', "F");
-				destroy_session(p);
+				reset_or_destroy_session(p);
 				return;
 			}
 
@@ -344,7 +361,7 @@ static void sasl_input(sasl_message_t *smsg)
 
 	case 'D':
 		/* (D)one -- when we receive it, means client abort */
-		destroy_session(p);
+		reset_or_destroy_session(p);
 		return;
 	}
 }
@@ -424,7 +441,7 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 		if(len > 60)
 		{
 			sasl_sts(p->uid, 'D', "F");
-			destroy_session(p);
+			reset_or_destroy_session(p);
 			return;
 		}
 
@@ -436,7 +453,7 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 			sasl_sts(p->uid, 'M', mechlist_string);
 
 			sasl_sts(p->uid, 'D', "F");
-			destroy_session(p);
+			reset_or_destroy_session(p);
 			return;
 		}
 
@@ -468,12 +485,15 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 			if (!(mu->flags & MU_WAITAUTH))
 				svslogin_sts(p->uid, "*", "*", cloak, mu);
 			sasl_sts(p->uid, 'D', "S");
+			if (p->pendingeid)
+				free(p->pendingeid);
+			p->pendingeid = strdup(entity(mu)->id);
 			/* Will destroy session on introduction of user to net. */
 		}
 		else
 		{
 			sasl_sts(p->uid, 'D', "F");
-			destroy_session(p);
+			reset_or_destroy_session(p);
 		}
 		return;
 	}
@@ -512,7 +532,7 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 
 	free(out);
 	sasl_sts(p->uid, 'D', "F");
-	destroy_session(p);
+	reset_or_destroy_session(p);
 }
 
 /* output an arbitrary amount of data to the SASL client */
@@ -710,11 +730,13 @@ static void sasl_newuser(hook_user_nick_t *data)
 	p->flags &= ~ASASL_NEED_LOG;
 
 	/* Find the account */
-	mu = p->authzid ? myuser_find_by_nick(p->authzid) : NULL;
+	mu = ((p->pendingeid != NULL) ? myuser_find_uid(p->pendingeid) : NULL);
 	if (mu == NULL)
 	{
-		notice(saslsvs->nick, u->nick, "Account %s dropped, login cancelled",
-		       p->authzid ? p->authzid : "??");
+		if (p->pendingeid != NULL)
+			notice(saslsvs->nick, u->nick, "Account %s dropped, login cancelled",
+			       p->authzid ? p->authzid : "??");
+
 		destroy_session(p);
 		/* We'll remove their ircd login in handle_burstlogin() */
 		return;

@@ -26,6 +26,7 @@ struct sasl_session_ {
   char *username;
   char *certfp;
   char *authzid;
+  char *pendingeid;
 
   char *host;
   char *ip;
