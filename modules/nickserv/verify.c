@@ -9,26 +9,27 @@
 
 #include <atheme.h>
 
+#define VERIFY_STR_THANKS   _("Thank you for verifying your e-mail address! You have taken steps in ensuring that your registrations are not exploited.")
+#define VERIFY_STR_CONFIRM  _("\2%s\2 has now been verified.")
+
 static void
 ns_verify_activate_account(struct sourceinfo *si, struct myuser *mu, bool force)
 {
 	mowgli_node_t *n;
 	struct hook_user_req req;
-	const char *thanks = _("Thank you for verifying your e-mail address! You have taken steps in ensuring that your registrations are not exploited.");
-	const char *confirm = _("\2%s\2 has now been verified.");
 
 	mu->flags &= ~MU_WAITAUTH;
 
 	metadata_delete(mu, "private:verify:register:key");
 	metadata_delete(mu, "private:verify:register:timestamp");
 
-	myuser_notice(nicksvs.nick, mu, confirm, entity(mu)->name);
+	myuser_notice(nicksvs.nick, mu, VERIFY_STR_CONFIRM, entity(mu)->name);
 	if (!force)
-		myuser_notice(nicksvs.nick, mu, thanks);
+		myuser_notice(nicksvs.nick, mu, VERIFY_STR_THANKS);
 	if (si->smu != mu) {
-		command_success_nodata(si, confirm, entity(mu)->name);
+		command_success_nodata(si, VERIFY_STR_CONFIRM, entity(mu)->name);
 		if (!force)
-			command_success_nodata(si, thanks);
+			command_success_nodata(si, VERIFY_STR_THANKS);
 	}
 
 	MOWGLI_ITER_FOREACH(n, mu->logins.head)
