@@ -46,7 +46,7 @@ struct logfile
 extern char *log_path; /* contains path to default log. */
 extern int log_force;
 
-struct logfile *logfile_new(const char *log_path_, unsigned int log_mask) ATHEME_FATTR_MALLOC;
+struct logfile *logfile_new(const char *log_path_, unsigned int log_mask) ATHEME_FATTR_MALLOC_UNCHECKED;
 void logfile_register(struct logfile *lf);
 void logfile_unregister(struct logfile *lf);
 

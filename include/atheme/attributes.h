@@ -210,7 +210,9 @@
  * objects. This aids static analysis and some compiler optimisations.
  *
  * The warn_unused_result attribute is also present (if supported) because ignoring the return value could lead to
- * a memory leak.
+ * a memory leak. A variant is provided without this, to account for the fact that the function may be returning a
+ * pointer that it itself keeps track of (for example, it's being added to the list in another structure), and thus
+ * the pointer it returns is not lost if the return value is ignored.
  */
 #ifdef ATHEME_ATTR_HAS_MALLOC
 #  ifdef ATHEME_ATTR_HAS_WARN_UNUSED_RESULT
@@ -218,8 +220,10 @@
 #  else
 #    define ATHEME_FATTR_MALLOC                         __attribute__((__malloc__))
 #  endif
+#  define ATHEME_FATTR_MALLOC_UNCHECKED                 __attribute__((__malloc__))
 #else
 #  define ATHEME_FATTR_MALLOC                           /* No 'malloc' function attribute support */
+#  define ATHEME_FATTR_MALLOC_UNCHECKED                 /* No 'malloc' function attribute support */
 #endif
 
 /* Inform the compiler that a variable may be unused (don't warn, whether it's used or not). This is distinct

@@ -367,7 +367,7 @@ logfile_unregister(struct logfile *lf)
  * Side Effects:
  *       - log_files is populated with the newly created struct logfile.
  */
-struct logfile * ATHEME_FATTR_MALLOC
+struct logfile * ATHEME_FATTR_MALLOC_UNCHECKED
 logfile_new(const char *path, unsigned int log_mask)
 {
 	static bool hooked = false;
