@@ -381,10 +381,7 @@ db_save_periodic(void *unused)
 {
 	slog(LG_DEBUG, "db_save_periodic(): initiating periodic database write");
 
-	if (config_options.db_save_blocking)
-		db_save(unused, DB_SAVE_BLOCKING);
-	else
-		db_save(unused, DB_SAVE_BG_REGULAR);
+	db_save(unused, DB_SAVE_BG_REGULAR);
 }
 
 int

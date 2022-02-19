@@ -1088,7 +1088,6 @@ corestorage_db_write(void *filename, enum db_save_strategy strategy)
 #ifndef HAVE_FORK
 	corestorage_db_write_blocking(filename);
 #else
-
 	if (child_pid && strategy == DB_SAVE_BG_REGULAR)
 	{
 		slog(LG_DEBUG, "db_save(): previous save unfinished, skipping save");
@@ -1104,6 +1103,9 @@ corestorage_db_write(void *filename, enum db_save_strategy strategy)
 			waitpid(child_pid, NULL, 0);
 		}
 	}
+
+	if (config_options.db_save_blocking)
+		strategy = DB_SAVE_BLOCKING;
 
 	if (strategy == DB_SAVE_BLOCKING)
 	{
