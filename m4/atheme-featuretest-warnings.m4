@@ -92,6 +92,7 @@ AC_DEFUN([ATHEME_CC_ENABLE_WARNINGS], [
     ATHEME_TEST_CC_FLAGS([-Wno-padded])
     ATHEME_TEST_CC_FLAGS([-Wno-pedantic])
     ATHEME_TEST_CC_FLAGS([-Wno-reserved-id-macro])
+    ATHEME_TEST_CC_FLAGS([-Wno-reserved-identifier])
     ATHEME_TEST_CC_FLAGS([-Wno-sign-conversion])
     ATHEME_TEST_CC_FLAGS([-Wno-unused-parameter])
     ATHEME_TEST_CC_FLAGS([-Wno-unused-variable])
