@@ -82,6 +82,7 @@ AC_DEFUN([ATHEME_CC_ENABLE_WARNINGS], [
     ])
 
     ATHEME_TEST_CC_FLAGS([-Wno-conversion])
+    ATHEME_TEST_CC_FLAGS([-Wno-declaration-after-statement])
     ATHEME_TEST_CC_FLAGS([-Wno-disabled-macro-expansion])
     ATHEME_TEST_CC_FLAGS([-Wno-documentation-deprecated-sync])
     ATHEME_TEST_CC_FLAGS([-Wno-documentation-unknown-command])
