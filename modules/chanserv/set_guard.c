@@ -51,7 +51,7 @@ cs_cmd_set_guard(struct sourceinfo *si, int parc, char *parv[])
 		if (metadata_find(mc, "private:botserv:bot-assigned") &&
 				module_find_published("botserv/main"))
 		{
-			command_fail(si, fault_noprivs, _("Channel \2%s\2 already has a BotServ bot assigned to it.  You need to unassign it first."), mc->name);
+			command_fail(si, fault_noprivs, _("Channel \2%s\2 already has a BotServ bot assigned to it. You need to unassign it first."), mc->name);
 			return;
 		}
 
