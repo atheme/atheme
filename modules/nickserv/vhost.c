@@ -225,7 +225,8 @@ ns_cmd_vhost(struct sourceinfo *si, int parc, char *parv[])
 			command_success_nodata(si, _("Overriding MARK(s) placed on the account %s."), entity(mu)->name);
 		}
 	}
-	do_sethost_all(mu, host);
+	if (!(mu->flags & MU_WAITAUTH))
+		do_sethost_all(mu, host);
 	return;
 }
 
