@@ -318,6 +318,7 @@ loadmodule "crypto/pbkdf2";             /* Verify-only, see prev. */
  * LISTMAIL command                             nickserv/listmail
  * LISTOWNMAIL command                          nickserv/listownmail
  * LOGIN command (for no_nick_ownership)        nickserv/login
+ * LOGINNOLIMIT command                         nickserv/loginnolimit
  * LOGOUT command                               nickserv/logout
  * MARK command                                 nickserv/mark
  * Password quality validation                  nickserv/pwquality
@@ -375,6 +376,7 @@ loadmodule "nickserv/list";
 loadmodule "nickserv/listmail";
 #loadmodule "nickserv/listownmail";
 #loadmodule "nickserv/login";
+#loadmodule "nickserv/loginnolimit";
 loadmodule "nickserv/logout";
 loadmodule "nickserv/mark";
 #loadmodule "nickserv/pwquality";
