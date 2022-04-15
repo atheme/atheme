@@ -528,7 +528,7 @@ ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 				quit_sts(u, "REGAIN command");
 				user_delete(u, "REGAIN command");
 			}
-			fnc_sts(nicksvs.me->me, si->su, target, FNC_FORCE);
+			fnc_sts(nicksvs.me->me, si->su, target, FNC_REGAIN);
 			command_success_nodata(si, _("\2%s\2 has been regained."), target);
 		}
 		else
@@ -542,7 +542,7 @@ ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 				guest_nickname(u);
 				command_success_nodata(si, _("\2%s\2 has been regained."), target);
 			}
-			fnc_sts(nicksvs.me->me, si->su, target, FNC_FORCE);
+			fnc_sts(nicksvs.me->me, si->su, target, FNC_REGAIN);
 		}
 
 		return;
