@@ -1048,7 +1048,7 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, rl->head)
 		{
-	                rm = n->data;
+			rm = n->data;
 			mowgli_node_delete(&rm->node, l);
 
 			sfree(rm->account_uid);
