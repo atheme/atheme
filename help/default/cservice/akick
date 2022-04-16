@@ -4,7 +4,7 @@ The AKICK command allows you to maintain channel
 ban lists.  Users on the AKICK list will be
 automatically kickbanned when they join the channel,
 removing any matching ban exceptions first. Users
-with the +r flag are exempt.
+with the +e flag are exempt.
 
 Syntax: AKICK <#channel> ADD <nickname|hostmask> [!P|!T <minutes>] [reason]
 
