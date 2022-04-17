@@ -734,6 +734,7 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 
 	mowgli_node_t *n, *tn;
 	struct multimark *mm;
+	struct restored_mark *rm;
 	struct tm *tm;
 	char time[BUFSIZE];
 
@@ -767,14 +768,13 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!(mu = myuser_find_ext(target)) && strcasecmp(action, "LIST"))
-	{
-		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
-		return;
-	}
-
 	if (!strcasecmp(action, "ADD"))
 	{
+		if (!(mu = myuser_find_ext(target)))
+		{
+			command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
+			return;
+		}
 		if (!info)
 		{
 			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "MARK");
@@ -800,7 +800,6 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 		if (!mu)
 		{
 			rl = restored_mark_list(target);
-			struct restored_mark *rm;
 
 			if (rl->count == 0)
 			{
@@ -997,6 +996,21 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 
 		l = multimark_list(mu);
 
+		if (!(mu = myuser_find_ext(target)))
+		{
+			if (mode != DELETE_RESTORED_MARKS)
+			{
+				command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
+				return;
+			}
+			else if ((rl = restored_mark_list(target))->count == 0)
+			{
+				command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered, and was not marked."), target);
+				return;
+			}
+		}
+
+
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, l->head)
 		{
 			mm = n->data;
@@ -1030,6 +1044,22 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 
 			if (mode == DELETE_ONE_MARK)
 				break;
+		}
+
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, rl->head)
+		{
+			rm = n->data;
+			mowgli_node_delete(&rm->node, l);
+
+			sfree(rm->account_uid);
+			sfree(rm->account_name);
+			sfree(rm->nick);
+			sfree(rm->setter_uid);
+			sfree(rm->setter_name);
+			sfree(rm->mark);
+			sfree(rm);
+
+			found++;
 		}
 
 		if (found)
