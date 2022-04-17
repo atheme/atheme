@@ -27,9 +27,9 @@ ns_cmd_set_accountname(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	if (is_conf_soper(si->smu))
+	if (is_conf_named_soper(si->smu))
 	{
-		command_fail(si, fault_noprivs, _("You may not modify your account name because your operclass is defined in the configuration file."));
+		command_fail(si, fault_noprivs, _("You may not modify your account name because your operclass is defined by name in the configuration file."));
 		return;
 	}
 

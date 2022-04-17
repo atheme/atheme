@@ -604,6 +604,7 @@ c_operator(mowgli_config_file_entry_t *ce)
 	char *name;
 	char *password = NULL;
 	struct operclass *operclass = NULL;
+	unsigned int flags = SOPER_CONF;
 	mowgli_config_file_entry_t *topce;
 
 	if (ce->vardata == NULL)
@@ -647,8 +648,11 @@ c_operator(mowgli_config_file_entry_t *ce)
 		}
 	}
 
+	if (*name == '?')
+		flags |= SOPER_EID;
+
 	if (operclass != NULL)
-		soper_add(name, operclass->name, SOPER_CONF, password);
+		soper_add(name, operclass->name, flags, password);
 	else
 		conf_report_warning(topce, "skipping operator %s because of bad/missing parameters",
 						name);

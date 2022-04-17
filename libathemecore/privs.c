@@ -265,6 +265,25 @@ soper_find_named(const char *name)
 
 	return NULL;
 }
+struct soper *
+soper_find_eid(const char *eid)
+{
+	struct soper *soper;
+	mowgli_node_t *n;
+	char lookup_eid[IDLEN+2]; // 2 for ? and \0
+
+	snprintf(lookup_eid, sizeof lookup_eid, "?%s", eid);
+
+	MOWGLI_ITER_FOREACH(n, soperlist.head)
+	{
+		soper = (struct soper *)n->data;
+
+		if (soper->name && !irccasecmp(soper->name, lookup_eid))
+			return soper;
+	}
+
+	return NULL;
+}
 
 bool
 is_soper(struct myuser *myuser)
@@ -288,6 +307,12 @@ is_conf_soper(struct myuser *myuser)
 		return true;
 
 	return false;
+}
+
+bool
+is_conf_named_soper(struct myuser *myuser)
+{
+	return is_conf_soper(myuser) && !(myuser->soper->flags & SOPER_EID);
 }
 
 bool
