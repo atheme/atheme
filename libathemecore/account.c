@@ -153,7 +153,8 @@ myuser_add_id(const char *id, const char *name, const char *pass, const char *em
 
 	myentity_put(entity(mu));
 
-	if ((soper = soper_find_named(entity(mu)->name)) != NULL)
+	if ((soper = soper_find_named(entity(mu)->name)) != NULL
+		|| (soper = soper_find_eid(entity(mu)->id)) != NULL)
 	{
 		slog(LG_DEBUG, "myuser_add(): user `%s' has been declared as soper, activating privileges.", entity(mu)->name);
 		soper->myuser = mu;

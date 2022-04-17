@@ -145,9 +145,9 @@ ns_cmd_fungroup(struct sourceinfo *si, int parc, char *parv[])
 			command_fail(si, fault_noprivs, _("Nick \2%s\2 is an account name; you may not remove it."), mn->nick);
 			return;
 		}
-		if (is_conf_soper(mu))
+		if (is_conf_named_soper(mu))
 		{
-			command_fail(si, fault_noprivs, _("You may not modify \2%s\2's account name because their operclass is defined in the configuration file."),
+			command_fail(si, fault_noprivs, _("You may not modify \2%s\2's account name because their operclass is defined by name in the configuration file."),
 					entity(mu)->name);
 			return;
 		}

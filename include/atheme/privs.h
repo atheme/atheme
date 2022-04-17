@@ -77,6 +77,7 @@
 
 // Flags for (struct soper).flags
 #define SOPER_CONF                      0x1U // Oper is listed in atheme.conf
+#define SOPER_EID                       0x2U /* oper is listed in atheme.conf by ?EID */
 
 struct operclass
 {
@@ -110,9 +111,11 @@ struct soper *soper_add(const char *name, const char *classname, int flags, cons
 void soper_delete(struct soper *soper);
 struct soper *soper_find(struct myuser *myuser);
 struct soper *soper_find_named(const char *name);
+struct soper *soper_find_eid(const char *);
 
 bool is_soper(struct myuser *myuser);
 bool is_conf_soper(struct myuser *myuser);
+bool is_conf_named_soper(struct myuser *myuser);
 
 /* has_any_privs(): used to determine whether we should give detailed
  * messages about disallowed things
