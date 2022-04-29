@@ -116,7 +116,7 @@
  * InspIRCd 2.x and 3.x                         protocol/inspircd
  * ircd-ratbox 2.0 and later                    protocol/ratbox
  * IRCNet ircd (ircd 2.11)                      protocol/ircnet
- * ircd-seven                                   protocol/ircd-seven
+ * solanum                                      protocol/solanum
  * Nefarious IRCu 0.4.0 or later                protocol/nefarious
  * ngIRCd 19 or later [experimental]            protocol/ngircd
  * UnrealIRCd 3.2.*                             protocol/unreal
@@ -1399,7 +1399,7 @@ serverinfo {
 	 *
 	 * If this is enabled, Atheme will indicate to the uplink IRCd that it
 	 * should not be included in /LINKS output. This only works on the
-	 * following IRCds at present: ratbox, charybdis, ircd-seven.
+	 * following IRCds at present: ratbox, charybdis, solanum.
 	 */
 	#hidden;
 
