@@ -24,7 +24,7 @@ SRCS   =                    \
     chatircd1.1.c           \
     elemental-ircd.c        \
     inspircd.c              \
-    ircd-seven.c            \
+    solanum.c               \
     ircnet.c                \
     mixin_nohalfops.c       \
     mixin_noholdnick.c      \

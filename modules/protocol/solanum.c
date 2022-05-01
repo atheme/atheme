@@ -5,7 +5,7 @@
  * Copyright (C) 2003-2004 E. Will, et al.
  * Copyright (C) 2005-2008 Atheme Project (http://atheme.org/)
  *
- * This file contains protocol support for ircd-seven.
+ * This file contains protocol support for solanum.
  */
 
 #include <atheme.h>
@@ -14,8 +14,8 @@
 #define UF_NOLOGOUT UF_CUSTOM1
 #define UF_HELPER   UF_CUSTOM2
 
-static struct ircd Seven = {
-	.ircdname = "ircd-seven",
+static struct ircd Solanum = {
+	.ircdname = "solanum",
 	.tldprefix = "$$",
 	.uses_uid = true,
 	.uses_rcommand = false,
@@ -40,7 +40,7 @@ static struct ircd Seven = {
 	.flags = IRCD_CIDR_BANS | IRCD_HOLDNICK | IRCD_TOPIC_NOCOLOUR,
 };
 
-static const struct cmode seven_mode_list[] = {
+static const struct cmode solanum_mode_list[] = {
   { 'i', CMODE_INVITE },
   { 'm', CMODE_MOD    },
   { 'n', CMODE_NOEXT  },
@@ -69,7 +69,7 @@ static const struct cmode seven_mode_list[] = {
   { '\0', 0 }
 };
 
-static const struct cmode seven_user_mode_list[] = {
+static const struct cmode solanum_user_mode_list[] = {
   { 'p', UF_IMMUNE   },
   { 'a', UF_ADMIN    },
   { 'i', UF_INVIS    },
@@ -82,7 +82,7 @@ static const struct cmode seven_user_mode_list[] = {
 };
 
 static bool
-seven_is_valid_hostslash(const char *host)
+solanum_is_valid_hostslash(const char *host)
 {
 	const char *p;
 	bool dot = false;
@@ -107,7 +107,7 @@ seven_is_valid_hostslash(const char *host)
 }
 
 static void
-seven_wallops_sts(const char *reason)
+solanum_wallops_sts(const char *reason)
 {
 	sts(":%s ENCAP * SNOTE s :%s", ME, reason);
 }
@@ -242,7 +242,7 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 }
 
 static void
-seven_on_login(struct user *u, struct myuser *mu, const char *wantedhost)
+solanum_on_login(struct user *u, struct myuser *mu, const char *wantedhost)
 {
 	return_if_fail(u != NULL);
 
@@ -253,7 +253,7 @@ seven_on_login(struct user *u, struct myuser *mu, const char *wantedhost)
 }
 
 static bool
-seven_on_logout(struct user *u, const char *account)
+solanum_on_logout(struct user *u, const char *account)
 {
 	return_val_if_fail(u != NULL, false);
 
@@ -263,7 +263,7 @@ seven_on_logout(struct user *u, const char *account)
 }
 
 static bool
-seven_is_ircop(struct user *u)
+solanum_is_ircop(struct user *u)
 {
 	if ((UF_IRCOP | UF_HELPER) & u->flags)
 		return true;
@@ -303,21 +303,21 @@ mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/charybdis")
 
-	mode_list = seven_mode_list;
-	user_mode_list = seven_user_mode_list;
+	mode_list = solanum_mode_list;
+	user_mode_list = solanum_user_mode_list;
 
-	wallops_sts = &seven_wallops_sts;
-	ircd_on_login = &seven_on_login;
-	ircd_on_logout = &seven_on_logout;
-	is_valid_host = &seven_is_valid_hostslash;
-	is_ircop = &seven_is_ircop;
+	wallops_sts = &solanum_wallops_sts;
+	ircd_on_login = &solanum_on_login;
+	ircd_on_logout = &solanum_on_logout;
+	is_valid_host = &solanum_is_valid_hostslash;
+	is_ircop = &solanum_is_ircop;
 
 	pcommand_delete("NICK");
 	pcommand_add("NICK", m_nick, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_delete("EUID");
 	pcommand_add("EUID", m_euid, 11, MSRC_SERVER);
 
-	ircd = &Seven;
+	ircd = &Solanum;
 
 	hook_add_nick_group(nick_group);
 	hook_add_nick_ungroup(nick_ungroup);
@@ -330,4 +330,4 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 }
 
-SIMPLE_DECLARE_MODULE_V1("protocol/ircd-seven", MODULE_UNLOAD_CAPABILITY_NEVER)
+SIMPLE_DECLARE_MODULE_V1("protocol/solanum", MODULE_UNLOAD_CAPABILITY_NEVER)
