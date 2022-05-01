@@ -1,0 +1,10 @@
+Help for LOGINNOLIMIT:
+
+LOGINNOLIMIT allows administrators to waive the
+limit on the number of logins for accounts.
+
+Syntax: LOGINNOLIMIT <account> <ON|OFF>
+
+Examples:
+    /msg &nick& LOGINNOLIMIT launchd ON
+    /msg &nick& LOGINNOLIMIT spammer OFF
