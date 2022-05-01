@@ -1,7 +1,8 @@
 Frequently asked questions
---------------------------
+==========================
 
-1. Will you implement SQL support?
+Will you implement SQL support?
+-------------------------------
 
 No, there are many impracticalities with SQL support, such as:
 
@@ -17,22 +18,26 @@ that with XMLRPC and authentication modules anyway.
 Plus, we strongly believe you should know how your services
 are working, so why would we do all the work for you?
 
-2. Which crypto module should I use?
+Which crypto module should I use?
+---------------------------------
 
 crypto/argon2d or crypto/pbkdf2v2 (see doc/SASL-SCRAM-SHA to decide
 which one).
 
-3. There is an Atheme "0day exploit"?!&%&%@!!
+There is an Atheme "0day exploit"?!&%&%@!!
+------------------------------------------
 
 Report it to us.  Do not twitter about it, that is generally not
 helpful.  People who publicize 0days before they can be fixed are
 also generally known as "assholes."
 
-4. I get a compile error about some .po file thing.
+I get a compile error about some .po file thing.
+------------------------------------------------
 
 ./configure --disable-nls or install gettext and rerun ./configure.
 
-5. Atheme exits complaining that it is 'tainted'.
+Atheme exits complaining that it is 'tainted'.
+----------------------------------------------
 
 You have configured your network in a way that is not supported
 correctly by Atheme at this time.  In order to use this configuration,
