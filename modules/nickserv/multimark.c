@@ -725,9 +725,9 @@ multimark_needforce(struct hook_user_needforce *hdata)
 static void
 ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 {
-	char *target = parv[0];
-	char *action = parv[1];
-	char *info = parv[2];
+	const char *target = parv[0];
+	const char *action = parv[1];
+	const char *info = parv[2];
 	struct myuser *mu;
 	struct myuser_name *mun;
 	mowgli_list_t *l;
@@ -767,7 +767,9 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!(mu = myuser_find_ext(target)) && strcasecmp(action, "LIST"))
+	if ((mu = myuser_find_ext(target)))
+		target = entity(mu)->name;
+	else if (strcasecmp(action, "LIST"))
 	{
 		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
 		return;
