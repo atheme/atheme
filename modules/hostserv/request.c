@@ -209,7 +209,7 @@ hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 
 	md = metadata_find(si->smu, "private:usercloak-timestamp");
 
-	if (CURRTIME < (time_t)(md + config_options.vhost_change) && config_options.vhost_change > 0)
+	if (md != NULL && config_options.vhost_change > 0 && (atoi(md->value) + config_options.vhost_change) > CURRTIME)
 	{
 		command_fail(si, fault_noprivs, _("You must wait at least \2%u\2 days between changes to your vHost."),
 			(config_options.vhost_change / SECONDS_PER_DAY));
