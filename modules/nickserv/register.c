@@ -203,6 +203,8 @@ ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 
 	command_add_flood(si, FLOOD_MODERATE);
 
+	logcommand(si, LG_VERBOSE, "ns_cmd_register(): new entity id: %s -> %s", entity(mu)->id, account);
+
 	if (!nicksvs.no_nick_ownership && si->su != NULL)
 		logcommand(si, CMDLOG_REGISTER, "REGISTER: \2%s\2 to \2%s\2", account, email);
 	else
