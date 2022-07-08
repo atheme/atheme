@@ -96,9 +96,9 @@ do_list(struct sourceinfo *si, struct mychan *mc, unsigned int flags)
 		}
 	}
 
-	bool show_akicks = true;
+	bool show_akicks = !chansvs.hide_flags_akicks;
 
-	if (chansvs.hide_pubacl_akicks)
+	if (show_akicks && chansvs.hide_pubacl_akicks)
 		show_akicks = ( chanacs_source_has_flag(mc, si, CA_ACLVIEW) || has_priv(si, PRIV_CHAN_AUSPEX) );
 
 	/* TRANSLATORS: Adjust these numbers only if the translated column
@@ -312,9 +312,9 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 				return;
 			}
 
-			bool show_akicks = true;
+			bool show_akicks = !chansvs.hide_flags_akicks;
 
-			if (chansvs.hide_pubacl_akicks)
+			if (show_akicks && chansvs.hide_pubacl_akicks)
 				show_akicks = chanacs_source_has_flag(mc, si, CA_ACLVIEW);
 
 			if (validhostmask(target))

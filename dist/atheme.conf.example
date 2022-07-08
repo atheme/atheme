@@ -1810,6 +1810,18 @@ chanserv {
 	 */
 	#hide_xop;
 
+	/* (*) hide_flags_akicks
+	 *
+	 * Hide AKICKs (ACL entries with only the +b flag) from FLAGS output.
+	 *
+	 * AKICK expiries and reasons will not be disclosed to unauthorized
+	 * users in any case.
+	 *
+	 * This option is only meaningful if you are using the PUBACL flag
+	 * to allow channel access lists to be public.
+	 */
+	#hide_flags_akicks;
+
 	/* (*) hide_pubacl_akicks
 	 *
 	 * Hide AKICKs (ACL entries with only the +b flag) from the public

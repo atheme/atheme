@@ -40,6 +40,7 @@ struct chansvs
 	char *          deftemplates;       // default templates
 	char *          default_mlock;      // default mlock
 	bool            hide_xop;           // hide XOP templates
+	bool            hide_flags_akicks;  // hide AKICKs in FLAGS for everyone
 	bool            hide_pubacl_akicks; // hide AKICKs only visible via PUBACL
 };
 
