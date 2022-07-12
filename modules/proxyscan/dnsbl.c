@@ -47,6 +47,10 @@
 
 #include <atheme.h>
 
+#ifdef HAVE_ARPA_INET_H
+#  include <arpa/inet.h>
+#endif
+
 #define DNSBL_ELIST_PERSIST_MDNAME "atheme.proxyscan.dnsbl.elist"
 #define IRCD_RES_HOSTLEN 255
 
@@ -341,37 +345,56 @@ blacklist_dns_callback(mowgli_dns_reply_t *reply, int result, void *vptr)
 	sfree(blcptr);
 }
 
-/* XXX: no IPv6 implementation, not to concerned right now though. */
-/* 2015-12-06: at least we shouldn't crash on bad inputs anymore... -bcode */
 static void
 initiate_blacklist_dnsquery(struct Blacklist *blptr, struct user *u)
 {
 	char buf[IRCD_RES_HOSTLEN + 1];
-	unsigned int ip[4];
-	mowgli_list_t *l;
+	unsigned char ipoct[16];
+	char tmp[16];
 
 	if (u->ip == NULL)
 		return;
 
-	// A sscanf worked fine for chary for many years, it'll be fine here
-	if (sscanf(u->ip, "%u.%u.%u.%u", &ip[3], &ip[2], &ip[1], &ip[0]) != 4)
+	(void) memset(buf, 0x00, sizeof buf);
+
+	if (inet_pton(AF_INET, u->ip, ipoct) == 1)
+	{
+		if (strlen(blptr->host) >= (IRCD_RES_HOSTLEN - 16))
+			return;
+
+		for (unsigned int i = 0; i < 4; i++)
+		{
+			(void) snprintf(tmp, sizeof tmp, "%u.", (unsigned int) ipoct[3 - i]);
+			(void) mowgli_strlcat(buf, tmp, sizeof buf);
+		}
+	}
+	else if (inet_pton(AF_INET6, u->ip, ipoct) == 1)
+	{
+		if (strlen(blptr->host) >= (IRCD_RES_HOSTLEN - 64))
+			return;
+
+		for (unsigned int i = 0; i < 16; i++)
+		{
+			(void) snprintf(tmp, sizeof tmp, "%1x.%1x.", (unsigned int) (ipoct[15 - i] & 0xFU),
+			                                             (unsigned int) (ipoct[15 - i] >> 4U));
+
+			(void) mowgli_strlcat(buf, tmp, sizeof buf);
+		}
+	}
+	else
 		return;
 
-	struct BlacklistClient *blcptr = smalloc(sizeof *blcptr);
+	struct BlacklistClient *const blcptr = smalloc(sizeof *blcptr);
+	mowgli_list_t *const uql = dnsbl_queries(u);
 
 	blcptr->blacklist = atheme_object_ref(blptr);
+	blcptr->dns_query.callback = blacklist_dns_callback;
+	blcptr->dns_query.ptr = blcptr;
 	blcptr->u = u;
 
-	blcptr->dns_query.ptr = blcptr;
-	blcptr->dns_query.callback = blacklist_dns_callback;
-
-	// becomes 2.0.0.127.torbl.ahbl.org or whatever
-	snprintf(buf, sizeof buf, "%u.%u.%u.%u.%s", ip[0], ip[1], ip[2], ip[3], blptr->host);
-
-	mowgli_dns_gethost_byname(dns_base, buf, &blcptr->dns_query, MOWGLI_DNS_T_A);
-
-	l = dnsbl_queries(u);
-	mowgli_node_add(blcptr, &blcptr->node, l);
+	(void) mowgli_strlcat(buf, blptr->host, sizeof buf);
+	(void) mowgli_dns_gethost_byname(dns_base, buf, &blcptr->dns_query, MOWGLI_DNS_T_A);
+	(void) mowgli_node_add(blcptr, &blcptr->node, uql);
 }
 
 static void
