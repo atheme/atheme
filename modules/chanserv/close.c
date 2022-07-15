@@ -97,7 +97,7 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		if (mc->flags & CHAN_LOG)
+		if (mc->chan != NULL && mc->chan->flags & CHAN_LOG)
 		{
 			command_fail(si, fault_noprivs, _("\2%s\2 cannot be closed."), target);
 			return;
