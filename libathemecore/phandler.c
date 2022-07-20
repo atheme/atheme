@@ -337,25 +337,21 @@ generic_sasl_mechlist_sts(const char *mechlist)
 bool
 generic_mask_matches_user(const char *mask, struct user *u)
 {
-	char hostbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
-	char cloakbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
-	char realbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
-	char ipbuf[NICKLEN + 1 + USERLEN + 1 + HOSTLEN + 1];
-
-	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
-	snprintf(cloakbuf, sizeof cloakbuf, "%s!%s@%s", u->nick, u->user, u->chost);
-
-	bool result = !match(mask, hostbuf) || !match(mask, cloakbuf);
+	bool result = !match(mask, format_hostmask(u, HOST_VISIBLE))
+		|| !match(mask, format_hostmask(u, HOST_CLOAK));
 
 	// return if configured not to check further, or if we already have a match
 	if ((!config_options.masks_through_vhost && u->host != u->vhost) || result)
 		return result;
 
-	snprintf(realbuf, sizeof realbuf, "%s!%s@%s", u->nick, u->user, u->host);
 	/* will be nick!user@ if ip unknown, doesn't matter */
-	snprintf(ipbuf, sizeof ipbuf, "%s!%s@%s", u->nick, u->user, u->ip);
-
-	return !match(mask, realbuf) || !match(mask, ipbuf) || (ircd->flags & IRCD_CIDR_BANS && !match_cidr(mask, ipbuf));
+	const char *ipbuf;
+	return !match(mask, format_hostmask(u, HOST_REAL))
+		|| !match(mask, (ipbuf = format_hostmask(u, HOST_IP)))
+		|| (
+			ircd->flags & IRCD_CIDR_BANS
+			&& !match_cidr(mask, ipbuf)
+		);
 
 }
 
