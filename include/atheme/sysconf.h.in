@@ -107,6 +107,9 @@
 /* Define to 1 if you have the `explicit_memset' function. */
 #undef HAVE_EXPLICIT_MEMSET
 
+/* Define to 1 if you have the <features.h> header file. */
+#undef HAVE_FEATURES_H
+
 /* Define to 1 if you have the `fileno' function. */
 #undef HAVE_FILENO
 

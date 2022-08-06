@@ -21,6 +21,7 @@ AC_DEFUN([ATHEME_CHECK_BUILD_REQUIREMENTS], [
     AC_CHECK_HEADERS([ctype.h], [], [], [])
     AC_CHECK_HEADERS([dirent.h], [], [], [])
     AC_CHECK_HEADERS([errno.h], [], [], [])
+    AC_CHECK_HEADERS([features.h], [], [], [])
     AC_CHECK_HEADERS([inttypes.h], [], [], [])
     AC_CHECK_HEADERS([libintl.h], [], [], [])
     AC_CHECK_HEADERS([limits.h], [], [], [])

@@ -106,13 +106,20 @@ AC_DEFUN([ATHEME_DECIDE_RANDOM_FRONTEND], [
             #ifdef HAVE_STDLIB_H
             #  include <stdlib.h>
             #endif
+            #ifdef HAVE_FEATURES_H
+            #  include <features.h>
+            #endif
             #if defined(HAVE_AVAILABILITY_H)
             #  include <Availability.h>
             #elif defined(HAVE_SYS_PARAM_H)
             #  include <sys/param.h>
             #endif
             #undef HAVE_SECURE_ARCRANDOM
-            #if defined(__MAC_10_12)
+            #if defined(__GLIBC__) && defined(__GLIBC_MINOR__)
+            #  if (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 36)
+            #    define HAVE_SECURE_ARCRANDOM 1
+            #  endif
+            #elif defined(__MAC_10_12)
             #  define HAVE_SECURE_ARCRANDOM 1
             #elif defined(__FreeBSD__)
             #  if (__FreeBSD__ >= 12)
