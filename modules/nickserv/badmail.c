@@ -62,20 +62,24 @@ check_registration(struct hook_user_register_check *hdata)
 	if (hdata->approved)
 		return;
 
+	stringref email_canonical = canonicalize_email(hdata->email);
+
 	MOWGLI_ITER_FOREACH(n, ns_maillist.head)
 	{
 		l = n->data;
 
-		if (!match(l->mail, hdata->email))
+		if (!match(l->mail, email_canonical))
 		{
 			command_fail(hdata->si, fault_noprivs, _("Sorry, we do not accept registrations with email addresses from that domain. Use another address."));
 			hdata->approved = 1;
 			slog(LG_INFO, "REGISTER:BADEMAIL: %s to \2%s\2 by \2%s\2",
 					hdata->account, hdata->email,
 					hdata->si->su != NULL ? hdata->si->su->nick : get_source_name(hdata->si));
-			return;
+			break;
 		}
 	}
+
+	strshare_unref(email_canonical);
 }
 
 static void
