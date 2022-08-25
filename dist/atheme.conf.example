@@ -303,6 +303,7 @@ loadmodule "crypto/pbkdf2";             /* Verify-only, see prev. */
  * Core components                              nickserv/main
  * Nickname access lists                        nickserv/access
  * Bad e-mail address blocking                  nickserv/badmail
+ * E-mail canonicalization testing              nickserv/canonmail
  * CertFP fingerprint managment                 nickserv/cert
  * DROP command                                 nickserv/drop
  * Nickname enforcement                         nickserv/enforce
@@ -361,6 +362,7 @@ loadmodule "crypto/pbkdf2";             /* Verify-only, see prev. */
 loadmodule "nickserv/main";
 #loadmodule "nickserv/access";
 loadmodule "nickserv/badmail";
+#loadmodule "nickserv/canonmail";
 #loadmodule "nickserv/cert";
 loadmodule "nickserv/drop";
 #loadmodule "nickserv/enforce";
@@ -941,8 +943,21 @@ loadmodule "groupserv/set_url";
  * with portal software and other useful things. To enable it, load this
  * module, and uncomment the httpd { } block towards the bottom of the config.
  *
+ * There are also modules that provide e-mail address canonicalization, thus
+ * allowing per-email registration limits to be applied to the "canonical"
+ * form of an address; this includes e.g. stripping out a +suffix or
+ * considering multiple domains of a single provider as if they were the same.
+ *
+ * Of these, the canon_gmail module strips +suffixes and dots from GMail
+ * localparts and requires no configuration. The canon_domains module has its
+ * own configuration block; see further below for documentation.
+ *
+ * Email domain canonicalization                misc/canon_domains
+ * GMail localpart canonicalization             misc/canon_gmail
  * HTTP Server                                  misc/httpd
  */
+#loadmodule "misc/canon_domains";
+#loadmodule "misc/canon_gmail";
 #loadmodule "misc/httpd";
 
 
@@ -2425,6 +2440,39 @@ proxyscan {
 	 *              (default AKILL is 24 hours)
 	 */
 	dnsbl_action = kline;
+};
+
+
+
+/* Email domain canonicalizer configuration.
+ *
+ * This canonicalizer maps all domains associated with an email service
+ * provider onto a single one for canonicalization purposes.
+ */
+canon_domains {
+
+    /* (*) provider
+     *
+     * Each provider block contains a list of domains that will be considered
+     * the same for registration limit purposes.
+     *
+     * You can configure any number of providers, however any given domain
+     * can only be listed once. (Services will warn you about a configuration
+     * that contains duplicates as there is no meaningful way to handle them.)
+     *
+     * Note that there is currently no support for any sort of wildcard
+     * entries; domains can only be listed individually.
+     */
+    provider {
+        "atheme.org";
+        "atheme.services";
+    };
+
+    provider {
+        "example.org";
+        "example.net";
+        "example.com";
+    };
 };
 
 
