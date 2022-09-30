@@ -74,7 +74,7 @@ ns_cmd_set_loginfails(struct sourceinfo *si, int parc, char *parv[])
 
 static struct command ns_set_loginfails = {
 	.name           = "LOGINFAILS",
-	.desc           = N_("Hides information about you from other users."),
+	.desc           = N_("Tell you when someone fails to login as you."),
 	.access         = AC_NONE,
 	.maxparc        = 1,
 	.cmd            = &ns_cmd_set_loginfails,
