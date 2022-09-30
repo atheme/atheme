@@ -59,6 +59,7 @@ SRCS   =                    \
     set_hidelastlogin.c     \
     set_hidemail.c          \
     set_language.c          \
+    set_loginfails.c        \
     set_nevergroup.c        \
     set_neverop.c           \
     set_nogreet.c           \

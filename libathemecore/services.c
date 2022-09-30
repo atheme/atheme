@@ -883,7 +883,7 @@ bad_password(struct sourceinfo *si, struct myuser *mu)
 	svs = si->service;
 	if (svs == NULL)
 		svs = service_find("nickserv");
-	if (svs != NULL)
+	if (svs != NULL && MU_LOGINFAILS & mu->flags)
 	{
 		myuser_notice(svs->me->nick, mu, "\2%s\2 failed to login to \2%s\2. There %s been \2%d\2 failed login %s since your last successful login.", mask, entity(mu)->name, count == 1 ? "has" : "have", count, count == 1 ? "attempt" : "attempts");
 	}

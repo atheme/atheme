@@ -92,6 +92,7 @@ struct myuser
 #define MU_NOOP         0x00000004U
 #define MU_WAITAUTH     0x00000008U
 #define MU_HIDEMAIL     0x00000010U
+#define MU_LOGINFAILS   0x00000020U
 #define MU_NOMEMO       0x00000040U
 #define MU_EMAILMEMOS   0x00000080U
 #define MU_CRYPTPASS    0x00000100U
