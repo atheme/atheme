@@ -302,7 +302,7 @@ xmlrpcmethod_command(void *conn, int parc, char *parv[])
 
 	for (i = 0; i < parc; i++)
 	{
-		if (*parv[i] == '\0' || strchr(parv[i], '\r') || strchr(parv[i], '\n'))
+		if ((i >= 2 && *parv[i] == '\0') || strchr(parv[i], '\r') || strchr(parv[i], '\n'))
 		{
 			xmlrpc_generic_error(fault_badparams, "Invalid parameters.");
 			return 0;
@@ -315,7 +315,7 @@ xmlrpcmethod_command(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (*parv[1] != '\0' && strlen(parv[0]) > 1)
+	if (*parv[0] && *parv[1])
 	{
 		if ((mu = myuser_find(parv[1])) == NULL)
 		{
