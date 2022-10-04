@@ -606,7 +606,7 @@ handle_clearlogin(struct sourceinfo *si, struct user *u)
 void
 handle_certfp(struct sourceinfo *si, struct user *u, const char *certfp)
 {
-	struct myuser *mu;
+	struct myuser *mu = NULL;
 	struct mycertfp *mcfp;
 	struct service *svs;
 	struct hook_user_login_check req;
@@ -618,8 +618,9 @@ handle_certfp(struct sourceinfo *si, struct user *u, const char *certfp)
 		return;
 
 	if ((mcfp = mycertfp_find(certfp)) != NULL)
-		mu = req.mu = mcfp->mu;
+		mu = mcfp->mu;
 
+	req.mu = mu;
 	req.si = si;
 	req.allowed = true;
 	hook_call_user_can_login(&req);
