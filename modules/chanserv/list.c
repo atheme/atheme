@@ -19,6 +19,13 @@ enum list_opttype
 	OPT_AGE,
 };
 
+enum list_opterr
+{
+	OPTERR_NONE,
+	OPTERR_UNKNOWN_OPT,
+	OPTERR_BAD_ARG,
+};
+
 struct list_option
 {
 	const char *option;
@@ -56,18 +63,22 @@ parse_age(const char *s)
 	return duration;
 }
 
-static void
-process_parvarray(const struct list_option *opts, size_t optsize, int parc, char *parv[])
+static enum list_opterr
+process_parvarray(const struct list_option *opts, size_t optsize, int parc, char *parv[], char **opt_last)
 {
 	int i;
 	size_t j;
+	bool found;
 
 	for (i = 0; i < parc; i++)
 	{
+		found = false;
+		*opt_last = parv[i];
 		for (j = 0; j < optsize; j++)
 		{
 			if (!strcasecmp(opts[j].option, parv[i]))
 			{
+				found = true;
 				switch(opts[j].opttype)
 				{
 				case OPT_BOOL:
@@ -79,6 +90,8 @@ process_parvarray(const struct list_option *opts, size_t optsize, int parc, char
 						*opts[j].optval.intval = atoi(parv[i + 1]);
 						i++;
 					}
+					else
+						return OPTERR_BAD_ARG;
 					break;
 				case OPT_STRING:
 					if (i + 1 < parc)
@@ -86,6 +99,8 @@ process_parvarray(const struct list_option *opts, size_t optsize, int parc, char
 						*opts[j].optval.strval = parv[i + 1];
 						i++;
 					}
+					else
+						return OPTERR_BAD_ARG;
 					break;
 				case OPT_FLAG:
 					*opts[j].optval.flagval |= opts[j].flag;
@@ -96,11 +111,16 @@ process_parvarray(const struct list_option *opts, size_t optsize, int parc, char
 						*opts[j].optval.ageval = parse_age(parv[i + 1]);
 						i++;
 					}
+					else
+						return OPTERR_BAD_ARG;
 					break;
 				}
 			}
 		}
+		if (!found)
+			return OPTERR_UNKNOWN_OPT;
 	}
+	return OPTERR_NONE;
 }
 
 static void
@@ -190,7 +210,16 @@ cs_cmd_list(struct sourceinfo *si, int parc, char *parv[])
 	if (si->c != NULL)
 		return;
 
-	process_parvarray(optstable, ARRAY_SIZE(optstable), parc, parv);
+	char *opt_last;
+	enum list_opterr parv_err = process_parvarray(optstable, ARRAY_SIZE(optstable), parc, parv, &opt_last);
+	if (parv_err == OPTERR_UNKNOWN_OPT) {
+		command_fail(si, fault_badparams, _("Error: \2%s\2 is not a valid LIST option"), opt_last);
+		return;
+	}
+	else if (parv_err == OPTERR_BAD_ARG) {
+		command_fail(si, fault_badparams, _("Error: Invalid argument for option \2%s\2"), opt_last);
+		return;
+	}
 
 	char criteriastr[BUFSIZE];
 	build_criteriastr(criteriastr, parc, parv);
