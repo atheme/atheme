@@ -134,7 +134,7 @@ ns_cmd_cert(struct sourceinfo *si, int parc, char *parv[])
 
 		struct hook_user_certfp hdata = {
 			.si = si,
-			.mu = mu
+			.mu = mu,
 		};
 		mowgli_strlcpy(hdata.certfp, mcfp, sizeof hdata.certfp);
 		hook_call_user_certfp_add(&hdata);
@@ -178,7 +178,7 @@ ns_cmd_cert(struct sourceinfo *si, int parc, char *parv[])
 
 		struct hook_user_certfp hdata = {
 			.si = si,
-			.mu = mu
+			.mu = mu,
 		};
 		mowgli_strlcpy(hdata.certfp, parv[1], sizeof hdata.certfp);
 		hook_call_user_certfp_del(&hdata);
