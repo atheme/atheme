@@ -9,7 +9,7 @@
  */
 
 #include <atheme.h>
-#include <atheme/protocol/charybdis.h>
+#include <atheme/protocol/solanum.h>
 
 #define UF_NOLOGOUT UF_CUSTOM1
 #define UF_HELPER   UF_CUSTOM2
@@ -65,6 +65,7 @@ static const struct cmode solanum_mode_list[] = {
   { 'A', CMODE_ADMINONLY },
   { 'u', CMODE_NOFILTER  },
   { 'T', CMODE_NONOTICE  },
+  { 'R', CMODE_MODREG    },
 
   { '\0', 0 }
 };
