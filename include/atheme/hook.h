@@ -238,6 +238,13 @@ struct hook_user_req
 	struct mynick *     mn;
 };
 
+struct hook_user_certfp
+{
+	struct sourceinfo * si;
+	struct myuser *     mu;
+	char                certfp[512];
+};
+
 void hook_del_hook(const char *, hook_fn);
 void hook_add_hook(const char *, hook_fn);
 void hook_add_hook_first(const char *, hook_fn);

@@ -84,6 +84,8 @@ user_can_login                  struct hook_user_login_check *
 user_can_logout                 struct hook_user_logout_check *
 user_can_register               struct hook_user_register_check *
 user_can_rename                 struct hook_user_rename_check *
+user_certfp_add                 struct hook_user_certfp *
+user_certfp_del                 struct hook_user_certfp *
 user_check_expire               struct hook_expiry_req *
 user_drop                       struct myuser *
 user_identify                   struct user *

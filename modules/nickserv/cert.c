@@ -132,23 +132,34 @@ ns_cmd_cert(struct sourceinfo *si, int parc, char *parv[])
 			return;
 		}
 
-		cert = mycertfp_find(mcfp);
+		struct hook_user_certfp hdata = {
+			.si = si,
+			.mu = mu,
+		};
+		mowgli_strlcpy(hdata.certfp, mcfp, sizeof hdata.certfp);
+		hook_call_user_certfp_add(&hdata);
+
+		if (!hdata.certfp[0])
+			return;
+
+		cert = mycertfp_find(hdata.certfp);
 		if (cert == NULL)
 			;
 		else if (cert->mu == mu)
 		{
-			command_fail(si, fault_nochange, _("Fingerprint \2%s\2 is already on your fingerprint list."), mcfp);
+			command_fail(si, fault_nochange, _("Fingerprint \2%s\2 is already on your fingerprint list."), hdata.certfp);
 			return;
 		}
 		else
 		{
-			command_fail(si, fault_nochange, _("Fingerprint \2%s\2 is already on another user's fingerprint list."), mcfp);
+			command_fail(si, fault_nochange, _("Fingerprint \2%s\2 is already on another user's fingerprint list."), hdata.certfp);
 			return;
 		}
-		if (mycertfp_add(mu, mcfp, false))
+
+		if (mycertfp_add(mu, hdata.certfp, false))
 		{
-			command_success_nodata(si, _("Added fingerprint \2%s\2 to your fingerprint list."), mcfp);
-			logcommand(si, CMDLOG_SET, "CERT:ADD: \2%s\2", mcfp);
+			command_success_nodata(si, _("Added fingerprint \2%s\2 to your fingerprint list."), hdata.certfp);
+			logcommand(si, CMDLOG_SET, "CERT:ADD: \2%s\2", hdata.certfp);
 		}
 		else
 			command_fail(si, fault_toomany, _("Your fingerprint list is full."));
@@ -167,14 +178,26 @@ ns_cmd_cert(struct sourceinfo *si, int parc, char *parv[])
 			command_fail(si, fault_noprivs, STR_NOT_LOGGED_IN);
 			return;
 		}
+
+		struct hook_user_certfp hdata = {
+			.si = si,
+			.mu = mu,
+		};
+		mowgli_strlcpy(hdata.certfp, parv[1], sizeof hdata.certfp);
+		hook_call_user_certfp_del(&hdata);
+
 		cert = mycertfp_find(parv[1]);
+		if (cert == NULL && strcasecmp(parv[1], hdata.certfp))
+			cert = mycertfp_find(hdata.certfp);
+
 		if (cert == NULL || cert->mu != mu)
 		{
 			command_fail(si, fault_nochange, _("Fingerprint \2%s\2 is not on your fingerprint list."), parv[1]);
 			return;
 		}
-		command_success_nodata(si, _("Deleted fingerprint \2%s\2 from your fingerprint list."), parv[1]);
-		logcommand(si, CMDLOG_SET, "CERT:DEL: \2%s\2", parv[1]);
+
+		command_success_nodata(si, _("Deleted fingerprint \2%s\2 from your fingerprint list."), cert->certfp);
+		logcommand(si, CMDLOG_SET, "CERT:DEL: \2%s\2", cert->certfp);
 		mycertfp_delete(cert);
 	}
 	else
