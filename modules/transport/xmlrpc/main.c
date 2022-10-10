@@ -580,6 +580,7 @@ xmlrpcmethod_metadata(void *conn, int parc, char *parv[])
 		xmlrpc_string(buf, md->value);
 	else
 		xmlrpc_string(buf, "");
+	xmlrpc_send(1, buf);
 
 	return 0;
 }
