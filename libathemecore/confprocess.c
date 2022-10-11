@@ -20,6 +20,7 @@ enum conftype
 {
 	CONF_HANDLER,
 	CONF_UINT,
+	CONF_FLOAT,
 	CONF_DURATION,
 	CONF_DUPSTR,
 	CONF_BOOL,
@@ -42,6 +43,13 @@ struct ConfTable
 			unsigned int max;
 			unsigned int def;
 		} uint_val;
+		struct
+		{
+			float *var;
+			float min;
+			float max;
+			float def;
+		} float_val;
 		struct
 		{
 			unsigned int *var;
@@ -133,6 +141,38 @@ process_uint_configentry(mowgli_config_file_entry_t *ce, unsigned int *var,
 	return true;
 }
 
+bool
+process_float_configentry(mowgli_config_file_entry_t *ce, float *var, float min, float max)
+{
+	float v;
+	char *end;
+
+	if (ce->vardata == NULL)
+	{
+		conf_report_warning(ce, "no parameter for configuration option");
+		return false;
+	}
+	errno = 0;
+	v = strtof(ce->vardata, &end);
+	if (errno != 0 || *end != '\0' || end == ce->vardata)
+	{
+		conf_report_warning(ce, "invalid float \"%s\"",
+				ce->vardata);
+		return false;
+	}
+	if (v > max || v < min)
+	{
+		conf_report_warning(ce, "value %lf is out of range [%f,%f]",
+				v,
+				min,
+				max);
+		return false;
+	}
+	*var = v;
+	return true;
+}
+
+
 static struct
 {
 	const char *name;
@@ -219,6 +259,9 @@ set_default(struct ConfTable *ct)
 		case CONF_UINT:
 			*ct->un.uint_val.var = ct->un.uint_val.def;
 			break;
+		case CONF_FLOAT:
+			*ct->un.float_val.var = ct->un.float_val.def;
+			break;
 		case CONF_DURATION:
 			*ct->un.duration_val.var = ct->un.duration_val.def;
 			break;
@@ -254,6 +297,12 @@ process_configentry(struct ConfTable *ct, mowgli_config_file_entry_t *ce)
 			if (!process_uint_configentry(ce, ct->un.uint_val.var,
 					ct->un.uint_val.min,
 					ct->un.uint_val.max))
+				return;
+			break;
+		case CONF_FLOAT:
+			if (!process_float_configentry(ce, ct->un.float_val.var,
+					ct->un.float_val.min,
+					ct->un.float_val.max))
 				return;
 			break;
 		case CONF_DURATION:
@@ -513,6 +562,29 @@ add_uint_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags
 	mowgli_node_add(ct, &ct->node, conflist);
 	conf_need_rehash = true;
 }
+
+void
+add_float_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, float *var, float min, float max, float def)
+{
+	if (find_conf_item(name, conflist))
+	{
+		slog(LG_DEBUG, "add_float_conf_item(): duplicate item %s", name);
+		return;
+	}
+
+	struct ConfTable *const ct = mowgli_heap_alloc(conftable_heap);
+	ct->name = sstrdup(name);
+	ct->type = CONF_FLOAT;
+	ct->flags = flags;
+	ct->un.float_val.var = var;
+	ct->un.float_val.min = min;
+	ct->un.float_val.max = max;
+	ct->un.float_val.def = def;
+
+	mowgli_node_add(ct, &ct->node, conflist);
+	conf_need_rehash = true;
+}
+
 
 void
 add_duration_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, unsigned int *var, const char *defunit, unsigned int def)
