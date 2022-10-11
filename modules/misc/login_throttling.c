@@ -103,6 +103,10 @@ lt_user_can_login_hook(struct hook_user_login_check *const restrict hdata)
 		// We only throttle password-based login attempts
 		return;
 
+	if (is_ircop(hdata->si->su))
+		// Don't throttle opers
+		return;
+
 	if (! hdata->allowed)
 		// Another hook already decided to deny the login -- nothing to do
 		return;
