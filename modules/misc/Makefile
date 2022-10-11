@@ -11,9 +11,10 @@
 include ../../extra.mk
 
 MODULE = misc
-SRCS   =            \
-    canon_gmail.c   \
-    httpd.c
+SRCS   =                \
+    canon_gmail.c       \
+    httpd.c             \
+    login_throttling.c
 
 include ../../buildsys.mk
 include ../../buildsys.module.mk
