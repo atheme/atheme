@@ -180,11 +180,20 @@ struct hook_user_delete_info
 	const char *        comment;
 };
 
+enum hook_user_login_method
+{
+	HULM_CERT_FINGERPRINT,
+	HULM_PASSWORD,
+	HULM_PK_CHALLENGE,
+	HULM_TOKEN,
+};
+
 struct hook_user_login_check
 {
-	struct sourceinfo * si;
-	struct myuser *     mu;
-	bool                allowed;
+	struct sourceinfo *                 si;
+	struct myuser *                     mu;
+	const enum hook_user_login_method   method;
+	bool                                allowed;
 };
 
 struct hook_user_logout_check

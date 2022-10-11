@@ -609,7 +609,6 @@ handle_certfp(struct sourceinfo *si, struct user *u, const char *certfp)
 	struct myuser *mu;
 	struct mycertfp *mcfp;
 	struct service *svs;
-	struct hook_user_login_check req;
 
 	sfree(u->certfp);
 	u->certfp = sstrdup(certfp);
@@ -638,14 +637,17 @@ handle_certfp(struct sourceinfo *si, struct user *u, const char *certfp)
 		return;
 	}
 
-	req.si = si;
-	req.mu = mu;
-	req.allowed = true;
+	struct hook_user_login_check req = {
+		.si         = si,
+		.mu         = mu,
+		.method     = HULM_CERT_FINGERPRINT,
+		.allowed    = true,
+	};
+
 	hook_call_user_can_login(&req);
+
 	if (!req.allowed)
-	{
 		return;
-	}
 
 	notice(svs->me->nick, u->nick, nicksvs.no_nick_ownership ? "You are now logged in as \2%s\2." : "You are now identified for \2%s\2.", entity(mu)->name);
 

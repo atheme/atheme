@@ -51,11 +51,11 @@ sasl_mech_authcookie_step(struct sasl_session *const restrict p, const struct sa
 	if (strlen(secret) > AUTHCOOKIE_LENGTH)
 		return ASASL_MRESULT_ERROR;
 
-	if (! sasl_core_functions->authzid_can_login(p, authzid, NULL))
+	if (! sasl_core_functions->authzid_can_login(p, HULM_TOKEN, authzid, NULL))
 		return ASASL_MRESULT_ERROR;
 
 	struct myuser *mu = NULL;
-	if (! sasl_core_functions->authcid_can_login(p, authcid, &mu))
+	if (! sasl_core_functions->authcid_can_login(p, HULM_TOKEN, authcid, &mu))
 		return ASASL_MRESULT_ERROR;
 
 	if (! authcookie_find(secret, mu))
@@ -70,7 +70,6 @@ static const struct sasl_mechanism sasl_mech_authcookie = {
 	.mech_start     = NULL,
 	.mech_step      = &sasl_mech_authcookie_step,
 	.mech_finish    = NULL,
-	.password_based = false,
 };
 
 static void

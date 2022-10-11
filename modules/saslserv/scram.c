@@ -306,7 +306,7 @@ scram_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_
 		(void) slog(LG_DEBUG, "%s: parsed authzid '%s'", MOWGLI_FUNC_NAME, authzid);
 
 		// Check it exists and can login
-		if (! sasl_core_functions->authzid_can_login(p, authzid, NULL))
+		if (! sasl_core_functions->authzid_can_login(p, HULM_PASSWORD, authzid, NULL))
 		{
 			(void) slog(LG_DEBUG, "%s: authzid_can_login failed", MOWGLI_FUNC_NAME);
 			(void) scram_error("other-error", out);
@@ -385,7 +385,7 @@ scram_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_
 
 	(void) slog(LG_DEBUG, "%s: parsed authcid '%s'", MOWGLI_FUNC_NAME, authcid);
 
-	if (! sasl_core_functions->authcid_can_login(p, authcid, &mu))
+	if (! sasl_core_functions->authcid_can_login(p, HULM_PASSWORD, authcid, &mu))
 	{
 		(void) slog(LG_DEBUG, "%s: authcid_can_login failed", MOWGLI_FUNC_NAME);
 		(void) scram_error("other-error", out);
@@ -412,7 +412,7 @@ scram_step_clientfirst(struct sasl_session *const restrict p, const struct sasl_
 	if (db.a != prf)
 	{
 		(void) slog(LG_DEBUG, "%s: PRF ID mismatch: server(%u) != client(%u)", MOWGLI_FUNC_NAME, db.a, prf);
-		(void) sasl_core_functions->recalc_mechlist(p, mu, scram_get_avoidance_mechlist(db.a));
+		(void) sasl_core_functions->recalc_mechlist(p, scram_get_avoidance_mechlist(db.a));
 		(void) scram_error("digest-algorithm-mismatch", out);
 		goto error;
 	}
@@ -772,7 +772,6 @@ static const struct sasl_mechanism sasl_mech_scram_sha1 = {
 	.mech_start     = NULL,
 	.mech_step      = &sasl_mech_scram_sha1_step,
 	.mech_finish    = &sasl_mech_scram_finish,
-	.password_based = true,
 };
 
 static const struct sasl_mechanism sasl_mech_scram_sha2_256 = {
@@ -780,7 +779,6 @@ static const struct sasl_mechanism sasl_mech_scram_sha2_256 = {
 	.mech_start     = NULL,
 	.mech_step      = &sasl_mech_scram_sha2_256_step,
 	.mech_finish    = &sasl_mech_scram_finish,
-	.password_based = true,
 };
 
 static const struct sasl_mechanism sasl_mech_scram_sha2_512 = {
@@ -788,7 +786,6 @@ static const struct sasl_mechanism sasl_mech_scram_sha2_512 = {
 	.mech_start     = NULL,
 	.mech_step      = &sasl_mech_scram_sha2_512_step,
 	.mech_finish    = &sasl_mech_scram_finish,
-	.password_based = true,
 };
 
 static inline void

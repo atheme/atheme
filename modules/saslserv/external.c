@@ -29,13 +29,13 @@ sasl_mech_external_step(struct sasl_session *const restrict p, const struct sasl
 		if (in->len > NICKLEN)
 			return ASASL_MRESULT_ERROR;
 
-		if (! sasl_core_functions->authzid_can_login(p, in->buf, NULL))
+		if (! sasl_core_functions->authzid_can_login(p, HULM_CERT_FINGERPRINT, in->buf, NULL))
 			return ASASL_MRESULT_ERROR;
 	}
 
 	const char *const authcid = entity(mcfp->mu)->name;
 
-	if (! sasl_core_functions->authcid_can_login(p, authcid, NULL))
+	if (! sasl_core_functions->authcid_can_login(p, HULM_CERT_FINGERPRINT, authcid, NULL))
 		return ASASL_MRESULT_ERROR;
 
 	return ASASL_MRESULT_SUCCESS;
@@ -47,7 +47,6 @@ static const struct sasl_mechanism sasl_mech_external = {
 	.mech_start     = NULL,
 	.mech_step      = &sasl_mech_external_step,
 	.mech_finish    = NULL,
-	.password_based = false,
 };
 
 static void

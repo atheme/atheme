@@ -164,8 +164,7 @@ sasl_server_eob(struct server ATHEME_VATTR_UNUSED *const restrict s)
 }
 
 static void
-sasl_mechlist_string_build(const struct sasl_session *const restrict p, const struct myuser *const restrict mu,
-                           const char **const restrict avoid)
+sasl_mechlist_string_build(const struct sasl_session *const restrict p, const char **const restrict avoid)
 {
 	char buf[sizeof sasl_mechlist_string];
 	char *bufptr = buf;
@@ -190,7 +189,7 @@ sasl_mechlist_string_build(const struct sasl_session *const restrict p, const st
 			}
 		}
 
-		if (in_avoid_list || (mptr->password_based && mu != NULL && (mu->flags & MU_NOPASSWORD)))
+		if (in_avoid_list)
 			continue;
 
 		const size_t namelen = strlen(mptr->name);
@@ -217,7 +216,7 @@ sasl_mechlist_string_build(const struct sasl_session *const restrict p, const st
 static void
 sasl_mechlist_do_rebuild(void)
 {
-	(void) sasl_mechlist_string_build(NULL, NULL, NULL);
+	(void) sasl_mechlist_string_build(NULL, NULL);
 
 	if (me.connected)
 		(void) sasl_mechlist_sts(sasl_mechlist_string);
@@ -980,9 +979,10 @@ sasl_mech_unregister(const struct sasl_mechanism *const restrict mech)
 }
 
 static inline bool ATHEME_FATTR_WUR
-sasl_authxid_can_login(struct sasl_session *const restrict p, const char *const restrict authxid,
-                       struct myuser **const restrict muo, char *const restrict val_name,
-                       char *const restrict val_eid, const char *const restrict other_val_eid)
+sasl_authxid_can_login(struct sasl_session *const restrict p, const enum hook_user_login_method method,
+                       const char *const restrict authxid, struct myuser **const restrict muo,
+                       char *const restrict val_name, char *const restrict val_eid,
+                       const char *const restrict other_val_eid)
 {
 	return_val_if_fail(p != NULL, false);
 	return_val_if_fail(p->si != NULL, false);
@@ -1007,7 +1007,7 @@ sasl_authxid_can_login(struct sasl_session *const restrict p, const char *const 
 	(void) mowgli_strlcpy(val_name, entity(mu)->name, NICKLEN + 1);
 	(void) mowgli_strlcpy(val_eid, entity(mu)->id, IDLEN + 1);
 
-	if (p->mechptr->password_based && (mu->flags & MU_NOPASSWORD))
+	if (method == HULM_PASSWORD && (mu->flags & MU_NOPASSWORD))
 	{
 		(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN %s to \2%s\2 (password authentication disabled)",
 		                  p->mechptr->name, entity(mu)->name);
@@ -1023,6 +1023,7 @@ sasl_authxid_can_login(struct sasl_session *const restrict p, const char *const 
 
 		.si         = p->si,
 		.mu         = mu,
+		.method     = method,
 		.allowed    = true,
 	};
 
@@ -1035,17 +1036,17 @@ sasl_authxid_can_login(struct sasl_session *const restrict p, const char *const 
 }
 
 static bool ATHEME_FATTR_WUR
-sasl_authcid_can_login(struct sasl_session *const restrict p, const char *const restrict authcid,
-                       struct myuser **const restrict muo)
+sasl_authcid_can_login(struct sasl_session *const restrict p, const enum hook_user_login_method method,
+                       const char *const restrict authcid, struct myuser **const restrict muo)
 {
-	return sasl_authxid_can_login(p, authcid, muo, p->authcid, p->authceid, p->authzeid);
+	return sasl_authxid_can_login(p, method, authcid, muo, p->authcid, p->authceid, p->authzeid);
 }
 
 static bool ATHEME_FATTR_WUR
-sasl_authzid_can_login(struct sasl_session *const restrict p, const char *const restrict authzid,
-                       struct myuser **const restrict muo)
+sasl_authzid_can_login(struct sasl_session *const restrict p, const enum hook_user_login_method method,
+                       const char *const restrict authzid, struct myuser **const restrict muo)
 {
-	return sasl_authxid_can_login(p, authzid, muo, p->authzid, p->authzeid, p->authceid);
+	return sasl_authxid_can_login(p, method, authzid, muo, p->authzid, p->authzeid, p->authceid);
 }
 
 extern const struct sasl_core_functions sasl_core_functions;

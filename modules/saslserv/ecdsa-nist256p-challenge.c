@@ -44,7 +44,7 @@ sasl_mech_ecdsa_step_account_names(struct sasl_session *const restrict p,
 			(void) slog(LG_DEBUG, "%s: in->len (%zu) is unacceptable", MOWGLI_FUNC_NAME, in->len);
 			return ASASL_MRESULT_ERROR;
 		}
-		if (! sasl_core_functions->authcid_can_login(p, in->buf, &mu))
+		if (! sasl_core_functions->authcid_can_login(p, HULM_PK_CHALLENGE, in->buf, &mu))
 		{
 			(void) slog(LG_DEBUG, "%s: authcid_can_login failed", MOWGLI_FUNC_NAME);
 			return ASASL_MRESULT_ERROR;
@@ -68,12 +68,12 @@ sasl_mech_ecdsa_step_account_names(struct sasl_session *const restrict p,
 			                      MOWGLI_FUNC_NAME, authzid_length);
 			return ASASL_MRESULT_ERROR;
 		}
-		if (! sasl_core_functions->authzid_can_login(p, end + 1, NULL))
+		if (! sasl_core_functions->authzid_can_login(p, HULM_PK_CHALLENGE, end + 1, NULL))
 		{
 			(void) slog(LG_DEBUG, "%s: authzid_can_login failed", MOWGLI_FUNC_NAME);
 			return ASASL_MRESULT_ERROR;
 		}
-		if (! sasl_core_functions->authcid_can_login(p, in->buf, &mu))
+		if (! sasl_core_functions->authcid_can_login(p, HULM_PK_CHALLENGE, in->buf, &mu))
 		{
 			(void) slog(LG_DEBUG, "%s: authcid_can_login failed", MOWGLI_FUNC_NAME);
 			return ASASL_MRESULT_ERROR;
@@ -197,7 +197,6 @@ static const struct sasl_mechanism sasl_mech_ecdsa = {
 	.mech_start     = NULL,
 	.mech_step      = &sasl_mech_ecdsa_step,
 	.mech_finish    = &sasl_mech_ecdsa_finish,
-	.password_based = false,
 };
 
 static void

@@ -13,6 +13,7 @@
 
 #include <atheme/attributes.h>
 #include <atheme/constants.h>
+#include <atheme/hook.h>
 #include <atheme/sourceinfo.h>
 #include <atheme/stdheaders.h>
 #include <atheme/structures.h>
@@ -117,11 +118,10 @@ struct sasl_mechanism
 	sasl_mech_start_fn  mech_start;
 	sasl_mech_step_fn   mech_step;
 	sasl_mech_finish_fn mech_finish;
-	bool                password_based;
 };
 
-typedef bool (*sasl_authxid_can_login_fn)(struct sasl_session *restrict, const char *restrict,
-                                          struct myuser **restrict) ATHEME_FATTR_WUR;
+typedef bool (*sasl_authxid_can_login_fn)(struct sasl_session *restrict, enum hook_user_login_method,
+                                          const char *restrict, struct myuser **restrict) ATHEME_FATTR_WUR;
 
 struct sasl_core_functions
 {
@@ -129,7 +129,7 @@ struct sasl_core_functions
 	void                      (*mech_unregister)(const struct sasl_mechanism *);
 	sasl_authxid_can_login_fn   authcid_can_login;
 	sasl_authxid_can_login_fn   authzid_can_login;
-	void                      (*recalc_mechlist)(const struct sasl_session *, const struct myuser *, const char **);
+	void                      (*recalc_mechlist)(const struct sasl_session *, const char **);
 };
 
 #endif /* !ATHEME_INC_SASL_H */
