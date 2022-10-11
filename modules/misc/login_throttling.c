@@ -8,12 +8,12 @@
 #include <atheme.h>
 
 #define LT_BURST_MIN   0U
-#define LT_BURST_MAX   300U
+#define LT_BURST_MAX   200U
 #define LT_BURST_DEF   1U
 
-#define LT_REPLENISH_MIN      0.1f
-#define LT_REPLENISH_MAX      1800.0f
-#define LT_REPLENISH_DEF      2.0f
+#define LT_REPLENISH_MIN      0.005f
+#define LT_REPLENISH_MAX      200.0f
+#define LT_REPLENISH_DEF      1.0f
 
 #define MAX_ADDR_LEN    56U // strlen("2001:0db8:0000:0000:0000:0000:0000:0001%abcdefghabcdefgh")
 

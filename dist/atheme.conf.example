@@ -2478,43 +2478,39 @@ httpd {
  * the former throttles any logins from the same address, and the latter
  * throttles any logins from the same address to the same account.
  *
- * This is achieved with a rudimentary token bucket system. The "weight" of
- * each attempt is added and the login attempt is rejected if it reaches the
- * "max" setting. For example, with "weight" set to 1 and "max" set to 2, you
- * can attempt at most 2 logins per second, and then you must wait 1 second
- * before trying again; while with "weight" set to 5 and "max" set to 30, you
- * can attempt at most 6 logins per second, and then you must wait 5 seconds
- * before trying again. Logins are capped at the "max" value, so it is not
- * possible to lock yourself out of an account by being throttled; all you
- * need do is wait up to "weight" seconds.
+ * This is achieved with a rudimentary token bucket system. You configure a
+ * "burst" of attempts that can be made immediately, and configure a
+ * "replenish" rate of how many tokens replenish each second. For example,
+ * with "burst" set to 2 and "replenish" set to 0.5, you can attempt at most
+ * twice in 2 seconds.
  *
  * To disable a specific throttling mechanism (e.g. to only throttle IP
  * addresses, and not combinations of IP address and account), set the
- * weight for that mechanism to zero. The max is ignored in this case.
+ * burst for that mechanism to zero. The replenish is ignored in this case.
  *
  * All of these options are runtime reconfigurable. Changing the value of
  * these options and then rehashing services will affect all new login
  * attempts, but it will not change the existing values of any buckets. In
- * other words, if you previously had weight set to 2 minutes, and then you
- * change it to 30 seconds and rehash, users may still have to wait up to
- * 2 minutes after being throttled before they can try to log in again, and
- * only then will they only have to wait up to 30 seconds.
+ * other words, if you previously had replenish set to free up a token after
+ * 2 minutes, and then you change it to 30 seconds and rehash, users may still
+ * have to wait up to 2 minutes after being throttled before they can try to
+ * log in again, and only then will they only have to wait up to 30 seconds.
  *
  * This module has absolutely no effect on any other form of login attempt
  * (for example, certificate fingerprints or public-key challenges).
  *
  * All values are in seconds.
- * The legal range for max values is 1 through 1800 (inclusive).
- * The legal range for weight values is 0 through 300 (inclusive).
+ * The legal range for burst values is 0 through 200 (inclusive).
+ * The legal range for replenish values is 0.005 through 200 (inclusive).
  * The commented-out example values given below are the default values.
  */
 throttle {
 
-	#address_max = 2;
-	#address_weight = 1;
+	#address_burst = 3;
+	#address_replenish = 1;
 
-	#address_account_max = 2;
-	#address_account_weight = 1;
+	#address_account_burst = 2;
+	#address_account_replenish = 1;
 };
 
 
