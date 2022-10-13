@@ -116,8 +116,10 @@ svsignore_delete(struct svsignore *svsignore)
 
 	n = mowgli_node_find(svsignore, &svs_ignore_list);
 	mowgli_node_delete(n, &svs_ignore_list);
+	mowgli_node_free(n);
 
 	sfree(svsignore->mask);
+	sfree(svsignore->setby);
 	sfree(svsignore->reason);
 	sfree(svsignore);
 }
