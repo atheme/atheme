@@ -11,8 +11,6 @@
 
 static mowgli_patricia_t *os_ignore_cmds = NULL;
 
-mowgli_list_t svs_ignore_list;
-
 static void
 os_cmd_ignore(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
