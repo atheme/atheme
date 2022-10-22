@@ -405,8 +405,8 @@ sasl_handle_login(struct sasl_session *const restrict p, struct user *const u, s
 	{
 		if (! *pendingeid)
 		{
-			(void) slog(LG_INFO, "%s: session for '%s' without a pendingeid (BUG)",
-			                     MOWGLI_FUNC_NAME, u->nick);
+			(void) slog(LG_DEBUG, "%s: session for '%s' without a pendingeid (incomplete login?)",
+			                      MOWGLI_FUNC_NAME, u->nick);
 			(void) notice(saslsvs->nick, u->nick, LOGIN_CANCELLED_STR);
 			return false;
 		}
