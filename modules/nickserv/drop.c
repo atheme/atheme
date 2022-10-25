@@ -59,10 +59,11 @@ cmd_ns_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 		return;
 	}
 
-	if (is_soper(mu))
+	if (is_conf_named_soper(mu))
 	{
-		(void) command_fail(si, fault_noprivs, _("The nickname \2%s\2 belongs to a services operator; "
-		                                         "it cannot be dropped."), acc);
+		(void) command_fail(si, fault_noprivs, _("The nickname \2%s\2 belongs to a services operator "
+							 "defined by name in the configuration "
+		                                         "file; it cannot be dropped."), acc);
 		return;
 	}
 
