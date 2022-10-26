@@ -18,6 +18,7 @@ AC_DEFUN([ATHEME_CHECK_BUILD_REQUIREMENTS], [
     AC_USE_SYSTEM_EXTENSIONS
 
     AC_CHECK_HEADERS([Availability.h], [], [], [])
+    AC_CHECK_HEADERS([arpa/inet.h], [], [], [])
     AC_CHECK_HEADERS([ctype.h], [], [], [])
     AC_CHECK_HEADERS([dirent.h], [], [], [])
     AC_CHECK_HEADERS([errno.h], [], [], [])
@@ -62,6 +63,7 @@ AC_DEFUN([ATHEME_CHECK_BUILD_REQUIREMENTS], [
     AC_CHECK_FUNCS([getpid], [], [ATHEME_REQUIRED_FUNC_MISSING])
     AC_CHECK_FUNCS([getrlimit], [], [])
     AC_CHECK_FUNCS([gettimeofday], [], [ATHEME_REQUIRED_FUNC_MISSING])
+    AC_CHECK_FUNCS([inet_pton], [], [ATHEME_REQUIRED_FUNC_MISSING])
     AC_CHECK_FUNCS([localeconv], [], [ATHEME_REQUIRED_FUNC_MISSING])
     AC_CHECK_FUNCS([memchr], [], [ATHEME_REQUIRED_FUNC_MISSING])
     AC_CHECK_FUNCS([memmove], [], [ATHEME_REQUIRED_FUNC_MISSING])
