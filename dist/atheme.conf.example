@@ -1770,6 +1770,15 @@ nickserv {
 	 * so (e.g. if you unconditionally strip +subaddress from emails.)
 	 */
 	listownmail_canon;
+
+	/* (*) bad_password_message
+	 *
+	 * Whether or not failed password-based login attempts are, by default,
+	 * announced to the target account. Can be changed per-account with
+	 * nickserv/set_badpasswdmsg. It is only advisable to disable if you
+	 * have enabled misc/login_throttling.
+	 */
+	bad_password_message;
 };
 
 /* ChanServ configuration.
@@ -2684,9 +2693,8 @@ general {
 	 *
 	 * The default flags to set for users upon registration.
 	 *
-	 * Valid values are: badpasswdmsg, emailmemos, enforce, hidemail,
-	 *                   hold, neverop, nomemo, noop, private, privmsg,
-	 *                   quietchg, none.
+	 * Valid values are: emailmemos, enforce, hidemail, hold, neverop,
+	 *                   nomemo, noop, private, privmsg, quietchg, none.
 	 */
 	uflags = { hidemail; };
 

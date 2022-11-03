@@ -36,21 +36,20 @@ static int c_gi_immune_level(mowgli_config_file_entry_t *);
 /* *INDENT-OFF* */
 
 static struct Token uflags[] = {
-  {         "HOLD", MU_HOLD         },
-  {      "NEVEROP", MU_NEVEROP      },
-  {         "NOOP", MU_NOOP         },
-  {     "HIDEMAIL", MU_HIDEMAIL     },
-  {       "NOMEMO", MU_NOMEMO       },
-  {   "EMAILMEMOS", MU_EMAILMEMOS   },
-  {      "ENFORCE", MU_ENFORCE      },
-  {      "PRIVMSG", MU_USE_PRIVMSG  },
-  {      "PRIVATE", MU_PRIVATE      },
-  {     "QUIETCHG", MU_QUIETCHG     },
-  {   "NEVERGROUP", MU_NEVERGROUP   },
-  {   "NOPASSWORD", MU_NOPASSWORD   },
-  { "BADPASSWDMSG", MU_BADPASSWDMSG },
-  {         "NONE", 0               },
-  {           NULL, 0               }
+  { "HOLD",      MU_HOLD         },
+  { "NEVEROP",   MU_NEVEROP      },
+  { "NOOP",      MU_NOOP         },
+  { "HIDEMAIL",  MU_HIDEMAIL     },
+  { "NOMEMO",    MU_NOMEMO       },
+  { "EMAILMEMOS",MU_EMAILMEMOS   },
+  { "ENFORCE",   MU_ENFORCE      },
+  { "PRIVMSG",   MU_USE_PRIVMSG  },
+  { "PRIVATE",   MU_PRIVATE      },
+  { "QUIETCHG",  MU_QUIETCHG     },
+  { "NEVERGROUP", MU_NEVERGROUP  },
+  { "NOPASSWORD", MU_NOPASSWORD  },
+  { "NONE",      0               },
+  { NULL, 0 }
 };
 
 static struct Token cflags[] = {

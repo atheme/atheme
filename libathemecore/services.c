@@ -860,7 +860,7 @@ bad_password(struct sourceinfo *si, struct myuser *mu)
 	struct tm *tm;
 	char numeric[21], strfbuf[BUFSIZE];
 	int count;
-	struct metadata *md_failnum;
+	struct metadata *md;
 	struct service *svs;
 
 	/* If the user is already logged in, no paranoia is needed,
@@ -873,8 +873,8 @@ bad_password(struct sourceinfo *si, struct myuser *mu)
 
 	mask = get_source_mask(si);
 
-	md_failnum = metadata_find(mu, "private:loginfail:failnum");
-	count = md_failnum ? atoi(md_failnum->value) : 0;
+	md = metadata_find(mu, "private:loginfail:failnum");
+	count = md ? atoi(md->value) : 0;
 	count++;
 	snprintf(numeric, sizeof numeric, "%d", count);
 	metadata_add(mu, "private:loginfail:failnum", numeric);
@@ -882,7 +882,8 @@ bad_password(struct sourceinfo *si, struct myuser *mu)
 	snprintf(numeric, sizeof numeric, "%lu", (unsigned long)CURRTIME);
 	metadata_add(mu, "private:loginfail:lastfailtime", numeric);
 
-	if (mu->flags & MU_BADPASSWDMSG)
+	md = metadata_find(mu, "private:badpasswdmsg");
+	if (md ? strcmp(md->value, "1") == 0 : nicksvs.bad_password_message)
 	{
 		svs = si->service;
 

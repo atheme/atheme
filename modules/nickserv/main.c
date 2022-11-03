@@ -146,6 +146,7 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 
 	add_bool_conf_item("SPAM", &nicksvs.me->conf_table, 0, &nicksvs.spam, false);
 	add_bool_conf_item("NO_NICK_OWNERSHIP", &nicksvs.me->conf_table, 0, &nicksvs.no_nick_ownership, false);
+	add_bool_conf_item("BAD_PASSWORD_MESSAGE", &nicksvs.me->conf_table, 0, &nicksvs.bad_password_message, false);
 	add_duration_conf_item("EXPIRE", &nicksvs.me->conf_table, 0, &nicksvs.expiry, "d", 0);
 	add_duration_conf_item("ENFORCE_EXPIRE", &nicksvs.me->conf_table, 0, &nicksvs.enforce_expiry, "d", 0);
 	add_duration_conf_item("ENFORCE_DELAY", &nicksvs.me->conf_table, 0, &nicksvs.enforce_delay, "s", 30);

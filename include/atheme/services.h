@@ -49,6 +49,7 @@ struct nicksvs
 {
 	bool            spam;
 	bool            no_nick_ownership;
+	bool		bad_password_message;
 	char *          nick;
 	char *          user;
 	char *          host;
