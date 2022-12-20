@@ -78,6 +78,12 @@ lt_deny_common(const time_t currts, const char *const restrict key,
 	 * seconds for a token to be available, or we can wait
 	 * `vreplenish * vburst` seconds (`2 * 2`) for the bucket to be totally
 	 * replenished (i.e. at the default unthrottled state)
+	 *
+	 * so if `bucket->timestamp + vreplenish` is more than
+	 * `currts_d + (vreplenish * vburst)`, our bucket does not have a token
+	 * left for us to take, because if we tried to take one, it would push
+	 * our bucket above the maximum "at what time will our bucket next be
+	 * totally replenished"
 	 */
 	if ((bucket->timestamp + vreplenish) > (currts_d + (vreplenish * vburst)))
 		return true;
