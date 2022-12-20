@@ -89,7 +89,7 @@ lt_deny_common(const time_t currts, const char *const restrict key,
 		return true;
 	else
 	{
-        // bucket has space, to take a token out
+		// bucket has space, to take a token out
 		bucket->timestamp += vreplenish;
 		return false;
 	}
