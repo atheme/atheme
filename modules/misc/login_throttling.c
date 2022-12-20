@@ -51,13 +51,39 @@ lt_deny_common(const time_t currts, const char *const restrict key,
 
 	double currts_d = currts;
 
+	/* bucket->timestamp tells us when our bucket will next be totally
+	 * replenished (i.e. when all throttles are gone.)
+	 *
+	 * if bucket->timestamp is in the past, we've fully replenished, so
+	 * we want to start counting from *now*
+	 */
 	if (bucket->timestamp < currts_d)
 		bucket->timestamp = currts_d;
 
+	/** `bucket->timestamp + vreplenish`
+	 *
+	 * if we were to take one token from the bucket (i.e. attempt a login)
+	 * right now, our bucket would then be considered totally replenished
+	 * $vreplenish seconds from now; i.e. if vreplenish was 2, that means
+	 * 1 token would replenish every 2 seconds, which means in 2 seconds
+	 * from now, our bucket would be totally replenished (at the default
+	 * unthrottled state)
+	 *
+	 ** `currts_d + (vreplenish * vburst)
+	 *
+	 * vburst represents how many tokens we can take from the bucket
+	 * instantly. if vreplenish is 2, and vburst is 2, we can take a token
+	 * (i.e. attempt a login) twice instantly without being throttled, but
+	 * a third token would fail, and we'd have to wait $vreplenish (2)
+	 * seconds for a token to be available, or we can wait
+	 * `vreplenish * vburst` seconds (`2 * 2`) for the bucket to be totally
+	 * replenished (i.e. at the default unthrottled state)
+	 */
 	if ((bucket->timestamp + vreplenish) > (currts_d + (vreplenish * vburst)))
 		return true;
 	else
 	{
+        // bucket has space, to take a token out
 		bucket->timestamp += vreplenish;
 		return false;
 	}
