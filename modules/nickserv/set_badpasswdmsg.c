@@ -9,24 +9,21 @@
 
 #include <atheme.h>
 
-#include "list_common.h"
-#include "list.h"
+#define BADPASSWDMSG_MDNAME "private:badpasswdmsg"
 
 static mowgli_patricia_t **ns_set_cmdtree = NULL;
 
 static void
 ns_cmd_set_badpasswdmsg(struct sourceinfo *const restrict si, const int parc, char **const restrict parv)
 {
-	struct metadata *md;
-
 	if (parc < 1)
 	{
 		(void) command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET BADPASSWDMSG");
-		(void) command_fail(si, fault_needmoreparams, _("Syntax: SET BADPASSWDMSG ON|OFF|DEFAULT"));
+		(void) command_fail(si, fault_needmoreparams, _("Syntax: SET BADPASSWDMSG <ON|OFF|DEFAULT>"));
 		return;
 	}
 
-	md = metadata_find(si->smu, "private:badpasswdmsg");
+	const struct metadata *const md = metadata_find(si->smu, BADPASSWDMSG_MDNAME);
 
 	if (strcasecmp(parv[0], "ON") == 0)
 	{
@@ -37,7 +34,7 @@ ns_cmd_set_badpasswdmsg(struct sourceinfo *const restrict si, const int parc, ch
 			return;
 		}
 
-		metadata_add(si->smu, "private:badpasswdmsg", "1");
+		(void) metadata_add(si->smu, BADPASSWDMSG_MDNAME, "1");
 
 		(void) logcommand(si, CMDLOG_SET, "SET:BADPASSWDMSG:ON");
 		(void) command_success_nodata(si, _("The \2%s\2 flag has been set \2ON\2 for account \2%s\2."),
@@ -52,7 +49,7 @@ ns_cmd_set_badpasswdmsg(struct sourceinfo *const restrict si, const int parc, ch
 			return;
 		}
 
-		metadata_add(si->smu, "private:badpasswdmsg", "0");
+		(void) metadata_add(si->smu, BADPASSWDMSG_MDNAME, "0");
 
 		(void) logcommand(si, CMDLOG_SET, "SET:BADPASSWDMSG:OFF");
 		(void) command_success_nodata(si, _("The \2%s\2 flag has been set \2OFF\2 for account \2%s\2."),
@@ -60,14 +57,14 @@ ns_cmd_set_badpasswdmsg(struct sourceinfo *const restrict si, const int parc, ch
 	}
 	else if (strcasecmp(parv[0], "DEFAULT") == 0)
 	{
-		if (!md)
+		if (! md)
 		{
 			(void) command_fail(si, fault_nochange, _("The \2%s\2 flag is already \2DEFAULT\2 for account \2%s\2."),
 			                                          "BADPASSWDMSG", entity(si->smu)->name);
 			return;
 		}
 
-		metadata_delete(si->smu, "private:badpasswdmsg");
+		(void) metadata_delete(si->smu, BADPASSWDMSG_MDNAME);
 
 		(void) logcommand(si, CMDLOG_SET, "SET:BADPASSWDMSG:DEFAULT");
 		(void) command_success_nodata(si, _("The \2%s\2 flag has been set \2DEFAULT\2 for account \2%s\2."),
@@ -98,7 +95,6 @@ static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	(void) command_delete(&ns_set_badpasswdmsg, *ns_set_cmdtree);
-	(void) list_unregister("badpasswdmsg");
 }
 
 SIMPLE_DECLARE_MODULE_V1("nickserv/set_badpasswdmsg", MODULE_UNLOAD_CAPABILITY_OK)

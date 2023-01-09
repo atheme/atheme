@@ -7,20 +7,23 @@
 
 #include <atheme.h>
 
-#define LT_BURST_MIN   0U
-#define LT_BURST_MAX   200U
-#define LT_BURST_DEF   1U
+#define LT_BURST_MIN            0U
+#define LT_BURST_MAX            200U
+#define LT_REPLENISH_MIN        0.005
+#define LT_REPLENISH_MAX        200.0
 
-#define LT_REPLENISH_MIN      0.005f
-#define LT_REPLENISH_MAX      200.0f
-#define LT_REPLENISH_DEF      1.0f
+#define LT_BURST_IP_DEF         5U
+#define LT_REPLENISH_IP_DEF     1.0
 
-#define MAX_ADDR_LEN    56U // strlen("2001:0db8:0000:0000:0000:0000:0000:0001%abcdefghabcdefgh")
+#define LT_BURST_IPACCT_DEF     2U
+#define LT_REPLENISH_IPACCT_DEF 0.5
+
+#define MAX_ADDR_LEN            56U // strlen("2001:0db8:0000:0000:0000:0000:0000:0001%abcdefghabcdefgh")
 
 struct lt_bucket
 {
-	double          timestamp;
-	char            key[MAX_ADDR_LEN + 1 + IDLEN + 1];
+	double  timestamp;
+	char    key[MAX_ADDR_LEN + 1 + IDLEN + 1];
 };
 
 static mowgli_list_t lt_config_table;
@@ -28,13 +31,13 @@ static mowgli_patricia_t *lt_buckets = NULL;
 static mowgli_eventloop_timer_t *lt_expire_timer = NULL;
 
 static unsigned int lt_address_account_burst = 0U;
-static float lt_address_account_replenish = 0.0f;
+static double lt_address_account_replenish = 0.0;
 static unsigned int lt_address_burst = 0U;
-static float lt_address_replenish = 0.0f;
+static double lt_address_replenish = 0.0;
 
 static inline bool
-lt_deny_common(const time_t currts, const char *const restrict key,
-               const unsigned int vburst, const float vreplenish)
+lt_deny_common(const double currts, const char *const restrict key,
+               const unsigned int vburst, const double vreplenish)
 {
 	if (! vburst)
 		return false;
@@ -49,16 +52,14 @@ lt_deny_common(const time_t currts, const char *const restrict key,
 		(void) mowgli_patricia_add(lt_buckets, bucket->key, bucket);
 	}
 
-	double currts_d = currts;
-
 	/* bucket->timestamp tells us when our bucket will next be totally
 	 * replenished (i.e. when all throttles are gone.)
 	 *
 	 * if bucket->timestamp is in the past, we've fully replenished, so
 	 * we want to start counting from *now*
 	 */
-	if (bucket->timestamp < currts_d)
-		bucket->timestamp = currts_d;
+	if (bucket->timestamp < currts)
+		bucket->timestamp = currts;
 
 	/** `bucket->timestamp + vreplenish`
 	 *
@@ -69,7 +70,7 @@ lt_deny_common(const time_t currts, const char *const restrict key,
 	 * from now, our bucket would be totally replenished (at the default
 	 * unthrottled state)
 	 *
-	 ** `currts_d + (vreplenish * vburst)
+	 ** `currts + (vreplenish * vburst)
 	 *
 	 * vburst represents how many tokens we can take from the bucket
 	 * instantly. if vreplenish is 2, and vburst is 2, we can take a token
@@ -80,30 +81,27 @@ lt_deny_common(const time_t currts, const char *const restrict key,
 	 * replenished (i.e. at the default unthrottled state)
 	 *
 	 * so if `bucket->timestamp + vreplenish` is more than
-	 * `currts_d + (vreplenish * vburst)`, our bucket does not have a token
+	 * `currts + (vreplenish * vburst)`, our bucket does not have a token
 	 * left for us to take, because if we tried to take one, it would push
 	 * our bucket above the maximum "at what time will our bucket next be
 	 * totally replenished"
 	 */
-	if ((bucket->timestamp + vreplenish) > (currts_d + (vreplenish * vburst)))
+	if ((bucket->timestamp + vreplenish) > (currts + (vreplenish * vburst)))
 		return true;
-	else
-	{
-		// bucket has space, to take a token out
-		bucket->timestamp += vreplenish;
-		return false;
-	}
+
+	bucket->timestamp += vreplenish;
+	return false;
 }
 
 static bool
-lt_deny_iplogin(const time_t currts, const char *const restrict ipaddr,
+lt_deny_iplogin(const double currts, const char *const restrict ipaddr,
                 struct myuser ATHEME_VATTR_UNUSED *const restrict mu)
 {
 	return lt_deny_common(currts, ipaddr, lt_address_burst, lt_address_replenish);
 }
 
 static bool
-lt_deny_ipacctlogin(const time_t currts, const char *const restrict ipaddr,
+lt_deny_ipacctlogin(const double currts, const char *const restrict ipaddr,
                     struct myuser *const restrict mu)
 {
 	char key[BUFSIZE];
@@ -118,7 +116,7 @@ lt_user_can_login_hook(struct hook_user_login_check *const restrict hdata)
 {
 	static const struct {
 		const char *    type;
-		bool          (*func)(time_t, const char *, struct myuser *);
+		bool          (*func)(double, const char *, struct myuser *);
 	} checks[] = {
 		{         "IPADDR", &lt_deny_iplogin     },
 		{ "IPADDR/ACCOUNT", &lt_deny_ipacctlogin },
@@ -131,16 +129,16 @@ lt_user_can_login_hook(struct hook_user_login_check *const restrict hdata)
 	return_if_fail(hdata->si != NULL);
 	return_if_fail(hdata->mu != NULL);
 
+	if (! hdata->allowed)
+		// Another hook already decided to deny the login -- nothing to do
+		return;
+
 	if (hdata->method != HULM_PASSWORD)
 		// We only throttle password-based login attempts
 		return;
 
-	if (is_ircop(hdata->si->su))
+	if (hdata->si->su && is_ircop(hdata->si->su))
 		// Don't throttle opers
-		return;
-
-	if (! hdata->allowed)
-		// Another hook already decided to deny the login -- nothing to do
 		return;
 
 	if (hdata->si->su)
@@ -170,7 +168,7 @@ lt_user_can_login_hook(struct hook_user_login_check *const restrict hdata)
 
 	for (size_t i = 0; i < ARRAY_SIZE(checks); i++)
 	{
-		if (! ((*(checks[i].func))(currts, ipaddr, hdata->mu)))
+		if (! ((*(checks[i].func))((double) currts, ipaddr, hdata->mu)))
 			continue;
 
 		(void) slog(LG_VERBOSE, "LOGIN:THROTTLE:%s: \2%s\2 (\2%s\2)",
@@ -199,7 +197,7 @@ lt_expire_timer_cb(void ATHEME_VATTR_UNUSED *const restrict unused)
 
 	MOWGLI_PATRICIA_FOREACH(bucket, &state, lt_buckets)
 	{
-		if (bucket->timestamp > currts)
+		if (((time_t) bucket->timestamp) > currts)
 			continue;
 
 		(void) mowgli_patricia_delete(lt_buckets, bucket->key);
@@ -242,13 +240,13 @@ mod_init(struct module *const restrict m)
 
 	(void) add_subblock_top_conf("throttle", &lt_config_table);
 	(void) add_uint_conf_item("address_account_burst", &lt_config_table, 0, &lt_address_account_burst,
-	                          LT_BURST_MIN, LT_BURST_MAX, LT_BURST_DEF);
-	(void) add_float_conf_item("address_account_replenish", &lt_config_table, 0, &lt_address_account_replenish,
-	                          LT_REPLENISH_MIN, LT_REPLENISH_MAX, LT_REPLENISH_DEF);
+	                          LT_BURST_MIN, LT_BURST_MAX, LT_BURST_IPACCT_DEF);
+	(void) add_double_conf_item("address_account_replenish", &lt_config_table, 0, &lt_address_account_replenish,
+	                          LT_REPLENISH_MIN, LT_REPLENISH_MAX, LT_REPLENISH_IPACCT_DEF);
 	(void) add_uint_conf_item("address_burst", &lt_config_table, 0, &lt_address_burst,
-	                          LT_BURST_MIN, LT_BURST_MAX, LT_BURST_DEF);
-	(void) add_float_conf_item("address_replenish", &lt_config_table, 0, &lt_address_replenish,
-	                          LT_REPLENISH_MIN, LT_REPLENISH_MAX, LT_REPLENISH_DEF);
+	                          LT_BURST_MIN, LT_BURST_MAX, LT_BURST_IP_DEF);
+	(void) add_double_conf_item("address_replenish", &lt_config_table, 0, &lt_address_replenish,
+	                          LT_REPLENISH_MIN, LT_REPLENISH_MAX, LT_REPLENISH_IP_DEF);
 }
 
 static void

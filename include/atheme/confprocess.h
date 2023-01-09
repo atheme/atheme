@@ -30,17 +30,18 @@ void add_top_conf(const char *name, int (*handler)(mowgli_config_file_entry_t *c
 void add_subblock_top_conf(const char *name, mowgli_list_t *list);
 void add_conf_item(const char *name, mowgli_list_t *conflist, int (*handler)(mowgli_config_file_entry_t *ce));
 void add_uint_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, unsigned int *var, unsigned int min, unsigned int max, unsigned int def);
-void add_float_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, float *var, float min, float max, float def);
+void add_double_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, double *var, double min, double max, double def);
 void add_duration_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, unsigned int *var, const char *defunit, unsigned int def);
 void add_dupstr_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, char **var, const char *def);
 void add_bool_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, bool *var, bool def);
 void del_top_conf(const char *name);
 void del_conf_item(const char *name, mowgli_list_t *conflist);
 int subblock_handler(mowgli_config_file_entry_t *ce, mowgli_list_t *entries);
-bool process_uint_configentry(mowgli_config_file_entry_t *ce, unsigned int *var,
-		unsigned int min, unsigned int max);
-bool process_duration_configentry(mowgli_config_file_entry_t *ce, unsigned int *var,
-		const char *defunit);
+
+bool process_double_configentry(mowgli_config_file_entry_t *, double *, double, double);
+bool process_duration_configentry(mowgli_config_file_entry_t *, unsigned int *, const char *);
+bool process_uint_configentry(mowgli_config_file_entry_t *, unsigned int *, unsigned int, unsigned int);
+
 void conf_report_warning(mowgli_config_file_entry_t *ce, const char *fmt, ...) ATHEME_FATTR_PRINTF (2, 3);
 /* sort of a hack for servtree.c */
 typedef int (*conf_handler_fn)(mowgli_config_file_entry_t *);
