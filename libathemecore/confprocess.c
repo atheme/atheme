@@ -20,6 +20,7 @@ enum conftype
 {
 	CONF_HANDLER,
 	CONF_UINT,
+	CONF_DOUBLE,
 	CONF_DURATION,
 	CONF_DUPSTR,
 	CONF_BOOL,
@@ -42,6 +43,13 @@ struct ConfTable
 			unsigned int max;
 			unsigned int def;
 		} uint_val;
+		struct
+		{
+			double *var;
+			double min;
+			double max;
+			double def;
+		} double_val;
 		struct
 		{
 			unsigned int *var;
@@ -133,6 +141,38 @@ process_uint_configentry(mowgli_config_file_entry_t *ce, unsigned int *var,
 	return true;
 }
 
+bool
+process_double_configentry(mowgli_config_file_entry_t *ce, double *var, double min, double max)
+{
+	double v;
+	char *end;
+
+	if (ce->vardata == NULL)
+	{
+		conf_report_warning(ce, "no parameter for configuration option");
+		return false;
+	}
+	errno = 0;
+	v = strtod(ce->vardata, &end);
+	if (errno != 0 || *end != '\0' || end == ce->vardata)
+	{
+		conf_report_warning(ce, "invalid double \"%s\"",
+				ce->vardata);
+		return false;
+	}
+	if (v > max || v < min)
+	{
+		conf_report_warning(ce, "value %f is out of range [%f,%f]",
+				v,
+				min,
+				max);
+		return false;
+	}
+	*var = v;
+	return true;
+}
+
+
 static struct
 {
 	const char *name;
@@ -219,6 +259,9 @@ set_default(struct ConfTable *ct)
 		case CONF_UINT:
 			*ct->un.uint_val.var = ct->un.uint_val.def;
 			break;
+		case CONF_DOUBLE:
+			*ct->un.double_val.var = ct->un.double_val.def;
+			break;
 		case CONF_DURATION:
 			*ct->un.duration_val.var = ct->un.duration_val.def;
 			break;
@@ -254,6 +297,12 @@ process_configentry(struct ConfTable *ct, mowgli_config_file_entry_t *ce)
 			if (!process_uint_configentry(ce, ct->un.uint_val.var,
 					ct->un.uint_val.min,
 					ct->un.uint_val.max))
+				return;
+			break;
+		case CONF_DOUBLE:
+			if (!process_double_configentry(ce, ct->un.double_val.var,
+					ct->un.double_val.min,
+					ct->un.double_val.max))
 				return;
 			break;
 		case CONF_DURATION:
@@ -509,6 +558,28 @@ add_uint_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags
 	ct->un.uint_val.min = min;
 	ct->un.uint_val.max = max;
 	ct->un.uint_val.def = def;
+
+	mowgli_node_add(ct, &ct->node, conflist);
+	conf_need_rehash = true;
+}
+
+void
+add_double_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, double *var, double min, double max, double def)
+{
+	if (find_conf_item(name, conflist))
+	{
+		slog(LG_DEBUG, "add_double_conf_item(): duplicate item %s", name);
+		return;
+	}
+
+	struct ConfTable *const ct = mowgli_heap_alloc(conftable_heap);
+	ct->name = sstrdup(name);
+	ct->type = CONF_DOUBLE;
+	ct->flags = flags;
+	ct->un.double_val.var = var;
+	ct->un.double_val.min = min;
+	ct->un.double_val.max = max;
+	ct->un.double_val.def = def;
 
 	mowgli_node_add(ct, &ct->node, conflist);
 	conf_need_rehash = true;

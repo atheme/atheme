@@ -49,11 +49,11 @@ sasl_mech_plain_step(struct sasl_session *const restrict p, const struct sasl_in
 	if (strlen(secret) > PASSLEN)
 		return ASASL_MRESULT_ERROR;
 
-	if (*authzid && ! sasl_core_functions->authzid_can_login(p, authzid, NULL))
+	if (*authzid && ! sasl_core_functions->authzid_can_login(p, HULM_PASSWORD, authzid, NULL))
 		return ASASL_MRESULT_ERROR;
 
 	struct myuser *mu = NULL;
-	if (! sasl_core_functions->authcid_can_login(p, authcid, &mu))
+	if (! sasl_core_functions->authcid_can_login(p, HULM_PASSWORD, authcid, &mu))
 		return ASASL_MRESULT_ERROR;
 
 	if (! verify_password(mu, secret))
@@ -68,7 +68,6 @@ static const struct sasl_mechanism sasl_mech_plain = {
 	.mech_start     = NULL,
 	.mech_step      = &sasl_mech_plain_step,
 	.mech_finish    = NULL,
-	.password_based = true,
 };
 
 static void

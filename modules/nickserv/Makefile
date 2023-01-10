@@ -52,6 +52,7 @@ SRCS   =                    \
     sendpass_user.c         \
     set.c                   \
     set_accountname.c       \
+    set_badpasswdmsg.c      \
     set_core.c              \
     set_email.c             \
     set_emailmemos.c        \
