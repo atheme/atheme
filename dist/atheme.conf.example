@@ -333,6 +333,7 @@ loadmodule "crypto/pbkdf2";             /* Verify-only, see prev. */
  * Password retrieval (SENDPASS command)        nickserv/sendpass
  * Password retrieval allowed to normal users   nickserv/sendpass_user
  * Change primary nickname (SET ACCOUNTNAME)    nickserv/set_accountname
+ * SET BADPASSWDMSG command                     nickserv/set_badpasswdmsg
  * SET EMAIL command                            nickserv/set_email
  * SET EMAILMEMOS command                       nickserv/set_emailmemos
  * SET ENFORCETIME command                      nickserv/set_enforcetime
@@ -392,6 +393,7 @@ loadmodule "nickserv/setpass";
 #loadmodule "nickserv/sendpass";
 loadmodule "nickserv/sendpass_user";
 loadmodule "nickserv/set_accountname";
+#loadmodule "nickserv/set_badpasswdmsg";
 loadmodule "nickserv/set_email";
 loadmodule "nickserv/set_emailmemos";
 #loadmodule "nickserv/set_enforcetime";
