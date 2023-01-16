@@ -1,0 +1,25 @@
+Help for SET BADPASSWDMSG:
+
+SET BADPASSWDMSG controls whether services tells you about
+failed password-based logins as they occur.
+
+This command takes one of 3 options; ON, OFF, or DEFAULT.
+If it is ON, services will tell you about failed logins as
+they occur. If it is OFF, it will not. If it is DEFAULT, it
+will behave as configured by network staff. The default can
+be changed by network staff at any time, so you may want to
+set an explicit ON or OFF.
+
+This does not affect login attempts that do not use your
+account password, as no real-time notices are ever sent for
+such login attempts.
+
+Regardless of the setting, you will still receive a notice
+when you login telling you how many failed logins have
+occurred since your last successful login, and where the
+latest failed login attempt originated.
+
+Syntax: SET BADPASSWDMSG ON|OFF|DEFAULT
+
+Example:
+    /msg &nick& SET BADPASSWDMSG ON
