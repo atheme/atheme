@@ -2491,9 +2491,9 @@ httpd {
  *
  * This is achieved with a rudimentary token bucket system. You configure a
  * "burst" of attempts that can be made immediately, and configure a
- * "replenish" rate of how many tokens replenish each second. For example,
- * with "burst" set to 2 and "replenish" set to 0.5, you can attempt at most
- * twice in 2 seconds, and then once every 2 seconds thereafter.
+ * "replenish" rate of how many seconds it takes for a token to replenish. For
+ * example, with "burst" set to 2 and "replenish" set to 2, you can attempt at
+ * most twice in 2 seconds, and then once every 2 seconds thereafter.
  *
  * To disable a specific throttling mechanism (e.g. to only throttle IP
  * addresses, and not combinations of IP address and account), set the
@@ -2527,7 +2527,7 @@ throttle {
 	#address_replenish = 1;
 
 	#address_account_burst = 2;
-	#address_account_replenish = 0.5;
+	#address_account_replenish = 2;
 };
 
 
