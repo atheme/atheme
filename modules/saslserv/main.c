@@ -995,6 +995,9 @@ sasl_authxid_can_login(struct sasl_session *const restrict p, const enum hook_us
 		(void) slog(LG_DEBUG, "%s: myuser_find_by_nick: does not exist", MOWGLI_FUNC_NAME);
 		return false;
 	}
+	if (p->si->smu == mu)
+		// already logged in to this user. allow it
+		return true;
 	if (metadata_find(mu, "private:freeze:freezer"))
 	{
 		(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", entity(mu)->name);

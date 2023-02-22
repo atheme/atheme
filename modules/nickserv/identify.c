@@ -63,6 +63,18 @@ ns_cmd_login(struct sourceinfo *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered nickname."), target);
 		return;
 	}
+	else if (u->myuser == mu)
+	{
+		command_fail(si, fault_nochange, _("You are already logged in as \2%s\2."), entity(u->myuser)->name);
+		if (mu->flags & MU_WAITAUTH)
+			command_fail(si, fault_nochange, _("Please check your email for instructions to complete your registration."));
+		return;
+	}
+	else if (u->myuser != NULL && !command_find(si->service->commands, "LOGOUT"))
+	{
+		command_fail(si, fault_alreadyexists, _("You are already logged in as \2%s\2."), entity(u->myuser)->name);
+		return;
+	}
 
 	struct hook_user_login_check login_req = {
 		.si      = si,
@@ -103,19 +115,6 @@ ns_cmd_login(struct sourceinfo *si, int parc, char *parv[])
 	{
 		command_fail(si, fault_authfail, _("Password authentication is disabled for this account."));
 		logcommand(si, CMDLOG_LOGIN, "failed " COMMAND_UC " to \2%s\2 (password authentication disabled)", entity(mu)->name);
-		return;
-	}
-
-	if (u->myuser == mu)
-	{
-		command_fail(si, fault_nochange, _("You are already logged in as \2%s\2."), entity(u->myuser)->name);
-		if (mu->flags & MU_WAITAUTH)
-			command_fail(si, fault_nochange, _("Please check your email for instructions to complete your registration."));
-		return;
-	}
-	else if (u->myuser != NULL && !command_find(si->service->commands, "LOGOUT"))
-	{
-		command_fail(si, fault_alreadyexists, _("You are already logged in as \2%s\2."), entity(u->myuser)->name);
 		return;
 	}
 
