@@ -1019,6 +1019,10 @@ sasl_authxid_can_login(struct sasl_session *const restrict p, const enum hook_us
 		// We have already executed the user_can_login hook for this user
 		return true;
 
+	if (p->si->smu == mu)
+		// already logged in to this user. allow it
+		return true;
+
 	struct hook_user_login_check req = {
 
 		.si         = p->si,
