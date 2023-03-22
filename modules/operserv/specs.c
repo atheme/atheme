@@ -39,6 +39,7 @@ os_cmd_specs(struct sourceinfo *si, int parc, char *parv[])
 			{ PRIV_HOLD, N_("hold accounts") },
 			{ PRIV_EXCEED_LIMITS, N_("bypass nickname grouping limits") },
 			{ PRIV_LOGIN_NOLIMIT, N_("bypass login limits") },
+			{ PRIV_REGNOLIMIT, N_("allow other accounts to bypass channel registration limits") },
 			{ NULL, NULL },
 		}
 	};
