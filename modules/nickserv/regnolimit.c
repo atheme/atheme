@@ -77,7 +77,7 @@ ns_cmd_regnolimit(struct sourceinfo *si, int parc, char *parv[])
 static struct command ns_regnolimit = {
 	.name           = "REGNOLIMIT",
 	.desc           = N_("Allow a user to bypass registration limits."),
-	.access         = PRIV_ADMIN,
+	.access         = PRIV_REGNOLIMIT,
 	.maxparc        = 2,
 	.cmd            = &ns_cmd_regnolimit,
 	.help           = { .path = "nickserv/regnolimit" },

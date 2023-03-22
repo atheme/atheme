@@ -51,7 +51,7 @@ os_cmd_specs(struct sourceinfo *si, int parc, char *parv[])
 			{ PRIV_JOIN_STAFFONLY, N_("join staff channels") },
 			{ PRIV_MARK, N_("mark channels") },
 			{ PRIV_HOLD, N_("hold channels") },
-			{ PRIV_REG_NOLIMIT, N_("bypass channel registration limits") },
+			{ PRIV_EXCEED_LIMITS, N_("bypass channel registration limits") },
 			{ NULL, NULL },
 		}
 	};
@@ -87,7 +87,7 @@ os_cmd_specs(struct sourceinfo *si, int parc, char *parv[])
 		{
 			{ PRIV_GROUP_AUSPEX, N_("view concealed information about groups") },
 			{ PRIV_GROUP_ADMIN, N_("administer groups") },
-			{ PRIV_REG_NOLIMIT, N_("bypass group registration limits") },
+			{ PRIV_EXCEED_LIMITS, N_("bypass group registration limits") },
 			{ NULL, NULL },
 		}
 	};
