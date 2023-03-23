@@ -90,6 +90,9 @@ user:mark
 user:hold
 	use ns/us/cs hold to prevent things from expiring
 user:regnolimit
+	allow ns REGNOLIMIT command to mark accounts as being able to
+	exceed limits on numbers of registrations
+user:exceedlimits
 	exempt from limits on numbers of registrations (does not work
 	fully if set on the ircop operclass)
 
