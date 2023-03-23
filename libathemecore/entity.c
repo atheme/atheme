@@ -212,7 +212,7 @@ linear_can_register_channel(struct myentity *mt)
 	if (mu->flags & MU_REGNOLIMIT)
 		return true;
 
-	return has_priv_myuser(mu, PRIV_REG_NOLIMIT);
+	return has_priv_myuser(mu, PRIV_EXCEED_LIMITS);
 }
 
 static bool

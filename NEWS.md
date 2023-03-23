@@ -110,6 +110,10 @@ POTENTIAL COMPATIBILITY BREAKAGE
   database before it will start successfully. A migration script is located in
   this repository; please see the comment block in `contrib/database-ts.pl`.
 
+- The service oper privilege previously called `user:regnolimit` has been
+  changed to `user:exceedlimits`, and `user:regnolimit` now refers to the
+  ability to use the nickserv command `REGNOLIMIT`.
+
 Security
 --------
 - Services now accepts email addresses that may contain shell metacharacters.

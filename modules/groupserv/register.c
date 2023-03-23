@@ -48,7 +48,7 @@ gs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	if (myentity_count_group_flag(entity(si->smu), GA_FOUNDER) > gs_config->maxgroups &&
-	    !has_priv(si, PRIV_REG_NOLIMIT))
+	    !has_priv(si, PRIV_EXCEED_LIMITS))
 	{
 		command_fail(si, fault_toomany, _("You have too many groups registered."));
 		return;

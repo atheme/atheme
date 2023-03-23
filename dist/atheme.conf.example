@@ -3031,6 +3031,7 @@ operclass "sra" {
 	extends "ircop";
 
 	privs {
+		user:exceedlimits;
 		user:hold;
 		user:regnolimit;
 	};

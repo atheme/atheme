@@ -30,7 +30,8 @@
 #define PRIV_HOLD                       "user:hold"
 #define PRIV_LOGIN_NOLIMIT              "user:loginnolimit"
 #define PRIV_MARK                       "user:mark"
-#define PRIV_REG_NOLIMIT                "user:regnolimit"
+#define PRIV_EXCEED_LIMITS              "user:exceedlimits"
+#define PRIV_REGNOLIMIT                 "user:regnolimit"
 
 // GroupServ
 #define PRIV_GROUP_ADMIN                "group:admin"
