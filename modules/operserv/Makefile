@@ -24,6 +24,7 @@ SRCS   =                    \
     ignore.c                \
     info.c                  \
     inject.c                \
+    joinrate.c              \
     jupe.c                  \
     main.c                  \
     mode.c                  \

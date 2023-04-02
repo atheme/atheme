@@ -589,6 +589,7 @@ loadmodule "chanserv/antiflood";
  * IDENTIFY command                             operserv/identify
  * INFO command                                 operserv/info
  * INJECT command                               operserv/inject
+ * JOINRATE command & join rate monitoring      operserv/joinrate
  * JUPE command                                 operserv/jupe
  * MODE command                                 operserv/mode
  * MODLIST command                              operserv/modlist
@@ -640,6 +641,7 @@ loadmodule "operserv/help";
 loadmodule "operserv/identify";
 loadmodule "operserv/ignore";
 loadmodule "operserv/info";
+#loadmodule "operserv/joinrate";
 loadmodule "operserv/jupe";
 loadmodule "operserv/mode";
 loadmodule "operserv/modlist";
