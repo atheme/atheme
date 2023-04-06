@@ -485,11 +485,12 @@ static void
 ts6_fnc_sts(struct user *source, struct user *u, const char *newnick, int type)
 {
 	// XXX assumes the server will accept this -- jilles
-	sts(":%s ENCAP %s RSFNC %s %s %lu %lu", ME,
+	sts(":%s ENCAP %s RSFNC %s %s %lu %lu %u", ME,
 			u->server->name,
 			CLIENT_NAME(u), newnick,
 			(unsigned long)(CURRTIME - SECONDS_PER_MINUTE),
-			(unsigned long)u->ts);
+			(unsigned long)u->ts,
+			type);
 }
 
 static void
