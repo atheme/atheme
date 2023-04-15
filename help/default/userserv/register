@@ -12,6 +12,11 @@ follow the instructions in the message sent to the email
 address.
 #endif
 
+If the network has allowed you to not supply an email 
+address, you may use the word noemail instead of your 
+email address to indicate that you do not wish to associate 
+one with your account.
+
 Syntax: REGISTER <account> <password> <email-address>
 
 Example:

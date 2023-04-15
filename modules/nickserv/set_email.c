@@ -41,19 +41,19 @@ ns_cmd_set_email(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!validemail(email))
+	if (!validemail(email) && !(nicksvs.email_optional && strcasecmp(email, "noemail") == 0))
 	{
 		command_fail(si, fault_badparams, _("\2%s\2 is not a valid e-mail address."), email);
 		return;
 	}
 
-	if (!email_within_limits(email))
+	if (!email_within_limits(email) && !(nicksvs.email_optional && strcasecmp(email, "noemail") == 0))
 	{
 		command_fail(si, fault_toomany, _("\2%s\2 has too many accounts registered."), email);
 		return;
 	}
 
-	if (me.auth == AUTH_EMAIL)
+	if (me.auth == AUTH_EMAIL && strcasecmp(email, "noemail") != 0)
 	{
 		unsigned long key = makekey();
 

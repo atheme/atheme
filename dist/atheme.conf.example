@@ -1781,6 +1781,16 @@ nickserv {
 	 * have enabled misc/login_throttling.
 	 */
 	bad_password_message;
+
+	/* (*) email_optional
+	 *
+	 * Whether or not users will be allowed to opt out of associating an
+	 * email address with their services account. If this setting is 
+	 * enabled, users may choose not to associate an email with their
+	 * services account by passing noemail to the email parameter of
+	 * the REGISTER and SET EMAIL commands.
+	 */
+	#email_optional;
 };
 
 /* ChanServ configuration.
