@@ -77,6 +77,14 @@ ns_cmd_set_email(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	if (strcasecmp(email, "noemail") == 0 && (si->smu->flags & MU_EMAILMEMOS))
+	{
+		// MU_EMAILMEMOS cannot be used with noemail
+		// if they have it, we'll take it away and log that we've done so
+		logcommand(si, CMDLOG_SET, "SET:EMAILMEMOS:OFF (user is noemail)");
+		si->smu->flags &= ~MU_EMAILMEMOS;
+	}
+
 	logcommand(si, CMDLOG_SET, "SET:EMAIL: \2%s\2 (\2%s\2 -> \2%s\2)", entity(si->smu)->name, si->smu->email, email);
 	myuser_set_email(si->smu, email);
 	command_success_nodata(si, _("The email address for account \2%s\2 has been changed to \2%s\2."), entity(si->smu)->name, si->smu->email);

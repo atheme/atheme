@@ -52,6 +52,12 @@ ns_cmd_set_emailmemos(struct sourceinfo *si, int parc, char *parv[])
 			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for account \2%s\2."), "EMAILMEMOS", entity(si->smu)->name);
 			return;
 		}
+		if (!validemail(si->smu->email))
+		{
+			// they're probably noemail
+			command_fail(si, fault_nochange, _("The \2%s\2 flag requires a valid email address for your account."), "EMAILMEMOS");
+			return;
+		}
 
 		logcommand(si, CMDLOG_SET, "SET:EMAILMEMOS:ON");
 		si->smu->flags |= MU_EMAILMEMOS;
