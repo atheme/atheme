@@ -22,7 +22,7 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	struct metadata *md;
 	mowgli_patricia_iteration_state_t state;
 	struct hook_channel_req req;
-	bool hide_info, hide_acl;
+	bool hide_info, hide_acl, user_on_channel;
 
 	if (!name)
 	{
@@ -50,6 +50,8 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	hide_acl = !chanacs_source_has_flag(mc, si, CA_ACLVIEW) &&
 		!has_priv(si, PRIV_CHAN_AUSPEX) &&
 		!(mc->flags & MC_PUBACL);
+
+	user_on_channel = si->su != NULL && mc->chan != NULL && chanuser_find(mc->chan, si->su) != NULL;
 
 	if (!has_priv(si, PRIV_CHAN_AUSPEX) && metadata_find(mc, "private:close:closer"))
 	{
@@ -102,14 +104,14 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 
-	if ((!hide_info || (si->su != NULL && chanuser_find(mc->chan, si->su))) &&
+	if ((!hide_info || user_on_channel) &&
 			(md = metadata_find(mc, "url")))
 		command_success_nodata(si, "URL        : %s", md->value);
 
 	if (!hide_info && (md = metadata_find(mc, "email")))
 		command_success_nodata(si, "Email      : %s", md->value);
 
-	if ((!hide_info || (si->su != NULL && chanuser_find(mc->chan, si->su))) &&
+	if ((!hide_info || user_on_channel) &&
 			(md = metadata_find(mc, "private:entrymsg")))
 		command_success_nodata(si, "Entrymsg   : %s", md->value);
 
