@@ -41,19 +41,19 @@ ns_cmd_set_email(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!validemail(email))
+	if (!validemail(email) && !(nicksvs.email_optional && strcasecmp(email, "noemail") == 0))
 	{
 		command_fail(si, fault_badparams, _("\2%s\2 is not a valid e-mail address."), email);
 		return;
 	}
 
-	if (!email_within_limits(email))
+	if (!email_within_limits(email) && !(nicksvs.email_optional && strcasecmp(email, "noemail") == 0))
 	{
 		command_fail(si, fault_toomany, _("\2%s\2 has too many accounts registered."), email);
 		return;
 	}
 
-	if (me.auth == AUTH_EMAIL)
+	if (me.auth == AUTH_EMAIL && strcasecmp(email, "noemail") != 0)
 	{
 		unsigned long key = makekey();
 
@@ -75,6 +75,14 @@ ns_cmd_set_email(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("Your email address will not be changed until you follow these instructions."));
 
 		return;
+	}
+
+	if (strcasecmp(email, "noemail") == 0 && (si->smu->flags & MU_EMAILMEMOS))
+	{
+		// MU_EMAILMEMOS cannot be used with noemail
+		// if they have it, we'll take it away and log that we've done so
+		logcommand(si, CMDLOG_SET, "SET:EMAILMEMOS:OFF (user is noemail)");
+		si->smu->flags &= ~MU_EMAILMEMOS;
 	}
 
 	logcommand(si, CMDLOG_SET, "SET:EMAIL: \2%s\2 (\2%s\2 -> \2%s\2)", entity(si->smu)->name, si->smu->email, email);

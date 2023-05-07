@@ -61,6 +61,7 @@ struct nicksvs
 	unsigned int    enforce_delay;  // delay for nickname enforce
 	char *          enforce_prefix; // prefix for enforcement
 	mowgli_list_t   emailexempts;   // emails exempt from maxusers checks
+	bool		email_optional;
 };
 
 /* atheme.c */

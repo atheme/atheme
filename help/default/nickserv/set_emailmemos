@@ -3,6 +3,9 @@ Help for SET EMAILMEMOS:
 This will forward memos sent to your account
 to the email address listed on your registration.
 
+In order to use this feature, you must have a
+valid email address associated with your account.
+
 Syntax: SET EMAILMEMOS [ON|OFF]
 
 Example:
