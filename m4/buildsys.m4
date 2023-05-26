@@ -177,7 +177,7 @@ AC_DEFUN([BUILDSYS_SHARED_LIB], [
 ])
 
 AC_DEFUN([BUILDSYS_TOUCH_DEPS], [
-	${as_echo:="echo"} ${as_me:="configure"}": touching .deps files"
+	AC_MSG_NOTICE([touching .deps files])
 	for i in $(find . -name Makefile); do
 		DEPSFILE="$(dirname $i)/.deps"
 		test -f "$DEPSFILE" && rm "$DEPSFILE"

@@ -25883,7 +25883,8 @@ printf "%s\n" "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2
 fi
 
 
-	${as_echo:="echo"} ${as_me:="configure"}": touching .deps files"
+	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: touching .deps files" >&5
+printf "%s\n" "$as_me: touching .deps files" >&6;}
 	for i in $(find . -name Makefile); do
 		DEPSFILE="$(dirname $i)/.deps"
 		test -f "$DEPSFILE" && rm "$DEPSFILE"
