@@ -1,0 +1,24 @@
+Help for GENDER:
+
+GENDER sets or clears gender identify information associated with
+your account, which will be visible in your WHOIS and &nick& INFO
+information. The information you enter will be prefixed with "identifies as"
+when displayed; do not enter this part.
+
+Using GENDER without a description clears gender identity information.
+
+Syntax: GENDER [DESCRIPTION]
+
+Examples of setting gender identity information:
+    /msg &nick& GENDER female
+    /msg &nick& GENDER gender non-conforming
+
+For the above, a /WHOIS would show:
+ExampleUser1 identifies as: female
+ExampleUser2 identifies as: gender non-conforming
+
+Example of clearing gender information:
+    /msg &nick& GENDER
+
+04,01WARNING: Adding joke or offensive information will result in
+disciplinary action.

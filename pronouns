@@ -1,0 +1,23 @@
+Help for PRONOUNS:
+
+PRONOUNS sets or clears pronouns associated with your account,
+which will be visible in your WHOIS and &nick& INFO information.
+Pronouns should be separated by spaces. Specifying an empty list
+will clear pronouns. Use of this feature is optional.
+
+You may also set accepted or unaccepted pronouns. These lists may
+be cleared in the same way.
+
+Syntax: PRONOUNS [ACCEPTED|UNACCEPTED] [PRONOUN] (...)
+
+Examples of setting pronouns:
+    /msg &nick& PRONOUNS he him his
+    /msg &nick& PRONOUNS ACCEPTED they them their
+    /msg &nick& PRONOUNS UNACCEPTED she her hers
+
+Examples of clearing pronouns:
+    /msg &nick& PRONOUNS
+    /msg &nick& PRONOUNS ACCEPTED
+
+04,01WARNING: Adding joke or offensive pronouns will result in
+disciplinary action.
