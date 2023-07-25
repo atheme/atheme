@@ -102,8 +102,10 @@ jr_instance_destroy(struct jr_instance *const restrict instance)
 static void
 channel_join_hook(struct hook_channel_joinpart *const restrict hdata)
 {
-	return_if_fail(hdata != NULL);
-	return_if_fail(hdata->cu != NULL);
+	if (! (hdata && hdata->cu))
+		// A previous channel_join hook may have kicked the user; do nothing
+		return;
+
 	return_if_fail(hdata->cu->chan != NULL);
 	return_if_fail(hdata->cu->chan->name != NULL);
 	return_if_fail(hdata->cu->user != NULL);
