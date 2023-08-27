@@ -1587,7 +1587,7 @@ m_protoctl(struct sourceinfo *si, int parc, char *parv[])
 
 
 static void
-m_svslogout(sourceinfo *si, int parc, char *parv[])
+m_svslogout(struct sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[1];
 	char *account = parv[2];
