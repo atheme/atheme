@@ -1587,11 +1587,11 @@ m_protoctl(struct sourceinfo *si, int parc, char *parv[])
 
 
 static void
-m_svslogout(sourceinfo_t *si, int parc, char *parv[])
+m_svslogout(sourceinfo *si, int parc, char *parv[])
 {
 	char *target = parv[1];
 	char *account = parv[2];
-	user_t *u;
+	struct user *u;
 	if (parc < 3 || *target == '*' || *account != '0')
 		return; // we only care about logging people out
 
