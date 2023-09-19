@@ -16382,6 +16382,13 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
 
     unset CFLAGS_SAVED
 
+        if test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"
+then :
+
+            { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: asynchronous unwind tables could not be enabled" >&5
+printf "%s\n" "$as_me: WARNING: asynchronous unwind tables could not be enabled" >&2;}
+
+fi
      ;; #(
   *) :
 
@@ -16556,8 +16563,8 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
                 if test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"
 then :
 
-                    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: --enable-debugging-symbols was given, but they could not be enabled" >&5
-printf "%s\n" "$as_me: WARNING: --enable-debugging-symbols was given, but they could not be enabled" >&2;}
+                    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: debugging symbols could not be enabled" >&5
+printf "%s\n" "$as_me: WARNING: debugging symbols could not be enabled" >&2;}
 
 fi
 
@@ -16627,6 +16634,13 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
 
     unset CFLAGS_SAVED
 
+        if test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"
+then :
+
+            { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: stack clash protection could not be enabled" >&5
+printf "%s\n" "$as_me: WARNING: stack clash protection could not be enabled" >&2;}
+
+fi
      ;; #(
   *) :
 
@@ -16798,6 +16812,13 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
 
     unset CFLAGS_SAVED
 
+                if test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"
+then :
+
+                    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: stack protectors could not be enabled" >&5
+printf "%s\n" "$as_me: WARNING: stack protectors could not be enabled" >&2;}
+
+fi
 
 fi
 

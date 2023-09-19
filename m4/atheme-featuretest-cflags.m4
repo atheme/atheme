@@ -29,6 +29,9 @@ AC_DEFUN([ATHEME_FEATURETEST_CFLAGS], [
 
     AS_CASE(["x${enable_async_unwind_tables}"], [xno], [], [xyes], [
         ATHEME_TEST_CC_FLAGS([-fasynchronous-unwind-tables])
+        AS_IF([test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"], [
+            AC_MSG_WARN([asynchronous unwind tables could not be enabled])
+        ])
     ], [
         AC_MSG_ERROR([invalid option for --enable-async-unwind-tables])
     ])
@@ -40,7 +43,7 @@ AC_DEFUN([ATHEME_FEATURETEST_CFLAGS], [
             AS_IF([test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"], [
                 ATHEME_TEST_CC_FLAGS([-g])
                 AS_IF([test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"], [
-                    AC_MSG_WARN([--enable-debugging-symbols was given, but they could not be enabled])
+                    AC_MSG_WARN([debugging symbols could not be enabled])
                 ])
             ])
         ])
@@ -50,6 +53,9 @@ AC_DEFUN([ATHEME_FEATURETEST_CFLAGS], [
 
     AS_CASE(["x${enable_stack_clash_protection}"], [xno], [], [xyes], [
         ATHEME_TEST_CC_FLAGS([-fstack-clash-protection])
+        AS_IF([test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"], [
+            AC_MSG_WARN([stack clash protection could not be enabled])
+        ])
     ], [
         AC_MSG_ERROR([invalid option for --enable-stack-clash-protection])
     ])
@@ -60,6 +66,9 @@ AC_DEFUN([ATHEME_FEATURETEST_CFLAGS], [
             ATHEME_TEST_CC_FLAGS([-fstack-protector-strong])
             AS_IF([test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"], [
                 ATHEME_TEST_CC_FLAGS([-fstack-protector])
+                AS_IF([test "${ATHEME_TEST_CC_FLAGS_RESULT}" = "no"], [
+                    AC_MSG_WARN([stack protectors could not be enabled])
+                ])
             ])
         ])
     ], [
