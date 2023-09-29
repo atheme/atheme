@@ -6,7 +6,7 @@
  * Copyright (C) 2007 Jilles Tjoelker
  * Copyright (C) 2014 Zohlai Development Group
  *
- * Sets the public key (for SASL ECDSA-NIST256p-CHALLENGE) of a user.
+ * Sets the public key (for SASL ECDSA-NIST256P-CHALLENGE) of a user.
  */
 
 #include <atheme.h>
