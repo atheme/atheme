@@ -1,6 +1,6 @@
 SET PUBKEY:
 
-SASL ECDSA-NIST256p-CHALLENGE dogrulamasi icin
+SASL ECDSA-NIST256P-CHALLENGE dogrulamasi icin
 kullanilan public key'inizi degistirmenize izin verir.
 
 Eger public key belirtilmezse, public keyiniz
