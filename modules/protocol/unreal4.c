@@ -1603,20 +1603,17 @@ m_svslogout(struct sourceinfo *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_LOGIN, "LOGOUT: \2%s\2", u->nick);
 
-	if (!ircd_on_logout(u, entity(u->myuser)->name))
+	mowgli_node_t *n, *tn;
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, u->myuser->logins.head)
 	{
-			mowgli_node_t *n, *tn;
-			MOWGLI_ITER_FOREACH_SAFE(n, tn, u->myuser->logins.head)
+			if (n->data == u)
 			{
-					if (n->data == u)
-					{
-							mowgli_node_delete(n, &u->myuser->logins);
-							mowgli_node_free(n);
-							break;
-					}
+					mowgli_node_delete(n, &u->myuser->logins);
+					mowgli_node_free(n);
+					break;
 			}
-			u->myuser = NULL;
 	}
+	u->myuser = NULL;
 }
 
 static void
