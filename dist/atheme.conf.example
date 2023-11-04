@@ -27,6 +27,12 @@
 /*
  * These are the modules included with the core distribution of Services.
  *
+ * You MUST load exactly ONE IRCd protocol module, followed by exactly ONE
+ * database backend module. These MUST be loaded before any pseudoservice
+ * modules (NickServ, ChanServ, et al). If in doubt, preserve the relative
+ * ordering of modules in this file and simply comment/uncomment "loadmodule"
+ * lines as necessary.
+ *
  * You may be interested in the atheme community modules distribution as well,
  * which adds additional features that may or may not be compatible with the
  * project paradigms intended for maintainance of the core of atheme-services.
