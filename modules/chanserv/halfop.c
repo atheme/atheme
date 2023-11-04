@@ -176,9 +176,20 @@ static struct command cs_dehalfop = {
 static void
 mod_init(struct module *const restrict m)
 {
-	if (ircd != NULL && !ircd->uses_halfops)
+	if (! ircd)
 	{
-		slog(LG_INFO, "Module %s requires halfop support, refusing to load.", m->name);
+		(void) slog(LG_ERROR, "Module %s must be loaded after an IRCd protocol module; refusing to load",
+		                      m->name);
+
+		m->mflags |= MODFLAG_FAIL;
+		return;
+	}
+
+	if (! ircd->uses_halfops)
+	{
+		(void) slog(LG_ERROR, "Module %s requires IRCd channel halfop status support; refusing to load",
+		                      m->name);
+
 		m->mflags |= MODFLAG_FAIL;
 		return;
 	}

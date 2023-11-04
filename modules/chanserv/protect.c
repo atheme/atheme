@@ -176,9 +176,20 @@ static struct command cs_deprotect = {
 static void
 mod_init(struct module *const restrict m)
 {
-	if (ircd != NULL && !ircd->uses_protect)
+	if (! ircd)
 	{
-		slog(LG_INFO, "Module %s requires protect support, refusing to load.", m->name);
+		(void) slog(LG_ERROR, "Module %s must be loaded after an IRCd protocol module; refusing to load",
+		                      m->name);
+
+		m->mflags |= MODFLAG_FAIL;
+		return;
+	}
+
+	if (! ircd->uses_protect)
+	{
+		(void) slog(LG_ERROR, "Module %s requires IRCd channel protected status support; refusing to load",
+		                      m->name);
+
 		m->mflags |= MODFLAG_FAIL;
 		return;
 	}
