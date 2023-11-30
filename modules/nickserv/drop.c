@@ -84,7 +84,12 @@ cmd_ns_drop_func(struct sourceinfo *const restrict si, const int ATHEME_VATTR_UN
 	if (! key)
 	{
 		(void) command_success_nodata(si, _("This is a friendly reminder that you are about to \2DESTROY\2 "
-		                                    "the account \2%s\2."), entity(mu)->name);
+		                                    "the account \2%s\2 and any channel permissions or ownership."),
+			                            entity(mu)->name);
+
+		if (module_find_published("nickserv/set_accountname"))
+			(void) command_success_nodata(si, _("Are you trying to rename account \2%s\2? If so, use the "
+			                                    "\2SET ACCOUNTNAME\2 command instead."), entity(mu)->name);
 
 		(void) command_success_nodata(si, _("To avoid accidental use of this command, this operation has to "
 		                                    "be confirmed. Please confirm by replying with \2/msg %s DROP %s "
