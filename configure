@@ -18522,6 +18522,7 @@ fi
      ;; #(
   xyes) :
 
+        USE_NLS="yes"
 
 
       GETTEXT_MACRO_VERSION=0.19

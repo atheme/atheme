@@ -16,6 +16,7 @@ AC_DEFUN([ATHEME_FEATURETEST_NLS], [
         [], [enable_nls="no"])
 
     AS_CASE(["x${enable_nls}"], [xno], [], [xyes], [
+        USE_NLS="yes"
         AM_PO_SUBDIRS
         AM_GNU_GETTEXT([external], [need-formatstring-macros])
         AS_IF([test "x${USE_NLS}" = "xyes"], [
