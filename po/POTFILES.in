@@ -129,6 +129,7 @@ modules/memoserv/sendall.c
 modules/memoserv/send.c
 modules/memoserv/sendgroup.c
 modules/memoserv/sendops.c
+modules/misc/login_throttling.c
 modules/nickserv/access.c
 modules/nickserv/badmail.c
 modules/nickserv/cert.c
@@ -162,6 +163,7 @@ modules/nickserv/return.c
 modules/nickserv/sendpass.c
 modules/nickserv/sendpass_user.c
 modules/nickserv/set_accountname.c
+modules/nickserv/set_badpasswdmsg.c
 modules/nickserv/set_core.c
 modules/nickserv/set_email.c
 modules/nickserv/set_emailmemos.c
@@ -199,6 +201,7 @@ modules/operserv/identify.c
 modules/operserv/ignore.c
 modules/operserv/info.c
 modules/operserv/inject.c
+modules/operserv/joinrate.c
 modules/operserv/jupe.c
 modules/operserv/mode.c
 modules/operserv/modlist.c
