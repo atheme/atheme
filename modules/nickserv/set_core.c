@@ -57,7 +57,7 @@ ns_cmd_set(struct sourceinfo *const restrict si, const int parc, char **const re
 
 static struct command ns_set = {
 	.name           = "SET",
-	.desc           = N_("Sets various control flags."),
+	.desc           = N_("Sets various account parameters."),
 	.access         = AC_AUTHENTICATED,
 	.maxparc        = 2,
 	.cmd            = &ns_cmd_set,
