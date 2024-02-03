@@ -323,9 +323,9 @@ unreal_introduce_nick(struct user *u)
 	const char *umode = user_get_umodestr(u);
 
 	if (!ircd->uses_uid)
-		sts("NICK %s 1 %lu %s %s %s 0 %sS * :%s", u->nick, (unsigned long)u->ts, u->user, u->host, me.name, umode, u->gecos);
+		sts("NICK %s 1 %lu %s %s %s 0 %szHS * :%s", u->nick, (unsigned long)u->ts, u->user, u->host, me.name, umode, u->gecos);
 	else
-		sts(":%s UID %s 1 %lu %s %s %s * %sS * * * :%s", ME, u->nick, (unsigned long)u->ts, u->user, u->host, u->uid, umode, u->gecos);
+		sts(":%s UID %s 1 %lu %s %s %s * %szHS * * * :%s", ME, u->nick, (unsigned long)u->ts, u->user, u->host, u->uid, umode, u->gecos);
 }
 
 static void
