@@ -186,6 +186,10 @@ check_enforce(struct hook_nick_enforce *hdata)
 			timeout->timelimit = CURRTIME + enforcetime;
 		}
 
+		// if the account is frozen, they cannot identify to it regardless of how long we wait   -- amdj
+		if (metadata_find(hdata->mn->owner, "private:freeze:freezer"))
+			timeout->timelimit = CURRTIME + 1;
+
 		// insert in sorted order
 		MOWGLI_ITER_FOREACH_PREV(n, enforce_list.tail)
 		{
