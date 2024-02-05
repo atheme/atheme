@@ -77,9 +77,12 @@ nickserv_handle_nickchange(struct user *u)
 		return;
 	}
 
-	notice(nicksvs.nick, u->nick, "This nickname is registered. Please choose a different nickname, or "
-	                              "identify via \2/msg %s IDENTIFY %s <password>\2",
-	                              nicksvs.me->disp, entity(mn->owner)->name);
+	if (metadata_find(mn->owner, "private:freeze:freezer"))
+		notice(nicksvs.nick, u->nick, "This nickname is registered. Please choose a different nickname.");
+	else
+		notice(nicksvs.nick, u->nick, "This nickname is registered. Please choose a different nickname, or "
+		                              "identify via \2/msg %s IDENTIFY %s <password>\2",
+		                              nicksvs.me->disp, entity(mn->owner)->name);
 
 	hdata.u = u;
 	hdata.mn = mn;
