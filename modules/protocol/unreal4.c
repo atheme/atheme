@@ -1040,9 +1040,9 @@ m_uid(struct sourceinfo *si, int parc, char *parv[])
 
 		vhost = strcmp(parv[8], "*") ? parv[8] : NULL;
 		iplen = 0;
-		if (parc == 11 && strcmp(parv[parc - 2], "*"))
+		if (strcmp(parv[10], "*"))
 		{
-			ipb64 = parv[parc - 2];
+			ipb64 = parv[10];
 			af = AF_INET;
 			if (strlen(ipb64) == 8)
 			{
