@@ -22,6 +22,6 @@ d - debug logging is enabled
 e - nick/account registration requires email verification
 j - join_chans is enabled
 l - leave_chans is enabled
-n - services is attached to a terminal
+n - services is not running as a background daemon
 r - operserv raw can be used
 t - changets is enabled (shown as of 2.1)
