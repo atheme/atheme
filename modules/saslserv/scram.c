@@ -57,6 +57,12 @@
 #define SCRAM_PASSHASH_LENGTH_MAX       (7U + BASE64_SIZE_RAW(PBKDF2_SALTLEN_MAX) + \
                                          (2U * BASE64_SIZE_RAW(SCRAM_MDLEN_MAX)) + 9U)
 
+struct scram_mechanism
+{
+	const struct sasl_mechanism mechanism;
+	bool                        advertise;
+};
+
 struct scram_attribute
 {
 	char *                      value;
@@ -89,6 +95,7 @@ typedef struct scram_attribute scram_attr_list[128];
 
 static mowgli_list_t scram_sessions;
 
+static mowgli_list_t **crypto_conf_table = NULL;
 static const struct sasl_core_functions *sasl_core_functions = NULL;
 static const struct pbkdf2v2_scram_functions *pbkdf2v2_scram_functions = NULL;
 
@@ -767,41 +774,53 @@ sasl_mech_scram_finish(struct sasl_session *const restrict p)
 	p->mechdata = NULL;
 }
 
-static const struct sasl_mechanism sasl_mech_scram_sha1 = {
-	.name           = "SCRAM-SHA-1",
-	.mech_start     = NULL,
-	.mech_step      = &sasl_mech_scram_sha1_step,
-	.mech_finish    = &sasl_mech_scram_finish,
-};
-
-static const struct sasl_mechanism sasl_mech_scram_sha2_256 = {
-	.name           = "SCRAM-SHA-256",
-	.mech_start     = NULL,
-	.mech_step      = &sasl_mech_scram_sha2_256_step,
-	.mech_finish    = &sasl_mech_scram_finish,
-};
-
-static const struct sasl_mechanism sasl_mech_scram_sha2_512 = {
-	.name           = "SCRAM-SHA-512",
-	.mech_start     = NULL,
-	.mech_step      = &sasl_mech_scram_sha2_512_step,
-	.mech_finish    = &sasl_mech_scram_finish,
+static struct scram_mechanism scram_mechanisms[] = {
+	{
+		.mechanism = {
+			.name           = "SCRAM-SHA-1",
+			.mech_start     = NULL,
+			.mech_step      = &sasl_mech_scram_sha1_step,
+			.mech_finish    = &sasl_mech_scram_finish,
+		},
+		.advertise              = true,
+	},
+	{
+		.mechanism = {
+			.name           = "SCRAM-SHA-256",
+			.mech_start     = NULL,
+			.mech_step      = &sasl_mech_scram_sha2_256_step,
+			.mech_finish    = &sasl_mech_scram_finish,
+		},
+		.advertise              = true,
+	},
+	{
+		.mechanism = {
+			.name           = "SCRAM-SHA-512",
+			.mech_start     = NULL,
+			.mech_step      = &sasl_mech_scram_sha2_512_step,
+			.mech_finish    = &sasl_mech_scram_finish,
+		},
+		.advertise              = true,
+	},
 };
 
 static inline void
 scram_mechanisms_register(void)
 {
-	(void) sasl_core_functions->mech_register(&sasl_mech_scram_sha2_512);
-	(void) sasl_core_functions->mech_register(&sasl_mech_scram_sha2_256);
-	(void) sasl_core_functions->mech_register(&sasl_mech_scram_sha1);
+	for (size_t i = 0; i < ARRAY_SIZE(scram_mechanisms); i++)
+	{
+		if (scram_mechanisms[i].advertise)
+			(void) sasl_core_functions->mech_register(&scram_mechanisms[i].mechanism);
+		else
+			(void) sasl_core_functions->mech_unregister(&scram_mechanisms[i].mechanism);
+	}
 }
 
 static inline void
 scram_mechanisms_unregister(void)
 {
-	(void) sasl_core_functions->mech_unregister(&sasl_mech_scram_sha2_512);
-	(void) sasl_core_functions->mech_unregister(&sasl_mech_scram_sha2_256);
-	(void) sasl_core_functions->mech_unregister(&sasl_mech_scram_sha1);
+	for (size_t i = 0; i < ARRAY_SIZE(scram_mechanisms); i++)
+		(void) sasl_core_functions->mech_unregister(&scram_mechanisms[i].mechanism);
 }
 
 static void
@@ -839,6 +858,56 @@ scram_pbkdf2v2_scram_confhook(const struct pbkdf2v2_scram_config *const restrict
 		                     CYRUS_SASL_ITERCNT_MAX);
 }
 
+// Yes, this is O(n^2), but n is always very small
+static int
+c_ci_scram_mechanisms(mowgli_config_file_entry_t *const restrict ce)
+{
+	char buf[BUFSIZE];
+	bool any_enabled = false;
+
+	if (! ce->vardata)
+	{
+		(void) conf_report_warning(ce, "no parameter for configuration option -- ignoring");
+		return 0;
+	}
+
+	(void) snprintf(buf, sizeof buf, "%s,", ce->vardata);
+
+	for (size_t i = 0; i < ARRAY_SIZE(scram_mechanisms); i++)
+		scram_mechanisms[i].advertise = false;
+
+	for (char *tok = strtok(buf, ","); tok != NULL; tok = strtok(NULL, ","))
+	{
+		bool valid = false;
+
+		for (size_t i = 0; i < ARRAY_SIZE(scram_mechanisms); i++)
+		{
+			if (strcasecmp(tok, scram_mechanisms[i].mechanism.name) == 0)
+			{
+				scram_mechanisms[i].advertise = true;
+				any_enabled = true;
+				valid = true;
+				break;
+			}
+		}
+
+		if (! valid)
+			(void) conf_report_warning(ce, "unknown mechanism in configuration option -- skipping");
+	}
+
+	if (! any_enabled)
+		(void) conf_report_warning(ce, "no supported mechanisms in configuration option -- SCRAM disabled");
+
+	return 0;
+}
+
+static void
+scram_config_purge(void ATHEME_VATTR_UNUSED *const restrict unused)
+{
+	for (size_t i = 0; i < ARRAY_SIZE(scram_mechanisms); i++)
+		scram_mechanisms[i].advertise = true;
+}
+
 static void
 mod_init(struct module *const restrict m)
 {
@@ -851,11 +920,17 @@ mod_init(struct module *const restrict m)
 		return;
 	}
 
+	MODULE_TRY_REQUEST_SYMBOL(m, crypto_conf_table, "crypto/main", "crypto_conf_table")
 	MODULE_TRY_REQUEST_SYMBOL(m, sasl_core_functions, "saslserv/main", "sasl_core_functions")
 	MODULE_TRY_REQUEST_SYMBOL(m, pbkdf2v2_scram_functions, PBKDF2V2_CRYPTO_MODULE_NAME, "pbkdf2v2_scram_functions")
 
+	(void) add_conf_item("SCRAM_MECHANISMS", *crypto_conf_table, &c_ci_scram_mechanisms);
+
 	// Ask the PBKDF2 module to call us back with its configuration
 	(void) pbkdf2v2_scram_functions->confhook(&scram_pbkdf2v2_scram_confhook);
+
+	// We need to be told when the configuration is about to be rehashed to reset the list of advertised mechanisms
+	(void) hook_add_config_purge(&scram_config_purge);
 
 	// We need to be told when a user account is deleted in case there is an active SCRAM negotiation for it
 	(void) hook_add_myuser_delete(&scram_myuser_delete);
@@ -864,10 +939,13 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
+	(void) del_conf_item("SCRAM_MECHANISMS", *crypto_conf_table);
+
 	// Unregister configuration interest in the pbkdf2v2 module
 	(void) pbkdf2v2_scram_functions->confhook(NULL);
 
-	// We no longer need this
+	// We no longer need these
+	(void) hook_del_config_purge(&scram_config_purge);
 	(void) hook_del_myuser_delete(&scram_myuser_delete);
 
 	// Unregister the SASL mechanisms

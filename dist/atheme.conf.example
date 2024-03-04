@@ -1321,6 +1321,30 @@ crypto {
 	 */
 	#pbkdf2v2_saltlen = 32;
 
+	/* (*) scram_mechanisms
+	 *
+	 * This option only has any effect if you are using the SASL SCRAM
+	 * module in conjunction with the PBKDF2 v2 crypto module (above).
+	 *
+	 * If you wish to restrict the list of SCRAM mechanisms advertised
+	 * to the network, set this option to a comma-separated list of
+	 * mechanisms to advertise.
+	 *
+	 * If this value is unset, all mechanisms are advertised, under the
+	 * assumptions that the database may contain password hashes in many
+	 * forms (changing the value of pbkdf2v2_digest over time) and that
+	 * clients either will retry other mechanisms when one of them fails
+	 * or can be configured to use a specific mechanism based upon your
+	 * network's documentation or reference material.
+	 *
+	 * If you plan to never change the digest, it would be wise to set
+	 * this to only the specific digest you are using (above).
+	 *
+	 * Valid mechanisms are "SCRAM-SHA-1", "SCRAM-SHA-256", and
+	 * "SCRAM-SHA-512", in any order.
+	 */
+	#scram_mechanisms = "SCRAM-SHA-1,SCRAM-SHA-256,SCRAM-SHA-512";
+
 	/* (*) bcrypt_cost
 	 *
 	 * Amount of rounds to perform for new passwords (as a power of 2).

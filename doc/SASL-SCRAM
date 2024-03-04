@@ -44,6 +44,8 @@ to enable this. The 5 main steps to perform are:
        /* or "SCRAM-SHA-512" or "SCRAM-SHA-1" */
 
        #pbkdf2v2_rounds = ...;          /* between 10000 and 65536 (**) */
+
+       /* see also the documentation on the "scram_mechanisms" option */
    }
 
    This is important. The SASL SCRAM module will not register any mechanisms
