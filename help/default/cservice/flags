@@ -95,14 +95,53 @@ Permissions:
 #endif
     +s - Enables use of the set command.
     +i - Enables use of the invite and getkey commands.
-#if module chanserv/kick
-    +r - Enables use of the kick, kickban, ban and unban commands.
-#else
-#if !module chanserv/unban_self
+#if module chanserv/ban
+#  if module chanserv/kick
+#    if module chanserv/quiet
+    +r - Enables use of the kick, kickban, ban, unban, quiet,
+         and unquiet commands.
+#    else
+    +r - Enables use of the kick, kickban, ban, and unban
+         commands.
+#    endif
+#  else
+#    if module chanserv/quiet
+    +r - Enables use of the ban, unban, quiet, and unquiet
+         commands.
+#    else
     +r - Enables use of the ban and unban commands.
+#    endif
+#  endif
 #else
+#  if module chanserv/unban_self
+#    if module chanserv/kick
+#      if module chanserv/quiet
+    +r - Enables use of the kick, kickban, unban, quiet, and
+         unquiet commands.
+#      else
+    +r - Enables use of the kick, kickban, and unban commands.
+#      endif
+#    else
+#      if module chanserv/quiet
+    +r - Enables use of the unban, quiet, and unquiet commands.
+#      else
     +r - Enables use of the unban command.
-#endif
+#      endif
+#    endif
+#  else
+#    if module chanserv/kick
+#      if module chanserv/quiet
+    +r - Enables use of the kick, kickban, quiet, and unquiet
+         commands.
+#      else
+    +r - Enables use of the kick and kickban commands.
+#      endif
+#    else
+#      if module chanserv/quiet
+    +r - Enables use of the quiet and unquiet commands.
+#      endif
+#    endif
+#  endif
 #endif
     +R - Enables use of the recover, sync and clear commands.
     +f - Enables modification of channel access lists.
