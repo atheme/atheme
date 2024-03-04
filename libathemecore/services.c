@@ -750,6 +750,9 @@ myuser_login(struct service *svs, struct user *u, struct myuser *mu, bool sendac
 		metadata_delete(mu, "private:sendpass:timestamp");
 	}
 
+	if (! (mu->flags & MU_CRYPTPASS))
+		notice(svs->me->nick, u->nick, "Warning: Your password is not encrypted.");
+
 	mu->lastlogin = CURRTIME;
 	mn = mynick_find(u->nick);
 	if (mn != NULL && mn->owner == mu)
