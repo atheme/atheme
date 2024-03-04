@@ -677,19 +677,17 @@ myuser_login(struct service *svs, struct user *u, struct myuser *mu, bool sendac
 	u->flags &= ~UF_SOPER_PASS;
 
 	/* check for previous login and let them know, unless they have opt'd OUT */
+	if (metadata_find(mu, "private:host:actual") != NULL && metadata_find(mu, "private:showlast:optout") == NULL)
+	{
+		struct metadata *md_loginaddr;
+		time_t ts = CURRTIME;
 
-		if (metadata_find(mu, "private:host:actual") != NULL && metadata_find(mu, "private:showlast:optout") == NULL)
-		{
-			struct metadata *md_loginaddr;
-			time_t ts = CURRTIME;
+		md_loginaddr = metadata_find(mu, "private:host:actual");
+		tm = localtime(&mu->lastlogin);
+		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 
-			md_loginaddr = metadata_find(mu, "private:host:actual");
-			tm = localtime(&mu->lastlogin);
-			strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
-
-			notice(svs->me->nick, u->nick, "Last login from: \2%s\2 on %s.", md_loginaddr->value, strfbuf);
-
-		}
+		notice(svs->me->nick, u->nick, "Last login from: \2%s\2 on %s.", md_loginaddr->value, strfbuf);
+	}
 
 	/* keep track of login address for users */
 	mowgli_strlcpy(lau, u->user, BUFSIZE);
