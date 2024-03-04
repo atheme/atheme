@@ -422,8 +422,6 @@ static void
 atheme_pbkdf2v2_scram_confhook(const pbkdf2v2_scram_confhook_fn confhook)
 {
 	pbkdf2v2_scram_confhook = confhook;
-
-	(void) atheme_pbkdf2v2_scram_confhook_dispatch();
 }
 
 extern const struct pbkdf2v2_scram_functions pbkdf2v2_scram_functions;
