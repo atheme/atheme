@@ -64,8 +64,10 @@ struct alis_query
 	bool                    mode_limit;
 	bool                    mode_ext[256];
 	bool                    show_mode;
-	bool                    show_topicwho;
+	bool                    show_regonly;
 	bool                    show_secret;
+	bool                    show_topicwho;
+	bool                    show_unregonly;
 	char                    mask[BUFSIZE];
 	char                    topic[BUFSIZE];
 };
@@ -218,8 +220,20 @@ alis_parse_query(struct sourceinfo *const restrict si, const int parc, char **co
 			if (strchr(arg, 'm'))
 				query->show_mode = true;
 
+			if (strchr(arg, 'r'))
+				query->show_regonly = true;
+
 			if (strchr(arg, 't'))
 				query->show_topicwho = true;
+
+			if (strchr(arg, 'u'))
+				query->show_unregonly = true;
+
+			if (query->show_regonly && query->show_unregonly)
+			{
+				(void) command_fail(si, fault_badparams, _("Invalid option for \2%s\2"), opt);
+				return false;
+			}
 		}
 		else if (strcasecmp(opt, "-mode") == 0)
 		{
@@ -348,6 +362,12 @@ alis_show_channel(const struct alis_query *const restrict query, const struct ch
 			if (query->mode_ext[i] && ! chptr->extmodes[i])
 				return false;
 	}
+
+	if (query->show_regonly && ! chptr->mychan)
+		return false;
+
+	if (query->show_unregonly && chptr->mychan)
+		return false;
 
 	if (*query->mask && match(query->mask, chptr->name))
 		return false;

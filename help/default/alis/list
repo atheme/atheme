@@ -10,6 +10,7 @@ Options are:
     -max <n>: show only channels with at most <n> users
     -skip <n>: skip first <n> matches
     -show [m][t]: show modes/topicsetter
+    -show [r|u]: show registered/unregistered channels only
     -mode <+|-|=><modes>: modes set/unset/equal
     -topic <pattern>: topic matches pattern
 #if priv chan:auspex
