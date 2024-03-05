@@ -1229,7 +1229,7 @@ verbose_wallops(const char *fmt, ...)
 bool
 check_vhost_validity(struct sourceinfo *si, const char *host)
 {
-	const char *p;
+	const char *p, *p2;
 
 	/* Never ever allow @!?* as they have special meaning in all ircds */
 	/* Empty, space anywhere and colon at the start break the protocol */
@@ -1247,8 +1247,13 @@ check_vhost_validity(struct sourceinfo *si, const char *host)
 		command_fail(si, fault_badparams, _("The vhost provided is too long."));
 		return false;
 	}
-	p = strrchr(host, '/');
-	if (p != NULL && isdigit((unsigned char)p[1]))
+	p = p2 = strrchr(host, '/');
+	// walk the vhost until we hit either the end or a non-digit
+	while (p != NULL && isdigit((unsigned char)p[1]))
+		p++;
+	// if we found a /, and are now at the end of the vhost, that
+	// means we found no non-digits, so it looks too much like a CIDR
+	if (p2 != NULL && p[1] == '\0')
 	{
 		command_fail(si, fault_badparams, _("The vhost provided looks like a CIDR mask."));
 		return false;
