@@ -784,6 +784,12 @@ ns_cmd_multimark(struct sourceinfo *si, int parc, char *parv[])
 			return;
 		}
 
+		if (! si->smu)
+		{
+			command_fail(si, fault_noprivs, STR_NOT_LOGGED_IN);
+			return;
+		}
+
 		l = multimark_list(mu);
 
 		mm = smalloc(sizeof *mm);
