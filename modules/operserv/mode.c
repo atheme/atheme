@@ -32,12 +32,19 @@ os_cmd_mode(struct sourceinfo *si, int parc, char *parv[])
                 return;
 	}
 
+	modeparc = sjtoken(mode, ' ', modeparv);
+
+	if (modeparc == 0 || (modeparv[0][0] != '+' && modeparv[0][0] != '-'))
+	{
+		command_fail(si, fault_badparams, _("The mode parameter(s) given must be to add or "
+		                                    "remove channel modes."));
+		return;
+	}
+
 	wallops("\2%s\2 is using MODE on \2%s\2 (set: \2%s\2)",
 		get_oper_name(si), channel, mode);
 	logcommand(si, CMDLOG_ADMIN, "MODE: \2%s\2 on \2%s\2", mode, channel);
 	command_success_nodata(si, _("Setting modes \2%s\2 on \2%s\2."), mode, channel);
-
-	modeparc = sjtoken(mode, ' ', modeparv);
 
 	channel_mode(si->service->me, c, modeparc, modeparv);
 }
