@@ -7,7 +7,7 @@ Des critères multiples peuvent être utilisés dans cette commande.
 Les critère actuels sont :
 PATTERN       - Tous les utilisateurs qui correpondent au pattern donné.
 EMAIL         - Tous les comptes enregistrés qui ont une adresse email
-	      	qui correspond au pattern donné.
+	        qui correspond au pattern donné.
 #if module nickserv/mark
 MARK-REASON   - Tous les comptes qui ont une raison de "marque" qui
 	        correspond au pattern donné.
@@ -56,7 +56,7 @@ NOPASSWORD    - Tous les utilisateurs avec le flag NOPASSWORD actif.
 #endif
 #if module nickserv/regnolimit
 REGNOLIMIT    - Tous les utilisateurs avec le flag REGNOLIMIT actif.
-#end
+#endif
 
 #if module nickserv/freeze
 FROZEN        - Tous les utilisateurs gelés par l'équipe du réseau.
@@ -71,7 +71,7 @@ RESTRICTED    - Tous les utilisateurs limités par l'équipe du réseau.
 VACATION      - Tous les utilisateurs marqués d'être en vacances.
 #endif
 REGISTERED    - Les comptes d'utilisateurs enregistrés depuis plus longtemps
-	      	que l'âge donné.
+	        que l'âge donné.
 LASTLOGIN     - Les comptes utilisateurs non utilisés depuis plus de l'âge donné.
 
 Syntaxe : LIST <critères>
