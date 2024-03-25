@@ -169,37 +169,50 @@ help_display_path(struct sourceinfo *const restrict si, const char *const restri
 
 	unsigned int ifnest_false = 0;
 	unsigned int ifnest = 0;
+	unsigned int line = 0;
 	char buf[BUFSIZE];
 
 	while (fgets(buf, sizeof buf, fh))
 	{
+		line++;
+
 		(void) strip(buf);
 		(void) replace(buf, sizeof buf, "&nick&", service_name);
 
-		if (strncasecmp(buf, "#if", 3) == 0)
+		char *str = buf;
+
+		if (*str == '#')
 		{
-			if (ifnest_false || ! help_evaluate_condition(si, buf + 3))
-				ifnest_false++;
+			str++;
 
-			ifnest++;
-			continue;
-		}
+			while (*str == ' ' || *str == '\t')
+				str++;
 
-		if (strncasecmp(buf, "#endif", 6) == 0)
-		{
-			if (ifnest_false)
-				ifnest_false--;
+			if (strncasecmp(str, "if ", 3) == 0 || strncasecmp(str, "if\t", 3) == 0)
+			{
+				str += 3;
 
-			if (ifnest)
-				ifnest--;
+				if (ifnest_false || ! help_evaluate_condition(si, str))
+					ifnest_false++;
 
-			continue;
-		}
+				ifnest++;
+			}
+			else if (strncasecmp(str, "endif", 5) == 0)
+			{
+				if (ifnest_false)
+					ifnest_false--;
 
-		if (strncasecmp(buf, "#else", 5) == 0)
-		{
-			if (ifnest && ifnest_false < 2)
-				ifnest_false ^= 1;
+				if (ifnest)
+					ifnest--;
+			}
+			else if (strncasecmp(str, "else", 4) == 0)
+			{
+				if (ifnest && ifnest_false < 2)
+					ifnest_false ^= 1;
+			}
+			else
+				(void) slog(LG_ERROR, "%s: unrecognised directive '%s' in help file '%s' line %u",
+				                      MOWGLI_FUNC_NAME, str, path, line);
 
 			continue;
 		}
