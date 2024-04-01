@@ -198,7 +198,7 @@ char *
 time_ago(time_t event)
 {
 	static char ret[128];
-	int years, weeks, days, hours, minutes, seconds;
+	int64_t years, weeks, days, hours, minutes, seconds;
 
 	event = CURRTIME - event;
 	years = weeks = days = hours = minutes = 0;
@@ -232,17 +232,17 @@ time_ago(time_t event)
 	seconds = event;
 
 	if (years)
-		snprintf(ret, sizeof(ret), "%dy %dw %dd", years, weeks, days);
+		snprintf(ret, sizeof ret, "%" PRId64 "y %" PRId64 "w %" PRId64 "d", years, weeks, days);
 	else if (weeks)
-		snprintf(ret, sizeof(ret), "%dw %dd %dh", weeks, days, hours);
+		snprintf(ret, sizeof ret, "%" PRId64 "w %" PRId64 "d %" PRId64 "h", weeks, days, hours);
 	else if (days)
-		snprintf(ret, sizeof(ret), "%dd %dh %dm %ds", days, hours, minutes, seconds);
+		snprintf(ret, sizeof ret, "%" PRId64 "d %" PRId64 "h %" PRId64 "m", days, hours, minutes);
 	else if (hours)
-		snprintf(ret, sizeof(ret), "%dh %dm %ds", hours, minutes, seconds);
+		snprintf(ret, sizeof ret, "%" PRId64 "h %" PRId64 "m %" PRId64 "s", hours, minutes, seconds);
 	else if (minutes)
-		snprintf(ret, sizeof(ret), "%dm %ds", minutes, seconds);
+		snprintf(ret, sizeof ret, "%" PRId64 "m %" PRId64 "s", minutes, seconds);
 	else
-		snprintf(ret, sizeof(ret), "%ds", seconds);
+		snprintf(ret, sizeof ret, "%" PRId64 "s", seconds);
 
 	return ret;
 }
