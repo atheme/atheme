@@ -154,7 +154,7 @@ write_multimark_db(struct database_handle *db)
 
 			db_write_word(db, mm->restored_from_account);
 
-			db_write_uint(db, mm->time);
+			db_write_time(db, mm->time);
 			db_write_uint(db, mm->number);
 			db_write_str(db, mm->mark);
 			db_commit_row(db);
@@ -172,7 +172,7 @@ write_multimark_db(struct database_handle *db)
 			db_write_word(db, rm->nick);
 			db_write_word(db, rm->setter_uid);
 			db_write_word(db, rm->setter_name);
-			db_write_uint(db, rm->time);
+			db_write_time(db, rm->time);
 			db_write_str(db, rm->mark);
 			db_commit_row(db);
 		}
@@ -191,7 +191,7 @@ db_h_mm(struct database_handle *db, const char *type)
 	const char *setter_name = db_sread_word(db);
 	const char *restored_from_uid = db_sread_word(db);
 	const char *restored_from_account = db_sread_word(db);
-	time_t time = db_sread_uint(db);
+	time_t time = db_sread_time(db);
 	unsigned int number = db_sread_uint(db);
 	const char *mark = db_sread_str(db);
 
@@ -228,7 +228,7 @@ db_h_rm(struct database_handle *db, const char *type)
 	const char *nick = db_sread_word(db);
 	const char *setter_uid = db_sread_word(db);
 	const char *setter_name = db_sread_word(db);
-	time_t time = db_sread_uint(db);
+	time_t time = db_sread_time(db);
 	const char *mark = db_sread_str(db);
 
 	mowgli_list_t *l = restored_mark_list(nick);
