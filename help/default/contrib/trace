@@ -8,7 +8,7 @@ SERVER     - All users on a given server.
 REGEXP     - All users matching a given regex pattern. This is very similar to
              RMATCH/RWATCH.
 GLOB       - All users matching a given glob pattern.
-NICKAGE    - How long (in seconds) a user has been connected to the network.
+NICKAGE    - How long (in seconds) a user has used their current nick.
 NUMCHAN    - Number of channels a user is in.
 IDENTIFIED - Identified status of users matching a specific criteria.
 
