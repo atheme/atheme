@@ -1,7 +1,8 @@
 [package]
 name = "convertrservtoatheme"
 version = "0.1.0"
-authors = ["Jilles Tjoelker <jilles@stack.nl>"]
+edition = "2021"
+authors = ["Jilles Tjoelker <jilles@stack.nl>", "Jess Porter <me@jesopo.uk>"]
 
 [dependencies]
-rusqlite = "0.12.0"
+rusqlite = "0.28.0"
