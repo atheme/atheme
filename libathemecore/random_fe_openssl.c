@@ -29,11 +29,12 @@ atheme_openssl_get_strerror(void)
 {
 	static char res[BUFSIZE];
 	const char *efile = NULL;
+	const char *efunc = NULL;
 	const char *edata = NULL;
 	int eline = 0;
 	int eflags = 0;
 
-	const unsigned long err = ERR_get_error_line_data(&efile, &eline, &edata, &eflags);
+	const unsigned long err = ERR_get_error_all(&efile, &eline, &efunc, &edata, &eflags);
 
 	if (! err)
 		return "<unknown>";
@@ -41,10 +42,13 @@ atheme_openssl_get_strerror(void)
 	if (! efile)
 		efile = "<unknown>";
 
-	if ((eflags & ERR_TXT_STRING) && edata)
-		(void) snprintf(res, sizeof res, "%08lX (%s) [%s:%d]", err, edata, efile, eline);
-	else
-		(void) snprintf(res, sizeof res, "%08lX (<unknown>) [%s:%d]", err, efile, eline);
+	if (! efunc)
+		efunc = "<unknown>";
+
+	if (! ((eflags & ERR_TXT_STRING) && edata))
+		edata = "<unknown>";
+
+	(void) snprintf(res, sizeof res, "%08lX (%s) [%s:%d %s]", err, edata, efile, eline, efunc);
 
 	return res;
 }
