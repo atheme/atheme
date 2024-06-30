@@ -12,7 +12,6 @@
 #endif /* !ATHEME_LAC_DIGEST_FRONTEND_C */
 
 #include <openssl/evp.h>
-#include <openssl/hmac.h>
 #include <openssl/opensslv.h>
 
 const char *
@@ -21,46 +20,13 @@ digest_get_frontend_info(void)
 	return OPENSSL_VERSION_TEXT;
 }
 
-#ifndef HAVE_LIBCRYPTO_HMAC_CTX_DYNAMIC
-
-/*
- * Grumble. If you're (OpenSSL developers) going to stop exporting the
- * definitions of your internal structures and provide new/free functions
- * for your API instead, you really should do it for *all* versions of your
- * API.
- *
- * Seriously, guys.  --amdj
- */
-
-static inline HMAC_CTX * ATHEME_FATTR_WUR
-HMAC_CTX_new(void)
-{
-	HMAC_CTX *const ctx = smalloc(sizeof *ctx);
-
-	(void) HMAC_CTX_init(ctx);
-
-	return ctx;
-}
-
-static inline void
-HMAC_CTX_free(HMAC_CTX *const restrict ctx)
-{
-	(void) HMAC_CTX_cleanup(ctx);
-	(void) sfree(ctx);
-}
-
-#endif /* !HAVE_LIBCRYPTO_HMAC_CTX_DYNAMIC */
-
 static inline void
 _digest_free_internal(struct digest_context *const restrict ctx)
 {
 	if (! ctx || ! ctx->ictx)
 		return;
 
-	if (ctx->hmac)
-		(void) HMAC_CTX_free(ctx->ictx);
-	else
-		(void) EVP_MD_CTX_destroy(ctx->ictx);
+	(void) EVP_MD_CTX_free(ctx->ictx);
 
 	ctx->ictx = NULL;
 }
@@ -104,12 +70,12 @@ _digest_init(struct digest_context *const restrict ctx, const enum digest_algori
 		(void) slog(LG_ERROR, "%s: _digest_decide_md() failed (BUG?)", MOWGLI_FUNC_NAME);
 		return false;
 	}
-	if (! (ctx->ictx = EVP_MD_CTX_create()))
+	if (! (ctx->ictx = EVP_MD_CTX_new()))
 	{
-		(void) slog(LG_ERROR, "%s: EVP_MD_CTX_create(3): unknown error", MOWGLI_FUNC_NAME);
+		(void) slog(LG_ERROR, "%s: EVP_MD_CTX_new(3): unknown error", MOWGLI_FUNC_NAME);
 		return false;
 	}
-	if (EVP_DigestInit_ex(ctx->ictx, ctx->md, NULL) != 1)
+	if (EVP_DigestInit(ctx->ictx, ctx->md) != 1)
 	{
 		(void) slog(LG_ERROR, "%s: EVP_DigestInit_ex(3): unknown error", MOWGLI_FUNC_NAME);
 		(void) _digest_free_internal(ctx);
@@ -123,6 +89,8 @@ static bool ATHEME_FATTR_WUR
 _digest_init_hmac(struct digest_context *const restrict ctx, const enum digest_algorithm alg,
                   const void *const restrict key, const size_t keyLen)
 {
+	EVP_PKEY *pk;
+
 	(void) memset(ctx, 0x00, sizeof *ctx);
 
 	ctx->alg = alg;
@@ -133,18 +101,25 @@ _digest_init_hmac(struct digest_context *const restrict ctx, const enum digest_a
 		(void) slog(LG_ERROR, "%s: _digest_decide_md() failed (BUG?)", MOWGLI_FUNC_NAME);
 		return false;
 	}
-	if (! (ctx->ictx = HMAC_CTX_new()))
+	if (! (ctx->ictx = EVP_MD_CTX_new()))
 	{
-		(void) slog(LG_ERROR, "%s: HMAC_CTX_new(3): unknown error", MOWGLI_FUNC_NAME);
+		(void) slog(LG_ERROR, "%s: EVP_MD_CTX_new(3): unknown error", MOWGLI_FUNC_NAME);
 		return false;
 	}
-	if (HMAC_Init_ex(ctx->ictx, key, (int) keyLen, ctx->md, NULL) != 1)
+	if (! (pk = EVP_PKEY_new_raw_private_key(EVP_PKEY_HMAC, NULL, key, keyLen)))
 	{
-		(void) slog(LG_ERROR, "%s: HMAC_Init_ex(3): unknown error", MOWGLI_FUNC_NAME);
+		(void) slog(LG_ERROR, "%s: EVP_PKEY_new_raw_private_key(3): unknown error", MOWGLI_FUNC_NAME);
+		return false;
+	}
+	if (EVP_DigestSignInit(ctx->ictx, NULL, ctx->md, NULL, pk) != 1)
+	{
+		(void) slog(LG_ERROR, "%s: EVP_DigestSignInit(3): unknown error", MOWGLI_FUNC_NAME);
 		(void) _digest_free_internal(ctx);
+		(void) EVP_PKEY_free(pk);
 		return false;
 	}
 
+	(void) EVP_PKEY_free(pk);
 	return true;
 }
 
@@ -156,7 +131,7 @@ _digest_update(struct digest_context *const restrict ctx, const void *const rest
 
 	if (ctx->hmac)
 	{
-		if (HMAC_Update(ctx->ictx, data, dataLen) != 1)
+		if (EVP_DigestSignUpdate(ctx->ictx, data, dataLen) != 1)
 		{
 			(void) _digest_free_internal(ctx);
 			return false;
@@ -178,16 +153,21 @@ static bool ATHEME_FATTR_WUR
 _digest_final(struct digest_context *const restrict ctx, void *const restrict out, size_t *const restrict outLen)
 {
 	const size_t hLen = digest_size_ctx(ctx);
-	unsigned int uLen = (unsigned int) hLen;
 	int ret;
 
 	if (outLen)
 		*outLen = hLen;
 
 	if (ctx->hmac)
-		ret = HMAC_Final(ctx->ictx, out, &uLen);
+	{
+		size_t uLen = hLen;
+		ret = EVP_DigestSignFinal(ctx->ictx, out, &uLen);
+	}
 	else
-		ret = EVP_DigestFinal_ex(ctx->ictx, out, &uLen);
+	{
+		unsigned int uLen = (unsigned int) hLen;
+		ret = EVP_DigestFinal(ctx->ictx, out, &uLen);
+	}
 
 	(void) _digest_free_internal(ctx);
 

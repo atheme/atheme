@@ -87,25 +87,6 @@ AC_DEFUN([ATHEME_LIBTEST_CRYPTO], [
             AC_MSG_RESULT([yes])
             LIBCRYPTO_USABLE="Yes"
             LIBCRYPTO_DIGEST="Yes"
-
-            AC_MSG_CHECKING([if libcrypto has HMAC_CTX_new() & HMAC_CTX_free()])
-            AC_LINK_IFELSE([
-                AC_LANG_PROGRAM([[
-                    #ifdef HAVE_STDDEF_H
-                    #  include <stddef.h>
-                    #endif
-                    #include <openssl/hmac.h>
-                    #include <openssl/opensslv.h>
-                ]], [[
-                    (void) HMAC_CTX_new();
-                    (void) HMAC_CTX_free(NULL);
-                ]])
-            ], [
-                AC_MSG_RESULT([yes])
-                AC_DEFINE([HAVE_LIBCRYPTO_HMAC_CTX_DYNAMIC], [1], [Define to 1 if libcrypto has HMAC_CTX_new() & HMAC_CTX_free()])
-            ], [
-                AC_MSG_RESULT([no])
-            ])
         ], [
             AC_MSG_RESULT([no])
         ])

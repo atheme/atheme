@@ -8802,48 +8802,6 @@ printf "%s\n" "yes" >&6; }
             LIBCRYPTO_USABLE="Yes"
             LIBCRYPTO_DIGEST="Yes"
 
-            { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking if libcrypto has HMAC_CTX_new() & HMAC_CTX_free()" >&5
-printf %s "checking if libcrypto has HMAC_CTX_new() & HMAC_CTX_free()... " >&6; }
-            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-                    #ifdef HAVE_STDDEF_H
-                    #  include <stddef.h>
-                    #endif
-                    #include <openssl/hmac.h>
-                    #include <openssl/opensslv.h>
-
-int
-main (void)
-{
-
-                    (void) HMAC_CTX_new();
-                    (void) HMAC_CTX_free(NULL);
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_link "$LINENO"
-then :
-
-                { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-printf "%s\n" "yes" >&6; }
-
-printf "%s\n" "#define HAVE_LIBCRYPTO_HMAC_CTX_DYNAMIC 1" >>confdefs.h
-
-
-else $as_nop
-
-                { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
-printf "%s\n" "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.beam \
-    conftest$ac_exeext conftest.$ac_ext
-
 else $as_nop
 
             { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5

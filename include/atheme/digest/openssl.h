@@ -18,7 +18,7 @@
 struct digest_context
 {
 	const EVP_MD *          md;
-	void *                  ictx;
+	EVP_MD_CTX *            ictx;
 	enum digest_algorithm   alg;
 	bool                    hmac;
 };
