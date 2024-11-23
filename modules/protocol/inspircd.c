@@ -616,7 +616,7 @@ inspircd_ping_sts(void)
 	if (!u)
 		return;
 
-	sts(":%s PING %s :%s", me.numeric, me.numeric, u->sid);
+	sts(":%s PING %s", me.numeric, u->sid);
 }
 
 static void
@@ -815,10 +815,7 @@ static void
 m_ping(struct sourceinfo *si, int parc, char *parv[])
 {
 	// reply to PINGs
-	if (parc == 1)
-		sts(":%s PONG %s", me.numeric, parv[0]);
-	else if (parc == 2)
-		sts(":%s PONG %s :%s", me.numeric, parv[1], parv[0]);
+	sts(":%s PONG %s", me.numeric, si->s->sid);
 }
 
 static void
@@ -1281,7 +1278,7 @@ solicit_pongs(struct server *s)
 {
 	mowgli_node_t *n;
 
-	sts(":%s PING %s %s", me.numeric, me.numeric, s->sid);
+	sts(":%s PING %s", me.numeric, s->sid);
 
 	MOWGLI_ITER_FOREACH(n, s->children.head)
 		solicit_pongs(n->data);
@@ -1774,7 +1771,7 @@ mod_init(struct module *const restrict m)
 
 	ircd = &InspIRCd;
 
-	pcommand_add("PING", m_ping, 1, MSRC_USER | MSRC_SERVER);
+	pcommand_add("PING", m_ping, 1, MSRC_SERVER);
 	pcommand_add("PONG", m_pong, 1, MSRC_SERVER);
 	pcommand_add("PRIVMSG", m_privmsg, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("NOTICE", m_notice, 2, MSRC_USER | MSRC_SERVER | MSRC_UNREG);
