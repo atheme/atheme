@@ -11,7 +11,6 @@
 #include <atheme/protocol/inspircd.h>
 
 #define PROTOCOL_MINIMUM 1205 // we do not support anything older than this
-#define PROTOCOL_PREFERRED_STR "1205"
 
 static struct ircd InspIRCd = {
 	.ircdname = "InspIRCd",
@@ -354,7 +353,7 @@ inspircd_server_login(void)
 	ircd->uses_protect = false;
 	ircd->uses_halfops = false;
 
-	ret = sts("CAPAB START " PROTOCOL_PREFERRED_STR);
+	ret = sts("CAPAB START %u", PROTOCOL_MINIMUM);
 	if (ret == 1)
 		return 1;
 	sts("CAPAB CAPABILITIES :CASEMAPPING=%s", match_mapping == MATCH_ASCII ? "ascii" : "rfc1459");
@@ -1590,12 +1589,7 @@ m_capab(struct sourceinfo *si, int parc, char *parv[])
 		 */
 		if (parc > 1)
 			has_protocol = atoi(parv[1]);
-		if (has_protocol == 1203 || has_protocol == 1204)
-		{
-			slog(LG_ERROR, "m_capab(): InspIRCd 2.1 beta is not supported.");
-			exit(EXIT_FAILURE);
-		}
-		else if (has_protocol < PROTOCOL_MINIMUM)
+		if (has_protocol < PROTOCOL_MINIMUM)
 		{
 			slog(LG_ERROR, "m_capab(): remote protocol version too old (%d). you may need another protocol module or a newer inspircd. exiting.", has_protocol);
 			exit(EXIT_FAILURE);
@@ -1655,7 +1649,6 @@ m_capab(struct sourceinfo *si, int parc, char *parv[])
 			if (it)
 				max_rejoindelay = atoi(it + 1);
 		}
-		TAINT_ON(strstr(parv[1], "m_invisible.so") != NULL, "invisible (m_invisible) is not presently supported correctly in atheme, and won't be due to ethical obligations");
 	}
 	else if (strcasecmp(parv[0], "CHANMODES") == 0 && parc > 1)
 	{
