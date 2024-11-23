@@ -1662,11 +1662,11 @@ m_capab(struct sourceinfo *si, int parc, char *parv[])
 		varc = sjtoken(parv[1], ' ', varv);
 		for (i = 0; i < varc; i++)
 		{
-			if (!strcmp(varv[i], "hidechans=I"))
+			if (!strcmp(varv[i], "simple:hidechans=I"))
 				has_hidechansmod = true;
-			else if (!strcmp(varv[i], "hideoper=H"))
+			else if (!strcmp(varv[i], "simple:hideoper=H"))
 				has_hideopermod = true;
-			else if (!strcmp(varv[i], "servprotect=k"))
+			else if (!strcmp(varv[i], "simple:servprotect=k"))
 				has_servprotectmod = true;
 		}
 	}
