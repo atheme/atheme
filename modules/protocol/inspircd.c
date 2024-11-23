@@ -708,7 +708,7 @@ inspircd_fnc_sts(struct user *source, struct user *u, const char *newnick, int t
 static void
 inspircd_invite_sts(struct user *sender, struct user *target, struct channel *channel)
 {
-	sts(":%s INVITE %s %s", sender->uid, target->uid, channel->name);
+	sts(":%s INVITE %s %s %lu", sender->uid, target->uid, channel->name, (unsigned long)channel->ts);
 }
 
 static void
