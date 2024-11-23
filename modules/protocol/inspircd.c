@@ -357,7 +357,7 @@ inspircd_server_login(void)
 	ret = sts("CAPAB START " PROTOCOL_PREFERRED_STR);
 	if (ret == 1)
 		return 1;
-	sts("CAPAB CAPABILITIES :PROTOCOL=" PROTOCOL_PREFERRED_STR);
+	sts("CAPAB CAPABILITIES :CASEMAPPING=%s", match_mapping == MATCH_ASCII ? "ascii" : "rfc1459");
 	sts("CAPAB END");
 	sts("SERVER %s %s 0 %s :%s", me.name, curr_uplink->send_pass, me.numeric, me.desc);
 
@@ -1606,22 +1606,7 @@ m_capab(struct sourceinfo *si, int parc, char *parv[])
 		varc = sjtoken(parv[1], ' ', varv);
 		for (i = 0; i < varc; i++)
 		{
-			if(!strncmp(varv[i], "PREFIX=", 7))
-			{
-				if (strstr(varv[i] + 7, "q"))
-				{
-					ircd->uses_owner = true;
-				}
-				if (strstr(varv[i] + 7, "a"))
-				{
-					ircd->uses_protect = true;
-				}
-				if (strstr(varv[i] + 7, "h"))
-				{
-					ircd->uses_halfops = true;
-				}
-			}
-			else if (!strcmp(varv[i], "GLOBOPS=1"))
+			if (!strcmp(varv[i], "GLOBOPS=1"))
 			{
 				has_globopsmod = true;
 			}
