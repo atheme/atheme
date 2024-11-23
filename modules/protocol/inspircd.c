@@ -1657,6 +1657,28 @@ m_capab(struct sourceinfo *si, int parc, char *parv[])
 		}
 		TAINT_ON(strstr(parv[1], "m_invisible.so") != NULL, "invisible (m_invisible) is not presently supported correctly in atheme, and won't be due to ethical obligations");
 	}
+	else if (strcasecmp(parv[0], "CHANMODES") == 0 && parc > 1)
+	{
+		varc = sjtoken(parv[1], ' ', varv);
+		for (i = 0; i < varc; i++)
+		{
+			if (strstr(varv[i], "prefix:") != varv[i])
+				continue; // not a prefix mode
+
+			switch (varv[i][(strlen(varv[i]) - 1)])
+			{
+				case 'q':
+					ircd->uses_owner = true;
+					break;
+				case 'a':
+					ircd->uses_protect = true;
+					break;
+				case 'h':
+					ircd->uses_halfops = true;
+					break;
+			}
+		}
+	}
 	else if (strcasecmp(parv[0], "USERMODES") == 0 && parc > 1)
 	{
 		varc = sjtoken(parv[1], ' ', varv);
