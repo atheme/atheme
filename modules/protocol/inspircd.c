@@ -1005,6 +1005,11 @@ m_fjoin(struct sourceinfo *si, int parc, char *parv[])
 				// yup, skip over the comma
 				userv[i]++;
 
+				// we dont handle membership ids so it can just be thrown away
+				char *membid = strchr(userv[i], ':');
+				if (membid != NULL)
+					*membid = '\0';
+
 				// if we're ignoring status (keep_new_modes is false) then just add them to chan here...
 				if (keep_new_modes == false)
 				{
