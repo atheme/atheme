@@ -1631,7 +1631,7 @@ chanacs_t *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, unsigned int l
 	mowgli_node_t *n;
 	chanacs_t *ca;
 
-	return_val_if_fail(mychan != NULL && u != NULL, 0);
+	return_val_if_fail(mychan != NULL && u != NULL, NULL);
 
 	for (n = next_matching_host_chanacs(mychan, u, mychan->chanacs.head); n != NULL; n = next_matching_host_chanacs(mychan, u, n->next))
 	{
@@ -1779,8 +1779,8 @@ chanacs_t *chanacs_open(mychan_t *mychan, myentity_t *mt, const char *hostmask, 
 	chanacs_t *ca;
 
 	/* wrt the second assert: only one of mu or hostmask can be not-NULL --nenolod */
-	return_val_if_fail(mychan != NULL, false);
-	return_val_if_fail((mt != NULL && hostmask == NULL) || (mt == NULL && hostmask != NULL), false);
+	return_val_if_fail(mychan != NULL, NULL);
+	return_val_if_fail((mt != NULL && hostmask == NULL) || (mt == NULL && hostmask != NULL), NULL);
 
 	if (mt != NULL)
 	{
