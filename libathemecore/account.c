@@ -1002,7 +1002,7 @@ mychan_add(char *name)
 	struct mychan *mc;
 
 	return_val_if_fail(name != NULL, NULL);
-	return_val_if_fail((mc = mychan_find(name)) == NULL, mc);
+	return_val_if_fail((mc = mychan_find(name)) == NULL, NULL);
 
 	if (!(runflags & RF_STARTING))
 		slog(LG_DEBUG, "mychan_add(): %s", name);
@@ -1679,7 +1679,7 @@ chanacs_find_host_by_user(struct mychan *mychan, struct user *u, unsigned int le
 	mowgli_node_t *n;
 	struct chanacs *ca;
 
-	return_val_if_fail(mychan != NULL && u != NULL, 0);
+	return_val_if_fail(mychan != NULL && u != NULL, NULL);
 
 	for (n = next_matching_host_chanacs(mychan, u, mychan->chanacs.head); n != NULL; n = next_matching_host_chanacs(mychan, u, n->next))
 	{
@@ -1834,8 +1834,8 @@ chanacs_open(struct mychan *mychan, struct myentity *mt, const char *hostmask, b
 	struct chanacs *ca;
 
 	/* wrt the second assert: only one of mu or hostmask can be not-NULL --nenolod */
-	return_val_if_fail(mychan != NULL, false);
-	return_val_if_fail((mt != NULL && hostmask == NULL) || (mt == NULL && hostmask != NULL), false);
+	return_val_if_fail(mychan != NULL, NULL);
+	return_val_if_fail((mt != NULL && hostmask == NULL) || (mt == NULL && hostmask != NULL), NULL);
 
 	if (mt != NULL)
 	{
