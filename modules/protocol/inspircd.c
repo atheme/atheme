@@ -10,8 +10,7 @@
 #include <atheme.h>
 #include <atheme/protocol/inspircd.h>
 
-#define PROTOCOL_MINIMUM 1202 // we do not support anything older than this
-#define PROTOCOL_PREFERRED_STR "1202"
+#define PROTOCOL_MINIMUM 1205 // we do not support anything older than this
 
 static struct ircd InspIRCd = {
 	.ircdname = "InspIRCd",
@@ -211,7 +210,7 @@ sid_find(const char *name)
 static inline void
 channel_metadata_sts(struct channel *c, const char *key, const char *value)
 {
-	sts(":%s METADATA %s %s :%s", ME, c->name, key, value);
+	sts(":%s METADATA %s %lu %s :%s", ME, c->name, (unsigned long)c->ts, key, value);
 }
 
 static bool
@@ -354,10 +353,10 @@ inspircd_server_login(void)
 	ircd->uses_protect = false;
 	ircd->uses_halfops = false;
 
-	ret = sts("CAPAB START " PROTOCOL_PREFERRED_STR);
+	ret = sts("CAPAB START %u", PROTOCOL_MINIMUM);
 	if (ret == 1)
 		return 1;
-	sts("CAPAB CAPABILITIES :PROTOCOL=" PROTOCOL_PREFERRED_STR);
+	sts("CAPAB CAPABILITIES :CASEMAPPING=%s", match_mapping == MATCH_ASCII ? "ascii" : "rfc1459");
 	sts("CAPAB END");
 	sts("SERVER %s %s 0 %s :%s", me.name, curr_uplink->send_pass, me.numeric, me.desc);
 
@@ -467,7 +466,7 @@ inspircd_numeric_sts(struct server *from, int numeric, struct user *target, cons
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s PUSH %s ::%s %d %s %s", from->sid, target->uid, from->name, numeric, target->nick, buf);
+	sts(":%s NUM %s %s %d %s", from->sid, from->sid, target->uid, numeric, buf);
 }
 
 static void
@@ -576,14 +575,14 @@ inspircd_topic_sts(struct channel *c, struct user *source, const char *setter, t
 	// Restoring old topic
 	if (ts > prevts + SECONDS_PER_MINUTE || prevts == 0)
 	{
-		sts(":%s FTOPIC %s %lu %s :%s", source->uid, c->name, (unsigned long)ts, setter, topic);
+		sts(":%s FTOPIC %s %lu %lu %s :%s", source->uid, c->name, (unsigned long)c->ts, (unsigned long)ts, setter, topic);
 		return;
 	}
 	// Tweaking a topic
 	else if (ts == prevts)
 	{
 		ts -= SECONDS_PER_MINUTE;
-		sts(":%s FTOPIC %s %lu %s :%s", source->uid, c->name, (unsigned long)ts, setter, topic);
+		sts(":%s FTOPIC %s %lu %lu %s :%s", source->uid, c->name, (unsigned long)c->ts, (unsigned long)ts, setter, topic);
 		c->topicts = ts;
 		return;
 	}
@@ -616,7 +615,7 @@ inspircd_ping_sts(void)
 	if (!u)
 		return;
 
-	sts(":%s PING %s :%s", me.numeric, me.numeric, u->sid);
+	sts(":%s PING %s", me.numeric, u->sid);
 }
 
 static void
@@ -680,7 +679,7 @@ inspircd_jupe(const char *server, const char *reason)
 		}
 	} while (server_find(sid));
 
-	sts(":%s SERVER %s * 1 %s :%s", me.numeric, server, sid, reason);
+	sts(":%s SERVER %s %s :%s", me.numeric, server, sid, reason);
 }
 
 static void
@@ -708,7 +707,7 @@ inspircd_fnc_sts(struct user *source, struct user *u, const char *newnick, int t
 static void
 inspircd_invite_sts(struct user *sender, struct user *target, struct channel *channel)
 {
-	sts(":%s INVITE %s %s", sender->uid, target->uid, channel->name);
+	sts(":%s INVITE %s %s %lu", sender->uid, target->uid, channel->name, (unsigned long)channel->ts);
 }
 
 static void
@@ -794,21 +793,10 @@ inspircd_topiclock_sts(struct channel *c)
 }
 
 static void
-m_topic(struct sourceinfo *si, int parc, char *parv[])
-{
-	struct channel *c = channel_find(parv[0]);
-
-	if (!c)
-		return;
-
-	handle_topic_from(si, c, si->su->nick, time(NULL), parv[1]);
-}
-
-static void
 m_ftopic(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c = channel_find(parv[0]);
-	time_t ts = atol(parv[1]);
+	time_t ts = atol(parv[2]);
 
 	if (!c)
 		return;
@@ -819,17 +807,14 @@ m_ftopic(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	handle_topic_from(si, c, parv[2], ts, parv[3]);
+	handle_topic_from(si, c, parv[3], ts, parv[4]);
 }
 
 static void
 m_ping(struct sourceinfo *si, int parc, char *parv[])
 {
 	// reply to PINGs
-	if (parc == 1)
-		sts(":%s PONG %s", me.numeric, parv[0]);
-	else if (parc == 2)
-		sts(":%s PONG %s :%s", me.numeric, parv[1], parv[0]);
+	sts(":%s PONG %s", me.numeric, si->s->sid);
 }
 
 static void
@@ -1019,6 +1004,11 @@ m_fjoin(struct sourceinfo *si, int parc, char *parv[])
 				// yup, skip over the comma
 				userv[i]++;
 
+				// we dont handle membership ids so it can just be thrown away
+				char *membid = strchr(userv[i], ':');
+				if (membid != NULL)
+					*membid = '\0';
+
 				// if we're ignoring status (keep_new_modes is false) then just add them to chan here...
 				if (keep_new_modes == false)
 				{
@@ -1046,6 +1036,31 @@ m_fjoin(struct sourceinfo *si, int parc, char *parv[])
 
 	if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))
 		channel_delete(c);
+}
+
+static void
+m_ijoin(struct sourceinfo *si, int parc, char *parv[])
+{
+	// :<uid> IJOIN <chan> <membid> [<ts> [<flags>]]
+	struct channel *c;
+	char prefixandnick[51];
+
+	c = channel_find(parv[0]);
+	if (c == NULL)
+	{
+		sts(":%s RESYNC :%s", me.numeric, parv[0]);
+		return;
+	}
+
+	if (parc < 4)
+	{
+		chanuser_add(c, si->su->nick);
+		return;
+	}
+
+	mowgli_strlcpy(prefixandnick, parv[3], sizeof(prefixandnick));
+	mowgli_strlcpy(prefixandnick + strlen(parv[3]), si->su->nick, sizeof(prefixandnick) - strlen(parv[3]));
+	chanuser_add(c, prefixandnick);
 }
 
 static void
@@ -1243,12 +1258,23 @@ m_server(struct sourceinfo *si, int parc, char *parv[])
 	{
 		sts(":%s BURST", me.numeric);
 		get_version_string(ver, sizeof(ver));
-		sts(":%s VERSION :%s", me.numeric, ver);
+		sts(":%s SINFO version :%s", me.numeric, ver);
+		sts(":%s SINFO fullversion :[%s] %s", me.numeric, me.numeric, ver);
+		sts(":%s SINFO rawversion :%s-%s", me.numeric, PACKAGE_TARNAME, PACKAGE_VERSION);
 		services_init();
 		sts(":%s ENDBURST", me.numeric);
 	}
 
-	handle_server(si, parv[0], parv[3], atoi(parv[2]), parv[4]);
+	if (parc == 5)
+	{
+		// SERVER <name> <password> <hops> <sid> :<description>
+		handle_server(si, parv[0], parv[3], atoi(parv[2]), parv[4]);
+	}
+	else if (parc == 3)
+	{
+		// SERVER <name> <sid> :<description>
+		handle_server(si, parv[0], parv[1], 0, parv[2]);
+	}
 }
 
 static inline void
@@ -1256,7 +1282,7 @@ solicit_pongs(struct server *s)
 {
 	mowgli_node_t *n;
 
-	sts(":%s PING %s %s", me.numeric, me.numeric, s->sid);
+	sts(":%s PING %s", me.numeric, s->sid);
 
 	MOWGLI_ITER_FOREACH(n, s->children.head)
 		solicit_pongs(n->data);
@@ -1290,22 +1316,6 @@ static void
 m_away(struct sourceinfo *si, int parc, char *parv[])
 {
 	handle_away(si->su, parc >= 1 ? parv[parc-1] : NULL);
-}
-
-static void
-m_join(struct sourceinfo *si, int parc, char *parv[])
-{
-	struct channel *c;
-
-	c = channel_find(parv[0]);
-	if (!c)
-	{
-		slog(LG_DEBUG, "m_join(): new channel: %s (modes lost)", parv[0]);
-		c = channel_add(parv[0], parc > 1 ? atol(parv[1]) : CURRTIME, si->su->server);
-		return_if_fail(c != NULL);
-		channel_mode_va(NULL, c, 1, "+");
-	}
-	chanuser_add(c, si->su->nick);
 }
 
 static void
@@ -1579,12 +1589,7 @@ m_capab(struct sourceinfo *si, int parc, char *parv[])
 		 */
 		if (parc > 1)
 			has_protocol = atoi(parv[1]);
-		if (has_protocol == 1203 || has_protocol == 1204)
-		{
-			slog(LG_ERROR, "m_capab(): InspIRCd 2.1 beta is not supported.");
-			exit(EXIT_FAILURE);
-		}
-		else if (has_protocol < PROTOCOL_MINIMUM)
+		if (has_protocol < PROTOCOL_MINIMUM)
 		{
 			slog(LG_ERROR, "m_capab(): remote protocol version too old (%d). you may need another protocol module or a newer inspircd. exiting.", has_protocol);
 			exit(EXIT_FAILURE);
@@ -1595,22 +1600,7 @@ m_capab(struct sourceinfo *si, int parc, char *parv[])
 		varc = sjtoken(parv[1], ' ', varv);
 		for (i = 0; i < varc; i++)
 		{
-			if(!strncmp(varv[i], "PREFIX=", 7))
-			{
-				if (strstr(varv[i] + 7, "q"))
-				{
-					ircd->uses_owner = true;
-				}
-				if (strstr(varv[i] + 7, "a"))
-				{
-					ircd->uses_protect = true;
-				}
-				if (strstr(varv[i] + 7, "h"))
-				{
-					ircd->uses_halfops = true;
-				}
-			}
-			else if (!strcmp(varv[i], "GLOBOPS=1"))
+			if (!strcmp(varv[i], "GLOBOPS=1"))
 			{
 				has_globopsmod = true;
 			}
@@ -1659,18 +1649,39 @@ m_capab(struct sourceinfo *si, int parc, char *parv[])
 			if (it)
 				max_rejoindelay = atoi(it + 1);
 		}
-		TAINT_ON(strstr(parv[1], "m_invisible.so") != NULL, "invisible (m_invisible) is not presently supported correctly in atheme, and won't be due to ethical obligations");
+	}
+	else if (strcasecmp(parv[0], "CHANMODES") == 0 && parc > 1)
+	{
+		varc = sjtoken(parv[1], ' ', varv);
+		for (i = 0; i < varc; i++)
+		{
+			if (strstr(varv[i], "prefix:") != varv[i])
+				continue; // not a prefix mode
+
+			switch (varv[i][(strlen(varv[i]) - 1)])
+			{
+				case 'q':
+					ircd->uses_owner = true;
+					break;
+				case 'a':
+					ircd->uses_protect = true;
+					break;
+				case 'h':
+					ircd->uses_halfops = true;
+					break;
+			}
+		}
 	}
 	else if (strcasecmp(parv[0], "USERMODES") == 0 && parc > 1)
 	{
 		varc = sjtoken(parv[1], ' ', varv);
 		for (i = 0; i < varc; i++)
 		{
-			if (!strcmp(varv[i], "hidechans=I"))
+			if (!strcmp(varv[i], "simple:hidechans=I"))
 				has_hidechansmod = true;
-			else if (!strcmp(varv[i], "hideoper=H"))
+			else if (!strcmp(varv[i], "simple:hideoper=H"))
 				has_hideopermod = true;
-			else if (!strcmp(varv[i], "servprotect=k"))
+			else if (!strcmp(varv[i], "simple:servprotect=k"))
 				has_servprotectmod = true;
 		}
 	}
@@ -1765,11 +1776,12 @@ mod_init(struct module *const restrict m)
 
 	ircd = &InspIRCd;
 
-	pcommand_add("PING", m_ping, 1, MSRC_USER | MSRC_SERVER);
+	pcommand_add("PING", m_ping, 1, MSRC_SERVER);
 	pcommand_add("PONG", m_pong, 1, MSRC_SERVER);
 	pcommand_add("PRIVMSG", m_privmsg, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("NOTICE", m_notice, 2, MSRC_USER | MSRC_SERVER | MSRC_UNREG);
 	pcommand_add("FJOIN", m_fjoin, 3, MSRC_SERVER);
+	pcommand_add("IJOIN", m_ijoin, 2, MSRC_USER);
 	pcommand_add("PART", m_part, 1, MSRC_USER);
 	pcommand_add("NICK", m_nick, 2, MSRC_USER);
 	pcommand_add("UID", m_uid, 10, MSRC_SERVER);
@@ -1781,14 +1793,12 @@ mod_init(struct module *const restrict m)
 	pcommand_add("SAVE", m_save, 2, MSRC_SERVER);
 	pcommand_add("SQUIT", m_squit, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("RSQUIT", m_rsquit, 1, MSRC_USER);
-	pcommand_add("SERVER", m_server, 4, MSRC_UNREG | MSRC_SERVER);
+	pcommand_add("SERVER", m_server, 3, MSRC_UNREG | MSRC_SERVER);
 	pcommand_add("STATS", m_stats, 2, MSRC_USER);
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
 	pcommand_add("ADMIN", m_admin, 1, MSRC_USER);
-	pcommand_add("FTOPIC", m_ftopic, 4, MSRC_SERVER);
-	pcommand_add("JOIN", m_join, 1, MSRC_USER);
+	pcommand_add("FTOPIC", m_ftopic, 5, MSRC_SERVER);
 	pcommand_add("ERROR", m_error, 1, MSRC_UNREG | MSRC_SERVER);
-	pcommand_add("TOPIC", m_topic, 2, MSRC_USER);
 	pcommand_add("FIDENT", m_fident, 1, MSRC_USER);
 	pcommand_add("FHOST", m_fhost, 1, MSRC_USER);
 	pcommand_add("IDLE", m_idle, 1, MSRC_USER);

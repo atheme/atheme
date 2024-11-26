@@ -48,9 +48,9 @@ on the network.
 inspircd
 --------
 
-You should use the "inspircd" protocol module for InspIRCd 2.x and 3.x.
+You should use the "inspircd" protocol module for InspIRCd 3.x and 4.x.
 InspIRCd 1.2 support was deprecated in atheme 7.1 and has been dropped
-in atheme 7.2.
+in atheme 7.2. InspIRCd 2.x support has been dropped in atheme 7.3.
 
 You need <uline> tags for services on all servers on the network.
 
@@ -58,9 +58,6 @@ Several of the modes supported by Atheme are in optional modules. It should
 usually not be a problem if those modules are not loaded. The exception to
 this is the m_services_account.so module, which must be loaded at all times
 on your inspircd servers if you wish to use this version of atheme.
-
-Using the m_invisible module on inspircd with Atheme connected is an unsupported
-condition and will result in your Atheme installation being "tainted".
 
 Jupes will use SIDs numerically following services's SID, make sure to leave
 plenty of space.

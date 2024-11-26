@@ -119,7 +119,7 @@
  * Charybdis IRCd                               protocol/charybdis
  * ChatIRCd                                     protocol/chatircd1.1
  * DreamForge 4.6.7 or later                    protocol/dreamforge
- * InspIRCd 2.x and 3.x                         protocol/inspircd
+ * InspIRCd 3.x and 4.x                         protocol/inspircd
  * ircd-ratbox 2.0 and later                    protocol/ratbox
  * IRCNet ircd (ircd 2.11)                      protocol/ircnet
  * solanum                                      protocol/solanum
