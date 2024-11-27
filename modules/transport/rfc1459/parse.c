@@ -54,6 +54,20 @@ irc_parse(char *line)
 
 		slog(LG_RAWDATA, "-> %s", line);
 
+		/* If it starts with a @ we have IRCv3 message tags.
+		 * We don't handle these so just skip them.
+		 */
+		if (*line == '@')
+		{
+			line = strchr(line, ' ');
+			if (!line)
+				goto cleanup; /* just "@tags" */
+
+			line++;
+			if (*line == '\n' || *line == '\000')
+				goto cleanup; /* just "@tags " */
+		}
+
 		// find the first space
 		if ((pos = strchr(line, ' ')))
 		{
