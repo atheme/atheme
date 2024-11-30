@@ -822,17 +822,14 @@ m_pong(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct server *s;
 
-	if (!parv[1])
-		return;
 	s = server_find(parv[0]);
-	if (!s || s == me.me)
+	if (!s || s != me.me)
 	{
-		TAINT_ON(s = server_find(parv[1]), "inspircd bug #90 causes possible state desync -- upgrade your software");
-		if (!s || s == me.me)
-			return;
+		slog(LG_DEBUG, "m_pong(): received unexpected PONG for %s", parv[0]);
+		return;
 	}
 
-	handle_eob(s);
+	handle_eob(si->s);
 
 	me.uplinkpong = CURRTIME;
 
