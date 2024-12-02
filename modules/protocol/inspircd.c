@@ -1263,17 +1263,20 @@ m_server(struct sourceinfo *si, int parc, char *parv[])
 		sts(":%s SINFO rawversion :%s-%s", me.numeric, PACKAGE_TARNAME, PACKAGE_VERSION);
 		services_init();
 		sts(":%s ENDBURST", me.numeric);
-	}
 
-	if (parc == 5)
-	{
 		// SERVER <name> <password> <hops> <sid> :<description>
+		if (parc < 5)
+		{
+			(void) slog(LG_ERROR, "%s: received local SERVER command with %d parameters",
+			                      MOWGLI_FUNC_NAME, parc);
+			return;
+		}
 		handle_server(si, parv[0], parv[3], atoi(parv[2]), parv[4]);
 	}
-	else if (parc == 3)
+	else
 	{
-		// SERVER <name> <sid> :<description>
-		handle_server(si, parv[0], parv[1], 0, parv[2]);
+		// SERVER <name> <sid> [<attrs>...] :<description>
+		handle_server(si, parv[0], parv[1], 0, parv[parc - 1]);
 	}
 }
 
