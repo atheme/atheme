@@ -89,6 +89,24 @@ gs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("Join flags  : %s"), gflags_tostr(ga_flags, atoi(md->value)));
 	}
 
+	if (has_priv(si, PRIV_GROUP_AUSPEX) && (md = metadata_find(mg, "private:mark:setter")))
+	{
+		const char *setter = md->value;
+		const char *reason;
+		time_t ts;
+
+		md = metadata_find(mg, "private:mark:reason");
+		reason = md != NULL ? md->value : "unknown";
+
+		md = metadata_find(mg, "private:mark:timestamp");
+		ts = md != NULL ? atoi(md->value) : 0;
+
+		tm = localtime(&ts);
+		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
+
+		command_success_nodata(si, _("%s was \2MARKED\2 by \2%s\2 on \2%s\2 (%s)."), entity(mg)->name, setter, strfbuf, reason);
+	}
+
 	command_success_nodata(si, _("\2*** End of Info ***\2"));
 
 	logcommand(si, CMDLOG_GET, "INFO: \2%s\2", parv[0]);
