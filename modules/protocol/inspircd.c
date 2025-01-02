@@ -385,6 +385,9 @@ inspircd_quit_sts(struct user *u, const char *reason)
 static void
 inspircd_wallops_sts(const char *text)
 {
+	if (!me.recvsvr)
+		return; // not allowed until connected
+
 	if (has_globopsmod)
 		sts(":%s SNONOTICE g :%s", me.numeric, text);
 	else
