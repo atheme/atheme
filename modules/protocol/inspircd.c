@@ -797,6 +797,7 @@ m_ftopic(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c = channel_find(parv[0]);
 	time_t ts = atol(parv[2]);
+	const char *setter;
 
 	if (!c)
 		return;
@@ -807,7 +808,18 @@ m_ftopic(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	handle_topic_from(si, c, parv[3], ts, parv[4]);
+	if (si->su)
+	{
+		// topic is being set by a user
+		setter = si->su->nick;
+	}
+	else
+	{
+		// topic is being set by a server on burst
+		setter = parv[3];
+	}
+
+	handle_topic_from(si, c, setter, ts, parv[parc - 1]);
 }
 
 static void
@@ -1797,7 +1809,7 @@ mod_init(struct module *const restrict m)
 	pcommand_add("STATS", m_stats, 2, MSRC_USER);
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
 	pcommand_add("ADMIN", m_admin, 1, MSRC_USER);
-	pcommand_add("FTOPIC", m_ftopic, 5, MSRC_SERVER);
+	pcommand_add("FTOPIC", m_ftopic, 4, MSRC_USER | MSRC_SERVER);
 	pcommand_add("ERROR", m_error, 1, MSRC_UNREG | MSRC_SERVER);
 	pcommand_add("FIDENT", m_fident, 1, MSRC_USER);
 	pcommand_add("FHOST", m_fhost, 1, MSRC_USER);
