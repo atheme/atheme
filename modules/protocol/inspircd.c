@@ -848,10 +848,6 @@ m_pong(struct sourceinfo *si, int parc, char *parv[])
 
 	me.uplinkpong = CURRTIME;
 
-	// if pong source isn't origin, this isn't a complete burst. --nenolod
-	if (s != si->s)
-		return;
-
 	// -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net
 	if (me.bursting)
 	{
