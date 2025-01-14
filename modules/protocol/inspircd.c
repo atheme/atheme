@@ -908,6 +908,7 @@ map_a_prefix(char prefix, char* prefixandnick, unsigned int *nlen)
 			{
 				if (status_mode_list[j].value == prefix_mode_list[k].value)
 				{
+					slog(LG_DEBUG, "map_a_prefix(): %c -> %c", prefix, prefix_mode_list[k].mode);
 					prefixandnick[*nlen] = prefix_mode_list[k].mode;
 					(*nlen)++;
 					return;
@@ -1052,6 +1053,7 @@ m_ijoin(struct sourceinfo *si, int parc, char *parv[])
 	// :<uid> IJOIN <chan> <membid> [<ts> [<flags>]]
 	struct channel *c;
 	char prefixandnick[51];
+	unsigned int plen;
 
 	c = channel_find(parv[0]);
 	if (c == NULL)
@@ -1066,8 +1068,14 @@ m_ijoin(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	mowgli_strlcpy(prefixandnick, parv[3], sizeof(prefixandnick));
-	mowgli_strlcpy(prefixandnick + strlen(parv[3]), si->su->nick, sizeof(prefixandnick) - strlen(parv[3]));
+	plen = 0;
+	for (; *parv[3]; parv[3]++)
+	{
+		// atheme wants prefix characters but inspircd sends prefix modes
+		map_a_prefix(*parv[3], prefixandnick, &plen);
+	}
+
+	mowgli_strlcpy(prefixandnick + plen, si->su->nick, sizeof(prefixandnick) - plen);
 	chanuser_add(c, prefixandnick);
 }
 
