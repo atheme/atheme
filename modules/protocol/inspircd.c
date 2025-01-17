@@ -624,12 +624,14 @@ inspircd_ping_sts(void)
 static void
 inspircd_on_login(struct user *u, struct myuser *mu, const char *wantedhost)
 {
+	sts(":%s METADATA %s accountid :%s", me.numeric, u->uid, config_options.show_entity_id ? entity(mu)->id : "");
 	sts(":%s METADATA %s accountname :%s", me.numeric, u->uid, entity(mu)->name);
 }
 
 static bool
 inspircd_on_logout(struct user *u, const char *account)
 {
+	sts(":%s METADATA %s accountid :", me.numeric, u->uid);
 	sts(":%s METADATA %s accountname :", me.numeric, u->uid);
 	return false;
 }
