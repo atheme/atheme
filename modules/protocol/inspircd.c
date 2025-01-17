@@ -520,7 +520,7 @@ inspircd_qline_sts(const char *server, const char *name, long duration, const ch
 	}
 
 	if (has_cbanmod)
-		sts(":%s CBAN %s %ld :%s", svs != NULL ? svs->me->uid : ME, name, duration, reason);
+		sts(":%s ADDLINE CBAN %s %s %lu %ld :%s", me.numeric, name, svs != NULL ? svs->nick : me.name, (unsigned long)CURRTIME, duration, reason);
 	else
 		slog(LG_INFO, "SQLINE: Could not set SQLINE on \2%s\2 due to m_cban not being loaded in inspircd.", name);
 }
@@ -535,7 +535,7 @@ inspircd_unqline_sts(const char *server, const char *name)
 	}
 
 	if (has_cbanmod)
-		sts(":%s CBAN %s", ME, name);
+		sts(":%s DELLINE CBAN %s", ME, name);
 	else
 		slog(LG_INFO, "SQLINE: Could not remove SQLINE on \2%s\2 due to m_cban not being loaded in inspircd.", name);
 }
