@@ -385,6 +385,9 @@ inspircd_quit_sts(struct user *u, const char *reason)
 static void
 inspircd_wallops_sts(const char *text)
 {
+	if (!me.recvsvr)
+		return; // not allowed until connected
+
 	if (has_globopsmod)
 		sts(":%s SNONOTICE g :%s", me.numeric, text);
 	else
@@ -517,7 +520,7 @@ inspircd_qline_sts(const char *server, const char *name, long duration, const ch
 	}
 
 	if (has_cbanmod)
-		sts(":%s CBAN %s %ld :%s", svs != NULL ? svs->me->uid : ME, name, duration, reason);
+		sts(":%s ADDLINE CBAN %s %s %lu %ld :%s", me.numeric, name, svs != NULL ? svs->nick : me.name, (unsigned long)CURRTIME, duration, reason);
 	else
 		slog(LG_INFO, "SQLINE: Could not set SQLINE on \2%s\2 due to m_cban not being loaded in inspircd.", name);
 }
@@ -532,7 +535,7 @@ inspircd_unqline_sts(const char *server, const char *name)
 	}
 
 	if (has_cbanmod)
-		sts(":%s CBAN %s", ME, name);
+		sts(":%s DELLINE CBAN %s", ME, name);
 	else
 		slog(LG_INFO, "SQLINE: Could not remove SQLINE on \2%s\2 due to m_cban not being loaded in inspircd.", name);
 }
@@ -621,12 +624,14 @@ inspircd_ping_sts(void)
 static void
 inspircd_on_login(struct user *u, struct myuser *mu, const char *wantedhost)
 {
+	sts(":%s METADATA %s accountid :%s", me.numeric, u->uid, config_options.show_entity_id ? entity(mu)->id : "");
 	sts(":%s METADATA %s accountname :%s", me.numeric, u->uid, entity(mu)->name);
 }
 
 static bool
 inspircd_on_logout(struct user *u, const char *account)
 {
+	sts(":%s METADATA %s accountid :", me.numeric, u->uid);
 	sts(":%s METADATA %s accountname :", me.numeric, u->uid);
 	return false;
 }
@@ -797,6 +802,7 @@ m_ftopic(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c = channel_find(parv[0]);
 	time_t ts = atol(parv[2]);
+	const char *setter;
 
 	if (!c)
 		return;
@@ -807,7 +813,18 @@ m_ftopic(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	handle_topic_from(si, c, parv[3], ts, parv[4]);
+	if (si->su)
+	{
+		// topic is being set by a user
+		setter = si->su->nick;
+	}
+	else
+	{
+		// topic is being set by a server on burst
+		setter = parv[3];
+	}
+
+	handle_topic_from(si, c, setter, ts, parv[parc - 1]);
 }
 
 static void
@@ -832,10 +849,6 @@ m_pong(struct sourceinfo *si, int parc, char *parv[])
 	handle_eob(si->s);
 
 	me.uplinkpong = CURRTIME;
-
-	// if pong source isn't origin, this isn't a complete burst. --nenolod
-	if (s != si->s)
-		return;
 
 	// -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net
 	if (me.bursting)
@@ -897,6 +910,7 @@ map_a_prefix(char prefix, char* prefixandnick, unsigned int *nlen)
 			{
 				if (status_mode_list[j].value == prefix_mode_list[k].value)
 				{
+					slog(LG_DEBUG, "map_a_prefix(): %c -> %c", prefix, prefix_mode_list[k].mode);
 					prefixandnick[*nlen] = prefix_mode_list[k].mode;
 					(*nlen)++;
 					return;
@@ -1041,6 +1055,7 @@ m_ijoin(struct sourceinfo *si, int parc, char *parv[])
 	// :<uid> IJOIN <chan> <membid> [<ts> [<flags>]]
 	struct channel *c;
 	char prefixandnick[51];
+	unsigned int plen;
 
 	c = channel_find(parv[0]);
 	if (c == NULL)
@@ -1055,8 +1070,14 @@ m_ijoin(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	mowgli_strlcpy(prefixandnick, parv[3], sizeof(prefixandnick));
-	mowgli_strlcpy(prefixandnick + strlen(parv[3]), si->su->nick, sizeof(prefixandnick) - strlen(parv[3]));
+	plen = 0;
+	for (; *parv[3]; parv[3]++)
+	{
+		// atheme wants prefix characters but inspircd sends prefix modes
+		map_a_prefix(*parv[3], prefixandnick, &plen);
+	}
+
+	mowgli_strlcpy(prefixandnick + plen, si->su->nick, sizeof(prefixandnick) - plen);
 	chanuser_add(c, prefixandnick);
 }
 
@@ -1797,7 +1818,7 @@ mod_init(struct module *const restrict m)
 	pcommand_add("STATS", m_stats, 2, MSRC_USER);
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
 	pcommand_add("ADMIN", m_admin, 1, MSRC_USER);
-	pcommand_add("FTOPIC", m_ftopic, 5, MSRC_SERVER);
+	pcommand_add("FTOPIC", m_ftopic, 4, MSRC_USER | MSRC_SERVER);
 	pcommand_add("ERROR", m_error, 1, MSRC_UNREG | MSRC_SERVER);
 	pcommand_add("FIDENT", m_fident, 1, MSRC_USER);
 	pcommand_add("FHOST", m_fhost, 1, MSRC_USER);
