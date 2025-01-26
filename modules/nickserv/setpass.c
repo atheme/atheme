@@ -67,13 +67,20 @@ ns_cmd_setpass(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	logcommand(si, CMDLOG_SET, "SETPASS: \2%s\2", entity(mu)->name);
+	if (! set_password(mu, password))
+	{
+		(void) command_fail(si, fault_internalerror, _("There was an error setting your password. Please "
+		                                               "check it for any invalid characters and contact "
+		                                               "network staff if the issue persists."));
+		return;
+	}
 
 	metadata_delete(mu, "private:setpass:key");
 	metadata_delete(mu, "private:sendpass:sender");
 	metadata_delete(mu, "private:sendpass:timestamp");
 
-	set_password(mu, password);
+	logcommand(si, CMDLOG_SET, "SETPASS: \2%s\2", entity(mu)->name);
+
 	command_success_nodata(si, _("The password for \2%s\2 has been successfully changed."), entity(mu)->name);
 
 	if (mu->flags & MU_NOPASSWORD)
