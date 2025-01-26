@@ -3,7 +3,9 @@ Help for RAKILL:
 RAKILL allows for regex-based akills,
 which are useful for removing clones
 or botnets. The akills are not added
-to &nick&'s list and last a week.
+to &nick&'s list and use the
+configured default network ban
+duration.
 
 Be careful, as regex is very easy to
 make mistakes with. Use RMATCH first.
