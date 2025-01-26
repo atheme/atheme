@@ -140,18 +140,13 @@ myuser_add_id(const char *id, const char *name, const char *pass, const char *em
 	}
 	mu->language = NULL; /* default */
 
-	/* If it's already crypted, don't touch the password. Otherwise,
-	 * use set_password() to initialize it. Why? Because set_password
-	 * will move the user to encrypted passwords if possible. That way,
-	 * new registers are immediately protected and the database is
-	 * immediately converted the first time we start up with crypto.
-	 */
-	if (flags & MU_CRYPTPASS)
-		mowgli_strlcpy(mu->pass, pass, sizeof mu->pass);
-	else
-		set_password(mu, pass);
-
 	myentity_put(entity(mu));
+
+	/* If it's already encrypted, don't touch the password. Otherwise,
+	 * try to encrypt it, or continue to store it plain if this fails.
+	 */
+	if ((mu->flags & MU_CRYPTPASS) || (! set_password(mu, pass)))
+		(void) mowgli_strlcpy(mu->pass, pass, sizeof mu->pass);
 
 	if ((soper = soper_find_named(entity(mu)->name)) != NULL
 		|| (soper = soper_find_eid(entity(mu)->id)) != NULL)

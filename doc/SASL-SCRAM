@@ -14,6 +14,36 @@ somewhat sub-optimal. Likewise, a client may not even attempt a SCRAM
 login in the first place if it does not know in advance that there are
 SCRAM mechanisms available. Please consider this.
 
+Note that deploying this feature to the network will enforce some
+restrictions on passwords. The following are prohibited:
+
+  - Invalid UTF-8 byte sequences
+
+  - ASCII control characters 0x01 through 0x1F (inclusive)
+
+    This includes the following IRC formatting conventions:
+
+    - Bold (0x02)
+    - Colours (0x03)
+    - Monospace (0x11)
+    - Italics (0x1D)
+    - Strike-through (0x1E)
+    - Underline (0x1F)
+
+  - ASCII DEL (0x7F)
+
+  - ASCII control characters 0x80 through 0x9F (inclusive)
+
+If PBKDF2 (the underlying digest algorithm used by SCRAM) will be the only
+loaded crypto provider, attempting to register accounts or change passwords
+will fail if the passwords include the above.
+
+If PBKDF2 is not the only loaded crypto provider, services will fall back to
+one of the others, meaning those users will not be able to login using SASL
+SCRAM.
+
+
+
 Some work needs to be performed by the prospective IRC network administrator
 to enable this. The 5 main steps to perform are:
 

@@ -48,6 +48,17 @@ ns_cmd_return(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	newpass = random_string(config_options.default_pass_length);
+
+	if (! set_password(mu, newpass))
+	{
+		// XXX This should never happen (services' random passwords are strictly 7-bit US ASCII)
+		(void) command_fail(si, fault_internalerror, _("An error occurred changing the account password. "
+		                                               "You should investigate the services logs and "
+		                                               "correct the configuration mistake responsible."));
+		(void) sfree(newpass);
+		return;
+	}
+
 	mowgli_strlcpy(oldmail, mu->email, sizeof oldmail);
 	myuser_set_email(mu, newmail);
 
@@ -60,6 +71,8 @@ ns_cmd_return(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	sfree(newpass);
+
 	if (!(mu->flags & MU_HIDEMAIL)                    // doesn't have HIDEMAIL
 		&& config_options.defuflags & MU_HIDEMAIL // HIDEMAIL is in default uflags
 		&& strcmp(oldmail, newmail))              // new email is different
@@ -67,10 +80,6 @@ ns_cmd_return(struct sourceinfo *si, int parc, char *parv[])
 		mu->flags |= MU_HIDEMAIL;
 		force_hidemail = true;
 	}
-
-	set_password(mu, newpass);
-
-	sfree(newpass);
 
 	// prevents users from "stealing it back" in the event of a takeover
 	metadata_delete(mu, "private:verify:emailchg:key");

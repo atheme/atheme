@@ -163,7 +163,6 @@ ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 			else
 				command_success_nodata(si, _("Overriding MARK on the account %s."), entity(mu)->name);
 		}
-		logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2 (change key)", name);
 
 		key = random_string(config_options.default_pass_length);
 
@@ -182,6 +181,7 @@ ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 			return;
 		}
 
+		logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2 (change key)", name);
 		metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
 		metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));
 		metadata_add(mu, "private:setpass:key", hash);
@@ -198,11 +198,19 @@ ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 			else
 				command_success_nodata(si, _("Overriding MARK on the account %s."), entity(mu)->name);
 		}
-		logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2", name);
 
 		newpass = random_string(16);
-		metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
-		metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));
+
+		if (! set_password(mu, newpass))
+		{
+			// XXX This should never happen (services' random passwords are strictly 7-bit US ASCII)
+			(void) command_fail(si, fault_internalerror, _("An error occurred changing the account "
+			                                               "password. You should investigate the "
+			                                               "services logs and correct the configuration "
+			                                               "mistake responsible."));
+			(void) sfree(newpass);
+			return;
+		}
 
 		if (!sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SENDPASS, mu->email, newpass))
 		{
@@ -211,7 +219,9 @@ ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 			return;
 		}
 
-		set_password(mu, newpass);
+		logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2", name);
+		metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
+		metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));
 		sfree(newpass);
 
 		command_success_nodata(si, _("The password for \2%s\2 has been sent to \2%s\2."), entity(mu)->name, mu->email);
