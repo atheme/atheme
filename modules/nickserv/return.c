@@ -15,6 +15,7 @@ ns_cmd_return(struct sourceinfo *si, int parc, char *parv[])
 	char *target = parv[0];
 	char *newmail = parv[1];
 	char *newpass;
+	const char *newhash;
 	char oldmail[EMAILLEN + 1];
 	struct myuser *mu;
 	struct user *u;
@@ -48,8 +49,9 @@ ns_cmd_return(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	newpass = random_string(config_options.default_pass_length);
+	newhash = crypt_password(newpass);
 
-	if (! set_password(mu, newpass))
+	if (! newhash)
 	{
 		// XXX This should never happen (services' random passwords are strictly 7-bit US ASCII)
 		(void) command_fail(si, fault_internalerror, _("An error occurred changing the account password. "
@@ -71,7 +73,12 @@ ns_cmd_return(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	sfree(newpass);
+	mu->flags |= MU_CRYPTPASS;
+
+	(void) sfree(newpass);
+	(void) smemzero(mu->pass, sizeof mu->pass);
+	(void) mowgli_strlcpy(mu->pass, newhash, sizeof mu->pass);
+	(void) hook_call_myuser_changed_password_or_hash(mu);
 
 	if (!(mu->flags & MU_HIDEMAIL)                    // doesn't have HIDEMAIL
 		&& config_options.defuflags & MU_HIDEMAIL // HIDEMAIL is in default uflags
