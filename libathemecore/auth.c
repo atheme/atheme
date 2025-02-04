@@ -59,13 +59,6 @@ verify_password(struct myuser *const restrict mu, const char *const restrict pas
 		(void) slog(LG_INFO, "%s: verifying unencrypted password for account '%s'!",
 		                     MOWGLI_FUNC_NAME, entity(mu)->name);
 
-		/* This is not a constant-time comparison, but it can't be, because we do not have, at
-		 * this point, a crypto module with a fixed-length output (and thus could use a constant-
-		 * time memory comparison function) to verify it.
-		 */
-		if (strcmp(mu->pass, password) != 0)
-			return false;
-
 		/* Try set_password() instead of the default crypto provider (chosen below) on the basis
 		 * that any encrypted password is better than a plaintext one. If the default crypto
 		 * provider were to fail, it would remain unencrypted, while set_password() will fall
@@ -74,13 +67,17 @@ verify_password(struct myuser *const restrict mu, const char *const restrict pas
 		 *
 		 *   -- amdj
 		 */
-		if (! set_password(mu, password))
+		if (! set_password(mu, mu->pass))
 			(void) slog(LG_DEBUG, "%s: failed to encrypt password for account '%s'",
 			                      MOWGLI_FUNC_NAME, entity(mu)->name);
-
-		// Verification succeeded, hopefully password encrypted
-		return true;
 	}
+
+	if (! (mu->flags & MU_CRYPTPASS))
+		/* This is not a constant-time comparison, but it can't be, because we do not have, at
+		 * this point, a crypto module with a fixed-length output (and thus could use a constant-
+		 * time memory comparison function) to verify it.
+		 */
+		return (strcmp(mu->pass, password) == 0);
 
 	const char *new_hash;
 	const struct crypt_impl *ci, *ci_default;
