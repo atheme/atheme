@@ -1,0 +1,18 @@
+From: &from&
+To: &to&
+Reply-To: &replyto&
+Subject: &netname& Récupération de mot de passe de compte
+Date: &date&
+
+&accountname&,
+
+Quelqu'un a demandé à ce que le mot de passe de votre compte soit
+réinitialisé, et envoyé par mail.  Si vous n'avez pas fait cette
+demande, merci de nous en informer immédiatement, car il pourrait
+s'agir d'une tentative de compromission de votre compte.
+
+Le mot de passe pour '&accountname&' est à présent '&param&'.
+
+--
+Si ce message n'est pas sollicité, merci de contacter &replyto&
+avec une copie complète.

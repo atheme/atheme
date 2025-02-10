@@ -1,0 +1,19 @@
+From: &from&
+To: &to&
+Reply-To: &replyto&
+Subject: &netname& Enregistrement de compte
+Date: &date&
+
+&accountname&,
+
+Pour compléter l'enregistrement de votre compte, vous devez taper la commande
+suivante sur IRC :
+
+/msg &nicksvs& VERIFY REGISTER &accountname& &param&
+
+Merci d'avoir enregistré votre compte sur le réseau IRC &netname& !
+
+--
+Ce mail a été envoyé en raison d'une commande de &sourceinfo&
+le &date&.  Si ce message n'est pas sollicité, merci de contacter &replyto&
+avec une copie complète.
