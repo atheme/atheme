@@ -72,6 +72,8 @@ ns_cmd_setpass(struct sourceinfo *si, int parc, char *parv[])
 		(void) command_fail(si, fault_internalerror, _("There was an error setting your password. Please "
 		                                               "check it for any invalid characters and contact "
 		                                               "network staff if the issue persists."));
+
+		(void) logcommand(si, CMDLOG_SET, "failed SETPASS (password encryption failure)");
 		return;
 	}
 
