@@ -42,22 +42,23 @@ on:
 jobs:
   linux:
     name: Linux
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     strategy:
       fail-fast: true
       matrix:
         compiler:
-          - clang-10
-          - gcc-10
+          - clang-18
+          - gcc-14
 
     env:
       CC: ${{ matrix.compiler }}
 
     steps:
     - name: Clone source code repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
+        persist-credentials: false
         submodules: recursive
 
     - name: Install dependencies
@@ -66,10 +67,11 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y --no-install-recommends                 \
           ${CC}                                                         \
+          lld-18                                                        \
           build-essential                                               \
           gettext                                                       \
           git                                                           \
-          libargon2-0-dev                                               \
+          libargon2-dev                                                 \
           libcrack2-dev                                                 \
           libgcrypt20-dev                                               \
           libgettextpo-dev                                              \
@@ -81,7 +83,6 @@ jobs:
           libqrencode-dev                                               \
           libsodium-dev                                                 \
           libssl-dev                                                    \
-          lld-10                                                        \
           # EOF
 
     - name: Run CI build script

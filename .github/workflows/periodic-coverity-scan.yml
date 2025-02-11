@@ -9,12 +9,13 @@ jobs:
   scan:
     environment: CoverityScan
     name: Coverity Scan
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     steps:
     - name: Clone source code repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
+        persist-credentials: false
         ref: master
         submodules: recursive
 
@@ -27,7 +28,7 @@ jobs:
           curl                                                          \
           gcc                                                           \
           git                                                           \
-          libargon2-0-dev                                               \
+          libargon2-dev                                                 \
           libcrack2-dev                                                 \
           libgcrypt20-dev                                               \
           libidn11-dev                                                  \
