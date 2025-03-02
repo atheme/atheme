@@ -1,0 +1,18 @@
+From: &from&
+To: &to&
+Reply-To: &replyto&
+Subject: &netname& Vérification de nouvelle adresse email de compte
+Date: &date&
+
+&accountname&,
+
+Afin de compléter votre changement d'adresse mail, vous devez vérifier
+votre nouvelle adresse en envoyant les commandes suivantes sur IRC :
+
+/msg &nicksvs& VERIFY EMAILCHG &accountname& &param&
+
+Merci d'avoir mis à jour votre adresse mail avec le réseau IRC
+&netname& !
+--
+Si ce message n'est pas sollicité, merci de contacter &replyto&
+avec une copie complète.

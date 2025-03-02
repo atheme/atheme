@@ -1,0 +1,21 @@
+From: &from&
+To: &to&
+Reply-To: &replyto&
+Subject: &netname& Vérification de changement de mot de passe de compte
+Date: &date&
+
+&accountname&,
+
+Quelqu'un a demandé à ce que le mot de passe de votre compte soit
+réinitialisé, avec un token envoyé à l'adresse mail pour ce compte.
+
+Si vous n'avez pas fait cette demande, merci d'ignorer ce message, car
+aucune action ne sera réalisée sur votre compte sans le token présent
+dans ce mail. Ce token sera également automatiquement invalidé la
+prochaine fois que vous vous connecterez à votre compte.
+
+Afin de définir un nouveau mot de passe, vous devez envoyer les commandes
+suivantes sur IRC, où <mot-de-passe> est le nouveau mot de passe que vous
+souhaitez définir :
+
+/msg &nicksvs& SETPASS &accountname& &param& <mot-de-passe>

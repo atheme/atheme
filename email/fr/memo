@@ -1,0 +1,17 @@
+From: &from&
+To: &to&
+Reply-To: &replyto&
+Subject: &netname& Nouveau Memo
+Date: &date&
+
+&accountname&,
+
+Vous avez un nouveau memo de &entityname& :
+
+&param&
+
+Pour désactiver cette fonctionnalité, faites /msg &nicksvs& SET EMAILMEMOS OFF via
+IRC.
+--
+Si ce message n'est pas sollicité, merci de contacter &replyto&
+avec une copie complète.
