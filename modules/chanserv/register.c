@@ -154,11 +154,6 @@ cs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 		mc->mlock_on |= (CMODE_NOEXT | CMODE_TOPIC);
 	}
 
-	if (c->limit == 0)
-		mc->mlock_off |= CMODE_LIMIT;
-	if (c->key == NULL)
-		mc->mlock_off |= CMODE_KEY;
-
 	mc->mlock_off &= ~mc->mlock_on;
 
 	chanacs_add(mc, entity(si->smu), custom_founder_check(), CURRTIME, entity(si->smu));
