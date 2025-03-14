@@ -291,7 +291,7 @@ os_cmd_joinrate_func(struct sourceinfo *const restrict si, const int parc, char 
 static struct command os_cmd_joinrate = {
 	.name           = "JOINRATE",
 	.desc           = N_("Configure join rate thresholds for channels"),
-	.access         = PRIV_USER_ADMIN,
+	.access         = PRIV_CHAN_ADMIN,
 	.maxparc        = 4,
 	.cmd            = &os_cmd_joinrate_func,
 	.help           = { .path = "oservice/joinrate" },
