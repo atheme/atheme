@@ -534,7 +534,7 @@ unreal_qline_sts(const char *server, const char *name, long duration, const char
 {
 	struct service *svs;
 
-	if (*name == '#' || *name == '&')
+	if (*name == '&')
 	{
 		slog(LG_INFO, "SQLINE: Could not set SQLINE on \2%s\2, not supported by unrealircd.", name);
 		return;
