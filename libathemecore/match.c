@@ -17,7 +17,8 @@
 #include "internal.h"
 
 #ifdef HAVE_LIBPCRE
-#  include <pcre.h>
+#  define PCRE2_CODE_UNIT_WIDTH 8
+#  include <pcre2.h>
 #endif
 
 #define BadPtr(x) (!(x) || (*(x) == '\0'))
@@ -601,14 +602,17 @@ regex_create(char *pattern, int flags)
 	if (flags & AREGEX_PCRE)
 	{
 #ifdef HAVE_LIBPCRE
-		const char *errptr;
-		int erroffset;
+		int errcode = 0;
+		PCRE2_SIZE erroffset;
 
-		preg->un.pcre = pcre_compile(pattern, (flags & AREGEX_ICASE ? PCRE_CASELESS : 0) | PCRE_NO_AUTO_CAPTURE, &errptr, &erroffset, NULL);
+		preg->un.pcre = pcre2_compile(pattern, PCRE2_ZERO_TERMINATED, (flags & AREGEX_ICASE ? PCRE2_CASELESS : 0) | PCRE2_NO_AUTO_CAPTURE, &errcode, &erroffset, NULL);
 		if (preg->un.pcre == NULL)
 		{
+			char errstr[256];
+			errstr[0] = '\0';
+			pcre2_get_error_message(errcode, errstr, sizeof(errstr));
 			slog(LG_ERROR, "regex_match(): %s at offset %d in %s",
-					errptr, erroffset, pattern);
+					errstr, erroffset, pattern);
 			sfree(preg);
 			return NULL;
 		}
@@ -697,7 +701,7 @@ regex_match(struct atheme_regex *preg, char *string)
 			return regexec(&preg->un.posix, string, 0, NULL, 0) == 0;
 		case at_pcre:
 #ifdef HAVE_LIBPCRE
-			return pcre_exec(preg->un.pcre, NULL, string, strlen(string), 0, 0, NULL, 0) >= 0;
+			return pcre2_match(preg->un.pcre, string, PCRE2_ZERO_TERMINATED, 0, 0, NULL, NULL) >= 0;
 #else
 			slog(LG_ERROR, "regex_match(): we were given a PCRE pattern without PCRE support!");
 			return false;
@@ -719,7 +723,7 @@ regex_destroy(struct atheme_regex *preg)
 			break;
 		case at_pcre:
 #ifdef HAVE_LIBPCRE
-			pcre_free(preg->un.pcre);
+			pcre2_code_free(preg->un.pcre);
 			break;
 #else
 			slog(LG_ERROR, "regex_destroy(): we were given a PCRE pattern without PCRE support!");

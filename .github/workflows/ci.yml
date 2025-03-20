@@ -78,7 +78,7 @@ jobs:
           libidn11-dev                                                  \
           libldap2-dev                                                  \
           libpasswdqc-dev                                               \
-          libpcre3-dev                                                  \
+          libpcre2-dev                                                  \
           libperl-dev                                                   \
           libqrencode-dev                                               \
           libsodium-dev                                                 \

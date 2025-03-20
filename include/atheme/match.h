@@ -15,7 +15,8 @@
 #include <atheme/stdheaders.h>
 
 #ifdef HAVE_LIBPCRE
-#  include <pcre.h>
+#  define PCRE2_CODE_UNIT_WIDTH 8
+#  include <pcre2.h>
 #endif
 
 enum atheme_regex_type
@@ -30,7 +31,7 @@ struct atheme_regex
 	union {
 		regex_t         posix;
 #ifdef HAVE_LIBPCRE
-		pcre *          pcre;
+		pcre2_code *    pcre;
 #endif
 	} un;
 };
