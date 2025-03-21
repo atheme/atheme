@@ -31,13 +31,13 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
             # Allow for user to provide custom installation directory
             AS_IF([test -d "${LIBPCRE_PATH}/include" -a -d "${LIBPCRE_PATH}/lib"], [
                 LIBPCRE_CFLAGS="-I${LIBPCRE_PATH}/include"
-                LIBPCRE_LIBS="-L${LIBPCRE_PATH}/lib -lpcre"
+                LIBPCRE_LIBS="-L${LIBPCRE_PATH}/lib -lpcre2-8"
             ], [
                 AC_MSG_ERROR([${LIBPCRE_PATH} is not a suitable directory for libpcre])
             ])
         ], [test -n "${PKG_CONFIG}"], [
             # Allow for the user to "override" pkg-config without it being installed
-            PKG_CHECK_MODULES([LIBPCRE], [libpcre], [], [LIBPCRE="No"])
+            PKG_CHECK_MODULES([LIBPCRE], [libpcre2-8], [], [LIBPCRE="No"])
         ])
         AS_IF([test -n "${LIBPCRE_CFLAGS+set}" -a -n "${LIBPCRE_LIBS+set}"], [
             # Only proceed with library tests if custom paths were given or pkg-config succeeded
@@ -60,11 +60,12 @@ AC_DEFUN([ATHEME_LIBTEST_PCRE], [
                 #ifdef HAVE_STDDEF_H
                 #  include <stddef.h>
                 #endif
-                #include <pcre.h>
+                #define PCRE2_CODE_UNIT_WIDTH 8
+                #include <pcre2.h>
             ]], [[
-                (void) pcre_compile(NULL, 0, NULL, NULL, NULL);
-                (void) pcre_exec(NULL, NULL, NULL, 0, 0, 0, NULL, 0);
-                (void) pcre_free(NULL);
+                (void) pcre2_compile(NULL, 0, 0, NULL, NULL, NULL);
+                (void) pcre2_match(NULL, NULL, 0, 0, 0, NULL, NULL);
+                (void) pcre2_code_free(NULL);
             ]])
         ], [
             AC_MSG_RESULT([yes])
