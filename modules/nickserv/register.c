@@ -21,6 +21,7 @@ ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 	const char *account;
 	const char *pass;
 	const char *email;
+	const char *hash;
 	char lau[BUFSIZE], lao[BUFSIZE];
 	struct hook_user_register_check hdata;
 	struct hook_user_req req;
@@ -141,10 +142,15 @@ ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 			return;
 	}
 
-	if (si->su && !auth_module_loaded && !crypt_get_default_provider())
-		(void) command_success_nodata(si, "%s", _("Warning: Your password will not be encrypted."));
+	if ((! auth_module_loaded) && (! (hash = crypt_password(pass))))
+	{
+		(void) command_fail(si, fault_internalerror, _("There was an error setting your password. Please "
+		                                               "check it for any invalid characters and contact "
+		                                               "network staff if the issue persists."));
+		return;
+	}
 
-	mu = myuser_add(account, auth_module_loaded ? "*" : pass, email, config_options.defuflags | MU_NOBURSTLOGIN | (auth_module_loaded ? MU_CRYPTPASS : 0));
+	mu = myuser_add(account, auth_module_loaded ? "*" : hash, email, config_options.defuflags | MU_NOBURSTLOGIN | MU_CRYPTPASS);
 	mu->registered = CURRTIME;
 	mu->lastlogin = CURRTIME;
 	if (!nicksvs.no_nick_ownership)
