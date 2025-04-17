@@ -75,7 +75,7 @@ The following libraries generally require pkg-config to be installed:
 - OpenSSL (`libcrypto.pc`)
 - GNU libidn (`libidn.pc`)
 - GNU Nettle (`nettle.pc`)
-- PCRE (`libpcre.pc`)
+- PCRE (`libpcre2-8.pc`)
 - libqrencode (`libqrencode.pc`)
 - Sodium (`libsodium.pc`)
 
