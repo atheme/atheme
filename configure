@@ -8018,21 +8018,21 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        LIBARGON2_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libargon2" 2>&1`
+                LIBARGON2_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libargon2" 2>&1`
         else
-	        LIBARGON2_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libargon2" 2>&1`
+                LIBARGON2_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libargon2" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$LIBARGON2_PKG_ERRORS" >&5
+        # Put the nasty error message in config.log where it belongs
+        echo "$LIBARGON2_PKG_ERRORS" >&5
 
-	LIBARGON2="No"
+        LIBARGON2="No"
 elif test $pkg_failed = untried; then
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-	LIBARGON2="No"
+        LIBARGON2="No"
 else
-	LIBARGON2_CFLAGS=$pkg_cv_LIBARGON2_CFLAGS
-	LIBARGON2_LIBS=$pkg_cv_LIBARGON2_LIBS
+        LIBARGON2_CFLAGS=$pkg_cv_LIBARGON2_CFLAGS
+        LIBARGON2_LIBS=$pkg_cv_LIBARGON2_LIBS
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
 
@@ -8707,21 +8707,21 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        LIBCRYPTO_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libcrypto" 2>&1`
+                LIBCRYPTO_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libcrypto" 2>&1`
         else
-	        LIBCRYPTO_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libcrypto" 2>&1`
+                LIBCRYPTO_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libcrypto" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$LIBCRYPTO_PKG_ERRORS" >&5
+        # Put the nasty error message in config.log where it belongs
+        echo "$LIBCRYPTO_PKG_ERRORS" >&5
 
-	LIBCRYPTO="No"
+        LIBCRYPTO="No"
 elif test $pkg_failed = untried; then
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-	LIBCRYPTO="No"
+        LIBCRYPTO="No"
 else
-	LIBCRYPTO_CFLAGS=$pkg_cv_LIBCRYPTO_CFLAGS
-	LIBCRYPTO_LIBS=$pkg_cv_LIBCRYPTO_LIBS
+        LIBCRYPTO_CFLAGS=$pkg_cv_LIBCRYPTO_CFLAGS
+        LIBCRYPTO_LIBS=$pkg_cv_LIBCRYPTO_LIBS
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
 
@@ -9493,21 +9493,21 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        LIBIDN_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libidn" 2>&1`
+                LIBIDN_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libidn" 2>&1`
         else
-	        LIBIDN_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libidn" 2>&1`
+                LIBIDN_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libidn" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$LIBIDN_PKG_ERRORS" >&5
+        # Put the nasty error message in config.log where it belongs
+        echo "$LIBIDN_PKG_ERRORS" >&5
 
-	LIBIDN="No"
+        LIBIDN="No"
 elif test $pkg_failed = untried; then
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-	LIBIDN="No"
+        LIBIDN="No"
 else
-	LIBIDN_CFLAGS=$pkg_cv_LIBIDN_CFLAGS
-	LIBIDN_LIBS=$pkg_cv_LIBIDN_LIBS
+        LIBIDN_CFLAGS=$pkg_cv_LIBIDN_CFLAGS
+        LIBIDN_LIBS=$pkg_cv_LIBIDN_LIBS
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
 
@@ -10320,12 +10320,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        LIBMOWGLI_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libmowgli-2 >= 2.0.0" 2>&1`
+                LIBMOWGLI_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libmowgli-2 >= 2.0.0" 2>&1`
         else
-	        LIBMOWGLI_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libmowgli-2 >= 2.0.0" 2>&1`
+                LIBMOWGLI_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libmowgli-2 >= 2.0.0" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$LIBMOWGLI_PKG_ERRORS" >&5
+        # Put the nasty error message in config.log where it belongs
+        echo "$LIBMOWGLI_PKG_ERRORS" >&5
 
 
             as_fn_error $? "--with-libmowgli=yes was given, but pkg-config could not locate libmowgli" "$LINENO" 5
@@ -10337,8 +10337,8 @@ printf "%s\n" "no" >&6; }
             as_fn_error $? "--with-libmowgli=yes was given, but pkg-config could not locate libmowgli" "$LINENO" 5
 
 else
-	LIBMOWGLI_CFLAGS=$pkg_cv_LIBMOWGLI_CFLAGS
-	LIBMOWGLI_LIBS=$pkg_cv_LIBMOWGLI_LIBS
+        LIBMOWGLI_CFLAGS=$pkg_cv_LIBMOWGLI_CFLAGS
+        LIBMOWGLI_LIBS=$pkg_cv_LIBMOWGLI_LIBS
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
 
@@ -10740,21 +10740,21 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        LIBNETTLE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "nettle" 2>&1`
+                LIBNETTLE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "nettle" 2>&1`
         else
-	        LIBNETTLE_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "nettle" 2>&1`
+                LIBNETTLE_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "nettle" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$LIBNETTLE_PKG_ERRORS" >&5
+        # Put the nasty error message in config.log where it belongs
+        echo "$LIBNETTLE_PKG_ERRORS" >&5
 
-	LIBNETTLE="No"
+        LIBNETTLE="No"
 elif test $pkg_failed = untried; then
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-	LIBNETTLE="No"
+        LIBNETTLE="No"
 else
-	LIBNETTLE_CFLAGS=$pkg_cv_LIBNETTLE_CFLAGS
-	LIBNETTLE_LIBS=$pkg_cv_LIBNETTLE_LIBS
+        LIBNETTLE_CFLAGS=$pkg_cv_LIBNETTLE_CFLAGS
+        LIBNETTLE_LIBS=$pkg_cv_LIBNETTLE_LIBS
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
 
@@ -11167,7 +11167,7 @@ then :
 then :
 
                 LIBPCRE_CFLAGS="-I${LIBPCRE_PATH}/include"
-                LIBPCRE_LIBS="-L${LIBPCRE_PATH}/lib -lpcre"
+                LIBPCRE_LIBS="-L${LIBPCRE_PATH}/lib -lpcre2-8"
 
 else $as_nop
 
@@ -11181,19 +11181,19 @@ then :
             # Allow for the user to "override" pkg-config without it being installed
 
 pkg_failed=no
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libpcre" >&5
-printf %s "checking for libpcre... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libpcre2-8" >&5
+printf %s "checking for libpcre2-8... " >&6; }
 
 if test -n "$LIBPCRE_CFLAGS"; then
     pkg_cv_LIBPCRE_CFLAGS="$LIBPCRE_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libpcre") 2>&5
+    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre2-8\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libpcre2-8") 2>&5
   ac_status=$?
   printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_LIBPCRE_CFLAGS=`$PKG_CONFIG --cflags "libpcre" 2>/dev/null`
+  pkg_cv_LIBPCRE_CFLAGS=`$PKG_CONFIG --cflags "libpcre2-8" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -11205,12 +11205,12 @@ if test -n "$LIBPCRE_LIBS"; then
     pkg_cv_LIBPCRE_LIBS="$LIBPCRE_LIBS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libpcre") 2>&5
+    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre2-8\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libpcre2-8") 2>&5
   ac_status=$?
   printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_LIBPCRE_LIBS=`$PKG_CONFIG --libs "libpcre" 2>/dev/null`
+  pkg_cv_LIBPCRE_LIBS=`$PKG_CONFIG --libs "libpcre2-8" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -11231,21 +11231,21 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        LIBPCRE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libpcre" 2>&1`
+                LIBPCRE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libpcre2-8" 2>&1`
         else
-	        LIBPCRE_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libpcre" 2>&1`
+                LIBPCRE_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libpcre2-8" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$LIBPCRE_PKG_ERRORS" >&5
+        # Put the nasty error message in config.log where it belongs
+        echo "$LIBPCRE_PKG_ERRORS" >&5
 
-	LIBPCRE="No"
+        LIBPCRE="No"
 elif test $pkg_failed = untried; then
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-	LIBPCRE="No"
+        LIBPCRE="No"
 else
-	LIBPCRE_CFLAGS=$pkg_cv_LIBPCRE_CFLAGS
-	LIBPCRE_LIBS=$pkg_cv_LIBPCRE_LIBS
+        LIBPCRE_CFLAGS=$pkg_cv_LIBPCRE_CFLAGS
+        LIBPCRE_LIBS=$pkg_cv_LIBPCRE_LIBS
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
 
@@ -11290,15 +11290,16 @@ printf %s "checking if libpcre appears to be usable... " >&6; }
                 #ifdef HAVE_STDDEF_H
                 #  include <stddef.h>
                 #endif
-                #include <pcre.h>
+                #define PCRE2_CODE_UNIT_WIDTH 8
+                #include <pcre2.h>
 
 int
 main (void)
 {
 
-                (void) pcre_compile(NULL, 0, NULL, NULL, NULL);
-                (void) pcre_exec(NULL, NULL, NULL, 0, 0, 0, NULL, 0);
-                (void) pcre_free(NULL);
+                (void) pcre2_compile(NULL, 0, 0, NULL, NULL, NULL);
+                (void) pcre2_match(NULL, NULL, 0, 0, 0, NULL, NULL);
+                (void) pcre2_code_free(NULL);
 
   ;
   return 0;
@@ -11464,21 +11465,21 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        LIBQRENCODE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libqrencode" 2>&1`
+                LIBQRENCODE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libqrencode" 2>&1`
         else
-	        LIBQRENCODE_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libqrencode" 2>&1`
+                LIBQRENCODE_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libqrencode" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$LIBQRENCODE_PKG_ERRORS" >&5
+        # Put the nasty error message in config.log where it belongs
+        echo "$LIBQRENCODE_PKG_ERRORS" >&5
 
-	LIBQRENCODE="No"
+        LIBQRENCODE="No"
 elif test $pkg_failed = untried; then
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-	LIBQRENCODE="No"
+        LIBQRENCODE="No"
 else
-	LIBQRENCODE_CFLAGS=$pkg_cv_LIBQRENCODE_CFLAGS
-	LIBQRENCODE_LIBS=$pkg_cv_LIBQRENCODE_LIBS
+        LIBQRENCODE_CFLAGS=$pkg_cv_LIBQRENCODE_CFLAGS
+        LIBQRENCODE_LIBS=$pkg_cv_LIBQRENCODE_LIBS
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
 
@@ -11704,21 +11705,21 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        LIBSODIUM_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libsodium" 2>&1`
+                LIBSODIUM_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libsodium" 2>&1`
         else
-	        LIBSODIUM_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libsodium" 2>&1`
+                LIBSODIUM_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libsodium" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$LIBSODIUM_PKG_ERRORS" >&5
+        # Put the nasty error message in config.log where it belongs
+        echo "$LIBSODIUM_PKG_ERRORS" >&5
 
-	LIBSODIUM="No"
+        LIBSODIUM="No"
 elif test $pkg_failed = untried; then
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-	LIBSODIUM="No"
+        LIBSODIUM="No"
 else
-	LIBSODIUM_CFLAGS=$pkg_cv_LIBSODIUM_CFLAGS
-	LIBSODIUM_LIBS=$pkg_cv_LIBSODIUM_LIBS
+        LIBSODIUM_CFLAGS=$pkg_cv_LIBSODIUM_CFLAGS
+        LIBSODIUM_LIBS=$pkg_cv_LIBSODIUM_LIBS
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
 
