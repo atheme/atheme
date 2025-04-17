@@ -603,7 +603,7 @@ regex_create(char *pattern, int flags)
 	{
 #ifdef HAVE_LIBPCRE
 		int errcode = 0;
-		PCRE2_SIZE erroffset;
+		PCRE2_SIZE erroffset = 0;
 
 		preg->un.pcre = pcre2_compile(pattern, PCRE2_ZERO_TERMINATED, (flags & AREGEX_ICASE ? PCRE2_CASELESS : 0) | PCRE2_NO_AUTO_CAPTURE, &errcode, &erroffset, NULL);
 		if (preg->un.pcre == NULL)
@@ -611,8 +611,8 @@ regex_create(char *pattern, int flags)
 			char errstr[256];
 			errstr[0] = '\0';
 			pcre2_get_error_message(errcode, errstr, sizeof(errstr));
-			slog(LG_ERROR, "regex_match(): %s at offset %d in %s",
-					errstr, erroffset, pattern);
+			slog(LG_ERROR, "regex_match(): %s at offset %zu in %s",
+					errstr, (size_t) erroffset, pattern);
 			sfree(preg);
 			return NULL;
 		}
