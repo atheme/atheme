@@ -22,6 +22,7 @@ SRCS    =                   \
     join.c                  \
     list.c                  \
     listchans.c             \
+    mark.c                  \
     register.c              \
     regnolimit.c            \
     set.c                   \
