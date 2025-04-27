@@ -59,10 +59,20 @@ ns_cmd_resetpass(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	newpass = random_string(config_options.default_pass_length);
+
+	if (! set_password(mu, newpass))
+	{
+		// XXX This should never happen (services' random passwords are strictly 7-bit US ASCII)
+		(void) command_fail(si, fault_internalerror, _("An error occurred changing the account password. "
+		                                               "You should investigate the services logs and "
+		                                               "correct the configuration mistake responsible."));
+		(void) sfree(newpass);
+		return;
+	}
+
 	metadata_delete(mu, "private:setpass:key");
 	metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
 	metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));
-	set_password(mu, newpass);
 	command_success_nodata(si, _("The password for \2%s\2 has been changed to \2%s\2."), entity(mu)->name, newpass);
 
 	sfree(newpass);

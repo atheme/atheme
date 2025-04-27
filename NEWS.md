@@ -280,6 +280,9 @@ Password Cryptography
 - Add verify-only `rawsha2-256` and `rawsha2-512` modules to verify more
   password hashes from other sources.
 - Warn admin if no encryption-capable crypto modules are loaded
+- Services will now refuse to set new account passwords if they cannot be
+  encrypted, and refuse new account registrations if the password cannot be
+  encrypted. You MUST load an encryption-capable crypto provider.
 - Generating new encrypted passwords is now much more efficient
 - Try encrypting a password with each module in turn instead of giving up
 - Indicating whether a password needs re-encrypting is now much more efficient
