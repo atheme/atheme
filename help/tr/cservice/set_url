@@ -6,4 +6,4 @@ Bu adres kanala giren butun kullanicilara gosterilir.
 Sentaks: SET <#kanal> URL [url]
 
 Kullanimi:
-    /msg &nick& SET #foo URL http://www.foobar.org
+    /msg &nick& SET #foo URL https://example.org/

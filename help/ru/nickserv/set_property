@@ -9,6 +9,6 @@
 Синтаксис: SET PROPERTY <название> [значение]
 
 Примеры:
-    /msg &nick& SET PROPERTY URL http://www.primer.ru/aga.php
+    /msg &nick& SET PROPERTY URL https://example.org/
     /msg &nick& SET PROPERTY GENDER Female
     /msg &nick& SET PROPERTY ICQ

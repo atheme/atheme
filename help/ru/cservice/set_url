@@ -6,4 +6,4 @@ SET URL позволяет вам ассоциировать URL-адрес с каналом.
 Синтаксис: SET <#канал> URL [url-адрес]
 
 Пример:
-    /msg &nick& SET #chat URL http://vasya.ppk
+    /msg &nick& SET #chat URL https://example.org/

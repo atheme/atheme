@@ -10,6 +10,6 @@ blanco.
 Sintaxis: SET PROPERTY <nombre> [valor]
 
 Ejemplo:
-    /msg &nick& SET PROPERTY URL http://www.ejemplo.com/~pedro/
+    /msg &nick& SET PROPERTY URL https://example.org/
     /msg &nick& SET PROPERTY SIGNO Piscis
     /msg &nick& SET PROPERTY ICQ

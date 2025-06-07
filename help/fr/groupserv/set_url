@@ -7,4 +7,4 @@ les utilisateurs dans INFO.
 Syntaxe : SET <!groupe> URL [url]
 
 Exemple :
-    /msg &nick& SET !slashdot URL http://slashdot.org
+    /msg &nick& SET !slashdot URL https://example.org/

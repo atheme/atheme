@@ -9,5 +9,5 @@ el nombre y deje el valor en blanco.
 Sintaxis: SET <#canal> PROPERTY <nombre> [valor]
 
 Ejemplo:
-    /msg &nick& SET #atheme PROPERTY URL http://www.atheme.org/
+    /msg &nick& SET #atheme PROPERTY URL https://example.org/
     /msg &nick& SET #carne PROPERTY VEGETALES

@@ -7,4 +7,4 @@ to all users joining the channel.
 Syntax: SET <#channel> URL [url]
 
 Example:
-    /msg &nick& SET #chat URL http://slashdot.org
+    /msg &nick& SET #chat URL https://example.org

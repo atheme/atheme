@@ -6,4 +6,4 @@ infosunda butun kullanicilara gorunur.
 Sentaks: SET <!grup> URL [url]
 
 Kullanimi:
-    /msg &nick& SET !foobar URL http://foobar.org
+    /msg &nick& SET !foobar URL https://example.org/

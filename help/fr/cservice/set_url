@@ -7,4 +7,4 @@ une URL associée à votre salon. Ceci est montré
 Syntaxe : SET <#salon> URL [url]
 
 Exemple :
-    /msg &nick& SET #chat URL http://slashdot.org
+    /msg &nick& SET #chat URL https://example.org/

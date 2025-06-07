@@ -8,4 +8,4 @@ al canal.
 Sintaxis: SET <#canal> URL [url]
 
 Ejemplo:
-    /msg &nick& SET #chat URL http://slashdot.org
+    /msg &nick& SET #chat URL https://example.org/
