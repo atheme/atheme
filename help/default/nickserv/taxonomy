@@ -1,7 +1,12 @@
 Help for TAXONOMY:
 
-The taxonomy command lists metadata information associated
+The TAXONOMY command lists metadata information associated
 with registered users.
+#if module nickserv/set_property
+
+This information can be added and removed with the
+SET PROPERTY command.
+#endif
 
 Example:
     /msg &nick& TAXONOMY foo
