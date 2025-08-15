@@ -10,6 +10,12 @@ already received an email with the key.
 
 To set a new password if you know the current
 password, use SET PASSWORD instead of SETPASS.
+#if module saslserv/scram
+
+The password should be well-formed UTF-8 (which
+includes ASCII), with no control characters or
+invalid UTF-8 byte sequences.
+#endif
 
 Syntax: SETPASS <nickname> <key> <password>
 
