@@ -71,7 +71,7 @@ ns_cmd_verify(struct sourceinfo *si, int parc, char *parv[])
 	{
 		if (!(mu->flags & MU_WAITAUTH) || !(md = metadata_find(mu, "private:verify:register:key")))
 		{
-			command_fail(si, fault_badparams, _("\2%s\2 is not awaiting verification."), nick);
+			command_fail(si, fault_nochange, _("\2%s\2 is not awaiting verification."), nick);
 			return;
 		}
 
@@ -100,7 +100,7 @@ ns_cmd_verify(struct sourceinfo *si, int parc, char *parv[])
 	{
 		if (!(md = metadata_find(mu, "private:verify:emailchg:key")))
 		{
-			command_fail(si, fault_badparams, _("\2%s\2 is not awaiting verification."), nick);
+			command_fail(si, fault_nochange, _("\2%s\2 is not awaiting verification."), nick);
 			return;
 		}
 
@@ -174,7 +174,7 @@ ns_cmd_fverify(struct sourceinfo *si, int parc, char *parv[])
 	{
 		if (!(mu->flags & MU_WAITAUTH) || !metadata_find(mu, "private:verify:register:key"))
 		{
-			command_fail(si, fault_badparams, _("\2%s\2 is not awaiting verification."), nick);
+			command_fail(si, fault_nochange, _("\2%s\2 is not awaiting verification."), nick);
 			return;
 		}
 
@@ -187,7 +187,7 @@ ns_cmd_fverify(struct sourceinfo *si, int parc, char *parv[])
 	{
 		if (!metadata_find(mu, "private:verify:emailchg:key"))
 		{
-			command_fail(si, fault_badparams, _("\2%s\2 is not awaiting verification."), nick);
+			command_fail(si, fault_nochange, _("\2%s\2 is not awaiting verification."), nick);
 			return;
 		}
 
