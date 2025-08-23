@@ -14,7 +14,7 @@
 #include <atheme/stdheaders.h>
 #include <atheme/structures.h>
 
-void set_password(struct myuser *mu, const char *newpassword);
+bool set_password(struct myuser *mu, const char *password) ATHEME_FATTR_WUR;
 bool verify_password(struct myuser *mu, const char *password) ATHEME_FATTR_WUR;
 
 extern bool auth_module_loaded;
