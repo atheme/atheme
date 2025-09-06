@@ -217,53 +217,55 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 	// we have a registered nickname
 	if (mn != NULL)
 	{
-		if (hide_info)
-			command_success_nodata(si, _("Last seen  : %s"), ns_obfuscate_time_ago(mn->lastseen));
-
 		// registered nickname is online
 		if (u != NULL)
 		{
-			// it's our nickname or the account isn't Private
 			if (!hide_info)
 				command_success_nodata(si, _("Last seen  : now"));
-			// it's not our nickname and the account is private but we're a soper
-			else if (has_user_auspex)
-				command_success_nodata(si, _("Last seen  : (hidden) now"));
+			else
+			{
+				command_success_nodata(si, _("Last seen  : %s"), ns_obfuscate_time_ago(CURRTIME));
+				if (has_user_auspex)
+					command_success_nodata(si, _("Last seen  : (hidden) now"));
+			}
 		}
-		// registered nickname is offline
 		else
 		{
 			strftime(lastlogin, sizeof lastlogin, TIME_FORMAT, localtime(&mn->lastseen));
-			// it's our nickname or the account isn't private
 			if (!hide_info)
 				command_success_nodata(si, _("Last seen  : %s (%s ago)"), lastlogin, time_ago(mn->lastseen));
-			// it's not our nickname and the account is private but we're a soper
-			else if (has_user_auspex)
-				command_success_nodata(si, _("Last seen  : (hidden) %s (%s ago)"), lastlogin, time_ago(mn->lastseen));
+			else
+			{
+				command_success_nodata(si, _("Last seen  : %s"), ns_obfuscate_time_ago(mn->lastseen));
+				if (has_user_auspex)
+					command_success_nodata(si, _("Last seen  : (hidden) %s (%s ago)"), lastlogin, time_ago(mn->lastseen));
+			}
 		}
 	}
 
-	if (hide_info)
-		command_success_nodata(si, _("User seen  : %s"), ns_obfuscate_time_ago(mu->lastlogin));
 	// account is logged in
 	if (MOWGLI_LIST_LENGTH(&mu->logins) > 0)
 	{
-		// it's our account or the account isn't private
 		if (!hide_info)
 			command_success_nodata(si, _("User seen  : now"));
-		// it's not our account and the account is private but we're a soper
-		else if (has_user_auspex)
-			command_success_nodata(si, _("User seen  : (hidden) now"));
+		else
+		{
+			command_success_nodata(si, _("User seen  : %s"), ns_obfuscate_time_ago(CURRTIME));
+			if (has_user_auspex)
+				command_success_nodata(si, _("User seen  : (hidden) now"));
+		}
 	}
 	else
 	{
 		strftime(lastlogin, sizeof lastlogin, TIME_FORMAT, localtime(&mu->lastlogin));
-		// it's our account or the account isn't private
 		if (!hide_info)
 			command_success_nodata(si, _("User seen  : %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
-		// it's not our account and the account is private but we're a soper
-		else if (has_user_auspex)
-			command_success_nodata(si, _("User seen  : (hidden) %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
+		else
+		{
+			command_success_nodata(si, _("User seen  : %s"), ns_obfuscate_time_ago(mu->lastlogin));
+			if (has_user_auspex)
+				command_success_nodata(si, _("User seen  : (hidden) %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
+		}
 	}
 
 	// if this is our account or we're a soper, show sessions
