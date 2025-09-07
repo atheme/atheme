@@ -220,52 +220,52 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		// registered nickname is online
 		if (u != NULL)
 		{
-			if (!hide_info)
-				command_success_nodata(si, _("Last seen  : now"));
-			else
+			if (hide_info)
 			{
 				command_success_nodata(si, _("Last seen  : %s"), ns_obfuscate_time_ago(CURRTIME));
 				if (has_user_auspex)
 					command_success_nodata(si, _("Last seen  : (hidden) now"));
 			}
+			else
+				command_success_nodata(si, _("Last seen  : now"));
 		}
 		else
 		{
 			strftime(lastlogin, sizeof lastlogin, TIME_FORMAT, localtime(&mn->lastseen));
-			if (!hide_info)
-				command_success_nodata(si, _("Last seen  : %s (%s ago)"), lastlogin, time_ago(mn->lastseen));
-			else
+			if (hide_info)
 			{
 				command_success_nodata(si, _("Last seen  : %s"), ns_obfuscate_time_ago(mn->lastseen));
 				if (has_user_auspex)
 					command_success_nodata(si, _("Last seen  : (hidden) %s (%s ago)"), lastlogin, time_ago(mn->lastseen));
 			}
+			else
+				command_success_nodata(si, _("Last seen  : %s (%s ago)"), lastlogin, time_ago(mn->lastseen));
 		}
 	}
 
 	// account is logged in
 	if (MOWGLI_LIST_LENGTH(&mu->logins) > 0)
 	{
-		if (!hide_info)
-			command_success_nodata(si, _("User seen  : now"));
-		else
+		if (hide_info)
 		{
 			command_success_nodata(si, _("User seen  : %s"), ns_obfuscate_time_ago(CURRTIME));
 			if (has_user_auspex)
 				command_success_nodata(si, _("User seen  : (hidden) now"));
 		}
+		else
+			command_success_nodata(si, _("User seen  : now"));
 	}
 	else
 	{
 		strftime(lastlogin, sizeof lastlogin, TIME_FORMAT, localtime(&mu->lastlogin));
-		if (!hide_info)
-			command_success_nodata(si, _("User seen  : %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
-		else
+		if (hide_info)
 		{
 			command_success_nodata(si, _("User seen  : %s"), ns_obfuscate_time_ago(mu->lastlogin));
 			if (has_user_auspex)
 				command_success_nodata(si, _("User seen  : (hidden) %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
 		}
+		else
+			command_success_nodata(si, _("User seen  : %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
 	}
 
 	// if this is our account or we're a soper, show sessions
