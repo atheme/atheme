@@ -81,6 +81,7 @@ AC_DEFUN([ATHEME_CC_ENABLE_WARNINGS], [
         ATHEME_TEST_CC_FLAGS([-Wwrite-strings])
     ])
 
+    ATHEME_TEST_CC_FLAGS([-Wno-c++-keyword])
     ATHEME_TEST_CC_FLAGS([-Wno-conversion])
     ATHEME_TEST_CC_FLAGS([-Wno-declaration-after-statement])
     ATHEME_TEST_CC_FLAGS([-Wno-disabled-macro-expansion])
@@ -89,6 +90,7 @@ AC_DEFUN([ATHEME_CC_ENABLE_WARNINGS], [
     ATHEME_TEST_CC_FLAGS([-Wno-extra-semi-stmt])
     ATHEME_TEST_CC_FLAGS([-Wno-format-pedantic])
     ATHEME_TEST_CC_FLAGS([-Wno-format-zero-length])
+    ATHEME_TEST_CC_FLAGS([-Wno-implicit-void-ptr-cast])
     ATHEME_TEST_CC_FLAGS([-Wno-packed])
     ATHEME_TEST_CC_FLAGS([-Wno-padded])
     ATHEME_TEST_CC_FLAGS([-Wno-pedantic])
