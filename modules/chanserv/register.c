@@ -140,6 +140,31 @@ cs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 				case '-':
 					dir = MTYPE_DEL;
 					break;
+
+				/* 'k' and 'l' are not in mode_list[] and so mode_to_flag() does not parse them
+				 *
+				 * Ignore +k if there is currently no channel key; ignore -k if there is
+				 * Ignore +l if there is currently no channel limit; ignore -l if there is
+				 *
+				 * Reason being we wouldn't want to remove an active channel key or limit on
+				 * registration if the admin has put -kl in default_mlock, and we can't enforce
+				 * a key or limit where none exists either
+				 *
+				 * -- amdj
+				 */
+				case 'k':
+					if (dir == MTYPE_ADD && c->key != NULL)
+						mc->mlock_on |= CMODE_KEY;
+					if (dir == MTYPE_DEL && c->key == NULL)
+						mc->mlock_off |= CMODE_KEY;
+					break;
+				case 'l':
+					if (dir == MTYPE_ADD && c->limit != 0)
+						mc->mlock_on |= CMODE_LIMIT;
+					if (dir == MTYPE_DEL && c->limit == 0)
+						mc->mlock_off |= CMODE_LIMIT;
+					break;
+
 				default:
 					if (dir == MTYPE_ADD)
 						mc->mlock_on |= mode_to_flag(*mchar);
