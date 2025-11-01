@@ -1507,6 +1507,42 @@ m_chghost(struct sourceinfo *si, int parc, char *parv[])
 	u->vhost = strshare_get(parv[1]);
 }
 
+static void m_setname(struct sourceinfo *si, int parc, char *parv[])
+{
+	strshare_unref(si->su->gecos);
+	si->su->gecos = strshare_get(parv[0]);
+}
+
+static void m_chgname(struct sourceinfo *si, int parc, char *parv[])
+{
+	struct user *u = user_find(parv[0]);
+
+	if (!u)
+		return;
+
+	strshare_unref(u->gecos);
+	u->gecos = strshare_get(parv[1]);
+}
+
+
+static void m_setident(struct sourceinfo *si, int parc, char *parv[])
+{
+	strshare_unref(si->su->user);
+	si->su->user = strshare_get(parv[0]);
+}
+
+static void m_chgident(struct sourceinfo *si, int parc, char *parv[])
+{
+	struct user *u = user_find(parv[0]);
+
+	if (!u)
+		return;
+
+	strshare_unref(u->user);
+	u->user = strshare_get(parv[1]);
+}
+
+
 static void
 m_motd(struct sourceinfo *si, int parc, char *parv[])
 {
@@ -1668,6 +1704,10 @@ mod_init(struct module *const restrict m)
 	pcommand_add("TOPIC", m_topic, 4, MSRC_USER | MSRC_SERVER);
 	pcommand_add("SETHOST", m_sethost, 1, MSRC_USER);
 	pcommand_add("CHGHOST", m_chghost, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("SETNAME", m_setname, 1, MSRC_USER);
+	pcommand_add("CHGNAME", m_chgname, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("SETIDENT", m_setident, 1, MSRC_USER);
+	pcommand_add("CHGIDENT", m_chgident, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
 	pcommand_add("PROTOCTL", m_protoctl, 1, MSRC_UNREG);
 	pcommand_add("SASL", m_sasl, 4, MSRC_SERVER);
