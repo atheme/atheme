@@ -199,7 +199,7 @@ ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 				command_success_nodata(si, _("Overriding MARK on the account %s."), entity(mu)->name);
 		}
 
-		newpass = random_string(16);
+		newpass = random_string(config_options.default_pass_length);
 
 		if (! set_password(mu, newpass))
 		{
