@@ -23,6 +23,12 @@ If you do not receive the email, please check the address
 in your INFO. If the address is incorrect, DROP the nick 
 and REGISTER it again.
 #endif
+#if module saslserv/scram
+
+The password should be well-formed UTF-8 (which
+includes ASCII), with no control characters or
+invalid UTF-8 byte sequences.
+#endif
 
 Syntax: REGISTER <password> <email-address>
 
