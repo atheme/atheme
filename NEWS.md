@@ -114,6 +114,11 @@ POTENTIAL COMPATIBILITY BREAKAGE
   changed to `user:exceedlimits`, and `user:regnolimit` now refers to the
   ability to use the nickserv command `REGNOLIMIT`.
 
+- The NickServ VHOST command now exclusively supports the modern ON/OFF syntax
+  introduced in Atheme 5.0. In the unlikely case you operate any bots managing
+  user vhosts that are still using the pre-2009 syntax, you may wish to update
+  them; consult `help/default/nickserv/vhost` for details.
+
 Security
 --------
 - Services now accepts email addresses that may contain shell metacharacters.
@@ -213,6 +218,7 @@ NickServ
 - Blame a specific channel when a NickServ `REGAIN` fails due to a channel ban
 - NickServ `RETURN` now enables the `HIDEMAIL` flag if the email was changed
   (unless the flag is unset by default)
+- NickServ `VHOST` no longer supports legacy pre-v5.0 command syntax
 
 IRCds
 -----

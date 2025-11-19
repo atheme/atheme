@@ -32,7 +32,6 @@ do_sethost_all(struct myuser *mu, stringref host)
 	}
 }
 
-// VHOST <account> [host]  (legacy)
 // VHOST <account> ON|OFF [host]
 static void
 ns_cmd_vhost(struct sourceinfo *si, int parc, char *parv[])
@@ -46,26 +45,14 @@ ns_cmd_vhost(struct sourceinfo *si, int parc, char *parv[])
 	char timestring[16];
 	struct hook_user_needforce needforce_hdata;
 
-	if (!target)
+	if (parc < 2)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "VHOST");
 		command_fail(si, fault_needmoreparams, _("Syntax: VHOST <account> ON|OFF [vhost]"));
 		return;
 	}
 
-	// find the user...
-	if (!(mu = myuser_find_ext(target)))
-	{
-		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
-		return;
-	}
-
-	if (parc == 1)
-		host = NULL;
-	else if (parc == 2 && (strchr(parv[1], '.') || strchr(parv[1], ':') ||
-					strchr(parv[1], '/')))
-		host = parv[1];
-	else if (!strcasecmp(parv[1], "ON"))
+	if (!strcasecmp(parv[1], "ON"))
 	{
 		if (parc < 3)
 		{
@@ -99,6 +86,13 @@ ns_cmd_vhost(struct sourceinfo *si, int parc, char *parv[])
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "VHOST");
 		command_fail(si, fault_badparams, _("Syntax: VHOST <account> ON|OFF [vhost]"));
+		return;
+	}
+
+	// find the user...
+	if (!(mu = myuser_find_ext(target)))
+	{
+		command_fail(si, fault_nosuch_target, STR_IS_NOT_REGISTERED, target);
 		return;
 	}
 
