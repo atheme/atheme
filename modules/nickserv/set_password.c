@@ -56,9 +56,15 @@ ns_cmd_set_password(struct sourceinfo *si, int parc, char *parv[])
 	if (! hdata.allowed)
 		return;
 
-	logcommand(si, CMDLOG_SET, "SET:PASSWORD");
+	if (! set_password(si->smu, password))
+	{
+		(void) command_fail(si, fault_internalerror, _("There was an error setting your password. Please "
+		                                               "check it for any invalid characters and contact "
+		                                               "network staff if the issue persists."));
+		return;
+	}
 
-	set_password(si->smu, password);
+	logcommand(si, CMDLOG_SET, "SET:PASSWORD");
 
 	command_success_nodata(si, _("The password for \2%s\2 has been successfully changed."), entity(si->smu)->name);
 }

@@ -171,6 +171,9 @@ crypt_verify_password(const char *const restrict password, const char *const res
 const char *
 crypt_password(const char *const restrict password)
 {
+	return_val_if_fail(password != NULL, NULL);
+	return_val_if_fail(*password != 0x00, NULL);
+
 	bool encryption_capable_module = false;
 
 	mowgli_node_t *n;
@@ -191,7 +194,7 @@ crypt_password(const char *const restrict password)
 
 		if (! result)
 		{
-			(void) slog(LG_ERROR, "%s: ci->crypt() failed for provider '%s'", MOWGLI_FUNC_NAME, ci->id);
+			(void) slog(LG_DEBUG, "%s: ci->crypt() failed for provider '%s'", MOWGLI_FUNC_NAME, ci->id);
 			continue;
 		}
 
@@ -200,7 +203,7 @@ crypt_password(const char *const restrict password)
 	}
 
 	if (encryption_capable_module)
-		(void) slog(LG_ERROR, "%s: all encryption-capable crypto providers failed", MOWGLI_FUNC_NAME);
+		(void) slog(LG_DEBUG, "%s: all encryption-capable crypto providers failed", MOWGLI_FUNC_NAME);
 	else
 		(void) slog(LG_ERROR, "%s: no encryption-capable crypto provider is available!", MOWGLI_FUNC_NAME);
 
