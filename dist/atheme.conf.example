@@ -884,10 +884,16 @@ loadmodule "saslserv/plain";
  * CHANNEL command                              statserv/channel
  * NETSPLIT command                             statserv/netsplit
  * SERVER command                               statserv/server
+ *
+ * Graphite Statistics Exporter                 statserv/graphite
+ *   See the graphite {} section below.
+ *   It is mandatory if you load this module.
  */
 #loadmodule "statserv/channel";
 #loadmodule "statserv/netsplit";
 #loadmodule "statserv/server";
+#
+#loadmodule "statserv/graphite";
 
 
 
@@ -2411,6 +2417,100 @@ statserv {
 
 	access {
 	};
+};
+
+/* Graphite Statistics Exporter configuration
+ *
+ * This is where you configure the parameters for the statserv/graphite
+ * module.
+ *
+ * Unless otherwise indicated, all options are required to be specified
+ * and provided with a value; that is, if you load the module, you must
+ * uncomment and configure these values.
+ *
+ * Installing and configuring Graphite is outside of the scope of support
+ * for this software. There is already plenty of documentation for that,
+ * for example at <https://graphite.readthedocs.io/en/stable/>.
+ */
+graphite {
+
+	/* (*) interval (seconds)
+	 *
+	 * The data collection and reporting interval. This should, but does
+	 * not have to, match your Graphite server configuration's highest
+	 * resolution data retention period. If it does not match, then
+	 * interpolation and/or averaging of values will be required, which
+	 * will increase the processing load on Graphite.
+	 */
+	#interval = 10;
+
+	/* (*) prefix
+	 *
+	 * The prefix to use for metric names. For example, if you set this
+	 * to "atheme", then the number of servers on the network will be
+	 * represented by the metric named "atheme.network.servers".
+	 *
+	 * Note that if you change this, old metrics that have already been
+	 * collected by Graphite will not be renamed; it would be, in effect,
+	 * starting over from nothing.
+	 */
+	#prefix = "atheme";
+
+	/* (*) vhost
+	 *
+	 * The local address to connect to the Graphite server from.
+	 *
+	 * This parameter is optional. If you do not specify an address,
+	 * services will leave it to the operating system to decide which
+	 * source address to use for the connection.
+	 */
+	#vhost = "192.0.2.40";
+
+	/* (*) host
+	 *
+	 * The hostname or IP address of the Graphite server.
+	 */
+	#host = "192.0.2.80";
+
+	/* (*) port
+	 *
+	 * The TCP port that the Graphite server is listening on.
+	 * This module does not support UDP.
+	 */
+	#port = 2003;
+
+	/* (*) collect_pwhashes
+	 *
+	 * This module can collect and export the various types of, and
+	 * amount of, password hashes for registered accounts. For example,
+	 * it can tell you how many users have PBKDF2-HMAC-SHA2-512 password
+	 * hashes, how many have Argon2i hashes, how many accounts have MD5
+	 * hashes, and so on.
+	 *
+	 * This functionality is only of benefit if you are planning to, or
+	 * are currently in the middle of, performing a migration from one
+	 * password crypto module to another, or migrating parameters for a
+	 * module; for example, by changing the digest algorithm used by the
+	 * pbkdf2v2 module, or by changing the algorithm type used by the
+	 * argon2 module. This would allow you to graph the migration over
+	 * time, as users login with their password and services re-encrypts
+	 * it.
+	 *
+	 * It does not get any more specific than that; for example, if you
+	 * change the amount of iterations in the pbkdf2v2 module, or if you
+	 * change the amount of memory required by the argon2 module, those
+	 * changes will not be reflected here; they will still be counted as
+	 * the same *type* of password hash.
+	 *
+	 * Enabling this if you only have one type of password hash in the
+	 * database is pointless; its only non-zero metric would match the
+	 * reported metric for number of registered accounts.
+	 *
+	 * This parameter is optional; if you do not specify it, it defaults
+	 * to false, and no statistics on password hashes will be collected
+	 * and exported.
+	 */
+	#collect_pwhashes;
 };
 
 /* ALIS configuration.
