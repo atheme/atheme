@@ -583,7 +583,14 @@ command_calc(struct sourceinfo *si, int parc, char *parv[])
 	}
 	else
 	{
-		if (! string_to_uint(parv[0], &times) || times > max_rolls)
+		if (! string_to_uint(parv[0], &times))
+		{
+			command_fail(si, fault_badparams, STR_INVALID_PARAMS, "CALC");
+			command_fail(si, fault_badparams, _("Syntax: CALC [times] <expression>"));
+			return;
+		}
+
+		if (times > max_rolls)
 			times = max_rolls;
 
 		arg = parv[1];
