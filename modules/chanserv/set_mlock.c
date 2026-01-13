@@ -16,10 +16,11 @@ static void
 cs_cmd_set_mlock(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct mychan *mc;
-	char modebuf[32], *end, c;
+	char modebuf[32], old_omode_buf[32], new_omode_buf[32], *end, c;
 	int dir = MTYPE_NUL;
 	int newlock_on = 0, newlock_off = 0, newlock_limit = 0, flag = 0;
 	unsigned int mask, changed;
+	unsigned int old_omode_plus, old_omode_minus, new_omode_plus, new_omode_minus;
 	bool mask_ext;
 	char newlock_key[KEYLEN + 1];
 	char newlock_ext[ignore_mode_list_size][512];
@@ -211,9 +212,35 @@ cs_cmd_set_mlock(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	// track previous state of any oper-only modes being changed for logging purposes
+	old_omode_plus  = mc->mlock_on  & changed & ircd->oper_only_modes;
+	old_omode_minus = mc->mlock_off & changed & ircd->oper_only_modes;
+
+	end = old_omode_buf;
+	*end = 0;
+
+	if (old_omode_plus)
+		end += snprintf(end, sizeof(old_omode_buf) - (end - old_omode_buf), "+%s", flags_to_string(old_omode_plus));
+
+	if (old_omode_minus)
+		end += snprintf(end, sizeof(old_omode_buf) - (end - old_omode_buf), "-%s", flags_to_string(old_omode_minus));
+
 	// save it to mychan, leave the modes in mask unchanged -- jilles
 	mc->mlock_on = (newlock_on & ~mask) | (mc->mlock_on & mask);
 	mc->mlock_off = (newlock_off & ~mask) | (mc->mlock_off & mask);
+
+	// same as above, but recording the new state
+	new_omode_plus  = mc->mlock_on  & changed & ircd->oper_only_modes;
+	new_omode_minus = mc->mlock_off & changed & ircd->oper_only_modes;
+
+	end = new_omode_buf;
+	*end = 0;
+
+	if (new_omode_plus)
+		end += snprintf(end, sizeof(new_omode_buf) - (end - new_omode_buf), "+%s", flags_to_string(new_omode_plus));
+
+	if (new_omode_minus)
+		end += snprintf(end, sizeof(new_omode_buf) - (end - new_omode_buf), "-%s", flags_to_string(new_omode_minus));
 
 	if (!(mask & CMODE_LIMIT))
 		mc->mlock_limit = newlock_limit;
@@ -293,8 +320,22 @@ cs_cmd_set_mlock(struct sourceinfo *si, int parc, char *parv[])
 		command_success_nodata(si, _("The MLOCK for \2%s\2 has been removed."), mc->name);
 		logcommand(si, CMDLOG_SET, "SET:MLOCK:NONE: \2%s\2", mc->name);
 	}
-	if (changed & ircd->oper_only_modes)
-		logcommand(si, CMDLOG_SET, "SET:MLOCK: \2%s\2 to \2%s\2 by \2%s\2", mc->name, *modebuf != '\0' ? modebuf : "+", get_oper_name(si));
+
+	if (*old_omode_buf && *new_omode_buf)
+	{
+		wallops("\2%s\2 changed MLOCK on \2%s\2, removing \2%s\2 and adding \2%2s\2", get_oper_name(si), mc->name, old_omode_buf, new_omode_buf);
+		logcommand(si, CMDLOG_ADMIN, "SET:MLOCK:OPER: \2%s\2 removed \2%s\2, added \2%s\2", mc->name, old_omode_buf, new_omode_buf);
+	}
+	else if (*old_omode_buf)
+	{
+		wallops("\2%s\2 changed MLOCK on \2%s\2, removing \2%s\2", get_oper_name(si), mc->name, old_omode_buf);
+		logcommand(si, CMDLOG_ADMIN, "SET:MLOCK:OPER: \2%s\2 removed \2%s\2", mc->name, old_omode_buf);
+	}
+	else if (*new_omode_buf)
+	{
+		wallops("\2%s\2 changed MLOCK on \2%s\2, adding \2%s\2", get_oper_name(si), mc->name, new_omode_buf);
+		logcommand(si, CMDLOG_ADMIN, "SET:MLOCK:OPER: \2%s\2 added \2%s\2", mc->name, new_omode_buf);
+	}
 
 	check_modes(mc, true);
 	if (mc->chan != NULL)
