@@ -488,6 +488,8 @@ xmlrpcmethod_ison(void *conn, int parc, char *parv[])
 /* atheme.metadata
  *
  * XML inputs:
+ *       authcookie
+ *       account name
  *       entity name, UID or channel name
  *       metadata key
  *       metadata value (optional)
@@ -499,7 +501,9 @@ static int
 xmlrpcmethod_metadata(void *conn, int parc, char *parv[])
 {
 	struct metadata *md;
+	struct myuser *mu;
 	int i;
+	bool showprivate = false;
 	char buf[XMLRPC_BUFSIZE];
 
 	for (i = 0; i < parc; i++)
@@ -511,32 +515,44 @@ xmlrpcmethod_metadata(void *conn, int parc, char *parv[])
 		}
 	}
 
-	if (parc < 2)
+	if (parc < 4)
 	{
 		xmlrpc_generic_error(fault_needmoreparams, "Insufficient parameters.");
 		return 0;
 	}
 
-	if (*parv[0] == '#')
+	if ((mu = myuser_find(parv[1])) == NULL)
+	{
+		xmlrpc_generic_error(fault_nosuch_source, "Unknown user.");
+		return 0;
+	}
+
+	if (authcookie_validate(parv[0], mu) == false)
+	{
+		xmlrpc_generic_error(fault_badauthcookie, "Invalid authcookie for this account.");
+		return 0;
+	}
+
+	if (*parv[2] == '#')
 	{
 		struct mychan *mc;
 
-		mc = mychan_find(parv[0]);
+		mc = mychan_find(parv[2]);
 		if (mc == NULL)
 		{
 			xmlrpc_generic_error(fault_nosuch_source, "No channel registration was found for the provided channel name.");
 			return 0;
 		}
 
-		md = metadata_find(mc, parv[1]);
+		md = metadata_find(mc, parv[3]);
 	}
 	else
 	{
 		struct myentity *mt;
 
-		mt = myentity_find(parv[0]);
+		mt = myentity_find(parv[2]);
 		if (mt == NULL)
-			mt = myentity_find_uid(parv[0]);
+			mt = myentity_find_uid(parv[2]);
 
 		if (mt == NULL)
 		{
@@ -544,7 +560,7 @@ xmlrpcmethod_metadata(void *conn, int parc, char *parv[])
 			return 0;
 		}
 
-		md = metadata_find(mt, parv[1]);
+		md = metadata_find(mt, parv[3]);
 	}
 
 	if (md == NULL)
@@ -553,7 +569,17 @@ xmlrpcmethod_metadata(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	xmlrpc_string(buf, md->value);
+	if (*parv[2] == '#' && has_priv_myuser(mu, PRIV_CHAN_AUSPEX))
+		showprivate = true;
+	else if (*parv[2] == '!' && has_priv_myuser(mu, PRIV_GROUP_AUSPEX))
+		showprivate = true;
+	else if (*parv[2] != '#' && *parv[2] != '!' && has_priv_myuser(mu, PRIV_USER_AUSPEX))
+		showprivate = true;
+
+	if (strncmp(md->name, "private:", 8) != 0 || showprivate)
+		xmlrpc_string(buf, md->value);
+	else
+		xmlrpc_string(buf, "");
 	xmlrpc_send(1, buf);
 
 	return 0;
