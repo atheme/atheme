@@ -8,6 +8,11 @@ recreating the channel (this includes keys).
 
 Syntax: SET <#channel> MLOCK [modes]
 
+The MLOCK can also be removed, so that no modes are 
+enforced or locked.
+
+Syntax: SET <#channel> MLOCK OFF
+
 Examples: (some may use modes your ircd does not support)
     /msg &nick& SET #foo MLOCK +nt-lk
     /msg &nick& SET #foo MLOCK +inst-kl
@@ -15,3 +20,4 @@ Examples: (some may use modes your ircd does not support)
     /msg &nick& SET #foo MLOCK +ntcjf-kl 2:30 #overflow
     /msg &nick& SET #overflow MLOCK +mntF-kljf
     /msg &nick& SET #foo1 MLOCK +ntlL 40 #foo2
+    /msg &nick& SET #bar MLOCK OFF
