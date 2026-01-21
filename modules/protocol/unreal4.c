@@ -708,6 +708,10 @@ unreal_svslogin_sts(const char *target, const char *nick, const char *user, cons
 		*p = '\0';
 
 	sts(":%s SVSLOGIN %s %s %s", saslserv->me->nick, servermask, target, entity(account)->name);
+	if (strcmp(user, "*"))
+		sts(":%s CHGIDENT %s %s", me.numeric, target, user);
+	if (strcmp(host, "*"))
+		sts(":%s CHGHOST %s %s", me.numeric, target, host);
 }
 
 static void
