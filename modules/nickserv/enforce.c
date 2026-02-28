@@ -331,7 +331,7 @@ ns_cmd_release(struct sourceinfo *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_DO, "failed RELEASE \2%s\2 (password authentication disabled)", target);
 		return;
 	}
-	if ((si->smu == mn->owner) || verify_password(mn->owner, password))
+	if ((si->smu == mn->owner) || (password && verify_password(mn->owner, password)))
 	{
 		// if this (nick, host) is waiting to be enforced, remove it
 		if (si->su != NULL)
