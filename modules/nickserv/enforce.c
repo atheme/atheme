@@ -447,7 +447,7 @@ ns_cmd_regain(struct sourceinfo *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_DO, "failed REGAIN \2%s\2 (not a valid nickname)", target);
 		return;
 	}
-	if ((si->smu == mn->owner) || verify_password(mn->owner, password))
+	if ((si->smu == mn->owner) || (password && verify_password(mn->owner, password)))
 	{
 		if (user_loginmaxed(mn->owner))
 		{
