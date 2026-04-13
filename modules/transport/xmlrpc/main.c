@@ -10,16 +10,15 @@
 #include <atheme.h>
 #include "xmlrpclib.h"
 
-static struct {
-	char *path;
-} xmlrpc_config;
-
-static struct connection *current_cptr = NULL; // XXX: Hack: src/xmlrpc.c requires us to do this
-
+// Imported from other modules
 static mowgli_list_t *httpd_path_handlers = NULL;
 
-// Configuration
+// Configuration for this module
 static mowgli_list_t conf_xmlrpc_table;
+
+// Miscellaneous state for this module
+static struct connection *current_cptr = NULL; // XXX: Hack: src/xmlrpc.c requires us to do this
+static mowgli_node_t *xmlrpc_path_node = NULL;
 
 static char *
 dump_buffer(char *buf, int length)
@@ -49,36 +48,6 @@ dump_buffer(char *buf, int length)
 	return buf;
 }
 
-static void
-handle_request(struct connection *cptr, void *requestbuf)
-{
-	current_cptr = cptr;
-	xmlrpc_process(requestbuf, cptr);
-	current_cptr = NULL;
-
-	return;
-}
-
-static struct path_handler handle_xmlrpc = { NULL, handle_request };
-
-static void
-xmlrpc_config_ready(void *vptr)
-{
-	/* Note: handle_xmlrpc.path may point to freed memory between
-	 * reading the config and here.
-	 */
-	handle_xmlrpc.path = xmlrpc_config.path;
-
-	if (handle_xmlrpc.handler != NULL)
-	{
-		if (mowgli_node_find(&handle_xmlrpc, httpd_path_handlers))
-			return;
-
-		mowgli_node_add(&handle_xmlrpc, mowgli_node_create(), httpd_path_handlers);
-	}
-	else
-		slog(LG_ERROR, "xmlrpc_config_ready(): xmlrpc {} block missing or invalid");
-}
 
 static void
 xmlrpc_command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *message)
@@ -560,31 +529,43 @@ xmlrpcmethod_metadata(void *conn, int parc, char *parv[])
 }
 
 static void
+handle_request(struct connection *cptr, void *requestbuf)
+{
+	current_cptr = cptr;
+	xmlrpc_process(requestbuf, cptr);
+	current_cptr = NULL;
+}
+
+static void
 mod_init(struct module *const restrict m)
 {
+	static struct path_handler path_handler = {
+		.path    = "/xmlrpc",
+		.handler = &handle_request,
+	};
+
 	MODULE_TRY_REQUEST_SYMBOL(m, httpd_path_handlers, "misc/httpd", "httpd_path_handlers")
 
-	hook_add_config_ready(xmlrpc_config_ready);
-
-	xmlrpc_config.path = sstrdup("/xmlrpc");
-
 	add_subblock_top_conf("XMLRPC", &conf_xmlrpc_table);
-	add_dupstr_conf_item("PATH", &conf_xmlrpc_table, 0, &xmlrpc_config.path, NULL);
 
 	xmlrpc_set_buffer(dump_buffer);
 	xmlrpc_set_options(XMLRPC_HTTP_HEADER, XMLRPC_OFF);
+
 	xmlrpc_register_method("atheme.login", xmlrpcmethod_login);
 	xmlrpc_register_method("atheme.logout", xmlrpcmethod_logout);
 	xmlrpc_register_method("atheme.command", xmlrpcmethod_command);
 	xmlrpc_register_method("atheme.privset", xmlrpcmethod_privset);
 	xmlrpc_register_method("atheme.ison", xmlrpcmethod_ison);
 	xmlrpc_register_method("atheme.metadata", xmlrpcmethod_metadata);
+
+	xmlrpc_path_node = mowgli_node_create();
+	mowgli_node_add(&path_handler, xmlrpc_path_node, httpd_path_handlers);
 }
 
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	mowgli_node_t *n;
+	del_top_conf("XMLRPC");
 
 	xmlrpc_unregister_method("atheme.login");
 	xmlrpc_unregister_method("atheme.logout");
@@ -593,18 +574,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	xmlrpc_unregister_method("atheme.ison");
 	xmlrpc_unregister_method("atheme.metadata");
 
-	if ((n = mowgli_node_find(&handle_xmlrpc, httpd_path_handlers)) != NULL)
-	{
-		mowgli_node_delete(n, httpd_path_handlers);
-		mowgli_node_free(n);
-	}
-
-	del_conf_item("PATH", &conf_xmlrpc_table);
-	del_top_conf("XMLRPC");
-
-	sfree(xmlrpc_config.path);
-
-	hook_del_config_ready(xmlrpc_config_ready);
+	mowgli_node_delete(xmlrpc_path_node, httpd_path_handlers);
+	mowgli_node_free(xmlrpc_path_node);
 }
 
 SIMPLE_DECLARE_MODULE_V1("transport/xmlrpc", MODULE_UNLOAD_CAPABILITY_OK)
