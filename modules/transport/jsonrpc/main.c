@@ -13,6 +13,10 @@
 // Imported from other modules
 static mowgli_list_t *httpd_path_handlers = NULL;
 
+// Configuration for this module
+static mowgli_list_t conf_jsonrpc_table;
+static bool jsonrpc_log_full_info = false;
+
 // Miscellaneous state for this module
 static mowgli_patricia_t *json_methods = NULL;
 static mowgli_node_t *jsonrpc_path_node = NULL;
@@ -33,6 +37,32 @@ jsonrpc_method_fn
 get_json_method(const char *method_name)
 {
 	return mowgli_patricia_retrieve(json_methods, method_name);
+}
+
+static const char *
+jsonrpc_format_sourceinfo(struct sourceinfo *si, bool full)
+{
+	static char buf[BUFSIZE];
+
+	struct myuser *mu = si->smu;
+
+	if (full || jsonrpc_log_full_info)
+		(void) snprintf(buf, sizeof buf, "<%s>%s%s%s%s%s%s",
+		                si->v->description,
+		                si->sourcedesc == NULL ? "" : " [",
+		                si->sourcedesc == NULL ? "" : si->sourcedesc,
+		                si->sourcedesc == NULL ? "" : "]",
+		                mu == NULL ? "" : " (",
+		                mu == NULL ? "" : entity(mu)->name,
+		                mu == NULL ? "" : ")");
+	else
+		(void) snprintf(buf, sizeof buf, "<%s>%s%s%s",
+		                si->v->description,
+		                mu == NULL ? "" : " (",
+		                mu == NULL ? "" : entity(mu)->name,
+		                mu == NULL ? "" : ")");
+
+	return buf;
 }
 
 static void
@@ -107,9 +137,10 @@ jsonrpc_command_success_nodata(struct sourceinfo *si, const char *message)
 
 static struct sourceinfo_vtable jsonrpc_vtable = {
 	.description        = "jsonrpc",
-	.cmd_fail           = jsonrpc_command_fail,
-	.cmd_success_string = jsonrpc_command_success_string,
-	.cmd_success_nodata = jsonrpc_command_success_nodata
+	.format             = &jsonrpc_format_sourceinfo,
+	.cmd_fail           = &jsonrpc_command_fail,
+	.cmd_success_string = &jsonrpc_command_success_string,
+	.cmd_success_nodata = &jsonrpc_command_success_nodata,
 };
 
 // These taken from modules/transport/xmlrpc/main.c
@@ -661,6 +692,8 @@ mod_init(struct module *const restrict m)
 
 	MODULE_TRY_REQUEST_SYMBOL(m, httpd_path_handlers, "misc/httpd", "httpd_path_handlers")
 
+	add_subblock_top_conf("JSONRPC", &conf_jsonrpc_table);
+	add_bool_conf_item("LOG_FULL_INFO", &conf_jsonrpc_table, 0, &jsonrpc_log_full_info, false);
 
 	json_methods = mowgli_patricia_create(strcasecanon);
 
@@ -678,6 +711,8 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
+	del_conf_item("LOG_FULL_INFO", &conf_jsonrpc_table);
+	del_top_conf("JSONRPC");
 
 	jsonrpc_unregister_method("atheme.login");
 	jsonrpc_unregister_method("atheme.logout");
