@@ -2545,6 +2545,24 @@ jsonrpc {
 	#log_full_info;
 };
 
+/* XML-RPC configuration.
+ *
+ * This controls configuration specific to serving XML-RPC requests.
+ */
+xmlrpc {
+
+	/* (*) log_full_info
+	 *
+	 * This controls whether the IP address is always logged interactively
+	 * (to a logfile{} that is an IRC channel) for commands executed via
+	 * XML-RPC.
+	 *
+	 * It is always logged non-interactively (to a logfile{} that is on
+	 * disk).
+	 */
+	#log_full_info;
+};
+
 /* Password-based login attempt throttling configuration.
  *
  * This module can throttle both login attempts from IP addresses, and login

@@ -15,6 +15,7 @@ static mowgli_list_t *httpd_path_handlers = NULL;
 
 // Configuration for this module
 static mowgli_list_t conf_xmlrpc_table;
+static bool xmlrpc_log_full_info = false;
 
 // Miscellaneous state for this module
 static struct connection *current_cptr = NULL; // XXX: Hack: src/xmlrpc.c requires us to do this
@@ -48,6 +49,31 @@ dump_buffer(char *buf, int length)
 	return buf;
 }
 
+static const char *
+xmlrpc_format_sourceinfo(struct sourceinfo *si, bool full)
+{
+	static char buf[BUFSIZE];
+
+	struct myuser *mu = si->smu;
+
+	if (full || xmlrpc_log_full_info)
+		(void) snprintf(buf, sizeof buf, "<%s>%s%s%s%s%s%s",
+		                si->v->description,
+		                si->sourcedesc == NULL ? "" : " [",
+		                si->sourcedesc == NULL ? "" : si->sourcedesc,
+		                si->sourcedesc == NULL ? "" : "]",
+		                mu == NULL ? "" : " (",
+		                mu == NULL ? "" : entity(mu)->name,
+		                mu == NULL ? "" : ")");
+	else
+		(void) snprintf(buf, sizeof buf, "<%s>%s%s%s",
+		                si->v->description,
+		                mu == NULL ? "" : " (",
+		                mu == NULL ? "" : entity(mu)->name,
+		                mu == NULL ? "" : ")");
+
+	return buf;
+}
 
 static void
 xmlrpc_command_fail(struct sourceinfo *si, enum cmd_faultcode code, const char *message)
@@ -113,10 +139,11 @@ xmlrpc_command_success_string(struct sourceinfo *si, const char *result, const c
 }
 
 static struct sourceinfo_vtable xmlrpc_vtable = {
-	.description = "xmlrpc",
-	.cmd_fail = xmlrpc_command_fail,
-	.cmd_success_nodata = xmlrpc_command_success_nodata,
-	.cmd_success_string = xmlrpc_command_success_string
+	.description        = "xmlrpc",
+	.format             = &xmlrpc_format_sourceinfo,
+	.cmd_fail           = &xmlrpc_command_fail,
+	.cmd_success_nodata = &xmlrpc_command_success_nodata,
+	.cmd_success_string = &xmlrpc_command_success_string,
 };
 
 // These taken from the old modules/xmlrpc/account.c
@@ -547,6 +574,7 @@ mod_init(struct module *const restrict m)
 	MODULE_TRY_REQUEST_SYMBOL(m, httpd_path_handlers, "misc/httpd", "httpd_path_handlers")
 
 	add_subblock_top_conf("XMLRPC", &conf_xmlrpc_table);
+	add_bool_conf_item("LOG_FULL_INFO", &conf_xmlrpc_table, 0, &xmlrpc_log_full_info, false);
 
 	xmlrpc_set_buffer(dump_buffer);
 	xmlrpc_set_options(XMLRPC_HTTP_HEADER, XMLRPC_OFF);
@@ -565,6 +593,7 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
+	del_conf_item("LOG_FULL_INFO", &conf_xmlrpc_table);
 	del_top_conf("XMLRPC");
 
 	xmlrpc_unregister_method("atheme.login");
