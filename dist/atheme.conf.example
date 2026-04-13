@@ -964,12 +964,25 @@ loadmodule "groupserv/set_url";
 
 
 
-/* XMLRPC server module.
+/* JSON-RPC server module.
+ *
+ * The JSON-RPC handler requires "misc/httpd" to be loaded as it merely
+ * registers a path handler for JSON-RPC. The path used for JSON-RPC is
+ * /jsonrpc
+ *
+ * JSON-RPC handler for the httpd               transport/jsonrpc
+ */
+#loadmodule "transport/jsonrpc";
+
+
+
+/* XML-RPC server module.
  *
  * The XML-RPC handler requires "misc/httpd" to be loaded as it merely
- * registers a path handler for XML-RPC. The path used for XML-RPC is /xmlrpc.
+ * registers a path handler for XML-RPC. The path used for XML-RPC is
+ * /xmlrpc
  *
- * XMLRPC handler for the httpd                 transport/xmlrpc
+ * XML-RPC handler for the httpd                transport/xmlrpc
  */
 #loadmodule "transport/xmlrpc";
 
@@ -2481,8 +2494,8 @@ proxyscan {
 
 /* HTTP server configuration.
  *
- * The HTTP server in Services is used for serving XMLRPC requests. It can
- * also serve static documents and statistics pages.
+ * The HTTP server in services is used for serving RPC requests.
+ * It can also serve static documents and statistics pages.
  */
 httpd {
 
