@@ -328,7 +328,7 @@ jsonrpcmethod_command(void *conn, mowgli_list_t *params, char *id)
 	svs = service_find(service);
 	if ((svs == NULL && (svs = service_find_nick(service)) == NULL) || svs->commands == NULL)
 	{
-		slog(LG_DEBUG, "xmlrpcmethod_command(): invalid service %s", service);
+		slog(LG_DEBUG, "jsonrpcmethod_command(): invalid service %s", service);
 		jsonrpc_failure_string(conn, fault_nosuch_source, "Invalid service name.", id);
 		return 0;
 	}
