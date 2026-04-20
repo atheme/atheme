@@ -21,6 +21,8 @@ static mowgli_heap_t *user_heap = NULL;
 mowgli_patricia_t *userlist;
 mowgli_patricia_t *uidlist;
 
+char hostmaskbuf[NICKLEN + USERLEN + HOSTLEN + 2];
+
 static void
 user_delete_cb(void *const restrict user)
 {
@@ -671,6 +673,13 @@ find_user_banned_channel(struct user *const restrict u, const char ban_type)
 	}
 
 	return NULL;
+}
+
+const char *
+format_hostmask(const struct user *user, const enum host_type type)
+{
+	sprintf(hostmaskbuf, "%s!%s!%s", user->nick, user->user, user->vhost);
+	return hostmaskbuf;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
