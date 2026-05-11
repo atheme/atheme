@@ -252,7 +252,7 @@ m_topic(struct sourceinfo *si, int parc, char *parv[])
 		source = si->su->nick;
 
 	if (parc > 2)
-		ts = atoi(parv[parc - 2]);
+		ts = atoll(parv[parc - 2]);
 	if (ts == 0)
 		ts = CURRTIME;
 	else if (c->topic != NULL && ts < c->topicts)
@@ -282,7 +282,7 @@ m_burst(struct sourceinfo *si, int parc, char *parv[])
 	 * %<bans separated with spaces>
 	 * <nicks>
 	 */
-	ts = atoi(parv[1]);
+	ts = atoll(parv[1]);
 
 	c = channel_find(parv[0]);
 
@@ -400,7 +400,7 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s@%s (%s)", si->s->name, parv[0],parv[4],parv[7]);
 
 		decode_p10_ip(parv[parc - 3], ipstring);
-		u = user_add(parv[0], parv[3], parv[4], parv[7], ipstring, parv[parc - 2], parv[parc - 1], si->s, atoi(parv[2]));
+		u = user_add(parv[0], parv[3], parv[4], parv[7], ipstring, parv[parc - 2], parv[parc - 1], si->s, atoll(parv[2]));
 		if (u == NULL)
 			return;
 
@@ -476,7 +476,7 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
-		if (user_changenick(si->su, parv[0], atoi(parv[1])))
+		if (user_changenick(si->su, parv[0], atoll(parv[1])))
 			return;
 
 		handle_nickchange(si->su);

@@ -87,7 +87,7 @@ cs_cmd_close(struct sourceinfo *si, int parc, char *parv[])
 
 		metadata_add(mc, "private:close:closer", get_oper_name(si));
 		metadata_add(mc, "private:close:reason", reason);
-		metadata_add(mc, "private:close:timestamp", number_to_string(CURRTIME));
+		metadata_add(mc, "private:close:timestamp", int64_to_string(CURRTIME));
 
 		if ((c = channel_find(target)))
 		{

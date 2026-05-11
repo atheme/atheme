@@ -72,7 +72,7 @@ ns_cmd_resetpass(struct sourceinfo *si, int parc, char *parv[])
 
 	metadata_delete(mu, "private:setpass:key");
 	metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
-	metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));
+	metadata_add(mu, "private:sendpass:timestamp", int64_to_string(time(NULL)));
 	command_success_nodata(si, _("The password for \2%s\2 has been changed to \2%s\2."), entity(mu)->name, newpass);
 
 	sfree(newpass);

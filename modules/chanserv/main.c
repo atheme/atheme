@@ -581,7 +581,7 @@ cs_keeptopic_topicset(struct channel *c)
 		metadata_add(mc, "private:topic:text",
 			c->topic);
 		metadata_add(mc, "private:topic:ts",
-			number_to_string(c->topicts));
+			int64_to_string(c->topicts));
 	}
 	else
 		slog(LG_DEBUG, "KeepTopic: topic cleared for %s", c->name);
@@ -651,7 +651,7 @@ cs_newchan(struct channel *c)
 
 	md = metadata_find(mc, "private:channelts");
 	if (md != NULL)
-		channelts = atol(md->value);
+		channelts = atoll(md->value);
 	if (channelts == 0)
 		channelts = mc->registered;
 
@@ -717,7 +717,7 @@ cs_newchan(struct channel *c)
 	md = metadata_find(mc, "private:topic:ts");
 	if (md == NULL)
 		return;
-	topicts = atol(md->value);
+	topicts = atoll(md->value);
 
 	handle_topic(c, setter, topicts, text);
 	topic_sts(c, chansvs.me->me, setter, topicts, 0, text);

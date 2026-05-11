@@ -82,7 +82,7 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 			md = metadata_find(mun, "private:mark:reason");
 			reason = md != NULL ? md->value : "unknown";
 			md = metadata_find(mun, "private:mark:timestamp");
-			ts = md != NULL ? atoi(md->value) : 0;
+			ts = md != NULL ? atoll(md->value) : 0;
 
 			tm = localtime(&ts);
 			strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
@@ -167,7 +167,7 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 
 		if (vhost_timestring && (vhost || has_user_auspex))
 		{
-			vhost_time = atoi(vhost_timestring);
+			vhost_time = atoll(vhost_timestring);
 			tm2 = localtime(&vhost_time);
 			strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm2);
 			buflen += snprintf(buf + buflen, BUFSIZE - buflen, _(" on %s (%s ago)"), strfbuf, time_ago(vhost_time));
@@ -458,7 +458,7 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		reason = md != NULL ? md->value : "unknown";
 
 		md = metadata_find(mu, "private:freeze:timestamp");
-		ts = md != NULL ? atoi(md->value) : 0;
+		ts = md != NULL ? atoll(md->value) : 0;
 
 		tm = localtime(&ts);
 		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
@@ -478,7 +478,7 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		reason = md != NULL ? md->value : "unknown";
 
 		md = metadata_find(mu, "private:mark:timestamp");
-		ts = md != NULL ? atoi(md->value) : 0;
+		ts = md != NULL ? atoll(md->value) : 0;
 
 		tm = localtime(&ts);
 		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
@@ -496,7 +496,7 @@ ns_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		time_t ts;
 
 		md = metadata_find(mu, "private:verify:emailchg:timestamp");
-		ts = md != NULL ? atoi(md->value) : 0;
+		ts = md != NULL ? atoll(md->value) : 0;
 		tm = localtime(&ts);
 		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 

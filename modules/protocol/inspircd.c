@@ -801,7 +801,7 @@ static void
 m_ftopic(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct channel *c = channel_find(parv[0]);
-	time_t ts = atol(parv[2]);
+	time_t ts = atoll(parv[2]);
 	const char *setter;
 
 	if (!c)
@@ -935,7 +935,7 @@ m_fjoin(struct sourceinfo *si, int parc, char *parv[])
 	time_t ts;
 
 	c = channel_find(parv[0]);
-	ts = atol(parv[1]);
+	ts = atoll(parv[1]);
 
 	if (!c)
 	{
@@ -1102,7 +1102,7 @@ m_uid(struct sourceinfo *si, int parc, char *parv[])
 	slog(LG_DEBUG, "m_uid(): new user on `%s': %s", si->s->name, parv[2]);
 
 	//            nick,    user,    host,    vhost,    ip,      uid,        gecos,    server,       ts
-	u = user_add(parv[2], parv[5], parv[3], parv[4], parv[6], parv[0], parv[parc - 1], si->s, atol(parv[1]));
+	u = user_add(parv[2], parv[5], parv[3], parv[4], parv[6], parv[0], parv[parc - 1], si->s, atoll(parv[1]));
 
 	if (u == NULL)
 		return;
@@ -1119,7 +1119,7 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
-	if (user_changenick(si->su, parv[0], atoi(parv[1])))
+	if (user_changenick(si->su, parv[0], atoll(parv[1])))
 		return;
 
 	/* It could happen that our PING arrived late and the
@@ -1202,7 +1202,7 @@ m_fmode(struct sourceinfo *si, int parc, char *parv[])
 			slog(LG_DEBUG, "m_fmode(): nonexistent channel: %s", parv[0]);
 			return;
 		}
-		ts = atoi(parv[1]);
+		ts = atoll(parv[1]);
 		if (ts > c->ts)
 		{
 			return;
@@ -1500,7 +1500,7 @@ m_metadata(struct sourceinfo *si, int parc, char *parv[])
 	if (parc > 3)
 	{
 		c = channel_find(parv[0]);
-		ts = atoi(parv[1]);
+		ts = atoll(parv[1]);
 
 		if (!irccasecmp(parv[2], "mlock"))
 			verify_mlock(c, ts, parv[3]);

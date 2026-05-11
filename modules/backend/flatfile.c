@@ -196,7 +196,7 @@ flatfile_db_load(const char *filename)
 
 			mu = myuser_find(strtok(NULL, " "));
 			sender = strtok(NULL, " ");
-			mtime = atoi(strtok(NULL, " "));
+			mtime = atoll(strtok(NULL, " "));
 			status = atoi(strtok(NULL, " "));
 			text = strtok(NULL, "\n");
 
@@ -284,8 +284,8 @@ flatfile_db_load(const char *filename)
 			}
 
 			mn = mynick_add(mu, nick);
-			mn->registered = atoi(treg);
-			mn->lastseen = atoi(tseen);
+			mn->registered = atoll(treg);
+			mn->lastseen = atoll(tseen);
 		}
 		else if (!strcmp("MCFP", item))
 		{
@@ -361,8 +361,8 @@ flatfile_db_load(const char *filename)
 
 				founder = myuser_find(strtok(NULL, " "));
 
-				mc->registered = atoi(strtok(NULL, " "));
-				mc->used = atoi(strtok(NULL, " "));
+				mc->registered = atoll(strtok(NULL, " "));
+				mc->used = atoll(strtok(NULL, " "));
 				mc->flags = atoi(strtok(NULL, " "));
 
 				mc->mlock_on = atoi(strtok(NULL, " "));
@@ -504,7 +504,7 @@ flatfile_db_load(const char *filename)
 					 */
 					tsstr = strtok(NULL, " ");
 					if (tsstr != NULL)
-						ts = atoi(tsstr);
+						ts = atoll(tsstr);
 
 					/* previous to CA_ACLVIEW, everyone could view
 					 * access lists. If they aren't AKICKed, upgrade
@@ -583,7 +583,7 @@ flatfile_db_load(const char *filename)
 
 			mask = strtok(NULL, " ");
                         tmp = strtok(NULL, " ");
-			settime = atol(tmp);
+			settime = atoll(tmp);
 			setby = strtok(NULL, " ");
 			reason = strtok(NULL, "");
 
@@ -612,7 +612,7 @@ flatfile_db_load(const char *filename)
 			tmp = strtok(NULL, " ");
 			duration = atol(tmp);
 			tmp = strtok(NULL, " ");
-			settime = atol(tmp);
+			settime = atoll(tmp);
 			setby = strtok(NULL, " ");
 			reason = strtok(NULL, "");
 
@@ -642,7 +642,7 @@ flatfile_db_load(const char *filename)
 			tmp = strtok(NULL, " ");
 			duration = atol(tmp);
 			tmp = strtok(NULL, " ");
-			settime = atol(tmp);
+			settime = atoll(tmp);
 			setby = strtok(NULL, " ");
 			reason = strtok(NULL, "");
 
@@ -672,7 +672,7 @@ flatfile_db_load(const char *filename)
 			tmp = strtok(NULL, " ");
 			duration = atol(tmp);
 			tmp = strtok(NULL, " ");
-			settime = atol(tmp);
+			settime = atoll(tmp);
 			setby = strtok(NULL, " ");
 			reason = strtok(NULL, "");
 

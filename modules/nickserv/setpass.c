@@ -126,7 +126,7 @@ show_setpass(struct hook_user_req *hdata)
 			struct tm *tm;
 
 			md = metadata_find(hdata->mu, "private:sendpass:timestamp");
-			ts = md != NULL ? atoi(md->value) : 0;
+			ts = md != NULL ? atoll(md->value) : 0;
 
 			tm = localtime(&ts);
 			strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);

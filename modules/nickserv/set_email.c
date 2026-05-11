@@ -59,7 +59,7 @@ ns_cmd_set_email(struct sourceinfo *si, int parc, char *parv[])
 
 		metadata_add(si->smu, "private:verify:emailchg:key", number_to_string(key));
 		metadata_add(si->smu, "private:verify:emailchg:newemail", email);
-		metadata_add(si->smu, "private:verify:emailchg:timestamp", number_to_string(CURRTIME));
+		metadata_add(si->smu, "private:verify:emailchg:timestamp", int64_to_string(CURRTIME));
 
 		if (!sendemail(si->su != NULL ? si->su : si->service->me, si->smu, EMAIL_SETEMAIL, email, number_to_string(key)))
 		{

@@ -53,7 +53,7 @@ cs_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 
 		metadata_add(mc, "private:mark:setter", get_oper_name(si));
 		metadata_add(mc, "private:mark:reason", info);
-		metadata_add(mc, "private:mark:timestamp", number_to_string(CURRTIME));
+		metadata_add(mc, "private:mark:timestamp", int64_to_string(CURRTIME));
 
 		wallops("\2%s\2 marked the channel \2%s\2.", get_oper_name(si), target);
 		logcommand(si, CMDLOG_ADMIN, "MARK:ON: \2%s\2 (reason: \2%s\2)", mc->name, info);

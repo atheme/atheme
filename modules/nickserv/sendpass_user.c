@@ -123,7 +123,7 @@ ns_cmd_sendpass(struct sourceinfo *si, int parc, char *parv[])
 			wallops("\2%s\2 sent the password for the \2MARKED\2 account %s.", get_oper_name(si), entity(mu)->name);
 		logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2 (change key)", name);
 		metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
-		metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));
+		metadata_add(mu, "private:sendpass:timestamp", int64_to_string(time(NULL)));
 		metadata_add(mu, "private:setpass:key", hash);
 		command_success_nodata(si, _("The password change key for \2%s\2 has been sent to the corresponding email address."), entity(mu)->name);
 	}

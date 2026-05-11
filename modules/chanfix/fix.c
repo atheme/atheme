@@ -619,7 +619,7 @@ chanfix_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		reason = md != NULL ? md->value : "unknown";
 
 		md = metadata_find(chan, "private:mark:timestamp");
-		ts = md != NULL ? atoi(md->value) : 0;
+		ts = md != NULL ? atoll(md->value) : 0;
 
 		tm = localtime(&ts);
 		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
@@ -637,7 +637,7 @@ chanfix_cmd_info(struct sourceinfo *si, int parc, char *parv[])
                 reason = md != NULL ? md->value : "unknown";
 
                 md = metadata_find(chan, "private:mark:timestamp");
-                ts = md != NULL ? atoi(md->value) : 0;
+                ts = md != NULL ? atoll(md->value) : 0;
 
                 tm = localtime(&ts);
                 strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
@@ -694,7 +694,7 @@ chanfix_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 
 		metadata_add(chan, "private:mark:setter", get_oper_name(si));
 		metadata_add(chan, "private:mark:reason", info);
-		metadata_add(chan, "private:mark:timestamp", number_to_string(CURRTIME));
+		metadata_add(chan, "private:mark:timestamp", int64_to_string(CURRTIME));
 
 		logcommand(si, CMDLOG_ADMIN, "MARK:ON: \2%s\2 (reason: \2%s\2)", chan->name, info);
 		command_success_nodata(si, _("\2%s\2 is now marked."), target);
@@ -767,7 +767,7 @@ chanfix_cmd_nofix(struct sourceinfo *si, int parc, char *parv[])
 
 		metadata_add(chan, "private:nofix:setter", get_oper_name(si));
 		metadata_add(chan, "private:nofix:reason", info);
-		metadata_add(chan, "private:nofix:timestamp", number_to_string(CURRTIME));
+		metadata_add(chan, "private:nofix:timestamp", int64_to_string(CURRTIME));
 
 		logcommand(si, CMDLOG_ADMIN, "NOFIX:ON: \2%s\2 (reason: \2%s\2)", chan->name, info);
 		command_success_nodata(si, _("\2%s\2 is now set to NOFIX."), target);

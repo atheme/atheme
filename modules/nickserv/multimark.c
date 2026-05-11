@@ -293,7 +293,7 @@ migrate_user(struct myuser *mu)
 	md = metadata_find(mu, "private:mark:reason");
 	reason = md != NULL ? md->value : "unknown";
 	md = metadata_find(mu, "private:mark:timestamp");
-	time = md != NULL ? atoi(md->value) : 0;
+	time = md != NULL ? atoll(md->value) : 0;
 
 	struct multimark *const mm = smalloc(sizeof *mm);
 

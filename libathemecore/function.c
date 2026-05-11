@@ -170,6 +170,14 @@ number_to_string(int num)
 	return ret;
 }
 
+/* reverse of atoll() */
+const char *int64_to_string(int64_t num)
+{
+	static char ret[32];
+	snprintf(ret, 32, "%lld", (long long)num);
+	return ret;
+}
+
 /* a better atoi() but detects errors and doesn't allow negative values */
 bool ATHEME_FATTR_WUR
 string_to_uint(const char *const restrict in, unsigned int *const restrict out)

@@ -52,7 +52,7 @@ info_hook(struct hook_user_req *hdata)
 		reason = md != NULL ? md->value : "unknown";
 
 		md = metadata_find(hdata->mu, "private:restrict:timestamp");
-		ts = md != NULL ? atoi(md->value) : 0;
+		ts = md != NULL ? atoll(md->value) : 0;
 
 		tm = localtime(&ts);
 		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
@@ -99,7 +99,7 @@ ns_cmd_restrict(struct sourceinfo *si, int parc, char *parv[])
 
 		metadata_add(mu, "private:restrict:setter", get_oper_name(si));
 		metadata_add(mu, "private:restrict:reason", info);
-		metadata_add(mu, "private:restrict:timestamp", number_to_string(time(NULL)));
+		metadata_add(mu, "private:restrict:timestamp", int64_to_string(time(NULL)));
 
 		wallops("\2%s\2 restricted the account \2%s\2.", get_oper_name(si), entity(mu)->name);
 		logcommand(si, CMDLOG_ADMIN, "RESTRICT:ON: \2%s\2 (reason: \2%s\2)", entity(mu)->name, info);

@@ -516,7 +516,7 @@ m_sjoin(struct sourceinfo *si, int parc, char *parv[])
 	{
 		// :origin SJOIN ts chan modestr [key or limits] :users
 		c = channel_find(parv[1]);
-		ts = atol(parv[0]);
+		ts = atoll(parv[0]);
 
 		if (!c)
 		{
@@ -592,7 +592,7 @@ m_sjoin(struct sourceinfo *si, int parc, char *parv[])
 	else if (parc >= 2 && si->su != NULL)
 	{
 		c = channel_find(parv[1]);
-		ts = atol(parv[0]);
+		ts = atoll(parv[0]);
 
 		if (c == NULL || ts < c->ts)
 		{
@@ -661,7 +661,7 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 		else
 			mowgli_strlcpy(ipstring, parv[8], sizeof ipstring);
 
-		u = user_add(parv[0], parv[4], parv[5], NULL, ipstring, NULL, parv[9], s, atoi(parv[2]));
+		u = user_add(parv[0], parv[4], parv[5], NULL, ipstring, NULL, parv[9], s, atoll(parv[2]));
 		if (u == NULL)
 			return;
 
@@ -697,7 +697,7 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 
 		realchange = irccasecmp(si->su->nick, parv[0]);
 
-		if (user_changenick(si->su, parv[0], atoi(parv[1])))
+		if (user_changenick(si->su, parv[0], atoll(parv[1])))
 			return;
 
 		// fix up +r if necessary -- jilles

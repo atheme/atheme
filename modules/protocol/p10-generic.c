@@ -355,7 +355,7 @@ m_topic(struct sourceinfo *si, int parc, char *parv[])
 		source = si->su->nick;
 
 	if (parc > 2)
-		ts = atoi(parv[parc - 2]);
+		ts = atoll(parv[parc - 2]);
 	if (ts == 0)
 		ts = CURRTIME;
 	else if (c->topic != NULL && ts < c->topicts)
@@ -430,7 +430,7 @@ m_create(struct sourceinfo *si, int parc, char *parv[])
 
 	for (i = 0; i < chanc; i++)
 	{
-		struct channel *c = channel_add(chanv[i], ts = atoi(parv[1]), si->su->server);
+		struct channel *c = channel_add(chanv[i], ts = atoll(parv[1]), si->su->server);
 
 		/* Tell the core to check mode locks now,
 		 * otherwise it may only happen after the next
@@ -483,7 +483,7 @@ m_join(struct sourceinfo *si, int parc, char *parv[])
 
 		if (!c)
 		{
-			c = channel_add(chanv[i], atoi(parv[1]), si->su->server);
+			c = channel_add(chanv[i], atoll(parv[1]), si->su->server);
 			channel_mode_va(NULL, c, 1, "+");
 		}
 
@@ -513,7 +513,7 @@ m_burst(struct sourceinfo *si, int parc, char *parv[])
 	 * %<bans separated with spaces>
 	 * <nicks>
 	 */
-	ts = atoi(parv[1]);
+	ts = atoll(parv[1]);
 
 	c = channel_find(parv[0]);
 
@@ -645,7 +645,7 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", si->s->name, parv[0]);
 
 		decode_p10_ip(parv[parc - 3], ipstring);
-		u = user_add(parv[0], parv[3], parv[4], NULL, ipstring, parv[parc - 2], parv[parc - 1], si->s, atoi(parv[2]));
+		u = user_add(parv[0], parv[3], parv[4], NULL, ipstring, parv[parc - 2], parv[parc - 1], si->s, atoll(parv[2]));
 		if (u == NULL)
 			return;
 
@@ -685,7 +685,7 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
-		if (user_changenick(si->su, parv[0], atoi(parv[1])))
+		if (user_changenick(si->su, parv[0], atoll(parv[1])))
 			return;
 
 		handle_nickchange(si->su);
@@ -752,7 +752,7 @@ m_mode(struct sourceinfo *si, int parc, char *parv[])
 					  i++;
 			}
 		}
-		if (i < parc && (ts = atoi(parv[i])) != 0)
+		if (i < parc && (ts = atoll(parv[i])) != 0)
 		{
 			if (ts > c->ts)
 			{

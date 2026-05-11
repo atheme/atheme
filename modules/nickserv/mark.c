@@ -85,7 +85,7 @@ ns_cmd_mark(struct sourceinfo *si, int parc, char *parv[])
 
 		metadata_add(mu, "private:mark:setter", get_oper_name(si));
 		metadata_add(mu, "private:mark:reason", info);
-		metadata_add(mu, "private:mark:timestamp", number_to_string(time(NULL)));
+		metadata_add(mu, "private:mark:timestamp", int64_to_string(time(NULL)));
 
 		wallops("\2%s\2 marked the account \2%s\2.", get_oper_name(si), entity(mu)->name);
 		logcommand(si, CMDLOG_ADMIN, "MARK:ON: \2%s\2 (reason: \2%s\2)", entity(mu)->name, info);

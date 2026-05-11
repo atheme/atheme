@@ -204,7 +204,7 @@ join(const char *chan, const char *nick)
 			ts = mc->registered;
 			md = metadata_find(mc, "private:channelts");
 			if (md != NULL)
-				ts = atol(md->value);
+				ts = atoll(md->value);
 			if (ts == 0)
 				ts = CURRTIME;
 		}
@@ -712,7 +712,7 @@ myuser_login(struct service *svs, struct user *u, struct myuser *mu, bool sendac
 
 		md_failtime = metadata_find(mu, "private:loginfail:lastfailtime");
 		if (md_failtime != NULL)
-			ts = atol(md_failtime->value);
+			ts = atoll(md_failtime->value);
 
 		md_failaddr = metadata_find(mu, "private:loginfail:lastfailaddr");
 		if (md_failaddr != NULL)

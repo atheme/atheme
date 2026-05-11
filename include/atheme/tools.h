@@ -105,6 +105,7 @@ const char *create_weak_challenge(struct sourceinfo *si, const char *name);
 void tb2sp(char *line);
 char *replace(char *s, int size, const char *old, const char *new);
 const char *number_to_string(int num);
+const char *int64_to_string(int64_t num);
 bool string_to_uint(const char *, unsigned int *) ATHEME_FATTR_WUR;
 bool validhostmask(const char *host);
 char *pretty_mask(char *mask);

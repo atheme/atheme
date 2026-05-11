@@ -746,7 +746,7 @@ m_mlock(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	time_t ts = atol(parv[0]);
+	time_t ts = atoll(parv[0]);
 	if (ts > c->ts)
 		return;
 
@@ -904,7 +904,7 @@ m_sjoin(struct sourceinfo *si, int parc, char *parv[])
 	{
 		// :origin SJOIN ts chan modestr [key or limits] :users
 		c = channel_find(parv[1]);
-		ts = atol(parv[0]);
+		ts = atoll(parv[0]);
 
 		if (!c)
 		{
@@ -937,7 +937,7 @@ m_sjoin(struct sourceinfo *si, int parc, char *parv[])
 	{
 		// :origin SJOIN ts chan :users
 		c = channel_find(parv[1]);
-		ts = atol(parv[0]);
+		ts = atoll(parv[0]);
 
 		if (!c)
 		{
@@ -970,7 +970,7 @@ m_sjoin(struct sourceinfo *si, int parc, char *parv[])
 	else if (parc == 2)
 	{
 		c = channel_find(parv[1]);
-		ts = atol(parv[0]);
+		ts = atoll(parv[0]);
 		if (!c)
 		{
 			slog(LG_DEBUG, "m_sjoin(): new channel: %s (modes lost)", parv[1]);
@@ -1062,7 +1062,7 @@ m_uid(struct sourceinfo *si, int parc, char *parv[])
 				if (!inet_ntop(af, ipdata, ipstring, sizeof ipstring))
 					iplen = 0;
 		}
-		u = user_add(parv[0], parv[3], parv[4], vhost, iplen != 0 ? ipstring : NULL, parv[5], parv[parc - 1], s, atoi(parv[2]));
+		u = user_add(parv[0], parv[3], parv[4], vhost, iplen != 0 ? ipstring : NULL, parv[5], parv[parc - 1], s, atoll(parv[2]));
 		if (u == NULL)
 			return;
 
@@ -1147,7 +1147,7 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 				if (!inet_ntop(af, ipdata, ipstring, sizeof ipstring))
 					iplen = 0;
 		}
-		u = user_add(parv[0], parv[3], parv[4], vhost, iplen != 0 ? ipstring : NULL, NULL, parv[parc - 1], s, atoi(parv[2]));
+		u = user_add(parv[0], parv[3], parv[4], vhost, iplen != 0 ? ipstring : NULL, NULL, parv[parc - 1], s, atoll(parv[2]));
 		if (u == NULL)
 			return;
 
@@ -1187,7 +1187,7 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 
 		realchange = irccasecmp(si->su->nick, parv[0]);
 
-		if (user_changenick(si->su, parv[0], atoi(parv[1])))
+		if (user_changenick(si->su, parv[0], atoll(parv[1])))
 			return;
 
 		// fix up +r if necessary -- jilles

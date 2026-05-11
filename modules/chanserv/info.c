@@ -286,7 +286,7 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		reason = md != NULL ? md->value : "unknown";
 
 		md = metadata_find(mc, "private:mark:timestamp");
-		ts = md != NULL ? atoi(md->value) : 0;
+		ts = md != NULL ? atoll(md->value) : 0;
 
 		tm = localtime(&ts);
 		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
@@ -307,7 +307,7 @@ cs_cmd_info(struct sourceinfo *si, int parc, char *parv[])
 		reason = md != NULL ? md->value : "unknown";
 
 		md = metadata_find(mc, "private:close:timestamp");
-		ts = md != NULL ? atoi(md->value) : 0;
+		ts = md != NULL ? atoll(md->value) : 0;
 
 		tm = localtime(&ts);
 		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);

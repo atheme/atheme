@@ -89,7 +89,7 @@ hs_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
 
 			if (md_timestamp)
 			{
-				vhost_time = atoi(md_timestamp->value);
+				vhost_time = atoll(md_timestamp->value);
 				tm = localtime(&vhost_time);
 				strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, tm);
 				len += snprintf(buf + len, BUFSIZE - len, _(" on %s (%s ago)"), strfbuf, time_ago(vhost_time));

@@ -136,7 +136,7 @@ m_euid(struct sourceinfo *si, int parc, char *parv[])
 			parv[7],				// uid
 			parv[parc - 1],				// gecos
 			s,					// object parent (server)
-			atoi(parv[2]));				// hopcount
+			atoll(parv[2]));			// hopcount
 		if (u == NULL)
 			return;
 
@@ -191,7 +191,7 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
 
-		u = user_add(parv[0], parv[4], parv[5], NULL, NULL, NULL, parv[7], s, atoi(parv[2]));
+		u = user_add(parv[0], parv[4], parv[5], NULL, NULL, NULL, parv[7], s, atoll(parv[2]));
 		if (u == NULL)
 			return;
 
@@ -218,7 +218,7 @@ m_nick(struct sourceinfo *si, int parc, char *parv[])
 
 		realchange = irccasecmp(si->su->nick, parv[0]);
 
-		if (user_changenick(si->su, parv[0], atoi(parv[1])))
+		if (user_changenick(si->su, parv[0], atoll(parv[1])))
 			return;
 
 		// fix up +e if necessary -- jilles

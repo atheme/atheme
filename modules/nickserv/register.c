@@ -179,7 +179,7 @@ ns_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 		mu->flags |= MU_WAITAUTH;
 
 		metadata_add(mu, "private:verify:register:key", key);
-		metadata_add(mu, "private:verify:register:timestamp", number_to_string(time(NULL)));
+		metadata_add(mu, "private:verify:register:timestamp", int64_to_string(time(NULL)));
 
 		if (!sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_REGISTER, mu->email, key))
 		{
