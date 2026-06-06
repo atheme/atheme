@@ -2797,6 +2797,14 @@ general {
 	 */
 	cflags = { guard; verbose; };
 
+	/* (*) gflags
+	 *
+	 * The default flags to set for groups upon registration.
+	 *
+	 * Valid values are: neverop, open, public, none.
+	 */
+	gflags = { none; };
+
 	/* (*) raw
 	 *
 	 * Do you want to allow SRAs to use the RAW and INJECT commands? These

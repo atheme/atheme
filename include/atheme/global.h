@@ -80,6 +80,7 @@ struct ConfOption
 	bool            kline_verified_ident;   // Don't kline ident@host if first char of ident is ~ ?
 	unsigned int    defuflags;              // default username flags
 	unsigned int    defcflags;              // default channel flags
+	unsigned int    defgflags;              // default group flags
 	bool            raw;                    // enable raw/inject?
 	char *          global;                 // nick for global noticer
 	char *          languagefile;           // path to language file (if any)

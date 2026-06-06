@@ -30,6 +30,7 @@ static int c_si_casemapping(mowgli_config_file_entry_t *);
 
 static int c_gi_uflags(mowgli_config_file_entry_t *);
 static int c_gi_cflags(mowgli_config_file_entry_t *);
+static int c_gi_gflags(mowgli_config_file_entry_t *);
 static int c_gi_exempts(mowgli_config_file_entry_t *);
 static int c_gi_immune_level(mowgli_config_file_entry_t *);
 
@@ -65,6 +66,14 @@ static struct Token cflags[] = {
   { "LIMITFLAGS",  MC_LIMITFLAGS  },
   { "ANTIFLOOD",   MC_ANTIFLOOD   },
   { "PUBACL",      MC_PUBACL      },
+  { "NONE",        0              },
+  { NULL, 0 }
+};
+
+static struct Token gflags[] = {
+  { "NEVEROP",     MG_NEVEROP     },
+  { "OPEN",        MG_OPEN        },
+  { "PUBLIC",      MG_PUBLIC      },
   { "NONE",        0              },
   { NULL, 0 }
 };
@@ -218,7 +227,9 @@ conf_init(void)
 {
 	hook_call_config_purge();
 
-	config_options.defuflags = config_options.defcflags = 0x00000000;
+	config_options.defuflags = 0;
+	config_options.defcflags = 0;
+	config_options.defgflags = 0;
 	config_options.immune_level = UF_IMMUNE;
 
 	me.auth = AUTH_NONE;
@@ -283,6 +294,7 @@ init_newconf(void)
 	add_bool_conf_item("SECURE", &conf_gi_table, 0, &config_options.secure, false);
 	add_conf_item("UFLAGS", &conf_gi_table, c_gi_uflags);
 	add_conf_item("CFLAGS", &conf_gi_table, c_gi_cflags);
+	add_conf_item("GFLAGS", &conf_gi_table, c_gi_gflags);
 	add_bool_conf_item("RAW", &conf_gi_table, 0, &config_options.raw, false);
 	add_uint_conf_item("FLOOD_MSGS", &conf_gi_table, 0, &config_options.flood_msgs, 0, INT_MAX, 0);
 	add_duration_conf_item("FLOOD_TIME", &conf_gi_table, 0, &config_options.flood_time, "s", 10);
@@ -852,6 +864,26 @@ c_gi_cflags(mowgli_config_file_entry_t *ce)
 
 	if (config_options.defcflags & MC_TOPICLOCK)
 		config_options.defcflags |= MC_KEEPTOPIC;
+
+	return 0;
+}
+
+static int
+c_gi_gflags(mowgli_config_file_entry_t *ce)
+{
+	mowgli_config_file_entry_t *flce;
+
+	MOWGLI_ITER_FOREACH(flce, ce->entries)
+	{
+		int val;
+
+		val = token_to_value(gflags, flce->varname);
+
+		if ((val != TOKEN_UNMATCHED) && (val != TOKEN_ERROR))
+			config_options.defgflags |= val;
+		else
+			conf_report_warning(flce, "unknown flag: %s", flce->varname);
+	}
 
 	return 0;
 }

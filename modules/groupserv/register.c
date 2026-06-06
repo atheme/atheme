@@ -61,6 +61,7 @@ gs_cmd_register(struct sourceinfo *si, int parc, char *parv[])
 	}
 
 	mg = mygroup_add(parv[0]);
+	mg->flags |= config_options.defgflags;
 	groupacs_add(mg, entity(si->smu), GA_ALL | GA_FOUNDER);
 	hook_call_group_register(mg);
 
