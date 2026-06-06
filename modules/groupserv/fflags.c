@@ -89,9 +89,10 @@ gs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 	{
 		struct chanacs *ca = n->data;
 
-		verbose(ca->mychan, "\2%s\2 now has flags \2%s\2 in the group \2%s\2 which communally has \2%s\2 on \2%s\2.",
-			mt->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name,
-			bitmask_to_flags(ca->level), ca->mychan->name);
+		if ((ga->flags & GA_CHANACS) && ! (ca->level & CA_AKICK))
+			verbose(ca->mychan, "\2%s\2 now has flags \2%s\2 in the group \2%s\2 which communally has "
+			                    "\2%s\2 on \2%s\2.", mt->name, gflags_tostr(ga_flags, ga->flags),
+			                    entity(mg)->name, bitmask_to_flags(ca->level), ca->mychan->name);
 
 		hook_call_channel_acl_change(&(struct hook_channel_acl_req){ .ca = ca });
 	}
@@ -100,7 +101,7 @@ gs_cmd_fflags(struct sourceinfo *si, int parc, char *parv[])
 
 	// XXX
 	wallops("\2%s\2 is modifying flags(\2%s\2) for \2%s\2 on \2%s\2", get_oper_name(si), gflags_tostr(ga_flags, ga->flags), mt->name, entity(mg)->name);
-	logcommand(si, CMDLOG_ADMIN, "FFLAGS: \2%s\2 now has flags \2%s\2 on \2%s\2", mt->name, gflags_tostr(ga_flags,  ga->flags), entity(mg)->name);
+	logcommand(si, CMDLOG_ADMIN, "FFLAGS: \2%s\2 now has flags \2%s\2 on \2%s\2", mt->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name);
 }
 
 static struct command gs_fflags = {

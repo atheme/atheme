@@ -191,9 +191,10 @@ no_founder:
 	{
 		struct chanacs *ca = n->data;
 
-		verbose(ca->mychan, "\2%s\2 now has flags \2%s\2 in the group \2%s\2 which communally has \2%s\2 on \2%s\2.",
-			mt->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name,
-			bitmask_to_flags(ca->level), ca->mychan->name);
+		if ((ga->flags & GA_CHANACS) && ! (ca->level & CA_AKICK))
+			verbose(ca->mychan, "\2%s\2 now has flags \2%s\2 in the group \2%s\2 which communally has "
+			                    "\2%s\2 on \2%s\2.", mt->name, gflags_tostr(ga_flags, ga->flags),
+			                    entity(mg)->name, bitmask_to_flags(ca->level), ca->mychan->name);
 
 		hook_call_channel_acl_change(&(struct hook_channel_acl_req){ .ca = ca });
 	}
@@ -201,7 +202,7 @@ no_founder:
 	command_success_nodata(si, _("\2%s\2 now has flags \2%s\2 on \2%s\2."), mt->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name);
 
 	// XXX
-	logcommand(si, CMDLOG_SET, "FLAGS: \2%s\2 now has flags \2%s\2 on \2%s\2", mt->name, gflags_tostr(ga_flags,  ga->flags), entity(mg)->name);
+	logcommand(si, CMDLOG_SET, "FLAGS: \2%s\2 now has flags \2%s\2 on \2%s\2", mt->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name);
 }
 
 static struct command gs_flags = {
