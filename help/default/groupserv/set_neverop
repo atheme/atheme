@@ -1,0 +1,9 @@
+Help for SET NEVEROP:
+
+SET NEVEROP prevents others from adding the
+group to channel access lists.
+
+Syntax: SET <!group> NEVEROP <ON|OFF>
+
+Example:
+    /msg &nick& SET !awesome-people NEVEROP ON

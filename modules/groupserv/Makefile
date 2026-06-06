@@ -30,6 +30,7 @@ SRCS    =                   \
     set_email.c             \
     set_groupname.c         \
     set_joinflags.c         \
+    set_neverop.c           \
     set_open.c              \
     set_public.c            \
     set_url.c

@@ -257,6 +257,7 @@ struct mygroup
 #define MG_ACSNOLIMIT		0x00000002U
 #define MG_OPEN			0x00000004U
 #define MG_PUBLIC		0x00000008U
+#define MG_NEVEROP		0x00000010U
 
 struct groupacs
 {

@@ -470,6 +470,13 @@ cs_cmd_flags(struct sourceinfo *si, int parc, char *parv[])
 				sfree(target);
 				return;
 			}
+			if (isgroup(mt) && (MG_NEVEROP & group(mt)->flags && addflags != CA_AKICK && addflags != 0 && (ca->level == 0 || ca->level == CA_AKICK)))
+			{
+				command_fail(si, fault_noprivs, _("\2%s\2 does not wish to be added to channel access lists (NEVEROP set)."), mt->name);
+				chanacs_close(ca);
+				sfree(target);
+				return;
+			}
 
 			if (ca->level == 0 && chanacs_is_table_full(ca))
 			{

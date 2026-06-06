@@ -90,6 +90,7 @@ const struct gflags mg_flags[] = {
 	{ 'a', MG_ACSNOLIMIT },
 	{ 'o', MG_OPEN },
 	{ 'p', MG_PUBLIC },
+	{ 'n', MG_NEVEROP },
 	{ 0, 0 }
 };
 
