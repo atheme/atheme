@@ -8,6 +8,7 @@ OUTPUT:
     RETVAL
 
 MODULE = Atheme			PACKAGE = Atheme::ChanServ::Config
+
 #include "../../../chanserv/chanserv.h"
 
 char *
