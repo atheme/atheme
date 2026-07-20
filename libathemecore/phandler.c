@@ -66,6 +66,8 @@ void (*undline_sts)(const char *server, const char *host) = generic_undline_sts;
 bool (*is_ircop)(struct user *u) = generic_is_ircop;
 bool (*is_admin)(struct user *u) = generic_is_admin;
 bool (*is_service)(struct user *u) = generic_is_service;
+int (*sts)(const char *fmt, ...) = generic_sts;
+void (*handle_command)(struct proto_cmd *pcmd, struct sourceinfo *si, int parc, char *parv[]) = generic_handle_command;
 
 unsigned int
 generic_server_login(void)
@@ -484,6 +486,28 @@ generic_is_service(struct user *u)
 		return true;
 
 	return false;
+}
+
+int ATHEME_FATTR_PRINTF(1, 2)
+generic_sts(const char *fmt, ...)
+{
+	va_list ap;
+	char buf[BUFSIZE+1];
+
+	return_val_if_fail(fmt != NULL, 0);
+
+	va_start(ap, fmt);
+	vsnprintf(buf, sizeof(buf), fmt, ap);
+	va_end(ap);
+
+	return send_line(buf);
+}
+
+void
+generic_handle_command(struct proto_cmd *pcmd, struct sourceinfo *si, int parc, char *parv[])
+{
+	if (pcmd->handler)
+		pcmd->handler(si, parc, parv);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

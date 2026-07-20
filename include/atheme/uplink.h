@@ -50,7 +50,7 @@ extern void (*parse)(char *line);
 void irc_handle_connect(struct connection *cptr);
 
 /* send.c */
-int sts(const char *fmt, ...) ATHEME_FATTR_PRINTF(1, 2);
+int send_line(const char *line);
 void io_loop(void);
 
 #endif /* !ATHEME_INC_UPLINK_H */

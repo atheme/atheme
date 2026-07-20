@@ -15,6 +15,58 @@
 #include <atheme.h>
 #include "rfc1459.h"
 
+/* Unescapes an IRCv3 message-tags value in-place
+ * \: -> ';', \s -> ' ', \\ -> '\', \r -> CR, \n -> LF
+ */
+static void
+message_tag_unescape(char *value)
+{
+	char *dst = value;
+
+	for (char *src = value; *src != '\0'; src++)
+	{
+		if (*src != '\\')
+		{
+			*dst++ = *src;
+			continue;
+		}
+
+		switch (*++src)
+		{
+		case ':':
+			*dst++ = ';';
+			break;
+		case 's':
+			*dst++ = ' ';
+			break;
+		case '\\':
+			*dst++ = '\\';
+			break;
+		case 'r':
+			*dst++ = '\r';
+			break;
+		case 'n':
+			*dst++ = '\n';
+			break;
+		case '\0':
+			// trailing lone backslash; drop it
+			*dst = '\0';
+			return;
+		default:
+			*dst++ = *src;
+			break;
+		}
+	}
+
+	*dst = '\0';
+}
+
+static void
+message_tag_free_cb(const char *key, void *data, void *privdata)
+{
+	sfree(data);
+}
+
 // parses a standard 2.8.21 style IRC stream
 void
 irc_parse(char *line)
@@ -54,16 +106,44 @@ irc_parse(char *line)
 
 		slog(LG_RAWDATA, "-> %s", line);
 
-		/* If it starts with a @ we have IRCv3 message tags.
-		 * We don't handle these so just skip them.
-		 */
+		// If it starts with @ we have IRCv3 message tags.
 		if (*line == '@')
 		{
-			line = strchr(line, ' ');
-			if (!line)
+			line++;
+			if (*line == ' ')
+				goto cleanup; /* no tags, starts with "@ " */
+
+			char *sp = strchr(line, ' ');
+			if (!sp)
 				goto cleanup; /* just "@tags" */
 
-			line++;
+			*sp = '\0';
+			si->tags = mowgli_patricia_create(NULL);
+			for (char *tag = strtok_r(line + 1, ";", &pos); tag != NULL; tag = strtok_r(NULL, ";", &pos))
+			{
+				char *key = tag;
+				char *value = strchr(tag, '=');
+				void *old;
+
+				if (value != NULL)
+				{
+					*value++ = '\0';
+					message_tag_unescape(value);
+				}
+				else
+					value = "";
+
+				if (*key == '\0')
+					continue;
+
+				// if we get duplicate keys, keep only the latest one
+				if ((old = mowgli_patricia_delete(si->tags, key)) != NULL)
+					sfree(old);
+
+				mowgli_patricia_add(si->tags, key, sstrdup(value));
+			}
+
+			line = sp + 1;
 			if (*line == '\n' || *line == '\000')
 				goto cleanup; /* just "@tags " */
 		}
@@ -176,13 +256,16 @@ irc_parse(char *line)
 				slog(LG_INFO, "irc_parse(): insufficient parameters for command %s", pcmd->token);
 				goto cleanup;
 			}
-			if (pcmd->handler)
-			{
-				pcmd->handler(si, parc, parv);
-			}
+			handle_command(pcmd, si, parc, parv);
 		}
 	}
 
 cleanup:
+	if (si->tags != NULL)
+	{
+		mowgli_patricia_destroy(si->tags, message_tag_free_cb, NULL);
+		si->tags = NULL;
+	}
+
 	atheme_object_unref(si);
 }
