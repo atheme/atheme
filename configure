@@ -6310,6 +6310,13 @@ else $as_nop
 fi
 
 done
+    ac_fn_c_check_func "$LINENO" "timespec_get" "ac_cv_func_timespec_get"
+if test "x$ac_cv_func_timespec_get" = xyes
+then :
+  printf "%s\n" "#define HAVE_TIMESPEC_GET 1" >>confdefs.h
+
+fi
+
     ac_fn_c_check_func "$LINENO" "timingsafe_bcmp" "ac_cv_func_timingsafe_bcmp"
 if test "x$ac_cv_func_timingsafe_bcmp" = xyes
 then :

@@ -90,7 +90,7 @@ ts6_server_login(void)
 
 	me.bursting = true;
 
-	sts("CAPAB :QS EX IE KLN UNKLN ENCAP TB SERVICES EUID EOPMOD MLOCK");
+	sts("CAPAB :QS EX IE KLN UNKLN ENCAP TB SERVICES EUID EOPMOD MLOCK STAG");
 	sts("SERVER %s 1 :%s%s", me.name, me.hidden ? "(H) " : "", me.desc);
 	sts("SVINFO %d 3 0 :%lu", ircd->uses_uid ? 6 : 5,
 			(unsigned long)CURRTIME);
@@ -715,6 +715,12 @@ m_notice(struct sourceinfo *si, int parc, char *parv[])
 		return;
 
 	handle_message(si, parv[0], true, parv[1]);
+}
+
+static void
+m_tagmsg(struct sourceinfo *si, int parc, char *parv[])
+{
+	// no-op; nothing in atheme currently cares about incoming TAGMSG
 }
 
 static void
@@ -1442,6 +1448,7 @@ m_capab(struct sourceinfo *si, int parc, char *parv[])
 	use_tb = false;
 	use_eopmod = false;
 	use_mlock = false;
+	ircd->flags &= ~IRCD_MESSAGE_TAGS;
 	for (p = strtok(parv[0], " "); p != NULL; p = strtok(NULL, " "))
 	{
 		if (!irccasecmp(p, "EUID"))
@@ -1468,6 +1475,11 @@ m_capab(struct sourceinfo *si, int parc, char *parv[])
 		{
 			slog(LG_DEBUG, "m_capab(): uplink supports MLOCK, enabling support.");
 			use_mlock = true;
+		}
+		if (!irccasecmp(p, "STAG"))
+		{
+			slog(LG_DEBUG, "m_capab(): uplink supports message tags, enabling support.");
+			ircd->flags |= IRCD_MESSAGE_TAGS;
 		}
 	}
 
@@ -1570,6 +1582,7 @@ mod_init(struct module *const restrict m)
 	pcommand_add("PONG", m_pong, 1, MSRC_SERVER);
 	pcommand_add("PRIVMSG", m_privmsg, 2, MSRC_USER);
 	pcommand_add("NOTICE", m_notice, 2, MSRC_UNREG | MSRC_USER | MSRC_SERVER);
+	pcommand_add("TAGMSG", m_tagmsg, 1, MSRC_USER);
 	pcommand_add("SJOIN", m_sjoin, 4, MSRC_SERVER);
 	pcommand_add("PART", m_part, 1, MSRC_USER);
 	pcommand_add("NICK", m_nick, 2, MSRC_USER | MSRC_SERVER);

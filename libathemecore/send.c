@@ -16,11 +16,11 @@
 #include "internal.h"
 
 /* send a line to the server, append the \r\n */
-int ATHEME_FATTR_PRINTF(1, 2)
-sts(const char *fmt, ...)
+int
+send_line(const char *line)
 {
-	va_list ap;
-	char buf[513];
+	char buf[BUFSIZE+1];
+	size_t off = 0;
 	int len;
 
 	if (!me.connected)
@@ -28,11 +28,29 @@ sts(const char *fmt, ...)
 
 	return_val_if_fail(curr_uplink != NULL, 0);
 	return_val_if_fail(curr_uplink->conn != NULL, 0);
-	return_val_if_fail(fmt != NULL, 0);
+	return_val_if_fail(line != NULL, 0);
 
-	va_start(ap, fmt);
-	vsnprintf(buf, 511, fmt, ap); /* leave two bytes for \r\n */
-	va_end(ap);
+	if (*line == '@')
+	{
+		const char *sp = strchr(line, ' ');
+		if (sp == NULL)
+			return 0;
+
+		// right now BUFSIZE == 1024, so we only support up to 512 bytes of tags including framing
+		// this should be adjusted to 8191 once the rest of atheme grows support for the longer sizes
+		// if tag data is longer, skip the tags rather than truncating them to avoid corrupted tag data
+		// also skip tags if the IRCd lacks support for receiving message tags
+		if (ircd->flags & IRCD_MESSAGE_TAGS && sp - line < 512)
+		{
+			mowgli_strlcpy(buf, line, sp - line + 2);
+			off = sp - line + 1;
+		}
+
+		line = sp + 1;
+	}
+
+	return_val_if_fail(sizeof(buf) - off >= 513, 0);
+	mowgli_strlcpy(buf + off, line, 511);
 
 	len = strlen(buf);
 	buf[len++] = '\r';

@@ -75,6 +75,7 @@ struct ircd
 #define IRCD_HOLDNICK			2 /* supports holdnick_sts() */
 #define IRCD_TOPIC_NOCOLOUR		4
 #define IRCD_SASL_USE_PUID		8
+#define IRCD_MESSAGE_TAGS		16 /* conditionally added in protocol module if tag support isn't guaranteed */
 
 /* forced nick change types */
 #define FNC_REGAIN 0 /* give a registered user their nick back */
@@ -259,6 +260,9 @@ extern bool (*is_ircop)(struct user *u);
 extern bool (*is_admin)(struct user *u);
 /* as above; used to respect external services clients */
 extern bool (*is_service)(struct user *u);
+/* low-level function used for sending all server-to-server messages */
+extern int (*sts)(const char *fmt, ...) ATHEME_FATTR_PRINTF(1, 2);
+extern void (*handle_command)(struct proto_cmd *pcmd, struct sourceinfo *si, int parc, char *parv[]);
 
 unsigned int generic_server_login(void);
 void generic_introduce_nick(struct user *u);
@@ -310,6 +314,8 @@ void generic_undline_sts(const char *server, const char *host);
 bool generic_is_ircop(struct user *u);
 bool generic_is_admin(struct user *u);
 bool generic_is_service(struct user *u);
+int generic_sts(const char *fmt, ...) ATHEME_FATTR_PRINTF(1, 2);
+void generic_handle_command(struct proto_cmd *pcmd, struct sourceinfo *si, int parc, char *parv[]);
 
 extern const struct cmode *mode_list;
 extern struct extmode *ignore_mode_list;

@@ -82,6 +82,8 @@ static const struct cmode solanum_user_mode_list[] = {
   { '\0', 0 }
 };
 
+static struct sourceinfo *current_si = NULL;
+
 static bool
 solanum_is_valid_hostslash(const char *host)
 {
@@ -105,6 +107,124 @@ solanum_is_valid_hostslash(const char *host)
 		return false;
 
 	return dot;
+}
+
+static const char *
+current_time(void)
+{
+	static char buf[32];
+	struct tm *tm = NULL;
+	unsigned int ms = 0;
+
+#if defined(HAVE_TIMESPEC_GET)
+	struct timespec ts;
+	timespec_get(&ts, TIME_UTC);
+	tm = gmtime(&ts.tv_sec);
+	ms = ts.tv_nsec / 1000000;
+#elif defined(CLOCK_REALTIME)
+	struct timespec ts;
+	clock_gettime(CLOCK_REALTIME, &ts);
+	tm = gmtime(&ts.tv_sec);
+	ms = ts.tv_nsec / 1000000;
+#elif defined(HAVE_GETTIMEOFDAY)
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	tm = gmtime(&tv.tv_sec);
+	ms = tv.tv_usec / 1000;
+#else
+	time_t t = time(NULL);
+	tm = gmtime(&t);
+#endif
+
+	snprintf(buf, sizeof(buf), "%04d-%02d-%02dT%02d:%02d:%02d.%03uZ",
+		tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday,
+		tm->tm_hour, tm->tm_min, tm->tm_sec, ms);
+
+	return buf;
+}
+
+static const char *
+response_tag(void)
+{
+	static char buf[128];
+
+	if (current_si == NULL || current_si->tags == NULL)
+		return "";
+
+	const char *response = mowgli_patricia_retrieve(current_si->tags, "solanum.chat/response");
+	if (response == NULL)
+		return "";
+
+	snprintf(buf, sizeof(buf), ";solanum.chat/response=%s", response);
+	return buf;
+}
+
+static int ATHEME_FATTR_PRINTF(1, 2)
+solanum_sts(const char *fmt, ...)
+{
+	va_list ap;
+	char buf[BUFSIZE+1];
+	char buf2[BUFSIZE+1];
+	size_t off = 0;
+
+	return_val_if_fail(fmt != NULL, 0);
+
+	va_start(ap, fmt);
+	vsnprintf(buf2, sizeof(buf2), fmt, ap);
+	va_end(ap);
+
+	if (ircd->flags & IRCD_MESSAGE_TAGS)
+	{
+		off = snprintf(buf, sizeof(buf), "@time=%s%s", current_time(), response_tag());
+		// merge any tags passed into sts()
+		if (*buf2 == '@')
+			*buf2 = ';';
+		else
+			buf[off++] = ' ';
+	}
+
+	mowgli_strlcpy(buf + off, buf2, sizeof(buf) - off);
+	return send_line(buf);
+}
+
+void
+solanum_handle_command(struct proto_cmd *pcmd, struct sourceinfo *si, int parc, char *parv[])
+{
+	if (pcmd->handler)
+	{
+		current_si = si;
+		pcmd->handler(si, parc, parv);
+		current_si = NULL;
+	}
+
+	if (si->tags != NULL && ircd->flags & IRCD_MESSAGE_TAGS)
+	{
+		const char *response = mowgli_patricia_retrieve(si->tags, "solanum.chat/response");
+		const char *mask;
+		if (response == NULL)
+			return;
+
+		char buf[128];
+		char *p;
+		mowgli_strlcpy(buf, response, sizeof(buf));
+
+		// skip past the first two tokens; we only care about the third (the mask)
+		if (strtok_r(buf, ",", &p) == NULL)
+			return;
+		if (strtok_r(NULL, ",", &p) == NULL)
+			return;
+		if ((mask = strtok_r(NULL, ",", &p)) == NULL)
+			return;
+
+		// no ACK if the mask doesn't match us
+		if (match(mask, me.name))
+			return;
+
+		if (si->s != NULL)
+			sts("@solanum.chat/response=%s :%s ENCAP %s ACK", response, me.name, si->s->name);
+		else if (si->su != NULL)
+			sts("@solanum.chat/response=%s :%s ENCAP %s ACK", response, me.name, si->su->server->name);
+	}
 }
 
 static void
@@ -307,6 +427,8 @@ mod_init(struct module *const restrict m)
 	mode_list = solanum_mode_list;
 	user_mode_list = solanum_user_mode_list;
 
+	sts = &solanum_sts;
+	handle_command = &solanum_handle_command;
 	wallops_sts = &solanum_wallops_sts;
 	ircd_on_login = &solanum_on_login;
 	ircd_on_logout = &solanum_on_logout;
