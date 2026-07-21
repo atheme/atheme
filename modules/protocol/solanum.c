@@ -116,7 +116,7 @@ current_time(void)
 	struct tm *tm = NULL;
 	unsigned int ms = 0;
 
-#if defined(TIME_UTC)
+#if defined(HAVE_TIMESPEC_GET)
 	struct timespec ts;
 	timespec_get(&ts, TIME_UTC);
 	tm = gmtime(&ts.tv_sec);
@@ -190,12 +190,12 @@ solanum_sts(const char *fmt, ...)
 void
 solanum_handle_command(struct proto_cmd *pcmd, struct sourceinfo *si, int parc, char *parv[])
 {
-	current_si = si;
-
 	if (pcmd->handler)
+	{
+		current_si = si;
 		pcmd->handler(si, parc, parv);
-
-	current_si = NULL;
+		current_si = NULL;
+	}
 
 	if (si->tags != NULL && ircd->flags & IRCD_MESSAGE_TAGS)
 	{
