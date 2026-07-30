@@ -997,7 +997,7 @@ ircd protocol
 
 chanserv
 --------
-- split out SET into seperate modules for each SET command. chanserv/set
+- split out SET into separate modules for each SET command. chanserv/set
   is now a "meta-module" that depends on all the set_* modules.
 
 hostserv
@@ -1013,7 +1013,7 @@ infoserv
 
 nickserv
 --------
-- split out SET into seperate modules for each SET command. nickserv/set
+- split out SET into separate modules for each SET command. nickserv/set
   is now a "meta-module" that depends on all the set_* modules.
 - added cracklib module that checks users' passwords on REGISTER and lets
   them know if the password is secure or not. You can have it just warn
@@ -1657,7 +1657,7 @@ documentation
 
 other
 -----
-- Split expiry setting into seperate nickserv::expiry and chanserv::expiry.
+- Split expiry setting into separate nickserv::expiry and chanserv::expiry.
 - Make expiry settings of 0 work more consistently as "do not expire
   anything", and still update last used times.
 - Add graphtastical contrib module, creates files to be processed with
