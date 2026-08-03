@@ -717,6 +717,17 @@ loadmodule "infoserv/main";
 
 
 
+/* Serv module.
+ *
+ * Serv is a compatibility router: it provides a single entry point that
+ * forwards commands to the other services using namespace prefixes, e.g.
+ * `/msg Serv NICK IDENTIFY <nick> <password>`. Its display nick is set in
+ * the `serv {}` block below.
+ */
+loadmodule "serv/main";
+
+
+
 /* SASL agent module.
  *
  * Allows clients to authenticate to services via SASL with an appropriate
@@ -1660,6 +1671,13 @@ uplink "irc6.example.net" {
  * Services to operate correctly. You should make sure these settings
  * are properly configured for your network.
  */
+serv {
+	nick = "Serv";
+	user = "Serv";
+	host = "services.int";
+	real = "Services Entry Point";
+};
+
 nickserv {
 
 	nick = "NickServ";

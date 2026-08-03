@@ -34,6 +34,7 @@ SUBDIRS =                   \
     protocol                \
     proxyscan               \
     rpgserv                 \
+    serv                    \
     saslserv                \
     scripting               \
     security                \
