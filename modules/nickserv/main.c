@@ -10,8 +10,6 @@
 
 #include <atheme.h>
 
-static struct service *notice_front;
-
 static struct {
 	const char *nickstring, *accountstring;
 } nick_account_trans[] = {
@@ -36,6 +34,7 @@ nickserv_handle_nickchange(struct user *u)
 {
 	struct mynick *mn;
 	struct hook_nick_enforce hdata;
+	struct service *const notice_front = (nicksvs.noticefront != NULL) ? service_find(nicksvs.noticefront) : NULL;
 
 	if (nicksvs.me == NULL || nicksvs.no_nick_ownership)
 		return;
@@ -117,17 +116,9 @@ nickserv_config_ready(void *unused)
 	nicksvs.host = nicksvs.me->host;
 	nicksvs.real = nicksvs.me->real;
 
-	notice_front = NULL;
-	if (nicksvs.noticefront != NULL)
-	{
-		struct service *svs = service_find(nicksvs.noticefront);
-
-		if (svs == NULL)
-			(void) slog(LG_ERROR, "%s: noticefront service \2%s\2 not found",
-			            MOWGLI_FUNC_NAME, nicksvs.noticefront);
-		else
-			notice_front = svs;
-	}
+	if (nicksvs.noticefront != NULL && service_find(nicksvs.noticefront) == NULL)
+		(void) slog(LG_ERROR, "%s: noticefront service \2%s\2 not found",
+		            MOWGLI_FUNC_NAME, nicksvs.noticefront);
 
 	if (nicksvs.no_nick_ownership)
 		for (i = 0; nick_account_trans[i].nickstring != NULL; i++)
@@ -202,8 +193,6 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 		nicksvs.me = NULL;
 	}
 	authservice_loaded--;
-
-	notice_front = NULL;
 
         hook_del_config_ready(nickserv_config_ready);
         hook_del_nick_check(nickserv_handle_nickchange);
