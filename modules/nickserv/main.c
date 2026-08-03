@@ -3,11 +3,14 @@
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
  * Copyright (C) 2005 Atheme Project (http://atheme.org/)
+ * Copyright (C) 2026 syk <syk@localhost>
  *
  * This file contains the main() routine.
  */
 
 #include <atheme.h>
+
+static struct service *notice_front;
 
 static struct {
 	const char *nickstring, *accountstring;
@@ -52,10 +55,16 @@ nickserv_handle_nickchange(struct user *u)
 
 		if (!(u->flags & UF_SEENINFO) && chansvs.me != NULL)
 		{
-			notice(nicksvs.nick, u->nick, "Welcome to \2%s\2, \2%s\2! Here on \2%s\2, we provide "
-			       "services to enable the registration of nicknames and channels! For details, type "
-			       "\2/msg %s HELP\2 and \2/msg %s HELP\2", me.netname, u->nick, me.netname,
-			       nicksvs.me->disp, chansvs.me->disp);
+			if (notice_front != NULL)
+				notice(notice_front->nick, u->nick, "Welcome to \2%s\2, \2%s\2! Here on \2%s\2, we provide "
+				       "services to enable the registration of nicknames and channels! For details, type "
+				       "\2/msg %s NICK HELP\2 and \2/msg %s CHAN HELP\2", me.netname, u->nick, me.netname,
+				       notice_front->disp, notice_front->disp);
+			else
+				notice(nicksvs.nick, u->nick, "Welcome to \2%s\2, \2%s\2! Here on \2%s\2, we provide "
+				       "services to enable the registration of nicknames and channels! For details, type "
+				       "\2/msg %s HELP\2 and \2/msg %s HELP\2", me.netname, u->nick, me.netname,
+				       nicksvs.me->disp, chansvs.me->disp);
 
 			u->flags |= UF_SEENINFO;
 		}
@@ -72,13 +81,22 @@ nickserv_handle_nickchange(struct user *u)
 	// OpenServices: is user on access list? -nenolod
 	if (myuser_access_verify(u, mn->owner))
 	{
-		notice(nicksvs.nick, u->nick, "Please identify via \2/msg %s IDENTIFY %s <password>\2",
-		                              nicksvs.me->disp, entity(mn->owner)->name);
+		if (notice_front != NULL)
+			notice(notice_front->nick, u->nick, "Please identify via \2/msg %s NICK IDENTIFY %s <password>\2",
+			                              notice_front->disp, entity(mn->owner)->name);
+		else
+			notice(nicksvs.nick, u->nick, "Please identify via \2/msg %s IDENTIFY %s <password>\2",
+			                              nicksvs.me->disp, entity(mn->owner)->name);
 		return;
 	}
 
 	if (metadata_find(mn->owner, "private:freeze:freezer"))
-		notice(nicksvs.nick, u->nick, "This nickname is registered. Please choose a different nickname.");
+		notice(notice_front != NULL ? notice_front->nick : nicksvs.nick, u->nick,
+		       "This nickname is registered. Please choose a different nickname.");
+	else if (notice_front != NULL)
+		notice(notice_front->nick, u->nick, "This nickname is registered. Please choose a different nickname, or "
+		                              "identify via \2/msg %s NICK IDENTIFY %s <password>\2",
+		                              notice_front->disp, entity(mn->owner)->name);
 	else
 		notice(nicksvs.nick, u->nick, "This nickname is registered. Please choose a different nickname, or "
 		                              "identify via \2/msg %s IDENTIFY %s <password>\2",
@@ -98,6 +116,18 @@ nickserv_config_ready(void *unused)
 	nicksvs.user = nicksvs.me->user;
 	nicksvs.host = nicksvs.me->host;
 	nicksvs.real = nicksvs.me->real;
+
+	notice_front = NULL;
+	if (nicksvs.noticefront != NULL)
+	{
+		struct service *svs = service_find(nicksvs.noticefront);
+
+		if (svs == NULL)
+			(void) slog(LG_ERROR, "%s: noticefront service \2%s\2 not found",
+			            MOWGLI_FUNC_NAME, nicksvs.noticefront);
+		else
+			notice_front = svs;
+	}
 
 	if (nicksvs.no_nick_ownership)
 		for (i = 0; nick_account_trans[i].nickstring != NULL; i++)
@@ -154,6 +184,7 @@ mod_init(struct module ATHEME_VATTR_UNUSED *const restrict m)
 	add_duration_conf_item("ENFORCE_EXPIRE", &nicksvs.me->conf_table, 0, &nicksvs.enforce_expiry, "d", 0);
 	add_duration_conf_item("ENFORCE_DELAY", &nicksvs.me->conf_table, 0, &nicksvs.enforce_delay, "s", 30);
 	add_dupstr_conf_item("ENFORCE_PREFIX", &nicksvs.me->conf_table, 0, &nicksvs.enforce_prefix, "Guest");
+	add_dupstr_conf_item("NOTICEFRONT", &nicksvs.me->conf_table, 0, &nicksvs.noticefront, NULL);
 	add_conf_item("EMAILEXEMPTS", &nicksvs.me->conf_table, c_ni_emailexempts);
 	add_uint_conf_item("MAXNICKS", &nicksvs.me->conf_table, 9, &nicksvs.maxnicks, 1, INT_MAX, 5);
 }
@@ -171,6 +202,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 		nicksvs.me = NULL;
 	}
 	authservice_loaded--;
+
+	notice_front = NULL;
 
         hook_del_config_ready(nickserv_config_ready);
         hook_del_nick_check(nickserv_handle_nickchange);
