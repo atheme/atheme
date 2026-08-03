@@ -1,0 +1,9 @@
+The INFO namespace provides information commands.
+
+Syntax:
+
+    /msg &nick& INFO <command> [arguments...]
+
+For help on a command, type:
+
+    /msg &nick& HELP INFO <command>

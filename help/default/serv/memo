@@ -1,0 +1,11 @@
+The MEMO namespace provides memo commands.
+
+Syntax:
+
+    /msg &nick& MEMO <command> [arguments...]
+
+Common commands: SEND, LIST, READ, FORWARD, DELETE
+
+For help on a command, type:
+
+    /msg &nick& HELP MEMO <command>

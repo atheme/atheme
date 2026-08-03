@@ -1,0 +1,12 @@
+The OPER namespace provides operator commands.
+
+Syntax:
+
+    /msg &nick& OPER <command> [arguments...]
+
+This namespace requires operator privileges; unprivileged users are
+denied exactly as they would be by OperServ directly.
+
+For help on a command, type:
+
+    /msg &nick& HELP OPER <command>
