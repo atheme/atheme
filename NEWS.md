@@ -219,6 +219,10 @@ NickServ
 - NickServ `RETURN` now enables the `HIDEMAIL` flag if the email was changed
   (unless the flag is unset by default)
 - NickServ `VHOST` no longer supports legacy pre-v5.0 command syntax
+- New `NOTICEFRONT` setting in the `nickserv {}` block: when a front service
+  such as `Serv` is in use, NickServ's on-connect notices (welcome, identify
+  reminder, registered-nick notice) are sent by that service and their hints
+  use the router's namespace syntax, e.g. `/msg Serv NICK IDENTIFY ...`.
 
 IRCds
 -----
