@@ -204,6 +204,12 @@ struct hook_user_logout_check
 	bool                allowed;
 };
 
+struct hook_user_identify_fail
+{
+	struct sourceinfo * si;
+	struct myuser *     mu;
+};
+
 struct hook_user_needforce
 {
 	struct sourceinfo * si;
