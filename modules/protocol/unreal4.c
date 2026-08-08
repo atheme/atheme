@@ -617,12 +617,41 @@ static void
 unreal_jupe(const char *server, const char *reason)
 {
 	struct service *svs;
+	static char sid[3+1];
+	int i;
 
 	server_delete(server);
 
 	svs = service_find("operserv");
 	sts(":%s SQUIT %s :%s", svs != NULL ? svs->nick : ME, server, reason);
-	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
+
+	// dirty dirty make up some sid
+	if (sid[0] == '\0')
+		mowgli_strlcpy(sid, me.numeric, sizeof sid);
+	do
+	{
+		i = 2;
+		for (;;)
+		{
+			if (sid[i] == 'Z')
+			{
+				sid[i] = '0';
+				i--;
+
+				// eek, no more sids
+				if (i < 0)
+					return;
+
+				continue;
+			}
+			else if (sid[i] == '9')
+				sid[i] = 'A';
+			else sid[i]++;
+			break;
+		}
+	} while (server_find(sid));
+
+	sts(":%s SID %s 2 %s :%s", ME, server, sid, reason);
 }
 
 static void
