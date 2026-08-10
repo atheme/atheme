@@ -1,5 +1,7 @@
 MODULE = Atheme			PACKAGE = Atheme::Channel
 
+#include "../../../chanserv/chanserv.h"
+
 Atheme_Channel
 find(SV * package, const char * name)
 CODE:
