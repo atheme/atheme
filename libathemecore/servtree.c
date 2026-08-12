@@ -380,7 +380,7 @@ service_delete(struct service *sptr)
 		mowgli_patricia_destroy(sptr->aliases, &free_alias_string, NULL);
 
 	if (sptr->commands)
-		mowgli_patricia_destroy(sptr->commands, &command_delete_trie_cb, sptr->commands);
+		mowgli_patricia_destroy(sptr->commands, NULL, NULL);
 
 	sfree(sptr->disp);	/* service_name() does a smalloc() */
 	sfree(sptr->internal_name);

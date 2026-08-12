@@ -82,7 +82,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	(void) service_named_unbind_command("operserv", &os_cmd_set);
 
-	(void) mowgli_patricia_destroy(os_set_cmdtree, &command_delete_trie_cb, os_set_cmdtree);
+	(void) mowgli_patricia_destroy(os_set_cmdtree, NULL, NULL);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/set_core", MODULE_UNLOAD_CAPABILITY_OK)

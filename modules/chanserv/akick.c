@@ -900,7 +900,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 	(void) service_named_unbind_command("chanserv", &cs_akick);
 
-	(void) mowgli_patricia_destroy(cs_akick_cmds, &command_delete_trie_cb, cs_akick_cmds);
+	(void) mowgli_patricia_destroy(cs_akick_cmds, NULL, NULL);
 
 	(void) mowgli_heap_destroy(akick_timeout_heap);
 }

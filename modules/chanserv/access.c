@@ -1463,8 +1463,8 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	(void) service_named_unbind_command("chanserv", &cs_access);
 	(void) service_named_unbind_command("chanserv", &cs_role);
 
-	(void) mowgli_patricia_destroy(cs_access_cmds, &command_delete_trie_cb, cs_access_cmds);
-	(void) mowgli_patricia_destroy(cs_role_cmds, &command_delete_trie_cb, cs_role_cmds);
+	(void) mowgli_patricia_destroy(cs_access_cmds, NULL, NULL);
+	(void) mowgli_patricia_destroy(cs_role_cmds, NULL, NULL);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/access", MODULE_UNLOAD_CAPABILITY_OK)

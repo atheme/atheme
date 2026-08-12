@@ -30,7 +30,6 @@ struct command
 /* commandtree.c */
 void command_add(struct command *, mowgli_patricia_t *);
 void command_delete(struct command *, mowgli_patricia_t *);
-void command_delete_trie_cb(const char *, void *, void *);
 struct command *command_find(mowgli_patricia_t *, const char *);
 void command_exec(struct service *, struct sourceinfo *, struct command *, int, char **);
 void command_exec_split(struct service *, struct sourceinfo *, const char *, char *, mowgli_patricia_t *);

@@ -246,7 +246,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 	(void) service_named_unbind_command("operserv", &os_ignore);
 
-	(void) mowgli_patricia_destroy(os_ignore_cmds, &command_delete_trie_cb, os_ignore_cmds);
+	(void) mowgli_patricia_destroy(os_ignore_cmds, NULL, NULL);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/ignore", MODULE_UNLOAD_CAPABILITY_OK)

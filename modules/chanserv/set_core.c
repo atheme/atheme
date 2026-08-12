@@ -104,7 +104,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	(void) service_named_unbind_command("chanserv", &cs_set);
 
-	(void) mowgli_patricia_destroy(cs_set_cmdtree, &command_delete_trie_cb, cs_set_cmdtree);
+	(void) mowgli_patricia_destroy(cs_set_cmdtree, NULL, NULL);
 }
 
 SIMPLE_DECLARE_MODULE_V1("chanserv/set_core", MODULE_UNLOAD_CAPABILITY_OK)

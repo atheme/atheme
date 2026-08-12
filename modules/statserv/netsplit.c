@@ -186,7 +186,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 	(void) service_named_unbind_command("statserv", &ss_netsplit);
 
-	(void) mowgli_patricia_destroy(ss_netsplit_cmds, &command_delete_trie_cb, ss_netsplit_cmds);
+	(void) mowgli_patricia_destroy(ss_netsplit_cmds, NULL, NULL);
 	(void) mowgli_patricia_destroy(splitlist, NULL, NULL);
 
 	(void) hook_del_server_add(&netsplit_server_add);

@@ -106,13 +106,6 @@ command_delete(struct command *cmd, mowgli_patricia_t *commandtree)
 	mowgli_patricia_delete(commandtree, cmd->name);
 }
 
-void
-command_delete_trie_cb(const char ATHEME_VATTR_UNUSED *const restrict cmdname, void *const restrict cmd,
-                       void *const restrict cmdlist)
-{
-	(void) command_delete(cmd, cmdlist);
-}
-
 struct command *
 command_find(mowgli_patricia_t *commandtree, const char *command)
 {

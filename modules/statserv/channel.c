@@ -117,7 +117,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
 	(void) service_named_unbind_command("statserv", &ss_channel);
 
-	(void) mowgli_patricia_destroy(ss_channel_cmds, &command_delete_trie_cb, ss_channel_cmds);
+	(void) mowgli_patricia_destroy(ss_channel_cmds, NULL, NULL);
 }
 
 SIMPLE_DECLARE_MODULE_V1("statserv/channel", MODULE_UNLOAD_CAPABILITY_OK)

@@ -400,7 +400,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 
 	(void) service_named_unbind_command("operserv", &os_sgline);
 
-	(void) mowgli_patricia_destroy(os_sgline_cmds, &command_delete_trie_cb, os_sgline_cmds);
+	(void) mowgli_patricia_destroy(os_sgline_cmds, NULL, NULL);
 }
 
 SIMPLE_DECLARE_MODULE_V1("operserv/sgline", MODULE_UNLOAD_CAPABILITY_OK)
