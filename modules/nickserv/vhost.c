@@ -257,8 +257,9 @@ ns_cmd_listvhost(struct sourceinfo *si, int parc, char *parv[])
 }
 
 static void
-vhost_on_identify(struct user *u)
+vhost_on_identify(struct hook_user_identify *hdata)
 {
+	struct user *u = hdata->u;
 	struct myuser *mu = u->myuser;
 	struct metadata *md;
 

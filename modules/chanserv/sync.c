@@ -90,6 +90,12 @@ sync_user(struct user *u)
 }
 
 static void
+sync_user_identify(struct hook_user_identify *hdata)
+{
+	(void) sync_user(hdata->u);
+}
+
+static void
 sync_myuser(struct myuser *mu)
 {
 	mowgli_node_t *iter;
@@ -269,7 +275,7 @@ mod_init(struct module *const restrict m)
 	hook_add_user_sethost(sync_user);
 	hook_add_user_oper(sync_user);
 	hook_add_user_deoper(sync_user);
-	hook_add_user_identify(sync_user);
+	hook_add_user_identify(sync_user_identify);
 	hook_add_user_register(sync_myuser);
 }
 
@@ -280,7 +286,7 @@ mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 	hook_del_user_sethost(sync_user);
 	hook_del_user_oper(sync_user);
 	hook_del_user_deoper(sync_user);
-	hook_del_user_identify(sync_user);
+	hook_del_user_identify(sync_user_identify);
 	hook_del_user_register(sync_myuser);
 
 	service_named_unbind_command("chanserv", &cs_sync);

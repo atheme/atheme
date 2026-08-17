@@ -17,8 +17,9 @@ extern unsigned int maxmemos;
 unsigned int maxmemos;
 
 static void
-on_user_identify(struct user *u)
+on_user_identify(struct hook_user_identify *hdata)
 {
+	struct user *u = hdata->u;
 	struct myuser *mu = u->myuser;
 
 	if (mu->memoct_new > 0)

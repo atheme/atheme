@@ -14,8 +14,9 @@
 static struct service *hostsvs = NULL;
 
 static void
-on_user_identify(struct user *u)
+on_user_identify(struct hook_user_identify *hdata)
 {
+	struct user *u = hdata->u;
 	struct myuser *mu = u->myuser;
 	struct metadata *md;
 	char buf[NICKLEN + 20];

@@ -180,6 +180,12 @@ struct hook_user_delete_info
 	const char *        comment;
 };
 
+struct hook_user_identify
+{
+	struct user * const     u;
+	struct service * const  svs;
+};
+
 enum hook_user_login_method
 {
 	HULM_CERT_FINGERPRINT,

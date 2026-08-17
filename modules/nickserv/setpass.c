@@ -93,22 +93,6 @@ ns_cmd_setpass(struct sourceinfo *si, int parc, char *parv[])
 }
 
 static void
-clear_setpass_key(struct user *u)
-{
-	struct myuser *mu = u->myuser;
-
-	if (!metadata_find(mu, "private:setpass:key"))
-		return;
-
-	metadata_delete(mu, "private:setpass:key");
-	metadata_delete(mu, "private:sendpass:sender");
-	metadata_delete(mu, "private:sendpass:timestamp");
-
-	notice(nicksvs.nick, u->nick, "Warning: SENDPASS had been used to mail you a password recovery "
-		"key. Since you have identified, that key is no longer valid.");
-}
-
-static void
 show_setpass(struct hook_user_req *hdata)
 {
 	if (has_priv(hdata->si, PRIV_USER_AUSPEX))
@@ -150,7 +134,6 @@ mod_init(struct module *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/main")
 
-	hook_add_user_identify(clear_setpass_key);
 	hook_add_user_info(show_setpass);
 	service_named_bind_command("nickserv", &ns_setpass);
 }
@@ -158,7 +141,6 @@ mod_init(struct module *const restrict m)
 static void
 mod_deinit(const enum module_unload_intent ATHEME_VATTR_UNUSED intent)
 {
-	hook_del_user_identify(clear_setpass_key);
 	hook_del_user_info(show_setpass);
 	service_named_unbind_command("nickserv", &ns_setpass);
 }

@@ -504,7 +504,8 @@ handle_burstlogin(struct user *u, const char *login, time_t ts)
 	{
 		slog(LG_DEBUG, "handle_burstlogin(): handling pending login hooks for %s", u->nick);
 		mu->flags &= ~MU_PENDINGLOGIN;
-		hook_call_user_identify(u);
+
+		hook_call_user_identify(&((struct hook_user_identify){ u, NULL }));
 	}
 }
 
@@ -762,7 +763,7 @@ myuser_login(struct service *svs, struct user *u, struct myuser *mu, bool sendac
 	if (sendaccount && !(mu->flags & MU_WAITAUTH))
 		ircd_on_login(u, mu, NULL);
 
-	hook_call_user_identify(u);
+	hook_call_user_identify(&((struct hook_user_identify){ u, svs }));
 }
 
 /* this could be done with more finesse, but hey! */

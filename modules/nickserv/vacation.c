@@ -40,8 +40,10 @@ ns_cmd_vacation(struct sourceinfo *si, int parc, char *parv[])
 }
 
 static void
-user_identify_hook(struct user *u)
+user_identify_hook(struct hook_user_identify *hdata)
 {
+	struct user *u = hdata->u;
+
 	if (!metadata_find(u->myuser, "private:vacation"))
 		return;
 
