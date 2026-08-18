@@ -1,5 +1,3 @@
-extern crate rusqlite;
-
 use std::env::args_os;
 use std::ffi::OsStr;
 
@@ -42,19 +40,18 @@ mod flag_constants {
 use flag_constants::*;
 
 fn process(fname: &OsStr) -> rusqlite::Result<()> {
-    let conn = Connection::open_with_flags(fname, rusqlite::SQLITE_OPEN_READ_ONLY)?;
+    let conn = Connection::open_with_flags(fname, rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY)?;
     println!("DBV 8");
     println!("CF +AFORVbfiorstv");
     let mut stmt = conn.prepare("SELECT username, password, email, reg_time, last_time, flags FROM users;")?;
-    let mut user_rows = stmt.query(&[])?;
-    while let Some(user_result) = user_rows.next() {
-        let u = user_result?;
-        let username: String = u.get(0);
-        let password: String = u.get(1);
-        let mut email: String = u.get(2);
-        let reg_time: i64 = u.get(3);
-        let last_time: i64 = u.get(4);
-        let rs_flags: u32 = u.get(5);
+    let mut user_rows = stmt.query([])?;
+    while let Some(user_result) = user_rows.next()? {
+        let username: String = user_result.get(0)?;
+        let password: String = user_result.get(1)?;
+        let mut email: String = user_result.get(2)?;
+        let reg_time: i64 = user_result.get(3)?;
+        let last_time: i64 = user_result.get(4)?;
+        let rs_flags: u32 = user_result.get(5)?;
         if email.is_empty() {
             email.push_str("noemail");
         }
@@ -75,27 +72,25 @@ fn process(fname: &OsStr) -> rusqlite::Result<()> {
             reg_time, last_time, ath_flags);
     }
     let mut stmt = conn.prepare("SELECT nickname, username, reg_time, last_time FROM nicks;")?;
-    let mut nick_rows = stmt.query(&[])?;
-    while let Some(nick_result) = nick_rows.next() {
-        let n = nick_result?;
-        let nickname: String = n.get(0);
-        let username: String = n.get(1);
-        let reg_time: i64 = n.get(2);
-        let last_time: i64 = n.get(3);
+    let mut nick_rows = stmt.query([])?;
+    while let Some(nick_result) = nick_rows.next()? {
+        let nickname: String = nick_result.get(0)?;
+        let username: String = nick_result.get(1)?;
+        let reg_time: i64 = nick_result.get(2)?;
+        let last_time: i64 = nick_result.get(3)?;
         println!("MN {} {} {} {}", username, nickname, reg_time, last_time);
     }
     let mut stmt = conn.prepare("SELECT chname, topic, url, enforcemodes, tsinfo, reg_time, last_time, flags FROM channels;")?;
-    let mut chan_rows = stmt.query(&[])?;
-    while let Some(chan_result) = chan_rows.next() {
-        let c = chan_result?;
-        let chname: String = c.get(0);
-        let topic: String = c.get(1);
-        let url: String = c.get(2);
-        let enforcemodes: String = c.get(3);
-        let tsinfo: i64 = c.get(4);
-        let reg_time: i64 = c.get(5);
-        let last_time: i64 = c.get(6);
-        let rs_flags: u32 = c.get(7);
+    let mut chan_rows = stmt.query([])?;
+    while let Some(chan_result) = chan_rows.next()? {
+        let chname: String = chan_result.get(0)?;
+        let topic: String = chan_result.get(1)?;
+        let url: String = chan_result.get(2)?;
+        let enforcemodes: String = chan_result.get(3)?;
+        let tsinfo: i64 = chan_result.get(4)?;
+        let reg_time: i64 = chan_result.get(5)?;
+        let last_time: i64 = chan_result.get(6)?;
+        let rs_flags: u32 = chan_result.get(7)?;
         let mut ath_mlock = 0;
         if enforcemodes.contains('i') {
             ath_mlock |= CMODE_INVITE;
@@ -140,13 +135,12 @@ fn process(fname: &OsStr) -> rusqlite::Result<()> {
         }
     }
     let mut stmt = conn.prepare("SELECT chname, username, level, flags, suspend FROM members;")?;
-    let mut chanuser_rows = stmt.query(&[])?;
-    while let Some(chanuser_result) = chanuser_rows.next() {
-        let cu = chanuser_result?;
-        let chname: String = cu.get(0);
-        let username: String = cu.get(1);
-        let rs_level: i32 = cu.get(2);
-        let rs_flags: u32 = cu.get(3);
+    let mut chanuser_rows = stmt.query([])?;
+    while let Some(chanuser_result) = chanuser_rows.next()? {
+        let chname: String = chanuser_result.get(0)?;
+        let username: String = chanuser_result.get(1)?;
+        let rs_level: i32 = chanuser_result.get(2)?;
+        let rs_flags: u32 = chanuser_result.get(3)?;
         let mut ath_level = String::new();
         if rs_level >= 1 {
             ath_level.push_str("iv");
@@ -181,13 +175,12 @@ fn process(fname: &OsStr) -> rusqlite::Result<()> {
         println!("CA {} {} +{} {}", chname, username, ath_level, 0);
     }
     let mut stmt = conn.prepare("SELECT chname, mask, reason FROM bans;")?;
-    let mut chanban_rows = stmt.query(&[])?;
-    while let Some(chanban_result) = chanban_rows.next() {
-        let cb = chanban_result?;
-        let chname: String = cb.get(0);
-        let mask: String = cb.get(1);
-        let reason: String = cb.get(2);
-        println!("CA {} {} +{} {}", chname, mask, "b", 0);
+    let mut chanban_rows = stmt.query([])?;
+    while let Some(chanban_result) = chanban_rows.next()? {
+        let chname: String = chanban_result.get(0)?;
+        let mask: String = chanban_result.get(1)?;
+        let reason: String = chanban_result.get(2)?;
+        println!("CA {} {} +b {}", chname, mask, 0);
         if !reason.is_empty() {
             println!("MDA {}:{} reason {}", chname, mask, reason);
         }
