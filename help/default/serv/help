@@ -1,0 +1,31 @@
+Serv is a unified entry point for the network services.
+
+The following namespaces are available:
+
+    NICK    nickname and account commands
+    CHAN    channel commands
+    MEMO    memo commands
+    GROUP   group commands
+    OPER    operator commands (requires operator privileges)
+    INFO    information commands
+    GLOBAL  global announcement commands
+
+To get help on a namespace, type:
+
+    /msg &nick& HELP NICK
+    /msg &nick& HELP CHAN
+    /msg &nick& HELP MEMO
+    /msg &nick& HELP GROUP
+    /msg &nick& HELP OPER
+    /msg &nick& HELP INFO
+    /msg &nick& HELP GLOBAL
+
+To use a command, type:
+
+    /msg &nick& NICK <command> [arguments...]
+    /msg &nick& CHAN <command> [arguments...]
+    /msg &nick& MEMO <command> [arguments...]
+    /msg &nick& GROUP <command> [arguments...]
+    /msg &nick& OPER <command> [arguments...]
+    /msg &nick& INFO <command> [arguments...]
+    /msg &nick& GLOBAL <command> [arguments...]
