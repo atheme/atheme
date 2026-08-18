@@ -431,7 +431,7 @@ sasl_handle_login(struct sasl_session *const restrict p, struct user *const u, s
 
 		(void) logcommand_user(saslsvs, u, CMDLOG_LOGIN, "LOGOUT");
 
-		if (! (was_killed = ircd_on_logout(u, entity(u->myuser)->name)))
+		if (u->myuser->flags & MU_WAITAUTH || !(was_killed = ircd_on_logout(u, entity(u->myuser)->name)))
 		{
 			mowgli_node_t *n;
 
