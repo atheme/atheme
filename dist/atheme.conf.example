@@ -1681,6 +1681,15 @@ nickserv {
 	 */
 	spam;
 
+	/* noticefront
+	 *
+	 * When a front service such as serv/main is in use, send NickServ's
+	 * on-connect notices (welcome, identify reminder, registered-nick
+	 * notice) from that service instead, using its namespace syntax, e.g.
+	 * `/msg Serv NICK IDENTIFY <nick> <password>`.
+	 */
+	#noticefront = "Serv";
+
 	/* no_nick_ownership
 	 *
 	 * Enable this to disable nickname ownership (old userserv{}). This
