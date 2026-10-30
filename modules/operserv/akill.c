@@ -11,7 +11,101 @@
 
 #include <atheme.h>
 
+#include <errno.h>
+
 static mowgli_patricia_t *os_akill_cmds = NULL;
+
+// The longest timed AKILL that can be added (anything longer overflows or is meant to be !P)
+#define AKILL_MAX_SECONDS       (20L * 365L * 24L * 60L * 60L)
+
+/*
+ * Parse a duration given as "<number>[h|d|w]" (default unit: minutes).
+ *
+ * Returns the duration in seconds, 0 if it is not a valid duration and -1 if
+ * it is valid but too long. Nothing here can overflow.
+ */
+static long
+akill_parse_duration(const char *s)
+{
+	char *end = NULL;
+	long long value, unit = SECONDS_PER_MINUTE;
+
+	errno = 0;
+	value = strtoll(s, &end, 10);
+
+	if (errno != 0 || end == s || value <= 0)
+		return 0;
+
+	if (*end == 'h' || *end == 'H')
+		unit *= MINUTES_PER_HOUR;
+	else if (*end == 'd' || *end == 'D')
+		unit *= MINUTES_PER_DAY;
+	else if (*end == 'w' || *end == 'W')
+		unit *= MINUTES_PER_WEEK;
+	else if (*end != '\0')
+		return 0;
+
+	if (value > AKILL_MAX_SECONDS / unit)
+		return -1;
+
+	return (long) (value * unit);
+}
+
+/*
+ * True if HOST is a literal IPv6 loopback address in any spelling: ::1,
+ * 0:0:0:0:0:0:0:1, 0::0001, ::ffff:127.0.0.1, ::ffff:7f00:1 ...
+ * (A plain string comparison with "::1" only finds one of them.)
+ */
+static bool
+akill_is_ipv6_loopback(const char *host)
+{
+	static const unsigned char mapped[12] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff };
+	struct in6_addr addr;
+
+	if (inet_pton(AF_INET6, host, &addr) != 1)
+		return false;
+
+	if (IN6_IS_ADDR_LOOPBACK(&addr))
+		return true;
+
+	return memcmp(&addr, mapped, sizeof mapped) == 0 && addr.s6_addr[12] == 127;
+}
+
+/*
+ * Parse "<number>" or "<first>:<last>" (decimal digits only).
+ *
+ * Anything else is NOT a number: an IPv6 address ("2001:db8::1"), an IPv4
+ * address ("1.2.3.4"), a host name or user@host. The old code looked for a
+ * ':' or fed the string to atoi(), so those were taken for AKILL numbers.
+ */
+static bool
+akill_parse_numbers(const char *s, unsigned long *first, unsigned long *last)
+{
+	char *end = NULL;
+
+	if (!isdigit((unsigned char) *s))
+		return false;
+
+	errno = 0;
+	*first = strtoul(s, &end, 10);
+
+	if (errno != 0)
+		return false;
+
+	if (*end == '\0')
+	{
+		*last = *first;
+		return true;
+	}
+
+	if (*end != ':' || !isdigit((unsigned char) end[1]))
+		return false;
+
+	errno = 0;
+	*last = strtoul(end + 1, &end, 10);
+
+	return errno == 0 && *end == '\0';
+}
 
 static void
 os_akill_newuser(struct hook_user_nick *data)
@@ -58,7 +152,7 @@ os_cmd_akill_add(struct sourceinfo *si, int parc, char *parv[])
 {
 	struct user *u;
 	char *target = parv[0];
-	char *token = strtok(parv[1], " ");
+	char *token = parv[1] ? strtok(parv[1], " ") : NULL;
 	char star[] = "*";
 	const char *kuser, *khost;
 	char *treason, reason[BUFSIZE];
@@ -93,19 +187,13 @@ os_cmd_akill_add(struct sourceinfo *si, int parc, char *parv[])
 			mowgli_strlcpy(reason, "No reason given", BUFSIZE);
 		if (s)
 		{
-			duration = (atol(s) * SECONDS_PER_MINUTE);
-			while (isdigit((unsigned char)*s))
-				s++;
-			if (*s == 'h' || *s == 'H')
-				duration *= MINUTES_PER_HOUR;
-			else if (*s == 'd' || *s == 'D')
-				duration *= MINUTES_PER_DAY;
-			else if (*s == 'w' || *s == 'W')
-				duration *= MINUTES_PER_WEEK;
-			else if (*s == '\0')
-				;
-			else
-				duration = 0;
+			duration = akill_parse_duration(s);
+
+			if (duration < 0)
+			{
+				command_fail(si, fault_badparams, _("The duration is too long (maximum is 20 years); use !P for a permanent AKILL."));
+				return;
+			}
 			if (duration == 0)
 			{
 				command_fail(si, fault_badparams, _("Invalid duration given."));
@@ -148,7 +236,10 @@ os_cmd_akill_add(struct sourceinfo *si, int parc, char *parv[])
 		}
 
 		if (is_internal_client(u) || u == si->su)
+		{
+			command_fail(si, fault_noprivs, _("\2%s\2 cannot be AKILLed."), u->nick);
 			return;
+		}
 
 		kuser = star;
 		khost = u->host;
@@ -202,6 +293,8 @@ os_cmd_akill_add(struct sourceinfo *si, int parc, char *parv[])
 
 		if (!match(khost, "127.0.0.1") || !match_ips(khost, "127.0.0.1"))
 			unsafe = true;
+		else if (!match(khost, "::1") || !match_ips(khost, "::1") || akill_is_ipv6_loopback(khost))
+			unsafe = true;
 		else if (me.vhost != NULL && (!match(khost, me.vhost) || !match_ips(khost, me.vhost)))
 			unsafe = true;
 		else if ((p = strrchr(khost, '/')) != NULL && IsDigit(p[1]) && atoi(p + 1) < 4)
@@ -237,144 +330,83 @@ os_cmd_akill_add(struct sourceinfo *si, int parc, char *parv[])
 }
 
 static void
-os_cmd_akill_del(struct sourceinfo *si, int parc, char *parv[])
+akill_removed(struct sourceinfo *si, struct kline *k)
 {
-	char *target = parv[0];
-	char *userbuf, *hostbuf;
-	unsigned int number;
-	char *s;
+	command_success_nodata(si, _("AKILL on \2%s@%s\2 has been successfully removed."), k->user, k->host);
+
+	verbose_wallops("\2%s\2 is \2removing\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2",
+		get_oper_name(si), k->user, k->host, k->reason);
+
+	logcommand(si, CMDLOG_ADMIN, "AKILL:DEL: \2%s@%s\2", k->user, k->host);
+
+	kline_delete(k);
+}
+
+/*
+ * Delete the AKILLs numbered FIRST to LAST. It walks the AKILL list once, so
+ * it takes the same time for "1:5" as for "1:4000000000" and cannot flood.
+ */
+static void
+akill_delete_numbers(struct sourceinfo *si, unsigned long first, unsigned long last)
+{
+	mowgli_node_t *n, *tn;
+	unsigned int removed = 0;
+
+	if (first > last)
+	{
+		command_fail(si, fault_badparams, _("Invalid range \2%lu:%lu\2: the first number is larger than the last."), first, last);
+		return;
+	}
+
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, klnlist.head)
+	{
+		struct kline *k = n->data;
+
+		if (k->number < first || k->number > last)
+			continue;
+
+		akill_removed(si, k);
+		removed++;
+	}
+
+	if (removed == 0 && first == last)
+		command_fail(si, fault_nosuch_target, _("No such AKILL with number \2%lu\2."), first);
+	else if (removed == 0)
+		command_fail(si, fault_nosuch_target, _("No AKILL with a number from \2%lu\2 to \2%lu\2."), first, last);
+}
+
+/*
+ * Delete the AKILL for "user@host", or for "host" (the user is then "*").
+ * The host can be anything: IPv4, IPv6, CIDR, a host name or a wildcard mask.
+ */
+static void
+akill_delete_mask(struct sourceinfo *si, char *mask)
+{
+	char star[] = "*";
+	char *userbuf = star, *hostbuf = mask, *at;
 	struct kline *k;
 
-	if (!target)
+	if ((at = strchr(mask, '@')) != NULL)
+	{
+		*at = '\0';
+		hostbuf = at + 1;
+
+		if (*mask)
+			userbuf = mask;
+	}
+
+	if (!*hostbuf)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKILL DEL");
-		command_fail(si, fault_needmoreparams, _("Syntax: AKILL DEL <hostmask>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: AKILL DEL <hostmask|number|first:last>"));
 		return;
 	}
 
-	if (strchr(target, ','))
+	if (strchr(hostbuf, '@'))
 	{
-		unsigned int start = 0, end = 0, i;
-		char t[16];
-
-		s = strtok(target, ",");
-
-		do
-		{
-			if (strchr(s, ':'))
-			{
-				for (i = 0; *s != ':'; s++, i++)
-					t[i] = *s;
-
-				t[++i] = '\0';
-				start = atoi(t);
-
-				s++;	// skip past the :
-
-				for (i = 0; *s != '\0'; s++, i++)
-					t[i] = *s;
-
-				t[++i] = '\0';
-				end = atoi(t);
-
-				for (i = start; i <= end; i++)
-				{
-					if (!(k = kline_find_num(i)))
-					{
-						command_fail(si, fault_nosuch_target, _("No such AKILL with number \2%u\2."), i);
-						continue;
-					}
-
-					command_success_nodata(si, _("AKILL on \2%s@%s\2 has been successfully removed."), k->user, k->host);
-					verbose_wallops("\2%s\2 is \2removing\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2",
-						get_oper_name(si), k->user, k->host, k->reason);
-
-					logcommand(si, CMDLOG_ADMIN, "AKILL:DEL: \2%s@%s\2", k->user, k->host);
-					kline_delete(k);
-				}
-
-				continue;
-			}
-
-			number = atoi(s);
-
-			if (!(k = kline_find_num(number)))
-			{
-				command_fail(si, fault_nosuch_target, _("No such AKILL with number \2%u\2."), number);
-				return;
-			}
-
-			command_success_nodata(si, _("AKILL on \2%s@%s\2 has been successfully removed."), k->user, k->host);
-			verbose_wallops("\2%s\2 is \2removing\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2",
-				get_oper_name(si), k->user, k->host, k->reason);
-
-			logcommand(si, CMDLOG_ADMIN, "AKILL:DEL: \2%s@%s\2", k->user, k->host);
-			kline_delete(k);
-		} while ((s = strtok(NULL, ",")));
-
+		command_fail(si, fault_badparams, _("Too many '%c' in user@host."), '@');
 		return;
 	}
-
-	if (!strchr(target, '@'))
-	{
-		unsigned int start = 0, end = 0, i;
-		char t[16];
-
-		if (strchr(target, ':'))
-		{
-			for (i = 0; *target != ':'; target++, i++)
-				t[i] = *target;
-
-			t[++i] = '\0';
-			start = atoi(t);
-
-			target++;	// skip past the :
-
-			for (i = 0; *target != '\0'; target++, i++)
-				t[i] = *target;
-
-			t[++i] = '\0';
-			end = atoi(t);
-
-			for (i = start; i <= end; i++)
-			{
-				if (!(k = kline_find_num(i)))
-				{
-					command_fail(si, fault_nosuch_target, _("No such AKILL with number \2%u\2."), i);
-					continue;
-				}
-
-				command_success_nodata(si, _("AKILL on \2%s@%s\2 has been successfully removed."), k->user, k->host);
-				verbose_wallops("\2%s\2 is \2removing\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2",
-					get_oper_name(si), k->user, k->host, k->reason);
-
-				logcommand(si, CMDLOG_ADMIN, "AKILL:DEL: \2%s@%s\2", k->user, k->host);
-				kline_delete(k);
-			}
-
-			return;
-		}
-
-		number = atoi(target);
-
-		if (!(k = kline_find_num(number)))
-		{
-			command_fail(si, fault_nosuch_target, _("No such AKILL with number \2%u\2."), number);
-			return;
-		}
-
-		command_success_nodata(si, _("AKILL on \2%s@%s\2 has been successfully removed."), k->user, k->host);
-
-		verbose_wallops("\2%s\2 is \2removing\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2",
-			get_oper_name(si), k->user, k->host, k->reason);
-
-		logcommand(si, CMDLOG_ADMIN, "AKILL:DEL: \2%s@%s\2", k->user, k->host);
-		kline_delete(k);
-		return;
-	}
-
-	userbuf = strtok(target, "@");
-	hostbuf = strtok(NULL, "");
 
 	if (!(k = kline_find(userbuf, hostbuf)))
 	{
@@ -382,13 +414,41 @@ os_cmd_akill_del(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
-	command_success_nodata(si, _("AKILL on \2%s@%s\2 has been successfully removed."), userbuf, hostbuf);
+	akill_removed(si, k);
+}
 
-	verbose_wallops("\2%s\2 is \2removing\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2",
-		get_oper_name(si), k->user, k->host, k->reason);
+static void
+os_cmd_akill_del(struct sourceinfo *si, int parc, char *parv[])
+{
+	char *target = parv[0];
+	char *token, *save = NULL;
+	bool any = false;
 
-	logcommand(si, CMDLOG_ADMIN, "AKILL:DEL: \2%s@%s\2", k->user, k->host);
-	kline_delete(k);
+	if (!target)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKILL DEL");
+		command_fail(si, fault_needmoreparams, _("Syntax: AKILL DEL <hostmask|number|first:last>"));
+		return;
+	}
+
+	// A comma separated list of numbers, ranges and masks: "1,4:6,*@192.0.2.1"
+	for (token = strtok_r(target, ",", &save); token != NULL; token = strtok_r(NULL, ",", &save))
+	{
+		unsigned long first, last;
+
+		any = true;
+
+		if (akill_parse_numbers(token, &first, &last))
+			akill_delete_numbers(si, first, last);
+		else
+			akill_delete_mask(si, token);
+	}
+
+	if (!any)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKILL DEL");
+		command_fail(si, fault_needmoreparams, _("Syntax: AKILL DEL <hostmask|number|first:last>"));
+	}
 }
 
 static void
@@ -441,7 +501,9 @@ os_cmd_akill_list(struct sourceinfo *si, int parc, char *parv[])
 		k = (struct kline *)n->data;
 
 		tm = localtime(&k->settime);
-		strftime(settime, sizeof settime, TIME_FORMAT, tm);
+
+		if (tm == NULL || strftime(settime, sizeof settime, TIME_FORMAT, tm) == 0)
+			mowgli_strlcpy(settime, "?", sizeof settime);
 
 		if (num != 0 && k->number != num)
 			continue;
