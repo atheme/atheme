@@ -422,7 +422,7 @@ void db_check(void);
 extern mowgli_list_t svs_ignore_list;
 
 struct svsignore *svsignore_find(struct user *user);
-struct svsignore *svsignore_add(const char *mask, const char *reason) ATHEME_FATTR_MALLOC ATHEME_FATTR_RETURNS_NONNULL;
+struct svsignore *svsignore_add(const char *mask, const char *reason) ATHEME_FATTR_RETURNS_NONNULL;
 void svsignore_delete(struct svsignore *svsignore);
 
 /* check if user is at the login limit or if they are exempt */
