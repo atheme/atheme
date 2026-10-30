@@ -36,13 +36,14 @@ mowgli_list_t svs_ignore_list;
  * Bugs:
  *     - this function does not check for dupes
  */
-struct svsignore * ATHEME_FATTR_MALLOC ATHEME_FATTR_RETURNS_NONNULL
+struct svsignore * ATHEME_FATTR_RETURNS_NONNULL
 svsignore_add(const char *mask, const char *reason)
 {
         struct svsignore *const svsignore = smalloc(sizeof *svsignore);
 
         svsignore->mask = sstrdup(mask);
         svsignore->settime = CURRTIME;
+	    svsignore->setby = NULL;
         svsignore->reason = sstrdup(reason);
 
         mowgli_node_t *n = mowgli_node_create();
