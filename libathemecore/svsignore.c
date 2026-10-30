@@ -43,7 +43,6 @@ svsignore_add(const char *mask, const char *reason)
 
         svsignore->mask = sstrdup(mask);
         svsignore->settime = CURRTIME;
-	    svsignore->setby = NULL;
         svsignore->reason = sstrdup(reason);
 
         mowgli_node_t *n = mowgli_node_create();
