@@ -431,7 +431,17 @@ sasl_handle_login(struct sasl_session *const restrict p, struct user *const u, s
 
 		(void) logcommand_user(saslsvs, u, CMDLOG_LOGIN, "LOGOUT");
 
-		if (! (was_killed = ircd_on_logout(u, entity(u->myuser)->name)))
+		 /* On these IRCds, the SVSLOGIN that sasl_session_success() sends afterwards replaces the
+		 * account outright. Sending the logout notification first makes the IRCd tell the client
+		 * "You are now logged out" immediately before "You are now logged in as ...".
+		 * It is skipped only if that SVSLOGIN will actually be sent (not for unverified accounts).
+		 */
+		const bool login_replaces_account = (! (mu->flags & MU_WAITAUTH) &&
+		                                     (ircd->type == PROTOCOL_INSPIRCD ||
+		                                      ircd->type == PROTOCOL_CHARYBDIS ||
+		                                      ircd->type == PROTOCOL_UNREAL));
+
+		if (! (was_killed = (login_replaces_account ? false : ircd_on_logout(u, entity(u->myuser)->name))))
 		{
 			mowgli_node_t *n;
 
