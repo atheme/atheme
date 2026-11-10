@@ -63,8 +63,6 @@ struct sourceinfo
 	unsigned int                    output_count;   // lines of output upto now
 	struct language *               force_language; // locale to force replies to be in, could be NULL
 	struct command *                command;        // The command being executed
-
-	mowgli_patricia_t *             tags;           // IRCv3 message tags (NULL if no tags)
 };
 
 #endif /* !ATHEME_INC_SOURCEINFO_H */

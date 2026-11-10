@@ -94,7 +94,6 @@ AC_DEFUN([ATHEME_CHECK_BUILD_REQUIREMENTS], [
     AC_CHECK_FUNCS([strtold], [], [ATHEME_REQUIRED_FUNC_MISSING])
     AC_CHECK_FUNCS([strtoul], [], [ATHEME_REQUIRED_FUNC_MISSING])
     AC_CHECK_FUNCS([strtoull], [], [ATHEME_REQUIRED_FUNC_MISSING])
-    AC_CHECK_FUNCS([timespec_get], [], [])
     AC_CHECK_FUNCS([timingsafe_bcmp], [], [])
     AC_CHECK_FUNCS([timingsafe_memcmp], [], [])
     AC_CHECK_FUNCS([vsnprintf], [], [ATHEME_REQUIRED_FUNC_MISSING])
