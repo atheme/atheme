@@ -9,6 +9,7 @@ include ../../extra.mk
 MODULE = statserv
 SRCS   =            \
     channel.c       \
+    graphite.c      \
     main.c          \
     netsplit.c      \
     pwhashes.c      \
