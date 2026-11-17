@@ -291,6 +291,12 @@ hs_cmd_take(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	if (si->smu->flags & MU_WAITAUTH)
+	{
+		command_fail(si, fault_notverified, STR_EMAIL_NOT_VERIFIED);
+		return;
+	}
+
 	if (metadata_find(si->smu, "private:restrict:setter"))
 	{
 		command_fail(si, fault_noprivs, _("You have been restricted from taking vhosts by network staff"));

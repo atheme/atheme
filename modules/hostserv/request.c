@@ -195,6 +195,12 @@ hs_cmd_request(struct sourceinfo *si, int parc, char *parv[])
 		return;
 	}
 
+	if (si->smu->flags & MU_WAITAUTH)
+	{
+		command_fail(si, fault_notverified, STR_EMAIL_NOT_VERIFIED);
+		return;
+	}
+
 	if ((unsigned int)(CURRTIME - ratelimit_firsttime) > config_options.ratelimit_period)
 	{
 		ratelimit_count = 0;
