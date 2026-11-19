@@ -104,7 +104,7 @@ os_cmd_clearchan(struct sourceinfo *si, int parc, char *parv[])
 								cu->user->nick, cu->user->user, cu->user->host);
 					} else {
 						if (! (cu->user->flags & UF_KLINESENT)) {
-							kline_add(cu->user->user, cu->user->host, reason, SECONDS_PER_WEEK, si->su->nick);
+							kline_add_user(cu->user, reason, SECONDS_PER_WEEK, si->su->nick);
 							cu->user->flags |= UF_KLINESENT;
 						}
 					}
