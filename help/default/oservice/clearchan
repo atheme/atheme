@@ -4,9 +4,10 @@ CLEARCHAN allows operators to clear
 a channel in one of three ways: KICK,
 which kicks all users from the channel, KILL,
 which kills all users in the channel off the
-network, or AKILL, which sets a one week
-network ban against the hosts of all users in
-the channel.
+network, or AKILL, which sets a network ban
+against the hosts of all users in the channel,
+using the configured default network ban
+duration.
 
 This command should not be used lightly.
 
