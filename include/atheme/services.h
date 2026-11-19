@@ -3,6 +3,7 @@
  * SPDX-URL: https://spdx.org/licenses/ISC.html
  *
  * Copyright (C) 2005 William Pitcock, et al.
+ * Copyright (C) 2026 syk <syk@localhost>
  *
  * Data structures related to services psuedo-clients.
  */
@@ -60,6 +61,7 @@ struct nicksvs
 	unsigned int    enforce_expiry; // expiry time
 	unsigned int    enforce_delay;  // delay for nickname enforce
 	char *          enforce_prefix; // prefix for enforcement
+	char *          noticefront;    // service to send on-connect notices (router front)
 	mowgli_list_t   emailexempts;   // emails exempt from maxusers checks
 };
 
