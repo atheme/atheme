@@ -1,0 +1,11 @@
+The GROUP namespace provides group commands.
+
+Syntax:
+
+    /msg &nick& GROUP <command> [arguments...]
+
+Common commands: REGISTER, JOIN, INFO, LISTCHANS, FLAGS
+
+For help on a command, type:
+
+    /msg &nick& HELP GROUP <command>

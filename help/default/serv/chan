@@ -1,0 +1,12 @@
+The CHAN and CHANNEL namespaces provide channel commands.
+
+Syntax:
+
+    /msg &nick& CHAN <command> [arguments...]
+    /msg &nick& CHANNEL <command> [arguments...]
+
+Common commands: REGISTER, DROP, INFO, SET, TOPIC, FLAGS, AKICK
+
+For help on a command, type:
+
+    /msg &nick& HELP CHAN <command>

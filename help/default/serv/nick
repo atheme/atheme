@@ -1,0 +1,12 @@
+The NICK and ACCOUNT namespaces provide nickname and account commands.
+
+Syntax:
+
+    /msg &nick& NICK <command> [arguments...]
+    /msg &nick& ACCOUNT <command> [arguments...]
+
+Common commands: REGISTER, IDENTIFY, LOGOUT, INFO, SET, LISTCHANS
+
+For help on a command, type:
+
+    /msg &nick& HELP NICK <command>

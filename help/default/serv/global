@@ -1,0 +1,9 @@
+The GLOBAL namespace provides global announcement commands.
+
+Syntax:
+
+    /msg &nick& GLOBAL <command> [arguments...]
+
+For help on a command, type:
+
+    /msg &nick& HELP GLOBAL <command>

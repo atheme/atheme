@@ -220,6 +220,13 @@ NickServ
   (unless the flag is unset by default)
 - NickServ `VHOST` no longer supports legacy pre-v5.0 command syntax
 
+Serv
+----
+- New `serv/main` module: a single entry point pseudoclient that routes
+  NICK, CHAN, MEMO, GROUP, OPER, INFO, and GLOBAL commands to the backing
+  service. Commands can also be reached as `Serv <namespace> <command>`, e.g.
+  `/msg Serv CHAN INFO #channel`. Includes `serv/` help files.
+
 IRCds
 -----
 - Support `chm_nonotice.so` (Block channel notices) extension in charybdis IRCd
