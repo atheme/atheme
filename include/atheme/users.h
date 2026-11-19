@@ -38,6 +38,14 @@ struct user
 	char *                  certfp;         // client certificate fingerprint
 };
 
+enum host_type
+{
+	HOST_VISIBLE,
+	HOST_CLOAK,
+	HOST_REAL,
+	HOST_IP
+};
+
 #define UF_AWAY        0x00000002U
 #define UF_INVIS       0x00000004U
 #define UF_DOING_SASL  0x00000008U
@@ -80,6 +88,7 @@ void user_mode(struct user *user, const char *modes);
 void user_sethost(struct user *source, struct user *target, const char *host);
 const char *user_get_umodestr(struct user *u);
 struct chanuser *find_user_banned_channel(struct user *u, char ban_type);
+const char *format_hostmask(const struct user *user, const enum host_type type);
 
 /* uid.c */
 void init_uid(void);
