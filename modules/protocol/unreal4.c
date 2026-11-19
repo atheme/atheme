@@ -1621,6 +1621,37 @@ m_protoctl(struct sourceinfo *si, int parc, char *parv[])
 	}
 }
 
+
+static void
+m_svslogout(struct sourceinfo *si, int parc, char *parv[])
+{
+	char *target = parv[1];
+	char *account = parv[2];
+	struct user *u;
+	if (parc < 3 || *target == '*' || *account != '0')
+		return; // we only care about logging people out
+
+	if (!(u = user_find(parv[1])))
+		return;
+
+	if (!u->myuser)
+		return;
+
+	logcommand(si, CMDLOG_LOGIN, "LOGOUT: \2%s\2", u->nick);
+
+	mowgli_node_t *n, *tn;
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, u->myuser->logins.head)
+	{
+			if (n->data == u)
+			{
+					mowgli_node_delete(n, &u->myuser->logins);
+					mowgli_node_free(n);
+					break;
+			}
+	}
+	u->myuser = NULL;
+}
+
 static void
 mod_init(struct module *const restrict m)
 {
@@ -1713,6 +1744,7 @@ mod_init(struct module *const restrict m)
 	pcommand_add("SASL", m_sasl, 4, MSRC_SERVER);
 	pcommand_add("MLOCK", m_mlock, 3, MSRC_SERVER);
 	pcommand_add("MD", m_md, 3, MSRC_SERVER);
+	pcommand_add("SVSLOGIN", m_svslogout, 3, MSRC_SERVER);
 
 	hook_add_nick_group(nick_group);
 	hook_add_nick_ungroup(nick_ungroup);
