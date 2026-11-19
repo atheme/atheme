@@ -98,7 +98,7 @@ ns_cmd_logout(struct sourceinfo *si, int parc, char *parv[])
 	if (mn != NULL && mn->owner == u->myuser)
 		mn->lastseen = CURRTIME;
 
-	if (!ircd_on_logout(u, entity(u->myuser)->name))
+	if (u->myuser->flags & MU_WAITAUTH || !ircd_on_logout(u, entity(u->myuser)->name))
 	{
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, u->myuser->logins.head)
 		{
